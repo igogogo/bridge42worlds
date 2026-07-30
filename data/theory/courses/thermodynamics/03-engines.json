@@ -1368,5 +1368,333 @@
  "laws": [
   "law_of_conservation_of_energy",
   "carnot_theorem"
- ]
+ ],
+ "fr": {
+  "title": "Principes de la thermodynamique",
+  "subtitle": "Paragraphe 3 · Processus, cycles et machines thermiques",
+  "intro": [
+   "Prenez une pompe à vélo, bouchez la sortie avec votre doigt et donnez une dizaine de coups rapides. Le cylindre devient nettement chaud. Il n'y a pas de feu à proximité — vous avez simplement poussé. D'où vient la chaleur?",
+   "Un gaz a exactement quatre façons de changer d'état, et chacune trace sur le diagramme « pression–volume » sa ligne caractéristique. Trois d'entre elles sont familières, et la quatrième — l'adabatique — explique justement la pompe chaude.",
+   "En reliant ces processus en une boucle fermée, nous obtenons un moteur. Et alors on voit pourquoi son rendement est limité non par la qualité de l'acier, mais par la nature même de la chaleur."
+  ],
+  "standNote": "Le stand propose cinq modes. Le paramètre principal dans chacun se déplace tout seul — regardez simplement quelle courbe le processus dessine. Portez une attention particulière à l'adabatique : lors de la compression, la température augmente, bien qu'il n'y ait pas de plaque chauffante. En mode « moteur », le point court le long d'une boucle fermée — ce sont les courses du piston, et le rendement est calculé sur place.",
+  "formula": {
+   "name": "Premier principe de la thermodynamique et théorème de Carnot",
+   "latex": "\\delta Q = dU + P\\,dV \\qquad \\eta_{\\max} = 1 - \\frac{T_{\\text{f}}}{T_{\\text{c}}}",
+   "alsoKnown": "Loi de conservation de l'énergie pour les processus thermiques et limite de l'efficacité",
+   "authors": [
+    {
+     "who": "Sadi Carnot",
+     "year": "1824",
+     "what": "a démontré que le rendement maximal d'une machine thermique ne dépend que des températures de la source chaude et de la source froide — et de rien d'autre"
+    },
+    {
+     "who": "James Joule",
+     "year": "1843",
+     "what": "a établi expérimentalement l'équivalence entre la chaleur et le travail mécanique, préparant ainsi le premier principe"
+    },
+    {
+     "who": "Rudolf Clausius",
+     "year": "1850",
+     "what": "a formulé les deux principes sous leur forme moderne et a introduit l'entropie comme mesure de l'irréversibilité"
+    }
+   ],
+   "story": "Carnot raisonnait sur une machine idéale sans rien savoir des molécules ni de la conservation de l'énergie — il utilisait encore la théorie erronée du calorique. Étonnamment, sa conclusion principale s'est avérée correcte : la limite d'efficacité est donnée par le rapport des températures. Vingt-cinq ans plus tard, Clausius reformula cela sur une base solide, et le résultat de Carnot a tenu."
+  },
+  "derivation": {
+   "title": "Dérivation rigoureuse",
+   "lead": "Tout le contenu de ce paragraphe découle d'une seule loi — la conservation de l'énergie, écrite pour les processus thermiques. Le reste en découle automatiquement.",
+   "steps": [
+    {
+     "text": "Premier principe : la chaleur fournie sert à modifier l'énergie interne du gaz et à effectuer le travail qu'il réalise en se dilatant. C'est la loi de conservation de l'énergie, et il n'y a rien de plus.",
+     "latex": "\\delta Q = dU + P\\,dV",
+     "figure": "firstlaw",
+     "figCaption": "La chaleur se divise en deux voies : le chauffage du gaz et le travail de déplacement du piston."
+    },
+    {
+     "text": "Un processus adiabatique est un processus sans échange de chaleur, $\\delta Q = 0$. Alors le gaz ne peut effectuer un travail qu'aux dépens de sa propre énergie interne, c'est-à-dire de sa température. D'où la pompe chaude.",
+     "latex": "C_V\\,dT + P\\,dV = 0",
+     "figure": "adiabatic",
+     "figCaption": "Compression sans échange de chaleur : le travail du piston se transforme directement en température du gaz."
+    },
+    {
+     "text": "Substituons $P = nRT/V$ du premier paragraphe et séparons les variables — la même technique que dans le paragraphe précédent. Après intégration, nous obtenons la relation entre la température et le volume.",
+     "latex": "\\frac{dT}{T} = -\\frac{R}{C_V}\\frac{dV}{V} \\;\\Longrightarrow\\; T\\,V^{\\gamma-1} = \\text{const}",
+     "figure": "integrate",
+     "figCaption": "Encore une séparation des variables : à gauche la température, à droite le volume."
+    },
+    {
+     "text": "En remplaçant la température par l'équation d'état, nous arrivons à la forme la plus connue — l'équation de l'adiabatique. L'exposant $\\gamma$ est supérieur à un, donc sur le diagramme l'adiabatique est toujours plus raide que l'isotherme.",
+     "latex": "P\\,V^{\\gamma} = \\text{const}, \\qquad \\gamma = \\frac{C_P}{C_V}",
+     "figure": "curves",
+     "figCaption": "L'adiabatique est plus raide que l'isotherme : lors de la compression, la pression augmente pour deux raisons à la fois."
+    },
+    {
+     "text": "Maintenant le moteur. Sur un cycle complet, le gaz revient à son état initial, donc son énergie interne n'a pas changé : $\\Delta U = 0$. Tout le travail utile est égal à la différence entre la chaleur fournie et la chaleur évacuée.",
+     "latex": "W = Q_{\\text{c}} - Q_{\\text{f}}",
+     "figure": "cycle",
+     "figCaption": "Cycle fermé : l'aire à l'intérieur de la boucle est le travail par tour."
+    },
+    {
+     "text": "Le rendement par définition est le rapport du travail obtenu à la chaleur fournie. On voit ainsi que pour avoir $\\eta = 1$, il faudrait $Q_{\\text{f}} = 0$, c'est-à-dire ne rien céder du tout à la source froide.",
+     "latex": "\\eta = \\frac{W}{Q_{\\text{c}}} = 1 - \\frac{Q_{\\text{f}}}{Q_{\\text{c}}}",
+     "figure": "efficiency",
+     "figCaption": "Une partie de la chaleur doit nécessairement aller à la source froide — sinon le cycle ne se ferme pas."
+    },
+    {
+     "text": "Pour le cycle idéal de Carnot, constitué de deux isothermes et deux adiabatiques, le rapport des chaleurs est égal au rapport des températures. On obtient une limite qui ne dépend ni de la substance ni de la construction de la machine.",
+     "latex": "\\eta_{\\text{Carnot}} = 1 - \\frac{T_{\\text{f}}}{T_{\\text{c}}}",
+     "figure": "carnot",
+     "figCaption": "Théorème de Carnot : l'efficacité n'est déterminée que par deux températures."
+    }
+   ],
+   "plate": "\\eta_{\\max} = 1 - \\frac{T_{\\text{f}}}{T_{\\text{c}}}",
+   "plateCap": "Aucune machine thermique fonctionnant entre ces températures ne peut être plus efficace. C'est une interdiction de la nature, et non un défaut d'ingénierie.",
+   "note": "De la formule on voit pourquoi cent pour cent est inaccessible : il faudrait une source froide au zéro absolu, ce qui est interdit par le troisième principe. De là découle aussi la conclusion pratique qui guide l'énergie : il est plus avantageux d'augmenter la température de combustion que de refroidir les gaz d'échappement — le dénominateur agit plus fortement que le numérateur. Pour une automobile (environ $2000$ K dans le cylindre contre $300$ K à l'extérieur), le plafond théorique est d'environ $85\\%$, et la réalité de $25$ à $30\\%$."
+  },
+  "math": {
+   "title": "Mathématiques nécessaires ici",
+   "items": [
+    {
+     "what": "Relation de Mayer",
+     "why": "La capacité thermique à pression constante est plus grande que celle à volume constant, exactement de la constante des gaz. La raison est simple : à pression constante, le gaz non seulement chauffe, mais aussi se dilate, effectuant un travail contre le milieu extérieur — et cela coûte de l'énergie. C'est pourquoi γ est toujours supérieur à 1.",
+     "latex": "C_P - C_V = R"
+    },
+    {
+     "what": "D'où vient la valeur de $\\gamma$",
+     "why": "La capacité thermique est déterminée par le nombre de degrés de liberté de la molécule : $C_V = \\tfrac{i}{2}R$. Pour un gaz monoatomique, il n'y a que trois degrés de translation ; pour un gaz diatomique, s'ajoutent deux degrés de rotation. C'est un de ces rares cas où une constante découle de la géométrie de la molécule, et non d'une mesure.",
+     "latex": "\\gamma = \\frac{i+2}{i}: \\quad i=3 \\Rightarrow \\gamma = \\tfrac{5}{3} \\approx 1{,}67; \\quad i=5 \\Rightarrow \\gamma = \\tfrac{7}{5} = 1{,}4"
+    },
+    {
+     "what": "Travail comme aire sous la courbe",
+     "why": "Le travail élémentaire est $P\\,dV$, donc le travail total est l'intégrale de la pression par rapport au volume — c'est-à-dire littéralement l'aire sous la courbe du processus sur le diagramme. Pour un cycle fermé, c'est l'aire à l'intérieur de la boucle. L'affirmation « l'aire est égale au travail » n'est pas une métaphore, mais la définition de l'intégrale.",
+     "latex": "W = \\int_{V_1}^{V_2} P\\,dV, \\qquad W_{\\text{cycle}} = \\oint P\\,dV"
+    }
+   ]
+  },
+  "example": {
+   "title": "Exemple avec des nombres",
+   "lead": "Estimons l'efficacité limite d'un moteur réel et comparons-la avec la valeur du constructeur.",
+   "given": "Dans le cylindre du moteur, la température de combustion atteint $1800$ K, les gaz d'échappement sortent à $600$ K. Trouver le rendement limite de Carnot et comparer avec la valeur réelle de $30\\%$.",
+   "law": "Théorème de Carnot : $\\eta_{\\max} = 1 - T_{\\text{f}}/T_{\\text{c}}$",
+   "solution": [
+    {
+     "text": "Nous substituons les températures — impérativement en kelvins, sinon le rapport perd son sens.",
+     "latex": "\\eta_{\\max} = 1 - \\frac{600}{1800}"
+    },
+    {
+     "text": "La fraction se calcule mentalement : six cents sur mille huit cents donne un tiers.",
+     "latex": "\\frac{600}{1800} = \\frac{1}{3} \\approx 0{,}33"
+    },
+    {
+     "text": "Nous soustrayons de l'unité.",
+     "latex": "\\eta_{\\max} = 1 - 0{,}33 = 0{,}67 = 67\\%"
+    }
+   ],
+   "answer": "La limite de Carnot est d'environ $67\\%$, le moteur réel donne $30\\%$ — environ la moitié du maximum théorique",
+   "check": "Est-ce raisonnable ? Oui : la moitié de la limite de Carnot est un indicateur typique pour une bonne machine thermique. Le reste est absorbé par le frottement, la combustion incomplète, les pertes thermiques à travers les parois et l'irréversibilité des processus réels. Notez l'essentiel : même une machine idéale perdrait ici un tiers de l'énergie — et cela ne peut être corrigé par aucune ingénierie."
+  },
+  "constants": {
+   "title": "Constantes de ce paragraphe",
+   "lead": "Ici, les constantes ne sont pas mesurées mais calculées à partir de la structure des molécules et des grandeurs précédentes — un bon signe que la théorie est cohérente.",
+   "items": [
+    {
+     "sym": "γ",
+     "latex": "\\gamma",
+     "name": "Indice adiabatique",
+     "value": "1,4 (air) · 1,67 (hélium)",
+     "unit": "sans dimension",
+     "why": "Rapport des capacités thermiques $C_P/C_V$. Grandeur sans dimension car c'est le rapport de deux quantités homogènes. Il est déterminé par le nombre de degrés de liberté de la molécule : pour l'air diatomique, on obtient $7/5 = 1{,}4$, pour l'hélium monoatomique, $5/3 \\approx 1{,}67$.",
+     "mnemo": "Pour l'air, $1{,}4$ est proche de $\\sqrt{2} \\approx 1{,}41$. Pour les gaz monoatomiques, c'est exactement cinq tiers."
+    },
+    {
+     "sym": "C_V",
+     "latex": "C_V",
+     "name": "Capacité thermique molaire à volume constant",
+     "value": "≈ 20,8 (air)",
+     "unit": "J / (mol · K)",
+     "why": "Quantité d'énergie qu'une mole de gaz reçoit par degré lorsque le volume est fixe et aucun travail n'est effectué. Toute la chaleur va dans l'énergie interne, donc $C_V = \\tfrac{i}{2}R$ : pour l'air avec cinq degrés de liberté, cela donne $2{,}5 \\cdot 8{,}314 \\approx 20{,}8$."
+    },
+    {
+     "sym": "C_P",
+     "latex": "C_P",
+     "name": "Capacité thermique molaire à pression constante",
+     "value": "≈ 29,1 (air)",
+     "unit": "J / (mol · K)",
+     "why": "Elle est supérieure à la précédente exactement de la constante des gaz $R$, car à pression constante le gaz effectue en plus un travail de dilatation. Vérifiez : $20{,}8 + 8{,}3 = 29{,}1$, et le rapport $29{,}1/20{,}8 = 1{,}4$ — l'indice adiabatique lui-même.",
+     "mnemo": "$C_P - C_V = R$ — la relation de Mayer. La différence des capacités thermiques est exactement le coût de la dilatation."
+    },
+    {
+     "sym": "r",
+     "latex": "r",
+     "name": "Taux de compression",
+     "value": "6–11 (essence) · 14–23 (diesel)",
+     "unit": "sans dimension",
+     "why": "Rapport du volume maximum du cylindre au volume minimum. C'est le seul paramètre de construction dans la formule du rendement du cycle d'Otto, donc les ingénieurs luttent pour l'augmenter. Dans un moteur à essence, la limite est fixée par le cliquetis : le mélange s'enflamme par compression avant l'étincelle. Dans un diesel, ce n'est pas un défaut mais le principe de fonctionnement — d'où son rendement plus élevé."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "Le premier principe est la loi de conservation de l'énergie pour la chaleur. Tous les processus en découlent, et de l'analyse d'un cycle fermé découle la limite d'efficacité, qui ne dépend que de deux températures.",
+   "keyIdeas": [
+    {
+     "icon": "scale",
+     "title": "Premier principe",
+     "text": "La chaleur se divise en deux voies : l'échauffement du gaz et le travail de dilatation. Rien ne se perd."
+    },
+    {
+     "icon": "clock",
+     "title": "Adiabatique",
+     "text": "Sans échange de chaleur, la compression chauffe le gaz elle-même. C'est ainsi que fonctionnent la pompe et le diesel."
+    },
+    {
+     "icon": "sigma",
+     "title": "Travail = aire",
+     "text": "L'aire à l'intérieur de la boucle sur le diagramme P-V est littéralement égale au travail par cycle."
+    },
+    {
+     "icon": "formula",
+     "title": "Limite de Carnot",
+     "text": "Le rendement est limité par le rapport des températures. Cent pour cent sont impossibles en principe."
+    }
+   ],
+   "where": [
+    "Moteur de voiture : cycle d'Otto, rendement d'environ 25–30%",
+    "Diesel : l'air est comprimé environ 20 fois, il chauffe jusqu'à 700° et enflamme le carburant tout seul",
+    "Réfrigérateur et climatiseur — le même cycle, parcouru en sens inverse",
+    "Une pompe à chaleur fournit 3–4 kW de chaleur pour 1 kW d'électricité, sans violer les lois"
+   ],
+   "watchOut": "Dans la formule de Carnot, les températures sont uniquement absolues, en kelvins. La substitution en degrés Celsius donne un résultat absurde — par exemple, avec un réfrigérant à 0 °C, le rendement serait égal à 1."
+  },
+  "quiz": [
+   {
+    "id": "e1",
+    "type": "mcq",
+    "q": "La pompe à vélo chauffe lors d'un gonflage rapide. Quelle est la raison principale ?",
+    "options": [
+     "Frottement du piston contre les parois du cylindre",
+     "Le travail de compression se transforme en énergie interne du gaz — la chaleur n'a pas le temps de s'échapper",
+     "Frottement de l'air contre le tuyau à grande vitesse",
+     "Le caoutchouc chauffe par étirement"
+    ],
+    "answer": 1,
+    "why": "C'est une compression adiabatique. Il est facile de le vérifier par une expérience de pensée : si on pompe très lentement, avec des pauses, la chaleur a le temps de se dissiper dans l'environnement et la pompe ne chauffe presque pas — avec le même frottement.",
+    "hint": "Imaginez faire les mêmes vingt coups de pompe, mais extrêmement lentement, avec des pauses d'une minute. Le frottement n'a pas disparu — la pompe chauffera-t-elle autant ? Qu'est-ce qui a changé ?"
+   },
+   {
+    "id": "e2",
+    "type": "mcq",
+    "q": "Peut-on refroidir la cuisine en laissant la porte du réfrigérateur en marche ouverte ?",
+    "options": [
+     "Oui, le froid de la chambre se répandra dans la cuisine",
+     "Non, la température de la cuisine augmentera même",
+     "Oui, mais seulement si le réfrigérateur est assez puissant",
+     "Rien ne changera : autant il prend, autant il rend"
+    ],
+    "answer": 1,
+    "why": "Le réfrigérateur transfère la chaleur de l'intérieur vers l'extérieur et en plus, il dissipe dans la pièce toute l'énergie électrique consommée. Le bilan pour la cuisine dans son ensemble : l'apport est supérieur à la dépense, donc elle se réchauffe.",
+    "hint": "Calculez le bilan pour la pièce entière, pas seulement pour la chambre. Qu'entre dans la pièce et qu'en sort-il ? N'oubliez pas la prise : où finit l'électricité consommée ?"
+   },
+   {
+    "id": "e3",
+    "type": "free",
+    "q": "En vos propres mots : pourquoi même un moteur idéal, sans frottement et avec les meilleurs matériaux, ne peut-il pas convertir en travail toute la chaleur fournie ?",
+    "keywords": [
+     "réfrigérat",
+     "froid",
+     "différence",
+     "température",
+     "rejet",
+     "carnot",
+     "écoulement",
+     "gradient",
+     "restitution",
+     "cycle"
+    ],
+    "needed": 1,
+    "why": "Pour obtenir du travail, la chaleur doit circuler du chaud vers le froid. Donc une partie doit nécessairement aller au réfrigérateur, sinon le cycle ne se ferme pas. La limite de Carnot ne devient égale à un qu'au zéro absolu du réfrigérateur, ce qui est inaccessible.",
+    "hint": "Analogie avec une centrale hydroélectrique : la turbine fonctionne tant que l'eau coule de haut en bas. Que se passerait-il si on supprimait le niveau inférieur et que le courant s'arrêtait ? Quel est le rôle de ce niveau inférieur pour la chaleur ?"
+   },
+   {
+    "id": "e4",
+    "type": "estimate",
+    "q": "Turbine à vapeur : la vapeur est fournie à 800 K, le condenseur est refroidi par une rivière à 300 K. Quel est le rendement maximal en pourcentage ?",
+    "answer": 62,
+    "unit": "%",
+    "tolerance": 1.3,
+    "why": "$\\eta = 1 - 300/800 = 1 - 0{,}375 = 0{,}625$, soit environ $62\\%$. Les centrales réelles fournissent $40$–$45\\%$, ce qui représente environ les deux tiers de la limite — un très bon indicateur pour une machine thermique.",
+    "hint": "La formule ne nécessite que le rapport des deux températures. Trois cents sur huit cents, c'est un peu plus d'un tiers. Que faut-il faire avec cette fraction ensuite ?"
+   }
+  ],
+  "curiosities": {
+   "title": "Curiosités : testez par vous-même",
+   "lead": "Le premier principe se teste avec un élastique sur la lèvre, et le second explique pourquoi le réfrigérateur chauffe la cuisine.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "expérience de cuisine",
+     "h": "L'élastique qui chauffe et refroidit",
+     "text": "Prenez un large élastique de bureau, pressez-le contre votre lèvre et étirez-le brusquement — la lèvre est plus sensible que les doigts. Maintenez-le étiré quelques secondes pour que la température s'égalise, puis relâchez-le tout aussi brusquement en le pressant à nouveau contre la lèvre.",
+     "answer": "En étirant l'élastique, il devient nettement plus chaud ; en relâchant, il refroidit. Vous avez effectué un travail sur lui, et d'après le premier principe, l'énergie n'a pas disparu : elle s'est transformée en énergie interne, c'est-à-dire en chaleur. Le retour restitue le travail et refroidit. Le caoutchouc a aussi sa particularité : contrairement au métal, il se contracte lorsqu'on le chauffe, car l'élasticité de ses chaînes moléculaires a une nature entropique. Un poids suspendu à un élastique chauffé s'élève."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoxe",
+     "h": "Le réfrigérateur ouvert réchauffe la cuisine",
+     "text": "Il semble évident que si on laisse la porte du réfrigérateur ouverte, la cuisine deviendra plus fraîche. En réalité, la température augmente. Pourquoi ?",
+     "answer": "Le réfrigérateur ne détruit pas la chaleur, il la transfère de l'intérieur vers l'extérieur — et en plus, il rejette dans la pièce toute l'énergie électrique consommée. Au total, il entre dans la cuisine plus de chaleur qu'il n'en est extrait de la chambre : exactement le travail du compresseur. Une cuisine fermée avec un réfrigérateur en fonctionnement se réchauffe à la vitesse de sa consommation. Le climatiseur ne diffère que par le fait que son échangeur chaud est placé à l'extérieur — sinon il se comporterait exactement de la même manière."
+    },
+    {
+     "icon": "fact",
+     "kind": "fait amusant",
+     "h": "Le livre passa presque inaperçu, et les papiers furent brûlés",
+     "text": "En 1824, Sadi Carnot, âgé de vingt-huit ans, publia « Réflexions sur la puissance motrice du feu » à six cents exemplaires. Le livre se vendit mal et la communauté scientifique ne le remarqua pas. Carnot mourut du choléra à 36 ans, et selon les règles sanitaires de l'époque, la majeure partie de ses manuscrits fut brûlée avec ses effets personnels. Les notes survivantes montrent qu'il était sur le point de découvrir la conservation de l'énergie vingt ans avant Joule. L'idée fut sauvée par Émile Clapeyron, qui la reformula en langage mathématique — sinon le rendement maximal d'une machine thermique aurait été redécouvert plus tard."
+    },
+    {
+     "icon": "mnemo",
+     "kind": "mnémonique",
+     "h": "Le rendement, c'est un moins le froid sur le chaud",
+     "text": "La formule $\\eta_{\\max}=1-T_\\text{f}/T_\\text{c}$ se lit simplement : plus les températures de la source chaude et de la source froide sont proches, moins on peut en tirer. Le seul piège est les kelvins : en utilisant des degrés Celsius, on obtiendrait un non-sens comme un rendement négatif. Et retenez le sens : ce n'est pas un défaut de conception, mais une interdiction du deuxième principe. Aucune machine entre ces deux mêmes températures ne peut donner plus."
+    },
+    {
+     "icon": "estimate",
+     "kind": "estimation",
+     "h": "Limite pour une centrale thermique",
+     "text": "La vapeur à l'entrée de la turbine est d'environ 800 kelvins, le rejet dans la tour de refroidissement d'environ 300. Le rendement maximal est de $1-300/800 \\approx 62$ pour cent. Les unités réelles donnent 40–45 : à cause des frottements, des pertes thermiques et de la non-idéalité des processus. On voit ici pourquoi on se bat pour chaque degré de température de la vapeur — elle est au dénominateur, et augmenter la température haute est plus avantageux que toute autre amélioration."
+    },
+    {
+     "icon": "edge",
+     "kind": "limite d'application",
+     "h": "La pompe à chaleur contourne la limite",
+     "text": "La formule de Carnot limite la conversion de la chaleur en travail, mais pas le processus inverse. Une pompe à chaleur, en consommant un kilowatt d'électricité, apporte trois à quatre kilowatts de chaleur dans la maison — elle ne crée pas d'énergie, mais la transfère de l'extérieur. Il n'y a aucune violation : le coefficient de performance et le rendement sont des grandeurs différentes. Le deuxième principe interdit seulement d'obtenir du travail à partir d'un seul réservoir, sans rejeter de chaleur dans un réservoir plus froid."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Ce que la thermodynamique apporte aux machines",
+   "lead": "Les deux principes fixent le plafond pour toute l'énergie — et aucune ingénierie ne peut le relever.",
+   "items": [
+    {
+     "h": "Centrales électriques",
+     "text": "Les centrales thermiques, nucléaires et les concentrateurs solaires fonctionnent selon le même schéma : chauffer le fluide de travail, en extraire du travail, rejeter le reste. La différence réside uniquement dans la source de chaleur, mais la limite est commune."
+    },
+    {
+     "h": "Transport",
+     "text": "Le taux de compression dans un moteur est un moyen d'augmenter la température haute du cycle, donc de se rapprocher de la limite de Carnot. Le diesel est plus efficace que l'essence précisément grâce à un taux de compression plus élevé."
+    },
+    {
+     "h": "Chauffage par pompes à chaleur",
+     "text": "Transférer la chaleur au lieu de la produire donne un gain de trois à quatre fois par rapport au chauffage électrique direct. C'est la conclusion pratique la plus directe d'un cours de thermodynamique."
+    },
+    {
+     "h": "Refroidissement de l'électronique",
+     "text": "Chaque processeur est une machine thermique inversée : toute la puissance consommée se transforme en chaleur à évacuer. La limite de densité de calcul aujourd'hui n'est pas posée par la physique du transistor, mais par l'évacuation de la chaleur."
+    },
+    {
+     "h": "Bilan énergétique de la planète",
+     "text": "La Terre reçoit de la chaleur du Soleil à haute température et rayonne dans l'espace à basse température — cette différence alimente toute la circulation de l'atmosphère et de l'océan. Les modèles climatiques sont construits sur les mêmes principes."
+    }
+   ]
+  }
+ }
 }

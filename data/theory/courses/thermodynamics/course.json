@@ -1,369 +1,449 @@
 {
-  "id": "thermodynamics",
-  "schema": "b42.course/2",
-  "kind": "overview",
-  "order": 12,
-  "entities": {
-    "laws": [
-      "ideal_gas_law",
-      "first_law_of_thermodynamics",
-      "second_law_of_thermodynamics",
-      "third_law_of_thermodynamics",
-      "zeroth_law_of_thermodynamics",
-      "carnot_theorem",
-      "boltzmann_distribution"
-    ],
-    "tags": [
-      "temperature",
-      "entropy",
-      "phase_transition"
-    ],
-    "scientists": [
-      "Emile Clapeyron",
-      "Ludwig Boltzmann"
-    ]
+ "id": "thermodynamics",
+ "schema": "b42.course/2",
+ "kind": "overview",
+ "order": 12,
+ "entities": {
+  "laws": [
+   "ideal_gas_law",
+   "first_law_of_thermodynamics",
+   "second_law_of_thermodynamics",
+   "third_law_of_thermodynamics",
+   "zeroth_law_of_thermodynamics",
+   "carnot_theorem",
+   "boltzmann_distribution"
+  ],
+  "tags": [
+   "temperature",
+   "entropy",
+   "phase_transition"
+  ],
+  "scientists": [
+   "Emile Clapeyron",
+   "Ludwig Boltzmann"
+  ]
+ },
+ "lessons": [
+  {
+   "id": "01-molecules",
+   "title": "Молекулы и температура",
+   "sub": "Уравнение состояния идеального газа",
+   "law": "Клапейрон–Менделеев",
+   "model": "ideal_gas"
+  },
+  {
+   "id": "02-phase",
+   "title": "Фазовые переходы",
+   "sub": "Скрытая теплота и точка кипения",
+   "law": "Клаузиус–Клапейрон",
+   "model": "phase_transition"
+  },
+  {
+   "id": "03-engines",
+   "title": "Начала термодинамики",
+   "sub": "Процессы, циклы и тепловые машины",
+   "law": "Первое начало · Карно",
+   "model": "processes_engine"
+  }
+ ],
+ "ru": {
+  "title": "Термодинамика",
+  "subtitle": "Наука о тепле, работе и о том, почему нельзя получить что-то из ничего",
+  "lead": "Прежде чем открывать формулы, стоит понять, зачем эта наука появилась и что она объясняет в мире вокруг вас. Это обзорная глава: здесь нет вычислений — только смысл, история и карта того, что предстоит изучить.",
+  "why": {
+   "title": "Зачем это знать",
+   "text": [
+    "Термодинамика отвечает на вопросы, которые вы задавали себе с детства. Почему суп остывает, а сам себя не разогревает? Почему нельзя построить вечный двигатель — не «пока не придумали», а именно нельзя? Почему в горах невозможно нормально сварить яйцо? Почему автомобиль превращает в движение лишь четверть сожжённого топлива, а остальное выбрасывает теплом?",
+    "Эта наука родилась не из любопытства философов, а из совершенно практической нужды. В начале XIX века паровые машины уже работали на шахтах и фабриках, но никто не понимал, как сделать их лучше. Инженеры действовали наугад: пробовали разные металлы, давления, конструкции. Требовалась теория — и она появилась.",
+    "Результат превзошёл ожидания. Выяснилось, что законы, выведенные для паровой машины, управляют и звёздами, и живой клеткой, и информацией в компьютере. Термодинамика оказалась одной из самых универсальных теорий в физике: она не про пар и не про поршни, она про то, как энергия вообще может переходить из одной формы в другую — и чего при этом сделать нельзя никогда."
+   ]
+  },
+  "history": {
+   "title": "Кто её создал",
+   "people": [
+    {
+     "name": "Сади Карно",
+     "years": "1796–1832",
+     "what": "Военный инженер, в 28 лет издал небольшую книгу о движущей силе огня. Доказал, что предельный КПД тепловой машины не зависит ни от конструкции, ни от рабочего вещества — только от температур нагревателя и холодильника. Умер от холеры в 36 лет; его бумаги сожгли из-за карантина."
+    },
+    {
+     "name": "Джеймс Джоуль",
+     "years": "1818–1889",
+     "what": "Десятилетиями с исключительной точностью измерял, сколько механической работы даёт какое количество теплоты. Над ним посмеивались: тепло тогда считали невесомой жидкостью — «теплородом». Он оказался прав: теплота есть форма движения. Его именем названа единица энергии."
+    },
+    {
+     "name": "Рудольф Клаузиус",
+     "years": "1822–1888",
+     "what": "Свёл накопленные наблюдения в два строгих закона и ввёл понятие энтропии — меры того, насколько энергия «обесценилась» и потеряла способность совершать работу."
+    },
+    {
+     "name": "Людвиг Больцман",
+     "years": "1844–1906",
+     "what": "Объяснил, что температура — это средняя энергия хаотического движения молекул, а энтропия — счёт числа способов, которыми молекулы могут расположиться. Его идеи встретили ожесточённое сопротивление; формула, связывающая энтропию с вероятностью, высечена на его надгробии в Вене."
+    },
+    {
+     "name": "Эмиль Клапейрон и Дмитрий Менделеев",
+     "years": "1799–1864 · 1834–1907",
+     "what": "Клапейрон в 1834 году объединил разрозненные газовые законы в одно уравнение, Менделеев в 1874-м придал ему универсальную форму, введя количество вещества. Так появилось уравнение состояния, с которого начинается любой курс термодинамики."
+    }
+   ]
+  },
+  "map": {
+   "title": "Что вы изучите",
+   "lead": "Тема разбита на три параграфа. Каждый строится вокруг одного закона: сначала наглядный образ и опыт, затем строгий вывод формулы, затем задачи и проверка понимания.",
+   "outcome": "Пройдя все три, вы будете понимать, как связаны давление, объём и температура; почему кипение — это сделка с атмосферой; и по каким законам работает любой двигатель, холодильник и тепловой насос."
+  },
+  "prereq": {
+   "title": "Что нужно знать заранее",
+   "items": [
+    "Второй закон Ньютона в виде «сила есть изменение импульса в единицу времени» — он понадобится при выводе давления.",
+    "Понятие производной и простейший интеграл — для вывода уравнения адиабаты и Клаузиуса–Клапейрона. Мы разберём эти шаги подробно, но полезно, если запись dP/dT вас не пугает.",
+    "Умение работать со степенями и логарифмами на уровне школьной программы."
+   ],
+   "note": "Если что-то из этого забылось — не страшно: в местах, где математика начинает работать, мы поясняем каждый шаг и показываем пример с числами."
   },
   "lessons": [
+   {
+    "id": "01-molecules",
+    "title": "Молекулы и температура",
+    "sub": "Уравнение состояния идеального газа",
+    "law": "Клапейрон–Менделеев",
+    "model": "ideal_gas"
+   },
+   {
+    "id": "02-phase",
+    "title": "Фазовые переходы",
+    "sub": "Скрытая теплота и точка кипения",
+    "law": "Клаузиус–Клапейрон",
+    "model": "phase_transition"
+   },
+   {
+    "id": "03-engines",
+    "title": "Начала термодинамики",
+    "sub": "Процессы, циклы и тепловые машины",
+    "law": "Первое начало · Карно",
+    "model": "processes_engine"
+   }
+  ]
+ },
+ "en": {
+  "title": "Thermodynamics",
+  "subtitle": "The science of heat, work, and why you can't get something for nothing",
+  "lead": "Before opening formulas, it's worth understanding why this science emerged and what it explains in the world around you. This is an overview chapter: no calculations here — only meaning, history, and a map of what lies ahead.",
+  "why": {
+   "title": "Why know this",
+   "text": [
+    "Thermodynamics answers questions you've asked since childhood. Why does soup cool down but never heat itself up? Why is it impossible to build a perpetual motion machine — not \"we haven't figured it out yet,\" but truly impossible? Why can't you properly boil an egg in the mountains? Why does a car convert only a quarter of burned fuel into motion and dump the rest as heat?",
+    "This science was born not from philosophers' curiosity but from a very practical need. In the early 19th century, steam engines were already working in mines and factories, but no one understood how to improve them. Engineers acted by trial and error: trying different metals, pressures, designs. A theory was needed — and it emerged.",
+    "The result exceeded expectations. It turned out that the laws derived for a steam engine govern stars, living cells, and information in a computer. Thermodynamics proved to be one of the most universal theories in physics: it's not about steam or pistons; it's about how energy can transition from one form to another — and what can never be done in the process."
+   ]
+  },
+  "history": {
+   "title": "Who created it",
+   "people": [
     {
-      "id": "01-molecules",
-      "title": "Молекулы и температура",
-      "sub": "Уравнение состояния идеального газа",
-      "law": "Клапейрон–Менделеев",
-      "model": "ideal_gas"
+     "name": "Sadi Carnot",
+     "years": "1796–1832",
+     "what": "A military engineer who at 28 published a small book on the motive power of fire. He proved that the maximum efficiency of a heat engine depends neither on construction nor on working substance — only on the temperatures of the hot and cold reservoirs. He died of cholera at 36; his papers were burned due to quarantine."
     },
     {
-      "id": "02-phase",
-      "title": "Фазовые переходы",
-      "sub": "Скрытая теплота и точка кипения",
-      "law": "Клаузиус–Клапейрон",
-      "model": "phase_transition"
+     "name": "James Joule",
+     "years": "1818–1889",
+     "what": "For decades, with exceptional precision, he measured how much mechanical work a given amount of heat could produce. People laughed at him: heat was then thought to be a weightless fluid — \"caloric.\" He was right: heat is a form of motion. The unit of energy is named after him."
     },
     {
-      "id": "03-engines",
-      "title": "Начала термодинамики",
-      "sub": "Процессы, циклы и тепловые машины",
-      "law": "Первое начало · Карно",
-      "model": "processes_engine"
+     "name": "Rudolf Clausius",
+     "years": "1822–1888",
+     "what": "He consolidated accumulated observations into two strict laws and introduced the concept of entropy — a measure of how much energy has \"devalued\" and lost its ability to do work."
+    },
+    {
+     "name": "Ludwig Boltzmann",
+     "years": "1844–1906",
+     "what": "He explained that temperature is the average energy of chaotic molecular motion, and entropy is a count of the number of ways molecules can arrange themselves. His ideas met fierce resistance; the formula linking entropy to probability is carved on his tombstone in Vienna."
+    },
+    {
+     "name": "Émile Clapeyron and Dmitri Mendeleev",
+     "years": "1799–1864 · 1834–1907",
+     "what": "Clapeyron in 1834 combined scattered gas laws into a single equation; Mendeleev in 1874 gave it universal form by introducing the amount of substance. Thus came the equation of state, which starts any thermodynamics course."
     }
-  ],
-  "ru": {
-    "title": "Термодинамика",
-    "subtitle": "Наука о тепле, работе и о том, почему нельзя получить что-то из ничего",
-    "lead": "Прежде чем открывать формулы, стоит понять, зачем эта наука появилась и что она объясняет в мире вокруг вас. Это обзорная глава: здесь нет вычислений — только смысл, история и карта того, что предстоит изучить.",
-    "why": {
-      "title": "Зачем это знать",
-      "text": [
-        "Термодинамика отвечает на вопросы, которые вы задавали себе с детства. Почему суп остывает, а сам себя не разогревает? Почему нельзя построить вечный двигатель — не «пока не придумали», а именно нельзя? Почему в горах невозможно нормально сварить яйцо? Почему автомобиль превращает в движение лишь четверть сожжённого топлива, а остальное выбрасывает теплом?",
-        "Эта наука родилась не из любопытства философов, а из совершенно практической нужды. В начале XIX века паровые машины уже работали на шахтах и фабриках, но никто не понимал, как сделать их лучше. Инженеры действовали наугад: пробовали разные металлы, давления, конструкции. Требовалась теория — и она появилась.",
-        "Результат превзошёл ожидания. Выяснилось, что законы, выведенные для паровой машины, управляют и звёздами, и живой клеткой, и информацией в компьютере. Термодинамика оказалась одной из самых универсальных теорий в физике: она не про пар и не про поршни, она про то, как энергия вообще может переходить из одной формы в другую — и чего при этом сделать нельзя никогда."
-      ]
-    },
-    "history": {
-      "title": "Кто её создал",
-      "people": [
-        {
-          "name": "Сади Карно",
-          "years": "1796–1832",
-          "what": "Военный инженер, в 28 лет издал небольшую книгу о движущей силе огня. Доказал, что предельный КПД тепловой машины не зависит ни от конструкции, ни от рабочего вещества — только от температур нагревателя и холодильника. Умер от холеры в 36 лет; его бумаги сожгли из-за карантина."
-        },
-        {
-          "name": "Джеймс Джоуль",
-          "years": "1818–1889",
-          "what": "Десятилетиями с исключительной точностью измерял, сколько механической работы даёт какое количество теплоты. Над ним посмеивались: тепло тогда считали невесомой жидкостью — «теплородом». Он оказался прав: теплота есть форма движения. Его именем названа единица энергии."
-        },
-        {
-          "name": "Рудольф Клаузиус",
-          "years": "1822–1888",
-          "what": "Свёл накопленные наблюдения в два строгих закона и ввёл понятие энтропии — меры того, насколько энергия «обесценилась» и потеряла способность совершать работу."
-        },
-        {
-          "name": "Людвиг Больцман",
-          "years": "1844–1906",
-          "what": "Объяснил, что температура — это средняя энергия хаотического движения молекул, а энтропия — счёт числа способов, которыми молекулы могут расположиться. Его идеи встретили ожесточённое сопротивление; формула, связывающая энтропию с вероятностью, высечена на его надгробии в Вене."
-        },
-        {
-          "name": "Эмиль Клапейрон и Дмитрий Менделеев",
-          "years": "1799–1864 · 1834–1907",
-          "what": "Клапейрон в 1834 году объединил разрозненные газовые законы в одно уравнение, Менделеев в 1874-м придал ему универсальную форму, введя количество вещества. Так появилось уравнение состояния, с которого начинается любой курс термодинамики."
-        }
-      ]
-    },
-    "map": {
-      "title": "Что вы изучите",
-      "lead": "Тема разбита на три параграфа. Каждый строится вокруг одного закона: сначала наглядный образ и опыт, затем строгий вывод формулы, затем задачи и проверка понимания.",
-      "outcome": "Пройдя все три, вы будете понимать, как связаны давление, объём и температура; почему кипение — это сделка с атмосферой; и по каким законам работает любой двигатель, холодильник и тепловой насос."
-    },
-    "prereq": {
-      "title": "Что нужно знать заранее",
-      "items": [
-        "Второй закон Ньютона в виде «сила есть изменение импульса в единицу времени» — он понадобится при выводе давления.",
-        "Понятие производной и простейший интеграл — для вывода уравнения адиабаты и Клаузиуса–Клапейрона. Мы разберём эти шаги подробно, но полезно, если запись dP/dT вас не пугает.",
-        "Умение работать со степенями и логарифмами на уровне школьной программы."
-      ],
-      "note": "Если что-то из этого забылось — не страшно: в местах, где математика начинает работать, мы поясняем каждый шаг и показываем пример с числами."
-    },
-    "lessons": [
-      {
-        "id": "01-molecules",
-        "title": "Молекулы и температура",
-        "sub": "Уравнение состояния идеального газа",
-        "law": "Клапейрон–Менделеев",
-        "model": "ideal_gas"
-      },
-      {
-        "id": "02-phase",
-        "title": "Фазовые переходы",
-        "sub": "Скрытая теплота и точка кипения",
-        "law": "Клаузиус–Клапейрон",
-        "model": "phase_transition"
-      },
-      {
-        "id": "03-engines",
-        "title": "Начала термодинамики",
-        "sub": "Процессы, циклы и тепловые машины",
-        "law": "Первое начало · Карно",
-        "model": "processes_engine"
-      }
-    ]
+   ]
   },
-  "en": {
-    "title": "Thermodynamics",
-    "subtitle": "The science of heat, work, and why you can't get something for nothing",
-    "lead": "Before opening formulas, it's worth understanding why this science emerged and what it explains in the world around you. This is an overview chapter: no calculations here — only meaning, history, and a map of what lies ahead.",
-    "why": {
-      "title": "Why know this",
-      "text": [
-        "Thermodynamics answers questions you've asked since childhood. Why does soup cool down but never heat itself up? Why is it impossible to build a perpetual motion machine — not \"we haven't figured it out yet,\" but truly impossible? Why can't you properly boil an egg in the mountains? Why does a car convert only a quarter of burned fuel into motion and dump the rest as heat?",
-        "This science was born not from philosophers' curiosity but from a very practical need. In the early 19th century, steam engines were already working in mines and factories, but no one understood how to improve them. Engineers acted by trial and error: trying different metals, pressures, designs. A theory was needed — and it emerged.",
-        "The result exceeded expectations. It turned out that the laws derived for a steam engine govern stars, living cells, and information in a computer. Thermodynamics proved to be one of the most universal theories in physics: it's not about steam or pistons; it's about how energy can transition from one form to another — and what can never be done in the process."
-      ]
-    },
-    "history": {
-      "title": "Who created it",
-      "people": [
-        {
-          "name": "Sadi Carnot",
-          "years": "1796–1832",
-          "what": "A military engineer who at 28 published a small book on the motive power of fire. He proved that the maximum efficiency of a heat engine depends neither on construction nor on working substance — only on the temperatures of the hot and cold reservoirs. He died of cholera at 36; his papers were burned due to quarantine."
-        },
-        {
-          "name": "James Joule",
-          "years": "1818–1889",
-          "what": "For decades, with exceptional precision, he measured how much mechanical work a given amount of heat could produce. People laughed at him: heat was then thought to be a weightless fluid — \"caloric.\" He was right: heat is a form of motion. The unit of energy is named after him."
-        },
-        {
-          "name": "Rudolf Clausius",
-          "years": "1822–1888",
-          "what": "He consolidated accumulated observations into two strict laws and introduced the concept of entropy — a measure of how much energy has \"devalued\" and lost its ability to do work."
-        },
-        {
-          "name": "Ludwig Boltzmann",
-          "years": "1844–1906",
-          "what": "He explained that temperature is the average energy of chaotic molecular motion, and entropy is a count of the number of ways molecules can arrange themselves. His ideas met fierce resistance; the formula linking entropy to probability is carved on his tombstone in Vienna."
-        },
-        {
-          "name": "Émile Clapeyron and Dmitri Mendeleev",
-          "years": "1799–1864 · 1834–1907",
-          "what": "Clapeyron in 1834 combined scattered gas laws into a single equation; Mendeleev in 1874 gave it universal form by introducing the amount of substance. Thus came the equation of state, which starts any thermodynamics course."
-        }
-      ]
-    },
-    "map": {
-      "title": "What you will study",
-      "lead": "The topic is divided into three paragraphs. Each is built around one law: first a vivid picture and experiment, then a rigorous derivation of the formula, then problems and comprehension checks.",
-      "outcome": "After completing all three, you will understand how pressure, volume, and temperature are related; why boiling is a deal with the atmosphere; and by what laws any engine, refrigerator, and heat pump operate."
-    },
-    "prereq": {
-      "title": "What you need to know beforehand",
-      "items": [
-        "Newton's second law in the form \"force is the change in momentum per unit time\" — it will be needed when deriving pressure.",
-        "The concept of derivative and the simplest integral — for deriving the adiabatic equation and the Clausius–Clapeyron equation. We will go through these steps in detail, but it helps if the notation dP/dT doesn't scare you.",
-        "Ability to work with exponents and logarithms at the high school level."
-      ],
-      "note": "If you've forgotten any of this — don't worry: where the math gets going, we explain each step and show a numerical example."
-    },
-    "lessons": [
-      {
-        "id": "01-molecules",
-        "title": "Molecules and Temperature",
-        "sub": "Section 1 · Ideal Gas Equation of State",
-        "law": "Clapeyron–Mendeleev equation",
-        "model": "ideal_gas"
-      },
-      {
-        "id": "02-phase",
-        "title": "Phase Transitions",
-        "sub": "Section 2 · Latent Heat and Boiling Point",
-        "law": "Clausius–Clapeyron relation",
-        "model": "phase_transition"
-      },
-      {
-        "id": "03-engines",
-        "title": "Principles of Thermodynamics",
-        "sub": "Section 3 · Processes, Cycles, and Heat Engines",
-        "law": "First law · Carnot",
-        "model": "processes_engine"
-      }
-    ]
+  "map": {
+   "title": "What you will study",
+   "lead": "The topic is divided into three paragraphs. Each is built around one law: first a vivid picture and experiment, then a rigorous derivation of the formula, then problems and comprehension checks.",
+   "outcome": "After completing all three, you will understand how pressure, volume, and temperature are related; why boiling is a deal with the atmosphere; and by what laws any engine, refrigerator, and heat pump operate."
   },
-  "es": {
-    "title": "Termodinámica",
-    "subtitle": "La ciencia del calor, el trabajo y por qué no se puede obtener algo de la nada",
-    "lead": "Antes de abrir las fórmulas, vale la pena entender por qué surgió esta ciencia y qué explica en el mundo que te rodea. Este es un capítulo de visión general: no hay cálculos aquí, solo significado, historia y un mapa de lo que está por estudiar.",
-    "why": {
-      "title": "Por qué saber esto",
-      "text": [
-        "La termodinámica responde preguntas que te has hecho desde niño. ¿Por qué la sopa se enfría y no se calienta sola? ¿Por qué no se puede construir una máquina de movimiento perpetuo, no 'todavía no se ha inventado', sino que simplemente no se puede? ¿Por qué en las montañas no se puede hervir un huevo correctamente? ¿Por qué un automóvil convierte en movimiento solo una cuarta parte del combustible quemado y el resto lo expulsa como calor?",
-        "Esta ciencia no nació de la curiosidad de los filósofos, sino de una necesidad completamente práctica. A principios del siglo XIX, las máquinas de vapor ya funcionaban en minas y fábricas, pero nadie entendía cómo mejorarlas. Los ingenieros actuaban al azar: probaban diferentes metales, presiones, diseños. Se necesitaba una teoría, y surgió.",
-        "El resultado superó las expectativas. Resultó que las leyes derivadas para la máquina de vapor gobiernan tanto las estrellas como la célula viva y la información en una computadora. La termodinámica resultó ser una de las teorías más universales de la física: no se trata de vapor ni de pistones, sino de cómo la energía puede transformarse de una forma a otra, y qué nunca se puede hacer en ese proceso."
-      ]
-    },
-    "history": {
-      "title": "Quién la creó",
-      "people": [
-        {
-          "name": "Sadi Carnot",
-          "years": "1796–1832",
-          "what": "Ingeniero militar, a los 28 años publicó un pequeño libro sobre la fuerza motriz del fuego. Demostró que el rendimiento límite de una máquina térmica no depende ni del diseño ni del fluido de trabajo, solo de las temperaturas del foco caliente y del foco frío. Murió de cólera a los 36 años; sus papeles fueron quemados debido a la cuarentena."
-        },
-        {
-          "name": "James Joule",
-          "years": "1818–1889",
-          "what": "Durante décadas midió con excepcional precisión cuánto trabajo mecánico produce una determinada cantidad de calor. Se burlaban de él: en ese entonces el calor se consideraba un fluido sin peso llamado 'calórico'. Tenía razón: el calor es una forma de movimiento. La unidad de energía lleva su nombre."
-        },
-        {
-          "name": "Rudolf Clausius",
-          "years": "1822–1888",
-          "what": "Resumió las observaciones acumuladas en dos leyes rigurosas e introdujo el concepto de entropía, una medida de cuánto se ha 'devaluado' la energía y ha perdido su capacidad de realizar trabajo."
-        },
-        {
-          "name": "Ludwig Boltzmann",
-          "years": "1844–1906",
-          "what": "Explicó que la temperatura es la energía promedio del movimiento caótico de las moléculas, y la entropía es el número de formas en que las moléculas pueden disponerse. Sus ideas encontraron una feroz resistencia; la fórmula que relaciona la entropía con la probabilidad está tallada en su lápida en Viena."
-        },
-        {
-          "name": "Émile Clapeyron y Dmitri Mendeléyev",
-          "years": "1799–1864 · 1834–1907",
-          "what": "Clapeyron en 1834 unificó las leyes de los gases dispersas en una sola ecuación; Mendeléyev en 1874 le dio una forma universal al introducir la cantidad de sustancia. Así surgió la ecuación de estado con la que comienza cualquier curso de termodinámica."
-        }
-      ]
-    },
-    "map": {
-      "title": "Lo que estudiarás",
-      "lead": "El tema está dividido en tres secciones. Cada una se construye alrededor de una ley: primero una imagen visual y un experimento, luego una deducción rigurosa de la fórmula, y luego problemas y verificación de la comprensión.",
-      "outcome": "Al completar las tres, entenderás cómo se relacionan la presión, el volumen y la temperatura; por qué la ebullición es un trato con la atmósfera; y según qué leyes funciona cualquier motor, refrigerador y bomba de calor."
-    },
-    "prereq": {
-      "title": "Lo que necesitas saber de antemano",
-      "items": [
-        "La segunda ley de Newton en la forma 'la fuerza es el cambio de momento por unidad de tiempo' — se necesitará al deducir la presión.",
-        "El concepto de derivada e integral simple — para deducir la ecuación de la adiabática y la de Clausius-Clapeyron. Analizaremos estos pasos en detalle, pero es útil que la notación dP/dT no te asuste.",
-        "Habilidad para trabajar con potencias y logaritmos a nivel de programa escolar."
-      ],
-      "note": "Si algo de esto se ha olvidado, no importa: en los lugares donde las matemáticas entran en juego, explicamos cada paso y mostramos un ejemplo con números."
-    },
-    "lessons": [
-      {
-        "id": "01-molecules",
-        "title": "Moléculas y temperatura",
-        "sub": "Parágrafo 1 · Ecuación de estado del gas ideal",
-        "law": "Clapeyron–Mendeléyev",
-        "model": "ideal_gas"
-      },
-      {
-        "id": "02-phase",
-        "title": "Transiciones de fase",
-        "sub": "Párrafo 2 · Calor latente y punto de ebullición",
-        "law": "Clausius–Clapeyron",
-        "model": "phase_transition"
-      },
-      {
-        "id": "03-engines",
-        "title": "Fundamentos de la termodinámica",
-        "sub": "Párrafo 3 · Procesos, ciclos y máquinas térmicas",
-        "law": "Primer principio · Carnot",
-        "model": "processes_engine"
-      }
-    ]
+  "prereq": {
+   "title": "What you need to know beforehand",
+   "items": [
+    "Newton's second law in the form \"force is the change in momentum per unit time\" — it will be needed when deriving pressure.",
+    "The concept of derivative and the simplest integral — for deriving the adiabatic equation and the Clausius–Clapeyron equation. We will go through these steps in detail, but it helps if the notation dP/dT doesn't scare you.",
+    "Ability to work with exponents and logarithms at the high school level."
+   ],
+   "note": "If you've forgotten any of this — don't worry: where the math gets going, we explain each step and show a numerical example."
   },
-  "ar": {
-    "title": "الديناميكا الحرارية",
-    "subtitle": "علم الحرارة والشغل ولماذا لا يمكن الحصول على شيء من لا شيء",
-    "lead": "قبل فتح المعادلات، من المفيد فهم لماذا نشأ هذا العلم وماذا يشرح في العالم من حولك. هذا فصل تمهيدي: لا توجد حسابات هنا – فقط المعنى والتاريخ وخريطة لما ستدرسه.",
-    "why": {
-      "title": "لماذا يجب معرفة هذا",
-      "text": [
-        "تجيب الديناميكا الحرارية عن أسئلة طرحتها على نفسك منذ الطفولة. لماذا يبرد الحساء ولا يسخن نفسه؟ لماذا لا يمكن بناء آلة حركة أبدية – ليس «لم تُخترع بعد»، بل لا يمكن قطعاً؟ لماذا لا يمكن سلق بيضة جيداً في الجبال؟ لماذا يحوّل السيارة ربع الوقود المحروق فقط إلى حركة، ويطرح الباقي كحرارة؟",
-        "لم يولد هذا العلم من فضول الفلاسفة، بل من حاجة عملية تماماً. في بداية القرن التاسع عشر، كانت المحركات البخارية تعمل بالفعل في المناجم والمصانع، لكن لم يفهم أحد كيف يجعلها أفضل. كان المهندسون يعملون بشكل عشوائي: جربوا معادن مختلفة، ضغوطاً، تصاميم. كانت هناك حاجة إلى نظرية – وقد ظهرت.",
-        "تجاوزت النتيجة التوقعات. اتضح أن القوانين المستخلصة للمحرك البخاري تتحكم في النجوم والخلية الحية والمعلومات في الكمبيوتر. تبين أن الديناميكا الحرارية واحدة من أكثر النظريات شمولاً في الفيزياء: إنها لا تتعلق بالبخار أو المكابس، بل بكيفية تحول الطاقة من شكل إلى آخر – وما لا يمكن فعله أبداً."
-      ]
+  "lessons": [
+   {
+    "id": "01-molecules",
+    "title": "Molecules and Temperature",
+    "sub": "Section 1 · Ideal Gas Equation of State",
+    "law": "Clapeyron–Mendeleev equation",
+    "model": "ideal_gas"
+   },
+   {
+    "id": "02-phase",
+    "title": "Phase Transitions",
+    "sub": "Section 2 · Latent Heat and Boiling Point",
+    "law": "Clausius–Clapeyron relation",
+    "model": "phase_transition"
+   },
+   {
+    "id": "03-engines",
+    "title": "Principles of Thermodynamics",
+    "sub": "Section 3 · Processes, Cycles, and Heat Engines",
+    "law": "First law · Carnot",
+    "model": "processes_engine"
+   }
+  ]
+ },
+ "es": {
+  "title": "Termodinámica",
+  "subtitle": "La ciencia del calor, el trabajo y por qué no se puede obtener algo de la nada",
+  "lead": "Antes de abrir las fórmulas, vale la pena entender por qué surgió esta ciencia y qué explica en el mundo que te rodea. Este es un capítulo de visión general: no hay cálculos aquí, solo significado, historia y un mapa de lo que está por estudiar.",
+  "why": {
+   "title": "Por qué saber esto",
+   "text": [
+    "La termodinámica responde preguntas que te has hecho desde niño. ¿Por qué la sopa se enfría y no se calienta sola? ¿Por qué no se puede construir una máquina de movimiento perpetuo, no 'todavía no se ha inventado', sino que simplemente no se puede? ¿Por qué en las montañas no se puede hervir un huevo correctamente? ¿Por qué un automóvil convierte en movimiento solo una cuarta parte del combustible quemado y el resto lo expulsa como calor?",
+    "Esta ciencia no nació de la curiosidad de los filósofos, sino de una necesidad completamente práctica. A principios del siglo XIX, las máquinas de vapor ya funcionaban en minas y fábricas, pero nadie entendía cómo mejorarlas. Los ingenieros actuaban al azar: probaban diferentes metales, presiones, diseños. Se necesitaba una teoría, y surgió.",
+    "El resultado superó las expectativas. Resultó que las leyes derivadas para la máquina de vapor gobiernan tanto las estrellas como la célula viva y la información en una computadora. La termodinámica resultó ser una de las teorías más universales de la física: no se trata de vapor ni de pistones, sino de cómo la energía puede transformarse de una forma a otra, y qué nunca se puede hacer en ese proceso."
+   ]
+  },
+  "history": {
+   "title": "Quién la creó",
+   "people": [
+    {
+     "name": "Sadi Carnot",
+     "years": "1796–1832",
+     "what": "Ingeniero militar, a los 28 años publicó un pequeño libro sobre la fuerza motriz del fuego. Demostró que el rendimiento límite de una máquina térmica no depende ni del diseño ni del fluido de trabajo, solo de las temperaturas del foco caliente y del foco frío. Murió de cólera a los 36 años; sus papeles fueron quemados debido a la cuarentena."
     },
-    "history": {
-      "title": "من ابتكرها",
-      "people": [
-        {
-          "name": "سادي كارنو",
-          "years": "1796–1832",
-          "what": "مهندس عسكري، نشر في سن 28 كتيباً صغيراً عن القوة المحركة للنار. أثبت أن الكفاءة القصوى للمحرك الحراري لا تعتمد على التصميم ولا على مادة العمل – فقط على درجات حرارة المصدر الساخن والبارد. مات بالكوليرا في 36؛ أحرقت أوراقه بسبب الحجر الصحي."
-        },
-        {
-          "name": "جيمس جول",
-          "years": "1818–1889",
-          "what": "على مدى عقود بقي دقة استثنائية قاس كمية العمل الميكانيكي الناتج عن كمية معينة من الحرارة. كانوا يسخرون منه: كانت الحرارة تُعتبر آنذاك سائلاً عديم الوزن – «المادة الحرارية». كان محقاً: الحرارة شكل من أشكال الحركة. سُميت وحدة الطاقة باسمه."
-        },
-        {
-          "name": "رودولف كلاوزيوس",
-          "years": "1822–1888",
-          "what": "جمع الملاحظات المتراكمة في قانونين صارمين وأدخل مفهوم الإنتروبيا – مقياس مدى «فقدان قيمة» الطاقة وفقدان قدرتها على بذل شغل."
-        },
-        {
-          "name": "لودفيغ بولتزمان",
-          "years": "1844–1906",
-          "what": "شرح أن الحرارة هي متوسط طاقة الحركة العشوائية للجزيئات، والإنتروبيا هي عدد الطرق التي يمكن أن ترتب بها الجزيئات. قوبلت أفكاره بمقاومة شرسة؛ الصيغة التي تربط الإنتروبيا بالاحتمال محفورة على شاهد قبره في فيينا."
-        },
-        {
-          "name": "إميل كلابيرون وديميتري مندليف",
-          "years": "1799–1864 · 1834–1907",
-          "what": "في عام 1834، جمع كلابيرون قوانين الغاز المتناثرة في معادلة واحدة. في عام 1874، أعطاها مندليف شكلاً عاماً بإدخال كمية المادة. هكذا ظهرت معادلة الحالة التي تبدأ بها أي دورة في الديناميكا الحرارية."
-        }
-      ]
+    {
+     "name": "James Joule",
+     "years": "1818–1889",
+     "what": "Durante décadas midió con excepcional precisión cuánto trabajo mecánico produce una determinada cantidad de calor. Se burlaban de él: en ese entonces el calor se consideraba un fluido sin peso llamado 'calórico'. Tenía razón: el calor es una forma de movimiento. La unidad de energía lleva su nombre."
     },
-    "map": {
-      "title": "ماذا ستتعلم",
-      "lead": "الموضوع مقسم إلى ثلاث فقرات. كل فقرة تبنى حول قانون واحد: أولاً صورة واضحة وتجربة، ثم اشتقاق صارم للمعادلة، ثم مسائل واختبار للفهم.",
-      "outcome": "بعد اجتياز الثلاث، ستفهم كيف يرتبط الضغط والحجم ودرجة الحرارة؛ لماذا الغليان صفقة مع الغلاف الجوي؛ وبأي قوانين يعمل أي محرك وثلاجة ومضخة حرارية."
+    {
+     "name": "Rudolf Clausius",
+     "years": "1822–1888",
+     "what": "Resumió las observaciones acumuladas en dos leyes rigurosas e introdujo el concepto de entropía, una medida de cuánto se ha 'devaluado' la energía y ha perdido su capacidad de realizar trabajo."
     },
-    "prereq": {
-      "title": "ما يجب معرفته مسبقاً",
-      "items": [
-        "القانون الثاني لنيوتن بصيغة «القوة هي تغير الزخم في وحدة الزمن» – ستحتاجه عند اشتقاق الضغط.",
-        "مفهوم المشتق والتكامل البسيط – لاشتقاق معادلة الأديابات ومعادلة كلاوزيوس-كلابيرون. سنشرح هذه الخطوات بالتفصيل، لكن من المفيد ألا تخيفك كتابة dP/dT.",
-        "القدرة على التعامل مع الأسس واللوغاريتمات على مستوى المناهج المدرسية."
-      ],
-      "note": "إذا نسي شيء من هذا – لا مشكلة: في الأماكن التي تبدأ فيها الرياضيات بالعمل، نشرح كل خطوة ونعطي مثالاً بالأرقام."
+    {
+     "name": "Ludwig Boltzmann",
+     "years": "1844–1906",
+     "what": "Explicó que la temperatura es la energía promedio del movimiento caótico de las moléculas, y la entropía es el número de formas en que las moléculas pueden disponerse. Sus ideas encontraron una feroz resistencia; la fórmula que relaciona la entropía con la probabilidad está tallada en su lápida en Viena."
     },
-    "lessons": [
-      {
-        "id": "01-molecules",
-        "title": "الجزيئات ودرجة الحرارة",
-        "sub": "الفقرة 1 · معادلة الحالة للغاز المثالي",
-        "law": "كلابيرون-منديليف",
-        "model": "ideal_gas"
-      },
-      {
-        "id": "02-phase",
-        "title": "التحولات الطورية",
-        "sub": "الفقرة 2 · الحرارة الكامنة ونقطة الغليان",
-        "law": "كلوزيوس-كلابيرون",
-        "model": "phase_transition"
-      },
-      {
-        "id": "03-engines",
-        "title": "مبادئ الديناميكا الحرارية",
-        "sub": "الفقرة 3 · العمليات والدورات والآلات الحرارية",
-        "law": "القانون الأول · كارنو",
-        "model": "processes_engine"
-      }
-    ]
-  }
+    {
+     "name": "Émile Clapeyron y Dmitri Mendeléyev",
+     "years": "1799–1864 · 1834–1907",
+     "what": "Clapeyron en 1834 unificó las leyes de los gases dispersas en una sola ecuación; Mendeléyev en 1874 le dio una forma universal al introducir la cantidad de sustancia. Así surgió la ecuación de estado con la que comienza cualquier curso de termodinámica."
+    }
+   ]
+  },
+  "map": {
+   "title": "Lo que estudiarás",
+   "lead": "El tema está dividido en tres secciones. Cada una se construye alrededor de una ley: primero una imagen visual y un experimento, luego una deducción rigurosa de la fórmula, y luego problemas y verificación de la comprensión.",
+   "outcome": "Al completar las tres, entenderás cómo se relacionan la presión, el volumen y la temperatura; por qué la ebullición es un trato con la atmósfera; y según qué leyes funciona cualquier motor, refrigerador y bomba de calor."
+  },
+  "prereq": {
+   "title": "Lo que necesitas saber de antemano",
+   "items": [
+    "La segunda ley de Newton en la forma 'la fuerza es el cambio de momento por unidad de tiempo' — se necesitará al deducir la presión.",
+    "El concepto de derivada e integral simple — para deducir la ecuación de la adiabática y la de Clausius-Clapeyron. Analizaremos estos pasos en detalle, pero es útil que la notación dP/dT no te asuste.",
+    "Habilidad para trabajar con potencias y logaritmos a nivel de programa escolar."
+   ],
+   "note": "Si algo de esto se ha olvidado, no importa: en los lugares donde las matemáticas entran en juego, explicamos cada paso y mostramos un ejemplo con números."
+  },
+  "lessons": [
+   {
+    "id": "01-molecules",
+    "title": "Moléculas y temperatura",
+    "sub": "Parágrafo 1 · Ecuación de estado del gas ideal",
+    "law": "Clapeyron–Mendeléyev",
+    "model": "ideal_gas"
+   },
+   {
+    "id": "02-phase",
+    "title": "Transiciones de fase",
+    "sub": "Párrafo 2 · Calor latente y punto de ebullición",
+    "law": "Clausius–Clapeyron",
+    "model": "phase_transition"
+   },
+   {
+    "id": "03-engines",
+    "title": "Fundamentos de la termodinámica",
+    "sub": "Párrafo 3 · Procesos, ciclos y máquinas térmicas",
+    "law": "Primer principio · Carnot",
+    "model": "processes_engine"
+   }
+  ]
+ },
+ "ar": {
+  "title": "الديناميكا الحرارية",
+  "subtitle": "علم الحرارة والشغل ولماذا لا يمكن الحصول على شيء من لا شيء",
+  "lead": "قبل فتح المعادلات، من المفيد فهم لماذا نشأ هذا العلم وماذا يشرح في العالم من حولك. هذا فصل تمهيدي: لا توجد حسابات هنا – فقط المعنى والتاريخ وخريطة لما ستدرسه.",
+  "why": {
+   "title": "لماذا يجب معرفة هذا",
+   "text": [
+    "تجيب الديناميكا الحرارية عن أسئلة طرحتها على نفسك منذ الطفولة. لماذا يبرد الحساء ولا يسخن نفسه؟ لماذا لا يمكن بناء آلة حركة أبدية – ليس «لم تُخترع بعد»، بل لا يمكن قطعاً؟ لماذا لا يمكن سلق بيضة جيداً في الجبال؟ لماذا يحوّل السيارة ربع الوقود المحروق فقط إلى حركة، ويطرح الباقي كحرارة؟",
+    "لم يولد هذا العلم من فضول الفلاسفة، بل من حاجة عملية تماماً. في بداية القرن التاسع عشر، كانت المحركات البخارية تعمل بالفعل في المناجم والمصانع، لكن لم يفهم أحد كيف يجعلها أفضل. كان المهندسون يعملون بشكل عشوائي: جربوا معادن مختلفة، ضغوطاً، تصاميم. كانت هناك حاجة إلى نظرية – وقد ظهرت.",
+    "تجاوزت النتيجة التوقعات. اتضح أن القوانين المستخلصة للمحرك البخاري تتحكم في النجوم والخلية الحية والمعلومات في الكمبيوتر. تبين أن الديناميكا الحرارية واحدة من أكثر النظريات شمولاً في الفيزياء: إنها لا تتعلق بالبخار أو المكابس، بل بكيفية تحول الطاقة من شكل إلى آخر – وما لا يمكن فعله أبداً."
+   ]
+  },
+  "history": {
+   "title": "من ابتكرها",
+   "people": [
+    {
+     "name": "سادي كارنو",
+     "years": "1796–1832",
+     "what": "مهندس عسكري، نشر في سن 28 كتيباً صغيراً عن القوة المحركة للنار. أثبت أن الكفاءة القصوى للمحرك الحراري لا تعتمد على التصميم ولا على مادة العمل – فقط على درجات حرارة المصدر الساخن والبارد. مات بالكوليرا في 36؛ أحرقت أوراقه بسبب الحجر الصحي."
+    },
+    {
+     "name": "جيمس جول",
+     "years": "1818–1889",
+     "what": "على مدى عقود بقي دقة استثنائية قاس كمية العمل الميكانيكي الناتج عن كمية معينة من الحرارة. كانوا يسخرون منه: كانت الحرارة تُعتبر آنذاك سائلاً عديم الوزن – «المادة الحرارية». كان محقاً: الحرارة شكل من أشكال الحركة. سُميت وحدة الطاقة باسمه."
+    },
+    {
+     "name": "رودولف كلاوزيوس",
+     "years": "1822–1888",
+     "what": "جمع الملاحظات المتراكمة في قانونين صارمين وأدخل مفهوم الإنتروبيا – مقياس مدى «فقدان قيمة» الطاقة وفقدان قدرتها على بذل شغل."
+    },
+    {
+     "name": "لودفيغ بولتزمان",
+     "years": "1844–1906",
+     "what": "شرح أن الحرارة هي متوسط طاقة الحركة العشوائية للجزيئات، والإنتروبيا هي عدد الطرق التي يمكن أن ترتب بها الجزيئات. قوبلت أفكاره بمقاومة شرسة؛ الصيغة التي تربط الإنتروبيا بالاحتمال محفورة على شاهد قبره في فيينا."
+    },
+    {
+     "name": "إميل كلابيرون وديميتري مندليف",
+     "years": "1799–1864 · 1834–1907",
+     "what": "في عام 1834، جمع كلابيرون قوانين الغاز المتناثرة في معادلة واحدة. في عام 1874، أعطاها مندليف شكلاً عاماً بإدخال كمية المادة. هكذا ظهرت معادلة الحالة التي تبدأ بها أي دورة في الديناميكا الحرارية."
+    }
+   ]
+  },
+  "map": {
+   "title": "ماذا ستتعلم",
+   "lead": "الموضوع مقسم إلى ثلاث فقرات. كل فقرة تبنى حول قانون واحد: أولاً صورة واضحة وتجربة، ثم اشتقاق صارم للمعادلة، ثم مسائل واختبار للفهم.",
+   "outcome": "بعد اجتياز الثلاث، ستفهم كيف يرتبط الضغط والحجم ودرجة الحرارة؛ لماذا الغليان صفقة مع الغلاف الجوي؛ وبأي قوانين يعمل أي محرك وثلاجة ومضخة حرارية."
+  },
+  "prereq": {
+   "title": "ما يجب معرفته مسبقاً",
+   "items": [
+    "القانون الثاني لنيوتن بصيغة «القوة هي تغير الزخم في وحدة الزمن» – ستحتاجه عند اشتقاق الضغط.",
+    "مفهوم المشتق والتكامل البسيط – لاشتقاق معادلة الأديابات ومعادلة كلاوزيوس-كلابيرون. سنشرح هذه الخطوات بالتفصيل، لكن من المفيد ألا تخيفك كتابة dP/dT.",
+    "القدرة على التعامل مع الأسس واللوغاريتمات على مستوى المناهج المدرسية."
+   ],
+   "note": "إذا نسي شيء من هذا – لا مشكلة: في الأماكن التي تبدأ فيها الرياضيات بالعمل، نشرح كل خطوة ونعطي مثالاً بالأرقام."
+  },
+  "lessons": [
+   {
+    "id": "01-molecules",
+    "title": "الجزيئات ودرجة الحرارة",
+    "sub": "الفقرة 1 · معادلة الحالة للغاز المثالي",
+    "law": "كلابيرون-منديليف",
+    "model": "ideal_gas"
+   },
+   {
+    "id": "02-phase",
+    "title": "التحولات الطورية",
+    "sub": "الفقرة 2 · الحرارة الكامنة ونقطة الغليان",
+    "law": "كلوزيوس-كلابيرون",
+    "model": "phase_transition"
+   },
+   {
+    "id": "03-engines",
+    "title": "مبادئ الديناميكا الحرارية",
+    "sub": "الفقرة 3 · العمليات والدورات والآلات الحرارية",
+    "law": "القانون الأول · كارنو",
+    "model": "processes_engine"
+   }
+  ]
+ },
+ "fr": {
+  "title": "Thermodynamique",
+  "subtitle": "La science de la chaleur, du travail et pourquoi on ne peut pas obtenir quelque chose à partir de rien",
+  "lead": "Avant d'ouvrir les formules, il faut comprendre pourquoi cette science est apparue et ce qu'elle explique dans le monde qui vous entoure. C'est un chapitre de synthèse : pas de calculs ici, seulement le sens, l'histoire et une carte de ce qu'il reste à étudier.",
+  "why": {
+   "title": "Pourquoi savoir cela",
+   "text": [
+    "La thermodynamique répond aux questions que vous vous êtes posées depuis l'enfance. Pourquoi la soupe refroidit-elle et ne se réchauffe-t-elle pas toute seule ? Pourquoi ne peut-on pas construire un moteur perpétuel — pas « pas encore trouvé », mais carrément impossible ? Pourquoi est-il impossible de faire cuire un œuf normalement en montagne ? Pourquoi une voiture ne convertit-elle qu'un quart du carburant brûlé en mouvement et rejette le reste en chaleur ?",
+    "Cette science n'est pas née de la curiosité des philosophes, mais d'un besoin tout à fait pratique. Au début du XIXe siècle, les machines à vapeur fonctionnaient déjà dans les mines et les usines, mais personne ne comprenait comment les améliorer. Les ingénieurs agissaient au hasard : ils essayaient différents métaux, pressions, constructions. Une théorie était nécessaire — et elle est apparue.",
+    "Le résultat a dépassé les attentes. Il s'est avéré que les lois dérivées pour la machine à vapeur régissent aussi les étoiles, la cellule vivante et l'information dans un ordinateur. La thermodynamique s'est révélée être l'une des théories les plus universelles de la physique : elle ne concerne ni la vapeur ni les pistons, elle parle de la manière dont l'énergie peut passer d'une forme à une autre — et de ce qui ne peut jamais être fait."
+   ]
+  },
+  "history": {
+   "title": "Qui l'a créée",
+   "people": [
+    {
+     "name": "Sadi Carnot",
+     "years": "1796–1832",
+     "what": "Ingénieur militaire, à 28 ans il a publié un petit livre sur la force motrice du feu. Il a prouvé que le rendement maximal d'une machine thermique ne dépend ni de la construction ni du fluide de travail, mais uniquement des températures de la source chaude et de la source froide. Il est mort du choléra à 36 ans ; ses papiers ont été brûlés en raison de la quarantaine."
+    },
+    {
+     "name": "James Joule",
+     "years": "1818–1889",
+     "what": "Pendant des décennies, avec une précision exceptionnelle, il a mesuré combien de travail mécanique est produit par une quantité donnée de chaleur. On se moquait de lui : à l'époque, la chaleur était considérée comme un fluide immatériel — le « calorique ». Il avait raison : la chaleur est une forme de mouvement. L'unité d'énergie porte son nom."
+    },
+    {
+     "name": "Rudolf Clausius",
+     "years": "1822–1888",
+     "what": "Il a résumé les observations accumulées en deux lois strictes et a introduit le concept d'entropie — une mesure de combien l'énergie s'est « dépréciée » et a perdu sa capacité à effectuer un travail."
+    },
+    {
+     "name": "Ludwig Boltzmann",
+     "years": "1844–1906",
+     "what": "Il a expliqué que la température est l'énergie moyenne du mouvement aléatoire des molécules, et que l'entropie est le nombre de façons dont les molécules peuvent s'arranger. Ses idées ont rencontré une vive opposition ; la formule reliant l'entropie à la probabilité est gravée sur sa tombe à Vienne."
+    },
+    {
+     "name": "Émile Clapeyron et Dmitri Mendeleïev",
+     "years": "1799–1864 · 1834–1907",
+     "what": "Clapeyron en 1834 a combiné les lois des gaz éparses en une seule équation, Mendeleïev en 1874 lui a donné une forme universelle en introduisant la quantité de matière. C'est ainsi qu'est apparue l'équation d'état par laquelle commence tout cours de thermodynamique."
+    }
+   ]
+  },
+  "map": {
+   "title": "Ce que vous allez étudier",
+   "lead": "Le sujet est divisé en trois sections. Chacune est construite autour d'une loi : d'abord une image visuelle et une expérience, puis une déduction rigoureuse de la formule, puis des exercices et une vérification de la compréhension.",
+   "outcome": "Après avoir suivi les trois, vous comprendrez comment pression, volume et température sont liés ; pourquoi l'ébullition est une transaction avec l'atmosphère ; et selon quelles lois fonctionnent tout moteur, réfrigérateur et pompe à chaleur."
+  },
+  "prereq": {
+   "title": "Ce qu'il faut savoir à l'avance",
+   "items": [
+    "La deuxième loi de Newton sous la forme « la force est la variation de la quantité de mouvement par unité de temps » — elle sera nécessaire pour déduire la pression.",
+    "La notion de dérivée et l'intégrale la plus simple — pour déduire l'équation de l'adiabatique et de Clausius–Clapeyron. Nous détaillerons ces étapes, mais il est utile que l'écriture dP/dT ne vous effraie pas.",
+    "La capacité à travailler avec les puissances et les logarithmes au niveau du programme scolaire."
+   ],
+   "note": "Si quelque chose est oublié, ce n'est pas grave : là où les mathématiques entrent en jeu, nous expliquons chaque étape et montrons un exemple avec des nombres."
+  },
+  "lessons": [
+   {
+    "id": "01-molecules",
+    "title": "Molécules et température",
+    "sub": "Équation d'état des gaz parfaits",
+    "law": "Clapeyron–Mendeleïev",
+    "model": "ideal_gas"
+   },
+   {
+    "id": "02-phase",
+    "title": "Transitions de phase",
+    "sub": "Chaleur latente et point d'ébullition",
+    "law": "Clausius–Clapeyron",
+    "model": "phase_transition"
+   },
+   {
+    "id": "03-engines",
+    "title": "Principes de la thermodynamique",
+    "sub": "Processus, cycles et machines thermiques",
+    "law": "Premier principe · Carnot",
+    "model": "processes_engine"
+   }
+  ]
+ }
 }

@@ -454,7 +454,9 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
       arts.forEach(function (a) {
         if (!a.date) return;                 // без даты адрес в архиве не собрать
         var t = a.title;
-        var name = (t && (typeof t === 'string' ? t : (t[LANG] || t.ru))) || a.id;
+        // Заголовки статей переведены не на все языки сайта. Откат на английский, а не
+        // сразу на русский: латиница читается везде, кириллица — нет.
+        var name = (t && (typeof t === 'string' ? t : (t[LANG] || t.en || t.ru))) || a.id;
         if (shown) line.appendChild(document.createTextNode(' · '));
         var link = el('a', null, name);
         link.href = '/lang/' + LANG + '/archive/' + a.date + '/' + a.id + '/';
@@ -1119,8 +1121,8 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 </script>
-<script src="/js/course-predict.js?v=4"></script>
-<script src="/js/course-challenge.js?v=1"></script>
+<script src="/js/course-predict.js?v=5"></script>
+<script src="/js/course-challenge.js?v=2"></script>
 <script src="/js/sitenav.js?v=1"></script>
 </body>
 </html>

@@ -1420,5 +1420,342 @@
    "id": "2607.13930",
    "why": "совпадение по теме: pulsar"
   }
- ]
+ ],
+ "fr": {
+  "title": "Molécules et température",
+  "subtitle": "Paragraphe 1 · Équation d'état des gaz parfaits",
+  "intro": [
+   "Oubliez un instant le mot « température ». Imaginez une boîte fermée dans laquelle se précipitent de minuscules billes — les molécules. Elles n'ont ni couleur ni intention. Elles volent simplement et heurtent les parois.",
+   "Chaque choc est une minuscule poussée sur la paroi. Les chocs sont inimaginablement nombreux, ils se fondent en une pression régulière : celle qui gonfle le pneu et maintient le ballon. La pression n'est pas une « force du gaz » en tant que tout, c'est le roulement des molécules sur la paroi.",
+   "Et la température est une mesure de la vitesse à laquelle ces billes volent. Chauffer un gaz signifie accélérer les molécules. À partir de ces deux idées, nous allons maintenant dériver honnêtement la loi qui relie la pression, le volume et la température."
+  ],
+  "standNote": "Avant de dériver la formule, jouez avec le modèle. Augmentez la température et surveillez l'aiguille du manomètre : les chocs deviennent plus fréquents et plus forts. Comprimez le piston — la paroi est plus proche, les chocs par seconde sont plus nombreux. C'est ce que nous allons maintenant écrire mathématiquement.",
+  "formula": {
+   "name": "Équation de Clapeyron – Mendeleïev",
+   "latex": "PV = nRT",
+   "alsoKnown": "Équation d'état des gaz parfaits",
+   "authors": [
+    {
+     "who": "Émile Clapeyron",
+     "year": "1834",
+     "what": "a combiné les trois lois expérimentales des gaz — Boyle-Mariotte, Charles et Gay-Lussac — en une seule équation"
+    },
+    {
+     "who": "Dmitri Mendeleïev",
+     "year": "1874",
+     "what": "a donné à l'équation une forme universelle en introduisant la quantité de matière (mole), — grâce à quoi la constante R est devenue la même pour tous les gaz"
+    }
+   ],
+   "story": "Avant Clapeyron, les lois des gaz existaient séparément : l'une décrivait la compression à température constante, l'autre la dilatation par chauffage. Clapeyron a remarqué qu'il s'agissait de trois projections d'une même relation et l'a écrite dans son intégralité. Quarante ans plus tard, Mendeleïev a compris que si l'on compte non pas la masse du gaz mais le nombre de particules qu'il contient, la constante de l'équation cesse de dépendre de la nature du gaz — elle devient universelle.",
+   "symbols": [
+    {
+     "sym": "P",
+     "latex": "P",
+     "what": "pression",
+     "unit": "Pa (N/m²)",
+     "note": "ce qu'indique le manomètre : la force des chocs moléculaires par unité de surface"
+    },
+    {
+     "sym": "V",
+     "latex": "V",
+     "what": "volume",
+     "unit": "m³",
+     "note": "espace disponible pour les molécules ; dans les problèmes, on donne souvent en litres — conversion obligatoire"
+    },
+    {
+     "sym": "n",
+     "latex": "n",
+     "what": "quantité de matière",
+     "unit": "mol",
+     "note": "nombre de particules, mais dans une unité de comptage pratique ; n = N/N_A"
+    },
+    {
+     "sym": "R",
+     "latex": "R",
+     "what": "constante universelle des gaz",
+     "unit": "J/(mol·K)",
+     "const": "R",
+     "note": "facteur de conversion entre « combien de particules et à quelle température » et « combien de pression »"
+    },
+    {
+     "sym": "T",
+     "latex": "T",
+     "what": "température absolue",
+     "unit": "K",
+     "note": "UNIQUEMENT en kelvins — l'utilisation de degrés Celsius casse la formule"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Dérivation rigoureuse",
+   "lead": "Nous allons dériver cette équation à partir de zéro, en nous appuyant uniquement sur la deuxième loi de Newton et la moyenne. Rien d'autre que la mécanique d'une seule molécule ne sera nécessaire.",
+   "steps": [
+    {
+     "text": "Une molécule de masse m se dirige vers la paroi avec une vitesse vₓ et rebondit élastiquement : le module de la vitesse est conservé, mais la direction est inversée. Le changement de quantité de mouvement de la molécule est de 2mvₓ — et c'est exactement l'impulsion que reçoit la paroi.",
+     "latex": "\\Delta p = m v_x - (-m v_x) = 2 m v_x",
+     "figure": "bounce",
+     "figCaption": "Rebond élastique : la vitesse change de signe, donc l'impulsion transmise est le double de l'impulsion initiale."
+    },
+    {
+     "text": "Combien de molécules heurtent la paroi pendant un temps Δt ? Seules celles qui se trouvent à une distance inférieure à vₓ·Δt de la paroi — c'est-à-dire à l'intérieur d'un cylindre imaginaire de base A et de hauteur vₓ·Δt. La concentration des molécules est N/V, et environ la moitié se dirige vers la paroi (l'autre moitié s'en éloigne).",
+     "latex": "N_{\\text{coll}} = \\tfrac{1}{2}\\,\\frac{N}{V}\\,A\\,v_x\\,\\Delta t",
+     "figure": "cylinder",
+     "figCaption": "Pendant Δt, les molécules du cylindre de volume A·vₓ·Δt atteignent la paroi — mais seulement celles qui se dirigent vers elle."
+    },
+    {
+     "text": "L'impulsion totale reçue par la paroi est le produit de l'impulsion d'un seul choc par le nombre de chocs. La force, selon la deuxième loi de Newton, est la quantité de mouvement transférée par unité de temps, donc Δt s'annule.",
+     "latex": "F = \\frac{\\Delta p \\cdot N_{\\text{coll}}}{\\Delta t} = \\frac{N}{V}\\,A\\,m\\,v_x^{2}",
+     "figure": "force",
+     "figCaption": "La multitude de chocs individuels se fond en une force constante agissant sur la paroi."
+    },
+    {
+     "text": "La pression, par définition, est la force divisée par la surface. La surface A s'annule — et c'est un résultat physique important : la pression ne dépend pas de la taille du récipient, seulement de la densité des molécules et de leur vitesse.",
+     "latex": "P = \\frac{F}{A} = \\frac{N}{V}\\,m\\,v_x^{2}",
+     "figure": "pressure",
+     "figCaption": "La pression est la densité de flux de quantité de mouvement : combien de quantité de mouvement arrive par mètre carré par seconde."
+    },
+    {
+     "text": "Mais les molécules volent dans toutes les directions, pas seulement le long de l'axe x. Les trois directions sont équivalentes, donc le carré moyen de la projection de la vitesse est un tiers du carré moyen de la vitesse totale. Substituons cela et introduisons l'énergie cinétique moyenne d'une molécule.",
+     "latex": "\\langle v_x^{2}\\rangle = \\tfrac{1}{3}\\langle v^{2}\\rangle \\;\\Rightarrow\\; PV = \\tfrac{2}{3} N \\langle E_{\\text{cin}}\\rangle",
+     "figure": "axes",
+     "figCaption": "Le chaos est isotrope : aucune direction n'est privilégiée, donc l'énergie se répartit également entre les trois axes."
+    },
+    {
+     "text": "Voici le point clé de tout le cours. Nous ne dérivons pas la température — nous la définissons ainsi. La température est une mesure de l'énergie cinétique moyenne des molécules, et la constante de Boltzmann sert de taux de change entre les joules et les degrés.",
+     "latex": "\\langle E_{\\text{cin}}\\rangle = \\tfrac{3}{2} k_B T",
+     "figure": "energy",
+     "figCaption": "Trois degrés de liberté, chacun apportant ½kT — c'est un cas particulier du théorème général d'équipartition."
+    },
+    {
+     "text": "En substituant la définition de la température dans le résultat précédent, nous obtenons l'équation d'état. Il reste à passer du nombre de molécules N au nombre de moles n = N/N_A et à noter le produit N_A·k_B par une seule lettre R.",
+     "latex": "PV = N k_B T = n N_A k_B T = nRT",
+     "figure": "result",
+     "figCaption": "Résultat : les grandeurs macroscopiques à gauche, la nature microscopique à droite."
+    }
+   ],
+   "plate": "PV = nRT",
+   "plateCap": "À gauche — ce que l'on peut mesurer avec un manomètre et une règle. À droite — ce qui se passe dans le monde des molécules. Le signe égal entre les deux est la principale réalisation de ce chapitre.",
+   "note": "Remarquez ce qui n'était pas dans la dérivation : la taille des molécules et les forces d'attraction entre elles. Nous avons considéré des points n'interagissant qu'avec la paroi. C'est pourquoi ce gaz est appelé parfait — et c'est pourquoi l'équation commence à donner des erreurs à hautes pressions et basses températures, lorsque les molécules deviennent trop serrées et que l'attraction n'est plus négligeable."
+  },
+  "math": {
+   "title": "Mathématiques nécessaires ici",
+   "items": [
+    {
+     "what": "Moyenne sur les directions",
+     "why": "La vitesse est un vecteur, et par le théorème de Pythagore en trois dimensions, son carré est la somme des carrés des projections : v² = vₓ² + v_y² + v_z². Puisqu'aucune direction dans le chaos n'est privilégiée, les carrés moyens des projections sont égaux entre eux. Par conséquent, chacun d'eux représente un tiers de ⟨v²⟩ — ce fameux facteur 1/3 dans la dérivation.",
+     "latex": "\\langle v^{2}\\rangle = \\langle v_x^{2}\\rangle + \\langle v_y^{2}\\rangle + \\langle v_z^{2}\\rangle = 3\\langle v_x^{2}\\rangle"
+    },
+    {
+     "what": "Pourquoi la force est égale à la variation de quantité de mouvement par unité de temps",
+     "why": "La deuxième loi de Newton dans la formulation originale de Newton est écrite ainsi : la force est le taux de variation de la quantité de mouvement. La forme familière F = ma en découle lorsque la masse est constante. Nous avons besoin de la forme originale car nous calculons le flux de quantité de mouvement d'un grand nombre de particules, et non l'accélération d'un seul corps.",
+     "latex": "F = \\frac{\\Delta p}{\\Delta t}"
+    }
+   ]
+  },
+  "example": {
+   "title": "Exemple avec des nombres",
+   "lead": "Vérifions la formule sur un problème concret — et voyons comment cela se calcule mentalement.",
+   "given": "Un ballon de 5 litres contient 0,4 mole de gaz à une température de 300 K. Trouver la pression.",
+   "law": "PV = nRT, d'où P = nRT / V",
+   "solution": [
+    {
+     "text": "Nous substituons les nombres. Convertissons le volume en mètres cubes : 5 L = 0,005 m³.",
+     "latex": "P = \\frac{0{,}4 \\cdot 8{,}314 \\cdot 300}{0{,}005}"
+    },
+    {
+     "text": "Calculons le numérateur : 0,4 · 8,314 ≈ 3,33, multiplié par 300 donne environ 998 J.",
+     "latex": "0{,}4 \\cdot 8{,}314 \\cdot 300 \\approx 998\\ \\text{J}"
+    },
+    {
+     "text": "Divisons par le volume en mètres cubes et nous obtenons la pression en pascals.",
+     "latex": "P = \\frac{998}{0{,}005} \\approx 199\\,600\\ \\text{Pa} \\approx 200\\ \\text{kPa}"
+    }
+   ],
+   "answer": "P ≈ 200 kPa ≈ 2 atmosphères",
+   "check": "Est-ce raisonnable ? Deux cents kilopascals — environ le double de la pression atmosphérique, comme dans un ballon de football. Pour un demi-litre de gaz comprimé dans un ballon de cinq litres, cela semble plausible. Une telle vérification de bon sens après chaque problème est une habitude qui évite les erreurs grossières."
+  },
+  "constants": {
+   "title": "Constantes de ce paragraphe",
+   "lead": "Chaque constante n'est pas simplement un nombre, mais un fait mesuré sur le monde. Faites attention aux unités : elles indiquent le sens physique de la grandeur.",
+   "items": [
+    {
+     "sym": "k_B",
+     "latex": "k_B",
+     "name": "Constante de Boltzmann",
+     "value": "1,380 649 · 10⁻²³",
+     "unit": "J / K",
+     "why": "Taux de change entre température et énergie : autant de joules par kelvin et par degré de liberté. Les unités se lisent littéralement — joules par kelvin. Depuis 2019, la valeur est fixée exactement, et c'est par elle que le kelvin lui-même est défini.",
+     "mnemo": "Ordre de grandeur 10⁻²³ — le même que celui du nombre d'Avogadro, mais avec un signe inverse : l'un compte les particules dans une mole, l'autre divise l'énergie par particule."
+    },
+    {
+     "sym": "N_A",
+     "latex": "N_A",
+     "name": "Constante d'Avogadro",
+     "value": "6,022 140 76 · 10²³",
+     "unit": "1 / mol",
+     "why": "Nombre d'unités structurales contenues dans une mole de substance. L'unité est la mole inverse, car c'est le nombre de particules par mole. Depuis 2019, la valeur est fixée et la mole est définie par elle.",
+     "mnemo": "Le jour de la mole est célébré le 23 octobre (10/23 — l'exposant) à 6:02 du matin (les premiers chiffres de la mantisse)."
+    },
+    {
+     "sym": "R",
+     "latex": "R",
+     "name": "Constante universelle des gaz parfaits",
+     "value": "8,314 462",
+     "unit": "J / (mol · K)",
+     "why": "Pas une constante indépendante, mais le produit des deux précédentes : R = N_A · k_B. Le même taux de change, mais rapporté à la mole, ce qui se voit directement dans les unités — joules par mole et par kelvin. Elle est universelle car identique pour tout gaz, tant qu'il se comporte comme un gaz parfait.",
+     "mnemo": "Après le huit se cache le nombre π : 8,314. Vérifiez le lien : 6,022 · 1,381 ≈ 8,31."
+    },
+    {
+     "sym": "n",
+     "latex": "n",
+     "name": "Quantité de matière",
+     "value": "grandeur mesurée",
+     "unit": "mol",
+     "why": "Ce n'est pas une constante mais une variable, mais il faut bien la comprendre : la mole est simplement une unité pratique pour compter les particules, comme la douzaine ou le millier. Une mole de tout gaz dans les conditions normales occupe 22,4 litres — c'est une conséquence de l'équation que nous avons dérivée."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "La pression est le tambourinement des molécules sur la paroi, la température est une mesure de leur vitesse. L'équation d'état relie ce que l'instrument indique à ce qui se passe dans le micromonde.",
+   "keyIdeas": [
+    {
+     "icon": "scale",
+     "title": "Pression",
+     "text": "Densité du flux d'impulsion : combien d'impulsion les molécules apportent par mètre carré par seconde."
+    },
+    {
+     "icon": "clock",
+     "title": "Température",
+     "text": "Mesure de l'énergie cinétique moyenne. Pas « combien de chaleur », mais « à quelle vitesse elles volent »."
+    },
+    {
+     "icon": "sigma",
+     "title": "Facteur ⅓",
+     "text": "Le chaos est isotrope : l'énergie se répartit également entre les trois axes, donc ⟨vₓ²⟩ = ⟨v²⟩/3."
+    },
+    {
+     "icon": "formula",
+     "title": "Gaz parfait",
+     "text": "Dans la dérivation, il n'y a ni taille des molécules ni attraction. D'où les limites : il ment à haute pression et basse température."
+    }
+   ],
+   "where": [
+    "Pneus en hiver : refroidissement de 20° — la pression a chuté d'environ 7%",
+    "Emballage sous vide : enlevé les molécules — le film est pressé par la pression extérieure",
+    "Une mole de tout gaz dans des conditions normales occupe 22,4 litres",
+    "Bombe aérosol dans la chaleur : augmentation de T à V constant élève P"
+   ],
+   "watchOut": "La température est substituée dans la formule uniquement en kelvins. Substituer en degrés Celsius est l'erreur la plus fréquente dans les exercices sur ce sujet."
+  },
+  "quiz": [
+   {
+    "id": "m1",
+    "type": "mcq",
+    "q": "Dans la dérivation, nous avons obtenu que l'aire de la paroi A se simplifie. Qu'est-ce que cela signifie physiquement ?",
+    "options": [
+     "La pression ne dépend pas de la taille du récipient — seulement de la concentration des molécules et de leur vitesse",
+     "La pression est d'autant plus faible que la paroi est grande",
+     "La formule n'est valable que pour des récipients de forme définie",
+     "C'est une coïncidence mathématique sans signification physique"
+    ],
+    "answer": 0,
+    "why": "Exactement : la pression est une caractéristique de l'état du gaz, pas du récipient. C'est pourquoi le manomètre indique la même chose indépendamment de la forme de la bouteille et de l'endroit où on le visse.",
+    "hint": "Regardez l'étape 4 de la dérivation : la grandeur A était au numérateur et au dénominateur. Si le résultat n'en dépend pas, qu'est-ce que cela dit sur la nature de la pression en tant que grandeur ?"
+   },
+   {
+    "id": "m2",
+    "type": "mcq",
+    "q": "Pourquoi le facteur un tiers est-il apparu dans la dérivation ?",
+    "options": [
+     "C'est plus pratique pour calculer",
+     "Les molécules se déplacent dans trois dimensions et l'énergie se répartit également entre les directions",
+     "Un tiers des molécules vole vers la paroi, les autres sur les côtés",
+     "C'est une correction empirique issue de l'expérience"
+    ],
+    "answer": 1,
+    "why": "Le mouvement chaotique est isotrope : aucun axe n'est privilégié. Donc ⟨vₓ²⟩ = ⟨v²⟩/3 — c'est de la pure géométrie de l'espace tridimensionnel, et non un ajustement.",
+    "hint": "Écrivez le carré de la vitesse en fonction des projections par le théorème de Pythagore en trois dimensions. Si les trois termes sont en moyenne égaux, quelle fraction chacun représente-t-il ?"
+   },
+   {
+    "id": "m3",
+    "type": "estimate",
+    "q": "Estimez la pression produite par 2 moles de gaz à 300 K dans un récipient de volume 10 litres. Réponse en kilopascals.",
+    "answer": 499,
+    "unit": "kPa",
+    "tolerance": 1.5,
+    "why": "P = nRT/V = 2 · 8,314 · 300 / 0,01 ≈ 499 kPa. Mentalement : 2 · 8 · 300 = 4800, divisé par 0,01 — donne environ 480 000 Pa, soit environ 500 kPa, environ cinq atmosphères.",
+    "hint": "Arrondissez R à huit — la précision est suffisante pour une estimation. N'oubliez pas de convertir les litres en mètres cubes : 10 L = 0,01 m³."
+   }
+  ],
+  "curiosities": {
+   "title": "Curiosités: vérifiez par vous-même",
+   "lead": "L'équation d'état se vérifie avec un ballon de baudruche dans un réfrigérateur — avec une précision de quelques pour cent.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "expérience de cuisine",
+     "h": "Le ballon dans le réfrigérateur",
+     "text": "Gonflez le ballon, nouez-le et mesurez sa circonférence avec un fil. Mettez-le au réfrigérateur pendant une demi-heure, sortez-le et mesurez immédiatement à nouveau. Le rapport des cubes des circonférences donne le rapport des volumes.",
+     "answer": "Le ballon se contracte nettement. De 22 degrés Celsius ambiants à 5 degrés au réfrigérateur — cela va de 295 à 278 kelvins, soit une baisse d'environ six pour cent. Le volume doit diminuer d'autant, et la circonférence de deux pour cent, car le volume croît comme le cube de la taille. Sur un ballon de 60 centimètres de circonférence, cela représente un peu plus d'un centimètre, et le fil le détecte. Détail important : il faut compter en kelvins, sinon on obtient une absurdité — de 22 à 5 degrés donnerait une baisse d'un facteur quatre."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoxe",
+     "h": "On chauffe la pièce — l'air diminue",
+     "text": "En hiver, on chauffe une pièce de 15 à 25 degrés. Le volume de la pièce n'a pas changé, la pression reste atmosphérique. Que devient la masse d'air à l'intérieur ?",
+     "answer": "Elle a diminué d'environ trois pour cent : une partie de l'air est sortie par les fissures. La pièce n'est pas hermétique, donc la pression y est toujours égale à la pression extérieure, et à pression et volume constants, la quantité de matière est inversement proportionnelle à la température. Dans une pièce de 50 mètres cubes, cela représente environ deux kilogrammes d'air qui sont sortis. On en tire une conclusion curieuse : l'énergie thermique totale de l'air dans la pièce lors du chauffage n'augmente presque pas — il y a exactement autant de molécules en moins que chacune est devenue plus énergétique."
+    },
+    {
+     "icon": "fact",
+     "kind": "fait intéressant",
+     "h": "L'hypothèse est restée ignorée pendant un demi-siècle",
+     "text": "En 1811, Amedeo Avogadro a supposé que des volumes égaux de gaz différents dans les mêmes conditions contiennent le même nombre de molécules. L'idée résolvait des contradictions qui tourmentaient les chimistes, mais elle est restée ignorée pendant près de cinquante ans — en partie parce qu'Avogadro travaillait à Turin, loin des centres scientifiques, et écrivait en italien. Ce n'est qu'en 1860, lors du congrès de Karlsruhe, que Stanislao Cannizzaro a montré que cette hypothèse mettait de l'ordre dans tous les poids atomiques à la fois. Le nombre de molécules dans une mole — $6{,}022\\cdot10^{23}$ — porte le nom d'Avogadro, bien que lui-même ne l'ait jamais calculé."
+    },
+    {
+     "icon": "mnemo",
+     "kind": "mnémotechnique",
+     "h": "La température est une mesure d'énergie, pas de chaleur",
+     "text": "La température est proportionnelle à l'énergie cinétique moyenne d'une molécule, et non à la réserve totale de chaleur. Ainsi, une étincelle de meule est chauffée à des milliers de degrés, mais elle est inoffensive : elle contient très peu de molécules. Et de même, un seau d'eau fraîche contient bien plus d'énergie thermique que cette étincelle. Dans la formule $PV=nRT$, la température se trouve à côté de la quantité de matière $n$ — leur produit donne la réserve totale."
+    },
+    {
+     "icon": "estimate",
+     "kind": "estimation",
+     "h": "À quelle vitesse les molécules d'air se déplacent-elles ?",
+     "text": "D'après $\\tfrac{3}{2}kT=\\tfrac{1}{2}mv^2$, pour l'azote à température ambiante, on obtient environ 500 mètres par seconde — plus vite qu'un avion de ligne. Pourtant, une odeur provenant de l'autre bout de la pièce met des minutes à arriver, et non des centièmes de seconde : une molécule ne parcourt librement qu'environ 70 nanomètres et change de direction des milliards de fois par seconde. La vitesse est énorme, mais le déplacement est une marche aléatoire."
+    },
+    {
+     "icon": "edge",
+     "kind": "limite de validité",
+     "h": "Quand un gaz cesse d'être parfait",
+     "text": "Le modèle suppose que les molécules n'occupent pas de volume et ne s'attirent pas mutuellement. Dans des conditions normales, cela est vrai à quelques fractions de pour cent près, mais à haute pression, le volume propre des molécules cesse d'être négligeable, et près de la condensation, l'attraction devient cruciale — sinon les gaz ne se liquéfieraient jamais. On passe alors à l'équation de van der Waals, où les deux corrections sont explicitement écrites."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Ce que l'on calcule avec l'équation d'état",
+   "lead": "Une seule relation entre pression, volume et température sert de la météorologie à la médecine.",
+   "items": [
+    {
+     "h": "Prévisions météorologiques",
+     "text": "L'air qui s'élève se dilate car la pression diminue avec l'altitude, et se refroidit — d'environ un degré tous les cent mètres. De là découlent la hauteur des nuages, les conditions des orages et toute la structure verticale de l'atmosphère."
+    },
+    {
+     "h": "Mélanges respiratoires et bouteilles",
+     "text": "La quantité réelle d'oxygène dans une bouteille est calculée précisément avec l'équation d'état — avec une correction pour le gaz réel à haute pression. Une erreur de calcul pour un plongeur ou dans un hôpital coûte trop cher."
+    },
+    {
+     "h": "Moteurs",
+     "text": "Le temps de compression et le temps de détente sont des transitions entre états du gaz. Le taux de compression détermine de combien la température augmente, et avec elle le rendement maximal."
+    },
+    {
+     "h": "Aérostation",
+     "text": "La force de levage d'un ballon est égale à la différence de densité entre l'air extérieur et l'air intérieur. Un chauffage de cent degrés réduit la densité d'environ un quart — cela suffit à soulever une nacelle avec des personnes."
+    },
+    {
+     "h": "Gaz industriels",
+     "text": "Le stockage, le transport et le dosage des gaz — des mélanges de soudage à l'ammoniac dans la production d'engrais — se ramènent à une conversion entre masse, volume et pression à une température donnée."
+    }
+   ]
+  }
+ }
 }
