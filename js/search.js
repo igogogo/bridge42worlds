@@ -1003,12 +1003,35 @@ function mountSortControl() {
     };
 }
 
+// Плашка «молодого языка»: тонкая лента без объяснения выглядит сломанной (сценарии fr).
+// CSS .young-lang уже свёрстан дизайнером; здесь — разметка и словарь (находка QA: стиль
+// был готов, разметку не выдавал никто).
+var YOUNG_LANG_TXT = {
+    fr: {t: "La section française vient d'ouvrir", d: "<b>{n}</b> articles traduits, de nouveaux chaque jour. En attendant : <a href='/lang/fr/tags/'>363 concepts</a>, <a href='/lang/fr/laws/'>145 lois</a> et <a href='/lang/fr/scientists/'>201 scientifiques</a> déjà en français."},
+    es: {t: "Sección joven", d: "<b>{n}</b> artículos y creciendo a diario."},
+    ar: {t: "قسم جديد", d: "<b>{n}</b> مقالة مترجمة، والمزيد يومياً."}
+};
+function mountYoungLangNote(count) {
+    var box = document.getElementById('young-lang-note');
+    var txt = YOUNG_LANG_TXT[lang];
+    if (!txt || count >= 20) { if (box) box.remove(); return; }
+    if (!box) {
+        var results = document.getElementById('search-results');
+        if (!results) return;
+        box = document.createElement('div');
+        box.id = 'young-lang-note'; box.className = 'young-lang';
+        results.parentNode.insertBefore(box, results);
+    }
+    box.innerHTML = '<b>' + txt.t + '</b> — ' + txt.d.replace('{n}', count);
+}
+
 function showLatest() {
     var arr = sortFeed(
         applyPageContext(searchIndex.filter(function(item) { return item.version === effVersion(); })),
         getSortMode()
     );
     mountSortControl();
+    mountYoungLangNote(arr.length);
     feed.items = arr;
     feed.shown = 0; feed.lastDay = null; feed.active = true;
     var c = document.getElementById('search-results');
