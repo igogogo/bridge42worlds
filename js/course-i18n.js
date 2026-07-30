@@ -80,6 +80,8 @@
         'Где это встречается': ['Where you meet it', 'Dónde aparece', 'أين نصادفه'],
         'Проверка знаний': ['Knowledge check', 'Comprobación', 'اختبار المعرفة'],
         'Вопросы': ['Questions', 'Preguntas', 'أسئلة'],
+        // третий заголовок оглавления «края известного»: два соседних в словаре были, этот забыли
+        'Смысл': ['Why it matters', 'Sentido', 'المعنى'],
         'Проверьте себя': ['Test yourself', 'Ponte a prueba', 'اختبر نفسك'],
         'Сквозные нити': ['Threads across topics', 'Hilos entre temas', 'خيوط جامعة'],
         'Прикидка в уме': ['Mental estimate', 'Cálculo mental', 'تقدير ذهني'],

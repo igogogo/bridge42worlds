@@ -477,14 +477,28 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
     gl.href = '?t=' + c.id + '&p=guide';
     root.appendChild(gl);
 
-    var why = el('section', 'k-sec');
-    why.appendChild(el('h2', null, C.why.title));
-    C.why.text.forEach(function (p) { why.appendChild(el('p', null, md(p))); });
-    root.appendChild(why);
+    // Разделы обзора терпимы к форме данных. Причина не в аккуратности ради аккуратности:
+    // раньше любое расхождение схемы гасило ВСЮ страницу темы — читатель видел «Не удалось
+    // загрузить материал» вместо десятка готовых параграфов. Пусть лучше один раздел выглядит
+    // скромнее, чем тема пропадёт целиком.
+    function paras(v) { return v == null ? [] : (Array.isArray(v) ? v : [v]); }
+
+    if (C.why) {
+      var why = el('section', 'k-sec');
+      why.appendChild(el('h2', null, C.why.title || 'Зачем это знать'));
+      paras(C.why.text || (typeof C.why === 'string' ? C.why : null))
+        .forEach(function (p) { why.appendChild(el('p', null, md(p))); });
+      root.appendChild(why);
+    }
 
     var map = el('section', 'k-sec');
-    map.appendChild(el('h2', null, C.map.title));
-    map.appendChild(el('p', null, C.map.lead));
+    // Блок необязателен: тема без него должна открываться, а не падать целиком. Именно так
+    // пятнадцатая тема стала недоступна — у неё не было `map`, и обзор валился с TypeError,
+    // хотя все параграфы работали. Список параграфов ниже важнее заголовка над ним.
+    if (C.map) {
+      map.appendChild(el('h2', null, C.map.title));
+      map.appendChild(el('p', null, C.map.lead));
+    }
     var prog = loadProgress();
     var doneCount = 0;
     var ls = el('div', 'k-lessons');
@@ -540,27 +554,34 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
       '<span class="k-star-total">★ ' + totalStars + ' / ' + maxStars + '</span></div>' +
       (done ? '<div class="k-unlocked">' + ic('star', 14) + ' Тема пройдена целиком — открыт доступ к следующей теме курса.</div>' : '');
     map.appendChild(bar);
-    map.appendChild(el('p', null, md('**Итог:** ' + C.map.outcome)));
+    if (C.map && C.map.outcome) map.appendChild(el('p', null, md('**Итог:** ' + C.map.outcome)));
     root.appendChild(map);
 
-    var hist = el('section', 'k-sec');
-    hist.appendChild(el('h2', null, ic('history') + ' ' + C.history.title));
-    C.history.people.forEach(function (p) {
-      var d = el('div', 'k-person');
-      d.appendChild(el('div', 'k-person-n', p.name + '<span class="k-person-y">' + p.years + '</span>'));
-      d.appendChild(el('div', 'k-person-w', p.what));
-      hist.appendChild(d);
-    });
-    root.appendChild(hist);
+    if (C.history) {
+      var hist = el('section', 'k-sec');
+      hist.appendChild(el('h2', null, ic('history') + ' ' + (C.history.title || '')));
+      // обычная форма — карточки людей; запасная — сплошной рассказ
+      (C.history.people || []).forEach(function (p) {
+        var d = el('div', 'k-person');
+        d.appendChild(el('div', 'k-person-n', p.name + '<span class="k-person-y">' + (p.years || '') + '</span>'));
+        d.appendChild(el('div', 'k-person-w', p.what));
+        hist.appendChild(d);
+      });
+      if (!C.history.people) paras(C.history.text).forEach(function (t) { hist.appendChild(el('p', null, md(t))); });
+      root.appendChild(hist);
+    }
 
-    var pre = el('section', 'k-sec');
-    pre.appendChild(el('h2', null, C.prereq.title));
-    var ul = el('ul');
-    ul.style.cssText = 'margin:0 0 12px 20px;font-size:15px;line-height:1.8;color:var(--muted)';
-    C.prereq.items.forEach(function (i) { ul.appendChild(el('li', null, md(i))); });
-    pre.appendChild(ul);
-    pre.appendChild(el('div', 'k-note', C.prereq.note));
-    root.appendChild(pre);
+    // «Что нужно знать заранее» — тоже необязательный блок
+    if (C.prereq) {
+      var pre = el('section', 'k-sec');
+      pre.appendChild(el('h2', null, C.prereq.title));
+      var ul = el('ul');
+      ul.style.cssText = 'margin:0 0 12px 20px;font-size:15px;line-height:1.8;color:var(--muted)';
+      (C.prereq.items || []).forEach(function (i) { ul.appendChild(el('li', null, md(i))); });
+      pre.appendChild(ul);
+      if (C.prereq.note) pre.appendChild(el('div', 'k-note', C.prereq.note));
+      root.appendChild(pre);
+    }
 
     // край известного: чем тема упирается в нерешённое (не у всех тем есть)
     if (C.closing) {
@@ -1081,7 +1102,7 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
 })();
 </script>
 
-<script src="/js/course-i18n.js?v=5"></script>
+<script src="/js/course-i18n.js?v=6"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
