@@ -222,6 +222,53 @@ def _refuse_if_not_lead(command):
     sys.exit(2)
 
 
+def _refuse_if_build_running(lock):
+    """Вторая сборка поверх идущей — самая дорогая ошибка, какую тут можно сделать.
+
+    Замок `.build.lock` до 2026-07-31 только ПРЕДУПРЕЖДАЛ заливку, а вторую сборку не
+    останавливал: она молча перезаписывала файл замка своим pid, и дальше два процесса
+    писали в одни и те же 83 тысячи страниц. Ночью 30→31 июля это случилось на живом
+    дереве: у пятого языка остались индексы от прошлого прогона, дата сборки — от
+    позавчерашнего, а разделы `laws/`, `graph/`, `analytics/` не собрались вовсе.
+    Распутывали потом по датам файлов.
+
+    Замок с мёртвым pid не считается: сборка могла оборваться и оставить его за собой,
+    и требовать ручной уборки — значит получить привычку удалять замок не глядя.
+    """
+    if not lock.exists():
+        return
+    info = ""
+    try:
+        info = lock.read_text(encoding="utf-8").strip()
+    except OSError:
+        pass
+    import re
+    m = re.search(r"pid (\d+)", info)
+    pid = int(m.group(1)) if m else None
+    if pid and pid != os.getpid() and _pid_alive(pid):
+        print(f"\n==> СТОП: сборка уже идёт ({info}).")
+        print("    Две сборки на одном дереве пишут в одни файлы и дают смесь версий —")
+        print("    именно так мы потеряли пятый язык в ночь на 31 июля.")
+        print("    Дождитесь конца или остановите тот процесс.\n")
+        sys.exit(1)
+    if info:
+        print(f"⚠️  замок от оборвавшейся сборки ({info}) — процесса нет, продолжаю.")
+
+
+def _pid_alive(pid):
+    """Жив ли процесс. Кроссплатформенно и без зависимостей: на Windows спрашиваем
+    tasklist, на остальных — сигнал 0."""
+    try:
+        if os.name == "nt":
+            out = subprocess.run(["tasklist", "/FI", f"PID eq {pid}", "/NH"],
+                                 capture_output=True, text=True, timeout=10).stdout
+            return str(pid) in out
+        os.kill(pid, 0)
+        return True
+    except (OSError, subprocess.SubprocessError, ValueError):
+        return False
+
+
 def cmd_html(args):
     """Пересборка HTML. На время работы ставим файл-замок: заливка в R2, запущенная
     параллельно, прочитает наполовину переписанное дерево и зальёт смесь версий."""
@@ -230,6 +277,7 @@ def cmd_html(args):
     import generate
     from datetime import datetime
     lock = Path(".build.lock")
+    _refuse_if_build_running(lock)
     lock.write_text(f"начата {datetime.now():%H:%M}, pid {os.getpid()}", encoding="utf-8")
     try:
         generate.regenerate_all_html(only=getattr(args, "only", None))
