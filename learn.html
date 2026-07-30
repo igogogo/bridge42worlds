@@ -312,7 +312,10 @@
 
     // Справочные материалы: их читают не по порядку, а когда понадобилось, поэтому они стоят
     // отдельным блоком, а не внутри дерева тем.
-    var REF = {
+    // Откат на русскую ветку, а не на пустой объект: на языке, которого здесь ещё нет,
+    // REF.d оказывался undefined, и дерево знаний падало целиком с TypeError. Так
+    // выглядела страница на пятом языке, пока подписи не переведены.
+    var REF_ALL = {
       ru: { h: 'Справочные материалы', s: 'Читаются в любом порядке и в любой момент курса',
             d: ['Ретроспектива открытий', 'Кто и как узнал — и во что это превратилось в быту'],
             r: ['Справочник', 'Формулы курса, константы с единицами и сквозные принципы'],
@@ -332,8 +335,14 @@
             d: ['استعراض الاكتشافات', 'من اكتشف ماذا — وفيمَ تحوّل ذلك في بيوتنا'],
             r: ['المرجع', 'صيغ المقرر والثوابت بوحداتها والمبادئ الجامعة'],
             m: ['الرياضيات ببساطة', 'المشتقات والمجالات والموتّرات — بمعناها الفيزيائي'],
-            y: ['فرضيات جريئة', 'ثلاثون «ماذا لو» — وما الذي يدحض كلاً منها'] }
-    }[LANG] || {};
+            y: ['فرضيات جريئة', 'ثلاثون «ماذا لو» — وما الذي يدحض كلاً منها'] },
+      fr: { h: 'Ressources de référence', s: 'À lire dans n’importe quel ordre, à tout moment du cours',
+            d: ['Rétrospective des découvertes', 'Qui a trouvé quoi — et ce que cela est devenu au quotidien'],
+            r: ['Aide-mémoire', 'Formules du cours, constantes avec unités et principes transversaux'],
+            m: ['Les maths simplement', 'Dérivées, champs et tenseurs — au sens physique'],
+            y: ['Hypothèses audacieuses', 'Trente « et si » — et ce qui réfuterait chacune'] }
+    };
+    var REF = REF_ALL[LANG] || REF_ALL.ru;
     var rf = el('div', 't-lect');
     rf.appendChild(el('h2', null, ic('book', 15) + ' ' + REF.h));
     rf.appendChild(el('div', 't-lect-lead', REF.s));

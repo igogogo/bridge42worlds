@@ -117,6 +117,10 @@
             'Aide-moi à l’estimer de tête, étape par étape, sans donner le nombre tout de suite : '],
 
         'Вопросы': ['Questions', 'Preguntas', 'أسئلة', 'Questions'],
+        // подписи шпаргалки: жили только в разметке memo.html и на всех языках были русскими
+        'К параграфу': ['Back to the paragraph', 'Volver al párrafo', 'إلى الفقرة', 'Retour au paragraphe'],
+        'Схема': ['Diagram', 'Esquema', 'مخطط', 'Schéma'],
+        'Печать': ['Print', 'Imprimir', 'طباعة', 'Imprimer'],
         // третий заголовок оглавления «края известного»: два соседних в словаре были, этот забыли
         'Смысл': ['Why it matters', 'Sentido', 'المعنى', "Pourquoi c'est important"],
         'Проверьте себя': ['Test yourself', 'Ponte a prueba', 'اختبر نفسك', 'Testez-vous'],
