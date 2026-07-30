@@ -154,3 +154,31 @@ function updateNextButton(version) {
 }
 
 document.addEventListener('DOMContentLoaded', initScroll);
+
+/* ── Связи под текстом статьи на телефоне (владелец 2026-07-30, живой телефон) ──
+   Проблема: .article-side — соседний блок после .article-main, а .article-main на мобиле
+   вырастает до ~6200px (текст + реакции + отклик + похожие). Связи оказывались НИЖЕ
+   похожих статей — владелец долистал до конца и решил, что их нет вовсе. CSS тут бессилен:
+   order переставляет соседей, а нужно перенести узел ВНУТРЬ main, выше реакций.
+   Делаем один раз при загрузке; десктоп не трогаем (там колонка справа, position:fixed). */
+(function moveSideOnMobile() {
+    function apply() {
+        var side = document.querySelector('.article-wrapper > .article-side');
+        var main = document.querySelector('.article-wrapper > .article-main');
+        if (!side || !main) return;
+        var narrow = window.matchMedia('(max-width: 640px)').matches;
+        if (narrow && !side.dataset.movedIn) {
+            var anchor = main.querySelector('.actions, .lv-bottom, .feedback') || null;
+            main.insertBefore(side, anchor);          // сразу после текста, до реакций
+            side.dataset.movedIn = '1';
+            side.classList.add('article-side-inline');
+        } else if (!narrow && side.dataset.movedIn) {
+            document.querySelector('.article-wrapper').appendChild(side);
+            delete side.dataset.movedIn;
+            side.classList.remove('article-side-inline');
+        }
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+    else apply();
+    window.addEventListener('resize', apply);
+})();
