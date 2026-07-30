@@ -394,7 +394,7 @@ def generate_popular(scipop_adv):
 # ── Конвейер 2.0: конструктор (владелец 2026-07-30, обоснование temp/experiment-constructor) ──
 COMBO_SHARED = ("formulas", "key_numbers", "fun_fact", "scifi", "main_tag",
                 "extra_tags", "scientists", "glossary")
-SLIM_SHARED_TRANSLATE = ("fun_fact", "scifi", "formulas", "key_numbers", "glossary")
+SLIM_SHARED_TRANSLATE = ("fun_fact", "scifi", "formulas", "key_numbers")
 
 
 def generate_combo(scipop_adv):
@@ -429,7 +429,8 @@ def translate_scipop_slim(tier, adv_translated, target_lang, retries=2):
     """Перевод тира БЕЗ общих полей (они уже переведены в advanced и копируются сюда) —
     дешёвой моделью. Валидатор судит итоговую сборку. При провале — None, вызывающий
     падает на полный translate_scipop."""
-    slim = {k: v for k, v in tier.items() if k not in SLIM_SHARED_TRANSLATE}
+    slim = {k: v for k, v in tier.items()
+            if k not in SLIM_SHARED_TRANSLATE and k not in _INTERNAL_FIELDS}
     target_language = LANG_NAMES.get(target_lang, target_lang)
     prompt = load_prompt("article-translate").format(
         article_json=json.dumps(slim, ensure_ascii=False), target_language=target_language,
@@ -440,9 +441,12 @@ def translate_scipop_slim(tier, adv_translated, target_lang, retries=2):
             out = json.loads(clean_json(r.choices[0].message.content))
         except Exception:
             continue
-        for k in ("main_tag", "extra_tags", "tags", "scientists", "laws", "metaphor"):
+        for k in ("main_tag", "extra_tags", "tags", "scientists", "laws"):
             if k in slim:
                 out[k] = slim[k]
+        for k in _INTERNAL_FIELDS:      # служебные — из русского тира, они и не переводились
+            if k in tier:
+                out[k] = tier[k]
         for k in SLIM_SHARED_TRANSLATE:
             if k in adv_translated:
                 out[k] = adv_translated[k]
@@ -620,8 +624,23 @@ def _latex_bits(obj):
     return out
 
 
+# Служебные поля: читателю не показываются (в templates/ и js/ их нет), нужны только коду —
+# metaphor держит метафору единой между уровнями, glossary кормит нижние тиры и термбазу.
+# Модели они не отдаются и переводом не считаются: русский текст в них — норма, а не брак.
+_INTERNAL_FIELDS = ("metaphor", "glossary")
+
+
+def _without_internal(scipop):
+    return {k: v for k, v in scipop.items() if k not in _INTERNAL_FIELDS} if isinstance(scipop, dict) else scipop
+
+
 def validate_translation(src, dst, target_lang):
-    """Возвращает (ok, [проблемы]). Порядок проверок — по §6.4 ТЗ."""
+    """Возвращает (ok, [проблемы]). Порядок проверок — по §6.4 ТЗ.
+
+    Служебные поля из счёта исключены: они копируются из русского оригинала кодом,
+    и раньше их кириллица считалась браком перевода — из-за чего каждый уровень
+    уезжал на три дорогих ретрая и всё равно возвращался непереведённым."""
+    src, dst = _without_internal(src), _without_internal(dst)
     problems = []
     src_t, dst_t = _flat_text(src), _flat_text(dst)
     if not dst_t.strip():
@@ -708,9 +727,9 @@ def build_termbase(scipop, target_lang):
     got = {k: v for k, v in ((i, sci_all.get(i)) for i in sci_ids) if v}
     if got:
         tb["scientists"] = got
-    gl = scipop.get("glossary") or []
-    if gl:
-        tb["glossary"] = {g.get("term", ""): g.get("plain", "") for g in gl if isinstance(g, dict) and g.get("term")}
+    # Глоссарий сюда НЕ идёт: это пары «русский термин → русское бытовое объяснение».
+    # В блоке, который называется «готовые переводы, используй ТОЛЬКО эти формулировки»,
+    # они работали ровно наоборот — подсказывали модели писать по-русски.
     return tb
 
 
@@ -813,17 +832,18 @@ def _retranslate_cyrillic_fields(out, target_lang, target_language, src=None):
     return True
 
 
-def translate_scipop(scipop, target_lang, retries=3, translate_glossary=False):
+def translate_scipop(scipop, target_lang, retries=3):
     """retries — сбой здесь почти всегда НЕ сетевой (chat() уже отретраила сетевые сама, см.
     common.chat retries=3), а невалидный/недо-JSON в самом ответе модели — стохастическая штука,
     повторный вызов часто проходит нормально. Раньше единственная попытка молча откатывалась на
     непереведённый scipop — статья выглядела "готовой", но текст оставался на языке источника."""
     target_language = LANG_NAMES.get(target_lang, target_lang)
+    payload = _without_internal(scipop)   # служебные поля модели не нужны — и это минус токены
     prompt = load_prompt("article-translate").format(
-        article_json=json.dumps(scipop, ensure_ascii=False), target_language=target_language,
+        article_json=json.dumps(payload, ensure_ascii=False), target_language=target_language,
         culture_note=CULTURE_NOTES.get(target_lang, "")) + _termbase_block(scipop, target_lang)
     for attempt in range(1, retries + 1):
-        r = chat("translate", prompt, system=_translation_system(target_language))
+        r = chat("translate", prompt, system=_translation_system(target_language, payload))
         try:
             out = json.loads(clean_json(r.choices[0].message.content))
         except Exception as e:
@@ -834,10 +854,7 @@ def translate_scipop(scipop, target_lang, retries=3, translate_glossary=False):
         # ссылка. После смены роли переводчика на «редактуру носителем» модель стала переводить и их,
         # отчего ссылки вида /tags/markov_chain.html превращались в /tags/سلاسل ماركوف.html (битые).
         # Возвращаем ключи из оригинала кодом — промпту такое доверять нельзя.
-        _keep = ["main_tag", "extra_tags", "tags", "scientists", "laws", "metaphor"]
-        if not translate_glossary:
-            _keep.append("glossary")   # находка 0г: глоссарий — читаемый текст, в конструкторе переводится
-        for _k in _keep:
+        for _k in ("main_tag", "extra_tags", "tags", "scientists", "laws") + _INTERNAL_FIELDS:
             if _k in scipop:
                 out[_k] = scipop[_k]
         ok, problems = validate_translation(scipop, out, target_lang)
