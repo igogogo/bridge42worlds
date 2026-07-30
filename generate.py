@@ -294,6 +294,55 @@ def reading_minutes(scipop):
     return max(1, round(words / 180))
 
 
+def article_og_image_html(date_str, article_id):
+    """Блок og:image для статьи — с ПРОВЕРКОЙ, что картинка есть, и с настоящими размерами.
+
+    До 2026-07-31 адрес обложки и размеры 1440x960 стояли в шаблоне литералом. Обе половины
+    врали (обход живого сайта): у 222 статей файла нет вовсе — карточка ссылки уходила
+    с адресом, отдающим 404; а из тех, что есть, заявленным 1440x960 соответствовали 27% —
+    остальные 1024x1024, 1920x1080 и длинный хвост, и парсер, который верит мете, рисовал
+    карточку не той пропорции.
+
+    Обложки лежат централизованно под языком-источником — на всех языках один файл.
+    Нет картинки (или она вырожденная) — отдаём карточку без картинки: пустая лучше битой.
+    """
+    folder = Path(LANG_DIR) / DEFAULT_LANG / "archive" / date_str / article_id
+    webp = folder / "ai.webp"
+    try:
+        if not webp.exists() or webp.stat().st_size < 2000:
+            return '<meta name="twitter:card" content="summary">'
+    except OSError:
+        return '<meta name="twitter:card" content="summary">'
+    url = f"{SITE_URL}/{LANG_DIR}/{DEFAULT_LANG}/archive/{date_str}/{article_id}/ai.webp"
+    size = ""
+    try:
+        from PIL import Image
+        with Image.open(webp) as im:
+            w, h = im.size
+        # Ниже 200x200 карточку не принимает часть площадок — лучше без картинки.
+        if w < 200 or h < 200:
+            return '<meta name="twitter:card" content="summary">'
+        nl = "\n    "
+        size = (f'{nl}<meta property="og:image:width" content="{w}">'
+                f'{nl}<meta property="og:image:height" content="{h}">')
+    except Exception:
+        pass   # размеры необязательны: без них площадка просто померит сама
+    return (f'<meta property="og:image" content="{url}">{size}'
+            f'\n    <meta name="twitter:card" content="summary_large_image">')
+
+
+def og_title_for(scipop, article, lang):
+    """Заголовок для карточки ссылки. У непереведённых статей тело честно говорит
+    «на этот язык ещё не переведено», а og:title оставался РУССКИМ — 216 страниц
+    (en 81, es 61, ar 72) уходили в мессенджер кириллицей. Для неславянских языков
+    кириллица в заголовке = заведомо непереведённая заглушка: берём оригинальное
+    название статьи с arXiv, оно хотя бы на латинице и по теме."""
+    title = (scipop.get("title") or "").strip()
+    if lang != "ru" and re.search(r"[А-Яа-яЁё]", title):
+        return (article.get("title") or title).strip()
+    return title or article.get("title", "")
+
+
 def build_jsonld(scipop, article, date_str, lang, canonical_url, abstract_full=""):
     data = {
         "@context": "https://schema.org", "@type": "ScholarlyArticle",
@@ -1051,6 +1100,8 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
         lang=lang, dir=dir_for(lang), site_name=SITE_NAME, site_url=SITE_URL, goatcounter=GOATCOUNTER,
         authors_lang="en", asset_ver=asset_ver(),
         clickbait=safe(scipop.get("title", article["title"])),
+        og_title=safe(og_title_for(scipop, article, lang)),
+        og_image_html=article_og_image_html(date_str, article["id"]),
         clickbait_escaped=safe(scipop.get("title", "").replace("'", "\\'")),
         refine_badge=(f'<span class="refine-badge" title="{safe({"ru": "Отшлифовано редактором", "en": "Polished by an editor", "es": "Pulido por un editor", "ar": "تم صقله بواسطة محرر", "fr": "Peaufiné par un éditeur", "zh": "编辑润色"}.get(lang, "Polished by an editor"))}">✦</span>' if article.get("refined") else ""),
         express_badge=(f'<span class="express-badge" title="{safe({"ru": "Экспресс-версия: по аннотации автора, без разбора полного текста статьи", "en": "Express version: based on the author\'s abstract, not the full paper text", "es": "Versión exprés: basada en el resumen del autor, no en el texto completo", "ar": "نسخة سريعة: بناءً على ملخص المؤلف، دون تحليل النص الكامل", "fr": "Version express : basée sur le résumé de l\'auteur", "zh": "速览版：基于作者摘要"}.get(lang, "Express version: based on the abstract"))}">{safe({"ru": "экспресс", "en": "express", "es": "exprés", "ar": "سريع", "fr": "express", "zh": "速览"}.get(lang, "express"))}</span>' if article.get("express") else ""),

@@ -5,14 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>$clickbait — bridge42worlds</title>
     <meta name="description" content="$description">
-    <meta property="og:title" content="$clickbait">
+    <!-- Заголовок карточки — отдельная переменная, а не $clickbait: у непереведённых
+         статей тело честно говорит «на этот язык ещё не переведено», а заголовок
+         оставался русским и уходил в мессенджер кириллицей (216 страниц). -->
+    <meta property="og:title" content="$og_title">
     <meta property="og:description" content="$oneliner_og">
-    <meta property="og:image" content="$site_url/lang/ru/archive/$date/$id/ai.webp">
-    <meta property="og:image:width" content="1440">
-    <meta property="og:image:height" content="960">
+    <!-- Картинка и её размеры считаются в генераторе: адрес — только если файл есть
+         (у 222 статей его не было, карточка уходила с 404), размеры — настоящие
+         (заявленным 1440x960 соответствовали 27%). -->
+    $og_image_html
     <meta property="og:url" content="$canonical_url">
     <meta property="og:type" content="article">
-    <meta name="twitter:card" content="summary_large_image">
     <link rel="canonical" href="$canonical_url">
     $hreflang_links
     <link rel="preconnect" href="https://fonts.googleapis.com">
