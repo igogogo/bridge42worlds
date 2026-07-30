@@ -203,6 +203,7 @@ def gen_mosaic(images, aid, date_str, captions=None, cover_url=None):
 
 
 from gen_llm import *  # LLM-слой вынесен в gen_llm.py
+import tag_domains     # доменные облака тегов (какой словарь видит статья в промпте)
 # Флаг экономии (ТЗ 2026-07-27, §6.5): advanced — самый крупный и самый редко читаемый уровень.
 # По умолчанию true, чтобы ничего не сломать на существующем архиве.
 TRANSLATE_ADVANCED = CONFIG.get("translate_advanced", True)
@@ -3126,7 +3127,11 @@ def build_article(a, date_str, inputs, force=False, express=False, known_license
             scipop_pop = express_result if "popular" in express_tiers else express_locked_scipop(express_result, DEFAULT_LANG)
             scipop_adv = express_result if "advanced" in express_tiers else express_locked_scipop(express_result, DEFAULT_LANG)
         else:
-            scipop_adv = generate_advanced(a, text, inputs["tags_input"], inputs["scientists_keys"], inputs.get("law_ids"))
+            # Словарь тегов сужаем до доменов ЭТОЙ статьи: биологической статье физический
+            # список нечего предложить, и она берёт ближайший физический тег (см. tag_domains).
+            tags_cloud = tag_domains.cloud_for(a, inputs["tags_input"])
+            print(f"    🏷️  {tag_domains.describe(a, inputs['tags_input'])}")
+            scipop_adv = generate_advanced(a, text, tags_cloud, inputs["scientists_keys"], inputs.get("law_ids"))
             if not scipop_adv: return None
             (article_folder / "api").mkdir(exist_ok=True)
             (article_folder / "api" / "advanced-ru.json").write_text(
