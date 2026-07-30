@@ -49,7 +49,7 @@ for date in DATES:
             if DRY:
                 tot_fixed += len(need); continue
             adv_l = cur_adv if "advanced" not in need else \
-                translate_scipop(ru["advanced"], lang, translate_glossary=True)
+                translate_scipop(ru["advanced"], lang)
             if G.payload_in_source_lang(adv_l):
                 print(f"    ✗ advanced {lang} снова не прошёл — пропускаю статью")
                 tot_fail += 1
