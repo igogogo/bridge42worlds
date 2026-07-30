@@ -1076,7 +1076,10 @@ function mountSortControl() {
 // CSS .young-lang уже свёрстан дизайнером; здесь — разметка и словарь (находка QA: стиль
 // был готов, разметку не выдавал никто).
 var YOUNG_LANG_TXT = {
-    fr: {t: "La section française vient d'ouvrir", d: "<b>{n}</b> articles traduits, de nouveaux chaque jour. En attendant : <a href='/lang/fr/tags/'>363 concepts</a>, <a href='/lang/fr/laws/'>145 lois</a> et <a href='/lang/fr/scientists/'>201 scientifiques</a> déjà en français."},
+    // {tags}/{laws}/{sci} подставляются из ЗАГРУЖЕННЫХ справочников, а не числами в тексте:
+    // числа в справочниках растут каждую неделю, а литерал в строке — никогда, и однажды
+    // плашка начнёт врать читателю про наш же объём.
+    fr: {t: "La section française vient d'ouvrir", d: "<b>{n}</b> articles traduits, de nouveaux chaque jour. En attendant : <a href='/lang/fr/tags/'>{tags} concepts</a>, <a href='/lang/fr/laws/'>{laws} lois</a> et <a href='/lang/fr/scientists/'>{sci} scientifiques</a> déjà en français."},
     es: {t: "Sección joven", d: "<b>{n}</b> artículos y creciendo a diario."},
     ar: {t: "قسم جديد", d: "<b>{n}</b> مقالة مترجمة، والمزيد يومياً."}
 };
@@ -1091,7 +1094,12 @@ function mountYoungLangNote(count) {
         box.id = 'young-lang-note'; box.className = 'young-lang';
         results.parentNode.insertBefore(box, results);
     }
-    box.innerHTML = '<b>' + txt.t + '</b> — ' + txt.d.replace('{n}', count);
+    var size = function (o) { return o ? Object.keys(o).length : 0; };
+    box.innerHTML = '<b>' + txt.t + '</b> — ' + txt.d
+        .replace('{n}', count)
+        .replace('{tags}', size(window.tagsLoc))
+        .replace('{laws}', size(window.lawsData))
+        .replace('{sci}', size(window.scientistsData));
 }
 
 function showLatest() {
