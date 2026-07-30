@@ -168,8 +168,14 @@ document.addEventListener('DOMContentLoaded', initScroll);
         if (!side || !main) return;
         var narrow = window.matchMedia('(max-width: 640px)').matches;
         if (narrow && !side.dataset.movedIn) {
-            var anchor = main.querySelector('.actions, .lv-bottom, .feedback') || null;
-            main.insertBefore(side, anchor);          // сразу после текста, до реакций
+            // Место выбрано владельцем (2026-07-30): ПЕРЕД похожими статьями.
+            // Логика: «похожие» — это «куда пойти дальше», а связи — «из чего эта статья»,
+            // значит связи идут раньше. Ставим перед #related; если его нет — перед
+            // реакциями, чтобы всё равно не уехать в самый хвост.
+            var anchor = main.querySelector('#related, .related')
+                      || main.querySelector('.actions, .lv-bottom, .feedback')
+                      || null;
+            main.insertBefore(side, anchor);
             side.dataset.movedIn = '1';
             side.classList.add('article-side-inline');
         } else if (!narrow && side.dataset.movedIn) {
