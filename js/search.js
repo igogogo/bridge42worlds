@@ -318,7 +318,11 @@ function whenIdle(fn) {
     else setTimeout(fn, 1200);
 }
 
-Promise.all(
+/* Общий доступ к справочникам. Мини-граф и эксплорер живут на тех же страницах, что и
+   search.js, и им нужны ровно эти же tags/laws/scientists. Без общего обещания они
+   успевали попросить файлы ДО того, как search.js их дочитывал, — и разбирали те же
+   4,6 МБ тегов и 1,8 МБ законов вторым комплектом на главном потоке телефона. */
+window.B42Refs = Promise.all(
     [].concat([
         fetch(tagsPath).then(function(r) { return r.json(); }).catch(function() {
             return fetch('/lang/' + defaultLang + '/data/tags.json').then(function(r) { return r.json(); });
@@ -365,8 +369,10 @@ Promise.all(
         ensureAuthorsGraph();
         ensureOtherVersions();
     });
+    return { tagsLoc: tagsLoc, lawsData: lawsData, scientistsData: scientistsData };
 }).catch(function(e) {
     console.error('Background data load error:', e);
+    return {};
 });
 
 /* Индексы соседних уровней — по требованию. Пока их нет, поиск ищет по текущему уровню:

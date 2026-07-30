@@ -16,7 +16,17 @@
     // связь центр→другой-тип — кросс-ребро требует оба конца включёнными (юзер-фидбек 2026-07-20:
     // "нажимаю законы — ничего", хотя у тега закон есть). На мультицентре (статья) и облаке — null.
     var CENTER_KIND = (centers.length === 1) ? { t: 'tag', l: 'law', s: 'sci', c: 'cat' }[centers[0].charAt(0)] : null;
-    var BUST = '?_=' + Date.now();
+    /* Раньше здесь к каждому адресу приписывался '?_=' + Date.now(), чтобы браузер
+       не отдал старые данные после регенерации. Цена оказалась несоразмерной: метка
+       времени делает адрес уникальным, поэтому НИ браузерный кэш, НИ CDN не срабатывают
+       никогда — а ровно эти же файлы секундой раньше уже скачал search.js, без метки.
+       Замер живого сайта (2026-07-30): 1,61 МБ лишнего трафика и 6,99 МБ лишнего разбора
+       на КАЖДЫЙ показ страницы тега, закона, учёного и графа — около 20% их трафика,
+       потраченные на данные, которые уже лежат в памяти.
+
+       Свежесть после регенерации обеспечивает не метка времени, а заголовки: справочники
+       отдаются с max-age=300 (под immutable они не попадают), то есть пять минут — и
+       браузер сам сходит проверить. Пятиминутная задержка после выкладки нам не мешает. */
     // Цвет кодирует ТИП узла (не под-домен): один чёткий, максимально разнесённый по hue
     // оттенок на тег/закон/учёный/раздел — чтобы тип читался с одного взгляда (юзер-фидбек
     // 2026-07-19: "непонятно от чего зависит цвет; тег/закон/учёный должны быть визуально
@@ -55,16 +65,39 @@
         return s;
     }
 
+    /* Справочник берём из памяти, если его уже загрузил search.js (он есть на всех
+       страницах, где живёт мини-граф). Второй fetch отдавался из кэша — трафика больше
+       не стоил, — но разбор 4,6 МБ тегов и 1,8 МБ законов ВТОРОЙ РАЗ на главном потоке
+       телефона стоил заметно. Если объекта нет (страница без search.js) — качаем, как
+       раньше. */
+    function shared(name, url) {
+        var have = window[name];
+        if (have && typeof have === 'object' && Object.keys(have).length) {
+            return Promise.resolve(have);
+        }
+        // search.js читает те же файлы и выставляет обещание B42Refs. Дожидаемся его,
+        // а не гоняем второй комплект: без ожидания мини-граф успевал попросить файлы
+        // раньше, чем search.js их дочитывал, и выигрыш терялся.
+        if (window.B42Refs && window.B42Refs.then) {
+            return window.B42Refs.then(function (refs) {
+                var got = refs && refs[name];
+                if (got && Object.keys(got).length) return got;
+                return fetch(url).then(function (r) { return r.json(); }).catch(function () { return {}; });
+            });
+        }
+        return fetch(url).then(function (r) { return r.json(); }).catch(function () { return {}; });
+    }
+
     createForceGraph({
         canvas: 'minigraph', resizeKey: '__miniResize', rebuildKey: '__miniRebuild',
         build: function (lang) {
             return Promise.all([
-                fetch('/data/knowledge-graph.json' + BUST).then(function (r) { return r.json(); }),
-                fetch('/lang/' + lang + '/data/tags.json' + BUST).then(function (r) { return r.json(); }).catch(function () { return {}; }),
-                fetch('/lang/' + lang + '/data/laws.json' + BUST).then(function (r) { return r.json(); }).catch(function () { return {}; }),
-                fetch('/lang/' + lang + '/data/scientists.json' + BUST).then(function (r) { return r.json(); }).catch(function () { return {}; }),
-                fetch('/data/arxiv-categories.json' + BUST).then(function (r) { return r.json(); }).catch(function () { return {}; }),
-                fetch('/data/arxiv-category-descriptions.json' + BUST).then(function (r) { return r.json(); }).catch(function () { return {}; })
+                fetch('/data/knowledge-graph.json').then(function (r) { return r.json(); }),
+                shared('tagsLoc', '/lang/' + lang + '/data/tags.json'),
+                shared('lawsData', '/lang/' + lang + '/data/laws.json'),
+                shared('scientistsData', '/lang/' + lang + '/data/scientists.json'),
+                fetch('/data/arxiv-categories.json').then(function (r) { return r.json(); }).catch(function () { return {}; }),
+                fetch('/data/arxiv-category-descriptions.json').then(function (r) { return r.json(); }).catch(function () { return {}; })
             ]).then(function (res) {
                 var kg = res[0], tn = res[1], ln = res[2], sn = res[3], cn = res[4], cd = res[5];
                 var edgeTypes = checkedEdgeKgTypes();

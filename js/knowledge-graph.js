@@ -6,7 +6,17 @@
     // сразу (юзер-фидбек 2026-07-19). Синхронно с js/mini-graph.js KIND_COLORS.
     var KIND_COLORS = { tag: '#2E8AA0', law: '#C77F3A', sci: '#3E8E5A', cat: '#7C5BD6' };
 
-    var BUST = '?_=' + Date.now();  // данные меняются при регенерации — не даём браузеру отдать старое
+    /* Раньше здесь к каждому адресу приписывался '?_=' + Date.now(), чтобы браузер
+       не отдал старые данные после регенерации. Цена оказалась несоразмерной: метка
+       времени делает адрес уникальным, поэтому НИ браузерный кэш, НИ CDN не срабатывают
+       никогда — а ровно эти же файлы секундой раньше уже скачал search.js, без метки.
+       Замер живого сайта (2026-07-30): 1,61 МБ лишнего трафика и 6,99 МБ лишнего разбора
+       на КАЖДЫЙ показ страницы тега, закона, учёного и графа — около 20% их трафика,
+       потраченные на данные, которые уже лежат в памяти.
+
+       Свежесть после регенерации обеспечивает не метка времени, а заголовки: справочники
+       отдаются с max-age=300 (под immutable они не попадают), то есть пять минут — и
+       браузер сам сходит проверить. Пятиминутная задержка после выкладки нам не мешает. */
     function slug(name) { return name.replace(/ /g, '_').replace(/\./g, ''); }
     function checked(cls) {
         var s = {};
@@ -140,14 +150,32 @@
         if (window.__kgRebuild) window.__kgRebuild();
     }
 
+    /* Те же справочники, что читает search.js, — берём из его обещания, а не вторым
+       комплектом. Замер живого сайта 2026-07-30: без этого страница графа разбирала
+       6,99 МБ данных повторно. Нет search.js на странице — качаем сами, как раньше. */
+    function shared(name, url) {
+        var have = window[name];
+        if (have && typeof have === 'object' && Object.keys(have).length) {
+            return Promise.resolve(have);
+        }
+        if (window.B42Refs && window.B42Refs.then) {
+            return window.B42Refs.then(function (refs) {
+                var got = refs && refs[name];
+                if (got && Object.keys(got).length) return got;
+                return fetch(url).then(function (r) { return r.json(); }).catch(function () { return {}; });
+            });
+        }
+        return fetch(url).then(function (r) { return r.json(); }).catch(function () { return {}; });
+    }
+
     createForceGraph({
         canvas: 'kgcanvas', resizeKey: '__kgResize', rebuildKey: '__kgRebuild',
         build: function (lang) {
             return Promise.all([
-                fetch('/data/knowledge-graph.json' + BUST).then(function (r) { return r.json(); }),
-                fetch('/lang/' + lang + '/data/tags.json' + BUST).then(function (r) { return r.json(); }).catch(function () { return {}; }),
-                fetch('/lang/' + lang + '/data/laws.json' + BUST).then(function (r) { return r.json(); }).catch(function () { return {}; }),
-                fetch('/lang/' + lang + '/data/scientists.json' + BUST).then(function (r) { return r.json(); }).catch(function () { return {}; })
+                fetch('/data/knowledge-graph.json').then(function (r) { return r.json(); }),
+                shared('tagsLoc', '/lang/' + lang + '/data/tags.json'),
+                shared('lawsData', '/lang/' + lang + '/data/laws.json'),
+                shared('scientistsData', '/lang/' + lang + '/data/scientists.json')
             ]).then(function (res) {
                 var kg = res[0], tn = res[1], ln = res[2];
                 kgEdgesCache = kg.edges;
