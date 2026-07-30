@@ -23,7 +23,13 @@ from gen_llm import translate_scipop, translate_scipop_slim  # noqa: E402
 
 DRY = "--dry" in sys.argv
 DATES = [a for a in sys.argv[1:] if not a.startswith("--")]
-LANGS = [l for l in G.LANGUAGES if l != G.DEFAULT_LANG]
+
+# Языки можно сузить: --langs en,es,ar. Без этого скрипт брал ВСЕ языки конфига, включая
+# молодые, которые владелец сознательно держит «по запросу» — и разовый прогон
+# превращался в массовый перевод целого языка (на fr это 748 тиров вместо 60).
+_langs_arg = next((a.split("=", 1)[1] for a in sys.argv[1:] if a.startswith("--langs=")), "")
+LANGS = ([l.strip() for l in _langs_arg.split(",") if l.strip()]
+         or [l for l in G.LANGUAGES if l != G.DEFAULT_LANG])
 TIERS = ("advanced", "popular", "simple")
 _print_lock = threading.Lock()
 
