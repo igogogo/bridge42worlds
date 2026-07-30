@@ -43,9 +43,12 @@ def targets():
     for r in ROOTS:
         if not r.exists():
             continue
-        # в папках курса и лекций переводим всё, в корне theory — только файлы курса
-        it = r.rglob("*.json") if r.name in ("courses", "lectures") else (
-                list(r.glob("course*.json")) + [r / "discoveries.json", r / "mathkit.json", r / "hypotheses.json"])
+        # В папках курса и лекций переводим всё; в корне theory — тоже всё, что имеет языковые
+        # ветки. Раньше здесь стоял поимённый список, и материал, не попавший в него, оставался
+        # русским на всех языках навсегда: так `frontier.json` (край известного, 15 тысяч знаков)
+        # читался по-русски на en/es/ar. Отбор по содержимому, а не по имени файла: новый
+        # материал подхватывается сам.
+        it = r.rglob("*.json") if r.name in ("courses", "lectures") else r.glob("*.json")
         for f in it:
             if f in seen:
                 continue
@@ -72,6 +75,10 @@ RULES — critical:
   bug: the reader sees Cyrillic in an English/Spanish/Arabic formula.
   Units inside \text{{}} become the international symbols: м→m, с→s, кг→kg, Дж→J, Н→N, Вт→W,
   В→V, А→A, Кл→C, К→K, Гц→Hz, эВ→eV, МэВ→MeV, моль→mol.
+- IMPORTANT — Cyrillic SUBSCRIPTS and units written plainly, without \text{{}}: things like
+  N_удар, Δp_полн, L_мол, V_пар, T_гор, 67 кДж. They are human-readable too and must not stay
+  in Cyrillic: translate the subscript (L_мол → L_mol, T_гор → T_hot) and convert the unit
+  (кДж → kJ, кПа → kPa, °С → °C). Keep the symbol itself and the underscore.
 - Names of laws and effects (fields like "law") ARE human-readable — translate them using the
   standard name in {lang} ("Закон Ома" → "Ohm's law").
 - Keep the EXACT same JSON structure and keys; only values change.
@@ -85,10 +92,10 @@ INPUT:
 {payload}"""
 
 
-def _one(payload, lang, retries=2):
+def _one(payload, lang, retries=2, prompt=None):
     for _ in range(retries):
         try:
-            r = chat("translate", PROMPT.format(lang=LANG_NAME[lang], payload=json.dumps(payload, ensure_ascii=False)),
+            r = chat("translate", (prompt or PROMPT).format(lang=LANG_NAME[lang], payload=json.dumps(payload, ensure_ascii=False)),
                      model="deepseek-v4-flash", max_tokens=32000)
             raw = r.choices[0].message.content or ""
             data = parse_json_salvage(raw)
@@ -168,7 +175,15 @@ def translate_block(block, lang, chunk_chars=6000):
             return
         got = _one(batch, lang)
         if isinstance(got, dict):
-            out.update({k: graft(v, got.get(k)) for k, v in batch.items()})
+            # Ключ, которого в ответе нет, — это НЕ повод положить русский оригинал. Такой
+            # откат уже стоил нам утечки: перевод «есть», а читатель видит кириллицу. Здесь он
+            # оставался в последнем виде — через graft. Модель молча теряла по нескольку полей
+            # (`constants`, `mnemonic` в строгом выводе), и они уезжали в перевод по-русски.
+            for k, v in batch.items():
+                if k in got and got[k] is not None:
+                    out[k] = graft(v, got[k])
+                else:
+                    failed.append(k)
         else:
             failed.extend(batch.keys())
         batch, size = {}, 0
@@ -197,6 +212,94 @@ def translate_block(block, lang, chunk_chars=6000):
     return out
 
 
+FILL_PROMPT = r"""Translate these strings from a physics course into {lang}. Each key holds one
+string; return STRICT JSON with the SAME keys and translated values, nothing else.
+
+RULES:
+- Keep LaTeX/KaTeX commands, markdown (**bold**), numbers and symbols of quantities intact.
+- Cyrillic subscripts and units are human-readable and must NOT stay in Cyrillic:
+  L_мол -> L_mol, N_удар -> N_hit, V_пар -> V_vap, T_гор -> T_hot, T_хол -> T_cold,
+  кДж -> kJ, кПа -> kPa, моль -> mol, Дж -> J, эВ -> eV.
+- Physics terminology must be the standard one in {lang}-language textbooks.
+- Keep the tone: clear, engaging, no condescension. No alcohol analogies.
+
+INPUT:
+{payload}"""
+
+
+def walk_strings(node, fn):
+    """Обходим значения и заменяем строки через fn (вернула не строку — оставляем как было)."""
+    if isinstance(node, dict):
+        return {k: walk_strings(v, fn) for k, v in node.items()}
+    if isinstance(node, list):
+        return [walk_strings(v, fn) for v in node]
+    if isinstance(node, str):
+        got = fn(node)
+        return got if isinstance(got, str) and got.strip() else node
+    return node
+
+
+def fill_gaps(files, langs, dry=False, chunk_chars=4000):
+    """Добор: переводим ОТДЕЛЬНЫЕ строки, в которых осталась кириллица.
+
+    Зачем отдельный проход. Перевод блока целиком не сходится: на каждом заходе модель теряет
+    пару полей в новом месте (то `mnemonic`, то `constants`), а блок из-за одной строки уезжает
+    на повторный перевод весь — восемьдесят девять тысяч знаков за раз, и снова с потерей.
+    Здесь мы просим ровно то, чего не хватает: собираем непереведённые строки, отдаём списком
+    и ставим обратно во все места, где они встречались. Дёшево, сходится, и видно ровно то,
+    что изменилось.
+    """
+    total = 0
+    for f in files:
+        d = json.loads(f.read_text(encoding="utf-8"))
+        br = branches(d)
+        changed = 0
+        for lang in langs:
+            left = set()
+            for b in br.values():
+                if lang in b:
+                    walk_strings(b[lang], lambda s: left.add(s) if CYR.search(s) else None)
+            left = sorted(left)
+            if not left:
+                continue
+            print(f"  {f.name} [{lang}]: строк с кириллицей {len(left)}", flush=True)
+            if dry:
+                for s in left[:6]:
+                    print(f"      {s[:90]}", flush=True)
+                continue
+            # партиями; ключ — номер строки, чтобы модель не путала их местами
+            table, batch, size = {}, {}, 0
+
+            def send(b):
+                got = _one(b, lang, prompt=FILL_PROMPT)
+                if isinstance(got, dict):
+                    for k, src in b.items():
+                        v = got.get(k)
+                        if isinstance(v, str) and v.strip() and not CYR.search(v):
+                            table[src] = v
+
+            for i, s in enumerate(left):
+                if size + len(s) > chunk_chars and batch:
+                    send(batch)
+                    batch, size = {}, 0
+                batch[str(i)] = s
+                size += len(s)
+            if batch:
+                send(batch)
+            if not table:
+                print(f"      ⚠️ {lang}: добрать не удалось, строки остались русскими", flush=True)
+                continue
+            for b in br.values():
+                if lang in b:
+                    b[lang] = walk_strings(b[lang], lambda s: table.get(s))
+            changed += len(table)
+            print(f"      подставлено {len(table)} из {len(left)}", flush=True)
+        if changed and not dry:
+            f.write_text(json.dumps(d, ensure_ascii=False, indent=1), encoding="utf-8")
+            total += changed
+    print(f"✅ добрано строк: {total}", flush=True)
+
+
 def main():
     argv = sys.argv
     langs = ["en", "es", "ar"]
@@ -205,6 +308,15 @@ def main():
     limit = int(argv[argv.index("--limit") + 1]) if "--limit" in argv else 0
 
     files = targets()
+
+    # --fill: добор отдельных строк вместо перевода блоков целиком (см. fill_gaps)
+    if "--fill" in argv:
+        only = argv[argv.index("--fill") + 1] if len(argv) > argv.index("--fill") + 1 \
+                                                 and not argv[argv.index("--fill") + 1].startswith("--") else ""
+        sel = [f for f in files if only in f.name] if only else files
+        fill_gaps(sel, langs, dry="--dry" in argv)
+        return
+
     todo = []
     for f in files:
         d = json.loads(f.read_text(encoding="utf-8"))
