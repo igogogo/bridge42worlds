@@ -20,9 +20,14 @@ import sys
 from pathlib import Path
 
 DRY = "--dry" in sys.argv
+# Русский справочник — ИСТОЧНИК утечки в формулах: latex не переводится, он копируется
+# во все языки как есть. Пока русские подписи стоят в ru, любая перегенерация переводов
+# возвращает их обратно в en/es/ar/fr. С --with-ru чиним и русский, но только latex:
+# lifespan и type там по-русски законно.
+WITH_RU = "--with-ru" in sys.argv
 ROOT = Path(__file__).resolve().parent.parent
 LANGS = [d.name for d in (ROOT / "lang").iterdir()
-         if d.is_dir() and d.name != "ru" and (d / "data").exists()]
+         if d.is_dir() and (d.name != "ru" or WITH_RU) and (d / "data").exists()]
 
 # — научные обозначения: безопасны во всех языках (международная нотация) —
 LATEX_MAP = {
@@ -35,6 +40,18 @@ LATEX_MAP = {
     "среднее": "avg", "ср": "avg", "эфф": "eff", "крит": "crit",
     "при ": "at ", "или": "or", "и ": "and ",
     "up-тип": "up-type", "down-тип": "down-type",
+    # — добор 2026-07-30 (промпт-инженер): остаток первого прохода, разобран поштучно —
+    # Индексы величин. Замены идут от длинных ключей к коротким (см. fix_latex),
+    # поэтому «св.лет» отрабатывает раньше, чем «св».
+    "св": "b", "пор": "th", "инерт": "inert", "гравит": "grav",
+    "лин": "lin", "кв": "quad", "выт": "buoy",
+    "Земли": "Earth", "Луны": "Moon", "Солнца": "Sun",
+    # Куски фраз внутри \text{} — встречаются в математических формулировках.
+    "такое, что": "such that", "такое что": "such that",
+    "для бесконечно многих": "for infinitely many",
+    "для всех": "for all", "существует": "there exists",
+    "почти наверное": "almost surely",
+    "сходится равномерно на": "converges uniformly on",
 }
 PRESENT = {"en": "present", "es": "presente", "fr": "aujourd'hui",
            "ar": "حتى الآن", "zh": "至今"}
@@ -49,12 +66,21 @@ CYR = re.compile(r"[а-яА-ЯёЁ]")
 
 
 def fix_latex(s):
+    """Замены по границам слова. Голый str.replace здесь опасен: ключ «и » превращал
+    «почти наверное» в «почтand наверное» (поймано на доборе 30 июля). Ключи со знаками
+    (св.лет, км/с, up-тип, «при ») остаются буквальными — границы им не нужны."""
     if not CYR.search(s):
         return s, 0
     n = 0
     for ru, lat in sorted(LATEX_MAP.items(), key=lambda kv: -len(kv[0])):
-        if ru in s:
-            s = s.replace(ru, lat)
+        if ru not in s:
+            continue
+        if ru.strip().isalpha():
+            new = re.sub(rf"(?<![А-Яа-яЁё]){re.escape(ru)}(?![А-Яа-яЁё])", lat, s)
+        else:
+            new = s.replace(ru, lat)
+        if new != s:
+            s = new
             n += 1
     return s, n
 
@@ -77,6 +103,13 @@ def process(lang):
                         if k in ("latex", "meaning") or "\\" in v:
                             new, n = fix_latex(v)
                             fixed += n
+                        if lang == "ru":
+                            # в русском справочнике чиним ТОЛЬКО формулы: подпись «н.в.»
+                            # и тип «уравнение» там на своём месте
+                            if new != v:
+                                node[k] = new
+                                changed = True
+                            continue
                         if k == "lifespan" and CYR.search(new):
                             new = re.sub(r"(настоящее время|наст\.? ?время|н\.? ?в\.?)",
                                          PRESENT.get(lang, "present"), new)
