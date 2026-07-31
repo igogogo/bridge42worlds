@@ -82,10 +82,22 @@
             return window.B42Refs.then(function (refs) {
                 var got = refs && refs[name];
                 if (got && Object.keys(got).length) return got;
-                return fetch(url).then(function (r) { return r.json(); }).catch(function () { return {}; });
+                return fetch(url).then(function (r) { return r.json(); }).catch(function (e) {
+            // Осознанный откат: без справочника граф рисуется, но без человеческих
+            // подписей. Молчать об этом нельзя — иначе назавтра никто не поймёт,
+            // почему на узлах сырые идентификаторы.
+            console.warn('справочник не загрузился: ' + url, e);
+            return {};
+        });
             });
         }
-        return fetch(url).then(function (r) { return r.json(); }).catch(function () { return {}; });
+        return fetch(url).then(function (r) { return r.json(); }).catch(function (e) {
+            // Осознанный откат: без справочника граф рисуется, но без человеческих
+            // подписей. Молчать об этом нельзя — иначе назавтра никто не поймёт,
+            // почему на узлах сырые идентификаторы.
+            console.warn('справочник не загрузился: ' + url, e);
+            return {};
+        });
     }
 
     createForceGraph({
