@@ -23,9 +23,15 @@ from sklearn.manifold import TSNE
 if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-DEFAULT_LANG = "ru"
-LANGS = ("ru", "en", "es", "ar")
-LANG_NAME = {"ru": "Russian", "en": "English", "es": "Spanish", "ar": "Arabic"}
+# Языки — из config.json, не списком: хардкод ["ru","en","es","ar"] — причина того, что
+# пятый язык (fr) прошёл мимо половины инструментов (аудит 2026-07-30). Здесь он дожил
+# до 2026-07-31: трактовки кластеров генерились без fr, и французская страница /analytics
+# показывала имена групп через фолбэк.
+_CONFIG = json.loads(Path("config.json").read_text(encoding="utf-8"))
+DEFAULT_LANG = _CONFIG.get("default_lang", "ru")
+LANGS = tuple(_CONFIG.get("languages", ["ru"]))
+LANG_NAME = {"ru": "Russian", "en": "English", "es": "Spanish", "ar": "Arabic",
+             "fr": "French", "zh": "Chinese"}
 OUT = Path("data/analytics")
 OUT.mkdir(parents=True, exist_ok=True)
 
@@ -57,7 +63,7 @@ def interpret_clusters(cluster_top, samples, kind, langs=LANGS):
             f"For EVERY cluster id, give:\n"
             f'  "title": a short, vivid human name (2–4 words, NO underscores, NO jargon ids),\n'
             f'  "desc": ONE plain-language sentence telling a curious non-expert what unites this group and why it matters.\n'
-            f"Write BOTH fields in {LANG_NAME[lang]}. Do not transliterate the tag ids — interpret their meaning. "
+            f"Write BOTH fields in {LANG_NAME.get(lang, lang)}. Do not transliterate the tag ids — interpret their meaning. "
             f'Return STRICT JSON: {{"<id>": {{"title": "...", "desc": "..."}}, ...}} covering every id below.\n\n{body}')
         # reasoning-модель изредка возвращает пустой/битый ответ (весь бюджет ушёл в рассуждение) —
         # ретраим, иначе целый язык выпадает из трактовки.
