@@ -190,7 +190,9 @@
         lastQuery = query;
         if (!scopeReady) { scoped = scope(); scopeReady = true; }
         var useScope = ignoreScope ? null : scoped;
-        var vector = mode === 'meaning';
+        // Одна-две буквы смыслом не обладают, а сетевой запрос стоит единицу нормы —
+        // короткий ввод ищем локально даже в смысловом режиме.
+        var vector = mode === 'meaning' && query.length >= 3;
         var p = S.search(query, {
             source: vector ? 'vector' : 'local',
             scope: useScope
@@ -210,10 +212,18 @@
         });
     }
 
+    /* Дебаунс: раньше каждый символ звал run(), и в смысловом режиме 11 букв означали
+       11 сетевых запросов к /api/search — анонимная норма (3/сутки) сгорала на третьей
+       букве, а карточки ожидания копились стопкой (блокер QA 2026-07-31). Пишущему
+       человеку 350 мс незаметны; сети достаётся один запрос на паузу в наборе. */
+    var _inputTimer = null;
     document.addEventListener('input', function (e) {
         var t = e.target;
         if (!t || !t.classList || !t.classList.contains('search-box')) return;
-        run(t.value.trim(), false);
+        var q = t.value.trim();
+        lastQuery = q;                        // ответы на устаревший ввод отсекутся сразу
+        if (_inputTimer) clearTimeout(_inputTimer);
+        _inputTimer = setTimeout(function () { run(q, false); }, 350);
     });
 
     document.addEventListener('click', function (e) {

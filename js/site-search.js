@@ -205,12 +205,21 @@
 
     /* Векторный источник. Отвечает только статьями, поэтому справочники всё равно берём
        локально и склеиваем. Любая осечка сети — молча возвращаемся к локальному поиску:
-       поиск, который «не работает, потому что упал Worker», хуже поиска по словам. */
+       поиск, который «не работает, потому что упал Worker», хуже поиска по словам.
+       Новый ввод отменяет прежний сетевой запрос, а зависший Worker обрубается по
+       таймауту — иначе Promise.all держал бы и готовую локальную часть выдачи
+       (блокер QA 2026-07-31). */
+    var _apiCtl = null;
     function apiSearch(q, opts) {
         var local = localSearch(q, opts);
-        var remote = fetch('/api/search?q=' + encodeURIComponent(q))
-            .then(function (r) { return r.ok ? r.json() : null; })
-            .catch(function () { return null; });
+        if (_apiCtl) { try { _apiCtl.abort(); } catch (e) {} }
+        var ctl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+        _apiCtl = ctl;
+        var kill = ctl ? setTimeout(function () { ctl.abort(); }, 8000) : null;
+        var remote = fetch('/api/search?q=' + encodeURIComponent(q),
+                           ctl ? { signal: ctl.signal } : undefined)
+            .then(function (r) { if (kill) clearTimeout(kill); return r.ok ? r.json() : null; })
+            .catch(function () { if (kill) clearTimeout(kill); return null; });
         return Promise.all([local, remote]).then(function (res) {
             var base = res[0], api = res[1];
             if (!api || !api.results || !api.results.length) return base;

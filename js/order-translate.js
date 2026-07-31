@@ -29,6 +29,8 @@
               reload: 'Обновить', already: 'Эта статья уже переводится — подождите вместе со всеми',
               limit: 'На сегодня заказы закончились. Норма обновится завтра.',
               noAuth: 'Чтобы заказать перевод, нужно войти',
+              captcha: 'Не прошла проверка «не робот». Обновите страницу и попробуйте ещё раз.',
+              tooFast: 'Слишком много запросов подряд — подождите минуту.',
               offline: 'Очередь сейчас недоступна. Статья доступна на других языках.',
               failed: 'Перевести не получилось. Попробуйте позже.' },
         en: { offer: 'Translate this article now', hint: 'Usually takes about a minute',
@@ -37,6 +39,8 @@
               reload: 'Reload', already: 'This article is already being translated — wait along with others',
               limit: 'No orders left today. The allowance resets tomorrow.',
               noAuth: 'Sign in to order a translation',
+              captcha: 'The “not a robot” check failed. Reload the page and try again.',
+              tooFast: 'Too many requests in a row — wait a minute.',
               offline: 'The queue is unavailable right now. The article is available in other languages.',
               failed: 'Translation failed. Please try later.' },
         es: { offer: 'Traducir este artículo ahora', hint: 'Suele tardar alrededor de un minuto',
@@ -45,6 +49,8 @@
               reload: 'Recargar', already: 'Este artículo ya se está traduciendo: espere junto a los demás',
               limit: 'No quedan pedidos hoy. El cupo se renueva mañana.',
               noAuth: 'Inicie sesión para pedir una traducción',
+              captcha: 'La verificación «no soy un robot» falló. Recargue la página e inténtelo de nuevo.',
+              tooFast: 'Demasiadas solicitudes seguidas: espere un minuto.',
               offline: 'La cola no está disponible ahora. El artículo está disponible en otros idiomas.',
               failed: 'No se pudo traducir. Inténtelo más tarde.' },
         ar: { offer: 'ترجم هذه المقالة الآن', hint: 'يستغرق عادة نحو دقيقة',
@@ -53,6 +59,8 @@
               reload: 'إعادة التحميل', already: 'هذه المقالة قيد الترجمة بالفعل — انتظر مع الآخرين',
               limit: 'لا طلبات متبقية اليوم. تتجدد الحصة غدًا.',
               noAuth: 'سجّل الدخول لطلب الترجمة',
+              captcha: 'فشل التحقق من «لست روبوتًا». أعد تحميل الصفحة وحاول مجددًا.',
+              tooFast: 'طلبات كثيرة متتالية — انتظر دقيقة.',
               offline: 'الطابور غير متاح الآن. المقالة متاحة بلغات أخرى.',
               failed: 'تعذّرت الترجمة. حاول لاحقًا.' },
         fr: { offer: 'Traduire cet article maintenant', hint: 'Prend en général une minute',
@@ -61,6 +69,8 @@
               reload: 'Recharger', already: 'Cet article est déjà en cours de traduction — patientez avec les autres',
               limit: 'Plus de commandes aujourd’hui. Le quota se renouvelle demain.',
               noAuth: 'Connectez-vous pour commander une traduction',
+              captcha: 'La vérification « je ne suis pas un robot » a échoué. Rechargez la page et réessayez.',
+              tooFast: 'Trop de requêtes d’affilée — patientez une minute.',
               offline: 'La file est indisponible. L’article existe dans d’autres langues.',
               failed: 'La traduction a échoué. Réessayez plus tard.' }
     };
@@ -105,19 +115,47 @@
             .catch(function () { say(L.offline); });
     }
 
-    function order() {
+    // Помощник подключён в шаблоне статьи, но уже СОБРАННЫЕ страницы тега <script> не имеют —
+    // догружаем сами, чтобы починка работала сразу после выкладки js, без пересборки 42к страниц.
+    function loadHelper() {
+        if (window.b42TurnstilePass) return Promise.resolve(true);
+        return new Promise(function (resolve) {
+            var s = document.createElement('script');
+            s.src = '/js/b42-turnstile.js';
+            s.onload = function () { resolve(true); };
+            s.onerror = function () { resolve(false); };
+            document.head.appendChild(s);
+        });
+    }
+
+    async function order() {
         say(L.queued);
+        // Пропуск «не робот» обязателен: handleOrder отказывает без него ВСЕГДА
+        // (fail-closed). Кнопка без пропуска не могла сработать никогда — блокер QA
+        // 2026-07-31. Помощник общий (js/b42-turnstile.js); нет его или пропуска —
+        // шлём пусто, сервер откажет честным captcha_failed, и мы его покажем.
+        await loadHelper();
+        var pass = window.b42TurnstilePass ? await window.b42TurnstilePass() : '';
         fetch('/api/order', {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({ kind: 'translate', payload: { arxiv_id: arxivId, to: to } })
+            body: JSON.stringify({ kind: 'translate', lang: to, turnstile: pass,
+                                   payload: { arxiv_id: arxivId, to: to } })
         }).then(function (r) {
             return r.json().catch(function () { return null; });
         }).then(function (d) {
             if (!d) { say(L.offline); return; }
-            if (d.error === 'quota_exceeded' || d.error === 'limit') { say(L.limit); return; }
-            if (d.error === 'no_token' || d.error === 'unauthorized') { say(L.noAuth); return; }
-            if (d.error) { say(L.offline); return; }
+            // Коды сервера (worker.js): day_limit / week_limit / project_limit /
+            // captcha_failed / too_fast. Раньше клиент ловил только свои выдуманные
+            // (quota_exceeded, no_token…) — пересечение было пустым, и любой отказ
+            // выглядел как «очередь недоступна». Старые коды оставлены на всякий случай.
+            var e = d.error;
+            if (e === 'day_limit' || e === 'week_limit' || e === 'project_limit' ||
+                e === 'quota_exceeded' || e === 'limit') { say(L.limit); return; }
+            if (e === 'captcha_failed') { say(L.captcha, true); return; }
+            if (e === 'too_fast') { say(L.tooFast); return; }
+            if (e === 'no_token' || e === 'unauthorized') { say(L.noAuth); return; }
+            if (e) { say(L.offline); return; }
             if (d.deduped) say(L.already);
             if (d.id) poll(d.id);
         }).catch(function () { say(L.offline); });
