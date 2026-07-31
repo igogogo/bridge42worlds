@@ -414,6 +414,30 @@ function ensureOtherVersions() {
 }
 window.ensureOtherVersions = ensureOtherVersions;
 
+/* Полный индекс ПО ТРЕБОВАНИЮ — для страниц, которые считают по корпусу, но списка не
+   показывают. Такая ровно одна: дашборд /archive — вся его сводка (статьи, тепловая карта,
+   динамика, разделы, обложки, топы) выводится из индекса, а контейнера ленты у него нет.
+   С момента, как индекс перестал грузиться всюду подряд (2026-07-31), дашборд получал
+   пустой массив и рисовал нули — счётчик статей был пуст. Загрузка «по требованию» держит
+   и экономию (статья и /analytics не зовут — значит не качают), и правду на дашборде.
+   Один общий промис, сколько бы раз ни позвали; на странице со списком отдаёт тот же
+   индекс, который уже грузится, вторым запросом не ходит. */
+var _searchIndexPromise = null;
+function ensureSearchIndex() {
+    if (_searchIndexPromise) return _searchIndexPromise;
+    _searchIndexPromise = HAS_LIST ? _fullIndexPromise : fetchIndex(effVersion()).then(function (primary) {
+        searchIndex = primary;
+        window.searchIndex = searchIndex;
+        window.__primaryIndex = primary;
+        return searchIndex;
+    }).catch(function (e) {
+        console.error('Index on demand failed:', e);
+        return [];
+    });
+    return _searchIndexPromise;
+}
+window.ensureSearchIndex = ensureSearchIndex;
+
 // Ленивая загрузка графа авторов: один общий промис, сколько бы раз ни позвали.
 var _authorsGraphPromise = null;
 function ensureAuthorsGraph() {

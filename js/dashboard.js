@@ -56,17 +56,23 @@
 
     root.innerHTML = '<div class="b42-loader">' + T.loading + '</div>';
 
-    // Ждём, пока search.js догрузит индекс и справочники (searchIndex собран из 3 тиров).
-    var tries = 0;
-    (function waitData() {
-        var idx = window.searchIndex || [];
-        if (idx.length && window.tagsLoc && window.lawsData) { build(); return; }
-        if (tries++ > 120) { build(); return; }   // ~12с фолбэк — рисуем что есть
-        setTimeout(waitData, 100);
-    })();
+    // Данные ПРОСИМ, а не ждём. Раньше здесь стоял опрос window.searchIndex раз в 100 мс с
+    // выходом по 12-секундному таймеру — он молча терпел любую причину, по которой индекс не
+    // приехал, и рисовал нули. Именно так дашборд и опустел 2026-07-31, когда search.js стал
+    // грузить индекс только на страницах со списком: у дашборда списка нет, ждать было нечего,
+    // и через 12 секунд он показывал 0 статей при живом корпусе. Теперь три источника
+    // запрашиваются явно: индекс (вся сводка), справочники (теги/законы/учёные), граф авторов
+    // (счётчик авторов — он по той же причине показывал 0).
+    Promise.all([
+        window.ensureSearchIndex ? window.ensureSearchIndex() : Promise.resolve(window.searchIndex || []),
+        window.B42Refs || Promise.resolve({}),
+        window.ensureAuthorsGraph ? window.ensureAuthorsGraph() : Promise.resolve({})
+    ]).then(function (r) { build(r[0]); })
+      // Сводка без части данных лучше вечного «Собираем данные…»: рисуем тем, что доехало.
+      .catch(function (e) { console.error('Dashboard data error:', e); build(window.searchIndex || []); });
 
-    function build() {
-        var idx = window.searchIndex || [];
+    function build(index) {
+        var idx = index || window.searchIndex || [];
         // Уникальные статьи по id (в индексе 3 тира на статью).
         var byId = {};
         idx.forEach(function (a) { if (!byId[a.id]) byId[a.id] = a; });
