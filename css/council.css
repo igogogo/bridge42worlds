@@ -1,0 +1,136 @@
+/* Золотая тема наблюдательного совета.
+   Одна копия на все страницы совета: council.html задаёт тон, страницы заседаний
+   (council_build.py) берут отсюда же. Держать стиль в двух местах — верный способ
+   получить две разные комнаты через месяц.
+
+   Золото приглушённое, латунное: блестящий жёлтый превратил бы серьёзный орган
+   в поздравительную открытку. */
+:root {
+  --bg: #F6F2E9; --surface: #FCFAF4; --card: #EEE7D8; --ink: #14110B;
+  --muted: #6A6152; --faint: rgba(20,17,11,.10); --hair: rgba(20,17,11,.13);
+  --gold: #A8802C; --gold-soft: #C9A34E;
+  --grad: linear-gradient(92deg, #A8802C, #D8B863);
+  --midnight: #14110B; --ivory: #F1E9D6;
+  --sans: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --serif: "Source Serif 4", "Iowan Old Style", Palatino, Georgia, serif;
+  --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+  --ok: #2E7D32; --no: #B3452F;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0E0C08; --surface: #17130C; --card: #1D1810; --ink: #F1E9D6;
+    --muted: #9A8F79; --faint: rgba(241,233,214,.08); --hair: rgba(241,233,214,.14);
+    --gold: #D8B863; --gold-soft: #E8D19A;
+    --grad: linear-gradient(92deg, #D8B863, #F0DFB4);
+    --ok: #7FBF83; --no: #E08A72;
+  }
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; }
+.page { background: var(--bg); color: var(--ink); font-family: var(--sans);
+  line-height: 1.62; -webkit-font-smoothing: antialiased;
+  padding: clamp(18px, 5vw, 56px) 18px 80px; }
+.wrap { max-width: 760px; margin: 0 auto; }
+
+.topnav { display: flex; align-items: center; gap: 14px; margin: 0 0 22px;
+  font-family: var(--mono); font-size: 13px; flex-wrap: wrap; }
+.topnav a { color: var(--muted); text-decoration: none; transition: color .16s; }
+.topnav a:hover { color: var(--gold); }
+.topnav-logo { font-family: var(--serif); font-size: 17px; color: var(--ink); }
+
+.hero { position: relative; background: var(--midnight); color: var(--ivory);
+  border: 1px solid rgba(216,184,99,.28); border-radius: 18px;
+  padding: 32px 28px 28px; overflow: hidden;
+  box-shadow: 0 26px 56px -28px rgba(0,0,0,.6); }
+.hero::before { content: ''; position: absolute; inset: 0;
+  background: radial-gradient(120% 80% at 80% -10%, rgba(216,184,99,.14), transparent 60%);
+  pointer-events: none; }
+.eyebrow { font-family: var(--mono); font-size: 11.5px; letter-spacing: .24em;
+  text-transform: uppercase; color: rgba(216,184,99,.85); margin: 0 0 10px; }
+.hero h1 { font-family: var(--serif); font-weight: 500;
+  font-size: clamp(26px, 6vw, 40px); line-height: 1.1; margin: 0 0 12px;
+  letter-spacing: -.01em; text-wrap: balance; }
+.hero h1 .n { font-family: var(--mono); font-weight: 600; background: var(--grad);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent; }
+.hero .dek { font-size: 16.5px; color: rgba(241,233,214,.82); max-width: 52ch; margin: 0; }
+
+section { margin-top: 44px; }
+.kicker { font-family: var(--mono); font-size: 11px; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--gold); margin: 0 0 8px; }
+h2 { font-family: var(--serif); font-weight: 500; font-size: clamp(21px, 4vw, 27px);
+  line-height: 1.2; margin: 0 0 16px; letter-spacing: -.01em; }
+h4 { font-family: var(--mono); font-size: 11.5px; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--muted); margin: 0 0 7px; font-weight: 600; }
+p { margin: 0 0 12px; }
+.muted { color: var(--muted); }
+a { color: var(--gold); text-decoration: none; border-bottom: 1px solid var(--faint); }
+a:hover { border-bottom-color: var(--gold); }
+
+/* ── Вопрос повестки ─────────────────────────────────────────────────────── */
+.item { background: var(--surface); border: 1px solid var(--hair);
+  border-radius: 14px; padding: 18px 20px; margin-bottom: 14px; }
+.ihead { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+  margin-bottom: 8px; }
+.inum { font-family: var(--mono); font-size: 12px; color: var(--gold);
+  border: 1px solid var(--gold); border-radius: 999px; padding: 1px 8px; flex: none; }
+.ihead h3 { font-family: var(--serif); font-weight: 600; font-size: 18.5px;
+  margin: 0; flex: 1 1 240px; min-width: 0; }
+.dec { font-family: var(--mono); font-size: 11.5px; letter-spacing: .08em;
+  text-transform: uppercase; white-space: nowrap; }
+.d-ok { color: var(--ok); } .d-no { color: var(--no); }
+.d-wait { color: var(--gold); } .d-open { color: var(--muted); }
+.item .from { font-family: var(--mono); font-size: 12px; color: var(--muted); margin: 0 0 8px; }
+.item .body { font-size: 15.5px; margin: 0 0 10px; }
+.item .why, .item .outcome { font-size: 14.5px; color: var(--muted);
+  border-top: 1px dashed var(--hair); padding-top: 10px; margin: 10px 0 0; }
+.item .why b, .item .outcome b { color: var(--ink); }
+
+/* Исходные формулировки. Открыты по требованию, но всегда доступны: сведение
+   не должно выглядеть подменой чужих слов. */
+.merged { margin: 0 0 10px; font-size: 14px; }
+.merged summary { cursor: pointer; color: var(--muted); font-family: var(--mono);
+  font-size: 12px; }
+.merged ul { margin: 8px 0 0; padding-inline-start: 20px; color: var(--muted); }
+
+/* ── Голоса ──────────────────────────────────────────────────────────────── */
+.votes { margin: 12px 0 4px; }
+.vrow { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.vname { flex: 0 0 108px; font-size: 14px; }
+.vbar { flex: 1 1 auto; height: 8px; border-radius: 4px; background: var(--card);
+  overflow: hidden; min-width: 60px; }
+.vbar i { display: block; height: 100%; background: var(--grad); border-radius: 4px; }
+.vnum { flex: 0 0 28px; text-align: right; font-family: var(--mono); font-size: 13px;
+  color: var(--muted); }
+.vtotal { font-family: var(--mono); font-size: 11.5px; color: var(--muted); margin: 6px 0 0; }
+
+/* ── Спринт ──────────────────────────────────────────────────────────────── */
+.sprint { display: flex; flex-wrap: wrap; gap: 12px; }
+.sp { flex: 1 1 220px; background: var(--surface); border: 1px solid var(--hair);
+  border-radius: 12px; padding: 14px 16px; }
+.sp ul { margin: 0; padding-inline-start: 18px; font-size: 14.5px; }
+.sp li { margin-bottom: 5px; }
+.sp-done { border-inline-start: 3px solid var(--ok); }
+.sp-carry { border-inline-start: 3px solid var(--gold); }
+ul.next { font-size: 15px; padding-inline-start: 20px; }
+
+/* ── Таблица списка ──────────────────────────────────────────────────────── */
+.tw { overflow-x: auto; border: 1px solid var(--hair); border-radius: 12px;
+  background: var(--surface); margin-bottom: 14px; }
+table { border-collapse: collapse; width: 100%; font-size: 14.5px; min-width: 420px; }
+th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--hair); }
+th { font-family: var(--mono); font-size: 11.5px; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted); font-weight: 600;
+  background: color-mix(in srgb, var(--gold) 7%, transparent); }
+tr:last-child td { border-bottom: none; }
+td.st { font-family: var(--mono); font-size: 12.5px; color: var(--muted); }
+
+footer { margin-top: 52px; padding-top: 18px; border-top: 1px solid var(--hair);
+  font-family: var(--mono); font-size: 12px; color: var(--muted); }
+
+@media (max-width: 640px) {
+  .hero { padding: 24px 18px 20px; border-radius: 15px; }
+  .item { padding: 15px 15px; }
+  .vname { flex-basis: 84px; font-size: 13.5px; }
+}
