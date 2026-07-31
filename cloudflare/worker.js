@@ -635,6 +635,42 @@ async function tg(env, text) {
   return r.ok;
 }
 
+// ── Отзывы с плашки предзапуска (владелец 2026-07-31: «если кто напишет — мы это увидели») ──
+// Два канала доставки, падение одного не роняет второй: строка в D1 (история, ничего не
+// теряется) И сообщение в Telegram-канал команды (мгновенная видимость). Клиент при ошибке
+// ручки падает на mailto — сообщение не теряется даже до выкладки этого кода.
+async function handleFeedback(request, env) {
+  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
+  if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405 });
+  const ipOk = await ipGuard(env, request);
+  if (!ipOk.ok) return Response.json({ error: ipOk.error }, { status: ipOk.code });
+  let body = {};
+  try { body = await request.json(); } catch { return Response.json({ error: "bad_json" }, { status: 400 }); }
+  const msg = String(body.message || "").trim().slice(0, 2000);
+  if (!msg) return Response.json({ error: "empty" }, { status: 400 });
+  const email = String(body.email || "").slice(0, 120);
+  const page = String(body.page || "").slice(0, 300);
+  const lang = String(body.lang || "").slice(0, 5);
+  let saved = false, alerted = false;
+  if (env.QUEUE) {
+    try {
+      await env.QUEUE.prepare(
+        "CREATE TABLE IF NOT EXISTS feedback (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+        "created_at TEXT DEFAULT CURRENT_TIMESTAMP, page TEXT, lang TEXT, email TEXT, message TEXT)").run();
+      await env.QUEUE.prepare(
+        "INSERT INTO feedback (page, lang, email, message) VALUES (?,?,?,?)")
+        .bind(page, lang, email, msg).run();
+      saved = true;
+    } catch (e) { /* алерт ниже всё равно уйдёт */ }
+  }
+  try {
+    alerted = await tg(env, `💬 <b>Отзыв с сайта</b> (${lang || "?"} · ${page || "?"})\n` +
+                           `${msg.slice(0, 1500)}${email ? `\n← ${email}` : ""}`);
+  } catch (e) {}
+  if (!saved && !alerted) return Response.json({ error: "delivery_failed" }, { status: 503 });
+  return Response.json({ ok: true, saved, alerted });
+}
+
 async function handleAlertHook(request, env) {
   if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405 });
   const secret = request.headers.get("cf-webhook-auth");
@@ -1086,6 +1122,7 @@ export default {
     if (url.pathname.startsWith("/api/order/")) {
       return withCors(await handleOrderStatus(request, env, url.pathname.slice(11)));
     }
+    if (url.pathname === "/api/feedback") return withCors(await handleFeedback(request, env));
     if (url.pathname === "/api/hook/alert") return handleAlertHook(request, env);
 
     if (request.method !== "GET" && request.method !== "HEAD") {

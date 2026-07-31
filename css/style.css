@@ -2905,3 +2905,46 @@ body.b42-wait-open { overflow: hidden; }
   .top-bar .nav-links { display: none; }
   .top-bar .header-right { position: absolute; top: 10px; inset-inline-end: 12px; }
 }
+
+/* ── Плашка предзапуска «мост ещё строится» (v0.8, владелец 2026-07-31) ── */
+.beta-card {
+  display: none; position: fixed; z-index: 60; left: 12px; right: 12px; bottom: 12px;
+  max-width: 420px; margin-inline: auto;
+  background: var(--bg); border: 1px solid var(--border); border-radius: 14px;
+  padding: 14px 16px; box-shadow: 0 8px 28px rgba(0,0,0,.18);
+  font-size: 14px; line-height: 1.45;
+}
+@media (min-width: 641px) { .beta-card { left: auto; right: 20px; bottom: 20px; } }
+.beta-card.on { display: block; }
+.beta-card p { margin: 8px 0; }
+.beta-head { padding-inline-end: 28px; }
+.beta-ver { color: var(--muted); font-size: 12px; white-space: nowrap; }
+.beta-x { position: absolute; top: 4px; inset-inline-end: 4px; min-width: 44px; min-height: 44px;
+  border: 0; background: none; font-size: 20px; color: var(--muted); cursor: pointer; }
+.beta-bar { position: relative; height: 14px; border-radius: 7px; margin-top: 8px;
+  background: color-mix(in srgb, var(--border) 55%, transparent); overflow: hidden; }
+.beta-bar i { display: block; height: 100%; border-radius: 7px;
+  background: repeating-linear-gradient(-45deg, var(--cyan, #2aa) 0 10px,
+    color-mix(in srgb, var(--cyan, #2aa) 72%, #fff) 10px 20px);
+  background-size: 28px 100%; animation: beta-move 1.2s linear infinite; }
+@keyframes beta-move { to { background-position: 28px 0; } }
+.beta-bar em { position: absolute; top: 0; inset-inline-end: 6px; font: 700 10px/14px monospace,
+  monospace; color: var(--ink); font-style: normal; }
+.beta-links { color: var(--muted); font-size: 13px; }
+.beta-form textarea, .beta-form input { width: 100%; box-sizing: border-box; margin-top: 6px;
+  padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px;
+  background: var(--bg); color: var(--ink); font: inherit; }
+.beta-found { font-weight: 600; margin-top: 4px; }
+.beta-send { margin-top: 8px; min-height: 40px; padding: 0 18px; border-radius: 10px;
+  border: 1px solid var(--cyan, #2aa); background: none; color: var(--cyan, #2aa);
+  font: inherit; cursor: pointer; }
+.beta-send:disabled { opacity: .5; }
+.beta-badge { display: none; position: fixed; z-index: 60; bottom: 12px; inset-inline-end: 12px;
+  min-height: 44px; padding: 0 12px; align-items: center; gap: 6px;
+  border: 1px solid var(--border); border-radius: 22px; background: var(--bg);
+  color: var(--ink); font: 600 13px/1 monospace, monospace; cursor: pointer;
+  box-shadow: 0 3px 12px rgba(0,0,0,.14); }
+.beta-badge.on { display: inline-flex; }
+.beta-badge i { display: block; width: 34px; height: 6px; border-radius: 3px;
+  background: var(--cyan, #2aa); max-width: 34px; }
+.beta-badge span { color: var(--muted); }
