@@ -1163,8 +1163,62 @@ function showLatest() {
     if (c) c.innerHTML = feed.items.length ? '' : '<p style="color:var(--soft);text-align:center;padding:40px">' + UI.noResults + '</p>';
     renderMoreFeed();
     updateSearchRowVisibility();
+    mountCouncilInvite();
 }
 window.showLatest = showLatest;
+
+/* ── Приглашение тем, кто дочитался ─────────────────────────────────────────
+   Идея владельца 2026-07-31: человек, открывший сто статей, доказал делом, что ему
+   интересно, — его и зовём. Фильтр по вовлечённости честнее анкеты: не спрашиваем
+   «хотите к нам», а смотрим, кто уже здесь живёт.
+
+   Считаем ОТКРЫТЫЕ статьи (js/scroll.js, ключ b42_read), а не пролистанные карточки:
+   иначе приглашение получит каждый, кто минуту крутил ленту, и обесценится.
+
+   Показываем строкой в конце ленты, а не окном поперёк экрана: это находка, а не
+   объявление. Закрыл — больше не возвращается.
+
+   Язык. Страница пока написана только по-русски, поэтому и приглашение появляется
+   только в русской версии: отправлять араба на русскую стену — хуже, чем не звать
+   вовсе. Список расширяется по мере перевода страницы, и это ЯВНЫЙ список, а не
+   молчаливый откат на русский. */
+var COUNCIL_MIN = 100;
+var COUNCIL_LANGS = ['ru'];          // языки, на которых council.html существует
+var COUNCIL_TXT = {
+    ru: { t: 'Вы прочитали {n} статей',
+          d: 'Дальше начинается кухня: как всё устроено, сколько стоит и что мы планируем.',
+          a: 'Посмотреть изнутри' }
+};
+
+function readCount() {
+    try { return (JSON.parse(localStorage.getItem('b42_read') || '[]') || []).length; }
+    catch (e) { return 0; }
+}
+
+function mountCouncilInvite() {
+    if (COUNCIL_LANGS.indexOf(lang) === -1) return;
+    if (document.getElementById('council-invite')) return;
+    try { if (localStorage.getItem('b42_council_hide') === '1') return; } catch (e) {}
+    var n = readCount();
+    if (n < COUNCIL_MIN) return;
+    var host = document.getElementById('search-results');
+    if (!host || !host.parentNode) return;
+    var t = COUNCIL_TXT[lang] || COUNCIL_TXT.ru;
+
+    var box = document.createElement('div');
+    box.id = 'council-invite';
+    box.className = 'council-invite';
+    box.innerHTML =
+        '<button type="button" class="ci-close" aria-label="закрыть">×</button>' +
+        '<b>' + t.t.replace('{n}', n) + '</b>' +
+        '<span>' + t.d + '</span>' +
+        '<a href="/council.html">' + t.a + ' →</a>';
+    host.parentNode.insertBefore(box, host.nextSibling);
+    box.querySelector('.ci-close').addEventListener('click', function () {
+        box.remove();
+        try { localStorage.setItem('b42_council_hide', '1'); } catch (e) {}
+    });
+}
 
 // Вкладка «Избранное»: карточки из localStorage.favorites (клиент, без сервера).
 function showFavorites() {

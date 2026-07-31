@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Изнутри — bridge42worlds</title>
+<!-- Страница-приглашение. Открывается тем, кто дочитался: сто открытых статей.
+     Отдельная золотая тема — она должна ощущаться как другая комната, а не как
+     ещё один раздел. Разметка и сетка — от about.html, чтобы рука узнавала дом. -->
+<meta name="description" content="Как устроен bridge42worlds изнутри: архитектура, экономика, планы — и приглашение в наблюдательный совет.">
+<meta property="og:site_name" content="bridge42worlds">
+<meta property="og:title" content="bridge42worlds изнутри">
+<meta property="og:description" content="Архитектура, экономика и планы проекта — и приглашение тем, кто дочитался.">
+<meta property="og:url" content="https://bridge42worlds.academy/council.html">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&family=Noto+Naskh+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/favicon.png">
+<style>
+  /* ── Золотая тема ────────────────────────────────────────────────────────
+     От брендовой она отличается ровно одним: акцент не охра→циан, а золото.
+     Остальное — та же типографика и та же сетка, что на about: страница должна
+     читаться как продолжение дома, а не как чужой сайт. Золото держим приглушённым
+     (латунь, а не блеск): дешёвый жёлтый убил бы всё ощущение. */
+  :root {
+    --bg: #F6F2E9; --surface: #FCFAF4; --card: #EEE7D8; --ink: #14110B;
+    --muted: #6A6152; --faint: rgba(20,17,11,.10); --hair: rgba(20,17,11,.13);
+    --gold: #A8802C; --gold-soft: #C9A34E; --gold-deep: #6E5116;
+    --grad: linear-gradient(92deg, #A8802C, #D8B863);
+    --midnight: #14110B; --ivory: #F1E9D6;
+    --sans: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --serif: "Source Serif 4", "Iowan Old Style", Palatino, Georgia, serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0E0C08; --surface: #17130C; --card: #1D1810; --ink: #F1E9D6;
+      --muted: #9A8F79; --faint: rgba(241,233,214,.08); --hair: rgba(241,233,214,.14);
+      --gold: #D8B863; --gold-soft: #E8D19A; --gold-deep: #F0DFB4;
+      --grad: linear-gradient(92deg, #D8B863, #F0DFB4);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #F6F2E9; --surface: #FCFAF4; --card: #EEE7D8; --ink: #14110B;
+    --muted: #6A6152; --faint: rgba(20,17,11,.10); --hair: rgba(20,17,11,.13);
+    --gold: #A8802C; --gold-soft: #C9A34E; --gold-deep: #6E5116;
+    --grad: linear-gradient(92deg, #A8802C, #D8B863);
+  }
+  :root[data-theme="dark"] {
+    --bg: #0E0C08; --surface: #17130C; --card: #1D1810; --ink: #F1E9D6;
+    --muted: #9A8F79; --faint: rgba(241,233,214,.08); --hair: rgba(241,233,214,.14);
+    --gold: #D8B863; --gold-soft: #E8D19A; --gold-deep: #F0DFB4;
+    --grad: linear-gradient(92deg, #D8B863, #F0DFB4);
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  .page { background: var(--bg); color: var(--ink); font-family: var(--sans);
+    line-height: 1.62; -webkit-font-smoothing: antialiased;
+    padding: clamp(18px, 5vw, 56px) 18px 80px; }
+  .wrap { max-width: 760px; margin: 0 auto; }
+
+  .topnav { display: flex; align-items: center; gap: 14px; margin: 0 0 22px;
+    font-family: var(--mono); font-size: 13px; flex-wrap: wrap; }
+  .topnav a { color: var(--muted); text-decoration: none; transition: color .16s; }
+  .topnav a:hover { color: var(--gold); }
+  .topnav-logo { font-family: var(--serif); font-size: 17px; color: var(--ink); }
+
+  /* Шапка. Тёмная, как у гида, но золото вместо дуотона — и тонкая золотая рамка,
+     которой на обычных страницах нет: это знак, что комната другая. */
+  .hero { position: relative; background: var(--midnight); color: var(--ivory);
+    border: 1px solid rgba(216,184,99,.28); border-radius: 18px;
+    padding: 38px 32px 32px; overflow: hidden;
+    box-shadow: 0 26px 56px -28px rgba(0,0,0,.6); }
+  .hero::before { content: ''; position: absolute; inset: 0;
+    background: radial-gradient(120% 80% at 80% -10%, rgba(216,184,99,.14), transparent 60%);
+    pointer-events: none; }
+  .hero .mark { width: 112px; height: auto; display: block; margin-bottom: 16px; }
+  .eyebrow { font-family: var(--mono); font-size: 11.5px; letter-spacing: .24em;
+    text-transform: uppercase; color: rgba(216,184,99,.85); margin: 0 0 12px; }
+  .hero h1 { font-family: var(--serif); font-weight: 500;
+    font-size: clamp(27px, 6vw, 42px); line-height: 1.1; letter-spacing: -.01em;
+    margin: 0 0 14px; text-wrap: balance; }
+  .hero h1 .n { font-family: var(--mono); font-weight: 600; background: var(--grad);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent; }
+  .hero .dek { font-size: 17px; color: rgba(241,233,214,.82); max-width: 50ch; margin: 0; }
+  .hero .formula { position: absolute; font-family: var(--mono);
+    color: rgba(241,233,214,.06); font-size: 13px; pointer-events: none; }
+
+  section { margin-top: 48px; }
+  .kicker { font-family: var(--mono); font-size: 11px; letter-spacing: .22em;
+    text-transform: uppercase; color: var(--gold); margin: 0 0 8px; }
+  h2 { font-family: var(--serif); font-weight: 500; font-size: clamp(21px, 4vw, 28px);
+    line-height: 1.2; margin: 0 0 14px; letter-spacing: -.01em; text-wrap: balance; }
+  h3 { font-family: var(--serif); font-weight: 600; font-size: 18px; margin: 26px 0 8px; }
+  p { margin: 0 0 14px; }
+  p.lead { font-size: 17.5px; }
+  .muted { color: var(--muted); }
+  strong { font-weight: 650; }
+  a { color: var(--gold); text-decoration: none; border-bottom: 1px solid var(--faint); }
+  a:hover { border-bottom-color: var(--gold); }
+
+  /* Таблицы — главный носитель смысла на этой странице. На узком экране прокручиваются
+     внутри себя, а не растягивают страницу: правило дома. */
+  .tw { overflow-x: auto; margin: 0 0 16px; border: 1px solid var(--hair);
+    border-radius: 12px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 14.5px; min-width: 460px; }
+  th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--hair);
+    vertical-align: top; }
+  th { font-family: var(--mono); font-size: 11.5px; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--muted); font-weight: 600;
+    background: color-mix(in srgb, var(--gold) 7%, transparent); }
+  tr:last-child td { border-bottom: none; }
+  td b { color: var(--ink); }
+  .st { font-family: var(--mono); font-size: 12.5px; white-space: nowrap; }
+  .st-ok { color: #2E7D32; } .st-part { color: var(--gold); }
+  .st-no { color: #B3452F; } .st-plan { color: var(--muted); }
+  :root[data-theme="dark"] .st-ok, @media (prefers-color-scheme: dark) { }
+
+  .note { border-left: 3px solid var(--gold); background: var(--surface);
+    border-radius: 0 12px 12px 0; padding: 15px 19px; margin: 18px 0;
+    font-size: 15px; color: var(--muted); }
+  .note b { color: var(--ink); }
+
+  .num { display: flex; flex-wrap: wrap; gap: 10px; margin: 6px 0 18px; }
+  .num div { flex: 1 1 120px; background: var(--surface); border: 1px solid var(--hair);
+    border-radius: 12px; padding: 13px 15px; }
+  .num b { display: block; font-family: var(--mono); font-size: 22px; color: var(--gold);
+    line-height: 1.2; }
+  .num span { font-size: 13px; color: var(--muted); }
+
+  /* ── Опрос по ходу текста ──────────────────────────────────────────────
+     Голос никуда не улетает и мы этого не скрываем: он остаётся в браузере
+     и уходит вместе с заявкой, если человек решит её оставить. Обещать
+     «ваш голос учтён» при отсутствующем приёмнике — ровно тот молчаливый
+     обман, который мы в коде ловим стражем. */
+  .poll { background: var(--surface); border: 1px solid var(--hair);
+    border-inline-start: 3px solid var(--gold); border-radius: 0 14px 14px 0;
+    padding: 16px 19px; margin: 20px 0; }
+  .poll .q { font-family: var(--serif); font-size: 17px; margin: 0 0 4px; }
+  .poll .sub { font-size: 13px; color: var(--muted); margin: 0 0 12px; }
+  .poll .opts { display: flex; flex-direction: column; gap: 8px; }
+  .poll button { min-height: 44px; padding: 8px 15px; text-align: start;
+    border: 1px solid var(--hair); border-radius: 10px; background: var(--bg);
+    font-family: inherit; font-size: 14.5px; color: var(--ink); cursor: pointer;
+    transition: border-color .16s, background .16s, color .16s; }
+  .poll button:hover { border-color: var(--gold); color: var(--gold); }
+  .poll button.on { border-color: var(--gold); background: color-mix(in srgb, var(--gold) 13%, transparent);
+    color: var(--ink); font-weight: 600; }
+  .poll .said { margin: 10px 0 0; font-size: 13px; color: var(--muted); min-height: 1em; }
+
+  /* ── Заявка ────────────────────────────────────────────────────────── */
+  .join { background: var(--card); border: 1px solid rgba(168,128,44,.32);
+    border-radius: 16px; padding: 22px 22px 20px; margin-top: 18px; }
+  .join label { display: block; font-family: var(--mono); font-size: 11.5px;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 12px 0 5px; }
+  .join input, .join textarea { width: 100%; padding: 11px 13px; border-radius: 10px;
+    border: 1px solid var(--hair); background: var(--surface); color: var(--ink);
+    font-family: inherit; font-size: 15px; }
+  .join textarea { min-height: 84px; resize: vertical; }
+  .join .row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+  .join .row button { min-height: 46px; padding: 0 20px; border-radius: 999px;
+    border: 1px solid var(--gold); background: var(--grad); color: #14110B;
+    font-family: var(--mono); font-size: 13.5px; font-weight: 600; cursor: pointer; }
+  .join .row button.ghost { background: none; color: var(--gold); font-weight: 500; }
+  .token { font-family: var(--mono); font-size: 15px; letter-spacing: .06em;
+    background: var(--surface); border: 1px dashed var(--gold); border-radius: 10px;
+    padding: 12px 15px; margin-top: 14px; word-break: break-all; }
+  .token small { display: block; font-family: var(--sans); letter-spacing: 0;
+    font-size: 12.5px; color: var(--muted); margin-top: 6px; }
+
+  footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--hair);
+    font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  @media (max-width: 640px) {
+    .hero { padding: 28px 20px 24px; border-radius: 15px; }
+    .join { padding: 18px 16px 16px; }
+    .poll { padding: 14px 15px; }
+  }
+</style>
+</head>
+<body>
+<div class="page"><div class="wrap">
+
+  <div class="topnav">
+    <a class="topnav-logo" href="/lang/ru/index.html">bridge42worlds</a>
+    <a href="/lang/ru/about.html">гид</a>
+    <a href="/learn.html">учебник</a>
+    <a href="/lang/ru/archive/">дашборд</a>
+  </div>
+
+  <div class="hero">
+    <span class="formula" style="top:16px;right:20px">S = k·lnW</span>
+    <span class="formula" style="bottom:18px;right:26px">∮E·dl = −dΦ/dt</span>
+    <svg class="mark" viewBox="0 0 240 150" role="img" aria-label="bridge42worlds">
+      <defs><linearGradient id="b42gold" x1="0" x2="1"><stop offset="0" stop-color="#A8802C"/><stop offset="1" stop-color="#F0DFB4"/></linearGradient></defs>
+      <line x1="44" y1="110" x2="196" y2="110" stroke="rgba(241,233,214,.5)" stroke-width="3.5" stroke-linecap="round"/>
+      <line x1="72" y1="110" x2="72" y2="71" stroke="rgba(241,233,214,.38)" stroke-width="2"/>
+      <line x1="96" y1="110" x2="96" y2="54" stroke="rgba(241,233,214,.38)" stroke-width="2"/>
+      <line x1="120" y1="110" x2="120" y2="46" stroke="rgba(241,233,214,.38)" stroke-width="2"/>
+      <line x1="144" y1="110" x2="144" y2="54" stroke="rgba(241,233,214,.38)" stroke-width="2"/>
+      <line x1="168" y1="110" x2="168" y2="71" stroke="rgba(241,233,214,.38)" stroke-width="2"/>
+      <path d="M44 110 C 84 22, 156 22, 196 110" fill="none" stroke="url(#b42gold)" stroke-width="7.5" stroke-linecap="round"/>
+      <circle cx="44" cy="110" r="10" fill="#A8802C"/>
+      <circle cx="196" cy="110" r="10" fill="#F0DFB4"/>
+    </svg>
+    <p class="eyebrow">для тех, кто дочитался</p>
+    <h1>Проект изнутри: как устроены <span class="n">42</span> мира</h1>
+    <p class="dek">Вы открыли достаточно статей, чтобы этот текст был вам интересен.
+      Здесь без витрины: архитектура, деньги, что сломано, что впереди — и приглашение
+      участвовать по-настоящему.</p>
+  </div>
+
+  <section>
+    <p class="kicker">Зачем всё это</p>
+    <h2>Наука публикуется быстрее, чем её успевают объяснять</h2>
+    <p class="lead">На arXiv выкладывают больше двух тысяч работ в день. Их пишут учёные
+      для учёных, и человеку без диплома по физике туда хода нет — не потому, что он не
+      поймёт идею, а потому, что не пробьётся через язык.</p>
+    <p><b>Мы переводим свежую науку на человеческий — каждый день и на пяти языках.</b>
+      Не пересказываем новости о науке: берём саму работу, читаем целиком и пишем так,
+      чтобы понял любой, кому интересно. Одну и ту же статью — на четырёх глубинах,
+      от «суть за десять секунд» до разбора с формулами и историей открытия.</p>
+
+    <div class="tw"><table>
+      <tr><th>Во что мы верим</th><th>Что из этого следует в продукте</th></tr>
+      <tr><td><b>Понятно ≠ поверхностно</b></td><td>Формулы не прячем, а объясняем: у каждой есть автор, вывод по шагам и смысл каждого символа</td></tr>
+      <tr><td><b>Язык не должен быть барьером</b></td><td>Пять языков равноправны; арабский — не перевод для галочки, а полноценная версия с правильным направлением письма</td></tr>
+      <tr><td><b>Наука — это связи</b></td><td>Поверх статей живёт карта: темы, законы, учёные и связи между ними</td></tr>
+      <tr><td><b>Читатель умнее, чем принято считать</b></td><td>Никакого сюсюканья и кликбейта: интересное интересно само по себе</td></tr>
+      <tr><td><b>Честность дороже красоты</b></td><td>Если статья не переведена — так и написано, а не подсунут текст на другом языке</td></tr>
+    </table></div>
+  </section>
+
+  <section>
+    <p class="kicker">Где мы сейчас</p>
+    <h2>Цифры, а не ощущения</h2>
+    <div class="num" id="live-num">
+      <div><b>2110</b><span>статей</span></div>
+      <div><b>382</b><span>дня архива</span></div>
+      <div><b>5</b><span>языков</span></div>
+      <div><b>369</b><span>тем</span></div>
+      <div><b>145</b><span>законов</span></div>
+      <div><b>201</b><span>учёный</span></div>
+    </div>
+    <p class="muted">Числа подтягиваются с сайта при загрузке страницы — если сверху
+      что-то другое, значит проект успел вырасти с момента, когда этот текст писали.</p>
+
+    <div class="tw"><table>
+      <tr><th>Направление</th><th>Состояние</th><th>Подробность</th></tr>
+      <tr><td>Статьи</td><td class="st st-ok">работает</td><td>2110 за 382 дня, с октября 2023</td></tr>
+      <tr><td>— полные, по всему тексту работы</td><td class="st st-ok">работает</td><td>601</td></tr>
+      <tr><td>— экспресс, по авторской аннотации</td><td class="st st-ok">работает</td><td>1509</td></tr>
+      <tr><td>Языки</td><td class="st st-ok">пять</td><td>ru/en/es/ar полные, fr молодой</td></tr>
+      <tr><td>Глубины чтения</td><td class="st st-ok">четыре</td><td>мини · просто · популярно · подробно</td></tr>
+      <tr><td>Справочники</td><td class="st st-ok">работает</td><td>369 тем, 145 законов, 201 учёный — все описаны и переведены</td></tr>
+      <tr><td>Граф знаний</td><td class="st st-ok">работает</td><td>связи тема ↔ закон ↔ учёный, интерактивный</td></tr>
+      <tr><td>Поиск по смыслу</td><td class="st st-ok">на проде</td><td>кросс-язычный: арабский запрос находит английские статьи</td></tr>
+      <tr><td>Учебный курс</td><td class="st st-ok">работает</td><td>16 курсов, интерактивные стенды, разбор формул</td></tr>
+      <tr><td>Бот-репетитор</td><td class="st st-ok">на проде</td><td>отвечает по конкретному параграфу</td></tr>
+      <tr><td>Заказ статьи читателем</td><td class="st st-part">частично</td><td>механизм есть, воронка не достроена</td></tr>
+      <tr><td>Переиспользование экспресса</td><td class="st st-no">сломано</td><td>при апгрейде платим дважды — главный техдолг</td></tr>
+      <tr><td>Поиск по всему arXiv</td><td class="st st-plan">в планах</td><td>чтобы можно было заказать разбор любой работы</td></tr>
+    </table></div>
+  </section>
+
+  <section>
+    <p class="kicker">Как это сделано</p>
+    <h2>Сайт уже собран — весь, целиком</h2>
+    <p>Страницы не собираются в момент, когда вы их открываете: все сорок с лишним тысяч
+      лежат готовыми файлами в объектном хранилище. Решение скучное, но из него следует
+      почти всё остальное.</p>
+    <div class="tw"><table>
+      <tr><th>Следствие</th><th>Что это даёт</th></tr>
+      <tr><td>Нет сервера приложений</td><td>Нечему падать под нагрузкой, хостинг стоит копейки</td></tr>
+      <tr><td>Страница отдаётся из хранилища</td><td>Быстро в любой точке мира, включая Залив</td></tr>
+      <tr><td>Динамика только там, где нужна</td><td>Поиск, бот и реакции — отдельные вызовы, остальное статика</td></tr>
+      <tr><td>Пересборка — единая операция</td><td>Один прогон на всё дерево, около двух часов</td></tr>
+    </table></div>
+
+    <h3>Путь статьи</h3>
+    <p class="muted">arXiv → отбор → скачивание PDF и извлечение иллюстраций → генерация
+      четырёх глубин на языке-источнике → перевод на четыре языка с проверкой чисел,
+      формул и маркеров → сборка HTML → публикация.</p>
+    <p>Проверка перевода — не формальность. Валидатор сверяет, что все числа исходника
+      дошли до перевода, что формулы не изменились и что подписи сущностей не потерялись;
+      не сошлось — перевод идёт на повтор. Именно так ловятся случаи, когда модель
+      «улучшает» результат исследования.</p>
+  </section>
+
+  <section>
+    <p class="kicker">Деньги</p>
+    <h2>Экономика, из которой растут все решения</h2>
+    <p>Это не абстракция: от цены зависит, что мы можем себе позволить, и почти каждое
+      продуктовое решение — следствие вот этой таблицы.</p>
+    <div class="tw"><table>
+      <tr><th>Что</th><th>Цена</th><th>Примечание</th></tr>
+      <tr><td>Полная статья: 4 глубины × 5 языков</td><td><b>~$0,06–0,09</b></td><td>подешевела вдвое после перестройки промптов</td></tr>
+      <tr><td>Экспресс-статья</td><td><b>~$0,01–0,02</b></td><td>по авторской аннотации, без разбора PDF</td></tr>
+      <tr><td>Обложка</td><td><b>$0</b></td><td>берём иллюстрацию из самой работы, а не рисуем</td></tr>
+      <tr><td>Хранение и раздача</td><td><b>копейки</b></td><td>статика в объектном хранилище</td></tr>
+    </table></div>
+    <div class="note"><b>Действующее решение.</b> Ежедневным потоком идёт только экспресс —
+      20–25 статей в день с упором на естественные науки. Полная статья стала роскошью
+      и тратится осознанно: по заказу читателя и на работы, которые того стоят.</div>
+
+    <div class="poll" data-poll="money">
+      <p class="q">А вы что думаете?</p>
+      <p class="sub">Если бюджет позволит делать вдвое больше — куда его лучше пустить?</p>
+      <div class="opts">
+        <button type="button" data-v="Больше полных разборов">Больше полных разборов вместо экспрессов</button>
+        <button type="button" data-v="Больше статей в день">Больше статей в день, пусть короткими</button>
+        <button type="button" data-v="Шестой язык">Шестой язык</button>
+        <button type="button" data-v="Интерактив и лаборатории">Интерактивные лаборатории вместо количества</button>
+      </div>
+      <p class="said"></p>
+    </div>
+  </section>
+
+  <section>
+    <p class="kicker">Воронка</p>
+    <h2>От аннотации к разбору</h2>
+    <p>Как работа проходит путь от сырой публикации до полного разбора — и почему
+      сейчас этот путь дороже, чем должен быть.</p>
+    <div class="tw"><table>
+      <tr><th>Ступень</th><th>Что происходит</th><th>Цена</th><th>Состояние</th></tr>
+      <tr><td><b>0 · Индекс</b></td><td>сырой абстракт → вектор, поиск по всему arXiv</td><td>~$1–2 разово</td><td class="st st-plan">в планах</td></tr>
+      <tr><td><b>1 · Экспресс</b></td><td>по аннотации, сразу на всех языках</td><td>~$0,01–0,02</td><td class="st st-ok">работает</td></tr>
+      <tr><td><b>2 · Полная</b></td><td>по всему тексту, на языке запроса</td><td>~$0,03–0,05</td><td class="st st-part">частично</td></tr>
+    </table></div>
+    <div class="note"><b>Что сломано и почему это важно.</b> Правило воронки: экспресс не
+      пропадает при апгрейде — его текст должен становиться краткой версией полной статьи,
+      его переводы остаются там, где полной ещё нет. Сейчас правило нарушено: при апгрейде
+      всё генерируется заново, и мы платим за один и тот же текст дважды. Это главный
+      технический долг проекта, и он в работе.</div>
+
+    <div class="poll" data-poll="funnel">
+      <p class="q">А вы что думаете?</p>
+      <p class="sub">Представьте: нашли на arXiv работу, разбора которой у нас нет. Что для вас
+        естественнее?</p>
+      <div class="opts">
+        <button type="button" data-v="Кнопка «разобрать»">Кнопка «разобрать эту работу» и ждать пару минут</button>
+        <button type="button" data-v="Короткая выжимка сразу">Сразу короткая выжимка, полный разбор — по желанию</button>
+        <button type="button" data-v="Очередь и уведомление">Оставить заявку и получить письмо, когда готово</button>
+      </div>
+      <p class="said"></p>
+    </div>
+  </section>
+
+  <section>
+    <p class="kicker">Куда идём</p>
+    <h2>Планы — и то, о чём мы ещё спорим</h2>
+    <div class="tw"><table>
+      <tr><th>Направление</th><th>Суть</th></tr>
+      <tr><td><b>Интерактивные лаборатории</b></td><td>«экспериментальные столы» вместо картинок: покрутить параметр и увидеть, что будет</td></tr>
+      <tr><td><b>Бот-исследователь</b></td><td>вопрос → поиск по нашему корпусу → ответ строго по найденному, со ссылками; не знает — так и говорит</td></tr>
+      <tr><td><b>Охота за прорывами</b></td><td>научиться находить в потоке работы, про которые через год скажут «вот с этого началось»</td></tr>
+      <tr><td><b>Шестой язык</b></td><td>схема отработана на французском: сначала справочники, потом статьи</td></tr>
+      <tr><td><b>Вовлечение</b></td><td>звания как в науке; эта страница — часть замысла</td></tr>
+    </table></div>
+
+    <h3>Открытые вопросы</h3>
+    <p>Честный список того, о чём мы не договорились. Если у вас есть мнение — оно
+      нам пригодится больше, чем согласие.</p>
+    <div class="tw"><table>
+      <tr><th>Вопрос</th><th>Почему открыт</th></tr>
+      <tr><td>Сколько полных разборов в неделю оправдано</td><td>зависит от того, научимся ли отличать прорыв от просто хорошей работы</td></tr>
+      <tr><td>Как отбирать области науки для расширения</td><td>сейчас упор на естественные, математики и машинного обучения намеренно меньше</td></tr>
+      <tr><td>Нужна ли монетизация и какая</td><td>см. следующий раздел — тут у нас есть принцип, но нет решения</td></tr>
+    </table></div>
+
+    <div class="poll" data-poll="next">
+      <p class="q">А вы что думаете?</p>
+      <p class="sub">Что из планов вам нужнее всего?</p>
+      <div class="opts">
+        <button type="button" data-v="Лаборатории">Интерактивные лаборатории</button>
+        <button type="button" data-v="Бот-исследователь">Бот-исследователь по корпусу</button>
+        <button type="button" data-v="Охота за прорывами">Охота за прорывными работами</button>
+        <button type="button" data-v="Шестой язык">Ещё один язык</button>
+      </div>
+      <p class="said"></p>
+    </div>
+  </section>
+
+  <section>
+    <p class="kicker">Приглашение</p>
+    <h2>Наблюдательный совет</h2>
+    <p class="lead">Спасибо, что дочитали. Если дошли сюда — вы уже сделали больше, чем
+      большинство: разобрались, как устроено то, чем пользуетесь.</p>
+    <p>Мы зовём вас в наблюдательный совет проекта. Это не почётная грамота и не работа
+      по расписанию: это право видеть, как принимаются решения, и говорить, когда считаете,
+      что мы ошибаемся.</p>
+
+    <h3>Правила совета — их всего три</h3>
+    <div class="tw"><table>
+      <tr><th>Правило</th><th>Что это значит</th></tr>
+      <tr><td><b>Проект некоммерческий</b></td><td>Мы не продаём доступ, не показываем рекламу и не торгуем вниманием читателя</td></tr>
+      <tr><td><b>Деньги — в развитие</b></td><td>Если проект когда-нибудь начнёт получать деньги, они идут на развитие: больше разборов, больше языков, лучше инструменты</td></tr>
+      <tr><td><b>Любой труд должен быть оплачен</b></td><td>Честно, прозрачно и справедливо. Если чья-то работа приносит проекту пользу — она не должна оставаться бесплатной по умолчанию</td></tr>
+    </table></div>
+    <p class="muted">Третье правило и есть наш ответ на вопрос о монетизации: мы её не
+      исключаем, но любая её форма проверяется этими тремя пунктами, и обсуждается
+      с советом до того, как появится.</p>
+
+    <h3>Как войти</h3>
+    <p>Регистрация нам не нужна — ни пароля, ни аккаунта. Достаточно имени, по которому
+      к вам обращаться, и почты, чтобы связаться. Вы получите ключ: по нему всегда можно
+      вернуться и продолжить разговор с того же места.</p>
+
+    <div class="join">
+      <label for="j-name">Как к вам обращаться</label>
+      <input id="j-name" type="text" autocomplete="name" placeholder="Имя или ник">
+      <label for="j-mail">Почта для связи</label>
+      <input id="j-mail" type="email" autocomplete="email" placeholder="вы@пример.рф">
+      <label for="j-note">Что хотите сказать — не обязательно</label>
+      <textarea id="j-note" placeholder="С чем не согласны, что бы сделали иначе, чем могли бы помочь"></textarea>
+      <div class="row">
+        <button type="button" id="j-make">Получить ключ</button>
+        <button type="button" class="ghost" id="j-mail-btn" hidden>Отправить письмом</button>
+        <button type="button" class="ghost" id="j-copy" hidden>Скопировать заявку</button>
+      </div>
+      <div class="token" id="j-token" hidden></div>
+    </div>
+    <p class="muted" id="j-honest" style="margin-top:14px">Ваши ответы на вопросы выше
+      сохраняются только у вас в браузере. Они прикладываются к заявке, если вы решите её
+      оставить, — и никуда не уходят, если не решите.</p>
+  </section>
+
+  <footer>
+    bridge42worlds · наука простыми словами · вопросы —
+    <a href="mailto:admin@bridge42worlds.academy">admin@bridge42worlds.academy</a>
+  </footer>
+
+</div></div>
+
+<script>
+(function () {
+  'use strict';
+  var LS_POLL = 'b42_council_polls', LS_TOKEN = 'b42_council_token';
+
+  function read(key, dflt) {
+    try { return JSON.parse(localStorage.getItem(key)) || dflt; } catch (e) { return dflt; }
+  }
+  function write(key, val) {
+    try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) { /* приватный режим — переживём */ }
+  }
+
+  /* Опросы. Голос живёт в браузере и уезжает вместе с заявкой — так и написано
+     на странице. Обещать «учтено» без приёмника нельзя: это ровно тот молчаливый
+     обман, который мы в своём же коде считаем худшим классом ошибок. */
+  var votes = read(LS_POLL, {});
+  Array.prototype.forEach.call(document.querySelectorAll('.poll'), function (poll) {
+    var id = poll.dataset.poll;
+    var said = poll.querySelector('.said');
+    function paint() {
+      Array.prototype.forEach.call(poll.querySelectorAll('button'), function (b) {
+        b.classList.toggle('on', votes[id] === b.dataset.v);
+      });
+      said.textContent = votes[id] ? 'Записано у вас: ' + votes[id] : '';
+    }
+    poll.addEventListener('click', function (e) {
+      var b = e.target.closest('button');
+      if (!b) return;
+      votes[id] = (votes[id] === b.dataset.v) ? null : b.dataset.v;
+      if (!votes[id]) delete votes[id];
+      write(LS_POLL, votes);
+      paint();
+    });
+    paint();
+  });
+
+  /* Живые числа — из того же индекса, что рисует ленту. Файл небольшой (сводка
+     последних), и если он не доехал, на странице остаются числа из разметки:
+     они верны на момент публикации и врать не начнут. */
+  fetch('/data/corpus-stats.json').then(function (r) {
+    return r.ok ? r.json() : null;
+  }).then(function (d) {
+    if (!d || !d.generated_total) return;
+    var box = document.getElementById('live-num');
+    var g = d.generated_total;
+    var cells = box.querySelectorAll('div b');
+    if (g.gen && cells[0]) cells[0].textContent = g.gen;
+  }).catch(function () { /* остаёмся на числах из разметки — они честные */ });
+
+  /* Ключ участника. Никакого аккаунта: случайный номер, который человек может
+     сохранить. Пароля нет, значит нечему утечь. */
+  function makeToken() {
+    var raw = (window.crypto && crypto.randomUUID) ? crypto.randomUUID()
+            : String(Date.now()) + Math.random().toString(36).slice(2);
+    return 'B42-' + raw.replace(/-/g, '').slice(0, 12).toUpperCase();
+  }
+
+  var elName = document.getElementById('j-name'),
+      elMail = document.getElementById('j-mail'),
+      elNote = document.getElementById('j-note'),
+      elTok  = document.getElementById('j-token'),
+      btnMake = document.getElementById('j-make'),
+      btnMail = document.getElementById('j-mail-btn'),
+      btnCopy = document.getElementById('j-copy');
+
+  var saved = read(LS_TOKEN, null);
+
+  function letter() {
+    var lines = [
+      'Заявка в наблюдательный совет bridge42worlds',
+      '',
+      'Имя: ' + (elName.value.trim() || '—'),
+      'Почта: ' + (elMail.value.trim() || '—'),
+      'Ключ: ' + (saved && saved.token ? saved.token : '—'),
+      ''
+    ];
+    var keys = Object.keys(votes);
+    if (keys.length) {
+      lines.push('Ответы на вопросы страницы:');
+      keys.forEach(function (k) { lines.push('  · ' + k + ': ' + votes[k]); });
+      lines.push('');
+    }
+    if (elNote.value.trim()) { lines.push('Сообщение:', elNote.value.trim()); }
+    return lines.join('\n');
+  }
+
+  function showToken() {
+    elTok.hidden = false;
+    elTok.innerHTML = '<span>' + saved.token + '</span>' +
+      '<small>Сохраните ключ. По нему мы вас узнаем, даже если вы напишете с другой почты. ' +
+      'Он живёт в этом браузере и нигде больше, пока вы не отправите заявку.</small>';
+    btnMail.hidden = false;
+    btnCopy.hidden = false;
+    btnMake.textContent = 'Ключ получен';
+  }
+
+  btnMake.addEventListener('click', function () {
+    if (!saved || !saved.token) {
+      saved = { token: makeToken(), at: new Date().toISOString().slice(0, 10) };
+      write(LS_TOKEN, saved);
+    }
+    saved.name = elName.value.trim();
+    saved.mail = elMail.value.trim();
+    write(LS_TOKEN, saved);
+    showToken();
+  });
+
+  btnMail.addEventListener('click', function () {
+    var url = 'mailto:admin@bridge42worlds.academy'
+            + '?subject=' + encodeURIComponent('Наблюдательный совет — заявка')
+            + '&body=' + encodeURIComponent(letter());
+    window.location.href = url;
+  });
+
+  btnCopy.addEventListener('click', function () {
+    var text = letter();
+    function done(ok) { btnCopy.textContent = ok ? 'Скопировано' : 'Выделите и скопируйте вручную'; }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(false); });
+    } else { done(false); }
+  });
+
+  if (saved && saved.token) {
+    if (saved.name) elName.value = saved.name;
+    if (saved.mail) elMail.value = saved.mail;
+    showToken();
+  }
+})();
+</script>
+</body>
+</html>

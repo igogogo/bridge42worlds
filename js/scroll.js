@@ -20,6 +20,31 @@ var NO_MORE_ARTICLES = {
     ar: 'لا مزيد من المقالات'
 };
 
+/* ── Счётчик прочитанного за всё время ──────────────────────────────────────
+   viewedIds выше живёт в sessionStorage и обнуляется с закрытием браузера — он про
+   «не предлагать одно и то же в этой сессии». Здесь другое: сколько статей человек
+   открыл ЗА ВСЁ ВРЕМЯ. По этому числу на главной появляется приглашение (js/search.js).
+
+   Считаем ОТКРЫТЫЕ статьи, а не пролистанные карточки: сто карточек проматываются
+   за минуту ленты, сто открытых статей — это месяцы жизни в проекте. Порог должен
+   быть честным, иначе приглашение обесценится.
+
+   Храним не число, а множество идентификаторов: иначе перечитывание одной статьи
+   накручивало бы счётчик. Дальше порога список не растим — он не нужен, а место занимает. */
+var READ_KEY = 'b42_read';
+var READ_CAP = 400;          // с запасом над порогом приглашения
+
+function countRead(id) {
+    if (!id) return;
+    try {
+        var seen = JSON.parse(localStorage.getItem(READ_KEY) || '[]');
+        if (seen.indexOf(id) !== -1) return;
+        seen.push(id);
+        if (seen.length > READ_CAP) seen = seen.slice(-READ_CAP);
+        localStorage.setItem(READ_KEY, JSON.stringify(seen));
+    } catch (e) { /* приватный режим — счётчик не ведём, приглашения просто не будет */ }
+}
+
 async function initScroll() {
     var lang = getLang();
     var path = window.location.pathname;
@@ -53,6 +78,7 @@ async function initScroll() {
         }
         viewedIds.add(currentId);
         persistViewed();
+        countRead(currentId);
     }
 
     updateNextButton(version);

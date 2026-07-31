@@ -2793,3 +2793,31 @@ body.b42-wait-open { overflow: hidden; }
 .b42-wait-inline .b42-wait-bar { margin: 8px 0 12px; }
 .b42-wait-inline .b42-fact { font-size: 14px; }
 @media (max-width: 640px) { .b42-wait-inline { padding: 12px 12px 8px; } }
+
+/* ── Приглашение дочитавшимся (js/search.js, mountCouncilInvite) ─────────────
+   Появляется в конце ленты у того, кто открыл сто статей. Единственное место на
+   сайте с золотом: оно должно читаться как находка, а не как очередная плашка.
+   Не окно поперёк экрана — строка, которую можно закрыть навсегда. */
+.council-invite { position: relative; margin: 28px 0 8px; padding: 18px 44px 18px 20px;
+  border: 1px solid color-mix(in srgb, #A8802C 40%, var(--hair));
+  border-radius: var(--radius); background: var(--surface);
+  border-inline-start: 3px solid #A8802C; }
+.council-invite b { display: block; font-family: var(--serif); font-size: 17px;
+  color: var(--ink); margin-bottom: 4px; }
+.council-invite span { display: block; font-size: 14px; color: var(--muted);
+  margin-bottom: 10px; }
+.council-invite a { font-family: var(--mono); font-size: 13px; color: #A8802C;
+  text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .16s; }
+.council-invite a:hover { border-bottom-color: #A8802C; }
+.ci-close { position: absolute; top: 6px; inset-inline-end: 6px;
+  min-width: var(--tap-md, 44px); min-height: var(--tap-md, 44px);
+  border: none; background: none; color: var(--soft); font-size: 20px;
+  line-height: 1; cursor: pointer; }
+.ci-close:hover { color: var(--ink); }
+@media (prefers-color-scheme: dark) {
+  .council-invite { border-inline-start-color: #D8B863; }
+  .council-invite b { color: var(--ink); }
+  .council-invite a, .council-invite { --gold-here: #D8B863; }
+  .council-invite a { color: #D8B863; }
+}
+@media (max-width: 640px) { .council-invite { padding: 15px 42px 15px 15px; } }
