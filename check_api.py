@@ -6,6 +6,10 @@ from pathlib import Path
 from dotenv import load_dotenv
 from openai import OpenAI
 
+# cp1252-консоль Windows роняет печать ✅/❌ при ручном запуске
+if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 load_dotenv()
 
 BOLD = "\033[1m"

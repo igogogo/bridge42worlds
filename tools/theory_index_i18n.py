@@ -9,13 +9,19 @@ en/es/ar видел русские названия в дереве знаний
     python tools/theory_index_i18n.py
 """
 import json
+import sys
 from pathlib import Path
 
 import json as _json
 from pathlib import Path as _Path
+
+# cp1252-консоль Windows роняет печать ✅/❌ при ручном запуске
+if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 # Языки берём из config.json, а не списком: хардкод ["ru","en","es","ar"] — причина того,
 # что пятый язык (fr) прошёл мимо половины инструментов (аудит 2026-07-30).
-LANGS = _json.loads(_Path(__file__).resolve().parent.parent / "config.json".read_text(encoding="utf-8")).get("languages", ["ru"])
+LANGS = _json.loads((_Path(__file__).resolve().parent.parent / "config.json").read_text(encoding="utf-8")).get("languages", ["ru"])
 DIR = Path("data/theory/lectures")
 
 

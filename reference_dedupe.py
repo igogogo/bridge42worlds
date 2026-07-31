@@ -21,7 +21,12 @@ related/scientists), и переписывает все ссылки на пот
 """
 import argparse
 import json
+import sys
 from pathlib import Path
+
+# cp1252-консоль Windows роняет печать ✅/❌ при ручном запуске
+if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 CONFIG = json.loads(Path("config.json").read_text(encoding="utf-8"))
 LANGS = CONFIG.get("languages", ["ru", "en", "es"])

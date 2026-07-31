@@ -28,6 +28,11 @@ import sys
 from pathlib import Path
 from collections import defaultdict
 
+# Консоль Windows по умолчанию cp1252 — печать ✅/❌ роняет скрипт при ручном запуске
+# (из run.py спасает PYTHONIOENCODING, но скрипт обязан жить и сам по себе).
+if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 DUMP = Path(r"C:/Users/nadez/Downloads/arxiv-metadata-oai-snapshot.json")
 OUT = Path("data/corpus-stats.json")
 YEARS = ("25", "26")  # arXiv id YYMM.xxxxx → 2025-2026

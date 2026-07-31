@@ -23,7 +23,12 @@
 import argparse
 import json
 import re
+import sys
 from pathlib import Path
+
+# cp1252-консоль Windows роняет печать ✅/❌ при ручном запуске
+if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 MARKER = re.compile(r"\[(tag|scientist|law):([^\]]+)\]")
 NUMBER = re.compile(r"\d+(?:[.,]\d+)?")

@@ -13,6 +13,10 @@ from pathlib import Path
 from PIL import Image
 Image.MAX_IMAGE_PIXELS = None  # огромные страницы PDF — не бомба, это наши сканы
 
+# cp1252-консоль Windows роняет печать ✅/❌ при ручном запуске
+if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 QUALITY = 88
 ROOTS = ["lang"]
 

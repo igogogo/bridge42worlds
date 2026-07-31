@@ -19,6 +19,10 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.cluster import KMeans
 from sklearn.manifold import TSNE
 
+# cp1252-консоль Windows роняет печать ✅/❌ при ручном запуске
+if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 DEFAULT_LANG = "ru"
 LANGS = ("ru", "en", "es", "ar")
 LANG_NAME = {"ru": "Russian", "en": "English", "es": "Spanish", "ar": "Arabic"}

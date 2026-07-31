@@ -22,6 +22,10 @@ import json
 import sys
 from pathlib import Path
 
+# cp1252-консоль Windows роняет печать ✅/❌ при ручном запуске
+if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 SEEDS = Path("data/tag-seeds.json")
 ACTIVE = Path("lang/ru/data/tags-list.json")
 DRY = "--dry" in sys.argv

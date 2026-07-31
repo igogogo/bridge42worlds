@@ -7,6 +7,10 @@ import sys
 from pathlib import Path
 from urllib.parse import urlsplit
 
+# cp1252-консоль Windows роняет печать ✅/❌ при ручном запуске
+if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 ROOT = Path(__file__).parent
 LINK_RE = re.compile(r'(?:href|src)="([^"]+)"')
 SKIP_PREFIXES = ("http://", "https://", "mailto:", "tel:", "javascript:", "data:", "//")

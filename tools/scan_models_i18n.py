@@ -12,7 +12,7 @@ import json as _json
 from pathlib import Path as _Path
 # Языки берём из config.json, а не списком: хардкод ["ru","en","es","ar"] — причина того,
 # что пятый язык (fr) прошёл мимо половины инструментов (аудит 2026-07-30).
-LANGS = _json.loads(_Path(__file__).resolve().parent.parent / "config.json".read_text(encoding="utf-8")).get("languages", ["ru"])
+LANGS = _json.loads((_Path(__file__).resolve().parent.parent / "config.json").read_text(encoding="utf-8")).get("languages", ["ru"])
 SKIP = {"constants.json", "course-thermodynamics.json", "reference.json", "mathkit.json",
         "hypotheses.json", "discoveries.json", "frontier.json"}
 
