@@ -3270,10 +3270,15 @@ def build_article(a, date_str, inputs, force=False, express=False, known_license
             text = re.sub(r'https?://\S+', '', body)  # тело без литературы и URL → экономия ~20% токенов в промте
         print(f"  → {a['id']} …{' [no-fetch]' if no_fetch else ''}")
         article_folder.mkdir(parents=True, exist_ok=True)
+        # errors="replace" обязателен: в тексте PDF попадаются НЕПАРНЫЕ суррогаты —
+        # обломки математических символов Unicode, которые извлекатель отдаёт как есть.
+        # utf-8 такое кодировать отказывается, и падала ВСЯ статья на записи списка
+        # литературы (2607.27683v1, прогон 2026-07-31). Литература — вспомогательный
+        # файл, ронять из-за неё статью нельзя.
         if refs:
-            (article_folder / "references.txt").write_text(refs, encoding="utf-8")
-        (article_folder / "arxiv-atom.xml").write_text(atom_xml, encoding="utf-8")
-        (article_folder / "arxiv-oai.xml").write_text(oai_xml or "", encoding="utf-8")
+            (article_folder / "references.txt").write_text(refs, encoding="utf-8", errors="replace")
+        (article_folder / "arxiv-atom.xml").write_text(atom_xml, encoding="utf-8", errors="replace")
+        (article_folder / "arxiv-oai.xml").write_text(oai_xml or "", encoding="utf-8", errors="replace")
         if not no_fetch and config.get("keep_pdf", True):  # мёртвый вес на масштабе — можно не хранить
             (article_folder / "original.pdf").write_bytes(pdf.read_bytes())
         images = save_images(imgs, a["id"], article_folder) if imgs else []
