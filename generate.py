@@ -3484,7 +3484,11 @@ def build_article(a, date_str, inputs, force=False, express=False, known_license
         # карточку в ленте и формировал первое впечатление); без версии реюз консервировал
         # бы старый текст навсегда — статья апгрейдится, а аннотация остаётся прежней.
         prev_abstract = (prev.get("abstract") or {}) if prev.get("abstract_v") == ABSTRACT_PROMPT_V else {}
-        abstract_ru = prev_abstract.get(DEFAULT_LANG) or generate_abstract(a.get("summary", ""))
+        # Аннотацию не считаем, пока её никто не видит (show_abstract=false, решение
+        # владельца 2026-07-31): платить ~4 тыс. токенов на статью за скрытый артефакт
+        # незачем. Данные прошлых статей лежат нетронутыми; включим показ — включим и счёт.
+        abstract_ru = (prev_abstract.get(DEFAULT_LANG)
+                       or (generate_abstract(a.get("summary", "")) if config.get("show_abstract", False) else {}))
         if REFINE and abstract_ru and not express and not prev_abstract.get(DEFAULT_LANG):
             abstract_ru = refine_abstract(abstract_ru)
         abstract = {l: t for l, t in prev_abstract.items() if t}

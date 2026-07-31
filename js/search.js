@@ -629,11 +629,13 @@ function doFullSearch(query) {
         results = results.filter(function(item) {
             return (item.title || '').toLowerCase().includes(q) ||
                    (item.oneliner || '').toLowerCase().includes(q) ||
-                   // Ищем по тому же тексту, что видит читатель на карточке (abstract),
-                   // а не только по description: фильтр по невидимому полю давал и пропуски
-                   // (en «quantum» — 119 статей мимо), и «мусорную» выдачу (QA 2026-07-29).
-                   (item.abstract || '').toLowerCase().includes(q) ||
+                   // Ищем по тому тексту, что видит читатель на карточке — теперь это
+                   // description (2026-07-31). Аннотацию оставляем в поиске как второй
+                   // источник: она есть у 1967 старых статей и расширяет находимость
+                   // (без неё en «quantum» терял 119 статей — QA 2026-07-29), а мусора
+                   // не даёт, потому что ищется, но не показывается.
                    (item.description || '').toLowerCase().includes(q) ||
+                   (item.abstract || '').toLowerCase().includes(q) ||
                    (item.authors || []).some(function(a) { return a.toLowerCase().includes(q); });
         });
     }
