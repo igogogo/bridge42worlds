@@ -1866,13 +1866,32 @@ html[dir="rtl"] .category-bar .cat-chip:first-child { padding-left: 9px; padding
 .bar-legend { font-size: 11px; color: var(--soft); margin-top: 14px; }
 .lg { display: inline-block; width: 10px; height: 10px; border-radius: 2px; vertical-align: -1px; margin: 0 3px 0 8px; }
 .lg-f { background: var(--cyan); } .lg-e { background: color-mix(in srgb, var(--ochre) 70%, transparent); }
-/* Горизонтальные бары разделов */
+/* Рост корпуса — накопительная кривая */
+.growth-svg { width: 100%; height: 150px; display: block; }
+/* В арабской версии подписи под кривой встают в обратном порядке (первый месяц — справа),
+   и без зеркала кривая начиналась бы с той стороны, где написан конец. Отражаем ось времени
+   целиком; подсказки на точках от этого не меняются. */
+[dir="rtl"] .growth-svg { transform: scaleX(-1); }
+.growth-legend { display: flex; justify-content: space-between; font-family: var(--mono);
+    font-size: 11px; color: var(--soft); margin-top: 4px; }
+.growth-legend b { color: var(--ink); }
+/* Дата в плитке KPI — не число, ей не нужен кегль числа */
+.kpi-n-sm { font-size: 19px; }
+/* Горизонтальные бары разделов. Две полосы в одном жёлобе: охра — всего в разделе,
+   циан поверх — сколько из них полных разборов. Вторая лежит НА первой (обе от левого
+   края жёлоба), поэтому нужен position, а не поток. */
 .hbars { display: flex; flex-direction: column; gap: 6px; }
 .hbar { display: flex; align-items: center; gap: 10px; font-size: 12px; }
-.hbar-l { font-family: var(--mono); width: 90px; flex: none; color: var(--muted); }
-.hbar-t { flex: 1; height: 10px; background: var(--card); border-radius: 999px; overflow: hidden; }
-.hbar-fill { display: block; height: 100%; background: var(--grad, var(--cyan)); }
-.hbar-n { font-family: var(--mono); font-size: 11px; color: var(--soft); width: 40px; text-align: right; flex: none; }
+/* Колонка подписи фиксированная, а подписи бывают длиннее неё (article_advanced,
+   translate_flash) — без обрезки текст выходил за свои 90px и ложился на дорожку. */
+.hbar-l { font-family: var(--mono); width: 90px; flex: none; color: var(--muted);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hbar-t { position: relative; flex: 1; height: 10px; background: var(--card); border-radius: 999px; overflow: hidden; }
+.hbar-fill { display: block; height: 100%; background: color-mix(in srgb, var(--ochre) 55%, transparent); }
+.hbar-fill-full { position: absolute; left: 0; top: 0; background: var(--cyan); }
+[dir="rtl"] .hbar-fill-full { left: auto; right: 0; }
+.hbar-n { font-family: var(--mono); font-size: 11px; color: var(--soft); width: 46px; text-align: right; flex: none; }
+.hbar-sub { display: block; font-style: normal; font-size: 10px; color: var(--cyan); }
 /* Кухня: обложки */
 .cover-bar { height: 12px; background: var(--card); border-radius: 999px; overflow: hidden; }
 .cover-fill { display: block; height: 100%; background: var(--grad, var(--cyan)); }
