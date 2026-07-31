@@ -1183,11 +1183,26 @@ window.showLatest = showLatest;
    вовсе. Список расширяется по мере перевода страницы, и это ЯВНЫЙ список, а не
    молчаливый откат на русский. */
 var COUNCIL_MIN = 100;
-var COUNCIL_LANGS = ['ru'];          // языки, на которых council.html существует
+// Языки, на которых страница существует. Список ЯВНЫЙ, а не «показываем всем»:
+// отправить человека на стену на чужом языке хуже, чем не позвать вовсе. Пополняется
+// вместе с переводом страницы (council_translate.py + council_page.py).
+var COUNCIL_LANGS = ['ru', 'en', 'es', 'ar', 'fr'];
 var COUNCIL_TXT = {
     ru: { t: 'Вы прочитали {n} статей',
           d: 'Дальше начинается кухня: как всё устроено, сколько стоит и что мы планируем.',
-          a: 'Посмотреть изнутри' }
+          a: 'Посмотреть изнутри' },
+    en: { t: 'You have read {n} articles',
+          d: 'Beyond this point is the kitchen: how it all works, what it costs, what we plan.',
+          a: 'See it from inside' },
+    es: { t: 'Ha leído {n} artículos',
+          d: 'A partir de aquí empieza la cocina: cómo funciona todo, cuánto cuesta y qué planeamos.',
+          a: 'Verlo por dentro' },
+    ar: { t: 'قرأت {n} مقالة',
+          d: 'من هنا يبدأ المطبخ: كيف يعمل كل شيء، وكم يكلّف، وما الذي نخطّط له.',
+          a: 'انظر من الداخل' },
+    fr: { t: 'Vous avez lu {n} articles',
+          d: 'Ici commence les coulisses : comment tout fonctionne, ce que ça coûte et nos projets.',
+          a: "Voir de l'intérieur" }
 };
 
 function readCount() {
@@ -1212,7 +1227,7 @@ function mountCouncilInvite() {
         '<button type="button" class="ci-close" aria-label="закрыть">×</button>' +
         '<b>' + t.t.replace('{n}', n) + '</b>' +
         '<span>' + t.d + '</span>' +
-        '<a href="/council.html">' + t.a + ' →</a>';
+        '<a href="/lang/' + lang + '/council.html">' + t.a + ' →</a>';
     host.parentNode.insertBefore(box, host.nextSibling);
     box.querySelector('.ci-close').addEventListener('click', function () {
         box.remove();

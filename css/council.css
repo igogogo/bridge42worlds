@@ -152,3 +152,72 @@ footer { margin-top: 52px; padding-top: 18px; border-top: 1px solid var(--hair);
   background: color-mix(in srgb, var(--gold) 12%, transparent);
   border: 1px solid color-mix(in srgb, var(--gold) 40%, transparent);
   font-size: 14.5px; color: var(--ink); }
+
+/* ── Блоки страницы «изнутри» ──────────────────────────────────────────────
+   Раньше эти правила жили внутри одного русского council.html. Когда страница
+   стала собираться на пять языков, они туда не переехали — и у собранных страниц
+   кнопки опроса оказались 21px вместо положенных 44 (поймано замером на арабской).
+   Теперь стиль один на всю комнату: и на рукописную страницу, и на собранные. */
+p.lead { font-size: 17.5px; }
+h3 { font-family: var(--serif); font-weight: 600; font-size: 18px; margin: 26px 0 8px; }
+
+.num { display: flex; flex-wrap: wrap; gap: 10px; margin: 6px 0 18px; }
+.num div { flex: 1 1 120px; background: var(--surface); border: 1px solid var(--hair);
+  border-radius: 12px; padding: 13px 15px; }
+.num b { display: block; font-family: var(--mono); font-size: 22px; color: var(--gold);
+  line-height: 1.2; }
+.num span { font-size: 13px; color: var(--muted); }
+
+.note { border-left: 3px solid var(--gold); background: var(--surface);
+  border-radius: 0 12px 12px 0; padding: 15px 19px; margin: 18px 0;
+  font-size: 15px; color: var(--muted); }
+.note b { color: var(--ink); }
+html[dir="rtl"] .note { border-left: none; border-right: 3px solid var(--gold);
+  border-radius: 12px 0 0 12px; }
+
+.st { font-family: var(--mono); font-size: 12.5px; white-space: nowrap; }
+.st-ok { color: var(--ok); } .st-part { color: var(--gold); }
+.st-no { color: var(--no); } .st-plan { color: var(--muted); }
+
+/* Опрос по ходу текста. Кнопки — по шкале касания: это главный элемент, ради
+   которого страницу вообще открывают на телефоне. */
+.poll { background: var(--surface); border: 1px solid var(--hair);
+  border-inline-start: 3px solid var(--gold); border-radius: 0 14px 14px 0;
+  padding: 16px 19px; margin: 20px 0; }
+html[dir="rtl"] .poll { border-radius: 14px 0 0 14px; }
+.poll .q { font-family: var(--serif); font-size: 17px; margin: 0 0 4px; }
+.poll .sub { font-size: 13px; color: var(--muted); margin: 0 0 12px; }
+.poll .opts { display: flex; flex-direction: column; gap: 8px; }
+.poll button { min-height: 44px; padding: 9px 15px; text-align: start;
+  border: 1px solid var(--hair); border-radius: 10px; background: var(--bg);
+  font-family: inherit; font-size: 14.5px; color: var(--ink); cursor: pointer;
+  transition: border-color .16s, background .16s, color .16s; }
+.poll button:hover { border-color: var(--gold); color: var(--gold); }
+.poll button.on { border-color: var(--gold); font-weight: 600; color: var(--ink);
+  background: color-mix(in srgb, var(--gold) 13%, transparent); }
+.poll .said { margin: 10px 0 0; font-size: 13px; color: var(--muted); min-height: 1em; }
+
+/* Заявка */
+.join { background: var(--card); border: 1px solid color-mix(in srgb, var(--gold) 32%, transparent);
+  border-radius: 16px; padding: 22px 22px 20px; margin-top: 18px; }
+.join label { display: block; font-family: var(--mono); font-size: 11.5px;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 12px 0 5px; }
+.join input, .join textarea { width: 100%; padding: 11px 13px; border-radius: 10px;
+  border: 1px solid var(--hair); background: var(--surface); color: var(--ink);
+  font-family: inherit; font-size: 15px; }
+.join textarea { min-height: 84px; resize: vertical; }
+.join .row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+.join .row button { min-height: 46px; padding: 0 20px; border-radius: 999px;
+  border: 1px solid var(--gold); background: var(--grad); color: #14110B;
+  font-family: var(--mono); font-size: 13.5px; font-weight: 600; cursor: pointer; }
+.join .row button.ghost { background: none; color: var(--gold); font-weight: 500; }
+.token { font-family: var(--mono); font-size: 15px; letter-spacing: .06em;
+  background: var(--surface); border: 1px dashed var(--gold); border-radius: 10px;
+  padding: 12px 15px; margin-top: 14px; word-break: break-all; }
+.token small { display: block; font-family: var(--sans); letter-spacing: 0;
+  font-size: 12.5px; color: var(--muted); margin-top: 6px; }
+
+@media (max-width: 640px) {
+  .join { padding: 18px 16px 16px; }
+  .poll { padding: 14px 15px; }
+}
