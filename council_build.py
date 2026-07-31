@@ -129,6 +129,24 @@ def agenda_item(item, n):
     out_html = (f'<p class="outcome"><b>Что вышло:</b> {esc(outcome)}</p>'
                 if outcome else "")
 
+    # Голоса с обоснованием. Публикуем ОБЯЗАТЕЛЬНО: голос без объяснения от участника,
+    # который не устаёт и не спит, — это не участие, а давление числом. Люди должны
+    # видеть, почему модель решила так, и иметь по чему возразить.
+    voices = item.get("voices") or []
+    voices_html = ""
+    if voices:
+        rows = "".join(
+            f'<div class="voice"><span class="vby">{esc(v.get("by",""))}</span>'
+            f'<span class="vch">{esc(v.get("choice",""))}</span>'
+            f'<p class="vwhy">{esc(v.get("why",""))}</p></div>'
+            for v in voices)
+        voices_html = f'<div class="voices"><h4>Как голосовали и почему</h4>{rows}</div>'
+
+    # Модель не решает в одиночку. Если её голос оказался решающим — вопрос ждёт живых.
+    need_html = ("" if not item.get("needs_human") else
+                 '<p class="needhuman">Голос модели здесь оказался решающим — '
+                 'вопрос ждёт живых голосов и на этом заседании не закрывается.</p>')
+
     return f"""
   <article class="item">
     <div class="ihead">
@@ -140,6 +158,8 @@ def agenda_item(item, n):
     <p class="body">{esc(item.get("body", ""))}</p>
     {merged_html}
     {votes_bar(item)}
+    {voices_html}
+    {need_html}
     {why_html}
     {out_html}
   </article>"""
@@ -247,7 +267,11 @@ def main():
     if not SRC.exists():
         print("нет data/council — нечего собирать")
         return 1
-    files = sorted(SRC.glob("*.json"), reverse=True)
+    # Черновики повестки (черновик-<дата>.json) сюда НЕ берём: у них та же дата, что
+    # у заседания, и они перезаписывали бы его страницу — поймано первым же прогоном.
+    # Черновик становится заседанием только когда человек перенесёт его руками.
+    files = sorted((f for f in SRC.glob("*.json") if not f.name.startswith("черновик-")),
+                   reverse=True)
     if not files:
         print("в data/council нет заседаний — собираю только пустой список")
     sessions = []
