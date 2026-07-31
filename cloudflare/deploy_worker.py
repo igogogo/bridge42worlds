@@ -1,0 +1,35 @@
+"""Выкладка Worker — единственная команда, которой это делается.
+
+    python cloudflare/deploy_worker.py
+
+Зачем обёртка вместо прямого `npx wrangler deploy`. Замок (predeploy_check.py) полезен
+ровно настолько, насколько его невозможно забыть позвать. Отдельным скриптом его забудут
+в первый же занятый вечер — как забыли правило 6б, записанное словами, и дважды за сутки
+откатили друг другу выкладку. Здесь проверка и выкладка — одно действие.
+
+Что делает: прогоняет замок (не главная ли папка, не отстала ли копия от main, нет ли
+незакоммиченного в cloudflare/), и только при чистом результате зовёт wrangler.
+"""
+import os, sys, subprocess
+from pathlib import Path
+
+if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
+
+HERE = Path(__file__).resolve().parent
+
+
+def main():
+    check = subprocess.run([sys.executable, str(HERE / "predeploy_check.py")],
+                           env={**os.environ, "PYTHONIOENCODING": "utf-8"})
+    if check.returncode != 0:
+        return check.returncode
+
+    print("\n▶️  wrangler deploy\n")
+    # shell=True — на Windows npx это .cmd, без оболочки он не находится.
+    return subprocess.run("npx wrangler deploy", cwd=HERE, shell=True).returncode
+
+
+if __name__ == "__main__":
+    sys.exit(main())
