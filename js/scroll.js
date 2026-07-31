@@ -45,6 +45,55 @@ function countRead(id) {
     } catch (e) { /* приватный режим — счётчик не ведём, приглашения просто не будет */ }
 }
 
+/* Индекс нужен ДВУМ блокам внизу статьи: «похожие» и «следующая». Оба находятся под
+   текстом, и до них долистывает меньшинство — а грузился индекс всегда и сразу, 6,4 МБ
+   на каждой странице статьи (замер роли «дашборд» 2026-07-31). После ночной оптимизации
+   search.js на статье индекс не тянет, и scroll.js остался его единственным заказчиком:
+   экономия не состоялась, просто сменился виновник.
+
+   Взял ленивую загрузку, а НЕ latest-индекс (150 КБ), хотя он и предлагался. Причина:
+   latest — это шестьдесят самых свежих статей, и «похожие по тегам» для статьи двухлетней
+   давности искались бы среди них — то есть блок бы остался, а смысл из него ушёл. Здесь
+   дешевле отложить, чем ухудшить: кто долистал до блоков, получает те же данные, что и
+   раньше, кто не долистал — не платит за них ничего.
+
+   Загрузку начинаем заранее (rootMargin), чтобы к моменту появления блока данные уже были;
+   без IntersectionObserver — грузим сразу, как раньше. */
+function whenNeeded(fn) {
+    var marks = [document.getElementById('related')].concat(
+        Array.prototype.slice.call(document.querySelectorAll('.next-btn')));
+    marks = marks.filter(Boolean);
+    if (!marks.length) { fn(); return; }
+
+    var fired = false;
+    function go() {
+        if (fired) return;
+        fired = true;
+        if (io) io.disconnect();
+        EVENTS.forEach(function (e) { window.removeEventListener(e, go); });
+        fn();
+    }
+
+    // Два независимых повода загрузить, и достаточно любого.
+    // 1) блок подошёл к экрану — обычный случай;
+    // 2) читатель вообще шевельнулся — страховка: IntersectionObserver молчит, когда
+    //    высота окна нулевая (скрытая панель, фоновая вкладка), и без неё блоки внизу
+    //    остались бы пустыми навсегда. Таймаут сюда не годится: он сработал бы у всех,
+    //    и экономия снова исчезла бы.
+    var EVENTS = ['scroll', 'pointerdown', 'keydown', 'wheel', 'touchstart'];
+    EVENTS.forEach(function (e) { window.addEventListener(e, go, { once: true, passive: true }); });
+
+    var io = null;
+    if (typeof IntersectionObserver === 'function') {
+        io = new IntersectionObserver(function (entries) {
+            for (var i = 0; i < entries.length; i++) {
+                if (entries[i].isIntersecting) { go(); return; }
+            }
+        }, { rootMargin: '800px 0px' });   // с запасом: успеть загрузить до появления блока
+        marks.forEach(function (m) { io.observe(m); });
+    }
+}
+
 async function initScroll() {
     var lang = getLang();
     var path = window.location.pathname;
@@ -52,18 +101,9 @@ async function initScroll() {
                 : (path.indexOf('simple.html') !== -1 ? 'simple'
                 : (path.indexOf('mini.html') !== -1 ? 'mini' : 'popular'));
     try { localStorage.setItem('b42_version', version); } catch(e) {}
-    var INDEX_FILES = { popular: 'articles-index.json', simple: 'articles-index-simple.json',
-                        advanced: 'articles-index-advanced.json', mini: 'articles-index.json' };
-    var indexFile = INDEX_FILES[version];
-    try {
-        var resp = await fetch('/lang/' + lang + '/' + indexFile);
-        if (!resp.ok) return;
-        articlesIndex = await resp.json();
-    } catch(e) {
-        console.log('Scroll: no index yet');
-        return;
-    }
 
+    // Счётчик прочитанного и «просмотрено в этой сессии» индекса не требуют — считаем сразу,
+    // иначе статья не засчиталась бы тем, кто её не долистал.
     var currentId = document.querySelector('[data-article-id]')?.dataset.articleId;
     // data-article-id теперь составной: id_lang_version. Выделяем чистый arXiv id.
     if (currentId) {
@@ -81,8 +121,31 @@ async function initScroll() {
         countRead(currentId);
     }
 
-    updateNextButton(version);
-    renderRelated(currentId, lang, version);
+    whenNeeded(async function () {
+        // Общий промис из search.js — но только когда он про ТОТ ЖЕ уровень чтения.
+        // search.js держит индекс выбранного в ленте уровня, а страница может быть другого:
+        // на advanced.html при «популярно» в ленте мы бы показали чужие заголовки. Ссылки
+        // тир правит сам (urlForVersion), а вот подписи взялись бы не те — поэтому сверяем.
+        var INDEX_FILES = { popular: 'articles-index.json', simple: 'articles-index-simple.json',
+                            advanced: 'articles-index-advanced.json', mini: 'articles-index.json' };
+        var sameTier = typeof window.effVersion === 'function'
+            && window.effVersion() === (version === 'mini' ? 'popular' : version);
+        try {
+            if (sameTier && typeof window.ensureSearchIndex === 'function') {
+                articlesIndex = await window.ensureSearchIndex() || [];
+            }
+            if (!articlesIndex.length) {
+                var resp = await fetch('/lang/' + lang + '/' + INDEX_FILES[version]);
+                if (!resp.ok) return;
+                articlesIndex = await resp.json();
+            }
+        } catch (e) {
+            console.log('Scroll: no index yet');
+            return;
+        }
+        updateNextButton(version);
+        renderRelated(currentId, lang, version);
+    });
 }
 
 // mini переиспользует индекс popular (у него нет своего) — url в записях индекса
