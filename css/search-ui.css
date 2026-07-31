@@ -84,3 +84,22 @@
 /* Пометка об откате смыслового режима: должна читаться как факт, а не как ошибка —
    поиск работает, просто другим способом. */
 .ss-note { font-size: 12px; color: var(--muted); font-style: italic; }
+
+/* ── Заказ перевода на заглушке непереведённой статьи ────────────────────────────
+   Лежит в этом же файле, а не в общем стиле: оба блока — интерфейс, который я
+   добавил поверх готовых страниц, и дизайнеру удобнее доводить их вместе. */
+.translate-offer { margin: 14px 0 18px; }
+.translate-btn {
+    font: inherit;
+    font-size: 14px;
+    padding: 10px 16px;
+    min-height: 44px;                 /* шкала касания проекта */
+    border-radius: 9px;
+    cursor: pointer;
+    border: 1px solid var(--accent);
+    background: var(--accent);
+    color: var(--bg);
+}
+.translate-btn:hover { opacity: .9; }
+.translate-hint { font-size: 12.5px; color: var(--muted); margin-top: 5px; }
+.translate-state { font-size: 14px; color: var(--soft); margin-bottom: 6px; }
