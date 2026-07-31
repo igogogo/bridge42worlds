@@ -12,7 +12,7 @@ if not exist "%LOGDIR%" mkdir "%LOGDIR%"
 
 REM wmic из Windows 11 выпилен — штамп через powershell; иначе имя лога превращалось
 REM в мусор daily_~0,8DT и сам лог оказывался пустым (найдено 2026-07-31).
-for /f %%I in ('powershell -NoProfile -Command "Get-Date -Format yyyyMMdd_HHmm"') do set "STAMP=%%I"
+for /f %%I in ('powershell -NoProfile -Command Get-Date -Format yyyyMMdd_HHmm') do set "STAMP=%%I"
 
 cd /d "%REPO%"
 set PYTHONIOENCODING=utf-8
