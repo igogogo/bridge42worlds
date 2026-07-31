@@ -2,10 +2,29 @@
 за 2025-2026 vs сколько мы обработали, разбивка по разделам и ЛИЦЕНЗИЯМ (сколько можем взять),
 плюс признаки из дампа (опубликовано в журнале, число версий, размер коллабораций).
 
-Разовый скан дампа (~5.4ГБ) → data/corpus-stats.json. Дашборд (js/dashboard.js) читает и рисует.
-Запуск: python corpus_stats.py   (несколько минут; фильтр по префиксу id 25xx/26xx — быстро пропускаем чужое)
+Пишет data/corpus-stats.json; дашборд (js/dashboard.js) читает его и рисует блок «Покрытие архива».
+
+ДВА ВХОДА, и это главное в этом файле:
+
+    python corpus_stats.py           наши числа — сколько статей мы обработали (0,2 с)
+    python corpus_stats.py --dump    полный скан дампа 5,4 ГБ + наши числа (20 с, замер 2026-07-31)
+
+Почему разведено (2026-07-31). Файл собирал обе половины разом, и дешёвая была прикована к
+дорогой: чтобы обновить «обработали», приходилось перечитывать 5,4 ГБ. Никто этого не делал,
+и блок «Покрытие» показывал позавчерашние 1922 статьи, пока KPI на той же странице — свежие
+2085.
+
+Дело не только в секундах (их, как оказалось, всего двадцать), а в том, что половины живут
+в разном ритме и от разного зависят. Наши числа меняются после каждой сборки и считаются по
+файлу, который лежит в дереве. Числа arXiv не меняются вообще, пока не выйдет новый дамп
+Kaggle, и требуют файла на 5,4 ГБ, которого нет ни в репозитории, ни на чужой машине —
+привязать к нему каждую сборку значит сделать её зависимой от чужого диска.
+
+Дефолт — БЕЗ скана: команда без флагов обновляет только наши числа. Полный скан просите явно.
 """
+import argparse
 import json
+import sys
 from pathlib import Path
 from collections import defaultdict
 
@@ -83,6 +102,8 @@ def scan_dump():
 
 
 def generated_counts():
+    """Наши числа — из готового индекса статей. Это и есть дешёвая половина: чтение одного
+    файла, который к моменту вызова уже пересобран генератором."""
     idx = json.loads(Path("lang/ru/articles-index.json").read_text(encoding="utf-8"))
     seen, gm = set(), defaultdict(lambda: {"gen": 0, "express": 0, "full": 0})
     total = {"gen": 0, "express": 0, "full": 0}
@@ -101,8 +122,14 @@ def generated_counts():
     return gm, total
 
 
-def main():
+def build_full():
+    """Полная сборка: скан дампа + наши числа. ~20 секунд на 5,4 ГБ — дешёвый пре-фильтр по
+    строке отбрасывает чужие годы до разбора json."""
     print("скан Kaggle-дампа за 2025-2026 (лицензии + признаки)…", flush=True)
+    if not DUMP.exists():
+        print(f"❌ дампа нет: {DUMP}\n   Это единственное, ради чего нужен --dump. Скачайте дамп "
+              f"или обновляйте только наши числа: python corpus_stats.py")
+        return 1
     by_month, by_section, licenses, n = scan_dump()
     gm, gtot = generated_counts()
     months = sorted(set(by_month) | set(gm))
@@ -126,6 +153,54 @@ def main():
     OUT.write_text(json.dumps(out, ensure_ascii=False), encoding="utf-8")
     print(f"✅ corpus-stats.json: дамп 2025-2026 = {n}, можем взять (откр. лиц.) = {out['allowed_total']}, "
           f"обработали = {gtot['gen']} ({gtot['express']} express / {gtot['full']} full)")
+    return 0
+
+
+def refresh_ours():
+    """Быстрый вход: переписывает в готовом corpus-stats.json ТОЛЬКО наши числа — общий счётчик
+    и три поля у каждого месяца. Всё, что пришло из дампа (dump/allowed/published/средние,
+    разделы, лицензии), остаётся нетронутым: оно про arXiv и меняется только с новым дампом.
+
+    Работает поверх существующего файла и не умеет создавать его с нуля — там, где нужны числа
+    arXiv, догадки хуже отсутствия. Нет файла — говорим об этом ненулевым кодом, чтобы хвост
+    run.py напечатал предупреждение, а не проглотил молча."""
+    if not OUT.exists():
+        print(f"❌ {OUT} нет — сначала разовый полный скан: python corpus_stats.py --dump")
+        return 1
+    data = json.loads(OUT.read_text(encoding="utf-8"))
+    gm, gtot = generated_counts()
+    was = data.get("generated_total", {}).get("gen", 0)
+    data["generated_total"] = gtot
+
+    by_ym = {m["ym"]: m for m in data.get("months", [])}
+    for ym, g in gm.items():
+        m = by_ym.get(ym)
+        if m is None:
+            # Месяц, которого в дампе ещё нет: мы уже пишем про свежие статьи, а снимок arXiv
+            # сделан раньше. Нули в полях дампа честны — «сколько всего вышло» мы пока не знаем.
+            m = {"ym": ym, "dump": 0, "allowed": 0, "published": 0, "avg_authors": 0, "avg_versions": 0}
+            by_ym[ym] = m
+        m["generated"], m["express"], m["full"] = g["gen"], g["express"], g["full"]
+    for ym, m in by_ym.items():
+        if ym not in gm:
+            m["generated"] = m["express"] = m["full"] = 0
+    data["months"] = [by_ym[ym] for ym in sorted(by_ym)]
+
+    OUT.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    print(f"✅ corpus-stats.json: наши числа обновлены — обработали {gtot['gen']} "
+          f"({gtot['express']} express / {gtot['full']} full), было {was}. "
+          f"Числа arXiv не трогали: они из дампа, обновляются через --dump")
+    return 0
+
+
+def main():
+    p = argparse.ArgumentParser(description="статистика покрытия для дашборда")
+    p.add_argument("--dump", action="store_true",
+                   help="полный скан Kaggle-дампа (5,4 ГБ, ~20 с) вдобавок к нашим числам")
+    p.add_argument("--ours", action="store_true",
+                   help="только наши числа (поведение по умолчанию, флаг для явности)")
+    args = p.parse_args()
+    return build_full() if args.dump else refresh_ours()
 
 
 if __name__ == "__main__":
