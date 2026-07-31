@@ -1403,7 +1403,7 @@ function getOrCreateTooltip() {
     tip.appendChild(x);
     // Тап/клик вне подсказки — тоже закрывает.
     document.addEventListener('click', function (e) {
-        if (tip.style.display !== 'none' && !tip.contains(e.target) && !e.target.closest('[data-tag],[data-author],[data-scientist],[data-law]')) {
+        if (tip.style.display !== 'none' && !tip.contains(e.target) && !e.target.closest('[data-tag],[data-author],[data-scientist],[data-law],.express-badge,.card-express-badge,.refine-badge')) {
             tip.style.display = 'none';
         }
     });
@@ -1434,7 +1434,12 @@ function initAllTooltips() {
     // было случайным: mouseenter эмулировался тапом, переход происходил со второго тапа
     // без всякого объяснения читателю.
     var TOUCH = window.matchMedia && window.matchMedia('(hover: none)').matches;
-    document.querySelectorAll('[data-tag], [data-scientist], [data-law], [data-author]').forEach(function(el) {
+    // Бейджи «экспресс» и «✦ отшлифовано» тоже объясняются подсказкой. Раньше объяснение
+    // жило ТОЛЬКО в нативном title, а он на тач-устройствах не показывается вовсе —
+    // то есть на телефоне слово «экспресс» не объяснялось ничем (владелец 2026-07-31).
+    // Бейдж это span вне ссылки, поэтому перехват клика ему безопасен, в отличие от
+    // чипов-фильтров, на которых мы уже обжигались.
+    document.querySelectorAll('[data-tag], [data-scientist], [data-law], [data-author], .express-badge, .card-express-badge, .refine-badge').forEach(function(el) {
         if (el.dataset.tooltipInit) return;
         el.dataset.tooltipInit = '1';
 
@@ -1462,7 +1467,15 @@ function initAllTooltips() {
             var tip = getOrCreateTooltip();
 
             var content = '';
-            if (el.dataset.tag) {
+            var badge = el.classList && (el.classList.contains('express-badge')
+                     || el.classList.contains('card-express-badge')
+                     || el.classList.contains('refine-badge'));
+            if (badge) {
+                // Тексты давно переведены на шесть языков (UI_STRINGS) и до сих пор
+                // только переписывались в атрибут title — теперь показываем их сами.
+                content = '<strong>' + (el.textContent || '').trim() + '</strong> <span class="tip-desc">'
+                        + (el.classList.contains('refine-badge') ? UI.refineTip : UI.expressTip) + '</span>';
+            } else if (el.dataset.tag) {
                 var t = tagsLoc[el.dataset.tag];
                 content = t
                     ? '<strong>' + t.name + '</strong> &mdash; <span class="tip-desc">' + tipCut(descByVersion(t)) + '</span> <a href="/lang/' + lang + '/tags/' + encodeURIComponent(el.dataset.tag) + '.html">' + UI.more + '</a>'
