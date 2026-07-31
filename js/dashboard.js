@@ -20,7 +20,12 @@
               eArticle:'статьи', eTag:'теги', eLaw:'законы', eScientist:'учёные', eAuthor:'авторы',
               pace:'Темп', d7:'за 7 дней', d30:'за 30 дней', perDayAvg:'в среднем в день',
               lastArticle:'последняя статья', growth:'Рост корпуса', totalBy:'всего к',
-              ofThemFull:'из них полных' },
+              ofThemFull:'из них полных',
+              langCoverage:'Языковое покрытие', connectivity:'Связность: что не связано',
+              noTags:'статей без тегов', orphanTags:'тегов без статей', lawsNoTags:'законов без связей',
+              sciNoArticles:'учёных без статей', machine:'Машинное время', calls:'запросов к модели',
+              tokensM:'млн токенов', cachePct:'взято из кэша', byAgent:'По шагам работы',
+              period:'период', ofMax:'от максимума' },
         en: { title:'Project dashboard', articles:'articles', full:'full', express:'express', laws:'laws',
               tags:'tags', sections:'sections', scientists:'scientists', authors:'authors', langs:'languages',
               nodes:'graph nodes', edges:'edges', activity:'Daily activity', dynamics:'Monthly dynamics',
@@ -39,7 +44,13 @@
               eArticle:'artículos', eTag:'etiquetas', eLaw:'leyes', eScientist:'científicos', eAuthor:'autores',
               pace:'Ritmo', d7:'últimos 7 días', d30:'últimos 30 días', perDayAvg:'al día de media',
               lastArticle:'último artículo', growth:'Crecimiento del corpus', totalBy:'total hasta',
-              ofThemFull:'de ellos completos' },
+              ofThemFull:'de ellos completos',
+              langCoverage:'Cobertura por idioma', connectivity:'Conexiones: lo que quedó suelto',
+              noTags:'artículos sin etiquetas', orphanTags:'etiquetas sin artículos',
+              lawsNoTags:'leyes sin vínculos', sciNoArticles:'científicos sin artículos',
+              machine:'Tiempo de máquina', calls:'llamadas al modelo', tokensM:'M de tokens',
+              cachePct:'servido desde caché', byAgent:'Por etapa de trabajo', period:'periodo',
+              ofMax:'del máximo' },
         ar: { title:'لوحة المشروع', articles:'مقالات', full:'كاملة', express:'سريعة', laws:'قوانين',
               tags:'وسوم', sections:'أقسام', scientists:'علماء', authors:'مؤلفين', langs:'لغات',
               nodes:'عقدة', edges:'حافة', activity:'النشاط اليومي', dynamics:'الديناميكية الشهرية',
@@ -51,7 +62,12 @@
               viewsByDevice:'المشاهدات حسب الجهاز', reactions:'التفاعلات', lawTypes:'أنواع القوانين',
               eArticle:'مقالات', eTag:'وسوم', eLaw:'قوانين', eScientist:'علماء', eAuthor:'مؤلفون',
               pace:'الوتيرة', d7:'خلال 7 أيام', d30:'خلال 30 يومًا', perDayAvg:'يوميًا في المتوسط',
-              lastArticle:'آخر مقالة', growth:'نمو المجموعة', totalBy:'المجموع بحلول', ofThemFull:'منها كاملة' },
+              lastArticle:'آخر مقالة', growth:'نمو المجموعة', totalBy:'المجموع بحلول', ofThemFull:'منها كاملة',
+              langCoverage:'التغطية اللغوية', connectivity:'الترابط: ما بقي غير مرتبط',
+              noTags:'مقالات بلا وسوم', orphanTags:'وسوم بلا مقالات', lawsNoTags:'قوانين بلا روابط',
+              sciNoArticles:'علماء بلا مقالات', machine:'وقت الآلة', calls:'طلبات إلى النموذج',
+              tokensM:'مليون رمز', cachePct:'من الذاكرة المؤقتة', byAgent:'حسب مرحلة العمل',
+              period:'الفترة', ofMax:'من الحد الأقصى' },
         // Французский появился пятым языком позже дашборда, и до сих пор весь его текст
         // приезжал из английского фолбэка — читатель видел «Daily activity» на французской
         // странице. Ключи те же, что у остальных.
@@ -69,7 +85,12 @@
               eArticle:'articles', eTag:'tags', eLaw:'lois', eScientist:'scientifiques', eAuthor:'auteurs',
               pace:'Rythme', d7:'sur 7 jours', d30:'sur 30 jours', perDayAvg:'par jour en moyenne',
               lastArticle:'dernier article', growth:'Croissance du corpus', totalBy:'total au',
-              ofThemFull:'dont complets' }
+              ofThemFull:'dont complets',
+              langCoverage:'Couverture linguistique', connectivity:'Connexions : ce qui reste isolé',
+              noTags:'articles sans tags', orphanTags:'tags sans articles', lawsNoTags:'lois sans liens',
+              sciNoArticles:'scientifiques sans articles', machine:'Temps machine',
+              calls:'appels au modèle', tokensM:'M de jetons', cachePct:'servi depuis le cache',
+              byAgent:'Par étape de travail', period:'période', ofMax:'du maximum' }
     })[window.lang] || null;
     // Английская карта — база-фолбэк: любой ключ, которого нет в языковой карте (напр. v2-подписи
     // добавлены только в ru/en), берётся отсюда, чтобы не было "undefined".
@@ -84,7 +105,12 @@
         reactions:'Reactions', lawTypes:'Law types', eArticle:'articles', eTag:'tags', eLaw:'laws',
         eScientist:'scientists', eAuthor:'authors', topLaws:'Key laws',
         pace:'Pace', d7:'last 7 days', d30:'last 30 days', perDayAvg:'per day on average',
-        lastArticle:'latest article', growth:'Corpus growth', totalBy:'total by', ofThemFull:'of them full' };
+        lastArticle:'latest article', growth:'Corpus growth', totalBy:'total by', ofThemFull:'of them full',
+        langCoverage:'Language coverage', connectivity:'Connectivity: what is left loose',
+        noTags:'articles without tags', orphanTags:'tags without articles', lawsNoTags:'laws without links',
+        sciNoArticles:'scientists without articles', machine:'Machine time', calls:'model calls',
+        tokensM:'M tokens', cachePct:'served from cache', byAgent:'By work stage', period:'period',
+        ofMax:'of the maximum' };
     var T = Object.assign({}, DEFAULT, L || {});
 
     var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
@@ -177,6 +203,9 @@
             kpi(Math.round(n30 / 30 * 10) / 10, T.perDayAvg) +
             kpiText(lastDate || T.none, T.lastArticle) +
             '</div></div>';
+        // Слот под языковое покрытие: данные приезжают отдельным файлом, но место в потоке
+        // держим заранее — иначе блок встал бы в конец, куда попадает всё асинхронное.
+        html += '<div id="dash-langs"></div>';
 
         // ── Тепловая карта по дням (месяц-строка × дни) ────────
         var months = Object.keys(byMonth).sort().reverse();
@@ -269,6 +298,21 @@
             '<div class="cover-legend"><b>' + withImg + '</b> ' + esc(T.withCover) + ' · <b>' + (nA - withImg) + '</b> ' + esc(T.noCover) +
             ' (' + pctCover + '%)</div></div>';
 
+        // ── Связность: что не связано ──────────────────────────
+        // Витрина показывает, сколько всего накоплено; это — сколько из накопленного висит
+        // само по себе. Половина словаря тегов может не встречаться ни в одной статье, и по
+        // общим счётчикам этого не видно вообще. Считается из тех же справочников, что уже
+        // загружены страницей, — ни одного лишнего запроса.
+        var tagsAll = window.tagsLoc || {}, sciAll = window.scientistsData || {}, lawsAll = window.lawsData || {};
+        var noTagArts = arts.filter(function (a) { return !((a.tags || []).length); }).length;
+        var orphanTags = Object.keys(tagsAll).filter(function (t) { return !tagCount[t]; }).length;
+        var lawsLoose = Object.keys(lawsAll).filter(function (k) { return !(((lawsAll[k] || {}).tags || []).length); }).length;
+        var sciLoose = Object.keys(sciAll).filter(function (s) { return !sciCount[s]; }).length;
+        html += '<div class="dash-block"><h2>' + esc(T.connectivity) + '</h2><div class="kpi-grid">' +
+            kpi(noTagArts, T.noTags) + kpi(orphanTags, T.orphanTags) +
+            kpi(lawsLoose, T.lawsNoTags) + kpi(sciLoose, T.sciNoArticles) +
+            '</div></div>';
+
         // ── Топы ───────────────────────────────────────────────
         function topBlock(counts, title, kind) {
             var arr = Object.keys(counts).map(function (k) { return [k, counts[k]]; })
@@ -301,7 +345,32 @@
         var typeCount = {};
         Object.keys(ld).forEach(function (k) { var t = (ld[k] && ld[k].type) || '?'; typeCount[t] = (typeCount[t] || 0) + 1; });
 
+        // Слот под машинное время — перед покрытием архива: сначала «чем это сделано»,
+        // потом «сколько такого ещё осталось в arXiv».
+        html += '<div id="dash-machine"></div>';
+
         root.innerHTML = html;
+
+        // ── Языковое покрытие ─────────────────────────────────
+        // KPI считают по индексу ТЕКУЩЕГО языка, поэтому на любой странице выходит одно и то
+        // же число и разрыв между языками не виден. Файл собирает tools/lang_coverage.py.
+        fetch('/data/lang-coverage.json').then(function (r) { return r.json(); }).then(function (lc) {
+            var slot = document.getElementById('dash-langs');
+            if (!slot || !lc || !lc.langs || !lc.langs.length) return;
+            var mx = lc.max || 1;
+            slot.innerHTML = '<div class="dash-block"><h2>' + esc(T.langCoverage) + '</h2><div class="hbars">' +
+                lc.langs.map(function (r) {
+                    // Вниз, а не к ближайшему: 2109 из 2110 округлялось в «100%», и недобор
+                    // одной статьи читался как полный паритет. Недобор должен быть виден.
+                    var pct = Math.floor(100 * r.articles / mx);
+                    return '<div class="hbar" title="' + esc(r.lang) + ': ' + r.articles + ' · ' + r.full + ' ' + esc(T.full) + '">' +
+                        '<span class="hbar-l">' + esc(String(r.lang).toUpperCase()) + '</span>' +
+                        '<span class="hbar-t"><span class="hbar-fill" style="width:' + pct + '%"></span>' +
+                        '<span class="hbar-fill hbar-fill-full" style="width:' + Math.round(100 * r.full / mx) + '%"></span></span>' +
+                        '<span class="hbar-n">' + r.articles.toLocaleString() + '<i class="hbar-sub">' + pct + '%</i></span></div>';
+                }).join('') + '</div><div class="cover-legend"><span class="lg lg-f"></span>' +
+                esc(T.ofThemFull) + '</div></div>';
+        }).catch(function () {});
 
         // Пай-чарт из сегментов [{label,value,color}] → SVG-«пончик»
         function pie(segments, title) {
@@ -429,6 +498,27 @@
                 '<h3 class="cov-h3">' + esc(CL.sec) + '</h3><div class="cov-list">' + secBars + '</div>' +
                 '</div>';
             root.appendChild(cov);
+        }).catch(function () {});
+
+        // ── Машинное время ────────────────────────────────────
+        // Самая честная кухня, какая у нас есть: что стоит за статьями. Показываем измеренное —
+        // вызовы, токены, долю кэша, — и намеренно не переводим в деньги: тариф меняется без
+        // нас, а решение показывать сумму читателю не техническое. Свод: tools/usage_summary.py.
+        fetch('/data/usage-summary.json').then(function (r) { return r.json(); }).then(function (u) {
+            var slot = document.getElementById('dash-machine');
+            if (!slot || !u || !u.calls) return;
+            var mTok = Math.round((u.prompt + u.completion) / 1e5) / 10;
+            var maxAg = (u.agents && u.agents[0] && u.agents[0][1]) || 1;
+            var bars = (u.agents || []).slice(0, 6).map(function (a) {
+                return '<div class="hbar" title="' + esc(a[0]) + ': ' + a[1] + '"><span class="hbar-l">' + esc(a[0]) + '</span>' +
+                    '<span class="hbar-t"><span class="hbar-fill hbar-fill-full" style="width:' +
+                    Math.round(100 * a[1] / maxAg) + '%"></span></span>' +
+                    '<span class="hbar-n">' + a[1].toLocaleString() + '</span></div>';
+            }).join('');
+            slot.innerHTML = '<div class="dash-block"><h2>' + esc(T.machine) + '</h2><div class="kpi-grid">' +
+                kpi(u.calls, T.calls) + kpi(mTok, T.tokensM) + kpiText(u.cachePct + '%', T.cachePct) +
+                kpiText(u.from + ' → ' + u.to, T.period) +
+                '</div><h3 class="cov-h3">' + esc(T.byAgent) + '</h3><div class="hbars">' + bars + '</div></div>';
         }).catch(function () {});
 
         // Дата сборки

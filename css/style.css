@@ -1882,7 +1882,10 @@ html[dir="rtl"] .category-bar .cat-chip:first-child { padding-left: 9px; padding
    края жёлоба), поэтому нужен position, а не поток. */
 .hbars { display: flex; flex-direction: column; gap: 6px; }
 .hbar { display: flex; align-items: center; gap: 10px; font-size: 12px; }
-.hbar-l { font-family: var(--mono); width: 90px; flex: none; color: var(--muted); }
+/* Колонка подписи фиксированная, а подписи бывают длиннее неё (article_advanced,
+   translate_flash) — без обрезки текст выходил за свои 90px и ложился на дорожку. */
+.hbar-l { font-family: var(--mono); width: 90px; flex: none; color: var(--muted);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .hbar-t { position: relative; flex: 1; height: 10px; background: var(--card); border-radius: 999px; overflow: hidden; }
 .hbar-fill { display: block; height: 100%; background: color-mix(in srgb, var(--ochre) 55%, transparent); }
 .hbar-fill-full { position: absolute; left: 0; top: 0; background: var(--cyan); }
