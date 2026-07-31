@@ -33,6 +33,56 @@ def load_tags():
     return json.loads(p.read_text(encoding="utf-8")) if p.exists() else []
 
 
+def report_dead(active_tags):
+    """Разбор «мёртвого» словаря. Дашборд считает по справочнику (tags.json, 363 карточки),
+    а в статьи идёт только активный список (233) — образовательные теги в статьи не идут
+    ПО УСТРОЙСТВУ и мёртвыми не являются. Разделяем эти три вещи, иначе цифра «180 мёртвых»
+    зовёт чистить то, что работает как задумано."""
+    active = {t["en"] for t in active_tags}
+    domain_of = {t["en"]: t.get("domain", "") for t in active_tags}
+    edu_path = Path(f"lang/{DEFAULT_LANG}/data/tags-list-educational.json")
+    express_path = Path(f"lang/{DEFAULT_LANG}/data/tags-list-express.json")
+    book_path = Path(f"lang/{DEFAULT_LANG}/data/tags.json")
+    jload = lambda p: json.loads(p.read_text(encoding="utf-8")) if p.exists() else []
+    edu = {t["en"] for t in jload(edu_path)}
+    express = {t["en"] for t in jload(express_path)}
+    book = jload(book_path)
+    book_ids = set(book) if isinstance(book, dict) else {t.get("id") for t in book}
+
+    used = Counter()
+    express_articles = total = 0
+    for p in Path(f"lang/{DEFAULT_LANG}/archive").glob("*/*/data.json"):
+        try:
+            data = json.loads(p.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        total += 1
+        express_articles += 1 if data.get("express") else 0
+        for level in ("simple", "popular", "advanced"):
+            tier = (data.get(level) or {}).get(DEFAULT_LANG) or {}
+            if tier.get("main_tag"):
+                used[tier["main_tag"]] += 1
+            for tag in tier.get("extra_tags") or []:
+                used[tag] += 1
+
+    dead_book = book_ids - used.keys()
+    dead_active = sorted(active - used.keys())
+    orphan = sorted(dead_book - active - edu)
+    print(f"\nмёртвый словарь (статей {total}, из них экспресс {express_articles}):")
+    print(f"   справочник tags.json:            {len(book_ids)}, не встречается {len(dead_book)}")
+    print(f"   из них образовательные:          {len(dead_book & edu)}  — в статьи не идут по устройству")
+    print(f"   из них активные, но не выбраны:  {len(dead_active)}  ← настоящие кандидаты на разбор")
+    print(f"   осиротевшие (карточка есть, в списках нет): {len(orphan)}"
+          + (f" — {', '.join(orphan)}" if orphan else ""))
+    hidden = [t for t in dead_active if t not in express]
+    print(f"   из мёртвых активных не входят в экспресс-словарь: {len(hidden)} — "
+          f"их не видели {express_articles / max(1, total):.0%} статей архива")
+    by_domain = Counter(domain_of.get(t, "") for t in dead_active)
+    print("   по доменам: " + ", ".join(f"{d}×{n}" for d, n in by_domain.most_common(6)))
+    for tag in dead_active:
+        print(f"      {domain_of.get(tag, ''):<24} {tag}")
+
+
 def main():
     tags = load_tags()
     by_domain = Counter(t.get("domain", "?") for t in tags)
@@ -86,6 +136,10 @@ def main():
     if asked:
         print(f"\nмодель чаще всего просила добавить (топ-12 из {len(asked)}):")
         print("   " + ", ".join(f"{t}×{n}" for t, n in asked.most_common(12)))
+
+    # 3б) мёртвая часть словаря — по требованию (замер дашборда 2026-07-31: «180 из 363»)
+    if "--dead" in sys.argv:
+        report_dead(tags)
 
     # 4) по требованию — сразу дорастить
     if "--grow" in sys.argv:
