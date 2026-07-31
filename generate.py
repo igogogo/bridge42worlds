@@ -3322,7 +3322,15 @@ def build_article(a, date_str, inputs, force=False, express=False, known_license
             a["cited_arxiv"] = []
         else:
             # PDF качаем ВСЕГДА (кроме no_fetch) — обложки/картинки настоящие (юзер: «картинки из PDF»).
-            pdf = download_pdf(a["id"])
+            # Но сперва смотрим под ноги: у уже сгенерённой статьи original.pdf лежит в её папке
+            # (keep_pdf) — апгрейд экспресс→полная не должен перекачивать 2–20 МБ с arXiv,
+            # которые уже есть на диске (владелец 2026-07-31: «если он его взял — пусть хранит»).
+            # temp-кэш download_pdf этого не покрывал: temp чистится, папка статьи — нет.
+            local_pdf = article_folder / "original.pdf"
+            if local_pdf.exists() and local_pdf.stat().st_size > 10_000:
+                pdf = local_pdf
+            else:
+                pdf = download_pdf(a["id"])
             text, imgs = parse_pdf(pdf)
             captions = extract_captions(text)  # подписи ищем в полном тексте (в списке литературы их нет)
             body, refs = split_references(text)
@@ -3339,7 +3347,8 @@ def build_article(a, date_str, inputs, force=False, express=False, known_license
             (article_folder / "references.txt").write_text(refs, encoding="utf-8", errors="replace")
         (article_folder / "arxiv-atom.xml").write_text(atom_xml, encoding="utf-8", errors="replace")
         (article_folder / "arxiv-oai.xml").write_text(oai_xml or "", encoding="utf-8", errors="replace")
-        if not no_fetch and config.get("keep_pdf", True):  # мёртвый вес на масштабе — можно не хранить
+        if not no_fetch and config.get("keep_pdf", True) and pdf != article_folder / "original.pdf":
+            # мёртвый вес на масштабе — можно не хранить; при реюзе PDF файл уже на месте
             (article_folder / "original.pdf").write_bytes(pdf.read_bytes())
         images = save_images(imgs, a["id"], article_folder) if imgs else []
         captions = captions[:len(images)]  # выравниваем по числу сохранённых картинок
