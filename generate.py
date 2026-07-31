@@ -3735,6 +3735,26 @@ def process_day(date_str, force=False, refresh_aggregates=True, express=False, l
     best = select_best(articles, date_str)
     if limit is not None:
         best = best[:limit]
+    # Потолки долей по разделам (config.category_caps, владелец 2026-07-31: «математики
+    # максимум 2%, только самое интересное»). Весов в отборе нет — режем уже ранжированный
+    # список: статья раздела с потолком остаётся, только если сама вошла в общий топ И не
+    # выбрала квоту. Префиксное совпадение по primary_category: "math." ловит math.CO и
+    # math.NT, но НЕ math-ph (это физика). Квота от размера дня, минимум 1 — иначе при
+    # 25 статьях 2% давали бы вечный ноль и раздел не появлялся бы никогда.
+    caps = config.get("category_caps") or {}
+    if caps and best:
+        quota = {p: max(1, int(share * len(best))) for p, share in caps.items()}
+        used = {p: 0 for p in caps}
+        kept = []
+        for a in best:
+            pfx = next((p for p in caps if a.get("primary_category", "").startswith(p)), None)
+            if pfx is None or used[pfx] < quota[pfx]:
+                kept.append(a)
+                if pfx is not None:
+                    used[pfx] += 1
+            else:
+                print(f"  ⏭️ {a['id']} — потолок доли {pfx}* ({quota[pfx]} на день) выбран")
+        best = kept
     inputs = load_generation_inputs()
 
     print(f"  🚀 Обработка {len(best)} статей в {ARTICLE_WORKERS} потока...")
