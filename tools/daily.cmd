@@ -25,11 +25,13 @@ REM бриллиантами» (задача ML). Вернуть полные = 
 REM
 REM Разделы: «репрезентативно по всем, упор на естественные науки, математики и machine
 REM learning поменьше». Управляем не весами (их в отборе нет), а составом списка: каждый
-REM шаблон тянет до 200 кандидатов, поэтому десять естественнонаучных шаблонов против двух
+REM шаблон тянет до 200 кандидатов, поэтому десять естественнонаучных шаблонов против
 REM «прочих» и дают нужный перекос. physics.* закрывает химию, биофизику, геофизику,
-REM атмосферу, оптику, плазму и медфизику; q-bio.* — биологию; math-ph и cs.LG оставлены
-REM как та самая «поменьше» доля. Реальные доли смотреть в `run.py stats` после прогона.
-python run.py daily --express --limit 25 --category "astro-ph.*,gr-qc,hep-th,hep-ph,hep-ex,nucl-th,nucl-ex,quant-ph,cond-mat.*,physics.*,q-bio.*,math-ph,cs.LG" >> "%LOGDIR%\daily_%STAMP%.log" 2>&1
+REM атмосферу, оптику, плазму и медфизику; q-bio.* — биологию; math-ph, math.* и cs.LG —
+REM та самая «поменьше» доля. math.* добавлен 2026-07-31 (ведущая): чистой математики
+REM в ленте было 0 — теперь у неё слот наравне с cs.LG, доля мала составом списка.
+REM Реальные доли смотреть в `run.py stats` после прогона.
+python run.py daily --express --limit 25 --category "astro-ph.*,gr-qc,hep-th,hep-ph,hep-ex,nucl-th,nucl-ex,quant-ph,cond-mat.*,physics.*,q-bio.*,math-ph,math.*,cs.LG" >> "%LOGDIR%\daily_%STAMP%.log" 2>&1
 set RC=%ERRORLEVEL%
 
 REM Хвост лога — в общий журнал, чтобы одним файлом видеть историю прогонов
