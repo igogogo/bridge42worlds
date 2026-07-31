@@ -1368,6 +1368,37 @@ html[dir="rtl"] .feedback .fb-title-row { justify-content: flex-start; }
 .fun-fact .fact + .fact { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
 .fun-fact .fact-scifi { font-style: italic; }
 
+/* Маркер факта — один тип на весь сайт.
+   Раньше символ жил внутри текста в семи местах генератора, и типы разошлись:
+   class="fact" носил то 🎯 (статья), то 💡 (тег) — один класс, разный смысл.
+   Теперь смысл несёт класс, а знак рисует CSS: он масштабируется вместе с текстом,
+   красится темой (currentColor) и не попадает ни в поиск, ни в перевод, ни в
+   зачитывание вслух. Новое место получает маркер само, без правки генератора. */
+/* свойства логические, а не левые: на арабском маркер обязан уйти вправо вместе с текстом */
+.fact, .fun-fact { position: relative; padding-inline-start: 26px; }
+.fact::before, .fun-fact::before {
+    content: ""; position: absolute; inset-inline-start: 0; top: 0.15em;
+    width: 17px; height: 17px; flex: none;
+    background: currentColor; opacity: .62;
+    -webkit-mask: var(--fact-ico) center / contain no-repeat;
+            mask: var(--fact-ico) center / contain no-repeat;
+}
+/* по умолчанию — цель (было 🎯) */
+.fact {
+    --fact-ico: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.4"/><path d="M12 1.6v2.6M12 19.8v2.6M1.6 12h2.6M19.8 12h2.6"/></svg>');
+}
+/* любопытное — лампочка (было 💡) */
+.fun-fact, .fact-fun {
+    --fact-ico: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21.2h4"/><path d="M12 2.6a6.4 6.4 0 0 0-3.7 11.6c.5.4.8 1 .8 1.6v.4h5.8v-.4c0-.6.3-1.2.8-1.6A6.4 6.4 0 0 0 12 2.6z"/></svg>');
+}
+/* кино — хлопушка (было 🎬) */
+.fact-scifi {
+    --fact-ico: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1.7" stroke-linejoin="round"><rect x="2.6" y="9" width="18.8" height="12.4" rx="1.6"/><path d="M2.9 9l2.6-4.5 17.1 1.9L21.4 9z"/><path d="M9.6 5.3L7.4 9M15.2 5.9L13 9.4"/></svg>');
+}
+/* когда внутри лежат готовые .fact — у обёртки своего маркера быть не должно */
+.fun-fact:has(.fact) { padding-inline-start: 0; }
+.fun-fact:has(.fact)::before { content: none; }
+
 /* ── Quote (без подложки, по ширине текста) ── */
 .quote {
     margin: 16px 0; padding: 12px 0; max-width: 620px;

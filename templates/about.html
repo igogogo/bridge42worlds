@@ -125,11 +125,13 @@
   .topnav > a:hover { color: var(--cyan); }
   .topnav-more { position: relative; }
   .topnav-burger { font: inherit; font-size: 17px; line-height: 1; background: none; border: none; color: var(--muted); cursor: pointer; padding: 4px 9px; border-radius: 8px; transition: color .16s, background .16s; }
-  /* Шкала касания. Гид самодостаточен и общий css сюда не приходит, поэтому
-     значения держим у себя — но ровно те же, что в css/style.css: на телефоне
-     44 пикселя, ниже промахи растут у всех. */
-  :root { --tap-md: 32px; --ico-md: 20px; }
-  @media (max-width: 640px) { :root { --tap-md: 44px; --ico-md: 24px; } }
+  /* Шкала касания. Гид самодостаточен, общий css сюда не приходит — значения
+     приходится держать у себя. Копия обещала «ровно те же, что в css/style.css»,
+     и всё равно разошлась: иконка была 20/24 против 18/22 в общем файле.
+     Приведено обратно. Правишь шкалу в css/style.css — правь и здесь, иначе
+     единственная страница вне общего стиля снова уедет молча. */
+  :root { --tap-md: 32px; --ico-md: 18px; }
+  @media (max-width: 640px) { :root { --tap-md: 44px; --ico-md: 22px; } }
   .topnav-burger { min-height: var(--tap-md); min-width: var(--tap-md);
     display: inline-flex; align-items: center; justify-content: center; padding: 0 9px; }
   .topnav-burger .ico-svg { width: var(--ico-md); height: var(--ico-md); stroke-width: 2; }
