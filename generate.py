@@ -524,6 +524,8 @@ FEEDBACK_UI_LOC = {
            "ваш комментарий разберём пакетно — при необходимости поправим статью", "отправить"),
     "en": ("How does it read? (helps us improve)", "+ add a comment",
            "comments are reviewed in batches — we may update the article", "send"),
+    "es": ("¿Qué tal se lee? (nos ayuda a mejorar)", "+ añadir un comentario",
+           "los comentarios se revisan por lotes — podemos actualizar el artículo", "enviar"),
     "zh": ("读起来怎么样？(帮助我们改进)", "+ 添加评论",
            "评论将批量处理 — 如有需要我们会修改文章", "发送"),
     "fr": ("Lecture agréable ? (nous aide à améliorer)", "+ ajouter un commentaire",
@@ -564,7 +566,7 @@ def build_feedback_html(like_id, lang, entity_type="article", next_button_html="
 
 
 ACTIONS_LOC = {
-    "ru": "избранное", "en": "favorite", "zh": "收藏", "fr": "favori", "ar": "مفضلة",
+    "ru": "избранное", "en": "favorite", "es": "favorito", "zh": "收藏", "fr": "favori", "ar": "مفضلة",
 }
 SHARE_LABEL = {"ru": "Поделиться", "en": "Share", "es": "Compartir", "ar": "مشاركة",
                "fr": "Partager", "zh": "分享"}
@@ -1592,9 +1594,9 @@ def generate_tag_page(tag_id, lang):
         f'data-scientist="{attr_safe(s)}">{safe(s)}</a>'
         for s in tag_data.get("scientists", []) if s in valid_scientist_ids()]
     entity_side_html = (
-        side_chip_group(loc["scientists"].rstrip(":"), side_sci_chips)
-        + side_chip_group(loc["related"], side_tag_chips)
-        + side_chip_group(SIDE_LAWS_LABEL.get(lang, SIDE_LAWS_LABEL["en"]), side_law_chips)
+        side_chip_group(side_label("sci", lang), side_sci_chips)
+        + side_chip_group(side_label("tags", lang), side_tag_chips)
+        + side_chip_group(side_label("laws", lang), side_law_chips)
     )
 
     _write_text_retry(Path(LANG_DIR) / lang / "tags" / f"{tag_id}.html", tpl.substitute(
@@ -1666,7 +1668,7 @@ LAWS_LABELS = {
            "influenced": "重要影响：", "article_search": "搜索文章...", "article_hint": "# 标签 · @ 作者 · ! 科学家"},
     "fr": {"title": "Lois et principes", "subtitle": "Lois fondamentales de la science. La formule n'est qu'une représentation.",
            "history": "Découverte", "how": "Fonctionnement", "problems": "Nuances", "laws": "Lois :", "footer": "la science simplifiée",
-           "search": "Trouver une loi...", "tags": "Concepts liés", "related_laws": "Lois liées", "articles": "Articles liés", "scientists": "Découverte par :", "practical": "En pratique",
+           "search": "Trouver une loi...", "tags": "Concepts liés", "related_laws": "Lois associées", "articles": "Articles liés", "scientists": "Découverte par :", "practical": "En pratique",
            "influenced": "Influence clé :", "article_search": "Rechercher des articles...", "article_hint": "# tag · @ auteur · ! scientifique"},
     "ar": {"title": "القوانين والمبادئ", "subtitle": "القوانين الأساسية للعلم. الصيغة مجرد تمثيل؛ الفكرة في النص.",
            "history": "تاريخ الاكتشاف", "how": "كيف يعمل", "problems": "ملاحظات", "laws": "القوانين:", "footer": "العلم ببساطة",
@@ -1730,7 +1732,7 @@ TAG_DOMAIN_LABELS = {
     "genomics":               {"ru": "Геномика", "en": "Genomics", "es": "Genómica", "ar": "علم الجينوم"},
     "bioengineering":         {"ru": "Биоинженерия", "en": "Bioengineering", "es": "Bioingeniería", "ar": "الهندسة الحيوية"},
 }
-TAG_DOMAIN_FALLBACK = {"ru": "Другое", "en": "Other", "es": "Otros", "ar": "أخرى"}
+TAG_DOMAIN_FALLBACK = {"ru": "Другое", "en": "Other", "es": "Otros", "fr": "Autre", "ar": "أخرى"}
 
 # Имена ГРУПП разделов верхнего уровня (юзер 2026-07-25: на /sections/ у cs/math/… не было имени —
 # в справочнике только подкатегории). Фолбэк для gname. Умбреллы вроде cond-mat/hep-th/gr-qc/quant-ph
@@ -1763,16 +1765,33 @@ def tag_domain_label(domain, lang):
 MINI_CONFIG_LABEL = {"ru": "настроить представление", "en": "configure view", "es": "configurar vista",
                      "ar": "ضبط العرض", "fr": "configurer la vue", "zh": "显示设置"}
 MINI_LABEL = {"ru": "Связи в графе знаний", "en": "Links in the knowledge graph",
+              "es": "Conexiones en el grafo del conocimiento",
               "zh": "知识图谱中的关联", "fr": "Liens dans le graphe des savoirs", "ar": "الروابط في شبكة المعرفة"}
 # Короткий ярлык для левого меню-навигатора статьи (пункт на граф — только когда граф есть,
 # юзер-фидбек 2026-07-15: "ссылка на отзыв тоже слева после графа").
-GRAPH_NAV_LABEL = {"ru": "Граф", "en": "Graph", "zh": "关系图", "fr": "Graphe", "ar": "الشبكة"}
+GRAPH_NAV_LABEL = {"ru": "Граф", "en": "Graph", "es": "Grafo", "zh": "关系图", "fr": "Graphe", "ar": "الشبكة"}
 
-SIDE_LAWS_LABEL = {"ru": "Законы", "en": "Laws", "zh": "定律", "fr": "Lois", "ar": "قوانين"}
-SIDE_TAGS_LABEL = {"ru": "Теги", "en": "Tags", "zh": "标签", "fr": "Tags", "ar": "الوسوم"}
-SIDE_SCI_LABEL = {"ru": "Учёные", "en": "Scientists", "zh": "科学家", "fr": "Scientifiques", "ar": "العلماء"}
+SIDE_LAWS_LABEL = {"ru": "Законы", "en": "Laws", "es": "Leyes", "zh": "定律", "fr": "Lois", "ar": "قوانين"}
+SIDE_TAGS_LABEL = {"ru": "Теги", "en": "Tags", "es": "Etiquetas", "zh": "标签", "fr": "Tags", "ar": "الوسوم"}
+SIDE_SCI_LABEL = {"ru": "Учёные", "en": "Scientists", "es": "Científicos", "zh": "科学家", "fr": "Scientifiques", "ar": "العلماء"}
 
-ABSTRACT_LABEL = {"ru": "Аннотация", "en": "Abstract", "zh": "摘要", "fr": "Résumé", "ar": "الملخّص"}
+
+def side_label(kind, lang):
+    """Подпись колонки сайдбара — один источник на все страницы.
+
+    Колонка сайдбара везде отвечает на один вопрос: «что ещё связано с этим». Раньше
+    подпись брали кто откуда — страница тега из SIDE_LAWS_LABEL, страница закона из
+    loc["tags"], страница учёного из loc["related"] — и они разъехались: колонка тегов
+    называлась то «Теги», то «Связанные теги», по-французски законы были одновременно
+    «Lois liées» и «Lois associées». Теперь слово зависит от сущности, а не от страницы,
+    и следующая страница разойтись уже не сможет.
+
+    Роли — отдельный случай и сюда не входят: «Открыли» на странице закона и «Оказали
+    влияние» на странице учёного значат не «связанные учёные», а кто именно это сделал."""
+    d = {"tags": SIDE_TAGS_LABEL, "laws": SIDE_LAWS_LABEL, "sci": SIDE_SCI_LABEL}[kind]
+    return d.get(lang, d["en"])
+
+ABSTRACT_LABEL = {"ru": "Аннотация", "en": "Abstract", "es": "Resumen", "zh": "摘要", "fr": "Résumé", "ar": "الملخّص"}
 
 # ── Экспресс-режим: locked-тиры (не входят в express.tiers) теперь показывают РЕАЛЬНЫЙ
 # контент уже готового тира (см. express_locked_scipop) + баннер сверху текста, а не заглушку
@@ -1939,9 +1958,11 @@ def generate_law_page(law_id, lang):
         f'<a href="/{LANG_DIR}/{lang}/laws/{attr_safe(rl)}.html" class="side-law" data-law="{attr_safe(rl)}">'
         f'{safe(laws[rl].get("name", rl))}</a>' for rl in related_laws[:6]]
     entity_side_html = (
+        # «Открыли» — роль (кто открыл именно этот закон), а не «связанные учёные»:
+        # эту подпись сознательно оставляем из словаря страницы, см. side_label().
         side_chip_group(loc["scientists"].rstrip(":"), side_sci_chips)
-        + side_chip_group(loc["tags"], side_tag_chips)
-        + side_chip_group(loc["related_laws"], side_law_chips)
+        + side_chip_group(side_label("tags", lang), side_tag_chips)
+        + side_chip_group(side_label("laws", lang), side_law_chips)
     )
 
     mini_html = f'<p class="mini-desc">{safe(L["mini"])}</p>' if L.get("mini") else ""
@@ -2261,9 +2282,9 @@ def generate_scientist_page(sid, lang):
         f'<a href="/{LANG_DIR}/{lang}/scientists/{attr_safe(author_slug(s))}.html" class="side-sci" '
         f'data-scientist="{attr_safe(s)}">{safe(s)}</a>' for s in related_scientists[:8]]
     entity_side_html = (
-        side_chip_group(loc["related"], side_tag_chips)
-        + side_chip_group(loc.get("related_laws", "Related laws"), side_law_chips)
-        + side_chip_group(loc["related_scientists"], side_sci_chips)
+        side_chip_group(side_label("tags", lang), side_tag_chips)
+        + side_chip_group(side_label("laws", lang), side_law_chips)
+        + side_chip_group(side_label("sci", lang), side_sci_chips)
     )
 
     _sci_quote = (data.get("quote") or "").strip()
