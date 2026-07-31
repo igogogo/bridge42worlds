@@ -3592,7 +3592,11 @@ def write_article_pages(item, date_str):
                 encoding="utf-8")
     update_authors_graph(a)
     update_tag_counts(versions_ru["advanced"])
-    ensure_article_webp(article_folder)   # webp там, где картинки рождаются (см. функцию)
+    # Папку считаем здесь, а не берём из чужой области видимости: article_folder — локальная
+    # переменная build_article, и эта строка роняла запись статьи с NameError. Три статьи
+    # прогона 2026-07-31 были СГЕНЕРИРОВАНЫ (то есть оплачены) и потеряны на записи.
+    # Картинки лежат под языком-источником — там же, где их сохранил build_article.
+    ensure_article_webp(Path(LANG_DIR) / DEFAULT_LANG / "archive" / date_str / a["id"])
     print(f"  ✅ {a['id']} done")
 
 
