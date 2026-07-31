@@ -1214,6 +1214,8 @@ def save_data_json(versions_ru, article, date_str, folder, translations=None, ca
     # через article — иначе regen молча терял и поле, и с ним защиту FLUX-обложки от затирания.
     if article.get("image_model"):
         payload["image_model"] = article["image_model"]
+    if article.get("upgraded"):
+        payload["upgraded"] = article["upgraded"]
     has_captions = any(captions.values()) if isinstance(captions, dict) else bool(captions)
     if has_captions:
         payload["captions"] = captions
@@ -3571,6 +3573,12 @@ def build_article(a, date_str, inputs, force=False, express=False, known_license
 
         a["refined"] = REFINE and not express  # бейдж ✦/тумблер ⇄ — экспресс не шлифован
         a["express"] = express
+        # Дата апгрейда — для воронки «экспресс → полная» на дашборде (сколько экспрессов
+        # доросло до разбора и как быстро). При обычном пересоздании дата проносится из prev.
+        if prev_express_upgrade:
+            a["upgraded"] = datetime.now().strftime("%Y-%m-%d")
+        elif prev.get("upgraded"):
+            a["upgraded"] = prev["upgraded"]
         if express:
             a["express_tiers"] = sorted(express_tiers)
         elif prev_express_upgrade and prev.get("express_tiers"):
