@@ -978,7 +978,9 @@ function cardHTML(item) {
     // голосом, с аналогией. На карточке — витрина сайта — теперь наш голос: description,
     // и только если его нет — аннотация. Промпт аннотации переписан тем же днём, но
     // у 2110 уже сгенерированных статей она осталась старой; порядок чинит их бесплатно.
-    var bodyText = item.description || item.abstract || item.oneliner || '';
+    // Аннотации на карточке нет вовсе (решение владельца 2026-07-31: «убери, такое никогда
+    // не показывай»). Она остаётся внутри статьи как строгая версия — там она к месту.
+    var bodyText = item.description || item.oneliner || '';
     var cat = (item.categories || [])[0] || '';
     var catName = (window.ARXIV_CAT_NAMES && ARXIV_CAT_NAMES[cat]) || cat;
     var catDesc = (window.ARXIV_CAT_DESC && ARXIV_CAT_DESC[cat]) || '';

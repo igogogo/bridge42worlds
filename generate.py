@@ -848,7 +848,11 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
                      has_mini=True):
     tpl = load_template("article")
     if not tpl.template: return "<html><body>Template not found</body></html>"
-    abstract_text = abstract_for(abstract, lang, version)
+    # Аннотация СНЯТА С ПОКАЗА (решение владельца 2026-07-31): её промпт писал паспорт
+    # статьи вместо человеческого текста, и это видел читатель. Данные не удаляем и не
+    # перестаём считать — возвращаем показ строкой в config, когда промпт-инженер
+    # переделает промпт и QA примет качество (см. задачи/промпты.md, разбор 07-31).
+    abstract_text = abstract_for(abstract, lang, version) if config.get("show_abstract", False) else ""
     abstract_html = ""
     if abstract_text:  # аннотация из авторского абстракта — постоянно на виду, не по клику
         abstract_html = (f'<div class="abstract-lead"><div class="abstract-label">'
