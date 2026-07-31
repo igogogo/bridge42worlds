@@ -26,7 +26,10 @@ def targets():
     for r in ROOTS:
         for p in Path(r).rglob("*.jpg"):
             w = p.with_suffix(".webp")
-            if not w.exists():
+            # Не только «webp нет», но и «jpg свежее webp»: regen с 2026-07-31 пишет ПОВЕРХ
+            # старой папки (реюз оплаченного), и перезаписанный jpg при пропуске по exists
+            # молча оставлял бы читателю старую картинку — сайт отдаёт webp, не jpg.
+            if not w.exists() or w.stat().st_mtime < p.stat().st_mtime:
                 out.append(str(p))
     return out
 

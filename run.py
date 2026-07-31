@@ -26,7 +26,9 @@ run.py — единый оркестратор Bridge For Two Worlds.
   evolve [--rounds N]      Ко-эволюция графа знаний: растит tags/laws/scientists пробел-
                              осведомлённо (--gaps) до потолков из config.json → growth.
   delete <arxiv_id>        Удалить статью целиком (контент, картинки, PDF, индексы).
-  regen <arxiv_id>         Пересоздать одну статью с нуля (удалить + сгенерировать).
+  regen <arxiv_id>         Пересоздать одну статью поверх старой (реюз оплаченного: mini
+                             экспресса, переводы аннотации/подписей, FLUX-обложка).
+                             --lang fr — полная на одном языке; чистое пересоздание: delete+regen.
   check [--fix]            Проверка целостности; --fix чинит HTML/индексы (офлайн).
 
 Даты — в формате YYYY-MM-DD.
@@ -704,7 +706,8 @@ def cmd_regen(args):
     if args.refine:
         os.environ["REFINE"] = "1"
     import generate
-    generate.regenerate_article(args.id)
+    only_langs = [l.strip() for l in args.lang.split(",") if l.strip()] if args.lang else None
+    generate.regenerate_article(args.id, only_langs=only_langs)
     _ensure_webp()   # regen-статья 2607.23119v2 вышла без единого webp — возврат QA
 
 
@@ -1018,10 +1021,12 @@ def build_parser():
     s.add_argument("id", help="arXiv id, напр. 2606.30936v1")
     s.set_defaults(func=cmd_delete)
 
-    s = sub.add_parser("regen", help="пересоздать одну статью с нуля")
+    s = sub.add_parser("regen", help="пересоздать одну статью поверх старой (реюз оплаченного)")
     s.add_argument("id", help="arXiv id")
     s.add_argument("--refine", action="store_true", help="рефлексивная шлифовка Simple и Popular")
-    s.set_defaults(func=cmd_regen, refine=False)
+    s.add_argument("--lang", help="перевести только эти языки через запятую (напр. fr или en,es); "
+                                  "остальные сохраняют прежний контент или заглушку")
+    s.set_defaults(func=cmd_regen, refine=False, lang=None)
 
     s = sub.add_parser("check", help="проверка целостности")
     s.add_argument("--fix", action="store_true", help="починить HTML/индексы офлайн")

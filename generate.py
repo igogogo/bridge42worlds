@@ -1210,6 +1210,10 @@ def save_data_json(versions_ru, article, date_str, folder, translations=None, ca
         "express": article.get("express", False),
         "express_tiers": article.get("express_tiers", []),
     }
+    # Поле пишет covers_full.py задним числом; при пересоздании статьи build_article проносит его
+    # через article — иначе regen молча терял и поле, и с ним защиту FLUX-обложки от затирания.
+    if article.get("image_model"):
+        payload["image_model"] = article["image_model"]
     has_captions = any(captions.values()) if isinstance(captions, dict) else bool(captions)
     if has_captions:
         payload["captions"] = captions
@@ -3230,7 +3234,8 @@ def load_generation_inputs():
     }
 
 
-def build_article(a, date_str, inputs, force=False, express=False, known_license=None, no_fetch=False):
+def build_article(a, date_str, inputs, force=False, express=False, known_license=None, no_fetch=False,
+                  only_langs=None):
     """Фаза A: arXiv + PDF + все вызовы DeepSeek. Пишет только в папку статьи (гонок нет).
     Возвращает подготовленный dict либо None (пропущено/ошибка).
     express=True — дешёвый режим (см. TODO.md): один вызов generate_express() по авторской
@@ -3239,7 +3244,18 @@ def build_article(a, date_str, inputs, force=False, express=False, known_license
     самый частый повод жалоб на сложность языка, теги в шлифовку не идут (см. gen_llm.refine_simple)
     и не нужны там. PDF всё равно качаем и парсим — картинки/обложка/миниатюры настоящие,
     экономим только на тексте генерации. Тиры не из config.express.tiers получают заглушку («полная
-    готовится») вместо контента — апгрейд до полной версии: run.py regen <id>."""
+    готовится») вместо контента — апгрейд до полной версии: run.py regen <id>.
+
+    only_langs — «полная на языке запроса» (воронка, ПРОЕКТ.md §4): переводим ТОЛЬКО эти языки
+    (DEFAULT_LANG генерится всегда — это язык генерации). Остальные языки не платят за перевод:
+    им остаётся прежний контент из старого data.json (см. реюз ниже), а без него — честная
+    заглушка «перевод готовится» с кнопкой заказа.
+
+    Реюз при force (правило воронки: «экспресс не пропадает при апгрейде»): перед генерацией
+    читаем старый data.json и переносим из него всё оплаченное, что не устарело: переводы
+    аннотации и подписей (их источник — авторский абстракт и PDF, они не меняются), FLUX-обложку
+    (image_model), короткий текст экспресса — он становится mini полной статьи, а его переводы
+    остаются на языках, где полной ещё нет."""
     article_folder = Path(LANG_DIR) / DEFAULT_LANG / "archive" / date_str / a["id"]
     if not force and (article_folder / "data.json").exists():
         print(f"  ⏭️ {a['id']} — уже есть, пропускаю (--force чтобы пересоздать)")
@@ -3248,6 +3264,17 @@ def build_article(a, date_str, inputs, force=False, express=False, known_license
     if not force and base_id in inputs.get("existing_base_ids", set()):
         print(f"  ⏭️ {a['id']} — новая версия уже обработанной статьи ({base_id}), пропускаю (--force чтобы пересоздать)")
         return None
+    # Старый data.json — источник реюза. Только при совпадении id: под тем же именем папки
+    # не может лежать другая статья, но битый/чужой json не должен подмешать чужой контент.
+    prev = {}
+    if force and (article_folder / "data.json").exists():
+        try:
+            prev = json.loads((article_folder / "data.json").read_text(encoding="utf-8"))
+            if prev.get("id") != a["id"]:
+                prev = {}
+        except Exception:
+            prev = {}
+    prev_express_upgrade = bool(prev.get("express")) and not express
     try:
         # known_license — лицензия уже известна (из локального Kaggle-дампа arXiv, поле license):
         # НЕ ходим в arXiv за OAI-лицензией. Вызывающий обязан передавать только разрешённые CC-BY/CC0
@@ -3354,6 +3381,14 @@ def build_article(a, date_str, inputs, force=False, express=False, known_license
                 if mini_ru:
                     scipop_pop["mini"] = mini_ru
                     scipop_simple["mini"] = mini_ru
+            # Апгрейд экспресс→полная: короткий текст экспресса УЖЕ показан читателю как текст
+            # статьи — он и остаётся mini полной версии (правило воронки: «экспресс не пропадает»),
+            # а не свежая выжимка, которая говорит то же самое другими словами.
+            prev_mini_ru = (((prev.get("simple") or prev.get("popular") or {}).get(DEFAULT_LANG) or {}).get("mini")
+                            if prev_express_upgrade else None)
+            if prev_mini_ru:
+                scipop_pop["mini"] = prev_mini_ru
+                scipop_simple["mini"] = prev_mini_ru
             (article_folder / "api" / "simple-ru.json").write_text(
                 json.dumps(scipop_simple, ensure_ascii=False, indent=2), encoding="utf-8")
             (article_folder / "api" / "popular-ru.json").write_text(
@@ -3377,22 +3412,40 @@ def build_article(a, date_str, inputs, force=False, express=False, known_license
         # Обложка статьи — крупнейшая картинка из самого PDF, не AI-генерация (см. pick_cover_image).
         # Экспресс всё равно качает и парсит PDF (см. выше) специально ради этого — обложка
         # настоящая, экономим только на тексте генерации.
-        cover = pick_cover_image(images)
-        if cover:
-            shutil.copy(cover, article_folder / "ai.jpg")
+        # Исключение: у статьи уже есть ОПЛАЧЕННАЯ FLUX-обложка (covers_full.py пишет image_model
+        # в data.json) — кадром из PDF её не затираем, поле проносим в новый data.json, иначе
+        # regen молча превращал pro-обложку в кадр из PDF (техдолг воронки, 2026-07-31).
+        if prev.get("image_model") and (article_folder / "ai.jpg").exists():
+            a["image_model"] = prev["image_model"]
+        else:
+            cover = pick_cover_image(images)
+            if cover:
+                shutil.copy(cover, article_folder / "ai.jpg")
         # Лёгкие миниатюры для ленты (t_ai + до 2 PDF); число PDF-миниатюр → в индекс
         a["thumbs"] = make_thumbnails(article_folder)
 
         versions_ru = {"popular": scipop_pop, "simple": scipop_simple, "advanced": scipop_adv}
-        # «Аннотация» из авторского arXiv-abstract — ТРИ регистра (popular/simple/advanced), + перевод по языкам
-        abstract_ru = generate_abstract(a.get("summary", ""))
-        if REFINE and abstract_ru and not express:
-            abstract_ru = refine_abstract(abstract_ru)
-        abstract = {DEFAULT_LANG: abstract_ru}
+        # Целевые языки перевода. only_langs сужает список: «полная на языке запроса» переводит
+        # один язык, остальные живут реюзом из prev (ниже) или заглушкой — и не оплачиваются.
         targets = [l for l in LANGUAGES if l != DEFAULT_LANG]
-        if abstract_ru and targets:
-            with ThreadPoolExecutor(max_workers=min(8, len(targets))) as aex:
-                afut = {aex.submit(translate_scipop, abstract_ru, l): l for l in targets}
+        if only_langs is not None:
+            unknown = [l for l in only_langs if l not in LANGUAGES]
+            if unknown:
+                print(f"    ⚠️ only_langs: {unknown} нет в config.languages — игнорирую")
+            targets = [l for l in targets if l in only_langs]
+        # «Аннотация» из авторского arXiv-abstract — ТРИ регистра (popular/simple/advanced), + перевод
+        # по языкам. Источник между прогонами не меняется (авторский абстракт той же версии статьи) —
+        # реюзим и русскую, и переводы; переводим только языки, которых в prev не было.
+        prev_abstract = prev.get("abstract") or {}
+        abstract_ru = prev_abstract.get(DEFAULT_LANG) or generate_abstract(a.get("summary", ""))
+        if REFINE and abstract_ru and not express and not prev_abstract.get(DEFAULT_LANG):
+            abstract_ru = refine_abstract(abstract_ru)
+        abstract = {l: t for l, t in prev_abstract.items() if t}
+        abstract[DEFAULT_LANG] = abstract_ru
+        abs_missing = [l for l in targets if not abstract.get(l)]
+        if abstract_ru and abs_missing:
+            with ThreadPoolExecutor(max_workers=min(8, len(abs_missing))) as aex:
+                afut = {aex.submit(translate_scipop, abstract_ru, l): l for l in abs_missing}
                 for fut, l in afut.items():
                     try:
                         abstract[l] = fut.result() or abstract_ru
@@ -3401,8 +3454,15 @@ def build_article(a, date_str, inputs, force=False, express=False, known_license
         # Подписи к рисункам вытащены regex'ом из английского PDF (extract_captions) — переводим
         # на все языки САЙТА, кроме английского (не FROM default_lang, а FROM "en" — источник
         # всегда английский, независимо от того, какой язык у нас DEFAULT_LANG).
+        # Реюз: PDF тот же — если английские подписи совпали со старыми, старые переводы верны.
         captions_by_lang = {"en": captions}
-        cap_targets = [l for l in LANGUAGES if l != "en"]
+        prev_caps = prev.get("captions") or {}
+        if captions and prev_caps.get("en") == captions:
+            for l, cl in prev_caps.items():
+                if cl:
+                    captions_by_lang.setdefault(l, cl)
+        cap_targets = [l for l in LANGUAGES if l != "en" and l not in captions_by_lang
+                       and (only_langs is None or l in only_langs or l == DEFAULT_LANG)]
         if captions and cap_targets:
             with ThreadPoolExecutor(max_workers=min(8, len(cap_targets))) as capex:
                 capfut = {capex.submit(translate_captions, captions, l): l for l in cap_targets}
@@ -3411,9 +3471,10 @@ def build_article(a, date_str, inputs, force=False, express=False, known_license
                         captions_by_lang[l] = fut.result() or captions
                     except Exception:
                         captions_by_lang[l] = captions
-        else:
-            for l in cap_targets:
-                captions_by_lang[l] = captions
+        # Языки вне целей и без реюза получают английские подписи — как и раньше при отказе перевода.
+        for l in LANGUAGES:
+            if l != "en":
+                captions_by_lang.setdefault(l, captions)
 
         # Переводы: каждую версию на каждый целевой язык — параллельно. В экспрессе переводим
         # ТОЛЬКО реально сгенерированные тиры — заблокированные получают заглушку на языке
@@ -3477,10 +3538,47 @@ def build_article(a, date_str, inputs, force=False, express=False, known_license
                         if v not in express_tiers:
                             translations[v][l] = express_locked_scipop(base_l, l)
 
+        # Реюз переводов из prev — два случая:
+        # 1) язык в этот прогон не переводился (only_langs его исключил) — прежний контент языка
+        #    остаётся как был: экспресс-текст читателю полезнее заглушки «перевод готовится».
+        #    Русские молчаливые откаты и старые заглушки не переносим — их pick_scipop и так
+        #    превратит в честную заглушку.
+        # 2) апгрейд экспресс→полная: в свежих переводах mini заменяем на СТАРЫЙ перевод экспресса —
+        #    тот же текст, что читатель уже видел (языковое продолжение правила про mini выше).
+        if prev:
+            for v in VERSIONS:
+                prev_v = prev.get(v) or {}
+                for l in LANGUAGES:
+                    if l == DEFAULT_LANG:
+                        continue
+                    cur = translations[v].get(l)
+                    if cur and not payload_in_source_lang(cur):
+                        continue  # свежий перевод удался — реюз не нужен
+                    # Сюда попадают и языки вне целей, и цели, у которых перевод упал в
+                    # русский откат: старый хороший текст лучше и заглушки, и русского.
+                    old = prev_v.get(l)
+                    if (isinstance(old, dict) and old.get("title")
+                            and not old.get("untranslated") and not payload_in_source_lang(old)):
+                        translations[v][l] = old
+        if prev_express_upgrade:
+            for v in VERSIONS:
+                prev_v = prev.get(v) or {}
+                for l, tr in translations[v].items():
+                    old = prev_v.get(l) or {}
+                    if (isinstance(tr, dict) and old.get("mini")
+                            and not old.get("untranslated") and not payload_in_source_lang(old)):
+                        tr["mini"] = old["mini"]
+
         a["refined"] = REFINE and not express  # бейдж ✦/тумблер ⇄ — экспресс не шлифован
         a["express"] = express
         if express:
             a["express_tiers"] = sorted(express_tiers)
+        elif prev_express_upgrade and prev.get("express_tiers"):
+            # Языки, оставшиеся на экспресс-контенте (реюз выше), несут в тирах express_locked-
+            # баннер «показана версия X, Y пока не готова» — ему нужен список реальных тиров
+            # экспресса (gen_article_html, avail), иначе баннер молча исчезает и экспресс-текст
+            # выдаёт себя за полный. Бейджа «экспресс» это не включает — он смотрит на express.
+            a["express_tiers"] = prev["express_tiers"]
         save_data_json(versions_ru, a, date_str, article_folder, translations, captions_by_lang, abstract,
                        refined=a["refined"])
         return {"article": a, "versions": versions_ru, "translations": translations,
@@ -3833,11 +3931,20 @@ def fetch_one_arxiv(aid):
     }
 
 
-def regenerate_article(aid, force=True):
-    """Пересоздаёт одну статью с нуля (удаляет старое, генерит заново, чинит агрегаты)."""
+def regenerate_article(aid, force=True, only_langs=None):
+    """Пересоздаёт одну статью (генерит заново ПОВЕРХ старой, чинит агрегаты).
+
+    Папку больше НЕ удаляем перед генерацией (техдолг воронки, 2026-07-31): старый data.json —
+    источник реюза оплаченного (mini экспресса, переводы аннотации/подписей, FLUX-обложка,
+    см. build_article), а при падении генерации статья остаётся живой, а не исчезает с сайта.
+    Раньше delete_article стирал папку ПЕРВЫМ шагом — оплаченный api/express-ru.json и обложка
+    гибли до того, как новая генерация хотя бы начиналась. Чистое пересоздание без реюза:
+    run.py delete <id>, затем regen.
+
+    only_langs — «полная на языке запроса»: перевести только эти языки; остальные сохраняют
+    прежний контент (экспресс) или честную заглушку."""
     dates = find_article_dates(aid)
     date_str = dates[0] if dates else None
-    delete_article(aid, rebuild=False)
     a = fetch_one_arxiv(aid)
     if not a:
         print(f"  ❌ не удалось получить метаданные {aid} с arXiv")
@@ -3845,9 +3952,9 @@ def regenerate_article(aid, force=True):
     if not date_str:
         date_str = iso_day(a.get("published")) or TARGET_DATE
     for lang in LANGUAGES: ensure_lang_structure(lang)
-    item = build_article(a, date_str, load_generation_inputs(), force=True)
+    item = build_article(a, date_str, load_generation_inputs(), force=True, only_langs=only_langs)
     if not item:
-        print(f"  ❌ {aid}: генерация не удалась")
+        print(f"  ❌ {aid}: генерация не удалась — старая версия статьи не тронута")
         return False
     write_article_pages(item, date_str)
     rebuild_indexes()
