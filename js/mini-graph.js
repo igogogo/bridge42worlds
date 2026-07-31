@@ -65,36 +65,16 @@
         return s;
     }
 
-    /* Справочник берём из памяти, если его уже загрузил search.js (он есть на всех
-       страницах, где живёт мини-граф). Второй fetch отдавался из кэша — трафика больше
-       не стоил, — но разбор 4,6 МБ тегов и 1,8 МБ законов ВТОРОЙ РАЗ на главном потоке
-       телефона стоил заметно. Если объекта нет (страница без search.js) — качаем, как
-       раньше. */
+    /* Справочник — через общую точку из search.js (window.B42Ref): уже разобранный объект,
+       иначе общее обещание, иначе свой запрос. Своя копия этой логики жила здесь и в
+       knowledge-graph.js, а author-graph.js качал теги мимо неё — класс «справочники вторым
+       комплектом» был закрыт не везде. Запасной путь оставлен: на странице без search.js
+       B42Ref не существует. */
     function shared(name, url) {
+        if (typeof window.B42Ref === 'function') return window.B42Ref(name, url);
         var have = window[name];
-        if (have && typeof have === 'object' && Object.keys(have).length) {
-            return Promise.resolve(have);
-        }
-        // search.js читает те же файлы и выставляет обещание B42Refs. Дожидаемся его,
-        // а не гоняем второй комплект: без ожидания мини-граф успевал попросить файлы
-        // раньше, чем search.js их дочитывал, и выигрыш терялся.
-        if (window.B42Refs && window.B42Refs.then) {
-            return window.B42Refs.then(function (refs) {
-                var got = refs && refs[name];
-                if (got && Object.keys(got).length) return got;
-                return fetch(url).then(function (r) { return r.json(); }).catch(function (e) {
-            // Осознанный откат: без справочника граф рисуется, но без человеческих
-            // подписей. Молчать об этом нельзя — иначе назавтра никто не поймёт,
-            // почему на узлах сырые идентификаторы.
-            console.warn('справочник не загрузился: ' + url, e);
-            return {};
-        });
-            });
-        }
+        if (have && typeof have === 'object' && Object.keys(have).length) return Promise.resolve(have);
         return fetch(url).then(function (r) { return r.json(); }).catch(function (e) {
-            // Осознанный откат: без справочника граф рисуется, но без человеческих
-            // подписей. Молчать об этом нельзя — иначе назавтра никто не поймёт,
-            // почему на узлах сырые идентификаторы.
             console.warn('справочник не загрузился: ' + url, e);
             return {};
         });
@@ -108,8 +88,11 @@
                 shared('tagsLoc', '/lang/' + lang + '/data/tags.json'),
                 shared('lawsData', '/lang/' + lang + '/data/laws.json'),
                 shared('scientistsData', '/lang/' + lang + '/data/scientists.json'),
-                fetch('/data/arxiv-categories.json').then(function (r) { return r.json(); }).catch(function () { return {}; }),
-                fetch('/data/arxiv-category-descriptions.json').then(function (r) { return r.json(); }).catch(function () { return {}; })
+                // Названия и описания разделов search.js уже прочитал — причём в ЛОКАЛИЗОВАННОМ
+                // виде (arxiv-categories-ru и т.п.). Свой запрос базового файла давал второй
+                // комплект и заодно английские подписи там, где локализованные уже есть.
+                shared('ARXIV_CAT_NAMES', '/data/arxiv-categories.json'),
+                shared('ARXIV_CAT_DESC', '/data/arxiv-category-descriptions.json')
             ]).then(function (res) {
                 var kg = res[0], tn = res[1], ln = res[2], sn = res[3], cn = res[4], cd = res[5];
                 var edgeTypes = checkedEdgeKgTypes();

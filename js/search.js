@@ -336,6 +336,33 @@ function whenIdle(fn) {
    search.js, и им нужны ровно эти же tags/laws/scientists. Без общего обещания они
    успевали попросить файлы ДО того, как search.js их дочитывал, — и разбирали те же
    4,6 МБ тегов и 1,8 МБ законов вторым комплектом на главном потоке телефона. */
+/* Единая точка доступа к справочнику для всех, кто рисует графы. Правило одно: уже
+   разобранный объект → общее обещание B42Refs → и только если ни того ни другого нет
+   (страница без search.js) — свой запрос. Раньше эта функция была скопирована в
+   mini-graph.js и knowledge-graph.js, а author-graph.js качал теги мимо неё вовсе —
+   то есть класс «справочники вторым комплектом» был закрыт на два файла из трёх. */
+window.B42Ref = function (name, url) {
+    var have = window[name];
+    if (have && typeof have === 'object' && Object.keys(have).length) {
+        return Promise.resolve(have);
+    }
+    function own() {
+        return fetch(url).then(function (r) { return r.json(); }).catch(function (e) {
+            // Осознанный откат: без справочника граф рисуется, но без человеческих подписей.
+            // Молчать нельзя — иначе назавтра никто не поймёт, почему на узлах сырые id.
+            console.warn('справочник не загрузился: ' + url, e);
+            return {};
+        });
+    }
+    if (window.B42Refs && window.B42Refs.then) {
+        return window.B42Refs.then(function (refs) {
+            var got = (refs && refs[name]) || window[name];
+            return (got && Object.keys(got).length) ? got : own();
+        });
+    }
+    return own();
+};
+
 window.B42Refs = Promise.all(
     [].concat([
         fetch(tagsPath).then(function(r) { return r.json(); }).catch(function() {
@@ -366,6 +393,7 @@ window.B42Refs = Promise.all(
     window.tagsLoc = tagsLoc;
     window.scientistsData = scientistsData;
     window.lawsData = lawsData;
+    window.B42RefsReady = true;
 
     renderSiteStats();
     // Первая лента уже отрисована с тегами как raw id (tagsLoc ещё не пришёл) — теперь, когда

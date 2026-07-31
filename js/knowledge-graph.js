@@ -150,31 +150,16 @@
         if (window.__kgRebuild) window.__kgRebuild();
     }
 
-    /* Те же справочники, что читает search.js, — берём из его обещания, а не вторым
-       комплектом. Замер живого сайта 2026-07-30: без этого страница графа разбирала
-       6,99 МБ данных повторно. Нет search.js на странице — качаем сами, как раньше. */
+    /* Справочник — через общую точку из search.js (window.B42Ref): уже разобранный объект,
+       иначе общее обещание, иначе свой запрос. Своя копия этой логики жила здесь и в
+       knowledge-graph.js, а author-graph.js качал теги мимо неё — класс «справочники вторым
+       комплектом» был закрыт не везде. Запасной путь оставлен: на странице без search.js
+       B42Ref не существует. */
     function shared(name, url) {
+        if (typeof window.B42Ref === 'function') return window.B42Ref(name, url);
         var have = window[name];
-        if (have && typeof have === 'object' && Object.keys(have).length) {
-            return Promise.resolve(have);
-        }
-        if (window.B42Refs && window.B42Refs.then) {
-            return window.B42Refs.then(function (refs) {
-                var got = refs && refs[name];
-                if (got && Object.keys(got).length) return got;
-                return fetch(url).then(function (r) { return r.json(); }).catch(function (e) {
-            // Осознанный откат: без справочника граф рисуется, но без человеческих
-            // подписей. Молчать об этом нельзя — иначе назавтра никто не поймёт,
-            // почему на узлах сырые идентификаторы.
-            console.warn('справочник не загрузился: ' + url, e);
-            return {};
-        });
-            });
-        }
+        if (have && typeof have === 'object' && Object.keys(have).length) return Promise.resolve(have);
         return fetch(url).then(function (r) { return r.json(); }).catch(function (e) {
-            // Осознанный откат: без справочника граф рисуется, но без человеческих
-            // подписей. Молчать об этом нельзя — иначе назавтра никто не поймёт,
-            // почему на узлах сырые идентификаторы.
             console.warn('справочник не загрузился: ' + url, e);
             return {};
         });
