@@ -179,7 +179,12 @@ def download_pdf(aid):
     p = Path(f"temp/{aid}.pdf")
     p.parent.mkdir(exist_ok=True)
     if not p.exists():
-        p.write_bytes(requests.get(f"https://arxiv.org/pdf/{aid}.pdf", timeout=60).content)
+        # Через общий ретрай, а не голым requests.get: в файле есть _get_with_retry,
+        # и все обращения к arXiv идут через него — кроме этого, единственного. Прогон
+        # 2026-07-31 потерял на этом две статьи: ReadTimeout при скачивании PDF ронял
+        # статью целиком, хотя повтор через десяток секунд проходит. Класс ошибки тот же,
+        # что у 429 и обрыва связи, которые здесь давно обрабатываются.
+        p.write_bytes(_get_with_retry(f"https://arxiv.org/pdf/{aid}.pdf", timeout=60).content)
     return p
 
 

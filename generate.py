@@ -3987,7 +3987,7 @@ def search_arxiv_author(name, from_date=None, to_date=None, max_results=200):
         f = from_date.replace("-", "") + "0000"
         t = to_date.replace("-", "") + "2359"
         q += f" AND submittedDate:[{f} TO {t}]"
-    r = requests.get("http://es.arxiv.org/api/query", params={
+    r = _get_with_retry("http://es.arxiv.org/api/query", params={
         "search_query": q, "start": 0, "max_results": max_results,
         "sortBy": "submittedDate", "sortOrder": "descending"}, timeout=30)
     try:
