@@ -10,8 +10,9 @@ set "REPO=C:\Users\nadez\PycharmProjects\bridge42worlds"
 set "LOGDIR=%REPO%\logs"
 if not exist "%LOGDIR%" mkdir "%LOGDIR%"
 
-for /f "tokens=2 delims==" %%I in ('wmic os get localdatetime /value 2^>nul') do set "DT=%%I"
-set "STAMP=%DT:~0,8%_%DT:~8,4%"
+REM wmic из Windows 11 выпилен — штамп через powershell; иначе имя лога превращалось
+REM в мусор daily_~0,8DT и сам лог оказывался пустым (найдено 2026-07-31).
+for /f %%I in ('powershell -NoProfile -Command "Get-Date -Format yyyyMMdd_HHmm"') do set "STAMP=%%I"
 
 cd /d "%REPO%"
 set PYTHONIOENCODING=utf-8
