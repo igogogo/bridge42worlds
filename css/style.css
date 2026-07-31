@@ -2882,3 +2882,26 @@ body.b42-wait-open { overflow: hidden; }
   .council-invite a { color: #D8B863; }
 }
 @media (max-width: 640px) { .council-invite { padding: 15px 42px 15px 15px; } }
+
+/* ── Панели шапки на телефоне: во всю ширину шапки, а не от кнопки ──
+   Панель поиска прижата right:0 к лупе; на 375px её 300 пикселей уносятся за ЛЕВЫЙ
+   край экрана — поле ввода начиналось на −40px, попасть в него пальцем нельзя
+   (блокер владельца 2026-07-31). У календаря геометрия та же — чиним тип, а не место:
+   контейнер кнопки перестаёт быть позиционированным, и absolute-панель якорится
+   к самой шапке (.top-bar sticky = позиционированный предок), растягиваясь на её
+   ширину. Работает и в RTL: left/right задаём оба, кнопочный якорь не участвует. */
+@media (max-width: 640px) {
+  .top-bar .search-bar, .top-bar .cal-bar { position: static; }
+  .top-bar .search-panel, .top-bar .calendar-panel,
+  /* RTL-строка обязана повторяться: правило html[dir=rtl] (строка ~647) специфичнее
+     и возвращало right:auto — панель разъезжалась на 440px за ПРАВЫЙ край. */
+  html[dir="rtl"] .top-bar .search-panel, html[dir="rtl"] .top-bar .calendar-panel {
+    left: 0; right: 0; width: auto; max-width: none;
+  }
+  /* Вторая строка шапки на телефоне держалась ради ОДНОЙ ссылки analytics — а она
+     и так есть в бургере (nav-more-panel). Ссылку прячем, луну темы поднимаем в
+     первую строку к правому краю (в RTL — к левому, inset-inline сам разворачивает);
+     .top-bar sticky = позиционированный предок. Владелец 2026-07-31: «всё поехало». */
+  .top-bar .nav-links { display: none; }
+  .top-bar .header-right { position: absolute; top: 10px; inset-inline-end: 12px; }
+}
