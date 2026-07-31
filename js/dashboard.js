@@ -17,7 +17,10 @@
               topLaws:'Ключевые законы', engagement:'Вовлечённость (данные сайта)', views:'просмотров',
               likes:'лайков', dislikes:'дизлайков', comments:'откликов', viewsByType:'Просмотры по типу',
               viewsByDevice:'Просмотры по устройству', reactions:'Реакции', lawTypes:'Типы законов',
-              eArticle:'статьи', eTag:'теги', eLaw:'законы', eScientist:'учёные', eAuthor:'авторы' },
+              eArticle:'статьи', eTag:'теги', eLaw:'законы', eScientist:'учёные', eAuthor:'авторы',
+              pace:'Темп', d7:'за 7 дней', d30:'за 30 дней', perDayAvg:'в среднем в день',
+              lastArticle:'последняя статья', growth:'Рост корпуса', totalBy:'всего к',
+              ofThemFull:'из них полных' },
         en: { title:'Project dashboard', articles:'articles', full:'full', express:'express', laws:'laws',
               tags:'tags', sections:'sections', scientists:'scientists', authors:'authors', langs:'languages',
               nodes:'graph nodes', edges:'edges', activity:'Daily activity', dynamics:'Monthly dynamics',
@@ -29,13 +32,44 @@
               nodes:'nodos', edges:'aristas', activity:'Actividad diaria', dynamics:'Dinámica mensual',
               bySection:'Cobertura por área', kitchen:'Tras bambalinas: portadas y cobertura', covers:'Portadas',
               withCover:'con portada', noCover:'sin portada', topTags:'Etiquetas frecuentes', topSci:'Científicos frecuentes',
-              perDay:'artículos ese día', updated:'actualizado', loading:'Procesando datos…', none:'—' },
+              perDay:'artículos ese día', updated:'actualizado', loading:'Procesando datos…', none:'—',
+              topLaws:'Leyes clave', engagement:'Interacción (datos del sitio)', views:'vistas',
+              likes:'me gusta', dislikes:'no me gusta', comments:'respuestas', viewsByType:'Vistas por tipo',
+              viewsByDevice:'Vistas por dispositivo', reactions:'Reacciones', lawTypes:'Tipos de leyes',
+              eArticle:'artículos', eTag:'etiquetas', eLaw:'leyes', eScientist:'científicos', eAuthor:'autores',
+              pace:'Ritmo', d7:'últimos 7 días', d30:'últimos 30 días', perDayAvg:'al día de media',
+              lastArticle:'último artículo', growth:'Crecimiento del corpus', totalBy:'total hasta',
+              ofThemFull:'de ellos completos' },
         ar: { title:'لوحة المشروع', articles:'مقالات', full:'كاملة', express:'سريعة', laws:'قوانين',
               tags:'وسوم', sections:'أقسام', scientists:'علماء', authors:'مؤلفين', langs:'لغات',
               nodes:'عقدة', edges:'حافة', activity:'النشاط اليومي', dynamics:'الديناميكية الشهرية',
               bySection:'التغطية حسب المجال', kitchen:'من الكواليس: الأغلفة والتغطية', covers:'الأغلفة',
               withCover:'بغلاف', noCover:'بدون غلاف', topTags:'وسوم متكررة', topSci:'علماء متكررون',
-              perDay:'مقالات في ذلك اليوم', updated:'حُدّث', loading:'نُعالج البيانات…', none:'—' }
+              perDay:'مقالات في ذلك اليوم', updated:'حُدّث', loading:'نُعالج البيانات…', none:'—',
+              topLaws:'قوانين أساسية', engagement:'التفاعل (بيانات الموقع)', views:'مشاهدات',
+              likes:'إعجابات', dislikes:'عدم إعجاب', comments:'ردود', viewsByType:'المشاهدات حسب النوع',
+              viewsByDevice:'المشاهدات حسب الجهاز', reactions:'التفاعلات', lawTypes:'أنواع القوانين',
+              eArticle:'مقالات', eTag:'وسوم', eLaw:'قوانين', eScientist:'علماء', eAuthor:'مؤلفون',
+              pace:'الوتيرة', d7:'خلال 7 أيام', d30:'خلال 30 يومًا', perDayAvg:'يوميًا في المتوسط',
+              lastArticle:'آخر مقالة', growth:'نمو المجموعة', totalBy:'المجموع بحلول', ofThemFull:'منها كاملة' },
+        // Французский появился пятым языком позже дашборда, и до сих пор весь его текст
+        // приезжал из английского фолбэка — читатель видел «Daily activity» на французской
+        // странице. Ключи те же, что у остальных.
+        fr: { title:'Tableau de bord du projet', articles:'articles', full:'complets', express:'express',
+              laws:'lois', tags:'tags', sections:'sections', scientists:'scientifiques', authors:'auteurs',
+              langs:'langues', nodes:'nœuds', edges:'arêtes', activity:'Activité quotidienne',
+              dynamics:'Dynamique mensuelle', bySection:'Couverture par domaine',
+              kitchen:'Dans les coulisses : illustrations et couverture', covers:'Illustrations',
+              withCover:'avec couverture', noCover:'sans couverture', topTags:'Tags fréquents',
+              topSci:'Scientifiques fréquents', perDay:'articles ce jour-là', updated:'mis à jour',
+              loading:'Traitement des données…', none:'—', topLaws:'Lois clés',
+              engagement:'Engagement (données du site)', views:'vues', likes:'j’aime',
+              dislikes:'je n’aime pas', comments:'retours', viewsByType:'Vues par type',
+              viewsByDevice:'Vues par appareil', reactions:'Réactions', lawTypes:'Types de lois',
+              eArticle:'articles', eTag:'tags', eLaw:'lois', eScientist:'scientifiques', eAuthor:'auteurs',
+              pace:'Rythme', d7:'sur 7 jours', d30:'sur 30 jours', perDayAvg:'par jour en moyenne',
+              lastArticle:'dernier article', growth:'Croissance du corpus', totalBy:'total au',
+              ofThemFull:'dont complets' }
     })[window.lang] || null;
     // Английская карта — база-фолбэк: любой ключ, которого нет в языковой карте (напр. v2-подписи
     // добавлены только в ru/en), берётся отсюда, чтобы не было "undefined".
@@ -48,7 +82,9 @@
         engagement:'Engagement (site data)', views:'views', likes:'likes', dislikes:'dislikes',
         comments:'feedback', viewsByType:'Views by type', viewsByDevice:'Views by device',
         reactions:'Reactions', lawTypes:'Law types', eArticle:'articles', eTag:'tags', eLaw:'laws',
-        eScientist:'scientists', eAuthor:'authors', topLaws:'Key laws' };
+        eScientist:'scientists', eAuthor:'authors', topLaws:'Key laws',
+        pace:'Pace', d7:'last 7 days', d30:'last 30 days', perDayAvg:'per day on average',
+        lastArticle:'latest article', growth:'Corpus growth', totalBy:'total by', ofThemFull:'of them full' };
     var T = Object.assign({}, DEFAULT, L || {});
 
     var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
@@ -86,7 +122,14 @@
             if (a.date) { byDay[a.date] = (byDay[a.date] || 0) + 1;
                 var m = a.date.slice(0, 7); if (!byMonth[m]) byMonth[m] = { full: 0, express: 0 };
                 byMonth[m][a.express ? 'express' : 'full']++; }
-            (a.categories || []).slice(0, 1).forEach(function (c) { var p = c.split('.')[0]; bySection[p] = (bySection[p] || 0) + 1; });
+            // По разделу считаем не только «сколько», но и «сколько из них полных»: раздел
+            // с 300 экспрессами и разделом с 300 разборами — разные вещи, а полоса была одна.
+            (a.categories || []).slice(0, 1).forEach(function (c) {
+                var p = c.split('.')[0];
+                if (!bySection[p]) bySection[p] = { total: 0, full: 0 };
+                bySection[p].total++;
+                if (!a.express) bySection[p].full++;
+            });
             (a.tags || []).forEach(function (t) { if (t) tagCount[t] = (tagCount[t] || 0) + 1; });
             (a.scientists || []).forEach(function (s) { if (s) sciCount[s] = (sciCount[s] || 0) + 1; });
         });
@@ -110,6 +153,30 @@
             kpi(nL, T.laws) + kpi(nT, T.tags) + kpi(nSec, T.sections) +
             kpi(nS, T.scientists) + kpi(nAu, T.authors) + kpi(nLang, T.langs) +
             '</div>';
+
+        // ── Темп ──────────────────────────────────────────────
+        // Общие счётчики отвечают «сколько накопили», но не «идёт ли работа сейчас»: корпус
+        // в две тысячи статей выглядит одинаково и когда мы пишем каждый день, и когда встали
+        // неделю назад. Отсчёт — от сегодняшнего дня читателя, а не от последней сборки.
+        function iso(d) { return new Date(d).toISOString().slice(0, 10); }
+        var todayMs = Date.now();
+        var since7 = iso(todayMs - 7 * 864e5), since30 = iso(todayMs - 30 * 864e5);
+        var n7 = 0, n30 = 0, lastDate = '';
+        arts.forEach(function (a) {
+            if (!a.date) return;
+            if (a.date > since7) n7++;
+            if (a.date > since30) n30++;
+            if (a.date > lastDate) lastDate = a.date;
+        });
+        function kpiText(text, label, sub) {
+            return '<div class="kpi"><div class="kpi-n kpi-n-sm">' + esc(text) + '</div>' +
+                '<div class="kpi-l">' + esc(label) + '</div>' + (sub ? '<div class="kpi-s">' + sub + '</div>' : '') + '</div>';
+        }
+        html += '<div class="dash-block"><h2>' + esc(T.pace) + '</h2><div class="kpi-grid">' +
+            kpi(n7, T.d7) + kpi(n30, T.d30) +
+            kpi(Math.round(n30 / 30 * 10) / 10, T.perDayAvg) +
+            kpiText(lastDate || T.none, T.lastArticle) +
+            '</div></div>';
 
         // ── Тепловая карта по дням (месяц-строка × дни) ────────
         var months = Object.keys(byMonth).sort().reverse();
@@ -148,15 +215,49 @@
             ' <span class="lg lg-e"></span>' + esc(T.express) + '</div></div>';
         html += dyn;
 
+        // ── Рост корпуса (накопительно) ────────────────────────
+        // Столбики по месяцам показывают «сколько сделали в июле», но не отвечают на вопрос,
+        // который задаёт каждый, кто видит проект впервые: он вообще растёт? Накопительная
+        // кривая отвечает одним взглядом — и заодно видно, когда темп менялся.
+        var asc = months.slice().reverse();
+        var cum = 0;
+        var pts = asc.map(function (m) { cum += byMonth[m].full + byMonth[m].express; return { m: m, v: cum }; });
+        if (pts.length > 1) {
+            var W = 620, H = 150, PL = 6, PB = 20, PT = 8;
+            var maxV = pts[pts.length - 1].v || 1;
+            var xy = pts.map(function (p, i) {
+                return [PL + i * (W - 2 * PL) / (pts.length - 1),
+                        PT + (H - PT - PB) * (1 - p.v / maxV)];
+            });
+            var line = xy.map(function (p, i) { return (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join(' ');
+            var area = line + ' L' + xy[xy.length - 1][0].toFixed(1) + ' ' + (H - PB) + ' L' + PL + ' ' + (H - PB) + ' Z';
+            var dots = xy.map(function (p, i) {
+                return '<circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="2.5" fill="var(--cyan)">' +
+                    '<title>' + pts[i].m + ': ' + pts[i].v.toLocaleString() + '</title></circle>';
+            }).join('');
+            html += '<div class="dash-block"><h2>' + esc(T.growth) + '</h2>' +
+                '<svg class="growth-svg" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" role="img">' +
+                '<path d="' + area + '" fill="color-mix(in srgb, var(--cyan) 16%, transparent)"/>' +
+                '<path d="' + line + '" fill="none" stroke="var(--cyan)" stroke-width="2" ' +
+                'stroke-linejoin="round" stroke-linecap="round"/>' + dots + '</svg>' +
+                '<div class="growth-legend"><span>' + esc(pts[0].m) + '</span>' +
+                '<span><b>' + maxV.toLocaleString() + '</b> ' + esc(T.totalBy) + ' ' + esc(pts[pts.length - 1].m) + '</span></div></div>';
+        }
+
         // ── Охват по разделам ──────────────────────────────────
-        var secArr = Object.keys(bySection).map(function (k) { return [k, bySection[k]]; })
+        var secArr = Object.keys(bySection).map(function (k) { return [k, bySection[k].total, bySection[k].full]; })
             .sort(function (a, b) { return b[1] - a[1]; }).slice(0, 14);
         var maxSec = secArr.length ? secArr[0][1] : 1;
         var sec = '<div class="dash-block"><h2>' + esc(T.bySection) + '</h2><div class="hbars">';
         secArr.forEach(function (r) {
-            sec += '<div class="hbar"><span class="hbar-l">' + esc(r[0]) + '</span>' +
-                '<span class="hbar-t"><span class="hbar-fill" style="width:' + Math.round(100 * r[1] / maxSec) + '%"></span></span>' +
-                '<span class="hbar-n">' + r[1] + '</span></div>';
+            // Две полосы в одном жёлобе: вся охра — сколько статей в разделе, циан поверх —
+            // сколько из них полных разборов. Ширины считаются от одного максимума, поэтому
+            // разделы сравнимы между собой, а не каждый сам с собой.
+            sec += '<div class="hbar" title="' + esc(r[0]) + ': ' + r[1] + ' · ' + r[2] + ' ' + esc(T.full) + '">' +
+                '<span class="hbar-l">' + esc(r[0]) + '</span>' +
+                '<span class="hbar-t"><span class="hbar-fill" style="width:' + Math.round(100 * r[1] / maxSec) + '%"></span>' +
+                '<span class="hbar-fill hbar-fill-full" style="width:' + Math.round(100 * r[2] / maxSec) + '%"></span></span>' +
+                '<span class="hbar-n">' + r[1] + '<i class="hbar-sub">' + r[2] + '</i></span></div>';
         });
         sec += '</div></div>';
         html += sec;
@@ -290,7 +391,10 @@
                       sec: 'Secciones: tomadas / total', note: 'Solo cubrimos una fracción del material con licencia abierta.' },
                 ar: { h: 'تغطية الأرشيف · 2025–2026', dump: 'المجموع في arXiv', take: 'يمكننا أخذها (رخصة مفتوحة)',
                       done: 'عالجنا', sub: '{e} سريع · {f} كامل', lic: 'الرخص في arXiv',
-                      sec: 'أهم الأقسام: مأخوذ / الكل', note: 'لم نغطِّ سوى جزء يسير من المتاح برخصة مفتوحة.' }
+                      sec: 'أهم الأقسام: مأخوذ / الكل', note: 'لم نغطِّ سوى جزء يسير من المتاح برخصة مفتوحة.' },
+                fr: { h: 'Couverture de l’archive · 2025–2026', dump: 'total sur arXiv', take: 'accessible (licence ouverte)',
+                      done: 'traités', sub: '{e} express · {f} complets', lic: 'Licences sur arXiv',
+                      sec: 'Principales sections : pris / total', note: 'Nous n’avons couvert qu’une fraction du matériel sous licence ouverte — il y en a pour des années.' }
             })[window.lang] || null;
             CL = CL || { h: 'Archive coverage · 2025–2026', dump: 'total on arXiv', take: 'we can take', done: 'processed',
                          sub: '{e} express · {f} full', lic: 'Licenses', sec: 'Top sections', note: '' };
