@@ -19,6 +19,9 @@ let currentVersion = (function() {
 if (currentVersion === 'mini') currentVersion = 'popular';
 // Эффективная версия для выборки статей: мини берёт popular-статьи.
 function effVersion() { return currentVersion === 'mini' ? 'popular' : currentVersion; }
+// Наружу — чтобы scroll.js мог сверить, про тот ли уровень чтения общий индекс, прежде чем
+// брать его вместо своего: иначе на advanced-странице подписи приехали бы из popular.
+window.effVersion = effVersion;
 window.__favoritesPage = /\/favorites(\.html)?([?#]|$)/.test(location.pathname);
 
 // Тёмная тема: применяем сохранённый выбор как можно раньше, чтобы не мигало светлым.
