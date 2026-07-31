@@ -1351,9 +1351,9 @@ def generate_index_page(lang):
         version_toggle_html=""
     )
     base = Path(LANG_DIR) / lang
-    (base / "index.html").write_text(html, encoding="utf-8")
+    _write_text_retry(base / "index.html", html)
     # Вкладка «Избранное» — тот же шаблон/лента; search.js показывает favorites по URL (клиент, localStorage).
-    (base / "favorites.html").write_text(html, encoding="utf-8")
+    _write_text_retry(base / "favorites.html", html)
 
 
 def generate_about_page(lang):
@@ -2702,7 +2702,7 @@ def generate_archive_page(lang):
 <script src="/js/icons.js?v={asset_ver()}"></script>
 <script src="/js/search.js?v={asset_ver()}"></script>
 <script src="/js/dashboard.js?v={asset_ver()}"></script></body></html>'''
-    (Path(LANG_DIR) / lang / "archive" / "index.html").write_text(html, encoding="utf-8")
+    _write_text_retry(Path(LANG_DIR) / lang / "archive" / "index.html", html)
 
 
 ANALYTICS_TITLE = {"ru": "Карта проекта", "en": "Project map", "es": "Mapa del proyecto",
@@ -2737,7 +2737,7 @@ def generate_analytics_page(lang):
 <script src="/js/search.js?v={asset_ver()}"></script>
 <script src="/js/analytics.js?v={asset_ver()}"></script></body></html>'''
     (Path(LANG_DIR) / lang / "analytics").mkdir(parents=True, exist_ok=True)
-    (Path(LANG_DIR) / lang / "analytics" / "index.html").write_text(html, encoding="utf-8")
+    _write_text_retry(Path(LANG_DIR) / lang / "analytics" / "index.html", html)
 
 
 def compute_connectivity_gaps():
@@ -2949,7 +2949,7 @@ table{{border-collapse:collapse;font-size:13px;width:100%}}</style></head><body>
 <h2>Целостность</h2>{warn}
 <h2>Связность сущностей (тег↔закон↔учёный)</h2>{connectivity_html}
 </body></html>'''
-    Path("status.html").write_text(html, encoding="utf-8")
+    _write_text_retry(Path("status.html"), html)
     print(f"  📊 status.html ({total} статей, {authors_n} авторов)")
 
 
@@ -2992,11 +2992,11 @@ def generate_sitemaps():
         for tid in tags_graph:
             urls.append(f"{SITE_URL}/{LANG_DIR}/{lang}/tags/{tid}.html")
         fn = f"sitemap-{lang}.xml"
-        Path(fn).write_text(urlset(urls), encoding="utf-8")
+        _write_text_retry(Path(fn), urlset(urls))
         made.append(fn)
     index = ('<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
              + "".join(f"<sitemap><loc>{SITE_URL}/{f}</loc></sitemap>" for f in made) + "</sitemapindex>")
-    Path("sitemap.xml").write_text(index, encoding="utf-8")
+    _write_text_retry(Path("sitemap.xml"), index)
     print(f"  🗺️ Sitemaps: {', '.join(made)} + sitemap.xml")
 
 
@@ -3031,7 +3031,7 @@ def generate_feeds(limit=50):
             f'<id>{SITE_URL}/{LANG_DIR}/{lang}/</id><updated>{updated}</updated>{entries}</feed>'
         )
         fn = f"feed-{lang}.xml"
-        Path(fn).write_text(feed, encoding="utf-8")
+        _write_text_retry(Path(fn), feed)
         made.append(fn)
     if made:
         print(f"  📡 Feeds: {', '.join(made)}")
