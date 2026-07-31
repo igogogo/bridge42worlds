@@ -265,6 +265,15 @@ function quotaLimitsFor(env, user) {
 
 // Turnstile — бесплатная замена капчи от Cloudflare. Для человека обычно невидима, для
 // скрипта — стена. Проверяется на сервере: без проверки виджет на странице не значит ничего.
+// Дверь для проверки (задача круга 4: «дать QA способ проверить вход живьём»). Снимает
+// ТОЛЬКО капчу — нормы, предел по адресу и потолок проекта работают как для всех, иначе
+// это была бы не дверь для своих, а дыра. Заголовок x-b42-dev со значением секрета
+// DEV_BYPASS; секрета нет — двери нет (как и у капчи, fail-closed).
+function devBypass(env, request) {
+  const s = env.DEV_BYPASS;
+  return !!s && request.headers.get("x-b42-dev") === s;
+}
+
 async function turnstileOk(env, token, ip) {
   // Отсутствие секрета — это НЕ повод пропустить. Раньше здесь стоял `return true`, и любая
   // потеря секрета (не выложили, опечатались в имени, снесли при переезде) молча снимала
@@ -469,7 +478,8 @@ async function handleOrder(request, env) {
   // поэтому здесь оба рубежа обязательны. Интерфейса у неё пока нет, ломать нечего.
   const ipOk = await ipGuard(env, request);
   if (!ipOk.ok) return Response.json({ error: ipOk.error }, { status: ipOk.code });
-  if (!(await turnstileOk(env, body.turnstile, request.headers.get("cf-connecting-ip")))) {
+  if (!devBypass(env, request) &&
+      !(await turnstileOk(env, body.turnstile, request.headers.get("cf-connecting-ip")))) {
     return Response.json({ error: "captcha_failed" }, { status: 403 });
   }
 
@@ -709,6 +719,169 @@ async function translateTitles(env, results, lang) {
   }));
 }
 
+// ── Бот-исследователь (/api/ask) ──────────────────────────────────
+// Вопрос → перевод в английский → вектор → пять наших статей → ответ модели СТРОГО
+// по найденному, со ссылками. Правило проекта: ответ без ссылки на наш материал
+// не показываем вовсе. Мы отличаемся от болталки ровно возможностью проверить.
+//
+// Правило держится КОДОМ, а не уговором в промпте: модель нарушает инструкцию тем чаще,
+// чем интереснее вопрос (решение ML). Поэтому после ответа мы вычитаем из него пометки
+// [id], сверяем с тем, что реально нашли, и ответ без единой годной пометки не отдаём.
+const ASK_TOP_K = 5;
+
+// Порог «в базе про это нет» — настройкой, а не константой: ML выведет настоящее число
+// из прогона 800 вопросов, и менять его выкладкой кода было бы неправильно.
+//
+// Почему по умолчанию 0,50, а не 0,60 из записки ML. Число 0,60 бралось на индексе по
+// РУССКОМУ тексту. Индекс с тех пор пересобран по английскому (решение владельца), запрос
+// переводится — и оценки закономерно просели: замер 2026-07-31 на заведомо «нашем» вопросе
+// про рождение нейтронных звёзд дал 0,556–0,576, то есть порог 0,60 отсекал верные ответы
+// целиком, и бот на любой вопрос отвечал «в базе нет». Ставлю 0,50 — тоже до прогона 800.
+function askMinScore(env) {
+  const v = Number(env.ASK_MIN_SCORE);
+  return Number.isFinite(v) && v > 0 ? v : 0.50;
+}
+
+function askSystemPrompt(sources, question) {
+  const context = sources.map((s) =>
+    `[${s.id}] ${s.title}\n${s.text}`).join("\n\n---\n\n");
+  return { context, question };
+}
+
+async function handleAsk(request, env) {
+  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
+  if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405 });
+  if (!env.VECTORIZE || !env.AI) return Response.json({ error: "not_configured" }, { status: 503 });
+  if (!env.DEEPSEEK_API_KEY) return Response.json({ error: "no_key" }, { status: 503 });
+
+  let body = {};
+  try { body = await request.json(); } catch { return Response.json({ error: "bad_json" }, { status: 400 }); }
+
+  const ipOk = await ipGuard(env, request);
+  if (!ipOk.ok) return Response.json({ error: ipOk.error }, { status: ipOk.code });
+  if (!devBypass(env, request) &&
+      !(await turnstileOk(env, body.turnstile, request.headers.get("cf-connecting-ip")))) {
+    return Response.json({ error: "captcha_failed" }, { status: 403 });
+  }
+
+  const q = String(body.question || "").trim().slice(0, 500);
+  if (q.length < 3) return Response.json({ error: "question_too_short" }, { status: 400 });
+  const lang = ["ru", "en", "es", "ar"].includes(body.lang) ? body.lang : "ru";
+
+  const who = await identify(request, env);
+  const spent = await quotaSpend(env, who.uid, 1, who.lim);
+  if (!spent.ok) {
+    return Response.json({ error: spent.error, dayLeft: spent.dayLeft, weekLeft: spent.weekLeft },
+      { status: spent.code });
+  }
+
+  // Ищем так же, как обычный поиск: индекс построен по английскому, поэтому вопрос
+  // сначала переводим. Иначе сравниваем разноязычные вектора и теряем термины.
+  let queryEn = q;
+  if (lang !== "en") {
+    const t = await translateText(env, q, "en");
+    if (t) queryEn = t;
+  }
+  let matches = [];
+  try {
+    const emb = await env.AI.run(SEARCH_MODEL, { text: [queryEn] });
+    const found = await env.VECTORIZE.query(emb.data[0], {
+      topK: ASK_TOP_K, returnMetadata: "all", namespace: "ours",
+    });
+    matches = (found.matches || []).filter((m) => m.score >= askMinScore(env));
+  } catch {
+    return Response.json({ error: "search_failed" }, { status: 502 });
+  }
+
+  // Ничего похожего — честное «в базе нет». Это правильный ответ, а не неудача:
+  // придуманный ответ дороже отсутствующего.
+  if (!matches.length) {
+    return Response.json({ answer: null, nothing_found: true, sources: [],
+      dayLeft: spent.dayLeft }, { headers: { "cache-control": "no-store" } });
+  }
+
+  // Материалы для ответа — готовые аннотации на языке читателя (разложены в KV
+  // скриптом context_build.py). Переводить нечего: они написаны на всех четырёх.
+  const sources = [];
+  for (const m of matches) {
+    const raw = await env.TOKENS.get(`ctx:${m.id}:${lang}`);
+    if (!raw) continue;
+    try {
+      const c = JSON.parse(raw);
+      sources.push({ id: m.id, title: c.title, text: c.text, url: c.url,
+                     date: c.date, score: Math.round(m.score * 1000) / 1000 });
+    } catch { /* битая запись — просто пропускаем источник */ }
+  }
+  if (!sources.length) {
+    return Response.json({ answer: null, nothing_found: true, sources: [],
+      dayLeft: spent.dayLeft }, { headers: { "cache-control": "no-store" } });
+  }
+
+  const { context, question } = askSystemPrompt(sources, q);
+  const prompt = (env.ASK_PROMPT || ASK_PROMPT_FALLBACK)
+    .replace("{context}", context).replace("{question}", question);
+
+  let answer;
+  try {
+    const r = await fetch("https://api.deepseek.com/chat/completions", {
+      method: "POST",
+      headers: { "content-type": "application/json",
+                 authorization: `Bearer ${env.DEEPSEEK_API_KEY}` },
+      body: JSON.stringify({
+        model: env.DEEPSEEK_MODEL || "deepseek-v4-flash",
+        messages: [{ role: "user", content: prompt }],
+        temperature: 0.3, max_tokens: 700, thinking: { type: "disabled" },
+      }),
+    });
+    if (!r.ok) return Response.json({ error: "upstream", status: r.status }, { status: 502 });
+    const d = await r.json();
+    answer = d?.choices?.[0]?.message?.content?.trim();
+  } catch {
+    return Response.json({ error: "model_failed" }, { status: 502 });
+  }
+  if (!answer) return Response.json({ error: "empty_answer" }, { status: 502 });
+
+  // Сверка ссылок кодом. Берём пометки [id] из ответа и оставляем только те, что есть
+  // среди найденных: выдуманный идентификатор выглядит для читателя так же убедительно,
+  // как настоящий, и именно поэтому его нельзя пропускать.
+  const known = new Set(sources.map((s) => s.id));
+  const cited = new Set();
+  for (const mm of answer.matchAll(/\[([0-9]{4}\.[0-9]{4,5}(?:v\d+)?)\]/g)) {
+    if (known.has(mm[1])) cited.add(mm[1]);
+  }
+  if (!cited.size) {
+    // Модель ответила «из головы». Отдаём не её ответ, а честное «нет» плюс найденное —
+    // пусть читатель сам решит, годится ли это.
+    return Response.json({
+      answer: null, unsupported: true, sources: sources.map(shortSource),
+      dayLeft: spent.dayLeft,
+    }, { headers: { "cache-control": "no-store" } });
+  }
+
+  return Response.json({
+    answer,
+    sources: sources.filter((s) => cited.has(s.id)).map(shortSource),
+    dayLeft: spent.dayLeft, leftToday: spent.dayLeft,
+  }, { headers: { "cache-control": "no-store" } });
+}
+
+function shortSource(s) {
+  return { id: s.id, title: s.title, url: s.url, date: s.date, score: s.score };
+}
+
+// Запасной промпт на случай, если настройка не выложена. Основной живёт в
+// data/prompts/ask-answer.txt (его пишет ML) и кладётся в переменную ASK_PROMPT.
+const ASK_PROMPT_FALLBACK = `Отвечай ТОЛЬКО по материалам ниже.
+Каждое утверждение заканчивай пометкой источника в квадратных скобках, например [2410.01625].
+Утверждение без пометки запрещено. Если ответа в материалах нет — скажи это прямо одной фразой.
+Отвечай на языке вопроса, три-пять предложений, без вступлений.
+
+МАТЕРИАЛЫ
+{context}
+
+ВОПРОС
+{question}`;
+
 async function handleSearch(request, env) {
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
   if (!env.VECTORIZE || !env.AI) {
@@ -815,7 +988,8 @@ async function handleTutor(request, env) {
   // по адресу бесполезен — там адресов тысячи.
   const ipOk = await ipGuard(env, request);
   if (!ipOk.ok) return Response.json({ error: ipOk.error }, { status: ipOk.code });
-  if (!(await turnstileOk(env, body.turnstile, request.headers.get("cf-connecting-ip")))) {
+  if (!devBypass(env, request) &&
+      !(await turnstileOk(env, body.turnstile, request.headers.get("cf-connecting-ip")))) {
     return Response.json({ error: "captcha_failed" }, { status: 403 });
   }
 
@@ -901,6 +1075,7 @@ export default {
     if (url.pathname === "/api/tutor/issue") return withCors(await handleIssue(request, env));
     if (url.pathname === "/api/tutor") return withCors(await handleTutor(request, env));
     if (url.pathname === "/api/search") return withCors(await handleSearch(request, env));
+    if (url.pathname === "/api/ask") return withCors(await handleAsk(request, env));
     if (url.pathname === "/api/quota") return withCors(await handleQuota(request, env));
     if (url.pathname === "/api/auth/google") return handleGoogleStart(request, env);
     if (url.pathname === "/api/auth/google/callback") return handleGoogleCallback(request, env);
