@@ -933,32 +933,40 @@ a.cat-badge:hover { color: var(--link); border-color: var(--link); }
 /* Тот же язык, что у .express-badge — контур, капс, разрядка букв — просто мельче под узкую колонку. */
 /* Окаймление плашек — жирнее и контрастнее, фон по-прежнему прозрачный (юзер-фидбек
    2026-07-15: "жирнее окаймление... убери фон совсем контраст добавь"). */
-.article-side .side-tag {
-    display: block; font-size: 9px; font-weight: 600; color: var(--muted);
-    background: transparent; border: 1.5px solid var(--muted); text-decoration: none;
+/* Форма плашки — одна на все три вида, различие только в цвете. Раньше это были три
+   почти одинаковых правила, и они уже начали расходиться. Скругление приведено к общей
+   пилюле: остальные плашки сайта (.related-tags a, .law-chip, .fb-chip) давно 999px,
+   а эти три оставались единственными углова́тыми — на глаз читались как чужие. */
+.article-side .side-tag,
+.article-side .side-law,
+.article-side .side-sci {
+    display: block; font-size: 9px; font-weight: 600; text-align: center;
+    background: transparent; text-decoration: none;
     text-transform: uppercase; letter-spacing: .3px;
-    padding: 3px 6px; margin-bottom: 3px; border-radius: 3px;
-    text-align: center; transition: all 0.15s;
+    padding: 3px 6px; margin-bottom: 3px; border-radius: 999px;
+    border: 1.5px solid currentColor; transition: all 0.15s;
 }
+/* На телефоне это единственные ссылки мельче шкалы касания (замер 375: 21,5 px против 44
+   у всех кнопок рядом) — попасть пальцем в такую колонку тяжело. Высоту даём шкалой,
+   размер шрифта поднимаем: 9 px в верхнем регистре на телефоне читается плохо. */
+@media (max-width: 640px) {
+    .article-side .side-tag,
+    .article-side .side-law,
+    .article-side .side-sci {
+        min-height: var(--tap-sm); display: flex; align-items: center; justify-content: center;
+        font-size: 11px; padding: 4px 12px; margin-bottom: var(--tap-gap, 8px);
+    }
+}
+.article-side .side-tag { color: var(--muted); }
 .article-side .side-tag:hover { background: transparent; border-color: var(--link); color: var(--link); }
 .article-side .side-tags-label, .article-side .side-laws-label, .article-side .side-sci-label {
     font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px;
     color: var(--soft); margin: 10px 0 4px; text-align: center; }
 .article-side > *:first-child { margin-top: 0; }
-.article-side .side-law {
-    display: block; font-size: 9px; font-weight: 600; color: #4a6a92; text-align: center;
-    background: transparent; border: 1.5px solid rgba(74,106,146,0.75);
-    text-decoration: none; text-transform: uppercase; letter-spacing: .3px;
-    padding: 3px 6px; margin-bottom: 3px; border-radius: 3px; transition: all 0.15s;
-}
+.article-side .side-law { color: #4a6a92; border-color: rgba(74,106,146,0.75); }
 .article-side .side-law:hover { background: transparent; border-color: var(--link); color: var(--link); }
 /* Учёные — сверху тегов/законов в той же колонке, зелёный тон как на графе знаний (SCI_COLOR). */
-.article-side .side-sci {
-    display: block; font-size: 9px; font-weight: 600; color: #2e7d32; text-align: center;
-    background: transparent; border: 1.5px solid rgba(46,125,50,0.75);
-    text-decoration: none; text-transform: uppercase; letter-spacing: .3px;
-    padding: 3px 6px; margin-bottom: 3px; border-radius: 3px; transition: all 0.15s;
-}
+.article-side .side-sci { color: #2e7d32; border-color: rgba(46,125,50,0.75); }
 .article-side .side-sci:hover { background: transparent; border-color: #2e7d32; color: #2e7d32; }
 
 /* ── Section navigation ───────── */
@@ -1071,7 +1079,7 @@ p { margin-bottom: 16px; color: var(--text); text-align: left; }
 .actions button {
     background: none; border: 1px solid var(--border);
     padding: 4px 12px; font-size: 13px; color: var(--soft);
-    cursor: pointer; font-family: inherit; border-radius: 4px; transition: all 0.15s;
+    cursor: pointer; font-family: inherit; border-radius: 999px; transition: all 0.15s;
 }
 .actions button:hover { border-color: #ccc; color: var(--muted); }
 .actions button.liked { color: var(--red); border-color: #fcc; }
@@ -1220,7 +1228,7 @@ html[dir="rtl"] .feedback .fb-title-row { justify-content: flex-start; }
    js/likes.js снимает [hidden] при открытии textarea. */
 .feedback .fb-row[hidden] { display: none; }
 .feedback .fb-row { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
-.feedback .fb-send { cursor: pointer; background: var(--accent, #4a90d9); color: #fff; border: none; border-radius: 6px; padding: 6px 14px; font-size: 13px; }
+.feedback .fb-send { cursor: pointer; background: var(--accent, #4a90d9); color: #fff; border: none; border-radius: 999px; padding: 6px 14px; font-size: 13px; }
 .feedback .fb-status { font-size: 12px; color: var(--muted, #888); }
 /* margin-top: auto — прижимает реакции к низу карточки (заполняет пустоту под коротким
    описанием, если картинка слева выше текста) вместо того чтобы висеть сразу под текстом. */
@@ -2310,10 +2318,13 @@ figcaption, .caption, .fig-caption, .mosaic-caption, .lightbox-caption {
 /* Уровни на карточке — сегментный переключатель. Ряд лежит на своей подложке, выбранный
    сегмент залит акцентом с белыми жирными черточками: видно сразу, какой уровень открыт,
    и не спутаешь с меню (юзер 2026-07-28). Знак — количество строк, то есть объём текста. */
+/* Скругление задаём пилюлей, а не числом: высота сегмента идёт по шкале касания и на
+   телефоне вырастает с 26 до 44 — фиксированные 13 px переставали быть половиной высоты,
+   и на мобильном сегмент читался прямоугольником рядом с круглыми кнопками (замер 375). */
 .lv-switch-card { display: inline-flex; gap: 2px; margin: 0 0 10px; max-width: none;
-  flex-wrap: nowrap; padding: 2px; border-radius: 15px; background: var(--tag-bg, rgba(46,138,160,.08)); }
+  flex-wrap: nowrap; padding: 2px; border-radius: 999px; background: var(--tag-bg, rgba(46,138,160,.08)); }
 .lv-switch-card .lv-btn { flex: none; min-height: 26px; padding: 0 11px; font-size: 11.5px;
-  border-radius: 13px; border: none; background: transparent; color: var(--muted);
+  border-radius: 999px; border: none; background: transparent; color: var(--muted);
   gap: 6px; font-weight: 600; letter-spacing: .005em; }
 .lv-switch-card .lv-btn .vs-ic { width: 13px; height: 13px; }
 .lv-switch-card .lv-btn:hover { color: var(--link); background: rgba(46,138,160,.10); }
@@ -2449,7 +2460,7 @@ html[data-theme="dark"] .an-stage {
 .entity-levels { margin: 14px 0 16px; }
 .entity-levels .lv-switch { max-width: none; gap: 6px; margin: 0; }
 .entity-levels .lv-btn { flex: none; min-height: 30px; padding: 0 13px; font-size: 12.5px;
-  border-radius: 15px; color: var(--muted); gap: 6px; }
+  border-radius: 999px; color: var(--muted); gap: 6px; }
 .entity-levels .lv-btn .vs-ic { width: 14px; height: 14px; }
 .entity-levels .lv-btn .lv-t { display: inline; }
 .entity-levels .lv-btn:hover { color: var(--link); border-color: var(--link); }
