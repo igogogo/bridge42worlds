@@ -242,6 +242,12 @@ TRANSLATE_ADVANCED = CONFIG.get("translate_advanced", True)
 
 REFINE = os.environ.get("REFINE") == "1" or CONFIG.get("refine", False)
 
+# Версия промпта «Аннотации» (data/prompts/abstract-adapt.txt). Поднимается ВРУЧНУЮ при
+# смысловой правке промпта: по ней build_article решает, реюзить старую аннотацию при
+# пересоздании статьи или считать заново. v2 — переписан 2026-07-31 (сухой пересказ →
+# наш голос; аннотация уходит на карточку в ленте и делает первое впечатление).
+ABSTRACT_PROMPT_V = 2
+
 # ── HTML ──
 _VALID_TAGS = None
 _VALID_SCI = None
@@ -1207,6 +1213,7 @@ def save_data_json(versions_ru, article, date_str, folder, translations=None, ca
         "cited_arxiv": article.get("cited_arxiv", []),
         "threads": (versions_ru.get("popular", {}).get("threads", "") or "")[:480],
         "abstract": abstract or {},
+        "abstract_v": ABSTRACT_PROMPT_V,   # каким промптом сделана — см. константу
         "thumbs": article.get("thumbs", 0),
         "refined": refined,
         "express": article.get("express", False),
@@ -3468,7 +3475,11 @@ def build_article(a, date_str, inputs, force=False, express=False, known_license
         # «Аннотация» из авторского arXiv-abstract — ТРИ регистра (popular/simple/advanced), + перевод
         # по языкам. Источник между прогонами не меняется (авторский абстракт той же версии статьи) —
         # реюзим и русскую, и переводы; переводим только языки, которых в prev не было.
-        prev_abstract = prev.get("abstract") or {}
+        # Реюз аннотации — ТОЛЬКО если она сделана текущим промптом. Промпт «Аннотации»
+        # переписан 2026-07-31 (был сухой пересказ структуры статьи, он же попадает на
+        # карточку в ленте и формировал первое впечатление); без версии реюз консервировал
+        # бы старый текст навсегда — статья апгрейдится, а аннотация остаётся прежней.
+        prev_abstract = (prev.get("abstract") or {}) if prev.get("abstract_v") == ABSTRACT_PROMPT_V else {}
         abstract_ru = prev_abstract.get(DEFAULT_LANG) or generate_abstract(a.get("summary", ""))
         if REFINE and abstract_ru and not express and not prev_abstract.get(DEFAULT_LANG):
             abstract_ru = refine_abstract(abstract_ru)
