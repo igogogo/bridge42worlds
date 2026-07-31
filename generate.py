@@ -391,9 +391,9 @@ def trivia_html(fun_fact, scifi="", lang=DEFAULT_LANG):
     и раньше маркеры печатались читателю сырыми — 1419 файлов (QA 2026-07-29)."""
     rows = []
     if fun_fact:
-        rows.append(f'<p class="fact">🎯 {parse_markers(fun_fact, lang)}</p>')
+        rows.append(f'<p class="fact">{parse_markers(fun_fact, lang)}</p>')
     if scifi:
-        rows.append(f'<p class="fact fact-scifi">🎬 {parse_markers(scifi, lang)}</p>')
+        rows.append(f'<p class="fact fact-scifi">{parse_markers(scifi, lang)}</p>')
     return f'<div class="fun-fact">{"".join(rows)}</div>' if rows else ""
 
 
@@ -1358,16 +1358,16 @@ def generate_tag_page(tag_id, lang):
         if tag_data.get("key_problems"):
             problems_and_fact_html += f'<p>{safe("; ".join(tag_data["key_problems"]))}</p>'
         if tag_data.get("fun_fact"):
-            problems_and_fact_html += f'<p class="fact">💡 {safe(tag_data["fun_fact"])}</p>'
+            problems_and_fact_html += f'<p class="fact fact-fun">{safe(tag_data["fun_fact"])}</p>'
         problems_and_fact_html += '</div>'
 
     fun_fact_html = ""
     if tag_data.get("fun_fact"):
-        fun_fact_html = f'<div class="fun-fact">💡 {safe(tag_data["fun_fact"])}</div>'
+        fun_fact_html = f'<div class="fun-fact">{safe(tag_data["fun_fact"])}</div>'
     fun_fact_popular_html = ""
     ff_pop = tag_data.get("fun_fact_popular") or tag_data.get("fun_fact", "")
     if ff_pop:
-        fun_fact_popular_html = f'<div class="fun-fact">💡 {safe(ff_pop)}</div>'
+        fun_fact_popular_html = f'<div class="fun-fact">{safe(ff_pop)}</div>'
 
     scientists_link_list = [scientist_link_or_text(s, lang) for s in tag_data.get("scientists", [])]
     scientists_section_html = related_row(loc["scientists"].rstrip(":"), scientists_link_list, "sci")
@@ -1770,8 +1770,8 @@ def generate_law_page(law_id, lang):
     mini_html = f'<p class="mini-desc">{safe(L["mini"])}</p>' if L.get("mini") else ""
     if L.get("practical_application"):
         mini_html += f'<div class="practical-app"><strong>{safe(loc["practical"])}:</strong> {safe(L["practical_application"])}</div>'
-    fun_fact_popular_html = f'<div class="fun-fact">💡 {safe(L.get("fun_fact_popular") or L.get("fun_fact", ""))}</div>' if (L.get("fun_fact_popular") or L.get("fun_fact")) else ""
-    fun_fact_html = f'<div class="fun-fact">💡 {safe(L.get("fun_fact", ""))}</div>' if L.get("fun_fact") else ""
+    fun_fact_popular_html = f'<div class="fun-fact">{safe(L.get("fun_fact_popular") or L.get("fun_fact", ""))}</div>' if (L.get("fun_fact_popular") or L.get("fun_fact")) else ""
+    fun_fact_html = f'<div class="fun-fact">{safe(L.get("fun_fact", ""))}</div>' if L.get("fun_fact") else ""
     problems = L.get("key_problems") or []
     problems_html = f'<div class="section"><h2>{safe(loc["problems"])}</h2><p>{safe("; ".join(problems))}</p></div>' if problems else ""
 
