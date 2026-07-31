@@ -971,7 +971,14 @@ function cardHTML(item) {
     // нужный размер уже задан в промпте генерации (data/prompts/adapt-abstract.txt: 350/550/900
     // символов на popular/simple/advanced), здесь всегда показываем как есть, целиком.
     // Мини — свой threads-текст, короче по своей природе, но и он не режется.
-    var bodyText = item.abstract || item.description || item.oneliner || '';
+    // ПОРЯДОК ВАЖЕН (владелец 2026-07-31: «такого текста близко у нас быть не должно»).
+    // Раньше первой шла аннотация — адаптация авторского abstract. Она сделана отдельным
+    // вызовом модели с брифом «сохрани суть и результаты», поэтому открывалась термином
+    // и читалась как паспорт статьи, тогда как description той же статьи написан нашим
+    // голосом, с аналогией. На карточке — витрина сайта — теперь наш голос: description,
+    // и только если его нет — аннотация. Промпт аннотации переписан тем же днём, но
+    // у 2110 уже сгенерированных статей она осталась старой; порядок чинит их бесплатно.
+    var bodyText = item.description || item.abstract || item.oneliner || '';
     var cat = (item.categories || [])[0] || '';
     var catName = (window.ARXIV_CAT_NAMES && ARXIV_CAT_NAMES[cat]) || cat;
     var catDesc = (window.ARXIV_CAT_DESC && ARXIV_CAT_DESC[cat]) || '';
