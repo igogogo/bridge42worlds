@@ -89,6 +89,30 @@ def sql(query, params=None):
     return d["result"][0].get("results", [])
 
 
+STUCK_MINUTES = 45      # дольше самого долгого честного заказа (генерация статьи ~10 мин)
+
+
+def revive_stuck():
+    """Возвращает в очередь заказы, застрявшие в `running`.
+
+    Находка разработчика 2026-07-31, и она серьёзнее, чем «потерялся один заказ»: если
+    исполнитель умер между взятием и завершением, строка остаётся `running` навсегда,
+    а частичный индекс дедупликации не отпускает пару (статья, язык). Значит повторный
+    заказ той же статьи склеится с мертвецом и будет ждать вечно — читатель нажимает
+    кнопку, мы отвечаем «уже в работе», и работа не идёт никогда.
+
+    Порог с запасом: 45 минут дольше любого честного заказа, поэтому живой прогон
+    у нас не отберут. Счётчик попыток не трогаем — он уже увеличен при взятии, и
+    безнадёжный заказ всё равно остановится по MAX_ATTEMPTS."""
+    edge = int(time.time() * 1000) - STUCK_MINUTES * 60_000
+    rows = sql("""UPDATE orders SET status='queued',
+                         error='исполнитель не завершил заказ — вернули в очередь'
+                   WHERE status='running' AND started_at < ? RETURNING id""", [edge])
+    if rows:
+        print(f"вернул в очередь зависших: {len(rows)}")
+    return len(rows)
+
+
 def claim_next():
     """Взять следующий заказ. Порядок тот же, что в индексе: приоритет, затем время."""
     rows = sql("""SELECT id, kind, payload, lang, attempts FROM orders
@@ -130,7 +154,15 @@ def do_translate(payload, lang):
         cwd=DATA_ROOT, env={**os.environ, "PYTHONIOENCODING": "utf-8"}).returncode
     if code != 0:
         raise RuntimeError(f"перевод завершился с кодом {code}")
-    return {"url": f"/lang/{to}/archive/{arxiv_id}/", "arxiv_id": arxiv_id, "lang": to}
+
+    # Адрес ищем по диску, как и в do_article. Раньше здесь собирался путь без даты —
+    # `/lang/{to}/archive/{id}/`, — а настоящий адрес всегда с датой. Разработчику это
+    # не мешало (он по ссылке не ходит), но любой следующий потребитель получил бы 404.
+    # Находка разработчика, 2026-07-31.
+    found = next(DATA_ROOT.glob(f"lang/ru/archive/*/{arxiv_id}"), None)
+    day = found.parent.name if found else None
+    url = f"/lang/{to}/archive/{day}/{arxiv_id}/" if day else None
+    return {"url": url, "arxiv_id": arxiv_id, "lang": to}
 
 
 def find_arxiv_paper(topic):
@@ -223,6 +255,9 @@ HANDLERS = {"translate": do_translate, "article": do_article, "ask": do_ask}
 
 
 def run_once(dry=False):
+    # Сначала подбираем брошенное, потом берём новое: иначе зависший заказ так и лежит,
+    # пока кто-нибудь не заметит его вручную — а заметит он его по жалобе читателя.
+    revive_stuck()
     o = claim_next()
     if not o:
         return False
@@ -268,10 +303,14 @@ if __name__ == "__main__":
             print("очередь пуста")
         sys.exit(0)
     print(f"исполнитель запущен, проверяю очередь раз в {POLL_SECONDS} с")
+    from heartbeat import beat
     while True:
         try:
             while run_once(a.dry):
                 pass
         except Exception as e:
             print(f"сбой прохода: {e}")
+        # Отмечаемся живыми ПОСЛЕ прохода, а не до: отметка должна означать «я работаю»,
+        # а не «я запустился». Сторож молчания в Worker проверяет её раз в сутки.
+        beat("queue")
         time.sleep(POLL_SECONDS)

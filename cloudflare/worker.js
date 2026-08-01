@@ -14,6 +14,16 @@ const IMMUTABLE = /\.(?:jpg|jpeg|png|webp|gif|svg|ico|css|js|woff2?|ttf|map)$/i;
 // сюда — см. обработчик fetch. Менять только вместе с маршрутами в wrangler.toml.
 const CANONICAL_HOST = "bridge42worlds.academy";
 
+// Фоновые сторожа на машине владельца. Пределы разные по цене молчания: письмо автора
+// ждать сутки нельзя (условие архитектора — 12 часов), заказ в очереди потерпит дольше.
+const WATCHERS = [
+  { key: "mail", title: "Сторож почты", maxHours: 12 },
+  { key: "queue", title: "Исполнитель очереди", maxHours: 24 },
+];
+
+// Сколько держим сырые события счётчика. Дальше чистит cron — см. scheduled().
+const EVENTS_KEEP_DAYS = 90;
+
 // ── Бот-тьютор (DeepSeek) ─────────────────────────────────────────
 // Ключ живёт ТОЛЬКО здесь, в секрете Worker'а (wrangler secret put DEEPSEEK_API_KEY) —
 // в статике его светить нельзя, поэтому браузер ходит к нам, а мы к DeepSeek.
@@ -1297,6 +1307,39 @@ export default {
       if (!home) problems.push("Главная страница отсутствует в хранилище.");
     } catch (e) {
       problems.push(`Хранилище недоступно: ${e.message}`);
+    }
+
+    // Молчание фоновых сторожей. Оба (очередь заказов и почта) держатся задачей
+    // планировщика на машине владельца и делают полезное молча: когда всё хорошо, они
+    // ничем себя не проявляют. Значит упавший процесс выглядит ровно как спокойный —
+    // и о смерти сторожа почты мы узнали бы от автора, чьё письмо никто не прочитал.
+    // Каждый пишет отметку в KV, здесь мы смотрим, не устарела ли она.
+    for (const w of WATCHERS) {
+      try {
+        const raw = env.TOKENS ? await env.TOKENS.get(`hb:${w.key}`) : null;
+        if (!raw) {
+          problems.push(`${w.title}: отметки «жив» нет вовсе — процесс не запущен?`);
+          continue;
+        }
+        const hours = Math.floor((Date.now() - Number(raw)) / 3600000);
+        if (hours >= w.maxHours) {
+          problems.push(`${w.title}: молчит ${hours} ч (предел ${w.maxHours}).`);
+        }
+      } catch (e) {
+        problems.push(`${w.title}: не смог проверить отметку — ${escapeHtml(e.message)}`);
+      }
+    }
+
+    // Чистка старого. Событий на каждый просмотр набегает много, и упрёмся мы не в место
+    // (10 ГБ на базу — это годы), а в скорость: COUNT(DISTINCT uid) по миллионам строк
+    // начнёт тормозить сводку раньше, чем закончится диск. Строка сегодня стоит минуту.
+    if (env.QUEUE) {
+      try {
+        const edge = new Date(Date.now() - EVENTS_KEEP_DAYS * 864e5).toISOString().slice(0, 10);
+        await env.QUEUE.prepare("DELETE FROM events WHERE day < ?").bind(edge).run();
+      } catch (e) {
+        problems.push(`Чистка событий не удалась: ${escapeHtml(e.message)}`);
+      }
     }
 
     if (problems.length) {
