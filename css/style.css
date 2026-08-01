@@ -2899,11 +2899,15 @@ body.b42-wait-open { overflow: hidden; }
     left: 0; right: 0; width: auto; max-width: none;
   }
   /* Вторая строка шапки на телефоне держалась ради ОДНОЙ ссылки analytics — а она
-     и так есть в бургере (nav-more-panel). Ссылку прячем, луну темы поднимаем в
-     первую строку к правому краю (в RTL — к левому, inset-inline сам разворачивает);
-     .top-bar sticky = позиционированный предок. Владелец 2026-07-31: «всё поехало». */
+     и так есть в бургере (nav-more-panel). Ссылку прячем, остальное (луна темы)
+     остаётся В ПОТОКЕ и прижимается к краю авто-отступом.
+     ВАЖНО: раньше здесь стоял position:absolute — и на странице графа, где в шапке
+     есть ещё и кнопка-гамбургер, блок лёг ПОВЕРХ неё: гамбургер визуально был,
+     а нажатие уходило в луну (владелец: «кнопка ничего не делает»). Абсолют в общей
+     шапке запрещён: состав шапки разный на разных страницах. */
+  .top-bar { flex-wrap: nowrap; }
   .top-bar .nav-links { display: none; }
-  .top-bar .header-right { position: absolute; top: 10px; inset-inline-end: 12px; }
+  .top-bar .header-right { margin-inline-start: auto; }
 }
 
 /* ── Плашка предзапуска «мост ещё строится» (v0.8, владелец 2026-07-31) ── */
@@ -2948,3 +2952,120 @@ body.b42-wait-open { overflow: hidden; }
 .beta-badge i { display: block; width: 34px; height: 6px; border-radius: 3px;
   background: var(--cyan, #2aa); max-width: 34px; }
 .beta-badge span { color: var(--muted); }
+
+/* ── Плашки-таблетки на телефоне: высота ниже, форма как на десктопе ──
+   Шкала касания подняла ВСЕ кнопки до 44 по узкой стороне, включая текстовые
+   таблетки (сортировка ленты, уровни чтения, чипы). У иконки 44×44 — квадрат,
+   это правильно; у таблетки с текстом высота 44 при боковых полях 5-8 пикселей
+   даёт короткий толстый брусок вместо узкой пилюли десктопа, и текст в нём
+   кажется прижатым кверху (владелец 2026-07-31: «форма расплывается, неаккуратно,
+   и это не то, что в десктопной версии»).
+   Решение: текстовым таблеткам ступень 38 (палец попадает уверенно, порог 44
+   считается по узкой стороне — а у них это ШИРИНА, она заведомо больше), боковые
+   поля возвращаем к десктопным пропорциям, текст центрируем явно. */
+@media (max-width: 640px) {
+  .feed-sort-btn, .lv-btn, .lv-btn.lv-compact, .lv-switch-card .lv-btn,
+  .entity-levels .lv-btn, .fb-chip, .dash-chip, .nav-express-toggle {
+    min-height: 38px;
+    padding-inline: 14px;
+    display: inline-flex; align-items: center; justify-content: center;
+    line-height: 1.15;
+  }
+  /* Ряд уровней делит ширину на троих — полям нужен потолок, иначе перенос */
+  .lv-switch .lv-btn { padding-inline: 10px; }
+}
+
+/* Знак «мы ещё в разработке» рядом с названием сайта — постоянный, в отличие от
+   карточки, которую можно закрыть. Кликабельный: открывает ту же карточку. */
+.beta-mark {
+  border: 1px solid var(--border); background: none; color: var(--muted);
+  font: 700 12px/1 monospace, monospace; cursor: pointer;
+  width: 20px; height: 20px; border-radius: 50%; padding: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  margin-inline-start: 6px; flex-shrink: 0; align-self: center;
+}
+.beta-mark:hover { color: var(--cyan, #2aa); border-color: var(--cyan, #2aa); }
+
+/* ── Плашки сущностей: тег / закон / учёный — форма различает тип ──
+   Владелец 2026-07-31: «должны быть аккуратные, формой различать тип; на мобильной
+   они огромные; теги полукруглые, законы более квадратные, учёные контрастные».
+
+   Почему одним блоком в конце файла: правила для этих трёх плашек были размазаны по
+   четырём местам (строки ~940, ~966, ~2102, ~2176) и спорили между собой за форму,
+   поля и выравнивание — тот самый класс «правило в двух местах разойдётся». Здесь
+   собран весь их вид; выше остаются только цвета-наследие, которые мы перекрываем.
+
+   Тип читается формой, а не только цветом: цвет отпадает при дальтонизме и в тёмной
+   теме, форма — нет. Цвета сохраняем прежние (охра — закон, зелёный — учёный),
+   они уже закреплены за сущностями на графе и в ленте. */
+.article-side .side-tag,
+.article-side .side-law,
+.article-side .side-sci {
+  display: block; text-align: center; line-height: 1.3;
+  font-size: 9px; font-weight: 600; letter-spacing: .3px; text-transform: uppercase;
+  padding: 4px 9px; margin-bottom: 4px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  border: 1.5px solid currentColor; background: transparent; text-decoration: none;
+  transition: background .15s, border-color .15s, color .15s;
+}
+/* ТЕГ — пилюля: самый частый и самый лёгкий вид связи */
+.article-side .side-tag { border-radius: 999px; color: var(--muted); }
+.article-side .side-tag:hover { color: var(--cyan); border-color: var(--cyan); }
+/* ЗАКОН — почти прямоугольник: закон «твёрже» тега, форма это и говорит */
+.article-side .side-law { border-radius: 6px; color: var(--law-color);
+  border-color: color-mix(in srgb, var(--law-color) 70%, transparent); }
+.article-side .side-law:hover { color: var(--law-color); border-color: var(--law-color);
+  background: color-mix(in srgb, var(--law-color) 10%, transparent); }
+/* УЧЁНЫЙ — заливка: человек среди понятий, его видно первым */
+.article-side .side-sci { border-radius: 999px;
+  color: var(--scientist-color); background: var(--scientist-bg);
+  border-color: color-mix(in srgb, var(--scientist-color) 45%, transparent); }
+.article-side .side-sci:hover { border-color: var(--scientist-color); }
+
+@media (max-width: 640px) {
+  /* Было: шкала касания поднимала их до 44 пикселей — колонка превращалась в стопку
+     огромных брусков. Порог 44 считается по УЗКОЙ стороне, а у плашки на телефоне
+     колонка широкая: палец попадает по ширине. Высоту возвращаем к аккуратной. */
+  .article-side .side-tag,
+  .article-side .side-law,
+  .article-side .side-sci {
+    min-height: 30px; display: flex; align-items: center; justify-content: center;
+    font-size: 10.5px; padding: 4px 12px; margin-bottom: 6px;
+  }
+}
+
+/* ── Те же три сущности, но в РЯДАХ связей (страницы тега/закона/учёного, низ статьи).
+   Класс проверен по всему дереву: плашки сущностей живут в двух видах — колонка
+   (.article-side .side-*) и ряд (.related-tags a). Колонку привели выше; ряд оставался
+   простыми текстовыми ссылками через «·», то есть один и тот же объект выглядел
+   по-разному на соседних страницах. Владелец 2026-07-31: «одно заметили — везде
+   поправили». Форма и цвет — те же, что в колонке: тег пилюля, закон прямоугольнее,
+   учёный с заливкой. */
+.related-tags { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.related-tags .sep { display: none; }        /* точки-разделители больше не нужны */
+.related-tags a {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 26px; padding: 3px 10px; border-radius: 999px;
+  font-size: 11.5px; line-height: 1.25; text-decoration: none;
+  border: 1.5px solid color-mix(in srgb, currentColor 55%, transparent);
+  color: var(--muted); transition: background .15s, border-color .15s, color .15s;
+}
+.related-tags a:hover { color: var(--cyan); border-color: var(--cyan); text-decoration: none; }
+.related-laws a { border-radius: 6px; color: var(--law-color); font-family: var(--mono);
+  border-style: solid !important; }
+.related-laws a:hover { color: var(--law-color); border-color: var(--law-color);
+  background: color-mix(in srgb, var(--law-color) 10%, transparent); }
+.related-sci a { color: var(--scientist-color) !important; background: var(--scientist-bg); }
+.related-sci a:hover { border-color: var(--scientist-color); }
+@media (max-width: 640px) { .related-tags a { min-height: 30px; font-size: 11px; } }
+
+/* Подписи «ТЕГИ / ЗАКОНЫ / УЧЁНЫЕ» над рядами убраны с экрана (владелец 2026-07-31:
+   «форма плашки должна сразу говорить, не занимай место разными словами»). Для
+   читалок и поиска они остаются в потоке — просто не видны: слепому читателю форма
+   ничего не скажет, ему нужен именно заголовок. */
+.article-side .side-tags-label,
+.article-side .side-laws-label,
+.article-side .side-sci-label {
+  position: absolute; width: 1px; height: 1px; margin: -1px;
+  padding: 0; border: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+}

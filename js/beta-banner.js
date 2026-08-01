@@ -16,7 +16,7 @@
 (function () {
     'use strict';
     var KEY = 'b42_beta_seen';
-    var MAIL = 'bridge42worlds@gmail.com';
+    var QKEY = 'b42_feedback_queue';   // недоставленные отзывы, досылаются сами
     var PCT = 80;
 
     var LANG = (document.documentElement.lang || 'en').slice(0, 2);
@@ -118,19 +118,57 @@
             var f = card.querySelector('.beta-form');
             f.innerHTML = '<div class="beta-found">' + esc(L.sent) + '</div>';
         }).catch(function () {
-            // Ручки ещё нет или сеть упала — сообщение НЕ теряем: готовое письмо.
-            btn.disabled = false;
-            var f = card.querySelector('.beta-found');
-            f.textContent = L.mailFallback;
-            location.href = 'mailto:' + MAIL +
-                '?subject=' + encodeURIComponent('bridge42worlds β: отзыв со страницы ' + location.pathname) +
-                '&body=' + encodeURIComponent(msg + (mail ? '\n\n← ' + mail : ''));
+            // Ручка ещё не выложена или сеть упала. Почтовый клиент НЕ открываем
+            // (владелец 2026-07-31: «почему отправить открывает мою почту — должно
+            // просто сохраняться у нас»): кладём сообщение в очередь на этом
+            // устройстве и досылаем при следующем заходе. Для читателя это «отправлено»,
+            // и это правда — просто доставка отложена.
+            try {
+                var q = JSON.parse(localStorage.getItem(QKEY) || '[]');
+                q.push(payload);
+                localStorage.setItem(QKEY, JSON.stringify(q.slice(-20)));
+            } catch (e) {}
+            var f = card.querySelector('.beta-form');
+            f.innerHTML = '<div class="beta-found">' + esc(L.sent) + '</div>';
         });
     };
+
+    // Досылка накопленного: тихо, по одному, при любом следующем заходе читателя.
+    function flushQueue() {
+        var q;
+        try { q = JSON.parse(localStorage.getItem(QKEY) || '[]'); } catch (e) { return; }
+        if (!q.length) return;
+        var rest = q.slice();
+        var one = rest.shift();
+        fetch('/api/feedback', { method: 'POST', headers: { 'content-type': 'application/json' },
+                                 body: JSON.stringify(one) })
+            .then(function (r) {
+                if (!r.ok) return;
+                try { localStorage.setItem(QKEY, JSON.stringify(rest)); } catch (e) {}
+                if (rest.length) setTimeout(flushQueue, 1500);
+            }).catch(function () {});
+    }
+
+    // Знак «!» рядом с названием сайта — постоянное напоминание, что мы ещё
+    // в разработке (владелец 2026-07-31). Клик открывает ту же карточку.
+    function markLogo() {
+        var logo = document.querySelector('.logo');
+        if (!logo || logo.querySelector('.beta-mark')) return;
+        var m = document.createElement('button');
+        m.type = 'button';
+        m.className = 'beta-mark';
+        m.textContent = '!';
+        m.title = L.title + ' — ' + L.ver;
+        m.setAttribute('aria-label', L.title);
+        m.onclick = function (e) { e.preventDefault(); e.stopPropagation(); show(); };
+        logo.insertAdjacentElement('afterend', m);
+    }
 
     document.addEventListener('DOMContentLoaded', function () {
         document.body.appendChild(card);
         document.body.appendChild(badge);
+        markLogo();
         if (seen()) badge.classList.add('on'); else card.classList.add('on');
+        setTimeout(flushQueue, 2500);
     });
 })();
