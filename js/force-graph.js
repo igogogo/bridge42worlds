@@ -217,7 +217,16 @@ window.createForceGraph = function (opts) {
             var take = function (el, dest) {
                 var ph = document.createComment('fs-ctrl');
                 el.parentNode.insertBefore(ph, el);
-                ctrlHomes.push({ el: el, ph: ph });
+                // ПОЧЕМУ снимаем hidden (владелец, пятый заход к одной проблеме, 2026-08-01).
+                // На странице статьи фильтры мини-графа спрятаны атрибутом hidden — их
+                // показывает своя кнопка «настройки». В полноэкранный режим блок переезжал
+                // ВМЕСТЕ со скрытием, поэтому панель «фильтры» открывалась пустой: 0×0
+                // пикселей. Кнопка работала всегда, показывать было нечего — снаружи это
+                // неотличимо от «нажатие не срабатывает», и я четыре раза чинил не ту
+                // болезнь (позицию, подпись, наложение). Атрибут снимаем на время переезда
+                // и возвращаем на место, чтобы на самой странице поведение не изменилось.
+                ctrlHomes.push({ el: el, ph: ph, wasHidden: el.hasAttribute('hidden') });
+                el.removeAttribute('hidden');
                 dest.appendChild(el);
             };
             fsKeep.forEach(function (el) { take(el, fsPanel); });
@@ -228,7 +237,10 @@ window.createForceGraph = function (opts) {
                 fsPanel.appendChild(fsCollapseWrap);
             }
         } else {
-            ctrlHomes.forEach(function (h) { if (h.ph.parentNode) h.ph.parentNode.replaceChild(h.el, h.ph); });
+            ctrlHomes.forEach(function (h) {
+                if (h.wasHidden) h.el.setAttribute('hidden', '');   // вернуть как было на странице
+                if (h.ph.parentNode) h.ph.parentNode.replaceChild(h.el, h.ph);
+            });
             ctrlHomes = [];
         }
     }
