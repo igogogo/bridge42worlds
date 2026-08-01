@@ -838,7 +838,10 @@ def _retranslate_cyrillic_fields(out, target_lang, target_language, src=None):
               "numbers and $latex$ untouched. Answer with a JSON object {\"strings\": [...]} "
               "of the same length and order.\n" + json.dumps(strings, ensure_ascii=False))
     try:
-        r = chat("translate", prompt, system=_translation_system(target_language, src))
+        # Починка отдельных строк, где осталась кириллица: работа механическая — перевести
+        # список коротких строк, не трогая маркеры и числа. Дешёвая модель справляется,
+        # а вызовов таких много (это ремонт после каждого перевода).
+        r = chat("translate_light", prompt, system=_translation_system(target_language, src))
         fixed = json.loads(clean_json(r.choices[0].message.content)).get("strings")
         if not isinstance(fixed, list) or len(fixed) != len(strings):
             return False
@@ -914,7 +917,10 @@ def translate_captions(captions_en, target_lang, retries=3):
         culture_note=CULTURE_NOTES.get(target_lang, ""))
     for attempt in range(1, retries + 1):
         try:
-            r = chat("translate", prompt)
+            # Подписи к рисункам — короткие технические строки («Рис. 3: спектр образца»),
+            # редактуры носителем они не требуют. Дорогая модель здесь ничего не добавляет,
+            # а стоит вчетверо (замер 2026-08-01: $0.0071 против $0.0018 за вызов).
+            r = chat("translate_light", prompt)
             data = json.loads(clean_json(r.choices[0].message.content))
             out = data.get("captions") if isinstance(data, dict) else data
             if isinstance(out, list) and len(out) == len(captions_en):
