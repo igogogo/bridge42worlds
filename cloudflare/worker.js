@@ -635,6 +635,80 @@ async function tg(env, text) {
   return r.ok;
 }
 
+// ── Свой счётчик: события с сайта (владелец 2026-07-31: «уходим от Supabase») ──
+// Пишем в D1 сырые события; агрегаты считает /api/stats. Сырьё держим потому, что вопросы
+// к статистике меняются («а сколько уникальных за неделю?», «куда уходили с главной?»),
+// и пересчитать по сырью можно, а достать из готовой суммы — нельзя.
+// d=1 — событие с помеченного тестового устройства: хранится, но в сводки не входит.
+async function handleEvents(request, env) {
+  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
+  if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405 });
+  if (!env.QUEUE) return Response.json({ error: "db_not_configured" }, { status: 503 });
+  let body = {};
+  try { body = await request.json(); } catch { return Response.json({ error: "bad_json" }, { status: 400 }); }
+  const evs = Array.isArray(body.events) ? body.events.slice(0, 20) : [];
+  if (!evs.length) return Response.json({ ok: true, n: 0 });
+  try {
+    await env.QUEUE.prepare(
+      `CREATE TABLE IF NOT EXISTS events (
+         id INTEGER PRIMARY KEY AUTOINCREMENT,
+         ts TEXT DEFAULT CURRENT_TIMESTAMP,
+         day TEXT, type TEXT, path TEXT, lang TEXT, uid TEXT, sid TEXT,
+         first_seen TEXT, ref TEXT, dev INTEGER DEFAULT 0, w INTEGER, extra TEXT)`).run();
+    // Индексы — под те запросы, которые реально делает /api/stats
+    await env.QUEUE.prepare("CREATE INDEX IF NOT EXISTS ev_day ON events(day)").run();
+    await env.QUEUE.prepare("CREATE INDEX IF NOT EXISTS ev_uid ON events(uid)").run();
+  } catch (e) { /* таблица уже есть — идём дальше */ }
+  const day = new Date().toISOString().slice(0, 10);
+  const s = (v, n) => String(v == null ? "" : v).slice(0, n);
+  const stmt = env.QUEUE.prepare(
+    `INSERT INTO events (day, type, path, lang, uid, sid, first_seen, ref, dev, w, extra)
+     VALUES (?,?,?,?,?,?,?,?,?,?,?)`);
+  try {
+    await env.QUEUE.batch(evs.map(e => stmt.bind(
+      day, s(e.t, 24), s(e.p, 300), s(e.l, 5), s(e.u, 32), s(e.s, 32),
+      s(e.f, 10), s(e.r, 80), e.d ? 1 : 0, Number(e.w) || 0, s(e.x, 60))));
+  } catch (e) {
+    return Response.json({ error: "write_failed" }, { status: 503 });
+  }
+  return Response.json({ ok: true, n: evs.length });
+}
+
+// Сводка для дашборда. Только агрегаты, никаких сырых строк наружу.
+async function handleStats(request, env) {
+  if (!env.QUEUE) return Response.json({ error: "db_not_configured" }, { status: 503 });
+  const url = new URL(request.url);
+  const days = Math.min(90, Math.max(1, Number(url.searchParams.get("days")) || 30));
+  const since = new Date(Date.now() - days * 864e5).toISOString().slice(0, 10);
+  // dev=0 везде: своя возня с тестами не должна выглядеть посещаемостью
+  const q = (sql, ...b) => env.QUEUE.prepare(sql).bind(...b).all().then(r => r.results || []).catch(() => []);
+  const [totals, byDay, byPath, byLang, byClick, byRef, retention, depth] = await Promise.all([
+    q(`SELECT COUNT(*) n, COUNT(DISTINCT uid) uniq, COUNT(DISTINCT sid) visits
+         FROM events WHERE dev=0 AND day>=? AND type='view'`, since),
+    q(`SELECT day, COUNT(*) views, COUNT(DISTINCT uid) uniq FROM events
+        WHERE dev=0 AND day>=? AND type='view' GROUP BY day ORDER BY day`, since),
+    q(`SELECT path, COUNT(*) n FROM events WHERE dev=0 AND day>=? AND type='view'
+        GROUP BY path ORDER BY n DESC LIMIT 20`, since),
+    q(`SELECT lang, COUNT(*) n, COUNT(DISTINCT uid) uniq FROM events
+        WHERE dev=0 AND day>=? AND type='view' GROUP BY lang ORDER BY n DESC`, since),
+    q(`SELECT extra kind, COUNT(*) n FROM events WHERE dev=0 AND day>=? AND type='click'
+        GROUP BY extra ORDER BY n DESC LIMIT 15`, since),
+    q(`SELECT ref, COUNT(*) n FROM events WHERE dev=0 AND day>=? AND type='view' AND ref<>''
+        GROUP BY ref ORDER BY n DESC LIMIT 10`, since),
+    // Возвраты: сколько устройств заходило больше чем в один день
+    q(`SELECT COUNT(*) returning FROM (SELECT uid FROM events WHERE dev=0 AND day>=? AND type='view'
+        GROUP BY uid HAVING COUNT(DISTINCT day) > 1)`, since),
+    q(`SELECT extra pct, COUNT(*) n FROM events WHERE dev=0 AND day>=? AND type='depth'
+        GROUP BY extra ORDER BY pct`, since),
+  ]);
+  return Response.json({
+    days, since,
+    totals: totals[0] || { n: 0, uniq: 0, visits: 0 },
+    returning: (retention[0] || {}).returning || 0,
+    byDay, byPath, byLang, byClick, byRef, depth,
+  }, { headers: { "cache-control": "public, max-age=300" } });
+}
+
 // ── Отзывы с плашки предзапуска (владелец 2026-07-31: «если кто напишет — мы это увидели») ──
 // Два канала доставки, падение одного не роняет второй: строка в D1 (история, ничего не
 // теряется) И сообщение в Telegram-канал команды (мгновенная видимость). Клиент при ошибке
@@ -1122,6 +1196,8 @@ export default {
     if (url.pathname.startsWith("/api/order/")) {
       return withCors(await handleOrderStatus(request, env, url.pathname.slice(11)));
     }
+    if (url.pathname === "/api/ev") return withCors(await handleEvents(request, env));
+    if (url.pathname === "/api/stats") return withCors(await handleStats(request, env));
     if (url.pathname === "/api/feedback") return withCors(await handleFeedback(request, env));
     if (url.pathname === "/api/hook/alert") return handleAlertHook(request, env);
 

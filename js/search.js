@@ -2176,3 +2176,19 @@ document.addEventListener('DOMContentLoaded', function () {
         if (typeof switchFeedLang === 'function') switchFeedLang(saved);
     });
 })();
+
+/* Свой счётчик посещений и нажатий (js/metrics.js) и отклик-искра (js/spark.js).
+   Грузим отсюда, а не тегом в шаблоне: search.js подключён на всех собранных
+   страницах, поэтому оба появляются БЕЗ пересборки сайта (правило владельца
+   2026-07-31: «если можно оживить без регенерации — делай так»). Лениво и молча:
+   упадёт загрузка — страница не заметит. */
+(function () {
+    function load(src) {
+        var s = document.createElement('script');
+        s.src = src; s.async = true; s.onerror = function () {};
+        document.head.appendChild(s);
+    }
+    var go = function () { load('/js/metrics.js'); load('/js/spark.js'); };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', go);
+    else go();
+})();

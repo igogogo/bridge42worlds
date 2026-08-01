@@ -3097,3 +3097,48 @@ body.b42-wait-open { overflow: hidden; }
      и граф выглядел «сломанным поверх сайта». На десктопе прозрачность оставляем. */
   body.graph-fs-open .graph-fs-active { background: var(--bg) !important; }
 }
+
+/* ── Отклик на действие: искра, нажатие, мягкие переходы ──
+   Владелец 2026-07-31: «нажали лайк — звёздочки вылетели, что-то мигнуло СЛАБО, не
+   сильно; немного цвета можно, но у нас спокойный контрастный строгий вид».
+   Поэтому: частицы мелкие (3-4 px), живут 600 мс, цвет наследуют у кнопки — новых
+   красок в палитру не вводим. Всё в css/js, значит появляется без пересборки сайта. */
+.b42-spark { position: fixed; z-index: 90; pointer-events: none; width: 0; height: 0; }
+.b42-spark i {
+  position: absolute; width: 4px; height: 4px; border-radius: 50%;
+  background: currentColor; color: var(--cyan, #2aa); opacity: 0;
+  animation: b42-fly 600ms cubic-bezier(.2,.7,.3,1) forwards;
+}
+.b42-spark i.star {
+  width: 6px; height: 6px; border-radius: 1px; color: #e0a800;
+  clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+@keyframes b42-fly {
+  0%   { transform: translate(0,0) scale(.6); opacity: 0; }
+  15%  { opacity: .95; }
+  100% { transform: translate(var(--dx), var(--dy)) scale(1); opacity: 0; }
+}
+/* Кнопка чуть «отзывается» на включение — 0.32 с, без пружин и подпрыгиваний */
+.b42-pop { animation: b42-pop 320ms ease-out; }
+@keyframes b42-pop { 0% { transform: scale(1); } 40% { transform: scale(1.12); } 100% { transform: scale(1); } }
+
+/* Тактильность нажатия — общая для всех кнопок сайта: палец видит, что попал.
+   Только на активное нажатие, ничего не мигает само по себе. */
+.react-btn:active, .fav-btn:active, .cal-btn:active, .feed-sort-btn:active,
+.lv-btn:active, .beta-send:active, .share-btn:active, .translate-btn:active,
+.nav-more-btn:active, .graph-fs-btn:active, .beta-mark:active {
+  transform: scale(.96);
+}
+.react-btn, .fav-btn, .cal-btn, .feed-sort-btn, .lv-btn, .beta-send,
+.share-btn, .translate-btn, .nav-more-btn, .graph-fs-btn, .beta-mark {
+  transition: transform .12s ease, background .15s, border-color .15s, color .15s;
+}
+
+/* Кому системно выключено движение — не двигаем ничего: это не украшение,
+   а требование доступности (и у части читателей от анимаций кружится голова). */
+@media (prefers-reduced-motion: reduce) {
+  .b42-spark { display: none; }
+  .b42-pop { animation: none; }
+  .react-btn, .fav-btn, .cal-btn, .feed-sort-btn, .lv-btn, .beta-send,
+  .share-btn, .translate-btn, .nav-more-btn, .graph-fs-btn, .beta-mark { transition: none; }
+}
