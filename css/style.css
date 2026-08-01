@@ -3178,3 +3178,45 @@ body.graph-fs-open .graph-fs-active,
 body.graph-fs-open .graph-fs-active canvas,
 body.graph-fs-open .graph-fs-active svg { touch-action: manipulation; }
 
+
+
+/* ── Панель фильтров графа: три ряда, ровно и компактно ──
+   Владелец 2026-08-01: «+− можно рядом или по центру в строке с меню; вторая строка —
+   три объекта; третья — переключатели связей, тег под тегом; это не мелочи, это
+   впечатление о продукте».
+   Было: девять плашек разной длины валились в один поток, «−1+» стоял среди объектов
+   и читался как ещё один фильтр — на 375 это выглядело свалкой.
+   Стало: глубина ушла в строку с кнопкой «фильтры» (она про вид, а не про отбор);
+   объекты — своей строкой в три равные колонки; связи — двумя колонками, каждая
+   плашка двухэтажная («тег» над «законом», стрелка между этажами). Двухэтажность
+   даёт всем шести одинаковую ширину и снимает обрезание длинных пар. */
+.graph-fs-active .graph-fs-controls { flex-direction: row; flex-wrap: wrap; align-items: center; }
+.graph-fs-active .graph-fs-collapse { flex-basis: 100%; }
+.mini-depth-ctrl.fs-depth-inline { margin-inline-start: 8px; }
+
+@media (max-width: 640px) {
+  .graph-fs-collapse .mini-graph-filters { gap: 0; }
+  /* Ряд объектов: три равные колонки — глаз ловит строку целиком, без рваного края */
+  .graph-fs-collapse .mg-kinds {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; width: 100%;
+    padding-bottom: 8px; border-bottom: 1px solid var(--hair, var(--border));
+  }
+  .graph-fs-collapse .mg-kinds > label { width: 100%; box-sizing: border-box; justify-content: center; }
+  /* Ряд связей: две колонки, плашки одной ширины */
+  .graph-fs-collapse .mg-edges {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; width: 100%;
+  }
+  .graph-fs-collapse .mg-edges .mg-edge-label {
+    width: 100%; box-sizing: border-box; justify-content: flex-start; padding: 5px 9px;
+  }
+  /* Двухэтажная надпись: слово, стрелка МЕЖДУ строк, слово.
+     Первый вариант ставил стрелку сбоку — она висела в пустоте и связывала слова
+     только на словах. Владелец: «между ними, на пол-строки вверх». Теперь она стоит
+     в собственной средней строке, прижатая к обоим словам отрицательными полями:
+     читается как связь, а не как отдельный знак. */
+  .mg-edge-stack { display: inline-flex; flex-direction: column; align-items: flex-start;
+    line-height: 1.1; }
+  .mg-edge-stack i { font-style: normal; }
+  .mg-edge-stack b { font-weight: 400; opacity: .5; font-size: 10px;
+    margin: -2px 0 -2px 6px; letter-spacing: -.5px; }
+}

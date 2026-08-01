@@ -210,6 +210,41 @@ window.createForceGraph = function (opts) {
     // Возврат через плейсхолдер, а НЕ insertBefore(el, savedNext): saved-next-сосед может сам
     // оказаться перенесённым (например filters стоял next для label, но тоже уезжает) — тогда
     // insertBefore падает. Заглушка-комментарий держит исходную позицию независимо от соседей.
+    /* Порядок в панели фильтров — требование владельца 2026-08-01: «это не мелочи,
+       это впечатление о продукте». Было: девять плашек разной длины в одном потоке,
+       и «−1+» (глубина) стоял среди объектов, читаясь как ещё один фильтр.
+       Стало три ряда: глубина уезжает в строку с кнопкой (она про вид, а не про отбор),
+       объекты — своей строкой, связи — двухэтажными плашками «тег / закон» со стрелкой
+       между этажами. Двухэтажность даёт одинаковую ширину всем шести и убирает
+       обрезание длинных пар вроде «закон↔учёный». */
+    function fsTidy(el) {
+        if (!el || !el.querySelectorAll) return;
+        // insertBefore здесь падал: на момент переезда fsCollapseWrap ещё НЕ был внутри
+        // fsPanel (его добавляют следующей строкой), и браузер бросал NotFoundError —
+        // а вместе с ним переставал открываться сам полноэкранный режим. Ставим рядом
+        // с кнопкой обычным добавлением, порядок в строке задаёт CSS.
+        var depth = el.querySelector('.mini-depth-ctrl');
+        if (depth && fsPanel && depth.parentNode !== fsPanel) {
+            try {
+                fsPanel.appendChild(depth);
+                depth.classList.add('fs-depth-inline');
+            } catch (e) { /* глубина не переехала — не повод ронять полноэкранный режим */ }
+        }
+        el.querySelectorAll('.mg-edge-label').forEach(function (lab) {
+            if (lab.dataset.fsStacked) return;
+            var host = Array.prototype.filter.call(lab.childNodes, function (n) {
+                return n.nodeType === 3 && /↔/.test(n.textContent);
+            })[0];
+            if (!host) return;
+            var parts = host.textContent.split('↔');
+            var box = document.createElement('span');
+            box.className = 'mg-edge-stack';
+            box.innerHTML = '<i>' + parts[0].trim() + '</i><b>↔</b><i>' + (parts[1] || '').trim() + '</i>';
+            lab.replaceChild(box, host);
+            lab.dataset.fsStacked = '1';
+        });
+    }
+
     function relocateControls(into) {
         if (!fsPanel) return;
         if (into) {
@@ -228,6 +263,9 @@ window.createForceGraph = function (opts) {
                 ctrlHomes.push({ el: el, ph: ph, wasHidden: el.hasAttribute('hidden') });
                 el.removeAttribute('hidden');
                 dest.appendChild(el);
+                // Приборка — в try: любая ошибка косметики не должна мешать графу
+                // открыться (уже наступали на это ровно здесь, 2026-08-01).
+                try { fsTidy(el); } catch (e) { }
             };
             fsKeep.forEach(function (el) { take(el, fsPanel); });
             if (fsCollapsible.length) {
