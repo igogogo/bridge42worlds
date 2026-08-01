@@ -189,8 +189,16 @@ window.createForceGraph = function (opts) {
             if (fsCollapsible.length) {
                 fsCollapseBtn = document.createElement('button');
                 fsCollapseBtn.type = 'button'; fsCollapseBtn.className = 'graph-fs-collapse-btn';
-                fsCollapseBtn.innerHTML = (window.B42Icons && B42Icons.menu) ? B42Icons.menu(18) : '☰';
-                fsCollapseBtn.setAttribute('aria-label', 'filters');
+                // Кнопка подписана СЛОВОМ, а не только значком. Голый гамбургер над графом
+                // читался как «непонятная иконка в окантовке»: владелец 2026-08-01 не смог
+                // угадать, чья она и что делает. Значок сам по себе объясняет только тому,
+                // кто уже знает ответ.
+                var FLT = { ru: 'фильтры', en: 'filters', es: 'filtros', ar: 'المرشحات', fr: 'filtres' };
+                var _lang = (document.documentElement.lang || 'en').slice(0, 2);
+                var _word = FLT[_lang] || FLT.en;
+                fsCollapseBtn.innerHTML = ((window.B42Icons && B42Icons.menu) ? B42Icons.menu(16) : '☰') +
+                    '<span class="fs-flt-word">' + _word + '</span>';
+                fsCollapseBtn.setAttribute('aria-label', _word);
                 fsCollapseWrap = document.createElement('div');
                 fsCollapseWrap.className = 'graph-fs-collapse';
                 fsCollapseBtn.addEventListener('click', function (e) { e.stopPropagation(); fsCollapseWrap.classList.toggle('open'); });
