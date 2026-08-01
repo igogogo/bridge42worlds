@@ -723,6 +723,95 @@ async function handleStats(request, env) {
 // Два канала доставки, падение одного не роняет второй: строка в D1 (история, ничего не
 // теряется) И сообщение в Telegram-канал команды (мгновенная видимость). Клиент при ошибке
 // ручки падает на mailto — сообщение не теряется даже до выкладки этого кода.
+// ── Реакции и отклики по статьям ──────────────────────────────────
+// Переезд с Supabase: его ключ лежал открытым в js/likes.js, то есть любой, кто открыл
+// исходник страницы, мог писать в нашу базу напрямую и накручивать счётчики. Теперь запись
+// идёт через нас, а браузер не знает никаких ключей вообще.
+//
+// Нормой реакции НЕ считаем: лайк не стоит нам денег, а брать за него из той же нормы,
+// что за вопрос модели, значит наказывать читателя за благодарность. От перебора здесь
+// защищает предел по адресу и правило «один человек — одна реакция».
+const REACTION_KINDS = new Set(["like", "mind", "heart", "wow", "hmm"]);
+
+async function reactionCounts(env, articleId) {
+  const r = await env.QUEUE.prepare(
+    "SELECT reaction, COUNT(*) n FROM reactions WHERE article_id = ? GROUP BY reaction"
+  ).bind(articleId).all();
+  const out = {};
+  for (const row of r.results || []) out[row.reaction] = row.n;
+  return out;
+}
+
+async function handleReact(request, env) {
+  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
+  if (!env.QUEUE) return Response.json({ error: "db_not_configured" }, { status: 503 });
+  const url = new URL(request.url);
+
+  // Чтение счётчиков — открыто и дёшево: это то, что видит каждый читатель на карточке.
+  if (request.method === "GET") {
+    const id = String(url.searchParams.get("id") || "").slice(0, 60);
+    if (!id) return Response.json({ error: "no_id" }, { status: 400 });
+    return Response.json({ id, counts: await reactionCounts(env, id) },
+      { headers: { "cache-control": "public, max-age=60" } });
+  }
+  if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405 });
+
+  const ipOk = await ipGuard(env, request);
+  if (!ipOk.ok) return Response.json({ error: ipOk.error }, { status: ipOk.code });
+
+  let body = {};
+  try { body = await request.json(); } catch { return Response.json({ error: "bad_json" }, { status: 400 }); }
+  const id = String(body.id || "").slice(0, 60);
+  const reaction = String(body.reaction || "");
+  if (!id || !REACTION_KINDS.has(reaction)) {
+    return Response.json({ error: "bad_request" }, { status: 400 });
+  }
+  const entityType = String(body.entityType || "article").slice(0, 30);
+  // Номер устройства из подписанной сессии, а не из тела запроса: иначе «один человек —
+  // одна реакция» обходится подстановкой чужого номера, то есть не работает вовсе.
+  const uid = (await sessionId(request, env)) || "";
+
+  try {
+    await env.QUEUE.prepare(
+      `INSERT OR IGNORE INTO reactions (article_id, reaction, entity_type, uid, ts)
+       VALUES (?, ?, ?, ?, ?)`
+    ).bind(id, reaction, entityType, uid, Date.now()).run();
+  } catch {
+    return Response.json({ error: "write_failed" }, { status: 503 });
+  }
+  return Response.json({ ok: true, id, counts: await reactionCounts(env, id) },
+    { headers: { "cache-control": "no-store" } });
+}
+
+async function handleArticleFeedback(request, env) {
+  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
+  if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405 });
+  if (!env.QUEUE) return Response.json({ error: "db_not_configured" }, { status: 503 });
+
+  const ipOk = await ipGuard(env, request);
+  if (!ipOk.ok) return Response.json({ error: ipOk.error }, { status: ipOk.code });
+
+  let body = {};
+  try { body = await request.json(); } catch { return Response.json({ error: "bad_json" }, { status: 400 }); }
+  const id = String(body.id || "").slice(0, 60);
+  const opts = Array.isArray(body.options) ? body.options.slice(0, 10).map(String) : [];
+  const comment = String(body.comment || "").trim().slice(0, 2000);
+  if (!id || (!opts.length && !comment)) {
+    return Response.json({ error: "empty" }, { status: 400 });
+  }
+  try {
+    await env.QUEUE.prepare(
+      `INSERT INTO article_feedback (article_id, options, comment, entity_type, lang, ts)
+       VALUES (?, ?, ?, ?, ?, ?)`
+    ).bind(id, opts.length ? JSON.stringify(opts) : null, comment || null,
+           String(body.entityType || "article").slice(0, 30),
+           String(body.lang || "").slice(0, 5), Date.now()).run();
+  } catch {
+    return Response.json({ error: "write_failed" }, { status: 503 });
+  }
+  return Response.json({ ok: true }, { headers: { "cache-control": "no-store" } });
+}
+
 async function handleFeedback(request, env) {
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
   if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405 });
@@ -1209,6 +1298,10 @@ export default {
     if (url.pathname === "/api/ev") return withCors(await handleEvents(request, env));
     if (url.pathname === "/api/stats") return withCors(await handleStats(request, env));
     if (url.pathname === "/api/feedback") return withCors(await handleFeedback(request, env));
+    if (url.pathname === "/api/react") return withCors(await handleReact(request, env));
+    if (url.pathname === "/api/article-feedback") {
+      return withCors(await handleArticleFeedback(request, env));
+    }
     if (url.pathname === "/api/hook/alert") return handleAlertHook(request, env);
 
     if (request.method !== "GET" && request.method !== "HEAD") {
