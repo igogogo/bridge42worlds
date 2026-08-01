@@ -3180,43 +3180,41 @@ body.graph-fs-open .graph-fs-active svg { touch-action: manipulation; }
 
 
 
-/* ── Панель фильтров графа: три ряда, ровно и компактно ──
-   Владелец 2026-08-01: «+− можно рядом или по центру в строке с меню; вторая строка —
-   три объекта; третья — переключатели связей, тег под тегом; это не мелочи, это
-   впечатление о продукте».
-   Было: девять плашек разной длины валились в один поток, «−1+» стоял среди объектов
-   и читался как ещё один фильтр — на 375 это выглядело свалкой.
-   Стало: глубина ушла в строку с кнопкой «фильтры» (она про вид, а не про отбор);
-   объекты — своей строкой в три равные колонки; связи — двумя колонками, каждая
-   плашка двухэтажная («тег» над «законом», стрелка между этажами). Двухэтажность
-   даёт всем шести одинаковую ширину и снимает обрезание длинных пар. */
+/* ── Панель фильтров графа: вариант Б (выбор владельца 2026-08-01) ──
+   Объекты — три равные колонки; связи — две колонки, слова в одну строку.
+   Почему так, а не «как поместится»: человек считывает СТРУКТУРУ раньше слов, и рваный
+   ритм читается как неряшливость ещё до того, как прочитано хоть одно слово.
+
+   Посчитано до кода, ширина 375:
+     панель внутри = 375 − 16 (поля страницы) − 24 (поля панели) ≈ 320
+     объекты: (320 − 12) / 3 ≈ 102 на клетку — «учёные» при 11px занимает ~40 + галочка,
+       помещается с запасом
+     связи:   (320 − 6) / 2 ≈ 157 — «учёный ↔ учёный» при 10.5px ~85 + галочка, помещается
+   Шесть связей ложатся ровно в три ряда по два, панель ~190 px — граф за ней остаётся виден. */
 .graph-fs-active .graph-fs-controls { flex-direction: row; flex-wrap: wrap; align-items: center; }
 .graph-fs-active .graph-fs-collapse { flex-basis: 100%; }
+/* Глубина — в строке с кнопкой: она про вид, а не про отбор */
 .mini-depth-ctrl.fs-depth-inline { margin-inline-start: 8px; }
 
 @media (max-width: 640px) {
-  .graph-fs-collapse .mini-graph-filters { gap: 0; }
-  /* Ряд объектов: три равные колонки — глаз ловит строку целиком, без рваного края */
+  .graph-fs-collapse .mini-graph-filters { display: block; gap: 0; }
   .graph-fs-collapse .mg-kinds {
     display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; width: 100%;
     padding-bottom: 8px; border-bottom: 1px solid var(--hair, var(--border));
   }
-  .graph-fs-collapse .mg-kinds > label { width: 100%; box-sizing: border-box; justify-content: center; }
-  /* Ряд связей: две колонки, плашки одной ширины */
   .graph-fs-collapse .mg-edges {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; width: 100%;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 100%; margin-top: 8px;
   }
+  .graph-fs-collapse .mg-kinds > label,
   .graph-fs-collapse .mg-edges .mg-edge-label {
-    width: 100%; box-sizing: border-box; justify-content: flex-start; padding: 5px 9px;
+    width: 100%; box-sizing: border-box; justify-content: flex-start;
+    padding: 4px 8px; gap: 5px;
   }
-  /* Двухэтажная надпись: слово, стрелка МЕЖДУ строк, слово.
-     Первый вариант ставил стрелку сбоку — она висела в пустоте и связывала слова
-     только на словах. Владелец: «между ними, на пол-строки вверх». Теперь она стоит
-     в собственной средней строке, прижатая к обоим словам отрицательными полями:
-     читается как связь, а не как отдельный знак. */
-  .mg-edge-stack { display: inline-flex; flex-direction: column; align-items: flex-start;
-    line-height: 1.1; }
+  .graph-fs-collapse .mg-kinds > label { font-size: 11px; }
+  .graph-fs-collapse .mg-edges .mg-edge-label { font-size: 10.5px; white-space: nowrap; }
+  /* Связь — одной строкой, как фраза: «тег ↔ закон». Двухэтажную надпись из прежнего
+     варианта разворачиваем обратно (см. fsTidy в js/force-graph.js). */
+  .mg-edge-stack { display: inline; }
   .mg-edge-stack i { font-style: normal; }
-  .mg-edge-stack b { font-weight: 400; opacity: .5; font-size: 10px;
-    margin: -2px 0 -2px 6px; letter-spacing: -.5px; }
+  .mg-edge-stack b { font-weight: 400; opacity: .55; margin: 0 3px; }
 }
