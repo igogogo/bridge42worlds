@@ -14,7 +14,7 @@
               bySection:'Охват по разделам', kitchen:'Кухня: обложки и покрытие', covers:'Обложки',
               withCover:'с обложкой', noCover:'без обложки', topTags:'Частые теги', topSci:'Частые учёные',
               perDay:'статей за день', updated:'обновлено', loading:'Собираем данные…', none:'—',
-              topLaws:'Ключевые законы', engagement:'Вовлечённость (данные сайта)', views:'просмотров',
+              topLaws:'Ключевые законы', mainPage:'главная', audience:'Аудитория (свой счётчик)', uniqueVisitors:'уникальных', visits:'визитов', returning:'вернулись', topPages:'Куда ходили', byLangViews:'Языки читателей', sources:'Откуда пришли', clicks:'Что нажимали', readDepth:'Глубина чтения, %', audienceNote:'За 30 дней. Наши собственные визиты помечены и в эти числа не входят.', engagement:'Вовлечённость (данные сайта)', views:'просмотров',
               likes:'лайков', dislikes:'дизлайков', comments:'откликов', viewsByType:'Просмотры по типу',
               viewsByDevice:'Просмотры по устройству', reactions:'Реакции', lawTypes:'Типы законов',
               eArticle:'статьи', eTag:'теги', eLaw:'законы', eScientist:'учёные', eAuthor:'авторы',
@@ -38,7 +38,7 @@
               bySection:'Cobertura por área', kitchen:'Tras bambalinas: portadas y cobertura', covers:'Portadas',
               withCover:'con portada', noCover:'sin portada', topTags:'Etiquetas frecuentes', topSci:'Científicos frecuentes',
               perDay:'artículos ese día', updated:'actualizado', loading:'Procesando datos…', none:'—',
-              topLaws:'Leyes clave', engagement:'Interacción (datos del sitio)', views:'vistas',
+              topLaws:'Leyes clave', mainPage:'inicio', audience:'Audiencia (contador propio)', uniqueVisitors:'únicos', visits:'visitas', returning:'volvieron', topPages:'Adónde fueron', byLangViews:'Idiomas de lectores', sources:'De dónde llegaron', clicks:'Qué pulsaron', readDepth:'Profundidad de lectura, %', audienceNote:'Últimos 30 días. Nuestras propias visitas están marcadas y excluidas.', engagement:'Interacción (datos del sitio)', views:'vistas',
               likes:'me gusta', dislikes:'no me gusta', comments:'respuestas', viewsByType:'Vistas por tipo',
               viewsByDevice:'Vistas por dispositivo', reactions:'Reacciones', lawTypes:'Tipos de leyes',
               eArticle:'artículos', eTag:'etiquetas', eLaw:'leyes', eScientist:'científicos', eAuthor:'autores',
@@ -57,7 +57,7 @@
               bySection:'التغطية حسب المجال', kitchen:'من الكواليس: الأغلفة والتغطية', covers:'الأغلفة',
               withCover:'بغلاف', noCover:'بدون غلاف', topTags:'وسوم متكررة', topSci:'علماء متكررون',
               perDay:'مقالات في ذلك اليوم', updated:'حُدّث', loading:'نُعالج البيانات…', none:'—',
-              topLaws:'قوانين أساسية', engagement:'التفاعل (بيانات الموقع)', views:'مشاهدات',
+              topLaws:'قوانين أساسية', mainPage:'الرئيسية', audience:'الجمهور (عدّادنا الخاص)', uniqueVisitors:'زوار فريدون', visits:'زيارات', returning:'عادوا', topPages:'أين ذهبوا', byLangViews:'لغات القراء', sources:'من أين جاؤوا', clicks:'ما الذي ضغطوه', readDepth:'عمق القراءة، %', audienceNote:'آخر 30 يومًا. زياراتنا الخاصة مُعلَّمة ومستبعدة.', engagement:'التفاعل (بيانات الموقع)', views:'مشاهدات',
               likes:'إعجابات', dislikes:'عدم إعجاب', comments:'ردود', viewsByType:'المشاهدات حسب النوع',
               viewsByDevice:'المشاهدات حسب الجهاز', reactions:'التفاعلات', lawTypes:'أنواع القوانين',
               eArticle:'مقالات', eTag:'وسوم', eLaw:'قوانين', eScientist:'علماء', eAuthor:'مؤلفون',
@@ -79,7 +79,7 @@
               withCover:'avec couverture', noCover:'sans couverture', topTags:'Tags fréquents',
               topSci:'Scientifiques fréquents', perDay:'articles ce jour-là', updated:'mis à jour',
               loading:'Traitement des données…', none:'—', topLaws:'Lois clés',
-              engagement:'Engagement (données du site)', views:'vues', likes:'j’aime',
+              mainPage:'accueil', audience:'Audience (notre compteur)', uniqueVisitors:'uniques', visits:'visites', returning:'revenus', topPages:'Où ils sont allés', byLangViews:'Langues des lecteurs', sources:'D’où ils viennent', clicks:'Ce qu’ils ont cliqué', readDepth:'Profondeur de lecture, %', audienceNote:'30 derniers jours. Nos propres visites sont marquées et exclues.', engagement:'Engagement (données du site)', views:'vues', likes:'j’aime',
               dislikes:'je n’aime pas', comments:'retours', viewsByType:'Vues par type',
               viewsByDevice:'Vues par appareil', reactions:'Réactions', lawTypes:'Types de lois',
               eArticle:'articles', eTag:'tags', eLaw:'lois', eScientist:'scientifiques', eAuthor:'auteurs',
@@ -100,7 +100,7 @@
         bySection:'Coverage by area', kitchen:'Covers & coverage', covers:'Covers', withCover:'with cover',
         noCover:'no cover', topTags:'Top tags', topSci:'Top scientists', perDay:'articles that day',
         updated:'updated', loading:'…', none:'—',
-        engagement:'Engagement (site data)', views:'views', likes:'likes', dislikes:'dislikes',
+        mainPage:'home', audience:'Audience (our own counter)', uniqueVisitors:'unique', visits:'visits', returning:'returned', topPages:'Where they went', byLangViews:'Reader languages', sources:'Where they came from', clicks:'What they clicked', readDepth:'Read depth, %', audienceNote:'Last 30 days. Our own visits are flagged and excluded.', engagement:'Engagement (site data)', views:'views', likes:'likes', dislikes:'dislikes',
         comments:'feedback', viewsByType:'Views by type', viewsByDevice:'Views by device',
         reactions:'Reactions', lawTypes:'Law types', eArticle:'articles', eTag:'tags', eLaw:'laws',
         eScientist:'scientists', eAuthor:'authors', topLaws:'Key laws',
@@ -439,6 +439,68 @@
             if (firstKpi && firstKpi.parentNode === root) root.insertBefore(eng, firstKpi.nextSibling);
             else root.appendChild(eng);
         });
+
+        /* ── Аудитория: свой счётчик (/api/stats), а не Supabase ──
+           Владелец 2026-07-31: «кто зашёл, сколько, куда ходили, что нажимали, ретеншн,
+           уникальные». Блок молчит, пока ручка не выложена: пустой дашборд лучше, чем
+           дашборд с нулями, которые выглядят как «читателей нет».
+           Свои визиты в эти числа не входят — события с меткой тестировщика (d=1)
+           /api/stats отфильтровывает на своей стороне. */
+        (function audience() {
+            fetch('/api/stats?days=30')
+                .then(function (r) { return r.ok ? r.json() : null; })
+                .then(function (s) {
+                    if (!s || !s.totals) return;
+                    var t = s.totals;
+                    // Ноль просмотров = счётчик только выложили и данных ещё нет. Показывать
+                    // такой блок незачем — он расскажет ровно ничего.
+                    if (!t.n) return;
+                    function row(label, val, max) {
+                        return '<div class="hbar"><span class="hbar-l">' + esc(String(label).slice(0, 22)) + '</span>' +
+                            '<span class="hbar-t"><span class="hbar-fill" style="width:' +
+                            Math.round(100 * val / (max || 1)) + '%"></span></span>' +
+                            '<span class="hbar-n">' + val + '</span></div>';
+                    }
+                    /* Путь целиком в узкую колонку не влезает и обрезается на «/lang/ar/arc…» —
+                       по такой подписи не понять, какая это страница. Убираем языковой
+                       префикс (язык и так виден в соседнем ряду) и служебный index.html,
+                       из статьи оставляем её arXiv-номер: он опознаётся с одного взгляда. */
+                    function shortPath(p) {
+                        var s = String(p || '').replace(/^\/lang\/[a-z]{2}\//, '/').replace(/index\.html$/, '');
+                        var art = s.match(/archive\/\d{4}-\d{2}-\d{2}\/([^/]+)/);
+                        if (art) return art[1];
+                        s = s.replace(/^\/|\/$/g, '');
+                        return s || T.mainPage;
+                    }
+                    function bars(list, key, valKey, title, fmt) {
+                        if (!list || !list.length) return '';
+                        var max = Math.max.apply(null, list.map(function (r) { return r[valKey]; }));
+                        return '<div class="dash-sub"><h3>' + esc(title) + '</h3><div class="hbars">' +
+                            list.slice(0, 8).map(function (r) {
+                                return row((fmt ? fmt(r[key]) : r[key]) || T.none, r[valKey], max);
+                            }).join('') +
+                            '</div></div>';
+                    }
+                    var pctReturn = t.uniq ? Math.round(100 * s.returning / t.uniq) : 0;
+                    var el = document.createElement('div');
+                    el.innerHTML = '<div class="dash-block"><h2>' + esc(T.audience) + '</h2>' +
+                        '<div class="kpi-grid">' +
+                          '<div class="kpi"><div class="kpi-n">' + t.uniq.toLocaleString() + '</div><div class="kpi-l">' + esc(T.uniqueVisitors) + '</div></div>' +
+                          '<div class="kpi"><div class="kpi-n">' + t.visits.toLocaleString() + '</div><div class="kpi-l">' + esc(T.visits) + '</div></div>' +
+                          '<div class="kpi"><div class="kpi-n">' + t.n.toLocaleString() + '</div><div class="kpi-l">' + esc(T.views) + '</div></div>' +
+                          '<div class="kpi"><div class="kpi-n">' + pctReturn + '%</div><div class="kpi-l">' + esc(T.returning) + '</div></div>' +
+                        '</div>' +
+                        bars(s.byPath, 'path', 'n', T.topPages, shortPath) +
+                        bars(s.byLang, 'lang', 'n', T.byLangViews) +
+                        bars(s.byRef, 'ref', 'n', T.sources) +
+                        bars(s.byClick, 'kind', 'n', T.clicks) +
+                        bars(s.depth, 'pct', 'n', T.readDepth) +
+                        '<div class="dash-note">' + esc(T.audienceNote) + '</div>' +
+                      '</div>';
+                    root.appendChild(el);
+                })
+                .catch(function () { /* ручка не выложена — блока просто нет */ });
+        })();
 
         // ── Покрытие архива (corpus-stats.json из скана Kaggle-дампа, юзер 2026-07-25): сколько ВСЕГО
         //    в arXiv за 2025-2026 vs сколько мы обработали, разбивка по лицензиям и разделам. ──
