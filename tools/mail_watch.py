@@ -107,12 +107,31 @@ def save_seen(seen):
     SEEN.write_text(json.dumps(sorted(seen)[-500:]), encoding="utf-8")
 
 
-def check(list_only=False, quiet=False):
+def boxes():
+    """Все наши ящики, а не один. Опубликованы в about на пяти языках — значит, писать
+    могут на любой, и молчать не должен ни один (владелец 2026-07-31: «адреса у тебя
+    в about, должны быть все»). Пароль общий; список — в .env через запятую."""
     e = env()
-    host, user, pw = e.get("MAIL_HOST"), e.get("MAIL_USER"), e.get("MAIL_PASS")
+    raw = e.get("MAIL_USERS") or e.get("MAIL_USER") or ""
+    return [b.strip() for b in raw.split(",") if b.strip()]
+
+
+def check(list_only=False, quiet=False):
+    total = 0
+    for box in boxes():
+        try:
+            total += check_box(box, list_only=list_only, quiet=quiet)
+        except Exception as ex:
+            print(f"⚠️ {box}: {type(ex).__name__} {ex}")
+    return 0
+
+
+def check_box(user, list_only=False, quiet=False):
+    e = env()
+    host, pw = e.get("MAIL_HOST"), e.get("MAIL_PASS")
     if not (host and user and pw):
-        print("❌ нет доступов к почте в .env (MAIL_HOST/MAIL_USER/MAIL_PASS)")
-        return 1
+        print("❌ нет доступов к почте в .env (MAIL_HOST/MAIL_USERS/MAIL_PASS)")
+        return 0
     M = imaplib.IMAP4_SSL(host, int(e.get("MAIL_IMAP_PORT", 993)), timeout=30)
     M.login(user, pw)
     M.select("INBOX")
@@ -120,8 +139,9 @@ def check(list_only=False, quiet=False):
     typ, data = M.uid("search", None, "ALL")
     uids = data[0].split()
     seen = load_seen()
-    fresh = [u for u in uids if u.decode() not in seen]
+    fresh = [u for u in uids if f"{user}:{u.decode()}" not in seen]
     if list_only:
+        print(f"— {user}: писем {len(uids)}")
         for u in uids[-10:]:
             typ, d = M.uid("fetch", u, "(BODY.PEEK[HEADER.FIELDS (FROM SUBJECT DATE)])")
             msg = email.message_from_bytes(d[0][1])
@@ -139,12 +159,12 @@ def check(list_only=False, quiet=False):
         text = f"📨 <b>Письмо на {esc(user)}</b>\nОт: {esc(frm)}\nТема: {esc(subj)}\n\n{esc(body_snippet(msg))}"
         if tg(text):
             sent += 1
-        seen.add(u.decode())
+        seen.add(f"{user}:{u.decode()}")
     save_seen(seen)
     M.logout()
     if not quiet:
-        print(f"писем в ящике {len(uids)}, новых для нас {len(fresh)}, отправлено уведомлений {sent}")
-    return 0
+        print(f"{user}: писем {len(uids)}, новых {len(fresh)}, уведомлений {sent}")
+    return sent
 
 
 def main():
