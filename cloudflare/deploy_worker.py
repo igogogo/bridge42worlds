@@ -12,12 +12,17 @@
 """
 import os, sys, subprocess
 from pathlib import Path
+from dotenv import load_dotenv
 
 if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8")
     sys.stderr.reconfigure(encoding="utf-8")
 
 HERE = Path(__file__).resolve().parent
+# Токен подхватываем сами. Первая же выкладка этой обёрткой упала: wrangler не видел
+# CLOUDFLARE_API_TOKEN, потому что раньше я всегда делал `source .env` руками. Обёртка,
+# которая работает только если вызвавший что-то не забыл, — ровно то, от чего мы уходим.
+load_dotenv(HERE.parent / ".env")
 
 
 def main():
