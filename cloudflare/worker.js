@@ -731,7 +731,10 @@ async function handleStats(request, env) {
 // Нормой реакции НЕ считаем: лайк не стоит нам денег, а брать за него из той же нормы,
 // что за вопрос модели, значит наказывать читателя за благодарность. От перебора здесь
 // защищает предел по адресу и правило «один человек — одна реакция».
-const REACTION_KINDS = new Set(["like", "mind", "heart", "wow", "hmm"]);
+// Ровно те три, что рисует клиент (js/likes.js, REACTIONS). Сверено с живыми данными —
+// в первой версии я перечислил выдуманные названия, и ручка отвергла бы настоящие
+// dislike и superlike. Меняя набор здесь, менять и там: список в двух местах разойдётся.
+const REACTION_KINDS = new Set(["like", "dislike", "superlike"]);
 
 async function reactionCounts(env, articleId) {
   const r = await env.QUEUE.prepare(

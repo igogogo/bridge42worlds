@@ -1,22 +1,25 @@
-// bridge42worlds · движок вовлечения: реакции (Supabase) + избранное (localStorage) + обратная связь (Supabase)
-const SUPABASE_URL = 'https://gyfdyfbuolnciaqxgybx.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd5ZmR5ZmJ1b2xuY2lhcXhneWJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3OTk0MzQsImV4cCI6MjA5ODM3NTQzNH0.rKsgWoj5ubRpkvElPfELOn-G9StW5RSOkxBbpvFyWc4';
+// bridge42worlds · движок вовлечения: реакции + избранное (localStorage) + обратная связь.
+//
+// Реакции и отклики живут в НАШЕЙ базе, через наши ручки /api/react и /api/article-feedback
+// (переезд с Supabase, 2026-08-01). Раньше здесь лежал ключ доступа к чужой базе — открытым
+// текстом, на виду у всякого, кто откроет исходник страницы: писать в неё мог кто угодно
+// и сколько угодно, а счётчик накручивался повторным нажатием. Теперь браузер не знает
+// никаких ключей вообще, запись идёт через сервер, и там же стоит правило «один человек —
+// одна реакция».
+//
+// Просмотры отсюда ушли совсем: их считает js/metrics.js своим счётчиком.
 const REACTIONS = ['like', 'dislike', 'superlike']   // superlike рисуется в ленте — без него его счётчик был локальной фикцией;
 
-let _sb = null;
 const _lock = new Set();   // замок ПО ID: глобальный терял тап по соседней карточке
-async function getSupabase() {
-    if (_sb) return _sb;
-    const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
-    _sb = createClient(SUPABASE_URL, SUPABASE_KEY);
-    return _sb;
-}
 
-// Таблицы likes/feedback: колонок user_key/device в них НЕТ (есть только у views), а version/lang/
-// base_id — GENERATED (БД вычисляет их из article_id сама, вставлять нельзя). Раньше react()/
-// submitFeedback вставляли user_key/device → insert падал, лайки и комменты молча не сохранялись
-// (баг найден 2026-07-24). Пишем ТОЛЬКО базовые колонки {article_id, reaction/options/comment,
-// entity_type}; остальное БД проставит сама.
+// Одна дверь наружу на весь модуль. Сеть может не ответить — тогда молчим и не ломаем
+// страницу: реакция уже показана оптимистично, а счётчик подтянется при следующем заходе.
+async function api(path, opts) {
+    try {
+        const r = await fetch(path, Object.assign({ headers: { 'content-type': 'application/json' } }, opts || {}));
+        return r.ok ? await r.json() : null;
+    } catch (e) { return null; }
+}
 
 // ── Реакции: like / dislike / superlike ─────────────────────────────────────
 function myReaction(id) { try { return localStorage.getItem('react_' + id) || ''; } catch { return ''; } }
@@ -30,12 +33,13 @@ function highlightReactions(id) {
 
 async function loadReactions(id) {
     if (!document.querySelector(`[data-article-id="${id}"] [data-react] .rc`)) return; // на карточках счётчиков нет — не дёргаем сеть
-    const sb = await getSupabase();
+    // Один запрос на все три реакции вместо трёх: раньше открытие страницы стоило
+    // три обращения к чужой базе, теперь одно к своей — и оно кэшируется на минуту.
+    const d = await api(`/api/react?id=${encodeURIComponent(id)}`);
+    if (!d) return;
     for (const type of REACTIONS) {
-        const { count } = await sb.from('likes').select('*', { count: 'exact', head: true })
-            .eq('article_id', id).eq('reaction', type);
         document.querySelectorAll(`[data-article-id="${id}"] [data-react="${type}"] .rc`)
-            .forEach(el => el.textContent = count || 0);
+            .forEach(el => el.textContent = (d.counts && d.counts[type]) || 0);
     }
 }
 
@@ -58,7 +62,7 @@ async function react(id, type, entityType) {
     // снимает её, а дальнейшие быстрые тапы игнорируются до подтверждения записи.
     if (_pending.has(id)) { _lock.delete(id); return; }
     _pending.add(id);
-    // ОПТИМИСТИЧНО: отклик СРАЗУ, до сети (юзер 2026-07-25: «нажал — получил», а загрузка supabase
+    // ОПТИМИСТИЧНО: отклик СРАЗУ, до сети (юзер 2026-07-25: «нажал — получил», а поход
     // с CDN + insert + повторный запрос счётчика раньше давали заметную задержку). Сеть — в фоне.
     const wasActive = myReaction(id) === type;
     const prev = myReaction(id);
@@ -74,13 +78,14 @@ async function react(id, type, entityType) {
     setTimeout(() => { _lock.delete(id); }, 350);
     // фоновая запись + тихая ресинхронизация счётчиков с сервером (не блокирует UI)
     try {
-        const sb = await getSupabase();
         if (!wasActive) {
-            const { error } = await sb.from('likes').insert({
-                article_id: id, reaction: type, entity_type: entityType || 'article',
+            const d = await api('/api/react', {
+                method: 'POST',
+                body: JSON.stringify({ id, reaction: type, entityType: entityType || 'article' }),
             });
-            if (error) {
-                console.error('like insert failed:', error.message);
+            if (!d) {
+                // Не сохранилось — откатываем то, что показали оптимистично. Счётчик,
+                // который вырос только в глазах читателя, врёт ему и нам.
                 setMyReaction(id, prev || '');
                 bumpCount(id, type, -1);
                 if (prev) bumpCount(id, prev, +1);
@@ -119,11 +124,15 @@ async function submitFeedback(id, wrap, entityType) {
     const opts = [...box.querySelectorAll('.fb-chip.active')].map(c => c.dataset.opt);
     const comment = (box.querySelector('.fb-comment')?.value || '').trim();
     if (!opts.length && !comment) return;
-    const sb = await getSupabase();
-    const { error } = await sb.from('feedback').insert({
-        article_id: id, options: opts, comment: comment || null, entity_type: entityType || 'article',
+    const sent = await api('/api/article-feedback', {
+        method: 'POST',
+        body: JSON.stringify({
+            id, options: opts, comment: comment || null,
+            entityType: entityType || 'article',
+            lang: document.documentElement.lang || '',
+        }),
     });
-    if (error) console.error('feedback insert failed:', error.message);
+    const error = sent ? null : true;
     const status = box.querySelector('.fb-status');
     // Статус отклика — ЛОКАЛИЗОВАН (был русский хардкод на всех языках, юзер 2026-07-25).
     const FB_MSG = {
@@ -190,28 +199,23 @@ function getUserKey() {
 }
 function deviceType() { return /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop'; }
 
-// Логируем ТОЛЬКО переходы на страницу сущности (не каждый клик) — вызывается один раз со страницы.
-async function logPageView(entityId, entityType, lang) {
-    try {
-        const sb = await getSupabase();
-        await sb.from('views').insert({
-            entity_id: entityId, entity_type: entityType || 'article', lang: lang || '',
-            source: 'page', user_key: getUserKey(), device: deviceType(),
-        });
-    } catch {}
-}
+// Просмотры считает js/metrics.js (событие view в нашу базу), поэтому здесь их больше нет.
+// Функцию оставляем пустой заглушкой, а не удаляем: её зовут из шаблонов страниц, и молча
+// исчезнувшее имя уронило бы страницу целиком ради того, чего мы и так больше не пишем.
+function logPageView() { /* просмотры ушли в js/metrics.js */ }
 window.logPageView = logPageView;
 
 // Клик на «заблокированную» вкладку экспресс-статьи (advanced/popular ещё не сгенерены) —
 // сигнал интереса, чтобы приоритизировать апгрейд до полной версии (run.py regen <id>).
-async function logExpressInterest(entityId, lang) {
+// Этот сигнал НЕ выбрасываем вместе с просмотрами: он не про посещаемость, а про спрос —
+// по нему решают, какую экспресс-статью поднять до полной. Шлём его нашим же счётчиком
+// событием click, чтобы он попал в общую статистику и был виден на дашборде.
+function logExpressInterest(entityId, lang) {
     try {
-        const sb = await getSupabase();
-        await sb.from('views').insert({
-            entity_id: entityId, entity_type: 'article', lang: lang || '',
-            source: 'express_locked', user_key: getUserKey(), device: deviceType(),
-        });
-    } catch {}
+        if (window.b42Metrics && window.b42Metrics.send) {
+            window.b42Metrics.send('click', 'express_locked:' + entityId);
+        }
+    } catch (e) {}
 }
 window.logExpressInterest = logExpressInterest;
 
