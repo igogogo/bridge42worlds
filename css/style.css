@@ -3166,3 +3166,14 @@ body.b42-wait-open { overflow: hidden; }
 /* Подпись у кнопки фильтров полноэкранного графа: значок + слово в один ряд. */
 .graph-fs-collapse-btn { display: inline-flex; align-items: center; gap: 6px; }
 .graph-fs-collapse-btn .fs-flt-word { font-size: 12px; letter-spacing: .2px; }
+
+/* Полноэкранный граф: двойной тап больше не масштабирует СТРАНИЦУ.
+   Владелец 2026-08-01: «сделал двойной клик, масштаб увеличился, вернуть обратно
+   никакими жестами не могу». Так и есть: зумился не граф, а вся страница браузером,
+   а вернуться щипком некуда — оверлей занимает экран целиком и не прокручивается.
+   touch-action: manipulation убирает именно двойной тап (щипок двумя пальцами
+   остаётся — насильно лишать людей увеличения нельзя), а масштаб самого графа
+   делают его собственные кнопки + и −. */
+body.graph-fs-open .graph-fs-active,
+body.graph-fs-open .graph-fs-active canvas,
+body.graph-fs-open .graph-fs-active svg { touch-action: manipulation; }
