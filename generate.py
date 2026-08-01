@@ -801,6 +801,17 @@ ICON_STAR = ('<svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="curre
              'stroke-width="1.6" stroke-linejoin="round" aria-hidden="true">'
              '<path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45L12 21.35 7.05 18.5l1-5.45-4-3.85 5.5-.7Z"/></svg>')
 
+def full_first(items):
+    """Экспресс — в конец списка при прочих равных (правило владельца 2026-07-31).
+
+    Устойчиво: внутри каждой группы сохраняется порядок, который список задал сам
+    (свежесть, вес совпадения). Применяется ко всем спискам статей на страницах
+    сущностей — тега, закона, учёного, раздела: правило одно на весь сайт, и в JS
+    (js/search.js: fullFirst) оно такое же."""
+    full = [a for a in items if not a.get("express")]
+    return full + [a for a in items if a.get("express")]
+
+
 def entity_article_card(a, lang):
     """Карточка статьи в списках справочников (тег/закон/учёный/раздел/автор) — единый вид с
     лентой: миниатюра-обложка + название + короткий текст (юзер 2026-07-24: «список с картинками
@@ -1504,9 +1515,9 @@ def generate_tag_page(tag_id, lang):
     index = json.loads(idx_path.read_text(encoding="utf-8")) if idx_path.exists() else []
 
     articles_html = ""
-    for a in index:
-        if tag_id in a.get("tags", []) and a.get("version") == "popular":
-            articles_html += entity_article_card(a, lang)
+    for a in full_first([x for x in index
+                         if tag_id in x.get("tags", []) and x.get("version") == "popular"]):
+        articles_html += entity_article_card(a, lang)
 
     related_html = " · ".join(
         f'<a href="/{LANG_DIR}/{lang}/tags/{rt}.html" data-tag="{attr_safe(rt)}">{tags_loc.get(rt, {}).get("name", rt)}</a>'

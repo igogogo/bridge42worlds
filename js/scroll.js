@@ -167,7 +167,11 @@ function renderRelated(currentId, lang, version) {
         .filter(function(a){ return a.id !== currentId; })
         .map(function(a){ return { a: a, s: (a.tags||[]).filter(function(t){ return curTags.indexOf(t) !== -1; }).length }; })
         .filter(function(x){ return x.s > 0; })
-        .sort(function(p,q){ return q.s - p.s || q.a.date.localeCompare(p.a.date); })
+        // При равном числе общих тегов: полный разбор выше экспресса, затем свежесть
+        // (правило владельца 2026-07-31 — экспресс понижен во ВСЕХ списках, включая
+        // «похожие статьи»: читатель дочитал разбор, предлагать заметку — шаг назад).
+        .sort(function(p,q){ return q.s - p.s || (p.a.express?1:0) - (q.a.express?1:0)
+                                    || q.a.date.localeCompare(p.a.date); })
         .slice(0, 3);
     if (!scored.length) return;
     // Похожие статьи — те же карточки-подложки с миниатюрой, что на страницах тега/закона/учёного
@@ -204,7 +208,9 @@ function findNextArticle(currentTags, mainTag) {
                 score: a.tags.filter(function(t) { return currentTags.includes(t); }).length + (a.tags.includes(mainTag) ? 10 : 0)
             };
         })
-        .sort(function(a, b) { return b.score - a.score || b.date.localeCompare(a.date); });
+        // «Следующая статья» — тот же порядок: при равном совпадении сначала полные.
+        .sort(function(a, b) { return b.score - a.score || (a.express?1:0) - (b.express?1:0)
+                                      || b.date.localeCompare(a.date); });
     return candidates[0] || articlesIndex.find(function(a) { return !viewedIds.has(a.id); });
 }
 

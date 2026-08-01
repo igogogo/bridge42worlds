@@ -230,8 +230,14 @@ def build_lang(lang):
     for code, name in categories.items():
         rows.append({"t": "sec", "id": code, "n": name, "c": sec_count.get(code, 0)})
     for a in articles:
-        rows.append({"t": "art", "id": a["id"], "n": a.get("title") or a["id"],
-                     "d": a.get("date", "")})
+        # x=1 — экспресс. Одна буква, потому что поле уходит в каждую строку индекса
+        # (2,7 тыс. записей). Нужно выдаче: при равном весе совпадения экспресс
+        # опускается под полные разборы (правило владельца 2026-07-31).
+        row = {"t": "art", "id": a["id"], "n": a.get("title") or a["id"],
+               "d": a.get("date", "")}
+        if a.get("express"):
+            row["x"] = 1
+        rows.append(row)
 
     out = Path(LANG_DIR) / lang / "search-index.json"
     out.parent.mkdir(parents=True, exist_ok=True)

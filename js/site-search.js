@@ -108,9 +108,14 @@
         }
         out.sort(function (a, b) {
             if (b.s !== a.s) return b.s - a.s;
-            // внутри одного веса: у справочников — популярность, у статей — свежесть
-            if (a.row.t === 'art') return (b.row.d || '').localeCompare(a.row.d || '');
-            return (b.row.c || 0) - (a.row.c || 0);
+            if (a.row.t === 'art') {
+                // При равном весе совпадения полный разбор идёт впереди экспресса
+                // (правило владельца 2026-07-31: экспресс находится, но не вытесняет).
+                var ax = a.row.x ? 1 : 0, bx = b.row.x ? 1 : 0;
+                if (ax !== bx) return ax - bx;
+                return (b.row.d || '').localeCompare(a.row.d || '');   // затем свежесть
+            }
+            return (b.row.c || 0) - (a.row.c || 0);                    // справочники — популярность
         });
         return out.map(function (x) {
             var r = x.row;

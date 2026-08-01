@@ -1112,6 +1112,17 @@ function promoteWithCovers(arr, topN) {
     return arr;   // картинок мало — не перетасовываем, лента честнее полупустой витрины
 }
 
+/* Экспресс — в конец любого списка при прочих равных (владелец 2026-07-31).
+   Устойчивое разделение на две группы: внутри каждой порядок, который список задал
+   сам (свежесть, вес совпадения, случайность), — мы лишь опускаем короткие заметки
+   под разборы, а не перетасовываем всё заново. */
+function fullFirst(arr) {
+    var full = [], express = [];
+    for (var i = 0; i < arr.length; i++) (arr[i].express ? express : full).push(arr[i]);
+    return full.concat(express);
+}
+window.b42FullFirst = fullFirst;
+
 function sortFeed(arr, mode) {
     if (mode === 'random') {
         // Тасование Фишера — Йетса по всему списку, а не по верхушке.
@@ -1119,7 +1130,10 @@ function sortFeed(arr, mode) {
             var j = Math.floor(Math.random() * (i + 1));
             var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
         }
-        return promoteWithCovers(arr, 10);
+        // Даже «вперемешку» ставит полные выше: правило владельца 2026-07-31 —
+        // «при прочих равных экспресс понижен в ЛЮБЫХ списках». Случайность остаётся
+        // внутри каждой группы, поэтому лента по-прежнему разная при каждом заходе.
+        return promoteWithCovers(fullFirst(arr), 10);
     }
     // По дате: полные статьи выше express — короткая заметка не должна вытеснять разбор.
     return promoteWithCovers(arr.sort(function(a, b) {
