@@ -3197,21 +3197,27 @@ body.graph-fs-open .graph-fs-active svg { touch-action: manipulation; }
 .mini-depth-ctrl.fs-depth-inline { margin-inline-start: 8px; }
 
 @media (max-width: 640px) {
-  .graph-fs-collapse .mini-graph-filters { display: block; gap: 0; }
-  .graph-fs-collapse .mg-kinds {
+  /* ОДНО правило на оба места (владелец 2026-08-01: «раз сделали так — надо так везде,
+     не только в развёрнутом»). Прежняя версия причёсывала только полноэкранный режим,
+     а те же фильтры прямо на странице статьи оставались вразнобой: ширины 74/77/71
+     и 98/92/97/94/103/91 в пять колонок — та самая свалка, только не на виду.
+     Селектор теперь без привязки к .graph-fs-collapse: панель одна и та же, значит
+     и сетка одна. */
+  .mini-graph-filters { display: block; gap: 0; }
+  .mini-graph-filters .mg-kinds {
     display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; width: 100%;
     padding-bottom: 8px; border-bottom: 1px solid var(--hair, var(--border));
   }
-  .graph-fs-collapse .mg-edges {
+  .mini-graph-filters .mg-edges {
     display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 100%; margin-top: 8px;
   }
-  .graph-fs-collapse .mg-kinds > label,
-  .graph-fs-collapse .mg-edges .mg-edge-label {
+  .mini-graph-filters .mg-kinds > label,
+  .mini-graph-filters .mg-edges .mg-edge-label {
     width: 100%; box-sizing: border-box; justify-content: flex-start;
     padding: 4px 8px; gap: 5px;
   }
-  .graph-fs-collapse .mg-kinds > label { font-size: 11px; }
-  .graph-fs-collapse .mg-edges .mg-edge-label { font-size: 10.5px; white-space: nowrap; }
+  .mini-graph-filters .mg-kinds > label { font-size: 11px; }
+  .mini-graph-filters .mg-edges .mg-edge-label { font-size: 10.5px; white-space: nowrap; }
   /* Связь — одной строкой, как фраза: «тег ↔ закон». Двухэтажную надпись из прежнего
      варианта разворачиваем обратно (см. fsTidy в js/force-graph.js). */
   .mg-edge-stack { display: inline; }

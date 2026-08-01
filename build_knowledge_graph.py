@@ -92,6 +92,65 @@ def main():
             for t in a.get("tags", []):
                 add(f"c:{cat}", f"t:{t}", "cat-tag")
 
+    # ── КВОТЫ СВЯЗЕЙ (владелец 2026-08-01) ────────────────────────────────────────
+    # «Учёный не может быть связан с десятью учёными — только с тремя, с двумя
+    # основными законами и тремя тегами. Оставить только существенные».
+    #
+    # Зачем. Без квот граф превращается в клубок: 8575 рёбер на 773 узла, из них 48% —
+    # один-единственный тип «учёный↔тег», а у хабов вроде «спектроскопия» по 229 связей.
+    # Читатель видит месиво и не может проследить ни одной мысли — а граф ровно для
+    # этого и нужен.
+    #
+    # Как выбираем «существенные». Веса у рёбер нет, поэтому берём меру важности самого
+    # соседа: у тега и закона — число статей (article_count), у учёного — число законов
+    # и тегов, где он назван. Связь с общеизвестным узлом информативнее случайной.
+    # Квота ДВУСТОРОННЯЯ: ребро остаётся, только если помещается в квоту обоих концов —
+    # иначе хаб просто выбрал бы все свои связи первым, и слабый узел снова остался бы
+    # без единой.
+    QUOTA = {                       # сколько связей одного узла с узлами данного вида
+        ("sci", "sci"): 3, ("sci", "law"): 2, ("sci", "tag"): 3,
+        ("law", "law"): 3, ("law", "tag"): 4, ("law", "sci"): 3,
+        ("tag", "tag"): 4, ("tag", "sci"): 3, ("tag", "law"): 3,
+        ("cat", "tag"): 12, ("tag", "cat"): 2,
+    }
+
+    def importance(nid):
+        kind = nodes[nid]["kind"]
+        key = nid[2:]
+        if kind == "tag":
+            return (tg.get(key) or {}).get("article_count", 0)
+        if kind == "law":
+            return len((lg.get(key) or {}).get("tags", [])) * 3 + \
+                   len((lg.get(key) or {}).get("related", []))
+        if kind == "sci":
+            s = sci.get(key) or {}
+            return len(s.get("related_tags", [])) + len(s.get("laws", [])) * 3
+        return 0
+
+    def prune(edge_set):
+        """Оставляем существенные: сортируем по важности пары и режем по квотам обоих концов."""
+        ranked = sorted(edge_set, key=lambda e: -(importance(e[0]) + importance(e[1])))
+        used = {}
+        kept = []
+        for a, b, t in ranked:
+            ka, kb = nodes[a]["kind"], nodes[b]["kind"]
+            qa, qb = QUOTA.get((ka, kb)), QUOTA.get((kb, ka))
+            if qa is None and qb is None:
+                kept.append((a, b, t))
+                continue
+            na = used.get((a, kb), 0)
+            nb = used.get((b, ka), 0)
+            if (qa is not None and na >= qa) or (qb is not None and nb >= qb):
+                continue
+            used[(a, kb)] = na + 1
+            used[(b, ka)] = nb + 1
+            kept.append((a, b, t))
+        return kept
+
+    before = len(edges)
+    edges = prune(edges)
+    print(f"   квоты связей: {before} → {len(edges)} рёбер (убрано {before - len(edges)})")
+
     edge_list = [{"a": a, "b": b, "t": t} for (a, b, t) in sorted(edges)]
     out = {"nodes": list(nodes.values()), "edges": edge_list}
     Path("data").mkdir(exist_ok=True)
