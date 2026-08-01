@@ -3069,3 +3069,31 @@ body.b42-wait-open { overflow: hidden; }
   position: absolute; width: 1px; height: 1px; margin: -1px;
   padding: 0; border: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
 }
+
+/* ── Полноэкранный граф на телефоне: экран отдаём графу целиком ──
+   Было: шапка сайта, ряд языков и бейдж беты оставались НАД графом и перехватывали
+   нажатия — кнопка фильтров «не работала» (палец попадал в логотип), а крестик выхода
+   лежал на кнопке темы, и выйти было нечем (владелец 2026-07-31: «случайно развернул —
+   уменьшить не могу»). Полноэкранный режим обязан быть полноэкранным. */
+@media (max-width: 640px) {
+  body.graph-fs-open .top-bar,
+  body.graph-fs-open .langs-row,
+  body.graph-fs-open .beta-badge,
+  body.graph-fs-open .beta-card { display: none !important; }
+  /* Управление графом — над самим графом и на безопасном отступе от краёв экрана */
+  body.graph-fs-open .graph-fs-controls { z-index: 60; inset-inline: 8px; top: 8px; }
+  body.graph-fs-open .graph-fs-btn,
+  body.graph-fs-open .graph-fs-bgbtn { z-index: 61; }
+  /* Панель фильтров: не во весь экран, с прокруткой — граф остаётся виден за ней */
+  body.graph-fs-open .graph-fs-collapse.open {
+    max-height: 55vh; overflow-y: auto; -webkit-overflow-scrolling: touch;
+  }
+}
+@media (max-width: 640px) {
+  /* Ряд языков на разных страницах верстался то .langs-row, то .langs — прячем оба,
+     иначе он просвечивал сквозь полноэкранный граф (поймано глазами 2026-07-31). */
+  body.graph-fs-open .langs { display: none !important; }
+  /* Фон сплошной: сквозь прозрачный на телефоне читались заголовок и текст страницы,
+     и граф выглядел «сломанным поверх сайта». На десктопе прозрачность оставляем. */
+  body.graph-fs-open .graph-fs-active { background: var(--bg) !important; }
+}
