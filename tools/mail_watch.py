@@ -176,11 +176,22 @@ def main():
     if not args.loop:
         return check(list_only=args.list)
     print(f"сторож почты запущен, опрос раз в {args.every} с")
+    # Отметка «я жив» в KV (добавлено DevOps'ом 2026-08-01, условие архитектора).
+    # Сторож, который молча умер, выглядит ровно как сторож, у которого всё спокойно —
+    # и узнаём мы об этом от автора, чьё письмо никто не прочитал. Отметку проверяет
+    # cron-Worker и пишет в канал, если она старше 12 часов.
+    sys.path.insert(0, str(ROOT / "cloudflare"))
+    try:
+        from heartbeat import beat
+    except Exception:
+        def beat(_name):
+            return False
     while True:
         try:
             check(quiet=True)
         except Exception as ex:
             print(f"⚠️ опрос не удался: {type(ex).__name__} {ex}")
+        beat("mail")
         time.sleep(args.every)
 
 
