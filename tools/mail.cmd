@@ -12,11 +12,16 @@ set "REPO=C:\Users\nadez\PycharmProjects\bridge42worlds"
 set "LOGDIR=%REPO%\logs"
 if not exist "%LOGDIR%" mkdir "%LOGDIR%"
 
+REM Лог со штампом времени: общий файл держит открытым ранее запущенный экземпляр,
+REM и тогда перенаправление падает, а строка с python не выполняется вовсе (поймано
+REM на живом запуске 2026-08-01 — задача возвращала 0 при пустом логе).
+for /f %%I in ('powershell -NoProfile -Command Get-Date -Format yyyyMMdd_HHmm') do set "STAMP=%%I"
+
 cd /d "%REPO%"
 set PYTHONIOENCODING=utf-8
 set PYTHONUNBUFFERED=1
 
-python tools\mail_watch.py --loop >> "%LOGDIR%\mail-watch.log" 2>&1
+python tools\mail_watch.py --loop >> "%LOGDIR%\mail-watch_%STAMP%.log" 2>&1
 set RC=%ERRORLEVEL%
 
 echo [%DATE% %TIME%] mail rc=%RC% >> "%LOGDIR%\mail-history.log"

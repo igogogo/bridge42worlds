@@ -815,6 +815,24 @@ async function handleCouncil(request, env, path) {
   let body = {};
   try { body = await request.json(); } catch { return Response.json({ error: "bad_json" }, { status: 400 }); }
 
+  // Пригласить вручную: выдать ключ человеку, которого позвали лично (автор написал
+  // на почту, читатель оставил дельный комментарий). Владелец 2026-08-02: «в совет
+  // приглашаем не за просмотры, а за внятное участие; авторам — сразу ответом».
+  // Защищено админ-секретом: это не публичная ручка.
+  if (path === "mint") {
+    const admin = request.headers.get("x-b42-admin") || "";
+    if (!env.COUNCIL_ADMIN_TOKEN || admin !== env.COUNCIL_ADMIN_TOKEN) {
+      return Response.json({ error: "forbidden" }, { status: 403 });
+    }
+    const key = councilKey();
+    await env.QUEUE.prepare(
+      "INSERT INTO council_members (key, uid, views, name, email, kind) VALUES (?,?,?,?,?,?)")
+      .bind(key, "invited:" + key, 0, String(body.name || "").slice(0, 40),
+            String(body.email || "").slice(0, 120), String(body.kind || "human")).run();
+    await tg(env, `🏛 <b>Приглашение выдано</b>\n${key} · ${String(body.name || body.email || "").slice(0, 60)}`);
+    return Response.json({ ok: true, key, link: `https://bridge42worlds.academy/council.html?key=${key}` });
+  }
+
   if (path === "join") {
     const uid = String(body.uid || "").slice(0, 32);
     if (!uid) return Response.json({ error: "no_uid" }, { status: 400 });
