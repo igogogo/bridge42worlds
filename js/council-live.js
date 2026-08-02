@@ -38,7 +38,8 @@
               fName: 'Как к вам обращаться (необязательно)',
               fMail: 'Почта для отчётов (необязательно)',
               fHint: 'Оба поля можно пропустить — ключ выдадим всё равно. Почта нужна только для писем о заседаниях.',
-              getKey: 'Получить ключ' },
+              getKey: 'Получить ключ',
+              invited: 'Вас пригласили в наблюдательный совет. Нажмите — и вы внутри: повестка, голосование, предложения.' },
         en: { need: 'To join, open {n} more articles — you have read {seen}.',
               can: 'You have read {seen} articles. That is enough to join the council.',
               join: 'Join the council', joined: 'You are a council member', key: 'Your key',
@@ -54,7 +55,8 @@
               fName: 'How to address you (optional)',
               fMail: 'Email for reports (optional)',
               fHint: 'Both can be skipped — you get the key anyway. Email is only for meeting notices.',
-              getKey: 'Get the key' }
+              getKey: 'Get the key',
+              invited: 'You have been invited to the council. One click and you are in: agenda, voting, proposals.' }
     };
     var L = T[LANG] || T.en;
 
@@ -139,8 +141,11 @@
 
     function showJoin(st) {
         host.innerHTML = '';
-        var can = st.eligible;
-        var line = (can ? L.can : L.need).replace('{seen}', st.views).replace('{n}', Math.max(0, st.need - st.views));
+        // По личному приглашению порог чтения не нужен: человека позвали лично,
+        // и это доказательство участия сильнее счётчика страниц.
+        var can = st.eligible || !!get('b42_council_invite');
+        var line = get('b42_council_invite') ? L.invited
+                 : (can ? L.can : L.need).replace('{seen}', st.views).replace('{n}', Math.max(0, st.need - st.views));
         var b = block('<div class="cl-standing">' + esc(line) + '</div>' +
             (can ? '<button type="button" class="cl-join">' + esc(L.join) + '</button>' : '') +
             '<div class="cl-msg"></div>');
@@ -173,7 +178,7 @@
                 if (window.b42TurnstilePass) pass = await window.b42TurnstilePass();
             } catch (e) {}
             var nm = host.querySelector('.cl-name'), ml = host.querySelector('.cl-mail');
-            api('/join', { uid: uid(), turnstile: pass,
+            api('/join', { uid: uid(), turnstile: pass, invite: get('b42_council_invite') || '',
                            name: nm ? nm.value.trim() : '', email: ml ? ml.value.trim() : '' }).then(function (r) {
                 if (r && r.ok && r.key) { set(LS_KEY, r.key); showMember(r.key); return; }
                 btn.disabled = false;
@@ -238,6 +243,9 @@
     (function keyFromUrl() {
         try {
             var u = new URL(location.href), k = u.searchParams.get('key');
+            var inv = u.searchParams.get('invite');
+            if (inv) { set('b42_council_invite', inv); u.searchParams.delete('invite');
+                       history.replaceState(null, '', u.toString()); }
             if (k && /^B42-/i.test(k)) {
                 set(LS_KEY, k.toUpperCase());
                 u.searchParams.delete('key');

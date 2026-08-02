@@ -845,11 +845,16 @@ async function handleCouncil(request, env, path) {
     }
     const have = await env.QUEUE.prepare("SELECT key FROM council_members WHERE uid=?").bind(uid).first();
     if (have) return Response.json({ ok: true, key: have.key, again: true });
+    // Ссылка-приглашение: владелец рассылает одну ссылку своим людям, и порог чтения
+    // для них не нужен — их пригласили лично, это и есть доказательство участия.
+    // Код живёт в настройках Worker (COUNCIL_INVITE_CODE), меняется без правки кода.
+    const invite = String(body.invite || "").slice(0, 40);
+    const invited = !!(env.COUNCIL_INVITE_CODE && invite && invite === env.COUNCIL_INVITE_CODE);
     const r = await env.QUEUE.prepare(
       `SELECT COUNT(DISTINCT path) n FROM events
         WHERE uid=? AND type='view' AND path LIKE '%/archive/%'`).bind(uid).first();
     const seen = (r && r.n) || 0;
-    if (seen < COUNCIL_MIN_VIEWS) {
+    if (!invited && seen < COUNCIL_MIN_VIEWS) {
       return Response.json({ error: "not_yet", views: seen, need: COUNCIL_MIN_VIEWS }, { status: 403 });
     }
     const key = councilKey();
