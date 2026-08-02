@@ -147,6 +147,40 @@ def from_readers(since):
     return out
 
 
+def from_members(since):
+    """Предложения участников совета из формы на сайте (ручка /api/council/propose,
+    архитектор 2026-08-01). Отдельный источник, а не «ещё одни отзывы»: у этих людей
+    есть ключ, они доказали право входа чтением, и их слово по весу другое.
+
+    Без этого источника цепочка рвалась молча: человек нажимал «отправить» на странице
+    совета, предложение ложилось в council_proposals — и до повестки не доезжало никогда,
+    потому что сборщик про эту таблицу не знал. Форма при этом честно отвечала
+    «предложение записано».
+    """
+    try:
+        rows = _d1("SELECT text, created, lang, key FROM council_proposals "
+                   "ORDER BY id DESC LIMIT 200", _env())
+    except Exception as e:
+        # Таблицы может не быть, пока воркер с ручками совета не выкачен на прод.
+        # Это не повод рушить сбор, но и молчать нельзя: пустая повестка выглядит
+        # так же, как повестка без предложений.
+        print(f"  ⚠️ предложения участников не прочитались ({type(e).__name__}: {e})")
+        print("     если ручки /api/council ещё не на проде — это ожидаемо")
+        return []
+    out = []
+    for r in rows:
+        text = (r.get("text") or "").strip()
+        if since and (r.get("created") or "")[:10] < since:
+            continue
+        if len(text) < 15:
+            continue
+        out.append({"text": text, "role": "совет",
+                    "from": (r.get("key") or "").strip(),
+                    "at": (r.get("created") or "")[:10],
+                    "where": (r.get("lang") or "")})
+    return out
+
+
 def from_mail(since):
     """Предложения письмами на proposal@. Ящик заведён ровно под это, и письмо —
     самый доступный способ высказаться: не нужен ни ключ, ни аккаунт, ни наш сайт.
@@ -275,18 +309,24 @@ def main():
                     pass
     seen = {(i.get("text") or "").strip() for i in existing}
 
-    readers = [r for r in from_readers(since) if r["text"] not in seen]
+    members = [r for r in from_members(since) if r["text"] not in seen]
+    print(f"предложений участников совета: {len(members)}")
+    for r in members:
+        print(f'  · [{r["from"]}] {r["text"][:70]}')
+
+    readers = [r for r in from_readers(since)
+               if r["text"] not in seen and r["text"] not in {x["text"] for x in members}]
     print(f"отзывов с сайта: {len(readers)}")
     for r in readers:
         print(f'  · [{r["where"]}] {r["text"][:70]}')
 
-    letters = [r for r in from_mail(since)
-               if r["text"] not in seen and r["text"] not in {x["text"] for x in readers}]
+    known = seen | {x["text"] for x in members} | {x["text"] for x in readers}
+    letters = [r for r in from_mail(since) if r["text"] not in known]
     print(f"писем на {MAILBOX}: {len(letters)}")
     for r in letters:
         print(f'  · [{r["from"]}] {r["text"][:70]}')
 
-    readers = readers + letters
+    readers = members + readers + letters
     human_count = len(readers) + sum(1 for i in existing if i.get("role") != "модель")
     model_items = []
     if not no_model and human_count:
