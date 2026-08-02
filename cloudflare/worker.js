@@ -741,6 +741,10 @@ async function councilDb(env) {
        views INTEGER DEFAULT 0, name TEXT, email TEXT)`).run();
   // Колонка добавлена позже — у тех, кто вступил до неё, таблица уже создана без email.
   try { await env.QUEUE.prepare("ALTER TABLE council_members ADD COLUMN email TEXT").run(); } catch (e) {}
+  // kind: 'human' | 'ai' — предложение и голос ИИ-участника помечаются значком.
+  // Владелец 2026-08-02: «если это ИИ, то значок у него, что это от ИИ». Скрывать
+  // авторство машины нельзя: участник должен понимать, с кем спорит.
+  try { await env.QUEUE.prepare("ALTER TABLE council_members ADD COLUMN kind TEXT DEFAULT 'human'").run(); } catch (e) {}
   await env.QUEUE.prepare(
     `CREATE TABLE IF NOT EXISTS council_proposals (
        id INTEGER PRIMARY KEY AUTOINCREMENT, key TEXT, text TEXT, lang TEXT,
@@ -868,6 +872,34 @@ async function handleCouncil(request, env, path) {
   }
 
   return Response.json({ error: "unknown" }, { status: 404 });
+}
+
+// Открытая доска совета: сколько участников, что предложено, кем и как идёт голосование.
+// Владелец 2026-08-02: «все чтобы видели, сколько членов совета, голосования и порядок».
+// Без ключа: непубличный совещательный орган — это не совет, а переписка.
+async function handleCouncilBoard(request, env) {
+  if (!env.QUEUE) return Response.json({ error: "db_not_configured" }, { status: 503 });
+  const q = (sql, ...b) => env.QUEUE.prepare(sql).bind(...b).all()
+    .then(r => r.results || []).catch(() => []);
+  const [members, props, votes] = await Promise.all([
+    q(`SELECT kind, COUNT(*) n FROM council_members GROUP BY kind`),
+    // Ник, а не ключ: ключ — это вход, светить его нельзя. Нет ника — «участник».
+    q(`SELECT p.id, p.text, p.created, p.meeting,
+              COALESCE(NULLIF(m.name,''),'участник') nick, COALESCE(m.kind,'human') kind
+         FROM council_proposals p LEFT JOIN council_members m ON m.key = p.key
+        ORDER BY p.id DESC LIMIT 50`),
+    q(`SELECT meeting, question, vote, COUNT(*) n FROM council_votes GROUP BY meeting, question, vote`),
+  ]);
+  const byKind = {}; let total = 0;
+  for (const r of members) { byKind[r.kind || "human"] = r.n; total += r.n; }
+  const tally = {};
+  for (const v of votes) {
+    tally[v.meeting] = tally[v.meeting] || {};
+    tally[v.meeting][v.question] = tally[v.meeting][v.question] || { yes: 0, no: 0, abstain: 0 };
+    tally[v.meeting][v.question][v.vote] = v.n;
+  }
+  return Response.json({ members: { total, ...byKind }, proposals: props, votes: tally },
+                       { headers: { "cache-control": "public, max-age=60" } });
 }
 
 // Итоги голосования — открыто, без ключа: решения совета публичны по определению.
@@ -1468,6 +1500,7 @@ export default {
     if (url.pathname.startsWith("/api/order/")) {
       return withCors(await handleOrderStatus(request, env, url.pathname.slice(11)));
     }
+    if (url.pathname === "/api/council/board") return withCors(await handleCouncilBoard(request, env));
     if (url.pathname === "/api/council/results") return withCors(await handleCouncilResults(request, env));
     if (url.pathname.startsWith("/api/council/")) {
       return withCors(await handleCouncil(request, env, url.pathname.slice(13)));
