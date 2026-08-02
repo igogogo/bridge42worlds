@@ -31,7 +31,14 @@
               send: 'Отправить', sent: 'Предложение записано — оно попадёт в ближайшую повестку.',
               voteTitle: 'Голосование', yes: 'за', no: 'против', abstain: 'воздержаться',
               why: 'Коротко почему (необязательно)', voted: 'Голос учтён. Можно передумать до закрытия заседания.',
-              results: 'Итоги', members: 'участников совета', err: 'Не получилось. Попробуйте ещё раз.' },
+              results: 'Итоги', members: 'участников совета', err: 'Не получилось. Попробуйте ещё раз.',
+              cabinet: 'Ваше участие', cabRead: ' статей прочитано', cabProps: ' предложений',
+              cabVotes: ' голосов', cabSince: ' в совете с', cabMembers: ' участников всего',
+              onAgenda: 'в повестке',
+              fName: 'Как к вам обращаться (необязательно)',
+              fMail: 'Почта для отчётов (необязательно)',
+              fHint: 'Оба поля можно пропустить — ключ выдадим всё равно. Почта нужна только для писем о заседаниях.',
+              getKey: 'Получить ключ' },
         en: { need: 'To join, open {n} more articles — you have read {seen}.',
               can: 'You have read {seen} articles. That is enough to join the council.',
               join: 'Join the council', joined: 'You are a council member', key: 'Your key',
@@ -40,7 +47,14 @@
               send: 'Send', sent: 'Proposal recorded — it will reach the next agenda.',
               voteTitle: 'Vote', yes: 'for', no: 'against', abstain: 'abstain',
               why: 'Briefly why (optional)', voted: 'Vote counted. You may change it until the meeting closes.',
-              results: 'Results', members: 'council members', err: 'Did not work. Please try again.' }
+              results: 'Results', members: 'council members', err: 'Did not work. Please try again.',
+              cabinet: 'Your participation', cabRead: ' articles read', cabProps: ' proposals',
+              cabVotes: ' votes', cabSince: ' member since', cabMembers: ' members total',
+              onAgenda: 'on agenda',
+              fName: 'How to address you (optional)',
+              fMail: 'Email for reports (optional)',
+              fHint: 'Both can be skipped — you get the key anyway. Email is only for meeting notices.',
+              getKey: 'Get the key' }
     };
     var L = T[LANG] || T.en;
 
@@ -74,10 +88,12 @@
             '<div class="cl-ok">🏛 ' + esc(L.joined) + '</div>' +
             '<div class="cl-key"><b>' + esc(L.key) + ':</b> <code>' + esc(key) + '</code>' +
             '<small>' + esc(L.keyNote) + '</small></div>' +
+            '<div class="cl-cab"></div>' +
             '<div class="cl-prop"><h4>' + esc(L.propose) + '</h4>' +
             '<textarea class="cl-text" rows="3" placeholder="' + esc(L.placeholder) + '"></textarea>' +
             '<button type="button" class="cl-send">' + esc(L.send) + '</button>' +
             '<div class="cl-msg"></div></div>'));
+        cabinet(key);
         host.querySelector('.cl-send').onclick = function () {
             var t = host.querySelector('.cl-text').value.trim();
             if (!t) return;
@@ -91,6 +107,36 @@
         mountVoting(key);
     }
 
+    /* Кабинет участника: что он сделал и что из этого вышло. Не «профиль» с аватаркой,
+       а короткая сводка участия — прочитано, предложено, как голосовал. Владелец
+       2026-08-01: «небольшой личный кабинет участника». */
+    function cabinet(key) {
+        fetch(API + '/me?key=' + encodeURIComponent(key))
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (d) {
+                var box = host.querySelector('.cl-cab');
+                if (!d || !d.member || !box) return;
+                var m = d.member;
+                var rows = [
+                    [L.cabRead, m.views],
+                    [L.cabProps, (d.proposals || []).length],
+                    [L.cabVotes, (d.votes || []).length],
+                    [L.cabSince, (m.joined || '').slice(0, 10)],
+                    [L.cabMembers, d.members]
+                ];
+                box.innerHTML = '<h4>' + esc(L.cabinet) + '</h4><div class="cl-stats">' +
+                    rows.map(function (r) {
+                        return '<span><b>' + esc(String(r[1])) + '</b>' + esc(r[0]) + '</span>';
+                    }).join('') + '</div>' +
+                    ((d.proposals || []).length
+                        ? '<ul class="cl-list">' + d.proposals.slice(0, 5).map(function (p) {
+                            return '<li>' + esc((p.text || '').slice(0, 140)) +
+                                   (p.meeting ? ' <em>' + esc(L.onAgenda) + '</em>' : '') + '</li>';
+                          }).join('') + '</ul>'
+                        : '');
+            }).catch(function () {});
+    }
+
     function showJoin(st) {
         host.innerHTML = '';
         var can = st.eligible;
@@ -101,6 +147,22 @@
         host.appendChild(b);
         var btn = host.querySelector('.cl-join');
         if (btn) btn.onclick = async function () {
+            /* Минимальная форма (владелец 2026-08-01: «регистрацию упрости, форма
+               минимальная, окошко»). Спрашиваем ровно два необязательных поля — как
+               обращаться и куда прислать отчёт. Пропустить можно оба: членство от
+               этого не зависит, а лишний вопрос на входе стоит нам участника. */
+            var pane = host.querySelector('.cl-form');
+            if (!pane) {
+                var f = document.createElement('div');
+                f.className = 'cl-form';
+                f.innerHTML =
+                    '<input class="cl-name" type="text" placeholder="' + esc(L.fName) + '">' +
+                    '<input class="cl-mail" type="email" placeholder="' + esc(L.fMail) + '">' +
+                    '<div class="cl-hint">' + esc(L.fHint) + '</div>';
+                btn.insertAdjacentElement('beforebegin', f);
+                btn.textContent = L.getKey;
+                return;                       // первый клик открывает окошко, второй отправляет
+            }
             btn.disabled = true;
             var pass = '';
             try {
@@ -110,7 +172,9 @@
                 });
                 if (window.b42TurnstilePass) pass = await window.b42TurnstilePass();
             } catch (e) {}
-            api('/join', { uid: uid(), turnstile: pass }).then(function (r) {
+            var nm = host.querySelector('.cl-name'), ml = host.querySelector('.cl-mail');
+            api('/join', { uid: uid(), turnstile: pass,
+                           name: nm ? nm.value.trim() : '', email: ml ? ml.value.trim() : '' }).then(function (r) {
                 if (r && r.ok && r.key) { set(LS_KEY, r.key); showMember(r.key); return; }
                 btn.disabled = false;
                 host.querySelector('.cl-msg').textContent = L.err;
@@ -167,6 +231,20 @@
                 if (head && d.members) head.innerHTML += ' <small>' + d.members + ' ' + esc(L.members) + '</small>';
             }).catch(function () {});
     }
+
+    /* Вход по ссылке: /council.html?key=B42-… — владелец рассылает такую ссылку, человек
+       переходит и сразу оказывается в кабинете. Ключ из адреса убираем немедленно:
+       иначе он останется в истории браузера и в реферере при переходе по любой ссылке. */
+    (function keyFromUrl() {
+        try {
+            var u = new URL(location.href), k = u.searchParams.get('key');
+            if (k && /^B42-/i.test(k)) {
+                set(LS_KEY, k.toUpperCase());
+                u.searchParams.delete('key');
+                history.replaceState(null, '', u.toString());
+            }
+        } catch (e) {}
+    })();
 
     var saved = get(LS_KEY);
     if (saved) { showMember(saved); return; }

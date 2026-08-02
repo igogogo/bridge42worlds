@@ -738,7 +738,9 @@ async function councilDb(env) {
   await env.QUEUE.prepare(
     `CREATE TABLE IF NOT EXISTS council_members (
        key TEXT PRIMARY KEY, uid TEXT, joined TEXT DEFAULT CURRENT_TIMESTAMP,
-       views INTEGER DEFAULT 0, name TEXT)`).run();
+       views INTEGER DEFAULT 0, name TEXT, email TEXT)`).run();
+  // Колонка добавлена позже — у тех, кто вступил до неё, таблица уже создана без email.
+  try { await env.QUEUE.prepare("ALTER TABLE council_members ADD COLUMN email TEXT").run(); } catch (e) {}
   await env.QUEUE.prepare(
     `CREATE TABLE IF NOT EXISTS council_proposals (
        id INTEGER PRIMARY KEY AUTOINCREMENT, key TEXT, text TEXT, lang TEXT,
@@ -779,6 +781,30 @@ async function handleCouncil(request, env, path) {
                            eligible: seen >= COUNCIL_MIN_VIEWS, member: !!m });
   }
 
+  // Личный кабинет: что человек сделал в совете. Ключ — он же и вход, пароля нет.
+  if (path === "me") {
+    const k = String(url.searchParams.get("key") || "").slice(0, 24);
+    const m = k ? await env.QUEUE.prepare(
+      "SELECT key, name, email, joined, views, uid FROM council_members WHERE key=?").bind(k).first() : null;
+    if (!m) return Response.json({ error: "not_member" }, { status: 403 });
+    const seen = await env.QUEUE.prepare(
+      `SELECT COUNT(DISTINCT path) n FROM events
+        WHERE uid=? AND type='view' AND path LIKE '%/archive/%'`).bind(m.uid || "").first().catch(() => null);
+    const props = await env.QUEUE.prepare(
+      "SELECT id, text, created, meeting FROM council_proposals WHERE key=? ORDER BY id DESC LIMIT 30")
+      .bind(k).all().catch(() => ({ results: [] }));
+    const votes = await env.QUEUE.prepare(
+      "SELECT meeting, question, vote, created FROM council_votes WHERE key=? ORDER BY created DESC LIMIT 50")
+      .bind(k).all().catch(() => ({ results: [] }));
+    const total = await env.QUEUE.prepare("SELECT COUNT(*) n FROM council_members").first().catch(() => null);
+    return Response.json({
+      member: { key: m.key, name: m.name || "", email: m.email || "", joined: m.joined,
+                views: (seen && seen.n) || m.views || 0 },
+      proposals: props.results || [], votes: votes.results || [],
+      members: (total && total.n) || 0,
+    });
+  }
+
   if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405 });
   const ipOk = await ipGuard(env, request);
   if (!ipOk.ok) return Response.json({ error: ipOk.error }, { status: ipOk.code });
@@ -788,6 +814,9 @@ async function handleCouncil(request, env, path) {
   if (path === "join") {
     const uid = String(body.uid || "").slice(0, 32);
     if (!uid) return Response.json({ error: "no_uid" }, { status: 400 });
+    // Почта необязательна и нужна ровно для одного: присылать статусы заседаний и отчёты
+    // тем, кто попросил. Без неё членство работает полностью — это осознанно.
+    const mail = String(body.email || "").slice(0, 120);
     if (!devBypass(env, request) &&
         !(await turnstileOk(env, body.turnstile, request.headers.get("cf-connecting-ip")))) {
       return Response.json({ error: "captcha_failed" }, { status: 403 });
@@ -803,8 +832,8 @@ async function handleCouncil(request, env, path) {
     }
     const key = councilKey();
     await env.QUEUE.prepare(
-      "INSERT INTO council_members (key, uid, views, name) VALUES (?,?,?,?)")
-      .bind(key, uid, seen, String(body.name || "").slice(0, 40)).run();
+      "INSERT INTO council_members (key, uid, views, name, email) VALUES (?,?,?,?,?)")
+      .bind(key, uid, seen, String(body.name || "").slice(0, 40), mail).run();
     await tg(env, `🏛 <b>Новый участник совета</b>\nключ ${key} · прочитано статей: ${seen}`);
     return Response.json({ ok: true, key });
   }
