@@ -3081,7 +3081,14 @@ body.b42-wait-open { overflow: hidden; }
   body.graph-fs-open .beta-badge,
   body.graph-fs-open .beta-card { display: none !important; }
   /* Управление графом — над самим графом и на безопасном отступе от краёв экрана */
-  body.graph-fs-open .graph-fs-controls { z-index: 60; inset-inline: 8px; top: 8px; }
+  /* Панель управления — ПОД рядом кнопок, а не вровень с ним. Первая версия ставила
+     её на ту же высоту (top: 8), и кнопка фильтров внутри панели оказывалась ровно под
+     крестиком: палец метил в «фильтры», попадал в «закрыть», и снаружи это выглядело
+     как «кнопка ничего не делает» (владелец 2026-08-01, граф из карточки статьи).
+     Причина, по которой это вылезло именно в арабском: панель прижимает своё
+     содержимое к flex-start, а в RTL это ПРАВЫЙ край — там же, где крестик.
+     Отступ сверху убирает наложение при любом направлении письма. */
+  body.graph-fs-open .graph-fs-controls { z-index: 60; inset-inline: 8px; top: 60px; }
   body.graph-fs-open .graph-fs-btn,
   body.graph-fs-open .graph-fs-bgbtn { z-index: 61; }
   /* Панель фильтров: не во весь экран, с прокруткой — граф остаётся виден за ней */
@@ -3142,3 +3149,113 @@ body.b42-wait-open { overflow: hidden; }
   .react-btn, .fav-btn, .cal-btn, .feed-sort-btn, .lv-btn, .beta-send,
   .share-btn, .translate-btn, .nav-more-btn, .graph-fs-btn, .beta-mark { transition: none; }
 }
+
+/* Кнопки полноэкранного графа на телефоне: видимые, разнесённые, с фоном.
+   Раньше они были прозрачными поверх графа — на пёстрой сцене их не было видно,
+   и владелец справедливо не понимал, что это за значок и кому он принадлежит. */
+@media (max-width: 640px) {
+  body.graph-fs-open .graph-fs-btn,
+  body.graph-fs-open .graph-fs-bgbtn {
+    background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.12);
+  }
+  body.graph-fs-open .graph-fs-collapse-btn {
+    background: var(--bg); box-shadow: 0 2px 8px rgba(0,0,0,.12); min-height: 38px;
+  }
+}
+/* Подпись у кнопки фильтров полноэкранного графа: значок + слово в один ряд. */
+.graph-fs-collapse-btn { display: inline-flex; align-items: center; gap: 6px; }
+.graph-fs-collapse-btn .fs-flt-word { font-size: 12px; letter-spacing: .2px; }
+
+/* Полноэкранный граф: двойной тап больше не масштабирует СТРАНИЦУ.
+   Владелец 2026-08-01: «сделал двойной клик, масштаб увеличился, вернуть обратно
+   никакими жестами не могу». Так и есть: зумился не граф, а вся страница браузером,
+   а вернуться щипком некуда — оверлей занимает экран целиком и не прокручивается.
+   touch-action: manipulation убирает именно двойной тап (щипок двумя пальцами
+   остаётся — насильно лишать людей увеличения нельзя), а масштаб самого графа
+   делают его собственные кнопки + и −. */
+body.graph-fs-open .graph-fs-active,
+body.graph-fs-open .graph-fs-active canvas,
+body.graph-fs-open .graph-fs-active svg { touch-action: manipulation; }
+
+
+
+/* ── Панель фильтров графа: вариант Б (выбор владельца 2026-08-01) ──
+   Объекты — три равные колонки; связи — две колонки, слова в одну строку.
+   Почему так, а не «как поместится»: человек считывает СТРУКТУРУ раньше слов, и рваный
+   ритм читается как неряшливость ещё до того, как прочитано хоть одно слово.
+
+   Посчитано до кода, ширина 375:
+     панель внутри = 375 − 16 (поля страницы) − 24 (поля панели) ≈ 320
+     объекты: (320 − 12) / 3 ≈ 102 на клетку — «учёные» при 11px занимает ~40 + галочка,
+       помещается с запасом
+     связи:   (320 − 6) / 2 ≈ 157 — «учёный ↔ учёный» при 10.5px ~85 + галочка, помещается
+   Шесть связей ложатся ровно в три ряда по два, панель ~190 px — граф за ней остаётся виден. */
+.graph-fs-active .graph-fs-controls { flex-direction: row; flex-wrap: wrap; align-items: center; }
+.graph-fs-active .graph-fs-collapse { flex-basis: 100%; }
+/* Глубина — в строке с кнопкой: она про вид, а не про отбор */
+.mini-depth-ctrl.fs-depth-inline { margin-inline-start: 8px; }
+
+@media (max-width: 640px) {
+  /* ОДНО правило на оба места (владелец 2026-08-01: «раз сделали так — надо так везде,
+     не только в развёрнутом»). Прежняя версия причёсывала только полноэкранный режим,
+     а те же фильтры прямо на странице статьи оставались вразнобой: ширины 74/77/71
+     и 98/92/97/94/103/91 в пять колонок — та самая свалка, только не на виду.
+     Селектор теперь без привязки к .graph-fs-collapse: панель одна и та же, значит
+     и сетка одна. */
+  .mini-graph-filters { display: block; gap: 0; }
+  .mini-graph-filters .mg-kinds {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; width: 100%;
+    padding-bottom: 8px; border-bottom: 1px solid var(--hair, var(--border));
+  }
+  .mini-graph-filters .mg-edges {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 100%; margin-top: 8px;
+  }
+  .mini-graph-filters .mg-kinds > label,
+  .mini-graph-filters .mg-edges .mg-edge-label {
+    width: 100%; box-sizing: border-box; justify-content: flex-start;
+    padding: 4px 8px; gap: 5px;
+  }
+  .mini-graph-filters .mg-kinds > label { font-size: 11px; }
+  .mini-graph-filters .mg-edges .mg-edge-label { font-size: 10.5px; white-space: nowrap; }
+  /* Связь — одной строкой, как фраза: «тег ↔ закон». Двухэтажную надпись из прежнего
+     варианта разворачиваем обратно (см. fsTidy в js/force-graph.js). */
+  .mg-edge-stack { display: inline; }
+  .mg-edge-stack i { font-style: normal; }
+  .mg-edge-stack b { font-weight: 400; opacity: .55; margin: 0 3px; }
+}
+
+/* ── Совет живьём: вступление, предложение, голос — прямо на странице ── */
+.cl-box { border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px;
+  margin: 14px 0; background: var(--bg); }
+.cl-ok { font-weight: 600; margin-bottom: 8px; }
+.cl-standing { margin-bottom: 10px; }
+.cl-key { font-size: 13px; margin-bottom: 12px; }
+.cl-key code { font-family: var(--mono, monospace); font-size: 14px; letter-spacing: .5px; }
+.cl-key small { display: block; color: var(--soft); margin-top: 4px; font-size: 11.5px; }
+.cl-prop h4, .cl-vote h4 { margin: 10px 0 6px; font-size: 13px; text-transform: uppercase;
+  letter-spacing: .5px; color: var(--soft); }
+.cl-vote h4 small { text-transform: none; letter-spacing: 0; margin-inline-start: 6px; }
+.cl-text { width: 100%; box-sizing: border-box; padding: 8px 10px; border-radius: 8px;
+  border: 1px solid var(--border); background: var(--bg); color: var(--ink); font: inherit; }
+.cl-join, .cl-send { min-height: 40px; padding: 0 18px; margin-top: 8px; border-radius: 10px;
+  border: 1px solid var(--cyan, #2aa); background: none; color: var(--cyan, #2aa);
+  font: inherit; cursor: pointer; }
+.cl-msg { font-size: 12.5px; color: var(--soft); margin-top: 6px; }
+.cl-q { padding: 10px 0; border-top: 1px solid var(--hair, var(--border)); }
+.cl-qt { font-size: 13.5px; margin-bottom: 6px; }
+.cl-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+.cl-btns button { min-height: 36px; padding: 0 14px; border-radius: 999px;
+  border: 1px solid var(--border); background: none; color: var(--ink); font: inherit; cursor: pointer; }
+.cl-btns button.on { border-color: var(--cyan, #2aa); color: var(--cyan, #2aa); }
+.cl-res { font-size: 12px; color: var(--soft); margin-top: 6px; }
+/* Минимальная форма вступления: два необязательных поля, окошком */
+.cl-form { display: grid; gap: 6px; margin: 10px 0; }
+.cl-form input { padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px;
+  background: var(--bg); color: var(--ink); font: inherit; }
+.cl-hint { font-size: 11.5px; color: var(--soft); line-height: 1.45; }
+.cl-stats { display: flex; flex-wrap: wrap; gap: 10px 16px; margin: 6px 0 10px; font-size: 12.5px; }
+.cl-stats span { color: var(--soft); }
+.cl-stats b { color: var(--ink); font-size: 15px; margin-inline-end: 4px; }
+.cl-list { margin: 0; padding-inline-start: 18px; font-size: 12.5px; color: var(--soft); }
+.cl-list em { color: var(--cyan, #2aa); font-style: normal; }

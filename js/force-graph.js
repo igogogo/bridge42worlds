@@ -189,8 +189,16 @@ window.createForceGraph = function (opts) {
             if (fsCollapsible.length) {
                 fsCollapseBtn = document.createElement('button');
                 fsCollapseBtn.type = 'button'; fsCollapseBtn.className = 'graph-fs-collapse-btn';
-                fsCollapseBtn.innerHTML = (window.B42Icons && B42Icons.menu) ? B42Icons.menu(18) : '☰';
-                fsCollapseBtn.setAttribute('aria-label', 'filters');
+                // Кнопка подписана СЛОВОМ, а не только значком. Голый гамбургер над графом
+                // читался как «непонятная иконка в окантовке»: владелец 2026-08-01 не смог
+                // угадать, чья она и что делает. Значок сам по себе объясняет только тому,
+                // кто уже знает ответ.
+                var FLT = { ru: 'фильтры', en: 'filters', es: 'filtros', ar: 'المرشحات', fr: 'filtres' };
+                var _lang = (document.documentElement.lang || 'en').slice(0, 2);
+                var _word = FLT[_lang] || FLT.en;
+                fsCollapseBtn.innerHTML = ((window.B42Icons && B42Icons.menu) ? B42Icons.menu(16) : '☰') +
+                    '<span class="fs-flt-word">' + _word + '</span>';
+                fsCollapseBtn.setAttribute('aria-label', _word);
                 fsCollapseWrap = document.createElement('div');
                 fsCollapseWrap.className = 'graph-fs-collapse';
                 fsCollapseBtn.addEventListener('click', function (e) { e.stopPropagation(); fsCollapseWrap.classList.toggle('open'); });
@@ -202,6 +210,41 @@ window.createForceGraph = function (opts) {
     // Возврат через плейсхолдер, а НЕ insertBefore(el, savedNext): saved-next-сосед может сам
     // оказаться перенесённым (например filters стоял next для label, но тоже уезжает) — тогда
     // insertBefore падает. Заглушка-комментарий держит исходную позицию независимо от соседей.
+    /* Порядок в панели фильтров — требование владельца 2026-08-01: «это не мелочи,
+       это впечатление о продукте». Было: девять плашек разной длины в одном потоке,
+       и «−1+» (глубина) стоял среди объектов, читаясь как ещё один фильтр.
+       Стало три ряда: глубина уезжает в строку с кнопкой (она про вид, а не про отбор),
+       объекты — своей строкой, связи — двухэтажными плашками «тег / закон» со стрелкой
+       между этажами. Двухэтажность даёт одинаковую ширину всем шести и убирает
+       обрезание длинных пар вроде «закон↔учёный». */
+    function fsTidy(el) {
+        if (!el || !el.querySelectorAll) return;
+        // insertBefore здесь падал: на момент переезда fsCollapseWrap ещё НЕ был внутри
+        // fsPanel (его добавляют следующей строкой), и браузер бросал NotFoundError —
+        // а вместе с ним переставал открываться сам полноэкранный режим. Ставим рядом
+        // с кнопкой обычным добавлением, порядок в строке задаёт CSS.
+        var depth = el.querySelector('.mini-depth-ctrl');
+        if (depth && fsPanel && depth.parentNode !== fsPanel) {
+            try {
+                fsPanel.appendChild(depth);
+                depth.classList.add('fs-depth-inline');
+            } catch (e) { /* глубина не переехала — не повод ронять полноэкранный режим */ }
+        }
+        el.querySelectorAll('.mg-edge-label').forEach(function (lab) {
+            if (lab.dataset.fsStacked) return;
+            var host = Array.prototype.filter.call(lab.childNodes, function (n) {
+                return n.nodeType === 3 && /↔/.test(n.textContent);
+            })[0];
+            if (!host) return;
+            var parts = host.textContent.split('↔');
+            var box = document.createElement('span');
+            box.className = 'mg-edge-stack';
+            box.innerHTML = '<i>' + parts[0].trim() + '</i><b>↔</b><i>' + (parts[1] || '').trim() + '</i>';
+            lab.replaceChild(box, host);
+            lab.dataset.fsStacked = '1';
+        });
+    }
+
     function relocateControls(into) {
         if (!fsPanel) return;
         if (into) {
@@ -209,8 +252,20 @@ window.createForceGraph = function (opts) {
             var take = function (el, dest) {
                 var ph = document.createComment('fs-ctrl');
                 el.parentNode.insertBefore(ph, el);
-                ctrlHomes.push({ el: el, ph: ph });
+                // ПОЧЕМУ снимаем hidden (владелец, пятый заход к одной проблеме, 2026-08-01).
+                // На странице статьи фильтры мини-графа спрятаны атрибутом hidden — их
+                // показывает своя кнопка «настройки». В полноэкранный режим блок переезжал
+                // ВМЕСТЕ со скрытием, поэтому панель «фильтры» открывалась пустой: 0×0
+                // пикселей. Кнопка работала всегда, показывать было нечего — снаружи это
+                // неотличимо от «нажатие не срабатывает», и я четыре раза чинил не ту
+                // болезнь (позицию, подпись, наложение). Атрибут снимаем на время переезда
+                // и возвращаем на место, чтобы на самой странице поведение не изменилось.
+                ctrlHomes.push({ el: el, ph: ph, wasHidden: el.hasAttribute('hidden') });
+                el.removeAttribute('hidden');
                 dest.appendChild(el);
+                // Приборка — в try: любая ошибка косметики не должна мешать графу
+                // открыться (уже наступали на это ровно здесь, 2026-08-01).
+                try { fsTidy(el); } catch (e) { }
             };
             fsKeep.forEach(function (el) { take(el, fsPanel); });
             if (fsCollapsible.length) {
@@ -220,7 +275,10 @@ window.createForceGraph = function (opts) {
                 fsPanel.appendChild(fsCollapseWrap);
             }
         } else {
-            ctrlHomes.forEach(function (h) { if (h.ph.parentNode) h.ph.parentNode.replaceChild(h.el, h.ph); });
+            ctrlHomes.forEach(function (h) {
+                if (h.wasHidden) h.el.setAttribute('hidden', '');   // вернуть как было на странице
+                if (h.ph.parentNode) h.ph.parentNode.replaceChild(h.el, h.ph);
+            });
             ctrlHomes = [];
         }
     }
@@ -275,18 +333,44 @@ window.createForceGraph = function (opts) {
 
     opts.build(lang).then(_ingest);
 
+    /* Силы графа. Владелец 2026-08-01: «в центре месиво, по краям пусто — пусть
+       расползается по всему пространству».
+       Что поменяно и почему:
+       • расталкивание 1500 → 3400 и радиус действия 250 → 340: узлы в гуще отталкивались
+         слабее, чем их стягивало к центру, и слипались в ком;
+       • стяжка к центру 0.0026/0.0045 → 0.0011/0.0018: она нужна лишь чтобы облако
+         не уплыло за край, а не чтобы собирать всех в точку;
+       • длина связи 52 → 74: соседи стоят дальше, подписи перестают наезжать;
+       • расталкивание учитывает РАЗМЕР узла: крупный (много статей) раздвигает соседей
+         сильнее — раньше именно вокруг таких хабов и образовывалось месиво.
+       Итоговый масштаб не меняется: облако всё равно вписывается в 85% канваса ниже
+       по функции, поэтому «расползание» видно как равномерность, а не как рост. */
+    var REPULSE = 3400, REPULSE_R2 = 115600, PULL_X = 0.0011, PULL_Y = 0.0018, LINK_LEN = 74;
+
     function step() {
         var cx = W / 2, cy = H / 2;
         for (var i = 0; i < nodes.length; i++) {
             var a = nodes[i];
             for (var j = i + 1; j < nodes.length; j++) {
                 var b = nodes[j], dx = a.x - b.x, dy = a.y - b.y, d2 = dx * dx + dy * dy || 0.01;
-                if (d2 < 62500) { var d = Math.sqrt(d2), f = 1500 / d2 / d; a.vx += dx * f; a.vy += dy * f; b.vx -= dx * f; b.vy -= dy * f; }
+                if (d2 < REPULSE_R2) {
+                    var d = Math.sqrt(d2);
+                    // вес по размеру: r у нас 4-14, поэтому множитель ~1.0-1.6
+                    var w = 1 + ((a.r + b.r) - 8) / 24;
+                    var f = REPULSE * (w > 0.6 ? w : 0.6) / d2 / d;
+                    a.vx += dx * f; a.vy += dy * f; b.vx -= dx * f; b.vy -= dy * f;
+                }
             }
-            a.vx += (cx - a.x) * 0.0026; a.vy += (cy - a.y) * 0.0045;
+            // Стяжка слабее вдоль ДЛИННОЙ стороны холста. Прежние постоянные (Y сильнее X)
+            // сплющивали облако по горизонтали — на телефоне в полноэкранном режиме холст
+            // высокий, и граф оказывался узкой полосой посередине: сверху и снизу пусто,
+            // в центре месиво (замер: центр плотнее углов в 64 раза). Теперь ось, по которой
+            // места больше, притягивает мягче, и облако вытягивается туда, где пусто.
+            var kx = W >= H ? 0.75 : 1.25, ky = H > W ? 0.75 : 1.25;
+            a.vx += (cx - a.x) * PULL_X * kx; a.vy += (cy - a.y) * PULL_Y * ky;
         }
         links.forEach(function (l) {
-            var a = nodes[l[0]], b = nodes[l[1]], dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || 0.01, f = (d - 52) * 0.02 / d;
+            var a = nodes[l[0]], b = nodes[l[1]], dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || 0.01, f = (d - LINK_LEN) * 0.02 / d;
             a.vx += dx * f; a.vy += dy * f; b.vx -= dx * f; b.vy -= dy * f;
         });
         for (var k = 0; k < nodes.length; k++) {
