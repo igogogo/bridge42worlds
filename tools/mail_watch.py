@@ -156,7 +156,18 @@ def check_box(user, list_only=False, quiet=False):
             continue
         msg = email.message_from_bytes(d[0][1])
         frm, subj = hdr(msg.get("From")), hdr(msg.get("Subject"))
-        text = f"📨 <b>Письмо на {esc(user)}</b>\nОт: {esc(frm)}\nТема: {esc(subj)}\n\n{esc(body_snippet(msg))}"
+        body = body_snippet(msg)
+        # Письма на author@ — главный канал приглашений в совет (владелец 2026-08-02:
+        # «следи внимательно за ящиком, где я автор, — там в ответ можно приглашать сразу»).
+        # Автор, подтвердивший работу, ценнее сотни просмотров: он знает предмет и уже
+        # заинтересован. Помечаем такое письмо отдельно, чтобы оно не потерялось в потоке.
+        author_box = user.split("@")[0].lower() in ("author", "proposal")
+        looks_author = author_box or any(
+            w in (subj + " " + body).lower()
+            for w in ("author", "my paper", "our paper", "arxiv", "مؤلف", "автор статьи"))
+        head = ("👤 <b>АВТОР ПИШЕТ</b> — можно приглашать в совет ответом\n"
+                if looks_author else "📨 <b>Письмо</b>\n")
+        text = (f"{head}Ящик: {esc(user)}\nОт: {esc(frm)}\nТема: {esc(subj)}\n\n{esc(body)}")
         if tg(text):
             sent += 1
         seen.add(f"{user}:{u.decode()}")

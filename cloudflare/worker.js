@@ -738,7 +738,13 @@ async function councilDb(env) {
   await env.QUEUE.prepare(
     `CREATE TABLE IF NOT EXISTS council_members (
        key TEXT PRIMARY KEY, uid TEXT, joined TEXT DEFAULT CURRENT_TIMESTAMP,
-       views INTEGER DEFAULT 0, name TEXT)`).run();
+       views INTEGER DEFAULT 0, name TEXT, email TEXT)`).run();
+  // Колонка добавлена позже — у тех, кто вступил до неё, таблица уже создана без email.
+  try { await env.QUEUE.prepare("ALTER TABLE council_members ADD COLUMN email TEXT").run(); } catch (e) {}
+  // kind: 'human' | 'ai' — предложение и голос ИИ-участника помечаются значком.
+  // Владелец 2026-08-02: «если это ИИ, то значок у него, что это от ИИ». Скрывать
+  // авторство машины нельзя: участник должен понимать, с кем спорит.
+  try { await env.QUEUE.prepare("ALTER TABLE council_members ADD COLUMN kind TEXT DEFAULT 'human'").run(); } catch (e) {}
   await env.QUEUE.prepare(
     `CREATE TABLE IF NOT EXISTS council_proposals (
        id INTEGER PRIMARY KEY AUTOINCREMENT, key TEXT, text TEXT, lang TEXT,
@@ -779,32 +785,82 @@ async function handleCouncil(request, env, path) {
                            eligible: seen >= COUNCIL_MIN_VIEWS, member: !!m });
   }
 
+  // Личный кабинет: что человек сделал в совете. Ключ — он же и вход, пароля нет.
+  if (path === "me") {
+    const k = String(url.searchParams.get("key") || "").slice(0, 24);
+    const m = k ? await env.QUEUE.prepare(
+      "SELECT key, name, email, joined, views, uid FROM council_members WHERE key=?").bind(k).first() : null;
+    if (!m) return Response.json({ error: "not_member" }, { status: 403 });
+    const seen = await env.QUEUE.prepare(
+      `SELECT COUNT(DISTINCT path) n FROM events
+        WHERE uid=? AND type='view' AND path LIKE '%/archive/%'`).bind(m.uid || "").first().catch(() => null);
+    const props = await env.QUEUE.prepare(
+      "SELECT id, text, created, meeting FROM council_proposals WHERE key=? ORDER BY id DESC LIMIT 30")
+      .bind(k).all().catch(() => ({ results: [] }));
+    const votes = await env.QUEUE.prepare(
+      "SELECT meeting, question, vote, created FROM council_votes WHERE key=? ORDER BY created DESC LIMIT 50")
+      .bind(k).all().catch(() => ({ results: [] }));
+    const total = await env.QUEUE.prepare("SELECT COUNT(*) n FROM council_members").first().catch(() => null);
+    return Response.json({
+      member: { key: m.key, name: m.name || "", email: m.email || "", joined: m.joined,
+                views: (seen && seen.n) || m.views || 0 },
+      proposals: props.results || [], votes: votes.results || [],
+      members: (total && total.n) || 0,
+    });
+  }
+
   if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405 });
   const ipOk = await ipGuard(env, request);
   if (!ipOk.ok) return Response.json({ error: ipOk.error }, { status: ipOk.code });
   let body = {};
   try { body = await request.json(); } catch { return Response.json({ error: "bad_json" }, { status: 400 }); }
 
+  // Пригласить вручную: выдать ключ человеку, которого позвали лично (автор написал
+  // на почту, читатель оставил дельный комментарий). Владелец 2026-08-02: «в совет
+  // приглашаем не за просмотры, а за внятное участие; авторам — сразу ответом».
+  // Защищено админ-секретом: это не публичная ручка.
+  if (path === "mint") {
+    const admin = request.headers.get("x-b42-admin") || "";
+    if (!env.COUNCIL_ADMIN_TOKEN || admin !== env.COUNCIL_ADMIN_TOKEN) {
+      return Response.json({ error: "forbidden" }, { status: 403 });
+    }
+    const key = councilKey();
+    await env.QUEUE.prepare(
+      "INSERT INTO council_members (key, uid, views, name, email, kind) VALUES (?,?,?,?,?,?)")
+      .bind(key, "invited:" + key, 0, String(body.name || "").slice(0, 40),
+            String(body.email || "").slice(0, 120), String(body.kind || "human")).run();
+    await tg(env, `🏛 <b>Приглашение выдано</b>\n${key} · ${String(body.name || body.email || "").slice(0, 60)}`);
+    return Response.json({ ok: true, key, link: `https://bridge42worlds.academy/council.html?key=${key}` });
+  }
+
   if (path === "join") {
     const uid = String(body.uid || "").slice(0, 32);
     if (!uid) return Response.json({ error: "no_uid" }, { status: 400 });
+    // Почта необязательна и нужна ровно для одного: присылать статусы заседаний и отчёты
+    // тем, кто попросил. Без неё членство работает полностью — это осознанно.
+    const mail = String(body.email || "").slice(0, 120);
     if (!devBypass(env, request) &&
         !(await turnstileOk(env, body.turnstile, request.headers.get("cf-connecting-ip")))) {
       return Response.json({ error: "captcha_failed" }, { status: 403 });
     }
     const have = await env.QUEUE.prepare("SELECT key FROM council_members WHERE uid=?").bind(uid).first();
     if (have) return Response.json({ ok: true, key: have.key, again: true });
+    // Ссылка-приглашение: владелец рассылает одну ссылку своим людям, и порог чтения
+    // для них не нужен — их пригласили лично, это и есть доказательство участия.
+    // Код живёт в настройках Worker (COUNCIL_INVITE_CODE), меняется без правки кода.
+    const invite = String(body.invite || "").slice(0, 40);
+    const invited = !!(env.COUNCIL_INVITE_CODE && invite && invite === env.COUNCIL_INVITE_CODE);
     const r = await env.QUEUE.prepare(
       `SELECT COUNT(DISTINCT path) n FROM events
         WHERE uid=? AND type='view' AND path LIKE '%/archive/%'`).bind(uid).first();
     const seen = (r && r.n) || 0;
-    if (seen < COUNCIL_MIN_VIEWS) {
+    if (!invited && seen < COUNCIL_MIN_VIEWS) {
       return Response.json({ error: "not_yet", views: seen, need: COUNCIL_MIN_VIEWS }, { status: 403 });
     }
     const key = councilKey();
     await env.QUEUE.prepare(
-      "INSERT INTO council_members (key, uid, views, name) VALUES (?,?,?,?)")
-      .bind(key, uid, seen, String(body.name || "").slice(0, 40)).run();
+      "INSERT INTO council_members (key, uid, views, name, email) VALUES (?,?,?,?,?)")
+      .bind(key, uid, seen, String(body.name || "").slice(0, 40), mail).run();
     await tg(env, `🏛 <b>Новый участник совета</b>\nключ ${key} · прочитано статей: ${seen}`);
     return Response.json({ ok: true, key });
   }
@@ -839,6 +895,34 @@ async function handleCouncil(request, env, path) {
   }
 
   return Response.json({ error: "unknown" }, { status: 404 });
+}
+
+// Открытая доска совета: сколько участников, что предложено, кем и как идёт голосование.
+// Владелец 2026-08-02: «все чтобы видели, сколько членов совета, голосования и порядок».
+// Без ключа: непубличный совещательный орган — это не совет, а переписка.
+async function handleCouncilBoard(request, env) {
+  if (!env.QUEUE) return Response.json({ error: "db_not_configured" }, { status: 503 });
+  const q = (sql, ...b) => env.QUEUE.prepare(sql).bind(...b).all()
+    .then(r => r.results || []).catch(() => []);
+  const [members, props, votes] = await Promise.all([
+    q(`SELECT kind, COUNT(*) n FROM council_members GROUP BY kind`),
+    // Ник, а не ключ: ключ — это вход, светить его нельзя. Нет ника — «участник».
+    q(`SELECT p.id, p.text, p.created, p.meeting,
+              COALESCE(NULLIF(m.name,''),'участник') nick, COALESCE(m.kind,'human') kind
+         FROM council_proposals p LEFT JOIN council_members m ON m.key = p.key
+        ORDER BY p.id DESC LIMIT 50`),
+    q(`SELECT meeting, question, vote, COUNT(*) n FROM council_votes GROUP BY meeting, question, vote`),
+  ]);
+  const byKind = {}; let total = 0;
+  for (const r of members) { byKind[r.kind || "human"] = r.n; total += r.n; }
+  const tally = {};
+  for (const v of votes) {
+    tally[v.meeting] = tally[v.meeting] || {};
+    tally[v.meeting][v.question] = tally[v.meeting][v.question] || { yes: 0, no: 0, abstain: 0 };
+    tally[v.meeting][v.question][v.vote] = v.n;
+  }
+  return Response.json({ members: { total, ...byKind }, proposals: props, votes: tally },
+                       { headers: { "cache-control": "public, max-age=60" } });
 }
 
 // Итоги голосования — открыто, без ключа: решения совета публичны по определению.
@@ -1439,6 +1523,7 @@ export default {
     if (url.pathname.startsWith("/api/order/")) {
       return withCors(await handleOrderStatus(request, env, url.pathname.slice(11)));
     }
+    if (url.pathname === "/api/council/board") return withCors(await handleCouncilBoard(request, env));
     if (url.pathname === "/api/council/results") return withCors(await handleCouncilResults(request, env));
     if (url.pathname.startsWith("/api/council/")) {
       return withCors(await handleCouncil(request, env, url.pathname.slice(13)));
