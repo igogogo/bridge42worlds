@@ -24,6 +24,7 @@ load_dotenv()
 
 # Слои вынесены в модули; generate.py — фасад (рендер/индексы/пайплайн + реэкспорт).
 from common import CONFIG as config, DEEPSEEK_API_KEY, LANGUAGES, DEFAULT_LANG, LANG_DIR, as_list, deepseek_peak_status  # noqa: F401
+import common               # common.job() — метка «к какой статье относится вызов»
 from gen_base import *    # noqa: F401,F403 — константы и базовые хелперы
 from gen_arxiv import *   # noqa: F401,F403 — arXiv/PDF-слой
 from gen_arxiv import _get_with_retry  # leading underscore не попадает в import *
@@ -3280,8 +3281,18 @@ def load_generation_inputs():
     }
 
 
-def build_article(a, date_str, inputs, force=False, express=False, known_license=None, no_fetch=False,
-                  only_langs=None):
+def build_article(a, date_str, inputs, force=False, express=False, **kw):
+    """Фаза A целиком, но помеченная: все вызовы DeepSeek внутри попадают в журнал
+    расхода с id статьи и её видом. Обёртка отдельная, потому что тело фазы длинное
+    и с ранними выходами — оборачивать его целиком значило бы переписать двести строк
+    ради одной метки. Метка живёт в своём потоке (common.job), а статьи готовятся
+    параллельно."""
+    with common.job(article=a.get("id"), kind="экспресс" if express else "полная"):
+        return _build_article(a, date_str, inputs, force=force, express=express, **kw)
+
+
+def _build_article(a, date_str, inputs, force=False, express=False, known_license=None, no_fetch=False,
+                   only_langs=None):
     """Фаза A: arXiv + PDF + все вызовы DeepSeek. Пишет только в папку статьи (гонок нет).
     Возвращает подготовленный dict либо None (пропущено/ошибка).
     express=True — дешёвый режим (см. TODO.md): один вызов generate_express() по авторской

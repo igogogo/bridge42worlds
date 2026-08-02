@@ -161,13 +161,44 @@ def build(days):
     # Он был прав; теперь разовое считается отдельно и в цену статьи не попадает.
     ONE_OFF = {"translate_ref"}          # справочники: разово на язык, не на статью
     one_off = sum(by_agent[k][1] for k in ONE_OFF if k in by_agent)
+
+    # Точный счёт — по метке вызова (common.job): к какой статье и какому виду он относился.
+    # Метка появилась 2026-08-02; для более старых записей её нет, и тогда остаётся дележка
+    # поровну — она ЗАВЫШАЕТ экспресс и занижает полную, потому что экспресс переводится
+    # дешёвой моделью, а полная дорогой. На сверке 2026-08-02 это дало 12 центов за экспресс
+    # вместо девяти и сделало его почти равным полной — а решение «ежедневно только экспресс»
+    # принималось как раз по этим числам. Поэтому честность оценки печатается рядом.
+    tagged = defaultdict(float)
+    tagged_ids = defaultdict(set)
+    n_tagged = 0
+    for r in rows:
+        k = r.get("kind")
+        if k in ("экспресс", "полная"):
+            n_tagged += 1
+            tagged[k] += cost_of(r, pr)
+            if r.get("article"):
+                tagged_ids[k].add(r["article"])
+
     per_article = (n_exp + n_full) or 1
     tr_share = max(0.0, by_kind.get("перевод", 0) - one_off) / per_article
-    unit = {
-        "экспресс": (by_kind.get("экспресс", 0) / n_exp + tr_share) if n_exp else None,
-        "полная": ((by_kind.get("полная", 0) + by_kind.get("шлифовка", 0)) / n_full + tr_share) if n_full else None,
-        "перевод_одной_статьи": tr_share or None,
-    }
+    if n_tagged:
+        # Делим на число статей, реально помеченных в журнале, а не на число папок в архиве:
+        # иначе догон старых статей и статьи, сделанные за пределами окна, снова всё смешают.
+        m_exp = len(tagged_ids["экспресс"]) or n_exp or 1
+        m_full = len(tagged_ids["полная"]) or n_full or 1
+        unit = {
+            "экспресс": (tagged["экспресс"] / m_exp) if tagged["экспресс"] else None,
+            "полная": (tagged["полная"] / m_full) if tagged["полная"] else None,
+            "перевод_одной_статьи": None,
+            "точность": f"по метке вызова ({n_tagged} из {len(rows)} записей)",
+        }
+    else:
+        unit = {
+            "экспресс": (by_kind.get("экспресс", 0) / n_exp + tr_share) if n_exp else None,
+            "полная": ((by_kind.get("полная", 0) + by_kind.get("шлифовка", 0)) / n_full + tr_share) if n_full else None,
+            "перевод_одной_статьи": tr_share or None,
+            "точность": "оценка: перевод делится поровну, экспресс завышен",
+        }
     total = sum(by_day.values())
     month = sum(v for k, v in by_day.items() if k[:7] == datetime.now().strftime("%Y-%m"))
     return {
@@ -200,6 +231,10 @@ def human(s):
         lines.append(f"Себестоимость полной: <b>${u['полная']:.4f}</b>")
     if u.get("перевод_одной_статьи"):
         lines.append(f"Из них перевод: ${u['перевод_одной_статьи']:.4f}")
+    # Насколько числу можно верить — рядом с самим числом, а не в документации.
+    # По этим цифрам решают, что гнать ежедневно; молчаливая оценка тут дороже строчки.
+    if u.get("точность") and (u.get("экспресс") or u.get("полная")):
+        lines.append(f"<i>{u['точность']}</i>")
     lines.append(f"Сделано за период: {s['articles']['экспресс']} экспресс · {s['articles']['полная']} полных")
     lines.append("")
     lines.append("<b>На что ушло:</b>")

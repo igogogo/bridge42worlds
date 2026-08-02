@@ -11,6 +11,7 @@ max_tokens) — из config.json → "agents", чтобы менять их в �
 import os
 import sys
 import json
+import threading
 import time
 import re
 from pathlib import Path
@@ -220,6 +221,36 @@ def agent_cfg(agent):
     }
 
 
+# К чему относятся вызовы прямо сейчас — попадает в каждую строку журнала расхода.
+# Без этого себестоимость статьи посчитать НЕЛЬЗЯ, а не «трудно»: имя агента говорит,
+# ЧТО делали, но не для чего. 2026-08-02 сверка показала, чем это кончается — в цену
+# новых экспрессов попал догон французского по старым статьям, и отчёт выдал 12 центов
+# за экспресс вместо девяти, сделав его почти равным полной. Решение «ежедневно только
+# экспресс» принималось как раз по этим числам.
+#
+# Метка ПО ПОТОКАМ, а не одна на процесс: статьи готовятся в несколько потоков сразу
+# (ThreadPoolExecutor в process_day), и общая метка приписала бы вызовы одной статьи
+# другой — тем вернее, чем больше потоков.
+_job = threading.local()
+
+
+def job_tags():
+    return getattr(_job, "tags", None) or {}
+
+
+def job(**tags):
+    """Пометить вызовы своего потока: `with job(article="2607.12345", kind="экспресс")`."""
+    class _Job:
+        def __enter__(self):
+            self.was = job_tags()
+            _job.tags = {**self.was, **{k: v for k, v in tags.items() if v is not None}}
+
+        def __exit__(self, *exc):
+            _job.tags = self.was
+            return False
+    return _Job()
+
+
 def chat(agent, user_prompt, retries=3, system=None, **overrides):
     """Вызов LLM по ИМЕНИ АГЕНТА (модель/температура/max_tokens из config.agents).
     overrides позволяет точечно переопределить (напр. max_tokens) в конкретном вызове.
@@ -254,6 +285,7 @@ def chat(agent, user_prompt, retries=3, system=None, **overrides):
                            "completion": getattr(u, "completion_tokens", 0),
                            "cache_hit": getattr(u, "prompt_cache_hit_tokens", 0),
                            "cache_miss": getattr(u, "prompt_cache_miss_tokens", 0)}
+                    rec.update(job_tags())
                     with open("data/usage-log.jsonl", "a", encoding="utf-8") as f:
                         f.write(json.dumps(rec, ensure_ascii=False) + chr(10))
             except Exception:
