@@ -240,7 +240,7 @@ def build(lang, t):
 <script>window.B42_COUNCIL_T = {json.dumps({k: t[k] for k in (
     "poll_saved", "b_key_done", "b_copied", "b_copy_manual", "key_note",
     "letter_subject", "letter_title", "letter_name", "letter_mail", "letter_key",
-    "letter_answers", "letter_msg")}, ensure_ascii=False)};</script>
+    "letter_answers", "letter_msg", "sent_ok", "sent_no")}, ensure_ascii=False)};</script>
 <script src="/js/council.js"></script>
 </body>
 </html>
