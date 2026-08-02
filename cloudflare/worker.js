@@ -719,6 +719,147 @@ async function handleStats(request, env) {
   }, { headers: { "cache-control": "public, max-age=300" } });
 }
 
+// ── Наблюдательный совет: вступление, предложения, голоса — ВНУТРИ САЙТА ──────────
+// Решение владельца 2026-08-01: «регистрация без отправки по почте, внутри сайта,
+// ведение заседаний там же; нужен уже реализованный рабочий инструмент».
+//
+// Почему без почты. Почта — это лишний шаг, чужой сервис и повод не дойти. Читателю,
+// который уже прочитал сотню статей, мы верим больше, чем подтверждённому адресу:
+// он доказал участие делом. Поэтому членство — это КЛЮЧ, а не учётная запись:
+// сервер выдаёт его один раз, браузер хранит, человек может записать и перенести
+// на другое устройство. Пароля нет, восстанавливать нечего, персональных данных
+// мы не собираем вовсе — только ключ и дату.
+//
+// Что мешает злоупотреблению: порог участия (сколько статей прочитано — считает наш
+// же счётчик по uid), предел по адресу и одна проверка «не робот» при вступлении.
+const COUNCIL_MIN_VIEWS = 40;   // порог участия; окончательное число — вопрос совета
+
+async function councilDb(env) {
+  await env.QUEUE.prepare(
+    `CREATE TABLE IF NOT EXISTS council_members (
+       key TEXT PRIMARY KEY, uid TEXT, joined TEXT DEFAULT CURRENT_TIMESTAMP,
+       views INTEGER DEFAULT 0, name TEXT)`).run();
+  await env.QUEUE.prepare(
+    `CREATE TABLE IF NOT EXISTS council_proposals (
+       id INTEGER PRIMARY KEY AUTOINCREMENT, key TEXT, text TEXT, lang TEXT,
+       created TEXT DEFAULT CURRENT_TIMESTAMP, meeting TEXT)`).run();
+  await env.QUEUE.prepare(
+    `CREATE TABLE IF NOT EXISTS council_votes (
+       meeting TEXT, question TEXT, key TEXT, vote TEXT, why TEXT,
+       created TEXT DEFAULT CURRENT_TIMESTAMP,
+       PRIMARY KEY (meeting, question, key))`).run();
+}
+
+function councilKey() {
+  // Ключ читаемый и произносимый: его можно записать на бумажке и перенести руками.
+  const abc = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";   // без похожих 0/O, 1/I
+  let s = "";
+  const buf = crypto.getRandomValues(new Uint8Array(12));
+  for (const b of buf) s += abc[b % abc.length];
+  return `B42-${s.slice(0, 4)}-${s.slice(4, 8)}-${s.slice(8, 12)}`;
+}
+
+async function handleCouncil(request, env, path) {
+  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
+  if (!env.QUEUE) return Response.json({ error: "db_not_configured" }, { status: 503 });
+  await councilDb(env);
+  const url = new URL(request.url);
+
+  // Сколько статей прочитал этот читатель — по нашему же счётчику событий.
+  // Это и есть «доказательство участия» вместо подтверждения почты.
+  if (path === "standing") {
+    const uid = String(url.searchParams.get("uid") || "").slice(0, 32);
+    if (!uid) return Response.json({ error: "no_uid" }, { status: 400 });
+    const r = await env.QUEUE.prepare(
+      `SELECT COUNT(DISTINCT path) n FROM events
+        WHERE uid=? AND type='view' AND path LIKE '%/archive/%'`).bind(uid).first();
+    const seen = (r && r.n) || 0;
+    const m = await env.QUEUE.prepare("SELECT key FROM council_members WHERE uid=?").bind(uid).first();
+    return Response.json({ views: seen, need: COUNCIL_MIN_VIEWS,
+                           eligible: seen >= COUNCIL_MIN_VIEWS, member: !!m });
+  }
+
+  if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405 });
+  const ipOk = await ipGuard(env, request);
+  if (!ipOk.ok) return Response.json({ error: ipOk.error }, { status: ipOk.code });
+  let body = {};
+  try { body = await request.json(); } catch { return Response.json({ error: "bad_json" }, { status: 400 }); }
+
+  if (path === "join") {
+    const uid = String(body.uid || "").slice(0, 32);
+    if (!uid) return Response.json({ error: "no_uid" }, { status: 400 });
+    if (!devBypass(env, request) &&
+        !(await turnstileOk(env, body.turnstile, request.headers.get("cf-connecting-ip")))) {
+      return Response.json({ error: "captcha_failed" }, { status: 403 });
+    }
+    const have = await env.QUEUE.prepare("SELECT key FROM council_members WHERE uid=?").bind(uid).first();
+    if (have) return Response.json({ ok: true, key: have.key, again: true });
+    const r = await env.QUEUE.prepare(
+      `SELECT COUNT(DISTINCT path) n FROM events
+        WHERE uid=? AND type='view' AND path LIKE '%/archive/%'`).bind(uid).first();
+    const seen = (r && r.n) || 0;
+    if (seen < COUNCIL_MIN_VIEWS) {
+      return Response.json({ error: "not_yet", views: seen, need: COUNCIL_MIN_VIEWS }, { status: 403 });
+    }
+    const key = councilKey();
+    await env.QUEUE.prepare(
+      "INSERT INTO council_members (key, uid, views, name) VALUES (?,?,?,?)")
+      .bind(key, uid, seen, String(body.name || "").slice(0, 40)).run();
+    await tg(env, `🏛 <b>Новый участник совета</b>\nключ ${key} · прочитано статей: ${seen}`);
+    return Response.json({ ok: true, key });
+  }
+
+  const key = String(body.key || "").slice(0, 24);
+  const member = key ? await env.QUEUE.prepare("SELECT key FROM council_members WHERE key=?").bind(key).first() : null;
+  if (!member) return Response.json({ error: "not_member" }, { status: 403 });
+
+  if (path === "propose") {
+    const text = String(body.text || "").trim().slice(0, 1000);
+    if (!text) return Response.json({ error: "empty" }, { status: 400 });
+    await env.QUEUE.prepare(
+      "INSERT INTO council_proposals (key, text, lang) VALUES (?,?,?)")
+      .bind(key, text, String(body.lang || "").slice(0, 5)).run();
+    await tg(env, `🏛 <b>Предложение в совет</b> (${key})\n${text.slice(0, 800)}`);
+    return Response.json({ ok: true });
+  }
+
+  if (path === "vote") {
+    const meeting = String(body.meeting || "").slice(0, 20);
+    const q = String(body.question || "").slice(0, 80);
+    const v = String(body.vote || "").toLowerCase();
+    if (!meeting || !q || !["yes", "no", "abstain"].includes(v)) {
+      return Response.json({ error: "bad_vote" }, { status: 400 });
+    }
+    // Переголосовать можно: мнение меняется, и это нормально до закрытия заседания.
+    await env.QUEUE.prepare(
+      `INSERT INTO council_votes (meeting, question, key, vote, why) VALUES (?,?,?,?,?)
+       ON CONFLICT(meeting, question, key) DO UPDATE SET vote=excluded.vote, why=excluded.why`)
+      .bind(meeting, q, key, v, String(body.why || "").slice(0, 500)).run();
+    return Response.json({ ok: true });
+  }
+
+  return Response.json({ error: "unknown" }, { status: 404 });
+}
+
+// Итоги голосования — открыто, без ключа: решения совета публичны по определению.
+async function handleCouncilResults(request, env) {
+  if (!env.QUEUE) return Response.json({ error: "db_not_configured" }, { status: 503 });
+  const url = new URL(request.url);
+  const meeting = String(url.searchParams.get("meeting") || "").slice(0, 20);
+  if (!meeting) return Response.json({ error: "no_meeting" }, { status: 400 });
+  const rows = await env.QUEUE.prepare(
+    `SELECT question, vote, COUNT(*) n FROM council_votes WHERE meeting=?
+      GROUP BY question, vote`).bind(meeting).all().catch(() => ({ results: [] }));
+  const members = await env.QUEUE.prepare("SELECT COUNT(*) n FROM council_members").first().catch(() => ({ n: 0 }));
+  const out = {};
+  for (const r of (rows.results || [])) {
+    out[r.question] = out[r.question] || { yes: 0, no: 0, abstain: 0 };
+    out[r.question][r.vote] = r.n;
+  }
+  return Response.json({ meeting, members: (members && members.n) || 0, results: out },
+                       { headers: { "cache-control": "public, max-age=60" } });
+}
+
 // ── Отзывы с плашки предзапуска (владелец 2026-07-31: «если кто напишет — мы это увидели») ──
 // Два канала доставки, падение одного не роняет второй: строка в D1 (история, ничего не
 // теряется) И сообщение в Telegram-канал команды (мгновенная видимость). Клиент при ошибке
@@ -1297,6 +1438,10 @@ export default {
     if (url.pathname === "/api/order") return withCors(await handleOrder(request, env));
     if (url.pathname.startsWith("/api/order/")) {
       return withCors(await handleOrderStatus(request, env, url.pathname.slice(11)));
+    }
+    if (url.pathname === "/api/council/results") return withCors(await handleCouncilResults(request, env));
+    if (url.pathname.startsWith("/api/council/")) {
+      return withCors(await handleCouncil(request, env, url.pathname.slice(13)));
     }
     if (url.pathname === "/api/ev") return withCors(await handleEvents(request, env));
     if (url.pathname === "/api/stats") return withCors(await handleStats(request, env));
