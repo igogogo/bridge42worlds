@@ -27,6 +27,7 @@ from common import CONFIG as config, DEEPSEEK_API_KEY, LANGUAGES, DEFAULT_LANG, 
 from gen_base import *    # noqa: F401,F403 — константы и базовые хелперы
 from gen_arxiv import *   # noqa: F401,F403 — arXiv/PDF-слой
 from gen_arxiv import _get_with_retry  # leading underscore не попадает в import *
+import gen_arxiv          # список отказов читаем через модуль, а не через копию имени
 
 if not DEEPSEEK_API_KEY:
     print("⚠️  DEEPSEEK_API_KEY не задан — доступны только офлайн-операции (html/reindex/check/delete)")
@@ -3785,13 +3786,31 @@ def process_day(date_str, force=False, refresh_aggregates=True, express=False, l
     # разделам, а не по одной категории (юзер-фидбер 2026-07-21: «20 лучших за день по всем разделам»).
     cats = [c.strip() for c in (category or "astro-ph.*").split(",") if c.strip()]
     articles, _seen = [], set()
+    gen_arxiv.FETCH_FAILURES.clear()
     for cat in cats:
         for a in fetch_arxiv(date_str, category=cat):
             if a["id"] not in _seen:
                 _seen.add(a["id"]); articles.append(a)
     if len(cats) > 1:
         print(f"  🔭 периметр {cats}: {len(articles)} уникальных кандидатов")
-    if not articles: return 0
+    if not articles:
+        # Ноль по ВСЕМУ периметру — это не будни, а происшествие. 31 июля — 2 августа 2026
+        # ночной прогон трижды подряд вернул ноль по всем 14 разделам, вышел с кодом
+        # «успех», опубликовал неизменившийся сайт — и лента простояла три дня незаметно.
+        # Такой же простой уже случался в июле, и длился 13 дней. Значит ноль обязан быть
+        # слышен: печатаем причину и отдаём наверх отрицательный код, чтобы планировщик
+        # записал неудачу, а не «rc=0».
+        why = gen_arxiv.FETCH_FAILURES
+        print(f"\n  ⛔ НИ ОДНОГО КАНДИДАТА по всем разделам за {date_str}.")
+        if why:
+            print(f"     arXiv отказал {len(why)} раз(а) из {len(cats)}:")
+            for w in why[:5]:
+                print(f"       · {w}")
+            print("     Это отказ добычи, а не пустой день: статьи есть, мы их не получили.")
+        else:
+            print("     arXiv ответил без ошибок и отдал пусто. Если это будний день, а не")
+            print("     выходной, — смотри лаг выгрузки и не сменился ли формат запроса.")
+        return -1
     best = select_best(articles, date_str)
     if limit is not None:
         best = best[:limit]

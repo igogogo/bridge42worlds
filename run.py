@@ -51,6 +51,11 @@ for _stream in (sys.stdout, sys.stderr):
         pass
 
 
+# Чем run.py отчитается вызывающему. Ставится командой, читается в самом конце — уже
+# после публикации и резервной копии, чтобы неудача дня не отменяла их.
+EXIT_CODE = 0
+
+
 def _yesterday():
     return (datetime.now(timezone.utc) - timedelta(days=1)).strftime("%Y-%m-%d")
 
@@ -92,13 +97,21 @@ def cmd_init(args):
 
 
 def cmd_daily(args):
+    global EXIT_CODE
     _refuse_if_peak("daily")
 
     if args.refine:
         os.environ["REFINE"] = "1"
     import generate
-    generate.process_day(args.date or _yesterday(), force=args.force, express=args.express, category=args.category, limit=args.limit)
+    made = generate.process_day(args.date or _yesterday(), force=args.force,
+                                express=args.express, category=args.category, limit=args.limit)
     _ensure_webp()   # без этого шага свежие статьи выходят без картинок (возврат QA 2026-07-30)
+    # -1 = периметр не дал НИ ОДНОГО кандидата. Возвращаем неудачу наружу: планировщик
+    # пишет код в logs/daily-history.log, и «rc=1» там видно сразу, а «rc=0» трое суток
+    # подряд означало «всё хорошо» при стоящей ленте.
+    if made == -1:
+        EXIT_CODE = 1
+        print("\n⛔ лента за день не пополнилась — смотри причину выше")
 
 
 def cmd_range(args):
@@ -1089,3 +1102,11 @@ if __name__ == "__main__":
     _build_derived_assets()
     _publish_to_r2()
     _backup_to_r2()
+    # Неудача доезжает до вызывающего. Раньше код возврата терялся здесь, и ночной прогон,
+    # не сделавший ни одной статьи, отчитывался планировщику как «rc=0» — три дня подряд.
+    # Признак именно отдельный, а не «команда вернула ненулевое»: cmd_evolve возвращает
+    # КОЛИЧЕСТВО обработанного, и удачный прогон тогда выглядел бы падением.
+    # Публикацию и копию делаем в любом случае: они дельта-based и от пустого дня
+    # не портятся, а вот молчать о неудаче нельзя.
+    if EXIT_CODE:
+        sys.exit(EXIT_CODE)
