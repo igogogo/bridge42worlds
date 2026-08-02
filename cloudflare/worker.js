@@ -703,7 +703,13 @@ async function handleStats(request, env) {
         WHERE dev=0 AND day>=? AND type='view' GROUP BY lang ORDER BY n DESC`, since),
     q(`SELECT extra kind, COUNT(*) n FROM events WHERE dev=0 AND day>=? AND type='click'
         GROUP BY extra ORDER BY n DESC LIMIT 15`, since),
-    q(`SELECT ref, COUNT(*) n FROM events WHERE dev=0 AND day>=? AND type='view' AND ref<>''
+    // Свой домен из «откуда пришли» исключаем: переход со страницы на страницу внутри
+    // сайта — это наша же навигация, а не источник трафика. На первых живых сутках
+    // (2026-08-02) он дал 46 записей из 60 и забил список целиком: настоящие источники,
+    // поиск Google и ChatGPT, оказались под ним. Панель, где на первом месте всегда мы
+    // сами, не отвечает на вопрос, ради которого заведена.
+    q(`SELECT ref, COUNT(*) n FROM events WHERE dev=0 AND day>=? AND type='view'
+         AND ref<>'' AND ref NOT LIKE '%bridge42worlds%'
         GROUP BY ref ORDER BY n DESC LIMIT 10`, since),
     // Возвраты: сколько устройств заходило больше чем в один день
     q(`SELECT COUNT(*) returning FROM (SELECT uid FROM events WHERE dev=0 AND day>=? AND type='view'

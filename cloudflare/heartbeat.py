@@ -13,7 +13,18 @@
 молчание, и Worker увидит отсутствие ключа так же, как устаревший.
 """
 import os
+from pathlib import Path
 import requests
+
+# Окружение подтягиваем сами. Первый живой запуск это и показал: сторож почты
+# не загружает .env (ему доступы приходят иначе), токена в окружении не было,
+# и отметка молча не отправлялась — сторож «работал», а выглядел мёртвым.
+# Помощник, которому нужно, чтобы вызвавший что-то подготовил, — источник таких историй.
+try:
+    from dotenv import load_dotenv
+    load_dotenv(Path(__file__).resolve().parent.parent / ".env")
+except Exception:
+    pass
 
 KV_NAMESPACE = os.environ.get("KV_TOKENS_ID", "bf89cc7963304948a6a7aeeb0a06e43d")
 
