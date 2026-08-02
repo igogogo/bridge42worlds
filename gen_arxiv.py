@@ -49,6 +49,20 @@ def _get_with_retry(url, params=None, timeout=30, retries=3):
             time.sleep(wait)
 
 
+_last_call = [0.0]
+
+
+def _pace(gap=3.0):
+    """Выдержка между запросами к живому API. arXiv просит не чаще одного раза в три
+    секунды, а периметр дня — это 14 запросов подряд без единой паузы. Пока отказ был
+    неотличим от «статей нет», расплата за такую спешку была не видна; теперь видна,
+    но правильнее не нарываться. Ждём ровно недостающее, а не фиксированные три секунды."""
+    wait = gap - (time.monotonic() - _last_call[0])
+    if 0 < wait <= gap:
+        time.sleep(wait)
+    _last_call[0] = time.monotonic()
+
+
 def _category_pattern(category):
     """arXiv 'cat:X.*' — wildcard-совпадение по префиксу подкатегорий, 'cat:X' — точное имя."""
     if category.endswith(".*"):
@@ -112,6 +126,7 @@ def fetch_arxiv(date_str, category="astro-ph.*"):
     # отсутствовали, и ночной прогон честно находил ноль. Пусто в кэше → проверяем живой API.
     if local is not None:
         print("  📦 Кэш пуст за этот день — падаю на живой arXiv API (лаг выгрузки)")
+    _pace()
     f = f"{date_str.replace('-', '')}0000"
     t = f"{date_str.replace('-', '')}2359"
     url = "http://es.arxiv.org/api/query"
