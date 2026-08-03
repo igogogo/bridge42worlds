@@ -508,18 +508,24 @@ function renderSiteStats() {
     var nS = Object.keys(window.scientistsData || {}).length;
     var nAu = Object.keys(window.authorsGraph || {}).length;
     var nLang = (document.querySelectorAll('#langs-bar a').length || 4);
+    // «5 языка» — грамматическая ошибка на самом видном месте главной (владелец 2026-08-02).
+    // Русскому нужны три формы: 1 язык, 2-4 языка, 5+ языков.
+    var langWord = lang === 'ru'
+        ? (nLang % 10 === 1 && nLang % 100 !== 11 ? 'язык'
+           : (nLang % 10 >= 2 && nLang % 10 <= 4 && (nLang % 100 < 12 || nLang % 100 > 14) ? 'языка' : 'языков'))
+        : L.langs;
     // Компактная ОДНА строка (юзер 2026-07-25 «сократи, сожми, уплотни»): 16795 → 16.8k.
     function kfmt(n){ return n >= 10000 ? (n / 1000).toFixed(1).replace('.0', '') + 'k' : String(n); }
     function part(n, w){ return '<b>' + kfmt(n) + '</b> ' + w; }
     var bits = [
         part(nA, L.articles),
         part(nL, L.laws), part(nT, L.tags), part(nSec, L.sections),
-        part(nS, L.scientists), part(nAu, L.authors), part(nLang, L.langs)
+        part(nS, L.scientists), part(nAu, L.authors), part(nLang, langWord)
     ];
     el.innerHTML = bits.join(' · ');
     if (!el.dataset.builtLoaded) {
         el.dataset.builtLoaded = '1';
-        var upd = {ru:'обновлено', en:'updated', es:'actualizado', ar:'حُدّث'}[lang] || 'updated';
+        var upd = {ru:'обновлено', en:'updated', es:'actualizado', ar:'حُدّث', fr:'mis à jour'}[lang] || 'updated';
         fetch('/data/build-info.json').then(function(r){ return r.json(); }).then(function(b){
             if (b && b.built) el.innerHTML += ' <span class="stats-built">/ ' + upd + ' ' + b.built + '</span>';
         }).catch(function(){});
@@ -786,11 +792,20 @@ function removeFilter(prefix, value) {
 window.removeFilter = removeFilter;
 
 function clearSearch() {
+    // Два смысла одного крестика (владелец 2026-08-02: «как закрыть окошко — непонятно»):
+    // есть текст — крестик чистит его; ПУСТО — закрывает саму панель. Так работает
+    // поиск в браузерах и телефонах, читатель это уже умеет. Esc закрывает всегда —
+    // обработчик в initSearchToggle.
     var input = document.querySelector('.search-box');
-    if (input) input.value = '';
-    renderActiveFilters('');
-    showLatest();
-    if (input) input.focus();
+    if (input && input.value) {
+        input.value = '';
+        renderActiveFilters('');
+        showLatest();
+        input.focus();
+        return;
+    }
+    var panel = document.getElementById('search-panel');
+    if (panel) panel.classList.remove('open');
 }
 window.clearSearch = clearSearch;
 
@@ -952,14 +967,61 @@ var LVL_LABEL = {
 
 function levelSwitchHTML(base) {
     var loc = LVL_LABEL[lang] || LVL_LABEL.en;
+    // На КАРТОЧКЕ в ленте ни один уровень не подсвечивается (владелец 2026-08-02:
+    // «кажется, что "Просто" уже выбрано, а результат мы видим только после перехода»).
+    // Это три РАВНОЗНАЧНЫХ входа в статью — «открыть проще / популярнее / подробнее», —
+    // а не переключатель состояния: сам текст карточки от них не меняется. Подсветка
+    // здесь обещала то, чего не происходит. На странице статьи активный уровень
+    // подсвечивается по-прежнему — там он и правда выбран.
     return '<div class="lv-switch lv-switch-card">' + ['simple', 'popular', 'advanced'].map(function (v) {
-        var on = (currentVersion === v) ? ' active' : '';
+        var on = '';
         return '<a class="lv-btn' + on + '" data-version="' + v + '" href="' + base + LVL_FILE[v]
              + '" title="' + loc[v] + '">'
              + '<svg class="vs-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" '
              + 'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + LVL_SVG[v] + '</svg>'
              + '<span class="lv-t">' + loc[v] + '</span></a>';
     }).join('') + '</div>';
+}
+
+/* Частота тегов по всему корпусу: считается один раз при первом обращении.
+   Нужна, чтобы на карточке показывать ГЛАВНЫЕ теги статьи, а не первые попавшиеся. */
+var _tagFreq = null;
+function pickTop(tags, n) {
+    if (!_tagFreq) {
+        _tagFreq = {};
+        (window.searchIndex || []).forEach(function (a) {
+            (a.tags || []).forEach(function (t) { _tagFreq[t] = (_tagFreq[t] || 0) + 1; });
+        });
+    }
+    return tags.filter(Boolean).slice().sort(function (a, b) {
+        return (_tagFreq[b] || 0) - (_tagFreq[a] || 0);
+    }).slice(0, n);
+}
+
+/* Законы статьи ВЫВОДИМ ИЗ ТЕГОВ по графу знаний, а не спрашиваем у модели.
+   Решение владельца 2026-08-02: «законы добавлять в промпт не надо — их надо вытащить
+   через теги, у нас же полный граф». И это оказалось не только дешевле, но и точнее:
+   напрямую закон проставлен лишь у 14% статей (у экспрессов — ни у одной, промпт про
+   законы не спрашивает), а через теги закон находится у 99%. Связи берём из
+   data/tag-laws.json — выжимка рёбер law-tag из графа знаний.
+
+   Отбираем законы, подтверждённые НЕСКОЛЬКИМИ тегами статьи: один общий тег даёт
+   случайную связь, два и больше — осмысленную. Если таких нет, берём закон самого
+   главного тега. */
+var _tagLaws = null;
+fetch('/data/tag-laws.json').then(function (r) { return r.json(); })
+    .then(function (m) { _tagLaws = m; }).catch(function () { _tagLaws = {}; });
+
+function lawsFor(item) {
+    if (item.laws && item.laws.length) return item.laws;   // проставлено явно — уважаем
+    if (!_tagLaws) return [];
+    var tags = item.tags || [], score = {};
+    tags.forEach(function (t) {
+        (_tagLaws[t] || []).forEach(function (l) { score[l] = (score[l] || 0) + 1; });
+    });
+    var ranked = Object.keys(score).sort(function (a, b) { return score[b] - score[a]; });
+    var strong = ranked.filter(function (l) { return score[l] >= 2; });
+    return strong.length ? strong : ranked.slice(0, 1);
 }
 
 function cardHTML(item) {
@@ -991,9 +1053,26 @@ function cardHTML(item) {
     var authorsHtml = au.slice(0, 20).map(function(a) {
         return '<a href="/lang/' + 'en' + '/authors/' + authorSlug(a) + '.html" data-author="' + a + '">' + a + '</a>';
     }).join('<span class="sep">·</span>') + (au.length > 20 ? ' <span class="au-more-lite">+' + (au.length - 20) + '</span>' : '');
-    var tagsHtml = (item.tags || []).slice(0, 6).map(function(t) {
-        return '<a href="/lang/' + lang + '/tags/' + encodeURIComponent(t) + '.html" data-tag="' + t + '">' + ((tagsLoc[t] && tagsLoc[t].name) || t.replace(/_/g, ' ')) + '</a>';
-    }).join('<span class="sep">·</span>');
+    /* Сущности на карточке: ФОРМА отличает тип (владелец 2026-08-02).
+       Тег — круглая пилюля, учёный — скруглённый прямоугольник, закон — строгий квадрат.
+       Читатель узнаёт тип раньше, чем прочитает слово, и это работает на любом языке,
+       включая арабский, где длина слов другая. Типографика одна и та же везде: в ленте,
+       в статье, в облаках — иначе форма перестаёт что-либо значить.
+
+       Теги отбираем по ЧАСТОТЕ в корпусе, а не по порядку из генерации: у статьи их до 11,
+       на карточке нужно 5 главных. Частый тег ведёт в живой раздел, редкий — в пустой. */
+    var tagsHtml = pickTop(item.tags || [], 5).map(function(t) {
+        return '<a class="ent ent-tag" href="/lang/' + lang + '/tags/' + encodeURIComponent(t) + '.html" data-tag="' + t + '">' + ((tagsLoc[t] && tagsLoc[t].name) || t.replace(/_/g, ' ')) + '</a>';
+    }).join('');
+    var sciHtml = (item.scientists || []).slice(0, 3).map(function(s) {
+        var sd = scientistsData[s];
+        return '<a class="ent ent-sci" href="/lang/' + lang + '/scientists/' + authorSlug(s) + '.html" data-scientist="' + s + '">' + ((sd && sd.name) || s) + '</a>';
+    }).join('');
+    var lawHtml = lawsFor(item).slice(0, 2).map(function(l) {
+        var ld = lawsData[l];
+        return '<a class="ent ent-law" href="/lang/' + lang + '/laws/' + encodeURIComponent(l) + '.html" data-law="' + l + '">' + ((ld && ld.name) || l.replace(/_/g, ' ')) + '</a>';
+    }).join('');
+    tagsHtml = lawHtml + sciHtml + tagsHtml;
     // Реакции + избранное прямо в карточке (клики — через делегирование в likes.js; подсветка — на этапе сборки)
     var _likeId = item.id + '_' + lang + '_' + currentVersion;
     var _myR = (typeof myReaction === 'function' ? (myReaction(_likeId) || '') : '');
@@ -1002,7 +1081,6 @@ function cardHTML(item) {
         '<div class="card-actions" data-article-id="' + _likeId + '">' +
         '<button class="react-btn sm' + (_myR === 'like' ? ' active' : '') + '" data-react="like" title="Нравится">' + b42ic('like', 17, '👍') + '<span class="rc"></span></button>' +
         '<button class="react-btn sm' + (_myR === 'dislike' ? ' active' : '') + '" data-react="dislike" title="Не нравится">' + b42ic('dislike', 17, '👎') + '<span class="rc"></span></button>' +
-        '<button class="react-btn sm' + (_myR === 'superlike' ? ' active' : '') + '" data-react="superlike" title="Супер">' + b42ic('star', 17, '⭐') + '<span class="rc"></span></button>' +
         '<button class="fav-btn sm' + (_favOn ? ' active' : '') + '" data-fav="' + item.id + '" title="В избранное"><span class="fav-ic">' + (_favOn ? '★' : '☆') + '</span></button>' +
         '</div>';
     // Обложки лежат ОДИН раз, под ru (умысел: экономия гигабайтов). Ссылки — по языку
@@ -1019,10 +1097,17 @@ function cardHTML(item) {
     // мини-картинка стартует под ним, вровень с заголовком (юзер-фидбек 2026-07-19: "мини картинку
     // выровнять по названию"). Раньше мета была первой строкой card-body — картинка обтекалась от
     // самого верха и её край торчал выше заголовка на высоту меты.
-    var eyebrow = (catName || item.date || item.express) ?
+    // Одна служебная строка вместо двух (владелец 2026-08-02: «ссылку на оригинал и сколько
+    // минут читать — в ту строку, где раздел и дата, не засоряем подвал»). Всё, что относится
+    // к «паспорту» статьи, живёт сверху; низ карточки остаётся под теги и действия.
+    // Описание раздела уходит в data-, а не в title: нативная подсказка рисуется строкой,
+    // уезжает за экран и на телефоне не показывается вовсе.
+    var eyebrow = (catName || item.date || item.express || item.reading) ?
         '<div class="card-eyebrow">' +
-            (catName ? '<a class="card-cat" href="#" title="' + catDesc.replace(/"/g, '&quot;') + '" onclick="filterByCategory(\'' + cat + '\');return false;">' + catName + '</a>' : '') +
+            (catName ? '<a class="card-cat" href="#" data-cat="' + cat + '" data-cat-desc="' + catDesc.replace(/"/g, '&quot;') + '" onclick="filterByCategory(\'' + cat + '\');return false;">' + catName + '</a>' : '') +
             (item.date ? '<span class="card-date">' + item.date + '</span>' : '') +
+            (item.reading ? '<span class="card-read">' + item.reading + ' ' + UI.min + '</span>' : '') +
+            '<a class="card-src" href="https://arxiv.org/abs/' + item.id + '" target="_blank" rel="noopener">arXiv:' + item.id + '</a>' +
             (item.express ? '<span class="card-express-badge" title="' + UI.expressTip + '">' + UI.express + '</span>' : '') +
         '</div>' : '';
     return '<article class="article-card">' +
@@ -1036,7 +1121,6 @@ function cardHTML(item) {
             '<a class="card-title" href="' + url + '">' + item.title + '</a>' +
             (bodyText ? '<div class="card-desc">' + bodyText + '</div>' : '') +
             (authorsHtml ? '<div class="card-authors">' + authorsHtml + '</div>' : '') +
-            '<div class="card-meta">' + (item.reading ? '<svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12.5" r="7.6"/><path d="M12 8.4V12.6L15 14.6"/></svg> ' + item.reading + ' ' + UI.min + '<span class="sep">·</span>' : '') + 'arXiv:' + item.id + '</div>' +
             (tagsHtml ? '<div class="card-tags">' + tagsHtml + '</div>' : '') +
             cardActions +
         '</div>' +
@@ -1420,7 +1504,10 @@ function initCategoryBar() {
     if (!cats.length) { bar.innerHTML = ''; return; }
     bar.innerHTML = cats.map(function(c) {
         var desc = (ARXIV_CAT_DESC[c] || '').replace(/"/g, '&quot;');
-        return '<span class="cat-chip' + (selectedCats[c] ? ' active' : '') + '" data-cat="' + c + '" title="' + desc + '">' +
+        // Описание уходит в data-, а НЕ в title: нативная подсказка браузера рисуется
+        // строкой во всю ширину (уезжает за экран) и на телефоне не показывается вовсе.
+        // Владелец 2026-08-02: «все тултипы — карточка, а не строка, уходящая справа».
+        return '<span class="cat-chip' + (selectedCats[c] ? ' active' : '') + '" data-cat="' + c + '" data-cat-desc="' + desc + '">' +
             (ARXIV_CAT_NAMES[c] || c) + '<span class="cat-chip-n">' + counts[c] + '</span>' +
             '<span class="cat-chip-add" title="' + (UI.addToFilter || '+') + '">+</span></span>';
     }).join('');
@@ -1594,7 +1681,7 @@ function initAllTooltips() {
     // то есть на телефоне слово «экспресс» не объяснялось ничем (владелец 2026-07-31).
     // Бейдж это span вне ссылки, поэтому перехват клика ему безопасен, в отличие от
     // чипов-фильтров, на которых мы уже обжигались.
-    document.querySelectorAll('[data-tag], [data-scientist], [data-law], [data-author], .express-badge, .card-express-badge, .refine-badge').forEach(function(el) {
+    document.querySelectorAll('[data-tag], [data-scientist], [data-law], [data-author], [data-cat-desc], .express-badge, .card-express-badge, .refine-badge').forEach(function(el) {
         if (el.dataset.tooltipInit) return;
         el.dataset.tooltipInit = '1';
 
@@ -1645,6 +1732,10 @@ function initAllTooltips() {
                 content = lw
                     ? '<strong>' + lw.name + '</strong>' + (lw.type ? ' &middot; ' + lw.type : '') + ' &mdash; <span class="tip-desc">' + tipCut(descByVersion(lw)) + '</span> <a href="/lang/' + lang + '/laws/' + encodeURIComponent(el.dataset.law) + '.html">' + UI.more + '</a>'
                     : '<strong>' + (el.textContent || el.dataset.law) + '</strong> <a href="/lang/' + lang + '/laws/' + encodeURIComponent(el.dataset.law) + '.html">' + UI.more + '</a>';
+            } else if (el.dataset.cat) {
+                var cd = el.dataset.catDesc || '';
+                content = '<strong>' + (ARXIV_CAT_NAMES[el.dataset.cat] || el.dataset.cat) + '</strong>'
+                        + (cd ? ' &mdash; <span class="tip-desc">' + tipCut(cd) + '</span>' : '');
             } else if (el.dataset.author) {
                 var a = authorsGraph[el.dataset.author];
                 var count = a ? (a.article_count || (a.articles || []).length || 0) : 0;
@@ -1751,7 +1842,13 @@ function collapseNavOverflow() {
 
     // Extras в ☰ по смыслу (юзер 2026-07-25: «map→analytics, пересортируй, about не в центре»):
     // сначала исследование (dashboard, analytics), «о проекте» — последним.
-    [['/learn.html', 'learn'], ['/lang/' + lang + '/archive/', 'dashboard'], ['/lang/' + lang + '/analytics/', 'analytics'], ['/lang/' + lang + '/about.html', 'about']].forEach(function(e) {
+    // authors и graph добавлены сюда 2026-08-02 вместе с чисткой шапки: раньше они стояли
+    // в шаблоне и попадали в шторку сворачиванием. Когда я убрал их из двенадцати шаблонов,
+    // они исчезли из меню ЦЕЛИКОМ — разделы остались на сайте, но попасть в них стало
+    // неоткуда. Урок: убирая элемент из разметки, проверь, не он ли был источником для кода,
+    // который его же и перекладывает.
+    [['/lang/en/authors/', 'authors'], ['/lang/' + lang + '/graph/', 'graph'],
+     ['/learn.html', 'learn'], ['/lang/' + lang + '/archive/', 'dashboard'], ['/lang/' + lang + '/analytics/', 'analytics'], ['/lang/' + lang + '/about.html', 'about']].forEach(function(e) {
         if (panel.querySelector('a[href="' + e[0] + '"]')) return;
         var a = document.createElement('a');
         a.href = e[0]; a.textContent = e[1];
@@ -1973,6 +2070,16 @@ function initSearchToggle() {
         if (panel.classList.contains('open') && !panel.contains(e.target) && !btn.contains(e.target)) {
             panel.classList.remove('open');
         }
+    });
+    // Esc: набранное остаётся (вдруг вернёшься), панель прячется. Заодно закрываем
+    // соседей по паттерну «выпадашка от кнопки» — календарь и попап «i»: аналогичная
+    // функциональность должна закрываться одинаково (владелец 2026-08-02).
+    document.addEventListener('keydown', function(e) {
+        if (e.key !== 'Escape') return;
+        ['search-panel', 'calendar-panel', 'intro-popup'].forEach(function(id) {
+            var p = document.getElementById(id);
+            if (p) p.classList.remove('open');
+        });
     });
 }
 document.addEventListener('DOMContentLoaded', initSearchToggle);

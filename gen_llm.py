@@ -427,7 +427,8 @@ def translate_scipop_slim(tier, adv_translated, target_lang, retries=2):
         article_json=json.dumps(slim, ensure_ascii=False), target_language=target_language,
         culture_note=CULTURE_NOTES.get(target_lang, "")) + _termbase_block(slim, target_lang)
     for attempt in range(1, retries + 1):
-        r = chat("translate_flash", prompt, system=_translation_system(target_language, slim))
+        r = chat("translate_flash", prompt + _translation_contract(slim),
+                 system=_translation_system(target_language))
         try:
             out = json.loads(clean_json(r.choices[0].message.content))
         except Exception:
@@ -782,19 +783,32 @@ def _translation_system(target_language, src=None):
     и числа (62 вызова перевода на 3 статьи вместо ~36, переводы = 75% цены статьи).
     Обещание «не теряй» не работает — работает контракт с числами, который валидатор
     потом проверяет теми же счётчиками."""
-    base = (f"You are a professional scientific translator. TARGET LANGUAGE: {target_language}. "
+    return (f"You are a professional scientific translator. TARGET LANGUAGE: {target_language}. "
             f"Every text value in your JSON answer MUST be written in {target_language} only. "
             f"Cyrillic characters are FORBIDDEN in the output (exception: content inside "
-            f"[tag:...]/[scientist:...] marker IDs and latex fields, which are copied verbatim). ")
-    if src is not None:
-        st = _flat_text(src)
-        markers = _MARKER_RE.findall(st)
-        nums = sorted(set(_NUM_RE.findall(st)))[:40]
-        base += (f"HARD CONTRACT (validator rejects your answer otherwise): the source contains "
-                 f"EXACTLY {len(markers)} entity markers — reproduce every one of them, same IDs, "
-                 f"no more, no fewer. These numbers appear in the source and every one of them "
-                 f"must appear in your output unchanged: {', '.join(nums)}. ")
-    return base + "Do not add, drop or alter any numbers, markers or latex."
+            f"[tag:...]/[scientist:...] marker IDs and latex fields, which are copied verbatim). "
+            f"Do not add, drop or alter any numbers, markers or latex.")
+
+
+def _translation_contract(src):
+    """Контракт с числами и счётчиком маркеров — в КОНЕЦ пользовательского текста,
+    а не в системную роль.
+
+    Он у каждой статьи свой, а системная роль идёт первой строкой запроса. Пока контракт
+    жил в ней, начало КАЖДОГО запроса было уникальным — и кэш DeepSeek, который срабатывает
+    только на полном совпадении НАЧАЛА, не попадал почти никогда. Замер 2026-08-02: у
+    переводов попадание 25-29% против 85% у экспресса — при том, что перевод у нас самая
+    массовая операция (1532 вызова за неделю). Сам контракт нужен и остаётся: без него
+    модель теряет маркеры и числа (урок 2026-07-30). Он просто переезжает в конец."""
+    if src is None:
+        return ""
+    st = _flat_text(src)
+    markers = _MARKER_RE.findall(st)
+    nums = sorted(set(_NUM_RE.findall(st)))[:40]
+    return (f"\n\nHARD CONTRACT (validator rejects your answer otherwise): the source contains "
+            f"EXACTLY {len(markers)} entity markers — reproduce every one of them, same IDs, "
+            f"no more, no fewer. These numbers appear in the source and every one of them "
+            f"must appear in your output unchanged: {', '.join(nums)}.")
 
 
 _CYR_FIELD_RE = _CYR_RE
@@ -841,7 +855,8 @@ def _retranslate_cyrillic_fields(out, target_lang, target_language, src=None):
         # Починка отдельных строк, где осталась кириллица: работа механическая — перевести
         # список коротких строк, не трогая маркеры и числа. Дешёвая модель справляется,
         # а вызовов таких много (это ремонт после каждого перевода).
-        r = chat("translate_light", prompt, system=_translation_system(target_language, src))
+        r = chat("translate_light", prompt + _translation_contract(src),
+                 system=_translation_system(target_language))
         fixed = json.loads(clean_json(r.choices[0].message.content)).get("strings")
         if not isinstance(fixed, list) or len(fixed) != len(strings):
             return False
@@ -872,7 +887,8 @@ def translate_scipop(scipop, target_lang, retries=3):
         article_json=json.dumps(payload, ensure_ascii=False), target_language=target_language,
         culture_note=CULTURE_NOTES.get(target_lang, "")) + _termbase_block(scipop, target_lang)
     for attempt in range(1, retries + 1):
-        r = chat("translate", prompt, system=_translation_system(target_language, payload))
+        r = chat("translate", prompt + _translation_contract(payload),
+                 system=_translation_system(target_language))
         try:
             out = json.loads(clean_json(r.choices[0].message.content))
         except Exception as e:
@@ -900,9 +916,65 @@ def translate_scipop(scipop, target_lang, retries=3):
         if attempt == retries:
             _log_translation_failure("scipop", target_lang,
                                      f"{scipop.get('title', '')[:60]!r}: брак перевода — {'; '.join(problems)}")
+            # ПОСЛЕДНИЙ ШАНС: перевести по полям, а не целиком. Брак почти всегда локальный —
+            # потерялось число в одном абзаце, съелся маркер в другом, — а мы из-за этого
+            # выбрасывали весь перевод и подставляли русский. Владелец 2026-08-02: «может,
+            # всё надо по частям; проверяй результат сразу, а не узнавай потом».
+            partial = _translate_by_fields(scipop, target_lang, target_language)
+            if partial is not None:
+                print(f"    ✚ перевод {target_lang}: собран по полям после брака целиком")
+                return partial
         else:
             print(f"    ↻ перевод {target_lang}: {problems[0]} — повтор {attempt}/{retries}")
-    return scipop
+    # Тихого отката БОЛЬШЕ НЕТ. Раньше здесь стоял `return scipop` — русский оригинал
+    # возвращался как «перевод», страница выходила с флагом чужого языка и русским текстом,
+    # и узнавали об этом, только когда владелец открывал сайт. Из 1102 записей в
+    # translation-failures.log никто не прочёл ни одной. Пустой перевод честнее поддельного:
+    # None означает «языка у статьи нет», вызывающий код это видит и пишет в сводку прогона.
+    return None
+
+
+def _translate_by_fields(scipop, target_lang, target_language):
+    """Перевод ПО ПОЛЯМ: длинный уровень режется на отдельные строки и переводится группами.
+
+    Зачем: целиком статья иногда не проходит контроль (модель теряет число или маркер
+    где-то в одном месте), и весь труд шёл в мусор. По полям брак локализуется — не вышло
+    одно поле, остальные всё равно переведены. Возвращает словарь или None, если не собралось
+    даже наполовину: полупустая статья хуже отсутствующей."""
+    src_fields = {k: v for k, v in scipop.items()
+                  if isinstance(v, str) and v.strip() and k not in _INTERNAL_FIELDS
+                  and k not in ("main_tag", "extra_tags", "scientists", "laws")}
+    if not src_fields:
+        return None
+    out = dict(scipop)
+    done = 0
+    keys = list(src_fields)
+    # группами по 4 поля: короткий запрос переживает контроль лучше длинного,
+    # но по одному полю платить за системную роль накладно
+    for i in range(0, len(keys), 4):
+        chunk = {k: src_fields[k] for k in keys[i:i + 4]}
+        try:
+            r = chat("translate_light",
+                     load_prompt("article-translate").format(
+                         article_json=json.dumps(chunk, ensure_ascii=False),
+                         target_language=target_language,
+                         culture_note=CULTURE_NOTES.get(target_lang, ""))
+                     + _translation_contract(chunk),
+                     system=_translation_system(target_language))
+            got = json.loads(clean_json(r.choices[0].message.content))
+        except Exception:
+            continue
+        for k in chunk:
+            v = got.get(k)
+            if isinstance(v, str) and v.strip():
+                out[k] = v
+                done += 1
+    if done < max(1, len(keys) // 2):
+        return None
+    for _k in ("main_tag", "extra_tags", "tags", "scientists", "laws") + _INTERNAL_FIELDS:
+        if _k in scipop:
+            out[_k] = scipop[_k]
+    return out
 
 
 def translate_captions(captions_en, target_lang, retries=3):

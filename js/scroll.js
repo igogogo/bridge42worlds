@@ -159,9 +159,81 @@ function urlForVersion(url, version) {
     return url.replace(/\/[^\/]+$/, '/' + file);
 }
 
+/* Похожие статьи: сначала СМЫСЛ, тегами добираем.
+ *
+ * Владелец 2026-08-02: «вектор строили как раз для этого — связь статей напрямую; можно
+ * ссылок понаставить по тексту, это будет эффектно».
+ *
+ * Раньше «похожие» подбирались по совпадению тегов. Тег — грубая мерка: две работы про
+ * «энтропию» бывают о совершенно разном, а работа про приливные силы и работа про
+ * деформацию звёзд общего тега могут не иметь вовсе. data/related-vec.json содержит
+ * связи, посчитанные по САМИМ ТЕКСТАМ (tools/vector_links_local.py): 6313 связей,
+ * 88% статей. Где смысловой связи нет — остаётся прежний подбор по тегам, чтобы блок
+ * не пустовал.
+ */
+var _relVec = null;
+fetch('/data/related-vec.json').then(function (r) { return r.json(); })
+    .then(function (m) {
+        _relVec = m;
+        // Рисуем блок САМИ, не дожидаясь ленивого загрузчика.
+        //
+        // Раньше «похожие» рисовались только из whenNeeded — обработчика, который ждёт,
+        // когда блок подойдёт к экрану. На живой странице он не срабатывал вовсе (проверено
+        // 2026-08-02: индекс так и оставался пустым, блок пустовал), и связи по смыслу
+        // читатель не увидел бы ни разу. Ждать чужого события, чтобы показать своё, —
+        // лишняя зависимость: у нас есть всё нужное, id статьи стоит прямо в разметке.
+        var args = window.__relatedArgs;
+        if (!args) {
+            var el = document.querySelector('[data-article-id]');
+            var raw = el ? el.dataset.articleId : '';
+            var id = (raw.split('_')[0] || '');
+            if (!/^\d{4}\.\d{4,5}(v\d+)?$/.test(id)) return;
+            var path = location.pathname;
+            var ver = path.indexOf('advanced.html') !== -1 ? 'advanced'
+                    : (path.indexOf('simple.html') !== -1 ? 'simple'
+                    : (path.indexOf('mini.html') !== -1 ? 'mini' : 'popular'));
+            args = [id, getLang(), ver];
+        }
+        renderRelated.apply(null, args);
+    }).catch(function () { _relVec = {}; });
+function relatedByMeaning(currentId) {
+    if (!_relVec) return null;
+    var near = _relVec[currentId];
+    if (!near || !near.length) return null;
+    var byId = {};
+    articlesIndex.forEach(function (a) { if (!byId[a.id]) byId[a.id] = a; });
+    return near.map(function (n) { return byId[n.id]; }).filter(Boolean).slice(0, 3);
+}
+
 function renderRelated(currentId, lang, version) {
     var box = document.getElementById('related');
     if (!box) return;
+    window.__relatedArgs = [currentId, lang, version];
+    /* Блок может отрисовываться раньше, чем подъехал индекс статей: у него ленивая
+       загрузка (см. whenNeeded), и порядок зависит от того, как быстро читатель долистал
+       и что успел кэш. Раньше в этом случае «похожие» просто оставались пустыми — молча.
+       Теперь не гадаем о порядке: нет индекса — грузим и перерисовываемся. */
+    if (!articlesIndex.length) {
+        if (!window.__relIdxLoading) {
+            window.__relIdxLoading = 1;
+            var F = { popular: 'articles-index.json', simple: 'articles-index-simple.json',
+                      advanced: 'articles-index-advanced.json', mini: 'articles-index.json' };
+            fetch('/lang/' + lang + '/' + (F[version] || F.popular))
+                .then(function (r) { return r.ok ? r.json() : []; })
+                .then(function (idx) {
+                    if (idx && idx.length) {
+                        articlesIndex = idx;
+                        renderRelated(currentId, lang, version);
+                    }
+                }).catch(function () {});
+        }
+        return;
+    }
+    var byMeaning = relatedByMeaning(currentId);
+    if (byMeaning && byMeaning.length) {
+        drawRelated(box, byMeaning.map(function (a) { return { a: a }; }), lang, version);
+        return;
+    }
     var curTags = Array.from(document.querySelectorAll('.side-tag')).map(function(e){ return e.dataset.tag || ''; });
     var scored = articlesIndex
         .filter(function(a){ return a.id !== currentId; })
@@ -174,8 +246,13 @@ function renderRelated(currentId, lang, version) {
                                     || q.a.date.localeCompare(p.a.date); })
         .slice(0, 3);
     if (!scored.length) return;
-    // Похожие статьи — те же карточки-подложки с миниатюрой, что на страницах тега/закона/учёного
-    // (юзер 2026-07-24: «related как в карточках тегов, на плашках с картинкой»).
+    drawRelated(box, scored, lang, version);
+}
+
+/* Отрисовка блока «похожие» — одна на оба способа подбора (по смыслу и по тегам).
+   Карточки-подложки с миниатюрой, как на страницах тега/закона/учёного
+   (юзер 2026-07-24: «related как в карточках тегов, на плашках с картинкой»). */
+function drawRelated(box, scored, lang, version) {
     box.innerHTML = '<h3 class="related-h">' + (box.dataset.label || 'Related') + '</h3>' +
         scored.map(function(x){
             var a = x.a;

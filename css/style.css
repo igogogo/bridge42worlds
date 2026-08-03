@@ -413,15 +413,12 @@ body.graph-fs-open { overflow: hidden; }
    (юзер 2026-07-24). white-space:normal + overflow-wrap — переносится по « / », а не режется. */
 .site-stats { text-align: left; max-width: 620px; font-size: 10.5px; line-height: 1.5;
     color: var(--soft); margin: 2px 0 14px; font-family: var(--mono);
-    /* строго ОДНА строка: не переносим, лишнее — горизонтальным свайпом (юзер 2026-07-25) */
-    white-space: nowrap; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
-.site-stats::-webkit-scrollbar { display: none; }
-/* На телефоне «одна строка со свайпом» не работала: хвост «201 учёный · 17.4k авторов»
-   стоял за краем экрана без возможности доскроллить (QA 2026-07-29, x=434..539 при 375).
-   Одна строка остаётся правилом десктопа; на узком — перенос, читатель видит всё. */
-@media (max-width: 640px) {
-  .site-stats { white-space: normal; overflow-x: visible; }
-}
+    /* Перенос ВЕЗДЕ. История: сначала «одна строка со свайпом» (2026-07-25), потом на
+       телефоне хвост стоял за краем без доскролла (QA 2026-07-29), а 2026-08-02 владелец
+       увидел то же на десктопе: «…5 языка / обновлен» выглядело обрезанным на половине,
+       потому что скроллбар спрятан и о продолжении ничто не говорит. Невидимый свайп —
+       это не компактность, это потерянный текст. Строка просто переносится. */
+    white-space: normal; overflow-wrap: anywhere; }
 .site-stats b { color: var(--text); font-weight: 600; }
 .related { margin-top: 26px; }
 .related-h { font-size: 14px; font-weight: 600; color: var(--soft); margin-bottom: 8px; }
@@ -584,7 +581,12 @@ html[dir="rtl"] .vs-dot:nth-child(6) { left: 0%; }
     width: 340px; max-width: 80vw; text-align: left;
     background: var(--bg); border: 1px solid var(--border); border-radius: 12px;
     padding: 12px 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    /* Шапка живёт в nowrap, и попап это наследовал: текст выстраивался в одну строку
+       и уезжал за экран вправо (владелец 2026-08-02: «должна быть аккуратная карточка,
+       абзац»). Возвращаем нормальный перенос явно. */
+    white-space: normal;
 }
+.intro-popup .intro-more { display: inline-block; margin-top: 8px; font-size: 13px; }
 .intro-popup.open { display: block; }
 .home-intro { margin: 0; font-size: 14px; line-height: 1.6; color: var(--muted); }
 .home-intro b { color: var(--text); font-weight: 600; }
@@ -689,7 +691,7 @@ html[dir="rtl"] .calendar-panel, html[dir="rtl"] .search-panel { right: auto; le
 .cat-chip.active:hover { background: color-mix(in srgb, var(--cyan) 22%, transparent); }
 /* RTL: разделитель у арабской раскладки слева — гасим его же на подсвеченном чипе */
 html[lang="ar"] .cat-chip:hover, html[lang="ar"] .cat-chip.active { border-left-color: transparent; }
-.cat-chip-n { font-size: 9.5px; color: var(--soft); margin-left: 2px; }
+.cat-chip-n { font-size: 11px; color: var(--soft); margin-left: 2px; }
 .cat-chip.active .cat-chip-n { color: var(--link); opacity: 0.75; }
 
 /* ── Законы: облако имён (как теги) + страница-карточка + связи ── */
@@ -730,9 +732,17 @@ html { scroll-behavior: smooth; }
    2026-07-19: "иконки поиска и календаря улетели вправо"). */
 .langs-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; max-width: 680px; }
 .langs { display: flex; flex-wrap: wrap; }
+/* Переключатель языков — главная кнопка нашего проекта: сайт существует ради того, что
+   человек читает на своём языке. При этом он был самым мелким на странице: 10px и область
+   касания 21×17 при шкале 44 (замер 375px, 2026-08-02). Промахнуться по нему — значит
+   не увидеть перевод вовсе. */
 .langs a {
-    font-size: 10px; color: var(--soft); text-decoration: none;
-    padding: 0 4px; border-right: 1px solid var(--border);
+    font-size: 11.5px; color: var(--soft); text-decoration: none;
+    padding: 6px 9px; border-right: 1px solid var(--border);
+    display: inline-flex; align-items: center; min-height: 30px;
+}
+@media (max-width: 640px) {
+    .langs a { min-height: var(--tap-sm, 36px); padding: 6px 11px; font-size: 12px; }
 }
 .langs a:last-child { border-right: none; }
 .langs a.active { font-weight: 700; color: var(--muted); }
@@ -940,12 +950,18 @@ a.cat-badge:hover { color: var(--link); border-color: var(--link); }
 .article-side .side-tag,
 .article-side .side-law,
 .article-side .side-sci {
-    display: block; font-size: 9px; font-weight: 600; text-align: center;
+    display: block; font-size: 10.5px; font-weight: 600; text-align: center;
     background: transparent; text-decoration: none;
     text-transform: uppercase; letter-spacing: .3px;
-    padding: 3px 6px; margin-bottom: 3px; border-radius: 999px;
+    padding: 3px 6px; margin-bottom: 3px;
     border: 1.5px solid currentColor; transition: all 0.15s;
 }
+/* Форма отличает тип — то же правило, что в ленте (владелец 2026-08-02). Раньше все три
+   были одинаковыми пилюлями, и колонка читалась как один список без смысла: тег, закон
+   и учёный выглядели одинаково. Радиус здесь несёт смысл, а не украшает. */
+.article-side .side-tag { border-radius: 999px; }
+.article-side .side-sci { border-radius: 8px; }
+.article-side .side-law { border-radius: 2px; }
 /* На телефоне это единственные ссылки мельче шкалы касания (замер 375: 21,5 px против 44
    у всех кнопок рядом) — попасть пальцем в такую колонку тяжело. Высоту даём шкалой,
    размер шрифта поднимаем: 9 px в верхнем регистре на телефоне читается плохо. */
@@ -959,8 +975,12 @@ a.cat-badge:hover { color: var(--link); border-color: var(--link); }
 }
 .article-side .side-tag { color: var(--muted); }
 .article-side .side-tag:hover { background: transparent; border-color: var(--link); color: var(--link); }
+/* Подписи колонки: 11,5px вместо 10px. Десять пикселей в верхнем регистре — предел
+   разборчивости на телефоне, а у нас арабский, где мелкий кегль хуже вдвое: вязь теряет
+   диакритику, и слово читается наугад. Владелец не раз просил «не мельчить» — это тот
+   самый случай. */
 .article-side .side-tags-label, .article-side .side-laws-label, .article-side .side-sci-label {
-    font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px;
+    font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.5px;
     color: var(--soft); margin: 10px 0 4px; text-align: center; }
 .article-side > *:first-child { margin-top: 0; }
 .article-side .side-law { color: #4a6a92; border-color: rgba(74,106,146,0.75); }
@@ -3259,3 +3279,34 @@ body.graph-fs-open .graph-fs-active svg { touch-action: manipulation; }
 .cl-stats b { color: var(--ink); font-size: 15px; margin-inline-end: 4px; }
 .cl-list { margin: 0; padding-inline-start: 18px; font-size: 12.5px; color: var(--soft); }
 .cl-list em { color: var(--cyan, #2aa); font-style: normal; }
+
+/* ── Сущности: форма отличает тип ─────────────────────────────────────────────
+   Владелец 2026-08-02: «учёные — карточки более квадратные, теги — круглые,
+   законы — совсем квадратные, и везде эту типографику соблюдай».
+
+   Смысл не в украшении: читатель узнаёт ТИП раньше, чем прочитает слово. Это
+   работает на любом языке — в том числе на арабском, где длина слов другая и
+   на текст ориентироваться нельзя. Поэтому радиус здесь — носитель смысла,
+   и менять его в отдельных местах нельзя: форма перестанет что-либо значить.
+
+   тег    — 999px, круглая пилюля (понятие: мягкое, их много)
+   учёный — 8px, скруглённый прямоугольник (человек: карточка)
+   закон  — 2px, строгий квадрат (закон: жёсткий, незыблемый) */
+.ent {
+    display: inline-block; margin: 0 5px 5px 0; padding: 2px 9px;
+    font-size: 11.5px; line-height: 1.6; text-decoration: none;
+    border: 1px solid var(--border); color: var(--muted);
+    background: var(--card-bg, transparent);
+    transition: border-color .15s, color .15s;
+}
+.ent:hover { color: var(--link); border-color: var(--link); }
+.ent-tag { border-radius: 999px; }
+.ent-sci { border-radius: 8px; }
+.ent-law { border-radius: 2px; font-family: var(--mono); font-size: 11px; letter-spacing: .2px; }
+
+/* Паспорт статьи одной строкой: раздел · дата · сколько читать · оригинал · экспресс.
+   Переносится, а не уезжает за экран: на 375px в неё не влезает и половина. */
+.card-eyebrow { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+.card-read, .card-src { font-size: 11px; color: var(--muted); }
+.card-src { text-decoration: none; font-family: var(--mono); }
+.card-src:hover { color: var(--link); }
