@@ -24,9 +24,11 @@ load_dotenv()
 
 # Слои вынесены в модули; generate.py — фасад (рендер/индексы/пайплайн + реэкспорт).
 from common import CONFIG as config, DEEPSEEK_API_KEY, LANGUAGES, DEFAULT_LANG, LANG_DIR, as_list, deepseek_peak_status  # noqa: F401
+import common               # common.job() — метка «к какой статье относится вызов»
 from gen_base import *    # noqa: F401,F403 — константы и базовые хелперы
 from gen_arxiv import *   # noqa: F401,F403 — arXiv/PDF-слой
 from gen_arxiv import _get_with_retry  # leading underscore не попадает в import *
+import gen_arxiv          # список отказов читаем через модуль, а не через копию имени
 
 if not DEEPSEEK_API_KEY:
     print("⚠️  DEEPSEEK_API_KEY не задан — доступны только офлайн-операции (html/reindex/check/delete)")
@@ -1170,7 +1172,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
         oneliner=safe(scipop.get("oneliner", "")),
         oneliner_short=safe(scipop.get("oneliner", "")[:160]),
         oneliner_og=safe(scipop.get("oneliner", "")[:200]),
-        description=safe(scipop.get("description", scipop.get("oneliner", ""))[:300]),
+        description=safe(card_cut(scipop.get("description", scipop.get("oneliner", "")))),
         id=article["id"], date=date_str,
         like_id=like_id,
         version_toggle_html=version_toggle_html,
@@ -1221,6 +1223,7 @@ def save_data_json(versions_ru, article, date_str, folder, translations=None, ca
         "authors": article.get("authors", []), "date": date_str,
         "license": article.get("license_url", ""), "license_name": article.get("license_name", "CC BY"),
         "tags": [scipop_adv.get("main_tag", "")] + scipop_adv.get("extra_tags", []),
+        "laws": scipop_adv.get("laws", []),
         "main_tag": scipop_adv.get("main_tag", ""),
         "scientists": scipop_adv.get("scientists", []),
         "categories": article.get("categories", []),
@@ -1259,6 +1262,63 @@ def strip_markers(s):
     return _MARKER_RE.sub('', s or '')
 
 
+# Индекс статей — ОДИН РАЗ НА ЯЗЫК, из памяти.
+#
+# Шесть мест собирали страницы (тег, закон, учёный, раздел, автор, облако) и каждое читало
+# lang/<lang>/articles-index.json с диска заново. В одном прогоне индекс сначала переписывается,
+# а потом читается — и если чтение попадает в момент записи, файл виден пустым: json падает
+# с «Expecting value: line 1 column 1», сборка обрывается на середине, а часть страниц остаётся
+# от прошлого поколения. Именно отсюда бралась «каша» из страниц разных поколений, которую
+# владелец видел 2026-08-02, — и она же трижды за день роняла прогон.
+#
+# Чтение из памяти убирает гонку по устройству, а не по везению: файл читается один раз,
+# до записи, и все страницы видят один и тот же снимок. Побочно это и в разы быстрее:
+# индекс на 6,8 МБ разбирался заново для каждой из 42 тысяч страниц.
+_INDEX_CACHE = {}
+
+
+def load_index(lang):
+    if lang not in _INDEX_CACHE:
+        p = Path(LANG_DIR) / lang / "articles-index.json"
+        try:
+            _INDEX_CACHE[lang] = json.loads(p.read_text(encoding="utf-8")) if p.exists() else []
+        except json.JSONDecodeError:
+            # Файл в этот момент пишется другим шагом — не роняем сборку из-за момента.
+            print(f"    ⚠️ индекс {lang} читается в момент записи — беру пустой на этот проход")
+            _INDEX_CACHE[lang] = []
+    return _INDEX_CACHE[lang]
+
+
+def drop_index_cache(lang=None):
+    """Сбросить снимок после перезаписи индексов (rebuild_indexes)."""
+    if lang:
+        _INDEX_CACHE.pop(lang, None)
+    else:
+        _INDEX_CACHE.clear()
+
+
+def card_cut(s, limit=300):
+    """Обрез для карточки — по границе ПРЕДЛОЖЕНИЯ, а не по счётчику символов.
+
+    Жёсткое [:300] обрывало текст посреди слова («…при определённых условиях становят»),
+    и читатель видел кашу вместо законченной мысли — владелец поймал это на главной
+    2026-08-02: «текст как бы оборван, а должен быть чёткий компактный законченный».
+    Берём столько ЦЕЛЫХ предложений, сколько влезает в лимит; если первое же предложение
+    длиннее лимита — режем по последнему слову с многоточием: лучше честное многоточие,
+    чем обрубок слова."""
+    s = (s or "").strip()
+    if len(s) <= limit:
+        return s
+    cut = s[:limit]
+    # последняя граница предложения в пределах лимита
+    best = max(cut.rfind(". "), cut.rfind("! "), cut.rfind("? "),
+               cut.rfind(".\n"), len(cut) - 1 if cut.endswith(('.', '!', '?')) else -1)
+    if best > limit // 3:          # нашли границу не слишком близко к началу
+        return s[:best + 1].strip()
+    sp = cut.rfind(" ")
+    return (cut[:sp] if sp > 0 else cut).rstrip(",;:—- ") + "…"
+
+
 def update_index(scipop, article, date_str, lang, version, abstract=""):
     base = Path(LANG_DIR) / lang
     base.mkdir(parents=True, exist_ok=True)
@@ -1272,13 +1332,21 @@ def update_index(scipop, article, date_str, lang, version, abstract=""):
         # express_locked_scipop больше не подменяет title заглушкой (юзер-фидбек 2026-07-17) —
         # scipop["title"] всегда настоящий, локked-тиры отличаются только express_locked-баннером.
         "title": scipop.get("title", article["title"]),
-        "oneliner": strip_markers(scipop.get("oneliner", ""))[:300],
-        "description": strip_markers(scipop.get("description", ""))[:300],
+        "oneliner": card_cut(strip_markers(scipop.get("oneliner", ""))),
+        # Описание — ЦЕЛИКОМ, без обрезки (владелец 2026-08-02: «если текст, то текст,
+        # ничего обрезать не надо; карточки не фиксированной высоты»). Оно пишется
+        # специально под карточку и укладывается в 4-6 предложений самим промптом —
+        # ограничивать его ещё и здесь значит резать то, что уже отмерено.
+        "description": strip_markers(scipop.get("description", "")),
         "abstract": strip_markers(abstract)[:1500],
         "threads": strip_markers(scipop.get("threads", ""))[:480],
         "thumbs": article.get("thumbs", 0),
         "authors": article.get("authors", [])[:50], "date": date_str,  # до 50 — лента показывает ≤20, >20 разворачивает
         "tags": [scipop.get("main_tag", "")] + scipop.get("extra_tags", []),
+        # Законы в индексе не было вовсе — на карточке их показать было нечем, хотя в data.json
+        # они лежат с самого введения слоя «Законы». Владелец 2026-08-02: показывать на карточке
+        # теги, учёных и законы в едином графическом ключе.
+        "laws": scipop.get("laws", []),
         "scientists": scipop.get("scientists", []), "url": url,
         "reading": reading_minutes(scipop),
         "categories": article.get("categories", []),
@@ -1433,8 +1501,7 @@ def generate_tags_cloud(lang):
     tpl = load_template("tags-cloud")
     if not tpl.template: return
     tags_loc = load_tags_loc(lang)
-    idx_path = Path(LANG_DIR) / lang / "articles-index.json"
-    index = json.loads(idx_path.read_text(encoding="utf-8")) if idx_path.exists() else []
+    index = load_index(lang)
 
     # Счётчики из статей
     tag_counts = {}
@@ -1511,8 +1578,7 @@ def generate_tag_page(tag_id, lang):
     tag_data = tags_loc.get(tag_id, {})
     graph = json.loads(Path("data/tags-graph.json").read_text(encoding="utf-8"))
     tag_graph = graph.get("graph", {}).get(tag_id, {})
-    idx_path = Path(LANG_DIR) / lang / "articles-index.json"
-    index = json.loads(idx_path.read_text(encoding="utf-8")) if idx_path.exists() else []
+    index = load_index(lang)
 
     articles_html = ""
     for a in full_first([x for x in index
@@ -1873,8 +1939,7 @@ def generate_laws_cloud(lang):
         return LAW_TYPE_COLORS.get(ru_laws.get(lid, {}).get("type", ""), "#7f8c8d")
 
     # Счётчики статей по законам (через пересечение тегов)
-    idx_path = Path(LANG_DIR) / lang / "articles-index.json"
-    index = json.loads(idx_path.read_text(encoding="utf-8")) if idx_path.exists() else []
+    index = load_index(lang)
     law_counts = {}
     for a in index:
         arts = set(a.get("tags", []))
@@ -1996,8 +2061,7 @@ def generate_law_page(law_id, lang):
     problems_html = f'<div class="section"><h2>{safe(loc["problems"])}</h2><p>{safe("; ".join(problems))}</p></div>' if problems else ""
 
     # Статьи по теме — по объединению тегов закона (как лента тега, но для нескольких тегов)
-    idx_path = Path(LANG_DIR) / lang / "articles-index.json"
-    index = json.loads(idx_path.read_text(encoding="utf-8")) if idx_path.exists() else []
+    index = load_index(lang)
     seen = set()
     articles_html = ""
     law_article_count = 0
@@ -2168,8 +2232,7 @@ def generate_scientists_cloud(lang):
     scientists = json.loads(sp.read_text(encoding="utf-8"))
 
     # Счётчики статей по учёным
-    idx_path = Path(LANG_DIR) / lang / "articles-index.json"
-    index = json.loads(idx_path.read_text(encoding="utf-8")) if idx_path.exists() else []
+    index = load_index(lang)
     sci_counts = {}
     for a in index:
         for sid in a.get("scientists", []):
@@ -2247,8 +2310,7 @@ def generate_scientist_page(sid, lang):
         for lid, ld in laws_data.items()
         if sid in ld.get("scientists", []) or sid in ld.get("influenced_by", [])
     ]
-    idx_path = Path(LANG_DIR) / lang / "articles-index.json"
-    index = json.loads(idx_path.read_text(encoding="utf-8")) if idx_path.exists() else []
+    index = load_index(lang)
     articles_html = ""
     for a in index:
         if sid in a.get("scientists", []) and a.get("version") == "popular":
@@ -3279,8 +3341,18 @@ def load_generation_inputs():
     }
 
 
-def build_article(a, date_str, inputs, force=False, express=False, known_license=None, no_fetch=False,
-                  only_langs=None):
+def build_article(a, date_str, inputs, force=False, express=False, **kw):
+    """Фаза A целиком, но помеченная: все вызовы DeepSeek внутри попадают в журнал
+    расхода с id статьи и её видом. Обёртка отдельная, потому что тело фазы длинное
+    и с ранними выходами — оборачивать его целиком значило бы переписать двести строк
+    ради одной метки. Метка живёт в своём потоке (common.job), а статьи готовятся
+    параллельно."""
+    with common.job(article=a.get("id"), kind="экспресс" if express else "полная"):
+        return _build_article(a, date_str, inputs, force=force, express=express, **kw)
+
+
+def _build_article(a, date_str, inputs, force=False, express=False, known_license=None, no_fetch=False,
+                   only_langs=None):
     """Фаза A: arXiv + PDF + все вызовы DeepSeek. Пишет только в папку статьи (гонок нет).
     Возвращает подготовленный dict либо None (пропущено/ошибка).
     express=True — дешёвый режим (см. TODO.md): один вызов generate_express() по авторской
@@ -3785,13 +3857,31 @@ def process_day(date_str, force=False, refresh_aggregates=True, express=False, l
     # разделам, а не по одной категории (юзер-фидбер 2026-07-21: «20 лучших за день по всем разделам»).
     cats = [c.strip() for c in (category or "astro-ph.*").split(",") if c.strip()]
     articles, _seen = [], set()
+    gen_arxiv.FETCH_FAILURES.clear()
     for cat in cats:
         for a in fetch_arxiv(date_str, category=cat):
             if a["id"] not in _seen:
                 _seen.add(a["id"]); articles.append(a)
     if len(cats) > 1:
         print(f"  🔭 периметр {cats}: {len(articles)} уникальных кандидатов")
-    if not articles: return 0
+    if not articles:
+        # Ноль по ВСЕМУ периметру — это не будни, а происшествие. 31 июля — 2 августа 2026
+        # ночной прогон трижды подряд вернул ноль по всем 14 разделам, вышел с кодом
+        # «успех», опубликовал неизменившийся сайт — и лента простояла три дня незаметно.
+        # Такой же простой уже случался в июле, и длился 13 дней. Значит ноль обязан быть
+        # слышен: печатаем причину и отдаём наверх отрицательный код, чтобы планировщик
+        # записал неудачу, а не «rc=0».
+        why = gen_arxiv.FETCH_FAILURES
+        print(f"\n  ⛔ НИ ОДНОГО КАНДИДАТА по всем разделам за {date_str}.")
+        if why:
+            print(f"     arXiv отказал {len(why)} раз(а) из {len(cats)}:")
+            for w in why[:5]:
+                print(f"       · {w}")
+            print("     Это отказ добычи, а не пустой день: статьи есть, мы их не получили.")
+        else:
+            print("     arXiv ответил без ошибок и отдал пусто. Если это будний день, а не")
+            print("     выходной, — смотри лаг выгрузки и не сменился ли формат запроса.")
+        return -1
     best = select_best(articles, date_str)
     if limit is not None:
         best = best[:limit]
@@ -3858,13 +3948,21 @@ def _index_entry(scipop, data, date_str, lang, version):
     return {
         "id": data["id"], "version": version,
         "title": scipop.get("title", data.get("original_title", "")),
-        "oneliner": strip_markers(scipop.get("oneliner", ""))[:300],
-        "description": strip_markers(scipop.get("description", ""))[:300],
+        "oneliner": card_cut(strip_markers(scipop.get("oneliner", ""))),
+        # Описание — ЦЕЛИКОМ, без обрезки (владелец 2026-08-02: «если текст, то текст,
+        # ничего обрезать не надо; карточки не фиксированной высоты»). Оно пишется
+        # специально под карточку и укладывается в 4-6 предложений самим промптом —
+        # ограничивать его ещё и здесь значит резать то, что уже отмерено.
+        "description": strip_markers(scipop.get("description", "")),
         "abstract": strip_markers(abstract)[:1500],
         "threads": strip_markers(data.get("threads", ""))[:480],
         "thumbs": data.get("thumbs", 0),
         "authors": data.get("authors", [])[:50], "date": date_str,  # до 50 — лента показывает ≤20, >20 разворачивает
         "tags": [scipop.get("main_tag", "")] + scipop.get("extra_tags", []),
+        # Законы в индексе не было вовсе — на карточке их показать было нечем, хотя в data.json
+        # они лежат с самого введения слоя «Законы». Владелец 2026-08-02: показывать на карточке
+        # теги, учёных и законы в едином графическом ключе.
+        "laws": scipop.get("laws", []),
         "scientists": scipop.get("scientists", []), "url": url,
         "reading": reading_minutes(scipop),
         "categories": data.get("categories", []),
@@ -3917,6 +4015,9 @@ def rebuild_indexes():
     Path("data").mkdir(exist_ok=True)
     Path("data/build-info.json").write_text(
         json.dumps({"built": datetime.date.today().isoformat()}, ensure_ascii=False), encoding="utf-8")
+    # Снимок в памяти устарел — страницы, которые соберутся дальше в этом же прогоне,
+    # должны видеть только что записанные индексы, а не то, что было до перезаписи.
+    drop_index_cache()
     print(f"  ✅ Индексы пересобраны ({total} записей popular по всем языкам) + latest-{LATEST_INDEX_N}")
 
 

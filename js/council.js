@@ -102,6 +102,36 @@
         btnMake.textContent = T.b_key_done || btnMake.textContent;
     }
 
+    /* Отправка заявки на сервер. Появилась 2026-08-01, когда проект ушёл с Supabase
+       на свою базу: ручка /api/feedback принимает page/lang/email/message и кладёт
+       и в базу, и в наш канал. До этого заявка жила только в браузере, и владелец,
+       нажав кнопку, решил что она ушла — она не уходила. Второй раз так подставлять
+       человека нельзя, поэтому здесь честно: получилось — говорим, не получилось —
+       тоже говорим и оставляем письмо запасным путём. */
+    function send() {
+        var body = {
+            page: '/council', lang: (document.documentElement.lang || 'ru'),
+            email: elMail.value.trim(),
+            message: letter()
+        };
+        return fetch('/api/feedback', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        }).then(function (r) { return r.ok ? r.json() : null; });
+    }
+
+    function say(text, ok) {
+        var box = document.getElementById('j-sent');
+        if (!box) {
+            box = document.createElement('p');
+            box.id = 'j-sent';
+            box.className = 'sent';
+            elTok.parentNode.appendChild(box);
+        }
+        box.textContent = text;
+        box.classList.toggle('sent-no', !ok);
+    }
+
     btnMake.addEventListener('click', function () {
         if (!saved || !saved.token) {
             saved = { token: makeToken(), at: new Date().toISOString().slice(0, 10) };
@@ -110,6 +140,21 @@
         saved.mail = elMail.value.trim();
         write(LS_TOKEN, saved);
         showToken();
+
+        btnMake.disabled = true;
+        send().then(function (res) {
+            btnMake.disabled = false;
+            if (res && res.ok) {
+                saved.sent = new Date().toISOString();
+                write(LS_TOKEN, saved);
+                say(T.sent_ok || '', true);
+            } else {
+                say(T.sent_no || '', false);
+            }
+        }).catch(function () {
+            btnMake.disabled = false;
+            say(T.sent_no || '', false);
+        });
     });
 
     btnMail.addEventListener('click', function () {

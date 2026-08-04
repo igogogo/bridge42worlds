@@ -20,14 +20,16 @@
     <a href="/lang/$lang/index.html" class="logo">bridge42worlds</a>
     <div class="header-right">
         <div class="nav-links">
+            <!-- authors / graph / analytics живут в «ещё» (js/sitenav.js), а не в шапке.
+                 Владелец 2026-08-02: «опять меню засорилось». Причина не в конкретном пункте:
+                 список разделов дублировался В ДВУХ местах — в шаблонах и в sitenav.js, —
+                 и каждый новый раздел дописывали в оба, отчего шапка росла сама собой.
+                 В шапке держим ПЯТЬ основных; остальное открывается кнопкой «ещё». -->
             <a href="/lang/$lang/index.html">main</a>
             <a href="/lang/$lang/tags/" class="active">tags</a>
             <a href="/lang/$lang/laws/">laws</a>
             <a href="/lang/$lang/scientists/">scientists</a>
             <a href="/lang/$lang/sections/">sections</a>
-            <a href="/lang/$authors_lang/authors/">authors</a>
-            <a href="/lang/$lang/graph/">graph</a>
-            <a href="/lang/$lang/analytics/">analytics</a>
             <a href="/learn.html" title="learn" class="nav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.5A2 2 0 0 1 6 5h5v14H6a2 2 0 0 0-2 1.5z"/><path d="M20 6.5A2 2 0 0 0 18 5h-5v14h5a2 2 0 0 1 2 1.5z"/></svg></a>
             <a class="nav-ic" href="/lang/$lang/favorites.html" title="$fav_title"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.45 5 5.5.7-4 3.85 1 5.45-4.95-2.65-4.95 2.65 1-5.45-4-3.85 5.5-.7Z"/></svg></a>
         </div>

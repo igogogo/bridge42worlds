@@ -143,8 +143,28 @@ def main():
         if dry:
             continue
         item.setdefault("votes", {})
+        item.setdefault("voices", [])
+        # Один голосующий — один голос. Повторный запуск скрипта ПЕРЕПИСЫВАЕТ прежний
+        # голос модели, а не добавляет второй. Поймано на первом же заседании: у вопроса
+        # о монетизации оказалось два голоса модели и «всего голосов: 2» при одном
+        # голосующем. В механизме, который existует ради честного счёта, набивание урны
+        # повторным запуском — не мелочь, а брак: любые итоги после такого недоказуемы.
+        prev = [x for x in item["voices"] if x.get("by") == VOTER]
+        for p in prev:
+            old = p.get("choice")
+            if old in item["votes"]:
+                item["votes"][old] = max(0, item["votes"][old] - 1)
+                if not item["votes"][old]:
+                    del item["votes"][old]
+            item["voices"].remove(p)
+        if prev:
+            olds = [p.get("choice") for p in prev]
+            print(f'  (было голосов от {VOTER}: {len(prev)} — переписаны одним)'
+                  if len(prev) > 1 else
+                  (f'  (голос переписан: было «{olds[0]}»)' if olds[0] != choice
+                   else "  (голос тот же — счёт не двоится)"))
         item["votes"][choice] = item["votes"].get(choice, 0) + 1
-        item.setdefault("voices", []).append(
+        item["voices"].append(
             {"by": VOTER, "choice": choice, "why": v.get("why", "")})
         if was_decisive:
             item["needs_human"] = True

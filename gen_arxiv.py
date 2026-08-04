@@ -20,6 +20,13 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
 
 BULK_DIR = Path("data/arxiv-bulk")
 
+# Сюда пишется КАЖДЫЙ неудавшийся запрос к arXiv за прогон. Нужен, потому что отказ
+# и «сегодня статей нет» до сих пор выглядели одинаково: пустой список. 1–2 августа 2026
+# ночной прогон три дня подряд завершался с кодом «успех» и не делал ни одной статьи —
+# лента стояла, и об этом никто не узнал. Отличить одно от другого можно только так:
+# запомнить, был ли отказ, и не дать вызывающему решить, что arXiv просто промолчал.
+FETCH_FAILURES = []
+
 
 def _get_with_retry(url, params=None, timeout=30, retries=3):
     """arXiv отдаёт то 429 (перегрузка), то просто зависший коннект без ответа — раньше
@@ -40,6 +47,20 @@ def _get_with_retry(url, params=None, timeout=30, retries=3):
             wait = [10, 30, 30][min(attempt - 1, 2)]
             print(f"  ⚠️ arXiv connection error: {e} — retry {attempt}/{retries} через {wait}с")
             time.sleep(wait)
+
+
+_last_call = [0.0]
+
+
+def _pace(gap=3.0):
+    """Выдержка между запросами к живому API. arXiv просит не чаще одного раза в три
+    секунды, а периметр дня — это 14 запросов подряд без единой паузы. Пока отказ был
+    неотличим от «статей нет», расплата за такую спешку была не видна; теперь видна,
+    но правильнее не нарываться. Ждём ровно недостающее, а не фиксированные три секунды."""
+    wait = gap - (time.monotonic() - _last_call[0])
+    if 0 < wait <= gap:
+        time.sleep(wait)
+    _last_call[0] = time.monotonic()
 
 
 def _category_pattern(category):
@@ -105,6 +126,7 @@ def fetch_arxiv(date_str, category="astro-ph.*"):
     # отсутствовали, и ночной прогон честно находил ноль. Пусто в кэше → проверяем живой API.
     if local is not None:
         print("  📦 Кэш пуст за этот день — падаю на живой arXiv API (лаг выгрузки)")
+    _pace()
     f = f"{date_str.replace('-', '')}0000"
     t = f"{date_str.replace('-', '')}2359"
     url = "http://es.arxiv.org/api/query"
@@ -117,16 +139,22 @@ def fetch_arxiv(date_str, category="astro-ph.*"):
         r = _get_with_retry(url, params=params, timeout=30)
     except requests.exceptions.RequestException as e:
         print(f"  ❌ arXiv API: не удалось получить ответ после ретраев ({e})")
+        FETCH_FAILURES.append(f"{category}: сеть — {type(e).__name__}")
         return []
     Path(f"temp/{date_str}").mkdir(parents=True, exist_ok=True)
     Path(f"temp/{date_str}/arxiv-api.xml").write_text(r.text, encoding="utf-8")
 
     if not r.text or r.status_code != 200:
+        # 429 сюда доходит, только когда исчерпаны ретраи: значит arXiv нас душит всерьёз,
+        # и это НЕ «статей нет».
         print(f"  ❌ arXiv API error: status {r.status_code}")
+        FETCH_FAILURES.append(f"{category}: HTTP {r.status_code}")
         return []
     try:
         root = ET.fromstring(r.text)
     except ET.ParseError:
+        print("  ❌ arXiv API: ответ пришёл, но это не XML")
+        FETCH_FAILURES.append(f"{category}: ответ не XML")
         return []
 
     ns = {"atom": "http://www.w3.org/2005/Atom", "arxiv": "http://arxiv.org/schemas/atom"}
@@ -149,7 +177,9 @@ def fetch_arxiv(date_str, category="astro-ph.*"):
             })
         except Exception:
             pass
-    print(f"  ✅ Found: {len(articles)} articles")
+    # Галочку ставим только тогда, когда есть чему радоваться. Ноль со знаком «успех»
+    # три ночи подряд и был причиной, по которой простой ленты никто не заметил.
+    print(f"  {'✅' if articles else '·'} Found: {len(articles)} articles")
     return articles
 
 

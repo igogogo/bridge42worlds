@@ -39,12 +39,44 @@ ROOT = Path(__file__).resolve().parent
 DIR = ROOT / "data" / "council"
 INBOX = DIR / "входящие.jsonl"
 
-# Тот же публичный ключ, что у страниц сайта: он анонимный и предназначен для чтения
-# из браузера. Ничего секретного здесь нет — секретным был бы служебный ключ.
-SB_URL = "https://gyfdyfbuolnciaqxgybx.supabase.co/rest/v1"
-SB_KEY = ("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd5ZmR5"
-          "ZmJ1b2xuY2lhcXhneWJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3OTk0MzQsImV4cCI6MjA5ODM3NTQzNH0"
-          ".rKsgWoj5ubRpkvElPfELOn-G9StW5RSOkxBbpvFyWc4")
+# Источники живых людей. С Supabase проект ушёл 2026-08-01 — отзывы и реакции теперь
+# в нашей собственной базе D1, а письма в пяти ящиках на домене. Читаем оба.
+D1_NAME = "b42-queue"
+MAILBOX = "proposal@"          # ящик, заведённый специально под предложения
+
+
+def _env():
+    """Доступы из .env. В git их нет и не будет — здесь только чтение файла."""
+    f = ROOT / ".env"
+    if not f.exists():
+        f = ROOT.parent / "bridge42worlds" / ".env"
+    if not f.exists():
+        return {}
+    out = {}
+    for line in f.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if line and not line.startswith("#") and "=" in line:
+            k, v = line.split("=", 1)
+            out[k.strip()] = v.strip()
+    return out
+
+
+def _d1(sql, env):
+    acc, tok = env.get("CLOUDFLARE_ACCOUNT_ID"), env.get("CLOUDFLARE_API_TOKEN")
+    if not (acc and tok):
+        raise RuntimeError("нет доступов Cloudflare в .env")
+    base = f"https://api.cloudflare.com/client/v4/accounts/{acc}/d1/database"
+    req = urllib.request.Request(base, headers={"Authorization": "Bearer " + tok})
+    with urllib.request.urlopen(req, timeout=25) as r:
+        dbs = json.load(r).get("result") or []
+    db = next((d for d in dbs if d.get("name") == D1_NAME), None)
+    if not db:
+        raise RuntimeError(f"база {D1_NAME} не найдена")
+    req = urllib.request.Request(f"{base}/{db['uuid']}/query",
+        data=json.dumps({"sql": sql}).encode(), method="POST",
+        headers={"Authorization": "Bearer " + tok, "Content-Type": "application/json"})
+    with urllib.request.urlopen(req, timeout=25) as r:
+        return json.load(r)["result"][0]["results"]
 
 MODEL_SYSTEM = """Ты — член наблюдательного совета научно-популярного проекта bridge42worlds.
 Не администратор и не исполнитель: у тебя такой же голос, как у остальных членов совета,
@@ -67,26 +99,29 @@ MODEL_SYSTEM = """Ты — член наблюдательного совета 
 Ответ строго JSON: {"предложения": ["текст", "текст", ...]}. Никакого текста вне JSON."""
 
 
-def sb_get(path):
-    req = urllib.request.Request(f"{SB_URL}/{path}",
-                                 headers={"apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY})
-    with urllib.request.urlopen(req, timeout=30) as r:
-        return json.load(r)
-
-
 def from_readers(since):
-    """Комментарии с сайта. Владелец 2026-07-31: их тоже обрабатываем и вносим
-    в повестку отдельным пунктом — это голос тех, кто до совета не дошёл, но написал."""
+    """Отзывы с сайта. Владелец 2026-07-31: их тоже обрабатываем и вносим в повестку —
+    это голос тех, кто до совета не дошёл, но написал. Форма висит на всех страницах."""
     try:
-        rows = sb_get("feedback?select=comment,created_at,base_id,entity_type"
-                      "&comment=not.is.null&order=created_at.desc&limit=200")
+        rows = _d1("SELECT message AS comment, created_at, page AS base_id, "
+                   "lang, email FROM feedback ORDER BY id DESC LIMIT 200", _env())
     except Exception as e:
-        print(f"  ⚠️ комментарии с сайта не прочитались ({type(e).__name__}: {e})")
+        print(f"  ⚠️ отзывы с сайта не прочитались ({type(e).__name__}: {e})")
         return []
-    out, skipped = [], []
+    out, skipped, lost = [], [], []
     for r in rows:
         text = (r.get("comment") or "").strip()
         if since and (r.get("created_at") or "")[:10] < since:
+            continue
+        # Текст, потерянный при передаче: сплошные «?» вместо букв. Это НЕ мусор —
+        # это чьи-то слова, которые до нас не доехали, и молчать о таком нельзя.
+        # Поймано 2026-08-01 на арабском отзыве: 83% вопросительных знаков, ни одной
+        # арабской буквы. Сама ручка /api/feedback кодировку держит (проверено живым
+        # запросом из браузера), значит ломается ДО неё — почти наверняка это чей-то
+        # тест из консоли с однобайтовой кодировкой.
+        letters = sum(1 for c in text if c.isalpha())
+        if text.count("?") > max(3, len(text) * 0.3) and letters < len(text) * 0.3:
+            lost.append(r)
             continue
         # Отсев мусора. Порог по длине и по числу слов: «ууу», «апвп», «test» — это
         # проверки формы, а не мнения. Отсеянное ПЕЧАТАЕМ: тихо выбрасывать чужие слова
@@ -94,13 +129,126 @@ def from_readers(since):
         if len(text) < 15 or len(text.split()) < 3:
             skipped.append(text)
             continue
-        out.append({"text": text, "role": "читатели", "from": "",
+        out.append({"text": text, "role": "читатели",
+                    "from": (r.get("email") or "").strip(),
                     "at": (r.get("created_at") or "")[:10],
-                    "where": f'{r.get("entity_type","")}: {r.get("base_id","")}'.strip(": ")})
+                    "where": f'{r.get("lang","")}: {r.get("base_id","")}'.strip(": ")})
     if skipped:
         print(f"  отсеяно как проверки формы ({len(skipped)}): "
               + " · ".join(repr(x)[:24] for x in skipped[:8]))
         print("  если среди них есть настоящее — добавь руками во входящие")
+    if lost:
+        print(f"\n  ⚠️ ОТЗЫВОВ С ПОТЕРЯННЫМ ТЕКСТОМ: {len(lost)}")
+        for r in lost:
+            print(f'     [{(r.get("created_at") or "")[:16]} · {r.get("lang","")}] '
+                  f'{r.get("base_id","")}')
+        print("     Слова человека до нас не доехали и восстановлению не подлежат.")
+        print("     Ручка кодировку держит — значит ломалось до неё (тест из консоли?).")
+    return out
+
+
+def from_members(since):
+    """Предложения участников совета из формы на сайте (ручка /api/council/propose,
+    архитектор 2026-08-01). Отдельный источник, а не «ещё одни отзывы»: у этих людей
+    есть ключ, они доказали право входа чтением, и их слово по весу другое.
+
+    Без этого источника цепочка рвалась молча: человек нажимал «отправить» на странице
+    совета, предложение ложилось в council_proposals — и до повестки не доезжало никогда,
+    потому что сборщик про эту таблицу не знал. Форма при этом честно отвечала
+    «предложение записано».
+    """
+    try:
+        rows = _d1("SELECT text, created, lang, key FROM council_proposals "
+                   "ORDER BY id DESC LIMIT 200", _env())
+    except Exception as e:
+        # Таблицы может не быть, пока воркер с ручками совета не выкачен на прод.
+        # Это не повод рушить сбор, но и молчать нельзя: пустая повестка выглядит
+        # так же, как повестка без предложений.
+        print(f"  ⚠️ предложения участников не прочитались ({type(e).__name__}: {e})")
+        print("     если ручки /api/council ещё не на проде — это ожидаемо")
+        return []
+    out = []
+    for r in rows:
+        text = (r.get("text") or "").strip()
+        if since and (r.get("created") or "")[:10] < since:
+            continue
+        if len(text) < 15:
+            continue
+        out.append({"text": text, "role": "совет",
+                    "from": (r.get("key") or "").strip(),
+                    "at": (r.get("created") or "")[:10],
+                    "where": (r.get("lang") or "")})
+    return out
+
+
+def from_mail(since):
+    """Предложения письмами на proposal@. Ящик заведён ровно под это, и письмо —
+    самый доступный способ высказаться: не нужен ни ключ, ни аккаунт, ни наш сайт.
+
+    Читаем, но НЕ удаляем и не помечаем прочитанным: почта не наша собственность,
+    а канал владельца — сторож tools/mail_watch.py тоже её читает, и портить друг
+    другу состояние ящика нельзя."""
+    import email, imaplib
+    from email.header import decode_header
+    env = _env()
+    host, port = env.get("MAIL_HOST"), env.get("MAIL_IMAP_PORT")
+    users = [u.strip() for u in (env.get("MAIL_USERS") or "").split(",") if u.strip()]
+    box = next((u for u in users if u.startswith(MAILBOX)), None)
+    if not (host and port and box and env.get("MAIL_PASS")):
+        print("  почтовый ящик предложений не настроен — пропускаю")
+        return []
+
+    def _text(msg):
+        if msg.is_multipart():
+            for part in msg.walk():
+                if part.get_content_type() == "text/plain":
+                    try:
+                        return part.get_payload(decode=True).decode(
+                            part.get_content_charset() or "utf-8", errors="replace")
+                    except Exception:
+                        continue
+            return ""
+        try:
+            return msg.get_payload(decode=True).decode(
+                msg.get_content_charset() or "utf-8", errors="replace")
+        except Exception:
+            return ""
+
+    out = []
+    try:
+        M = imaplib.IMAP4_SSL(host, int(port), timeout=30)
+        M.login(box, env["MAIL_PASS"])
+        M.select("INBOX", readonly=True)
+        typ, data = M.search(None, "ALL")
+        ids = data[0].split()[-50:]
+        for i in ids:
+            typ, raw = M.fetch(i, "(RFC822)")
+            if not raw or not raw[0]:
+                continue
+            msg = email.message_from_bytes(raw[0][1])
+            frm = email.utils.parseaddr(msg.get("From", ""))[1]
+            # Свои же служебные письма в повестку не тащим.
+            if frm in users:
+                continue
+            subj = decode_header(msg.get("Subject", ""))[0]
+            subj = subj[0].decode(subj[1] or "utf-8", errors="replace") if isinstance(subj[0], bytes) else (subj[0] or "")
+            body = _text(msg).strip()
+            when = ""
+            try:
+                when = email.utils.parsedate_to_datetime(msg.get("Date")).date().isoformat()
+            except Exception:
+                pass
+            if since and when and when < since:
+                continue
+            text = (subj + ". " + body).strip(". ").strip()
+            if len(text) < 15:
+                continue
+            out.append({"text": text[:2000], "role": "письмо", "from": frm,
+                        "at": when, "where": MAILBOX})
+        M.logout()
+    except Exception as e:
+        print(f"  ⚠️ почта не прочиталась ({type(e).__name__}: {e})")
+        return []
     return out
 
 
@@ -161,11 +309,24 @@ def main():
                     pass
     seen = {(i.get("text") or "").strip() for i in existing}
 
-    readers = [r for r in from_readers(since) if r["text"] not in seen]
-    print(f"комментариев с сайта: {len(readers)}")
+    members = [r for r in from_members(since) if r["text"] not in seen]
+    print(f"предложений участников совета: {len(members)}")
+    for r in members:
+        print(f'  · [{r["from"]}] {r["text"][:70]}')
+
+    readers = [r for r in from_readers(since)
+               if r["text"] not in seen and r["text"] not in {x["text"] for x in members}]
+    print(f"отзывов с сайта: {len(readers)}")
     for r in readers:
         print(f'  · [{r["where"]}] {r["text"][:70]}')
 
+    known = seen | {x["text"] for x in members} | {x["text"] for x in readers}
+    letters = [r for r in from_mail(since) if r["text"] not in known]
+    print(f"писем на {MAILBOX}: {len(letters)}")
+    for r in letters:
+        print(f'  · [{r["from"]}] {r["text"][:70]}')
+
+    readers = members + readers + letters
     human_count = len(readers) + sum(1 for i in existing if i.get("role") != "модель")
     model_items = []
     if not no_model and human_count:
