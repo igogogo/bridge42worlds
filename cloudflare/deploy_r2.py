@@ -127,8 +127,10 @@ class S3Backend:
             aws_secret_access_key=os.environ["R2_SECRET_ACCESS_KEY"], region_name="auto",
             config=Config(retries={"max_attempts": 5, "mode": "adaptive"},
                           s3={"addressing_style": "path"}))
-        self.tcfg = TransferConfig(multipart_threshold=8 * 1024 * 1024,
-                                   multipart_chunksize=8 * 1024 * 1024,
+        # Порог 8 МБ не спас: ar-индекс на ~6 МБ шёл одним куском и рвался так же.
+        # 2 МБ — крупные файлы у нас только индексы и картинки, им multipart не вредит.
+        self.tcfg = TransferConfig(multipart_threshold=2 * 1024 * 1024,
+                                   multipart_chunksize=2 * 1024 * 1024,
                                    use_threads=False)
 
     def put(self, p, key, ct):
