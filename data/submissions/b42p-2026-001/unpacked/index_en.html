@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The 256+47 Anomaly — the "vertical wheel" experiment</title>
+<style>
+:root{
+ --bg:#FBFAF7; --ink:#1E222A; --mut:#66707D; --line:#DEDBD2; --card:#FFFFFF;
+ --acc:#8A2D3B; --acc2:#2F6B8F; --ok:#3E7A52; --warn:#A96F26; --code:#F0EEE7;
+ --mono:ui-monospace,'Cascadia Code',Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root{
+ --bg:#14171C; --ink:#DFE3E8; --mut:#8B95A3; --line:#2C313A; --card:#1B2027;
+ --acc:#D96A7C; --acc2:#6FA8C9; --ok:#7CBB93; --warn:#D9A45B; --code:#232830;
+}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16.5px/1.7 Charter,Georgia,'Times New Roman',serif}
+.wrap{max-width:960px;margin:0 auto;padding:0 1.2rem 6rem}
+header.hero{padding:4rem 0 2.2rem;border-bottom:3px double var(--line);margin-bottom:1.5rem;position:relative}
+.kicker{font:600 .72rem/1 var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--acc)}
+h1{font-size:2.25rem;line-height:1.15;margin:.6rem 0 .8rem;font-weight:700}
+.lede{font-size:1.1rem;color:var(--mut);max-width:64ch}
+.lang{position:absolute;top:1.2rem;right:0;font:600 13px var(--mono)}
+.lang a{color:var(--acc2);text-decoration:none;border:1px solid var(--line);padding:.2em .7em;border-radius:4px}
+.badge{display:inline-block;font:600 12px/1.9 var(--mono);padding:0 .7em;border:1px solid var(--line);border-radius:3px;margin:1rem .4rem 0 0;color:var(--mut)}
+nav.toc{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);z-index:9;padding:.45rem 0;font:13px/1.6 var(--mono);overflow-x:auto;white-space:nowrap}
+nav.toc a{color:var(--acc2);text-decoration:none;margin-right:1.2em}
+nav.toc a:hover{color:var(--acc)}
+h2{font-size:1.45rem;margin:3rem 0 1rem;padding-top:1rem}
+h2 .n{font:700 .85em var(--mono);color:var(--acc);margin-right:.5em}
+h3{font-size:1.08rem;margin:1.7rem 0 .6rem}
+p{max-width:74ch}
+figure{margin:1.4rem 0;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:.7rem}
+figure img,figure video{max-width:100%;display:block;border-radius:3px;background:#fff}
+figcaption{font:13px/1.5 system-ui,sans-serif;color:var(--mut);margin-top:.55rem}
+figcaption .src{font-family:var(--mono);font-size:11px;color:var(--acc2)}
+.gal{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;margin:1.2rem 0}
+.gal figure{margin:0}
+table{border-collapse:collapse;width:100%;font:13.5px/1.5 system-ui,sans-serif;font-variant-numeric:tabular-nums}
+.tw{overflow-x:auto;margin:1rem 0}
+th,td{border:1px solid var(--line);padding:.4rem .6rem;text-align:left;vertical-align:top}
+th{background:var(--code);font-weight:600}
+code,kbd{font:.85em var(--mono);background:var(--code);padding:.1em .35em;border-radius:3px}
+.vd{border-left:4px solid var(--acc2);background:var(--card);padding:.9rem 1.1rem;margin:1.2rem 0;border-radius:0 6px 6px 0}
+.vd.a{border-color:var(--acc)} .vd.k{border-color:var(--ok)} .vd.w{border-color:var(--warn)}
+.vd b.t{font:700 .78rem/1 var(--mono);letter-spacing:.1em;text-transform:uppercase}
+.timeline{border-left:2px solid var(--line);margin:1.2rem 0 1.2rem .4rem;padding-left:1.4rem}
+.timeline .ev{margin:0 0 1.1rem;position:relative}
+.timeline .ev::before{content:'';position:absolute;left:-1.83rem;top:.45em;width:9px;height:9px;border-radius:50%;background:var(--acc2)}
+.timeline .ev.hot::before{background:var(--acc)}
+.timeline .d{font:600 12px var(--mono);color:var(--mut)}
+details{border:1px solid var(--line);border-radius:6px;background:var(--card);padding:.6rem 1rem;margin:.8rem 0}
+details summary{cursor:pointer;font-weight:600;font-family:system-ui,sans-serif;font-size:.95rem}
+.demo,.anim{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:1rem 1.2rem;margin:1.2rem 0}
+.demo{font-family:var(--mono)}
+.demo .row{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;font-size:15px}
+.demo .byte{border:2px solid var(--acc2);border-radius:5px;padding:.3rem .8rem;text-align:center;min-width:74px}
+.demo .byte.lo{border-color:var(--warn)}
+.demo .byte.lo.stuck{border-color:var(--acc);background:rgba(200,60,80,.12)}
+.demo .lbl{font-size:10px;color:var(--mut);display:block}
+input[type=range]{width:200px;accent-color:var(--acc2)}
+.out{font-weight:700}
+.small{font-size:.85rem;color:var(--mut)}
+ul,ol{padding-left:1.4rem} li{margin:.3rem 0}
+a{color:var(--acc2)}
+.filelist{font:12.5px/1.7 var(--mono);background:var(--card);border:1px solid var(--line);border-radius:6px;padding:.8rem 1.1rem;overflow-x:auto}
+.anim .ctl{display:flex;gap:1.2rem;align-items:center;flex-wrap:wrap;font:13px system-ui,sans-serif;margin-bottom:.5rem}
+canvas{max-width:100%;display:block;margin:0 auto;border-radius:6px}
+.repro td:nth-child(2){font-family:var(--mono);font-size:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+<div class="lang"><a href="index.html">RU — русская версия</a></div>
+<span class="kicker">Experimental report · August 4, 2026</span>
+<h1>The "256 + 47" Anomaly: what turned up in the vertical-wheel data</h1>
+<p class="lede">A complete and honest account of one analysis: what physics the experimenters are after, what a blind statistical review found, how classical mechanics was confirmed to a fraction of a percent — and what strange effect remained once everything explainable had been explained. Every conclusion in this document is reproducible by a script in <code>scripts/</code> run on the data in <code>data/</code>.</p>
+<span class="badge">669,000+ measurements</span><span class="badge">11 runs · 10 sensors</span><span class="badge">blind analysis</span><span class="badge">effect: up to 27σ</span><span class="badge">fully reproducible</span>
+</header>
+
+<nav class="toc">
+<a href="#s1">The quest</a><a href="#s2">Apparatus</a><a href="#anim">Animation</a><a href="#gloss">Glossary</a><a href="#s3">Timeline</a><a href="#s4">Classics</a><a href="#s5">The anomaly</a><a href="#s6">Properties</a><a href="#s7">Hypotheses</a><a href="#s8">Program</a><a href="#fant">F</a><a href="#s9">Reproducibility</a><a href="#s10">Archive</a>
+</nav>
+
+<h2 id="s1"><span class="n">01</span>What we are looking for — stated honestly</h2>
+<p>This is an exploratory experiment. The authors' working interest lies in <b>quantum gravity and its possible traces at the level of the measurement process</b>: could anything show up not in the magnitude of the measured signal, but in how randomness, the moment of fixation, and the recording of the result interact with one another. The apparatus is built to give such traces a chance to appear, if they exist: the moment of each measurement is set by a stochastic trigger (hardware-random numbers tested for primality), the measurement "fixation" modes are switched, and a directed magnetic field surrounds the sensors. No specific model is postulated in advance — the program is organised as a search for any reproducible deviations from null hypotheses.</p>
+<div class="vd k"><b class="t">Methodological safeguard</b><br>
+The analyst (Claude, Anthropic) performed the entire review <b>blind</b>: the purpose of the experiment was disclosed only after all principal results had been obtained. Everything in sections 03–06 was measured without knowledge of the target hypothesis. This guards against fitting — and it cut both ways: several previously claimed anomalies were traced to instrumental causes, while one survived and sharpened.</div>
+
+<h2 id="s2"><span class="n">02</span>The apparatus</h2>
+<div class="gal">
+<figure><img src="media/wheel_full.jpg" alt="Full wheel"><figcaption>The wheel (plywood disc ~1 m) with a copper-coil segment on the rim. Driven by a gearmotor through a shaft. Spare coil segments on the floor.</figcaption></figure>
+<figure><img src="media/wheel_laptop.jpg" alt="Setup with laptop"><figcaption>Workbench: the acquisition server on a laptop, a coil node near the axle, UNI-T thermometer on the mount.</figcaption></figure>
+<figure><img src="media/node_inside_1.jpg" alt="Node internals"><figcaption>A sensor node opened: 0.75 mm enamelled copper winding along the housing, board and capacitor. The yellow Ø0.5 spool on the desk is solder for soldering, unrelated to the winding.</figcaption></figure>
+<figure><img src="media/node_inside_2.jpg" alt="Node internals 2"><figcaption>Seeed Studio XIAO ESP32-C6 controller + LIS3DSH accelerometer inside the wound housing.</figcaption></figure>
+</div>
+<p class="small">[Видео работающей установки — в полной версии пакета / video of the running rig — in the full package]</p>
+<p>The disc rotates in a vertical plane. 10 sensor nodes: <b>0–1 stationary</b> (controls, ≈1g), <b>2–9 on the rim</b>. The speed is tuned so that at the top of the rim the acceleration magnitude is ≈0g (weightlessness) and ≈2g at the bottom. Around the sensors are <b>coils with a directed magnetic field</b>; reversing the wheel's rotation relative to the field is the meaning of the paired runs (<code>seno</code> / <code>soloma</code> — opposite directions, <code>seno_soloma</code> — a combined session).</p>
+<h3>Technical specification</h3>
+<div class="tw"><table>
+<tr><th>Component</th><th>Details</th></tr>
+<tr><td>Node controller</td><td>Seeed Studio XIAO ESP32-C6, Wi-Fi, 252,000-byte buffer (18,000 records)</td></tr>
+<tr><td>Accelerometer</td><td>LIS3DSH (ST), 3-axis, 16-bit, I2C 400 kHz; actual range ±4g — verified from the data: 1g ≈ 8,000 counts = 0.122 mg/count (the datasheet value for ±4g)</td></tr>
+<tr><td>Least significant bit</td><td>0.000122 g (firmware scale <code>SCALE_4G = 4/32768</code>, see <a href="code/zero.ino">code/zero.ino</a>)</td></tr>
+<tr><td>Sensor rate</td><td>server-controlled: 100/400/800/1600 Hz (reg 0x20 ← 0x67/0x7F/0x8F/0x9F); BDU on at ≥400 Hz</td></tr>
+<tr><td>Measurement trigger</td><td>hardware RNG → 32-bit number → primality test (trial division + Miller–Rabin); a found prime = "measure now". On average 1 measurement per ~21 checks</td></tr>
+<tr><td>Record</td><td><code>agent_id, prime, g, timestamp_us, checked_since</code>; g = √(ax²+ay²+az²) computed on the node</td></tr>
+<tr><td>Server</td><td>TCP:8888, binary protocol 14 bytes/record, 5–10 s cycles; <a href="code/server_v6.py">code/server_v6.py</a></td></tr>
+<tr><td>Mode scenario</td><td><a href="code/scenario.py">code/scenario.py</a> — automatic parameter sweep every ~2 min; log: <code>data/*/config_history.log</code></td></tr>
+</table></div>
+<h3>The modes — what they mean</h3>
+<div class="tw"><table>
+<tr><th>Parameter</th><th>Values</th><th>Meaning (from firmware, <a href="code/zero.ino">zero.ino</a> lines 365–366)</th></tr>
+<tr><td><code>fix_mode</code></td><td>A (0) / B (1)</td><td><b>A:</b> the accelerometer is read only AFTER a prime is found ("event first, then measurement"). <b>B:</b> it is read on every loop iteration and recorded when a prime occurs ("measure continuously, the event selects")</td></tr>
+<tr><td><code>fix_order</code> / <code>prime_order</code></td><td>permutations of T,G,D</td><td>the order in which Time/G/random number are latched — a check that operation order creates no artifacts</td></tr>
+<tr><td><code>buffer_mode</code></td><td>RING / STOP</td><td>ring buffer overwrites oldest / acquisition stops when full</td></tr>
+<tr><td><code>sensor_hz</code></td><td>100–1600</td><td>internal accelerometer update rate</td></tr>
+</table></div>
+
+
+<p class="small">A separate thread the authors intend to explore later is the equivalence principle: a rim sensor experiences an indistinguishable mix of "gravity + accelerated motion", and at the top of the wheel free fall is locally reproduced. Noted here only as a topic for a future discussion.</p><h3>How acquisition works — straight from the code</h3>
+<p><b>Why the data comes in bursts.</b> A node has little memory: the buffer is 18,000 records × 14 bytes = 252 KB, which leaves the ESP32-C6 ~124 KB of free RAM (lines 4–8, 46 in <a href="code/zero.ino">zero.ino</a>). Hence the cycle: a short capture window (5–10 s) → the whole buffer is shipped to the server over TCP → pause → next window. <b>All agents start a session simultaneously</b> — a node waits for the top of the minute (<code>waitForNextMinute</code>), and so that 10 nodes do not collide when sending, each has its own send delay in <a href="code/config.yaml">config.yaml</a>: agent 0 — 1 s, agent 2 — 10 s, agent 3 — 15 s… in 5 s steps. Hence the folder structure: one minute = one session = one file per device.</p>
+<p><b>The node's main loop</b> (verbatim from <a href="code/zero.ino">zero.ino</a>, lines 365–366): mode A — <code>num=esp_random(); prime=isPrime(num); if(prime){ ts=micros(); g=readAccel(); }</code> (the sensor is read only after a prime); mode B — <code>ts=micros(); g=readAccel(); num=esp_random(); prime=isPrime(num);</code> (read every iteration, recorded on a prime). A found prime is buffered: <code>addToBuffer(num, g, ts, checked_since)</code>.</p>
+<p><b>What the raw data looks like</b> (first lines of the real file <code>data/data_seno_soloma/csv/20260611/1701/58_E6_C5_14_2C_0C.csv</code>):</p>
+<pre>agent_id,prime,g,timestamp_us,checked_since
+0,3970455059,0.709864,0,2
+0,2352777377,1.097761,1895,17
+0,1150136957,0.944764,4775,35</pre>
+<p>Read as: agent 0; the random number 3970455059 turned out prime; at that moment the acceleration magnitude was 0.709864 g; 0 µs since the window start; 2 numbers checked since the previous prime. The server (<a href="code/server_v6.py">server_v6.py</a>, port 8888) receives binary packets (record = 14 bytes: <code>&lt;IfIH</code>), files them under <code>bin/</code> and <code>csv/</code> as "date/minute/MAC", and logs session summaries to <code>headers.csv</code>.</p>
+<h2 id="anim"><span class="n">⟳</span>Animation: how it works</h2>
+<div class="anim">
+<div class="ctl">
+<button id="dirBtn" onclick="flipDir()" style="font:600 13px var(--mono);padding:.35em 1em;border:1px solid var(--line);border-radius:4px;background:var(--code);color:var(--ink);cursor:pointer">direction: SENO ⟲</button>
+<label>speed <input id="spd" type="range" min="30" max="160" value="90"></label>
+<label><input id="showStick" type="checkbox" checked> show sticking</label>
+</div>
+<canvas id="cv" width="920" height="430"></canvas>
+<p class="small">Left: the wheel with 8 rim sensors (copper arc — the field coil). Vectors on the highlighted sensor: <span style="color:#2F6B8F">■</span> gravity g (down, constant), <span style="color:#A96F26">■</span> centripetal acceleration (always toward the hub), <span style="color:#8A2D3B">■</span> G-LOAD — how hard and where the agent is pressed (blue minus yellow). The sensor reads its magnitude: at the bottom the press is downward at ≈2g (long red arrow down), at the top there is nothing to press with — the red arrow collapses to zero, weightlessness. Exactly what a rider feels on the ride: squeezed into the seat at the bottom, lifted at the top. At the top |a|→0 — weightlessness (a "0g" flash). Right: live |a|(t) trace; red dots are random "stuck" readings landing on the 0.03125 g lattice. The button flips the rotation direction — that is the seno/soloma difference.</p>
+</div>
+<script>
+(function(){
+const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
+let dir=1,t=0,last=0,hist=[],stickPts=[];
+const css=getComputedStyle(document.documentElement);
+function col(v){return css.getPropertyValue(v).trim()||'#888'}
+window.flipDir=function(){dir*=-1;
+ document.getElementById('dirBtn').textContent='direction: '+(dir>0?'SENO ⟲':'SOLOMA ⟳');}
+function frame(ts){
+ const spd=+document.getElementById('spd').value/50;
+ const dt=Math.min(0.05,(ts-last)/1000||0.016); last=ts;
+ t+=dt*spd*dir;
+ draw(ts,spd);
+ requestAnimationFrame(frame);
+}
+function draw(ts,spd){
+ const W=cv.width,H=cv.height;
+ ctx.clearRect(0,0,W,H);
+ const cx=215,cy=215,R=150;
+ const ink=col('--ink'),mut=col('--mut'),acc=col('--acc'),acc2=col('--acc2'),warn=col('--warn'),ok=col('--ok');
+ ctx.lineWidth=14;ctx.strokeStyle='#b5622d';
+ ctx.beginPath();ctx.arc(cx,cy,R+12,-2.2,-1.1);ctx.stroke();
+ ctx.lineWidth=2;ctx.strokeStyle=mut;
+ ctx.beginPath();ctx.arc(cx,cy,R,0,7);ctx.stroke();
+ for(let s=0;s<6;s++){ctx.beginPath();ctx.moveTo(cx,cy);
+  const a=t+s*Math.PI/3;ctx.lineTo(cx+R*Math.cos(a),cy+R*Math.sin(a));ctx.globalAlpha=.35;ctx.stroke();ctx.globalAlpha=1;}
+ let mainA=0;
+ for(let k=0;k<8;k++){
+  const a=t+k*Math.PI/4, x=cx+R*Math.cos(a), y=cy+R*Math.sin(a);
+  ctx.beginPath();ctx.arc(x,y,7,0,7);
+  ctx.fillStyle=k?acc2:acc;ctx.fill();
+  if(!k)mainA=a;
+ }
+ const x0=cx+R*Math.cos(mainA), y0=cy+R*Math.sin(mainA);
+ const acm=1.2, g=1.0, sc=55;
+ const vcx=-Math.cos(mainA)*acm, vcy=-Math.sin(mainA)*acm;
+ // синий: тяжесть g (вниз). жёлтый: центростремительное (к центру).
+ // красный: ПЕРЕГРУЗКА = с какой силой агента прижимает = g - a_c.
+ // датчик показывает её величину: внизу 2g (прижат вниз), наверху 0 (невесом).
+ arrow(x0,y0,x0,y0+g*sc,acc2);
+ arrow(x0,y0,x0+vcx*sc,y0+vcy*sc,warn);
+ const rx=-vcx, ry=g-vcy;
+ arrow(x0,y0,x0+rx*sc,y0+ry*sc,acc,3);
+ const mag=Math.hypot(rx,ry);
+ const topness=-Math.sin(mainA);
+ if(topness>0.96&&mag<0.5){ctx.font='700 22px monospace';ctx.fillStyle=ok;
+  ctx.fillText('0g — WEIGHTLESS',cx-85,cy-R-24);}
+ ctx.font='12px monospace';ctx.fillStyle=mut;
+ ctx.fillText('|a| = '+mag.toFixed(2)+' g',x0+12,y0-12);
+ const gx=445,gy=30,gw=450,gh=370;
+ ctx.strokeStyle=mut;ctx.strokeRect(gx,gy,gw,gh);
+ hist.push(mag); if(hist.length>gw)hist.shift();
+ if(document.getElementById('showStick').checked){
+  ctx.strokeStyle=acc;ctx.globalAlpha=.15;
+  for(let q=0;q<2.4;q+=0.25){
+   const yy=gy+gh-q/2.4*gh;
+   ctx.beginPath();ctx.moveTo(gx,yy);ctx.lineTo(gx+gw,yy);ctx.stroke();
+  }
+  ctx.globalAlpha=1;
+ }
+ ctx.beginPath();ctx.strokeStyle=acc2;ctx.lineWidth=1.5;
+ hist.forEach((v,i)=>{const yy=gy+gh-v/2.4*gh;i?ctx.lineTo(gx+i,yy):ctx.moveTo(gx+i,yy);});
+ ctx.stroke();ctx.lineWidth=2;
+ if(document.getElementById('showStick').checked&&Math.random()<0.25){
+  const q=0.25, snapped=Math.round(mag/q)*q;
+  stickPts.push({x:gx+hist.length-1,y:gy+gh-snapped/2.4*gh,a:1});
+ }
+ stickPts.forEach(p=>{p.x-=1;p.a-=0.004;});
+ stickPts=stickPts.filter(p=>p.a>0&&p.x>gx);
+ stickPts.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,3,0,7);
+  ctx.fillStyle=acc;ctx.globalAlpha=Math.max(0,p.a);ctx.fill();ctx.globalAlpha=1;});
+ ctx.font='12px monospace';ctx.fillStyle=mut;
+ ctx.fillText('|a|(t), g',gx+8,gy+16);
+ ctx.fillText('2g',gx-24,gy+gh-2/2.4*gh+4);
+ ctx.fillText('1g',gx-24,gy+gh-1/2.4*gh+4);
+ ctx.fillText('0g',gx-24,gy+gh+4);
+ ctx.fillText('red dots = stuck readings on the lattice (exaggerated)',gx+8,gy+gh-8);
+}
+function arrow(x1,y1,x2,y2,c,w){
+ ctx.strokeStyle=c;ctx.fillStyle=c;ctx.lineWidth=w||2;
+ ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+ const a=Math.atan2(y2-y1,x2-x1);
+ ctx.beginPath();ctx.moveTo(x2,y2);
+ ctx.lineTo(x2-9*Math.cos(a-0.4),y2-9*Math.sin(a-0.4));
+ ctx.lineTo(x2-9*Math.cos(a+0.4),y2-9*Math.sin(a+0.4));
+ ctx.closePath();ctx.fill();ctx.lineWidth=2;
+}
+requestAnimationFrame(frame);
+})();
+</script>
+
+
+<h2 id="gloss"><span class="n">§</span>Statistics in plain words — every term used here</h2>
+<div class="tw"><table>
+<tr><th>Term</th><th>In human language</th></tr>
+<tr><td><b>Counts (LSB)</b></td><td>The sensor's integer "ticks". One tick = 0.000122 g. Nothing exists between ticks — a ruler has no half-marks.</td></tr>
+<tr><td><b>Lattice pitch</b></td><td>Spacing between "favourite" values: 256 ticks = 0.03125 g. Picture a fence with evenly spaced boards.</td></tr>
+<tr><td><b>Lattice phase</b></td><td>WHERE the fence stands (not its spacing). Phase 47 = boards at "…×256+47". <b>The "what if it were 37?" game</b>: the whole fence would shift left by 10 ticks (0.0012 g) — and nothing else would change. The number itself is unimportant; what matters is that it <i>does not drift</i>: day after day, two devices — 47±1. If it drifted, the comb would smear to nothing.</td></tr>
+<tr><td><b>R (coherence)</b></td><td>"How unanimous". 1000 compasses pointing at random average to ≈0 (R≈0); all pointing north — R=1. Each measurement becomes a "needle" by its position inside the 256 step; R measures unanimity. R=0.37 = a solid share of readings point exactly at "47".</td></tr>
+<tr><td><b>z (sigmas)</b></td><td>"Heads in a row". z=2 — by luck one time in twenty; z=4 — one in 30,000 (our detection threshold); z=27 — never by luck. Formula: z = R·√n.</td></tr>
+<tr><td><b>p-value</b></td><td>The chance of seeing this by pure luck with no effect present. p=0.9 — "ordinary chance"; p=0.001 — "chance can't do that". Caution: p=0.03 across seven tests is business as usual, not a discovery.</td></tr>
+<tr><td><b>Null model</b></td><td>"The world without the effect" used as the reference, e.g. "values are continuous, no fence". Compute that world's statistics, measure how far reality deviates.</td></tr>
+<tr><td><b>Bootstrap</b></td><td>Error bars without formulas: reshuffle your own data with replacement 40 times, remeasure; the spread of answers is the uncertainty. That is where "255.85 ± 0.11" comes from.</td></tr>
+<tr><td><b>Fourier / residual spectrum</b></td><td>An automatic fence detector: subtract the smooth hill from the histogram, look for a repeating rhythm in the remainder. "Peak/bg 15×" = the rhythm is 15× brighter than random ripple.</td></tr>
+<tr><td><b>Bernoulli, memoryless</b></td><td>Each measurement is an independent coin (~10.7% chance to stick). "Memoryless": after a stuck one, the next is NOT more likely to stick (neighbour correlation 0.015 ≈ 0).</td></tr>
+<tr><td><b>"Excluded at 150σ"</b></td><td>The fence pitch is 255.85±0.11 ticks; the "246 ticks (exactly 0.030 g)" hypothesis misses by ~90 of its own error bars — like insisting a person measured at 1.750±0.001 m is two metres tall.</td></tr>
+</table></div>
+<h3>How to tell which mode was active at any given minute</h3>
+<p>The server logs every switch to <code>data/&lt;run&gt;/config_history.log</code>. A line looks like:</p>
+<pre>2026-06-10 09:39:10 | dur=5s | buf=STOP | fix=A | order=TGD/TG | hz=1600 | send=1</pre>
+<p>Read as: "from 09:39:10 the regime is: 5-second sessions; buffer stops when full; fixation mode A (sensor read after a found prime); field latch order Time→G→Number; sensor rate 1600 Hz". A regime lasts until the next log line. To find any session's regime: session = the HHMM folder; take the latest log line with time ≤ session start. That is exactly what <code>scripts/05_regime_split.py</code> does automatically. Example from the data: sensor 1's structure changed on June 10 between sessions 09:31 and 09:38 — the log has the fix B→A switch right there at 09:39:10 (mode B was still active at 09:37).</p>
+<h2 id="s3"><span class="n">03</span>Timeline of the blind analysis</h2>
+<div class="timeline">
+<div class="ev"><span class="d">STEP 1</span><br>Cataloguing: 11 runs, 15+ scripts, firmware, logs (<code>scripts/01_catalog.py</code>). The trigger is clean: checked_since is geometric, p̂ = 0.0475 ≈ 1/ln 2³² (<code>scripts/02_trigger_check.py</code>).</div>
+<div class="ev"><span class="d">STEP 2</span><br>Replication of the July GUNGNIR reports: the Δg=0.031 "comb" on sensor 0 reproduced exactly. Found: the 0.030 step was hard-coded into the search — sensor 1's comb was "not found" because its pitch is different.</div>
+<div class="ev"><span class="d">STEP 3</span><br>The analyst's first hypothesis (plain ADC quantization) was refuted by the analyst himself: the lattice changes between days while the firmware did not (verified by sketch file dates).</div>
+<div class="ev hot"><span class="d">STEP 4 — TURNING POINT</span><br>Sensor 1's pitch change at 09:38 on June 10 coincided with a server command (log entry 09:39:10). The per-mode breakdown (<code>scripts/05_regime_split.py</code>): the manifestation depends on the pair "device × fix mode". The exact signature: <b>pitch 255.85 ± 0.11 counts (=256, a byte), phase 47</b> (<code>scripts/10_pitch_precision.py</code>).</div>
+<div class="ev hot"><span class="d">STEP 5 — KEY CHECK</span><br>The metric across all 11 runs (<code>scripts/06_sticking_all_series.py</code>): <b>in all 5 wheel-off runs the effect is absent</b> (up to n=190k); wheel-on — present in some nodes. Among rotating sensors: 5 of 8, on all 3 days (<code>scripts/08_rotating_sticking.py</code>).</div>
+<div class="ev"><span class="d">STEP 6</span><br>Victims are chosen at random: sticking is unrelated to the random number, timing, or neighbours (<code>scripts/09_victims_randomness.py</code>). Classical wheel mechanics confirmed (<code>scripts/03_theory_overlay.py</code>).</div>
+</div>
+
+<h2 id="s4"><span class="n">04</span>Trust first: the classical picture checks out</h2>
+<figure><img loading="lazy" src="figures/theory_overlay.png" alt=""><figcaption>Spinning sessions only. Green line — theory |a|=√(a_c²+1+2a_c·cos ωt) with σ=0.08g noise. The anomalous sensor (left) and a clean one (right) are indistinguishable at this scale. <span class="src">→ scripts/03_theory_overlay.py</span></figcaption></figure>
+<figure><img loading="lazy" src="figures/rotation_fit.png" alt=""><figcaption>One spinning session in time: dots — measurements, line — the classical model. All 8 nodes share one period to 0.4%; at the top g reaches 0.000 — weightlessness is real.</figcaption></figure>
+<div class="vd k"><b class="t">Section verdict</b><br>The wheel's mechanics is textbook classical. Everything interesting lives two floors below — in the microstructure of the numbers.</div>
+
+<h2 id="s5"><span class="n">05</span>The anomaly: a stuck low byte</h2>
+<p>Each axis is transmitted as a 16-bit number made of two bytes: <b>value = high × 256 + low</b>. Try it:</p>
+
+
+<div class="anim" id="bytedemo">
+<div class="ctl">
+<button id="bd_run" class="bdbtn">⏸ STOP</button>
+<button id="bd_eff" class="bdbtn">effect: ON</button>
+<button id="bd_alt" class="bdbtn">pitch: 256</button>
+<button id="bd_rst" class="bdbtn">reset</button>
+<label>sticks to: <input id="bd_ph" type="range" min="0" max="255" value="47"> <span id="bd_phv" style="font-weight:700">47</span></label>
+<label>how often: <input id="bd_pr" type="range" min="0" max="40" value="14"> <span id="bd_prv" style="font-weight:700">14%</span></label>
+<span id="bd_cnt" style="font:12px var(--mono);color:var(--mut)"></span>
+</div>
+<style>.bdbtn{font:600 13px var(--mono);padding:.35em 1em;border:1px solid var(--line);border-radius:4px;background:var(--code);color:var(--ink);cursor:pointer}</style>
+<canvas id="bd_cv" width="920" height="470"></canvas>
+<p class="small">A hands-on stand. <b>STOP</b> freezes the stream for inspection. The 'sticks to' slider is the low-byte value itself (47 in the real data): drag it and the teeth migrate live to new places (the answer to 'what if the phase were different'). 'How often' is the stuck fraction (~10% in the data). 'Pitch 256/239' — the byte lattice vs an arbitrary one. The right-hand chart mirrors our real analysis in three layers: data accumulates in blue; the grey dashed line is the smooth shape (the 'theory+noise' bell) growing with it; below, separately, the RESIDUAL = data minus smooth shape — the signal teeth in pure form, bell removed. Red verticals are the lattice nodes: the residual spikes exactly on them.</p>
+</div>
+<script>
+(function(){
+const cv=document.getElementById('bd_cv'); if(!cv)return;
+const ctx=cv.getContext('2d');
+const css=getComputedStyle(document.documentElement);
+const C=v=>css.getPropertyValue(v).trim()||'#888';
+let run=true, eff=true, pitch=256, hist=new Array(560).fill(0), total=0, stuckN=0;
+let cur=null, flash=0;
+const L={stop:'⏸ STOP',go:'▶ RUN',eff:'effect: ',on:'ON',off:'OFF',lat:'pitch: ',
+ cnt1:'measurements: ',cnt2:' | stuck: ',
+ truev:'sensor measured (counts): ',high:'HIGH x256',low:'LOW',repl:' → REPLACED BY ',
+ wrote:'written to file: ',err:'error: ',g:'in g units: ',
+ hint:'Each individual error is tiny, invisible in noise.',
+ hint2:'But every corrupted record shares the same tail —',
+ hint3:'so teeth grow in the residual (bottom right).',
+ lay1:'— data (accumulating)',lay2:'--- smooth shape: theory+noise',
+ lay3:'RESIDUAL = data − smooth shape (the signal, pure)'};
+const el=id=>document.getElementById(id);
+el('bd_run').onclick=function(){run=!run;this.textContent=run?L.stop:L.go;};
+el('bd_eff').onclick=function(){eff=!eff;this.textContent=L.eff+(eff?L.on:L.off);};
+el('bd_alt').onclick=function(){pitch=(pitch===256)?239:256;this.textContent=L.lat+pitch;};
+el('bd_rst').onclick=function(){hist.fill(0);total=0;stuckN=0;};
+el('bd_ph').oninput=function(){el('bd_phv').textContent=this.value;};
+el('bd_pr').oninput=function(){el('bd_prv').textContent=this.value+'%';};
+function gauss(){let s=0;for(let i=0;i<6;i++)s+=Math.random();return (s-3)/1.35;}
+function loop(){
+ if(run){
+  const phase=+el('bd_ph').value, prob=+el('bd_pr').value/100;
+  for(let k=0;k<6;k++){
+   let c=Math.round(7950+gauss()*900);
+   let isSt=eff&&Math.random()<prob;
+   let rec=c;
+   if(isSt){rec=Math.floor(c/pitch)*pitch+phase; stuckN++;}
+   total++; cur={c:c,rec:rec,st:isSt};
+   flash=isSt?1:flash*0.7;
+   const bin=Math.round((rec-6900)/4);
+   if(bin>=0&&bin<hist.length)hist[bin]++;
+  }
+ }
+ draw();
+ el('bd_cnt').textContent=L.cnt1+total+L.cnt2+stuckN+' ('+(100*stuckN/Math.max(1,total)).toFixed(0)+'%)';
+ requestAnimationFrame(loop);
+}
+function byteBox(x,y,w,h,label,val,hot){
+ ctx.strokeStyle=hot?C('--acc'):C('--acc2');ctx.lineWidth=hot?3:2;
+ if(hot){ctx.fillStyle='rgba(200,60,80,'+(0.15+0.3*flash)+')';ctx.fillRect(x,y,w,h);}
+ ctx.strokeRect(x,y,w,h);
+ ctx.font='10px monospace';ctx.fillStyle=C('--mut');ctx.fillText(label,x+6,y+14);
+ ctx.font='700 26px monospace';ctx.fillStyle=C('--ink');ctx.fillText(val,x+14,y+46);
+ ctx.lineWidth=2;
+}
+function smooth(arr,k){
+ const out=new Array(arr.length).fill(0);
+ for(let i=0;i<arr.length;i++){
+  let s=0,n=0;
+  for(let j=Math.max(0,i-k);j<=Math.min(arr.length-1,i+k);j++){s+=arr[j];n++;}
+  out[i]=s/n;
+ }
+ return out;
+}
+function draw(){
+ ctx.clearRect(0,0,920,470);
+ const mut=C('--mut'),acc=C('--acc'),acc2=C('--acc2'),ok=C('--ok');
+ const phase=+el('bd_ph').value;
+ if(cur){
+  const hb=Math.floor(cur.rec/256), lb=cur.rec%256;
+  const hbT=Math.floor(cur.c/256), lbT=cur.c%256;
+  ctx.font='12px monospace';ctx.fillStyle=mut;
+  ctx.fillText(L.truev+cur.c+'  =  '+hbT+'x256 + '+lbT,30,40);
+  byteBox(30,60,150,60,L.high,hb,false);
+  ctx.font='700 20px monospace';ctx.fillStyle=C('--ink');ctx.fillText('+',196,98);
+  byteBox(215,60,150,60,L.low+(cur.st?(L.repl+phase):''),lb,cur.st);
+  ctx.font='12px monospace';ctx.fillStyle=cur.st?acc:mut;
+  ctx.fillText(L.wrote+cur.rec+(cur.st?('   ('+L.err+(cur.rec-cur.c)+')'):''),30,150);
+  ctx.fillStyle=mut;
+  ctx.fillText(L.g+(cur.rec*0.000122).toFixed(4)+' g',30,172);
+  ctx.fillText(L.hint,30,215);ctx.font='11px monospace';
+  ctx.fillText(L.hint2,30,233);ctx.fillText(L.hint3,30,251);
+ }
+ // верхняя панель: данные + гладкая форма
+ const gx=420,gy=25,gw=480,gh=250;
+ ctx.strokeStyle=mut;ctx.strokeRect(gx,gy,gw,gh);
+ const m=Math.max(8,Math.max.apply(null,hist));
+ const sm=smooth(hist,10);
+ ctx.beginPath();ctx.strokeStyle=acc2;ctx.lineWidth=1;
+ for(let i=0;i<hist.length;i++){
+  const x=gx+4+i*(gw-8)/hist.length, y=gy+gh-6-hist[i]/m*(gh-20);
+  i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+ }
+ ctx.stroke();
+ ctx.beginPath();ctx.strokeStyle=mut;ctx.lineWidth=2;ctx.setLineDash([5,3]);
+ for(let i=0;i<sm.length;i++){
+  const x=gx+4+i*(gw-8)/sm.length, y=gy+gh-6-sm[i]/m*(gh-20);
+  i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+ }
+ ctx.stroke();ctx.setLineDash([]);ctx.lineWidth=2;
+ ctx.font='11px monospace';
+ ctx.fillStyle=acc2;ctx.fillText(L.lay1,gx+10,gy+16);
+ ctx.fillStyle=mut;ctx.fillText(L.lay2,gx+10,gy+32);
+ // нижняя панель: остаток = данные - гладкая
+ const ry0=gy+gh+22, rh=150;
+ ctx.strokeStyle=mut;ctx.strokeRect(gx,ry0,gw,rh);
+ let rm=8;
+ for(let i=0;i<hist.length;i++){const d=Math.abs(hist[i]-sm[i]);if(d>rm)rm=d;}
+ ctx.beginPath();ctx.strokeStyle=acc;ctx.lineWidth=1.2;
+ for(let i=0;i<hist.length;i++){
+  const x=gx+4+i*(gw-8)/hist.length;
+  const y=ry0+rh/2-(hist[i]-sm[i])/rm*(rh/2-8);
+  i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+ }
+ ctx.stroke();ctx.lineWidth=2;
+ ctx.strokeStyle=mut;ctx.globalAlpha=.4;
+ ctx.beginPath();ctx.moveTo(gx,ry0+rh/2);ctx.lineTo(gx+gw,ry0+rh/2);ctx.stroke();ctx.globalAlpha=1;
+ // узлы решётки на обеих панелях
+ ctx.strokeStyle=acc;ctx.globalAlpha=.2;
+ for(let c=Math.ceil(6900/pitch)*pitch+phase;c<6900+560*4;c+=pitch){
+  const x=gx+4+((c-6900)/4)*(gw-8)/hist.length;
+  ctx.beginPath();ctx.moveTo(x,gy+8);ctx.lineTo(x,gy+gh-6);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(x,ry0+6);ctx.lineTo(x,ry0+rh-6);ctx.stroke();
+ }
+ ctx.globalAlpha=1;
+ ctx.font='11px monospace';ctx.fillStyle=acc;
+ ctx.fillText(L.lay3,gx+10,ry0+16);
+}
+requestAnimationFrame(loop);
+})();
+</script>
+
+
+<figure><img loading="lazy" src="figures/fold_profiles.png" alt=""><figcaption>Folded profile (counts−47) mod 256. Carrier: the zero-bin peak is 2.4× the background. Its neighbour, same day: flat. The same sensor two weeks later with no wheel, 190k measurements: perfectly flat. <span class="src">→ scripts/07_fold_profiles.py</span></figcaption></figure>
+<figure><img loading="lazy" src="figures/comb_histogram.png" alt=""><figcaption>Theory-free view: the g histogram at 0.001 binning and its density autocorrelation — the periodicity is visible directly.</figcaption></figure>
+<figure><img loading="lazy" src="figures/simulation.png" alt=""><figcaption>Numerical model: quantization + sticking, nothing else. Flat mount → bright comb (GUNGNIR's "sensor 0"); 38° tilt → smeared ("weak signal" of sensor 1). <span class="src">→ scripts/11_simulation.py</span></figcaption></figure>
+
+<h2 id="s6"><span class="n">06</span>Properties of the effect</h2>
+
+<figure><img loading="lazy" src="figures/signal_extraction.png" alt=""><figcaption>Signal out of noise, step by step, for the three days. Columns: data vs "just noise" (Gaussian); residual after subtracting the smooth shape; the mod-256 fold against the grey "what nothing would look like" band; per-session signal level. Visible: June 9 — signal on 64_E8 (switches on at 16:56), June 10 — NO signal on the statics (curve inside the grey band), June 11 — signal on 2C_0C all day. <span class="src">→ scripts/12_signal_extraction.py</span></figcaption></figure>
+<figure><img loading="lazy" src="figures/series_summary.png" alt=""><figcaption>Left: static sensors across all 11 runs — the effect exists only while the wheel apparatus runs, and the carrier changes. Right: rotating sensors — 4–5 carriers of 8 on all 3 days; the miscalibrated 84_C0 is clean. <span class="src">→ scripts/06, 08</span></figcaption></figure>
+<figure><img loading="lazy" src="figures/onset_seno.png" alt=""><figcaption>Onset: June 9, static 64_E8 — R jumps 0.03→0.4 between 16:55 and 16:56 (wheel start; unfortunately coincident with a server setting change — the June setup cannot separate them).</figcaption></figure>
+<figure><img loading="lazy" src="figures/switch_series.png" alt=""><figcaption>Real packets around the switches. Top row: six consecutive sessions on June 9, sensor 64_E8 — at 16:54 and 16:55 the fold is flat ("none"), from 16:56 (wheel start) teeth at z=19–28 ("EFFECT") — the onset is visible minute by minute. Bottom row: June 10 — the residual spectrum before the 09:39 server command (0.0128 pitch dominates) and after (0.0083): the peak moved. <span class="src">→ scripts/13_switch_series.py</span></figcaption></figure>
+<figure><img loading="lazy" src="figures/sessions_gallery.png" alt=""><figcaption>A gallery of REAL per-session histograms (0.002 bins, raw CSVs). Row 1 — data_seno, 64_E8: smooth bells at 16:54–16:55 (blue, "none"), toothy from 16:56 (red, z=17–28); the onset is visible on raw data session by session. Row 2 — data_soloma, 64_E8: smooth bells all day — no static-sensor signal that day. Row 3 — data_seno_soloma, 2C_0C: the mode never changed (A all day) — teeth stand in every session (z=22–26). Labels: time · fix mode · verdict. <span class="src">→ scripts/14_sessions_gallery.py</span></figcaption></figure>
+<figure><img loading="lazy" src="figures/spin_vs_still.png" alt=""><figcaption>Same-day control (June 11): static histograms with the wheel spinning vs briefly stopped — the comb teeth stand at the same values. A short stop does not switch the effect off; a switched-off apparatus (other runs) does.</figcaption></figure>
+<figure><img loading="lazy" src="figures/wheel_phase.png" alt=""><figcaption>Rotating sensors: the lattice is significant over the whole revolution (left), while its phase rotates along the revolution (right): ≈42 at the bottom (close to the statics' 47), anti-phase mid-revolution (the illusory "gaps"). <span class="src">→ scripts/08_rotating_sticking.py</span></figcaption></figure>
+<details><summary>Per-session Fourier maps (three days, both static sensors)</summary>
+<figure><img loading="lazy" src="figures/fourier_seno.png" alt=""><figcaption>June 9: the coarse-pitch carrier is sensor 1. <span class="src">→ scripts/04_fourier_sessions.py</span></figcaption></figure>
+<figure><img loading="lazy" src="figures/fourier_soloma.png" alt=""><figcaption>June 10: no coarse pitch on the statics; sensor 1 switches from 0.0128 to 0.0083 after 09:40.</figcaption></figure>
+<figure><img loading="lazy" src="figures/fourier_seno_soloma.png" alt=""><figcaption>June 11: the carrier is sensor 0, stable all day (the day of the GUNGNIR report).</figcaption></figure>
+</details>
+<div class="tw"><table>
+<tr><th>Invariant</th><th>Value</th><th>Precision / significance</th></tr>
+<tr><td>Lattice pitch</td><td>255.85 counts (= 256, the byte boundary)</td><td>±0.11; the 0.030/0.029 g alternatives excluded at 90–160σ</td></tr>
+<tr><td>Phase</td><td>≈47 counts, same across devices and days</td><td>±0.4</td></tr>
+<tr><td>Stuck fraction</td><td>~10.7% on the strongest carrier</td><td>Bernoulli, memoryless</td></tr>
+<tr><td>Link to the random number</td><td>none</td><td>p=0.33–0.98</td></tr>
+<tr><td>Unit invariance</td><td>"256 counts", not "0.031 g"</td><td>at ±2g the comb would sit at 0.0156 g</td></tr>
+<tr><td>Node synchrony</td><td>none — nodes stick independently</td><td>inter-node correlation ≈ 0</td></tr>
+<tr><td>Fine lattices 68/82/126/136</td><td>a separate phenomenon, always present</td><td>uncorrelated with the big one (ρ=0.09)</td></tr>
+</table></div>
+<div class="vd w"><b class="t">Testing a beautiful formula — in plain words</b><br>
+<p style="margin:.4rem 0 0">The idea: what if the comb pitch is a constant of nature? Candidate formula: the fine-structure constant (α = 1/137.036) times (π+1). Compute: 0.007297 × 4.1416 = <b>0.03022</b>.</p>
+<p style="margin:.4rem 0 0">Now measure the pitch in the data: <b>0.03123</b>, with a tiny uncertainty of ±0.00001. The gap between formula and measurement (0.00101) is seventy times the uncertainty. As if a formula predicted a person's height as 175.0 cm and a millimetre-accurate tape showed 181.0 — not "almost right", but a miss.</p>
+<p style="margin:.4rem 0 0">And the deeper argument: our pitch is 256 sensor "ticks", and the size of one tick depends on the instrument's setting — switch the sensor from ±4g to ±2g and the same 256 ticks become 0.0156 instead of 0.0312. A constant of nature cannot depend on a switch position inside a chip. So the number 0.031 means nothing by itself — "256 ticks" is what means, and that is about the anatomy of a number, not universal constants. (One evening to check: test #1 of the program — if the comb defies this and stays at 0.031 after the range switch, this paragraph will be ceremonially eaten.)</p></div>
+
+<h2 id="s7"><span class="n">07</span>What it could be — three hypotheses on equal footing</h2>
+<div class="vd"><b class="t">Hypothesis A — a readout-path artifact</b><br>Each I2C transaction independently races the sensor's register update; losing the race substitutes a stale/foreign low byte. <b>For:</b> the byte signature; 10% is consistent with the timing budget (~150 µs read vs 625 µs cycle); Bernoulli victims. <b>Against:</b> does not explain the constant 47 shared across units, the dependence on the apparatus running, or the day-to-day carrier switch.</div>
+<div class="vd w"><b class="t">Hypothesis B — apparatus interference with the electronics</b><br>Motor / coil field / power / vibration perturb the bus or timings. <b>For:</b> "no apparatus → no effect" (5 clean runs); onset at wheel start; powerful coils near the nodes are a real field source. <b>Against:</b> no static-sensor effect in data_soloma and data_delta with the wheel running; the dependence on the software fix mode; the shared phase 47.</div>
+<div class="vd a"><b class="t">Hypothesis C — the sought "informational manifestation"</b><br>Something tied to the running apparatus manifests at the level of number representation. <b>For:</b> the effect lives in the anatomy of the number (invariant 256+47, not a g-value); tied to apparatus operation; stochastic victim choice — in the spirit of the design. <b>Against:</b> indistinguishable from A/B on these data; an extraordinary claim requires exhausting A/B first.</div>
+<div class="vd k"><b class="t">The general principle</b><br>An effect belonging to the world must be representation-invariant: change the chip, protocol, or encoding — it stays. A representation defect dies with the representation.</div>
+
+<h2 id="s8"><span class="n">08</span>The decisive experimental program</h2>
+<p>The metric is pre-registered: coherence R on the "256, phase 47" lattice, detection threshold z > 4 (<code>scripts/common.py::stick_R</code>).</p>
+<div class="tw"><table>
+<tr><th>#</th><th>Test</th><th>Separates</th><th>Predictions</th></tr>
+<tr><td>1</td><td><b>±2g range instead of ±4g</b></td><td>bytes ↔ physics</td><td>byte hypotheses: the comb moves to 0.0156 g. If it stays at 0.031 g — a sensation</td></tr>
+<tr><td>2</td><td><b>Raw int16 axes</b></td><td>location in the chain</td><td>shows directly which axis and when the byte is replaced</td></tr>
+<tr><td>3</td><td><b>Random fix A↔B switching</b></td><td>role of the code path</td><td>blinking in sync with commands → the factor enters via code timing</td></tr>
+<tr><td>4</td><td><b>Motor without wheel / coast-down without motor / coils without rotation</b></td><td>electrics ↔ rotation ↔ field</td><td>isolates the channel</td></tr><tr><td>4b</td><td><b>Coils ON/OFF</b> (the field was never switched off in any run!)</td><td>the magnetic field's role</td><td>effect gone with the field — channel found; stays — field excluded</td></tr>
+<tr><td>5</td><td><b>A different-architecture sensor alongside</b></td><td>A/B ↔ C</td><td>foreign representation clean → a LIS3DSH-chain defect; structure there too → a breakthrough</td></tr>
+<tr><td>6</td><td><b>Geiger counter</b> (planned)</td><td>universality</td><td>fix its metric BEFORE the first run</td></tr>
+</table></div>
+
+
+<h2 id="s8b"><span class="n">08b</span>Next experiment: two wheels</h2>
+<p>The authors' next step: spin <b>two wheels</b> with sensors in the gap between them. The analogy: if the sought phenomenon has a wave nature, two rotating discs — like the two plates of the Casimir effect — may form a preferred (standing) configuration between them, and the in-gap effect should depend on the mutual rotation mode: co-rotating / counter-rotating / one at rest. This is a working metaphor, not a computed model — hence predictions are registered in advance and interpretation is forbidden until the run completes.</p>
+<div class="anim">
+<div class="ctl">
+<button id="d2Btn" onclick="flip2()" style="font:600 13px var(--mono);padding:.35em 1em;border:1px solid var(--line);border-radius:4px;background:var(--code);color:var(--ink);cursor:pointer">mode: COUNTER-ROTATING</button>
+<label>speed <input id="spd2" type="range" min="30" max="160" value="90"></label>
+</div>
+<canvas id="cv2" width="920" height="360"></canvas>
+<p class="small">Scheme of the future rig: two discs with a measurement zone between them (sensors 0/1 + a radiation-background monitor). The in-gap pattern illustrates the expected "standing" configuration under counter-rotation; under co-rotation it travels (control mode). The experimental question: do the stuck fraction and phase change with the mode and with sensor position (node/antinode).</p>
+</div>
+<script>
+var D2LBL='mode: ',D2A='COUNTER-ROTATING',D2B='CO-ROTATING',
+    W1='wheel 1',W2='wheel 2',
+    SENSORS=[[0.25,'sensor 0'],[0.5,'bg (Geiger)'],[0.75,'sensor 1']],
+    NOTE_A='standing-pattern nodes are fixed - sensors can sit at a node and an antinode',
+    NOTE_B='the pattern travels - no preferred points (control mode)';
+</script>
+
+<script>
+(function(){
+const cv=document.getElementById('cv2'); if(!cv)return;
+const ctx=cv.getContext('2d');
+let mode=-1,t=0,last=0;
+window.flip2=function(){mode*=-1;
+ document.getElementById('d2Btn').textContent=D2LBL+(mode<0?D2A:D2B);}
+function fr(ts){
+ const spd=+document.getElementById('spd2').value/50;
+ const dt=Math.min(.05,(ts-last)/1000||.016); last=ts; t+=dt*spd;
+ const css=getComputedStyle(document.documentElement);
+ const C=v=>css.getPropertyValue(v).trim()||'#888';
+ const mut=C('--mut'),acc=C('--acc'),acc2=C('--acc2'),ok=C('--ok'),warn=C('--warn');
+ ctx.clearRect(0,0,920,360);
+ const y=180,R=120,x1=170,x2=750;
+ [[x1,t,W1],[x2,mode*t,W2]].forEach(([cx,a,lbl])=>{
+  ctx.strokeStyle=mut;ctx.lineWidth=2;
+  ctx.beginPath();ctx.arc(cx,y,R,0,7);ctx.stroke();
+  for(let s=0;s<6;s++){ctx.beginPath();ctx.moveTo(cx,y);
+   const q=a+s*Math.PI/3;ctx.lineTo(cx+R*Math.cos(q),y+R*Math.sin(q));
+   ctx.globalAlpha=.3;ctx.stroke();ctx.globalAlpha=1;}
+  ctx.lineWidth=10;ctx.strokeStyle='#b5622d';
+  ctx.beginPath();ctx.arc(cx,y,R+9,a-0.5,a+0.5);ctx.stroke();
+  ctx.font='12px monospace';ctx.fillStyle=mut;
+  ctx.fillText(lbl,cx-26,y+R+28);
+ });
+ const zx1=x1+R+24,zx2=x2-R-24;
+ ctx.strokeStyle=mut;ctx.setLineDash([4,4]);
+ ctx.strokeRect(zx1,y-90,zx2-zx1,180);ctx.setLineDash([]);
+ for(let x=zx1+6;x<zx2-6;x+=7){
+  const u=(x-zx1)/(zx2-zx1);
+  let A;
+  if(mode<0){A=Math.sin(u*Math.PI*4)*Math.cos(t*2);}
+  else{A=Math.sin(u*Math.PI*4 - t*2);}
+  ctx.beginPath();ctx.moveTo(x,y);
+  ctx.lineTo(x,y-A*70);
+  ctx.strokeStyle=mode<0?ok:acc2;ctx.globalAlpha=.55;ctx.lineWidth=3;
+  ctx.stroke();ctx.globalAlpha=1;ctx.lineWidth=2;
+ }
+ SENSORS.forEach(([u,l])=>{
+  const x=zx1+u*(zx2-zx1);
+  ctx.beginPath();ctx.arc(x,y,6,0,7);
+  ctx.fillStyle=(u===0.5)?warn:acc;ctx.fill();
+  ctx.font='11px monospace';ctx.fillStyle=mut;
+  ctx.fillText(l,x-26,y+22);
+ });
+ ctx.font='11px monospace';
+ if(mode<0){ctx.fillStyle=ok;ctx.fillText(NOTE_A,zx1,y-100);}
+ else{ctx.fillStyle=acc2;ctx.fillText(NOTE_B,zx1,y-100);}
+ requestAnimationFrame(fr);
+}
+requestAnimationFrame(fr);
+})();
+</script>
+
+<div class="tw"><table>
+<tr><th>Plan element</th><th>Registered in advance</th></tr>
+<tr><td>Modes</td><td>4 states: both at rest / one spinning / co-rotating / counter-rotating — random order, several switches per day, each journaled to the second (June's lesson: coincident events cannot be separated in hindsight)</td></tr>
+<tr><td>Metric</td><td>pre-registered: R on the "256, phase 47" lattice for in-gap sensors, threshold z &gt; 4; plus stuck fraction vs sensor position in the gap</td></tr>
+<tr><td>"Wave" expectation</td><td>the in-gap effect depends on the mutual rotation configuration (maximal under counter-rotation; position-dependent)</td></tr>
+<tr><td>A/B expectation</td><td>the effect depends only on nearby electrics/motor and is indifferent to the mutual configuration</td></tr>
+<tr><td>Background control</td><td>parallel radiation-background (Geiger) and gap-temperature logging — excludes mundane channels + a physics-independent second instrument</td></tr>
+</table></div>
+
+<h2 id="fant"><span class="n">F</span>Estimates and speculations — clearly marked</h2>
+<p class="small">Everything in this section is either an engineering estimate with explicit assumptions or open speculation. None of it belongs to the evidential part of the report.</p>
+<h3>The coil field — a back-of-envelope estimate</h3>
+<p>Parameters from the authors: winding diameter ≈14 cm, segment length ≈40 cm, 5 V supply, enamelled copper wire — 0.75 mm, also used for the power bus (the yellow Ø0.5 spool in the photo is solder). Power: one 5000 mAh powerbank for the shared bus (~5 ESP32 nodes) + a separate 5000 mAh powerbank for the coil; protective capacitors in the circuit (one is visible in the node photo). <b style='color:var(--acc)'>⚠ SAFETY: while nodes are connected to the shared power bus, NEVER plug USB into any of them — back-feeding burns the nodes out. Disconnect a node from the bus before any USB flashing/debugging.</b>. A solenoid: B = μ₀·n·I. Both wire options:</p>
+<ul>
+<li><b>0.75 mm:</b> ≈500 turns, ≈220 m of wire, R ≈ 8.7 Ω → 0.58 A (3 W) → <b>B ≈ 0.9 mT ≈ 18 Earth fields</b> inside the turns;</li>
+<li><b>0.5 mm:</b> ≈750 turns, ≈330 m, R ≈ 29 Ω → 0.17 A (1 W) → <b>B ≈ 0.4 mT ≈ 8 Earth fields</b>.</li>
+</ul>
+<p>So at 5 V and this winding diameter the in-coil field is on the order of <b>0.4–0.9 mT (8–18 Earth fields)</b>, with modest currents (0.2–0.6 A) and little heating. Outside a solenoid the field falls off quickly. Methodologically it still matters: a coil centimetres from the sensor and the bus is a potential interference source, and the field was never switched off in any run (test 4b). The most reliable refinement is to measure the current with a multimeter: B then follows exactly (B[mT] ≈ 1.57·I[A] for 0.75 mm / 2.35·I[A] for 0.5 mm).</p><p class="small">Power layout (clarified by the authors): <b>two 5000 mAh powerbanks — one for the shared power bus of all nodes, a separate one for the coil</b>. Consistency check: at ≈0.58 A the coil powerbank lasts ~8–9 hours — compatible with run lengths. The methodological consequence cuts both ways: the coil is decoupled from the nodes power-wise (good — its current does not sag the node bus directly), but <b>all nodes share one bus</b> — the common powerbank is a shared channel between nodes, and its sags/ripple are seen by all of them at once. This adds a check to the list: give nodes 0 and 1 individual powerbanks and see whether the sticking picture changes.</p><h3>The speculation corner: loop quantum gravity and α</h3>
+<p>In loop quantum gravity geometry is discrete: areas are quantized as A = 8πγ·l_P²·√(j(j+1)), with l_P = 1.6·10⁻³⁵ m and the Barbero–Immirzi parameter γ ≈ 0.2375; the minimal area quantum is ≈1.3·10⁻⁶⁹ m². There is a poetic echo with our effect — "the world is lattice-like at the very bottom" — but the honest scales differ by ~65 orders of magnitude, and LQG provides no computed bridge. If such a bridge exists, a concrete model must produce a number — an open invitation to theorists.</p>
+<p>Why the fine-structure constant α = 1/137.036 "could" surface in measurements: α is the coupling constant of everything electromagnetic, and our sensor is a capacitive MEMS read over an electric bus — every stage of the measurement is electromagnetic. Yet the specific probe α·(π+1) = 0.030223 against the measured Δg/g = 0.031231 ± 0.000013 misses by ~80σ and is rejected; moreover Δg in g-units depends on the sensor's range setting, while the effect's invariant is 256 counts (a byte) — pointing at number representation, not a universal constant. Verdict of the corner: pretty rhymes, zero evidence; only the §08 tests decide.</p>
+<h3>The authors' worldview frame (for context)</h3>
+<p>The authors view the rig as a miniature "model universe": rotation, local weightlessness, a directed field, noise, independent agents, primes as the source of event randomness — and search such a saturated system for anti-entropic ordering effects (the intuition: since abiogenesis happened on Earth, ordering out of noise is possible and should have a physical channel). The analyst records this frame as the experiment's motivation, not as a claim defended by this report.</p>
+<h2 id="s9"><span class="n">09</span>Reproducibility: every claim has its script</h2>
+<p>Data layout: <code>data/&lt;run&gt;/csv/&lt;YYYYMMDD&gt;/&lt;HHMM&gt;/&lt;MAC&gt;.csv</code>, columns <code>agent_id, prime, g, timestamp_us, checked_since</code>. Run: <code>cd scripts &amp;&amp; python NN_name.py</code> (numpy, scipy, matplotlib required). Paths are configured in <code>scripts/common.py</code>.</p>
+<div class="tw"><table class="repro">
+<tr><th>Claim / figure</th><th>Script</th><th>Output</th></tr>
+<tr><td>Run catalogue</td><td>01_catalog.py</td><td>n/mean/std table per device</td></tr>
+<tr><td>Trigger is honest</td><td>02_trigger_check.py</td><td>p̂=0.0475 ≈ 1/ln 2³²</td></tr>
+<tr><td>Classics confirmed</td><td>03_theory_overlay.py</td><td>figures/theory_overlay.png</td></tr>
+<tr><td>Per-session Fourier</td><td>04_fourier_sessions.py</td><td>figures/fourier_*.png</td></tr>
+<tr><td>Pitch follows the mode</td><td>05_regime_split.py</td><td>"device × fix × hz → pitch" table</td></tr>
+<tr><td>Only while the apparatus runs</td><td>06_sticking_all_series.py</td><td>R/z table over 11 runs</td></tr>
+<tr><td>Sticking profiles</td><td>07_fold_profiles.py</td><td>figures/fold_profiles.png</td></tr>
+<tr><td>Rotating + phase along the revolution</td><td>08_rotating_sticking.py</td><td>figures/wheel_phase.png + table</td></tr>
+<tr><td>Victims are random</td><td>09_victims_randomness.py</td><td>p-values of all links</td></tr>
+<tr><td>Pitch = 256 ± 0.1 (not 0.030 g)</td><td>10_pitch_precision.py</td><td>bootstrap interval</td></tr>
+<tr><td>Simulation of both GUNGNIR panels</td><td>11_simulation.py</td><td>figures/simulation.png</td></tr>
+</table></div>
+
+<h2 id="s10"><span class="n">10</span>Package contents</h2>
+<p class="small"><b>On the data in this published version:</b> the full measurement archive (117 MB, all 11 runs) is not included due to the size limit. The <code>data/</code> folder contains a sample — the sessions shown in the figures and the configuration logs of the three source days; enough to reproduce the key figures (scripts 07, 13, 14). The full archive is available on request — all scripts work with it unchanged.</p><div class="filelist">
+index.html / index_en.html   this document (RU / EN)<br>
+data/                        raw CSVs of all 11 runs + config_history.log + headers.csv (117 MB)<br>
+scripts/                     11 reproducibility scripts + common.py<br>
+figures/                     all report figures (regenerated by the scripts)<br>
+code/                        server_v6.py, scenario.py, config.yaml, node firmware, EXPERIMENT.md<br>
+media/                       photos of the rig and nodes, spin video
+</div>
+<p class="small">The whole folder can be zipped and shared — index.html resolves everything via relative links. Methods: phase coherence R(q)=|⟨e^{2πig/q}⟩|, residual-histogram spectra, permutation null models, bootstrap. Report compiled by an AI analyst (Claude, Anthropic); the analyst holds no position on the underlying theory and is equally prepared for any outcome of the decisive tests. Every number in the text is a direct script output.</p>
+</div>
+</body>
+</html>

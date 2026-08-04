@@ -1590,6 +1590,14 @@ export default {
       obj = await env.SITE.get(key + "/index.html"); // чистый URL без расширения
     }
     if (!obj) {
+      // Удалённый раздел /theory/ переехал по смыслу в /learn.html (решение «старая часть
+      // в архив», июль 2026). Google при переносе домена (запущен 2026-08-04) идёт по
+      // старым ссылкам .org → 301 → сюда — и получал 404. Постоянный 301 честнее:
+      // вес страницы уходит наследнику, а не в мусор. Языковой префикс сохраняем.
+      const th = key.match(/^lang\/([a-z]{2})\/theory(\/|$)/);
+      if (th) {
+        return Response.redirect(`https://${CANONICAL_HOST}/learn.html?lang=${th[1]}`, 301);
+      }
       const nf = await env.SITE.get("404.html");
       return new Response(nf ? nf.body : "Not found", {
         status: 404,

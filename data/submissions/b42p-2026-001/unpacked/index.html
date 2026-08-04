@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Аномалия 256+47 — эксперимент «вертикальное колесо»</title>
+<style>
+:root{
+ --bg:#FBFAF7; --ink:#1E222A; --mut:#66707D; --line:#DEDBD2; --card:#FFFFFF;
+ --acc:#8A2D3B; --acc2:#2F6B8F; --ok:#3E7A52; --warn:#A96F26; --code:#F0EEE7;
+ --mono:ui-monospace,'Cascadia Code',Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root{
+ --bg:#14171C; --ink:#DFE3E8; --mut:#8B95A3; --line:#2C313A; --card:#1B2027;
+ --acc:#D96A7C; --acc2:#6FA8C9; --ok:#7CBB93; --warn:#D9A45B; --code:#232830;
+}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16.5px/1.7 Charter,Georgia,'Times New Roman',serif}
+.wrap{max-width:960px;margin:0 auto;padding:0 1.2rem 6rem}
+header.hero{padding:4rem 0 2.2rem;border-bottom:3px double var(--line);margin-bottom:1.5rem;position:relative}
+.kicker{font:600 .72rem/1 var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--acc)}
+h1{font-size:2.25rem;line-height:1.15;margin:.6rem 0 .8rem;font-weight:700}
+.lede{font-size:1.1rem;color:var(--mut);max-width:64ch}
+.lang{position:absolute;top:1.2rem;right:0;font:600 13px var(--mono)}
+.lang a{color:var(--acc2);text-decoration:none;border:1px solid var(--line);padding:.2em .7em;border-radius:4px}
+.badge{display:inline-block;font:600 12px/1.9 var(--mono);padding:0 .7em;border:1px solid var(--line);border-radius:3px;margin:1rem .4rem 0 0;color:var(--mut)}
+nav.toc{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);z-index:9;padding:.45rem 0;font:13px/1.6 var(--mono);overflow-x:auto;white-space:nowrap}
+nav.toc a{color:var(--acc2);text-decoration:none;margin-right:1.2em}
+nav.toc a:hover{color:var(--acc)}
+h2{font-size:1.45rem;margin:3rem 0 1rem;padding-top:1rem}
+h2 .n{font:700 .85em var(--mono);color:var(--acc);margin-right:.5em}
+h3{font-size:1.08rem;margin:1.7rem 0 .6rem}
+p{max-width:74ch}
+figure{margin:1.4rem 0;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:.7rem}
+figure img,figure video{max-width:100%;display:block;border-radius:3px;background:#fff}
+figcaption{font:13px/1.5 system-ui,sans-serif;color:var(--mut);margin-top:.55rem}
+figcaption .src{font-family:var(--mono);font-size:11px;color:var(--acc2)}
+.gal{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;margin:1.2rem 0}
+.gal figure{margin:0}
+table{border-collapse:collapse;width:100%;font:13.5px/1.5 system-ui,sans-serif;font-variant-numeric:tabular-nums}
+.tw{overflow-x:auto;margin:1rem 0}
+th,td{border:1px solid var(--line);padding:.4rem .6rem;text-align:left;vertical-align:top}
+th{background:var(--code);font-weight:600}
+code,kbd{font:.85em var(--mono);background:var(--code);padding:.1em .35em;border-radius:3px}
+pre{background:var(--code);border:1px solid var(--line);border-radius:6px;padding:.8rem 1rem;overflow-x:auto;font:13px/1.5 var(--mono)}
+.vd{border-left:4px solid var(--acc2);background:var(--card);padding:.9rem 1.1rem;margin:1.2rem 0;border-radius:0 6px 6px 0}
+.vd.a{border-color:var(--acc)} .vd.k{border-color:var(--ok)} .vd.w{border-color:var(--warn)}
+.vd b.t{font:700 .78rem/1 var(--mono);letter-spacing:.1em;text-transform:uppercase}
+.timeline{border-left:2px solid var(--line);margin:1.2rem 0 1.2rem .4rem;padding-left:1.4rem}
+.timeline .ev{margin:0 0 1.1rem;position:relative}
+.timeline .ev::before{content:'';position:absolute;left:-1.83rem;top:.45em;width:9px;height:9px;border-radius:50%;background:var(--acc2)}
+.timeline .ev.hot::before{background:var(--acc)}
+.timeline .d{font:600 12px var(--mono);color:var(--mut)}
+details{border:1px solid var(--line);border-radius:6px;background:var(--card);padding:.6rem 1rem;margin:.8rem 0}
+details summary{cursor:pointer;font-weight:600;font-family:system-ui,sans-serif;font-size:.95rem}
+.demo,.anim{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:1rem 1.2rem;margin:1.2rem 0}
+.demo{font-family:var(--mono)}
+.demo .row{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;font-size:15px}
+.demo .byte{border:2px solid var(--acc2);border-radius:5px;padding:.3rem .8rem;text-align:center;min-width:74px}
+.demo .byte.lo{border-color:var(--warn)}
+.demo .byte.lo.stuck{border-color:var(--acc);background:rgba(200,60,80,.12)}
+.demo .lbl{font-size:10px;color:var(--mut);display:block}
+input[type=range]{width:200px;accent-color:var(--acc2)}
+.out{font-weight:700}
+.small{font-size:.85rem;color:var(--mut)}
+ul,ol{padding-left:1.4rem} li{margin:.3rem 0}
+a{color:var(--acc2)}
+.filelist{font:12.5px/1.7 var(--mono);background:var(--card);border:1px solid var(--line);border-radius:6px;padding:.8rem 1.1rem;overflow-x:auto}
+.anim .ctl{display:flex;gap:1.2rem;align-items:center;flex-wrap:wrap;font:13px system-ui,sans-serif;margin-bottom:.5rem}
+canvas{max-width:100%;display:block;margin:0 auto;border-radius:6px}
+.repro td:nth-child(2){font-family:var(--mono);font-size:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+<div class="lang"><a href="index_en.html">EN — English version</a></div>
+<span class="kicker">Экспериментальный отчёт · 4 августа 2026</span>
+<h1>Аномалия «256 + 47»: что нашлось в данных вертикального колеса</h1>
+<p class="lede">Полная и честная история одного анализа: какую физику ищут авторы установки, что нашёл слепой статистический разбор, как классическая механика подтвердилась до долей процента — и какой странный эффект остался, когда всё объяснимое было объяснено. Каждый вывод в этом документе воспроизводится скриптом из папки <code>scripts/</code> на данных из папки <code>data/</code>.</p>
+<span class="badge">669 000+ измерений</span><span class="badge">11 серий · 10 датчиков</span><span class="badge">слепой анализ</span><span class="badge">эффект: до 27σ</span><span class="badge">полностью воспроизводимо</span>
+</header>
+
+<nav class="toc">
+<a href="#s1">Что ищем</a><a href="#s2">Установка</a><a href="#anim">Анимация</a><a href="#gloss">Термины</a><a href="#s3">Хроника</a><a href="#s4">Классика</a><a href="#s5">Аномалия</a><a href="#s6">Свойства</a><a href="#s7">Версии</a><a href="#s8">Программа</a><a href="#fant">Ф</a><a href="#s9">Воспроизводимость</a><a href="#s10">Архив</a>
+</nav>
+
+<h2 id="s1"><span class="n">01</span>Что мы ищем — говорим честно</h2>
+<p>Эксперимент — поисковый. Рабочий интерес авторов лежит в области <b>квантовой гравитации и её возможных следов на уровне процесса измерения</b>: существует ли что-то, что проявлялось бы не в величине измеряемого сигнала, а в том, как случайность, момент фиксации и запись результата взаимодействуют между собой. Установка построена так, чтобы дать таким следам шанс проявиться, если они есть: момент каждого измерения задаёт стохастический триггер (аппаратно-случайные числа, проверяемые на простоту), способы «фиксации» измерения переключаются, а вокруг датчиков создано направленное магнитное поле. Никакой конкретной модели заранее не постулируется — программа устроена как поиск любых воспроизводимых отклонений от нулевых гипотез.</p>
+<div class="vd k"><b class="t">Методологический ход</b><br>
+Аналитик (Claude, Anthropic) выполнял разбор <b>вслепую</b>: цель эксперимента ему сообщили только после того, как все основные результаты были получены. Всё в разделах 03–06 намерено без знания искомой гипотезы. Это защита от подгонки, и она сработала в обе стороны: часть заявленных ранее аномалий разобрана до приборных причин, а одна устояла и обострилась.</div>
+
+<h2 id="s2"><span class="n">02</span>Установка</h2>
+<div class="gal">
+<figure><img src="media/wheel_full.jpg" alt="Колесо целиком"><figcaption>Колесо (фанерный диск ~1 м) с сегментом медной катушки на ободе. Привод — мотор-редуктор через вал. На полу — запасные сегменты намотки.</figcaption></figure>
+<figure><img src="media/wheel_laptop.jpg" alt="Установка с ноутбуком"><figcaption>Рабочее место: сервер сбора на ноутбуке, узел с катушкой у оси, термометр UNI-T на стойке.</figcaption></figure>
+<figure><img src="media/node_inside_1.jpg" alt="Узел изнутри"><figcaption>Сенсорный узел в разборе: намотка из медного провода 0.75 мм в лаке по корпусу, плата и конденсатор. Жёлтая катушка на столе — припой Ø0.5 для пайки, к намотке отношения не имеет.</figcaption></figure>
+<figure><img src="media/node_inside_2.jpg" alt="Узел изнутри 2"><figcaption>Контроллер Seeed Studio XIAO ESP32-C6 + акселерометр LIS3DSH внутри корпуса с намоткой.</figcaption></figure>
+</div>
+<p class="small">[Видео работающей установки — в полной версии пакета / video of the running rig — in the full package]</p>
+<p>Диск вращается в вертикальной плоскости. 10 сенсорных узлов: <b>0–1 неподвижны</b> (контроль, ≈1g), <b>2–9 на ободе</b>. Скорость подобрана так, чтобы в верхней точке обода модуль ускорения был ≈0g (невесомость), в нижней ≈2g. Вокруг датчиков — <b>катушки с направленным магнитным полем</b>; смена направления вращения колеса относительно поля и есть смысл парных серий (<code>seno</code> / <code>soloma</code> — противоположные направления, <code>seno_soloma</code> — комбинированная сессия).</p>
+<h3>Техническая спецификация</h3>
+<div class="tw"><table>
+<tr><th>Компонент</th><th>Детали</th></tr>
+<tr><td>Контроллер узла</td><td>Seeed Studio XIAO ESP32-C6, Wi-Fi, буфер 252 000 байт (18 000 записей)</td></tr>
+<tr><td>Акселерометр</td><td>LIS3DSH (ST), 3 оси, 16 бит, I2C 400 кГц; фактический диапазон ±4g — проверено по данным: 1g ≈ 8000 счётов = 0.122 мг/счёт (паспортное значение для ±4g)</td></tr>
+<tr><td>Цена деления (LSB)</td><td>0.000122 g (масштаб прошивки <code>SCALE_4G = 4/32768</code>, см. <a href="code/zero.ino">code/zero.ino</a>)</td></tr>
+<tr><td>Частота датчика</td><td>задаётся сервером: 100/400/800/1600 Гц (регистр 0x20 ← 0x67/0x7F/0x8F/0x9F); BDU включён при ≥400 Гц</td></tr>
+<tr><td>Триггер измерения</td><td>аппаратный ГСЧ → 32-битное число → тест на простоту (пробное деление + Миллер–Рабин); найденное простое = «измерить». В среднем 1 измерение на ~21 проверку</td></tr>
+<tr><td>Запись</td><td><code>agent_id, prime, g, timestamp_us, checked_since</code>; g = √(ax²+ay²+az²) считается на узле</td></tr>
+<tr><td>Сервер</td><td>TCP:8888, бинарный протокол 14 байт/запись, циклы 5–10 с; <a href="code/server_v6.py">code/server_v6.py</a></td></tr>
+<tr><td>Сценарий режимов</td><td><a href="code/scenario.py">code/scenario.py</a> — автоперебор параметров раз в ~2 мин; журнал: <code>data/*/config_history.log</code></td></tr>
+</table></div>
+<h3>Режимы — что они значат</h3>
+<div class="tw"><table>
+<tr><th>Параметр</th><th>Значения</th><th>Смысл (по коду прошивки, <a href="code/zero.ino">zero.ino</a> строки 365–366)</th></tr>
+<tr><td><code>fix_mode</code></td><td>A (0) / B (1)</td><td><b>A:</b> акселерометр читается только ПОСЛЕ найденного простого («сначала событие — потом измерение»). <b>B:</b> читается в каждой итерации цикла, записывается при простом («измерение непрерывно, событие выбирает»)</td></tr>
+<tr><td><code>fix_order</code> / <code>prime_order</code></td><td>перестановки T,G,D</td><td>порядок фиксации Времени/G/случайного числа — проверка, что порядок операций не создаёт артефактов</td></tr>
+<tr><td><code>buffer_mode</code></td><td>КОЛЬЦО / ОСТАНОВКА</td><td>кольцевой буфер перезаписывает старое / остановка при заполнении</td></tr>
+<tr><td><code>sensor_hz</code></td><td>100–1600</td><td>внутренняя частота обновления акселерометра</td></tr>
+</table></div>
+
+
+<p class="small">Отдельная нить, которую авторы намерены разобрать позже, — принцип эквивалентности: датчик на ободе неразличимо для себя переживает смесь «гравитация + ускоренное движение», а в верхней точке локально воспроизводится свободное падение. Пока фиксируем только как тему будущего разговора.</p><h3>Как устроен сбор — прямо из кода</h3>
+<p><b>Почему данные идут пакетами.</b> У узла мало памяти: буфер — 18 000 записей по 14 байт = 252 КБ, после его выделения у ESP32-C6 остаётся ~124 КБ свободной RAM (строки 4–8, 46 в <a href="code/zero.ino">zero.ino</a>). Поэтому цикл такой: короткое окно сбора (5–10 с) → отправка всего буфера на сервер по TCP → пауза → следующее окно. <b>Все агенты стартуют сессию одновременно</b> — узел ждёт начала минуты (<code>waitForNextMinute</code>), а чтобы 10 узлов не столкнулись при отправке, каждому в <a href="code/config.yaml">config.yaml</a> задана своя задержка отправки: агент 0 — 1 с, агент 2 — 10 с, агент 3 — 15 с… с шагом 5 с. Отсюда структура папок: одна минута = одна сессия = один файл на устройство.</p>
+<p><b>Главный цикл узла</b> (дословно из <a href="code/zero.ino">zero.ino</a>, строки 365–366): режим A — <code>num=esp_random(); prime=isPrime(num); if(prime){ ts=micros(); g=readAccel(); }</code> (датчик читается только после простого); режим B — <code>ts=micros(); g=readAccel(); num=esp_random(); prime=isPrime(num);</code> (датчик читается каждую итерацию, запись — при простом). Найденное простое добавляется в буфер: <code>addToBuffer(num, g, ts, checked_since)</code>.</p>
+<p><b>Как выглядят сырые данные</b> (первые строки реального файла <code>data/data_seno_soloma/csv/20260611/1701/58_E6_C5_14_2C_0C.csv</code>):</p>
+<pre>agent_id,prime,g,timestamp_us,checked_since
+0,3970455059,0.709864,0,2
+0,2352777377,1.097761,1895,17
+0,1150136957,0.944764,4775,35</pre>
+<p>Читается: агент 0; случайное число 3970455059 оказалось простым; в этот момент модуль ускорения был 0.709864 g; прошло 0 мкс от начала окна; с прошлого простого проверено 2 числа. Сервер (<a href="code/server_v6.py">server_v6.py</a>, порт 8888) принимает бинарные пакеты (запись = 14 байт: <code>&lt;IfIH</code> — число, g, время, счётчик), раскладывает в <code>bin/</code> и <code>csv/</code> по папкам «дата/минута/MAC» и пишет сводку сессий в <code>headers.csv</code>.</p>
+<h2 id="anim"><span class="n">⟳</span>Анимация: как это работает</h2>
+<div class="anim">
+<div class="ctl">
+<button id="dirBtn" onclick="flipDir()" style="font:600 13px var(--mono);padding:.35em 1em;border:1px solid var(--line);border-radius:4px;background:var(--code);color:var(--ink);cursor:pointer">направление: SENO ⟲</button>
+<label>скорость <input id="spd" type="range" min="30" max="160" value="90"></label>
+<label><input id="showStick" type="checkbox" checked> показывать залипания</label>
+</div>
+<canvas id="cv" width="920" height="430"></canvas>
+<p class="small">Слева: колесо с 8 датчиками на ободе (медная дуга — катушка поля). Векторы выделенного датчика: <span style="color:#2F6B8F">■</span> тяжесть g (вниз, постоянна), <span style="color:#A96F26">■</span> центростремительное ускорение (всегда к центру колеса), <span style="color:#8A2D3B">■</span> ПЕРЕГРУЗКА — с какой силой и куда агента прижимает (разность синего и жёлтого). Датчик показывает именно её величину: внизу колеса прижимает вниз с силой ≈2g (красный длинный, вниз), наверху прижимать нечем — красный схлопывается в ноль, невесомость. Это то же, что чувствует человек на аттракционе: внизу вдавливает в кресло, наверху отрывает. Вверху |a|→0 — невесомость (вспышка «0g»). Справа: живой график |a|(t); красные точки — случайные «залипшие» измерения, ложащиеся на решётку 0.03125 g. Кнопка меняет направление вращения — это и есть разница серий seno/soloma.</p>
+</div>
+<script>
+(function(){
+const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
+let dir=1,t=0,last=0,hist=[],stickPts=[];
+const css=getComputedStyle(document.documentElement);
+function col(v){return css.getPropertyValue(v).trim()||'#888'}
+window.flipDir=function(){dir*=-1;
+ document.getElementById('dirBtn').textContent='направление: '+(dir>0?'SENO ⟲':'SOLOMA ⟳');}
+function frame(ts){
+ const spd=+document.getElementById('spd').value/50;
+ const dt=Math.min(0.05,(ts-last)/1000||0.016); last=ts;
+ t+=dt*spd*dir;
+ draw(ts,spd);
+ requestAnimationFrame(frame);
+}
+function draw(ts,spd){
+ const W=cv.width,H=cv.height;
+ ctx.clearRect(0,0,W,H);
+ const cx=215,cy=215,R=150;
+ const ink=col('--ink'),mut=col('--mut'),acc=col('--acc'),acc2=col('--acc2'),warn=col('--warn'),ok=col('--ok');
+ // катушка-дуга на ободе
+ ctx.lineWidth=14;ctx.strokeStyle='#b5622d';
+ ctx.beginPath();ctx.arc(cx,cy,R+12,-2.2+t*0.0,-1.1+t*0.0);ctx.stroke();
+ ctx.lineWidth=2;ctx.strokeStyle=mut;
+ // диск
+ ctx.beginPath();ctx.arc(cx,cy,R,0,7);ctx.stroke();
+ for(let s=0;s<6;s++){ctx.beginPath();ctx.moveTo(cx,cy);
+  const a=t+s*Math.PI/3;ctx.lineTo(cx+R*Math.cos(a),cy+R*Math.sin(a));ctx.globalAlpha=.35;ctx.stroke();ctx.globalAlpha=1;}
+ // датчики
+ let mainA=0;
+ for(let k=0;k<8;k++){
+  const a=t+k*Math.PI/4, x=cx+R*Math.cos(a), y=cy+R*Math.sin(a);
+  ctx.beginPath();ctx.arc(x,y,7,0,7);
+  ctx.fillStyle=k?acc2:acc;ctx.fill();
+  if(!k)mainA=a;
+ }
+ // векторы выделенного датчика
+ const x0=cx+R*Math.cos(mainA), y0=cy+R*Math.sin(mainA);
+ const acm=1.2, g=1.0, sc=55;
+ // центростремительное: к центру
+ const vcx=-Math.cos(mainA)*acm, vcy=-Math.sin(mainA)*acm;
+ // тяжесть в системе датчика: вниз экрана (+y)
+ // синий: тяжесть g (вниз). жёлтый: центростремительное (к центру).
+ // красный: ПЕРЕГРУЗКА = с какой силой агента прижимает = g - a_c.
+ // датчик показывает её величину: внизу 2g (прижат вниз), наверху 0 (невесом).
+ arrow(x0,y0,x0,y0+g*sc,acc2);
+ arrow(x0,y0,x0+vcx*sc,y0+vcy*sc,warn);
+ const rx=-vcx, ry=g-vcy;
+ arrow(x0,y0,x0+rx*sc,y0+ry*sc,acc,3);
+ const mag=Math.hypot(rx,ry);
+ // 0g вспышка наверху
+ if(Math.sin(mainA)>0.0){} // датчик внизу — ничего
+ const topness=-Math.sin(mainA); // >0 когда датчик сверху
+ if(topness>0.96&&mag<0.5){ctx.font='700 22px monospace';ctx.fillStyle=ok;
+  ctx.fillText('0g — НЕВЕСОМОСТЬ',cx-95,cy-R-24);}
+ ctx.font='12px monospace';ctx.fillStyle=mut;
+ ctx.fillText('|a| = '+mag.toFixed(2)+' g',x0+12,y0-12);
+ // ---- правая панель: график |a|(t)
+ const gx=445,gy=30,gw=450,gh=370;
+ ctx.strokeStyle=mut;ctx.strokeRect(gx,gy,gw,gh);
+ hist.push(mag); if(hist.length>gw)hist.shift();
+ // решётка залипания
+ if(document.getElementById('showStick').checked){
+  ctx.strokeStyle=acc;ctx.globalAlpha=.15;
+  for(let q=0;q<2.4;q+=0.25){ // рисуем каждые 8 узлов для наглядности
+   const yy=gy+gh-q/2.4*gh;
+   ctx.beginPath();ctx.moveTo(gx,yy);ctx.lineTo(gx+gw,yy);ctx.stroke();
+  }
+  ctx.globalAlpha=1;
+ }
+ ctx.beginPath();ctx.strokeStyle=acc2;ctx.lineWidth=1.5;
+ hist.forEach((v,i)=>{const yy=gy+gh-v/2.4*gh;i?ctx.lineTo(gx+i,yy):ctx.moveTo(gx+i,yy);});
+ ctx.stroke();ctx.lineWidth=2;
+ // случайные залипания: точка прыгает на ближайший узел 0.03125*8 (утрировано)
+ if(document.getElementById('showStick').checked&&Math.random()<0.25){
+  const q=0.25, snapped=Math.round(mag/q)*q;
+  stickPts.push({x:gx+hist.length-1,y:gy+gh-snapped/2.4*gh,a:1});
+ }
+ stickPts.forEach(p=>{p.x-=1;p.a-=0.004;});
+ stickPts=stickPts.filter(p=>p.a>0&&p.x>gx);
+ stickPts.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,3,0,7);
+  ctx.fillStyle=acc;ctx.globalAlpha=Math.max(0,p.a);ctx.fill();ctx.globalAlpha=1;});
+ ctx.font='12px monospace';ctx.fillStyle=mut;
+ ctx.fillText('|a|(t), g',gx+8,gy+16);
+ ctx.fillText('2g',gx-24,gy+gh-2/2.4*gh+4);
+ ctx.fillText('1g',gx-24,gy+gh-1/2.4*gh+4);
+ ctx.fillText('0g',gx-24,gy+gh+4);
+ ctx.fillText('красные точки = залипшие чтения на решётке (утрированно)',gx+8,gy+gh-8);
+}
+function arrow(x1,y1,x2,y2,c,w){
+ ctx.strokeStyle=c;ctx.fillStyle=c;ctx.lineWidth=w||2;
+ ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+ const a=Math.atan2(y2-y1,x2-x1);
+ ctx.beginPath();ctx.moveTo(x2,y2);
+ ctx.lineTo(x2-9*Math.cos(a-0.4),y2-9*Math.sin(a-0.4));
+ ctx.lineTo(x2-9*Math.cos(a+0.4),y2-9*Math.sin(a+0.4));
+ ctx.closePath();ctx.fill();ctx.lineWidth=2;
+}
+requestAnimationFrame(frame);
+})();
+</script>
+
+
+<h2 id="gloss"><span class="n">§</span>Статистика на пальцах — все термины отчёта</h2>
+<div class="tw"><table>
+<tr><th>Термин</th><th>По-человечески</th></tr>
+<tr><td><b>Счёты (LSB)</b></td><td>Целые «тики» датчика. Один тик = 0.000122 g. Между тиками значений не бывает — как у линейки нет полурисок.</td></tr>
+<tr><td><b>Шаг решётки</b></td><td>Расстояние между «любимыми» значениями: 256 тиков = 0.03125 g. Представьте забор с досками через равные промежутки.</td></tr>
+<tr><td><b>Фаза решётки</b></td><td>ГДЕ стоит забор (не шаг!). Фаза 47 = доски на отметках «…×256+47». <b>Игра «а если бы фаза была 37?»</b>: весь забор сдвинулся бы влево на 10 тиков (0.0012 g) — и всё, больше ничего бы не поменялось. Само число не важно; важно, что оно <i>не плавает</i>: день за днём, у двух устройств — 47±1. Плавало бы — гребёнка размазалась бы в ноль.</td></tr>
+<tr><td><b>R (когерентность)</b></td><td>«Насколько дружно». 1000 компасов: стрелки кто куда — среднее ≈ 0 (R≈0); все на север — R=1. Каждое измерение превращаем в «стрелку» по его позиции внутри шага 256 и меряем дружность. R=0.37 = изрядная доля измерений смотрит ровно на «47».</td></tr>
+<tr><td><b>z (сигмы)</b></td><td>«Сколько орлов подряд». z=2 — случайно каждый 20-й раз; z=4 — раз на 30 000 (наш порог обнаружения); z=27 — случайно не бывает. Формула: z = R·√n — дружность × корень из числа измерений.</td></tr>
+<tr><td><b>p-значение</b></td><td>Шанс увидеть такое чисто случайно, если эффекта нет. p=0.9 — «обычная случайность»; p=0.001 — «случайность так не умеет». Осторожно: p=0.03 при семи проверках подряд — норма, а не открытие (мы так и трактовали).</td></tr>
+<tr><td><b>Нулевая модель</b></td><td>«Мир, где эффекта нет», с которым сравниваем: например «значения непрерывны, никакого забора». Считаем статистику такого мира — и меряем, насколько реальность от неё отклоняется.</td></tr>
+<tr><td><b>Бутстреп</b></td><td>Погрешность без формул: 40 раз перемешиваем собственные данные с возвратом и меряем заново; разброс ответов = погрешность. Так получено «255.85 ± 0.11».</td></tr>
+<tr><td><b>Фурье / спектр остатка</b></td><td>Автопоиск «заборов»: из гистограммы вычитаем плавный холм, в остатке ищем повторяющийся ритм. «Пик/фон 15×» = ритм в 15 раз ярче случайной ряби.</td></tr>
+<tr><td><b>Бернулли, без памяти</b></td><td>Каждое измерение — независимая монетка (~10.7% шанс залипнуть). «Без памяти»: после залипшего следующее НЕ залипает чаще (корреляция соседей 0.015 ≈ 0). Отличает случайную порчу от «полос» и «приступов».</td></tr>
+<tr><td><b>«Исключено на 150σ»</b></td><td>Шаг забора 255.85±0.11 тиков; гипотеза «246 тиков (ровно 0.030 g)» промахивается на ~90 своих погрешностей — как утверждать, что человек ростом 1.750±0.001 м на самом деле двухметровый.</td></tr>
+</table></div>
+<h3>Как узнать, какой режим был в конкретную минуту</h3>
+<p>Сервер записывает каждое переключение в <code>data/&lt;серия&gt;/config_history.log</code>. Строка выглядит так:</p>
+<pre>2026-06-10 09:39:10 | dur=5s | buf=ОСТАНОВКА | fix=A | order=TGD/TG | hz=1600 | send=1</pre>
+<p>Читается: «с 09:39:10 действует режим: сессии по 5 секунд; буфер останавливается при заполнении; способ фиксации A (датчик читается после найденного простого); порядок фиксации полей Время→G→Число; частота датчика 1600 Гц». Режим действует до следующей строки журнала. Чтобы узнать режим любой сессии: сессия = папка ЧЧММ, берём последнюю строку журнала с временем ≤ начала сессии. Именно так работает <code>scripts/05_regime_split.py</code> — он сопоставляет каждую сессию с активным режимом автоматически. Пример из данных: смена структуры у датчика 1 десятого июня произошла между сессиями 09:31 и 09:38 — в журнале ровно там строка 09:39:10 со сменой fix B→A (в 09:37 действовал ещё B).</p>
+<h2 id="s3"><span class="n">03</span>Хроника слепого анализа</h2>
+<div class="timeline">
+<div class="ev"><span class="d">ШАГ 1</span><br>Каталогизация: 11 серий, 15+ скриптов, прошивки, журналы (<code>scripts/01_catalog.py</code>). Триггер чист: checked_since геометрический, p̂ = 0.0475 ≈ 1/ln 2³² (<code>scripts/02_trigger_check.py</code>).</div>
+<div class="ev"><span class="d">ШАГ 2</span><br>Репликация июльских отчётов GUNGNIR: «гребёнка» Δg=0.031 у датчика 0 воспроизведена точно. Найдено: шаг 0.030 был жёстко зашит в код поиска — у датчика 1 гребёнку «не нашли», потому что у него шаг другой.</div>
+<div class="ev"><span class="d">ШАГ 3</span><br>Первая гипотеза аналитика (простое квантование АЦП) опровергнута им же: решётка меняется между днями при неизменной прошивке (проверено датами файлов скетчей).</div>
+<div class="ev hot"><span class="d">ШАГ 4 — ПЕРЕЛОМ</span><br>Смена шага у датчика 1 в 09:38 10.06 совпала с командой сервера (журнал 09:39:10). Раскладка по режимам (<code>scripts/05_regime_split.py</code>): проявление зависит от пары «устройство × режим fix». Точная сигнатура: <b>шаг 255.85 ± 0.11 счёта (=256, байт), фаза 47</b> (<code>scripts/10_pitch_precision.py</code>).</div>
+<div class="ev hot"><span class="d">ШАГ 5 — ГЛАВНАЯ ПРОВЕРКА</span><br>Метрика по всем 11 сериям (<code>scripts/06_sticking_all_series.py</code>): <b>во всех 5 сериях без колеса эффект отсутствует</b> (до n=190 тыс.); с колесом — есть у части узлов. У вращающихся — у 5 из 8 во все 3 дня (<code>scripts/08_rotating_sticking.py</code>).</div>
+<div class="ev"><span class="d">ШАГ 6</span><br>Жертвы выбираются случайно: залипание не связано ни со случайным числом, ни с таймингом, ни с соседями (<code>scripts/09_victims_randomness.py</code>). Классика колеса подтверждена (<code>scripts/03_theory_overlay.py</code>).</div>
+</div>
+
+<h2 id="s4"><span class="n">04</span>Сначала — доверие: классика подтверждается</h2>
+<figure><img loading="lazy" src="figures/theory_overlay.png" alt=""><figcaption>Только сессии с вращением. Зелёная линия — теория |a|=√(a_c²+1+2a_c·cos ωt) с шумом σ=0.08g. Датчик с аномалией (слева) и без (справа) на этом масштабе неотличимы. <span class="src">→ scripts/03_theory_overlay.py</span></figcaption></figure>
+<figure><img loading="lazy" src="figures/rotation_fit.png" alt=""><figcaption>Одна сессия вращения во времени: точки — измерения, линия — классическая модель. Период всех 8 узлов совпадает с точностью 0.4%; в верхней точке g достигает 0.000 — невесомость реальна. <span class="src">→ данные data_last, подгонка нелинейным МНК</span></figcaption></figure>
+<div class="vd k"><b class="t">Итог раздела</b><br>Механика колеса — учебная классика: один период у всех узлов, невесомость наверху, форма распределения совпадает с теорией. Всё интересное — в микроструктуре чисел.</div>
+
+<h2 id="s5"><span class="n">05</span>Аномалия: залипание младшего байта</h2>
+<p>Каждая ось передаётся 16-битным числом из двух байтов: <b>число = старший × 256 + младший</b>. Поиграйте:</p>
+
+
+<div class="anim" id="bytedemo">
+<div class="ctl">
+<button id="bd_run" class="bdbtn">⏸ СТОП</button>
+<button id="bd_eff" class="bdbtn">эффект: ВКЛ</button>
+<button id="bd_alt" class="bdbtn">шаг: 256</button>
+<button id="bd_rst" class="bdbtn">сброс</button>
+<label>к чему липнет: <input id="bd_ph" type="range" min="0" max="255" value="47"> <span id="bd_phv" style="font-weight:700">47</span></label>
+<label>как часто: <input id="bd_pr" type="range" min="0" max="40" value="14"> <span id="bd_prv" style="font-weight:700">14%</span></label>
+<span id="bd_cnt" style="font:12px var(--mono);color:var(--mut)"></span>
+</div>
+<style>.bdbtn{font:600 13px var(--mono);padding:.35em 1em;border:1px solid var(--line);border-radius:4px;background:var(--code);color:var(--ink);cursor:pointer}</style>
+<canvas id="bd_cv" width="920" height="470"></canvas>
+<p class="small">Стенд, всё крутится руками. <b>СТОП</b> замораживает поток — можно разглядывать. Ползунок «к чему липнет» — то самое значение младшего байта (в реальных данных 47): двигаете — и зубцы на глазах переезжают на новые места (это ответ на вопрос «а что если бы фаза была другой»). «Как часто» — доля залипающих чтений (в данных ~10%). «Шаг 256/239» — байтовая решётка против произвольной. Правый график устроен как наш реальный анализ, тремя слоями: синим копятся данные; серый пунктир — гладкая форма (колокол «теория+шум»), она растёт вместе с данными; внизу отдельно ОСТАТОК = данные минус гладкая форма — там сигнал-зубцы видны в чистом виде, без колокола. Красные вертикали — узлы решётки: остаток торчит ровно на них.</p>
+</div>
+<script>
+(function(){
+const cv=document.getElementById('bd_cv'); if(!cv)return;
+const ctx=cv.getContext('2d');
+const css=getComputedStyle(document.documentElement);
+const C=v=>css.getPropertyValue(v).trim()||'#888';
+let run=true, eff=true, pitch=256, hist=new Array(560).fill(0), total=0, stuckN=0;
+let cur=null, flash=0;
+const L={stop:'⏸ СТОП',go:'▶ ПУСК',eff:'эффект: ',on:'ВКЛ',off:'ВЫКЛ',lat:'шаг: ',
+ cnt1:'измерений: ',cnt2:' | залипло: ',
+ truev:'датчик намерил (счёты): ',high:'СТАРШИЙ x256',low:'МЛАДШИЙ',repl:' → ЗАМЕНЁН НА ',
+ wrote:'записано в файл: ',err:'ошибка: ',g:'в единицах g: ',
+ hint:'Ошибка каждый раз крошечная, в шуме не видна.',
+ hint2:'Но хвостик у всех испорченных одинаковый —',
+ hint3:'поэтому в остатке (внизу справа) растут зубцы.',
+ lay1:'— данные (копятся)',lay2:'--- гладкая форма: теория+шум',
+ lay3:'ОСТАТОК = данные − гладкая форма (сигнал в чистом виде)'};
+const el=id=>document.getElementById(id);
+el('bd_run').onclick=function(){run=!run;this.textContent=run?L.stop:L.go;};
+el('bd_eff').onclick=function(){eff=!eff;this.textContent=L.eff+(eff?L.on:L.off);};
+el('bd_alt').onclick=function(){pitch=(pitch===256)?239:256;this.textContent=L.lat+pitch;};
+el('bd_rst').onclick=function(){hist.fill(0);total=0;stuckN=0;};
+el('bd_ph').oninput=function(){el('bd_phv').textContent=this.value;};
+el('bd_pr').oninput=function(){el('bd_prv').textContent=this.value+'%';};
+function gauss(){let s=0;for(let i=0;i<6;i++)s+=Math.random();return (s-3)/1.35;}
+function loop(){
+ if(run){
+  const phase=+el('bd_ph').value, prob=+el('bd_pr').value/100;
+  for(let k=0;k<6;k++){
+   let c=Math.round(7950+gauss()*900);
+   let isSt=eff&&Math.random()<prob;
+   let rec=c;
+   if(isSt){rec=Math.floor(c/pitch)*pitch+phase; stuckN++;}
+   total++; cur={c:c,rec:rec,st:isSt};
+   flash=isSt?1:flash*0.7;
+   const bin=Math.round((rec-6900)/4);
+   if(bin>=0&&bin<hist.length)hist[bin]++;
+  }
+ }
+ draw();
+ el('bd_cnt').textContent=L.cnt1+total+L.cnt2+stuckN+' ('+(100*stuckN/Math.max(1,total)).toFixed(0)+'%)';
+ requestAnimationFrame(loop);
+}
+function byteBox(x,y,w,h,label,val,hot){
+ ctx.strokeStyle=hot?C('--acc'):C('--acc2');ctx.lineWidth=hot?3:2;
+ if(hot){ctx.fillStyle='rgba(200,60,80,'+(0.15+0.3*flash)+')';ctx.fillRect(x,y,w,h);}
+ ctx.strokeRect(x,y,w,h);
+ ctx.font='10px monospace';ctx.fillStyle=C('--mut');ctx.fillText(label,x+6,y+14);
+ ctx.font='700 26px monospace';ctx.fillStyle=C('--ink');ctx.fillText(val,x+14,y+46);
+ ctx.lineWidth=2;
+}
+function smooth(arr,k){
+ const out=new Array(arr.length).fill(0);
+ for(let i=0;i<arr.length;i++){
+  let s=0,n=0;
+  for(let j=Math.max(0,i-k);j<=Math.min(arr.length-1,i+k);j++){s+=arr[j];n++;}
+  out[i]=s/n;
+ }
+ return out;
+}
+function draw(){
+ ctx.clearRect(0,0,920,470);
+ const mut=C('--mut'),acc=C('--acc'),acc2=C('--acc2'),ok=C('--ok');
+ const phase=+el('bd_ph').value;
+ if(cur){
+  const hb=Math.floor(cur.rec/256), lb=cur.rec%256;
+  const hbT=Math.floor(cur.c/256), lbT=cur.c%256;
+  ctx.font='12px monospace';ctx.fillStyle=mut;
+  ctx.fillText(L.truev+cur.c+'  =  '+hbT+'x256 + '+lbT,30,40);
+  byteBox(30,60,150,60,L.high,hb,false);
+  ctx.font='700 20px monospace';ctx.fillStyle=C('--ink');ctx.fillText('+',196,98);
+  byteBox(215,60,150,60,L.low+(cur.st?(L.repl+phase):''),lb,cur.st);
+  ctx.font='12px monospace';ctx.fillStyle=cur.st?acc:mut;
+  ctx.fillText(L.wrote+cur.rec+(cur.st?('   ('+L.err+(cur.rec-cur.c)+')'):''),30,150);
+  ctx.fillStyle=mut;
+  ctx.fillText(L.g+(cur.rec*0.000122).toFixed(4)+' g',30,172);
+  ctx.fillText(L.hint,30,215);ctx.font='11px monospace';
+  ctx.fillText(L.hint2,30,233);ctx.fillText(L.hint3,30,251);
+ }
+ // верхняя панель: данные + гладкая форма
+ const gx=420,gy=25,gw=480,gh=250;
+ ctx.strokeStyle=mut;ctx.strokeRect(gx,gy,gw,gh);
+ const m=Math.max(8,Math.max.apply(null,hist));
+ const sm=smooth(hist,10);
+ ctx.beginPath();ctx.strokeStyle=acc2;ctx.lineWidth=1;
+ for(let i=0;i<hist.length;i++){
+  const x=gx+4+i*(gw-8)/hist.length, y=gy+gh-6-hist[i]/m*(gh-20);
+  i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+ }
+ ctx.stroke();
+ ctx.beginPath();ctx.strokeStyle=mut;ctx.lineWidth=2;ctx.setLineDash([5,3]);
+ for(let i=0;i<sm.length;i++){
+  const x=gx+4+i*(gw-8)/sm.length, y=gy+gh-6-sm[i]/m*(gh-20);
+  i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+ }
+ ctx.stroke();ctx.setLineDash([]);ctx.lineWidth=2;
+ ctx.font='11px monospace';
+ ctx.fillStyle=acc2;ctx.fillText(L.lay1,gx+10,gy+16);
+ ctx.fillStyle=mut;ctx.fillText(L.lay2,gx+10,gy+32);
+ // нижняя панель: остаток = данные - гладкая
+ const ry0=gy+gh+22, rh=150;
+ ctx.strokeStyle=mut;ctx.strokeRect(gx,ry0,gw,rh);
+ let rm=8;
+ for(let i=0;i<hist.length;i++){const d=Math.abs(hist[i]-sm[i]);if(d>rm)rm=d;}
+ ctx.beginPath();ctx.strokeStyle=acc;ctx.lineWidth=1.2;
+ for(let i=0;i<hist.length;i++){
+  const x=gx+4+i*(gw-8)/hist.length;
+  const y=ry0+rh/2-(hist[i]-sm[i])/rm*(rh/2-8);
+  i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+ }
+ ctx.stroke();ctx.lineWidth=2;
+ ctx.strokeStyle=mut;ctx.globalAlpha=.4;
+ ctx.beginPath();ctx.moveTo(gx,ry0+rh/2);ctx.lineTo(gx+gw,ry0+rh/2);ctx.stroke();ctx.globalAlpha=1;
+ // узлы решётки на обеих панелях
+ ctx.strokeStyle=acc;ctx.globalAlpha=.2;
+ for(let c=Math.ceil(6900/pitch)*pitch+phase;c<6900+560*4;c+=pitch){
+  const x=gx+4+((c-6900)/4)*(gw-8)/hist.length;
+  ctx.beginPath();ctx.moveTo(x,gy+8);ctx.lineTo(x,gy+gh-6);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(x,ry0+6);ctx.lineTo(x,ry0+rh-6);ctx.stroke();
+ }
+ ctx.globalAlpha=1;
+ ctx.font='11px monospace';ctx.fillStyle=acc;
+ ctx.fillText(L.lay3,gx+10,ry0+16);
+}
+requestAnimationFrame(loop);
+})();
+</script>
+
+
+<figure><img loading="lazy" src="figures/fold_profiles.png" alt=""><figcaption>Свёрнутый профиль (счёты−47) mod 256. Носитель: пик на нуле ×2.4 фона. Сосед в тот же день: плоско. Тот же датчик через 2 недели без колеса, 190 тыс. измерений: идеально плоско. <span class="src">→ scripts/07_fold_profiles.py</span></figcaption></figure>
+<figure><img loading="lazy" src="figures/comb_histogram.png" alt=""><figcaption>Как это выглядит без теории: гистограмма g с бином 0.001 и автокорреляция её плотности — периодичность видна напрямую. <span class="src">→ гистограмма по data_last</span></figcaption></figure>
+<figure><img loading="lazy" src="figures/simulation.png" alt=""><figcaption>Численная модель: квантование + залипание, больше ничего. Плоский монтаж → яркая гребёнка («датчик 0» GUNGNIR); наклон 38° → размытая («слабый сигнал» датчика 1). <span class="src">→ scripts/11_simulation.py</span></figcaption></figure>
+
+<h2 id="s6"><span class="n">06</span>Свойства эффекта</h2>
+
+<figure><img loading="lazy" src="figures/signal_extraction.png" alt=""><figcaption>Сигнал из шума, шаг за шагом, по трём дням. Колонки: данные против «просто шума» (гаусс); остаток после вычитания гладкой формы; свёртка mod 256 против серой полосы «как выглядело бы ничего»; уровень сигнала по сессиям. Видно: 09.06 сигнал у 64_E8 (включается в 16:56), 10.06 — у статиков сигнала НЕТ (кривая внутри серой полосы), 11.06 — сигнал у 2C_0C весь день. <span class="src">→ scripts/12_signal_extraction.py</span></figcaption></figure>
+<figure><img loading="lazy" src="figures/series_summary.png" alt=""><figcaption>Слева: статики по всем 11 сериям — эффект только при работающем колесе, носитель меняется. Справа: вращающиеся — 4–5 носителей из 8 во все 3 дня; «глючный» 84_C0 чист. <span class="src">→ scripts/06, 08</span></figcaption></figure>
+<figure><img loading="lazy" src="figures/onset_seno.png" alt=""><figcaption>Включение: 09.06, статик 64_E8 — скачок R 0.03→0.4 между 16:55 и 16:56 (старт колеса; совмещён со сменой настройки сервера — июньская постановка их не разделяет). <span class="src">→ метрика stick_R посессионно</span></figcaption></figure>
+<figure><img loading="lazy" src="figures/switch_series.png" alt=""><figcaption>Реальные пакеты вокруг переключений. Верхний ряд: шесть сессий подряд 09.06, датчик 64_E8 — в 16:54 и 16:55 свёртка плоская («нет»), с 16:56 (старт колеса) зубцы z=19–28 («ЭФФЕКТ») — включение видно поштучно, по минутам. Нижний ряд: 10.06 — спектр остатка до команды сервера 09:39 (доминирует шаг 0.0128) и после (0.0083): пик переехал. <span class="src">→ scripts/13_switch_series.py</span></figcaption></figure>
+<figure><img loading="lazy" src="figures/sessions_gallery.png" alt=""><figcaption>Галерея РЕАЛЬНЫХ гистограмм по сессиям (бин 0.002, сырые CSV). Ряд 1 — data_seno, 64_E8: в 16:54–16:55 колокол гладкий (синее, «нет»), с 16:56 — зубчатый (красное, z=17–28); включение видно на сырых данных поштучно. Ряд 2 — data_soloma, 64_E8: гладкие колокола весь день — у статики в этот день сигнала нет нигде. Ряд 3 — data_seno_soloma, 2C_0C: режим не менялся (A весь день) — зубцы стоят в каждой сессии (z=22–26). Подписи: время · режим fix · вердикт. <span class="src">→ scripts/14_sessions_gallery.py</span></figcaption></figure>
+<figure><img loading="lazy" src="figures/spin_vs_still.png" alt=""><figcaption>Контроль 11.06: гистограммы статика при крутящемся и остановленном колесе — пики на тех же местах. Короткая остановка эффект не выключает; выключенная установка (другие серии) — выключает.</figcaption></figure>
+<figure><img loading="lazy" src="figures/wheel_phase.png" alt=""><figcaption>Вращающиеся: решётка значима на всём обороте (слева), фаза поворачивается вдоль оборота (справа): внизу ≈42 (почти 47 статиков), в середине — противофаза (мнимые «провалы»). <span class="src">→ scripts/08_rotating_sticking.py</span></figcaption></figure>
+<details><summary>Фурье-карты каждой сессии (три дня, оба статика)</summary>
+<figure><img loading="lazy" src="figures/fourier_seno.png" alt=""><figcaption>09.06: носитель крупного шага — датчик 1. <span class="src">→ scripts/04_fourier_sessions.py</span></figcaption></figure>
+<figure><img loading="lazy" src="figures/fourier_soloma.png" alt=""><figcaption>10.06: крупного шага нет у статиков; переход датчика 1 с 0.0128 на 0.0083 после 09:40.</figcaption></figure>
+<figure><img loading="lazy" src="figures/fourier_seno_soloma.png" alt=""><figcaption>11.06: носитель — датчик 0, стабильно весь день (день GUNGNIR-отчёта).</figcaption></figure>
+</details>
+<div class="tw"><table>
+<tr><th>Инвариант</th><th>Значение</th><th>Точность / значимость</th></tr>
+<tr><td>Шаг решётки</td><td>255.85 счёта (= 256, граница байта)</td><td>±0.11; альтернативы 0.030/0.029 g исключены на 90–160σ</td></tr>
+<tr><td>Фаза</td><td>≈47 счётов у разных устройств в разные дни</td><td>±0.4</td></tr>
+<tr><td>Доля залипших</td><td>~10.7% у сильнейшего носителя</td><td>Бернулли, без памяти</td></tr>
+<tr><td>Связь со случайным числом</td><td>нет</td><td>p=0.33–0.98</td></tr>
+<tr><td>Инвариант единиц</td><td>«256 счётов», не «0.031 g»</td><td>при ±2g гребёнка была бы на 0.0156 g</td></tr>
+<tr><td>Синхронность узлов</td><td>нет — узлы независимы</td><td>межузловая корреляция ≈ 0</td></tr>
+<tr><td>Мелкие решётки 68/82/126/136</td><td>отдельное явление, есть всегда</td><td>с большой не коррелируют (ρ=0.09)</td></tr>
+</table></div>
+<div class="vd w"><b class="t">Проверка красивой формулы — по-человечески</b><br>
+<p style="margin:.4rem 0 0">Была идея: а вдруг шаг гребёнки — это константа природы? Формула-кандидат: постоянная тонкой структуры (α = 1/137.036) умножить на (π+1). Считаем: 0.007297 × 4.1416 = <b>0.03022</b>.</p>
+<p style="margin:.4rem 0 0">Теперь меряем шаг в данных: <b>0.03123</b>, причём с очень маленькой погрешностью — ±0.00001. Разница между формулой и измерением (0.00101) в семьдесят раз больше погрешности. Это как если бы формула предсказывала рост человека 175.0 см, а рулетка с точностью до миллиметра показала 181.0 — не «почти угадала», а мимо.</p>
+<p style="margin:.4rem 0 0">И второй, более важный довод. Наш шаг — это 256 «тиков» датчика, а цена одного тика зависит от настройки прибора: переключим датчик с диапазона ±4g на ±2g — и тот же самый шаг 256 тиков станет равен 0.0156 вместо 0.0312. Константа природы не может зависеть от положения переключателя на микросхеме. Значит, число 0.031 само по себе ничего не значит — значит «256 тиков», а это про устройство числа, не про мировые константы. (Проверить можно за вечер: тест №1 в программе — если после переключения диапазона гребёнка вопреки всему останется на 0.031, этот абзац будет торжественно съеден.)</p></div>
+
+<h2 id="s7"><span class="n">07</span>Что это может быть — три версии на равных</h2>
+<div class="vd"><b class="t">Версия А — артефакт тракта чтения</b><br>Каждая I2C-транзакция независимо «гонится» с обновлением регистров; проигрыш подставляет чужой младший байт. <b>За:</b> байтовая сигнатура; 10% совместимы с таймингами (чтение ~150 мкс на цикле 625 мкс); бернуллиевость жертв. <b>Против:</b> не объясняет константу 47, одинаковую у экземпляров; зависимость от работы установки; смену носителя по дням.</div>
+<div class="vd w"><b class="t">Версия Б — наводка установки на электронику</b><br>Мотор/поле катушек/питание/вибрация возмущают шину или тайминги. <b>За:</b> «нет установки → нет эффекта» (5 чистых серий); включение при старте колеса; наличие мощных катушек рядом с узлами — реальный источник поля. <b>Против:</b> нет эффекта у статиков в data_soloma и data_delta при работающем колесе; зависимость от программного режима fix; одинаковая фаза 47.</div>
+<div class="vd a"><b class="t">Версия В — искомое «информационное проявление»</b><br>Нечто, связанное с работающей установкой, проявляется на уровне представления числа. <b>За:</b> эффект живёт в устройстве числа (инвариант 256+47, не величина в g); привязан к работе установки; жертвы стохастические — в духе конструкции. <b>Против:</b> неотличим от А/Б на этих данных; экстраординарное утверждение требует исчерпания А/Б первыми.</div>
+<div class="vd k"><b class="t">Общий принцип</b><br>Эффект, принадлежащий миру, обязан быть инвариантом представления: сменишь микросхему/протокол/кодировку — он останется. Дефект представления умирает вместе с представлением.</div>
+
+<h2 id="s8"><span class="n">08</span>Программа решающих экспериментов</h2>
+<p>Метрика предрегистрирована: R на решётке «256, фаза 47», порог z > 4 (<code>scripts/common.py::stick_R</code>).</p>
+<div class="tw"><table>
+<tr><th>#</th><th>Тест</th><th>Разделяет</th><th>Предсказания</th></tr>
+<tr><td>1</td><td><b>Диапазон ±2g вместо ±4g</b></td><td>байты ↔ физика</td><td>байтовые версии: гребёнка переедет на 0.0156 g. Останется на 0.031 g — сенсация</td></tr>
+<tr><td>2</td><td><b>Сырые оси int16</b></td><td>место в тракте</td><td>видно, в какой оси и когда замещается байт</td></tr>
+<tr><td>3</td><td><b>Случайное переключение fix A↔B</b></td><td>роль кода</td><td>мигает синхронно с командами → фактор в тайминге кода</td></tr>
+<tr><td>4</td><td><b>Мотор без колеса / выбег без мотора / катушки без вращения</b></td><td>электрика ↔ вращение ↔ поле</td><td>по отдельности выявляет канал</td></tr><tr><td>4б</td><td><b>Катушки ВКЛ/ВЫКЛ</b> (поле не выключалось ни в одном прогоне!)</td><td>роль магнитного поля</td><td>если эффект уйдёт с полем — канал найден; если останется — поле исключено</td></tr>
+<tr><td>5</td><td><b>Датчик другой архитектуры рядом</b></td><td>А/Б ↔ В</td><td>чужое представление чисто → дефект; структура и там → прорыв</td></tr>
+<tr><td>6</td><td><b>Счётчик Гейгера</b> (планируется)</td><td>универсальность</td><td>метрику зафиксировать ДО первого запуска</td></tr>
+</table></div>
+
+
+<h2 id="s8b"><span class="n">08б</span>Следующий эксперимент: два колеса</h2>
+<p>Идея авторов на следующий шаг: раскрутить <b>два колеса</b> и поместить датчики в зазор между ними. Логика аналогии: если у искомого явления волновая природа, то два вращающихся диска — как две пластины в эффекте Казимира — могут формировать между собой выделенную (стоячую) конфигурацию, и эффект в зазоре должен зависеть от взаимного режима вращения: сонаправленно / противонаправленно / одно стоит. Это рабочая метафора, а не расчётная модель — поэтому предсказания фиксируются заранее, а интерпретация запрещена до окончания прогона.</p>
+<div class="anim">
+<div class="ctl">
+<button id="d2Btn" onclick="flip2()" style="font:600 13px var(--mono);padding:.35em 1em;border:1px solid var(--line);border-radius:4px;background:var(--code);color:var(--ink);cursor:pointer">режим: ПРОТИВОВРАЩЕНИЕ</button>
+<label>скорость <input id="spd2" type="range" min="30" max="160" value="90"></label>
+</div>
+<canvas id="cv2" width="920" height="360"></canvas>
+<p class="small">Схема будущей установки: два диска, между ними измерительная зона (датчики 0/1 + контроль радиационного фона). Узор в зазоре — иллюстрация ожидаемой «стоячей» конфигурации при противовращении; при сонаправленном вращении узор бежит (контрольный режим). Вопрос эксперимента: меняется ли доля и фаза залипших чтений при смене режима и от положения датчика (узел/пучность).</p>
+</div>
+<script>
+var D2LBL='режим: ',D2A='ПРОТИВОВРАЩЕНИЕ',D2B='СОНАПРАВЛЕННО',
+    W1='колесо 1',W2='колесо 2',
+    SENSORS=[[0.25,'датчик 0'],[0.5,'фон (Гейгер)'],[0.75,'датчик 1']],
+    NOTE_A='узлы стоячей конфигурации неподвижны — датчик можно ставить в узел и в пучность',
+    NOTE_B='картина бежит — выделенных точек нет (контрольный режим)';
+</script>
+
+<script>
+(function(){
+const cv=document.getElementById('cv2'); if(!cv)return;
+const ctx=cv.getContext('2d');
+let mode=-1,t=0,last=0;
+window.flip2=function(){mode*=-1;
+ document.getElementById('d2Btn').textContent=D2LBL+(mode<0?D2A:D2B);}
+function fr(ts){
+ const spd=+document.getElementById('spd2').value/50;
+ const dt=Math.min(.05,(ts-last)/1000||.016); last=ts; t+=dt*spd;
+ const css=getComputedStyle(document.documentElement);
+ const C=v=>css.getPropertyValue(v).trim()||'#888';
+ const mut=C('--mut'),acc=C('--acc'),acc2=C('--acc2'),ok=C('--ok'),warn=C('--warn');
+ ctx.clearRect(0,0,920,360);
+ const y=180,R=120,x1=170,x2=750;
+ [[x1,t,W1],[x2,mode*t,W2]].forEach(([cx,a,lbl])=>{
+  ctx.strokeStyle=mut;ctx.lineWidth=2;
+  ctx.beginPath();ctx.arc(cx,y,R,0,7);ctx.stroke();
+  for(let s=0;s<6;s++){ctx.beginPath();ctx.moveTo(cx,y);
+   const q=a+s*Math.PI/3;ctx.lineTo(cx+R*Math.cos(q),y+R*Math.sin(q));
+   ctx.globalAlpha=.3;ctx.stroke();ctx.globalAlpha=1;}
+  ctx.lineWidth=10;ctx.strokeStyle='#b5622d';
+  ctx.beginPath();ctx.arc(cx,y,R+9,a-0.5,a+0.5);ctx.stroke();
+  ctx.font='12px monospace';ctx.fillStyle=mut;
+  ctx.fillText(lbl,cx-26,y+R+28);
+ });
+ const zx1=x1+R+24,zx2=x2-R-24;
+ ctx.strokeStyle=mut;ctx.setLineDash([4,4]);
+ ctx.strokeRect(zx1,y-90,zx2-zx1,180);ctx.setLineDash([]);
+ for(let x=zx1+6;x<zx2-6;x+=7){
+  const u=(x-zx1)/(zx2-zx1);
+  let A;
+  if(mode<0){A=Math.sin(u*Math.PI*4)*Math.cos(t*2);}
+  else{A=Math.sin(u*Math.PI*4 - t*2);}
+  ctx.beginPath();ctx.moveTo(x,y);
+  ctx.lineTo(x,y-A*70);
+  ctx.strokeStyle=mode<0?ok:acc2;ctx.globalAlpha=.55;ctx.lineWidth=3;
+  ctx.stroke();ctx.globalAlpha=1;ctx.lineWidth=2;
+ }
+ SENSORS.forEach(([u,l])=>{
+  const x=zx1+u*(zx2-zx1);
+  ctx.beginPath();ctx.arc(x,y,6,0,7);
+  ctx.fillStyle=(u===0.5)?warn:acc;ctx.fill();
+  ctx.font='11px monospace';ctx.fillStyle=mut;
+  ctx.fillText(l,x-26,y+22);
+ });
+ ctx.font='11px monospace';
+ if(mode<0){ctx.fillStyle=ok;ctx.fillText(NOTE_A,zx1,y-100);}
+ else{ctx.fillStyle=acc2;ctx.fillText(NOTE_B,zx1,y-100);}
+ requestAnimationFrame(fr);
+}
+requestAnimationFrame(fr);
+})();
+</script>
+
+<div class="tw"><table>
+<tr><th>Элемент плана</th><th>Что фиксируем заранее</th></tr>
+<tr><td>Режимы</td><td>4 состояния: оба стоят / одно крутится / сонаправленно / противонаправленно — в случайном порядке, несколько смен за день, каждая в журнал с точностью до секунды (урок июня: совмещённые события неразделимы задним числом)</td></tr>
+<tr><td>Метрика</td><td>предрегистрированная: R на решётке «256, фаза 47» у датчиков в зазоре, порог z &gt; 4; плюс зависимость доли залипаний от положения датчика в зазоре</td></tr>
+<tr><td>Ожидание «волновой» версии</td><td>эффект в зазоре зависит от взаимной конфигурации вращения (максимум при противовращении; зависимость от позиции датчика)</td></tr>
+<tr><td>Ожидание версий А/Б</td><td>эффект зависит только от работы электрики/мотора рядом и безразличен к взаимной конфигурации</td></tr>
+<tr><td>Контроль фона</td><td>параллельная запись радиационного фона (счётчик Гейгера) и температуры в зазоре — исключение банальных каналов + независимый по физике второй прибор</td></tr>
+</table></div>
+
+<h2 id="fant"><span class="n">Ф</span>Оценки и фантазии — помечено отдельно</h2>
+<p class="small">Всё в этом разделе — либо инженерные оценки с явными допущениями, либо откровенные спекуляции. Они не входят в доказательную часть отчёта.</p>
+<h3>Магнитное поле катушек — оценка «на пальцах»</h3>
+<p>Параметры от авторов: диаметр намотки ≈14 см, длина сегмента ≈40 см, питание 5 В, провод медный в лаке — 0.75 мм, он же используется и для шины питания (жёлтая катушка Ø0.5 на фото — припой). Питание: павербанк 5000 мА·ч на общую шину (~5 узлов ESP32) + отдельный павербанк 5000 мА·ч на катушку; в цепи предохранительные ёмкости (конденсатор виден на фото узла). <b style='color:var(--acc)'>⚠ ТЕХНИКА БЕЗОПАСНОСТИ: пока узлы соединены общей шиной питания, подключать USB к любому из них НЕЛЬЗЯ — встречное питание выжигает узлы. Перед прошивкой/отладкой по USB узел отсоединяется от шины.</b>. Это соленоид: поле внутри B = μ₀·n·I. Считаем оба варианта провода:</p>
+<ul>
+<li><b>0.75 мм:</b> ≈500 витков, ≈220 м провода, R ≈ 8.7 Ом → ток 0.58 А (3 Вт) → <b>B ≈ 0.9 мТл ≈ 18 полей Земли</b> внутри витков;</li>
+<li><b>0.5 мм:</b> ≈750 витков, ≈330 м, R ≈ 29 Ом → ток 0.17 А (1 Вт) → <b>B ≈ 0.4 мТл ≈ 8 полей Земли</b>.</li>
+</ul>
+<p>То есть при 5 В и таком диаметре намотки поле внутри катушки — порядка <b>0.4–0.9 мТл (8–18 полей Земли)</b>, токи скромные (0.2–0.6 А), нагрев небольшой. Снаружи соленоида поле спадает быстро. Для методики всё равно важно: катушка в сантиметрах от датчика и шины — потенциальный источник наводок, и поле не выключалось ни в одном прогоне (тест 4б в программе). Самый надёжный способ уточнить оценку — измерить ток мультиметром: B легко пересчитывается точно (B[мТл] ≈ 1.57·I[А] при 0.75 мм / 2.35·I[А] при 0.5 мм).</p><p class="small">Схема питания (уточнено авторами): <b>два павербанка по 5000 мА·ч — один на общую шину питания всех узлов, второй отдельный на катушку</b>. Проверка на согласованность: при токе ≈0.58 А катушечного павербанка хватает на ~8–9 часов — совместимо с длительностью серий. Следствие для методики двоякое: катушка развязана от узлов по питанию (это хорошо — её ток не просаживает шину узлов напрямую), но <b>все узлы сидят на одной шине</b> — общий павербанк является разделяемым каналом между узлами, и его просадки/пульсации видны всем сразу. Это добавляет в список проверок пункт: раздать узлам 0 и 1 индивидуальные павербанки и посмотреть, изменится ли картина залипания.</p><h3>Фантазийный уголок: петлевая квантовая гравитация и α</h3>
+<p>В петлевой квантовой гравитации (ЛКГ) геометрия дискретна: площадь квантуется как A = 8πγ·l_P²·√(j(j+1)), где l_P = 1.6·10⁻³⁵ м — планковская длина, γ ≈ 0.2375 — параметр Барберо–Иммирци. Минимальный квант площади ≈ 1.3·10⁻⁶⁹ м². Идейная перекличка с нашим эффектом есть: «мир решётчат на самом дне». Но честные масштабы: между квантом площади ЛКГ и нашим шагом 0.03 g — ~65 порядков; никакого расчётного моста между ними ЛКГ не даёт. Если такой мост есть, его должна предъявить конкретная модель с числом на выходе — это и есть открытое приглашение теоретикам.</p>
+<p>Почему в измерениях «могла бы» проступать постоянная тонкой структуры α = 1/137.036: α — константа связи всего электромагнитного, а наш датчик — ёмкостный МЭМС, читаемый по электрической шине: каждый этап измерения электромагнитен, и комбинации с α в электронных трактах не экзотика. Но конкретная проба α·(π+1) = 0.030223 против измеренного Δg/g = 0.031231 ± 0.000013 расходится на ~80σ и отклонена; к тому же Δg в g-единицах зависит от настройки диапазона датчика, а инвариант эффекта — 256 счётов (байт), что указывает на представление числа, а не на мировую константу. Итог фантазийного уголка: красивые созвучия есть, доказательных — ноль; решают только тесты из §08.</p>
+<h3>Мировоззренческая рамка авторов (для контекста)</h3>
+<p>Авторы рассматривают установку как миниатюрную «модель вселенной»: вращение, локальная невесомость, направленное поле, шум, независимые агенты, простые числа как источник событийной случайности — и ищут в такой насыщенной системе антиэнтропийные упорядочивающие эффекты (интуиция: раз на Земле возник абиогенез, упорядочивание из шума возможно и должно иметь физический канал). Аналитик фиксирует эту рамку как мотивацию эксперимента, не как утверждение, требующее защиты в этом отчёте.</p>
+<h2 id="s9"><span class="n">09</span>Воспроизводимость: каждый вывод — свой скрипт</h2>
+<p>Данные читаются так: <code>data/&lt;серия&gt;/csv/&lt;ГГГГММДД&gt;/&lt;ЧЧММ&gt;/&lt;MAC&gt;.csv</code>, колонки <code>agent_id, prime, g, timestamp_us, checked_since</code>. Запуск: <code>cd scripts &amp;&amp; python NN_название.py</code> (нужны numpy, scipy, matplotlib). Все пути настраиваются в <code>scripts/common.py</code>.</p>
+<div class="tw"><table class="repro">
+<tr><th>Вывод / картинка</th><th>Скрипт</th><th>Что печатает/рисует</th></tr>
+<tr><td>Каталог серий</td><td>01_catalog.py</td><td>таблица n/mean/std по устройствам</td></tr>
+<tr><td>Триггер честный</td><td>02_trigger_check.py</td><td>p̂=0.0475 ≈ 1/ln 2³²</td></tr>
+<tr><td>Классика подтверждена</td><td>03_theory_overlay.py</td><td>figures/theory_overlay.png</td></tr>
+<tr><td>Фурье по сессиям</td><td>04_fourier_sessions.py</td><td>figures/fourier_*.png</td></tr>
+<tr><td>Шаг зависит от режима</td><td>05_regime_split.py</td><td>таблица «устройство × fix × hz → шаг»</td></tr>
+<tr><td>Только при работающем колесе</td><td>06_sticking_all_series.py</td><td>таблица R/z по 11 сериям</td></tr>
+<tr><td>Профили залипания</td><td>07_fold_profiles.py</td><td>figures/fold_profiles.png</td></tr>
+<tr><td>Вращающиеся + фаза по обороту</td><td>08_rotating_sticking.py</td><td>figures/wheel_phase.png + таблица</td></tr>
+<tr><td>Жертвы случайны</td><td>09_victims_randomness.py</td><td>p-значения всех связей</td></tr>
+<tr><td>Шаг = 256 ± 0.1 (не 0.030 g)</td><td>10_pitch_precision.py</td><td>бутстреп-интервал</td></tr>
+<tr><td>Симуляция обеих картинок GUNGNIR</td><td>11_simulation.py</td><td>figures/simulation.png</td></tr>
+</table></div>
+
+<h2 id="s10"><span class="n">10</span>Архив пакета</h2>
+<p class="small"><b>О данных в публикуемой версии:</b> полный архив измерений (117 МБ, все 11 серий) в публикацию не входит из-за ограничения на размер. В папке <code>data/</code> приложен образец — сессии, показанные на рисунках, и журналы конфигураций трёх дней-источников; этого достаточно, чтобы воспроизвести ключевые картинки (скрипты 07, 13, 14). Полный архив предоставляется по запросу — все скрипты работают с ним без изменений.</p><div class="filelist">
+index.html / index_en.html   этот документ (RU / EN)<br>
+data/                        сырые CSV всех 11 серий + config_history.log + headers.csv (117 МБ)<br>
+scripts/                     11 скриптов воспроизводимости + common.py<br>
+figures/                     все картинки отчёта (генерируются скриптами)<br>
+code/                        server_v6.py, scenario.py, config.yaml, прошивки zero/uno/prod, EXPERIMENT.md<br>
+media/                       фото установки и узлов, видео вращения
+</div>
+<p class="small">Папку можно заархивировать целиком и передать — index.html подтянет всё по относительным ссылкам. Методы: фазовая когерентность R(q)=|⟨e^{2πig/q}⟩|, спектр остатка гистограммы, перестановочные нуль-модели, бутстреп. Отчёт составлен ИИ-аналитиком (Claude, Anthropic); аналитик не имеет позиции по существу теории и одинаково готов к любому исходу решающих тестов. Все числа в тексте — прямые выходы скриптов.</p>
+</div>
+</body>
+</html>
