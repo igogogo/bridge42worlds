@@ -275,6 +275,21 @@ function quotaLimitsFor(env, user) {
 
 // Turnstile — бесплатная замена капчи от Cloudflare. Для человека обычно невидима, для
 // скрипта — стена. Проверяется на сервере: без проверки виджет на странице не значит ничего.
+// Служебный ключ для наших собственных прогонов. ML гоняет через поиск теги, законы,
+// учёных и статьи пачками — это работа фабрики, а не читатель, и считать её по норме
+// читателя бессмысленно: массовый прогон упрётся на первой сотне.
+//
+// Отличие от devBypass: тот снимает только капчу и оставляет нормы, потому что за ним
+// живой человек, которого всё равно надо считать. Этот снимает нормы и предел по адресу,
+// потому что за ним мы сами. Поэтому и секрет отдельный: перепутать эти две двери нельзя.
+//
+// Секрет живёт в шифрованных секретах Worker и в браузер не попадает никогда. Нет
+// секрета — нет обхода: fail-closed, как у капчи. Сторож для читателей не ослаблен ничем.
+function isService(env, request) {
+  const s = env.SERVICE_KEY;
+  return !!s && request.headers.get("x-b42-service") === s;
+}
+
 // Дверь для проверки (задача круга 4: «дать QA способ проверить вход живьём»). Снимает
 // ТОЛЬКО капчу — нормы, предел по адресу и потолок проекта работают как для всех, иначе
 // это была бы не дверь для своих, а дыра. Заголовок x-b42-dev со значением секрета
@@ -1200,11 +1215,15 @@ async function handleAsk(request, env) {
   let body = {};
   try { body = await request.json(); } catch { return Response.json({ error: "bad_json" }, { status: 400 }); }
 
-  const ipOk = await ipGuard(env, request);
-  if (!ipOk.ok) return Response.json({ error: ipOk.error }, { status: ipOk.code });
-  if (!devBypass(env, request) &&
-      !(await turnstileOk(env, body.turnstile, request.headers.get("cf-connecting-ip")))) {
-    return Response.json({ error: "captcha_failed" }, { status: 403 });
+  // Служебный прогон — мимо всех рубежей: за ним наша фабрика, а не читатель (см. isService).
+  const service = isService(env, request);
+  if (!service) {
+    const ipOk = await ipGuard(env, request);
+    if (!ipOk.ok) return Response.json({ error: ipOk.error }, { status: ipOk.code });
+    if (!devBypass(env, request) &&
+        !(await turnstileOk(env, body.turnstile, request.headers.get("cf-connecting-ip")))) {
+      return Response.json({ error: "captcha_failed" }, { status: 403 });
+    }
   }
 
   const q = String(body.question || "").trim().slice(0, 500);
@@ -1212,7 +1231,9 @@ async function handleAsk(request, env) {
   const lang = ["ru", "en", "es", "ar"].includes(body.lang) ? body.lang : "ru";
 
   const who = await identify(request, env);
-  const spent = await quotaSpend(env, who.uid, 1, who.lim);
+  const spent = service
+    ? { ok: true, dayLeft: null, weekLeft: null }
+    : await quotaSpend(env, who.uid, 1, who.lim);
   if (!spent.ok) {
     return Response.json({ error: spent.error, dayLeft: spent.dayLeft, weekLeft: spent.weekLeft },
       { status: spent.code });
@@ -1351,17 +1372,31 @@ async function handleSearch(request, env) {
   const cached = await caches.default.match(cacheKey);
   if (cached) return cached;
 
-  // Поиск капчей не закрываем: она бы вылезала на каждый запрос и мешала живому человеку,
-  // а поиск дешёвый. Здесь работает предел по адресу — он невидим и ловит перебор.
-  const ipOk = await ipGuard(env, request);
-  if (!ipOk.ok) return Response.json({ error: ipOk.error }, { status: ipOk.code });
+  // Служебный прогон (ML гонит через поиск теги, законы, учёных и статьи пачками) идёт
+  // мимо нормы и предела по адресу: это наша собственная работа, а не читатель, и считать
+  // её по норме читателя бессмысленно — она упрётся на первой же сотне.
+  //
+  // Сторож при этом НЕ ослаблен: обход открывается только по секрету, который живёт
+  // в шифрованных секретах Worker и в браузер не попадает никогда. Нет секрета — нет
+  // обхода (тот же приём и та же осторожность, что у /api/council/mint).
+  // spent объявлен СНАРУЖИ условия намеренно: ниже он нужен для ответа читателю.
+  // Второй раз наступаю на одни грабли — в первой версии объявил его внутри блока,
+  // и служебный запрос падал с 500 на строке, которая читает spent.dayLeft. Обёрнутое
+  // в условие объявление ломает не ту ветку, которую правишь, и молча.
+  let spent = { ok: true, dayLeft: null, weekLeft: null };
+  if (!isService(env, request)) {
+    // Поиск капчей не закрываем: она бы вылезала на каждый запрос и мешала живому человеку,
+    // а поиск дешёвый. Здесь работает предел по адресу — он невидим и ловит перебор.
+    const ipOk = await ipGuard(env, request);
+    if (!ipOk.ok) return Response.json({ error: ipOk.error }, { status: ipOk.code });
 
-  // Поиск — тоже расход, считаем с первого дня.
-  const who = await identify(request, env);
-  const spent = await quotaSpend(env, who.uid, 1, who.lim);
-  if (!spent.ok) {
-    return Response.json({ error: spent.error, dayLeft: spent.dayLeft, weekLeft: spent.weekLeft },
-      { status: spent.code });
+    // Поиск — тоже расход, считаем с первого дня.
+    const who = await identify(request, env);
+    spent = await quotaSpend(env, who.uid, 1, who.lim);
+    if (!spent.ok) {
+      return Response.json({ error: spent.error, dayLeft: spent.dayLeft, weekLeft: spent.weekLeft },
+        { status: spent.code });
+    }
   }
 
   // Индекс построен по АНГЛИЙСКОМУ тексту (решение владельца: английский каноничен для научных
