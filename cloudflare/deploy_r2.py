@@ -113,14 +113,27 @@ class S3Backend:
 
     def __init__(self, account, bucket):
         import boto3
+        from boto3.s3.transfer import TransferConfig
+        from botocore.config import Config
         self.bucket = bucket
+        # ФИКС «IncompleteBody» на файлах в мегабайты (2026-08-04, второй раз наступаем):
+        # R2 не принимает chunked-стриминг с неточной длиной — большие articles-index-*.json
+        # рвались на PutObject трижды подряд, выкладка 1661 файла обрывалась на середине.
+        # Два рычага: multipart с порога 8 МБ (крупный файл идёт частями, у каждой части
+        # честный Content-Length) и ретраи адаптивным режимом на уровне botocore.
         self.s3 = boto3.client(
             "s3", endpoint_url=f"https://{account}.r2.cloudflarestorage.com",
             aws_access_key_id=os.environ["R2_ACCESS_KEY_ID"],
-            aws_secret_access_key=os.environ["R2_SECRET_ACCESS_KEY"], region_name="auto")
+            aws_secret_access_key=os.environ["R2_SECRET_ACCESS_KEY"], region_name="auto",
+            config=Config(retries={"max_attempts": 5, "mode": "adaptive"},
+                          s3={"addressing_style": "path"}))
+        self.tcfg = TransferConfig(multipart_threshold=8 * 1024 * 1024,
+                                   multipart_chunksize=8 * 1024 * 1024,
+                                   use_threads=False)
 
     def put(self, p, key, ct):
-        self.s3.upload_file(str(p), self.bucket, key, ExtraArgs={"ContentType": ct})
+        self.s3.upload_file(str(p), self.bucket, key, ExtraArgs={"ContentType": ct},
+                            Config=self.tcfg)
 
     def delete_many(self, keys):
         for i in range(0, len(keys), 1000):
