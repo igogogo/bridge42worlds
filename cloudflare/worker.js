@@ -1379,6 +1379,11 @@ async function handleSearch(request, env) {
   // Сторож при этом НЕ ослаблен: обход открывается только по секрету, который живёт
   // в шифрованных секретах Worker и в браузер не попадает никогда. Нет секрета — нет
   // обхода (тот же приём и та же осторожность, что у /api/council/mint).
+  // spent объявлен СНАРУЖИ условия намеренно: ниже он нужен для ответа читателю.
+  // Второй раз наступаю на одни грабли — в первой версии объявил его внутри блока,
+  // и служебный запрос падал с 500 на строке, которая читает spent.dayLeft. Обёрнутое
+  // в условие объявление ломает не ту ветку, которую правишь, и молча.
+  let spent = { ok: true, dayLeft: null, weekLeft: null };
   if (!isService(env, request)) {
     // Поиск капчей не закрываем: она бы вылезала на каждый запрос и мешала живому человеку,
     // а поиск дешёвый. Здесь работает предел по адресу — он невидим и ловит перебор.
@@ -1387,7 +1392,7 @@ async function handleSearch(request, env) {
 
     // Поиск — тоже расход, считаем с первого дня.
     const who = await identify(request, env);
-    const spent = await quotaSpend(env, who.uid, 1, who.lim);
+    spent = await quotaSpend(env, who.uid, 1, who.lim);
     if (!spent.ok) {
       return Response.json({ error: spent.error, dayLeft: spent.dayLeft, weekLeft: spent.weekLeft },
         { status: spent.code });
