@@ -62,8 +62,73 @@ def norm_title(s):
     return re.sub(r"[^a-z0-9]+", " ", s.lower()).strip()
 
 
+def s2_citations(rows, pause=1.5, batch=200):
+    """Цитирования из Semantic Scholar — пачками, по arXiv-id напрямую.
+
+    ПОЧЕМУ НЕ OPENALEX (проверено 2026-07-31, обе попытки в истории ветки):
+    1. По DOI препринта цитирования почти нулевые — их набирает ЖУРНАЛЬНАЯ версия
+       с другим DOI. Одна работа: препринт 9, журнал 163. Медиана по выборке падает
+       до нуля, и все признаки выходят «не различают» — вывод уверенный и ложный.
+    2. Связать препринт с публикацией нечем: у журнальной записи среди locations
+       стоят журнал, репозитории вуза, HAL, DOAJ — arXiv среди них НЕТ.
+    3. Остаётся поиск по заголовку — один запрос на статью. На 300 статьях упирается
+       в 429 и обрывается на восьмидесятой.
+
+    Semantic Scholar снимает все три: индексирует по `ARXIV:<id>`, сводит препринт
+    с публикацией сам (та же CEERS даёт 102), принимает до 500 id за раз. 2000 статей
+    укладываются в десять запросов вместо двух тысяч.
+    """
+    cache_path = ROOT / "data" / "s2-cites.json"
+    cache = {}
+    if cache_path.exists():
+        try:
+            cache = json.loads(cache_path.read_text(encoding="utf-8"))
+        except Exception:
+            cache = {}
+    todo = [r for r in rows if r["id"] not in cache]
+    if len(todo) < len(rows):
+        print(f"  из кэша: {len(rows) - len(todo)}")
+
+    for i in range(0, len(todo), batch):
+        chunk = todo[i:i + batch]
+        req = urllib.request.Request(
+            "https://api.semanticscholar.org/graph/v1/paper/batch"
+            "?fields=title,citationCount,year",
+            data=json.dumps({"ids": [f"ARXIV:{r['id']}" for r in chunk]}).encode(),
+            headers={"Content-Type": "application/json", "User-Agent": "b42-ml-eval/1.0"})
+        # S2 без ключа режет по ЧАСТОТЕ запросов, а не по размеру пачки: из восьми
+        # пачок подряд проходит одна. Дробить бессмысленно — надо ждать. Пачка большая
+        # (200 статей), так что ждать выгодно: одна удачная попытка стоит двух минут
+        # ожидания и заменяет двести отдельных запросов.
+        data = None
+        for attempt in range(7):
+            try:
+                with urllib.request.urlopen(req, timeout=90) as resp:
+                    data = json.loads(resp.read().decode("utf-8"))
+                break
+            except Exception:
+                wait = min(60, 5 * 2 ** attempt)
+                print(f"  пачка {i//batch + 1}: отказ, жду {wait}с "
+                      f"(попытка {attempt + 1}/7)")
+                time.sleep(wait)
+        if data is None:
+            print(f"  !! пачка {i//batch + 1} не далась, иду дальше — кэш сохранён")
+            continue
+        # ответ идёт В ТОМ ЖЕ ПОРЯДКЕ, что и запрос; ненайденное — null
+        for r, w in zip(chunk, data):
+            cache[r["id"]] = (w or {}).get("citationCount")
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
+        cache_path.write_text(json.dumps(cache, ensure_ascii=False), encoding="utf-8")
+        got = sum(1 for r in rows if cache.get(r["id"]) is not None)
+        print(f"  пачка {i//batch + 1}/{math.ceil(len(todo)/batch)}: сопоставлено {got}")
+        time.sleep(pause)
+
+    return {r["id"]: cache[r["id"]] for r in rows
+            if cache.get(r["id"]) is not None}
+
+
 def openalex_citations(rows, pause=1.0):
-    """Цитирования ПО ЗАГОЛОВКУ, а не по DOI препринта.
+    """СТАРЫЙ путь через OpenAlex — оставлен как запасной, см. s2_citations выше.
 
     ПОЧЕМУ НЕ ПО DOI. Проверено 2026-07-31 на живом API: у работы
     «CEERS Spectroscopic Confirmation…» препринт arXiv показывает 9 цитирований,
@@ -201,8 +266,8 @@ def main():
     rows = load_month(args.month, args.field, args.n)
     print(f"взято статей {args.field} за {args.month}: {len(rows)}")
 
-    print("спрашиваю цитирования у OpenAlex (бесплатно, без ключа)...")
-    cites = openalex_citations(rows)
+    print("спрашиваю цитирования у Semantic Scholar (пачками, без ключа)...")
+    cites = s2_citations(rows)
     for r in rows:
         r["cites"] = cites.get(r["id"])
 
@@ -253,6 +318,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
