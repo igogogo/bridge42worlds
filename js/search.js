@@ -1847,7 +1847,8 @@ function collapseNavOverflow() {
     // они исчезли из меню ЦЕЛИКОМ — разделы остались на сайте, но попасть в них стало
     // неоткуда. Урок: убирая элемент из разметки, проверь, не он ли был источником для кода,
     // который его же и перекладывает.
-    [['/lang/en/authors/', 'authors'], ['/lang/' + lang + '/graph/', 'graph'],
+    [['/lang/' + lang + '/formulas/', 'formulas'],
+     ['/lang/en/authors/', 'authors'], ['/lang/' + lang + '/graph/', 'graph'],
      ['/learn.html', 'learn'], ['/lang/' + lang + '/archive/', 'dashboard'], ['/lang/' + lang + '/analytics/', 'analytics'], ['/lang/' + lang + '/about.html', 'about']].forEach(function(e) {
         if (panel.querySelector('a[href="' + e[0] + '"]')) return;
         var a = document.createElement('a');

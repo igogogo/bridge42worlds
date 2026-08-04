@@ -197,8 +197,24 @@ def _log_lang_fallback(kind, article_id, category="", attempt=0):
         pass
 
 
+# Список тегов в промпте заставляет модель выбирать знакомое: 179 тегов из 363 не проставлены
+# ни одной статье, на топ-10 приходится 45% проставлений (замер 2026-08-04). Решение владельца —
+# уводить теги на вектор. Переключатель заведён заранее и ПО УМОЛЧАНИЮ ВКЛЮЧЁН: выключать
+# только после того, как ML отдаст измеренную привязку по смыслу, иначе останемся без обоих
+# механизмов. Без списка модель даёт ОДИН главный тег своими словами, а не выдумывает набор.
+TAGS_IN_PROMPT = CONFIG.get("tags_in_prompt", True)
+
+_NO_TAGS_BLOCK = (
+    "ТЕГИ: списка тегов в этом промпте нет намеренно — остальные теги статья получит "
+    "привязкой по смыслу. От тебя нужен ТОЛЬКО main_tag: одно понятие, о котором статья, "
+    "английским идентификатором в нижнем регистре через подчёркивание (например black_hole). "
+    "extra_tags оставь пустым списком. Не выдумывай наборы тегов и не размечай маркерами "
+    "[tag:...] то, чего в main_tag нет."
+)
+
+
 def generate_advanced(article, text, tags_input, scientists_keys, law_ids=None):
-    tags_list = ", ".join(t["en"] for t in tags_input)
+    tags_list = (", ".join(t["en"] for t in tags_input) if TAGS_IN_PROMPT else _NO_TAGS_BLOCK)
     scientists_list = ", ".join(scientists_keys)
     laws_list = ", ".join(law_ids or [])
     prompt = load_prompt("article-generate-advanced").format(
@@ -345,7 +361,8 @@ def generate_image(image_prompt, out_path, preset="image"):
 # Наследование фактуры КОДОМ, а не пересказом модели (ТЗ 2026-07-27, §4): нижний уровень получает
 # теги/учёных/законы/числа/метафору/глоссарий готовыми и не вправе их менять — так версии не
 # расходятся между уровнями.
-_INHERITED = ("main_tag", "extra_tags", "scientists", "laws", "key_numbers", "metaphor", "glossary")
+_INHERITED = ("main_tag", "extra_tags", "scientists", "laws", "key_numbers", "metaphor",
+              "glossary", "contribution")
 
 
 def inherit_facts(child, parent):
@@ -384,7 +401,7 @@ def generate_popular(scipop_adv):
 
 # ── Конвейер 2.0: конструктор (владелец 2026-07-30, обоснование temp/experiment-constructor) ──
 COMBO_SHARED = ("formulas", "key_numbers", "fun_fact", "scifi", "main_tag",
-                "extra_tags", "scientists", "glossary")
+                "extra_tags", "scientists", "glossary", "contribution")
 SLIM_SHARED_TRANSLATE = ("fun_fact", "scifi", "formulas", "key_numbers")
 
 
@@ -663,7 +680,7 @@ def _latex_bits(obj):
 # Служебные поля: читателю не показываются (в templates/ и js/ их нет), нужны только коду —
 # metaphor держит метафору единой между уровнями, glossary кормит нижние тиры и термбазу.
 # Модели они не отдаются и переводом не считаются: русский текст в них — норма, а не брак.
-_INTERNAL_FIELDS = ("metaphor", "glossary")
+_INTERNAL_FIELDS = ("metaphor", "glossary", "contribution")
 
 
 def _without_internal(scipop):

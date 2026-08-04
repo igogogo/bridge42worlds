@@ -47,6 +47,10 @@ def th(*cells):
     return "<tr>" + "".join(f"<th>{esc(c)}</th>" for c in cells) + "</tr>"
 
 
+# Опросы из документа УБРАНЫ (стратег 2026-08-04, владелец подтвердил: «нажал не то»).
+# На одной странице стояли ДВА элемента, выглядящих как голосование, и настоящий из них —
+# на двадцать тысяч пикселей ниже: владелец проголосовал в опрос-пустышку, голос остался
+# в браузере, в базе совета ноль. Мнение собирается там же, где голосуют, — на панели.
 def poll(pid, question, options, t):
     opts = "".join(
         f'<button type="button" data-v="{esc(o)}">{esc(o)}</button>' for o in options)
@@ -178,9 +182,7 @@ def build(lang, t):
     <p>{esc(t["money_p"])}</p>
     <div class="tw"><table>{th(t["money_th_1"], t["money_th_2"], t["money_th_3"])}{money_rows}</table></div>
     <div class="note">{t["money_note"]}</div>
-    {poll("money", t["poll_money_q"],
-          [t["poll_money_1"], t["poll_money_2"], t["poll_money_3"], t["poll_money_4"]], t)}
-  </section>
+      </section>
 
   <section>
     <p class="kicker">{esc(t["funnel_kicker"])}</p>
@@ -188,9 +190,7 @@ def build(lang, t):
     <p>{esc(t["funnel_p"])}</p>
     <div class="tw"><table>{th(t["funnel_th_1"], t["funnel_th_2"], t["funnel_th_3"], t["funnel_th_4"])}{funnel_rows}</table></div>
     <div class="note">{t["funnel_note"]}</div>
-    {poll("funnel", t["poll_funnel_q"],
-          [t["poll_funnel_1"], t["poll_funnel_2"], t["poll_funnel_3"]], t)}
-  </section>
+      </section>
 
   <section>
     <p class="kicker">{esc(t["next_kicker"])}</p>
@@ -199,9 +199,7 @@ def build(lang, t):
     <h3>{esc(t["open_h3"])}</h3>
     <p>{esc(t["open_p"])}</p>
     <div class="tw"><table>{th(t["open_th_1"], t["open_th_2"])}{opens}</table></div>
-    {poll("next", t["poll_next_q"],
-          [t["poll_next_1"], t["poll_next_2"], t["poll_next_3"], t["poll_next_4"]], t)}
-  </section>
+      </section>
 
   <section>
     <p class="kicker">{esc(t["join_kicker"])}</p>
@@ -264,7 +262,10 @@ def main():
             print(f"  ⚠️ {lang}: не переведено ключей {len(missing)} — будут по-русски: "
                   + ", ".join(missing[:6]) + ("…" if len(missing) > 6 else ""))
             t = {**base, **t}
-        out = ROOT / "lang" / lang / "council.html"
+        # Документ переезжает на inside.html: /council.html теперь ПАНЕЛЬ совета
+        # (замысел стратега, задачи/СОВЕТ-ПАНЕЛЬ.md; владелец: «я уже зашёл — зачем мне
+        # форма; нужны решения, бюджет, состав — это структура управления, а не лирика»).
+        out = ROOT / "lang" / lang / "inside.html"
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(build(lang, t), encoding="utf-8")
         print(f"  {lang} → {out.relative_to(ROOT)}")

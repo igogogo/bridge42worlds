@@ -61,9 +61,14 @@ SLIDERS_ICO = ('<svg class="ico-sliders" viewBox="0 0 25 25" aria-hidden="true" 
 
 
 def asset_ver():
-    """Хэш от содержимого всех css/js — заменяет ручной ?v=N (забывали бампать, у части
-    посетителей оставался закэшированный старый файл). Меняется контент — меняется хэш
-    автоматически, ничего руками поднимать не нужно. Считается один раз за прогон."""
+    """Хэш от содержимого всех css/js. С 2026-08-04 в СТРАНИЦЫ БОЛЬШЕ НЕ ВШИВАЕТСЯ
+    (шаблоны зовут /js/x.js без ?v=): каждая правка интерфейса меняла байты всех 42 471
+    страницы, Google видел «весь сайт обновился» и тратил бюджет обхода на переобход
+    старья вместо свежих статей — а свежая статья это автор, который ищет сам себя
+    (владелец). Свежесть кэша теперь держат заголовки Worker: css/js 5 минут + 304.
+    Дисциплина взамен версии: JS обязан работать со СТАРОЙ разметкой — новые функции
+    проверяют «есть ли элемент», а не предполагают его; окно рассинхрона ≤5 минут.
+    Хэш остаётся для служебных нужд (сторож изменений, учебные страницы)."""
     global _ASSET_VER
     if _ASSET_VER is None:
         h = hashlib.sha256()
@@ -3077,7 +3082,16 @@ table{{border-collapse:collapse;font-size:13px;width:100%}}</style></head><body>
 def generate_sitemaps():
     """sitemap-{lang}.xml (статьи+теги+учёные+about+index) + индекс sitemap.xml в корне."""
     def urlset(urls):
-        body = "".join(f"<url><loc>{u}</loc></url>" for u in urls)
+        # urls — список (адрес, lastmod|None). Честный lastmod из данных статьи: Google
+        # переобходит только то, что реально менялось, и бюджет обхода уходит на свежие
+        # статьи, а не на переобход старья (владелец 2026-08-04: свежая статья — это автор,
+        # который ищет сам себя). Врать датой нельзя: поисковики ловят «всё обновилось
+        # сегодня» и перестают верить карте вовсе.
+        def one(u):
+            if isinstance(u, tuple) and u[1]:
+                return f"<url><loc>{u[0]}</loc><lastmod>{u[1]}</lastmod></url>"
+            return f"<url><loc>{u[0] if isinstance(u, tuple) else u}</loc></url>"
+        body = "".join(one(u) for u in urls)
         return f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{body}</urlset>'
 
     tags_graph = json.loads(Path("data/tags-graph.json").read_text(encoding="utf-8")).get("graph", {}) \
@@ -3107,9 +3121,20 @@ def generate_sitemaps():
                 # Только существующие файлы: у экспресс-статьи без короткого текста mini.html
                 # не пишется, а карта сайта звала поисковик на несуществующий адрес.
                 art_dir = Path(LANG_DIR) / lang / "archive" / a["date"] / a["id"]
+                # lastmod — дата правки данных статьи, не HTML: пересборка не считается
+                # изменением содержания.
+                lm = None
+                dj = art_dir.parent / a["id"] / "data.json"
+                dj = art_dir / "data.json"
+                try:
+                    if dj.exists():
+                        import datetime as _dt
+                        lm = _dt.date.fromtimestamp(dj.stat().st_mtime).isoformat()
+                except Exception:
+                    lm = None
                 for vf in VERSION_FILES.values():
                     if (art_dir / vf).exists():
-                        urls.append(f"{SITE_URL}/{LANG_DIR}/{lang}/archive/{a['date']}/{a['id']}/{vf}")
+                        urls.append((f"{SITE_URL}/{LANG_DIR}/{lang}/archive/{a['date']}/{a['id']}/{vf}", lm))
         for tid in tags_graph:
             urls.append(f"{SITE_URL}/{LANG_DIR}/{lang}/tags/{tid}.html")
         fn = f"sitemap-{lang}.xml"

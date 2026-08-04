@@ -39,6 +39,7 @@
               fMail: 'Почта для отчётов (необязательно)',
               fHint: 'Оба поля можно пропустить — ключ выдадим всё равно. Почта нужна только для писем о заседаниях.',
               getKey: 'Получить ключ',
+              haveKey: 'У меня есть ключ', enter: 'Войти', badKey: 'ключ не найден — проверьте',
               invited: 'Вас пригласили в наблюдательный совет. Нажмите — и вы внутри: повестка, голосование, предложения.' },
         en: { need: 'To join, open {n} more articles — you have read {seen}.',
               can: 'You have read {seen} articles. That is enough to join the council.',
@@ -56,9 +57,24 @@
               fMail: 'Email for reports (optional)',
               fHint: 'Both can be skipped — you get the key anyway. Email is only for meeting notices.',
               getKey: 'Get the key',
+              haveKey: 'I have a key', enter: 'Enter', badKey: 'key not found — check it',
               invited: 'You have been invited to the council. One click and you are in: agenda, voting, proposals.' }
     };
     var L = T[LANG] || T.en;
+    /* ar/es/fr — из файлов стратега (data/council/live-strings.<lang>.json): формулировки
+       его, каркас мой, в js он не лезет. Пока файл едет, работает английский; приехал —
+       надписи меняются на месте. Ключи сверяются: перевод с дырами хуже честного
+       английского, потому что читается как недоделка. */
+    if (!T[LANG] && ['ar', 'es', 'fr'].indexOf(LANG) >= 0) {
+        fetch('/data/council/live-strings.' + LANG + '.json')
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (d) {
+                if (!d) return;
+                for (var k in T.ru) { if (!(k in d)) return; }   // дырявый перевод не берём
+                L = d;
+                if (window.__clRerender) window.__clRerender();
+            }).catch(function () {});
+    }
 
     function get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
     function set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
@@ -85,6 +101,7 @@
     function block(html) { var d = document.createElement('div'); d.className = 'cl-box'; d.innerHTML = html; return d; }
 
     function showMember(key) {
+        window.__clRerender = function () { showMember(key); };
         host.innerHTML = '';
         host.appendChild(block(
             '<div class="cl-ok">🏛 ' + esc(L.joined) + '</div>' +
@@ -140,6 +157,7 @@
     }
 
     function showJoin(st) {
+        window.__clRerender = function () { showJoin(st); };
         host.innerHTML = '';
         // По личному приглашению порог чтения не нужен: человека позвали лично,
         // и это доказательство участия сильнее счётчика страниц.
@@ -148,8 +166,36 @@
                  : (can ? L.can : L.need).replace('{seen}', st.views).replace('{n}', Math.max(0, st.need - st.views));
         var b = block('<div class="cl-standing">' + esc(line) + '</div>' +
             (can ? '<button type="button" class="cl-join">' + esc(L.join) + '</button>' : '') +
+            '<button type="button" class="cl-havekey">' + esc(L.haveKey) + '</button>' +
             '<div class="cl-msg"></div>');
         host.appendChild(b);
+        /* «У меня есть ключ» — вход с ДРУГОГО устройства. Ключ живёт в браузере, и member
+           в базе не означает, что этот браузер его знает: владелец вступил на телефоне,
+           открыл с компьютера — и снова увидел «Войти в совет» (находка стратега
+           2026-08-04, отсюда же его «токен забыл»). Форма вступления не должна быть
+           единственной дверью. */
+        var haveKey = host.querySelector('.cl-havekey');
+        if (haveKey) haveKey.onclick = function () {
+            var inp = host.querySelector('.cl-key-inp');
+            if (!inp) {
+                var f = document.createElement('div');
+                f.className = 'cl-form';
+                f.innerHTML = '<input class="cl-key-inp" type="text" placeholder="B42-XXXX-XXXX-XXXX" autocomplete="off">';
+                haveKey.insertAdjacentElement('beforebegin', f);
+                haveKey.textContent = L.enter;
+                return;
+            }
+            var k = (inp.value || '').trim().toUpperCase();
+            if (!/^B42-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(k)) { inp.focus(); return; }
+            // Проверяем ключ КАБИНЕТОМ, а не верой: чужая строка не должна включать участника.
+            fetch(API + '/me?key=' + encodeURIComponent(k))
+                .then(function (r) { return r.ok; })
+                .then(function (ok) {
+                    if (ok) { set(LS_KEY, k); showMember(k); }
+                    else { inp.value = ''; inp.placeholder = L.badKey; }
+                }).catch(function () {});
+        };
+
         var btn = host.querySelector('.cl-join');
         if (btn) btn.onclick = async function () {
             /* Минимальная форма (владелец 2026-08-01: «регистрацию упрости, форма
