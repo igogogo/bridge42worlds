@@ -31,7 +31,25 @@ def _load_env():
 
 
 def main():
-    if len(sys.argv) >= 3 and sys.argv[1] == "--file":
+    # Готовые сообщения СОБИРАЮТСЯ ЗДЕСЬ, а не передаются строкой из .cmd-файла.
+    #
+    # Владелец 2026-08-04: «в канал телеграма лезет какая-то сбитая кодировка, что-то там
+    # log». Причина: русский текст жил внутри tools/daily.cmd, а консоль Windows отдаёт
+    # аргументы в кодировке OEM (cp866) — до Python доезжали кракозябры, и они же уходили
+    # в канал. Лечится не «ещё одним перекодированием», а тем, что русские тексты живут
+    # только в UTF-8 файлах Python; .cmd передаёт короткий ЛАТИНСКИЙ код и числа.
+    if len(sys.argv) >= 2 and sys.argv[1] == "--daily-failed":
+        rc = sys.argv[2] if len(sys.argv) > 2 else "?"
+        log = sys.argv[3] if len(sys.argv) > 3 else ""
+        text = (f"⛔ <b>Ежедневный прогон не пополнил ленту</b> (код {rc}).\n"
+                f"Причина — в логе: <code>{log}</code>")
+    elif len(sys.argv) >= 2 and sys.argv[1] == "--dump-failed":
+        rc = sys.argv[2] if len(sys.argv) > 2 else "?"
+        log = sys.argv[3] if len(sys.argv) > 3 else ""
+        text = (f"⚠️ <b>Дамп arXiv не обновился</b> (код {rc}).\n"
+                f"Ретроспектива и поиск дыр будут работать по старым данным.\n"
+                f"Лог: <code>{log}</code>")
+    elif len(sys.argv) >= 3 and sys.argv[1] == "--file":
         text = Path(sys.argv[2]).read_text(encoding="utf-8")
     elif len(sys.argv) >= 2:
         text = sys.argv[1]
