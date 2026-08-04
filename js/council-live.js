@@ -61,6 +61,20 @@
               invited: 'You have been invited to the council. One click and you are in: agenda, voting, proposals.' }
     };
     var L = T[LANG] || T.en;
+    /* ar/es/fr — из файлов стратега (data/council/live-strings.<lang>.json): формулировки
+       его, каркас мой, в js он не лезет. Пока файл едет, работает английский; приехал —
+       надписи меняются на месте. Ключи сверяются: перевод с дырами хуже честного
+       английского, потому что читается как недоделка. */
+    if (!T[LANG] && ['ar', 'es', 'fr'].indexOf(LANG) >= 0) {
+        fetch('/data/council/live-strings.' + LANG + '.json')
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (d) {
+                if (!d) return;
+                for (var k in T.ru) { if (!(k in d)) return; }   // дырявый перевод не берём
+                L = d;
+                if (window.__clRerender) window.__clRerender();
+            }).catch(function () {});
+    }
 
     function get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
     function set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
@@ -87,6 +101,7 @@
     function block(html) { var d = document.createElement('div'); d.className = 'cl-box'; d.innerHTML = html; return d; }
 
     function showMember(key) {
+        window.__clRerender = function () { showMember(key); };
         host.innerHTML = '';
         host.appendChild(block(
             '<div class="cl-ok">🏛 ' + esc(L.joined) + '</div>' +
@@ -142,6 +157,7 @@
     }
 
     function showJoin(st) {
+        window.__clRerender = function () { showJoin(st); };
         host.innerHTML = '';
         // По личному приглашению порог чтения не нужен: человека позвали лично,
         // и это доказательство участия сильнее счётчика страниц.

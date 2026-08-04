@@ -74,6 +74,26 @@ T = {
 }
 
 
+def _load_translations():
+    """ar/es/fr — из файлов стратега (data/council/panel-strings.<lang>.json), а не из
+    словаря в коде. Разграничение прямое: формулировки — его работа, каркас — моя;
+    он не лезет в py/js, я не переписываю его тексты. Сверка состава ключей — при
+    загрузке, молча подставленный английский хуже честного падения."""
+    for lang in ("ar", "es", "fr"):
+        f = ROOT / "data" / "council" / f"panel-strings.{lang}.json"
+        if not f.exists():
+            continue
+        d = json.loads(f.read_text(encoding="utf-8"))
+        missing = set(T["ru"]) - set(d)
+        if missing:
+            print(f"  ⚠️ {lang}: в переводе панели нет ключей {sorted(missing)[:5]} — падаю на en")
+            continue
+        T[lang] = d
+
+
+_load_translations()
+
+
 def budget_line():
     """Строка бюджета из данных, а не из головы: cost-summary пишет tools/cost_report.py.
     Нет файла — честный прочерк, выдуманное число хуже пустого."""
