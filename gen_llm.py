@@ -498,7 +498,11 @@ ABSTRACT_LEVELS = ("popular", "simple", "advanced")
 # как «не полные» на сайте). Теперь код-лимит — это подстраховка с запасом (редкий последний
 # рубеж против аномального переспама), а не де-факто ограничитель длины.
 ABSTRACT_LIMITS = {"simple": 350, "popular": 550, "advanced": 900}
-_ABSTRACT_HARD_LIMITS = {"simple": 500, "popular": 750, "advanced": 1200}
+# Держать РАВНЫМИ лимитам в data/prompts/abstract-adapt.txt. Были 500/750/1200 при
+# заявленных промптом 350/550/900 — то есть промпт называл лимит жёстким, а код молча
+# принимал на 43% длиннее. Замер 2026-08-04 по 1967 аннотациям: за лимит промпта выходили
+# 44% simple и 62% popular, и именно эти раздутые тексты читатель видел на карточке.
+_ABSTRACT_HARD_LIMITS = {"simple": 350, "popular": 550, "advanced": 900}
 
 
 def _cap_text(text, limit):
@@ -523,15 +527,27 @@ def generate_abstract(summary):
     if not summary:
         return {}
     prompt = load_prompt("abstract-adapt").format(summary=summary)
-    for _ in range(3):
+    for attempt in range(3):
         try:
             data = json.loads(clean_json(chat("abstract", prompt).choices[0].message.content))
         except Exception:
             data = {}
         levels = {v: (data.get(v, "") or "").strip() for v in ABSTRACT_LEVELS}
-        if any(levels.values()):
-            fb = next((t for t in levels.values() if t), "")  # если модель дала не все уровни — добить непустым
-            return {v: _cap_text(levels[v] or fb, _ABSTRACT_HARD_LIMITS[v]) for v in ABSTRACT_LEVELS}
+        if not any(levels.values()):
+            continue
+        fb = next((t for t in levels.values() if t), "")  # если модель дала не все уровни — добить непустым
+        levels = {v: levels[v] or fb for v in ABSTRACT_LEVELS}
+        # Перебор длины — повод переспросить, а не обрезать. Обрезка рвёт мысль на середине,
+        # а этот текст читатель видит первым, на карточке в ленте.
+        over = [v for v in ABSTRACT_LEVELS if len(levels[v]) > _ABSTRACT_HARD_LIMITS[v]]
+        if over and attempt < 2:
+            prompt += ("\n\nПРОШЛАЯ ПОПЫТКА НЕ ПРОШЛА: превышен лимит символов в полях "
+                       + ", ".join(f"{v} ({len(levels[v])} при лимите {_ABSTRACT_HARD_LIMITS[v]})"
+                                   for v in over)
+                       + ". Лимит жёсткий: текст показывается целиком, без обрезки. "
+                         "Сократи, убрав детали, а не объяснения.")
+            continue
+        return {v: _cap_text(levels[v], _ABSTRACT_HARD_LIMITS[v]) for v in ABSTRACT_LEVELS}
     return {}
 
 
