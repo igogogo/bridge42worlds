@@ -121,34 +121,43 @@ def verify(dest):
 
     arts = sorted((dest / "lang").glob("*/archive/*/*/data.json")) if (dest / "lang").exists() else []
     print(f"  исходников статей: {len(arts)}")
+    # Только русский — это НОРМА, а не потеря: исходник статьи один, остальные четыре языка
+    # существуют собранными страницами. Проверка это печатает, чтобы в плохой день никто
+    # не решил, что копия неполная, и не начал искать несуществующее.
     bad, langs = [], {}
     for p in arts:
-        langs[p.relative_to(dest / "lang").parts[0]] = langs.get(p.relative_to(dest / "lang").parts[0], 0) + 1
+        lang = p.relative_to(dest / "lang").parts[0]
+        langs[lang] = langs.get(lang, 0) + 1
+    # Обязательные поля исходника — те, без которых страница не соберётся.
     for p in arts[:: max(1, len(arts) // 50)]:      # выборка ~50 штук по всему дереву
         try:
             d = json.loads(p.read_text(encoding="utf-8"))
-            if not d.get("title"):
-                bad.append((p.name, "нет title"))
+            missing = [f for f in ("id", "original_title", "abstract") if not d.get(f)]
+            if missing:
+                bad.append((p.parent.name, "нет полей: " + ", ".join(missing)))
         except Exception as e:
             bad.append((str(p.relative_to(dest)), str(e)[:80]))
-    print(f"  по языкам: {', '.join(f'{k}={v}' for k, v in sorted(langs.items())) or '—'}")
+    print(f"  по языкам: {', '.join(f'{k}={v}' for k, v in sorted(langs.items())) or '—'}"
+          f"  (исходник только ru — так и должно быть)")
     print(f"  выборочно разобрано {min(50, len(arts))}: " + ("битых нет" if not bad else f"БИТЫХ {len(bad)}"))
     for n, e in bad[:5]:
         print(f"     {n} — {e}")
     ok &= not bad
 
-    for name in ("tags.json", "laws.json", "scientists.json", "knowledge-graph.json"):
-        p = dest / "data" / name
+    # Реестры лежат в языковых папках, а не в data/ — легко ошибиться, проверяя вслепую.
+    for rel in ("lang/ru/data/tags.json", "lang/ru/data/laws.json",
+                "lang/ru/data/scientists.json", "data/knowledge-graph.json"):
+        p = dest / rel
         if not p.exists():
-            print(f"  ⚠️  нет data/{name}")
+            print(f"  ⚠️  нет {rel}")
             ok = False
             continue
         try:
             d = json.loads(p.read_text(encoding="utf-8"))
             n = len(d) if isinstance(d, (list, dict)) else "?"
-            print(f"  data/{name}: разбирается, записей {n}")
+            print(f"  {rel}: разбирается, записей {n}")
         except Exception as e:
-            print(f"  ⚠️  data/{name} не разбирается: {str(e)[:80]}")
+            print(f"  ⚠️  {rel} не разбирается: {str(e)[:80]}")
             ok = False
 
     covers = list((dest / "lang").rglob("ai.jpg")) if (dest / "lang").exists() else []
@@ -178,13 +187,17 @@ def missing_report(dest):
    Данные приезжают сюда, этим скриптом.
 
 3. СОСТОЯНИЕ CLOUDFLARE — единственное, чего нет НИГДЕ, кроме самой Cloudflare:
-     • D1: реакции/просмотры, очередь, совет  → wrangler d1 export <база> --output=<файл>
+     • D1: реакции/просмотры, очередь, совет  → лежит в этой же копии, d1/<база>/<дата>.sql
      • KV: контекст бота, нормы читателей     → context_build.py соберёт заново из исходников
      • Vectorize: индекс поиска               → vector_build.py соберёт заново
      • секреты Worker                         → wrangler secret put, значения из .env
    Пересобираемое (KV, Vectorize) — это часы работы, но не потеря. D1 не пересобирается
-   ничем: голоса совета и реакции читателей существуют только там. Их выгрузка — отдельная
-   задача, на 2026-08-05 не автоматизирована.
+   ничем, поэтому с 2026-08-05 выгружается сюда каждый прогон (backup_d1.py, 14 суток).
+
+3б. ПЕРЕВОДЫ. Исходник статьи существует только по-русски; английский, испанский,
+   арабский и французский живут собранными страницами и больше нигде. Значит, бакет
+   сайта — не только витрина, но и единственный экземпляр переводов. Не чистите его
+   `--prune` вслепую и не считайте, что его потеря — «просто пересоберём».
 
 4. ПРОВЕРКА, что дерево живое (ничего не стоит, модель не зовётся):
      python run.py stats
