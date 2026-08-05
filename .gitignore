@@ -62,6 +62,12 @@ data/arxiv-index.jsonl
 # Выгрузка на эмбеддинг (embeddings_export.py): наши статьи 2,5 МБ, с arXiv будут гигабайты.
 # Пересоздаётся одной командой, в git ему делать нечего.
 data/embeddings-*.jsonl
+
+# Черновые выхлопы мерок: результат прогона поиска и кэш неудачного пути через OpenAlex
+# (цитирования по DOI препринта — тупик, см. diamonds_eval.py). Кэш Semantic Scholar
+# `data/s2-cites.json` наоборот КОММИТИМ: он делает мерку повторяемой без обращений к API.
+data/search-eval-results.json
+data/openalex-cites.json
 _devops-handoff.zip
 
 # Собранный сайт публикуется через cloudflare/deploy_r2.py (R2), не через git-пуш —
