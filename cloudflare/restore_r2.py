@@ -24,7 +24,7 @@
 
 Проверено живым прогоном 2026-08-05 (см. задачи/отчёты/devops.md).
 """
-import os, sys, json, time, argparse
+import os, sys, json, time, gzip, argparse
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from dotenv import load_dotenv
@@ -81,6 +81,17 @@ def pull(s3, bucket, items, dest, label):
 
     def one(item):
         key, size = item
+        # Переводы лежат сжатыми под pages/ — кладём их на место разжатыми, туда же,
+        # где их ждёт генератор. Иначе человек получит 56 тысяч файлов .html.gz и будет
+        # разбираться с этим в худший день, а не сейчас.
+        if key.startswith("pages/") and key.endswith(".gz"):
+            target = dest / key[len("pages/"):-3]
+            if target.exists():
+                return size, True
+            target.parent.mkdir(parents=True, exist_ok=True)
+            body = s3.get_object(Bucket=bucket, Key=key)["Body"].read()
+            target.write_bytes(gzip.decompress(body))
+            return size, False
         target = dest / key
         if target.exists() and target.stat().st_size == size:
             return size, True
@@ -194,10 +205,10 @@ def missing_report(dest):
    Пересобираемое (KV, Vectorize) — это часы работы, но не потеря. D1 не пересобирается
    ничем, поэтому с 2026-08-05 выгружается сюда каждый прогон (backup_d1.py, 14 суток).
 
-3б. ПЕРЕВОДЫ. Исходник статьи существует только по-русски; английский, испанский,
-   арабский и французский живут собранными страницами и больше нигде. Значит, бакет
-   сайта — не только витрина, но и единственный экземпляр переводов. Не чистите его
-   `--prune` вслепую и не считайте, что его потеря — «просто пересоберём».
+3б. ПЕРЕВОДЫ. Исходник статьи существует только по-русски. Английский, испанский,
+   арабский и французский живут собранными страницами — с 2026-08-05 они лежат в этой
+   же копии под `pages/`, сжатыми, и этот скрипт разворачивает их на место сам.
+   Русские страницы в копию НЕ кладём: они пересобираются из data.json, который здесь.
 
 4. ПРОВЕРКА, что дерево живое (ничего не стоит, модель не зовётся):
      python run.py stats

@@ -457,6 +457,15 @@ def _backup_to_r2():
         if r2.returncode != 0:
             print(f"⚠️  выгрузка D1 не удалась (код {r2.returncode}).")
 
+    # Переводы: исходник статьи есть только по-русски, остальные четыре языка существуют
+    # собранными страницами и больше нигде. До 2026-08-05 их единственным экземпляром был
+    # бакет сайта. Дельта по md5 — если страницы не менялись, отрабатывает вхолостую.
+    pages = Path(__file__).resolve().parent / "cloudflare" / "backup_pages.py"
+    if pages.exists():
+        r3 = subprocess.run([sys.executable, str(pages)], env=child_env)
+        if r3.returncode != 0:
+            print(f"⚠️  копия переводов не удалась (код {r3.returncode}).")
+
 
 def cmd_tags(args):
     _refuse_if_peak("tags")
