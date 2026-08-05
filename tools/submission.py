@@ -39,7 +39,8 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
 ROOT = Path(__file__).resolve().parent.parent
 SUBS = ROOT / "data" / "submissions"
 SITE = "https://bridge42worlds.academy"
-MAX_MB = 10
+MAX_MB = 25          # вложение: практический предел почтовых серверов
+MAX_LINK_MB = 100    # данные по ссылке из письма — скачиваем и храним у себя
 DEFENDER = Path(r"C:\Program Files\Windows Defender\MpCmdRun.exe")
 
 
@@ -162,6 +163,36 @@ def cmd_fetch():
                 src.rename(src.with_suffix(src.suffix + ".quarantine"))
         (box / "scan.json").write_text(json.dumps(verdicts, ensure_ascii=False, indent=1),
                                        encoding="utf-8")
+
+        # ССЫЛКИ НА ДАННЫЕ в теле письма (решение владельца 2026-08-05: «данных может
+        # быть много — пусть присылают всё, до 100 МБ; хранить дёшево»). Почта режет
+        # вложения ~25 МБ, поэтому большие данные — ссылкой: мы скачиваем и размещаем
+        # у себя (R2: полтора цента в месяц за 100 МБ, отдача читателям бесплатная).
+        # Безопасность: только http(s), потолок размера продавлен потоком (не верим
+        # Content-Length), скачанное проходит тот же скан, что вложения.
+        import requests as _rq
+        for m2 in list(re.finditer(r"https?://[^\s<>\"']+", body))[:5]:
+            url = m2.group(0).rstrip('.,)')
+            if any(h in url for h in ("bridge42worlds", "mailto:")):
+                continue
+            try:
+                with _rq.get(url, stream=True, timeout=120,
+                             headers={"User-Agent": "bridge42worlds-intake"}) as resp:
+                    if resp.status_code != 200:
+                        continue
+                    name = Path(url.split("?")[0]).name or "data.bin"
+                    dest = box / "incoming" / ("link_" + name)
+                    size = 0
+                    with dest.open("wb") as f:
+                        for chunk in resp.iter_content(1 << 20):
+                            size += len(chunk)
+                            if size > MAX_LINK_MB * 1024 * 1024:
+                                raise ValueError("больше предела")
+                            f.write(chunk)
+                    files.append(dest.name)
+                    print(f"  🔗 скачано по ссылке: {name} · {size // 1024 // 1024} МБ")
+            except Exception as ex:
+                print(f"  ⚠️ ссылка {url[:50]}: {ex}")
 
         # zip распаковываем только чистые
         for fn in list(files):
