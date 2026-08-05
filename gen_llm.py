@@ -1070,6 +1070,10 @@ def translate_captions(captions_en, target_lang, retries=3):
             if attempt == retries:
                 _log_translation_failure("captions", target_lang, str(e))
             continue
+    # Последний тихий откат в переводах (находка аудитора 2026-08-05): провал перевода
+    # подписей молча оставлял английские. Откат остаётся (подпись на английском лучше
+    # отсутствующей — это цитата из PDF), но теперь ГРОМКИЙ: в журнал сбоев, как всё.
+    _log_translation_failure("captions", target_lang, f"{len(captions_en)} подписей остались en")
     return captions_en
 
 
