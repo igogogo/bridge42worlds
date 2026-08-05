@@ -519,7 +519,10 @@ ABSTRACT_LIMITS = {"simple": 350, "popular": 550, "advanced": 900}
 # заявленных промптом 350/550/900 — то есть промпт называл лимит жёстким, а код молча
 # принимал на 43% длиннее. Замер 2026-08-04 по 1967 аннотациям: за лимит промпта выходили
 # 44% simple и 62% popular, и именно эти раздутые тексты читатель видел на карточке.
-_ABSTRACT_HARD_LIMITS = {"simple": 350, "popular": 550, "advanced": 900}
+_ABSTRACT_HARD_LIMITS = {"simple": 350, "popular": 550, "advanced": 1600}
+# advanced с 2026-08-05 — это ПЕРЕВОД авторской аннотации (abstract-advanced.txt), а не наш
+# пересказ: лимит равен разумной длине абстракта, обрезать перевод нельзя — потеря
+# утверждения это брак. Для simple/popular лимиты прежние, они идут на карточку.
 
 
 def _cap_text(text, limit):
@@ -566,6 +569,28 @@ def generate_abstract(summary):
             continue
         return {v: _cap_text(levels[v], _ABSTRACT_HARD_LIMITS[v]) for v in ABSTRACT_LEVELS}
     return {}
+
+
+def generate_abstract_advanced(summary, retries=2):
+    """Уровень «Подробно»: авторская аннотация по-русски, без упрощения и без потерь.
+
+    Отдельный промпт, а не регистр в abstract-adapt, по одной причине: там подключён
+    {style_core} с требованием «первая фраза — картина, а не термин». Для профессионального
+    читателя это требование вредно, а противоречие в промпте всегда выигрывает у стиля
+    (урок 31 июля). Здесь стилевого ядра нет намеренно."""
+    summary = (summary or "").strip()
+    if not summary:
+        return ""
+    prompt = load_prompt("abstract-advanced").format(summary=summary)
+    for _ in range(retries):
+        try:
+            data = json.loads(clean_json(chat("abstract", prompt).choices[0].message.content))
+        except Exception:
+            continue
+        text = (data.get("advanced") or "").strip()
+        if text and _script_ratio(text, "Ѐ", "ӿ") >= 0.5:
+            return text
+    return ""
 
 
 def refine_abstract(abstract):
