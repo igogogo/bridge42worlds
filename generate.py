@@ -1078,7 +1078,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
         key_numbers_html = ""
         if kn:
             key_numbers_html = f'<div class="key-numbers"><h3>{safe(loc["key_numbers"])}</h3><ul>' + \
-                               "".join(f"<li><strong>{k}:</strong> {v}</li>" for k, v in kn.items()) + '</ul></div>'
+                               "".join(f"<li><strong>{k}:</strong> {sci_notation(v)}</li>" for k, v in kn.items()) + '</ul></div>'
         fun_html = trivia_html(scipop.get("fun_fact", ""), scipop.get("scifi", ""), lang)
 
     if scipop.get("express_locked"):
@@ -1300,6 +1300,23 @@ def drop_index_cache(lang=None):
         _INDEX_CACHE.pop(lang, None)
     else:
         _INDEX_CACHE.clear()
+
+
+_POW_RE = re.compile(r"10\^\{?(-?\d+)\}?")
+_EXP_RE = re.compile(r"(\d+(?:[.,]\d+)?)[eE]([+-]?\d+)")
+
+
+def sci_notation(v):
+    """Порядки величин — типографикой, а не «10^{11}» сырьём.
+
+    Владелец 2026-08-05: «в физике используют порядки, надо показывать их формулой — это
+    будет профессионально». Ключевые числа приходят от модели строками вида «~10^{11} ГэВ»
+    или «3.5e-9 м» — на странице это выглядело как черновик. KaTeX сюда тащить незачем:
+    степень делается обычным <sup>, работает без скриптов и в RSS."""
+    s = str(v)
+    s = _EXP_RE.sub(lambda m: f"{m.group(1)}·10<sup>{int(m.group(2))}</sup>", s)
+    s = _POW_RE.sub(lambda m: f"10<sup>{m.group(1)}</sup>", s)
+    return s
 
 
 def card_cut(s, limit=300):

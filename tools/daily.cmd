@@ -17,6 +17,13 @@ for /f %%I in ('powershell -NoProfile -Command Get-Date -Format yyyyMMdd_HHmm') 
 cd /d "%REPO%"
 set PYTHONIOENCODING=utf-8
 set PYTHONUNBUFFERED=1
+
+REM Подъём сторожей. Оба — долгоживущие процессы, которые задача запускает один раз;
+REM 2 августа их убило закрытием консоли (0xC000013A), и 43 часа никто не смотрел почту
+REM и очередь — в это окно пришло письмо владельца со статьёй, нашли руками. Ночной
+REM прогон работает каждый день — он и поднимает упавших: Start-ScheduledTask прав
+REM администратора не требует, а мёртвого не убьёт повторный старт.
+powershell -NoProfile -Command "foreach($t in 'b42_mail_temp','b42_queue'){ if((Get-ScheduledTask -TaskName $t -ErrorAction SilentlyContinue).State -ne 'Running'){ Start-ScheduledTask -TaskName $t } }" >nul 2>&1
 REM B42_LEAD не ставим: daily не пересобирает сайт целиком, страж html его и не касается.
 REM Публикация в R2 идёт последним шагом самой команды — отдельного вызова не нужно.
 REM Решение владельца 2026-07-31 (утро): бюджет скромный — полные ежедневно НЕ гоняем,
