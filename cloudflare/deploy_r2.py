@@ -52,6 +52,11 @@ SKIP_SUFFIX = {".pdf", ".jsonl"}
 SKIP_JPG_UNDER = ("lang/",)
 SKIP_NAMES = {"data.json", "arxiv-atom.xml", "arxiv-oai.xml"}
 SKIP_DIR_NAMES = {"api"}
+# .log, .pyc, __pycache__ здесь НЕ перечислены сознательно: их закрывает .gitignore, и с
+# 2026-08-05 его правила применяются напрямую (см. _internal_by_gitignore). Дублировать
+# их тут — ровно та ошибка, из-за которой в бакет уехали common.cpython-313.pyc и
+# config_history.log из присланной автором работы. Исключения (авторский .log и .zip
+# публикуются) живут в publish-rules.json, а не в этих константах.
 # data/prompts — тексты запросов к модели, data/arxiv-index — рабочий индекс отбора статей
 # (107 МБ). Ни то, ни другое браузер не запрашивает.
 SKIP_PATH_PREFIXES = ("data/arxiv-bulk/", "data/arxiv-bulk", "data/bulk-select",
@@ -61,8 +66,35 @@ mimetypes.add_type("application/json", ".json")
 mimetypes.add_type("text/html; charset=utf-8", ".html")
 
 
+_gitignore_spec = None
+
+
+def _internal_by_gitignore(rel):
+    """Правила .gitignore с вердиктом «внутреннее» — применяем их напрямую.
+
+    Раньше этот список повторялся здесь константами; аудит справедливо назвал это путём
+    к публикации приватного. Теперь источник один — .gitignore, а разметку «это не сайт,
+    а внутреннее» держит cloudflare/publish-rules.json. Собственные правила ниже остаются:
+    они про публикацию, а не про git (jpg под lang/, data/prompts/), и в .gitignore их нет."""
+    global _gitignore_spec
+    if _gitignore_spec is None:
+        # Оба набора компилируются один раз: is_internal зовут на каждый из 100 000 файлов,
+        # и сборка pathspec внутри неё превращала бы выкладку в минуты ожидания.
+        import pathspec
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        import publish_rules
+        _gitignore_spec = (
+            publish_rules.internal_spec(),
+            pathspec.PathSpec.from_lines(
+                "gitwildmatch", [e["шаблон"] for e in publish_rules.load_exceptions()]))
+    spec, allow = _gitignore_spec
+    return spec.match_file(rel) and not allow.match_file(rel)
+
+
 def is_internal(p):
     rel = p.relative_to(ROOT).as_posix()
+    if _internal_by_gitignore(rel):
+        return True
     if p.suffix.lower() in SKIP_SUFFIX or p.name in SKIP_NAMES:
         return True
     if p.suffix.lower() in (".jpg", ".jpeg") and rel.startswith(SKIP_JPG_UNDER):
@@ -199,6 +231,23 @@ def _refuse_if_build_running():
     raise SystemExit(1)
 
 
+def _refuse_if_rules_unclear(keys):
+    """Второй замок перед заливкой: граница «что не публикуем» должна быть внятной.
+
+    Отказ, а не предупреждение. Предупреждение в конвейере, который ходит сам по
+    расписанию, никто не прочтёт — а цена ошибки здесь односторонняя: опубликованное
+    уже скачано и, возможно, проиндексировано. Пропущенная выкладка стоит одного прогона."""
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import publish_rules
+    problems = publish_rules.check(keys)
+    if not problems:
+        return
+    print("⛔ Выкладка остановлена: непонятна граница публикуемого.")
+    for i, t in enumerate(problems, 1):
+        print(f"   {i}. {t}")
+    raise SystemExit(1)
+
+
 def main():
     _refuse_if_build_running()
     prune = "--prune" in sys.argv
@@ -234,6 +283,7 @@ def main():
             to_upload.append((p, key))
     print(f"всего файлов: {len(new)} | изменённых к заливке: {len(to_upload)}" +
           (f" | пропущено (исчезли на лету): {skipped}" if skipped else ""))
+    _refuse_if_rules_unclear(list(new))
 
     def put(item):
         p, key = item

@@ -447,6 +447,16 @@ def _backup_to_r2():
         print(f"⚠️  резервная копия не удалась (код {result.returncode}). "
               f"Подробности: cloudflare/publish-failures.log")
 
+    # Базы D1 — отдельным шагом, потому что они единственные, что не пересобирается ничем:
+    # очередь, реакции читателей, голоса совета. Найдено репетицией восстановления
+    # 2026-08-05: копии не существовало. Выгрузка занимает секунды и не зависит от того,
+    # менялись ли статьи, — поэтому просто ходит следом.
+    d1 = Path(__file__).resolve().parent / "cloudflare" / "backup_d1.py"
+    if d1.exists():
+        r2 = subprocess.run([sys.executable, str(d1)], env=child_env)
+        if r2.returncode != 0:
+            print(f"⚠️  выгрузка D1 не удалась (код {r2.returncode}).")
+
 
 def cmd_tags(args):
     _refuse_if_peak("tags")
