@@ -519,7 +519,10 @@ ABSTRACT_LIMITS = {"simple": 350, "popular": 550, "advanced": 900}
 # заявленных промптом 350/550/900 — то есть промпт называл лимит жёстким, а код молча
 # принимал на 43% длиннее. Замер 2026-08-04 по 1967 аннотациям: за лимит промпта выходили
 # 44% simple и 62% popular, и именно эти раздутые тексты читатель видел на карточке.
-_ABSTRACT_HARD_LIMITS = {"simple": 350, "popular": 550, "advanced": 900}
+_ABSTRACT_HARD_LIMITS = {"simple": 350, "popular": 550, "advanced": 1600}
+# advanced с 2026-08-05 — это ПЕРЕВОД авторской аннотации (abstract-advanced.txt), а не наш
+# пересказ: лимит равен разумной длине абстракта, обрезать перевод нельзя — потеря
+# утверждения это брак. Для simple/popular лимиты прежние, они идут на карточку.
 
 
 def _cap_text(text, limit):
@@ -538,11 +541,17 @@ def _cap_text(text, limit):
 
 
 def generate_abstract(summary):
-    """Адаптирует авторский arXiv-abstract в «Аннотацию» на RU в ТРЁХ регистрах
-    (popular/simple/advanced) одним вызовом. Возвращает {level: text}. До 3 попыток."""
+    """«Аннотация» на RU в трёх регистрах. Возвращает {level: text}.
+
+    Регистры разошлись по промптам 2026-08-05, потому что у них противоположные задачи:
+    simple и popular — наш голос для карточки (abstract-adapt, со стилевым ядром),
+    advanced — перевод авторской аннотации для уровня «Подробно», где упрощение запрещено
+    (abstract-advanced, без стилевого ядра). Один промпт на оба режима давал бы прямое
+    противоречие внутри себя, а такое всегда выигрывает у стиля."""
     summary = (summary or "").strip()
     if not summary:
         return {}
+    advanced_ru = generate_abstract_advanced(summary)
     prompt = load_prompt("abstract-adapt").format(summary=summary)
     for attempt in range(3):
         try:
@@ -564,8 +573,33 @@ def generate_abstract(summary):
                        + ". Лимит жёсткий: текст показывается целиком, без обрезки. "
                          "Сократи, убрав детали, а не объяснения.")
             continue
-        return {v: _cap_text(levels[v], _ABSTRACT_HARD_LIMITS[v]) for v in ABSTRACT_LEVELS}
-    return {}
+        out = {v: _cap_text(levels[v], _ABSTRACT_HARD_LIMITS[v]) for v in ABSTRACT_LEVELS}
+        if advanced_ru:
+            out["advanced"] = advanced_ru      # перевод не режем: потеря утверждения — брак
+        return out
+    return {"advanced": advanced_ru} if advanced_ru else {}
+
+
+def generate_abstract_advanced(summary, retries=2):
+    """Уровень «Подробно»: авторская аннотация по-русски, без упрощения и без потерь.
+
+    Отдельный промпт, а не регистр в abstract-adapt, по одной причине: там подключён
+    {style_core} с требованием «первая фраза — картина, а не термин». Для профессионального
+    читателя это требование вредно, а противоречие в промпте всегда выигрывает у стиля
+    (урок 31 июля). Здесь стилевого ядра нет намеренно."""
+    summary = (summary or "").strip()
+    if not summary:
+        return ""
+    prompt = load_prompt("abstract-advanced").format(summary=summary)
+    for _ in range(retries):
+        try:
+            data = json.loads(clean_json(chat("abstract", prompt).choices[0].message.content))
+        except Exception:
+            continue
+        text = (data.get("advanced") or "").strip()
+        if text and _script_ratio(text, "Ѐ", "ӿ") >= 0.5:
+            return text
+    return ""
 
 
 def refine_abstract(abstract):
