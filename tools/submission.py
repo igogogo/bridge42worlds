@@ -39,7 +39,8 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
 ROOT = Path(__file__).resolve().parent.parent
 SUBS = ROOT / "data" / "submissions"
 SITE = "https://bridge42worlds.academy"
-MAX_MB = 10
+MAX_MB = 25          # вложение: практический предел почтовых серверов
+MAX_LINK_MB = 100    # данные по ссылке из письма — скачиваем и храним у себя
 DEFENDER = Path(r"C:\Program Files\Windows Defender\MpCmdRun.exe")
 
 
@@ -163,6 +164,43 @@ def cmd_fetch():
         (box / "scan.json").write_text(json.dumps(verdicts, ensure_ascii=False, indent=1),
                                        encoding="utf-8")
 
+        # ССЫЛКИ НА ДАННЫЕ в теле письма (решение владельца 2026-08-05: «данных может
+        # быть много — пусть присылают всё, до 100 МБ; хранить дёшево»). Почта режет
+        # вложения ~25 МБ, поэтому большие данные — ссылкой: мы скачиваем и размещаем
+        # у себя (R2: полтора цента в месяц за 100 МБ, отдача читателям бесплатная).
+        # Безопасность: только http(s), потолок размера продавлен потоком (не верим
+        # Content-Length), скачанное проходит тот же скан, что вложения.
+        import requests as _rq
+        for m2 in list(re.finditer(r"https?://[^\s<>\"']+", body))[:5]:
+            url = m2.group(0).rstrip('.,)')
+            if any(h in url for h in ("bridge42worlds", "mailto:")):
+                continue
+            try:
+                with _rq.get(url, stream=True, timeout=120,
+                             headers={"User-Agent": "bridge42worlds-intake"}) as resp:
+                    if resp.status_code != 200:
+                        continue
+                    name = Path(url.split("?")[0]).name or "data.bin"
+                    dest = box / "incoming" / ("link_" + name)
+                    size = 0
+                    with dest.open("wb") as f:
+                        for chunk in resp.iter_content(1 << 20):
+                            size += len(chunk)
+                            if size > MAX_LINK_MB * 1024 * 1024:
+                                raise ValueError("больше предела")
+                            f.write(chunk)
+                    files.append(dest.name)
+                    print(f"  🔗 скачано по ссылке: {name} · {size // 1024 // 1024} МБ")
+            except Exception as ex:
+                print(f"  ⚠️ ссылка {url[:50]}: {ex}")
+
+        # ПРОВЕРКА СЛЕДОВ ПРОМПТА ПОДГОТОВКИ (правило владельца 2026-08-05: «если видно,
+        # что промпт не обрабатывался — по форматам, структуре хранения, первичному
+        # заключению — не принимаем; архив должен быть сделан по промпту»). Робот ищет
+        # SELF-REVIEW.md со строкой «ВЕРДИКТ:». Нет следов — статус needs-prompt и
+        # заготовка вежливого ответа: это не отказ, а единственный вход.
+        meta["prepared"] = False
+
         # zip распаковываем только чистые
         for fn in list(files):
             p = box / "incoming" / fn
@@ -173,7 +211,27 @@ def cmd_fetch():
                 except Exception as ex:
                     print(f"  ⚠️ {fn}: {ex}")
 
-        print(f"  ✅ {code} · от {meta['email'] or 'без адреса'} · файлов {len(files)}")
+        un = box / "unpacked"
+        sr = list(un.rglob("SELF-REVIEW.md")) if un.exists() else []
+        if sr and "ВЕРДИКТ:" in sr[0].read_text(encoding="utf-8", errors="replace")[:200]:
+            meta["prepared"] = True
+        (box / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1),
+                                       encoding="utf-8")
+        if not meta["prepared"]:
+            NL2 = chr(10) + chr(10)
+            (box / "reply-needs-prompt.txt").write_text(
+                "Здравствуйте!" + NL2 +
+                "Спасибо за работу. Чтобы мы могли её разобрать, пропустите материалы через "
+                "наш промпт подготовки — он проверит логику, соберёт пакет в нужной структуре "
+                "и напишет первичное заключение. Это займёт минут пять с любым сильным "
+                "ИИ-ассистентом." + NL2 +
+                "Промпт: https://bridge42worlds.academy/data/prompts/author-self-check.txt" + chr(10) +
+                "Инструкция: https://bridge42worlds.academy/lang/ru/community/" + NL2 +
+                "Это не отказ — это единственный вход: подготовленная работа проходит наш "
+                "разбор с первого раза." + NL2 + "bridge42worlds", encoding="utf-8")
+            print(f"  ⚠️ {code}: следов промпта подготовки нет — заготовлен ответ needs-prompt")
+        print(f"  ✅ {code} · от {meta['email'] or 'без адреса'} · файлов {len(files)} · "
+              f"подготовлен: {'да' if meta['prepared'] else 'НЕТ'}")
     m.logout()
     return 0
 
