@@ -179,7 +179,90 @@
         // экспресс — быстро, коротко
         bolt: function (s) {
             return wrap(s, '<path d="M13.2 2.5L4.5 13.4h6.2l-.9 8.1 8.7-10.9h-6.2z"/>');
+        },
+
+        /* ── Группы разделов arXiv ────────────────────────────────────────────
+           Владелец 2026-08-05: «разделы закодировать иконками, хотя бы на группу —
+           чтобы в списке на главной сразу визуальное разделение, а то их много».
+
+           Знак говорит о предмете, а не о слове: в ленте на пяти языках название
+           раздела читается по-разному, а рисунок одинаков — в том числе в арабской
+           версии, где на длину слова ориентироваться нельзя. */
+
+        // астрономия — планета с кольцом
+        secAstro: function (s) {
+            return wrap(s, '<circle cx="12" cy="11.4" r="5.4"/>' +
+                '<path d="M4.2 15.6c4.6 2.4 11 2.4 15.6 0"/><path d="M3.4 14.2c5.2 3.4 12 3.4 17.2 0"/>');
+        },
+        // физика — ядро и орбита
+        secPhysics: function (s) {
+            return wrap(s, '<circle cx="12" cy="12" r="2.2"/>' +
+                '<ellipse cx="12" cy="12" rx="9.4" ry="4"/>' +
+                '<ellipse cx="12" cy="12" rx="9.4" ry="4" transform="rotate(60 12 12)"/>');
+        },
+        // математика — циркуль
+        secMath: function (s) {
+            return wrap(s, '<circle cx="12" cy="4.4" r="1.7"/>' +
+                '<path d="M11 6L5.4 20.2"/><path d="M13 6l5.6 14.2"/><path d="M8.4 14.4c2.4 1.4 4.8 1.4 7.2 0"/>');
+        },
+        // информатика — кристалл с выводами
+        secCs: function (s) {
+            return wrap(s, '<rect x="7.4" y="7.4" width="9.2" height="9.2" rx="1.4"/>' +
+                '<path d="M10.4 3.6v3.8M13.6 3.6v3.8M10.4 16.6v3.8M13.6 16.6v3.8"/>' +
+                '<path d="M3.6 10.4h3.8M3.6 13.6h3.8M16.6 10.4h3.8M16.6 13.6h3.8"/>');
+        },
+        // биология — двойная спираль
+        secBio: function (s) {
+            return wrap(s, '<path d="M8 3c0 6 8 12 8 18"/><path d="M16 3c0 6-8 12-8 18"/>' +
+                '<path d="M9.2 7.4h5.6"/><path d="M9.2 16.6h5.6"/>');
+        },
+        // статистика — колокол распределения
+        secStat: function (s) {
+            return wrap(s, '<path d="M3 18c3.6 0 3.6-11 9-11s5.4 11 9 11"/><path d="M3 20.6h18"/>');
+        },
+        // экономика — монета
+        secEcon: function (s) {
+            return wrap(s, '<circle cx="12" cy="12" r="8.4"/>' +
+                '<path d="M12 7.2v9.6"/><path d="M14.4 9.6c-.6-.9-1.5-1.3-2.6-1.3-1.5 0-2.6.8-2.6 2s1 1.7 2.6 2.1c1.7.4 2.7 1 2.7 2.2 0 1.3-1.2 2.1-2.7 2.1-1.2 0-2.1-.4-2.7-1.3"/>');
+        },
+        // инженерия — сигнал в системе
+        secEng: function (s) {
+            return wrap(s, '<path d="M2.6 12h3.2c1.6 0 1.6-5 3.2-5s1.6 10 3.2 10 1.6-5 3.2-5h5"/>' +
+                '<circle cx="20.4" cy="12" r="1.4"/>');
         }
+    };
+
+    /* Раздел → группа → иконка. Единственный источник соответствия: карточка ленты и
+       панель разделов берут знак отсюда, чтобы одна работа не оказалась в ленте под
+       одним знаком, а в панели под другим. Ключ — то, что стоит до точки: arXiv так и
+       устроен (astro-ph.GA, cond-mat.stat-mech), а неизвестный префикс знака не получает
+       вовсе — лучше ничего, чем неверный намёк. */
+    var SECTION_GROUP = {
+        'astro-ph': 'secAstro',
+        'cond-mat': 'secPhysics', 'gr-qc': 'secPhysics', 'hep-th': 'secPhysics',
+        'hep-ph': 'secPhysics', 'hep-ex': 'secPhysics', 'hep-lat': 'secPhysics',
+        'nucl-th': 'secPhysics', 'nucl-ex': 'secPhysics', 'quant-ph': 'secPhysics',
+        'physics': 'secPhysics',
+        // нелинейная динамика — хаос, солитоны, самоорганизация: по предмету это физика,
+        // отдельной группы владелец не называл, а без знака раздел выпадал из ряда
+        'nlin': 'secPhysics',
+        'math': 'secMath', 'math-ph': 'secMath',
+        'cs': 'secCs',
+        'q-bio': 'secBio',
+        'stat': 'secStat',
+        'econ': 'secEcon', 'q-fin': 'secEcon',
+        'eess': 'secEng'
+    };
+
+    I.sectionGroup = function (cat) {
+        if (!cat) return '';
+        return SECTION_GROUP[String(cat).split('.')[0]] || '';
+    };
+
+    /* Знак группы для раздела: строка со <svg> или пустая строка. */
+    I.sectionIcon = function (cat, size) {
+        var name = I.sectionGroup(cat);
+        return name ? I[name](size) : '';
     };
 
     global.B42Icons = I;
