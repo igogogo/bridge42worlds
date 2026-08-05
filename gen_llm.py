@@ -541,11 +541,17 @@ def _cap_text(text, limit):
 
 
 def generate_abstract(summary):
-    """Адаптирует авторский arXiv-abstract в «Аннотацию» на RU в ТРЁХ регистрах
-    (popular/simple/advanced) одним вызовом. Возвращает {level: text}. До 3 попыток."""
+    """«Аннотация» на RU в трёх регистрах. Возвращает {level: text}.
+
+    Регистры разошлись по промптам 2026-08-05, потому что у них противоположные задачи:
+    simple и popular — наш голос для карточки (abstract-adapt, со стилевым ядром),
+    advanced — перевод авторской аннотации для уровня «Подробно», где упрощение запрещено
+    (abstract-advanced, без стилевого ядра). Один промпт на оба режима давал бы прямое
+    противоречие внутри себя, а такое всегда выигрывает у стиля."""
     summary = (summary or "").strip()
     if not summary:
         return {}
+    advanced_ru = generate_abstract_advanced(summary)
     prompt = load_prompt("abstract-adapt").format(summary=summary)
     for attempt in range(3):
         try:
@@ -567,8 +573,11 @@ def generate_abstract(summary):
                        + ". Лимит жёсткий: текст показывается целиком, без обрезки. "
                          "Сократи, убрав детали, а не объяснения.")
             continue
-        return {v: _cap_text(levels[v], _ABSTRACT_HARD_LIMITS[v]) for v in ABSTRACT_LEVELS}
-    return {}
+        out = {v: _cap_text(levels[v], _ABSTRACT_HARD_LIMITS[v]) for v in ABSTRACT_LEVELS}
+        if advanced_ru:
+            out["advanced"] = advanced_ru      # перевод не режем: потеря утверждения — брак
+        return out
+    return {"advanced": advanced_ru} if advanced_ru else {}
 
 
 def generate_abstract_advanced(summary, retries=2):
