@@ -1104,7 +1104,11 @@ function cardHTML(item) {
     // уезжает за экран и на телефоне не показывается вовсе.
     var eyebrow = (catName || item.date || item.express || item.reading) ?
         '<div class="card-eyebrow">' +
-            (catName ? '<a class="card-cat" href="#" data-cat="' + cat + '" data-cat-desc="' + catDesc.replace(/"/g, '&quot;') + '" onclick="filterByCategory(\'' + cat + '\');return false;">' + catName + '</a>' : '') +
+            (catName ? '<a class="card-cat" href="#" data-cat="' + cat + '" data-cat-desc="' + catDesc.replace(/"/g, '&quot;') + '" onclick="filterByCategory(\'' + cat + '\');return false;">' +
+                // знак группы перед названием: в ленте из двадцати работ разных наук глаз
+                // цепляется за рисунок раньше, чем прочитает слово (владелец 2026-08-05)
+                (window.B42Icons && B42Icons.sectionIcon ? B42Icons.sectionIcon(cat, 14) : '') +
+                '<span class="card-cat-t">' + catName + '</span></a>' : '') +
             (item.date ? '<span class="card-date">' + item.date + '</span>' : '') +
             (item.reading ? '<span class="card-read">' + item.reading + ' ' + UI.min + '</span>' : '') +
             '<a class="card-src" href="https://arxiv.org/abs/' + item.id + '" target="_blank" rel="noopener">arXiv:' + item.id + '</a>' +
@@ -1508,6 +1512,9 @@ function initCategoryBar() {
         // строкой во всю ширину (уезжает за экран) и на телефоне не показывается вовсе.
         // Владелец 2026-08-02: «все тултипы — карточка, а не строка, уходящая справа».
         return '<span class="cat-chip' + (selectedCats[c] ? ' active' : '') + '" data-cat="' + c + '" data-cat-desc="' + desc + '">' +
+            // тот же знак, что и на карточке — источник соответствия один (B42Icons.sectionIcon),
+            // иначе одна работа окажется в ленте под одним рисунком, а в панели под другим
+            (window.B42Icons && B42Icons.sectionIcon ? B42Icons.sectionIcon(c, 13) : '') +
             (ARXIV_CAT_NAMES[c] || c) + '<span class="cat-chip-n">' + counts[c] + '</span>' +
             '<span class="cat-chip-add" title="' + (UI.addToFilter || '+') + '">+</span></span>';
     }).join('');

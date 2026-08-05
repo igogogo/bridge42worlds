@@ -3316,6 +3316,23 @@ body.graph-fs-open .graph-fs-active svg { touch-action: manipulation; }
    Переносится, а не уезжает за экран: на 375px в неё не влезает и половина. */
 .card-eyebrow { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
 .card-read, .card-src { font-size: 11px; color: var(--muted); }
+
+/* ── Знак группы раздела ──────────────────────────────────────────────────────
+   Владелец 2026-08-05: «разделы закодировать иконками, хотя бы на группу — чтобы в
+   списке на главной сразу визуальное разделение, а то их много».
+
+   Знак опознаёт предмет раньше слова и работает одинаково на всех пяти языках —
+   в арабской версии особенно, там на длину слова ориентироваться нельзя.
+   Логические свойства, не левые: в RTL знак обязан встать справа от текста. */
+.card-cat, .cat-chip { display: inline-flex; align-items: center; gap: 5px; }
+.card-cat .b42-ic, .cat-chip .b42-ic {
+    flex: none; opacity: .68;
+    /* строчные буквы раздела набраны капителью — знак садим по их оптическому центру */
+    margin-block-start: -1px;
+}
+.card-cat:hover .b42-ic, .cat-chip:hover .b42-ic, .cat-chip.active .b42-ic { opacity: 1; }
+/* Название не должно рвать строку между знаком и словом. */
+.card-cat-t { white-space: nowrap; }
 .card-src { text-decoration: none; font-family: var(--mono); }
 .card-src:hover { color: var(--link); }
 
