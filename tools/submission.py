@@ -194,6 +194,13 @@ def cmd_fetch():
             except Exception as ex:
                 print(f"  ⚠️ ссылка {url[:50]}: {ex}")
 
+        # ПРОВЕРКА СЛЕДОВ ПРОМПТА ПОДГОТОВКИ (правило владельца 2026-08-05: «если видно,
+        # что промпт не обрабатывался — по форматам, структуре хранения, первичному
+        # заключению — не принимаем; архив должен быть сделан по промпту»). Робот ищет
+        # SELF-REVIEW.md со строкой «ВЕРДИКТ:». Нет следов — статус needs-prompt и
+        # заготовка вежливого ответа: это не отказ, а единственный вход.
+        meta["prepared"] = False
+
         # zip распаковываем только чистые
         for fn in list(files):
             p = box / "incoming" / fn
@@ -204,7 +211,27 @@ def cmd_fetch():
                 except Exception as ex:
                     print(f"  ⚠️ {fn}: {ex}")
 
-        print(f"  ✅ {code} · от {meta['email'] or 'без адреса'} · файлов {len(files)}")
+        un = box / "unpacked"
+        sr = list(un.rglob("SELF-REVIEW.md")) if un.exists() else []
+        if sr and "ВЕРДИКТ:" in sr[0].read_text(encoding="utf-8", errors="replace")[:200]:
+            meta["prepared"] = True
+        (box / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1),
+                                       encoding="utf-8")
+        if not meta["prepared"]:
+            NL2 = chr(10) + chr(10)
+            (box / "reply-needs-prompt.txt").write_text(
+                "Здравствуйте!" + NL2 +
+                "Спасибо за работу. Чтобы мы могли её разобрать, пропустите материалы через "
+                "наш промпт подготовки — он проверит логику, соберёт пакет в нужной структуре "
+                "и напишет первичное заключение. Это займёт минут пять с любым сильным "
+                "ИИ-ассистентом." + NL2 +
+                "Промпт: https://bridge42worlds.academy/data/prompts/author-self-check.txt" + chr(10) +
+                "Инструкция: https://bridge42worlds.academy/lang/ru/community/" + NL2 +
+                "Это не отказ — это единственный вход: подготовленная работа проходит наш "
+                "разбор с первого раза." + NL2 + "bridge42worlds", encoding="utf-8")
+            print(f"  ⚠️ {code}: следов промпта подготовки нет — заготовлен ответ needs-prompt")
+        print(f"  ✅ {code} · от {meta['email'] or 'без адреса'} · файлов {len(files)} · "
+              f"подготовлен: {'да' if meta['prepared'] else 'НЕТ'}")
     m.logout()
     return 0
 
