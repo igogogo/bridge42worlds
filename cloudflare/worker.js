@@ -806,6 +806,22 @@ async function handleCouncil(request, env, path) {
                            eligible: seen >= COUNCIL_MIN_VIEWS, member: !!m });
   }
 
+  // Список участников с почтой — ДЛЯ РАССЫЛКИ, под админ-секретом. Находка стратега
+  // 2026-08-06: council_mail ходил на ручку, которой НЕ СУЩЕСТВОВАЛО (405), получал []
+  // и печатал успокоительное «ни у кого нет почты» — пятничная рассылка ушла бы никому,
+  // а планировщик записал бы успех. Тот же молчаливый успех, что у ленты 31.07-02.08.
+  if (path === "members" && request.method === "GET") {
+    const admin = request.headers.get("x-b42-admin") || "";
+    if (!env.COUNCIL_ADMIN_TOKEN || admin !== env.COUNCIL_ADMIN_TOKEN) {
+      return Response.json({ error: "forbidden" }, { status: 403 });
+    }
+    const rows = await env.QUEUE.prepare(
+      "SELECT key, name, email, kind, joined FROM council_members").all()
+      .then(r => r.results || []).catch(() => null);
+    if (rows === null) return Response.json({ error: "db_failed" }, { status: 500 });
+    return Response.json({ members: rows });
+  }
+
   // Личный кабинет: что человек сделал в совете. Ключ — он же и вход, пароля нет.
   if (path === "me") {
     const k = String(url.searchParams.get("key") || "").slice(0, 24);

@@ -96,18 +96,27 @@ def letter_weekly(m, key):
 
 
 def members():
-    """Адреса берём у Worker'а, а не из git: это личные данные живых людей."""
+    """Адреса берём у Worker'а, а не из git: это личные данные живых людей.
+
+    ВОЗВРАЩАЕТ None ПРИ СБОЕ, [] — только при честном «список получен, он пуст».
+    Находка стратега 2026-08-06: ручки не существовало (405), сбой возвращался пустым
+    списком, и рассылка печатала успокоительное «ни у кого нет почты» при живом адресе
+    владельца в базе. Различие «не получили» / «пусто» — это разница между тревогой
+    и нормой; смешаешь — любой будущий сбой рассылки будет выглядеть нормой."""
     import requests
     e = env()
     tok = e.get("COUNCIL_ADMIN_TOKEN", "")
+    if not tok:
+        print("❌ нет COUNCIL_ADMIN_TOKEN в .env — список участников недоступен")
+        return None
     try:
         r = requests.get(f"{SITE}/api/council/members", headers={"x-b42-admin": tok}, timeout=20)
         if r.status_code == 200:
             return r.json().get("members", [])
-        print(f"⚠️ список участников недоступен ({r.status_code}) — нужна ручка /api/council/members у DevOps")
+        print(f"❌ список участников недоступен: HTTP {r.status_code}")
     except Exception as ex:
-        print(f"⚠️ список участников не получен: {ex}")
-    return []
+        print(f"❌ список участников не получен: {ex}")
+    return None
 
 
 def main():
@@ -126,9 +135,21 @@ def main():
         print("✅ письмо отправлено" if ok else "❌ не отправлено")
         return 0 if ok else 1
 
-    people = [p for p in members() if p.get("email")]
+    got = members()
+    if got is None:
+        # Сбой получения — ТРЕВОГА, не норма: код 1 наверх (планировщик увидит) и крик
+        # в канал — рассылка совета не имеет права умирать молча.
+        try:
+            import subprocess
+            subprocess.run([sys.executable, str(ROOT / "tools" / "status_tg.py"),
+                            "⛔ <b>Рассылка совета НЕ ушла</b>: список участников недоступен. "
+                            "Письма не отправлены никому."], timeout=60)
+        except Exception:
+            pass
+        return 1
+    people = [p for p in got if p.get("email")]
     if not people:
-        print("некому слать: ни у кого нет почты (это нормально — она необязательна)")
+        print("список получен: участников с почтой нет (почта необязательна) — слать некому")
         return 0
     subj = {True: f"Совет: итоги заседания {m.get('date','')}"}.get(args.results) or \
            (f"Совет: сверка недели" if args.weekly else f"Совет: повестка {m.get('date','')}")
