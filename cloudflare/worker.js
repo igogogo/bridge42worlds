@@ -1188,8 +1188,8 @@ const CARD_COLS = "c.id,c.title,c.oneliner,c.description,c.authors,c.tags,c.laws
 // Поэтому он и не списывает норму читателя (см. handleSearch).
 async function searchWords(env, q, lang, version, limit) {
   const m = ftsQuery(q);
-  if (!m || !env.QUEUE) return [];
-  const rows = await env.QUEUE.prepare(
+  if (!m || !env.CARDS) return [];
+  const rows = await env.CARDS.prepare(
     `SELECT ${CARD_COLS} FROM cards_fts f
      JOIN cards c ON c.id = f.id AND c.lang = f.lang AND c.version = f.version
      WHERE cards_fts MATCH ? AND f.lang = ? AND f.version = ?
@@ -1202,9 +1202,9 @@ async function searchWords(env, q, lang, version, limit) {
 // Карточки по списку идентификаторов — этим смысловой поиск превращает свои id в то,
 // что можно нарисовать.
 async function cardsByIds(env, ids, lang, version) {
-  if (!ids.length || !env.QUEUE) return new Map();
+  if (!ids.length || !env.CARDS) return new Map();
   const holes = ids.map(() => "?").join(",");
-  const rows = await env.QUEUE.prepare(
+  const rows = await env.CARDS.prepare(
     `SELECT ${CARD_COLS} FROM cards c WHERE c.lang = ? AND c.version = ? AND c.id IN (${holes})`)
     .bind(lang, version, ...ids).all()
     .then((r) => r.results || []).catch(() => []);
