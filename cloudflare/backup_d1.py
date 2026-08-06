@@ -30,6 +30,13 @@ load_dotenv(ROOT / ".env")
 BUCKET = os.environ.get("R2_BACKUP_BUCKET", "bridge42worlds-backup")
 KEEP = 14
 
+# Базы, которым копия не нужна: они целиком пересобираются из индексов за минуты.
+# Смысл этой выгрузки — невосстановимое (голоса совета, реакции читателей, очередь работ),
+# и смешивать с ним 68 МБ карточек поиска значит каждый день гонять зря и падать, когда
+# карточки как раз заливаются. То же разделение, из-за отсутствия которого 6 августа
+# пакетная запись в общую базу заглушила живые ручки.
+SKIP = {"b42-cards"}
+
 
 def api():
     acc = os.environ.get("CLOUDFLARE_ACCOUNT_ID") or os.environ.get("R2_ACCOUNT_ID")
@@ -108,16 +115,29 @@ def main():
         print("баз D1 не найдено — это подозрительно, проверьте права токена.")
         return 1
     day = datetime.date.today().isoformat()
+    failed = []
     for db in dbs:
+        if db["name"] in SKIP:
+            print(f"⏭️  {db['name']}: пересобирается из индексов, копия не нужна")
+            continue
         try:
             blob = export_one(sess, base, db)
         except Exception as e:
+            # НЕ выходим: раньше здесь стоял return 1, и первая же неудачная база уносила
+            # с собой все следующие. 2026-08-06 это сработало вживую — b42-cards заливалась
+            # и не отдала дамп, а порядок баз задаёт Cloudflare, не мы. Выпади в том списке
+            # первой невосстановимая b42-queue — мы бы просто остались без копии голосов
+            # и реакций, с одной строчкой предупреждения в конце длинного лога.
             print(f"⚠️  {db['name']}: не выгрузилась — {e}")
-            return 1
+            failed.append(db["name"])
+            continue
         key = f"d1/{db['name']}/{day}.sql"
         cl.put_object(Bucket=BUCKET, Key=key, Body=blob, ContentType="application/sql")
         print(f"✅ {db['name']}: {len(blob) / 1024:.0f} КБ → {key}")
         prune(cl, f"d1/{db['name']}/")
+    if failed:
+        print(f"\n⛔ без копии остались: {', '.join(failed)}")
+        return 1
     return 0
 
 
