@@ -100,7 +100,7 @@ def git_log(since, until):
 
 
 def spread(commits, accepted):
-    from common import chat
+    from common import chat, clean_json
     payload = {
         "правки": [c["subject"] for c in commits],
         "вопросы совета": [{"id": a.get("id"), "title": a.get("title")} for a in accepted],
@@ -108,9 +108,7 @@ def spread(commits, accepted):
     resp = chat("translate_flash", json.dumps(payload, ensure_ascii=False, indent=1),
                 system=SYSTEM)
     text = (resp.choices[0].message.content or "").strip()
-    if text.startswith("```"):
-        text = text.split("\n", 1)[1].rsplit("```", 1)[0]
-    return json.loads(text)
+    return json.loads(clean_json(text))
 
 
 def main():

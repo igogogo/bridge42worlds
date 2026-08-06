@@ -272,14 +272,12 @@ def done_list():
 def from_model(count, done):
     """Ровно столько же предложений, сколько пришло от людей — просьба владельца.
     Модель не должна заглушать живые голоса количеством: у неё один голос из многих."""
-    from common import chat
+    from common import chat, clean_json
     payload = {"сколько предложений нужно": count, "уже сделано": done}
     resp = chat("translate_flash", json.dumps(payload, ensure_ascii=False, indent=1),
                 system=MODEL_SYSTEM)
     text = (resp.choices[0].message.content or "").strip()
-    if text.startswith("```"):
-        text = text.split("\n", 1)[1].rsplit("```", 1)[0]
-    data = json.loads(text)
+    data = json.loads(clean_json(text))
     items = data.get("предложения") or []
     today = date.today().isoformat()
     return [{"text": t, "role": "модель", "from": "модель-советник", "at": today}

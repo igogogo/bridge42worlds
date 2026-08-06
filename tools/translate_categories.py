@@ -69,10 +69,8 @@ def translate_chunk(chunk, lang, chat):
                 system=_system(lang))
     # chat() возвращает ответ целиком (объект SDK), а не строку — текст лежит внутри.
     text = (resp.choices[0].message.content or "").strip()
-    if text.startswith("```"):
-        text = text.split("\n", 1)[1].rsplit("```", 1)[0]
     try:
-        out = json.loads(text)
+        out = json.loads(clean_json(text))
     except json.JSONDecodeError:
         print(f"    ⚠️ модель вернула не JSON — пропускаю пачку из {len(chunk)}")
         return {}
@@ -114,7 +112,7 @@ def main():
 
     chat = None
     if not dry:
-        from common import chat as _chat
+        from common import chat as _chat, clean_json
         chat = _chat
 
     total = 0

@@ -57,7 +57,7 @@ def main():
 
     chat = None
     if not dry:
-        from common import chat as _chat
+        from common import chat as _chat, clean_json
         chat = _chat
 
     for lang in targets:
@@ -83,7 +83,7 @@ def main():
             if text.startswith("```"):
                 text = text.split("\n", 1)[1].rsplit("```", 1)[0]
             try:
-                got = json.loads(text)
+                got = json.loads(clean_json(text))
             except json.JSONDecodeError:
                 print(f"    ⚠️ пачка не разобралась ({len(chunk)} ключей) — повтори прогон")
                 continue

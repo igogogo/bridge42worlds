@@ -108,7 +108,7 @@ def done_list():
 
 
 def digest(items, done):
-    from common import chat
+    from common import chat, clean_json
     payload = {
         "предложения": [{"text": i.get("text", ""), "from": i.get("from", "аноним")}
                         for i in items],
@@ -118,9 +118,7 @@ def digest(items, done):
                 json.dumps(payload, ensure_ascii=False, indent=1),
                 system=SYSTEM)
     text = (resp.choices[0].message.content or "").strip()
-    if text.startswith("```"):
-        text = text.split("\n", 1)[1].rsplit("```", 1)[0]
-    return json.loads(text)
+    return json.loads(clean_json(text))
 
 
 def main():

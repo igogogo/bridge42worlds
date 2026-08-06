@@ -71,7 +71,7 @@ def load(when):
 
 
 def ask(agenda):
-    from common import chat
+    from common import chat, clean_json
     payload = {"повестка": [
         {"id": a.get("id"), "title": a.get("title"), "body": a.get("body"),
          "options": a.get("options") or ["За", "Против", "Отложить"]}
@@ -79,9 +79,7 @@ def ask(agenda):
     resp = chat("translate_flash", json.dumps(payload, ensure_ascii=False, indent=1),
                 system=SYSTEM)
     text = (resp.choices[0].message.content or "").strip()
-    if text.startswith("```"):
-        text = text.split("\n", 1)[1].rsplit("```", 1)[0]
-    return json.loads(text).get("votes") or []
+    return json.loads(clean_json(text)).get("votes") or []
 
 
 def decisive(item, choice):

@@ -43,7 +43,7 @@ OUT.mkdir(parents=True, exist_ok=True)
 def interpret_clusters(cluster_top, samples, kind, langs=LANGS):
     """cluster_top: {cid: [характерные теги]}, samples: {cid: [примеры-заголовки]}.
     Возвращает {cid: {lang: {"title","desc"}}} — человеческие названия групп на каждом языке."""
-    from common import chat  # ленивый импорт: чистый пересчёт карты не требует API-ключа
+    from common import chat, clean_json  # ленивый импорт: чистый пересчёт карты не требует API-ключа
     ids = sorted(cluster_top, key=lambda c: int(c))
     lines = []
     for c in ids:
@@ -73,7 +73,11 @@ def interpret_clusters(cluster_top, samples, kind, langs=LANGS):
                 resp = chat("cluster_interpret", prompt)
                 raw = resp.choices[0].message.content or ""
                 if raw.strip():
-                    data = json.loads(raw)
+                    # Через clean_json, а не голым json.loads: латех внутри строки («\frac»,
+                    # «\nu», «\upsilon») роняет разбор целиком, и трактовка кластера пропадала
+                    # молча — три попытки подряд на одном и том же тексте. Владелец 2026-08-06:
+                    # «везде это проверь, и при генерации, не только в переводе».
+                    data = json.loads(clean_json(raw))
                     break
             except Exception as e:
                 if attempt == 2:
