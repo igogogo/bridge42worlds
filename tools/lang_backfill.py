@@ -34,7 +34,14 @@ PER_ARTICLE_USD = 0.019      # дешёвая модель, замер по жу
 
 def missing(lang):
     """Статьи, у которых нет перевода на язык. Смотрим data.json — источник правды,
-    а не собранные страницы: страница может существовать заглушкой."""
+    а не собранные страницы: страница может существовать заглушкой.
+
+    Ключа мало — надо смотреть НА ЯЗЫК ТЕКСТА. 2026-08-06: во французском индексе не хватало
+    49 статей при том, что ключ "fr" у всех был на месте, и эта проверка отвечала «переводить
+    нечего». Внутри ключа лежал русский оригинал: перевод не состоялся, а записался молча.
+    Сборка индекса такое отбрасывает намеренно (иначе в арабской ленте выходили русские
+    карточки), поэтому статья исчезала из ленты языка, оставаясь «переведённой» для нас.
+    Один и тот же вопрос двумя мерками — вот и разошлись; берём ту же мерку, что и сборка."""
     import generate
     out = []
     for f in sorted((ROOT / "lang" / generate.DEFAULT_LANG / "archive").glob("*/*/data.json")):
@@ -44,6 +51,8 @@ def missing(lang):
             continue
         tr = (d.get("simple") or {}).get(lang) or (d.get("popular") or {}).get(lang)
         if not tr or tr.get("untranslated") or not tr.get("title"):
+            out.append((d.get("id") or f.parent.name, f.parent.parent.name))
+        elif lang != generate.DEFAULT_LANG and generate.payload_in_source_lang(tr):
             out.append((d.get("id") or f.parent.name, f.parent.parent.name))
     return out
 
