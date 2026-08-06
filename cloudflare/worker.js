@@ -1155,7 +1155,11 @@ const SEARCH_TOP_K = 12;
 // Ключ модели живёт в секретах Worker'а, в страницу не попадает.
 async function translateText(env, text, to) {
   if (!env.DEEPSEEK_API_KEY || !text) return null;
-  const names = { en: "English", ru: "Russian", es: "Spanish", ar: "Arabic" };
+  // Шестое место того же рода: без fr сюда уходило «Translate to fr». Модель обычно
+  // понимает и код языка, но полагаться на «обычно» в том, что читатель видит
+  // глазами, — плохая ставка.
+  const names = { en: "English", ru: "Russian", es: "Spanish", ar: "Arabic",
+                  fr: "French" };
   try {
     const r = await fetch("https://api.deepseek.com/chat/completions", {
       method: "POST",
