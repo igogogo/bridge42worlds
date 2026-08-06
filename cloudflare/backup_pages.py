@@ -94,23 +94,39 @@ def main():
 
     def put(item):
         p, key = item
-        blob = gzip.compress(p.read_bytes(), 6)
-        cl.put_object(Bucket=BUCKET, Key=f"{PREFIX}/{key}.gz", Body=blob,
-                      ContentType="text/html", ContentEncoding="gzip")
-        sent[0] += len(blob)
+        try:
+            blob = gzip.compress(p.read_bytes(), 6)
+            cl.put_object(Bucket=BUCKET, Key=f"{PREFIX}/{key}.gz", Body=blob,
+                          ContentType="text/html", ContentEncoding="gzip")
+            sent[0] += len(blob)
+            return key, None
+        except Exception as e:                         # noqa: BLE001 — причина уходит в отчёт
+            return key, str(e)[:160]
 
+    # Одна сбойная страница не должна отменять пятьдесят шесть тысяч остальных: раньше
+    # исключение из потока всплывало наружу, манифест не записывался — и следующий прогон
+    # заливал ВСЁ заново. Та же ошибка, что ведущая нашла в backup_d1.py 2026-08-06.
+    failed = []
     if todo:
         with ThreadPoolExecutor(max_workers=24) as ex:
-            for i, _ in enumerate(ex.map(put, todo), 1):
+            for i, (key, err) in enumerate(ex.map(put, todo), 1):
+                if err:
+                    failed.append((key, err))
                 if i % 2000 == 0:
                     print(f"  отправлено {i}/{len(todo)} · {sent[0] / 2 ** 20:.0f} МБ")
 
+    for key, _ in failed:
+        new.pop(key, None)     # не запоминаем как скопированное то, что не легло
     # Как и в backup_r2.py: из бакета ничего не удаляем. Копия должна переживать
     # случайное «снёс не ту папку» на рабочей машине.
     MANIFEST.write_text(json.dumps(new, ensure_ascii=False), encoding="utf-8")
-    print(f"✅ переводы скопированы: +{len(todo)} обновлено ({sent[0] / 2 ** 20:.0f} МБ сжатыми), "
-          f"всего {len(new)} страниц.")
-    return 0
+    print(f"✅ переводы скопированы: +{len(todo) - len(failed)} обновлено "
+          f"({sent[0] / 2 ** 20:.0f} МБ сжатыми), всего {len(new)} страниц.")
+    if failed:
+        print(f"⚠️  НЕ скопировано {len(failed)} страниц — поедут следующим прогоном:")
+        for key, err in failed[:10]:
+            print(f"     {key} — {err}")
+    return 1 if failed else 0
 
 
 if __name__ == "__main__":

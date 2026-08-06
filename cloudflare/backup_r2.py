@@ -100,20 +100,40 @@ def backup():
     print(f"исходников: {len(new)} | изменённых к копированию: {len(todo)}" +
           (f" | исчезли на лету: {vanished}" if vanished else ""))
 
+    failed = []
     if todo:
         def put(item):
             p, key = item
-            s3.upload_file(str(p), BUCKET, key, ExtraArgs={"ContentType": "application/json"})
+            try:
+                s3.upload_file(str(p), BUCKET, key, ExtraArgs={"ContentType": "application/json"})
+                return key, None
+            except Exception as e:                     # noqa: BLE001 — причина уходит в отчёт
+                return key, str(e)[:160]
+        # Один сбойный файл НЕ уносит весь прогон. Раньше исключение из потока всплывало
+        # наружу, манифест не записывался, и следующий прогон перезаливал всё заново —
+        # а до остальных файлов этот так и не доходил. Та же ошибка, что ведущая нашла
+        # 2026-08-06 в backup_d1.py: первая неудача обрывала цикл по базам.
         with ThreadPoolExecutor(max_workers=24) as ex:
-            for i, _ in enumerate(ex.map(put, todo), 1):
+            for i, (key, err) in enumerate(ex.map(put, todo), 1):
+                if err:
+                    failed.append((key, err))
                 if i % 500 == 0:
                     print(f"  скопировано {i}/{len(todo)}")
 
+    # В манифест пишем только то, что действительно легло: иначе несбэкапленный файл
+    # запомнится как скопированный и не поедет уже никогда.
+    for key, _ in failed:
+        new.pop(key, None)
     # Намеренно НЕ удаляем из бакета то, чего не стало локально: бэкап должен переживать
     # случайное «удалил не то» на рабочей машине. Мусор здесь дешевле потери.
     MANIFEST.write_text(json.dumps(new, ensure_ascii=False), encoding="utf-8")
-    print(f"✅ резервная копия готова: +{len(todo)} обновлено, всего {len(new)} файлов.")
-    return 0
+    print(f"✅ резервная копия готова: +{len(todo) - len(failed)} обновлено, "
+          f"всего {len(new)} файлов.")
+    if failed:
+        print(f"⚠️  НЕ скопировано {len(failed)} — они поедут следующим прогоном:")
+        for key, err in failed[:10]:
+            print(f"     {key} — {err}")
+    return 1 if failed else 0
 
 
 def restore(arxiv_id, dest):
