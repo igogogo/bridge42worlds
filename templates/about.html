@@ -96,6 +96,16 @@
   .lang.rtl .native { font-size: 18px; }
   .note { border-left: 3px solid var(--ochre); background: var(--surface); border-radius: 0 12px 12px 0; padding: 16px 20px; margin-top: 18px; font-size: 15px; color: var(--muted); }
   .note b { color: var(--ink); }
+  /* Карточки «Найдите себя». minmax(280px) — чтобы на телефоне шла одна колонка, а не две
+     сплющенные: текста в карточке много, и в 150px он превращается в лапшу. */
+  .who { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-top: 14px; }
+  .who-c { background: var(--surface); border: 1px solid var(--hair); border-radius: 14px; padding: 18px 20px; }
+  .who-t { font-family: var(--serif); font-size: 18px; font-weight: 600; margin: 0 0 8px; color: var(--ink); }
+  .who-now { font-size: 14.5px; color: var(--muted); margin: 0 0 10px; }
+  .who-now b { color: var(--ink); font-weight: 650; }
+  .who-next { font-size: 13.5px; color: var(--muted); margin: 0; padding-top: 10px; border-top: 1px solid var(--hair); }
+  .who-next .wl { font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--ochre); margin-right: 6px; }
+  .fresh { font-size: 13.5px; margin-top: 46px; padding-top: 18px; border-top: 1px solid var(--hair); }
   .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 8px; }
   .tile { background: var(--surface); border: 1px solid var(--hair); border-radius: 12px; padding: 15px 17px; }
   .tile b { display: block; font-size: 15px; margin-bottom: 3px; }
@@ -198,6 +208,28 @@
     <h2>$whatis_h2</h2>
     <p class="lead">$whatis_lead</p>
     <p class="muted">$whatis_muted</p>
+  </section>
+
+  <!-- «Найдите себя»: одна и та же площадка нужна читателю, студенту, учёному, автору и
+       преподавателю по-разному, и до 2026-08-06 гид рассказывал только про устройство сайта,
+       а не про то, что с ним делать конкретному человеку. Каждая карточка отвечает на два
+       вопроса: что можно взять ПРЯМО СЕЙЧАС и что мы ещё строим. Второе не менее важно —
+       без него читатель принимает стройку за поломку. -->
+  <section>
+    <p class="kicker">$who_kicker</p>
+    <h2>$who_h2</h2>
+    <p class="muted">$who_intro</p>
+    <div class="who">
+      <div class="who-c"><p class="who-t">$who1_t</p><p class="who-now">$who1_now</p><p class="who-next"><span class="wl">$who_soon_lbl</span> $who1_next</p></div>
+      <div class="who-c"><p class="who-t">$who2_t</p><p class="who-now">$who2_now</p><p class="who-next"><span class="wl">$who_soon_lbl</span> $who2_next</p></div>
+      <div class="who-c"><p class="who-t">$who3_t</p><p class="who-now">$who3_now</p><p class="who-next"><span class="wl">$who_soon_lbl</span> $who3_next</p></div>
+      <div class="who-c"><p class="who-t">$who4_t</p><p class="who-now">$who4_now</p><p class="who-next"><span class="wl">$who_soon_lbl</span> $who4_next</p></div>
+      <div class="who-c"><p class="who-t">$who5_t</p><p class="who-now">$who5_now</p><p class="who-next"><span class="wl">$who_soon_lbl</span> $who5_next</p></div>
+      <div class="who-c"><p class="who-t">$who6_t</p><p class="who-now">$who6_now</p><p class="who-next"><span class="wl">$who_soon_lbl</span> $who6_next</p></div>
+      <div class="who-c"><p class="who-t">$who7_t</p><p class="who-now">$who7_now</p><p class="who-next"><span class="wl">$who_soon_lbl</span> $who7_next</p></div>
+      <div class="who-c"><p class="who-t">$who8_t</p><p class="who-now">$who8_now</p><p class="who-next"><span class="wl">$who_soon_lbl</span> $who8_next</p></div>
+    </div>
+    <div class="note">$who_contacts</div>
   </section>
 
   <section>
@@ -315,6 +347,24 @@
     <p>$express_p</p>
   </section>
 
+  <!-- Откуда берутся статьи, почему именно эти и чего мы НЕ можем. Раздел про ограничения
+       здесь намеренно: читатель всё равно заметит, что охвачено не всё, — лучше пусть узнает
+       причину от нас, чем решит, что мы просто небрежны. -->
+  <section>
+    <p class="kicker">$base_kicker</p>
+    <h2>$base_h2</h2>
+    <p>$base_p</p>
+    <p>$base_select</p>
+    <p class="muted">$base_vector</p>
+    <div class="note">$base_limits</div>
+  </section>
+
+  <section>
+    <p class="kicker">$fb_kicker</p>
+    <h2>$fb_h2</h2>
+    <p>$fb_p</p>
+  </section>
+
   <section>
     <p class="kicker">$submit_kicker</p>
     <h2>$submit_h2</h2>
@@ -337,6 +387,18 @@
     <div class="note">$contact_authors</div>
     <p>$contact_write <a href="mailto:author@bridge42worlds.academy">author@bridge42worlds.academy</a></p>
   </section>
+
+  <!-- Про деньги. Владелец 2026-08-06: пожертвований не привлекаем, «но если вы очень хотите —
+       сами найдёте путь», и про совет сказать туманно, «пусть сами ищут». Отсюда ни кнопки,
+       ни реквизитов, ни ссылки: тон приглашает того, кто действительно захочет, и не давит
+       на остальных. -->
+  <section>
+    <p class="kicker">$money_kicker</p>
+    <h2>$money_h2</h2>
+    <p>$money_p</p>
+  </section>
+
+  <p class="muted fresh">$fresh_note</p>
 
   <div class="foot">
     <a class="brand" href="/lang/$lang/index.html" style="border-bottom:none">bridge42worlds</a>

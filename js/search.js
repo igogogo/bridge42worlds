@@ -1856,12 +1856,25 @@ function collapseNavOverflow() {
     // который его же и перекладывает.
     [['/lang/' + lang + '/formulas/', 'formulas'],
      ['/lang/en/authors/', 'authors'], ['/lang/' + lang + '/graph/', 'graph'],
-     ['/learn.html', 'learn'], ['/lang/' + lang + '/archive/', 'dashboard'], ['/lang/' + lang + '/analytics/', 'analytics'], ['/lang/' + lang + '/about.html', 'about']].forEach(function(e) {
+     ['/learn.html', 'learn'], ['/lang/' + lang + '/archive/', 'dashboard'], ['/lang/' + lang + '/analytics/', 'analytics']].forEach(function(e) {
         if (panel.querySelector('a[href="' + e[0] + '"]')) return;
         var a = document.createElement('a');
         a.href = e[0]; a.textContent = e[1];
         panel.appendChild(a);
     });
+
+    // Гид — ПЕРВЫМ пунктом, а не последним (владелец 2026-08-06: «about во-первых в меню, его
+    // на самый верх»). Прежний порядок «о проекте последним» был решением от 25 июля, когда
+    // гид рассказывал только про устройство сайта; теперь это документация для читателя,
+    // студента, учёного, автора и преподавателя — то, что человеку нужно раньше ленты.
+    // insertBefore, а не appendChild: панель уже содержит свёрнутые из шапки разделы, и
+    // добавление в конец положило бы гид под них.
+    if (!panel.querySelector('a[href="/lang/' + lang + '/about.html"]')) {
+        var ab = document.createElement('a');
+        ab.href = '/lang/' + lang + '/about.html';
+        ab.textContent = 'about';
+        panel.insertBefore(ab, panel.firstChild);
+    }
 
     // Переключатель экспресс-статей раньше жил чекбоксом внутри панели поиска и только на
     // главной. Юзер 2026-07-23: «экспресс надо уметь отключить как через меню» — кладём пунктом
