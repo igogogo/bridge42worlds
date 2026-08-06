@@ -91,6 +91,19 @@ def _base_id(arxiv_id):
     return re.sub(r"v\d+$", "", str(arxiv_id or ""))
 
 
+def _cands_json(articles):
+    """Кандидаты для промптов отбора и ранжирования.
+
+    Поле "cat" добавлено 2026-08-06 (решение владельца): в машинном обучении и математике
+    берём не «поменьше», а только то, что работает на естественную науку и на нашу
+    практику. Правило отсева живёт в data/prompts/article-select.txt, но без раздела оно
+    неисполнимо — по заголовку и аннотации модель не всегда отличит работу про сам ИИ от
+    применения ИИ в физике. Восемь лишних токенов на кандидата, зато фильтр точный."""
+    return json.dumps([{"id": a["id"], "cat": a.get("primary_category", ""),
+                        "title": a["title"], "summary": a["summary"][:500]} for a in articles],
+                      ensure_ascii=False)
+
+
 def _match_selected(articles, ids, count):
     want = {_base_id(i) for i in ids}
     picked = [a for a in articles if _base_id(a["id"]) in want][:count]
@@ -107,8 +120,7 @@ def select_best(articles, date_str):
     count = min(count, MAX_ARTICLES)
     if total <= count:
         return articles
-    j = json.dumps([{"id": a["id"], "title": a["title"], "summary": a["summary"][:500]} for a in articles],
-                   ensure_ascii=False)
+    j = _cands_json(articles)
     prompt = load_prompt("article-select").format(count=count, articles_json=j)
     print(f"  🤖 Selecting {count} best from {total}...")
     r = chat("select", prompt)
@@ -131,8 +143,7 @@ def select_best_n(articles, count, tag="bulk"):
     total = len(articles)
     if total <= count:
         return articles
-    j = json.dumps([{"id": a["id"], "title": a["title"], "summary": a["summary"][:500]} for a in articles],
-                   ensure_ascii=False)
+    j = _cands_json(articles)
     prompt = load_prompt("article-select").format(count=count, articles_json=j)
     r = chat("select", prompt)
     out_dir = Path(f"temp/bulk-select/{tag}")
@@ -152,8 +163,7 @@ def rank_articles(articles, tag="bulk"):
     """Ранжирующий (не отсеивающий) проход: оценка 1-10 по тем же критериям, что и отбор —
     для приоритезации внутри уже прошедшего каскад пула (bulk-select, раунд 3). Возвращает
     {{id: score}}; отсутствующие в ответе модели статьи получают нейтральный score=5."""
-    j = json.dumps([{"id": a["id"], "title": a["title"], "summary": a["summary"][:500]} for a in articles],
-                   ensure_ascii=False)
+    j = _cands_json(articles)
     prompt = load_prompt("article-rank").format(articles_json=j)
     r = chat("select", prompt)
     out_dir = Path(f"temp/bulk-select/{tag}")
