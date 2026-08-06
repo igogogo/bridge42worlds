@@ -1153,6 +1153,11 @@ const SEARCH_TOP_K = 12;
 // articles-index.json, но уровень внутри — «popular». По имени файла читалось бы «mini».
 const SEARCH_VERSIONS = ["popular", "simple", "advanced"];
 const CARDS_LIMIT = 20;          // столько карточек рисует список выдачи
+// Метка кэша поиска. Поднимайте на единицу, когда меняется ФОРМА ответа или источник
+// данных: старые ответы висят в кэше края час и переживают выкладку. Без этой ручки
+// единственный способ выгнать протухшее — ждать час, и именно в этот час выясняется,
+// что проверить починку нечем (проверено на себе 2026-08-06).
+const SEARCH_CACHE_V = 2;
 
 // ─── нормализация запроса ───────────────────────────────────────────────────
 // ЭТО ЗЕРКАЛО функции norm_text из cloudflare/cards_build.py. Тело поиска в D1 записано
@@ -1448,6 +1453,24 @@ const ASK_PROMPT_FALLBACK = `Отвечай ТОЛЬКО по материала
 ВОПРОС
 {question}`;
 
+// Кладём в кэш края только НЕПУСТУЮ выдачу.
+//
+// Поймано 2026-08-06 на себе: пока испытательный Worker смотрел не в ту базу, он ответил
+// пустотой на десяток запросов — и эта пустота застряла в кэше на час. После починки
+// поиск продолжал отдавать «ничего не найдено» по тем же словам, хотя в базе всё лежало.
+// На проде это выглядело бы так: минута недоступности базы — и целый час читателям
+// говорят, что статей про чёрные дыры у нас нет. Пустой ответ дешёвый, его не жалко
+// посчитать заново; замороженная пустота дороже.
+async function cacheSearch(cacheKey, res, results) {
+  if (!results.length) {
+    res.headers.set("cache-control", "no-store");
+    return res;
+  }
+  res.headers.set("cache-control", "public, max-age=3600");
+  await caches.default.put(cacheKey, res.clone());
+  return res;
+}
+
 async function handleSearch(request, env) {
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
 
@@ -1468,7 +1491,7 @@ async function handleSearch(request, env) {
   // Одинаковые запросы отдаём из кэша края, а не гоняем модель заново: люди ищут одно и то же
   // пачками. Язык и уровень в ключе — выдача у них разная.
   const cacheKey = new Request(
-    `https://b42-search-cache/${lang}/${version}/${encodeURIComponent(q.toLowerCase())}`);
+    `https://b42-search-cache/v${SEARCH_CACHE_V}/${lang}/${version}/${encodeURIComponent(q.toLowerCase())}`);
   const cached = await caches.default.match(cacheKey);
   if (cached) return cached;
 
@@ -1480,9 +1503,7 @@ async function handleSearch(request, env) {
   if (wordHits.length >= CARDS_LIMIT || !env.VECTORIZE || !env.AI) {
     const res = Response.json({ q, lang, version, results: wordHits,
                                 words: wordHits.length, semantic: 0 });
-    res.headers.set("cache-control", "public, max-age=3600");
-    await caches.default.put(cacheKey, res.clone());
-    return res;
+    return cacheSearch(cacheKey, res, wordHits);
   }
 
   // Служебный прогон (ML гонит через поиск теги, законы, учёных и статьи пачками) идёт
