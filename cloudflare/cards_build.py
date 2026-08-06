@@ -99,22 +99,34 @@ class D1:
                 return d["uuid"]
         raise SystemExit(f"база {DB_NAME} не найдена")
 
-    def sql(self, sql, params=None, tries=4):
+    def sql(self, sql, params=None, tries=10):
+        """Запрос к D1 с повторами.
+
+        Главная тонкость, стоившая двух неудачных заливок: под пакетной записью D1 отвечает
+        HTTP 200 и телом «success: false, code 7500, internal error». То есть неудача
+        приходит под видом успешного ответа, и обычная проверка кода состояния её не ловит —
+        скрипт падал на первой же икоте базы, хотя достаточно было подождать секунду.
+        Ошибку 7500 считаем временной и повторяем; настоящие ошибки SQL (в них есть текст
+        про синтаксис или таблицу) поднимаем сразу — их повторять бессмысленно."""
         url = (f"https://api.cloudflare.com/client/v4/accounts/{self.acc}"
                f"/d1/database/{self.uuid}/query")
         body = {"sql": sql}
         if params:
             body["params"] = params
+        last = None
         for attempt in range(tries):
             r = self.s.post(url, json=body, timeout=180)
             if r.status_code in (429, 500, 502, 503, 504):
                 time.sleep(min(2 ** attempt, 20))
                 continue
             j = r.json()
-            if not j.get("success"):
-                raise RuntimeError(json.dumps(j.get("errors"), ensure_ascii=False)[:300])
-            return j["result"][0].get("results", [])
-        raise RuntimeError("D1 не ответила после повторов")
+            if j.get("success"):
+                return j["result"][0].get("results", [])
+            last = json.dumps(j.get("errors"), ensure_ascii=False)
+            if "internal error" not in last:
+                raise RuntimeError(last[:300])
+            time.sleep(min(2 ** attempt, 20))
+        raise RuntimeError(f"D1 не ответила после {tries} повторов: {(last or '')[:200]}")
 
 
 # ───────────────────────────────── данные ──────────────────────────────────
@@ -188,6 +200,10 @@ def send_in_batches(db, head, rows):
     for r in rows:
         if buf and size + len(r) > SQL_BUDGET:
             db.sql(head + ",".join(buf))
+            # Пауза между пачками. Без неё D1 захлёбывается и начинает отвечать
+            # «internal error» на всё подряд — проверено дважды. Полсекунды на пачку
+            # добавляют к полной заливке минуты, а не часы, и заливка доходит до конца.
+            time.sleep(0.5)
             buf, size = [], 0
         buf.append(r)
         size += len(r) + 1

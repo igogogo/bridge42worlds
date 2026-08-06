@@ -1494,12 +1494,21 @@ async function handleSearch(request, env) {
     const ipOk = await ipGuard(env, request);
     if (!ipOk.ok) return Response.json({ error: ipOk.error }, { status: ipOk.code });
 
-    // Поиск — тоже расход, считаем с первого дня.
+    // По норме идёт только смысловой поиск — он зовёт модель. Словесный уже отработал выше
+    // и ничего не стоил.
     const who = await identify(request, env);
     spent = await quotaSpend(env, who.uid, 1, who.lim);
     if (!spent.ok) {
-      return Response.json({ error: spent.error, dayLeft: spent.dayLeft, weekLeft: spent.weekLeft },
-        { status: spent.code });
+      // Норма кончилась — НЕ отказываем. Отдаём то, что нашли словами, и говорим об этом
+      // отдельным признаком. Читатель получает выдачу хуже, но получает: отказ поиска
+      // посреди чтения — ровно то, от чего мы уходим, перенося поиск на сервер
+      // (решение архитектора 2026-08-06).
+      const res = Response.json({ q, lang, version, results: wordHits,
+                                  words: wordHits.length, semantic: 0,
+                                  degraded: "quota", dayLeft: spent.dayLeft,
+                                  weekLeft: spent.weekLeft });
+      res.headers.set("cache-control", "no-store");   // выдача зависит от нормы читателя
+      return res;
     }
   }
 
