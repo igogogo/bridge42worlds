@@ -49,10 +49,24 @@ def missing(lang):
             d = json.loads(f.read_text(encoding="utf-8"))
         except Exception:
             continue
-        tr = (d.get("simple") or {}).get(lang) or (d.get("popular") or {}).get(lang)
-        if not tr or tr.get("untranslated") or not tr.get("title"):
-            out.append((d.get("id") or f.parent.name, f.parent.parent.name))
-        elif lang != generate.DEFAULT_LANG and generate.payload_in_source_lang(tr):
+        # Смотрим ВСЕ уровни, а не первый попавшийся. Прежняя проверка брала simple, а если
+        # его нет — popular, и на этом останавливалась: статья с переведённым «Просто» и
+        # русским «Популярно» считалась готовой. Именно так 2026-08-06 после успешного догона
+        # (46 из 46, ноль сбоев) пятнадцать французских статей остались вне ленты — «Просто»
+        # у них перевёлся, а лента строится по «Популярно».
+        broken = False
+        for version in ("mini", "simple", "popular", "advanced"):
+            vd = d.get(version)
+            if not isinstance(vd, dict) or not vd.get(generate.DEFAULT_LANG):
+                continue          # уровня нет у самого источника — переводить нечего
+            tr = vd.get(lang)
+            if not tr or tr.get("untranslated") or not tr.get("title"):
+                broken = True
+            elif lang != generate.DEFAULT_LANG and generate.payload_in_source_lang(tr):
+                broken = True
+            if broken:
+                break
+        if broken:
             out.append((d.get("id") or f.parent.name, f.parent.parent.name))
     return out
 
