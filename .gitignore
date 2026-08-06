@@ -124,3 +124,26 @@ data/blindspot-random.jsonl
 
 # Карточки проверки гипотез — рабочий материал мерки, пересоздаётся.
 data/analogy-hypothesis.json
+
+# ── Пересобираемое: в репозитории ему не место ──────────────────────────────────────────
+# Владелец 2026-08-06: «перестать класть в git то, что пересобирается» — после разбора
+# истории, где картинки статей и графы заняли 9,8 ГБ из 22.
+# Главный виновник — authors-graph.json: 10 МБ, переписывается при КАЖДОЙ пересборке
+# индексов, и каждая версия навсегда оседает в истории. В топе тяжёлых объектов истории
+# он занимает первое место (75 МБ в старой, ещё несжатой версии).
+# Всё перечисленное создаётся командами из исходников за минуты:
+#   графы и статистика  → run.py reindex / graph / stats
+#   карты сайта и ленты → run.py html (generate_sitemaps)
+#   related-vec.json    → tools/vector_links_local.py
+# НЕ добавлять сюда: data/citations.json (пересборка = 2 часа разбора всех PDF)
+# и data/formula-tree.json (его не создаёт ни один скрипт — потеряем безвозвратно).
+data/authors-graph.json
+data/tags-graph.json
+data/knowledge-graph.json
+data/corpus-stats.json
+data/lang-coverage.json
+data/usage-summary.json
+data/related-vec.json
+status.html
+sitemap-*.xml
+feed-*.xml
