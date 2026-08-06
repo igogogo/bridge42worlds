@@ -1138,6 +1138,78 @@ function escapeHtml(s) {
 const SEARCH_MODEL = "@cf/baai/bge-m3";
 const SEARCH_MAX_LEN = 300;      // длиннее запросов у живых людей не бывает
 const SEARCH_TOP_K = 12;
+const SEARCH_LANGS = ["ru", "en", "es", "ar", "fr"];
+// Названия уровней взяты из самих индексов, а не из имён файлов: базовый файл называется
+// articles-index.json, но уровень внутри — «popular». По имени файла читалось бы «mini».
+const SEARCH_VERSIONS = ["popular", "simple", "advanced"];
+const CARDS_LIMIT = 20;          // столько карточек рисует список выдачи
+
+// ─── нормализация запроса ───────────────────────────────────────────────────
+// ЭТО ЗЕРКАЛО функции norm_text из cloudflare/cards_build.py. Тело поиска в D1 записано
+// ею же; если поменять здесь и забыть там (или наоборот), поиск перестанет находить —
+// молча, без единой ошибки в журнале. Правите одну — правьте вторую тем же коммитом.
+const AR_HARAKAT = /[ؐ-ًؚ-ٰٟۖ-ۭـ]/g;
+const AR_ALEF = /[آأإٱ]/g;
+const AR_AL = /(?<![؀-ۿ])ال(?=[؀-ۿ]{3,})/g;
+
+function normText(s) {
+  if (!s) return "";
+  let t = String(s).normalize("NFKC").toLowerCase();
+  t = t.replace(AR_HARAKAT, "").replace(AR_ALEF, "ا");
+  t = t.replace(/ى/g, "ي").replace(/ة/g, "ه");
+  t = t.replace(AR_AL, "");
+  return t.replace(/\s+/g, " ").trim();
+}
+
+// Сырой ввод в MATCH пускать нельзя: кавычки, звёздочки и слова AND/OR/NEAR либо роняют
+// запрос с 500 на живом читателе, либо тихо меняют его смысл. Каждое слово берём в
+// кавычки с удвоением внутренних — тогда любой ввод становится обычной фразой.
+function ftsQuery(q) {
+  const words = normText(q).split(/\s+/).filter((w) => w.length > 0).slice(0, 12);
+  if (!words.length) return "";
+  return words.map((w) => '"' + w.replace(/"/g, '""') + '"').join(" ");
+}
+
+function cardOf(r) {
+  const arr = (s) => { try { return JSON.parse(s || "[]"); } catch { return []; } };
+  return {
+    id: r.id, title: r.title, oneliner: r.oneliner, description: r.description,
+    authors: arr(r.authors), tags: arr(r.tags), laws: arr(r.laws),
+    scientists: arr(r.scientists), categories: arr(r.categories),
+    primary_category: r.primary_category, date: r.date, url: r.url,
+    image: r.image, reading: r.reading, express: !!r.express,
+  };
+}
+
+const CARD_COLS = "c.id,c.title,c.oneliner,c.description,c.authors,c.tags,c.laws," +
+  "c.scientists,c.categories,c.primary_category,c.date,c.url,c.image,c.reading,c.express";
+
+// Словесный поиск по D1. Стоит нам ноль: это чтение своей же базы, модель не зовётся.
+// Поэтому он и не списывает норму читателя (см. handleSearch).
+async function searchWords(env, q, lang, version, limit) {
+  const m = ftsQuery(q);
+  if (!m || !env.QUEUE) return [];
+  const rows = await env.QUEUE.prepare(
+    `SELECT ${CARD_COLS} FROM cards_fts f
+     JOIN cards c ON c.id = f.id AND c.lang = f.lang AND c.version = f.version
+     WHERE cards_fts MATCH ? AND f.lang = ? AND f.version = ?
+     ORDER BY bm25(cards_fts) LIMIT ?`)
+    .bind(m, lang, version, limit).all()
+    .then((r) => r.results || []).catch(() => []);
+  return rows.map(cardOf);
+}
+
+// Карточки по списку идентификаторов — этим смысловой поиск превращает свои id в то,
+// что можно нарисовать.
+async function cardsByIds(env, ids, lang, version) {
+  if (!ids.length || !env.QUEUE) return new Map();
+  const holes = ids.map(() => "?").join(",");
+  const rows = await env.QUEUE.prepare(
+    `SELECT ${CARD_COLS} FROM cards c WHERE c.lang = ? AND c.version = ? AND c.id IN (${holes})`)
+    .bind(lang, version, ...ids).all()
+    .then((r) => r.results || []).catch(() => []);
+  return new Map(rows.map((r) => [r.id, cardOf(r)]));
+}
 
 // Перевод коротких строк дешёвой моделью. Используется в поиске: запрос читателя приводим
 // к английскому (индекс построен по нему), а заголовки результатов — к языку читателя.
@@ -1364,10 +1436,6 @@ const ASK_PROMPT_FALLBACK = `Отвечай ТОЛЬКО по материала
 
 async function handleSearch(request, env) {
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
-  if (!env.VECTORIZE || !env.AI) {
-    // Индекс ещё не привязан — фронт молча откатывается на обычный поиск по словам.
-    return Response.json({ error: "not_configured" }, { status: 503 });
-  }
 
   const url = new URL(request.url);
   let q = "";
@@ -1378,15 +1446,32 @@ async function handleSearch(request, env) {
   }
   q = String(q).trim().slice(0, SEARCH_MAX_LEN);
   if (q.length < 2) return Response.json({ error: "query_too_short" }, { status: 400 });
-  const lang = ["ru", "en", "es", "ar"].includes(url.searchParams.get("lang"))
+  // Французский до 2026-08-06 отсутствовал в этом списке, и французский читатель молча
+  // получал русскую выдачу — ошибка была не видна, потому что откат тихий.
+  const lang = SEARCH_LANGS.includes(url.searchParams.get("lang"))
     ? url.searchParams.get("lang") : "ru";
+  const version = SEARCH_VERSIONS.includes(url.searchParams.get("version"))
+    ? url.searchParams.get("version") : "popular";
 
   // Одинаковые запросы отдаём из кэша края, а не гоняем модель заново: люди ищут одно и то же
-  // пачками. Язык в ключе — выдача на разных языках разная.
+  // пачками. Язык и уровень в ключе — выдача у них разная.
   const cacheKey = new Request(
-    `https://b42-search-cache/${lang}/${encodeURIComponent(q.toLowerCase())}`);
+    `https://b42-search-cache/${lang}/${version}/${encodeURIComponent(q.toLowerCase())}`);
   const cached = await caches.default.match(cacheKey);
   if (cached) return cached;
+
+  // ШАГ ПЕРВЫЙ — слова, по своей же базе. Он бесплатен: ни модели, ни внешних вызовов,
+  // только чтение D1. Поэтому нормы читателя не трогает вовсе — иначе человек, набирающий
+  // текст в поисковой строке, выжигал бы дневную норму на середине фразы и получал отказ
+  // посреди чтения. Платим мы только за смысл, значит и считать надо только смысл.
+  const wordHits = await searchWords(env, q, lang, version, CARDS_LIMIT);
+  if (wordHits.length >= CARDS_LIMIT || !env.VECTORIZE || !env.AI) {
+    const res = Response.json({ q, lang, version, results: wordHits,
+                                words: wordHits.length, semantic: 0 });
+    res.headers.set("cache-control", "public, max-age=3600");
+    await caches.default.put(cacheKey, res.clone());
+    return res;
+  }
 
   // Служебный прогон (ML гонит через поиск теги, законы, учёных и статьи пачками) идёт
   // мимо нормы и предела по адресу: это наша собственная работа, а не читатель, и считать
@@ -1435,23 +1520,29 @@ async function handleSearch(request, env) {
   const found = await env.VECTORIZE.query(vector, {
     topK: SEARCH_TOP_K, returnMetadata: "all", namespace: "ours",
   });
-  const results = (found.matches || []).map((m) => ({
-    id: m.id,
-    score: Math.round(m.score * 1000) / 1000,
-    title: m.metadata?.title || m.metadata?.title_en || "",
-    title_en: m.metadata?.title_en || "",
-    url: m.metadata?.url || "",
-    date: m.metadata?.date || "",
-    category: m.metadata?.primary_category || "",
-  }));
 
-  // Заголовки у нас есть на русском и английском. Если читателю нужен третий язык —
-  // переводим на лету и запоминаем: второй такой запрос уже бесплатный.
-  if (lang !== "ru" && lang !== "en") {
-    await translateTitles(env, results, lang);
+  // Смысловая выдача даёт идентификаторы — карточки к ним достаём из той же таблицы,
+  // что и словесный поиск. Одно хранилище на два движка: иначе пришлось бы держать
+  // тексты дважды и следить, чтобы они не разошлись.
+  const seen = new Set(wordHits.map((c) => c.id));
+  const ids = (found.matches || []).map((m) => m.id).filter((id) => !seen.has(id));
+  const byId = await cardsByIds(env, ids.slice(0, CARDS_LIMIT), lang, version);
+
+  // Порядок: сначала точные словесные совпадения, смысловые добивают остаток. Складывать
+  // bm25 и косинус в одно число нельзя — величины разной природы, общая шкала была бы
+  // выдумкой. Поэтому не смешиваем, а выстраиваем: точное впереди, близкое по смыслу следом.
+  const semantic = [];
+  for (const m of found.matches || []) {
+    const card = byId.get(m.id);
+    if (card && wordHits.length + semantic.length < CARDS_LIMIT) {
+      semantic.push({ ...card, score: Math.round(m.score * 1000) / 1000 });
+    }
   }
+  const results = wordHits.concat(semantic);
 
-  const res = Response.json({ q, lang, results, dayLeft: spent.dayLeft });
+  const res = Response.json({ q, lang, version, results,
+                              words: wordHits.length, semantic: semantic.length,
+                              dayLeft: spent.dayLeft });
   // Кэш на час: корпус меняется раз в сутки, а повторные запросы приходят пачками.
   res.headers.set("cache-control", "public, max-age=3600");
   await caches.default.put(cacheKey, res.clone());
