@@ -20,6 +20,7 @@ git. История весит 22 ГБ (старые картинки, кото�
 """
 import argparse
 import os
+import shutil
 import subprocess
 import sys
 import time
@@ -56,7 +57,7 @@ README = """РЕЗЕРВНАЯ КОПИЯ bridge42worlds — {stamp}
 4. БАЗА. d1/b42-queue/ДАТА.sql — голоса наблюдательного совета, реакции читателей,
    очередь работ. Это следы живых людей, генератор их не восстановит.
    Заливается в новую базу D1 через wrangler d1 execute.
-
+{secrets_note}
 Состав копии на момент выгрузки:
 {inventory}
 """
@@ -82,6 +83,10 @@ def main():
     ap.add_argument("--to", required=True, help="куда выгружать, например E:\\b42")
     ap.add_argument("--dry", action="store_true", help="посчитать объём, ничего не писать")
     ap.add_argument("--skip", nargs="*", default=[], help="папки бакета, которые не нужны (lang pages …)")
+    ap.add_argument("--with-secrets", action="store_true",
+                    help="положить .env и прочие ключи (владелец 2026-08-06: «пишем всё на носитель, "
+                         "пароли особенно»). По умолчанию ВЫКЛЮЧЕНО: потерянная флешка с этой папкой "
+                         "отдаёт нашедшему почту, облако, домен и деньги на счёте моделей")
     args = ap.parse_args()
 
     dest = Path(args.to)
@@ -131,7 +136,6 @@ def main():
 
     # ── код ──
     print("\nкопирую код…")
-    import shutil
     for i, f in enumerate(files, 1):
         src = ROOT / f
         if not src.exists():
@@ -163,11 +167,40 @@ def main():
             el = time.time() - t0
             print(f"   {done:,}/{len(objs):,} · {human(bytes_done)} · {el/60:.1f} мин", flush=True)
 
+    # ── ключи ──
+    secrets_note = ""
+    if args.with_secrets:
+        sec_dir = dest / "КЛЮЧИ"
+        sec_dir.mkdir(parents=True, exist_ok=True)
+        put = []
+        for rel in (".env", "cloudflare/.dev.vars", "cloudflare/wrangler.toml"):
+            src = ROOT / rel
+            if src.exists():
+                dst = sec_dir / rel.replace("/", "_")
+                shutil.copy2(src, dst)
+                put.append(f"{rel} → КЛЮЧИ/{dst.name}")
+        (sec_dir / "ЧТО ЭТО.txt").write_text(
+            "Здесь боевые ключи и пароли проекта.\n\n"
+            "Тот, кто получит эту папку, получит: почту проекта, облако Cloudflare с сайтом\n"
+            "и резервными копиями, управление доменом, счёт у моделей и Telegram-бота.\n"
+            "Восстановить после чужого доступа можно всё, кроме репутации и потраченных денег.\n\n"
+            "Поэтому: держите носитель там же, где держали бы паспорт и банковскую карту.\n"
+            "Если он потеряется — ротировать нужно ВСЁ перечисленное, а не только то,\n"
+            "что кажется важным.\n\n"
+            "Положено по прямому распоряжению владельца 2026-08-06: «пишем всё на носитель,\n"
+            "пароли особенно». Копия без ключей делается запуском без --with-secrets.\n",
+            encoding="utf-8")
+        print(f"\n🔑 ключи положены: {', '.join(put)}")
+        secrets_note = ("\n5. КЛЮЧИ. Папка КЛЮЧИ/ — боевые пароли и токены. Носитель с ней равен\n"
+                        "   полному доступу к проекту: почта, облако, домен, счёт у моделей.\n"
+                        "   Хранить как паспорт. При потере — ротировать всё разом.\n")
+
     inventory = "\n".join(f"  {k:10} {groups[k]:>7,} файлов  {human(sizes[k])}" for k in sorted(groups))
     inventory += f"\n  code       {len(files):>7,} файлов  {human(code_size)}"
     (dest / "ВОССТАНОВЛЕНИЕ.txt").write_text(
         README.format(stamp=time.strftime("%Y-%m-%d %H:%M"), commit=commit,
-                      remote=remote or "(удалённый репозиторий не задан)", inventory=inventory),
+                      remote=remote or "(удалённый репозиторий не задан)", inventory=inventory,
+                      secrets_note=secrets_note),
         encoding="utf-8")
 
     print(f"\n✅ готово: {done:,} объектов + {len(files):,} файлов кода, {human(bytes_done + code_size)}")
