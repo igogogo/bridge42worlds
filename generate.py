@@ -4547,12 +4547,27 @@ def translate_article_lang(aid, target_lang, force=False):
     changed = False
     for version in VERSIONS:
         vdata = data.get(version, {})
-        if vdata.get(target_lang) and not force:
+        # Наличия ключа мало: если под ним лежит русский оригинал (перевод молча не
+        # состоялся), «уже переведено» — неправда. Такую версию сборка индекса всё равно
+        # выбросит из ленты языка, и статья исчезнет, оставаясь для нас переведённой.
+        # 2026-08-06: так потерялись 47 французских статей, 3 английских, 1 испанская,
+        # 2 арабских — и точечный перевод отказывался их чинить без --force, потому что
+        # проверял ту же мерку, что и сломала учёт.
+        have = vdata.get(target_lang)
+        if have and not force and not payload_in_source_lang(have):
             continue
         src = vdata.get(DEFAULT_LANG)
         if not src:
             continue
-        vdata[target_lang] = translate_scipop(src, target_lang)
+        got = translate_scipop(src, target_lang)
+        # Переводчик отдаёт None, когда проверки не сошлись трижды (числа, маркеры). Записывать
+        # это в data.json нельзя: ключ появится, значение будет пустым, и следующий прогон
+        # снова сочтёт статью «имеющей перевод». Ровно так и накопились нынешние потери.
+        # Нет перевода — значит нет ключа, и статью видно как непереведённую.
+        if not got:
+            print(f"    ⚠️ {aid} · {version} → {target_lang}: перевод не сошёлся, ключ не пишу")
+            continue
+        vdata[target_lang] = got
         data[version] = vdata
         changed = True
 
