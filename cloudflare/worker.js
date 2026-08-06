@@ -1202,10 +1202,27 @@ async function translateTitles(env, results, lang) {
   if (!out) return;
   const lines = out.split("\n").map((s) => s.replace(/^\s*\d+[.)]\s*/, "").trim()).filter(Boolean);
   await Promise.all(need.map(async (r, i) => {
-    if (!lines[i]) return;
-    r.title = lines[i];
-    await env.TOKENS.put(`t:${r.id}:${lang}`, lines[i], { expirationTtl: 90 * 86400 });
+    const t = lines[i];
+    // Не подошло — молча оставляем оригинал. Английский заголовок хуже перевода,
+    // но несравнимо лучше того, что выдавала выдача до 2026-08-06: французский читатель
+    // видел карточку с названием «12». Разбор пронумерованного списка съезжает, когда
+    // модель склеивает или переносит строки, и тогда номер занимает место текста.
+    if (!t || !saneTitle(r.title_en || r.title, t)) return;
+    r.title = t;
+    await env.TOKENS.put(`t:${r.id}:${lang}`, t, { expirationTtl: 90 * 86400 });
   }));
+}
+
+// Похоже ли это на перевод заголовка, а не на обломок разбора.
+// Три признака мусора, все встречались вживую: пусто, одни цифры/знаки, и текст втрое
+// короче исходного. Заголовки статей у нас длинные — настоящий перевод такой усадки
+// не даёт ни на одном из наших языков.
+function saneTitle(original, translated) {
+  const t = (translated || "").trim();
+  if (t.length < 4) return false;
+  if (!/\p{L}/u.test(t)) return false;
+  const src = (original || "").trim();
+  return !(src.length >= 24 && t.length * 3 < src.length);
 }
 
 // ── Бот-исследователь (/api/ask) ──────────────────────────────────
@@ -1313,8 +1330,22 @@ async function handleAsk(request, env) {
   }
 
   const { context, question } = askSystemPrompt(sources, q);
-  const prompt = (env.ASK_PROMPT || ASK_PROMPT_FALLBACK)
+  // Язык подставляем ЯВНО, а не полагаемся на «отвечай на языке вопроса». Проверено
+  // вживую 2026-08-06: французский вопрос с французскими материалами получил русский
+  // ответ. Промпт целиком написан по-русски, и модель отвечает на языке того текста,
+  // которым её окружили, — языконезависимая формулировка проигрывает языку промпта.
+  // По коду она выглядела надёжнее прямого указания; на деле оказалась слабее.
+  const langName = askLangName(lang);
+  let prompt = (env.ASK_PROMPT || ASK_PROMPT_FALLBACK)
+    .replace("{lang}", langName)
     .replace("{context}", context).replace("{question}", question);
+  // Настройка ASK_PROMPT живёт отдельно от кода — её выкладывают в секреты Worker'а из
+  // data/prompts/ask-answer.txt. Значит, выложенный текст может быть СТАРЫМ, без места
+  // подстановки, и тогда вся починка выше не сделает ничего. Молча. Поэтому проверяем
+  // результат, а не намерение: нет упоминания языка — дописываем указание сами.
+  if (!prompt.includes(langName)) {
+    prompt = `Отвечай на ${langName} языке.\n` + prompt;
+  }
 
   let answer;
   try {
@@ -1366,10 +1397,17 @@ function shortSource(s) {
 
 // Запасной промпт на случай, если настройка не выложена. Основной живёт в
 // data/prompts/ask-answer.txt (его пишет ML) и кладётся в переменную ASK_PROMPT.
+// Имена языков для промпта бота — на самих языках: «Отвечай на français» модель понимает
+// однозначнее, чем «на французском», и не путает с языком окружающего текста.
+function askLangName(lang) {
+  return { ru: "русском", en: "English", es: "español",
+           ar: "العربية", fr: "français" }[lang] || "русском";
+}
+
 const ASK_PROMPT_FALLBACK = `Отвечай ТОЛЬКО по материалам ниже.
 Каждое утверждение заканчивай пометкой источника в квадратных скобках, например [2410.01625].
 Утверждение без пометки запрещено. Если ответа в материалах нет — скажи это прямо одной фразой.
-Отвечай на языке вопроса, три-пять предложений, без вступлений.
+Отвечай на {lang} языке, три-пять предложений, без вступлений.
 
 МАТЕРИАЛЫ
 {context}
@@ -1492,20 +1530,32 @@ async function handleTutor(request, env) {
     if (!gate.ok) return Response.json({ error: gate.error, limit: gate.limit }, { status: gate.code });
   }
 
-  // Каждый вопрос — это обращение к платной модели, поэтому оба рубежа обязательны.
-  // Предел по адресу невидим человеку; капча отсекает ботоферму, против которой предел
-  // по адресу бесполезен — там адресов тысячи.
-  const ipOk = await ipGuard(env, request);
-  if (!ipOk.ok) return Response.json({ error: ipOk.error }, { status: ipOk.code });
-  if (!devBypass(env, request) &&
-      !(await turnstileOk(env, body.turnstile, request.headers.get("cf-connecting-ip")))) {
-    return Response.json({ error: "captcha_failed" }, { status: 403 });
-  }
+  // Служебный прогон (наши же проверки) идёт мимо капчи, предела по адресу и нормы —
+  // тем же ключом и по той же причине, что в поиске и у бота. Понадобилось буквально:
+  // 2026-08-06 проверить французского тьютора на проде было НЕЧЕМ, дневная норма
+  // проверяющего кончилась, и пункт остался непроверенным. Проверка, которую нельзя
+  // выполнить, ничем не лучше отсутствующей.
+  //
+  // Сторож читателей не ослаблен: обход открывается только секретом, который живёт
+  // в шифрованных секретах Worker и в браузер не попадает. Нет секрета — нет обхода.
+  const service = isService(env, request);
+  let spent = { ok: true, dayLeft: null, weekLeft: null };
+  if (!service) {
+    // Каждый вопрос — это обращение к платной модели, поэтому оба рубежа обязательны.
+    // Предел по адресу невидим человеку; капча отсекает ботоферму, против которой предел
+    // по адресу бесполезен — там адресов тысячи.
+    const ipOk = await ipGuard(env, request);
+    if (!ipOk.ok) return Response.json({ error: ipOk.error }, { status: ipOk.code });
+    if (!devBypass(env, request) &&
+        !(await turnstileOk(env, body.turnstile, request.headers.get("cf-connecting-ip")))) {
+      return Response.json({ error: "captcha_failed" }, { status: 403 });
+    }
 
-  // Норма — считаем всем: и анонимному (3 в сутки), и вошедшему (20), и поверх этого
-  // стоит суточный потолок на весь проект.
-  const who = await identify(request, env);
-  const spent = await quotaSpend(env, who.uid, 1, who.lim);
+    // Норма — считаем всем: и анонимному (3 в сутки), и вошедшему (20), и поверх этого
+    // стоит суточный потолок на весь проект.
+    const who = await identify(request, env);
+    spent = await quotaSpend(env, who.uid, 1, who.lim);
+  }
   if (!spent.ok) {
     return Response.json({ error: spent.error, dayLimit: spent.dayLimit,
       dayLeft: spent.dayLeft, weekLeft: spent.weekLeft }, { status: spent.code });
