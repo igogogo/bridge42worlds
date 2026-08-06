@@ -1135,10 +1135,15 @@ function escapeHtml(s) {
 // совпадению слов: «разлёт галактик» находит «расширение Вселенной». Индекс строится
 // скриптом cloudflare/vector_build.py, один вектор на статью, модель кросс-язычная —
 // запрос на любом из четырёх языков находит один и тот же корпус.
+// Языки сайта. Французского здесь не было до 2026-08-06, и это стоило дороже всего
+// найденного за неделю: французских статей 1453 — две трети архива, — а их читатель
+// молча получал русскую выдачу, русский ответ бота и русские подсказки тьютора.
+// Список общий на все три ручки именно поэтому: три копии одного списка и разошлись.
+const LANGS = ["ru", "en", "es", "ar", "fr"];
+
 const SEARCH_MODEL = "@cf/baai/bge-m3";
 const SEARCH_MAX_LEN = 300;      // длиннее запросов у живых людей не бывает
 const SEARCH_TOP_K = 12;
-const SEARCH_LANGS = ["ru", "en", "es", "ar", "fr"];
 // Названия уровней взяты из самих индексов, а не из имён файлов: базовый файл называется
 // articles-index.json, но уровень внутри — «popular». По имени файла читалось бы «mini».
 const SEARCH_VERSIONS = ["popular", "simple", "advanced"];
@@ -1316,7 +1321,7 @@ async function handleAsk(request, env) {
 
   const q = String(body.question || "").trim().slice(0, 500);
   if (q.length < 3) return Response.json({ error: "question_too_short" }, { status: 400 });
-  const lang = ["ru", "en", "es", "ar"].includes(body.lang) ? body.lang : "ru";
+  const lang = LANGS.includes(body.lang) ? body.lang : "ru";
 
   const who = await identify(request, env);
   const spent = service
@@ -1446,9 +1451,7 @@ async function handleSearch(request, env) {
   }
   q = String(q).trim().slice(0, SEARCH_MAX_LEN);
   if (q.length < 2) return Response.json({ error: "query_too_short" }, { status: 400 });
-  // Французский до 2026-08-06 отсутствовал в этом списке, и французский читатель молча
-  // получал русскую выдачу — ошибка была не видна, потому что откат тихий.
-  const lang = SEARCH_LANGS.includes(url.searchParams.get("lang"))
+  const lang = LANGS.includes(url.searchParams.get("lang"))
     ? url.searchParams.get("lang") : "ru";
   const version = SEARCH_VERSIONS.includes(url.searchParams.get("version"))
     ? url.searchParams.get("version") : "popular";
@@ -1587,7 +1590,7 @@ async function handleTutor(request, env) {
       dayLeft: spent.dayLeft, weekLeft: spent.weekLeft }, { status: spent.code });
   }
 
-  const lang = ["ru", "en", "es", "ar"].includes(body.lang) ? body.lang : "ru";
+  const lang = LANGS.includes(body.lang) ? body.lang : "ru";
   const mode = body.mode === "hint" ? "hint" : "ask";
   const question = String(body.question || "").slice(0, TUTOR_MAX_CHARS);
   const context = String(body.context || "").slice(0, TUTOR_MAX_CTX);
