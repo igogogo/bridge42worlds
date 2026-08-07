@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="$lang" dir="$dir">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$page_title — bridge42worlds</title>
+    <meta name="description" content="$description">
+    <meta property="og:title" content="$og_title">
+    <meta property="og:description" content="$description">
+    $og_image_html
+    <meta property="og:url" content="$canonical_url">
+    <meta property="og:type" content="article">
+    <link rel="canonical" href="$canonical_url">
+    $hreflang_links
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&family=Noto+Naskh+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+    <script data-goatcounter="https://$goatcounter.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+<style>
+  /* ── Шапка как в гиде (templates/about.html) ──────────────────────────────
+     Базовые правила .topnav живут ВНУТРИ about.html: тот файл самодостаточен и общий
+     css к нему не приходит. В css/style.css от .topnav есть только мобильные
+     переопределения (шторка бургера, шкала касания) — без базы шапка развалилась бы
+     в голый список ссылок. Поэтому базу держим здесь копией.
+     Правишь шапку в about.html — правь и тут, иначе две страницы разъедутся молча. */
+  .topnav { display: flex; align-items: center; gap: 15px; margin: 0 0 20px;
+    max-width: var(--w-text); font-family: var(--mono); font-size: 13px; flex-wrap: wrap; }
+  .topnav-logo { font-family: 'Source Serif 4', Georgia, serif; font-size: 17px;
+    color: var(--ink); text-decoration: none; }
+  .topnav-more { position: relative; margin-inline-start: 2px; }
+  .topnav-burger { font: inherit; font-size: 17px; line-height: 1; background: none; border: none;
+    color: var(--soft); cursor: pointer; border-radius: 8px; padding: 0 9px;
+    min-height: var(--tap-md, 32px); min-width: var(--tap-md, 32px);
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: color .16s, background .16s; }
+  .topnav-burger .ico-svg { width: var(--ico-md, 18px); height: var(--ico-md, 18px); stroke-width: 2; }
+  .topnav-burger:hover, .topnav-more.open .topnav-burger { color: var(--link); background: var(--tag-bg); }
+  .topnav-panel { position: absolute; inset-inline-start: 0; top: 132%; display: none;
+    flex-direction: column; gap: 2px; min-width: 158px; background: var(--surface);
+    border: 1px solid var(--hair); border-radius: var(--radius-sm); padding: 8px;
+    box-shadow: var(--shadow-sm); z-index: 30; }
+  .topnav-more.open .topnav-panel { display: flex; }
+  .topnav-panel a { padding: 6px 11px; border-radius: 8px; color: var(--soft);
+    text-decoration: none; min-height: var(--tap-md, 32px); display: inline-flex; align-items: center;
+    transition: color .16s, background .16s; }
+  .topnav-panel a:hover { background: var(--tag-bg); color: var(--link); }
+  html[dir="rtl"] .topnav-panel { text-align: start; }
+  /* Языки — в конец строки шапки. margin-inline-start:auto, а не float/margin-left:
+     в арабском ряд обязан прижиматься к левому краю, и физическое свойство это ломает. */
+  .cw-langs { display: flex; gap: 6px; margin-inline-start: auto; }
+  .cw-langs a { color: var(--soft); text-decoration: none; font-size: 12px;
+    border: 1px solid var(--hair); border-radius: 999px; padding: 3px 11px;
+    transition: color .16s, border-color .16s, background .16s; }
+  .cw-langs a:hover { color: var(--link); border-color: var(--link); }
+  /* Активный язык подсвечиваем СЕЛЕКТОРОМ по html[lang], а не классом от генератора:
+     адрес работы содержит её slug и в статике не сравнивается, а язык страницы известен
+     всегда. Пять правил вместо ветвления в шаблоне. */
+  html[lang="ru"] .cw-langs a[data-l="ru"], html[lang="en"] .cw-langs a[data-l="en"],
+  html[lang="es"] .cw-langs a[data-l="es"], html[lang="ar"] .cw-langs a[data-l="ar"],
+  html[lang="fr"] .cw-langs a[data-l="fr"] {
+    color: var(--ink); border-color: var(--link); background: color-mix(in srgb, var(--cyan) 10%, transparent); }
+
+  /* ── Колонка страницы ──────────────────────────────────────────────────── */
+  .cw-main { max-width: var(--w-wide); }
+  .cw-main > * { max-width: var(--w-text); }
+  .cw-sec { margin-top: 40px; }
+  .cw-k { font-family: var(--mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--ochre); margin-bottom: 6px; }
+  .cw-sec h2 { font-family: 'Source Serif 4', Georgia, serif; font-weight: 600; font-size: 21px;
+    color: var(--text); line-height: 1.3; margin-bottom: 10px; }
+  .cw-note { font-size: 13.5px; color: var(--muted); margin-bottom: 14px; }
+  /* Пустой раздел не оставляет на странице заголовок без содержания: когда данных нет,
+     генератор передаёт пустую строку, а не заглушку «пока ничего». Заголовок над пустотой
+     читается как поломка страницы, а не как отсутствие данных. */
+  .cw-sec:has(> .cw-body:empty) { display: none; }
+
+  /* ── Плашка «авторская работа» + вид работы ─────────────────────────────
+     Это ПОМЕТКА, а не предупреждение: ни красного, ни жёлтого, ни восклицательного знака.
+     Отличает страницу наш собственный знак — мост в градиенте охра→циан над рядом плашек:
+     тот же знак, что в логотипе. Читатель видит «здесь другой источник», а не «осторожно». */
+  .cw-flags { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 14px; }
+  .cw-flags::before { content: ""; flex-basis: 100%; height: 2px; border-radius: 2px;
+    background: var(--grad); margin-bottom: 10px; }
+  .cw-flag { display: inline-flex; align-items: center; gap: 7px; min-height: 28px;
+    padding: 3px 13px; border-radius: 999px; font-family: var(--mono); font-size: 11.5px;
+    letter-spacing: .07em; text-transform: uppercase; }
+  .cw-flag-work { color: var(--ink); background: var(--surface); border: 1px solid var(--hair); }
+  .cw-mark { width: 26px; height: 17px; flex: none; }
+  /* Вид работы решает, о чём мы спрашиваем автора (у эксперимента — данные и погрешности,
+     у теории — допущения и вывод), поэтому он стоит рядом с плашкой, а не в подвале.
+     Иконки обе лежат в разметке, лишнюю прячет класс: так вид приходит одной переменной. */
+  .cw-kind .ic-exp, .cw-kind .ic-th { display: none; width: 15px; height: 15px; flex: none; }
+  .cw-kind-experimental .ic-exp, .cw-kind-theoretical .ic-th { display: block; }
+  .cw-kind { color: var(--muted); background: var(--surface); border: 1px solid var(--hair); }
+  .cw-kind-experimental { color: var(--cyan);
+    background: color-mix(in srgb, var(--cyan) 7%, var(--surface));
+    border-color: color-mix(in srgb, var(--cyan) 34%, var(--hair)); }
+  .cw-kind-theoretical { color: var(--ochre);
+    background: color-mix(in srgb, var(--ochre) 7%, var(--surface));
+    border-color: color-mix(in srgb, var(--ochre) 34%, var(--hair)); }
+
+  /* ── Заголовок, дата, автор ─────────────────────────────────────────────── */
+  .cw-title { font-family: 'Source Serif 4', Georgia, serif; font-weight: 600; font-size: 24px;
+    color: var(--text); line-height: 1.3; margin-bottom: 8px; }
+  .cw-meta { font-size: 13px; color: var(--soft); display: flex; flex-wrap: wrap; gap: 4px 8px;
+    align-items: baseline; margin-bottom: 6px; }
+  .cw-meta b { color: var(--text); font-weight: 600; }
+  .cw-meta a { color: var(--link); text-decoration: none; border-bottom: 1px solid var(--hair); }
+  /* Токен вместо имени — не аноним-заглушка, а полноценный публичный адрес автора у нас,
+     поэтому моноширинный и заметный, как arXiv-номер у обычной статьи. */
+  .cw-author-token b { font-family: var(--mono); font-size: 12.5px; letter-spacing: .03em; }
+  .cw-token-note, .cw-privacy { font-size: 12.5px; color: var(--muted); margin-bottom: 4px; }
+  .cw-token-note:empty, .cw-privacy:empty { display: none; }
+  .cw-oneliner { font-size: 15px; color: var(--muted); line-height: 1.6; margin: 12px 0 22px; }
+
+  /* ── Наша обработка ─────────────────────────────────────────────────────
+     Переключатель уровней — тот же .lv-switch, что на статье: и разметка, и порядок
+     кнопок, и поведение. Липкость своя: на статье ряд липнет под sticky-шапку и её
+     высоту меряет js (--stick-top2), здесь шапка обычная — значит, липнем к нулю. */
+  .cw-our > .lv-switch { position: sticky; top: 0; z-index: 20; padding: 8px 0;
+    background: var(--bg); }
+  .cw-text { font-size: 16.5px; line-height: 1.8; }
+  .cw-text p { margin-bottom: 18px; }
+
+  /* ── Разбор ─────────────────────────────────────────────────────────────
+     Три карточки с разной ролью, поэтому и цвет разный: сильная сторона — циан
+     (то, что работает), рекомендации — охра (то, что стоит доделать), вопросы —
+     нейтральный волосок (мы спрашиваем, а не оцениваем). */
+  .cw-rev { display: grid; gap: 10px; }
+  .cw-rev-card { padding: 14px 16px; border-radius: var(--radius-sm); background: var(--surface);
+    border: 1px solid var(--hair); border-inline-start: 3px solid var(--hair); }
+  .cw-rev-card:has(> .cw-rev-body:empty) { display: none; }
+  .cw-rev-l { font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--soft); margin-bottom: 6px; }
+  .cw-rev-body { font-size: 15px; line-height: 1.65; color: var(--text); }
+  .cw-rev-body p { margin-bottom: 10px; }
+  .cw-rev-body p:last-child, .cw-rev-body ol, .cw-rev-body ul { margin-bottom: 0; }
+  .cw-rev-body ol, .cw-rev-body ul { padding-inline-start: 20px; }
+  .cw-rev-body li { margin-bottom: 6px; }
+  .cw-rev-strength { border-inline-start-color: var(--cyan); }
+  .cw-rev-strength .cw-rev-l { color: var(--cyan); }
+  .cw-rev-advice { border-inline-start-color: var(--ochre); }
+  .cw-rev-advice .cw-rev-l { color: var(--ochre); }
+
+  /* ── Комментарий автора ────────────────────────────────────────────────
+     По ТЗ это последнее слово, и оно должно читаться как ОТВЕТ, а не как ещё один
+     наш абзац. Отсюда сдвиг от края, реплика в фиолетовом — цвете автора на всём
+     сайте (--author-color у имён и фильтров), стрелка ответа и подпись в конце. */
+  .cw-reply { margin-inline-start: clamp(0px, 4vw, 30px); padding: 16px 18px;
+    border-radius: var(--radius); border-start-start-radius: 4px;
+    background: color-mix(in srgb, var(--author-color) 7%, var(--surface));
+    border: 1px solid color-mix(in srgb, var(--author-color) 26%, var(--hair)); }
+  .cw-reply-l { display: flex; align-items: center; gap: 7px; font-family: var(--mono);
+    font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--author-color); margin-bottom: 8px; }
+  .cw-reply-ic { width: 15px; height: 15px; flex: none; }
+  html[dir="rtl"] .cw-reply-ic { transform: scaleX(-1); }
+  .cw-reply-body { font-size: 15.5px; line-height: 1.7; color: var(--text); }
+  .cw-reply-body p { margin-bottom: 12px; }
+  .cw-reply-body p:last-child { margin-bottom: 0; }
+  .cw-reply-sign { text-align: start; font-size: 13px; color: var(--muted); margin-top: 12px;
+    padding-top: 10px; border-top: 1px solid var(--hair); }
+  .cw-rights { font-size: 12.5px; color: var(--muted); margin-top: 10px;
+    margin-inline-start: clamp(0px, 4vw, 30px); }
+
+  /* ── Исходный вариант ──────────────────────────────────────────────────
+     Кнопка, а не тихая ссылка: у обычной статьи источник — чужой arXiv, здесь источник
+     это САМ АВТОР, и витрина не должна выглядеть подменой его работы. */
+  .cw-src-btn { display: inline-flex; align-items: center; gap: 9px; min-height: var(--tap-md, 32px);
+    padding: 10px 18px; border-radius: 999px; text-decoration: none;
+    font-family: var(--mono); font-size: 13px; color: var(--ink);
+    background: var(--surface); border: 1px solid color-mix(in srgb, var(--ochre) 45%, var(--hair));
+    transition: color .16s, border-color .16s, background .16s, transform .16s; }
+  .cw-src-btn:hover { color: var(--link); border-color: var(--link); transform: translateY(-1px); }
+  .cw-src-btn .ico-svg { width: 17px; height: 17px; flex: none; }
+  .cw-src-meta { font-family: var(--mono); font-size: 12px; color: var(--soft); margin-top: 10px; }
+  .cw-src-meta:empty { display: none; }
+
+  /* ── Похожие работы ────────────────────────────────────────────────────── */
+  .cw-sim { display: grid; gap: 10px; }
+
+  footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--hair);
+    font-size: 12.5px; color: var(--soft); max-width: var(--w-text); }
+
+  @media (max-width: 640px) {
+    .cw-title { font-size: 21px; }
+    .cw-text { font-size: 16px; }
+    .cw-reply, .cw-rights { margin-inline-start: 0; }
+  }
+
+  /* Арабский набирается наскхом, а не засечной латиницей. Правила .cw-title и .cw-sec h2
+     ставят 'Source Serif 4' — у неё нет арабских глифов, и заголовок падал в Georgia.
+     В списке раздела это уже учтено; без правила здесь один раздел выглядел бы двумя
+     разными сайтами: список наскхом, сама работа латинским фолбэком. */
+  html[lang="ar"] .cw-title, html[lang="ar"] .cw-sec h2, html[lang="ar"] h1, html[lang="ar"] h2 {
+    font-family: 'Noto Naskh Arabic', var(--sans); line-height: 1.9; }
+
+  /* Тёмная тема. На остальных страницах её включает js/search.js, подставляя data-theme
+     из памяти браузера, — но здесь search.js не подключён (странице не нужны ни лента,
+     ни поиск). Без этих правил читатель, живущий в тёмной теме, открывал бы авторскую
+     работу и получал белый экран, при том что список раздела рядом остаётся тёмным.
+     Слушаем системную настройку И уважаем ручной выбор, сохранённый на сайте. */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1b1f27; --surface: #242832; --text: #e8e6e3; --soft: #b9b6b1;
+      --muted: #8f8c88; --hair: #343842; --tag-bg: #2b303a;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1b1f27; --surface: #242832; --text: #e8e6e3; --soft: #b9b6b1;
+    --muted: #8f8c88; --hair: #343842; --tag-bg: #2b303a;
+  }
+</style>
+<script>
+/* Тема применяется ДО первой отрисовки: иначе страница успевает мигнуть белым, а потом
+   потемнеть. Ключ тот же, что у js/search.js, — выбор читателя общий на весь сайт. */
+(function () {
+  try {
+    var t = localStorage.getItem('b42_theme');
+    if (t) document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+})();
+</script>
+</head>
+<body class="community-page">
+
+<div class="topnav">
+    <a class="topnav-logo" href="/lang/$lang/index.html">bridge42worlds</a>
+    <span class="topnav-more">
+        <button type="button" class="topnav-burger" aria-label="$menu_label" aria-expanded="false"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></svg></button>
+        <span class="topnav-panel">
+            <a href="/lang/$lang/index.html">main</a>
+            <a href="/lang/$lang/tags/">tags</a>
+            <a href="/lang/$lang/laws/">laws</a>
+            <a href="/lang/$lang/scientists/">scientists</a>
+            <a href="/lang/$lang/sections/">sections</a>
+            <a href="/lang/$lang/community/">community</a>
+            <a href="/lang/en/authors/">authors</a>
+            <a href="/lang/$lang/graph/">graph</a>
+            <a href="/learn.html" title="learn" class="nav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.5A2 2 0 0 1 6 5h5v14H6a2 2 0 0 0-2 1.5z"/><path d="M20 6.5A2 2 0 0 0 18 5h-5v14h5a2 2 0 0 1 2 1.5z"/></svg></a>
+        </span>
+    </span>
+    <span class="cw-langs">
+        <a href="/lang/ru/community/$slug/$page_file" data-l="ru">RU</a><a href="/lang/en/community/$slug/$page_file" data-l="en">EN</a><a href="/lang/es/community/$slug/$page_file" data-l="es">ES</a><a href="/lang/ar/community/$slug/$page_file" data-l="ar">AR</a><a href="/lang/fr/community/$slug/$page_file" data-l="fr">FR</a>
+    </span>
+</div>
+
+<main class="cw-main">
+
+    <div class="cw-flags">
+        <span class="cw-flag cw-flag-work" title="$badge_title">
+            <svg class="cw-mark" viewBox="0 0 240 150" aria-hidden="true">
+                <defs><linearGradient id="cw-grad" x1="0" x2="1"><stop offset="0" stop-color="var(--ochre)"/><stop offset="1" stop-color="var(--cyan)"/></linearGradient></defs>
+                <line x1="44" y1="112" x2="196" y2="112" stroke="currentColor" stroke-opacity=".38" stroke-width="8" stroke-linecap="round"/>
+                <path d="M44 112 C 84 24, 156 24, 196 112" fill="none" stroke="url(#cw-grad)" stroke-width="14" stroke-linecap="round"/>
+                <circle cx="44" cy="112" r="13" fill="var(--ochre)"/>
+                <circle cx="196" cy="112" r="13" fill="var(--cyan)"/>
+            </svg>
+            $badge_label
+        </span>
+        <span class="cw-flag cw-kind cw-kind-$kind" title="$kind_title">
+            <svg class="ic-exp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3h4"/><path d="M11 3v6.2L5.6 18a2 2 0 0 0 1.7 3h9.4a2 2 0 0 0 1.7-3L13 9.2V3"/><path d="M8 15h8"/></svg>
+            <svg class="ic-th" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19c3.5 0 4-14 7.5-14"/><path d="M6 11h8"/><path d="M15 10l5 6"/><path d="M20 10l-5 6"/></svg>
+            $kind_label
+        </span>
+    </div>
+    <p class="cw-note">$badge_note</p>
+
+    <h1 class="cw-title">$work_title</h1>
+    <!-- Строка-паспорт. Ссылку на исходник держим ЗДЕСЬ же, где у обычной статьи стоит
+         arXiv: читатель ищет первоисточник по привычке в этом месте, а не в конце. Полный
+         блок с кнопкой ниже — он для того, кто дочитал и хочет забрать работу целиком. -->
+    <div class="cw-meta">
+        <span>$received_label <b>$received_date</b></span>
+        <span>·</span>
+        <span class="cw-author cw-author-$author_kind">$author_label <b>$author_display</b></span>
+        <span>·</span>
+        <a href="$source_url">$source_inline_label</a>
+    </div>
+    <p class="cw-token-note">$author_hint</p>
+    <!-- Почта и контакты автора не публикуются никогда (ТЗ владельца). Говорим об этом
+         прямо: иначе отсутствие контактов выглядит недоработкой, а не позицией. -->
+    <p class="cw-privacy">$privacy_note</p>
+    <p class="cw-oneliner">$oneliner</p>
+
+    <section class="cw-sec cw-our">
+        <p class="cw-k">$our_kicker</p>
+        <h2>$our_h2</h2>
+        <p class="cw-note">$our_note</p>
+        $level_switch_html
+        <div class="cw-text">$text_html</div>
+        <div class="lv-bottom">$level_switch_bottom_html</div>
+    </section>
+
+    <section class="cw-sec">
+        <p class="cw-k">$review_kicker</p>
+        <h2>$review_h2</h2>
+        <p class="cw-note">$review_intro</p>
+        <div class="cw-body cw-rev">
+            <div class="cw-rev-card cw-rev-strength">
+                <p class="cw-rev-l">$review_strength_label</p>
+                <div class="cw-rev-body">$review_strength_html</div>
+            </div>
+            <div class="cw-rev-card cw-rev-advice">
+                <p class="cw-rev-l">$review_advice_label</p>
+                <div class="cw-rev-body">$review_advice_html</div>
+            </div>
+            <div class="cw-rev-card">
+                <p class="cw-rev-l">$review_questions_label</p>
+                <div class="cw-rev-body">$review_questions_html</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cw-sec">
+        <p class="cw-k">$author_word_kicker</p>
+        <h2>$author_word_h2</h2>
+        <p class="cw-note">$author_word_note</p>
+        <div class="cw-body"><div class="cw-reply">
+            <p class="cw-reply-l"><svg class="cw-reply-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h9a7 7 0 0 1 7 7v4"/></svg>$author_word_label</p>
+            <div class="cw-reply-body">$author_comment_html</div>
+            <p class="cw-reply-sign">— $author_display</p>
+        </div><p class="cw-rights">$rights_note</p></div>
+    </section>
+
+    <section class="cw-sec">
+        <p class="cw-k">$source_kicker</p>
+        <h2>$source_h2</h2>
+        <p class="cw-note">$source_note</p>
+        <a class="cw-src-btn" href="$source_url"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5h18v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M3 7.5l1.6-3.2A1.5 1.5 0 0 1 6 3.5h12a1.5 1.5 0 0 1 1.4.8L21 7.5"/><path d="M10 12h4"/></svg>$source_btn_label</a>
+        <p class="cw-src-meta">$source_meta</p>
+    </section>
+
+    <section class="cw-sec">
+        <p class="cw-k">$similar_kicker</p>
+        <h2>$similar_h2</h2>
+        <p class="cw-note">$similar_note</p>
+        <div class="cw-body cw-sim">$similar_html</div>
+    </section>
+
+    <footer><p>bridge42worlds · $foot_tag</p></footer>
+
+</main>
+
+<script src="/js/likes.js"></script>
+<script>
+(function() {
+    // Бургер: та же логика, что в about.html — клик вне панели и Escape закрывают.
+    var m = document.querySelector('.topnav-more');
+    var b = m && m.querySelector('.topnav-burger');
+    if (b) {
+        b.addEventListener('click', function(e) {
+            e.stopPropagation();
+            var o = m.classList.toggle('open');
+            b.setAttribute('aria-expanded', o ? 'true' : 'false');
+        });
+        document.addEventListener('click', function(e) {
+            if (!m.contains(e.target) || e.target === m) m.classList.remove('open');
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') m.classList.remove('open');
+        });
+    }
+})();
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.logPageView) logPageView('$slug', 'community', '$lang');
+    var main = document.querySelector('.cw-main');
+    // Теоретические работы приходят с формулами, и рендерить их надо во всём тексте —
+    // включая разбор и слово автора. Знак доллара собираем из кода: литералом нельзя,
+    // шаблонизатор принял бы его за свою переменную (та же оговорка, что в article.html).
+    if (main && window.renderMathInElement) {
+        var S = String.fromCharCode(36);
+        try {
+            renderMathInElement(main, {
+                delimiters: [
+                    { left: S + S, right: S + S, display: true },
+                    { left: '\\[', right: '\\]', display: true },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: S, right: S, display: false }
+                ],
+                ignoredClasses: ['formula-render'],
+                throwOnError: false
+            });
+        } catch (e) {}
+    }
+    document.querySelectorAll('.formula-render').forEach(function(el) {
+        try { katex.render(el.textContent, el, { throwOnError: false }); } catch (e) {}
+    });
+});
+</script>
+<script src="/js/beta-banner.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="$lang" dir="$dir">
+<head>
+<meta charset="utf8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>$page_title · bridge42worlds</title>
+    $og_meta_html
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz@8..60&family=Noto+Naskh+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* Стили держим внутри файла — как в templates/about.html. Раздел живёт своей жизнью:
+     он редко меняется и не должен ломаться от правок общего css/style.css, где карточки
+     заточены под ленту статей. Токены — те же, что на всём сайте. */
+  :root {
+    --bg: #F4F2EC; --surface: #FBFAF6; --card: #ECE9E1; --ink: #0F1626;
+    --muted: #5A6273; --faint: rgba(15,22,38,.10); --hair: rgba(15,22,38,.12);
+    --ochre: #C77F3A; --cyan: #2E8AA0; --grad: linear-gradient(90deg, #C77F3A, #2E8AA0);
+    --midnight: #0F1626; --ivory: #ECE9E1;
+    --sans: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    --serif: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0B111E; --surface: #111A29; --card: #131C2D; --ink: #ECE9E1;
+      --muted: #8A94A6; --faint: rgba(236,233,225,.08); --hair: rgba(236,233,225,.13);
+      --ochre: #E4A860; --cyan: #5EBCD2; --grad: linear-gradient(90deg, #E4A860, #5EBCD2);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #F4F2EC; --surface: #FBFAF6; --card: #ECE9E1; --ink: #0F1626;
+    --muted: #5A6273; --faint: rgba(15,22,38,.10); --hair: rgba(15,22,38,.12);
+    --ochre: #C77F3A; --cyan: #2E8AA0; --grad: linear-gradient(90deg, #C77F3A, #2E8AA0);
+  }
+  :root[data-theme="dark"] {
+    --bg: #0B111E; --surface: #111A29; --card: #131C2D; --ink: #ECE9E1;
+    --muted: #8A94A6; --faint: rgba(236,233,225,.08); --hair: rgba(236,233,225,.13);
+    --ochre: #E4A860; --cyan: #5EBCD2; --grad: linear-gradient(90deg, #E4A860, #5EBCD2);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  .page { background: var(--bg); color: var(--ink); font-family: var(--sans); line-height: 1.62; -webkit-font-smoothing: antialiased; padding: clamp(20px, 5vw, 64px) 20px 72px; }
+  .wrap { max-width: 720px; margin: 0 auto; }
+  /* У арабского Source Serif 4 нет глифов, и браузер молча подставляет что попало —
+     задаём наскх явно и добавляем воздуха строке: арабская вязь выше латиницы. */
+  html[lang="ar"] .page, html[lang="ar"] h1, html[lang="ar"] h2, html[lang="ar"] .work-title { font-family: "Noto Naskh Arabic", var(--sans); line-height: 1.9; }
+
+  /* Топ-навигация сайта (самодостаточная, как в гиде: общий css сюда не приходит). */
+  .topnav { display: flex; align-items: center; gap: 15px; margin: 0 0 22px; font-family: var(--mono); font-size: 13px; flex-wrap: wrap; }
+  .topnav-logo { font-family: var(--serif); font-size: 17px; color: var(--ink); text-decoration: none; }
+  .topnav-more { margin-inline-start: 2px; position: relative; }
+  .topnav > .topnav-right { margin-inline-start: auto; }
+  .topnav > a { color: var(--muted); text-decoration: none; transition: color .16s; }
+  .topnav > a:hover { color: var(--cyan); }
+  .topnav-burger { font: inherit; font-size: 17px; line-height: 1; background: none; border: none; color: var(--muted); cursor: pointer; border-radius: 8px; transition: color .16s, background .16s; }
+  /* Шкала касания — копия значений из css/style.css. Страница самодостаточна, общий файл
+     сюда не приходит; правишь шкалу там — правь и здесь, иначе раздел молча уедет. */
+  :root { --tap-md: 32px; --ico-md: 18px; }
+  @media (max-width: 640px) { :root { --tap-md: 44px; --ico-md: 22px; } }
+  .topnav-burger { min-height: var(--tap-md); min-width: var(--tap-md);
+    display: inline-flex; align-items: center; justify-content: center; padding: 0 9px; }
+  .topnav-burger .ico-svg { width: var(--ico-md); height: var(--ico-md); stroke-width: 2; }
+  .topnav > a, .topnav-logo, .topnav-panel a { min-height: var(--tap-md); display: inline-flex; align-items: center; }
+  .topnav-burger:hover, .topnav-more.open .topnav-burger { color: var(--cyan); background: var(--card); }
+  .topnav-panel { position: absolute; inset-inline-start: 0; top: 132%; display: none; flex-direction: column; gap: 2px; min-width: 158px;
+    background: var(--surface); border: 1px solid var(--hair); border-radius: 12px; padding: 8px; box-shadow: 0 18px 40px -20px rgba(0,0,0,.4); z-index: 30; }
+  .topnav-more.open .topnav-panel { display: flex; }
+  .topnav-panel a { padding: 6px 11px; border-radius: 8px; color: var(--muted); text-decoration: none; transition: color .16s, background .16s; }
+  .topnav-panel a:hover { background: var(--card); color: var(--cyan); }
+  .topnav-panel a.cur { color: var(--ink); background: var(--card); }
+  html[dir="rtl"] .topnav-panel { text-align: start; }
+
+  /* Переключатель языков. Тёмного «героя», как в гиде, здесь нет намеренно: владелец
+     просил раздел неприметный — крупная чёрная шапка читалась бы как витрина. */
+  .page-langs { display: flex; gap: 6px; margin: 0 0 26px; }
+  .page-langs a { font-family: var(--mono); font-size: 12px; color: var(--muted);
+    border: 1px solid var(--hair); border-radius: 999px; padding: 3px 11px;
+    text-decoration: none; transition: color .16s, border-color .16s, background .16s; }
+  .page-langs a:hover { color: var(--ink); border-color: var(--muted); }
+  html[lang="ru"] .page-langs a[href="/lang/ru/community/"],
+  html[lang="en"] .page-langs a[href="/lang/en/community/"],
+  html[lang="es"] .page-langs a[href="/lang/es/community/"],
+  html[lang="ar"] .page-langs a[href="/lang/ar/community/"],
+  html[lang="fr"] .page-langs a[href="/lang/fr/community/"] {
+    color: var(--ink); border-color: var(--muted); background: var(--card); }
+  html[dir="rtl"] .page-langs { flex-direction: row-reverse; justify-content: flex-end; }
+
+  section { margin-top: 46px; }
+  section:first-of-type { margin-top: 0; }
+  .kicker { font-family: var(--mono); font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--ochre); margin: 0 0 8px; }
+  h1 { font-family: var(--serif); font-weight: 500; font-size: clamp(26px, 5vw, 36px); line-height: 1.15; letter-spacing: -.01em; margin: 0 0 14px; text-wrap: balance; }
+  h2 { font-family: var(--serif); font-weight: 500; font-size: clamp(20px, 4vw, 25px); line-height: 1.2; margin: 0 0 12px; letter-spacing: -.01em; text-wrap: balance; }
+  p { margin: 0 0 14px; }
+  p.lead { font-size: 17.5px; }
+  .muted { color: var(--muted); }
+  a { color: var(--cyan); text-decoration: none; border-bottom: 1px solid var(--faint); }
+  /* Пояснительная врезка. Скругление задано логическими свойствами: в арабском полоса
+     должна стоять справа, и left/right здесь пришлось бы зеркалить отдельным правилом. */
+  .note { border-inline-start: 3px solid var(--ochre); background: var(--surface);
+    border-start-start-radius: 0; border-end-start-radius: 0;
+    border-start-end-radius: 12px; border-end-end-radius: 12px;
+    padding: 16px 20px; margin-top: 18px; font-size: 15px; color: var(--muted); text-align: start; }
+  .note b { color: var(--ink); }
+
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 12px; }
+  .tile { background: var(--surface); border: 1px solid var(--hair); border-radius: 12px; padding: 15px 17px; }
+  .tile b { display: block; font-size: 15px; margin-bottom: 3px; }
+  .tile span { font-size: 14px; color: var(--muted); }
+
+  /* ── Список работ ──────────────────────────────────────────────────────────────
+     Разметку карточек генерирует код и кладёт в $works_html одной строкой. Контракт —
+     ровно такой (классы менять только вместе с генератором):
+
+     <a class="work" href="/lang/ru/community/b42p-2026-001/">
+       <span class="work-top">
+         <span class="work-kind work-kind-experimental">экспериментальная</span>
+         <span class="work-mark">авторская работа</span>
+         <span class="work-date">6 августа 2026</span>
+       </span>
+       <span class="work-title">Заголовок работы</span>
+       <span class="work-by">Имя автора</span>          ← либо, если не представился:
+       <span class="work-by work-by--token">b42p-2026-001</span>
+       <span class="work-sum">Две строки выжимки из нашего разбора.</span>
+     </a>
+
+     Вид работы различается ЦВЕТОМ плашки: --exp охра (эксперимент), --theo циан (теория).
+     Тот же приём, что у плашек статьи в css/style.css: контур, капс, прозрачный фон —
+     чтобы карточка не пестрела. Текст плашек приходит из json со строками, а не отсюда:
+     раздел живёт на пяти языках.
+     Все дети карточки — <span>: внутри <a> так спокойнее для старых парсеров, а блочность
+     всё равно задаётся display. -------------------------------------------------------- */
+  .works { display: grid; gap: 12px; margin-top: 14px; }
+  .work { display: block; background: var(--surface); border: 1px solid var(--hair); border-radius: 14px;
+    padding: 16px 20px 18px; color: inherit; text-decoration: none;
+    transition: border-color .16s, box-shadow .16s, transform .16s; }
+  .work:hover { border-color: var(--cyan); box-shadow: 0 14px 30px -22px rgba(0,0,0,.5); transform: translateY(-1px); }
+  .work-top { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 9px; }
+  .work-kind { font-family: var(--mono); font-size: 10.5px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: .14em; border: 1.5px solid currentColor; border-radius: 999px; padding: 2px 9px; }
+  .work-kind-experimental { color: var(--cyan); }
+  .work-kind-theoretical { color: var(--ochre); }
+  /* Знак «авторская работа». Обязателен по ТЗ, но нарочно тише вида работы: это признак
+     происхождения, а не оценка. Точка градиентом — тот же мост, что в логотипе. */
+  .work-mark { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono);
+    font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .work-mark::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--grad); flex: none; }
+  .work-date { font-family: var(--mono); font-size: 11.5px; color: var(--muted); margin-inline-start: auto; }
+  .work-title { display: block; font-family: var(--serif); font-size: 19px; font-weight: 600; line-height: 1.3;
+    color: var(--ink); margin-bottom: 4px; transition: color .16s; text-wrap: balance; }
+  .work:hover .work-title { color: var(--cyan); }
+  .work-by { display: block; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  /* Автор без имени — публичный токен. Разрядка, чтобы код не читался как слово. */
+  .work-by--token { letter-spacing: .06em; }
+  .work-sum { display: block; font-size: 14.5px; color: var(--muted); margin-top: 7px; }
+  /* На узком экране дата, прижатая к концу строки, отрывается от плашек и висит одна. */
+  @media (max-width: 520px) {
+    .work-date { margin-inline-start: 0; width: 100%; }
+  }
+
+  /* Пусто — это нормальное состояние раздела, а не ошибка: работ может не быть неделями.
+     Показываем строку, только когда список действительно пуст. Два селектора не для
+     красоты: :empty ловит по-настоящему пустую подстановку, а :has() — случай, когда
+     генератор оставил в переменной перевод строки или пробел. */
+  .works-empty { display: none; border: 1px dashed var(--hair); border-radius: 14px;
+    padding: 22px 20px; margin-top: 14px; color: var(--muted); font-size: 15px; text-align: start; }
+  .works:empty + .works-empty { display: block; }
+  .works:not(:has(.work)) + .works-empty { display: block; }
+
+  .invite { background: var(--surface); border: 1px solid var(--hair); border-radius: 14px; padding: 20px 22px; margin-top: 14px; }
+  .invite p { margin: 0 0 14px; }
+  .invite-cta { display: inline-flex; align-items: center; min-height: var(--tap-md);
+    font-family: var(--mono); font-size: 13px; color: var(--ink); background: var(--card);
+    border: 1px solid var(--hair); border-radius: 999px; padding: 6px 16px; text-decoration: none;
+    transition: color .16s, border-color .16s; }
+  .invite-cta:hover { color: var(--cyan); border-color: var(--cyan); }
+
+  .foot { margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--hair); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .foot .brand { font-family: var(--serif); font-size: 16px; color: var(--ink); }
+  .foot .tag { font-family: var(--mono); font-size: 12px; color: var(--muted); letter-spacing: .04em; }
+</style>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+</head>
+<body>
+<div class="page"><div class="wrap">
+
+  <div class="topnav">
+    <a class="topnav-logo" href="/lang/$lang/index.html">bridge42worlds</a>
+    <span class="topnav-more">
+      <button type="button" class="topnav-burger" aria-label="$menu_label" aria-expanded="false"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></svg></button>
+      <span class="topnav-panel">
+        <a href="/lang/$lang/index.html">main</a>
+        <a href="/lang/$lang/tags/">tags</a>
+        <a href="/lang/$lang/laws/">laws</a>
+        <a href="/lang/$lang/scientists/">scientists</a>
+        <a href="/lang/$lang/sections/">sections</a>
+        <a href="/lang/en/authors/">authors</a>
+        <a href="/lang/$lang/graph/">graph</a>
+        <!-- Та самая неприметная кнопка: раздел доступен только отсюда, в шапку и в общую
+             ленту не выносится (ТЗ владельца от 6 августа 2026). -->
+        <a class="cur" href="/lang/$lang/community/">community</a>
+        <a href="/learn.html" title="$learn_label"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.5A2 2 0 0 1 6 5h5v14H6a2 2 0 0 0-2 1.5z"/><path d="M20 6.5A2 2 0 0 0 18 5h-5v14h5a2 2 0 0 1 2 1.5z"/></svg></a>
+      </span>
+    </span>
+  </div>
+
+  <div class="page-langs">
+    <a href="/lang/ru/community/">RU</a><a href="/lang/en/community/">EN</a><a href="/lang/es/community/">ES</a><a href="/lang/ar/community/">AR</a><a href="/lang/fr/community/">FR</a>
+  </div>
+
+  <!-- Заголовок раздела. Читатель попадает сюда из меню и не знает, чем эти работы
+       отличаются от остальных, — поэтому сразу после заголовка объясняем и происхождение
+       работ, и границу нашей ответственности. Врезка про «не рецензируемые публикации»
+       стоит выше списка намеренно: узнать это после чтения работы — обидно. -->
+  <section>
+    <p class="kicker">$section_kicker</p>
+    <h1>$section_h1</h1>
+    <p class="lead">$section_lead</p>
+    <p class="muted">$section_what</p>
+    <div class="note">$honest_note</div>
+  </section>
+
+  <section>
+    <p class="kicker">$how_kicker</p>
+    <h2>$how_h2</h2>
+    <div class="tiles">
+      <div class="tile"><b>$how1_t</b><span>$how1_s</span></div>
+      <div class="tile"><b>$how2_t</b><span>$how2_s</span></div>
+      <div class="tile"><b>$how3_t</b><span>$how3_s</span></div>
+    </div>
+  </section>
+
+  <section>
+    <p class="kicker">$list_kicker</p>
+    <h2>$list_h2</h2>
+    <div class="works">$works_html</div>
+    <p class="works-empty">$empty_note</p>
+  </section>
+
+  <!-- Приглашение стоит последним: сначала человек видит, что и как мы публикуем, и только
+       потом решает, присылать ли своё. Обещание про почту и контакты держим здесь же —
+       именно об этом тревожится автор, а не читатель. -->
+  <section>
+    <p class="kicker">$invite_kicker</p>
+    <h2>$invite_h2</h2>
+    <div class="invite">
+      <p>$invite_p</p>
+      <a class="invite-cta" href="$join_url">$join_cta</a>
+      <div class="note">$privacy_note</div>
+    </div>
+  </section>
+
+  <div class="foot">
+    <a class="brand" href="/lang/$lang/index.html" style="border-bottom:none">bridge42worlds</a>
+    <span class="tag">$foot_tag</span>
+  </div>
+
+</div></div>
+<script>
+(function(){
+  var m = document.querySelector('.topnav-more');
+  var b = m && m.querySelector('.topnav-burger');
+  if (!b) return;
+  b.addEventListener('click', function(e){ e.stopPropagation(); var o = m.classList.toggle('open'); b.setAttribute('aria-expanded', o ? 'true' : 'false'); });
+  document.addEventListener('click', function(e){ if (!m.contains(e.target)) m.classList.remove('open'); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') m.classList.remove('open'); });
+})();
+</script>
+<script src="/js/beta-banner.js" defer></script>
+</body>
+</html>
