@@ -372,49 +372,110 @@ def cmd_analyze(code):
     return 0
 
 
-def cmd_publish(code):
-    """Закрытая страница: неугадываемый адрес, noindex, вне карт сайта и индексов.
-    Это «не на виду», а не «под замком» — для черновиков достаточно; постоянный раздел
-    получит проверку ключом совета."""
+def _our_take(text, title, lang="ru"):
+    """Наша обработка: пересказ работы на трёх уровнях глубины.
+
+    Витрина раздела по ТЗ — именно наш пересказ, а не текст автора: читатель приходит
+    к нам за понятным изложением, а точный текст остаётся под кнопкой «исходный вариант».
+    Уровни те же, что у обычных статей, чтобы читателю не пришлось учиться заново."""
+    from common import chat, clean_json, load_prompt
+    import json as _j
+    prompt = load_prompt("submission-retell").replace("{title}", title or "").replace(
+        "{work}", (text or "")[:60000])
+    try:
+        r = chat("article_popular", prompt,
+                 system="Ты научный журналист. Отвечай JSON-объектом, на русском языке.")
+        d = _j.loads(clean_json(r.choices[0].message.content))
+        return {k: d.get(k, "") for k in ("title", "oneliner", "mini", "simple", "advanced")}
+    except Exception as ex:
+        print(f"  ⚠️ пересказ не вышел: {type(ex).__name__} — страница выйдет без нашей обработки")
+        return {}
+
+
+def cmd_publish(code, langs=None):
+    """Публикация работы: постоянный адрес /lang/{lang}/community/{code}/ на пяти языках.
+
+    Адрес постоянный и предсказуемый — так и задумано: работа участвует в поиске и в срезах,
+    как обычная статья. Защита живёт не в адресе, а в токене снятия: автор в любой момент
+    убирает публикацию, и Worker начинает отдавать 410 вместо страницы.
+    """
     box = SUBS / code
     meta = json.loads((box / "meta.json").read_text(encoding="utf-8"))
-    review = (box / "review.md").read_text(encoding="utf-8") if (box / "review.md").exists() else ""
+    letter = (box / "letter.txt").read_text(encoding="utf-8") if (box / "letter.txt").exists() else ""
     similar = json.loads((box / "similar.json").read_text(encoding="utf-8")) if (box / "similar.json").exists() else []
-    letter = (box / "letter.txt").read_text(encoding="utf-8")
 
-    slug = code + "-" + secrets.token_urlsafe(8)
-    out_dir = ROOT / "lang" / "ru" / "community" / slug
-    out_dir.mkdir(parents=True, exist_ok=True)
+    # Текст работы: распакованное содержимое, если есть, иначе тело письма
+    text = letter
+    un = box / "unpacked"
+    if un.exists():
+        chunks = []
+        for f in sorted(un.rglob("*")):
+            if f.suffix.lower() in (".md", ".txt") and f.stat().st_size < 400000:
+                chunks.append(f.read_text(encoding="utf-8", errors="replace"))
+        if chunks:
+            text = "\n\n".join(chunks)[:200000]
 
-    import html as H
-    sim_html = "".join(
-        f'<li><a href="/lang/ru/archive/">{H.escape(s["title"])}</a> <small>{s["score"]}</small></li>'
-        for s in similar)
-    rev_html = "".join(f"<p>{H.escape(x)}</p>" for x in review.split("\n\n") if x.strip())
-    let_html = "".join(f"<p>{H.escape(x)}</p>" for x in letter.split("\n\n") if x.strip())
-    page = f"""<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8">
-<meta name="robots" content="noindex, nofollow">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{code} · закрытый просмотр — bridge42worlds</title>
-<link rel="stylesheet" href="/css/style.css"></head>
-<body style="max-width:680px;margin:0 auto;padding:20px">
-<p style="font-family:monospace;font-size:12px;color:#888">{code} · народная наука ·
-закрытый просмотр — не для распространения</p>
-<h1>{H.escape(meta.get("subject") or code)}</h1>
-<p><small>получено {meta["received"]} · автор: {"аноним" if not meta.get("author_name") else H.escape(meta["author_name"])}</small></p>
-<h2>Текст</h2>{let_html}
-<h2>Разбор (наш анализатор)</h2>{rev_html}
-<h2>Похожие работы у нас</h2><ul>{sim_html or "<li>—</li>"}</ul>
-</body></html>"""
-    (out_dir / "index.html").write_text(page, encoding="utf-8")
+    title = meta.get("subject") or code
+    ours_ru = _our_take(text, title)
 
-    meta["status"] = "published-private"
-    meta["url"] = f"{SITE}/lang/ru/community/{slug}/"
+    # ПРИВАТНОЕ СЮДА НЕ ПОПАДАЕТ. publish.json уезжает на сайт, meta.json — нет.
+    # Почта автора и токен остаются в meta.json; здесь только то, что можно показывать.
+    pub = {
+        "code": code,
+        "received": meta.get("received", ""),
+        "title": title,
+        "kind": meta.get("kind", ""),
+        "author_display": meta.get("author_name") or "",
+        "ours": {"ru": ours_ru} if ours_ru else {},
+        "review": _review_parts(box),
+        "similar": similar[:5],
+        "source_url": f"/lang/ru/community/{code}/source.zip",
+        "source_meta": meta.get("source_meta", ""),
+        "author_comment": meta.get("author_comment", ""),
+        "withdrawn": False,
+    }
+    (box / "publish.json").write_text(json.dumps(pub, ensure_ascii=False, indent=1),
+                                      encoding="utf-8")
+
+    import community_pages
+    made = community_pages.build_work(code, langs=langs)
+    for lang in (langs or community_pages.LANGS):
+        community_pages.build_index(lang)
+
+    meta["status"] = "published"
+    meta["url"] = f"{SITE}/lang/ru/community/{code}/"
     (box / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1), encoding="utf-8")
-    print(f"✅ закрытая страница: {meta['url']}")
-    print(f"   токен автора: {meta['author_token']} — вернуть в ответном письме")
-    print("   на прод уедет ближайшей выкаткой (страница вне индексов и карт сайта)")
+    print(f"✅ опубликовано: {meta['url']}")
+    print(f"   страниц собрано: {len(made)}")
+    print(f"   токен автора: {meta['author_token']} — вернуть ему в письме")
+    print("   зарегистрировать токен для снятия: python cloudflare/submissions_sync.py")
     return 0
+
+
+def _review_parts(box):
+    """Разбор в частях, как его ждёт страница: сильная сторона, советы, вопросы.
+
+    Читаем из review.md по заголовкам, а не храним отдельно: файл разбора остаётся
+    единственным источником, и правка руками в нём сразу видна на странице."""
+    p = box / "review.md"
+    if not p.exists():
+        return {}
+    t = p.read_text(encoding="utf-8")
+
+    def section(name):
+        m = re.search(rf"##\s*{name}\s*\n(.*?)(?=\n##|\Z)", t, re.S | re.I)
+        return m.group(1).strip() if m else ""
+
+    def items(name):
+        body = section(name)
+        return [re.sub(r"^\d+\.\s*", "", x).strip()
+                for x in body.split("\n") if x.strip()] if body else []
+
+    return {
+        "strength": section("Сильная сторона"),
+        "advice": items("Рекомендации по методике"),
+        "questions": [x for x in items("Вопросы автору") if "Вопросов нет" not in x],
+    }
 
 
 def cmd_list():
