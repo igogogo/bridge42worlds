@@ -274,10 +274,30 @@ def main():
         print("нет ни R2_ACCESS_KEY_ID/R2_SECRET_ACCESS_KEY, ни CLOUDFLARE_API_TOKEN. Стоп.")
         return
 
+    # Работы, снятые авторами, не публикуем — даже если страницы всё ещё лежат в дереве.
+    # Без этой проверки первая же выкладка вернула бы на сайт то, что автор снял час назад,
+    # и он узнал бы об этом сам. Право снять публикацию стоит ровно столько, сколько живёт
+    # между двумя выкладками.
+    withdrawn = ()
+    try:
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        import submissions_sync
+        withdrawn = tuple(submissions_sync.withdrawn_codes())
+        if withdrawn:
+            print(f"снято авторами (не публикуем): {', '.join(withdrawn)}")
+    except Exception as e:
+        # Молча продолжать нельзя: это тот случай, когда «не смогли проверить» означает
+        # «можем опубликовать снятое». Останавливаемся и говорим почему.
+        print(f"⛔ не удалось узнать список снятых работ: {str(e)[:160]}")
+        print("   Публикация остановлена: иначе рискуем вернуть на сайт снятую работу.")
+        raise SystemExit(1)
+
     old = json.loads(MANIFEST.read_text(encoding="utf-8")) if MANIFEST.exists() else {}
     new, to_upload, skipped = {}, [], 0
     for p in iter_files():
         key = p.relative_to(ROOT).as_posix()
+        if withdrawn and any(code in key for code in withdrawn):
+            continue
         try:
             h = md5(p)
         except FileNotFoundError:

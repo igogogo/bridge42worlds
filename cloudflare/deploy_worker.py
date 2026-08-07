@@ -25,15 +25,38 @@ HERE = Path(__file__).resolve().parent
 load_dotenv(HERE.parent / ".env")
 
 
-def main():
-    check = subprocess.run([sys.executable, str(HERE / "predeploy_check.py")],
-                           env={**os.environ, "PYTHONIOENCODING": "utf-8"})
-    if check.returncode != 0:
-        return check.returncode
+KNOWN_FLAGS = {"--dev"}
 
-    print("\n▶️  wrangler deploy\n")
+
+def main():
+    # Неизвестный флаг — СТОП, а не «сделаю обычное».
+    #
+    # 6 августа я запустил эту команду с --dev из ветки, где поддержки --dev ещё не было.
+    # Скрипт не знал флага, промолчал и выложил БОЕВОЙ Worker — выкладка без разрешения,
+    # ровно то, от чего стоит замок. Виновата не невнимательность: молчаливое игнорирование
+    # непонятного аргумента превращает опечатку в выкатку на прод. Здесь цена ошибки
+    # односторонняя, поэтому по умолчанию — отказ.
+    unknown = [a for a in sys.argv[1:] if a not in KNOWN_FLAGS]
+    if unknown:
+        print(f"⛔ не знаю аргумент(ы): {' '.join(unknown)}")
+        print(f"   Знаю только: {', '.join(sorted(KNOWN_FLAGS))}")
+        print("   Ничего не выкладываю: непонятная команда не должна означать выкатку на прод.")
+        return 2
+
+    # --dev выкладывает ИСПЫТАТЕЛЬНЫЙ Worker: своё имя, без маршрутов на домен и без
+    # расписаний (cloudflare/wrangler.dev.toml). Он никого не обслуживает, поэтому и замок
+    # ему не нужен — замок стоит на пути к читателю, а не на пути к проверке.
+    dev = "--dev" in sys.argv
+    if not dev:
+        check = subprocess.run([sys.executable, str(HERE / "predeploy_check.py")],
+                               env={**os.environ, "PYTHONIOENCODING": "utf-8"})
+        if check.returncode != 0:
+            return check.returncode
+
+    cmd = "npx wrangler deploy" + (" --config wrangler.dev.toml" if dev else "")
+    print(f"\n▶️  {cmd}\n")
     # shell=True — на Windows npx это .cmd, без оболочки он не находится.
-    return subprocess.run("npx wrangler deploy", cwd=HERE, shell=True).returncode
+    return subprocess.run(cmd, cwd=HERE, shell=True).returncode
 
 
 if __name__ == "__main__":
