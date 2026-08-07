@@ -59,8 +59,15 @@ SKIP_DIR_NAMES = {"api"}
 # публикуются) живут в publish-rules.json, а не в этих константах.
 # data/prompts — тексты запросов к модели, data/arxiv-index — рабочий индекс отбора статей
 # (107 МБ). Ни то, ни другое браузер не запрашивает.
+# data/submissions — РАБОЧАЯ папка присланных работ, и она приватная целиком. Найдено
+# 2026-08-06 разведкой перед испытанием конвейера: её тут не было, и на прод уезжало всё
+# содержимое заявки, включая meta.json с ПОЧТОЙ АВТОРА и его секретным токеном снятия
+# публикации. Адрес при этом угадывается — код работы идёт подряд (b42p-ГОД-NNN), так что
+# перебрать их мог кто угодно. Публиковать положено ТОЛЬКО собранные страницы под
+# lang/*/community/, куда мы сами кладём то, что решили показать.
 SKIP_PATH_PREFIXES = ("data/arxiv-bulk/", "data/arxiv-bulk", "data/bulk-select",
-                      "data/prompts/", "data/arxiv-index")
+                      "data/prompts/", "data/arxiv-index", "data/submissions/",
+                      "data/submissions")
 
 mimetypes.add_type("application/json", ".json")
 mimetypes.add_type("text/html; charset=utf-8", ".html")
