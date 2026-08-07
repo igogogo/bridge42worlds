@@ -1114,6 +1114,111 @@ async function handleFeedback(request, env) {
   return Response.json({ ok: true, saved, alerted });
 }
 
+// ─── Снятие авторской работы с публикации ──────────────────────────────────
+//
+// По ТЗ владельца (задачи/АВТОРСКИЕ-РАБОТЫ.md, п.6) автор снимает свою работу когда
+// захочет и без объяснений — «может, ему и не зашло». Это его право, а не наша уступка,
+// поэтому путь должен работать без нас, среди ночи и без переписки.
+//
+// ГДЕ ЖИВЁТ СОСТОЯНИЕ — KV, и вот почему именно оно. Проверка «снята ли работа» стоит на
+// пути ЧТЕНИЯ: её проходит каждый запрос страницы сообщества. KV для того и сделан —
+// читается на краю, рядом с читателем. D1 пришлось бы спрашивать из воркера на каждый
+// показ, и в тот день, когда база икнёт (а мы это уже видели 6 августа), пришлось бы
+// выбирать между «снятая работа снова видна» и «весь раздел отдаёт 404». Оба ответа
+// плохие, и выбирать между ними не хочется на живом сайте.
+//
+// Цена KV — согласованность не мгновенная, до минуты. Поэтому снятие не полагается на
+// флаг: одновременно удаляются сами страницы из хранилища. Флаг закрывает эту минуту
+// и, что важнее, не даёт следующей выкладке опубликовать работу заново.
+const WITHDRAW_CODE = /(b42p-\d{4}-\d{3})/;
+
+async function withdrawnCode(env, key) {
+  if (!env.TOKENS || !key.includes("/community/")) return null;
+  const m = key.match(WITHDRAW_CODE);
+  if (!m) return null;
+  return (await env.TOKENS.get(`wd:${m[1]}`)) ? m[1] : null;
+}
+
+function goneResponse(code) {
+  // 410, а не 404. Разница видна не человеку, а поисковику: 404 значит «сейчас нет,
+  // заходите потом», и страница держится в выдаче неделями. 410 значит «этого больше
+  // нет» — и уходит из поиска быстро. Автор, снявший работу, хочет именно этого.
+  // Вернётся — опубликуем заново, и она переиндексируется; это дешевле, чем объяснять
+  // автору, почему его работа всё ещё находится в Google.
+  return new Response(
+    `<!doctype html><meta charset="utf-8"><title>Работа снята автором</title>` +
+    `<div style="font:16px/1.6 system-ui;max-width:34rem;margin:15vh auto;padding:0 1rem">` +
+    `<h1 style="font-size:1.3rem">Работа снята с публикации</h1>` +
+    `<p>Автор снял эту работу (${code}). Мы сохранили присланные материалы и можем ` +
+    `вернуть публикацию, если он попросит.</p></div>`,
+    { status: 410, headers: { "content-type": "text/html; charset=utf-8",
+                              "cache-control": "no-store" } });
+}
+
+// Сравнение секретов постоянным по времени. Обычное === выходит на первом несовпавшем
+// символе, и по времени ответа токен подбирается посимвольно — при угадываемом коде
+// (b42p-ГОД-NNN идут подряд) это не теория.
+function sameSecret(a, b) {
+  const x = new TextEncoder().encode(String(a || ""));
+  const y = new TextEncoder().encode(String(b || ""));
+  let diff = x.length ^ y.length;
+  for (let i = 0; i < Math.max(x.length, y.length); i++) {
+    diff |= (x[i] || 0) ^ (y[i] || 0);
+  }
+  return diff === 0;
+}
+
+async function sha256hex(s) {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s));
+  return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+async function handleWithdraw(request, env) {
+  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
+  if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405 });
+  if (!env.TOKENS) return Response.json({ error: "not_configured" }, { status: 503 });
+
+  // Предел по адресу — здесь он не «на всякий случай»: код работы угадывается (b42p-ГОД-NNN
+  // идут подряд), значит перебор токена — реальный сценарий, а не бумажный.
+  const ipOk = await ipGuard(env, request);
+  if (!ipOk.ok) return Response.json({ error: ipOk.error }, { status: ipOk.code });
+
+  let body;
+  try { body = await request.json(); } catch { return Response.json({ error: "bad_json" }, { status: 400 }); }
+  const code = String(body.code || "").trim().slice(0, 32);
+  const token = String(body.token || "").trim().slice(0, 128);
+  if (!WITHDRAW_CODE.test(code) || !token) {
+    return Response.json({ error: "bad_request" }, { status: 400 });
+  }
+
+  // У нас лежит не сам токен, а его отпечаток: утечка нашего хранилища не должна давать
+  // возможность снимать чужие работы.
+  const known = await env.TOKENS.get(`sub:${code}`);
+  const given = await sha256hex(token);
+  if (!known || !sameSecret(known, given)) {
+    // Неверная попытка — в журнал. Без этого подбор выглядит как тишина.
+    const ip = request.headers.get("cf-connecting-ip") || "?";
+    await env.TOKENS.put(`wdfail:${code}:${Date.now()}`, ip, { expirationTtl: 30 * 86400 })
+      .catch(() => {});
+    await tg(env, `⚠️ <b>Неверный токен снятия</b>\nработа ${code}, адрес ${ip}`).catch(() => {});
+    // Один и тот же ответ на «нет такой работы» и «токен не тот»: иначе перебором
+    // выясняется, какие коды существуют.
+    return Response.json({ error: "forbidden" }, { status: 403 });
+  }
+
+  await env.TOKENS.put(`wd:${code}`, new Date().toISOString());
+  await tg(env, `🚫 <b>Автор снял работу</b>\n${code} — страницы больше не отдаются.\n` +
+                `Материалы сохранены, вернуть можно по его просьбе.`).catch(() => {});
+  return Response.json({
+    ok: true, code,
+    // Ответ человеку, а не машине: он только что нажал кнопку, о которой волновался.
+    message: "Работа снята с публикации. Страницы больше не открываются, поисковикам " +
+             "отдан признак «удалено навсегда». Присланные вами материалы мы сохранили " +
+             "и ничего не удаляли — если передумаете, напишите нам, и мы вернём " +
+             "публикацию. Объяснять причину не нужно.",
+  });
+}
+
 async function handleAlertHook(request, env) {
   if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405 });
   const secret = request.headers.get("cf-webhook-auth");
@@ -1658,6 +1763,9 @@ export default {
       return withCors(await handleArticleFeedback(request, env));
     }
     if (url.pathname === "/api/hook/alert") return handleAlertHook(request, env);
+    if (url.pathname === "/api/community/withdraw") {
+      return withCors(await handleWithdraw(request, env));
+    }
 
     if (request.method !== "GET" && request.method !== "HEAD") {
       return new Response("Method Not Allowed", { status: 405 });
@@ -1665,6 +1773,12 @@ export default {
 
     let key = decodeURIComponent(url.pathname).replace(/^\/+/, "");
     if (key === "" || key.endsWith("/")) key += "index.html";
+
+    // Работа, снятая автором, не отдаётся — даже если её страницы почему-то ещё лежат
+    // в хранилище. Проверка стоит ДО чтения объекта и только для страниц сообщества:
+    // на остальном сайте это лишний поход в KV на каждый запрос.
+    const withdrawn = await withdrawnCode(env, key);
+    if (withdrawn) return goneResponse(withdrawn);
 
     let obj = await env.SITE.get(key);
     if (!obj && !key.split("/").pop().includes(".")) {
