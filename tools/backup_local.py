@@ -150,6 +150,7 @@ def main():
     # ── данные из облака ──
     print("\nскачиваю копию из облака…")
     done = bytes_done = 0
+    failed = []
     t0 = time.time()
     for key, size in objs:
         dst = dest / key
@@ -160,7 +161,21 @@ def main():
             bytes_done += size
             continue
         dst.parent.mkdir(parents=True, exist_ok=True)
-        cl.download_file(BUCKET, key, str(dst))
+        # Обрыв связи на 60-тысячном файле не должен обнулять час работы. Первый прогон
+        # 2026-08-06 умер на 80% с EndpointConnectionError — сеть моргнула, и всё встало.
+        # Три попытки с нарастающей паузой; если и они не помогли, файл пропускаем и идём
+        # дальше, а список пропущенных печатаем в конце: лучше копия с дырой и честным
+        # списком, чем полное отсутствие копии из-за одного файла.
+        for attempt in range(3):
+            try:
+                cl.download_file(BUCKET, key, str(dst))
+                break
+            except Exception as e:
+                if attempt == 2:
+                    print(f"   ⚠️ пропущен {key}: {type(e).__name__}")
+                    failed.append(key)
+                else:
+                    time.sleep(2 * (attempt + 1))
         done += 1
         bytes_done += size
         if done % 500 == 0:
@@ -202,6 +217,14 @@ def main():
                       remote=remote or "(удалённый репозиторий не задан)", inventory=inventory,
                       secrets_note=secrets_note),
         encoding="utf-8")
+
+    if failed:
+        print(f"\n⚠️ не скачались {len(failed)} файлов — запустите команду ещё раз, "
+              f"она добирает только недостающее:")
+        for k in failed[:10]:
+            print(f"   {k}")
+        if len(failed) > 10:
+            print(f"   … и ещё {len(failed) - 10}")
 
     print(f"\n✅ готово: {done:,} объектов + {len(files):,} файлов кода, {human(bytes_done + code_size)}")
     print(f"   {dest}")
