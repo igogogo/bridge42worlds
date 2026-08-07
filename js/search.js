@@ -1856,7 +1856,13 @@ function collapseNavOverflow() {
     // который его же и перекладывает.
     [['/lang/' + lang + '/formulas/', 'formulas'],
      ['/lang/en/authors/', 'authors'], ['/lang/' + lang + '/graph/', 'graph'],
-     ['/learn.html', 'learn'], ['/lang/' + lang + '/archive/', 'dashboard'], ['/lang/' + lang + '/analytics/', 'analytics']].forEach(function(e) {
+     ['/learn.html', 'learn'], ['/lang/' + lang + '/archive/', 'dashboard'], ['/lang/' + lang + '/analytics/', 'analytics'],
+     // Авторские работы — ПОСЛЕДНИМ пунктом, намеренно (владелец 2026-08-06: «кнопочка
+     // где-то в меню затеряется, не на виду, в общий список пока не включаем»). Раздел
+     // существует и находится тем, кто ищет, но не спорит за внимание с основной лентой:
+     // работа независимого автора и разбор статьи с arXiv — разные вещи, мешать их
+     // в одном потоке рано.
+     ['/lang/' + lang + '/community/', 'community']].forEach(function(e) {
         if (panel.querySelector('a[href="' + e[0] + '"]')) return;
         var a = document.createElement('a');
         a.href = e[0]; a.textContent = e[1];
