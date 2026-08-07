@@ -88,14 +88,44 @@ def _levels(work, lang, s):
     have = [(k, t) for k, t in order if (work.get("ours", {}).get(lang, {}) or {}).get(k)]
     if not have:
         return "", ""
+    # Классы .lv-switch / .lv-btn — те же, что у обычной статьи, а не свои. Свои
+    # выглядели ровно так, как выглядит неоформленная кнопка: 19 пикселей высотой,
+    # пальцем не попасть (поймано эмуляцией на экране 375). Общие стили уже знают
+    # и про размер касания (42px), и про активное состояние, и про тёмную тему.
     btns = "".join(
-        f'<button type="button" class="cw-lvl{" on" if i == 0 else ""}" data-lvl="{k}">{H.escape(t)}</button>'
+        f'<button type="button" class="lv-btn{" active" if i == 0 else ""}" '
+        f'data-lvl="{k}">{H.escape(t)}</button>'
         for i, (k, t) in enumerate(have))
     body = "".join(
         f'<div class="cw-lvl-body{" on" if i == 0 else ""}" data-lvl="{k}">'
         f'{_paras((work["ours"][lang] or {}).get(k))}</div>'
         for i, (k, _) in enumerate(have))
-    return f'<div class="cw-lvls">{btns}</div>', body
+    # Переключение — коротким скриптом рядом: страница самодостаточна, js/search.js
+    # ей не нужен (ни ленты, ни поиска здесь нет), тащить его ради трёх кнопок незачем.
+    js = ("<script>(function(){var s=document.currentScript.parentNode;"
+          "s.addEventListener('click',function(e){var b=e.target.closest('.lv-btn');"
+          "if(!b)return;var v=b.dataset.lvl;"
+          "s.querySelectorAll('.lv-btn').forEach(function(x){x.classList.toggle('active',x===b)});"
+          "document.querySelectorAll('.cw-lvl-body').forEach(function(x){"
+          "x.classList.toggle('on',x.dataset.lvl===v)});});})();</script>")
+    return f'<div class="lv-switch">{btns}</div>{js}', body
+
+
+_TITLES = {}
+
+
+def _local_title(item, lang):
+    """Заголовок статьи на нужном языке из индекса; при отсутствии — как есть.
+
+    Индекс каждого языка читаем один раз за прогон: на пяти языках и пяти похожих
+    работах повторное чтение семимегабайтного файла заняло бы дольше, чем вся сборка."""
+    if lang not in _TITLES:
+        try:
+            idx = json.loads((ROOT / "lang" / lang / "articles-index.json").read_text(encoding="utf-8"))
+            _TITLES[lang] = {a["id"]: a.get("title", "") for a in idx}
+        except Exception:
+            _TITLES[lang] = {}
+    return _TITLES[lang].get(item.get("id"), "") or item.get("title", "")
 
 
 def build_work(code, langs=None):
@@ -120,9 +150,15 @@ def build_work(code, langs=None):
         kind_cls = {"экспериментальная": "experimental", "теоретическая": "theoretical",
                     "experimental": "experimental", "theoretical": "theoretical"}.get(kind, "")
         sw, body = _levels(w, lang, s)
-        rev = w.get("review", {})
+        # Разбор своего языка; откат на язык-источник, если перевод не сошёлся.
+        rev_all = w.get("review", {})
+        rev = rev_all.get(lang) or rev_all.get("ru") or (rev_all if "strength" in rev_all else {})
+        # Заголовки похожих работ — на языке страницы. В similar.json они лежат
+        # по-русски (подбирались по русскому корпусу), и без подстановки арабская
+        # страница показывала русский список.
         sim = "".join(
-            f'<li><a href="/lang/{lang}/archive/{x["id"]}/">{H.escape(x["title"])}</a></li>'
+            f'<li><a href="/lang/{lang}/archive/{x["id"]}/">'
+            f'{H.escape(_local_title(x, lang))}</a></li>'
             for x in (w.get("similar") or [])[:5])
 
         vals = {
@@ -145,6 +181,14 @@ def build_work(code, langs=None):
             "review_questions_html": "".join(f"<li>{H.escape(x)}</li>" for x in (rev.get("questions") or [])),
             "author_comment_html": _paras(w.get("author_comment")),
             "similar_html": f"<ul>{sim}</ul>" if sim else "",
+            # Подсказка про публичный код — ТОЛЬКО когда автор не представился.
+            # Иначе страница писала «автор Сергей» и «автор не назвал себя» подряд.
+            "author_hint_html": ("" if w.get("author_display")
+                                 else f'<p class="cw-token-note">{H.escape(s.get("author_hint", ""))}</p>'),
+            # Блок «слово автора» показываем, только если слово есть. Пустая врезка с его
+            # подписью приписывала бы автору молчание, которого он не выбирал.
+            "author_word_open": '<section class="cw-sec">' if w.get("author_comment") else "<!--",
+            "author_word_close": "</section>" if w.get("author_comment") else "-->",
             "source_url": w.get("source_url") or "",
             "source_meta": H.escape(w.get("source_meta") or ""),
         }

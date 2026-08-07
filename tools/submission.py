@@ -37,6 +37,10 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace", line_buffering=True)
 
 ROOT = Path(__file__).resolve().parent.parent
+# Скрипт лежит в tools/, а общие модули (common, community_pages) — в корне. Без этой
+# строки корень попадал в путь только внутри cmd_analyze, и стадия publish падала
+# на импорте common — поймано эмуляцией заявки, ровно тем, чем и должно ловиться.
+sys.path.insert(0, str(ROOT))
 SUBS = ROOT / "data" / "submissions"
 SITE = "https://bridge42worlds.academy"
 MAX_MB = 25          # вложение: практический предел почтовых серверов
@@ -418,6 +422,37 @@ def cmd_publish(code, langs=None):
     title = meta.get("subject") or code
     ours_ru = _our_take(text, title)
 
+    # Пересказ переводится на остальные языки, как обычная статья (решение владельца
+    # 2026-08-06). Витрина раздела — наша обработка, и разделять читателей по языку там,
+    # где мы уже взялись обрабатывать, странно: арабский читатель получал бы страницу
+    # с арабским интерфейсом и русским текстом внутри. Порядка четырёх центов на работу.
+    ours = {"ru": ours_ru} if ours_ru else {}
+    if ours_ru:
+        from gen_llm import translate_scipop
+        for lang in ("en", "es", "ar", "fr"):
+            got = translate_scipop(ours_ru, lang)
+            if got:
+                ours[lang] = got
+                print(f"  🌐 {lang}: пересказ переведён")
+            else:
+                # Молчать нельзя: страница на этом языке выйдет с русским текстом,
+                # и заметит это только читатель.
+                print(f"  ⚠️ {lang}: перевод не сошёлся — страница выйдет на языке-источнике")
+
+    # РАЗБОР ТОЖЕ ПЕРЕВОДИТСЯ. Эмуляция показала: интерфейс и пересказ переведены,
+    # а разбор оставался русским — и арабская страница выходила на треть по-русски.
+    # Читателю всё равно, какой у текста источник: он видит одну страницу, и она обязана
+    # быть на его языке целиком.
+    review_ru = _review_parts(box)
+    review_all = {"ru": review_ru}
+    if review_ru:
+        from gen_llm import translate_scipop
+        for lang in ("en", "es", "ar", "fr"):
+            got = translate_scipop(review_ru, lang)
+            review_all[lang] = got or review_ru
+            if not got:
+                print(f"  ⚠️ {lang}: разбор не перевёлся — выйдет на языке-источнике")
+
     # ПРИВАТНОЕ СЮДА НЕ ПОПАДАЕТ. publish.json уезжает на сайт, meta.json — нет.
     # Почта автора и токен остаются в meta.json; здесь только то, что можно показывать.
     pub = {
@@ -426,8 +461,8 @@ def cmd_publish(code, langs=None):
         "title": title,
         "kind": meta.get("kind", ""),
         "author_display": meta.get("author_name") or "",
-        "ours": {"ru": ours_ru} if ours_ru else {},
-        "review": _review_parts(box),
+        "ours": ours,
+        "review": review_all,
         "similar": similar[:5],
         "source_url": f"/lang/ru/community/{code}/source.zip",
         "source_meta": meta.get("source_meta", ""),
