@@ -239,6 +239,21 @@ def build_lang(lang):
             row["x"] = 1
         rows.append(row)
 
+    # Авторские работы — отдельный тип «com». Они находятся поиском, но встают в САМЫЙ
+    # КОНЕЦ выдачи (владелец 2026-08-06: «в поиск тоже можно включить, но ставить в самый
+    # конец»). Отдельный тип, а не признак у «art»: работы живут отдельным корпусом и
+    # в articles-index их нет вовсе — иначе они протекли бы в ленту.
+    try:
+        import community_pages
+        for w in community_pages._works():
+            loc = (w.get("ours", {}).get(lang) or {})
+            rows.append({"t": "com", "id": w["code"],
+                         "n": loc.get("title") or w.get("title") or w["code"],
+                         "d": w.get("received", "")})
+    except Exception as e:
+        # Пустой раздел — обычное дело, а вот молчаливая потеря работ из поиска — нет.
+        print(f"  ⚠️ авторские работы в поиск не попали: {type(e).__name__}: {e}")
+
     out = Path(LANG_DIR) / lang / "search-index.json"
     out.parent.mkdir(parents=True, exist_ok=True)
     # separators без пробелов: на 2,7 тыс. записей лишний пробел после каждой запятой — это

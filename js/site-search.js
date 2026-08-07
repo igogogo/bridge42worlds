@@ -29,7 +29,11 @@
         return q || document.documentElement.lang || 'ru';
     })();
 
-    var TYPES = ['tag', 'law', 'sci', 'sec', 'art'];
+    // Порядок ВАЖЕН: по нему группы идут в выдаче. 'com' — авторские работы — стоит
+    // последним намеренно (владелец 2026-08-06: «в поиск включить, но ставить в самый
+    // конец»). Раздел неприметный и в поиске тоже: находится тем, кто искал именно его,
+    // и не спорит за внимание с разборами статей.
+    var TYPES = ['tag', 'law', 'sci', 'sec', 'art', 'com'];
     var index = null, loading = null;
 
     function loadIndex() {
@@ -61,6 +65,10 @@
         if (row.t === 'sci') return base + 'scientists/' + authorSlug(row.id) + '.html';
         if (row.t === 'sec') return base + 'sections/' + row.id.replace(/[./]/g, '_') + '.html';
         if (row.t === 'art') return base + 'archive/' + (row.d || '') + '/' + row.id + '/index.html';
+        // Авторская работа: постоянный адрес по коду препринта, без даты в пути. Дата
+        // у неё — день получения письма, а не публикации, и класть её в адрес значило бы
+        // ломать ссылку при повторной публикации после доработки.
+        if (row.t === 'com') return base + 'community/' + row.id + '/';
         return base;
     }
 
@@ -107,6 +115,13 @@
             if (s) out.push({ row: rows[i], s: s });
         }
         out.sort(function (a, b) {
+            // Авторские работы — в САМЫЙ конец, ниже всего остального, независимо от веса
+            // совпадения (владелец 2026-08-06: «в поиск включить, но ставить в самый конец»).
+            // Проверка идёт ПЕРВОЙ, до сравнения весов: точное совпадение названия авторской
+            // работы не должно вытеснять статью, найденную по подстроке. Раздел неприметный
+            // и в выдаче тоже — находится тем, кто искал именно его.
+            var ac = a.row.t === 'com' ? 1 : 0, bc = b.row.t === 'com' ? 1 : 0;
+            if (ac !== bc) return ac - bc;
             if (b.s !== a.s) return b.s - a.s;
             if (a.row.t === 'art') {
                 // При равном весе совпадения полный разбор идёт впереди экспресса
@@ -255,7 +270,10 @@
         if (only) q = q.slice(1).trim();
         if (!q) return Promise.resolve({ q: '', source: 'none', total: 0, groups: group([], null) });
 
-        var limits = opts.limits || { tag: 6, law: 4, sci: 4, sec: 4, art: 20 };
+        // com: 5 — авторских работ в выдаче показываем немного. Их всего единицы, и раздел
+        // по решению владельца держится в стороне; двадцать строк, как у статей, сделали бы
+        // его заметнее основного корпуса ровно тогда, когда работ станет десяток.
+        var limits = opts.limits || { tag: 6, law: 4, sci: 4, sec: 4, art: 20, com: 5 };
         var run = (opts.source === 'vector' ? apiSearch : localSearch);
         return run(q, { scope: opts.scope, limits: limits }).then(function (res) {
             if (only) {
