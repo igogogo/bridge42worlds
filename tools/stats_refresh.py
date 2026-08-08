@@ -44,6 +44,48 @@ def run(script):
     return r.returncode, (r.stdout or "")[-300:] + (r.stderr or "")[-300:]
 
 
+def money_line():
+    """Расход в пересчёте НА СТАТЬИ — владелец 7 августа: «каждый день в телегу, что
+    потратили с точки зрения статей».
+
+    Доллары сами по себе ничего не говорят: $4 это много или мало? А вот «сделали 96
+    статей, потратили $3,10, вышло по три цента» — говорит сразу и про объём, и про то,
+    не подорожал ли конвейер."""
+    import subprocess as sp
+    from datetime import date, timedelta
+    import glob, os
+
+    try:
+        sys.path.insert(0, str(ROOT / "tools"))
+        import budget_guard as bg
+        month, today, by = bg.spend()
+        cap, day_cap = bg.MONTH_CAP, bg.DAY_CAP
+    except Exception:
+        return ""
+
+    # Статей, созданных сегодня — по времени появления папки, а не по дате arXiv
+    t = date.today()
+    made_today = sum(1 for d in glob.glob(str(ROOT / "lang/ru/archive/*/*/"))
+                     if date.fromtimestamp(os.path.getctime(d)) == t)
+    made_month = sum(1 for d in glob.glob(str(ROOT / "lang/ru/archive/*/*/"))
+                     if date.fromtimestamp(os.path.getctime(d)) >= t.replace(day=1))
+
+    per_today = f"${today / made_today:.3f}" if made_today else "—"
+    per_month = f"${month / made_month:.3f}" if made_month else "—"
+    left_articles = int((cap - month) / (month / made_month)) if made_month and month else 0
+
+    out = ("\n\n💰 <b>Деньги</b>"
+           f"\nСегодня: <b>{made_today}</b> статей за <b>${today:.2f}</b> "
+           f"(по {per_today} за статью)."
+           f"\nЗа месяц: {made_month} статей за ${month:.2f} из ${cap:.0f}, по {per_month}."
+           f"\nОстаток ${cap - month:.2f} — это ещё около <b>{left_articles}</b> статей.")
+    if today > day_cap * 0.8:
+        out += f"\n🟡 Дневной предел ${day_cap:.2f} почти выбран."
+    if month > cap * 0.85:
+        out += f"\n🔴 Месячный бюджет выбран на {month / cap * 100:.0f}%."
+    return out
+
+
 def zone_traffic():
     """Статистика на грани сети: запросы, страницы, уникальные адреса за последние дни.
 
@@ -173,7 +215,7 @@ def main():
 
     msg = (f"<b>Витрина обновлена</b>\n"
            f"Статей в ленте: {n.get('статей', '?')}, последняя за {n.get('последняя', '?')}."
-           f"{stats}{growth}{net}")
+           f"{stats}{growth}{money_line()}{net}")
     if failed:
         msg += f"\n\n⚠️ Не получилось: {', '.join(failed)}."
 

@@ -106,6 +106,186 @@ def safe_extract(zpath, dest):
         z.extractall(dest)
 
 
+
+def direct_link(url):
+    """Ссылка из адресной строки облака → ссылка, по которой отдаётся сам файл.
+
+    Автор присылает то, что видит в браузере. Для Google Drive это .../file/d/ID/view —
+    страница просмотра; скачав её, мы получим html вместо архива и не заметим этого,
+    пока не попробуем распаковать. Возвращаем ссылку на скачивание там, где знаем правило,
+    и исходную там, где не знаем.
+    """
+    m = re.search(r"drive\.google\.com/file/d/([\w-]{10,})", url)
+    if m:
+        return f"https://drive.google.com/uc?export=download&id={m.group(1)}"
+    m = re.search(r"drive\.google\.com/open\?id=([\w-]{10,})", url)
+    if m:
+        return f"https://drive.google.com/uc?export=download&id={m.group(1)}"
+    # Яндекс.Диск: публичная ссылка отдаётся через их API, прямой нет вовсе
+    if "disk.yandex" in url:
+        return ("https://cloudapi.yandex.net/v1/disk/public/resources/download"
+                f"?public_key={url}")
+    if "dropbox.com" in url and "dl=0" in url:
+        return url.replace("dl=0", "dl=1")
+    return url
+
+
+def looks_like_page(head):
+    """Пришёл html вместо файла? Признак того, что ссылка вела на страницу, а не на данные.
+
+    Проверяем НАЧАЛО содержимого, а не заголовок ответа: облака часто отдают
+    content-type: text/html и при отдаче файла тоже, а вот сигнатура не врёт."""
+    h = head[:400].lstrip().lower()
+    return h.startswith(b"<!doctype html") or h.startswith(b"<html") or b"<head" in h[:200]
+
+
+def fetch_link(url, dest, max_mb, session=None):
+    """Скачать файл по ссылке из письма. Возвращает (имя, размер) или (None, причина).
+
+    Отдельной функцией, потому что путей отказа тут больше, чем кода: ссылка может вести
+    на страницу просмотра, на форму подтверждения, на «запросите доступ» — и каждый из этих
+    ответов приходит с кодом 200 и типом text/html. Единственный надёжный признак файла —
+    его первые байты.
+    """
+    import requests as _rq
+    s = session or _rq.Session()
+    H = {"User-Agent": "Mozilla/5.0 bridge42worlds-intake"}
+    dl = direct_link(url)
+
+    r = s.get(dl, stream=True, timeout=300, allow_redirects=True, headers=H)
+    if r.status_code != 200:
+        return None, f"ответ {r.status_code}"
+    head = next(r.iter_content(4096), b"")
+
+    # Google Drive: страница «Virus scan warning» с формой подтверждения. Разбираем форму
+    # и повторяем запрос её полями — то же самое делает браузер по нажатию «скачать».
+    if looks_like_page(head) and "drive.google" in dl:
+        page = head + r.content if hasattr(r, "content") else head
+        try:
+            page = (head + b"".join(r.iter_content(1 << 16))).decode("utf-8", "replace")
+        except Exception:
+            page = head.decode("utf-8", "replace")
+        m = re.search(r'action="([^"]+)"', page)
+        if m:
+            action = m.group(1).replace("&amp;", "&")
+            fields = dict(re.findall(r'name="([^"]+)"\s+value="([^"]*)"', page))
+            r = s.get(action, params=fields, stream=True, timeout=300, headers=H)
+            head = next(r.iter_content(4096), b"")
+
+    if looks_like_page(head):
+        return None, "по ссылке отдаётся веб-страница, а не файл (нет общего доступа?)"
+
+    cd = r.headers.get("content-disposition", "")
+    mfn = re.search(r'filename\*?=(?:UTF-8\'\')?"?([^";]+)', cd)
+    name = Path((mfn.group(1) if mfn else url.split("?")[0])).name or "data.bin"
+
+    size = len(head)
+    with dest_path_for(dest, name).open("wb") as f:
+        f.write(head)
+        for chunk in r.iter_content(1 << 20):
+            size += len(chunk)
+            if size > max_mb * 1024 * 1024:
+                f.close()
+                dest_path_for(dest, name).unlink(missing_ok=True)
+                return None, f"файл больше {max_mb} МБ"
+            f.write(chunk)
+    return name, size
+
+
+def dest_path_for(folder, name):
+    return folder / ("link_" + Path(name).name)
+
+
+
+# Сколько раз работа может вернуться на подготовку. Владелец 2026-08-07: «три попытки
+# и хватит». Это не наказание, а признание: если после трёх заходов пакет не собирается,
+# дело не в невнимательности, и переписка по кругу не поможет ни нам, ни автору.
+MAX_TRIES = 3
+
+# Что должно быть в пакете. Ключ — что ищем, значение — как объяснить автору, зачем.
+REQUIRED = [
+    (("README.md", "index.html"), "текст работы"),
+    (("SELF-REVIEW.md",), "заключение подготовки со строкой «ВЕРДИКТ:»"),
+]
+EXPECTED_DIRS = [("data", "данные"), ("scripts", "код обработки"), ("figures", "графики")]
+
+
+def check_package(box):
+    """Соответствует ли пакет требованиям. Возвращает (готов, [замечания], вердикт_автора).
+
+    Проверяем СОДЕРЖАНИЕ, а не галочки: файл самопроверки с вердиктом «почти готово»
+    означает, что автор сам знает о недоделках — принимать такую работу и потом писать
+    о тех же недоделках было бы странно."""
+    un = box / "unpacked"
+    if not un.exists() or not any(un.rglob("*")):
+        return False, ["архив не распаковался или пуст"], ""
+
+    # Корень пакета: либо сама папка, либо единственная вложенная
+    dirs = [d for d in un.iterdir() if d.is_dir()]
+    root = dirs[0] if len(dirs) == 1 and not any(f.is_file() for f in un.iterdir()) else un
+
+    problems = []
+    names = {p.name for p in root.iterdir()}
+
+    for variants, what in REQUIRED:
+        if not (names & set(variants)):
+            problems.append(f"нет файла {' или '.join(variants)} — {what}")
+
+    for d, what in EXPECTED_DIRS:
+        if d not in names:
+            # Не всякая работа имеет код или данные — говорим мягко, но говорим
+            problems.append(f"нет папки {d}/ — {what}; если их нет по существу работы, "
+                            f"так и напишите в SELF-REVIEW.md")
+
+    verdict = ""
+    sr = root / "SELF-REVIEW.md"
+    if sr.exists():
+        head = sr.read_text(encoding="utf-8", errors="replace").strip().splitlines()
+        first = next((l for l in head if l.strip()), "")
+        if not first.upper().startswith("ВЕРДИКТ"):
+            problems.append("SELF-REVIEW.md не начинается со строки «ВЕРДИКТ:» — "
+                            "именно её читает приёмник")
+        else:
+            verdict = first.strip()
+            if "ГОТОВО К ОТПРАВКЕ" not in first.upper():
+                # Автор сам отметил недоделки — принимать нельзя, но и придираться не за что
+                problems.append(f"в заключении стоит «{first.strip()}» — "
+                                f"работа помечена как незавершённая самим автором")
+
+    return (not problems), problems, verdict
+
+
+def tries_count(box, digest):
+    """Сколько раз ЭТА работа уже возвращалась. Считаем по отпечатку архива.
+
+    Отпечаток, а не имя файла и не тема письма: автор может переименовать архив или
+    сменить тему, но если содержимое то же самое — это та же попытка. А если он
+    действительно переделал работу, отпечаток изменится, и счёт начнётся заново —
+    что справедливо, ведь это уже другая работа."""
+    hist = box.parent / "_tries.json"
+    try:
+        data = json.loads(hist.read_text(encoding="utf-8"))
+    except Exception:
+        data = {}
+    return data.get(digest, 0), hist, data
+
+
+def bump_try(hist, data, digest):
+    data[digest] = data.get(digest, 0) + 1
+    hist.write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8")
+    return data[digest]
+
+
+def package_digest(box):
+    """Отпечаток содержимого пакета: имена и размеры файлов, без чтения гигабайтов."""
+    un = box / "unpacked"
+    if not un.exists():
+        return ""
+    parts = sorted(f"{p.relative_to(un).as_posix()}:{p.stat().st_size}"
+                   for p in un.rglob("*") if p.is_file())
+    return hashlib.sha256("\n".join(parts).encode("utf-8")).hexdigest()[:16]
+
+
 def cmd_fetch():
     e = env()
     host = e.get("MAIL_HOST")
@@ -123,6 +303,27 @@ def cmd_fetch():
         frm = hdr(msg.get("From"))
         subj = hdr(msg.get("Subject"))
         mail_addr = re.search(r"[\w.+-]+@[\w.-]+", frm)
+
+        # СЛУЖЕБНЫЕ ПИСЬМА — не заявки. Отчёт о недоставке, автоответ «я в отпуске»,
+        # уведомление рассылки: всё это приходит в тот же ящик и выглядит как письмо
+        # от человека. 8 августа автомат завёл заявку b42p-2026-002 на отчёт Mailer-Daemon
+        # о том, что наше же письмо не дошло, — и вежливо ответил почтовому роботу
+        # с просьбой прогнать промпт подготовки.
+        addr = (mail_addr.group(0) if mail_addr else "").lower()
+        auto = (msg.get("Auto-Submitted", "").lower().startswith("auto")
+                or msg.get("X-Autoreply")
+                or msg.get("X-Failed-Recipients")
+                or any(x in addr for x in ("mailer-daemon", "postmaster", "no-reply",
+                                           "noreply", "bounce", "notification"))
+                or any(x in (subj or "").lower() for x in
+                       ("mail delivery failed", "undelivered mail", "delivery status",
+                        "returning message to sender", "автоответ", "out of office")))
+        if auto:
+            print(f"  ↩️ служебное письмо, не заявка: {subj[:60]}")
+            # Помечаем прочитанным и идём дальше: заявку не заводим, но и не теряем —
+            # письмо остаётся в ящике, человек его увидит.
+            continue
+
         code = next_code()
         box = SUBS / code
         (box / "incoming").mkdir(parents=True, exist_ok=True)
@@ -187,33 +388,21 @@ def cmd_fetch():
         # Безопасность: только http(s), потолок размера продавлен потоком (не верим
         # Content-Length), скачанное проходит тот же скан, что вложения.
         import requests as _rq
+        _sess = _rq.Session()
         for m2 in list(re.finditer(r"https?://[^\s<>\"']+", body))[:5]:
             url = m2.group(0).rstrip('.,)')
             if any(h in url for h in ("bridge42worlds", "mailto:")):
                 continue
-            try:
-                with _rq.get(url, stream=True, timeout=120,
-                             headers={"User-Agent": "bridge42worlds-intake"}) as resp:
-                    if resp.status_code != 200:
-                        continue
-                    name = Path(url.split("?")[0]).name or "data.bin"
-                    dest = box / "incoming" / ("link_" + name)
-                    size = 0
-                    with dest.open("wb") as f:
-                        for chunk in resp.iter_content(1 << 20):
-                            size += len(chunk)
-                            if size > MAX_LINK_MB * 1024 * 1024:
-                                raise ValueError("больше предела")
-                            f.write(chunk)
-                    files.append(dest.name)
-                    print(f"  🔗 скачано по ссылке: {name} · {size // 1024 // 1024} МБ")
-                    scan_one(dest.name)      # ровно та же проверка, что у вложений
-            except Exception as ex:
-                print(f"  ⚠️ ссылка {url[:50]}: {ex}")
-
-        # Сводка проверки пишется ПОСЛЕ ссылок — иначе в неё не попадало скачанное.
-        (box / "scan.json").write_text(json.dumps(verdicts, ensure_ascii=False, indent=1),
-                                       encoding="utf-8")
+            name, res = fetch_link(url, box / "incoming", MAX_LINK_MB, _sess)
+            if not name:
+                # Причину показываем и себе, и потом автору: «не смогли скачать» без
+                # объяснения выглядит как «ваша работа нам не нужна».
+                print(f"  ⚠️ ссылка {url[:55]}: {res}")
+                continue
+            fn = "link_" + Path(name).name
+            files.append(fn)
+            print(f"  🔗 скачано по ссылке: {name} · {res // 1024 // 1024} МБ")
+            scan_one(fn)
 
         # ПРОВЕРКА СЛЕДОВ ПРОМПТА ПОДГОТОВКИ (правило владельца 2026-08-05: «если видно,
         # что промпт не обрабатывался — по форматам, структуре хранения, первичному

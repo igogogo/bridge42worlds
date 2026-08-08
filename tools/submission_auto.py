@@ -98,7 +98,8 @@ def compose(kind, meta, review_text, url=""):
     Промпт держит тон («помогаем, а не лечим») и правило про язык работы."""
     from common import chat, load_prompt
     name = {"publish": "submission-reply-publish",
-            "revise": "submission-reply-revise"}[kind]
+            "revise": "submission-reply-revise",
+            "needs-prompt": "submission-reply-needs-prompt"}[kind]
     p = load_prompt(name)
     for k, v in (("{code}", meta.get("code", "")),
                  ("{title}", meta.get("subject", "")),
@@ -111,8 +112,17 @@ def compose(kind, meta, review_text, url=""):
                  ("{token}", meta.get("author_token", "")),
                  # Этих трёх не передавали — и автор получал бы фигурные скобки в тексте.
                  ("{reply_to}", "article@bridge42worlds.academy"),
-                 ("{prompt_url}", f"{SITE}/lang/ru/community/"),
-                 ("{token_url}", f"{SITE}/lang/ru/community/")):
+                 ("{prompt_url}", f"{SITE}/lang/ru/community/prepare/"),
+                 ("{prepare_url}", f"{SITE}/lang/ru/community/prepare/"),
+                 ("{token_url}", f"{SITE}/lang/ru/community/"),
+                 ("{found}", meta.get("found", "")),
+                 ("{problems}", meta.get("problems_text", "")),
+                 ("{attempt_note}", meta.get("attempt_note", "")),
+                 # Промпт вставляем в письмо ЦЕЛИКОМ (владелец 2026-08-07: «промт в письмо
+                 # прямо вставить, чтобы продублировать»). Автору не придётся никуда идти:
+                 # ссылка на страницу тоже есть, но письмо самодостаточно.
+                 ("{prompt}", (ROOT / "data" / "prompts" / "author-self-check.txt")
+                  .read_text(encoding="utf-8"))):
         p = p.replace(k, str(v))
     r = chat("article_popular", p, system="Ты пишешь письмо автору от лица bridge42worlds.")
     raw = (r.choices[0].message.content or "").strip()
@@ -163,17 +173,75 @@ def process(code, dry=False):
                     break
             break
 
-    # ── куда автомат не идёт ──
-    if verdict == "decline" or not meta.get("prepared", True):
-        why = ("вердикт decline — отказ пишем руками"
-               if verdict == "decline" else "нет следов промпта подготовки")
+    # ── работа без подготовки: отвечаем сами, это не отказ ──
+    # Раньше такие работы ждали человека. Владелец 2026-08-07: «мою работу отклони, скажи
+    # нужен промпт, и в письме укажи порядок проверки». Письмо не шаблонное: его пишет
+    # модель, перечисляя то, что реально лежит в пакете, и вкладывая промпт целиком —
+    # автору не нужно никуда идти.
+    # Проверяем СООТВЕТСТВИЕ требованиям, а не наличие файла (владелец 2026-08-07):
+    # пакет может содержать SELF-REVIEW.md и всё равно не годиться — если в нём стоит
+    # «почти готово» или структура разошлась с нашей.
+    import submission as _sub
+    ok_pkg, problems, author_verdict = _sub.check_package(box)
+    if not ok_pkg:
+        if dry:
+            print(f"  [сухой] {code}: вернул бы на подготовку ({len(problems)} замечаний)")
+            return "needs-prompt"
+
+        # Счёт попыток по отпечатку пакета: та же работа второй раз — та же попытка,
+        # переделанная — новая. Три круга, дальше пауза: если пакет не собирается
+        # с третьего раза, переписка по кругу не поможет ни нам, ни автору.
+        digest = _sub.package_digest(box)
+        n, hist, data = _sub.tries_count(box, digest)
+        attempt = _sub.bump_try(hist, data, digest)
+        meta["attempt"] = attempt
+        meta["package_digest"] = digest
+        meta["problems"] = problems
+
+        if attempt > _sub.MAX_TRIES:
+            from datetime import date, timedelta
+            until = (date.today() + timedelta(days=5)).isoformat()
+            meta["status"] = "paused"
+            meta["paused_until"] = until
+            (box / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1),
+                                           encoding="utf-8")
+            tg(f"⏸️ <b>{code}</b>: три попытки исчерпаны, пауза до {until}.")
+            print(f"  ⏸️ {code}: три попытки исчерпаны — пауза до {until}")
+            return "paused"
+
+        un = box / "unpacked"
+        found = []
+        if un.exists():
+            root = next((d for d in un.iterdir() if d.is_dir()), un)
+            for item in sorted(root.iterdir()):
+                n2 = sum(1 for _ in item.rglob("*")) if item.is_dir() else 0
+                found.append(f"{item.name}{' (' + str(n2) + ' файлов)' if n2 else ''}")
+        meta["found"] = ", ".join(found) if found else "архив не распаковался"
+        meta["problems_text"] = "\n".join(f"· {x}" for x in problems)
+        meta["attempt_note"] = (f"Попытка {attempt} из {_sub.MAX_TRIES}." if attempt > 1 else "")
+        subject, letter = compose("needs-prompt", meta, "")
+        (box / "reply-sent.txt").write_text(letter, encoding="utf-8")
+        ok = send_mail(meta.get("email", ""),
+                       subject or f"{code}: нужна подготовка работы", letter)
+        meta["status"] = "needs-prompt-sent" if ok else "received"
+        meta["reply_sent"] = bool(ok)
+        (box / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1),
+                                       encoding="utf-8")
+        tg(f"📨 <b>{code}</b>: работа без подготовки, автору отправлен промпт и порядок. "
+           f"Письмо: {'ушло' if ok else 'НЕ УШЛО'}")
+        print(f"  📨 {code}: письмо о подготовке {'ушло' if ok else 'НЕ УШЛО'}")
+        return "needs-prompt"
+
+    # ── отказ по существу пишет человек ──
+    if verdict == "decline":
         meta["status"] = "held"
-        meta["hold_reason"] = why
+        meta["hold_reason"] = "вердикт decline — отказ пишем руками"
         if not dry:
             (box / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1),
                                            encoding="utf-8")
-            tg(f"✋ <b>{code}</b> ждёт человека: {why}.\nРазбор готов, письмо не отправлено.")
-        print(f"  ✋ {code}: {why}")
+            tg(f"✋ <b>{code}</b> ждёт человека: вердикт decline.\n"
+               f"Разбор готов, письмо не отправлено.")
+        print(f"  ✋ {code}: вердикт decline — письмо пишет человек")
         return "held"
 
     # ── публикация или просьба доработать ──

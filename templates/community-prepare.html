@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="$lang" dir="$dir">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>$prep_page_title · bridge42worlds</title>
+<meta name="description" content="$prep_lead">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz@8..60&family=Noto+Naskh+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<style>
+  /* Страница самодостаточна, как гид: свой css внутри файла. Раздел живёт отдельно от
+     ленты, и тащить сюда общий стиль ради пяти правил незачем. */
+  :root {
+    --bg: #F4F2EC; --surface: #FBFAF6; --ink: #0F1626; --soft: #4A5468; --muted: #77808F;
+    --hair: #DFDBD1; --ochre: #B5651D; --cyan: #2E9E8F; --link: #2E9E8F;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --w-text: 680px; --radius: 14px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1b1f27; --surface: #242832; --ink: #e8e6e3; --soft: #b9b6b1;
+      --muted: #8f8c88; --hair: #343842;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1b1f27; --surface: #242832; --ink: #e8e6e3; --soft: #b9b6b1;
+    --muted: #8f8c88; --hair: #343842;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans);
+    font-size: 16px; line-height: 1.65; -webkit-text-size-adjust: 100%; }
+  html[lang="ar"] body, html[lang="ar"] h1, html[lang="ar"] h2 {
+    font-family: 'Noto Naskh Arabic', var(--sans); line-height: 1.9; }
+  .wrap { max-width: var(--w-text); margin: 0 auto; padding: 22px 20px 60px; }
+  a { color: var(--link); }
+  .top { display: flex; align-items: center; gap: 14px; margin-bottom: 30px;
+    font-family: var(--mono); font-size: 13px; }
+  .top a { color: var(--soft); text-decoration: none; }
+  .logo { font-family: 'Source Serif 4', Georgia, serif; font-size: 17px; color: var(--ink);
+    text-decoration: none; }
+  .langs { display: flex; gap: 6px; margin-inline-start: auto; }
+  .langs a { border: 1px solid var(--hair); border-radius: 999px; padding: 3px 10px;
+    font-size: 12px; }
+  h1 { font-family: 'Source Serif 4', Georgia, serif; font-weight: 600;
+    font-size: clamp(25px, 5vw, 33px); line-height: 1.2; margin: 0 0 12px; }
+  h2 { font-family: 'Source Serif 4', Georgia, serif; font-weight: 600; font-size: 21px;
+    line-height: 1.3; margin: 0 0 12px; }
+  .k { font-family: var(--mono); font-size: 11px; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--ochre); margin: 0 0 8px; }
+  .lead { font-size: 17.5px; color: var(--soft); margin: 0 0 34px; }
+  section { margin-top: 44px; }
+  .note { color: var(--muted); font-size: 14.5px; margin: 0 0 16px; }
+
+  /* Шаги: номер отдельным столбцом, чтобы читались как последовательность,
+     а не как список равнозначных пунктов. */
+  .steps { display: grid; gap: 12px; }
+  .step { display: grid; grid-template-columns: 30px 1fr; gap: 16px; align-items: start;
+    background: var(--surface); border: 1px solid var(--hair); border-radius: var(--radius);
+    padding: 16px 18px; }
+  .step .n { font-family: var(--mono); font-size: 13px; color: var(--ochre); padding-top: 2px; }
+  .step b { display: block; margin-bottom: 3px; }
+  .step span { color: var(--muted); font-size: 14.5px; }
+
+  /* Промпт: моноширинный блок с прокруткой. Копируется одной кнопкой — переписывать
+     полсотни строк руками никто не станет, а именно от этого зависит качество пакета. */
+  .prompt-box { position: relative; background: var(--surface); border: 1px solid var(--hair);
+    border-radius: var(--radius); overflow: hidden; }
+  .prompt-box pre { margin: 0; padding: 18px 20px; max-height: 420px; overflow: auto;
+    font-family: var(--mono); font-size: 12.5px; line-height: 1.6; white-space: pre-wrap;
+    word-break: break-word; color: var(--soft); }
+  .copy { position: sticky; top: 0; display: flex; justify-content: flex-end;
+    padding: 10px 12px; background: var(--surface); border-bottom: 1px solid var(--hair); }
+  .copy button { font: inherit; font-family: var(--mono); font-size: 12px; cursor: pointer;
+    min-height: 34px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--hair);
+    background: none; color: var(--soft); transition: color .15s, border-color .15s; }
+  .copy button:hover { color: var(--link); border-color: var(--link); }
+  .copy button.done { color: var(--cyan); border-color: var(--cyan); }
+
+  .tree { font-family: var(--mono); font-size: 13px; line-height: 1.9; color: var(--soft);
+    background: var(--surface); border: 1px solid var(--hair); border-radius: var(--radius);
+    padding: 16px 20px; overflow-x: auto; }
+  ul.rights { margin: 0; padding-inline-start: 20px; color: var(--soft); }
+  ul.rights li { margin-bottom: 9px; }
+  .foot { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--hair);
+    display: flex; gap: 14px; align-items: center; font-size: 13px; color: var(--muted); }
+</style>
+<script>
+/* Тема применяется до первой отрисовки, иначе страница мигает белым. Ключ общий
+   с остальным сайтом: выбор читателя один на все разделы. */
+(function () { try { var t = localStorage.getItem('b42_theme');
+  if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <a class="logo" href="/lang/$lang/index.html">bridge42worlds</a>
+    <a href="/lang/$lang/community/">$prep_back</a>
+    <span class="langs">
+      <a href="/lang/ru/community/prepare/" data-l="ru">RU</a>
+      <a href="/lang/en/community/prepare/" data-l="en">EN</a>
+      <a href="/lang/es/community/prepare/" data-l="es">ES</a>
+      <a href="/lang/ar/community/prepare/" data-l="ar">AR</a>
+      <a href="/lang/fr/community/prepare/" data-l="fr">FR</a>
+    </span>
+  </div>
+
+  <p class="k">$prep_kicker</p>
+  <h1>$prep_h1</h1>
+  <p class="lead">$prep_lead</p>
+
+  <section>
+    <h2>$prep_why_h2</h2>
+    <p>$prep_why_p</p>
+  </section>
+
+  <section>
+    <h2>$prep_how_h2</h2>
+    <div class="steps">
+      <div class="step"><span class="n">1</span><div><b>$prep_s1_t</b><span>$prep_s1_s</span></div></div>
+      <div class="step"><span class="n">2</span><div><b>$prep_s2_t</b><span>$prep_s2_s</span></div></div>
+      <div class="step"><span class="n">3</span><div><b>$prep_s3_t</b><span>$prep_s3_s</span></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>$prep_prompt_h2</h2>
+    <p class="note">$prep_prompt_note</p>
+    <div class="prompt-box">
+      <div class="copy"><button type="button" id="cp" data-done="$prep_copied">$prep_copy</button></div>
+      <pre id="pr">$prep_prompt_text</pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>$prep_order_h2</h2>
+    <p class="note">$prep_order_note</p>
+    <div class="steps">
+      <div class="step"><span class="n">1</span><div><b>$prep_o1_t</b><span>$prep_o1_s</span></div></div>
+      <div class="step"><span class="n">2</span><div><b>$prep_o2_t</b><span>$prep_o2_s</span></div></div>
+      <div class="step"><span class="n">3</span><div><b>$prep_o3_t</b><span>$prep_o3_s</span></div></div>
+      <div class="step"><span class="n">4</span><div><b>$prep_o4_t</b><span>$prep_o4_s</span></div></div>
+      <div class="step"><span class="n">5</span><div><b>$prep_o5_t</b><span>$prep_o5_s</span></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>$prep_rights_h2</h2>
+    <ul class="rights">
+      <li>$prep_r1</li>
+      <li>$prep_r2</li>
+      <li>$prep_r3</li>
+      <li>$prep_r4</li>
+      <li>$prep_r5</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>$prep_license_h2</h2>
+    <p>$prep_license_p</p>
+  </section>
+
+  <div class="foot">
+    <a href="/lang/$lang/index.html" style="color:var(--ink);text-decoration:none">bridge42worlds</a>
+    <span>$foot_tag</span>
+  </div>
+
+</div>
+<script>
+(function () {
+  var b = document.getElementById('cp'), pre = document.getElementById('pr');
+  if (!b || !pre) return;
+  b.addEventListener('click', function () {
+    // navigator.clipboard требует защищённого соединения; на всякий случай оставляем
+    // запасной путь через выделение — иначе на части браузеров кнопка молча ничего не делает.
+    var text = pre.innerText;
+    var done = function () {
+      var was = b.textContent;
+      b.textContent = b.dataset.done; b.classList.add('done');
+      setTimeout(function () { b.textContent = was; b.classList.remove('done'); }, 2000);
+    };
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(done);
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); done(); } catch (e) {}
+      ta.remove();
+    }
+  });
+})();
+</script>
+</body>
+</html>

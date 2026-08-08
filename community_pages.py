@@ -232,12 +232,38 @@ def build_index(lang):
     return str(d / "index.html")
 
 
+
+def build_prepare(lang):
+    """Страница подготовки: промпт и порядок проверки.
+
+    Отдельная страница, а не раздел гида. Владелец 2026-08-07: «я давал на вход наш about,
+    а надо было дать страницу, где описан промт и условия». Гид объясняет, что у нас есть;
+    автору нужно знать, что сделать, — это разные тексты и разные адреса.
+
+    Промпт экранируем: он уходит внутрь <pre> как текст, и любой угловой скобкой в нём
+    страница бы поломалась."""
+    tpl = _tpl("community-prepare")
+    if not tpl:
+        return None
+    s = _strings(lang)
+    vals = {
+        "lang": lang, "dir": "rtl" if lang in RTL else "ltr",
+        "prep_prompt_text": H.escape(s.get("prep_prompt_text", "")),
+    }
+    out = tpl.safe_substitute({**s, **vals})
+    d = ROOT / "lang" / lang / "community" / "prepare"
+    d.mkdir(parents=True, exist_ok=True)
+    (d / "index.html").write_text(out, encoding="utf-8")
+    return str(d / "index.html")
+
+
 def build_all():
     n = 0
     for w in _works():
         n += len(build_work(w["code"]))
     for lang in LANGS:
         build_index(lang)
+        build_prepare(lang)
     print(f"✅ раздел собран: {len(_works())} работ, {n} страниц + {len(LANGS)} списков")
     return 0
 
