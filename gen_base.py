@@ -248,6 +248,39 @@ def version_label(version, lang):
     return VERSION_LABELS[version].get(lang, VERSION_LABELS[version]["en"])
 
 
+def article_tags(scipop):
+    """Понятия статьи — ОДНА точка на весь генератор.
+
+    С 2026-08-09 показываем смысловую разметку (`tags_vec`, её пишет tools/tag_by_vector.py),
+    а не то, что модель назвала при генерации. Разница не косметическая: промпт выбирал теги
+    из словаря, который держал в голове, и в ходу оказалось 209 понятий из 368 — остальные
+    существовали на сайте, но статей у них не было никогда. Вектор смотрит на смысл текста
+    и достаёт то, что человек назвать не догадался.
+
+    Откат на старые поля обязателен: `tags_vec` записан не у всех (на 2026-08-09 — 2937 из
+    2966), а у свежих статей его ещё нет вовсе, пока не прогнали разметку. Старые поля не
+    трогаем — по ним можно вернуться назад одной правкой этой функции.
+    """
+    vec = scipop.get("tags_vec")
+    if vec:
+        return [t for t in vec if t]
+    return [t for t in [scipop.get("main_tag", "")] + (scipop.get("extra_tags") or []) if t]
+
+
+def article_laws(scipop):
+    """Законы статьи — тоже одна точка.
+
+    Раньше законы на странице статьи не хранились рядом с ней, а выводились через общий тег:
+    достаточно было упомянуть спектроскопию, чтобы приклеился закон излучения Планка. Теперь
+    берём `laws_vec` — привязку по смыслу текста. У трети статей список станет пустым, и это
+    правильный ответ, а не потеря: физического закона для работы про языковые модели нет.
+    """
+    vec = scipop.get("laws_vec")
+    if vec is not None:
+        return [l for l in vec if l]
+    return [l for l in (scipop.get("laws") or []) if l]
+
+
 def version_scipop(data, version, lang):
     """scipop нужной версии/языка из data.json с откатами по версии и языку.
     Просто (simple) без своих формул наследует их у Популярного, как и мини-версия (юзер-фидбек
@@ -263,8 +296,24 @@ def version_scipop(data, version, lang):
                 pop = version_scipop(data, "popular", lang)
                 if pop.get("formulas"):
                     s = {**s, "formulas": pop["formulas"]}
+            s = with_vec_markup(s, vdata.get(DEFAULT_LANG))
             return s
     return {}
+
+
+def with_vec_markup(scipop, ru_scipop):
+    """Подмешать смысловую разметку из русской ветки в перевод.
+
+    Теги и законы — идентификаторы, они одинаковы на всех языках, но `tags_vec`/`laws_vec`
+    пишутся только в ветку языка-источника (см. tools/tag_by_vector.py). Без этого шага
+    английская и арабская страницы показывали бы старую разметку, а русская — новую:
+    расхождение, которое заметил бы первый же читатель, сверивший две версии одной статьи.
+    """
+    if not scipop or not ru_scipop or scipop is ru_scipop:
+        return scipop
+    add = {k: ru_scipop[k] for k in ("tags_vec", "laws_vec")
+           if k not in scipop and ru_scipop.get(k) is not None}
+    return {**scipop, **add} if add else scipop
 
 
 # Бегунок сложности — от простого к сложному, лево→право (мини даже проще «Просто»).

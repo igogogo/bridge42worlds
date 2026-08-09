@@ -972,7 +972,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
     # Кнопка «+ комментарий» едет в строку лайков (.actions-compact), справа от реакций/шэра.
     comment_toggle_html = f'<button type="button" class="fb-comment-toggle actions-comment">{safe(feedback_comment_label(lang))}</button>'
 
-    tags = [t for t in [scipop.get("main_tag", "")] + scipop.get("extra_tags", []) if t]
+    tags = article_tags(scipop)
     authors = article.get("authors", [])
     authors_html = ", ".join(
         (f'<a href="/{LANG_DIR}/en/authors/{attr_safe(author_slug(a))}.html" class="text-author-link" data-author="{attr_safe(a)}">{safe(a)}</a>'
@@ -1227,8 +1227,8 @@ def save_data_json(versions_ru, article, date_str, folder, translations=None, ca
         "id": article["id"], "original_title": article["title"],
         "authors": article.get("authors", []), "date": date_str,
         "license": article.get("license_url", ""), "license_name": article.get("license_name", "CC BY"),
-        "tags": [scipop_adv.get("main_tag", "")] + scipop_adv.get("extra_tags", []),
-        "laws": scipop_adv.get("laws", []),
+        "tags": article_tags(scipop_adv),
+        "laws": article_laws(scipop_adv),
         "main_tag": scipop_adv.get("main_tag", ""),
         "scientists": scipop_adv.get("scientists", []),
         "categories": article.get("categories", []),
@@ -1364,11 +1364,11 @@ def update_index(scipop, article, date_str, lang, version, abstract=""):
         "threads": strip_markers(scipop.get("threads", ""))[:480],
         "thumbs": article.get("thumbs", 0),
         "authors": article.get("authors", [])[:50], "date": date_str,  # до 50 — лента показывает ≤20, >20 разворачивает
-        "tags": [scipop.get("main_tag", "")] + scipop.get("extra_tags", []),
+        "tags": article_tags(scipop),
         # Законы в индексе не было вовсе — на карточке их показать было нечем, хотя в data.json
         # они лежат с самого введения слоя «Законы». Владелец 2026-08-02: показывать на карточке
         # теги, учёных и законы в едином графическом ключе.
-        "laws": scipop.get("laws", []),
+        "laws": article_laws(scipop),
         "scientists": scipop.get("scientists", []), "url": url,
         "reading": reading_minutes(scipop),
         "categories": article.get("categories", []),
@@ -1405,7 +1405,7 @@ def update_tag_counts(scipop):
     gp = Path("data/tags-graph.json")
     if not gp.exists(): return
     graph = json.loads(gp.read_text(encoding="utf-8"))
-    for t in [scipop.get("main_tag", "")] + scipop.get("extra_tags", []):
+    for t in article_tags(scipop):
         if t and t in graph.get("graph", {}):
             graph["graph"][t]["article_count"] = graph["graph"][t].get("article_count", 0) + 1
             if "scientists" not in graph["graph"][t]: graph["graph"][t]["scientists"] = []
@@ -2082,14 +2082,19 @@ def generate_law_page(law_id, lang):
     problems = L.get("key_problems") or []
     problems_html = f'<div class="section"><h2>{safe(loc["problems"])}</h2><p>{safe("; ".join(problems))}</p></div>' if problems else ""
 
-    # Статьи по теме — по объединению тегов закона (как лента тега, но для нескольких тегов)
+    # Статьи закона — по ПРЯМОЙ привязке (`laws` статьи, которую с 2026-08-09 заполняет
+    # смысловая разметка), а не по объединению тегов закона, как было раньше. Старое правило
+    # цепляло закон ко всему, где встретился хотя бы один его тег: достаточно упомянуть
+    # спектроскопию, чтобы к статье приклеился закон излучения Планка. Статей у части законов
+    # станет меньше, а у трети статей колонка законов опустеет — это верный ответ, а не потеря:
+    # физического закона для работы про языковые модели не существует.
     index = load_index(lang)
     seen = set()
     articles_html = ""
     law_article_count = 0
     for a in index:
         if a.get("version") != "popular": continue
-        if not (set(a.get("tags", [])) & set(law_tags)): continue
+        if law_id not in (a.get("laws") or []): continue
         if a["id"] in seen: continue
         seen.add(a["id"])
         law_article_count += 1
@@ -3822,7 +3827,9 @@ def pick_scipop(versions_ru, translations, v, lang):
     per_lang = translations.get(v, {})
     tr = per_lang.get(lang)
     if tr and not payload_in_source_lang(tr):
-        return tr, True
+        # Смысловая разметка лежит только в русской ветке, а теги — идентификаторы, общие для
+        # всех языков: без этого перевод показывал бы старые теги, а оригинал — новые.
+        return with_vec_markup(tr, versions_ru.get(v)), True
     return untranslated_stub(versions_ru.get(v) or {}, lang, per_lang), False
 
 
@@ -4000,11 +4007,11 @@ def _index_entry(scipop, data, date_str, lang, version):
         "threads": strip_markers(data.get("threads", ""))[:480],
         "thumbs": data.get("thumbs", 0),
         "authors": data.get("authors", [])[:50], "date": date_str,  # до 50 — лента показывает ≤20, >20 разворачивает
-        "tags": [scipop.get("main_tag", "")] + scipop.get("extra_tags", []),
+        "tags": article_tags(scipop),
         # Законы в индексе не было вовсе — на карточке их показать было нечем, хотя в data.json
         # они лежат с самого введения слоя «Законы». Владелец 2026-08-02: показывать на карточке
         # теги, учёных и законы в едином графическом ключе.
-        "laws": scipop.get("laws", []),
+        "laws": article_laws(scipop),
         "scientists": scipop.get("scientists", []), "url": url,
         "reading": reading_minutes(scipop),
         "categories": data.get("categories", []),
@@ -4094,7 +4101,14 @@ def recompute_tag_counts():
     for t in graph.get("graph", {}).values():
         t["article_count"] = 0
     for data, _ in iter_articles():
-        for t in [data.get("main_tag", "")] + data.get("tags", []):
+        # Верхнеуровневые `tags`/`main_tag` в data.json обновляются только при генерации статьи,
+        # а смысловая разметка приезжает отдельным прогоном (tools/tag_by_vector.py) прямо
+        # в ветку тира. Считаем по тому же правилу, по которому показываем, иначе счётчик
+        # в облаке разойдётся со списком статей на самой странице тега.
+        pop_ru = (data.get("popular") or {}).get(DEFAULT_LANG) or {}
+        tags = (article_tags(pop_ru) if pop_ru.get("tags_vec")
+                else [t for t in [data.get("main_tag", "")] + (data.get("tags") or []) if t])
+        for t in tags:
             node = graph.get("graph", {}).get(t)
             if node:
                 node["article_count"] = node.get("article_count", 0) + 1
