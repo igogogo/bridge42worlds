@@ -419,17 +419,16 @@ def _level_btn(v, lang, active, href=None, compact=False):
             f'title="{label} — {hint}">{inner}</button>')
 
 
-def level_switch_links(lang, current, date_str, aid, compact=False, with_mini=False):
+def level_switch_links(lang, current, date_str, aid, compact=False):
     """Для страницы статьи: ссылки на файлы уровней (работает и без JS).
 
-    with_mini — добавляет «мини» четвёртой кнопкой. На странице статьи это настоящий файл
-    (mini.html), поэтому уровень честный. В лентах мини не показываем: там он был не выбором
-    версии, а режимом показа, который молча превращался в «популярно», если у статьи не было
-    короткого текста, — читатель нажимал и не видел разницы (2026-07-28)."""
-    order = LEVEL_ORDER + (["mini"] if with_mini else [])
+    Мини среди уровней больше нет (владелец 2026-08-09: «непонятно для чего, неудачный
+    текст»). Уровней три — просто, популярно, подробно, — и они отличаются глубиной разбора;
+    мини же был не глубиной, а обрубком, и читатель не понимал, чем он отличается от простого.
+    Поле `mini` в данных осталось: там лежит короткий текст экспресс-статей, он нужен внутри."""
     btns = "".join(_level_btn(v, lang, v == current,
                               href=f"/{LANG_DIR}/{lang}/archive/{date_str}/{aid}/{VERSION_FILES[v]}",
-                              compact=compact) for v in order)
+                              compact=compact) for v in LEVEL_ORDER)
     return f'<div class="lv-switch{" lv-switch-compact" if compact else ""}">{btns}</div>'
 
 
@@ -440,10 +439,11 @@ def level_switch_spans(lang, current="popular", compact=False):
 
 
 def mini_header_html(mini_text, lang):
-    """Карточка «коротко» — шапка страницы (Фаза 4). Пусто, если текста нет."""
-    if not mini_text:
-        return ""
-    label = {"ru": "коротко · 20 секунд", "en": "in short · 20 seconds",
-             "es": "en breve · 20 segundos", "ar": "باختصار · 20 ثانية"}.get(lang, "in short")
-    return (f'<div class="mini-head"><div class="mini-head-l">{safe(label)}</div>'
-            f'<p>{safe(mini_text)}</p></div>')
+    """Шапка «коротко · 20 секунд» убрана (владелец 2026-08-09).
+
+    Она стояла над текстом «просто» и «популярно» и пересказывала статью ещё раз, до того как
+    читатель начал её читать: тот же смысл в трёх строках, только суше. Функция оставлена
+    пустой заглушкой, чтобы не править вызовы и шаблон, — и чтобы решение было видно тому,
+    кто придёт сюда за «а куда делась шапка».
+    """
+    return ""

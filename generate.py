@@ -862,8 +862,7 @@ def build_actions_html(like_id, fav_id, lang, entity_type="article", inline_comm
             f'</div>')
 
 
-def gen_article_html(scipop, article, date_str, images, lang, version, captions=None, abstract=None,
-                     has_mini=True):
+def gen_article_html(scipop, article, date_str, images, lang, version, captions=None, abstract=None):
     tpl = load_template("article")
     if not tpl.template: return "<html><body>Template not found</body></html>"
     # Аннотация СНЯТА С ПОКАЗА (решение владельца 2026-07-31): её промпт писал паспорт
@@ -1131,9 +1130,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
     version_toggle_html = ""   # бегунок заменён иконочным переключателем (2026-07-28)
     # Фаза 4: иконочный переключатель над названием + компактный дубль внизу статьи,
     # плюс карточка «коротко» шапкой (решения владельца 2026-07-27).
-    # «Мини» показываем, только если mini.html для этой статьи действительно пишется: у экспресс-
-    # статьи без короткого текста его нет, а кнопка стояла всегда и вела в 404 (нашли 2026-07-29).
-    level_switch_html = level_switch_links(lang, version, date_str, article["id"], with_mini=has_mini)
+    level_switch_html = level_switch_links(lang, version, date_str, article["id"])
     level_switch_bottom_html = level_switch_links(lang, version, date_str, article["id"], compact=True)
     mini_head_html = mini_header_html((scipop.get("mini") or "").strip(), lang)
     # canonical — собственный URL страницы; языковые альтернативы описывает hreflang
@@ -3301,39 +3298,15 @@ def regenerate_all_html(only=None):
                     scipop = untranslated_stub(scipop, lang, {"en": version_scipop(data, version, "en") or {}})
                 html = gen_article_html(scipop, article_obj, date_str,
                                         [str(p) for p in images], lang, version,
-                                        captions_for_lang(captions, lang), abstract,
-                                        has_mini=mini_ok.get(lang, True))
+                                        captions_for_lang(captions, lang), abstract)
                 out = Path(LANG_DIR) / lang / "archive" / date_str / data["id"] / VERSION_FILES[version]
                 out.parent.mkdir(parents=True, exist_ok=True)
                 _write_text_retry(out, html)
                 count += 1
-        # Mini-версия — threads-текст (полный, не обрезанный). threads берём ИМЕННО из popular
-        # (заглушка express_locked уже несёт туда express-поле mini — см. express_locked_scipop),
-        # а title/oneliner — из simple, если popular оказался экспресс-заглушкой (у simple нет
-        # своего threads, только у popular/заглушки — брать threads из simple было бы пусто).
-        # ПО ЯЗЫКУ: version_scipop(data, v, lang) сам делает откат на DEFAULT_LANG, если перевода
-        # нет — раньше здесь везде стоял DEFAULT_LANG жёстко, и mini у en/es всегда был русским.
-        for lang in LANGUAGES:
-            base_scipop = version_scipop(data, "popular", lang) or version_scipop(data, "simple", lang) or {}
-            if base_scipop.get("express_locked"):
-                base_scipop = version_scipop(data, "simple", lang) or base_scipop
-            if lang != DEFAULT_LANG and payload_in_source_lang(base_scipop):
-                base_scipop = untranslated_stub(base_scipop, lang,
-                                                {"en": version_scipop(data, "popular", "en") or {}})
-                base_scipop["threads"] = base_scipop["text"]   # иначе mini просто не запишется
-            # express: реальный тир хранит короткий текст в "mini", не "threads" (см. write_article_pages)
-            threads_text = base_scipop.get("threads") or base_scipop.get("mini") or ""
-            if not threads_text:
-                continue
-            mini_scipop = dict(base_scipop)
-            mini_scipop["text"] = threads_text
-            out = Path(LANG_DIR) / lang / "archive" / date_str / data["id"] / "mini.html"
-            out.parent.mkdir(parents=True, exist_ok=True)
-            html = gen_article_html(mini_scipop, article_obj, date_str,
-                                    [str(p) for p in images], lang, "mini",
-                                    captions_for_lang(captions, lang), abstract)
-            _write_text_retry(out, html)
-            count += 1
+        # Мини-страницы больше не пишем (владелец 2026-08-09: «непонятно для чего, неудачный
+        # текст»). Поле `mini` в данных ОСТАЁТСЯ: там короткий текст экспресс-статей, он нужен
+        # внутри и как источник при апгрейде до полной. Уже созданные mini.html лежат в дереве
+        # и в R2 — их уборка отдельная задача, не дело генератора.
     build_knowledge_graph_data()
     for lang in LANGUAGES:
         update_all_tags(lang)
@@ -3846,47 +3819,14 @@ def write_article_pages(item, date_str):
         for v in VERSIONS:
             scipop, translated = pick_scipop(versions_ru, translations, v, lang)
             (lang_folder / VERSION_FILES[v]).write_text(
-                gen_article_html(scipop, a, date_str, images, lang, v, lang_captions, abstract,
-                                 # mini живёт в "mini" у нового конвейера (с 2026-07-27) и в
-                                 # "threads" у старого — проверяем ОБА, как regenerate_all_html.
-                                 # Проверка только threads молча оставила без mini.html все
-                                 # статьи догона 17–28 июля (mini был сгенерирован и оплачен).
-                                 has_mini=bool((versions_ru.get("popular", {})).get("threads")
-                                               or (versions_ru.get("popular", {})).get("mini"))),
+                gen_article_html(scipop, a, date_str, images, lang, v, lang_captions, abstract),
                 encoding="utf-8")
             if translated:
                 update_index(scipop, a, date_str, lang, v, abstract_for(abstract, lang, v))
-    # Mini-версия — threads-текст (полный, до обрезки). Источник title/oneliner для мини —
-    # popular, ЕСЛИ он настоящий контент; если popular — экспресс-заглушка (express_locked),
-    # берём simple (реально сгенерированный тир) — иначе на mini-странице повиснет
-    # заглушечный oneliner «Полная версия готовится» вместо настоящего заголовка.
-    # ПО ЯЗЫКУ: раньше mini_scipop строился один раз из versions_ru (русской версии) ВНЕ цикла
-    # по языкам и переиспользовался для всех — на mini у en/es был русский текст под локализованной
-    # обвязкой. Теперь источник берём per-язык: свой tier из translations, не всегда RU.
-    if (versions_ru.get("popular", {})).get("threads") or (versions_ru.get("popular", {})).get("mini"):
-        for l in LANGUAGES:
-            if l == DEFAULT_LANG:
-                mini_source = versions_ru["popular"]
-                if mini_source.get("express_locked"):
-                    mini_source = versions_ru.get("simple") or mini_source
-            else:
-                # тот же выбор, что и для обычных тиров: без перевода — заглушка, не русский текст
-                mini_source, _ok = pick_scipop(versions_ru, translations, "popular", l)
-                if mini_source.get("express_locked"):
-                    mini_source, _ok = pick_scipop(versions_ru, translations, "simple", l)
-            # express: реальный тир (simple) хранит короткий текст в поле "mini", не "threads"
-            # ("threads" — только у попап-заглушки, express_locked_scipop бэкфиллит его из RU).
-            threads_text = (mini_source.get("threads") or mini_source.get("mini")
-                             or (versions_ru.get("popular", {})).get("threads")
-                             or (versions_ru.get("popular", {})).get("mini", ""))
-            mini_scipop = dict(mini_source)
-            mini_scipop["text"] = threads_text
-            lf = Path(LANG_DIR) / l / "archive" / date_str / a["id"]
-            lf.mkdir(parents=True, exist_ok=True)
-            (lf / "mini.html").write_text(
-                gen_article_html(mini_scipop, a, date_str, images, l, "mini",
-                                 captions_for_lang(captions, l), abstract, has_mini=True),
-                encoding="utf-8")
+    # Мини-страницы больше не пишем (владелец 2026-08-09: «непонятно для чего, неудачный
+    # текст»). Поле `mini` в данных ОСТАЁТСЯ: там короткий текст экспресс-статей, он нужен
+    # внутри и как источник при апгрейде до полной. Уже созданные mini.html лежат в дереве
+    # и в R2 — их уборка отдельная задача, не дело генератора.
     update_authors_graph(a)
     update_tag_counts(versions_ru["advanced"])
     # Папку считаем здесь, а не берём из чужой области видимости: article_folder — локальная
@@ -4617,24 +4557,17 @@ def translate_article_lang(aid, target_lang, force=False):
     }
     lang_folder = Path(LANG_DIR) / target_lang / "archive" / date_str / aid
     lang_folder.mkdir(parents=True, exist_ok=True)
-    base_scipop = version_scipop(data, "popular", target_lang) or version_scipop(data, "simple", target_lang) or {}
-    if base_scipop.get("express_locked"):
-        base_scipop = version_scipop(data, "simple", target_lang) or base_scipop
-    threads_text = base_scipop.get("threads") or base_scipop.get("mini") or ""
     for version in VERSIONS:
         scipop = version_scipop(data, version, target_lang)
         if not scipop:
             continue
         html = gen_article_html(scipop, article_obj, date_str, [str(p) for p in images],
-                                 target_lang, version, lang_captions, data.get("abstract") or {},
-                                 has_mini=bool(threads_text))
+                                 target_lang, version, lang_captions, data.get("abstract") or {})
         (lang_folder / VERSION_FILES[version]).write_text(html, encoding="utf-8")
-    if threads_text:
-        mini_scipop = dict(base_scipop)
-        mini_scipop["text"] = threads_text
-        html = gen_article_html(mini_scipop, article_obj, date_str, [str(p) for p in images],
-                                 target_lang, "mini", lang_captions, data.get("abstract") or {})
-        (lang_folder / "mini.html").write_text(html, encoding="utf-8")
+    # Мини-страницу больше не пишем (владелец 2026-08-09: «непонятно для чего, неудачный
+    # текст»). Поле `mini` в данных ОСТАЁТСЯ: там короткий текст экспресс-статей, он нужен
+    # внутри и как источник при апгрейде до полной. Уже созданные mini.html лежат в дереве
+    # и в R2 — их уборка отдельная задача, не дело генератора.
 
     rebuild_indexes()
     print(f"  ✅ {aid} → {target_lang} переведена")
@@ -4686,10 +4619,9 @@ def integrity_check(fix=False):
                     problems.append(("missing_html", aid, f"{lang}/{fname}"))
                 if vdata.get(DEFAULT_LANG) and lang != DEFAULT_LANG and lang not in vdata:
                     problems.append(("missing_translation", aid, f"{version}/{lang}"))
-        # Проверка mini.html
-        mini_page = Path(LANG_DIR) / DEFAULT_LANG / "archive" / date_str / aid / "mini.html"
-        if data.get("threads") and not mini_page.exists():
-            problems.append(("missing_html", aid, "mini"))
+        # Мини больше не страница (владелец 2026-08-09), поэтому её отсутствие — норма,
+        # а не поломка. Оставь проверку — и `run.py check` объявил бы битыми все статьи
+        # разом, ровно в тот момент, когда мы намеренно перестали писать эти файлы.
 
     # Недопечённые папки: контент есть (картинки/api/pdf), но data.json нет —
     # значит фаза A прошла, а фаза B (или сам data.json) не записалась.
