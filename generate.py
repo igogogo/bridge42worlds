@@ -3545,13 +3545,11 @@ def _build_article(a, date_str, inputs, force=False, express=False, known_licens
                     print("    ⚠️ конструктор не собрал тиры — падаю на старый путь")
             if scipop_pop is None:
                 scipop_pop = generate_popular(scipop_adv)
-                scipop_simple, mini_ru = generate_simple_mini(scipop_pop)
-                if mini_ru:
-                    scipop_pop["mini"] = mini_ru
-                    scipop_simple["mini"] = mini_ru
+                scipop_simple = generate_simple(scipop_pop)
             # Апгрейд экспресс→полная: короткий текст экспресса УЖЕ показан читателю как текст
-            # статьи — он и остаётся mini полной версии (правило воронки: «экспресс не пропадает»),
-            # а не свежая выжимка, которая говорит то же самое другими словами.
+            # статьи, поэтому он и остаётся mini полной версии (правило воронки «экспресс
+            # не пропадает»). Сам уровень mini с 2026-08-09 не генерируется, но у статей,
+            # прошедших апгрейд, старый текст сохраняем — страница на него уже ссылается.
             prev_mini_ru = (((prev.get("simple") or prev.get("popular") or {}).get(DEFAULT_LANG) or {}).get("mini")
                             if prev_express_upgrade else None)
             if prev_mini_ru:

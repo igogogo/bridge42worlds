@@ -42,7 +42,10 @@ NO_LANG_NEEDED = {"article-translate", "caption-translate", "reference-translate
                   "system",
                   # ask-answer отвечает читателю НА ЯЗЫКЕ ВОПРОСА — требовать русский тут
                   # значило бы отвечать по-русски французу. Правило языка у него своё.
-                  "ask-answer"}
+                  "ask-answer",
+                  # article-kind отдаёт не текст, а один из четырёх английских ярлыков
+                  # (experimental/theoretical/methods/review) — требование русского его сломает.
+                  "article-kind"}
 
 
 def check(path):

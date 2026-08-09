@@ -212,7 +212,23 @@ def _log_lang_fallback(kind, article_id, category="", attempt=0):
 # уводить теги на вектор. Переключатель заведён заранее и ПО УМОЛЧАНИЮ ВКЛЮЧЁН: выключать
 # только после того, как ML отдаст измеренную привязку по смыслу, иначе останемся без обоих
 # механизмов. Без списка модель даёт ОДИН главный тег своими словами, а не выдумывает набор.
+# Значение допускает три формы, потому что замер ML 2026-08-09 показал: вектор выигрывает
+# не везде. Взвешенно top-3 даёт 68% против нынешних 52%, но на q-bio — 48% против 88%,
+# то есть вдвое хуже ровно в том домене, который владелец просил развивать (медицина).
+#   true            — список тегов в промпте (как сейчас)
+#   false           — списка нет нигде, теги приходят вектором
+#   ["q-bio", ...]  — список остаётся ТОЛЬКО для этих корневых разделов arXiv
 TAGS_IN_PROMPT = CONFIG.get("tags_in_prompt", True)
+
+
+def tags_in_prompt_for(article):
+    """Нужен ли список тегов в промпте для ЭТОЙ статьи."""
+    if isinstance(TAGS_IN_PROMPT, (list, tuple)):
+        groups = {str(c).split(".")[0] for c in
+                  ([article.get("primary_category")] + list(article.get("categories") or [])) if c}
+        return bool(groups & set(TAGS_IN_PROMPT))
+    return bool(TAGS_IN_PROMPT)
+
 
 _NO_TAGS_BLOCK = (
     "ТЕГИ: списка тегов в этом промпте нет намеренно — остальные теги статья получит "
@@ -224,7 +240,8 @@ _NO_TAGS_BLOCK = (
 
 
 def generate_advanced(article, text, tags_input, scientists_keys, law_ids=None):
-    tags_list = (", ".join(t["en"] for t in tags_input) if TAGS_IN_PROMPT else _NO_TAGS_BLOCK)
+    tags_list = (", ".join(t["en"] for t in tags_input)
+                 if tags_in_prompt_for(article) else _NO_TAGS_BLOCK)
     scientists_list = ", ".join(scientists_keys)
     laws_list = ", ".join(law_ids or [])
     prompt = load_prompt("article-generate-advanced").format(
@@ -386,14 +403,14 @@ def inherit_facts(child, parent):
 
 
 # generate_simple() убрана 2026-07-30: её никто не вызывал (живой путь —
-# generate_simple_mini из popular), а работать она уже не могла: подставляла advanced_json
+# generate_simple из popular), а работать она уже не могла: подставляла advanced_json
 # в article-generate-simple.txt, который принимает Popular и отдаёт simple+mini.
 # Мёртвый код, который сломался бы при первом же вызове, хуже отсутствующего.
 
 
 def generate_popular(scipop_adv):
-    """Popular генерируется из Advanced. Simple и mini — уже из Popular
-    (generate_simple_mini), чтобы уровни не расходились."""
+    """Popular генерируется из Advanced, а Simple — уже из Popular (generate_simple),
+    чтобы уровни не расходились."""
     prompt = load_prompt("article-generate-popular").format(
         advanced_json=json.dumps(scipop_adv, ensure_ascii=False))
     reinforce = "\n\nВНИМАНИЕ: пиши СТРОГО на русском языке."
@@ -416,11 +433,14 @@ SLIM_SHARED_TRANSLATE = ("fun_fact", "scifi", "formulas", "key_numbers")
 
 
 def generate_combo(scipop_adv):
-    """popular + simple + mini ОДНИМ вызовом из advanced. Общие блоки (формулы, числа,
-    факты, теги, глоссарий) модель НЕ пересказывает — копируются кодом из advanced.
+    """popular + simple ОДНИМ вызовом из advanced. Общие блоки (формулы, числа, факты,
+    теги, глоссарий) модель НЕ пересказывает — копируются кодом из advanced.
     Доказано на эксперименте: −52% цены генерации тиров, метафора едина между уровнями.
-    Возвращает (pop, simple) с полем mini в обоих, или (None, None) при провале —
-    вызывающий падает на старый путь."""
+    Возвращает (pop, simple) или (None, None) при провале — вызывающий падает на старый путь.
+
+    Уровень mini убран 2026-08-09 по решению владельца («непонятно для чего, неудачный
+    текст»): он ещё и стоил 600–900 знаков выхода на каждой статье. Старые mini в архиве
+    остаются, страницы для них уже собраны."""
     prompt = load_prompt("article-generate-combo").format(
         advanced_json=json.dumps(scipop_adv, ensure_ascii=False))
     reinforce = chr(10)*2 + "ВНИМАНИЕ: пиши СТРОГО на русском языке."
@@ -429,7 +449,6 @@ def generate_combo(scipop_adv):
         try:
             data = json.loads(clean_json(r.choices[0].message.content))
             pop, simp = data["popular"], data["simple"]
-            mini = (data.get("mini") or "").strip()
         except Exception:
             continue
         if not (_default_lang_ok(pop) and _default_lang_ok(simp)):
@@ -438,7 +457,6 @@ def generate_combo(scipop_adv):
             for k in COMBO_SHARED:
                 if k in scipop_adv:
                     tier[k] = scipop_adv[k]
-        pop["mini"] = simp["mini"] = mini
         return inherit_facts(pop, scipop_adv), inherit_facts(simp, scipop_adv)
     return None, None
 
@@ -494,8 +512,6 @@ def refine_simple(scipop):
         data["extra_tags"] = scipop.get("extra_tags", [])
         data["scientists"] = scipop.get("scientists", [])
         data["laws"] = scipop.get("laws", [])
-        if "mini" in scipop:
-            data["mini"] = scipop.get("mini", "")
         return inherit_facts(data, scipop)
     except Exception:
         return scipop
@@ -1136,9 +1152,9 @@ def validate_tags(scipop, valid_tags_set):
     return scipop
 
 
-def generate_simple_mini(scipop_popular):
-    """simple + mini ОДНИМ вызовом из popular (ТЗ 2026-07-27, §4): mini — выжимка из simple,
-    а не из advanced; фактура наследуется кодом. Возвращает (simple_dict, mini_text)."""
+def generate_simple(scipop_popular):
+    """Simple из popular (ТЗ 2026-07-27, §4): фактура наследуется кодом, не пересказом.
+    Раньше функция отдавала ещё и mini — уровень убран 2026-08-09 (решение владельца)."""
     prompt = load_prompt("article-generate-simple").format(
         popular_json=json.dumps(scipop_popular, ensure_ascii=False),
         advanced_json=json.dumps(scipop_popular, ensure_ascii=False))
@@ -1149,8 +1165,8 @@ def generate_simple_mini(scipop_popular):
         try:
             data = json.loads(clean_json(r.choices[0].message.content))
         except Exception:
-            return scipop_popular, ""
+            return scipop_popular
         if _default_lang_ok(data):
             break
-    mini = (data.pop("mini", "") or "").strip()
-    return inherit_facts(data, scipop_popular), mini
+    data.pop("mini", None)      # если модель по инерции прислала — выбрасываем
+    return inherit_facts(data, scipop_popular)
