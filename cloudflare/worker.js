@@ -17,7 +17,10 @@ const CANONICAL_HOST = "bridge42worlds.academy";
 // Фоновые сторожа на машине владельца. Пределы разные по цене молчания: письмо автора
 // ждать сутки нельзя (условие архитектора — 12 часов), заказ в очереди потерпит дольше.
 const WATCHERS = [
-  { key: "mail", title: "Сторож почты", maxHours: 12 },
+  // Час, а не двенадцать: 9 августа сторож почты два с половиной часа крутился
+  // вхолостую после сетевого сбоя, и письмо автора с работой пролежало
+  // непрочитанным. Проверяет это ежечасное расписание — см. scheduled().
+  { key: "mail", title: "Сторож почты", maxHours: 1 },
   { key: "queue", title: "Исполнитель очереди", maxHours: 24 },
 ];
 
@@ -1114,6 +1117,56 @@ async function handleFeedback(request, env) {
   return Response.json({ ok: true, saved, alerted });
 }
 
+// ─── Молчание фоновых сторожей ─────────────────────────────────────────────
+//
+// Сторожа (почта и очередь) держатся задачей планировщика на машине владельца и делают
+// полезное молча: когда всё хорошо, они ничем себя не проявляют. Значит упавший процесс
+// выглядит ровно как спокойный. Каждый пишет отметку «жив» в KV — здесь мы смотрим,
+// не устарела ли она.
+async function watcherProblems(env) {
+  const out = [];
+  for (const w of WATCHERS) {
+    try {
+      const raw = env.TOKENS ? await env.TOKENS.get(`hb:${w.key}`) : null;
+      if (!raw) {
+        out.push(`${w.title}: отметки «жив» нет вовсе — процесс не запущен?`);
+        continue;
+      }
+      const hours = (Date.now() - Number(raw)) / 3600000;
+      if (hours >= w.maxHours) {
+        out.push(`${w.title}: молчит ${hours.toFixed(1)} ч (предел ${w.maxHours}).`);
+      }
+    } catch (e) {
+      out.push(`${w.title}: не смог проверить отметку — ${escapeHtml(e.message)}`);
+    }
+  }
+  return out;
+}
+
+// Ежечасная проверка не должна превращаться в ежечасное нытьё: беда живёт часами, а
+// сообщение о ней нужно одно. Повторяем не чаще раза в шесть часов и обязательно
+// сообщаем, когда наладилось, — иначе тишина после тревоги неотличима от того, что
+// канал просто перестали читать.
+async function alertOnce(env, problems) {
+  if (!env.TOKENS) return;
+  const key = "alert:watchers";
+  const now = Date.now();
+  const prev = await env.TOKENS.get(key).then((v) => (v ? JSON.parse(v) : null)).catch(() => null);
+  if (!problems.length) {
+    if (prev) {
+      await tg(env, "✅ <b>Сторожа снова на связи</b>").catch(() => {});
+      await env.TOKENS.delete(key).catch(() => {});
+    }
+    return;
+  }
+  const text = problems.join("\n");
+  const same = prev && prev.text === text;
+  if (same && now - prev.at < 6 * 3600000) return;
+  await tg(env, "⏰ <b>Сторож молчит</b>\n" + text).catch(() => {});
+  await env.TOKENS.put(key, JSON.stringify({ text, at: now }),
+                       { expirationTtl: 7 * 86400 }).catch(() => {});
+}
+
 async function handleAlertHook(request, env) {
   if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405 });
   const secret = request.headers.get("cf-webhook-auth");
@@ -1707,8 +1760,19 @@ export default {
   // публикация — нет. Проверяем не «отвечает ли сервер» (он отвечал), а дату последней статьи:
   // именно это отличает работающий конвейер от вставшего.
   async scheduled(event, env, ctx) {
+    // Расписаний два, и они делают разное. Ежечасное смотрит ТОЛЬКО молчание сторожей:
+    // письмо автора не может ждать до утра — 9 августа оно пролежало непрочитанным
+    // два с половиной часа, и узнали мы об этом не от сторожа. Суточное проверяет всё
+    // остальное: свежесть ленты, доступность главной, чистку событий — такие беды за час
+    // не портятся, а ежечасный отчёт о них превратился бы в шум, который перестают читать.
+    const hourly = event && event.cron === "0 * * * *";
     const problems = [];
     let latest = null;
+    if (hourly) {
+      const late = await watcherProblems(env);
+      if (late.length) await alertOnce(env, late);
+      return;
+    }
 
     try {
       const obj = await env.SITE.get("lang/ru/articles-index.json");
@@ -1749,21 +1813,7 @@ export default {
     // ничем себя не проявляют. Значит упавший процесс выглядит ровно как спокойный —
     // и о смерти сторожа почты мы узнали бы от автора, чьё письмо никто не прочитал.
     // Каждый пишет отметку в KV, здесь мы смотрим, не устарела ли она.
-    for (const w of WATCHERS) {
-      try {
-        const raw = env.TOKENS ? await env.TOKENS.get(`hb:${w.key}`) : null;
-        if (!raw) {
-          problems.push(`${w.title}: отметки «жив» нет вовсе — процесс не запущен?`);
-          continue;
-        }
-        const hours = Math.floor((Date.now() - Number(raw)) / 3600000);
-        if (hours >= w.maxHours) {
-          problems.push(`${w.title}: молчит ${hours} ч (предел ${w.maxHours}).`);
-        }
-      } catch (e) {
-        problems.push(`${w.title}: не смог проверить отметку — ${escapeHtml(e.message)}`);
-      }
-    }
+    problems.push(...await watcherProblems(env));
 
     // Чистка старого. Событий на каждый просмотр набегает много, и упрёмся мы не в место
     // (10 ГБ на базу — это годы), а в скорость: COUNT(DISTINCT uid) по миллионам строк
