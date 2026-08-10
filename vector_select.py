@@ -82,6 +82,55 @@ def embed(texts, acc, tok, tries=5):
     raise RuntimeError("эмбеддинги не получены")
 
 
+def prefilter(articles, keep_min=40):
+    """Отсев краёв ПЕРЕД моделью. Зовётся из gen_llm.select_best().
+
+    ЧТО ДЕЛАЕТ. Вычёркивает два края: «такое у нас уже есть» (близость к корпусу выше
+    95-го перцентиля дня) и «не наш профиль» (ниже 20-го). Середину не трогает и
+    НЕ РАНЖИРУЕТ — там решает модель. Это разделение обязанностей, а не временная мера.
+
+    ЗАМЕР 6 августа, шесть дней: в промпт уходит вместо ~1058 кандидатов около 200,
+    то есть минус 81% токенов отбора — самой дорогой строки ночного прогона. Доля
+    профильных разделов при этом РАСТЁТ во все шесть дней (+0,7…+5,5 п.п.), не падает
+    ни разу.
+
+    ПОЧЕМУ НЕ РАНЖИРУЕТ. Первая версия брала «ближе к медиане = интереснее» и дала
+    шорт-лист, где 45% cs/math при 4% астрофизики: наши профильные темы близки
+    к корпусу, «полнота» у них низкая, и они вылетали. Ранжирующего признака у вектора
+    нет — три оси закрыты числом (практика/теория, аналогии, полнота).
+
+    БЕЗОПАСНОСТЬ. Любой сбой — возвращаем список как был. Отбор не должен падать
+    из-за вспомогательного слоя: без него он работает как раньше, с ним дешевле.
+    """
+    if len(articles) <= keep_min:
+        return articles, "кандидатов мало, отсев не нужен"
+    try:
+        env = load_env()
+        acc, tok = env["CLOUDFLARE_ACCOUNT_ID"], env["CLOUDFLARE_API_TOKEN"]
+        ours = corpus()
+        import numpy as np
+        O = np.array(ours, dtype=np.float32)
+        near = []
+        for i in range(0, len(articles), BATCH):
+            ch = articles[i:i + BATCH]
+            vs = embed([f"{a.get('title','')} {a.get('summary','')}"[:6000] for a in ch],
+                       acc, tok)
+            cv = np.array([nz(v) for v in vs], dtype=np.float32)
+            near.extend((cv @ O.T).max(axis=1).tolist())
+    except Exception as e:
+        return articles, f"вектор недоступен ({type(e).__name__}), беру всех"
+
+    order = sorted(near)
+    p_dup = order[int(0.95 * (len(order) - 1))]
+    p_off = order[int(0.20 * (len(order) - 1))]
+    kept = [a for a, s in zip(articles, near) if p_off <= s <= p_dup]
+    if len(kept) < keep_min:          # порезали слишком много — днём не рискуем
+        return articles, f"после отсева осталось {len(kept)}, это мало — беру всех"
+    return kept, (f"вектор отсеял {len(articles) - len(kept)} из {len(articles)}: "
+                  f"дублей темы {sum(1 for s in near if s > p_dup)}, "
+                  f"чужого профиля {sum(1 for s in near if s < p_off)}")
+
+
 def day_candidates(date):
     f = MAIN / "data" / "arxiv-bulk" / f"{date[:7]}.jsonl"
     if not f.exists():

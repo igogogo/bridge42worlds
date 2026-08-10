@@ -120,6 +120,22 @@ def select_best(articles, date_str):
     count = min(count, MAX_ARTICLES)
     if total <= count:
         return articles
+
+    # ВЕКТОРНЫЙ ПРЕДФИЛЬТР перед моделью (ML, волна 2026-08-09, задача 1).
+    # Вычёркивает два края — «такое у нас уже есть» и «не наш профиль» — и отдаёт
+    # модели середину. Отбор кандидатов был самой дорогой строкой ночного прогона:
+    # замер на шести днях показал минус 81% токенов (1058 кандидатов → ~200), причём
+    # доля профильных разделов после отсева РАСТЁТ, а не падает.
+    # Ранжирование внутри середины остаётся за моделью: вектор умеет вычёркивать,
+    # но не выбирать — три ранжирующие оси закрыты числом.
+    try:
+        from vector_select import prefilter
+        articles, why = prefilter(articles)
+        print(f"  🧭 {why}")
+    except Exception as e:
+        # Вспомогательный слой не имеет права ронять отбор: без него работает как раньше.
+        print(f"  🧭 предфильтр пропущен ({type(e).__name__})")
+
     j = _cands_json(articles)
     prompt = load_prompt("article-select").format(count=count, articles_json=j)
     print(f"  🤖 Selecting {count} best from {total}...")

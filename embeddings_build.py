@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Эмбеддинги всего, что у нас есть: статьи, теги, законы, учёные.
 
@@ -80,6 +80,44 @@ def ref_docs(main_repo, name, kind):
         text = " ".join(" ".join(parts).split())[:MAX_CHARS]
         if len(text) > 30:
             out.append({"id": f"{kind}:{key}", "kind": kind, "text": text})
+    return out
+
+
+def arxiv_docs(main_repo, months=None, limit=0):
+    """ВСПОМОГАТЕЛЬНЫЙ индекс: сырые английские аннотации всего arXiv, как есть.
+
+    Решение владельца 2026-08-10: отдельный вектор, не смешанный с нашим. Причина
+    в том, ЧТО в них лежит: у нас — наша интерпретация (пересказ, аналогия, упрощение),
+    здесь — первоисточник без нашего слоя.
+
+    ПОЧЕМУ ПОРОЗНЬ, А НЕ ОДНИМ ИНДЕКСОМ. Обе стороны считаются одной моделью по
+    английскому тексту, то есть живут в ОДНОМ пространстве и спрашиваются друг о друге:
+    наша статья → что рядом в трёх миллионах и чего мы не взяли; чужая аннотация →
+    писали мы про это или нет. Слить их в один индекс — значит потерять сам вопрос
+    «что есть там, чего нет здесь», а он и есть карта покрытия.
+
+    Ничего не обрабатываем: заголовок и аннотация как пришли из дампа.
+    """
+    bulk = pathlib.Path(main_repo) / "data" / "arxiv-bulk"
+    files = sorted(p for p in bulk.glob("*.jsonl") if p.stat().st_size > 0)
+    if months:
+        want = set(months)
+        files = [p for p in files if p.stem in want]
+    out = []
+    for f in files:
+        with f.open(encoding="utf-8") as fh:
+            for line in fh:
+                try:
+                    j = json.loads(line)
+                except Exception:
+                    continue
+                t = " ".join(f"{j.get('title','')} {j.get('abstract','')}".split())
+                if j.get("id") and len(t) > 80:
+                    out.append({"id": f"arx:{j['id']}", "kind": "arxiv",
+                                "text": t[:MAX_CHARS], "cat": (j.get("categories") or [""])[0],
+                                "published": j.get("published")})
+                if limit and len(out) >= limit:
+                    return out
     return out
 
 
@@ -182,6 +220,7 @@ def main():
                     help="главная папка проекта: там .env и lang/** (в git их нет)")
     ap.add_argument("--kinds", default="tags,laws,scientists,articles")
     ap.add_argument("--limit", type=int, default=0)
+    ap.add_argument("--months", default="", help="через запятую, напр. 2026-07,2026-06")
     args = ap.parse_args()
 
     env = load_env(args.repo)
@@ -195,6 +234,9 @@ def main():
         "laws": lambda: ref_docs(args.repo, "laws.json", "law"),
         "scientists": lambda: ref_docs(args.repo, "scientists.json", "sci"),
         "articles": lambda: article_docs(args.repo, args.limit),
+        # вспомогательный индекс: сырые аннотации arXiv, отдельным файлом
+        "arxiv": lambda: arxiv_docs(args.repo, args.months.split(",") if args.months else None,
+                                    args.limit),
     }
     total = 0
     for kind in [k.strip() for k in args.kinds.split(",") if k.strip()]:
@@ -215,3 +257,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
