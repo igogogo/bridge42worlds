@@ -49,6 +49,17 @@ def main():
         text = (f"⚠️ <b>Дамп arXiv не обновился</b> (код {rc}).\n"
                 f"Ретроспектива и поиск дыр будут работать по старым данным.\n"
                 f"Лог: <code>{log}</code>")
+    elif len(sys.argv) >= 2 and sys.argv[1] == "--run-failed":
+        # Общий случай для задач планировщика, у которых нет своего текста. Имя задачи
+        # приходит ЛАТИНИЦЕЙ (см. объяснение про кодировку выше), человеческие слова
+        # добавляем здесь.
+        name = sys.argv[2] if len(sys.argv) > 2 else "?"
+        rc = sys.argv[3] if len(sys.argv) > 3 else "?"
+        log = sys.argv[4] if len(sys.argv) > 4 else ""
+        titles = {"overnight": "Ночная накачка архива",
+                  "upkeep": "Разметка вектором и починка графа"}
+        text = (f"⚠️ <b>{titles.get(name, name)} не отработала</b> (код {rc}).\n"
+                f"Лог: <code>{log}</code>")
     elif len(sys.argv) >= 3 and sys.argv[1] == "--file":
         text = Path(sys.argv[2]).read_text(encoding="utf-8")
     elif len(sys.argv) >= 2:
