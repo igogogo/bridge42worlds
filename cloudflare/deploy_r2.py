@@ -40,17 +40,26 @@ MANIFEST = ROOT / "cloudflare" / ".r2-manifest.json"
 INCLUDE_DIRS = ["lang", "css", "js", "data"]
 # config.json обязателен: по нему строится строка выбора языков (search.js). Без него
 # переключателя языков нет на всём сайте, а ошибка глушится пустым catch — молча.
-INCLUDE_GLOBS = ["favicon.*", "sitemap*.xml", "feed*.xml", "robots.txt", "*.html",
+INCLUDE_GLOBS = ["favicon.*", "sitemap*.xml", "feed*.xml", "robots.txt", "llms.txt", "*.html",
                  "config.json"]
 # Зеркалит .gitignore для этих папок (см. docstring выше) — внутренние/рабочие файлы, не сайт.
+# .pdf пропускаем везде, КРОМЕ страниц авторских работ: там PDF — это сама работа,
+# первоисточник, на который ведёт главная кнопка страницы (см. исключение в
+# publish-rules.json). В остальных местах .pdf — скачанный с arXiv исходник статьи.
 SKIP_SUFFIX = {".pdf", ".jsonl"}
+SKIP_SUFFIX_EXCEPT = ("/community/",)
 # jpg исключаем ТОЛЬКО под lang/: там у каждой картинки статьи есть webp-двойник, страницы
 # ссылаются на него, а jpg втрое тяжелее — из-за них сайт весил 11 ГБ вместо четырёх.
 # Широкое правило «любой jpg» было ошибкой: картинки параграфов курса лежат в
 # data/theory/courses/<тема>/img/<id>.jpg, двойников не имеют, и страница просит именно jpg —
 # они бы просто пропали с сайта (поймано 2026-07-28 до публикации).
 SKIP_JPG_UNDER = ("lang/",)
-SKIP_NAMES = {"data.json", "arxiv-atom.xml", "arxiv-oai.xml"}
+# fulltext.txt — разобранный текст чужой статьи, который мы храним ДЛЯ ВЕКТОРА,
+# а не для читателя. На сайте ему делать нечего: это 179 МБ текста, права на
+# который принадлежат авторам, и читателю мы даём наш пересказ и ссылку на arXiv.
+# Ловится ровно тем же способом, что data.json и служебные xml.
+SKIP_NAMES = {"data.json", "arxiv-atom.xml", "arxiv-oai.xml", "fulltext.txt",
+              "references.txt"}
 SKIP_DIR_NAMES = {"api"}
 # .log, .pyc, __pycache__ здесь НЕ перечислены сознательно: их закрывает .gitignore, и с
 # 2026-08-05 его правила применяются напрямую (см. _internal_by_gitignore). Дублировать
@@ -102,9 +111,15 @@ def is_internal(p):
     rel = p.relative_to(ROOT).as_posix()
     if _internal_by_gitignore(rel):
         return True
-    if p.suffix.lower() in SKIP_SUFFIX or p.name in SKIP_NAMES:
+    if p.suffix.lower() in SKIP_SUFFIX and not any(x in rel for x in SKIP_SUFFIX_EXCEPT):
         return True
-    if p.suffix.lower() in (".jpg", ".jpeg") and rel.startswith(SKIP_JPG_UNDER):
+    if p.name in SKIP_NAMES:
+        return True
+    # jpg под lang/ пропускаем ради веса: у картинок статей есть webp-двойник. Но обложка
+    # авторской работы и кадры из её media/ двойников не имеют — страница просит именно
+    # jpg, и без этого исключения на ней зияли бы дыры.
+    if (p.suffix.lower() in (".jpg", ".jpeg") and rel.startswith(SKIP_JPG_UNDER)
+            and "/community/" not in rel):
         return True
     if rel.startswith(SKIP_PATH_PREFIXES):
         return True

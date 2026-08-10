@@ -862,6 +862,237 @@ def build_actions_html(like_id, fav_id, lang, entity_type="article", inline_comm
             f'</div>')
 
 
+# ── Авторские работы: три отличия от статьи с arXiv ──────────────────────────
+# Не отдельный шаблон и не отдельный генератор — три функции, дающие три куска html.
+# Всё остальное на странице собирается тем же кодом, что у двух тысяч других статей,
+# и любая правка дизайна приходит сюда сама.
+
+AW_LABELS = {
+    "work":   {"ru": "работа автора", "en": "author's work", "es": "trabajo del autor",
+               "ar": "عمل المؤلف", "fr": "travail de l'auteur"},
+    "checked": {"ru": "мы разобрали", "en": "we reviewed it", "es": "lo analizamos",
+                "ar": "راجعناه", "fr": "examiné par nous"},
+    "exp":    {"ru": "эксперимент", "en": "experimental", "es": "experimental",
+               "ar": "تجريبي", "fr": "expérimental"},
+    "th":     {"ru": "теория", "en": "theoretical", "es": "teórico",
+               "ar": "نظري", "fr": "théorique"},
+    "live":   {"ru": "работа автора: HTML", "en": "author's paper: HTML",
+               "es": "trabajo del autor: HTML", "ar": "بحث المؤلف: HTML",
+               "fr": "travail de l'auteur : HTML"},
+    "pdf":    {"ru": "PDF", "en": "PDF", "es": "PDF", "ar": "PDF", "fr": "PDF"},
+    "zip":    {"ru": "все материалы", "en": "all materials", "es": "todos los materiales",
+               "ar": "كل المواد", "fr": "tous les matériaux"},
+    "rev_h":  {"ru": "Что мы об этом думаем", "en": "What we make of it",
+               "es": "Lo que pensamos", "ar": "رأينا في هذا", "fr": "Ce que nous en pensons"},
+    "rev_note": {"ru": "Работа не проходила рецензирование. Это наш разбор — мнение, а не приговор.",
+                 "en": "This work has not been peer-reviewed. What follows is our reading of it.",
+                 "es": "Este trabajo no ha sido revisado por pares. Lo que sigue es nuestra lectura.",
+                 "ar": "لم يخضع هذا البحث لمراجعة الأقران. ما يلي هو قراءتنا له.",
+                 "fr": "Ce travail n'a pas été évalué par les pairs. Voici notre lecture."},
+    "strength": {"ru": "Сильная сторона", "en": "What works", "es": "Lo que funciona",
+                 "ar": "نقطة القوة", "fr": "Le point fort"},
+    "advice": {"ru": "Что усилит работу", "en": "What would make it stronger",
+               "es": "Qué lo haría más fuerte", "ar": "ما الذي يقوّي العمل",
+               "fr": "Ce qui le renforcerait"},
+    "questions": {"ru": "Вопросы автору", "en": "Questions for the author",
+                  "es": "Preguntas al autor", "ar": "أسئلة إلى المؤلف",
+                  "fr": "Questions à l'auteur"},
+    "word":   {"ru": "Слово автора", "en": "The author's word", "es": "La palabra del autor",
+               "ar": "كلمة المؤلف", "fr": "La parole de l'auteur"},
+}
+
+
+def _aw(key, lang):
+    return AW_LABELS[key].get(lang, AW_LABELS[key]["en"])
+
+
+# Наш знак — мост из логотипа. Ставится у заголовка авторской работы: читатель должен
+# видеть, что источник другой, ещё до того, как дочитает строку-паспорт. Тултип говорит
+# прямо: это не препринт с arXiv (владелец 2026-08-08).
+AW_MARK_SVG = (
+    '<svg class="aw-mark" viewBox="0 0 240 150" aria-hidden="true">'
+    '<defs><linearGradient id="aw-g" x1="0" x2="1">'
+    '<stop offset="0" stop-color="var(--ochre)"/><stop offset="1" stop-color="var(--cyan)"/>'
+    '</linearGradient></defs>'
+    '<line x1="44" y1="112" x2="196" y2="112" stroke="currentColor" stroke-opacity=".38" '
+    'stroke-width="8" stroke-linecap="round"/>'
+    '<path d="M44 112 C 84 24, 156 24, 196 112" fill="none" stroke="url(#aw-g)" '
+    'stroke-width="14" stroke-linecap="round"/>'
+    '<circle cx="44" cy="112" r="13" fill="var(--ochre)"/>'
+    '<circle cx="196" cy="112" r="13" fill="var(--cyan)"/></svg>')
+
+AW_TOOLTIP = {
+    "ru": "Работа автора, а не препринт с arXiv: прислана нам напрямую и разобрана нами. "
+          "Рецензирование она не проходила — доверять ей или нет, решаете вы.",
+    "en": "An author's own work, not an arXiv preprint: sent to us directly and reviewed by us. "
+          "It has not been peer-reviewed — whether to trust it is up to you.",
+    "es": "Trabajo propio del autor, no un preprint de arXiv: enviado directamente y analizado "
+          "por nosotros. No ha sido revisado por pares; confiar en él es decisión suya.",
+    "ar": "عمل خاص بالمؤلف، وليس مسودة من arXiv: أُرسل إلينا مباشرة وقمنا بمراجعته. "
+          "لم يخضع لمراجعة الأقران — والثقة به قرارك أنت.",
+    "fr": "Travail propre de l'auteur, non un preprint arXiv : envoyé directement et examiné "
+          "par nous. Il n'a pas été évalué par les pairs — à vous de juger.",
+}
+
+AW_FILES_H = {"ru": "Забрать работу целиком", "en": "Take the whole work",
+              "es": "Llevarse el trabajo completo", "ar": "خذ العمل كاملاً",
+              "fr": "Emporter le travail complet"}
+AW_FILES_NOTE = {
+    "ru": "У статьи с arXiv по ссылке лежит текст. Здесь — текст и все данные, на которых "
+          "он построен: работу можно проверить, а не только прочитать.",
+    "en": "An arXiv paper gives you the text. Here you get the text and all the data behind "
+          "it: this work can be checked, not just read.",
+    "es": "Un artículo de arXiv da el texto. Aquí están el texto y todos los datos que lo "
+          "sustentan: este trabajo se puede comprobar, no solo leer.",
+    "ar": "بحث arXiv يمنحك النص فقط. هنا النص وكل البيانات التي بُني عليها: "
+          "يمكن التحقق من هذا العمل، لا قراءته فحسب.",
+    "fr": "Un article arXiv donne le texte. Ici, le texte et toutes les données qui le "
+          "sous-tendent : ce travail peut être vérifié, pas seulement lu.",
+}
+
+
+def author_work_files_html(article, lang):
+    """Блок «забрать работу целиком» под кнопками уровней: HTML, PDF, архив.
+
+    У статьи с arXiv он пуст — там скачивать нечего, и ссылка на первоисточник стоит
+    в строке-паспорте. Кнопки без файла не рисуем: ведущая в 404 хуже отсутствующей.
+    """
+    if not article.get("author_work"):
+        return ""
+    src = article.get("sources") or {}
+    live, pdf = aw_localized(src, lang)
+    btns = []
+    if live:
+        btns.append(f'<a class="aw-file aw-file-main" href="{attr_safe(live)}">'
+                    f'{ICON_DOC}{safe(_aw("live", lang))}</a>')
+    if pdf:
+        btns.append(f'<a class="aw-file" href="{attr_safe(pdf)}">'
+                    f'{ICON_DOC}{safe(_aw("pdf", lang))}</a>')
+    if src.get("zip"):
+        mb = src.get("zip_mb")
+        tail = f'<span class="aw-file-size">{mb} MB</span>' if mb else ""
+        btns.append(f'<a class="aw-file" href="{attr_safe(src["zip"])}">'
+                    f'{ICON_BOX}{safe(_aw("zip", lang))}{tail}</a>')
+    if not btns:
+        return ""
+    return (f'<section class="aw-files"><h3>{safe(AW_FILES_H.get(lang, AW_FILES_H["en"]))}</h3>'
+            f'<p class="aw-note">{safe(AW_FILES_NOTE.get(lang, AW_FILES_NOTE["en"]))}</p>'
+            f'<div class="aw-file-row">{"".join(btns)}</div></section>')
+
+
+ICON_DOC = ('<svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+            'stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+            '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/>'
+            '<path d="M14 3v5h5"/><path d="M9 13h6"/><path d="M9 17h4"/></svg>')
+ICON_BOX = ('<svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+            'stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+            '<path d="M3 7.5h18v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>'
+            '<path d="M3 7.5l1.6-3.2A1.5 1.5 0 0 1 6 3.5h12a1.5 1.5 0 0 1 1.4.8L21 7.5"/>'
+            '<path d="M10 12h4"/></svg>')
+
+
+def aw_localized(src, lang):
+    """Живая версия и PDF на языке страницы, если они есть.
+
+    Работа автора переводится на все наши языки, как и всё остальное (владелец 2026-08-08:
+    «оригинальный html переведи тоже на все языки… у нас стандарт на все распространяется»).
+    Арабский читатель, нажав «работа автора», должен попасть в арабский текст, а не в
+    русский. Нет перевода — ведём на язык автора: это честнее, чем битая ссылка.
+    """
+    live, pdf = src.get("live", ""), src.get("pdf", "")
+    if live:
+        cand = live.replace("/lang/ru/", f"/lang/{lang}/")
+        if (Path(cand.lstrip("/")).exists()):
+            live = cand
+    if pdf:
+        cand = pdf.replace("/lang/ru/", f"/lang/{lang}/")
+        if (Path(cand.lstrip("/")).exists()):
+            pdf = cand
+    return live, pdf
+
+
+def author_work_sources(article, lang):
+    """Три ссылки на первоисточник вместо одной на arXiv.
+
+    Отличие по существу, а не оформление: у статьи с arXiv по ссылке лежит текст, здесь —
+    текст И данные, на которых он построен. Такую работу можно проверить, а не только
+    прочитать. Чего нет — того и в строке нет: ссылка в 404 хуже отсутствующей.
+    """
+    src = article.get("sources") or {}
+    # НАШ код первым и явно (владелец 2026-08-08: «код статьи не arXiv явно, а наш b42w»).
+    # Раньше в этом месте стояло «arXiv:b42p-2026-001» — ссылка на препринт, которого на
+    # arXiv нет и не будет: работа пришла к нам напрямую. Читатель, привыкший видеть здесь
+    # источник, получал ложный.
+    out = [f'<span class="aw-code" title="{attr_safe(AW_TOOLTIP.get(lang, AW_TOOLTIP["en"]))}">'
+           f'b42w:{safe(article.get("code") or article["id"])}</span>']
+    live, pdf = aw_localized(src, lang)
+    if live:
+        out.append(f'<a href="{attr_safe(live)}">{safe(_aw("live", lang))}</a>')
+    if pdf:
+        out.append(f'<a href="{attr_safe(pdf)}">{safe(_aw("pdf", lang))}</a>')
+    if src.get("zip"):
+        mb = src.get("zip_mb")
+        tail = f' ({mb} MB)' if mb else ""
+        out.append(f'<a href="{attr_safe(src["zip"])}">{safe(_aw("zip", lang))}{tail}</a>')
+    return " · ".join(out)
+
+
+def author_work_badges_html(article, lang):
+    """Плашки у заголовка: чья работа и что мы её разбирали.
+
+    Стоят там же, где «экспресс» у обычной статьи, и выглядят так же — это пометка об
+    источнике, а не предупреждение. Ни красного, ни восклицательных знаков.
+    """
+    kind = (article.get("kind") or "").lower()
+    kind_key = "exp" if "эксперимент" in kind or "experim" in kind else (
+        "th" if "теор" in kind or "theor" in kind else "")
+    tip = attr_safe(AW_TOOLTIP.get(lang, AW_TOOLTIP["en"]))
+    parts = [f'<span class="express-badge aw-badge" title="{tip}">'
+             f'{AW_MARK_SVG}{safe(_aw("work", lang))}</span>']
+    if kind_key:
+        parts.append(f'<span class="express-badge aw-kind">{safe(_aw(kind_key, lang))}</span>')
+    return " ".join(parts)
+
+
+def author_work_review_html(article, lang):
+    """Наш разбор работы и слово автора — то, чего у статьи с arXiv нет и быть не может.
+
+    Три карточки: что работает, что усилит, о чём спросили. Пустые не показываем: заголовок
+    над пустотой читается как поломка страницы.
+    """
+    rev_all = article.get("review") or {}
+    rev = rev_all.get(lang) or rev_all.get("ru") or {}
+    if isinstance(rev, dict) and "strength" not in rev and rev_all.get("strength"):
+        rev = rev_all
+    strength = (rev.get("strength") or "").strip()
+    advice = [x for x in (rev.get("advice") or []) if str(x).strip()]
+    questions = [x for x in (rev.get("questions") or []) if str(x).strip()]
+    comment = (article.get("author_comment") or "").strip()
+    if not (strength or advice or questions or comment):
+        return ""
+
+    cards = []
+    if strength:
+        cards.append(f'<div class="aw-card aw-card-plus"><p class="aw-card-l">'
+                     f'{safe(_aw("strength", lang))}</p><p>{safe(strength)}</p></div>')
+    if advice:
+        li = "".join(f"<li>{safe(x)}</li>" for x in advice)
+        cards.append(f'<div class="aw-card aw-card-adv"><p class="aw-card-l">'
+                     f'{safe(_aw("advice", lang))}</p><ul>{li}</ul></div>')
+    if questions:
+        li = "".join(f"<li>{safe(x)}</li>" for x in questions)
+        cards.append(f'<div class="aw-card"><p class="aw-card-l">'
+                     f'{safe(_aw("questions", lang))}</p><ul>{li}</ul></div>')
+    word = ""
+    if comment:
+        paras = "".join(f"<p>{safe(x.strip())}</p>" for x in comment.split(chr(10) + chr(10)) if x.strip())
+        word = (f'<div class="aw-word"><p class="aw-card-l">{safe(_aw("word", lang))}</p>'
+                f'{paras}</div>')
+    return (f'<section class="aw-review"><h2>{safe(_aw("rev_h", lang))}</h2>'
+            f'<p class="aw-note">{safe(_aw("rev_note", lang))}</p>'
+            f'<div class="aw-cards">{"".join(cards)}</div>{word}</section>')
+
+
 def gen_article_html(scipop, article, date_str, images, lang, version, captions=None, abstract=None,
                      has_mini=True):
     tpl = load_template("article")
@@ -972,22 +1203,48 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
     # Кнопка «+ комментарий» едет в строку лайков (.actions-compact), справа от реакций/шэра.
     comment_toggle_html = f'<button type="button" class="fb-comment-toggle actions-comment">{safe(feedback_comment_label(lang))}</button>'
 
-    tags = [t for t in [scipop.get("main_tag", "")] + scipop.get("extra_tags", []) if t]
+    # ТЕГИ БЕРЁМ ИЗ ВЕКТОРА, если он посчитан (владелец 2026-08-09: «переходим целиком
+    # на вектор, теги в промпте больше не гоняем»).
+    #
+    # Причина не в экономии, а в качестве. Из 368 тегов 159 не стояли ни у одной статьи:
+    # модель, выбирая из списка в промпте, берёт знакомое и частое, а редкое и точное не
+    # берёт никогда. Статья про мозг получала «энтропия, ГАЛАКТИКА, спектроскопия».
+    # Вектор сравнивает смыслы — в ходу все 368, и связи стали честными.
+    #
+    # Откат: убрать tags_vec из data.json или вернуть строку ниже. Старые поля целы.
+    tags = _display_tags(scipop)
     authors = article.get("authors", [])
     authors_html = ", ".join(
         (f'<a href="/{LANG_DIR}/en/authors/{attr_safe(author_slug(a))}.html" class="text-author-link" data-author="{attr_safe(a)}">{safe(a)}</a>'
          if any(c.isalpha() for c in a) else safe(a))  # мусорное "имя" (парсинг-артефакт без букв) — без ссылки, страницы для него нет
         for a in authors
     )
-    # Законы статьи (через её теги, закон↔тег) — в правый сайдбар столбиком под тегами
+    # Законы — ПРЯМО ИЗ ВЕКТОРА, а не через общий тег.
+    #
+    # Прежнее правило цепляло закон к статье, если совпал хотя бы один тег: у закона
+    # излучения Планка стоит «спектроскопия», и он приклеивался ко всему, где спектроскопия
+    # хоть упомянута. Вектор сравнивает описание закона с текстом статьи напрямую.
+    # Порог отсечения намеренно высокий: физического закона для статьи про языковые модели
+    # не существует, и пустая колонка честнее принципа Паули в статье про трансформеры.
+    # Треть статей остаётся без законов — это правда, а не пробел.
     laws_loc = load_laws_loc(lang)
+    # tagset нужен и ниже, для подбора учёных по related_tags, — поэтому считаем его
+    # здесь, а не внутри ветки отката. Убрав его вместе со старым блоком законов,
+    # я уронил сборку всех статей: UnboundLocalError на первой же.
     tagset = set(tags)
     side_laws = []
-    for lid, ld in laws_loc.items():
-        if tagset & set(ld.get("tags", [])):
+    for lid in (scipop.get("laws_vec") or [])[:6]:
+        ld = laws_loc.get(lid)
+        if ld:
             side_laws.append((lid, ld.get("name", lid)))
-        if len(side_laws) >= 6:
-            break
+    if not side_laws and not scipop.get("laws_vec"):
+        # Вектор для статьи ещё не считался — старый путь через теги, чтобы страница
+        # не осталась без связей до следующего прогона разметки.
+        for lid, ld in laws_loc.items():
+            if tagset & set(ld.get("tags", [])):
+                side_laws.append((lid, ld.get("name", lid)))
+            if len(side_laws) >= 6:
+                break
     # Учёные статьи — через её теги (related_tags учёного) И через уже найденные законы
     # (их scientists/influenced_by) — тот же стандартный подход, что у законов выше.
     # Результат идёт ПЕРВЫМ в колонке (сверху тегов) — см. side_sci_html ниже.
@@ -1136,8 +1393,23 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
     level_switch_html = level_switch_links(lang, version, date_str, article["id"], with_mini=has_mini)
     level_switch_bottom_html = level_switch_links(lang, version, date_str, article["id"], compact=True)
     mini_head_html = mini_header_html((scipop.get("mini") or "").strip(), lang)
-    # canonical — собственный URL страницы; языковые альтернативы описывает hreflang
-    canonical_url = f"{SITE_URL}/{LANG_DIR}/{lang}/archive/{date_str}/{article['id']}/{page_file}"
+    # canonical — ОДИН на статью, на популярный уровень (index.html). Языковые
+    # альтернативы описывает hreflang.
+    #
+    # Раньше каждый уровень указывал сам на себя, и поисковик получал четыре
+    # самостоятельных документа с одним и тем же материалом. Итог виден в отчёте Google
+    # за 8 августа: мы предъявили 46 662 адреса, проиндексировано 3 535 — семь процентов.
+    # 39 500 страниц он даже не стал читать («обнаружена, не проиндексирована»), ещё 585
+    # прочёл и отверг. Восемнадцать штук он сам склеил, решив за нас, какая версия главная.
+    #
+    # Теперь мини, просто и подробно ссылаются на популярный уровень: предъявляем 11 тысяч
+    # страниц вместо 44, и вес четырёх версий сливается в одну вместо того, чтобы делиться
+    # между ними. Читатель ничего не теряет — переключатель уровней работает как работал,
+    # меняется только то, что мы говорим поисковику.
+    canonical_url = f"{SITE_URL}/{LANG_DIR}/{lang}/archive/{date_str}/{article['id']}/index.html"
+    # Собственный адрес страницы всё равно нужен: для og:url и структурированных данных
+    # правильнее показывать именно ту страницу, которую человек открыл.
+    page_url = f"{SITE_URL}/{LANG_DIR}/{lang}/archive/{date_str}/{article['id']}/{page_file}"
 
     cats = article.get("categories", [])
     categories_html = ""
@@ -1155,16 +1427,37 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
     lic_name = "CC BY 4.0" if "by/4.0" in lic else (
         "CC BY-SA 4.0" if "by-sa" in lic else ("CC0" if "zero" in lic else "CC BY"))
 
+    # hreflang ведёт на index.html каждого языка, а не на текущий уровень: языковые
+    # альтернативы обязаны указывать на канонические адреса, иначе поисковик отбрасывает
+    # всю связку целиком. Раньше mini.html ссылался на mini.html соседних языков — то есть
+    # на страницы, которые сами каноническими не являются.
     hreflang_links = "\n    ".join(
-        f'<link rel="alternate" hreflang="{l}" href="{SITE_URL}/{LANG_DIR}/{l}/archive/{date_str}/{article["id"]}/{page_file}">'
+        f'<link rel="alternate" hreflang="{l}" href="{SITE_URL}/{LANG_DIR}/{l}/archive/{date_str}/{article["id"]}/index.html">'
         for l in LANGUAGES
-    ) + f'\n    <link rel="alternate" hreflang="x-default" href="{SITE_URL}/{LANG_DIR}/{DEFAULT_LANG}/archive/{date_str}/{article["id"]}/{page_file}">'
+    ) + f'\n    <link rel="alternate" hreflang="x-default" href="{SITE_URL}/{LANG_DIR}/{DEFAULT_LANG}/archive/{date_str}/{article["id"]}/index.html">'
 
     rmin = reading_minutes(scipop)
     reading_html = f'<span class="reading-time"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12.5" r="7.6"/><path d="M12 8.4V12.6L15 14.6"/></svg> {rmin} {safe(loc.get("min", "min"))}</span>'
     jsonld_html = build_jsonld(scipop, article, date_str, lang, canonical_url, abstract_for(abstract, lang, "advanced"))
 
+    # ── АВТОРСКАЯ РАБОТА ──────────────────────────────────────────────────────
+    # Работа, присланная автором, — такая же статья, тем же шаблоном и тем же кодом.
+    # Отличий ровно три, и все три приходят ДАННЫМИ, а не отдельной вёрсткой (владелец
+    # 2026-08-08: «такая же статья, максимум ещё ссылки, объяснения и так далее, но всё
+    # то же самое, просто другой источник, и всё»).
+    source_meta_html = (f'arXiv:<a href="https://arxiv.org/abs/{attr_safe(article["id"])}" '
+                        f'target="_blank" rel="noopener">{safe(article["id"])}</a>')
+    author_work_badges = ""
+    review_block_html = ""
+    if article.get("author_work"):
+        source_meta_html = author_work_sources(article, lang)
+        author_work_badges = author_work_badges_html(article, lang)
+        review_block_html = author_work_review_html(article, lang)
+
     return tpl.substitute(
+        source_meta_html=source_meta_html, author_work_badges=author_work_badges,
+        review_block_html=review_block_html,
+        author_work_files_html=author_work_files_html(article, lang),
         lang=lang, dir=dir_for(lang), site_name=SITE_NAME, site_url=SITE_URL, goatcounter=GOATCOUNTER,
         authors_lang="en", asset_ver=asset_ver(),
         clickbait=safe(scipop.get("title", article["title"])),
@@ -1196,7 +1489,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
         express_locked_js="true" if scipop.get("express_locked") else "false",
         license_label=safe(loc.get("license", "Original")),
         license_url=lic, license_name=lic_name,
-        canonical_url=canonical_url, hreflang_links=hreflang_links,
+        canonical_url=canonical_url, page_url=page_url, hreflang_links=hreflang_links,
         tags_side_html=tags_side_html, article_graph_html=article_graph_html,
         mosaic_html=mosaic_html, ai_cover_html=ai_cover_html,
         abstract_html=abstract_html,
@@ -1319,6 +1612,44 @@ def sci_notation(v):
     return s
 
 
+def _display_tags(scipop):
+    """Теги статьи для показа и индекса: вектор, с откатом на прежние.
+
+    Одна функция на все места, где теги нужны, — иначе страница и лента расходятся,
+    и заметить это можно только глазами, случайно.
+    """
+    vec = [x for x in (scipop.get("tags_vec") or []) if x]
+    # Мало тегов — значит вектор НЕ УВЕРЕН, и верить ему нельзя.
+    #
+    # Порог отбора один на всех, поэтому у статьи с уверенной привязкой набирается шесть
+    # тегов, а у сомнительной — два-три: близость едва переваливает за порог. Живой случай
+    # 10 августа: авторская работа про MEMS-акселерометры получила «большие языковые модели»
+    # и «рекуррентные нейросети» — TF-IDF зацепился за общие слова «данные» и «модель»,
+    # потому что своего текста у работы всего три тысячи знаков. Прежние теги из промпта
+    # там были точные: обработка сигналов, спектральный анализ.
+    #
+    # Так что три тега и меньше — это не разметка, а шум. Берём прежние.
+    if len(vec) >= 4:
+        return vec
+    return [x for x in [scipop.get("main_tag", "")] + (scipop.get("extra_tags") or []) if x]
+
+
+def _card_text(scipop, limit=420):
+    """Текст для карточки в ленте: начало простого изложения.
+
+    Порядок отката не случаен. Простой текст — то, ради чего человек и приходит; если его
+    нет (у экспресса без simple), берём популярный; только потом справочное description,
+    и в самом конце однострочник. Пустой карточки не бывает.
+    """
+    body = ""
+    for k in ("text", "description", "oneliner"):
+        v = (scipop.get(k) or "").strip()
+        if v:
+            body = v
+            break
+    return card_cut(body, limit)
+
+
 def card_cut(s, limit=300):
     """Обрез для карточки — по границе ПРЕДЛОЖЕНИЯ, а не по счётчику символов.
 
@@ -1355,20 +1686,32 @@ def update_index(scipop, article, date_str, lang, version, abstract=""):
         # scipop["title"] всегда настоящий, локked-тиры отличаются только express_locked-баннером.
         "title": scipop.get("title", article["title"]),
         "oneliner": card_cut(strip_markers(scipop.get("oneliner", ""))),
-        # Описание — ЦЕЛИКОМ, без обрезки (владелец 2026-08-02: «если текст, то текст,
-        # ничего обрезать не надо; карточки не фиксированной высоты»). Оно пишется
-        # специально под карточку и укладывается в 4-6 предложений самим промптом —
-        # ограничивать его ещё и здесь значит резать то, что уже отмерено.
-        "description": strip_markers(scipop.get("description", "")),
+        # В карточку идёт НАЧАЛО ПРОСТОГО ТЕКСТА, а не поле description.
+        #
+        # description пишется как справка и звучит соответственно: «у ядер-близнецов число
+        # протонов и нейтронов меняется местами, физики использовали разницу радиусов, чтобы
+        # прощупать тензорные силы». Термины, ни одного образа. А простой текст той же статьи
+        # начинается так: «в атомном ядре протоны и нейтроны упакованы так плотно, что между
+        # ними действуют силы, напоминающие туго натянутые пружины».
+        #
+        # Владелец 2026-08-09: «в карточку списка — простой понятный текст». Карточка — первое,
+        # что человек видит в ленте, и по ней решает, читать ли дальше. Справкой не заманишь.
+        "description": strip_markers(_card_text(scipop)),
         "abstract": strip_markers(abstract)[:1500],
         "threads": strip_markers(scipop.get("threads", ""))[:480],
         "thumbs": article.get("thumbs", 0),
         "authors": article.get("authors", [])[:50], "date": date_str,  # до 50 — лента показывает ≤20, >20 разворачивает
-        "tags": [scipop.get("main_tag", "")] + scipop.get("extra_tags", []),
+        # Теги В ИНДЕКС — тоже из вектора. Я поправил показ на странице статьи и забыл
+        # про индекс, а по нему живут лента, поиск и облако тегов: после полной пересборки
+        # страницы были размечены по смыслу, а облако осталось прежним — 306 тегов вместо
+        # 368 и те же 46% на десяти самых частых. Один источник правды, а не два.
+        "tags": _display_tags(scipop),
         # Законы в индексе не было вовсе — на карточке их показать было нечем, хотя в data.json
         # они лежат с самого введения слоя «Законы». Владелец 2026-08-02: показывать на карточке
         # теги, учёных и законы в едином графическом ключе.
-        "laws": scipop.get("laws", []),
+        # Законы в индексе — из вектора, как и на странице. Иначе карточка в ленте
+        # покажет один набор, а страница другой.
+        "laws": (scipop.get("laws_vec") or scipop.get("laws") or []),
         "scientists": scipop.get("scientists", []), "url": url,
         "reading": reading_minutes(scipop),
         "categories": article.get("categories", []),
@@ -2786,7 +3129,22 @@ def update_all_authors():
                 f'<a href="/{lbase}/laws/{attr_safe(lid)}.html" class="law-chip" data-law="{attr_safe(lid)}">{safe(laws_loc[lid].get("name", lid))}</a>'
                 for lid in author_law_ids[:20]
             )
+            # Описание для выдачи: сколько работ и о чём. Без него поисковик собирает сниппет
+            # из случайного куска страницы, а человек, нашедший себя по имени, должен сразу
+            # понимать, что он нашёл.
+            n_art = len(data.get("articles", []))
+            topics = ", ".join(
+                str(tags_loc.get(t, {}).get("name", t)) for t in author_tags[:3]
+            )
+            author_desc = (
+                f"{author_name}: {n_art} " + ("paper" if n_art == 1 else "papers")
+                + " retold in plain language"
+                + (f" — {topics}" if topics else "")
+                + ". Free to read at bridge42worlds."
+            )
             _write_text_retry(Path(LANG_DIR) / lang / "authors" / f"{slug}.html", tpl_page.substitute(
+                author_desc=attr_safe(author_desc),
+                author_url=f"{SITE_URL}/{LANG_DIR}/en/authors/{slug}.html",
                 lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang="en", asset_ver=asset_ver(),
                 fav_title=safe(nav_fav_title(lang)),
                 version_toggle_html="",
@@ -3096,8 +3454,88 @@ table{{border-collapse:collapse;font-size:13px;width:100%}}</style></head><body>
     print(f"  📊 status.html ({total} статей, {authors_n} авторов)")
 
 
+def generate_llms_txt():
+    """llms.txt — путеводитель по сайту для языковых моделей.
+
+    То же, чем robots.txt служит поисковику, только адресат другой: модель, которая пришла
+    отвечать на вопрос человека, читает короткий markdown и понимает, что здесь лежит и как
+    устроено, вместо того чтобы догадываться по случайной странице. Cloudflare держит
+    /llms.txt и /llms-full.txt в списке путей, открытых даже заблокированным краулерам, —
+    то есть считает файл частью нормального устройства сайта.
+
+    Владелец 8 августа 2026 снял блокировку со всех ИИ-краулеров: мы отдаём материал по
+    свободной лицензии, и читатель, пришедший по ссылке из ответа ИИ, — такой же читатель.
+    """
+    idx = Path(LANG_DIR) / DEFAULT_LANG / "articles-index.json"
+    n_art = len(json.loads(idx.read_text(encoding="utf-8"))) if idx.exists() else 0
+    n_auth = len(list((Path(LANG_DIR) / "en" / "authors").glob("*.html"))) if \
+        (Path(LANG_DIR) / "en" / "authors").exists() else 0
+    langs = ", ".join(LANGUAGES)
+
+    body = f"""# bridge42worlds
+
+> Peer-reviewed physics, biology and related research from arXiv, retold in plain language.
+> {n_art} papers, each at four depths — from a one-paragraph gist to a full technical
+> account — in {len(LANGUAGES)} languages ({langs}). Free to read, no registration, no ads.
+
+Every article keeps a link to the arXiv original and its licence. The retelling is ours;
+the science belongs to the authors named on each page. If you quote from here, cite the
+original paper — and a link back to our page helps its authors find the retelling.
+
+## How the site is laid out
+
+- Article addresses look like `/{LANG_DIR}/<lang>/archive/<date>/<arxiv-id>/index.html`
+- `index.html` is the canonical page; `mini.html`, `simple.html` and `advanced.html` are
+  the same paper at other depths and point their canonical here
+- [Archive of all papers]({SITE_URL}/{LANG_DIR}/en/archive/index.html)
+- [Authors]({SITE_URL}/{LANG_DIR}/en/authors/index.html) — {n_auth} pages, one per researcher
+- [Topics]({SITE_URL}/{LANG_DIR}/en/tags/index.html)
+- [Laws of nature]({SITE_URL}/{LANG_DIR}/en/laws/index.html) — formulas with their history
+- [arXiv sections]({SITE_URL}/{LANG_DIR}/en/sections/index.html)
+- [About the project]({SITE_URL}/{LANG_DIR}/en/about.html) — what this is, who it is for
+- [Sitemap]({SITE_URL}/sitemap.xml)
+
+## For researchers
+
+Authors may submit their own work for a plain-language retelling, and may correct or
+withdraw ours at any time. The last word on any page is theirs.
+[How to submit]({SITE_URL}/{LANG_DIR}/en/community/index.html)
+
+## Contact
+
+Own work for review: article@bridge42worlds.academy
+Anything else, including "you got this wrong": see the About page above.
+"""
+    _write_text_retry(Path("llms.txt"), body)
+    print(f"  🤖 llms.txt: {n_art} статей, {n_auth} авторов, {len(LANGUAGES)} языков")
+
+
+def _authors_multi(min_articles: int = 2) -> list:
+    """Авторы, у которых в базе больше одной работы, — по графу авторов.
+
+    Граф считается при генерации и лежит в data/authors-graph.json; берём его, а не
+    articles-index.json, чтобы имя и число работ совпадали ровно с тем, что на странице.
+    """
+    p = Path("data/authors-graph.json")
+    if not p.exists():
+        return []
+    try:
+        g = json.loads(p.read_text(encoding="utf-8"))
+    except Exception:
+        return []
+    g = g.get("graph", g)
+    out = []
+    for name, d in g.items():
+        arts = (d or {}).get("articles", [])
+        # Страницу пишем только если файл действительно есть: звать поисковика на
+        # несуществующий адрес мы уже один раз наступали (mini.html у экспресс-статей).
+        if len(arts) >= min_articles and (Path(LANG_DIR) / "en" / "authors" / f"{author_slug(name)}.html").exists():
+            out.append(name)
+    return out
+
+
 def generate_sitemaps():
-    """sitemap-{lang}.xml (статьи+теги+учёные+about+index) + индекс sitemap.xml в корне."""
+    """sitemap-{lang}.xml (статьи+теги+учёные+авторы+about+index) + индекс sitemap.xml в корне."""
     def urlset(urls):
         # urls — список (адрес, lastmod|None). Честный lastmod из данных статьи: Google
         # переобходит только то, что реально менялось, и бюджет обхода уходит на свежие
@@ -3125,6 +3563,14 @@ def generate_sitemaps():
         if lang == "en" and authors_dir.exists():
             for p in sorted(authors_dir.glob("[a-z].html")):
                 urls.append(f"{SITE_URL}/{LANG_DIR}/en/authors/{p.name}")
+            # Персональные страницы авторов — тех, у кого больше одной работы. Учёный,
+            # который ищет собственное имя, попадает к своим статьям в нашем пересказе; это
+            # прямее любой рассылки и не требует ничьих контактов. Всех 18 506 сразу в карту
+            # не даём: мы только что срезали её с 46 662 адресов до 13 566 именно потому,
+            # что поисковик захлебнулся. Порог «две работы и больше» оставляет 1 479 — тех,
+            # кого мы разбирали не по случайности. Остальных добавим, когда эти осядут.
+            for name in sorted(_authors_multi()):
+                urls.append(f"{SITE_URL}/{LANG_DIR}/en/authors/{author_slug(name)}.html")
         sections_dir = Path(LANG_DIR) / lang / "sections"
         if sections_dir.exists():
             for p in sorted(sections_dir.glob("*.html")):
@@ -3141,7 +3587,6 @@ def generate_sitemaps():
                 # lastmod — дата правки данных статьи, не HTML: пересборка не считается
                 # изменением содержания.
                 lm = None
-                dj = art_dir.parent / a["id"] / "data.json"
                 dj = art_dir / "data.json"
                 try:
                     if dj.exists():
@@ -3149,9 +3594,15 @@ def generate_sitemaps():
                         lm = _dt.date.fromtimestamp(dj.stat().st_mtime).isoformat()
                 except Exception:
                     lm = None
-                for vf in VERSION_FILES.values():
-                    if (art_dir / vf).exists():
-                        urls.append((f"{SITE_URL}/{LANG_DIR}/{lang}/archive/{a['date']}/{a['id']}/{vf}", lm))
+                # В карте — только канонический адрес статьи (index.html). Три остальных
+                # уровня остаются доступны читателю и открыты для обхода, но в карту не
+                # попадают: их canonical всё равно ведёт сюда, а звать поисковика на
+                # страницы, которые он по нашей же просьбе индексировать не должен, —
+                # значит тратить его бюджет обхода впустую. Отчёт за 8 августа: из 46 662
+                # предъявленных адресов проиндексировано 3 535, а 39 500 он не стал даже
+                # читать. После правки предъявляем около 11 тысяч.
+                if (art_dir / "index.html").exists():
+                    urls.append((f"{SITE_URL}/{LANG_DIR}/{lang}/archive/{a['date']}/{a['id']}/index.html", lm))
         for tid in tags_graph:
             urls.append(f"{SITE_URL}/{LANG_DIR}/{lang}/tags/{tid}.html")
         fn = f"sitemap-{lang}.xml"
@@ -3273,6 +3724,15 @@ def regenerate_all_html(only=None):
             "refined": data.get("refined", False),
             "express": data.get("express", False),
             "express_tiers": data.get("express_tiers", []),
+            # Авторская работа: те самые три отличия. Без переноса сюда data.json их знает,
+            # а страница — нет, и работа собирается неотличимо от статьи с arXiv, включая
+            # ложную ссылку «arXiv:b42p-2026-001» на несуществующий препринт.
+            "author_work": data.get("author_work", False),
+            "kind": data.get("kind", ""),
+            "code": data.get("code", ""),
+            "sources": data.get("sources", {}),
+            "review": data.get("review", {}),
+            "author_comment": data.get("author_comment", ""),
         }
         abstract = data.get("abstract") or {}
         # Наличие мини считаем ДО страниц уровней: кнопка «Мини» на них должна появляться только
@@ -3322,6 +3782,10 @@ def regenerate_all_html(only=None):
                 continue
             mini_scipop = dict(base_scipop)
             mini_scipop["text"] = threads_text
+            # mini.html больше НЕ ПИШЕТСЯ: мини убран из уровней чтения
+            # (владелец 2026-08-09, причина — у order в gen_base.level_switch_links).
+            # Старые файлы не удаляем: на них могли остаться ссылки снаружи.
+            continue
             out = Path(LANG_DIR) / lang / "archive" / date_str / data["id"] / "mini.html"
             out.parent.mkdir(parents=True, exist_ok=True)
             html = gen_article_html(mini_scipop, article_obj, date_str,
@@ -3346,6 +3810,7 @@ def regenerate_all_html(only=None):
     rebuild_author_graph()
     update_all_authors()
     generate_sitemaps()
+    generate_llms_txt()
     generate_feeds()
     generate_status_page()
     print(f"  ✅ Regenerated {count} HTML pages + tags/scientists/authors/laws/graph")
@@ -3481,6 +3946,14 @@ def _build_article(a, date_str, inputs, force=False, express=False, known_licens
         # файл, ронять из-за неё статью нельзя.
         if refs:
             (article_folder / "references.txt").write_text(refs, encoding="utf-8", errors="replace")
+        # РАЗОБРАННЫЙ ТЕКСТ СОХРАНЯЕМ. Раньше он уходил в промпт и терялся навсегда: рядом
+        # оставались только PDF и список литературы. А это самое ценное, что есть у статьи
+        # для вектора — не аннотация-витрина, которую автор пишет для привлечения, а тело
+        # с методикой, оговорками и настоящими результатами (владелец 2026-08-09: «нам бы
+        # вектор по всем статьям из PDF»). Весит копейки: 12 ГБ исходников дают около
+        # 150 МБ текста.
+        if text and not no_fetch:
+            (article_folder / "fulltext.txt").write_text(text, encoding="utf-8", errors="replace")
         (article_folder / "arxiv-atom.xml").write_text(atom_xml, encoding="utf-8", errors="replace")
         (article_folder / "arxiv-oai.xml").write_text(oai_xml or "", encoding="utf-8", errors="replace")
         if not no_fetch and config.get("keep_pdf", True) and pdf != article_folder / "original.pdf":
@@ -3876,6 +4349,10 @@ def write_article_pages(item, date_str):
             mini_scipop["text"] = threads_text
             lf = Path(LANG_DIR) / l / "archive" / date_str / a["id"]
             lf.mkdir(parents=True, exist_ok=True)
+            # mini.html больше НЕ ПИШЕТСЯ: мини убран из уровней чтения
+            # (владелец 2026-08-09, причина — у order в gen_base.level_switch_links).
+            # Старые файлы не удаляем: на них могли остаться ссылки снаружи.
+            continue
             (lf / "mini.html").write_text(
                 gen_article_html(mini_scipop, a, date_str, images, l, "mini",
                                  captions_for_lang(captions, l), abstract, has_mini=True),
@@ -3970,6 +4447,7 @@ def process_day(date_str, force=False, refresh_aggregates=True, express=False, l
         generate_analytics_page(lang)
         update_all_authors()
         generate_sitemaps()
+        generate_llms_txt()
         generate_feeds()
         generate_status_page()
     print(f"\n✅ {date_str}: {len(prepared)} articles generated")
@@ -3991,20 +4469,32 @@ def _index_entry(scipop, data, date_str, lang, version):
         "id": data["id"], "version": version,
         "title": scipop.get("title", data.get("original_title", "")),
         "oneliner": card_cut(strip_markers(scipop.get("oneliner", ""))),
-        # Описание — ЦЕЛИКОМ, без обрезки (владелец 2026-08-02: «если текст, то текст,
-        # ничего обрезать не надо; карточки не фиксированной высоты»). Оно пишется
-        # специально под карточку и укладывается в 4-6 предложений самим промптом —
-        # ограничивать его ещё и здесь значит резать то, что уже отмерено.
-        "description": strip_markers(scipop.get("description", "")),
+        # В карточку идёт НАЧАЛО ПРОСТОГО ТЕКСТА, а не поле description.
+        #
+        # description пишется как справка и звучит соответственно: «у ядер-близнецов число
+        # протонов и нейтронов меняется местами, физики использовали разницу радиусов, чтобы
+        # прощупать тензорные силы». Термины, ни одного образа. А простой текст той же статьи
+        # начинается так: «в атомном ядре протоны и нейтроны упакованы так плотно, что между
+        # ними действуют силы, напоминающие туго натянутые пружины».
+        #
+        # Владелец 2026-08-09: «в карточку списка — простой понятный текст». Карточка — первое,
+        # что человек видит в ленте, и по ней решает, читать ли дальше. Справкой не заманишь.
+        "description": strip_markers(_card_text(scipop)),
         "abstract": strip_markers(abstract)[:1500],
         "threads": strip_markers(data.get("threads", ""))[:480],
         "thumbs": data.get("thumbs", 0),
         "authors": data.get("authors", [])[:50], "date": date_str,  # до 50 — лента показывает ≤20, >20 разворачивает
-        "tags": [scipop.get("main_tag", "")] + scipop.get("extra_tags", []),
+        # Теги В ИНДЕКС — тоже из вектора. Я поправил показ на странице статьи и забыл
+        # про индекс, а по нему живут лента, поиск и облако тегов: после полной пересборки
+        # страницы были размечены по смыслу, а облако осталось прежним — 306 тегов вместо
+        # 368 и те же 46% на десяти самых частых. Один источник правды, а не два.
+        "tags": _display_tags(scipop),
         # Законы в индексе не было вовсе — на карточке их показать было нечем, хотя в data.json
         # они лежат с самого введения слоя «Законы». Владелец 2026-08-02: показывать на карточке
         # теги, учёных и законы в едином графическом ключе.
-        "laws": scipop.get("laws", []),
+        # Законы в индексе — из вектора, как и на странице. Иначе карточка в ленте
+        # покажет один набор, а страница другой.
+        "laws": (scipop.get("laws_vec") or scipop.get("laws") or []),
         "scientists": scipop.get("scientists", []), "url": url,
         "reading": reading_minutes(scipop),
         "categories": data.get("categories", []),
@@ -4320,6 +4810,7 @@ def bulk_generate(selection_path, batch_size=100, express=True, force=False, ski
         generate_analytics_page(lang)
         update_all_authors()
         generate_sitemaps()
+        generate_llms_txt()
         generate_feeds()
         generate_status_page()
     print(f"\n🎉 bulk-generate: сгенерировано {total_generated} из {len(ready)} в очереди")

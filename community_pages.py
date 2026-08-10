@@ -111,6 +111,184 @@ def _levels(work, lang, s):
     return f'<div class="lv-switch">{btns}</div>{js}', body
 
 
+_ICO_DOC = ('<svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+            'stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+            '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/>'
+            '<path d="M14 3v5h5"/><path d="M9 13h6"/><path d="M9 17h4"/></svg>')
+_ICO_BOX = ('<svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+            'stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+            '<path d="M3 7.5h18v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>'
+            '<path d="M3 7.5l1.6-3.2A1.5 1.5 0 0 1 6 3.5h12a1.5 1.5 0 0 1 1.4.8L21 7.5"/>'
+            '<path d="M10 12h4"/></svg>')
+
+
+def _src_btn(url, label, primary=False, size=None):
+    """Кнопка к материалам работы. Нет файла — нет и кнопки.
+
+    Кнопка, ведущая в 404, хуже отсутствующей: читатель решит, что у нас сломано, а не
+    что материала нет. Так уже было — на странице стояла ссылка на source.zip, который
+    никто никуда не клал."""
+    if not url or not label:
+        return ""
+    cls = "cw-src-btn primary" if primary else "cw-src-btn"
+    ico = _ICO_DOC if primary else _ICO_BOX
+    mb = f'<span class="cw-src-size">{size} МБ</span>' if size else ""
+    return f'<a class="{cls}" href="{H.escape(url)}">{ico}{H.escape(label)}{mb}</a>'
+
+
+def _source_inline(work, s):
+    """Ссылки на первоисточник прямо в строке-паспорте — там, где у статьи стоит arXiv.
+
+    Читатель ищет первоисточник по привычке в этом месте, а не в конце страницы. У нас его
+    три вида, и порядок не случаен (владелец 2026-08-08: «давай HTML и PDF как опция»):
+
+        работа: HTML        живой файл автора — с работающими визуализациями
+        PDF                 то же самое на бумагу; динамики в нём нет по природе
+        полные материалы    данные, код, графики — то, чем работа проверяется
+
+    HTML первым именно потому, что PDF теряет интерактив, а он в этой работе есть.
+    Чего нет — того и в строке нет: ссылка в 404 хуже отсутствующей.
+    """
+    out = []
+    if work.get("live_url"):
+        out.append((work["live_url"], s.get("src_live", "HTML")))
+    if work.get("pdf_url"):
+        out.append((work["pdf_url"], s.get("src_pdf", "PDF")))
+    if work.get("archive_url"):
+        mb = work.get("archive_mb")
+        out.append((work["archive_url"],
+                    s.get("src_zip", "ZIP") + (f" · {mb} МБ" if mb else "")))
+    if not out:
+        return ""
+    return "".join(f'<span>·</span><a href="{H.escape(u)}">{H.escape(t)}</a>' for u, t in out)
+
+
+_LOC_CACHE = {}
+
+
+def _loc_json(lang, name):
+    """Локализованный справочник (tags.json, laws.json) — читаем раз за прогон."""
+    key = (lang, name)
+    if key not in _LOC_CACHE:
+        p = ROOT / "lang" / lang / "data" / f"{name}.json"
+        try:
+            _LOC_CACHE[key] = json.loads(p.read_text(encoding="utf-8"))
+        except Exception:
+            _LOC_CACHE[key] = {}
+    return _LOC_CACHE[key]
+
+
+def _tags_laws(work, lang, s):
+    """Теги и законы работы — теми же чипами, что на обычной статье.
+
+    Владелец 2026-08-08: «не вижу наших обычных тегов, законов и так далее — немного не по
+    уставу всё». Без этой разметки работа выпадает из графа знаний: её не находят ни через
+    облако тегов, ни со страницы закона, ни в перекрёстных связях. Выделять авторскую
+    работу должна плашка, а не отсутствие обычного устройства страницы.
+    """
+    tags = work.get("tags") or []
+    laws = work.get("laws") or []
+    if not tags and not laws:
+        return ""
+    tloc = _loc_json(lang, "tags")
+    lloc = _loc_json(lang, "laws")
+    parts = []
+    if tags:
+        chips = "".join(
+            f'<a href="/lang/{lang}/tags/{H.escape(t)}.html" class="side-tag" '
+            f'data-tag="{H.escape(t, quote=True)}">'
+            f'{H.escape((tloc.get(t) or {}).get("name", t))}</a>' for t in tags)
+        parts.append(f'<div class="side-tags-label">{H.escape(s.get("tags_label", ""))}</div>{chips}')
+    if laws:
+        chips = "".join(
+            f'<a href="/lang/{lang}/laws/{H.escape(lid)}.html" class="side-law" '
+            f'data-law="{H.escape(lid, quote=True)}">'
+            f'{H.escape((lloc.get(lid) or {}).get("name", lid))}</a>' for lid in laws)
+        parts.append(f'<div class="side-laws-label">{H.escape(s.get("laws_label", ""))}</div>{chips}')
+    return f'<div class="cw-tags side-tags">{"".join(parts)}</div>'
+
+
+def _cover(work, title):
+    """Обложка работы. Рисуется своим пресетом (tools/submission_cover.py) — ярче и
+    контрастнее, чем у обычной статьи: таких работ единицы, и они должны выделяться."""
+    url = work.get("cover_url")
+    if not url:
+        return ""
+    return (f'<figure class="cw-cover"><img src="{H.escape(url)}" '
+            f'alt="{H.escape(title)}" fetchpriority="high"></figure>')
+
+
+def _video_slide(work, lang, s):
+    """Видео — ПЕРВЫМ кадром той же галереи, что и картинки, а не своей секцией.
+
+    Сперва оно стояло отдельным блоком, и владелец сказал: «видео в том же ряду, что и
+    картинки, ну всё так же». Он прав — это ещё одна иллюстрация к работе, просто
+    движущаяся; отдельная секция под неё ломает единый ряд и заставляет читателя
+    переучиваться. Первым — потому что живая съёмка установки объясняет больше, чем
+    любой график.
+    """
+    vids = work.get("videos") or []
+    if not vids:
+        return ""
+    caps = (work.get("captions", {}) or {}).get(lang, {}) or {}
+    v = vids[0]
+    poster = f' poster="{H.escape(v["poster"])}"' if v.get("poster") else ""
+    cap = caps.get(v.get("file", "")) or s.get("video_note", "")
+    return (f'<div class="gallery-video">'
+            f'<video controls preload="metadata"{poster} playsinline>'
+            f'<source src="{H.escape(v["url"])}" type="{H.escape(v["type"])}"></video>'
+            + (f'<figcaption class="gallery-caption">{H.escape(cap)}</figcaption>' if cap else "")
+            + '</div>')
+
+
+def _figures(work, lang, s):
+    """Иллюстрации автора — НАШЕЙ галереей, той же, что у обычной статьи.
+
+    Сначала это была сетка из 27 карточек подряд, и владелец сказал прямо: «картинки из
+    работы россыпью, а не как у нас положено… понятно, что должно выделяться, но хотя бы
+    чтобы близко было». Он прав: выделять авторскую работу должна плашка и обложка, а не
+    другой способ показывать картинки. Читатель, пришедший со статьи, не должен заново
+    учиться смотреть.
+
+    Поэтому здесь ровно та же разметка, что рендерит gen_mosaic() в generate.py: одно
+    главное изображение, лента превью снизу, стрелки, клик — полноэкранный просмотр.
+    Работают те же js/gallery.js и js/lightbox.js.
+
+    Подписи пишет модель по тексту работы и переводит на все языки: имя файла
+    comb_histogram.png читателю не говорит ничего.
+    """
+    imgs = work.get("images") or []
+    if not imgs:
+        return ""
+    caps = (work.get("captions", {}) or {}).get(lang, {}) or {}
+    items = [(im["url"], caps.get(im.get("file", "")) or "") for im in imgs]
+    video_html = _video_slide(work, lang, s)
+
+    n = len(items)
+    thumbs = "".join(
+        f'<button type="button" class="gallery-thumb{" is-active" if k == 0 else ""}" '
+        f'data-i="{k}" data-src="{H.escape(u)}" data-cap="{H.escape(c, quote=True)}" '
+        f'aria-label="{H.escape(c, quote=True) or f"Image {k + 1}"}">'
+        f'<img src="{H.escape(u)}" alt="" loading="lazy"></button>'
+        for k, (u, c) in enumerate(items))
+    u0, c0 = items[0]
+    nav = ('<button type="button" class="gallery-nav gallery-prev" aria-label="Prev">‹</button>'
+           '<button type="button" class="gallery-nav gallery-next" aria-label="Next">›</button>'
+           ) if n > 1 else ""
+    thumbs_html = f'<div class="gallery-thumbs">{thumbs}</div>' if n > 1 else ""
+    gallery = (
+        f'<div class="gallery" data-count="{n}">'
+        f'<div class="gallery-stage">{nav}'
+        f'<a class="gallery-main" href="{H.escape(u0)}" aria-label="Open image">'
+        f'<img class="gallery-main-img" src="{H.escape(u0)}" alt="{H.escape(c0, quote=True)}"></a>'
+        f'<figcaption class="gallery-caption"{"" if c0 else " style=\'display:none\'"}>'
+        f'{H.escape(c0)}</figcaption>'
+        f'</div>{thumbs_html}</div>')
+    # Ровно как у статьи: галерея стоит в .mosaic сразу под шапкой, без своего заголовка
+    # и пояснений. Видео — первым кадром того же ряда.
+    return f'<div class="mosaic">{video_html}{gallery}</div>'
+
+
 _TITLES = {}
 
 
@@ -172,6 +350,9 @@ def build_work(code, langs=None):
             "og_image_html": "", "hreflang_links": "", "goatcounter": "bridge42worlds",
             "received_date": w.get("received", ""),
             "author_display": H.escape(w.get("author_display") or s.get("author_anon", "автор не представился")),
+            # Подпись «автор» — только когда есть имя. Иначе строка читалась
+            # «автор автор не представился»: слово шло и в подписи, и в значении.
+            "author_label_shown": H.escape(s.get("author_label", "")) if w.get("author_display") else "",
             "kind": kind_cls, "author_kind": kind_cls,
             "kind_label": H.escape(s.get(f"kind_{kind_cls}", kind)),
             "level_switch_html": sw, "level_switch_bottom_html": "",
@@ -191,6 +372,21 @@ def build_work(code, langs=None):
             "author_word_close": "</section>" if w.get("author_comment") else "-->",
             "source_url": w.get("source_url") or "",
             "source_meta": H.escape(w.get("source_meta") or ""),
+            # Живая версия — ГЛАВНАЯ кнопка: это работа автора как он её сверстал, с
+            # работающими визуализациями. PDF рядом, обычной: он их теряет по природе.
+            "source_live_html": _src_btn(w.get("live_url"), s.get("source_live_label", ""), primary=True),
+            "source_pdf_html": _src_btn(w.get("pdf_url"), s.get("source_pdf_label", "")),
+            "source_zip_html": _src_btn(w.get("archive_url"), s.get("source_zip_label", ""),
+                                        size=w.get("archive_mb")),
+            "figures_html": _figures(w, lang, s),
+            "source_inline_html": _source_inline(w, s),
+            "tags_html": _tags_laws(w, lang, s),
+            "cover_html": _cover(w, title),
+            # Обложка уезжает в карточку при пересылке: без неё работа выглядит в
+            # мессенджере серым прямоугольником, тогда как все наши статьи с картинкой.
+            "og_image_html": (f'<meta property="og:image" content="{SITE}{H.escape(w["cover_url"])}">'
+                              '\n    <meta name="twitter:card" content="summary_large_image">'
+                              if w.get("cover_url") else ""),
         }
         # Остальное — строки интерфейса; недостающие не роняют страницу, а видны как пустота
         out = tpl.safe_substitute({**{k: "" for k in ()}, **s, **vals})
