@@ -38,6 +38,10 @@ OUT = ROOT / "data" / "cost-summary.json"
 DEFAULT_PRICES = {
     "deepseek-v4-pro":   {"cache_hit": 0.003625, "cache_miss": 0.435, "output": 0.87},
     "deepseek-v4-flash": {"cache_hit": 0.0028,   "cache_miss": 0.14,  "output": 0.28},
+    # Эмбеддинги (bge-m3 через DeepInfra): $0,01 за миллион токенов, выхода нет.
+    # Строка обязательна, а не для порядка: без неё cost_of() уходит в запасной тариф
+    # DeepSeek и считает вектор в 43 раза дороже, чем он стоит.
+    "bge-m3":            {"cache_hit": 0.0,       "cache_miss": 0.010, "output": 0.0},
 }
 
 # Шаги работы → к какому продукту относить их стоимость. Нужен, чтобы ответить не
@@ -53,6 +57,7 @@ KIND = {
     "select": "отбор", "rank": "отбор",
     "tutor": "бот", "ask": "бот",
     "cluster_interpret": "аналитика",
+    "embed": "вектор", "vector_select": "вектор",
 }
 
 

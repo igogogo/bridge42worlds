@@ -183,7 +183,7 @@ DI_URL = "https://api.deepinfra.com/v1/inference/BAAI/bge-m3"
 DI_BATCH_TOKENS = 40000
 
 
-def embed_di(texts, key, tries=5):
+def embed_di(texts, key, tries=5, stats=None):
     """Та же bge-m3, но через DeepInfra: своя карта, свой счёт, без квоты Workers AI.
 
     Зачем второй адрес к одной модели. У Workers AI платится не за вызов, а за индекс,
@@ -202,6 +202,10 @@ def embed_di(texts, key, tries=5):
             vecs = d.get("embeddings")
             if not vecs or len(vecs) != len(texts):
                 raise ValueError(f"ответ не по размеру: {len(vecs or [])} на {len(texts)}")
+            if stats is not None:
+                # Токены берём У ПОСТАВЩИКА, а не считаем по знакам: наша оценка «знаки/1,5»
+                # нужна, чтобы не превысить контекст, и для денег она грубовата.
+                stats["tokens"] = stats.get("tokens", 0) + int(d.get("input_tokens") or 0)
             return vecs
         except urllib.error.HTTPError as e:
             if e.code in (429, 500, 502, 503):
@@ -218,22 +222,39 @@ def embed_di(texts, key, tries=5):
     raise RuntimeError("не удалось получить эмбеддинги после повторов")
 
 
-def _di_split(texts, key):
+def _di_split(texts, key, stats=None):
     """Пачка не прошла по контексту — делим пополам, в пределе до одного текста.
 
     Одна аномально длинная статья не должна ронять прогон на три тысячи: оценка
     токенов по знакам приблизительная, и промахивается она именно на редких текстах.
     """
     try:
-        return embed_di(texts, key)
+        return embed_di(texts, key, stats=stats)
     except RuntimeError as e:
         if len(texts) == 1 or "context" not in str(e).lower():
             raise
         mid = len(texts) // 2
-        return _di_split(texts[:mid], key) + _di_split(texts[mid:], key)
+        return _di_split(texts[:mid], key, stats) + _di_split(texts[mid:], key, stats)
 
 
-def embed_cached(texts, key, cache_path, label=""):
+def log_usage(agent, tokens, model="bge-m3"):
+    """Запись в общий журнал расхода — тот же файл и тот же формат, что у генерации.
+
+    Отдельного журнала у вектора нет намеренно: владелец смотрит один отчёт
+    (tools/cost_report.py), и статья расходов, которой в нём нет, для него не существует.
+    Эмбеддинги пишутся как cache_miss — у них нет ни кэша поставщика, ни выхода.
+    """
+    try:
+        rec = {"ts": time.strftime("%Y-%m-%d %H:%M:%S"), "agent": agent, "model": model,
+               "prompt": tokens, "completion": 0, "cache_hit": 0, "cache_miss": tokens}
+        with (ROOT / "data/usage-log.jsonl").open("a", encoding="utf-8") as f:
+            f.write(json.dumps(rec, ensure_ascii=False) + "\n")
+    except Exception:
+        # Журнал не должен ронять расчёт: деньги уже потрачены, запись — вторична.
+        pass
+
+
+def embed_cached(texts, key, cache_path, label="", agent="embed"):
     """Векторы для списка текстов; посчитанное однажды лежит на диске.
 
     Кэш по отпечатку текста, а не по номеру строки: статьи дописываются и правятся,
@@ -262,13 +283,13 @@ def embed_cached(texts, key, cache_path, label=""):
         chars = sum(len(t) for _, t in todo)
         print(f"  {label}: считаю {len(todo)} из {len(texts)}, знаков {chars:,}, "
               f"~${chars / 1.5 / 1e6 * 0.010:.4f}")
-        done = 0
+        done, stats = 0, {}
         with cache_path.open("a", encoding="utf-8") as f:
             batch, budget = [], 0
             for h, t in todo + [(None, None)]:
                 cost = len(t) / 1.5 if t else 0
                 if batch and (h is None or budget + cost > DI_BATCH_TOKENS or len(batch) >= 32):
-                    vecs = _di_split([x[1] for x in batch], key)
+                    vecs = _di_split([x[1] for x in batch], key, stats)
                     for (bh, bt), v in zip(batch, vecs):
                         cache[bh] = v
                         f.write(json.dumps({"h": bh, "v": [round(x, 6) for x in v]}) + "\n")
@@ -279,6 +300,9 @@ def embed_cached(texts, key, cache_path, label=""):
                 if h is not None:
                     batch.append((h, t))
                     budget += cost
+        log_usage(agent, stats.get("tokens", 0))
+        print(f"  {label}: {stats.get('tokens', 0):,} токенов "
+              f"(${stats.get('tokens', 0) / 1e6 * 0.010:.4f}) — записано в журнал")
     else:
         print(f"  {label}: всё из кэша ({len(texts)})")
     return [cache[h] for h in keys]
