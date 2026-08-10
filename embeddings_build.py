@@ -175,6 +175,115 @@ def embed(texts, acc, tok, tries=5):
     raise RuntimeError("не удалось получить эмбеддинги после повторов")
 
 
+DI_URL = "https://api.deepinfra.com/v1/inference/BAAI/bge-m3"
+# Предел контекста у bge-m3 — 60k токенов, и он на ПАЧКУ целиком, а не на текст
+# (выяснено 2026-08-08: батч из 20 аннотаций получил «Max context reached 78440 tokens»).
+# Считаем токены как знаки/1,5: на научном тексте с формулами привычное «знаки/4»
+# занижает втрое. 40k — запас к пределу, чтобы промах оценки не ронял прогон.
+DI_BATCH_TOKENS = 40000
+
+
+def embed_di(texts, key, tries=5):
+    """Та же bge-m3, но через DeepInfra: своя карта, свой счёт, без квоты Workers AI.
+
+    Зачем второй адрес к одной модели. У Workers AI платится не за вызов, а за индекс,
+    и дневная квота у нас общая с поиском на сайте. Разметка тегов — разовый тяжёлый
+    прогон, он не должен занимать канал, которым живёт продакшн. Модель та же самая,
+    размерность та же (1024, проверено живым вызовом 2026-08-10), значит векторы одного
+    прогона сравнимы с другим.
+    """
+    body = json.dumps({"inputs": texts}).encode("utf-8")
+    for attempt in range(tries):
+        req = urllib.request.Request(DI_URL, data=body, headers={
+            "Authorization": f"bearer {key}", "Content-Type": "application/json"})
+        try:
+            with urllib.request.urlopen(req, timeout=180) as r:
+                d = json.loads(r.read().decode("utf-8"))
+            vecs = d.get("embeddings")
+            if not vecs or len(vecs) != len(texts):
+                raise ValueError(f"ответ не по размеру: {len(vecs or [])} на {len(texts)}")
+            return vecs
+        except urllib.error.HTTPError as e:
+            if e.code in (429, 500, 502, 503):
+                time.sleep(2 ** attempt * 2)
+                continue
+            # Тело ответа несёт причину («Max context reached ...»), а urllib её глотает.
+            # Без этой строки 400 выглядит как «просто 400» и час уходит на догадки.
+            detail = e.read().decode("utf-8", "replace")[:300]
+            raise RuntimeError(f"HTTP {e.code}: {detail}") from None
+        except Exception:
+            if attempt == tries - 1:
+                raise
+            time.sleep(2 ** attempt * 2)
+    raise RuntimeError("не удалось получить эмбеддинги после повторов")
+
+
+def _di_split(texts, key):
+    """Пачка не прошла по контексту — делим пополам, в пределе до одного текста.
+
+    Одна аномально длинная статья не должна ронять прогон на три тысячи: оценка
+    токенов по знакам приблизительная, и промахивается она именно на редких текстах.
+    """
+    try:
+        return embed_di(texts, key)
+    except RuntimeError as e:
+        if len(texts) == 1 or "context" not in str(e).lower():
+            raise
+        mid = len(texts) // 2
+        return _di_split(texts[:mid], key) + _di_split(texts[mid:], key)
+
+
+def embed_cached(texts, key, cache_path, label=""):
+    """Векторы для списка текстов; посчитанное однажды лежит на диске.
+
+    Кэш по отпечатку текста, а не по номеру строки: статьи дописываются и правятся,
+    порядок и количество меняются от прогона к прогону, а сам текст — нет. Поэтому
+    повторная разметка после добавления двадцати статей считает двадцать, а не три тысячи.
+    """
+    import hashlib
+    cache = {}
+    cache_path = pathlib.Path(cache_path)
+    if cache_path.exists():
+        for line in cache_path.read_text(encoding="utf-8").splitlines():
+            if line.strip():
+                try:
+                    r = json.loads(line)
+                    cache[r["h"]] = r["v"]
+                except Exception:
+                    pass
+
+    keys = [hashlib.sha1(t.encode("utf-8")).hexdigest() for t in texts]
+    todo, seen = [], set()
+    for h, t in zip(keys, texts):
+        if h not in cache and h not in seen:
+            seen.add(h)
+            todo.append((h, t))
+    if todo:
+        chars = sum(len(t) for _, t in todo)
+        print(f"  {label}: считаю {len(todo)} из {len(texts)}, знаков {chars:,}, "
+              f"~${chars / 1.5 / 1e6 * 0.010:.4f}")
+        done = 0
+        with cache_path.open("a", encoding="utf-8") as f:
+            batch, budget = [], 0
+            for h, t in todo + [(None, None)]:
+                cost = len(t) / 1.5 if t else 0
+                if batch and (h is None or budget + cost > DI_BATCH_TOKENS or len(batch) >= 32):
+                    vecs = _di_split([x[1] for x in batch], key)
+                    for (bh, bt), v in zip(batch, vecs):
+                        cache[bh] = v
+                        f.write(json.dumps({"h": bh, "v": [round(x, 6) for x in v]}) + "\n")
+                    f.flush()
+                    done += len(batch)
+                    print(f"    {done}/{len(todo)}")
+                    batch, budget = [], 0
+                if h is not None:
+                    batch.append((h, t))
+                    budget += cost
+    else:
+        print(f"  {label}: всё из кэша ({len(texts)})")
+    return [cache[h] for h in keys]
+
+
 def run(kind_docs, kind, acc, tok, out_path):
     """Считает и дописывает в файл. Повторный запуск добирает недостающее."""
     done = {}
