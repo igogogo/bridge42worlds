@@ -199,13 +199,28 @@ def process(code, dry=False):
         meta["problems"] = problems
 
         if attempt > _sub.MAX_TRIES:
+            # Три круга — и пауза на неделю (владелец 2026-08-08: «не больше трёх итераций,
+            # потом скажи надо дорабатывать глубже, пока не готовы, можете попробовать
+            # через неделю»). Молча ставить на паузу нельзя: автор ждёт ответа и вправе
+            # знать, что дело не в очереди, а в работе, и когда можно вернуться.
             from datetime import date, timedelta
-            until = (date.today() + timedelta(days=5)).isoformat()
+            until = (date.today() + timedelta(days=7)).isoformat()
             meta["status"] = "paused"
             meta["paused_until"] = until
+            meta["attempt_note"] = (
+                f"Это третий заход, и пакет всё ещё не собирается. Дело не в мелочах "
+                f"оформления — работе нужна более глубокая доработка. Возвращайтесь к нам "
+                f"после {until}, мы посмотрим её заново и с чистого листа."
+            )
+            subject, letter = compose("needs-prompt", meta, "")
+            (box / "reply-paused.txt").write_text(letter, encoding="utf-8")
+            ok = send_mail(meta.get("email", ""),
+                           subject or f"{code}: нужна более глубокая доработка", letter)
+            meta["reply_sent"] = bool(ok)
             (box / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1),
                                            encoding="utf-8")
-            tg(f"⏸️ <b>{code}</b>: три попытки исчерпаны, пауза до {until}.")
+            tg(f"⏸️ <b>{code}</b>: три попытки исчерпаны, пауза до {until}. "
+               f"Письмо: {'ушло' if ok else 'НЕ УШЛО'}")
             print(f"  ⏸️ {code}: три попытки исчерпаны — пауза до {until}")
             return "paused"
 

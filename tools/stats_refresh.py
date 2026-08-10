@@ -44,6 +44,37 @@ def run(script):
     return r.returncode, (r.stdout or "")[-300:] + (r.stderr or "")[-300:]
 
 
+def _short_reason(tail):
+    """Из хвоста лога — одна человеческая фраза для канала.
+
+    Полный лог в сообщение не вставишь, а код возврата ничего не объясняет. Берём первую
+    содержательную строку: скрипты пишут причину первой, а не в конце.
+    """
+    for line in (tail or "").splitlines():
+        s = line.strip().lstrip("⚠️✅❌ ").strip()
+        if len(s) > 12 and not s.startswith(("Traceback", "File ")):
+            return s[:180]
+    return "смотри лог прогона в logs/"
+
+
+_RUN_FLAG = ROOT / "logs" / ".stats-last-failed"
+
+
+def _last_run_failed():
+    return _RUN_FLAG.exists()
+
+
+def _remember_run(failed):
+    """Помним исход прошлого прогона — только чтобы сказать «а теперь всё хорошо»."""
+    try:
+        if failed:
+            _RUN_FLAG.write_text("1", encoding="utf-8")
+        else:
+            _RUN_FLAG.unlink(missing_ok=True)
+    except Exception:
+        pass
+
+
 def money_line():
     """Расход в пересчёте НА СТАТЬИ — владелец 7 августа: «каждый день в телегу, что
     потратили с точки зрения статей».
@@ -70,19 +101,36 @@ def money_line():
     made_month = sum(1 for d in glob.glob(str(ROOT / "lang/ru/archive/*/*/"))
                      if date.fromtimestamp(os.path.getctime(d)) >= t.replace(day=1))
 
+    # Считаем по СТРОКЕ «Статьи», а не по потолку месяца. На статьи выделено 130 из 200 —
+    # остальное это машина открытий, Cloudflare и резерв, и на ленту они не идут. Прежний
+    # расчёт делил весь остаток месяца на цену статьи и обещал «ещё 3230 статей», хотя
+    # оплачено вдвое меньше (владелец 2026-08-08: «на статьи выделено не 200, а 130»).
+    # Ровно эта ошибка уже ловилась в бюджетном файле для людей — в ежедневный отчёт
+    # правка тогда не доехала.
+    lines = bg.spend_by_line() if hasattr(bg, "spend_by_line") else {}
+    art = lines.get("Статьи") or {"план": cap, "потрачено": month, "остаток": cap - month}
+    art_plan, art_used, art_left = art["план"], art["потрачено"], art["остаток"]
+
     per_today = f"${today / made_today:.3f}" if made_today else "—"
-    per_month = f"${month / made_month:.3f}" if made_month else "—"
-    left_articles = int((cap - month) / (month / made_month)) if made_month and month else 0
+    per_article = (art_used / made_month) if made_month and art_used else 0
+    per_month = f"${per_article:.3f}" if per_article else "—"
+    left_articles = int(art_left / per_article) if per_article else 0
 
     out = ("\n\n💰 <b>Деньги</b>"
            f"\nСегодня: <b>{made_today}</b> статей за <b>${today:.2f}</b> "
            f"(по {per_today} за статью)."
-           f"\nЗа месяц: {made_month} статей за ${month:.2f} из ${cap:.0f}, по {per_month}."
-           f"\nОстаток ${cap - month:.2f} — это ещё около <b>{left_articles}</b> статей.")
+           f"\nСтатьи за месяц: {made_month} штук за ${art_used:.2f} из ${art_plan:.0f}, "
+           f"по {per_month}."
+           f"\nОстаток на статьи ${art_left:.2f} — это ещё около <b>{left_articles}</b> статей."
+           f"\nВесь месяц: ${month:.2f} из ${cap:.0f}.")
+    others = [f"{k} ${v['потрачено']:.2f}/${v['план']:.0f}"
+              for k, v in lines.items() if k != "Статьи"]
+    if others:
+        out += "\n" + " · ".join(others)
     if today > day_cap * 0.8:
         out += f"\n🟡 Дневной предел ${day_cap:.2f} почти выбран."
-    if month > cap * 0.85:
-        out += f"\n🔴 Месячный бюджет выбран на {month / cap * 100:.0f}%."
+    if art_plan and art_used > art_plan * 0.85:
+        out += f"\n🔴 Бюджет статей выбран на {art_used / art_plan * 100:.0f}%."
     return out
 
 
@@ -147,7 +195,11 @@ def main():
     ap.add_argument("--dry", action="store_true", help="ничего не менять и не выкладывать")
     args = ap.parse_args()
 
-    done, failed = [], []
+    # Причину отказа держим рядом с названием шага: в канал уходило одно слово
+    # «выкладка», и по нему нельзя было отличить сработавшую защиту от аварии.
+    # 8 августа выкладка отказалась заливать сайт во время пересборки — ровно то, ради
+    # чего замок и сделан, — а владелец увидел в канале голое «не получилось».
+    done, failed, why = [], [], {}
     for script, what in STEPS:
         if args.dry:
             print(f"  [сухой прогон] {script} — {what}")

@@ -105,6 +105,16 @@
   .cw-kind-theoretical { color: var(--ochre);
     background: color-mix(in srgb, var(--ochre) 7%, var(--surface));
     border-color: color-mix(in srgb, var(--ochre) 34%, var(--hair)); }
+  /* «Мы разобрали» — единственная плашка-ссылка, поэтому она подчёркнуто кликабельна:
+     курсор, подсветка на наведении. Зелёного нет намеренно: это не знак качества и не
+     «одобрено», а сообщение о том, что работа прошла наш разбор, и разбор тут же ниже. */
+  .cw-checked { color: var(--cyan); text-decoration: none; cursor: pointer;
+    background: color-mix(in srgb, var(--cyan) 8%, var(--surface));
+    border: 1px solid color-mix(in srgb, var(--cyan) 38%, var(--hair));
+    transition: color .16s, border-color .16s, background .16s; }
+  .cw-checked:hover { color: var(--link); border-color: var(--link);
+    background: color-mix(in srgb, var(--cyan) 14%, var(--surface)); }
+  .cw-checked .ico-svg { width: 14px; height: 14px; flex: none; }
 
   /* ── Заголовок, дата, автор ─────────────────────────────────────────────── */
   .cw-title { font-family: 'Source Serif 4', Georgia, serif; font-weight: 600; font-size: 24px;
@@ -128,6 +138,12 @@
     background: var(--bg); }
   .cw-text { font-size: 16.5px; line-height: 1.8; }
   .cw-text p { margin-bottom: 18px; }
+  /* Показан ровно один уровень. Правила не было вовсе: скрипт исправно переключал класс
+     .on, а все три текста стояли на странице подряд — кнопки выглядели сломанными, хотя
+     работали (нашёл владелец 2026-08-08). На статье этим занимается js/article.js,
+     сюда он не приходит: страница работы самодостаточна. */
+  .cw-lvl-body { display: none; }
+  .cw-lvl-body.on { display: block; }
 
   /* ── Разбор ─────────────────────────────────────────────────────────────
      Три карточки с разной ролью, поэтому и цвет разный: сильная сторона — циан
@@ -182,6 +198,52 @@
   .cw-src-btn .ico-svg { width: 17px; height: 17px; flex: none; }
   .cw-src-meta { font-family: var(--mono); font-size: 12px; color: var(--soft); margin-top: 10px; }
   .cw-src-meta:empty { display: none; }
+  /* Две кнопки рядом; на узком экране встают друг под друга, а не сжимаются в нечитаемое. */
+  .cw-src-row { display: flex; flex-wrap: wrap; gap: 10px; }
+  /* Работа — главная кнопка: за ней пришли. Комплект данных — рядом, обычной. */
+  .cw-src-btn.primary { border-color: var(--ochre); color: var(--ochre); font-weight: 600; }
+  .cw-src-btn.primary:hover { color: var(--link); border-color: var(--link); }
+  .cw-src-size { font-family: var(--mono); font-size: 11px; color: var(--soft); margin-left: 2px; }
+  @media (max-width: 460px) { .cw-src-row { flex-direction: column; align-items: stretch; }
+    .cw-src-btn { justify-content: center; } }
+
+  /* Иллюстрации автора: одна колонка на телефоне, две на широком. Картинки бывают
+     и узкими графиками, и широкими снимками установки — фиксированная высота
+     обрезала бы половину смысла, поэтому высота свободная. */
+
+  /* ── Обложка и видео ────────────────────────────────────────────────────
+     Обложка рисуется своим пресетом: ярче и контрастнее, чем у обычной статьи.
+     Видео эксперимента стоит сразу за ней и до текста — десять секунд, где видно,
+     как установка крутится, объясняют больше страницы пересказа. */
+  .cw-cover { margin: 20px 0 0; border-radius: 14px; overflow: hidden;
+    border: 1px solid var(--hair); box-shadow: var(--shadow-sm); }
+  .cw-cover img { display: block; width: 100%; height: auto; }
+  .cw-vid-sec { margin-top: 30px; }
+  /* Видео снимают телефоном, и оно чаще вертикальное, чем горизонтальное. Растянутое
+     на всю колонку, оно даёт широкие чёрные поля по бокам (поймано на первой же
+     работе: 464×848 в колонке 618 пикселей). Поэтому ограничиваем ВЫСОТУ, а ширину
+     отдаём содержимому и центрируем — горизонтальное займёт всю колонку само. */
+  /* Рамка обнимает видео, а не колонку: у вертикального ролика иначе остаётся по
+     три сотни пикселей чёрного по бокам, и блок выглядит поломанным, а не задуманным. */
+  .cw-video { margin: 0 auto; width: fit-content; max-width: 100%;
+    border-radius: 12px; overflow: hidden;
+    border: 1px solid var(--hair); background: #000;
+    display: flex; flex-direction: column; align-items: center; }
+  .cw-video video { display: block; max-width: 100%; max-height: 70vh;
+    width: auto; height: auto; background: #000; }
+  .cw-video figcaption { width: 100%; box-sizing: border-box; }
+  .cw-video figcaption { font-size: 13px; line-height: 1.5; color: var(--soft);
+    padding: 10px 14px 13px; background: var(--surface); border-top: 1px solid var(--hair); }
+
+  /* Видео — первым кадром того же ряда, что картинки: это ещё одна иллюстрация,
+     просто движущаяся. Отдельной секции под неё нет намеренно (владелец 2026-08-08:
+     «видео в том же ряду, что и картинки, ну всё так же»). */
+  .gallery-video { margin: 0 auto 14px; width: fit-content; max-width: 100%;
+    border-radius: 12px; overflow: hidden; border: 1px solid var(--hair); background: #000; }
+  .gallery-video video { display: block; max-width: 100%; max-height: 66vh;
+    width: auto; height: auto; background: #000; }
+  .gallery-video .gallery-caption { padding: 9px 13px 12px; background: var(--surface);
+    border-top: 1px solid var(--hair); font-size: 13px; color: var(--soft); }
 
   /* ── Похожие работы ────────────────────────────────────────────────────── */
   .cw-sim { display: grid; gap: 10px; }
@@ -253,6 +315,13 @@
 </div>
 
 <main class="cw-main">
+<!-- Сетка ТА ЖЕ, что у обычной статьи (.article-wrapper / .article-main / .article-side).
+     Была своя, одноколоночная, и владелец сказал прямо: «почему ссылки на работы, теги,
+     похожие статьи внизу, а не как на обычной нашей странице… почему ломаешь структуру».
+     Он прав: читатель, пришедший со статьи, не должен заново искать, где что лежит.
+     Отличать эту страницу должны плашки и содержание, а не другой скелет. -->
+<div class="article-wrapper">
+<div class="article-main">
 
     <div class="cw-flags">
         <span class="cw-flag cw-flag-work" title="$badge_title">
@@ -270,6 +339,14 @@
             <svg class="ic-th" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19c3.5 0 4-14 7.5-14"/><path d="M6 11h8"/><path d="M15 10l5 6"/><path d="M20 10l-5 6"/></svg>
             $kind_label
         </span>
+        <!-- «Мы разобрали» — третья плашка (владелец 2026-08-08: «плашку с анализом к его
+             работе прикрепи, типа да, проверили, чтобы читатели видели тоже, что не просто
+             так сюда попало, а по делу»). Плашка ведёт на правила подачи: наш знак должен
+             объяснять, что за ним стоит, а не просто украшать страницу. -->
+        <a class="cw-flag cw-checked" href="/lang/$lang/community/prepare/" title="$checked_title">
+            <svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6.5L9.5 17 4 11.5"/></svg>
+            $checked_label
+        </a>
     </div>
     <p class="cw-note">$badge_note</p>
 
@@ -280,15 +357,17 @@
     <div class="cw-meta">
         <span>$received_label <b>$received_date</b></span>
         <span>·</span>
-        <span class="cw-author cw-author-$author_kind">$author_label <b>$author_display</b></span>
-        <span>·</span>
-        <a href="$source_url">$source_inline_label</a>
+        <span class="cw-author cw-author-$author_kind">$author_label_shown <b>$author_display</b></span>
+        $source_inline_html
     </div>
     $author_hint_html
     <!-- Почта и контакты автора не публикуются никогда (ТЗ владельца). Говорим об этом
          прямо: иначе отсутствие контактов выглядит недоработкой, а не позицией. -->
     <p class="cw-privacy">$privacy_note</p>
     <p class="cw-oneliner">$oneliner</p>
+
+    $cover_html
+    $figures_html
 
     <section class="cw-sec cw-our">
         <p class="cw-k">$our_kicker</p>
@@ -334,7 +413,16 @@
         <p class="cw-k">$source_kicker</p>
         <h2>$source_h2</h2>
         <p class="cw-note">$source_note</p>
-        <a class="cw-src-btn" href="$source_url"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5h18v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M3 7.5l1.6-3.2A1.5 1.5 0 0 1 6 3.5h12a1.5 1.5 0 0 1 1.4.8L21 7.5"/><path d="M10 12h4"/></svg>$source_btn_label</a>
+        <!-- Две кнопки, а не одна. У статьи с arXiv по ссылке лежит текст, и всё; здесь
+             лежит текст И данные, на которых он построен (владелец 2026-08-08: «у нас же
+             немного отличается, я все данные даю, а не как в arXiv»). Это отличие по
+             существу — нашу работу можно проверить, а не только прочитать, — поэтому обе
+             кнопки видные и стоят рядом, а не спрятаны в примечании. -->
+        <div class="cw-src-row">
+            $source_live_html
+            $source_pdf_html
+            $source_zip_html
+        </div>
         <p class="cw-src-meta">$source_meta</p>
     </section>
 
@@ -345,8 +433,11 @@
         <div class="cw-body cw-sim">$similar_html</div>
     </section>
 
-    <footer><p>bridge42worlds · $foot_tag</p></footer>
+</div>
+<div class="article-side">$tags_html</div>
+</div>
 
+<footer><p>bridge42worlds · $foot_tag</p></footer>
 </main>
 
 <script src="/js/likes.js"></script>
@@ -395,6 +486,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+<script src="/js/gallery.js" defer></script>
+<script src="/js/lightbox.js" defer></script>
 <script src="/js/beta-banner.js" defer></script>
 </body>
 </html>

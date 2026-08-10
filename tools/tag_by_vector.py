@@ -57,6 +57,32 @@ def tag_texts():
     return ids, texts, d
 
 
+def law_texts():
+    """Закон как ТЕКСТ: имя, формулировка, объяснение, где встречается.
+
+    Владелец 2026-08-09: «мы даже напрямую размечать и теги, и законы для статьи, а не
+    тянуть законы из тегов, так?». Да — и это заметно точнее. Сейчас закон приклеивается
+    к статье, если у них совпал ХОТЯ БЫ ОДИН тег: у закона излучения Планка стоит тег
+    «спектроскопия», и он цепляется к любой статье, где спектроскопия хоть упомянута.
+    Смысловое сравнение так не ошибается: у закона есть собственное описание, у статьи —
+    свой текст, и меряются они напрямую, без посредника-тега.
+    """
+    d = json.loads((ROOT / "lang/ru/data/laws.json").read_text(encoding="utf-8"))
+    ids, texts = [], []
+    for lid, v in d.items():
+        if not isinstance(v, dict):
+            continue
+        parts = [v.get("name", ""), v.get("statement", ""), v.get("mini", ""),
+                 v.get("description_popular", ""), v.get("description_simple", ""),
+                 v.get("where_met", ""), v.get("practical_application", "")]
+        s = " ".join(x for x in parts if x)
+        if len(s) < 40:
+            continue
+        ids.append(lid)
+        texts.append(s)
+    return ids, texts, d
+
+
 def article_texts():
     ids, texts, meta = [], [], {}
     for p in sorted((ROOT / "lang/ru/archive").glob("*/*/data.json")):
@@ -84,6 +110,15 @@ def main():
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--top", type=int, default=6)
     ap.add_argument("--min", type=float, default=0.045)
+    # Порог для законов ВЫШЕ, чем для тегов, и это не придирка.
+    #
+    # Тег найдётся у любой статьи: словарь тегов покрывает всё, чем мы занимаемся.
+    # А физического закона для статьи про языковые модели просто НЕ СУЩЕСТВУЕТ — и вектор
+    # это честно показывает числами 0.026–0.033 против 0.124 у настоящего попадания.
+    # Без порога он всё равно выдаст лучшее из плохого: преобразования Лоренца и принцип
+    # Паули в статье про трансформеры (проверено 2026-08-09). Пустая колонка честнее.
+    ap.add_argument("--min-law", type=float, default=0.055)
+    ap.add_argument("--top-law", type=int, default=4)
     args = ap.parse_args()
 
     from sklearn.feature_extraction.text import TfidfVectorizer
@@ -91,15 +126,17 @@ def main():
     import numpy as np
 
     tids, ttexts, tdict = tag_texts()
+    lids, ltexts, ldict = law_texts()
     aids, atexts, ameta = article_texts()
-    print(f"тегов с описанием: {len(tids)} · статей: {len(aids)}")
+    print(f"тегов с описанием: {len(tids)} · законов: {len(lids)} · статей: {len(aids)}")
 
     # Общее словарное пространство: теги и статьи должны меряться одной линейкой,
     # поэтому обучаем на объединении, а не на каждом корпусе отдельно.
     vec = TfidfVectorizer(min_df=2, max_df=0.5, sublinear_tf=True,
                           token_pattern=r"(?u)\b\w[\w-]{2,}\b")
-    vec.fit(ttexts + atexts)
+    vec.fit(ttexts + ltexts + atexts)
     T = vec.transform(ttexts)
+    L = vec.transform(ltexts)
     A = vec.transform(atexts)
 
     if args.show:
@@ -114,6 +151,11 @@ def main():
         print("  по смыслу:")
         for j in order:
             print(f"     {sim[j]:.3f}  {tids[j]}  ({tdict[tids[j]].get('name', '')})")
+        lsim = linear_kernel(A[i], L)[0]
+        lorder = np.argsort(lsim)[::-1][:4]
+        print("  законы по смыслу:")
+        for j in lorder:
+            print(f"     {lsim[j]:.3f}  {lids[j]}  ({ldict[lids[j]].get('name', '')})")
         return 0
 
     # массовая привязка
@@ -131,6 +173,25 @@ def main():
             now_used.update(ameta[aid]["tags"] + [ameta[aid]["main"]])
             revived.update(picked)
 
+    # Законы — тем же способом и той же линейкой, но со своим порогом.
+    laws_got, with_laws = {}, 0
+    for s in range(0, A.shape[0], CH):
+        sim = linear_kernel(A[s:s + CH], L)
+        for i, row in enumerate(sim):
+            aid = aids[s + i]
+            order = np.argsort(row)[::-1]
+            picked = [lids[j] for j in order[:args.top_law] if row[j] >= args.min_law]
+            laws_got[aid] = picked
+            if picked:
+                with_laws += 1
+    print("")
+    print(f"законы: статей с законами {with_laws} из {len(aids)} "
+          f"({with_laws * 100 // max(len(aids), 1)}%), у остальных честно пусто")
+    used_laws = set()
+    for v in laws_got.values():
+        used_laws.update(v)
+    print(f"   законов в ходу: {len(used_laws)} из {len(ldict)}")
+
     old_dead = set(tdict) - now_used
     new_dead = set(tdict) - revived
     print(f"\nбыло тегов без единой статьи: {len(old_dead)} из {len(tdict)}")
@@ -144,10 +205,26 @@ def main():
         for aid, tags in got.items():
             p = ameta[aid]["path"]
             d = json.loads(p.read_text(encoding="utf-8"))
+            # Пишем во ВСЕ языки, а не только в русский.
+            #
+            # Теги и законы — идентификаторы, они общие для всех языков: страница сама
+            # подставит перевод названия. Записав только в русский, мы получили бы сайт,
+            # где русская версия статьи размечена по смыслу, а английская и арабская —
+            # по-старому, из промпта. Один и тот же материал с разными связями в разных
+            # языках — худший вид расхождения: его никто не заметит.
             for tier in ("simple", "popular", "advanced"):
+                for _lang in ("ru", "en", "es", "ar", "fr"):
+                    v = d.get(tier, {}).get(_lang)
+                    if isinstance(v, dict):
+                        v["tags_vec"] = tags
+                        v["laws_vec"] = laws_got.get(aid, [])
                 v = d.get(tier, {}).get("ru")
                 if isinstance(v, dict):
                     v["tags_vec"] = tags
+                    # Законы кладём рядом и тем же способом. Раньше они выводились из
+                    # тегов — закон цеплялся к статье по одному общему тегу, и закон
+                    # излучения Планка приклеивался ко всему, где упомянута спектроскопия.
+                    v["laws_vec"] = laws_got.get(aid, [])
             p.write_text(json.dumps(d, ensure_ascii=False, indent=1), encoding="utf-8")
             n += 1
         print(f"\nзаписано в tags_vec: {n} статей (нынешние теги не тронуты)")

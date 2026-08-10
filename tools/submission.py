@@ -27,6 +27,7 @@ import json
 import os
 import re
 import secrets
+import shutil
 import subprocess
 import sys
 import zipfile
@@ -63,6 +64,18 @@ def hdr(s):
                    for p, enc in parts)
 
 
+def _peek_body(msg):
+    """Текстовое тело письма — только чтобы поискать в нём наш код работы.
+
+    Полный разбор частей идёт ниже и своим порядком; здесь нужен один быстрый взгляд
+    до того, как решится, новая это заявка или продолжение старой."""
+    for part in msg.walk():
+        if part.get_content_type() == "text/plain" and not part.get_filename():
+            raw = part.get_payload(decode=True) or b""
+            return raw.decode(part.get_content_charset() or "utf-8", "replace")[:4000]
+    return ""
+
+
 def next_code():
     """Свой препринт-код: b42p-ГОД-NNN. Отдельная сущность, с arXiv не смешивается."""
     year = date.today().year
@@ -96,14 +109,41 @@ def defender_scan(path):
     return "error"
 
 
+# Пределы распаковки. Нужны, когда антивирус недоступен и архив — единственное, что нас
+# защищает от самого себя: zip-бомба весит мегабайт, а разворачивается в терабайт.
+MAX_UNPACKED_GB = 3
+MAX_UNPACKED_FILES = 30000
+# Исполняемое из чужого архива на диск не кладём вовсе. Работе оно не нужно: код обработки
+# автор присылает исходником, а не собранным бинарником.
+BAD_SUFFIXES = {".exe", ".dll", ".scr", ".com", ".pif", ".msi", ".bat", ".cmd",
+                ".ps1", ".vbs", ".vbe", ".wsf", ".jar", ".lnk", ".reg", ".hta"}
+
+
 def safe_extract(zpath, dest):
-    """Распаковка с защитой от zip-slip: имя с ../ выводит запись из папки — отклоняем."""
+    """Распаковка с защитой от zip-slip: имя с ../ выводит запись из папки — отклоняем.
+
+    Плюс три предела, которые раньше держал за нас антивирус: суммарный объём, число
+    файлов и расширения. Возвращает список пропущенного, чтобы это было видно, а не
+    случилось молча."""
+    skipped = []
     with zipfile.ZipFile(zpath) as z:
-        for m in z.infolist():
+        infos = z.infolist()
+        if len(infos) > MAX_UNPACKED_FILES:
+            raise ValueError(f"в архиве {len(infos)} файлов — больше предела {MAX_UNPACKED_FILES}")
+        total = sum(m.file_size for m in infos)
+        if total > MAX_UNPACKED_GB * (1 << 30):
+            raise ValueError(f"распакованный объём {total >> 30} ГБ — больше предела {MAX_UNPACKED_GB} ГБ")
+        keep = []
+        for m in infos:
             target = (dest / m.filename).resolve()
             if not str(target).startswith(str(dest.resolve())):
                 raise ValueError(f"подозрительный путь в архиве: {m.filename}")
-        z.extractall(dest)
+            if Path(m.filename).suffix.lower() in BAD_SUFFIXES:
+                skipped.append(m.filename)
+                continue
+            keep.append(m)
+        z.extractall(dest, members=keep)
+    return skipped
 
 
 
@@ -220,9 +260,27 @@ def check_package(box):
     if not un.exists() or not any(un.rglob("*")):
         return False, ["архив не распаковался или пуст"], ""
 
-    # Корень пакета: либо сама папка, либо единственная вложенная
+    # Корень пакета ищем ПО СОДЕРЖИМОМУ, а не по тому, что папка одна.
+    #
+    # Автор вправе прислать несколько архивов — например, работу и полный комплект данных
+    # отдельно, — и тогда наверху лежит два каталога. Прежнее правило «корень, если папка
+    # единственная» в этом случае откатывалось к самой unpacked, где нет ничего, и приёмник
+    # честно сообщал «нет README, нет data, нет scripts» при том, что всё это лежало
+    # каталогом ниже (поймано на живой заявке 2026-08-08).
+    #
+    # Признак настоящего корня простой: там лежит SELF-REVIEW.md либо текст работы.
+    def _looks_like_root(d):
+        n = {p.name for p in d.iterdir()}
+        return "SELF-REVIEW.md" in n or bool(n & {"README.md", "index.html"})
+
     dirs = [d for d in un.iterdir() if d.is_dir()]
-    root = dirs[0] if len(dirs) == 1 and not any(f.is_file() for f in un.iterdir()) else un
+    root = un
+    if not _looks_like_root(un):
+        # Каталог с заключением подготовки главнее: полный комплект данных его не содержит.
+        best = [d for d in dirs if (d / "SELF-REVIEW.md").exists()] or \
+               [d for d in dirs if _looks_like_root(d)]
+        if best:
+            root = best[0]
 
     problems = []
     names = {p.name for p in root.iterdir()}
@@ -324,8 +382,86 @@ def cmd_fetch():
             # письмо остаётся в ящике, человек его увидит.
             continue
 
-        code = next_code()
-        box = SUBS / code
+        # ПОВТОРНЫЙ ЗАХОД ПО ТОЙ ЖЕ РАБОТЕ, а не новая заявка.
+        #
+        # Автор отвечает на наше письмо, и в теме остаётся «Re: b42p-2026-001: …». Раньше
+        # такое письмо заводило ВТОРУЮ заявку с новым кодом — и вместе с кодом обнулялось
+        # всё: счёт попыток (три круга не срабатывали никогда), прошлый разбор (правило
+        # «посмотри, ответил ли автор на вопросы» проверять было не с чем), ключ управления
+        # публикацией. У человека на руках оказывалось два кода на одну работу.
+        #
+        # Ищем свой код в теме и в теле. Нашли живую заявку — продолжаем её.
+        prev_code = ""
+        for m_code in re.finditer(r"b42p-\d{4}-\d{3}", f"{subj}\n{_peek_body(msg)}"):
+            if (SUBS / m_code.group(0)).is_dir():
+                prev_code = m_code.group(0)
+                break
+
+        if prev_code:
+            code = prev_code
+            box = SUBS / code
+            # Прошлый разбор сохраняем ДО того, как новый прогон его перезапишет: он нужен
+            # рецензенту, чтобы проверить, ответил ли автор на наши вопросы.
+            rv, rp = box / "review.md", box / "review-prev.md"
+            if rv.exists() and not rp.exists():
+                rp.write_text(rv.read_text(encoding="utf-8"), encoding="utf-8")
+            # Прошлые файлы не затираем и не мешаем с новыми: сдвигаем в incoming-N.
+            inc = box / "incoming"
+            if inc.exists() and any(inc.iterdir()):
+                n_old = 1
+                while (box / f"incoming-{n_old}").exists():
+                    n_old += 1
+                inc.rename(box / f"incoming-{n_old}")
+            # Распакованное — от прошлой версии; оставить значит разобрать старую работу.
+            if (box / "unpacked").exists():
+                shutil.rmtree(box / "unpacked", ignore_errors=True)
+
+            # ОПУБЛИКОВАННУЮ версию сохраняем, а не затираем.
+            #
+            # Автор переписал работу и шлёт новую — прежняя при этом перестаёт быть черновиком
+            # и становится ИСТОРИЕЙ: на неё могли сослаться, её могли скачать. У arXiv для
+            # этого есть v1, v2, и причина та же. Кладём прежние PDF, архив и живую версию
+            # рядом, в подпапку версии; адрес самой статьи не меняется.
+            try:
+                was_meta = json.loads((box / "meta.json").read_text(encoding="utf-8"))
+            except Exception:
+                was_meta = {}
+            if was_meta.get("status") == "published":
+                pub_dir = ROOT / "lang" / "ru" / "community" / code
+                if pub_dir.exists():
+                    ver = 1
+                    while (pub_dir / f"v{ver}").exists():
+                        ver += 1
+                    keep = pub_dir / f"v{ver}"
+                    keep.mkdir(parents=True, exist_ok=True)
+                    # Обложку КОПИРУЕМ, остальное переносим.
+                    #
+                    # Владелец 2026-08-09: «только ссылки не меняй». Главные адреса и должны
+                    # вести на свежую версию — так же, как /abs/2310.15936 на arXiv всегда
+                    # показывает последнюю. Но обложка у нас НАША, а не авторская, и при
+                    # обновлении версии заново не рисуется: сдвинь её в v1 — и страница
+                    # останется без картинки, хотя ссылка формально цела.
+                    KEEP_IN_PLACE = ("cover.jpg", "cover.webp")
+                    for item in list(pub_dir.iterdir()):
+                        if item.name.startswith("v") and item.name[1:].isdigit():
+                            continue
+                        try:
+                            if item.name in KEEP_IN_PLACE:
+                                shutil.copy2(str(item), str(keep / item.name))
+                            else:
+                                shutil.move(str(item), str(keep / item.name))
+                        except Exception as ex:
+                            print(f"     ⚠️ {item.name}: {ex}")
+                    print(f"  🗄️ прежняя версия сохранена как v{ver}")
+                    meta_ver = ver + 1
+                else:
+                    meta_ver = 2
+            else:
+                meta_ver = was_meta.get("version", 1)
+            print(f"  🔁 повторный заход по {code}")
+        else:
+            code = next_code()
+            box = SUBS / code
         (box / "incoming").mkdir(parents=True, exist_ok=True)
 
         body = ""
@@ -353,8 +489,28 @@ def cmd_fetch():
             "subject": subj, "files": files, "status": "received",
             "author_token": "b42a-" + secrets.token_urlsafe(9),
         }
+        # На повторном заходе часть прежнего переносим: ключ управления публикацией автор
+        # уже держит на руках (менять его — значит сломать ему доступ), дата первого
+        # обращения — его, а не сегодняшняя, и счёт попыток продолжается, а не начинается.
+        if prev_code and (box / "meta.json").exists():
+            try:
+                was = json.loads((box / "meta.json").read_text(encoding="utf-8"))
+            except Exception:
+                was = {}
+            for k in ("author_token", "received", "author_name", "kind",
+                      "author_comment", "attempt", "package_digest"):
+                if was.get(k):
+                    meta[k] = was[k]
+            meta["subject"] = was.get("subject") or subj   # тема «Re: …» хуже исходной
+            meta["version"] = meta_ver
+            meta["repeat_of"] = was.get("attempt", 1)
         (box / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1),
                                        encoding="utf-8")
+        # Письмо повторного захода дописываем к прежнему, а не затираем: в теле бывают
+        # ответы на наши вопросы, и потерять их значит спросить то же самое второй раз.
+        if prev_code and (box / "letter.txt").exists():
+            was_letter = (box / "letter.txt").read_text(encoding="utf-8")
+            body = f"{was_letter}\n\n─── повторный заход, {date.today().isoformat()} ───\n\n{body}"
         (box / "letter.txt").write_text(body, encoding="utf-8")
 
         # Антивирус до всякой распаковки.
@@ -417,12 +573,26 @@ def cmd_fetch():
             # Распаковываем только то, что ЯВНО признано чистым. Прежнее условие
             # «не равно УГРОЗА» пропускало файл без вердикта — то есть любую дыру
             # в учёте оно превращало в распаковку непроверенного архива.
-            if p.suffix.lower() == ".zip" and p.exists() and verdicts.get(fn) == "чисто":
+            # «Чисто» — распаковываем. «Проверка не удалась» — тоже распаковываем, но
+            # осознанно и с пометкой: на этой машине Защитник отключён, вердикт всегда
+            # «error», и прежнее условие означало, что не распакуется НИ ОДНА работа —
+            # автомат молча возвращал каждому автору «нет следов подготовки» (найдено на
+            # живой заявке 2026-08-08). Отсутствие антивируса не повод остановить приём;
+            # повод — заменить его пределами распаковки и сказать об этом вслух.
+            # «УГРОЗА» не распаковывается ни при каких условиях.
+            v = verdicts.get(fn)
+            if p.suffix.lower() == ".zip" and p.exists() and v in ("чисто", "проверка не удалась — смотреть руками"):
                 try:
-                    safe_extract(p, box / "unpacked")
-                    print(f"  📦 {fn} распакован")
+                    skipped = safe_extract(p, box / "unpacked")
+                    note = "" if v == "чисто" else " (антивирус недоступен — распакован под пределами)"
+                    print(f"  📦 {fn} распакован{note}")
+                    if skipped:
+                        print(f"     ⚠️ не распакованы исполняемые: {', '.join(skipped[:5])}"
+                              + (f" и ещё {len(skipped) - 5}" if len(skipped) > 5 else ""))
+                        meta["skipped_executables"] = skipped[:50]
                 except Exception as ex:
                     print(f"  ⚠️ {fn}: {ex}")
+                    meta["unpack_error"] = str(ex)
 
         un = box / "unpacked"
         sr = list(un.rglob("SELF-REVIEW.md")) if un.exists() else []
@@ -496,7 +666,25 @@ def cmd_analyze(code):
                 '"что_поправить":["..."],"вопросы_автору":["..."],'
                 '"вердикт":"publish|revise|decline","почему":"..."}')
     from common import load_prompt
+    # ПОВТОРНЫЙ ЗАХОД разбирается иначе, чем первый (правило владельца 2026-08-08).
+    # Если работа приходит второй раз, рецензент обязан сперва посмотреть, что мы у автора
+    # спрашивали, и ответил ли он. Без этого второй разбор пишется с чистого листа и может
+    # задать те же вопросы заново — автор справедливо решит, что его не читали.
+    #
+    # Порог возврата тут намеренно высокий: «если условно ничего сильно неправильного —
+    # пропускай». Работа между заходами всегда немного меняется, и гонять её по кругу за
+    # мелкие расхождения — это не строгость, а неспособность остановиться.
+    prev = ""
+    old = box / "review-prev.md"
+    cur = box / "review.md"
+    if cur.exists() and not old.exists():
+        # Прошлый разбор сохраняем ДО того, как перезапишем его новым.
+        old.write_text(cur.read_text(encoding="utf-8"), encoding="utf-8")
+    if old.exists():
+        prev = old.read_text(encoding="utf-8")
+
     prompt = load_prompt("submission-analyze").replace("{work}", text[:120000])
+    prompt = prompt.replace("{previous_review}", prev or "— работа пришла впервые —")
     r = chat("article_advanced", prompt,
              system="Ты научный рецензент открытой площадки. Отвечай на языке работы автора.")
     import json as _j
@@ -563,6 +751,126 @@ def cmd_analyze(code):
         print(f"     {s['score']}  {s['title'][:60]}")
     print("\nДальше: посмотреть review.md глазами → publish")
     return 0
+
+
+def _captions(work_text, images, lang="ru"):
+    """Подписи к иллюстрациям автора: {имя_файла: подпись}. Пишет модель по тексту работы.
+
+    Почему не берём подписи из html автора: они там не всегда есть, а где есть — часто
+    служебные («Рис. 4»). Читателю нужно знать, ЧТО на графике и почему он важен, а это
+    видно только из текста работы.
+
+    Дальше подписи переводятся на остальные языки вместе с пересказом: картинка одна и
+    та же на всех страницах, а объяснять её арабскому читателю по-русски — не объяснять.
+    """
+    from common import chat, clean_json
+    names = [im.get("src") or im.get("file") for im in images]
+    NL = "\n"
+    prompt = (
+        "Ниже текст научной работы и список файлов иллюстраций к ней." + NL +
+        "Для КАЖДОГО файла напиши короткую подпись: что на изображении и что по нему видно." + NL +
+        "Одно-два предложения, живым языком, без «Рис. N» и без пересказа всей работы." + NL +
+        "Если по тексту непонятно, что на изображении, дай пустую строку — выдумывать нельзя." +
+        NL + NL + "ФАЙЛЫ:" + NL + NL.join(f"- {n}" for n in names) +
+        NL + NL + "ТЕКСТ РАБОТЫ:" + NL + work_text[:60000] + NL + NL +
+        'Ответь JSON: {"подписи": {"имя файла": "подпись", ...}}'
+    )
+    try:
+        r = chat("article_popular", prompt,
+                 system="Ты подписываешь иллюстрации к научной работе для широкого читателя.")
+        d = json.loads(clean_json(r.choices[0].message.content))
+        got = d.get("подписи") or d.get("captions") or {}
+    except Exception as ex:
+        print(f"  ⚠️ подписи к картинкам не сошлись: {type(ex).__name__}")
+        return {}
+    # Ключи возвращаем в терминах файлов на сайте: модель отвечает по исходным путям.
+    by_src = {(im.get("src") or im.get("file")): im["file"] for im in images}
+    out = {}
+    for k, v in got.items():
+        f = by_src.get(k) or by_src.get(Path(k).name) or k
+        if str(v).strip():
+            out[f] = str(v).strip()
+    print(f"  ✍️ подписей к картинкам: {len(out)} из {len(images)}")
+
+    # Подписи переводятся, как и всё остальное на странице. Иначе арабский читатель
+    # получает арабский интерфейс, арабский пересказ — и русские подписи под картинками.
+    # На этих же граблях мы уже стояли с разбором: страница выходила на треть по-русски.
+    res = {"ru": out}
+    if out:
+        keys = list(out)
+        for lang in ("en", "es", "ar", "fr"):
+            try:
+                rr = chat("translate_flash",
+                          "Переведи подписи к иллюстрациям научной работы. Верни JSON с теми же "
+                          "ключами и переведёнными значениями, ничего не добавляя и не убирая." + NL +
+                          f"Целевой язык (код): {lang}" + NL + NL +
+                          json.dumps(out, ensure_ascii=False),
+                          system=f"Ты переводчик. Отвечай только на языке с кодом {lang}.")
+                got = json.loads(clean_json(rr.choices[0].message.content))
+                # Ключи модель иногда переводит вместе со значениями — сопоставляем по порядку.
+                if set(got) != set(keys) and len(got) == len(keys):
+                    got = dict(zip(keys, list(got.values())))
+                res[lang] = {k: str(v).strip() for k, v in got.items() if str(v).strip()}
+                print(f"  🌐 {lang}: подписи переведены ({len(res[lang])})")
+            except Exception:
+                # Молчать нельзя: без подписи картинка на этом языке останется голой.
+                print(f"  ⚠️ {lang}: подписи не перевелись — картинки выйдут без них")
+    return res
+
+
+def _pick_tags(work_text, title, limit=8):
+    """Теги работы из нашего ЗАКРЫТОГО словаря. Придумывать новые нельзя.
+
+    Придуманный тег ведёт на несуществующую страницу и портит облако; на этом мы уже
+    стояли, когда физический словарь применяли к биологии. Поэтому модель выбирает из
+    списка, а всё, чего в списке нет, отбрасывается кодом.
+    """
+    from common import chat, clean_json
+    p = ROOT / "lang" / "ru" / "data" / "tags-list.json"
+    if not p.exists():
+        return []
+    known = json.loads(p.read_text(encoding="utf-8"))
+    # Список тегов — это список записей вида {"ru": …, "en": …, "type": …, "domain": …},
+    # а идентификатор тега (и имя его страницы) — английское поле.
+    if isinstance(known, dict):
+        known = list(known.keys())
+    else:
+        known = [t.get("en") or t.get("ru") for t in known if isinstance(t, dict)] or \
+                [t for t in known if isinstance(t, str)]
+    known = [k for k in known if k]
+    NL = chr(10)
+    ask = ("Выбери из списка теги, которые ТОЧНО подходят этой научной работе." + NL +
+           f"Не больше {limit}. Только из списка, ничего своего не добавляй." + NL +
+           "Если подходит меньше — верни меньше, пустой список тоже нормальный ответ." + NL + NL +
+           "СПИСОК ТЕГОВ:" + NL + ", ".join(known) + NL + NL +
+           f"РАБОТА: {title}" + NL + work_text[:24000] + NL + NL +
+           'Ответь JSON: {"tags": ["...", "..."]}')
+    try:
+        r = chat("article_kind", ask, system="Ты размечаешь научные работы тегами из закрытого словаря.")
+        got = json.loads(clean_json(r.choices[0].message.content)).get("tags", [])
+    except Exception as ex:
+        print(f"  ⚠️ теги не выбрались: {type(ex).__name__}")
+        return []
+    ks = set(known)
+    out = [t for t in got if t in ks][:limit]
+    print(f"  🏷️ тегов: {len(out)} — {', '.join(out[:6])}")
+    return out
+
+
+def _laws_for_tags(tags, limit=6):
+    """Законы природы, связанные с тегами работы. Тот же принцип связи, что на статье."""
+    p = ROOT / "lang" / "ru" / "data" / "laws.json"
+    if not p.exists() or not tags:
+        return []
+    try:
+        laws = json.loads(p.read_text(encoding="utf-8"))
+    except Exception:
+        return []
+    ts = set(tags)
+    out = [lid for lid, L in laws.items() if ts & set((L or {}).get("tags", []))][:limit]
+    if out:
+        print(f"  ⚖️ законов: {len(out)}")
+    return out
 
 
 def _our_take(text, title, lang="ru"):
@@ -642,18 +950,66 @@ def cmd_publish(code, langs=None):
             if not got:
                 print(f"  ⚠️ {lang}: разбор не перевёлся — выйдет на языке-источнике")
 
+    # МАТЕРИАЛЫ РАБОТЫ — кодом, без модели: PDF, картинки, полный комплект.
+    import submission_assets
+    assets = submission_assets.build(code)
+
+    # ПОДПИСИ К КАРТИНКАМ — а вот это модель. Имя файла comb_histogram.png читателю не
+    # говорит ничего, и картинка без подписи в научной работе бесполезна: непонятно,
+    # на что смотреть. Модель читает работу, находит, где график упоминается, и пишет
+    # подпись по-человечески. Переводится, как и всё остальное на странице.
+    captions = {}
+    if assets.get("images"):
+        captions = _captions(text, assets["images"])
+
+    # ТЕГИ И ЗАКОНЫ — из нашего же словаря, как у обычной статьи.
+    #
+    # Владелец 2026-08-08: «не вижу наших обычных тегов, законов и так далее — немного не
+    # по уставу всё… причеши по рядовому подходу». Он прав: авторскую работу должна
+    # выделять плашка и обложка, а не отсутствие обычной разметки. Без тегов работа
+    # выпадает из графа знаний и из всех перекрёстных связей сайта.
+    #
+    # Словарь ЗАКРЫТЫЙ: модель выбирает из существующих тегов, а не придумывает свои —
+    # придуманный тег ведёт на несуществующую страницу и ломает облако.
+    tags = _pick_tags(text, title)
+    laws = _laws_for_tags(tags)
+
     # ПРИВАТНОЕ СЮДА НЕ ПОПАДАЕТ. publish.json уезжает на сайт, meta.json — нет.
     # Почта автора и токен остаются в meta.json; здесь только то, что можно показывать.
+    # ДАТА ПУБЛИКАЦИИ НЕ ЕЗДИТ.
+    #
+    # `received` — дата первого письма автора, и она своя (7 августа). Дата публикации —
+    # другая (8 августа). Подставив первую, вторая редакция уехала в архив на день назад
+    # и задвоила статью: папки 2026-08-07 и 2026-08-08 с одним и тем же кодом.
+    # Публикуемся один раз; при обновлении версии дата остаётся той, что была.
+    from datetime import date as _date
+    prev_pub = {}
+    if (box / "publish.json").exists():
+        try:
+            prev_pub = json.loads((box / "publish.json").read_text(encoding="utf-8"))
+        except Exception:
+            prev_pub = {}
+    pub_date = prev_pub.get("received") or meta.get("published_date") or _date.today().isoformat()
+
     pub = {
         "code": code,
-        "received": meta.get("received", ""),
+        "received": pub_date,
         "title": title,
         "kind": meta.get("kind", ""),
         "author_display": meta.get("author_name") or "",
         "ours": ours,
         "review": review_all,
         "similar": similar[:5],
-        "source_url": f"/lang/ru/community/{code}/source.zip",
+        # Материалы работы: PDF, картинки, полный комплект. Собираются кодом (см.
+        # tools/submission_assets.py) — распаковать, свернуть в PDF, скопировать, сжать.
+        # Адрес source.zip раньше стоял здесь жёстко, а файл туда никто не клал: кнопка
+        # на странице вела в 404 всё время, пока раздел существовал.
+        "pdf_url": assets.get("pdf_url", ""),
+        "archive_url": assets.get("archive_url", ""),
+        "archive_mb": assets.get("archive_mb", 0),
+        "images": assets.get("images", []),
+        "captions": captions,
+        "source_url": assets.get("pdf_url", "") or assets.get("archive_url", ""),
         "source_meta": meta.get("source_meta", ""),
         "author_comment": meta.get("author_comment", ""),
         "withdrawn": False,

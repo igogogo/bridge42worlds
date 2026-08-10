@@ -3400,3 +3400,60 @@ body.graph-fs-open .graph-fs-active svg { touch-action: manipulation; }
   .lv-switch-card .lv-btn { min-height: 32px; padding: 2px 8px; font-size: 10.5px; gap: 4px; }
   .lv-switch-card .lv-btn .vs-ic { width: 13px; height: 13px; }
 }
+
+/* ── Авторская работа: три отличия от статьи с arXiv ──────────────────────────
+   Работа, присланная автором, собирается тем же шаблоном и тем же кодом, что статьи.
+   Отличают её плашка у заголовка, ссылки на первоисточник (у нас их три вместо одной)
+   и блок разбора. Стили держим здесь, вместе с остальными: отдельный файл на три
+   правила — тот же путь к расхождению, что и отдельный шаблон. */
+.aw-badge { background: color-mix(in srgb, var(--ochre) 12%, var(--surface));
+  border-color: color-mix(in srgb, var(--ochre) 42%, var(--hair)); color: var(--ochre); }
+.aw-kind { background: color-mix(in srgb, var(--cyan) 10%, var(--surface));
+  border-color: color-mix(in srgb, var(--cyan) 38%, var(--hair)); color: var(--cyan); }
+
+.aw-review { margin: 34px 0 8px; padding-top: 22px; border-top: 1px solid var(--hair); }
+.aw-review h2 { font-family: 'Source Serif 4', Georgia, serif; font-weight: 600;
+  font-size: 21px; color: var(--text); margin-bottom: 6px; }
+.aw-note { font-size: 13.5px; color: var(--muted); margin-bottom: 16px; }
+.aw-cards { display: grid; gap: 12px; }
+.aw-card { background: var(--surface); border: 1px solid var(--hair);
+  border-radius: 12px; padding: 14px 16px; }
+/* Цвет по роли карточки, как в разборе: сильная сторона — то, что работает,
+   рекомендации — то, что стоит доделать, вопросы — нейтральные. */
+.aw-card-plus { border-color: color-mix(in srgb, var(--cyan) 34%, var(--hair)); }
+.aw-card-adv { border-color: color-mix(in srgb, var(--ochre) 34%, var(--hair)); }
+.aw-card-l { font-family: var(--mono); font-size: 11px; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--soft); margin-bottom: 8px; }
+.aw-card p, .aw-card li { font-size: 15px; line-height: 1.65; }
+.aw-card ul { margin: 0; padding-inline-start: 20px; }
+.aw-card li { margin-bottom: 6px; }
+.aw-word { margin-top: 14px; padding: 14px 16px; border-radius: 12px;
+  background: var(--tag-bg); border: 1px solid var(--hair); }
+.aw-word p { font-size: 15px; line-height: 1.7; }
+
+/* Наш знак у заголовка авторской работы + блок «забрать работу целиком». */
+.aw-mark { width: 20px; height: 13px; flex: none; vertical-align: -1px; margin-inline-end: 5px; }
+.aw-badge { display: inline-flex; align-items: center; cursor: help; }
+
+.aw-files { margin: 30px 0 6px; padding: 18px 20px; border-radius: 14px;
+  background: var(--surface); border: 1px solid var(--hair); }
+.aw-files h3 { font-family: 'Source Serif 4', Georgia, serif; font-weight: 600;
+  font-size: 18px; color: var(--text); margin-bottom: 6px; }
+.aw-files .aw-note { margin-bottom: 14px; }
+.aw-file-row { display: flex; flex-wrap: wrap; gap: 10px; }
+.aw-file { display: inline-flex; align-items: center; gap: 9px; min-height: var(--tap-md, 42px);
+  padding: 10px 18px; border-radius: 999px; text-decoration: none;
+  font-family: var(--mono); font-size: 13px; color: var(--ink); background: var(--bg);
+  border: 1px solid var(--hair);
+  transition: color .16s, border-color .16s, background .16s, transform .16s; }
+.aw-file:hover { color: var(--link); border-color: var(--link); transform: translateY(-1px); }
+.aw-file .ico-svg { width: 17px; height: 17px; flex: none; }
+/* Оригинал работы — главная кнопка: за ним и приходят. */
+.aw-file-main { border-color: var(--ochre); color: var(--ochre); font-weight: 600; }
+.aw-file-main:hover { color: var(--link); border-color: var(--link); }
+.aw-file-size { font-size: 11px; color: var(--soft); margin-inline-start: 2px; }
+@media (max-width: 460px) { .aw-file-row { flex-direction: column; }
+  .aw-file { justify-content: center; } }
+/* Наш код работы в строке-паспорте — на месте arXiv-номера у обычной статьи. */
+.aw-code { font-family: var(--mono); color: var(--ochre); cursor: help;
+  border-bottom: 1px dotted color-mix(in srgb, var(--ochre) 55%, transparent); }

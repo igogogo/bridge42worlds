@@ -14,7 +14,10 @@
          (у 222 статей его не было, карточка уходила с 404), размеры — настоящие
          (заявленным 1440x960 соответствовали 27%). -->
     $og_image_html
-    <meta property="og:url" content="$canonical_url">
+    <!-- og:url — адрес открытой страницы: при пересылке в мессенджер человек должен попасть
+         на тот уровень, которым с ним поделились. canonical ниже — другое дело: он один на
+         статью и указывает поисковику, какую из четырёх версий индексировать. -->
+    <meta property="og:url" content="$page_url">
     <meta property="og:type" content="article">
     <link rel="canonical" href="$canonical_url">
     $hreflang_links
@@ -75,13 +78,16 @@ $nav_html
         $level_switch_html
         $mini_head_html
         <div class="title-row">
-            <h1 class="article-title-top" id="article-top">$clickbait $refine_badge $express_badge</h1>
+            <h1 class="article-title-top" id="article-top">$clickbait $refine_badge $express_badge $author_work_badges</h1>
             <button class="share-btn share-inline" title="$share_label" onclick="shareArticle('$clickbait_escaped','$site_url/lang/$lang/archive/$date/$id/index.html')"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg></button>
         </div>
         <div class="original-title original-title-top">$license_label: "$original_title"</div>
         <div class="authors-top"><button type="button" class="author-verify-btn" onclick="document.getElementById('author-verify-modal').classList.add('open')">$author_verify_label</button> · $authors_full</div>
         <div class="meta">
-            arXiv:<a href="https://arxiv.org/abs/$id" target="_blank" rel="noopener">$id</a> · $date · <a href="$license_url" target="_blank" rel="noopener">$license_name</a> · $reading_html
+            <!-- Источник у статьи один (arXiv), у авторской работы их три: живой html,
+                 PDF и полный архив с данными. Подставляет генератор одной переменной —
+                 разной вёрстки для этого не нужно. -->
+            $source_meta_html · $date · <a href="$license_url" target="_blank" rel="noopener">$license_name</a> · $reading_html
         </div>
         <div class="meta-cats">$categories_html</div>
         <div class="oneliner">$oneliner</div>
@@ -95,6 +101,7 @@ $nav_html
              того, как человек понял, о чём статья. Стоя сразу за мозаикой, он вклинивался
              между заголовком и первым абзацем — читатель ещё ничего не знает, а ему уже
              предлагают карту связей. -->
+        $review_block_html
         $article_graph_html
         $fun_fact_html
         $formulas_html
@@ -108,6 +115,11 @@ $nav_html
             $comment_toggle_html
         </div>
         <div class="lv-bottom">$level_switch_bottom_html</div>
+        <!-- Скачать работу целиком — под кнопками уровней (владелец 2026-08-08:
+             «внизу под кнопками надо сделать html-вариант, PDF, полный архив работы
+             для скачивания»). У статьи с arXiv блок пуст: там скачивать нечего,
+             ссылка на первоисточник стоит в строке-паспорте. -->
+        $author_work_files_html
         $feedback_html
         <div class="related" id="related" data-label="$related_label"></div>
     </div>
