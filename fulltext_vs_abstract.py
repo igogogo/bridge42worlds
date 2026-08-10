@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Вектор по ТЕЛУ статьи против вектора по аннотации — на замороженной мерке.
 
@@ -32,6 +32,7 @@ DATA = ROOT / "data"
 MODEL = "@cf/baai/bge-m3"
 BATCH = 10
 BODY_CHARS = 12000
+TRANSLATE = '--translated' in sys.argv   # мерить боевой путь: вопрос переводится в en
 
 
 def load_env():
@@ -139,6 +140,51 @@ def load_vecs(path, strip_prefix=False):
     return m
 
 
+def translate_queries(rows, key):
+    """Перевести неанглийские вопросы в английский — как это делает боевой Worker.
+
+    ПОЧЕМУ ЭТО ОБЯЗАТЕЛЬНО ДЛЯ ЧЕСТНОГО ЗАМЕРА. Первый прогон дал арабскому 24,7%
+    против 52,0% у английского, и я предложил «включить перевод запроса». Проверил
+    код — перевод УЖЕ включён: `handleSearch` и `handleAsk` в worker.js зовут
+    translateText(q, "en") перед поиском (строки 1399 и 1581). То есть я померил путь,
+    которого в проде нет, и чуть не отправил архитектора чинить работающее.
+
+    Промпт берём тот же, что в Worker, слово в слово — иначе замер снова будет
+    про другую систему.
+    """
+    cache_p = DATA / "eval-query-en.json"
+    cache = json.loads(cache_p.read_text(encoding="utf-8")) if cache_p.exists() else {}
+    names = {"en": "English", "ru": "Russian", "es": "Spanish",
+             "ar": "Arabic", "fr": "French"}
+    todo = [r for r in rows if r["lang"] != "en" and r["qid"] not in cache]
+    print(f"перевести вопросов: {len(todo)}")
+    for n, r in enumerate(todo, 1):
+        body = json.dumps({
+            "model": "deepseek-v4-flash", "temperature": 0, "max_tokens": 300,
+            "thinking": {"type": "disabled"},
+            "messages": [
+                {"role": "system", "content":
+                 "Translate to English. Scientific text: keep terminology precise. "
+                 "Answer with the translation only, no quotes, no explanation."},
+                {"role": "user", "content": r["query"]},
+            ]}).encode("utf-8")
+        try:
+            req = urllib.request.Request(
+                "https://api.deepseek.com/chat/completions", data=body,
+                headers={"Authorization": f"Bearer {key}",
+                         "Content-Type": "application/json"})
+            with urllib.request.urlopen(req, timeout=90) as resp:
+                d = json.loads(resp.read().decode("utf-8"))
+            cache[r["qid"]] = d["choices"][0]["message"]["content"].strip()
+        except Exception:
+            cache[r["qid"]] = r["query"]      # не перевелось — ищем как есть
+        if n % 50 == 0:
+            cache_p.write_text(json.dumps(cache, ensure_ascii=False), encoding="utf-8")
+            print(f"  {n}/{len(todo)}")
+    cache_p.write_text(json.dumps(cache, ensure_ascii=False), encoding="utf-8")
+    return cache
+
+
 def compare():
     env = load_env()
     acc, tok = env["CLOUDFLARE_ACCOUNT_ID"], env["CLOUDFLARE_API_TOKEN"]
@@ -154,14 +200,21 @@ def compare():
     rows = [r for r in rows if r["expect"] in set(common)]
     print(f"вопросов из мерки, применимых к обоим: {len(rows)} из 800")
 
-    qcache = DATA / "eval-query-vecs.json"
+    # Боевой путь: неанглийский вопрос переводится ДО поиска. Без этого замер
+    # описывает систему, которой у нас нет.
+    en_q = translate_queries(rows, env["DEEPSEEK_API_KEY"]) if TRANSLATE else {}
+    suffix = "-tr" if TRANSLATE else ""
+
+    qcache = DATA / f"eval-query-vecs{suffix}.json"
     qv = json.loads(qcache.read_text(encoding="utf-8")) if qcache.exists() else {}
+    for r in rows:
+        r["_q"] = en_q.get(r["qid"], r["query"]) if TRANSLATE else r["query"]
     todo = [r for r in rows if r["qid"] not in qv]
     if todo:
         print(f"считаю векторы вопросов: {len(todo)}")
         for i in range(0, len(todo), 20):
             ch = todo[i:i + 20]
-            vs = embed([r["query"] for r in ch], acc, tok)
+            vs = embed([r["_q"] for r in ch], acc, tok)
             for r, v in zip(ch, vs):
                 qv[r["qid"]] = [round(x, 6) for x in v]
         qcache.write_text(json.dumps(qv), encoding="utf-8")
@@ -204,7 +257,9 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--build", action="store_true")
     ap.add_argument("--compare", action="store_true")
+    ap.add_argument("--translated", action="store_true")
     a = ap.parse_args()
     if a.build: build()
     elif a.compare: compare()
     else: ap.print_help()
+
