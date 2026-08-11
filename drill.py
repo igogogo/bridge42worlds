@@ -244,6 +244,18 @@ def main():
             print(f"· {name_region(C[j], T, tag_names)}: "
                   f"у науки {n_arx[j]}, у нас {n_our[j]} — реже в {ratio[j]:.1f} раза")
 
+    # Карта сохраняется целиком — центры, счётчики, имена. Без этого её можно только
+    # посмотреть глазами, а нужно, чтобы её можно было СПРОСИТЬ по одной статье:
+    # «рядом с этой работой пусто?» (recommend_ml.drill_hint, раздел рекомендаций авторам).
+    names = [name_region(C[j], T, tag_names) for j in range(args.regions)]
+    np.save(DATA / "drill-centers.npy", C)
+    (DATA / "drill-regions.json").write_text(json.dumps({
+        "regions": args.regions, "min_arxiv": args.min_arxiv,
+        "n_arxiv": n_arx.tolist(), "n_ours": n_our.tolist(),
+        "restricted": restricted.tolist(), "names": names,
+        "cats": {str(j): sorted(set(v))[:8] for j, v in cats.items()},
+    }, ensure_ascii=False), encoding="utf-8")
+
     out = {"областей": args.regions, "пустых": int(empty.sum()),
            "пустых в профиле": int((empty & ~restricted).sum()),
            "тонких": int(thin.sum()), "покрытие": round(covered, 4)}
