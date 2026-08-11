@@ -67,6 +67,11 @@ BATCH_ITEMS = 96                   # предел контекста — 60k т�
                                    # меньше часов, а часы тут дороже денег.
 WORKERS = 6                        # пачки уходят параллельно: прогон упирается в ожидание
                                    # ответа, а не в счёт. Без этого 3,13 млн — это ночь.
+PACK_TIMEOUT = 240                 # сколько ждать одну пачку, прежде чем бросить её.
+                                   # Пачка считается 2-5 секунд; четыре минуты — это уже
+                                   # с запасом на повторы внутри embed_di. Брошенная
+                                   # пачка не теряется: её доберёт следующий запуск,
+                                   # потому что в .ids она не попала.
 
 if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace", line_buffering=True)
@@ -96,8 +101,16 @@ PHYSICS = ("astro-ph", "cond-mat", "physics", "hep-ph", "quant-ph", "hep-th", "g
 
 
 def _base_id(s):
-    """Номер работы без версии: 2508.00529v1 и 2508.00529 — одна и та же."""
-    s = str(s).strip().split("/")[-1].split(":")[-1]
+    """Номер работы без версии: 2508.00529v1 и 2508.00529 — одна и та же.
+
+    РАЗДЕЛ НЕ СРЕЗАЕМ, и это не мелочь. До 2007 года arXiv нумеровал работы отдельно
+    в каждом разделе, поэтому `astro-ph/9909003` и `hep-th/9909003` — РАЗНЫЕ работы.
+    Первая версия срезала всё до косой черты, и один номер собирал до шестнадцати
+    чужих работ (замер: 519 таких столкновений в одном сентябре 1999-го).
+    Поймалось это не рассуждением, а проверкой поля по содержимому: она объявила
+    вектор битым, а битой оказалась она сама — сравнила его с текстом другой работы.
+    """
+    s = str(s).strip().split(":", 1)[-1]
     return s.split("v")[0] if "v" in s[-3:] else s
 
 
@@ -160,12 +173,11 @@ def main():
     ap.add_argument("--cats", default="physics",
                     help="physics — разделы естествознания (по умолчанию); all — всё подряд; "
                          "или через запятую: astro-ph,quant-ph")
+    ap.add_argument("--years", help="считать по годам ОДНИМ процессом: 2024-1986 "
+                                    "(от свежих к старым) или 2020-2024")
     ap.add_argument("--batch-tokens", type=int, default=40000)
     args = ap.parse_args()
-    import numpy as np
     sys.path.insert(0, str(ROOT))
-    import vecstore
-    from embeddings_build import _di_split, load_env, log_usage
 
     ms = months(args.months)
     # Разделы решаются ПЕРВЫМИ, чтобы режим «наши» мог их отменить последним словом.
@@ -207,6 +219,46 @@ def main():
         return 0
 
     OUT.parent.mkdir(exist_ok=True)
+    # ЗАМОК. Два процесса, пишущих в одно поле, — отказ, который не виден: длины .f16
+    # и .ids сойдутся, а вектор окажется склеен с чужим номером. 11 августа это
+    # случилось (остановленный прогон оставил живым шелл, тот запускал новые процессы),
+    # и обошлось только по везению — проверка по содержимому показала поле целым.
+    # Полагаться на везение тут нельзя: испорченное поле выглядит здоровым.
+    lock = DATA / "field.lock"
+    if lock.exists():
+        age = time.time() - lock.stat().st_mtime
+        if age < 3600:
+            sys.exit(f"поле уже считает другой процесс (замок {int(age)}с назад). "
+                     f"Если это не так — удалите {lock}")
+        print(f"замок протух ({int(age/60)} мин), беру его себе")
+    lock.write_text(str(time.time()), encoding="utf-8")
+    try:
+        if args.years:
+            # Год за годом ОДНИМ процессом, а не циклом в командной оболочке.
+            # 11 августа цикл в shell пережил остановку задачи: оболочку убили,
+            # а она успела запустить следующий питон, и тот писал в поле
+            # одновременно с проверочным прогоном. То, что нельзя остановить
+            # одной командой, однажды не остановится.
+            a, b = args.years.split("-")
+            step = 1 if int(b) >= int(a) else -1
+            done_total = 0
+            for y in range(int(a), int(b) + step, step):
+                yms = months(str(y))
+                if not yms:
+                    continue
+                print(f"\n===== {y} =====")
+                lock.write_text(str(time.time()), encoding="utf-8")   # замок не протухнет
+                done_total += build(args, cats, only, yms) or 0
+            return 0
+        return build(args, cats, only, ms)
+    finally:
+        lock.unlink(missing_ok=True)
+
+
+def build(args, cats, only, ms):
+    import numpy as np
+    import vecstore
+    from embeddings_build import _di_split, load_env, log_usage
     vecstore.repair(OUT)
     done = set(vecstore.done_ids(OUT))
     print(f"уже посчитано: {len(done):,}")
@@ -245,17 +297,27 @@ def main():
         # потока перемешают байты векторов с чужими идентификаторами.
         for g in range(0, len(packs), WORKERS):
             group = packs[g:g + WORKERS]
-            with cf.ThreadPoolExecutor(max_workers=WORKERS) as ex:
+            # Исполнитель НЕ в `with`: выход из блока ждёт все потоки, и зависший
+            # запрос остановил бы прогон ровно так же, как и без ограничения времени.
+            # Гасим без ожидания, брошенный поток умрёт сам по своему тайм-ауту,
+            # а его пачку доберёт следующий запуск — она просто не попадёт в .ids.
+            ex = cf.ThreadPoolExecutor(max_workers=WORKERS)
+            try:
                 futs = [ex.submit(work, p) for p in group]
                 res = []
                 for fu in futs:
                     try:
-                        res.append(fu.result())
+                        res.append(fu.result(timeout=PACK_TIMEOUT))
+                    except cf.TimeoutError:
+                        print(f"  !! {m}: пачка зависла дольше {PACK_TIMEOUT}с — брошена, "
+                              f"доберётся следующим запуском")
                     except Exception as e:
                         # Один сбойный кусок не должен ронять весь прогон:
                         # пропускаем, повторный запуск доберёт его же.
                         print(f"  !! {m}: пачка пропущена "
                               f"({type(e).__name__}: {str(e)[:90]})")
+            finally:
+                ex.shutdown(wait=False)
             for pack, vecs, st in res:
                 vecstore.append(OUT, [x[0] for x in pack], vecs)
                 done.update(x[0] for x in pack)

@@ -183,7 +183,7 @@ DI_URL = "https://api.deepinfra.com/v1/inference/BAAI/bge-m3"
 DI_BATCH_TOKENS = 40000
 
 
-def embed_di(texts, key, tries=5, stats=None):
+def embed_di(texts, key, tries=5, stats=None, timeout=60):
     """Та же bge-m3, но через DeepInfra: своя карта, свой счёт, без квоты Workers AI.
 
     Зачем второй адрес к одной модели. У Workers AI платится не за вызов, а за индекс,
@@ -197,7 +197,12 @@ def embed_di(texts, key, tries=5, stats=None):
         req = urllib.request.Request(DI_URL, data=body, headers={
             "Authorization": f"bearer {key}", "Content-Type": "application/json"})
         try:
-            with urllib.request.urlopen(req, timeout=180) as r:
+            # Тайм-аут 60 секунд, а не 180. Пачка из 96 аннотаций считается за 2-5 секунд;
+            # всё, что идёт дольше минуты, — это зависшее соединение, а не медленный ответ.
+            # Замер 11 августа: в прогоне по годам один такой запрос остановил всю группу
+            # из шести потоков, потому что `future.result()` ждал его без ограничения.
+            # При 180 секундах и четырёх повторах одна такая пачка стоит 12 минут простоя.
+            with urllib.request.urlopen(req, timeout=timeout) as r:
                 d = json.loads(r.read().decode("utf-8"))
             vecs = d.get("embeddings")
             if not vecs or len(vecs) != len(texts):
