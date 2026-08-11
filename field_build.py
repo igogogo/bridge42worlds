@@ -95,7 +95,27 @@ PHYSICS = ("astro-ph", "cond-mat", "physics", "hep-ph", "quant-ph", "hep-th", "g
            "chao-dyn", "adap-org", "solv-int", "patt-sol", "supr-con", "mtrl-th")
 
 
-def docs(month, cats=None):
+def _base_id(s):
+    """Номер работы без версии: 2508.00529v1 и 2508.00529 — одна и та же."""
+    s = str(s).strip().split("/")[-1].split(":")[-1]
+    return s.split("v")[0] if "v" in s[-3:] else s
+
+
+def id_month(aid):
+    """Месяц работы прямо из её номера: 2607.11163 → 2026-07. Обе схемы нумерации
+    arXiv: до 2007 года номер шёл после раздела (astro-ph/9909003), после — сам по себе."""
+    core = str(aid).split(":", 1)[-1]
+    core = core.split("/")[-1] if "/" in core else core
+    d = core.split("v")[0][:4]
+    if not d.isdigit():
+        return None
+    yy, mm = int(d[:2]), int(d[2:4])
+    if not 1 <= mm <= 12:
+        return None
+    return f"{1900 + yy if yy >= 91 else 2000 + yy}-{mm:02d}"
+
+
+def docs(month, cats=None, only=None):
     """Работы одного месяца: id и текст для вектора. Заголовок + аннотация вместе —
     заголовок несёт предмет работы, аннотация результат, и порознь они хуже.
 
@@ -113,6 +133,8 @@ def docs(month, cats=None):
             try:
                 r = json.loads(line)
             except Exception:
+                continue
+            if only is not None and _base_id(r.get("id", "")) not in only:
                 continue
             if cats:
                 c = r.get("categories")
@@ -132,6 +154,9 @@ def main():
     ap.add_argument("--months", help="например 2024,2025 — только эти годы")
     ap.add_argument("--max-cost", type=float, default=12.0,
                     help="потолок расходов на прогон, доллары")
+    ap.add_argument("--ours", action="store_true",
+                    help="добрать в поле работы, о которых написаны НАШИ статьи — "
+                         "любого раздела и года")
     ap.add_argument("--cats", default="physics",
                     help="physics — разделы естествознания (по умолчанию); all — всё подряд; "
                          "или через запятую: astro-ph,quant-ph")
@@ -143,19 +168,35 @@ def main():
     from embeddings_build import _di_split, load_env, log_usage
 
     ms = months(args.months)
+    # Разделы решаются ПЕРВЫМИ, чтобы режим «наши» мог их отменить последним словом.
+    # В первой версии порядок был обратный: `--ours` сбрасывал фильтр, а следующие
+    # строки возвращали его обратно, и 283 наши статьи про cs/math в поле не попали.
     if args.cats == "all":
         cats = None
     elif args.cats == "physics":
         cats = set(PHYSICS)
     else:
         cats = {x.strip() for x in args.cats.split(",") if x.strip()}
+    if args.ours:
+        # НАШИ статьи обязаны быть в поле целиком, вне зависимости от раздела и года.
+        # Иначе карта врёт про нас самих: мы писали и про cs, и про math (284 статьи),
+        # а поле их не берёт — и эти области выглядели бы пустыми у нас, хотя они
+        # как раз не пустые. Исключение из правила про разделы, и оно одно.
+        own = {_base_id(p.parent.name) for p in
+               (MAIN / "lang/ru/archive").glob("*/*/data.json")}
+        cats = None
+        ms = sorted({mo for mo in (id_month(a) for a in own) if mo} & set(months()))
+        print(f"режим «наши»: статей {len(own)}, месяцев с ними {len(ms)}")
+        only = own
+    else:
+        only = None
     print(f"месяцев: {len(ms)} ({ms[0]} … {ms[-1]}) · разделы: "
           f"{'все' if cats is None else str(len(cats)) + ' шт.'}")
 
     if args.check:
         n = chars = 0
         for i, m in enumerate(ms):
-            d = docs(m, cats)
+            d = docs(m, cats, only)
             n += len(d)
             chars += sum(len(t) for _, t in d)
             if i % 60 == 0 and n:
@@ -185,7 +226,7 @@ def main():
         # в одном файле. Последний случай `done` из .ids не поймал бы: на момент
         # чтения файла обеих записей ещё нет ни в одном списке.
         todo, seen = [], set()
-        for i, t in docs(m, cats):
+        for i, t in docs(m, cats, only):
             if i in done or i in seen:
                 continue
             seen.add(i)

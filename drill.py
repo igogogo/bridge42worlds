@@ -44,19 +44,23 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
 RESTRICTED = ("cs.", "math.", "stat.", "econ.", "q-fin.", "q-bio.PE")
 
 
-def load_ours():
-    import numpy as np
-    vecs, ids = [], []
-    with (DATA / "embeddings-articles.jsonl").open(encoding="utf-8") as f:
-        for line in f:
-            if line.strip():
-                r = json.loads(line)
-                if r.get("vec"):
-                    vecs.append(r["vec"])
-                    ids.append(r.get("id", ""))
-    m = np.asarray(vecs, dtype=np.float32)
-    m /= np.linalg.norm(m, axis=1, keepdims=True) + 1e-9
-    return m, ids
+def our_ids():
+    """Номера работ, о которых у нас написаны статьи. Просто список, без векторов.
+
+    Раньше здесь строилась ОТДЕЛЬНАЯ матрица из `embeddings-articles.jsonl` — векторов
+    наших пересказов. Это была та самая ошибка, от которой я отговаривал ведущую:
+    поле построено по аннотациям arXiv, а наши точки приходили из русского пересказа,
+    то есть из другого жанра. Замер разницы: одна и та же работа в двух источниках даёт
+    косинус 0,765, а не единицу, и меняет больше половины соседей. Карта сравнивала
+    разное с разным и занижала наше покрытие.
+
+    Теперь иначе и точнее: наши статьи — это те же работы arXiv, у них есть номера.
+    Ищем их В САМОМ ПОЛЕ по номеру. Никакого второго вектора, сравнение идеально
+    однородное, и заодно вместо устаревшей выгрузки на 2124 записи берётся весь архив.
+    Работы, которых в поле нет, добираются командой `field_build.py --ours`.
+    """
+    ids = {p.parent.name for p in (MAIN / "lang/ru/archive").glob("*/*/data.json")}
+    return {str(a).split("v")[0] if "v" in str(a)[-3:] else str(a) for a in ids}
 
 
 def id_month(aid):
@@ -189,19 +193,23 @@ def main():
     import numpy as np
 
     A, aids, ameta = load_arxiv(args.field)
-    O, _ = load_ours()
+    ours = our_ids()
     T, tag_names = load_tags()
-    print(f"arXiv: {len(A):,} работ · наших: {len(O):,} · областей: {args.regions}")
+    # Наши точки — это строки САМОГО поля, а не отдельная матрица. Маска по номерам.
+    is_ours = np.array([(i.split(":", 1)[-1].split("v")[0]
+                         if "v" in i.split(":", 1)[-1][-3:] else i.split(":", 1)[-1]) in ours
+                        for i in aids])
+    print(f"поле: {len(A):,} работ · наших в нём: {int(is_ours.sum()):,} "
+          f"из {len(ours):,} · областей: {args.regions}")
+    if len(ours) - int(is_ours.sum()) > 50:
+        print(f"  ⚠️ {len(ours) - int(is_ours.sum()):,} наших статей нет в поле — "
+              f"добрать: python field_build.py --ours")
 
     C, lab = kmeans(A, args.regions)
-    # Наши статьи не участвуют в НАРЕЗКЕ, только в подсчёте. Иначе карта подстроится
-    # под нас и покажет, что мы покрываем всё: области возникнут вокруг наших тем.
-    ours_lab = np.empty(len(O), dtype=np.int32)
-    for s in range(0, len(O), 4096):
-        ours_lab[s:s + 4096] = (O[s:s + 4096] @ C.T).argmax(1)
-
+    # Наши статьи не участвуют в НАРЕЗКЕ, только в подсчёте — они лежат в тех же
+    # строках поля, и метка области у них берётся оттуда же, что у всех остальных.
     n_arx = np.bincount(lab, minlength=args.regions)
-    n_our = np.bincount(ours_lab, minlength=args.regions)
+    n_our = np.bincount(lab[is_ours], minlength=args.regions)
     # Доля, а не разность: область на 900 работ и область на 30 нельзя сравнивать штуками.
     share_arx = n_arx / max(n_arx.sum(), 1)
     share_our = n_our / max(n_our.sum(), 1)
