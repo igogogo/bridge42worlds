@@ -812,7 +812,7 @@ def cmd_ids(args):
     if not ids:
         print("❌ не указано ни одного id (позиционно или через --ids-file)")
         sys.exit(1)
-    generate.generate_ids(ids, force=args.force)
+    generate.generate_ids(ids, force=args.force, express=getattr(args, 'express', False))
 
 
 def cmd_author(args):
@@ -1136,7 +1136,11 @@ def build_parser():
     s.add_argument("--ids-file", help="файл со списком id (по одному на строку)")
     s.add_argument("--force", action="store_true", help="пересоздать существующие")
     s.add_argument("--refine", action="store_true", help="рефлексивная шлифовка Simple и Popular")
-    s.set_defaults(func=cmd_ids, refine=False)
+    # Экспресс по списку id — режим «опоры пакетом»: куст вокруг разобранной работы
+    # (tools/field.py) нужен как поле вокруг, а не как десяток полных разборов.
+    s.add_argument("--express", action="store_true",
+                   help="экспресс вместо полного разбора (в десять раз дешевле)")
+    s.set_defaults(func=cmd_ids, refine=False, express=False)
 
     s = sub.add_parser("author", help="статьи автора за период (с превью-подтверждением)")
     s.add_argument("name", help='имя автора, формат "Family, Given"')

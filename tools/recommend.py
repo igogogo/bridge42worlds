@@ -456,6 +456,8 @@ def main():
     ap.add_argument("--fix-links", action="store_true",
                     help="дописать соседям признак полной версии (бесплатно, без модели)")
     ap.add_argument("--limit", type=int)
+    ap.add_argument("--force", action="store_true",
+                    help="пересчитать, даже если раздел уже есть (после добора опор)")
     args = ap.parse_args()
 
     if args.fix_links:
@@ -474,6 +476,14 @@ def main():
     if not args.aid:
         print("нужен id статьи или --all-full")
         return 2
+    if args.force and not args.show:
+        # Куст из всего поля вырос — старый раздел опирался на то, чего рядом ещё не было.
+        p = next(ROOT.glob(f"lang/ru/archive/*/{args.aid}/data.json"), None)
+        if p:
+            d = json.loads(p.read_text(encoding="utf-8"))
+            if d.pop("recommend", None):
+                p.write_text(json.dumps(d, ensure_ascii=False, indent=2), encoding="utf-8")
+                print(f"{args.aid}: прежний раздел убран, считаем заново")
     build(args.aid, show=args.show)
     return 0
 

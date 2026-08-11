@@ -5032,9 +5032,15 @@ def _refresh_all_aggregates():
     update_all_authors()
 
 
-def generate_ids(id_list, force=False):
+def generate_ids(id_list, force=False, express=False):
     """Генерирует конкретные статьи по списку arXiv id. Дата берётся из метаданных
-    статьи (published), поэтому статьи корректно ложатся в свои дни."""
+    статьи (published), поэтому статьи корректно ложатся в свои дни.
+
+    express=True — режим «опоры пакетом»: когда мы вытаскиваем вокруг разобранной работы
+    куст из всего arXiv (tools/field.py), эти соседи нужны не как самостоятельные статьи,
+    а как поле вокруг. Полный разбор каждого стоил бы десятикратно дороже экспресса и
+    ничего бы не добавил: опоре достаточно аннотации.
+    """
     for lang in LANGUAGES: ensure_lang_structure(lang)
     inputs = load_generation_inputs()
 
@@ -5044,7 +5050,7 @@ def generate_ids(id_list, force=False):
             print(f"  ❌ {aid}: нет метаданных на arXiv")
             return None
         date_str = iso_day(a.get("published")) or TARGET_DATE
-        item = build_article(a, date_str, inputs, force=force)
+        item = build_article(a, date_str, inputs, force=force, express=express)
         if item: item["date_str"] = date_str
         return item
 
