@@ -43,15 +43,31 @@ def save(path, ids, vecs):
     return a.shape
 
 
-def load(path, mmap=False):
-    """Вернуть (ids, matrix). mmap=True — не тянуть в память целиком."""
+def load(path, mmap=False, latest=False):
+    """Вернуть (ids, matrix). mmap=True — не тянуть в память целиком.
+
+    latest=True — если работа встречается несколько раз, оставить ПОСЛЕДНЮЮ запись.
+
+    Так устроено обновление вектора отдельной работы: файл только дописывается,
+    и новая версия кладётся в хвост с тем же идентификатором. Ничего не переписывается
+    (переписать 3 ГБ ради одной строки — верный способ однажды оборвать запись
+    и потерять всё), старая версия остаётся в файле, откат — это просто чтение
+    без флага. Цена — лишние байты на диске; на нашем объёме это ничто.
+    """
     p = pathlib.Path(path)
     ids = p.with_suffix(".ids").read_text(encoding="utf-8").splitlines()
     if mmap:
         m = np.memmap(p.with_suffix(".f16"), dtype=np.float16, mode="r")
     else:
         m = np.frombuffer(p.with_suffix(".f16").read_bytes(), dtype=np.float16)
-    return ids, m.reshape(len(ids), DIM)
+    m = m.reshape(len(ids), DIM)
+    if latest and len(set(ids)) != len(ids):
+        keep = {}
+        for i, a in enumerate(ids):
+            keep[a] = i                      # позже встреченное затирает раннее
+        idx = sorted(keep.values())
+        return [ids[i] for i in idx], m[idx]
+    return ids, m
 
 
 def append(path, ids, vecs):

@@ -59,30 +59,52 @@ def load_ours():
     return m, ids
 
 
-def load_arxiv():
-    """Вектора вспомогательного индекса + метаданные (раздел, заголовок) из jsonl."""
+def id_month(aid):
+    """Месяц работы прямо из её номера: 2607.11163 → 2026-07.
+
+    Так мы узнаём, в каком файле выгрузки её искать, не держа отдельной таблицы.
+    Старые идентификаторы (astro-ph/9909003) устроены иначе — там YYMM после косой
+    черты. До 2007 года arXiv нумеровал работы по разделам, и обе схемы живы
+    одновременно, поэтому разбираем обе, а не «ту, что чаще».
+    """
+    s = str(aid).split(":", 1)[-1]
+    core = s.split("/")[-1] if "/" in s else s
+    d = core.split("v")[0][:4]
+    if not d.isdigit():
+        return None
+    yy, mm = int(d[:2]), int(d[2:4])
+    if not 1 <= mm <= 12:
+        return None
+    year = 1900 + yy if yy >= 91 else 2000 + yy
+    return f"{year}-{mm:02d}"
+
+
+def load_arxiv(path=None):
+    """Векторы поля + метаданные (раздел, заголовок) из выгрузки arXiv.
+
+    Раньше метаданные брались из `embeddings-arxiv.jsonl` — файла, который писал
+    старый путь через JSONL. Полное поле его не создаёт (тридцать гигабайт текста
+    некуда класть), поэтому раздел и заголовок читаются прямо из выгрузки, а нужный
+    файл вычисляется из номера работы. Заголовки обязательны: строка «arx:2607.23786»
+    не позволяет человеку сказать «да, сюда бурим» или «нет».
+    """
     import numpy as np
     import vecstore
-    ids, m = vecstore.load(DATA / "arxiv")
+    src = pathlib.Path(path) if path else (
+        DATA / "field" if (DATA / "field.f16").exists() else DATA / "arxiv")
+    ids, m = vecstore.load(src, latest=True)
     m = np.asarray(m, dtype=np.float32)
     m /= np.linalg.norm(m, axis=1, keepdims=True) + 1e-9
+    print(f"поле: {src.name} · {len(ids):,} работ")
+
+    want = {i.split(":", 1)[-1]: i for i in ids}
+    by_month = {}
+    for short, full in want.items():
+        mo = id_month(short)
+        if mo:
+            by_month.setdefault(mo, set()).add(short)
     meta = {}
-    p = DATA / "embeddings-arxiv.jsonl"
-    if p.exists():
-        with p.open(encoding="utf-8") as f:
-            for line in f:
-                if not line.strip():
-                    continue
-                try:
-                    r = json.loads(line)
-                except Exception:
-                    continue
-                meta[r["id"]] = {"cat": r.get("cat", ""), "published": r.get("published", "")}
-    # Заголовки — из выгрузки arXiv в главной папке. Без них план читает только машина:
-    # строка «arx:2607.23786» не позволяет человеку сказать «да, сюда бурим» или «нет».
-    months = {v.get("published", "")[:7] for v in meta.values() if v.get("published")}
-    want = {i.split(":", 1)[-1] for i in ids}
-    for mo in sorted(m for m in months if m):
+    for mo, keys in sorted(by_month.items()):
         f = MAIN / "data" / "arxiv-bulk" / f"{mo}.jsonl"
         if not f.exists():
             continue
@@ -94,8 +116,13 @@ def load_arxiv():
                     r = json.loads(line)
                 except Exception:
                     continue
-                if r.get("id") in want:
-                    meta.setdefault(f"arx:{r['id']}", {})["title"] = r.get("title", "")
+                if r.get("id") in keys:
+                    c = r.get("categories")
+                    lst = c if isinstance(c, list) else str(c or "").split()
+                    meta[f"arx:{r['id']}"] = {"cat": str(lst[0]) if lst else "",
+                                              "title": r.get("title", ""),
+                                              "published": r.get("published", "")}
+    print(f"метаданные найдены у {len(meta):,} из {len(ids):,}")
     return m, ids, meta
 
 
@@ -155,12 +182,13 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--regions", type=int, default=200)
     ap.add_argument("--plan", type=int, default=0, help="показать N самых пустых областей")
+    ap.add_argument("--field", help="путь к полю (по умолчанию data/field, иначе data/arxiv)")
     ap.add_argument("--min-arxiv", type=int, default=20,
                     help="область меньше этого — не область, а шум выборки")
     args = ap.parse_args()
     import numpy as np
 
-    A, aids, ameta = load_arxiv()
+    A, aids, ameta = load_arxiv(args.field)
     O, _ = load_ours()
     T, tag_names = load_tags()
     print(f"arXiv: {len(A):,} работ · наших: {len(O):,} · областей: {args.regions}")

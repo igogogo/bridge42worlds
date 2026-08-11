@@ -179,7 +179,17 @@ def main():
     for m in ms:
         if stop:
             break
-        todo = [(i, t) for i, t in docs(m, cats) if i not in done]
+        # Отсев повторов идёт по ОДНОМУ множеству `done`, которое пополняется на ходу.
+        # Это закрывает три случая сразу: работа посчитана прошлым запуском, работа
+        # посчитана раньше в этом же запуске (другой месяц), работа дважды лежит
+        # в одном файле. Последний случай `done` из .ids не поймал бы: на момент
+        # чтения файла обеих записей ещё нет ни в одном списке.
+        todo, seen = [], set()
+        for i, t in docs(m, cats):
+            if i in done or i in seen:
+                continue
+            seen.add(i)
+            todo.append((i, t))
         if not todo:
             continue
         packs = [todo[s:s + BATCH_ITEMS] for s in range(0, len(todo), BATCH_ITEMS)]
