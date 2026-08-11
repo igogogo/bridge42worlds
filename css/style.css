@@ -1967,6 +1967,10 @@ html[dir="rtl"] .category-bar .cat-chip:first-child { padding-left: 9px; padding
 .hbar-sub { display: block; font-style: normal; font-size: 10px; color: var(--cyan); }
 /* Кухня: обложки */
 .cover-bar { height: 12px; background: var(--card); border-radius: 999px; overflow: hidden; }
+/* Вторая полоса в том же блоке — покрытие разделом машины знаний. Отбита сверху, чтобы
+   не читалась как продолжение полосы обложек. */
+.cover-bar.km-bar { margin-top: 14px; }
+.cover-bar.km-bar .cover-fill { background: var(--cyan); }
 .cover-fill { display: block; height: 100%; background: var(--grad, var(--cyan)); }
 .cover-legend { font-size: 12px; color: var(--muted); margin-top: 8px; }
 /* Топ-чипы */
@@ -3430,6 +3434,78 @@ body.graph-fs-open .graph-fs-active svg { touch-action: manipulation; }
 .aw-word { margin-top: 14px; padding: 14px 16px; border-radius: 12px;
   background: var(--tag-bg); border: 1px solid var(--hair); }
 .aw-word p { font-size: 15px; line-height: 1.7; }
+
+/* «Взгляд машины знаний» — рекомендации автору в конце продвинутой версии.
+   Карточки те же, что в разборе авторских работ: раздел говорит о том же — что сделано,
+   в чём сила, куда идти, — и разводить две вёрстки для одного смысла незачем. Своё здесь
+   только опоры под направлениями и список соседних работ. */
+.km-advice .km-src { display: block; margin-top: 4px; font-family: var(--mono);
+  font-size: 11.5px; letter-spacing: .04em; color: var(--soft); }
+.km-advice .km-src a { color: var(--link); text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--link) 34%, transparent); }
+.km-advice .km-src a:hover { border-bottom-color: var(--link); }
+.km-sig { margin-top: 12px; padding: 14px 16px; border-radius: 12px;
+  background: var(--tag-bg); border: 1px solid var(--hair); }
+.km-sig p:last-child { font-size: 15px; line-height: 1.7; }
+.km-links { margin-top: 14px; }
+.km-links ul { margin: 0; padding: 0; list-style: none;
+  display: grid; gap: 7px; }
+.km-links li { display: flex; align-items: baseline; justify-content: space-between;
+  gap: 12px; font-size: 14.5px; line-height: 1.5; }
+.km-link-main { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+/* Паспорт работы под ссылкой: код и дата тем же строем, что в карточке ленты. */
+.km-meta { display: flex; flex-wrap: wrap; gap: 10px; font-family: var(--mono);
+  font-size: 11px; letter-spacing: .04em; color: var(--soft); }
+.km-meta a { color: var(--soft); text-decoration: none; border-bottom: 1px solid transparent; }
+.km-meta a:hover { color: var(--link); border-bottom-color: var(--link); }
+.km-advice h2 .km-about { color: inherit; text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--ochre) 40%, transparent);
+  transition: border-color .16s, color .16s; }
+.km-advice h2 .km-about:hover { color: var(--link); border-bottom-color: var(--link); }
+.km-links a { color: var(--ink); text-decoration: none;
+  border-bottom: 1px solid transparent; transition: color .16s, border-color .16s; }
+.km-links a:hover { color: var(--link); border-bottom-color: var(--link); }
+/* Оригинальная аннотация в конце продвинутой версии: первоисточник словами авторов.
+   Мелко и тише основного текста — это справка и приманка для поиска, а не чтение. */
+.orig-abs { margin: 30px 0 6px; padding-top: 20px; border-top: 1px solid var(--hair); }
+.orig-abs h2 { font-family: 'Source Serif 4', Georgia, serif; font-weight: 600;
+  font-size: 18px; color: var(--text); margin-bottom: 4px; }
+.orig-abs-note { font-size: 12.5px; color: var(--soft); margin-bottom: 12px;
+  display: flex; flex-wrap: wrap; gap: 10px; align-items: baseline; }
+.orig-abs-src { font-family: var(--mono); font-size: 11.5px; color: var(--soft);
+  text-decoration: none; border-bottom: 1px solid transparent; }
+.orig-abs-src:hover { color: var(--link); border-bottom-color: var(--link); }
+/* Селектор с .article-main — иначе базовое `.article-main p { font-size: 16.5px }`
+   (строка 410) перебивает по специфичности, и «мелкий текст» выходит ростом с основной. */
+.article-main .orig-abs .orig-abs-title { font-size: 14px; font-weight: 600;
+  color: var(--text); margin-bottom: 6px; text-align: start; line-height: 1.5; }
+.article-main .orig-abs .orig-abs-text { font-size: 13.5px; line-height: 1.68;
+  color: var(--muted); text-align: start; }
+.article-main .orig-abs .orig-abs-note { font-size: 12.5px; line-height: 1.5; }
+/* Формулы внутри аннотации KaTeX рисует своим кеглем — прижимаем к тексту блока. */
+.orig-abs .katex { font-size: 1em; }
+
+/* Значок «разобрано машиной знаний» у названия — и на странице статьи, и в карточке ленты.
+   Знак не кричит: он того же роста, что и заголовок, но тоном спокойнее, и оживает только
+   под курсором. Смысл значка — «здесь есть что-то ещё», а не «смотри на меня». */
+.km-badge { display: inline-flex; align-items: center; justify-content: center;
+  min-width: var(--tap-sm, 30px); min-height: var(--tap-sm, 30px);
+  margin-inline-start: 4px; vertical-align: baseline;
+  font-family: var(--mono); font-size: .62em; line-height: 1; text-decoration: none;
+  color: var(--cyan); opacity: .75; cursor: help;
+  transition: opacity .16s, transform .16s, color .16s; }
+.km-badge:hover { opacity: 1; transform: translateY(-1px); color: var(--link); }
+.card-title + .km-badge { font-size: 13px; }
+
+.km-frontier { margin-top: 10px; font-size: 13.5px; line-height: 1.6; color: var(--muted);
+  border-inline-start: 2px solid color-mix(in srgb, var(--ochre) 45%, var(--hair));
+  padding-inline-start: 11px; }
+/* Близость — служебное число, оно не должно спорить с заголовком работы за внимание. */
+.km-score { flex: none; font-family: var(--mono); font-size: 11px; color: var(--soft);
+  letter-spacing: .06em; }
+@media (max-width: 560px) {
+  .km-links li { flex-direction: column; gap: 2px; }
+}
 
 /* Наш знак у заголовка авторской работы + блок «забрать работу целиком». */
 .aw-mark { width: 20px; height: 13px; flex: none; vertical-align: -1px; margin-inline-end: 5px; }

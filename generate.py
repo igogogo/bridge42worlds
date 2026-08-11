@@ -1093,6 +1093,283 @@ def author_work_review_html(article, lang):
             f'<div class="aw-cards">{"".join(cards)}</div>{word}</section>')
 
 
+_KM = {
+    "ru": {"h": "Взгляд машины знаний", "nav": "Машина знаний",
+           "note": "Этот раздел адресован автору работы и его коллегам. Соседние работы "
+                   "нашёл смысловой поиск по нашему архиву — не по совпадению слов, а по "
+                   "смыслу. Мы не рецензируем: мы показываем поле вокруг.",
+           "seen": "Что сделано в работе", "strength": "В чём сила",
+           "dirs": "Куда можно двигаться", "ideas": "Что можно попробовать",
+           "sig": "Почему это может быть важно", "src": "опора:",
+           "links": "Работы рядом в нашем архиве", "near": "близость",
+           "dense": "Вокруг этой работы в архиве плотно: {nn} рядом, ближайший {top}. Тему уже ходят — и есть с чем сверяться.",
+           "sparse": "Вокруг этой работы в архиве пусто: ближайший разбор всего на {top}, при обычных 0.64. Похоже, рядом почти не бурили.",
+           "mid": "Ближайшая работа архива — {top} по смысловой близости, рядом {nn}. Обычный для нашего корпуса уровень."},
+    "en": {"h": "The knowledge machine's view", "nav": "Knowledge machine",
+           "note": "This section is addressed to the author of the paper and their "
+                   "colleagues. Neighbouring works were found by meaning-based search "
+                   "across our archive, not by word overlap. We do not review: we show "
+                   "the field around the work.",
+           "seen": "What the work does", "strength": "Where its strength is",
+           "dirs": "Where it could go next", "ideas": "Worth trying",
+           "sig": "Why this may matter", "src": "based on:",
+           "links": "Nearby works in our archive", "near": "similarity",
+           "dense": "The archive is crowded around this work: {nn} nearby, closest at {top}. This ground is well walked — and there is plenty to compare against.",
+           "sparse": "The archive is sparse around this work: the closest review is only {top}, against a usual 0.64. It looks like few have drilled nearby.",
+           "mid": "The closest work in the archive sits at {top} by meaning, with {nn} nearby — the usual level for our corpus."},
+    "es": {"h": "La mirada de la máquina del conocimiento", "nav": "Máquina del conocimiento",
+           "note": "Esta sección está dirigida al autor del trabajo y a sus colegas. Los "
+                   "trabajos vecinos los encontró la búsqueda por significado en nuestro "
+                   "archivo, no por coincidencia de palabras. No evaluamos: mostramos el "
+                   "campo alrededor.",
+           "seen": "Qué hace el trabajo", "strength": "Dónde está su fuerza",
+           "dirs": "Hacia dónde puede avanzar", "ideas": "Vale la pena probar",
+           "sig": "Por qué puede importar", "src": "se apoya en:",
+           "links": "Trabajos cercanos en nuestro archivo", "near": "cercanía",
+           "dense": "El archivo está poblado alrededor de este trabajo: {nn} cercanos, el más próximo a {top}. Es terreno transitado, y hay con qué contrastar.",
+           "sparse": "El archivo está vacío alrededor de este trabajo: el análisis más cercano queda en {top}, frente a un 0.64 habitual. Parece que aquí al lado casi nadie ha perforado.",
+           "mid": "El trabajo más cercano del archivo está a {top} por significado, con {nn} alrededor: el nivel habitual de nuestro corpus."},
+    "fr": {"h": "Le regard de la machine du savoir", "nav": "Machine du savoir",
+           "note": "Cette section s'adresse à l'auteur du travail et à ses collègues. Les "
+                   "travaux voisins ont été trouvés par une recherche sémantique dans notre "
+                   "archive, et non par correspondance de mots. Nous n'évaluons pas : nous "
+                   "montrons le champ autour.",
+           "seen": "Ce que fait ce travail", "strength": "Où est sa force",
+           "dirs": "Vers où avancer", "ideas": "À essayer",
+           "sig": "Pourquoi cela peut compter", "src": "appui :",
+           "links": "Travaux voisins dans notre archive", "near": "proximité",
+           "dense": "L'archive est dense autour de ce travail : {nn} voisines, la plus proche à {top}. Le terrain est fréquenté, et il y a de quoi se comparer.",
+           "sparse": "L'archive est vide autour de ce travail : l'analyse la plus proche n'est qu'à {top}, contre 0,64 d'ordinaire. Il semble qu'on ait peu foré à côté.",
+           "mid": "Le travail le plus proche de l'archive se situe à {top} par le sens, avec {nn} autour — le niveau habituel de notre corpus."},
+    "ar": {"h": "نظرة آلة المعرفة", "nav": "آلة المعرفة",
+           "note": "هذا القسم موجَّه إلى مؤلف العمل وزملائه. الأعمال المجاورة عثر عليها بحثٌ "
+                   "دلالي في أرشيفنا، لا بتطابق الكلمات. نحن لا نقيّم العمل: نعرض الحقل من "
+                   "حوله.",
+           "seen": "ماذا يفعل هذا العمل", "strength": "أين تكمن قوته",
+           "dirs": "إلى أين يمكن المضي", "ideas": "يستحق التجربة",
+           "sig": "لماذا قد يكون هذا مهمًا", "src": "استنادًا إلى:",
+           "links": "أعمال قريبة في أرشيفنا", "near": "التقارب",
+           "dense": "الأرشيف مزدحم حول هذا العمل: {nn} قريبة، أقربها عند {top}. أرض مطروقة، وفيها ما يُقاس عليه.",
+           "sparse": "الأرشيف خالٍ حول هذا العمل: أقرب تحليل عند {top} فقط، مقابل 0.64 المعتادة. يبدو أن الحفر بجواره كان نادرًا.",
+           "mid": "أقرب عمل في الأرشيف يقع عند {top} من حيث المعنى، وحوله {nn} — وهو المستوى المعتاد في مجموعتنا."},
+    "zh": {"h": "知识机器的视角", "nav": "知识机器",
+           "note": "本节写给论文作者及其同行。相邻工作由我们档案库的语义检索找出，而非词面匹配。"
+                   "我们不做评审，只呈现它周围的领域。",
+           "seen": "这项工作做了什么", "strength": "它的长处",
+           "dirs": "可以往哪里走", "ideas": "值得一试",
+           "sig": "为什么这可能重要", "src": "依据：",
+           "links": "档案库中相邻的工作", "near": "相似度",
+           "dense": "这项工作周围很密集：附近有 {nn}，最近的为 {top}。这片地方常有人走，也有得对照。",
+           "sparse": "这项工作周围很空：最近的解读只有 {top}，而通常是 0.64。看来旁边少有人钻探。",
+           "mid": "档案库中最近的工作按语义为 {top}，周围有 {nn}——是我们语料的常见水平。"},
+}
+
+
+_ORIG_ABS = {
+    "ru": ("Оригинальная аннотация", "как её написали авторы, на английском"),
+    "en": ("Original abstract", "as written by the authors"),
+    "es": ("Resumen original", "tal como lo escribieron los autores, en inglés"),
+    "fr": ("Résumé original", "tel que rédigé par les auteurs, en anglais"),
+    "ar": ("الملخص الأصلي", "كما كتبه المؤلفون، بالإنجليزية"),
+    "zh": ("原文摘要", "作者原文，英文"),
+}
+
+
+def original_abstract_html(article, lang):
+    """Аннотация работы словами её авторов — в конце продвинутой версии, мелким текстом.
+
+    Владелец 11 августа: «это бесплатно, быстро и даст возможность привлекать поиск по
+    оригиналу, который могут делать авторы». Суть в этом: заголовок у нас образный, текст —
+    пересказ, и по запросу собственными словами работы наша страница не находится вообще.
+    Здесь появляются те самые слова — и заодно читатель может сверить пересказ с источником.
+
+    Показываем и у экспрессов: аннотация — ровно то, из чего экспресс и сделан, скрывать
+    её там особенно нечего.
+    """
+    text = (article.get("abstract_orig") or "").strip()
+    if not text:
+        return ""
+    head, note = _ORIG_ABS.get(lang, _ORIG_ABS["en"])
+    aid = article.get("id", "")
+    src = ""
+    if re.match(r"^\d{4}\.\d{4,5}", aid):
+        src = (f'<a class="orig-abs-src" href="https://arxiv.org/abs/{attr_safe(aid)}" '
+               f'target="_blank" rel="noopener">arXiv:{safe(aid)}</a>')
+    title = safe(article.get("original_title", ""))
+    # lang="en" и dir="ltr" на самом тексте: он английский на любой версии страницы, и без
+    # этого арабская страница разворачивает латиницу по своим правилам.
+    return (f'<section id="orig-abstract" class="orig-abs">'
+            f'<h2>{safe(head)}</h2>'
+            f'<p class="orig-abs-note">{safe(note)} {src}</p>'
+            + (f'<p class="orig-abs-title" lang="en" dir="ltr">{title}</p>' if title else "")
+            + f'<p class="orig-abs-text" lang="en" dir="ltr">{safe(text)}</p></section>')
+
+
+_KM_BADGE_TIP = {
+    "ru": "Разобрано машиной знаний: в конце продвинутой версии есть раздел для автора работы "
+          "— куда двигаться дальше и что лежит рядом в нашем архиве.",
+    "en": "Read by the knowledge machine: the advanced version ends with a section for the "
+          "paper's author — where the work could go next and what lies nearby in our archive.",
+    "es": "Analizado por la máquina del conocimiento: la versión avanzada termina con una "
+          "sección para el autor del trabajo — hacia dónde avanzar y qué hay cerca en nuestro archivo.",
+    "fr": "Lu par la machine du savoir : la version avancée se termine par une section destinée "
+          "à l'auteur — vers où avancer et ce qui se trouve à côté dans notre archive.",
+    "ar": "قرأته آلة المعرفة: تنتهي النسخة المتقدمة بقسم موجَّه إلى مؤلف العمل — إلى أين يمكن "
+          "المضي وما الذي يقع قريبًا في أرشيفنا.",
+    "zh": "已由知识机器解读：进阶版末尾有写给论文作者的一节——可以往哪里走，档案库里附近有什么。",
+}
+
+
+def km_badge_html(article, lang, date_str, version):
+    """Значок «разобрано машиной знаний» у заголовка статьи.
+
+    Владелец 11 августа: «пометить работы, где это выполнено, рядом с названием плюсиком;
+    плюсик виден во ВСЕХ версиях и списках, тултип с объяснением, при нажатии — переход
+    на рекомендации». Отсюда две особенности: значок рисуется на любом уровне чтения, а
+    ведёт всегда в продвинутую версию — раздел живёт только там.
+    """
+    if not (article.get("recommend") or {}).get(lang) and \
+       not (article.get("recommend") or {}).get(DEFAULT_LANG):
+        return ""
+    tip = _KM_BADGE_TIP.get(lang, _KM_BADGE_TIP["en"])
+    href = ("#km-advice" if version == "advanced"
+            else f'/{LANG_DIR}/{lang}/archive/{date_str}/{article["id"]}/advanced.html#km-advice')
+    return (f'<a class="km-badge" href="{attr_safe(href)}" title="{attr_safe(tip)}" '
+            f'aria-label="{attr_safe(tip)}">✛</a>')
+
+
+def _km_count(n, lang):
+    """«4 разбора», а не «4 разборов». Число живёт внутри фразы, и склонение к нему
+    прилагается: русский требует трёх форм, арабский — двойственного числа, английский
+    и французский различают единственное. Строка «4 разборов рядом» выдаёт машину
+    ровно в том разделе, который должен читаться как письмо коллеги."""
+    if lang == "ru":
+        n10, n100 = n % 10, n % 100
+        if n10 == 1 and n100 != 11:
+            w = "разбор"
+        elif n10 in (2, 3, 4) and n100 not in (12, 13, 14):
+            w = "разбора"
+        else:
+            w = "разборов"
+        return f"{n} {w}"
+    if lang == "ar":
+        if n == 1:
+            return "تحليل واحد"
+        if n == 2:
+            return "تحليلان"
+        return f"{n} تحليلات" if n <= 10 else f"{n} تحليلًا"
+    if lang == "zh":
+        return f"{n} 篇解读"
+    one, many = {"en": ("review", "reviews"), "es": ("análisis", "análisis"),
+                 "fr": ("analyse", "analyses")}.get(lang, ("review", "reviews"))
+    return f"{n} {one if n == 1 else many}"
+
+
+def knowledge_advice_html(article, lang):
+    """Раздел «Взгляд машины знаний» — рекомендации АВТОРУ разобранной работы.
+
+    Владелец 10 августа: «к каждой статье при полном разборе давай на основе ML
+    рекомендации… отдельное описание, что автор видел, что и как сделано, потом
+    структурированно наши мысли, ссылки, заключения — всё только позитивное: куда
+    двигаться дальше, в чём сила, какие идеи можно апробировать, как найти где бурить
+    новую скважину».
+
+    Содержание готовит `tools/recommend.py`: соседей ищет вектор, формулирует модель, но
+    каждое направление обязано опираться на конкретную статью архива — и она названа
+    ссылкой. Раздела нет, пока опоры нет: пустой блок «рекомендаций» хуже отсутствия.
+
+    Вёрстка берётся у разбора авторских работ (`.aw-review`/`.aw-card`) — те же карточки,
+    тот же ритм. Своя вёрстка рядом с общей 8 августа уже кончилась переделкой.
+    """
+    rec_all = article.get("recommend") or {}
+    rec = rec_all.get(lang) or (rec_all.get("ru") if lang == DEFAULT_LANG else None)
+    if not rec or not rec.get("directions"):
+        return ""
+    t = _KM.get(lang, _KM["en"])
+    by_id = {n["id"]: n for n in (rec.get("neighbours") or []) if n.get("id")}
+
+    def link(aid):
+        n = by_id.get(aid)
+        if not n:
+            return ""
+        title = (n.get("titles") or {}).get(lang) or (n.get("titles") or {}).get("ru") or aid
+        # Читатель уже на продвинутом уровне — уводить его на популярный значит терять
+        # глубину на ровном месте (владелец 11 августа). Ведём в продвинутую версию, но
+        # только если она у соседа настоящая: у экспресса там баннер «полная готовится».
+        # У записей до 11 августа поля full нет — считаем, что полной версии не обещали.
+        page = "advanced.html" if n.get("full") else "index.html"
+        href = f'/{LANG_DIR}/{lang}/archive/{n["date"]}/{aid}/{page}'
+        return f'<a href="{attr_safe(href)}">{safe(title)}</a>'
+
+    def meta(n):
+        """Код работы и дата публикации — «паспорт» соседа той же строкой, что и в ленте."""
+        aid = n.get("id") or ""
+        code = (f'<a class="km-arxiv" href="https://arxiv.org/abs/{attr_safe(aid)}" '
+                f'target="_blank" rel="noopener">arXiv:{safe(aid)}</a>'
+                if re.match(r"^\d{4}\.\d{4,5}", aid) else f'<span class="km-arxiv">{safe(aid)}</span>')
+        # Честная пометка: у экспресса разобрана только авторская аннотация. Читатель по
+        # ссылке должен знать заранее, насколько глубоко мы туда заглядывали.
+        mark = ("" if n.get("full") else
+                f'<span class="km-express">'
+                f'{safe({"ru": "экспресс", "en": "express", "es": "exprés", "fr": "express", "ar": "سريع", "zh": "速览"}.get(lang, "express"))}</span>')
+        return (f'<span class="km-meta">{code}'
+                f'<span class="km-date">{safe(n.get("date", ""))}</span>{mark}</span>')
+
+    cards = []
+    if rec.get("seen"):
+        cards.append(f'<div class="aw-card"><p class="aw-card-l">{safe(t["seen"])}</p>'
+                     f'<p>{safe(rec["seen"])}</p></div>')
+    if rec.get("strength"):
+        cards.append(f'<div class="aw-card aw-card-plus"><p class="aw-card-l">'
+                     f'{safe(t["strength"])}</p><p>{safe(rec["strength"])}</p></div>')
+    items = []
+    for x in rec["directions"]:
+        srcs = [s for s in (link(a) for a in (x.get("based_on") or [])) if s]
+        tail = (f'<span class="km-src">{safe(t["src"])} {" · ".join(srcs)}</span>'
+                if srcs else "")
+        items.append(f'<li>{safe(x["text"])}{tail}</li>')
+    cards.append(f'<div class="aw-card aw-card-adv"><p class="aw-card-l">{safe(t["dirs"])}</p>'
+                 f'<ul>{"".join(items)}</ul></div>')
+    if rec.get("ideas"):
+        li = "".join(f"<li>{safe(i)}</li>" for i in rec["ideas"])
+        cards.append(f'<div class="aw-card"><p class="aw-card-l">{safe(t["ideas"])}</p>'
+                     f'<ul>{li}</ul></div>')
+
+    sig = ""
+    if rec.get("significance"):
+        sig = (f'<div class="km-sig"><p class="aw-card-l">{safe(t["sig"])}</p>'
+               f'<p>{safe(rec["significance"])}</p></div>')
+    links = ""
+    if by_id:
+        rows = "".join(
+            f'<li><span class="km-link-main">{link(n["id"])}{meta(n)}</span>'
+            f'<span class="km-score">{safe(t["near"])} {n.get("score", 0):.2f}</span></li>'
+            for n in (rec.get("neighbours") or []) if n.get("id"))
+        # Плотность окружения — честный сигнал «здесь уже топтались» / «здесь пусто».
+        # Считается кодом при сборке рекомендаций, а не моделью: это измерение, а не мнение.
+        fr = rec.get("frontier") or {}
+        fr_html = ""
+        if fr.get("nearest"):
+            # Полосу выбрал recommend.py по откалиброванным порогам — страница её не
+            # переизобретает. У старых записей поля band нет: там молчим, а не гадаем.
+            phrase = t.get(fr.get("band") or "", "")
+            if phrase:
+                said = phrase.format(nn=_km_count(fr.get("dense", 0), lang),
+                                     top=f'{fr["nearest"]:.2f}')
+                fr_html = f'<p class="km-frontier">{safe(said)}</p>'
+        links = (f'<div class="km-links"><p class="aw-card-l">{safe(t["links"])}</p>'
+                 f'<ul>{rows}</ul>{fr_html}</div>')
+    # Заголовок ведёт на страницу гида, где методика описана целиком. Владелец 11 августа:
+    # «методику, которую мы используем, — ссылка на страницу; описание машины знаний
+    # впоследствии превратится в полноценного чат-бота». Пока это раздел гида; когда
+    # появится бот, менять придётся один адрес, а не разметку всех статей.
+    about = f'/{LANG_DIR}/{lang}/about.html#km'
+    return (f'<section class="aw-review km-advice" id="km-advice">'
+            f'<h2><a class="km-about" href="{attr_safe(about)}">{safe(t["h"])}</a></h2>'
+            f'<p class="aw-note">{safe(t["note"])}</p>'
+            f'<div class="aw-cards">{"".join(cards)}</div>{sig}{links}</section>')
+
+
 def gen_article_html(scipop, article, date_str, images, lang, version, captions=None, abstract=None,
                      has_mini=True):
     tpl = load_template("article")
@@ -1338,6 +1615,32 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
                                "".join(f"<li><strong>{k}:</strong> {sci_notation(v)}</li>" for k, v in kn.items()) + '</ul></div>'
         fun_html = trivia_html(scipop.get("fun_fact", ""), scipop.get("scifi", ""), lang)
 
+    # Хвост продвинутой версии — общий для обеих веток выше. У экспресса продвинутый уровень
+    # идёт по ветке SIMPLE_LIKE (там баннер «полная готовится»), но оригинальную аннотацию
+    # владелец просил и там: экспресс из неё как раз и сделан.
+    #
+    # Порядок: сначала наш разбор, потом слово машины знаний автору, потом первоисточник
+    # мелким шрифтом. Владелец 11 августа про аннотацию: «не обязательно в первом абзаце,
+    # мелким текстом, во вторую очередь».
+    if version == "advanced":
+        tail_nav = ""
+        km_html = knowledge_advice_html(article, lang)
+        if km_html:
+            tail_nav += f'<li><a href="#km-advice">{safe(_KM.get(lang, _KM["en"])["nav"])}</a></li>'
+            text_html += km_html
+        orig_html = original_abstract_html(article, lang)
+        if orig_html:
+            lbl = _ORIG_ABS.get(lang, _ORIG_ABS["en"])[0]
+            tail_nav += f'<li><a href="#orig-abstract">{safe(lbl)}</a></li>'
+            text_html += orig_html
+        if tail_nav:
+            # Пункты встают перед последним разделителем — то есть в группу разделов статьи,
+            # а не к служебным ссылкам внизу меню. Меню к этому месту уже собрано строкой
+            # в обеих ветках, поэтому вставляем по образцу, а не пересобираем.
+            anchor = '<li class="article-nav-sep"></li>' + "".join(nav_extra_items)
+            if anchor in nav_html:
+                nav_html = nav_html.replace(anchor, tail_nav + anchor, 1)
+
     if scipop.get("express_locked"):
         # Показываем баннер сверху текста: "показана версия X, Y пока не готова" — текст уже
         # реальный (тот же, что и у X), не generic-заглушка (см. express_locked_scipop).
@@ -1464,6 +1767,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
         og_title=safe(og_title_for(scipop, article, lang)),
         og_image_html=article_og_image_html(date_str, article["id"]),
         clickbait_escaped=safe(scipop.get("title", "").replace("'", "\\'")),
+        km_badge=km_badge_html(article, lang, date_str, version),
         refine_badge=(f'<span class="refine-badge" title="{safe({"ru": "Отшлифовано редактором", "en": "Polished by an editor", "es": "Pulido por un editor", "ar": "تم صقله بواسطة محرر", "fr": "Peaufiné par un éditeur", "zh": "编辑润色"}.get(lang, "Polished by an editor"))}">✦</span>' if article.get("refined") else ""),
         express_badge=(f'<span class="express-badge" title="{safe({"ru": "Экспресс-версия: по аннотации автора, без разбора полного текста статьи", "en": "Express version: based on the author\'s abstract, not the full paper text", "es": "Versión exprés: basada en el resumen del autor, no en el texto completo", "ar": "نسخة سريعة: بناءً على ملخص المؤلف، دون تحليل النص الكامل", "fr": "Version express : basée sur le résumé de l\'auteur", "zh": "速览版：基于作者摘要"}.get(lang, "Express version: based on the abstract"))}">{safe({"ru": "экспресс", "en": "express", "es": "exprés", "ar": "سريع", "fr": "express", "zh": "速览"}.get(lang, "express"))}</span>' if article.get("express") else ""),
         original_title=safe(article["title"]),
@@ -1717,6 +2021,11 @@ def update_index(scipop, article, date_str, lang, version, abstract=""):
         "categories": article.get("categories", []),
         "primary_category": article.get("primary_category", ""),
         "express": article.get("express", False),
+        # Значок «разобрано машиной знаний» в карточке ленты. Карточки рисует js/search.js
+        # по этому индексу, а не сервер, — без флага здесь значок в списках не появится
+        # ни при какой правке шаблонов.
+        "km": bool((article.get("recommend") or {}).get(lang)
+                   or (article.get("recommend") or {}).get(DEFAULT_LANG)),
     })
     ip.write_text(json.dumps(idx, ensure_ascii=False, indent=2), encoding="utf-8")
 
@@ -3733,6 +4042,12 @@ def regenerate_all_html(only=None):
             "sources": data.get("sources", {}),
             "review": data.get("review", {}),
             "author_comment": data.get("author_comment", ""),
+            # Рекомендации автору от машины знаний (tools/recommend.py). Без переноса сюда
+            # раздел лежит в data.json, а на странице его нет — ровно как было с полями
+            # авторской работы выше.
+            "recommend": data.get("recommend", {}),
+            # Оригинальная аннотация arXiv (tools/abstract_orig.py) — по той же причине.
+            "abstract_orig": data.get("abstract_orig", ""),
         }
         abstract = data.get("abstract") or {}
         # Наличие мини считаем ДО страниц уровней: кнопка «Мини» на них должна появляться только

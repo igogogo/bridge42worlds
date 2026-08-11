@@ -12,7 +12,7 @@
               tags:'тегов', sections:'разделов', scientists:'учёных', authors:'авторов', langs:'языка',
               nodes:'узлов графа', edges:'рёбер', activity:'Активность по дням', dynamics:'Динамика по месяцам',
               bySection:'Охват по разделам', kitchen:'Кухня: обложки и покрытие', covers:'Обложки',
-              withCover:'с обложкой', noCover:'без обложки', topTags:'Частые теги', topSci:'Частые учёные',
+              withCover:'с обложкой', noCover:'без обложки', km:'Машина знаний', kmOf:'из полных разборов', kmNote:'Полные разборы, у которых есть раздел с рекомендациями автору', topTags:'Частые теги', topSci:'Частые учёные',
               perDay:'статей за день', updated:'обновлено', loading:'Собираем данные…', none:'—',
               topLaws:'Ключевые законы', mainPage:'главная', audience:'Аудитория (свой счётчик)', uniqueVisitors:'уникальных', visits:'визитов', returning:'вернулись', topPages:'Куда ходили', byLangViews:'Языки читателей', sources:'Откуда пришли', clicks:'Что нажимали', readDepth:'Глубина чтения, %', audienceNote:'За 30 дней. Наши собственные визиты помечены и в эти числа не входят.', engagement:'Вовлечённость (данные сайта)', views:'просмотров',
               likes:'лайков', dislikes:'дизлайков', comments:'откликов', viewsByType:'Просмотры по типу',
@@ -30,13 +30,13 @@
               tags:'tags', sections:'sections', scientists:'scientists', authors:'authors', langs:'languages',
               nodes:'graph nodes', edges:'edges', activity:'Daily activity', dynamics:'Monthly dynamics',
               bySection:'Coverage by area', kitchen:'Behind the scenes: covers & coverage', covers:'Covers',
-              withCover:'with cover', noCover:'no cover', topTags:'Top tags', topSci:'Top scientists',
+              withCover:'with cover', noCover:'no cover', km:'Knowledge machine', kmOf:'of full reviews', kmNote:'Full reviews that carry a section of recommendations for the author', topTags:'Top tags', topSci:'Top scientists',
               perDay:'articles that day', updated:'updated', loading:'Crunching the data…', none:'—' },
         es: { title:'Panel del proyecto', articles:'artículos', full:'completos', express:'exprés', laws:'leyes',
               tags:'etiquetas', sections:'secciones', scientists:'científicos', authors:'autores', langs:'idiomas',
               nodes:'nodos', edges:'aristas', activity:'Actividad diaria', dynamics:'Dinámica mensual',
               bySection:'Cobertura por área', kitchen:'Tras bambalinas: portadas y cobertura', covers:'Portadas',
-              withCover:'con portada', noCover:'sin portada', topTags:'Etiquetas frecuentes', topSci:'Científicos frecuentes',
+              withCover:'con portada', noCover:'sin portada', km:'Máquina del conocimiento', kmOf:'de los análisis completos', kmNote:'Análisis completos que incluyen la sección de recomendaciones para el autor', topTags:'Etiquetas frecuentes', topSci:'Científicos frecuentes',
               perDay:'artículos ese día', updated:'actualizado', loading:'Procesando datos…', none:'—',
               topLaws:'Leyes clave', mainPage:'inicio', audience:'Audiencia (contador propio)', uniqueVisitors:'únicos', visits:'visitas', returning:'volvieron', topPages:'Adónde fueron', byLangViews:'Idiomas de lectores', sources:'De dónde llegaron', clicks:'Qué pulsaron', readDepth:'Profundidad de lectura, %', audienceNote:'Últimos 30 días. Nuestras propias visitas están marcadas y excluidas.', engagement:'Interacción (datos del sitio)', views:'vistas',
               likes:'me gusta', dislikes:'no me gusta', comments:'respuestas', viewsByType:'Vistas por tipo',
@@ -55,7 +55,7 @@
               tags:'وسوم', sections:'أقسام', scientists:'علماء', authors:'مؤلفين', langs:'لغات',
               nodes:'عقدة', edges:'حافة', activity:'النشاط اليومي', dynamics:'الديناميكية الشهرية',
               bySection:'التغطية حسب المجال', kitchen:'من الكواليس: الأغلفة والتغطية', covers:'الأغلفة',
-              withCover:'بغلاف', noCover:'بدون غلاف', topTags:'وسوم متكررة', topSci:'علماء متكررون',
+              withCover:'بغلاف', noCover:'بدون غلاف', km:'آلة المعرفة', kmOf:'من التحليلات الكاملة', kmNote:'التحليلات الكاملة التي تتضمن قسم التوصيات لمؤلف العمل', topTags:'وسوم متكررة', topSci:'علماء متكررون',
               perDay:'مقالات في ذلك اليوم', updated:'حُدّث', loading:'نُعالج البيانات…', none:'—',
               topLaws:'قوانين أساسية', mainPage:'الرئيسية', audience:'الجمهور (عدّادنا الخاص)', uniqueVisitors:'زوار فريدون', visits:'زيارات', returning:'عادوا', topPages:'أين ذهبوا', byLangViews:'لغات القراء', sources:'من أين جاؤوا', clicks:'ما الذي ضغطوه', readDepth:'عمق القراءة، %', audienceNote:'آخر 30 يومًا. زياراتنا الخاصة مُعلَّمة ومستبعدة.', engagement:'التفاعل (بيانات الموقع)', views:'مشاهدات',
               likes:'إعجابات', dislikes:'عدم إعجاب', comments:'ردود', viewsByType:'المشاهدات حسب النوع',
@@ -76,7 +76,7 @@
               langs:'langues', nodes:'nœuds', edges:'arêtes', activity:'Activité quotidienne',
               dynamics:'Dynamique mensuelle', bySection:'Couverture par domaine',
               kitchen:'Dans les coulisses : illustrations et couverture', covers:'Illustrations',
-              withCover:'avec couverture', noCover:'sans couverture', topTags:'Tags fréquents',
+              withCover:'avec couverture', noCover:'sans couverture', km:'Machine du savoir', kmOf:'des analyses complètes', kmNote:'Analyses complètes comportant une section de recommandations pour l\'auteur', topTags:'Tags fréquents',
               topSci:'Scientifiques fréquents', perDay:'articles ce jour-là', updated:'mis à jour',
               loading:'Traitement des données…', none:'—', topLaws:'Lois clés',
               mainPage:'accueil', audience:'Audience (notre compteur)', uniqueVisitors:'uniques', visits:'visites', returning:'revenus', topPages:'Où ils sont allés', byLangViews:'Langues des lecteurs', sources:'D’où ils viennent', clicks:'Ce qu’ils ont cliqué', readDepth:'Profondeur de lecture, %', audienceNote:'30 derniers jours. Nos propres visites sont marquées et exclues.', engagement:'Engagement (données du site)', views:'vues', likes:'j’aime',
@@ -98,7 +98,7 @@
         tags:'tags', sections:'sections', scientists:'scientists', authors:'authors', langs:'languages',
         nodes:'nodes', edges:'edges', activity:'Daily activity', dynamics:'Monthly dynamics',
         bySection:'Coverage by area', kitchen:'Covers & coverage', covers:'Covers', withCover:'with cover',
-        noCover:'no cover', topTags:'Top tags', topSci:'Top scientists', perDay:'articles that day',
+        noCover:'no cover', km:'Knowledge machine', kmOf:'of full reviews', kmNote:'Full reviews that carry a section of recommendations for the author', topTags:'Top tags', topSci:'Top scientists', perDay:'articles that day',
         updated:'updated', loading:'…', none:'—',
         mainPage:'home', audience:'Audience (our own counter)', uniqueVisitors:'unique', visits:'visits', returning:'returned', topPages:'Where they went', byLangViews:'Reader languages', sources:'Where they came from', clicks:'What they clicked', readDepth:'Read depth, %', audienceNote:'Last 30 days. Our own visits are flagged and excluded.', engagement:'Engagement (site data)', views:'views', likes:'likes', dislikes:'dislikes',
         comments:'feedback', viewsByType:'Views by type', viewsByDevice:'Views by device',
@@ -292,11 +292,23 @@
         html += sec;
 
         // ── Кухня: обложки ─────────────────────────────────────
+        // Владелец 11 августа: «в дашборд — сколько статей имеют такое дополнение».
+        // Считаем от ПОЛНЫХ разборов, а не от всего архива: экспрессам раздел не пишется
+        // вовсе, и доля от 3.6 тысяч показывала бы вечные 0.4% вместо честной картины.
+        function kmBar() {
+            var full = arts.filter(function (a) { return !a.express; });
+            var km = full.filter(function (a) { return a.km; }).length;
+            if (!full.length) return '';
+            var pct = Math.round(100 * km / full.length);
+            return '<div class="cover-bar km-bar"><span class="cover-fill" style="width:' + pct + '%"></span></div>' +
+                '<div class="cover-legend" title="' + esc(T.kmNote || '') + '"><b>' + km + '</b> ' +
+                esc(T.km) + ' · ' + esc(T.kmOf) + ' <b>' + full.length + '</b> (' + pct + '%)</div>';
+        }
         var pctCover = nA ? Math.round(100 * withImg / nA) : 0;
         html += '<div class="dash-block"><h2>' + esc(T.kitchen) + '</h2>' +
             '<div class="cover-bar"><span class="cover-fill" style="width:' + pctCover + '%"></span></div>' +
             '<div class="cover-legend"><b>' + withImg + '</b> ' + esc(T.withCover) + ' · <b>' + (nA - withImg) + '</b> ' + esc(T.noCover) +
-            ' (' + pctCover + '%)</div></div>';
+            ' (' + pctCover + '%)</div>' + kmBar() + '</div>';
 
         // ── Связность: что не связано ──────────────────────────
         // Витрина показывает, сколько всего накоплено; это — сколько из накопленного висит

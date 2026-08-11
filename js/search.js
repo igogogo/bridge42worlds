@@ -89,41 +89,47 @@ var UI_STRINGS = {
           express: 'экспресс', expressTip: 'Экспресс: быстрый пересказ по авторской аннотации. Полные статьи мы пишем по всему тексту работы — глубже и подробнее.',
           hideExpress: 'Скрыть экспресс-статьи', showLess: 'Свернуть',
           favTitle: 'Избранное', like: 'Нравится', dislike: 'Не нравится', superlike: 'Супер!',
-          refineTip: 'Отшлифовано редактором' },
+          refineTip: 'Отшлифовано редактором',
+          kmTip: 'Разобрано машиной знаний: в конце продвинутой версии есть раздел для автора работы — куда двигаться дальше и что лежит рядом в нашем архиве. Нажмите, чтобы открыть.' },
     en: { tagNotFound: 'Tag not found', selectTag: 'Select a tag:', scientistNotFound: 'Scientist not found',
           selectScientist: 'Select a scientist:', authorNotFound: 'Author not found', selectAuthor: 'Select an author:',
           articlesWord: 'articles', noResults: 'Nothing found', more: 'More →', profile: 'Profile →', moreWord: 'more', min: 'min',
           express: 'express', expressTip: 'Express: a quick take from the author\'s abstract only. Full articles are written from the whole paper — deeper and more detailed.',
           hideExpress: 'Hide express articles', showLess: 'Collapse',
           favTitle: 'Favorites', like: 'Like', dislike: 'Dislike', superlike: 'Super!',
-          refineTip: 'Polished by an editor' },
+          refineTip: 'Polished by an editor',
+          kmTip: 'Read by the knowledge machine: the advanced version ends with a section for the paper\'s author — where the work could go next and what lies nearby in our archive. Click to open.' },
     es: { tagNotFound: 'Etiqueta no encontrada', selectTag: 'Elige una etiqueta:', scientistNotFound: 'Científico no encontrado',
           selectScientist: 'Elige un científico:', authorNotFound: 'Autor no encontrado', selectAuthor: 'Elige un autor:',
           articlesWord: 'artículos', noResults: 'Nada encontrado', more: 'Más →', profile: 'Perfil →', moreWord: 'más', min: 'min',
           express: 'exprés', expressTip: 'Exprés: un resumen rápido solo del abstract del autor. Los artículos completos se escriben a partir de todo el texto.',
           hideExpress: 'Ocultar artículos exprés', showLess: 'Contraer',
           favTitle: 'Favoritos', like: 'Me gusta', dislike: 'No me gusta', superlike: '¡Genial!',
-          refineTip: 'Pulido por un editor' },
+          refineTip: 'Pulido por un editor',
+          kmTip: 'Analizado por la máquina del conocimiento: la versión avanzada termina con una sección para el autor del trabajo — hacia dónde avanzar y qué hay cerca en nuestro archivo. Pulse para abrir.' },
     zh: { tagNotFound: '未找到标签', selectTag: '选择标签：', scientistNotFound: '未找到科学家',
           selectScientist: '选择科学家：', authorNotFound: '未找到作者', selectAuthor: '选择作者：',
           articlesWord: '篇文章', noResults: '未找到结果', more: '详情 →', profile: '主页 →', moreWord: '更多', min: '分钟',
           express: '速览', expressTip: '速览版：基于作者摘要，未解析全文', hideExpress: '隐藏速览文章', showLess: '收起',
           favTitle: '收藏', like: '喜欢', dislike: '不喜欢', superlike: '太赞了！',
-          refineTip: '编辑润色' },
+          refineTip: '编辑润色',
+          kmTip: '已由知识机器解读：进阶版末尾有写给论文作者的一节——可以往哪里走，档案库里附近有什么。点击打开。' },
     fr: { tagNotFound: 'Tag introuvable', selectTag: 'Choisir un tag :', scientistNotFound: 'Scientifique introuvable',
           selectScientist: 'Choisir un scientifique :', authorNotFound: 'Auteur introuvable', selectAuthor: 'Choisir un auteur :',
           articlesWord: 'articles', noResults: 'Aucun résultat', more: 'En savoir plus →', profile: 'Profil →', moreWord: 'autres', min: 'min',
           express: 'express', expressTip: 'Version express : basée sur le résumé de l\'auteur, pas le texte complet',
           hideExpress: 'Masquer les articles express', showLess: 'Réduire',
           favTitle: 'Favoris', like: 'J\'aime', dislike: 'Je n\'aime pas', superlike: 'Génial !',
-          refineTip: 'Peaufiné par un éditeur' },
+          refineTip: 'Peaufiné par un éditeur',
+          kmTip: 'Lu par la machine du savoir : la version avancée se termine par une section destinée à l\'auteur — vers où avancer et ce qui se trouve à côté dans notre archive. Cliquez pour ouvrir.' },
     ar: { tagNotFound: 'الوسم غير موجود', selectTag: 'اختر وسمًا:', scientistNotFound: 'العالم غير موجود',
           selectScientist: 'اختر عالمًا:', authorNotFound: 'المؤلف غير موجود', selectAuthor: 'اختر مؤلفًا:',
           articlesWord: 'مقالات', noResults: 'لا نتائج', more: 'المزيد ←', profile: 'الملف ←', moreWord: 'آخرون', min: 'دقيقة',
           express: 'سريع', expressTip: 'سريع: ملخّص سريع من خلاصة المؤلف فقط. أما المقالات الكاملة فتُكتب من النص الكامل — أعمق وأكثر تفصيلاً.',
           hideExpress: 'إخفاء المقالات السريعة', showLess: 'طي',
           favTitle: 'المفضلة', like: 'إعجاب', dislike: 'عدم إعجاب', superlike: 'رائع!',
-          refineTip: 'تم صقله بواسطة محرر' }
+          refineTip: 'تم صقله بواسطة محرر',
+          kmTip: 'قرأته آلة المعرفة: تنتهي النسخة المتقدمة بقسم موجَّه إلى مؤلف العمل — إلى أين يمكن المضي وما الذي يقع قريبًا في أرشيفنا. اضغط للفتح.' }
 };
 var UI = UI_STRINGS[lang] || UI_STRINGS.en;
 
@@ -1123,6 +1129,13 @@ function cardHTML(item) {
         '<div class="card-body">' +
             levelSwitchHTML(base) +
             '<a class="card-title" href="' + url + '">' + item.title + '</a>' +
+            // Значок машины знаний у названия. Ведёт СРАЗУ в раздел рекомендаций и всегда
+            // в продвинутую версию — раздел живёт только там (владелец 11 августа: «плюсик
+            // виден во всех версиях и списках, при нажатии переход на рекомендации»).
+            // Отдельной ссылкой ПОСЛЕ заголовка, а не внутри него: ссылка внутри ссылки —
+            // недопустимая вложенность, браузер её разрывает и значок выпадает из строки.
+            (item.km ? '<a class="km-badge" href="' + base + 'advanced.html#km-advice"' +
+                       ' title="' + (UI.kmTip || '') + '" aria-label="' + (UI.kmTip || '') + '">✛</a>' : '') +
             (bodyText ? '<div class="card-desc">' + bodyText + '</div>' : '') +
             (authorsHtml ? '<div class="card-authors">' + authorsHtml + '</div>' : '') +
             (tagsHtml ? '<div class="card-tags">' + tagsHtml + '</div>' : '') +
