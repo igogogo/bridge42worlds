@@ -54,6 +54,61 @@ def load(path, mmap=False):
     return ids, m.reshape(len(ids), DIM)
 
 
+def append(path, ids, vecs):
+    """Дописать в конец. Нужен для полей, которые не помещаются в память ЦЕЛИКОМ.
+
+    save() собирает всю матрицу и пишет одним куском — на 3,13 млн работ это 6,4 ГБ
+    в оперативной памяти и промежуточный JSONL на тридцать гигабайт, которого просто
+    некуда положить. Здесь тот же формат, но растёт по кускам, и прогон можно
+    прервать и продолжить: файлы .f16 и .ids всегда согласованы по длине.
+    """
+    a = np.asarray(vecs, dtype=np.float32)
+    if a.ndim != 2 or a.shape[1] != DIM:
+        raise ValueError(f"ожидалась матрица N×{DIM}, пришло {a.shape}")
+    n = np.linalg.norm(a, axis=1, keepdims=True)
+    n[n == 0] = 1.0
+    a = (a / n).astype(np.float16)
+    p = pathlib.Path(path)
+    with p.with_suffix(".f16").open("ab") as f:
+        f.write(a.tobytes())
+    with p.with_suffix(".ids").open("a", encoding="utf-8") as f:
+        f.write("".join(f"{i}\n" for i in ids))
+    return a.shape
+
+
+def done_ids(path):
+    """Что уже посчитано. Читаем ТОЛЬКО .ids — их пара мегабайт против гигабайтов
+    векторов; ради проверки «продолжаем с какого места» тянуть векторы незачем."""
+    p = pathlib.Path(path).with_suffix(".ids")
+    if not p.exists():
+        return []
+    return p.read_text(encoding="utf-8").split("\n")[:-1] or []
+
+
+def repair(path):
+    """Согласовать .f16 и .ids после обрыва посреди записи.
+
+    Прогон на десять часов будет прерван — питанием, сном машины, чем угодно.
+    Если обрыв пришёлся на середину append(), в .f16 окажется больше или меньше
+    строк, чем в .ids, и файл станет молча непригоден: reshape разложит числа
+    со сдвигом, и все векторы после точки обрыва будут чужими. Поэтому длину
+    сверяем и лишний хвост отрезаем — ПО МЕНЬШЕМУ из двух.
+    """
+    p = pathlib.Path(path)
+    fp, ip = p.with_suffix(".f16"), p.with_suffix(".ids")
+    if not (fp.exists() and ip.exists()):
+        return 0
+    n_vec = fp.stat().st_size // (DIM * 2)
+    ids = ip.read_text(encoding="utf-8").split("\n")[:-1]
+    n = min(n_vec, len(ids))
+    if n_vec != len(ids):
+        with fp.open("r+b") as f:
+            f.truncate(n * DIM * 2)
+        ip.write_text("".join(f"{i}\n" for i in ids[:n]), encoding="utf-8")
+        print(f"починено: было векторов {n_vec}, идентификаторов {len(ids)}, стало {n}")
+    return n
+
+
 def from_jsonl(src, dst):
     ids, vecs = [], []
     for line in pathlib.Path(src).read_text(encoding="utf-8").splitlines():
