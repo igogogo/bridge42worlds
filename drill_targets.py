@@ -44,6 +44,8 @@ def main():
     ap.add_argument("--pool", type=int, default=40,
                     help="сколько кандидатов из области отдавать реранкеру")
     ap.add_argument("--out", default="data/drill-targets.json")
+    ap.add_argument("--since", default="",
+                    help="брать работы не старше месяца ГГГГ-ММ (пусто — вся история)")
     ap.add_argument("--by-size", action="store_true",
                     help="брать крупнейшие дырки вместо самых перспективных")
     ap.add_argument("--model", default="8B")
@@ -93,7 +95,16 @@ def main():
         rows = np.where(lab == j)[0]
         # Внутри области берём ближайшие к центру: это ещё не ранжирование по
         # интересности, а сужение до пула, который не жалко отдать реранкеру.
-        order = rows[np.argsort(-(A[rows] @ C[j]))][:args.pool]
+        order = rows[np.argsort(-(A[rows] @ C[j]))]
+        # ДВА РАЗНЫХ ПРОДУКТА, и различать их надо здесь, а не потом глазами.
+        # Полное поле накрывает сорок лет, поэтому без ограничения по дате наверх
+        # всплывают КЛАССИКИ: первой целью вышла cond-mat/0509330 — работа Гейма
+        # и Новосёлова про графен, за которую дали Нобелевскую премию. Это честная
+        # находка (про графен у нас ноль статей), но это заполнение пробела
+        # в фундаменте, а не освещение новостей. Ночная лента живёт другим.
+        if args.since:
+            order = [i for i in order if (fb.id_month(ids[i]) or "0000") >= args.since]
+        order = list(order)[:args.pool]
         for i in order:
             mo = fb.id_month(ids[i])
             if mo:
@@ -126,7 +137,10 @@ def main():
     rows_out, stats = [], {}
     for j in holes:
         rows = np.where(lab == j)[0]
-        order = rows[np.argsort(-(A[rows] @ C[j]))][:args.pool]
+        order = rows[np.argsort(-(A[rows] @ C[j]))]
+        if args.since:
+            order = [i for i in order if (fb.id_month(ids[i]) or "0000") >= args.since]
+        order = list(order)[:args.pool]
         cand = [int(i) for i in order if i in texts]
         if not cand:
             continue
