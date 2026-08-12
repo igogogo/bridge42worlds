@@ -3286,6 +3286,13 @@ body.graph-fs-open .graph-fs-active svg { touch-action: manipulation; }
 .cl-btns button { min-height: 36px; padding: 0 14px; border-radius: 999px;
   border: 1px solid var(--border); background: none; color: var(--ink); font: inherit; cursor: pointer; }
 .cl-btns button.on { border-color: var(--cyan, #2aa); color: var(--cyan, #2aa); }
+/* Вопрос с вариантами: подписи там не «за/против», а фразы вроде «Догнать французский
+   до общего уровня». В строку они не помещаются, поэтому колонкой и с левым краем —
+   читать варианты решения важнее, чем экономить высоту. */
+.cl-btns-wide { flex-direction: column; align-items: stretch; }
+.cl-btns-wide button { min-height: 40px; padding: 9px 15px; border-radius: 12px;
+  text-align: start; line-height: 1.4; white-space: normal; cursor: help; }
+.cl-res { margin-top: 7px; font-family: var(--mono); font-size: 12px; color: var(--soft); }
 .cl-res { font-size: 12px; color: var(--soft); margin-top: 6px; }
 /* Минимальная форма вступления: два необязательных поля, окошком */
 .cl-form { display: grid; gap: 6px; margin: 10px 0; }

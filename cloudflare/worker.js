@@ -927,9 +927,29 @@ async function handleCouncil(request, env, path) {
   if (path === "vote") {
     const meeting = String(body.meeting || "").slice(0, 20);
     const q = String(body.question || "").slice(0, 80);
-    const v = String(body.vote || "").toLowerCase();
-    if (!meeting || !q || !["yes", "no", "abstain"].includes(v)) {
-      return Response.json({ error: "bad_vote" }, { status: 400 });
+    const v = String(body.vote || "").toLowerCase().slice(0, 40);
+    // Голос — это ЛИБО «за/против/воздержаться», ЛИБО один из вариантов самого вопроса.
+    // Раньше принималась только тройка, а в повестке заседания 16 августа семь вопросов
+    // из восьми — выбор из трёх-пяти именованных вариантов («куда пустить бюджет»,
+    // «что считать бриллиантом»). «Да» на такой вопрос — не решение, а шум: ровно эту
+    // болезнь уже лечили 2 августа и она вернулась с другой стороны.
+    // Список вариантов берём из настоящей повестки в хранилище, а не с чужих слов.
+    let allowed = ["yes", "no", "abstain"];
+    try {
+      const obj = await env.SITE.get("data/council/upcoming.json");
+      if (obj) {
+        const m = await obj.json();
+        if (String(m.date || "") === meeting) {
+          const qq = (m.agenda || []).find((x) => String(x.id) === q);
+          const opts = (qq && qq.options) || [];
+          if (opts.length) {
+            allowed = opts.map((o, i) => String((o && o.id) || i + 1).toLowerCase());
+          }
+        }
+      }
+    } catch (e) { /* повестку не прочли — остаётся тройка, голос не теряем */ }
+    if (!meeting || !q || !allowed.includes(v)) {
+      return Response.json({ error: "bad_vote", allowed }, { status: 400 });
     }
     // Переголосовать можно: мнение меняется, и это нормально до закрытия заседания.
     await env.QUEUE.prepare(
@@ -963,7 +983,7 @@ async function handleCouncilBoard(request, env) {
   const tally = {};
   for (const v of votes) {
     tally[v.meeting] = tally[v.meeting] || {};
-    tally[v.meeting][v.question] = tally[v.meeting][v.question] || { yes: 0, no: 0, abstain: 0 };
+    tally[v.meeting][v.question] = tally[v.meeting][v.question] || {};
     tally[v.meeting][v.question][v.vote] = v.n;
   }
   return Response.json({ members: { total, ...byKind }, proposals: props, votes: tally },
@@ -980,9 +1000,11 @@ async function handleCouncilResults(request, env) {
     `SELECT question, vote, COUNT(*) n FROM council_votes WHERE meeting=?
       GROUP BY question, vote`).bind(meeting).all().catch(() => ({ results: [] }));
   const members = await env.QUEUE.prepare("SELECT COUNT(*) n FROM council_members").first().catch(() => ({ n: 0 }));
+  // Ключи не задаём заранее: у вопроса с вариантами это их идентификаторы, а не
+  // «за/против». Пустые тройки в ответе выглядели как «голосовали и все воздержались».
   const out = {};
   for (const r of (rows.results || [])) {
-    out[r.question] = out[r.question] || { yes: 0, no: 0, abstain: 0 };
+    out[r.question] = out[r.question] || {};
     out[r.question][r.vote] = r.n;
   }
   return Response.json({ meeting, members: (members && members.n) || 0, results: out },
@@ -1220,6 +1242,7 @@ async function handleWithdraw(request, env) {
              "и ничего не удаляли — если передумаете, напишите нам, и мы вернём " +
              "публикацию. Объяснять причину не нужно.",
   });
+}
 
 // ─── Молчание фоновых сторожей ─────────────────────────────────────────────
 //

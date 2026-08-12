@@ -243,13 +243,29 @@
                 var box = document.createElement('div');
                 box.className = 'cl-box cl-vote';
                 box.innerHTML = '<h4>' + esc(L.voteTitle) + ' · ' + esc(m.date || '') + '</h4>';
+                box.__ids = [];
                 m.agenda.forEach(function (q) {
                     var row = document.createElement('div');
                     row.className = 'cl-q';
+                    box.__ids.push(q.id);
+                    // Кнопки — по ВАРИАНТАМ вопроса, если они есть. Семь вопросов из восьми
+                    // в повестке 16 августа — это выбор («куда пустить бюджет», «что считать
+                    // бриллиантом»), и «за/против» на них не отвечает ни на что. Варианты
+                    // приходят строками или объектами {id, label} — приводим к одному виду.
+                    var opts = (q.options || []).map(function (o, i) {
+                        return (o && typeof o === 'object')
+                            ? { v: String(o.id || (i + 1)), t: String(o.label || o.id || ('вариант ' + (i + 1))), note: o.note || '' }
+                            : { v: String(i + 1), t: String(o), note: '' };
+                    });
+                    if (!opts.length) {
+                        opts = ['yes', 'no', 'abstain'].map(function (v) { return { v: v, t: L[v], note: '' }; });
+                    }
                     row.innerHTML = '<div class="cl-qt">' + esc(q.title || q.id) + '</div>' +
-                        (key ? '<div class="cl-btns">' +
-                            ['yes', 'no', 'abstain'].map(function (v) {
-                                return '<button type="button" data-v="' + v + '">' + esc(L[v]) + '</button>';
+                        (key ? '<div class="cl-btns' + (opts.length > 3 ? ' cl-btns-wide' : '') + '">' +
+                            opts.map(function (o) {
+                                return '<button type="button" data-v="' + esc(o.v) + '"' +
+                                       (o.note ? ' title="' + esc(o.note) + '"' : '') + '>' +
+                                       esc(o.t) + '</button>';
                             }).join('') + '</div><div class="cl-res"></div>'
                              : '<div class="cl-res"></div>');
                     box.appendChild(row);
@@ -277,6 +293,18 @@
                 if (!d || !d.results) return;
                 box.querySelectorAll('.cl-q').forEach(function (row, i) {
                     var qid = (box.__ids || [])[i];
+                    var r = qid && d.results[qid];
+                    var cell = row.querySelector('.cl-res');
+                    if (!r || !cell) return;
+                    // Подписи берём с кнопок этого же вопроса: у вопроса с вариантами
+                    // ключ итога — идентификатор варианта, и «yes/no» тут ни при чём.
+                    var names = {};
+                    row.querySelectorAll('.cl-btns button').forEach(function (b) {
+                        names[b.dataset.v] = b.textContent;
+                    });
+                    var parts = Object.keys(r).sort(function (a, b) { return r[b] - r[a]; })
+                        .map(function (k) { return (names[k] || L[k] || k) + ': ' + r[k]; });
+                    if (parts.length) cell.textContent = parts.join(' · ');
                 });
                 var head = box.querySelector('h4');
                 if (head && d.members) head.innerHTML += ' <small>' + d.members + ' ' + esc(L.members) + '</small>';
