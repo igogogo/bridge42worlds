@@ -60,6 +60,49 @@ between within while during about into over under more most less least first sec
 one two three four five six seven eight nine ten""".split())
 
 
+# Полный вектор поля, который строит ML (решение владельца 11 августа: «полный вектор
+# сейчас делает ML, хранить будем локально — там не так дорого»). Формат намеренно
+# простейший, чтобы читался memmap'ом без единой зависимости сверх numpy:
+#
+#   data/field-vectors.npy   float16, форма (N, D), векторы УЖЕ нормированы
+#   data/field-ids.txt       N строк, arXiv id ровно в том же порядке
+#   data/field-meta.json     {"model": "bge-m3", "dim": 1024, "count": N, "built": "…"}
+#
+# Пока файлов нет, работает словесная ступень (FTS5): она грубее, но не ждёт никого.
+VEC = ROOT / "data" / "field-vectors.npy"
+VEC_IDS = ROOT / "data" / "field-ids.txt"
+VEC_META = ROOT / "data" / "field-meta.json"
+
+
+def have_vectors():
+    return VEC.exists() and VEC_IDS.exists()
+
+
+def search_vectors(seed_vec, limit=CANDIDATES, exclude=()):
+    """Прямой поиск по полному полю: косинус со всеми векторами разом.
+
+    Векторы нормированы при сборке, поэтому косинус — это просто скалярное произведение,
+    одно матричное умножение на весь массив. Читаем через memmap: 3.13 млн × 1024 во
+    float16 это 6.4 ГБ на диске, но в память целиком поднимать их незачем.
+    """
+    import numpy as np
+    ids = VEC_IDS.read_text(encoding="utf-8").split()
+    m = np.load(VEC, mmap_mode="r")
+    q = np.asarray(seed_vec, dtype=np.float32)
+    q /= (np.linalg.norm(q) or 1.0)
+    # Порциями, чтобы не тянуть весь массив в память одним куском.
+    best = []
+    step = 200_000
+    for i in range(0, m.shape[0], step):
+        block = np.asarray(m[i:i + step], dtype=np.float32)
+        sims = block @ q
+        top = np.argpartition(-sims, min(limit, len(sims) - 1))[:limit]
+        best.extend((float(sims[j]), ids[i + j]) for j in top)
+    ex = set(exclude)
+    best = [(s, a) for s, a in sorted(best, reverse=True) if a not in ex]
+    return best[:limit]
+
+
 def _months():
     return sorted(BULK.glob("*.jsonl"))
 
@@ -145,6 +188,22 @@ def search_words(text, limit=CANDIDATES, exclude=()):
         con.close()
     ex = set(exclude)
     return [(a, m) for a, m in rows if a not in ex][:limit]
+
+
+def _mon_of(aid):
+    """Файл месяца по номеру работы: 2310.15936 → 2023-10. Старые id (hep-th/9901001)
+    так не читаются — для них месяц берём из индекса поля, если он построен."""
+    m = re.match(r"^(\d{2})(\d{2})\.", aid)
+    if m:
+        return f"20{m.group(1)}-{m.group(2)}"
+    if DB.exists():
+        con = sqlite3.connect(DB)
+        try:
+            row = con.execute("SELECT mon FROM doc WHERE aid = ? LIMIT 1", (aid,)).fetchone()
+        finally:
+            con.close()
+        return row[0] if row else ""
+    return ""
 
 
 def _abstracts(pairs):
@@ -234,18 +293,30 @@ def bush(aid, want=5, only_new=False, quiet=False):
         return []
 
     ours = _ours()
-    cands = search_words(seed, exclude={aid, re.sub(r'v\d+$', '', aid)})
-    if not cands:
-        print(f"{aid}: поле не дало кандидатов")
-        return []
-    meta = _abstracts(cands)
-    ids = [a for a, _ in cands if a in meta]
-    if not quiet:
-        print(f"  словами найдено {len(cands)}, аннотации есть у {len(ids)}")
+    skip = {aid, re.sub(r'v\d+$', '', aid)}
 
-    vecs = embed([seed] + [f"{meta[i][0]} {meta[i][1]}" for i in ids])
-    base, rest = vecs[0], vecs[1:]
-    scored = sorted(((_cos(base, v), i) for i, v in zip(ids, rest)), reverse=True)
+    if have_vectors():
+        # Полное поле готово: ищем по смыслу сразу среди всех трёх миллионов, словесная
+        # ступень больше не нужна — она была обходом дорогого хранения, а не самоцелью.
+        base = embed([seed])[0]
+        pairs = search_vectors(base, exclude=skip)
+        cands = [(a, _mon_of(a)) for _, a in pairs]
+        meta = _abstracts([(a, m) for a, m in cands if m])
+        scored = [(s, a) for s, a in pairs if a in meta]
+        if not quiet:
+            print(f"  вектором по всему полю: {len(scored)} кандидатов")
+    else:
+        cands = search_words(seed, exclude=skip)
+        if not cands:
+            print(f"{aid}: поле не дало кандидатов")
+            return []
+        meta = _abstracts(cands)
+        ids = [a for a, _ in cands if a in meta]
+        if not quiet:
+            print(f"  словами найдено {len(cands)}, аннотации есть у {len(ids)}")
+        vecs = embed([seed] + [f"{meta[i][0]} {meta[i][1]}" for i in ids])
+        base, rest = vecs[0], vecs[1:]
+        scored = sorted(((_cos(base, v), i) for i, v in zip(ids, rest)), reverse=True)
 
     out = []
     for score, i in scored:
