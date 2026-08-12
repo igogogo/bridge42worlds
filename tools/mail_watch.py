@@ -95,6 +95,41 @@ def esc(s):
     return (s or "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
+def is_machine_mail(msg, frm, subj):
+    """Письмо от машины, а не от человека: в канал такому не место.
+
+    Владелец 12 августа: «потом туда сыплется какой-то мусор типа „недоставлено, почта“».
+    Сторож заведён ради писем авторов — одно такое письмо ценнее сотни просмотров. Но
+    рядом с ними в ящик валятся отчёты о недоставке, автоответы и рассылки, и в канале
+    они выглядят одинаково. Когда в ленте уведомлений шум, настоящее письмо в ней тонет —
+    ровно то, от чего сторож и должен защищать.
+
+    Проверяем по служебным заголовкам (их ставит почтовый сервер, подделать нечем) и по
+    адресу отправителя. Тему смотрим последней и только по точным оборотам: «недоставлено»
+    может быть и в письме живого человека.
+    """
+    # Стандартные заголовки автоматической почты: RFC 3834 и практика рассылок.
+    for h in ("Auto-Submitted", "X-Auto-Response-Suppress", "List-Unsubscribe",
+              "List-Id", "Precedence"):
+        v = (msg.get(h) or "").lower()
+        if not v:
+            continue
+        if h == "Auto-Submitted" and v.startswith("no"):
+            continue          # auto-submitted: no — это обычное человеческое письмо
+        if h == "Precedence" and v not in ("bulk", "list", "junk", "auto_reply"):
+            continue
+        return True
+    low = (frm or "").lower()
+    if any(w in low for w in ("mailer-daemon", "postmaster@", "noreply", "no-reply",
+                              "donotreply", "bounce", "notification")):
+        return True
+    s = (subj or "").lower()
+    return any(w in s for w in (
+        "undelivered mail", "delivery status notification", "mail delivery failed",
+        "returned to sender", "delivery has failed", "out of office",
+        "автоматический ответ", "недоставлено", "доставка не удалась"))
+
+
 def load_seen():
     try:
         return set(json.loads(SEEN.read_text(encoding="utf-8")))
@@ -148,7 +183,7 @@ def check_box(user, list_only=False, quiet=False):
             print(f"  [{u.decode()}] {hdr(msg.get('Date'))[:31]} | {hdr(msg.get('From'))[:40]} | {hdr(msg.get('Subject'))[:60]}")
         M.logout()
         return 0
-    sent = 0
+    sent = skipped = 0
     for u in fresh:
         # PEEK — не помечаем прочитанным: это дело человека, а не сторожа
         typ, d = M.uid("fetch", u, "(BODY.PEEK[])")
@@ -156,6 +191,12 @@ def check_box(user, list_only=False, quiet=False):
             continue
         msg = email.message_from_bytes(d[0][1])
         frm, subj = hdr(msg.get("From")), hdr(msg.get("Subject"))
+        # Машинную почту помечаем прочитанной и в канал не отправляем — иначе настоящее
+        # письмо автора тонет в отчётах о недоставке.
+        if is_machine_mail(msg, frm, subj):
+            seen.add(f"{user}:{u.decode()}")
+            skipped += 1
+            continue
         body = body_snippet(msg)
         # Письма на author@ — главный канал приглашений в совет (владелец 2026-08-02:
         # «следи внимательно за ящиком, где я автор, — там в ответ можно приглашать сразу»).
@@ -174,7 +215,8 @@ def check_box(user, list_only=False, quiet=False):
     save_seen(seen)
     M.logout()
     if not quiet:
-        print(f"{user}: писем {len(uids)}, новых {len(fresh)}, уведомлений {sent}")
+        print(f"{user}: писем {len(uids)}, новых {len(fresh)}, уведомлений {sent}"
+              + (f", машинных пропущено {skipped}" if skipped else ""))
     return sent
 
 

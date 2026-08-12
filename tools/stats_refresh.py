@@ -18,6 +18,7 @@
 """
 import argparse
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -131,7 +132,43 @@ def money_line():
         out += f"\n🟡 Дневной предел ${day_cap:.2f} почти выбран."
     if art_plan and art_used > art_plan * 0.85:
         out += f"\n🔴 Бюджет статей выбран на {art_used / art_plan * 100:.0f}%."
+    out += balances_line(today)
     return out
+
+
+def balances_line(spent_today=0.0):
+    """Сколько реально осталось НА СЧЕТАХ сервисов, а не по нашей бухгалтерии.
+
+    Владелец 12 августа: «остаток ещё на DeepSeek туда, и на других сервисах если есть —
+    раз в день всё, что есть». Разница принципиальная: наш журнал считает, сколько мы
+    потратили по прайсу, а на счету может лежать меньше — списания идут со скидкой, курс
+    и НДС плавают, пополнения делает владелец руками. Конвейер встанет по балансу счёта,
+    а не по нашей смете, и узнать об этом лучше из отчёта, чем из отказа генерации.
+    """
+    import requests
+    key = os.environ.get("DEEPSEEK_API_KEY")
+    if not key:
+        return ""
+    try:
+        r = requests.get("https://api.deepseek.com/user/balance",
+                         headers={"Authorization": f"Bearer {key}"}, timeout=20)
+        j = r.json()
+        usd = next((b for b in (j.get("balance_infos") or [])
+                    if b.get("currency") == "USD"), None)
+        if not usd:
+            return ""
+        left = float(usd.get("total_balance") or 0)
+    except Exception:
+        return ""
+    line = f"\n💳 На счету DeepSeek: <b>${left:.2f}</b>"
+    # Дни жизни считаем по сегодняшнему расходу — он и есть наш нынешний темп.
+    if spent_today > 0.05:
+        line += f" — при сегодняшнем темпе это ещё около {left / spent_today:.0f} дн."
+    if left < 3:
+        line += "\n🔴 Меньше трёх долларов: пополнить, иначе конвейер встанет."
+    elif left < 8:
+        line += "\n🟡 Меньше восьми долларов — пора пополнить."
+    return line
 
 
 def zone_traffic():
@@ -178,6 +215,12 @@ def site_numbers():
         idx = json.loads((ROOT / "lang/ru/articles-index.json").read_text(encoding="utf-8"))
         out["статей"] = len(idx)
         out["последняя"] = max((a.get("date", "") for a in idx), default="?")
+        # Сколько работ уже разобрано машиной знаний — те самые «с плюсиком». Владелец
+        # 12 августа: «пиши в канал везде, сколько статей с нашими рекомендациями, чтобы
+        # видеть в динамике». Считаем по флагу km в индексе — по нему же рисуется значок
+        # в ленте, так что число в отчёте и значки на сайте не разойдутся.
+        out["с_рекомендациями"] = sum(1 for a in idx if a.get("km"))
+        out["полных"] = sum(1 for a in idx if not a.get("express"))
     except Exception:
         pass
     for name, key in (("data/corpus-stats.json", "покрытие"), ("data/lang-coverage.json", "языки"),
@@ -265,9 +308,19 @@ def main():
         elif req > 50000:
             net += f"\n🟡 Половина суточного предела Worker пройдена."
 
+    # Строка машины знаний идёт сразу за объёмом ленты: владелец смотрит её в динамике,
+    # а не разыскивает в конце отчёта. Доля считается от ПОЛНЫХ разборов — экспрессам
+    # раздел не пишется вовсе, и процент от всей ленты был бы неверным по смыслу.
+    km, full = n.get("с_рекомендациями", 0), n.get("полных", 0)
+    km_line = ""
+    if km:
+        share = f", это {km / full * 100:.0f}% полных разборов" if full else ""
+        km_line = (f"\n🧭 Разобрано машиной знаний: <b>{km}</b> из {full}{share}. "
+                   f"На их страницах стоит ✛ и раздел с рекомендациями автору.")
+
     msg = (f"<b>Витрина обновлена</b>\n"
            f"Статей в ленте: {n.get('статей', '?')}, последняя за {n.get('последняя', '?')}."
-           f"{stats}{growth}{money_line()}{net}")
+           f"{km_line}{stats}{growth}{money_line()}{net}")
     if failed:
         msg += f"\n\n⚠️ Не получилось: {', '.join(failed)}."
 

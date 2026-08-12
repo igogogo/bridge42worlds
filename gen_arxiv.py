@@ -168,8 +168,12 @@ def fetch_arxiv(date_str, category="astro-ph.*"):
             primary_cat = primary.get("term", "") if primary is not None else (cats[0] if cats else "")
             articles.append({
                 "id": aid,
-                "title": e.find("atom:title", ns).text.strip().replace("\n", " "),
-                "summary": e.find("atom:summary", ns).text.strip().replace("\n", " "),
+                # " ".join(split()) вместо replace("\n", " "): arXiv переносит строки
+                # ВМЕСТЕ С ОТСТУПОМ, и простая замена оставляла «слово   слово» —
+                # три пробела посреди заголовка. На странице это читается как разрыв
+                # (владелец поймал 12 августа), и попадало в 2% заголовков архива.
+                "title": " ".join(e.find("atom:title", ns).text.split()),
+                "summary": " ".join(e.find("atom:summary", ns).text.split()),
                 "authors": [a.find("atom:name", ns).text for a in e.findall("atom:author", ns)],
                 "published": e.find("atom:published", ns).text,
                 "categories": cats,

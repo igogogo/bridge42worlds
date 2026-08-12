@@ -154,10 +154,31 @@ document.addEventListener('DOMContentLoaded', function() {
                     { left: '\\(', right: '\\)', display: false },
                     { left: S, right: S, display: false }
                 ],
-                ignoredClasses: ['formula-render'],
+                // Оригинальная аннотация исключена сознательно: в чужом тексте доллары
+                // расставлены как попало, и авторендер то и дело склеивает две соседние
+                // строчные формулы в ОДНУ блочную. Блочная формула разрывает абзац, и
+                // аннотация выглядит рассыпанной по строкам (владелец поймал это
+                // 12 августа на 2606.01855v1: шесть блочных формул в одном абзаце).
+                // Символа доллара в этом файле быть не может даже в комментарии —
+                // шаблонизатор считает его подстановкой и роняет сборку целиком.
+                ignoredClasses: ['formula-render', 'orig-abs-text'],
                 throwOnError: false
             });
         } catch (e) {}
+        // Аннотацию рендерим отдельно и ТОЛЬКО строчными формулами: смысл сохраняем,
+        // абзац не разрываем.
+        var origAbs = main.querySelector('.orig-abs-text');
+        if (origAbs) {
+            try {
+                renderMathInElement(origAbs, {
+                    delimiters: [
+                        { left: '\(', right: '\)', display: false },
+                        { left: S, right: S, display: false }
+                    ],
+                    throwOnError: false
+                });
+            } catch (e) {}
+        }
     }
     document.querySelectorAll('.formula-render').forEach(function(el) {
         try { katex.render(el.textContent, el, { throwOnError: false }); } catch(e) {}
