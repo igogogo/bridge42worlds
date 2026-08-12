@@ -186,6 +186,17 @@
                    + ', ' + R.share.replace('{p}', Math.round(cnt[top] / Math.max(1, n) * 100)) + '.');
           out.push(Object.keys(cnt).length + ' ' + R.groups + ' ' + R.of + ' ' + n + ' ' + R.arts + '.');
         }
+      } else if (mode === 'world') {
+        // Чтение карты мира: три числа, которые отвечают на «где мы стоим».
+        var L = (d.legend && (d.legend[LANG] || d.legend.ru)) || {};
+        var pts = d.points || [];
+        var gaps = pts.filter(function (p) { return p.gap; }).length;
+        var covered = pts.filter(function (p) { return (p.o || 0) > 0; }).length;
+        if (L.note) out.push(L.note);
+        out.push('<b>' + (d.field || 0).toLocaleString() + '</b> ' + (L.world || '') +
+                 ' · <b>' + (d.ours || 0).toLocaleString() + '</b> ' + (L.ours || '') + '.');
+        out.push('Областей с нашими работами: <b>' + covered + '</b> из ' + pts.length +
+                 '; значимых пустот: <b>' + gaps + '</b>.');
       } else if (mode === 'authors') {
         var pts = d.points || [];
         var th = pts.filter(function (p) { return (p.th || 0) > 0.6; }).length;
@@ -349,13 +360,24 @@
           spectrum: 'إيقاع النشر عبر الزمن',
           tension: 'جسور بين المجالات والفجوات بينها' }
   })[LANG] || {};
-  var HEAD_T = { articles: T.articles, authors: T.authors, fly: FLY.tab, heat: HEAT.tab,
+  // Карта мира: координаты дают 600 областей поля arXiv, а не наши теги. Тексты вкладки
+  // держим здесь, подробную легенду отдаёт сам файл данных (world-view.json).
+  var WM = {
+    ru: { tab: 'мир', hint: 'Каждый круг — область науки. Размер — сколько там работ у мира, цвет — какую долю разобрали мы.' },
+    en: { tab: 'world', hint: 'Each circle is an area of science. Size is how many papers the world has; colour is the share we reviewed.' },
+    es: { tab: 'mundo', hint: 'Cada círculo es un área de la ciencia. El tamaño indica los trabajos del mundo; el color, la parte analizada.' },
+    fr: { tab: 'monde', hint: 'Chaque cercle est un domaine. La taille indique les travaux du monde ; la couleur, la part analysée.' },
+    ar: { tab: 'العالم', hint: 'كل دائرة مجال علمي. الحجم عدد الأبحاث في العالم، واللون النسبة التي حلّلناها.' }
+  }[LANG] || { tab: 'world', hint: '' };
+
+  var HEAD_T = { articles: T.articles, authors: T.authors, world: WM.tab, fly: FLY.tab, heat: HEAT.tab,
                  sphere: V.sphere, mobius: V.mobius, matrix: V.matrix,
                  tree: V2.tree, spectrum: V2.spectrum, tension: V3.tab };
 
   root.innerHTML =
     '<h1 class="dash-h1">' + T.title + '</h1>' +
     '<div class="an-tabs"><button class="an-tab active" data-t="articles">' + T.articles + '</button>' +
+    '<button class="an-tab" data-t="world"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><ellipse cx="12" cy="12" rx="4" ry="8.5"/><path d="M3.8 9.5h16.4"/><path d="M3.8 14.5h16.4"/></svg> ' + WM.tab + '</button>' +
     '<button class="an-tab" data-t="authors">' + T.authors + '</button>' +
     '<button class="an-tab" data-t="fly"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12l18-8-7 18-2.5-7.5L3 12Z"/></svg> ' + FLY.tab + '</button>' +
     '<button class="an-tab" data-t="heat"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="13" width="4" height="7.5" rx="1"/><rect x="10" y="8" width="4" height="12.5" rx="1"/><rect x="16.5" y="4" width="4" height="16.5" rx="1"/></svg> ' + HEAT.tab + '</button>' +
@@ -418,7 +440,8 @@
       headEl.innerHTML = '<span class="an-head-t">' + (HEAD_T[mode] || '') + '</span>' +
                          '<span class="an-head-n">' + (HEAD[mode] || '') + '</span>';
     }
-    if (hintEl) hintEl.textContent = HINTS[mode] || (mode === 'fly' ? FLY.hint : (mode === 'heat' ? HEAT.hint : T.hint));
+    if (hintEl) hintEl.textContent = HINTS[mode] || (mode === 'fly' ? FLY.hint
+      : (mode === 'heat' ? HEAT.hint : (mode === 'world' ? WM.hint : T.hint)));
     if (mode === 'fly') { state.travel = 0; state.fyaw = 0; state.fpitch = 0; state.speed = 0.0011; }
     var speedBox = document.getElementById('an-speed');
     if (speedBox) speedBox.style.display = mode === 'fly' ? 'flex' : 'none';
@@ -426,7 +449,8 @@
     if (sr && mode === 'fly') sr.value = Math.round(state.speed / 0.006 * 60);
     if (cache[dataMode]) { state.data = cache[dataMode]; prep(); return; }
     document.getElementById('an-loading').style.display = '';
-    var FILE = { authors: 'authors-map', articles: 'articles-map', cooc: 'tags-cooc' };
+    var FILE = { authors: 'authors-map', articles: 'articles-map', cooc: 'tags-cooc',
+                 world: 'world-view' };
     fetch('/data/analytics/' + (FILE[dataMode] || 'articles-map') + '.json')
       .then(function (r) { return r.json(); })
       .then(function (d) { cache[dataMode] = d; state.data = d; prep(); })

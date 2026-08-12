@@ -424,7 +424,12 @@ def do_step(s):
     if k == "analytics":
         # Без --interpret: имена кластерам даёт модель, а это уже платно. Сама карта
         # (кластеры, оси, со-встречаемость) считается локально и бесплатно.
-        return run([sys.executable, "run.py", "analytics"], timeout=7200)
+        rc = run([sys.executable, "run.py", "analytics"], timeout=7200)
+        # Карта мира — вторая вкладка аналитики: координаты задаёт поле arXiv, а не наши
+        # теги. Пересчёт областей делает ML своим инструментом; здесь только перекладка
+        # готового в формат страницы, поэтому шаг ничего не стоит и не требует их запуска.
+        rc = run([sys.executable, "tools/world_map_view.py"], timeout=1800) or rc
+        return rc
     if k == "graph":
         return run([sys.executable, "run.py", "graph"], timeout=3600)
     if k == "status":
