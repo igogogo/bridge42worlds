@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Машина открытий — комплект материалов</title>
+<style>
+:root{--paper:#EEEFEC;--card:#FFF;--ink:#141A1E;--dim:#5B6870;--brand:#0B5A54;
+  --brand-soft:#DCEAE6;--signal:#9E4418;--signal-soft:#F5E5DA;--rule:#D8D9D3;--shade:#E5E7E2}
+@media (prefers-color-scheme:dark){:root{--paper:#12171A;--card:#171D21;--ink:#E4E7E5;
+  --dim:#93A0A6;--brand:#5FBFAF;--brand-soft:#16302C;--signal:#D98254;
+  --signal-soft:#2E1F18;--rule:#2A3237;--shade:#1B2226}}
+:root[data-theme=dark]{--paper:#12171A;--card:#171D21;--ink:#E4E7E5;--dim:#93A0A6;
+  --brand:#5FBFAF;--brand-soft:#16302C;--signal:#D98254;--signal-soft:#2E1F18;
+  --rule:#2A3237;--shade:#1B2226}
+:root[data-theme=light]{--paper:#EEEFEC;--card:#FFF;--ink:#141A1E;--dim:#5B6870;
+  --brand:#0B5A54;--brand-soft:#DCEAE6;--signal:#9E4418;--signal-soft:#F5E5DA;
+  --rule:#D8D9D3;--shade:#E5E7E2}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);padding:0 24px 80px;
+  font:16.5px/1.6 Georgia,"Iowan Old Style","Times New Roman",serif;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:940px;margin:0 auto}
+h1,h2,.eyebrow,.tile b,.step b{font-family:"Segoe UI",-apple-system,system-ui,sans-serif}
+code{font-family:"Cascadia Mono",Consolas,ui-monospace,monospace;font-size:.87em;
+  background:var(--shade);padding:1px 5px;border-radius:3px}
+header{padding:56px 0 30px;border-bottom:1px solid var(--rule);margin-bottom:32px}
+.eyebrow{font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--brand);
+  font-weight:700;margin:0 0 12px}
+h1{font-size:42px;line-height:1.06;letter-spacing:-.022em;margin:0 0 14px;font-weight:750;
+  text-wrap:balance}
+.lede{font-size:19px;line-height:1.5;color:var(--dim);max-width:64ch;margin:0}
+h2{font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);
+  font-weight:700;margin:36px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--rule)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(285px,1fr));gap:14px}
+a.tile{display:block;background:var(--card);border:1px solid var(--rule);
+  border-left:3px solid var(--brand);padding:17px 20px;text-decoration:none;color:inherit;
+  transition:border-color .12s,transform .12s}
+a.tile:hover{border-left-color:var(--signal);transform:translateY(-1px)}
+a.tile:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+a.tile.main{border-left-width:5px;grid-column:1/-1;background:var(--brand-soft)}
+a.tile b{display:block;font-size:17px;margin-bottom:5px;letter-spacing:-.01em}
+a.tile.main b{font-size:23px}
+a.tile span{display:block;font-size:14.5px;color:var(--dim);line-height:1.45}
+a.tile em{display:block;font-size:12px;color:var(--brand);margin-top:8px;font-style:normal;
+  font-family:"Segoe UI",system-ui,sans-serif;letter-spacing:.03em}
+.steps{background:var(--card);border:1px solid var(--rule);border-left:3px solid var(--signal);
+  padding:18px 22px;margin:22px 0}
+.steps p{margin:0 0 10px;max-width:72ch;font-size:15px}
+.steps p:last-child{margin-bottom:0}
+.steps b{color:var(--signal)}
+footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--rule);font-size:13px;
+  color:var(--dim)}
+footer p{margin:0 0 5px}
+@media (max-width:640px){h1{font-size:32px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">bridge42worlds · НИОКР · август 2026</p>
+  <h1>Машина открытий</h1>
+  <p class="lede">Комплект материалов для показа. Всё в этой папке, все ссылки внутренние —
+  папку можно заархивировать и передать целиком, интернет не нужен.</p>
+</header>
+
+<div class="steps">
+  <p><b>Тому, кто будет презентовать — три шага.</b></p>
+  <p><b>1.</b> Открыть <code>portal.html</code> и прочесть целиком. Там весь проект
+  одной страницей: что построено, как устроено, что замерено и — отдельным разделом —
+  что провалилось. Последнее важнее остального: на встрече с техническими людьми
+  честный список неудач работает лучше списка достижений.</p>
+  <p><b>2.</b> Открыть <code>deck-en.html</code>. Оранжевый <b>?</b> в углу каждого
+  слайда — подсказка: зачем слайд, что сказать, чего <em>не</em> говорить. Термины
+  с пунктиром — навести, откроется «почему выбрано именно так».</p>
+  <p><b>3.</b> Прочесть <code>deck-notes.html</code> — там по слайду техническая
+  подкладка и раздел ожидаемых вопросов с готовыми ответами, включая «покажите
+  открытие» и «чем это отличается от RAG».</p>
+</div>
+
+<h2>Показывать</h2>
+<div class="tiles">
+  <a class="tile main" href="portal.html">
+    <b>Портал проекта</b>
+    <span>Всё одной страницей: состояние, архитектура, механизм двух плотностей,
+      стек методов, живой пример работы конвейера, замеры и контроли, что провалилось,
+      замыкание цикла, отрасли, дорожная карта, словарь понятий.</span>
+    <em>начните отсюда · 13 разделов · перекрёстные ссылки</em></a>
+
+  <a class="tile" href="deck-en.html">
+    <b>Презентация · English</b>
+    <span>7 слайдов с подсказками докладчику и тултипами на терминах.</span>
+    <em>в PDF: Ctrl+P, ориентация альбомная</em></a>
+
+  <a class="tile" href="diagram.html">
+    <b>Структурная схема</b>
+    <span>Четыре яруса; в центре — сам механизм: как области нарезаются по миру
+      и как в каждой сравниваются две плотности.</span>
+    <em>слепая зона видна глазом</em></a>
+</div>
+
+<h2>Читать</h2>
+<div class="tiles">
+  <a class="tile" href="deck-notes.html">
+    <b>Подсказки докладчику</b>
+    <span>По слайду: что говорить и чего не говорить, техническая подкладка,
+      ожидаемые вопросы с ответами.</span>
+    <em>обязательно перед показом</em></a>
+
+  <a class="tile" href="platform.html">
+    <b>Платформа</b>
+    <span>Четыре архитектуры развития, применимость по отраслям, словарь понятий
+      обычным языком.</span></a>
+
+  <a class="tile" href="machine.html">
+    <b>Машина знаний</b>
+    <span>Разворот цели, три механизма поиска пробелов, метод шахмат,
+      контур обратной связи и его опасности.</span></a>
+
+  <a class="tile" href="dossier.html">
+    <b>Досье к встрече</b>
+    <span>Полная спецификация дообучения, сценарии применения,
+      трудные вопросы и честные ответы.</span></a>
+
+  <a class="tile" href="concept.html">
+    <b>Концепция</b>
+    <span>Первый концептуальный документ проекта.</span></a>
+</div>
+
+<h2>Действующее издание</h2>
+<div class="tiles">
+  <a class="tile" href="https://bridge42worlds.academy" target="_blank" rel="noopener">
+    <b>bridge42worlds.academy</b>
+    <span>Работающий прототип: разобранные работы на пяти языках, у части из них —
+      раздел для автора с направлениями развития и проверенными опорами.</span>
+    <em>нужен интернет</em></a>
+</div>
+
+<footer>
+  <p>Машина открытий · bridge42worlds · август 2026</p>
+  <p>Правило проекта: нет замера — нет утверждения. Применяется к нам самим
+  в первую очередь.</p>
+</footer>
+
+</div>
+</body>
+</html>
