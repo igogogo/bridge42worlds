@@ -185,23 +185,25 @@ def counts():
             "полных без советов": full - advised}
 
 
-def run(cmd, log, timeout=7200):
-    """Шаг фабрики — отдельным процессом, с логом. Падение шага не роняет прогон:
-    следующий по важности должен получить свои деньги, даже если предыдущий споткнулся."""
-    LOGS.mkdir(exist_ok=True)
-    print(f"  ▸ {' '.join(cmd[1:])}", flush=True)
-    with open(log, "a", encoding="utf-8") as fh:
-        fh.write(f"\n=== {datetime.now():%H:%M} {' '.join(cmd)}\n")
-        fh.flush()
-        try:
-            r = subprocess.run(cmd, cwd=ROOT, stdout=fh, stderr=subprocess.STDOUT,
-                               timeout=timeout,
-                               env={**os.environ, "PYTHONIOENCODING": "utf-8",
-                                    "PYTHONUNBUFFERED": "1"})
-            return r.returncode
-        except subprocess.TimeoutExpired:
-            fh.write("⏱️ шаг не уложился в отведённое время\n")
-            return -1
+def run(cmd, log=None, timeout=7200):
+    """Шаг фабрики — отдельным процессом. Падение шага не роняет прогон: следующий по
+    важности должен получить свои деньги, даже если предыдущий споткнулся.
+
+    Вывод шага идёт в НАШ же поток, а не в отдельно открытый файл. Обёртка factory.cmd
+    уже перенаправляет всё в лог дня, и попытка открыть тот же файл вторым дескриптором
+    на Windows кончается PermissionError — ровно этим первый же запуск по расписанию
+    и завершился, не сделав ни шага.
+    """
+    print(f"\n=== {datetime.now():%H:%M} {' '.join(cmd[1:])}", flush=True)
+    sys.stdout.flush()
+    try:
+        r = subprocess.run(cmd, cwd=ROOT, timeout=timeout,
+                           env={**os.environ, "PYTHONIOENCODING": "utf-8",
+                                "PYTHONUNBUFFERED": "1"})
+        return r.returncode
+    except subprocess.TimeoutExpired:
+        print("⏱️ шаг не уложился в отведённое время", flush=True)
+        return -1
 
 
 def plan(money):
@@ -284,8 +286,6 @@ def main():
         show_plan()
         return 0
 
-    stamp = datetime.now().strftime("%Y%m%d_%H%M")
-    log = LOGS / f"factory_{stamp}.log"
     steps = show_plan()
     if args.only:
         steps = [s for s in steps if s["key"] == args.only]
@@ -300,14 +300,14 @@ def main():
         if s["cost"] > 0 and money < s["cost"] * 0.5:
             print(f"  ⏭️ {s['key']}: денег осталось ${money:.2f} — пропускаю")
             continue
-        rc = do_step(s, log)
+        rc = do_step(s)
         done.append((s["key"], rc))
 
     if not args.no_publish:
         print("\n▶️ пересборка и выкладка")
-        rc = run([sys.executable, "run.py", "html"], log, timeout=21600)
+        rc = run([sys.executable, "run.py", "html"], timeout=21600)
         done.append(("publish", rc))
-        run([sys.executable, "tools/stats_refresh.py"], log, timeout=1800)
+        run([sys.executable, "tools/stats_refresh.py"], timeout=1800)
 
     STATE.parent.mkdir(exist_ok=True)
     STATE.write_text(json.dumps({"когда": datetime.now().isoformat(timespec="minutes"),
@@ -319,19 +319,19 @@ def main():
     return 0
 
 
-def do_step(s, log):
+def do_step(s):
     """Один шаг фабрики. Каждый — существующий инструмент, а не новая логика."""
     k = s["key"]
     if k == "orders":
         # Без флагов = ровно один проход по очереди (queue_worker.__main__): --loop
         # крутится вечно, --dry ничего не делает. Флага --once там нет и не было.
-        return run([sys.executable, "cloudflare/queue_worker.py"], log, timeout=3600)
+        return run([sys.executable, "cloudflare/queue_worker.py"], timeout=3600)
     if k == "days":
         rc = 0
         for d, _n in s["days"]:
             rc = run([sys.executable, "run.py", "range", "--from", d, "--to", d,
                       "--express", "--limit", str(max(5, s["n"] // max(1, len(s["days"]))))],
-                     log, timeout=7200) or rc
+                     timeout=7200) or rc
         return rc
     if k == "upgrade":
         # Доращиваем экспресс до полного разбора. B42_NO_PUBLISH=1 — иначе run.py regen
@@ -339,14 +339,14 @@ def do_step(s, log):
         # в R2 подряд. Выкладка одна, в конце прогона.
         rc = 0
         for aid in s.get("ids", []):
-            rc = run([sys.executable, "run.py", "regen", aid], log, timeout=5400) or rc
+            rc = run([sys.executable, "run.py", "regen", aid], timeout=5400) or rc
         return rc
     if k == "advise":
         return run([sys.executable, "tools/recommend.py", "--all-full",
-                    "--limit", str(s["n"])], log, timeout=10800)
+                    "--limit", str(s["n"])], timeout=10800)
     if k == "research":
         return run([sys.executable, "tools/research.py", "--build", str(s["n"])],
-                   log, timeout=7200)
+                   timeout=7200)
     print(f"  ⚠️ шаг {k} пока не реализован")
     return None
 
