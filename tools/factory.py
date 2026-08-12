@@ -256,6 +256,17 @@ def plan(money):
     # 4. Заказы читателей — по кнопке «предложить наш разбор». Их немного, но они
     #    важнее плановой работы: человек ждёт ответа.
     steps.insert(0, {"key": "orders", "title": "заказы читателей", "n": 0, "cost": 0.0})
+
+    # 5. Бесплатные работы. Идут ВСЕГДА, даже когда на счету ноль — в этом и смысл:
+    #    владелец 12 августа сказал «даже если доллар, всё равно ежедневно можно что-то
+    #    генерить: и статьи, и исследования, и анализ». Модель здесь не зовётся ни разу,
+    #    считается по уже накопленным данным.
+    steps += [
+        {"key": "points", "title": "пересчёт точек схождения", "n": 0, "cost": 0.0},
+        {"key": "analytics", "title": "карта аналитики", "n": 0, "cost": 0.0},
+        {"key": "graph", "title": "граф знаний", "n": 0, "cost": 0.0},
+        {"key": "status", "title": "дашборд", "n": 0, "cost": 0.0},
+    ]
     return steps, c, gaps
 
 
@@ -300,7 +311,9 @@ def main():
             print(f"шаг «{args.only}» сегодня не запланирован")
             return 0
 
-    print(f"\n▶️ работаем, лог: {log.name}")
+    # Расход на входе — чтобы в отчёте назвать цену ИМЕННО этого прогона, а не всего дня.
+    started_spent = spent_today()
+    print("\n▶️ работаем")
     done = []
     for s in steps:
         money, _bal, _ = purse()
@@ -317,13 +330,62 @@ def main():
         run([sys.executable, "tools/stats_refresh.py"], timeout=1800)
 
     STATE.parent.mkdir(exist_ok=True)
+    spent = max(0.0, spent_today() - started_spent)
     STATE.write_text(json.dumps({"когда": datetime.now().isoformat(timespec="minutes"),
-                                 "шаги": done}, ensure_ascii=False, indent=1),
-                     encoding="utf-8")
+                                 "шаги": done, "потрачено": round(spent, 3),
+                                 "план": [s["key"] for s in steps]},
+                                ensure_ascii=False, indent=1), encoding="utf-8")
     bad = [k for k, rc in done if rc not in (0, None)]
     print(f"\n{'⚠️' if bad else '✅'} готово: {', '.join(k for k, _ in done)}"
           + (f" · споткнулись: {', '.join(bad)}" if bad else ""))
+    report(done, bad, spent)
     return 0
+
+
+# Человеческие названия шагов для отчёта: в канал уходит не «advise», а то, что реально
+# сделано. Владелец 12 августа: «пиши лог, что сделано — даже если доллар, всё равно
+# ежедневно можно что-то генерить».
+STEP_NAMES = {
+    "orders": "заказы читателей", "days": "статьи за непокрытые дни",
+    "advise": "советы авторам", "upgrade": "доращивание до полного разбора",
+    "research": "направления «Что исследовать»", "points": "точки схождения",
+    "analytics": "карта аналитики", "graph": "граф знаний", "status": "дашборд",
+    "publish": "пересборка и выкладка",
+}
+
+
+def report(done, bad, spent):
+    """Одно сообщение в канал: что фабрика сделала сегодня и во что это обошлось.
+
+    Без него прогон бессловесен: лог лежит в файле, который никто не открывает, а о
+    работе конвейера владелец узнаёт по тому, появились ли новые статьи. Отчёт уходит
+    в любом случае — «денег не было, сделали бесплатное» это тоже новость, и хорошая:
+    значит автомат жив.
+
+    Текст передаём ФАЙЛОМ, а не аргументом: консоль Windows отдаёт аргументы в OEM-
+    кодировке, и русские слова уже приезжали в канал кракозябрами (владелец поймал
+    это 4 августа).
+    """
+    ok = [STEP_NAMES.get(k, k) for k, rc in done if rc in (0, None)]
+    fail = [STEP_NAMES.get(k, k) for k in bad]
+    bal = balance()
+    lines = ["🏭 <b>Фабрика отработала</b>",
+             "Сделано: " + (", ".join(ok) if ok else "ничего")]
+    if fail:
+        lines.append("⚠️ Споткнулись: " + ", ".join(fail))
+    lines.append(f"Потрачено за прогон: ${spent:.2f}"
+                 + (f" · на счету осталось ${bal:.2f}" if bal is not None else ""))
+    if bal is not None and bal < 1.0:
+        lines.append("🔴 Денег почти нет. Завтра фабрика сделает бесплатное: аналитику, "
+                     "граф, дашборд и точки схождения — конвейер не встанет.")
+    try:
+        msg = LOGS / "factory-report.txt"
+        msg.write_text("\n".join(lines), encoding="utf-8")
+        subprocess.run([sys.executable, str(ROOT / "tools" / "status_tg.py"),
+                        "--file", str(msg)], cwd=ROOT, timeout=120,
+                       env={**os.environ, "PYTHONIOENCODING": "utf-8"})
+    except Exception as ex:
+        print(f"⚠️ отчёт в канал не ушёл: {type(ex).__name__}")
 
 
 def do_step(s):
@@ -355,6 +417,18 @@ def do_step(s):
     if k == "research":
         return run([sys.executable, "tools/research.py", "--build", str(s["n"])],
                    timeout=7200)
+    if k == "points":
+        # Сгущения направлений: где советы РАЗНЫМ авторам легли рядом. Считается по
+        # готовым текстам, стоит доли цента на эмбеддингах и кэшируется по отпечатку.
+        return run([sys.executable, "special_points.py"], timeout=3600)
+    if k == "analytics":
+        # Без --interpret: имена кластерам даёт модель, а это уже платно. Сама карта
+        # (кластеры, оси, со-встречаемость) считается локально и бесплатно.
+        return run([sys.executable, "run.py", "analytics"], timeout=7200)
+    if k == "graph":
+        return run([sys.executable, "run.py", "graph"], timeout=3600)
+    if k == "status":
+        return run([sys.executable, "run.py", "status"], timeout=1800)
     print(f"  ⚠️ шаг {k} пока не реализован")
     return None
 
