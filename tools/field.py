@@ -69,9 +69,24 @@ one two three four five six seven eight nine ten""".split())
 #   data/field-meta.json     {"model": "bge-m3", "dim": 1024, "count": N, "built": "…"}
 #
 # Пока файлов нет, работает словесная ступень (FTS5): она грубее, но не ждёт никого.
-VEC = ROOT / "data" / "field-vectors.npy"
-VEC_IDS = ROOT / "data" / "field-ids.txt"
-VEC_META = ROOT / "data" / "field-meta.json"
+def _vec_dir():
+    """Где лежит полное поле. Свой data/ — потом рабочая папка ML.
+
+    Копировать 3.2 ГБ к себе незачем: файл один, читается memmap'ом, и держать две копии
+    значит однажды искать соседей по устаревшей. Путь можно задать B42_FIELD_DIR.
+    """
+    for d in (Path(os.environ["B42_FIELD_DIR"]) if os.environ.get("B42_FIELD_DIR") else None,
+              ROOT / "data",
+              ROOT.parent / "b42-ml" / "data"):
+        if d and (d / "field-vectors.npy").exists() and (d / "field-ids.txt").exists():
+            return d
+    return ROOT / "data"
+
+
+_VD = _vec_dir()
+VEC = _VD / "field-vectors.npy"
+VEC_IDS = _VD / "field-ids.txt"
+VEC_META = _VD / "field-meta.json"
 
 
 def have_vectors():
