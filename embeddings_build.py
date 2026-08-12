@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Эмбеддинги всего, что у нас есть: статьи, теги, законы, учёные.
 
@@ -83,6 +83,44 @@ def ref_docs(main_repo, name, kind):
     return out
 
 
+def arxiv_docs(main_repo, months=None, limit=0):
+    """ВСПОМОГАТЕЛЬНЫЙ индекс: сырые английские аннотации всего arXiv, как есть.
+
+    Решение владельца 2026-08-10: отдельный вектор, не смешанный с нашим. Причина
+    в том, ЧТО в них лежит: у нас — наша интерпретация (пересказ, аналогия, упрощение),
+    здесь — первоисточник без нашего слоя.
+
+    ПОЧЕМУ ПОРОЗНЬ, А НЕ ОДНИМ ИНДЕКСОМ. Обе стороны считаются одной моделью по
+    английскому тексту, то есть живут в ОДНОМ пространстве и спрашиваются друг о друге:
+    наша статья → что рядом в трёх миллионах и чего мы не взяли; чужая аннотация →
+    писали мы про это или нет. Слить их в один индекс — значит потерять сам вопрос
+    «что есть там, чего нет здесь», а он и есть карта покрытия.
+
+    Ничего не обрабатываем: заголовок и аннотация как пришли из дампа.
+    """
+    bulk = pathlib.Path(main_repo) / "data" / "arxiv-bulk"
+    files = sorted(p for p in bulk.glob("*.jsonl") if p.stat().st_size > 0)
+    if months:
+        want = set(months)
+        files = [p for p in files if p.stem in want]
+    out = []
+    for f in files:
+        with f.open(encoding="utf-8") as fh:
+            for line in fh:
+                try:
+                    j = json.loads(line)
+                except Exception:
+                    continue
+                t = " ".join(f"{j.get('title','')} {j.get('abstract','')}".split())
+                if j.get("id") and len(t) > 80:
+                    out.append({"id": f"arx:{j['id']}", "kind": "arxiv",
+                                "text": t[:MAX_CHARS], "cat": (j.get("categories") or [""])[0],
+                                "published": j.get("published")})
+                if limit and len(out) >= limit:
+                    return out
+    return out
+
+
 def article_docs(main_repo, limit=0):
     """Статьи: авторский заголовок с arXiv + наш английский разбор уровня advanced.
 
@@ -137,6 +175,144 @@ def embed(texts, acc, tok, tries=5):
     raise RuntimeError("не удалось получить эмбеддинги после повторов")
 
 
+DI_URL = "https://api.deepinfra.com/v1/inference/BAAI/bge-m3"
+# Предел контекста у bge-m3 — 60k токенов, и он на ПАЧКУ целиком, а не на текст
+# (выяснено 2026-08-08: батч из 20 аннотаций получил «Max context reached 78440 tokens»).
+# Считаем токены как знаки/1,5: на научном тексте с формулами привычное «знаки/4»
+# занижает втрое. 40k — запас к пределу, чтобы промах оценки не ронял прогон.
+DI_BATCH_TOKENS = 40000
+
+
+def embed_di(texts, key, tries=5, stats=None, timeout=60):
+    """Та же bge-m3, но через DeepInfra: своя карта, свой счёт, без квоты Workers AI.
+
+    Зачем второй адрес к одной модели. У Workers AI платится не за вызов, а за индекс,
+    и дневная квота у нас общая с поиском на сайте. Разметка тегов — разовый тяжёлый
+    прогон, он не должен занимать канал, которым живёт продакшн. Модель та же самая,
+    размерность та же (1024, проверено живым вызовом 2026-08-10), значит векторы одного
+    прогона сравнимы с другим.
+    """
+    body = json.dumps({"inputs": texts}).encode("utf-8")
+    for attempt in range(tries):
+        req = urllib.request.Request(DI_URL, data=body, headers={
+            "Authorization": f"bearer {key}", "Content-Type": "application/json"})
+        try:
+            # Тайм-аут 60 секунд, а не 180. Пачка из 96 аннотаций считается за 2-5 секунд;
+            # всё, что идёт дольше минуты, — это зависшее соединение, а не медленный ответ.
+            # Замер 11 августа: в прогоне по годам один такой запрос остановил всю группу
+            # из шести потоков, потому что `future.result()` ждал его без ограничения.
+            # При 180 секундах и четырёх повторах одна такая пачка стоит 12 минут простоя.
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                d = json.loads(r.read().decode("utf-8"))
+            vecs = d.get("embeddings")
+            if not vecs or len(vecs) != len(texts):
+                raise ValueError(f"ответ не по размеру: {len(vecs or [])} на {len(texts)}")
+            if stats is not None:
+                # Токены берём У ПОСТАВЩИКА, а не считаем по знакам: наша оценка «знаки/1,5»
+                # нужна, чтобы не превысить контекст, и для денег она грубовата.
+                stats["tokens"] = stats.get("tokens", 0) + int(d.get("input_tokens") or 0)
+            return vecs
+        except urllib.error.HTTPError as e:
+            if e.code in (429, 500, 502, 503):
+                time.sleep(2 ** attempt * 2)
+                continue
+            # Тело ответа несёт причину («Max context reached ...»), а urllib её глотает.
+            # Без этой строки 400 выглядит как «просто 400» и час уходит на догадки.
+            detail = e.read().decode("utf-8", "replace")[:300]
+            raise RuntimeError(f"HTTP {e.code}: {detail}") from None
+        except Exception:
+            if attempt == tries - 1:
+                raise
+            time.sleep(2 ** attempt * 2)
+    raise RuntimeError("не удалось получить эмбеддинги после повторов")
+
+
+def _di_split(texts, key, stats=None):
+    """Пачка не прошла по контексту — делим пополам, в пределе до одного текста.
+
+    Одна аномально длинная статья не должна ронять прогон на три тысячи: оценка
+    токенов по знакам приблизительная, и промахивается она именно на редких текстах.
+    """
+    try:
+        return embed_di(texts, key, stats=stats)
+    except RuntimeError as e:
+        if len(texts) == 1 or "context" not in str(e).lower():
+            raise
+        mid = len(texts) // 2
+        return _di_split(texts[:mid], key, stats) + _di_split(texts[mid:], key, stats)
+
+
+def log_usage(agent, tokens, model="bge-m3"):
+    """Запись в общий журнал расхода — тот же файл и тот же формат, что у генерации.
+
+    Отдельного журнала у вектора нет намеренно: владелец смотрит один отчёт
+    (tools/cost_report.py), и статья расходов, которой в нём нет, для него не существует.
+    Эмбеддинги пишутся как cache_miss — у них нет ни кэша поставщика, ни выхода.
+    """
+    try:
+        rec = {"ts": time.strftime("%Y-%m-%d %H:%M:%S"), "agent": agent, "model": model,
+               "prompt": tokens, "completion": 0, "cache_hit": 0, "cache_miss": tokens}
+        with (ROOT / "data/usage-log.jsonl").open("a", encoding="utf-8") as f:
+            f.write(json.dumps(rec, ensure_ascii=False) + "\n")
+    except Exception:
+        # Журнал не должен ронять расчёт: деньги уже потрачены, запись — вторична.
+        pass
+
+
+def embed_cached(texts, key, cache_path, label="", agent="embed"):
+    """Векторы для списка текстов; посчитанное однажды лежит на диске.
+
+    Кэш по отпечатку текста, а не по номеру строки: статьи дописываются и правятся,
+    порядок и количество меняются от прогона к прогону, а сам текст — нет. Поэтому
+    повторная разметка после добавления двадцати статей считает двадцать, а не три тысячи.
+    """
+    import hashlib
+    cache = {}
+    cache_path = pathlib.Path(cache_path)
+    if cache_path.exists():
+        for line in cache_path.read_text(encoding="utf-8").splitlines():
+            if line.strip():
+                try:
+                    r = json.loads(line)
+                    cache[r["h"]] = r["v"]
+                except Exception:
+                    pass
+
+    keys = [hashlib.sha1(t.encode("utf-8")).hexdigest() for t in texts]
+    todo, seen = [], set()
+    for h, t in zip(keys, texts):
+        if h not in cache and h not in seen:
+            seen.add(h)
+            todo.append((h, t))
+    if todo:
+        chars = sum(len(t) for _, t in todo)
+        print(f"  {label}: считаю {len(todo)} из {len(texts)}, знаков {chars:,}, "
+              f"~${chars / 1.5 / 1e6 * 0.010:.4f}")
+        done, stats = 0, {}
+        with cache_path.open("a", encoding="utf-8") as f:
+            batch, budget = [], 0
+            for h, t in todo + [(None, None)]:
+                cost = len(t) / 1.5 if t else 0
+                if batch and (h is None or budget + cost > DI_BATCH_TOKENS or len(batch) >= 32):
+                    vecs = _di_split([x[1] for x in batch], key, stats)
+                    for (bh, bt), v in zip(batch, vecs):
+                        cache[bh] = v
+                        f.write(json.dumps({"h": bh, "v": [round(x, 6) for x in v]}) + "\n")
+                    f.flush()
+                    done += len(batch)
+                    print(f"    {done}/{len(todo)}")
+                    batch, budget = [], 0
+                if h is not None:
+                    batch.append((h, t))
+                    budget += cost
+        log_usage(agent, stats.get("tokens", 0))
+        print(f"  {label}: {stats.get('tokens', 0):,} токенов "
+              f"(${stats.get('tokens', 0) / 1e6 * 0.010:.4f}) — записано в журнал")
+    else:
+        print(f"  {label}: всё из кэша ({len(texts)})")
+    return [cache[h] for h in keys]
+
+
 def run(kind_docs, kind, acc, tok, out_path):
     """Считает и дописывает в файл. Повторный запуск добирает недостающее."""
     done = {}
@@ -182,6 +358,7 @@ def main():
                     help="главная папка проекта: там .env и lang/** (в git их нет)")
     ap.add_argument("--kinds", default="tags,laws,scientists,articles")
     ap.add_argument("--limit", type=int, default=0)
+    ap.add_argument("--months", default="", help="через запятую, напр. 2026-07,2026-06")
     args = ap.parse_args()
 
     env = load_env(args.repo)
@@ -195,6 +372,9 @@ def main():
         "laws": lambda: ref_docs(args.repo, "laws.json", "law"),
         "scientists": lambda: ref_docs(args.repo, "scientists.json", "sci"),
         "articles": lambda: article_docs(args.repo, args.limit),
+        # вспомогательный индекс: сырые аннотации arXiv, отдельным файлом
+        "arxiv": lambda: arxiv_docs(args.repo, args.months.split(",") if args.months else None,
+                                    args.limit),
     }
     total = 0
     for kind in [k.strip() for k in args.kinds.split(",") if k.strip()]:
@@ -215,3 +395,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

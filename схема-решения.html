@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Машина открытий — структурная схема</title>
+<style>
+  :root{
+    --ink:#16222e; --muted:#5b6b7a; --bg:#f7f5f0; --card:#fff;
+    --accent:#0e6e63; --accent2:#c8541a; --line:#dcd6ca;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{font-family:"Segoe UI",system-ui,-apple-system,sans-serif; color:var(--ink);
+       background:#e9e5dd; padding:24px}
+  .sheet{max-width:1360px; margin:0 auto; background:var(--bg); border:1px solid var(--line);
+         padding:48px 56px 40px}
+  .kicker{font-size:14px; letter-spacing:.22em; text-transform:uppercase; color:var(--accent);
+          font-weight:600; margin-bottom:10px}
+  h1{font-size:40px; line-height:1.1; letter-spacing:-.01em; margin-bottom:8px}
+  .lead{font-size:19px; color:var(--muted); max-width:900px; line-height:1.5; margin-bottom:26px}
+  figure{margin:0}
+  svg{width:100%; height:auto; display:block; color:var(--ink)}
+  figcaption{font-size:15.5px; color:var(--muted); line-height:1.55; margin-top:18px;
+             border-top:1px solid var(--line); padding-top:14px; max-width:1100px}
+  figcaption b{color:var(--ink)}
+  .legend{display:flex; gap:26px; flex-wrap:wrap; font-size:14.5px; color:var(--muted);
+          margin-top:14px; align-items:center}
+  .sw{display:inline-block; width:26px; height:11px; vertical-align:-1px; margin-right:7px;
+      border:1px solid var(--ink)}
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="kicker">bridge42worlds · НИОКР</div>
+  <h1>Машина открытий: структурная схема</h1>
+  <p class="lead">Два потока документов попадают в одно пространство. Карта сравнивает
+  их плотности в одних и тех же областях — отсюда берутся слепые зоны. Всё остальное
+  обслуживает этот цикл.</p>
+
+<figure>
+<svg viewBox="0 0 1280 1010" role="img"
+     aria-label="Схема: документы мира и наши документы кодируются одной моделью в общее поле; поле режется на области; в каждой области сравниваются две плотности; из сравнения получаются слепые зоны, тонкие места и полнота; двухступенчатый отбор выбирает цели бурения; результаты бурения возвращаются в поле, замыкая цикл; отдельно строится дообученный компас на парах цитирований">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7"
+            orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+    </marker>
+    <marker id="arA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7"
+            orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#c8541a"/>
+    </marker>
+  </defs>
+
+  <!-- ══ ЯРУС 1: источники → энкодер → поле ══ -->
+  <text x="0" y="18" font-size="13" font-weight="700" letter-spacing="1.6" fill="#0e6e63">
+    ЯРУС 1 · ПОЛЕ</text>
+  <line x1="0" y1="28" x2="1280" y2="28" stroke="currentColor" stroke-opacity=".18"/>
+
+  <!-- источник: мир -->
+  <rect x="0" y="48" width="212" height="72" rx="7" fill="#fff" stroke="currentColor"
+        stroke-opacity=".45"/>
+  <text x="16" y="72" font-size="15" font-weight="700">МИР</text>
+  <text x="16" y="93" font-size="13.5" fill="#5b6b7a">arXiv · отчёты ГРР · патенты</text>
+  <text x="16" y="111" font-size="13.5" fill="#5b6b7a">1 561 047 работ</text>
+
+  <!-- источник: мы -->
+  <rect x="0" y="140" width="212" height="72" rx="7" fill="#fff" stroke="#c8541a" stroke-width="1.6"/>
+  <text x="16" y="164" font-size="15" font-weight="700" fill="#c8541a">МЫ</text>
+  <text x="16" y="185" font-size="13.5" fill="#5b6b7a">свой разобранный корпус</text>
+  <text x="16" y="203" font-size="13.5" fill="#5b6b7a">3 682 статьи · 5 языков</text>
+
+  <path d="M212,84 L286,84 L286,118" fill="none" stroke="currentColor" stroke-opacity=".55"
+        marker-end="url(#ar)"/>
+  <path d="M212,176 L286,176 L286,142" fill="none" stroke="#c8541a" stroke-opacity=".8"
+        marker-end="url(#arA)"/>
+
+  <!-- энкодер -->
+  <rect x="296" y="90" width="196" height="80" rx="7" fill="#fff" stroke="currentColor"
+        stroke-opacity=".45"/>
+  <text x="312" y="115" font-size="15" font-weight="700">ЭНКОДЕР</text>
+  <text x="312" y="135" font-size="13.5" fill="#5b6b7a">bge-m3 · 568 млн парам.</text>
+  <text x="312" y="153" font-size="13.5" fill="#5b6b7a">100+ языков → 1024 числа</text>
+
+  <line x1="492" y1="130" x2="560" y2="130" stroke="currentColor" stroke-opacity=".55"
+        marker-end="url(#ar)"/>
+  <text x="500" y="122" font-size="12" fill="#5b6b7a">$0,01/М ток.</text>
+
+  <!-- поле -->
+  <rect x="570" y="90" width="212" height="80" rx="7" fill="#fff" stroke="currentColor"
+        stroke-opacity=".45"/>
+  <text x="586" y="115" font-size="15" font-weight="700">ПОЛЕ</text>
+  <text x="586" y="135" font-size="13.5" fill="#5b6b7a">float16 на диске · 3,2 ГБ</text>
+  <text x="586" y="153" font-size="13.5" fill="#5b6b7a">аддитивно · проверяемо</text>
+
+  <line x1="782" y1="130" x2="850" y2="130" stroke="currentColor" stroke-opacity=".55"
+        marker-end="url(#ar)"/>
+  <text x="788" y="122" font-size="12" fill="#5b6b7a">k-means</text>
+
+  <!-- нарезка -->
+  <rect x="860" y="90" width="196" height="80" rx="7" fill="#fff" stroke="currentColor"
+        stroke-opacity=".45"/>
+  <text x="876" y="115" font-size="15" font-weight="700">600 ОБЛАСТЕЙ</text>
+  <text x="876" y="135" font-size="13.5" fill="#5b6b7a">нарезка ПО МИРУ,</text>
+  <text x="876" y="153" font-size="13.5" fill="#5b6b7a">не по нам</text>
+
+  <rect x="1076" y="90" width="204" height="80" rx="7" fill="#fdf6ee" stroke="#c8541a"
+        stroke-dasharray="4 3"/>
+  <text x="1092" y="113" font-size="13" font-weight="700" fill="#c8541a">ПОЧЕМУ ПО МИРУ</text>
+  <text x="1092" y="133" font-size="12.5" fill="#5b6b7a">нарежь по себе — области</text>
+  <text x="1092" y="150" font-size="12.5" fill="#5b6b7a">возникнут вокруг своих тем,</text>
+  <text x="1092" y="167" font-size="12.5" fill="#5b6b7a">и покрытие выйдет 100%</text>
+
+  <!-- ══ ЯРУС 2: механизм двух плотностей ══ -->
+  <text x="0" y="228" font-size="13" font-weight="700" letter-spacing="1.6" fill="#0e6e63">
+    ЯРУС 2 · КАРТА — МЕХАНИЗМ</text>
+  <line x1="0" y1="238" x2="1280" y2="238" stroke="currentColor" stroke-opacity=".18"/>
+  <text x="0" y="262" font-size="14.5" fill="#5b6b7a">В каждой области считаются
+    ДВА числа: сколько работ у мира и сколько у нас. Слепая зона — где первое велико,
+    а второе равно нулю.</text>
+
+  <!-- ось -->
+  <line x1="0" y1="440" x2="1180" y2="440" stroke="currentColor" stroke-opacity=".5"/>
+  <text x="1190" y="444" font-size="12.5" fill="#5b6b7a">области →</text>
+
+  <!-- столбики: пары (мир, мы). Схематично; реальные числа — в подписи. -->
+  <!-- 1 --><rect x="14" y="360" width="17" height="80" fill="currentColor" fill-opacity=".28"/>
+           <rect x="33" y="404" width="17" height="36" fill="#c8541a"/>
+  <!-- 2 --><rect x="76" y="330" width="17" height="110" fill="currentColor" fill-opacity=".28"/>
+           <rect x="95" y="392" width="17" height="48" fill="#c8541a"/>
+  <!-- 3 СЛЕПАЯ --><rect x="138" y="316" width="17" height="124" fill="currentColor" fill-opacity=".28"/>
+           <rect x="157" y="437" width="17" height="3" fill="#c8541a"/>
+           <rect x="130" y="300" width="52" height="150" rx="5" fill="none" stroke="#c8541a"
+                 stroke-width="2"/>
+  <!-- 4 --><rect x="200" y="376" width="17" height="64" fill="currentColor" fill-opacity=".28"/>
+           <rect x="219" y="398" width="17" height="42" fill="#c8541a"/>
+  <!-- 5 --><rect x="262" y="348" width="17" height="92" fill="currentColor" fill-opacity=".28"/>
+           <rect x="281" y="386" width="17" height="54" fill="#c8541a"/>
+  <!-- 6 ТОНКОЕ --><rect x="324" y="322" width="17" height="118" fill="currentColor" fill-opacity=".28"/>
+           <rect x="343" y="426" width="17" height="14" fill="#c8541a"/>
+           <rect x="316" y="306" width="52" height="144" rx="5" fill="none" stroke="#c8541a"
+                 stroke-width="1.4" stroke-dasharray="5 3"/>
+  <!-- 7 --><rect x="386" y="368" width="17" height="72" fill="currentColor" fill-opacity=".28"/>
+           <rect x="405" y="396" width="17" height="44" fill="#c8541a"/>
+  <!-- 8 --><rect x="448" y="340" width="17" height="100" fill="currentColor" fill-opacity=".28"/>
+           <rect x="467" y="378" width="17" height="62" fill="#c8541a"/>
+  <!-- 9 СЛЕПАЯ --><rect x="510" y="308" width="17" height="132" fill="currentColor" fill-opacity=".28"/>
+           <rect x="529" y="437" width="17" height="3" fill="#c8541a"/>
+           <rect x="502" y="292" width="52" height="158" rx="5" fill="none" stroke="#c8541a"
+                 stroke-width="2"/>
+  <!-- 10 --><rect x="572" y="382" width="17" height="58" fill="currentColor" fill-opacity=".28"/>
+            <rect x="591" y="404" width="17" height="36" fill="#c8541a"/>
+  <!-- 11 --><rect x="634" y="354" width="17" height="86" fill="currentColor" fill-opacity=".28"/>
+            <rect x="653" y="390" width="17" height="50" fill="#c8541a"/>
+  <!-- 12 --><rect x="696" y="372" width="17" height="68" fill="currentColor" fill-opacity=".28"/>
+            <rect x="715" y="400" width="17" height="40" fill="#c8541a"/>
+  <!-- 13 ТОНКОЕ --><rect x="758" y="336" width="17" height="104" fill="currentColor" fill-opacity=".28"/>
+            <rect x="777" y="428" width="17" height="12" fill="#c8541a"/>
+            <rect x="750" y="320" width="52" height="130" rx="5" fill="none" stroke="#c8541a"
+                  stroke-width="1.4" stroke-dasharray="5 3"/>
+  <!-- 14 --><rect x="820" y="364" width="17" height="76" fill="currentColor" fill-opacity=".28"/>
+            <rect x="839" y="394" width="17" height="46" fill="#c8541a"/>
+  <!-- 15 --><rect x="882" y="344" width="17" height="96" fill="currentColor" fill-opacity=".28"/>
+            <rect x="901" y="384" width="17" height="56" fill="#c8541a"/>
+  <!-- 16 --><rect x="944" y="378" width="17" height="62" fill="currentColor" fill-opacity=".28"/>
+            <rect x="963" y="402" width="17" height="38" fill="#c8541a"/>
+  <!-- 17 --><rect x="1006" y="352" width="17" height="88" fill="currentColor" fill-opacity=".28"/>
+            <rect x="1025" y="388" width="17" height="52" fill="#c8541a"/>
+  <!-- 18 --><rect x="1068" y="370" width="17" height="70" fill="currentColor" fill-opacity=".28"/>
+            <rect x="1087" y="398" width="17" height="42" fill="#c8541a"/>
+  <!-- 19 --><rect x="1130" y="358" width="17" height="82" fill="currentColor" fill-opacity=".28"/>
+            <rect x="1149" y="392" width="17" height="48" fill="#c8541a"/>
+
+  <text x="130" y="470" font-size="12.5" font-weight="700" fill="#c8541a">слепая зона</text>
+  <text x="316" y="470" font-size="12.5" fill="#c8541a">тонкое место</text>
+  <text x="502" y="470" font-size="12.5" font-weight="700" fill="#c8541a">слепая зона</text>
+  <text x="750" y="470" font-size="12.5" fill="#c8541a">тонкое место</text>
+
+  <!-- выходы карты -->
+  <rect x="0" y="496" width="290" height="66" rx="7" fill="#fff" stroke="#c8541a" stroke-width="1.6"/>
+  <text x="16" y="519" font-size="14.5" font-weight="700" fill="#c8541a">СЛЕПЫЕ ЗОНЫ · 53</text>
+  <text x="16" y="539" font-size="13" fill="#5b6b7a">имя · примеры работ · адрес:</text>
+  <text x="16" y="555" font-size="13" fill="#5b6b7a">кто там работает</text>
+
+  <rect x="310" y="496" width="290" height="66" rx="7" fill="#fff" stroke="currentColor"
+        stroke-opacity=".45"/>
+  <text x="326" y="519" font-size="14.5" font-weight="700">ТОНКИЕ МЕСТА · 94</text>
+  <text x="326" y="539" font-size="13" fill="#5b6b7a">начато, но кратно реже,</text>
+  <text x="326" y="555" font-size="13" fill="#5b6b7a">чем у мира</text>
+
+  <rect x="620" y="496" width="290" height="66" rx="7" fill="#fff" stroke="currentColor"
+        stroke-opacity=".45"/>
+  <text x="636" y="519" font-size="14.5" font-weight="700">ПОЛНОТА · 93,4%</text>
+  <text x="636" y="539" font-size="13" fill="#5b6b7a">доля мирового объёма там,</text>
+  <text x="636" y="555" font-size="13" fill="#5b6b7a">где у нас есть скважина</text>
+
+  <rect x="930" y="496" width="350" height="66" rx="7" fill="#fdf6ee" stroke="#c8541a"
+        stroke-dasharray="4 3"/>
+  <text x="946" y="519" font-size="13" font-weight="700" fill="#c8541a">ПУСТО ≠ НЕВОЗМОЖНО</text>
+  <text x="946" y="539" font-size="12.5" fill="#5b6b7a">карта помнит ПРИЧИНУ пустоты:</text>
+  <text x="946" y="556" font-size="12.5" fill="#5b6b7a">решение, шум выборки или находка</text>
+
+  <!-- ══ ЯРУС 3: инструменты и цикл ══ -->
+  <text x="0" y="606" font-size="13" font-weight="700" letter-spacing="1.6" fill="#0e6e63">
+    ЯРУС 3 · БУРЕНИЕ</text>
+  <line x1="0" y1="616" x2="1280" y2="616" stroke="currentColor" stroke-opacity=".18"/>
+
+  <!-- отбор: два разных механизма -->
+  <rect x="0" y="636" width="404" height="128" rx="7" fill="#fff" stroke="currentColor"
+        stroke-opacity=".45"/>
+  <text x="16" y="659" font-size="14.5" font-weight="700">ОТБОР ЦЕЛИ · два механизма</text>
+  <rect x="16" y="672" width="180" height="46" rx="5" fill="#f7f5f0" stroke="currentColor"
+        stroke-opacity=".35"/>
+  <text x="26" y="690" font-size="12.5" font-weight="700">вектор</text>
+  <text x="26" y="708" font-size="12" fill="#5b6b7a">читает тексты ПОРОЗНЬ</text>
+  <rect x="208" y="672" width="180" height="46" rx="5" fill="#f7f5f0" stroke="#c8541a"
+        stroke-opacity=".7"/>
+  <text x="218" y="690" font-size="12.5" font-weight="700" fill="#c8541a">реранкер</text>
+  <text x="218" y="708" font-size="12" fill="#5b6b7a">читает пару ВМЕСТЕ</text>
+  <line x1="196" y1="695" x2="206" y2="695" stroke="currentColor" stroke-opacity=".5"
+        marker-end="url(#ar)"/>
+  <text x="16" y="736" font-size="12.5" fill="#5b6b7a">вычёркивает «уже есть» и «не наше»</text>
+  <text x="16" y="753" font-size="12.5" fill="#5b6b7a">→ ранжирует по интересности · 82% находок при вдвое меньшем объёме</text>
+
+  <!-- скважины -->
+  <rect x="424" y="636" width="180" height="128" rx="7" fill="#fff" stroke="currentColor"
+        stroke-opacity=".45"/>
+  <text x="440" y="659" font-size="14.5" font-weight="700">СКВАЖИНА</text>
+  <text x="440" y="681" font-size="12.5" fill="#5b6b7a">экспресс-разбор:</text>
+  <text x="440" y="698" font-size="12.5" fill="#5b6b7a">десятки за ночь</text>
+  <text x="440" y="722" font-size="12.5" fill="#5b6b7a">вскрытие:</text>
+  <text x="440" y="739" font-size="12.5" fill="#5b6b7a">полный разбор</text>
+  <text x="440" y="756" font-size="12.5" fill="#5b6b7a">перспективных</text>
+
+  <!-- обустройство -->
+  <rect x="624" y="636" width="290" height="128" rx="7" fill="#fff" stroke="currentColor"
+        stroke-opacity=".45"/>
+  <text x="640" y="659" font-size="14.5" font-weight="700">ОБУСТРОЙСТВО</text>
+  <text x="640" y="681" font-size="12.5" fill="#5b6b7a">опоры — подтверждённые соседи</text>
+  <text x="640" y="700" font-size="12.5" fill="#5b6b7a">рекомендации — куда развивать</text>
+  <text x="640" y="719" font-size="12.5" fill="#5b6b7a">особые точки — куда сходятся</text>
+  <text x="640" y="736" font-size="12.5" fill="#5b6b7a">независимые линии</text>
+  <text x="640" y="755" font-size="12.5" fill="#5b6b7a">мосты — общая формула, разные слова</text>
+
+  <!-- кабинет -->
+  <rect x="934" y="636" width="346" height="128" rx="7" fill="#fff" stroke="#0e6e63"
+        stroke-width="1.6"/>
+  <text x="950" y="659" font-size="14.5" font-weight="700" fill="#0e6e63">КАБИНЕТ · человек</text>
+  <text x="950" y="681" font-size="12.5" fill="#5b6b7a">ввожу идею свободным текстом</text>
+  <text x="950" y="700" font-size="12.5" fill="#5b6b7a">↓ вижу её на карте: что вокруг, кто рядом</text>
+  <text x="950" y="719" font-size="12.5" fill="#5b6b7a">↓ система дополняет до ПАСПОРТА СКВАЖИНЫ:</text>
+  <text x="950" y="738" font-size="12.5" fill="#5b6b7a">точка · опоры · ожидаемый вклад</text>
+  <text x="950" y="757" font-size="12.5" font-weight="700" fill="#0e6e63">решение остаётся за человеком</text>
+
+  <line x1="404" y1="700" x2="422" y2="700" stroke="currentColor" stroke-opacity=".55"
+        marker-end="url(#ar)"/>
+  <line x1="604" y1="700" x2="622" y2="700" stroke="currentColor" stroke-opacity=".55"
+        marker-end="url(#ar)"/>
+  <line x1="914" y1="700" x2="932" y2="700" stroke="currentColor" stroke-opacity=".55"
+        marker-end="url(#ar)"/>
+
+  <!-- цикл обратно в поле -->
+  <path d="M769,764 L769,806 L100,806 L100,222" fill="none" stroke="#c8541a" stroke-width="1.8"
+        stroke-dasharray="7 4" marker-end="url(#arA)"/>
+  <rect x="300" y="790" width="340" height="30" rx="5" fill="#f7f5f0"/>
+  <text x="316" y="810" font-size="13" font-weight="700" fill="#c8541a">
+    каждая скважина уточняет карту</text>
+
+  <!-- ══ ЯРУС 4: компас ══ -->
+  <text x="0" y="866" font-size="13" font-weight="700" letter-spacing="1.6" fill="#0e6e63">
+    ЯРУС 4 · КОМПАС (строится)</text>
+  <line x1="0" y1="876" x2="1280" y2="876" stroke="currentColor" stroke-opacity=".18"/>
+
+  <rect x="0" y="896" width="250" height="76" rx="7" fill="#fff" stroke="currentColor"
+        stroke-opacity=".4" stroke-dasharray="4 3"/>
+  <text x="16" y="918" font-size="13.5" font-weight="700">СВЯЗИ ДОМЕНА</text>
+  <text x="16" y="937" font-size="12.5" fill="#5b6b7a">2 817 пар из цитирований</text>
+  <text x="16" y="955" font-size="12.5" fill="#c8541a">82,7% из них модель НЕ видит</text>
+
+  <line x1="250" y1="934" x2="300" y2="934" stroke="currentColor" stroke-opacity=".45"
+        stroke-dasharray="4 3" marker-end="url(#ar)"/>
+
+  <rect x="310" y="896" width="290" height="76" rx="7" fill="#fff" stroke="currentColor"
+        stroke-opacity=".4" stroke-dasharray="4 3"/>
+  <text x="326" y="918" font-size="13.5" font-weight="700">ДООБУЧЕНИЕ</text>
+  <text x="326" y="937" font-size="12.5" fill="#5b6b7a">контрастное, LoRA · аренда карты</text>
+  <text x="326" y="955" font-size="12.5" fill="#5b6b7a">поминутно · $4–8 за опыт</text>
+
+  <path d="M455,896 L455,860 L394,860 L394,172" fill="none" stroke="currentColor"
+        stroke-opacity=".4" stroke-dasharray="4 3" marker-end="url(#ar)"/>
+  <text x="466" y="880" font-size="12" fill="#5b6b7a">заменяет энкодер</text>
+
+  <rect x="620" y="896" width="660" height="76" rx="7" fill="#fdf6ee" stroke="#c8541a"
+        stroke-dasharray="4 3"/>
+  <text x="636" y="918" font-size="13.5" font-weight="700" fill="#c8541a">
+    РАЗДЕЛЕНИЕ, НА КОТОРОМ ВСЁ ДЕРЖИТСЯ</text>
+  <text x="636" y="938" font-size="12.5" fill="#5b6b7a">
+    ФАКТЫ живут в поле: обновляются ежедневно, бесплатно, со ссылками — модель их не помнит и не выдумывает.</text>
+  <text x="636" y="957" font-size="12.5" fill="#5b6b7a">
+    В ВЕСА зашивается только ОПТИКА — умение видеть связь, которую заводская модель считает далёкой.</text>
+</svg>
+<figcaption>
+  <b>Что показывает схема.</b> Механизм, ради которого всё построено, — во втором ярусе:
+  области нарезаются по <i>мировому</i> корпусу, и в каждой сравниваются две плотности.
+  Столбики схематичны; реальные числа — 600 областей, 53 слепые зоны, полнота 93,4%.
+  Нарезка именно по миру, а не по себе, принципиальна: нарежь по своему корпусу — области
+  возникнут вокруг собственных тем, и покрытие всегда выйдет стопроцентным.
+  <br><br>
+  <b>Два механизма отбора — не один подешевле.</b> Вектор превращает запрос и документ
+  в числа <i>порознь</i> и потому отвечает «про то же ли это». Реранкер читает пару
+  <i>вместе</i> и отвечает «стоит ли это читать». Это разные вопросы, и второй нельзя
+  получить из первого никаким порогом.
+  <br><br>
+  <b>Пунктир — то, что строится:</b> компас, дообученный на связях домена. Сплошные
+  линии — то, что работает и замерено.
+</figcaption>
+</figure>
+
+<div class="legend">
+  <span><span class="sw" style="background:rgba(22,34,46,.28)"></span>работ у мира</span>
+  <span><span class="sw" style="background:#c8541a; border-color:#c8541a"></span>работ у нас</span>
+  <span><span class="sw" style="background:#fff; border-color:#c8541a; border-width:2px"></span>слепая зона</span>
+  <span><span class="sw" style="background:#fff; border-style:dashed"></span>строится / пояснение</span>
+</div>
+</div>
+</body>
+</html>

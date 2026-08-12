@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Машина открытий — концепция</title>
+<style>
+  :root{
+    --ink:#16222e; --muted:#5b6b7a; --bg:#f7f5f0; --card:#ffffff;
+    --accent:#0e6e63; --accent2:#c8541a; --line:#dcd6ca;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  html{scroll-snap-type:y mandatory}
+  body{font-family:"Segoe UI",system-ui,-apple-system,sans-serif; color:var(--ink); background:#e9e5dd}
+  .slide{
+    width:1280px; height:720px; margin:24px auto; padding:64px 72px;
+    background:var(--bg); border:1px solid var(--line); position:relative;
+    scroll-snap-align:start; display:flex; flex-direction:column; overflow:hidden;
+  }
+  .num{position:absolute; top:28px; right:36px; font-size:14px; color:var(--muted); letter-spacing:.1em}
+  .kicker{font-size:15px; letter-spacing:.22em; text-transform:uppercase; color:var(--accent); margin-bottom:14px; font-weight:600}
+  h1{font-size:64px; line-height:1.08; font-weight:750; letter-spacing:-.01em}
+  h2{font-size:42px; line-height:1.12; font-weight:700; margin-bottom:26px; letter-spacing:-.01em}
+  .sub{font-size:24px; color:var(--muted); margin-top:22px; max-width:900px; line-height:1.45}
+  .foot{position:absolute; bottom:26px; left:72px; right:72px; display:flex; justify-content:space-between;
+        font-size:14px; color:var(--muted); border-top:1px solid var(--line); padding-top:12px}
+  .big{font-size:26px; line-height:1.5; max-width:1040px}
+  .accent{color:var(--accent2); font-weight:650}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:28px; flex:1; align-content:start}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:22px 26px}
+  .card h3{font-size:20px; margin-bottom:8px; color:var(--accent)}
+  .card p{font-size:17.5px; line-height:1.45; color:var(--ink)}
+  table{border-collapse:collapse; width:100%; background:var(--card); border:1px solid var(--line); border-radius:10px; overflow:hidden}
+  th,td{padding:13px 18px; text-align:left; font-size:19px; border-bottom:1px solid var(--line)}
+  th{background:#eef2f0; font-size:15px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted)}
+  tr:last-child td{border-bottom:none}
+  td b{color:var(--accent)}
+  .flow{display:flex; align-items:stretch; gap:0; margin:34px 0 10px}
+  .step{flex:1; background:var(--card); border:1px solid var(--line); padding:18px 14px 16px; text-align:center; position:relative}
+  .step:first-child{border-radius:10px 0 0 10px}
+  .step:last-child{border-radius:0 10px 10px 0}
+  .step+.step{border-left:none}
+  .step .t{font-size:19px; font-weight:700; color:var(--accent); margin-bottom:6px}
+  .step .d{font-size:14.5px; color:var(--muted); line-height:1.35}
+  .arrow{align-self:center; font-size:22px; color:var(--accent2); padding:0 2px; z-index:2; margin:0 -7px}
+  .loop{font-size:16.5px; color:var(--muted); margin-top:16px; text-align:center}
+  .status{display:inline-block; font-size:13px; padding:2px 10px; border-radius:20px; margin-left:8px; vertical-align:middle; font-weight:600}
+  .ok{background:#dcefe7; color:#116149} .wip{background:#fdeeda; color:#9a5b12} .idea{background:#e8e9f5; color:#3d4a9e}
+  .title-slide{justify-content:center}
+  .title-slide .mark{width:76px; height:6px; background:var(--accent2); margin:30px 0 0}
+  ul.cl{list-style:none; font-size:21px; line-height:1.7}
+  ul.cl li::before{content:"—"; color:var(--accent2); margin-right:12px}
+  @media print{
+    body{background:#fff}
+    .slide{margin:0; border:none; page-break-after:always; width:100%; height:100vh}
+    @page{size:landscape; margin:0}
+  }
+</style>
+</head>
+<body>
+
+<!-- 1 -->
+<section class="slide title-slide">
+  <div class="kicker">bridge42worlds · НИОКР · август 2026</div>
+  <h1>Машина открытий</h1>
+  <div class="sub">Разведочное бурение в пространстве знаний.<br>
+  Универсальный инструмент: научные издания · нефтегаз · корпоративный R&amp;D.</div>
+  <div class="sub" style="font-size:20px; margin-top:18px">
+  Четыре аналогии, через которые всё объясняется:
+  <b>бурение</b> — как ищем · <b>шахматы</b> — как проверяем ·
+  <b>мышление исследователя</b> — что автоматизируем · <b>нефтянка</b> — где это не наука.</div>
+  <div class="mark"></div>
+  <div class="sub" style="font-size:19px; margin-top:26px">Поле → Карта → Скважина → Обустройство.<br>
+  Каждое число в этой презентации — наш замер на живых данных, не оценка из литературы.</div>
+  <div class="foot"><span>Машина открытий — концепция</span><span>1 / 9</span></div>
+</section>
+
+<!-- 2 -->
+<section class="slide">
+  <div class="num">2 / 9</div>
+  <div class="kicker">Проблема · разворот цели</div>
+  <h2>Не «чего не хватает нам», а «чего не хватает науке»</h2>
+  <p class="big">Любая организация бурит там, где бурила вчера: поиск по словам находит
+  знакомое, эксперты предлагают привычное. <span class="accent">Слепая зона — пустое место,
+  окружённое плотностью изученного, — это не «невозможно», это «никто не посмотрел».</span></p>
+  <p class="big" style="margin-top:26px">Живой пример: система два года собирала работы
+  только по астрофизике — решение, принятое однажды и ставшее невидимым.
+  <b>Карта нашла это за один прогон</b> и превратила предрассудок в цену вопроса.
+  Верхняя цель без ограничения по дате — работа Гейма и Новосёлова про графен,
+  Нобелевская премия. Про графен у нас <b>ноль статей</b>.</p>
+  <div class="card" style="margin-top:24px; border-color:#c8541a">
+    <h3 style="color:#c8541a">Стенка, которую надо назвать первой</h3>
+    <p>Искать пустоту в поле напрямую <b>нельзя, и это не про нехватку данных</b>.
+    При 40 внутренних измерениях и 1,56 млн работ на ось приходится 1,4 точки;
+    удвоение корпуса сжимает расстояние до соседа на 2%. Чтобы уплотнить поле вдвое,
+    нужно <b>в 17 миллиардов раз</b> больше работ. Это геометрия. Поэтому пробел ищется
+    не как пустое место, а как <b>край</b>, <b>перемычка</b> и <b>остановка во времени</b>.</p>
+  </div>
+  <div class="foot"><span>Машина открытий — концепция</span><span>слепая зона = предрассудок, а не невозможность</span></div>
+</section>
+
+<!-- 3 -->
+<section class="slide">
+  <div class="num">3 / 9</div>
+  <div class="kicker">Как устроено</div>
+  <h2>Четыре слоя</h2>
+  <div class="flow">
+    <div class="step"><div class="t">ПОЛЕ</div><div class="d">каждый документ — точка в пространстве смыслов; 1,56 млн работ; любой язык; модель открытая, работает внутри периметра</div></div>
+    <div class="arrow">▶</div>
+    <div class="step"><div class="t">КАРТА</div><div class="d">600 областей, две плотности: мир против нас; слепые зоны с именем и адресом — кто там работает</div></div>
+    <div class="arrow">▶</div>
+    <div class="step"><div class="t">ИНСТРУМЕНТЫ</div><div class="d">отбор целей, опоры, рекомендации развития, особые точки, мосты между областями</div></div>
+    <div class="arrow">▶</div>
+    <div class="step"><div class="t">КОМПАС</div><div class="d">своя модель, дообученная на наших связях; факты — в поле, в весах — оптика</div></div>
+  </div>
+  <div class="grid2" style="margin-top:26px">
+    <div class="card"><h3>Экономика</h3><p>Поле на 40 лет физики — <b>~$5 и одна ночь</b>. Хранение — файл на диске, бесплатно навсегда. Работа всех фильтров — <b>$0,002 за ночь</b>.</p></div>
+    <div class="card"><h3>Надёжность</h3><p>База аддитивна (дописывается без пересчёта), обновляема по ключу и <b>проверяема по содержимому</b> — инструмент сверяет хранимое с пересчитанным.</p></div>
+  </div>
+  <div class="foot"><span>Машина открытий — концепция</span><span>универсальное ядро · сменный энкодер под домен</span></div>
+</section>
+
+<!-- 4 -->
+<section class="slide">
+  <div class="num">4 / 9</div>
+  <div class="kicker">Рабочий цикл</div>
+  <h2>Цикл бурения</h2>
+  <div class="flow">
+    <div class="step"><div class="t">1 · Разведка</div><div class="d">карта: слепые зоны, тонкие места, полнота одним числом</div></div>
+    <div class="arrow">▶</div>
+    <div class="step"><div class="t">2 · Точка</div><div class="d">человек выбирает — машина обосновывает: плотности, авторы, перспективы</div></div>
+    <div class="arrow">▶</div>
+    <div class="step"><div class="t">3 · Скважина</div><div class="d">экспресс-разбор: десятки за ночь, копейки за штуку</div></div>
+    <div class="arrow">▶</div>
+    <div class="step"><div class="t">4 · Вскрытие</div><div class="d">полный разбор перспективных, три уровня глубины</div></div>
+    <div class="arrow">▶</div>
+    <div class="step"><div class="t">5 · Обустройство</div><div class="d">опоры, рекомендации, особые точки</div></div>
+    <div class="arrow">▶</div>
+    <div class="step"><div class="t">6 · Доразведка</div><div class="d">развитие существующего фонда по рекомендациям</div></div>
+  </div>
+  <p class="loop">⟲ каждая скважина уточняет карту — поле само показывает следующую точку</p>
+  <div class="card" style="margin-top:22px"><h3>Кабинет владельца идеи</h3>
+  <p>Ввожу идею свободным текстом → вижу её на карте: что вокруг, кто работает, где рядом пусто →
+  система дополняет идею до <b>паспорта скважины</b>: обоснованная точка, опоры, ожидаемый вклад.</p></div>
+  <div class="foot"><span>Машина открытий — концепция</span><span>всё, кроме выбора точки, работает ночами без человека</span></div>
+</section>
+
+<!-- 5 -->
+<section class="slide">
+  <div class="num">5 / 9</div>
+  <div class="kicker">Не обещания — замеры</div>
+  <h2>Что уже измерено</h2>
+  <table>
+    <tr><th>что</th><th>результат</th><th>как проверено</th></tr>
+    <tr><td>Отбор целей: объём дорогой обработки</td><td><b>−50%</b> при сохранении <b>82%</b> находок</td><td>20 дней реальной работы; случайный срез даёт 52%</td></tr>
+    <tr><td>Качество отбора глазами</td><td><b>7 дней из 8</b> за отфильтрованный список</td><td>слепая приёмка: ключ вскрывается после оценки</td></tr>
+    <tr><td>Слепые зоны</td><td><b>53 зоны</b> с именами и адресами · полнота 93,4%</td><td>две плотности на поле 154 000 работ</td></tr>
+    <tr><td>Опоры для новой работы</td><td><b>3–5 надёжных</b> из первых десяти кандидатов</td><td>подтверждение независимым механизмом</td></tr>
+    <tr><td>Отсев натяжек</td><td>ложный сосед 0,011 · настоящий 0,99</td><td>перекрёстное чтение пар, не совпадение слов</td></tr>
+    <tr><td>Цена</td><td>поле $4 разово (1,56 млн работ) · конвейер <b>$0,002/ночь</b></td><td>журнал расходов, токены от поставщика</td></tr>
+  </table>
+  <div class="card" style="margin-top:20px; border-color:#c8541a">
+    <h3 style="color:#c8541a">И то, что пока НЕ измерено — говорим сами</h3>
+    <p>Поиск пробелов <b>в самой науке</b> (а не в нашем охвате) собран и работает
+    end-to-end за $0,007, но его выход мы <b>пока не умеем отличить от шума</b>:
+    судья-модель проходит контроль (8 из 8 на заведомых стыках) и при этом выдаёт
+    шаблон — уверенность 4/5 у всех ответов. Единственная проверка, которая решит
+    вопрос, — <b>ретроспективная</b>: поле на 2015 год, прогон вслепую, сверка
+    с 2016–2026. Данные есть, денег не стоит, ещё не сделана.</p>
+  </div>
+  <div class="foot"><span>Машина открытий — концепция</span><span>прототип: 3 809 статей · 5 языков · работает ежедневно</span></div>
+</section>
+
+<!-- 6 -->
+<section class="slide">
+  <div class="num">6 / 9</div>
+  <div class="kicker">Один инструмент — разные поля</div>
+  <h2>Сценарии</h2>
+  <div class="grid2">
+    <div class="card"><h3>Наука и издания <span class="status ok">работает</span></h3>
+      <p>Действующее мультиязычное издание: поле 1,5 млн работ, ночной конвейер, рекомендации
+      авторам, карта слепых зон. Для издательств, университетов, фондов: «куда смотрит
+      и куда НЕ смотрит ваша область».</p></div>
+    <div class="card"><h3>Нефтегаз <span class="status idea">пилот 4–6 недель</span></h3>
+      <p>Отчёты ГРР, дела скважин, керн — десятилетия текстов, где поиск по словам слеп:
+      «поглощение промывочной жидкости» и «lost circulation» — одно явление, ноль общих слов.
+      Модель открытая и работает <b>внутри периметра</b>, на своей видеокарте.
+      Честная граница: пустое место в разведке может значить «бурили и сухо» —
+      инструмент обязан отличать это от «не бурили».</p></div>
+    <div class="card"><h3>Корпоративный R&amp;D <span class="status idea">концепт</span></h3>
+      <p>Свои НИОКР и патенты против мирового поля: слепые зоны портфеля, куда независимо
+      указывают внутренние отчёты разных лет, чем развивать существующие направления.</p></div>
+    <div class="card"><h3>Своя модель <span class="status wip">в работе</span></h3>
+      <p>Задача поставлена числом: заводская модель ставит реально связанную работу
+      на <b>2 704-е место</b> из 918 тысяч — в топ-100 попадает 11%. Критерий успеха
+      дообучения — падение медианного ранга. Метод известный (SPECTER, SciNCL);
+      наше — перенос на мультиязычную модель и на связи домена.</p></div>
+  </div>
+  <div class="foot"><span>Машина открытий — концепция</span><span>меняется корпус и энкодер — ядро одно</span></div>
+</section>
+
+
+<!-- 6b -->
+<section class="slide">
+  <div class="num">7 / 9</div>
+  <div class="kicker">Шахматы · как мы проверяем</div>
+  <h2>Замыкание вместо суждения</h2>
+  <p class="big">Шахматная программа не оценивает позицию на глаз — она
+  <b>разыгрывает продолжения</b>. Но у шахмат есть то, чего нет у науки:
+  <b>исход партии</b>. Выиграл или проиграл — и по этому оценивается вся линия.
+  У поиска научных пробелов исхода не было. Это была дыра во всей конструкции.</p>
+  <div class="flow" style="margin:28px 0 16px">
+    <div class="step"><div class="t">позиция</div><div class="d">реальная работа из поля</div></div>
+    <div class="arrow">▶</div>
+    <div class="step"><div class="t">ход 1–3</div><div class="d">каждый принимается ЗА ФАКТ, без оценки</div></div>
+    <div class="arrow">▶</div>
+    <div class="step"><div class="t">возврат</div><div class="d">замыкается ли круг на начало</div></div>
+    <div class="arrow">▶</div>
+    <div class="step" style="border-color:#c8541a"><div class="t" style="color:#c8541a">исход</div><div class="d">замкнулось = «здесь точно что-то есть, и выглядит так»</div></div>
+  </div>
+  <div class="grid2">
+    <div class="card"><h3>Первый замер</h3>
+      <p>замыкание к <b>своему</b> началу — <b>0,465</b><br>
+      замыкание к <b>чужому</b> началу — <b>0,330</b><br>
+      модель сказала «замкнулось»: <b>5 из 9</b> на своём и <b>0 из 9</b> на чужом.
+      Тот же судья, который прежде соглашался со всем подряд, здесь девять раз
+      из девяти отказал.</p></div>
+    <div class="card" style="border-color:#c8541a"><h3 style="color:#c8541a">И честно о границах</h3>
+      <p>Партий девять. Замыкающие фразы ближе к центру корпуса (0,581), чем к своему
+      началу (0,465) — скатывание к общим формулировкам есть и <b>измерено</b>.
+      Решит вопрос ретроспективная проверка: поле на 2015 год, прогон вслепую,
+      сверка с 2016–2026.</p></div>
+  </div>
+  <div class="foot"><span>Машина открытий — концепция</span><span>не «правда ли», а «сходится ли»</span></div>
+</section>
+
+<!-- 6c -->
+<section class="slide">
+  <div class="num">8 / 9</div>
+  <div class="kicker">Архитектура для национального масштаба</div>
+  <h2>Не одна модель, а репозиторий отраслевых</h2>
+  <p class="big">Одна большая модель знает всё понемногу и ничего достаточно —
+  это не мнение, а наш замер: она ставит реально связанную работу на <b>2 704-е место</b>
+  из 918 тысяч. Отраслевая оптика не добавляется к общей, она её <b>заменяет</b>
+  в своей области.</p>
+  <div class="flow" style="margin:26px 0 18px">
+    <div class="step"><div class="t">ОРКЕСТРАТОР</div><div class="d">одна точка входа, маршрутизация запроса</div></div>
+    <div class="arrow">▶</div>
+    <div class="step"><div class="t">компас: нефтегаз</div><div class="d">своя оптика, свои замеры, своя версия</div></div>
+    <div class="step"><div class="t">компас: медицина</div><div class="d">обновление одного не ломает другой</div></div>
+    <div class="step"><div class="t">компас: физика</div><div class="d">репозиторий, а не монолит</div></div>
+    <div class="arrow">▶</div>
+    <div class="step" style="border-color:#0e6e63"><div class="t" style="color:#0e6e63">ОБЩЕЕ ПОЛЕ</div><div class="d">числа, не тексты: ведомства складывают сюда, не раскрывая документы</div></div>
+  </div>
+  <div class="card" style="border-color:#c8541a">
+    <h3 style="color:#c8541a">Оговорку про «обезличенность» говорим первыми</h3>
+    <p>Вектор — <b>не</b> анонимный: существуют работы по восстановлению текста
+    из эмбеддинга. Поэтому в общий слой отдаются <b>агрегаты</b> (центры областей
+    и счётчики), размерность понижается (сжатие до 256 сохраняет 99,4% соседей),
+    полные векторы остаются внутри периметра. Честная формулировка: раскрытие
+    снижается, но не устраняется, и уровень выбирается под класс данных.</p>
+  </div>
+  <div class="foot"><span>Машина открытий — концепция</span><span>продукт — инфраструктура, а не «интеллект»</span></div>
+</section>
+
+<!-- 9 -->
+<section class="slide">
+  <div class="num">9 / 9</div>
+  <div class="kicker">Дорожная карта</div>
+  <h2>Где мы и что дальше</h2>
+  <table style="margin-bottom:26px">
+    <tr><th>этап</th><th>содержание</th><th>статус</th></tr>
+    <tr><td>1 · Поле и карта</td><td>поле, карта, отбор, опоры, рекомендации, особые точки</td><td><b>сделано и замерено</b></td></tr>
+    <tr><td>2 · Свой компас</td><td>дообучение на связях, проверка по времени; мерка заморожена</td><td>метод готов · опыты $20–30</td></tr>
+    <tr><td>3 · Кабинет</td><td>чат + карта, оркестрация, свой сервер</td><td>составные части готовы</td></tr>
+    <tr><td>4 · Второй домен</td><td>пилот на корпусе партнёра</td><td>2–4 недели от передачи данных</td></tr>
+  </table>
+  <ul class="cl">
+    <li>Повышение эффективности разведки — вдвое меньше дорогой обработки без потери находок</li>
+    <li>Слепые зоны — найдены, названы, с адресами и ценой закрытия</li>
+    <li>Развитие существующего фонда — направления с проверенными опорами</li>
+  </ul>
+  <div class="foot"><span>Машина открытий — концепция · bridge42worlds</span><span>август 2026</span></div>
+</section>
+
+</body>
+</html>

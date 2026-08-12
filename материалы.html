@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Машина открытий — все материалы</title>
+<style>
+:root{
+  --paper:#EEEFEC; --card:#FFFFFF; --ink:#141A1E; --dim:#5B6870;
+  --brand:#0B5A54; --brand-soft:#DCEAE6; --signal:#9E4418; --signal-soft:#F5E5DA;
+  --rule:#D8D9D3; --shade:#E5E7E2;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#12171A; --card:#171D21; --ink:#E4E7E5; --dim:#93A0A6;
+    --brand:#5FBFAF; --brand-soft:#16302C; --signal:#D98254; --signal-soft:#2E1F18;
+    --rule:#2A3237; --shade:#1B2226;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#12171A; --card:#171D21; --ink:#E4E7E5; --dim:#93A0A6;
+  --brand:#5FBFAF; --brand-soft:#16302C; --signal:#D98254; --signal-soft:#2E1F18;
+  --rule:#2A3237; --shade:#1B2226;
+}
+:root[data-theme="light"]{
+  --paper:#EEEFEC; --card:#FFFFFF; --ink:#141A1E; --dim:#5B6870;
+  --brand:#0B5A54; --brand-soft:#DCEAE6; --signal:#9E4418; --signal-soft:#F5E5DA;
+  --rule:#D8D9D3; --shade:#E5E7E2;
+}
+*{box-sizing:border-box}
+body{margin:0; background:var(--paper); color:var(--ink);
+  font:16.5px/1.6 Georgia,"Iowan Old Style","Times New Roman",serif;
+  -webkit-font-smoothing:antialiased; padding:0 24px 80px}
+.wrap{max-width:940px; margin:0 auto}
+h1,h2,h3,.eyebrow,.chip,th,.tile b,.path{font-family:"Segoe UI",-apple-system,system-ui,sans-serif}
+code{font-family:"Cascadia Mono",Consolas,ui-monospace,monospace; font-size:.87em;
+  background:var(--shade); padding:1px 5px; border-radius:3px}
+
+header{padding:56px 0 30px; border-bottom:1px solid var(--rule); margin-bottom:34px}
+.eyebrow{font-size:11.5px; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--brand); font-weight:700; margin:0 0 12px}
+h1{font-size:42px; line-height:1.06; letter-spacing:-.022em; margin:0 0 14px;
+  font-weight:750; text-wrap:balance}
+.lede{font-size:19px; line-height:1.5; color:var(--dim); max-width:62ch; margin:0}
+.path{font-size:13px; color:var(--dim); margin-top:20px}
+
+h2{font-size:14px; letter-spacing:.14em; text-transform:uppercase; color:var(--dim);
+  font-weight:700; margin:38px 0 14px; padding-bottom:8px; border-bottom:1px solid var(--rule)}
+
+.tiles{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:14px}
+a.tile{display:block; background:var(--card); border:1px solid var(--rule);
+  border-left:3px solid var(--brand); padding:17px 20px; text-decoration:none;
+  color:inherit; transition:border-color .12s, transform .12s}
+a.tile:hover{border-left-color:var(--signal); transform:translateY(-1px)}
+a.tile:focus-visible{outline:2px solid var(--brand); outline-offset:2px}
+a.tile.main{border-left-width:5px; grid-column:1/-1; background:var(--brand-soft)}
+a.tile b{display:block; font-size:17px; margin-bottom:5px; letter-spacing:-.01em}
+a.tile.main b{font-size:22px}
+a.tile span{display:block; font-size:14.5px; color:var(--dim); line-height:1.45}
+a.tile em{display:block; font-size:12px; color:var(--brand); margin-top:8px;
+  font-style:normal; font-family:"Segoe UI",system-ui,sans-serif; letter-spacing:.03em}
+
+.list{background:var(--card); border:1px solid var(--rule)}
+.list a{display:flex; gap:16px; align-items:baseline; padding:11px 18px;
+  border-bottom:1px solid var(--rule); text-decoration:none; color:inherit}
+.list a:last-child{border-bottom:none}
+.list a:hover{background:var(--brand-soft)}
+.list a:focus-visible{outline:2px solid var(--brand); outline-offset:-2px}
+.list code{flex:0 0 210px; background:none; padding:0; color:var(--brand); font-size:13.5px}
+.list span{font-size:14.5px; color:var(--dim); line-height:1.4}
+
+.hint{background:var(--card); border:1px solid var(--rule);
+  border-left:3px solid var(--signal); padding:15px 20px; margin:20px 0; font-size:15px}
+.hint b{color:var(--signal)}
+.hint p{margin:0 0 8px; max-width:70ch}
+.hint p:last-child{margin-bottom:0}
+
+footer{margin-top:46px; padding-top:18px; border-top:1px solid var(--rule);
+  font-size:13px; color:var(--dim)}
+@media (max-width:640px){
+  h1{font-size:32px}
+  .list a{flex-direction:column; gap:3px}
+  .list code{flex:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">bridge42worlds · НИОКР · август 2026</p>
+  <h1>Машина открытий</h1>
+  <p class="lede">Все материалы проекта. Начните с портала — там всё содержимое
+  одной страницей; остальное открывается оттуда же или отсюда.</p>
+  <p class="path">Папка: <code>C:\Users\nadez\PycharmProjects\b42-ml\</code> ·
+    файл <code>материалы.html</code> · ветка <code>ml-wave-0809</code></p>
+  <div class="hint" style="margin-top:20px">
+    <p><b>Это страница НИОКР, а не сайта.</b> Рядом в той же папке лежит
+    <code>index.html</code> — главная страница издания, которая разводит посетителя
+    по языкам и уходит на прод. Не путать и не заменять.</p>
+  </div>
+</header>
+
+<h2>Смотреть</h2>
+<div class="tiles">
+  <a class="tile main" href="portal.html">
+    <b>Портал проекта</b>
+    <span>Всё одной страницей: состояние, архитектура, механизм двух плотностей,
+      стек методов, живой пример работы, замеры и контроли, что провалилось,
+      замыкание цикла, отрасли, дорожная карта, словарь понятий.</span>
+    <em>начните отсюда · 13 разделов · перекрёстные ссылки</em></a>
+
+  <a class="tile" href="deck-en.html">
+    <b>Презентация · English</b>
+    <span>7 слайдов. Оранжевый «?» в углу слайда — подсказка докладчику.
+      Термины с пунктиром — навести, откроется «почему выбрано именно так».</span>
+    <em>печать в PDF: Ctrl+P, альбомная</em></a>
+
+  <a class="tile" href="%D1%81%D1%85%D0%B5%D0%BC%D0%B0-%D1%80%D0%B5%D1%88%D0%B5%D0%BD%D0%B8%D1%8F.html">
+    <b>Структурная схема</b>
+    <span>Четыре яруса. В центре — сам механизм: как области нарезаются по миру
+      и как в каждой сравниваются две плотности.</span>
+    <em>слепая зона видна глазом</em></a>
+</div>
+
+<h2>Документы</h2>
+<div class="list">
+  <a href="deck-en-notes.md"><code>deck-en-notes.md</code>
+    <span>Сопроводительный текст к презентации: по слайду что говорить и чего
+      не говорить, техническая подкладка, ожидаемые вопросы с ответами</span></a>
+  <a href="%D0%9F%D0%9B%D0%90%D0%A2%D0%A4%D0%9E%D0%A0%D0%9C%D0%90.md"><code>ПЛАТФОРМА.md</code>
+    <span>Четыре архитектуры развития, отрасли, словарь обычным языком</span></a>
+  <a href="%D0%9C%D0%90%D0%A8%D0%98%D0%9D%D0%90-%D0%97%D0%9D%D0%90%D0%9D%D0%98%D0%99.md"><code>МАШИНА-ЗНАНИЙ.md</code>
+    <span>Разворот цели, три механизма поиска, метод шахмат, контур обратной связи</span></a>
+  <a href="%D0%94%D0%9E%D0%A1%D0%AC%D0%95-%D0%92%D0%A1%D0%A2%D0%A0%D0%95%D0%A7%D0%90.md"><code>ДОСЬЕ-ВСТРЕЧА.md</code>
+    <span>Полная спецификация дообучения, сценарии, трудные вопросы</span></a>
+  <a href="%D0%9A%D0%9E%D0%9D%D0%A6%D0%95%D0%9F%D0%A6%D0%98%D0%AF.md"><code>КОНЦЕПЦИЯ.md</code>
+    <span>Первый концептуальный документ</span></a>
+</div>
+
+<h2>Код</h2>
+<div class="list">
+  <a href="field_build.py"><code>field_build.py</code>
+    <span>Строит поле: продолжение после обрыва, потолок расходов,
+      починка рассогласованных файлов</span></a>
+  <a href="drill.py"><code>drill.py</code>
+    <span>Карта: 600 областей, две плотности, слепые зоны с именами и адресами</span></a>
+  <a href="drill_targets.py"><code>drill_targets.py</code>
+    <span>Карта → конкретные работы к бурению, отранжированные на интересность</span></a>
+  <a href="chess.py"><code>chess.py</code>
+    <span>Короткие циклы с возвратом; контроль на чужом якоре встроен в прибор</span></a>
+  <a href="frontier.py"><code>frontier.py</code>
+    <span>Край и перемычки; в файле записано, как именно провалились четыре версии</span></a>
+  <a href="recommend_ml.py"><code>recommend_ml.py</code>
+    <span>Соседи по вектору, отсев натяжек реранкером, «где рядом пусто»</span></a>
+  <a href="compass_data.py"><code>compass_data.py</code>
+    <span>Данные для дообучения: пары, трудные отрицательные, разделение по времени</span></a>
+  <a href="bridges_llm.py"><code>bridges_llm.py</code>
+    <span>Геометрия даёт кандидатов, модель судит; контрольные пары подмешаны</span></a>
+  <a href="field_export.py"><code>field_export.py</code>
+    <span>Выгрузка поля в формат приёмника, с проверкой на выходе</span></a>
+</div>
+
+<h2>Издание</h2>
+<div class="tiles">
+  <a class="tile" href="https://bridge42worlds.academy" target="_blank" rel="noopener">
+    <b>bridge42worlds.academy</b>
+    <span>Действующий прототип: 3&nbsp;809 разобранных работ на пяти языках,
+      193 из них — с рекомендациями и проверенными опорами.</span>
+    <em>открывается в браузере</em></a>
+</div>
+
+<div class="hint">
+  <p><b>Если ссылки на <code>.md</code> не открываются в браузере</b> — это обычные
+  текстовые файлы, они откроются в блокноте или в редакторе. Всё их содержание
+  пересказано в портале, уже в HTML.</p>
+  <p><b>Презентация в PDF:</b> открыть <code>deck-en.html</code>, Ctrl+P,
+  ориентация альбомная. Подсказки докладчику при печати раскрываются в текст
+  под слайдом.</p>
+</div>
+
+<footer>
+  <p>Машина открытий · bridge42worlds · август 2026</p>
+  <p>Правило проекта: нет замера — нет утверждения. Применяется к нам самим
+  в первую очередь.</p>
+</footer>
+
+</div>
+</body>
+</html>

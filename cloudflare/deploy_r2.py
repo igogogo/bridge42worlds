@@ -59,7 +59,13 @@ SKIP_JPG_UNDER = ("lang/",)
 # который принадлежат авторам, и читателю мы даём наш пересказ и ссылку на arXiv.
 # Ловится ровно тем же способом, что data.json и служебные xml.
 SKIP_NAMES = {"data.json", "arxiv-atom.xml", "arxiv-oai.xml", "fulltext.txt",
-              "references.txt"}
+              "references.txt",
+              # Внутренние страницы для показа и обсуждения, живут в корне репозитория
+              # рядом с настоящими страницами сайта. Публиковать их нельзя: INCLUDE_GLOBS
+              # забирает из корня ВСЕ *.html, и после слияния ветки ML 12 августа портал
+              # проекта, презентация и комплект докладчика уехали бы на публичный домен
+              # вместе с обычной выкаткой — без единого решения кого-либо.
+              "portal.html", "deck-en.html", "kit-index.html", "материалы.html"}
 SKIP_DIR_NAMES = {"api"}
 # .log, .pyc, __pycache__ здесь НЕ перечислены сознательно: их закрывает .gitignore, и с
 # 2026-08-05 его правила применяются напрямую (см. _internal_by_gitignore). Дублировать
@@ -136,7 +142,10 @@ def iter_files():
                 candidates.append(p)
     for g in INCLUDE_GLOBS:
         for p in ROOT.glob(g):
-            if p.is_file():
+            # is_internal здесь не для симметрии: корневые файлы шли в бакет вообще без
+            # проверок, и ни SKIP_NAMES, ни правила .gitignore на них не действовали.
+            # Пока в корне лежали только страницы сайта, это не всплывало.
+            if p.is_file() and not is_internal(p):
                 candidates.append(p)
     return candidates
 

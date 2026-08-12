@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Discovery Machine — Architecture &amp; Method</title>
+<style>
+  :root{
+    --ink:#141b24; --dim:#5d6b7a; --bg:#fbfaf7; --card:#fff; --line:#e0dcd3;
+    --brand:#0d5f57; --hot:#b8481a; --grid:#f0ede7;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{font-family:"Segoe UI",Inter,system-ui,-apple-system,sans-serif;
+       color:var(--ink); background:#e6e2da; padding:0}
+  .slide{
+    width:1280px; height:720px; margin:22px auto; padding:52px 64px 64px;
+    background:var(--bg); border:1px solid var(--line); position:relative;
+    display:flex; flex-direction:column; overflow:hidden;
+  }
+  .hdr{display:flex; justify-content:space-between; align-items:baseline;
+       border-bottom:2px solid var(--brand); padding-bottom:10px; margin-bottom:22px}
+  .eyebrow{font-size:12.5px; letter-spacing:.2em; text-transform:uppercase;
+           color:var(--brand); font-weight:700}
+  .num{font-size:12.5px; color:var(--dim); letter-spacing:.12em}
+  h1{font-size:58px; line-height:1.06; font-weight:750; letter-spacing:-.02em}
+  h2{font-size:36px; line-height:1.12; font-weight:700; letter-spacing:-.015em; margin-bottom:8px}
+  .lede{font-size:20px; color:var(--dim); line-height:1.45; max-width:1000px; margin-bottom:18px}
+  .foot{position:absolute; bottom:22px; left:64px; right:64px; display:flex;
+        justify-content:space-between; font-size:12px; color:var(--dim);
+        border-top:1px solid var(--line); padding-top:9px}
+  table{border-collapse:collapse; width:100%; background:var(--card);
+        border:1px solid var(--line)}
+  th,td{padding:9px 14px; text-align:left; font-size:15px; border-bottom:1px solid var(--line);
+        vertical-align:top}
+  th{background:var(--grid); font-size:11.5px; text-transform:uppercase;
+     letter-spacing:.09em; color:var(--dim); font-weight:700}
+  tr:last-child td{border-bottom:none}
+  code,.mono{font-family:"Cascadia Mono",Consolas,monospace; font-size:13.5px;
+             background:var(--grid); padding:1px 5px; border-radius:3px}
+  .g2{display:grid; grid-template-columns:1fr 1fr; gap:20px}
+  .g3{display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px}
+  .card{background:var(--card); border:1px solid var(--line); padding:16px 18px}
+  .card h3{font-size:16px; color:var(--brand); margin-bottom:7px; letter-spacing:.01em}
+  .card p{font-size:14.5px; line-height:1.45}
+  .card.hot{border-left:3px solid var(--hot)}
+  .card.hot h3{color:var(--hot)}
+  .flow{display:flex; align-items:stretch; margin:14px 0}
+  .box{flex:1; background:var(--card); border:1px solid var(--line); padding:13px 12px;
+       text-align:center}
+  .box+.box{border-left:none}
+  .box .t{font-size:15px; font-weight:700; color:var(--brand); margin-bottom:5px}
+  .box .d{font-size:12.5px; color:var(--dim); line-height:1.35}
+  .box.hot{border-color:var(--hot); border-width:1px 1px 1px 3px}
+  .box.hot .t{color:var(--hot)}
+  .ar{align-self:center; color:var(--hot); font-size:17px; padding:0 3px}
+  .kpi{display:flex; gap:0; margin:12px 0 16px}
+  .kpi div{flex:1; background:var(--card); border:1px solid var(--line); padding:12px 14px}
+  .kpi div+div{border-left:none}
+  .kpi b{display:block; font-size:30px; line-height:1.1; color:var(--brand); font-weight:750}
+  .kpi span{font-size:12.5px; color:var(--dim); line-height:1.3; display:block; margin-top:3px}
+  .kpi .h b{color:var(--hot)}
+  .tag{display:inline-block; font-size:10.5px; padding:1px 7px; border-radius:9px;
+       font-weight:700; letter-spacing:.04em; vertical-align:2px; margin-left:6px}
+  .live{background:#dbeee7; color:#0d5f57}
+  .wip{background:#fbe9d8; color:#9a4a14}
+  .fail{background:#eee; color:#666}
+  .lit{background:#e5e9f2; color:#33477a}
+
+  /* inline term tooltips */
+  .tm{border-bottom:1.5px dotted var(--hot); cursor:help; position:relative}
+  .tm > .tip{position:absolute; left:0; top:1.7em; width:430px; background:#141b24;
+       color:#e8e6e1; font-size:12.5px; line-height:1.5; font-weight:400; padding:13px 15px;
+       border-left:3px solid var(--hot); opacity:0; pointer-events:none; z-index:40;
+       transition:opacity .1s; box-shadow:0 8px 26px rgba(0,0,0,.3); text-align:left;
+       letter-spacing:0; text-transform:none; font-style:normal}
+  .tm > .tip b{color:#f0a877}
+  .tm:hover > .tip{opacity:1}
+  .tm.rt > .tip{left:auto; right:0}
+  .tm.up > .tip{top:auto; bottom:1.7em}
+  /* speaker note */
+  .note{position:absolute; right:64px; bottom:56px; width:520px; background:#141b24;
+        color:#e8e6e1; font-size:13px; line-height:1.5; padding:15px 17px;
+        border-left:3px solid var(--hot); opacity:0; pointer-events:none;
+        transition:opacity .12s; z-index:9; box-shadow:0 8px 28px rgba(0,0,0,.28)}
+  .note b{color:#f0a877}
+  .ntrig{position:absolute; right:64px; top:50px; width:22px; height:22px; border-radius:50%;
+         background:var(--hot); color:#fff; font-size:13px; font-weight:700; text-align:center;
+         line-height:22px; cursor:help; z-index:10}
+  .ntrig:hover + .note{opacity:1}
+  @media print{
+    body{background:#fff}
+    .slide{margin:0; border:none; page-break-after:always; width:100%; height:100vh}
+    .note{opacity:1; position:static; width:auto; margin-top:14px}
+    .ntrig{display:none}
+    @page{size:landscape; margin:0}
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ 1 ══ -->
+<section class="slide">
+  <div class="ntrig">?</div>
+  <div class="note"><b>Purpose of this slide:</b> establish that this is an engineering
+  architecture, not a demo. <b>Say:</b> “We built an orchestrated multi-model system.
+  The domain here is science, but the architecture is domain-agnostic — the same stack
+  works wherever you have a large document corpus and need to find what is *missing*
+  rather than what is present.” <b>Do not</b> promise discoveries. We have none yet,
+  and that is stated on slide 5.</div>
+  <div class="hdr"><span class="eyebrow">bridge42worlds · R&amp;D</span>
+    <span class="num">1 / 7</span></div>
+  <div style="flex:1; display:flex; flex-direction:column; justify-content:center">
+    <h1>Discovery Machine</h1>
+    <p class="lede" style="font-size:24px; margin-top:20px">An orchestrated multi-model
+    architecture for <b>exploratory search in knowledge space</b> — finding what a field
+    has <i>not</i> studied, not what it has.</p>
+    <div style="width:70px; height:5px; background:var(--hot); margin:24px 0 22px"></div>
+    <p class="lede" style="font-size:17px">Working prototype: multilingual science
+    publication, 3 809 analysed papers in 5 languages, nightly automated pipeline.<br>
+    Vector field: <b>1 556 983</b> arXiv abstracts, physics, 1991–2026.</p>
+    <p class="lede" style="font-size:15px; margin-top:16px">
+    Four working analogies used throughout: <b>drilling</b> — how we search ·
+    <b>chess</b> — how we validate · <b>the researcher's mind</b> — what we automate ·
+    <b>petroleum exploration</b> — where this leaves science.</p>
+  </div>
+  <div class="foot"><span>Discovery Machine — architecture &amp; method</span>
+    <span>August 2026</span></div>
+</section>
+
+<!-- ══ 2 ══ -->
+<section class="slide">
+  <div class="ntrig">?</div>
+  <div class="note"><b>Purpose:</b> reframe the problem and immediately show we know the
+  hard limit. <b>Say:</b> “The naive idea — look for empty space in the embedding —
+  is provably dead. Not for lack of data: intrinsic dimension is ~40, and doubling the
+  corpus shrinks nearest-neighbour distance by 2%. You would need 17 billion times more
+  papers.” <b>This is the slide that buys credibility</b> with a technical audience:
+  we killed our own most attractive idea with arithmetic.</div>
+  <div class="hdr"><span class="eyebrow">Problem · Reframe</span><span class="num">2 / 7</span></div>
+  <h2>From “what <i>we</i> missed” to “what the <i>field</i> missed”</h2>
+  <p class="lede">A blind spot is an empty region <b>surrounded by density</b>. That is not
+  “impossible” — that is “nobody looked”. Our own pipeline had one: two years of collecting
+  only <code>astro-ph</code>, a decision made once and then invisible. The map found it
+  in a single pass.</p>
+
+  <div class="card hot" style="margin-bottom:16px">
+    <h3>The density wall — stated before anyone asks</h3>
+    <p>Searching for voids directly in the embedding <b>cannot work, and this is geometry,
+    not budget</b>. Intrinsic dimension (<span class="tm rt">Levina–Bickel<span class="tip"><b>How intrinsic dimension is estimated.</b> A maximum-likelihood estimator built from distances to the k nearest neighbours: if a point’s neighbours are arranged as they would be inside a d-dimensional ball, the ratios of those distances reveal d. Ours is stable at 32–35 for k from 10 to 80, which is why the figure can be argued about rather than merely quoted.</span></span> MLE): <b>≈40</b>. With 1.56M points
+    that is <b>1.4 points per axis</b> — every point is isolated at almost any radius.
+    Nearest-neighbour distance scales as N<sup>−1/d</sup>: doubling the corpus shrinks it by
+    <b>2%</b>. Densifying twofold requires <b>2<sup>34</sup> ≈ 1.7 × 10<sup>10</sup></b>
+    times more papers than exist.</p>
+  </div>
+
+  <div class="g3">
+    <div class="card"><h3>Frontier</h3><p>A work whose neighbours lie on one side only.
+    The leading edge of what has been written.</p></div>
+    <div class="card"><h3>Bridges</h3><p>Two dense regions, nothing between them.
+    <span class="tm rt">Swanson<span class="tip"><b>The 1986 precedent.</b> Don Swanson found one literature stating that fish oil lowers blood viscosity and another stating that viscosity aggravates Raynaud’s syndrome, with no paper connecting them and no shared authors. He wrote the connection and it was confirmed clinically. The essential condition is not transitivity but DISJOINTNESS — without it, chains of length two are exponentially abundant.</span></span>’s ABC (1986) made geometric — with his <i>disjointness</i> condition restored.</p></div>
+    <div class="card"><h3>Temporal stalls</h3><p>A region that grew, then stopped, while its
+    neighbours kept moving. Solved — or abandoned.</p></div>
+  </div>
+  <div class="foot"><span>Discovery Machine — architecture &amp; method</span>
+    <span>we search for edges, bridges and stalls — never for voids</span></div>
+</section>
+
+<!-- ══ 3 ══ -->
+<section class="slide">
+  <div class="ntrig">?</div>
+  <div class="note"><b>Purpose:</b> show the architecture and why the layers cannot be
+  merged. <b>Say:</b> “Facts live in the field, where they are checkable and refreshed
+  daily. Optics live in the weights. Reasoning lives in the LLM. Put facts in weights and
+  the model invents them; ask the vector to rank and it cannot — we broke that rule four
+  times before accepting it.” <b>Emphasise</b> the orchestrator: this is the reusable part —
+  any domain, any set of fine-tuned experts.</div>
+  <div class="hdr"><span class="eyebrow">Architecture</span><span class="num">3 / 7</span></div>
+  <h2>Three layers and an orchestrator</h2>
+  <p class="lede">Each layer does what the others cannot. That separation <i>is</i> the design.</p>
+
+  <table style="margin-bottom:14px">
+    <tr><th style="width:15%">Layer</th><th style="width:23%">Holds</th>
+      <th style="width:32%">Implementation</th><th>Why it cannot be merged</th></tr>
+    <tr><td><b>Environment</b></td><td>Facts</td>
+      <td><code>float16</code> <span class="tm">memmap<span class="tip"><b>Why no vector database.</b> The field is a plain file read through memory mapping: the operating system pages in only what is touched, so 3.2 GB never enters RAM at once. A managed vector service charges monthly rent and exists to answer in milliseconds; our workload is a nightly batch where 1.5 s per query is ample. Measured, not assumed.</span></span> store, 1 556 983 × 1024, 3.19 GB;
+        append-only, key-addressable, content-verifiable</td>
+      <td>Facts in weights become hallucinations with no way to check them</td></tr>
+    <tr><td><b>Compass</b></td><td>Optics</td>
+      <td>BAAI/bge-m3 → domain <span class="tm">LoRA<span class="tip"><b>Why not full fine-tuning.</b> Low-Rank Adaptation trains small additive matrices instead of the whole model — 3.1M parameters instead of 568M. It forgets less, which matters because “out of distribution” for us means Arabic, Spanish and French. Full fine-tuning also injects directions orthogonal to the pre-trained spectrum, which correlate with out-of-domain degradation.</span></span> <span class="tag wip">in progress</span></td>
+      <td>Generic optics rank a truly related paper <b>2 704th</b> of 918 297</td></tr>
+    <tr><td><b>Reasoning</b></td><td>Language &amp; moves</td>
+      <td>Qwen3-Reranker-8B (<span class="tm rt">cross-encoder<span class="tip"><b>Why a second stage exists.</b> A bi-encoder turns query and document into vectors SEPARATELY, so it answers “is this the same topic”. A cross-encoder reads the pair TOGETHER and answers “is this worth reading”. Two different questions; no threshold on the first produces the second. We violated this rule four times before accepting it.</span></span>) + DeepSeek-V3.1 (generation, judging)</td>
+      <td>A bi-encoder can eliminate but cannot choose — measured, four times over</td></tr>
+  </table>
+
+  <div class="flow">
+    <div class="box hot"><div class="t">ORCHESTRATOR</div>
+      <div class="d">single entry point · routing · state · human decision points</div></div>
+    <div class="ar">▶</div>
+    <div class="box"><div class="t">compass: physics</div><div class="d">own optics, own eval, own version</div></div>
+    <div class="box"><div class="t">compass: subsurface</div><div class="d">updating one never breaks another</div></div>
+    <div class="box"><div class="t">compass: clinical</div><div class="d">a registry, not a monolith</div></div>
+    <div class="ar">▶</div>
+    <div class="box" style="border-color:var(--brand)"><div class="t">SHARED FIELD</div>
+      <div class="d">vectors, not documents — organisations contribute without disclosure</div></div>
+  </div>
+  <div class="card hot">
+    <h3>Stated first, not when asked: “de-identified vectors” ≠ anonymous</h3>
+    <p>Embedding-inversion work (Song &amp; Raghunathan 2020; Morris et al. 2023) recovers
+    substantial source text. Mitigations we implement: share <b>aggregates</b> (region
+    centroids and counts), reduce dimensionality (<span class="tm rt">PCA<span class="tip"><b>Why compression is safe here.</b> Principal component analysis rotates the space so most variance lands in the first axes. Alone, cutting to 256 dimensions loses 30% of true neighbours. But compression is only the first stage: retrieve a wide shortlist compressed, then re-score it exactly against full vectors — 99.4% retained. Naive truncation gives 48.8%, so bge-m3 is not a Matryoshka model; we verified that rather than assuming it.</span></span> 1024→256 retains <b>99.4%</b> of true
+    neighbours with exact re-scoring), keep full vectors inside the perimeter.
+    Disclosure is <i>reduced</i>, not eliminated — the level is chosen per data class.</p>
+  </div>
+  <div class="foot"><span>Discovery Machine — architecture &amp; method</span>
+    <span>reusable for any orchestrated system of fine-tuned domain experts</span></div>
+</section>
+
+<!-- ══ 4 ══ -->
+<section class="slide">
+  <div class="ntrig">?</div>
+  <div class="note"><b>Purpose:</b> demonstrate technical depth and — critically — that we
+  discard what fails. <b>Say:</b> “This column on the right is the point. Four of these
+  methods are dead, and we killed them ourselves with controls, not with taste.”
+  <b>If asked about persistent homology:</b> concede immediately — projection to 3–4
+  dimensions destroys topology; the result validates the tool, not the claim.
+  <b>Watch your own wording on fine-tuning:</b> the <span class="tm">LoRA<span class="tip"><b>Why not full fine-tuning.</b> Low-Rank Adaptation trains small additive matrices instead of the whole model — 3.1M parameters instead of 568M. It forgets less, which matters because “out of distribution” for us means Arabic, Spanish and French. Full fine-tuning also injects directions orthogonal to the pre-trained spectrum, which correlate with out-of-domain degradation.</span></span> line is a <i>specification</i>,
+  not a running system. Say “this is what we would run, and here is why it is blocked” —
+  never let it be heard as “this is what we do”.</div>
+  <div class="hdr"><span class="eyebrow">Method stack</span><span class="num">4 / 7</span></div>
+  <h2>What we use, what we tried, what we discarded</h2>
+  <p style="font-size:14px; color:var(--dim); margin-bottom:10px">
+    <span class="tag live">measured</span> our own run on our own data ·
+    <span class="tag lit">published</span> third-party benchmark, cited not reproduced ·
+    <span class="tag wip">specified</span> designed and costed, <b>not yet run</b> ·
+    <span class="tag fail">discarded</span> failed a control, kept in the record</p>
+
+  <table>
+    <tr><th style="width:26%">Component</th><th style="width:40%">Method &amp; parameters</th>
+      <th>Status — decided by measurement</th></tr>
+    <tr><td><b>Embedding</b></td>
+      <td>BAAI/bge-m3 — <span class="tm">XLM-RoBERTa-large<span class="tip"><b>The backbone.</b> A 24-layer transformer encoder trained on 100 languages. 45% of its 568M parameters sit in the token embedding table — that table is what carries the multilingual ability, which is why it is frozen absolutely during fine-tuning rather than merely regularised.</span></span>, 568M params, 1024-d dense head, 8192 ctx, MIT.
+        Arabic retrieval, <span class="tm">MIRACL<span class="tip"><b>What this benchmark is, and whose number it is.</b> A multilingual retrieval benchmark over 18 languages. This figure is PUBLISHED BY THE MODEL’S AUTHORS, not measured by us, and MIRACL training data formed part of bge-m3’s training, so the absolute level is flattered. The comparison between models stays meaningful because their situations are identical.</span></span> nDCG@10 <b>78.4</b>
+        <span class="tag lit">published</span> — above 7B-class models</td>
+      <td><span class="tag live">measured</span> field built on it; chosen for multilingual
+        retrieval and permissive licence</td></tr>
+    <tr><td><b>Vector store</b></td>
+      <td>Custom <code>float16</code> <span class="tm">memmap<span class="tip"><b>Why no vector database.</b> The field is a plain file read through memory mapping: the operating system pages in only what is touched, so 3.2 GB never enters RAM at once. A managed vector service charges monthly rent and exists to answer in milliseconds; our workload is a nightly batch where 1.5 s per query is ample. Measured, not assumed.</span></span>, append-only with last-write-wins by key;
+        brute-force scan 1.5 s/query when batched</td>
+      <td><span class="tag live">measured</span> no ANN index needed at this scale</td></tr>
+    <tr><td><b>Map</b></td>
+      <td>Spherical k-means, 600 regions, fixed seed; partitioned on the <i>world</i>
+        corpus, never on ours</td>
+      <td><span class="tag live">measured</span> partition on self ⇒ 100% coverage by
+        construction</td></tr>
+    <tr><td><b>Selection</b></td>
+      <td>Two-stage: bi-encoder prefilter → Qwen3-Reranker-8B <span class="tm rt">cross-encoder<span class="tip"><b>Why a second stage exists.</b> A bi-encoder turns query and document into vectors SEPARATELY, so it answers “is this the same topic”. A cross-encoder reads the pair TOGETHER and answers “is this worth reading”. Two different questions; no threshold on the first produces the second. We violated this rule four times before accepting it.</span></span></td>
+      <td><span class="tag live">measured</span> top half retains <b>82%</b> of an
+        expensive LLM’s picks vs 52% for a random half</td></tr>
+    <tr><td><b>Hubness</b></td>
+      <td>Per-item mean-similarity correction, applied to the tail only</td>
+      <td><span class="tag live">measured</span> full correction breaks the head —
+        AUC fell 0.787 → 0.676</td></tr>
+    <tr><td><b>Fine-tuning</b><br><span style="font-size:12px; color:var(--hot)">
+        specification only</span></td>
+      <td>LoRA r=16 on Q/K/V/O (3 145 728 params, 0.55%); embedding table frozen (45% of
+        model); <span class="tm rt">InfoNCE<span class="tip"><b>The training objective.</b> A contrastive loss: pull a related pair together, push everything else in the batch apart. Every other item in the batch serves as a free negative — which is why batch size here is a quality parameter, not a convenience setting.</span></span> via <span class="tm rt">GradCache<span class="tip"><b>Why this trick is needed.</b> Contrastive quality scales with batch size, and batch size is capped by memory. GradCache splits the pass in two — collect embeddings without a graph, then recompute with gradients — so an effective batch of 1024 fits where 64 would. It also forces bf16: fp16 loss scaling combined with cached logit gradients produces NaN.</span></span>, batch 1024, <span class="tm rt">τ=0.05<span class="tip"><b>Why not the factory 0.02.</b> Temperature controls how hard the loss pushes pairs together. The stock value builds a near-duplicate detector: only almost-identical texts stay close. Exploratory search needs broad neighbourhoods, where two papers from different subfields sit at a moderate but meaningful distance. A harder temperature collapses exactly the structure we depend on.</span></span>, bf16.
+        <i>Parameter counts are arithmetic from the architecture; no training run
+        has been executed.</i></td>
+      <td><span class="tag wip">specified</span> blocked on data: 2 102 domain pairs
+        available, 150–200k required</td></tr>
+    <tr><td>Persistent homology</td>
+      <td><code>ripser</code>, <span class="tm rt">Betti numbers<span class="tip"><b>What they count.</b> Connected pieces, loops and cavities in a point cloud — a shape’s fingerprint. We calibrated the tool on a sphere, a torus and a Klein bottle and it distinguishes them correctly. It still cannot answer our question, because we had to project to 3–4 dimensions first and projection destroys topology by construction.</span></span>, calibrated on sphere / torus / Klein bottle</td>
+      <td><span class="tag fail">discarded</span> projection to 3–4 d destroys topology;
+        validates the tool, not the corpus</td></tr>
+    <tr><td>δ-hyperbolicity</td>
+      <td>Gromov four-point condition, tree vs random baselines</td>
+      <td><span class="tag fail">discarded</span> synthetic tree indistinguishable from
+        noise at d=1024 — instrument failure, reported as such</td></tr>
+    <tr><td>Geometric bridge ranking</td>
+      <td>Four threshold definitions of “between two regions”</td>
+      <td><span class="tag fail">discarded</span> 80% of corpus, then 0% — thresholds do
+        not survive distance concentration</td></tr>
+  </table>
+  <div class="foot"><span>Discovery Machine — architecture &amp; method</span>
+    <span>nine instrument failures caught and recorded in four days</span></div>
+</section>
+
+<!-- ══ 5 ══ -->
+<section class="slide">
+  <div class="ntrig">?</div>
+  <div class="note"><b>Purpose:</b> show the evaluation discipline — this is what separates
+  us from a demo. <b>Say:</b> “Every claim here has a control. The blind protocol seals the
+  key before scoring. And the honest line is the last one: we have no confirmed discoveries,
+  and the gap-finding pipeline’s output we cannot yet distinguish from plausible noise.”
+  <b>Expect the question</b> “show me a discovery” — the answer is on this slide, deliberately.</div>
+  <div class="hdr"><span class="eyebrow">Validation</span><span class="num">5 / 7</span></div>
+  <h2>How we know — and where we do not</h2>
+
+  <div class="kpi">
+    <div><b>82%</b><span>of an expensive LLM’s picks retained in the reranker’s top half
+      (random half: 52%) — 20 days, 153 picks</span></div>
+    <div><b>7 / 8</b><span>blind A/B days favouring the filtered shortlist; key sealed
+      until after scoring</span></div>
+    <div><b>0.941</b><span>AUC separating cited pairs from random — but median rank
+      <b>2 704</b> of 918 297</span></div>
+    <div class="h"><b>0 / 9</b><span>times the judge closed a reasoning cycle onto a
+      <i>foreign</i> starting point (own: 5 / 9)</span></div>
+  </div>
+
+  <div class="g2">
+    <div class="card"><h3>Controls are built into the instruments, not added later</h3>
+      <p>Blind evaluation with a sealed key. Foreign-anchor controls in every cycle run.
+      Known-positive calibration pairs mixed into every judging batch. Baselines printed
+      next to every result — random half, random pair, foreign anchor.
+      An instrument that answers <i>always</i> is treated as broken.</p></div>
+    <div class="card hot"><h3>What we cannot yet claim</h3>
+      <p><b>No confirmed discoveries.</b> The gap-finding pipeline runs end-to-end, and its
+      output we cannot presently separate from plausible noise: the judge passes controls
+      8/8 yet returns a template. One experiment settles it —
+      <b>retrospective validation</b>: rebuild the field as of 2015, run blind, compare
+      against 2016–2026. Data exists; not yet done.</p></div>
+  </div>
+  <div class="foot"><span>Discovery Machine — architecture &amp; method</span>
+    <span>“no measurement, no claim” — applied to ourselves first</span></div>
+</section>
+
+<!-- ══ 6 ══ -->
+<section class="slide">
+  <div class="ntrig">?</div>
+  <div class="note"><b>Purpose:</b> the intellectually strongest idea in the deck.
+  <b>Say:</b> “Chess engines work because a game has a terminal signal — win or loss.
+  Gap-finding had none, and that was the hole in every tree-search framing. Cycle closure
+  supplies it: we stop asking the model *is this true* — it has no access to truth — and
+  ask instead *does the chain return*.” <b>Concede early:</b> nine games, and closing
+  statements still drift toward the corpus centroid.</div>
+  <div class="hdr"><span class="eyebrow">Validation by coherence</span><span class="num">6 / 7</span></div>
+  <h2>Cycle closure as the terminal signal</h2>
+  <p class="lede">A chess engine does not evaluate a position statically — it plays out
+  continuations and is scored by <b>the outcome of the game</b>. Exploratory search had no
+  outcome. That was the structural hole.</p>
+
+  <div class="flow">
+    <div class="box"><div class="t">position</div><div class="d">a real paper drawn from the field</div></div>
+    <div class="ar">▶</div>
+    <div class="box"><div class="t">moves 1–3</div><div class="d">each accepted <i>as fact</i>, never judged</div></div>
+    <div class="ar">▶</div>
+    <div class="box"><div class="t">return</div><div class="d">does the chain close back onto its origin?</div></div>
+    <div class="ar">▶</div>
+    <div class="box hot"><div class="t">OUTCOME</div><div class="d">closed ⇒ the ring is mutually supported</div></div>
+  </div>
+
+  <div class="g2" style="margin-top:6px">
+    <div class="card"><h3>First measurement — 9 games</h3>
+      <p>Closure to <b>own</b> anchor: <b>0.465</b> · to a <b>foreign</b> anchor: <b>0.330</b>.
+      The judge declared closure 5 / 9 on its own anchor and <b>0 / 9</b> on a foreign one —
+      the same judge that had previously assigned identical confidence to all 19 answers
+      in a row. That is discrimination, not a template.</p></div>
+    <div class="card hot"><h3>Conceded, unprompted</h3>
+      <p>Nine games is a small sample. Closing statements sit closer to the corpus centroid
+      (<b>0.581</b>) than to their own anchor (0.465) — regression toward generic phrasing is
+      present and <i>measured</i>. This is formally <span class="tm rt">Swanson<span class="tip"><b>The 1986 precedent.</b> Don Swanson found one literature stating that fish oil lowers blood viscosity and another stating that viscosity aggravates Raynaud’s syndrome, with no paper connecting them and no shared authors. He wrote the connection and it was confirmed clinically. The essential condition is not transitivity but DISJOINTNESS — without it, chains of length two are exponentially abundant.</span></span>’s A→B→C→A with the return
+      condition restored; without it, paths of length two are exponentially abundant.</p></div>
+  </div>
+  <div class="foot"><span>Discovery Machine — architecture &amp; method</span>
+    <span>we stopped asking “is it true” and started asking “does it close”</span></div>
+</section>
+
+<!-- ══ 7 ══ -->
+<section class="slide">
+  <div class="ntrig">?</div>
+  <div class="note"><b>Purpose:</b> generalise and close. <b>Say:</b> “The domain is
+  interchangeable. What transfers is the pattern: a verifiable environment, a registry of
+  fine-tuned domain experts, an orchestrator, and evaluation discipline with controls.
+  That pattern applies to any orchestrated system built on fine-tuned models.”
+  <b>Close on</b> the roadmap and on what we are asking for — data for a pilot, not belief.</div>
+  <div class="hdr"><span class="eyebrow">Generalisation</span><span class="num">7 / 7</span></div>
+  <h2>One pattern, interchangeable domains</h2>
+  <p class="lede">Nothing in the architecture is specific to physics. What transfers is the
+  <b>pattern</b>: verifiable environment + registry of fine-tuned experts + orchestrator +
+  controls. It applies to any orchestrated system whose method is fine-tuned models.</p>
+
+  <table style="margin-bottom:14px">
+    <tr><th style="width:22%">Domain</th><th style="width:36%">Corpus</th>
+      <th style="width:26%">“Blind spot” means</th><th>Status</th></tr>
+    <tr><td><b>Science publishing</b></td><td>papers, preprints</td>
+      <td>a topic never covered</td><td><span class="tag live">operating</span></td></tr>
+    <tr><td><b>Subsurface / E&amp;P</b></td><td>exploration reports, well files, core
+      descriptions, daily drilling reports</td>
+      <td>an under-appraised interval inside a well-studied setting</td>
+      <td><span class="tag wip">pilot, 4–6 weeks</span></td></tr>
+    <tr><td><b>Corporate R&amp;D · IP</b></td><td>internal reports, patent families</td>
+      <td>a white space in the portfolio</td><td><span class="tag wip">pilot</span></td></tr>
+    <tr><td><b>National research system</b></td><td>national output vs world field</td>
+      <td>what the country does not study</td><td><span class="tag wip">pilot</span></td></tr>
+  </table>
+
+  <div class="g2">
+    <div class="card"><h3>Roadmap — measurement first, model second</h3>
+      <p><b>1.</b> Significance test on the 74 empty regions — free.<br>
+      <b>2.</b> Temporal signals per region — free, unused data.<br>
+      <b>3.</b> Retrospective validation at a 2015 cut — free, decisive.<br>
+      <b>4.</b> Citation graph ingestion → 2 102 pairs to 200–500k.<br>
+      <b>5.</b> Compass fine-tuning; success criterion: median rank falls 4×.</p></div>
+    <div class="card hot"><h3>Honest boundary, and where the subsurface analogy breaks</h3>
+      <p>In science an empty region means “not studied”. In exploration it often means
+      <b>“drilled and dry”</b> — and that report sits in the archive. The system must
+      distinguish <i>not drilled</i> from <i>drilled without result</i>, and negative
+      results are the least documented data a company holds. This is settled before a
+      pilot, not after.</p></div>
+  </div>
+  <div class="foot"><span>Discovery Machine — architecture &amp; method · bridge42worlds</span>
+    <span>August 2026</span></div>
+</section>
+
+</body>
+</html>
