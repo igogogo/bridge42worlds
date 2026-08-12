@@ -64,6 +64,19 @@
   .live{background:#dbeee7; color:#0d5f57}
   .wip{background:#fbe9d8; color:#9a4a14}
   .fail{background:#eee; color:#666}
+  .lit{background:#e5e9f2; color:#33477a}
+
+  /* inline term tooltips */
+  .tm{border-bottom:1.5px dotted var(--hot); cursor:help; position:relative}
+  .tm > .tip{position:absolute; left:0; top:1.7em; width:430px; background:#141b24;
+       color:#e8e6e1; font-size:12.5px; line-height:1.5; font-weight:400; padding:13px 15px;
+       border-left:3px solid var(--hot); opacity:0; pointer-events:none; z-index:40;
+       transition:opacity .1s; box-shadow:0 8px 26px rgba(0,0,0,.3); text-align:left;
+       letter-spacing:0; text-transform:none; font-style:normal}
+  .tm > .tip b{color:#f0a877}
+  .tm:hover > .tip{opacity:1}
+  .tm.rt > .tip{left:auto; right:0}
+  .tm.up > .tip{top:auto; bottom:1.7em}
   /* speaker note */
   .note{position:absolute; right:64px; bottom:56px; width:520px; background:#141b24;
         color:#e8e6e1; font-size:13px; line-height:1.5; padding:15px 17px;
@@ -133,7 +146,7 @@
   <div class="card hot" style="margin-bottom:16px">
     <h3>The density wall — stated before anyone asks</h3>
     <p>Searching for voids directly in the embedding <b>cannot work, and this is geometry,
-    not budget</b>. Intrinsic dimension (Levina–Bickel MLE): <b>≈40</b>. With 1.56M points
+    not budget</b>. Intrinsic dimension (<span class="tm rt">Levina–Bickel<span class="tip"><b>How intrinsic dimension is estimated.</b> A maximum-likelihood estimator built from distances to the k nearest neighbours: if a point’s neighbours are arranged as they would be inside a d-dimensional ball, the ratios of those distances reveal d. Ours is stable at 32–35 for k from 10 to 80, which is why the figure can be argued about rather than merely quoted.</span></span> MLE): <b>≈40</b>. With 1.56M points
     that is <b>1.4 points per axis</b> — every point is isolated at almost any radius.
     Nearest-neighbour distance scales as N<sup>−1/d</sup>: doubling the corpus shrinks it by
     <b>2%</b>. Densifying twofold requires <b>2<sup>34</sup> ≈ 1.7 × 10<sup>10</sup></b>
@@ -144,7 +157,7 @@
     <div class="card"><h3>Frontier</h3><p>A work whose neighbours lie on one side only.
     The leading edge of what has been written.</p></div>
     <div class="card"><h3>Bridges</h3><p>Two dense regions, nothing between them.
-    Swanson’s ABC (1986) made geometric — with his <i>disjointness</i> condition restored.</p></div>
+    <span class="tm rt">Swanson<span class="tip"><b>The 1986 precedent.</b> Don Swanson found one literature stating that fish oil lowers blood viscosity and another stating that viscosity aggravates Raynaud’s syndrome, with no paper connecting them and no shared authors. He wrote the connection and it was confirmed clinically. The essential condition is not transitivity but DISJOINTNESS — without it, chains of length two are exponentially abundant.</span></span>’s ABC (1986) made geometric — with his <i>disjointness</i> condition restored.</p></div>
     <div class="card"><h3>Temporal stalls</h3><p>A region that grew, then stopped, while its
     neighbours kept moving. Solved — or abandoned.</p></div>
   </div>
@@ -169,14 +182,14 @@
     <tr><th style="width:15%">Layer</th><th style="width:23%">Holds</th>
       <th style="width:32%">Implementation</th><th>Why it cannot be merged</th></tr>
     <tr><td><b>Environment</b></td><td>Facts</td>
-      <td><code>float16</code> memmap store, 1 556 983 × 1024, 3.19 GB;
+      <td><code>float16</code> <span class="tm">memmap<span class="tip"><b>Why no vector database.</b> The field is a plain file read through memory mapping: the operating system pages in only what is touched, so 3.2 GB never enters RAM at once. A managed vector service charges monthly rent and exists to answer in milliseconds; our workload is a nightly batch where 1.5 s per query is ample. Measured, not assumed.</span></span> store, 1 556 983 × 1024, 3.19 GB;
         append-only, key-addressable, content-verifiable</td>
       <td>Facts in weights become hallucinations with no way to check them</td></tr>
     <tr><td><b>Compass</b></td><td>Optics</td>
-      <td>BAAI/bge-m3 → domain LoRA <span class="tag wip">in progress</span></td>
+      <td>BAAI/bge-m3 → domain <span class="tm">LoRA<span class="tip"><b>Why not full fine-tuning.</b> Low-Rank Adaptation trains small additive matrices instead of the whole model — 3.1M parameters instead of 568M. It forgets less, which matters because “out of distribution” for us means Arabic, Spanish and French. Full fine-tuning also injects directions orthogonal to the pre-trained spectrum, which correlate with out-of-domain degradation.</span></span> <span class="tag wip">in progress</span></td>
       <td>Generic optics rank a truly related paper <b>2 704th</b> of 918 297</td></tr>
     <tr><td><b>Reasoning</b></td><td>Language &amp; moves</td>
-      <td>Qwen3-Reranker-8B (cross-encoder) + DeepSeek-V3.1 (generation, judging)</td>
+      <td>Qwen3-Reranker-8B (<span class="tm rt">cross-encoder<span class="tip"><b>Why a second stage exists.</b> A bi-encoder turns query and document into vectors SEPARATELY, so it answers “is this the same topic”. A cross-encoder reads the pair TOGETHER and answers “is this worth reading”. Two different questions; no threshold on the first produces the second. We violated this rule four times before accepting it.</span></span>) + DeepSeek-V3.1 (generation, judging)</td>
       <td>A bi-encoder can eliminate but cannot choose — measured, four times over</td></tr>
   </table>
 
@@ -195,7 +208,7 @@
     <h3>Stated first, not when asked: “de-identified vectors” ≠ anonymous</h3>
     <p>Embedding-inversion work (Song &amp; Raghunathan 2020; Morris et al. 2023) recovers
     substantial source text. Mitigations we implement: share <b>aggregates</b> (region
-    centroids and counts), reduce dimensionality (PCA 1024→256 retains <b>99.4%</b> of true
+    centroids and counts), reduce dimensionality (<span class="tm rt">PCA<span class="tip"><b>Why compression is safe here.</b> Principal component analysis rotates the space so most variance lands in the first axes. Alone, cutting to 256 dimensions loses 30% of true neighbours. But compression is only the first stage: retrieve a wide shortlist compressed, then re-score it exactly against full vectors — 99.4% retained. Naive truncation gives 48.8%, so bge-m3 is not a Matryoshka model; we verified that rather than assuming it.</span></span> 1024→256 retains <b>99.4%</b> of true
     neighbours with exact re-scoring), keep full vectors inside the perimeter.
     Disclosure is <i>reduced</i>, not eliminated — the level is chosen per data class.</p>
   </div>
@@ -210,42 +223,54 @@
   discard what fails. <b>Say:</b> “This column on the right is the point. Four of these
   methods are dead, and we killed them ourselves with controls, not with taste.”
   <b>If asked about persistent homology:</b> concede immediately — projection to 3–4
-  dimensions destroys topology; the result validates the tool, not the claim.</div>
+  dimensions destroys topology; the result validates the tool, not the claim.
+  <b>Watch your own wording on fine-tuning:</b> the <span class="tm">LoRA<span class="tip"><b>Why not full fine-tuning.</b> Low-Rank Adaptation trains small additive matrices instead of the whole model — 3.1M parameters instead of 568M. It forgets less, which matters because “out of distribution” for us means Arabic, Spanish and French. Full fine-tuning also injects directions orthogonal to the pre-trained spectrum, which correlate with out-of-domain degradation.</span></span> line is a <i>specification</i>,
+  not a running system. Say “this is what we would run, and here is why it is blocked” —
+  never let it be heard as “this is what we do”.</div>
   <div class="hdr"><span class="eyebrow">Method stack</span><span class="num">4 / 7</span></div>
   <h2>What we use, what we tried, what we discarded</h2>
+  <p style="font-size:14px; color:var(--dim); margin-bottom:10px">
+    <span class="tag live">measured</span> our own run on our own data ·
+    <span class="tag lit">published</span> third-party benchmark, cited not reproduced ·
+    <span class="tag wip">specified</span> designed and costed, <b>not yet run</b> ·
+    <span class="tag fail">discarded</span> failed a control, kept in the record</p>
 
   <table>
     <tr><th style="width:26%">Component</th><th style="width:40%">Method &amp; parameters</th>
       <th>Status — decided by measurement</th></tr>
     <tr><td><b>Embedding</b></td>
-      <td>BAAI/bge-m3 — XLM-RoBERTa-large, 568M params, 1024-d dense head, 8192 ctx, MIT.
-        MIRACL Arabic nDCG@10 <b>78.4</b> — above 7B-class models</td>
-      <td><span class="tag live">in production</span> chosen for multilingual retrieval
-        and permissive licence</td></tr>
+      <td>BAAI/bge-m3 — <span class="tm">XLM-RoBERTa-large<span class="tip"><b>The backbone.</b> A 24-layer transformer encoder trained on 100 languages. 45% of its 568M parameters sit in the token embedding table — that table is what carries the multilingual ability, which is why it is frozen absolutely during fine-tuning rather than merely regularised.</span></span>, 568M params, 1024-d dense head, 8192 ctx, MIT.
+        Arabic retrieval, <span class="tm">MIRACL<span class="tip"><b>What this benchmark is, and whose number it is.</b> A multilingual retrieval benchmark over 18 languages. This figure is PUBLISHED BY THE MODEL’S AUTHORS, not measured by us, and MIRACL training data formed part of bge-m3’s training, so the absolute level is flattered. The comparison between models stays meaningful because their situations are identical.</span></span> nDCG@10 <b>78.4</b>
+        <span class="tag lit">published</span> — above 7B-class models</td>
+      <td><span class="tag live">measured</span> field built on it; chosen for multilingual
+        retrieval and permissive licence</td></tr>
     <tr><td><b>Vector store</b></td>
-      <td>Custom <code>float16</code> memmap, append-only with last-write-wins by key;
+      <td>Custom <code>float16</code> <span class="tm">memmap<span class="tip"><b>Why no vector database.</b> The field is a plain file read through memory mapping: the operating system pages in only what is touched, so 3.2 GB never enters RAM at once. A managed vector service charges monthly rent and exists to answer in milliseconds; our workload is a nightly batch where 1.5 s per query is ample. Measured, not assumed.</span></span>, append-only with last-write-wins by key;
         brute-force scan 1.5 s/query when batched</td>
-      <td><span class="tag live">in production</span> no ANN index needed at this scale</td></tr>
+      <td><span class="tag live">measured</span> no ANN index needed at this scale</td></tr>
     <tr><td><b>Map</b></td>
       <td>Spherical k-means, 600 regions, fixed seed; partitioned on the <i>world</i>
         corpus, never on ours</td>
-      <td><span class="tag live">in production</span> partition on self ⇒ 100% coverage by
+      <td><span class="tag live">measured</span> partition on self ⇒ 100% coverage by
         construction</td></tr>
     <tr><td><b>Selection</b></td>
-      <td>Two-stage: bi-encoder prefilter → Qwen3-Reranker-8B cross-encoder</td>
-      <td><span class="tag live">in production</span> top half retains <b>82%</b> of an
+      <td>Two-stage: bi-encoder prefilter → Qwen3-Reranker-8B <span class="tm rt">cross-encoder<span class="tip"><b>Why a second stage exists.</b> A bi-encoder turns query and document into vectors SEPARATELY, so it answers “is this the same topic”. A cross-encoder reads the pair TOGETHER and answers “is this worth reading”. Two different questions; no threshold on the first produces the second. We violated this rule four times before accepting it.</span></span></td>
+      <td><span class="tag live">measured</span> top half retains <b>82%</b> of an
         expensive LLM’s picks vs 52% for a random half</td></tr>
     <tr><td><b>Hubness</b></td>
       <td>Per-item mean-similarity correction, applied to the tail only</td>
-      <td><span class="tag live">in production</span> full correction breaks the head —
+      <td><span class="tag live">measured</span> full correction breaks the head —
         AUC fell 0.787 → 0.676</td></tr>
-    <tr><td><b>Fine-tuning</b></td>
+    <tr><td><b>Fine-tuning</b><br><span style="font-size:12px; color:var(--hot)">
+        specification only</span></td>
       <td>LoRA r=16 on Q/K/V/O (3 145 728 params, 0.55%); embedding table frozen (45% of
-        model); InfoNCE via GradCache, batch 1024, τ=0.05, bf16</td>
-      <td><span class="tag wip">blocked</span> 2 102 domain pairs available,
-        150–200k required</td></tr>
+        model); <span class="tm rt">InfoNCE<span class="tip"><b>The training objective.</b> A contrastive loss: pull a related pair together, push everything else in the batch apart. Every other item in the batch serves as a free negative — which is why batch size here is a quality parameter, not a convenience setting.</span></span> via <span class="tm rt">GradCache<span class="tip"><b>Why this trick is needed.</b> Contrastive quality scales with batch size, and batch size is capped by memory. GradCache splits the pass in two — collect embeddings without a graph, then recompute with gradients — so an effective batch of 1024 fits where 64 would. It also forces bf16: fp16 loss scaling combined with cached logit gradients produces NaN.</span></span>, batch 1024, <span class="tm rt">τ=0.05<span class="tip"><b>Why not the factory 0.02.</b> Temperature controls how hard the loss pushes pairs together. The stock value builds a near-duplicate detector: only almost-identical texts stay close. Exploratory search needs broad neighbourhoods, where two papers from different subfields sit at a moderate but meaningful distance. A harder temperature collapses exactly the structure we depend on.</span></span>, bf16.
+        <i>Parameter counts are arithmetic from the architecture; no training run
+        has been executed.</i></td>
+      <td><span class="tag wip">specified</span> blocked on data: 2 102 domain pairs
+        available, 150–200k required</td></tr>
     <tr><td>Persistent homology</td>
-      <td><code>ripser</code>, Betti numbers, calibrated on sphere / torus / Klein bottle</td>
+      <td><code>ripser</code>, <span class="tm rt">Betti numbers<span class="tip"><b>What they count.</b> Connected pieces, loops and cavities in a point cloud — a shape’s fingerprint. We calibrated the tool on a sphere, a torus and a Klein bottle and it distinguishes them correctly. It still cannot answer our question, because we had to project to 3–4 dimensions first and projection destroys topology by construction.</span></span>, calibrated on sphere / torus / Klein bottle</td>
       <td><span class="tag fail">discarded</span> projection to 3–4 d destroys topology;
         validates the tool, not the corpus</td></tr>
     <tr><td>δ-hyperbolicity</td>
@@ -334,7 +359,7 @@
     <div class="card hot"><h3>Conceded, unprompted</h3>
       <p>Nine games is a small sample. Closing statements sit closer to the corpus centroid
       (<b>0.581</b>) than to their own anchor (0.465) — regression toward generic phrasing is
-      present and <i>measured</i>. This is formally Swanson’s A→B→C→A with the return
+      present and <i>measured</i>. This is formally <span class="tm rt">Swanson<span class="tip"><b>The 1986 precedent.</b> Don Swanson found one literature stating that fish oil lowers blood viscosity and another stating that viscosity aggravates Raynaud’s syndrome, with no paper connecting them and no shared authors. He wrote the connection and it was confirmed clinically. The essential condition is not transitivity but DISJOINTNESS — without it, chains of length two are exponentially abundant.</span></span>’s A→B→C→A with the return
       condition restored; without it, paths of length two are exponentially abundant.</p></div>
   </div>
   <div class="foot"><span>Discovery Machine — architecture &amp; method</span>
