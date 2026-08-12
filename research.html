@@ -8,7 +8,7 @@
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/favicon.png">
-<link rel="stylesheet" href="/css/style.css?v=37b14434df">
+<link rel="stylesheet" href="/css/style.css?v=860f0df172">
 <style>
   /* Страница устроена как остальные справочные (hypotheses/frontier/discoveries): одна на все
      языки, содержимое фетчем из data/theory/research.json. Своё устройство рядом с общим
@@ -58,6 +58,14 @@
   .r-src{margin-top:16px;padding-top:13px;border-top:1px solid var(--line, var(--hair));
     font-size:13px;color:var(--soft)}
   .r-src a{color:var(--link);text-decoration:none}
+  /* Точки схождения — другой сорт материала, и это должно быть видно глазом, а не
+     только из подписи: отбиты чертой, карточка спокойнее, без охряной метки масштаба. */
+  .r-points{margin-top:44px;padding-top:26px;border-top:1px solid var(--line, var(--hair))}
+  .r-points h2{font-family:var(--font-display);font-size:clamp(21px,3.2vw,27px);
+    line-height:1.2;margin-bottom:8px}
+  .r-points .r-lead{margin-bottom:0}
+  .r-card-pt{background:var(--tag-bg, var(--bg))}
+  .r-card-pt .r-sec p{font-size:14px;line-height:1.65;color:var(--muted);margin-top:6px}
   .r-empty{padding:30px;text-align:center;color:var(--muted)}
   @media (max-width:640px){ .r-card{padding:16px 15px} .r-read{gap:5px} }
 </style>
@@ -214,6 +222,40 @@
         list.appendChild(c);
       });
       root.appendChild(list);
+
+      // Точки схождения. Отдельным блоком и другим тоном: направления выше — это работа,
+      // за которую можно взяться, а здесь наблюдение о нашей же работе. Смешивать нельзя,
+      // иначе читатель решит, что мы предсказали неизведанное.
+      var pts = d.points || {};
+      var PT = (pts.page && (pts.page[LANG] || pts.page.ru)) || null;
+      if (PT && (pts.items || []).length) {
+        var sec = el('div', 'r-points');
+        sec.appendChild(el('h2', null, esc(PT.title)));
+        sec.appendChild(el('p', 'r-lead', esc(PT.lead)));
+        sec.appendChild(el('div', 'r-honest', esc(PT.note)));
+        var box = el('div', 'r-list');
+        pts.items.forEach(function (it) {
+          var c = el('div', 'r-card r-card-pt');
+          var names = (it.sources || []).map(function (s) {
+            var t = (s.titles && (s.titles[LANG] || s.titles.ru)) || s.id;
+            var href = '/lang/' + LANG + '/archive/' + s.date + '/' + s.id + '/' +
+                       (s.full ? 'advanced.html' : 'index.html');
+            return '<a href="' + esc(href) + '">' + esc(t) + '</a>';
+          });
+          c.innerHTML = '<div class="r-sec"><b>' + esc(PT.src) + '</b>' +
+                        '<div class="r-reads">' + names.map(function (n) {
+                          return '<div class="r-read">' + n + '</div>'; }).join('') + '</div></div>';
+          var box2 = el('div', 'r-sec');
+          box2.innerHTML = '<b>' + esc((PT.title || '')) + '</b>';
+          (it.directions || []).forEach(function (x) {
+            box2.appendChild(el('p', null, esc(x)));
+          });
+          c.appendChild(box2);
+          box.appendChild(c);
+        });
+        sec.appendChild(box);
+        root.appendChild(sec);
+      }
     })
     .catch(function (e) { root.appendChild(el('div', 'r-empty', String(e))); });
 })();

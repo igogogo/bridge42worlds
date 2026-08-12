@@ -208,6 +208,31 @@ def zone_traffic():
         return None
 
 
+def _genre_mix(idx, days=14):
+    """Каких работ мы набрали за последние две недели: измерено, а не на глаз.
+
+    Жанр берём из data/article-kind.json — его размечает article_kind.py по смыслу
+    аннотации (эксперимент / теория / методы / обзор). Считаем только свежие статьи:
+    старый архив набирался с прежним приоритетом и разбавляет картину так, что новую
+    настройку в ней не разглядеть.
+    """
+    try:
+        kinds = json.loads((ROOT / "data" / "article-kind.json").read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    from datetime import date, timedelta
+    edge = (date.today() - timedelta(days=days)).isoformat()
+    seen = {}
+    for a in idx:
+        if (a.get("date") or "") < edge:
+            continue
+        k = kinds.get(a.get("id"))
+        k = (k or {}).get("kind") if isinstance(k, dict) else k
+        if k:
+            seen[k] = seen.get(k, 0) + 1
+    return seen
+
+
 def site_numbers():
     """Числа для отчёта: из свежепересчитанных файлов, а не из головы."""
     out = {}
@@ -221,6 +246,11 @@ def site_numbers():
         # в ленте, так что число в отчёте и значки на сайте не разойдутся.
         out["с_рекомендациями"] = sum(1 for a in idx if a.get("km"))
         out["полных"] = sum(1 for a in idx if not a.get("express"))
+        # Жанровый перекос — то, что владелец просил править 12 августа: «побольше бы
+        # практических экспериментальных работ». Без строки в отчёте правку промпта
+        # нечем проверить: доля меняется медленно и незаметно, а замечают её только
+        # глазами по ленте, то есть через неделю.
+        out["жанры"] = _genre_mix(idx)
     except Exception:
         pass
     for name, key in (("data/corpus-stats.json", "покрытие"), ("data/lang-coverage.json", "языки"),

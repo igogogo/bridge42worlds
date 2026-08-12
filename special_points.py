@@ -236,6 +236,22 @@ def main():
         if hint:
             print(f"  ГДЕ ЛЕЖИТ: {hint}")
 
+    # Сводка — это числа для нас, а на страницу нужны сами точки. Пишем их отдельным
+    # файлом: ведущая показывает сгущения читателю (раздел «Что исследовать»), и брать
+    # их из печати в консоль было бы единственным способом — то есть никаким.
+    points_out = []
+    for g in good:
+        srcs_g = sorted({pts[i]["src"] for i in g})
+        points_out.append({
+            "статьи": srcs_g,
+            "направления": [pts[i]["text"] for i in g],
+            "область": drill_check(M[g].mean(0)) or "",
+        })
+    (DATA / "special-points-list.json").write_text(
+        json.dumps({"сгущения": points_out, "порог": round(thr, 4),
+                    "из_направлений": len(pts), "из_статей": len(srcs)},
+                   ensure_ascii=False, indent=1), encoding="utf-8")
+
     out = {"направлений": len(pts), "статей": len(srcs),
            "обычная_пара": round(mu, 4), "разброс": round(sd, 4),
            "жанровая_прибавка": None if base != base else round(mu - base, 4),

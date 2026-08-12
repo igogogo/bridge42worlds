@@ -52,6 +52,13 @@ RESERVE = 0.50
 
 # Замеры себестоимости по журналу, 11–12 августа. Не «прайс», а то, во что реально
 # обходится работа со всеми переводами и попаданиями в кэш.
+# Периметр разделов — тот же, что был у daily и overnight. Передавать ОБЯЗАТЕЛЬНО: без
+# --category генератор подставляет "astro-ph.*", и лента набирается из одной астрофизики.
+# С отключением старых задач фабрика осталась единственным источником свежих статей, и
+# эта тихая подстановка стоила бы нам всей широты корпуса.
+CATEGORIES = ("astro-ph.*,gr-qc,hep-th,hep-ph,hep-ex,nucl-th,nucl-ex,quant-ph,"
+              "cond-mat.*,physics.*,q-bio.*,math-ph,math.*,cs.LG")
+
 COST = {
     "express": 0.0074,     # статья экспрессом на пяти языках
     "full": 0.075,         # полный разбор
@@ -330,7 +337,8 @@ def do_step(s):
         rc = 0
         for d, _n in s["days"]:
             rc = run([sys.executable, "run.py", "range", "--from", d, "--to", d,
-                      "--express", "--limit", str(max(5, s["n"] // max(1, len(s["days"]))))],
+                      "--express", "--limit", str(max(5, s["n"] // max(1, len(s["days"])))),
+                      "--category", CATEGORIES],
                      timeout=7200) or rc
         return rc
     if k == "upgrade":
