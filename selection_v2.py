@@ -79,7 +79,7 @@ def nz(v):
 def our_vectors():
     p = DATA / "embeddings-articles.jsonl"
     if not p.exists():
-        sys.exit("нет embeddings-articles.jsonl — сначала embeddings_build.py")
+        raise RuntimeError("нет embeddings-articles.jsonl — сначала embeddings_build.py")
     out = {}
     for line in p.read_text(encoding="utf-8").splitlines():
         if line.strip():
@@ -299,7 +299,7 @@ def hypothesis(n):
     env = load_env()
     key = env.get("DEEPSEEK_API_KEY")
     if not key:
-        sys.exit("нет DEEPSEEK_API_KEY")
+        raise RuntimeError("нет DEEPSEEK_API_KEY")
     src = json.loads((DATA / "selection-scores.json").read_text(encoding="utf-8"))
     sc = src["scores"]
     cands = candidates(src["date"])

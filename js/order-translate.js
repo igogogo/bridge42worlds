@@ -107,7 +107,12 @@
             .then(function (d) {
                 if (!d) { say(L.offline); return; }
                 if (d.status === 'done') { say(L.done, true); return; }
-                if (d.status === 'error') { say(L.failed); return; }
+                // Очередь пишет 'failed' и 'rejected' (schema-queue.sql), а не 'error':
+                // из-за расхождения провалившийся заказ показывался читателю как
+                // «ждём очереди» до конца опроса — сорок раз по три секунды впустую.
+                if (d.status === 'failed' || d.status === 'rejected' || d.status === 'error') {
+                    say(L.failed); return;
+                }
                 if (d.status === 'running') say(L.running);
                 else say(L.queued + (d.ahead ? ' · ' + d.ahead + ' ' + L.ahead : ''));
                 timer = setTimeout(function () { poll(id); }, 3000);

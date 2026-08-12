@@ -149,8 +149,12 @@ def do_translate(payload, lang):
     if not (arxiv_id and to):
         raise ValueError("в заказе нет arxiv_id или языка")
     # Точечный перевод одной статьи существующим механизмом проекта.
+    # Аргументы ПОЗИЦИОННЫЕ: `run.py translate-one <id> <lang>` (run.py, parser
+    # translate-one). Здесь стояли ключи --id/--lang, которых у команды нет, — argparse
+    # выходил с кодом 2, заказ трижды перезапускался и уходил в failed. Читатель при
+    # этом видел «ждём очереди» до конца опроса: ни один заказ перевода не исполнялся.
     code = subprocess.run(
-        [sys.executable, "run.py", "translate-one", "--id", arxiv_id, "--lang", to],
+        [sys.executable, "run.py", "translate-one", arxiv_id, to],
         cwd=DATA_ROOT, env={**os.environ, "PYTHONIOENCODING": "utf-8"}).returncode
     if code != 0:
         raise RuntimeError(f"перевод завершился с кодом {code}")

@@ -42,7 +42,7 @@ def nz(v):
 def load():
     p = DATA / "embeddings-articles.jsonl"
     if not p.exists():
-        sys.exit("нет embeddings-articles.jsonl")
+        raise RuntimeError("нет embeddings-articles.jsonl")
     vecs = {}
     for line in p.read_text(encoding="utf-8").splitlines():
         if line.strip():
@@ -132,7 +132,7 @@ def main():
     if a.article:
         r = expanding(a.article, vecs, meta, art_f, levels, a.n)
         if not r:
-            sys.exit("нет такой статьи в индексе")
+            raise RuntimeError("нет такой статьи в индексе")
         d = DATA / "research" / a.article
         d.mkdir(parents=True, exist_ok=True)
         (d / "engine.json").write_text(json.dumps(r, ensure_ascii=False, indent=1),

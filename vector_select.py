@@ -50,7 +50,12 @@ def nz(v):
 def corpus():
     p = DATA / "embeddings-articles.jsonl"
     if not p.exists():
-        sys.exit("нет embeddings-articles.jsonl")
+        # RuntimeError, а НЕ sys.exit. Вызывающий (gen_llm.select_best) ловит Exception
+        # и спокойно работает без предфильтра, а SystemExit проходит сквозь except
+        # и роняет весь прогон. Из-за этого в ночь на 12 августа четырнадцать дней
+        # подряд отчитались «код 1, день пропущен» при полном кэше кандидатов:
+        # вспомогательный слой убил основную работу.
+        raise RuntimeError("нет embeddings-articles.jsonl — предфильтр пропущен")
     out = []
     for line in p.read_text(encoding="utf-8").splitlines():
         if line.strip():
