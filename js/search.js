@@ -235,8 +235,10 @@ function switchFeedLang(l) {
 }
 window.switchFeedLang = switchFeedLang;
 
-var tagsPath = '/lang/' + lang + '/data/tags.json';
-var scientistsPath = '/lang/' + lang + '/data/scientists.json';
+// Лёгкие справочники (tools/lite_refs.py): имя и описание для подсказки. Полные
+// файлы весят 4.5 МБ ради 368 названий и нужны СТРАНИЦЕ тега, а не ленте.
+var tagsPath = '/lang/' + lang + '/data/tags-lite.json';
+var scientistsPath = '/lang/' + lang + '/data/scientists-lite.json';
 
 function fetchIndex(version) {
     return fetch('/lang/' + lang + '/' + VERSION_INDEX_FILES[version])
@@ -372,12 +374,12 @@ window.B42Ref = function (name, url) {
 window.B42Refs = Promise.all(
     [].concat([
         fetch(tagsPath).then(function(r) { return r.json(); }).catch(function() {
-            return fetch('/lang/' + defaultLang + '/data/tags.json').then(function(r) { return r.json(); });
+            return fetch('/lang/' + defaultLang + '/data/tags-lite.json').then(function(r) { return r.json(); });
         }),
         fetch(scientistsPath).then(function(r) { return r.json(); }).catch(function() {
-            return fetch('/lang/' + defaultLang + '/data/scientists.json').then(function(r) { return r.json(); });
+            return fetch('/lang/' + defaultLang + '/data/scientists-lite.json').then(function(r) { return r.json(); });
         }),
-        fetch('/lang/' + lang + '/data/laws.json').then(function(r) { return r.json(); }).catch(function() { return {}; }),
+        fetch('/lang/' + lang + '/data/laws-lite.json').then(function(r) { return r.json(); }).catch(function() { return {}; }),
         // Локализованный набор названий/описаний разделов, с откатом на английскую базу —
         // она же остаётся источником для lang=en и для категорий, перевода которых ещё нет.
         // Базовый файл — АНГЛИЙСКИЙ, отдельного -en не существует и не должно. Раньше его
@@ -647,7 +649,10 @@ function doFullSearch(query) {
                    // (без неё en «quantum» терял 119 статей — QA 2026-07-29), а мусора
                    // не даёт, потому что ищется, но не показывается.
                    (item.description || '').toLowerCase().includes(q) ||
-                   (item.abstract || '').toLowerCase().includes(q) ||
+                   // abstract из индекса убран (13 августа): он весил 1.14 МБ и давал
+                   // совпадения по тексту, которого на карточке нет. Поиск по полному
+                   // смыслу делает векторный поиск на стороне Worker'а.
+
                    (item.authors || []).some(function(a) { return a.toLowerCase().includes(q); });
         });
     }

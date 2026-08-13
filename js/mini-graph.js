@@ -85,9 +85,9 @@
         build: function (lang) {
             return Promise.all([
                 fetch('/data/knowledge-graph.json').then(function (r) { return r.json(); }),
-                shared('tagsLoc', '/lang/' + lang + '/data/tags.json'),
-                shared('lawsData', '/lang/' + lang + '/data/laws.json'),
-                shared('scientistsData', '/lang/' + lang + '/data/scientists.json'),
+                shared('tagsLoc', '/lang/' + lang + '/data/tags-lite.json'),
+                shared('lawsData', '/lang/' + lang + '/data/laws-lite.json'),
+                shared('scientistsData', '/lang/' + lang + '/data/scientists-lite.json'),
                 // Названия и описания разделов search.js уже прочитал — причём в ЛОКАЛИЗОВАННОМ
                 // виде (arxiv-categories-ru и т.п.). Свой запрос базового файла давал второй
                 // комплект и заодно английские подписи там, где локализованные уже есть.

@@ -433,7 +433,11 @@ def do_step(s):
     if k == "graph":
         return run([sys.executable, "run.py", "graph"], timeout=3600)
     if k == "status":
-        return run([sys.executable, "run.py", "status"], timeout=1800)
+        rc = run([sys.executable, "run.py", "status"], timeout=1800)
+        # Лёгкие справочники для браузера (имя + описание подсказки). Пересобираются из
+        # полных: разойдутся — читатель увидит старое название тега на карточке.
+        rc = run([sys.executable, "tools/lite_refs.py"], timeout=1800) or rc
+        return rc
     print(f"  ⚠️ шаг {k} пока не реализован")
     return None
 

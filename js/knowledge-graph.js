@@ -170,9 +170,9 @@
         build: function (lang) {
             return Promise.all([
                 fetch('/data/knowledge-graph.json').then(function (r) { return r.json(); }),
-                shared('tagsLoc', '/lang/' + lang + '/data/tags.json'),
-                shared('lawsData', '/lang/' + lang + '/data/laws.json'),
-                shared('scientistsData', '/lang/' + lang + '/data/scientists.json')
+                shared('tagsLoc', '/lang/' + lang + '/data/tags-lite.json'),
+                shared('lawsData', '/lang/' + lang + '/data/laws-lite.json'),
+                shared('scientistsData', '/lang/' + lang + '/data/scientists-lite.json')
             ]).then(function (res) {
                 var kg = res[0], tn = res[1], ln = res[2];
                 kgEdgesCache = kg.edges;

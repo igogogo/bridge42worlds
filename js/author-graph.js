@@ -21,8 +21,8 @@
                 // запросом: этот файл оставался последним, кто разбирал 4,6 МБ тегов вторым
                 // комплектом, пока мини-граф и граф знаний уже брали их из B42Refs.
                 (typeof window.B42Ref === 'function'
-                    ? window.B42Ref('tagsLoc', '/lang/' + lang + '/data/tags.json')
-                    : fetch('/lang/' + lang + '/data/tags.json').then(function (r) { return r.json(); }).catch(function () { return {}; }))
+                    ? window.B42Ref('tagsLoc', '/lang/' + lang + '/data/tags-lite.json')
+                    : fetch('/lang/' + lang + '/data/tags-lite.json').then(function (r) { return r.json(); }).catch(function () { return {}; }))
             ]).then(function (res) {
                 var kg = res[0], tn = res[1];
                 var sub = {};  // tag id -> level/sub из KG
