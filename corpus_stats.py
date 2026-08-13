@@ -24,7 +24,9 @@ Kaggle, и требуют файла на 5,4 ГБ, которого нет ни
 """
 import argparse
 import json
+import os
 import sys
+from datetime import datetime
 from pathlib import Path
 from collections import defaultdict
 
@@ -33,7 +35,15 @@ from collections import defaultdict
 if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-DUMP = Path(r"C:/Users/nadez/Downloads/arxiv-metadata-oai-snapshot.json")
+# Где искать дамп: Downloads → кэш kagglehub. Тот же список, что в arxiv_bulk_chunk.py,
+# и это не роскошь: чанкер после успешного разбора УДАЛЯЕТ исходник, чтобы не держать
+# 5 ГБ на диске, и следующим шагом этот скрипт искал дамп ровно там, где его только что
+# не стало. В кэше kagglehub при этом лежала живая копия.
+_DUMP_CANDIDATES = [
+    Path.home() / "Downloads" / "arxiv-metadata-oai-snapshot.json",
+    Path.home() / ".cache/kagglehub/datasets/Cornell-University/arxiv/versions/294/arxiv-metadata-oai-snapshot.json",
+]
+DUMP = next((c for c in _DUMP_CANDIDATES if c.exists()), _DUMP_CANDIDATES[0])
 OUT = Path("data/corpus-stats.json")
 YEARS = ("25", "26")  # arXiv id YYMM.xxxxx → 2025-2026
 ALLOWED = ("by/4.0", "by-sa/4.0", "zero/1.0", "nonexclusive-distrib/1.0")
@@ -135,11 +145,28 @@ def build_full():
         print(f"❌ дампа нет: {DUMP}\n   Это единственное, ради чего нужен --dump. Скачайте дамп "
               f"или обновляйте только наши числа: python corpus_stats.py")
         return 1
+    # Дата дампа — в файл. Без неё нельзя отличить свежий скан от скана по старой копии
+    # из кэша, и витрина молча уезжает назад: сегодняшний прогон по июльской копии дал
+    # 462 720 работ там, где вчера было 482 576, и на дашборде это выглядело бы как будто
+    # arXiv усох на двадцать тысяч статей.
+    dump_mtime = datetime.fromtimestamp(DUMP.stat().st_mtime).strftime("%Y-%m-%d")
+    prev = {}
+    if OUT.exists():
+        try:
+            prev = json.loads(OUT.read_text(encoding="utf-8"))
+        except Exception:
+            prev = {}
+    if prev.get("dump_date") and prev["dump_date"] > dump_mtime and not os.environ.get("B42_FORCE_STATS"):
+        print(f"⏭️ дамп на диске ({dump_mtime}) старее того, по которому уже посчитано "
+              f"({prev['dump_date']}) — числа не трогаю, чтобы витрина не поехала назад.\n"
+              f"   Нужно всё равно — B42_FORCE_STATS=1.")
+        return 0
     by_month, by_section, licenses, n = scan_dump()
     gm, gtot = generated_counts()
     months = sorted(set(by_month) | set(gm))
     out = {
         "range": "2025-2026",
+        "dump_date": dump_mtime,
         "dump_total": n,
         "generated_total": gtot,
         "months": [{
@@ -209,4 +236,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # Код возврата обязан доезжать до вызывающего: без sys.exit скрипт заканчивался нулём
+    # даже после «❌ дампа нет», и обновление дампа рапортовало «🎉 всё обновлено» поверх
+    # несделанного шага. Молчащий сбой хуже громкого.
+    sys.exit(main())

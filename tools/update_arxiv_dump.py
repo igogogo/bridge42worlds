@@ -85,7 +85,11 @@ def main():
     ZIP.unlink()
     print("✅ дамп обновлён, гоню чанки и статистику…", flush=True)
     env = {**os.environ, "PYTHONIOENCODING": "utf-8"}
-    for cmd in (["arxiv_bulk_chunk.py"], ["corpus_stats.py", "--dump"]):
+    # Порядок важен: скан лицензий читает ДАМП, а чанкер после успешного разбора его
+    # удаляет (5 ГБ на диске держать незачем). Пока скан стоял вторым, он каждый раз
+    # приходил к пустому месту и писал «дампа нет» — 13 августа именно так и вышло,
+    # причём прогон отрапортовал «🎉 всё обновлено».
+    for cmd in (["corpus_stats.py", "--dump"], ["arxiv_bulk_chunk.py"]):
         code = subprocess.run([sys.executable, *cmd], cwd=ROOT, env=env).returncode
         if code != 0:
             print(f"❌ {cmd[0]} завершился с кодом {code}")
