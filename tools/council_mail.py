@@ -84,6 +84,74 @@ def letter_agenda(m, key):
     return "\n".join(lines)
 
 
+def results(meeting_date):
+    """Итоги голосования с сайта. Пусто — значит никто не голосовал, и это тоже итог."""
+    import requests
+    try:
+        r = requests.get(f"{SITE}/api/council/results",
+                         params={"meeting": meeting_date}, timeout=20)
+        if r.status_code != 200:
+            return None
+        return r.json()
+    except Exception:
+        return None
+
+
+def letter_results(m, key):
+    """Письмо с ИТОГАМИ — то, чего у нас не было вовсе.
+
+    До 13 августа `--results` слал ровно ту же повестку, что и в пятницу: тема письма
+    называлась «итоги», а текст звал голосовать по уже закрытому заседанию. Владелец
+    писал прямо: «как прошло заседание комитета, ничего не прислали — ни решений, ни
+    напоминаний». Теперь письмо отвечает на единственный вопрос, ради которого его
+    открывают: что решили.
+
+    Голоса берём с сайта, а не из файла заседания: в файле они появляются только после
+    закрытия, а закрытие и рассылка идут одним прогоном.
+    """
+    date = m.get("date", "")
+    res = (results(date) or {}).get("results") or {}
+    members = (results(date) or {}).get("members") or 0
+    lines = [f"Итоги заседания наблюдательного совета {date}", ""]
+
+    decided, skipped = [], []
+    for q in (m.get("agenda") or []):
+        qid = q.get("id")
+        tally = res.get(qid) or {}
+        if not tally:
+            skipped.append(q)
+            continue
+        # Подписи вариантов — из самой повестки: в базе лежат идентификаторы, а человеку
+        # нужны слова. Без этого письмо сообщало бы «o2: 1 голос».
+        names = {}
+        for o in (q.get("options") or []):
+            if isinstance(o, dict):
+                names[str(o.get("id"))] = str(o.get("label") or o.get("id"))
+        best = max(tally.items(), key=lambda kv: kv[1])
+        total = sum(tally.values())
+        decided.append((q, best, total, names))
+
+    if decided:
+        lines.append("Решения:")
+        for q, (choice, n), total, names in decided:
+            label = names.get(choice, {"yes": "за", "no": "против",
+                                       "abstain": "воздержались"}.get(choice, choice))
+            lines.append(f"  · {q.get('title','')}")
+            lines.append(f"      {label} — {n} из {total}")
+        lines.append("")
+    if skipped:
+        lines.append("Перенесено (никто не проголосовал):")
+        for q in skipped:
+            lines.append(f"  · {q.get('title','')}")
+        lines.append("")
+
+    lines += [f"Участников в совете: {members}." if members else "",
+              "Полные итоги и все предложения — в вашем кабинете:",
+              f"  {SITE}/council.html?key={key}", "",
+              "Решение можно оспорить: напишите в ответ, вопрос вернётся на следующее заседание."]
+    return "\n".join(x for x in lines if x is not None)
+
+
 def letter_weekly(m, key):
     return "\n".join([
         "Сверка недели · bridge42worlds", "",
@@ -130,7 +198,9 @@ def main():
     m = meeting()
 
     if args.test:
-        body = letter_agenda(m, args.key) if not args.weekly else letter_weekly(m, args.key)
+        body = (letter_results(m, args.key) if args.results else
+                letter_weekly(m, args.key) if args.weekly else
+                letter_agenda(m, args.key))
         ok = send(args.test, f"Наблюдательный совет: заседание {m.get('date','')}", body)
         print("✅ письмо отправлено" if ok else "❌ не отправлено")
         return 0 if ok else 1
@@ -155,7 +225,9 @@ def main():
            (f"Совет: сверка недели" if args.weekly else f"Совет: повестка {m.get('date','')}")
     n = 0
     for p in people:
-        body = letter_weekly(m, p["key"]) if args.weekly else letter_agenda(m, p["key"])
+        body = (letter_results(m, p["key"]) if args.results else
+                letter_weekly(m, p["key"]) if args.weekly else
+                letter_agenda(m, p["key"]))
         if send(p["email"], subj, body):
             n += 1
     print(f"✅ отправлено писем: {n} из {len(people)}")
