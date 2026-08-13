@@ -893,8 +893,17 @@ async function handleCouncil(request, env, path) {
   }
 
   if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405 });
-  const ipOk = await ipGuard(env, request);
-  if (!ipOk.ok) return Response.json({ error: ipOk.error }, { status: ipOk.code });
+  // Щит по адресу считает обращения с одного IP и рассчитан на человека с мышкой. Ручки
+  // с админ-секретом (выдача ключа, сброс) он считал наравне со всеми — и однажды отказал
+  // в отзыве засвеченного ключа со словами «лимит на сегодня». Отзыв ключа не может ждать
+  // до завтра. Админ-секрет — доказательство сильнее репутации адреса, поэтому при нём щит
+  // не применяется; для всех остальных он работает как работал.
+  const isAdmin = !!env.COUNCIL_ADMIN_TOKEN &&
+                  (request.headers.get("x-b42-admin") || "") === env.COUNCIL_ADMIN_TOKEN;
+  if (!isAdmin) {
+    const ipOk = await ipGuard(env, request);
+    if (!ipOk.ok) return Response.json({ error: ipOk.error }, { status: ipOk.code });
+  }
   let body = {};
   try { body = await request.json(); } catch { return Response.json({ error: "bad_json" }, { status: 400 }); }
 
@@ -912,7 +921,12 @@ async function handleCouncil(request, env, path) {
       "INSERT INTO council_members (key, uid, views, name, email, kind) VALUES (?,?,?,?,?,?)")
       .bind(key, "invited:" + key, 0, String(body.name || "").slice(0, 40),
             String(body.email || "").slice(0, 120), String(body.kind || "human")).run();
-    await tg(env, `🏛 <b>Приглашение выдано</b>\n${key} · ${String(body.name || body.email || "").slice(0, 60)}`);
+    // КЛЮЧ В КАНАЛ НЕ УХОДИТ. Владелец 13 августа: «ты их засветил в канале» — и он
+    // прав. Ключ совета это одновременно логин и пароль: у кого он есть, тот и участник.
+    // В канале сидят люди, канал пересылается, история хранится вечно — опубликованный
+    // ключ надо считать выданным посторонним. В канал идёт ФАКТ выдачи, сам ключ —
+    // только тому, кому он предназначен, и только личным каналом.
+    await tg(env, `🏛 <b>Приглашение в совет выдано</b>\n${String(body.name || body.email || "участник").slice(0, 60)}`);
     return Response.json({ ok: true, key, link: `https://bridge42worlds.academy/council.html?key=${key}` });
   }
 
@@ -944,8 +958,27 @@ async function handleCouncil(request, env, path) {
     await env.QUEUE.prepare(
       "INSERT INTO council_members (key, uid, views, name, email) VALUES (?,?,?,?,?)")
       .bind(key, uid, seen, String(body.name || "").slice(0, 40), mail).run();
-    await tg(env, `🏛 <b>Новый участник совета</b>\nключ ${key} · прочитано статей: ${seen}`);
+    await tg(env, `🏛 <b>Новый участник совета</b>\nпрочитано статей: ${seen}`);
     return Response.json({ ok: true, key });
+  }
+
+  // Отозвать ОДИН ключ. Ключ — это вход: где бы он ни всплыл (канал, скриншот, чужая
+  // переписка), его надо считать выданным посторонним и гасить, а не «иметь в виду».
+  // Сбрасывать ради этого весь совет нельзя — остальные участники не виноваты.
+  if (path === "revoke") {
+    const admin = request.headers.get("x-b42-admin") || "";
+    if (!env.COUNCIL_ADMIN_TOKEN || admin !== env.COUNCIL_ADMIN_TOKEN) {
+      return Response.json({ error: "forbidden" }, { status: 403 });
+    }
+    const target = String(body.target || "").slice(0, 24);
+    if (!target) return Response.json({ error: "no_target" }, { status: 400 });
+    // Голоса отозванного ключа уходят вместе с ним: они больше не принадлежат никому.
+    await env.QUEUE.prepare("DELETE FROM council_votes WHERE key=?").bind(target).run();
+    await env.QUEUE.prepare("DELETE FROM council_freezes WHERE key=?").bind(target).run();
+    const r = await env.QUEUE.prepare("DELETE FROM council_members WHERE key=?").bind(target).run();
+    const gone = !!(r && r.meta && r.meta.changes);
+    return Response.json({ ok: true, revoked: gone ? target : null,
+                           note: gone ? "ключ погашен" : "такого ключа в базе нет" });
   }
 
   // Полный сброс совета к чистому листу: голоса, заморозки, предложения и участники-люди.
@@ -989,7 +1022,7 @@ async function handleCouncil(request, env, path) {
     await env.QUEUE.prepare(
       "INSERT INTO council_proposals (key, text, lang) VALUES (?,?,?)")
       .bind(key, text, String(body.lang || "").slice(0, 5)).run();
-    await tg(env, `🏛 <b>Предложение в совет</b> (${key})\n${text.slice(0, 800)}`);
+    await tg(env, `🏛 <b>Предложение в совет</b>\n${text.slice(0, 800)}`);
     return Response.json({ ok: true });
   }
 
