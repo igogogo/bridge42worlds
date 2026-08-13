@@ -3531,6 +3531,12 @@ body.graph-fs-open .graph-fs-active svg { touch-action: manipulation; }
 /* Значок «разобрано машиной знаний» у названия — и на странице статьи, и в карточке ленты.
    Знак не кричит: он того же роста, что и заголовок, но тоном спокойнее, и оживает только
    под курсором. Смысл значка — «здесь есть что-то ещё», а не «смотри на меня». */
+/* Упоминание без карточки. Выглядит тише обычной плашки — это честно: за ним не наша
+   статья о предмете, а список работ, где он встречается. Пунктир вместо сплошной рамки
+   читается как «здесь ещё не дописано», и это ровно то, что мы хотим сказать. */
+.ent-nocard { border-style: dashed !important; opacity: .78; cursor: help; }
+.ent-nocard:hover { opacity: 1; }
+
 .km-badge { display: inline-flex; align-items: center; justify-content: center;
   min-width: var(--tap-sm, 30px); min-height: var(--tap-sm, 30px);
   margin-inline-start: 4px; vertical-align: baseline;

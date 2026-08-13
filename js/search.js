@@ -90,6 +90,7 @@ var UI_STRINGS = {
           hideExpress: 'Скрыть экспресс-статьи', showLess: 'Свернуть',
           favTitle: 'Избранное', like: 'Нравится', dislike: 'Не нравится', superlike: 'Супер!',
           refineTip: 'Отшлифовано редактором',
+          noCard: 'Карточки пока нет — покажем статьи, где о нём говорится',
           kmTip: 'Разобрано машиной знаний: в конце продвинутой версии есть раздел для автора работы — куда двигаться дальше и что лежит рядом в нашем архиве. Нажмите, чтобы открыть.' },
     en: { tagNotFound: 'Tag not found', selectTag: 'Select a tag:', scientistNotFound: 'Scientist not found',
           selectScientist: 'Select a scientist:', authorNotFound: 'Author not found', selectAuthor: 'Select an author:',
@@ -98,6 +99,7 @@ var UI_STRINGS = {
           hideExpress: 'Hide express articles', showLess: 'Collapse',
           favTitle: 'Favorites', like: 'Like', dislike: 'Dislike', superlike: 'Super!',
           refineTip: 'Polished by an editor',
+          noCard: 'No profile yet — we will show the articles that mention it',
           kmTip: 'Read by the knowledge machine: the advanced version ends with a section for the paper\'s author — where the work could go next and what lies nearby in our archive. Click to open.' },
     es: { tagNotFound: 'Etiqueta no encontrada', selectTag: 'Elige una etiqueta:', scientistNotFound: 'Científico no encontrado',
           selectScientist: 'Elige un científico:', authorNotFound: 'Autor no encontrado', selectAuthor: 'Elige un autor:',
@@ -106,6 +108,7 @@ var UI_STRINGS = {
           hideExpress: 'Ocultar artículos exprés', showLess: 'Contraer',
           favTitle: 'Favoritos', like: 'Me gusta', dislike: 'No me gusta', superlike: '¡Genial!',
           refineTip: 'Pulido por un editor',
+          noCard: 'Aún sin ficha: mostraremos los artículos donde se menciona',
           kmTip: 'Analizado por la máquina del conocimiento: la versión avanzada termina con una sección para el autor del trabajo — hacia dónde avanzar y qué hay cerca en nuestro archivo. Pulse para abrir.' },
     zh: { tagNotFound: '未找到标签', selectTag: '选择标签：', scientistNotFound: '未找到科学家',
           selectScientist: '选择科学家：', authorNotFound: '未找到作者', selectAuthor: '选择作者：',
@@ -113,6 +116,7 @@ var UI_STRINGS = {
           express: '速览', expressTip: '速览版：基于作者摘要，未解析全文', hideExpress: '隐藏速览文章', showLess: '收起',
           favTitle: '收藏', like: '喜欢', dislike: '不喜欢', superlike: '太赞了！',
           refineTip: '编辑润色',
+          noCard: '暂无词条——将显示提到它的文章',
           kmTip: '已由知识机器解读：进阶版末尾有写给论文作者的一节——可以往哪里走，档案库里附近有什么。点击打开。' },
     fr: { tagNotFound: 'Tag introuvable', selectTag: 'Choisir un tag :', scientistNotFound: 'Scientifique introuvable',
           selectScientist: 'Choisir un scientifique :', authorNotFound: 'Auteur introuvable', selectAuthor: 'Choisir un auteur :',
@@ -121,6 +125,7 @@ var UI_STRINGS = {
           hideExpress: 'Masquer les articles express', showLess: 'Réduire',
           favTitle: 'Favoris', like: 'J\'aime', dislike: 'Je n\'aime pas', superlike: 'Génial !',
           refineTip: 'Peaufiné par un éditeur',
+          noCard: 'Pas encore de fiche : nous montrerons les articles qui en parlent',
           kmTip: 'Lu par la machine du savoir : la version avancée se termine par une section destinée à l\'auteur — vers où avancer et ce qui se trouve à côté dans notre archive. Cliquez pour ouvrir.' },
     ar: { tagNotFound: 'الوسم غير موجود', selectTag: 'اختر وسمًا:', scientistNotFound: 'العالم غير موجود',
           selectScientist: 'اختر عالمًا:', authorNotFound: 'المؤلف غير موجود', selectAuthor: 'اختر مؤلفًا:',
@@ -129,6 +134,7 @@ var UI_STRINGS = {
           hideExpress: 'إخفاء المقالات السريعة', showLess: 'طي',
           favTitle: 'المفضلة', like: 'إعجاب', dislike: 'عدم إعجاب', superlike: 'رائع!',
           refineTip: 'تم صقله بواسطة محرر',
+          noCard: 'لا توجد بطاقة بعد — سنعرض المقالات التي تذكره',
           kmTip: 'قرأته آلة المعرفة: تنتهي النسخة المتقدمة بقسم موجَّه إلى مؤلف العمل — إلى أين يمكن المضي وما الذي يقع قريبًا في أرشيفنا. اضغط للفتح.' }
 };
 var UI = UI_STRINGS[lang] || UI_STRINGS.en;
@@ -1073,15 +1079,25 @@ function cardHTML(item) {
        Теги отбираем по ЧАСТОТЕ в корпусе, а не по порядку из генерации: у статьи их до 11,
        на карточке нужно 5 главных. Частый тег ведёт в живой раздел, редкий — в пустой. */
     var tagsHtml = pickTop(item.tags || [], 5).map(function(t) {
-        return '<a class="ent ent-tag" href="/lang/' + lang + '/tags/' + encodeURIComponent(t) + '.html" data-tag="' + t + '">' + ((tagsLoc[t] && tagsLoc[t].name) || t.replace(/_/g, ' ')) + '</a>';
+        return tagsLoc[t]
+            ? '<a class="ent ent-tag" href="/lang/' + lang + '/tags/' + encodeURIComponent(t) + '.html" data-tag="' + t + '">' + (tagsLoc[t].name || t.replace(/_/g, ' ')) + '</a>'
+            : '<a class="ent ent-tag ent-nocard" href="/lang/' + lang + '/index.html?q=' + encodeURIComponent('#' + t) + '" title="' + esc(UI.noCard || '') + '">' + t.replace(/_/g, ' ') + '</a>';
     }).join('');
     var sciHtml = (item.scientists || []).slice(0, 3).map(function(s) {
         var sd = scientistsData[s];
-        return '<a class="ent ent-sci" href="/lang/' + lang + '/scientists/' + authorSlug(s) + '.html" data-scientist="' + s + '">' + ((sd && sd.name) || s) + '</a>';
+        // Карточка есть не у каждого имени: замер 13 августа — в статьях упоминаются 345
+        // учёных, а карточек 201, и 169 ссылок вели прямиком в 404. Пока справочник
+        // догоняет, имя без карточки ведёт в поиск по этому имени: читатель попадает
+        // на список статей, где о нём говорится, а не в пустоту.
+        return sd
+            ? '<a class="ent ent-sci" href="/lang/' + lang + '/scientists/' + authorSlug(s) + '.html" data-scientist="' + s + '">' + (sd.name || s) + '</a>'
+            : '<a class="ent ent-sci ent-nocard" href="/lang/' + lang + '/index.html?q=' + encodeURIComponent('!' + s) + '" title="' + esc(UI.noCard || '') + '">' + s + '</a>';
     }).join('');
     var lawHtml = lawsFor(item).slice(0, 2).map(function(l) {
         var ld = lawsData[l];
-        return '<a class="ent ent-law" href="/lang/' + lang + '/laws/' + encodeURIComponent(l) + '.html" data-law="' + l + '">' + ((ld && ld.name) || l.replace(/_/g, ' ')) + '</a>';
+        return ld
+            ? '<a class="ent ent-law" href="/lang/' + lang + '/laws/' + encodeURIComponent(l) + '.html" data-law="' + l + '">' + (ld.name || l.replace(/_/g, ' ')) + '</a>'
+            : '<span class="ent ent-law ent-nocard" title="' + esc(UI.noCard || '') + '">' + l.replace(/_/g, ' ') + '</span>';
     }).join('');
     tagsHtml = lawHtml + sciHtml + tagsHtml;
     // Реакции + избранное прямо в карточке (клики — через делегирование в likes.js; подсветка — на этапе сборки)
