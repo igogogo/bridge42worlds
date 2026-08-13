@@ -2045,7 +2045,17 @@ html[dir="rtl"] .bar-x { transform: rotate(45deg); }
   border-radius: var(--radius-sm); background: var(--surface); padding: 10px 13px;
   transition: border-color .2s, transform .16s, box-shadow .2s; }
 .an-card:hover { transform: translateY(-2px); border-color: var(--hair-soft); box-shadow: var(--shadow); }
-.an-card-t { font-family: var(--serif); font-weight: 600; font-size: 15.5px; line-height: 1.25; color: var(--ink); }
+.an-card-t { font-family: var(--serif); font-weight: 600; font-size: 15.5px; line-height: 1.25; color: var(--ink);
+  display: flex; align-items: baseline; gap: 7px; }
+/* Число работ в группе — справа, тише названия: это счёт, а не заголовок. */
+.an-card-n { margin-inline-start: auto; font-family: var(--mono); font-size: 11.5px;
+  font-weight: 600; color: var(--soft); flex: none; }
+.an-card-shape { font-style: normal; font-size: 12px; color: var(--cc, var(--cyan)); flex: none; }
+.an-card-link { text-decoration: none; cursor: pointer; display: block;
+  transition: border-color .16s, transform .16s, box-shadow .16s; }
+.an-card-link:hover { border-color: var(--link); transform: translateY(-1px);
+  box-shadow: 0 3px 14px rgba(20,30,45,.07); }
+.an-card-link:hover .an-card-n { color: var(--link); }
 .an-card-d { font-size: 12.5px; line-height: 1.5; color: var(--muted); margin-top: 4px; }
 /* Сцена карты — по ширине колонки (не шире), как остальной контент */
 .an-stage { max-width: 680px; }
@@ -2380,6 +2390,9 @@ figcaption, .caption, .fig-caption, .mosaic-caption, .lightbox-caption {
 
 /* Активное автовращение видно на кнопке — иначе непонятно, крутится сцена или замерла. */
 .an-btn.active { color: var(--link); border-color: var(--link); }
+/* Включённый режим форм виден так же ясно, как включённое вращение: иначе непонятно,
+   в каком состоянии карта, и человек жмёт кнопку наугад. */
+.an-btn.on { color: var(--ochre); border-color: var(--ochre); background: color-mix(in srgb, var(--ochre) 12%, transparent); }
 .an-stage-ctl { display: flex; gap: 6px; flex-wrap: wrap; }
 @media (max-width: 640px) { .an-stage-ctl { gap: 4px; } }
 
@@ -2406,6 +2419,29 @@ html[data-theme="dark"] .an-stage {
   font-size: 11.5px; color: var(--soft); }
 .an-legend .lg-key { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
 .an-legend .lg-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+/* Число работ в группе и переход к их списку. Группа перестаёт быть просто цветом:
+   это счёт и вход в список, то есть такой же признак отбора, как раздел arXiv. */
+.an-legend .lg-n { font-family: var(--mono); font-size: 11px; color: var(--soft);
+  font-weight: 600; margin-inline-start: 4px; }
+.an-legend .lg-shape { font-style: normal; font-size: 11px; color: var(--soft); }
+.an-legend .lg-link { text-decoration: none; color: inherit; cursor: pointer;
+  border-bottom: 1px solid transparent; transition: color .16s, border-color .16s; }
+.an-legend .lg-link:hover { color: var(--link); border-bottom-color: var(--link); }
+.an-legend .lg-link:hover .lg-n { color: var(--link); }
+
+.an-cluster-list { margin: 12px 0 4px; border: 1px solid var(--hair); border-radius: 12px;
+  background: var(--surface); overflow: hidden; }
+.an-cl-head { display: flex; align-items: center; gap: 8px; padding: 11px 14px;
+  border-bottom: 1px solid var(--hair); font-size: 13.5px; color: var(--muted); }
+.an-cl-head b { color: var(--text); }
+.an-cl-x { margin-inline-start: auto; background: none; border: none; cursor: pointer;
+  font-size: 18px; line-height: 1; color: var(--soft); }
+.an-cl-x:hover { color: var(--link); }
+.an-cl-items { max-height: 320px; overflow-y: auto; padding: 8px 14px 12px;
+  display: grid; gap: 6px; }
+.an-cl-items a, .an-cl-items span { font-size: 14px; line-height: 1.5; color: var(--ink);
+  text-decoration: none; border-bottom: 1px solid transparent; }
+.an-cl-items a:hover { color: var(--link); border-bottom-color: var(--link); }
 
 /* живые показания — как KPI-плитки: подпись капителью, крупное число, тонкий индикатор */
 .an-rd { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));

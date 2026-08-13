@@ -6,11 +6,15 @@
   // Мини-панель вида: без неё сцена «замирала» — перетаскивание выключает автовращение,
   // а включить обратно было нечем (замечание юзера 2026-07-28).
   var CTL = ({
-    ru: { spin: 'вращение', zin: 'приблизить', zout: 'отдалить', reset: 'вернуть вид' },
-    en: { spin: 'auto-rotate', zin: 'zoom in', zout: 'zoom out', reset: 'reset view' },
-    es: { spin: 'rotación', zin: 'acercar', zout: 'alejar', reset: 'restablecer vista' },
-    ar: { spin: 'دوران تلقائي', zin: 'تقريب', zout: 'إبعاد', reset: 'إعادة العرض' }
-  })[LANG] || { spin: 'auto-rotate', zin: 'zoom in', zout: 'zoom out', reset: 'reset view' };
+    ru: { spin: 'вращение: стоп / пуск', zin: 'приблизить', zout: 'отдалить', reset: 'вернуть вид',
+          shapes: 'формы вместо одного цвета — для тех, кто различает цвета иначе' },
+    en: { spin: 'auto-rotate: stop / start', zin: 'zoom in', zout: 'zoom out', reset: 'reset view',
+          shapes: 'shapes as well as colour — for colour-blind readers' },
+    es: { spin: 'rotación: parar / iniciar', zin: 'acercar', zout: 'alejar', reset: 'restablecer vista',
+          shapes: 'formas además del color — para daltónicos' },
+    ar: { spin: 'الدوران: إيقاف / تشغيل', zin: 'تقريب', zout: 'إبعاد', reset: 'إعادة العرض',
+          shapes: 'أشكال إلى جانب اللون — لمن يميّز الألوان بشكل مختلف' }
+  })[LANG] || { shapes: 'shapes as well as colour', spin: 'auto-rotate', zin: 'zoom in', zout: 'zoom out', reset: 'reset view' };
 
 
   if (!root) return;
@@ -394,6 +398,7 @@
     '<button class="an-btn" id="an-spin" title="' + CTL.spin + '" aria-pressed="true"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.5-5.8"/><path d="M20 4v4h-4"/></svg></button>' +
     '<button class="an-btn" id="an-zin" title="' + CTL.zin + '"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/><path d="M8 10.5h5"/><path d="M10.5 8v5"/></svg></button>' +
     '<button class="an-btn" id="an-zout" title="' + CTL.zout + '"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/><path d="M8 10.5h5"/></svg></button>' +
+    '<button class="an-btn" id="an-shapes" title="' + CTL.shapes + '" aria-pressed="false"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7" cy="7" r="3"/><rect x="14" y="4" width="6" height="6" rx="1"/><path d="M7 14l3 6H4l3-6Z"/><path d="M17 13.5l1.2 2.6 2.8.3-2.1 1.9.6 2.7-2.5-1.4-2.5 1.4.6-2.7-2.1-1.9 2.8-.3 1.2-2.6Z"/></svg></button>' +
     '<button class="an-btn" id="an-home" title="' + CTL.reset + '"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11 12 4l8 7"/><path d="M6.5 9.5V19h11V9.5"/></svg></button>' +
     '<button class="an-btn" id="an-fs" title="' + (FLY.fs || 'fullscreen') + '"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V5.5A1.5 1.5 0 0 1 5.5 4H9"/><path d="M15 4h3.5A1.5 1.5 0 0 1 20 5.5V9"/><path d="M20 15v3.5a1.5 1.5 0 0 1-1.5 1.5H15"/><path d="M9 20H5.5A1.5 1.5 0 0 1 4 18.5V15"/></svg></button></div>' +
     '<div class="an-speed" id="an-speed"><span>' + (FLY.speed || 'speed') + '</span>' +
@@ -1053,16 +1058,103 @@
     if (state.mode === 'mobius') drawMobiusWire();
     var proj = state.pts.map(function (p, i) { var pr = project(p); pr.i = i; pr.color = colorOf(p); return pr; });
     proj.sort(function (a, b) { return a.depth - b.depth; }); // дальние сначала
+    if (state.shapes) drawHulls(proj);
     for (var k = 0; k < proj.length; k++) {
       var pr = proj[k];
       var fade = 0.35 + 0.65 * (1 - (pr.depth + 0.5));
       ctx.globalAlpha = Math.max(0.12, Math.min(1, fade * (state.ptAlpha || 1)));
       ctx.fillStyle = pr.color;
-      ctx.beginPath();
-      ctx.arc(pr.sx, pr.sy, pr.i === state.hover ? pr.r * 2.4 : pr.r * (state.ptScale || 1), 0, 6.283);
-      ctx.fill();
+      var rr = pr.i === state.hover ? pr.r * 2.4 : pr.r * (state.ptScale || 1);
+      // Форма несёт ту же информацию, что цвет. Владелец 13 августа: «я немного дальтоник —
+      // придумать, чтобы был режим не ширины, а разной формы точки». Цвет остаётся, но
+      // перестаёт быть единственным различителем: круг, квадрат, ромб, треугольник, звезда.
+      if (state.shapes) markShape(pr.sx, pr.sy, rr, (state.pts[pr.i] && state.pts[pr.i].c) || 0);
+      else { ctx.beginPath(); ctx.arc(pr.sx, pr.sy, rr, 0, 6.283); ctx.fill(); }
     }
     ctx.globalAlpha = 1;
+    if (state.shapes) drawHullLabels(proj);
+  }
+
+  /* Пять различимых форм по номеру группы. Различимость проверяется не «на глаз в
+     редакторе», а тем, что силуэты разной природы: круглое, угловатое, острое. */
+  function markShape(x, y, r, c) {
+    var s = c % 5;
+    ctx.beginPath();
+    if (s === 0) {                                   // круг
+      ctx.arc(x, y, r, 0, 6.283);
+    } else if (s === 1) {                            // квадрат
+      ctx.rect(x - r, y - r, r * 2, r * 2);
+    } else if (s === 2) {                            // ромб
+      ctx.moveTo(x, y - r * 1.3); ctx.lineTo(x + r * 1.3, y);
+      ctx.lineTo(x, y + r * 1.3); ctx.lineTo(x - r * 1.3, y);
+    } else if (s === 3) {                            // треугольник
+      ctx.moveTo(x, y - r * 1.4); ctx.lineTo(x + r * 1.25, y + r);
+      ctx.lineTo(x - r * 1.25, y + r);
+    } else {                                         // звезда
+      for (var i = 0; i < 10; i++) {
+        var ang = -1.5708 + i * 0.6283, rad = i % 2 ? r * 0.55 : r * 1.5;
+        var px = x + Math.cos(ang) * rad, py = y + Math.sin(ang) * rad;
+        if (i) ctx.lineTo(px, py); else ctx.moveTo(px, py);
+      }
+    }
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  /* Границы групп полупрозрачной заливкой. Владелец 13 августа: «на визуалах с кластерами
+     хорошо бы их границы полупрозрачными сферами обозначать и включать подписи».
+     Рисуем не выпуклую оболочку (она цепляет случайные выбросы и превращается в кляксу),
+     а круг вокруг центра группы радиусом в полтора среднего отклонения — так пятно
+     показывает, где группа ЖИВЁТ, а не куда дотянулись её края. */
+  function hulls(proj) {
+    var by = {};
+    proj.forEach(function (pr) {
+      var c = (state.pts[pr.i] && state.pts[pr.i].c);
+      if (c == null) return;
+      (by[c] = by[c] || []).push(pr);
+    });
+    return Object.keys(by).map(function (c) {
+      var g = by[c], n = g.length;
+      var mx = g.reduce(function (s, p) { return s + p.sx; }, 0) / n;
+      var my = g.reduce(function (s, p) { return s + p.sy; }, 0) / n;
+      var sd = Math.sqrt(g.reduce(function (s, p) {
+        return s + (p.sx - mx) * (p.sx - mx) + (p.sy - my) * (p.sy - my); }, 0) / n);
+      return { c: +c, x: mx, y: my, r: Math.max(18, sd * 1.5), n: n };
+    });
+  }
+
+  function drawHulls(proj) {
+    hulls(proj).forEach(function (h) {
+      ctx.globalAlpha = 0.10;
+      ctx.fillStyle = PAL[h.c % PAL.length];
+      ctx.beginPath(); ctx.arc(h.x, h.y, h.r, 0, 6.283); ctx.fill();
+      ctx.globalAlpha = 0.35;
+      ctx.strokeStyle = PAL[h.c % PAL.length];
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    });
+    ctx.globalAlpha = 1;
+  }
+
+  function drawHullLabels(proj) {
+    var hs = hulls(proj).sort(function (a, b) { return b.n - a.n; }).slice(0, 8);
+    ctx.globalAlpha = 0.95;
+    ctx.font = '600 11px ui-monospace, SFMono-Regular, Menlo, monospace';
+    ctx.textAlign = 'center';
+    hs.forEach(function (h) {
+      var name = clusterTitle(h.c);
+      if (!name) return;
+      var w = ctx.measureText(name).width;
+      ctx.fillStyle = 'rgba(12,16,24,.62)';
+      ctx.beginPath();
+      ctx.roundRect ? ctx.roundRect(h.x - w / 2 - 6, h.y - h.r - 20, w + 12, 16, 8)
+                    : ctx.rect(h.x - w / 2 - 6, h.y - h.r - 20, w + 12, 16);
+      ctx.fill();
+      ctx.fillStyle = '#fff';
+      ctx.fillText(name, h.x, h.y - h.r - 8);
+    });
+    ctx.globalAlpha = 1;
+    ctx.textAlign = 'start';
   }
 
   // Метки кластеров приходят как сырые id (теги snake_case у статей; коды разделов у авторов) —
@@ -1083,31 +1175,106 @@
      видов, где цвет лишь подсказка, а не предмет разговора, поэтому там легенду раньше просто
      стирали: у «дерева», «ленты», «тепла» и «полёта» цвет означал кластер, но что именно —
      нигде не было сказано. Стили (.lg-row/.lg-key/.lg-dot) лежали в CSS без применения. */
+  /* Сколько точек в каждой группе — считаем по самим данным, а не по справочнику:
+     справочник знает, КАК называется группа, но не сколько в ней работ сегодня. */
+  function clusterCounts() {
+    var n = {};
+    ((state.data && state.data.points) || []).forEach(function (p) {
+      if (p.c != null) n[p.c] = (n[p.c] || 0) + 1;
+    });
+    return n;
+  }
+
+  var SHAPE_CHAR = ['●', '■', '◆', '▲', '★'];
+
   function clusterRow() {
     var cl = (state.data && state.data.clusters) || {};
     var titles = state.data && state.data.titles;
     var keys = Object.keys(cl);
     if (!keys.length) return '';
+    var cnt = clusterCounts();
     var items = keys.slice(0, 12).map(function (c) {
       var lt = titles && titles[c] ? (titles[c][LANG] || titles[c].en) : null;
       var name = lt ? lt.title : (cl[c] || []).map(niceLabel).slice(0, 2).join(' · ');
-      return '<span class="lg-key"><i class="lg-dot" style="background:' + PAL[c % PAL.length] + '"></i>'
-             + name + '</span>';
+      // Число работ в группе и — если группа кликабельна — переход к их списку.
+      // Владелец 13 августа: «каждый кластер это группа, хорошо бы количество статей
+      // отобразить и в принципе перейти на список; возможно, это признак для фильтрации,
+      // наряду с разделами».
+      var n = cnt[c] || 0;
+      var mark = state.shapes ? '<i class="lg-shape">' + SHAPE_CHAR[c % 5] + '</i>' : '';
+      var body = mark + '<i class="lg-dot" style="background:' + PAL[c % PAL.length] + '"></i>' +
+                 name + (n ? '<b class="lg-n">' + n + '</b>' : '');
+      return clusterListable()
+        ? '<a class="lg-key lg-link" href="javascript:void(0)" data-cluster="' + c + '">' + body + '</a>'
+        : '<span class="lg-key">' + body + '</span>';
     }).join('');
     return '<div class="lg-row">' + items + '</div>';
   }
+
+  /* Список статей группы имеет смысл там, где точка — это статья. На карте мира точка —
+     область науки, и «перейти к статьям области» значило бы обещать список, которого у
+     нас нет: в области могут лежать чужие работы, а не наши. */
+  function clusterListable() {
+    return state.mode === 'articles' || state.mode === 'mobius' || state.mode === 'fly'
+        || state.mode === 'tree' || state.mode === 'heat';
+  }
+
+  /* Статьи выбранной группы — списком под картой, со ссылками. Данные уже загружены,
+     ходить никуда не надо. */
+  function showClusterList(c) {
+    var pts = ((state.data && state.data.points) || []).filter(function (p) { return String(p.c) === String(c); });
+    if (!pts.length) return;
+    var titles = state.data.titles, lt = titles && titles[c] ? (titles[c][LANG] || titles[c].en) : null;
+    var name = lt ? lt.title : ('#' + c);
+    var box = document.getElementById('an-cluster-list');
+    if (!box) {
+      box = document.createElement('div');
+      box.id = 'an-cluster-list';
+      box.className = 'an-cluster-list';
+      legendEl.parentNode.insertBefore(box, legendEl.nextSibling);
+    }
+    var rows = pts.slice(0, 200).map(function (p) {
+      var t = p.t || p.id;
+      return p.url ? '<a href="' + p.url + '">' + t + '</a>' : '<span>' + t + '</span>';
+    }).join('');
+    box.innerHTML = '<div class="an-cl-head"><b>' + name + '</b> · ' + pts.length + ' ' +
+      (CL.arts || '') + (pts.length > 200 ? ' ' + (CL.first || '') : '') +
+      '<button type="button" class="an-cl-x" aria-label="close">×</button></div>' +
+      '<div class="an-cl-items">' + rows + '</div>';
+    box.querySelector('.an-cl-x').onclick = function () { box.remove(); };
+    box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  var CL = ({
+    ru: { arts: 'статей в группе', first: '(показаны первые 200)' },
+    en: { arts: 'papers in the group', first: '(first 200 shown)' },
+    es: { arts: 'trabajos en el grupo', first: '(primeros 200)' },
+    fr: { arts: 'travaux dans le groupe', first: '(les 200 premiers)' },
+    ar: { arts: 'أعمال في المجموعة', first: '(أول 200)' }
+  })[LANG] || { arts: 'papers in the group', first: '(first 200 shown)' };
 
   function renderLegend() {
     var cl = state.data.clusters || {};
     var titles = state.data.titles || null;   // человеческие названия от LLM-трактовщика (если посчитаны)
     var extra = state.mode === 'authors' ? '<div class="an-axis">' + T.theoryExp + '</div>' : '';
     // Кластеры — КАРТОЧКАМИ (юзер 2026-07-25): цветная полоса, название-заголовок, описание ниже.
+    var cnt = clusterCounts();
+    var listable = clusterListable();
     var items = Object.keys(cl).map(function (c) {
-      var col = state.mode === 'authors' ? PAL[c % PAL.length] : PAL[c % PAL.length];
+      var col = PAL[c % PAL.length];
       var lt = titles && titles[c] ? titles[c][LANG] || titles[c].en : null;
       var title = lt ? lt.title : (cl[c] || []).map(niceLabel).slice(0, 3).join(' · ');
       var desc = lt && lt.desc ? '<div class="an-card-d">' + lt.desc + '</div>' : '';
-      return '<div class="an-card" style="--cc:' + col + '"><div class="an-card-t">' + title + '</div>' + desc + '</div>';
+      // Сколько работ в группе — и вход в их список. Группа становится таким же признаком
+      // отбора, как раздел arXiv (владелец 13 августа), а не просто цветом на картинке.
+      var n = cnt[c] || 0;
+      var shape = state.shapes ? '<i class="an-card-shape">' + SHAPE_CHAR[c % 5] + '</i>' : '';
+      var num = n ? '<span class="an-card-n">' + n + '</span>' : '';
+      var head = '<div class="an-card-t">' + shape + title + num + '</div>';
+      var body = head + desc;
+      return listable
+        ? '<a class="an-card an-card-link" style="--cc:' + col + '" href="javascript:void(0)" data-cluster="' + c + '">' + body + '</a>'
+        : '<div class="an-card" style="--cc:' + col + '">' + body + '</div>';
     }).join('');
     legendEl.innerHTML = '<div class="an-lg-h">' + T.clusters + ' · <b>' + state.data.n + '</b> ' + T.n + '</div>' +
       '<div class="an-cards">' + items + '</div>' + extra;
@@ -1130,9 +1297,40 @@
     state.spin = on;
     var b = document.getElementById('an-spin');
     if (b) { b.classList.toggle('active', on); b.setAttribute('aria-pressed', on ? 'true' : 'false'); }
+    // Остановленное вращение переживает переход между страницами: если человек его
+    // выключил, значит оно ему мешает, и включать заново на каждой карте — навязчиво.
+    try { localStorage.setItem('b42_an_spin', on ? '1' : '0'); } catch (e) {}
   }
+  if (legendEl) legendEl.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('[data-cluster]');
+    if (a) { e.preventDefault(); showClusterList(a.dataset.cluster); }
+  });
+
   var spinBtn = document.getElementById('an-spin');
   if (spinBtn) spinBtn.addEventListener('click', function () { setSpin(!state.spin); });
+
+  /* Формы вместо одного цвета. Выбор запоминаем: человеку, который различает цвета иначе,
+     не должно приходиться включать это на каждой странице заново. По той же причине
+     запоминаем и остановленное вращение — владелец 13 августа просил кнопку «стоп»,
+     а она была, но безымянной иконкой и сбрасывалась при каждом заходе. */
+  try {
+    if (localStorage.getItem('b42_an_shapes') === '1') state.shapes = true;
+    if (localStorage.getItem('b42_an_spin') === '0') state.spin = false;
+  } catch (e) {}
+  var shapesBtn = document.getElementById('an-shapes');
+  function setShapes(on) {
+    state.shapes = !!on;
+    if (shapesBtn) {
+      shapesBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      shapesBtn.classList.toggle('on', !!on);
+    }
+    try { localStorage.setItem('b42_an_shapes', on ? '1' : '0'); } catch (e) {}
+    draw();
+  }
+  if (shapesBtn) {
+    shapesBtn.addEventListener('click', function () { setShapes(!state.shapes); });
+    if (state.shapes) setShapes(true);
+  }
   var zinBtn = document.getElementById('an-zin');
   if (zinBtn) zinBtn.addEventListener('click', function () {
     state.zoom = Math.min(4, state.zoom * 1.25); draw();
