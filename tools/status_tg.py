@@ -30,6 +30,69 @@ def _load_env():
             os.environ.setdefault(k.strip(), v.strip())
 
 
+def why(log):
+    """Из лога упавшего прогона — одна человеческая фраза, ПОЧЕМУ он упал.
+
+    Владелец 13 августа: «пишет stats refresh fails — может, в канал надо, что за ошибка,
+    иначе непонятно». Он прав: сообщение «код 1, лог в logs/…» полезно ровно одному
+    человеку — тому, кто сидит за этой машиной. Все остальные (и владелец с телефона в
+    первую очередь) видят только то, что что-то сломалось, и не могут решить, надо ли
+    вмешиваться сейчас или это само пройдёт к следующему прогону.
+
+    Разбор простой и намеренно тупой: последняя строка последнего Traceback — это и есть
+    причина, питон кладёт её туда сам. Если трейсбека нет, берём последнюю строку с
+    предупреждением. Частые случаи переводим на русский: «TimeoutExpired» ничего не
+    объясняет тому, кто не писал этот код.
+    """
+    p = Path(log)
+    if not log or not p.exists():
+        return ""
+    try:
+        text = p.read_text(encoding="utf-8", errors="replace")
+    except Exception:
+        return ""
+    lines = [l.rstrip() for l in text.splitlines() if l.strip()]
+
+    raw = ""
+    for i in range(len(lines) - 1, -1, -1):
+        s = lines[i].strip()
+        # Последняя строка трейсбека: «ИмяОшибки: подробности». Не путаем с телом
+        # трейсбека — те строки начинаются с File/^^^ и с отступа.
+        if s and not s.startswith(("File ", "Traceback", "~", "^")) and ":" in s[:60]:
+            head = s.split(":", 1)[0]
+            # Имя может быть с модулем — «subprocess.TimeoutExpired». Смотрим на последний
+            # сегмент, иначе проверка на заглавную букву не срабатывает и причина теряется.
+            tail_name = head.rsplit(".", 1)[-1]
+            if tail_name and tail_name[:1].isupper() and " " not in head and tail_name.endswith(
+                    ("Error", "Exception", "Expired", "Interrupt", "Exit")):
+                raw = s
+                break
+    if not raw:
+        # Трейсбека нет — значит скрипт сам решил, что дело плохо, и написал об этом.
+        # Берём только строки-жалобы: последняя строка лога вполне может оказаться
+        # бодрым «✅ статус отправлен», и выдавать её за причину сбоя — хуже, чем молчать.
+        for s in reversed(lines):
+            if s.strip().startswith(("⚠", "⛔", "❌", "СТОП", "Ошибка", "ошибка")):
+                raw = s.strip().lstrip("⚠️⛔❌ ").strip()
+                break
+
+    human = {
+        "TimeoutExpired": "шаг не уложился в отведённое время (обычно большая дельта выкладки)",
+        "ConnectionError": "не достучались до сети",
+        "ConnectTimeout": "сеть не ответила вовремя",
+        "ReadTimeout": "сервис отвечал слишком долго",
+        "MemoryError": "не хватило памяти",
+        "PermissionError": "файл занят другой программой",
+        "FileNotFoundError": "не нашёлся нужный файл",
+        "JSONDecodeError": "испорченный json на входе",
+        "KeyboardInterrupt": "прогон прервали вручную",
+    }
+    for k, v in human.items():
+        if k in raw:
+            return v
+    return raw[:180]
+
+
 def main():
     # Готовые сообщения СОБИРАЮТСЯ ЗДЕСЬ, а не передаются строкой из .cmd-файла.
     #
@@ -41,14 +104,16 @@ def main():
     if len(sys.argv) >= 2 and sys.argv[1] == "--daily-failed":
         rc = sys.argv[2] if len(sys.argv) > 2 else "?"
         log = sys.argv[3] if len(sys.argv) > 3 else ""
-        text = (f"⛔ <b>Ежедневный прогон не пополнил ленту</b> (код {rc}).\n"
-                f"Причина — в логе: <code>{log}</code>")
+        text = (f"⛔ <b>Ежедневный прогон не пополнил ленту</b> (код {rc})."
+                + (f"\nПричина: {why(log)}" if why(log) else "")
+                + f"\nЛог: <code>{log}</code>")
     elif len(sys.argv) >= 2 and sys.argv[1] == "--dump-failed":
         rc = sys.argv[2] if len(sys.argv) > 2 else "?"
         log = sys.argv[3] if len(sys.argv) > 3 else ""
-        text = (f"⚠️ <b>Дамп arXiv не обновился</b> (код {rc}).\n"
-                f"Ретроспектива и поиск дыр будут работать по старым данным.\n"
-                f"Лог: <code>{log}</code>")
+        text = (f"⚠️ <b>Дамп arXiv не обновился</b> (код {rc})."
+                + (f"\nПричина: {why(log)}" if why(log) else "")
+                + "\nРетроспектива и поиск дыр будут работать по старым данным."
+                + f"\nЛог: <code>{log}</code>")
     elif len(sys.argv) >= 2 and sys.argv[1] == "--run-failed":
         # Общий случай для задач планировщика, у которых нет своего текста. Имя задачи
         # приходит ЛАТИНИЦЕЙ (см. объяснение про кодировку выше), человеческие слова
@@ -57,9 +122,12 @@ def main():
         rc = sys.argv[3] if len(sys.argv) > 3 else "?"
         log = sys.argv[4] if len(sys.argv) > 4 else ""
         titles = {"overnight": "Ночная накачка архива",
-                  "upkeep": "Разметка вектором и починка графа"}
-        text = (f"⚠️ <b>{titles.get(name, name)} не отработала</b> (код {rc}).\n"
-                f"Лог: <code>{log}</code>")
+                  "upkeep": "Разметка вектором и починка графа",
+                  "factory": "Фабрика (плановая работа по бюджету)",
+                  "stats": "Пересчёт витрины и отчёт по читателям"}
+        text = (f"⚠️ <b>{titles.get(name, name)} не отработала</b> (код {rc})."
+                + (f"\nПричина: {why(log)}" if why(log) else "")
+                + f"\nЛог: <code>{log}</code>")
     elif len(sys.argv) >= 3 and sys.argv[1] == "--file":
         text = Path(sys.argv[2]).read_text(encoding="utf-8")
     elif len(sys.argv) >= 2:

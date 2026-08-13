@@ -36,13 +36,25 @@ STEPS = [
 ]
 
 
-def run(script):
+def run(script, timeout=900):
+    """Шаг витрины. Таймаут ловим, а не даём ему убить прогон.
+
+    13 августа выкладка не уложилась в 900 секунд (дельта после большой пересборки —
+    полторы тысячи файлов), TimeoutExpired вылетел наружу и уронил весь stats_refresh:
+    отчёт не дописался, в канал ушло сухое «rc=1» от обёртки, и понять причину можно
+    было только открыв лог на машине. Теперь любой исход шага — это пара (код, текст),
+    а не исключение.
+    """
     p = ROOT / script
     if not p.exists():
         return None, f"{script} не найден"
-    r = subprocess.run([sys.executable, str(p)], cwd=ROOT, capture_output=True, text=True,
-                       encoding="utf-8", errors="replace", timeout=900)
-    return r.returncode, (r.stdout or "")[-300:] + (r.stderr or "")[-300:]
+    try:
+        r = subprocess.run([sys.executable, str(p)], cwd=ROOT, capture_output=True, text=True,
+                           encoding="utf-8", errors="replace", timeout=timeout)
+        return r.returncode, (r.stdout or "")[-300:] + (r.stderr or "")[-300:]
+    except subprocess.TimeoutExpired:
+        return -1, (f"не уложился в {timeout // 60} минут — обычно это большая дельта "
+                    f"выкладки после полной пересборки; следующий прогон её добьёт")
 
 
 def _short_reason(tail):
@@ -288,11 +300,12 @@ def main():
     # Выкладка: только витринные файлы, без трогания страниц. deploy_r2 сам сверяет хэши
     # и заливает изменённое, так что лишнего трафика не будет.
     if not args.dry:
-        code, tail = run("cloudflare/deploy_r2.py")
+        code, tail = run("cloudflare/deploy_r2.py", timeout=2400)
         if code == 0:
             print("  ✅ выложено")
         else:
             failed.append("выкладка")
+            why["выкладка"] = _short_reason(tail)
             print(f"  ⚠️ выкладка: код {code}\n     {tail.strip()[:300]}")
 
     n = site_numbers()
@@ -352,7 +365,14 @@ def main():
            f"Статей в ленте: {n.get('статей', '?')}, последняя за {n.get('последняя', '?')}."
            f"{km_line}{stats}{growth}{money_line()}{net}")
     if failed:
-        msg += f"\n\n⚠️ Не получилось: {', '.join(failed)}."
+        # Не «что не получилось», а ПОЧЕМУ: одна человеческая строка на каждый упавший
+        # шаг. Владелец 13 августа: «пишет stats refresh fails — может, в канал надо, что
+        # за ошибка, иначе непонятно». Причина собиралась и раньше (_short_reason), но
+        # печаталась в консоль и оставалась в логе на машине, то есть не доходила ни до
+        # кого. Сообщение без причины заставляет лезть в файл — значит не работает.
+        msg += "\n\n⚠️ <b>Не получилось</b>"
+        for f in failed:
+            msg += f"\n· {f}: {why.get(f) or 'причина в логе прогона'}"
 
     print("\n" + msg.replace("<b>", "").replace("</b>", ""))
 

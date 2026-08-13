@@ -29,7 +29,13 @@ set RC=%ERRORLEVEL%
 echo [%DATE% %TIME%] stats rc=%RC% >> "%LOGDIR%\stats-history.log"
 
 REM Неудача пересчёта — тоже новость: молчащая витрина выглядит как работающая.
+REM
+REM Через --run-failed, как у остальных задач: status_tg.py сам достанет из лога ПРИЧИНУ
+REM и напишет её по-русски. Раньше здесь была английская строка «stats refresh failed
+REM rc=1 see logs\...», по которой владелец 13 августа справедливо сказал: «непонятно,
+REM что за ошибка». Текст сообщения в .cmd писать нельзя — консоль Windows отдаёт
+REM аргументы в OEM-кодировке, русский приезжает кракозябрами (см. шапку status_tg.py).
 if not "%RC%"=="0" (
-  python "%REPO%\tools\status_tg.py" "stats refresh failed rc=%RC% see logs\stats_%STAMP%.log"
+  python "%REPO%\tools\status_tg.py" --run-failed stats %RC% "logs\stats_%STAMP%.log"
 )
 endlocal & exit /b %RC%
