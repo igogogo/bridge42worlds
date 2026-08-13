@@ -145,11 +145,54 @@ def letter_results(m, key):
             lines.append(f"  · {q.get('title','')}")
         lines.append("")
 
+    # Замороженные вопросы — отдельным разделом, с причиной и без имени заморозившего.
+    # Владелец 13 августа: заморозка «снимает вопрос с голосования», его «надо обработать
+    # и пробовать переформулировать на следующее заседание с объяснением, почему не
+    # принято решение». Умолчать об этом в письме значит оставить людей в уверенности,
+    # что вопрос просто потеряли.
+    frz = frozen(date)
+    if frz:
+        lines.append("Снято с голосования (заморожено участником совета):")
+        for qid, f in frz.items():
+            q = next((x for x in (m.get("agenda") or []) if x.get("id") == qid), {})
+            lines.append(f"  · {q.get('title', qid)}")
+            for why in (f.get("why") or []):
+                lines.append(f"      причина: {why}")
+            lines.append("      вернётся на следующее заседание в переформулированном виде"
+                         if not f.get("quorum")
+                         else "      заморожен повторно — решение примет кворум ИИ-участников")
+        lines.append("")
+
+    # План работ: что мы делаем по итогам. Без него письмо сообщает, что мы поговорили.
+    plan = m.get("sprint") or []
+    if plan:
+        lines.append("План работ на неделю:")
+        for item in plan:
+            lines.append(f"  · {item if isinstance(item, str) else item.get('title', '')}")
+        lines.append("")
+
+    nxt = m.get("next_meeting") or {}
+    if nxt:
+        lines.append(f"Следующее заседание: {nxt.get('date', '—')}.")
+        for q in (nxt.get("questions") or []):
+            lines.append(f"  · {q}")
+        lines.append("")
+
     lines += [f"Участников в совете: {members}." if members else "",
               "Полные итоги и все предложения — в вашем кабинете:",
               f"  {SITE}/council.html?key={key}", "",
               "Решение можно оспорить: напишите в ответ, вопрос вернётся на следующее заседание."]
     return "\n".join(x for x in lines if x is not None)
+
+
+def frozen(date):
+    """Что заморожено на заседании — с сайта, без имён."""
+    import requests
+    try:
+        r = requests.get(f"{SITE}/api/council/frozen?meeting={date}", timeout=20)
+        return (r.json() or {}).get("frozen") or {} if r.ok else {}
+    except Exception:
+        return {}
 
 
 def letter_weekly(m, key):

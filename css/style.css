@@ -3325,9 +3325,107 @@ body.graph-fs-open .graph-fs-active svg { touch-action: manipulation; }
 /* Вопрос с вариантами: подписи там не «за/против», а фразы вроде «Догнать французский
    до общего уровня». В строку они не помещаются, поэтому колонкой и с левым краем —
    читать варианты решения важнее, чем экономить высоту. */
+/* Кабинет совета: блоки первого входа, состава, истории и подтверждения решений.
+   Порядок на странице задан смыслом — сначала решить, потом связь, потом кто рядом,
+   потом что уже было, и только затем предложить своё. */
+.cl-first { border-color: color-mix(in srgb, var(--ochre) 45%, var(--hair)); }
+.cl-note { font-size: 13px; line-height: 1.6; color: var(--muted); margin: 4px 0 10px; }
+.cl-nick-in, .cl-mail-in { display: block; width: 100%; max-width: 380px; margin-bottom: 8px;
+  min-height: var(--tap-md, 42px); padding: 9px 13px; border-radius: 10px;
+  border: 1px solid var(--line, var(--hair)); background: var(--bg); color: var(--ink);
+  font: inherit; font-size: 14px; }
+.cl-mail-save, .cl-submit { min-height: var(--tap-md, 42px); padding: 9px 20px;
+  border-radius: 999px; border: 1px solid var(--line, var(--hair));
+  background: var(--surface); color: var(--ink); font: inherit; font-size: 14px; cursor: pointer;
+  transition: border-color .16s, color .16s; }
+.cl-mail-save:hover, .cl-submit:hover { border-color: var(--link); color: var(--link); }
+/* Кнопка «отправить решения» — главное действие страницы, поэтому заметнее прочих. */
+.cl-vote-foot { margin-top: 18px; padding-top: 14px;
+  border-top: 1px solid var(--line, var(--hair)); }
+.cl-submit { background: var(--ochre); border-color: var(--ochre); color: #fff; }
+.cl-submit:hover { filter: brightness(1.06); color: #fff; }
+.cl-picked { font-family: var(--mono); font-size: 12px; color: var(--soft); margin-bottom: 8px; }
+/* Пока идёт голосование — только эта строка вместо раскладов по вариантам. */
+.cl-wait { font-size: 13px; color: var(--muted); margin: 6px 0 12px;
+  padding: 9px 13px; border-radius: 10px; background: var(--tag-bg, var(--bg)); }
+.cl-mlist { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 8px; }
+.cl-mlist li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px;
+  font-size: 14px; }
+.cl-mark { font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--soft); }
+.cl-mnums { margin-inline-start: auto; font-family: var(--mono); font-size: 11.5px;
+  color: var(--soft); }
+@media (max-width: 560px) { .cl-mnums { margin-inline-start: 0; } }
+
+/* Окно подтверждения голоса. Перекрывает страницу целиком: это последний шаг, на
+   котором человек видит всё, за что расписывается, — отвлекать его тут нечем. */
+.cl-modal { position: fixed; inset: 0; z-index: 90; display: flex; align-items: center;
+  justify-content: center; padding: 20px; background: rgba(10, 14, 22, .55); }
+.cl-modal-box { max-width: 560px; width: 100%; max-height: 84vh; overflow: auto;
+  background: var(--surface); border: 1px solid var(--line, var(--hair));
+  border-radius: 16px; padding: 22px 24px; box-shadow: 0 24px 60px -20px rgba(0,0,0,.5); }
+.cl-modal-box h4 { font-family: var(--font-display); font-size: 19px; margin-bottom: 6px; }
+.cl-confirm { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 10px; }
+.cl-confirm li { display: grid; gap: 3px; padding-bottom: 9px;
+  border-bottom: 1px solid var(--line, var(--hair)); }
+.cl-confirm .cd-q { font-size: 13.5px; color: var(--muted); line-height: 1.45; }
+.cl-confirm .cd-a { font-size: 15px; font-weight: 600; color: var(--ink); line-height: 1.4; }
+.cl-confirm-prop { margin-top: 14px; padding: 12px 14px; border-radius: 11px;
+  background: var(--tag-bg, var(--bg)); font-size: 14px; line-height: 1.6; }
+.cl-confirm-prop b { display: block; font-size: 12px; color: var(--soft); margin-bottom: 4px; }
+.cl-modal-btns { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px;
+  justify-content: flex-end; }
+.cl-cancel, .cl-yes { min-height: var(--tap-md, 42px); padding: 9px 20px; border-radius: 999px;
+  font: inherit; font-size: 14px; cursor: pointer; border: 1px solid var(--line, var(--hair));
+  background: var(--bg); color: var(--ink); }
+.cl-yes { background: var(--ochre); border-color: var(--ochre); color: #fff; }
+.cl-yes:hover { filter: brightness(1.06); }
+
 .cl-btns-wide { flex-direction: column; align-items: stretch; }
 .cl-btns-wide button { min-height: 40px; padding: 9px 15px; border-radius: 12px;
-  text-align: start; line-height: 1.4; white-space: normal; cursor: help; }
+  text-align: start; line-height: 1.4; white-space: normal; cursor: pointer; }
+
+/* Знак вопроса у пункта повестки: открывает окно с происхождением вопроса.
+   Раньше пояснение жило в title= — на телефоне его не существовало вовсе (наводить
+   нечем), а на компьютере оно приходило одной строкой без переносов. */
+.cl-why-btn { width: 22px; height: 22px; padding: 0; margin-inline-start: 4px;
+  border-radius: 999px; border: 1px solid var(--line, var(--hair));
+  background: var(--bg); color: var(--soft); font: inherit; font-size: 12px;
+  line-height: 1; cursor: pointer; vertical-align: middle;
+  transition: border-color .16s, color .16s; }
+.cl-why-btn:hover { border-color: var(--link); color: var(--link); }
+.cl-why-body h5 { font-size: 12px; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--soft); margin: 16px 0 5px; font-family: var(--mono); font-weight: 400; }
+.cl-why-body p { font-size: 14.5px; line-height: 1.65; margin: 0; }
+.cl-why-opts { margin: 6px 0 0; padding-inline-start: 18px; display: grid; gap: 7px;
+  font-size: 14px; line-height: 1.55; }
+
+/* Заморозка — блокирующий голос. Вид спокойный, не тревожный: это законный ход
+   участника, а не поломка. Синий холодный тон отделяет его от жёлтых предупреждений. */
+.cl-qfoot { margin-top: 9px; }
+.cl-freeze-btn { min-height: 32px; padding: 5px 13px; border-radius: 999px;
+  border: 1px dashed var(--line, var(--hair)); background: none; color: var(--soft);
+  font: inherit; font-size: 12.5px; cursor: pointer;
+  transition: border-color .16s, color .16s; }
+.cl-freeze-btn:hover { border-color: #6aa9d8; color: #6aa9d8; }
+.cl-q.is-frozen .cl-btns button { opacity: .4; pointer-events: none; }
+.cl-frozen { margin: 8px 0 10px; padding: 12px 15px; border-radius: 12px;
+  border: 1px solid color-mix(in srgb, #6aa9d8 40%, var(--hair));
+  background: color-mix(in srgb, #6aa9d8 7%, var(--bg)); }
+.cl-frozen-head { font-family: var(--mono); font-size: 11.5px; letter-spacing: .08em;
+  text-transform: uppercase; color: #6aa9d8; margin-bottom: 6px; }
+.cl-frozen-anon { font-size: 13px; color: var(--muted); margin: 0 0 6px; line-height: 1.55; }
+.cl-frozen-why { font-size: 14px; line-height: 1.6; margin: 0 0 6px; }
+.cl-frozen-why b { color: var(--soft); font-weight: 400; }
+.cl-frozen .cl-note { margin: 8px 0 0; }
+.cl-unfreeze { margin-top: 8px; min-height: 32px; padding: 5px 13px; border-radius: 999px;
+  border: 1px solid var(--line, var(--hair)); background: var(--bg); color: var(--soft);
+  font: inherit; font-size: 12.5px; cursor: pointer; }
+.cl-freeze-q { font-size: 14.5px; line-height: 1.5; margin: 10px 0;
+  padding: 10px 14px; border-radius: 11px; background: var(--tag-bg, var(--bg)); }
+.cl-freeze-why { display: block; width: 100%; padding: 10px 13px; border-radius: 11px;
+  border: 1px solid var(--line, var(--hair)); background: var(--bg); color: var(--ink);
+  font: inherit; font-size: 14px; line-height: 1.55; resize: vertical; }
 .cl-res { margin-top: 7px; font-family: var(--mono); font-size: 12px; color: var(--soft); }
 .cl-res { font-size: 12px; color: var(--soft); margin-top: 6px; }
 /* Минимальная форма вступления: два необязательных поля, окошком */

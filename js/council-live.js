@@ -35,12 +35,51 @@
               cabinet: 'Ваше участие', cabRead: ' статей прочитано', cabProps: ' предложений',
               cabVotes: ' голосов', cabSince: ' в совете с', cabMembers: ' участников всего',
               onAgenda: 'в повестке',
+              confirmTitle: 'Вы голосуете по этим пунктам',
+              confirmNote: 'Проверьте выбор. После подтверждения голос будет записан — изменить его можно до закрытия заседания.',
+              confirmYes: 'Проголосовать', cancel: 'Вернуться к выбору',
+              yourProposal: 'Ваше предложение совету:',
+              needMail: 'Сначала оставьте почту — без неё голос не принимается.',
+              firstAsk: 'Представьтесь совету',
+              nickPh: 'Ник — под ним вас увидят остальные',
+              inMeetings: 'заседаний',
+              mailAsk: 'Куда присылать повестку и итоги',
+              mailNote: 'Уведомления о заседаниях приходят почтой — иначе о решениях можно узнать, только зайдя сюда. Оставьте поле пустым, если писем не нужно.',
+              mailSave: 'Сохранить', mailOk: 'Записали. Повестка и итоги придут на этот адрес.',
+              mailOff: 'Хорошо, писем не будет.',
+              submitAll: 'Отправить мои решения', submitted: 'Ваши решения отправлены.',
+              pickAll: 'Ответьте на вопросы выше — отмеченное отправится одной кнопкой.',
+              chosen: 'выбрано', ofQ: 'из',
+              hidden: 'Итоги откроются после закрытия заседания',
+              votedN: 'уже проголосовали', nextMeet: 'следующее заседание',
+              history: 'Заседания', closedM: 'закрыто', openM: 'идёт',
+              decidedN: 'решений', questionsN: 'вопросов',
+              roles: 'Состав совета', roleHuman: 'люди', roleAi: 'ИИ-участники',
+              memo: 'Как устроен совет',
               fName: 'Как к вам обращаться (необязательно)',
               fMail: 'Почта для отчётов (необязательно)',
               fHint: 'Оба поля можно пропустить — ключ выдадим всё равно. Почта нужна только для писем о заседаниях.',
               getKey: 'Получить ключ',
               haveKey: 'У меня есть ключ', enter: 'Войти', badKey: 'ключ не найден — проверьте',
-              invited: 'Вас пригласили в наблюдательный совет. Нажмите — и вы внутри: повестка, голосование, предложения.' },
+              invited: 'Вас пригласили в наблюдательный совет. Нажмите — и вы внутри: повестка, голосование, предложения.',
+              whyBtn: 'откуда этот вопрос',
+              whyTitle: 'Откуда взялся этот вопрос',
+              whyAbout: 'О чём речь',
+              whyOptions: 'Что означает каждый вариант',
+              close: 'Закрыть',
+              freeze: '❄ Заморозить вопрос',
+              freezeTitle: 'Заморозить вопрос',
+              freezeNote: 'Заморозка снимает вопрос с голосования: сегодня решения по нему не будет. К следующему заседанию мы переформулируем его с учётом вашего объяснения. Вашего имени не увидит никто — только причину.',
+              freezePh: 'Почему сейчас не время? Что должно измениться, чтобы вопрос можно было решать',
+              freezeShort: 'Объясните хотя бы одним предложением — иначе следующему заседанию не с чем работать.',
+              freezeYes: 'Заморозить',
+              frozenLabel: '❄ Снят с голосования',
+              frozenAnon: 'Вопрос заморозил участник совета. Кто именно — не раскрывается.',
+              frozenWhy: 'Причина',
+              frozenNext: 'Вопрос вернётся на следующее заседание в переформулированном виде.',
+              frozenQuorum: 'Замораживается второй раз — по регламенту решение примет кворум ИИ-участников.',
+              unfreeze: 'Снять мою заморозку',
+              oneAtATime: 'У вас уже заморожен другой вопрос. По регламенту — один вопрос на участника за заседание: сначала снимите ту заморозку.' },
         en: { need: 'To join, open {n} more articles — you have read {seen}.',
               can: 'You have read {seen} articles. That is enough to join the council.',
               join: 'Join the council', joined: 'You are a council member', key: 'Your key',
@@ -58,7 +97,25 @@
               fHint: 'Both can be skipped — you get the key anyway. Email is only for meeting notices.',
               getKey: 'Get the key',
               haveKey: 'I have a key', enter: 'Enter', badKey: 'key not found — check it',
-              invited: 'You have been invited to the council. One click and you are in: agenda, voting, proposals.' }
+              invited: 'You have been invited to the council. One click and you are in: agenda, voting, proposals.',
+              whyBtn: 'where this question came from',
+              whyTitle: 'Where this question came from',
+              whyAbout: 'What it is about',
+              whyOptions: 'What each option means',
+              close: 'Close',
+              freeze: '❄ Freeze this question',
+              freezeTitle: 'Freeze this question',
+              freezeNote: 'Freezing takes the question off the vote: no decision on it today. For the next meeting we will rephrase it taking your explanation into account. Nobody sees your name — only the reason.',
+              freezePh: 'Why is now not the time? What has to change before this can be decided',
+              freezeShort: 'Explain in at least one sentence — otherwise the next meeting has nothing to work with.',
+              freezeYes: 'Freeze',
+              frozenLabel: '❄ Off the vote',
+              frozenAnon: 'A council member froze this question. Who exactly is not disclosed.',
+              frozenWhy: 'Reason',
+              frozenNext: 'The question returns to the next meeting, rephrased.',
+              frozenQuorum: 'Frozen for the second time — by the rules the AI members decide it by their own quorum.',
+              unfreeze: 'Remove my freeze',
+              oneAtATime: 'You already froze another question. One question per member per meeting — remove that freeze first.' }
     };
     var L = T[LANG] || T.en;
     /* ar/es/fr — из файлов стратега (data/council/live-strings.<lang>.json): формулировки
@@ -107,12 +164,27 @@
             '<div class="cl-ok">🏛 ' + esc(L.joined) + '</div>' +
             '<div class="cl-key"><b>' + esc(L.key) + ':</b> <code>' + esc(key) + '</code>' +
             '<small>' + esc(L.keyNote) + '</small></div>' +
-            '<div class="cl-cab"></div>' +
+            '<div class="cl-cab"></div>'));
+        // Места под блоки размечаем СРАЗУ и в нужном порядке: голосование, почта, состав,
+        // история, предложения. Иначе порядок задаёт то, чей запрос вернулся первым, —
+        // и предложения (без запроса) обгоняли голосование (с запросом).
+        ['slot-vote', 'slot-mail', 'slot-people', 'slot-hist', 'slot-prop'].forEach(function (c) {
+            var s = document.createElement('div');
+            s.className = 'cl-slot ' + c;
+            host.appendChild(s);
+        });
+        cabinet(key);
+        mountVoting(key);          // ради него и пришли — сразу за кабинетом
+        mountEmail(key);           // связь: без почты участник не узнает об итогах
+        mountPeople();             // кто ещё в совете и насколько он живой
+        mountHistory();            // что уже было решено и когда следующее заседание
+        // Предложения — ПОСЛЕ голосования: сначала ответь на поставленные вопросы,
+        // потом ставь свои (владелец 13 августа).
+        host.querySelector('.slot-prop').appendChild(block(
             '<div class="cl-prop"><h4>' + esc(L.propose) + '</h4>' +
             '<textarea class="cl-text" rows="3" placeholder="' + esc(L.placeholder) + '"></textarea>' +
             '<button type="button" class="cl-send">' + esc(L.send) + '</button>' +
             '<div class="cl-msg"></div></div>'));
-        cabinet(key);
         host.querySelector('.cl-send').onclick = function () {
             var t = host.querySelector('.cl-text').value.trim();
             if (!t) return;
@@ -123,7 +195,6 @@
                 if (r && r.ok) host.querySelector('.cl-text').value = '';
             }).catch(function () { btn.disabled = false; host.querySelector('.cl-msg').textContent = L.err; });
         };
-        mountVoting(key);
     }
 
     /* Кабинет участника: что он сделал и что из этого вышло. Не «профиль» с аватаркой,
@@ -234,16 +305,134 @@
         mountVoting(null);
     }
 
+    /* Окно подтверждения перед отправкой голосов. Показывает ровно то, за что человек
+       расписывается: каждый вопрос с выбранным вариантом словами (а не «o2») и своё
+       предложение, если он его написал. Отменить можно на этом же шаге. */
+    function confirmVotes(m, picked, proposal, go) {
+        var rows = (m.agenda || []).filter(function (q) { return picked[q.id]; })
+            .map(function (q) {
+                var label = picked[q.id];
+                (q.options || []).forEach(function (o, i) {
+                    var id = (o && typeof o === 'object') ? String(o.id || (i + 1)) : String(i + 1);
+                    if (id === picked[q.id]) label = (o && o.label) || String(o);
+                });
+                if (!q.options || !q.options.length) label = L[picked[q.id]] || picked[q.id];
+                return '<li><span class="cd-q">' + esc(q.title || q.id) + '</span>' +
+                       '<span class="cd-a">' + esc(label) + '</span></li>';
+            }).join('');
+        var wrap = modal(
+            '<h4>' + esc(L.confirmTitle) + '</h4>' +
+            '<p class="cl-note">' + esc(L.confirmNote) + '</p>' +
+            '<ul class="cl-confirm">' + rows + '</ul>' +
+            (proposal ? '<div class="cl-confirm-prop"><b>' + esc(L.yourProposal) + '</b>' +
+                        '<p>' + esc(proposal.slice(0, 400)) + '</p></div>' : '') +
+            '<div class="cl-modal-btns">' +
+            '<button type="button" class="cl-cancel">' + esc(L.cancel) + '</button>' +
+            '<button type="button" class="cl-yes">' + esc(L.confirmYes) + '</button>' +
+            '</div>');
+        wrap.querySelector('.cl-yes').onclick = function () { wrap.remove(); go(); };
+    }
+
+    /* Почта к ключу. Ключ — вход, почта — связь. Владелец 13 августа: «надо обязательно
+       где-то почту попросить к ключу, потому что уведомления всё-таки почта; после входа
+       это канал коммуникации». Спрашиваем ПОСЛЕ входа: сначала человек видит, во что
+       вступил, и только потом решает, впускать ли нас в свой ящик. */
+    function mountEmail(key) {
+        fetch(API + '/me?key=' + encodeURIComponent(key))
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (d) {
+                var m = (d && d.member) || {};
+                // Первый вход — это когда ни ника, ни почты. Тогда форма стоит ВВЕРХУ и
+                // просит оба поля разом: ник, под которым участника увидят остальные, и
+                // адрес для повестки. Дальше она же служит настройками.
+                var first = !m.name && !m.email;
+                var b = block('<div class="cl-mail' + (first ? ' cl-first' : '') + '">' +
+                    '<h4>' + esc(first ? L.firstAsk : L.mailAsk) + '</h4>' +
+                    '<p class="cl-note">' + esc(L.mailNote) + '</p>' +
+                    '<input type="text" class="cl-nick-in" value="' + esc(m.name || '') + '" placeholder="' + esc(L.nickPh) + '">' +
+                    '<input type="email" class="cl-mail-in" value="' + esc(m.email || '') + '" placeholder="name@mail.com">' +
+                    '<button type="button" class="cl-mail-save">' + esc(L.mailSave) + '</button>' +
+                    '<div class="cl-msg cl-mail-msg"></div></div>');
+                var slot = host.querySelector(first ? '.slot-vote' : '.slot-mail');
+                if (first) slot.parentNode.insertBefore(b, slot);   // первый вход — выше всего
+                else slot.appendChild(b);
+                b.querySelector('.cl-mail-save').onclick = function () {
+                    var v = b.querySelector('.cl-mail-in').value.trim();
+                    var nick = b.querySelector('.cl-nick-in').value.trim();
+                    var btn = this; btn.disabled = true;
+                    api('/profile', { key: key, email: v, name: nick }).then(function (r) {
+                        btn.disabled = false;
+                        b.querySelector('.cl-mail-msg').textContent =
+                            r && r.ok ? (v ? L.mailOk : L.mailOff) : L.err;
+                        if (r && r.ok) b.classList.remove('cl-first');
+                    }).catch(function () { btn.disabled = false;
+                        b.querySelector('.cl-mail-msg').textContent = L.err; });
+                };
+            }).catch(function () {});
+    }
+
+    /* Состав совета: кто ещё здесь и насколько живой. Ники, роли и число заседаний, в
+       которых человек голосовал. Владелец 13 августа: «в списке все ники чтобы были
+       видны и какая-то активность — в скольких заседаниях участвовал». */
+    function mountPeople() {
+        fetch(API + '/board').then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (d) {
+                if (!d || !(d.people || []).length) return;
+                var mm = d.members || {};
+                var head = esc(L.roles) + ': ' + (mm.total || 0) +
+                    (mm.human ? ' · ' + mm.human + ' ' + esc(L.roleHuman) : '') +
+                    (mm.ai ? ' · ' + mm.ai + ' ' + esc(L.roleAi) : '');
+                var rows = d.people.map(function (p) {
+                    return '<li><b>' + esc(p.nick) + '</b>' +
+                        (p.kind === 'ai' ? ' <span class="cl-mark">' + esc(L.roleAi) + '</span>' : '') +
+                        '<span class="cl-mnums">' + (p.meetings || 0) + ' ' + esc(L.inMeetings) + '</span></li>';
+                }).join('');
+                host.querySelector('.slot-people').appendChild(block('<div class="cl-people"><h4>' + head + '</h4>' +
+                    '<ul class="cl-mlist">' + rows + '</ul></div>'));
+            }).catch(function () {});
+    }
+
+    /* Кабинет заседаний: что было, что решено, когда следующее. Владелец 13 августа:
+       «нужно иметь как кабинет заседаний — прошло, по каждому что решено, сколько
+       голосов, какие предложения на следующий совет, когда дата». */
+    function mountHistory() {
+        fetch(API + '/meetings').then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (d) {
+                if (!d || !(d.meetings || []).length) return;
+                var rows = d.meetings.map(function (m) {
+                    var mark = m.status === 'closed' ? L.closedM : L.openM;
+                    return '<li><b>' + esc(m.date) + '</b> <span class="cl-mark">' + esc(mark) + '</span>' +
+                        '<span class="cl-mnums">' + m.questions + ' ' + esc(L.questionsN) +
+                        (m.status === 'closed' ? ' · ' + m.decided + ' ' + esc(L.decidedN) : '') +
+                        ' · ' + (m.voted || 0) + ' ' + esc(L.votedN) + '</span></li>';
+                }).join('');
+                host.querySelector('.slot-hist').appendChild(block('<div class="cl-hist"><h4>' + esc(L.history) + '</h4>' +
+                    (d.next ? '<p class="cl-note">' + esc(L.nextMeet) + ': <b>' + esc(d.next) + '</b></p>' : '') +
+                    '<ul class="cl-mlist">' + rows + '</ul></div>'));
+            }).catch(function () {});
+    }
+
     /* Голосование по ближайшему заседанию. Вопросы берём из того же файла, по которому
        строится страница заседания, — один источник, иначе списки разойдутся. */
     function mountVoting(key) {
-        fetch('/data/council/upcoming.json').then(function (r) { return r.ok ? r.json() : null; })
+        // Повестку берём всегда свежую. Это единственный файл, который обязан быть
+        // сегодняшним: заморозка снимает вопрос с голосования, секретарь переписывает
+        // формулировку — а браузер с кэшем показал бы вчерашнее заседание и принял бы
+        // голоса по вопросу, которого уже нет.
+        fetch('/data/council/upcoming.json', { cache: 'no-store' })
+            .then(function (r) { return r.ok ? r.json() : null; })
             .then(function (m) {
                 if (!m || !m.agenda || !m.agenda.length) return;
                 var box = document.createElement('div');
                 box.className = 'cl-box cl-vote';
                 box.innerHTML = '<h4>' + esc(L.voteTitle) + ' · ' + esc(m.date || '') + '</h4>';
                 box.__ids = [];
+                var picked = {};
+                function updatePicked() {
+                    var el = box.querySelector('.cl-picked');
+                    if (el) el.textContent = L.chosen + ': ' + Object.keys(picked).length +
+                                             ' ' + L.ofQ + ' ' + m.agenda.length;
+                }
                 m.agenda.forEach(function (q) {
                     var row = document.createElement('div');
                     row.className = 'cl-q';
@@ -260,37 +449,224 @@
                     if (!opts.length) {
                         opts = ['yes', 'no', 'abstain'].map(function (v) { return { v: v, t: L[v], note: '' }; });
                     }
-                    row.innerHTML = '<div class="cl-qt">' + esc(q.title || q.id) + '</div>' +
+                    // Знак вопроса открывает ОКНО С АБЗАЦЕМ, а не строку-подсказку.
+                    // Владелец 13 августа: «при выборе должен быть тултип с объяснением,
+                    // откуда возник вопрос, только чтобы тултип был не строкой, а абзацем,
+                    // окошко». Пояснения к вариантам переехали туда же: раньше они жили в
+                    // title= и на телефоне не показывались вовсе — там нет наведения мыши.
+                    row.innerHTML = '<div class="cl-qt">' + esc(q.title || q.id) +
+                        ' <button type="button" class="cl-why-btn" aria-label="' + esc(L.whyBtn) +
+                        '" title="' + esc(L.whyBtn) + '">?</button></div>' +
+                        '<div class="cl-frozen" hidden></div>' +
                         (key ? '<div class="cl-btns' + (opts.length > 3 ? ' cl-btns-wide' : '') + '">' +
                             opts.map(function (o) {
-                                return '<button type="button" data-v="' + esc(o.v) + '"' +
-                                       (o.note ? ' title="' + esc(o.note) + '"' : '') + '>' +
+                                return '<button type="button" data-v="' + esc(o.v) + '">' +
                                        esc(o.t) + '</button>';
-                            }).join('') + '</div><div class="cl-res"></div>'
+                            }).join('') + '</div>' +
+                            '<div class="cl-qfoot"><button type="button" class="cl-freeze-btn">' +
+                            esc(L.freeze) + '</button></div><div class="cl-res"></div>'
                              : '<div class="cl-res"></div>');
                     box.appendChild(row);
-                    if (key) row.querySelectorAll('button').forEach(function (b) {
+                    row.querySelector('.cl-why-btn').onclick = function () { showWhy(q, opts); };
+                    if (key) row.querySelectorAll('.cl-btns button').forEach(function (b) {
                         b.onclick = function () {
-                            api('/vote', { key: key, meeting: m.date, question: q.id, vote: b.dataset.v })
-                                .then(function (r) {
-                                    row.querySelector('.cl-res').textContent = r && r.ok ? L.voted : L.err;
-                                    row.querySelectorAll('button').forEach(function (x) { x.classList.remove('on'); });
-                                    if (r && r.ok) b.classList.add('on');
-                                    loadResults(m.date, box);
-                                });
+                            if (row.classList.contains('is-frozen')) return;
+                            row.querySelectorAll('.cl-btns button').forEach(function (x) { x.classList.remove('on'); });
+                            b.classList.add('on');
+                            picked[q.id] = b.dataset.v;
+                            updatePicked();
                         };
                     });
+                    if (key) {
+                        row.querySelector('.cl-freeze-btn').onclick = function () {
+                            askFreeze(key, m, q, row, function () { loadFrozen(m.date, box, key); });
+                        };
+                    }
+                    // Заморозка снимает выбор: голосовать по снятому вопросу нельзя.
+                    row.__clearPick = function () { delete picked[q.id]; updatePicked();
+                        row.querySelectorAll('.cl-btns button').forEach(function (x) { x.classList.remove('on'); }); };
                 });
-                host.appendChild(box);
+                if (key) {
+                    var foot = document.createElement('div');
+                    foot.className = 'cl-vote-foot';
+                    foot.innerHTML = '<div class="cl-picked"></div>' +
+                        '<button type="button" class="cl-submit">' + esc(L.submitAll) + '</button>' +
+                        '<div class="cl-msg cl-submit-msg"></div>';
+                    box.appendChild(foot);
+                    box.__foot = foot;
+                    foot.querySelector('.cl-submit').onclick = function () {
+                        var ids = Object.keys(picked);
+                        if (!ids.length) {
+                            foot.querySelector('.cl-submit-msg').textContent = L.pickAll;
+                            return;
+                        }
+                        // Голос — это ОСОЗНАННОЕ действие, а не касание кнопки. Владелец
+                        // 13 августа: «пока кнопка не нажата, нельзя считать, что я что-то
+                        // выбрал: я могу выбрать предварительно и потом изменить». Поэтому
+                        // выбор до сих пор жил только в браузере, а здесь человек видит
+                        // разом всё, за что расписывается, — и своё предложение тоже.
+                        var proposal = (host.querySelector('.cl-text') || {}).value || '';
+                        confirmVotes(m, picked, proposal.trim(), function () {
+                            var btn = foot.querySelector('.cl-submit'); btn.disabled = true;
+                            var left = ids.length, bad = 0, needMail = false, wasFrozen = false;
+                            ids.forEach(function (qid) {
+                                api('/vote', { key: key, meeting: m.date, question: qid, vote: picked[qid] })
+                                    .then(function (r) {
+                                        if (!(r && r.ok)) {
+                                            bad++;
+                                            if (r && r.error === 'email_required') needMail = true;
+                                            // Кто-то заморозил вопрос, пока человек выбирал.
+                                            // Не ошибка отправки, а изменившаяся повестка.
+                                            if (r && r.error === 'frozen') wasFrozen = true;
+                                        }
+                                    })
+                                    .catch(function () { bad++; })
+                                    .then(function () {
+                                        if (--left === 0) {
+                                            btn.disabled = false;
+                                            foot.querySelector('.cl-submit-msg').textContent =
+                                                needMail ? L.needMail
+                                              : wasFrozen ? L.frozenAnon
+                                              : (bad ? L.err : L.submitted);
+                                            if (needMail) {
+                                                var mi = host.querySelector('.cl-mail-in');
+                                                if (mi) { mi.focus(); mi.scrollIntoView({ block: 'center' }); }
+                                            }
+                                            loadResults(m.date, box);
+                                            loadFrozen(m.date, box, key);
+                                        }
+                                    });
+                            });
+                        });
+                    };
+                }
+                host.querySelector('.slot-vote').appendChild(box);
                 loadResults(m.date, box);
+                loadFrozen(m.date, box, key);
             }).catch(function () {});
+    }
+
+    /* Окно «откуда взялся вопрос». Три части: происхождение (кто и на каком основании
+       вынес), суть, и что означает каждый вариант. Всё абзацами: вопрос повестки — это
+       не подпись к кнопке, в одну строку он честно не сжимается. */
+    function showWhy(q, opts) {
+        var parts = '';
+        if (q.origin) parts += '<h5>' + esc(L.whyTitle) + '</h5><p>' + esc(q.origin) + '</p>';
+        if (q.body) parts += '<h5>' + esc(L.whyAbout) + '</h5><p>' + esc(q.body) + '</p>';
+        var notes = (opts || []).filter(function (o) { return o.note; });
+        if (notes.length) {
+            parts += '<h5>' + esc(L.whyOptions) + '</h5><ul class="cl-why-opts">' +
+                notes.map(function (o) {
+                    return '<li><b>' + esc(o.t) + '</b> — ' + esc(o.note) + '</li>';
+                }).join('') + '</ul>';
+        }
+        modal('<h4>' + esc(q.title || q.id) + '</h4><div class="cl-why-body">' + parts + '</div>' +
+              '<div class="cl-modal-btns"><button type="button" class="cl-cancel">' +
+              esc(L.close) + '</button></div>');
+    }
+
+    /* Заморозка: блокирующий голос с обязательным объяснением. Кнопка сама по себе ничего
+       не отправляет — сначала человек пишет причину и подтверждает, как и с голосованием. */
+    function askFreeze(key, m, q, row, done) {
+        var w = modal('<h4>' + esc(L.freezeTitle) + '</h4>' +
+            '<p class="cl-note">' + esc(L.freezeNote) + '</p>' +
+            '<div class="cl-freeze-q">' + esc(q.title || q.id) + '</div>' +
+            '<textarea class="cl-freeze-why" rows="4" placeholder="' + esc(L.freezePh) + '"></textarea>' +
+            '<div class="cl-msg cl-freeze-msg"></div>' +
+            '<div class="cl-modal-btns">' +
+            '<button type="button" class="cl-cancel">' + esc(L.cancel) + '</button>' +
+            '<button type="button" class="cl-yes">' + esc(L.freezeYes) + '</button></div>');
+        var ta = w.querySelector('.cl-freeze-why');
+        ta.focus();
+        w.querySelector('.cl-yes').onclick = function () {
+            var why = ta.value.trim();
+            var msg = w.querySelector('.cl-freeze-msg');
+            if (why.length < 20) { msg.textContent = L.freezeShort; return; }
+            this.disabled = true;
+            var self = this;
+            api('/freeze', { key: key, meeting: m.date, question: q.id, why: why })
+                .then(function (r) {
+                    if (r && r.ok) { w.remove(); if (row.__clearPick) row.__clearPick(); done(); return; }
+                    self.disabled = false;
+                    msg.textContent = (r && r.error === 'one_at_a_time') ? L.oneAtATime
+                                    : (r && r.error === 'email_required') ? L.needMail
+                                    : (r && r.error === 'why_required') ? L.freezeShort : L.err;
+                })
+                .catch(function () { self.disabled = false; msg.textContent = L.err; });
+        };
+    }
+
+    /* Что заморожено — показываем всем и всегда, не дожидаясь закрытия заседания. Это не
+       расклад голосов: снятый с голосования вопрос обязаны видеть все, иначе люди будут
+       ждать решения, которого не будет. Имя заморозившего наружу не идёт. */
+    function loadFrozen(meeting, box, key) {
+        fetch(API + '/frozen?meeting=' + encodeURIComponent(meeting))
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (d) {
+                if (!d || !d.frozen) return;
+                box.querySelectorAll('.cl-q').forEach(function (row, i) {
+                    var qid = (box.__ids || [])[i];
+                    var f = qid && d.frozen[qid];
+                    var cell = row.querySelector('.cl-frozen');
+                    if (!cell) return;
+                    if (!f) { cell.hidden = true; row.classList.remove('is-frozen'); return; }
+                    row.classList.add('is-frozen');
+                    if (row.__clearPick) row.__clearPick();
+                    cell.hidden = false;
+                    cell.innerHTML = '<div class="cl-frozen-head">' + esc(L.frozenLabel) + '</div>' +
+                        '<p class="cl-frozen-anon">' + esc(L.frozenAnon) + '</p>' +
+                        f.why.map(function (t) {
+                            return '<p class="cl-frozen-why"><b>' + esc(L.frozenWhy) + ':</b> ' + esc(t) + '</p>';
+                        }).join('') +
+                        '<p class="cl-note">' + esc(f.quorum ? L.frozenQuorum : L.frozenNext) + '</p>' +
+                        (key ? '<button type="button" class="cl-unfreeze">' + esc(L.unfreeze) + '</button>' : '');
+                    var un = cell.querySelector('.cl-unfreeze');
+                    if (un) un.onclick = function () {
+                        un.disabled = true;
+                        api('/freeze', { key: key, meeting: meeting, question: qid, undo: true })
+                            .then(function () { loadFrozen(meeting, box, key); })
+                            .catch(function () { un.disabled = false; });
+                    };
+                });
+            }).catch(function () {});
+    }
+
+    /* Общее окно: у совета их уже три (подтверждение голосов, происхождение вопроса,
+       заморозка), и каждое городило свою разметку и своё закрытие. */
+    function modal(inner) {
+        var wrap = document.createElement('div');
+        wrap.className = 'cl-modal';
+        wrap.innerHTML = '<div class="cl-modal-box">' + inner + '</div>';
+        document.body.appendChild(wrap);
+        function close() { wrap.remove(); }
+        var c = wrap.querySelector('.cl-cancel');
+        if (c) c.onclick = close;
+        wrap.onclick = function (e) { if (e.target === wrap) close(); };
+        return wrap;
     }
 
     function loadResults(meeting, box) {
         fetch(API + '/results?meeting=' + encodeURIComponent(meeting))
             .then(function (r) { return r.ok ? r.json() : null; })
             .then(function (d) {
-                if (!d || !d.results) return;
+                if (!d) return;
+                // Пока заседание идёт, расклад не отдаёт и сервер. Показываем ровно два
+                // числа: сколько человек уже высказалось и сколько всего участников —
+                // этого хватает, чтобы понять, ждут ли ещё кого-то, и не хватает, чтобы
+                // подсмотреть чужой ответ и повторить его не думая.
+                var head = box.querySelector('h4');
+                if (!d.closed) {
+                    var line = box.querySelector('.cl-wait');
+                    if (!line) {
+                        line = document.createElement('div');
+                        line.className = 'cl-wait';
+                        box.insertBefore(line, box.children[1] || null);
+                    }
+                    line.textContent = L.hidden + ' · ' + (d.voted || 0) + ' ' + L.votedN +
+                                       (d.members ? ' ' + L.ofQ + ' ' + d.members : '');
+                    return;
+                }
+                if (!d.results) return;
                 box.querySelectorAll('.cl-q').forEach(function (row, i) {
                     var qid = (box.__ids || [])[i];
                     var r = qid && d.results[qid];

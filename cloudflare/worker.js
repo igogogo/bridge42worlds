@@ -783,6 +783,35 @@ async function councilDb(env) {
        meeting TEXT, question TEXT, key TEXT, vote TEXT, why TEXT,
        created TEXT DEFAULT CURRENT_TIMESTAMP,
        PRIMARY KEY (meeting, question, key))`).run();
+  // Заморозка — блокирующий голос. Владелец 13 августа: «нужен блокирующий голос, то
+  // есть отложить: это ещё не время. Вопрос может заморозить любой член, и если кнопка
+  // нажата, голосование по этому вопросу не ведётся — всем видно, что кто-то заморозил».
+  //
+  // Три вещи здесь принципиальны и заданы владельцем дословно.
+  // 1. Причина обязательна: «пусть тот, кто замораживает, пишет комментарий».
+  // 2. Автор не раскрывается («но не раскрывать кто») — ключ хранится только чтобы
+  //    участник мог снять СВОЮ заморозку и чтобы один человек не морозил дважды.
+  // 3. Ждать трёх заморозок не нужно: «если заморожено, то должно быть объяснение,
+  //    обработать и пробовать переформулировать на следующее заседание с объяснением,
+  //    почему не принято решение, и это вопрос снят был с голосования».
+  await env.QUEUE.prepare(
+    `CREATE TABLE IF NOT EXISTS council_freezes (
+       meeting TEXT, question TEXT, key TEXT, why TEXT,
+       created TEXT DEFAULT CURRENT_TIMESTAMP,
+       PRIMARY KEY (meeting, question, key))`).run();
+}
+
+// Замороженные вопросы заседания: {qid: [{why, created}, …]}. Без ключей и ников —
+// заморозка публична как факт, но анонимна как поступок.
+async function frozenMap(env, meeting) {
+  const rows = await env.QUEUE.prepare(
+    "SELECT question, why, created FROM council_freezes WHERE meeting=? ORDER BY created")
+    .bind(meeting).all().then((r) => r.results || []).catch(() => []);
+  const out = {};
+  for (const r of rows) {
+    (out[r.question] = out[r.question] || []).push({ why: r.why || "", created: r.created });
+  }
+  return out;
 }
 
 function councilKey() {
@@ -834,7 +863,7 @@ async function handleCouncil(request, env, path) {
   if (path === "me") {
     const k = String(url.searchParams.get("key") || "").slice(0, 24);
     const m = k ? await env.QUEUE.prepare(
-      "SELECT key, name, email, joined, views, uid FROM council_members WHERE key=?").bind(k).first() : null;
+      "SELECT key, name, email, joined, views, uid, kind FROM council_members WHERE key=?").bind(k).first() : null;
     if (!m) return Response.json({ error: "not_member" }, { status: 403 });
     const seen = await env.QUEUE.prepare(
       `SELECT COUNT(DISTINCT path) n FROM events
@@ -846,11 +875,20 @@ async function handleCouncil(request, env, path) {
       "SELECT meeting, question, vote, created FROM council_votes WHERE key=? ORDER BY created DESC LIMIT 50")
       .bind(k).all().catch(() => ({ results: [] }));
     const total = await env.QUEUE.prepare("SELECT COUNT(*) n FROM council_members").first().catch(() => null);
+    // Состав по ролям: владелец 13 августа — «видно чтобы сколько участников, какие роли,
+    // ИИ и так далее». Человек должен понимать, с кем он решает: у ИИ-участников по
+    // регламенту те же права, но и особые ограничения (голос всегда с обоснованием,
+    // решающий голос ИИ вопрос не закрывает).
+    const byKind = await env.QUEUE.prepare(
+      "SELECT kind, COUNT(*) n FROM council_members GROUP BY kind").all()
+      .then(r => r.results || []).catch(() => []);
+    const roles = {};
+    for (const r of byKind) roles[r.kind || "human"] = r.n;
     return Response.json({
       member: { key: m.key, name: m.name || "", email: m.email || "", joined: m.joined,
-                views: (seen && seen.n) || m.views || 0 },
+                views: (seen && seen.n) || m.views || 0, kind: m.kind || "human" },
       proposals: props.results || [], votes: votes.results || [],
-      members: (total && total.n) || 0,
+      members: (total && total.n) || 0, roles,
     });
   }
 
@@ -910,6 +948,37 @@ async function handleCouncil(request, env, path) {
     return Response.json({ ok: true, key });
   }
 
+  // Полный сброс совета к чистому листу: голоса, заморозки, предложения и участники-люди.
+  // ИИ-участники остаются — это постоянный состав, а не тестовые записи. Владелец
+  // 13 августа: «дальше Игорь не владелец, то есть я обычный участник, и я себя опять как
+  // все зарегистрирую; убери и чисти эту роль», «их аж всего ресет».
+  //
+  // Закрыто админ-секретом. Отдельная ручка, а не флаг у reset: полное стирание должно
+  // называться своим именем, чтобы его нельзя было позвать по невнимательности.
+  if (path === "wipe") {
+    const admin = request.headers.get("x-b42-admin") || "";
+    if (!env.COUNCIL_ADMIN_TOKEN || admin !== env.COUNCIL_ADMIN_TOKEN) {
+      return Response.json({ error: "forbidden" }, { status: 403 });
+    }
+    if (String(body.confirm || "") !== "wipe-council") {
+      return Response.json({ error: "confirm_required" }, { status: 400 });
+    }
+    const before = await env.QUEUE.prepare(
+      "SELECT (SELECT COUNT(*) FROM council_members) m, (SELECT COUNT(*) FROM council_votes) v")
+      .first().catch(() => ({}));
+    await env.QUEUE.prepare("DELETE FROM council_votes").run();
+    await env.QUEUE.prepare("DELETE FROM council_freezes").run();
+    await env.QUEUE.prepare("DELETE FROM council_proposals").run();
+    // Людей стираем, машинных участников оставляем: у них нет ни почты, ни личных данных,
+    // а состав совета не должен обнуляться от технического сброса.
+    if (!body.keepAi) {
+      await env.QUEUE.prepare("DELETE FROM council_members WHERE COALESCE(kind,'human')<>'ai'").run();
+    }
+    const after = await env.QUEUE.prepare(
+      "SELECT COUNT(*) n FROM council_members").first().catch(() => ({ n: 0 }));
+    return Response.json({ ok: true, was: before, members: after.n });
+  }
+
   const key = String(body.key || "").slice(0, 24);
   const member = key ? await env.QUEUE.prepare("SELECT key FROM council_members WHERE key=?").bind(key).first() : null;
   if (!member) return Response.json({ error: "not_member" }, { status: 403 });
@@ -924,7 +993,95 @@ async function handleCouncil(request, env, path) {
     return Response.json({ ok: true });
   }
 
+  // Почта к ключу. Ключ — это вход, а почта — связь: без неё участник не узнает ни о
+  // повестке, ни об итогах, и совет для него существует, только пока открыта вкладка.
+  // Просим ПОСЛЕ входа, а не до: сначала человек видит, во что вступил.
+  if (path === "email" || path === "profile") {
+    const mail = String(body.email || "").trim().slice(0, 120);
+    // Пустая строка — законный ответ «не хочу писем»: отписка без переписки.
+    if (mail && !/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(mail)) {
+      return Response.json({ error: "bad_email" }, { status: 400 });
+    }
+    const name = String(body.name || "").trim().slice(0, 40);
+    if (name) {
+      await env.QUEUE.prepare("UPDATE council_members SET email=?, name=? WHERE key=?")
+        .bind(mail, name, key).run();
+    } else {
+      await env.QUEUE.prepare("UPDATE council_members SET email=? WHERE key=?")
+        .bind(mail, key).run();
+    }
+    return Response.json({ ok: true, email: mail, name });
+  }
+
+  // Сброс участника: снять голоса и профиль, чтобы вход выглядел как первый. Ручка
+  // закрыта админ-секретом — это не кнопка «передумать», а инструмент проверки: владелец
+  // 13 августа просил пройти сценарий с чистого листа.
+  if (path === "reset") {
+    const admin = request.headers.get("x-b42-admin") || "";
+    if (!env.COUNCIL_ADMIN_TOKEN || admin !== env.COUNCIL_ADMIN_TOKEN) {
+      return Response.json({ error: "forbidden" }, { status: 403 });
+    }
+    const target = String(body.target || "").slice(0, 24);
+    if (!target) return Response.json({ error: "no_target" }, { status: 400 });
+    await env.QUEUE.prepare("DELETE FROM council_votes WHERE key=?").bind(target).run();
+    await env.QUEUE.prepare("UPDATE council_members SET email='', name='' WHERE key=?")
+      .bind(target).run();
+    return Response.json({ ok: true, reset: target });
+  }
+
+  // Заморозить вопрос: снять его с голосования до следующего заседания. Любой участник,
+  // причина обязательна. Тот же член может снять свою заморозку (undo) — кнопка может
+  // быть нажата по ошибке, а необратимое действие в один клик пугает сильнее, чем помогает.
+  if (path === "freeze") {
+    const who = await env.QUEUE.prepare("SELECT email FROM council_members WHERE key=?")
+      .bind(key).first().catch(() => null);
+    if (!who) return Response.json({ error: "not_member" }, { status: 403 });
+    if (!String(who.email || "").trim()) {
+      return Response.json({ error: "email_required" }, { status: 403 });
+    }
+    const meeting = String(body.meeting || "").slice(0, 20);
+    const q = String(body.question || "").slice(0, 80);
+    if (!meeting || !q) return Response.json({ error: "bad_freeze" }, { status: 400 });
+    if (body.undo) {
+      await env.QUEUE.prepare(
+        "DELETE FROM council_freezes WHERE meeting=? AND question=? AND key=?")
+        .bind(meeting, q, key).run();
+      return Response.json({ ok: true, frozen: false });
+    }
+    // Заморозка без объяснения — это «нет» без разговора, ровно то, чего мы избегаем.
+    // Короткая отписка тоже не годится: следующему заседанию с ней нечего делать.
+    const why = String(body.why || "").trim().slice(0, 800);
+    if (why.length < 20) return Response.json({ error: "why_required" }, { status: 400 });
+    // Одна заморозка на участника за заседание. Владелец 13 августа: «если будет
+    // сознательная блокировка всего, то один человек может блокировать только один вопрос
+    // за один раз». Без этого правила один участник останавливает всю повестку в одиночку,
+    // и совет превращается в право вето для самого упрямого.
+    const mine = await env.QUEUE.prepare(
+      "SELECT question FROM council_freezes WHERE meeting=? AND key=? AND question<>?")
+      .bind(meeting, key, q).first().catch(() => null);
+    if (mine) {
+      return Response.json({ error: "one_at_a_time", question: mine.question }, { status: 409 });
+    }
+    await env.QUEUE.prepare(
+      `INSERT INTO council_freezes (meeting, question, key, why) VALUES (?,?,?,?)
+       ON CONFLICT(meeting, question, key) DO UPDATE SET why=excluded.why`)
+      .bind(meeting, q, key, why).run();
+    // Голоса по замороженному вопросу снимаем: вопрос снят с голосования, и хранить
+    // «мнения по снятому» значит потом случайно посчитать их за решение.
+    await env.QUEUE.prepare("DELETE FROM council_votes WHERE meeting=? AND question=?")
+      .bind(meeting, q).run();
+    return Response.json({ ok: true, frozen: true });
+  }
+
   if (path === "vote") {
+    // Почта — условие участия в голосовании, а не пожелание. Проверяем на сервере, а не
+    // только в форме: форму можно обойти, а голос без связи с человеком нельзя принимать
+    // ни при каких обстоятельствах.
+    const who = await env.QUEUE.prepare("SELECT email FROM council_members WHERE key=?")
+      .bind(key).first().catch(() => null);
+    if (!who || !String(who.email || "").trim()) {
+      return Response.json({ error: "email_required" }, { status: 403 });
+    }
     const meeting = String(body.meeting || "").slice(0, 20);
     const q = String(body.question || "").slice(0, 80);
     const v = String(body.vote || "").toLowerCase().slice(0, 40);
@@ -951,6 +1108,12 @@ async function handleCouncil(request, env, path) {
     if (!meeting || !q || !allowed.includes(v)) {
       return Response.json({ error: "bad_vote", allowed }, { status: 400 });
     }
+    // Замороженный вопрос голосов не принимает — иначе «снят с голосования» это надпись,
+    // а не правило. Проверяем на сервере: кнопки в форме гасятся, но форма не защита.
+    const frz = await env.QUEUE.prepare(
+      "SELECT COUNT(*) n FROM council_freezes WHERE meeting=? AND question=?")
+      .bind(meeting, q).first().catch(() => ({ n: 0 }));
+    if (frz && frz.n) return Response.json({ error: "frozen" }, { status: 409 });
     // Переголосовать можно: мнение меняется, и это нормально до закрытия заседания.
     await env.QUEUE.prepare(
       `INSERT INTO council_votes (meeting, question, key, vote, why) VALUES (?,?,?,?,?)
@@ -960,6 +1123,43 @@ async function handleCouncil(request, env, path) {
   }
 
   return Response.json({ error: "unknown" }, { status: 404 });
+}
+
+// Что заморожено на заседании — открыто, без ключа. Заморозка это не тайна голосования,
+// а факт, который обязаны видеть все: по этому вопросу решения сегодня не будет.
+//
+// Автор не раскрывается ни при каких условиях («но не раскрывать кто»): наружу идут
+// только причины. Разморозка должна КОГДА-ТО наступить — поэтому здесь же считается,
+// сколько раз вопрос замораживали за всю историю, и на второй раз он уходит кворуму ИИ
+// (владелец: «разрешение должно когда-то наступить, либо если нет, то ИИ только своим
+// кворумом собирается и выносит решение»). Иначе вопрос можно морозить вечно.
+const FREEZE_TO_QUORUM = 2;
+
+async function handleCouncilFrozen(request, env) {
+  if (!env.QUEUE) return Response.json({ error: "db_not_configured" }, { status: 503 });
+  await councilDb(env);
+  const url = new URL(request.url);
+  const meeting = String(url.searchParams.get("meeting") || "").slice(0, 20);
+  if (!meeting) return Response.json({ error: "no_meeting" }, { status: 400 });
+  const now = await frozenMap(env, meeting);
+  // История по вопросу — по всем заседаниям: переформулированный вопрос сохраняет свой
+  // идентификатор, поэтому счётчик не сбрасывается от переписывания заголовка.
+  const hist = await env.QUEUE.prepare(
+    "SELECT question, COUNT(DISTINCT meeting) n FROM council_freezes GROUP BY question")
+    .all().then((r) => r.results || []).catch(() => []);
+  const times = {};
+  for (const h of hist) times[h.question] = h.n;
+  const out = {};
+  for (const [qid, list] of Object.entries(now)) {
+    out[qid] = {
+      why: list.map((x) => x.why).filter(Boolean),
+      count: list.length,
+      times: times[qid] || 1,
+      quorum: (times[qid] || 1) >= FREEZE_TO_QUORUM,
+    };
+  }
+  return Response.json({ meeting, frozen: out, toQuorum: FREEZE_TO_QUORUM },
+                       { headers: { "cache-control": "no-store" } });
 }
 
 // Открытая доска совета: сколько участников, что предложено, кем и как идёт голосование.
@@ -976,18 +1176,68 @@ async function handleCouncilBoard(request, env) {
               COALESCE(NULLIF(m.name,''),'участник') nick, COALESCE(m.kind,'human') kind
          FROM council_proposals p LEFT JOIN council_members m ON m.key = p.key
         ORDER BY p.id DESC LIMIT 50`),
-    q(`SELECT meeting, question, vote, COUNT(*) n FROM council_votes GROUP BY meeting, question, vote`),
+    // Доска показывает АКТИВНОСТЬ, а не расклад: сколько человек уже проголосовало по
+    // каждому заседанию. Раскрывать, кто что выбрал, до закрытия — значит подсказывать
+    // остальным ответ (см. handleCouncilResults).
+    q(`SELECT meeting, COUNT(DISTINCT key) n FROM council_votes GROUP BY meeting`),
   ]);
   const byKind = {}; let total = 0;
   for (const r of members) { byKind[r.kind || "human"] = r.n; total += r.n; }
+  // Список участников под НИКАМИ с активностью. Владелец 13 августа: «в списке все ники
+  // чтобы были видны и какая-то активность — в скольких заседаниях участвовал». Ключ и
+  // почта наружу не идут ни при каких условиях: ключ это вход, почта это личное.
+  const people = await q(
+    `SELECT COALESCE(NULLIF(m.name,''),'участник') nick, COALESCE(m.kind,'human') kind,
+            m.joined joined, COUNT(DISTINCT v.meeting) meetings
+       FROM council_members m LEFT JOIN council_votes v ON v.key = m.key
+      GROUP BY m.key ORDER BY meetings DESC, m.joined ASC LIMIT 100`);
   const tally = {};
-  for (const v of votes) {
-    tally[v.meeting] = tally[v.meeting] || {};
-    tally[v.meeting][v.question] = tally[v.meeting][v.question] || {};
-    tally[v.meeting][v.question][v.vote] = v.n;
-  }
-  return Response.json({ members: { total, ...byKind }, proposals: props, votes: tally },
+  for (const v of votes) tally[v.meeting] = v.n;
+  return Response.json({ members: { total, ...byKind }, people, proposals: props, votes: tally },
                        { headers: { "cache-control": "public, max-age=60" } });
+}
+
+// История заседаний: что было, что решено, что дальше. Владелец 13 августа: «нужно
+// иметь как кабинет заседаний — прошло, по каждому что решено, сколько голосов, какие
+// предложения на следующий совет сформированы, когда дата».
+//
+// Список собираем из файлов заседаний в хранилище (data/council/*.json) — они и есть
+// первоисточник: их пишет планировщик при открытии и закрытии. Держать вторую копию
+// в базе значило бы завести два разных ответа на один вопрос.
+async function handleCouncilMeetings(request, env) {
+  const out = [];
+  try {
+    const list = await env.SITE.list({ prefix: "data/council/" });
+    for (const o of (list.objects || [])) {
+      const name = o.key.split("/").pop();
+      if (!/^\d{4}-\d{2}-\d{2}\.json$/.test(name)) continue;
+      const obj = await env.SITE.get(o.key);
+      if (!obj) continue;
+      const m = await obj.json();
+      const agenda = m.agenda || [];
+      out.push({
+        date: m.date || name.replace(".json", ""),
+        number: m.number || null,
+        status: m.status || "open",
+        questions: agenda.length,
+        decided: agenda.filter((q) => q.decision).length,
+        titles: agenda.map((q) => q.title || q.id).slice(0, 12),
+      });
+    }
+  } catch (e) { /* хранилище недоступно — отдадим пустой список, а не пятисотку */ }
+  out.sort((a, b) => (a.date < b.date ? 1 : -1));
+
+  // Сколько человек проголосовало на каждом — одно число, без раскладки.
+  const voted = env.QUEUE ? await env.QUEUE.prepare(
+    "SELECT meeting, COUNT(DISTINCT key) n FROM council_votes GROUP BY meeting").all()
+    .then((r) => r.results || []).catch(() => []) : [];
+  const byMeeting = {};
+  for (const v of voted) byMeeting[v.meeting] = v.n;
+  for (const m of out) m.voted = byMeeting[m.date] || 0;
+
+  const next = out.find((m) => m.status !== "closed");
+  return Response.json({ meetings: out, next: next ? next.date : null },
+                       { headers: { "cache-control": "public, max-age=120" } });
 }
 
 // Итоги голосования — открыто, без ключа: решения совета публичны по определению.
@@ -1000,15 +1250,39 @@ async function handleCouncilResults(request, env) {
     `SELECT question, vote, COUNT(*) n FROM council_votes WHERE meeting=?
       GROUP BY question, vote`).bind(meeting).all().catch(() => ({ results: [] }));
   const members = await env.QUEUE.prepare("SELECT COUNT(*) n FROM council_members").first().catch(() => ({ n: 0 }));
-  // Ключи не задаём заранее: у вопроса с вариантами это их идентификаторы, а не
-  // «за/против». Пустые тройки в ответе выглядели как «голосовали и все воздержались».
+  const voted = await env.QUEUE.prepare(
+    "SELECT COUNT(DISTINCT key) n FROM council_votes WHERE meeting=?").bind(meeting).first()
+    .catch(() => ({ n: 0 }));
+
+  // ЗАКРЫТО ЛИ ЗАСЕДАНИЕ. До закрытия расклад по вариантам НЕ отдаём никому: владелец
+  // 13 августа — «по каждому вопросу не показывать до завершения голосования, сколько
+  // было голосов и что выбрано, только общее количество уже проголосовавших».
+  // Причина не в тайне, а в качестве решения: видя, что двое уже выбрали второй вариант,
+  // третий выберет его же, не читая. Совет из трёх человек так превращается в одного.
+  let closed = false;
+  try {
+    const obj = await env.SITE.get(`data/council/${meeting}.json`);
+    if (obj) {
+      const m = await obj.json();
+      closed = String(m.status || "") === "closed";
+    }
+  } catch (e) { /* файла нет — считаем открытым, это безопаснее */ }
+
   const out = {};
-  for (const r of (rows.results || [])) {
-    out[r.question] = out[r.question] || {};
-    out[r.question][r.vote] = r.n;
+  if (closed) {
+    // Ключи не задаём заранее: у вопроса с вариантами это их идентификаторы, а не
+    // «за/против». Пустые тройки выглядели как «голосовали и все воздержались».
+    for (const r of (rows.results || [])) {
+      out[r.question] = out[r.question] || {};
+      out[r.question][r.vote] = r.n;
+    }
   }
-  return Response.json({ meeting, members: (members && members.n) || 0, results: out },
-                       { headers: { "cache-control": "public, max-age=60" } });
+  return Response.json({
+    meeting, closed,
+    members: (members && members.n) || 0,
+    voted: (voted && voted.n) || 0,
+    results: out,
+  }, { headers: { "cache-control": closed ? "public, max-age=60" : "no-store" } });
 }
 
 // ── Отзывы с плашки предзапуска (владелец 2026-07-31: «если кто напишет — мы это увидели») ──
@@ -1827,6 +2101,8 @@ export default {
     }
     if (url.pathname === "/api/council/board") return withCors(await handleCouncilBoard(request, env));
     if (url.pathname === "/api/council/results") return withCors(await handleCouncilResults(request, env));
+    if (url.pathname === "/api/council/meetings") return withCors(await handleCouncilMeetings(request, env));
+    if (url.pathname === "/api/council/frozen") return withCors(await handleCouncilFrozen(request, env));
     if (url.pathname.startsWith("/api/council/")) {
       return withCors(await handleCouncil(request, env, url.pathname.slice(13)));
     }

@@ -37,7 +37,7 @@ T = {
         "title": "Совет", "h1": "Наблюдательный совет",
         "meeting": "Заседание №1 · воскресенье 9 августа · повестка закрывается в пятницу",
         "decisions": "Решения совета",
-        "no_decisions": "Решений пока нет — первое заседание идёт. Итоги появятся здесь вечером 9 августа.",
+        "no_decisions": "Решений пока нет — заседание идёт. Итоги появятся здесь вечером {d} {m}.",
         "council": "Состав совета", "members_n": "участников",
         "r_owner": "Владелец", "r_owner_d": "решает: деньги, направление, ценностные развилки",
         "r_arch": "Архитектор", "r_arch_d": "готовит вопросы, отвечает за исполнение решений",
@@ -56,7 +56,7 @@ T = {
         "title": "Council", "h1": "Observers' council",
         "meeting": "Meeting #1 · Sunday, August 9 · agenda closes Friday",
         "decisions": "Council decisions",
-        "no_decisions": "No decisions yet — the first meeting is under way. Results will appear here on Sunday evening, August 9.",
+        "no_decisions": "No decisions yet — the meeting is under way. Results will appear here in the evening of {m} {d}.",
         "council": "Council members", "members_n": "members",
         "r_owner": "Owner", "r_owner_d": "decides: money, direction, value trade-offs",
         "r_arch": "Architect", "r_arch_d": "prepares questions, answers for execution of decisions",
@@ -108,17 +108,76 @@ def budget_line():
         return "—"
 
 
+# Шапка панели — из НАСТОЯЩЕЙ повестки, а не из строки в коде.
+#
+# 13 августа страница совета встречала фразой «Заседание №1 · воскресенье 9 августа»,
+# хотя шло заседание №2 от 16-го: дата была вписана руками при сборке первой панели и
+# устарела в тот же день, когда заседание сменилось. Дата на видном месте, которая врёт,
+# хуже отсутствующей: по ней люди планируют, успеют ли проголосовать.
+_MONTHS = {
+    "ru": ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа",
+           "сентября", "октября", "ноября", "декабря"],
+    "en": ["January", "February", "March", "April", "May", "June", "July", "August",
+           "September", "October", "November", "December"],
+    "es": ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto",
+           "septiembre", "octubre", "noviembre", "diciembre"],
+    "fr": ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août",
+           "septembre", "octobre", "novembre", "décembre"],
+    "ar": ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس",
+           "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"],
+}
+_MEET_FMT = {
+    "ru": "Заседание №{n} · {d} {m} · повестка закрывается в пятницу",
+    "en": "Meeting #{n} · {m} {d} · agenda closes on Friday",
+    "es": "Sesión n.º {n} · {d} de {m} · el orden del día se cierra el viernes",
+    "fr": "Séance n° {n} · {d} {m} · l'ordre du jour se clôt vendredi",
+    "ar": "الجلسة رقم {n} · {d} {m} · يُغلق جدول الأعمال يوم الجمعة",
+}
+
+
+def meeting_line(lang):
+    """Строка «Заседание №N · дата» по data/council/upcoming.json."""
+    import datetime
+    p = ROOT / "data" / "council" / "upcoming.json"
+    if not p.exists():
+        return T.get(lang, T["en"])["meeting"]
+    try:
+        d = json.loads(p.read_text(encoding="utf-8"))
+        dt = datetime.date.fromisoformat(str(d.get("date")))
+    except Exception:
+        return T.get(lang, T["en"])["meeting"]
+    months = _MONTHS.get(lang, _MONTHS["en"])
+    fmt = _MEET_FMT.get(lang, _MEET_FMT["en"])
+    return fmt.format(n=d.get("number") or 1, d=dt.day, m=months[dt.month - 1])
+
+
+def no_decisions_line(lang):
+    """«Итогов пока нет» — с датой ТЕКУЩЕГО заседания, а не первого."""
+    import datetime
+    txt = T.get(lang, T["en"])["no_decisions"]
+    if "{d}" not in txt:
+        return txt
+    p = ROOT / "data" / "council" / "upcoming.json"
+    try:
+        d = json.loads(p.read_text(encoding="utf-8"))
+        dt = datetime.date.fromisoformat(str(d.get("date")))
+    except Exception:
+        return txt.replace(" вечером {d} {m}", "").replace(" in the evening of {m} {d}", "")
+    months = _MONTHS.get(lang, _MONTHS["en"])
+    return txt.format(d=dt.day, m=months[dt.month - 1])
+
+
 def build(lang):
     t = T.get(lang, T["en"])
     b = budget_line()
     return f"""
 <div class="cp">
-  <div class="cp-head">{t["meeting"]}</div>
+  <div class="cp-head">{meeting_line(lang)}</div>
 
   <div id="council-live"></div>
 
   <h2>{t["decisions"]}</h2>
-  <div class="cp-decisions"><p class="cp-empty">{t["no_decisions"]}</p></div>
+  <div class="cp-decisions"><p class="cp-empty">{no_decisions_line(lang)}</p></div>
 
   <h2>{t["council"]} <span class="fx-n" id="cp-members"></span></h2>
   <div class="cp-roles">
