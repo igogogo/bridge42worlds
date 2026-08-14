@@ -79,7 +79,7 @@
         var links = [];
         kg.edges.forEach(function (e) {
             if (idx[e.a] !== undefined && idx[e.b] !== undefined) {
-                links.push([idx[e.a], idx[e.b], e.t === 'law-influence' ? 'dashed' : undefined]);
+                links.push([idx[e.a], idx[e.b], e.t === 'law-influence' ? 'dashed' : undefined, e.w]);
             }
         });
         return { nodes: nodes, links: links };
@@ -202,7 +202,7 @@
                 kg.edges.forEach(function (e) {
                     if (!edges[e.t]) return;
                     if (!candSet[e.a] || !candSet[e.b]) return;
-                    rawLinks.push([e.a, e.b, e.t === 'law-influence' ? 'dashed' : undefined]);
+                    rawLinks.push([e.a, e.b, e.t === 'law-influence' ? 'dashed' : undefined, e.w]);
                     deg[e.a] = (deg[e.a] || 0) + 1;
                     deg[e.b] = (deg[e.b] || 0) + 1;
                 });
@@ -219,7 +219,7 @@
                     idx[id] = nodes.length;
                     nodes.push({ rawid: n.id.slice(2), name: resolveName(n, tn, ln), kind: n.kind, sub: n.sub });
                 });
-                var links = rawLinks.map(function (e) { return [idx[e[0]], idx[e[1]], e[2]]; });
+                var links = rawLinks.map(function (e) { return [idx[e[0]], idx[e[1]], e[2], e[3]]; });
                 return { nodes: nodes, links: links };
             });
         },

@@ -438,8 +438,16 @@ window.createForceGraph = function (opts) {
             var kx = W >= H ? 0.75 : 1.25, ky = H > W ? 0.75 : 1.25;
             a.vx += (cx - a.x) * PULL_X * kx; a.vy += (cy - a.y) * PULL_Y * ky;
         }
+        // Пружина связи учитывает ВЕС (l[3], 0..1): сильная связь короче и тянет жёстче,
+        // слабая длиннее и мягче. Это и есть «увидеть структуру» — пока все пружины были
+        // одинаковыми, любой граф раскладывался равномерным шаром независимо от того,
+        // что в нём на самом деле связано (владелец 14 августа). Вес считает
+        // build_knowledge_graph.py по со-встречаемости в статьях.
         links.forEach(function (l) {
-            var a = nodes[l[0]], b = nodes[l[1]], dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || 0.01, f = (d - LINK_LEN) * 0.02 / d;
+            var a = nodes[l[0]], b = nodes[l[1]], w = (l[3] == null ? 0.5 : l[3]);
+            var len = LINK_LEN * (1.55 - w * 0.8);          // вес 1 → 0.75 длины, вес 0 → 1.55
+            var k = 0.012 + w * 0.022;                       // и жёсткость пружины по весу
+            var dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || 0.01, f = (d - len) * k / d;
             a.vx += dx * f; a.vy += dy * f; b.vx -= dx * f; b.vy -= dy * f;
         });
         for (var k = 0; k < nodes.length; k++) {
@@ -488,10 +496,17 @@ window.createForceGraph = function (opts) {
         ctx.clearRect(0, 0, W, H); ctx.lineWidth = 1;
         links.forEach(function (l) {
             var a = nodes[l[0]], b = nodes[l[1]], hot = hover >= 0 && (l[0] === hover || l[1] === hover);
-            ctx.strokeStyle = hot ? 'rgba(120,120,120,0.5)' : 'rgba(140,140,140,0.13)';
+            // Толщина и заметность — по весу связи. Одинаковые нитки не давали отличить
+            // «Эйнштейн ⇄ ОТО» от случайного совпадения тега с законом, и глаз читал
+            // любой граф как равномерную сетку.
+            var w = (l[3] == null ? 0.5 : l[3]);
+            ctx.lineWidth = 0.6 + w * 1.6;
+            ctx.strokeStyle = hot ? 'rgba(120,120,120,0.5)'
+                                  : 'rgba(140,140,140,' + (0.07 + w * 0.22).toFixed(3) + ')';
             if (l[2] === 'dashed') ctx.setLineDash([3, 3]); // напр. закон↔учёный «оказал влияние», не «открыл»
             ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
             if (l[2] === 'dashed') ctx.setLineDash([]);
+            ctx.lineWidth = 1;
         });
         for (var i = 0; i < nodes.length; i++) {
             var a = nodes[i], dim = hover >= 0 && i !== hover && !adj[hover][i], col = opts.color(a);
