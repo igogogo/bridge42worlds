@@ -1778,7 +1778,16 @@ html[dir="rtl"] .cat-chip-add { margin-left: 0; margin-right: 5px; }
 /* Контент ближе к шапке: убираем лишний верхний воздух над названием (юзер 2026-07-23). */
 .article-main { padding-top: 8px; }
 /* Карточка ленты: дата ↔ express-бейдж — единый зазор через flex-gap (чинит слипание в RTL/ar) */
-.card-eyebrow { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; }
+/* Строка над заголовком: раздел · дата · время чтения · arXiv · экспресс.
+   Выравнивание по ЦЕНТРУ, а не по базовой линии. С baseline элементы со значком
+   (раздел, время чтения, ссылка на arXiv) имеют другую высоту строчного блока, чем
+   голый текст даты, и ряд разъезжается: замер 14 августа — верх раздела 238 px,
+   даты 242 px, времени чтения 236 px. Владелец видел это как «начиная с даты всё
+   на полстроки сдвинуто вниз». По центру значок и текст встают ровно при любых
+   размерах шрифта. */
+.card-eyebrow { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
+.card-eyebrow > * { display: inline-flex; align-items: center; gap: 4px; }
+.card-eyebrow svg { flex: 0 0 auto; }
 .card-eyebrow .card-date { margin: 0 !important; }
 .card-eyebrow .card-express-badge { margin: 0 !important; }
 /* Нижняя «next article» (в блоке отклика) — по правому краю, как верхняя */
@@ -3464,8 +3473,12 @@ body.graph-fs-open .graph-fs-active svg { touch-action: manipulation; }
 .ent-law { border-radius: 2px; font-family: var(--mono); font-size: 11px; letter-spacing: .2px; }
 
 /* Паспорт статьи одной строкой: раздел · дата · сколько читать · оригинал · экспресс.
-   Переносится, а не уезжает за экран: на 375px в неё не влезает и половина. */
-.card-eyebrow { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+   Переносится, а не уезжает за экран: на 375px в неё не влезает и половина.
+   Само выравнивание задано выше (по центру) — здесь только зазор и размеры.
+   Раньше тут стояла вторая копия правила с align-items:baseline, и она перебивала
+   верхнюю: два одинаковых селектора в 1700 строк друг от друга — верный способ
+   чинить строку и не понимать, почему ничего не меняется. */
+.card-eyebrow { gap: 4px 10px; }
 .card-read, .card-src { font-size: 11px; color: var(--muted); }
 
 /* ── Знак группы раздела ──────────────────────────────────────────────────────

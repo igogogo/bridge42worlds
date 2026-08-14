@@ -4821,6 +4821,11 @@ def _index_entry(scipop, data, date_str, lang, version):
         "categories": data.get("categories", []),
         "primary_category": data.get("primary_category", ""),
         "express": data.get("express", False),
+        # Есть ли у статьи раздел «Взгляд машины знаний» — советы автору разобранной работы.
+        # Владелец 14 августа: «я бы добавил такую же галочку для отображения страниц с
+        # рекомендациями, мне было бы так удобно их искать». Одного флага хватает: сам
+        # текст советов в индекс не кладём — он большой, а искать надо не по нему.
+        "advice": bool((data.get("recommend") or {}).get(DEFAULT_LANG)),
         "image": has_image,
     }
 

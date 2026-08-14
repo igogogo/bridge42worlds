@@ -19,6 +19,20 @@ let currentVersion = (function() {
 if (currentVersion === 'mini') currentVersion = 'popular';
 // Эффективная версия для выборки статей: мини берёт popular-статьи.
 function effVersion() { return currentVersion === 'mini' ? 'popular' : currentVersion; }
+
+/* Экранирование для подстановки в атрибут. Нужно там, где в разметку карточки едет
+   переводимая строка: кавычка внутри title="…" рвёт тег, и дальше страница разъезжается.
+
+   Появилась после аварии 13 августа: в карточку добавили title у ссылок без справочной
+   карточки, вызвали esc(), а самой функции в этом файле не было. Итог — ReferenceError
+   на первой же карточке, лента не строилась НИ НА ОДНОМ языке, главная показывала
+   «0 articles / ничего не найдено». Ошибка молчаливая: страница отдавалась с кодом 200,
+   в консоли лежало одно сообщение, и заметил её владелец, а не мы. */
+function esc(s) {
+    return String(s == null ? '' : s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
 // Наружу — чтобы scroll.js мог сверить, про тот ли уровень чтения общий индекс, прежде чем
 // брать его вместо своего: иначе на advanced-странице подписи приехали бы из popular.
 window.effVersion = effVersion;
@@ -87,7 +101,7 @@ var UI_STRINGS = {
           selectScientist: 'Выберите учёного:', authorNotFound: 'Автор не найден', selectAuthor: 'Выберите автора:',
           articlesWord: 'статей', noResults: 'Ничего не найдено', more: 'Подробнее →', profile: 'Профиль →', moreWord: 'ещё', min: 'мин',
           express: 'экспресс', expressTip: 'Экспресс: быстрый пересказ по авторской аннотации. Полные статьи мы пишем по всему тексту работы — глубже и подробнее.',
-          hideExpress: 'Скрыть экспресс-статьи', showLess: 'Свернуть',
+          hideExpress: 'Скрыть экспресс-статьи', onlyAdvice: 'Только с советами автору', showLess: 'Свернуть',
           favTitle: 'Избранное', like: 'Нравится', dislike: 'Не нравится', superlike: 'Супер!',
           refineTip: 'Отшлифовано редактором',
           noCard: 'Карточки пока нет — покажем статьи, где о нём говорится',
@@ -96,7 +110,7 @@ var UI_STRINGS = {
           selectScientist: 'Select a scientist:', authorNotFound: 'Author not found', selectAuthor: 'Select an author:',
           articlesWord: 'articles', noResults: 'Nothing found', more: 'More →', profile: 'Profile →', moreWord: 'more', min: 'min',
           express: 'express', expressTip: 'Express: a quick take from the author\'s abstract only. Full articles are written from the whole paper — deeper and more detailed.',
-          hideExpress: 'Hide express articles', showLess: 'Collapse',
+          hideExpress: 'Hide express articles', onlyAdvice: 'Only with advice to authors', showLess: 'Collapse',
           favTitle: 'Favorites', like: 'Like', dislike: 'Dislike', superlike: 'Super!',
           refineTip: 'Polished by an editor',
           noCard: 'No profile yet — we will show the articles that mention it',
@@ -105,7 +119,7 @@ var UI_STRINGS = {
           selectScientist: 'Elige un científico:', authorNotFound: 'Autor no encontrado', selectAuthor: 'Elige un autor:',
           articlesWord: 'artículos', noResults: 'Nada encontrado', more: 'Más →', profile: 'Perfil →', moreWord: 'más', min: 'min',
           express: 'exprés', expressTip: 'Exprés: un resumen rápido solo del abstract del autor. Los artículos completos se escriben a partir de todo el texto.',
-          hideExpress: 'Ocultar artículos exprés', showLess: 'Contraer',
+          hideExpress: 'Ocultar artículos exprés', onlyAdvice: 'Solo con consejos al autor', showLess: 'Contraer',
           favTitle: 'Favoritos', like: 'Me gusta', dislike: 'No me gusta', superlike: '¡Genial!',
           refineTip: 'Pulido por un editor',
           noCard: 'Aún sin ficha: mostraremos los artículos donde se menciona',
@@ -113,7 +127,7 @@ var UI_STRINGS = {
     zh: { tagNotFound: '未找到标签', selectTag: '选择标签：', scientistNotFound: '未找到科学家',
           selectScientist: '选择科学家：', authorNotFound: '未找到作者', selectAuthor: '选择作者：',
           articlesWord: '篇文章', noResults: '未找到结果', more: '详情 →', profile: '主页 →', moreWord: '更多', min: '分钟',
-          express: '速览', expressTip: '速览版：基于作者摘要，未解析全文', hideExpress: '隐藏速览文章', showLess: '收起',
+          express: '速览', expressTip: '速览版：基于作者摘要，未解析全文', hideExpress: '隐藏速览文章', onlyAdvice: '仅含给作者的建议', showLess: '收起',
           favTitle: '收藏', like: '喜欢', dislike: '不喜欢', superlike: '太赞了！',
           refineTip: '编辑润色',
           noCard: '暂无词条——将显示提到它的文章',
@@ -122,7 +136,7 @@ var UI_STRINGS = {
           selectScientist: 'Choisir un scientifique :', authorNotFound: 'Auteur introuvable', selectAuthor: 'Choisir un auteur :',
           articlesWord: 'articles', noResults: 'Aucun résultat', more: 'En savoir plus →', profile: 'Profil →', moreWord: 'autres', min: 'min',
           express: 'express', expressTip: 'Version express : basée sur le résumé de l\'auteur, pas le texte complet',
-          hideExpress: 'Masquer les articles express', showLess: 'Réduire',
+          hideExpress: 'Masquer les articles express', onlyAdvice: "Uniquement avec conseils à l'auteur", showLess: 'Réduire',
           favTitle: 'Favoris', like: 'J\'aime', dislike: 'Je n\'aime pas', superlike: 'Génial !',
           refineTip: 'Peaufiné par un éditeur',
           noCard: 'Pas encore de fiche : nous montrerons les articles qui en parlent',
@@ -131,7 +145,7 @@ var UI_STRINGS = {
           selectScientist: 'اختر عالمًا:', authorNotFound: 'المؤلف غير موجود', selectAuthor: 'اختر مؤلفًا:',
           articlesWord: 'مقالات', noResults: 'لا نتائج', more: 'المزيد ←', profile: 'الملف ←', moreWord: 'آخرون', min: 'دقيقة',
           express: 'سريع', expressTip: 'سريع: ملخّص سريع من خلاصة المؤلف فقط. أما المقالات الكاملة فتُكتب من النص الكامل — أعمق وأكثر تفصيلاً.',
-          hideExpress: 'إخفاء المقالات السريعة', showLess: 'طي',
+          hideExpress: 'إخفاء المقالات السريعة', onlyAdvice: 'فقط ما فيه نصائح للمؤلف', showLess: 'طي',
           favTitle: 'المفضلة', like: 'إعجاب', dislike: 'عدم إعجاب', superlike: 'رائع!',
           refineTip: 'تم صقله بواسطة محرر',
           noCard: 'لا توجد بطاقة بعد — سنعرض المقالات التي تذكره',
@@ -181,6 +195,9 @@ function applyPageContext(results) {
     if (hideExpress) {
         results = results.filter(function(item) { return !item.express; });
     }
+    if (onlyAdvice) {
+        results = results.filter(function(item) { return item.advice; });
+    }
     return results;
 }
 
@@ -188,6 +205,16 @@ function applyPageContext(results) {
 // applyPageContext() (общий фильтр-чокпоинт для showLatest/filterByDate/applyCategoryFilter/doSearch).
 var hideExpress = false;
 try { hideExpress = localStorage.getItem('b42_hide_express') === '1'; } catch (e) {}
+
+/* Второй тумблер: «только с советами автору». Владелец 14 августа — «я бы добавил такую
+   же галочку для отображения страниц с рекомендациями, мне было бы так удобно их искать;
+   оставь все сортировки работающими».
+
+   Живёт рядом с экспрессом и по тем же правилам: признак берётся из индекса (поле advice),
+   фильтр применяется в общем чекпоинте applyPageContext, сортировки не трогаются вовсе —
+   они работают уже после фильтрации. */
+var onlyAdvice = false;
+try { onlyAdvice = localStorage.getItem('b42_only_advice') === '1'; } catch (e) {}
 
 function initExpressFilter() {
     var cb = document.getElementById('express-filter-toggle');
@@ -200,6 +227,16 @@ function initExpressFilter() {
         try { localStorage.setItem('b42_hide_express', hideExpress ? '1' : '0'); } catch (e) {}
         // Тумблер — глобальный фильтр поверх текущего вида; проще всего сбросить на «последние»,
         // чем пытаться помнить, какой именно фильтр (дата/категория/поиск) был активен.
+        _defaultFeed();
+    };
+    var ab = document.getElementById('advice-filter-toggle');
+    if (!ab) return;
+    var alabel = document.getElementById('advice-filter-label');
+    if (alabel) alabel.textContent = UI.onlyAdvice || 'advice';
+    ab.checked = onlyAdvice;
+    ab.onchange = function() {
+        onlyAdvice = ab.checked;
+        try { localStorage.setItem('b42_only_advice', onlyAdvice ? '1' : '0'); } catch (e) {}
         _defaultFeed();
     };
 }

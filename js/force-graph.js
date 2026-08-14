@@ -310,7 +310,18 @@ window.createForceGraph = function (opts) {
     function _ingest(g) {
         var capped = capNodes(g.nodes || [], g.links || []);
         nodes = capped.nodes; links = capped.links;
-        nodes.forEach(function (n) { n.x = Math.random() * (W - 60) + 30; n.y = Math.random() * (H - 60) + 30; n.vx = 0; n.vy = 0; n.deg = 0; });
+        // Стартовая раскладка — спираль золотого угла, а не случайные точки. Случайный
+        // старт на плотном графе даёт комки и пустоты, физика первые сотни шагов тратит
+        // на их расталкивание, и часть узлов успевает уехать к стенкам. Спираль кладёт
+        // узлы равномерно с первого кадра: те же 175 законов собираются заметно быстрее
+        // и никуда не улетают. Заодно раскладка воспроизводима — один и тот же граф
+        // выглядит одинаково при каждом открытии, и глазу не надо искать его заново.
+        var GA = Math.PI * (3 - Math.sqrt(5)), RAD = Math.min(W, H) * 0.42;
+        nodes.forEach(function (n, i) {
+            var t = Math.sqrt((i + 0.5) / nodes.length) * RAD, a = i * GA;
+            n.x = W / 2 + Math.cos(a) * t; n.y = H / 2 + Math.sin(a) * t;
+            n.vx = 0; n.vy = 0; n.deg = 0;
+        });
         links.forEach(function (l) { nodes[l[0]].deg++; nodes[l[1]].deg++; });
         nodes.forEach(function (n) { n.r = opts.radius(n); });
         adj = nodes.map(function () { return {}; });
@@ -373,9 +384,18 @@ window.createForceGraph = function (opts) {
     // не дала ничего. Стоит это два деления в кадр.
     var REPULSE_R2_EFF = REPULSE_R2, REPULSE_R = Math.sqrt(REPULSE_R2);
     var _grid = new Map();
+    var REPULSE_EFF = REPULSE;
     function _tuneRadius() {
-        REPULSE_R2_EFF = REPULSE_R2 * Math.min(1, 100 / Math.max(1, nodes.length));
+        // Радиус отталкивания сужаем на плотных графах — иначе каждый считается с каждым.
+        // Но САМУ силу при этом надо УСИЛИВАТЬ: раньше сужался только радиус, и на 175
+        // законах узлы переставали расталкиваться вовсе — сбивались в ком, а лишние
+        // выдавливались к стенкам. Владелец 14 августа: «в углах накапливаются узлы и всё
+        // практически останавливается». Держим произведение силы на радиус примерно
+        // постоянным: меньше дальность — больше отдача вблизи.
+        var k = Math.min(1, 100 / Math.max(1, nodes.length));
+        REPULSE_R2_EFF = REPULSE_R2 * k;
         REPULSE_R = Math.sqrt(REPULSE_R2_EFF);
+        REPULSE_EFF = REPULSE / Math.max(0.35, Math.sqrt(k));
     }
 
     function step() {
@@ -404,7 +424,7 @@ window.createForceGraph = function (opts) {
                             var d = Math.sqrt(d2);
                             // вес по размеру: r у нас 4-14, поэтому множитель ~1.0-1.6
                             var w = 1 + ((a.r + b.r) - 8) / 24;
-                            var f = REPULSE * (w > 0.6 ? w : 0.6) / d2 / d;
+                            var f = REPULSE_EFF * (w > 0.6 ? w : 0.6) / d2 / d;
                             a.vx += dx * f; a.vy += dy * f; b.vx -= dx * f; b.vy -= dy * f;
                         }
                     }
@@ -426,7 +446,22 @@ window.createForceGraph = function (opts) {
             var n = nodes[k];
             if (k === drag) { n.x = px; n.y = py; n.vx = n.vy = 0; continue; }
             n.vx *= 0.85; n.vy *= 0.85; n.x += n.vx * alpha; n.y += n.vy * alpha;
-            var m = 30 + n.r; n.x = Math.max(m, Math.min(W - m, n.x)); n.y = Math.max(m, Math.min(H - m, n.y));
+            // Мягкая стенка вместо жёсткого зажима. Раньше вышедший за край узел
+            // ПРИЛИПАЛ к границе (Math.max/Math.min), и вся лишняя плотность оседала
+            // ободком по периметру и комками в углах — то, что владелец видел как
+            // «в углах накапливаются узлы». Теперь край отталкивает пропорционально
+            // тому, насколько глубоко узел зашёл: узел тормозится и возвращается сам,
+            // а вписывание в окно ниже доводит картинку до края аккуратно.
+            var m = 30 + n.r, push = 0.06;
+            if (n.x < m) { n.vx += (m - n.x) * push; }
+            else if (n.x > W - m) { n.vx -= (n.x - (W - m)) * push; }
+            if (n.y < m) { n.vy += (m - n.y) * push; }
+            else if (n.y > H - m) { n.vy -= (n.y - (H - m)) * push; }
+            // Совсем далеко не отпускаем: узел, улетевший на три экрана, обратно ползёт
+            // минутами, и человек видит «часть графа пропала».
+            var far = 2;
+            n.x = Math.max(-W * far, Math.min(W * (1 + far), n.x));
+            n.y = Math.max(-H * far, Math.min(H * (1 + far), n.y));
         }
         // Мягкое вписывание облака в окно: масштабируем к ~85% канваса + центрируем,
         // чтобы граф не скучивался по центру, а занимал всё место (не трогаем во время драга).
