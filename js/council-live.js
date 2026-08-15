@@ -31,7 +31,7 @@
               send: 'Отправить', sent: 'Предложение записано — оно попадёт в ближайшую повестку.',
               sending: 'Отправляю…',
               myVotes: 'Как я голосовал',
-              edit: 'изменить', del: 'удалить',
+              edit: 'изменить', del: 'удалить', myProps: 'Мои предложения',
               delAsk: 'Удалить это предложение? Его ещё не видел совет.',
               voteTitle: 'Голосование', yes: 'за', no: 'против', abstain: 'воздержаться',
               why: 'Коротко почему (необязательно)', voted: 'Голос учтён. Можно передумать до закрытия заседания.',
@@ -92,7 +92,7 @@
               send: 'Send', sent: 'Proposal recorded — it will reach the next agenda.',
               sending: 'Sending…',
               myVotes: 'How I voted',
-              edit: 'edit', del: 'delete',
+              edit: 'edit', del: 'delete', myProps: 'My proposals',
               delAsk: 'Delete this proposal? The council has not seen it yet.',
               voteTitle: 'Vote', yes: 'for', no: 'against', abstain: 'abstain',
               why: 'Briefly why (optional)', voted: 'Vote counted. You may change it until the meeting closes.',
@@ -213,9 +213,41 @@
             api('/propose', { key: key, text: t, lang: LANG }).then(function (r) {
                 btn.disabled = false;
                 propMsg.textContent = r && r.ok ? L.sent : L.err;
-                if (r && r.ok) { propText.value = ''; propMsg.scrollIntoView({ block: 'nearest' }); }
+                if (r && r.ok) { propText.value = ''; myProposals(propBox, key); }
             }).catch(function () { btn.disabled = false; propMsg.textContent = L.err; });
         };
+        myProposals(propBox, key);
+    }
+
+    /* Свои предложения — СРАЗУ ПОД ФОРМОЙ, где человек их и пишет.
+       Владелец 15 августа: «не вижу своих предложений на странице, как их изменить и
+       удалить». Список был — но в блоке «Ваше участие» наверху страницы, в двух экранах
+       от формы. Место, где вещь создают, и место, где ей управляют, должны совпадать. */
+    function myProposals(box, key) {
+        var wrap = box.querySelector('.cl-mine');
+        if (!wrap) {
+            wrap = document.createElement('div');
+            wrap.className = 'cl-mine';
+            box.querySelector('.cl-prop').appendChild(wrap);
+        }
+        fetch(API + '/me?key=' + encodeURIComponent(key))
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (d) {
+                var list = (d && d.proposals) || [];
+                if (!list.length) { wrap.innerHTML = ''; return; }
+                wrap.innerHTML = '<div class="cl-myv-head">' + esc(L.myProps) + '</div>' +
+                    '<ul class="cl-list cl-props">' + list.map(function (p) {
+                        return '<li data-pid="' + esc(String(p.id)) + '">' +
+                               '<span class="cl-p-text">' + esc(p.text || '') + '</span>' +
+                               (p.meeting
+                                 ? ' <em>' + esc(L.onAgenda) + '</em>'
+                                 : '<span class="cl-p-act">' +
+                                   '<button type="button" class="cl-p-edit">' + esc(L.edit) + '</button>' +
+                                   '<button type="button" class="cl-p-del">' + esc(L.del) + '</button>' +
+                                   '</span>') + '</li>';
+                    }).join('') + '</ul>';
+                bindProposalActions(wrap, key);
+            }).catch(function () {});
     }
 
     /* Правка и удаление своего предложения прямо в списке. Владелец 15 августа:
@@ -279,22 +311,7 @@
                     rows.map(function (r) {
                         return '<span><b>' + esc(String(r[1])) + '</b>' + esc(r[0]) + '</span>';
                     }).join('') + '</div>' +
-                    ((d.proposals || []).length
-                        ? '<ul class="cl-list cl-props">' + d.proposals.map(function (p) {
-                            // Предложение копится и остаётся управляемым: пока оно не ушло
-                            // в повестку, автор может переписать его или снять. После —
-                            // только показываем пометку: его уже читали остальные.
-                            return '<li data-pid="' + esc(String(p.id)) + '">' +
-                                   '<span class="cl-p-text">' + esc(p.text || '') + '</span>' +
-                                   (p.meeting
-                                     ? ' <em>' + esc(L.onAgenda) + '</em>'
-                                     : '<span class="cl-p-act">' +
-                                       '<button type="button" class="cl-p-edit">' + esc(L.edit) + '</button>' +
-                                       '<button type="button" class="cl-p-del">' + esc(L.del) + '</button>' +
-                                       '</span>') + '</li>';
-                          }).join('') + '</ul>'
-                        : '');
-                bindProposalActions(box, key);
+                    '';
             }).catch(function () {});
     }
 
