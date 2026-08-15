@@ -140,7 +140,8 @@ _MEET_FMT = {
 
 
 def meeting_line(lang):
-    """Строка «Заседание №N · дата» по data/council/upcoming.json."""
+    """Строка «Заседание №N · дата» по data/council/upcoming.json (по-английски)."""
+    lang = "en"
     import datetime
     p = ROOT / "data" / "council" / "upcoming.json"
     if not p.exists():
@@ -157,6 +158,7 @@ def meeting_line(lang):
 
 def no_decisions_line(lang):
     """«Итогов пока нет» — с датой ТЕКУЩЕГО заседания, а не первого."""
+    lang = "en"
     import datetime
     txt = T.get(lang, T["en"])["no_decisions"]
     if "{d}" not in txt:
@@ -172,6 +174,7 @@ def no_decisions_line(lang):
 
 
 def memo_html(lang):
+    lang = "en"
     """Памятка «как устроен совет» — принципы и порядок работы, без ссылок в сторону.
 
     Раньше внизу панели стояла ссылка «Проект изнутри»: она вела на большой документ,
@@ -185,7 +188,9 @@ def memo_html(lang):
 
 
 def build(lang):
-    t = T.get(lang, T["en"])
+    # Содержание совета всегда английское (владелец 15 августа), меню страницы —
+    # на языке раздела: навигацию терять незачем.
+    t = T["en"]
     b = budget_line()
     return f"""
 <div class="cp">

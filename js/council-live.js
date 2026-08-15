@@ -93,6 +93,7 @@
               sending: 'Sending…',
               myVotes: 'How I voted',
               edit: 'edit', del: 'delete', myProps: 'My proposals',
+              anyLang: 'The council works in English, but write in any language you think in: Russian, Arabic, French. The secretary translates proposals when the agenda is assembled.',
               delAsk: 'Delete this proposal? The council has not seen it yet.',
               voteTitle: 'Vote', yes: 'for', no: 'against', abstain: 'abstain',
               why: 'Briefly why (optional)', voted: 'Vote counted. You may change it until the meeting closes.',
@@ -125,22 +126,18 @@
               unfreeze: 'Remove my freeze',
               oneAtATime: 'You already froze another question. One question per member per meeting — remove that freeze first.' }
     };
-    var L = T[LANG] || T.en;
+    /* Совет ведётся НА ОДНОМ ЯЗЫКЕ — английском. Решение владельца 15 августа.
+       До этого интерфейс кабинета был переведён на пять языков, а содержание — повестка,
+       вопросы, варианты, решения — существовало только по-русски: араб видел арабские
+       кнопки и русский текст вопроса. Обещание языком оболочки, которого не давали по
+       существу, хуже честного одноязычия. Продукт (статьи) остаётся на пяти языках —
+       там многоязычность и есть ценность; совет это управление, ему нужен один рабочий
+       язык, понятный будущим участникам: авторам разобранных работ и университетам. */
+    var L = T.en;
     /* ar/es/fr — из файлов стратега (data/council/live-strings.<lang>.json): формулировки
        его, каркас мой, в js он не лезет. Пока файл едет, работает английский; приехал —
        надписи меняются на месте. Ключи сверяются: перевод с дырами хуже честного
        английского, потому что читается как недоделка. */
-    if (!T[LANG] && ['ar', 'es', 'fr'].indexOf(LANG) >= 0) {
-        fetch('/data/council/live-strings.' + LANG + '.json')
-            .then(function (r) { return r.ok ? r.json() : null; })
-            .then(function (d) {
-                if (!d) return;
-                for (var k in T.ru) { if (!(k in d)) return; }   // дырявый перевод не берём
-                L = d;
-                if (window.__clRerender) window.__clRerender();
-            }).catch(function () {});
-    }
-
     function get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
     function set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
     function uid() { return get('b42_uid') || ''; }
@@ -196,6 +193,7 @@
         // кнопку и не видел ничего, а «записано» появлялось в двух экранах над ней.
         var propBox = block(
             '<div class="cl-prop"><h4>' + esc(L.propose) + '</h4>' +
+            '<p class="cl-note">' + esc(L.anyLang) + '</p>' +
             '<textarea class="cl-text" rows="3" placeholder="' + esc(L.placeholder) + '"></textarea>' +
             '<button type="button" class="cl-send">' + esc(L.send) + '</button>' +
             '<div class="cl-msg cl-prop-msg"></div></div>');

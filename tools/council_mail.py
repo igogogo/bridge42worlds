@@ -72,15 +72,20 @@ def meeting():
 
 
 def letter_agenda(m, key):
-    lines = [f"Заседание наблюдательного совета {m.get('date','')}", ""]
-    lines.append("На повестке:")
+    """Письмо с повесткой. По-английски: совет ведётся на одном рабочем языке (решение
+    владельца 15 августа). Про «отвечайте на любом» сказано в самом письме — иначе
+    английский текст читается как требование писать только по-английски."""
+    lines = [f"Observers' council meeting {m.get('date','')}", ""]
+    lines.append("On the agenda:")
     for q in (m.get("agenda") or []):
         lines.append(f"  · {q.get('title','')}")
     lines += ["",
-              "Проголосовать и предложить своё — по ссылке (пароль не нужен):",
+              "Vote and add your own proposal (no password needed):",
               f"  {SITE}/council.html?key={key}", "",
-              "Голос можно изменить до закрытия заседания.",
-              "Если письма не нужны — ответьте одним словом «не надо», и мы уберём адрес."]
+              "You can change your vote until the meeting closes.",
+              "Write to us in any language you think in: Russian, Arabic, French. "
+              "The secretary translates proposals when the agenda is assembled.",
+              "If you would rather not receive these letters, reply with one word: stop."]
     return "\n".join(lines)
 
 
@@ -112,7 +117,7 @@ def letter_results(m, key):
     date = m.get("date", "")
     res = (results(date) or {}).get("results") or {}
     members = (results(date) or {}).get("members") or 0
-    lines = [f"Итоги заседания наблюдательного совета {date}", ""]
+    lines = [f"Results of the observers' council meeting {date}", ""]
 
     decided, skipped = [], []
     for q in (m.get("agenda") or []):
@@ -132,15 +137,15 @@ def letter_results(m, key):
         decided.append((q, best, total, names))
 
     if decided:
-        lines.append("Решения:")
+        lines.append("Decisions:")
         for q, (choice, n), total, names in decided:
-            label = names.get(choice, {"yes": "за", "no": "против",
-                                       "abstain": "воздержались"}.get(choice, choice))
+            label = names.get(choice, {"yes": "for", "no": "against",
+                                       "abstain": "abstained"}.get(choice, choice))
             lines.append(f"  · {q.get('title','')}")
-            lines.append(f"      {label} — {n} из {total}")
+            lines.append(f"      {label} — {n} of {total}")
         lines.append("")
     if skipped:
-        lines.append("Перенесено (никто не проголосовал):")
+        lines.append("Carried over, nobody voted:")
         for q in skipped:
             lines.append(f"  · {q.get('title','')}")
         lines.append("")
@@ -152,36 +157,36 @@ def letter_results(m, key):
     # что вопрос просто потеряли.
     frz = frozen(date)
     if frz:
-        lines.append("Снято с голосования (заморожено участником совета):")
+        lines.append("Taken off the vote, frozen by a council member:")
         for qid, f in frz.items():
             q = next((x for x in (m.get("agenda") or []) if x.get("id") == qid), {})
             lines.append(f"  · {q.get('title', qid)}")
             for why in (f.get("why") or []):
-                lines.append(f"      причина: {why}")
-            lines.append("      вернётся на следующее заседание в переформулированном виде"
+                lines.append(f"      reason: {why}")
+            lines.append("      returns to the next meeting, rephrased"
                          if not f.get("quorum")
-                         else "      заморожен повторно — решение примет кворум ИИ-участников")
+                         else "      frozen a second time, the AI members decide it by their own quorum")
         lines.append("")
 
     # План работ: что мы делаем по итогам. Без него письмо сообщает, что мы поговорили.
     plan = m.get("sprint") or []
     if plan:
-        lines.append("План работ на неделю:")
+        lines.append("Work plan for the week:")
         for item in plan:
             lines.append(f"  · {item if isinstance(item, str) else item.get('title', '')}")
         lines.append("")
 
     nxt = m.get("next_meeting") or {}
     if nxt:
-        lines.append(f"Следующее заседание: {nxt.get('date', '—')}.")
+        lines.append(f"Next meeting: {nxt.get('date', '—')}.")
         for q in (nxt.get("questions") or []):
             lines.append(f"  · {q}")
         lines.append("")
 
-    lines += [f"Участников в совете: {members}." if members else "",
-              "Полные итоги и все предложения — в вашем кабинете:",
+    lines += [f"Council members: {members}." if members else "",
+              "Full results and all proposals are in your cabinet:",
               f"  {SITE}/council.html?key={key}", "",
-              "Решение можно оспорить: напишите в ответ, вопрос вернётся на следующее заседание."]
+              "A decision can be challenged: reply to this letter and the question returns to the next meeting. Write in any language."]
     return "\n".join(x for x in lines if x is not None)
 
 
