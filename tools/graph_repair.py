@@ -56,6 +56,22 @@ RU_TO_KEY = {
 }
 
 
+
+# Пишем ФАЙЛ ТОЛЬКО ЕСЛИ СОДЕРЖИМОЕ ИЗМЕНИЛОСЬ — см. подробное объяснение в
+# tools/tag_by_vector.py: ночная перезапись всех 5 245 data.json обновляла дату правки,
+# карта сайта сообщала «изменился весь сайт», и роботы каждый день переобходили всё
+# заново. Именно это, а не сами боты, упёрло нас в предел бесплатного тарифа Cloudflare.
+def _save_if_changed(path, data, indent=1):
+    new = json.dumps(data, ensure_ascii=False, indent=indent)
+    try:
+        if path.read_text(encoding="utf-8") == new:
+            return False
+    except Exception:
+        pass
+    path.write_text(new, encoding="utf-8")
+    return True
+
+
 def _norm(s):
     """Имя к сравнимому виду: без диакритики, регистра и лишних пробелов.
 
@@ -197,7 +213,7 @@ def main():
                         v["tags"] = src[k]["tags"]
                     if src[k].get("scientists"):
                         v["scientists"] = src[k]["scientists"]
-            p.write_text(json.dumps(d, ensure_ascii=False, indent=1), encoding="utf-8")
+            _save_if_changed(p, d)
     print("\n✅ записано. Дальше: run.py html — страницы подхватят связи")
     return 0
 
