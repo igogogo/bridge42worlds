@@ -3393,6 +3393,14 @@ body.graph-fs-open .graph-fs-active svg { touch-action: manipulation; }
   border: 1px solid var(--line, var(--hair)); background: var(--bg); color: var(--ink);
   font: inherit; font-size: 14px; line-height: 1.55; resize: vertical; }
 
+/* Памятка «как устроен совет»: принципы и порядок работы прямо на странице совета.
+   Заголовок пункта и объяснение — парой, без списка-маркеров: это не перечень дел,
+   а короткие правила, каждое из которых читают отдельно. */
+.cp-memo { margin: 10px 0 0; display: grid; gap: 14px; }
+.cp-memo dt { font-size: 15px; font-weight: 600; color: var(--ink); line-height: 1.35; }
+.cp-memo dd { margin: 3px 0 0; font-size: 14px; line-height: 1.62; color: var(--muted); }
+@media (max-width: 560px) { .cp-memo { gap: 12px; } .cp-memo dt { font-size: 14.5px; } }
+
 /* Окно подтверждения голоса. Перекрывает страницу целиком: это последний шаг, на
    котором человек видит всё, за что расписывается, — отвлекать его тут нечем. */
 .cl-modal { position: fixed; inset: 0; z-index: 90; display: flex; align-items: center;

@@ -51,6 +51,8 @@ T = {
         "w_done_v": "формулы на проде · заседание №1 подготовлено · перевод чинится по полям",
         "more": "подробнее",
         "rules": "Правила совета", "inside": "Проект изнутри",
+        "memo_h": "Как устроен совет",
+        "memo": [('Совет решает, а не советует', 'Решение, принятое голосованием, исполняется. Спорить можно до голосования и на следующем заседании — но не молча не выполнять.'), ('Заседания по воскресеньям', 'В пятницу повестка закрывается и уходит письмом. В воскресенье вечером голосование закрывается, итоги приходят почтой и открываются всем.'), ('Голос можно изменить', 'Пока заседание идёт, решение переписывается: мнение меняется, когда читаешь чужие доводы. После закрытия — нет.'), ('Расклад скрыт до конца', 'Видно только, сколько человек уже высказалось. Иначе первый голос подсказывает ответ остальным.'), ('Любой может заморозить вопрос', 'Заморозка снимает вопрос с голосования и требует объяснения. Имя заморозившего не раскрывается, вопрос возвращается переформулированным.'), ('ИИ-участники равны, но не решают за людей', 'Их голос всегда с обоснованием. Решающий голос машины вопрос не закрывает — кроме случая, когда вопрос заморожен второй раз.'), ('Предложить может каждый участник', 'Предложение нельзя отклонить по существу — только вынести на голосование. Пока оно не в повестке, автор может его изменить или снять.')],
     },
     "en": {
         "title": "Council", "h1": "Observers' council",
@@ -70,6 +72,8 @@ T = {
         "w_done_v": "formulas live · meeting #1 prepared · translation now repairs by fields",
         "more": "details",
         "rules": "Council rules", "inside": "Inside the project",
+        "memo_h": "How the council works",
+        "memo": [('The council decides, it does not advise', 'A decision taken by vote is carried out. Argue before the vote or at the next meeting — but do not silently ignore it.'), ('Meetings on Sundays', 'The agenda closes on Friday and goes out by email. On Sunday evening voting closes, results are mailed and opened to everyone.'), ('A vote can be changed', "While the meeting runs, your decision can be rewritten: opinions change when you read other people's reasoning. After it closes, they cannot."), ('The tally is hidden until the end', 'Only the number of people who have spoken is visible. Otherwise the first vote tells everyone else the answer.'), ('Anyone may freeze a question', 'Freezing takes the question off the vote and requires an explanation. The author is not disclosed; the question returns rephrased.'), ('AI members are equal but do not decide for people', 'Their vote always comes with reasoning. A decisive AI vote does not close a question — except when it has been frozen twice.'), ('Any member may propose', 'A proposal cannot be rejected on merits, only put to a vote. Until it reaches the agenda, its author can edit or withdraw it.')],
     },
 }
 
@@ -167,6 +171,19 @@ def no_decisions_line(lang):
     return txt.format(d=dt.day, m=months[dt.month - 1])
 
 
+def memo_html(lang):
+    """Памятка «как устроен совет» — принципы и порядок работы, без ссылок в сторону.
+
+    Раньше внизу панели стояла ссылка «Проект изнутри»: она вела на большой документ,
+    который начинается с гида по сайту и ссылки на about. Человек, дочитавший до состава
+    совета, хочет узнать правила совета, а не открыть ещё одну страницу про проект
+    (владелец 15 августа). Семь пунктов отвечают на всё, что спрашивают в первый раз.
+    """
+    t = T.get(lang, T["en"])
+    return chr(10).join(
+        f"<dt>{h}</dt><dd>{d}</dd>" for h, d in t.get("memo", T["en"]["memo"]))
+
+
 def build(lang):
     t = T.get(lang, T["en"])
     b = budget_line()
@@ -195,7 +212,10 @@ def build(lang):
     <div class="cp-row"><b>{t["w_plan"]}</b><span>{t["w_plan_v"]}</span></div>
   </div>
 
-  <p class="cp-foot"><a href="/lang/{lang}/inside.html">{t["inside"]}</a></p>
+  <h2>{t["memo_h"]}</h2>
+  <dl class="cp-memo">
+    {memo_html(lang)}
+  </dl>
 </div>
 """
 
