@@ -872,7 +872,10 @@ async function handleCouncil(request, env, path) {
       "SELECT id, text, created, meeting FROM council_proposals WHERE key=? ORDER BY id DESC LIMIT 30")
       .bind(k).all().catch(() => ({ results: [] }));
     const votes = await env.QUEUE.prepare(
-      "SELECT meeting, question, vote, created FROM council_votes WHERE key=? ORDER BY created DESC LIMIT 50")
+      // why — своё же обоснование. Нужно и человеку (вернуться и вспомнить, чем
+      // руководствовался), и ИИ-участнику: без своих прошлых доводов он каждое заседание
+      // начинает с чистого листа и может проголосовать наоборот, не заметив этого.
+      "SELECT meeting, question, vote, why, created FROM council_votes WHERE key=? ORDER BY created DESC LIMIT 50")
       .bind(k).all().catch(() => ({ results: [] }));
     const total = await env.QUEUE.prepare("SELECT COUNT(*) n FROM council_members").first().catch(() => null);
     // Состав по ролям: владелец 13 августа — «видно чтобы сколько участников, какие роли,
@@ -1019,10 +1022,37 @@ async function handleCouncil(request, env, path) {
   if (path === "propose") {
     const text = String(body.text || "").trim().slice(0, 1000);
     if (!text) return Response.json({ error: "empty" }, { status: 400 });
-    await env.QUEUE.prepare(
+    // Правка своего предложения. Владелец 15 августа: «предложения пусть накапливаются,
+    // чтобы я мог и изменить, и удалить каждое». Правим ТОЛЬКО своё и только пока
+    // предложение не ушло в повестку: после этого его уже читали остальные, и тихая
+    // подмена текста означала бы, что совет обсуждал одно, а в протоколе другое.
+    const id = Number(body.id || 0);
+    if (id) {
+      const own = await env.QUEUE.prepare(
+        "SELECT id, meeting FROM council_proposals WHERE id=? AND key=?").bind(id, key).first();
+      if (!own) return Response.json({ error: "not_yours" }, { status: 403 });
+      if (own.meeting) return Response.json({ error: "on_agenda" }, { status: 409 });
+      await env.QUEUE.prepare("UPDATE council_proposals SET text=? WHERE id=? AND key=?")
+        .bind(text, id, key).run();
+      return Response.json({ ok: true, id });
+    }
+    const ins = await env.QUEUE.prepare(
       "INSERT INTO council_proposals (key, text, lang) VALUES (?,?,?)")
       .bind(key, text, String(body.lang || "").slice(0, 5)).run();
     await tg(env, `🏛 <b>Предложение в совет</b>\n${text.slice(0, 800)}`);
+    return Response.json({ ok: true, id: (ins.meta && ins.meta.last_row_id) || null });
+  }
+
+  // Удалить своё предложение — по тем же правилам, что и правка.
+  if (path === "unpropose") {
+    const id = Number(body.id || 0);
+    if (!id) return Response.json({ error: "no_id" }, { status: 400 });
+    const own = await env.QUEUE.prepare(
+      "SELECT id, meeting FROM council_proposals WHERE id=? AND key=?").bind(id, key).first();
+    if (!own) return Response.json({ error: "not_yours" }, { status: 403 });
+    if (own.meeting) return Response.json({ error: "on_agenda" }, { status: 409 });
+    await env.QUEUE.prepare("DELETE FROM council_proposals WHERE id=? AND key=?")
+      .bind(id, key).run();
     return Response.json({ ok: true });
   }
 

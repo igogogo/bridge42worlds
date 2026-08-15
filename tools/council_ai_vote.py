@@ -111,7 +111,84 @@ def frozen(meeting):
         return {}
 
 
-def ask(role_name, items):
+
+def context(key, meeting):
+    """Досье участника: регламент, прошлые решения совета, свои прошлые голоса, чужие
+    предложения и причины заморозок.
+
+    Владелец 15 августа: «каждый ИИ-участник должен быть с контекстом наших решений,
+    видеть нашу документацию и прошлые решения».
+
+    До этого голосование было чистым листом: модель получала повестку и роль — и всё.
+    Она не знала, что совет уже решил, как голосовала сама в прошлый раз и что предлагали
+    люди. Участник тем и отличается от опрашиваемого, что помнит: иначе он может через
+    неделю проголосовать наоборот и не заметить противоречия.
+
+    Всё собираем из того, что уже лежит, — ни одного лишнего обращения к модели.
+    """
+    import requests
+    parts = []
+
+    reg = ROOT / "data" / "council" / "РЕГЛАМЕНТ.md"
+    if reg.exists():
+        parts.append("=== РЕГЛАМЕНТ СОВЕТА ===\n" + reg.read_text(encoding="utf-8").strip())
+
+    # Решения прошлых заседаний — только закрытые и только суть.
+    past = []
+    try:
+        ms = requests.get(f"{API}/meetings", timeout=25).json().get("meetings", [])
+        for m in ms:
+            if m.get("status") != "closed" or m.get("date") == meeting:
+                continue
+            d = requests.get(f"{SITE}/data/council/{m['date']}.json", timeout=25).json()
+            lines = [f"Заседание {m['date']}:"]
+            for q in (d.get("agenda") or []):
+                dec = q.get("decision")
+                if dec:
+                    lines.append(f"  · {q.get('title','')} → РЕШЕНО: {dec.get('label')} "
+                                 f"({dec.get('votes')} из {dec.get('of')})")
+                elif q.get("frozen"):
+                    why = "; ".join(q["frozen"].get("why") or [])
+                    lines.append(f"  · {q.get('title','')} → ЗАМОРОЖЕН: {why[:200]}")
+            if len(lines) > 1:
+                past.append("\n".join(lines))
+            if len(past) >= 3:
+                break
+    except Exception:
+        pass
+    if past:
+        parts.append("=== ЧТО СОВЕТ УЖЕ РЕШИЛ ===\n" + "\n\n".join(past))
+
+    # Свои прошлые голоса с обоснованиями — чтобы не противоречить себе не заметив.
+    try:
+        me = requests.get(f"{API}/me?key={key}", timeout=25).json()
+        mine = [f"  · {v.get('meeting')} / {v.get('question')}: выбрал «{v.get('vote')}»"
+                + (f" — {v.get('why')[:200]}" if v.get("why") else "")
+                for v in (me.get("votes") or [])[:20]]
+        if mine:
+            parts.append("=== КАК Я ГОЛОСОВАЛ РАНЬШЕ ===\n" + "\n".join(mine))
+    except Exception:
+        pass
+
+    # Предложения живых участников: это и есть голос людей между заседаниями.
+    try:
+        b = requests.get(f"{API}/board", timeout=25).json()
+        props = [f"  · {p.get('nick')}: {(p.get('text') or '')[:400]}"
+                 for p in (b.get("proposals") or [])[:10]]
+        if props:
+            parts.append("=== ЧТО ПРЕДЛАГАЮТ УЧАСТНИКИ ===\n" + "\n".join(props))
+    except Exception:
+        pass
+
+    frz = frozen(meeting)
+    if frz:
+        parts.append("=== СНЯТО С ГОЛОСОВАНИЯ НА ЭТОМ ЗАСЕДАНИИ ===\n" + "\n".join(
+            f"  · {qid}: " + "; ".join(f.get("why") or []) for qid, f in frz.items()))
+
+    return "\n\n".join(parts)
+
+
+def ask(role_name, items, dossier=""):
     """Один запрос на участника: вся повестка разом — так у модели есть контекст всего
     заседания, а не восьми отдельных вопросов без связи между собой."""
     from common import chat, clean_json
@@ -121,7 +198,10 @@ def ask(role_name, items):
          "options": [{"id": o.get("id"), "label": o.get("label"), "note": o.get("note")}
                      for o in (q.get("options") or [])]}
         for q in items]}
-    resp = chat("translate_flash", json.dumps(payload, ensure_ascii=False, indent=1),
+    body = json.dumps(payload, ensure_ascii=False, indent=1)
+    if dossier:
+        body = dossier + "\n\n=== ПОВЕСТКА, ПО КОТОРОЙ ГОЛОСУЕМ ===\n" + body
+    resp = chat("translate_flash", body,
                 system=SYSTEM.format(role=ROLES.get(role_name, ROLES["Архитектор"])))
     text = (resp.choices[0].message.content or "").strip()
     return json.loads(clean_json(text)).get("votes") or []
@@ -162,7 +242,7 @@ def main():
         name = m.get("name") or "участник"
         print(f"\n=== {name}")
         try:
-            votes = ask(name, live)
+            votes = ask(name, live, context(m["key"], meeting))
         except Exception as e:
             print(f"  ❌ не проголосовал ({type(e).__name__}: {e})")
             bad += 1

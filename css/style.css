@@ -3366,6 +3366,31 @@ body.graph-fs-open .graph-fs-active svg { touch-action: manipulation; }
   color: var(--soft); }
 @media (max-width: 560px) { .cl-mnums { margin-inline-start: 0; } }
 
+/* Свои голоса под заседанием в кабинете. Владелец 15 августа: «если я зайду потом, то по
+   каждому заседанию увижу, за что я голосовал». Вопрос приглушён, выбор выделен: человек
+   ищет глазами именно свой ответ, а формулировку вопроса он и так помнит. */
+.cl-myvotes { flex-basis: 100%; margin-top: 8px; padding-inline-start: 12px;
+  border-inline-start: 2px solid var(--hair); }
+.cl-myv-head { font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--soft); margin-bottom: 5px; }
+.cl-myv { display: grid; gap: 1px; margin-bottom: 7px; }
+.cl-myv-q { font-size: 12.5px; color: var(--muted); line-height: 1.4; }
+.cl-myv-a { font-size: 13.5px; color: var(--ink); font-weight: 600; line-height: 1.35; }
+
+/* Список своих предложений: копятся, каждое можно переписать или снять, пока совет его
+   не увидел. Кнопки бледные и мелкие — это служебные действия, а не призыв. */
+.cl-props li { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 6px 10px; }
+.cl-p-text { flex: 1 1 240px; line-height: 1.5; }
+.cl-p-act { display: inline-flex; gap: 8px; flex: 0 0 auto; }
+.cl-p-edit, .cl-p-del, .cl-p-save { min-height: 26px; padding: 2px 10px; border-radius: 999px;
+  border: 1px solid var(--line, var(--hair)); background: var(--bg); color: var(--soft);
+  font: inherit; font-size: 11.5px; cursor: pointer; transition: border-color .16s, color .16s; }
+.cl-p-edit:hover, .cl-p-save:hover { border-color: var(--link); color: var(--link); }
+.cl-p-del:hover { border-color: #c2564a; color: #c2564a; }
+.cl-p-in { flex-basis: 100%; width: 100%; padding: 9px 12px; border-radius: 10px;
+  border: 1px solid var(--line, var(--hair)); background: var(--bg); color: var(--ink);
+  font: inherit; font-size: 14px; line-height: 1.55; resize: vertical; }
+
 /* Окно подтверждения голоса. Перекрывает страницу целиком: это последний шаг, на
    котором человек видит всё, за что расписывается, — отвлекать его тут нечем. */
 .cl-modal { position: fixed; inset: 0; z-index: 90; display: flex; align-items: center;

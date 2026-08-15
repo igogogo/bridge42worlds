@@ -29,6 +29,10 @@
               keyNote: 'Запишите его. Он заменяет логин и пароль: с ним вы войдёте с любого устройства.',
               propose: 'Предложить совету', placeholder: 'Что стоит изменить, добавить или прекратить',
               send: 'Отправить', sent: 'Предложение записано — оно попадёт в ближайшую повестку.',
+              sending: 'Отправляю…',
+              myVotes: 'Как я голосовал',
+              edit: 'изменить', del: 'удалить',
+              delAsk: 'Удалить это предложение? Его ещё не видел совет.',
               voteTitle: 'Голосование', yes: 'за', no: 'против', abstain: 'воздержаться',
               why: 'Коротко почему (необязательно)', voted: 'Голос учтён. Можно передумать до закрытия заседания.',
               results: 'Итоги', members: 'участников совета', err: 'Не получилось. Попробуйте ещё раз.',
@@ -86,6 +90,10 @@
               keyNote: 'Write it down. It replaces login and password: use it on any device.',
               propose: 'Propose to the council', placeholder: 'What to change, add or stop doing',
               send: 'Send', sent: 'Proposal recorded — it will reach the next agenda.',
+              sending: 'Sending…',
+              myVotes: 'How I voted',
+              edit: 'edit', del: 'delete',
+              delAsk: 'Delete this proposal? The council has not seen it yet.',
               voteTitle: 'Vote', yes: 'for', no: 'against', abstain: 'abstain',
               why: 'Briefly why (optional)', voted: 'Vote counted. You may change it until the meeting closes.',
               results: 'Results', members: 'council members', err: 'Did not work. Please try again.',
@@ -177,24 +185,77 @@
         mountVoting(key);          // ради него и пришли — сразу за кабинетом
         mountEmail(key);           // связь: без почты участник не узнает об итогах
         mountPeople();             // кто ещё в совете и насколько он живой
-        mountHistory();            // что уже было решено и когда следующее заседание
+        mountHistory(key);         // что уже было решено, как голосовал я, когда следующее
         // Предложения — ПОСЛЕ голосования: сначала ответь на поставленные вопросы,
         // потом ставь свои (владелец 13 августа).
-        host.querySelector('.slot-prop').appendChild(block(
+        // ВАЖНО: искать элементы ВНУТРИ этого блока, а не по всей странице.
+        // Владелец 15 августа: «нажал кнопку несколько раз, нет реакции, а потом поле
+        // очистилось». Предложение уходило с первого раза, но ответ печатался в чужой
+        // элемент: host.querySelector('.cl-msg') находит ПЕРВЫЙ .cl-msg в кабинете, а это
+        // строка голосования — она стоит выше по порядку слотов. Человек смотрел на
+        // кнопку и не видел ничего, а «записано» появлялось в двух экранах над ней.
+        var propBox = block(
             '<div class="cl-prop"><h4>' + esc(L.propose) + '</h4>' +
             '<textarea class="cl-text" rows="3" placeholder="' + esc(L.placeholder) + '"></textarea>' +
             '<button type="button" class="cl-send">' + esc(L.send) + '</button>' +
-            '<div class="cl-msg"></div></div>'));
-        host.querySelector('.cl-send').onclick = function () {
-            var t = host.querySelector('.cl-text').value.trim();
-            if (!t) return;
-            var btn = this; btn.disabled = true;
+            '<div class="cl-msg cl-prop-msg"></div></div>');
+        host.querySelector('.slot-prop').appendChild(propBox);
+        var propText = propBox.querySelector('.cl-text');
+        var propMsg = propBox.querySelector('.cl-prop-msg');
+        propBox.querySelector('.cl-send').onclick = function () {
+            var t = propText.value.trim();
+            if (!t) { propMsg.textContent = L.placeholder; return; }
+            var btn = this;
+            btn.disabled = true;
+            // Отклик СРАЗУ, а не после ответа сервера: иначе секунда молчания читается
+            // как «кнопка не работает», и человек жмёт ещё раз.
+            propMsg.textContent = L.sending || '…';
             api('/propose', { key: key, text: t, lang: LANG }).then(function (r) {
                 btn.disabled = false;
-                host.querySelector('.cl-msg').textContent = r && r.ok ? L.sent : L.err;
-                if (r && r.ok) host.querySelector('.cl-text').value = '';
-            }).catch(function () { btn.disabled = false; host.querySelector('.cl-msg').textContent = L.err; });
+                propMsg.textContent = r && r.ok ? L.sent : L.err;
+                if (r && r.ok) { propText.value = ''; propMsg.scrollIntoView({ block: 'nearest' }); }
+            }).catch(function () { btn.disabled = false; propMsg.textContent = L.err; });
         };
+    }
+
+    /* Правка и удаление своего предложения прямо в списке. Владелец 15 августа:
+       «предложения пусть накапливаются, чтобы я мог и изменить, и удалить каждое».
+       Редактирование на месте, без отдельной формы: список и есть рабочее место. */
+    function bindProposalActions(box, key) {
+        box.querySelectorAll('.cl-props li').forEach(function (li) {
+            var pid = li.dataset.pid;
+            var span = li.querySelector('.cl-p-text');
+            var edit = li.querySelector('.cl-p-edit');
+            var del = li.querySelector('.cl-p-del');
+            if (edit) edit.onclick = function () {
+                if (li.querySelector('textarea')) return;
+                var ta = document.createElement('textarea');
+                ta.className = 'cl-p-in'; ta.rows = 3; ta.value = span.textContent;
+                var save = document.createElement('button');
+                save.type = 'button'; save.className = 'cl-p-save'; save.textContent = L.mailSave;
+                span.style.display = 'none';
+                li.insertBefore(ta, li.firstChild.nextSibling);
+                li.querySelector('.cl-p-act').appendChild(save);
+                ta.focus();
+                save.onclick = function () {
+                    var v = ta.value.trim();
+                    if (!v) return;
+                    save.disabled = true;
+                    api('/propose', { key: key, id: Number(pid), text: v, lang: LANG })
+                        .then(function (r) {
+                            if (r && r.ok) { span.textContent = v; ta.remove(); save.remove(); span.style.display = ''; }
+                            else { save.disabled = false; }
+                        }).catch(function () { save.disabled = false; });
+                };
+            };
+            if (del) del.onclick = function () {
+                if (!confirm(L.delAsk)) return;
+                del.disabled = true;
+                api('/unpropose', { key: key, id: Number(pid) })
+                    .then(function (r) { if (r && r.ok) li.remove(); else del.disabled = false; })
+                    .catch(function () { del.disabled = false; });
+            };
+        });
     }
 
     /* Кабинет участника: что он сделал и что из этого вышло. Не «профиль» с аватаркой,
@@ -219,11 +280,21 @@
                         return '<span><b>' + esc(String(r[1])) + '</b>' + esc(r[0]) + '</span>';
                     }).join('') + '</div>' +
                     ((d.proposals || []).length
-                        ? '<ul class="cl-list">' + d.proposals.slice(0, 5).map(function (p) {
-                            return '<li>' + esc((p.text || '').slice(0, 140)) +
-                                   (p.meeting ? ' <em>' + esc(L.onAgenda) + '</em>' : '') + '</li>';
+                        ? '<ul class="cl-list cl-props">' + d.proposals.map(function (p) {
+                            // Предложение копится и остаётся управляемым: пока оно не ушло
+                            // в повестку, автор может переписать его или снять. После —
+                            // только показываем пометку: его уже читали остальные.
+                            return '<li data-pid="' + esc(String(p.id)) + '">' +
+                                   '<span class="cl-p-text">' + esc(p.text || '') + '</span>' +
+                                   (p.meeting
+                                     ? ' <em>' + esc(L.onAgenda) + '</em>'
+                                     : '<span class="cl-p-act">' +
+                                       '<button type="button" class="cl-p-edit">' + esc(L.edit) + '</button>' +
+                                       '<button type="button" class="cl-p-del">' + esc(L.del) + '</button>' +
+                                       '</span>') + '</li>';
                           }).join('') + '</ul>'
                         : '');
+                bindProposalActions(box, key);
             }).catch(function () {});
     }
 
@@ -395,21 +466,64 @@
     /* Кабинет заседаний: что было, что решено, когда следующее. Владелец 13 августа:
        «нужно иметь как кабинет заседаний — прошло, по каждому что решено, сколько
        голосов, какие предложения на следующий совет, когда дата». */
-    function mountHistory() {
-        fetch(API + '/meetings').then(function (r) { return r.ok ? r.json() : null; })
-            .then(function (d) {
-                if (!d || !(d.meetings || []).length) return;
-                var rows = d.meetings.map(function (m) {
+    function mountHistory(key) {
+        Promise.all([
+            fetch(API + '/meetings').then(function (r) { return r.ok ? r.json() : null; }),
+            key ? fetch(API + '/me?key=' + encodeURIComponent(key))
+                    .then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; })
+                : Promise.resolve(null)
+        ]).then(function (res) {
+            var d = res[0], me = res[1];
+            if (!d || !(d.meetings || []).length) return;
+
+            // Свои голоса — по заседаниям. Владелец 15 августа: «если я зайду потом, то по
+            // каждому заседанию увижу, за что я голосовал, так?» До этого в кабинете было
+            // только ЧИСЛО голосов: участник помнил, что голосовал, но не помнил как —
+            // а именно это и нужно, чтобы вернуться к вопросу и передумать со знанием дела.
+            var mine = {};
+            (me && me.votes || []).forEach(function (v) {
+                (mine[v.meeting] = mine[v.meeting] || []).push(v);
+            });
+
+            var box = block('<div class="cl-hist"><h4>' + esc(L.history) + '</h4>' +
+                (d.next ? '<p class="cl-note">' + esc(L.nextMeet) + ': <b>' + esc(d.next) + '</b></p>' : '') +
+                '<ul class="cl-mlist">' + d.meetings.map(function (m) {
                     var mark = m.status === 'closed' ? L.closedM : L.openM;
-                    return '<li><b>' + esc(m.date) + '</b> <span class="cl-mark">' + esc(mark) + '</span>' +
+                    return '<li data-meet="' + esc(m.date) + '"><b>' + esc(m.date) + '</b> ' +
+                        '<span class="cl-mark">' + esc(mark) + '</span>' +
                         '<span class="cl-mnums">' + m.questions + ' ' + esc(L.questionsN) +
                         (m.status === 'closed' ? ' · ' + m.decided + ' ' + esc(L.decidedN) : '') +
-                        ' · ' + (m.voted || 0) + ' ' + esc(L.votedN) + '</span></li>';
-                }).join('');
-                host.querySelector('.slot-hist').appendChild(block('<div class="cl-hist"><h4>' + esc(L.history) + '</h4>' +
-                    (d.next ? '<p class="cl-note">' + esc(L.nextMeet) + ': <b>' + esc(d.next) + '</b></p>' : '') +
-                    '<ul class="cl-mlist">' + rows + '</ul></div>'));
-            }).catch(function () {});
+                        ' · ' + (m.voted || 0) + ' ' + esc(L.votedN) + '</span>' +
+                        (mine[m.date] ? '<div class="cl-myvotes"></div>' : '') + '</li>';
+                }).join('') + '</ul></div>');
+            host.querySelector('.slot-hist').appendChild(box);
+
+            // Подписи вопросов и вариантов лежат в файле заседания. Тянем только те файлы,
+            // где человек действительно голосовал, — обычно один-два, а не всю историю.
+            Object.keys(mine).forEach(function (date) {
+                var cell = box.querySelector('li[data-meet="' + date + '"] .cl-myvotes');
+                if (!cell) return;
+                fetch('/data/council/' + date + '.json', { cache: 'no-store' })
+                    .then(function (r) { return r.ok ? r.json() : null; })
+                    .then(function (mt) {
+                        var byId = {};
+                        ((mt && mt.agenda) || []).forEach(function (q) { byId[q.id] = q; });
+                        cell.innerHTML = '<div class="cl-myv-head">' + esc(L.myVotes) + '</div>' +
+                            mine[date].map(function (v) {
+                                var q = byId[v.question] || {};
+                                var label = v.vote;
+                                (q.options || []).forEach(function (o, i) {
+                                    var id = (o && typeof o === 'object') ? String(o.id || (i + 1)) : String(i + 1);
+                                    if (id === v.vote) label = (o && o.label) || String(o);
+                                });
+                                if (!q.options || !q.options.length) label = L[v.vote] || v.vote;
+                                return '<div class="cl-myv"><span class="cl-myv-q">' +
+                                       esc(q.title || v.question) + '</span>' +
+                                       '<span class="cl-myv-a">' + esc(label) + '</span></div>';
+                            }).join('');
+                    }).catch(function () {});
+            });
+        }).catch(function () {});
     }
 
     /* Голосование по ближайшему заседанию. Вопросы берём из того же файла, по которому
