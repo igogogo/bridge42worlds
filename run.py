@@ -308,7 +308,8 @@ def cmd_html(args):
     _refuse_if_build_running(lock)
     lock.write_text(f"начата {datetime.now():%H:%M}, pid {os.getpid()}", encoding="utf-8")
     try:
-        generate.regenerate_all_html(only=getattr(args, "only", None))
+        generate.regenerate_all_html(only=getattr(args, "only", None),
+                                     force=getattr(args, "force", False))
         generate.rebuild_indexes()
         _ensure_webp()   # догнать .webp для новых картинок (сайт отдаёт webp, генератор пишет jpg)
     finally:
@@ -1024,6 +1025,12 @@ def build_parser():
     s.add_argument("--only", nargs="+", metavar="ДАТА|ID",
                    help="пересобрать только эти статьи (2026-07-01 или 2607.00742); "
                         "агрегаты и индексы строятся полностью в любом случае")
+    # По умолчанию собираются только статьи, у которых изменились данные (сверка по
+    # отпечатку data.json) или под которыми изменился шаблон. --force ломает эту
+    # экономию и перестраивает всё: нужно после ручной правки страниц или когда есть
+    # подозрение, что на диске лежит что-то не то.
+    s.add_argument("--force", action="store_true",
+                   help="пересобрать всё, не глядя на отпечатки")
     s.set_defaults(func=cmd_html)
 
     s = sub.add_parser("reindex", help="пересобрать индексы и графы из data.json")

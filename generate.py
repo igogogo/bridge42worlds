@@ -4005,7 +4005,73 @@ def _write_text_retry(path, text, retries=5, encoding="utf-8"):
             delay *= 2
 
 
-def regenerate_all_html(only=None):
+
+# ── Пересобирать только изменившееся ─────────────────────────────────────────────
+#
+# Владелец 14 августа: «мы всё пересобираем или только новые? … надо двигаться к этому,
+# потому что скоро статей станет 10 000 и все приехали».
+#
+# До этого `run.py html` перестраивал ВСЕ страницы всех статей на пяти языках — часы
+# работы ежедневно ради того, что почти всегда не менялось. Генератор просто не умел
+# отличить «данные статьи те же» от «шаблон под ней изменился» и перестраховывался.
+#
+# Отличаем двумя отпечатками.
+#   ПОДПИСЬ СБОРКИ — хэш шаблонов и самого генератора. Изменилась вёрстка или код —
+#   пересобираем всё, иначе половина сайта останется на старом шаблоне.
+#   ОТПЕЧАТОК СТАТЬИ — хэш её data.json. Совпал и страница на месте — пропускаем.
+#
+# Стоит это одно чтение файла на статью против полной генерации пяти языков × четырёх
+# уровней. Агрегаты (теги, законы, ленты, карты сайта) строятся всегда: они ссылаются
+# на все статьи разом, и частичная сборка оставила бы их рассогласованными.
+_BUILD_SIG = None
+FINGERPRINTS = Path("data") / "build-fingerprints.json"
+
+
+def build_signature():
+    """Хэш всего, что влияет на КАЖДУЮ страницу: шаблоны, генератор, css/js."""
+    global _BUILD_SIG
+    if _BUILD_SIG is None:
+        h = hashlib.sha256()
+        for f in sorted(Path("templates").glob("*.html")):
+            h.update(f.read_bytes())
+        gen = Path("generate.py")
+        if gen.exists():
+            h.update(gen.read_bytes())
+        h.update(asset_ver().encode())
+        _BUILD_SIG = h.hexdigest()[:16]
+    return _BUILD_SIG
+
+
+def _load_fingerprints():
+    """Отпечатки прошлой сборки. Подпись не та — считаем, что отпечатков нет."""
+    try:
+        d = json.loads(FINGERPRINTS.read_text(encoding="utf-8"))
+        if d.get("подпись") != build_signature():
+            print("   шаблоны или генератор изменились — пересобираю всё")
+            return {}
+        return d.get("статьи") or {}
+    except Exception:
+        return {}
+
+
+def _save_fingerprints(fps):
+    try:
+        FINGERPRINTS.parent.mkdir(exist_ok=True)
+        FINGERPRINTS.write_text(json.dumps(
+            {"подпись": build_signature(), "когда": datetime.now().isoformat(timespec="minutes"),
+             "статьи": fps}, ensure_ascii=False), encoding="utf-8")
+    except Exception as e:
+        print(f"   ⚠️ отпечатки не сохранены: {type(e).__name__}")
+
+
+def _article_fingerprint(folder):
+    try:
+        return hashlib.sha256((folder / "data.json").read_bytes()).hexdigest()[:16]
+    except Exception:
+        return ""
+
+
+def regenerate_all_html(only=None, force=False):
     """Пересобирает HTML статей из data.json (без API). Идёт по источнику правды,
     а не по индексам — устойчиво к их повреждению.
 
@@ -4020,10 +4086,23 @@ def regenerate_all_html(only=None):
     write_arxiv_categories_json()
     for lang in LANGUAGES: ensure_lang_structure(lang)
     count = 0
+    fps = {} if (force or only) else _load_fingerprints()
+    fresh, skipped = dict(fps), 0
     for data, folder in iter_articles():
         date_str = data.get("date", folder.parent.name)
         if only and not ({date_str, data.get("id"), folder.parent.name} & only):
             continue
+        aid = data.get("id") or folder.name
+        fp = _article_fingerprint(folder)
+        if fp and fps.get(aid) == fp and not force:
+            # Данные те же и подпись сборки та же. Страница на месте? Проверяем ОДИН файл:
+            # если исчез он, исчезла и вся папка, а если пропал отдельный уровень — его
+            # вернёт ближайшая полная пересборка (run.py html --force).
+            probe = Path(LANG_DIR) / DEFAULT_LANG / "archive" / date_str / aid / "index.html"
+            if probe.exists():
+                skipped += 1
+                continue
+        fresh[aid] = fp
         # только контентные картинки 0.jpg..N-1.jpg (ai.jpg — обложка, не в мозаике)
         images = sorted([p for p in folder.glob("*.jpg") if p.stem.isdigit()],
                         key=lambda p: int(p.stem))
@@ -4134,7 +4213,12 @@ def regenerate_all_html(only=None):
     generate_llms_txt()
     generate_feeds()
     generate_status_page()
-    print(f"  ✅ Regenerated {count} HTML pages + tags/scientists/authors/laws/graph")
+    # Отпечатки пишем ТОЛЬКО после того, как агрегаты собраны: если прогон оборвётся
+    # посередине, следующий должен считать эти статьи несобранными, а не пропустить их.
+    if not only:
+        _save_fingerprints(fresh)
+    print(f"  ✅ Regenerated {count} HTML pages + tags/scientists/authors/laws/graph"
+          + (f" · пропущено без изменений: {skipped}" if skipped else ""))
     if _WRITE_FAILURES:
         print(f"  ⚠️ не записалось страниц: {len(_WRITE_FAILURES)} — допишите точечно "
               f"(run.py html --only <дата|id>):")
