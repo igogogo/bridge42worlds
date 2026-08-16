@@ -265,8 +265,12 @@ body.graph-fs-open { overflow: hidden; }
 .graph-fs-active .graph-fs-bgbtn { display: flex; }
 /* Оверлей контролов внутри FS — реальные контролы графа переезжают сюда (force-graph.js). */
 .graph-fs-controls { display: none; }
+/* Раскладка панели — строкой с переносом (вариант Б, выбор владельца 2026-08-01: объекты
+   тремя равными колонками, связи двумя). Раньше здесь стоял столбец, а строка приезжала
+   отдельным объявлением того же селектора на три тысячи строк ниже — работало нижнее,
+   и правка «по месту» в этом правиле уходила в пустоту. Сведено в одно место. */
 .graph-fs-active .graph-fs-controls {
-    display: flex; flex-direction: column; gap: 8px; align-items: flex-start;
+    display: flex; flex-direction: row; flex-wrap: wrap; gap: 8px; align-items: center;
     position: absolute; top: 12px; left: 12px; z-index: 6; max-width: min(92vw, 660px);
     background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px;
     opacity: 0.97;
@@ -672,6 +676,19 @@ html[dir="rtl"] .calendar-panel, html[dir="rtl"] .search-panel { right: auto; le
     font-size: 12px; color: var(--soft); cursor: pointer; user-select: none;
 }
 .express-filter input { cursor: pointer; }
+/* Пока фильтр был один, тесная строка сходила с рук. Их стало два подряд (появился
+   «только с советами автору»), и замер на 375 показал: высота 20 px, зазор между
+   соседями — один пиксель. Промахнуться мимо нужного проще, чем попасть, а отменять
+   ошибочный выбор читателю дороже, чем нам дать строке высоту.
+   Порог 44 считается по узкой стороне: строка широкая, поэтому хватает ступени --tap-md,
+   а зазор разводит две цели, чтобы палец не задевал соседнюю. */
+@media (max-width: 640px) {
+    .express-filter {
+        min-height: var(--tap-md); margin-top: var(--tap-gap, 8px);
+        font-size: 13px; gap: 9px;
+    }
+    .express-filter input { width: 18px; height: 18px; flex: none; }
+}
 .cat-chip {
     cursor: pointer; color: var(--muted); padding: 0 9px; user-select: none;
     border-radius: 999px; transition: color 0.15s, background 0.15s, box-shadow 0.15s;
@@ -3274,7 +3291,8 @@ body.graph-fs-open .graph-fs-active svg { touch-action: manipulation; }
        помещается с запасом
      связи:   (320 − 6) / 2 ≈ 157 — «учёный ↔ учёный» при 10.5px ~85 + галочка, помещается
    Шесть связей ложатся ровно в три ряда по два, панель ~190 px — граф за ней остаётся виден. */
-.graph-fs-active .graph-fs-controls { flex-direction: row; flex-wrap: wrap; align-items: center; }
+/* Раскладка этой панели задана там же, где остальные её свойства (см. .graph-fs-controls
+   выше): держать половину правила здесь значило спорить с самим собой через файл. */
 .graph-fs-active .graph-fs-collapse { flex-basis: 100%; }
 /* Глубина — в строке с кнопкой: она про вид, а не про отбор */
 .mini-depth-ctrl.fs-depth-inline { margin-inline-start: 8px; }
