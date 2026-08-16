@@ -91,8 +91,14 @@ window.createForceGraph = function (opts) {
         var order = nn.map(function (_, i) { return i; }).sort(function (a, b) { return deg[b] - deg[a]; }).slice(0, CAP);
         var remap = {}; var out = [];
         order.forEach(function (i) { remap[i] = out.length; out.push(nn[i]); });
+        // Переносим ВСЕ поля связи, а не только концы. Раньше здесь собиралось [a, b] —
+        // и вместе с лишними узлами молча пропадали вес (l[3]) и пунктир (l[2]).
+        // Пропадали там, где это заметнее всего: лимит срабатывает от 100 узлов, а
+        // граф-эксплорер в своём наборе по умолчанию даёт под две сотни — то есть человек,
+        // открывший /graph как есть, видел равномерную сетку одинаковых ниток, ради ухода
+        // от которой длина и толщина по весу и делались.
         var outL = ll.filter(function (l) { return remap[l[0]] != null && remap[l[1]] != null; })
-                     .map(function (l) { return [remap[l[0]], remap[l[1]]]; });
+                     .map(function (l) { return [remap[l[0]], remap[l[1]], l[2], l[3]]; });
         return { nodes: out, links: outL, from: nn.length };
     }
     var CAP_NOTE = {
@@ -307,10 +313,13 @@ window.createForceGraph = function (opts) {
         var _touchFs = window.matchMedia && window.matchMedia('(hover: none)').matches;
         if (v && !_touchFs) fsContainer.classList.add('graph-fs-transparent');
         if (!v) { relocateControls(false); fsContainer.classList.remove('graph-fs-transparent'); }
-        // resize() одного пересчёта W/H мало — авто-масштаб узлов в step() ограничен ×2.2 от
-        // текущего разброса точек, скачок с компактного мини-графа на весь экран так не влезет.
-        // restart() пересоздаёт позиции узлов уже в новых границах — граф сразу расправляется.
-        restart();
+        // Лимит узлов снимается только в полноэкранном (см. capNodes), но проверяется он при
+        // ЗАГРУЗКЕ данных — а setFs звал restart(), который лишь переставляет уже отобранные
+        // точки. Из-за этого обещание «в полноэкранном показываем всё» не выполнялось:
+        // человек разворачивал граф и видел те же сто узлов. Пересобираем набор, когда
+        // признак полноэкранного поменялся и лимит мог сняться или вернуться.
+        if (_prevFs !== v && rawG && rawG.nodes.length > CAP) rebuild();
+        else restart();
     }
 
     function resize() {
@@ -663,13 +672,16 @@ window.createForceGraph = function (opts) {
             // «Эйнштейн ⇄ ОТО» от случайного совпадения тега с законом, и глаз читал
             // любой граф как равномерную сетку.
             var w = (l[3] == null ? 0.5 : l[3]);
-            ctx.lineWidth = 0.6 + w * 1.6;
+            // Толщина задаётся в ЭКРАННЫХ пикселях: контекст масштабирован камерой, и без
+            // деления линии на отдалении становятся тоньше волоса, а вблизи — жирными
+            // полосами. Читатель должен видеть одинаковую графику на любом приближении.
+            ctx.lineWidth = (0.6 + w * 1.6) / cam.k;
             ctx.strokeStyle = hot ? 'rgba(120,120,120,0.5)'
                                   : 'rgba(140,140,140,' + (0.07 + w * 0.22).toFixed(3) + ')';
-            if (l[2] === 'dashed') ctx.setLineDash([3, 3]); // напр. закон↔учёный «оказал влияние», не «открыл»
+            if (l[2] === 'dashed') ctx.setLineDash([3 / cam.k, 3 / cam.k]); // «оказал влияние», не «открыл»
             ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
             if (l[2] === 'dashed') ctx.setLineDash([]);
-            ctx.lineWidth = 1;
+            ctx.lineWidth = 1 / cam.k;
         });
         for (var i = 0; i < nodes.length; i++) {
             var a = nodes[i], dim = hover >= 0 && i !== hover && !adj[hover][i], col = opts.color(a);
@@ -677,20 +689,30 @@ window.createForceGraph = function (opts) {
             ctx.beginPath(); ctx.arc(a.x, a.y, a.r, 0, 7);
             if (opts.hollow(a)) {
                 ctx.globalAlpha = dim ? 0.15 : 0.5; ctx.fillStyle = col; ctx.fill();
-                ctx.globalAlpha = dim ? 0.3 : 0.85; ctx.lineWidth = 1.3; ctx.strokeStyle = col; ctx.stroke(); ctx.lineWidth = 1;
+                ctx.globalAlpha = dim ? 0.3 : 0.85; ctx.lineWidth = 1.3 / cam.k; ctx.strokeStyle = col; ctx.stroke(); ctx.lineWidth = 1 / cam.k;
             } else {
                 ctx.fillStyle = col; ctx.fill();
             }
-            if (i === hover) { ctx.globalAlpha = 1; ctx.lineWidth = 2; ctx.strokeStyle = txtCol; ctx.stroke(); ctx.lineWidth = 1; }
+            if (i === hover) { ctx.globalAlpha = 1; ctx.lineWidth = 2 / cam.k; ctx.strokeStyle = txtCol; ctx.stroke(); ctx.lineWidth = 1 / cam.k; }
         }
+        // Подписи рисуем В ЭКРАННЫХ координатах, а не в мировых: шрифт, уехавший вместе
+        // с камерой, на отдалённом графе превращается в неразличимую сыпь (при масштабе 0.18
+        // девятипиксельная подпись стала бы полуторапиксельной). Имя узла должно читаться
+        // одинаково на любом приближении — иначе от подписей нет никакого толку.
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         ctx.textAlign = 'center';
         for (var j = 0; j < nodes.length; j++) {
             var n = nodes[j], always = opts.labelAlways && opts.labelAlways(n);
             if (j === hover || always || n.deg >= 3) {
+                var sx = n.x * cam.k + cam.x, sy = n.y * cam.k + cam.y;
+                // За краем холста подписи не рисуем совсем: на большом графе это заметная
+                // часть работы кадра, потраченная на текст, которого никто не видит.
+                if (sx < -60 || sx > W + 60 || sy < -20 || sy > H + 20) continue;
                 var strong = j === hover || (hover >= 0 && adj[hover][j]);
                 ctx.font = (always ? '10px' : '9px') + ' sans-serif';
                 ctx.globalAlpha = strong ? 0.95 : (hover >= 0 ? 0.08 : (always ? 0.6 : 0.28));
-                ctx.fillStyle = txtCol; ctx.fillText(n.name, n.x, n.y - n.r - 3);
+                ctx.fillStyle = txtCol;
+                ctx.fillText(n.name, sx, sy - n.r * cam.k - 3);
             }
         }
         ctx.globalAlpha = 1;
