@@ -129,6 +129,21 @@ def agenda_item(item, n):
     out_html = (f'<p class="outcome"><b>Что вышло:</b> {esc(outcome)}</p>'
                 if outcome else "")
 
+    # Исполнение решения. Владелец 13 августа: «отчёт по выполнению решений — как
+    # думаешь?». Без этой строки решение совета никуда не ведёт: проголосовали,
+    # записали, разошлись, а через неделю никто не помнит, что из этого сделано.
+    # Голосовать второй раз человек придёт только если увидел, к чему привёл первый
+    # голос. Заполняется через tools/council_done.py при слиянии веток.
+    done = item.get("done") or {}
+    done_html = ""
+    if done.get("status"):
+        mark = {"сделано": "d-done", "в работе": "d-work",
+                "отменено": "d-cancel"}.get(done["status"], "d-open")
+        what = f' — {esc(done["what"])}' if done.get("what") else ""
+        when = f' <span class="dwhen">{esc(done.get("when", ""))}</span>' if done.get("when") else ""
+        done_html = (f'<p class="done {mark}"><b>Исполнение:</b> '
+                     f'{esc(done["status"])}{what}{when}</p>')
+
     # Голоса с обоснованием. Публикуем ОБЯЗАТЕЛЬНО: голос без объяснения от участника,
     # который не устаёт и не спит, — это не участие, а давление числом. Люди должны
     # видеть, почему модель решила так, и иметь по чему возразить.
@@ -161,7 +176,7 @@ def agenda_item(item, n):
     {voices_html}
     {need_html}
     {why_html}
-    {out_html}
+    {out_html}{done_html}
   </article>"""
 
 

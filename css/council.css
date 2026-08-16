@@ -226,3 +226,14 @@ html[dir="rtl"] .poll { border-radius: 14px 0 0 14px; }
    решил, что заявка ушла, когда она оставалась в браузере. */
 .sent { margin: 12px 0 0; font-size: 14.5px; color: var(--ok); }
 .sent-no { color: var(--no); }
+
+/* Исполнение решения. Три состояния читаются цветом и словом сразу: сделанное зелёное,
+   в работе охристое, отменённое приглушённое. Слово обязательно — цвет один различает
+   не каждый (владелец дальтоник, и это правило для всего сайта). */
+.item .done { font-size: 14.5px; line-height: 1.6; margin-top: 8px; padding: 9px 13px;
+  border-radius: 10px; background: var(--tag-bg, rgba(127,127,127,.07)); }
+.item .done b { color: var(--ink); }
+.item .done.d-done { border-inline-start: 3px solid #3d8f5a; }
+.item .done.d-work { border-inline-start: 3px solid var(--ochre, #b8860b); }
+.item .done.d-cancel { border-inline-start: 3px solid var(--hair); opacity: .75; }
+.item .done .dwhen { font-family: var(--mono); font-size: 11.5px; color: var(--soft); }

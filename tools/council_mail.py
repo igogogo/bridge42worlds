@@ -71,11 +71,51 @@ def meeting():
     return json.loads(p.read_text(encoding="utf-8")) if p.exists() else {}
 
 
+
+def done_block():
+    """Что сделано по решениям ПРОШЛОГО заседания — первым разделом письма с повесткой.
+
+    Владелец 13 августа: «по плану прогоним, увидим, что сделано, какие вопросы
+    появились». Человек, которого зовут голосовать второй раз, первым делом хочет знать,
+    к чему привёл его первый голос. Если ответа нет, участие выглядит бессмысленным —
+    и второго раза не будет.
+    """
+    import json as _json
+    files = sorted((ROOT / "data" / "council").glob("[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9].json"),
+                   reverse=True)
+    for f in files:
+        try:
+            d = _json.loads(f.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        if d.get("status") != "closed":
+            continue
+        rows = []
+        for q in (d.get("agenda") or []):
+            if not q.get("decision"):
+                continue
+            done = q.get("done") or {}
+            mark = {"сделано": "done", "в работе": "in progress",
+                    "отменено": "cancelled"}.get(done.get("status"), "not started yet")
+            line = f"  · {q.get('title', '')} — {mark}"
+            if done.get("what"):
+                line += f": {done['what']}"
+            rows.append(line)
+        if not rows:
+            return ""
+        head = "What happened to the decisions of " + str(d.get("date")) + ":"
+        return "\n".join([head] + rows)
+    return ""
+
+
 def letter_agenda(m, key):
     """Письмо с повесткой. По-английски: совет ведётся на одном рабочем языке (решение
     владельца 15 августа). Про «отвечайте на любом» сказано в самом письме — иначе
     английский текст читается как требование писать только по-английски."""
     lines = [f"Observers' council meeting {m.get('date','')}", ""]
+    prev = done_block()
+    if prev:
+        lines += [prev, ""]
     lines.append("On the agenda:")
     for q in (m.get("agenda") or []):
         lines.append(f"  · {q.get('title','')}")
