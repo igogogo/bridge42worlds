@@ -151,7 +151,10 @@
                 });
                 var links = [];
                 visibleEdges.forEach(function (e) {
-                    if (idx[e.a] !== undefined && idx[e.b] !== undefined) links.push([idx[e.a], idx[e.b]]);
+                    // Вес ребра (e.w) и пунктир идут вместе со связью: физика делает сильную
+                    // связь короче, отрисовка — толще. Без них мини-граф рисовал ровную сетку.
+                    if (idx[e.a] !== undefined && idx[e.b] !== undefined)
+                        links.push([idx[e.a], idx[e.b], e.t === 'law-influence' ? 'dashed' : undefined, e.w]);
                 });
 
                 if (centers.length) return { nodes: nodes, links: links };
@@ -165,9 +168,11 @@
                     if (!deg[i]) return;
                     remap[i] = nodes2.length; nodes2.push(n);
                 });
+                // Вес и стиль связи переносим вместе с концами: без них облачный режим
+                // рисовал одинаковые нитки, хотя вес в данных есть у каждого ребра.
                 var links2 = links
                     .filter(function (l) { return deg[l[0]] && deg[l[1]]; })
-                    .map(function (l) { return [remap[l[0]], remap[l[1]]]; });
+                    .map(function (l) { return [remap[l[0]], remap[l[1]], l[2], l[3]]; });
                 return { nodes: nodes2, links: links2 };
             });
         },

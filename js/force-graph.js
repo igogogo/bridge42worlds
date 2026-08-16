@@ -20,6 +20,17 @@ window.createForceGraph = function (opts) {
     var txtCol = getComputedStyle(document.body).getPropertyValue('--text').trim() || '#2c2c2a';
     var nodes = [], links = [], adj = [], alpha = 1, drag = -1, hover = -1, px = 0, py = 0, downXY = null, ready = false;
 
+    /* КАМЕРА. Физика живёт в своих координатах, экран показывает её часть: cam.k — масштаб,
+       cam.x/cam.y — сдвиг. Раньше камеры не было, и каждый кадр САМИ КООРДИНАТЫ узлов
+       подтягивались так, чтобы облако влезало в 85% холста.
+       Это ломало ровно то, ради чего физика и нужна. Замер 14 августа на полном графе
+       (803 узла, 7663 связи): облако расходится до 5856px по ширине, а подгонка ужимает
+       его в 1200 — и 157 пар узлов оказываются друг на друге, ближайшая пара 0.0px.
+       Читатель видит «шар»: не потому, что связи такие, а потому что мы их сплющили.
+       С камерой узлы расходятся свободно, а в окно попадает столько, сколько влезает. */
+    var cam = { x: 0, y: 0, k: 1 };
+    var camUser = false;      // читатель сам двигал/масштабировал — больше не подстраиваемся
+
     // Кнопка «развернуть на весь экран» — CSS-оверлей поверх текущего канваса (не Fullscreen API:
     // на iOS Safari поддержка нестабильна для произвольных элементов). Канвас всегда лежит прямо
     // в бордер-боксе графа (.mini-graph / #tag-graph / #kg-graph / ...), так что один обработчик
@@ -80,8 +91,14 @@ window.createForceGraph = function (opts) {
         var order = nn.map(function (_, i) { return i; }).sort(function (a, b) { return deg[b] - deg[a]; }).slice(0, CAP);
         var remap = {}; var out = [];
         order.forEach(function (i) { remap[i] = out.length; out.push(nn[i]); });
+        // Переносим ВСЕ поля связи, а не только концы. Раньше здесь собиралось [a, b] —
+        // и вместе с лишними узлами молча пропадали вес (l[3]) и пунктир (l[2]).
+        // Пропадали там, где это заметнее всего: лимит срабатывает от 100 узлов, а
+        // граф-эксплорер в своём наборе по умолчанию даёт под две сотни — то есть человек,
+        // открывший /graph как есть, видел равномерную сетку одинаковых ниток, ради ухода
+        // от которой длина и толщина по весу и делались.
         var outL = ll.filter(function (l) { return remap[l[0]] != null && remap[l[1]] != null; })
-                     .map(function (l) { return [remap[l[0]], remap[l[1]]]; });
+                     .map(function (l) { return [remap[l[0]], remap[l[1]], l[2], l[3]]; });
         return { nodes: out, links: outL, from: nn.length };
     }
     var CAP_NOTE = {
@@ -296,10 +313,13 @@ window.createForceGraph = function (opts) {
         var _touchFs = window.matchMedia && window.matchMedia('(hover: none)').matches;
         if (v && !_touchFs) fsContainer.classList.add('graph-fs-transparent');
         if (!v) { relocateControls(false); fsContainer.classList.remove('graph-fs-transparent'); }
-        // resize() одного пересчёта W/H мало — авто-масштаб узлов в step() ограничен ×2.2 от
-        // текущего разброса точек, скачок с компактного мини-графа на весь экран так не влезет.
-        // restart() пересоздаёт позиции узлов уже в новых границах — граф сразу расправляется.
-        restart();
+        // Лимит узлов снимается только в полноэкранном (см. capNodes), но проверяется он при
+        // ЗАГРУЗКЕ данных — а setFs звал restart(), который лишь переставляет уже отобранные
+        // точки. Из-за этого обещание «в полноэкранном показываем всё» не выполнялось:
+        // человек разворачивал граф и видел те же сто узлов. Пересобираем набор, когда
+        // признак полноэкранного поменялся и лимит мог сняться или вернуться.
+        if (_prevFs !== v && rawG && rawG.nodes.length > CAP) rebuild();
+        else restart();
     }
 
     function resize() {
@@ -307,8 +327,97 @@ window.createForceGraph = function (opts) {
         cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
+    /* УКРУПНЕНИЕ ПО МАСШТАБУ. Выше нескольких сотен узлов рисовать каждый по отдельности
+       бессмысленно: замер 14 августа на полном графе (803 узла) — четыре тысячи пар узлов
+       перекрывают друг друга, и физика не сходится вовсе, дрожание держится на 115 пикселях.
+       Сколько ни улучшай раскладку, тысяча точек в окне остаётся тысячей точек.
+
+       Поэтому крупный граф показываем группами: узел-группа вместо всех её членов, клик
+       разворачивает группу в её узлы. Группируем по виду и подвиду (`kind` + `sub`) — это
+       уже лежит в самих данных графа, отдельный запрос не нужен: 803 узла складываются
+       в 15 групп («учёные», «понятия», «уравнения», «эффекты»…). Смысловые кластеры по
+       со-встречаемости считает аналитика, и когда они появятся в графе, менять надо будет
+       одну строку — ключ группировки. */
+    var LOD_AT = 400;         // ниже этого рисуем всё как есть: группы там только мешают
+    var rawG = null;          // исходные узлы и связи — из них строим и группы, и разворот
+    var expanded = null;      // ключ развёрнутой группы или null
+
+    var LOD_LABEL = {
+        ru: { sci: 'учёные', cat: 'разделы', tag: 'понятия', law: 'законы', back: '← ко всем группам' },
+        en: { sci: 'scientists', cat: 'sections', tag: 'concepts', law: 'laws', back: '← back to groups' },
+        es: { sci: 'científicos', cat: 'secciones', tag: 'conceptos', law: 'leyes', back: '← volver a los grupos' },
+        ar: { sci: 'علماء', cat: 'أقسام', tag: 'مفاهيم', law: 'قوانين', back: '← العودة إلى المجموعات' },
+        fr: { sci: 'scientifiques', cat: 'sections', tag: 'notions', law: 'lois', back: '← retour aux groupes' }
+    };
+    function lodWord(kind) {
+        var L = LOD_LABEL[lang] || LOD_LABEL.en;
+        return L[kind] || kind;
+    }
+    function groupKey(n) { return n.kind + '|' + (n.sub || n.kind); }
+
+    /* Свернуть граф в группы. Связи между группами складываем: вес группового ребра — сумма
+       весов исходных, приведённая к 0..1. Иначе толщина линии между группами говорила бы
+       не о силе связи, а о том, сколько узлов мы в неё сложили. */
+    function collapse(g) {
+        var byKey = {}, gnodes = [];
+        g.nodes.forEach(function (n, i) {
+            var k = groupKey(n);
+            if (byKey[k] == null) {
+                byKey[k] = gnodes.length;
+                gnodes.push({
+                    id: 'g:' + k, __cluster: k, kind: n.kind, sub: n.sub,
+                    members: [], name: '', deg: 0
+                });
+            }
+            gnodes[byKey[k]].members.push(i);
+        });
+        gnodes.forEach(function (gn) {
+            var sub = gn.sub && gn.sub !== gn.kind ? gn.sub : lodWord(gn.kind);
+            gn.name = sub + ' · ' + gn.members.length;
+            gn.count = gn.members.length;
+        });
+        var owner = [];
+        g.nodes.forEach(function (n, i) { owner[i] = byKey[groupKey(n)]; });
+        var acc = {};
+        g.links.forEach(function (l) {
+            var a = owner[l[0]], b = owner[l[1]];
+            if (a === b) return;                       // связи внутри группы прячем вместе с ней
+            var key = Math.min(a, b) + ':' + Math.max(a, b);
+            acc[key] = (acc[key] || 0) + (l[3] == null ? 0.5 : l[3]);
+        });
+        var maxw = 0;
+        Object.keys(acc).forEach(function (k) { if (acc[k] > maxw) maxw = acc[k]; });
+        var glinks = Object.keys(acc).map(function (k) {
+            var p = k.split(':');
+            return [+p[0], +p[1], undefined, maxw ? acc[k] / maxw : 0.5];
+        });
+        return { nodes: gnodes, links: glinks };
+    }
+
+    /* Развернуть одну группу: её узлы и связи между ними. Связи наружу здесь не показываем —
+       иначе на экран вернулись бы все остальные узлы, ради чего сворачивали. */
+    function expandGroup(g, key) {
+        var keep = [], remap = {};
+        g.nodes.forEach(function (n, i) {
+            if (groupKey(n) !== key) return;
+            remap[i] = keep.length; keep.push(n);
+        });
+        var ll = g.links.filter(function (l) { return remap[l[0]] != null && remap[l[1]] != null; })
+                        .map(function (l) { return [remap[l[0]], remap[l[1]], l[2], l[3]]; });
+        return { nodes: keep, links: ll };
+    }
+
+    function viewOf(g) {
+        if (!g || !g.nodes) return { nodes: [], links: [] };
+        if (expanded) return expandGroup(g, expanded);
+        if (g.nodes.length > LOD_AT) return collapse(g);
+        return { nodes: g.nodes, links: g.links };
+    }
+
     function _ingest(g) {
-        var capped = capNodes(g.nodes || [], g.links || []);
+        rawG = { nodes: (g.nodes || []).slice(), links: (g.links || []).slice() };
+        var view = viewOf(rawG);
+        var capped = capNodes(view.nodes, view.links);
         nodes = capped.nodes; links = capped.links;
         // Стартовая раскладка — спираль золотого угла, а не случайные точки. Случайный
         // старт на плотном графе даёт комки и пустоты, физика первые сотни шагов тратит
@@ -323,14 +432,25 @@ window.createForceGraph = function (opts) {
             n.vx = 0; n.vy = 0; n.deg = 0;
         });
         links.forEach(function (l) { nodes[l[0]].deg++; nodes[l[1]].deg++; });
-        nodes.forEach(function (n) { n.r = opts.radius(n); });
+        nodes.forEach(function (n) {
+            // Группа крупнее обычного узла и растёт с числом членов — но по корню, иначе
+            // «учёные» на 201 узел закрыли бы собой пол-экрана.
+            n.r = n.__cluster ? Math.min(46, 14 + Math.sqrt(n.count) * 2.2) : opts.radius(n);
+        });
         adj = nodes.map(function () { return {}; });
         links.forEach(function (l) { adj[l[0]][l[1]] = 1; adj[l[1]][l[0]] = 1; });
         alpha = 1; hover = -1; drag = -1; ready = true;
         // Пред-прогрев без отрисовки: прокручиваем физику, чтобы граф появился уже почти собранным,
         // а не «слетался» из углов секундами (юзер 2026-07-25). Дёшево — это только числа, без paint.
         if (W > 0 && H > 0) { var warm = nodes.length > 250 ? 70 : 140; for (var _w = 0; _w < warm; _w++) step(); }
+        // Первый кадр показываем уже наведённым: без этого граф въезжал бы в окно плавно,
+        // а читатель успевал бы увидеть пустоту. Смена фильтра — это тоже новый граф,
+        // поэтому наведение сбрасывает и ручную камеру.
+        camUser = false;
+        if (W > 0 && H > 0) fitCamera(1);
+        wake(1);
         updateSizeWarning(nodes.length, capped.from);
+        updateBackBtn();
         // Данные пришли, граф начинает рисоваться — убираем лоадер-оверлей (юзер 2026-07-23:
         // «граф долго, но пока грузится пустое место — каунтер»).
         var kgl = document.getElementById('kg-loader');
@@ -339,7 +459,37 @@ window.createForceGraph = function (opts) {
 
     function rebuild() {  // перестроить по новому фильтру (opts.build читает актуальное состояние)
         ready = false;
+        expanded = null;               // новый набор данных — прежняя развёрнутая группа не про него
         opts.build(lang).then(_ingest);
+    }
+
+    /* Пересобрать ПРЕДСТАВЛЕНИЕ (свернули/развернули), не перезапрашивая данные: raw уже
+       у нас, меняется только то, что показываем. */
+    function setView() {
+        if (!rawG) return;
+        ready = false;
+        _ingest(rawG);
+    }
+    // Кнопка возврата из развёрнутой группы. Держим её в том же контейнере, что и остальные
+    // накладки графа, и показываем только когда есть куда возвращаться.
+    var backBtn = null;
+    if (fsContainer) {
+        backBtn = document.createElement('button');
+        backBtn.type = 'button';
+        backBtn.className = 'graph-lod-back';
+        backBtn.style.display = 'none';
+        backBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            expanded = null;
+            setView();
+        });
+        fsContainer.appendChild(backBtn);
+    }
+    function updateBackBtn() {
+        if (!backBtn) return;
+        var L = LOD_LABEL[lang] || LOD_LABEL.en;
+        backBtn.textContent = L.back;
+        backBtn.style.display = expanded ? '' : 'none';
     }
 
     opts.build(lang).then(_ingest);
@@ -450,10 +600,15 @@ window.createForceGraph = function (opts) {
             var dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || 0.01, f = (d - len) * k / d;
             a.vx += dx * f; a.vy += dy * f; b.vx -= dx * f; b.vy -= dy * f;
         });
+        maxMove = 0;
         for (var k = 0; k < nodes.length; k++) {
             var n = nodes[k];
             if (k === drag) { n.x = px; n.y = py; n.vx = n.vy = 0; continue; }
-            n.vx *= 0.85; n.vy *= 0.85; n.x += n.vx * alpha; n.y += n.vy * alpha;
+            n.vx *= 0.85; n.vy *= 0.85;
+            var mvx = n.vx * alpha, mvy = n.vy * alpha;
+            var mv = Math.abs(mvx) + Math.abs(mvy);
+            if (mv > maxMove) maxMove = mv;
+            n.x += mvx; n.y += mvy;
             // Мягкая стенка вместо жёсткого зажима. Раньше вышедший за край узел
             // ПРИЛИПАЛ к границе (Math.max/Math.min), и вся лишняя плотность оседала
             // ободком по периметру и комками в углах — то, что владелец видел как
@@ -471,42 +626,62 @@ window.createForceGraph = function (opts) {
             n.x = Math.max(-W * far, Math.min(W * (1 + far), n.x));
             n.y = Math.max(-H * far, Math.min(H * (1 + far), n.y));
         }
-        // Мягкое вписывание облака в окно: масштабируем к ~85% канваса + центрируем,
-        // чтобы граф не скучивался по центру, а занимал всё место (не трогаем во время драга).
-        if (nodes.length > 1 && drag < 0) {
-            var minx = 1e9, miny = 1e9, maxx = -1e9, maxy = -1e9;
-            for (var q = 0; q < nodes.length; q++) {
-                var nq = nodes[q];
-                if (nq.x < minx) minx = nq.x; if (nq.x > maxx) maxx = nq.x;
-                if (nq.y < miny) miny = nq.y; if (nq.y > maxy) maxy = nq.y;
-            }
-            var mgn = 44, bw = (maxx - minx) || 1, bh = (maxy - miny) || 1;
-            var s = Math.max(0.6, Math.min(Math.min((W - 2 * mgn) / bw, (H - 2 * mgn) / bh), 2.2));
-            var ccx = (minx + maxx) / 2, ccy = (miny + maxy) / 2, ease = 0.06;
-            for (var t = 0; t < nodes.length; t++) {
-                var nt = nodes[t];
-                nt.x += ((W / 2 + (nt.x - ccx) * s) - nt.x) * ease;
-                nt.y += ((H / 2 + (nt.y - ccy) * s) - nt.y) * ease;
-            }
-        }
+        // Облако вписываем КАМЕРОЙ, а не сдвигом самих узлов. Разница принципиальная:
+        // камера меняет то, что мы показываем, а прежняя подгонка меняла то, что физика
+        // только что посчитала, — и расстояния между узлами схлопывались.
+        // Как только читатель сам взялся за граф (тащил фон или крутил колесо), наведение
+        // прекращаем: иначе камера боролась бы с его руками.
+        if (nodes.length > 1 && drag < 0 && !camUser) fitCamera(0.06);
         if (alpha > 0.03) alpha *= 0.992;
     }
 
+    /* Навести камеру на облако. ease=1 — сразу (первый кадр, смена фильтра), меньше —
+       плавно, чтобы граф не дёргался, пока физика ещё шевелится. */
+    function fitCamera(ease) {
+        if (!nodes.length) return;
+        var minx = 1e9, miny = 1e9, maxx = -1e9, maxy = -1e9;
+        for (var q = 0; q < nodes.length; q++) {
+            var n = nodes[q];
+            if (n.x - n.r < minx) minx = n.x - n.r;
+            if (n.x + n.r > maxx) maxx = n.x + n.r;
+            if (n.y - n.r < miny) miny = n.y - n.r;
+            if (n.y + n.r > maxy) maxy = n.y + n.r;
+        }
+        var mgn = 34, bw = (maxx - minx) || 1, bh = (maxy - miny) || 1;
+        // Верхняя граница 1.6 — чтобы граф из трёх узлов не раздувался на весь экран;
+        // нижней нет: большому графу нужно отдалиться настолько, насколько он вырос.
+        var k = Math.min((W - 2 * mgn) / bw, (H - 2 * mgn) / bh, 1.6);
+        var cx = (minx + maxx) / 2, cy = (miny + maxy) / 2;
+        var tx = W / 2 - cx * k, ty = H / 2 - cy * k;
+        var e = ease == null ? 1 : ease;
+        cam.k += (k - cam.k) * e;
+        cam.x += (tx - cam.x) * e;
+        cam.y += (ty - cam.y) * e;
+    }
+
     function draw() {
-        ctx.clearRect(0, 0, W, H); ctx.lineWidth = 1;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);   // сбрасываем в экранные, чтобы очистить весь холст
+        ctx.clearRect(0, 0, W, H);
+        // Дальше рисуем В МИРОВЫХ координатах: сдвиг и масштаб делает контекст, а код
+        // отрисовки остаётся про узлы и связи, а не про пересчёт точек.
+        ctx.setTransform(dpr * cam.k, 0, 0, dpr * cam.k, dpr * cam.x, dpr * cam.y);
+        ctx.lineWidth = 1;
         links.forEach(function (l) {
             var a = nodes[l[0]], b = nodes[l[1]], hot = hover >= 0 && (l[0] === hover || l[1] === hover);
             // Толщина и заметность — по весу связи. Одинаковые нитки не давали отличить
             // «Эйнштейн ⇄ ОТО» от случайного совпадения тега с законом, и глаз читал
             // любой граф как равномерную сетку.
             var w = (l[3] == null ? 0.5 : l[3]);
-            ctx.lineWidth = 0.6 + w * 1.6;
+            // Толщина задаётся в ЭКРАННЫХ пикселях: контекст масштабирован камерой, и без
+            // деления линии на отдалении становятся тоньше волоса, а вблизи — жирными
+            // полосами. Читатель должен видеть одинаковую графику на любом приближении.
+            ctx.lineWidth = (0.6 + w * 1.6) / cam.k;
             ctx.strokeStyle = hot ? 'rgba(120,120,120,0.5)'
                                   : 'rgba(140,140,140,' + (0.07 + w * 0.22).toFixed(3) + ')';
-            if (l[2] === 'dashed') ctx.setLineDash([3, 3]); // напр. закон↔учёный «оказал влияние», не «открыл»
+            if (l[2] === 'dashed') ctx.setLineDash([3 / cam.k, 3 / cam.k]); // «оказал влияние», не «открыл»
             ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
             if (l[2] === 'dashed') ctx.setLineDash([]);
-            ctx.lineWidth = 1;
+            ctx.lineWidth = 1 / cam.k;
         });
         for (var i = 0; i < nodes.length; i++) {
             var a = nodes[i], dim = hover >= 0 && i !== hover && !adj[hover][i], col = opts.color(a);
@@ -514,53 +689,162 @@ window.createForceGraph = function (opts) {
             ctx.beginPath(); ctx.arc(a.x, a.y, a.r, 0, 7);
             if (opts.hollow(a)) {
                 ctx.globalAlpha = dim ? 0.15 : 0.5; ctx.fillStyle = col; ctx.fill();
-                ctx.globalAlpha = dim ? 0.3 : 0.85; ctx.lineWidth = 1.3; ctx.strokeStyle = col; ctx.stroke(); ctx.lineWidth = 1;
+                ctx.globalAlpha = dim ? 0.3 : 0.85; ctx.lineWidth = 1.3 / cam.k; ctx.strokeStyle = col; ctx.stroke(); ctx.lineWidth = 1 / cam.k;
             } else {
                 ctx.fillStyle = col; ctx.fill();
             }
-            if (i === hover) { ctx.globalAlpha = 1; ctx.lineWidth = 2; ctx.strokeStyle = txtCol; ctx.stroke(); ctx.lineWidth = 1; }
+            if (i === hover) { ctx.globalAlpha = 1; ctx.lineWidth = 2 / cam.k; ctx.strokeStyle = txtCol; ctx.stroke(); ctx.lineWidth = 1 / cam.k; }
         }
+        // Подписи рисуем В ЭКРАННЫХ координатах, а не в мировых: шрифт, уехавший вместе
+        // с камерой, на отдалённом графе превращается в неразличимую сыпь (при масштабе 0.18
+        // девятипиксельная подпись стала бы полуторапиксельной). Имя узла должно читаться
+        // одинаково на любом приближении — иначе от подписей нет никакого толку.
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         ctx.textAlign = 'center';
         for (var j = 0; j < nodes.length; j++) {
             var n = nodes[j], always = opts.labelAlways && opts.labelAlways(n);
             if (j === hover || always || n.deg >= 3) {
+                var sx = n.x * cam.k + cam.x, sy = n.y * cam.k + cam.y;
+                // За краем холста подписи не рисуем совсем: на большом графе это заметная
+                // часть работы кадра, потраченная на текст, которого никто не видит.
+                if (sx < -60 || sx > W + 60 || sy < -20 || sy > H + 20) continue;
                 var strong = j === hover || (hover >= 0 && adj[hover][j]);
                 ctx.font = (always ? '10px' : '9px') + ' sans-serif';
                 ctx.globalAlpha = strong ? 0.95 : (hover >= 0 ? 0.08 : (always ? 0.6 : 0.28));
-                ctx.fillStyle = txtCol; ctx.fillText(n.name, n.x, n.y - n.r - 3);
+                ctx.fillStyle = txtCol;
+                ctx.fillText(n.name, sx, sy - n.r * cam.k - 3);
             }
         }
         ctx.globalAlpha = 1;
     }
 
-    // Пока граф ещё «горячий» (alpha высок) — гоним несколько тиков физики на кадр: собирается
-    // в разы быстрее по времени, без потери плавности у уже осевшего графа (юзер 2026-07-25).
+    /* ЗАМОРОЗКА ПОСЛЕ СХОДИМОСТИ. Раньше цикл крутился всегда: на полном графе это
+       восемь миллисекунд физики каждый кадр вечно — на слабой машине именно отсюда
+       «всё практически останавливается», хотя граф давно осел и не меняется.
+
+       Теперь: физика считается, пока alpha выше порога; ниже — кадр рисуется последний раз,
+       и цикл встаёт. Будит его wake() — любое взаимодействие, смена фильтра, resize.
+       Отдельно важен hover: подсветка соседей это ПЕРЕРИСОВКА без физики, и без пробуждения
+       на замороженном графе наведение мышью не давало бы отклика.
+
+       Сходимость меряем по ФАКТИЧЕСКОМУ смещению узлов, а не по alpha. Это не придирка:
+       alpha затухает только пока она выше 0.03 (см. конец step) и там же и застревает —
+       порог по alpha не наступил бы никогда, цикл крутился бы вечно. Смещение честнее:
+       узлы перестали двигаться — рисовать нечего. */
+    /* Порог подобран замером, а не на глаз, и меряется в ЭКРАННЫХ пикселях — читатель видит
+       экран, а не мировые единицы, и на отдалённой камере то же движение заметно меньше.
+       Замер 14 августа: осевшие 175 законов «дышат» на 0.25 экранного пикселя за кадр,
+       363 тега — на 0.52. Это равновесие сил, а не движение, которое кто-то видит.
+       Порог ниже (пробовал 0.05) не наступает никогда.
+       Полный граф — 803 узла — дрожит на 115 пикселей: он не сходится в принципе, и там
+       заморозка не наступит. Это верно, он и правда движется; лечится не порогом,
+       а укрупнением узлов. */
+    var CALM_PX = 0.6;
+    var CALM_FRAMES = 12;     // и спокойствие должно держаться, а не мелькнуть на одном кадре
+    var maxMove = 1, calm = 0;
+    var rafId = 0, frozen = false;
+
     function loop() {
+        rafId = 0;
         if (ready) {
             var reps = alpha > 0.2 ? 4 : (alpha > 0.08 ? 2 : 1);
             for (var s = 0; s < reps; s++) step();
             draw();
+            calm = (maxMove * cam.k) < CALM_PX ? calm + 1 : 0;
+            // Драг и сдвиг фона держат цикл живым даже на осевшем графе: то, что под
+            // пальцем, обязано ехать.
+            if (calm >= CALM_FRAMES && drag < 0 && !panFrom) { frozen = true; return; }
         }
-        requestAnimationFrame(loop);
+        rafId = requestAnimationFrame(loop);
+    }
+
+    /* Разбудить. Два режима: с физикой (alpha поднимаем) и без — когда надо просто
+       перерисовать (наведение, сдвиг камеры). Двойного rAF не бывает: заводим кадр,
+       только если он не заказан. */
+    function wake(heat) {
+        if (heat) alpha = Math.max(alpha, heat);
+        frozen = false; calm = 0;
+        if (!rafId) rafId = requestAnimationFrame(loop);
     }
     function pos(e) { var r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; }
-    function pick(x, y) { var bi = -1, bd = 1e9; for (var i = 0; i < nodes.length; i++) { var a = nodes[i], d = Math.hypot(a.x - x, a.y - y); if (d < a.r + 6 && d < bd) { bd = d; bi = i; } } return bi; }
-    cv.addEventListener('pointerdown', function (e) { var p = pos(e), i = pick(p[0], p[1]); downXY = p; if (i >= 0) { drag = i; px = p[0]; py = p[1]; alpha = Math.max(alpha, 0.5); cv.setPointerCapture(e.pointerId); } });
+    // Экран → мир. Все обработчики получают экранные координаты, а узлы живут в своих:
+    // без перевода попадание мышью после первого же зума уезжало бы мимо узла.
+    function toWorld(sx, sy) { return [(sx - cam.x) / cam.k, (sy - cam.y) / cam.k]; }
+    function pick(sx, sy) {
+        var p = toWorld(sx, sy), x = p[0], y = p[1];
+        var bi = -1, bd = 1e9;
+        for (var i = 0; i < nodes.length; i++) {
+            var a = nodes[i], d = Math.hypot(a.x - x, a.y - y);
+            // Допуск на попадание — в мировых единицах, иначе на отдалении в мелкий узел
+            // было бы физически невозможно попасть.
+            if (d < a.r + 6 / cam.k && d < bd) { bd = d; bi = i; }
+        }
+        return bi;
+    }
+    var panFrom = null;      // тащим фон — двигаем камеру, а не узел
+    cv.addEventListener('pointerdown', function (e) {
+        var p = pos(e), i = pick(p[0], p[1]);
+        downXY = p;
+        if (i >= 0) {
+            // Узел тащим в МИРОВЫХ координатах: px/py читает физика, а не отрисовка.
+            var w = toWorld(p[0], p[1]);
+            drag = i; px = w[0]; py = w[1];
+            alpha = Math.max(alpha, 0.5);
+            cv.setPointerCapture(e.pointerId);
+        } else {
+            panFrom = { sx: p[0], sy: p[1], cx: cam.x, cy: cam.y };
+            cv.setPointerCapture(e.pointerId);
+        }
+        wake();
+    });
     cv.addEventListener('pointermove', function (e) {
         var p = pos(e);
-        if (drag >= 0) { px = p[0]; py = p[1]; hideTip(); }
-        else {
+        if (drag >= 0) {
+            var w = toWorld(p[0], p[1]);
+            px = w[0]; py = w[1]; hideTip(); wake();
+        } else if (panFrom) {
+            // Сдвиг фона — сдвиг камеры один к одному: рука и картинка идут вместе.
+            cam.x = panFrom.cx + (p[0] - panFrom.sx);
+            cam.y = panFrom.cy + (p[1] - panFrom.sy);
+            camUser = true; hideTip(); wake();
+        } else {
+            var was = hover;
             hover = pick(p[0], p[1]);
             cv.style.cursor = hover >= 0 ? 'pointer' : 'grab';
             if (hover >= 0 && opts.tooltip) showTip(nodes[hover], p[0] + 14, p[1] + 14); else hideTip();
+            // Подсветка соседей — это перерисовка, а не физика: будим цикл, иначе на
+            // замороженном графе наведение мышью не давало бы никакого отклика.
+            if (hover !== was) wake();
         }
     });
+    // Колесо — масштаб вокруг курсора: точка под указателем остаётся на месте, иначе
+    // приближение уводит взгляд с того узла, к которому читатель тянулся.
+    cv.addEventListener('wheel', function (e) {
+        e.preventDefault();
+        var p = pos(e), w = toWorld(p[0], p[1]);
+        var k = cam.k * (e.deltaY < 0 ? 1.12 : 1 / 1.12);
+        cam.k = Math.max(0.05, Math.min(6, k));
+        cam.x = p[0] - w[0] * cam.k;
+        cam.y = p[1] - w[1] * cam.k;
+        camUser = true; hideTip(); wake();
+    }, { passive: false });
     cv.addEventListener('pointerleave', hideTip);
     cv.addEventListener('pointerup', function (e) {
         var p = pos(e), moved = downXY && (Math.abs(p[0] - downXY[0]) + Math.abs(p[1] - downXY[1]) > 6);
         var i = pick(p[0], p[1]);
-        if (!moved && i >= 0) { var url = opts.href(nodes[i], lang); if (url) window.location.href = url; }
-        drag = -1; downXY = null;
+        if (!moved && i >= 0) {
+            var n = nodes[i];
+            if (n.__cluster) {
+                // Клик по группе разворачивает её, а не уводит со страницы: у группы нет
+                // своего адреса, и увести читателя «в никуда» было бы обманом.
+                expanded = n.__cluster;
+                setView();
+            } else {
+                var url = opts.href(n, lang); if (url) window.location.href = url;
+            }
+        }
+        drag = -1; downXY = null; panFrom = null;
+        wake();
     });
 
     function restart() {
@@ -569,7 +853,10 @@ window.createForceGraph = function (opts) {
             nodes[i].x = Math.random() * (W - 80) + 40; nodes[i].y = Math.random() * (H - 80) + 40;
             nodes[i].vx = nodes[i].vy = 0;
         }
-        alpha = 1;
+        // Окно сменилось (поворот, полный экран) — прежняя ручная камера к нему не подходит.
+        camUser = false;
+        fitCamera(1);
+        wake(1);
     }
     window[opts.resizeKey] = restart;
     if (opts.rebuildKey) window[opts.rebuildKey] = rebuild;

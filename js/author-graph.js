@@ -41,7 +41,10 @@
                 kg.edges.forEach(function (e) {
                     if (e.a && e.b && e.a.slice(0, 2) === 't:' && e.b.slice(0, 2) === 't:') {
                         var a = e.a.slice(2), b = e.b.slice(2);
-                        if (tagSet[a] && tagSet[b] && idx[a] !== undefined && idx[b] !== undefined) links.push([idx[a], idx[b]]);
+                        // e.w здесь под рукой — берём вес, чтобы связи тем автора отличались
+                        // по силе так же, как на остальных графах сайта.
+                        if (tagSet[a] && tagSet[b] && idx[a] !== undefined && idx[b] !== undefined)
+                            links.push([idx[a], idx[b], undefined, e.w]);
                     }
                 });
                 return { nodes: nodes, links: links };

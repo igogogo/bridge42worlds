@@ -232,6 +232,18 @@ html[lang="ar"] .cal-dot { right: auto; left: -5px; }
     background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
     padding: 5px 10px; opacity: 0.92;
 }
+/* Возврат из развёрнутой группы графа. Крупный граф показывается группами («учёные · 201»),
+   клик разворачивает одну — и без этой кнопки читатель остаётся внутри без пути назад.
+   Стоит в левом нижнем углу: верх занят предупреждением о размере и кнопкой полного экрана. */
+.graph-lod-back {
+    position: absolute; left: 8px; bottom: 8px; z-index: 5;
+    font: inherit; font-size: 12px; line-height: 1.4;
+    color: var(--soft); background: var(--bg);
+    border: 1px solid var(--border); border-radius: 8px;
+    padding: 7px 12px; min-height: 34px; cursor: pointer;
+}
+.graph-lod-back:hover { color: var(--link); border-color: var(--link); }
+
 /* Тултип узла графа — общий для главного графа и мини-графов (force-graph.js), появляется у
    курсора при наведении. display управляется JS-ом, не через :hover (канвас — не DOM-узлы). */
 .graph-tooltip {
