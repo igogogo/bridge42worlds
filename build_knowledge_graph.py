@@ -19,6 +19,7 @@ import json
 from pathlib import Path
 
 from common import DEFAULT_LANG
+from common import write_json_atomic
 
 
 def _jl(p):
@@ -154,7 +155,7 @@ def main():
     edge_list = [{"a": a, "b": b, "t": t} for (a, b, t) in sorted(edges)]
     out = {"nodes": list(nodes.values()), "edges": edge_list}
     Path("data").mkdir(exist_ok=True)
-    Path("data/knowledge-graph.json").write_text(json.dumps(out, ensure_ascii=False), encoding="utf-8")
+    write_json_atomic(Path("data/knowledge-graph.json"), out, indent=None)
 
     by_type = {}
     for e in edge_list:

@@ -435,6 +435,19 @@ def _publish_to_r2():
             "a", encoding="utf-8").write(msg)
         print(f"⚠️  публикация в R2 не удалась (код {result.returncode}) — контент сгенерирован "
               f"успешно, но сайт не обновлён. Подробности: cloudflare/publish-failures.log")
+        return
+
+    # Сверка после выкладки: разбирается ли то, что легло в облако, и столько ли в нём
+    # записей, сколько у нас. 14 августа обрезанный индекс отдавался с кодом 200 —
+    # выкладка отчиталась успехом, а лента была пуста на всех пяти языках. «Залито»
+    # и «работает» — разные утверждения, и проверять надо второе.
+    verify = Path(__file__).resolve().parent / "cloudflare" / "verify_publish.py"
+    if verify.exists():
+        rc = subprocess.run([sys.executable, str(verify), "--quiet"], env=child_env).returncode
+        # Код 2 — «в облаке меньше, чем локально»: норма сразу после генерации, ждём
+        # следующую выкладку. Кричать об этом здесь значит кричать каждый прогон.
+        if rc == 1:
+            print("⚠️  проверка после выкладки нашла расхождение — см. выше, тревога ушла в канал")
 
 
 def _backup_to_r2():
@@ -729,15 +742,33 @@ def cmd_lang(args):
 
 
 def cmd_reindex(args):
+    """Пересборка индексов и графов. Под тем же замком, что и пересборка страниц.
+
+    До 14 августа замок стоял только на `html`, и это выглядело достаточным: страницы
+    тяжёлые, индексы «быстрые». Но заливка читает и то, и другое, а `reindex` переписывает
+    ровно те файлы, из которых рисуется лента. В тот день главная не показала ни одной
+    статьи на всех пяти языках — индекс уехал в облако наполовину записанным.
+
+    Причину чиним в двух местах, и это не перестраховка: атомарная запись (common.py)
+    делает обрезанный файл невозможным вообще, а замок не даёт двум нашим прогонам
+    писать в одно дерево. Первое спасает от чужого читателя, второе — от нас самих."""
     import generate
-    generate.rebuild_indexes()
-    generate.rebuild_author_graph()
-    generate.recompute_tag_counts()
-    for lang in generate.LANGUAGES:
-        generate.update_all_tags(lang)
-        generate.update_all_scientists(lang)
-    generate.update_all_authors()
-    _run_chain([["build_knowledge_graph.py"]])
+    from datetime import datetime
+    lock = Path(".build.lock")
+    _refuse_if_build_running(lock)
+    lock.write_text(f"пересборка индексов, начата {datetime.now():%H:%M}, pid {os.getpid()}",
+                    encoding="utf-8")
+    try:
+        generate.rebuild_indexes()
+        generate.rebuild_author_graph()
+        generate.recompute_tag_counts()
+        for lang in generate.LANGUAGES:
+            generate.update_all_tags(lang)
+            generate.update_all_scientists(lang)
+        generate.update_all_authors()
+        _run_chain([["build_knowledge_graph.py"]])
+    finally:
+        lock.unlink(missing_ok=True)
 
 
 def cmd_graph(args):

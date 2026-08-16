@@ -50,6 +50,7 @@ import sys
 from pathlib import Path
 
 from common import LANGUAGES
+from common import write_json_atomic
 
 # Подпись у маркера учёного в тексте статьи: [scientist:Albert Einstein]Эйнштейна[/scientist].
 SCI_MARKER = re.compile(r"\[scientist:([^\]]+)\]([^\[]{1,60})\[/scientist\]")
@@ -258,7 +259,7 @@ def build_lang(lang):
     out.parent.mkdir(parents=True, exist_ok=True)
     # separators без пробелов: на 2,7 тыс. записей лишний пробел после каждой запятой — это
     # десятки килобайт на ровном месте.
-    out.write_text(json.dumps(rows, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    write_json_atomic(out, rows, indent=None)
     return rows, out.stat().st_size
 
 

@@ -23,7 +23,7 @@ for _stream in (sys.stdout, sys.stderr):
 load_dotenv()
 
 # Слои вынесены в модули; generate.py — фасад (рендер/индексы/пайплайн + реэкспорт).
-from common import CONFIG as config, DEEPSEEK_API_KEY, LANGUAGES, DEFAULT_LANG, LANG_DIR, as_list, deepseek_peak_status  # noqa: F401
+from common import CONFIG as config, DEEPSEEK_API_KEY, LANGUAGES, DEFAULT_LANG, LANG_DIR, as_list, deepseek_peak_status, write_json_atomic  # noqa: F401
 import common               # common.job() — метка «к какой статье относится вызов»
 from gen_base import *    # noqa: F401,F403 — константы и базовые хелперы
 from gen_arxiv import *   # noqa: F401,F403 — arXiv/PDF-слой
@@ -2033,7 +2033,7 @@ def update_index(scipop, article, date_str, lang, version, abstract=""):
         "km": bool((article.get("recommend") or {}).get(lang)
                    or (article.get("recommend") or {}).get(DEFAULT_LANG)),
     })
-    ip.write_text(json.dumps(idx, ensure_ascii=False, indent=2), encoding="utf-8")
+    write_json_atomic(ip, idx)
 
 
 MAX_COAUTHORS = 30  # авторская страница показывает только первые 15 (см. generate_author_page) —
@@ -2056,7 +2056,7 @@ def update_authors_graph(article):
             if len(graph[a]["coauthors"]) >= MAX_COAUTHORS:
                 break
             if ca != a and ca not in graph[a]["coauthors"]: graph[a]["coauthors"].append(ca)
-    ap.write_text(json.dumps(graph, ensure_ascii=False, indent=2), encoding="utf-8")
+    write_json_atomic(ap, graph)   # 22 МБ граф авторов — самый крупный публикуемый файл
 
 
 def update_tag_counts(scipop):
@@ -2069,7 +2069,7 @@ def update_tag_counts(scipop):
             if "scientists" not in graph["graph"][t]: graph["graph"][t]["scientists"] = []
             for s in scipop.get("scientists", []):
                 if s not in graph["graph"][t]["scientists"]: graph["graph"][t]["scientists"].append(s)
-    gp.write_text(json.dumps(graph, ensure_ascii=False, indent=2), encoding="utf-8")
+    write_json_atomic(gp, graph)
 
 
 # ── Pages ──
@@ -4853,15 +4853,16 @@ def rebuild_indexes():
         base = Path(LANG_DIR) / lang
         base.mkdir(parents=True, exist_ok=True)
         for version in VERSIONS:
-            (base / VERSION_INDEX[version]).write_text(
-                json.dumps(buckets[lang][version], ensure_ascii=False, indent=2), encoding="utf-8")
+            # Атомарно: 14 августа этот файл уехал в облако обрезанным (7,3 МБ вместо
+            # 10,9) — его прочитали ровно в тот миг, когда он был обнулён под новую
+            # запись, и главная перестала показывать статьи на всех пяти языках.
+            write_json_atomic(base / VERSION_INDEX[version], buckets[lang][version])
             # Маленький индекс последних статей для мгновенной первой отрисовки ленты: полный
             # индекс тира ~3.6МБ, и лента ждала его целиком (юзер 2026-07-23: «долго грузится
             # первый раз»). Тут — только N свежих записей (~150КБ), лента рисуется сразу, полный
             # индекс догружается в фоне для поиска/фильтров/«показать ещё».
             latest = sorted(buckets[lang][version], key=lambda e: e.get("date", ""), reverse=True)[:LATEST_INDEX_N]
-            (base / VERSION_INDEX_LATEST[version]).write_text(
-                json.dumps(latest, ensure_ascii=False, indent=2), encoding="utf-8")
+            write_json_atomic(base / VERSION_INDEX_LATEST[version], latest)
     total = sum(len(b["popular"]) for b in buckets.values())
     # Дата последней сборки — витрина «обновлено …» на дашборде/в статистике (юзер 2026-07-24).
     import datetime
@@ -4909,7 +4910,7 @@ def recompute_tag_counts():
             node = graph.get("graph", {}).get(t)
             if node:
                 node["article_count"] = node.get("article_count", 0) + 1
-    gp.write_text(json.dumps(graph, ensure_ascii=False, indent=2), encoding="utf-8")
+    write_json_atomic(gp, graph)
     print("  ✅ Счётчики тегов пересчитаны")
 
 

@@ -336,17 +336,41 @@ def main():
           (f" | пропущено (исчезли на лету): {skipped}" if skipped else ""))
     _refuse_if_rules_unclear(list(new))
 
+    # Файл читается ДВАЖДЫ: сначала для md5 (выше), потом для отправки (ниже), и между
+    # этими чтениями проходят минуты. Если между ними файл переписали, в бакет уедет одно
+    # содержимое, а в манифест запишется отпечаток ДРУГОГО — и дельта больше никогда его
+    # не тронет: локальный md5 совпадает с манифестом, значит «уже залито».
+    #
+    # Так 14 августа обрезанный индекс закрепился в облаке намертво: сам бы он не починился
+    # никогда, его перезаливали руками на всех языках. Поэтому перед отправкой сверяем
+    # отпечаток заново и, если файл изменился, отправляем НОВЫЙ и запоминаем НОВЫЙ.
+    changed_under_us = []
+
     def put(item):
         p, key = item
         ct = mimetypes.guess_type(key)[0] or "application/octet-stream"
+        try:
+            fresh = md5(p)
+        except FileNotFoundError:
+            return key, None
+        if fresh != new.get(key):
+            changed_under_us.append(key)
+            new[key] = fresh
         backend.put(p, key, ct)
-        return key
+        return key, fresh
 
     if to_upload:
         with ThreadPoolExecutor(max_workers=24) as ex:
             for i, _ in enumerate(ex.map(put, to_upload), 1):
                 if i % 500 == 0:
                     print(f"  залито {i}/{len(to_upload)}")
+    if changed_under_us:
+        # Не тревога, а факт: дерево меняли во время выкладки. Печатаем, потому что это
+        # первый признак двух прогонов на одном дереве — и потому что молчание здесь
+        # означало бы, что мы опять не знаем, какая версия уехала.
+        print(f"⚠️  во время заливки успели измениться {len(changed_under_us)} файлов — "
+              f"залита свежая версия, манифест обновлён. Первые: "
+              f"{', '.join(changed_under_us[:5])}")
     if prune:
         removed = [k for k in old if k not in new]
         # Чистка бакета сайта — не то же самое, что чистка кэша. С 2026-08-05 известно,

@@ -18,6 +18,7 @@ import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.cluster import KMeans
 from sklearn.manifold import TSNE
+from common import write_json_atomic
 
 # cp1252-консоль Windows роняет печать ✅/❌ при ручном запуске
 if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
@@ -164,7 +165,7 @@ def build_article_map(arts, interpret=False):
             if len(samples[int(labels[i])]) < 4:
                 samples[int(labels[i])].append((a.get("title") or "")[:80])
         out["titles"] = interpret_clusters(cluster_top, samples, "articles")
-    (OUT / "articles-map.json").write_text(json.dumps(out, ensure_ascii=False), encoding="utf-8")
+    write_json_atomic(OUT / "articles-map.json", out, indent=None)
     print(f"articles-map: {len(points)} статей, {n_clusters} кластеров (3D){' + трактовка' if interpret else ''}")
 
 
@@ -220,7 +221,7 @@ def build_author_map(arts, min_articles=1, interpret=False):  # ВСЕ авто�
     if interpret:
         # для авторов метки = коды разделов; примеров-заголовков нет — трактуем по разделам.
         out["titles"] = interpret_clusters(cluster_top, {}, "authors")
-    (OUT / "authors-map.json").write_text(json.dumps(out, ensure_ascii=False), encoding="utf-8")
+    write_json_atomic(OUT / "authors-map.json", out, indent=None)
     print(f"authors-map: {n} авторов (≥{min_articles} статей), {n_clusters} кластеров, ось теория↔эксп (3D){' + трактовка' if interpret else ''}")
 
 
