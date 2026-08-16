@@ -42,8 +42,40 @@ DAY_CAP = MONTH_CAP / 31 * 1.5
 # Один прогон дороже этого — почти наверняка сорвавшийся цикл, а не работа.
 RUN_CAP = 25.0
 
-PRICES = {"deepseek-v4-pro":   {"h": 0.003625, "m": 0.435, "o": 0.87},
-          "deepseek-v4-flash": {"h": 0.0028,   "m": 0.14,  "o": 0.28}}
+# Цены за миллион токенов. С 16 августа 2026 (16:00 UTC) DeepSeek ввёл разные тарифы
+# для часов пик и остального времени: вне пика ровно вдвое дешевле.
+#
+# Пик по UTC: 01:00-04:00 и 06:00-10:00. У нашей машины UTC+3, значит по местному
+# времени пик — с 04:00 до 07:00 и с 09:00 до 13:00. Всё остальное дешевле вдвое.
+#
+# Считать по времени КАЖДОЙ записи, а не по текущему часу: журнал расхода читается
+# задним числом, и запрос, сделанный ночью, должен стоить ночную цену и через неделю.
+PRICES = {
+    "deepseek-v4-pro":   {"off": {"h": 0.022, "m": 0.66, "o": 1.98},
+                          "peak": {"h": 0.044, "m": 1.32, "o": 3.96}},
+    "deepseek-v4-flash": {"off": {"h": 0.007, "m": 0.22, "o": 0.66},
+                          "peak": {"h": 0.014, "m": 0.44, "o": 1.32}},
+}
+# До этой даты действовал прежний прайс — старые записи журнала пересчитывать по новому
+# нельзя, иначе месячный расход задним числом вырастет вдвое и остаток соврёт.
+NEW_PRICES_FROM = "2026-08-16"
+OLD_PRICES = {"deepseek-v4-pro":   {"h": 0.003625, "m": 0.435, "o": 0.87},
+              "deepseek-v4-flash": {"h": 0.0028,   "m": 0.14,  "o": 0.28}}
+
+
+def price_for(model, ts):
+    """Тариф для записи журнала: по её дате и часу UTC."""
+    model = model or "deepseek-v4-flash"
+    if not ts or ts[:10] < NEW_PRICES_FROM:
+        return OLD_PRICES.get(model, OLD_PRICES["deepseek-v4-flash"])
+    table = PRICES.get(model, PRICES["deepseek-v4-flash"])
+    try:
+        # Записи журнала — местное время машины (UTC+3), приводим к UTC.
+        hour = (int(ts[11:13]) - 3) % 24
+    except Exception:
+        return table["off"]
+    peak = (1 <= hour < 4) or (6 <= hour < 10)
+    return table["peak"] if peak else table["off"]
 LOG = ROOT / "data" / "usage-log.jsonl"
 
 
@@ -61,7 +93,7 @@ def spend():
         except Exception:
             continue
         ts = r.get("ts", "")
-        p = PRICES.get(r.get("model"), PRICES["deepseek-v4-flash"])
+        p = price_for(r.get("model"), ts)
         c = (r.get("cache_hit", 0) * p["h"] + r.get("cache_miss", 0) * p["m"]
              + r.get("completion", 0) * p["o"]) / 1e6
         if ts[:10] >= BUDGET_START:
@@ -139,7 +171,7 @@ def spend_by_line():
                 continue
             if r.get("ts", "")[:10] < BUDGET_START:
                 continue
-            p = PRICES.get(r.get("model"), PRICES["deepseek-v4-flash"])
+            p = price_for(r.get("model"), ts)
             c = (r.get("cache_hit", 0) * p["h"] + r.get("cache_miss", 0) * p["m"]
                  + r.get("completion", 0) * p["o"]) / 1e6
             by_agent[r.get("agent", "?")] += c
