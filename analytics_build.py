@@ -41,10 +41,50 @@ OUT.mkdir(parents=True, exist_ok=True)
 #    но у нас есть ИИ»). Кластеры считает математика (бесплатно), а человеческое ИМЯ+ОПИСАНИЕ каждой
 #    группе даёт ИИ — по одному вызову на язык (дёшево). Включается флагом --interpret / interpret=True,
 #    чтобы обычный пересчёт карты DeepSeek не трогал. Вызывается в пайплайне после «залили новый день».
+_INTERPRET_CACHE = Path("data/analytics/interpret-cache.json")
+
+
+def _cluster_signature(tags):
+    """Сигнатура кластера — его характерные теги, отсортированные. Кластер «про то же» —
+    то же имя, и неважно, что его номер сегодня другой: t-SNE перенумеровывает группы
+    при каждой перекладке, а тема группы меняется редко."""
+    import hashlib as _h
+    return _h.sha256("|".join(sorted(tags)).encode("utf-8")).hexdigest()[:16]
+
+
 def interpret_clusters(cluster_top, samples, kind, langs=LANGS):
     """cluster_top: {cid: [характерные теги]}, samples: {cid: [примеры-заголовки]}.
-    Возвращает {cid: {lang: {"title","desc"}}} — человеческие названия групп на каждом языке."""
+    Возвращает {cid: {lang: {"title","desc"}}} — человеческие названия групп на каждом языке.
+
+    КЕШ ПО СИГНАТУРЕ КЛАСТЕРА (аудит 16 августа, находка 1). Трактовка — «изюминка»
+    карты, но она платная, а карта пересобирается фабрикой ежедневно. Прежний выбор
+    стоял между «жечь DeepSeek каждый день» и «не звать --interpret вовсе» — фабрика
+    выбрала второе, и на живой странице появилось «Самая крупная группа: #21».
+    Кеш снимает выбор: кластер с теми же характерными тегами получает то же имя
+    бесплатно, модель зовётся только для действительно новых групп. Заодно имена
+    перестают дрожать от перенумерации кластеров при каждой перекладке t-SNE.
+    """
     from common import chat, clean_json  # ленивый импорт: чистый пересчёт карты не требует API-ключа
+    cache = {}
+    try:
+        cache = json.loads(_INTERPRET_CACHE.read_text(encoding="utf-8"))
+    except Exception:
+        pass
+    sig_by_cid = {str(c): _cluster_signature(cluster_top[c]) for c in cluster_top}
+    cached_out, need = {}, {}
+    for c, sig in sig_by_cid.items():
+        hit = cache.get(sig)
+        # Берём из кеша только полный комплект языков: полкомплекта означало бы
+        # французскую страницу с английскими именами — грабли, на которые уже наступали.
+        if hit and all(l in hit for l in langs):
+            cached_out[c] = hit
+        else:
+            need[c] = cluster_top[c]
+    if not need:
+        print(f"  🏷️ имена кластеров: все {len(cached_out)} из кеша, модель не тратим")
+        return cached_out
+    print(f"  🏷️ имена кластеров: {len(cached_out)} из кеша, новых к трактовке: {len(need)}")
+    cluster_top = need
     ids = sorted(cluster_top, key=lambda c: int(c))
     lines = []
     for c in ids:
@@ -92,6 +132,17 @@ def interpret_clusters(cluster_top, samples, kind, langs=LANGS):
                 out[str(c)][lang] = {"title": str(v.get("title", "")).strip(),
                                      "desc": str(v.get("desc", "")).strip()}
         print(f"  трактовка {kind}/{lang}: {sum(1 for c in ids if out[str(c)].get(lang))}/{len(ids)} кластеров")
+    # Свежие трактовки — в кеш (по сигнатуре, не по номеру), результат — кеш + новое.
+    for c, langs_out in out.items():
+        sig = sig_by_cid.get(str(c))
+        if sig and langs_out:
+            cache[sig] = langs_out
+    try:
+        _INTERPRET_CACHE.parent.mkdir(parents=True, exist_ok=True)
+        _INTERPRET_CACHE.write_text(json.dumps(cache, ensure_ascii=False), encoding="utf-8")
+    except Exception as _e:
+        print(f"  ⚠️ кеш трактовки не сохранён: {type(_e).__name__}")
+    out.update(cached_out)
     return out
 
 

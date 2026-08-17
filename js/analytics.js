@@ -3,6 +3,10 @@
 // препросчёт analytics_build.py, БЕЗ DeepSeek). Юзер 2026-07-24: показать группировки, 3D, «вау».
 (function () {
   var root = document.getElementById('analytics');
+  // LANG объявлен ДО первого словаря. Аудит 16 августа, находка 5: CTL индексировался
+  // [LANG] выше объявления var LANG — хойстинг поднимает объявление, но не значение,
+  // индекс был undefined, и кнопки управления шли по-английски на всех языках.
+  var LANG = window.lang || 'en';
   // Мини-панель вида: без неё сцена «замирала» — перетаскивание выключает автовращение,
   // а включить обратно было нечем (замечание юзера 2026-07-28).
   var CTL = ({
@@ -12,13 +16,14 @@
           shapes: 'shapes as well as colour — for colour-blind readers' },
     es: { spin: 'rotación: parar / iniciar', zin: 'acercar', zout: 'alejar', reset: 'restablecer vista',
           shapes: 'formas además del color — para daltónicos' },
+    fr: { spin: 'rotation : stop / marche', zin: 'zoomer', zout: 'reculer', reset: 'vue initiale',
+          shapes: 'des formes en plus de la couleur — pour les daltoniens' },
     ar: { spin: 'الدوران: إيقاف / تشغيل', zin: 'تقريب', zout: 'إبعاد', reset: 'إعادة العرض',
           shapes: 'أشكال إلى جانب اللون — لمن يميّز الألوان بشكل مختلف' }
   })[LANG] || { shapes: 'shapes as well as colour', spin: 'auto-rotate', zin: 'zoom in', zout: 'zoom out', reset: 'reset view' };
 
 
   if (!root) return;
-  var LANG = window.lang || 'en';
   var L = ({
     ru: { title: 'Карта проекта', articles: 'Статьи', authors: 'Авторы', loading: 'Считаем карту…',
           hint: 'тяни — повернуть · колесо — зум · клик по точке', clusters: 'Тематические группы', n: 'точек',
@@ -35,6 +40,11 @@
           theoryExp: 'Color: experimental (ocre) → teórico (cian)',
           introA: 'Cada punto es un <b>artículo</b>. Cuanto más cerca, más temas comparten. El color es un <b>grupo temático</b> formado por etiquetas comunes. Gira la esfera para ver de qué se compone nuestra nube de artículos.',
           introB: 'Cada punto es un <b>autor</b> — todos los que procesamos, miles. Los cercanos comparten un perfil similar; las nubes son campos. El color va de <b>experimental</b> a <b>teórico</b>. Lo importante no es un punto, sino <b>cómo se comporta todo el conjunto</b>: dónde están los núcleos densos y dónde las ramas escasas.' },
+    fr: { title: 'Carte du projet', articles: 'Articles', authors: 'Auteurs', loading: 'Construction de la carte…',
+          hint: 'glisser pour tourner · molette pour zoomer · clic sur un point', clusters: 'Groupes thématiques', n: 'points',
+          theoryExp: 'Couleur du point : expérimentateur (ocre) → théoricien (cyan)',
+          introA: 'Chaque point est un <b>article</b>. Plus deux points sont proches, plus les articles partagent de thèmes. La couleur est un <b>groupe thématique</b> formé par l’algorithme à partir des tags communs. Faites tourner la sphère pour voir de quoi se compose notre nuage d’articles.',
+          introB: 'Chaque point est un <b>auteur</b> — tous ceux que nous avons traités, des milliers. Les voisins partagent un profil de travaux similaire ; les nuages sont des domaines. La couleur va de l’<b>expérimentateur</b> au <b>théoricien</b>. L’important n’est pas un point isolé mais <b>le comportement de l’ensemble</b> : où sont les noyaux denses, où s’étirent les branches rares.' },
     ar: { title: 'خريطة المشروع', articles: 'المقالات', authors: 'المؤلفون', loading: 'نبني الخريطة…',
           hint: 'اسحب للتدوير · العجلة للتكبير · انقر نقطة', clusters: 'مجموعات موضوعية', n: 'نقطة',
           theoryExp: 'لون النقطة: تجريبي (أوكر) → نظري (سماوي)',
@@ -53,6 +63,8 @@
           intro: 'You are <b>flying through our universe of articles</b>. Each star is a paper; the brighter, the closer. Steer with mouse or finger, change speed with the wheel or slider. Aim at the star in the centre to see it — click to open.' },
     es: { tab: 'Vuelo', fs: 'pantalla completa', speed: 'velocidad', hint: 'dirige para girar · rueda/control para velocidad · clic en la estrella central para abrir',
           intro: 'Vuelas <b>por nuestro universo de artículos</b>. Cada estrella es un trabajo; cuanto más brillante, más cerca. Dirige con el ratón o el dedo, cambia la velocidad con la rueda o el control. Apunta a la estrella del centro para verla y haz clic para abrirla.' },
+    fr: { tab: 'Vol', fs: 'plein écran', speed: 'vitesse', hint: 'guidez pour tourner · molette/curseur pour la vitesse · clic sur l’étoile au centre pour ouvrir',
+          intro: 'Vous <b>volez à travers notre univers d’articles</b>. Chaque étoile est un travail ; plus elle brille, plus elle est proche. Guidez à la souris ou au doigt, changez la vitesse à la molette. Visez l’étoile au centre pour la voir, cliquez pour l’ouvrir.' },
     ar: { tab: 'تحليق', fs: 'ملء الشاشة', speed: 'السرعة', hint: 'وجّه للدوران · العجلة/المنزلق للسرعة · انقر النجمة في المنتصف لفتحها',
           intro: 'أنت <b>تحلّق عبر كوننا من المقالات</b>. كل نجمة بحث؛ كلما زاد سطوعها اقتربت. وجّه بالفأرة أو الإصبع، وغيّر السرعة بالعجلة أو المنزلق. صوّب نحو النجمة في المنتصف لتراها وانقر لفتحها.' }
   })[LANG] || { tab: 'Fly', fs: 'fullscreen', speed: 'speed', hint: 'steer · wheel = speed · click centre star', intro: '' };
@@ -63,6 +75,8 @@
           intro: 'A heat <b>landscape of the project</b>: one axis is topic groups, the other is months. The taller and brighter the bar, the more articles came out on that topic that month. Drag to rotate.' },
     es: { tab: 'Calor', hint: 'arrastra para girar · rueda para acercar',
           intro: 'Un <b>paisaje térmico del proyecto</b>: un eje son los grupos temáticos, el otro los meses. Cuanto más alta y brillante la barra, más artículos hubo. Arrastra para girar.' },
+    fr: { tab: 'Chaleur', hint: 'glisser pour tourner · molette pour zoomer',
+          intro: 'Un <b>paysage thermique du projet</b> : un axe pour les groupes thématiques, l’autre pour les mois. Plus la barre est haute et brillante, plus il y a eu d’articles sur ce thème ce mois-là. Glissez pour tourner.' },
     ar: { tab: 'الحرارة', hint: 'اسحب للتدوير · العجلة للتقريب',
           intro: 'تضاريس حرارية <b>للمشروع</b>: محور للمجموعات الموضوعية وآخر للأشهر. كلما ارتفع العمود وسطع، زادت المقالات في ذلك الشهر. اسحب للتدوير.' }
   })[LANG] || { tab: 'Heat', hint: 'drag to rotate', intro: '' };
@@ -90,6 +104,13 @@
       matrixIntro: 'Una malla <b>concepto × concepto</b>: cuanto más brillante la celda, más veces aparecen juntos. Los cuadros densos son campos; los puntos aislados, <b>puentes entre disciplinas</b>.',
       hint: 'arrastra para rotar · rueda para acercar'
     },
+    fr: {
+      sphere: 'Sphère', mobius: 'Möbius', matrix: 'Liens',
+      sphereIntro: 'Tout le savoir du projet sur <b>une sphère</b> : concepts, lois et scientifiques disposés pour que le proche en sens soit proche en espace. Un <b>ensemble fermé</b> — le savoir n’a pas de bord. Faites tourner le globe et regardez quels continents se sont formés.',
+      mobiusIntro: 'Nos articles sur un <b>ruban de Möbius</b>. Il n’a qu’une face : on avance et on revient au départ, retourné. La science fonctionne ainsi. La couleur est le groupe thématique ; le ruban s’enroule avec le temps.',
+      matrixIntro: 'Une grille <b>concept × concept</b> : plus la case est brillante, plus deux idées apparaissent ensemble. Les carrés denses le long de la diagonale sont des domaines ; les points isolés au loin, des <b>ponts entre disciplines</b> — ce que nous avons de plus intéressant.',
+      hint: 'glisser pour tourner · molette pour zoomer · survolez un point'
+    },
     ar: {
       sphere: 'الكرة', mobius: 'موبيوس', matrix: 'الروابط',
       sphereIntro: 'كل معرفة المشروع على <b>كرة واحدة</b>: المفاهيم والقوانين والعلماء موزّعون بحيث يتجاور المتقارب. إنها <b>مجموعة مغلقة</b> — لا حافة للمعرفة. أدر الكرة وانظر أي قارات تشكّلت.',
@@ -112,6 +133,9 @@
     es: { tree: 'Árbol', spectrum: 'Ritmo',
           treeIntro: 'El conocimiento como <b>árbol ordenado</b>: las ramas son direcciones, las hojas artículos. Los nombres los da la IA y se ordenan por peso.',
           specIntro: '¿Tiene ritmo la ciencia? Periodograma de Lomb-Scargle, método astronómico para series irregulares. X: periodo en días; Y: fuerza de repetición.' },
+    fr: { tree: 'Arbre', spectrum: 'Rythme',
+          treeIntro: 'Le savoir en <b>arbre ordonné</b> plutôt qu’en écheveau : les branches sont des directions, les feuilles des articles. Les noms viennent de l’IA, triés par poids — les thèmes riches en haut.',
+          specIntro: 'La science a-t-elle un <b>rythme</b> ? Périodogramme de Lomb-Scargle, méthode d’astronomie pour les séries à trous. X : période en jours ; Y : force de répétition.' },
     ar: { tree: 'الشجرة', spectrum: 'الإيقاع',
           treeIntro: 'المعرفة على هيئة <b>شجرة مرتّبة</b> لا شبكة متشابكة: الأفرع اتجاهات والأوراق مقالات. أسماء الأفرع من الذكاء الاصطناعي، مرتّبة حسب الوزن.',
           specIntro: 'هل للعلم <b>إيقاع</b>؟ مخطط لومب-سكارغل الدوري، وهو أسلوب فلكي للسلاسل غير المنتظمة. الأفقي: الدورة بالأيام، الرأسي: قوة التكرار.' }
@@ -130,6 +154,9 @@
     es: { tab: 'Tensión',
           intro: 'Lo interesante no está donde hay muchos trabajos, sino donde los campos <b>se enganchan</b>. Izquierda: <b>puentes</b>. Derecha: <b>vacíos</b>, áreas ricas sin concepto común.',
           bridges: 'Puentes entre campos', gaps: 'Vacíos: falta el concepto que une', leads: 'qué lleva a él' },
+    fr: { tab: 'Tension',
+          intro: 'L’intéressant n’est pas là où les travaux s’entassent, mais là où les domaines <b>s’accrochent</b>. À gauche, les <b>ponts</b> ; à droite, les <b>lacunes</b> : des zones riches sans concept commun. Une lacune n’est pas une erreur, c’est une piste.',
+          bridges: 'Ponts entre domaines', gaps: 'Lacunes : le lien s’impose mais n’a pas de nom', leads: 'ce qui y mène' },
     ar: { tab: 'التوتر',
           intro: 'الأهم ليس حيث تكثر الأبحاث بل حيث <b>تتشابك</b> المجالات. يسارًا <b>الجسور</b>، ويمينًا <b>الفجوات</b>: مجالات غنية بلا مفهوم يجمعها.',
           bridges: 'جسور بين المجالات', gaps: 'فجوات: رابط ينقصه الاسم', leads: 'ما يقود إليه' }
@@ -161,6 +188,13 @@
           gapTxt: 'Vacíos sin concepto que una', dense: 'Los conceptos se enlazan más dentro de',
           links: 'enlaces entre campos', people: 'investigadores', theorists: 'tienden a la teoría',
           spread: 'la nube abarca', groups: 'grupos temáticos', noData: 'Aún faltan datos.' },
+    fr: { h: 'Ce que cela signifie', of: 'sur', arts: 'articles', biggest: 'Plus grand groupe',
+          share: 'soit {p}% des archives', period: 'Rythme le plus net : période d’environ {n} jours',
+          periodWhy: 'les articles arrivent par vagues de cette durée', branches: 'Branches de l’arbre',
+          thick: 'la plus épaisse', thin: 'la plus fine', bridge: 'Pont le plus fort entre domaines',
+          gapTxt: 'Lacunes où le lien s’impose sans concept', dense: 'Les concepts sont le plus liés dans',
+          links: 'liens entre domaines', people: 'chercheurs', theorists: 'penchent vers la théorie',
+          spread: 'le nuage s’étend sur', groups: 'groupes thématiques', noData: 'Pas encore assez de données.' },
     ar: { h: 'ماذا يعني هذا', of: 'من', arts: 'مقالة', biggest: 'أكبر مجموعة',
           share: 'أي {p}% من الأرشيف', period: 'أقوى إيقاع — دورة نحو {n} يومًا',
           periodWhy: 'أي أن الأبحاث تأتي على موجات بهذا الطول', branches: 'أفرع الشجرة',
@@ -261,6 +295,9 @@
           sphere: 'drag to spin the globe · wheel to zoom', mobius: 'drag to spin the strip · wheel to zoom' },
     es: { spectrum: 'pasa sobre un pico', tree: 'arriba las ramas mayores', tension: 'puentes y vacíos',
           matrix: 'celda más brillante = más coincidencias', sphere: 'arrastra para girar', mobius: 'arrastra para girar' },
+    fr: { spectrum: 'survolez un pic — période en jours', tree: 'les branches du haut sont les plus grandes',
+          tension: 'ponts à gauche, lacunes à droite', matrix: 'case plus brillante = plus de co-occurrences',
+          sphere: 'glisser pour tourner le globe', mobius: 'glisser pour tourner le ruban' },
     ar: { spectrum: 'مرّر فوق القمة', tree: 'الأفرع العليا هي الأكبر', tension: 'الجسور والفجوات',
           matrix: 'الخلية الأسطع تعني تكرارًا أكثر', sphere: 'اسحب لتدوير الكرة', mobius: 'اسحب لتدوير الشريط' }
   })[LANG] || {};
