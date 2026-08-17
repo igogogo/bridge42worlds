@@ -69,6 +69,11 @@ COST = {
     "uplift": 0.008,       # дотяжка «Популярно» + перевод поднятого на арабский
 }
 
+# Недельный отбор (p3). Двенадцать — верх вилки владельца «10–12 работ»; окно неделя.
+WEEKLY_FULL_N = 12
+WEEKLY_FULL_TIMEOUT_S = 2700      # на одну статью
+WEEKLY_FULL_BUDGET_S = 4 * 3600   # на весь шаг: дальше идут выкладка и следующий запуск
+
 
 def balance():
     """Живой остаток на счету DeepSeek. None, если спросить не удалось."""
@@ -130,8 +135,13 @@ def uncovered_days(back=10):
     return out
 
 
-def upgrade_candidates(limit=3):
+def upgrade_candidates(limit=3, days=None):
     """Кого дорастить до полного разбора. Выбирает ВЕКТОР, а не наше настроение.
+
+    days задаёт окно в днях для недельного отбора (шаг weekly_full, решение владельца
+    18.08: «раз в неделю определять, что прям точно взлетит»). С окном логика другая:
+    обходятся ВСЕ работы окна и берутся самые плотные из них, а не первые попавшиеся
+    подходящие — иначе «что взлетит» превращается в «что попалось раньше по алфавиту».
 
     Владелец: «идентификация тех статей, что должны быть сделаны или доработаны до полной,
     определяется вектором». Признак простой и проверяемый: экспресс, вокруг которого в
@@ -147,9 +157,12 @@ def upgrade_candidates(limit=3):
         import recommend as _rec
     except Exception:
         return []
+    since = (date.today() - timedelta(days=days)).isoformat() if days else None
     rows = []
     for p in sorted((ROOT / "lang" / "ru" / "archive").glob("*/*/data.json"), reverse=True):
-        if len(rows) >= limit * 8:
+        if since and p.parent.parent.name < since:
+            break            # папки идут по убыванию даты — дальше только старее
+        if not since and len(rows) >= limit * 8:
             break
         try:
             d = json.loads(p.read_text(encoding="utf-8"))
@@ -158,22 +171,34 @@ def upgrade_candidates(limit=3):
         if not d.get("express") or d.get("upgraded"):
             continue
         pop = (d.get("popular") or {}).get("ru") or {}
-        seed = f"{pop.get('title', '')}. {d.get('abstract_orig', '')}"[:1500]
+        # abstract_orig НЕ годится как основа затравки: его пишет отдельный backfill из
+        # локального дампа, и у работ последней недели он пуст (замер 18.08: 0 из 197 за
+        # 7–13 августа). Пока затравка стояла на нём, недельное окно возвращало бы пустой
+        # список — то есть шаг молча ничего не делал бы. Берём то, что есть всегда:
+        # английское название работы и наш пересказ.
+        seed = ". ".join(x for x in [
+            d.get("original_title", ""), pop.get("title", ""),
+            d.get("abstract_orig") or pop.get("description", ""),
+        ] if x)[:1500]
         if len(seed) < 120:
             continue
-        rows.append({"id": p.parent.name, "seed": seed, "title": pop.get("title", "")})
+        rows.append({"id": p.parent.name, "date": p.parent.parent.name,
+                     "seed": seed, "title": pop.get("title", "")})
     out = []
-    for r in rows[:limit * 4]:
+    # Без окна — прежнее поведение ежедневного шага upgrade: пройтись по первым и взять
+    # первые подходящие. С окном обходим всех: за неделю это ~100 запросов к вектору
+    # (доли цента), зато отбор действительно по плотности, а не по порядку папок.
+    for r in (rows if since else rows[:limit * 4]):
         nb = _rec.find_neighbours(r["seed"])
         near = [n for n in nb if (n.get("score") or 0) >= _rec.FRONTIER_NEAR]
         if len(near) >= 3:
             r["near"] = len(near)
             r["nearest"] = round(max(n["score"] for n in near), 3)
             out.append(r)
-        if len(out) >= limit:
+        if not since and len(out) >= limit:
             break
     out.sort(key=lambda r: (-r["near"], -r["nearest"]))
-    return out
+    return out[:limit]
 
 
 def counts():
@@ -194,7 +219,7 @@ def counts():
             "полных без советов": full - advised}
 
 
-def run(cmd, log=None, timeout=7200):
+def run(cmd, log=None, timeout=7200, env=None):
     """Шаг фабрики — отдельным процессом. Падение шага не роняет прогон: следующий по
     важности должен получить свои деньги, даже если предыдущий споткнулся.
 
@@ -208,7 +233,7 @@ def run(cmd, log=None, timeout=7200):
     try:
         r = subprocess.run(cmd, cwd=ROOT, timeout=timeout,
                            env={**os.environ, "PYTHONIOENCODING": "utf-8",
-                                "PYTHONUNBUFFERED": "1"})
+                                "PYTHONUNBUFFERED": "1", **(env or {})})
         return r.returncode
     except subprocess.TimeoutExpired:
         print("⏱️ шаг не уложился в отведённое время", flush=True)
@@ -241,9 +266,27 @@ def plan(money):
             steps.append({"key": "advise", "title": "советы полным разборам без раздела",
                           "n": n, "cost": n * COST["advise"]})
 
+    # 2a-нед. Недельный отбор «что взлетит» (p3 техлиста, решение владельца 18.08:
+    #     «ежедневно только экспресс, а раз в неделю определять, что прям точно взлетит,
+    #     и делать полный разбор»). Понедельник — оглядка на прошедшую неделю целиком.
+    #     Отдельной задачи планировщика намеренно нет: фабрика и так просыпается каждый
+    #     день и она же одна держит бюджет перед глазами. Вторая задача означала бы вторую
+    #     руку в том же дереве — ровно то, из-за чего 12 августа upkeep лёг поверх прогона.
+    weekly = False
+    if date.today().weekday() == 0 and money > COST["full"] * 3:
+        wk = upgrade_candidates(WEEKLY_FULL_N, days=7)
+        if wk:
+            n = max(1, min(len(wk), int(money * 0.35 / COST["full"])))
+            steps.append({"key": "weekly_full", "title": "недельный отбор: полные разборы",
+                          "ids": [u["id"] for u in wk[:n]], "n": n, "cost": n * COST["full"]})
+            weekly = True
+
     # 2b. Доращивание до полного разбора: самое дорогое, поэтому по одной-две штуки
     #     и только если после свежей ленты и советов ещё остались деньги.
-    ups = upgrade_candidates(3)
+    #     В понедельник этот шаг молчит: недельный отбор уже взял лучшее из тех же семи
+    #     дней и по тому же признаку. Оба сразу — это не 12, а 15 разборов за прогон,
+    #     причём с пересечением: одна работа попала бы в regen дважды.
+    ups = [] if weekly else upgrade_candidates(3)
     if ups and money > COST["full"] * 1.5:
         n = max(1, min(len(ups), int(money * 0.15 / COST["full"])))
         steps.append({"key": "upgrade", "title": "дорастить экспресс до полного разбора",
@@ -334,7 +377,8 @@ def show_plan():
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--plan", action="store_true", help="показать план и выйти")
-    ap.add_argument("--only", help="выполнить один шаг: days/advise/research/orders")
+    ap.add_argument("--only", help="выполнить один шаг: days/advise/upgrade/weekly_full/"
+                                   "uplift/research/orders/related/points/analytics/graph/tech")
     ap.add_argument("--no-publish", action="store_true", help="не пересобирать и не выкладывать")
     args = ap.parse_args()
 
@@ -386,6 +430,7 @@ def main():
 STEP_NAMES = {
     "orders": "заказы читателей", "days": "статьи за непокрытые дни",
     "advise": "советы авторам", "upgrade": "доращивание до полного разбора",
+    "weekly_full": "недельный отбор: полные разборы", "uplift": "дотяжка «Популярно» + арабский",
     "research": "направления «Что исследовать»", "related": "похожие по смыслу", "tech": "техлист владельца",
     "points": "точки схождения",
     "analytics": "карта аналитики", "graph": "граф знаний", "status": "дашборд",
@@ -449,13 +494,28 @@ def do_step(s):
         # жить в плане каждый день, а перевод идти тем же проходом, не отдельной задачей.
         return run([sys.executable, "tools/express_uplift.py", "--pilot", str(s["n"]),
                     "--translate", "ar"], timeout=7200)
-    if k == "upgrade":
+    if k in ("upgrade", "weekly_full"):
         # Доращиваем экспресс до полного разбора. B42_NO_PUBLISH=1 — иначе run.py regen
         # публикует сайт после КАЖДОЙ статьи: пять апгрейдов это пять полных выкаток
         # в R2 подряд. Выкладка одна, в конце прогона.
+        #
+        # Переменная тут появилась 18.08: раньше её обещал вот этот комментарий, а код
+        # её не ставил — run() просто не умела передавать окружение. На трёх статьях в
+        # день это стоило трёх лишних выкладок, на двенадцати недельных стоило бы
+        # двенадцати. Комментарий, который расходится с кодом, хуже отсутствующего:
+        # следующий читает его и считает вопрос закрытым.
         rc = 0
+        started = time.time()
         for aid in s.get("ids", []):
-            rc = run([sys.executable, "run.py", "regen", aid], timeout=5400) or rc
+            # Свой потолок времени на статью и общий на шаг. При прежних 5400 с на статью
+            # двенадцать штук в худшем случае держали бы прогон 18 часов, а следом идёт
+            # выкладка со своим таймаутом — фабрика не успела бы к следующему запуску.
+            if time.time() - started > WEEKLY_FULL_BUDGET_S:
+                print(f"⏱️ {k}: суммарный лимит времени исчерпан, остаток статей отложен",
+                      flush=True)
+                break
+            rc = run([sys.executable, "run.py", "regen", aid], timeout=WEEKLY_FULL_TIMEOUT_S,
+                     env={"B42_NO_PUBLISH": "1"}) or rc
         return rc
     if k == "advise":
         return run([sys.executable, "tools/recommend.py", "--all-full",
