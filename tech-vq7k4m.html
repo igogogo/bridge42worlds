@@ -49,12 +49,12 @@ pre.mermaid { background:var(--surface); border:1px solid var(--hair); border-ra
 a { color:var(--cyan); }
 </style></head><body><div class="wrap">
 <h1>Техлист bridge42worlds</h1>
-<p class="sub">обновлено 2026-08-17 · спринт 2026-08-17 → 2026-08-23 · страница закрытая, обновляется еженедельно фабрикой</p>
+<p class="sub">обновлено 2026-08-18 · спринт 2026-08-17 → 2026-08-23 · страница закрытая, обновляется еженедельно фабрикой</p>
 <div class="goal"><b>Большая цель:</b> 20 возвращающихся читателей к концу сентября.<br>
-<b>Спринт:</b> Чистка перед инвестицией: краны закрыты, аналитика без регрессий, совет решает.<br>
+<b>Спринт:</b> Подготовка к режиму «ежедневно экспресс, еженедельно полные»: покрытие года 5000 экспрессов, датасет для дообучения компаса, VPS.<br>
 <span style="color:var(--muted);font-size:13px">Наведите на название пункта — подробное описание. В колонке «от владельца» — вопросы к вам:
 галочки, выборы, комментарии. Нажмите «Отправить ответы» внизу — я получу их в канал и размечу неделю.</span></div>
-<div class="gantt"><div class="g-head"><span class="g-name"></span><span class="g-days"><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span><span>23</span></span></div><div class="g-row"><span class="g-name">Конвейер контента</span><span class="g-track"><i style="left:0%;width:100%"></i></span></div><div class="g-row"><span class="g-name">Знания и вектор</span><span class="g-track"><i style="left:14%;width:71%"></i></span></div><div class="g-row"><span class="g-name">Аналитика и карта</span><span class="g-track"><i style="left:0%;width:71%"></i></span></div><div class="g-row"><span class="g-name">Читатель и удержание</span><span class="g-track"><i style="left:0%;width:100%"></i></span></div><div class="g-row"><span class="g-name">Совет</span><span class="g-track"><i style="left:0%;width:100%"></i></span></div><div class="g-row"><span class="g-name">Инфраструктура</span><span class="g-track"><i style="left:14%;width:86%"></i></span></div><div class="g-row"><span class="g-name">Деньги и учёт</span><span class="g-track"><i style="left:0%;width:43%"></i></span></div></div>
+<div class="gantt"><div class="g-head"><span class="g-name"></span><span class="g-days"><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span><span>23</span></span></div><div class="g-row"><span class="g-name">Конвейер контента</span><span class="g-track"><i style="left:0%;width:100%"></i></span></div><div class="g-row"><span class="g-name">Знания и вектор</span><span class="g-track"><i style="left:14%;width:71%"></i></span></div><div class="g-row"><span class="g-name">Аналитика и карта</span><span class="g-track"><i style="left:0%;width:71%"></i></span></div><div class="g-row"><span class="g-name">Читатель и удержание</span><span class="g-track"><i style="left:0%;width:100%"></i></span></div><div class="g-row"><span class="g-name">Совет</span><span class="g-track"><i style="left:0%;width:100%"></i></span></div><div class="g-row"><span class="g-name">Инфраструктура</span><span class="g-track"><i style="left:14%;width:86%"></i></span></div><div class="g-row"><span class="g-name">Деньги и учёт</span><span class="g-track"><i style="left:0%;width:43%"></i></span></div><div class="g-row"><span class="g-name">Дообучение компаса («танк»)</span><span class="g-track"><i style="left:14%;width:86%"></i></span></div></div>
 
 <section class="epic">
   <h2>Конвейер контента <small>Фабрика сама решает, что делать сегодня, и укладывается в бюджет</small></h2>
@@ -64,7 +64,7 @@ a { color:var(--cyan); }
     <th>статус</th><th>приоритет</th><th>от владельца</th></tr></thead>
     <tbody><tr data-item="p1">
   <td class="c-name"><span class="tip" tabindex="0">Экспресс-статьи ежедневно
-      <span class="tipbox">Ночной прогон отбирает лучшие работы дня вектором и реранкером, пишет пересказ на 5 языках. Отбор: предфильтр вектором (−81% кандидатов) → реранкер → модель выбирает из ~200. Себестоимость $0.0074/статья на всех языках.</span></span></td>
+      <span class="tipbox">Ночной прогон отбирает лучшие работы дня вектором и реранкером, пишет пересказ на 5 языках. Отбор: предфильтр вектором (−81% кандидатов) → реранкер → модель выбирает из ~200. Себестоимость $0.0074/статья на всех языках. Решение 18.08: плотное покрытие года — ~5000 экспрессов, разовая программа ~$70 по новому прайсу, растягивается на 1.5–2 месяца в потолке $130/мес.</span></span></td>
   <td class="c-cost">~$3–5/день</td>
   <td class="c-dep">баланс DeepSeek, часы пик (вне пика вдвое дешевле)</td>
   <td class="c-sprint">перенесён на 19:00 из-за нового прайса; 199 статей за последнюю ночь</td>
@@ -89,16 +89,16 @@ a { color:var(--cyan); }
       <input type="text" class="note" data-item="p2" data-kind="комментарий"
              placeholder="комментарий / блокер"></td>
 </tr><tr data-item="p3">
-  <td class="c-name"><span class="tip" tabindex="0">Полные разборы
-      <span class="tipbox">Разбор с PDF, формулами, советами автору. $0.075/штука — в 10 раз дороже экспресса. Кандидатов выбирает вектор: экспресс, вокруг которого в архиве собралось окружение. Сейчас 612 полных из 5752.</span></span></td>
-  <td class="c-cost">~$0.075/статья</td>
+  <td class="c-name"><span class="tip" tabindex="0">Полные разборы: еженедельный отбор
+      <span class="tipbox">Решение владельца 18.08: ежедневно — только экспрессы; раз в неделю вектор отбирает «что точно взлетит» — 10–12 работ на полный разбор. Промпт полного разбора дорабатывается с подключением вектора: разбор видит окружение статьи (соседи из поля, куст, кластер), а не только её саму. Цель: 10% архива полными (~500 при 5000).</span></span></td>
+  <td class="c-cost">~$1.5/нед (10–12 × $0.14)</td>
   <td class="c-dep">остаток дня после ленты и советов</td>
-  <td class="c-sprint">7 за неделю</td>
-  <td class="c-status"><i style="background:#3d8f5a"></i>работает</td>
+  <td class="c-sprint">решение принято 18.08; промпт с вектором — задача спринта</td>
+  <td class="c-status"><i style="background:#b8860b"></i>в работе</td>
   <td class="c-prio"><select data-item="p3" data-kind="приоритет">
       <option>высокий</option><option selected>средний</option><option>низкий</option>
       </select></td>
-  <td class="c-ask"><div class="ask">Доля полных при подорожании: держать объём ленты (потолок $130→$260) или лента вдвое короче при $130?<br><select data-item="p3" data-kind="выбор"><option value="">— выбрать —</option><option>Поднять потолок до ~$260</option><option>Оставить $130, лента короче</option><option>Обсудить на совете</option></select></div>
+  <td class="c-ask">
       <input type="text" class="note" data-item="p3" data-kind="комментарий"
              placeholder="комментарий / блокер"></td>
 </tr><tr data-item="p4">
@@ -381,7 +381,7 @@ a { color:var(--cyan); }
       <span class="tipbox">Тариф считается по часу каждой записи журнала (пик UTC 01–04 и 06–10). Чужие модели (Qwen-реранкер, bge-m3 у DeepInfra) считаются по их цене — раньше их 19.2 млн токенов считались по прайсу DeepSeek и завышали расход втрое.</span></span></td>
   <td class="c-cost">—</td>
   <td class="c-dep">точные цены DeepInfra (сейчас оценка)</td>
-  <td class="c-sprint">сделано 16–17.08; ночной прогон перенесён из пика (01:00 → 19:00)</td>
+  <td class="c-sprint">сделано 16–17.08; ночной прогон перенесён из пика (01:00 → 19:00); смета программы: 5000 экспрессов $70 + дотяжка $75 + 500 полных $70 + советы $6 = ~$220 на 2 месяца</td>
   <td class="c-status"><i style="background:#3d8f5a"></i>работает</td>
   <td class="c-prio"><select data-item="m1" data-kind="приоритет">
       <option>высокий</option><option selected>средний</option><option>низкий</option>
@@ -401,6 +401,54 @@ a { color:var(--cyan); }
       </select></td>
   <td class="c-ask">
       <input type="text" class="note" data-item="m2" data-kind="комментарий"
+             placeholder="комментарий / блокер"></td>
+</tr></tbody>
+  </table>
+</section>
+<section class="epic">
+  <h2>Дообучение компаса («танк») <small>Свой вектор, обученный на графе цитирований — DeepInfra как площадка</small></h2>
+  <table>
+    <thead><tr><th>что</th><th>стоимость</th><th>зависит от</th>
+    <th>спринт 08-17–08-23</th>
+    <th>статус</th><th>приоритет</th><th>от владельца</th></tr></thead>
+    <tbody><tr data-item="f1">
+  <td class="c-name"><span class="tip" tabindex="0">Датасет: 200 тыс. пар цитирований
+      <span class="tipbox">Узкое место — данные, не вычисления. Пары из графа цитирований: цитирующая работа + цитируемая = положительная пара, отрицательные in-batch. Сейчас 2102 пары из наших PDF; нужно ~200 тыс. — сбор через Semantic Scholar API (ключ бесплатный), ~50 тыс. работ опросить, ~1.5 часа при 10 rps. Аннотации обеих сторон уже локально (дамп, 4.2 ГБ).</span></span></td>
+  <td class="c-cost">бесплатно</td>
+  <td class="c-dep">ключ Semantic Scholar (бесплатный)</td>
+  <td class="c-sprint">сборщик — задача ML на спринт</td>
+  <td class="c-status"><i style="background:#b8860b"></i>в работе</td>
+  <td class="c-prio"><select data-item="f1" data-kind="приоритет">
+      <option selected>высокий</option><option>средний</option><option>низкий</option>
+      </select></td>
+  <td class="c-ask">
+      <input type="text" class="note" data-item="f1" data-kind="комментарий"
+             placeholder="комментарий / блокер"></td>
+</tr><tr data-item="f2">
+  <td class="c-name"><span class="tip" tabindex="0">Замер пропускной способности
+      <span class="tipbox">Половина сметы висит на предположении о скорости обучения. Убирается за 10 минут аренды B200 на DeepInfra: 20 шагов на готовых 2102 парах, замер секунд на шаг. После этого смета — число, а не вилка.</span></span></td>
+  <td class="c-cost">$0.61 разово</td>
+  <td class="c-dep">карта на DeepInfra</td>
+  <td class="c-sprint">—</td>
+  <td class="c-status"><i style="background:#8a8a86"></i>запланировано</td>
+  <td class="c-prio"><select data-item="f2" data-kind="приоритет">
+      <option>высокий</option><option selected>средний</option><option>низкий</option>
+      </select></td>
+  <td class="c-ask"><label class="ask"><input type="checkbox" data-item="f2" data-kind="галочка"> Разрешить замер за $0.61 (10 минут аренды GPU на DeepInfra)?</label>
+      <input type="text" class="note" data-item="f2" data-kind="комментарий"
+             placeholder="комментарий / блокер"></td>
+</tr><tr data-item="f3">
+  <td class="c-name"><span class="tip" tabindex="0">Обучение LoRA и приёмка
+      <span class="tipbox">LoRA r=16 на Q/K/V/O bge-m3 — 0.55% параметров, 3 эпохи, партия 1024 с in-batch негативами. Критерий успеха зафиксирован ДО обучения: медианный ранг связанной работы падает вчетверо (2704 → ≤676 из 918 297). Ключ контрольной выборки вскрывается после замера. Вся программа ~$19.</span></span></td>
+  <td class="c-cost">~$19 разово</td>
+  <td class="c-dep">f1 (датасет), f2 (замер)</td>
+  <td class="c-sprint">—</td>
+  <td class="c-status"><i style="background:#8a8a86"></i>запланировано</td>
+  <td class="c-prio"><select data-item="f3" data-kind="приоритет">
+      <option selected>высокий</option><option>средний</option><option>низкий</option>
+      </select></td>
+  <td class="c-ask"><label class="ask"><input type="checkbox" data-item="f3" data-kind="галочка"> Запускать обучение, когда датасет собран и замер сделан (~$19)?</label>
+      <input type="text" class="note" data-item="f3" data-kind="комментарий"
              placeholder="комментарий / блокер"></td>
 </tr></tbody>
   </table>
