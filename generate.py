@@ -243,6 +243,36 @@ def gen_mosaic(images, aid, date_str, captions=None, cover_url=None):
 
 from gen_llm import *  # LLM-слой вынесен в gen_llm.py
 import tag_domains     # доменные облака тегов (какой словарь видит статья в промпте)
+import gen_context     # окружение работы для промпта разбора (соседи, плотность, группа карты)
+
+
+def _check_neighbourhood(scipop, ctx_meta):
+    """Опоры поля neighbourhood проверяются кодом, а не доверием к модели.
+
+    Правило то же, что в tools/recommend.py: утверждение без опоры на реальную работу из
+    показанного списка — выброшено целиком. Разведка 11 августа показала, зачем: модель
+    охотно ссылается на работы, которых в списке не было, и такую ссылку читатель-учёный
+    проверяет первой. Здесь дешевле промолчать, чем ошибиться.
+    """
+    nb = scipop.get("neighbourhood")
+    if not isinstance(nb, dict):
+        scipop.pop("neighbourhood", None)
+        return scipop
+    known = {str(x.get("id")) for x in (ctx_meta.get("neighbours") or [])}
+    known |= {str(x.get("id")) for x in (ctx_meta.get("world") or [])}
+    based = [b for b in as_list(nb.get("based_on")) if str(b) in known]
+    if not based or not (nb.get("same") or nb.get("different")):
+        if nb:
+            print("    🌐 окружение: neighbourhood без опоры на показанные работы — выброшено")
+        scipop.pop("neighbourhood", None)
+        return scipop
+    # Идентификаторы в самом тексте не показываем: ссылку подставляет сайт (правило recommend.py).
+    for k in ("same", "different"):
+        if isinstance(nb.get(k), str):
+            nb[k] = re.sub(r"\[?\b\d{4}\.\d{4,5}(v\d+)?\b\]?", "", nb[k]).replace("  ", " ").strip()
+    nb["based_on"] = based
+    scipop["neighbourhood"] = nb
+    return scipop
 # Флаг экономии (ТЗ 2026-07-27, §6.5): advanced — самый крупный и самый редко читаемый уровень.
 # По умолчанию true, чтобы ничего не сломать на существующем архиве.
 TRANSLATE_ADVANCED = CONFIG.get("translate_advanced", True)
@@ -4432,11 +4462,22 @@ def _build_article(a, date_str, inputs, force=False, express=False, known_licens
             # список нечего предложить, и она берёт ближайший физический тег (см. tag_domains).
             tags_cloud = tag_domains.cloud_for(a, inputs["tags_input"])
             print(f"    🏷️  {tag_domains.describe(a, inputs['tags_input'])}")
-            scipop_adv = generate_advanced(a, text, tags_cloud, inputs["scientists_keys"], inputs.get("law_ids"))
+            # Окружение работы: соседи из архива, плотность, группа карты, куст мирового поля.
+            # Решение владельца 18.08 — разбор должен видеть поле вокруг, а не одну статью.
+            # Собирается ДО вызова модели и кладётся в промпт; пусто — разбор идёт как прежде.
+            ctx_block, ctx_meta = gen_context.build_block(a, text)
+            scipop_adv = generate_advanced(a, text, tags_cloud, inputs["scientists_keys"],
+                                           inputs.get("law_ids"), context_block=ctx_block)
             if not scipop_adv: return None
             (article_folder / "api").mkdir(exist_ok=True)
             (article_folder / "api" / "advanced-ru.json").write_text(
                 json.dumps(scipop_adv, ensure_ascii=False, indent=2), encoding="utf-8")
+            # Паспорт окружения рядом с сырым ответом: по нему потом видно, писался разбор
+            # с полем вокруг или вслепую. Без этого отличить одно от другого нельзя.
+            (article_folder / "api" / "context-ru.json").write_text(
+                json.dumps({"used": bool(ctx_block), **ctx_meta}, ensure_ascii=False, indent=2),
+                encoding="utf-8")
+            scipop_adv = _check_neighbourhood(scipop_adv, ctx_meta)
             scipop_adv = validate_tags(scipop_adv, inputs["valid_tags"])
             # Gap-suggestions: чего модели не хватило в справочниках (missing tags/laws/scientists +
             # instruments + open_problems) — копим в отдельный файл для ревью/пополнения, из публичного

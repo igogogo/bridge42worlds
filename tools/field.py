@@ -294,14 +294,21 @@ def _ours():
     return ours
 
 
-def bush(aid, want=5, only_new=False, quiet=False):
-    """Куст вокруг работы: что лежит рядом во всём arXiv, а не только у нас."""
-    hits = list(ROOT.glob(f"lang/ru/archive/*/{aid}/data.json"))
-    if not hits:
-        print(f"нет статьи {aid}")
-        return []
-    d = json.loads(hits[0].read_text(encoding="utf-8"))
-    seed = f"{d.get('original_title', '')} {d.get('abstract_orig', '')}".strip()
+def bush(aid, want=5, only_new=False, quiet=False, seed=None):
+    """Куст вокруг работы: что лежит рядом во всём arXiv, а не только у нас.
+
+    seed передают снаружи, когда статьи в архиве ещё нет: во время генерации разбора
+    заголовок и аннотация уже на руках (пришли из arXiv API), а data.json появится
+    только в конце. Поле abstract_orig тут тем более не помощник — его пишет отдельный
+    backfill из локального дампа, и у работ последней недели оно пустое.
+    """
+    if not seed:
+        hits = list(ROOT.glob(f"lang/ru/archive/*/{aid}/data.json"))
+        if not hits:
+            print(f"нет статьи {aid}")
+            return []
+        d = json.loads(hits[0].read_text(encoding="utf-8"))
+        seed = f"{d.get('original_title', '')} {d.get('abstract_orig', '')}".strip()
     if not seed:
         print(f"{aid}: нет оригинального названия и аннотации "
               f"(сначала: python tools/abstract_orig.py {aid})")

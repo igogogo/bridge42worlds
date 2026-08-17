@@ -246,12 +246,16 @@ _NO_TAGS_BLOCK = (
 )
 
 
-def generate_advanced(article, text, tags_input, scientists_keys, law_ids=None):
+def generate_advanced(article, text, tags_input, scientists_keys, law_ids=None, context_block=""):
+    """context_block — окружение работы (соседи, плотность, группа карты), его собирает
+    gen_context.build_block. Пустая строка — законное значение: вектор мог быть недоступен,
+    и тогда промпт возвращается к прежнему виду вместо падения разбора."""
     tags_list = (", ".join(t["en"] for t in tags_input) if TAGS_IN_PROMPT else _NO_TAGS_BLOCK)
     scientists_list = ", ".join(scientists_keys)
     laws_list = ", ".join(law_ids or [])
     prompt = load_prompt("article-generate-advanced").format(
-        tags_list=tags_list, scientists_list=scientists_list, laws_list=laws_list, article_text=text)
+        tags_list=tags_list, scientists_list=scientists_list, laws_list=laws_list,
+        article_text=text, context_block=context_block or "")
     reinforce = "\n\nВНИМАНИЕ: все текстовые поля пиши СТРОГО на русском языке. Не отвечай на английском."
     result = None
     for attempt in range(2):
@@ -489,6 +493,7 @@ def translate_scipop_slim(tier, adv_translated, target_lang, retries=2):
         for k in _INTERNAL_FIELDS:      # служебные — из русского тира, они и не переводились
             if k in tier:
                 out[k] = tier[k]
+        _keep_based_on(tier, out)
         for k in SLIM_SHARED_TRANSLATE:
             if k in adv_translated:
                 out[k] = adv_translated[k]
@@ -748,6 +753,18 @@ def _latex_bits(obj):
 # metaphor держит метафору единой между уровнями, glossary кормит нижние тиры и термбазу.
 # Модели они не отдаются и переводом не считаются: русский текст в них — норма, а не брак.
 _INTERNAL_FIELDS = ("metaphor", "glossary", "contribution")
+
+
+def _keep_based_on(src, dst):
+    """Опоры neighbourhood — идентификаторы работ, а не текст: переводить их нельзя.
+
+    Ровно та же болезнь, от которой защищены main_tag/tags/laws строкой ниже: переводчик
+    в роли «редактора-носителя» переводит и ключи, и arXiv-id 2605.18112 приезжает из
+    арабского как «٢٦٠٥.١٨١١٢». Тексты same/different переводить нужно — их не трогаем.
+    """
+    nb_src, nb_dst = src.get("neighbourhood"), dst.get("neighbourhood")
+    if isinstance(nb_src, dict) and isinstance(nb_dst, dict):
+        nb_dst["based_on"] = nb_src.get("based_on") or []
 
 
 def _without_internal(scipop):
@@ -1014,6 +1031,7 @@ def translate_scipop(scipop, target_lang, retries=1):
         for _k in ("main_tag", "extra_tags", "tags", "scientists", "laws") + _INTERNAL_FIELDS:
             if _k in scipop:
                 out[_k] = scipop[_k]
+        _keep_based_on(scipop, out)
         ok, problems = validate_translation(scipop, out, target_lang)
         if ok:
             return out

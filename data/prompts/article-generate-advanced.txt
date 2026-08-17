@@ -35,6 +35,11 @@
 - main_tag + extra_tags (7-11): ТОЛЬКО из списка ниже
 - scientists: 0-3 имени ТОЛЬКО из списка ниже (кто внёс вклад)
 - laws: 0-3 закона ТОЛЬКО из списка ниже — физические законы/принципы, которые статья реально использует, проверяет или на которые опирается (пустой список, если явной связи нет — не притягивай)
+- neighbourhood: объект — МЕСТО РАБОТЫ СРЕДИ СОСЕДЕЙ. Заполняй, только если ниже дан блок «ОКРУЖЕНИЕ РАБОТЫ»; иначе верни пустые строки и пустой список.
+  {{"same": "в каком русле работа идёт вместе с соседями — одна фраза",
+    "different": "чем отличается от них: метод, масштаб, объект, первая проверка — одна-две фразы; если отличия не видно, так и напиши",
+    "based_on": ["идентификаторы работ из блока окружения, на которые опираются обе фразы"]}}
+  based_on без единого идентификатора из списка = поле выброшено целиком. Придуманная новизна — брак.
 - suggested: объект — ЧЕГО НЕ ХВАТИЛО в списках выше (для пополнения справочников; пустые списки, если всё было). Только РЕАЛЬНО отсутствующее и ЦЕНТРАЛЬНОЕ для статьи, не выдумывай:
   {{"missing_tags":["english_id_style"], "missing_laws":["english_id_style"], "missing_scientists":["English Name"], "instruments":["JWST"], "open_problems":["короткая формулировка"]}}
   где missing_* — концепции/законы/учёные вне списков выше; instruments — ключевые приборы/обсерватории/установки/миссии; open_problems — большие нерешённые вопросы той области, которой касается статья.
@@ -47,7 +52,9 @@
 
 
 Ответь JSON:
-{{"title":"...","oneliner":"...","description":"...","context":"...","methods":"...","results":"...","implications":"...","future_development":"...","impact_on":"...","next_steps":"...","key_problems_connection":"...","fun_fact":"...","scifi":"...","formulas":[...],"key_numbers":{{...}},"contribution":{{"before":"...","after":"...","how":"...","use":"..."}},"metaphor":"...","glossary":[{{"term":"...","plain":"..."}}],"main_tag":"...","extra_tags":["..."],"scientists":["..."],"laws":["..."],"suggested":{{"missing_tags":[],"missing_laws":[],"missing_scientists":[],"instruments":[],"open_problems":[]}}}}
+{{"title":"...","oneliner":"...","description":"...","context":"...","methods":"...","results":"...","implications":"...","future_development":"...","impact_on":"...","next_steps":"...","key_problems_connection":"...","fun_fact":"...","scifi":"...","formulas":[...],"key_numbers":{{...}},"contribution":{{"before":"...","after":"...","how":"...","use":"..."}},"metaphor":"...","glossary":[{{"term":"...","plain":"..."}}],"main_tag":"...","extra_tags":["..."],"scientists":["..."],"laws":["..."],"neighbourhood":{{"same":"...","different":"...","based_on":["..."]}},"suggested":{{"missing_tags":[],"missing_laws":[],"missing_scientists":[],"instruments":[],"open_problems":[]}}}}
+
+{context_block}
 
 Текст статьи:
 {article_text}
