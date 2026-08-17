@@ -2166,6 +2166,25 @@ export default {
     if (url.pathname === "/api/council/results") return withCors(await handleCouncilResults(request, env));
     if (url.pathname === "/api/council/meetings") return withCors(await handleCouncilMeetings(request, env));
     if (url.pathname === "/api/council/frozen") return withCors(await handleCouncilFrozen(request, env));
+    // Ответы владельца с закрытого техлиста: галочки, приоритеты, комментарии.
+    // Владелец 17 августа: «я прохожусь, отвечаю, помечаю — и работаем неделю».
+    // Пишем в R2 (файл на дату — история решений сохраняется) и шлём строку в канал:
+    // ведущая должна узнать об ответах сразу, а не при следующем чтении бакета.
+    if (url.pathname === "/api/tech/feedback" && request.method === "POST") {
+      let b = {};
+      try { b = await request.json(); } catch { return withCors(Response.json({ error: "bad_json" }, { status: 400 })); }
+      const answers = Array.isArray(b.answers) ? b.answers.slice(0, 200) : [];
+      if (!answers.length) return withCors(Response.json({ error: "empty" }, { status: 400 }));
+      const key = `data/tech/feedback-${new Date().toISOString().slice(0, 10)}.json`;
+      let prev = [];
+      try { const o = await env.SITE.get(key); if (o) prev = await o.json(); } catch {}
+      prev.push({ at: new Date().toISOString(), page: String(b.page || "").slice(0, 40), answers });
+      await env.SITE.put(key, JSON.stringify(prev), { httpMetadata: { contentType: "application/json" } });
+      const brief = answers.slice(0, 8).map((a) =>
+        `${String(a.item || "?").slice(0, 12)}: ${String(a.value || "").slice(0, 60)}`).join("\n");
+      await tg(env, `📋 <b>Ответы владельца на техлисте</b> (${answers.length})\n${brief}`);
+      return withCors(Response.json({ ok: true, saved: answers.length }));
+    }
     if (url.pathname.startsWith("/api/council/")) {
       return withCors(await handleCouncil(request, env, url.pathname.slice(13)));
     }
