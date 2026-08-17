@@ -284,6 +284,10 @@ def plan(money):
         {"key": "analytics", "title": "карта аналитики", "n": 0, "cost": 0.0},
         {"key": "graph", "title": "граф знаний", "n": 0, "cost": 0.0},
         {"key": "status", "title": "дашборд", "n": 0, "cost": 0.0},
+        # Техлист владельца — закрытая страница с планом, Гантом и формой ответов.
+        # Владелец 17 августа: «поддерживать и обновлять раз в неделю». Пересобираем
+        # каждый прогон: это бесплатно, а данные спринта меняются чаще раза в неделю.
+        {"key": "tech", "title": "техлист владельца", "n": 0, "cost": 0.0},
     ]
     return steps, c, gaps
 
@@ -366,7 +370,7 @@ def main():
 STEP_NAMES = {
     "orders": "заказы читателей", "days": "статьи за непокрытые дни",
     "advise": "советы авторам", "upgrade": "доращивание до полного разбора",
-    "research": "направления «Что исследовать»", "related": "похожие по смыслу",
+    "research": "направления «Что исследовать»", "related": "похожие по смыслу", "tech": "техлист владельца",
     "points": "точки схождения",
     "analytics": "карта аналитики", "graph": "граф знаний", "status": "дашборд",
     "publish": "пересборка и выкладка",
@@ -442,6 +446,8 @@ def do_step(s):
     if k == "research":
         return run([sys.executable, "tools/research.py", "--build", str(s["n"])],
                    timeout=7200)
+    if k == "tech":
+        return run([sys.executable, "tools/tech_page.py"], timeout=600)
     if k == "related":
         return run([sys.executable, "tools/vector_links_local.py"], timeout=3600)
     if k == "points":
