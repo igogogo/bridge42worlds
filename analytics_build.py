@@ -65,6 +65,10 @@ def interpret_clusters(cluster_top, samples, kind, langs=LANGS):
     перестают дрожать от перенумерации кластеров при каждой перекладке t-SNE.
     """
     from common import chat, clean_json  # ленивый импорт: чистый пересчёт карты не требует API-ключа
+    # Ключи кластеров приходят и int, и str — приводим к str сразу: sig_by_cid ниже
+    # строится по str(c), и обращение need['0'] к cluster_top с ключом 0 падало KeyError
+    # (первый же прогон фабрики с --interpret, 17 августа).
+    cluster_top = {str(k): v for k, v in cluster_top.items()}
     cache = {}
     try:
         cache = json.loads(_INTERPRET_CACHE.read_text(encoding="utf-8"))

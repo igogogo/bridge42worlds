@@ -207,7 +207,7 @@ def spend_by_line():
                 continue
             if r.get("ts", "")[:10] < BUDGET_START:
                 continue
-            p = price_for(r.get("model"), ts)
+            p = price_for(r.get("model"), r.get("ts", ""))
             c = (r.get("cache_hit", 0) * p["h"] + r.get("cache_miss", 0) * p["m"]
                  + r.get("completion", 0) * p["o"]) / 1e6
             by_agent[r.get("agent", "?")] += c
