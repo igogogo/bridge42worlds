@@ -57,9 +57,23 @@ def candidates(n, pick=None):
         cover = ROOT / "lang/ru/archive" / a["date"] / a["id"] / "ai.webp"
         if not cover.exists() or not (a.get("description") or "").strip():
             continue
+        url = SITE + (a.get("url") or "").replace("/index.html", "/")
+        # Ссылка обязана отвечать 200 ДО публикации. Владелец 17 августа: «нажимаю
+        # на ссылку — 404». Причина: фабрика сгенерировала статьи в 13:00, выкладки
+        # после них не было, а дайджест в 18:00 взял свежайшее из ЛОКАЛЬНОГО индекса
+        # и разослал ссылки на страницы, которых на сайте ещё нет. Локальный диск и
+        # прод — разные миры; пост в канал — это обещание читателю, и давать его можно
+        # только про то, что уже опубликовано. Не отвечает — берём следующую статью.
+        try:
+            import requests as _rq
+            if _rq.head(url, timeout=15, allow_redirects=True).status_code != 200:
+                print(f"  ⏭️ {a['id']}: на сайте ещё нет ({url}) — пропускаю")
+                continue
+        except Exception:
+            print(f"  ⏭️ {a['id']}: сайт не ответил — пропускаю")
+            continue
         out.append({"id": a["id"], "date": a["date"], "title": a["title"],
-                    "text": a["description"], "cover": cover,
-                    "url": SITE + (a.get("url") or "").replace("/index.html", "/")})
+                    "text": a["description"], "cover": cover, "url": url})
         if len(out) >= n:
             break
     return out
