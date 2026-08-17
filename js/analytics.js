@@ -172,7 +172,9 @@
           bridge: 'Сильнейший мост между областями', gapTxt: 'Разрывов, где связь напрашивается, но понятия нет',
           dense: 'Плотнее всего понятия связаны внутри', links: 'связей между разными областями',
           people: 'исследователей', theorists: 'из них тяготеют к теории', spread: 'облако раскинуто на',
-          groups: 'тематических групп', noData: 'Данных пока мало для вывода.' },
+          groups: 'тематических групп', noData: 'Данных пока мало для вывода.',
+          loose: 'Вне групп', looseWhy: 'работы, которые не примыкают ни к одной плотной теме — '
+                 + 'это ответ карты, а не пропуск: так выглядит одиночное исследование' },
     en: { h: 'What this means', of: 'of', arts: 'articles', biggest: 'Largest group',
           share: 'that is {p}% of the archive', period: 'Strongest rhythm — a period near {n} days',
           periodWhy: 'so papers arrive in waves of that length rather than a steady stream',
@@ -180,35 +182,49 @@
           bridge: 'Strongest bridge between fields', gapTxt: 'Gaps where a link begs to exist but has no concept',
           dense: 'Concepts are most tightly linked inside', links: 'links between different fields',
           people: 'researchers', theorists: 'of them lean theoretical', spread: 'the cloud spans',
-          groups: 'topic groups', noData: 'Not enough data yet.' },
+          groups: 'topic groups', noData: 'Not enough data yet.',
+          loose: 'Outside the groups', looseWhy: 'papers that join no dense topic — this is the '
+                 + 'map’s answer, not a gap: that is what solitary research looks like' },
     es: { h: 'Qué significa', of: 'de', arts: 'artículos', biggest: 'Grupo más grande',
           share: 'es el {p}% del archivo', period: 'Ritmo más fuerte: periodo de unos {n} días',
           periodWhy: 'los artículos llegan en oleadas de esa duración', branches: 'Ramas del árbol',
           thick: 'la más gruesa', thin: 'la más fina', bridge: 'Puente más fuerte',
           gapTxt: 'Vacíos sin concepto que una', dense: 'Los conceptos se enlazan más dentro de',
           links: 'enlaces entre campos', people: 'investigadores', theorists: 'tienden a la teoría',
-          spread: 'la nube abarca', groups: 'grupos temáticos', noData: 'Aún faltan datos.' },
+          spread: 'la nube abarca', groups: 'grupos temáticos', noData: 'Aún faltan datos.',
+          loose: 'Fuera de los grupos', looseWhy: 'trabajos que no se unen a ningún tema denso: '
+                 + 'es la respuesta del mapa, no un hueco' },
     fr: { h: 'Ce que cela signifie', of: 'sur', arts: 'articles', biggest: 'Plus grand groupe',
           share: 'soit {p}% des archives', period: 'Rythme le plus net : période d’environ {n} jours',
           periodWhy: 'les articles arrivent par vagues de cette durée', branches: 'Branches de l’arbre',
           thick: 'la plus épaisse', thin: 'la plus fine', bridge: 'Pont le plus fort entre domaines',
           gapTxt: 'Lacunes où le lien s’impose sans concept', dense: 'Les concepts sont le plus liés dans',
           links: 'liens entre domaines', people: 'chercheurs', theorists: 'penchent vers la théorie',
-          spread: 'le nuage s’étend sur', groups: 'groupes thématiques', noData: 'Pas encore assez de données.' },
+          spread: 'le nuage s’étend sur', groups: 'groupes thématiques', noData: 'Pas encore assez de données.',
+          loose: 'Hors des groupes', looseWhy: 'des travaux qui ne rejoignent aucun thème dense — '
+                 + 'c’est la réponse de la carte, pas un manque' },
     ar: { h: 'ماذا يعني هذا', of: 'من', arts: 'مقالة', biggest: 'أكبر مجموعة',
           share: 'أي {p}% من الأرشيف', period: 'أقوى إيقاع — دورة نحو {n} يومًا',
           periodWhy: 'أي أن الأبحاث تأتي على موجات بهذا الطول', branches: 'أفرع الشجرة',
           thick: 'الأسمك', thin: 'الأدق', bridge: 'أقوى جسر بين المجالات',
           gapTxt: 'فجوات ينقصها مفهوم جامع', dense: 'ترتبط المفاهيم بكثافة داخل',
           links: 'روابط بين مجالات مختلفة', people: 'باحثًا', theorists: 'يميلون إلى النظرية',
-          spread: 'تمتد السحابة على', groups: 'مجموعات موضوعية', noData: 'البيانات غير كافية بعد.' }
+          spread: 'تمتد السحابة على', groups: 'مجموعات موضوعية', noData: 'البيانات غير كافية بعد.',
+          loose: 'خارج المجموعات', looseWhy: 'أعمال لا تنتمي إلى أي موضوع كثيف — هذا جواب الخريطة وليس نقصًا' }
   })[LANG] || null;
   var R = RD || { h: 'What this means', noData: '' };
 
   function clusterTitle(c) {
     var titles = (cache.articles && cache.articles.titles) || (state.data && state.data.titles) || {};
     var lt = titles[c] && (titles[c][LANG] || titles[c].en);
-    return (lt && lt.title) || ('#' + c);
+    if (lt && lt.title) return lt.title;
+    // Имён от трактовщика может не быть (у карты v2 их пока нет вовсе). Тогда берём
+    // характерные теги группы — так же, как делает легенда. Голое «#41» — это ровно
+    // находка 1 августовского аудита: читателю показывали внутренний номер кластера.
+    var cl = (state.data && state.data.clusters) || {};
+    var tags = cl[c] || cl[String(c)];
+    if (tags && tags.length) return tags.slice(0, 3).map(niceLabel).join(' · ');
+    return isNoise(c) ? (R.loose || '—') : ('#' + c);
   }
 
   function reading(mode) {
@@ -217,12 +233,24 @@
     try {
       if (mode === 'articles' || mode === 'mobius' || mode === 'fly') {
         var cnt = {}; (d.points || []).forEach(function (p) { cnt[p.c] = (cnt[p.c] || 0) + 1; });
-        var top = Object.keys(cnt).sort(function (a, b) { return cnt[b] - cnt[a]; })[0];
         var n = d.n || (d.points || []).length;
+        // Крупнейшую тему ищем среди тем. У карты v2 самая многочисленная метка — «вне
+        // групп» (40% корпуса), и без этого фильтра читатель увидел бы «Самая крупная
+        // группа: «#-1» — 40% архива» — ровно та беда, из-за которой в августе чинили «#21».
+        var keys = Object.keys(cnt).filter(function (c) { return !isNoise(c); });
+        var top = keys.sort(function (a, b) { return cnt[b] - cnt[a]; })[0];
         if (top != null) {
           out.push('<b>' + R.biggest + ':</b> «' + clusterTitle(+top) + '» — ' + cnt[top] + ' ' + R.arts
                    + ', ' + R.share.replace('{p}', Math.round(cnt[top] / Math.max(1, n) * 100)) + '.');
-          out.push(Object.keys(cnt).length + ' ' + R.groups + ' ' + R.of + ' ' + n + ' ' + R.arts + '.');
+          out.push(keys.length + ' ' + R.groups + ' ' + R.of + ' ' + n + ' ' + R.arts + '.');
+        }
+        // 40% работ вне групп — это не мелочь, о которой можно умолчать: не объяснив её,
+        // мы оставляем читателя гадать, почему часть точек серая.
+        var loose = 0;
+        Object.keys(cnt).forEach(function (c) { if (isNoise(c)) loose += cnt[c]; });
+        if (loose && R.loose) {
+          out.push('<b>' + R.loose + ':</b> ' + loose + ' ' + R.arts + ' ('
+                   + Math.round(loose / Math.max(1, n) * 100) + '%) — ' + R.looseWhy + '.');
         }
       } else if (mode === 'world') {
         // Чтение карты мира: три числа, которые отвечают на «где мы стоим».
@@ -311,8 +339,12 @@
   var ABOUT = ({
     ru: '<h3>Как построена карта</h3>'
       + '<p>Статьи — связующая среда. Мы смотрим, какие <b>темы, разделы и понятия</b> встречаются в статьях вместе, '
-      + 'и превращаем это в близость: похожие работы оказываются рядом. Всё считается <b>локально</b>, статистикой '
-      + '(TF-IDF по тегам → кластеризация K-means → проекция в 3D методом t-SNE) — без обращения к ИИ, поэтому карту легко держать актуальной.</p>'
+      + 'и превращаем это в близость: похожие работы оказываются рядом. Всё считается <b>локально</b> '
+      + '(смысловые векторы статей bge-m3 → проекция в 3D методом UMAP → выделение плотных групп методом HDBSCAN) — '
+      + 'без обращения к ИИ, поэтому карту легко держать актуальной. Новые работы <b>подсаживаются</b> в уже '
+      + 'построенную проекцию: карта не перекладывается каждый день, и вы узнаёте её через неделю.</p>'
+      + '<p>Часть работ алгоритм оставляет <b>вне групп</b> и красит серым. Это не пропуск и не ошибка: '
+      + 'так выглядит исследование, которое не примыкает ни к одной плотной теме.</p>'
       + '<h3>Что значат группы и цвета</h3>'
       + '<ul><li><b>Точка</b> — статья (или автор). Чем ближе точки, тем больше общего.</li>'
       + '<li><b>Цвет</b> — тематическая группа (кластер), которую алгоритм выделил сам.</li>'
@@ -325,7 +357,11 @@
     en: '<h3>How the map is built</h3>'
       + '<p>Articles are the connective tissue. We look at which <b>topics, sections and concepts</b> co-occur in articles '
       + 'and turn that into closeness: similar work ends up nearby. Everything is computed <b>locally</b>, statistically '
-      + '(TF-IDF over tags → K-means clustering → 3D projection via t-SNE) — no AI calls, so the map is easy to keep up to date.</p>'
+      + '(semantic bge-m3 vectors of the papers → 3D projection via UMAP → dense groups via HDBSCAN) — no AI calls, '
+      + 'so the map is easy to keep up to date. New papers are <b>seated into</b> the existing projection: the map is '
+      + 'not relaid every day, so you still recognise it a week later.</p>'
+      + '<p>Some papers are left <b>outside the groups</b> and drawn in grey. That is not a gap or an error: '
+      + 'it is what research that joins no dense topic looks like.</p>'
       + '<h3>What the groups and colours mean</h3>'
       + '<ul><li>A <b>dot</b> is an article (or author). The closer the dots, the more they share.</li>'
       + '<li><b>Colour</b> is a topic group (cluster) the algorithm found on its own.</li>'
@@ -336,7 +372,11 @@
       + 'Next we build a <b>general map</b>: tabs for <b>laws, scientists and tags</b>, all interlinked — to see what the project’s knowledge is made of and where it’s heading.</p>',
     es: '<h3>Cómo se construye el mapa</h3>'
       + '<p>Los artículos son el tejido conector. Vemos qué <b>temas, secciones y conceptos</b> aparecen juntos '
-      + 'y lo convertimos en cercanía. Todo se calcula <b>localmente</b> (TF-IDF → K-means → proyección 3D con t-SNE), sin IA.</p>'
+      + 'y lo convertimos en cercanía. Todo se calcula <b>localmente</b> (vectores semánticos bge-m3 → proyección 3D '
+      + 'con UMAP → grupos densos con HDBSCAN), sin IA. Los trabajos nuevos se <b>sientan</b> en la proyección ya '
+      + 'construida: el mapa no se rehace cada día.</p>'
+      + '<p>Algunos trabajos quedan <b>fuera de los grupos</b>, en gris. No es un hueco ni un error: '
+      + 'así se ve una investigación que no se une a ningún tema denso.</p>'
       + '<h3>Qué significan los grupos y colores</h3>'
       + '<ul><li>Un <b>punto</b> es un artículo (o autor). Cuanto más cerca, más comparten.</li>'
       + '<li>El <b>color</b> es un grupo temático que el algoritmo encontró solo.</li>'
@@ -344,9 +384,26 @@
       + '<li>En autores, el color va de <b>experimental → teórico</b>.</li></ul>'
       + '<h3>Qué hay ahora y hacia dónde crece</h3>'
       + '<p>Por ahora dos facetas: <b>artículos</b> y <b>autores</b>. Luego un <b>mapa general</b> con pestañas de <b>leyes, científicos y etiquetas</b>.</p>',
+    fr: '<h3>Comment la carte est construite</h3>'
+      + '<p>Les articles sont le tissu conjonctif. Nous regardons quels <b>thèmes, domaines et concepts</b> '
+      + 'apparaissent ensemble et convertissons cela en proximité : les travaux proches se retrouvent côte à côte. '
+      + 'Tout est calculé <b>localement</b> (vecteurs sémantiques bge-m3 → projection 3D par UMAP → groupes denses '
+      + 'par HDBSCAN), sans IA. Les nouveaux travaux sont <b>insérés</b> dans la projection existante : la carte '
+      + 'n’est pas refaite chaque jour, vous la reconnaissez une semaine plus tard.</p>'
+      + '<p>Certains travaux restent <b>hors des groupes</b>, en gris. Ce n’est ni un manque ni une erreur : '
+      + 'voilà à quoi ressemble une recherche qui ne rejoint aucun thème dense.</p>'
+      + '<h3>Ce que signifient les groupes et les couleurs</h3>'
+      + '<ul><li><b>Un point</b> — un article (ou un auteur). Plus les points sont proches, plus ils ont en commun.</li>'
+      + '<li><b>La couleur</b> — un groupe thématique que l’algorithme a dégagé lui-même.</li>'
+      + '<li><b>Le nom du groupe</b> vient de l’<b>IA</b> : elle lit les tags caractéristiques et écrit un nom lisible.</li>'
+      + '<li>Chez les auteurs, la couleur va de l’<b>expérimentateur</b> au <b>théoricien</b>.</li></ul>'
+      + '<h3>Ce qui est affiché et vers quoi cela grandit</h3>'
+      + '<p>Deux vues pour l’instant : <b>articles</b> et <b>auteurs</b>. Ensuite une <b>carte commune</b> avec des '
+      + 'onglets pour les lois, les scientifiques et les tags.</p>',
     ar: '<h3>كيف بُنيت الخريطة</h3>'
       + '<p>المقالات هي النسيج الرابط. ننظر إلى <b>المواضيع والأقسام والمفاهيم</b> التي ترد معًا ونحوّلها إلى قُرب. '
-      + 'يُحسب كل شيء <b>محليًا</b> إحصائيًا (TF-IDF ← تجميع K-means ← إسقاط ثلاثي الأبعاد t-SNE) دون ذكاء اصطناعي.</p>'
+      + 'يُحسب كل شيء <b>محليًا</b> إحصائيًا (متجهات دلالية bge-m3 ← إسقاط ثلاثي الأبعاد UMAP ← مجموعات كثيفة HDBSCAN) دون ذكاء اصطناعي. تُضاف الأعمال الجديدة إلى الإسقاط القائم، فلا تتغيّر الخريطة كل يوم.</p>'
+      + '<p>تبقى بعض الأعمال <b>خارج المجموعات</b> بلون رمادي. هذا ليس نقصًا ولا خطأً: هكذا يبدو بحث لا ينتمي إلى أي موضوع كثيف.</p>'
       + '<h3>ماذا تعني المجموعات والألوان</h3>'
       + '<ul><li><b>النقطة</b> مقالة (أو مؤلف). كلما اقتربت زاد المشترك.</li>'
       + '<li><b>اللون</b> مجموعة موضوعية اكتشفها الخوارزم.</li>'
@@ -491,10 +548,23 @@
     if (sr && mode === 'fly') sr.value = Math.round(state.speed / 0.006 * 60);
     if (cache[dataMode]) { state.data = cache[dataMode]; prep(); return; }
     document.getElementById('an-loading').style.display = '';
-    var FILE = { authors: 'authors-map', articles: 'articles-map', cooc: 'tags-cooc',
+    var FILE = { authors: 'authors-map', articles: 'articles-map-v2', cooc: 'tags-cooc',
                  world: 'world-view' };
-    fetch('/data/analytics/' + (FILE[dataMode] || 'articles-map') + '.json')
-      .then(function (r) { return r.json(); })
+    // Карта статей — v2 (эмбеддинги + UMAP + HDBSCAN) с откатом на v1 (теги + t-SNE).
+    // Откат нужен не для красоты: v2 строит отдельный скрипт, и пока он не встал в
+    // фабрику, файла может не быть на свежей выкладке. Пустая карта хуже старой.
+    var BACK = { 'articles-map-v2': 'articles-map' };
+    var name = FILE[dataMode] || 'articles-map-v2';
+    function grab(f, fallback) {
+      return fetch('/data/analytics/' + f + '.json').then(function (r) {
+        if (!r.ok) throw new Error(r.status);
+        return r.json();
+      }).catch(function (e) {
+        if (!fallback) throw e;
+        return grab(fallback, null);
+      });
+    }
+    grab(name, BACK[name])
       .then(function (d) { cache[dataMode] = d; state.data = d; prep(); })
       .catch(function () { document.getElementById('an-loading').textContent = '—'; });
   }
@@ -553,7 +623,7 @@
       var a = [199, 127, 58], b = [46, 138, 160];
       return 'rgb(' + Math.round(a[0] + (b[0] - a[0]) * t) + ',' + Math.round(a[1] + (b[1] - a[1]) * t) + ',' + Math.round(a[2] + (b[2] - a[2]) * t) + ')';
     }
-    return PAL[p.c % PAL.length];
+    return palOf(p.c);
   }
 
   function project(p) {
@@ -612,6 +682,9 @@
     (state.data.points || []).forEach(function (p) {
       var ym = (p.d || '').slice(0, 7); if (!ym) return;
       months[ym] = 1;
+      // Шум в полосы не идёт (его нет в clusters), но раньше он задирал max и гасил
+      // все остальные ячейки — они считались на фоне колонки, которой на картинке нет.
+      if (isNoise(p.c)) return;
       var k = p.c + '|' + ym;
       cells[k] = (cells[k] || 0) + 1;
       if (cells[k] > maxV) maxV = cells[k];
@@ -787,6 +860,7 @@
       (groups[c] = groups[c] || []).push(p);
     });
     state.tree = Object.keys(groups)
+      .filter(function (c) { return !isNoise(c); })   // «вне групп» — не тема, ветвиться нечем
       .sort(function (a, b) { return groups[b].length - groups[a].length; })
       .slice(0, 12)
       .map(function (c) {
@@ -1115,7 +1189,7 @@
   /* Пять различимых форм по номеру группы. Различимость проверяется не «на глаз в
      редакторе», а тем, что силуэты разной природы: круглое, угловатое, острое. */
   function markShape(x, y, r, c) {
-    var s = c % 5;
+    var s = ((c % 5) + 5) % 5;   // -1 % 5 === -1: без нормализации шум уезжал в «звезду»
     ctx.beginPath();
     if (s === 0) {                                   // круг
       ctx.arc(x, y, r, 0, 6.283);
@@ -1224,13 +1298,25 @@
 
   var SHAPE_CHAR = ['●', '■', '◆', '▲', '★'];
 
+  /* Кластер -1 у карты v2 — не пропуск и не ошибка: HDBSCAN так говорит «работа не
+     примыкает ни к одной плотной группе». Таких 40% корпуса, и это содержательный
+     ответ, а не дыра. Но для кода это отрицательное число, и без единой трактовки
+     оно ломается в восьми местах сразу: PAL[-1] undefined (точка рисуется цветом
+     предыдущей), SHAPE_CHAR[-1] печатает 'undefined' в легенду, а «самая крупная
+     группа» становится «#-1 — 40% архива». Поэтому одна функция на всех. */
+  function isNoise(c) { return +c < 0; }
+  var NOISE_COL = '#8A8A8A';
+  function palOf(c) { return isNoise(c) ? NOISE_COL : PAL[((+c % PAL.length) + PAL.length) % PAL.length]; }
+  function shapeOf(c) { return isNoise(c) ? '○' : SHAPE_CHAR[((+c % 5) + 5) % 5]; }
+
   function clusterRow() {
     var cl = (state.data && state.data.clusters) || {};
     var titles = state.data && state.data.titles;
     var keys = Object.keys(cl);
     if (!keys.length) return '';
     var cnt = clusterCounts();
-    var items = keys.slice(0, 12).map(function (c) {
+    var items = keys.sort(function (a, b) { return (cnt[b] || 0) - (cnt[a] || 0); })
+      .slice(0, 12).map(function (c) {
       var lt = titles && titles[c] ? (titles[c][LANG] || titles[c].en) : null;
       var name = lt ? lt.title : (cl[c] || []).map(niceLabel).slice(0, 2).join(' · ');
       // Число работ в группе и — если группа кликабельна — переход к их списку.
@@ -1238,8 +1324,8 @@
       // отобразить и в принципе перейти на список; возможно, это признак для фильтрации,
       // наряду с разделами».
       var n = cnt[c] || 0;
-      var mark = state.shapes ? '<i class="lg-shape">' + SHAPE_CHAR[c % 5] + '</i>' : '';
-      var body = mark + '<i class="lg-dot" style="background:' + PAL[c % PAL.length] + '"></i>' +
+      var mark = state.shapes ? '<i class="lg-shape">' + shapeOf(c) + '</i>' : '';
+      var body = mark + '<i class="lg-dot" style="background:' + palOf(c) + '"></i>' +
                  name + (n ? '<b class="lg-n">' + n + '</b>' : '');
       return clusterListable()
         ? '<a class="lg-key lg-link" href="javascript:void(0)" data-cluster="' + c + '">' + body + '</a>'
@@ -1297,15 +1383,18 @@
     // Кластеры — КАРТОЧКАМИ (юзер 2026-07-25): цветная полоса, название-заголовок, описание ниже.
     var cnt = clusterCounts();
     var listable = clusterListable();
-    var items = Object.keys(cl).map(function (c) {
-      var col = PAL[c % PAL.length];
+    // Кластеров стало 60 вместо 24 — по порядку номеров это стена карточек, в которой
+    // крупнейшая группа может оказаться в самом низу. Сортируем по числу работ.
+    var items = Object.keys(cl).sort(function (a, b) { return (cnt[b] || 0) - (cnt[a] || 0); })
+      .map(function (c) {
+      var col = palOf(c);
       var lt = titles && titles[c] ? titles[c][LANG] || titles[c].en : null;
       var title = lt ? lt.title : (cl[c] || []).map(niceLabel).slice(0, 3).join(' · ');
       var desc = lt && lt.desc ? '<div class="an-card-d">' + lt.desc + '</div>' : '';
       // Сколько работ в группе — и вход в их список. Группа становится таким же признаком
       // отбора, как раздел arXiv (владелец 13 августа), а не просто цветом на картинке.
       var n = cnt[c] || 0;
-      var shape = state.shapes ? '<i class="an-card-shape">' + SHAPE_CHAR[c % 5] + '</i>' : '';
+      var shape = state.shapes ? '<i class="an-card-shape">' + shapeOf(c) + '</i>' : '';
       var num = n ? '<span class="an-card-n">' + n + '</span>' : '';
       var head = '<div class="an-card-t">' + shape + title + num + '</div>';
       var body = head + desc;
@@ -1313,6 +1402,15 @@
         ? '<a class="an-card an-card-link" style="--cc:' + col + '" href="javascript:void(0)" data-cluster="' + c + '">' + body + '</a>'
         : '<div class="an-card" style="--cc:' + col + '">' + body + '</div>';
     }).join('');
+    // Карточка «вне групп» — последней и без ссылки: список из двух тысяч работ, ничем
+    // между собой не связанных, обещал бы читателю связь, которой нет.
+    var loose = cnt[-1] || 0;
+    if (loose && R.loose) {
+      items += '<div class="an-card" style="--cc:' + NOISE_COL + '">'
+             + '<div class="an-card-t">' + (state.shapes ? '<i class="an-card-shape">' + shapeOf(-1) + '</i>' : '')
+             + R.loose + '<span class="an-card-n">' + loose + '</span></div>'
+             + '<div class="an-card-d">' + R.looseWhy + '</div></div>';
+    }
     legendEl.innerHTML = '<div class="an-lg-h">' + T.clusters + ' · <b>' + state.data.n + '</b> ' + T.n + '</div>' +
       '<div class="an-cards">' + items + '</div>' + extra;
     // search.js грузит tagsLoc асинхронно — если легенда отрисовалась раньше и нет LLM-имён,
