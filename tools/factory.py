@@ -32,6 +32,7 @@ import json
 import os
 import subprocess
 import sys
+import time
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
@@ -289,6 +290,21 @@ def plan(money):
         # каждый прогон: это бесплатно, а данные спринта меняются чаще раза в неделю.
         {"key": "tech", "title": "техлист владельца", "n": 0, "cost": 0.0},
     ]
+
+    # 6. Сверка справочников — раз в НЕДЕЛЮ, не каждый день. Волна 14 августа просила
+    #    еженедельную итерацию; ежедневная не даст ничего нового (справочники за сутки
+    #    почти не меняются), а diff в канал превратится в шум, который перестанут читать.
+    #
+    #    Гейт по возрасту файла, а не по дню недели: если прогон в понедельник
+    #    пропустили — по календарю шаг молча уехал бы на неделю, по возрасту он
+    #    выполнится в первый же следующий раз. Пропуски случаются, и расписание
+    #    должно их переживать.
+    audit = ROOT / "data" / "refs-audit.json"
+    stale = (not audit.exists()
+             or (time.time() - audit.stat().st_mtime) > 7 * 86400)
+    if stale:
+        steps.append({"key": "refs", "title": "сверка справочников (раз в неделю)",
+                      "n": 0, "cost": 0.0})
     return steps, c, gaps
 
 
@@ -373,6 +389,7 @@ STEP_NAMES = {
     "research": "направления «Что исследовать»", "related": "похожие по смыслу", "tech": "техлист владельца",
     "points": "точки схождения",
     "analytics": "карта аналитики", "graph": "граф знаний", "status": "дашборд",
+    "refs": "сверка справочников",
     "publish": "пересборка и выкладка",
 }
 
@@ -448,6 +465,12 @@ def do_step(s):
                    timeout=7200)
     if k == "tech":
         return run([sys.executable, "tools/tech_page.py"], timeout=600)
+    if k == "refs":
+        # Инструмент ML: мёртвые сущности, дубли, дыры, пересчёт связей. Ничего
+        # не меняет — пишет предложение в data/refs-audit.json, а в канал уходит
+        # только то, что изменилось с прошлой недели. --notify делает отправку
+        # частью шага: отчёт, который надо запускать отдельно, не запускают.
+        return run([sys.executable, "refs_audit.py", "--notify"], timeout=3600)
     if k == "related":
         return run([sys.executable, "tools/vector_links_local.py"], timeout=3600)
     if k == "points":
