@@ -49,7 +49,7 @@ pre.mermaid { background:var(--surface); border:1px solid var(--hair); border-ra
 a { color:var(--cyan); }
 </style></head><body><div class="wrap">
 <h1>Техлист bridge42worlds</h1>
-<p class="sub">обновлено 2026-08-18 · спринт 2026-08-17 → 2026-08-23 · страница закрытая, обновляется еженедельно фабрикой</p>
+<p class="sub">обновлено 2026-08-18 (вечер) · спринт 2026-08-17 → 2026-08-23 · страница закрытая, обновляется еженедельно фабрикой</p>
 <div class="goal"><b>Большая цель:</b> 20 возвращающихся читателей к концу сентября.<br>
 <b>Спринт:</b> Подготовка к режиму «ежедневно экспресс, еженедельно полные»: покрытие года 5000 экспрессов, датасет для дообучения компаса, VPS.<br>
 <span style="color:var(--muted);font-size:13px">Наведите на название пункта — подробное описание. В колонке «от владельца» — вопросы к вам:
@@ -93,7 +93,7 @@ a { color:var(--cyan); }
       <span class="tipbox">Решение владельца 18.08: ежедневно — только экспрессы; раз в неделю вектор отбирает «что точно взлетит» — 10–12 работ на полный разбор. Промпт полного разбора дорабатывается с подключением вектора: разбор видит окружение статьи (соседи из поля, куст, кластер), а не только её саму. Цель: 10% архива полными (~500 при 5000).</span></span></td>
   <td class="c-cost">~$1.5/нед (10–12 × $0.14)</td>
   <td class="c-dep">остаток дня после ленты и советов</td>
-  <td class="c-sprint">решение принято 18.08; промпт с вектором — задача спринта</td>
+  <td class="c-sprint">разбор видит поле (gen_context: соседи+плотность+группа+куст, опоры проверяет код); weekly_full по понедельникам — слито</td>
   <td class="c-status"><i style="background:#b8860b"></i>в работе</td>
   <td class="c-prio"><select data-item="p3" data-kind="приоритет">
       <option>высокий</option><option selected>средний</option><option>низкий</option>
@@ -141,7 +141,7 @@ a { color:var(--cyan); }
       <span class="tipbox">Еженедельная итерация: мёртвое (сущности без опоры) → на слияние; дубли (высокий косинус + общий пул статей) → склейка; дыры (плотный кластер без тега) → кандидат на новую сущность; отчёт-diff в канал. Инструмент refs_audit.py сдан ML, в расписание пока не встроен.</span></span></td>
   <td class="c-cost">~копейки (названия новых сущностей)</td>
   <td class="c-dep">вектор построен</td>
-  <td class="c-sprint">инструмент готов, встраивание в расписание — эта неделя</td>
+  <td class="c-sprint">сверка в фабрике еженедельным шагом (гейт по возрасту файла) — слито</td>
   <td class="c-status"><i style="background:#b8860b"></i>в работе</td>
   <td class="c-prio"><select data-item="k2" data-kind="приоритет">
       <option selected>высокий</option><option>средний</option><option>низкий</option>
@@ -176,8 +176,8 @@ a { color:var(--cyan); }
       <span class="tipbox">1) кеш трактовки кластеров + --interpret в фабрике — СДЕЛАНО 17.08; 2) fr-словари — СДЕЛАНО; 3) регистр «дНК/lIGO» — у разработчика; 4) склейка синонимов «реионизация⟷реионизация» — у ML; 5) строка LANG — СДЕЛАНО.</span></span></td>
   <td class="c-cost">разово, почти бесплатно</td>
   <td class="c-dep">волна 17.08 поднята</td>
-  <td class="c-sprint">3 из 5 находок закрыты в день аудита</td>
-  <td class="c-status"><i style="background:#b8860b"></i>в работе</td>
+  <td class="c-sprint">ЗАКРЫТА: все 5 находок аудита (регистр вычищен — 10 имён; синонимы: 4 пары слиты, 61 спорная на разборе человеком)</td>
+  <td class="c-status"><i style="background:#3d8f5a"></i>работает</td>
   <td class="c-prio"><select data-item="a1" data-kind="приоритет">
       <option selected>высокий</option><option>средний</option><option>низкий</option>
       </select></td>
@@ -189,8 +189,8 @@ a { color:var(--cyan); }
       <span class="tipbox">UMAP + HDBSCAN на векторах bge-m3 вместо TF-IDF+t-SNE. Распад «бульонов» (мегакластер #21 = 793 статьи), k перестаёт быть магией. Аудитор: «самый большой скачок качества на вложенный час».</span></span></td>
   <td class="c-cost">бесплатно (вектора готовы)</td>
   <td class="c-dep">после чистки a1</td>
-  <td class="c-sprint">роздано ML волной 17.08</td>
-  <td class="c-status"><i style="background:#8a8a86"></i>запланировано</td>
+  <td class="c-sprint">СДЕЛАНО: 60 кластеров вместо 24, мегакластер 17.5%→4.0%, покрытие 5447 работ (нашёл и починил потерю 18% корпуса из-за версий в id)</td>
+  <td class="c-status"><i style="background:#3d8f5a"></i>работает</td>
   <td class="c-prio"><select data-item="a2" data-kind="приоритет">
       <option selected>высокий</option><option>средний</option><option>низкий</option>
       </select></td>
@@ -202,8 +202,8 @@ a { color:var(--cyan); }
       <span class="tipbox">Сейчас t-SNE переукладывает облако каждый день — читатель через неделю не узнаёт карту. Новые статьи подсаживаются в существующую проекцию, полная переукладка — редкая «пересъёмка». Для возвращающегося читателя узнаваемость карты — суть, не косметика.</span></span></td>
   <td class="c-cost">бесплатно</td>
   <td class="c-dep">после a2</td>
-  <td class="c-sprint">—</td>
-  <td class="c-status"><i style="background:#8a8a86"></i>запланировано</td>
+  <td class="c-sprint">СДЕЛАНО: подсадка через transform не двигает старые точки вообще; пересъёмка по флагу --resurvey; карта v2 на странице с откатом на v1</td>
+  <td class="c-status"><i style="background:#3d8f5a"></i>работает</td>
   <td class="c-prio"><select data-item="a3" data-kind="приоритет">
       <option selected>высокий</option><option>средний</option><option>низкий</option>
       </select></td>
@@ -237,7 +237,7 @@ a { color:var(--cyan); }
       <span class="tipbox">3 свежие статьи с обложками ежедневно в 18:00 (вечер по Заливу). Инструмент был готов с 4 августа, не хватало расписания — аудит: «не запущен ни разу». Запущен 17.08, пока в служебный канал.</span></span></td>
   <td class="c-cost">бесплатно</td>
   <td class="c-dep">выбор публичного канала</td>
-  <td class="c-sprint">галочка: да, публичный канал — инструкция отправлена владельцу в чат</td>
+  <td class="c-sprint">канал @bridge42worlds живой: первые 3 поста ушли, ежедневно 18:00</td>
   <td class="c-status"><i style="background:#2a8fa8"></i>новое</td>
   <td class="c-prio"><select data-item="r1" data-kind="приоритет">
       <option selected>высокий</option><option>средний</option><option>низкий</option>
@@ -285,7 +285,7 @@ a { color:var(--cyan); }
       <span class="tipbox">Аудит: потеряны 6 из 8 вопросов первого заседания, включая монетизацию — вопрос №1 совета. Вернуть в повестку + второй держатель доступов + повестка на английском (совет перешёл на один рабочий язык).</span></span></td>
   <td class="c-cost">~$0.05 (перевод повестки)</td>
   <td class="c-dep">стратег (волна 17.08)</td>
-  <td class="c-sprint">владелец по а8: отложить ещё раз — вопрос остаётся в повестке 23.08</td>
+  <td class="c-sprint">повестка 23.08 сведена: 15 вопросов + b8 (режим производства решением совета); кворум влит в «порядок голосования»</td>
   <td class="c-status"><i style="background:#b8860b"></i>в работе</td>
   <td class="c-prio"><select data-item="c1" data-kind="приоритет">
       <option selected>высокий</option><option>средний</option><option>низкий</option>
@@ -298,7 +298,7 @@ a { color:var(--cyan); }
       <span class="tipbox">У каждого решения — статус (сделано/в работе/не начато), строка «что сделано» и коммит. Показывается на странице заседания и первым разделом письма со следующей повесткой: человек должен видеть, что его голос к чему-то привёл.</span></span></td>
   <td class="c-cost">бесплатно</td>
   <td class="c-dep">—</td>
-  <td class="c-sprint">механизм сделан 16.08 (council_done.py)</td>
+  <td class="c-sprint">пилот «человек в петле»: 2 из 6 готовы; найден новый класс брака — опора описана как то, чем не является; отправка авторам без глаз не включается</td>
   <td class="c-status"><i style="background:#3d8f5a"></i>работает</td>
   <td class="c-prio"><select data-item="c2" data-kind="приоритет">
       <option>высокий</option><option selected>средний</option><option>низкий</option>
@@ -333,7 +333,7 @@ a { color:var(--cyan); }
       <span class="tipbox">Фабрика живёт на ноутбуке владельца: машина спит/уезжает — конвейер стоит. Прогоны, попавшие на сон, догоняются при включении (сделано), но письма и закрытия заседаний ждут. VPS снимает зависимость. Решение владельца 31.07: VPS, машина временная. Требование владельца 18.08: диск с запасом под ВСЕ PDF статей (сейчас ~12 ГБ, растёт) — они же корм для обучения. Значит диск от 100 ГБ.</span></span></td>
   <td class="c-cost">~$5–10/мес VPS</td>
   <td class="c-dep">выбор провайдера, перенос ключей</td>
-  <td class="c-sprint">галочка владельца: да, он даст выбор подключения; требования дополнены PDF-хранилищем</td>
+  <td class="c-sprint">подготовка сделана: окружение, порт ночной цепочки на Linux, замер диска; найдено: нормализовать концы строк ДО переезда; ждём аккаунт Hetzner</td>
   <td class="c-status"><i style="background:#8a8a86"></i>запланировано</td>
   <td class="c-prio"><select data-item="i2" data-kind="приоритет">
       <option>высокий</option><option selected>средний</option><option>низкий</option>
@@ -343,10 +343,10 @@ a { color:var(--cyan); }
              placeholder="комментарий / блокер"></td>
 </tr><tr data-item="i3">
   <td class="c-name"><span class="tip" tabindex="0">Сторожа и восстановление
-      <span class="tipbox">page_watch (живая ли лента, 5 языков), verify_publish (целы ли индексы после выкладки), атомарная запись, сторож свежести в Worker (час/сутки), причина сбоя в канал по-русски, бэкап на флешку с описью, репетиция восстановления из R2 — прошла живым прогоном.</span></span></td>
+      <span class="tipbox">page_watch (живая ли лента, 5 языков), verify_publish (целы ли индексы после выкладки), атомарная запись, сторож свежести в Worker (час/сутки), причина сбоя в канал по-русски, бэкап на флешку с описью, репетиция восстановления из R2 — прошла живым прогоном. Решение владельца 18.08: 19 ГБ иллюстраций (44 852 файла в одном экземпляре) в бэкап НЕ дублировать — восстановимы работой из PDF, читатель не страдает (сайт отдаёт webp).</span></span></td>
   <td class="c-cost">бесплатно</td>
   <td class="c-dep">—</td>
-  <td class="c-sprint">оба новых сторожа слиты и проверены на живой аварии 16.08</td>
+  <td class="c-sprint">решение: иллюстрации не дублируем; сторожа работают</td>
   <td class="c-status"><i style="background:#3d8f5a"></i>работает</td>
   <td class="c-prio"><select data-item="i3" data-kind="приоритет">
       <option>высокий</option><option selected>средний</option><option>низкий</option>
@@ -359,7 +359,7 @@ a { color:var(--cyan); }
       <span class="tipbox">Отпечаток статьи (хэш данных) + подпись сборки (хэш шаблонов и генератора). Изменился шаблон — пересобираем всё; изменились данные статьи — только её. Было: часы ежедневно на 42 тыс. страниц. Направление «тело статично, обвязка динамична» — к 10 000 статей.</span></span></td>
   <td class="c-cost">бесплатно</td>
   <td class="c-dep">сквозной прогон (замок был занят)</td>
-  <td class="c-sprint">код готов и закоммичен, инварианты проверены</td>
+  <td class="c-sprint">полный прогон записал отпечатки (86 280 страниц); контрольный прогон идёт</td>
   <td class="c-status"><i style="background:#b8860b"></i>в работе</td>
   <td class="c-prio"><select data-item="i4" data-kind="приоритет">
       <option selected>высокий</option><option>средний</option><option>низкий</option>
@@ -381,7 +381,7 @@ a { color:var(--cyan); }
       <span class="tipbox">Тариф считается по часу каждой записи журнала (пик UTC 01–04 и 06–10). Чужие модели (Qwen-реранкер, bge-m3 у DeepInfra) считаются по их цене — раньше их 19.2 млн токенов считались по прайсу DeepSeek и завышали расход втрое.</span></span></td>
   <td class="c-cost">—</td>
   <td class="c-dep">точные цены DeepInfra (сейчас оценка)</td>
-  <td class="c-sprint">сделано 16–17.08; ночной прогон перенесён из пика (01:00 → 19:00); смета программы: 5000 экспрессов $70 + дотяжка $75 + 500 полных $70 + советы $6 = ~$220 на 2 месяца</td>
+  <td class="c-sprint">цены DeepInfra сверены с прайсом, пометка «предположено» снята</td>
   <td class="c-status"><i style="background:#3d8f5a"></i>работает</td>
   <td class="c-prio"><select data-item="m1" data-kind="приоритет">
       <option>высокий</option><option selected>средний</option><option>низкий</option>
@@ -416,8 +416,8 @@ a { color:var(--cyan); }
       <span class="tipbox">Узкое место — данные, не вычисления. Пары из графа цитирований: цитирующая работа + цитируемая = положительная пара, отрицательные in-batch. Сейчас 2102 пары из наших PDF; нужно ~200 тыс. — сбор через Semantic Scholar API (ключ бесплатный), ~50 тыс. работ опросить, ~1.5 часа при 10 rps. Аннотации обеих сторон уже локально (дамп, 4.2 ГБ).</span></span></td>
   <td class="c-cost">бесплатно</td>
   <td class="c-dep">ключ Semantic Scholar (бесплатный)</td>
-  <td class="c-sprint">сборщик — задача ML на спринт</td>
-  <td class="c-status"><i style="background:#b8860b"></i>в работе</td>
+  <td class="c-sprint">СДЕЛАНО: 210 434 пары (цель 200 тыс.), источники помечены, сбор пережил два обрыва</td>
+  <td class="c-status"><i style="background:#3d8f5a"></i>работает</td>
   <td class="c-prio"><select data-item="f1" data-kind="приоритет">
       <option selected>высокий</option><option>средний</option><option>низкий</option>
       </select></td>
@@ -429,7 +429,7 @@ a { color:var(--cyan); }
       <span class="tipbox">Половина сметы висит на предположении о скорости обучения. Убирается за 10 минут аренды B200 на DeepInfra: 20 шагов на готовых 2102 парах, замер секунд на шаг. После этого смета — число, а не вилка.</span></span></td>
   <td class="c-cost">$0.61 разово</td>
   <td class="c-dep">карта на DeepInfra</td>
-  <td class="c-sprint">галочка владельца: да ($0.61) — после пополнения DeepInfra</td>
+  <td class="c-sprint">скрипт bench_lora готов; ждёт пополнения DeepInfra (галочка есть)</td>
   <td class="c-status"><i style="background:#8a8a86"></i>запланировано</td>
   <td class="c-prio"><select data-item="f2" data-kind="приоритет">
       <option>высокий</option><option selected>средний</option><option>низкий</option>
@@ -442,7 +442,7 @@ a { color:var(--cyan); }
       <span class="tipbox">LoRA r=16 на Q/K/V/O bge-m3 — 0.55% параметров, 3 эпохи, партия 1024 с in-batch негативами. Критерий успеха зафиксирован ДО обучения: медианный ранг связанной работы падает вчетверо (2704 → ≤676 из 918 297). Ключ контрольной выборки вскрывается после замера. Вся программа ~$19.</span></span></td>
   <td class="c-cost">~$19 разово</td>
   <td class="c-dep">f1 (датасет), f2 (замер)</td>
-  <td class="c-sprint">галочка владельца: да (~$19) — владелец пополняет счёт</td>
+  <td class="c-sprint">датасет готов; ждёт пополнения DeepInfra (галочка есть)</td>
   <td class="c-status"><i style="background:#8a8a86"></i>запланировано</td>
   <td class="c-prio"><select data-item="f3" data-kind="приоритет">
       <option selected>высокий</option><option>средний</option><option>низкий</option>
