@@ -13,7 +13,7 @@ from pathlib import Path
 from string import Template
 from concurrent.futures import ThreadPoolExecutor
 
-from common import CONFIG, chat, load_prompt, parse_json_salvage
+from common import CONFIG, chat, load_prompt, parse_json_salvage, keeps_case
 
 CFG = CONFIG.get("laws", {})
 DESCRIBE_BATCH = CFG.get("describe_batch", 12)
@@ -36,9 +36,12 @@ if not LAWS_LIST.exists():
 def lc_first(name):
     """Название закона строчными: имена законов всегда начинаются с родового слова
     (закон/уравнение/теорема/принцип/эффект/теория) — строчим первую букву детерминированно,
-    имена собственные внутри («Хаббла», «Нётер») не трогаем."""
+    имена собственные внутри («Хаббла», «Нётер») не трогаем. Исключение — начальная
+    аббревиатура («ОТО», «КЭД», «CPT-теорема»): её регистр задан не нами, см. keeps_case."""
     name = (name or "").strip()
-    return name[:1].lower() + name[1:] if name else name
+    if not name or keeps_case(name):
+        return name
+    return name[:1].lower() + name[1:]
 
 
 def generate_batch(items, batch_num, total, all_ids, scientists_list):
