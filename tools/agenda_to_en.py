@@ -52,6 +52,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--file", default="data/council/upcoming.json")
     ap.add_argument("--dry", action="store_true")
+    ap.add_argument("--force", action="store_true",
+                    help="перевести даже уже переведённый файл (перезапишет *_ru)")
     args = ap.parse_args()
 
     p = ROOT / args.file
@@ -59,6 +61,16 @@ def main():
     agenda = d.get("agenda") or []
     if not agenda:
         print("повестка пуста")
+        return 1
+
+    # Предохранитель (предложение стратега, волна 18.08): по уже переведённому файлу
+    # инструмент запускать нельзя — он перевёл бы английский «оригинал» ещё раз и
+    # ПЕРЕЗАПИСАЛ русские копии в *_ru английским текстом, потеряв исходник навсегда.
+    # Признак перевода — поле title_ru у любого вопроса.
+    done = [q.get("id") for q in agenda if q.get("title_ru")]
+    if done and not getattr(args, "force", False):
+        print(f"⛔ файл уже переведён (есть *_ru у {len(done)} вопросов: {', '.join(map(str, done[:6]))}).")
+        print("   Повторный прогон уничтожил бы русские оригиналы. Если правда нужно — --force.")
         return 1
 
     # Отдаём модели только тексты, с идентификаторами как якорями.
