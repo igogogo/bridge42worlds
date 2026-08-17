@@ -69,6 +69,12 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--pilot", type=int)
     ap.add_argument("--all", action="store_true")
+    # Перевод поднятого уровня. Аудит 16 августа: дотяжка была сделана только для ru,
+    # «en 2 / es 2 / ar 1 — приоритетная аудитория читает копии». Поднять текст и не
+    # перевести его значит починить уровень на одном языке и оставить обман на четырёх.
+    # Начинаем с арабского — по аудиту и по решению владельца об аудитории.
+    ap.add_argument("--translate", default="", metavar="ar,en",
+                    help="перевести поднятый популярный на эти языки")
     args = ap.parse_args()
 
     from common import chat, clean_json
@@ -104,6 +110,18 @@ def main():
         po["uplifted"] = time.strftime("%Y-%m-%d")
         po.pop("express_locked", None)   # уровень стал настоящим — баннер снимается
         p.write_text(json.dumps(d, ensure_ascii=False, indent=1), encoding="utf-8")
+        # Перевод поднятого — сразу, тем же проходом: отложенный перевод это ещё один
+        # кран, который потом кто-то забудет закрыть.
+        for tl in [x.strip() for x in args.translate.split(",") if x.strip()]:
+            try:
+                from gen_llm import translate_scipop
+                tr = translate_scipop(po, tl)
+                if tr:
+                    d["popular"][tl] = tr
+            except Exception as e:
+                print(f"    ⚠️ перевод {tl}: {type(e).__name__}")
+        if args.translate:
+            p.write_text(json.dumps(d, ensure_ascii=False, indent=1), encoding="utf-8")
         check = json.loads(p.read_text(encoding="utf-8"))
         if check["popular"]["ru"].get("uplifted"):
             ok += 1

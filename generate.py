@@ -1814,17 +1814,58 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
 
 
 # ── Data.json ──
+
+_TAGS_REGISTRY = None
+
+
+def _tags_registry():
+    """Множество зарегистрированных тегов — из data/tags-graph.json, один раз на прогон."""
+    global _TAGS_REGISTRY
+    if _TAGS_REGISTRY is None:
+        try:
+            g = json.loads(Path("data/tags-graph.json").read_text(encoding="utf-8"))
+            _TAGS_REGISTRY = set((g.get("graph") or {}).keys())
+        except Exception:
+            # Реестр не прочитался — валидация невозможна. Пропускаем ВСЁ и говорим об
+            # этом: молча пропустить хуже, но молча выбросить все теги ещё хуже.
+            print("    ⚠️ tags-graph.json не прочитался — валидация тегов пропущена")
+            _TAGS_REGISTRY = None
+            return set()
+    return _TAGS_REGISTRY if _TAGS_REGISTRY is not None else set()
+
+
 def save_data_json(versions_ru, article, date_str, folder, translations=None, captions=None, abstract=None, refined=False):
     """versions_ru: {version: scipop_ru}; translations: {version: {lang: scipop}};
     abstract: {lang: текст} — «Аннотация» из авторского arXiv-abstract (версионно-независимо).
     Пишет по ключу на каждую версию (popular/simple/advanced), плюс мета и подписи к картинкам."""
     translations = translations or {}
     scipop_adv = versions_ru.get("advanced", {})
+    # ── Валидация тегов НА ЗАПИСИ, а не в чистильщике ────────────────────────────
+    # Аудит 16 августа: 5 незарегистрированных тегов за месяц выросли в 505 на 189
+    # статьях, 108 статей ссылались на несуществующие страницы тегов (живые 404).
+    # Чистка вдогонку не работает на корпусе, растущем на тысячи в неделю: пока
+    # чистишь старое, генератор пишет новое. Кран закрывается только здесь — в
+    # единственной точке, где тег впервые попадает в data.json.
+    #
+    # Незнакомый тег НЕ выбрасывается молча: он уходит в tags_unverified — кандидаты
+    # для пополнения словаря (доменные облака, задача №20). Молча выбросить значило бы
+    # потерять сигнал «словарь отстал от корпуса», а это ровно тот сигнал, по которому
+    # словарь и должен расти.
+    _known_tags = _tags_registry()
+    _raw_tags = [t for t in ([scipop_adv.get("main_tag", "")] + scipop_adv.get("extra_tags", [])) if t]
+    if _known_tags:
+        _ok_tags = [t for t in _raw_tags if t in _known_tags]
+        _bad_tags = [t for t in _raw_tags if t not in _known_tags]
+    else:
+        _ok_tags, _bad_tags = _raw_tags, []
+    if _bad_tags:
+        print(f"    🏷️ теги вне реестра (в tags_unverified): {', '.join(_bad_tags[:5])}")
     payload = {
         "id": article["id"], "original_title": article["title"],
         "authors": article.get("authors", []), "date": date_str,
         "license": article.get("license_url", ""), "license_name": article.get("license_name", "CC BY"),
-        "tags": [scipop_adv.get("main_tag", "")] + scipop_adv.get("extra_tags", []),
+        "tags": _ok_tags,
+        **({"tags_unverified": _bad_tags} if _bad_tags else {}),
         "laws": scipop_adv.get("laws", []),
         "main_tag": scipop_adv.get("main_tag", ""),
         "scientists": scipop_adv.get("scientists", []),
@@ -4841,6 +4882,23 @@ def process_day(date_str, force=False, refresh_aggregates=True, express=False, l
         except Exception as e:
             print(f"  ❌ {item['article']['id']}: запись страниц упала ({e}) — LLM-контент уже оплачен, но не записан; пропускаю, остальные статьи не теряем")
             traceback.print_exc()
+
+    # ── Транзакционность заготовок ────────────────────────────────────────────────
+    # Папка статьи создаётся ДО data.json: сначала references/fulltext/картинки, и если
+    # генерация оборвалась между ними, остаётся заготовка — папка без data.json. Аудит
+    # 16 августа: 349 таких вычистили руками, за четыре дня наросло 243 новых, и они
+    # снова глушили run.py check. Чистим В КОНЦЕ КАЖДОГО дня, но только СВОИ: заготовки
+    # этого date_str. Чужие дни не трогаем — там может прямо сейчас работать другой
+    # прогон, и его недописанная папка — не мусор, а работа в полёте.
+    day_dir = Path(LANG_DIR) / DEFAULT_LANG / "archive" / date_str
+    if day_dir.exists():
+        for stub in day_dir.iterdir():
+            if stub.is_dir() and not (stub / "data.json").exists():
+                try:
+                    shutil.rmtree(stub)
+                    print(f"  🧹 заготовка без data.json удалена: {stub.name}")
+                except Exception as _e:
+                    print(f"  ⚠️ заготовка {stub.name} не удалилась: {type(_e).__name__}")
 
     if refresh_aggregates and prepared:
         for lang in LANGUAGES:
