@@ -45,6 +45,19 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent
 DATA = ROOT / "data"
+
+
+def _field_dir():
+    """Где лежит поле вектора. Скрипт писался в копии ML — там поле в data/; у ведущей
+    и остальных ролей оно в соседней копии ../b42-ml/data. Тот же порядок поиска, что
+    в tools/field.py: своя папка → папка ML → переменная окружения B42_FIELD_DIR.
+    Без этого сборка падала у всех, кроме автора, — классическая «работает у меня»."""
+    import os
+    for c in (DATA, ROOT.parent / "b42-ml" / "data",
+              pathlib.Path(os.environ.get("B42_FIELD_DIR", "")) if os.environ.get("B42_FIELD_DIR") else None):
+        if c and (c / "field.ids").exists():
+            return c
+    return DATA
 # lang/** в рабочие копии не выкладывается — индекс статей и готовые карты живут
 # в главной папке, читать и писать их надо там. Поле остаётся локальным: оно большое
 # и в git не идёт.
@@ -144,7 +157,7 @@ def main():
     # Поле открывается как memmap, и строки берутся поштучно. Через vecstore.load
     # с latest=True numpy материализует всю матрицу 1 556 983 × 1024 — три гигабайта
     # в памяти ради четырёх с половиной тысяч строк, и на этом сборка падала.
-    ids, M = vecstore.load(DATA / "field", mmap=True)
+    ids, M = vecstore.load(_field_dir() / "field", mmap=True)
     rowof = {}
     for i, s in enumerate(ids):
         rowof[fb._base_id(s)] = i      # позже встреченное затирает раннее — как latest
