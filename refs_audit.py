@@ -65,14 +65,56 @@ def obvious_pair(a, b):
     return x.rstrip("s") == y.rstrip("s") and x != y
 
 
+def diff_text(prev, cur, holes):
+    """Что изменилось со времени прошлого прогона — человеческим текстом.
+
+    Пустой diff это тоже результат и он печатается словами: «без изменений» значит,
+    что справочники за неделю не поехали, а не что инструмент не отработал.
+    """
+    if not prev:
+        lines = ["📚 Сверка справочников — первый прогон, сравнивать не с чем."]
+    else:
+        lines = ["📚 Сверка справочников за неделю"]
+    for k in ("tag", "law", "sci"):
+        c = (cur.get("kinds") or {}).get(k) or {}
+        o = (prev.get("kinds") or {}).get(k) or {}
+        if not c:
+            continue
+        human = {"tag": "теги", "law": "законы", "sci": "учёные"}[k]
+        dead_now = {x["id"] for x in c.get("dead", [])}
+        dead_was = {x["id"] for x in o.get("dead", [])}
+        dup_now = {(x["a"], x["b"]) for x in c.get("duplicates", [])}
+        dup_was = {(x["a"], x["b"]) for x in o.get("duplicates", [])}
+        bits = []
+        if dead_now - dead_was:
+            bits.append(f"без опоры прибавилось {len(dead_now - dead_was)}")
+        if dead_was - dead_now:
+            bits.append(f"обрели опору {len(dead_was - dead_now)}")
+        if dup_now - dup_was:
+            bits.append(f"новых кандидатов в дубли {len(dup_now - dup_was)}")
+        lines.append(f"· {human}: всего {c.get('total')}, "
+                     + ("; ".join(bits) if bits else "без изменений"))
+    hw = len(prev.get("holes") or [])
+    if hw != len(holes):
+        lines.append(f"· дыр без покрытия: {hw} → {len(holes)}")
+    else:
+        lines.append(f"· дыр без покрытия: {len(holes)}, без изменений")
+    lines.append("Файл: data/refs-audit.json. Это предложение, "
+                 "справочники не изменены.")
+    return "\n".join(lines)
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--out", default=str(MAIN / "data" / "refs-audit.json"))
+    # По умолчанию — в свою копию: результат коммитит тот, кто его получил.
+    ap.add_argument("--out", default=str(ROOT / "data" / "refs-audit.json"))
     ap.add_argument("--holes", type=int, default=80, help="сколько кластеров статей резать")
     ap.add_argument("--cover", type=float, default=0.40,
                     help="доля кластера, ниже которой считаем его непокрытым")
     ap.add_argument("--pairs", type=int, default=25, help="сколько пар печатать")
     ap.add_argument("--lang", default="ru")
+    ap.add_argument("--notify", action="store_true",
+                    help="отправить diff с прошлым прогоном в канал")
     args = ap.parse_args()
 
     import numpy as np
@@ -89,7 +131,10 @@ def main():
     # работы, а не пересказа, иначе популярная и экспресс-версия считались бы дважды.
     art = {}
     for a in idx:
-        aid = str(a.get("id") or "")
+        # Номер в индексе идёт С ВЕРСИЕЙ (2505.00266v1), в поле — без. Долг прошлой
+        # волны: без приведения к одному виду тысяча работ не находила свой вектор,
+        # и все числа этого отчёта были занижены примерно на пятую часть.
+        aid = fb._base_id(str(a.get("id") or ""))
         if not aid:
             continue
         r = art.setdefault(aid, {"tags": set(), "laws": set(), "sci": set()})
@@ -98,16 +143,22 @@ def main():
         r["sci"] |= set(a.get("scientists") or [])
     print(f"статей в индексе {len(idx)} · различных работ {len(art)}")
 
-    ids, M = vecstore.load(DATA / "field", latest=True)
+    # Поле читается как memmap, строки берутся поштучно. С latest=True numpy
+    # материализует всю матрицу 1 556 983 × 1024 — три гигабайта ради пяти тысяч строк,
+    # и прогон падает по памяти. Порядок поиска папки — как в analytics_v2: своя,
+    # затем копия ML, затем переменная окружения.
+    from analytics_v2 import _field_dir
+    ids, M = vecstore.load(_field_dir() / "field", mmap=True)
     rowof = {}
     for i, s in enumerate(ids):
-        rowof[fb._base_id(s)] = i
+        rowof[fb._base_id(s)] = i     # позже встреченное затирает раннее — как latest
     have = {a for a in art if a in rowof}
     print(f"из них с вектором в поле: {len(have)}")
 
     order = sorted(have)
-    rows = np.array([rowof[a] for a in order])
-    X = np.asarray(M[rows], dtype=np.float32)
+    X = np.empty((len(order), M.shape[1]), dtype=np.float32)
+    for i, a in enumerate(order):
+        X[i] = M[rowof[a]]
     X /= np.linalg.norm(X, axis=1, keepdims=True) + 1e-9
     pos = {a: k for k, a in enumerate(order)}
 
@@ -311,8 +362,34 @@ def main():
     print("  на счету шаг отложен — список кандидатов готов и ждёт.")
     result["holes"] = holes
 
+    # СРАВНЕНИЕ С ПРОШЛЫМ ПРОГОНОМ. Волна 14 августа просила diff «добавлено / слито /
+    # удалено / переподвешено»: рост справочников должен быть виден, а не происходить
+    # молча. Сам список из ста строк в канал слать бессмысленно — туда идёт то,
+    # что ИЗМЕНИЛОСЬ с прошлой недели, и только оно.
     p = pathlib.Path(args.out)
+    prev = {}
+    if p.exists():
+        try:
+            prev = json.loads(p.read_text(encoding="utf-8"))
+        except Exception:
+            prev = {}
+    diff = diff_text(prev, result, holes)
     p.write_text(json.dumps(result, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"\n{'=' * 78}")
+    print("ЧТО ИЗМЕНИЛОСЬ С ПРОШЛОГО ПРОГОНА")
+    print(f"{'=' * 78}")
+    print(diff)
+    if args.notify:
+        import subprocess
+        msg = MAIN / "logs" / "refs-diff.txt"
+        msg.parent.mkdir(exist_ok=True)
+        msg.write_text(diff, encoding="utf-8")
+        try:
+            subprocess.run([sys.executable, str(MAIN / "tools" / "status_tg.py"),
+                            "--file", str(msg)], cwd=str(MAIN), timeout=120)
+            print("отчёт ушёл в канал")
+        except Exception as ex:
+            print(f"в канал не ушло: {type(ex).__name__}")
     print(f"\n{'=' * 78}")
     print(f"ИТОГ: предложение, а не правка. Справочники этим проходом не изменены.")
     for k in result["kinds"]:

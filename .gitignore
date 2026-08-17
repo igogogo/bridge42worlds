@@ -75,6 +75,11 @@ data/field.ids
 # закрывать отдельной строкой: правила выше писались под .jsonl-выгрузки и .f16.
 data/tagvec-cache.jsonl
 data/points-cache.jsonl
+# Сбор пар цитирований (s2_harvest.py): промежуточные выгрузки на
+# десятки мегабайт, пересобираются повторным запуском. В citations.json
+# едет только результат слияния.
+data/s2-pairs.jsonl
+data/s2-refs.jsonl
 # Центры карты бурения (drill.py): 2,4 МБ, пересобираются за минуту тем же зерном.
 # Рядом лежит drill-regions.json — его КОММИТИМ: он маленький и по нему сверяются выводы.
 data/drill-centers.npy
