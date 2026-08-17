@@ -13,7 +13,7 @@ from pathlib import Path
 from string import Template
 from concurrent.futures import ThreadPoolExecutor
 
-from common import CONFIG, chat, load_prompt, parse_json_salvage
+from common import CONFIG, chat, load_prompt, parse_json_salvage, keeps_case
 
 CFG = CONFIG.get("tags", {})
 DESCRIBE_BATCH = CFG.get("describe_batch", 20)
@@ -36,11 +36,12 @@ if not ACTIVE_PATH.exists():
 
 
 def lc_name(name):
-    """Тег строчными, кроме имён собственных. Безопасная эвристика: строчим первую букву,
-    только если имя однословное ИЛИ второе слово уже строчное (тогда первое — не имя собственное).
-    «Спектроскопия»→«спектроскопия», но «Джеймс Уэбб» (второе слово с большой) не трогаем."""
+    """Тег строчными, кроме имён собственных и аббревиатур. Безопасная эвристика: строчим
+    первую букву, только если имя однословное ИЛИ второе слово уже строчное (тогда первое — не
+    имя собственное). «Спектроскопия»→«спектроскопия», но «Джеймс Уэбб» (второе слово с большой)
+    не трогаем; «ДНК», «МРТ простаты», «ЯМР-спектроскопия» держит keeps_case."""
     name = (name or "").strip()
-    if not name:
+    if not name or keeps_case(name):
         return name
     words = name.split()
     if len(words) == 1 or (len(words) >= 2 and words[1][:1].islower()):
