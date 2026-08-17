@@ -22,7 +22,8 @@ cd /d "%REPO%"
 set PYTHONIOENCODING=utf-8
 set PYTHONUNBUFFERED=1
 
-python tools\tg_digest.py --n 3 >> "%LOGDIR%\digest_%STAMP%.log" 2>&1
+REM Публичный канал @bridge42worlds создан владельцем 18.08, бот дан админом.
+python tools\tg_digest.py --n 3 --chat @bridge42worlds >> "%LOGDIR%\digest_%STAMP%.log" 2>&1
 set RC=%ERRORLEVEL%
 
 echo [%DATE% %TIME%] digest rc=%RC% >> "%LOGDIR%\digest-history.log"
