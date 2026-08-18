@@ -26,6 +26,10 @@
   .m-lead{max-width:70ch;font-size:15px;line-height:1.72;margin-bottom:8px}
 
   .m-body{display:grid;grid-template-columns:190px minmax(0,1fr);gap:34px;margin-top:26px;align-items:start}
+  /* У элемента грида минимальный размер по умолчанию — min-content, поэтому одна широкая формула
+     KaTeX раздувала колонку и уносила всю страницу за экран (на 375 до 541 px). С min-width:0
+     колонка держит ширину, а формула прокручивается внутри своей рамки, как и задумано. */
+  .m-body>*{min-width:0}
   .m-toc{position:sticky;top:20px;font-size:13px}
   .m-toc-t{font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);
     font-weight:700;margin-bottom:10px}
@@ -62,7 +66,7 @@
   .m-empty{padding:30px;text-align:center;color:var(--muted)}
 
   @media (max-width:900px){
-    .m-body{grid-template-columns:1fr;gap:0}
+    .m-body{grid-template-columns:minmax(0,1fr);gap:0}
     .m-toc{position:static;display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
     .m-toc-t{width:100%}
     .m-toc a{border:1px solid var(--line);border-radius:14px;padding:5px 12px;font-size:12px}
@@ -116,27 +120,33 @@
     catch (e) { node.textContent = latex; }
   }
 
-  // Карточки рождаются из fetch, то есть уже после того, как браузер разобрал адрес и не нашёл
-  // якорь. Поэтому со ссылки вида ?lang=ru#m-taylor читатель попадал наверх страницы и искал
-  // формулу руками. Доводим сами и помечаем карточку — :target тут не спасает, он только красит.
   // Шапку и строку языков sitenav делает липкими уже после загрузки, и высота у них своя на
   // каждом языке и ширине (на арабском 375 это 99 px против 87 на десктопе). Меряем их, а не
-  // подбираем отступ на глаз, иначе карточка приезжает ровно под шапку. Считаем по прямым детям
+  // подбираем отступ на глаз, иначе карточка приезжает ровно ПОД шапку. Считаем по прямым детям
   // body: боковое оглавление тоже липкое, но оно сбоку и в счёт не идёт. Результат кладём в
-  // переменную, которой пользуется scroll-margin-top, — тогда и родной прыжок браузера по
-  // клику в оглавлении встаёт правильно, без нашего вмешательства.
+  // переменную, которой пользуется scroll-margin-top, — тогда и родной прыжок браузера по клику
+  // в оглавлении встаёт правильно, без нашего вмешательства.
   function syncAnchorPad() {
     var pad = 0, kids = document.body.children;
     for (var i = 0; i < kids.length; i++) {
-      var r = kids[i].getBoundingClientRect();
-      if (!r.height || r.top > 120) continue;
-      var p = getComputedStyle(kids[i]).position;
-      if (p === 'fixed' || p === 'sticky') pad = Math.max(pad, r.bottom);
+      var s = getComputedStyle(kids[i]), r = kids[i].getBoundingClientRect();
+      if (!r.height) continue;
+      // У липкого элемента берём не текущий низ, а тот, на котором он застревает: наверху
+      // страницы он ещё стоит в потоке, и мы намеряли бы его обычное место, а не рабочее.
+      if (s.position === 'sticky') {
+        var t = parseFloat(s.top);
+        if (!isNaN(t) && t <= 120) pad = Math.max(pad, t + r.height);
+      } else if (s.position === 'fixed' && r.top <= 120) {
+        pad = Math.max(pad, r.bottom);
+      }
     }
     document.documentElement.style.setProperty('--m-anchor', (pad + 14) + 'px');
   }
   window.addEventListener('resize', syncAnchorPad);
 
+  // Карточки рождаются из fetch, то есть уже после того, как браузер разобрал адрес и якоря не
+  // нашёл. Поэтому со ссылки вида ?lang=ru#m-taylor читатель попадал наверх страницы и искал
+  // формулу руками. Доводим сами и помечаем карточку — :target тут только красит, но не везёт.
   var marked = null;
   function goToHash(smooth) {
     var id = decodeURIComponent((location.hash || '').slice(1));

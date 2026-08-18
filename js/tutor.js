@@ -133,10 +133,23 @@
         s.textContent = text;                 // ровно ключ словаря, без разметки вокруг
         return s;
     }
+    /* Запись числа — всегда своим узлом с dir="ltr".
+       В арабской карточке абзац идёт справа налево, и «·» между цифрами двунаправленный
+       алгоритм считает нейтралью: «5·10³²» ложится на экран как «10³²·5» — читатель видит
+       другое число. Раньше беды не было случайно: печатали «5e+32», а латинская «e» держала
+       запись слева направо сама. Отдельный узел с dir изолирует её (UA-стиль сам даёт
+       unicode-bidi: isolate), а единица измерения остаётся в направлении страницы. */
+    function ltr(text) {
+        var s = document.createElement('span');
+        s.dir = 'ltr';
+        s.textContent = text;
+        return s;
+    }
     /* Примеры записи числа. В <code> словарь не заходит — и правильно: «5·10³²» переводить
-       нечего, а сломать разметку примера легко. */
+       нечего, а сломать разметку примера легко. dir — по той же причине, что и выше. */
     function codeEl(text) {
         var c = document.createElement('code');
+        c.dir = 'ltr';
         c.textContent = text;
         return c;
     }
@@ -166,6 +179,11 @@
         } else {
             out = String(Number(v.toPrecision(6)));
         }
+        // Десятичный разделитель — как в самом уроке: «0,16» на всех языках, кроме английского.
+        // Иначе рядом оказывались две записи одного числа: «Площадь порядка 0,16» в тексте и
+        // «Точное значение: 9.9» в разборе. Разбор ввода понимает обе записи, так что читателю
+        // это ничем не грозит — но выглядело как чужая вставка.
+        if ((global.B42_LANG || 'ru') !== 'en') out = out.replace('.', ',');
         return out.replace(/^-/, '−');        // типографский минус, как в тексте уроков
     }
 
@@ -177,15 +195,16 @@
        это уже просто «очень далеко». */
     function missParts(res, L, unit) {
         if (res.kind === 'abs') {
-            return [lab(L.estOffBy || 'вы промахнулись на'),
-                    ' ' + numText(Number(res.off.toPrecision(2))) + unit];
+            return [lab(L.estOffBy || 'вы промахнулись на'), ' ',
+                    ltr(numText(Number(res.off.toPrecision(2)))), unit];
         }
         if (res.reason === 'sign') return [lab(L.estOffSign || 'у ответа другой знак')];
         if (res.reason === 'zero') return [lab(L.estOffZero || 'ноль здесь не подходит')];
         if (!isFinite(res.off) || res.off >= 1000) {
             return [lab(L.estOffFar || 'вы промахнулись больше чем в тысячу раз')];
         }
-        return [lab(L.estOff || 'вы промахнулись в'), ' ' + Number(res.off.toPrecision(2)) + '×'];
+        return [lab(L.estOff || 'вы промахнулись в'), ' ',
+                ltr(Number(res.off.toPrecision(2)) + '×')];
     }
 
     /* Формулы в разборе набираются так же, как в тексте урока. Страница прогоняет KaTeX один
@@ -548,7 +567,7 @@
                     fill(fb, [
                         ' ', lab(ok ? (L.estRight || 'Порядок верный!') : (L.estWrong || 'Мимо порядка.')),
                         ' ', lab(L.estAnswer || 'Точное значение'), ': ',
-                        el('b', null, numText(q.answer) + unit)
+                        fill(el('b'), [ltr(numText(q.answer)), unit])
                     ]);
                     if (!ok) fill(fb, [' — '].concat(missParts(res, L, unit)));
                     if (q.why) fill(fb, [el('br'), el('span', null, q.why)]);

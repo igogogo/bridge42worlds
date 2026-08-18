@@ -61,7 +61,7 @@
    "Но пусть слева газ горячее. Молекулы, приходящие слева, летят чуть быстрее и несут с собой чуть больше энергии, чем уносят встречные. Счёт частиц по-прежнему сходится, а счёт энергии — нет. Это и есть теплопроводность: перенос энергии без переноса вещества, без всякого течения и без излучения.",
    "Из этой картины мы выведем закон Фурье и получим сам коэффициент теплопроводности газа — через длину свободного пробега, тепловую скорость и теплоёмкость. Потом посмотрим, почему у меди он в пятнадцать тысяч раз больше, чем у воздуха, и почему борьба за тёплый дом идёт сразу с тремя механизмами, а не с одним."
   ],
-  "standNote": "Стенд рисует расплывание метки в неподвижном газе: ползунки задают длину свободного пробега λ, тепловую скорость v и прошедшее время. Смотрите на две вещи. Первая очевидна: ширина пятна растёт не пропорционально времени, а как корень из него — ждать вчетверо дольше значит получить пятно вдвое шире. Вторая — ради неё стенд и стоит в этом параграфе. Внутри себя он считает одну комбинацию: D ≈ v·λ/3. Ровно та же комбинация появится в конце вывода как температуропроводность χ = κ/(ρc): тепло расползается по неподвижному газу тем же случайным блужданием, что и примесь, только блуждает не частица, а её энергия. Поставьте λ = 68 нм и v = 470 м/с — это воздух при комнатной температуре — и получите около 1·10⁻⁵ м²/с; измеренная температуропроводность воздуха 2,2·10⁻⁵. Множитель порядка двух мы потеряли, и ниже честно сказано, где именно.",
+  "standNote": "Стенд рисует расплывание метки в неподвижном газе: ползунки задают длину свободного пробега λ, тепловую скорость v и прошедшее время. Смотрите на две вещи. Первая очевидна: ширина пятна растёт не пропорционально времени, а как корень из него — ждать вчетверо дольше значит получить пятно вдвое шире. Вторая — ради неё стенд и стоит в этом параграфе. Внутри себя он считает одну комбинацию: D ≈ v·λ/3. Ровно та же комбинация появится в конце вывода как температуропроводность χ = κ/(ρc_p): тепло расползается по неподвижному газу тем же случайным блужданием, что и примесь, только блуждает не частица, а её энергия. Поставьте λ = 68 нм и v = 470 м/с — это воздух при комнатной температуре — и получите около 1·10⁻⁵ м²/с; измеренная температуропроводность воздуха 2,2·10⁻⁵. Множитель порядка двух мы потеряли, и ниже честно сказано, где именно.",
   "formula": {
    "name": "Закон Фурье",
    "latex": "q = -\\kappa\\,\\frac{dT}{dx}",
@@ -137,7 +137,14 @@
      "latex": "c",
      "what": "теплоёмкость одного переносчика",
      "unit": "Дж/К",
-     "note": "на сколько растёт его средняя энергия при нагреве на кельвин; для молекулы это (i/2)k_B, где i — число степеней свободы"
+     "note": "на сколько растёт его средняя энергия при нагреве на кельвин; для молекулы это (i/2)k_B, где i — число степеней свободы. Не путать с удельной c_p: та отнесена к килограмму вещества, а не к частице"
+    },
+    {
+     "sym": "c_p",
+     "latex": "c_p",
+     "what": "удельная теплоёмкость вещества",
+     "unit": "Дж/(кг·К)",
+     "note": "теплоёмкость килограмма, а не одного переносчика: у воздуха 1005, у стали 500, у дерева 1700. Через неё считают температуропроводность χ = κ/(ρc_p) и тепловую активность b = √(κρc_p). С теплоёмкостью переносчика она связана через массу: c = m·c_V, а c_p у газа больше c_V на R/M; у твёрдых тел эта разница меньше процента"
     },
     {
      "sym": "R",
@@ -171,7 +178,7 @@
      "figCaption": "На отрезке в две длины пробега кривая T(x) неотличима от касательной — это и позволяет оставить одну производную"
     },
     {
-     "text": "Сколько энергии несёт молекула, зависит от числа её степеней свободы: у одноатомного газа их три, у двухатомного при комнатной температуре пять. Чтобы не пересчитывать их каждый раз, введём теплоёмкость одной молекулы c — по определению это прирост её средней энергии при нагреве на кельвин. Тогда разность энергий встречных потоков выражается сразу через градиент, и минус в ней появляется сам собой, из вычитания.",
+     "text": "Сколько энергии несёт молекула, зависит от числа её степеней свободы: у одноатомного газа их три, у двухатомного при комнатной температуре пять. Чтобы не пересчитывать их каждый раз, введём теплоёмкость одной молекулы c — по определению это прирост её средней энергии при нагреве на кельвин, джоули на кельвин на молекулу, а не на килограмм, как у справочной c_p. Тогда разность энергий встречных потоков выражается сразу через градиент, и минус в ней появляется сам собой, из вычитания.",
      "latex": "\\varepsilon_{\\rightarrow} - \\varepsilon_{\\leftarrow} = c\\,\\bigl[T(x-\\lambda) - T(x+\\lambda)\\bigr] = -\\,2\\,c\\,\\lambda\\,\\frac{dT}{dx}",
      "figure": "condenergy",
      "figCaption": "Теплоёмкость одной молекулы c = (i/2)k_B: три степени свободы у одноатомного газа, пять у двухатомного при комнатной температуре"
@@ -303,7 +310,7 @@
    "items": [
     {
      "h": "Диффузия",
-     "text": "Тот же счёт пересечений, тот же множитель ⅓, та же длина свободного пробега — только через плоскость переносится не энергия, а число частиц. Закон Фика j = −D·dn/dx и закон Фурье q = −κ·dT/dx устроены одинаково не по аналогии, а потому, что выведены из одной картины. Для газа D и χ = κ/(ρc) численно близки: и то и другое есть примерно v̄λ/3."
+     "text": "Тот же счёт пересечений, тот же множитель ⅓, та же длина свободного пробега — только через плоскость переносится не энергия, а число частиц. Закон Фика j = −D·dn/dx и закон Фурье q = −κ·dT/dx устроены одинаково не по аналогии, а потому, что выведены из одной картины. Для газа D и χ = κ/(ρc_p) численно близки: и то и другое есть примерно v̄λ/3."
     },
     {
      "h": "Вязкость",
@@ -328,14 +335,14 @@
      "kind": "опыт на кухне",
      "h": "Две ложки в горячей воде",
      "text": "Опустите в кружку со свежим кипятком стальную ложку и деревянную (годится и пластиковая лопатка) так, чтобы в воде оказались одинаковые куски. Подождите полминуты и потрогайте ручки. Заранее решите не только, какая нагреется, но и на сколько сантиметров вверх по стальной ручке уйдёт заметное тепло за эти тридцать секунд.",
-     "answer": "Стальная ручка станет горячей, деревянная останется комнатной. Но интереснее оценка глубины прогрева, и делается она не через κ. Тепло расползается по стержню тем же корневым законом, что и метка на стенде: глубина ≈ √(χt), где χ = κ/(ρc) — температуропроводность. У нержавеющей стали κ = 15, ρ = 7900, c = 500, значит χ = 3,8·10⁻⁶ м²/с, и за тридцать секунд √(3,8·10⁻⁶ · 30) ≈ 1,1 см; с множителем порядка двойки, который даёт точное решение, — два-три сантиметра, что и чувствуется пальцами. У дерева χ = 0,15/(500·1700) = 1,8·10⁻⁷, в двадцать раз меньше, а глубина — в четыре-пять раз меньше, то есть с тем же множителем четыре-пять миллиметров. Ручку деревянной ложки за полминуты греет не теплопроводность, а пар. Главное в этом опыте вот что: важна не κ сама по себе, а κ, делённая на теплоёмкость единицы объёма. Вещество, которое хорошо проводит, но много запасает, прогревается медленно."
+     "answer": "Стальная ручка станет горячей, деревянная останется комнатной. Но интереснее оценка глубины прогрева, и делается она не через κ. Тепло расползается по стержню тем же корневым законом, что и метка на стенде: глубина ≈ √(χt), где χ = κ/(ρc_p) — температуропроводность. У нержавеющей стали κ = 15, ρ = 7900, c_p = 500, значит χ = 3,8·10⁻⁶ м²/с, и за тридцать секунд √(3,8·10⁻⁶ · 30) ≈ 1,1 см; с множителем порядка двойки, который даёт точное решение, — два-три сантиметра, что и чувствуется пальцами. У дерева χ = 0,15/(500·1700) = 1,8·10⁻⁷, в двадцать раз меньше, а глубина — в четыре-пять раз меньше, то есть с тем же множителем четыре-пять миллиметров. Ручку деревянной ложки за полминуты греет не теплопроводность, а пар. Главное в этом опыте вот что: важна не κ сама по себе, а κ, делённая на теплоёмкость единицы объёма. Вещество, которое хорошо проводит, но много запасает, прогревается медленно."
     },
     {
      "icon": "kitchen",
      "kind": "опыт на кухне",
      "h": "Кафель холоднее ковра при одной температуре",
      "text": "Положите на минуту комнатный термометр на кафельный пол, потом на ковёр или деревянную доску рядом — он покажет практически одно и то же. Теперь встаньте босиком сначала на ковёр, потом на плитку. Разница чувствуется как несколько градусов. Кто врёт — термометр или ноги?",
-     "answer": "Никто. Кожа чувствует не температуру пола, а свою собственную в точке касания — а она устанавливается почти мгновенно где-то между 33 градусами кожи и 20 градусами пола. Где именно, решает не теплопроводность, а тепловая активность b = √(κρc): насколько быстро материал способен вытягивать тепло. Контактная температура оказывается средним двух температур, взвешенным по этим b. У кожи b ≈ 1500 (она близка к воде), у керамической плитки примерно столько же, около 1600, у шерстяного ковра всего около 120. Подставляем: на плитке контакт устанавливается на 26 градусах, на ковре — на 32. Шесть градусов разницы, ровно то, что чувствует нога. Тот же расчёт объясняет, почему металлические перила зимой обжигают, а деревянные нет, и почему рукой можно на секунду взяться за фольгу из духовки, но не за противень: у фольги та же температура и та же κ, но толщины почти нет — запаса тепла не хватает даже на то, чтобы нагреть палец."
+     "answer": "Никто. Кожа чувствует не температуру пола, а свою собственную в точке касания — а она устанавливается почти мгновенно где-то между 33 градусами кожи и 20 градусами пола. Где именно, решает не теплопроводность, а тепловая активность b = √(κρc_p): насколько быстро материал способен вытягивать тепло. Контактная температура оказывается средним двух температур, взвешенным по этим b. У кожи b ≈ 1500 (она близка к воде), у керамической плитки примерно столько же, около 1600, у шерстяного ковра всего около 120. Подставляем: на плитке контакт устанавливается на 26 градусах, на ковре — на 32. Шесть градусов разницы, ровно то, что чувствует нога. Тот же расчёт объясняет, почему металлические перила зимой обжигают, а деревянные нет, и почему рукой можно на секунду взяться за фольгу из духовки, но не за противень: у фольги та же температура и та же κ, но толщины почти нет — запаса тепла не хватает даже на то, чтобы нагреть палец."
     },
     {
      "icon": "paradox",
@@ -411,7 +418,7 @@
     "Термопаста: она хуже металла, но много лучше воздуха, который иначе остался бы в микрозазоре",
     "Стейк и тесто: время прогрева идёт как квадрат толщины, поэтому вдвое толще — вчетверо дольше"
    ],
-   "watchOut": "Три частые ошибки. Первая — путать κ с температуропроводностью χ = κ/(ρc): за то, сколько ватт пройдёт через стену насквозь, отвечает κ, а за то, как быстро прогреется сама стена или ложка, — χ. Вторая — считать, что утеплитель греет сам по себе: он всего лишь держит воздух неподвижным, и сжатый или намокший не работает. Третья — забывать про излучение: при комнатных температурах через воздушный зазор оно переносит больше тепла, чем проводимость, и увеличением зазора это не исправить."
+   "watchOut": "Три частые ошибки. Первая — путать κ с температуропроводностью χ = κ/(ρc_p): за то, сколько ватт пройдёт через стену насквозь, отвечает κ, а за то, как быстро прогреется сама стена или ложка, — χ. Вторая — считать, что утеплитель греет сам по себе: он всего лишь держит воздух неподвижным, и сжатый или намокший не работает. Третья — забывать про излучение: при комнатных температурах через воздушный зазор оно переносит больше тепла, чем проводимость, и увеличением зазора это не исправить."
   },
   "quiz": [
    {
@@ -439,7 +446,7 @@
      "Ковёр нагревается от ноги, а плитка нет"
     ],
     "answer": 0,
-    "why": "Кожа чувствует свою температуру в точке касания, а не температуру пола. Контактная температура — среднее двух температур, взвешенное по тепловой активности b = √(κρc). У кожи b ≈ 1500, у плитки около 1600, у ковра около 120: на плитке контакт устанавливается примерно на 26 °C, на ковре — на 32 °C. Вариант про большую теплоёмкость плитки ошибается тем, что смотрит на полную поглощённую энергию, тогда как ощущение задаётся температурой контакта, которая устанавливается за доли секунды. Вариант, где плитка «на самом деле холоднее», проверяется прямо: положите на плитку и на ковёр один и тот же термометр и подождите — покажет одно и то же.",
+    "why": "Кожа чувствует свою температуру в точке касания, а не температуру пола. Контактная температура — среднее двух температур, взвешенное по тепловой активности b = √(κρc_p). У кожи b ≈ 1500, у плитки около 1600, у ковра около 120: на плитке контакт устанавливается примерно на 26 °C, на ковре — на 32 °C. Вариант про большую теплоёмкость плитки ошибается тем, что смотрит на полную поглощённую энергию, тогда как ощущение задаётся температурой контакта, которая устанавливается за доли секунды. Вариант, где плитка «на самом деле холоднее», проверяется прямо: положите на плитку и на ковёр один и тот же термометр и подождите — покажет одно и то же.",
     "hint": "Ощущение задаёт не температура пола, а температура кожи в точке касания. От чего зависит, куда она сместится — ближе к 33 градусам кожи или к 20 градусам пола?"
    },
    {
@@ -480,7 +487,7 @@
    "But suppose the gas on the left is hotter. Molecules coming from the left fly a bit faster and carry a bit more energy than the counter-moving ones take away. The particle count still balances, but the energy count does not. This is thermal conductivity: energy transfer without transfer of matter, without any flow, and without radiation.",
    "From this picture, we will derive Fourier's law and obtain the thermal conductivity coefficient of a gas itself—through the mean free path, thermal speed, and heat capacity. Then we'll see why for copper it is fifteen thousand times larger than for air, and why the battle for a warm home involves three mechanisms at once, not just one."
   ],
-  "standNote": "The stand visualizes the spreading of a marker in a stationary gas: sliders set the mean free path λ, thermal speed v, and elapsed time. Watch two things. The first is obvious: the width of the spot grows not linearly with time, but as its square root—waiting four times longer means a spot twice as wide. The second—for which the stand is placed in this section—is that inside it calculates a specific combination: D ≈ v·λ/3. Exactly the same combination will appear at the end of the derivation as thermal diffusivity χ = κ/(ρc): heat spreads through a stationary gas by the same random walk as an impurity, except it's not a particle that wanders, but its energy. Set λ = 68 nm and v = 470 m/s—these are for air at room temperature—and you get about 1·10⁻⁵ m²/s; the measured thermal diffusivity of air is 2.2·10⁻⁵. We lost a factor of about two, and below we honestly say where exactly.",
+  "standNote": "The stand visualizes the spreading of a marker in a stationary gas: sliders set the mean free path λ, thermal speed v, and elapsed time. Watch two things. The first is obvious: the width of the spot grows not linearly with time, but as its square root—waiting four times longer means a spot twice as wide. The second—for which the stand is placed in this section—is that inside it calculates a specific combination: D ≈ v·λ/3. Exactly the same combination will appear at the end of the derivation as thermal diffusivity χ = κ/(ρc_p): heat spreads through a stationary gas by the same random walk as an impurity, except it's not a particle that wanders, but its energy. Set λ = 68 nm and v = 470 m/s—these are for air at room temperature—and you get about 1·10⁻⁵ m²/s; the measured thermal diffusivity of air is 2.2·10⁻⁵. We lost a factor of about two, and below we honestly say where exactly.",
   "formula": {
    "name": "Fourier's law",
    "latex": "q = -\\kappa\\,\\frac{dT}{dx}",
@@ -556,7 +563,14 @@
      "latex": "c",
      "what": "heat capacity of one carrier",
      "unit": "J/K",
-     "note": "how much its average energy increases when heated by one kelvin; for a molecule it is (i/2)k_B, where i is the number of degrees of freedom"
+     "note": "how much its average energy increases when heated by one kelvin; for a molecule it is (i/2)k_B, where i is the number of degrees of freedom. Not to be confused with the specific heat c_p: that one is per kilogram of substance, not per particle"
+    },
+    {
+     "sym": "c_p",
+     "latex": "c_p",
+     "what": "specific heat capacity of the substance",
+     "unit": "J/(kg·K)",
+     "note": "the heat capacity of a kilogram, not of a single carrier: 1005 for air, 500 for steel, 1700 for wood. It is what goes into the thermal diffusivity χ = κ/(ρc_p) and the thermal effusivity b = √(κρc_p). It is linked to the carrier heat capacity through mass: c = m·c_V, and for a gas c_p exceeds c_V by R/M; in solids that difference is under one percent"
     },
     {
      "sym": "R",
@@ -590,7 +604,7 @@
      "figCaption": "Over a segment of two mean free paths, the curve T(x) is indistinguishable from its tangent — this allows us to keep only one derivative."
     },
     {
-     "text": "How much energy a molecule carries depends on the number of its degrees of freedom: a monatomic gas has three, a diatomic gas at room temperature has five. To avoid recalculating them each time, we introduce the heat capacity of a single molecule c — by definition, it is the increase in its average energy when heated by one kelvin. Then the difference in energies of counter-propagating fluxes is expressed directly through the gradient, and the minus sign appears by itself from the subtraction.",
+     "text": "How much energy a molecule carries depends on the number of its degrees of freedom: a monatomic gas has three, a diatomic gas at room temperature has five. To avoid recalculating them each time, we introduce the heat capacity of a single molecule c — by definition, it is the increase in its average energy when heated by one kelvin: joules per kelvin per molecule, not per kilogram as in the tabulated c_p. Then the difference in energies of counter-propagating fluxes is expressed directly through the gradient, and the minus sign appears by itself from the subtraction.",
      "latex": "\\varepsilon_{\\rightarrow} - \\varepsilon_{\\leftarrow} = c\\,\\bigl[T(x-\\lambda) - T(x+\\lambda)\\bigr] = -\\,2\\,c\\,\\lambda\\,\\frac{dT}{dx}",
      "figure": "condenergy",
      "figCaption": "Heat capacity of one molecule c = (i/2)k_B: three degrees of freedom for a monatomic gas, five for a diatomic gas at room temperature."
@@ -722,7 +736,7 @@
    "items": [
     {
      "h": "Diffusion",
-     "text": "The same counting of crossings, the same factor ⅓, the same mean free path—only what is transferred through the plane is not energy but number of particles. Fick's law j = −D·dn/dx and Fourier's law q = −κ·dT/dx are structured identically not by analogy but because they are derived from the same picture. For a gas, D and χ = κ/(ρc) are numerically close: both are approximately v̄λ/3."
+     "text": "The same counting of crossings, the same factor ⅓, the same mean free path—only what is transferred through the plane is not energy but number of particles. Fick's law j = −D·dn/dx and Fourier's law q = −κ·dT/dx are structured identically not by analogy but because they are derived from the same picture. For a gas, D and χ = κ/(ρc_p) are numerically close: both are approximately v̄λ/3."
     },
     {
      "h": "Viscosity",
@@ -747,14 +761,14 @@
      "kind": "kitchen experiment",
      "h": "Two spoons in hot water",
      "text": "Dip a steel spoon and a wooden one (a plastic spatula works too) into a mug of freshly boiled water so that equal lengths are submerged. Wait half a minute and touch the handles. Decide in advance not only which one will heat up, but also how many centimeters up the steel handle noticeable heat will travel in those thirty seconds.",
-     "answer": "The steel handle will become hot, the wooden one will stay at room temperature. But the more interesting part is estimating the depth of heating, and it's not done via κ. Heat spreads along the rod by the same square-root law as the marker on the stand: depth ≈ √(χt), where χ = κ/(ρc) is the thermal diffusivity. For stainless steel, κ = 15, ρ = 7900, c = 500, so χ = 3.8·10⁻⁶ m²/s, and in thirty seconds √(3.8·10⁻⁶ · 30) ≈ 1.1 cm; with a factor of about two from the exact solution, that's two to three centimeters, which you can feel with your fingers. For wood, χ = 0.15/(500·1700) = 1.8·10⁻⁷, twenty times smaller, and the depth is four to five times smaller, so with the same factor, four to five millimeters. The handle of the wooden spoon is warmed in half a minute not by conduction but by steam. The main point of this experiment is this: what matters is not κ by itself, but κ divided by the heat capacity per unit volume. A substance that conducts well but stores a lot heats up slowly."
+     "answer": "The steel handle will become hot, the wooden one will stay at room temperature. But the more interesting part is estimating the depth of heating, and it's not done via κ. Heat spreads along the rod by the same square-root law as the marker on the stand: depth ≈ √(χt), where χ = κ/(ρc_p) is the thermal diffusivity. For stainless steel, κ = 15, ρ = 7900, c_p = 500, so χ = 3.8·10⁻⁶ m²/s, and in thirty seconds √(3.8·10⁻⁶ · 30) ≈ 1.1 cm; with a factor of about two from the exact solution, that's two to three centimeters, which you can feel with your fingers. For wood, χ = 0.15/(500·1700) = 1.8·10⁻⁷, twenty times smaller, and the depth is four to five times smaller, so with the same factor, four to five millimeters. The handle of the wooden spoon is warmed in half a minute not by conduction but by steam. The main point of this experiment is this: what matters is not κ by itself, but κ divided by the heat capacity per unit volume. A substance that conducts well but stores a lot heats up slowly."
     },
     {
      "icon": "kitchen",
      "kind": "kitchen experiment",
      "h": "Tile feels colder than carpet at the same temperature",
      "text": "Place a room thermometer on the tile floor for a minute, then on the carpet or a wooden board next to it — it will read almost the same. Now stand barefoot first on the carpet, then on the tile. The difference feels like several degrees. Who is lying — the thermometer or your feet?",
-     "answer": "Neither. The skin senses not the floor's temperature but its own at the point of contact — and it settles almost instantly somewhere between 33 degrees of the skin and 20 degrees of the floor. Where exactly is decided not by thermal conductivity but by thermal activity b = √(κρc): how quickly the material can draw heat away. The contact temperature turns out to be the average of the two temperatures, weighted by these b values. For skin, b ≈ 1500 (it is close to water), for ceramic tile about the same, around 1600, and for wool carpet only about 120. Plugging in: on tile, the contact settles at 26 degrees, on carpet at 32. Six degrees of difference, exactly what the foot feels. The same calculation explains why metal railings burn in winter but wooden ones don't, and why you can briefly grab aluminum foil from the oven with your hand but not the baking sheet: the foil has the same temperature and the same κ, but almost no thickness — its heat reserve isn't enough even to warm your finger."
+     "answer": "Neither. The skin senses not the floor's temperature but its own at the point of contact — and it settles almost instantly somewhere between 33 degrees of the skin and 20 degrees of the floor. Where exactly is decided not by thermal conductivity but by thermal activity b = √(κρc_p): how quickly the material can draw heat away. The contact temperature turns out to be the average of the two temperatures, weighted by these b values. For skin, b ≈ 1500 (it is close to water), for ceramic tile about the same, around 1600, and for wool carpet only about 120. Plugging in: on tile, the contact settles at 26 degrees, on carpet at 32. Six degrees of difference, exactly what the foot feels. The same calculation explains why metal railings burn in winter but wooden ones don't, and why you can briefly grab aluminum foil from the oven with your hand but not the baking sheet: the foil has the same temperature and the same κ, but almost no thickness — its heat reserve isn't enough even to warm your finger."
     },
     {
      "icon": "paradox",
@@ -830,7 +844,7 @@
     "Thermal paste: it is worse than metal, but much better than the air that would otherwise remain in the micro-gap",
     "Steak and dough: heating time goes as the square of thickness, so twice as thick—four times as long"
    ],
-   "watchOut": "Three common mistakes. First—confusing κ with thermal diffusivity χ = κ/(ρc): κ determines how many watts pass through a wall, while χ determines how quickly the wall itself or a spoon warms up. Second—thinking that insulation warms by itself: it only keeps air still, and compressed or wet it does not work. Third—forgetting about radiation: at room temperatures, through an air gap it transfers more heat than conduction, and increasing the gap cannot fix that."
+   "watchOut": "Three common mistakes. First—confusing κ with thermal diffusivity χ = κ/(ρc_p): κ determines how many watts pass through a wall, while χ determines how quickly the wall itself or a spoon warms up. Second—thinking that insulation warms by itself: it only keeps air still, and compressed or wet it does not work. Third—forgetting about radiation: at room temperatures, through an air gap it transfers more heat than conduction, and increasing the gap cannot fix that."
   },
   "quiz": [
    {
@@ -858,7 +872,7 @@
      "The carpet warms up from the foot, but the tile does not"
     ],
     "answer": 0,
-    "why": "The skin senses its own temperature at the point of contact, not the temperature of the floor. The contact temperature is the average of the two temperatures, weighted by the thermal activity b = √(κρc). For skin b ≈ 1500, for tile about 1600, for carpet about 120: on tile the contact settles at about 26 °C, on carpet at about 32 °C. The option about the tile’s larger heat capacity is wrong because it looks at the total absorbed energy, whereas the sensation is set by the contact temperature, which settles within fractions of a second. The option claiming the tile is actually colder can be checked directly: put the same thermometer on the tile and on the carpet and wait — it will show the same thing.",
+    "why": "The skin senses its own temperature at the point of contact, not the temperature of the floor. The contact temperature is the average of the two temperatures, weighted by the thermal activity b = √(κρc_p). For skin b ≈ 1500, for tile about 1600, for carpet about 120: on tile the contact settles at about 26 °C, on carpet at about 32 °C. The option about the tile’s larger heat capacity is wrong because it looks at the total absorbed energy, whereas the sensation is set by the contact temperature, which settles within fractions of a second. The option claiming the tile is actually colder can be checked directly: put the same thermometer on the tile and on the carpet and wait — it will show the same thing.",
     "hint": "The sensation is set not by the floor temperature but by the skin temperature at the point of contact. What does it depend on, where it shifts — closer to the 33 degrees of the skin or to the 20 degrees of the floor?"
    },
    {
@@ -899,7 +913,7 @@
    "Pero supongamos que el gas está más caliente a la izquierda. Las moléculas que vienen de la izquierda vuelan un poco más rápido y llevan consigo un poco más de energía de la que se llevan las que vienen en sentido contrario. El conteo de partículas sigue cuadrando, pero el de energía no. Esto es la conductividad térmica: transferencia de energía sin transferencia de materia, sin flujo y sin radiación.",
    "A partir de esta imagen derivaremos la ley de Fourier y obtendremos el coeficiente de conductividad térmica del gas, en términos de la longitud de camino libre medio, la velocidad térmica y la capacidad calorífica. Luego veremos por qué en el cobre es quince mil veces mayor que en el aire, y por qué la lucha por una casa cálida involucra tres mecanismos a la vez, no uno solo."
   ],
-  "standNote": "El stand muestra la dispersión de una marca en un gas estacionario: los controles deslizantes ajustan la longitud de camino libre medio λ, la velocidad térmica v y el tiempo transcurrido. Observe dos cosas. La primera es obvia: el ancho de la mancha crece no proporcionalmente al tiempo, sino como su raíz cuadrada: esperar cuatro veces más significa obtener una mancha dos veces más ancha. La segunda es la razón por la que este stand está en esta sección. Internamente calcula una combinación: D ≈ v·λ/3. Exactamente la misma combinación aparecerá al final de la derivación como difusividad térmica χ = κ/(ρc): el calor se propaga en un gas estacionario mediante el mismo paseo aleatorio que una impureza, solo que no es una partícula la que deambula, sino su energía. Establezca λ = 68 nm y v = 470 m/s — esto es aire a temperatura ambiente — y obtendrá alrededor de 1·10⁻⁵ m²/s; la difusividad térmica medida del aire es 2,2·10⁻⁵. Hemos perdido un factor del orden de dos, y más abajo se dice honestamente dónde exactamente.",
+  "standNote": "El stand muestra la dispersión de una marca en un gas estacionario: los controles deslizantes ajustan la longitud de camino libre medio λ, la velocidad térmica v y el tiempo transcurrido. Observe dos cosas. La primera es obvia: el ancho de la mancha crece no proporcionalmente al tiempo, sino como su raíz cuadrada: esperar cuatro veces más significa obtener una mancha dos veces más ancha. La segunda es la razón por la que este stand está en esta sección. Internamente calcula una combinación: D ≈ v·λ/3. Exactamente la misma combinación aparecerá al final de la derivación como difusividad térmica χ = κ/(ρc_p): el calor se propaga en un gas estacionario mediante el mismo paseo aleatorio que una impureza, solo que no es una partícula la que deambula, sino su energía. Establezca λ = 68 nm y v = 470 m/s — esto es aire a temperatura ambiente — y obtendrá alrededor de 1·10⁻⁵ m²/s; la difusividad térmica medida del aire es 2,2·10⁻⁵. Hemos perdido un factor del orden de dos, y más abajo se dice honestamente dónde exactamente.",
   "formula": {
    "name": "Ley de Fourier",
    "latex": "q = -\\kappa\\,\\frac{dT}{dx}",
@@ -975,7 +989,14 @@
      "latex": "c",
      "what": "capacidad calorífica de un portador",
      "unit": "J/K",
-     "note": "cuánto aumenta su energía media al calentarse un kelvin; para una molécula es (i/2)k_B, donde i es el número de grados de libertad."
+     "note": "cuánto aumenta su energía media al calentarse un kelvin; para una molécula es (i/2)k_B, donde i es el número de grados de libertad. No confundir con el calor específico c_p: ese se refiere a un kilogramo de sustancia, no a una partícula."
+    },
+    {
+     "sym": "c_p",
+     "latex": "c_p",
+     "what": "capacidad calorífica específica de la sustancia",
+     "unit": "J/(kg·K)",
+     "note": "la capacidad calorífica de un kilogramo, no la de un portador: 1005 para el aire, 500 para el acero, 1700 para la madera. Es la que entra en la difusividad térmica χ = κ/(ρc_p) y en la efusividad térmica b = √(κρc_p). Con la capacidad del portador se relaciona a través de la masa: c = m·c_V, y en un gas c_p supera a c_V en R/M; en los sólidos esa diferencia es menor del uno por ciento."
     },
     {
      "sym": "R",
@@ -1009,7 +1030,7 @@
      "figCaption": "En un segmento de dos caminos libres, la curva T(x) es indistinguible de su tangente; esto es lo que nos permite quedarnos con una sola derivada."
     },
     {
-     "text": "La energía que transporta una molécula depende de sus grados de libertad: un gas monoatómico tiene tres, uno diatómico a temperatura ambiente tiene cinco. Para no contarlos cada vez, introducimos la capacidad calorífica de una molécula, c, que por definición es el aumento de su energía media cuando se calienta un kelvin. Entonces, la diferencia de energías de los flujos opuestos se expresa directamente en términos del gradiente, y el signo menos aparece por sí solo, de la resta.",
+     "text": "La energía que transporta una molécula depende de sus grados de libertad: un gas monoatómico tiene tres, uno diatómico a temperatura ambiente tiene cinco. Para no contarlos cada vez, introducimos la capacidad calorífica de una molécula, c, que por definición es el aumento de su energía media cuando se calienta un kelvin: julios por kelvin y por molécula, no por kilogramo como en la c_p de las tablas. Entonces, la diferencia de energías de los flujos opuestos se expresa directamente en términos del gradiente, y el signo menos aparece por sí solo, de la resta.",
      "latex": "\\varepsilon_{\\rightarrow} - \\varepsilon_{\\leftarrow} = c\\,\\bigl[T(x-\\lambda) - T(x+\\lambda)\\bigr] = -\\,2\\,c\\,\\lambda\\,\\frac{dT}{dx}",
      "figure": "condenergy",
      "figCaption": "Capacidad calorífica de una molécula: c = (i/2)k_B: tres grados de libertad para un gas monoatómico, cinco para uno diatómico a temperatura ambiente."
@@ -1141,7 +1162,7 @@
    "items": [
     {
      "h": "Difusión",
-     "text": "El mismo conteo de cruces, el mismo factor ⅓, la misma longitud de camino libre medio — solo que a través del plano no se transfiere energía, sino número de partículas. La ley de Fick j = −D·dn/dx y la ley de Fourier q = −κ·dT/dx están estructuradas igual no por analogía, sino porque se derivan de la misma imagen. Para un gas, D y χ = κ/(ρc) son numéricamente cercanos: ambos son aproximadamente v̄λ/3."
+     "text": "El mismo conteo de cruces, el mismo factor ⅓, la misma longitud de camino libre medio — solo que a través del plano no se transfiere energía, sino número de partículas. La ley de Fick j = −D·dn/dx y la ley de Fourier q = −κ·dT/dx están estructuradas igual no por analogía, sino porque se derivan de la misma imagen. Para un gas, D y χ = κ/(ρc_p) son numéricamente cercanos: ambos son aproximadamente v̄λ/3."
     },
     {
      "h": "Viscosidad",
@@ -1166,14 +1187,14 @@
      "kind": "experimento de cocina",
      "h": "Dos cucharas en agua caliente",
      "text": "Sumerja en una taza con agua recién hervida una cuchara de acero y una de madera (también sirve una espátula de plástico) de modo que queden sumergidas partes iguales. Espere medio minuto y toque los mangos. Decida de antemano no solo cuál se calentará, sino también cuántos centímetros hacia arriba del mango de acero se extenderá el calor perceptible en esos treinta segundos.",
-     "answer": "El mango de acero se calentará, el de madera permanecerá a temperatura ambiente. Pero lo más interesante es estimar la profundidad de calentamiento, y no se hace mediante κ. El calor se propaga a lo largo de la varilla con la misma ley de raíz cuadrada que la marca en el soporte: profundidad ≈ √(χt), donde χ = κ/(ρc) es la difusividad térmica. Para el acero inoxidable κ = 15, ρ = 7900, c = 500, por lo que χ = 3.8·10⁻⁶ m²/s, y en treinta segundos √(3.8·10⁻⁶ · 30) ≈ 1.1 cm; con un factor del orden de dos, que da la solución exacta, son dos o tres centímetros, lo que se siente con los dedos. Para la madera χ = 0.15/(500·1700) = 1.8·10⁻⁷, veinte veces menor, y la profundidad es de cuatro a cinco veces menor, es decir, con el mismo factor, de cuatro a cinco milímetros. El mango de la cuchara de madera no lo calienta la conducción en medio minuto, sino el vapor. Lo principal en este experimento es esto: lo que importa no es κ por sí misma, sino κ dividida por la capacidad calorífica por unidad de volumen. Una sustancia que conduce bien pero almacena mucho se calienta lentamente."
+     "answer": "El mango de acero se calentará, el de madera permanecerá a temperatura ambiente. Pero lo más interesante es estimar la profundidad de calentamiento, y no se hace mediante κ. El calor se propaga a lo largo de la varilla con la misma ley de raíz cuadrada que la marca en el soporte: profundidad ≈ √(χt), donde χ = κ/(ρc_p) es la difusividad térmica. Para el acero inoxidable κ = 15, ρ = 7900, c_p = 500, por lo que χ = 3.8·10⁻⁶ m²/s, y en treinta segundos √(3.8·10⁻⁶ · 30) ≈ 1.1 cm; con un factor del orden de dos, que da la solución exacta, son dos o tres centímetros, lo que se siente con los dedos. Para la madera χ = 0.15/(500·1700) = 1.8·10⁻⁷, veinte veces menor, y la profundidad es de cuatro a cinco veces menor, es decir, con el mismo factor, de cuatro a cinco milímetros. El mango de la cuchara de madera no lo calienta la conducción en medio minuto, sino el vapor. Lo principal en este experimento es esto: lo que importa no es κ por sí misma, sino κ dividida por la capacidad calorífica por unidad de volumen. Una sustancia que conduce bien pero almacena mucho se calienta lentamente."
     },
     {
      "icon": "kitchen",
      "kind": "experimento de cocina",
      "h": "El azulejo está más frío que la alfombra a la misma temperatura",
      "text": "Coloque durante un minuto un termómetro de ambiente en el suelo de azulejos y luego sobre la alfombra o una tabla de madera cercana: marcará prácticamente lo mismo. Ahora póngase descalzo primero sobre la alfombra y luego sobre el azulejo. La diferencia se siente como varios grados. ¿Quién miente: el termómetro o los pies?",
-     "answer": "Nadie. La piel no siente la temperatura del suelo, sino la suya propia en el punto de contacto, y esta se establece casi instantáneamente en algún punto entre los 33 grados de la piel y los 20 del suelo. Dónde exactamente lo decide no la conductividad térmica, sino la efusividad térmica b = √(κρc): la rapidez con la que el material es capaz de extraer calor. La temperatura de contacto resulta ser el promedio de las dos temperaturas, ponderado por estas b. Para la piel b ≈ 1500 (cercana al agua), para el azulejo de cerámica aproximadamente lo mismo, alrededor de 1600, y para la alfombra de lana solo unos 120. Sustituyendo: sobre el azulejo el contacto se establece a 26 grados, sobre la alfombra a 32. Seis grados de diferencia, exactamente lo que siente el pie. El mismo cálculo explica por qué las barandillas metálicas queman en invierno y las de madera no, y por qué con la mano se puede agarrar un instante papel de aluminio del horno, pero no la bandeja: el papel tiene la misma temperatura y la misma κ, pero casi no tiene espesor: su reserva de calor no alcanza ni para calentar el dedo."
+     "answer": "Nadie. La piel no siente la temperatura del suelo, sino la suya propia en el punto de contacto, y esta se establece casi instantáneamente en algún punto entre los 33 grados de la piel y los 20 del suelo. Dónde exactamente lo decide no la conductividad térmica, sino la efusividad térmica b = √(κρc_p): la rapidez con la que el material es capaz de extraer calor. La temperatura de contacto resulta ser el promedio de las dos temperaturas, ponderado por estas b. Para la piel b ≈ 1500 (cercana al agua), para el azulejo de cerámica aproximadamente lo mismo, alrededor de 1600, y para la alfombra de lana solo unos 120. Sustituyendo: sobre el azulejo el contacto se establece a 26 grados, sobre la alfombra a 32. Seis grados de diferencia, exactamente lo que siente el pie. El mismo cálculo explica por qué las barandillas metálicas queman en invierno y las de madera no, y por qué con la mano se puede agarrar un instante papel de aluminio del horno, pero no la bandeja: el papel tiene la misma temperatura y la misma κ, pero casi no tiene espesor: su reserva de calor no alcanza ni para calentar el dedo."
     },
     {
      "icon": "paradox",
@@ -1249,7 +1270,7 @@
     "Pasta térmica: es peor que el metal, pero mucho mejor que el aire que de otro modo quedaría en la microgrieta.",
     "Filete y masa: el tiempo de calentamiento va con el cuadrado del espesor, por eso el doble de grueso tarda cuatro veces más."
    ],
-   "watchOut": "Tres errores frecuentes. Primero, confundir κ con la difusividad térmica χ = κ/(ρc): por cuántos vatios atraviesan la pared responde κ, y por la rapidez con que se calienta la propia pared o la cuchara, χ. Segundo, pensar que el aislante calienta por sí mismo: solo mantiene el aire inmóvil, y si se comprime o se moja, no funciona. Tercero, olvidar la radiación: a temperaturas ambiente, a través de una capa de aire transporta más calor que la conducción, y no se corrige aumentando el espesor."
+   "watchOut": "Tres errores frecuentes. Primero, confundir κ con la difusividad térmica χ = κ/(ρc_p): por cuántos vatios atraviesan la pared responde κ, y por la rapidez con que se calienta la propia pared o la cuchara, χ. Segundo, pensar que el aislante calienta por sí mismo: solo mantiene el aire inmóvil, y si se comprime o se moja, no funciona. Tercero, olvidar la radiación: a temperaturas ambiente, a través de una capa de aire transporta más calor que la conducción, y no se corrige aumentando el espesor."
   },
   "quiz": [
    {
@@ -1277,7 +1298,7 @@
      "La alfombra se calienta con el pie, pero la baldosa no"
     ],
     "answer": 0,
-    "why": "La piel siente su propia temperatura en el punto de contacto, no la temperatura del piso. La temperatura de contacto es el promedio de las dos temperaturas, ponderado por la actividad térmica b = √(κρc). Para la piel b ≈ 1500, para la baldosa alrededor de 1600, para la alfombra alrededor de 120: en la baldosa el contacto se establece aproximadamente a 26 °C, en la alfombra a 32 °C. La opción sobre la mayor capacidad calorífica de la baldosa se equivoca al mirar la energía total absorbida, mientras que la sensación está dada por la temperatura de contacto, que se establece en fracciones de segundo. La opción de que la baldosa está realmente más fría se verifica directamente: coloque el mismo termómetro sobre la baldosa y sobre la alfombra y espere: marcará lo mismo.",
+    "why": "La piel siente su propia temperatura en el punto de contacto, no la temperatura del piso. La temperatura de contacto es el promedio de las dos temperaturas, ponderado por la actividad térmica b = √(κρc_p). Para la piel b ≈ 1500, para la baldosa alrededor de 1600, para la alfombra alrededor de 120: en la baldosa el contacto se establece aproximadamente a 26 °C, en la alfombra a 32 °C. La opción sobre la mayor capacidad calorífica de la baldosa se equivoca al mirar la energía total absorbida, mientras que la sensación está dada por la temperatura de contacto, que se establece en fracciones de segundo. La opción de que la baldosa está realmente más fría se verifica directamente: coloque el mismo termómetro sobre la baldosa y sobre la alfombra y espere: marcará lo mismo.",
     "hint": "La sensación no la da la temperatura del piso, sino la temperatura de la piel en el punto de contacto. ¿De qué depende hacia dónde se desplaza: más cerca de los 33 grados de la piel o de los 20 grados del piso?"
    },
    {
@@ -1318,7 +1339,7 @@
    "ولكن دع الجانب الأيسر يكون أكثر سخونة. الجزيئات القادمة من اليسار تطير أسرع قليلاً وتحمل معها طاقة أكثر قليلاً مما تحمله الجزيئات القادمة من اليمين. عدد الجسيمات لا يزال متطابقًا، لكن عدد الطاقة ليس كذلك. هذا هو التوصيل الحراري: نقل الطاقة دون نقل المادة، دون أي تدفق ودون إشعاع.",
    "من هذه الصورة سنشتق قانون فورييه ونحصل على معامل التوصيل الحراري للغاز نفسه — من خلال متوسط المسار الحر، والسرعة الحرارية، والسعة الحرارية. ثم سنرى لماذا هو أكبر بخمسة عشر ألف مرة في النحاس منه في الهواء، ولماذا تدور المعركة من أجل منزل دافئ حول ثلاث آليات وليس واحدة."
   ],
-  "standNote": "يعرض التطبيق انتشار علامة في غاز ساكن: تُحدد أشرطة التمرير متوسط المسار الحر λ، والسرعة الحرارية v، والوقت المنقضي. لاحظ شيئين. الأول واضح: عرض البقعة لا ينمو بشكل متناسب مع الزمن، بل كجذره — الانتظار أربع مرات أطول يعني الحصول على بقعة أعرض بمرتين. والثاني — من أجله وُضع التطبيق في هذه الفقرة. داخليًا يحسب تركيبة واحدة: D ≈ v·λ/3. نفس التركيبة ستظهر في نهاية الاشتقاق كمعامل الانتشار الحراري χ = κ/(ρc): تنتشر الحرارة في غاز ساكن بنفس السير العشوائي الذي تنتشر به الشوائب، فقط لا يسير جسيم بل طاقته. اضبط λ = 68 نانومتر و v = 470 م/ث — هذا هو الهواء عند درجة حرارة الغرفة — وستحصل على حوالي 1·10⁻⁵ م²/ث؛ معامل الانتشار الحراري المقاس للهواء هو 2.2·10⁻⁵. لقد فقدنا معاملًا من الرتبة الثانية، وفي الأسفل يُذكر بصدق أين بالضبط.",
+  "standNote": "يعرض التطبيق انتشار علامة في غاز ساكن: تُحدد أشرطة التمرير متوسط المسار الحر λ، والسرعة الحرارية v، والوقت المنقضي. لاحظ شيئين. الأول واضح: عرض البقعة لا ينمو بشكل متناسب مع الزمن، بل كجذره — الانتظار أربع مرات أطول يعني الحصول على بقعة أعرض بمرتين. والثاني — من أجله وُضع التطبيق في هذه الفقرة. داخليًا يحسب تركيبة واحدة: D ≈ v·λ/3. نفس التركيبة ستظهر في نهاية الاشتقاق كمعامل الانتشار الحراري χ = κ/(ρc_p): تنتشر الحرارة في غاز ساكن بنفس السير العشوائي الذي تنتشر به الشوائب، فقط لا يسير جسيم بل طاقته. اضبط λ = 68 نانومتر و v = 470 م/ث — هذا هو الهواء عند درجة حرارة الغرفة — وستحصل على حوالي 1·10⁻⁵ م²/ث؛ معامل الانتشار الحراري المقاس للهواء هو 2.2·10⁻⁵. لقد فقدنا معاملًا من الرتبة الثانية، وفي الأسفل يُذكر بصدق أين بالضبط.",
   "formula": {
    "name": "قانون فورييه",
    "latex": "q = -\\kappa\\,\\frac{dT}{dx}",
@@ -1394,7 +1415,14 @@
      "latex": "c",
      "what": "السعة الحرارية لحامل واحد",
      "unit": "J/K",
-     "note": "مقدار الزيادة في متوسط طاقته عند تسخينه بدرجة كلفن واحدة؛ للجزيء هي (i/2)k_B، حيث i عدد درجات الحرية"
+     "note": "مقدار الزيادة في متوسط طاقته عند تسخينه بدرجة كلفن واحدة؛ للجزيء هي (i/2)k_B، حيث i عدد درجات الحرية. لا تخلط بينها وبين السعة النوعية c_p: تلك منسوبة إلى كيلوغرام من المادة لا إلى جسيم واحد"
+    },
+    {
+     "sym": "c_p",
+     "latex": "c_p",
+     "what": "السعة الحرارية النوعية للمادة",
+     "unit": "J/(kg·K)",
+     "note": "السعة الحرارية لكيلوغرام من المادة، لا لحامل واحد: 1005 للهواء، 500 للفولاذ، 1700 للخشب. وهي التي تدخل في الانتشارية الحرارية χ = κ/(ρc_p) وفي النشاط الحراري b = √(κρc_p). وترتبط بسعة الحامل عبر الكتلة: c = m·c_V، وفي الغاز يزيد c_p عن c_V بمقدار R/M؛ أما في المواد الصلبة فالفرق أقل من واحد بالمئة"
     },
     {
      "sym": "R",
@@ -1428,7 +1456,7 @@
      "figCaption": "على مقطع بطول مسارين حرين، لا يمكن تمييز المنحنى T(x) عن المماس - وهذا يسمح لنا بالاحتفاظ بمشتقة واحدة فقط"
     },
     {
-     "text": "تعتمد كمية الطاقة التي يحملها الجزيء على عدد درجات حريته: للغاز أحادي الذرة ثلاث درجات، وللغاز ثنائي الذرة عند درجة حرارة الغرفة خمس درجات. لتجنب حسابها في كل مرة، نقدم السعة الحرارية لجزيء واحد c - وهي بحكم التعريف الزيادة في متوسط طاقته عند التسخين بمقدار كلفن واحد. ثم يتم التعبير عن فرق الطاقات بين التدفقات المتقابلة مباشرة من خلال التدرج، وتظهر الإشارة السالبة من تلقاء نفسها، من الطرح.",
+     "text": "تعتمد كمية الطاقة التي يحملها الجزيء على عدد درجات حريته: للغاز أحادي الذرة ثلاث درجات، وللغاز ثنائي الذرة عند درجة حرارة الغرفة خمس درجات. لتجنب حسابها في كل مرة، نقدم السعة الحرارية لجزيء واحد c - وهي بحكم التعريف الزيادة في متوسط طاقته عند التسخين بمقدار كلفن واحد: جول لكل كلفن لكل جزيء، لا لكل كيلوغرام كما في c_p الجدولية. ثم يتم التعبير عن فرق الطاقات بين التدفقات المتقابلة مباشرة من خلال التدرج، وتظهر الإشارة السالبة من تلقاء نفسها، من الطرح.",
      "latex": "\\varepsilon_{\\rightarrow} - \\varepsilon_{\\leftarrow} = c\\,\\bigl[T(x-\\lambda) - T(x+\\lambda)\\bigr] = -\\,2\\,c\\,\\lambda\\,\\frac{dT}{dx}",
      "figure": "condenergy",
      "figCaption": "السعة الحرارية لجزيء واحد c = (i/2)k_B: ثلاث درجات حرية للغاز أحادي الذرة، وخمس درجات للغاز ثنائي الذرة عند درجة حرارة الغرفة"
@@ -1560,7 +1588,7 @@
    "items": [
     {
      "h": "الانتشار",
-     "text": "نفس حساب التقاطعات، نفس العامل ⅓، نفس متوسط المسار الحر - فقط عبر المستوى لا يتم نقل الطاقة بل عدد الجسيمات. قانون فيك j = −D·dn/dx وقانون فورييه q = −κ·dT/dx متشابهان ليس بالقياس، ولكن لأنهما مشتقان من نفس الصورة. بالنسبة للغاز، D و χ = κ/(ρc) قريبان عدديًا: كلاهما تقريبًا v̄λ/3."
+     "text": "نفس حساب التقاطعات، نفس العامل ⅓، نفس متوسط المسار الحر - فقط عبر المستوى لا يتم نقل الطاقة بل عدد الجسيمات. قانون فيك j = −D·dn/dx وقانون فورييه q = −κ·dT/dx متشابهان ليس بالقياس، ولكن لأنهما مشتقان من نفس الصورة. بالنسبة للغاز، D و χ = κ/(ρc_p) قريبان عدديًا: كلاهما تقريبًا v̄λ/3."
     },
     {
      "h": "اللزوجة",
@@ -1585,14 +1613,14 @@
      "kind": "تجربة في المطبخ",
      "h": "ملعقتان في ماء ساخن",
      "text": "ضع في كوب به ماء مغلي طازج ملعقة فولاذية وأخرى خشبية (أو ملعقة بلاستيكية) بحيث تكون الأجزاء المغمورة متساوية. انتظر نصف دقيقة ثم المس المقابض. قرر مسبقًا ليس فقط أيها سيسخن، ولكن أيضًا كم سنتيمترًا لأعلى على المقبض الفولاذي ستنتقل الحرارة الملحوظة خلال هذه الثلاثين ثانية.",
-     "answer": "سيصبح المقبض الفولاذي ساخنًا، بينما يبقى الخشبي بدرجة حرارة الغرفة. لكن الأكثر إثارة للاهتمام هو تقدير عمق التسخين، ولا يتم ذلك عبر κ. تنتشر الحرارة على طول القضيب بنفس قانون الجذر التربيعي مثل العلامة على الحامل: العمق ≈ √(χt)، حيث χ = κ/(ρc) هي الانتشارية الحرارية. للفولاذ المقاوم للصدأ κ = 15، ρ = 7900، c = 500، لذا χ = 3.8·10⁻⁶ م²/ث، وخلال ثلاثين ثانية √(3.8·10⁻⁶ · 30) ≈ 1.1 سم؛ مع عامل من رتبة اثنين يعطيه الحل الدقيق — من 2 إلى 3 سنتيمترات، وهو ما تشعر به الأصابع. للخشب χ = 0.15/(500·1700) = 1.8·10⁻⁷، أي أقل بعشرين مرة، والعمق أقل بأربع إلى خمس مرات، أي مع نفس العامل من 4 إلى 5 ملليمترات. مقبض الملعقة الخشبية خلال نصف دقيقة يسخن ليس بسبب التوصيل الحراري، بل بسبب البخار. الشيء الرئيسي في هذه التجربة هو: المهم ليس κ بحد ذاتها، بل κ مقسومة على السعة الحرارية لوحدة الحجم. المادة التي توصل جيدًا ولكنها تخزن الكثير، تسخن ببطء."
+     "answer": "سيصبح المقبض الفولاذي ساخنًا، بينما يبقى الخشبي بدرجة حرارة الغرفة. لكن الأكثر إثارة للاهتمام هو تقدير عمق التسخين، ولا يتم ذلك عبر κ. تنتشر الحرارة على طول القضيب بنفس قانون الجذر التربيعي مثل العلامة على الحامل: العمق ≈ √(χt)، حيث χ = κ/(ρc_p) هي الانتشارية الحرارية. للفولاذ المقاوم للصدأ κ = 15، ρ = 7900، c_p = 500، لذا χ = 3.8·10⁻⁶ م²/ث، وخلال ثلاثين ثانية √(3.8·10⁻⁶ · 30) ≈ 1.1 سم؛ مع عامل من رتبة اثنين يعطيه الحل الدقيق — من 2 إلى 3 سنتيمترات، وهو ما تشعر به الأصابع. للخشب χ = 0.15/(500·1700) = 1.8·10⁻⁷، أي أقل بعشرين مرة، والعمق أقل بأربع إلى خمس مرات، أي مع نفس العامل من 4 إلى 5 ملليمترات. مقبض الملعقة الخشبية خلال نصف دقيقة يسخن ليس بسبب التوصيل الحراري، بل بسبب البخار. الشيء الرئيسي في هذه التجربة هو: المهم ليس κ بحد ذاتها، بل κ مقسومة على السعة الحرارية لوحدة الحجم. المادة التي توصل جيدًا ولكنها تخزن الكثير، تسخن ببطء."
     },
     {
      "icon": "kitchen",
      "kind": "تجربة في المطبخ",
      "h": "البلاط أبرد من السجادة عند نفس درجة الحرارة",
      "text": "ضع مقياس حرارة الغرفة لمدة دقيقة على أرضية بلاطية، ثم على سجادة أو لوح خشبي بجانبها — سيظهر نفس القراءة تقريبًا. الآن قف حافي القدمين أولاً على السجادة، ثم على البلاط. الفرق محسوس بعدة درجات. من يكذب — مقياس الحرارة أم القدمين؟",
-     "answer": "لا أحد. الجلد لا يشعر بدرجة حرارة الأرضية، بل بدرجة حرارته هو عند نقطة التلامس — وهي تُحدد بشكل شبه فوري بين 33 درجة للجلد و20 درجة للأرضية. أين بالضبط، يحدد ليس التوصيل الحراري، بل النشاط الحراري b = √(κρc): مدى سرعة قدرة المادة على سحب الحرارة. درجة حرارة التلامس هي متوسط درجتي الحرارة، مرجحًا بـ b. للجلد b ≈ 1500 (قريب من الماء)، وللبلاط الخزفي تقريبًا نفس القيمة، حوالي 1600، وللسجادة الصوفية حوالي 120 فقط. بالتعويض: على البلاط، يستقر التلامس عند 26 درجة، على السجادة — عند 32. ست درجات فرق، بالضبط ما تشعر به القدم. نفس الحساب يفسر لماذا الدرابزين المعدني يحرق في الشتاء بينما الخشبي لا، ولماذا يمكنك بيدك أن تمسك بورق الألمنيوم من الفرن لثانية، لكن ليس بصينية الخبز: ورق الألمنيوم له نفس درجة الحرارة ونفس κ، لكن سمكه شبه معدوم — لا تكفي كمية الحرارة المخزنة حتى لتسخين إصبعك."
+     "answer": "لا أحد. الجلد لا يشعر بدرجة حرارة الأرضية، بل بدرجة حرارته هو عند نقطة التلامس — وهي تُحدد بشكل شبه فوري بين 33 درجة للجلد و20 درجة للأرضية. أين بالضبط، يحدد ليس التوصيل الحراري، بل النشاط الحراري b = √(κρc_p): مدى سرعة قدرة المادة على سحب الحرارة. درجة حرارة التلامس هي متوسط درجتي الحرارة، مرجحًا بـ b. للجلد b ≈ 1500 (قريب من الماء)، وللبلاط الخزفي تقريبًا نفس القيمة، حوالي 1600، وللسجادة الصوفية حوالي 120 فقط. بالتعويض: على البلاط، يستقر التلامس عند 26 درجة، على السجادة — عند 32. ست درجات فرق، بالضبط ما تشعر به القدم. نفس الحساب يفسر لماذا الدرابزين المعدني يحرق في الشتاء بينما الخشبي لا، ولماذا يمكنك بيدك أن تمسك بورق الألمنيوم من الفرن لثانية، لكن ليس بصينية الخبز: ورق الألمنيوم له نفس درجة الحرارة ونفس κ، لكن سمكه شبه معدوم — لا تكفي كمية الحرارة المخزنة حتى لتسخين إصبعك."
     },
     {
      "icon": "paradox",
@@ -1668,7 +1696,7 @@
     "المعجون الحراري: هو أسوأ من المعدن، لكنه أفضل بكثير من الهواء الذي كان سيبقى في الفجوة الدقيقة",
     "شريحة اللحم والعجين: زمن التسخين يتناسب مع مربع السمك، لذا ضعف السمك يعني أربعة أضعاف الوقت"
    ],
-   "watchOut": "ثلاثة أخطاء شائعة. الأول: الخلط بين κ والانتشارية الحرارية χ = κ/(ρc): عن عدد الواطات التي ستمر عبر الجدار مسؤول κ، وعن سرعة تسخين الجدار نفسه أو الملعقة مسؤول χ. الثاني: الاعتقاد أن العازل يدفئ بذاته: هو فقط يبقي الهواء ساكنًا، والمضغوط أو المبلل لا يعمل. الثالث: نسيان الإشعاع: عند درجات حرارة الغرفة، عبر فجوة هوائية ينقل حرارة أكثر من التوصيل، وزيادة الفجوة لا تصلح ذلك."
+   "watchOut": "ثلاثة أخطاء شائعة. الأول: الخلط بين κ والانتشارية الحرارية χ = κ/(ρc_p): عن عدد الواطات التي ستمر عبر الجدار مسؤول κ، وعن سرعة تسخين الجدار نفسه أو الملعقة مسؤول χ. الثاني: الاعتقاد أن العازل يدفئ بذاته: هو فقط يبقي الهواء ساكنًا، والمضغوط أو المبلل لا يعمل. الثالث: نسيان الإشعاع: عند درجات حرارة الغرفة، عبر فجوة هوائية ينقل حرارة أكثر من التوصيل، وزيادة الفجوة لا تصلح ذلك."
   },
   "quiz": [
    {
@@ -1696,7 +1724,7 @@
      "السجادة تسخن من القدم، بينما البلاطة لا تسخن"
     ],
     "answer": 0,
-    "why": "يشعر الجلد بدرجة حرارته عند نقطة التلامس، وليس بدرجة حرارة الأرضية. درجة حرارة التلامس هي متوسط درجتي الحرارة، مرجحًا بالنشاط الحراري b = √(κρc). للجلد b ≈ 1500، للبلاطة حوالي 1600، للسجادة حوالي 120: على البلاطة، تستقر درجة حرارة التلامس عند حوالي 26 درجة مئوية، وعلى السجادة عند حوالي 32 درجة مئوية. الخيار الذي يتحدث عن سعة البلاطة الحرارية الأكبر يخطئ لأنه ينظر إلى الطاقة الإجمالية الممتصة، بينما الإحساس يتحدد بدرجة حرارة التلامس التي تستقر خلال أجزاء من الثانية. أما الخيار الذي يقول إن البلاطة أبرد فعلاً فيمكن التحقق منه مباشرة: ضع نفس مقياس الحرارة على البلاطة وعلى السجادة وانتظر — سيظهر نفس القراءة.",
+    "why": "يشعر الجلد بدرجة حرارته عند نقطة التلامس، وليس بدرجة حرارة الأرضية. درجة حرارة التلامس هي متوسط درجتي الحرارة، مرجحًا بالنشاط الحراري b = √(κρc_p). للجلد b ≈ 1500، للبلاطة حوالي 1600، للسجادة حوالي 120: على البلاطة، تستقر درجة حرارة التلامس عند حوالي 26 درجة مئوية، وعلى السجادة عند حوالي 32 درجة مئوية. الخيار الذي يتحدث عن سعة البلاطة الحرارية الأكبر يخطئ لأنه ينظر إلى الطاقة الإجمالية الممتصة، بينما الإحساس يتحدد بدرجة حرارة التلامس التي تستقر خلال أجزاء من الثانية. أما الخيار الذي يقول إن البلاطة أبرد فعلاً فيمكن التحقق منه مباشرة: ضع نفس مقياس الحرارة على البلاطة وعلى السجادة وانتظر — سيظهر نفس القراءة.",
     "hint": "الإحساس لا يتحدد بدرجة حرارة الأرضية، بل بدرجة حرارة الجلد عند نقطة التلامس. على ماذا يعتمد إلى أين تميل؟ أقرب إلى 33 درجة للجلد أم إلى 20 درجة للأرضية؟"
    },
    {

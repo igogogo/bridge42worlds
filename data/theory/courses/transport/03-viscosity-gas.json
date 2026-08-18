@@ -65,7 +65,7 @@
   "formula": {
    "name": "Вязкость газа по кинетической теории",
    "latex": "\\eta = \\tfrac{1}{3}\\,\\rho\\,\\bar v\\,\\lambda = \\frac{m\\,\\bar v}{3\\sqrt{2}\\,\\sigma}",
-   "alsoKnown": "Независимость вязкости газа от давления называют законом Максвелла. Вместе с D = ⅓λ⟨v⟩ и κ = ⅓ρc⟨v⟩λ эта формула образует тройку коэффициентов переноса",
+   "alsoKnown": "Независимость вязкости газа от давления называют законом Максвелла. Вместе с D = ⅓λ⟨v⟩ и κ = ⅓ρc_V⟨v⟩λ эта формула образует тройку коэффициентов переноса",
    "authors": [
     {
      "who": "Рудольф Клаузиус",
@@ -148,6 +148,20 @@
      "what": "концентрация молекул",
      "unit": "1/м³",
      "note": "главный герой пятого шага: входит в ρ и в λ с противоположными показателями и потому исчезает из ответа"
+    },
+    {
+     "sym": "c_V",
+     "latex": "c_V",
+     "what": "удельная теплоёмкость при постоянном объёме",
+     "unit": "Дж/(кг·К)",
+     "note": "отнесена к килограмму газа, а не к молекуле: у теплоёмкости одного переносчика c из параграфа о теплопроводности другие единицы, Дж/К, и связаны они через массу молекулы, c = m·c_V"
+    },
+    {
+     "sym": "c_p",
+     "latex": "c_p",
+     "what": "удельная теплоёмкость при постоянном давлении",
+     "unit": "Дж/(кг·К)",
+     "note": "она стоит в числе Прандтля Pr = ηc_p/κ и в температуропроводности a = κ/(ρc_p); у газа больше c_V на R/M, и их отношение c_p/c_V — это показатель адиабаты γ, 1,4 для воздуха"
     },
     {
      "sym": "Pr",
@@ -469,7 +483,7 @@
      "энерг"
     ],
     "needed": 2,
-    "why": "Потому что во всех трёх случаях работает один и тот же механизм: молекула летит от столкновения до столкновения и уносит с собой то, чем обладала в месте последнего столкновения. Меняется только груз — сама молекула-метка даёт диффузию, её тепловая энергия даёт теплопроводность, её импульс вдоль потока даёт вязкость. Поэтому в каждом коэффициенте стоит множитель ⅓λ⟨v⟩ — по сути, «какую площадь охватывает носитель за секунду», — а различаются коэффициенты только тем, сколько груза приходится на кубометр: единица для числа частиц, ρc для энергии, ρ для импульса. Отсюда сразу следует проверяемое предсказание: отношения коэффициентов — числа порядка единицы, и у газов Pr и Sc действительно лежат около 0,7–1.",
+    "why": "Потому что во всех трёх случаях работает один и тот же механизм: молекула летит от столкновения до столкновения и уносит с собой то, чем обладала в месте последнего столкновения. Меняется только груз — сама молекула-метка даёт диффузию, её тепловая энергия даёт теплопроводность, её импульс вдоль потока даёт вязкость. Поэтому в каждом коэффициенте стоит множитель ⅓λ⟨v⟩ — по сути, «какую площадь охватывает носитель за секунду», — а различаются коэффициенты только тем, сколько груза приходится на кубометр: единица для числа частиц, ρc_V для энергии, ρ для импульса. Отсюда сразу следует проверяемое предсказание: отношения коэффициентов — числа порядка единицы, и у газов Pr и Sc действительно лежат около 0,7–1.",
     "hint": "Разберите, что во всех трёх явлениях общее и что различается. Механизм один и тот же — а что именно молекула уносит с собой через границу слоя?"
    },
    {
@@ -496,7 +510,7 @@
   "formula": {
    "name": "Gas viscosity by kinetic theory",
    "latex": "\\eta = \\tfrac{1}{3}\\,\\rho\\,\\bar v\\,\\lambda = \\frac{m\\,\\bar v}{3\\sqrt{2}\\,\\sigma}",
-   "alsoKnown": "The independence of gas viscosity from pressure is called Maxwell's law. Together with D = ⅓λ⟨v⟩ and κ = ⅓ρc⟨v⟩λ, this formula forms the trio of transport coefficients.",
+   "alsoKnown": "The independence of gas viscosity from pressure is called Maxwell's law. Together with D = ⅓λ⟨v⟩ and κ = ⅓ρc_V⟨v⟩λ, this formula forms the trio of transport coefficients.",
    "authors": [
     {
      "who": "Rudolf Clausius",
@@ -579,6 +593,20 @@
      "what": "number density of molecules",
      "unit": "1/m³",
      "note": "the main character of step five: it enters ρ and λ with opposite exponents and therefore cancels out of the answer"
+    },
+    {
+     "sym": "c_V",
+     "latex": "c_V",
+     "what": "specific heat capacity at constant volume",
+     "unit": "J/(kg·K)",
+     "note": "per kilogram of gas, not per molecule: the carrier heat capacity c from the paragraph on thermal conduction has different units, J/K, and the two are linked through the molecular mass, c = m·c_V"
+    },
+    {
+     "sym": "c_p",
+     "latex": "c_p",
+     "what": "specific heat capacity at constant pressure",
+     "unit": "J/(kg·K)",
+     "note": "it is the one in the Prandtl number Pr = ηc_p/κ and in the thermal diffusivity a = κ/(ρc_p); for a gas it exceeds c_V by R/M, and their ratio c_p/c_V is the adiabatic index γ, 1.4 for air"
     },
     {
      "sym": "Pr",
@@ -900,7 +928,7 @@
      "energy"
     ],
     "needed": 2,
-    "why": "Because in all three cases the same mechanism works: a molecule flies from collision to collision and carries with it what it possessed at the place of the last collision. Only the cargo changes — the molecule itself as a tag gives diffusion, its thermal energy gives thermal conductivity, its momentum along the flow gives viscosity. Therefore, each coefficient contains the factor ⅓λ⟨v⟩ — essentially, 'what area the carrier covers per second' — and the coefficients differ only in how much cargo per cubic meter: unity for the number of particles, ρc for energy, ρ for momentum. From this follows a testable prediction: the ratios of the coefficients are numbers of order unity, and for gases Pr and Sc indeed lie around 0.7–1.",
+    "why": "Because in all three cases the same mechanism works: a molecule flies from collision to collision and carries with it what it possessed at the place of the last collision. Only the cargo changes — the molecule itself as a tag gives diffusion, its thermal energy gives thermal conductivity, its momentum along the flow gives viscosity. Therefore, each coefficient contains the factor ⅓λ⟨v⟩ — essentially, 'what area the carrier covers per second' — and the coefficients differ only in how much cargo per cubic meter: unity for the number of particles, ρc_V for energy, ρ for momentum. From this follows a testable prediction: the ratios of the coefficients are numbers of order unity, and for gases Pr and Sc indeed lie around 0.7–1.",
     "hint": "Analyze what is common and what differs in all three phenomena. The mechanism is the same — but what exactly does the molecule carry with it across the layer boundary?"
    },
    {
@@ -919,7 +947,7 @@
   "formula": {
    "name": "Viscosidad del gas según la teoría cinética",
    "latex": "\\eta = \\tfrac{1}{3}\\,\\rho\\,\\bar v\\,\\lambda = \\frac{m\\,\\bar v}{3\\sqrt{2}\\,\\sigma}",
-   "alsoKnown": "La independencia de la viscosidad del gas respecto a la presión se denomina ley de Maxwell. Junto con D = ⅓λ⟨v⟩ y κ = ⅓ρc⟨v⟩λ, esta fórmula forma el trío de coeficientes de transporte.",
+   "alsoKnown": "La independencia de la viscosidad del gas respecto a la presión se denomina ley de Maxwell. Junto con D = ⅓λ⟨v⟩ y κ = ⅓ρc_V⟨v⟩λ, esta fórmula forma el trío de coeficientes de transporte.",
    "authors": [
     {
      "who": "Rudolf Clausius",
@@ -1002,6 +1030,20 @@
      "what": "concentración de moléculas",
      "unit": "1/m³",
      "note": "el protagonista del quinto paso: aparece en ρ y en λ con exponentes opuestos y por eso desaparece de la respuesta."
+    },
+    {
+     "sym": "c_V",
+     "latex": "c_V",
+     "what": "capacidad calorífica específica a volumen constante",
+     "unit": "J/(kg·K)",
+     "note": "referida a un kilogramo de gas, no a una molécula: la capacidad del portador c del párrafo sobre conducción térmica tiene otras unidades, J/K, y ambas se relacionan por la masa molecular, c = m·c_V."
+    },
+    {
+     "sym": "c_p",
+     "latex": "c_p",
+     "what": "capacidad calorífica específica a presión constante",
+     "unit": "J/(kg·K)",
+     "note": "es la que aparece en el número de Prandtl Pr = ηc_p/κ y en la difusividad térmica a = κ/(ρc_p); en un gas supera a c_V en R/M, y su cociente c_p/c_V es el índice adiabático γ, 1,4 para el aire."
     },
     {
      "sym": "Pr",
@@ -1323,7 +1365,7 @@
      "energía"
     ],
     "needed": 2,
-    "why": "Porque en los tres casos funciona el mismo mecanismo: una molécula vuela de colisión en colisión y lleva consigo lo que poseía en el lugar de la última colisión. Solo cambia la carga: la propia molécula marcada da la difusión, su energía térmica da la conductividad térmica, su impulso a lo largo del flujo da la viscosidad. Por eso en cada coeficiente aparece el factor ⅓λ⟨v⟩ — en esencia, 'qué área cubre el portador por segundo' — y los coeficientes se diferencian solo en cuánta carga hay por metro cúbico: unidad para el número de partículas, ρc para la energía, ρ para el impulso. De aquí se sigue una predicción comprobable: las relaciones entre coeficientes son números del orden de la unidad, y en gases Pr y Sc efectivamente están alrededor de 0,7–1.",
+    "why": "Porque en los tres casos funciona el mismo mecanismo: una molécula vuela de colisión en colisión y lleva consigo lo que poseía en el lugar de la última colisión. Solo cambia la carga: la propia molécula marcada da la difusión, su energía térmica da la conductividad térmica, su impulso a lo largo del flujo da la viscosidad. Por eso en cada coeficiente aparece el factor ⅓λ⟨v⟩ — en esencia, 'qué área cubre el portador por segundo' — y los coeficientes se diferencian solo en cuánta carga hay por metro cúbico: unidad para el número de partículas, ρc_V para la energía, ρ para el impulso. De aquí se sigue una predicción comprobable: las relaciones entre coeficientes son números del orden de la unidad, y en gases Pr y Sc efectivamente están alrededor de 0,7–1.",
     "hint": "Analice qué hay de común y qué difiere en los tres fenómenos. El mecanismo es el mismo: ¿qué lleva la molécula a través del límite de la capa?"
    },
    {
@@ -1358,7 +1400,7 @@
   "formula": {
    "name": "لزوجة الغاز حسب النظرية الحركية",
    "latex": "\\eta = \\tfrac{1}{3}\\,\\rho\\,\\bar v\\,\\lambda = \\frac{m\\,\\bar v}{3\\sqrt{2}\\,\\sigma}",
-   "alsoKnown": "استقلال لزوجة الغاز عن الضغط يُعرف بقانون ماكسويل. مع D = ⅓λ⟨v⟩ و κ = ⅓ρc⟨v⟩λ تشكل هذه الصيغة ثلاثية معاملات النقل",
+   "alsoKnown": "استقلال لزوجة الغاز عن الضغط يُعرف بقانون ماكسويل. مع D = ⅓λ⟨v⟩ و κ = ⅓ρc_V⟨v⟩λ تشكل هذه الصيغة ثلاثية معاملات النقل",
    "authors": [
     {
      "who": "رودولف كلوزيوس",
@@ -1441,6 +1483,20 @@
      "what": "تركيز الجزيئات",
      "unit": "1/m³",
      "note": "البطل الرئيسي للخطوة الخامسة: يدخل في ρ و λ بأسس متعاكسة وبالتالي يختفي من الإجابة"
+    },
+    {
+     "sym": "c_V",
+     "latex": "c_V",
+     "what": "السعة الحرارية النوعية عند حجم ثابت",
+     "unit": "J/(kg·K)",
+     "note": "منسوبة إلى كيلوغرام من الغاز لا إلى جزيء واحد: سعة الحامل c في فقرة التوصيل الحراري لها وحدات أخرى، J/K، وترتبط الاثنتان بكتلة الجزيء، c = m·c_V"
+    },
+    {
+     "sym": "c_p",
+     "latex": "c_p",
+     "what": "السعة الحرارية النوعية عند ضغط ثابت",
+     "unit": "J/(kg·K)",
+     "note": "وهي التي تظهر في عدد براندتل Pr = ηc_p/κ وفي الانتشارية الحرارية a = κ/(ρc_p)؛ في الغاز تزيد عن c_V بمقدار R/M، ونسبتهما c_p/c_V هي معامل الأديباتية γ، أي 1.4 للهواء"
     },
     {
      "sym": "Pr",
@@ -1762,7 +1818,7 @@
      "طاقة"
     ],
     "needed": 2,
-    "why": "لأنه في جميع الحالات الثلاث تعمل نفس الآلية: يطير الجزيء من تصادم إلى تصادم ويحمل معه ما كان يملكه في مكان آخر تصادم. يتغير فقط الحمولة — الجزيء المميز نفسه يعطي الانتشار، وطاقته الحرارية تعطي التوصيل الحراري، وزخمه على طول التدفق يعطي اللزوجة. لذلك في كل معامل يوجد العامل ⅓λ⟨v⟩ — في الأساس، 'ما المساحة التي يغطيها الناقل في الثانية' — وتختلف المعاملات فقط في كمية الحمولة لكل متر مكعب: الوحدة لعدد الجزيئات، ρc للطاقة، ρ للزخم. من هنا يتبع مباشرة تنبؤ قابل للاختبار: نسب المعاملات هي أعداد من رتبة الوحدة، وبالفعل بالنسبة للغازات فإن Pr و Sc تقع حوالي 0.7–1.",
+    "why": "لأنه في جميع الحالات الثلاث تعمل نفس الآلية: يطير الجزيء من تصادم إلى تصادم ويحمل معه ما كان يملكه في مكان آخر تصادم. يتغير فقط الحمولة — الجزيء المميز نفسه يعطي الانتشار، وطاقته الحرارية تعطي التوصيل الحراري، وزخمه على طول التدفق يعطي اللزوجة. لذلك في كل معامل يوجد العامل ⅓λ⟨v⟩ — في الأساس، 'ما المساحة التي يغطيها الناقل في الثانية' — وتختلف المعاملات فقط في كمية الحمولة لكل متر مكعب: الوحدة لعدد الجزيئات، ρc_V للطاقة، ρ للزخم. من هنا يتبع مباشرة تنبؤ قابل للاختبار: نسب المعاملات هي أعداد من رتبة الوحدة، وبالفعل بالنسبة للغازات فإن Pr و Sc تقع حوالي 0.7–1.",
     "hint": "حلل ما هو مشترك بين الظواهر الثلاث وما هو مختلف. الآلية واحدة — ولكن ما الذي يحمله الجزيء عبر حدود الطبقة؟"
    },
    {
