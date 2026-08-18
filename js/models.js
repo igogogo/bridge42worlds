@@ -2859,7 +2859,11 @@
                         // — манометры: столбики показывают, где давление больше
                         var base = H - 40;
                         function gauge(x, val, color, label) {
-                            var hgt = Math.max(4, Math.min(90, val * 0.5));
+                            // Высота столбика — доля от давления на входе, а не абсолютные
+                            // полсотни пикселей на килопаскаль: при жёстком масштабе оба
+                            // манометра упирались в потолок и выглядели одинаково, то есть
+                            // ровно та разница, ради которой стенд и сделан, была не видна.
+                            var hgt = Math.max(4, Math.min(96, 90 * val / (st.p1 * 1.05)));
                             KIT.bar(g, x - 16, base, 32, 10, { split: 1, border: col.border });
                             g.fillStyle = color;
                             g.fillRect(x - 8, base - hgt, 16, hgt);
@@ -2869,6 +2873,22 @@
                         }
                         gauge(xA, st.p1, '#155E74', ctx.T('wide'));
                         gauge(xD - 10, d.p2, d.cavitation ? '#9B2C2C' : '#8F6417', ctx.T('narrow'));
+                        // Перепад честно мал: на умолчаниях он 4% от давления на входе, и на
+                        // столбиках это два пикселя. Поэтому саму разницу показываем отдельно —
+                        // пунктиром от уровня входа и подписью, иначе читатель видит два
+                        // одинаковых столбика там, где параграф обещает разницу.
+                        var hA = Math.max(4, Math.min(96, 90 * st.p1 / (st.p1 * 1.05)));
+                        var hB = Math.max(4, Math.min(96, 90 * d.p2 / (st.p1 * 1.05)));
+                        if (hA - hB > 0.7) {
+                            KIT.dashed(g, [3, 4], function () {
+                                g.strokeStyle = '#9B2C2C'; g.lineWidth = 1;
+                                g.beginPath(); g.moveTo(xA + 10, base - hA);
+                                g.lineTo(xD - 26, base - hA); g.stroke();
+                            });
+                            KIT.arrow(g, xD - 10, base - hA, 0, hA - hB, { color: '#9B2C2C', width: 1.6, head: 4 });
+                            KIT.text(g, 'Δp ' + Math.abs(d.dp).toFixed(1) + ' ' + ctx.T('unit_kPa'),
+                                     xD - 34, base - (hA + hB) / 2, { size: 10, color: '#9B2C2C', align: 'right' });
+                        }
 
                         KIT.readout(g, [
                             { text: ctx.T('title'), y: 18, size: 11.5, weight: '600', color: '#155E74' },
@@ -2894,7 +2914,7 @@
                     curve: function (d2, s) {
                         var A1 = Math.PI * Math.pow(s.d1 / 2000, 2), A2 = Math.PI * Math.pow(d2 / 2000, 2);
                         var Q = s.Q / 1000, v1 = Q / A1, v2 = Q / A2;
-                        return Math.max(0, s.p1 - RHO * (v2 * v2 - v1 * v1) / 2 / 1000);
+                        return Math.max(2.34, s.p1 - RHO * (v2 * v2 - v1 * v1) / 2 / 1000);
                     },
                     marker: function (s, a, d) { return { x: s.d2, y: Math.max(0, d.p2) }; }
                 }
