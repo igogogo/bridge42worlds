@@ -1,0 +1,354 @@
+{
+ "id": "realgas",
+ "schema": "b42.course/2",
+ "kind": "course",
+ "order": 11,
+ "entities": {},
+ "lessons": [
+  {
+   "id": "01-vanderwaals",
+   "title": "Ван-дер-Ваальс: газ, который помнит о себе",
+   "sub": "две поправки к идеальному газу и почему выше критической температуры сжижения не бывает",
+   "law": "Уравнение Ван-дер-Ваальса · критическая точка",
+   "model": "realgas"
+  },
+  {
+   "id": "02-surface",
+   "title": "Поверхностное натяжение и капилляры",
+   "sub": "почему поверхность ведёт себя как плёнка и как высоко она поднимает воду",
+   "law": "Формула Лапласа · капиллярный подъём",
+   "model": "realgas"
+  },
+  {
+   "id": "03-heatcap",
+   "title": "Теплоёмкости Cv и Cp: куда уходит тепло",
+   "sub": "соотношение Майера, степени свободы и квант, торчащий из классической теории",
+   "law": "Cp − Cv = R · показатель адиабаты",
+   "model": "realgas"
+  }
+ ],
+ "ru": {
+  "title": "Реальный газ и поверхность",
+  "subtitle": "Ван-дер-Ваальс, натяжение, теплоёмкости",
+  "lead": "Идеальный газ был удобной ложью: молекулы без размера, которые друг друга не замечают. Ложь работала, пока газ разрежён, — а стоит его сжать или охладить, и она рассыпается: газ сжижается, чего идеальный делать не умеет вовсе. Эта тема возвращает молекулам то, что у них отняли: собственный объём и притяжение к соседям. Отсюда вырастают и уравнение реального газа, и плёнка на поверхности воды, и разница двух теплоёмкостей, в которой неожиданно проступает квантовая механика.",
+  "why": {
+   "title": "Зачем это знать",
+   "text": [
+    "Всё, что в быту называется «газом в баллоне» и «жидкостью», живёт как раз там, где идеальный газ уже не работает. Сжиженный воздух, углекислота в огнетушителе, пропан в баллоне, вода в котле электростанции — их состояние считают по уравнению с двумя поправками, и обе поправки имеют прямой молекулярный смысл, а не подгоночный.",
+    "Поверхностное натяжение — вторая половина темы и, пожалуй, самое недооценённое явление курса. Оно поднимает воду в бумажном полотенце и в почве, собирает капли в шарики, держит на воде водомерку, рвёт струю на капли в пульверизаторе и решает, смочит краска поверхность или соберётся в лужицы. Формула Лапласа помещается в строчку, а объясняет всё перечисленное.",
+    "Наконец, две теплоёмкости. Разница между ними — это ровно работа расширения, и она даёт универсальное соотношение, из которого потом выводится скорость звука. А число степеней свободы, которое в эту формулу входит, при комнатной температуре оказывается «неправильным»: часть движений молекулы просто вымерзла. Классическая физика этого объяснить не может — и здесь, в самой бытовой теме курса, впервые становится видно, что без кванта не обойтись."
+   ]
+  },
+  "map": {
+   "title": "Что вы изучите",
+   "lead": "Тема снимает по одному упрощению идеального газа: сначала молекулам возвращают объём и притяжение, потом смотрят, что происходит на границе вещества, и в конце считают, куда уходит подведённое тепло.",
+   "outcome": "Пройдя тему, вы сможете объяснить, почему газ выше критической температуры не сжижается никаким давлением, посчитать давление внутри капли и высоту подъёма в капилляре, вывести соотношение Майера и по показателю адиабаты определить, сколько степеней свободы у молекулы работает при данной температуре."
+  },
+  "prereq": {
+   "title": "Что нужно знать заранее",
+   "items": [
+    "Термодинамика: уравнение состояния идеального газа, первое начало, работа при расширении. Все три поправки этой темы — надстройка над ними, а не замена.",
+    "Статистическая физика: распределение молекул по скоростям и понятие о том, что температура есть мера средней энергии движения. Вымерзание степеней свободы объясняется именно на этом языке.",
+    "Математика: производная и условие перегиба (первая и вторая производные равны нулю) — им находится критическая точка; и простейший интеграл для работы расширения."
+   ],
+   "note": "Уравнение Ван-дер-Ваальса здесь не единственно верное, а первое честное: оно качественно объясняет сжижение и критическую точку, но количественно ошибается — критический коэффициент даёт 0,375 против измеренных 0,23–0,30. Об этом сказано прямо в приложении первого параграфа."
+  },
+  "history": {
+   "title": "Кто её создал",
+   "people": [
+    {
+     "name": "Томас Эндрюс",
+     "years": "1813–1885",
+     "what": "Измерил изотермы углекислоты и обнаружил критическую точку: выше 31 градуса граница между жидкостью и газом исчезает, сколько ни дави. Это был экспериментальный вызов, на который ответил Ван-дер-Ваальс."
+    },
+    {
+     "name": "Йоханнес Дидерик Ван-дер-Ваальс",
+     "years": "1837–1923",
+     "what": "В диссертации 1873 года добавил к уравнению идеального газа две поправки — на собственный объём молекул и на их взаимное притяжение — и получил уравнение, описывающее и газ, и жидкость, и переход между ними. Нобелевская премия 1910 года."
+    },
+    {
+     "name": "Пьер-Симон Лаплас",
+     "years": "1749–1827",
+     "what": "Вывел формулу для скачка давления на искривлённой поверхности: чем меньше радиус, тем сильнее плёнка сжимает то, что внутри. Из неё же выходит высота капиллярного подъёма."
+    },
+    {
+     "name": "Юлиус Роберт Майер",
+     "years": "1814–1878",
+     "what": "Из разницы двух теплоёмкостей воздуха вычислил механический эквивалент теплоты — раньше, чем Джоуль измерил его напрямую. Соотношение Cp − Cv = R носит его имя."
+    },
+    {
+     "name": "Джеймс Дьюар",
+     "years": "1842–1923",
+     "what": "Сжижил водород и придумал сосуд с двойными посеребрёнными стенками, который сегодня стоит на каждой кухне под именем термоса. Практическая сторона критической точки началась с него."
+    }
+   ]
+  },
+  "open": "уравнения состояния плотных жидкостей до сих пор подбирают, а не выводят",
+  "lessons": [
+   {
+    "id": "01-vanderwaals",
+    "title": "Ван-дер-Ваальс: газ, который помнит о себе",
+    "sub": "две поправки к идеальному газу и почему выше критической температуры сжижения не бывает",
+    "law": "Уравнение Ван-дер-Ваальса · критическая точка",
+    "model": "realgas"
+   },
+   {
+    "id": "02-surface",
+    "title": "Поверхностное натяжение и капилляры",
+    "sub": "почему поверхность ведёт себя как плёнка и как высоко она поднимает воду",
+    "law": "Формула Лапласа · капиллярный подъём",
+    "model": "realgas"
+   },
+   {
+    "id": "03-heatcap",
+    "title": "Теплоёмкости Cv и Cp: куда уходит тепло",
+    "sub": "соотношение Майера, степени свободы и квант, торчащий из классической теории",
+    "law": "Cp − Cv = R · показатель адиабаты",
+    "model": "realgas"
+   }
+  ]
+ },
+ "en": {
+  "title": "Real Gas and Surface",
+  "subtitle": "Van der Waals, tension, heat capacities",
+  "lead": "The ideal gas was a convenient lie: molecules without size that do not notice each other. The lie worked while the gas was rarefied—but as soon as you compress or cool it, it falls apart: the gas liquefies, which an ideal gas cannot do at all. This topic gives back to molecules what was taken from them: their own volume and attraction to neighbors. From this grow the real gas equation, the film on the surface of water, and the difference between two heat capacities, in which quantum mechanics unexpectedly emerges.",
+  "why": {
+   "title": "Why know this",
+   "text": [
+    "Everything that in everyday life is called 'gas in a cylinder' and 'liquid' lives exactly where the ideal gas no longer works. Liquefied air, carbon dioxide in a fire extinguisher, propane in a cylinder, water in a power plant boiler—their state is calculated using an equation with two corrections, and both corrections have direct molecular meaning, not fitting parameters.",
+    "Surface tension is the second half of the topic and perhaps the most underestimated phenomenon in the course. It lifts water in a paper towel and in soil, gathers drops into spheres, holds a water strider on the surface, breaks a jet into droplets in a sprayer, and decides whether paint wets a surface or collects into puddles. Laplace's formula fits in one line, yet explains all of the above.",
+    "Finally, the two heat capacities. The difference between them is exactly the work of expansion, and it gives a universal relation from which the speed of sound is later derived. And the number of degrees of freedom that enters this formula turns out to be 'wrong' at room temperature: some molecular motions are simply frozen out. Classical physics cannot explain this—and here, in the most everyday topic of the course, it becomes visible for the first time that one cannot do without the quantum."
+   ]
+  },
+  "map": {
+   "title": "What you will study",
+   "lead": "The topic removes one simplification of the ideal gas at a time: first, molecules get back their volume and attraction; then we look at what happens at the boundary of a substance; and finally, we calculate where the supplied heat goes.",
+   "outcome": "After completing the topic, you will be able to explain why a gas above the critical temperature cannot be liquefied by any pressure, calculate the pressure inside a droplet and the height of capillary rise, derive Mayer's relation, and determine from the adiabatic index how many degrees of freedom of a molecule are active at a given temperature."
+  },
+  "prereq": {
+   "title": "What you need to know beforehand",
+   "items": [
+    "Thermodynamics: ideal gas equation of state, first law, work during expansion. All three corrections in this topic are an extension of these, not a replacement.",
+    "Statistical physics: distribution of molecules by velocities and the concept that temperature is a measure of average energy of motion. The freezing out of degrees of freedom is explained in this language.",
+    "Mathematics: derivative and inflection condition (first and second derivatives equal to zero) — used to find the critical point; and the simplest integral for expansion work."
+   ],
+   "note": "The Van der Waals equation here is not the only correct one, but the first honest one: it qualitatively explains liquefaction and the critical point, but quantitatively it is wrong—the critical coefficient gives 0.375 against measured 0.23–0.30. This is stated directly in the appendix to the first section."
+  },
+  "history": {
+   "title": "Who created it",
+   "people": [
+    {
+     "name": "Thomas Andrews",
+     "years": "1813–1885",
+     "what": "Measured the isotherms of carbon dioxide and discovered the critical point: above 31 degrees, the boundary between liquid and gas disappears, no matter how much pressure is applied. This was an experimental challenge to which Van der Waals responded."
+    },
+    {
+     "name": "Johannes Diderik van der Waals",
+     "years": "1837–1923",
+     "what": "In his 1873 dissertation, he added two corrections to the ideal gas equation—for the molecules' own volume and their mutual attraction—and obtained an equation that describes both gas and liquid, and the transition between them. Nobel Prize in 1910."
+    },
+    {
+     "name": "Pierre-Simon Laplace",
+     "years": "1749–1827",
+     "what": "Derived the formula for the pressure jump on a curved surface: the smaller the radius, the stronger the film compresses what is inside. From it also comes the height of capillary rise."
+    },
+    {
+     "name": "Julius Robert Mayer",
+     "years": "1814–1878",
+     "what": "From the difference between the two heat capacities of air, he calculated the mechanical equivalent of heat—earlier than Joule measured it directly. The relation Cp − Cv = R bears his name."
+    },
+    {
+     "name": "James Dewar",
+     "years": "1842–1923",
+     "what": "Liquefied hydrogen and invented the vessel with double silvered walls that today stands in every kitchen under the name of thermos. The practical side of the critical point began with him."
+    }
+   ]
+  },
+  "open": "equations of state for dense liquids are still selected, not derived",
+  "lessons": [
+   {
+    "id": "01-vanderwaals",
+    "title": "Van der Waals: a gas that remembers itself",
+    "sub": "two corrections to the ideal gas and why above the critical temperature liquefaction does not occur",
+    "law": "Van der Waals equation · critical point",
+    "model": "realgas"
+   },
+   {
+    "id": "02-surface",
+    "title": "Surface tension and capillaries",
+    "sub": "why the surface behaves like a film and how high it lifts water",
+    "law": "Laplace's formula · capillary rise",
+    "model": "realgas"
+   },
+   {
+    "id": "03-heatcap",
+    "title": "Heat capacities Cv and Cp: where the heat goes",
+    "sub": "Mayer's relation, degrees of freedom, and the quantum sticking out of classical theory",
+    "law": "Cp − Cv = R · adiabatic index",
+    "model": "realgas"
+   }
+  ]
+ },
+ "es": {
+  "title": "Gas real y superficie",
+  "subtitle": "Van der Waals, tensión, capacidades caloríficas",
+  "lead": "El gas ideal fue una mentira conveniente: moléculas sin tamaño que no se notan entre sí. La mentira funcionó mientras el gas estaba enrarecido, pero en cuanto se comprime o se enfría, se desmorona: el gas se licúa, algo que el ideal no sabe hacer en absoluto. Este tema devuelve a las moléculas lo que se les quitó: su propio volumen y la atracción hacia sus vecinas. De aquí surgen la ecuación del gas real, la película en la superficie del agua y la diferencia entre dos capacidades caloríficas, en la que inesperadamente aparece la mecánica cuántica.",
+  "why": {
+   "title": "Por qué saber esto",
+   "text": [
+    "Todo lo que en la vida cotidiana se llama \"gas en bombona\" y \"líquido\" vive precisamente donde el gas ideal ya no funciona. Aire licuado, dióxido de carbono en extintores, propano en bombonas, agua en la caldera de una central eléctrica: su estado se calcula con una ecuación con dos correcciones, y ambas correcciones tienen un significado molecular directo, no de ajuste.",
+    "La tensión superficial es la segunda mitad del tema y, quizás, el fenómeno más subestimado del curso. Eleva el agua en una toalla de papel y en el suelo, forma gotas esféricas, sostiene al zapatero sobre el agua, rompe el chorro en gotas en un pulverizador y decide si la pintura moja la superficie o se acumula en charcos. La fórmula de Laplace cabe en una línea y explica todo lo mencionado.",
+    "Finalmente, las dos capacidades caloríficas. La diferencia entre ellas es exactamente el trabajo de expansión, y da una relación universal de la que luego se deduce la velocidad del sonido. Y el número de grados de libertad que entra en esta fórmula resulta \"incorrecto\" a temperatura ambiente: parte de los movimientos de la molécula simplemente se ha congelado. La física clásica no puede explicar esto, y aquí, en el tema más cotidiano del curso, se hace visible por primera vez que sin el cuanto no se puede."
+   ]
+  },
+  "map": {
+   "title": "Qué aprenderá",
+   "lead": "El tema elimina una simplificación del gas ideal a la vez: primero se devuelve a las moléculas el volumen y la atracción, luego se observa qué ocurre en el límite de la sustancia y, al final, se calcula a dónde va el calor suministrado.",
+   "outcome": "Al completar el tema, podrá explicar por qué un gas por encima de la temperatura crítica no se licúa con ninguna presión, calcular la presión dentro de una gota y la altura de ascenso en un capilar, deducir la relación de Mayer y, a partir del índice adiabático, determinar cuántos grados de libertad de una molécula están activos a una temperatura dada."
+  },
+  "prereq": {
+   "title": "Qué necesita saber de antemano",
+   "items": [
+    "Termodinámica: ecuación de estado del gas ideal, primer principio, trabajo en la expansión. Las tres correcciones de este tema son una superestructura sobre ellas, no un reemplazo.",
+    "Física estadística: distribución de velocidades moleculares y la idea de que la temperatura es una medida de la energía media del movimiento. La congelación de los grados de libertad se explica precisamente en este lenguaje.",
+    "Matemáticas: derivada y condición de punto de inflexión (primera y segunda derivadas iguales a cero) — con ella se encuentra el punto crítico; y la integral más simple para el trabajo de expansión."
+   ],
+   "note": "La ecuación de Van der Waals aquí no es la única verdadera, sino la primera honesta: explica cualitativamente la licuefacción y el punto crítico, pero cuantitativamente se equivoca — el coeficiente crítico da 0,375 frente a los 0,23–0,30 medidos. Esto se dice directamente en el apéndice del primer párrafo."
+  },
+  "history": {
+   "title": "Quién la creó",
+   "people": [
+    {
+     "name": "Thomas Andrews",
+     "years": "1813–1885",
+     "what": "Midió las isotermas del dióxido de carbono y descubrió el punto crítico: por encima de 31 grados, la frontera entre líquido y gas desaparece, por mucho que se presione. Fue un desafío experimental al que respondió Van der Waals."
+    },
+    {
+     "name": "Johannes Diderik van der Waals",
+     "years": "1837–1923",
+     "what": "En su tesis de 1873 añadió dos correcciones a la ecuación del gas ideal — por el volumen propio de las moléculas y por su atracción mutua — y obtuvo una ecuación que describe tanto el gas como el líquido y la transición entre ellos. Premio Nobel de 1910."
+    },
+    {
+     "name": "Pierre-Simon Laplace",
+     "years": "1749–1827",
+     "what": "Dedujo la fórmula para el salto de presión en una superficie curva: cuanto menor es el radio, más comprime la película lo que hay dentro. De ella también se obtiene la altura del ascenso capilar."
+    },
+    {
+     "name": "Julius Robert Mayer",
+     "years": "1814–1878",
+     "what": "A partir de la diferencia de las dos capacidades caloríficas del aire calculó el equivalente mecánico del calor — antes de que Joule lo midiera directamente. La relación Cp − Cv = R lleva su nombre."
+    },
+    {
+     "name": "James Dewar",
+     "years": "1842–1923",
+     "what": "Licuó hidrógeno e inventó el recipiente de doble pared plateada que hoy está en cada cocina con el nombre de termo. El lado práctico del punto crítico comenzó con él."
+    }
+   ]
+  },
+  "open": "las ecuaciones de estado de los líquidos densos todavía se ajustan, no se deducen",
+  "lessons": [
+   {
+    "id": "01-vanderwaals",
+    "title": "Van der Waals: el gas que se recuerda a sí mismo",
+    "sub": "dos correcciones al gas ideal y por qué por encima de la temperatura crítica no hay licuefacción",
+    "law": "Ecuación de Van der Waals · punto crítico",
+    "model": "realgas"
+   },
+   {
+    "id": "02-surface",
+    "title": "Tensión superficial y capilares",
+    "sub": "por qué la superficie se comporta como una película y hasta qué altura eleva el agua",
+    "law": "Fórmula de Laplace · ascenso capilar",
+    "model": "realgas"
+   },
+   {
+    "id": "03-heatcap",
+    "title": "Capacidades caloríficas Cv y Cp: a dónde va el calor",
+    "sub": "relación de Mayer, grados de libertad y el cuanto que asoma en la teoría clásica",
+    "law": "Cp − Cv = R · índice adiabático",
+    "model": "realgas"
+   }
+  ]
+ },
+ "ar": {
+  "title": "الغاز الحقيقي والسطح",
+  "subtitle": "فان دير فالس، التوتر السطحي، السعات الحرارية",
+  "lead": "كان الغاز المثالي كذبة مريحة: جزيئات بلا حجم لا تلاحظ بعضها البعض. نجحت الكذبة طالما كان الغاز مخلخلًا، ولكن بمجرد ضغطه أو تبريده تنهار: يتكثف الغاز، وهو ما لا يفعله الغاز المثالي إطلاقًا. هذا الموضوع يعيد للجزيئات ما سُلِب منها: حجمها الخاص وتجاذبها مع الجيران. ومن هنا تنشأ معادلة الغاز الحقيقي، والغشاء على سطح الماء، والفرق بين السعتين الحراريتين الذي تظهر فيه ميكانيكا الكم بشكل غير متوقع.",
+  "why": {
+   "title": "لماذا يجب معرفة هذا",
+   "text": [
+    "كل ما يُسمى في الحياة اليومية «غازًا في أسطوانة» و«سائلًا» يعيش بالضبط حيث لا يعمل الغاز المثالي. الهواء المسال، وثاني أكسيد الكربون في طفاية الحريق، والبروبان في الأسطوانة، والماء في غلاية محطة الطاقة - تُحسب حالتها بمعادلة ذات تصحيحين، وكلاهما له معنى جزيئي مباشر، وليس مجرد معاملات تكييف.",
+    "التوتر السطحي هو النصف الثاني من الموضوع، وربما أكثر الظواهر استخفافًا في الدورة. إنه يرفع الماء في المنشفة الورقية وفي التربة، ويجمع القطرات في كرات، ويبقي قياس الماء على السطح، ويمزق النفاث إلى قطرات في البخاخة، ويحدد ما إذا كان الطلاء سيبلل السطح أم سيتجمع في برك. صيغة لابلاس تتسع في سطر واحد، وتفسر كل ما سبق.",
+    "أخيرًا، السعتان الحراريتان. الفرق بينهما هو بالضبط عمل التمدد، وهو يعطي علاقة عامة يُشتق منها لاحقًا سرعة الصوت. وعدد درجات الحرية الذي يدخل في هذه الصيغة يتبين أنه «خاطئ» عند درجة حرارة الغرفة: جزء من حركات الجزيء متجمد ببساطة. الفيزياء الكلاسيكية لا تستطيع تفسير ذلك - وهنا، في أكثر موضوع يومي في الدورة، يصبح واضحًا لأول مرة أنه لا يمكن الاستغناء عن الكم."
+   ]
+  },
+  "map": {
+   "title": "ماذا ستتعلم",
+   "lead": "يزيل الموضوع تبسيطًا واحدًا من تبسيطات الغاز المثالي في كل مرة: أولاً يُعاد للجزيئات الحجم والتجاذب، ثم ننظر إلى ما يحدث عند حدود المادة، وأخيرًا نحسب أين تذهب الحرارة المضافة.",
+   "outcome": "بعد إتمام الموضوع، ستكون قادرًا على تفسير لماذا لا يتكثف الغاز فوق درجة الحرارة الحرجة مهما كان الضغط، وحساب الضغط داخل قطرة وارتفاع الارتفاع الشعري، واشتقاق علاقة ماير، وتحديد عدد درجات الحرية النشطة لجزيء عند درجة حرارة معينة من خلال معامل أدياباتي."
+  },
+  "prereq": {
+   "title": "ما يجب معرفته مسبقًا",
+   "items": [
+    "الديناميكا الحرارية: معادلة حالة الغاز المثالي، القانون الأول، العمل أثناء التمدد. جميع تصحيحات هذا الموضوع الثلاثة هي بنية فوقية فوقها، وليست بديلاً عنها.",
+    "الفيزياء الإحصائية: توزيع الجزيئات حسب السرعات وفكرة أن درجة الحرارة هي مقياس لمتوسط طاقة الحركة. يتم تفسير تجمد درجات الحرية بهذه اللغة.",
+    "الرياضيات: المشتقة وشرط الانقلاب (المشتقة الأولى والثانية تساويان الصفر) - لإيجاد النقطة الحرجة؛ والتكامل البسيط لعمل التمدد."
+   ],
+   "note": "معادلة فان دير فالس هنا ليست الوحيدة الصحيحة، بل هي أول معادلة صادقة: إنها تفسر التكثف والنقطة الحرجة نوعيًا، لكنها تخطئ كميًا - معامل الحرجة يعطي 0.375 مقابل 0.23-0.30 المقاسة. هذا مذكور صراحة في ملحق الفقرة الأولى."
+  },
+  "history": {
+   "title": "من صنعها",
+   "people": [
+    {
+     "name": "توماس أندروز",
+     "years": "1813–1885",
+     "what": "قاس متساوي الحرارة لثاني أكسيد الكربون واكتشف النقطة الحرجة: فوق 31 درجة تختفي الحدود بين السائل والغاز مهما ضغطت. كان هذا تحديًا تجريبيًا أجاب عليه فان دير فالس."
+    },
+    {
+     "name": "يوهانس ديديريك فان دير فالس",
+     "years": "1837–1923",
+     "what": "في أطروحته عام 1873 أضاف تصحيحين إلى معادلة الغاز المثالي - لحجم الجزيئات الخاص وتجاذبها المتبادل - وحصل على معادلة تصف الغاز والسائل والانتقال بينهما. جائزة نوبل عام 1910."
+    },
+    {
+     "name": "بيير سيمون لابلاس",
+     "years": "1749–1827",
+     "what": "اشتق صيغة لقفزة الضغط على سطح منحنٍ: كلما كان نصف القطر أصغر، زاد ضغط الغشاء على ما بداخله. ومنها أيضًا يخرج ارتفاع الارتفاع الشعري."
+    },
+    {
+     "name": "يوليوس روبرت ماير",
+     "years": "1814–1878",
+     "what": "من الفرق بين السعتين الحراريتين للهواء حسب المكافئ الميكانيكي للحرارة - قبل أن يقيسه جول مباشرة. العلاقة Cp − Cv = R تحمل اسمه."
+    },
+    {
+     "name": "جيمس ديوار",
+     "years": "1842–1923",
+     "what": "أسال الهيدروجين واخترع وعاءً بجدران مزدوجة مطلية بالفضة، وهو اليوم موجود في كل مطبخ باسم الترمس. الجانب العملي للنقطة الحرجة بدأ معه."
+    }
+   ]
+  },
+  "open": "معادلات حالة السوائل الكثيفة لا تزال تُنتقى وليس تُشتق",
+  "lessons": [
+   {
+    "id": "01-vanderwaals",
+    "title": "فان دير فالس: غاز يتذكر نفسه",
+    "sub": "تصحيحان للغاز المثالي ولماذا لا يوجد تكثف فوق درجة الحرارة الحرجة",
+    "law": "معادلة فان دير فالس · النقطة الحرجة",
+    "model": "realgas"
+   },
+   {
+    "id": "02-surface",
+    "title": "التوتر السطحي والشعيرات",
+    "sub": "لماذا يتصرف السطح كغشاء وإلى أي ارتفاع يرفع الماء",
+    "law": "صيغة لابلاس · الارتفاع الشعري",
+    "model": "realgas"
+   },
+   {
+    "id": "03-heatcap",
+    "title": "السعات الحرارية Cv و Cp: أين تذهب الحرارة",
+    "sub": "علاقة ماير، درجات الحرية، والكم البارز من النظرية الكلاسيكية",
+    "law": "Cp − Cv = R · معامل أدياباتي",
+    "model": "realgas"
+   }
+  ]
+ }
+}

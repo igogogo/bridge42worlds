@@ -12,6 +12,15 @@
 
     // Порядок значений: en, es, ar, fr (пятый язык добавлен tools/dict_lang.py)
     var DICT = {
+        'у ответа другой знак': ['your answer has the opposite sign', 'tu respuesta tiene el signo contrario', 'إجابتك بإشارة معاكسة', 'votre réponse a le signe opposé'],
+        'ноль здесь не подходит': ['zero will not do here', 'aquí el cero no sirve', 'الصفر لا يصلح هنا', 'zéro ne convient pas ici'],
+        'вы промахнулись больше чем в тысячу раз': ['you are off by more than a thousand times', 'te desviaste más de mil veces', 'أخطأت بأكثر من ألف ضعف', 'vous êtes à côté de plus de mille fois'],
+        'Не разобрал число. Можно так:': ['Could not read the number. Any of these will do:', 'No entendí el número. Puedes escribirlo así:', 'لم أفهم الرقم. يمكنك كتابته هكذا:', 'Nombre non compris. Vous pouvez l’écrire ainsi :'],
+        'Впишите число — хватит и порядка величины.': ['Type a number — an order of magnitude is enough.', 'Escribe un número: basta con el orden de magnitud.', 'اكتب رقماً — تكفي رتبة المقدار.', 'Entrez un nombre — un ordre de grandeur suffit.'],
+        'Осталось вопросов по токену': ['Questions left on this token', 'Preguntas restantes con este token', 'الأسئلة المتبقية بهذا الرمز', 'Questions restantes avec ce jeton'],
+        'На эту сессию лимит исчерпан': ['Session limit reached', 'Límite de la sesión alcanzado', 'انتهى حدّ هذه الجلسة', 'Limite de la session atteinte'],
+        'Ваш результат': ['Your result', 'Tu resultado', 'نتيجتك', 'Votre résultat'],
+        'Куда дальше': ['Where to next', 'Qué sigue', 'إلى أين بعد ذلك', 'Et ensuite'],
         'bridge42worlds · дерево знаний': ['bridge42worlds · knowledge tree',
             'bridge42worlds · árbol del conocimiento', 'bridge42worlds · شجرة المعرفة', 'bridge42worlds · arbre de connaissances'],
         'Как работать с этим курсом · сколько времени займёт · опыты · материалы по теме': [

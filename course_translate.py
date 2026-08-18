@@ -169,7 +169,9 @@ def graft(orig, got):
     if isinstance(orig, dict):
         if not isinstance(got, dict):
             return orig
-        return {k: (orig[k] if k in ("id", "model", "type", "href", "icon") else graft(v, got.get(k)))
+        # `kit` — тот же случай: это ключ карточки справочника, а не текст. Переведённый на
+        # испанский, он уводил врезку на /mathkit.html#m-simetría, которой не существует.
+        return {k: (orig[k] if k in ("id", "model", "type", "href", "icon", "kit") else graft(v, got.get(k)))
                 for k, v in orig.items()}
     if isinstance(orig, list):
         if not isinstance(got, list) or len(got) != len(orig):

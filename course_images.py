@@ -87,6 +87,14 @@ SUBJECTS = {
     "transport/01-diffusion": "a teabag resting in a glass of clear water with a soft plume of colour reaching out from it",
     "transport/02-conduction": "a metal spoon and a wooden spoon standing in the same cup of hot tea, faint steam above",
     "transport/03-viscosity-gas": "two brass cylinders side by side connected by a thin tube, a small paddle wheel between them",
+    # Твёрдое тело и реальный газ: последние две темы-дыры. Сюжеты снова предметные —
+    # «момент инерции» FLUX рисует облаком, а маховик и гироскоп на кардане это вещи.
+    "rigidbody/01-inertia": "a heavy cast iron flywheel on a bench beside a slim spoked wheel of the same diameter, a crank handle on each",
+    "rigidbody/02-gyroscope": "a brass gyroscope in gimbal rings spinning on a wooden pedestal, its axis tilted, a spinning top lying beside it",
+    "rigidbody/03-coriolis": "a wooden turntable with a chalk line curving across it, a small ball resting near the rim",
+    "realgas/01-vanderwaals": "a thick walled glass tube in a steel clamp, half filled with liquid and half with vapour, the boundary between them faint and blurred",
+    "realgas/02-surface": "a drop of water beading on a waxed leaf beside a narrow glass capillary tube standing in a dish of water",
+    "realgas/03-heatcap": "a brass cylinder with a movable piston and a small weight on top, a thermometer inserted into its side",
     "analytical/01-action": "a wire loop dipped in soap solution held by a hand, the film stretched into a smooth curved surface",
     "analytical/02-lagrange": "a spinning top on a mirror table, its reflection perfectly symmetrical below it",
     "analytical/03-hamilton": "a pendulum clock with its case open, a paper chart beside it showing a single closed oval curve drawn in ink",

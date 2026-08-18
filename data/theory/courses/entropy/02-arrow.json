@@ -1209,19 +1209,19 @@
      "what": "Cómo verificar una ecuación bajo inversión temporal",
      "why": "El truco del primer paso de la derivación parece mecánico: sustituye $t \\to -t$ y observa si la ecuación cambia. Funciona porque las derivadas responden de manera diferente al cambio de signo del tiempo. La primera cambia de signo: la velocidad, al reproducir la película al revés, apunta en dirección opuesta. La segunda no cambia: el signo menos aparece dos veces y se cancela. De ahí se sigue todo. En Newton, a la izquierda está $m\\ddot{x}$ y a la derecha una fuerza que depende solo de la posición, por lo que la ecuación permanece igual y el pasado es indistinguible del futuro. Añade fricción, $m\\ddot{x} = -b\\dot{x}$, y la simetría se rompe en la primera derivada. La flecha del tiempo está oculta en la fricción de antemano, porque la fricción misma es el resultado de promediar sobre las moléculas.",
      "latex": "\\frac{d^{2}x}{d(-t)^{2}} = \\frac{d^{2}x}{dt^{2}}, \\qquad \\frac{dx}{d(-t)} = -\\frac{dx}{dt}",
-     "kit": "simetría"
+     "kit": "symmetry"
     },
     {
      "what": "La exponencial cuyo exponente es en sí mismo enorme",
      "why": "En el quinto paso, el tiempo de retorno de Poincaré resulta ser $\\tau_P \\sim \\tau_0 2^{N}$. La diferencia entre esto y cualquier potencia como $N^{100}$ es fundamental: la potencia crece rápido, la exponencial crece incomparablemente más rápido, y para $N$ grande la comparación simplemente pierde sentido. Luego sucede algo a lo que vale la pena acostumbrarse por separado. El exponente $N$ resulta ser un número de veinticinco dígitos, y convertir la base de 2 a 10 apenas lo reduce: $2^{N} = 10^{N\\lg 2} \\approx 10^{3 \\cdot 10^{23}}$. El resultado debe escribirse como una potencia de una potencia, y en el exponente superior hay un número de veinticuatro dígitos. Tal torre deja de ser un \"número muy grande\" en el sentido habitual: hay alrededor de $10^{80}$ átomos en el universo observable, y junto a $10^{3 \\cdot 10^{23}}$ esa cantidad es indistinguible de uno. La aparición de una torre de potencias siempre es una señal: el evento debe considerarse no raro, sino imposible en cualquier horizonte significativo.",
      "latex": "\\tau_P \\sim \\tau_0\\, e^{S/k_B} \\sim \\tau_0\\, 2^{N}, \\qquad N \\sim 10^{24} \\;\\Rightarrow\\; \\tau_P \\sim 10^{N\\lg 2} \\approx 10^{3 \\cdot 10^{23}}\\ \\text{s}",
-     "kit": "exponente"
+     "kit": "exponent"
     },
     {
      "what": "Por qué se divide la entropía por la constante de Boltzmann",
      "why": "En el ejemplo del té hay un paso que es fácil pasar por alto: después de calcular $\\Delta S \\approx 0{,}009$ J/K, dividimos el resultado por $k_B$. Esto no se hace por conveniencia de cálculo. La probabilidad de una fluctuación se escribe como $P \\sim e^{-\\Delta S/k_B}$, y bajo el exponente, como bajo el seno y el logaritmo, no puede haber una cantidad con unidades: elevar a una potencia \"julio por kelvin\" no tiene sentido. La constante de Boltzmann actúa aquí como traductora: se mide en los mismos julios por kelvin y los cancela, dejando un número puro $6{,}8 \\cdot 10^{20}$. Ese es el verdadero resultado del problema: la entropía en unidades naturales para contar estados. La regla es general y vale la pena verificarla en cualquier cálculo: si bajo el exponente quedan unidades, se ha perdido un factor en algún lugar.",
      "latex": "P \\sim e^{-\\Delta S/k_B}, \\qquad \\left[\\frac{\\Delta S}{k_B}\\right] = \\frac{\\text{J}/\\text{K}}{\\text{J}/\\text{K}} = 1",
-     "kit": "dimensión"
+     "kit": "dimension"
     }
    ]
   }

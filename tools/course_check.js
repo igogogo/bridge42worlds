@@ -20,6 +20,10 @@ const figSrc = fs.readFileSync(ROOT + '/js/figures.js', 'utf8');
 const FIGS = new Set([...figSrc.matchAll(/F\.([a-zA-Z][a-zA-Z0-9]*)\s*=\s*function/g)].map(m => m[1]));
 const modSrc = fs.readFileSync(ROOT + '/js/models.js', 'utf8');
 const MODELS = new Set([...modSrc.matchAll(/(\w+):\s*\w+Model[,\s}]/g)].map(m => m[1]));
+// Стенды, приехавшие заготовками, живут в своей области видимости и кладут себя
+// в B42ModelsExtra, а не в общий список фабрик. Не считать их существующими значит
+// ругаться на исправно работающий стенд — проверка должна знать оба способа.
+[...modSrc.matchAll(/B42ModelsExtra\.(\w+)\s*=/g)].forEach(m => MODELS.add(m[1]));
 const courseSrc = fs.readFileSync(ROOT + '/course.html', 'utf8');
 const FACTORY = new Set([...courseSrc.matchAll(/(\w+):\s*'(\w+)'/g)].filter(m => MODELS.has(m[2])).map(m => m[1]));
 
