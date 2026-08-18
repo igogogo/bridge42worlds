@@ -500,8 +500,18 @@ body {
     max-width: 620px; margin-bottom: 8px;
     flex-wrap: wrap;
     gap: 8px;
-    position: sticky; top: 0; z-index: 50;
+    position: sticky; top: 0; z-index: 90;
     background: var(--bg); padding: 8px 0; margin-top: -8px;
+}
+/* Щель над липкой шапкой. Владелец 18 августа, мобильная статья: «меню не до конца
+   вверх уезжает, а статья появляется фоном сверху». Причина: у контейнера страницы
+   отступ сверху 16px, шапка прилипает НИЖЕ него, и в этой прозрачной полосе при
+   прокрутке просвечивает текст. Псевдоэлемент закрывает полосу фоном — шире шапки,
+   потому что на телефоне контент шире её 620px. z-index поднят до 90: у формул и
+   раскрывашек статьи свои контексты наложения, 50 они местами перебивали. */
+.top-bar::before {
+    content: ""; position: absolute; left: -24px; right: -24px;
+    top: -24px; height: 24px; background: var(--bg);
 }
 .logo {
     font-family: 'Source Serif 4', 'Georgia', serif;
