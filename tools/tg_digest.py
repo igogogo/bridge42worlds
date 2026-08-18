@@ -72,8 +72,21 @@ def candidates(n, pick=None, lang="ru"):
         except Exception:
             print(f"  ⏭️ {a['id']}: сайт не ответил — пропускаю")
             continue
+        # Лицензия исходной работы — в подпись поста (владелец 18.08: «в канале тоже
+        # должна быть ссылка на лицензию»). Пост — та же публикация, что и страница:
+        # атрибуция и ссылка на условия должны ехать вместе с контентом, а не
+        # оставаться только на сайте.
+        lic_url, lic_name = "", ""
+        dj = ROOT / f"lang/{lang}/archive" / a["date"] / a["id"] / "data.json"
+        try:
+            d = json.loads(dj.read_text(encoding="utf-8"))
+            lic_url = d.get("license") or d.get("license_url") or ""
+            lic_name = d.get("license_name") or ""
+        except Exception:
+            pass
         out.append({"id": a["id"], "date": a["date"], "title": a["title"],
-                    "text": a["description"], "cover": cover, "url": url})
+                    "text": a["description"], "cover": cover, "url": url,
+                    "lic_url": lic_url, "lic_name": lic_name})
         if len(out) >= n:
             break
     return out
@@ -87,11 +100,18 @@ def post(token, chat, art, dry=False, lang="ru"):
     # Подпись: заголовок, живой текст карточки, ссылка. Без хэштегов-простыней и без
     # «читайте далее» — текст карточки и так писался как приглашение, дублировать его
     # призывом значит не доверять собственному тексту.
-    cap = (f"<b>{esc(art['title'])}</b>\n\n{esc(art['text'])}\n\n"
-           f"<a href=\"{art['url']}\">Читать целиком →</a>")
+    link = LINK_TEXT.get(lang, LINK_TEXT["ru"])
+    # Строка атрибуции: наш пересказ — производная работа, ссылка на оригинал и его
+    # лицензию обязана ехать в каждом посте, а не оставаться только на сайте.
+    src = f"arXiv:{art['id']}"
+    lic = (f" · <a href=\"{art['lic_url']}\">{esc(art['lic_name'] or 'license')}</a>"
+           if art.get("lic_url") else "")
+    tail = (f"\n\n<a href=\"{art['url']}\">{link}</a>\n"
+            f"<a href=\"https://arxiv.org/abs/{art['id']}\">{src}</a>{lic}")
+    cap = f"<b>{esc(art['title'])}</b>\n\n{esc(art['text'])}" + tail
     if len(cap) > 1024:                      # предел подписи к фото в Telegram
-        cut = cap.rfind(". ", 0, 900)
-        cap = cap[:cut + 1] + f"\n\n<a href=\"{art['url']}\">Читать целиком →</a>"
+        cut = cap.rfind(". ", 0, 1000 - len(tail))
+        cap = cap[:cut + 1] + tail
     if dry:
         print(f"\n─── {art['id']} ({art['date']}) ───\n{cap}\n[обложка: {art['cover'].name}]")
         return True

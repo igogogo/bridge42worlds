@@ -188,6 +188,26 @@ def fetch_arxiv(date_str, category="astro-ph.*"):
 
 
 # ── License ──
+def license_label(lic_url):
+    """Человеческое имя лицензии по её адресу.
+
+    До 2026-08-18 всё, что не CC BY 4.0, подписывалось «CC BY» — и 2786 статей под
+    arXiv nonexclusive-distrib (это НЕ свободная лицензия, права даны только arXiv)
+    носили чужую этикетку. Ссылка вела на верный адрес, но слова врали; на производной
+    работе неверно названная лицензия хуже, чем никакая.
+    """
+    u = lic_url or ""
+    if "by-sa/4.0" in u:
+        return "CC BY-SA 4.0"
+    if "by/4.0" in u:
+        return "CC BY 4.0"
+    if "zero/1.0" in u:
+        return "CC0 1.0"
+    if "nonexclusive-distrib" in u:
+        return "arXiv non-exclusive"
+    return "license"
+
+
 def get_license(arxiv_id):
     try:
         r = _get_with_retry("http://es.arxiv.org/oai2", params={

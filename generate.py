@@ -1908,7 +1908,8 @@ def save_data_json(versions_ru, article, date_str, folder, translations=None, ca
     payload = {
         "id": article["id"], "original_title": article["title"],
         "authors": article.get("authors", []), "date": date_str,
-        "license": article.get("license_url", ""), "license_name": article.get("license_name", "CC BY"),
+        "license": article.get("license_url", ""),
+        "license_name": article.get("license_name") or license_label(article.get("license_url", "")),
         "tags": _ok_tags,
         **({"tags_unverified": _bad_tags} if _bad_tags else {}),
         "laws": scipop_adv.get("laws", []),
@@ -4254,7 +4255,7 @@ def regenerate_all_html(only=None, force=False):
             "title": data.get("original_title", ""),
             "authors": data.get("authors", []),
             "license_url": data.get("license", ""),
-            "license_name": data.get("license_name", "CC BY"),
+            "license_name": data.get("license_name") or license_label(data.get("license", "")),
             "categories": data.get("categories", []),
             "primary_category": data.get("primary_category", ""),
             "refined": data.get("refined", False),
@@ -4460,7 +4461,7 @@ def _build_article(a, date_str, inputs, force=False, express=False, known_licens
         if not allowed:
             print(f"  ⏭️ {a['id']} — license: {lic_url or 'none'}")
             return None
-        a["license_url"], a["license_name"] = lic_url, ("CC BY 4.0" if "by/4.0" in lic_url else "CC BY")
+        a["license_url"], a["license_name"] = lic_url, license_label(lic_url)
         # atom.xml только сохраняется для истории, в контенте не участвует — при известной лицензии
         # не тратим на него отдельный запрос к arXiv (юзер 2026-07-24: брать из базы, меньше arXiv).
         atom_xml = "" if known_license is not None else _get_with_retry(
