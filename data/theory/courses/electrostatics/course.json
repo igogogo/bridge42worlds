@@ -1,409 +1,409 @@
 {
-  "id": "electrostatics",
-  "schema": "b42.course/2",
-  "kind": "overview",
-  "order": 7,
-  "entities": {
-    "laws": [
-      "coulombs_law"
-    ],
-    "tags": [
-      "electromagnetism",
-      "energy"
-    ],
-    "scientists": [
-      "Michael Faraday"
-    ]
+ "id": "electrostatics",
+ "schema": "b42.course/2",
+ "kind": "overview",
+ "order": 10,
+ "entities": {
+  "laws": [
+   "coulombs_law"
+  ],
+  "tags": [
+   "electromagnetism",
+   "energy"
+  ],
+  "scientists": [
+   "Michael Faraday"
+  ]
+ },
+ "lessons": [
+  {
+   "id": "01-coulomb",
+   "title": "Заряд и закон Кулона",
+   "sub": "Та же формула, что у тяготения, — но в тысячи триллионов раз сильнее",
+   "law": "Закон Кулона",
+   "model": "charge"
+  },
+  {
+   "id": "02-field",
+   "title": "Поле",
+   "sub": "Как физика перестала верить в действие на расстоянии",
+   "law": "Напряжённость поля",
+   "model": "charge"
+  },
+  {
+   "id": "03-potential",
+   "title": "Потенциал и энергия",
+   "sub": "Что такое вольт и почему провод можно трогать за изоляцию",
+   "law": "Потенциал и разность потенциалов",
+   "model": "charge"
+  }
+ ],
+ "ru": {
+  "title": "Электростатика",
+  "subtitle": "Заряд, поле, потенциал",
+  "lead": "Тема, в которой физика придумала своё самое мощное понятие — поле. Начинается она с формулы, до неразличимости похожей на закон тяготения, а заканчивается отказом от представления о силах, действующих через пустоту.",
+  "why": {
+   "title": "Зачем это знать",
+   "text": [
+    "Начнём с числа, которое стоит осознать. Электрическое отталкивание двух электронов сильнее их гравитационного притяжения примерно в $10^{42}$ раз. Это не описка: единица с сорока двумя нулями. Гравитация — самое слабое из известных взаимодействий, и заметна она только потому, что заряды в веществе взаимно погашены, а массы складываются всегда.",
+    "Отсюда следует почти всё, что вас окружает. Твёрдость стола, упругость пружины, натяжение верёвки, трение, поверхностное натяжение воды, вся химия и вся биология — это электрические силы между атомами. Опираясь на стул, вы не касаетесь его: электроны ваших атомов отталкивают электроны его атомов, не давая приблизиться. Прикосновений в буквальном смысле не бывает.",
+    "Но главное в этой теме не формула, а понятие. Ньютон был недоволен собственным законом тяготения: сила действует мгновенно через пустоту, и как она это делает, неизвестно. Фарадей, не знавший высшей математики, предложил другую картину: заряд меняет пространство вокруг себя, а второй заряд чувствует не первый заряд, а изменённое пространство в своей точке. Так появилось поле — и оказалось, что это не удобная выдумка, а самостоятельная физическая сущность, у которой есть энергия и импульс.",
+    "Практическая сторона очевидна: без электростатики нет ни конденсатора, ни транзистора, ни экрана, на который вы смотрите. А ещё нет молний, лазерных принтеров, электрофильтров на трубах заводов и понимания того, почему в грозу опасно стоять под деревом."
+   ]
+  },
+  "history": {
+   "title": "Кто её создал",
+   "people": [
+    {
+     "name": "Фалес Милетский",
+     "years": "≈624–546 до н. э.",
+     "what": "Заметил, что натёртый шерстью янтарь притягивает соломинки. Греческое слово «янтарь» — электрон — и дало имя всему явлению спустя две с лишним тысячи лет."
+    },
+    {
+     "name": "Шарль Огюстен Кулон",
+     "years": "1736–1806",
+     "what": "Измерил силу между зарядами крутильными весами настолько тонкими, что они реагировали на движение воздуха в комнате. Получил обратный квадрат расстояния — ту же зависимость, что у тяготения, о чём сразу и написал."
+    },
+    {
+     "name": "Майкл Фарадей",
+     "years": "1791–1867",
+     "what": "Сын кузнеца, переплётчик по профессии, не знавший математики выше арифметики. Ввёл понятие силовых линий и поля, потому что мыслил картинками, а не формулами, — и оказался прав глубже всех своих математически образованных современников."
+    },
+    {
+     "name": "Карл Фридрих Гаусс",
+     "years": "1777–1855",
+     "what": "Сформулировал теорему, связывающую поток поля через замкнутую поверхность с заключённым внутри зарядом. Она превращает громоздкое суммирование в одну строчку — и работает только благодаря обратному квадрату."
+    },
+    {
+     "name": "Джеймс Клерк Максвелл",
+     "years": "1831–1879",
+     "what": "Перевёл картинки Фарадея на язык уравнений и обнаружил, что из них следует существование электромагнитных волн, идущих со скоростью света. Всегда подчёркивал, что все идеи принадлежат Фарадею, а он лишь записал их формулами."
+    }
+   ]
+  },
+  "map": {
+   "title": "Что вы изучите",
+   "lead": "Три параграфа идут от силы к полю и от поля к энергии. Стенд один: два заряда, стрелки поля и пробный заряд, который можно двигать по оси.",
+   "outcome": "Пройдя все три, вы будете понимать, почему закон Кулона так похож на закон тяготения и чем он от него принципиально отличается; что такое поле и зачем понадобилось его вводить; и что означает надпись «220 В» — а заодно почему птица на проводе цела."
+  },
+  "prereq": {
+   "title": "Что нужно знать заранее",
+   "items": [
+    "Механику: сила, работа, потенциальная энергия. Особенно понятие консервативной силы из темы о законах сохранения.",
+    "Закон тяготения из темы о гравитации — половина этой темы строится на сравнении с ним.",
+    "Векторы: сложение по правилу параллелограмма. Поля от разных зарядов складываются именно как векторы."
+   ],
+   "note": "Тема удобна тем, что почти всё в ней уже знакомо по гравитации: та же зависимость от расстояния, та же логика потенциальной энергии. Новых идей ровно две — заряд бывает двух знаков, и поле есть самостоятельная сущность. Обе стоят того, чтобы задержаться."
+  },
+  "closing": {
+   "title": "И главное",
+   "text": [
+    "Понятие поля оказалось важнее самого закона Кулона. Оно пережило смену теорий: в квантовой физике поле осталось, а сила исчезла, превратившись в обмен частицами. Сегодня всё вещество описывается как возбуждения полей, и это самая глубокая картина мира, которая у нас есть.",
+    "Но и здесь остаётся вопрос, на который ответа нет. Заряд квантуется: любой наблюдаемый заряд кратен элементарному с точностью до двадцатого знака. Никакой закон этого не требует, и почему так — неизвестно."
+   ],
+   "link": {
+    "href": "/frontier.html#gravity",
+    "text": "Открытые вопросы: чего физика не знает о взаимодействиях"
+   }
   },
   "lessons": [
+   {
+    "id": "01-coulomb",
+    "title": "Заряд и закон Кулона",
+    "sub": "Та же формула, что у тяготения, — но в тысячи триллионов раз сильнее",
+    "law": "Закон Кулона",
+    "model": "charge"
+   },
+   {
+    "id": "02-field",
+    "title": "Поле",
+    "sub": "Как физика перестала верить в действие на расстоянии",
+    "law": "Напряжённость поля",
+    "model": "charge"
+   },
+   {
+    "id": "03-potential",
+    "title": "Потенциал и энергия",
+    "sub": "Что такое вольт и почему провод можно трогать за изоляцию",
+    "law": "Потенциал и разность потенциалов",
+    "model": "charge"
+   }
+  ]
+ },
+ "en": {
+  "title": "Electrostatics",
+  "subtitle": "Charge, Field, Potential",
+  "lead": "A subject in which physics invented its most powerful concept — the field. It begins with a formula indistinguishably similar to the law of gravitation, and ends with abandoning the notion of forces acting through empty space.",
+  "why": {
+   "title": "Why You Need to Know This",
+   "text": [
+    "Let's start with a number worth grasping. The electrical repulsion of two electrons is about $10^{42}$ times stronger than their gravitational attraction. That is no typo: a one with forty-two zeros. Gravity is the weakest of the known interactions, and it is noticeable only because charges in matter cancel each other out, while masses always add up.",
+    "From this follows almost everything around you. The hardness of a table, the elasticity of a spring, the tension of a rope, friction, surface tension of water, all of chemistry and all of biology — these are electric forces between atoms. When you lean on a chair, you do not touch it; the electrons of your atoms repel the electrons of its atoms, preventing close approach. There is no literal touching.",
+    "But the main point of this topic is not the formula but the concept. Newton was dissatisfied with his own law of gravitation: a force acts instantly through empty space, and how it does so is unknown. Faraday, who did not know higher mathematics, proposed a different picture: a charge changes the space around it, and the second charge feels not the first charge but the altered space at its location. Thus the field appeared — and it turned out to be not a convenient fiction but an independent physical entity that possesses energy and momentum.",
+    "The practical side is obvious: without electrostatics there is no capacitor, no transistor, no screen you are looking at. Also no lightning, laser printers, electrostatic precipitators on factory chimneys, or understanding why it is dangerous to stand under a tree during a thunderstorm."
+   ]
+  },
+  "history": {
+   "title": "Who Created It",
+   "people": [
     {
-      "id": "01-coulomb",
-      "title": "Заряд и закон Кулона",
-      "sub": "Та же формула, что у тяготения, — но в тысячи триллионов раз сильнее",
-      "law": "Закон Кулона",
-      "model": "charge"
+     "name": "Thales of Miletus",
+     "years": "≈624–546 BCE",
+     "what": "Noticed that amber rubbed with wool attracts straw. The Greek word for amber—electron—gave its name to the whole phenomenon more than two thousand years later."
     },
     {
-      "id": "02-field",
-      "title": "Поле",
-      "sub": "Как физика перестала верить в действие на расстоянии",
-      "law": "Напряжённость поля",
-      "model": "charge"
+     "name": "Charles-Augustin de Coulomb",
+     "years": "1736–1806",
+     "what": "Measured the force between charges using a torsion balance so sensitive that it responded to air movement in the room. He obtained the inverse square of distance—the same dependence as gravitation, which he immediately noted."
     },
     {
-      "id": "03-potential",
-      "title": "Потенциал и энергия",
-      "sub": "Что такое вольт и почему провод можно трогать за изоляцию",
-      "law": "Потенциал и разность потенциалов",
-      "model": "charge"
+     "name": "Michael Faraday",
+     "years": "1791–1867",
+     "what": "Son of a blacksmith, a bookbinder by trade, who knew no mathematics beyond arithmetic. He introduced the concept of lines of force and the field because he thought in pictures, not formulas — and he turned out to be more right than all his mathematically educated contemporaries."
+    },
+    {
+     "name": "Carl Friedrich Gauss",
+     "years": "1777–1855",
+     "what": "Formulated the theorem linking the flux of a field through a closed surface to the enclosed charge. It turns cumbersome summation into a single line — and works only because of the inverse square law."
+    },
+    {
+     "name": "James Clerk Maxwell",
+     "years": "1831–1879",
+     "what": "Translated Faraday's pictures into the language of equations and discovered that they imply the existence of electromagnetic waves traveling at the speed of light. He always emphasized that all ideas belonged to Faraday, and he merely wrote them down as formulas."
     }
-  ],
-  "ru": {
-    "title": "Электростатика",
-    "subtitle": "Заряд, поле, потенциал",
-    "lead": "Тема, в которой физика придумала своё самое мощное понятие — поле. Начинается она с формулы, до неразличимости похожей на закон тяготения, а заканчивается отказом от представления о силах, действующих через пустоту.",
-    "why": {
-      "title": "Зачем это знать",
-      "text": [
-        "Начнём с числа, которое стоит осознать. Электрическое отталкивание двух электронов сильнее их гравитационного притяжения примерно в $10^{42}$ раз. Это не описка: единица с сорока двумя нулями. Гравитация — самое слабое из известных взаимодействий, и заметна она только потому, что заряды в веществе взаимно погашены, а массы складываются всегда.",
-        "Отсюда следует почти всё, что вас окружает. Твёрдость стола, упругость пружины, натяжение верёвки, трение, поверхностное натяжение воды, вся химия и вся биология — это электрические силы между атомами. Опираясь на стул, вы не касаетесь его: электроны ваших атомов отталкивают электроны его атомов, не давая приблизиться. Прикосновений в буквальном смысле не бывает.",
-        "Но главное в этой теме не формула, а понятие. Ньютон был недоволен собственным законом тяготения: сила действует мгновенно через пустоту, и как она это делает, неизвестно. Фарадей, не знавший высшей математики, предложил другую картину: заряд меняет пространство вокруг себя, а второй заряд чувствует не первый заряд, а изменённое пространство в своей точке. Так появилось поле — и оказалось, что это не удобная выдумка, а самостоятельная физическая сущность, у которой есть энергия и импульс.",
-        "Практическая сторона очевидна: без электростатики нет ни конденсатора, ни транзистора, ни экрана, на который вы смотрите. А ещё нет молний, лазерных принтеров, электрофильтров на трубах заводов и понимания того, почему в грозу опасно стоять под деревом."
-      ]
-    },
-    "history": {
-      "title": "Кто её создал",
-      "people": [
-        {
-          "name": "Фалес Милетский",
-          "years": "≈624–546 до н. э.",
-          "what": "Заметил, что натёртый шерстью янтарь притягивает соломинки. Греческое слово «янтарь» — электрон — и дало имя всему явлению спустя две с лишним тысячи лет."
-        },
-        {
-          "name": "Шарль Огюстен Кулон",
-          "years": "1736–1806",
-          "what": "Измерил силу между зарядами крутильными весами настолько тонкими, что они реагировали на движение воздуха в комнате. Получил обратный квадрат расстояния — ту же зависимость, что у тяготения, о чём сразу и написал."
-        },
-        {
-          "name": "Майкл Фарадей",
-          "years": "1791–1867",
-          "what": "Сын кузнеца, переплётчик по профессии, не знавший математики выше арифметики. Ввёл понятие силовых линий и поля, потому что мыслил картинками, а не формулами, — и оказался прав глубже всех своих математически образованных современников."
-        },
-        {
-          "name": "Карл Фридрих Гаусс",
-          "years": "1777–1855",
-          "what": "Сформулировал теорему, связывающую поток поля через замкнутую поверхность с заключённым внутри зарядом. Она превращает громоздкое суммирование в одну строчку — и работает только благодаря обратному квадрату."
-        },
-        {
-          "name": "Джеймс Клерк Максвелл",
-          "years": "1831–1879",
-          "what": "Перевёл картинки Фарадея на язык уравнений и обнаружил, что из них следует существование электромагнитных волн, идущих со скоростью света. Всегда подчёркивал, что все идеи принадлежат Фарадею, а он лишь записал их формулами."
-        }
-      ]
-    },
-    "map": {
-      "title": "Что вы изучите",
-      "lead": "Три параграфа идут от силы к полю и от поля к энергии. Стенд один: два заряда, стрелки поля и пробный заряд, который можно двигать по оси.",
-      "outcome": "Пройдя все три, вы будете понимать, почему закон Кулона так похож на закон тяготения и чем он от него принципиально отличается; что такое поле и зачем понадобилось его вводить; и что означает надпись «220 В» — а заодно почему птица на проводе цела."
-    },
-    "prereq": {
-      "title": "Что нужно знать заранее",
-      "items": [
-        "Механику: сила, работа, потенциальная энергия. Особенно понятие консервативной силы из темы о законах сохранения.",
-        "Закон тяготения из темы о гравитации — половина этой темы строится на сравнении с ним.",
-        "Векторы: сложение по правилу параллелограмма. Поля от разных зарядов складываются именно как векторы."
-      ],
-      "note": "Тема удобна тем, что почти всё в ней уже знакомо по гравитации: та же зависимость от расстояния, та же логика потенциальной энергии. Новых идей ровно две — заряд бывает двух знаков, и поле есть самостоятельная сущность. Обе стоят того, чтобы задержаться."
-    },
-    "closing": {
-      "title": "И главное",
-      "text": [
-        "Понятие поля оказалось важнее самого закона Кулона. Оно пережило смену теорий: в квантовой физике поле осталось, а сила исчезла, превратившись в обмен частицами. Сегодня всё вещество описывается как возбуждения полей, и это самая глубокая картина мира, которая у нас есть.",
-        "Но и здесь остаётся вопрос, на который ответа нет. Заряд квантуется: любой наблюдаемый заряд кратен элементарному с точностью до двадцатого знака. Никакой закон этого не требует, и почему так — неизвестно."
-      ],
-      "link": {
-        "href": "/frontier.html#gravity",
-        "text": "Открытые вопросы: чего физика не знает о взаимодействиях"
-      }
-    },
-    "lessons": [
-      {
-        "id": "01-coulomb",
-        "title": "Заряд и закон Кулона",
-        "sub": "Та же формула, что у тяготения, — но в тысячи триллионов раз сильнее",
-        "law": "Закон Кулона",
-        "model": "charge"
-      },
-      {
-        "id": "02-field",
-        "title": "Поле",
-        "sub": "Как физика перестала верить в действие на расстоянии",
-        "law": "Напряжённость поля",
-        "model": "charge"
-      },
-      {
-        "id": "03-potential",
-        "title": "Потенциал и энергия",
-        "sub": "Что такое вольт и почему провод можно трогать за изоляцию",
-        "law": "Потенциал и разность потенциалов",
-        "model": "charge"
-      }
-    ]
+   ]
   },
-  "en": {
-    "title": "Electrostatics",
-    "subtitle": "Charge, Field, Potential",
-    "lead": "A subject in which physics invented its most powerful concept — the field. It begins with a formula indistinguishably similar to the law of gravitation, and ends with abandoning the notion of forces acting through empty space.",
-    "why": {
-      "title": "Why You Need to Know This",
-      "text": [
-        "Let's start with a number worth grasping. The electrical repulsion of two electrons is about $10^{42}$ times stronger than their gravitational attraction. That is no typo: a one with forty-two zeros. Gravity is the weakest of the known interactions, and it is noticeable only because charges in matter cancel each other out, while masses always add up.",
-        "From this follows almost everything around you. The hardness of a table, the elasticity of a spring, the tension of a rope, friction, surface tension of water, all of chemistry and all of biology — these are electric forces between atoms. When you lean on a chair, you do not touch it; the electrons of your atoms repel the electrons of its atoms, preventing close approach. There is no literal touching.",
-        "But the main point of this topic is not the formula but the concept. Newton was dissatisfied with his own law of gravitation: a force acts instantly through empty space, and how it does so is unknown. Faraday, who did not know higher mathematics, proposed a different picture: a charge changes the space around it, and the second charge feels not the first charge but the altered space at its location. Thus the field appeared — and it turned out to be not a convenient fiction but an independent physical entity that possesses energy and momentum.",
-        "The practical side is obvious: without electrostatics there is no capacitor, no transistor, no screen you are looking at. Also no lightning, laser printers, electrostatic precipitators on factory chimneys, or understanding why it is dangerous to stand under a tree during a thunderstorm."
-      ]
-    },
-    "history": {
-      "title": "Who Created It",
-      "people": [
-        {
-          "name": "Thales of Miletus",
-          "years": "≈624–546 BCE",
-          "what": "Noticed that amber rubbed with wool attracts straw. The Greek word for amber—electron—gave its name to the whole phenomenon more than two thousand years later."
-        },
-        {
-          "name": "Charles-Augustin de Coulomb",
-          "years": "1736–1806",
-          "what": "Measured the force between charges using a torsion balance so sensitive that it responded to air movement in the room. He obtained the inverse square of distance—the same dependence as gravitation, which he immediately noted."
-        },
-        {
-          "name": "Michael Faraday",
-          "years": "1791–1867",
-          "what": "Son of a blacksmith, a bookbinder by trade, who knew no mathematics beyond arithmetic. He introduced the concept of lines of force and the field because he thought in pictures, not formulas — and he turned out to be more right than all his mathematically educated contemporaries."
-        },
-        {
-          "name": "Carl Friedrich Gauss",
-          "years": "1777–1855",
-          "what": "Formulated the theorem linking the flux of a field through a closed surface to the enclosed charge. It turns cumbersome summation into a single line — and works only because of the inverse square law."
-        },
-        {
-          "name": "James Clerk Maxwell",
-          "years": "1831–1879",
-          "what": "Translated Faraday's pictures into the language of equations and discovered that they imply the existence of electromagnetic waves traveling at the speed of light. He always emphasized that all ideas belonged to Faraday, and he merely wrote them down as formulas."
-        }
-      ]
-    },
-    "map": {
-      "title": "What You Will Learn",
-      "lead": "Three sections proceed from force to field and from field to energy. One stand: two charges, field arrows, and a test charge that can be moved along the axis.",
-      "outcome": "After completing all three, you will understand why Coulomb's law is so similar to the law of gravitation and how it fundamentally differs; what a field is and why it needed to be introduced; and what the inscription '220 V' means — and also why a bird on a wire is unharmed."
-    },
-    "prereq": {
-      "title": "What You Need to Know in Advance",
-      "items": [
-        "Mechanics: force, work, potential energy. Especially the concept of conservative force from the topic on conservation laws.",
-        "The law of gravitation from the topic on gravity — half of this topic is built on comparison with it.",
-        "Vectors: addition using the parallelogram rule. Fields from different charges add precisely as vectors."
-      ],
-      "note": "This topic is convenient because almost everything in it is already familiar from gravitation: the same dependence on distance, the same logic of potential energy. There are exactly two new ideas — charge comes in two signs, and the field is an independent entity. Both are worth dwelling on."
-    },
-    "closing": {
-      "title": "And Most Importantly",
-      "text": [
-        "The concept of a field turned out to be more important than Coulomb's law itself. It survived the change of theories: in quantum physics the field remained, while force disappeared, turning into an exchange of particles. Today all matter is described as excitations of fields, and this is the deepest picture of the world we have.",
-        "But even here a question remains unanswered. Charge is quantized: every observed charge is a multiple of the elementary charge to within twenty decimal places. No law requires this, and why it is so is unknown."
-      ],
-      "link": {
-        "href": "/frontier.html#gravity",
-        "text": "Open questions: what physics does not know about interactions"
-      }
-    },
-    "lessons": [
-      {
-        "id": "01-coulomb",
-        "title": "Charge and Coulomb's Law",
-        "sub": "Section 1 · The same formula as gravity, but thousands of trillions of times stronger",
-        "law": "Coulomb's law",
-        "model": "charge"
-      },
-      {
-        "id": "02-field",
-        "title": "Field",
-        "sub": "Section 2 · How physics stopped believing in action at a distance",
-        "law": "Field strength",
-        "model": "charge"
-      },
-      {
-        "id": "03-potential",
-        "title": "Potential and Energy",
-        "sub": "Section 3 · What is a volt and why a bird on a wire is unharmed",
-        "law": "Electric potential and potential difference",
-        "model": "charge"
-      }
-    ]
+  "map": {
+   "title": "What You Will Learn",
+   "lead": "Three sections proceed from force to field and from field to energy. One stand: two charges, field arrows, and a test charge that can be moved along the axis.",
+   "outcome": "After completing all three, you will understand why Coulomb's law is so similar to the law of gravitation and how it fundamentally differs; what a field is and why it needed to be introduced; and what the inscription '220 V' means — and also why a bird on a wire is unharmed."
   },
-  "es": {
-    "title": "Electrostática",
-    "subtitle": "Carga, campo, potencial",
-    "lead": "El tema en el que la física creó su concepto más poderoso: el campo. Comienza con una fórmula casi idéntica a la ley de la gravitación y termina abandonando la idea de fuerzas que actúan a través del vacío.",
-    "why": {
-      "title": "Por qué saber esto",
-      "text": [
-        "Empecemos con un número que vale la pena comprender. La repulsión eléctrica entre dos electrones es aproximadamente $10^{42}$ veces más fuerte que su atracción gravitatoria. No es un error: un uno seguido de cuarenta y dos ceros. La gravedad es la más débil de las interacciones conocidas, y solo es perceptible porque las cargas en la materia se cancelan mutuamente, mientras que las masas siempre se suman.",
-        "De aquí se deriva casi todo lo que te rodea. La dureza de una mesa, la elasticidad de un resorte, la tensión de una cuerda, la fricción, la tensión superficial del agua, toda la química y toda la biología son fuerzas eléctricas entre átomos. Al apoyarte en una silla, no la tocas: los electrones de tus átomos repelen a los electrones de sus átomos, impidiendo el contacto. En sentido literal, no existe el contacto.",
-        "Pero lo principal en este tema no es la fórmula, sino el concepto. Newton no estaba satisfecho con su propia ley de gravitación: la fuerza actúa instantáneamente a través del vacío, y no se sabe cómo lo hace. Faraday, que no conocía matemáticas superiores, propuso otra imagen: la carga modifica el espacio a su alrededor, y la segunda carga no siente a la primera, sino el espacio modificado en su punto. Así nació el campo, y resultó no ser un invento conveniente, sino una entidad física independiente con energía y momento.",
-        "El aspecto práctico es obvio: sin electrostática no hay condensador, ni transistor, ni la pantalla que miras. Tampoco hay rayos, impresoras láser, precipitadores electrostáticos en chimeneas de fábricas, ni comprensión de por qué es peligroso pararse bajo un árbol durante una tormenta."
-      ]
-    },
-    "history": {
-      "title": "Quién la creó",
-      "people": [
-        {
-          "name": "Tales de Mileto",
-          "years": "≈624–546 a. C.",
-          "what": "Notó que el ámbar frotado con lana atrae pajitas. La palabra griega para ámbar — electrón — dio nombre al fenómeno más de dos mil años después."
-        },
-        {
-          "name": "Charles-Augustin de Coulomb",
-          "years": "1736–1806",
-          "what": "Midió la fuerza entre cargas con una balanza de torsión tan sensible que reaccionaba al movimiento del aire en la habitación. Obtuvo la ley del inverso del cuadrado de la distancia, la misma dependencia que la gravitación, y lo escribió de inmediato."
-        },
-        {
-          "name": "Michael Faraday",
-          "years": "1791–1867",
-          "what": "Hijo de un herrero, encuadernador de profesión, sin más matemáticas que la aritmética. Introdujo el concepto de líneas de fuerza y campo porque pensaba en imágenes, no en fórmulas, y resultó tener más razón que todos sus contemporáneos con formación matemática."
-        },
-        {
-          "name": "Carl Friedrich Gauss",
-          "years": "1777–1855",
-          "what": "Formuló el teorema que relaciona el flujo del campo a través de una superficie cerrada con la carga encerrada. Convierte sumas engorrosas en una sola línea, y funciona solo gracias a la ley del inverso del cuadrado."
-        },
-        {
-          "name": "James Clerk Maxwell",
-          "years": "1831–1879",
-          "what": "Tradujo las imágenes de Faraday al lenguaje de ecuaciones y descubrió que de ellas se deduce la existencia de ondas electromagnéticas que viajan a la velocidad de la luz. Siempre recalcó que todas las ideas eran de Faraday y que él solo las escribió en fórmulas."
-        }
-      ]
-    },
-    "map": {
-      "title": "Qué aprenderá",
-      "lead": "Tres secciones van desde la fuerza al campo y del campo a la energía. Un único escenario: dos cargas, flechas de campo y una carga de prueba que se puede mover a lo largo del eje.",
-      "outcome": "Al completar las tres, entenderá por qué la ley de Coulomb es tan similar a la ley de la gravitación y en qué se diferencian fundamentalmente; qué es un campo y por qué fue necesario introducirlo; y qué significa la inscripción «220 V» — además de por qué un pájaro en un cable no se electrocuta."
-    },
-    "prereq": {
-      "title": "Qué necesita saber de antemano",
-      "items": [
-        "Mecánica: fuerza, trabajo, energía potencial. Especialmente el concepto de fuerza conservativa del tema de leyes de conservación.",
-        "La ley de la gravitación del tema de gravedad: la mitad de este tema se basa en la comparación con ella.",
-        "Vectores: suma por la regla del paralelogramo. Los campos de diferentes cargas se suman precisamente como vectores."
-      ],
-      "note": "El tema es cómodo porque casi todo ya es familiar por la gravitación: la misma dependencia de la distancia, la misma lógica de la energía potencial. Solo hay dos ideas nuevas: la carga tiene dos signos y el campo es una entidad independiente. Ambas merecen ser exploradas."
-    },
-    "closing": {
-      "title": "Y lo principal",
-      "text": [
-        "El concepto de campo resultó más importante que la propia ley de Coulomb. Sobrevivió al cambio de teorías: en física cuántica, el campo permanece y la fuerza desaparece, transformándose en intercambio de partículas. Hoy toda la materia se describe como excitaciones de campos, y esta es la imagen más profunda del mundo que tenemos.",
-        "Pero aún queda una pregunta sin respuesta. La carga está cuantizada: cualquier carga observable es múltiplo de la carga elemental con una precisión de veinte cifras decimales. Ninguna ley exige esto, y no se sabe por qué es así."
-      ],
-      "link": {
-        "href": "/frontier.html#gravity",
-        "text": "Preguntas abiertas: qué no sabe la física sobre las interacciones"
-      }
-    },
-    "lessons": [
-      {
-        "id": "01-coulomb",
-        "title": "Carga y ley de Coulomb",
-        "sub": "Párrafo 1 · La misma fórmula que la de la gravedad, pero miles de billones de veces más fuerte",
-        "law": "Ley de Coulomb",
-        "model": "charge"
-      },
-      {
-        "id": "02-field",
-        "title": "Campo",
-        "sub": "Párrafo 2 · Cómo la física dejó de creer en la acción a distancia",
-        "law": "Intensidad de campo",
-        "model": "charge"
-      },
-      {
-        "id": "03-potential",
-        "title": "Potencial y energía",
-        "sub": "Párrafo 3 · ¿Qué es un voltio y por qué el pájaro en el cable está ileso?",
-        "law": "Potencial y diferencia de potencial",
-        "model": "charge"
-      }
-    ]
+  "prereq": {
+   "title": "What You Need to Know in Advance",
+   "items": [
+    "Mechanics: force, work, potential energy. Especially the concept of conservative force from the topic on conservation laws.",
+    "The law of gravitation from the topic on gravity — half of this topic is built on comparison with it.",
+    "Vectors: addition using the parallelogram rule. Fields from different charges add precisely as vectors."
+   ],
+   "note": "This topic is convenient because almost everything in it is already familiar from gravitation: the same dependence on distance, the same logic of potential energy. There are exactly two new ideas — charge comes in two signs, and the field is an independent entity. Both are worth dwelling on."
   },
-  "ar": {
-    "title": "الكهرباء الساكنة",
-    "subtitle": "الشحنة، المجال، الجهد",
-    "lead": "موضوع اخترعت فيه الفيزياء أقوى مفاهيمها - المجال. يبدأ بصيغة تشبه قانون الجاذبية إلى حد لا يمكن تمييزه، وينتهي بالتخلي عن فكرة القوى المؤثرة عبر الفراغ.",
-    "why": {
-      "title": "لماذا يجب معرفة هذا",
-      "text": [
-        "لنبدأ برقم يستحق إدراكه. التنافر الكهربائي بين إلكترونين أقوى من جاذبيتهما التثاقلية بحوالي $10^{42}$ مرة. هذا ليس خطأ: واحد وأربعون صفرًا. الجاذبية هي أضعف التفاعلات المعروفة، ولا تكون ملحوظة إلا لأن الشحنات في المادة تتعادل، بينما الكتل تتجمع دائمًا.",
-        "من هذا ينبع كل ما يحيط بك تقريبًا. صلابة الطاولة، مرونة النابض، شد الحبل، الاحتكاك، التوتر السطحي للماء، كل الكيمياء وكل البيولوجيا هي قوى كهربائية بين الذرات. عندما تستند على كرسي، فإنك لا تلمسه: إلكترونات ذراتك تدفع إلكترونات ذراته، مانعة الاقتراب. لا يوجد ملامسة بالمعنى الحرفي.",
-        "لكن الأهم في هذا الموضوع ليس الصيغة، بل المفهوم. كان نيوتن غير راضٍ عن قانون الجاذبية الخاص به: القوة تؤثر فوريًا عبر الفراغ، وكيف تفعل ذلك غير معروف. فاراداي، الذي لم يكن يعرف الرياضيات العليا، اقترح صورة أخرى: الشحنة تغير الفضاء حولها، والشحنة الثانية تشعر ليس بالشحنة الأولى، بل بالفضاء المتغير عند نقطتها. هكذا ظهر المجال - وتبين أنه ليس اختراعًا مناسبًا، بل كيان فيزيائي مستقل له طاقة وزخم.",
-        "الجانب العملي واضح: بدون الكهرباء الساكنة لا يوجد مكثف، ولا ترانزستور، ولا الشاشة التي تنظر إليها. كما لا توجد بروق، ولا طابعات ليزر، ولا مرشحات كهربائية على مداخن المصانع، ولا فهم لسبب خطورة الوقوف تحت شجرة أثناء العاصفة الرعدية."
-      ]
+  "closing": {
+   "title": "And Most Importantly",
+   "text": [
+    "The concept of a field turned out to be more important than Coulomb's law itself. It survived the change of theories: in quantum physics the field remained, while force disappeared, turning into an exchange of particles. Today all matter is described as excitations of fields, and this is the deepest picture of the world we have.",
+    "But even here a question remains unanswered. Charge is quantized: every observed charge is a multiple of the elementary charge to within twenty decimal places. No law requires this, and why it is so is unknown."
+   ],
+   "link": {
+    "href": "/frontier.html#gravity",
+    "text": "Open questions: what physics does not know about interactions"
+   }
+  },
+  "lessons": [
+   {
+    "id": "01-coulomb",
+    "title": "Charge and Coulomb's Law",
+    "sub": "Section 1 · The same formula as gravity, but thousands of trillions of times stronger",
+    "law": "Coulomb's law",
+    "model": "charge"
+   },
+   {
+    "id": "02-field",
+    "title": "Field",
+    "sub": "Section 2 · How physics stopped believing in action at a distance",
+    "law": "Field strength",
+    "model": "charge"
+   },
+   {
+    "id": "03-potential",
+    "title": "Potential and Energy",
+    "sub": "Section 3 · What is a volt and why a bird on a wire is unharmed",
+    "law": "Electric potential and potential difference",
+    "model": "charge"
+   }
+  ]
+ },
+ "es": {
+  "title": "Electrostática",
+  "subtitle": "Carga, campo, potencial",
+  "lead": "El tema en el que la física creó su concepto más poderoso: el campo. Comienza con una fórmula casi idéntica a la ley de la gravitación y termina abandonando la idea de fuerzas que actúan a través del vacío.",
+  "why": {
+   "title": "Por qué saber esto",
+   "text": [
+    "Empecemos con un número que vale la pena comprender. La repulsión eléctrica entre dos electrones es aproximadamente $10^{42}$ veces más fuerte que su atracción gravitatoria. No es un error: un uno seguido de cuarenta y dos ceros. La gravedad es la más débil de las interacciones conocidas, y solo es perceptible porque las cargas en la materia se cancelan mutuamente, mientras que las masas siempre se suman.",
+    "De aquí se deriva casi todo lo que te rodea. La dureza de una mesa, la elasticidad de un resorte, la tensión de una cuerda, la fricción, la tensión superficial del agua, toda la química y toda la biología son fuerzas eléctricas entre átomos. Al apoyarte en una silla, no la tocas: los electrones de tus átomos repelen a los electrones de sus átomos, impidiendo el contacto. En sentido literal, no existe el contacto.",
+    "Pero lo principal en este tema no es la fórmula, sino el concepto. Newton no estaba satisfecho con su propia ley de gravitación: la fuerza actúa instantáneamente a través del vacío, y no se sabe cómo lo hace. Faraday, que no conocía matemáticas superiores, propuso otra imagen: la carga modifica el espacio a su alrededor, y la segunda carga no siente a la primera, sino el espacio modificado en su punto. Así nació el campo, y resultó no ser un invento conveniente, sino una entidad física independiente con energía y momento.",
+    "El aspecto práctico es obvio: sin electrostática no hay condensador, ni transistor, ni la pantalla que miras. Tampoco hay rayos, impresoras láser, precipitadores electrostáticos en chimeneas de fábricas, ni comprensión de por qué es peligroso pararse bajo un árbol durante una tormenta."
+   ]
+  },
+  "history": {
+   "title": "Quién la creó",
+   "people": [
+    {
+     "name": "Tales de Mileto",
+     "years": "≈624–546 a. C.",
+     "what": "Notó que el ámbar frotado con lana atrae pajitas. La palabra griega para ámbar — electrón — dio nombre al fenómeno más de dos mil años después."
     },
-    "history": {
-      "title": "من ابتكرها",
-      "people": [
-        {
-          "name": "طاليس ميليتوس",
-          "years": "≈624–546 ق.م.",
-          "what": "لاحظ أن الكهرمان الممسوح بالصوف يجذب قشات. الكلمة اليونانية للكهرمان - إلكترون - أعطت الاسم للظاهرة كلها بعد أكثر من ألفي عام."
-        },
-        {
-          "name": "شارل أوغستان كولوم",
-          "years": "1736–1806",
-          "what": "قاس القوة بين الشحنات بميزان الالتواء الذي كان دقيقًا لدرجة أنه يتفاعل مع حركة الهواء في الغرفة. حصل على معكوس مربع المسافة - نفس الاعتماد كما في الجاذبية، وكتب عن ذلك فورًا."
-        },
-        {
-          "name": "مايكل فاراداي",
-          "years": "1791–1867",
-          "what": "ابن حداد، مجلد كتب بالمهنة، لم يعرف الرياضيات فوق الحساب. أدخل مفهوم خطوط القوة والمجال لأنه كان يفكر بالصور وليس بالصيغ - وكان محقًا بشكل أعمق من جميع معاصريه المتعلمين رياضياتيًا."
-        },
-        {
-          "name": "كارل فريدريش غاوس",
-          "years": "1777–1855",
-          "what": "صاغ نظرية تربط تدفق المجال عبر سطح مغلق بالشحنة المحصورة داخله. تحول الجمع المعقد إلى سطر واحد - وتعمل فقط بفضل معكوس المربع."
-        },
-        {
-          "name": "جيمس كليرك ماكسويل",
-          "years": "1831–1879",
-          "what": "ترجم صور فاراداي إلى لغة المعادلات واكتشف أنها تؤدي إلى وجود موجات كهرومغناطيسية تنتقل بسرعة الضوء. كان دائمًا يؤكد أن جميع الأفكار تعود لفاراداي، وأنه فقط سجلها بالصيغ."
-        }
-      ]
+    {
+     "name": "Charles-Augustin de Coulomb",
+     "years": "1736–1806",
+     "what": "Midió la fuerza entre cargas con una balanza de torsión tan sensible que reaccionaba al movimiento del aire en la habitación. Obtuvo la ley del inverso del cuadrado de la distancia, la misma dependencia que la gravitación, y lo escribió de inmediato."
     },
-    "map": {
-      "title": "ماذا ستتعلم",
-      "lead": "ثلاث فقرات تنتقل من القوة إلى المجال ومن المجال إلى الطاقة. موقف واحد: شحنتان، أسهم المجال وشحنة اختبارية يمكن تحريكها على المحور.",
-      "outcome": "بعد إكمال الثلاثة، ستفهم لماذا قانون كولوم يشبه قانون الجاذبية كثيرًا وما الفرق الجوهري بينهما؛ وما هو المجال ولماذا احتيج إلى تقديمه؛ وماذا يعني النقش '220 فولت' - وكذلك لماذا يبقى الطائر على السلك سليمًا."
+    {
+     "name": "Michael Faraday",
+     "years": "1791–1867",
+     "what": "Hijo de un herrero, encuadernador de profesión, sin más matemáticas que la aritmética. Introdujo el concepto de líneas de fuerza y campo porque pensaba en imágenes, no en fórmulas, y resultó tener más razón que todos sus contemporáneos con formación matemática."
     },
-    "prereq": {
-      "title": "ما يجب معرفته مسبقًا",
-      "items": [
-        "الميكانيكا: القوة، الشغل، الطاقة الكامنة. خاصة مفهوم القوة المحافظة من موضوع قوانين الحفظ.",
-        "قانون الجاذبية من موضوع الثقالة - نصف هذا الموضوع مبني على المقارنة معه.",
-        "المتجهات: الجمع بقاعدة متوازي الأضلاع. مجالات الشحنات المختلفة تجمع كمتجهات."
-      ],
-      "note": "الموضوع مريح لأن كل شيء فيه تقريبًا مألوف من الجاذبية: نفس الاعتماد على المسافة، نفس منطق الطاقة الكامنة. هناك فكرتان جديدتان فقط - الشحنة لها نوعان، والمجال كيان مستقل. كلاهما يستحق التوقف عنده."
+    {
+     "name": "Carl Friedrich Gauss",
+     "years": "1777–1855",
+     "what": "Formuló el teorema que relaciona el flujo del campo a través de una superficie cerrada con la carga encerrada. Convierte sumas engorrosas en una sola línea, y funciona solo gracias a la ley del inverso del cuadrado."
     },
-    "closing": {
-      "title": "والأهم",
-      "text": [
-        "مفهوم المجال تبين أنه أهم من قانون كولوم نفسه. لقد نجا من تغيير النظريات: في الفيزياء الكمومية، بقي المجال واختفت القوة، وتحولت إلى تبادل جسيمات. اليوم توصف كل المادة كإثارة للحقول، وهذه أعمق صورة للعالم لدينا.",
-        "ولكن هنا أيضًا يبقى سؤال لا إجابة له. الشحنة مكممة: أي شحنة مشاهد هي مضاعف للشحنة الأولية بدقة تصل إلى العشرين رقمًا عشريًا. لا يوجد قانون يفرض ذلك، ولماذا هو كذلك غير معروف."
-      ],
-      "link": {
-        "href": "/frontier.html#gravity",
-        "text": "أسئلة مفتوحة: ما لا تعرفه الفيزياء عن التفاعلات"
-      }
+    {
+     "name": "James Clerk Maxwell",
+     "years": "1831–1879",
+     "what": "Tradujo las imágenes de Faraday al lenguaje de ecuaciones y descubrió que de ellas se deduce la existencia de ondas electromagnéticas que viajan a la velocidad de la luz. Siempre recalcó que todas las ideas eran de Faraday y que él solo las escribió en fórmulas."
+    }
+   ]
+  },
+  "map": {
+   "title": "Qué aprenderá",
+   "lead": "Tres secciones van desde la fuerza al campo y del campo a la energía. Un único escenario: dos cargas, flechas de campo y una carga de prueba que se puede mover a lo largo del eje.",
+   "outcome": "Al completar las tres, entenderá por qué la ley de Coulomb es tan similar a la ley de la gravitación y en qué se diferencian fundamentalmente; qué es un campo y por qué fue necesario introducirlo; y qué significa la inscripción «220 V» — además de por qué un pájaro en un cable no se electrocuta."
+  },
+  "prereq": {
+   "title": "Qué necesita saber de antemano",
+   "items": [
+    "Mecánica: fuerza, trabajo, energía potencial. Especialmente el concepto de fuerza conservativa del tema de leyes de conservación.",
+    "La ley de la gravitación del tema de gravedad: la mitad de este tema se basa en la comparación con ella.",
+    "Vectores: suma por la regla del paralelogramo. Los campos de diferentes cargas se suman precisamente como vectores."
+   ],
+   "note": "El tema es cómodo porque casi todo ya es familiar por la gravitación: la misma dependencia de la distancia, la misma lógica de la energía potencial. Solo hay dos ideas nuevas: la carga tiene dos signos y el campo es una entidad independiente. Ambas merecen ser exploradas."
+  },
+  "closing": {
+   "title": "Y lo principal",
+   "text": [
+    "El concepto de campo resultó más importante que la propia ley de Coulomb. Sobrevivió al cambio de teorías: en física cuántica, el campo permanece y la fuerza desaparece, transformándose en intercambio de partículas. Hoy toda la materia se describe como excitaciones de campos, y esta es la imagen más profunda del mundo que tenemos.",
+    "Pero aún queda una pregunta sin respuesta. La carga está cuantizada: cualquier carga observable es múltiplo de la carga elemental con una precisión de veinte cifras decimales. Ninguna ley exige esto, y no se sabe por qué es así."
+   ],
+   "link": {
+    "href": "/frontier.html#gravity",
+    "text": "Preguntas abiertas: qué no sabe la física sobre las interacciones"
+   }
+  },
+  "lessons": [
+   {
+    "id": "01-coulomb",
+    "title": "Carga y ley de Coulomb",
+    "sub": "Párrafo 1 · La misma fórmula que la de la gravedad, pero miles de billones de veces más fuerte",
+    "law": "Ley de Coulomb",
+    "model": "charge"
+   },
+   {
+    "id": "02-field",
+    "title": "Campo",
+    "sub": "Párrafo 2 · Cómo la física dejó de creer en la acción a distancia",
+    "law": "Intensidad de campo",
+    "model": "charge"
+   },
+   {
+    "id": "03-potential",
+    "title": "Potencial y energía",
+    "sub": "Párrafo 3 · ¿Qué es un voltio y por qué el pájaro en el cable está ileso?",
+    "law": "Potencial y diferencia de potencial",
+    "model": "charge"
+   }
+  ]
+ },
+ "ar": {
+  "title": "الكهرباء الساكنة",
+  "subtitle": "الشحنة، المجال، الجهد",
+  "lead": "موضوع اخترعت فيه الفيزياء أقوى مفاهيمها - المجال. يبدأ بصيغة تشبه قانون الجاذبية إلى حد لا يمكن تمييزه، وينتهي بالتخلي عن فكرة القوى المؤثرة عبر الفراغ.",
+  "why": {
+   "title": "لماذا يجب معرفة هذا",
+   "text": [
+    "لنبدأ برقم يستحق إدراكه. التنافر الكهربائي بين إلكترونين أقوى من جاذبيتهما التثاقلية بحوالي $10^{42}$ مرة. هذا ليس خطأ: واحد وأربعون صفرًا. الجاذبية هي أضعف التفاعلات المعروفة، ولا تكون ملحوظة إلا لأن الشحنات في المادة تتعادل، بينما الكتل تتجمع دائمًا.",
+    "من هذا ينبع كل ما يحيط بك تقريبًا. صلابة الطاولة، مرونة النابض، شد الحبل، الاحتكاك، التوتر السطحي للماء، كل الكيمياء وكل البيولوجيا هي قوى كهربائية بين الذرات. عندما تستند على كرسي، فإنك لا تلمسه: إلكترونات ذراتك تدفع إلكترونات ذراته، مانعة الاقتراب. لا يوجد ملامسة بالمعنى الحرفي.",
+    "لكن الأهم في هذا الموضوع ليس الصيغة، بل المفهوم. كان نيوتن غير راضٍ عن قانون الجاذبية الخاص به: القوة تؤثر فوريًا عبر الفراغ، وكيف تفعل ذلك غير معروف. فاراداي، الذي لم يكن يعرف الرياضيات العليا، اقترح صورة أخرى: الشحنة تغير الفضاء حولها، والشحنة الثانية تشعر ليس بالشحنة الأولى، بل بالفضاء المتغير عند نقطتها. هكذا ظهر المجال - وتبين أنه ليس اختراعًا مناسبًا، بل كيان فيزيائي مستقل له طاقة وزخم.",
+    "الجانب العملي واضح: بدون الكهرباء الساكنة لا يوجد مكثف، ولا ترانزستور، ولا الشاشة التي تنظر إليها. كما لا توجد بروق، ولا طابعات ليزر، ولا مرشحات كهربائية على مداخن المصانع، ولا فهم لسبب خطورة الوقوف تحت شجرة أثناء العاصفة الرعدية."
+   ]
+  },
+  "history": {
+   "title": "من ابتكرها",
+   "people": [
+    {
+     "name": "طاليس ميليتوس",
+     "years": "≈624–546 ق.م.",
+     "what": "لاحظ أن الكهرمان الممسوح بالصوف يجذب قشات. الكلمة اليونانية للكهرمان - إلكترون - أعطت الاسم للظاهرة كلها بعد أكثر من ألفي عام."
     },
-    "lessons": [
-      {
-        "id": "01-coulomb",
-        "title": "الشحنة وقانون كولوم",
-        "sub": "الفقرة 1 · نفس معادلة الجاذبية، لكنها أقوى بآلاف التريليونات من المرات",
-        "law": "قانون كولوم",
-        "model": "charge"
-      },
-      {
-        "id": "02-field",
-        "title": "المجال",
-        "sub": "الفقرة 2 · كيف توقفت الفيزياء عن الإيمان بالفعل عن بعد",
-        "law": "شدة المجال",
-        "model": "charge"
-      },
-      {
-        "id": "03-potential",
-        "title": "الجهد والطاقة",
-        "sub": "الفقرة 3 · ما هو الفولت ولماذا الطائر على السلك سليم",
-        "law": "الجهد وفرق الجهد",
-        "model": "charge"
-      }
-    ]
-  }
+    {
+     "name": "شارل أوغستان كولوم",
+     "years": "1736–1806",
+     "what": "قاس القوة بين الشحنات بميزان الالتواء الذي كان دقيقًا لدرجة أنه يتفاعل مع حركة الهواء في الغرفة. حصل على معكوس مربع المسافة - نفس الاعتماد كما في الجاذبية، وكتب عن ذلك فورًا."
+    },
+    {
+     "name": "مايكل فاراداي",
+     "years": "1791–1867",
+     "what": "ابن حداد، مجلد كتب بالمهنة، لم يعرف الرياضيات فوق الحساب. أدخل مفهوم خطوط القوة والمجال لأنه كان يفكر بالصور وليس بالصيغ - وكان محقًا بشكل أعمق من جميع معاصريه المتعلمين رياضياتيًا."
+    },
+    {
+     "name": "كارل فريدريش غاوس",
+     "years": "1777–1855",
+     "what": "صاغ نظرية تربط تدفق المجال عبر سطح مغلق بالشحنة المحصورة داخله. تحول الجمع المعقد إلى سطر واحد - وتعمل فقط بفضل معكوس المربع."
+    },
+    {
+     "name": "جيمس كليرك ماكسويل",
+     "years": "1831–1879",
+     "what": "ترجم صور فاراداي إلى لغة المعادلات واكتشف أنها تؤدي إلى وجود موجات كهرومغناطيسية تنتقل بسرعة الضوء. كان دائمًا يؤكد أن جميع الأفكار تعود لفاراداي، وأنه فقط سجلها بالصيغ."
+    }
+   ]
+  },
+  "map": {
+   "title": "ماذا ستتعلم",
+   "lead": "ثلاث فقرات تنتقل من القوة إلى المجال ومن المجال إلى الطاقة. موقف واحد: شحنتان، أسهم المجال وشحنة اختبارية يمكن تحريكها على المحور.",
+   "outcome": "بعد إكمال الثلاثة، ستفهم لماذا قانون كولوم يشبه قانون الجاذبية كثيرًا وما الفرق الجوهري بينهما؛ وما هو المجال ولماذا احتيج إلى تقديمه؛ وماذا يعني النقش '220 فولت' - وكذلك لماذا يبقى الطائر على السلك سليمًا."
+  },
+  "prereq": {
+   "title": "ما يجب معرفته مسبقًا",
+   "items": [
+    "الميكانيكا: القوة، الشغل، الطاقة الكامنة. خاصة مفهوم القوة المحافظة من موضوع قوانين الحفظ.",
+    "قانون الجاذبية من موضوع الثقالة - نصف هذا الموضوع مبني على المقارنة معه.",
+    "المتجهات: الجمع بقاعدة متوازي الأضلاع. مجالات الشحنات المختلفة تجمع كمتجهات."
+   ],
+   "note": "الموضوع مريح لأن كل شيء فيه تقريبًا مألوف من الجاذبية: نفس الاعتماد على المسافة، نفس منطق الطاقة الكامنة. هناك فكرتان جديدتان فقط - الشحنة لها نوعان، والمجال كيان مستقل. كلاهما يستحق التوقف عنده."
+  },
+  "closing": {
+   "title": "والأهم",
+   "text": [
+    "مفهوم المجال تبين أنه أهم من قانون كولوم نفسه. لقد نجا من تغيير النظريات: في الفيزياء الكمومية، بقي المجال واختفت القوة، وتحولت إلى تبادل جسيمات. اليوم توصف كل المادة كإثارة للحقول، وهذه أعمق صورة للعالم لدينا.",
+    "ولكن هنا أيضًا يبقى سؤال لا إجابة له. الشحنة مكممة: أي شحنة مشاهد هي مضاعف للشحنة الأولية بدقة تصل إلى العشرين رقمًا عشريًا. لا يوجد قانون يفرض ذلك، ولماذا هو كذلك غير معروف."
+   ],
+   "link": {
+    "href": "/frontier.html#gravity",
+    "text": "أسئلة مفتوحة: ما لا تعرفه الفيزياء عن التفاعلات"
+   }
+  },
+  "lessons": [
+   {
+    "id": "01-coulomb",
+    "title": "الشحنة وقانون كولوم",
+    "sub": "الفقرة 1 · نفس معادلة الجاذبية، لكنها أقوى بآلاف التريليونات من المرات",
+    "law": "قانون كولوم",
+    "model": "charge"
+   },
+   {
+    "id": "02-field",
+    "title": "المجال",
+    "sub": "الفقرة 2 · كيف توقفت الفيزياء عن الإيمان بالفعل عن بعد",
+    "law": "شدة المجال",
+    "model": "charge"
+   },
+   {
+    "id": "03-potential",
+    "title": "الجهد والطاقة",
+    "sub": "الفقرة 3 · ما هو الفولت ولماذا الطائر على السلك سليم",
+    "law": "الجهد وفرق الجهد",
+    "model": "charge"
+   }
+  ]
+ }
 }

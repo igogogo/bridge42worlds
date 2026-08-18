@@ -1,409 +1,409 @@
 {
-  "id": "language",
-  "schema": "b42.course/2",
-  "kind": "overview",
-  "order": 1,
-  "entities": {
-    "laws": [],
-    "tags": [
-      "mechanics",
-      "energy",
-      "entropy"
-    ],
-    "scientists": [
-      "Isaac Newton",
-      "Ludwig Boltzmann"
-    ]
+ "id": "language",
+ "schema": "b42.course/2",
+ "kind": "overview",
+ "order": 0,
+ "entities": {
+  "laws": [],
+  "tags": [
+   "mechanics",
+   "energy",
+   "entropy"
+  ],
+  "scientists": [
+   "Isaac Newton",
+   "Ludwig Boltzmann"
+  ]
+ },
+ "lessons": [
+  {
+   "id": "01-models",
+   "title": "Модель и её границы",
+   "sub": "Почему материальная точка — это не упрощение, а инструмент",
+   "law": "Принцип моделирования",
+   "model": "motion"
+  },
+  {
+   "id": "02-scale",
+   "title": "Размерность и порядок величины",
+   "sub": "Как получить ответ в уме, не решая задачу",
+   "law": "Анализ размерностей",
+   "model": "motion"
+  },
+  {
+   "id": "03-phase",
+   "title": "Пространство состояний",
+   "sub": "Как память превращается в размерность",
+   "law": "Фазовое пространство",
+   "model": "oscillator"
+  }
+ ],
+ "ru": {
+  "title": "Как физика описывает мир",
+  "subtitle": "Вводная тема: не законы, а способ, которым законы устроены",
+  "lead": "Эта глава стоит перед механикой, потому что отвечает на вопрос, который в учебниках обычно пропускают: что вообще делает физик, когда решает задачу. Не «какая формула», а откуда берутся формулы, почему они работают и где перестают.",
+  "why": {
+   "title": "Зачем это знать",
+   "text": [
+    "Обычный курс начинается сразу с законов, и у читателя складывается впечатление, будто физика — это набор правил, которые кто-то однажды обнаружил высеченными в природе. Это впечатление ложное и мешает дальше. Когда через несколько тем выяснится, что Ньютон неверен на околосветовых скоростях, а в атоме неприменим вовсе, придётся либо решить, что вас обманули, либо переучиваться.",
+    "На самом деле физика не открывает законы природы напрямую. Она строит модели — намеренно упрощённые описания, которые верны в оговорённой области и ломаются за её границей. Материальная точка, идеальный газ, несжимаемая жидкость, абсолютно чёрное тело — ни одного такого объекта в природе нет. И тем не менее именно они позволяют посчитать траекторию ракеты, давление в баллоне и температуру звезды.",
+    "Отсюда простое следствие, ради которого написана эта глава: у каждой формулы есть область применимости, и знать её важнее, чем помнить саму формулу. Формулу можно посмотреть. Понимание того, применима ли она здесь, посмотреть негде.",
+    "Второе, чему учит эта глава, — считать. Не в смысле арифметики, а в смысле умения за минуту, без калькулятора и справочника, получить ответ с точностью до порядка. Это навык, который отличает человека, понимающего физику, от человека, помнящего физику."
+   ]
+  },
+  "history": {
+   "title": "Кто научил так думать",
+   "people": [
+    {
+     "name": "Галилео Галилей",
+     "years": "1564–1642",
+     "what": "Первым сознательно применил идею модели: чтобы понять падение, он выбросил из рассмотрения сопротивление воздуха, форму тела и его состав. Современники считали это жульничеством — ведь в реальности пёрышко падает не так, как камень. Галилей ответил, что сначала надо понять главное, а поправки добавить потом. Так родился метод, которым физика пользуется до сих пор."
+    },
+    {
+     "name": "Уильям Томсон (лорд Кельвин)",
+     "years": "1824–1907",
+     "what": "Настаивал, что понимание есть умение посчитать: «Если вы можете измерить то, о чём говорите, и выразить это числом, вы кое-что об этом знаете». Оценив скорость остывания Земли, он получил её возраст в десятки миллионов лет и ошибся — потому что радиоактивность тогда не была известна. Прекрасный пример того, как оценка бывает безупречной по методу и неверной по исходным данным."
+    },
+    {
+     "name": "Джон Уильям Стретт (лорд Рэлей)",
+     "years": "1842–1919",
+     "what": "Развил анализ размерностей до рабочего инструмента: показал, что из одних только единиц измерения часто можно вывести вид формулы с точностью до безразмерного множителя. Так он объяснил, почему небо голубое, — не решая уравнений рассеяния целиком."
+    },
+    {
+     "name": "Энрико Ферми",
+     "years": "1901–1954",
+     "what": "Довёл искусство оценки до легенды. На испытании первой атомной бомбы он бросил в воздух клочки бумаги и по расстоянию, на которое их отнесла ударная волна, назвал мощность взрыва — результат сошёлся с приборными измерениями по порядку величины. Задачи такого рода до сих пор называют задачами Ферми."
+    },
+    {
+     "name": "Уиллард Гиббс",
+     "years": "1839–1903",
+     "what": "Ввёл представление о состоянии системы как о точке в многомерном пространстве, а о процессе — как о линии в нём. Идея оказалась настолько удачной, что пережила все смены физических теорий: язык фазового пространства одинаково работает в механике, в термодинамике и в квантовой теории."
+    }
+   ]
+  },
+  "map": {
+   "title": "Что вы изучите",
+   "lead": "Три параграфа, и каждый даёт инструмент, а не факт. Первый учит видеть границу модели, второй — получать ответ без вычислений, третий — превращать историю системы в её текущее состояние.",
+   "outcome": "Пройдя все три, вы будете понимать, почему у любой формулы есть область применимости и как её распознать; сможете за минуту оценить величину, которую не помните; и научитесь смотреть на движение как на линию в пространстве состояний — тот взгляд, который дальше встретится в термодинамике, в статистике и в квантовой механике."
+  },
+  "prereq": {
+   "title": "Что нужно знать заранее",
+   "items": [
+    "Арифметику и степени с десятками: запись $3 \\cdot 10^{8}$ должна читаться без напряжения.",
+    "Представление о том, что такое производная, — хотя бы на уровне «скорость есть быстрота изменения координаты». Строго разберём в механике.",
+    "Ничего больше. Эта глава сознательно не требует подготовки: она про способ думать, а не про аппарат."
+   ],
+   "note": "Если решите начать сразу с механики — ничего страшного, туда ведёт прямая дорога. Но вернуться сюда стоит: многое из того, что дальше выглядит произвольным соглашением, здесь объясняется одной фразой."
+  },
+  "closing": {
+   "title": "И главное",
+   "text": [
+    "Физика — не собрание истин, а способ задавать вопросы природе так, чтобы она могла ответить. Каждая модель в этом курсе однажды была передним краем, и каждая однажды упёрлась в границу, за которой понадобилась следующая.",
+    "Граница есть и сегодня. Мы по-прежнему не знаем, что такое время, почему энтропия растёт и как соединить гравитацию с квантовой механикой. Это не пробелы в учебнике — это места, где работа ещё идёт."
+   ],
+   "link": {
+    "href": "/frontier.html",
+    "text": "Открытые вопросы — что физика не знает сегодня"
+   }
   },
   "lessons": [
+   {
+    "id": "01-models",
+    "title": "Модель и её границы",
+    "sub": "Почему материальная точка — это не упрощение, а инструмент",
+    "law": "Принцип моделирования",
+    "model": "motion"
+   },
+   {
+    "id": "02-scale",
+    "title": "Размерность и порядок величины",
+    "sub": "Как получить ответ в уме, не решая задачу",
+    "law": "Анализ размерностей",
+    "model": "motion"
+   },
+   {
+    "id": "03-phase",
+    "title": "Пространство состояний",
+    "sub": "Как память превращается в размерность",
+    "law": "Фазовое пространство",
+    "model": "oscillator"
+   }
+  ]
+ },
+ "en": {
+  "title": "How Physics Describes the World",
+  "subtitle": "Introductory Topic: Not Laws, but the Way Laws Are Structured",
+  "lead": "This chapter comes before mechanics because it answers a question usually skipped in textbooks: what does a physicist actually do when solving a problem? Not 'which formula,' but where formulas come from, why they work, and where they stop working.",
+  "why": {
+   "title": "Why This Matters",
+   "text": [
+    "A typical course starts immediately with laws, giving the reader the impression that physics is a set of rules someone once found carved into nature. This impression is false and hinders further understanding. When, after a few topics, it turns out that Newton is wrong at near-light speeds and inapplicable in the atom altogether, you'll either have to decide you were deceived or relearn everything.",
+    "In reality, physics does not discover the laws of nature directly. It builds models — deliberately simplified descriptions that are valid within a specified domain and break down beyond it. A point mass, an ideal gas, an incompressible fluid, a black body — none of these objects exist in nature. Yet they allow us to calculate the trajectory of a rocket, the pressure in a tank, and the temperature of a star.",
+    "Hence a simple consequence, for which this chapter was written: every formula has a domain of applicability, and knowing it is more important than remembering the formula itself. You can look up a formula. But there is no place to look up whether it applies here.",
+    "The second thing this chapter teaches is estimation. Not arithmetic, but the ability to get an answer accurate to an order of magnitude in a minute, without a calculator or reference. This skill distinguishes someone who understands physics from someone who only memorizes physics."
+   ]
+  },
+  "history": {
+   "title": "Who Taught Us to Think This Way",
+   "people": [
     {
-      "id": "01-models",
-      "title": "Модель и её границы",
-      "sub": "Почему материальная точка — это не упрощение, а инструмент",
-      "law": "Принцип моделирования",
-      "model": "motion"
+     "name": "Galileo Galilei",
+     "years": "1564–1642",
+     "what": "First to consciously apply the idea of a model: to understand falling, he discarded air resistance, body shape, and composition. Contemporaries considered this cheating — after all, in reality a feather does not fall like a stone. Galileo replied that one must first understand the main effect, then add corrections later. Thus was born the method physics still uses."
     },
     {
-      "id": "02-scale",
-      "title": "Размерность и порядок величины",
-      "sub": "Как получить ответ в уме, не решая задачу",
-      "law": "Анализ размерностей",
-      "model": "motion"
+     "name": "William Thomson (Lord Kelvin)",
+     "years": "1824–1907",
+     "what": "Insisted that understanding is the ability to calculate: 'If you can measure what you are speaking about and express it in numbers, you know something about it.' By estimating Earth's cooling rate, he got its age in tens of millions of years and was wrong — because radioactivity was unknown then. A perfect example of how an estimate can be flawless in method yet wrong due to input data."
     },
     {
-      "id": "03-phase",
-      "title": "Пространство состояний",
-      "sub": "Как память превращается в размерность",
-      "law": "Фазовое пространство",
-      "model": "oscillator"
+     "name": "John William Strutt (Lord Rayleigh)",
+     "years": "1842–1919",
+     "what": "Developed dimensional analysis into a working tool: showed that from units alone one can often deduce the form of a formula up to a dimensionless factor. This way he explained why the sky is blue — without solving the full scattering equations."
+    },
+    {
+     "name": "Enrico Fermi",
+     "years": "1901–1954",
+     "what": "Raised the art of estimation to legendary status. At the first atomic bomb test, he threw scraps of paper into the air and from the distance they were carried by the shock wave gave the blast yield — the result matched instrument measurements to an order of magnitude. Such problems are still called Fermi problems."
+    },
+    {
+     "name": "Josiah Willard Gibbs",
+     "years": "1839–1903",
+     "what": "Introduced the idea of a system's state as a point in multidimensional space, and a process as a line in that space. The idea proved so successful that it survived all changes in physical theories: the language of phase space works equally well in mechanics, thermodynamics, and quantum theory."
     }
-  ],
-  "ru": {
-    "title": "Как физика описывает мир",
-    "subtitle": "Вводная тема: не законы, а способ, которым законы устроены",
-    "lead": "Эта глава стоит перед механикой, потому что отвечает на вопрос, который в учебниках обычно пропускают: что вообще делает физик, когда решает задачу. Не «какая формула», а откуда берутся формулы, почему они работают и где перестают.",
-    "why": {
-      "title": "Зачем это знать",
-      "text": [
-        "Обычный курс начинается сразу с законов, и у читателя складывается впечатление, будто физика — это набор правил, которые кто-то однажды обнаружил высеченными в природе. Это впечатление ложное и мешает дальше. Когда через несколько тем выяснится, что Ньютон неверен на околосветовых скоростях, а в атоме неприменим вовсе, придётся либо решить, что вас обманули, либо переучиваться.",
-        "На самом деле физика не открывает законы природы напрямую. Она строит модели — намеренно упрощённые описания, которые верны в оговорённой области и ломаются за её границей. Материальная точка, идеальный газ, несжимаемая жидкость, абсолютно чёрное тело — ни одного такого объекта в природе нет. И тем не менее именно они позволяют посчитать траекторию ракеты, давление в баллоне и температуру звезды.",
-        "Отсюда простое следствие, ради которого написана эта глава: у каждой формулы есть область применимости, и знать её важнее, чем помнить саму формулу. Формулу можно посмотреть. Понимание того, применима ли она здесь, посмотреть негде.",
-        "Второе, чему учит эта глава, — считать. Не в смысле арифметики, а в смысле умения за минуту, без калькулятора и справочника, получить ответ с точностью до порядка. Это навык, который отличает человека, понимающего физику, от человека, помнящего физику."
-      ]
-    },
-    "history": {
-      "title": "Кто научил так думать",
-      "people": [
-        {
-          "name": "Галилео Галилей",
-          "years": "1564–1642",
-          "what": "Первым сознательно применил идею модели: чтобы понять падение, он выбросил из рассмотрения сопротивление воздуха, форму тела и его состав. Современники считали это жульничеством — ведь в реальности пёрышко падает не так, как камень. Галилей ответил, что сначала надо понять главное, а поправки добавить потом. Так родился метод, которым физика пользуется до сих пор."
-        },
-        {
-          "name": "Уильям Томсон (лорд Кельвин)",
-          "years": "1824–1907",
-          "what": "Настаивал, что понимание есть умение посчитать: «Если вы можете измерить то, о чём говорите, и выразить это числом, вы кое-что об этом знаете». Оценив скорость остывания Земли, он получил её возраст в десятки миллионов лет и ошибся — потому что радиоактивность тогда не была известна. Прекрасный пример того, как оценка бывает безупречной по методу и неверной по исходным данным."
-        },
-        {
-          "name": "Джон Уильям Стретт (лорд Рэлей)",
-          "years": "1842–1919",
-          "what": "Развил анализ размерностей до рабочего инструмента: показал, что из одних только единиц измерения часто можно вывести вид формулы с точностью до безразмерного множителя. Так он объяснил, почему небо голубое, — не решая уравнений рассеяния целиком."
-        },
-        {
-          "name": "Энрико Ферми",
-          "years": "1901–1954",
-          "what": "Довёл искусство оценки до легенды. На испытании первой атомной бомбы он бросил в воздух клочки бумаги и по расстоянию, на которое их отнесла ударная волна, назвал мощность взрыва — результат сошёлся с приборными измерениями по порядку величины. Задачи такого рода до сих пор называют задачами Ферми."
-        },
-        {
-          "name": "Уиллард Гиббс",
-          "years": "1839–1903",
-          "what": "Ввёл представление о состоянии системы как о точке в многомерном пространстве, а о процессе — как о линии в нём. Идея оказалась настолько удачной, что пережила все смены физических теорий: язык фазового пространства одинаково работает в механике, в термодинамике и в квантовой теории."
-        }
-      ]
-    },
-    "map": {
-      "title": "Что вы изучите",
-      "lead": "Три параграфа, и каждый даёт инструмент, а не факт. Первый учит видеть границу модели, второй — получать ответ без вычислений, третий — превращать историю системы в её текущее состояние.",
-      "outcome": "Пройдя все три, вы будете понимать, почему у любой формулы есть область применимости и как её распознать; сможете за минуту оценить величину, которую не помните; и научитесь смотреть на движение как на линию в пространстве состояний — тот взгляд, который дальше встретится в термодинамике, в статистике и в квантовой механике."
-    },
-    "prereq": {
-      "title": "Что нужно знать заранее",
-      "items": [
-        "Арифметику и степени с десятками: запись $3 \\cdot 10^{8}$ должна читаться без напряжения.",
-        "Представление о том, что такое производная, — хотя бы на уровне «скорость есть быстрота изменения координаты». Строго разберём в механике.",
-        "Ничего больше. Эта глава сознательно не требует подготовки: она про способ думать, а не про аппарат."
-      ],
-      "note": "Если решите начать сразу с механики — ничего страшного, туда ведёт прямая дорога. Но вернуться сюда стоит: многое из того, что дальше выглядит произвольным соглашением, здесь объясняется одной фразой."
-    },
-    "closing": {
-      "title": "И главное",
-      "text": [
-        "Физика — не собрание истин, а способ задавать вопросы природе так, чтобы она могла ответить. Каждая модель в этом курсе однажды была передним краем, и каждая однажды упёрлась в границу, за которой понадобилась следующая.",
-        "Граница есть и сегодня. Мы по-прежнему не знаем, что такое время, почему энтропия растёт и как соединить гравитацию с квантовой механикой. Это не пробелы в учебнике — это места, где работа ещё идёт."
-      ],
-      "link": {
-        "href": "/frontier.html",
-        "text": "Открытые вопросы — что физика не знает сегодня"
-      }
-    },
-    "lessons": [
-      {
-        "id": "01-models",
-        "title": "Модель и её границы",
-        "sub": "Почему материальная точка — это не упрощение, а инструмент",
-        "law": "Принцип моделирования",
-        "model": "motion"
-      },
-      {
-        "id": "02-scale",
-        "title": "Размерность и порядок величины",
-        "sub": "Как получить ответ в уме, не решая задачу",
-        "law": "Анализ размерностей",
-        "model": "motion"
-      },
-      {
-        "id": "03-phase",
-        "title": "Пространство состояний",
-        "sub": "Как память превращается в размерность",
-        "law": "Фазовое пространство",
-        "model": "oscillator"
-      }
-    ]
+   ]
   },
-  "en": {
-    "title": "How Physics Describes the World",
-    "subtitle": "Introductory Topic: Not Laws, but the Way Laws Are Structured",
-    "lead": "This chapter comes before mechanics because it answers a question usually skipped in textbooks: what does a physicist actually do when solving a problem? Not 'which formula,' but where formulas come from, why they work, and where they stop working.",
-    "why": {
-      "title": "Why This Matters",
-      "text": [
-        "A typical course starts immediately with laws, giving the reader the impression that physics is a set of rules someone once found carved into nature. This impression is false and hinders further understanding. When, after a few topics, it turns out that Newton is wrong at near-light speeds and inapplicable in the atom altogether, you'll either have to decide you were deceived or relearn everything.",
-        "In reality, physics does not discover the laws of nature directly. It builds models — deliberately simplified descriptions that are valid within a specified domain and break down beyond it. A point mass, an ideal gas, an incompressible fluid, a black body — none of these objects exist in nature. Yet they allow us to calculate the trajectory of a rocket, the pressure in a tank, and the temperature of a star.",
-        "Hence a simple consequence, for which this chapter was written: every formula has a domain of applicability, and knowing it is more important than remembering the formula itself. You can look up a formula. But there is no place to look up whether it applies here.",
-        "The second thing this chapter teaches is estimation. Not arithmetic, but the ability to get an answer accurate to an order of magnitude in a minute, without a calculator or reference. This skill distinguishes someone who understands physics from someone who only memorizes physics."
-      ]
-    },
-    "history": {
-      "title": "Who Taught Us to Think This Way",
-      "people": [
-        {
-          "name": "Galileo Galilei",
-          "years": "1564–1642",
-          "what": "First to consciously apply the idea of a model: to understand falling, he discarded air resistance, body shape, and composition. Contemporaries considered this cheating — after all, in reality a feather does not fall like a stone. Galileo replied that one must first understand the main effect, then add corrections later. Thus was born the method physics still uses."
-        },
-        {
-          "name": "William Thomson (Lord Kelvin)",
-          "years": "1824–1907",
-          "what": "Insisted that understanding is the ability to calculate: 'If you can measure what you are speaking about and express it in numbers, you know something about it.' By estimating Earth's cooling rate, he got its age in tens of millions of years and was wrong — because radioactivity was unknown then. A perfect example of how an estimate can be flawless in method yet wrong due to input data."
-        },
-        {
-          "name": "John William Strutt (Lord Rayleigh)",
-          "years": "1842–1919",
-          "what": "Developed dimensional analysis into a working tool: showed that from units alone one can often deduce the form of a formula up to a dimensionless factor. This way he explained why the sky is blue — without solving the full scattering equations."
-        },
-        {
-          "name": "Enrico Fermi",
-          "years": "1901–1954",
-          "what": "Raised the art of estimation to legendary status. At the first atomic bomb test, he threw scraps of paper into the air and from the distance they were carried by the shock wave gave the blast yield — the result matched instrument measurements to an order of magnitude. Such problems are still called Fermi problems."
-        },
-        {
-          "name": "Josiah Willard Gibbs",
-          "years": "1839–1903",
-          "what": "Introduced the idea of a system's state as a point in multidimensional space, and a process as a line in that space. The idea proved so successful that it survived all changes in physical theories: the language of phase space works equally well in mechanics, thermodynamics, and quantum theory."
-        }
-      ]
-    },
-    "map": {
-      "title": "What You Will Learn",
-      "lead": "Three sections, each giving a tool rather than a fact. The first teaches you to see the boundary of a model, the second to get an answer without calculations, the third to turn a system's history into its current state.",
-      "outcome": "After completing all three, you will understand why every formula has a domain of applicability and how to recognize it; you will be able to estimate a quantity you don't remember within a minute; and you will learn to view motion as a line in state space — the perspective you will encounter later in thermodynamics, statistical mechanics, and quantum mechanics."
-    },
-    "prereq": {
-      "title": "What You Need to Know in Advance",
-      "items": [
-        "Arithmetic and powers of ten: notation $3 \\cdot 10^{8}$ should be read without strain.",
-        "An idea of what a derivative is — at least at the level of 'velocity is the rate of change of position'. We will cover it rigorously in mechanics.",
-        "Nothing else. This chapter deliberately requires no background: it is about a way of thinking, not about formalism."
-      ],
-      "note": "If you decide to start directly with mechanics, that's fine — there is a direct path. But it's worth returning here: much of what later seems like an arbitrary convention is explained in a single phrase here."
-    },
-    "closing": {
-      "title": "And Most Importantly",
-      "text": [
-        "Physics is not a collection of truths but a way of asking questions of nature so that it can answer. Every model in this course was once the frontier, and every one eventually hit a boundary beyond which a new model was needed.",
-        "The boundary exists today as well. We still do not know what time is, why entropy increases, or how to unify gravity with quantum mechanics. These are not gaps in the textbook — they are places where work is ongoing."
-      ],
-      "link": {
-        "href": "/frontier.html",
-        "text": "Open Questions — What Physics Does Not Know Today"
-      }
-    },
-    "lessons": [
-      {
-        "id": "01-models",
-        "title": "The Model and Its Boundaries",
-        "sub": "Section 1 · Why the Material Point Is Not a Simplification, but a Tool",
-        "law": "Principle of modeling",
-        "model": "motion"
-      },
-      {
-        "id": "02-scale",
-        "title": "Dimension and Order of Magnitude",
-        "sub": "Section 2 · How to Get an Answer Without Solving the Problem",
-        "law": "Dimensional analysis",
-        "model": "motion"
-      },
-      {
-        "id": "03-phase",
-        "title": "State Space",
-        "sub": "Section 3 · How Memory Becomes Dimension",
-        "law": "Phase space",
-        "model": "oscillator"
-      }
-    ]
+  "map": {
+   "title": "What You Will Learn",
+   "lead": "Three sections, each giving a tool rather than a fact. The first teaches you to see the boundary of a model, the second to get an answer without calculations, the third to turn a system's history into its current state.",
+   "outcome": "After completing all three, you will understand why every formula has a domain of applicability and how to recognize it; you will be able to estimate a quantity you don't remember within a minute; and you will learn to view motion as a line in state space — the perspective you will encounter later in thermodynamics, statistical mechanics, and quantum mechanics."
   },
-  "es": {
-    "title": "Cómo la física describe el mundo",
-    "subtitle": "Tema introductorio: no las leyes, sino la forma en que están estructuradas las leyes",
-    "lead": "Este capítulo precede a la mecánica porque responde a la pregunta que los libros de texto suelen omitir: ¿qué hace realmente un físico cuando resuelve un problema? No 'qué fórmula', sino de dónde vienen las fórmulas, por qué funcionan y dónde dejan de hacerlo.",
-    "why": {
-      "title": "Por qué es importante saber esto",
-      "text": [
-        "Un curso típico comienza directamente con las leyes, y el lector tiene la impresión de que la física es un conjunto de reglas que alguien descubrió talladas en la naturaleza. Esta impresión es falsa y dificulta el avance. Cuando después de varios temas resulte que Newton es incorrecto a velocidades cercanas a la luz y que en el átomo no es aplicable en absoluto, uno tendrá que decidir si lo engañaron o aprender de nuevo.",
-        "En realidad, la física no descubre las leyes de la naturaleza directamente. Construye modelos: descripciones deliberadamente simplificadas que son válidas en un dominio acordado y se rompen fuera de él. Punto material, gas ideal, fluido incompresible, cuerpo negro: ninguno de esos objetos existe en la naturaleza. Y sin embargo, son ellos los que permiten calcular la trayectoria de un cohete, la presión en un tanque y la temperatura de una estrella.",
-        "De aquí se sigue una conclusión simple, para la cual está escrito este capítulo: cada fórmula tiene un dominio de aplicabilidad, y conocerlo es más importante que recordar la fórmula misma. La fórmula se puede consultar. La comprensión de si es aplicable aquí no se puede consultar.",
-        "Lo segundo que enseña este capítulo es a estimar. No en el sentido de la aritmética, sino en el sentido de la capacidad de obtener una respuesta con precisión de orden de magnitud en un minuto, sin calculadora ni manual. Es una habilidad que distingue a quien entiende la física de quien la recuerda."
-      ]
-    },
-    "history": {
-      "title": "Quién enseñó a pensar así",
-      "people": [
-        {
-          "name": "Galileo Galilei",
-          "years": "1564–1642",
-          "what": "Fue el primero en aplicar conscientemente la idea de modelo: para entender la caída, eliminó de la consideración la resistencia del aire, la forma del cuerpo y su composición. Los contemporáneos lo consideraban un engaño, porque en realidad una pluma no cae como una piedra. Galileo respondió que primero hay que entender lo principal y luego agregar las correcciones. Así nació el método que la física usa hasta hoy."
-        },
-        {
-          "name": "William Thomson (lord Kelvin)",
-          "years": "1824–1907",
-          "what": "Insistió en que entender es saber calcular: 'Si puedes medir aquello de lo que hablas y expresarlo con un número, sabes algo al respecto'. Al estimar la velocidad de enfriamiento de la Tierra, obtuvo una edad de decenas de millones de años y se equivocó, porque la radiactividad no se conocía entonces. Un excelente ejemplo de cómo una estimación puede ser impecable en el método pero incorrecta en los datos de partida."
-        },
-        {
-          "name": "John William Strutt (lord Rayleigh)",
-          "years": "1842–1919",
-          "what": "Desarrolló el análisis dimensional como herramienta de trabajo: demostró que a partir de las unidades de medida a menudo se puede deducir la forma de una fórmula hasta un factor adimensional. Así explicó por qué el cielo es azul, sin resolver las ecuaciones de dispersión por completo."
-        },
-        {
-          "name": "Enrico Fermi",
-          "years": "1901–1954",
-          "what": "Llevó el arte de la estimación a la leyenda. En la prueba de la primera bomba atómica, arrojó trozos de papel al aire y por la distancia que la onda expansiva los desplazó, dio la potencia de la explosión; el resultado coincidió con las mediciones instrumentales en orden de magnitud. Los problemas de este tipo se llaman hasta hoy problemas de Fermi."
-        },
-        {
-          "name": "Willard Gibbs",
-          "years": "1839–1903",
-          "what": "Introdujo la representación del estado de un sistema como un punto en un espacio multidimensional, y del proceso como una línea en él. La idea resultó tan exitosa que sobrevivió a todos los cambios de teorías físicas: el lenguaje del espacio de fases funciona igualmente en mecánica, termodinámica y teoría cuántica."
-        }
-      ]
-    },
-    "map": {
-      "title": "Qué aprenderá",
-      "lead": "Tres párrafos, y cada uno da una herramienta, no un hecho. El primero enseña a ver el límite del modelo, el segundo a obtener una respuesta sin cálculos, el tercero a convertir la historia de un sistema en su estado actual.",
-      "outcome": "Al completar los tres, comprenderá por qué cada fórmula tiene un dominio de aplicabilidad y cómo reconocerlo; podrá estimar en un minuto una magnitud que no recuerde; y aprenderá a ver el movimiento como una línea en el espacio de estados — esa mirada que luego encontrará en termodinámica, en estadística y en mecánica cuántica."
-    },
-    "prereq": {
-      "title": "Qué necesita saber de antemano",
-      "items": [
-        "Aritmética y potencias de diez: la notación $3 \\cdot 10^{8}$ debe leerse sin esfuerzo.",
-        "Una noción de lo que es una derivada, al menos a nivel de 'la velocidad es la rapidez de cambio de la coordenada'. Lo abordaremos estrictamente en mecánica.",
-        "Nada más. Este capítulo deliberadamente no requiere preparación: se trata de una forma de pensar, no de un aparato."
-      ],
-      "note": "Si decide comenzar directamente con la mecánica, no hay problema, hay un camino directo. Pero vale la pena volver aquí: mucho de lo que más adelante parece un convenio arbitrario se explica aquí con una frase."
-    },
-    "closing": {
-      "title": "Y lo principal",
-      "text": [
-        "La física no es una colección de verdades, sino una forma de hacer preguntas a la naturaleza para que pueda responder. Cada modelo en este curso alguna vez fue la frontera del conocimiento, y cada uno alguna vez chocó con un límite más allá del cual se necesitó el siguiente.",
-        "El límite existe también hoy. Todavía no sabemos qué es el tiempo, por qué la entropía aumenta y cómo unir la gravedad con la mecánica cuántica. No son lagunas en el libro de texto, son lugares donde el trabajo continúa."
-      ],
-      "link": {
-        "href": "/frontier.html",
-        "text": "Preguntas abiertas: lo que la física no sabe hoy"
-      }
-    },
-    "lessons": [
-      {
-        "id": "01-models",
-        "title": "El modelo y sus límites",
-        "sub": "Párrafo 1 · Por qué el punto material no es una simplificación, sino una herramienta",
-        "law": "Principio de modelización",
-        "model": "motion"
-      },
-      {
-        "id": "02-scale",
-        "title": "Dimensionalidad y orden de magnitud",
-        "sub": "§ 2 · Cómo obtener la respuesta sin resolver el problema",
-        "law": "Análisis dimensional",
-        "model": "motion"
-      },
-      {
-        "id": "03-phase",
-        "title": "Espacio de estados",
-        "sub": "Párrafo 3 · Cómo la memoria se convierte en dimensión",
-        "law": "Espacio fásico",
-        "model": "oscillator"
-      }
-    ]
+  "prereq": {
+   "title": "What You Need to Know in Advance",
+   "items": [
+    "Arithmetic and powers of ten: notation $3 \\cdot 10^{8}$ should be read without strain.",
+    "An idea of what a derivative is — at least at the level of 'velocity is the rate of change of position'. We will cover it rigorously in mechanics.",
+    "Nothing else. This chapter deliberately requires no background: it is about a way of thinking, not about formalism."
+   ],
+   "note": "If you decide to start directly with mechanics, that's fine — there is a direct path. But it's worth returning here: much of what later seems like an arbitrary convention is explained in a single phrase here."
   },
-  "ar": {
-    "title": "كيف تصف الفيزياء العالم",
-    "subtitle": "موضوع تمهيدي: ليس القوانين، بل الطريقة التي تُنظّم بها القوانين",
-    "lead": "هذا الفصل يأتي قبل الميكانيكا، لأنه يجيب على سؤال يتم تجاهله عادة في الكتب المدرسية: ما الذي يفعله الفيزيائي عندما يحل مسألة؟ ليس «أي معادلة»، بل من أين تأتي المعادلات، ولماذا تعمل، وأين تتوقف.",
-    "why": {
-      "title": "لماذا من المهم معرفة ذلك",
-      "text": [
-        "تبدأ الدورة العادية فورًا بالقوانين، ويحصل القارئ على انطباع بأن الفيزياء هي مجموعة من القواعد التي اكتشفها شخص ما منقوشة في الطبيعة. هذا الانطباع خاطئ ويعيق التقدم. عندما يتبين بعد عدة مواضيع أن نيوتن غير صحيح عند السرعات القريبة من الضوء، وغير قابل للتطبيق تمامًا في الذرة، سيضطر المرء إما إلى الاعتقاد بأنه خُدع، أو إلى إعادة التعلم.",
-        "في الواقع، الفيزياء لا تكتشف قوانين الطبيعة بشكل مباشر. إنها تبني نماذج — أوصافًا مبسطة عن قصد، تكون صحيحة في نطاق محدد وتنهار خارج حدوده. النقطة المادية، الغاز المثالي، السائل غير القابل للانضغاط، الجسم الأسود المطلق — لا يوجد أي من هذه الأشياء في الطبيعة. ومع ذلك، فهي التي تسمح بحساب مسار الصاروخ، والضغط في الأسطوانة، ودرجة حرارة النجم.",
-        "من هنا تتبع نتيجة بسيطة، من أجلها كُتب هذا الفصل: لكل معادلة مجال صلاحية، ومعرفته أهم من تذكر المعادلة نفسها. يمكن البحث عن المعادلة. لكن فهم ما إذا كانت تنطبق هنا، لا يمكن البحث عنه.",
-        "الشيء الثاني الذي يعلمه هذا الفصل هو الحساب. ليس بمعنى الحساب العددي، بل بمعنى القدرة على الحصول على إجابة بدقة الرتبة في دقيقة واحدة، دون آلة حاسبة أو مرجع. هذه مهارة تميز الشخص الذي يفهم الفيزياء عن الشخص الذي يحفظ الفيزياء."
-      ]
+  "closing": {
+   "title": "And Most Importantly",
+   "text": [
+    "Physics is not a collection of truths but a way of asking questions of nature so that it can answer. Every model in this course was once the frontier, and every one eventually hit a boundary beyond which a new model was needed.",
+    "The boundary exists today as well. We still do not know what time is, why entropy increases, or how to unify gravity with quantum mechanics. These are not gaps in the textbook — they are places where work is ongoing."
+   ],
+   "link": {
+    "href": "/frontier.html",
+    "text": "Open Questions — What Physics Does Not Know Today"
+   }
+  },
+  "lessons": [
+   {
+    "id": "01-models",
+    "title": "The Model and Its Boundaries",
+    "sub": "Section 1 · Why the Material Point Is Not a Simplification, but a Tool",
+    "law": "Principle of modeling",
+    "model": "motion"
+   },
+   {
+    "id": "02-scale",
+    "title": "Dimension and Order of Magnitude",
+    "sub": "Section 2 · How to Get an Answer Without Solving the Problem",
+    "law": "Dimensional analysis",
+    "model": "motion"
+   },
+   {
+    "id": "03-phase",
+    "title": "State Space",
+    "sub": "Section 3 · How Memory Becomes Dimension",
+    "law": "Phase space",
+    "model": "oscillator"
+   }
+  ]
+ },
+ "es": {
+  "title": "Cómo la física describe el mundo",
+  "subtitle": "Tema introductorio: no las leyes, sino la forma en que están estructuradas las leyes",
+  "lead": "Este capítulo precede a la mecánica porque responde a la pregunta que los libros de texto suelen omitir: ¿qué hace realmente un físico cuando resuelve un problema? No 'qué fórmula', sino de dónde vienen las fórmulas, por qué funcionan y dónde dejan de hacerlo.",
+  "why": {
+   "title": "Por qué es importante saber esto",
+   "text": [
+    "Un curso típico comienza directamente con las leyes, y el lector tiene la impresión de que la física es un conjunto de reglas que alguien descubrió talladas en la naturaleza. Esta impresión es falsa y dificulta el avance. Cuando después de varios temas resulte que Newton es incorrecto a velocidades cercanas a la luz y que en el átomo no es aplicable en absoluto, uno tendrá que decidir si lo engañaron o aprender de nuevo.",
+    "En realidad, la física no descubre las leyes de la naturaleza directamente. Construye modelos: descripciones deliberadamente simplificadas que son válidas en un dominio acordado y se rompen fuera de él. Punto material, gas ideal, fluido incompresible, cuerpo negro: ninguno de esos objetos existe en la naturaleza. Y sin embargo, son ellos los que permiten calcular la trayectoria de un cohete, la presión en un tanque y la temperatura de una estrella.",
+    "De aquí se sigue una conclusión simple, para la cual está escrito este capítulo: cada fórmula tiene un dominio de aplicabilidad, y conocerlo es más importante que recordar la fórmula misma. La fórmula se puede consultar. La comprensión de si es aplicable aquí no se puede consultar.",
+    "Lo segundo que enseña este capítulo es a estimar. No en el sentido de la aritmética, sino en el sentido de la capacidad de obtener una respuesta con precisión de orden de magnitud en un minuto, sin calculadora ni manual. Es una habilidad que distingue a quien entiende la física de quien la recuerda."
+   ]
+  },
+  "history": {
+   "title": "Quién enseñó a pensar así",
+   "people": [
+    {
+     "name": "Galileo Galilei",
+     "years": "1564–1642",
+     "what": "Fue el primero en aplicar conscientemente la idea de modelo: para entender la caída, eliminó de la consideración la resistencia del aire, la forma del cuerpo y su composición. Los contemporáneos lo consideraban un engaño, porque en realidad una pluma no cae como una piedra. Galileo respondió que primero hay que entender lo principal y luego agregar las correcciones. Así nació el método que la física usa hasta hoy."
     },
-    "history": {
-      "title": "من علمنا التفكير بهذه الطريقة",
-      "people": [
-        {
-          "name": "جاليليو جاليلي",
-          "years": "1564–1642",
-          "what": "كان أول من طبق فكرة النموذج بوعي: لفهم السقوط، استبعد من الاعتبار مقاومة الهواء، وشكل الجسم ومكوناته. اعتبره المعاصرون غشًا — لأنه في الواقع، لا تسقط الريشة مثل الحجر. أجاب جاليليو بأنه يجب أولاً فهم الأساسيات، ثم إضافة التصحيحات لاحقًا. هكذا وُلدت الطريقة التي لا تزال الفيزياء تستخدمها حتى اليوم."
-        },
-        {
-          "name": "ويليام طومسون (اللورد كلفن)",
-          "years": "1824–1907",
-          "what": "أصر على أن الفهم هو القدرة على الحساب: «إذا كان بإمكانك قياس ما تتحدث عنه والتعبير عنه برقم، فأنت تعرف شيئًا عنه». بعد تقدير سرعة تبريد الأرض، حصل على عمرها بعشرات الملايين من السنين وأخطأ — لأن النشاط الإشعاعي لم يكن معروفًا آنذاك. مثال ممتاز على كيفية أن يكون التقدير لا تشوبه شائبة من حيث الطريقة ولكنه خاطئ من حيث البيانات الأساسية."
-        },
-        {
-          "name": "جون ويليام ستروت (اللورد رايلي)",
-          "years": "1842–1919",
-          "what": "طور تحليل الأبعاد إلى أداة عمل: أظهر أنه من وحدات القياس وحدها يمكن غالبًا استخلاص شكل المعادلة بدقة حتى عامل بلا أبعاد. وهكذا شرح لماذا السماء زرقاء — دون حل معادلات التشتت بأكملها."
-        },
-        {
-          "name": "إنريكو فيرمي",
-          "years": "1901–1954",
-          "what": "ارتقى بفن التقدير إلى مستوى الأسطورة. في اختبار أول قنبلة ذرية، ألقى قصاصات ورق في الهواء، ومن المسافة التي حملتها موجة الصدمة، حدد قوة الانفجار — تطابقت النتيجة مع القياسات الآلية من حيث رتبة المقدار. لا تزال المسائل من هذا النوع تُسمى مسائل فيرمي."
-        },
-        {
-          "name": "ويلارد غيبس",
-          "years": "1839–1903",
-          "what": "قدم مفهوم حالة النظام كنقطة في فضاء متعدد الأبعاد، والعملية كخط فيه. كانت الفكرة ناجحة لدرجة أنها صمدت أمام جميع التغييرات في النظريات الفيزيائية: لغة فضاء الطور تعمل بنفس الطريقة في الميكانيكا، والديناميكا الحرارية، والنظرية الكمومية."
-        }
-      ]
+    {
+     "name": "William Thomson (lord Kelvin)",
+     "years": "1824–1907",
+     "what": "Insistió en que entender es saber calcular: 'Si puedes medir aquello de lo que hablas y expresarlo con un número, sabes algo al respecto'. Al estimar la velocidad de enfriamiento de la Tierra, obtuvo una edad de decenas de millones de años y se equivocó, porque la radiactividad no se conocía entonces. Un excelente ejemplo de cómo una estimación puede ser impecable en el método pero incorrecta en los datos de partida."
     },
-    "map": {
-      "title": "ما الذي ستتعلمه",
-      "lead": "ثلاث فقرات، وكل منها يقدم أداة وليس حقيقة. الأولى تعلم رؤية حدود النموذج، والثانية تعلم الحصول على إجابة بدون حسابات، والثالثة تعلم تحويل تاريخ النظام إلى حالته الحالية.",
-      "outcome": "بعد اجتياز الفقرات الثلاث، ستفهم لماذا لكل معادلة مجال صلاحية وكيفية التعرف عليه؛ ستتمكن من تقدير كمية لا تذكرها في دقيقة واحدة؛ وستتعلم النظر إلى الحركة كخط في فضاء الحالات — تلك النظرة التي ستقابلك لاحقًا في الديناميكا الحرارية والإحصاء والميكانيكا الكمومية."
+    {
+     "name": "John William Strutt (lord Rayleigh)",
+     "years": "1842–1919",
+     "what": "Desarrolló el análisis dimensional como herramienta de trabajo: demostró que a partir de las unidades de medida a menudo se puede deducir la forma de una fórmula hasta un factor adimensional. Así explicó por qué el cielo es azul, sin resolver las ecuaciones de dispersión por completo."
     },
-    "prereq": {
-      "title": "ما الذي تحتاج معرفته مسبقًا",
-      "items": [
-        "الحساب والقوى العشرية: يجب قراءة التمثيل $3 \\cdot 10^{8}$ دون عناء.",
-        "فكرة عامة عن المشتقة — على الأقل بمستوى أن «السرعة هي سرعة تغير الإحداثي». سنناقشها بدقة في الميكانيكا.",
-        "لا شيء أكثر. هذا الفصل لا يتطلب تحضيرًا عن قصد: إنه يتعلق بطريقة التفكير، وليس بالأجهزة."
-      ],
-      "note": "إذا قررت البدء فورًا بالميكانيكا — لا بأس، هناك طريق مباشر إليها. لكن العودة إلى هنا جديرة بالاهتمام: الكثير مما يبدو لاحقًا اتفاقًا اعتباطيًا، يُفسر هنا بجملة واحدة."
+    {
+     "name": "Enrico Fermi",
+     "years": "1901–1954",
+     "what": "Llevó el arte de la estimación a la leyenda. En la prueba de la primera bomba atómica, arrojó trozos de papel al aire y por la distancia que la onda expansiva los desplazó, dio la potencia de la explosión; el resultado coincidió con las mediciones instrumentales en orden de magnitud. Los problemas de este tipo se llaman hasta hoy problemas de Fermi."
     },
-    "closing": {
-      "title": "والأهم",
-      "text": [
-        "الفيزياء ليست مجموعة من الحقائق، بل طريقة لطرح الأسئلة على الطبيعة بحيث يمكنها الإجابة. كل نموذج في هذه الدورة كان يومًا ما في طليعة العلم، وكل واحد اصطدم يومًا ما بحدود تطلبت النموذج التالي.",
-        "الحدود موجودة حتى اليوم. ما زلنا لا نعرف ما هو الزمن، ولماذا تزداد الإنتروبيا، وكيف ندمج الجاذبية مع الميكانيكا الكمومية. هذه ليست ثغرات في الكتاب المدرسي — بل هي أماكن لا يزال العمل جاريًا فيها."
-      ],
-      "link": {
-        "href": "/frontier.html",
-        "text": "أسئلة مفتوحة — ما لا تعرفه الفيزياء اليوم"
-      }
+    {
+     "name": "Willard Gibbs",
+     "years": "1839–1903",
+     "what": "Introdujo la representación del estado de un sistema como un punto en un espacio multidimensional, y del proceso como una línea en él. La idea resultó tan exitosa que sobrevivió a todos los cambios de teorías físicas: el lenguaje del espacio de fases funciona igualmente en mecánica, termodinámica y teoría cuántica."
+    }
+   ]
+  },
+  "map": {
+   "title": "Qué aprenderá",
+   "lead": "Tres párrafos, y cada uno da una herramienta, no un hecho. El primero enseña a ver el límite del modelo, el segundo a obtener una respuesta sin cálculos, el tercero a convertir la historia de un sistema en su estado actual.",
+   "outcome": "Al completar los tres, comprenderá por qué cada fórmula tiene un dominio de aplicabilidad y cómo reconocerlo; podrá estimar en un minuto una magnitud que no recuerde; y aprenderá a ver el movimiento como una línea en el espacio de estados — esa mirada que luego encontrará en termodinámica, en estadística y en mecánica cuántica."
+  },
+  "prereq": {
+   "title": "Qué necesita saber de antemano",
+   "items": [
+    "Aritmética y potencias de diez: la notación $3 \\cdot 10^{8}$ debe leerse sin esfuerzo.",
+    "Una noción de lo que es una derivada, al menos a nivel de 'la velocidad es la rapidez de cambio de la coordenada'. Lo abordaremos estrictamente en mecánica.",
+    "Nada más. Este capítulo deliberadamente no requiere preparación: se trata de una forma de pensar, no de un aparato."
+   ],
+   "note": "Si decide comenzar directamente con la mecánica, no hay problema, hay un camino directo. Pero vale la pena volver aquí: mucho de lo que más adelante parece un convenio arbitrario se explica aquí con una frase."
+  },
+  "closing": {
+   "title": "Y lo principal",
+   "text": [
+    "La física no es una colección de verdades, sino una forma de hacer preguntas a la naturaleza para que pueda responder. Cada modelo en este curso alguna vez fue la frontera del conocimiento, y cada uno alguna vez chocó con un límite más allá del cual se necesitó el siguiente.",
+    "El límite existe también hoy. Todavía no sabemos qué es el tiempo, por qué la entropía aumenta y cómo unir la gravedad con la mecánica cuántica. No son lagunas en el libro de texto, son lugares donde el trabajo continúa."
+   ],
+   "link": {
+    "href": "/frontier.html",
+    "text": "Preguntas abiertas: lo que la física no sabe hoy"
+   }
+  },
+  "lessons": [
+   {
+    "id": "01-models",
+    "title": "El modelo y sus límites",
+    "sub": "Párrafo 1 · Por qué el punto material no es una simplificación, sino una herramienta",
+    "law": "Principio de modelización",
+    "model": "motion"
+   },
+   {
+    "id": "02-scale",
+    "title": "Dimensionalidad y orden de magnitud",
+    "sub": "§ 2 · Cómo obtener la respuesta sin resolver el problema",
+    "law": "Análisis dimensional",
+    "model": "motion"
+   },
+   {
+    "id": "03-phase",
+    "title": "Espacio de estados",
+    "sub": "Párrafo 3 · Cómo la memoria se convierte en dimensión",
+    "law": "Espacio fásico",
+    "model": "oscillator"
+   }
+  ]
+ },
+ "ar": {
+  "title": "كيف تصف الفيزياء العالم",
+  "subtitle": "موضوع تمهيدي: ليس القوانين، بل الطريقة التي تُنظّم بها القوانين",
+  "lead": "هذا الفصل يأتي قبل الميكانيكا، لأنه يجيب على سؤال يتم تجاهله عادة في الكتب المدرسية: ما الذي يفعله الفيزيائي عندما يحل مسألة؟ ليس «أي معادلة»، بل من أين تأتي المعادلات، ولماذا تعمل، وأين تتوقف.",
+  "why": {
+   "title": "لماذا من المهم معرفة ذلك",
+   "text": [
+    "تبدأ الدورة العادية فورًا بالقوانين، ويحصل القارئ على انطباع بأن الفيزياء هي مجموعة من القواعد التي اكتشفها شخص ما منقوشة في الطبيعة. هذا الانطباع خاطئ ويعيق التقدم. عندما يتبين بعد عدة مواضيع أن نيوتن غير صحيح عند السرعات القريبة من الضوء، وغير قابل للتطبيق تمامًا في الذرة، سيضطر المرء إما إلى الاعتقاد بأنه خُدع، أو إلى إعادة التعلم.",
+    "في الواقع، الفيزياء لا تكتشف قوانين الطبيعة بشكل مباشر. إنها تبني نماذج — أوصافًا مبسطة عن قصد، تكون صحيحة في نطاق محدد وتنهار خارج حدوده. النقطة المادية، الغاز المثالي، السائل غير القابل للانضغاط، الجسم الأسود المطلق — لا يوجد أي من هذه الأشياء في الطبيعة. ومع ذلك، فهي التي تسمح بحساب مسار الصاروخ، والضغط في الأسطوانة، ودرجة حرارة النجم.",
+    "من هنا تتبع نتيجة بسيطة، من أجلها كُتب هذا الفصل: لكل معادلة مجال صلاحية، ومعرفته أهم من تذكر المعادلة نفسها. يمكن البحث عن المعادلة. لكن فهم ما إذا كانت تنطبق هنا، لا يمكن البحث عنه.",
+    "الشيء الثاني الذي يعلمه هذا الفصل هو الحساب. ليس بمعنى الحساب العددي، بل بمعنى القدرة على الحصول على إجابة بدقة الرتبة في دقيقة واحدة، دون آلة حاسبة أو مرجع. هذه مهارة تميز الشخص الذي يفهم الفيزياء عن الشخص الذي يحفظ الفيزياء."
+   ]
+  },
+  "history": {
+   "title": "من علمنا التفكير بهذه الطريقة",
+   "people": [
+    {
+     "name": "جاليليو جاليلي",
+     "years": "1564–1642",
+     "what": "كان أول من طبق فكرة النموذج بوعي: لفهم السقوط، استبعد من الاعتبار مقاومة الهواء، وشكل الجسم ومكوناته. اعتبره المعاصرون غشًا — لأنه في الواقع، لا تسقط الريشة مثل الحجر. أجاب جاليليو بأنه يجب أولاً فهم الأساسيات، ثم إضافة التصحيحات لاحقًا. هكذا وُلدت الطريقة التي لا تزال الفيزياء تستخدمها حتى اليوم."
     },
-    "lessons": [
-      {
-        "id": "01-models",
-        "title": "النموذج وحدوده",
-        "sub": "الفقرة 1 · لماذا النقطة المادية ليست تبسيطاً، بل أداة",
-        "law": "مبدأ النمذجة",
-        "model": "motion"
-      },
-      {
-        "id": "02-scale",
-        "title": "البُعد والترتيب من حيث المقدار",
-        "sub": "الفقرة 2 · كيف تحصل على الإجابة دون حل المسألة",
-        "law": "تحليل الأبعاد",
-        "model": "motion"
-      },
-      {
-        "id": "03-phase",
-        "title": "فضاء الحالات",
-        "sub": "الفقرة 3 · كيف تتحول الذاكرة إلى بُعد",
-        "law": "فضاء الطور",
-        "model": "oscillator"
-      }
-    ]
-  }
+    {
+     "name": "ويليام طومسون (اللورد كلفن)",
+     "years": "1824–1907",
+     "what": "أصر على أن الفهم هو القدرة على الحساب: «إذا كان بإمكانك قياس ما تتحدث عنه والتعبير عنه برقم، فأنت تعرف شيئًا عنه». بعد تقدير سرعة تبريد الأرض، حصل على عمرها بعشرات الملايين من السنين وأخطأ — لأن النشاط الإشعاعي لم يكن معروفًا آنذاك. مثال ممتاز على كيفية أن يكون التقدير لا تشوبه شائبة من حيث الطريقة ولكنه خاطئ من حيث البيانات الأساسية."
+    },
+    {
+     "name": "جون ويليام ستروت (اللورد رايلي)",
+     "years": "1842–1919",
+     "what": "طور تحليل الأبعاد إلى أداة عمل: أظهر أنه من وحدات القياس وحدها يمكن غالبًا استخلاص شكل المعادلة بدقة حتى عامل بلا أبعاد. وهكذا شرح لماذا السماء زرقاء — دون حل معادلات التشتت بأكملها."
+    },
+    {
+     "name": "إنريكو فيرمي",
+     "years": "1901–1954",
+     "what": "ارتقى بفن التقدير إلى مستوى الأسطورة. في اختبار أول قنبلة ذرية، ألقى قصاصات ورق في الهواء، ومن المسافة التي حملتها موجة الصدمة، حدد قوة الانفجار — تطابقت النتيجة مع القياسات الآلية من حيث رتبة المقدار. لا تزال المسائل من هذا النوع تُسمى مسائل فيرمي."
+    },
+    {
+     "name": "ويلارد غيبس",
+     "years": "1839–1903",
+     "what": "قدم مفهوم حالة النظام كنقطة في فضاء متعدد الأبعاد، والعملية كخط فيه. كانت الفكرة ناجحة لدرجة أنها صمدت أمام جميع التغييرات في النظريات الفيزيائية: لغة فضاء الطور تعمل بنفس الطريقة في الميكانيكا، والديناميكا الحرارية، والنظرية الكمومية."
+    }
+   ]
+  },
+  "map": {
+   "title": "ما الذي ستتعلمه",
+   "lead": "ثلاث فقرات، وكل منها يقدم أداة وليس حقيقة. الأولى تعلم رؤية حدود النموذج، والثانية تعلم الحصول على إجابة بدون حسابات، والثالثة تعلم تحويل تاريخ النظام إلى حالته الحالية.",
+   "outcome": "بعد اجتياز الفقرات الثلاث، ستفهم لماذا لكل معادلة مجال صلاحية وكيفية التعرف عليه؛ ستتمكن من تقدير كمية لا تذكرها في دقيقة واحدة؛ وستتعلم النظر إلى الحركة كخط في فضاء الحالات — تلك النظرة التي ستقابلك لاحقًا في الديناميكا الحرارية والإحصاء والميكانيكا الكمومية."
+  },
+  "prereq": {
+   "title": "ما الذي تحتاج معرفته مسبقًا",
+   "items": [
+    "الحساب والقوى العشرية: يجب قراءة التمثيل $3 \\cdot 10^{8}$ دون عناء.",
+    "فكرة عامة عن المشتقة — على الأقل بمستوى أن «السرعة هي سرعة تغير الإحداثي». سنناقشها بدقة في الميكانيكا.",
+    "لا شيء أكثر. هذا الفصل لا يتطلب تحضيرًا عن قصد: إنه يتعلق بطريقة التفكير، وليس بالأجهزة."
+   ],
+   "note": "إذا قررت البدء فورًا بالميكانيكا — لا بأس، هناك طريق مباشر إليها. لكن العودة إلى هنا جديرة بالاهتمام: الكثير مما يبدو لاحقًا اتفاقًا اعتباطيًا، يُفسر هنا بجملة واحدة."
+  },
+  "closing": {
+   "title": "والأهم",
+   "text": [
+    "الفيزياء ليست مجموعة من الحقائق، بل طريقة لطرح الأسئلة على الطبيعة بحيث يمكنها الإجابة. كل نموذج في هذه الدورة كان يومًا ما في طليعة العلم، وكل واحد اصطدم يومًا ما بحدود تطلبت النموذج التالي.",
+    "الحدود موجودة حتى اليوم. ما زلنا لا نعرف ما هو الزمن، ولماذا تزداد الإنتروبيا، وكيف ندمج الجاذبية مع الميكانيكا الكمومية. هذه ليست ثغرات في الكتاب المدرسي — بل هي أماكن لا يزال العمل جاريًا فيها."
+   ],
+   "link": {
+    "href": "/frontier.html",
+    "text": "أسئلة مفتوحة — ما لا تعرفه الفيزياء اليوم"
+   }
+  },
+  "lessons": [
+   {
+    "id": "01-models",
+    "title": "النموذج وحدوده",
+    "sub": "الفقرة 1 · لماذا النقطة المادية ليست تبسيطاً، بل أداة",
+    "law": "مبدأ النمذجة",
+    "model": "motion"
+   },
+   {
+    "id": "02-scale",
+    "title": "البُعد والترتيب من حيث المقدار",
+    "sub": "الفقرة 2 · كيف تحصل على الإجابة دون حل المسألة",
+    "law": "تحليل الأبعاد",
+    "model": "motion"
+   },
+   {
+    "id": "03-phase",
+    "title": "فضاء الحالات",
+    "sub": "الفقرة 3 · كيف تتحول الذاكرة إلى بُعد",
+    "law": "فضاء الطور",
+    "model": "oscillator"
+   }
+  ]
+ }
 }
