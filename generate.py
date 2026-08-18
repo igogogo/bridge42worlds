@@ -1497,6 +1497,22 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
                                "zh": "相关文章", "fr": "Articles similaires", "ar": "مقالات ذات صلة"}.get(lang, "Related articles")
     loc["feedback_nav"] = {"ru": "Отклик", "en": "Feedback", "es": "Comentarios", "zh": "反馈",
                             "fr": "Retour", "ar": "التعليقات"}.get(lang, "Feedback")
+    # №41 «Цитатные связи». Заголовок говорит ровно то, что есть: не «связанные работы»,
+    # а «из того, что цитирует эта статья, мы разбирали вот это». Связь провёл автор
+    # статьи, а не наш вектор, и подпись не должна присваивать нам чужую заслугу.
+    loc["cited_ours"] = {"ru": "Из цитируемого мы разбирали",
+                         "en": "From its references, we covered",
+                         "es": "De sus referencias, analizamos",
+                         "zh": "在其参考文献中，我们解读过",
+                         "fr": "Parmi ses références, nous avons analysé",
+                         "ar": "من مراجعها، تناولنا"}.get(lang, "From its references, we covered")
+    loc["cited_ours_hint"] = {"ru": "ссылку поставил автор статьи, разбор — наш",
+                              "en": "the link is the author’s, the write-up is ours",
+                              "es": "el enlace es del autor, el análisis es nuestro",
+                              "zh": "引用来自作者，解读来自我们",
+                              "fr": "le lien vient de l’auteur, l’analyse est la nôtre",
+                              "ar": "الإحالة من المؤلف، والتحليل منا"}.get(
+        lang, "the link is the author’s, the write-up is ours")
 
     # "Следующая статья" — на ту же строку, что заголовок отклика (юзер-фидбек 2026-07-15:
     # "следующая статья поставить надо с отзывами, как раз на строку в которой было
@@ -1834,6 +1850,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
         fun_fact_html=fun_html,
         reading_html=reading_html, jsonld_html=jsonld_html,
         related_label=safe(loc.get("related_articles", "Related articles")),
+        cited_ours_label=safe(loc["cited_ours"]), cited_ours_hint=safe(loc["cited_ours_hint"]),
         categories_html=categories_html,
         fav_title=safe(nav_fav_title(lang)),
         like_title=safe(reaction_titles(lang)["like"]),

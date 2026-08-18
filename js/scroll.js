@@ -224,6 +224,11 @@ function renderRelated(currentId, lang, version) {
                     if (idx && idx.length) {
                         articlesIndex = idx;
                         renderRelated(currentId, lang, version);
+                        // Врезка цитат живёт на том же индексе: без этого вызова она
+                        // молча пустует у всех, кто открыл страницу до его загрузки.
+                        if (typeof renderCitedOurs === 'function') {
+                            renderCitedOurs(currentId, lang, version);
+                        }
                     }
                 }).catch(function () {});
         }
@@ -269,6 +274,75 @@ function drawRelated(box, scored, lang, version) {
                 ol + '</div></article>';
         }).join('');
 }
+
+/* №41 «Цитатные связи»: из того, что цитирует эта статья, мы кое-что уже разбирали.
+ *
+ * Отличие от «похожих» принципиальное и его стоит держать в голове при правках: связь
+ * здесь провёл АВТОР статьи, сославшись на работу в списке литературы, а мы её разобрали.
+ * «Похожие» — наша догадка о близости, посчитанная вектором. Поэтому врезка стоит ВЫШЕ
+ * похожих и подписана честно: ссылку поставил автор, разбор наш.
+ *
+ * Связей мало и это нормально: 271 статья из 5963 (376 переходов). Мы разбираем пять тысяч
+ * работ из трёх миллионов, и совпадение чужого цитирования с нашим выбором — редкая удача.
+ * Блок просто не появляется там, где связи нет.
+ */
+var _citedOurs = null;
+function renderCitedOurs(currentId, lang, version) {
+    var box = document.getElementById('cited-ours');
+    if (!box || !_citedOurs) return;
+    var ids = _citedOurs[currentId];
+    if (!ids || !ids.length) return;
+    if (!articlesIndex.length) {
+        // Индекс грузим САМИ. Раньше блок ждал, пока его подтянет цепочка «похожих», а та
+        // стартует только после успешной загрузки related-vec.json — стоило файлу ответить
+        // 404 (проверено 19.08), и врезка молча пустовала при живых данных. Чужое событие
+        // как условие своей отрисовки — та же ошибка, что уже описана выше по файлу.
+        if (window.__citedIdxLoading) return;
+        window.__citedIdxLoading = 1;
+        var F = { popular: 'articles-index.json', simple: 'articles-index-simple.json',
+                  advanced: 'articles-index-advanced.json', mini: 'articles-index.json' };
+        fetch('/lang/' + lang + '/' + (F[version] || F.popular))
+            .then(function (r) { return r.ok ? r.json() : []; })
+            .then(function (idx) {
+                if (idx && idx.length) {
+                    articlesIndex = idx;
+                    renderCitedOurs(currentId, lang, version);
+                }
+            }).catch(function () {});
+        return;
+    }
+    var byId = {};
+    articlesIndex.forEach(function (a) { if (!byId[a.id]) byId[a.id] = a; });
+    var rows = ids.map(function (id) { return byId[id]; }).filter(Boolean)
+                  .map(function (a) { return { a: a, s: 1 }; });
+    if (!rows.length) return;
+    drawRelated(box, rows.slice(0, 3), lang, version);
+    var hint = box.dataset.hint;
+    if (hint) {
+        var p = document.createElement('p');
+        p.className = 'cited-ours-hint';
+        p.textContent = hint;
+        box.insertBefore(p, box.children[1] || null);
+    }
+}
+
+fetch('/data/cited-ours.json').then(function (r) { return r.json(); })
+    .then(function (m) {
+        _citedOurs = m;
+        var args = window.__relatedArgs;
+        if (!args) {
+            var el = document.querySelector('[data-article-id]');
+            var raw = el ? el.dataset.articleId : '';
+            var id = (raw.split('_')[0] || '');
+            if (!/^\d{4}\.\d{4,5}(v\d+)?$/.test(id)) return;
+            var path = location.pathname;
+            var ver = path.indexOf('advanced.html') !== -1 ? 'advanced'
+                    : (path.indexOf('simple.html') !== -1 ? 'simple'
+                    : (path.indexOf('mini.html') !== -1 ? 'mini' : 'popular'));
+            args = [id, getLang(), ver];
+        }
+        renderCitedOurs.apply(null, args);
+    }).catch(function () { _citedOurs = {}; });
 
 function findNextArticle(currentTags, mainTag) {
     var candidates = articlesIndex
