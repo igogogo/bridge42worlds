@@ -180,11 +180,25 @@
   },
   "math": {
    "title": "Математика, которая здесь понадобилась",
-   "text": [
-    "Как две бегущие волны дают стоячую — без формул. Представьте двух человек, тянущих скакалку каждый со своей стороны и качающих её навстречу. Там, где их воздействия всегда противоположны, скакалка не двигается вовсе — это узел. Там, где всегда совпадают, размах удваивается — это пучность. Никто не стоит на месте специально: неподвижность узла есть результат постоянного взаимного погашения. Формула $\\sin(kx-\\omega t) + \\sin(kx+\\omega t) = 2\\sin(kx)\\cos(\\omega t)$ говорит ровно это, только короче.",
-    "Что означает разделение переменных. В бегущей волне координата и время сидели вместе, в одной скобке, — и потому форма ехала. В стоячей они разъехались по разным сомножителям: один отвечает за то, где, другой — за то, когда. Форма задана раз и навсегда, меняется только её масштаб, как у дышащего рисунка. Этот приём — разделение переменных — окажется главным инструментом при решении уравнения Шрёдингера, и там он даст ровно тот же результат: стоячие волны с дискретным набором частот.",
-    "Почему из непрерывного получается дискретное. Вот, пожалуй, самая важная мысль всего курса, и её стоит осмыслить не спеша. Длина волны может быть любой — среда непрерывна и ничего не запрещает. Но струна закреплена, и на концах обязаны быть узлы. Представьте, что вы выкладываете плитку на полу фиксированной ширины: плитки бывают любого размера, но уложить их без обрезки можно только теми, что делят ширину нацело. Ограничение появилось не из свойств плитки, а из размера комнаты. Точно так же дискретность нот приходит не из свойств струны, а из её закреплённости.",
-    "Почему октава — это удвоение. Отношение частот два к одному ухо слышит как «та же нота, только выше», и это не соглашение культуры, а следствие устройства обертонов. Все гармоники ноты с частотой $2f$ входят и в набор гармоник ноты $f$ — второй звук не добавляет ничего чужеродного, потому и сливается. Квинта с отношением три к двум делит обертоны почти так же дружно, и потому звучит следующей по чистоте. Пифагор, перебирая длины струн, нащупал именно это."
+   "lead": "Понадобятся тождество суммы синусов, разделение переменных и умение отличать сложение от умножения.",
+   "items": [
+    {
+     "what": "Сумма синусов превращается в произведение",
+     "why": "Второй шаг вывода делает всё главное одной строкой, и стоит понимать, чем именно. Тождество $\\sin\\alpha + \\sin\\beta = 2\\sin\\frac{\\alpha+\\beta}{2}\\cos\\frac{\\alpha-\\beta}{2}$ переводит сумму двух колебаний в произведение двух сомножителей. Подставим $\\alpha = kx - \\omega t$ и $\\beta = kx + \\omega t$: полусумма даёт $kx$, полуразность даёт $-\\omega t$, а косинус чётен, и минус теряется. Получается $2A\\sin(kx)\\cos(\\omega t)$. Сумма и произведение — вещи разного смысла: в сумме два колебания живут рядом, в произведении одно управляет размахом другого. Именно поэтому после раскрытия волна перестаёт бежать, хотя ни одного нового предположения мы не вводили: та же самая строка переписана иначе.",
+     "latex": "\\sin\\alpha + \\sin\\beta = 2\\sin\\frac{\\alpha+\\beta}{2}\\cos\\frac{\\alpha-\\beta}{2}"
+    },
+    {
+     "what": "Разделение переменных: где отдельно, когда отдельно",
+     "why": "В бегущей волне координата и время сидели в одной скобке, $\\sin(kx - \\omega t)$, и потому форма ехала. После раскрытия они разошлись по разным сомножителям: $\\sin(kx)$ знает только про место, $\\cos(\\omega t)$ — только про момент. Такая запись и называется разделением переменных, а следствия видны сразу. Узлы находятся из одного сомножителя, безразлично к времени: третий шаг вывода приравнивает $\\sin(kx)$ нулю и получает точки, неподвижные всегда. Время при этом не задаёт форму, а только масштабирует её целиком — отсюда ощущение дышащего рисунка. Тем же приёмом седьмой шаг складывает произвольное колебание струны из отдельных мод, и он же будет главным инструментом при решении уравнения Шрёдингера, где даст ровно такой результат: стоячие волны с дискретным набором частот.",
+     "latex": "y(x,t) = \\underbrace{2A\\sin(kx)}_{\\text{где}} \\cdot \\underbrace{\\cos(\\omega t)}_{\\text{когда}}",
+     "kit": "separation"
+    },
+    {
+     "what": "Гармоники идут сложением, ноты — умножением",
+     "why": "Пятый шаг даёт ряд $f_n = n f_1$: частоты обертонов растут прибавлением, как $1, 2, 3, \\ldots$. Музыкальная высота устроена иначе, через отношения: октава — умножение частоты на два, квинта — на полтора. Поэтому равные на слух шаги отвечают равным множителям, а не равным разностям, и чтобы разделить октаву на двенадцать одинаковых полутонов, множитель приходится извлекать корнем: двенадцать умножений на $r$ должны дать двойку, откуда $r = \\sqrt[12]{2} \\approx 1{,}0595$ — то самое число из блока величин. Отсюда же расхождение двух шкал: третья гармоника выше основного тона ровно втрое, а темперированная квинта через октаву — в $2^{19/12} \\approx 2{,}996$ раза. Разница мала, но это и есть те два цента, которые настройщик правит вручную.",
+     "latex": "r^{12} = 2 \\;\\Longrightarrow\\; r = \\sqrt[12]{2} \\approx 1{,}0595",
+     "kit": "exponent"
+    }
    ]
   },
   "example": {
@@ -561,15 +575,6 @@
    "plate": "Fixing the ends forces an integer number of half-wavelengths — and the continuous medium yields a discrete set of frequencies $f_n = n f_1$. Discreteness comes from the boundary condition, not from a prohibition.",
    "note": "Limits of applicability and an important clarification. The series is exactly integer only for an ideally flexible string. A real string has stiffness, and its high overtones are slightly above integer multiples — this is called inharmonicity and is especially noticeable on the piano. Tuners account for it manually by stretching the tuning at the extremes of the range; because of this, a piano tuned 'mathematically exactly' sounds out of tune. For wind instruments, the picture is different: for a trumpet open at both ends, the series is complete, while for a pipe closed at one end only odd harmonics are present — that's why a clarinet sounds different from a flute of the same length."
   },
-  "math": {
-   "title": "Mathematics Needed Here",
-   "text": [
-    "How two traveling waves form a standing wave — without formulas. Imagine two people pulling a jump rope from opposite sides and shaking it towards each other. Where their actions are always opposite, the rope does not move at all — that's a node. Where they always coincide, the amplitude doubles — that's an antinode. No one stands still on purpose: the node's immobility is a result of constant mutual cancellation. The formula $\\sin(kx-\\omega t) + \\sin(kx+\\omega t) = 2\\sin(kx)\\cos(\\omega t)$ says exactly this, only more briefly.",
-    "What separation of variables means. In a traveling wave, coordinate and time sat together in one parenthesis — so the shape moved. In a standing wave, they separated into different factors: one determines where, the other determines when. The shape is fixed once and for all, only its scale changes, like a breathing picture. This technique — separation of variables — will be the main tool when solving the Schrödinger equation, and it will give exactly the same result: standing waves with a discrete set of frequencies.",
-    "Why the continuous becomes discrete. This is perhaps the most important idea of the entire course, and it is worth thinking about slowly. The wavelength can be anything — the medium is continuous and allows everything. But the string is fixed, and nodes must be at the ends. Imagine you are laying tiles on a floor of fixed width: tiles can be of any size, but to lay them without cutting you can only use those that divide the width evenly. The limitation came not from the properties of the tile, but from the size of the room. Similarly, the discreteness of notes comes not from the properties of the string, but from its fixed ends.",
-    "Why an octave is a doubling. The ear hears a frequency ratio of two to one as 'the same note, only higher', and this is not a cultural convention but a consequence of the overtone structure. All harmonics of a note with frequency $2f$ are included in the harmonic set of note $f$ — the second sound adds nothing foreign, so it blends. A fifth with ratio three to two shares overtones almost as harmoniously, so it sounds next in purity. Pythagoras, experimenting with string lengths, hit upon exactly this."
-   ]
-  },
   "example": {
    "title": "Numerical example: tuning a guitar",
    "lead": "We calculate what a musician does by ear, and at the same time verify Mersenne's formula.",
@@ -813,7 +818,30 @@
     "hint": "Harmonics go strictly by integer multiples of the fundamental. Which one is the third?",
     "tolAbs": 50
    }
-  ]
+  ],
+  "math": {
+   "title": "The math needed here",
+   "lead": "You'll need the sum-to-product identity for sines, separation of variables, and the ability to tell addition from multiplication.",
+   "items": [
+    {
+     "what": "Sum of sines becomes a product",
+     "why": "The second step of the derivation does all the heavy lifting in one line, and it's worth understanding exactly what it does. The identity $\\sin\\alpha + \\sin\\beta = 2\\sin\\frac{\\alpha+\\beta}{2}\\cos\\frac{\\alpha-\\beta}{2}$ converts the sum of two oscillations into a product of two factors. Substituting $\\alpha = kx - \\omega t$ and $\\beta = kx + \\omega t$: the half-sum gives $kx$, the half-difference gives $-\\omega t$, and since cosine is even, the minus sign disappears. We get $2A\\sin(kx)\\cos(\\omega t)$. Sum and product have different meanings: in a sum, two oscillations coexist side by side; in a product, one controls the amplitude of the other. That's why, after expansion, the wave stops traveling, even though we introduced no new assumptions: the same line is just rewritten differently.",
+     "latex": "\\sin\\alpha + \\sin\\beta = 2\\sin\\frac{\\alpha+\\beta}{2}\\cos\\frac{\\alpha-\\beta}{2}"
+    },
+    {
+     "what": "Separation of variables: where separately, when separately",
+     "why": "In a traveling wave, position and time were in the same parentheses, $\\sin(kx - \\omega t)$, which is why the shape moved. After expansion, they separate into different factors: $\\sin(kx)$ knows only about location, $\\cos(\\omega t)$ only about time. This notation is called separation of variables, and the consequences are immediate. Nodes are found from one factor, independent of time: the third step of the derivation sets $\\sin(kx)$ to zero and finds points that are always stationary. Time does not define the shape but only scales it as a whole—hence the feeling of a breathing pattern. The same technique is used in the seventh step to sum an arbitrary string vibration from individual modes, and it will be the main tool in solving the Schrödinger equation, where it gives exactly this result: standing waves with a discrete set of frequencies.",
+     "latex": "y(x,t) = \\underbrace{2A\\sin(kx)}_{\\text{where}} \\cdot \\underbrace{\\cos(\\omega t)}_{\\text{when}}",
+     "kit": "separation"
+    },
+    {
+     "what": "Harmonics add, notes multiply",
+     "why": "The fifth step gives the series $f_n = n f_1$: overtone frequencies grow by addition, like $1, 2, 3, \\ldots$. Musical pitch works differently, through ratios: an octave is multiplying the frequency by two, a fifth by one and a half. Therefore, steps that sound equal correspond to equal multipliers, not equal differences, and to divide an octave into twelve equal semitones, the multiplier must be extracted by a root: twelve multiplications by $r$ must yield two, hence $r = \\sqrt[12]{2} \\approx 1{,}0595$—that very number from the quantities block. This also leads to the discrepancy between the two scales: the third harmonic is exactly three times the fundamental, while a tempered fifth over an octave is $2^{19/12} \\approx 2{,}996$ times. The difference is small, but it's the two cents that a tuner corrects by hand.",
+     "latex": "r^{12} = 2 \\;\\Longrightarrow\\; r = \\sqrt[12]{2} \\approx 1{,}0595",
+     "kit": "exponent"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Ondas estacionarias y sonido",
@@ -943,15 +971,6 @@
    ],
    "plate": "La fijación de los extremos obliga a que quepa un número entero de semiondas — y el medio continuo produce un conjunto discreto de frecuencias $f_n = n f_1$. La discretización proviene de la condición de contorno, no de una prohibición.",
    "note": "Límites de aplicabilidad y aclaración importante. La serie es estrictamente múltiplo solo para una cuerda idealmente flexible. Una cuerda real tiene rigidez, y sus armónicos superiores son ligeramente superiores a los valores múltiplos — esto se llama inharmonicidad y es especialmente notable en el piano. Los afinadores la tienen en cuenta manualmente, estirando la afinación hacia los extremos del rango; por eso un piano afinado «matemáticamente exacto» suena desafinado. En los instrumentos de viento el panorama es diferente: en una trompeta, abierta en ambos extremos, la serie es completa, mientras que en uno cerrado en un extremo solo están presentes los armónicos impares — por eso el clarinete suena diferente de una flauta del mismo tamaño."
-  },
-  "math": {
-   "title": "Matemáticas que se necesitaron aquí",
-   "text": [
-    "Cómo dos ondas viajeras producen una onda estacionaria — sin fórmulas. Imagine a dos personas tirando de una cuerda cada una desde su lado y agitándola una hacia la otra. Donde sus acciones son siempre opuestas, la cuerda no se mueve en absoluto — eso es un nodo. Donde siempre coinciden, la amplitud se duplica — eso es un vientre. Nadie se queda quieto a propósito: la inmovilidad del nodo es el resultado de una cancelación mutua constante. La fórmula $\\sin(kx-\\omega t) + \\sin(kx+\\omega t) = 2\\sin(kx)\\cos(\\omega t)$ dice exactamente eso, solo que más breve.",
-    "Qué significa la separación de variables. En una onda viajera, la coordenada y el tiempo estaban juntos, en un mismo paréntesis — y por eso la forma se desplazaba. En una estacionaria se han separado en diferentes factores: uno responde por el dónde, el otro por el cuándo. La forma queda fijada de una vez por todas, solo cambia su escala, como un dibujo que respira. Esta técnica — separación de variables — resultará ser la herramienta principal al resolver la ecuación de Schrödinger, y allí dará exactamente el mismo resultado: ondas estacionarias con un conjunto discreto de frecuencias.",
-    "Por qué de lo continuo se obtiene lo discreto. Este es, quizás, el pensamiento más importante de todo el curso, y vale la pena asimilarlo sin prisa. La longitud de onda puede ser cualquiera — el medio es continuo y no prohíbe nada. Pero la cuerda está fija, y en los extremos deben haber nodos. Imagine que está colocando baldosas en un piso de ancho fijo: las baldosas pueden ser de cualquier tamaño, pero solo se pueden colocar sin cortar aquellas que dividen el ancho exactamente. La restricción no surgió de las propiedades de la baldosa, sino del tamaño de la habitación. Del mismo modo, la discretización de las notas no proviene de las propiedades de la cuerda, sino de su fijación.",
-    "Por qué la octava es una duplicación. La relación de frecuencias de dos a uno el oído la percibe como «la misma nota, pero más aguda», y no es una convención cultural, sino una consecuencia de la estructura de los armónicos. Todos los armónicos de la nota con frecuencia $2f$ están incluidos en el conjunto de armónicos de la nota $f$ — el segundo sonido no agrega nada extraño, por eso se fusiona. La quinta con relación tres a dos comparte armónicos casi tan armoniosamente, y por eso suena como la siguiente en pureza. Pitágoras, experimentando con longitudes de cuerdas, dio con esto."
-   ]
   },
   "example": {
    "title": "Ejemplo con números: afinando la guitarra",
@@ -1196,7 +1215,30 @@
     "hint": "Los armónicos siguen estrictamente números enteros del tono fundamental. ¿Cuál es el tercero en orden?",
     "tolAbs": 50
    }
-  ]
+  ],
+  "math": {
+   "title": "Matemáticas que aquí se necesitaron",
+   "lead": "Se necesitarán la identidad de la suma de senos, la separación de variables y la habilidad de distinguir la suma de la multiplicación.",
+   "items": [
+    {
+     "what": "La suma de senos se convierte en producto",
+     "why": "El segundo paso de la derivación hace todo lo principal en una sola línea, y vale la pena entender exactamente cómo. La identidad $\\sin\\alpha + \\sin\\beta = 2\\sin\\frac{\\alpha+\\beta}{2}\\cos\\frac{\\alpha-\\beta}{2}$ convierte la suma de dos oscilaciones en el producto de dos factores. Sustituimos $\\alpha = kx - \\omega t$ y $\\beta = kx + \\omega t$: la semisuma da $kx$, la semidiferencia da $-\\omega t$, y el coseno es par, por lo que el signo menos se pierde. Resulta $2A\\sin(kx)\\cos(\\omega t)$. La suma y el producto son cosas de diferente significado: en la suma, dos oscilaciones coexisten; en el producto, una controla la amplitud de la otra. Por eso, después de expandir, la onda deja de viajar, aunque no hemos introducido ninguna suposición nueva: la misma línea está reescrita de otra manera.",
+     "latex": "\\sin\\alpha + \\sin\\beta = 2\\sin\\frac{\\alpha+\\beta}{2}\\cos\\frac{\\alpha-\\beta}{2}"
+    },
+    {
+     "what": "Separación de variables: dónde por separado, cuándo por separado",
+     "why": "En una onda viajera, la coordenada y el tiempo estaban en el mismo paréntesis, $\\sin(kx - \\omega t)$, y por eso la forma se movía. Después de expandir, se separan en diferentes factores: $\\sin(kx)$ solo sabe del lugar, $\\cos(\\omega t)$ solo del momento. Esta escritura se llama separación de variables, y las consecuencias son visibles de inmediato. Los nodos se encuentran a partir de un solo factor, independientemente del tiempo: el tercer paso de la derivación iguala $\\sin(kx)$ a cero y obtiene puntos que están siempre inmóviles. El tiempo no define la forma, solo la escala en su totalidad — de ahí la sensación de un patrón que respira. Con el mismo truco, el séptimo paso suma una vibración arbitraria de la cuerda a partir de modos individuales, y será la herramienta principal al resolver la ecuación de Schrödinger, donde dará exactamente ese resultado: ondas estacionarias con un conjunto discreto de frecuencias.",
+     "latex": "y(x,t) = \\underbrace{2A\\sin(kx)}_{\\text{dónde}} \\cdot \\underbrace{\\cos(\\omega t)}_{\\text{cuándo}}",
+     "kit": "separation"
+    },
+    {
+     "what": "Los armónicos se suman, las notas se multiplican",
+     "why": "El quinto paso da la serie $f_n = n f_1$: las frecuencias de los armónicos crecen por adición, como $1, 2, 3, \\ldots$. La altura musical está organizada de otra manera, mediante relaciones: la octava es multiplicar la frecuencia por dos, la quinta por uno y medio. Por lo tanto, pasos que suenan igual corresponden a multiplicadores iguales, no a diferencias iguales, y para dividir la octava en doce semitonos iguales, el multiplicador se extrae con una raíz: doce multiplicaciones por $r$ deben dar dos, de donde $r = \\sqrt[12]{2} \\approx 1{,}0595$ — ese mismo número del bloque de magnitudes. De aquí también la discrepancia entre las dos escalas: el tercer armónico está exactamente tres veces por encima de la fundamental, mientras que la quinta temperada a través de la octava está en $2^{19/12} \\approx 2{,}996$ veces. La diferencia es pequeña, pero son esos dos cents que el afinador corrige manualmente.",
+     "latex": "r^{12} = 2 \\;\\Longrightarrow\\; r = \\sqrt[12]{2} \\approx 1{,}0595",
+     "kit": "exponent"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "الموجات المستقرة والصوت",
@@ -1326,15 +1368,6 @@
    ],
    "plate": "تثبيت الطرفين يجبر على احتواء عدد صحيح من أنصاف الموجات — والوسط المستمر يعطي مجموعة متقطعة من الترددات $f_n = n f_1$. التقطع يأتي من الشرط الحدّي، لا من حظر.",
    "note": "حدود الصلاحية وتوضيح مهم. السلسلة هي مضاعفات دقيقة فقط لوتر مرن تمامًا. الوتر الحقيقي له صلابة، وتوافقيته العليا تكون أعلى قليلاً من المضاعفات — وهذا يسمى اللاتوافقية، وهو ملحوظ بشكل خاص في البيانو. يأخذ الضابطون ذلك في الاعتبار يدويًا بتمديد الضبط نحو أطراف المجال؛ ولهذا البيانو المضبوط \"رياضيًا بدقة\" يبدو غير صحيح. في الآلات النفخية الوضع مختلف: في البوق المفتوح من كلا الطرفين، السلسلة كاملة، أما في المغلق من طرف واحد فحسب التوافقيات الفردية موجودة — ولهذا يبدو الكلارينيت مختلفًا عن الناي بنفس الحجم."
-  },
-  "math": {
-   "title": "الرياضيات التي استخدمناها هنا",
-   "text": [
-    "كيف تصبح موجتان متحركتان موجة واقفة — بدون صيغ. تخيل شخصين يسحبان حبلًا من كل جانب ويهزان تجاه بعضهما. حيث يكون تأثيراهما متعاكسين دائمًا، لا يتحرك الحبل أبدًا — هذه عقدة. حيث يتطابقان دائمًا، تتضاعف السعة — هذا بطن. لا أحد يقف ساكنًا عن قصد: سكون العقدة هو نتيجة الإلغاء المتبادل المستمر. الصيغة $\\sin(kx-\\omega t) + \\sin(kx+\\omega t) = 2\\sin(kx)\\cos(\\omega t)$ تقول هذا بالضبط، لكن بشكل أقصر.",
-    "ماذا يعني فصل المتغيرات. في الموجة المتحركة، كان الإحداثي والزمن معًا في قوس واحد — وبالتالي كان الشكل يتحرك. في الموجة الواقفة انفصلا إلى عاملين مختلفين: أحدهما مسؤول عن المكان، والآخر عن الزمن. الشكل محدد مرة واحدة وإلى الأبد، يتغير مقياسه فقط، مثل رسم يتنفس. هذه الطريقة — فصل المتغيرات — ستكون الأداة الرئيسية في حل معادلة شرودنغر، وستعطي هناك نفس النتيجة: موجات واقفة بمجموعة متقطعة من الترددات.",
-    "لماذا من المستمر نحصل على المتقطع. ها هي، ربما، أهم فكرة في الدورة بأكملها، ويجب التفكير فيها ببطء. يمكن أن يكون الطول الموجي أي شيء — الوسط مستمر ولا يمنع شيئًا. لكن الوتر مثبت، ويجب أن تكون العقد عند الطرفين. تخيل أنك تضع بلاطًا على أرضية ذات عرض ثابت: البلاط بأي حجم، ولكن وضعه بدون قص ممكن فقط بتلك التي تقسم العرض بدون باقي. ظهر القيد ليس من خواص البلاط، بل من حجم الغرفة. بنفس الطريقة، يأتي تقطع النغمات ليس من خواص الوتر، بل من تثبيته.",
-    "لماذا الأوكتاف هو مضاعفة. نسبة التردد اثنان إلى واحد تسمعها الأذن كـ \"نفس النغمة لكن أعلى\"، وهذا ليس اتفاقًا ثقافيًا، بل نتيجة لتركيب التوافقيات. كل توافقيات النغمة ذات التردد $2f$ موجودة أيضًا في مجموعة توافقيات النغمة $f$ — الصوت الثاني لا يضيف شيئًا غريبًا، ولذا يندمج. الخميس بنسبة ثلاثة إلى اثنين يشارك التوافقيات بنفس الود تقريبًا، ولذا يبدو التالي في النقاء. فيثاغورس، بتجربة أطوال الأوتار، اكتشف هذا بالضبط."
-   ]
   },
   "example": {
    "title": "مثال بالأرقام: ضبط الجيتار",
@@ -1579,6 +1612,29 @@
     "hint": "التوافقيات تأتي حسب أعداد صحيحة من النغمة الأساسية. ما هي الثالثة بالترتيب؟",
     "tolAbs": 50
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "ستحتاج إلى متطابقة مجموع الجيوب، وفصل المتغيرات، والقدرة على التمييز بين الجمع والضرب.",
+   "items": [
+    {
+     "what": "مجموع الجيوب يتحول إلى حاصل ضرب",
+     "why": "الخطوة الثانية من الاشتقاق تنجز كل شيء رئيسي في سطر واحد، ومن الجدير فهم ما تفعله بالضبط. المتطابقة $\\sin\\alpha + \\sin\\beta = 2\\sin\\frac{\\alpha+\\beta}{2}\\cos\\frac{\\alpha-\\beta}{2}$ تحول مجموع تذبذبين إلى حاصل ضرب عاملين. نعوض $\\alpha = kx - \\omega t$ و $\\beta = kx + \\omega t$: نصف المجموع يعطي $kx$، ونصف الفرق يعطي $-\\omega t$، وجيب التمام دالة زوجية، فتختفي الإشارة السالبة. نحصل على $2A\\sin(kx)\\cos(\\omega t)$. المجموع وحاصل الضرب شيئان مختلفان في المعنى: في المجموع، يعيش التذبذبان جنبًا إلى جنب، وفي حاصل الضرب، يتحكم أحدهما في سعة الآخر. لهذا السبب، بعد فك التعبير، تتوقف الموجة عن الانتقال، رغم أننا لم نقدم أي افتراض جديد: نفس السطر أعيدت كتابته بشكل مختلف.",
+     "latex": "\\sin\\alpha + \\sin\\beta = 2\\sin\\frac{\\alpha+\\beta}{2}\\cos\\frac{\\alpha-\\beta}{2}"
+    },
+    {
+     "what": "فصل المتغيرات: أين منفصلًا، ومتى منفصلًا",
+     "why": "في الموجة المتنقلة، كان الإحداثي والزمن داخل قوس واحد، $\\sin(kx - \\omega t)$، ولذلك كانت الشكل تتحرك. بعد الفك، افترقا إلى عاملين مختلفين: $\\sin(kx)$ يعرف فقط عن المكان، و$\\cos(\\omega t)$ يعرف فقط عن اللحظة. هذا التمثيل يسمى فصل المتغيرات، والنتائج واضحة فورًا. العقد تُستخرج من أحد العاملين، بغض النظر عن الزمن: الخطوة الثالثة من الاشتقاق تساوي $\\sin(kx)$ بالصفر وتحصل على نقاط ثابتة دائمًا. الزمن هنا لا يحدد الشكل، بل يغير مقياسه ككل — ومن هنا يأتي الإحساس بنمط يتنفس. بنفس الأسلوب، الخطوة السابعة تجمع أي اهتزاز للوتر من الأنماط الفردية، وستكون الأداة الرئيسية في حل معادلة شرودنغر، حيث ستعطي نفس النتيجة تمامًا: موجات واقفة مع مجموعة منفصلة من الترددات.",
+     "latex": "y(x,t) = \\underbrace{2A\\sin(kx)}_{\\text{أين}} \\cdot \\underbrace{\\cos(\\omega t)}_{\\text{متى}}",
+     "kit": "separation"
+    },
+    {
+     "what": "التوافقيات تُجمع، والنوتات تُضرب",
+     "why": "الخطوة الخامسة تعطي المتسلسلة $f_n = n f_1$: ترددات النغمات التوافقية تزيد بالجمع، مثل $1, 2, 3, \\ldots$. لكن درجة الصوت الموسيقية تُبنى بشكل مختلف، عبر النسب: الأوكتاف هو ضرب التردد في اثنين، والخُمس هو ضربه في واحد ونصف. لذلك، الخطوات المتساوية في السمع تقابل مضاعفات متساوية، وليس فروقًا متساوية، ولتقسيم الأوكتاف إلى اثني عشر نصف نغمة متساوية، يجب استخراج المضاعف بالجذر: اثنا عشر ضربًا في $r$ يجب أن تعطي اثنين، ومن هنا $r = \\sqrt[12]{2} \\approx 1{,}0595$ — هذا هو الرقم من كتلة الكميات. ومن هنا أيضًا التناقض بين المقياسين: التوافقية الثالثة أعلى من النغمة الأساسية بثلاث مرات بالضبط، بينما الخُمس المعدل عبر الأوكتاف هو $2^{19/12} \\approx 2{,}996$ مرة. الفرق صغير، لكنه هذان السنتان اللذان يصححهما الموالف يدويًا.",
+     "latex": "r^{12} = 2 \\;\\Longrightarrow\\; r = \\sqrt[12]{2} \\approx 1{,}0595",
+     "kit": "exponent"
+    }
+   ]
+  }
  }
 }

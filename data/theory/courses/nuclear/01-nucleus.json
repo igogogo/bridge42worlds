@@ -181,11 +181,26 @@
   },
   "math": {
    "title": "Математика, которая здесь понадобилась",
-   "text": [
-    "Почему объём растёт как $A$, а поверхность как $A^{2/3}$. Ядро — плотно упакованный шар, и объём его пропорционален числу нуклонов. Радиус тогда растёт как корень кубический из $A$, а площадь поверхности — как квадрат радиуса, то есть как $A^{2/3}$. Отсюда важное следствие: доля поверхностных нуклонов падает с ростом ядра как $A^{-1/3}$, и потому поверхностная поправка особенно вредит лёгким ядрам. Это ровно то же соотношение объёма и поверхности, что делает мелких животных теплоотдающими, а крупных — теплонакапливающими.",
-    "Почему кулоновский член квадратичен, а объёмный линеен. В этом вся суть устройства ядра. Ядерное притяжение короткодействующее: каждый нуклон чувствует только ближайших соседей, и их число не растёт с размером ядра — отсюда линейность. Электрическое отталкивание дальнодействующее: каждый протон отталкивает все остальные, и число пар растёт как $Z^{2}$. Значит с ростом ядра отталкивание набирает быстрее притяжения, и рано или поздно побеждает. Именно поэтому таблица элементов конечна.",
-    "Что означает член симметрии. Протоны и нейтроны — разные частицы, и каждый вид заполняет свои уровни независимо, подчиняясь запрету Паули. Представьте два одинаковых бассейна: залить в оба поровну выгоднее, чем в один вдвое больше, потому что уровень воды будет ниже. Перекос между числом протонов и нейтронов заставляет заселять более высокие состояния, и энергия растёт как квадрат перекоса.",
-    "Как читать кривую энергии связи. Она растёт от гелия, достигает максимума около железа и медленно спадает к урану. Всё, что слева от максимума, выигрывает энергию при слиянии; всё, что справа, — при делении. Железо не даёт ничего ни так, ни этак и потому копится в ядрах массивных звёзд, а когда его накапливается достаточно, звезда лишается источника энергии и коллапсирует. Один график объясняет и реактор, и Солнце, и сверхновую."
+   "lead": "Три приёма: дробные степени как способ записать связь с объёмом, подсчёт пар вместо подсчёта протонов и поиск максимума у суммы противоборствующих вкладов.",
+   "items": [
+    {
+     "what": "Откуда в формуле дробные степени",
+     "why": "Дробные степени появляются в третьем и четвёртом шагах вывода — $A^{2/3}$ и $A^{1/3}$, — и взяты они не из подгонки. Во втором шаге дробей ещё нет: объёмное слагаемое идёт прямо по $A$. Ядерное вещество несжимаемо, значит объём пропорционален числу нуклонов, а радиус растёт как корень кубический из него: отсюда и запись $R \\approx 1{,}2\\cdot10^{-15}A^{1/3}$ в списке обозначений. Площадь поверхности идёт как квадрат радиуса, то есть как $A^{2/3}$, и это ровно поверхностный член. Тот же корень объясняет $A^{1/3}$ в знаменателе кулоновского слагаемого: энергия отталкивания обратна размеру, а размер задан кубическим корнем. Дробный показатель не усложнение, а запись того, через какую степень длины величина связана с объёмом. Отношение поверхности к объёму падает как $A^{-1/3}$, и потому поверхностная поправка вредит лёгким ядрам сильнее, чем тяжёлым.",
+     "latex": "V \\propto A \\;\\Longrightarrow\\; R \\propto A^{1/3} \\;\\Longrightarrow\\; S \\propto A^{2/3}",
+     "kit": "propto"
+    },
+    {
+     "what": "Почему в кулоновском члене $Z(Z-1)$",
+     "why": "В четвёртом шаге стоит $Z(Z-1)$, а не $Z^{2}$, и разница здесь содержательная. Электрическая энергия есть сумма по парам протонов, а не по протонам: каждая пара считается один раз. Число пар из $Z$ штук равно числу сочетаний $C(Z,2) = Z(Z-1)/2$, у урана это 4186 пар против 92 протонов. Двойка уходит в коэффициент $a_C$, а $Z(Z-1)$ остаётся в формуле. Единица в скобках не косметика: у одиночного протона пары нет вовсе, и водород кулоновского члена не имеет. При больших $Z$ разница между $Z(Z-1)$ и $Z^{2}$ около процента, поэтому в прикидках пишут просто квадрат. И именно этот квадрат обгоняет линейный объёмный член: соседей у нуклона всегда примерно поровну, а пар с ростом ядра становится всё больше.",
+     "latex": "E_{\\text{кул}} \\propto \\sum_{i<j} 1 = C(Z,2) = \\frac{Z(Z-1)}{2}",
+     "kit": "combinatorics"
+    },
+    {
+     "what": "Где у энергии связи максимум по $Z$",
+     "why": "Стенд сообщает, какое $Z$ выгодно при заданном $A$, но самого действия в шагах вывода нет. От числа протонов зависят два слагаемых, и тянут они в разные стороны: кулоновское наказывает за лишние протоны, слагаемое симметрии — за любой перекос от равенства $A = 2Z$. Закрепим массовое число и потребуем наибольшей энергии связи: приравняем нулю производную по $Z$ при постоянном $A$. Дифференцирование по одной переменной при замороженных остальных и называют частной производной. Выходит $Z = (A/2)\\,/\\left(1 + a_C A^{2/3}/(4a_A)\\right)$. У кислорода поправка в знаменателе мала и даёт $Z \\approx 8$, то есть поровну; при $A = 238$ она равна $0{,}29$ и даёт $Z \\approx 92$ — это уран. Избыток нейтронов у тяжёлых ядер оказывается следствием одной производной.",
+     "latex": "\\frac{\\partial B}{\\partial Z} = 0 \\;\\Longrightarrow\\; Z = \\frac{A}{2}\\left(1 + \\frac{a_C A^{2/3}}{4a_A}\\right)^{-1}",
+     "kit": "partial"
+    }
    ]
   },
   "example": {
@@ -410,10 +425,9 @@
      "связ",
      "дефект масс",
      "мэв",
-     "эв",
+     "электронвольт",
      "порядк",
-     "миллион",
-     "энерги связи"
+     "миллион"
     ],
     "needed": 2,
     "why": "Химия перестраивает электронные связи с энергиями в единицы электронвольт, а ядерные реакции — связи между нуклонами с энергиями в мегаэлектронвольты. Разница в миллион раз заложена в самой природе взаимодействий: электромагнитного и сильного. В терминах массы это дефект $10^{-10}$ против $10^{-3}$.",
@@ -559,15 +573,6 @@
    ],
    "plate": "The nucleus is held together by short-range strong interaction against long-range Coulomb repulsion. From the competition of these two forces comes the binding energy curve with a maximum near iron.",
    "note": "Limits of applicability. The liquid drop model describes medium and heavy nuclei well, but noticeably errs on light ones: for helium-4 it gives about 5.7 MeV per nucleon instead of the actual 7.1. The reason is that shell effects are significant for light nuclei — the same as in atoms, but for nucleons. Nuclei with magic numbers of protons or neutrons (2, 8, 20, 28, 50, 82, 126) are noticeably more stable than predicted, and helium-4 with two protons and two neutrons is doubly magic. Full description requires a combination of both models."
-  },
-  "math": {
-   "title": "The mathematics needed here",
-   "text": [
-    "Why volume grows as $A$ and surface as $A^{2/3}$. The nucleus is a tightly packed sphere, and its volume is proportional to the number of nucleons. The radius then grows as the cube root of $A$, and the surface area as the square of the radius, i.e., as $A^{2/3}$. An important consequence: the fraction of surface nucleons falls with nuclear size as $A^{-1/3}$, so the surface correction especially harms light nuclei. This is exactly the same volume-to-surface ratio that makes small animals heat-losing and large ones heat-retaining.",
-    "Why the Coulomb term is quadratic and the volume term linear. This is the essence of nuclear structure. Nuclear attraction is short-range: each nucleon feels only its nearest neighbors, and their number does not grow with nuclear size — hence linearity. Electric repulsion is long-range: each proton repels all others, and the number of pairs grows as $Z^{2}$. So as the nucleus grows, repulsion overtakes attraction, and sooner or later it wins. This is why the table of elements is finite.",
-    "What the symmetry term means. Protons and neutrons are different particles, and each species fills its own levels independently, obeying the Pauli exclusion principle. Imagine two identical pools: filling both equally is more favorable than filling one twice as much, because the water level will be lower. An imbalance between proton and neutron numbers forces occupation of higher states, and the energy grows as the square of the imbalance.",
-    "How to read the binding energy curve. It rises from helium, reaches a maximum near iron, and slowly declines to uranium. Everything to the left of the maximum gains energy from fusion; everything to the right, from fission. Iron gains nothing either way and thus accumulates in the cores of massive stars, and when enough accumulates, the star loses its energy source and collapses. One graph explains the reactor, the Sun, and the supernova."
-   ]
   },
   "example": {
    "title": "Example with numbers: mass defect of helium",
@@ -791,10 +796,9 @@
      "binding",
      "mass defect",
      "MeV",
-     "eV",
+     "electronvolt",
      "order of magnitude",
-     "million",
-     "binding energy"
+     "million"
     ],
     "needed": 2,
     "why": "Chemistry rearranges electronic bonds with energies in electronvolts, while nuclear reactions rearrange bonds between nucleons with energies in megaelectronvolts. The difference of a million times is inherent in the very nature of the interactions: electromagnetic and strong. In terms of mass, this is a defect of $10^{-10}$ versus $10^{-3}$.",
@@ -810,7 +814,31 @@
     "hint": "Binding energy per nucleon is the total binding energy divided by the number of nucleons. How many are in helium-4?",
     "tolAbs": 0.5
    }
-  ]
+  ],
+  "math": {
+   "title": "The math that was needed here",
+   "lead": "Three tricks: fractional powers as a way to express the connection with volume, counting pairs instead of counting protons, and finding the maximum of a sum of competing contributions.",
+   "items": [
+    {
+     "what": "Where fractional powers come from in the formula",
+     "why": "Fractional powers appear in the third and fourth steps of the derivation — $A^{2/3}$ and $A^{1/3}$ — and they are not from fitting. In the second step there are no fractions: the volume term goes directly as $A$. Nuclear matter is incompressible, so the volume is proportional to the number of nucleons, and the radius grows as its cube root: hence the notation $R \\approx 1.2\\cdot10^{-15}A^{1/3}$ in the list of symbols. The surface area goes as the square of the radius, i.e., as $A^{2/3}$, and that is exactly the surface term. The same root explains the $A^{1/3}$ in the denominator of the Coulomb term: the repulsion energy is inversely proportional to the size, and the size is given by the cube root. The fractional exponent is not a complication but a way to express through which power of length the quantity is related to volume. The surface-to-volume ratio falls as $A^{-1/3}$, and therefore the surface correction harms light nuclei more than heavy ones.",
+     "latex": "V \\propto A \\;\\Longrightarrow\\; R \\propto A^{1/3} \\;\\Longrightarrow\\; S \\propto A^{2/3}",
+     "kit": "propto"
+    },
+    {
+     "what": "Why $Z(Z-1)$ in the Coulomb term",
+     "why": "In the fourth step we have $Z(Z-1)$, not $Z^{2}$, and the difference is substantive. The electric energy is a sum over pairs of protons, not over protons: each pair is counted once. The number of pairs from $Z$ items is the number of combinations $C(Z,2) = Z(Z-1)/2$, for uranium that is 4186 pairs versus 92 protons. The two goes into the coefficient $a_C$, and $Z(Z-1)$ remains in the formula. The one in the parentheses is not cosmetic: a single proton has no pair at all, and hydrogen has no Coulomb term. For large $Z$, the difference between $Z(Z-1)$ and $Z^{2}$ is about a percent, so in estimates one writes just the square. And it is this square that overtakes the linear volume term: a nucleon always has roughly the same number of neighbors, but with the growth of the nucleus there are more and more pairs.",
+     "latex": "E_{\\text{Coul}} \\propto \\sum_{i<j} 1 = C(Z,2) = \\frac{Z(Z-1)}{2}",
+     "kit": "combinatorics"
+    },
+    {
+     "what": "Where the binding energy has its maximum in $Z$",
+     "why": "The stand reports which $Z$ is favorable for a given $A$, but the action itself is not in the derivation steps. Two terms depend on the number of protons, and they pull in opposite directions: the Coulomb term punishes extra protons, the symmetry term punishes any deviation from the equality $A = 2Z$. Let us fix the mass number and require the greatest binding energy: we set the derivative with respect to $Z$ to zero at constant $A$. Differentiating with respect to one variable while the others are frozen is called the partial derivative. It turns out $Z = (A/2)\\,/\\left(1 + a_C A^{2/3}/(4a_A)\\right)$. For oxygen, the correction in the denominator is small and gives $Z \\approx 8$, i.e., half and half; for $A = 238$ it equals $0.29$ and gives $Z \\approx 92$ — that is uranium. The neutron excess in heavy nuclei turns out to be a consequence of one derivative.",
+     "latex": "\\frac{\\partial B}{\\partial Z} = 0 \\;\\Longrightarrow\\; Z = \\frac{A}{2}\\left(1 + \\frac{a_C A^{2/3}}{4a_A}\\right)^{-1}",
+     "kit": "partial"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Estructura del núcleo",
@@ -940,15 +968,6 @@
    ],
    "plate": "El núcleo se mantiene unido por la interacción fuerte de corto alcance contra la repulsión coulombiana de largo alcance. De la competencia de estas dos fuerzas surge la curva de energía de enlace con un máximo cerca del hierro.",
    "note": "Límites de aplicabilidad. El modelo de gota líquida describe bien los núcleos medianos y pesados, pero se equivoca notablemente en los ligeros: para el helio-4 da alrededor de 5,7 MeV por nucleón en lugar de los 7,1 reales. La razón es que en los núcleos ligeros son importantes los efectos de capa — los mismos que en el átomo, pero para nucleones. Los núcleos con números mágicos de protones o neutrones (2, 8, 20, 28, 50, 82, 126) son notablemente más estables de lo predicho, y el helio-4 con dos protones y dos neutrones es doblemente mágico. Una descripción completa requiere la combinación de ambos modelos."
-  },
-  "math": {
-   "title": "Matemáticas que se necesitaron aquí",
-   "text": [
-    "Por qué el volumen crece como $A$ y la superficie como $A^{2/3}$. El núcleo es una esfera densamente empaquetada, y su volumen es proporcional al número de nucleones. El radio entonces crece como la raíz cúbica de $A$, y el área de la superficie como el cuadrado del radio, es decir, como $A^{2/3}$. De ahí una consecuencia importante: la fracción de nucleones superficiales disminuye con el tamaño del núcleo como $A^{-1/3}$, y por eso la corrección de superficie perjudica especialmente a los núcleos ligeros. Es exactamente la misma relación de volumen y superficie que hace que los animales pequeños pierdan calor y los grandes lo acumulen.",
-    "Por qué el término coulombiano es cuadrático y el de volumen lineal. En esto reside toda la esencia de la estructura del núcleo. La atracción nuclear es de corto alcance: cada nucleón solo siente a sus vecinos más cercanos, y su número no crece con el tamaño del núcleo — de ahí la linealidad. La repulsión eléctrica es de largo alcance: cada protón repele a todos los demás, y el número de pares crece como $Z^{2}$. Por lo tanto, al crecer el núcleo, la repulsión aumenta más rápido que la atracción, y tarde o temprano vence. Precisamente por eso la tabla de elementos es finita.",
-    "Qué significa el término de simetría. Los protones y neutrones son partículas diferentes, y cada tipo llena sus niveles de forma independiente, obedeciendo el principio de exclusión de Pauli. Imagina dos piscinas idénticas: llenar ambas por igual es más ventajoso que llenar una con el doble, porque el nivel del agua será más bajo. Un desequilibrio entre el número de protones y neutrones obliga a poblar estados más altos, y la energía crece como el cuadrado del desequilibrio.",
-    "Cómo leer la curva de energía de enlace. Crece desde el helio, alcanza un máximo cerca del hierro y desciende lentamente hacia el uranio. Todo lo que está a la izquierda del máximo gana energía al fusionarse; todo lo que está a la derecha, al fisionarse. El hierro no gana ni pierde energía de ninguna manera y por eso se acumula en los núcleos de las estrellas masivas, y cuando se acumula lo suficiente, la estrella pierde su fuente de energía y colapsa. Un solo gráfico explica el reactor, el Sol y la supernova."
-   ]
   },
   "example": {
    "title": "Ejemplo con números: defecto de masa del helio",
@@ -1172,10 +1191,9 @@
      "enlace",
      "defecto de masa",
      "MeV",
-     "eV",
+     "electronvoltio",
      "orden",
-     "millón",
-     "energía de enlace"
+     "millón"
     ],
     "needed": 2,
     "why": "La química reorganiza los enlaces electrónicos con energías del orden de electronvoltios, mientras que las reacciones nucleares involucran enlaces entre nucleones con energías del orden de megaelectronvoltios. La diferencia de un millón de veces está inherente en la naturaleza de las interacciones: electromagnética y fuerte. En términos de masa, esto es un defecto de $10^{-10}$ frente a $10^{-3}$.",
@@ -1191,7 +1209,31 @@
     "hint": "La energía de enlace por nucleón es la energía de enlace total dividida por el número de nucleones. ¿Cuántos hay en el helio-4?",
     "tolAbs": 0.5
    }
-  ]
+  ],
+  "math": {
+   "title": "Matemáticas que aquí se necesitaron",
+   "lead": "Tres trucos: potencias fraccionarias como forma de expresar la relación con el volumen, contar pares en lugar de contar protones y buscar el máximo de una suma de contribuciones opuestas.",
+   "items": [
+    {
+     "what": "De dónde salen las potencias fraccionarias en la fórmula",
+     "why": "Las potencias fraccionarias aparecen en los pasos tercero y cuarto de la deducción — $A^{2/3}$ y $A^{1/3}$ — y no provienen de un ajuste. En el segundo paso aún no hay fracciones: el término de volumen va directamente con $A$. La materia nuclear es incompresible, por lo que el volumen es proporcional al número de nucleones, y el radio crece como su raíz cúbica: de ahí la expresión $R \\approx 1{,}2\\cdot10^{-15}A^{1/3}$ en la lista de notaciones. El área superficial va como el cuadrado del radio, es decir, como $A^{2/3}$, y ese es exactamente el término de superficie. La misma raíz explica el $A^{1/3}$ en el denominador del término de Coulomb: la energía de repulsión es inversa al tamaño, y el tamaño está dado por la raíz cúbica. El exponente fraccionario no es una complicación, sino una forma de expresar a través de qué potencia de la longitud la magnitud se relaciona con el volumen. La relación superficie-volumen cae como $A^{-1/3}$, y por eso la corrección de superficie perjudica más a los núcleos ligeros que a los pesados.",
+     "latex": "V \\propto A \\;\\Longrightarrow\\; R \\propto A^{1/3} \\;\\Longrightarrow\\; S \\propto A^{2/3}",
+     "kit": "propto"
+    },
+    {
+     "what": "Por qué en el término de Coulomb $Z(Z-1)$",
+     "why": "En el cuarto paso aparece $Z(Z-1)$, no $Z^{2}$, y la diferencia es sustancial. La energía eléctrica es una suma sobre pares de protones, no sobre protones: cada par se cuenta una vez. El número de pares de $Z$ elementos es igual al número de combinaciones $C(Z,2) = Z(Z-1)/2$; para el uranio son 4186 pares frente a 92 protones. El dos se va al coeficiente $a_C$, y $Z(Z-1)$ permanece en la fórmula. El uno en el paréntesis no es cosmético: un protón solitario no tiene ningún par, y el hidrógeno no tiene término de Coulomb. Para $Z$ grande, la diferencia entre $Z(Z-1)$ y $Z^{2}$ es de alrededor del uno por ciento, por lo que en estimaciones se escribe simplemente el cuadrado. Y es precisamente este cuadrado el que supera al término de volumen lineal: los vecinos de un nucleón siempre son aproximadamente los mismos, pero los pares aumentan con el tamaño del núcleo.",
+     "latex": "E_{\\text{cul}} \\propto \\sum_{i<j} 1 = C(Z,2) = \\frac{Z(Z-1)}{2}",
+     "kit": "combinatorics"
+    },
+    {
+     "what": "Dónde tiene el máximo la energía de enlace respecto a $Z$",
+     "why": "El apartado informa qué $Z$ es favorable para un $A$ dado, pero la acción en sí no está en los pasos de la deducción. Del número de protones dependen dos términos, y tiran en direcciones opuestas: el de Coulomb castiga el exceso de protones, el de simetría castiga cualquier desviación de la igualdad $A = 2Z$. Fijemos el número másico y exijamos la máxima energía de enlace: igualamos a cero la derivada respecto a $Z$ con $A$ constante. Derivar respecto a una variable manteniendo las demás fijas es lo que se llama derivada parcial. Resulta $Z = (A/2)\\,/\\left(1 + a_C A^{2/3}/(4a_A)\\right)$. Para el oxígeno la corrección en el denominador es pequeña y da $Z \\approx 8$, es decir, la mitad; para $A = 238$ es igual a $0{,}29$ y da $Z \\approx 92$ — esto es el uranio. El exceso de neutrones en los núcleos pesados resulta ser consecuencia de una sola derivada.",
+     "latex": "\\frac{\\partial B}{\\partial Z} = 0 \\;\\Longrightarrow\\; Z = \\frac{A}{2}\\left(1 + \\frac{a_C A^{2/3}}{4a_A}\\right)^{-1}",
+     "kit": "partial"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "بنية النواة",
@@ -1321,15 +1363,6 @@
    ],
    "plate": "النواة تُمسك بتفاعل قوي قصير المدى ضد التنافر الكولومي بعيد المدى. من تنافس هاتين القوتين نحصل على منحنى طاقة الربط بقمة قرب الحديد.",
    "note": "حدود التطبيق. نموذج القطرة يصف النوى المتوسطة والثقيلة جيدًا ويخطئ بشكل ملحوظ في الخفيفة: بالنسبة للهيليوم-4 يعطي حوالي 5.7 MeV لكل نوكليون بدلاً من 7.1 الحقيقية. السبب هو أن التأثيرات الغلافية كبيرة في النوى الخفيفة — نفسها كما في الذرة، ولكن للنوكليونات. النوى ذات الأعداد السحرية من البروتونات أو النيوترونات (2, 8, 20, 28, 50, 82, 126) أكثر استقرارًا بشكل ملحوظ من المتوقع، والهيليوم-4 ذو البروتونين والنيوترونين هو سحري مزدوج. الوصف الكامل يتطلب مزيجًا من كلا النموذجين."
-  },
-  "math": {
-   "title": "الرياضيات التي تطلبتها هذه المسألة",
-   "text": [
-    "لماذا ينمو الحجم كـ $A$ والسطح كـ $A^{2/3}$. النواة كرة متراصة، وحجمها يتناسب مع عدد النوكليونات. إذن نصف القطر ينمو كالجذر التكعيبي لـ $A$، ومساحة السطح كمربع نصف القطر، أي كـ $A^{2/3}$. من هنا نتيجة مهمة: نسبة النوكليونات السطحية تتناقص مع نمو النواة كـ $A^{-1/3}$، ولذلك فإن تصحيح السطح يضر النوى الخفيفة بشكل خاص. هذه بالضبط نفس علاقة الحجم والسطح التي تجعل الحيوانات الصغيرة تفقد حرارتها والكبيرة تخزنها.",
-    "لماذا الحد الكولومي تربيعي والحجمي خطي. في هذا جوهر بنية النواة. التجاذب النووي قصير المدى: كل نوكليون يشعر فقط بأقرب جيرانه، وعددهم لا يزيد مع حجم النواة — ومن هنا الخطية. التنافر الكهربائي بعيد المدى: كل بروتون يتنافر مع جميع البروتونات الأخرى، وعدد الأزواج ينمو كـ $Z^{2}$. إذن مع نمو النواة، يزداد التنافر أسرع من التجاذب، وعاجلاً أم آجلاً ينتصر. ولهذا فإن جدول العناصر منتهٍ.",
-    "ماذا يعني حد التناظر. البروتونات والنيوترونات جسيمات مختلفة، وكل نوع يملأ مستوياته بشكل مستقل، خاضعًا لمبدأ استبعاد باولي. تخيل حوضين متطابقين: ملء كليهما بالتساوي أفضل من ملء واحد بضعف الكمية، لأن مستوى الماء سيكون أقل. الانحراف بين عدد البروتونات والنيوترونات يجبر على شغل حالات أعلى، والطاقة تنمو كمربع الانحراف.",
-    "كيف نقرأ منحنى طاقة الربط. ينمو من الهيليوم، يصل إلى قمة قرب الحديد ثم يهبط ببطء نحو اليورانيوم. كل ما هو يسار القمة يكتسب طاقة بالاندماج؛ كل ما هو يمينها يكتسب طاقة بالانشطار. الحديد لا يعطي طاقة لا بهذا ولا بذاك، ولذا يتراكم في نوى النجوم الضخمة، وعندما يتراكم كفاية، يفقد النجم مصدر طاقته وينهار. رسم بياني واحد يشرح المفاعل والشمس والمستعر الأعظم."
-   ]
   },
   "example": {
    "title": "مثال بالأرقام: عجز كتلة الهيليوم",
@@ -1553,10 +1586,9 @@
      "ربط",
      "نقص الكتلة",
      "MeV",
-     "eV",
+     "إلكترون فولت",
      "ترتيب",
-     "مليون",
-     "طاقة الربط"
+     "مليون"
     ],
     "needed": 2,
     "why": "الكيمياء تعيد ترتيب الروابط الإلكترونية بطاقات تصل إلى عدة إلكترون فولت، بينما التفاعلات النووية تعيد ترتيب الروابط بين النيوكليونات بطاقات تصل إلى ميغا إلكترون فولت. الفرق بملايين المرات متأصل في طبيعة التفاعلين: الكهرومغناطيسي والقوي. من حيث الكتلة، هذا يتوافق مع نقص كتلة مقداره $10^{-10}$ مقابل $10^{-3}$.",
@@ -1572,7 +1604,31 @@
     "hint": "طاقة الربط النوعية هي طاقة الربط الكلية مقسومة على عدد النيوكليونات. كم عددها في الهيليوم-4؟",
     "tolAbs": 0.5
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "ثلاث تقنيات: الأسس الكسرية كطريقة لربط الحجم، عد الأزواج بدلاً من عد البروتونات، وإيجاد الحد الأقصى لمجموع المساهمات المتعارضة.",
+   "items": [
+    {
+     "what": "من أين تأتي الأسس الكسرية في الصيغة",
+     "why": "تظهر الأسس الكسرية في الخطوتين الثالثة والرابعة من الاشتقاق - $A^{2/3}$ و $A^{1/3}$ - وهي ليست من تركيب البيانات. في الخطوة الثانية لا توجد كسور بعد: الحد الحجمي يتناسب طردياً مع $A$. المادة النووية غير قابلة للانضغاط، لذا فإن الحجم يتناسب مع عدد النويات، ونصف القطر ينمو كالجذر التكعيبي له: ومن هنا يأتي التعبير $R \\approx 1{,}2\\cdot10^{-15}A^{1/3}$ في قائمة الرموز. مساحة السطح تتناسب مع مربع نصف القطر، أي مع $A^{2/3}$، وهذا هو حد السطح بالضبط. نفس الجذر يفسر $A^{1/3}$ في مقام حد كولوم: طاقة التنافر تتناسب عكسياً مع الحجم، والحجم محدد بالجذر التكعيبي. الأس الكسري ليس تعقيداً، بل هو تدوين لكيفية ارتباط الكمية بالحجم من خلال قوة الطول. نسبة السطح إلى الحجم تتناقص مع $A^{-1/3}$، ولهذا السبب يكون تصحيح السطح أكثر ضرراً للنوى الخفيفة منه للنوى الثقيلة.",
+     "latex": "V \\propto A \\;\\Longrightarrow\\; R \\propto A^{1/3} \\;\\Longrightarrow\\; S \\propto A^{2/3}",
+     "kit": "propto"
+    },
+    {
+     "what": "لماذا في حد كولوم $Z(Z-1)$",
+     "why": "في الخطوة الرابعة نجد $Z(Z-1)$ وليس $Z^{2}$، والفرق جوهري هنا. الطاقة الكهربائية هي مجموع على أزواج البروتونات، وليس على البروتونات نفسها: كل زوج يُحسب مرة واحدة. عدد الأزواج من $Z$ عنصراً يساوي عدد التوافيق $C(Z,2) = Z(Z-1)/2$، وبالنسبة لليورانيوم هذا يعطي 4186 زوجاً مقابل 92 بروتوناً. الاثنان يذهبان إلى المعامل $a_C$، بينما يبقى $Z(Z-1)$ في الصيغة. الواحد بين القوسين ليس تجميلياً: البروتون المنفرد ليس له زوج إطلاقاً، والهيدروجين لا يملك حد كولوم. عند قيم $Z$ الكبيرة، يكون الفرق بين $Z(Z-1)$ و $Z^{2}$ حوالي واحد بالمئة، لذلك في التقديرات التقريبية يُكتب المربع فقط. وهذا المربع بالتحديد هو الذي يتفوق على الحد الحجمي الخطي: جيران النيوكليون دائمًا متوازنون تقريبًا، بينما يزداد عدد الأزواج مع نمو النواة.",
+     "latex": "E_{\\text{كولوم}} \\propto \\sum_{i<j} 1 = C(Z,2) = \\frac{Z(Z-1)}{2}",
+     "kit": "combinatorics"
+    },
+    {
+     "what": "أين الحد الأقصى لطاقة الارتباط بالنسبة إلى $Z$",
+     "why": "يخبرنا المعيار أي $Z$ هو الأفضل عند قيمة معينة لـ $A$، لكن الفعل نفسه غير موجود في خطوات الاشتقاق. يعتمدان على عدد البروتونات حدان، وهما يسحبان في اتجاهين متعاكسين: حد كولوم يعاقب على البروتونات الزائدة، وحد التناظر يعاقب على أي انحراف عن المساواة $A = 2Z$. نثبت العدد الكتلي ونطلب أكبر طاقة ارتباط: نساوي المشتقة بالنسبة إلى $Z$ بالصفر مع ثبات $A$. التفاضل بالنسبة لمتغير واحد مع تجميد الباقي هو ما يسمى بالمشتقة الجزئية. النتيجة هي $Z = (A/2)\\,/\\left(1 + a_C A^{2/3}/(4a_A)\\right)$. بالنسبة للأكسجين، التصحيح في المقام صغير ويعطي $Z \\approx 8$، أي بالتساوي؛ عند $A = 238$ يساوي $0{,}29$ ويعطي $Z \\approx 92$ - وهذا هو اليورانيوم. فائض النيوترونات في النوى الثقيلة يتبين أنه نتيجة لمشتقة واحدة.",
+     "latex": "\\frac{\\partial B}{\\partial Z} = 0 \\;\\Longrightarrow\\; Z = \\frac{A}{2}\\left(1 + \\frac{a_C A^{2/3}}{4a_A}\\right)^{-1}",
+     "kit": "partial"
+    }
+   ]
+  }
  },
  "tags": [
   "helium",

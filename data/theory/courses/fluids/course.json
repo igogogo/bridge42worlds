@@ -1,0 +1,395 @@
+{
+ "id": "fluids",
+ "schema": "b42.course/2",
+ "kind": "topic",
+ "order": 7,
+ "entities": {
+  "tags": [
+   "water",
+   "viscosity",
+   "computational_fluid_dynamics",
+   "turbulence",
+   "superfluidity"
+  ],
+  "laws": [
+   "archimedes_principle",
+   "bernoullis_principle",
+   "navier_stokes_equations",
+   "poiseuille_equation"
+  ],
+  "scientists": [
+   "Archimedes",
+   "Daniel Bernoulli",
+   "Leonhard Euler",
+   "Isaac Newton",
+   "George Gabriel Stokes"
+  ]
+ },
+ "lessons": [
+  {
+   "id": "01-hydrostatics",
+   "title": "Давление в покоящейся жидкости",
+   "sub": "почему давление зависит только от глубины и откуда берётся сила Архимеда",
+   "law": "Закон Паскаля · закон Архимеда",
+   "model": "flow"
+  },
+  {
+   "id": "02-bernoulli",
+   "title": "Течение: неразрывность и Бернулли",
+   "sub": "почему в узком месте давление меньше, а не больше",
+   "law": "Уравнение Бернулли",
+   "model": "flow"
+  },
+  {
+   "id": "03-viscosity",
+   "title": "Вязкость и сопротивление",
+   "sub": "как жидкость тормозит сама себя и где кончается предсказуемое течение",
+   "law": "Пуазёйль · Стокс · число Рейнольдса",
+   "model": "flow"
+  }
+ ],
+ "ru": {
+  "title": "Жидкости и газы в движении",
+  "subtitle": "Сплошная среда: давление, поток, вязкость",
+  "lead": "Жидкость и газ описывают одним аппаратом, потому что для механики важно не агрегатное состояние, а одно свойство: среда не выдерживает сдвига. Приложите силу вдоль слоя — он поедет, и остановится только тогда, когда касательные силы исчезнут. Из этого единственного факта вырастает всё: давление на глубине, разгон в сужении трубы, вязкое торможение и, наконец, срыв ровного течения в турбулентность.",
+  "why": {
+   "title": "Зачем это знать",
+   "text": [
+    "Это первая тема курса, где вместо материальной точки берут сплошную среду — и оказывается, что новых законов заводить не пришлось. Второй закон Ньютона и сохранение энергии применяются к мысленно выделенному куску воды точно так же, как раньше применялись к бруску на столе. Разница лишь в том, что кусок надо выбрать удачно, и весь навык темы состоит в этом выборе: столбик от поверхности до глубины даёт формулу давления, трубка тока между двумя сечениями — уравнение Бернулли, цилиндрический слой внутри трубы — профиль скорости.",
+    "Прикладная плотность здесь выше, чем почти во всех остальных темах. Тормоза автомобиля, водонапорная башня, осадка судна, тонометр, капельница, шприц, крыло самолёта, водопроводная труба и сосуд, суженный бляшкой, — всё это считается тремя формулами, которые мы выведем. Ни одна из них не требует ничего сложнее производной, и все три проверяются стаканом воды и пластиковой бутылкой.",
+    "И здесь же честно видно, где классическая физика упирается в стену. Уравнения вязкой жидкости записаны с середины девятнадцатого века, их никто не оспаривает, но решать их в общем виде мы не умеем — и даже не доказано, что гладкое решение существует всегда. Порог, за которым ровное течение рассыпается в клубки, до сих пор берут из опыта. Тема, которая начинается с ванны, заканчивается открытым вопросом, за который назначена премия в миллион долларов."
+   ]
+  },
+  "map": {
+   "title": "Что вы изучите",
+   "lead": "Тема идёт от простого к сложному в прямом физическом смысле: сначала жидкость неподвижна, затем движется без потерь, затем с потерями. Каждый следующий параграф снимает одно упрощение предыдущего.",
+   "outcome": "Пройдя тему, вы сможете посчитать давление и выталкивающую силу на любой глубине, объяснить, почему в сужении давление падает, а не растёт, оценить расход через трубу по формуле Пуазёйля — и, что важнее, заранее сказать, применима ли эта формула вообще, посчитав число Рейнольдса."
+  },
+  "prereq": {
+   "title": "Что нужно знать заранее",
+   "items": [
+    "Механика: второй закон Ньютона, работа силы и кинетическая энергия. Уравнение Бернулли — это теорема об изменении кинетической энергии, записанная для куска жидкости, и ничего сверх неё в выводе не будет.",
+    "Термодинамика: плотность как масса единицы объёма и представление о молекулярном строении вещества. Вязкость мы выведем как перенос импульса тепловым движением — тем же механизмом, что даёт теплопроводность и диффузию.",
+    "Математика: производная как скорость изменения и простейший определённый интеграл. Запись $dp/dz = -\\rho g$ встретится в первом же параграфе, интегрирование по сечению трубы — в третьем."
+   ],
+   "note": "Векторный анализ не обязателен. Теорема о градиенте появляется ровно один раз, в блоке математики первого параграфа, и рядом приведён вывод того же результата вовсе без интегралов — тот, что придумал сам Архимед."
+  },
+  "history": {
+   "title": "Кто её создал",
+   "people": [
+    {
+     "name": "Архимед",
+     "years": "около 287–212 до н. э.",
+     "what": "В трактате «О плавающих телах» доказал, что погружённое тело теряет в весе ровно столько, сколько весит вытесненная им жидкость, и разобрал условия устойчивого плавания. Это единственный античный результат курса, которым пользуются сегодня без единой поправки."
+    },
+    {
+     "name": "Блез Паскаль",
+     "years": "1623–1662",
+     "what": "В «Трактате о равновесии жидкостей» сформулировал, что добавленное давление приходит во все точки без потерь, и описал гидравлический пресс за полтора века до того, как его построили. Он же довёл до конца проверку догадки Торричелли: барометр, поднятый на вершину Пюи-де-Дом, показал столб короче на восемь сантиметров — значит его держит вес воздуха, а не «боязнь пустоты»."
+    },
+    {
+     "name": "Даниил Бернулли",
+     "years": "1700–1782",
+     "what": "В «Гидродинамике» 1738 года связал скорость течения с давлением, рассуждая о «живой силе» — так тогда называли кинетическую энергию. Книга стоила ему отношений с отцом: Иоганн Бернулли выпустил свою «Гидравлику», проставив на титуле дату за шесть лет до публикации сына. Они не помирились до конца жизни."
+    },
+    {
+     "name": "Леонард Эйлер",
+     "years": "1707–1783",
+     "what": "Записал уравнения движения идеальной жидкости в том виде, в каком они дошли до нас, и получил соотношение Бернулли как их следствие, а не как рассуждение о живой силе. Слагаемое с давлением отдельным членом появилось именно у него. После этого оставалось добавить только вязкость."
+    },
+    {
+     "name": "Готхильф Хаген и Жан-Луи Пуазёйль",
+     "years": "1839–1846",
+     "what": "Независимо друг от друга измерили расход через тонкие трубки: инженер считал водопровод, врач хотел понять кровоток и ради этого изобрёл ртутный манометр для давления крови. Оба обнаружили четвёртую степень радиуса и оба не смогли объяснить, откуда она берётся, — вывод из уравнений вязкой жидкости дали Стокс и его современники только в 1850-х годах."
+    },
+    {
+     "name": "Осборн Рейнольдс",
+     "years": "1842–1912",
+     "what": "Пустил струйку краски в поток воды в стеклянной трубе и увидел точку, где ровная нить рассыпается в клубки. Из соображений размерности получил безразмерное число, сравнивающее инерцию с вязкостью, и показал, что переход определяется именно им, а не скоростью и не диаметром по отдельности. Само число выведено, но порог около 2300 остался измеренным — таким он остаётся и сейчас."
+    }
+   ]
+  },
+  "open": "существуют ли гладкие решения уравнений Навье — Стокса при любом начале — за ответ обещан миллион долларов",
+  "lessons": [
+   {
+    "id": "01-hydrostatics",
+    "title": "Давление в покоящейся жидкости",
+    "sub": "почему давление зависит только от глубины и откуда берётся сила Архимеда",
+    "law": "Закон Паскаля · закон Архимеда",
+    "model": "flow"
+   },
+   {
+    "id": "02-bernoulli",
+    "title": "Течение: неразрывность и Бернулли",
+    "sub": "почему в узком месте давление меньше, а не больше",
+    "law": "Уравнение Бернулли",
+    "model": "flow"
+   },
+   {
+    "id": "03-viscosity",
+    "title": "Вязкость и сопротивление",
+    "sub": "как жидкость тормозит сама себя и где кончается предсказуемое течение",
+    "law": "Пуазёйль · Стокс · число Рейнольдса",
+    "model": "flow"
+   }
+  ]
+ },
+ "en": {
+  "title": "Fluids and Gases in Motion",
+  "subtitle": "Continuous Medium: Pressure, Flow, Viscosity",
+  "lead": "Liquids and gases are described by the same apparatus because for mechanics, what matters is not the state of aggregation but one property: the medium does not withstand shear. Apply a force along a layer—it will move, and it will stop only when the tangential forces disappear. From this single fact grows everything: pressure at depth, acceleration in a pipe constriction, viscous drag, and finally, the breakdown of smooth flow into turbulence.",
+  "why": {
+   "title": "Why Know This",
+   "text": [
+    "This is the first topic in the course where instead of a point mass we take a continuous medium—and it turns out that no new laws were needed. Newton's second law and conservation of energy are applied to a mentally isolated piece of water just as they were applied to a block on a table. The difference is only that the piece must be chosen wisely, and the whole skill of the topic lies in this choice: a column from the surface to a depth gives the pressure formula, a stream tube between two sections gives Bernoulli's equation, a cylindrical layer inside a pipe gives the velocity profile.",
+    "The practical density here is higher than in almost any other topic. Car brakes, a water tower, ship draft, a blood pressure monitor, an IV drip, a syringe, an airplane wing, a water pipe, and a vessel narrowed by plaque—all of this is calculated with three formulas that we will derive. None of them requires anything more complex than a derivative, and all three can be tested with a glass of water and a plastic bottle.",
+    "And here you can honestly see where classical physics hits a wall. The equations of viscous fluids have been written since the mid-nineteenth century, no one disputes them, but we cannot solve them in general form—and it is not even proven that a smooth solution always exists. The threshold beyond which smooth flow breaks into swirls is still taken from experiment. A topic that starts with a bathtub ends with an open question for which a million-dollar prize has been offered."
+   ]
+  },
+  "map": {
+   "title": "What You Will Learn",
+   "lead": "The topic goes from simple to complex in a direct physical sense: first the fluid is stationary, then it moves without losses, then with losses. Each subsequent paragraph removes one simplification of the previous one.",
+   "outcome": "After completing the topic, you will be able to calculate pressure and buoyant force at any depth, explain why pressure drops in a constriction rather than rises, estimate the flow rate through a pipe using Poiseuille's formula—and, more importantly, tell in advance whether this formula is applicable at all by calculating the Reynolds number."
+  },
+  "prereq": {
+   "title": "What You Need to Know in Advance",
+   "items": [
+    "Mechanics: Newton's second law, work of a force, and kinetic energy. Bernoulli's equation is the theorem of change in kinetic energy written for a piece of fluid, and nothing beyond that will be used in the derivation.",
+    "Thermodynamics: density as mass per unit volume and an idea of the molecular structure of matter. We will derive viscosity as momentum transfer by thermal motion—the same mechanism that gives thermal conductivity and diffusion.",
+    "Mathematics: derivative as rate of change and the simplest definite integral. The notation $dp/dz = -\\rho g$ will appear in the first paragraph, integration over the pipe cross-section in the third."
+   ],
+   "note": "Vector analysis is not required. The gradient theorem appears exactly once, in the math block of the first paragraph, and next to it is a derivation of the same result without integrals—the one that Archimedes himself came up with."
+  },
+  "history": {
+   "title": "Who Created It",
+   "people": [
+    {
+     "name": "Archimedes",
+     "years": "c. 287–212 BC",
+     "what": "In the treatise 'On Floating Bodies' he proved that a submerged body loses exactly as much weight as the weight of the fluid it displaces, and he analyzed the conditions for stable floating. This is the only ancient result in the course that is used today without a single correction."
+    },
+    {
+     "name": "Blaise Pascal",
+     "years": "1623–1662",
+     "what": "In the 'Treatise on the Equilibrium of Liquids' he formulated that added pressure reaches all points without loss, and described the hydraulic press a century and a half before it was built. He also completed the verification of Torricelli's conjecture: a barometer taken to the top of Puy-de-Dôme showed a column shorter by eight centimeters—meaning it is held by the weight of air, not by 'nature's abhorrence of a vacuum.'"
+    },
+    {
+     "name": "Daniel Bernoulli",
+     "years": "1700–1782",
+     "what": "In 'Hydrodynamics' of 1738 he connected flow velocity with pressure, reasoning about 'living force'—as kinetic energy was then called. The book cost him his relationship with his father: Johann Bernoulli published his own 'Hydraulics', putting a date on the title page six years before his son's publication. They never reconciled."
+    },
+    {
+     "name": "Leonhard Euler",
+     "years": "1707–1783",
+     "what": "He wrote down the equations of motion for an ideal fluid in the form they have come down to us, and obtained Bernoulli's relation as a consequence of them, not as a reasoning about living force. The term with pressure as a separate component appeared precisely with him. After that, only viscosity remained to be added."
+    },
+    {
+     "name": "Gotthilf Hagen and Jean-Louis Poiseuille",
+     "years": "1839–1846",
+     "what": "Independently of each other, they measured the flow rate through thin tubes: the engineer was calculating water supply, the physician wanted to understand blood flow and for this purpose invented a mercury manometer for blood pressure. Both discovered the fourth power of the radius and both could not explain where it came from—the derivation from the equations of viscous fluids was given by Stokes and his contemporaries only in the 1850s."
+    },
+    {
+     "name": "Osborne Reynolds",
+     "years": "1842–1912",
+     "what": "He released a stream of dye into a water flow in a glass pipe and saw the point where the smooth thread breaks into swirls. From dimensional considerations he obtained a dimensionless number comparing inertia with viscosity, and showed that the transition is determined precisely by it, not by velocity or diameter separately. The number itself is derived, but the threshold around 2300 remains measured—it remains so to this day."
+    }
+   ]
+  },
+  "open": "whether smooth solutions to the Navier–Stokes equations exist for any initial condition—a million dollars is promised for the answer",
+  "lessons": [
+   {
+    "id": "01-hydrostatics",
+    "title": "Pressure in a stationary fluid",
+    "sub": "why pressure depends only on depth and where the buoyant force comes from",
+    "law": "Pascal's law · Archimedes' principle",
+    "model": "flow"
+   },
+   {
+    "id": "02-bernoulli",
+    "title": "Flow: continuity and Bernoulli",
+    "sub": "why pressure is lower in a narrow section, not higher",
+    "law": "Bernoulli's equation",
+    "model": "flow"
+   },
+   {
+    "id": "03-viscosity",
+    "title": "Viscosity and drag",
+    "sub": "how a fluid slows itself down and where predictable flow ends",
+    "law": "Poiseuille · Stokes · Reynolds number",
+    "model": "flow"
+   }
+  ]
+ },
+ "es": {
+  "title": "Líquidos y gases en movimiento",
+  "subtitle": "Medio continuo: presión, flujo, viscosidad",
+  "lead": "Líquido y gas se describen con el mismo aparato porque para la mecánica no importa el estado de agregación, sino una propiedad: el medio no resiste el cizallamiento. Si aplicas una fuerza a lo largo de una capa, esta se desliza y se detiene solo cuando desaparecen las fuerzas tangenciales. De este único hecho surge todo: la presión a profundidad, la aceleración en un estrechamiento de tubería, el frenado viscoso y, finalmente, el colapso del flujo uniforme en turbulencia.",
+  "why": {
+   "title": "Por qué saber esto",
+   "text": [
+    "Este es el primer tema del curso donde, en lugar de un punto material, se toma un medio continuo, y resulta que no fue necesario introducir nuevas leyes. La segunda ley de Newton y la conservación de la energía se aplican a un trozo de agua mentalmente aislado de la misma manera que antes se aplicaban a un bloque sobre una mesa. La diferencia es solo que el trozo debe elegirse adecuadamente, y toda la habilidad del tema consiste en esa elección: una columna desde la superficie hasta la profundidad da la fórmula de la presión, un tubo de corriente entre dos secciones da la ecuación de Bernoulli, una capa cilíndrica dentro de una tubería da el perfil de velocidad.",
+    "La densidad de aplicaciones aquí es mayor que en casi todos los demás temas. Los frenos de un automóvil, la torre de agua, el calado de un barco, el tensiómetro, el gotero, la jeringa, el ala de un avión, la tubería de agua y un vaso estrechado por una placa: todo esto se calcula con tres fórmulas que derivaremos. Ninguna de ellas requiere nada más complicado que una derivada, y las tres se pueden comprobar con un vaso de agua y una botella de plástico.",
+    "Y aquí también se ve honestamente dónde la física clásica choca contra la pared. Las ecuaciones de un fluido viscoso se escribieron a mediados del siglo XIX, nadie las discute, pero no sabemos resolverlas en forma general, y ni siquiera se ha demostrado que una solución suave exista siempre. El umbral más allá del cual el flujo uniforme se descompone en remolinos todavía se toma de la experiencia. Un tema que comienza con una bañera termina con una pregunta abierta por la que se ha ofrecido un premio de un millón de dólares."
+   ]
+  },
+  "map": {
+   "title": "Qué aprenderás",
+   "lead": "El tema va de lo simple a lo complejo en el sentido físico directo: primero el líquido está en reposo, luego se mueve sin pérdidas, luego con pérdidas. Cada párrafo siguiente elimina una simplificación del anterior.",
+   "outcome": "Al completar el tema, podrás calcular la presión y la fuerza de flotación a cualquier profundidad, explicar por qué en un estrechamiento la presión cae en lugar de aumentar, estimar el caudal a través de una tubería con la fórmula de Poiseuille y, lo más importante, decir de antemano si esta fórmula es aplicable calculando el número de Reynolds."
+  },
+  "prereq": {
+   "title": "Qué necesitas saber de antemano",
+   "items": [
+    "Mecánica: segunda ley de Newton, trabajo de una fuerza y energía cinética. La ecuación de Bernoulli es el teorema del cambio de energía cinética aplicado a un trozo de fluido, y no se necesita nada más en la derivación.",
+    "Termodinámica: densidad como masa por unidad de volumen y la idea de la estructura molecular de la materia. La viscosidad la derivaremos como transferencia de impulso por movimiento térmico, el mismo mecanismo que produce la conductividad térmica y la difusión.",
+    "Matemáticas: derivada como tasa de cambio e integral definida simple. La expresión $dp/dz = -\\rho g$ aparecerá en el primer párrafo, y la integración sobre la sección transversal de la tubería, en el tercero."
+   ],
+   "note": "El análisis vectorial no es obligatorio. El teorema del gradiente aparece exactamente una vez, en el bloque de matemáticas del primer párrafo, y junto a él se presenta la derivación del mismo resultado sin integrales: la que ideó el propio Arquímedes."
+  },
+  "history": {
+   "title": "Quién la creó",
+   "people": [
+    {
+     "name": "Arquímedes",
+     "years": "c. 287–212 a. C.",
+     "what": "En el tratado 'Sobre los cuerpos flotantes' demostró que un cuerpo sumergido pierde exactamente el peso del líquido que desaloja, y analizó las condiciones de flotación estable. Es el único resultado antiguo del curso que se usa hoy sin ninguna corrección."
+    },
+    {
+     "name": "Blaise Pascal",
+     "years": "1623–1662",
+     "what": "En el 'Tratado sobre el equilibrio de los líquidos' formuló que la presión añadida se transmite a todos los puntos sin pérdidas, y describió la prensa hidráulica un siglo y medio antes de que se construyera. También completó la verificación de la conjetura de Torricelli: un barómetro llevado a la cima del Puy-de-Dôme mostró una columna ocho centímetros más corta, lo que significa que la sostiene el peso del aire, no el 'horror al vacío'."
+    },
+    {
+     "name": "Daniel Bernoulli",
+     "years": "1700–1782",
+     "what": "En su 'Hidrodinámica' de 1738 relacionó la velocidad del flujo con la presión, razonando sobre la 'fuerza viva', como entonces se llamaba a la energía cinética. El libro le costó la relación con su padre: Johann Bernoulli publicó su 'Hidráulica' con una fecha en la portada seis años anterior a la publicación de su hijo. No se reconciliaron hasta el final de sus vidas."
+    },
+    {
+     "name": "Leonhard Euler",
+     "years": "1707–1783",
+     "what": "Escribió las ecuaciones del movimiento de un fluido ideal en la forma en que han llegado hasta nosotros, y obtuvo la relación de Bernoulli como una consecuencia de ellas, no como un razonamiento sobre la fuerza viva. El término de presión como miembro separado apareció precisamente con él. Después solo quedaba añadir la viscosidad."
+    },
+    {
+     "name": "Gotthilf Hagen y Jean-Louis Poiseuille",
+     "years": "1839–1846",
+     "what": "De forma independiente midieron el caudal a través de tubos delgados: el ingeniero calculaba tuberías de agua, el médico quería entender el flujo sanguíneo y para ello inventó el manómetro de mercurio para la presión arterial. Ambos descubrieron la cuarta potencia del radio y ninguno pudo explicar de dónde salía; la derivación a partir de las ecuaciones de un fluido viscoso la dieron Stokes y sus contemporáneos solo en la década de 1850."
+    },
+    {
+     "name": "Osborne Reynolds",
+     "years": "1842–1912",
+     "what": "Introdujo un hilo de tinta en una corriente de agua en un tubo de vidrio y vio el punto donde el hilo uniforme se deshace en remolinos. Mediante análisis dimensional obtuvo un número adimensional que compara la inercia con la viscosidad, y mostró que la transición está determinada por ese número, no por la velocidad ni el diámetro por separado. El número en sí está derivado, pero el umbral alrededor de 2300 sigue siendo medido; así permanece hasta hoy."
+    }
+   ]
+  },
+  "open": "si existen soluciones suaves de las ecuaciones de Navier-Stokes para cualquier condición inicial: por la respuesta se ofrecen un millón de dólares",
+  "lessons": [
+   {
+    "id": "01-hydrostatics",
+    "title": "Presión en un fluido en reposo",
+    "sub": "por qué la presión depende solo de la profundidad y de dónde surge la fuerza de Arquímedes",
+    "law": "Ley de Pascal · ley de Arquímedes",
+    "model": "flow"
+   },
+   {
+    "id": "02-bernoulli",
+    "title": "Flujo: continuidad y Bernoulli",
+    "sub": "por qué en un lugar estrecho la presión es menor, no mayor",
+    "law": "Ecuación de Bernoulli",
+    "model": "flow"
+   },
+   {
+    "id": "03-viscosity",
+    "title": "Viscosidad y resistencia",
+    "sub": "cómo el fluido se frena a sí mismo y dónde termina el flujo predecible",
+    "law": "Poiseuille · Stokes · número de Reynolds",
+    "model": "flow"
+   }
+  ]
+ },
+ "ar": {
+  "title": "السوائل والغازات في الحركة",
+  "subtitle": "الوسط المستمر: الضغط، التدفق، اللزوجة",
+  "lead": "يتم وصف السائل والغاز بنفس الأسلوب، لأنه بالنسبة للميكانيكا، ليس حالة التجمع هي المهمة، بل خاصية واحدة: الوسط لا يتحمل القص. إذا طبقت قوة على طول طبقة، فإنها تنزلق، ولن تتوقف إلا عندما تختفي قوى القص. من هذه الحقيقة الوحيدة ينبثق كل شيء: الضغط في العمق، والتسارع في تضييق الأنبوب، والتباطؤ اللزج، وأخيرًا، انهيار التدفق المنتظم إلى اضطراب.",
+  "why": {
+   "title": "لماذا يجب معرفة هذا",
+   "text": [
+    "هذا هو الموضوع الأول في الدورة حيث نستخدم بدلاً من النقطة المادية وسطًا مستمرًا - واتضح أنه لم يكن علينا تقديم قوانين جديدة. يتم تطبيق قانون نيوتن الثاني وحفظ الطاقة على قطعة ماء معزولة ذهنيًا بنفس الطريقة التي طُبقت بها سابقًا على كتلة على طاولة. الفرق فقط في أن القطعة يجب اختيارها بحكمة، والمهارة الكاملة للموضوع تكمن في هذا الاختيار: عمود من السطح إلى العمق يعطي صيغة الضغط، وأنبوب تيار بين مقطعين - معادلة برنولي، وطبقة أسطوانية داخل أنبوب - ملف السرعة.",
+    "الكثافة التطبيقية هنا أعلى منها في أي موضوع آخر تقريبًا. فرامل السيارة، وبرج المياه، وغاطس السفينة، ومقياس ضغط الدم، والقطارة، والحقنة، وجناح الطائرة، وأنبوب الماء، والوعاء الضيق بسبب اللويحة - كل هذا يُحسب بثلاث معادلات سنشتقها. لا تتطلب أي منها ما هو أكثر تعقيدًا من المشتقة، وكلها يمكن التحقق منها بكوب ماء وزجاجة بلاستيكية.",
+    "وهنا أيضًا نرى بوضوح أين تصطدم الفيزياء الكلاسيكية بالجدار. معادلات السائل اللزج كُتبت منذ منتصف القرن التاسع عشر، ولا أحد يشكك فيها، لكننا لا نستطيع حلها بشكل عام - ولم يُثبت حتى أن الحل السلس موجود دائمًا. العتبة التي بعدها ينهار التدفق المنتظم إلى دوامات لا تزال تُؤخذ من التجربة. الموضوع الذي يبدأ بحوض الاستحمام ينتهي بسؤال مفتوح، جائزته مليون دولار."
+   ]
+  },
+  "map": {
+   "title": "ماذا ستتعلم",
+   "lead": "الموضوع يتدرج من البسيط إلى المعقد بالمعنى الفيزيائي المباشر: أولاً السائل ساكن، ثم يتحرك بدون خسائر، ثم مع خسائر. كل فقرة تالية تزيل تبسيطًا واحدًا من الفقرة السابقة.",
+   "outcome": "بعد إكمال الموضوع، ستكون قادرًا على حساب الضغط وقوة الطفو عند أي عمق، وشرح لماذا ينخفض الضغط في التضييق بدلاً من أن يرتفع، وتقدير معدل التدفق عبر أنبوب باستخدام معادلة بويزويل - والأهم من ذلك، أن تعرف مسبقًا ما إذا كانت هذه المعادلة قابلة للتطبيق من خلال حساب رقم رينولدز."
+  },
+  "prereq": {
+   "title": "ما تحتاج معرفته مسبقًا",
+   "items": [
+    "الميكانيكا: قانون نيوتن الثاني، عمل القوة والطاقة الحركية. معادلة برنولي هي نظرية تغير الطاقة الحركية المكتوبة لقطعة من السائل، ولا شيء أكثر من ذلك في الاشتقاق.",
+    "الديناميكا الحرارية: الكثافة ككتلة وحدة الحجم وفكرة التركيب الجزيئي للمادة. سنشتق اللزوجة كنقل للزخم بالحركة الحرارية - بنفس الآلية التي تعطي التوصيل الحراري والانتشار.",
+    "الرياضيات: المشتقة كمعدل تغير وأبسط تكامل محدد. ستظهر الكتابة $dp/dz = -\\rho g$ في الفقرة الأولى، والتكامل عبر مقطع الأنبوب - في الثالثة."
+   ],
+   "note": "تحليل المتجهات ليس ضروريًا. تظهر نظرية التدرج مرة واحدة فقط، في كتلة الرياضيات من الفقرة الأولى، وبجانبها اشتقاق لنفس النتيجة بدون تكاملات - ذلك الذي اخترعه أرخميدس نفسه."
+  },
+  "history": {
+   "title": "من صنعها",
+   "people": [
+    {
+     "name": "أرخميدس",
+     "years": "حوالي 287-212 قبل الميلاد",
+     "what": "في أطروحته 'عن الأجسام الطافية' أثبت أن الجسم المغمور يفقد من وزنه مقدار وزن السائل المزاح، ودرس شروط الطفو المستقر. هذه هي النتيجة القديمة الوحيدة في الدورة التي تُستخدم اليوم دون أي تعديل."
+    },
+    {
+     "name": "بليز باسكال",
+     "years": "1623-1662",
+     "what": "في 'أطروحة عن توازن السوائل' صاغ أن الضغط المضاف يصل إلى جميع النقاط دون خسائر، ووصف المكبس الهيدروليكي قبل قرن ونصف من بنائه. كما أكمل التحقق من تخمين تورشيللي: البارومتر المرفوع إلى قمة بوي دي دوم أظهر عمودًا أقصر بثمانية سنتيمترات - مما يعني أنه محمول بوزن الهواء، وليس 'خوفًا من الفراغ'."
+    },
+    {
+     "name": "دانييل برنولي",
+     "years": "1700-1782",
+     "what": "في 'الهيدروديناميكا' عام 1738 ربط سرعة التدفق بالضغط، متأملًا في 'القوة الحية' - كما كانت تسمى الطاقة الحركية آنذاك. كلفه الكتاب علاقته بوالده: نشر يوهان برنولي كتابه 'الهيدروليكا' بوضع تاريخ على صفحة العنوان قبل ست سنوات من نشر ابنه. لم يتصالحا حتى نهاية حياتهما."
+    },
+    {
+     "name": "ليونارد أويلر",
+     "years": "1707-1783",
+     "what": "كتب معادلات حركة السائل المثالي بالشكل الذي وصلت إلينا، وحصل على علاقة برنولي كنتيجة لها، وليس كمناقشة حول القوة الحية. الحد الذي يحتوي على الضغط كعضو منفصل ظهر عنده. بعد ذلك لم يبق سوى إضافة اللزوجة."
+    },
+    {
+     "name": "جوثيلف هاجن وجان-لوي بويزويل",
+     "years": "1839-1846",
+     "what": "بشكل مستقل عن بعضهما، قاسا معدل التدفق عبر أنابيب رفيعة: المهندس كان يحسب أنابيب المياه، والطبيب أراد فهم تدفق الدم ولهذا اخترع مقياس ضغط الدم الزئبقي. كلاهما اكتشف القوة الرابعة لنصف القطر وكلاهما لم يستطع تفسير مصدرها - الاشتقاق من معادلات السائل اللزج قدمه ستوكس ومعاصروه فقط في خمسينيات القرن التاسع عشر."
+    },
+    {
+     "name": "أوسبورن رينولدز",
+     "years": "1842-1912",
+     "what": "أطلق خيطًا من الصبغة في تدفق الماء في أنبوب زجاجي ورأى النقطة التي ينهار فيها الخيط المنتظم إلى دوامات. من اعتبارات الأبعاد حصل على رقم بلا أبعاد يقارن القصور الذاتي باللزوجة، وأظهر أن الانتقال يتحدد به هو، وليس بالسرعة أو القطر بشكل منفصل. الرقم نفسه مشتق، لكن العتبة حوالي 2300 بقيت مقاسة - وهكذا هي حتى الآن."
+    }
+   ]
+  },
+  "open": "هل توجد حلول سلسة لمعادلات نافييه-ستوكس لأي شروط ابتدائية - مقابل الإجابة وعد بمليون دولار",
+  "lessons": [
+   {
+    "id": "01-hydrostatics",
+    "title": "الضغط في السائل الساكن",
+    "sub": "لماذا يعتمد الضغط على العمق فقط ومن أين تأتي قوة أرخميدس",
+    "law": "قانون باسكال · قانون أرخميدس",
+    "model": "flow"
+   },
+   {
+    "id": "02-bernoulli",
+    "title": "التدفق: الاستمرارية وبرنولي",
+    "sub": "لماذا يكون الضغط أقل في المكان الضيق وليس أكبر",
+    "law": "معادلة برنولي",
+    "model": "flow"
+   },
+   {
+    "id": "03-viscosity",
+    "title": "اللزوجة والمقاومة",
+    "sub": "كيف يبطئ السائل نفسه وأين ينتهي التدفق المتوقع",
+    "law": "بوازوي · ستوكس · رقم رينولدز",
+    "model": "flow"
+   }
+  ]
+ }
+}

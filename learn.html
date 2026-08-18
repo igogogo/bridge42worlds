@@ -130,8 +130,21 @@
     line-height:1.4;margin-top:2px}
   .t-note{max-width:680px;font-size:.8rem;color:var(--ink-soft);margin-top:34px;line-height:1.6;
     padding-top:14px;border-top:1px solid var(--rule)}
+  /* «Продолжить» — единственная кнопка на странице, которую читатель ищет глазами,
+     поэтому она стоит сразу под сводкой и выглядит как карточка, а не как ссылка. */
+  .t-go{display:flex;gap:14px;align-items:center;text-decoration:none;color:inherit;
+    border:1px solid var(--rule);border-radius:12px;padding:14px 16px;margin:6px 0 22px;
+    background:var(--surface,transparent);transition:border-color .18s,box-shadow .18s,transform .18s}
+  .t-go:hover{border-color:var(--brass);box-shadow:0 6px 18px rgba(0,0,0,.06);transform:translateY(-1px)}
+  .t-go .ico{flex:0 0 auto;color:var(--brass);display:flex}
+  .t-go .b{min-width:0}
+  .t-go .lbl{font-family:var(--font-display);font-size:.78rem;letter-spacing:.04em;
+    text-transform:uppercase;color:var(--brass)}
+  .t-go b{display:block;font-family:var(--font-display);font-size:1.02rem;line-height:1.3;margin-top:2px}
+  .t-go i{display:block;font-style:normal;font-size:.83rem;color:var(--ink-soft);margin-top:3px}
+  @media(max-width:520px){ .t-go{padding:12px 13px} .t-go b{font-size:.96rem} }
 </style>
-    <link rel="stylesheet" href="/css/style.css?v=7bd7159ffb">
+    <link rel="stylesheet" href="/css/style.css?v=a72778bde1">
 
 <script>
 // Язык курса — общий с сайтом: ?lang= в адресе → сохранённый выбор (b42_lang) → русский.
@@ -165,6 +178,70 @@
   function el(t, c, h) { var e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; }
   function ic(n, s) { return (window.B42Icons && B42Icons[n]) ? B42Icons[n](s || 14) : ''; }
 
+  // ── Где читатель остановился ─────────────────────────────────────────────────
+  // Аудит: «прогресс уже в localStorage, а студент добирается до места 2–3 кликами
+  // и прокруткой». Место знают два хранилища, и они разные: b42_progress_<тема>
+  // помнит ОТВЕТЫ на вопросы параграфа, b42_read_<тема>_<урок> — точку чтения. Второе
+  // точнее (пишется прямо во время чтения), поэтому при равенстве времени берём его.
+  function lastSpot(topics) {
+    var known = {}, best = null;
+    topics.forEach(function (t) { known[t.id] = true; });
+    function offer(topic, lesson, ts, mark) {
+      if (!known[topic] || !ts) return;
+      if (!best || ts > best.ts) best = { topic: topic, lesson: lesson, ts: ts, mark: mark || null };
+    }
+    try {
+      for (var i = 0; i < localStorage.length; i++) {
+        var k = localStorage.key(i);
+        if (!k) continue;
+        if (k.indexOf('b42_progress_') === 0) {
+          var topic = k.slice(13), p = JSON.parse(localStorage.getItem(k) || '{}');
+          Object.keys(p).forEach(function (lid) { offer(topic, lid, p[lid] && p[lid].ts); });
+        } else if (k.indexOf('b42_read_') === 0) {
+          // ключ склеен как <тема>_<урок>, а в id темы подчёркиваний нет — режем по первому
+          var rest = k.slice(9), cut = rest.indexOf('_');
+          if (cut < 1) continue;
+          var v = JSON.parse(localStorage.getItem(k) || 'null');
+          if (v && v.ts) offer(rest.slice(0, cut), rest.slice(cut + 1), v.ts, v);
+        }
+      }
+    } catch (e) { return null; }
+    return best;
+  }
+
+  // Название параграфа берём из его же файла: в дереве лежат только названия тем,
+  // а читателю нужно увидеть то место, куда он вернётся.
+  function mountContinue(spot, topicTitle) {
+    if (!spot) return;
+    var a = el('a', 't-go');
+    a.href = '/course.html?t=' + encodeURIComponent(spot.topic) + '&p=' + encodeURIComponent(spot.lesson) +
+             (LANG !== 'ru' ? '&lang=' + LANG : '');
+    var где = spot.mark && spot.mark.label ? spot.mark.label : '';
+    var сколько = spot.mark && spot.mark.pct ? spot.mark.pct + '%' : '';
+    a.innerHTML = '<span class="ico">' + ic('book', 22) + '</span><span class="b">' +
+      '<span class="lbl">Продолжить</span>' +
+      '<b>' + topicTitle + ' · <span class="p"></span></b>' +
+      // Подпись раздела и процент — РАЗНЫМИ узлами. Словарь интерфейса сверяет текстовый узел
+      // целиком, и склейка «Строгий вывод · 38%» ему не по зубам: на арабской странице так
+      // и осталась бы кириллица. Той же болезнью болели подписи разбора в тьюторе.
+      (где || сколько
+        ? '<i>' + (где ? '<span>' + где + '</span>' : '') +
+          (где && сколько ? '<span> · </span>' : '') +
+          (сколько ? '<span>' + сколько + '</span>' : '') + '</i>'
+        : '') +
+      '</span>';
+    var slot = a.querySelector('.p');
+    slot.textContent = spot.lesson;                       // пока не приехало название — id
+    root.appendChild(a);
+    fetch('/data/theory/courses/' + spot.topic + '/' + spot.lesson + '.json', { cache: 'no-cache' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (L) {
+        var loc = L && (B42Lang.pick(L) || L.ru);
+        if (loc && loc.title) slot.textContent = loc.title;
+      })
+      .catch(function () {});                              // нет файла — остаётся id, ссылка живая
+  }
+
   // Прогресс каждой темы берётся из того же хранилища, что пишет курс
   function progressOf(topicId) {
     try {
@@ -182,6 +259,10 @@
 
   fetch('/data/theory/courses/index.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (d) {
     var C = B42Lang.pick(d) || d.ru, byId = {};
+    if (window.B42JsonLd) B42JsonLd.courseList(d.topics.map(function (t) {
+      var loc = (C.topics || []).filter(function (x) { return x.id === t.id; })[0] || t;
+      return { id: t.id, title: loc.title || t.title, sub: loc.sub || t.sub };
+    }));
     // Состав курса задаётся ОДНИМ списком — верхним. Языковые ветки дают только перевод
     // названий, и накладываются поверх по id.
     //
@@ -222,6 +303,14 @@
       '<span><b>' + startedTopics + '</b><span class="lbl">начато вами</span></span>' +
       '<span class="stars"><b>★ ' + totalStars + '</b><span class="lbl">звёзд собрано</span></span>';
     root.appendChild(tot);
+
+    // Кнопка «Продолжить» стоит сразу под сводкой: до неё читатель добирался двумя-тремя
+    // кликами и прокруткой, хотя место, где он остановился, лежало в браузере всё это время.
+    var spot = lastSpot(d.topics);
+    if (spot) {
+      var tt = byId[spot.topic] || {};
+      mountContinue(spot, tt.title || spot.topic);
+    }
 
     // Ярусы дерева. Темы раскладываются по блокам, поэтому тема с блоком, которого нет
     // в списке, раньше просто не попадала никуда — исчезала со страницы без единой жалобы.
@@ -332,26 +421,31 @@
             d: ['Ретроспектива открытий', 'Кто и как узнал — и во что это превратилось в быту'],
             r: ['Справочник', 'Формулы курса, константы с единицами и сквозные принципы'],
             m: ['Математика на пальцах', 'Производные, поля, тензоры — с физическим смыслом'],
+            t: ['Интерактивный учебник: термодинамика', 'Отдельный формат: модели, бот-наставник и испытание с оценкой'],
             y: ['Смелые гипотезы', 'Тридцать «а что если» — с разбором, чем каждое можно опровергнуть'] },
       en: { h: 'Reference materials', s: 'Read them in any order, at any point in the course',
             d: ['Retrospective of discoveries', 'Who found out what — and what it became at home'],
             r: ['Reference', 'Course formulas, constants with units, cross-cutting principles'],
             m: ['Maths made plain', 'Derivatives, fields, tensors — with their physical meaning'],
+            t: ['Interactive textbook: thermodynamics', 'A separate format: models, a tutor bot and a graded challenge'],
             y: ['Bold hypotheses', 'Thirty «what if» ideas — and what would refute each'] },
       es: { h: 'Materiales de referencia', s: 'Se leen en cualquier orden y momento del curso',
             d: ['Retrospectiva de descubrimientos', 'Quién descubrió qué y en qué se convirtió en casa'],
             r: ['Referencia', 'Fórmulas del curso, constantes con unidades y principios transversales'],
             m: ['Matemáticas sencillas', 'Derivadas, campos, tensores: con su sentido físico'],
+            t: ['Libro interactivo: termodinámica', 'Otro formato: modelos, un bot tutor y una prueba con nota'],
             y: ['Hipótesis audaces', 'Treinta «qué pasaría si» y qué refutaría cada una'] },
       ar: { h: 'مواد مرجعية', s: 'تُقرأ بأي ترتيب وفي أي وقت من المقرر',
             d: ['استعراض الاكتشافات', 'من اكتشف ماذا — وفيمَ تحوّل ذلك في بيوتنا'],
             r: ['المرجع', 'صيغ المقرر والثوابت بوحداتها والمبادئ الجامعة'],
             m: ['الرياضيات ببساطة', 'المشتقات والمجالات والموتّرات — بمعناها الفيزيائي'],
+            t: ['كتاب تفاعلي: الديناميكا الحرارية', 'صيغة منفصلة: نماذج، وروبوت مُرشد، واختبار بدرجة'],
             y: ['فرضيات جريئة', 'ثلاثون «ماذا لو» — وما الذي يدحض كلاً منها'] },
       fr: { h: 'Ressources de référence', s: 'À lire dans n’importe quel ordre, à tout moment du cours',
             d: ['Rétrospective des découvertes', 'Qui a trouvé quoi — et ce que cela est devenu au quotidien'],
             r: ['Aide-mémoire', 'Formules du cours, constantes avec unités et principes transversaux'],
             m: ['Les maths simplement', 'Dérivées, champs et tenseurs — au sens physique'],
+            t: ['Manuel interactif : thermodynamique', 'Un format à part : modèles, tuteur-bot et épreuve notée'],
             y: ['Hypothèses audacieuses', 'Trente « et si » — et ce qui réfuterait chacune'] }
     };
     var REF = REF_ALL[LANG] || REF_ALL.ru;
@@ -359,8 +453,11 @@
     rf.appendChild(el('h2', null, ic('book', 15) + ' ' + REF.h));
     rf.appendChild(el('div', 't-lect-lead', REF.s));
     var rg = el('div', 't-lect-grid');
+    // Интерактивный учебник по термодинамике жил отдельной вселенной: страница есть,
+    // а из учебника на неё нет ни одной ссылки (находка аудита). Ставим её сюда,
+    // честно назвав отдельным форматом, а не темой курса.
     [['/discoveries.html', REF.d], ['/reference.html', REF.r], ['/mathkit.html', REF.m],
-     ['/hypotheses.html', REF.y]]
+     ['/hypotheses.html', REF.y], ['/course-thermodynamics.html', REF.t]]
       .forEach(function (pair, i) {
         var a = el('a', 't-lect-item');
         a.href = pair[0] + '?lang=' + LANG;
@@ -382,8 +479,9 @@
 })();
 </script>
 
-<script src="/js/course-i18n.js?v=37e49bc0b4"></script>
-<script src="/js/sitenav.js?v=ae42fac0f2"></script>
-<script src="/js/beta-banner.js?v=a16e674fd1" defer></script>
+<script src="/js/jsonld-course.js?v=f52eae0c50"></script>
+<script src="/js/course-i18n.js?v=7bcba42fcd"></script>
+<script src="/js/sitenav.js?v=a0b3a42aea"></script>
+<script src="/js/beta-banner.js?v=04a68b7cb8" defer></script>
 </body>
 </html>

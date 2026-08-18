@@ -1,0 +1,394 @@
+{
+ "id": "statistical",
+ "schema": "b42.course/2",
+ "kind": "topic",
+ "order": 8,
+ "entities": {
+  "tags": [
+   "temperature",
+   "helium",
+   "hydrogen",
+   "entropy",
+   "carbon_dioxide",
+   "viscosity",
+   "apparent_diffusion_coefficient"
+  ],
+  "laws": [
+   "boltzmann_distribution",
+   "equipartition_theorem",
+   "ideal_gas_law"
+  ],
+  "scientists": [
+   "James Clerk Maxwell",
+   "Ludwig Boltzmann",
+   "Albert Einstein"
+  ]
+ },
+ "lessons": [
+  {
+   "id": "01-maxwell",
+   "title": "Распределение молекул по скоростям",
+   "sub": "почему при одной температуре в газе есть молекулы всех скоростей",
+   "law": "Распределение Максвелла",
+   "model": "maxwell"
+  },
+  {
+   "id": "02-boltzmann",
+   "title": "Распределение Больцмана и барометрическая формула",
+   "sub": "один множитель exp(−E/kT) — и высота, и скорость, и барьер реакции",
+   "law": "Множитель Больцмана · барометрическая формула",
+   "model": "maxwell"
+  },
+  {
+   "id": "03-brownian",
+   "title": "Броуновское движение: как увидели молекулы",
+   "sub": "как дрожание крупинки под микроскопом стало доводом в пользу атомов",
+   "law": "Формула Эйнштейна — Смолуховского",
+   "model": "transport"
+  }
+ ],
+ "ru": {
+  "title": "Статистическая физика",
+  "subtitle": "Как из хаоса миллиардов частиц получается точный закон",
+  "lead": "Отдельная молекула непредсказуема: между двумя столкновениями проходят наносекунды, направление после удара — дело случая, и следить за каждой из десяти в двадцать пятой степени частиц в кубометре воздуха бессмысленно даже мысленно. Но именно из этой безнадёжности вырастает точность. Когда частиц очень много, вопросы «где эта» и «куда полетит та» теряют смысл, а на их место приходят другие — какая доля частиц имеет такую скорость, такую энергию, такую высоту. Ответы на них оказываются гладкими кривыми, воспроизводимыми от опыта к опыту до нескольких знаков. Тема об этом обмене: отказываясь знать судьбу каждой частицы, мы получаем взамен точный закон для всех.",
+  "why": {
+   "title": "Зачем это знать",
+   "text": [
+    "В термодинамике температура была мерой средней кинетической энергии, и слово «средней» проскакивало незаметно. Здесь оно выходит на первый план: средняя бывает только у того, что разбросано, и температура задаёт не скорость молекул, а форму разброса. Разница не философская. Испарение воды из чашки, утечка водорода из атмосферы Земли, скорость химической реакции и термоядерный синтез в центре Солнца решаются не серединой кривой, а её далёким правым хвостом — той долей процента частиц, которой хватило энергии. Считать хвост по средней скорости — самая дорогая ошибка в этой части физики: он идёт по экспоненте от квадрата отношения, и «чуть быстрее среднего» отличается от «вдвое быстрее среднего» не в разы, а на порядки.",
+    "Второй параграф показывает, что найденный в первом множитель exp(−E/kT) не имеет никакого отношения к скорости конкретно. Ему всё равно, какая это энергия: высота молекулы над землёй, поворот, растяжение химической связи, ширина запрещённой зоны в кремнии или барьер реакции. Один и тот же множитель объясняет, почему альтиметр самолёта считает высоту по давлению, почему продукты хранят в холоде, почему колебательные степени свободы азота при комнатной температуре не дают вклада в теплоёмкость и почему ток через полупроводник растёт при нагреве. Это самая переносимая формула курса — её узнают потом в химии, биологии и электронике.",
+    "И здесь же молекулы перестали быть гипотезой. К концу XIX века у атомистики были серьёзные противники: термодинамика прекрасно обходилась без невидимых частиц, а все доводы в их пользу оставались косвенными. Спор закрыла дрожащая под микроскопом крупинка — после того как Эйнштейн предсказал, как именно растёт её смещение, а Перрен это измерил и получил число Авогадро. Третий параграф проходит весь путь целиком, и заодно упирается в честную границу темы: механика каждого столкновения обратима во времени, а поведение газа необратимо, и откуда берётся эта разница, строго не объяснено до сих пор."
+   ]
+  },
+  "map": {
+   "title": "Что вы изучите",
+   "lead": "Тема идёт по расширяющемуся кругу. Сначала распределение одной величины — скорости; затем оказывается, что тот же вид имеет распределение по любой энергии; затем статистика становится видимой глазом в микроскоп, и по ней удаётся сосчитать сами молекулы.",
+   "outcome": "Пройдя тему, вы сможете объяснить, откуда у кривой Максвелла берётся горб и почему три характерные скорости относятся как 1 : 1,128 : 1,225 при любой температуре и для любого газа; оценить долю молекул за произвольным порогом и сказать, какой газ планета удержит, а какой потеряет; применить множитель exp(−E/kT) к задаче, где нет ни скоростей, ни высот; и, наконец, по смещениям броуновской частицы получить число Авогадро — тем же способом, каким его получил Перрен."
+  },
+  "prereq": {
+   "title": "Что нужно знать заранее",
+   "items": [
+    "Термодинамика: идеальный газ, температура как мера средней кинетической энергии, теорема о равнораспределении. Это понадобится буквально: в выводе распределения Максвелла коэффициент под экспонентой находят, приравнивая средний квадрат скорости к $3k_BT/m$ — то есть подставляя определение температуры из предыдущей темы.",
+    "Энтропия: вероятность состояния и число способов его осуществить. Множитель Больцмана есть утверждение о вероятностях, и без привычки считать состояния он выглядит взятым с потолка. Оттуда же пригодится связь $S = k\\ln W$ — в третьем параграфе она объясняет, почему диффузия идёт в одну сторону.",
+    "Математика: экспонента и логарифм как рабочие инструменты, производная, простейший определённый интеграл. Гауссовы интегралы вида $\\int v^{2}e^{-av^{2}}dv$ встретятся трижды; их значения выписаны рядом в блоке математики, выводить их самостоятельно не нужно."
+   ],
+   "note": "Теория вероятностей за пределами слов «доля» и «среднее» не требуется. Плотность распределения вводится с нуля в первом параграфе — вместе с оговоркой, что $f(v)$ сама по себе не вероятность: вероятность даёт только произведение $f(v)\\,dv$ на интервал."
+  },
+  "history": {
+   "title": "Кто её создал",
+   "people": [
+    {
+     "name": "Джеймс Клерк Максвелл",
+     "years": "1831–1879",
+     "what": "В 1860 году получил распределение скоростей раньше, чем появилась статистическая механика, — из одних соображений симметрии: три проекции скорости независимы, а направления равноправны. Вывод занимал полстраницы и был настолько непривычным, что современники сочли его скорее удачной догадкой, чем доказательством."
+    },
+    {
+     "name": "Людвиг Больцман",
+     "years": "1844–1906",
+     "what": "Показал, что множитель exp(−E/kT) относится не к скорости, а к любой энергии, и доказал, что распределение Максвелла — единственное, которое столкновения не разрушают. Связал энтропию с числом способов осуществить состояние; эту формулу при его жизни оспаривали, а высекли её на надгробии."
+    },
+    {
+     "name": "Джозайя Уиллард Гиббс",
+     "years": "1839–1903",
+     "what": "Придумал само название «статистическая механика» и её нынешний аппарат: вместо одной системы рассматривать сразу ансамбль копий и считать по нему средние. Работал в Йеле в почти полной изоляции, первые десять лет без жалованья, и в Европе о его результатах узнали с большим опозданием."
+    },
+    {
+     "name": "Альберт Эйнштейн и Мариан Смолуховский",
+     "years": "1905–1906",
+     "what": "Независимо друг от друга получили закон броуновского движения: пропорционально времени растёт средний квадрат смещения, а не смещение. Эйнштейн выразил коэффициент через температуру, вязкость и число Авогадро — и тем превратил микроскоп с секундомером в прибор для счёта молекул. Числовые множители у них разошлись примерно вдвое; прав оказался Эйнштейн."
+    },
+    {
+     "name": "Жан Перрен",
+     "years": "1870–1942",
+     "what": "Измерил под микроскопом смещения крупинок и распределение взвеси по высоте, получил из них число Авогадро и свёл больше десятка независимых способов его определения в одну таблицу. Совпадение чисел, полученных совершенно разными путями, и закрыло спор о реальности молекул."
+    },
+    {
+     "name": "Отто Штерн",
+     "years": "1888–1969",
+     "what": "В 1920 году измерил скорости молекул напрямую. Пучок атомов серебра вылетал из печи внутри вращающегося прибора и записывал своё распределение прямо на приёмнике: быстрые не успевали сместиться, медленные уезжали дальше. Кривая, предсказанная за шестьдесят лет до того, впервые стала измеренной."
+    }
+   ]
+  },
+  "open": "переход от обратимого к необратимому: уравнения механики не различают направления времени, а газ, выпущенный из баллона в комнату, обратно не собирается. Больцман вывел стрелу времени из столкновений, но только добавив в вывод предположение о молекулярном хаосе — что скорости сталкивающихся молекул не скоррелированы. Само это предположение из механики не следует, и почему оно верно вперёд по времени и неверно назад, строго не объяснено до сих пор",
+  "lessons": [
+   {
+    "id": "01-maxwell",
+    "title": "Распределение молекул по скоростям",
+    "sub": "почему при одной температуре в газе есть молекулы всех скоростей",
+    "law": "Распределение Максвелла",
+    "model": "maxwell"
+   },
+   {
+    "id": "02-boltzmann",
+    "title": "Распределение Больцмана и барометрическая формула",
+    "sub": "один множитель exp(−E/kT) — и высота, и скорость, и барьер реакции",
+    "law": "Множитель Больцмана · барометрическая формула",
+    "model": "maxwell"
+   },
+   {
+    "id": "03-brownian",
+    "title": "Броуновское движение: как увидели молекулы",
+    "sub": "как дрожание крупинки под микроскопом стало доводом в пользу атомов",
+    "law": "Формула Эйнштейна — Смолуховского",
+    "model": "transport"
+   }
+  ]
+ },
+ "en": {
+  "title": "Statistical Physics",
+  "subtitle": "How exact law emerges from the chaos of billions of particles",
+  "lead": "An individual molecule is unpredictable: nanoseconds pass between collisions, the direction after impact is a matter of chance, and tracking each of the ten to the twenty-fifth power particles in a cubic meter of air is pointless even mentally. But it is from this hopelessness that precision grows. When there are many particles, questions like 'where is this one' and 'where will that one fly' lose meaning, and they are replaced by others—what fraction of particles have such speed, such energy, such height. The answers turn out to be smooth curves, reproducible from experiment to experiment to several digits. This topic is about that exchange: by giving up knowing the fate of each particle, we gain in return an exact law for all.",
+  "why": {
+   "title": "Why know this",
+   "text": [
+    "In thermodynamics, temperature was a measure of average kinetic energy, and the word 'average' slipped by unnoticed. Here it takes center stage: only something that is spread out can have an average, and temperature sets not the speed of molecules but the shape of the spread. The difference is not philosophical. Evaporation of water from a cup, leakage of hydrogen from Earth's atmosphere, the rate of chemical reactions, and thermonuclear fusion in the Sun's core are decided not by the middle of the curve but by its far right tail—the fraction of a percent of particles that had enough energy. Counting the tail by average speed is the most expensive mistake in this part of physics: it goes exponentially with the square of the ratio, and 'slightly faster than average' differs from 'twice as fast as average' not by a factor but by orders of magnitude.",
+    "The second paragraph shows that the factor exp(−E/kT) found in the first has nothing to do with speed specifically. It does not care what kind of energy it is: the height of a molecule above the ground, rotation, stretching of a chemical bond, the band gap in silicon, or a reaction barrier. The same factor explains why an airplane altimeter calculates altitude from pressure, why food is stored in the cold, why vibrational degrees of freedom of nitrogen at room temperature do not contribute to heat capacity, and why current through a semiconductor increases when heated. This is the most portable formula in the course—it will be recognized later in chemistry, biology, and electronics.",
+    "And here molecules ceased to be a hypothesis. By the end of the 19th century, atomism had serious opponents: thermodynamics did fine without invisible particles, and all arguments in their favor remained indirect. The debate was settled by a speck trembling under a microscope—after Einstein predicted exactly how its displacement grows, and Perrin measured it and obtained Avogadro's number. The third paragraph goes through the whole path, and at the same time runs into an honest boundary of the topic: the mechanics of each collision is time-reversible, but the behavior of a gas is irreversible, and where this difference comes from is still not strictly explained."
+   ]
+  },
+  "map": {
+   "title": "What you will study",
+   "lead": "The topic follows an expanding circle. First, the distribution of one quantity—speed; then it turns out that the same form applies to the distribution over any energy; then statistics becomes visible to the eye under a microscope, and from it one can count the molecules themselves.",
+   "outcome": "After completing the topic, you will be able to explain where the hump of the Maxwell curve comes from and why the three characteristic speeds are in the ratio 1 : 1.128 : 1.225 at any temperature and for any gas; estimate the fraction of molecules beyond an arbitrary threshold and say which gas a planet will retain and which it will lose; apply the factor exp(−E/kT) to a problem where there are no speeds or heights; and finally, from the displacements of a Brownian particle, obtain Avogadro's number—the same way Perrin did."
+  },
+  "prereq": {
+   "title": "What you need to know beforehand",
+   "items": [
+    "Thermodynamics: ideal gas, temperature as a measure of average kinetic energy, the equipartition theorem. This will be needed literally: in the derivation of the Maxwell distribution, the coefficient under the exponential is found by equating the mean square speed to $3k_BT/m$—that is, substituting the definition of temperature from the previous topic.",
+    "Entropy: probability of a state and the number of ways to realize it. The Boltzmann factor is a statement about probabilities, and without the habit of counting states, it looks pulled out of thin air. From there, the relation $S = k\\ln W$ will also be useful—in the third paragraph it explains why diffusion goes in one direction.",
+    "Mathematics: exponential and logarithm as working tools, derivative, simplest definite integral. Gaussian integrals of the form $\\int v^{2}e^{-av^{2}}dv$ will be encountered three times; their values are written out nearby in the math block, and you do not need to derive them yourself."
+   ],
+   "note": "Probability theory beyond the words 'fraction' and 'average' is not required. The distribution density is introduced from scratch in the first paragraph—along with the caveat that $f(v)$ itself is not a probability: probability is given only by the product $f(v)\\,dv$ over an interval."
+  },
+  "history": {
+   "title": "Who created it",
+   "people": [
+    {
+     "name": "James Clerk Maxwell",
+     "years": "1831–1879",
+     "what": "In 1860 he obtained the velocity distribution before statistical mechanics existed, from symmetry considerations alone: the three velocity components are independent, and directions are equivalent. The derivation took half a page and was so unusual that contemporaries considered it a lucky guess rather than a proof."
+    },
+    {
+     "name": "Ludwig Boltzmann",
+     "years": "1844–1906",
+     "what": "He showed that the factor exp(−E/kT) applies not to velocity but to any energy, and proved that the Maxwell distribution is the only one that collisions do not destroy. He connected entropy with the number of ways to realize a state; this formula was disputed during his lifetime, and it was engraved on his tombstone."
+    },
+    {
+     "name": "Josiah Willard Gibbs",
+     "years": "1839–1903",
+     "what": "He coined the very name 'statistical mechanics' and its modern apparatus: instead of one system, consider an ensemble of copies and compute averages over it. He worked at Yale in almost complete isolation, for the first ten years without a salary, and his results became known in Europe with a great delay."
+    },
+    {
+     "name": "Albert Einstein and Marian Smoluchowski",
+     "years": "1905–1906",
+     "what": "Independently they derived the law of Brownian motion: the mean square displacement grows proportionally to time, not the displacement itself. Einstein expressed the coefficient in terms of temperature, viscosity, and Avogadro's number — and thus turned a microscope with a stopwatch into an instrument for counting molecules. Their numerical factors differed by about a factor of two; Einstein turned out to be right."
+    },
+    {
+     "name": "Jean Perrin",
+     "years": "1870–1942",
+     "what": "He measured under a microscope the displacements of grains and the distribution of a suspension with height, obtained Avogadro's number from them, and brought together more than a dozen independent methods of determining it into one table. The coincidence of numbers obtained by completely different paths settled the dispute about the reality of molecules."
+    },
+    {
+     "name": "Otto Stern",
+     "years": "1888–1969",
+     "what": "In 1920 he measured molecular velocities directly. A beam of silver atoms flew out of an oven inside a rotating apparatus and recorded its distribution right on the receiver: fast ones did not have time to shift, slow ones traveled further. The curve predicted sixty years earlier became measured for the first time."
+    }
+   ]
+  },
+  "open": "transition from reversible to irreversible: the equations of mechanics do not distinguish the direction of time, but a gas released from a cylinder into a room does not gather back. Boltzmann derived the arrow of time from collisions, but only by adding to the derivation the assumption of molecular chaos — that the velocities of colliding molecules are uncorrelated. This assumption itself does not follow from mechanics, and why it is true forward in time and not backward is still not strictly explained.",
+  "lessons": [
+   {
+    "id": "01-maxwell",
+    "title": "Distribution of molecules by velocities",
+    "sub": "why at one temperature there are molecules of all speeds in a gas",
+    "law": "Maxwell distribution",
+    "model": "maxwell"
+   },
+   {
+    "id": "02-boltzmann",
+    "title": "Boltzmann distribution and barometric formula",
+    "sub": "one factor exp(−E/kT) — and height, and speed, and reaction barrier",
+    "law": "Boltzmann factor · barometric formula",
+    "model": "maxwell"
+   },
+   {
+    "id": "03-brownian",
+    "title": "Brownian motion: how molecules were seen",
+    "sub": "how the trembling of a grain under a microscope became an argument for atoms",
+    "law": "Einstein–Smoluchowski formula",
+    "model": "transport"
+   }
+  ]
+ },
+ "es": {
+  "title": "Física estadística",
+  "subtitle": "Cómo del caos de miles de millones de partículas surge una ley precisa",
+  "lead": "Una molécula individual es impredecible: entre dos colisiones pasan nanosegundos, la dirección después del impacto es cuestión de azar, y seguir a cada una de las diez elevado a la veinticinco partículas en un metro cúbico de aire es inútil incluso mentalmente. Pero es precisamente de esta desesperanza de donde surge la precisión. Cuando hay muchas partículas, las preguntas \"¿dónde está esta?\" y \"¿hacia dónde volará esa?\" pierden sentido, y en su lugar aparecen otras: ¿qué fracción de partículas tiene tal velocidad, tal energía, tal altura? Las respuestas resultan ser curvas suaves, reproducibles de un experimento a otro hasta varios dígitos. El tema trata sobre este intercambio: al renunciar a conocer el destino de cada partícula, obtenemos a cambio una ley precisa para todas.",
+  "why": {
+   "title": "Por qué saber esto",
+   "text": [
+    "En termodinámica, la temperatura era una medida de la energía cinética media, y la palabra \"media\" pasaba desapercibida. Aquí pasa a primer plano: solo puede haber media de algo que está disperso, y la temperatura no fija la velocidad de las moléculas, sino la forma de la dispersión. La diferencia no es filosófica. La evaporación del agua de una taza, la fuga de hidrógeno de la atmósfera terrestre, la velocidad de una reacción química y la fusión termonuclear en el centro del Sol se deciden no por el centro de la curva, sino por su cola derecha lejana: esa fracción de porcentaje de partículas a las que les alcanzó la energía. Calcular la cola usando la velocidad media es el error más costoso en esta parte de la física: crece exponencialmente con el cuadrado de la relación, y \"un poco más rápido que la media\" difiere de \"el doble de rápido que la media\" no en factores, sino en órdenes de magnitud.",
+    "El segundo párrafo muestra que el factor exp(−E/kT) encontrado en el primero no tiene nada que ver con la velocidad en particular. Le da igual qué energía sea: la altura de una molécula sobre el suelo, una rotación, el estiramiento de un enlace químico, el ancho de la banda prohibida en el silicio o la barrera de una reacción. El mismo factor explica por qué el altímetro de un avión calcula la altura a partir de la presión, por qué los alimentos se conservan en frío, por qué los grados de libertad vibracionales del nitrógeno a temperatura ambiente no contribuyen a la capacidad calorífica y por qué la corriente a través de un semiconductor aumenta al calentarse. Es la fórmula más transferible del curso: luego la reconocerán en química, biología y electrónica.",
+    "Y aquí es donde las moléculas dejaron de ser una hipótesis. A finales del siglo XIX, el atomismo tenía serios oponentes: la termodinámica funcionaba perfectamente sin partículas invisibles, y todos los argumentos a favor de ellas eran indirectos. La disputa la cerró una mota temblando bajo el microscopio: después de que Einstein predijera exactamente cómo crecía su desplazamiento, y Perrin lo midiera y obtuviera el número de Avogadro. El tercer párrafo recorre todo el camino completo y, de paso, choca con un límite honesto del tema: la mecánica de cada colisión es reversible en el tiempo, pero el comportamiento del gas es irreversible, y de dónde surge esta diferencia aún no se ha explicado estrictamente."
+   ]
+  },
+  "map": {
+   "title": "Qué aprenderás",
+   "lead": "El tema sigue un círculo en expansión. Primero, la distribución de una sola magnitud —la velocidad; luego resulta que la misma forma tiene la distribución para cualquier energía; luego la estadística se vuelve visible a simple vista en el microscopio, y a partir de ella se pueden contar las propias moléculas.",
+   "outcome": "Al completar el tema, podrás explicar de dónde sale la joroba en la curva de Maxwell y por qué las tres velocidades características están en la relación 1 : 1,128 : 1,225 a cualquier temperatura y para cualquier gas; estimar la fracción de moléculas por encima de un umbral arbitrario y decir qué gas retendrá un planeta y cuál perderá; aplicar el factor exp(−E/kT) a un problema donde no hay velocidades ni alturas; y, finalmente, a partir de los desplazamientos de una partícula browniana obtener el número de Avogadro —de la misma manera que lo hizo Perrin."
+  },
+  "prereq": {
+   "title": "Qué necesitas saber de antemano",
+   "items": [
+    "Termodinámica: gas ideal, temperatura como medida de la energía cinética media, teorema de equipartición. Esto se necesitará literalmente: en la derivación de la distribución de Maxwell, el coeficiente bajo la exponencial se encuentra igualando la velocidad cuadrática media a $3k_BT/m$ —es decir, sustituyendo la definición de temperatura del tema anterior.",
+    "Entropía: probabilidad de un estado y número de formas de realizarlo. El factor de Boltzmann es una afirmación sobre probabilidades, y sin la costumbre de contar estados parece sacado de la nada. De allí también será útil la relación $S = k\\ln W$ —en el tercer párrafo explica por qué la difusión va en una sola dirección.",
+    "Matemáticas: exponencial y logaritmo como herramientas de trabajo, derivada, integral definida simple. Las integrales gaussianas de la forma $\\int v^{2}e^{-av^{2}}dv$ aparecerán tres veces; sus valores están escritos al lado en el bloque de matemáticas, no es necesario derivarlos por tu cuenta."
+   ],
+   "note": "La teoría de la probabilidad más allá de las palabras \"fracción\" y \"media\" no se requiere. La densidad de distribución se introduce desde cero en el primer párrafo —junto con la advertencia de que $f(v)$ en sí misma no es una probabilidad: la probabilidad la da solo el producto $f(v)\\,dv$ sobre un intervalo."
+  },
+  "history": {
+   "title": "Quién la creó",
+   "people": [
+    {
+     "name": "James Clerk Maxwell",
+     "years": "1831–1879",
+     "what": "En 1860 obtuvo la distribución de velocidades antes de que existiera la mecánica estadística, solo a partir de consideraciones de simetría: las tres proyecciones de la velocidad son independientes y las direcciones son equivalentes. La derivación ocupaba media página y era tan poco convencional que sus contemporáneos la consideraron más una conjetura afortunada que una demostración."
+    },
+    {
+     "name": "Ludwig Boltzmann",
+     "years": "1844–1906",
+     "what": "Demostró que el factor exp(−E/kT) se aplica no solo a la velocidad, sino a cualquier energía, y probó que la distribución de Maxwell es la única que las colisiones no destruyen. Relacionó la entropía con el número de formas de realizar un estado; esta fórmula fue cuestionada durante su vida, y fue grabada en su lápida."
+    },
+    {
+     "name": "Josiah Willard Gibbs",
+     "years": "1839–1903",
+     "what": "Inventó el propio nombre de «mecánica estadística» y su aparato actual: en lugar de considerar un solo sistema, considerar un conjunto de copias y calcular promedios sobre él. Trabajó en Yale en casi total aislamiento, los primeros diez años sin salario, y en Europa sus resultados se conocieron con gran retraso."
+    },
+    {
+     "name": "Albert Einstein y Marian Smoluchowski",
+     "years": "1905–1906",
+     "what": "De forma independiente obtuvieron la ley del movimiento browniano: el cuadrado medio del desplazamiento crece proporcionalmente al tiempo, no el desplazamiento. Einstein expresó el coeficiente en términos de la temperatura, la viscosidad y el número de Avogadro, convirtiendo así un microscopio con cronómetro en un instrumento para contar moléculas. Sus factores numéricos diferían aproximadamente en un factor de dos; Einstein tenía razón."
+    },
+    {
+     "name": "Jean Perrin",
+     "years": "1870–1942",
+     "what": "Midió bajo el microscopio los desplazamientos de las partículas y la distribución de la suspensión con la altura, obtuvo de ellos el número de Avogadro y reunió más de una docena de métodos independientes para determinarlo en una sola tabla. La coincidencia de los números obtenidos por caminos completamente diferentes cerró el debate sobre la realidad de las moléculas."
+    },
+    {
+     "name": "Otto Stern",
+     "years": "1888–1969",
+     "what": "En 1920 midió las velocidades de las moléculas directamente. Un haz de átomos de plata salía de un horno dentro de un aparato giratorio y registraba su distribución directamente en el receptor: los rápidos no tenían tiempo de desviarse, los lentos se desplazaban más lejos. La curva predicha sesenta años antes se convirtió por fin en algo medido."
+    }
+   ]
+  },
+  "open": "transición de lo reversible a lo irreversible: las ecuaciones de la mecánica no distinguen la dirección del tiempo, pero un gas liberado de un cilindro a una habitación no se reúne de nuevo. Boltzmann derivó la flecha del tiempo a partir de las colisiones, pero solo añadiendo a la derivación el supuesto del caos molecular: que las velocidades de las moléculas que chocan no están correlacionadas. Este supuesto mismo no se sigue de la mecánica, y por qué es válido hacia adelante en el tiempo y no hacia atrás, no se ha explicado estrictamente hasta hoy.",
+  "lessons": [
+   {
+    "id": "01-maxwell",
+    "title": "Distribución de las moléculas por velocidades",
+    "sub": "por qué a una misma temperatura en un gas hay moléculas de todas las velocidades",
+    "law": "Distribución de Maxwell",
+    "model": "maxwell"
+   },
+   {
+    "id": "02-boltzmann",
+    "title": "Distribución de Boltzmann y fórmula barométrica",
+    "sub": "un solo factor exp(−E/kT) — y la altura, y la velocidad, y la barrera de reacción",
+    "law": "Factor de Boltzmann · fórmula barométrica",
+    "model": "maxwell"
+   },
+   {
+    "id": "03-brownian",
+    "title": "Movimiento browniano: cómo se vieron las moléculas",
+    "sub": "cómo el temblor de una partícula bajo el microscopio se convirtió en un argumento a favor de los átomos",
+    "law": "Fórmula de Einstein–Smoluchowski",
+    "model": "transport"
+   }
+  ]
+ },
+ "ar": {
+  "title": "الفيزياء الإحصائية",
+  "subtitle": "كيف ينتج عن فوضى مليارات الجسيمات قانون دقيق",
+  "lead": "الجزيء الفردي غير قابل للتنبؤ: بين تصادمين تمر نانوثوانٍ، والاتجاه بعد الاصطدام مسألة صدفة، وتتبع كل واحد من عشرة مرفوعة للقوة 25 جسيماً في متر مكعب من الهواء لا معنى له حتى ذهنياً. ولكن من هذا اليأس تنمو الدقة. عندما يكون عدد الجسيمات كبيراً جداً، تفقد الأسئلة «أين هذا؟» و«إلى أين سيطير ذاك؟» معناها، وتحل محلها أسئلة أخرى: ما نسبة الجسيمات التي لها هذه السرعة، وهذه الطاقة، وهذا الارتفاع؟ الإجابات عليها تكون منحنيات ناعمة، تتكرر من تجربة إلى أخرى حتى عدة أرقام. الموضوع يدور حول هذا التبادل: بالتخلي عن معرفة مصير كل جسيم، نحصل في المقابل على قانون دقيق للجميع.",
+  "why": {
+   "title": "لماذا يجب معرفة هذا",
+   "text": [
+    "في الديناميكا الحرارية، كانت درجة الحرارة مقياساً لمتوسط الطاقة الحركية، وكلمة «متوسط» مرت دون أن يلاحظها أحد. هنا تظهر في المقدمة: المتوسط لا يكون إلا لما هو موزع، ودرجة الحرارة لا تحدد سرعة الجزيئات بل شكل التوزيع. الفرق ليس فلسفياً. تبخر الماء من الكوب، تسرب الهيدروجين من الغلاف الجوي للأرض، سرعة التفاعل الكيميائي، والاندماج النووي الحراري في مركز الشمس، كلها لا تحددها منتصف المنحنى بل ذيله الأيمن البعيد — تلك النسبة المئوية الصغيرة من الجسيمات التي كانت طاقتها كافية. حساب الذيل باستخدام متوسط السرعة هو أغلى خطأ في هذا الجزء من الفيزياء: فهو يسير أسياً بالنسبة لمربع النسبة، و«أسرع قليلاً من المتوسط» يختلف عن «أسرع بمرتين من المتوسط» ليس بمرات بل بمراتب.",
+    "الفقرة الثانية تُظهر أن العامل exp(−E/kT) الموجود في الأولى لا علاقة له بالسرعة تحديداً. لا يهمه أي نوع من الطاقة هو: ارتفاع الجزيء فوق الأرض، دوران، تمدد رابطة كيميائية، عرض نطاق ممنوع في السيليكون، أو حاجز تفاعل. نفس العامل يفسر لماذا يحسب مقياس الارتفاع في الطائرة الارتفاع من الضغط، ولماذا تُحفظ المنتجات في البرد، ولماذا درجات الحرية الاهتزازية للنيتروجين في درجة حرارة الغرفة لا تساهم في السعة الحرارية، ولماذا يزداد التيار عبر أشباه الموصلات عند التسخين. هذه هي الصيغة الأكثر قابلية للنقل في الدورة — ستُقابل لاحقاً في الكيمياء والأحياء والإلكترونيات.",
+    "وهنا توقفت الجزيئات عن كونها فرضية. بحلول نهاية القرن التاسع عشر، كان للذرية معارضون جادون: الديناميكا الحرارية استغنت تماماً عن الجسيمات غير المرئية، وكل الحجج المؤيدة لها بقيت غير مباشرة. أُغلق الجدل بواسطة حبيبة ترتجف تحت المجهر — بعد أن تنبأ أينشتاين بالضبط كيف ينمو إزاحتها، وقاسها بيرين وحصل على رقم أفوجادرو. الفقرة الثالثة تمر بالمسار كاملاً، وتصطدم في نفس الوقت بحد صريح للموضوع: ميكانيكا كل تصادم قابلة للعكس زمنياً، بينما سلوك الغاز غير قابل للعكس، ومن أين يأتي هذا الاختلاف، لم يُفسر بدقة حتى الآن."
+   ]
+  },
+  "map": {
+   "title": "ماذا ستتعلم",
+   "lead": "الموضوع يسير في دائرة متسعة. أولاً توزيع كمية واحدة — السرعة؛ ثم يتبين أن نفس الشكل له توزيع أي طاقة؛ ثم تصبح الإحصاءات مرئية بالعين في المجهر، ويُحسب عدد الجزيئات نفسها من خلالها.",
+   "outcome": "بعد اجتياز الموضوع، ستكون قادراً على شرح من أين يأتي الحدب في منحنى ماكسويل ولماذا ترتبط السرعات المميزة الثلاث بنسبة 1 : 1,128 : 1,225 عند أي درجة حرارة ولأي غاز؛ وتقدير نسبة الجزيئات فوق أي عتبة وتحديد أي غاز سيحتفظ به الكوكب وأي غاز سيفقده؛ وتطبيق العامل exp(−E/kT) على مسألة لا تحتوي سرعات ولا ارتفاعات؛ وأخيراً، من إزاحات جسيم براوني الحصول على رقم أفوجادرو — بنفس الطريقة التي حصل بها بيرين."
+  },
+  "prereq": {
+   "title": "ما يجب معرفته مسبقاً",
+   "items": [
+    "الديناميكا الحرارية: الغاز المثالي، درجة الحرارة كمقياس لمتوسط الطاقة الحركية، نظرية التوزيع المتساوي. ستحتاج هذا حرفياً: في اشتقاق توزيع ماكسويل، يُوجد المعامل تحت الأس بمساواة متوسط مربع السرعة بـ $3k_BT/m$ — أي باستبدال تعريف درجة الحرارة من الموضوع السابق.",
+    "الإنتروبيا: احتمال الحالة وعدد طرق تحقيقها. عامل بولتزمان هو عبارة عن احتمالات، وبدون عادة عد الحالات يبدو وكأنه أُخذ من السقف. من هناك أيضاً ستكون العلاقة $S = k\\ln W$ مفيدة — في الفقرة الثالثة تشرح لماذا يحدث الانتشار في اتجاه واحد.",
+    "الرياضيات: الأس واللوغاريتم كأدوات عمل، المشتقة، وأبسط تكامل محدد. تكاملات غاوس من الشكل $\\int v^{2}e^{-av^{2}}dv$ ستقابلها ثلاث مرات؛ قيمها مكتوبة بجانبها في كتلة الرياضيات، ولا تحتاج لاشتقاقها بنفسك."
+   ],
+   "note": "نظرية الاحتمالات خارج كلمتي «نسبة» و«متوسط» غير مطلوبة. كثافة التوزيع تُقدم من الصفر في الفقرة الأولى — مع ملاحظة أن $f(v)$ بحد ذاتها ليست احتمالاً: الاحتمال يعطيه فقط حاصل الضرب $f(v)\\,dv$ على فترة."
+  },
+  "history": {
+   "title": "من صنعها",
+   "people": [
+    {
+     "name": "جيمس كليرك ماكسويل",
+     "years": "1831–1879",
+     "what": "في عام 1860 حصل على توزيع السرعات قبل ظهور الميكانيكا الإحصائية، من اعتبارات التناظر فقط: إسقاطات السرعة الثلاثة مستقلة، والاتجاهات متكافئة. استغرق الاشتقاق نصف صفحة وكان غير مألوف لدرجة أن معاصريه اعتبروه تخمينًا موفقًا أكثر من كونه برهانًا."
+    },
+    {
+     "name": "لودفيغ بولتزمان",
+     "years": "1844–1906",
+     "what": "أظهر أن العامل exp(−E/kT) لا يتعلق بالسرعة فقط، بل بأي طاقة، وأثبت أن توزيع ماكسويل هو الوحيد الذي لا تدمره التصادمات. ربط الإنتروبيا بعدد الطرق لتحقيق حالة؛ هذه الصيغة كانت محل جدل خلال حياته، ونُقشت على شاهد قبره."
+    },
+    {
+     "name": "جوزيه ويلارد غيبس",
+     "years": "1839–1903",
+     "what": "ابتكر اسم «الميكانيكا الإحصائية» وأدواتها الحالية: بدلاً من نظام واحد، نعتبر مجموعة من النسخ ونحسب المتوسطات عليها. عمل في ييل في عزلة شبه تامة، دون راتب في السنوات العشر الأولى، وعُرفت نتائجه في أوروبا متأخرًا جدًا."
+    },
+    {
+     "name": "ألبرت أينشتاين وماريان سمولوتشوفسكي",
+     "years": "1905–1906",
+     "what": "بشكل مستقل، توصلا إلى قانون الحركة البراونية: متوسط مربع الإزاحة يزداد تناسبًا مع الزمن، وليس الإزاحة نفسها. عبّر أينشتاين عن المعامل بدلالة درجة الحرارة واللزوجة وعدد أفوجادرو — وبذلك حوّل المجهر مع ساعة الإيقاف إلى جهاز لعدّ الجزيئات. اختلفت المعاملات العددية بينهما تقريبًا بمعامل اثنين؛ وكان أينشتاين على صواب."
+    },
+    {
+     "name": "جان بيرين",
+     "years": "1870–1942",
+     "what": "قاس تحت المجهر إزاحات الحبيبات وتوزيع المعلق بالارتفاع، واستخرج منها عدد أفوجادرو، وجمع أكثر من عشر طرق مستقلة لتحديده في جدول واحد. تطابق الأرقام التي حُصل عليها بطرق مختلفة تمامًا هو ما حسم الجدل حول واقعية الجزيئات."
+    },
+    {
+     "name": "أوتو شتيرن",
+     "years": "1888–1969",
+     "what": "في عام 1920 قاس سرعات الجزيئات مباشرة. حزمة من ذرات الفضة كانت تخرج من الفرن داخل جهاز دوّار وتُسجّل توزيعها مباشرة على الكاشف: السريعة لم تكن لديها الوقت لتنزاح، والبطيئة كانت تبتعد أكثر. المنحنى الذي تنبأ به قبل ستين عامًا أصبح أخيرًا مُقاسًا."
+    }
+   ]
+  },
+  "open": "الانتقال من العكوسية إلى اللاعكوسية: معادلات الميكانيكا لا تميز اتجاه الزمن، لكن الغاز المنطلق من أسطوانة إلى غرفة لا يعود من تلقاء نفسه. اشتق بولتزمان سهم الزمن من التصادمات، لكن فقط بإضافة افتراض الفوضى الجزيئية — أن سرعات الجزيئات المتصادمة غير مترابطة. هذا الافتراض نفسه لا يتبع من الميكانيكا، ولماذا هو صحيح في اتجاه الزمن الأمامي وليس في الخلفي، لم يُفسر بدقة حتى اليوم.",
+  "lessons": [
+   {
+    "id": "01-maxwell",
+    "title": "توزيع الجزيئات حسب السرعات",
+    "sub": "لماذا توجد في الغاز عند درجة حرارة واحدة جزيئات بكل السرعات",
+    "law": "توزيع ماكسويل",
+    "model": "maxwell"
+   },
+   {
+    "id": "02-boltzmann",
+    "title": "توزيع بولتزمان والصيغة البارومترية",
+    "sub": "عامل واحد exp(−E/kT) — للارتفاع والسرعة وحاجز التفاعل",
+    "law": "عامل بولتزمان · الصيغة البارومترية",
+    "model": "maxwell"
+   },
+   {
+    "id": "03-brownian",
+    "title": "الحركة البراونية: كيف رأينا الجزيئات",
+    "sub": "كيف أصبح ارتجاف الحبيبة تحت المجهر حجة لصالح الذرات",
+    "law": "صيغة أينشتاين-سمولوتشوفسكي",
+    "model": "transport"
+   }
+  ]
+ }
+}

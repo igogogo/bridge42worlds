@@ -172,8 +172,8 @@
      "figCaption": "Добротность отвечает сразу на два вопроса: во сколько раз вырастет размах и насколько узок будет пик."
     },
     {
-     "text": "И физический смысл добротности с другой стороны: она показывает, сколько колебаний система совершает, прежде чем затухнет. Камертон с добротностью в тысячу звучит около тысячи периодов. Одна и та же величина отвечает и за остроту резонанса, и за длительность звучания — это не совпадение, а две стороны одного.",
-     "latex": "Q = 2\\pi \\frac{E}{\\Delta E \\text{ за период}} \\approx \\pi \\cdot N_{\\text{колебаний до затухания}}",
+     "text": "И физический смысл добротности с другой стороны: она задаёт, сколько колебаний система успевает сделать, пока размах не упадёт в $e$ раз. Число это не сама добротность, а $Q/\\pi$: камертон с добротностью тысяча звучит около трёхсот двадцати периодов. Одна и та же величина отвечает и за остроту резонанса, и за длительность звучания — это не совпадение, а две стороны одного.",
+     "latex": "Q = 2\\pi \\frac{E}{\\Delta E \\text{ за период}} = \\pi N, \\qquad N = \\frac{Q}{\\pi}",
      "figure": "energyswap",
      "figCaption": "Добротность есть отношение запасённой энергии к теряемой за период — потому она же задаёт и время звучания."
     },
@@ -189,11 +189,26 @@
   },
   "math": {
    "title": "Математика, которая здесь понадобилась",
-   "text": [
-    "Первое — почему складываются квадраты. Упругий отклик системы идёт в такт со смещением, а вязкий — в такт со скоростью, то есть с опережением ровно на четверть периода. Величины, сдвинутые на четверть периода, ведут себя как перпендикулярные векторы: складываются не арифметически, а по теореме Пифагора. Отсюда корень из суммы квадратов в знаменателе, а не просто сумма.",
-    "Второе — что такое резонансная кривая с точки зрения функции. Это функция с максимумом, положение которого задаётся параметрами системы, а острота — трением. Строго говоря, максимум амплитуды достигается чуть левее $\\omega_0$, при $\\omega = \\sqrt{\\omega_0^2 - 2\\gamma^2}$, но при малом трении разница неразличима, и обычно ею пренебрегают — очередной пример осознанного пренебрежения из первой темы.",
-    "Третье — приближение вблизи максимума. Разность квадратов раскладывается на произведение, и вблизи резонанса выражение упрощается: $\\omega_0^2 - \\omega^2 = (\\omega_0-\\omega)(\\omega_0+\\omega) \\approx 2\\omega_0(\\omega_0 - \\omega)$. Именно отсюда получается, что ширина пика по уровню половинной мощности равна $2\\gamma$, — оценка, которой пользуются при чтении любого спектра.",
-    "Четвёртое — почему безразмерная величина главнее размерных. У задачи пять параметров: масса, жёсткость, трение, сила и частота. Но форма кривой зависит только от двух безразмерных комбинаций: отношения частот и добротности. Это прямое применение того, что мы разбирали в теме о размерностях, — и именно поэтому один график годится для моста, камертона и радиоприёмника сразу."
+   "lead": "Три приёма: сложение величин, сдвинутых по фазе, упрощение разности квадратов вблизи пика и экспонента, которая стоит за словом «затухание».",
+   "items": [
+    {
+     "what": "Сдвиг на четверть периода — это перпендикуляр",
+     "why": "В четвёртом шаге вывода мы подставили $x = A\\cos(\\omega t - \\varphi)$ и получили два слагаемых: одно с косинусом — от упругой силы, другое с синусом — от трения. Сложить их как числа нельзя: они никогда не достигают максимума одновременно, синус отстаёт от косинуса ровно на четверть периода. Величины с такой разницей ведут себя как перпендикулярные векторы, и складывать их надо по теореме Пифагора — отсюда в знаменателе корень из суммы квадратов, а не сумма. Угол того же прямоугольного треугольника есть сдвиг фазы $\\varphi$: одна картинка отвечает сразу и на вопрос о размахе, и на вопрос о запаздывании.",
+     "latex": "a\\cos\\omega t + b\\sin\\omega t = \\sqrt{a^{2}+b^{2}}\\,\\cos(\\omega t - \\varphi)",
+     "kit": "vector"
+    },
+    {
+     "what": "Разность квадратов вблизи пика",
+     "why": "Ширина резонанса в последнем шаге вывода получена не на глаз. Разность квадратов в знаменателе раскладывается на произведение, и вблизи резонанса второй множитель почти равен $2\\omega_0$, а первый мал. Значит, знаменатель определяется расстройкой $\\omega_0-\\omega$, увеличенной в $2\\omega_0$ раз, и сравнивать её надо с вязким слагаемым $2\\gamma\\omega_0$. Пока расстройка меньше $\\gamma$, главным остаётся трение и амплитуда держится у максимума; при расстройке порядка $\\gamma$ она падает в корень из двух. Отсюда ширина пика $2\\gamma$ и относительная ширина $1/Q$. В этом приближении максимум приходится ровно на $\\omega_0$; точный расчёт сдвигает его чуть левее, но при малом трении разница неразличима.",
+     "latex": "\\omega_0^{2}-\\omega^{2} = (\\omega_0-\\omega)(\\omega_0+\\omega) \\approx 2\\omega_0(\\omega_0-\\omega)",
+     "kit": "taylor"
+    },
+    {
+     "what": "Экспонента, спрятанная в слове «затухание»",
+     "why": "Седьмой шаг вывода переводит добротность в число колебаний до затухания, и этот переход стоит развернуть. Трение отбирает за период не фиксированную порцию энергии, а фиксированную долю: чем больше размах, тем больше потери. Постоянная доля за равные промежутки времени — это и есть определение экспоненты. Поэтому размах спадает как $A_0e^{-\\gamma t}$, а энергия, пропорциональная квадрату размаха, — вдвое быстрее. Дальше остаётся счёт. Размах падает в $e$ раз за время $1/\\gamma$, период равен $2\\pi/\\omega_0$, значит периодов укладывается $N = \\omega_0/2\\pi\\gamma = Q/\\pi$. Отсюда и числа: камертон с добротностью тысяча звучит около трёхсот двадцати периодов, а не тысячу. Множитель $\\pi$ здесь не поправка на аккуратность, а перевод времени затухания в число периодов; запись через энергию, $Q = 2\\pi E/\\Delta E$ за период, даёт ту же самую добротность: $Q = 2\\pi E/\\Delta E = \\pi N$. Вдвое отличается не $Q$, а отношение $E/\\Delta E$ против числа периодов: $E/\\Delta E = N/2$, потому что энергия спадает вдвое быстрее размаха.",
+     "latex": "A(t) = A_0e^{-\\gamma t}, \\qquad E(t) = E_0e^{-2\\gamma t}, \\qquad N = \\frac{Q}{\\pi}",
+     "kit": "exponent"
+    }
    ]
   },
   "example": {
@@ -223,8 +238,8 @@
      "latex": "A(\\omega_0) = Q \\cdot A_{\\text{стат}} \\approx 6{,}5 \\cdot 0{,}20 \\approx 1{,}3\\ \\text{м}"
     },
     {
-     "text": "А вдали от резонанса, на удвоенной частоте, — почти ничего.",
-     "latex": "A(2\\omega_0) \\approx 0{,}066\\ \\text{м} \\;\\; (\\text{в } 20\\ \\text{раз меньше статического})"
+     "text": "А вдали от резонанса, на удвоенной частоте, — почти ничего: втрое меньше статического отклонения и в двадцать раз меньше резонансного размаха.",
+     "latex": "A(2\\omega_0) \\approx 0{,}066\\ \\text{м}"
     }
    ],
    "answer": "На резонансе размах около 1,3 метра — в шесть с половиной раз больше, чем дала бы та же сила, приложенная неподвижно. Вдали от резонанса та же сила почти не даёт эффекта.",
@@ -528,71 +543,6 @@
     }
    ]
   },
-  "derivation": {
-   "title": "Rigorous derivation: where the peak comes from",
-   "lead": "We go from the equation of motion to the resonance curve. The main question along the way — why the denominator can become almost zero and what prevents it.",
-   "steps": [
-    {
-     "text": "Let's write Newton's second law for a mass acted upon by three forces: elastic (Hooke's law), friction proportional to velocity, and an external force varying harmonically.",
-     "latex": "m\\ddot{x} = -kx - b\\dot{x} + F_0\\cos\\omega t",
-     "figure": "springlaw",
-     "figCaption": "Three forces: restoring, damping, and driving. Resonance is the result of their competition."
-    },
-    {
-     "text": "Divide by mass and introduce notation. The equation then takes the standard form encountered everywhere — from an electrical circuit to an atom in a laser field.",
-     "latex": "\\ddot{x} + 2\\gamma\\dot{x} + \\omega_0^{2}x = \\frac{F_0}{m}\\cos\\omega t, \\qquad \\omega_0^{2} = \\frac{k}{m}, \\;\\; \\gamma = \\frac{b}{2m}",
-     "figure": "sinederiv",
-     "figCaption": "Canonical form: two system parameters and one driving parameter."
-    },
-    {
-     "text": "Key physical insight: after some time, steady-state oscillations occur exactly at the driving frequency, not the natural frequency. The system forgets how it was initially driven — natural oscillations have died out. Only a phase shift remains.",
-     "latex": "x(t) = A\\cos(\\omega t - \\varphi)",
-     "figure": "matchfreq",
-     "figCaption": "Steady state: the system oscillates in sync with the force, lagging in phase."
-    },
-    {
-     "text": "Substitute and group. The cosine term gives the difference of squares of frequencies, the sine term gives the friction contribution. They add like legs of a right triangle because they are phase-shifted by exactly a quarter period.",
-     "latex": "A\\sqrt{(\\omega_0^{2}-\\omega^{2})^{2} + (2\\gamma\\omega)^{2}} = \\frac{F_0}{m}",
-     "figure": "vectriangle",
-     "figCaption": "Elastic and viscous responses are perpendicular on the vector diagram — hence the square root of sum of squares."
-    },
-    {
-     "text": "From here we immediately get the amplitude. Now look at the denominator: the first term vanishes when frequencies coincide. If there were no friction, the amplitude would become infinite — and that's why friction here is not a hindrance but the only thing that keeps the system from destruction.",
-     "latex": "A(\\omega) = \\frac{F_0/m}{\\sqrt{(\\omega_0^{2}-\\omega^{2})^{2} + (2\\gamma\\omega)^{2}}}",
-     "figure": "curves",
-     "figCaption": "The peak is higher and narrower the smaller the friction. With zero friction, the curve goes to infinity."
-    },
-    {
-     "text": "Let's estimate the peak height. When frequencies match, only the viscous term remains, and the ratio of amplitude to static deflection equals the quality factor. It is dimensionless — meaning this is the true control parameter of the problem.",
-     "latex": "\\frac{A(\\omega_0)}{A_{\\text{stat}}} = \\frac{\\omega_0}{2\\gamma} \\equiv Q, \\qquad A_{\\text{stat}} = \\frac{F_0}{k}",
-     "figure": "result",
-     "figCaption": "The quality factor answers two questions at once: how many times the amplitude grows and how narrow the peak is."
-    },
-    {
-     "text": "And the physical meaning of quality factor from another perspective: it shows how many oscillations the system makes before decaying. A tuning fork with a quality factor of a thousand sounds for about a thousand periods. The same quantity governs both the sharpness of resonance and the duration of sound — this is not a coincidence but two sides of the same coin.",
-     "latex": "Q = 2\\pi \\frac{E}{\\Delta E \\text{per period}} \\approx \\pi \\cdot N_{\\text{oscillations before decay}}",
-     "figure": "energyswap",
-     "figCaption": "The quality factor is the ratio of stored energy to energy lost per period — hence it also determines the sound duration."
-    },
-    {
-     "text": "Finally, the peak width. Deviating from resonance by about $\\gamma$, the amplitude drops noticeably. Hence the practical rule: the relative width of the resonance equals one divided by the quality factor.",
-     "latex": "\\frac{\\Delta\\omega}{\\omega_0} \\approx \\frac{1}{Q}",
-     "figure": "matchfreq",
-     "figCaption": "High quality factor means sharp selectivity: the system responds only to a very precise frequency match."
-    }
-   ],
-   "plate": "The system's response is determined not by the force, but by the frequency match. How much the amplitude grows and how precisely you need to hit — both answers are given by the quality factor.",
-   "note": "Limits of applicability. The formula is derived for a linear system: Hooke's force proportional to displacement, friction proportional to velocity. At large amplitudes, a real spring ceases to be linear, the peak tilts, and a sudden transition between regimes appears. Moreover, we have only considered the steady-state solution — in the first seconds after the force is applied, the amplitude grows gradually, and that is precisely why the bridge in Broughton did not collapse immediately."
-  },
-  "math": {
-   "title": "The Math Needed Here",
-   "text": [
-    "First — why squares add up. The elastic response of a system is in phase with displacement, while the viscous response is in phase with velocity, i.e., exactly a quarter period ahead. Quantities shifted by a quarter period behave like perpendicular vectors: they add not arithmetically but by the Pythagorean theorem. Hence the square root of the sum of squares in the denominator, rather than just the sum.",
-    "Second — what a resonance curve is from a function perspective. It is a function with a maximum, whose position is determined by the system parameters and sharpness by friction. Strictly speaking, the amplitude maximum occurs slightly to the left of $\\omega_0$, at $\\omega = \\sqrt{\\omega_0^2 - 2\\gamma^2}$, but with small friction the difference is indistinguishable and is usually neglected — another example of deliberate neglect from the first topic.",
-    "Third — approximation near the maximum. The difference of squares factors into a product, and near resonance the expression simplifies: $\\omega_0^2 - \\omega^2 = (\\omega_0-\\omega)(\\omega_0+\\omega) \\approx 2\\omega_0(\\omega_0 - \\omega)$. From this it follows that the width of the peak at half power level equals $2\\gamma$ — an estimate used when reading any spectrum.",
-    "Fourth — why a dimensionless quantity is more important than dimensional ones. The problem has five parameters: mass, stiffness, friction, force, and frequency. But the shape of the curve depends only on two dimensionless combinations: the frequency ratio and the quality factor. This is a direct application of what we discussed in the topic on dimensions — and that is why one graph works for a bridge, a tuning fork, and a radio receiver all at once."
-   ]
-  },
   "example": {
    "title": "Example with Numbers: How Many Times a Finger Is Stronger Than Itself",
    "lead": "We calculate a weight on a spring from a test stand and compare two friction regimes — that's the whole difference between a swing and a catastrophe.",
@@ -621,7 +571,7 @@
     },
     {
      "text": "And far from resonance, at double the frequency, almost nothing.",
-     "latex": "A(2\\omega_0) \\approx 0.066\\ \\text{m} \\;\\; (\\text{20 times less than static})"
+     "latex": "A(2\\omega_0) \\approx 0.066\\ \\text{m}"
     }
    ],
    "answer": "At resonance the amplitude is about 1.3 meters — six and a half times greater than the same force would produce if applied statically. Far from resonance, the same force has almost no effect.",
@@ -842,7 +792,87 @@
     "hint": "The amplitude ratio at resonance equals the quality factor. How is it expressed in terms of ω₀ and γ?",
     "tolAbs": 4
    }
-  ]
+  ],
+  "derivation": {
+   "title": "A rigorous derivation: where the peak comes from",
+   "lead": "We go from the equation of motion to the resonance curve. The main question along the way is why the denominator can become almost zero and what prevents it.",
+   "steps": [
+    {
+     "text": "Let's write Newton's second law for a mass acted upon by three forces: elastic (Hooke's law), friction proportional to velocity, and an external force varying harmonically.",
+     "latex": "m\\ddot{x} = -kx - b\\dot{x} + F_0\\cos\\omega t",
+     "figure": "springlaw",
+     "figCaption": "Three forces: restoring, damping, and driving. Resonance is the result of their competition."
+    },
+    {
+     "text": "Divide by mass and introduce notation. This puts the equation into a standard form that will be encountered everywhere later—from an electric circuit to an atom in a laser field.",
+     "latex": "\\ddot{x} + 2\\gamma\\dot{x} + \\omega_0^{2}x = \\frac{F_0}{m}\\cos\\omega t, \\qquad \\omega_0^{2} = \\frac{k}{m}, \\;\\; \\gamma = \\frac{b}{2m}",
+     "figure": "sinederiv",
+     "figCaption": "Canonical form: two system parameters and one external driving parameter."
+    },
+    {
+     "text": "Key physical insight: after some time, the steady-state oscillations occur exactly at the frequency of the external force, not at the natural frequency. The system forgets how it was initially driven—the natural oscillations have died out. Only a phase shift remains.",
+     "latex": "x(t) = A\\cos(\\omega t - \\varphi)",
+     "figure": "matchfreq",
+     "figCaption": "Steady state: the system oscillates in sync with the force, lagging behind it in phase."
+    },
+    {
+     "text": "Substitute and group terms. The cosine term gives the difference of squares of frequencies, the sine term gives the friction contribution. They add like the legs of a right triangle because they are shifted in phase by exactly a quarter period.",
+     "latex": "A\\sqrt{(\\omega_0^{2}-\\omega^{2})^{2} + (2\\gamma\\omega)^{2}} = \\frac{F_0}{m}",
+     "figure": "vectriangle",
+     "figCaption": "Elastic and viscous responses are perpendicular on the vector diagram—hence the square root of the sum of squares."
+    },
+    {
+     "text": "From this we immediately get the amplitude. Now look at the denominator: the first term becomes zero when the frequencies match. If there were no friction, the amplitude would become infinite—and this is why friction is not a hindrance here, but the only thing that keeps the system from being destroyed.",
+     "latex": "A(\\omega) = \\frac{F_0/m}{\\sqrt{(\\omega_0^{2}-\\omega^{2})^{2} + (2\\gamma\\omega)^{2}}}",
+     "figure": "curves",
+     "figCaption": "The peak is higher and narrower the smaller the friction. With zero friction, the curve goes to infinity."
+    },
+    {
+     "text": "Let's estimate the height of the peak. When frequencies match, only the viscous term remains, and the ratio of the amplitude to the static deflection turns out to be the quality factor. This quantity is dimensionless—so it is the true controlling parameter of the problem.",
+     "latex": "\\frac{A(\\omega_0)}{A_{\\text{stat}}} = \\frac{\\omega_0}{2\\gamma} \\equiv Q, \\qquad A_{\\text{stat}} = \\frac{F_0}{k}",
+     "figure": "result",
+     "figCaption": "The quality factor answers two questions at once: how many times the amplitude grows and how narrow the peak is."
+    },
+    {
+     "text": "And the physical meaning of the quality factor from another angle: it determines how many oscillations the system manages to make before the amplitude drops by a factor of $e$. This number is not the quality factor itself, but $Q/\\pi$: a tuning fork with a quality factor of a thousand sounds for about three hundred twenty periods. The same quantity is responsible both for the sharpness of resonance and for the duration of sound—this is not a coincidence, but two sides of the same coin.",
+     "latex": "Q = 2\\pi \\frac{E}{\\Delta E \\text{ per period}} = \\pi N, \\qquad N = \\frac{Q}{\\pi}",
+     "figure": "energyswap",
+     "figCaption": "The quality factor is the ratio of stored energy to energy lost per period—that is why it also sets the duration of sound."
+    },
+    {
+     "text": "Finally, the width of the peak. Deviating from resonance by an amount on the order of $\\gamma$, the amplitude drops noticeably. Hence the practical rule: the relative width of the resonance is equal to one divided by the quality factor.",
+     "latex": "\\frac{\\Delta\\omega}{\\omega_0} \\approx \\frac{1}{Q}",
+     "figure": "matchfreq",
+     "figCaption": "High quality factor means sharp selectivity: the system responds only to a very precise frequency match."
+    }
+   ],
+   "plate": "The response of a system is determined not by the force, but by the coincidence of frequencies. How many times the amplitude grows and how precisely one must hit—both answers are given by the quality factor.",
+   "note": "Limits of applicability. The formula is derived for a linear system: Hooke's force is proportional to displacement, friction to velocity. At large amplitudes, a real spring becomes nonlinear, the peak tilts, and a jump-like transition between regimes appears. In addition, we only looked for the steady-state solution—in the first seconds after the force is turned on, the amplitude grows gradually, and that is why the bridge in Broughton did not collapse immediately."
+  },
+  "math": {
+   "title": "The Math Needed Here",
+   "lead": "Three techniques: adding quantities shifted in phase, simplifying the difference of squares near the peak, and the exponential behind the word 'damping'.",
+   "items": [
+    {
+     "what": "A quarter-period shift is a perpendicular",
+     "why": "In the fourth step of the derivation, we substituted $x = A\\cos(\\omega t - \\varphi)$ and got two terms: one with cosine—from the elastic force, and one with sine—from friction. They cannot be added as numbers: they never reach their maximum at the same time; the sine lags the cosine by exactly a quarter period. Quantities with such a difference behave like perpendicular vectors, and they must be added using the Pythagorean theorem—hence the square root of the sum of squares in the denominator, not the sum. The angle of that same right triangle is the phase shift $\\varphi$: one picture answers both the question of amplitude and the question of delay.",
+     "latex": "a\\cos\\omega t + b\\sin\\omega t = \\sqrt{a^{2}+b^{2}}\\,\\cos(\\omega t - \\varphi)",
+     "kit": "vector"
+    },
+    {
+     "what": "Difference of squares near the peak",
+     "why": "The resonance width in the last step of the derivation was not obtained by eye. The difference of squares in the denominator factors into a product, and near resonance the second factor is almost $2\\omega_0$, while the first is small. Thus, the denominator is determined by the detuning $\\omega_0-\\omega$, multiplied by $2\\omega_0$, and it must be compared with the viscous term $2\\gamma\\omega_0$. As long as the detuning is less than $\\gamma$, friction remains dominant and the amplitude stays near its maximum; when the detuning is on the order of $\\gamma$, it drops by a factor of the square root of two. Hence the peak width is $2\\gamma$ and the relative width is $1/Q$. In this approximation, the maximum occurs exactly at $\\omega_0$; a precise calculation shifts it slightly to the left, but for small friction the difference is indistinguishable.",
+     "latex": "\\omega_0^{2}-\\omega^{2} = (\\omega_0-\\omega)(\\omega_0+\\omega) \\approx 2\\omega_0(\\omega_0-\\omega)",
+     "kit": "taylor"
+    },
+    {
+     "what": "The exponential hidden in the word 'damping'",
+     "why": "The seventh step of the derivation converts quality factor into the number of oscillations before damping, and this transition is worth unpacking. Friction removes not a fixed amount of energy per period, but a fixed fraction: the larger the amplitude, the greater the losses. A constant fraction over equal time intervals is the very definition of an exponential. Therefore, the amplitude decays as $A_0e^{-\\gamma t}$, and the energy, proportional to the square of the amplitude, decays twice as fast. The rest is just counting. The amplitude drops by a factor of $e$ in time $1/\\gamma$; the period is $2\\pi/\\omega_0$, so the number of periods is $N = \\omega_0/2\\pi\\gamma = Q/\\pi$. Hence the numbers: a tuning fork with a quality factor of a thousand sounds for about three hundred twenty periods, not a thousand. The factor $\\pi$ here is not a correction for accuracy but a conversion of the damping time into a number of periods; writing it via energy, $Q = 2\\pi E/\\Delta E$ per period, gives the same quality factor: $Q = 2\\pi E/\\Delta E = \\pi N$. What differs by a factor of two is not $Q$ but the ratio $E/\\Delta E$ versus the number of periods: $E/\\Delta E = N/2$, because energy decays twice as fast as amplitude.",
+     "latex": "A(t) = A_0e^{-\\gamma t}, \\qquad E(t) = E_0e^{-2\\gamma t}, \\qquad N = \\frac{Q}{\\pi}",
+     "kit": "exponent"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Amortiguamiento y resonancia",
@@ -925,71 +955,6 @@
     }
    ]
   },
-  "derivation": {
-   "title": "Derivación rigurosa: de dónde proviene el pico",
-   "lead": "Vamos desde la ecuación de movimiento hasta la curva de resonancia. La pregunta principal en el camino: ¿por qué el denominador puede volverse casi cero y qué lo impide?",
-   "steps": [
-    {
-     "text": "Escribimos la segunda ley para la masa sobre la que actúan tres fuerzas: elástica según Hooke, fricción proporcional a la velocidad, y una externa que varía armónicamente.",
-     "latex": "m\\ddot{x} = -kx - b\\dot{x} + F_0\\cos\\omega t",
-     "figure": "springlaw",
-     "figCaption": "Tres fuerzas: restauradora, amortiguadora y excitadora. La resonancia es el resultado de su competencia."
-    },
-    {
-     "text": "Dividimos entre la masa e introducimos notación. Así la ecuación adquiere la forma estándar que se encuentra después en todas partes, desde un circuito eléctrico hasta un átomo en el campo de un láser.",
-     "latex": "\\ddot{x} + 2\\gamma\\dot{x} + \\omega_0^{2}x = \\frac{F_0}{m}\\cos\\omega t, \\qquad \\omega_0^{2} = \\frac{k}{m}, \\;\\; \\gamma = \\frac{b}{2m}",
-     "figure": "sinederiv",
-     "figCaption": "Forma canónica: dos parámetros del sistema y un parámetro de la excitación externa."
-    },
-    {
-     "text": "Consideración física clave: después de un tiempo, las oscilaciones estacionarias ocurren exactamente a la frecuencia de la fuerza externa, no a la propia. El sistema deja de recordar cómo se excitó inicialmente — las oscilaciones propias se han amortiguado. Solo queda un desfase.",
-     "latex": "x(t) = A\\cos(\\omega t - \\varphi)",
-     "figure": "matchfreq",
-     "figCaption": "Régimen estacionario: el sistema oscila al ritmo de la fuerza, rezagado en fase."
-    },
-    {
-     "text": "Sustituimos y agrupamos. El término con coseno da la diferencia de cuadrados de frecuencias, el término con seno da la contribución de la fricción. Se suman como catetos de un triángulo rectángulo, porque están desfasados exactamente un cuarto de periodo.",
-     "latex": "A\\sqrt{(\\omega_0^{2}-\\omega^{2})^{2} + (2\\gamma\\omega)^{2}} = \\frac{F_0}{m}",
-     "figure": "vectriangle",
-     "figCaption": "Las respuestas elástica y viscosa son perpendiculares en el diagrama vectorial — de ahí la raíz de la suma de cuadrados."
-    },
-    {
-     "text": "De aquí obtenemos la amplitud. Ahora observe el denominador: el primer término se anula cuando las frecuencias coinciden. Si no hubiera fricción, la amplitud sería infinita — y por eso la fricción aquí no es un obstáculo, sino lo único que evita que el sistema se destruya.",
-     "latex": "A(\\omega) = \\frac{F_0/m}{\\sqrt{(\\omega_0^{2}-\\omega^{2})^{2} + (2\\gamma\\omega)^{2}}}",
-     "figure": "curves",
-     "figCaption": "El pico es más alto y estrecho cuanto menor es la fricción. Con fricción cero, la curva se vuelve infinita."
-    },
-    {
-     "text": "Estimemos la altura del pico. Cuando las frecuencias coinciden, solo queda el término viscoso, y la relación entre la amplitud y la desviación estática resulta ser el factor de calidad. Es una cantidad adimensional — por lo tanto, este es el verdadero parámetro de control del problema.",
-     "latex": "\\frac{A(\\omega_0)}{A_{\\text{estática}}} = \\frac{\\omega_0}{2\\gamma} \\equiv Q, \\qquad A_{\\text{estática}} = \\frac{F_0}{k}",
-     "figure": "result",
-     "figCaption": "El factor de calidad responde a dos preguntas: cuánto aumenta la amplitud y qué tan estrecho es el pico."
-    },
-    {
-     "text": "Y el significado físico del factor de calidad desde otro lado: indica cuántas oscilaciones realiza el sistema antes de amortiguarse. Un diapasón con un factor de calidad de mil suena alrededor de mil periodos. La misma cantidad determina tanto la agudeza de la resonancia como la duración del sonido — no es coincidencia, sino dos caras de la misma moneda.",
-     "latex": "Q = 2\\pi \\frac{E}{\\Delta E \\text{ por periodo}} \\approx \\pi \\cdot N_{\\text{oscilaciones hasta amortiguamiento}}",
-     "figure": "energyswap",
-     "figCaption": "El factor de calidad es la relación entre la energía almacenada y la perdida por periodo — por eso también determina el tiempo de sonido."
-    },
-    {
-     "text": "Finalmente, el ancho del pico. Al desviarse de la resonancia en una cantidad del orden de $\\gamma$, la amplitud disminuye notablemente. De aquí la regla práctica: el ancho relativo de la resonancia es igual a uno dividido por el factor de calidad.",
-     "latex": "\\frac{\\Delta\\omega}{\\omega_0} \\approx \\frac{1}{Q}",
-     "figure": "matchfreq",
-     "figCaption": "Alto factor de calidad significa alta selectividad: el sistema solo responde a una coincidencia muy precisa de frecuencias."
-    }
-   ],
-   "plate": "La respuesta del sistema no está determinada por la fuerza, sino por la coincidencia de frecuencias. Cuánto aumenta la amplitud y con qué precisión hay que acertar — ambas respuestas las da el factor de calidad.",
-   "note": "Límites de aplicabilidad. La fórmula se ha derivado para un sistema lineal: la fuerza de Hooke es proporcional al desplazamiento, la fricción a la velocidad. Con amplitudes grandes, un resorte real deja de ser lineal, el pico se inclina y aparece una transición abrupta entre modos. Además, solo hemos buscado la solución estacionaria — en los primeros segundos después de aplicar la fuerza, la amplitud aumenta gradualmente, y es por eso que el puente de Broughton no colapsó de inmediato."
-  },
-  "math": {
-   "title": "Matemáticas que aquí se necesitan",
-   "text": [
-    "Primero: por qué se suman los cuadrados. La respuesta elástica del sistema va en fase con el desplazamiento, mientras que la viscosa va en fase con la velocidad, es decir, con un adelanto de exactamente un cuarto de periodo. Las magnitudes desfasadas en un cuarto de periodo se comportan como vectores perpendiculares: no se suman aritméticamente, sino por el teorema de Pitágoras. De ahí la raíz de la suma de cuadrados en el denominador, y no simplemente la suma.",
-    "Segundo: qué es una curva de resonancia desde el punto de vista de una función. Es una función con un máximo, cuya posición viene dada por los parámetros del sistema, y la agudeza, por el rozamiento. Estrictamente hablando, el máximo de amplitud se alcanza un poco a la izquierda de ω0, en ω = √(ω₀² - 2γ²), pero con rozamiento pequeño la diferencia es imperceptible y normalmente se desprecia — otro ejemplo de desprecio consciente del primer tema.",
-    "Tercero: aproximación cerca del máximo. La diferencia de cuadrados se descompone en un producto, y cerca de la resonancia la expresión se simplifica: ω₀² - ω² = (ω₀-ω)(ω₀+ω) ≈ 2ω₀(ω₀ - ω). De aquí se obtiene que el ancho del pico a media potencia es 2γ — una estimación que se utiliza al leer cualquier espectro.",
-    "Cuarto: por qué una magnitud adimensional es más importante que las dimensionales. El problema tiene cinco parámetros: masa, rigidez, rozamiento, fuerza y frecuencia. Pero la forma de la curva depende solo de dos combinaciones adimensionales: la relación de frecuencias y el factor de calidad. Esto es una aplicación directa de lo que vimos en el tema de dimensiones, y es la razón por la que un solo gráfico sirve para un puente, un diapasón y un receptor de radio a la vez."
-   ]
-  },
   "example": {
    "title": "Ejemplo con números: ¿cuántas veces un dedo es más fuerte que sí mismo?",
    "lead": "Calculamos una masa sobre un resorte en un soporte y comparamos dos regímenes de rozamiento — en esto reside toda la diferencia entre un columpio y una catástrofe.",
@@ -1018,7 +983,7 @@
     },
     {
      "text": "Y lejos de la resonancia, al doble de la frecuencia, casi nada.",
-     "latex": "A(2\\omega_0) \\approx 0{,}066\\ \\text{m} \\;\\; (\\text{ }20\\ \\text{veces menor que la estática})"
+     "latex": "A(2\\omega_0) \\approx 0{,}066\\ \\text{m}"
     }
    ],
    "answer": "En resonancia, la amplitud es de aproximadamente 1,3 metros — seis veces y media mayor que la que daría la misma fuerza aplicada estáticamente. Lejos de la resonancia, la misma fuerza casi no tiene efecto.",
@@ -1239,7 +1204,87 @@
     "hint": "La relación de amplitudes en resonancia es igual al factor de calidad. ¿Cómo se expresa en función de ω₀ y γ?",
     "tolAbs": 4
    }
-  ]
+  ],
+  "derivation": {
+   "title": "Derivación rigurosa: de dónde sale el pico",
+   "lead": "Vamos de la ecuación del movimiento a la curva de resonancia. La pregunta principal en el camino: por qué el denominador puede volverse casi cero y qué lo impide.",
+   "steps": [
+    {
+     "text": "Escribimos la segunda ley para una masa sobre la que actúan tres fuerzas: la elástica según la ley de Hooke, el rozamiento proporcional a la velocidad y una fuerza externa que varía armónicamente.",
+     "latex": "m\\ddot{x} = -kx - b\\dot{x} + F_0\\cos\\omega t",
+     "figure": "springlaw",
+     "figCaption": "Tres fuerzas: la restauradora, la amortiguadora y la excitadora. La resonancia es el resultado de su competencia."
+    },
+    {
+     "text": "Dividimos por la masa e introducimos notación. Así la ecuación adquiere la forma estándar que se encuentra después en todas partes: desde un circuito eléctrico hasta un átomo en el campo de un láser.",
+     "latex": "\\ddot{x} + 2\\gamma\\dot{x} + \\omega_0^{2}x = \\frac{F_0}{m}\\cos\\omega t, \\qquad \\omega_0^{2} = \\frac{k}{m}, \\;\\; \\gamma = \\frac{b}{2m}",
+     "figure": "sinederiv",
+     "figCaption": "Forma canónica: dos parámetros del sistema y un parámetro de la acción externa."
+    },
+    {
+     "text": "Consideración física clave: después de un tiempo, las oscilaciones estacionarias ocurren exactamente a la frecuencia de la fuerza externa, no a la propia. El sistema deja de recordar cómo se excitó inicialmente: las oscilaciones propias se han amortiguado. Solo queda un desfase.",
+     "latex": "x(t) = A\\cos(\\omega t - \\varphi)",
+     "figure": "matchfreq",
+     "figCaption": "Régimen estacionario: el sistema oscila al compás de la fuerza, retrasándose en fase."
+    },
+    {
+     "text": "Sustituimos y agrupamos. El término con coseno da la diferencia de cuadrados de frecuencias, el término con seno da la contribución del rozamiento. Se suman como los catetos de un triángulo rectángulo porque están desfasados exactamente un cuarto de período.",
+     "latex": "A\\sqrt{(\\omega_0^{2}-\\omega^{2})^{2} + (2\\gamma\\omega)^{2}} = \\frac{F_0}{m}",
+     "figure": "vectriangle",
+     "figCaption": "Las respuestas elástica y viscosa son perpendiculares en el diagrama vectorial: de ahí la raíz de la suma de cuadrados."
+    },
+    {
+     "text": "De aquí obtenemos directamente la amplitud. Ahora observe el denominador: el primer término se anula cuando las frecuencias coinciden. Si no hubiera rozamiento, la amplitud se haría infinita, y he aquí por qué el rozamiento no es un estorbo, sino lo único que impide que el sistema se destruya.",
+     "latex": "A(\\omega) = \\frac{F_0/m}{\\sqrt{(\\omega_0^{2}-\\omega^{2})^{2} + (2\\gamma\\omega)^{2}}}",
+     "figure": "curves",
+     "figCaption": "El pico es más alto y más estrecho cuanto menor es el rozamiento. Con rozamiento cero, la curva se va a infinito."
+    },
+    {
+     "text": "Estimemos la altura del pico. Cuando las frecuencias coinciden, solo queda el término viscoso, y la relación entre la amplitud y el desplazamiento estático resulta ser igual al factor de calidad. Es una magnitud adimensional, lo que significa que es el verdadero parámetro de control del problema.",
+     "latex": "\\frac{A(\\omega_0)}{A_{\\text{est}}} = \\frac{\\omega_0}{2\\gamma} \\equiv Q, \\qquad A_{\\text{est}} = \\frac{F_0}{k}",
+     "figure": "result",
+     "figCaption": "El factor de calidad responde a dos preguntas a la vez: cuántas veces crece la amplitud y qué tan estrecho es el pico."
+    },
+    {
+     "text": "Y el significado físico del factor de calidad desde otro ángulo: determina cuántas oscilaciones alcanza a hacer el sistema antes de que la amplitud caiga en un factor $e$. Ese número no es el propio factor de calidad, sino $Q/\\pi$: un diapasón con factor de calidad mil suena alrededor de trescientos veinte períodos. La misma magnitud es responsable tanto de la agudeza de la resonancia como de la duración del sonido: no es una coincidencia, sino dos caras de lo mismo.",
+     "latex": "Q = 2\\pi \\frac{E}{\\Delta E \\text{ por período}} = \\pi N, \\qquad N = \\frac{Q}{\\pi}",
+     "figure": "energyswap",
+     "figCaption": "El factor de calidad es la relación entre la energía almacenada y la perdida por período; por eso también determina el tiempo de sonido."
+    },
+    {
+     "text": "Finalmente, la anchura del pico. Al desviarse de la resonancia en una cantidad del orden de $\\gamma$, la amplitud cae notablemente. De aquí la regla práctica: la anchura relativa de la resonancia es igual a uno dividido por el factor de calidad.",
+     "latex": "\\frac{\\Delta\\omega}{\\omega_0} \\approx \\frac{1}{Q}",
+     "figure": "matchfreq",
+     "figCaption": "Un factor de calidad alto significa una selectividad aguda: el sistema solo responde a un ajuste muy preciso de la frecuencia."
+    }
+   ],
+   "plate": "La respuesta del sistema no está determinada por la fuerza, sino por la coincidencia de frecuencias. Cuántas veces crecerá la amplitud y con qué precisión hay que acertar: ambas respuestas las da el factor de calidad.",
+   "note": "Límites de aplicabilidad. La fórmula se ha derivado para un sistema lineal: la fuerza de Hooke es proporcional al desplazamiento y el rozamiento a la velocidad. Con amplitudes grandes, un muelle real deja de ser lineal, el pico se inclina y aparece una transición abrupta entre regímenes. Además, solo hemos buscado la solución estacionaria: en los primeros segundos después de aplicar la fuerza, la amplitud crece gradualmente, y por eso el puente de Broughton no se derrumbó de inmediato."
+  },
+  "math": {
+   "title": "Matemáticas que aquí se necesitaron",
+   "lead": "Tres trucos: sumar magnitudes desfasadas, simplificar la diferencia de cuadrados cerca del pico y la exponencial que se esconde tras la palabra «amortiguamiento».",
+   "items": [
+    {
+     "what": "Un desfase de un cuarto de período es una perpendicular",
+     "why": "En el cuarto paso de la deducción sustituimos $x = A\\cos(\\omega t - \\varphi)$ y obtuvimos dos términos: uno con coseno, de la fuerza elástica, y otro con seno, del rozamiento. No se pueden sumar como números: nunca alcanzan el máximo a la vez, el seno va detrás del coseno exactamente un cuarto de período. Las magnitudes con esa diferencia se comportan como vectores perpendiculares, y hay que sumarlas por el teorema de Pitágoras — de ahí que en el denominador aparezca la raíz de la suma de cuadrados, y no la suma. El ángulo de ese mismo triángulo rectángulo es el desfase $\\varphi$: una sola imagen responde a la vez a la pregunta sobre la amplitud y a la del retraso.",
+     "latex": "a\\cos\\omega t + b\\sin\\omega t = \\sqrt{a^{2}+b^{2}}\\,\\cos(\\omega t - \\varphi)",
+     "kit": "vector"
+    },
+    {
+     "what": "Diferencia de cuadrados cerca del pico",
+     "why": "La anchura de la resonancia en el último paso de la deducción no se obtuvo a ojo. La diferencia de cuadrados en el denominador se descompone en un producto, y cerca de la resonancia el segundo factor es casi $2\\omega_0$, mientras que el primero es pequeño. Por tanto, el denominador queda determinado por la desafinación $\\omega_0-\\omega$, multiplicada por $2\\omega_0$, y hay que compararla con el término viscoso $2\\gamma\\omega_0$. Mientras la desafinación sea menor que $\\gamma$, el rozamiento sigue siendo lo dominante y la amplitud se mantiene cerca del máximo; cuando la desafinación es del orden de $\\gamma$, cae en un factor raíz de dos. De ahí la anchura del pico $2\\gamma$ y la anchura relativa $1/Q$. En esta aproximación, el máximo cae exactamente en $\\omega_0$; un cálculo exacto lo desplaza un poco a la izquierda, pero con poco rozamiento la diferencia es indistinguible.",
+     "latex": "\\omega_0^{2}-\\omega^{2} = (\\omega_0-\\omega)(\\omega_0+\\omega) \\approx 2\\omega_0(\\omega_0-\\omega)",
+     "kit": "taylor"
+    },
+    {
+     "what": "La exponencial escondida en la palabra «amortiguamiento»",
+     "why": "El séptimo paso de la deducción convierte el factor de calidad en el número de oscilaciones hasta el amortiguamiento, y merece la pena desglosar esa transición. El rozamiento no quita una cantidad fija de energía por período, sino una fracción fija: cuanto mayor es la amplitud, mayores son las pérdidas. Una fracción constante en intervalos de tiempo iguales es precisamente la definición de la exponencial. Por eso la amplitud decae como $A_0e^{-\\gamma t}$, y la energía, proporcional al cuadrado de la amplitud, lo hace el doble de rápido. Luego solo queda contar. La amplitud cae en un factor $e$ en un tiempo $1/\\gamma$, el período es $2\\pi/\\omega_0$, así que caben $N = \\omega_0/2\\pi\\gamma = Q/\\pi$ períodos. De ahí salen los números: un diapasón con factor de calidad mil suena unos trescientos veinte períodos, no mil. El factor $\\pi$ aquí no es un ajuste de precisión, sino la conversión del tiempo de amortiguamiento en número de períodos; la expresión mediante la energía, $Q = 2\\pi E/\\Delta E$ por período, da el mismo factor de calidad: $Q = 2\\pi E/\\Delta E = \\pi N$. Lo que difiere en un factor dos no es $Q$, sino la relación $E/\\Delta E$ frente al número de períodos: $E/\\Delta E = N/2$, porque la energía decae el doble de rápido que la amplitud.",
+     "latex": "A(t) = A_0e^{-\\gamma t}, \\qquad E(t) = E_0e^{-2\\gamma t}, \\qquad N = \\frac{Q}{\\pi}",
+     "kit": "exponent"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "التخميد والرنين",
@@ -1253,30 +1298,74 @@
   "formula": {
    "name": "سعة الاهتزازات القسرية",
    "latex": "A(\\omega) = \\frac{F_0/m}{\\sqrt{(\\omega_0^{2} - \\omega^{2})^{2} + (2\\gamma\\omega)^{2}}}",
-   "alsoKnown": "منحنى الرنين · معادلة استجابة المذبذب الخطي",
+   "alsoKnown": "منحنى الرنين · صيغة استجابة المذبذب الخطي",
    "authors": [
     {
      "who": "غاليليو غاليلي",
      "year": "1638",
-     "what": "أول من وصف الظاهرة: لاحظ أنه يمكن هز بندول ثقيل بقوة كبيرة بواسطة دفعات ضعيفة إذا تمت في التوقيت المناسب — وأن الدفعات نفسها خارج التوقيت تكون عديمة الفائدة"
+     "what": "أول من وصف هذه الظاهرة: لاحظ أن بندولًا ثقيلًا يمكن هزه بقوة كبيرة باستخدام دفعات ضعيفة إذا تمت مزامنتها مع إيقاعه، وأن نفس الدفعات تكون عديمة الفائدة إذا لم تكن متزامنة"
     },
     {
      "who": "روبرت هوك",
      "year": "1678",
-     "what": "قدم القانون الذي بدونه لم تكن هذه المعادلة موجودة: القوة المعيدة تتناسب مع الإزاحة. الخطية هي ما يعطي النظام ترددًا مميزًا واحدًا، وبالتالي جعل الرنين ممكنًا"
+     "what": "قدم القانون الذي بدونه لم تكن هذه الصيغة لتوجد: القوة الاسترجاعية تتناسب مع الإزاحة. الخطية هي ما يعطي النظام ترددًا مميزًا واحدًا، وبالتالي يجعل الرنين ممكنًا"
     },
     {
      "who": "ليونارد أويلر",
      "year": "1739",
-     "what": "حل معادلة الاهتزازات القسرية وأول من حصل على أن السعة ستصبح لانهائية عند التطابق التام للترددات لولا الاحتكاك. وهكذا اكتشف لأول مرة أن الاحتكاك ليس عائقًا مزعجًا، بل هو ما يحفظ العالم من الدمار"
+     "what": "حل معادلة الاهتزازات القسرية وكان أول من حصل على أن السعة ستصبح لا نهائية عند التطابق التام للترددات لولا الاحتكاك. هكذا اتضح لأول مرة أن الاحتكاك ليس عائقًا مزعجًا، بل هو ما يحمي العالم من الدمار"
     },
     {
      "who": "كريستيان هويغنس",
      "year": "1665",
-     "what": "لاحظ ظاهرة مشابهة: ساعتان على عارضة مشتركة بدأتا بعد يوم تتأرجحان في طور متعاكس. الارتباط الضعيف عبر الدعامة قام بمزامنتهما — أول حالة موصوفة من التقاط التردد"
+     "what": "لاحظ ظاهرة مشابهة: ساعتان على عارضة مشتركة بدأتا بعد يوم تتأرجحان في طور متعاكس. الارتباط الضعيف عبر الدعامة قام بمزامنتهما — أول حالة موثقة لالتقاط التردد"
     }
    ],
-   "story": "في 12 أبريل 1831، كان يسير عبر الجسر المعلق في بروتون (قرب مانشستر) فرقة من أربعة وسبعين جنديًا. كانت الخطوة منتظمة، وبدأ الجسر يتأرجح بإيقاعها — بشكل ملحوظ لدرجة أن الجنود، حسب الشهادات، وجدوا ذلك مضحكًا وتكيفوا معه عمدًا. في منتصف المعبر، انكسر برغي التثبيت، وانهار جزء من الجسر مع الناس. لم يكن هناك قتلى، لكن الحادثة أصبحت مشهورة: منذ ذلك الحين، الجيش البريطاني ملزم بكسر الخطى قبل الجسر، واعتمدت جيوش حول العالم نفس القاعدة. تبين أن الاستنتاج الهندسي كان أكثر أهمية من الحادثة نفسها — بدأ حساب المنشآت ليس فقط للحمل الثابت، بل أيضًا للترددات الذاتية."
+   "story": "في 12 أبريل 1831، كان جسر بروتون المعلق بالقرب من مانشستر يعبره فوج من أربعة وسبعين جنديًا. كانت خطواتهم منتظمة، وبدأ الجسر يتأرجح بنفس الإيقاع — بشكل ملحوظ لدرجة أن الجنود، وفقًا للشهادات، وجدوا الأمر مسليًا وتعمدوا التكيف معه. في منتصف العبور، انكسر برغي التثبيت، وانهار جزء من الجسر مع الناس. لم يكن هناك قتلى، لكن الحادثة أصبحت مشهورة: منذ ذلك الحين، أصبح الجيش البريطاني ملزمًا بكسر الخطوة قبل عبور الجسور، وتبنت جيوش حول العالم نفس القاعدة. الاستنتاج الهندسي كان أكثر أهمية من الحادثة نفسها — بدأ حساب المنشآت ليس فقط للأحمال الساكنة، ولكن أيضًا للترددات الذاتية.",
+   "symbols": [
+    {
+     "sym": "A",
+     "latex": "A(\\omega)",
+     "what": "سعة الاهتزازات المستقرة",
+     "unit": "m",
+     "note": "المقصود المستقرة تحديدًا: مباشرة بعد تطبيق القوة يكون الوضع أكثر تعقيدًا"
+    },
+    {
+     "sym": "F0",
+     "latex": "F_0",
+     "what": "سعة القوة الخارجية",
+     "unit": "N",
+     "note": "تدخل خطيًا: إذا هززت بقوة مضاعفة، يتضاعف المدى"
+    },
+    {
+     "sym": "w0",
+     "latex": "\\omega_0",
+     "what": "التردد الذاتي للنظام",
+     "unit": "rad/s",
+     "note": "$\\omega_0 = \\sqrt{k/m}$ — خاصية للنظام نفسه، القوة الخارجية لا تؤثر عليها"
+    },
+    {
+     "sym": "w",
+     "latex": "\\omega",
+     "what": "تردد القوة الخارجية",
+     "unit": "rad/s",
+     "note": "الشيء الوحيد الذي نتحكم فيه من الخارج"
+    },
+    {
+     "sym": "gamma",
+     "latex": "\\gamma",
+     "what": "معامل التخميد",
+     "unit": "1/s",
+     "note": "$\\gamma = b/2m$؛ كلما زاد الاحتكاك، انخفضت القمة واتسعت"
+    },
+    {
+     "sym": "Q",
+     "latex": "Q",
+     "what": "عامل الجودة",
+     "unit": "—",
+     "note": "$Q = \\omega_0/2\\gamma$ — عدد المرات التي تتجاوز فيها السعة عند الرنين الانحراف الساكن"
+    }
+   ]
   },
   "symbols": [
    {
@@ -1322,71 +1411,6 @@
     "note": "$Q = \\omega_0/2\\gamma$ — كم مرة تتجاوز السعة عند الرنين الإزاحة الساكنة"
    }
   ],
-  "derivation": {
-   "title": "اشتقاق صارم: من أين تأتي الذروة",
-   "lead": "ننتقل من معادلة الحركة إلى منحنى الرنين. السؤال الرئيسي في الطريق: لماذا يمكن أن يصبح المقام صفرًا تقريبًا وما الذي يمنع ذلك.",
-   "steps": [
-    {
-     "text": "نكتب قانون نيوتن الثاني لجسم تؤثر عليه ثلاث قوى: قوة مرنة وفقًا لهوك، واحتكاك يتناسب مع السرعة، وقوة خارجية تتغير وفق قانون توافقي.",
-     "latex": "m\\ddot{x} = -kx - b\\dot{x} + F_0\\cos\\omega t",
-     "figure": "springlaw",
-     "figCaption": "ثلاث قوى: القوة المعيدة، القوة المثبطة، والقوة المهيجة. الرنين هو نتيجة تنافسها."
-    },
-    {
-     "text": "نقسم على الكتلة وندخل الرموز. بهذا تأخذ المعادلة الشكل القياسي الذي ستواجهه لاحقًا في كل مكان - من الدائرة الكهربائية إلى الذرة في مجال الليزر.",
-     "latex": "\\ddot{x} + 2\\gamma\\dot{x} + \\omega_0^{2}x = \\frac{F_0}{m}\\cos\\omega t, \\qquad \\omega_0^{2} = \\frac{k}{m}, \\;\\; \\gamma = \\frac{b}{2m}",
-     "figure": "sinederiv",
-     "figCaption": "الشكل القانوني: معلما نظام ومعلم واحد للتأثير الخارجي."
-    },
-    {
-     "text": "الاعتبار الفيزيائي الأساسي: بعد مرور الوقت، تحدث الاهتزازات المستقرة تمامًا على تردد القوة الخارجية، وليس على التردد الطبيعي. يتوقف النظام عن تذكر كيف تم هزه في البداية - تموت الاهتزازات الطبيعية. يبقى فقط إزاحة الطور.",
-     "latex": "x(t) = A\\cos(\\omega t - \\varphi)",
-     "figure": "matchfreq",
-     "figCaption": "النظام المستقر: يتأرجح النظام بتناغم مع القوة، متأخرًا عنها في الطور."
-    },
-    {
-     "text": "نعوض ونجمع. الحد الذي يحتوي على جيب التمام يعطي فرق مربعي الترددات، والحد الذي يحتوي على الجيب يعطي مساهمة الاحتكاك. يضافان كساقي مثلث قائم الزاوية لأنهما منزاحان في الطور بمقدار ربع دورة بالضبط.",
-     "latex": "A\\sqrt{(\\omega_0^{2}-\\omega^{2})^{2} + (2\\gamma\\omega)^{2}} = \\frac{F_0}{m}",
-     "figure": "vectriangle",
-     "figCaption": "الاستجابتان المرنة واللزجة متعامدتان على مخطط المتجهات - ومن هنا الجذر التربيعي لمجموع المربعات."
-    },
-    {
-     "text": "من هنا نحصل مباشرة على السعة. الآن انظر إلى المقام: الحد الأول يصبح صفرًا عند تطابق الترددات. لو لم يكن هناك احتكاك، لكانت السعة لا نهائية - ولهذا فإن الاحتكاك هنا ليس عائقًا، بل هو الشيء الوحيد الذي يمنع النظام من الانهيار.",
-     "latex": "A(\\omega) = \\frac{F_0/m}{\\sqrt{(\\omega_0^{2}-\\omega^{2})^{2} + (2\\gamma\\omega)^{2}}}",
-     "figure": "curves",
-     "figCaption": "الذروة تكون أعلى وأضيق كلما قل الاحتكاك. عند عدم وجود احتكاك، يصبح المنحنى لا نهائيًا."
-    },
-    {
-     "text": "سنقدر ارتفاع الذروة. عند تطابق الترددات، يبقى فقط الحد اللزج، وتكون نسبة السعة إلى الانحراف الساكن مساوية لعامل الجودة. كمية لا بعدية - وبالتالي هذه هي المعلمة الحقيقية المسيطرة على المسألة.",
-     "latex": "\\frac{A(\\omega_0)}{A_{\\text{سكوني}}} = \\frac{\\omega_0}{2\\gamma} \\equiv Q, \\qquad A_{\\text{سكوني}} = \\frac{F_0}{k}",
-     "figure": "result",
-     "figCaption": "يجيب عامل الجودة على سؤالين: كم مرة ستزداد السعة وكم سيكون ضيق الذروة."
-    },
-    {
-     "text": "والمعنى الفيزيائي لعامل الجودة من جهة أخرى: يوضح عدد الاهتزازات التي يقوم بها النظام قبل أن يخمد. شوكة رنانة بعامل جودة ألف تصدر صوتًا لحوالي ألف دورة. نفس الكمية مسؤولة عن حدة الرنين ومدة الصوت - هذه ليست مصادفة، بل وجهان لعملة واحدة.",
-     "latex": "Q = 2\\pi \\frac{E}{\\Delta E \\text{لكل دورة}} \\approx \\pi \\cdot N_{\\text{التذبذبات حتى الاضمحلال}}",
-     "figure": "energyswap",
-     "figCaption": "عامل الجودة هو نسبة الطاقة المخزنة إلى الطاقة المفقودة في دورة - وبالتالي يحدد أيضًا مدة الصوت."
-    },
-    {
-     "text": "أخيرًا، عرض الذروة. بالانحراف عن الرنين بمقدار من رتبة $\\gamma$، تنخفض السعة بشكل ملحوظ. من هنا القاعدة العملية: العرض النسبي للرنين يساوي واحدًا مقسومًا على عامل الجودة.",
-     "latex": "\\frac{\\Delta\\omega}{\\omega_0} \\approx \\frac{1}{Q}",
-     "figure": "matchfreq",
-     "figCaption": "عامل جودة عالٍ يعني انتقائية حادة: النظام يستجيب فقط لتطابق دقيق جدًا في التردد."
-    }
-   ],
-   "plate": "لا يتحدد استجابة النظام بالقوة، بل بتطابق الترددات. كم سيتضاعف المدى ومدى الدقة المطلوبة - كلا الإجابتين يعطيهما عامل الجودة.",
-   "note": "حدود قابلية التطبيق. الصيغة مشتقة لنظام خطي: قوة هوك تتناسب مع الإزاحة، والاحتكاك مع السرعة. عند السعات الكبيرة، يتوقف الزنبرك الحقيقي عن كونه خطيًا، تميل الذروة، ويظهر انتقال مفاجئ بين الأنماط. بالإضافة إلى ذلك، بحثنا فقط عن الحل المستقر - في الثواني الأولى بعد تطبيق القوة، تزداد السعة تدريجيًا، ولهذا لم ينهار جسر بروتون على الفور."
-  },
-  "math": {
-   "title": "الرياضيات التي نحتاجها هنا",
-   "text": [
-    "أولاً — لماذا تُجمع المربعات. الاستجابة المرنة للنظام تكون متزامنة مع الإزاحة، بينما الاستجابة اللزجة تكون متزامنة مع السرعة أي متقدمة بمقدار ربع الدورة بالضبط. الكميات المزاحة بمقدار ربع دورة تتصرف مثل متجهات متعامدة: لا تُجمع جمعاً حسابياً، بل وفق نظرية فيثاغورس. ومن هنا يأتي الجذر التربيعي لمجموع المربعات في المقام، وليس مجرد المجموع.",
-    "ثانياً — ما هو منحنى الرنين من وجهة نظر دالة. إنها دالة لها قيمة عظمى، يحدد موقعها معلمات النظام، وتحدد حدتها الاحتكاك. بالمعنى الدقيق، تبلغ السعة قيمتها العظمى عند نقطة يسار $\\omega_0$ قليلاً، عند $\\omega = \\sqrt{\\omega_0^2 - 2\\gamma^2}$، لكن مع الاحتكاك الصغير يكون الفرق غير ملحوظ، وعادةً يُهمل — مثال آخر على الإهمال المتعمد من الموضوع الأول.",
-    "ثالثاً — التقريب بالقرب من القيمة العظمى. يُحلل فرق المربعات إلى حاصل ضرب، وبالقرب من الرنين يُبسط التعبير: $\\omega_0^2 - \\omega^2 = (\\omega_0-\\omega)(\\omega_0+\\omega) \\approx 2\\omega_0(\\omega_0 - \\omega)$. ومن هنا تحديداً نحصل على أن عرض الذروة عند مستوى نصف القدرة يساوي $2\\gamma$ — وهو التقدير الذي يُستخدم عند قراءة أي طيف.",
-    "رابعاً — لماذا الكمية اللابعدية أهم من الكميات ذات البعد. للمسألة خمس معلمات: الكتلة، الصلابة، الاحتكاك، القوة، والتردد. لكن شكل المنحنى يعتمد فقط على تركيبتين لابعديتين: نسبة الترددات وعامل الجودة. هذا تطبيق مباشر لما ناقشناه في موضوع الأبعاد — ولهذا السبب يناسب رسم بياني واحد جسراً وشوكة رنانة وجهاز استقبال راديوي في آن واحد."
-   ]
-  },
   "example": {
    "title": "مثال بالأرقام: كم مرة يكون الإصبع أقوى من نفسه",
    "lead": "نحسب ثقلاً على زنبرك من المنضدة ونقارن وضعي احتكاك — هذا هو الفرق بين الأرجوحة والكارثة.",
@@ -1415,7 +1439,7 @@
     },
     {
      "text": "أما بعيداً عن الرنين، عند تردد مضاعف، فلا شيء تقريباً.",
-     "latex": "A(2\\omega_0) \\approx 0{,}066\\ \\text{م} \\;\\; (\\text{أقل بـ } 20\\ \\text{مرة من الإزاحة الساكنة})"
+     "latex": "A(2\\omega_0) \\approx 0{,}066\\ \\text{م}"
     }
    ],
    "answer": "عند الرنين تبلغ السعة حوالي 1.3 متر — أي أكبر بست مرات ونصف مما كانت ستعطيه نفس القوة مطبقة بشكل ثابت. بعيداً عن الرنين لا تكاد نفس القوة تنتج أي تأثير.",
@@ -1636,7 +1660,87 @@
     "hint": "نسبة السعات عند الرنين تساوي معامل الجودة. كيف يُعبر عنه بدلالة ω₀ و γ؟",
     "tolAbs": 4
    }
-  ]
+  ],
+  "derivation": {
+   "title": "الاشتقاق الدقيق: من أين يأتي الذروة",
+   "lead": "ننتقل من معادلة الحركة إلى منحنى الرنين. السؤال الرئيسي على طول الطريق هو لماذا يمكن أن يصبح المقام صفرًا تقريبًا وما الذي يمنع ذلك.",
+   "steps": [
+    {
+     "text": "نكتب القانون الثاني لكتلة تؤثر عليها ثلاث قوى: القوة المرنة وفقًا لقانون هوك، والاحتكاك المتناسب مع السرعة، وقوة خارجية تتغير وفقًا لقانون توافقي.",
+     "latex": "m\\ddot{x} = -kx - b\\dot{x} + F_0\\cos\\omega t",
+     "figure": "springlaw",
+     "figCaption": "ثلاث قوى: القوة المُرجِعة، والمُثبِّطة، والمُهيِّجة. الرنين هو نتيجة تنافسها."
+    },
+    {
+     "text": "نقسم على الكتلة ونقدم رموزًا. هكذا تأخذ المعادلة الشكل القياسي الذي ستواجهه لاحقًا في كل مكان - من الدائرة الكهربائية إلى الذرة في مجال الليزر.",
+     "latex": "\\ddot{x} + 2\\gamma\\dot{x} + \\omega_0^{2}x = \\frac{F_0}{m}\\cos\\omega t, \\qquad \\omega_0^{2} = \\frac{k}{m}, \\;\\; \\gamma = \\frac{b}{2m}",
+     "figure": "sinederiv",
+     "figCaption": "الصيغة القانونية: معلمتان للنظام ومعلمة واحدة للتأثير الخارجي."
+    },
+    {
+     "text": "الاعتبار الفيزيائي الأساسي: بعد مرور الوقت، تتأرجح الاهتزازات المستقرة بدقة على تردد القوة الخارجية، وليس على التردد الطبيعي. يتوقف النظام عن تذكر كيف تم هزه في البداية - لقد تلاشت الاهتزازات الطبيعية. يبقى فقط إزاحة الطور.",
+     "latex": "x(t) = A\\cos(\\omega t - \\varphi)",
+     "figure": "matchfreq",
+     "figCaption": "النظام المستقر: يتأرجح النظام بإيقاع القوة، متخلفًا عنها في الطور."
+    },
+    {
+     "text": "نعوض ونجمع. الحد الذي يحتوي على جيب التمام يعطي فرق مربعات الترددات، والحد الذي يحتوي على جيب الزاوية يعطي مساهمة الاحتكاك. إنهما يُجمعان مثل ضلعي القائمة في مثلث قائم الزاوية، لأنهما منزاحان في الطور بمقدار ربع دورة بالضبط.",
+     "latex": "A\\sqrt{(\\omega_0^{2}-\\omega^{2})^{2} + (2\\gamma\\omega)^{2}} = \\frac{F_0}{m}",
+     "figure": "vectriangle",
+     "figCaption": "الاستجابتان المرنة واللزجة متعامدتان في مخطط المتجهات - ومن هنا يأتي الجذر التربيعي لمجموع المربعات."
+    },
+    {
+     "text": "من هنا نحصل مباشرة على السعة. الآن انظر إلى المقام: الحد الأول يصبح صفرًا عندما يتطابق الترددان. إذا لم يكن هناك احتكاك، لتصبح السعة لا نهائية - ولهذا السبب فإن الاحتكاك هنا ليس عائقًا، بل هو الشيء الوحيد الذي يمنع النظام من الانهيار.",
+     "latex": "A(\\omega) = \\frac{F_0/m}{\\sqrt{(\\omega_0^{2}-\\omega^{2})^{2} + (2\\gamma\\omega)^{2}}}",
+     "figure": "curves",
+     "figCaption": "الذروة تكون أعلى وأضيق كلما قل الاحتكاك. عند عدم وجود احتكاك، يذهب المنحنى إلى ما لا نهاية."
+    },
+    {
+     "text": "نقدر ارتفاع الذروة. عند تطابق الترددات، يبقى فقط الحد اللزج، وتكون نسبة السعة إلى الانحراف الساكن مساوية لعامل الجودة. الكمية بلا أبعاد - وهذا يعني أنها معلمة التحكم الحقيقية للمسألة.",
+     "latex": "\\frac{A(\\omega_0)}{A_{\\text{sta}}} = \\frac{\\omega_0}{2\\gamma} \\equiv Q, \\qquad A_{\\text{sta}} = \\frac{F_0}{k}",
+     "figure": "result",
+     "figCaption": "يجيب عامل الجودة على سؤالين في آن واحد: كم مرة سيزداد الاتساع وكم سيكون الذروة ضيقًا."
+    },
+    {
+     "text": "والمعنى الفيزيائي لعامل الجودة من ناحية أخرى: إنه يحدد عدد الاهتزازات التي يمكن للنظام القيام بها قبل أن ينخفض الاتساع بمقدار $e$ مرة. هذا الرقم ليس عامل الجودة نفسه، بل $Q/\\pi$: شوكة رنانة بعامل جودة ألف تصدر صوتًا لحوالي ثلاثمائة وعشرين فترة. نفس الكمية مسؤولة عن حدة الرنين وعن مدة الصوت - وهذا ليس مصادفة، بل وجهان لعملة واحدة.",
+     "latex": "Q = 2\\pi \\frac{E}{\\Delta E \\text{ لكل فترة}} = \\pi N, \\qquad N = \\frac{Q}{\\pi}",
+     "figure": "energyswap",
+     "figCaption": "عامل الجودة هو نسبة الطاقة المخزنة إلى الطاقة المفقودة خلال فترة - ولهذا السبب يحدد أيضًا زمن الصوت."
+    },
+    {
+     "text": "أخيرًا، عرض الذروة. عند الانحراف عن الرنين بمقدار من رتبة $\\gamma$، تنخفض السعة بشكل ملحوظ. من هنا تأتي القاعدة العملية: العرض النسبي للرنين يساوي واحدًا مقسومًا على عامل الجودة.",
+     "latex": "\\frac{\\Delta\\omega}{\\omega_0} \\approx \\frac{1}{Q}",
+     "figure": "matchfreq",
+     "figCaption": "عامل الجودة العالي يعني انتقائية حادة: النظام يستجيب فقط لإصابة دقيقة جدًا في التردد."
+    }
+   ],
+   "plate": "استجابة النظام لا تحددها القوة، بل تطابق الترددات. كم مرة سيزداد الاتساع وكم يجب أن تكون الإصابة دقيقة - كلتا الإجابتين يعطيهما عامل الجودة.",
+   "note": "حدود التطبيق. الصيغة مشتقة لنظام خطي: قوة هوك تتناسب مع الإزاحة، والاحتكاك مع السرعة. عند السعات الكبيرة، يتوقف الزنبرك الحقيقي عن كونه خطيًا، ويميل الذروة، ويظهر انتقال قفزي بين الأنماط. بالإضافة إلى ذلك، بحثنا فقط عن الحل المستقر - في الثواني الأولى بعد تشغيل القوة، تزداد السعة تدريجيًا، ولهذا السبب لم ينهار جسر بروتون على الفور."
+  },
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "ثلاث تقنيات: جمع الكميات المزاحة في الطور، تبسيط فرق المربعات بالقرب من الذروة، والدالة الأسية التي تقف وراء كلمة \"التخميد\".",
+   "items": [
+    {
+     "what": "الإزاحة بربع دورة هي عمودية",
+     "why": "في الخطوة الرابعة من الاشتقاق، عوضنا $x = A\\cos(\\omega t - \\varphi)$ وحصلنا على حدين: أحدهما مع جيب التمام - من القوة المرنة، والآخر مع الجيب - من الاحتكاك. لا يمكن جمعهما كأرقام: فهما لا يصلان إلى الحد الأقصى في نفس الوقت أبدًا، فالجيب يتخلف عن جيب التمام بربع دورة بالضبط. الكميات التي لها مثل هذا الاختلاف تتصرف مثل المتجهات المتعامدة، ويجب جمعها باستخدام نظرية فيثاغورس - ومن هنا جاء الجذر التربيعي لمجموع المربعات في المقام، وليس المجموع. زاوية نفس المثلث القائم هي إزاحة الطور $\\varphi$: صورة واحدة تجيب في نفس الوقت على سؤال السعة وسؤال التأخير.",
+     "latex": "a\\cos\\omega t + b\\sin\\omega t = \\sqrt{a^{2}+b^{2}}\\,\\cos(\\omega t - \\varphi)",
+     "kit": "vector"
+    },
+    {
+     "what": "فرق المربعات بالقرب من الذروة",
+     "why": "عرض الرنين في الخطوة الأخيرة من الاشتقاق لم يُحصل عليه بالتخمين. فرق المربعات في المقام يُحلل إلى حاصل ضرب، وبالقرب من الرنين، يكون العامل الثاني مساويًا تقريبًا $2\\omega_0$، بينما الأول صغير. لذلك، يُحدد المقام بتباعد التردد $\\omega_0-\\omega$، مضروبًا في $2\\omega_0$، ويجب مقارنته بالحد اللزج $2\\gamma\\omega_0$. طالما أن التباعد أقل من $\\gamma$، يظل الاحتكاك هو المهيمن وتبقى السعة قريبة من الحد الأقصى؛ وعندما يكون التباعد في حدود $\\gamma$، تنخفض السعة إلى جذر اثنين. ومن هنا عرض القمة $2\\gamma$ والعرض النسبي $1/Q$. في هذا التقريب، يقع الحد الأقصى تمامًا عند $\\omega_0$؛ الحساب الدقيق يزحزحه قليلاً إلى اليسار، لكن مع احتكاك صغير، يكون الفرق غير ملحوظ.",
+     "latex": "\\omega_0^{2}-\\omega^{2} = (\\omega_0-\\omega)(\\omega_0+\\omega) \\approx 2\\omega_0(\\omega_0-\\omega)",
+     "kit": "taylor"
+    },
+    {
+     "what": "الدالة الأسية المخبأة في كلمة \"تخميد\"",
+     "why": "الخطوة السابعة من الاشتقاق تحول عامل الجودة إلى عدد التذبذبات حتى التخميد، وهذا الانتقال يستحق التوضيح. الاحتكاك لا يزيل كمية ثابتة من الطاقة في كل دورة، بل نسبة ثابتة: كلما زادت السعة، زادت الخسائر. النسبة الثابتة على فترات زمنية متساوية هي تعريف الدالة الأسية. لذلك، تتناقص السعة كـ $A_0e^{-\\gamma t}$، والطاقة، المتناسبة مع مربع السعة، تتناقص بسرعة مضاعفة. ثم يبقى الحساب. تنخفض السعة بعامل $e$ في زمن قدره $1/\\gamma$، والدورة تساوي $2\\pi/\\omega_0$، لذا عدد الدورات هو $N = \\omega_0/2\\pi\\gamma = Q/\\pi$. ومن هنا الأرقام: شوكة رنانة بعامل جودة ألف تصدر حوالي ثلاثمائة وعشرين دورة، وليس ألفًا. المضاعف $\\pi$ هنا ليس تصحيحًا للدقة، بل تحويل زمن التخميد إلى عدد دورات؛ الصيغة عبر الطاقة، $Q = 2\\pi E/\\Delta E$ لكل دورة، تعطي نفس عامل الجودة: $Q = 2\\pi E/\\Delta E = \\pi N$. ما يختلف بمقدار الضعف ليس $Q$، بل النسبة $E/\\Delta E$ مقابل عدد الدورات: $E/\\Delta E = N/2$، لأن الطاقة تتناقص بسرعة مضاعفة مقارنة بالسعة.",
+     "latex": "A(t) = A_0e^{-\\gamma t}, \\qquad E(t) = E_0e^{-2\\gamma t}, \\qquad N = \\frac{Q}{\\pi}",
+     "kit": "exponent"
+    }
+   ]
+  }
  },
  "tags": [
   "nonlinear_dynamics"

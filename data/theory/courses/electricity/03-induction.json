@@ -59,7 +59,7 @@
    "Логика его поисков была проста и заняла десять лет. Эрстед показал, что ток создаёт магнитное поле. Значит, рассуждал Фарадей, должно быть и обратное: магнитное поле обязано создавать ток. Он обматывал катушки, подносил магниты, замыкал цепи — и ничего не получал.",
    "Разгадка оказалась в слове, которого не было в исходной догадке. Ток возникает не от магнитного поля, а от его **изменения**. Неподвижный магнит не даёт ничего, каким бы сильным он ни был. Стоит его двинуть — стрелка гальванометра дёргается. Всё, что вырабатывает электричество на планете, работает на этом различии между «есть поле» и «поле меняется»."
   ],
-  "standNote": "Переключите стенд в режим скрещённых полей и поднимите электрическое поле E. Частица перестанет ходить по кругу и поплывёт вбок со скоростью E/B — это дрейф. Обратите внимание, что скорость дрейфа не зависит ни от величины заряда, ни от его знака: сдвиньте ползунок заряда в минус и убедитесь. Именно это независимое от заряда движение и лежит в основе индукции: когда проводник движется в магнитном поле, все его свободные заряды испытывают одинаковое воздействие и разделяются по концам.",
+  "standNote": "Переключите стенд в режим скрещённых полей и поднимите электрическое поле E. Частица перестанет ходить по кругу и поплывёт вбок со скоростью E/B — это дрейф. Скорость дрейфа не зависит ни от величины заряда, ни от его знака: сдвиньте ползунок заряда в минус и убедитесь. Именно поэтому дрейф сам по себе ЭДС не создаёт — он уносит плюс и минус в одну сторону, а разделять их нужно в разные. Индукция работает иначе: когда проводник движется поперёк поля со скоростью v, на каждый носитель действует сила qv×B, и её направление зависит от знака заряда. Положительные уходят к одному концу, отрицательные к другому — разность потенциалов и есть ЭДС. Вывод в следующем разделе делает это аккуратно.",
   "formula": {
    "name": "Закон электромагнитной индукции Фарадея",
    "latex": "\\mathcal{E} = -\\frac{d\\Phi}{dt}, \\qquad \\Phi = B\\,S\\cos\\alpha",
@@ -189,11 +189,26 @@
   },
   "math": {
    "title": "Математика, которая здесь понадобилась",
-   "text": [
-    "Что такое поток — совсем просто. Представьте дождь и подставленную под него рамку. Поток — это сколько капель пролетает сквозь рамку. Он зависит от трёх вещей: насколько сильный дождь (поле), какая рамка большая (площадь) и как она наклонена (угол). Поверните рамку ребром к дождю — сквозь неё не пролетит ничего, хотя дождь идёт по-прежнему. Магнитный поток устроен ровно так же, только вместо капель — силовые линии.",
-    "Почему важна именно производная. Ток идёт не от потока, а от скорости его изменения. Аналогия: ваш банковский счёт может быть огромным, но если он не меняется, никакого движения денег нет. Движение — это приход и расход, то есть производная от остатка. Магнит, лежащий на катушке неподвижно, — это большой неизменный счёт: тока нет. Двиньте его — появится расход, появится и ток. Отсюда же следует, почему быстрое движение даёт большее напряжение, чем медленное.",
-    "Что означает знак минус на пальцах. Природа сопротивляется изменению. Подносите магнит к катушке — возникший в ней ток создаёт поле, отталкивающее магнит. Отводите — ток меняет направление и начинает притягивать. Всегда наперекор. Причина не в упрямстве природы, а в сохранении энергии: чтобы получить электричество, вы обязаны совершить механическую работу, преодолевая это сопротивление. Именно поэтому генератор на электростанции становится тяжелее вращать, когда потребители включают нагрузку.",
-    "Почему из вращения выходит синус. Поток через вращающуюся рамку меняется по косинусу угла, а угол растёт равномерно со временем. Производная косинуса есть синус со знаком — вот и вся причина синусоидальной формы напряжения в розетке. Это тот же самый переход, что связывал в теме о колебаниях координату и скорость: равномерное вращение даёт синус в проекции. Круг снова оказался спрятан внутри колебания."
+   "lead": "Понадобятся две вещи: что такое поток сквозь контур и почему в законе стоит скорость изменения, а не сама величина.",
+   "items": [
+    {
+     "what": "Поток: поле, площадь и косинус",
+     "why": "Поток $\\Phi = BS\\cos\\alpha$ считает, сколько силовых линий пронизывает контур, и собран он из трёх сомножителей: густота линий, размер рамки и её наклон. Косинус здесь не украшение, а проекция: работает не вся площадь, а только та её часть, которую поле видит. Поверните рамку ребром — угол прямой, косинус ноль, поток ноль, хотя поле никуда не делось. Отсюда сразу читаются три способа менять поток — по одному на каждый сомножитель: двигать проводник, меняя площадь; менять само поле; поворачивать рамку, меняя угол. Подпись к четвёртому шагу вывода называет их разом, но выведены они в разных местах: первым пользуется движущийся стержень из первых четырёх шагов, третьим — вращающаяся рамка шестого шага, вторым — трансформатор седьмого, где не движется ничто и меняется только поток в общем сердечнике. Сам приём считать «сколько прошло сквозь площадку» одинаков для света, тепла и текущей жидкости.",
+     "latex": "\\Phi = \\vec B \\cdot \\vec S = B\\,S\\cos\\alpha",
+     "kit": "flux"
+    },
+    {
+     "what": "Откуда в ответе берётся омега",
+     "why": "Шестой шаг вывода делает то, из-за чего в розетке синус. Поток вращающейся рамки меняется как $\\cos\\omega t$, а закон требует не поток, а его скорость изменения. Дифференцируем сложную функцию: производная косинуса даёт минус синус, а внутренняя функция $\\omega t$ выносит наружу множитель $\\omega$. Этот лишний множитель и есть главный практический вывод — ЭДС пропорциональна скорости вращения, поэтому генератор надо крутить быстро. В примере с числами он виден прямо: произведение $NBS$ даёт всего $4$, а ответ получается $1256$ вольт, потому что $\\omega = 2\\pi\\cdot 50 \\approx 314$. Правило общее: производная функции с внутренним аргументом всегда выносит наружу скорость изменения этого аргумента.",
+     "latex": "\\frac{d}{dt}\\cos\\omega t = -\\omega\\sin\\omega t \\;\\Longrightarrow\\; \\mathcal{E}_{\\max} = NBS\\omega",
+     "kit": "derivative"
+    },
+    {
+     "what": "Минус в законе и доказательство от противного",
+     "why": "Пятый шаг вывода устроен как математическое рассуждение, а не как опыт: мы предполагаем противоположное и смотрим, к чему это ведёт. Пусть знак был бы плюсом. Тогда индукционный ток усиливал бы вызвавшее его изменение, усиление давало бы ещё больший ток, а тот — ещё большее усиление. Обратная связь с положительным знаком всегда даёт нарастание без предела: величина разгоняет сама себя из ничего. Минус превращает ту же связь в противодействие, и система приходит к равновесию вместо взрыва. Знак перед скоростью изменения вообще решает судьбу решения — с минусом выходит затухание и устойчивость, с плюсом экспоненциальный разгон. Здесь этот выбор делает не математика, а закон сохранения энергии.",
+     "latex": "\\mathcal{E} = -\\frac{d\\Phi}{dt}",
+     "kit": "diffeq"
+    }
    ]
   },
   "example": {
@@ -417,11 +432,11 @@
      "ток",
      "наводит",
      "измен",
-     "поток",
+     "магнитн",
      "ленц",
      "противодейств",
      "тормоз",
-     "поле тока"
+     "индукц"
     ],
     "needed": 2,
     "why": "Падая, магнит меняет магнитный поток через стенки трубы, и в них наводятся вихревые токи. По правилу Ленца их собственное поле противодействует причине, то есть тормозит движение магнита. Медь при этом действительно немагнитна — неподвижный магнит она не притягивает совсем. Тормозит исключительно изменение.",
@@ -447,36 +462,81 @@
    "The logic of his search was simple and took ten years. Ørsted showed that a current creates a magnetic field. Therefore, Faraday reasoned, the opposite must also hold: a magnetic field must generate a current. He wound coils, brought magnets near, closed circuits—and got nothing.",
    "The answer lay in a word missing from the initial guess. The current arises not from the magnetic field but from its **change**. A stationary magnet gives nothing, no matter how strong. Move it, and the galvanometer needle twitches. All electricity generation on the planet relies on this difference between 'there is a field' and 'the field is changing'."
   ],
-  "standNote": "Switch the stand to crossed-field mode and raise the electric field E. The particle stops circling and drifts sideways at speed E/B — this is drift. Note that the drift speed does not depend on either the magnitude or the sign of the charge: move the charge slider to minus and verify. It is this charge-independent motion that underlies induction: when a conductor moves in a magnetic field, all its free charges experience the same effect and separate to the ends.",
+  "standNote": "Switch the stand to the crossed-fields mode and raise the electric field E. The particle will stop moving in a circle and will drift sideways with speed E/B — this is drift. The drift speed does not depend on either the magnitude of the charge or its sign: move the charge slider to minus and see for yourself. That is why drift itself does not create an EMF — it carries plus and minus in the same direction, but they need to be separated in different directions. Induction works differently: when a conductor moves across a field with speed v, each carrier experiences a force qv×B, and its direction depends on the sign of the charge. Positive charges go to one end, negative to the other — the potential difference is the EMF. The conclusion in the next section does this carefully.",
   "formula": {
-   "name": "Faraday's Law of Electromagnetic Induction",
+   "name": "Faraday's law of electromagnetic induction",
    "latex": "\\mathcal{E} = -\\frac{d\\Phi}{dt}, \\qquad \\Phi = B\\,S\\cos\\alpha",
-   "alsoKnown": "Faraday's law · Lenz's law in the minus sign",
+   "alsoKnown": "Faraday's law · Lenz's rule in the minus sign",
    "authors": [
     {
      "who": "Michael Faraday",
      "year": "1831",
-     "what": "after ten years of searching, discovered that current arises only when the magnetic flux changes. He recorded the experiment in his diary under a number—he kept such a diary his entire life, and by the end there were about sixteen thousand entries."
+     "what": "after ten years of searching, discovered that current arises only when the magnetic flux changes. He recorded the experiment in his diary under a number that he kept throughout his life — by the end there were about sixteen thousand of them"
     },
     {
      "who": "Joseph Henry",
      "year": "1830",
-     "what": "discovered the same phenomenon a year earlier in America but did not publish in time, busy with teaching. The unit of inductance is named after him—history's consolation prize."
+     "what": "discovered the same phenomenon a year earlier in America, but did not publish in time, busy with teaching. The unit of inductance is named after him — a consolation prize from history"
     },
     {
      "who": "Emil Lenz",
      "year": "1834",
-     "what": "formulated the rule for the direction of induced current: it always opposes the cause that produced it. This is not a separate law but a direct consequence of energy conservation."
+     "what": "formulated the rule about the direction of the induced current: it always opposes the cause that produced it. This is not a separate law, but a direct consequence of energy conservation"
     },
     {
      "who": "James Clerk Maxwell",
      "year": "1865",
-     "what": "wrote Faraday's law as one of the four equations and realized that a changing magnetic field creates an electric field even in empty space, without any conductor—from there, it is one step to radio waves."
+     "what": "wrote Faraday's law as one of the four equations and realized that a changing magnetic field creates an electric field even in empty space, without any conductor — from here to the radio wave is one step"
     },
     {
      "who": "Nikola Tesla",
      "year": "1888",
-     "what": "built a motor based on a rotating magnetic field and won the debate on what kind of current should power the grids: alternating current wins because its voltage can be easily changed by a transformer—and a transformer works on induction."
+     "what": "built a motor on a rotating magnetic field and won the argument about what the current in the networks should be: alternating current wins because its voltage is easy to change with a transformer — and the transformer works on induction"
+    }
+   ],
+   "story": "There is a famous story about how a certain politician, inspecting the laboratory, asked Faraday what practical use his discovery had. The answer is given in different versions: either “I don't know, but one day you will tax it,” or a counter-question “what is the use of a newborn baby?” The reliability of both is doubtful, but the essence is perfectly true. Faraday indeed could not imagine the scale of the consequences: he showed a tiny deflection of the needle, and half a century later, power plants operated on this principle. Today, about 99 percent of the world's electricity is generated by rotating a conductor in a magnetic field — and taxed, of course, too.",
+   "symbols": [
+    {
+     "sym": "E",
+     "latex": "\\mathcal{E}",
+     "what": "electromotive force",
+     "unit": "V",
+     "note": "not a force, but a voltage; the name is historical and unfortunate"
+    },
+    {
+     "sym": "Phi",
+     "latex": "\\Phi",
+     "what": "magnetic flux",
+     "unit": "Wb",
+     "note": "how many field lines penetrate the loop; weber is tesla times square meter"
+    },
+    {
+     "sym": "S",
+     "latex": "S",
+     "what": "area of the loop",
+     "unit": "m²",
+     "note": "the flux can be changed by the field, the area, or the rotation — all three methods are used"
+    },
+    {
+     "sym": "alpha",
+     "latex": "\\alpha",
+     "what": "angle between the field and the normal to the loop",
+     "unit": "°",
+     "note": "rotation of the loop changes the cosine — hence the sinusoidal voltage in the outlet"
+    },
+    {
+     "sym": "N",
+     "latex": "N",
+     "what": "number of turns of the coil",
+     "unit": "—",
+     "note": "the EMF is multiplied by the number of turns: this is how a transformer increases voltage"
+    },
+    {
+     "sym": "minus",
+     "latex": "-",
+     "what": "minus sign in the law",
+     "unit": "—",
+     "note": "Lenz's rule: the induced current opposes the cause. Otherwise, a perpetual motion machine would result"
     }
    ]
   },
@@ -574,15 +634,6 @@
    ],
    "plate": "Induced EMF equals the rate of change of magnetic flux with a minus sign. A stationary field gives nothing; only change works, and the minus sign guards conservation of energy.",
    "note": "Limits of applicability and an important clarification. The law in flux form works flawlessly almost always, but there is a subtlety: it unifies two different physical mechanisms. When the conductor moves, the EMF arises from the Lorentz force acting on charges. When the field itself changes and the loop is stationary, no charges are magnetically pushed — there a genuine vortex electric field is born, existing even in empty space. That these are two different phenomena described by the same formula was noticed precisely by Einstein, and his dissatisfaction with this asymmetry directly led to the theory of relativity."
-  },
-  "math": {
-   "title": "The mathematics needed here",
-   "text": [
-    "What is flux — quite simple. Imagine rain and a frame held under it. Flux is how many raindrops pass through the frame. It depends on three things: how heavy the rain (field), how big the frame (area), and how it is tilted (angle). Turn the frame edge-on to the rain — nothing passes through it, even though the rain continues. Magnetic flux works exactly the same, only instead of raindrops we have field lines.",
-    "Why the derivative matters. Current flows not from flux but from the rate of change of flux. Analogy: your bank account can be huge, but if it doesn't change, there is no movement of money. Movement is deposits and withdrawals, i.e., the derivative of the balance. A magnet resting motionless on a coil is a large unchanging account: no current. Move it — a withdrawal appears, and current appears. From this it follows why fast motion gives a larger voltage than slow motion.",
-    "What the minus sign means in simple terms. Nature resists change. Bring a magnet toward a coil — the induced current creates a field that repels the magnet. Pull it away — the current reverses direction and starts attracting. Always contrary. The reason is not nature's stubbornness but energy conservation: to get electricity, you must do mechanical work to overcome this resistance. This is exactly why the generator at a power plant becomes harder to turn when consumers turn on a load.",
-    "Why rotation yields a sine. The flux through a rotating loop changes as the cosine of the angle, and the angle grows uniformly with time. The derivative of cosine is sine with a sign — that's the whole reason for the sinusoidal voltage in the outlet. It's the same transition that connected coordinate and velocity in the topic of oscillations: uniform rotation gives a sine in projection. The circle is again hidden inside the oscillation."
-   ]
   },
   "example": {
    "title": "Numerical example: what a loop produces and why a transformer is needed",
@@ -813,7 +864,7 @@
      "lenz",
      "oppos",
      "brake",
-     "field of current"
+     "magnetic field"
     ],
     "needed": 2,
     "why": "As it falls, the magnet changes the magnetic flux through the tube walls, inducing eddy currents in them. According to Lenz's law, their own field opposes the cause, that is, it brakes the magnet's motion. Copper is indeed non-magnetic — a stationary magnet does not attract it at all. Only the change produces the braking.",
@@ -829,7 +880,31 @@
     "hint": "Voltage across a winding is proportional to its number of turns, because the flux through both windings is the same.",
     "tolAbs": 5
    }
-  ]
+  ],
+  "math": {
+   "title": "The math you'll need here",
+   "lead": "Two things are needed: what flux through a loop is and why the law involves the rate of change, not the quantity itself.",
+   "items": [
+    {
+     "what": "Flux: field, area, and cosine",
+     "why": "Flux $\\Phi = BS\\cos\\alpha$ counts how many field lines pierce the loop, and it is built from three factors: line density, loop size, and its tilt. The cosine here is not decoration but a projection: not the whole area works, but only the part the field sees. Turn the loop edge-on — the angle is right, cosine is zero, flux is zero, although the field hasn't gone anywhere. From this, three ways to change flux are immediately read — one per factor: move the conductor, changing the area; change the field itself; rotate the loop, changing the angle. The caption to the fourth step of the derivation names them all at once, but they are derived in different places: the first is used by the moving rod from the first four steps, the third by the rotating loop of the sixth step, the second by the transformer of the seventh step, where nothing moves and only the flux in the common core changes. The very technique of counting \"how much passed through the area\" is the same for light, heat, and flowing liquid.",
+     "latex": "\\Phi = \\vec B \\cdot \\vec S = B\\,S\\cos\\alpha",
+     "kit": "flux"
+    },
+    {
+     "what": "Where omega comes from in the answer",
+     "why": "The sixth step of the derivation does what puts the sine in the wall outlet. The flux of a rotating loop changes as $\\cos\\omega t$, and the law requires not the flux but its rate of change. We differentiate a composite function: the derivative of cosine gives minus sine, and the inner function $\\omega t$ brings out the factor $\\omega$. This extra factor is the main practical takeaway — EMF is proportional to rotation speed, so the generator must be spun fast. In the numerical example it is visible directly: the product $NBS$ gives only $4$, and the answer is $1256$ volts because $\\omega = 2\\pi\\cdot 50 \\approx 314$. The rule is general: the derivative of a function with an inner argument always brings out the rate of change of that argument.",
+     "latex": "\\frac{d}{dt}\\cos\\omega t = -\\omega\\sin\\omega t \\;\\Longrightarrow\\; \\mathcal{E}_{\\max} = NBS\\omega",
+     "kit": "derivative"
+    },
+    {
+     "what": "The minus in the law and proof by contradiction",
+     "why": "The fifth step of the derivation is structured as a mathematical argument, not an experiment: we assume the opposite and see where it leads. Suppose the sign were plus. Then the induced current would amplify the change that caused it, the amplification would give an even larger current, and that would give even more amplification. Positive feedback always gives unbounded growth: the quantity accelerates itself out of nothing. The minus turns the same connection into counteraction, and the system reaches equilibrium instead of exploding. The sign before the rate of change generally decides the fate of the solution — with a minus you get damping and stability, with a plus exponential runaway. Here the choice is made not by mathematics but by the law of conservation of energy.",
+     "latex": "\\mathcal{E} = -\\frac{d\\Phi}{dt}",
+     "kit": "diffeq"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Inducción",
@@ -839,7 +914,7 @@
    "La lógica de su búsqueda era simple y le llevó diez años. Oersted demostró que la corriente crea un campo magnético. Por lo tanto, razonó Faraday, debe ocurrir lo contrario: un campo magnético debe crear corriente. Enrollaba bobinas, acercaba imanes, cerraba circuitos — y no obtenía nada.",
    "La clave estaba en una palabra que no estaba en la conjetura original. La corriente no surge del campo magnético, sino de su **cambio**. Un imán quieto no produce nada, por más fuerte que sea. Basta con moverlo — la aguja del galvanómetro se mueve. Todo lo que genera electricidad en el planeta funciona con esta diferencia entre «hay campo» y «el campo cambia»."
   ],
-  "standNote": "Cambie el soporte al modo de campos cruzados y aumente el campo eléctrico E. La partícula dejará de girar y se desplazará lateralmente con velocidad E/B — esto es deriva. Observe que la velocidad de deriva no depende ni de la magnitud de la carga ni de su signo: deslice el control de carga a negativo y compruébelo. Este movimiento independiente de la carga es la base de la inducción: cuando un conductor se mueve en un campo magnético, todas sus cargas libres experimentan la misma influencia y se separan en los extremos.",
+  "standNote": "Cambie el soporte al modo de campos cruzados y aumente el campo eléctrico E. La partícula dejará de moverse en círculo y se desplazará lateralmente a una velocidad E/B — esto es la deriva. La velocidad de deriva no depende ni de la magnitud de la carga ni de su signo: mueva el control deslizante de carga a negativo y compruébelo. Es por esto que la deriva por sí sola no genera FEM — lleva el más y el menos en la misma dirección, y para separarlos se necesitan direcciones opuestas. La inducción funciona de otra manera: cuando un conductor se mueve transversalmente al campo con velocidad v, sobre cada portador actúa una fuerza qv×B, y su dirección depende del signo de la carga. Los positivos van hacia un extremo, los negativos hacia el otro — la diferencia de potencial es la FEM. La conclusión en la siguiente sección lo hace de manera cuidadosa.",
   "formula": {
    "name": "Ley de inducción electromagnética de Faraday",
    "latex": "\\mathcal{E} = -\\frac{d\\Phi}{dt}, \\qquad \\Phi = B\\,S\\cos\\alpha",
@@ -966,15 +1041,6 @@
    ],
    "plate": "La FEM inducida es igual a la tasa de cambio del flujo magnético con signo menos. Un campo estático no da nada; solo funciona el cambio, y el signo menos protege la ley de conservación de la energía.",
    "note": "Límites de aplicabilidad y una aclaración importante. La ley en forma de flujo funciona impecablemente casi siempre, pero hay un detalle: combina dos mecanismos físicos diferentes. Cuando el conductor se mueve, la FEM surge de la fuerza de Lorentz sobre las cargas. Cuando el campo mismo cambia y el circuito está estacionario, ninguna fuerza magnética empuja las cargas: allí nace un verdadero campo eléctrico vorticial, que existe incluso en el vacío. Que se trata de dos fenómenos diferentes descritos por la misma fórmula lo notó precisamente Einstein, y su insatisfacción con esta asimetría llevó directamente a la teoría de la relatividad."
-  },
-  "math": {
-   "title": "Matemáticas que fueron necesarias aquí",
-   "text": [
-    "Qué es el flujo — muy simple. Imagine la lluvia y un marco colocado debajo. El flujo es cuántas gotas pasan a través del marco. Depende de tres cosas: qué tan fuerte es la lluvia (el campo), qué tan grande es el marco (el área) y cómo está inclinado (el ángulo). Gire el marco de canto hacia la lluvia — no pasará ninguna gota, aunque la lluvia sigue cayendo. El flujo magnético funciona exactamente igual, solo que en lugar de gotas son las líneas de campo.",
-    "Por qué es importante la derivada. La corriente no viene del flujo, sino de la velocidad de su cambio. Analogía: su cuenta bancaria puede ser enorme, pero si no cambia, no hay movimiento de dinero. El movimiento son ingresos y gastos, es decir, la derivada del saldo. Un imán inmóvil sobre una bobina es como una cuenta grande e inmutable: no hay corriente. Muévalo — aparecen gastos, aparece corriente. De aquí se sigue también por qué un movimiento rápido da un voltaje mayor que uno lento.",
-    "Qué significa el signo menos en términos simples. La naturaleza se resiste al cambio. Acerca un imán a una bobina — la corriente inducida crea un campo que repele el imán. Aléjalo — la corriente cambia de dirección y comienza a atraerlo. Siempre en contra. La razón no es la terquedad de la naturaleza, sino la conservación de la energía: para obtener electricidad, debes realizar trabajo mecánico, venciendo esta resistencia. Por eso el generador en una central eléctrica se vuelve más difícil de girar cuando los consumidores conectan una carga.",
-    "Por qué de la rotación sale un seno. El flujo a través de una espira giratoria varía según el coseno del ángulo, y el ángulo crece uniformemente con el tiempo. La derivada del coseno es menos seno — esa es toda la razón de la forma sinusoidal del voltaje en el tomacorriente. Es la misma transición que en el tema de oscilaciones relacionaba la coordenada y la velocidad: una rotación uniforme da un seno en la proyección. El círculo vuelve a estar escondido dentro de la oscilación."
-   ]
   },
   "example": {
    "title": "Ejemplo con números: cuánto da una bobina y para qué sirve el transformador",
@@ -1201,7 +1267,7 @@
      "lenz",
      "opos",
      "fren",
-     "campo de la corrient"
+     "campo magnétic"
     ],
     "needed": 2,
     "why": "Al caer, el imán cambia el flujo magnético a través de las paredes del tubo, y en ellas se inducen corrientes parásitas. Según la regla de Lenz, su propio campo se opone a la causa, es decir, frena el movimiento del imán. El cobre realmente no es magnético — un imán estacionario no lo atrae en absoluto. Lo que frena es exclusivamente el cambio.",
@@ -1217,7 +1283,31 @@
     "hint": "El voltaje en un devanado es proporcional al número de sus vueltas, porque el flujo a través de ambos devanados es el mismo.",
     "tolAbs": 5
    }
-  ]
+  ],
+  "math": {
+   "title": "Matemáticas que aquí se necesitaron",
+   "lead": "Se necesitan dos cosas: qué es el flujo a través de un contorno y por qué en la ley aparece la velocidad de cambio y no la magnitud en sí.",
+   "items": [
+    {
+     "what": "Flujo: campo, área y coseno",
+     "why": "El flujo $\\Phi = BS\\cos\\alpha$ cuenta cuántas líneas de fuerza atraviesan el contorno, y se compone de tres factores: la densidad de líneas, el tamaño de la espira y su inclinación. El coseno aquí no es un adorno, sino una proyección: no funciona toda el área, sino solo la parte que el campo ve. Gire la espira de canto: el ángulo es recto, el coseno es cero, el flujo es cero, aunque el campo no ha desaparecido. De aquí se deducen directamente tres formas de cambiar el flujo, una por cada factor: mover el conductor, cambiando el área; cambiar el propio campo; girar la espira, cambiando el ángulo. La nota al cuarto paso de la deducción las menciona todas juntas, pero se derivan en lugares distintos: la primera la usa la barra móvil de los primeros cuatro pasos, la tercera la espira giratoria del sexto paso, la segunda el transformador del séptimo, donde nada se mueve y solo cambia el flujo en el núcleo común. El mismo método de contar \"cuánto atraviesa una superficie\" es igual para la luz, el calor y el flujo de un líquido.",
+     "latex": "\\Phi = \\vec B \\cdot \\vec S = B\\,S\\cos\\alpha",
+     "kit": "flux"
+    },
+    {
+     "what": "De dónde sale la omega en la respuesta",
+     "why": "El sexto paso de la deducción hace lo que produce el seno en el enchufe. El flujo de una espira giratoria cambia como $\\cos\\omega t$, y la ley exige no el flujo, sino su velocidad de cambio. Derivamos una función compuesta: la derivada del coseno da menos seno, y la función interna $\\omega t$ saca fuera el factor $\\omega$. Ese factor extra es la principal conclusión práctica: la FEM es proporcional a la velocidad de rotación, por eso hay que hacer girar el generador rápido. En el ejemplo numérico se ve directamente: el producto $NBS$ da solo $4$, y la respuesta es $1256$ voltios, porque $\\omega = 2\\pi\\cdot 50 \\approx 314$. La regla es general: la derivada de una función con argumento interno siempre saca fuera la velocidad de cambio de ese argumento.",
+     "latex": "\\frac{d}{dt}\\cos\\omega t = -\\omega\\sin\\omega t \\;\\Longrightarrow\\; \\mathcal{E}_{\\max} = NBS\\omega",
+     "kit": "derivative"
+    },
+    {
+     "what": "El signo menos en la ley y la demostración por contradicción",
+     "why": "El quinto paso de la deducción está construido como un razonamiento matemático, no como un experimento: suponemos lo contrario y vemos a dónde lleva. Supongamos que el signo fuera más. Entonces la corriente inducida reforzaría el cambio que la causó, el refuerzo daría una corriente aún mayor, y esta un refuerzo aún mayor. La retroalimentación con signo positivo siempre da un crecimiento sin límite: la magnitud se acelera a sí misma de la nada. El menos convierte la misma relación en una oposición, y el sistema llega al equilibrio en lugar de explotar. El signo delante de la velocidad de cambio decide el destino de la solución: con menos se obtiene amortiguamiento y estabilidad, con más, aceleración exponencial. Aquí la elección no la hace la matemática, sino la ley de conservación de la energía.",
+     "latex": "\\mathcal{E} = -\\frac{d\\Phi}{dt}",
+     "kit": "diffeq"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "الحث",
@@ -1227,7 +1317,7 @@
    "منطق بحثه كان بسيطاً واستغرق عشر سنوات. أظهر أورستد أن التيار يخلق مجالاً مغناطيسياً. إذن، فكر فاراداي، يجب أن يكون العكس صحيحاً: المجال المغناطيسي يجب أن يخلق تياراً. كان يلف الملفات ويقرب المغناطيس ويغلق الدوائر - ولم يحصل على شيء.",
    "كان الحل في كلمة لم تكن في التخمين الأولي. التيار لا ينشأ من المجال المغناطيسي، بل من **تغيّره**. المغناطيس الثابت لا ينتج شيئاً، مهما كان قوياً. بمجرد تحريكه، يتحرك مؤشر الجلفانومتر. كل ما ينتج الكهرباء على الكوكب يعمل على هذا الفرق بين \"هناك مجال\" و\"المجال يتغير\"."
   ],
-  "standNote": "حوّل المنصة إلى وضع الحقول المتقاطعة وارفع المجال الكهربائي E. سيتوقف الجسيم عن الدوران في دائرة وسينجرف جانبياً بسرعة E/B - هذا هو الانجراف. لاحظ أن سرعة الانجراف لا تعتمد على مقدار الشحنة ولا على إشارتها: حرّك منزلق الشحنة إلى السالب وتأكد. هذه الحركة المستقلة عن الشحنة هي أساس الحث: عندما يتحرك موصل في مجال مغناطيسي، تتعرض جميع شحناته الحرة لنفس التأثير وتنفصل عند طرفيه.",
+  "standNote": "بدّل الحامل إلى وضع الحقول المتقاطعة وارفع المجال الكهربائي E. ستتوقف الجسيمة عن الحركة الدائرية وتنجرف جانبياً بسرعة E/B — هذا هو الانجراف. سرعة الانجراف لا تعتمد على مقدار الشحنة ولا على إشارتها: حرّك منزلق الشحنة إلى السالب وتأكد. لهذا السبب الانجراف بحد ذاته لا يولّد قوة دافعة كهربائية — فهو يحمل الموجب والسالب في اتجاه واحد، بينما يجب فصلهما في اتجاهين مختلفين. الحث يعمل بشكل مختلف: عندما يتحرك الموصل عبر المجال بسرعة v، تؤثر على كل حامل شحنة قوة qv×B، واتجاهها يعتمد على إشارة الشحنة. الموجب يذهب إلى طرف، والسالب إلى الطرف الآخر — فرق الجهد هو القوة الدافعة الكهربائية. الاستنتاج في القسم التالي يوضح ذلك بدقة.",
   "formula": {
    "name": "قانون الحث الكهرومغناطيسي لفاراداي",
    "latex": "\\mathcal{E} = -\\frac{d\\Phi}{dt}, \\qquad \\Phi = B\\,S\\cos\\alpha",
@@ -1354,15 +1444,6 @@
    ],
    "plate": "القوة الدافعة الكهربائية الحثية تساوي معدل تغير التدفق المغناطيسي مع علامة الطرح. المجال الساكن لا يعطي شيئًا؛ التغيير فقط هو الذي يعمل، والطرح يحمي قانون حفظ الطاقة.",
    "note": "حدود الصلاحية وتوضيح مهم. القانون بصيغة التدفق يعمل بشكل لا تشوبه شائبة دائمًا تقريبًا، لكن هناك دقة: فهو يجمع بين آليتين فيزيائيتين مختلفتين. عندما يتحرك الموصل، تنشأ القوة الدافعة الكهربائية من قوة لورنتز المؤثرة على الشحنات. عندما يتغير المجال نفسه وتكون الدائرة ثابتة، لا توجد شحنات تدفع مغناطيسيًا — بل يُولد هناك مجال كهربائي دوامي حقيقي موجود حتى في الفراغ. أن هاتين ظاهرتين مختلفتين توصفان بصيغة واحدة لاحظها أينشتاين، وسخطه على هذا اللاتناظر قاده مباشرة إلى نظرية النسبية."
-  },
-  "math": {
-   "title": "الرياضيات التي كانت ضرورية هنا",
-   "text": [
-    "ما هو التدفق — بسيط جدًا. تخيل مطرًا وإطارًا موضوعًا تحته. التدفق هو عدد قطرات المطر التي تمر عبر الإطار. يعتمد على ثلاثة أشياء: شدة المطر (المجال)، وحجم الإطار (المساحة)، وزاوية ميله. أدر الإطار بحافته نحو المطر — لن تمر عبره أي قطرة، رغم أن المطر لا يزال يهطل. التدفق المغناطيسي مشابه تمامًا، لكن بدلاً من القطرات هناك خطوط القوة.",
-    "لماذا المشتقة مهمة. التيار لا ينشأ من التدفق نفسه، بل من معدل تغيره. تشبيه: قد يكون رصيدك البنكي ضخمًا، لكن إذا لم يتغير، فلا حركة للأموال. الحركة هي الإيداع والسحب، أي مشتقة الرصيد. مغناطيس موضوع على ملف ساكن — هو رصيد كبير ثابت: لا تيار. حركه — يظهر سحب، ويظهر تيار. ومن هنا أيضًا، لماذا الحركة السريعة تعطي جهدًا أكبر من الحركة البطيئة.",
-    "ما معنى علامة الطرح ببساطة. الطبيعة تقاوم التغيير. تقرب مغناطيسًا من ملف — التيار الناتج يخلق مجالًا يدفع المغناطيس بعيدًا. تبعده — يتغير اتجاه التيار ويبدأ في جذب المغناطيس. دائمًا في الاتجاه المعاكس. السبب ليس عناد الطبيعة، بل حفظ الطاقة: للحصول على الكهرباء، يجب عليك بذل شغل ميكانيكي للتغلب على هذه المقاومة. ولهذا يصبح تدوير المولد في محطة الكهرباء أصعب عندما يربط المستهلكون الحمل.",
-    "لماذا ينتج عن الدوران جيب. التدفق عبر إطار دوار يتغير وفق جيب تمام الزاوية، والزاوية تزداد بانتظام مع الزمن. مشتقة جيب التمام هي الجيب بإشارة — وهذا هو السبب الكامل لشكل الجيب للجهد في المقبس. هذا هو نفس الانتقال الذي ربط الإحداثي والسرعة في موضوع الاهتزازات: الدوران المنتظم يعطي جيبًا في الإسقاط. الدائرة مرة أخرى مخبأة داخل الاهتزاز."
-   ]
   },
   "example": {
    "title": "مثال بالأرقام: كم ينتج الملف وما فائدة المحول",
@@ -1593,7 +1674,7 @@
      "لينز",
      "يعاكس",
      "يبطئ",
-     "مجال التيار"
+     "مجال مغناطيسي"
     ],
     "needed": 2,
     "why": "عند السقوط، يغير المغناطيس التدفق المغناطيسي عبر جدران الأنبوب، وتستحث فيها تيارات دوامية. وفقًا لقاعدة لينز، يعاكس مجالها الخاص السبب، أي يبطئ حركة المغناطيس. النحاس هنا غير مغناطيسي حقًا — المغناطيس الثابت لا يجذبه على الإطلاق. التباطؤ ناتج فقط عن التغير.",
@@ -1609,7 +1690,31 @@
     "hint": "الجهد على الملف يتناسب مع عدد لفاته، لأن التدفق عبر كلا الملفين واحد.",
     "tolAbs": 5
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "سيلزم أمران: ما هو التدفق عبر حلقة ولماذا في القانون توجد معدل التغير وليس الكمية نفسها.",
+   "items": [
+    {
+     "what": "التدفق: المجال، المساحة، وجيب التمام",
+     "why": "التدفق $\\Phi = BS\\cos\\alpha$ يحسب عدد خطوط المجال التي تخترق الحلقة، ويتكون من ثلاثة عوامل: كثافة الخطوط، وحجم الإطار، وميله. جيب التمام هنا ليس للزينة بل هو إسقاط: لا تعمل المساحة كلها، بل فقط الجزء الذي يراه المجال. أدر الإطار بحافته — الزاوية قائمة، وجيب التمام صفر، والتدفق صفر، رغم أن المجال لم يختفِ. من هنا تُقرأ مباشرة ثلاث طرق لتغيير التدفق — واحدة لكل عامل: تحريك الموصل لتغيير المساحة؛ تغيير المجال نفسه؛ تدوير الإطار لتغيير الزاوية. التسمية في الخطوة الرابعة من الاشتقاق تذكرها مجتمعة، لكنها مشتقة في مواضع مختلفة: الأولى يستخدمها القضيب المتحرك في الخطوات الأربع الأولى، والثالثة يستخدمها الإطار الدوار في الخطوة السادسة، والثانية يستخدمها المحول في الخطوة السابعة، حيث لا يتحرك شيء ويتغير التدفق فقط في القلب المشترك. أسلوب حساب «كم مر عبر السطح» هو نفسه للضوء والحرارة والسائل الجاري.",
+     "latex": "\\Phi = \\vec B \\cdot \\vec S = B\\,S\\cos\\alpha",
+     "kit": "flux"
+    },
+    {
+     "what": "من أين يأتي أوميغا في الإجابة",
+     "why": "الخطوة السادسة من الاشتقاق تفعل الشيء الذي يجعل الجيب في مأخذ الكهرباء. تدفق الإطار الدوار يتغير مثل $\\cos\\omega t$، والقانون يتطلب ليس التدفق بل معدل تغيره. نشتق الدالة المركبة: مشتقة جيب التمام تعطي سالب جيب، والدالة الداخلية $\\omega t$ تُخرج العامل $\\omega$ إلى الخارج. هذا العامل الإضافي هو النتيجة العملية الرئيسية — القوة الدافعة الكهربائية تتناسب مع سرعة الدوران، لذلك يجب تدوير المولد بسرعة. في المثال العددي يظهر مباشرة: حاصل الضرب $NBS$ يعطي فقط $4$، والإجابة تكون $1256$ فولت لأن $\\omega = 2\\pi\\cdot 50 \\approx 314$. القاعدة عامة: مشتقة دالة ذات وسيط داخلي تخرج دائمًا معدل تغير هذا الوسيط.",
+     "latex": "\\frac{d}{dt}\\cos\\omega t = -\\omega\\sin\\omega t \\;\\Longrightarrow\\; \\mathcal{E}_{\\max} = NBS\\omega",
+     "kit": "derivative"
+    },
+    {
+     "what": "العلامة السالبة في القانون والبرهان بالخلف",
+     "why": "الخطوة الخامسة من الاشتقاق مبنية كاستدلال رياضي وليس كتجربة: نفترض العكس ونرى إلى أين يؤدي. لنفترض أن العلامة كانت زائد. عندها التيار المستحث سيعزز التغير الذي سببه، والتعزيز سيعطي تيارًا أكبر، والذي سيعطي تعزيزًا أكبر. التغذية الراجعة ذات الإشارة الموجبة تعطي دائمًا نموًا بلا حدود: الكمية تسرّع نفسها من لا شيء. السالب يحول نفس العلاقة إلى معارضة، والنظام يصل إلى التوازن بدلاً من الانفجار. العلامة أمام معدل التغير تحدد مصير الحل: مع السالب نحصل على توهين واستقرار، ومع الزائد تسارع أسي. هنا لا يختار الرياضيات، بل قانون حفظ الطاقة.",
+     "latex": "\\mathcal{E} = -\\frac{d\\Phi}{dt}",
+     "kit": "diffeq"
+    }
+   ]
+  }
  },
  "laws": [
   "law_of_conservation_of_energy",

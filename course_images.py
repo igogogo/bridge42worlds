@@ -76,6 +76,25 @@ SUBJECTS = {
     # «прибор без деталей» FLUX нарисовал целым — нехватка не читается. Просим весы: видимый
     # груз мал, а перевешивает пустая чаша, и это ровно то, что показали измерения масс.
     "cosmology/03-dark": "a brass balance scale on a workbench, one pan holding a single small sphere and raised high, the opposite pan empty yet tipped all the way down",
+    # Три новые темы, закрывающие дыры первого курса. Сюжеты, как всегда, предметные:
+    # «давление» и «перенос импульса» FLUX рисует туманом, а барометр и ложка в чашке — вещи.
+    "fluids/01-hydrostatics": "a tall glass tube of mercury standing inverted in a shallow dish, a brass ruler beside it marking the height of the column",
+    "fluids/02-bernoulli": "a brass venturi tube on a wooden stand, two vertical glass standpipes rising from it with water at different levels",
+    "fluids/03-viscosity": "a glass jar of honey with a steel ball halfway down, and beside it a jar of water with an identical ball at the bottom",
+    "statistical/01-maxwell": "an archery target riddled with arrows clustered densely near the centre and scattered thinly at the edges",
+    "statistical/02-boltzmann": "a tall glass column of air with tiny dust motes, dense at the bottom and sparse towards the top, a barometer standing beside it",
+    "statistical/03-brownian": "a drop of ink spreading in a glass of still water, a brass microscope leaning over it",
+    "transport/01-diffusion": "a teabag resting in a glass of clear water with a soft plume of colour reaching out from it",
+    "transport/02-conduction": "a metal spoon and a wooden spoon standing in the same cup of hot tea, faint steam above",
+    "transport/03-viscosity-gas": "two brass cylinders side by side connected by a thin tube, a small paddle wheel between them",
+    # Твёрдое тело и реальный газ: последние две темы-дыры. Сюжеты снова предметные —
+    # «момент инерции» FLUX рисует облаком, а маховик и гироскоп на кардане это вещи.
+    "rigidbody/01-inertia": "a heavy cast iron flywheel on a bench beside a slim spoked wheel of the same diameter, a crank handle on each",
+    "rigidbody/02-gyroscope": "a brass gyroscope in gimbal rings spinning on a wooden pedestal, its axis tilted, a spinning top lying beside it",
+    "rigidbody/03-coriolis": "a wooden turntable with a chalk line curving across it, a small ball resting near the rim",
+    "realgas/01-vanderwaals": "a thick walled glass tube in a steel clamp, half filled with liquid and half with vapour, the boundary between them faint and blurred",
+    "realgas/02-surface": "a drop of water beading on a waxed leaf beside a narrow glass capillary tube standing in a dish of water",
+    "realgas/03-heatcap": "a brass cylinder with a movable piston and a small weight on top, a thermometer inserted into its side",
     "analytical/01-action": "a wire loop dipped in soap solution held by a hand, the film stretched into a smooth curved surface",
     "analytical/02-lagrange": "a spinning top on a mirror table, its reflection perfectly symmetrical below it",
     "analytical/03-hamilton": "a pendulum clock with its case open, a paper chart beside it showing a single closed oval curve drawn in ink",

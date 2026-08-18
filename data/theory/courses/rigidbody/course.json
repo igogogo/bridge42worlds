@@ -1,0 +1,354 @@
+{
+ "id": "rigidbody",
+ "schema": "b42.course/2",
+ "kind": "course",
+ "order": 3,
+ "entities": {},
+ "lessons": [
+  {
+   "id": "01-inertia",
+   "title": "Момент инерции и уравнение вращения",
+   "sub": "почему для вращения масса — не мера инертности, и откуда берётся Штейнер",
+   "law": "M = Iε · теорема Штейнера",
+   "model": "rigid"
+  },
+  {
+   "id": "02-gyroscope",
+   "title": "Момент импульса и гироскоп",
+   "sub": "почему волчок не падает, а уходит вбок",
+   "law": "dL/dt = M · скорость прецессии",
+   "model": "rigid"
+  },
+  {
+   "id": "03-coriolis",
+   "title": "Вращающаяся система: центробежная сила и Кориолис",
+   "sub": "силы, у которых нет источника, и что они делают с погодой и пулей",
+   "law": "F = 2m[v×ω] · параметр Кориолиса",
+   "model": "rigid"
+  }
+ ],
+ "ru": {
+  "title": "Твёрдое тело",
+  "subtitle": "Вращение, гироскоп и вращающаяся Земля",
+  "lead": "До сих пор тело в курсе было точкой: у него была масса и не было размеров. Здесь размеры появляются — и сразу выясняется, что одной массы мало. Два тела одинакового веса раскручиваются по-разному, катятся с горки с разной скоростью и по-разному сопротивляются повороту, потому что важно не сколько вещества, а где оно лежит. Из этого единственного факта вырастает вся тема: момент инерции, странное поведение волчка и силы, которые появляются просто оттого, что мы стоим на вращающейся планете.",
+  "why": {
+   "title": "Зачем это знать",
+   "text": [
+    "Вращение — самое частое движение вокруг нас, и оно единственное, которое школьная механика описывает наполовину. Колесо, ротор, винт, барабан стиральной машины, планета, галактика: везде работает не F = ma, а его вращательный двойник M = Iε. Он выводится из того же второго закона, но ведёт себя иначе, и половина «парадоксов» техники — от вертолётного хвостового винта до пропавшего гироскопа в телефоне — это просто непонимание того, что момент импульса вектор.",
+    "Гироскоп — редкий случай, когда правильный ответ выглядит невозможным. Волчок, которому давно пора упасть, вместо этого спокойно поворачивается вбок; интуиция здесь бесполезна, а формула из трёх множителей даёт и направление, и скорость, и объясняет, почему уставший волчок валится в конце, а не в начале. Та же формула считает прецессию земной оси с периодом в двадцать шесть тысяч лет — и это тот случай, когда одну и ту же строчку можно проверить и на детской игрушке, и на археологической датировке.",
+    "И наконец, вращающаяся система отсчёта. Мы живём внутри неё всю жизнь, поэтому её эффекты кажутся свойствами природы: циклоны закручиваются в одну сторону, снаряд на двадцати километрах уходит на шестьдесят метров вбок, маятник Фуко за сутки обходит круг. Здесь же — честный разбор самого популярного мифа про воронку в раковине: число, которое показывает, во сколько раз этот эффект слабее формы самой раковины."
+   ]
+  },
+  "map": {
+   "title": "Что вы изучите",
+   "lead": "Тема идёт от твёрдого тела к системе отсчёта: сначала мы учимся считать вращение, потом смотрим на него как на вектор, а в конце сами садимся на вращающуюся платформу и разбираемся, что видно оттуда.",
+   "outcome": "Пройдя тему, вы сможете посчитать момент инерции для простых тел и не заучивая коэффициенты, предсказать, какое тело скатится с горки первым, объяснить прецессию волчка и оценить её скорость, а также прикинуть, где кориолисова сила существенна, а где ею можно пренебречь, — по числу Россби, а не по ощущению."
+  },
+  "prereq": {
+   "title": "Что нужно знать заранее",
+   "items": [
+    "Механика: второй закон Ньютона, работа и кинетическая энергия, сохранение импульса. Уравнение вращения мы не постулируем, а получаем из работы момента силы.",
+    "Колебания и вращение: связь линейной и угловой скорости, центростремительное ускорение и понятие силы инерции. Всё это разобрано в теме «Колебания», здесь берётся готовым.",
+    "Математика: производная, вектор и векторное произведение. Последнее нужно ровно в двух местах — для момента силы и для кориолисова члена; в обоих случаях рядом стоит врезка со смыслом операции."
+   ],
+   "note": "Тензор инерции и главные оси в теме названы, но не разобраны: для всего, что здесь считается, хватает вращения вокруг закреплённой оси. Свободные оси и эффект Джанибекова упомянуты как то, куда эта дорога ведёт дальше."
+  },
+  "history": {
+   "title": "Кто её создал",
+   "people": [
+    {
+     "name": "Христиан Гюйгенс",
+     "years": "1629–1695",
+     "what": "Ввёл понятие момента инерции при работе над маятниковыми часами: чтобы предсказать период физического маятника, ему понадобилась величина, зависящая от распределения массы, а не от её количества."
+    },
+    {
+     "name": "Леонард Эйлер",
+     "years": "1707–1783",
+     "what": "Записал уравнения вращения твёрдого тела в общем виде и ввёл главные оси инерции. Именно у него вращение стало отдельной главой механики, а не приложением к движению точки."
+    },
+    {
+     "name": "Якоб Штейнер",
+     "years": "1796–1863",
+     "what": "Дал теорему о переносе оси, которая избавляет от интегрирования: момент инерции относительно любой оси считается через момент относительно параллельной ей оси через центр масс."
+    },
+    {
+     "name": "Гаспар-Гюстав Кориолис",
+     "years": "1792–1843",
+     "what": "Разбирая работу машин во вращающихся частях, вывел дополнительное ускорение, названное потом его именем. Сам он писал о станках и водяных колёсах, а не о погоде: метеорология пришла к его формуле позже."
+    },
+    {
+     "name": "Леон Фуко",
+     "years": "1819–1868",
+     "what": "Подвесил в Пантеоне маятник длиной 67 метров и показал вращение Земли прямо, без астрономии. Он же построил первый гироскоп и дал ему имя."
+    }
+   ]
+  },
+  "open": "движение несимметричного волчка сводится к квадратурам, но наглядной картины у него нет",
+  "lessons": [
+   {
+    "id": "01-inertia",
+    "title": "Момент инерции и уравнение вращения",
+    "sub": "почему для вращения масса — не мера инертности, и откуда берётся Штейнер",
+    "law": "M = Iε · теорема Штейнера",
+    "model": "rigid"
+   },
+   {
+    "id": "02-gyroscope",
+    "title": "Момент импульса и гироскоп",
+    "sub": "почему волчок не падает, а уходит вбок",
+    "law": "dL/dt = M · скорость прецессии",
+    "model": "rigid"
+   },
+   {
+    "id": "03-coriolis",
+    "title": "Вращающаяся система: центробежная сила и Кориолис",
+    "sub": "силы, у которых нет источника, и что они делают с погодой и пулей",
+    "law": "F = 2m[v×ω] · параметр Кориолиса",
+    "model": "rigid"
+   }
+  ]
+ },
+ "en": {
+  "title": "Solid Body",
+  "subtitle": "Rotation, Gyroscope, and the Rotating Earth",
+  "lead": "Until now, a body in this course has been a point: it had mass and no size. Here, size appears — and it immediately turns out that mass alone is not enough. Two bodies of the same weight spin up differently, roll down a hill at different speeds, and resist turning differently, because what matters is not how much matter there is, but where it is located. From this single fact grows the entire topic: moment of inertia, the strange behavior of a spinning top, and forces that appear simply because we stand on a rotating planet.",
+  "why": {
+   "title": "Why Know This",
+   "text": [
+    "Rotation is the most common motion around us, and it is the only one that school mechanics describes only halfway. A wheel, a rotor, a propeller, a washing machine drum, a planet, a galaxy: everywhere it is not F = ma that works, but its rotational counterpart M = Iε. It is derived from the same second law, but behaves differently, and half of the 'paradoxes' in technology — from a helicopter tail rotor to a missing gyroscope in a phone — are simply a misunderstanding that angular momentum is a vector.",
+    "The gyroscope is a rare case where the correct answer looks impossible. A spinning top, which should have fallen long ago, instead calmly turns sideways; intuition is useless here, and a formula of three factors gives both the direction and the speed, and explains why a tired top falls at the end, not at the beginning. The same formula calculates the precession of the Earth's axis with a period of twenty-six thousand years — and this is a case where the same line can be checked both on a child's toy and on archaeological dating.",
+    "And finally, the rotating frame of reference. We live inside it all our lives, so its effects seem like properties of nature: cyclones spin in one direction, a projectile at twenty kilometers drifts sixty meters sideways, Foucault's pendulum completes a circle in a day. Here is also an honest analysis of the most popular myth about the funnel in a sink: the number that shows how many times this effect is weaker than the shape of the sink itself."
+   ]
+  },
+  "map": {
+   "title": "What You Will Learn",
+   "lead": "The topic goes from a solid body to a frame of reference: first we learn to calculate rotation, then we look at it as a vector, and in the end we ourselves sit on a rotating platform and figure out what is visible from there.",
+   "outcome": "After completing the topic, you will be able to calculate the moment of inertia for simple bodies without memorizing coefficients, predict which body will roll down a hill first, explain the precession of a spinning top and estimate its speed, and also estimate where the Coriolis force is significant and where it can be neglected — by the Rossby number, not by feeling."
+  },
+  "prereq": {
+   "title": "What You Need to Know in Advance",
+   "items": [
+    "Mechanics: Newton's second law, work and kinetic energy, conservation of momentum. We do not postulate the rotation equation but derive it from the work of torque.",
+    "Oscillations and rotation: the relationship between linear and angular velocity, centripetal acceleration, and the concept of inertial force. All this is covered in the topic 'Oscillations', here it is taken as ready.",
+    "Mathematics: derivative, vector, and cross product. The latter is needed in exactly two places — for torque and for the Coriolis term; in both cases, there is an inset with the meaning of the operation."
+   ],
+   "note": "The inertia tensor and principal axes are mentioned in the topic but not analyzed: for everything calculated here, rotation around a fixed axis is sufficient. Free axes and the Dzhanibekov effect are mentioned as where this road leads further."
+  },
+  "history": {
+   "title": "Who Created It",
+   "people": [
+    {
+     "name": "Christiaan Huygens",
+     "years": "1629–1695",
+     "what": "Introduced the concept of moment of inertia while working on pendulum clocks: to predict the period of a physical pendulum, he needed a quantity that depended on the distribution of mass, not on its amount."
+    },
+    {
+     "name": "Leonhard Euler",
+     "years": "1707–1783",
+     "what": "Wrote down the equations of rotation of a rigid body in general form and introduced the principal axes of inertia. It was he who made rotation a separate chapter of mechanics, not an appendix to the motion of a point."
+    },
+    {
+     "name": "Jakob Steiner",
+     "years": "1796–1863",
+     "what": "Gave the theorem on the transfer of axis, which saves from integration: the moment of inertia about any axis is calculated through the moment about a parallel axis through the center of mass."
+    },
+    {
+     "name": "Gaspard-Gustave Coriolis",
+     "years": "1792–1843",
+     "what": "While analyzing the work of machines in rotating parts, he derived an additional acceleration later named after him. He himself wrote about machine tools and water wheels, not about weather: meteorology came to his formula later."
+    },
+    {
+     "name": "Léon Foucault",
+     "years": "1819–1868",
+     "what": "Hung a 67-meter pendulum in the Panthéon and showed the rotation of the Earth directly, without astronomy. He also built the first gyroscope and gave it its name."
+    }
+   ]
+  },
+  "open": "the motion of an asymmetric top reduces to quadratures, but it has no visual picture",
+  "lessons": [
+   {
+    "id": "01-inertia",
+    "title": "Moment of Inertia and the Rotation Equation",
+    "sub": "why mass is not a measure of inertia for rotation, and where Steiner comes from",
+    "law": "M = Iε · Steiner's theorem",
+    "model": "rigid"
+   },
+   {
+    "id": "02-gyroscope",
+    "title": "Angular Momentum and the Gyroscope",
+    "sub": "why a top does not fall but moves sideways",
+    "law": "dL/dt = M · precession rate",
+    "model": "rigid"
+   },
+   {
+    "id": "03-coriolis",
+    "title": "Rotating Frame: Centrifugal Force and Coriolis",
+    "sub": "forces without a source, and what they do to weather and bullets",
+    "law": "F = 2m[v×ω] · Coriolis parameter",
+    "model": "rigid"
+   }
+  ]
+ },
+ "es": {
+  "title": "Sólido rígido",
+  "subtitle": "Rotación, giroscopio y la Tierra que gira",
+  "lead": "Hasta ahora, el cuerpo en el curso era un punto: tenía masa y no tenía dimensiones. Aquí aparecen las dimensiones, y de inmediato resulta que la masa sola no basta. Dos cuerpos del mismo peso giran de manera diferente, ruedan cuesta abajo a distintas velocidades y se resisten de manera distinta a la rotación, porque lo que importa no es cuánta materia hay, sino dónde está. De este único hecho surge todo el tema: el momento de inercia, el comportamiento extraño de la peonza y las fuerzas que aparecen simplemente porque estamos de pie sobre un planeta en rotación.",
+  "why": {
+   "title": "Por qué es importante saberlo",
+   "text": [
+    "La rotación es el movimiento más frecuente a nuestro alrededor, y es el único que la mecánica escolar describe a medias. La rueda, el rotor, la hélice, el tambor de la lavadora, el planeta, la galaxia: en todas partes no actúa F = ma, sino su equivalente rotacional M = Iε. Se deduce de la misma segunda ley, pero se comporta de manera diferente, y la mitad de las 'paradojas' de la técnica — desde el rotor de cola del helicóptero hasta el giroscopio desaparecido del teléfono — son simplemente la falta de comprensión de que el momento angular es un vector.",
+    "El giroscopio es un caso raro en el que la respuesta correcta parece imposible. La peonza, que debería haberse caído hace tiempo, en lugar de eso gira tranquilamente hacia un lado; la intuición aquí es inútil, y una fórmula de tres factores da tanto la dirección como la velocidad, y explica por qué una peonza cansada se cae al final, no al principio. La misma fórmula calcula la precesión del eje terrestre con un período de veintiséis mil años — y este es un caso donde la misma línea se puede comprobar tanto con un juguete infantil como con la datación arqueológica.",
+    "Y finalmente, el sistema de referencia en rotación. Vivimos dentro de él toda la vida, por lo que sus efectos parecen propiedades de la naturaleza: los ciclones giran en una dirección, un proyectil a veinte kilómetros se desvía sesenta metros hacia un lado, el péndulo de Foucault recorre un círculo en un día. Aquí también está el análisis honesto del mito más popular sobre el embudo en el lavabo: el número que muestra cuántas veces este efecto es más débil que la forma del propio lavabo."
+   ]
+  },
+  "map": {
+   "title": "Qué aprenderás",
+   "lead": "El tema va del sólido rígido al sistema de referencia: primero aprendemos a calcular la rotación, luego la vemos como un vector, y al final nos subimos a una plataforma giratoria y entendemos qué se ve desde allí.",
+   "outcome": "Al completar el tema, podrás calcular el momento de inercia para cuerpos simples sin memorizar coeficientes, predecir qué cuerpo rodará cuesta abajo primero, explicar la precesión de una peonza y estimar su velocidad, y también evaluar dónde la fuerza de Coriolis es significativa y dónde se puede despreciar, usando el número de Rossby, no la intuición."
+  },
+  "prereq": {
+   "title": "Qué necesitas saber de antemano",
+   "items": [
+    "Mecánica: segunda ley de Newton, trabajo y energía cinética, conservación del momento lineal. La ecuación de rotación no la postulamos, sino que la obtenemos a partir del trabajo del momento de fuerza.",
+    "Oscilaciones y rotación: relación entre velocidad lineal y angular, aceleración centrípeta y concepto de fuerza de inercia. Todo esto está tratado en el tema 'Oscilaciones'; aquí se toma como ya conocido.",
+    "Matemáticas: derivada, vector y producto vectorial. Esto último se necesita exactamente en dos lugares: para el momento de fuerza y para el término de Coriolis; en ambos casos hay un recuadro al lado con el significado de la operación."
+   ],
+   "note": "El tensor de inercia y los ejes principales se mencionan en el tema, pero no se analizan: para todo lo que se calcula aquí, basta con la rotación alrededor de un eje fijo. Los ejes libres y el efecto Dzhanibekov se mencionan como hacia dónde conduce este camino."
+  },
+  "history": {
+   "title": "Quién lo creó",
+   "people": [
+    {
+     "name": "Christiaan Huygens",
+     "years": "1629–1695",
+     "what": "Introdujo el concepto de momento de inercia al trabajar en el reloj de péndulo: para predecir el período de un péndulo físico, necesitó una magnitud que dependiera de la distribución de la masa, no de su cantidad."
+    },
+    {
+     "name": "Leonhard Euler",
+     "years": "1707–1783",
+     "what": "Escribió las ecuaciones de rotación de un sólido rígido en forma general e introdujo los ejes principales de inercia. Fue él quien convirtió la rotación en un capítulo separado de la mecánica, no en un apéndice del movimiento de un punto."
+    },
+    {
+     "name": "Jakob Steiner",
+     "years": "1796–1863",
+     "what": "Dio el teorema del eje paralelo, que evita la integración: el momento de inercia respecto a cualquier eje se calcula a partir del momento respecto a un eje paralelo que pasa por el centro de masa."
+    },
+    {
+     "name": "Gaspard-Gustave de Coriolis",
+     "years": "1792–1843",
+     "what": "Al analizar el trabajo de máquinas con partes giratorias, dedujo una aceleración adicional que luego llevó su nombre. Él mismo escribía sobre máquinas y ruedas hidráulicas, no sobre el clima: la meteorología llegó a su fórmula más tarde."
+    },
+    {
+     "name": "Léon Foucault",
+     "years": "1819–1868",
+     "what": "Colgó en el Panteón un péndulo de 67 metros y demostró la rotación de la Tierra directamente, sin astronomía. También construyó el primer giroscopio y le dio su nombre."
+    }
+   ]
+  },
+  "open": "el movimiento de una peonza asimétrica se reduce a cuadraturas, pero no tiene una imagen intuitiva",
+  "lessons": [
+   {
+    "id": "01-inertia",
+    "title": "Momento de inercia y ecuación de rotación",
+    "sub": "por qué para la rotación la masa no es una medida de inercia, y de dónde sale Steiner",
+    "law": "M = Iε · teorema de Steiner",
+    "model": "rigid"
+   },
+   {
+    "id": "02-gyroscope",
+    "title": "Momento angular y giroscopio",
+    "sub": "por qué la peonza no se cae, sino que se va hacia un lado",
+    "law": "dL/dt = M · velocidad de precesión",
+    "model": "rigid"
+   },
+   {
+    "id": "03-coriolis",
+    "title": "Sistema en rotación: fuerza centrífuga y Coriolis",
+    "sub": "fuerzas sin fuente, y qué le hacen al clima y a la bala",
+    "law": "F = 2m[v×ω] · parámetro de Coriolis",
+    "model": "rigid"
+   }
+  ]
+ },
+ "ar": {
+  "title": "الجسم الصلب",
+  "subtitle": "الدوران، الجيروسكوب والأرض الدوارة",
+  "lead": "حتى الآن كان الجسم في هذا المقرر نقطة: له كتلة وليس له أبعاد. هنا تظهر الأبعاد - واتضح فورًا أن الكتلة وحدها لا تكفي. جسمان متساويان في الوزن يدوران بشكل مختلف، ويتدحرجان على منحدر بسرعات مختلفة ويقاومان الدوران بشكل مختلف، لأن المهم ليس كمية المادة، بل مكان وجودها. من هذه الحقيقة الوحيدة ينبثق الموضوع بأكمله: عزم القصور الذاتي، والسلوك الغريب للقمة، والقوى التي تظهر فقط لأننا نقف على كوكب دوار.",
+  "why": {
+   "title": "لماذا يجب معرفة هذا",
+   "text": [
+    "الدوران هو الحركة الأكثر شيوعًا من حولنا، وهو الوحيد الذي تصفه ميكانيكا المدرسة بشكل ناقص. العجلة، الدوار، المروحة، أسطوانة الغسالة، الكوكب، المجرة: في كل مكان لا يعمل F = ma، بل نظيره الدوراني M = Iε. إنه يُشتق من نفس القانون الثاني، لكنه يتصرف بشكل مختلف، ونصف \"المفارقات\" في التقنية - من المروحة الخلفية للمروحية إلى الجيروسكوب المفقود في الهاتف - هي ببساطة عدم فهم أن عزم الزخم هو متجه.",
+    "الجيروسكوب هو حالة نادرة حيث يبدو الجواب الصحيح مستحيلًا. القمة التي كان يجب أن تسقط منذ زمن طويل، بدلاً من ذلك تدور بهدوء إلى الجانب؛ الحدس هنا عديم الفائدة، والصيغة من ثلاثة عوامل تعطي الاتجاه والسرعة وتشرح لماذا تسقط القمة المتعبة في النهاية وليس في البداية. نفس الصيغة تحسب البدارية لمحور الأرض بفترة ستة وعشرين ألف سنة - وهذه حالة يمكن فيها التحقق من نفس السطر على لعبة أطفال وعلى التأريخ الأثري.",
+    "وأخيرًا، الإطار المرجعي الدوار. نحن نعيش بداخله طوال حياتنا، لذلك تبدو تأثيراته وكأنها خصائص الطبيعة: الأعاصير تدور في اتجاه واحد، مقذوف على بعد عشرين كيلومترًا ينحرف ستين مترًا جانبًا، بندول فوكو يكمل دائرة في يوم واحد. هنا أيضًا - تحليل صادق للأسطورة الأكثر شعبية حول قمع الحوض: الرقم الذي يوضح عدد المرات التي يكون فيها هذا التأثير أضعف من شكل الحوض نفسه."
+   ]
+  },
+  "map": {
+   "title": "ماذا ستتعلم",
+   "lead": "الموضوع ينتقل من الجسم الصلب إلى الإطار المرجعي: أولاً نتعلم حساب الدوران، ثم ننظر إليه كمتجه، وفي النهاية نجلس أنفسنا على منصة دوارة ونفهم ما يُرى من هناك.",
+   "outcome": "بعد إكمال الموضوع، ستكون قادرًا على حساب عزم القصور الذاتي للأجسام البسيطة دون حفظ المعاملات، والتنبؤ بأي جسم سيتدحرج أولاً على منحدر، وشرح بدارية القمة وتقدير سرعتها، وكذلك تقدير أين تكون قوة كوريوليس مهمة وأين يمكن إهمالها - بناءً على رقم روسبي، وليس على الإحساس."
+  },
+  "prereq": {
+   "title": "ما يجب معرفته مسبقًا",
+   "items": [
+    "الميكانيكا: قانون نيوتن الثاني، الشغل والطاقة الحركية، حفظ الزخم. معادلة الدوران لا نفترضها بل نشتقها من شغل عزم القوة.",
+    "الاهتزازات والدوران: العلاقة بين السرعة الخطية والزاوية، التسارع المركزي ومفهوم قوة القصور الذاتي. كل هذا مشروح في موضوع «الاهتزازات»، هنا يُؤخذ جاهزًا.",
+    "الرياضيات: المشتقة، المتجه والضرب الاتجاهي. الأخير ضروري في موضعين فقط - لعزم القوة ولحد كوريوليس؛ في كلتا الحالتين يوجد بجانبه إدراج لمعنى العملية."
+   ],
+   "note": "موتر القصور الذاتي والمحاور الرئيسية مذكوران في الموضوع لكن غير مشروحين: لكل ما يُحسب هنا، يكفي الدوران حول محور ثابت. المحاور الحرة وتأثير جانبيكوف مذكوران كوجهة يؤدي إليها هذا الطريق."
+  },
+  "history": {
+   "title": "من صنعها",
+   "people": [
+    {
+     "name": "كريستيان هويجنز",
+     "years": "1629–1695",
+     "what": "أدخل مفهوم عزم القصور الذاتي أثناء عمله على ساعات البندول: للتنبؤ بفترة البندول الفيزيائي، احتاج إلى كمية تعتمد على توزيع الكتلة وليس على كميتها."
+    },
+    {
+     "name": "ليونارد أويلر",
+     "years": "1707–1783",
+     "what": "كتب معادلات دوران الجسم الصلب بشكل عام وأدخل المحاور الرئيسية للقصور الذاتي. عنده أصبح الدوران فصلًا منفصلًا في الميكانيكا، وليس مجرد تطبيق على حركة نقطة."
+    },
+    {
+     "name": "ياكوب شتاينر",
+     "years": "1796–1863",
+     "what": "أعطى نظرية نقل المحور، التي تلغي الحاجة إلى التكامل: عزم القصور الذاتي حول أي محور يُحسب من خلال العزم حول محور موازٍ له يمر بمركز الكتلة."
+    },
+    {
+     "name": "غاسبار-غوستاف كوريوليس",
+     "years": "1792–1843",
+     "what": "أثناء تحليل عمل الآلات في الأجزاء الدوارة، اشتق تسارعًا إضافيًا سُمي لاحقًا باسمه. هو نفسه كتب عن الأدوات الآلية والعجلات المائية، وليس عن الطقس: الأرصاد الجوية وصلت إلى صيغته لاحقًا."
+    },
+    {
+     "name": "ليون فوكو",
+     "years": "1819–1868",
+     "what": "علّق في البانثيون بندولًا طوله 67 مترًا وأظهر دوران الأرض مباشرة، دون علم الفلك. كما بنى أول جيروسكوب وأعطاه اسمه."
+    }
+   ]
+  },
+  "open": "حركة القمة غير المتماثلة تُختزل إلى تربيعات، لكن ليس لها صورة واضحة",
+  "lessons": [
+   {
+    "id": "01-inertia",
+    "title": "عزم القصور الذاتي ومعادلة الدوران",
+    "sub": "لماذا الكتلة ليست مقياس القصور الذاتي للدوران، ومن أين يأتي شتاينر",
+    "law": "M = Iε · نظرية شتاينر",
+    "model": "rigid"
+   },
+   {
+    "id": "02-gyroscope",
+    "title": "عزم الزخم والجيروسكوب",
+    "sub": "لماذا لا تسقط القمة بل تنحرف جانبًا",
+    "law": "dL/dt = M · سرعة البدارية",
+    "model": "rigid"
+   },
+   {
+    "id": "03-coriolis",
+    "title": "النظام الدوار: القوة الطاردة المركزية وكوريوليس",
+    "sub": "قوى ليس لها مصدر، وماذا تفعل بالطقس والرصاصة",
+    "law": "F = 2m[v×ω] · معامل كوريوليس",
+    "model": "rigid"
+   }
+  ]
+ }
+}

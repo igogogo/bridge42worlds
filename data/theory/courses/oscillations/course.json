@@ -1,372 +1,372 @@
 {
-  "id": "oscillations",
-  "schema": "b42.course/2",
-  "kind": "overview",
-  "order": 5,
-  "entities": {
-    "laws": [
-      "hookes_law",
-      "newtons_laws_of_motion"
-    ],
-    "tags": [
-      "mechanics",
-      "energy"
-    ],
-    "scientists": [
-      "Robert Hooke",
-      "Christiaan Huygens",
-      "Galileo Galilei"
-    ]
+ "id": "oscillations",
+ "schema": "b42.course/2",
+ "kind": "overview",
+ "order": 3,
+ "entities": {
+  "laws": [
+   "hookes_law",
+   "newtons_second_law"
+  ],
+  "tags": [
+   "harmonic_oscillator",
+   "angular_momentum"
+  ],
+  "scientists": [
+   "Robert Hooke",
+   "Christiaan Huygens",
+   "Galileo Galilei"
+  ]
+ },
+ "lessons": [
+  {
+   "id": "01-rotation",
+   "title": "Вращение и системы отсчёта",
+   "sub": "Почему во вращающемся мире появляются силы без источника",
+   "law": "Центростремительное ускорение",
+   "model": "rotation"
+  },
+  {
+   "id": "02-hooke",
+   "title": "Закон Гука и осциллятор",
+   "sub": "Колебание как проекция вращения",
+   "law": "Закон Гука",
+   "model": "oscillator"
+  },
+  {
+   "id": "03-resonance",
+   "title": "Затухание и резонанс",
+   "sub": "Как малая сила рушит мост",
+   "law": "Вынужденные колебания",
+   "model": "resonance"
+  }
+ ],
+ "ru": {
+  "title": "Колебания и вращение",
+  "subtitle": "Одно движение в двух обличьях — и почему природа так любит синус",
+  "lead": "Это, пожалуй, самая важная тема всего курса — и самая недооценённая. Из неё вырастает половина современной физики: электрический контур, звук, свет, спектры атомов, квантовая волновая функция. Причина проста: любая система, выведенная из равновесия, ведёт себя одинаково, независимо от того, из чего она сделана.",
+  "why": {
+   "title": "Почему это основа",
+   "text": [
+    "Возьмите любую систему в устойчивом равновесии — маятник, пружину, натянутую струну, атом в кристалле, электрический контур, мяч на дне ямы. Отклоните её чуть-чуть. Что произойдёт? Возникнет сила, возвращающая обратно. И почти всегда эта сила при малом отклонении пропорциональна самому отклонению.",
+    "Это не совпадение, а математическая неизбежность. Любая гладкая яма вблизи дна выглядит как парабола — это первый нетривиальный член разложения любой функции вблизи минимума. А парабола потенциальной энергии означает линейную возвращающую силу. Отсюда следует: **вблизи равновесия все системы во Вселенной ведут себя как пружина.**",
+    "Именно поэтому синус вездесущ. Он не «удобная функция из учебника» — он единственное решение уравнения, в котором ускорение пропорционально смещению с обратным знаком. Природа не выбирала синус, она обречена на него самой структурой равновесия.",
+    "А теперь второе откровение этой темы: гармоническое колебание — это тень равномерного вращения. Поставьте точку на вращающийся диск и посветите сбоку: её тень на стене будет двигаться точно по синусу. Вращение и колебание — не два похожих явления, а одно и то же движение, увиденное с разных сторон. Из этого равенства вырастает вся волновая физика, комплексные числа в электротехнике и фазовый язык квантовой механики."
+   ]
+  },
+  "history": {
+   "title": "Кто это построил",
+   "people": [
+    {
+     "name": "Галилео Галилей",
+     "years": "1564–1642",
+     "what": "Заметил, что качания люстры в Пизанском соборе занимают одинаковое время независимо от размаха — засекал по собственному пульсу. Так был открыт изохронизм маятника, на котором потом выросли все механические часы. Слабый эффект, требующий именно малых колебаний, — но Галилей уловил в нём закон."
+    },
+    {
+     "name": "Роберт Гук",
+     "years": "1635–1703",
+     "what": "Открыл, что удлинение упругого тела пропорционально приложенной силе. Опубликовал это в 1676 году анаграммой ceiiinosssttuv, чтобы застолбить приоритет и продолжить работу, а через два года раскрыл: ut tensio, sic vis — «каково растяжение, такова и сила». Из этого закона выросли теория упругости, сопротивление материалов и вся физика колебаний. Именно здесь Гук стоит по праву первым, без споров с Ньютоном."
+    },
+    {
+     "name": "Христиан Гюйгенс",
+     "years": "1629–1695",
+     "what": "Превратил открытие Галилея в работающий механизм: изобрёл маятниковые часы, точность хода которых была невиданной. Строго вывел формулу периода и разобрался с центробежной силой при вращении — задолго до «Начал» Ньютона."
+    },
+    {
+     "name": "Жан Батист Жозеф Фурье",
+     "years": "1768–1830",
+     "what": "Доказал, что любое периодическое движение раскладывается в сумму простых гармоник. Это придало теме универсальный масштаб: изучив один осциллятор, мы понимаем любые колебания вообще — от звука скрипки до тепловых волн в Земле."
+    },
+    {
+     "name": "Гаспар-Гюстав Кориолис",
+     "years": "1792–1843",
+     "what": "Описал силу, возникающую во вращающейся системе отсчёта. Она объясняет закручивание циклонов, отклонение снарядов дальнобойной артиллерии и подмыв правых берегов рек в северном полушарии — и при этом не имеет источника-тела, что делает её отличным поводом задуматься о природе сил вообще."
+    }
+   ]
+  },
+  "map": {
+   "title": "Что вы изучите",
+   "lead": "Три параграфа выстроены так, чтобы связь между вращением и колебанием проявилась сама. Сначала разберёмся с вращением и с тем, почему во вращающемся мире появляются силы, у которых нет источника. Затем увидим, что колебание есть проекция этого вращения. И наконец поймём, как малая сила, приложенная в такт, способна разрушить конструкцию.",
+   "outcome": "Пройдя все три, вы будете понимать, чем инерциальная система отсчёта отличается от неинерциальной и почему центробежной силы «не существует», но она вполне ощутима; почему период маятника не зависит от массы; и почему солдатам приказывают сбить шаг при переходе моста."
+  },
+  "prereq": {
+   "title": "Что нужно знать заранее",
+   "items": [
+    "Законы Ньютона и понятие силы — тема «Механика», параграф 2.",
+    "Кинематика: скорость и ускорение как производные — тема «Механика», параграф 1.",
+    "Синус и косинус как функции угла; полезно помнить, что производная синуса есть косинус.",
+    "Понятие потенциальной энергии — тема «Механика», параграф 3."
+   ],
+   "note": "Это первая тема, где физика по-настоящему опирается на математику: без дифференциального уравнения здесь не обойтись. Мы разберём его подробно и покажем, откуда берётся решение, — но именно здесь стоит не торопиться."
   },
   "lessons": [
+   {
+    "id": "01-rotation",
+    "title": "Вращение и системы отсчёта",
+    "sub": "Почему во вращающемся мире появляются силы без источника",
+    "law": "Центростремительное ускорение",
+    "model": "rotation"
+   },
+   {
+    "id": "02-hooke",
+    "title": "Закон Гука и осциллятор",
+    "sub": "Колебание как проекция вращения",
+    "law": "Закон Гука",
+    "model": "oscillator"
+   },
+   {
+    "id": "03-resonance",
+    "title": "Затухание и резонанс",
+    "sub": "Как малая сила рушит мост",
+    "law": "Вынужденные колебания",
+    "model": "resonance"
+   }
+  ]
+ },
+ "en": {
+  "title": "Oscillations and Rotation",
+  "subtitle": "One motion in two guises — and why nature is so fond of the sine",
+  "lead": "This is perhaps the most important topic of the entire course — and the most underestimated. From it grows half of modern physics: electric circuits, sound, light, atomic spectra, quantum wave function. The reason is simple: any system displaced from equilibrium behaves identically, no matter what it is made of.",
+  "why": {
+   "title": "Why This Is Foundational",
+   "text": [
+    "Take any system in stable equilibrium — a pendulum, a spring, a stretched string, an atom in a crystal, an electric circuit, a ball at the bottom of a pit. Displace it slightly. What happens? A force arises that returns it back. And almost always, for small displacements, that force is proportional to the displacement itself.",
+    "This is not a coincidence but a mathematical necessity. Any smooth pit near its bottom looks like a parabola — this is the first non-trivial term in the expansion of any function near its minimum. And a parabolic potential energy means a linear restoring force. It follows that **near equilibrium, all systems in the Universe behave like a spring.**",
+    "That is why the sine is ubiquitous. It is not a 'convenient textbook function' — it is the only solution to the equation where acceleration is proportional to displacement with opposite sign. Nature did not choose the sine; it is doomed to it by the very structure of equilibrium.",
+    "And now the second revelation of this topic: harmonic oscillation is the shadow of uniform circular motion. Place a point on a rotating disk and shine a light from the side: its shadow on the wall will move exactly along a sine. Rotation and oscillation are not two similar phenomena but the same motion seen from different sides. From this equivalence grows all of wave physics, complex numbers in electrical engineering, and the phase language of quantum mechanics."
+   ]
+  },
+  "history": {
+   "title": "Who Built It",
+   "people": [
     {
-      "id": "01-rotation",
-      "title": "Вращение и системы отсчёта",
-      "sub": "Почему во вращающемся мире появляются силы без источника",
-      "law": "Центростремительное ускорение",
-      "model": "rotation"
+     "name": "Galileo Galilei",
+     "years": "1564–1642",
+     "what": "Noticed that the swings of a chandelier in the Pisa Cathedral took the same time regardless of the amplitude — he timed them by his own pulse. Thus the isochronism of the pendulum was discovered, on which all mechanical clocks later grew. A weak effect requiring precisely small oscillations — but Galileo grasped the law in it."
     },
     {
-      "id": "02-hooke",
-      "title": "Закон Гука и осциллятор",
-      "sub": "Колебание как проекция вращения",
-      "law": "Закон Гука",
-      "model": "oscillator"
+     "name": "Robert Hooke",
+     "years": "1635–1703",
+     "what": "Discovered that the elongation of an elastic body is proportional to the applied force. He published this in 1676 as an anagram ceiiinosssttuv to stake priority and continue work, and two years later revealed it: ut tensio, sic vis — 'as the extension, so the force'. From this law grew the theory of elasticity, strength of materials, and all of oscillation physics. Here Hooke rightly stands first, without disputes with Newton."
     },
     {
-      "id": "03-resonance",
-      "title": "Затухание и резонанс",
-      "sub": "Как малая сила рушит мост",
-      "law": "Вынужденные колебания",
-      "model": "resonance"
+     "name": "Christiaan Huygens",
+     "years": "1629–1695",
+     "what": "Turned Galileo's discovery into a working mechanism: invented the pendulum clock, whose precision was unprecedented. He rigorously derived the period formula and understood centrifugal force in rotation — well before Newton's 'Principia'."
+    },
+    {
+     "name": "Jean Baptiste Joseph Fourier",
+     "years": "1768–1830",
+     "what": "Proved that any periodic motion can be decomposed into a sum of simple harmonics. This gave the topic universal scope: by studying one oscillator, we understand any oscillations at all — from the sound of a violin to thermal waves in the Earth."
+    },
+    {
+     "name": "Gaspard-Gustave Coriolis",
+     "years": "1792–1843",
+     "what": "Described the force that arises in a rotating reference frame. It explains the twisting of cyclones, the deflection of long-range artillery shells, and the erosion of right banks of rivers in the northern hemisphere — and yet has no source body, making it an excellent occasion to think about the nature of forces in general."
     }
-  ],
-  "ru": {
-    "title": "Колебания и вращение",
-    "subtitle": "Одно движение в двух обличьях — и почему природа так любит синус",
-    "lead": "Это, пожалуй, самая важная тема всего курса — и самая недооценённая. Из неё вырастает половина современной физики: электрический контур, звук, свет, спектры атомов, квантовая волновая функция. Причина проста: любая система, выведенная из равновесия, ведёт себя одинаково, независимо от того, из чего она сделана.",
-    "why": {
-      "title": "Почему это основа",
-      "text": [
-        "Возьмите любую систему в устойчивом равновесии — маятник, пружину, натянутую струну, атом в кристалле, электрический контур, мяч на дне ямы. Отклоните её чуть-чуть. Что произойдёт? Возникнет сила, возвращающая обратно. И почти всегда эта сила при малом отклонении пропорциональна самому отклонению.",
-        "Это не совпадение, а математическая неизбежность. Любая гладкая яма вблизи дна выглядит как парабола — это первый нетривиальный член разложения любой функции вблизи минимума. А парабола потенциальной энергии означает линейную возвращающую силу. Отсюда следует: **вблизи равновесия все системы во Вселенной ведут себя как пружина.**",
-        "Именно поэтому синус вездесущ. Он не «удобная функция из учебника» — он единственное решение уравнения, в котором ускорение пропорционально смещению с обратным знаком. Природа не выбирала синус, она обречена на него самой структурой равновесия.",
-        "А теперь второе откровение этой темы: гармоническое колебание — это тень равномерного вращения. Поставьте точку на вращающийся диск и посветите сбоку: её тень на стене будет двигаться точно по синусу. Вращение и колебание — не два похожих явления, а одно и то же движение, увиденное с разных сторон. Из этого равенства вырастает вся волновая физика, комплексные числа в электротехнике и фазовый язык квантовой механики."
-      ]
-    },
-    "history": {
-      "title": "Кто это построил",
-      "people": [
-        {
-          "name": "Галилео Галилей",
-          "years": "1564–1642",
-          "what": "Заметил, что качания люстры в Пизанском соборе занимают одинаковое время независимо от размаха — засекал по собственному пульсу. Так был открыт изохронизм маятника, на котором потом выросли все механические часы. Слабый эффект, требующий именно малых колебаний, — но Галилей уловил в нём закон."
-        },
-        {
-          "name": "Роберт Гук",
-          "years": "1635–1703",
-          "what": "Открыл, что удлинение упругого тела пропорционально приложенной силе. Опубликовал это в 1676 году анаграммой ceiiinosssttuv, чтобы застолбить приоритет и продолжить работу, а через два года раскрыл: ut tensio, sic vis — «каково растяжение, такова и сила». Из этого закона выросли теория упругости, сопротивление материалов и вся физика колебаний. Именно здесь Гук стоит по праву первым, без споров с Ньютоном."
-        },
-        {
-          "name": "Христиан Гюйгенс",
-          "years": "1629–1695",
-          "what": "Превратил открытие Галилея в работающий механизм: изобрёл маятниковые часы, точность хода которых была невиданной. Строго вывел формулу периода и разобрался с центробежной силой при вращении — задолго до «Начал» Ньютона."
-        },
-        {
-          "name": "Жан Батист Жозеф Фурье",
-          "years": "1768–1830",
-          "what": "Доказал, что любое периодическое движение раскладывается в сумму простых гармоник. Это придало теме универсальный масштаб: изучив один осциллятор, мы понимаем любые колебания вообще — от звука скрипки до тепловых волн в Земле."
-        },
-        {
-          "name": "Гаспар-Гюстав Кориолис",
-          "years": "1792–1843",
-          "what": "Описал силу, возникающую во вращающейся системе отсчёта. Она объясняет закручивание циклонов, отклонение снарядов дальнобойной артиллерии и подмыв правых берегов рек в северном полушарии — и при этом не имеет источника-тела, что делает её отличным поводом задуматься о природе сил вообще."
-        }
-      ]
-    },
-    "map": {
-      "title": "Что вы изучите",
-      "lead": "Три параграфа выстроены так, чтобы связь между вращением и колебанием проявилась сама. Сначала разберёмся с вращением и с тем, почему во вращающемся мире появляются силы, у которых нет источника. Затем увидим, что колебание есть проекция этого вращения. И наконец поймём, как малая сила, приложенная в такт, способна разрушить конструкцию.",
-      "outcome": "Пройдя все три, вы будете понимать, чем инерциальная система отсчёта отличается от неинерциальной и почему центробежной силы «не существует», но она вполне ощутима; почему период маятника не зависит от массы; и почему солдатам приказывают сбить шаг при переходе моста."
-    },
-    "prereq": {
-      "title": "Что нужно знать заранее",
-      "items": [
-        "Законы Ньютона и понятие силы — тема «Механика», параграф 2.",
-        "Кинематика: скорость и ускорение как производные — тема «Механика», параграф 1.",
-        "Синус и косинус как функции угла; полезно помнить, что производная синуса есть косинус.",
-        "Понятие потенциальной энергии — тема «Механика», параграф 3."
-      ],
-      "note": "Это первая тема, где физика по-настоящему опирается на математику: без дифференциального уравнения здесь не обойтись. Мы разберём его подробно и покажем, откуда берётся решение, — но именно здесь стоит не торопиться."
-    },
-    "lessons": [
-      {
-        "id": "01-rotation",
-        "title": "Вращение и системы отсчёта",
-        "sub": "Почему во вращающемся мире появляются силы без источника",
-        "law": "Центростремительное ускорение",
-        "model": "rotation"
-      },
-      {
-        "id": "02-hooke",
-        "title": "Закон Гука и осциллятор",
-        "sub": "Колебание как проекция вращения",
-        "law": "Закон Гука",
-        "model": "oscillator"
-      },
-      {
-        "id": "03-resonance",
-        "title": "Затухание и резонанс",
-        "sub": "Как малая сила рушит мост",
-        "law": "Вынужденные колебания",
-        "model": "resonance"
-      }
-    ]
+   ]
   },
-  "en": {
-    "title": "Oscillations and Rotation",
-    "subtitle": "One motion in two guises — and why nature is so fond of the sine",
-    "lead": "This is perhaps the most important topic of the entire course — and the most underestimated. From it grows half of modern physics: electric circuits, sound, light, atomic spectra, quantum wave function. The reason is simple: any system displaced from equilibrium behaves identically, no matter what it is made of.",
-    "why": {
-      "title": "Why This Is Foundational",
-      "text": [
-        "Take any system in stable equilibrium — a pendulum, a spring, a stretched string, an atom in a crystal, an electric circuit, a ball at the bottom of a pit. Displace it slightly. What happens? A force arises that returns it back. And almost always, for small displacements, that force is proportional to the displacement itself.",
-        "This is not a coincidence but a mathematical necessity. Any smooth pit near its bottom looks like a parabola — this is the first non-trivial term in the expansion of any function near its minimum. And a parabolic potential energy means a linear restoring force. It follows that **near equilibrium, all systems in the Universe behave like a spring.**",
-        "That is why the sine is ubiquitous. It is not a 'convenient textbook function' — it is the only solution to the equation where acceleration is proportional to displacement with opposite sign. Nature did not choose the sine; it is doomed to it by the very structure of equilibrium.",
-        "And now the second revelation of this topic: harmonic oscillation is the shadow of uniform circular motion. Place a point on a rotating disk and shine a light from the side: its shadow on the wall will move exactly along a sine. Rotation and oscillation are not two similar phenomena but the same motion seen from different sides. From this equivalence grows all of wave physics, complex numbers in electrical engineering, and the phase language of quantum mechanics."
-      ]
-    },
-    "history": {
-      "title": "Who Built It",
-      "people": [
-        {
-          "name": "Galileo Galilei",
-          "years": "1564–1642",
-          "what": "Noticed that the swings of a chandelier in the Pisa Cathedral took the same time regardless of the amplitude — he timed them by his own pulse. Thus the isochronism of the pendulum was discovered, on which all mechanical clocks later grew. A weak effect requiring precisely small oscillations — but Galileo grasped the law in it."
-        },
-        {
-          "name": "Robert Hooke",
-          "years": "1635–1703",
-          "what": "Discovered that the elongation of an elastic body is proportional to the applied force. He published this in 1676 as an anagram ceiiinosssttuv to stake priority and continue work, and two years later revealed it: ut tensio, sic vis — 'as the extension, so the force'. From this law grew the theory of elasticity, strength of materials, and all of oscillation physics. Here Hooke rightly stands first, without disputes with Newton."
-        },
-        {
-          "name": "Christiaan Huygens",
-          "years": "1629–1695",
-          "what": "Turned Galileo's discovery into a working mechanism: invented the pendulum clock, whose precision was unprecedented. He rigorously derived the period formula and understood centrifugal force in rotation — well before Newton's 'Principia'."
-        },
-        {
-          "name": "Jean Baptiste Joseph Fourier",
-          "years": "1768–1830",
-          "what": "Proved that any periodic motion can be decomposed into a sum of simple harmonics. This gave the topic universal scope: by studying one oscillator, we understand any oscillations at all — from the sound of a violin to thermal waves in the Earth."
-        },
-        {
-          "name": "Gaspard-Gustave Coriolis",
-          "years": "1792–1843",
-          "what": "Described the force that arises in a rotating reference frame. It explains the twisting of cyclones, the deflection of long-range artillery shells, and the erosion of right banks of rivers in the northern hemisphere — and yet has no source body, making it an excellent occasion to think about the nature of forces in general."
-        }
-      ]
-    },
-    "map": {
-      "title": "What You Will Learn",
-      "lead": "Three sections are arranged so that the connection between rotation and oscillation reveals itself. First, we will understand rotation and why forces with no source appear in a rotating world. Then we will see that oscillation is a projection of this rotation. And finally we will understand how a small force applied in rhythm can destroy a structure.",
-      "outcome": "After completing all three, you will understand how an inertial reference frame differs from a non-inertial one and why centrifugal force 'does not exist' but is quite tangible; why the period of a pendulum does not depend on mass; and why soldiers are ordered to break step when crossing a bridge."
-    },
-    "prereq": {
-      "title": "What You Need to Know in Advance",
-      "items": [
-        "Newton's laws and the concept of force — Topic 'Mechanics', Section 2.",
-        "Kinematics: velocity and acceleration as derivatives — Topic 'Mechanics', Section 1.",
-        "Sine and cosine as functions of angle; it is useful to remember that the derivative of sine is cosine.",
-        "The concept of potential energy — Topic 'Mechanics', Section 3."
-      ],
-      "note": "This is the first topic where physics truly relies on mathematics: we cannot avoid a differential equation. We will analyze it in detail and show where the solution comes from — but this is exactly where you should not rush."
-    },
-    "lessons": [
-      {
-        "id": "01-rotation",
-        "title": "Rotation and Reference Frames",
-        "sub": "Section 1 · Why forces without a source appear in a rotating world",
-        "law": "Centripetal acceleration",
-        "model": "rotation"
-      },
-      {
-        "id": "02-hooke",
-        "title": "Hooke's Law and the Oscillator",
-        "sub": "Paragraph 2 · Oscillation as a Projection of Rotation",
-        "law": "Hooke's law",
-        "model": "oscillator"
-      },
-      {
-        "id": "03-resonance",
-        "title": "Damping and Resonance",
-        "sub": "Paragraph 3 · How a Small Force Collapses a Bridge",
-        "law": "Forced oscillations",
-        "model": "resonance"
-      }
-    ]
+  "map": {
+   "title": "What You Will Learn",
+   "lead": "Three sections are arranged so that the connection between rotation and oscillation reveals itself. First, we will understand rotation and why forces with no source appear in a rotating world. Then we will see that oscillation is a projection of this rotation. And finally we will understand how a small force applied in rhythm can destroy a structure.",
+   "outcome": "After completing all three, you will understand how an inertial reference frame differs from a non-inertial one and why centrifugal force 'does not exist' but is quite tangible; why the period of a pendulum does not depend on mass; and why soldiers are ordered to break step when crossing a bridge."
   },
-  "es": {
-    "title": "Oscilaciones y rotación",
-    "subtitle": "Un mismo movimiento en dos formas — y por qué la naturaleza ama tanto el seno",
-    "lead": "Esta es quizás la más importante de todo el curso — y la más subestimada. De ella surge la mitad de la física moderna: el circuito eléctrico, el sonido, la luz, los espectros atómicos, la función de onda cuántica. La razón es simple: cualquier sistema sacado del equilibrio se comporta igual, sin importar de qué esté hecho.",
-    "why": {
-      "title": "Por qué es fundamental",
-      "text": [
-        "Tome cualquier sistema en equilibrio estable — un péndulo, un resorte, una cuerda tensa, un átomo en un cristal, un circuito eléctrico, una pelota en el fondo de un pozo. Desvíelo un poco. ¿Qué ocurre? Aparece una fuerza que lo devuelve. Y casi siempre, para pequeñas desviaciones, esta fuerza es proporcional a la propia desviación.",
-        "No es una coincidencia, sino una necesidad matemática. Cualquier pozo suave cerca del fondo tiene forma de parábola — es el primer término no trivial del desarrollo de cualquier función cerca de un mínimo. Y una parábola de energía potencial significa una fuerza restauradora lineal. De ahí se sigue: **cerca del equilibrio, todos los sistemas en el Universo se comportan como un resorte.**",
-        "Por eso el seno es omnipresente. No es una «función conveniente de los libros de texto» — es la única solución de la ecuación donde la aceleración es proporcional al desplazamiento con signo opuesto. La naturaleza no eligió el seno; está condenada a él por la propia estructura del equilibrio.",
-        "Y ahora la segunda revelación de este tema: la oscilación armónica es la sombra de una rotación uniforme. Coloque un punto en un disco que gira e ilumínelo de lado: su sombra en la pared se moverá exactamente como un seno. Rotación y oscilación no son dos fenómenos similares, sino el mismo movimiento visto desde diferentes ángulos. De esta igualdad surge toda la física ondulatoria, los números complejos en la ingeniería eléctrica y el lenguaje de fase de la mecánica cuántica."
-      ]
-    },
-    "history": {
-      "title": "Quién lo construyó",
-      "people": [
-        {
-          "name": "Galileo Galilei",
-          "years": "1564–1642",
-          "what": "Observó que las oscilaciones de una lámpara en la catedral de Pisa tardaban el mismo tiempo independientemente de la amplitud — las midió con su propio pulso. Así se descubrió el isocronismo del péndulo, sobre el que luego se construyeron todos los relojes mecánicos. Un efecto sutil, que requiere precisamente pequeñas oscilaciones, pero Galileo captó en él una ley."
-        },
-        {
-          "name": "Robert Hooke",
-          "years": "1635–1703",
-          "what": "Descubrió que el alargamiento de un cuerpo elástico es proporcional a la fuerza aplicada. Lo publicó en 1676 como un anagrama ceiiinosssttuv para asegurar la prioridad y continuar trabajando, y dos años después lo reveló: ut tensio, sic vis — «como la extensión, así la fuerza». De esta ley surgieron la teoría de la elasticidad, la resistencia de materiales y toda la física de oscilaciones. Aquí Hooke está legítimamente primero, sin disputas con Newton."
-        },
-        {
-          "name": "Christiaan Huygens",
-          "years": "1629–1695",
-          "what": "Convirtió el descubrimiento de Galileo en un mecanismo funcional: inventó el reloj de péndulo, cuya precisión era inaudita. Dedujo rigurosamente la fórmula del período y entendió la fuerza centrífuga en la rotación — mucho antes de los «Principios» de Newton."
-        },
-        {
-          "name": "Jean Baptiste Joseph Fourier",
-          "years": "1768–1830",
-          "what": "Demostró que cualquier movimiento periódico se descompone en una suma de armónicos simples. Esto le dio al tema una escala universal: al estudiar un oscilador, entendemos cualquier oscilación en general — desde el sonido de un violín hasta las ondas térmicas en la Tierra."
-        },
-        {
-          "name": "Gaspard-Gustave Coriolis",
-          "years": "1792–1843",
-          "what": "Describió la fuerza que aparece en un sistema de referencia en rotación. Explica la rotación de los ciclones, la desviación de los proyectiles de artillería de largo alcance y la erosión de las márgenes derechas de los ríos en el hemisferio norte — y, sin embargo, no tiene una fuente material, lo que la convierte en una excelente ocasión para reflexionar sobre la naturaleza de las fuerzas en general."
-        }
-      ]
-    },
-    "map": {
-      "title": "Qué aprenderá",
-      "lead": "Tres párrafos están estructurados para que la relación entre rotación y oscilación se manifieste por sí sola. Primero entenderemos la rotación y por qué en un mundo en rotación aparecen fuerzas sin fuente. Luego veremos que la oscilación es una proyección de esa rotación. Y finalmente comprenderemos cómo una fuerza pequeña aplicada a tiempo puede destruir una estructura.",
-      "outcome": "Al completar los tres, entenderá en qué se diferencia un sistema de referencia inercial de uno no inercial y por qué la fuerza centrífuga «no existe» pero es perfectamente perceptible; por qué el período de un péndulo no depende de la masa; y por qué se ordena a los soldados romper el paso al cruzar un puente."
-    },
-    "prereq": {
-      "title": "Qué debe saber de antemano",
-      "items": [
-        "Las leyes de Newton y el concepto de fuerza — tema «Mecánica», párrafo 2.",
-        "Cinemática: velocidad y aceleración como derivadas — tema «Mecánica», párrafo 1.",
-        "Seno y coseno como funciones del ángulo; es útil recordar que la derivada del seno es el coseno.",
-        "Concepto de energía potencial — tema «Mecánica», párrafo 3."
-      ],
-      "note": "Este es el primer tema donde la física realmente se apoya en las matemáticas: no se puede prescindir de la ecuación diferencial. La analizaremos en detalle y mostraremos de dónde surge la solución, pero aquí es precisamente donde no hay que apresurarse."
-    },
-    "lessons": [
-      {
-        "id": "01-rotation",
-        "title": "Rotación y sistemas de referencia",
-        "sub": "Párrafo 1 · Por qué en un mundo giratorio aparecen fuerzas sin fuente",
-        "law": "Aceleración centrípeta",
-        "model": "rotation"
-      },
-      {
-        "id": "02-hooke",
-        "title": "Ley de Hooke y el oscilador",
-        "sub": "Párrafo 2 · La oscilación como proyección de la rotación",
-        "law": "Ley de Hooke",
-        "model": "oscillator"
-      },
-      {
-        "id": "03-resonance",
-        "title": "Amortiguamiento y resonancia",
-        "sub": "Párrafo 3 · Cómo una fuerza pequeña derriba un puente",
-        "law": "Oscilaciones forzadas",
-        "model": "resonance"
-      }
-    ]
+  "prereq": {
+   "title": "What You Need to Know in Advance",
+   "items": [
+    "Newton's laws and the concept of force — Topic 'Mechanics', Section 2.",
+    "Kinematics: velocity and acceleration as derivatives — Topic 'Mechanics', Section 1.",
+    "Sine and cosine as functions of angle; it is useful to remember that the derivative of sine is cosine.",
+    "The concept of potential energy — Topic 'Mechanics', Section 3."
+   ],
+   "note": "This is the first topic where physics truly relies on mathematics: we cannot avoid a differential equation. We will analyze it in detail and show where the solution comes from — but this is exactly where you should not rush."
   },
-  "ar": {
-    "title": "الاهتزاز والدوران",
-    "subtitle": "حركة واحدة في وجهين - ولماذا تحب الطبيعة الجيب بهذا القدر",
-    "lead": "ربما هذا هو أهم موضوع في الدورة بأكملها - والأكثر استخفافًا. منه ينمو نصف الفيزياء الحديثة: الدائرة الكهربائية، الصوت، الضوء، أطياف الذرات، دالة الموجة الكمومية. السبب بسيط: أي نظام يُخرج من التوازن يتصرف بنفس الطريقة، بغض النظر عن مكوناته.",
-    "why": {
-      "title": "لماذا هو الأساس",
-      "text": [
-        "خذ أي نظام في توازن مستقر - بندول، نابض، وتر مشدود، ذرة في بلورة، دائرة كهربائية، كرة في قاع حفرة. أزحه قليلاً. ماذا يحدث؟ تنشأ قوة تعيده إلى موضعه الأصلي. وتكون هذه القوة دائمًا تقريبًا عند الإزاحات الصغيرة متناسبة مع الإزاحة نفسها.",
-        "هذه ليست مصادفة، بل حتمية رياضية. أي حفرة ملساء بالقرب من قاعها تبدو كقطع مكافئ - وهذا أول حد غير تافه في مفكوك أي دالة بالقرب من الصغرى. والقطع المكافئ لطاقة الوضع يعني قوة إرجاع خطية. ويترتب على ذلك: **بالقرب من التوازن، تتصرف جميع الأنظمة في الكون كالنابض.**",
-        "ولهذا السبب فإن الجيب موجود في كل مكان. إنها ليست 'دالة مريحة من الكتاب المدرسي' - بل هي الحل الوحيد لمعادلة يكون فيها التسارع متناسبًا مع الإزاحة بإشارة معاكسة. لم تختار الطبيعة الجيب، بل هي مضطرة إليه بسبب بنية التوازن نفسها.",
-        "والآن الكشف الثاني لهذا الموضوع: الاهتزاز التوافقي هو ظل الدوران المنتظم. ضع نقطة على قرص دوار وسلط ضوءًا من الجانب: سيتحرك ظلها على الحائط تمامًا وفقًا للجيب. الدوران والاهتزاز ليسا ظاهرتين متشابهتين، بل هما نفس الحركة تُرى من جانبين مختلفين. من هذه المساواة تنمو كل الفيزياء الموجية، والأعداد المركبة في الهندسة الكهربائية، ولغة الطور في ميكانيكا الكم."
-      ]
+  "lessons": [
+   {
+    "id": "01-rotation",
+    "title": "Rotation and Reference Frames",
+    "sub": "Section 1 · Why forces without a source appear in a rotating world",
+    "law": "Centripetal acceleration",
+    "model": "rotation"
+   },
+   {
+    "id": "02-hooke",
+    "title": "Hooke's Law and the Oscillator",
+    "sub": "Paragraph 2 · Oscillation as a Projection of Rotation",
+    "law": "Hooke's law",
+    "model": "oscillator"
+   },
+   {
+    "id": "03-resonance",
+    "title": "Damping and Resonance",
+    "sub": "Paragraph 3 · How a Small Force Collapses a Bridge",
+    "law": "Forced oscillations",
+    "model": "resonance"
+   }
+  ]
+ },
+ "es": {
+  "title": "Oscilaciones y rotación",
+  "subtitle": "Un mismo movimiento en dos formas — y por qué la naturaleza ama tanto el seno",
+  "lead": "Esta es quizás la más importante de todo el curso — y la más subestimada. De ella surge la mitad de la física moderna: el circuito eléctrico, el sonido, la luz, los espectros atómicos, la función de onda cuántica. La razón es simple: cualquier sistema sacado del equilibrio se comporta igual, sin importar de qué esté hecho.",
+  "why": {
+   "title": "Por qué es fundamental",
+   "text": [
+    "Tome cualquier sistema en equilibrio estable — un péndulo, un resorte, una cuerda tensa, un átomo en un cristal, un circuito eléctrico, una pelota en el fondo de un pozo. Desvíelo un poco. ¿Qué ocurre? Aparece una fuerza que lo devuelve. Y casi siempre, para pequeñas desviaciones, esta fuerza es proporcional a la propia desviación.",
+    "No es una coincidencia, sino una necesidad matemática. Cualquier pozo suave cerca del fondo tiene forma de parábola — es el primer término no trivial del desarrollo de cualquier función cerca de un mínimo. Y una parábola de energía potencial significa una fuerza restauradora lineal. De ahí se sigue: **cerca del equilibrio, todos los sistemas en el Universo se comportan como un resorte.**",
+    "Por eso el seno es omnipresente. No es una «función conveniente de los libros de texto» — es la única solución de la ecuación donde la aceleración es proporcional al desplazamiento con signo opuesto. La naturaleza no eligió el seno; está condenada a él por la propia estructura del equilibrio.",
+    "Y ahora la segunda revelación de este tema: la oscilación armónica es la sombra de una rotación uniforme. Coloque un punto en un disco que gira e ilumínelo de lado: su sombra en la pared se moverá exactamente como un seno. Rotación y oscilación no son dos fenómenos similares, sino el mismo movimiento visto desde diferentes ángulos. De esta igualdad surge toda la física ondulatoria, los números complejos en la ingeniería eléctrica y el lenguaje de fase de la mecánica cuántica."
+   ]
+  },
+  "history": {
+   "title": "Quién lo construyó",
+   "people": [
+    {
+     "name": "Galileo Galilei",
+     "years": "1564–1642",
+     "what": "Observó que las oscilaciones de una lámpara en la catedral de Pisa tardaban el mismo tiempo independientemente de la amplitud — las midió con su propio pulso. Así se descubrió el isocronismo del péndulo, sobre el que luego se construyeron todos los relojes mecánicos. Un efecto sutil, que requiere precisamente pequeñas oscilaciones, pero Galileo captó en él una ley."
     },
-    "history": {
-      "title": "من بنى هذا",
-      "people": [
-        {
-          "name": "جاليليو جاليلي",
-          "years": "1564–1642",
-          "what": "لاحظ أن تأرجحات الثريا في كاتدرائية بيزا تستغرق نفس الوقت بغض النظر عن سعة التأرجح - كان يقيسها بنبضه. هكذا تم اكتشاف تزامن البندول، الذي نشأت عليه جميع الساعات الميكانيكية لاحقًا. تأثير ضعيف يتطلب اهتزازات صغيرة تحديدًا - لكن جاليلي أدرك فيه القانون."
-        },
-        {
-          "name": "روبرت هوك",
-          "years": "1635–1703",
-          "what": "اكتشف أن استطالة الجسم المرن تتناسب مع القوة المطبقة. نشر هذا في عام 1676 على شكل لغز كلمات (ceiiinosssttuv) لتأكيد الأولوية ومواصلة العمل، وبعد عامين كشف: ut tensio, sic vis - 'كما الاستطالة، كذلك القوة'. من هذا القانون نشأت نظرية المرونة، ومقاومة المواد، وكل فيزياء الاهتزازات. هنا يقف هوك بحق أولاً، دون نزاعات مع نيوتن."
-        },
-        {
-          "name": "كريستيان هوغنس",
-          "years": "1629–1695",
-          "what": "حول اكتشاف جاليلي إلى آلية عاملة: اخترع الساعة البندولية، التي كانت دقتها غير مسبوقة. اشتق قانون الزمن بدقة وفهم قوة الطرد المركزي في الدوران - قبل فترة طويلة من 'المبادئ' لنيوتن."
-        },
-        {
-          "name": "جان بابتيست جوزيف فورييه",
-          "years": "1768–1830",
-          "what": "أثبت أن أي حركة دورية يمكن تحليلها إلى مجموع توافقيات بسيطة. أعطى هذا الموضوع نطاقًا عالميًا: بدراسة مذبذب واحد، نفهم أي اهتزازات بشكل عام - من صوت الكمان إلى الموجات الحرارية في الأرض."
-        },
-        {
-          "name": "غاسبار-غوستاف كوريوليس",
-          "years": "1792–1843",
-          "what": "وصف القوة التي تنشأ في إطار مرجعي دوار. تفسر هذه القوة دوران الأعاصير، وانحراف قذائف المدفعية بعيدة المدى، وتآكل الضفاف اليمنى للأنهار في نصف الكرة الشمالي - ومع ذلك ليس لها مصدر جسمي، مما يجعلها سببًا ممتازًا للتفكير في طبيعة القوى بشكل عام."
-        }
-      ]
+    {
+     "name": "Robert Hooke",
+     "years": "1635–1703",
+     "what": "Descubrió que el alargamiento de un cuerpo elástico es proporcional a la fuerza aplicada. Lo publicó en 1676 como un anagrama ceiiinosssttuv para asegurar la prioridad y continuar trabajando, y dos años después lo reveló: ut tensio, sic vis — «como la extensión, así la fuerza». De esta ley surgieron la teoría de la elasticidad, la resistencia de materiales y toda la física de oscilaciones. Aquí Hooke está legítimamente primero, sin disputas con Newton."
     },
-    "map": {
-      "title": "ما ستتعلمه",
-      "lead": "تم ترتيب ثلاث فقرات بحيث تظهر العلاقة بين الدوران والاهتزاز بنفسها. أولاً سنفهم الدوران ولماذا تظهر في العالم الدوار قوى ليس لها مصدر. ثم سنرى أن الاهتزاز هو إسقاط لهذا الدوران. وأخيرًا سنفهم كيف يمكن لقوة صغيرة مطبقة في الإيقاع أن تدمر بناءً.",
-      "outcome": "بعد إتمام الثلاثة، ستفهم كيف يختلف الإطار المرجعي القصوري عن غير القصوري، ولماذا 'لا توجد' قوة طرد مركزي لكنها محسوسة تمامًا؛ ولماذا لا يعتمد زمن البندول على الكتلة؛ ولماذا يُؤمر الجنود بفك الخطى عند عبور الجسر."
+    {
+     "name": "Christiaan Huygens",
+     "years": "1629–1695",
+     "what": "Convirtió el descubrimiento de Galileo en un mecanismo funcional: inventó el reloj de péndulo, cuya precisión era inaudita. Dedujo rigurosamente la fórmula del período y entendió la fuerza centrífuga en la rotación — mucho antes de los «Principios» de Newton."
     },
-    "prereq": {
-      "title": "ما تحتاج معرفته مسبقًا",
-      "items": [
-        "قوانين نيوتن ومفهوم القوة - موضوع 'الميكانيكا'، الفقرة 2.",
-        "الكينماتيكا: السرعة والتسارع كاشتقاقات - موضوع 'الميكانيكا'، الفقرة 1.",
-        "الجيب وجيب التمام كدوال للزاوية؛ من المفيد تذكر أن مشتقة الجيب هي جيب التمام.",
-        "مفهوم طاقة الوضع - موضوع 'الميكانيكا'، الفقرة 3."
-      ],
-      "note": "هذا أول موضوع تعتمد فيه الفيزياء حقًا على الرياضيات: لا يمكن تجنب المعادلة التفاضلية هنا. سنشرحها بالتفصيل ونوضح من أين يأتي الحل - لكن هنا تحديدًا يجب ألا تتعجل."
+    {
+     "name": "Jean Baptiste Joseph Fourier",
+     "years": "1768–1830",
+     "what": "Demostró que cualquier movimiento periódico se descompone en una suma de armónicos simples. Esto le dio al tema una escala universal: al estudiar un oscilador, entendemos cualquier oscilación en general — desde el sonido de un violín hasta las ondas térmicas en la Tierra."
     },
-    "lessons": [
-      {
-        "id": "01-rotation",
-        "title": "الدوران والأطر المرجعية",
-        "sub": "الفقرة 1 · لماذا تظهر قوى بلا مصدر في عالم دوار",
-        "law": "التسارع المركزي",
-        "model": "rotation"
-      },
-      {
-        "id": "02-hooke",
-        "title": "قانون هوك والمذبذب التوافقي",
-        "sub": "الفقرة 2 · الاهتزاز كإسقاط لدوران",
-        "law": "قانون هوك",
-        "model": "oscillator"
-      },
-      {
-        "id": "03-resonance",
-        "title": "التخميد والرنين",
-        "sub": "الفقرة 3 · كيف تهدم قوة صغيرة جسرًا",
-        "law": "الاهتزازات القسرية",
-        "model": "resonance"
-      }
-    ]
-  }
+    {
+     "name": "Gaspard-Gustave Coriolis",
+     "years": "1792–1843",
+     "what": "Describió la fuerza que aparece en un sistema de referencia en rotación. Explica la rotación de los ciclones, la desviación de los proyectiles de artillería de largo alcance y la erosión de las márgenes derechas de los ríos en el hemisferio norte — y, sin embargo, no tiene una fuente material, lo que la convierte en una excelente ocasión para reflexionar sobre la naturaleza de las fuerzas en general."
+    }
+   ]
+  },
+  "map": {
+   "title": "Qué aprenderá",
+   "lead": "Tres párrafos están estructurados para que la relación entre rotación y oscilación se manifieste por sí sola. Primero entenderemos la rotación y por qué en un mundo en rotación aparecen fuerzas sin fuente. Luego veremos que la oscilación es una proyección de esa rotación. Y finalmente comprenderemos cómo una fuerza pequeña aplicada a tiempo puede destruir una estructura.",
+   "outcome": "Al completar los tres, entenderá en qué se diferencia un sistema de referencia inercial de uno no inercial y por qué la fuerza centrífuga «no existe» pero es perfectamente perceptible; por qué el período de un péndulo no depende de la masa; y por qué se ordena a los soldados romper el paso al cruzar un puente."
+  },
+  "prereq": {
+   "title": "Qué debe saber de antemano",
+   "items": [
+    "Las leyes de Newton y el concepto de fuerza — tema «Mecánica», párrafo 2.",
+    "Cinemática: velocidad y aceleración como derivadas — tema «Mecánica», párrafo 1.",
+    "Seno y coseno como funciones del ángulo; es útil recordar que la derivada del seno es el coseno.",
+    "Concepto de energía potencial — tema «Mecánica», párrafo 3."
+   ],
+   "note": "Este es el primer tema donde la física realmente se apoya en las matemáticas: no se puede prescindir de la ecuación diferencial. La analizaremos en detalle y mostraremos de dónde surge la solución, pero aquí es precisamente donde no hay que apresurarse."
+  },
+  "lessons": [
+   {
+    "id": "01-rotation",
+    "title": "Rotación y sistemas de referencia",
+    "sub": "Párrafo 1 · Por qué en un mundo giratorio aparecen fuerzas sin fuente",
+    "law": "Aceleración centrípeta",
+    "model": "rotation"
+   },
+   {
+    "id": "02-hooke",
+    "title": "Ley de Hooke y el oscilador",
+    "sub": "Párrafo 2 · La oscilación como proyección de la rotación",
+    "law": "Ley de Hooke",
+    "model": "oscillator"
+   },
+   {
+    "id": "03-resonance",
+    "title": "Amortiguamiento y resonancia",
+    "sub": "Párrafo 3 · Cómo una fuerza pequeña derriba un puente",
+    "law": "Oscilaciones forzadas",
+    "model": "resonance"
+   }
+  ]
+ },
+ "ar": {
+  "title": "الاهتزاز والدوران",
+  "subtitle": "حركة واحدة في وجهين - ولماذا تحب الطبيعة الجيب بهذا القدر",
+  "lead": "ربما هذا هو أهم موضوع في الدورة بأكملها - والأكثر استخفافًا. منه ينمو نصف الفيزياء الحديثة: الدائرة الكهربائية، الصوت، الضوء، أطياف الذرات، دالة الموجة الكمومية. السبب بسيط: أي نظام يُخرج من التوازن يتصرف بنفس الطريقة، بغض النظر عن مكوناته.",
+  "why": {
+   "title": "لماذا هو الأساس",
+   "text": [
+    "خذ أي نظام في توازن مستقر - بندول، نابض، وتر مشدود، ذرة في بلورة، دائرة كهربائية، كرة في قاع حفرة. أزحه قليلاً. ماذا يحدث؟ تنشأ قوة تعيده إلى موضعه الأصلي. وتكون هذه القوة دائمًا تقريبًا عند الإزاحات الصغيرة متناسبة مع الإزاحة نفسها.",
+    "هذه ليست مصادفة، بل حتمية رياضية. أي حفرة ملساء بالقرب من قاعها تبدو كقطع مكافئ - وهذا أول حد غير تافه في مفكوك أي دالة بالقرب من الصغرى. والقطع المكافئ لطاقة الوضع يعني قوة إرجاع خطية. ويترتب على ذلك: **بالقرب من التوازن، تتصرف جميع الأنظمة في الكون كالنابض.**",
+    "ولهذا السبب فإن الجيب موجود في كل مكان. إنها ليست 'دالة مريحة من الكتاب المدرسي' - بل هي الحل الوحيد لمعادلة يكون فيها التسارع متناسبًا مع الإزاحة بإشارة معاكسة. لم تختار الطبيعة الجيب، بل هي مضطرة إليه بسبب بنية التوازن نفسها.",
+    "والآن الكشف الثاني لهذا الموضوع: الاهتزاز التوافقي هو ظل الدوران المنتظم. ضع نقطة على قرص دوار وسلط ضوءًا من الجانب: سيتحرك ظلها على الحائط تمامًا وفقًا للجيب. الدوران والاهتزاز ليسا ظاهرتين متشابهتين، بل هما نفس الحركة تُرى من جانبين مختلفين. من هذه المساواة تنمو كل الفيزياء الموجية، والأعداد المركبة في الهندسة الكهربائية، ولغة الطور في ميكانيكا الكم."
+   ]
+  },
+  "history": {
+   "title": "من بنى هذا",
+   "people": [
+    {
+     "name": "جاليليو جاليلي",
+     "years": "1564–1642",
+     "what": "لاحظ أن تأرجحات الثريا في كاتدرائية بيزا تستغرق نفس الوقت بغض النظر عن سعة التأرجح - كان يقيسها بنبضه. هكذا تم اكتشاف تزامن البندول، الذي نشأت عليه جميع الساعات الميكانيكية لاحقًا. تأثير ضعيف يتطلب اهتزازات صغيرة تحديدًا - لكن جاليلي أدرك فيه القانون."
+    },
+    {
+     "name": "روبرت هوك",
+     "years": "1635–1703",
+     "what": "اكتشف أن استطالة الجسم المرن تتناسب مع القوة المطبقة. نشر هذا في عام 1676 على شكل لغز كلمات (ceiiinosssttuv) لتأكيد الأولوية ومواصلة العمل، وبعد عامين كشف: ut tensio, sic vis - 'كما الاستطالة، كذلك القوة'. من هذا القانون نشأت نظرية المرونة، ومقاومة المواد، وكل فيزياء الاهتزازات. هنا يقف هوك بحق أولاً، دون نزاعات مع نيوتن."
+    },
+    {
+     "name": "كريستيان هوغنس",
+     "years": "1629–1695",
+     "what": "حول اكتشاف جاليلي إلى آلية عاملة: اخترع الساعة البندولية، التي كانت دقتها غير مسبوقة. اشتق قانون الزمن بدقة وفهم قوة الطرد المركزي في الدوران - قبل فترة طويلة من 'المبادئ' لنيوتن."
+    },
+    {
+     "name": "جان بابتيست جوزيف فورييه",
+     "years": "1768–1830",
+     "what": "أثبت أن أي حركة دورية يمكن تحليلها إلى مجموع توافقيات بسيطة. أعطى هذا الموضوع نطاقًا عالميًا: بدراسة مذبذب واحد، نفهم أي اهتزازات بشكل عام - من صوت الكمان إلى الموجات الحرارية في الأرض."
+    },
+    {
+     "name": "غاسبار-غوستاف كوريوليس",
+     "years": "1792–1843",
+     "what": "وصف القوة التي تنشأ في إطار مرجعي دوار. تفسر هذه القوة دوران الأعاصير، وانحراف قذائف المدفعية بعيدة المدى، وتآكل الضفاف اليمنى للأنهار في نصف الكرة الشمالي - ومع ذلك ليس لها مصدر جسمي، مما يجعلها سببًا ممتازًا للتفكير في طبيعة القوى بشكل عام."
+    }
+   ]
+  },
+  "map": {
+   "title": "ما ستتعلمه",
+   "lead": "تم ترتيب ثلاث فقرات بحيث تظهر العلاقة بين الدوران والاهتزاز بنفسها. أولاً سنفهم الدوران ولماذا تظهر في العالم الدوار قوى ليس لها مصدر. ثم سنرى أن الاهتزاز هو إسقاط لهذا الدوران. وأخيرًا سنفهم كيف يمكن لقوة صغيرة مطبقة في الإيقاع أن تدمر بناءً.",
+   "outcome": "بعد إتمام الثلاثة، ستفهم كيف يختلف الإطار المرجعي القصوري عن غير القصوري، ولماذا 'لا توجد' قوة طرد مركزي لكنها محسوسة تمامًا؛ ولماذا لا يعتمد زمن البندول على الكتلة؛ ولماذا يُؤمر الجنود بفك الخطى عند عبور الجسر."
+  },
+  "prereq": {
+   "title": "ما تحتاج معرفته مسبقًا",
+   "items": [
+    "قوانين نيوتن ومفهوم القوة - موضوع 'الميكانيكا'، الفقرة 2.",
+    "الكينماتيكا: السرعة والتسارع كاشتقاقات - موضوع 'الميكانيكا'، الفقرة 1.",
+    "الجيب وجيب التمام كدوال للزاوية؛ من المفيد تذكر أن مشتقة الجيب هي جيب التمام.",
+    "مفهوم طاقة الوضع - موضوع 'الميكانيكا'، الفقرة 3."
+   ],
+   "note": "هذا أول موضوع تعتمد فيه الفيزياء حقًا على الرياضيات: لا يمكن تجنب المعادلة التفاضلية هنا. سنشرحها بالتفصيل ونوضح من أين يأتي الحل - لكن هنا تحديدًا يجب ألا تتعجل."
+  },
+  "lessons": [
+   {
+    "id": "01-rotation",
+    "title": "الدوران والأطر المرجعية",
+    "sub": "الفقرة 1 · لماذا تظهر قوى بلا مصدر في عالم دوار",
+    "law": "التسارع المركزي",
+    "model": "rotation"
+   },
+   {
+    "id": "02-hooke",
+    "title": "قانون هوك والمذبذب التوافقي",
+    "sub": "الفقرة 2 · الاهتزاز كإسقاط لدوران",
+    "law": "قانون هوك",
+    "model": "oscillator"
+   },
+   {
+    "id": "03-resonance",
+    "title": "التخميد والرنين",
+    "sub": "الفقرة 3 · كيف تهدم قوة صغيرة جسرًا",
+    "law": "الاهتزازات القسرية",
+    "model": "resonance"
+   }
+  ]
+ }
 }

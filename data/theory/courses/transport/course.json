@@ -1,0 +1,417 @@
+{
+ "id": "transport",
+ "schema": "b42.course/2",
+ "kind": "topic",
+ "order": 9,
+ "entities": {
+  "tags": [
+   "apparent_diffusion_coefficient",
+   "cell",
+   "oxygen",
+   "thermal_conductivity",
+   "temperature",
+   "semiconductor",
+   "viscosity",
+   "computational_fluid_dynamics"
+  ],
+  "laws": [
+   "ficks_law",
+   "ohms_law",
+   "ideal_gas_law",
+   "navier_stokes_equations"
+  ],
+  "scientists": [
+   "Albert Einstein",
+   "Joseph Fourier",
+   "James Clerk Maxwell",
+   "Rudolf Clausius"
+  ]
+ },
+ "lessons": [
+  {
+   "id": "01-diffusion",
+   "title": "Диффузия: перенос вещества",
+   "sub": "почему расплывание идёт как корень из времени",
+   "law": "Закон Фика",
+   "model": "transport"
+  },
+  {
+   "id": "02-conduction",
+   "title": "Теплопроводность: перенос энергии",
+   "sub": "как энергия идёт сквозь вещество, которое само никуда не течёт",
+   "law": "Закон Фурье",
+   "model": "transport"
+  },
+  {
+   "id": "03-viscosity-gas",
+   "title": "Вязкость газа: перенос импульса",
+   "sub": "почему вязкость газа не зависит от давления, а при нагреве растёт",
+   "law": "Кинетическая формула вязкости · закон Максвелла",
+   "model": "transport"
+  }
+ ],
+ "ru": {
+  "title": "Явления переноса",
+  "subtitle": "Диффузия, теплопроводность и вязкость — одна картина в трёх лицах",
+  "lead": "Чернила расплываются в неподвижной воде, ложка нагревается в горячем чае, слои воздуха тормозят друг друга. Три явления выглядят как три разные главы, а оказываются одним и тем же счётом. Проведите в газе воображаемую плоскость и посмотрите, что проносят через неё летящие молекулы. Считайте сами молекулы — получится диффузия. Считайте энергию — теплопроводность. Считайте импульс вдоль потока — вязкость. Механизм один: носитель пролетает свободный пробег, попадает в чужое место и приносит туда то, чем обладал в своём. Отсюда три закона одинакового вида, три коэффициента, собранные из одних и тех же $\\lambda$ и $\\bar v$, — и одна общая граница, за которой они все разом перестают работать.",
+  "why": {
+   "title": "Зачем это знать",
+   "text": [
+    "Тема экономит память самым честным способом: вместо трёх наборов формул остаётся один приём. Закон Фика, закон Фурье и закон Ньютона для касательного напряжения выводятся подряд одним и тем же подсчётом пересечений плоскости, и различаются только тем, какую величину носит с собой молекула. Заодно возвращается долг предыдущих тем: вязкость, которая в теме про жидкости бралась из таблицы как свойство вещества, здесь вычисляется из длины свободного пробега и тепловой скорости — и вычисленное число можно сравнить с измеренным прямо в параграфе.",
+    "Прикладная плотность здесь высокая, и почти вся она бытовая. Утеплитель стены и стеклопакет считаются как цепочка сопротивлений, а мостик холода — как параллельная ветвь. Время прогрева стейка и время просаливания куска идут как квадрат толщины, а не как толщина. Кислород проходит последние микроны до крови диффузией, и именно поэтому ткань без капилляров не бывает толще миллиметра. Термопаста, термос, радиатор процессора, сушка, разделение изотопов и расчёт вакуумной установки — всё это три формулы этой темы, применённые к разным грузам.",
+    "И тема сразу показывает, где она кончается. Вся картина держится на длине свободного пробега — расстоянии, которое молекула пролетает, никого не задев. Понятие осмысленно только тогда, когда пробег много больше самой молекулы и много меньше сосуда. В разреженном газе это так, в вакуумной трубке и на высоте десяти километров уже нет, а в жидкости нет вовсе: там молекула не летит, а топчется в клетке соседей. Знать эту границу важнее, чем знать сами формулы, и в третьем параграфе она называется по имени — числом Кнудсена."
+   ]
+  },
+  "map": {
+   "title": "Что вы изучите",
+   "lead": "Параграфы идут по возрастанию отвлечённости переносимого. Сначала через плоскость несут само вещество — это видно глазом. Потом энергию — её уже приходится считать. Потом импульс — и результат выглядит не расплыванием, а силой. Вывод при этом трижды повторяется почти дословно, и в этом весь смысл порядка.",
+   "outcome": "Пройдя тему, вы сможете вывести любой из трёх законов переноса одним и тем же подсчётом пересечений; оценить время диффузии по толщине слоя и понять, почему запах через комнату разносит сквозняк, а не диффузия; посчитать теплопотери стены как цепочку сопротивлений и отличить $\\kappa$ от температуропроводности; объяснить, почему вязкость газа не зависит от давления и растёт при нагреве, тогда как у жидкости падает; и заранее сказать, применимы ли эти формулы вообще — посчитав число Кнудсена."
+  },
+  "prereq": {
+   "title": "Что нужно знать заранее",
+   "items": [
+    "Термодинамика и молекулярно-кинетическая теория: концентрация, средняя тепловая скорость, сечение столкновения и длина свободного пробега. Все три коэффициента переноса собраны только из этих величин и не содержат ничего сверх них — новой физики тема не вводит ни на грамм.",
+    "Статистическая физика: распределение Максвелла, откуда берётся $\\bar v$, и закон случайного блуждания $\\langle x^{2}\\rangle = 2Dt$. Без второго корень из времени в первом параграфе придётся принять на веру, а именно он делает диффузию бесполезной в комнате и безупречной в клетке.",
+    "Жидкости и газы в движении: вязкость как коэффициент в законе Ньютона для касательного напряжения, формула Пуазёйля, число Рейнольдса. Там $\\eta$ была табличным свойством; третий параграф её вычисляет и попутно объясняет, почему разрежённый воздух на высоте тормозит почти так же, как плотный внизу."
+   ],
+   "note": "Из математики хватит производной и разложения функции возле точки до первого члена — этот приём применяется во всех трёх выводах одинаково и разобран во врезках. Векторный анализ не нужен: градиент везде одномерный, $dn/dx$ и $dT/dx$, а трёхмерная запись через $\\nabla$ приводится справочно."
+  },
+  "history": {
+   "title": "Кто её создал",
+   "people": [
+    {
+     "name": "Жозеф Фурье",
+     "years": "1768–1830",
+     "what": "В «Аналитической теории тепла» 1822 года записал закон теплопроводности в дифференциальном виде, вывел из него уравнение теплопроводности и ради его решения придумал тригонометрические ряды. Лагранж и Лаплас возражали против рядов как против нестрогого приёма, и работа пролежала непринятой около пятнадцати лет; сегодня на ней стоит половина прикладной математики."
+    },
+    {
+     "name": "Рудольф Клаузиус",
+     "years": "1822–1888",
+     "what": "В 1858 году ввёл длину свободного пробега — прямо в ответ на возражение против кинетической теории: если молекулы летят сотни метров в секунду, почему запах не разносится по комнате мгновенно. Ответ оказался в том, что молекула не летит, а спотыкается миллиарды раз в секунду. Без этой величины в теории переноса нельзя сказать вообще ничего количественного."
+    },
+    {
+     "name": "Адольф Фик",
+     "years": "1829–1901",
+     "what": "Врач и физиолог, он в 1855 году перенёс на вещество то, что Фурье сделал для тепла: записал поток пропорциональным градиенту концентрации и проверил закон опытом с солью в трубке. Ему же принадлежат первая контактная линза и метод определения сердечного выброса — физиология здесь была не хобби, а источником задач."
+    },
+    {
+     "name": "Джеймс Клерк Максвелл и Кэтрин Максвелл",
+     "years": "1860–1866",
+     "what": "Максвелл вывел, что вязкость газа не должна зависеть от его плотности, и сам счёл вывод неправдоподобным. Проверять пришлось дома: супруги поставили опыт с качающимися стеклянными дисками в откачиваемом сосуде — Кэтрин поддерживала нужную температуру воздуха в комнате — и получили подтверждение расчёта, а заодно измерили рост вязкости с нагревом."
+    },
+    {
+     "name": "Йозеф Лошмидт",
+     "years": "1821–1895",
+     "what": "В 1865 году повернул формулу задом наперёд: взял измеренную вязкость, достал из неё длину свободного пробега, а из неё — первую в истории оценку размера молекулы и числа молекул в кубическом сантиметре газа. Диаметр он завысил втрое, а число молекул занизил в пятнадцать раз, но это была первая цифра там, где до него стояло рассуждение."
+    },
+    {
+     "name": "Густав Видеман, Рудольф Франц и Людвиг Лоренц",
+     "years": "1853–1872",
+     "what": "Видеман и Франц измерили теплопроводность и электропроводность у полутора десятков металлов и заметили, что их отношение при данной температуре у всех примерно одинаково. Лоренц показал, что отношение растёт пропорционально абсолютной температуре. Объяснение — что в металле тепло и ток носят одни и те же электроны — пришло только с электронной теорией."
+    },
+    {
+     "name": "Сидни Чепмен и Давид Энског",
+     "years": "1916–1917",
+     "what": "Независимо друг от друга построили строгую теорию переноса в разреженном газе и получили точные числовые множители вместо оценочной одной трети. Оценки школьного вывода занижают коэффициенты примерно в полтора-два раза; структуру формул при этом они передают верно, и именно поэтому простой вывод стоит проходить первым."
+    }
+   ]
+  },
+  "open": "перенос в плотных газах и жидкостях: вся картина темы держится на длине свободного пробега, а в жидкости её попросту нет — молекула не пролетает между столкновениями, а топчется в клетке соседей и меняет её изредка. Формул такого же уровня строгости для жидкости не существует: вязкость, теплопроводность и диффузию там считают по полуэмпирическим моделям с подгонкой к опыту, а точная для разреженного газа теория Чепмена — Энскога уже при обычных плотностях даёт заметную ошибку",
+  "lessons": [
+   {
+    "id": "01-diffusion",
+    "title": "Диффузия: перенос вещества",
+    "sub": "почему расплывание идёт как корень из времени",
+    "law": "Закон Фика",
+    "model": "transport"
+   },
+   {
+    "id": "02-conduction",
+    "title": "Теплопроводность: перенос энергии",
+    "sub": "как энергия идёт сквозь вещество, которое само никуда не течёт",
+    "law": "Закон Фурье",
+    "model": "transport"
+   },
+   {
+    "id": "03-viscosity-gas",
+    "title": "Вязкость газа: перенос импульса",
+    "sub": "почему вязкость газа не зависит от давления, а при нагреве растёт",
+    "law": "Кинетическая формула вязкости · закон Максвелла",
+    "model": "transport"
+   }
+  ]
+ },
+ "en": {
+  "title": "Transport Phenomena",
+  "subtitle": "Diffusion, Thermal Conductivity and Viscosity — One Picture in Three Faces",
+  "lead": "Ink spreads in still water, a spoon heats up in hot tea, layers of air slow each other down. Three phenomena look like three different chapters, but turn out to be the same calculation. Draw an imaginary plane in a gas and see what flying molecules carry across it. Count the molecules themselves — you get diffusion. Count the energy — thermal conductivity. Count the momentum along the flow — viscosity. The mechanism is one: a carrier travels a free path, lands in a foreign place, and brings there what it had in its own. Hence three laws of the same form, three coefficients assembled from the same $\\lambda$ and $\\bar v$ — and one common boundary beyond which they all stop working at once.",
+  "why": {
+   "title": "Why know this",
+   "text": [
+    "The topic saves memory in the most honest way: instead of three sets of formulas, one technique remains. Fick's law, Fourier's law, and Newton's law for shear stress are derived in a row by the same counting of plane crossings, and differ only in what quantity the molecule carries. Along the way, a debt from previous topics is repaid: viscosity, which in the topic on fluids was taken from a table as a property of a substance, is here calculated from the mean free path and thermal speed — and the calculated number can be compared with the measured one right in the paragraph.",
+    "The applied density here is high, and almost all of it is everyday. Wall insulation and a double-glazed window are calculated as a chain of resistances, and a thermal bridge as a parallel branch. The heating time of a steak and the salting time of a piece go as the square of thickness, not as thickness. Oxygen travels the last microns to the blood by diffusion, and that is why tissue without capillaries is never thicker than a millimeter. Thermal paste, a thermos, a CPU cooler, drying, isotope separation, and vacuum system design — all are these three formulas applied to different cargoes.",
+    "And the topic immediately shows where it ends. The whole picture rests on the mean free path — the distance a molecule travels without hitting anyone. The concept makes sense only when the path is much larger than the molecule itself and much smaller than the container. In a rarefied gas this is so, in a vacuum tube and at an altitude of ten kilometers it is no longer, and in a liquid it is not at all: there the molecule does not fly but jostles in a cage of neighbors. Knowing this boundary is more important than knowing the formulas themselves, and in the third paragraph it is called by name — the Knudsen number."
+   ]
+  },
+  "map": {
+   "title": "What you will study",
+   "lead": "The sections go in increasing order of abstraction of the transported quantity. First, matter itself is carried across the plane — this is visible to the eye. Then energy — it already has to be calculated. Then momentum — and the result looks not like spreading but like a force. The derivation is repeated almost verbatim three times, and that is the whole point of the order.",
+   "outcome": "After completing the topic, you will be able to derive any of the three transport laws by the same counting of crossings; estimate the diffusion time over a layer thickness and understand why a smell across a room is carried by a draft, not by diffusion; calculate the heat loss of a wall as a chain of resistances and distinguish $\\kappa$ from thermal diffusivity; explain why the viscosity of a gas does not depend on pressure and increases with heating, while that of a liquid decreases; and tell in advance whether these formulas apply at all — by calculating the Knudsen number."
+  },
+  "prereq": {
+   "title": "What you need to know beforehand",
+   "items": [
+    "Thermodynamics and molecular kinetic theory: concentration, mean thermal speed, collision cross-section and mean free path. All three transport coefficients are assembled only from these quantities and contain nothing beyond them — the topic introduces not a gram of new physics.",
+    "Statistical physics: the Maxwell distribution, where $\\bar v$ comes from, and the law of random walk $\\langle x^{2}\\rangle = 2Dt$. Without the second, the square root of time in the first section will have to be taken on faith, and it is precisely that which makes diffusion useless in a room and perfect in a cell.",
+    "Fluids and gases in motion: viscosity as a coefficient in Newton's law for shear stress, the Poiseuille formula, the Reynolds number. There $\\eta$ was a tabulated property; the third section calculates it and incidentally explains why rarefied air at altitude slows down almost as much as dense air below."
+   ],
+   "note": "From mathematics, a derivative and the expansion of a function near a point up to the first term suffice — this technique is applied identically in all three derivations and is discussed in the boxes. Vector analysis is not needed: the gradient is always one-dimensional, $dn/dx$ and $dT/dx$, and the three-dimensional notation via $\\nabla$ is given for reference."
+  },
+  "history": {
+   "title": "Who created it",
+   "people": [
+    {
+     "name": "Joseph Fourier",
+     "years": "1768–1830",
+     "what": "In the 'Analytical Theory of Heat' of 1822, he wrote the law of heat conduction in differential form, derived the heat equation from it, and invented trigonometric series to solve it. Lagrange and Laplace objected to the series as a non-rigorous method, and the work lay unaccepted for about fifteen years; today half of applied mathematics stands on it."
+    },
+    {
+     "name": "Rudolf Clausius",
+     "years": "1822–1888",
+     "what": "In 1858, he introduced the mean free path—directly in response to an objection to kinetic theory: if molecules fly hundreds of meters per second, why doesn't a smell spread across a room instantly? The answer turned out to be that a molecule doesn't fly but stumbles billions of times per second. Without this quantity, nothing quantitative can be said in transport theory."
+    },
+    {
+     "name": "Adolf Fick",
+     "years": "1829–1901",
+     "what": "A physician and physiologist, in 1855 he transferred to matter what Fourier had done for heat: he wrote the flux as proportional to the concentration gradient and tested the law with an experiment using salt in a tube. He also developed the first contact lens and a method for determining cardiac output—physiology was not a hobby here but a source of problems."
+    },
+    {
+     "name": "James Clerk Maxwell and Katherine Maxwell",
+     "years": "1860–1866",
+     "what": "Maxwell derived that the viscosity of a gas should not depend on its density, and he himself found the result implausible. The verification had to be done at home: the couple set up an experiment with oscillating glass disks in an evacuated vessel—Katherine maintained the required air temperature in the room—and obtained confirmation of the calculation, also measuring the increase of viscosity with heating."
+    },
+    {
+     "name": "Joseph Loschmidt",
+     "years": "1821–1895",
+     "what": "In 1865, he turned the formula around: he took the measured viscosity, extracted the mean free path from it, and from that the first-ever estimate of molecular size and the number of molecules in a cubic centimeter of gas. He overestimated the diameter by a factor of three and underestimated the number of molecules by a factor of fifteen, but it was the first number where before there had only been reasoning."
+    },
+    {
+     "name": "Gustav Wiedemann, Rudolf Franz, and Ludwig Lorenz",
+     "years": "1853–1872",
+     "what": "Wiedemann and Franz measured the thermal and electrical conductivity of about fifteen metals and noticed that their ratio at a given temperature is roughly the same for all of them. Lorenz showed that the ratio grows proportionally to absolute temperature. The explanation—that in metals heat and current are carried by the same electrons—came only with the electron theory."
+    },
+    {
+     "name": "Sydney Chapman and David Enskog",
+     "years": "1916–1917",
+     "what": "Independently, they built a rigorous theory of transport in a rarefied gas and obtained exact numerical factors instead of the estimated one-third. The estimates from the school-level derivation underestimate the coefficients by about a factor of one and a half to two; however, they correctly capture the structure of the formulas, which is why the simple derivation is worth learning first."
+    }
+   ]
+  },
+  "open": "transport in dense gases and liquids: the whole picture of the topic rests on the mean free path, but in a liquid it simply does not exist—the molecule does not fly between collisions but shuffles in the cage of its neighbors and changes it occasionally. Formulas of the same level of rigor do not exist for liquids: viscosity, thermal conductivity, and diffusion are calculated there using semi-empirical models fitted to experiment, while the exact Chapman–Enskog theory for rarefied gases already gives a noticeable error at ordinary densities",
+  "lessons": [
+   {
+    "id": "01-diffusion",
+    "title": "Diffusion: transport of matter",
+    "sub": "why spreading goes as the square root of time",
+    "law": "Fick's law",
+    "model": "transport"
+   },
+   {
+    "id": "02-conduction",
+    "title": "Thermal conductivity: transport of energy",
+    "sub": "how energy moves through matter that itself does not flow",
+    "law": "Fourier's law",
+    "model": "transport"
+   },
+   {
+    "id": "03-viscosity-gas",
+    "title": "Viscosity of gas: transport of momentum",
+    "sub": "why gas viscosity does not depend on pressure and increases with heating",
+    "law": "Kinetic formula for viscosity · Maxwell's law",
+    "model": "transport"
+   }
+  ]
+ },
+ "es": {
+  "title": "Fenómenos de transporte",
+  "subtitle": "Difusión, conductividad térmica y viscosidad: una misma imagen en tres versiones",
+  "lead": "La tinta se extiende en agua quieta, la cuchara se calienta en el té caliente, las capas de aire se frenan mutuamente. Tres fenómenos parecen capítulos distintos, pero resultan ser la misma cuenta. Traza un plano imaginario en un gas y observa qué transportan las moléculas que lo cruzan. Cuenta las moléculas: obtienes difusión. Cuenta la energía: conductividad térmica. Cuenta el impulso a lo largo del flujo: viscosidad. El mecanismo es uno: el portador recorre un camino libre medio, llega a un lugar ajeno y trae consigo lo que poseía en el suyo. De ahí tres leyes de la misma forma, tres coeficientes construidos a partir de los mismos $\\lambda$ y $\\bar v$, y un límite común más allá del cual todos dejan de funcionar a la vez.",
+  "why": {
+   "title": "Por qué saber esto",
+   "text": [
+    "El tema ahorra memoria de la manera más honesta: en lugar de tres conjuntos de fórmulas, queda un solo método. La ley de Fick, la ley de Fourier y la ley de Newton para el esfuerzo cortante se derivan consecutivamente con el mismo conteo de cruces de un plano, y se diferencian solo en qué cantidad lleva la molécula. De paso, se salda una deuda con temas anteriores: la viscosidad, que en el tema de líquidos se tomaba de tablas como una propiedad de la sustancia, aquí se calcula a partir del camino libre medio y la velocidad térmica, y el número calculado se puede comparar con el medido directamente en el párrafo.",
+    "La densidad aplicada aquí es alta, y casi toda es cotidiana. El aislamiento de una pared y una ventana de doble acristalamiento se calculan como una cadena de resistencias, y un puente térmico, como una rama en paralelo. El tiempo de calentamiento de un filete y el tiempo de salado de un trozo van como el cuadrado del espesor, no como el espesor. El oxígeno recorre los últimos micrómetros hasta la sangre por difusión, y por eso un tejido sin capilares no puede ser más grueso que un milímetro. Pasta térmica, termo, disipador de CPU, secado, separación de isótopos y cálculo de una instalación de vacío: todo son estas tres fórmulas aplicadas a diferentes cargas.",
+    "Y el tema muestra de inmediato dónde termina. Toda la imagen se sostiene sobre el camino libre medio: la distancia que recorre una molécula sin chocar con nadie. El concepto tiene sentido solo cuando el camino es mucho mayor que la propia molécula y mucho menor que el recipiente. En un gas enrarecido es así; en un tubo de vacío y a diez kilómetros de altitud ya no; y en un líquido no lo es en absoluto: allí la molécula no vuela, sino que se mueve en la jaula de sus vecinas. Conocer este límite es más importante que conocer las fórmulas mismas, y en el tercer párrafo se nombra: el número de Knudsen."
+   ]
+  },
+  "map": {
+   "title": "Qué aprenderás",
+   "lead": "Los párrafos avanzan en orden creciente de abstracción de lo transportado. Primero, a través del plano se lleva la propia sustancia, que se ve a simple vista. Luego, la energía, que ya hay que calcular. Después, el impulso, y el resultado no parece una dispersión, sino una fuerza. La deducción se repite tres veces casi literalmente, y ahí está todo el sentido del orden.",
+   "outcome": "Al terminar el tema, podrás derivar cualquiera de las tres leyes de transporte con el mismo conteo de cruces; estimar el tiempo de difusión según el espesor de la capa y entender por qué el olor se propaga por la habitación mediante corrientes de aire y no por difusión; calcular las pérdidas de calor de una pared como una cadena de resistencias y distinguir $\\kappa$ de la difusividad térmica; explicar por qué la viscosidad de un gas no depende de la presión y aumenta al calentarse, mientras que en un líquido disminuye; y predecir de antemano si estas fórmulas son aplicables calculando el número de Knudsen."
+  },
+  "prereq": {
+   "title": "Qué necesitas saber de antemano",
+   "items": [
+    "Termodinámica y teoría cinético-molecular: concentración, velocidad térmica media, sección eficaz de colisión y camino libre medio. Los tres coeficientes de transporte se construyen solo a partir de estas magnitudes y no contienen nada más allá de ellas: el tema no introduce ni un gramo de física nueva.",
+    "Física estadística: la distribución de Maxwell, de donde sale $\\bar v$, y la ley del paseo aleatorio $\\langle x^{2}\\rangle = 2Dt$. Sin la segunda, la raíz del tiempo en el primer párrafo tendrás que aceptarla sin demostración, y es precisamente ella la que hace que la difusión sea inútil en una habitación e impecable en una célula.",
+    "Líquidos y gases en movimiento: la viscosidad como coeficiente en la ley de Newton para el esfuerzo cortante, la fórmula de Poiseuille y el número de Reynolds. Allí $\\eta$ era una propiedad tabulada; el tercer párrafo la calcula y, de paso, explica por qué el aire enrarecido a gran altitud frena casi igual que el denso en el suelo."
+   ],
+   "note": "De matemáticas basta con la derivada y el desarrollo de una función alrededor de un punto hasta el primer término: este truco se aplica igual en las tres deducciones y se explica en los recuadros. No se necesita análisis vectorial: el gradiente es siempre unidimensional, $dn/dx$ y $dT/dx$, y la notación tridimensional con $\\nabla$ se da solo como referencia."
+  },
+  "history": {
+   "title": "Quién la creó",
+   "people": [
+    {
+     "name": "Joseph Fourier",
+     "years": "1768–1830",
+     "what": "En la 'Teoría analítica del calor' de 1822 escribió la ley de conducción del calor en forma diferencial, derivó de ella la ecuación del calor y, para resolverla, inventó las series trigonométricas. Lagrange y Laplace objetaron las series como un método no riguroso, y la obra permaneció sin aceptar durante unos quince años; hoy en día se basa en ella la mitad de las matemáticas aplicadas."
+    },
+    {
+     "name": "Rudolf Clausius",
+     "years": "1822–1888",
+     "what": "En 1858 introdujo el camino libre medio, directamente en respuesta a una objeción contra la teoría cinética: si las moléculas vuelan a cientos de metros por segundo, ¿por qué el olor no se dispersa por la habitación instantáneamente? La respuesta resultó ser que la molécula no vuela, sino que tropieza miles de millones de veces por segundo. Sin esta cantidad, en la teoría del transporte no se puede decir nada cuantitativo."
+    },
+    {
+     "name": "Adolf Fick",
+     "years": "1829–1901",
+     "what": "Médico y fisiólogo, en 1855 transfirió a la materia lo que Fourier hizo para el calor: escribió el flujo como proporcional al gradiente de concentración y verificó la ley con experimentos con sal en un tubo. También se le atribuyen la primera lente de contacto y el método para determinar el gasto cardíaco: la fisiología no era un pasatiempo, sino una fuente de problemas."
+    },
+    {
+     "name": "James Clerk Maxwell y Katherine Maxwell",
+     "years": "1860–1866",
+     "what": "Maxwell dedujo que la viscosidad de un gas no debería depender de su densidad, y él mismo consideró el resultado poco plausible. La verificación tuvo que hacerse en casa: la pareja realizó un experimento con discos de vidrio oscilantes en un recipiente evacuado — Katherine mantenía la temperatura del aire en la habitación — y obtuvieron confirmación del cálculo, y de paso midieron el aumento de la viscosidad con el calentamiento."
+    },
+    {
+     "name": "Johann Loschmidt",
+     "years": "1821–1895",
+     "what": "En 1865 invirtió la fórmula: tomó la viscosidad medida, extrajo de ella el camino libre medio, y de este, la primera estimación en la historia del tamaño de una molécula y del número de moléculas en un centímetro cúbico de gas. Sobreestimó el diámetro por un factor de tres y subestimó el número de moléculas por un factor de quince, pero fue la primera cifra donde antes solo había razonamiento."
+    },
+    {
+     "name": "Gustav Wiedemann, Rudolph Franz y Ludvig Lorenz",
+     "years": "1853–1872",
+     "what": "Wiedemann y Franz midieron la conductividad térmica y eléctrica de una docena y media de metales y notaron que su relación a una temperatura dada era aproximadamente la misma para todos. Lorenz mostró que la relación crece proporcionalmente a la temperatura absoluta. La explicación — de que en el metal el calor y la corriente son transportados por los mismos electrones — llegó solo con la teoría electrónica."
+    },
+    {
+     "name": "Sydney Chapman y David Enskog",
+     "years": "1916–1917",
+     "what": "Independientemente, construyeron una teoría rigurosa del transporte en gases enrarecidos y obtuvieron factores numéricos exactos en lugar del estimado de un tercio. Las estimaciones de la derivación escolar subestiman los coeficientes en aproximadamente un factor de uno y medio a dos; sin embargo, transmiten correctamente la estructura de las fórmulas, y por eso la derivación simple debe estudiarse primero."
+    }
+   ]
+  },
+  "open": "transporte en gases densos y líquidos: toda la imagen del tema se sostiene en el camino libre medio, pero en un líquido simplemente no existe — la molécula no vuela entre colisiones, sino que se mueve en la jaula de sus vecinos y la cambia raramente. No existen fórmulas del mismo nivel de rigor para líquidos: la viscosidad, la conductividad térmica y la difusión se calculan allí mediante modelos semiempíricos ajustados a la experiencia, y la teoría exacta de Chapman-Enskog para gases enrarecidos ya da un error notable a densidades ordinarias.",
+  "lessons": [
+   {
+    "id": "01-diffusion",
+    "title": "Difusión: transporte de materia",
+    "sub": "por qué la dispersión va como la raíz del tiempo",
+    "law": "Ley de Fick",
+    "model": "transport"
+   },
+   {
+    "id": "02-conduction",
+    "title": "Conducción del calor: transporte de energía",
+    "sub": "cómo la energía atraviesa la materia que no fluye",
+    "law": "Ley de Fourier",
+    "model": "transport"
+   },
+   {
+    "id": "03-viscosity-gas",
+    "title": "Viscosidad de un gas: transporte de impulso",
+    "sub": "por qué la viscosidad de un gas no depende de la presión y aumenta con el calentamiento",
+    "law": "Fórmula cinética de la viscosidad · ley de Maxwell",
+    "model": "transport"
+   }
+  ]
+ },
+ "ar": {
+  "title": "ظواهر النقل",
+  "subtitle": "الانتشار، التوصيل الحراري، واللزوجة — صورة واحدة بثلاثة أوجه",
+  "lead": "الحبر ينتشر في الماء الساكن، والملعقة تسخن في الشاي الساخن، وطبقات الهواء تعيق بعضها البعض. تبدو الظواهر الثلاث وكأنها فصول مختلفة، لكنها في الحقيقة نفس العملية الحسابية. ارسم مستوى وهميًا في غاز ولاحظ ما تحمله الجزيئات المتطايرة عبره. احسب عدد الجزيئات نفسها — تحصل على الانتشار. احسب الطاقة — تحصل على التوصيل الحراري. احسب الزخم على طول التدفق — تحصل على اللزوجة. الآلية واحدة: الحامل يقطع مسارًا حرًا، ويصل إلى مكان غريب ويحمل معه ما كان يمتلكه في مكانه الأصلي. ومن هنا تأتي ثلاثة قوانين بنفس الشكل، وثلاثة معاملات مبنية من نفس $\\lambda$ و $\\bar v$ — وحد واحد مشترك، بعدها تتوقف جميعها عن العمل في آن واحد.",
+  "why": {
+   "title": "لماذا يجب معرفة هذا",
+   "text": [
+    "الموضوع يوفر الجهد الذهني بأكثر طريقة صادقة: بدلاً من ثلاث مجموعات من الصيغ، تبقى لديك تقنية واحدة. قانون فيك، قانون فورييه، وقانون نيوتن للإجهاد العرضي تُشتق تباعًا بنفس طريقة حساب تقاطعات المستوى، وتختلف فقط في الكمية التي تحملها الجزيئات. وفي نفس الوقت، يسدد الموضوع دينًا من المواضيع السابقة: اللزوجة، التي كانت في موضوع الموائع تؤخذ من الجداول كخاصية للمادة، تُحسب هنا من متوسط المسار الحر والسرعة الحرارية — ويمكن مقارنة الرقم المحسوب بالرقم المقاس مباشرة في الفقرة.",
+    "الكثافة التطبيقية هنا عالية، ومعظمها من الحياة اليومية. عازل الجدار والزجاج المزدوج يُحسبان كسلسلة مقاومات، والجسر الحراري كفرع موازٍ. زمن تسخين شريحة اللحم وزمن تمليح قطعة اللحم يتناسبان مع مربع السُمك، وليس مع السُمك. الأكسجين يقطع آخر ميكرونات إلى الدم بالانتشار، ولهذا السبب لا يكون النسيج بدون شعيرات دموية أسمك من مليمتر. المعجون الحراري، الترمس، مشعاع المعالج، التجفيف، فصل النظائر، وحساب أنظمة التفريغ — كلها ثلاث صيغ من هذا الموضوع، مطبقة على أحمال مختلفة.",
+    "ويُظهر الموضوع أيضًا أين ينتهي. الصورة كلها تعتمد على متوسط المسار الحر — المسافة التي يقطعها الجزيء دون أن يصطدم بأي شيء. المفهوم يكون منطقيًا فقط عندما يكون المسار أكبر بكثير من الجزيء نفسه وأصغر بكثير من الوعاء. في الغاز المخلخل يكون الأمر كذلك، وفي أنبوب التفريغ وعلى ارتفاع عشرة كيلومترات لم يعد كذلك، وفي السائل لا يكون كذلك أبدًا: هناك الجزيء لا يطير بل يتردد في قفص جيرانه. معرفة هذا الحد أكثر أهمية من معرفة الصيغ نفسها، وفي الفقرة الثالثة يُسمى باسمه — رقم كنودسن."
+   ]
+  },
+  "map": {
+   "title": "ماذا ستتعلم",
+   "lead": "الفقرات مرتبة حسب درجة تجريد الكمية المنقولة. أولاً، يُنقل عبر المستوى المادة نفسها — وهذا مرئي بالعين. ثم الطاقة — وهنا يجب حسابها. ثم الزخم — والنتيجة لا تبدو كانتشار بل كقوة. الاستنتاج يتكرر ثلاث مرات بشكل شبه حرفي، وهذا هو جوهر الترتيب.",
+   "outcome": "بعد إتمام الموضوع، ستكون قادرًا على اشتقاق أي من قوانين النقل الثلاثة بنفس طريقة حساب التقاطعات؛ وتقدير زمن الانتشار حسب سُمك الطبقة وفهم لماذا ينتشر العطر عبر الغرفة بفعل تيار الهواء وليس الانتشار؛ وحساب فقدان الحرارة من الجدار كسلسلة مقاومات والتمييز بين $\\kappa$ والانتشارية الحرارية؛ وشرح لماذا لا تعتمد لزوجة الغاز على الضغط وتزداد مع التسخين، بينما تنخفض في السوائل؛ والتنبؤ مسبقًا بما إذا كانت هذه الصيغ قابلة للتطبيق من الأساس — بحساب رقم كنودسن."
+  },
+  "prereq": {
+   "title": "ما يجب معرفته مسبقًا",
+   "items": [
+    "الديناميكا الحرارية والنظرية الحركية الجزيئية: التركيز، متوسط السرعة الحرارية، مقطع التصادم، ومتوسط المسار الحر. جميع معاملات النقل الثلاثة مبنية فقط من هذه الكميات ولا تحتوي على أي شيء آخر — الموضوع لا يقدم فيزياء جديدة حتى بجرام واحد.",
+    "الفيزياء الإحصائية: توزيع ماكسويل، ومنه يأتي $\\bar v$، وقانون السير العشوائي $\\langle x^{2}\\rangle = 2Dt$. بدون الثاني، سيتعين عليك قبول الجذر التربيعي للزمن في الفقرة الأولى كمسلَّمة، وهو بالضبط ما يجعل الانتشار عديم الفائدة في الغرفة ومثاليًا في الخلية.",
+    "الموائع والغازات المتحركة: اللزوجة كمعامل في قانون نيوتن للإجهاد العرضي، معادلة بويزويل، رقم رينولدز. هناك كانت $\\eta$ خاصية جدولية؛ الفقرة الثالثة تحسبها وتشرح بالمناسبة لماذا الهواء المخلخل على ارتفاع يبطئ تقريبًا بنفس مقدار الهواء الكثيف في الأسفل."
+   ],
+   "note": "من الرياضيات، يكفي الاشتقاق وتوسيع الدالة حول نقطة حتى الحد الأول — هذه التقنية تُستخدم في جميع الاستنتاجات الثلاثة بنفس الطريقة ومشروحة في الصناديق الجانبية. تحليل المتجهات غير مطلوب: التدرج في كل مكان أحادي البعد، $dn/dx$ و $dT/dx$، والصيغة ثلاثية الأبعاد باستخدام $\\nabla$ تُعطى كمرجع."
+  },
+  "history": {
+   "title": "من اكتشفها",
+   "people": [
+    {
+     "name": "جوزيف فورييه",
+     "years": "1768–1830",
+     "what": "في 'النظرية التحليلية للحرارة' عام 1822، كتب قانون التوصيل الحراري في صورة تفاضلية، واشتق منه معادلة التوصيل الحراري، وابتكر المتسلسلات المثلثية لحلها. اعترض لاغرانج ولابلاس على المتسلسلات باعتبارها أسلوبًا غير دقيق، وظل العمل غير مقبول لمدة خمسة عشر عامًا تقريبًا؛ واليوم يُبنى عليه نصف الرياضيات التطبيقية."
+    },
+    {
+     "name": "رودولف كلوزيوس",
+     "years": "1822–1888",
+     "what": "في عام 1858، أدخل متوسط المسار الحر، مباشرة كرد على اعتراض على النظرية الحركية: إذا كانت الجزيئات تطير مئات الأمتار في الثانية، فلماذا لا ينتشر الرائحة في الغرفة فورًا؟ كان الجواب أن الجزيء لا يطير، بل يتعثر مليارات المرات في الثانية. بدون هذه الكمية، لا يمكن قول أي شيء كمي في نظرية النقل."
+    },
+    {
+     "name": "أدولف فيك",
+     "years": "1829–1901",
+     "what": "طبيب وعالم وظائف أعضاء، في عام 1855 نقل إلى المادة ما فعله فورييه للحرارة: كتب التدفق متناسبًا مع تدرج التركيز، واختبر القانون بتجربة مع الملح في أنبوب. كما اخترع أول عدسة لاصقة وطريقة لتحديد النتاج القلبي — كانت الفسيولوجيا هنا ليست هواية، بل مصدرًا للمشكلات."
+    },
+    {
+     "name": "جيمس كليرك ماكسويل وكاثرين ماكسويل",
+     "years": "1860–1866",
+     "what": "اشتق ماكسويل أن لزوجة الغاز لا يجب أن تعتمد على كثافته، واعتبر النتيجة غير معقولة. كان لا بد من التحقق في المنزل: أقام الزوجان تجربة بأقراص زجاجية متأرجحة في وعاء مفرغ — حافظت كاثرين على درجة حرارة الهواء المطلوبة في الغرفة — وحصلا على تأكيد الحساب، وقاسا أيضًا زيادة اللزوجة مع التسخين."
+    },
+    {
+     "name": "يوزيف لوشميت",
+     "years": "1821–1895",
+     "what": "في عام 1865، قلب الصيغة رأسًا على عقب: أخذ اللزوجة المقاسة، واستخرج منها متوسط المسار الحر، ومنه أول تقدير في التاريخ لحجم الجزيء وعدد الجزيئات في سنتيمتر مكعب من الغاز. لقد بالغ في القطر ثلاث مرات، وقلل عدد الجزيئات خمسة عشر مرة، لكنه كان أول رقم حيث كان هناك تفكير فقط."
+    },
+    {
+     "name": "غوستاف فيدمان، رودولف فرانز ولودفيغ لورنتز",
+     "years": "1853–1872",
+     "what": "قام فيدمان وفرانز بقياس التوصيل الحراري والموصلية الكهربائية لعشرات المعادن ولاحظوا أن نسبتهما عند درجة حرارة معينة متشابهة تقريبًا للجميع. أظهر لورنتز أن النسبة تزداد بالتناسب مع درجة الحرارة المطلقة. التفسير — أن الحرارة والتيار في المعدن تحملهما نفس الإلكترونات — جاء فقط مع النظرية الإلكترونية."
+    },
+    {
+     "name": "سيدني تشابمان وديفيد إنسكوج",
+     "years": "1916–1917",
+     "what": "بشكل مستقل، بنيا نظرية صارمة للنقل في الغاز المخلخل وحصلا على عوامل عددية دقيقة بدلاً من الثلث التقريبي. تقديرات الاشتقاق المدرسي تقلل المعاملات بحوالي مرة ونصف إلى مرتين؛ لكنها تنقل بنية الصيغ بشكل صحيح، ولهذا يستحق الاشتقاق البسيط أن يُدرس أولاً."
+    }
+   ]
+  },
+  "open": "النقل في الغازات الكثيفة والسوائل: الصورة الكاملة للموضوع تعتمد على متوسط المسار الحر، وفي السائل لا وجود له ببساطة — الجزيء لا يطير بين التصادمات، بل يتردد في قفص جيرانه ويغيره نادرًا. لا توجد صيغ بنفس مستوى الدقة للسوائل: اللزوجة والتوصيل الحراري والانتشار تُحسب هناك بنماذج شبه تجريبية مع معايرة بالتجربة، ونظرية تشابمان-إنسكوج الدقيقة للغاز المخلخل تعطي خطأً ملحوظًا بالفعل عند الكثافات العادية",
+  "lessons": [
+   {
+    "id": "01-diffusion",
+    "title": "الانتشار: نقل المادة",
+    "sub": "لماذا يتمدد الانتشار كجذر زمني",
+    "law": "قانون فيك",
+    "model": "transport"
+   },
+   {
+    "id": "02-conduction",
+    "title": "التوصيل الحراري: نقل الطاقة",
+    "sub": "كيف تنتقل الطاقة عبر مادة لا تتدفق نفسها",
+    "law": "قانون فورييه",
+    "model": "transport"
+   },
+   {
+    "id": "03-viscosity-gas",
+    "title": "لزوجة الغاز: نقل الزخم",
+    "sub": "لماذا لا تعتمد لزوجة الغاز على الضغط، وتزداد بالتسخين",
+    "law": "الصيغة الحركية للزوجة · قانون ماكسويل",
+    "model": "transport"
+   }
+  ]
+ }
+}

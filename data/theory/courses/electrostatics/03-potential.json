@@ -14,37 +14,37 @@
   "scientists": [],
   "examples_from_articles": [
    {
-    "id": "2607.14764",
-    "date": "2026-07-16",
+    "id": "2607.16645",
+    "date": "2026-07-18",
     "title": {
-     "ru": "Бозонный гул цемента: терагерцы слушают нано-неоднородности",
-     "en": "Cement's Boson Hum: Terahertz Waves Eavesdrop on Nano-Inhomogeneities",
-     "es": "El zumbido bosónico del cemento: los terahercios escuchan las nano-heterogeneidades",
-     "ar": "همهمة البوزون في الإسمنت: تيراهرتز تستمع إلى اللاتجانسات النانوية"
+     "ru": "Батарейка с характером: геометрия отдачи энергии",
+     "en": "A Battery with Character: The Geometry of Energy Delivery",
+     "es": "Batería con carácter: la geometría de la entrega de energía",
+     "ar": "بطارية ذات طابع خاص: هندسة إطلاق الطاقة"
     },
-    "why": "electromagnetism"
+    "why": "potential_energy, voltage"
    },
    {
-    "id": "2607.11058",
+    "id": "2607.12481",
+    "date": "2026-07-14",
+    "title": {
+     "ru": "Электромобили как распределённые регуляторы напряжения в сети",
+     "en": "How Electric Vehicles Stabilize Grid Voltage",
+     "es": "Cómo los coches eléctricos estabilizan la tensión en la red",
+     "ar": "كيف تثبّت السيارات الكهربائية الجهد في الشبكة"
+    },
+    "why": "voltage, potential_difference"
+   },
+   {
+    "id": "2607.11243",
     "date": "2026-07-13",
     "title": {
-     "ru": "Нейросеть слышит магнитную музыку",
-     "en": "Neural Network Hears Magnetic Music",
-     "es": "La red neuronal escucha música magnética",
-     "ar": "الشبكة العصبية تستمع إلى الموسيقى المغناطيسية"
+     "ru": "Почему в тяговой сети поездов возникают колебания напряжения",
+     "en": "Why Trains Rock the Voltage",
+     "es": "Por qué los trenes provocan oscilaciones de tensión",
+     "ar": "لماذا يتأرجح الجهد في القطارات؟"
     },
-    "why": "electromagnetism"
-   },
-   {
-    "id": "2607.10561",
-    "date": "2026-07-12",
-    "title": {
-     "ru": "Жидкое зеркало горизонта: как партонный океан дарует чёрным дырам электрическую душу",
-     "en": "The Liquid Mirror of the Horizon: How a Partonic Ocean Gives Black Holes an Electric Soul",
-     "es": "El espejo líquido del horizonte: cómo el océano de partones otorga un alma eléctrica a los agujeros negros",
-     "ar": "المرآة السائلة للأفق: كيف يمنح محيط البارتونات الثقوبَ السوداء جوهرًا كهربائيًا"
-    },
-    "why": "electromagnetism"
+    "why": "voltage, electric_grid"
    }
   ]
  },
@@ -174,11 +174,26 @@
   },
   "math": {
    "title": "Математика, которая здесь понадобилась",
-   "text": [
-    "Почему потенциал удобнее поля. Представьте карту местности. Поле — это стрелки, показывающие, куда покатится мяч в каждой точке: величина и направление, то есть два числа. Потенциал — это высота над уровнем моря: одно число. Но по высотам всё восстанавливается: мяч катится туда, где склон круче вниз. Мы заменили карту стрелок картой высот и потеряли ровно ничего, зато складывать высоты от нескольких холмов гораздо проще, чем складывать стрелки.",
-    "Что означает «поле есть производная потенциала со знаком минус». Минус здесь не формальность. Мяч катится вниз, то есть в сторону убывания высоты, — значит сила направлена туда, где потенциал меньше. Крутой склон означает большую силу, пологий — малую, ровная площадка — нулевую. Именно поэтому единицу напряжённости можно писать как вольт на метр: это буквально «сколько вольт теряется на каждом метре пути».",
-    "Что такое эквипотенциальная линия. На карте это горизонталь — линия равной высоты. Идя вдоль неё, вы не поднимаетесь и не спускаетесь, а значит не совершаете работы против силы тяжести. В электричестве то же: перемещая заряд вдоль эквипотенциали, работы не совершаешь вовсе. И ещё одно свойство, знакомое всякому, кто читал карты: горизонтали всегда перпендикулярны линиям наибольшего склона. Поэтому силовые линии всегда пересекают эквипотенциали под прямым углом.",
-    "Почему в яме энергия отрицательна. Тот же выбор отсчёта, что в гравитации: ноль отнесён на бесконечность. Разноимённые заряды притягиваются, чтобы их растащить — нужна работа, значит вблизи они сидят в яме, ниже нуля. Одноимённые, наоборот, сами разлетаются, отдавая энергию, — их энергия положительна, это горка. Знак энергии сразу говорит, связана система или развалится: ровно то же правило, что решало вид орбиты в теме о гравитации."
+   "lead": "Понадобятся три вещи: интеграл переменной силы, скалярное произведение и производная со знаком минус.",
+   "items": [
+    {
+     "what": "Почему работа считается интегралом",
+     "why": "Работа равна силе, умноженной на путь, только пока сила постоянна. В первом шаге вывода она меняется на каждом сантиметре — по закону обратных квадратов, — и постоянного множителя, на который можно было бы умножить путь, просто нет. Выход обычный: путь режется на куски настолько короткие, что на каждом силу можно считать неизменной; вклады складываются, а длина куска устремляется к нулю. Это и записано как $\\int_{r_1}^{r_2} kQq\\,dr/r^{2}$. Результат стоит запомнить отдельно: интегрирование показатель степени повышает на единицу, $\\int r^{n}\\,dr = r^{n+1}/(n+1)$. Здесь показатель равен $-2$ и становится $-1$ — из $1/r^{2}$ выходит $1/r$. Растёт показатель, а падает при этом степень в знаменателе. Отсюда и расхождение двух главных формул темы — поле убывает как квадрат расстояния, а потенциал и энергия как первая степень.",
+     "latex": "\\int_{r_1}^{r_2}\\frac{dr}{r^{2}} = \\left[-\\frac{1}{r}\\right]_{r_1}^{r_2} = \\frac{1}{r_1} - \\frac{1}{r_2}",
+     "kit": "integral"
+    },
+    {
+     "what": "Почему по дуге работа нулевая",
+     "why": "Во второй половине первого шага сказано, что на дуге окружности сила работы не совершает. За этим стоит определение работы через скалярное произведение: в счёт идёт не вся сила, а только её составляющая вдоль перемещения, то есть множитель $\\cos\\alpha$. Двигаясь по дуге, мы всё время идём поперёк радиуса, угол между силой и путём прямой, косинус нулевой — вклад пропадает целиком. Это и делает поле консервативным: любой путь разбирается на радиальные участки и дуги, дуги выпадают, остаются лишь начальный и конечный радиусы. Тот же ноль объясняет, почему линия равного потенциала всегда пересекает силовую линию под прямым углом.",
+     "latex": "A = \\vec{F}\\cdot\\Delta\\vec{s} = F\\,\\Delta s\\,\\cos\\alpha, \\qquad \\alpha = 90^{\\circ} \\;\\Longrightarrow\\; A = 0",
+     "kit": "dotcross"
+    },
+    {
+     "what": "Откуда минус в формуле поля",
+     "why": "Производная в пятом шаге работает так же, как в кинематике, только берётся по координате, а не по времени: она отвечает на вопрос, насколько круто величина меняется на метр пути. Крутой склон потенциала означает сильное поле, пологий — слабое. Минус задаёт направление: поле смотрит туда, куда потенциал убывает, а не туда, где он растёт. Единица напряжённости прочитывается тогда буквально — вольт на метр, столько вольт теряется на каждом метре. Шестой шаг вывода — та же производная, обращённая в ноль: поля внутри проводника нет, значит потенциал не меняется вовсе, значит обе лапы птицы сидят на одном значении.",
+     "latex": "E_x = -\\frac{d\\varphi}{dx}, \\qquad E = 0 \\;\\Longleftrightarrow\\; \\varphi = \\text{const}",
+     "kit": "gradient"
+    }
    ]
   },
   "example": {
@@ -400,8 +415,7 @@
      "гасят",
      "скаляр",
      "склад",
-     "знак",
-     "не имеет направлен"
+     "знак"
     ],
     "needed": 2,
     "why": "Поле — вектор: два одинаковых вклада направлены навстречу друг другу и полностью гасятся. Потенциал — скаляр, у него нет направления, и вклады просто складываются, давая максимум. Величины связаны, но обращаются в ноль в разных местах: поле есть крутизна склона, а в вершине холма склон нулевой при максимальной высоте.",
@@ -542,15 +556,6 @@
    ],
    "plate": "Potential is energy per unit charge, a scalar defined at every point. The field is the slope steepness of its slope; work depends only on the potential difference, not on the path.",
    "note": "Limits of applicability and a key practical clarification. The concept of potential exists only because the electrostatic field is conservative — work does not depend on the path. As soon as changing magnetic fields appear, this ceases to be true: then the work along a closed loop is nonzero, which is the basis of any electric generator. Potential in the usual sense cannot be introduced then, and a more general description will be needed. This will be the main topic of the next section of the course."
-  },
-  "math": {
-   "title": "Mathematics needed here",
-   "text": [
-    "Why potential is more convenient than field. Imagine a topographic map. The field is arrows showing where a ball will roll at each point: magnitude and direction, i.e., two numbers. Potential is the altitude above sea level: one number. But from altitudes everything is recovered: the ball rolls where the slope is steepest downward. We replaced a map of arrows with a map of altitudes and lost exactly nothing, but adding altitudes from several hills is much simpler than adding arrows.",
-    "What 'the field is the derivative of the potential with a minus sign' means. The minus is not a formality. The ball rolls downward, i.e., towards decreasing altitude — so the force is directed to where the potential is lower. A steep slope means a large force, a gentle slope means a small force, a flat area means zero. That's why the unit of field strength can be written as volt per meter: it literally means 'how many volts are lost per meter of path.'",
-    "What an equipotential line is. On a map it is a contour line — a line of equal altitude. Walking along it, you neither rise nor descend, so you do no work against gravity. In electricity the same: moving a charge along an equipotential does no work at all. And another property familiar to anyone who reads maps: contour lines are always perpendicular to the lines of steepest slope. Therefore, field lines always cross equipotentials at right angles.",
-    "Why energy is negative in a well. The same choice of reference as in gravity: zero is set at infinity. Opposite charges attract; to separate them work is needed, so near each other they sit in a well, below zero. Like charges, on the other hand, fly apart on their own, releasing energy — their energy is positive, a hill. The sign of energy immediately tells whether the system is bound or will fall apart: exactly the same rule that determined the type of orbit in the topic on gravity."
-   ]
   },
   "example": {
    "title": "Example with numbers: why a bird is unharmed but a person is not",
@@ -847,6 +852,30 @@
      "text": "It works not by attracting lightning, but because the field at the tip is especially strong: charge gradually leaks into the air, reducing the potential difference and often preventing the strike altogether."
     }
    ]
+  },
+  "math": {
+   "title": "The math you'll need here",
+   "lead": "You'll need three things: the integral of a variable force, the dot product, and a derivative with a minus sign.",
+   "items": [
+    {
+     "what": "Why work is calculated as an integral",
+     "why": "Work equals force times distance only while the force is constant. In the first step of the derivation, it changes at every centimeter—according to the inverse square law—and there is simply no constant factor by which you could multiply the distance. The usual approach: the path is cut into pieces so short that on each one the force can be considered constant; the contributions are summed, and the length of the piece tends to zero. This is written as $\\int_{r_1}^{r_2} kQq\\,dr/r^{2}$. The result is worth remembering separately: integration increases the exponent by one, $\\int r^{n}\\,dr = r^{n+1}/(n+1)$. Here the exponent is $-2$ and becomes $-1$—from $1/r^{2}$ you get $1/r$. The exponent grows, but the degree in the denominator falls. Hence the divergence of the two main formulas of the topic: the field decreases as the square of the distance, while the potential and energy decrease as the first power.",
+     "latex": "\\int_{r_1}^{r_2}\\frac{dr}{r^{2}} = \\left[-\\frac{1}{r}\\right]_{r_1}^{r_2} = \\frac{1}{r_1} - \\frac{1}{r_2}",
+     "kit": "integral"
+    },
+    {
+     "what": "Why work along an arc is zero",
+     "why": "In the second half of the first step, it is said that on a circular arc the force does no work. Behind this is the definition of work through the dot product: only the component of the force along the displacement counts, that is, the factor $\\cos\\alpha$. Moving along an arc, we always go across the radius, the angle between the force and the path is right, the cosine is zero—the contribution disappears entirely. This is what makes the field conservative: any path is decomposed into radial segments and arcs, the arcs drop out, and only the initial and final radii remain. The same zero explains why an equipotential line always intersects a field line at a right angle.",
+     "latex": "A = \\vec{F}\\cdot\\Delta\\vec{s} = F\\,\\Delta s\\,\\cos\\alpha, \\qquad \\alpha = 90^{\\circ} \\;\\Longrightarrow\\; A = 0",
+     "kit": "dotcross"
+    },
+    {
+     "what": "Where the minus sign in the field formula comes from",
+     "why": "The derivative in the fifth step works the same as in kinematics, only it is taken with respect to coordinate, not time: it answers the question of how steeply the quantity changes per meter of path. A steep slope of the potential means a strong field, a gentle one means a weak field. The minus sign sets the direction: the field points where the potential decreases, not where it increases. The unit of field strength is then read literally—volts per meter, so many volts lost per meter. The sixth step of the derivation is the same derivative, turned to zero: there is no field inside a conductor, so the potential does not change at all, so both of the bird's feet sit at the same value.",
+     "latex": "E_x = -\\frac{d\\varphi}{dx}, \\qquad E = 0 \\;\\Longleftrightarrow\\; \\varphi = \\text{const}",
+     "kit": "gradient"
+    }
+   ]
   }
  },
  "es": {
@@ -972,15 +1001,6 @@
    ],
    "plate": "El potencial es energía por unidad de carga, un escalar definido en cada punto. El campo es la pendiente de su declive; el trabajo depende solo de la diferencia de potencial, no del camino.",
    "note": "Límites de aplicabilidad y aclaración práctica principal. El concepto de potencial existe solo porque el campo electrostático es conservativo — el trabajo no depende del camino. En cuanto aparecen campos magnéticos variables, esto deja de ser cierto: allí el trabajo a lo largo de un circuito cerrado no es cero, en lo que se basa cualquier generador eléctrico. Entonces no se puede introducir el potencial en sentido habitual, y se necesitará una descripción más general. Este será el tema principal del próximo tema del curso."
-  },
-  "math": {
-   "title": "Matemáticas que aquí se necesitaron",
-   "text": [
-    "Por qué el potencial es más conveniente que el campo. Imagine un mapa del terreno. El campo son flechas que indican hacia dónde rodará una pelota en cada punto: magnitud y dirección, es decir, dos números. El potencial es la altura sobre el nivel del mar: un número. Pero a partir de las alturas se recupera todo: la pelota rueda hacia donde la pendiente es más pronunciada hacia abajo. Hemos reemplazado un mapa de flechas por un mapa de alturas y no hemos perdido nada, pero sumar las alturas de varias colinas es mucho más fácil que sumar flechas.",
-    "Qué significa «el campo es la derivada del potencial con signo menos». El menos no es una formalidad. La pelota rueda hacia abajo, es decir, hacia donde disminuye la altura; por lo tanto, la fuerza se dirige hacia donde el potencial es menor. Una pendiente pronunciada implica una fuerza grande, una pendiente suave una pequeña, una superficie plana una fuerza nula. Precisamente por eso la unidad de campo eléctrico se puede escribir como voltio por metro: literalmente «cuántos voltios se pierden por cada metro de recorrido».",
-    "Qué es una línea equipotencial. En un mapa es una curva de nivel: línea de igual altura. Caminando a lo largo de ella, no se sube ni se baja, por lo tanto no se realiza trabajo contra la gravedad. En electricidad es igual: moviendo una carga a lo largo de una equipotencial no se realiza trabajo. Y otra propiedad conocida por quienes leen mapas: las curvas de nivel siempre son perpendiculares a las líneas de máxima pendiente. Por eso las líneas de campo siempre cruzan las equipotenciales en ángulo recto.",
-    "Por qué la energía en un pozo es negativa. Es la misma elección de referencia que en la gravedad: el cero se sitúa en el infinito. Las cargas opuestas se atraen, para separarlas se necesita trabajo, por lo tanto cerca están en un pozo, por debajo de cero. Las cargas iguales, en cambio, se repelen, liberando energía, su energía es positiva, es una colina. El signo de la energía indica de inmediato si el sistema está ligado o se desintegrará: exactamente la misma regla que determinaba el tipo de órbita en el tema de la gravedad."
-   ]
   },
   "example": {
    "title": "Ejemplo con números: por qué el pájaro está ileso y la persona no",
@@ -1218,7 +1238,31 @@
     "hint": "La unidad fue inventada especialmente para que estos problemas se resuelvan sin cálculos. ¿Qué significa la palabra «electrónvoltio»?",
     "tolAbs": 200
    }
-  ]
+  ],
+  "math": {
+   "title": "Las matemáticas que aquí se necesitaron",
+   "lead": "Se necesitan tres cosas: la integral de una fuerza variable, el producto escalar y la derivada con signo menos.",
+   "items": [
+    {
+     "what": "Por qué el trabajo se calcula como una integral",
+     "why": "El trabajo es igual a la fuerza por la distancia solo si la fuerza es constante. En el primer paso de la deducción, la fuerza cambia en cada centímetro —según la ley del inverso del cuadrado— y no hay un factor constante por el que se pueda multiplicar la distancia. La solución habitual es dividir el camino en trozos tan cortos que en cada uno la fuerza se pueda considerar constante; se suman las contribuciones y la longitud del trozo tiende a cero. Esto es lo que se escribe como $\\int_{r_1}^{r_2} kQq\\,dr/r^{2}$. Vale la pena recordar el resultado por separado: la integración aumenta el exponente en uno, $\\int r^{n}\\,dr = r^{n+1}/(n+1)$. Aquí el exponente es $-2$ y se convierte en $-1$ — de $1/r^{2}$ se obtiene $1/r$. El exponente aumenta, pero la potencia en el denominador disminuye. De ahí surge la divergencia de las dos fórmulas principales del tema: el campo disminuye como el cuadrado de la distancia, mientras que el potencial y la energía lo hacen como la primera potencia.",
+     "latex": "\\int_{r_1}^{r_2}\\frac{dr}{r^{2}} = \\left[-\\frac{1}{r}\\right]_{r_1}^{r_2} = \\frac{1}{r_1} - \\frac{1}{r_2}",
+     "kit": "integral"
+    },
+    {
+     "what": "Por qué el trabajo a lo largo de un arco es nulo",
+     "why": "En la segunda mitad del primer paso se dice que en un arco de circunferencia la fuerza no realiza trabajo. Detrás de esto está la definición de trabajo mediante el producto escalar: no cuenta toda la fuerza, sino solo su componente a lo largo del desplazamiento, es decir, el factor $\\cos\\alpha$. Al moverse a lo largo de un arco, siempre se va perpendicular al radio, el ángulo entre la fuerza y el camino es recto, el coseno es cero — la contribución desaparece por completo. Esto es lo que hace que el campo sea conservativo: cualquier camino se descompone en segmentos radiales y arcos, los arcos se anulan, y solo quedan los radios inicial y final. Ese mismo cero explica por qué la línea de igual potencial siempre cruza la línea de campo en ángulo recto.",
+     "latex": "A = \\vec{F}\\cdot\\Delta\\vec{s} = F\\,\\Delta s\\,\\cos\\alpha, \\qquad \\alpha = 90^{\\circ} \\;\\Longrightarrow\\; A = 0",
+     "kit": "dotcross"
+    },
+    {
+     "what": "De dónde sale el signo menos en la fórmula del campo",
+     "why": "La derivada en el quinto paso funciona igual que en cinemática, solo que se toma con respecto a la coordenada, no al tiempo: responde a la pregunta de cuán abruptamente cambia la magnitud por metro de camino. Una pendiente pronunciada del potencial significa un campo fuerte; una suave, uno débil. El signo menos indica la dirección: el campo apunta hacia donde el potencial disminuye, no hacia donde aumenta. La unidad de intensidad se lee entonces literalmente: voltio por metro, cuántos voltios se pierden en cada metro. El sexto paso de la deducción es la misma derivada, igualada a cero: dentro del conductor no hay campo, por lo tanto el potencial no cambia en absoluto, por lo tanto las dos patas del pájaro están al mismo valor.",
+     "latex": "E_x = -\\frac{d\\varphi}{dx}, \\qquad E = 0 \\;\\Longleftrightarrow\\; \\varphi = \\text{const}",
+     "kit": "gradient"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "الجهد والطاقة",
@@ -1345,15 +1389,6 @@
    ],
    "plate": "الجهد هو الطاقة لكل وحدة شحنة، كمية قياسية، معطاة عند كل نقطة. المجال هو انحدار منحدره؛ الشغل يعتمد فقط على فرق الجهد، وليس على المسار.",
    "note": "حدود التطبيق والتوضيح العملي الرئيسي. مفهوم الجهد موجود فقط لأن المجال الكهروستاتيكي محافظ — الشغل لا يعتمد على المسار. بمجرد ظهور مجالات مغناطيسية متغيرة، لم يعد هذا صحيحًا: حيث يكون الشغل حول مسار مغلق غير صفري، وهو ما يقوم عليه أي مولد كهربائي. عندها لا يمكن تعريف الجهد بالمعنى المألوف، وسنحتاج إلى وصف أكثر عمومية. سيكون هذا الموضوع الرئيسي للموضوع التالي من الدورة."
-  },
-  "math": {
-   "title": "الرياضيات التي كانت ضرورية هنا",
-   "text": [
-    "لماذا الجهد أكثر ملاءمة من المجال. تخيل خريطة تضاريس. المجال هو أسهم تظهر أين سيتدحرج الكرة في كل نقطة: المقدار والاتجاه، أي رقمين. الجهد هو الارتفاع عن مستوى سطح البحر: رقم واحد. ولكن من الارتفاعات يمكن استعادة كل شيء: الكرة تتدحرج إلى حيث المنحدر أكثر انحدارًا نحو الأسفل. لقد استبدلنا خريطة الأسهم بخريطة ارتفاعات ولم نفقد شيئًا، لكن جمع ارتفاعات من عدة تلال أسهل بكثير من جمع الأسهم.",
-    "ماذا يعني \"المجال هو مشتقة الجهد بإشارة سالبة\". الإشارة السالبة هنا ليست شكلية. الكرة تتدحرج إلى أسفل، أي نحو انخفاض الارتفاع، مما يعني أن القوة موجهة نحو حيث الجهد أقل. المنحدر الحاد يعني قوة كبيرة، المنحدر اللطيف يعني قوة صغيرة، الأرض المستوية تعني صفرًا. ولهذا يمكن كتابة وحدة شدة المجال كـ فولت لكل متر: هذا حرفيًا \"كم فولت يُفقد لكل متر من المسار\".",
-    "ما هو خط تساوي الجهد. على الخريطة هو خط كنتور — خط ارتفاع متساوٍ. السير على طوله لا يرفعك أو يخفضك، وبالتالي لا تبذل شغلًا ضد الجاذبية. في الكهرباء نفس الشيء: تحريك شحنة على طول خط تساوي الجهد لا يبذل أي شغل. وخاصية أخرى يعرفها كل من قرأ الخرائط: خطوط الكنتور دائمًا عمودية على خطوط أشد الانحدار. لذلك خطوط المجال دائمًا تتقاطع مع خطوط تساوي الجهد بزاوية قائمة.",
-    "لماذا الطاقة سالبة في الحفرة. نفس اختيار المرجع كما في الجاذبية: الصفر عند اللانهاية. الشحنات المختلفة تتجاذب، لفصلها نحتاج شغل، لذا فهي تقع في حفرة تحت الصفر. الشحنات المتماثلة، على العكس، تتباعد تلقائيًا وتطلق طاقة، لذا طاقتها موجبة، وهي تلة. إشارة الطاقة تخبرنا فورًا ما إذا كان النظام مرتبطًا أم سيتفكك: نفس القاعدة التي حددت نوع المدار في موضوع الجاذبية."
-   ]
   },
   "example": {
    "title": "مثال بأرقام: لماذا يبقى الطائر سليمًا بينما الإنسان لا",
@@ -1654,6 +1689,30 @@
      "what": "إلكترون فولت",
      "unit": "J",
      "note": "طاقة إلكترون عبر فرق جهد 1 فولت؛ الوحدة الرئيسية في الفيزياء الذرية"
+    }
+   ]
+  },
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "ستكون هناك حاجة إلى ثلاثة أشياء: تكامل القوة المتغيرة، والضرب القياسي، والمشتقة مع علامة ناقص.",
+   "items": [
+    {
+     "what": "لماذا يُحسب الشغل باعتباره تكاملًا",
+     "why": "الشغل يساوي القوة مضروبة في المسافة فقط عندما تكون القوة ثابتة. في الخطوة الأولى من الاشتقاق، تتغير القوة عند كل سنتيمتر — وفقًا لقانون التربيع العكسي — ولا يوجد عامل ثابت يمكن ضرب المسافة به. الحل المعتاد هو تقسيم المسافة إلى أجزاء قصيرة بما يكفي بحيث يمكن اعتبار القوة ثابتة في كل جزء؛ تُجمع المساهمات، ويتجه طول الجزء إلى الصفر. هذا ما يُكتب على النحو $\\int_{r_1}^{r_2} kQq\\,dr/r^{2}$. يجدر تذكر النتيجة بشكل منفصل: التكامل يرفع الأس بمقدار واحد، $\\int r^{n}\\,dr = r^{n+1}/(n+1)$. هنا الأس يساوي $-2$ ويصبح $-1$ — من $1/r^{2}$ نحصل على $1/r$. يزداد الأس، بينما تنخفض القوة في المقام. ومن هنا يأتي الاختلاف بين الصيغتين الرئيسيتين للموضوع: المجال يتناقص كمربع المسافة، بينما الجهد والطاقة يتناقصان كالقوة الأولى.",
+     "latex": "\\int_{r_1}^{r_2}\\frac{dr}{r^{2}} = \\left[-\\frac{1}{r}\\right]_{r_1}^{r_2} = \\frac{1}{r_1} - \\frac{1}{r_2}",
+     "kit": "integral"
+    },
+    {
+     "what": "لماذا الشغل على طول القوس يساوي صفرًا",
+     "why": "في النصف الثاني من الخطوة الأولى، قيل إن القوة لا تبذل شغلًا على قوس الدائرة. خلف هذا التعريف للشغل من خلال الضرب القياسي: لا يُحسب سوى مركبة القوة على طول الإزاحة، أي العامل $\\cos\\alpha$. عند التحرك على طول القوس، نتحرك دائمًا بشكل عمودي على نصف القطر، والزاوية بين القوة والمسار قائمة، وجيب التمام يساوي صفرًا — يختفي المساهمة تمامًا. هذا ما يجعل المجال محافظًا: أي مسار يُحلل إلى أجزاء شعاعية وأقواس، تسقط الأقواس، وتبقى فقط نصف القطر الابتدائي والنهائي. نفس الصفر يفسر لماذا يتقاطع خط الجهد المتساوي دائمًا مع خط المجال بزاوية قائمة.",
+     "latex": "A = \\vec{F}\\cdot\\Delta\\vec{s} = F\\,\\Delta s\\,\\cos\\alpha, \\qquad \\alpha = 90^{\\circ} \\;\\Longrightarrow\\; A = 0",
+     "kit": "dotcross"
+    },
+    {
+     "what": "من أين تأتي علامة الناقص في صيغة المجال",
+     "why": "المشتقة في الخطوة الخامسة تعمل بنفس الطريقة كما في الكينماتيكا، لكنها تؤخذ بالنسبة للإحداثي وليس الزمن: إنها تجيب على السؤال عن مدى انحدار تغير الكمية لكل متر من المسار. المنحدر الحاد للجهد يعني مجالًا قويًا، والمنحدر اللطيف يعني مجالًا ضعيفًا. علامة الناقص تحدد الاتجاه: المجال يشير إلى حيث يتناقص الجهد، وليس إلى حيث يزداد. وحدة شدة المجال تُقرأ حرفيًا: فولت لكل متر، أي عدد الفولتات المفقودة عند كل متر. الخطوة السادسة من الاشتقاق هي نفس المشتقة، ولكنها تُساوي صفرًا: لا يوجد مجال داخل الموصل، وبالتالي لا يتغير الجهد إطلاقًا، وبالتالي فإن قدمي الطائر تقعان على نفس القيمة.",
+     "latex": "E_x = -\\frac{d\\varphi}{dx}, \\qquad E = 0 \\;\\Longleftrightarrow\\; \\varphi = \\text{ثابت}",
+     "kit": "gradient"
     }
    ]
   }

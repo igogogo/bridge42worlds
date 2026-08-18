@@ -178,11 +178,26 @@
   },
   "math": {
    "title": "Математика, которая здесь понадобилась",
-   "text": [
-    "Почему потенциальная энергия отрицательна. Это часто сбивает с толку, хотя за этим нет ничего, кроме выбора точки отсчёта. Представьте яму. Вы вольны считать нулём дно ямы — тогда всё вокруг выше нуля. А можете считать нулём поверхность земли вдалеке — тогда всё в яме ниже, то есть отрицательно. Физика от выбора не меняется, меняются только числа. В тяготении удобнее второй вариант: нуль отнесён на бесконечность, и тогда отрицательная энергия сразу означает «сидит в яме, само не выберется», а положительная — «свободно, может уйти».",
-    "Откуда берётся корень из двух. Сравните две задачи. Чтобы летать по кругу, нужна энергия, покрывающая половину глубины ямы. Чтобы выбраться совсем — полную глубину. Энергия пропорциональна квадрату скорости, значит вдвое большей энергии соответствует не вдвое большая скорость, а больше в корень из двух. Отсюда и знаменитое 11,2 против 7,9 км/с. Это соотношение одинаково для Земли, Луны, Солнца и любого другого тела — оно не зависит ни от массы, ни от размера.",
-    "Что такое конические сечения на пальцах. Возьмите фонарик и посветите на стену. Держите прямо — на стене круг. Наклоните — круг вытянется в эллипс. Наклоните сильнее, так чтобы край светового конуса стал параллелен стене, — эллипс разомкнётся в параболу. Ещё сильнее — получится гипербола. Все четыре кривые суть срезы одного конуса под разными углами, и ровно они же получаются как орбиты. Древние греки изучали их как чистую геометрию за две тысячи лет до того, как выяснилось, что по ним ходят планеты.",
-    "Почему масса ракеты растёт экспоненциально. Каждый килограмм топлива нужно разгонять вместе с ракетой, а значит для его разгона нужно ещё топливо, для которого — ещё. Такая самоподдерживающаяся добавка всегда даёт экспоненту: чтобы прибавить одну и ту же порцию скорости, приходится каждый раз умножать стартовую массу на одно и то же число. Это и есть формула Циолковского. Из неё же следует, зачем ступени: отбросив пустой бак, вы перестаёте платить за его разгон."
+   "lead": "Понадобятся интеграл с произвольной постоянной, квадратный корень в роли пропорции и логарифм.",
+   "items": [
+    {
+     "what": "Откуда у энергии взялся минус",
+     "why": "Первый шаг вывода объявляет потенциальную энергию отрицательной, и это сбивает с толку сильнее всего остального в параграфе. Дело не в физике, а в интегрировании. Потенциальная энергия есть работа, набранная от точки отсчёта до данной, то есть интеграл силы по пути; а у интеграла остаётся произвольная постоянная — свобода выбрать, где считать ноль. В тяготении ноль удобно вынести на бесконечность, и тогда знак сразу читается как приговор: отрицательно значит «сидит в яме, само не выберется», ноль значит «ровно хватает», положительно значит «свободно». На этом чтении знака держится весь пятый шаг, где три знака энергии дают три разные кривые.",
+     "latex": "E_{\\text{п}}(r) = -\\int_{\\infty}^{r} \\left(-\\frac{GMm}{s^{2}}\\right) ds = -\\frac{GMm}{r}",
+     "kit": "integral"
+    },
+    {
+     "what": "Почему корень из двух, а не двойка",
+     "why": "В четвёртом шаге условие убегания отличается от условия круговой орбиты ровно вдвое по энергии, а по скорости — всего в $\\sqrt{2}$ раз. Причина в том, что скорость входит в энергию квадратом. Если $E \\propto v^{2}$, то обратно $v \\propto \\sqrt{E}$: чтобы удвоить энергию, скорость умножают не на 2, а на 1,414. Привычка переводить «во сколько раз выросла величина» во «во сколько раз выросла её степень» экономит здесь весь расчёт — в примере вторую космическую не считают заново, а просто умножают первую на корень из двух. И заметьте, что в это отношение не входят ни масса, ни радиус: они сократились, поэтому $\\sqrt{2}$ одинаково для Земли, Луны и нейтронной звезды.",
+     "latex": "E \\propto v^{2} \\;\\Longrightarrow\\; v \\propto \\sqrt{E}, \\qquad \\frac{v_{\\text{II}}}{v_{\\text{I}}} = \\sqrt{2} \\approx 1{,}414",
+     "kit": "propto"
+    },
+    {
+     "what": "Логарифм в формуле ракеты",
+     "why": "Экспонента в этом параграфе живёт не в выводе, а в истории формулы и в третьем вопросе на понимание: почему масса ракеты растёт с требуемой скоростью экспоненциально, а не пропорционально. Ответ математический. Логарифм отвечает на вопрос «в какую степень возвести» и появляется всякий раз, когда прирост величины пропорционален ей самой: каждый следующий килограмм топлива приходится разгонять вместе со всем, что ещё не сожжено. Циолковский записал это так: приращение скорости равно скорости истечения газов, умноженной на логарифм отношения масс. Обратное прочтение той же записи — экспонента: чтобы прибавить одинаковую порцию скорости, стартовую массу умножают на одно и то же число. Отсюда сразу порядки. При истечении 4,5 км/с и потребных 9 км/с отношение масс равно $e^{2} \\approx 7{,}4$, то есть топливо составляет больше восьмидесяти процентов стартовой массы; следующие 4,5 км/с обойдутся не прибавкой, а ещё одним умножением — на $e \\approx 2{,}7$, и умножение на 7,4 повторится только на следующих 9 км/с. Разбор самого уравнения вынесен в аппендикс, но экспонента нужна уже здесь — без неё ступени выглядят усовершенствованием, а не единственным выходом.",
+     "latex": "\\Delta v = u \\ln\\frac{m_0}{m_1} \\;\\Longleftrightarrow\\; \\frac{m_0}{m_1} = e^{\\Delta v / u}",
+     "kit": "exponent"
+    }
    ]
   },
   "example": {
@@ -416,7 +431,6 @@
      "везти",
      "сам себя",
      "нести",
-     "ещё топлив",
      "экспонент",
      "умнож",
      "тащ"
@@ -560,15 +574,6 @@
    ],
    "plate": "The sign of energy decides whether the body returns; the magnitude of energy sets the orbit size and period; angular momentum sets elongation. Three numbers describe the entire motion.",
    "note": "Limits of applicability. The formulas are derived for a point center and a single satellite. The real Earth is not a perfect sphere—its oblateness causes the orbital plane to slowly rotate, and this is taken into account when placing satellites into sun-synchronous orbits, and sometimes used deliberately. Moreover, near very massive bodies Newtonian formulas break down: at the surface of a neutron star, the second cosmic velocity is already half the speed of light, and relativity is necessary."
-  },
-  "math": {
-   "title": "Mathematics Needed Here",
-   "text": [
-    "Why potential energy is negative. This often confuses, but there is nothing behind it except the choice of reference point. Imagine a pit. You are free to set zero at the bottom of the pit—then everything around is above zero. Or you can set zero at the ground level far away—then everything in the pit is below, i.e., negative. Physics does not change with the choice, only the numbers do. In gravity, the second option is more convenient: zero is set at infinity, and then negative energy immediately means 'sitting in a well, cannot get out on its own,' and positive means 'free, can escape.'",
-    "Where the square root of two comes from. Compare two tasks. To fly in a circle, you need energy covering half the depth of the well. To escape completely, you need the full depth. Energy is proportional to the square of velocity, so twice the energy corresponds not to twice the velocity, but to velocity multiplied by the square root of two. Hence the famous 11.2 vs 7.9 km/s. This ratio is the same for Earth, Moon, Sun, and any other body—it does not depend on mass or size.",
-    "What conic sections are in simple terms. Take a flashlight and shine it on a wall. Hold it straight—you get a circle on the wall. Tilt it—the circle stretches into an ellipse. Tilt it more so that the edge of the light cone becomes parallel to the wall—the ellipse opens into a parabola. Tilt even more—you get a hyperbola. All four curves are slices of a single cone at different angles, and exactly these curves appear as orbits. The ancient Greeks studied them as pure geometry two thousand years before it was discovered that planets move along them.",
-    "Why rocket mass grows exponentially. Each kilogram of fuel must be accelerated along with the rocket, so to accelerate it you need more fuel, and to accelerate that you need even more. This self-sustaining addition always gives an exponential: to add the same increment of velocity, you must multiply the initial mass by the same number each time. This is Tsiolkovsky's rocket equation. From it also follows why stages are needed: by discarding an empty tank, you stop paying for its acceleration."
-   ]
   },
   "example": {
    "title": "Example with numbers: three cosmic velocities of Earth",
@@ -801,7 +806,6 @@
      "carry",
      "itself",
      "haul",
-     "more fuel",
      "exponential",
      "multiply",
      "need"
@@ -820,7 +824,31 @@
     "hint": "Circular orbital speed is the square root of GM divided by r. How does it change if r is doubled?",
     "tolAbs": 0.6
    }
-  ]
+  ],
+  "math": {
+   "title": "The Math Needed Here",
+   "lead": "You will need the integral with an arbitrary constant, the square root as a ratio, and the logarithm.",
+   "items": [
+    {
+     "what": "Why energy has a minus sign",
+     "why": "The first step of the derivation declares potential energy negative, and that confuses more than anything else in the section. It's not about physics, but about integration. Potential energy is the work accumulated from a reference point to the given point, i.e., the integral of force over the path; and the integral leaves an arbitrary constant — the freedom to choose where to set zero. In gravitation, it is convenient to place zero at infinity, and then the sign reads like a verdict: negative means \"sits in a pit, won't get out by itself,\" zero means \"just enough,\" positive means \"free.\" The entire fifth step relies on this reading of the sign, where three signs of energy give three different curves.",
+     "latex": "E_{\\text{p}}(r) = -\\int_{\\infty}^{r} \\left(-\\frac{GMm}{s^{2}}\\right) ds = -\\frac{GMm}{r}",
+     "kit": "integral"
+    },
+    {
+     "what": "Why the square root of two, not two",
+     "why": "In the fourth step, the escape condition differs from the circular orbit condition by exactly a factor of two in energy, but by only $\\sqrt{2}$ in speed. The reason is that speed enters energy as a square. If $E \\propto v^{2}$, then inversely $v \\propto \\sqrt{E}$: to double the energy, you multiply the speed not by 2, but by 1.414. The habit of translating \"how many times did the quantity grow\" into \"how many times did its power grow\" saves the whole calculation here — in the example, the second cosmic velocity is not recalculated, but simply the first is multiplied by the square root of two. And note that neither mass nor radius enters this ratio: they cancel, so $\\sqrt{2}$ is the same for Earth, the Moon, and a neutron star.",
+     "latex": "E \\propto v^{2} \\;\\Longrightarrow\\; v \\propto \\sqrt{E}, \\qquad \\frac{v_{\\text{II}}}{v_{\\text{I}}} = \\sqrt{2} \\approx 1.414",
+     "kit": "propto"
+    },
+    {
+     "what": "The logarithm in the rocket equation",
+     "why": "The exponential in this section lives not in the derivation, but in the history of the formula and in the third comprehension question: why does the rocket mass grow exponentially with the required speed, not proportionally? The answer is mathematical. The logarithm answers the question \"to what power to raise\" and appears whenever the increment of a quantity is proportional to the quantity itself: each next kilogram of fuel has to be accelerated together with everything not yet burned. Tsiolkovsky wrote it like this: the increment of speed equals the exhaust velocity times the logarithm of the mass ratio. The inverse reading of the same equation is the exponential: to add the same portion of speed, the initial mass is multiplied by the same number. Hence the orders of magnitude. With an exhaust of 4.5 km/s and a required 9 km/s, the mass ratio is $e^{2} \\approx 7.4$, meaning fuel is more than eighty percent of the initial mass; the next 4.5 km/s will cost not an addition, but another multiplication — by $e \\approx 2.7$, and the multiplication by 7.4 repeats only for the next 9 km/s. The analysis of the equation itself is relegated to the appendix, but the exponential is needed already here — without it, stages look like an improvement, not the only way out.",
+     "latex": "\\Delta v = u \\ln\\frac{m_0}{m_1} \\;\\Longleftrightarrow\\; \\frac{m_0}{m_1} = e^{\\Delta v / u}",
+     "kit": "exponent"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Órbitas y velocidades cósmicas",
@@ -945,15 +973,6 @@
    ],
    "plate": "El signo de la energía decide si el cuerpo regresa o no; la magnitud de la energía determina el tamaño de la órbita y el período; el momento angular determina la excentricidad. Tres números describen todo el movimiento.",
    "note": "Límites de aplicabilidad. Las fórmulas se derivaron para un centro puntual y un solo satélite. La Tierra real no es una esfera perfecta: su achatamiento hace que el plano orbital gire lentamente, y esto se tiene en cuenta al colocar satélites en órbitas heliosincrónicas, y a veces se usa intencionalmente. Además, cerca de cuerpos muy masivos las fórmulas newtonianas dejan de funcionar: en la superficie de una estrella de neutrones, la segunda velocidad cósmica ya es la mitad de la velocidad de la luz, y no se puede prescindir de la relatividad."
-  },
-  "math": {
-   "title": "Las matemáticas que se necesitan aquí",
-   "text": [
-    "Por qué la energía potencial es negativa. Esto a menudo causa confusión, aunque no hay nada más que la elección del punto de referencia. Imagine un pozo. Puede considerar el fondo del pozo como cero, entonces todo alrededor está por encima de cero. O puede considerar la superficie de la tierra a lo lejos como cero, entonces todo en el pozo está por debajo, es decir, negativo. La física no cambia con la elección, solo cambian los números. En la gravedad, el segundo caso es más conveniente: el cero se coloca en el infinito, y entonces la energía negativa significa inmediatamente 'está en el pozo, no puede salir por sí mismo', y la positiva significa 'libre, puede irse'.",
-    "De dónde viene la raíz de dos. Compare dos problemas. Para volar en círculo se necesita energía que cubra la mitad de la profundidad del pozo. Para escapar completamente se necesita la profundidad total. La energía es proporcional al cuadrado de la velocidad, por lo tanto, al doble de energía le corresponde no el doble de velocidad, sino un aumento en la raíz de dos. De ahí los famosos 11,2 frente a 7,9 km/s. Esta relación es la misma para la Tierra, la Luna, el Sol y cualquier otro cuerpo: no depende ni de la masa ni del tamaño.",
-    "Qué son las secciones cónicas de forma simple. Tome una linterna y apunte a una pared. Manteniéndola recta, obtiene un círculo en la pared. Incline: el círculo se estira formando una elipse. Incline más, de modo que el borde del cono de luz sea paralelo a la pared: la elipse se abre en una parábola. Incline aún más: obtendrá una hipérbola. Las cuatro curvas son cortes de un mismo cono con diferentes ángulos, y son exactamente las mismas que se obtienen como órbitas. Los antiguos griegos las estudiaron como geometría pura dos mil años antes de que se descubriera que los planetas se mueven en ellas.",
-    "Por qué la masa del cohete crece exponencialmente. Cada kilogramo de combustible debe acelerarse junto con el cohete, por lo tanto, para acelerarlo se necesita más combustible, y para ese aún más. Esta adición autocontenida siempre da una exponencial: para agregar un mismo incremento de velocidad, hay que multiplicar la masa inicial por el mismo número cada vez. Esta es la fórmula de Tsiolkovsky. De ella se deduce por qué las etapas: al desechar un tanque vacío, se deja de pagar por su aceleración."
-   ]
   },
   "example": {
    "title": "Ejemplo con números: las tres velocidades cósmicas de la Tierra",
@@ -1186,7 +1205,6 @@
      "transportar",
      "a sí mismo",
      "llevar",
-     "más combustible",
      "exponencial",
      "multiplicar",
      "arrastrar"
@@ -1205,7 +1223,31 @@
     "hint": "La velocidad circular es la raíz de GM dividido por r. ¿Cómo cambia si se duplica r?",
     "tolAbs": 0.6
    }
-  ]
+  ],
+  "math": {
+   "title": "Matemáticas que se necesitaron aquí",
+   "lead": "Se necesitarán la integral con constante arbitraria, la raíz cuadrada como proporción y el logaritmo.",
+   "items": [
+    {
+     "what": "De dónde salió el signo menos en la energía",
+     "why": "El primer paso de la deducción declara que la energía potencial es negativa, y esto confunde más que cualquier otra cosa en el párrafo. No se trata de física, sino de integración. La energía potencial es el trabajo acumulado desde el punto de referencia hasta el punto dado, es decir, la integral de la fuerza a lo largo del camino; y la integral deja una constante arbitraria: la libertad de elegir dónde considerar el cero. En la gravitación, es conveniente poner el cero en el infinito, y entonces el signo se lee de inmediato como una sentencia: negativo significa \"está en un pozo, no saldrá por sí solo\", cero significa \"justo lo suficiente\", positivo significa \"libre\". De esta lectura del signo depende todo el quinto paso, donde los tres signos de la energía dan tres curvas diferentes.",
+     "latex": "E_{\\text{p}}(r) = -\\int_{\\infty}^{r} \\left(-\\frac{GMm}{s^{2}}\\right) ds = -\\frac{GMm}{r}",
+     "kit": "integral"
+    },
+    {
+     "what": "Por qué la raíz de dos y no el dos",
+     "why": "En el cuarto paso, la condición de escape difiere de la condición de órbita circular exactamente en el doble de energía, pero en velocidad solo en $\\sqrt{2}$ veces. La razón es que la velocidad entra en la energía al cuadrado. Si $E \\propto v^{2}$, entonces inversamente $v \\propto \\sqrt{E}$: para duplicar la energía, la velocidad se multiplica no por 2, sino por 1,414. El hábito de traducir \"cuántas veces creció la magnitud\" a \"cuántas veces creció su potencia\" ahorra aquí todo el cálculo: en el ejemplo, la segunda velocidad cósmica no se calcula de nuevo, sino que simplemente se multiplica la primera por la raíz de dos. Y nótese que en esta relación no entran ni la masa ni el radio: se cancelaron, por lo que $\\sqrt{2}$ es igual para la Tierra, la Luna y una estrella de neutrones.",
+     "latex": "E \\propto v^{2} \\;\\Longrightarrow\\; v \\propto \\sqrt{E}, \\qquad \\frac{v_{\\text{II}}}{v_{\\text{I}}} = \\sqrt{2} \\approx 1{,}414",
+     "kit": "propto"
+    },
+    {
+     "what": "El logaritmo en la fórmula del cohete",
+     "why": "La exponencial en este párrafo no vive en la deducción, sino en la historia de la fórmula y en la tercera pregunta de comprensión: por qué la masa del cohete crece exponencialmente con la velocidad requerida, y no proporcionalmente. La respuesta es matemática. El logaritmo responde a la pregunta \"¿a qué potencia elevar?\" y aparece cada vez que el incremento de una magnitud es proporcional a la propia magnitud: cada kilogramo adicional de combustible hay que acelerarlo junto con todo lo que aún no se ha quemado. Tsiolkovsky lo escribió así: el incremento de velocidad es igual a la velocidad de escape de los gases multiplicada por el logaritmo de la relación de masas. La lectura inversa de la misma expresión es la exponencial: para añadir la misma porción de velocidad, la masa inicial se multiplica por el mismo número. De ahí salen inmediatamente los órdenes de magnitud. Con una velocidad de escape de 4,5 km/s y una necesaria de 9 km/s, la relación de masas es $e^{2} \\approx 7{,}4$, es decir, el combustible constituye más del ochenta por ciento de la masa inicial; los siguientes 4,5 km/s costarán no una adición, sino otra multiplicación: por $e \\approx 2{,}7$, y la multiplicación por 7,4 se repetirá solo en los siguientes 9 km/s. El análisis de la ecuación en sí se ha trasladado al apéndice, pero la exponencial ya se necesita aquí: sin ella, las etapas parecen una mejora, no la única salida.",
+     "latex": "\\Delta v = u \\ln\\frac{m_0}{m_1} \\;\\Longleftrightarrow\\; \\frac{m_0}{m_1} = e^{\\Delta v / u}",
+     "kit": "exponent"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "المدارات والسرعات الكونية",
@@ -1219,30 +1261,67 @@
   "formula": {
    "name": "طاقة المدار والسرعات الكونية",
    "latex": "E = \\frac{mv^{2}}{2} - \\frac{GMm}{r} = -\\frac{GMm}{2a}",
-   "alsoKnown": "تكامل الطاقة · معادلة القوى الحية (vis viva)",
+   "alsoKnown": "تكامل الطاقة · معادلة القوة الحية (vis viva)",
    "authors": [
     {
      "who": "إسحاق نيوتن",
      "year": "1687",
-     "what": "رسم المدفع الشهير على الجبل، موضحًا أن الحركة المدارية والسقوط هما نفس الشيء. شرح الرسم الفكرة أفضل مما كانت ستفعله صيغ ذلك الزمان."
+     "what": "رسم مدفعًا على قمة جبل، موضحًا أن الحركة المدارية والسقوط هما نفس الشيء. الرسم أوضح الفكرة أفضل مما كانت ستفعله معادلات ذلك الزمن"
     },
     {
      "who": "يوهان برنولي",
      "year": "1710",
-     "what": "حصل على العلاقة التي تربط السرعة بالمسافة وحجم المدار. لا تزال تسمى معادلة القوى الحية — نسبة للاسم القديم للطاقة الحركية الذي أدخله لايبنتس."
+     "what": "اشتق العلاقة التي تربط السرعة بالمسافة وحجم المدار. ولا تزال تُعرف بمعادلة القوة الحية — الاسم القديم للطاقة الحركية الذي أدخله لايبنتز"
     },
     {
      "who": "كونستانتين تسيولكوفسكي",
      "year": "1903",
-     "what": "اشتق معادلة حركة الصاروخ وكان أول من حسب السرعة اللازمة للوصول إلى المدار. عمل مدرسًا في المدرسة في كالوغا وكان شبه أصم منذ الطفولة."
+     "what": "اشتق معادلة حركة الصاروخ وكان أول من حسب السرعة اللازمة للوصول إلى المدار. عمل مدرسًا في مدرسة في كالوغا وكان شبه أصم منذ الطفولة"
     },
     {
-     "who": "والتر هومان",
+     "who": "فالتر هومان",
      "year": "1925",
-     "what": "وجد الطريقة الأكثر اقتصادية للانتقال بين المدارات الدائرية: تشغيل المحرك مرتين وقطع ناقص بينهما. لا تزال جميع المحطات بين الكواكب تطير على مساره حتى اليوم."
+     "what": "وجد الطريقة الأكثر اقتصادية للانتقال بين المدارات الدائرية: تشغيلان للمحرك وقطع ناقص بينهما. لا تزال جميع المسابير بين الكواكب تتبع مساره حتى اليوم"
     }
    ],
-   "story": "قصة السرعة الكونية الأولى مفيدة بشكل خاص، حيث تُقدم أحيانًا كإنجاز تقني. في الواقع، لم تكن الصعوبة أبدًا في السرعة بذاتها: 7,9 كم/ث هي أسرع بعشرين مرة فقط من الرصاصة. الصعوبة تكمن في أنه يجب تسريع الوقود مع الصاروخ، وبالتالي تزداد الكتلة أضعافًا مضاعفة مع السرعة المطلوبة. اشتق تسيولكوفسكي هذا في عام 1903 وأظهر أن صاروخًا أحادي المرحلة بالوقود آنذاك مستحيل من حيث المبدأ. من هنا ولدت فكرة المراحل: التخلص من الخزانات الفارغة لتجنب تسريعها أكثر. كل علم الفضاء نشأ من الصراع مع دالة أسية واحدة."
+   "story": "قصة السرعة الكونية الأولى مفيدة بشكل خاص، والتي تُقدم أحيانًا كإنجاز تقني. في الحقيقة، لم تكن الصعوبة أبدًا في السرعة بحد ذاتها: 7.9 كم/ثانية هي فقط أسرع بعشرين مرة من رصاصة. الصعوبة هي أن الوقود يجب أن يتسارع مع الصاروخ، وبالتالي فإن الكتلة تنمو بشكل أسي مع السرعة المطلوبة. اشتق تسيولكوفسكي هذا في عام 1903 وأظهر أن صاروخًا أحادي المرحلة يعمل بالوقود آنذاك مستحيل من حيث المبدأ. ومن هنا وُلدت فكرة المراحل: التخلص من الخزانات الفارغة حتى لا نضطر لتسريعها أكثر. نشأ كل علم الفضاء من الصراع مع دالة أسية واحدة.",
+   "symbols": [
+    {
+     "sym": "E",
+     "latex": "E",
+     "what": "الطاقة الميكانيكية الكلية",
+     "unit": "J",
+     "note": "سالبة للمدارات المغلقة: الجسم في بئر ولن يخرج بدون إضافة طاقة"
+    },
+    {
+     "sym": "a",
+     "latex": "a",
+     "what": "نصف المحور الأكبر",
+     "unit": "m",
+     "note": "يُحدد بالطاقة فقط؛ شكل المدار يمكن أن يكون أي شيء"
+    },
+    {
+     "sym": "v1",
+     "latex": "v_{\\text{I}}",
+     "what": "السرعة الكونية الأولى",
+     "unit": "m/s",
+     "note": "$\\sqrt{GM/R}$ — الحد الأدنى لمدار دائري عند السطح"
+    },
+    {
+     "sym": "v2",
+     "latex": "v_{\\text{II}}",
+     "what": "السرعة الكونية الثانية (سرعة الإفلات)",
+     "unit": "m/s",
+     "note": "$\\sqrt{2GM/R}$ — أكبر من الأولى بمقدار $\\sqrt{2}$ بالضبط، دائمًا ولأي جسم"
+    },
+    {
+     "sym": "L",
+     "latex": "L",
+     "what": "الزخم الزاوي",
+     "unit": "kg·m²/s",
+     "note": "مع الطاقة يحدد المدار بشكل فريد: الطاقة تعطي الحجم، والزخم يعطي الاستطالة"
+    }
+   ]
   },
   "symbols": [
    {
@@ -1330,15 +1409,6 @@
    ],
    "plate": "إشارة الطاقة تحدد ما إذا كان الجسم سيعود أم لا؛ مقدار الطاقة يحدد حجم المدار والدورة؛ الزخم الزاوي يحدد الاستطالة. ثلاثة أرقام تصف كل الحركة.",
    "note": "حدود التطبيق. تم اشتقاق الصيغ لمركز نقطي وقمر صناعي واحد. الأرض الحقيقية ليست كرة مثالية - تسبب تفلطحها دورانًا بطيئًا لمستوى المدار، ويتم أخذ ذلك في الاعتبار عند إطلاق الأقمار الصناعية إلى مدارات متزامنة مع الشمس، وأحيانًا يُستخدم عن قصد. بالإضافة إلى ذلك، بالقرب من الأجسام شديدة الكتلة، تتوقف الصيغ النيوتونية عن العمل: على سطح نجم نيوتروني، تبلغ السرعة الكونية الثانية نصف سرعة الضوء، ولا يمكن الاستغناء عن النظرية النسبية."
-  },
-  "math": {
-   "title": "الرياضيات التي كانت مطلوبة هنا",
-   "text": [
-    "لماذا طاقة الوضع سالبة. هذا غالبًا ما يربك، رغم أنه لا يوجد وراءه سوى اختيار نقطة المرجع. تخيل حفرة. أنت حر في اعتبار قاع الحفرة صفرًا - عندها كل شيء فوق الصفر. أو يمكنك اعتبار سطح الأرض البعيد صفرًا - عندها كل شيء في الحفرة أقل من الصفر، أي سالب. الفيزياء لا تتغير بالاختيار، تتغير الأرقام فقط. في الجاذبية، الخيار الثاني أكثر ملاءمة: الصفر عند اللانهاية، ثم الطاقة السالبة تعني فورًا \"في الحفرة، لا يخرج بمفرده\"، والموجبة تعني \"حر، يمكنه الابتعاد\".",
-    "من أين يأتي الجذر التربيعي للاثنين. قارن بين مشكلتين. للطيران في دائرة، نحتاج طاقة تغطي نصف عمق الحفرة. للهروب تمامًا - العمق الكامل. الطاقة تتناسب مع مربع السرعة، لذا طاقة مضاعفة تقابل سرعة أكبر بمقدار الجذر التربيعي للاثنين. ومن هنا تأتي السرعتان الشهيرتان 11.2 و 7.9 كم/ث. هذه النسبة هي نفسها للأرض والقمر والشمس وأي جسم آخر - لا تعتمد على الكتلة ولا على الحجم.",
-    "ما هي المقاطع المخروطية بطريقة مبسطة. خذ مصباحًا يدويًا وسلطه على حائط. أمسكه مستقيمًا - على الحائط دائرة. أمله - تتمدد الدائرة إلى قطع ناقص. أمله أكثر، بحيث يصبح حافة مخروط الضوء موازية للحائط - يتفتح القطع الناقص إلى قطع مكافئ. أكثر من ذلك - تحصل على قطع زائد. جميع المنحنيات الأربعة هي مقاطع لمخروط واحد بزوايا مختلفة، وهي بالضبط نفس المدارات. درسها الإغريق القدماء كهندسة خالصة قبل ألفي عام من اكتشاف أن الكواكب تتحرك عليها.",
-    "لماذا تزداد كتلة الصاروخ بشكل أسي. كل كيلوغرام من الوقود يجب تسريعه مع الصاروخ، لذا لتسريعه نحتاج وقودًا إضافيًا، وهذا يتطلب وقودًا أكثر. هذه الإضافة ذاتية الاستدامة تعطي دائمًا أسيًا: لإضافة نفس الزيادة في السرعة، يجب مضاعفة الكتلة الابتدائية بنفس العامل في كل مرة. هذه هي معادلة تسيولكوفسكي. ومنها أيضًا تأتي أهمية المراحل: بإلقاء الخزان الفارغ، تتوقف عن دفع ثمن تسريعه."
-   ]
   },
   "example": {
    "title": "مثال بالأرقام: ثلاث سرعات كونية للأرض",
@@ -1570,8 +1640,7 @@
      "تسارع",
      "حمل",
      "نفسه",
-     "يحمل",
-     "المزيد من الوقود",
+     "ينقل",
      "أسي",
      "ضرب",
      "يسحب"
@@ -1590,7 +1659,31 @@
     "hint": "السرعة المدارية هي جذر GM مقسوماً على r. كيف تتغير إذا تضاعفت r؟",
     "tolAbs": 0.6
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات المطلوبة هنا",
+   "lead": "سنحتاج إلى تكامل مع ثابت اختياري، وجذر تربيعي كنسبة، ولوغاريتم.",
+   "items": [
+    {
+     "what": "من أين جاءت الإشارة السالبة للطاقة",
+     "why": "الخطوة الأولى في الاشتقاق تعلن أن طاقة الوضع سالبة، وهذا يربك أكثر من أي شيء آخر في هذا القسم. الأمر لا يتعلق بالفيزياء، بل بالتكامل. طاقة الوضع هي الشغل المُكتسب من نقطة مرجعية إلى نقطة معينة، أي تكامل القوة على المسار؛ والتكامل يترك ثابتًا اختياريًا — حرية اختيار مكان الصفر. في الجاذبية، من المناسب وضع الصفر عند اللانهاية، وعندها تُقرأ الإشارة كحكم: السالب يعني «في بئر ولن يخرج بنفسه»، والصفر يعني «يكفي بالضبط»، والموجب يعني «حر». على قراءة الإشارة هذه يعتمد القسم الخامس بأكمله، حيث تعطي إشارات الطاقة الثلاث منحنيات مختلفة.",
+     "latex": "E_{\\text{pot}}(r) = -\\int_{\\infty}^{r} \\left(-\\frac{GMm}{s^{2}}\\right) ds = -\\frac{GMm}{r}",
+     "kit": "integral"
+    },
+    {
+     "what": "لماذا جذر اثنين وليس اثنين",
+     "why": "في الخطوة الرابعة، شرط الإفلات يختلف عن شرط المدار الدائري بالضبط بمعامل اثنين في الطاقة، لكن في السرعة يختلف بمعامل $\\sqrt{2}$ فقط. السبب هو أن السرعة تدخل في الطاقة مربعة. إذا كان $E \\propto v^{2}$، فعكسيًا $v \\propto \\sqrt{E}$: لمضاعفة الطاقة، تُضرب السرعة ليس في 2 بل في 1.414. عادة تحويل «كم مرة زادت الكمية» إلى «كم مرة زادت قوتها» توفر هنا الحساب كله — في المثال، السرعة الكونية الثانية لا تُحسب من جديد، بل تُضرب الأولى في جذر اثنين. ولاحظ أن هذه النسبة لا تتضمن الكتلة ولا نصف القطر: لقد اختصرا، لذلك $\\sqrt{2}$ هو نفسه للأرض والقمر والنجم النيوتروني.",
+     "latex": "E \\propto v^{2} \\;\\Longrightarrow\\; v \\propto \\sqrt{E}, \\qquad \\frac{v_{\\text{II}}}{v_{\\text{I}}} = \\sqrt{2} \\approx 1{,}414",
+     "kit": "propto"
+    },
+    {
+     "what": "اللوغاريتم في معادلة الصاروخ",
+     "why": "الأُس في هذا القسم لا يظهر في الاشتقاق، بل في تاريخ المعادلة وفي سؤال الفهم الثالث: لماذا تزداد كتلة الصاروخ أُسِّيًا مع السرعة المطلوبة، وليس تناسبيًا. الجواب رياضي. اللوغاريتم يجيب على سؤال «إلى أي قوة نرفع» ويظهر كلما كان النمو متناسبًا مع الكمية نفسها: كل كيلوغرام وقود تالٍ يجب تسريعه مع كل ما لم يُحرق بعد. كتب تسيولكوفسكي هذا هكذا: زيادة السرعة تساوي سرعة اندفاع الغازات مضروبة في لوغاريتم نسبة الكتل. القراءة العكسية لنفس المعادلة هي الأُس: لإضافة نفس القدر من السرعة، تُضرب الكتلة الابتدائية في نفس الرقم. من هنا تأتي المقاييس فورًا. عند اندفاع 4.5 كم/ث وسرعة مطلوبة 9 كم/ث، نسبة الكتل تساوي $e^{2} \\approx 7.4$، أي أن الوقود يشكل أكثر من ثمانين بالمئة من الكتلة الابتدائية؛ الـ 4.5 كم/ث التالية ستكلف ليس إضافة بل ضربًا آخر — في $e \\approx 2.7$، والضرب في 7.4 سيتكرر فقط عند الـ 9 كم/ث التالية. تحليل المعادلة نفسها موجود في الملحق، لكن الأُس مطلوب هنا بالفعل — بدونه تبدو المراحل تحسينًا وليس الحل الوحيد.",
+     "latex": "\\Delta v = u \\ln\\frac{m_0}{m_1} \\;\\Longleftrightarrow\\; \\frac{m_0}{m_1} = e^{\\Delta v / u}",
+     "kit": "exponent"
+    }
+   ]
+  }
  },
  "tags": [
   "pulsar",

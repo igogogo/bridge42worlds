@@ -179,11 +179,26 @@
   },
   "math": {
    "title": "Математика, которая здесь понадобилась",
-   "text": [
-    "Что такое стоячая волна в трёх измерениях. На струне узлы — точки. На барабанной мембране узлы уже линии, и формы колебаний становятся куда разнообразнее: круги, диаметры, их сочетания. В шаре узлы — поверхности, а форм ещё больше. Орбитали и есть эти формы. Полезно посмотреть на фигуры Хладни из темы о волнах: там песок собирается по узловым линиям пластины, и получаются симметричные узоры. Орбиталь — трёхмерный аналог такого узора.",
-    "Почему квантовых чисел именно четыре. Три пространственных измерения дают три числа — по одному на каждую степень свободы: одно радиальное и два угловых. Четвёртое, спин, к пространству не относится и появляется из требования согласовать квантовую механику с теорией относительности. Полезная проверка: сколько независимых способов может колебаться система, столько чисел и потребуется для описания её состояния.",
-    "Как читать обозначения вроде 2p³. Цифра — номер оболочки, буква — форма орбитали, верхний индекс — сколько электронов на ней сидит. Ограничение сверху задаётся числом ориентаций, помноженным на два спина: у s одна ориентация и потому не более двух электронов, у p три ориентации и не более шести, у d пять и не более десяти. Отсюда и структура таблицы, где блоки имеют ширину 2, 6, 10 и 14 клеток.",
-    "Откуда берётся $2n^{2}$. Складываем по всем допустимым формам: при данном $n$ число $\\ell$ пробегает значения от 0 до $n-1$, каждое даёт $2\\ell+1$ ориентаций, каждая ориентация вмещает два электрона. Сумма нечётных чисел от 1 до $2n-1$ равна $n^{2}$ — школьный факт, который здесь неожиданно оказывается основой строения вещества. Умножаем на два спина и получаем ёмкость оболочки."
+   "lead": "Понадобятся три вещи: координаты, подогнанные под симметрию задачи, разделение переменных и одна школьная сумма.",
+   "items": [
+    {
+     "what": "Почему координаты сферические, а не x, y, z",
+     "why": "Первый шаг записывает уравнение с потенциалом $-ke^{2}/r$. В декартовых координатах это $-ke^{2}/\\sqrt{x^{2}+y^{2}+z^{2}}$ — выражение, в котором все три переменные перепутаны, и решение не распадается ни на какие части. Переход к сферическим координатам $(r, \\theta, \\varphi)$ ничего не меняет в физике и всё меняет в записи: потенциал зависит только от первой из них, две угловые в него не входят вовсе. Правило общее: координаты выбирают так, чтобы симметрия задачи совпала с симметрией сетки. Плата за это — усложнившийся оператор $\\nabla^{2}$, где появляются множители $r^{2}$ и $\\sin\\theta$. Выгода больше платы: именно отсюда во втором шаге получается разделение на радиальную и угловую части, а с ним и деление квантовых чисел на одно радиальное и два угловых.",
+     "latex": "U = -\\frac{ke^{2}}{\\sqrt{x^{2}+y^{2}+z^{2}}} \\;\\longrightarrow\\; U = -\\frac{ke^{2}}{r}",
+     "kit": "polar"
+    },
+    {
+     "what": "Что значит разделить переменные",
+     "why": "Второй шаг пишет решение как произведение $R(r)\\,Y(\\theta,\\varphi)$, и это не упрощающее предположение, а метод. Произведение подставляют в уравнение и делят на него же; после этого все слагаемые с $r$ собираются в одной части равенства, все угловые в другой. Две функции разных переменных равны друг другу только в одном случае: если обе равны одному и тому же числу. Это число называют постоянной разделения, и произвольным оно не бывает — требование конечности и однозначности решения оставляет для него лишь дискретный набор значений. Так появляются два угловых числа четвёртого и пятого шагов: $m_\\ell$ разделяет $\\theta$ и $\\varphi$, а $\\ell$ разделяет угловую часть и радиальную и входит в последнюю в виде $\\ell(\\ell+1)$. Главное число $n$ приходит иначе: постоянной разделения оно не является. Оно берётся из радиального уравнения, где $\\ell(\\ell+1)$ стоит уже готовым числом: при произвольной энергии решение неограниченно растёт на больших $r$, и конечным оно остаётся, только если ряд обрывается, — обрыв же случается при целом $n > \\ell$, и это третий шаг. Общее у двух механизмов то, что ни одно число не постулировано, как у Бора: и дискретность постоянных разделения, и обрыв ряда следуют из одного требования конечности решения.",
+     "latex": "\\psi = R(r)\\,Y(\\theta,\\varphi): \\qquad f(r) = g(\\theta,\\varphi) = \\text{const}",
+     "kit": "separation"
+    },
+    {
+     "what": "Сумма нечётных чисел даёт квадрат",
+     "why": "Седьмой шаг складывает $2(2\\ell+1)$ по всем $\\ell$ от нуля до $n-1$ и сразу выдаёт $2n^{2}$. Пропущено вот что: в скобках стоят нечётные числа 1, 3, 5, …, $2n-1$, а их сумма равна $n^{2}$ при любом $n$. Проще всего увидеть это картинкой: квадрат наращивают уголками. К квадрату $2\\times2$ добавляют пять клеток и получают $3\\times3$, к нему семь клеток и получают $4\\times4$; каждый уголок и есть очередное нечётное число. Умножьте результат на два спина — получите ёмкость оболочки 2, 8, 18, 32. Ни одно из этих четырёх чисел не измерено, все четыре сосчитаны, и считать пришлось только количество допустимых наборов квантовых чисел.",
+     "latex": "1 + 3 + 5 + \\ldots + (2n-1) = n^{2} \\;\\Longrightarrow\\; \\sum_{\\ell=0}^{n-1} 2(2\\ell+1) = 2n^{2}",
+     "kit": "combinatorics"
+    }
    ]
   },
   "example": {
@@ -561,15 +576,6 @@
    "plate": "The state of an electron in an atom is given by four numbers: shell number, shape, orientation, and spin. From their combinations we get the capacity of shells $2n^{2}$ — the very 2, 8, 18, 32.",
    "note": "Limits of applicability. An exact solution exists only for hydrogen and hydrogen-like ions — systems with one electron. Already for helium, electrons repel each other, and the problem becomes analytically unsolvable, like the three-body problem in mechanics. Everything else is calculated approximately, but with high accuracy: modern quantum chemistry predicts molecular energies with errors of fractions of a percent. The concept of an orbital remains an approximation — strictly speaking, a multi-electron atom has one common wave function of all electrons, not a set of individual ones."
   },
-  "math": {
-   "title": "Math that came in handy here",
-   "text": [
-    "What a standing wave in three dimensions is. On a string, nodes are points. On a drum membrane, nodes are lines, and vibration shapes become much more diverse: circles, diameters, their combinations. In a sphere, nodes are surfaces, and there are even more shapes. Orbitals are these shapes. It is useful to look at Chladni figures from the wave topic: sand gathers along the nodal lines of the plate, and symmetrical patterns form. An orbital is a three-dimensional analog of such a pattern.",
-    "Why there are exactly four quantum numbers. Three spatial dimensions give three numbers — one for each degree of freedom: one radial and two angular. The fourth, spin, does not belong to space and appears from the requirement to reconcile quantum mechanics with the theory of relativity. A useful check: as many independent ways a system can vibrate, so many numbers are needed to describe its state.",
-    "How to read notations like 2p³. The digit is the shell number, the letter is the orbital shape, the superscript is how many electrons are in it. The upper limit is given by the number of orientations multiplied by two spins: s has one orientation, so no more than two electrons; p has three orientations, so no more than six; d has five, so no more than ten. Hence the structure of the table, where blocks have widths of 2, 6, 10, and 14 cells.",
-    "Where $2n^{2}$ comes from. We sum over all allowed shapes: for a given $n$, the number $\\ell$ runs from 0 to $n-1$, each gives $2\\ell+1$ orientations, each orientation holds two electrons. The sum of odd numbers from 1 to $2n-1$ equals $n^{2}$ — a school fact that here unexpectedly turns out to be the basis of the structure of matter. Multiply by two spins and we get the shell capacity."
-   ]
-  },
   "example": {
    "title": "Example with numbers: why water is bent",
    "lead": "We analyze the shape of the molecule from which almost everything you know about water follows.",
@@ -798,7 +804,7 @@
      "hydrogen bond",
      "boil",
      "ice lighter",
-     "ice lighter"
+     "ice floats"
     ],
     "needed": 2,
     "why": "The bent molecule is polar: the centers of positive and negative charges do not coincide. Hence, the ability to dissolve salts, hydrogen bonds between molecules, high boiling point, surface tension, and lower density of ice. If the molecule were linear, the dipole moment would become zero, and water would lose all these properties.",
@@ -814,7 +820,31 @@
     "hint": "Use the formula 2n² or add the capacities of the s, p, d, and f subshells.",
     "tolAbs": 2
    }
-  ]
+  ],
+  "math": {
+   "title": "The math needed here",
+   "lead": "Three things are needed: coordinates matched to the symmetry of the problem, separation of variables, and one school-level sum.",
+   "items": [
+    {
+     "what": "Why spherical coordinates, not x, y, z",
+     "why": "The first step writes the equation with the potential $-ke^{2}/r$. In Cartesian coordinates this is $-ke^{2}/\\sqrt{x^{2}+y^{2}+z^{2}}$ — an expression in which all three variables are mixed, and the solution does not split into any parts. Switching to spherical coordinates $(r, \\theta, \\varphi)$ changes nothing in the physics and everything in the notation: the potential depends only on the first of them, the two angular ones do not enter at all. The general rule: choose coordinates so that the symmetry of the problem matches the symmetry of the grid. The price for this is a more complicated operator $\\nabla^{2}$, where factors $r^{2}$ and $\\sin\\theta$ appear. The gain outweighs the cost: it is from here that the second step splits the solution into radial and angular parts, and with it the division of quantum numbers into one radial and two angular.",
+     "latex": "U = -\\frac{ke^{2}}{\\sqrt{x^{2}+y^{2}+z^{2}}} \\;\\longrightarrow\\; U = -\\frac{ke^{2}}{r}",
+     "kit": "polar"
+    },
+    {
+     "what": "What it means to separate variables",
+     "why": "The second step writes the solution as a product $R(r)\\,Y(\\theta,\\varphi)$, and this is not a simplifying assumption but a method. The product is substituted into the equation and divided by itself; after that, all terms with $r$ gather on one side of the equality, all angular terms on the other. Two functions of different variables are equal to each other only in one case: if both are equal to the same number. This number is called the separation constant, and it is not arbitrary — the requirement of finiteness and single-valuedness of the solution leaves only a discrete set of values for it. This is how the two angular numbers of the fourth and fifth steps appear: $m_\\ell$ separates $\\theta$ and $\\varphi$, and $\\ell$ separates the angular part from the radial part and enters the latter as $\\ell(\\ell+1)$. The principal number $n$ comes differently: it is not a separation constant. It comes from the radial equation, where $\\ell(\\ell+1)$ is already a fixed number: for arbitrary energy the solution grows without bound at large $r$, and it remains finite only if the series terminates — and termination happens for integer $n > \\ell$, and that is the third step. What the two mechanisms have in common is that no number is postulated as in Bohr: both the discreteness of separation constants and the termination of the series follow from the single requirement of finiteness of the solution.",
+     "latex": "\\psi = R(r)\\,Y(\\theta,\\varphi): \\qquad f(r) = g(\\theta,\\varphi) = \\text{const}",
+     "kit": "separation"
+    },
+    {
+     "what": "The sum of odd numbers gives a square",
+     "why": "The seventh step sums $2(2\\ell+1)$ over all $\\ell$ from zero to $n-1$ and immediately yields $2n^{2}$. What is skipped is this: in the parentheses are the odd numbers 1, 3, 5, …, $2n-1$, and their sum equals $n^{2}$ for any $n$. The easiest way to see this is with a picture: a square is built up with corners. To a $2\\times2$ square add five cells and get $3\\times3$, to that add seven cells and get $4\\times4$; each corner is the next odd number. Multiply the result by two for spin — you get the shell capacities 2, 8, 18, 32. None of these four numbers is measured, all four are calculated, and all that had to be counted was the number of allowed sets of quantum numbers.",
+     "latex": "1 + 3 + 5 + \\ldots + (2n-1) = n^{2} \\;\\Longrightarrow\\; \\sum_{\\ell=0}^{n-1} 2(2\\ell+1) = 2n^{2}",
+     "kit": "combinatorics"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Orbitales",
@@ -944,15 +974,6 @@
    ],
    "plate": "El estado del electrón en un átomo se describe con cuatro números: el número de capa, la forma, la orientación y el espín. De sus combinaciones se obtiene la capacidad de las capas $2n^{2}$ — los mismos 2, 8, 18, 32.",
    "note": "Límites de aplicabilidad. La solución exacta solo existe para el hidrógeno y los iones hidrogenoides — sistemas con un solo electrón. Ya para el helio, los electrones se repelen entre sí, y el problema se vuelve analíticamente irresoluble, como el problema de los tres cuerpos en mecánica. Todo lo demás se calcula de forma aproximada, pero con alta precisión: la química cuántica moderna predice energías de moléculas con errores de fracciones de porcentaje. El concepto de orbital sigue siendo una aproximación — estrictamente hablando, en un átomo multielectrónico hay una función de onda común para todos los electrones, no un conjunto de funciones individuales."
-  },
-  "math": {
-   "title": "Matemáticas que fueron necesarias aquí",
-   "text": [
-    "Qué es una onda estacionaria en tres dimensiones. En una cuerda, los nodos son puntos. En una membrana de tambor, los nodos ya son líneas, y las formas de vibración se vuelven mucho más variadas: círculos, diámetros, sus combinaciones. En una esfera, los nodos son superficies, y hay aún más formas. Los orbitales son esas formas. Es útil observar las figuras de Chladni del tema de ondas: allí la arena se acumula a lo largo de las líneas nodales de la placa, y se obtienen patrones simétricos. Un orbital es un análogo tridimensional de ese patrón.",
-    "Por qué hay exactamente cuatro números cuánticos. Tres dimensiones espaciales dan tres números — uno por cada grado de libertad: uno radial y dos angulares. El cuarto, el espín, no pertenece al espacio y surge del requisito de compatibilizar la mecánica cuántica con la relatividad. Una comprobación útil: cuantos modos independientes de oscilación pueda tener un sistema, tantos números se necesitarán para describir su estado.",
-    "Cómo leer notaciones como 2p³. La cifra es el número de capa, la letra es la forma del orbital, el superíndice indica cuántos electrones lo ocupan. La limitación superior viene dada por el número de orientaciones multiplicado por dos espines: para s hay una orientación y por tanto no más de dos electrones, para p tres orientaciones y no más de seis, para d cinco y no más de diez. De ahí la estructura de la tabla, donde los bloques tienen anchos de 2, 6, 10 y 14 casillas.",
-    "De dónde viene $2n^{2}$. Sumamos sobre todas las formas permitidas: para un $n$ dado, el número $\\ell$ recorre valores de 0 a $n-1$, cada uno da $2\\ell+1$ orientaciones, cada orientación alberga dos electrones. La suma de los números impares de 1 a $2n-1$ es $n^{2}$ — un hecho escolar que aquí resulta inesperadamente ser la base de la estructura de la materia. Multiplicamos por dos espines y obtenemos la capacidad de la capa."
-   ]
   },
   "example": {
    "title": "Ejemplo con números: por qué el agua es angular",
@@ -1182,7 +1203,7 @@
      "enlace de hidrógeno",
      "ebullición",
      "hielo más ligero",
-     "hielo más ligero"
+     "hielo flota"
     ],
     "needed": 2,
     "why": "La molécula angular es polar: los centros de carga positiva y negativa no coinciden. De ahí su capacidad para disolver sales, enlaces de hidrógeno entre moléculas, alta temperatura de ebullición, tensión superficial y menor densidad del hielo. Si la molécula fuera lineal, el momento dipolar se anularía y el agua perdería todas estas propiedades.",
@@ -1198,7 +1219,31 @@
     "hint": "Usa la fórmula 2n² o suma las capacidades de las subcapas s, p, d y f.",
     "tolAbs": 2
    }
-  ]
+  ],
+  "math": {
+   "title": "Matemáticas que aquí se necesitaron",
+   "lead": "Se necesitan tres cosas: coordenadas ajustadas a la simetría del problema, separación de variables y una suma escolar.",
+   "items": [
+    {
+     "what": "Por qué coordenadas esféricas y no x, y, z",
+     "why": "El primer paso escribe la ecuación con el potencial $-ke^{2}/r$. En coordenadas cartesianas esto es $-ke^{2}/\\sqrt{x^{2}+y^{2}+z^{2}}$ — una expresión en la que las tres variables están mezcladas y la solución no se descompone en ninguna parte. El paso a coordenadas esféricas $(r, \\theta, \\varphi)$ no cambia nada en la física y lo cambia todo en la escritura: el potencial depende solo de la primera de ellas, las dos angulares no entran en absoluto. La regla general es: las coordenadas se eligen de modo que la simetría del problema coincida con la simetría de la malla. El precio a pagar es un operador $\\nabla^{2}$ más complicado, donde aparecen factores $r^{2}$ y $\\sin\\theta$. El beneficio supera el costo: es de aquí de donde, en el segundo paso, se obtiene la separación en partes radial y angular, y con ella la división de los números cuánticos en uno radial y dos angulares.",
+     "latex": "U = -\\frac{ke^{2}}{\\sqrt{x^{2}+y^{2}+z^{2}}} \\;\\longrightarrow\\; U = -\\frac{ke^{2}}{r}",
+     "kit": "polar"
+    },
+    {
+     "what": "Qué significa separar variables",
+     "why": "El segundo paso escribe la solución como un producto $R(r)\\,Y(\\theta,\\varphi)$, y esto no es una suposición simplificadora, sino un método. El producto se sustituye en la ecuación y se divide por él mismo; después de esto, todos los términos con $r$ se reúnen en una parte de la igualdad, todos los angulares en la otra. Dos funciones de variables diferentes son iguales entre sí solo en un caso: si ambas son iguales al mismo número. Este número se llama constante de separación, y no es arbitrario: el requisito de que la solución sea finita y unívoca deja solo un conjunto discreto de valores. Así aparecen los dos números angulares de los pasos cuarto y quinto: $m_\\ell$ separa $\\theta$ y $\\varphi$, y $\\ell$ separa la parte angular de la radial y entra en esta última como $\\ell(\\ell+1)$. El número principal $n$ llega de otra manera: no es una constante de separación. Proviene de la ecuación radial, donde $\\ell(\\ell+1)$ ya está como un número fijo: para una energía arbitraria, la solución crece sin límite en $r$ grande, y permanece finita solo si la serie se corta; el corte ocurre para un entero $n > \\ell$, y esto es el tercer paso. Lo común a los dos mecanismos es que ningún número se postula, como en Bohr: tanto la discretitud de las constantes de separación como el corte de la serie se siguen del único requisito de finitud de la solución.",
+     "latex": "\\psi = R(r)\\,Y(\\theta,\\varphi): \\qquad f(r) = g(\\theta,\\varphi) = \\text{const}",
+     "kit": "separation"
+    },
+    {
+     "what": "La suma de números impares da un cuadrado",
+     "why": "El séptimo paso suma $2(2\\ell+1)$ para todos los $\\ell$ desde cero hasta $n-1$ y da inmediatamente $2n^{2}$. Se omite lo siguiente: en los paréntesis están los números impares 1, 3, 5, …, $2n-1$, y su suma es $n^{2}$ para cualquier $n$. Lo más fácil es verlo con una imagen: un cuadrado se crece añadiendo esquinas. A un cuadrado de $2\\times2$ se le añaden cinco celdas y se obtiene $3\\times3$; a este, siete celdas y se obtiene $4\\times4$; cada esquina es precisamente el siguiente número impar. Multiplique el resultado por dos espines: obtendrá la capacidad de la capa 2, 8, 18, 32. Ninguno de estos cuatro números se mide, los cuatro se calculan, y solo se necesitó contar el número de conjuntos permitidos de números cuánticos.",
+     "latex": "1 + 3 + 5 + \\ldots + (2n-1) = n^{2} \\;\\Longrightarrow\\; \\sum_{\\ell=0}^{n-1} 2(2\\ell+1) = 2n^{2}",
+     "kit": "combinatorics"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "المدارات",
@@ -1328,15 +1373,6 @@
    ],
    "plate": "حالة الإلكترون في الذرة تُحدد بأربعة أعداد: رقم الغلاف، الشكل، التوجيه، واللف المغزلي. من تركيباتها نحصل على سعة الأغلفة $2n^{2}$ — وهي الأعداد 2، 8، 18، 32.",
    "note": "حدود قابلية التطبيق. يوجد حل دقيق فقط للهيدروجين والأيونات الشبيهة بالهيدروجين — الأنظمة ذات إلكترون واحد. بالفعل بالنسبة للهيليوم، تتنافر الإلكترونات عن بعضها، وتصبح المسألة غير قابلة للحل تحليليًا، مثل مسألة الأجسام الثلاثة في الميكانيكا. كل ما عدا ذلك يُحسب تقريبيًا، ولكن بدقة عالية: الكيمياء الكمومية الحديثة تتنبأ بطاقات الجزيئات بخطأ في أجزاء من المئة. مفهوم المدار يظل تقريبًا — بالمعنى الدقيق، الذرة متعددة الإلكترونات لها دالة موجية واحدة مشتركة لجميع الإلكترونات، وليست مجموعة منفصلة."
-  },
-  "math": {
-   "title": "الرياضيات التي كانت ضرورية هنا",
-   "text": [
-    "ما هي الموجة المستقرة في ثلاثة أبعاد. على الوتر، العقد نقاط. على غشاء الطبل، العقد خطوط، وتصبح أشكال الاهتزازات أكثر تنوعًا: دوائر، أقطار، ومزيجها. في الكرة، العقد سطوح، والأشكال أكثر. المدارات هي هذه الأشكال. من المفيد إلقاء نظرة على أشكال خلادني من موضوع الموجات: حيث يتجمع الرمل على طول الخطوط العقدية للوحة، وتتشكل أنماط متناظرة. المدار هو تماثل ثلاثي الأبعاد لمثل هذا النمط.",
-    "لماذا أعداد الكم هي أربعة تحديدًا. الأبعاد المكانية الثلاثة تعطي ثلاثة أعداد — واحد لكل درجة حرية: واحد شعاعي واثنان زاويان. الرابع، اللف المغزلي، لا يتعلق بالمكان ويظهر من شرط مواءمة ميكانيكا الكم مع النظرية النسبية. اختبار مفيد: كم عدد الطرق المستقلة التي يمكن للنظام أن يهتز بها، نفس العدد من الأعداد ستكون مطلوبة لوصف حالته.",
-    "كيفية قراءة الرموز مثل 2p³. الرقم هو رقم الغلاف، الحرف هو شكل المدار، والأس العلوي هو عدد الإلكترونات عليه. الحد الأعلى يُعطى بعدد التوجيهات مضروبًا في لفتين مغزليتين: لـ s توجيه واحد وبالتالي لا يزيد عن إلكترونين، لـ p ثلاثة توجيهات ولا يزيد عن ستة، لـ d خمسة ولا يزيد عن عشرة. من هنا هيكل الجدول، حيث عرض الكتل هو 2 و6 و10 و14 خلية.",
-    "من أين تأتي $2n^{2}$. نجمع على جميع الأشكال المسموحة: عند $n$ معين، يأخذ $\\ell$ القيم من 0 إلى $n-1$، كل منها يعطي $2\\ell+1$ توجيهًا، كل توجيه يسع إلكترونين. مجموع الأعداد الفردية من 1 إلى $2n-1$ يساوي $n^{2}$ — حقيقة مدرسية تتحول هنا بشكل غير متوقع إلى أساس بناء المادة. نضرب في لفتين مغزليتين ونحصل على سعة الغلاف."
-   ]
   },
   "example": {
    "title": "مثال بالأرقام: لماذا الماء منحني",
@@ -1566,7 +1602,7 @@
      "روابط هيدروجينية",
      "غليان",
      "الجليد أخف",
-     "الجليد أخف"
+     "الجليد يطفو"
     ],
     "needed": 2,
     "why": "الجزيء المنحني قطبي: مراكز الشحنات الموجبة والسالبة غير متطابقة. ومن هنا القدرة على إذابة الأملاح، والروابط الهيدروجينية بين الجزيئات، وارتفاع درجة حرارة الغليان، والتوتر السطحي، وانخفاض كثافة الجليد. لو كان الجزيء خطيًا، لانعدم عزم ثنائي القطب، وفقد الماء كل هذه الخصائص.",
@@ -1582,7 +1618,31 @@
     "hint": "استخدم الصيغة 2n² أو اجمع سعات تحت الأغلفة s، p، d و f.",
     "tolAbs": 2
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات اللازمة هنا",
+   "lead": "سنحتاج إلى ثلاثة أشياء: إحداثيات تتوافق مع تماثل المسألة، وفصل المتغيرات، ومجموع مدرسي واحد.",
+   "items": [
+    {
+     "what": "لماذا الإحداثيات كروية وليست x, y, z",
+     "why": "الخطوة الأولى تكتب المعادلة مع الجهد $-ke^{2}/r$. في الإحداثيات الديكارتية يكون هذا $-ke^{2}/\\sqrt{x^{2}+y^{2}+z^{2}}$ — تعبير تتشابك فيه المتغيرات الثلاثة، ولا ينفصل الحل إلى أي أجزاء. الانتقال إلى الإحداثيات الكروية $(r, \\theta, \\varphi)$ لا يغير شيئًا في الفيزياء ويغير كل شيء في الكتابة: الجهد يعتمد فقط على الأول منها، والزاويتان لا تدخلان فيه إطلاقًا. القاعدة العامة: تُختار الإحداثيات بحيث يتطابق تماثل المسألة مع تماثل الشبكة. الثمن هو تعقيد المؤثر $\\nabla^{2}$، حيث تظهر عوامل $r^{2}$ و $\\sin\\theta$. الفائدة أكبر من الثمن: من هنا تحديدًا، في الخطوة الثانية، نحصل على الفصل إلى جزء شعاعي وجزء زاوي، ومعها تقسيم الأعداد الكمومية إلى عدد شعاعي واحد وعددين زاويين.",
+     "latex": "U = -\\frac{ke^{2}}{\\sqrt{x^{2}+y^{2}+z^{2}}} \\;\\longrightarrow\\; U = -\\frac{ke^{2}}{r}",
+     "kit": "polar"
+    },
+    {
+     "what": "ماذا يعني فصل المتغيرات",
+     "why": "الخطوة الثانية تكتب الحل كحاصل ضرب $R(r)\\,Y(\\theta,\\varphi)$، وهذا ليس افتراضًا مبسطًا، بل طريقة. يُعوَّض بالحاصل في المعادلة ويُقسَم عليه؛ بعد ذلك، تُجمع جميع الحدود التي تحتوي $r$ في طرف واحد من المساواة، وجميع الحدود الزاوية في الطرف الآخر. دالتان لمتغيرين مختلفين تتساويان فقط في حالة واحدة: إذا كانت كلتاهما تساوي نفس العدد. يُسمى هذا العدد ثابت الفصل، وهو ليس عشوائيًا — فشرط كون الحل منتهيًا وأحادي القيمة يترك له فقط مجموعة منفصلة من القيم. هكذا يظهر العددان الزاويان في الخطوتين الرابعة والخامسة: $m_\\ell$ يفصل بين $\\theta$ و $\\varphi$، و$\\ell$ يفصل بين الجزء الزاوي والجزء الشعاعي ويدخل في الأخير بصيغة $\\ell(\\ell+1)$. العدد الرئيسي $n$ يأتي بطريقة أخرى: فهو ليس ثابت فصل. يأتي من المعادلة الشعاعية، حيث $\\ell(\\ell+1)$ موجود كعدد جاهز: عند طاقة عشوائية، ينمو الحل بلا حدود عند $r$ الكبيرة، ويبقى منتهيًا فقط إذا انقطع المتسلسلة، والانقطاع يحدث عند عدد صحيح $n > \\ell$، وهذه هي الخطوة الثالثة. القاسم المشترك بين الآليتين هو أنه لا يوجد عدد مفروض كما في نموذج بور: فكل من discreteness ثوابت الفصل وانقطاع المتسلسلة يتبعان من شرط واحد وهو كون الحل منتهيًا.",
+     "latex": "\\psi = R(r)\\,Y(\\theta,\\varphi): \\qquad f(r) = g(\\theta,\\varphi) = \\text{const}",
+     "kit": "separation"
+    },
+    {
+     "what": "مجموع الأعداد الفردية يعطي مربعًا",
+     "why": "الخطوة السابعة تجمع $2(2\\ell+1)$ لكل $\\ell$ من صفر إلى $n-1$ وتعطي فورًا $2n^{2}$. ما تم تخطيه هو: بين القوسين توجد الأعداد الفردية 1، 3، 5، …، $2n-1$، ومجموعها يساوي $n^{2}$ لأي $n$. أسهل طريقة لرؤية ذلك هي بالصورة: يُبنى المربع بإضافة زوايا. إلى مربع $2\\times2$ نضيف خمس خلايا فنحصل على $3\\times3$، إليه نضيف سبع خلايا فنحصل على $4\\times4$؛ كل زاوية هي عدد فردي تالٍ. اضرب الناتج في اثنين للسبين — تحصل على سعة الغلاف 2، 8، 18، 32. لا يوجد أي من هذه الأعداد الأربعة مقاسًا، بل كلها محسوبة، والحساب كان فقط لعدد المجموعات المسموح بها من الأعداد الكمومية.",
+     "latex": "1 + 3 + 5 + \\ldots + (2n-1) = n^{2} \\;\\Longrightarrow\\; \\sum_{\\ell=0}^{n-1} 2(2\\ell+1) = 2n^{2}",
+     "kit": "combinatorics"
+    }
+   ]
+  }
  },
  "tags": [
   "hydrogen",

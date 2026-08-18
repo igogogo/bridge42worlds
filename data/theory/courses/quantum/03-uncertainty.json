@@ -174,11 +174,26 @@
   },
   "math": {
    "title": "Математика, которая здесь понадобилась",
-   "text": [
-    "Щелчок и нота — лучшая аналогия для всей темы. Возьмите камертон: он звучит долго и даёт чистый тон, у него точная частота, но спросить «когда именно он звучал» бессмысленно — он тянется. Теперь щёлкните пальцами: момент известен точно, а высоты тона нет вовсе, щелчок содержит все частоты сразу. Между этими крайностями — весь диапазон. Соотношение Гейзенберга говорит буквально то же самое про координату и импульс, и в этом смысле оно не квантовое, а музыкальное.",
-    "Почему произведение неопределённостей ограничено снизу. Разложение в ряд Фурье устроено так, что чем уже сигнал во времени, тем шире его спектр, и наоборот. Произведение ширин имеет нижнюю границу — это чисто математическая теорема, доказанная задолго до физики. Радиоинженеры знают её как соотношение между длительностью импульса и полосой частот: короткий импульс требует широкой полосы, и никакая техника этого не обойдёт. Гейзенберг добавил к теореме одну физическую строчку: $p = \\hbar k$.",
-    "Что означает знак «больше или равно». Он говорит, что бывает и хуже, но лучше не бывает. Минимум достигается на гауссовом сгустке — колоколообразной волне; любая другая форма даёт большее произведение. В задачах это удобно: подставляя знак равенства, вы получаете оценку наилучшего возможного случая, и она обычно и нужна для прикидки порядка величины.",
-    "Как оценивать через неопределённость. Приём, которым физики пользуются постоянно: заперли частицу в область размером $L$ — значит $\\Delta p \\approx \\hbar/L$, значит кинетическая энергия не меньше $\\hbar^{2}/2mL^{2}$. Подставьте размер атома и получите электронвольты, подставьте размер ядра и получите мегаэлектронвольты. Отсюда сразу понятно, почему ядерные энергии в миллион раз больше химических: ядро в сто тысяч раз меньше атома, а энергия идёт как обратный квадрат размера."
+   "lead": "Одна теорема о волнах, одно определение разброса и один способ найти минимум — больше математики в этом параграфе нет.",
+   "items": [
+    {
+     "what": "Узкий сгусток требует широкого спектра",
+     "why": "Первые два шага вывода — это Фурье, а не квантовая механика. Бесконечная синусоида имеет одну частоту и не имеет положения. Чтобы собрать локализованный сгусток, волны разных частот складывают так, чтобы они гасили друг друга везде, кроме небольшой области; и чем уже нужна область, тем больше частот приходится взять, потому что сложение немногих даёт длинную рябь, а не короткий всплеск. Отсюда $\\Delta x\\,\\Delta k \\sim 1$ — соотношение, известное радиоинженерам как связь длительности импульса с полосой частот. Единственный физический шаг сделан в третьем: подстановка $p = \\hbar k$. Всё остальное у Гейзенберга — свойство волн вообще.",
+     "latex": "\\psi(x) = \\sum_k A_k \\sin(kx), \\qquad \\Delta x\\,\\Delta k \\sim 1",
+     "kit": "fourier"
+    },
+    {
+     "what": "Что за величина стоит под знаком дельта",
+     "why": "В четвёртом шаге появляется точный множитель одна вторая, и появляется он не сам по себе: Кеннард определил $\\Delta x$ и $\\Delta p$ как среднеквадратичные отклонения. Берут отклонение каждого возможного значения от среднего, возводят в квадрат — иначе плюсы и минусы взаимно уничтожатся, — усредняют и извлекают корень. Это ширина самого распределения, а не погрешность прибора и не ширина горба на глаз. Отсюда же и знак «больше или равно»: у гауссова сгустка произведение равно $\\hbar/2$ ровно, у любой другой формы больше. Меньше не выходит ни при каком состоянии и ни при какой технике измерения.",
+     "latex": "\\Delta x = \\sqrt{\\langle x^{2}\\rangle - \\langle x\\rangle^{2}}, \\qquad \\Delta x\\,\\Delta p \\geq \\frac{\\hbar}{2}",
+     "kit": "rms"
+    },
+    {
+     "what": "Где у суммы двух степеней минимум",
+     "why": "Шестой шаг записывает энергию электрона как сумму двух слагаемых, $\\hbar^{2}/2mr^{2}$ и $-ke^{2}/r$, и сразу выдаёт ответ $r_{\\min} = a_0$. Пропущенное действие — обычное отыскание минимума: производную по $r$ приравнивают нулю. Работает это потому, что степени разные. При малых $r$ первое слагаемое, растущее как обратный квадрат, забивает второе, растущее лишь как обратное расстояние. При больших $r$ малы оба, но отрицательное убывает медленнее и тянет сумму вниз. Между этими областями сумма проходит через минимум, и его положение задаётся соотношением показателей, а не величиной постоянных.",
+     "latex": "\\frac{dE}{dr} = -\\frac{\\hbar^{2}}{mr^{3}} + \\frac{ke^{2}}{r^{2}} = 0 \\;\\Longrightarrow\\; r_{\\min} = \\frac{\\hbar^{2}}{kme^{2}}",
+     "kit": "derivative"
+    }
    ]
   },
   "example": {
@@ -376,7 +391,7 @@
      "Координату и импульс нельзя измерять в один и тот же момент времени"
     ],
     "answer": 2,
-    "why": "Первые два варианта — популярные объяснения, от которых отказался сам Гейзенберг. Они подразумевают, что точные значения существуют, а мы их не можем узнать. Утверждение сильнее: состояние с определённой координатой не имеет определённого импульса, потому что локализованная волна складывается из множества частот.",
+    "why": "Вариант про недостаточную точность приборов и вариант про измерение, которое портит вторую величину, — популярные объяснения, от которых отказался сам Гейзенберг. Они подразумевают, что точные значения существуют, а мы их не можем узнать. Утверждение сильнее: состояние с определённой координатой не имеет определённого импульса, потому что локализованная волна складывается из множества частот.",
     "hint": "Вспомните хлопок в ладоши. Мы не знаем его высоту из-за плохого слуха — или у него её нет вовсе?"
    },
    {
@@ -441,7 +456,7 @@
     {
      "who": "Werner Heisenberg",
      "year": "1927",
-     "what": "derived the relation from his matrix mechanics. He later admitted that his initial explanation via measurement disturbance was flawed — Bohr pointed out that it is about the nature of the state itself, not the crudeness of the apparatus"
+     "what": "derived the relation from his matrix mechanics. He later admitted that his initial explanation via measurement disturbance was flawed — Bohr pointed out that the issue lies in the very nature of the state, not in the crudeness of the apparatus"
     },
     {
      "who": "Niels Bohr",
@@ -451,15 +466,52 @@
     {
      "who": "Earl Kennard",
      "year": "1927",
-     "what": "gave the rigorous formulation using standard deviations — the one found in textbooks. Heisenberg initially had only a qualitative estimate"
+     "what": "gave the rigorous formulation in terms of standard deviations — the one found in textbooks. Heisenberg initially had only a qualitative estimate"
     },
     {
      "who": "Joseph Fourier",
      "year": "1822",
-     "what": "established the mathematical fact a century before quantum mechanics: a short pulse requires a broad frequency spectrum. Heisenberg's relation is that statement translated into the language of particles"
+     "what": "a hundred years before quantum mechanics established a mathematical fact: a short pulse requires a wide spectrum of frequencies. The Heisenberg relation is this statement translated into the language of particles"
     }
    ],
-   "story": "The debate between Einstein and Bohr about this relation spanned nearly thirty years and remains a model of scientific polemics. At the 1927 Solvay Congress, Einstein arrived each morning with a new thought experiment that bypassed uncertainty, and Bohr would find the error by evening. The most famous case is the clock-in-a-box: Einstein proposed weighing the box before and after the photon's emission, thus determining the energy arbitrarily precisely, while setting the moment of emission with a shutter. Bohr spent a sleepless night and the next morning countered, using Einstein's own general theory of relativity against him: weighing shifts the box in a gravitational field, and clock rate depends on position, restoring the time uncertainty to exactly the required amount. Einstein acknowledged the objection and until the end of his life considered the theory correct but incomplete."
+   "story": "The debate between Einstein and Bohr over this relation lasted nearly thirty years and remains a model of scientific polemics. At the 1927 Solvay Congress, Einstein arrived each morning with a new thought experiment that circumvented the uncertainty, and Bohr found the error by evening. The most famous case is the clock-in-a-box: Einstein proposed weighing the box before and after a photon escapes, thereby determining the energy as precisely as desired, while the moment of escape is set by a shutter. Bohr spent a sleepless night and the next morning objected, using Einstein's own general theory of relativity against him: weighing shifts the box in a gravitational field, and the clock's rate depends on its position, so the time uncertainty is restored exactly to the required amount. Einstein acknowledged the objection and for the rest of his life considered the theory correct but incomplete.",
+   "symbols": [
+    {
+     "sym": "dx",
+     "latex": "\\Delta x",
+     "what": "uncertainty in position",
+     "unit": "m",
+     "note": "not an instrument error, but a spread of values inherent to the state itself"
+    },
+    {
+     "sym": "dp",
+     "latex": "\\Delta p",
+     "what": "uncertainty in momentum",
+     "unit": "kg·m/s",
+     "note": "the more precisely the position is specified, the larger the spread in momentum"
+    },
+    {
+     "sym": "hbar",
+     "latex": "\\hbar",
+     "what": "reduced Planck constant",
+     "unit": "J·s",
+     "note": "$h/2\\pi \\approx 1{,}05\\cdot 10^{-34}$; appears wherever angles and rotations are involved"
+    },
+    {
+     "sym": "dE",
+     "latex": "\\Delta E",
+     "what": "uncertainty in energy",
+     "unit": "J",
+     "note": "a short-lived state does not have a precise energy — hence the width of spectral lines"
+    },
+    {
+     "sym": "E0z",
+     "latex": "E_{\\text{zero}}",
+     "what": "zero-point energy",
+     "unit": "J",
+     "note": "the minimum energy that cannot be removed even at absolute zero"
+    }
+   ]
   },
   "symbols": [
    {
@@ -547,15 +599,6 @@
    ],
    "plate": "Uncertainty is not a consequence of the crudeness of instruments, but a property of the wave nature of matter: a localized packet does not have a single frequency, and hence not a single momentum.",
    "note": "Limits of applicability and the main misunderstanding. The formulation through disturbance during measurement — «the photon pushed the electron» — was later admitted by Heisenberg himself to be unsuccessful. It implies that exact values exist, and we spoil them. The correct statement: a state in which the coordinate is exactly specified does not have a definite momentum at all, just as a short click does not have a definite pitch. Asking what the frequency of a click is makes no sense not because of poor hearing, but because it does not have a single frequency."
-  },
-  "math": {
-   "title": "The mathematics that was needed here",
-   "text": [
-    "The click and the note are the best analogy for the entire topic. Take a tuning fork: it sounds for a long time and gives a pure tone, it has an exact frequency, but asking «when exactly did it sound» is meaningless — it stretches. Now snap your fingers: the moment is known exactly, but the pitch is not there at all; the click contains all frequencies at once. Between these extremes lies the whole range. The Heisenberg relation says literally the same thing about position and momentum, and in this sense it is not quantum, but musical.",
-    "Why the product of uncertainties is bounded from below. The Fourier series expansion is such that the narrower the signal in time, the wider its spectrum, and vice versa. The product of widths has a lower bound — this is a purely mathematical theorem, proven long before physics. Radio engineers know it as the relation between pulse duration and frequency bandwidth: a short pulse requires a wide band, and no technology can circumvent it. Heisenberg added one physical line to the theorem: $p = \\hbar k$.",
-    "What the 'greater than or equal' sign means. It says that things can be worse, but cannot be better. The minimum is achieved for a Gaussian packet — a bell-shaped wave; any other shape gives a larger product. In problems, this is convenient: substituting the equality sign gives an estimate of the best possible case, and that is usually what is needed for an order-of-magnitude estimation.",
-    "How to estimate via uncertainty. A trick physicists use constantly: confine a particle to a region of size $L$ — then $\\Delta p \\approx \\hbar/L$, so the kinetic energy is no less than $\\hbar^{2}/2mL^{2}$. Plug in the atomic size and you get electron volts; plug in the nuclear size and you get megaelectron volts. From this it is immediately clear why nuclear energies are a million times greater than chemical ones: the nucleus is a hundred thousand times smaller than the atom, and energy goes as the inverse square of size."
-   ]
   },
   "example": {
    "title": "Example with Numbers: Why There Is No Electron in the Nucleus",
@@ -752,7 +795,7 @@
      "Position and momentum cannot be measured at the same instant"
     ],
     "answer": 2,
-    "why": "The first two options are popular explanations that Heisenberg himself abandoned. They imply that precise values exist and we cannot know them. The statement is stronger: a state with a definite position does not have a definite momentum, because a localized wave is composed of many frequencies.",
+    "why": "The option about instruments being imprecise and the option about measurement spoiling the second quantity are popular explanations that Heisenberg himself abandoned. They imply that precise values exist and we cannot know them. The statement is stronger: a state with a definite position does not have a definite momentum, because a localized wave is composed of many frequencies.",
     "hint": "Recall a hand clap. Do we not know its pitch because of poor hearing, or does it have no pitch at all?"
    },
    {
@@ -798,7 +841,31 @@
     "hint": "Take Δp ≈ ħ/L and substitute into the kinetic energy formula p²/2m. Then convert joules to electronvolts by dividing by 1.6·10⁻¹⁹.",
     "tolFactor": 3
    }
-  ]
+  ],
+  "math": {
+   "title": "The math that was needed here",
+   "lead": "One theorem about waves, one definition of spread, and one way to find a minimum—there is no more math in this section.",
+   "items": [
+    {
+     "what": "A narrow packet requires a wide spectrum",
+     "why": "The first two steps of the derivation are Fourier, not quantum mechanics. An infinite sine wave has a single frequency and no position. To assemble a localized packet, waves of different frequencies are added so that they cancel each other everywhere except in a small region; and the narrower the required region, the more frequencies must be taken, because adding a few gives a long ripple, not a short burst. Hence $\\Delta x\\,\\Delta k \\sim 1$—a relation known to radio engineers as the link between pulse duration and frequency bandwidth. The only physical step is made in the third: the substitution $p = \\hbar k$. Everything else in Heisenberg is a property of waves in general.",
+     "latex": "\\psi(x) = \\sum_k A_k \\sin(kx), \\qquad \\Delta x\\,\\Delta k \\sim 1",
+     "kit": "fourier"
+    },
+    {
+     "what": "What quantity stands under the delta sign",
+     "why": "In the fourth step, an exact factor of one-half appears, and it does not appear by itself: Kennard defined $\\Delta x$ and $\\Delta p$ as root-mean-square deviations. Take the deviation of each possible value from the mean, square it—otherwise pluses and minuses would cancel each other—average, and take the square root. This is the width of the distribution itself, not the instrument error or the width of the hump by eye. Hence the 'greater than or equal to' sign: for a Gaussian packet, the product equals $\\hbar/2$ exactly; for any other shape, it is larger. It cannot be smaller for any state or any measurement technique.",
+     "latex": "\\Delta x = \\sqrt{\\langle x^{2}\\rangle - \\langle x\\rangle^{2}}, \\qquad \\Delta x\\,\\Delta p \\geq \\frac{\\hbar}{2}",
+     "kit": "rms"
+    },
+    {
+     "what": "Where the minimum of a sum of two powers is",
+     "why": "The sixth step writes the electron energy as a sum of two terms, $\\hbar^{2}/2mr^{2}$ and $-ke^{2}/r$, and immediately gives the answer $r_{\\min} = a_0$. The omitted action is the usual finding of a minimum: set the derivative with respect to $r$ to zero. This works because the powers are different. At small $r$, the first term, growing as the inverse square, dominates the second, which grows only as the inverse distance. At large $r$, both are small, but the negative one decreases more slowly and pulls the sum down. Between these regions, the sum passes through a minimum, and its position is set by the ratio of the exponents, not by the magnitude of the constants.",
+     "latex": "\\frac{dE}{dr} = -\\frac{\\hbar^{2}}{mr^{3}} + \\frac{ke^{2}}{r^{2}} = 0 \\;\\Longrightarrow\\; r_{\\min} = \\frac{\\hbar^{2}}{kme^{2}}",
+     "kit": "derivative"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Incertidumbre",
@@ -810,32 +877,69 @@
   ],
   "standNote": "Cambie el ancho de la caja y observe la energía del nivel fundamental. Al comprimir la caja, usted define con mayor precisión la posición de la partícula, y la energía aumenta inmediatamente porque aumenta la incertidumbre en el momento. Para $L$ la mitad, la energía es cuatro veces mayor. Observe que el nivel más bajo nunca es cero: la partícula no puede yacer inmóvil en el fondo, porque eso significaría tener simultáneamente una posición y un momento exactamente conocidos.",
   "formula": {
-   "name": "Relación de incertidumbre de Heisenberg",
+   "name": "Relación de indeterminación de Heisenberg",
    "latex": "\\Delta x\\,\\Delta p \\geq \\frac{\\hbar}{2}, \\qquad \\Delta E\\,\\Delta t \\geq \\frac{\\hbar}{2}",
-   "alsoKnown": "Principio de incertidumbre · relación posición-momento",
+   "alsoKnown": "Principio de indeterminación · relación posición-momento",
    "authors": [
     {
      "who": "Werner Heisenberg",
      "year": "1927",
-     "what": "dedujo la relación a partir de su mecánica matricial. La explicación inicial a través de la perturbación en la medición la reconoció posteriormente como desafortunada: Bohr señaló que el problema radica en la naturaleza misma del estado, no en la tosquedad del aparato."
+     "what": "dedujo la relación a partir de su mecánica matricial. La explicación inicial mediante la perturbación en la medición fue reconocida por él mismo como deficiente; Bohr señaló que se trata de la naturaleza misma del estado, no de la rudeza del aparato"
     },
     {
      "who": "Niels Bohr",
      "year": "1927",
-     "what": "formuló el principio de complementariedad: las descripciones ondulatoria y corpuscular no se contradicen, sino que se complementan, y se aplican en condiciones experimentales mutuamente excluyentes."
+     "what": "formuló el principio de complementariedad: las descripciones ondulatoria y corpuscular no se contradicen, sino que se complementan, y son aplicables en condiciones experimentales mutuamente excluyentes"
     },
     {
      "who": "Earl Kennard",
      "year": "1927",
-     "what": "dio una formulación rigurosa en términos de desviaciones cuadráticas medias, la que aparece en los libros de texto. Heisenberg inicialmente tenía solo una estimación cualitativa."
+     "what": "dio la formulación rigurosa mediante desviaciones cuadráticas medias, la que aparece en los libros de texto. Heisenberg originalmente solo tenía una estimación cualitativa"
     },
     {
      "who": "Joseph Fourier",
      "year": "1822",
-     "what": "estableció un hecho matemático cien años antes de la mecánica cuántica: un pulso corto requiere un amplio espectro de frecuencias. La relación de Heisenberg es esta afirmación traducida al lenguaje de las partículas."
+     "what": "cien años antes de la mecánica cuántica estableció el hecho matemático: un pulso corto requiere un espectro de frecuencias ancho. La relación de Heisenberg es esa afirmación traducida al lenguaje de las partículas"
     }
    ],
-   "story": "El debate entre Einstein y Bohr sobre esta relación duró casi treinta años y sigue siendo un ejemplo de polémica científica. En el Congreso Solvay de 1927, Einstein llegaba cada mañana con un nuevo experimento mental que eludía la incertidumbre, y Bohr encontraba el error por la noche. El caso más famoso es la caja con reloj: Einstein propuso pesar la caja antes y después de que el fotón saliera, determinando la energía con cualquier precisión, y fijar el momento de salida con un obturador. Bohr pasó una noche sin dormir y a la mañana siguiente objetó, utilizando contra el propio Einstein su teoría de la relatividad general: el pesaje desplaza la caja en el campo gravitatorio, y la marcha del reloj depende de la posición, por lo que la incertidumbre en el tiempo se restablece exactamente hasta el límite requerido. Einstein reconoció la objeción y hasta el final de su vida consideró la teoría correcta pero incompleta."
+   "story": "El debate entre Einstein y Bohr sobre esta relación duró casi treinta años y sigue siendo un modelo de polémica científica. En el Congreso Solvay de 1927, Einstein llegaba cada mañana con un nuevo experimento mental que eludía la indeterminación, y Bohr encontraba el error por la tarde. El caso más famoso es la caja con reloj: Einstein propuso pesar la caja antes y después de la emisión de un fotón, determinando la energía con precisión arbitraria, y el momento de emisión mediante un obturador. Bohr pasó una noche en vela y a la mañana siguiente objetó, usando contra Einstein su propia teoría de la relatividad general: el pesaje desplaza la caja en el campo gravitatorio, y el ritmo del reloj depende de la posición, por lo que la indeterminación del tiempo se restablece exactamente hasta el valor requerido. Einstein reconoció la objeción y hasta el final de su vida consideró la teoría correcta pero incompleta.",
+   "symbols": [
+    {
+     "sym": "dx",
+     "latex": "\\Delta x",
+     "what": "indeterminación de la posición",
+     "unit": "m",
+     "note": "no es un error del aparato, sino una dispersión de valores inherente al propio estado"
+    },
+    {
+     "sym": "dp",
+     "latex": "\\Delta p",
+     "what": "indeterminación del momento",
+     "unit": "kg·m/s",
+     "note": "cuanto más precisa es la posición, mayor es la dispersión del momento"
+    },
+    {
+     "sym": "hbar",
+     "latex": "\\hbar",
+     "what": "constante de Planck reducida",
+     "unit": "J·s",
+     "note": "$h/2\\pi \\approx 1{,}05\\cdot 10^{-34}$; aparece dondequiera que haya ángulos y giros"
+    },
+    {
+     "sym": "dE",
+     "latex": "\\Delta E",
+     "what": "indeterminación de la energía",
+     "unit": "J",
+     "note": "un estado de vida corta no tiene energía precisa; de ahí el ancho de las líneas espectrales"
+    },
+    {
+     "sym": "E0z",
+     "latex": "E_{\\text{cero}}",
+     "what": "energía de las oscilaciones de punto cero",
+     "unit": "J",
+     "note": "la energía mínima que no se puede extraer ni en el cero absoluto"
+    }
+   ]
   },
   "symbols": [
    {
@@ -923,15 +1027,6 @@
    ],
    "plate": "La incertidumbre no es consecuencia de la tosquedad de los instrumentos, sino una propiedad de la naturaleza ondulatoria de la materia: un paquete localizado no tiene una sola frecuencia y, por lo tanto, tampoco un solo momento.",
    "note": "Límites de aplicabilidad y el principal malentendido. La formulación mediante la perturbación por la medición —«el fotón empujó al electrón»— el propio Heisenberg la reconoció más tarde como desafortunada. Implica que existen valores exactos y nosotros los estropeamos. La afirmación correcta es: un estado en el que la coordenada está dada con exactitud no tiene en absoluto un momento definido, al igual que un chasquido corto no tiene una altura tonal definida. Preguntar cuál es la frecuencia de un chasquido no tiene sentido no por un mal oído, sino porque no tiene una sola frecuencia."
-  },
-  "math": {
-   "title": "Matemáticas que se necesitaron aquí",
-   "text": [
-    "El chasquido y la nota son la mejor analogía para todo el tema. Tome un diapasón: suena mucho tiempo y da un tono puro, tiene una frecuencia exacta, pero preguntar «¿cuándo sonó exactamente?» carece de sentido, porque se prolonga. Ahora chasquee los dedos: el momento se conoce con exactitud, pero la altura tonal no existe en absoluto; el chasquido contiene todas las frecuencias a la vez. Entre estos extremos está todo el rango. La relación de Heisenberg dice literalmente lo mismo sobre la coordenada y el momento, y en ese sentido no es cuántica, sino musical.",
-    "Por qué el producto de incertidumbres está acotado inferiormente. La expansión en serie de Fourier está diseñada de modo que cuanto más estrecha es la señal en el tiempo, más ancho es su espectro, y viceversa. El producto de las anchuras tiene un límite inferior; es un teorema puramente matemático, demostrado mucho antes de la física. Los ingenieros de radio lo conocen como la relación entre la duración del pulso y el ancho de banda: un pulso corto requiere un ancho de banda grande, y ninguna técnica lo evita. Heisenberg añadió al teorema una línea física: $p = \\hbar k$.",
-    "Qué significa el signo «mayor o igual». Dice que puede ser peor, pero mejor no se puede. El mínimo se alcanza en un paquete gaussiano — una onda con forma de campana; cualquier otra forma da un producto mayor. En los problemas es útil: al sustituir el signo igual, se obtiene una estimación del mejor caso posible, y suele ser suficiente para un cálculo de orden de magnitud.",
-    "Cómo estimar mediante la incertidumbre. Un truco que los físicos usan constantemente: si encerramos una partícula en una región de tamaño $L$, entonces $\\Delta p \\approx \\hbar/L$, por lo que la energía cinética no es menor que $\\hbar^{2}/2mL^{2}$. Sustituya el tamaño de un átomo y obtendrá electronvoltios; sustituya el tamaño de un núcleo y obtendrá megaelectronvoltios. De aquí se entiende de inmediato por qué las energías nucleares son un millón de veces mayores que las químicas: el núcleo es cien mil veces más pequeño que el átomo, y la energía va como el inverso del cuadrado del tamaño."
-   ]
   },
   "example": {
    "title": "Ejemplo con números: por qué el electrón no está en el núcleo",
@@ -1128,7 +1223,7 @@
      "No se pueden medir posición y momento en el mismo instante de tiempo"
     ],
     "answer": 2,
-    "why": "Las dos primeras opciones son explicaciones populares que el propio Heisenberg rechazó. Implican que los valores precisos existen, pero no podemos conocerlos. La afirmación es más fuerte: un estado con posición definida no tiene un momento definido, porque una onda localizada se compone de muchas frecuencias.",
+    "why": "La opción sobre la falta de precisión de los instrumentos y la opción sobre la medición que estropea la segunda magnitud son explicaciones populares que el propio Heisenberg rechazó. Implican que los valores precisos existen, pero no podemos conocerlos. La afirmación es más fuerte: un estado con posición definida no tiene un momento definido, porque una onda localizada se compone de muchas frecuencias.",
     "hint": "Recuerde una palmada. ¿No conocemos su tono por mala audición o simplemente no tiene un tono?"
    },
    {
@@ -1174,7 +1269,31 @@
     "hint": "Tome $\\Delta p \\approx \\hbar/L$ y sustitúyalo en la fórmula de energía cinética $p^{2}/2m$. Luego convierta julios a electronvoltios dividiendo por $1{,}6\\cdot10^{-19}$.",
     "tolFactor": 3
    }
-  ]
+  ],
+  "math": {
+   "title": "Matemáticas que se necesitaron aquí",
+   "lead": "Un teorema sobre ondas, una definición de dispersión y una forma de encontrar el mínimo: no hay más matemáticas en esta sección.",
+   "items": [
+    {
+     "what": "Un paquete estrecho requiere un espectro amplio",
+     "why": "Los dos primeros pasos de la derivación son Fourier, no mecánica cuántica. Una sinusoide infinita tiene una sola frecuencia y no tiene posición. Para formar un paquete localizado, se suman ondas de diferentes frecuencias de modo que se cancelen entre sí en todas partes excepto en una región pequeña; y cuanto más estrecha se necesita la región, más frecuencias hay que tomar, porque sumar pocas da una ondulación larga, no un pulso corto. De ahí $\\Delta x\\,\\Delta k \\sim 1$: una relación conocida por los ingenieros de radio como el vínculo entre la duración del pulso y el ancho de banda de frecuencias. El único paso físico se da en el tercero: la sustitución $p = \\hbar k$. Todo lo demás en Heisenberg es una propiedad de las ondas en general.",
+     "latex": "\\psi(x) = \\sum_k A_k \\sin(kx), \\qquad \\Delta x\\,\\Delta k \\sim 1",
+     "kit": "fourier"
+    },
+    {
+     "what": "Qué magnitud está bajo el signo delta",
+     "why": "En el cuarto paso aparece un factor exacto de un medio, y no surge por sí solo: Kennard definió $\\Delta x$ y $\\Delta p$ como desviaciones estándar. Se toma la desviación de cada valor posible respecto a la media, se eleva al cuadrado (de lo contrario, los más y los menos se cancelarían), se promedia y se extrae la raíz. Esto es el ancho de la distribución misma, no el error del instrumento ni el ancho del pico a ojo. De ahí también el signo 'mayor o igual que': para un paquete gaussiano, el producto es exactamente $\\hbar/2$; para cualquier otra forma, es mayor. No puede ser menor para ningún estado ni con ninguna técnica de medición.",
+     "latex": "\\Delta x = \\sqrt{\\langle x^{2}\\rangle - \\langle x\\rangle^{2}}, \\qquad \\Delta x\\,\\Delta p \\geq \\frac{\\hbar}{2}",
+     "kit": "rms"
+    },
+    {
+     "what": "Dónde está el mínimo de una suma de dos potencias",
+     "why": "El sexto paso escribe la energía del electrón como suma de dos términos, $\\hbar^{2}/2mr^{2}$ y $-ke^{2}/r$, y da inmediatamente la respuesta $r_{\\min} = a_0$. La acción omitida es la búsqueda habitual del mínimo: se iguala la derivada respecto a $r$ a cero. Esto funciona porque las potencias son diferentes. Para $r$ pequeño, el primer término, que crece como el inverso del cuadrado, domina al segundo, que crece solo como el inverso de la distancia. Para $r$ grande, ambos son pequeños, pero el negativo decrece más lentamente y tira de la suma hacia abajo. Entre estas regiones, la suma pasa por un mínimo, y su posición está determinada por la relación de los exponentes, no por la magnitud de las constantes.",
+     "latex": "\\frac{dE}{dr} = -\\frac{\\hbar^{2}}{mr^{3}} + \\frac{ke^{2}}{r^{2}} = 0 \\;\\Longrightarrow\\; r_{\\min} = \\frac{\\hbar^{2}}{kme^{2}}",
+     "kit": "derivative"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "عدم اليقين",
@@ -1299,15 +1418,6 @@
    ],
    "plate": "اللايقين ليس نتيجة لخشونة الأجهزة، بل هو خاصية للطبيعة الموجية للمادة: الحزمة الموضعية ليس لها تردد واحد، وبالتالي لا زخم واحد.",
    "note": "حدود التطبيق وسوء الفهم الرئيسي. الصياغة عبر الاضطراب أثناء القياس — 'الفوتون دفع الإلكترون' — اعترف هايزنبرغ نفسه لاحقًا أنها غير موفقة. إنها توحي بأن القيم الدقيقة موجودة، ونحن نُفسدها. البيان الصحيح: الحالة التي يكون فيها الإحداثي محددًا بدقة، ليس لها زخم محدد على الإطلاق، مثل النقرة القصيرة ليس لها طبقة صوت محددة. السؤال عن تردد النقرة لا معنى له ليس بسبب ضعف السمع، بل لأنه ليس لها تردد واحد."
-  },
-  "math": {
-   "title": "الرياضيات التي احتجناها هنا",
-   "text": [
-    "النقرة والنغمة — أفضل تشبيه للموضوع بأكمله. خذ شوكة رنانة: تصدر صوتًا طويلًا وتعطي نغمة نقية، لها تردد دقيق، ولكن السؤال 'متى تحديدًا كانت تصدر' لا معنى له — إنها مستمرة. الآن انقر بأصابعك: اللحظة معروفة بدقة، لكن طبقة الصوت غير موجودة على الإطلاق، النقرة تحتوي على جميع الترددات دفعة واحدة. بين هذين الطرفين يقع النطاق الكامل. تقول علاقة هايزنبرغ حرفيًا نفس الشيء عن الإحداثي والزخم، وبهذا المعنى فهي ليست كمومية بل موسيقية.",
-    "لماذا حاصل ضرب اللايقين محدود من الأسفل. تحليل فورييه مُصمم بحيث كلما كانت الإشارة أضيق في الزمن، كان طيفها أعرض، والعكس صحيح. حاصل ضرب العرضين له حد أدنى — هذه نظرية رياضية بحتة، أثبتت قبل الفيزياء بزمن طويل. مهندسو الراديو يعرفونها كعلاقة بين زمن النبضة وعرض الحزمة الترددية: النبضة القصيرة تتطلب حزمة عريضة، ولا يمكن لأي تقنية تجاوز ذلك. أضاف هايزنبرغ سطرًا فيزيائيًا واحدًا إلى النظرية: $p = \\hbar k$.",
-    "ماذا تعني علامة 'أكبر من أو يساوي'. إنها تقول إنه يمكن أن يكون أسوأ، لكن لا يمكن أن يكون أفضل. الحد الأدنى يُحقق في الحزمة الغاوسية — موجة على شكل جرس؛ أي شكل آخر يعطي حاصل ضرب أكبر. في المسائل، هذا مفيد: بتعويض علامة المساواة، تحصل على تقدير لأفضل حالة ممكنة، وعادةً ما يكون هذا هو المطلوب لتقدير مرتبة المقدار.",
-    "كيف تقدر عبر اللايقين. طريقة يستخدمها الفيزيائيون باستمرار: حبس جسيم في منطقة بحجم $L$ يعني $\\Delta p \\approx \\hbar/L$، وبالتالي الطاقة الحركية لا تقل عن $\\hbar^{2}/2mL^{2}$. عوض بحجم الذرة لتحصل على إلكترون فولت، وعوض بحجم النواة لتحصل على ميجا إلكترون فولت. من هنا يتضح فورًا لماذا الطاقات النووية أكبر بمليون مرة من الكيميائية: النواة أصغر بمئة ألف مرة من الذرة، والطاقة تتناسب عكسيًا مع مربع الحجم."
-   ]
   },
   "example": {
    "title": "مثال بالأرقام: لماذا لا يوجد إلكترون في النواة",
@@ -1504,7 +1614,7 @@
      "لا يمكن قياس الموقع وكمية الحركة في نفس اللحظة الزمنية"
     ],
     "answer": 2,
-    "why": "الخياران الأولان هما تفسيران شائعان تخلى عنهما هايزنبرغ نفسه. فهما يفترضان أن القيم الدقيقة موجودة، لكننا لا نستطيع معرفتها. البيان أقوى: الحالة ذات الموقع المحدد ليس لها كمية حركة محددة، لأن الموجة المحدودة مكانياً تتكون من ترددات متعددة.",
+    "why": "الخيار الذي يتحدث عن عدم دقة الأجهزة والخيار الذي يقول إن القياس يفسد الكمية الثانية هما تفسيران شائعان تخلى عنهما هايزنبرغ نفسه. فهما يفترضان أن القيم الدقيقة موجودة، لكننا لا نستطيع معرفتها. البيان أقوى: الحالة ذات الموقع المحدد ليس لها كمية حركة محددة، لأن الموجة المحدودة مكانياً تتكون من ترددات متعددة.",
     "hint": "تذكر التصفيق باليدين. ألا نعرف نغمته بسبب ضعف السمع — أم أنه ليس له نغمة أصلاً؟"
    },
    {
@@ -1550,7 +1660,31 @@
     "hint": "خذ Δp ≈ ħ/L وعوض في معادلة الطاقة الحركية p²/2m. ثم حول الجول إلى إلكترون فولت بالقسمة على 1,6·10⁻¹⁹.",
     "tolFactor": 3
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "نظرية واحدة عن الموجات، وتعريف واحد للتشتت، وطريقة واحدة لإيجاد الحد الأدنى — لا مزيد من الرياضيات في هذا القسم.",
+   "items": [
+    {
+     "what": "الكتلة الضيقة تتطلب طيفًا واسعًا",
+     "why": "الخطوتان الأوليتان في الاشتقاق هما فورييه، وليس ميكانيكا الكم. الموجة الجيبية اللانهائية لها تردد واحد وليس لها موضع. لتجميع كتلة موضعية، تُجمع موجات بترددات مختلفة بحيث تلغي بعضها البعض في كل مكان باستثناء منطقة صغيرة؛ وكلما كانت المنطقة المطلوبة أضيق، زاد عدد الترددات التي يجب أخذها، لأن جمع القليل يعطي تموجًا طويلًا وليس دفقة قصيرة. ومن هنا $\\Delta x\\,\\Delta k \\sim 1$ — علاقة يعرفها مهندسو الراديو كعلاقة بين مدة النبضة وعرض النطاق الترددي. الخطوة الفيزيائية الوحيدة تمت في الثالثة: استبدال $p = \\hbar k$. كل شيء آخر عند هايزنبرغ هو خاصية للموجات عمومًا.",
+     "latex": "\\psi(x) = \\sum_k A_k \\sin(kx), \\qquad \\Delta x\\,\\Delta k \\sim 1",
+     "kit": "fourier"
+    },
+    {
+     "what": "ما هي الكمية التي تحت علامة الدلتا",
+     "why": "في الخطوة الرابعة يظهر العامل الدقيق واحد على اثنين، ولا يظهر من تلقاء نفسه: عرّف كينارد $\\Delta x$ و $\\Delta p$ على أنهما الانحراف المعياري. يؤخذ انحراف كل قيمة ممكنة عن المتوسط، ويُربَّع — وإلا فإن الإشارات الموجبة والسالبة ستلغي بعضها البعض — ويُحسب المتوسط ثم يُستخرج الجذر التربيعي. هذا هو عرض التوزيع نفسه، وليس خطأ الجهاز ولا عرض الحدبة بالعين. ومن هنا أيضًا علامة \"أكبر من أو يساوي\": بالنسبة للكتلة الغاوسية، يكون حاصل الضرب مساويًا تمامًا $\\hbar/2$، وبالنسبة لأي شكل آخر يكون أكبر. لا يمكن أن يكون أقل مهما كانت الحالة أو تقنية القياس.",
+     "latex": "\\Delta x = \\sqrt{\\langle x^{2}\\rangle - \\langle x\\rangle^{2}}, \\qquad \\Delta x\\,\\Delta p \\geq \\frac{\\hbar}{2}",
+     "kit": "rms"
+    },
+    {
+     "what": "أين الحد الأدنى لمجموع قوتين",
+     "why": "الخطوة السادسة تكتب طاقة الإلكترون كمجموع حدين، $\\hbar^{2}/2mr^{2}$ و $-ke^{2}/r$، وتعطي فورًا الإجابة $r_{\\min} = a_0$. الإجراء المحذوف هو إيجاد الحد الأدنى بالطريقة المعتادة: المشتقة بالنسبة إلى $r$ تُساوي صفرًا. يعمل هذا لأن الأسس مختلفة. عند قيم $r$ الصغيرة، يغلب الحد الأول، الذي ينمو كمعكوس المربع، على الثاني الذي ينمو فقط كمعكوس المسافة. عند قيم $r$ الكبيرة، كلاهما صغير، لكن الحد السالب يتناقص ببطء أكثر ويسحب المجموع إلى الأسفل. بين هاتين المنطقتين، يمر المجموع بحد أدنى، ويحدد موضعه نسبة الأسس، وليس مقدار الثوابت.",
+     "latex": "\\frac{dE}{dr} = -\\frac{\\hbar^{2}}{mr^{3}} + \\frac{ke^{2}}{r^{2}} = 0 \\;\\Longrightarrow\\; r_{\\min} = \\frac{\\hbar^{2}}{kme^{2}}",
+     "kit": "derivative"
+    }
+   ]
+  }
  },
  "tags": [
   "pulsar",

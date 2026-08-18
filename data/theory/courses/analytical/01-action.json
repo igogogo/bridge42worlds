@@ -112,7 +112,7 @@
   },
   "derivation": {
    "title": "Откуда берётся минимум",
-   "lead": "Проследим за рассуждением по шагам: от «путей много» до «настоящий тот, где действие не меняется при малом шевелении».",
+   "lead": "Проследим за рассуждением по шагам: от «путей много» через «настоящий тот, где действие не меняется при малом шевелении» — до явного уравнения на этот путь.",
    "steps": [
     {
      "text": "Закрепим начало и конец: тело выходит из точки $A$ в момент $t_1$ и приходит в точку $B$ в момент $t_2$. Всё, что между ними, пока не задано — путей бесконечно много, и каждый из них мыслим.",
@@ -133,9 +133,33 @@
      "figCaption": "Кривая действия: истинный путь стоит на дне, отклонение в любую сторону поднимает"
     },
     {
-     "text": "Требование «действие не меняется при малом шевелении» — это уравнение на функцию. Раскрыв его, получаем уравнение Эйлера — Лагранжа, а для механической энергии оно превращается ровно во второй закон Ньютона. То есть Ньютон не отменён: он следствие.",
+     "text": "«Пошевелить путь» — пока фраза, а не вычисление. Превратим её в формулу: возьмём произвольную функцию $\\eta(t)$, равную нулю на обоих концах, и добавим её к истинному пути с маленьким множителем $\\varepsilon$. Ноль на концах — не украшение: иначе пробный путь стартует не из $A$ или промахнётся мимо $B$, и сравнивать станет нечего. Зато теперь вместо бесконечного набора путей у нас семейство, помеченное одним числом $\\varepsilon$.",
+     "latex": "y_\\varepsilon(t) = y(t) + \\varepsilon\\,\\eta(t), \\qquad \\eta(t_1) = \\eta(t_2) = 0",
+     "figure": "actiontrial",
+     "figCaption": "Горб η(t) прижат к нулю на концах, множитель ε задаёт его высоту: один параметр вместо бесконечности путей"
+    },
+    {
+     "text": "Подставив пробный путь в действие, получаем уже не функционал, а обычную функцию одного числа $S(\\varepsilon)$. Её можно разложить около нуля: постоянная, линейный член, квадратичный и дальше. Истинному пути отвечает $\\varepsilon = 0$, и раз там дно, линейного члена быть не может — будь коэффициент при $\\varepsilon$ отличен от нуля, достаточно взять $\\varepsilon$ противоположного знака, и действие оказалось бы меньше, чем на истинном пути. Этот линейный коэффициент и называют вариацией $\\delta S$: запись $\\delta S = 0$ означает ровно «первый порядок пуст», а не «действие не меняется вовсе». В части книг через $\\delta$ обозначают не коэффициент, а само маленькое изменение, $\\delta S = \\varepsilon\\, dS/d\\varepsilon$; для нас разницы нет — ноль остаётся нулём при любом $\\varepsilon$.",
+     "latex": "S(\\varepsilon) = S(0) + \\varepsilon\\,\\underbrace{\\left.\\frac{dS}{d\\varepsilon}\\right|_{\\varepsilon=0}}_{\\delta S} + O(\\varepsilon^{2}), \\qquad \\delta S = 0",
+     "figure": "actionorder",
+     "figCaption": "Наклонная касательная в нуле всегда даёт соседний путь дешевле истинного — значит, в минимуме она обязана быть горизонтальной"
+    },
+    {
+     "text": "Осталось выписать этот коэффициент. Добавка $\\varepsilon\\eta$ меняет не только координату, но и скорость: $y$ становится $y + \\varepsilon\\eta$, а $\\dot{y}$ — соответственно $\\dot{y} + \\varepsilon\\dot{\\eta}$. Подынтегральную разность энергий с этого места зовут лагранжианом, $L = K - U$; он зависит от обеих величин, поэтому в первом порядке получает две поправки, каждую со своей частной производной — это обычное цепное правило. Собрав их под интегралом, получаем явный вид вариации.",
+     "latex": "\\delta S = \\int_{t_1}^{t_2}\\left(\\frac{\\partial L}{\\partial y}\\,\\eta + \\frac{\\partial L}{\\partial \\dot{y}}\\,\\dot{\\eta}\\right)dt",
+     "figure": "actionchain",
+     "figCaption": "Сдвиг пути шевелит и координату, и наклон; лагранжиан отзывается на оба — отсюда ровно два слагаемых, и ни одного лишнего"
+    },
+    {
+     "text": "Вынести $\\eta$ за скобку мешает второе слагаемое: в нём стоит не сама $\\eta$, а её производная. Перебросим производную на соседний множитель интегрированием по частям — тогда $\\eta$ станет общим множителем, а платой будет граничный член, вынесенный за интеграл. Но берётся он ровно на концах, где $\\eta$ по построению равна нулю: член исчезает целиком, и именно ради этого концы закреплялись. Оставшийся интеграл обязан обнуляться при любой $\\eta$ — а будь скобка где-то отлична от нуля, горб можно было бы поставить именно туда и испортить равенство; значит, скобка равна нулю в каждый момент.",
+     "latex": "\\delta S = \\underbrace{\\left[\\frac{\\partial L}{\\partial \\dot{y}}\\,\\eta\\right]_{t_1}^{t_2}}_{=\\,0} + \\int_{t_1}^{t_2}\\left(\\frac{\\partial L}{\\partial y} - \\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{y}}\\right)\\eta\\,dt = 0",
+     "figure": "actionparts",
+     "figCaption": "Производная переезжает с горба на импульсный множитель; закреплённые концы убивают граничный член, а произвольность горба — скобку под интегралом"
+    },
+    {
+     "text": "Обнулившаяся скобка и есть искомое уравнение движения — его называют уравнением Эйлера — Лагранжа. Проверим, что оно не чужое: подставим механический лагранжиан $L = K - U$, где кинетическая часть зависит только от скорости, а потенциальная — только от координаты: первое слагаемое даёт $m\\ddot{y}$, второе — силу. Получается ровно второй закон Ньютона. То есть Ньютон не отменён: он следствие.",
      "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{y}} - \\frac{\\partial L}{\\partial y} = 0 \\;\\Longrightarrow\\; m\\ddot{y} = -\\frac{\\partial U}{\\partial y}",
-     "figure": "noether",
+     "figure": "eulerlagrange",
      "figCaption": "Из одного требования вырастают привычные уравнения движения"
     }
    ],
@@ -178,7 +202,7 @@
      "num": ""
     }
    ],
-   "answer": "Горб высотой в один метр стоит примерно $2{,}5$ Дж·с лишнего действия. Стенд показывает то же число — сверьте.",
+   "answer": "Горб высотой в один метр стоит примерно $2{,}5$ Дж·с лишнего действия. Стенд показывает то же число, но сверять надо при отклонении ровно $1{,}00$ м: по умолчанию там стоит $1{,}2$ м, и прирост выходит около $3{,}6$ Дж·с. Шаг ползунка $0{,}05$ м позволяет выставить единицу точно.",
    "check": "Проверка на здравый смысл: прирост пропорционален квадрату отклонения, значит вдвое больший горб обойдётся вчетверо дороже. Именно поэтому кривая действия на графике — парабола, а не прямая."
   },
   "constants": {
@@ -425,39 +449,6 @@
     }
    ]
   },
-  "derivation": {
-   "title": "Where does the minimum come from",
-   "lead": "Let's follow the reasoning step by step: from «many paths» to «the real path is the one where the action does not change under a small variation».",
-   "steps": [
-    {
-     "text": "Fix the start and end: the body leaves point $A$ at time $t_1$ and arrives at point $B$ at time $t_2$. Everything in between is not yet given — there are infinitely many paths, and each is conceivable.",
-     "latex": "y(t_1) = y_A, \\qquad y(t_2) = y_B",
-     "figure": "manypaths",
-     "figCaption": "The ends are fixed, the middle is free: any curve between the points is a candidate"
-    },
-    {
-     "text": "Assign a single number to each path. To do this, at each instant take the difference between kinetic and potential energy and sum it over the entire time of motion. The sum of infinitely many tiny pieces is an integral.",
-     "latex": "S = \\int_{t_1}^{t_2} \\big(K(t) - U(t)\\big)\\,dt",
-     "figure": "actionsum",
-     "figCaption": "The action is summed piece by piece: at each step the difference of energies is taken"
-    },
-    {
-     "text": "Now compare the paths. Take the true path and slightly vary it in the middle, without touching the ends. If the action increases on both sides, we are at a minimum. This is exactly what happens: for real motion the action is smallest.",
-     "latex": "\\delta S = 0 \\quad \\text{under a small variation of the path}",
-     "figure": "actionmin",
-     "figCaption": "Action curve: the true path is at the bottom, deviation in any direction raises it"
-    },
-    {
-     "text": "The requirement «the action does not change under a small variation» is an equation for the function. Expanding it gives the Euler–Lagrange equation, and for mechanical energy it turns exactly into Newton's second law. That is, Newton is not abolished: he is a consequence.",
-     "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{y}} - \\frac{\\partial L}{\\partial y} = 0 \\;\\Longrightarrow\\; m\\ddot{y} = -\\frac{\\partial U}{\\partial y}",
-     "figure": "noether",
-     "figCaption": "From one requirement, the familiar equations of motion emerge"
-    }
-   ],
-   "plate": "S = \\int (K - U)\\,dt \\longrightarrow \\min",
-   "plateCap": "The real path is the one on which the action takes the smallest value",
-   "note": "Strictly speaking, the action is not always minimal: the correct condition is that it is stationary, i.e., it does not change to first order under a small variation. For ordinary problems this is a minimum, but there are cases where the stationary point turns out to be a saddle. The name «principle of least action» became established historically before this subtlety was discovered."
-  },
   "math": {
    "title": "Mathematics needed here",
    "lead": "Here we seek not a number but a function — and the ordinary derivative is not suitable.",
@@ -635,7 +626,7 @@
     ],
     "answer": 0,
     "why": "Total energy is the same on all allowed paths, so minimizing it is meaningless. The difference distinguishes paths and is therefore suitable.",
-    "hint": "Спросите себя, чем допустимые пути вообще отличаются друг от друга. Полная энергия на всех них одинакова — значит, различить пути по ней нельзя. Что тогда остаётся?"
+    "hint": "Ask yourself, how do the allowed paths differ from each other at all? The total energy is the same on all of them—so you cannot distinguish the paths by it. What remains then?"
    },
    {
     "id": "a2",
@@ -649,7 +640,7 @@
     ],
     "answer": 1,
     "why": "Near the minimum, the increase is quadratic in deviation: twice the deviation costs four times more. This is also visible on the graph — it's a parabola.",
-    "hint": "Посмотрите на кривую действия справа от стенда: это прямая или парабола? Ответ про удвоение отклонения читается прямо с её формы."
+    "hint": "Look at the action curve to the right of the stand: is it a straight line or a parabola? The answer about the doubling of the deviation is read directly from its shape."
    },
    {
     "id": "a3",
@@ -664,7 +655,7 @@
      "same thing"
     ],
     "why": "The requirement of a minimum is mathematically equivalent to a local equation of motion that only looks at the current moment. These are two descriptions of the same thing, not a prediction of the future.",
-    "hint": "Сравните два описания одного и того же движения. Локальное уравнение смотрит только на текущий миг. Если оба описания дают одну и ту же траекторию, обязано ли тело что-то знать заранее?",
+    "hint": "Compare two descriptions of the same motion. The local equation looks only at the current instant. If both descriptions give the same trajectory, must the body know something in advance?",
     "needed": 2
    },
    {
@@ -675,9 +666,66 @@
     "unit": "J·s",
     "why": "$\\Delta S = m a^2 \\pi^2 / (4T) = 2\\cdot4\\cdot9{,}87/8 \\approx 9{,}9$. It's enough to remember the quadratic dependence: with twice the deviation as in the example, it is four times more than 2.5.",
     "tolAbs": 2,
-    "hint": "Прирост действия зависит от отклонения квадратично. В разобранном примере отклонение было вдвое меньше — во сколько раз меньше оказался прирост?"
+    "hint": "The increase in action depends quadratically on the deviation. In the worked example, the deviation was half as large—how many times smaller was the increase?"
    }
-  ]
+  ],
+  "derivation": {
+   "title": "Where the minimum comes from",
+   "lead": "Let's trace the reasoning step by step: from \"there are many paths\" through \"the real one is where the action doesn't change under a small variation\" to an explicit equation for that path.",
+   "steps": [
+    {
+     "text": "Fix the start and end: the body leaves point $A$ at time $t_1$ and arrives at point $B$ at time $t_2$. Everything in between is not yet specified — there are infinitely many paths, and each one is conceivable.",
+     "latex": "y(t_1) = y_A, \\qquad y(t_2) = y_B",
+     "figure": "manypaths",
+     "figCaption": "Ends are fixed, the middle is free: any curve between the points is a candidate"
+    },
+    {
+     "text": "To each path we assign a single number. To do this, at each moment we take the difference between kinetic and potential energy and sum it over the entire time of motion. The sum of infinitely small pieces is an integral.",
+     "latex": "S = \\int_{t_1}^{t_2} \\big(K(t) - U(t)\\big)\\,dt",
+     "figure": "actionsum",
+     "figCaption": "The action is built up piece by piece: at each step we take the difference of energies"
+    },
+    {
+     "text": "Now compare paths. Take the true path and slightly vary it in the middle, without touching the ends. If the action increases in both directions, we are at a minimum. This is exactly what happens: for the true motion the action is least.",
+     "latex": "\\delta S = 0 \\quad \\text{for a small variation of the path}",
+     "figure": "actionmin",
+     "figCaption": "Action curve: the true path sits at the bottom, any deviation raises it"
+    },
+    {
+     "text": "\"Vary the path\" is still a phrase, not a calculation. Let's turn it into a formula: take an arbitrary function $\\eta(t)$, zero at both ends, and add it to the true path with a small factor $\\varepsilon$. Zero at the ends is not a decoration: otherwise the trial path would not start at $A$ or would miss $B$, and there would be nothing to compare. But now, instead of an infinite set of paths, we have a family labeled by a single number $\\varepsilon$.",
+     "latex": "y_\\varepsilon(t) = y(t) + \\varepsilon\\,\\eta(t), \\qquad \\eta(t_1) = \\eta(t_2) = 0",
+     "figure": "actiontrial",
+     "figCaption": "The bump η(t) is pinned to zero at the ends, the factor ε sets its height: one parameter instead of an infinity of paths"
+    },
+    {
+     "text": "Substituting the trial path into the action, we get not a functional but an ordinary function of one number $S(\\varepsilon)$. It can be expanded around zero: constant, linear term, quadratic, and so on. The true path corresponds to $\\varepsilon = 0$, and since there is a bottom, the linear term must be absent — if the coefficient of $\\varepsilon$ were nonzero, it would suffice to take $\\varepsilon$ of the opposite sign, and the action would be smaller than on the true path. This linear coefficient is what is called the variation $\\delta S$: the notation $\\delta S = 0$ means exactly \"the first order is empty\", not \"the action does not change at all\". In some books, $\\delta$ denotes not the coefficient but the small change itself, $\\delta S = \\varepsilon\\, dS/d\\varepsilon$; for us it makes no difference — zero remains zero for any $\\varepsilon$.",
+     "latex": "S(\\varepsilon) = S(0) + \\varepsilon\\,\\underbrace{\\left.\\frac{dS}{d\\varepsilon}\\right|_{\\varepsilon=0}}_{\\delta S} + O(\\varepsilon^{2}), \\qquad \\delta S = 0",
+     "figure": "actionorder",
+     "figCaption": "A slanted tangent at zero always gives a neighboring path cheaper than the true one — so at a minimum it must be horizontal"
+    },
+    {
+     "text": "It remains to write out this coefficient. The addition $\\varepsilon\\eta$ changes not only the coordinate but also the velocity: $y$ becomes $y + \\varepsilon\\eta$, and $\\dot{y}$ correspondingly becomes $\\dot{y} + \\varepsilon\\dot{\\eta}$. From this point on, the integrand difference of energies is called the Lagrangian, $L = K - U$; it depends on both quantities, so in the first order it gets two corrections, each with its own partial derivative — this is the usual chain rule. Collecting them under the integral, we get the explicit form of the variation.",
+     "latex": "\\delta S = \\int_{t_1}^{t_2}\\left(\\frac{\\partial L}{\\partial y}\\,\\eta + \\frac{\\partial L}{\\partial \\dot{y}}\\,\\dot{\\eta}\\right)dt",
+     "figure": "actionchain",
+     "figCaption": "Shifting the path moves both the coordinate and the slope; the Lagrangian responds to both — hence exactly two terms, and no extra ones"
+    },
+    {
+     "text": "The second term prevents factoring out $\\eta$: it contains not $\\eta$ itself but its derivative. We transfer the derivative to the neighboring factor by integration by parts — then $\\eta$ becomes a common factor, and the price is a boundary term taken outside the integral. But it is evaluated exactly at the ends, where $\\eta$ is zero by construction: the term vanishes entirely, and this is precisely why the ends were fixed. The remaining integral must vanish for any $\\eta$ — and if the bracket were nonzero somewhere, one could place a bump exactly there and spoil the equality; therefore, the bracket is zero at every moment.",
+     "latex": "\\delta S = \\underbrace{\\left[\\frac{\\partial L}{\\partial \\dot{y}}\\,\\eta\\right]_{t_1}^{t_2}}_{=\\,0} + \\int_{t_1}^{t_2}\\left(\\frac{\\partial L}{\\partial y} - \\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{y}}\\right)\\eta\\,dt = 0",
+     "figure": "actionparts",
+     "figCaption": "The derivative moves from the bump to the momentum factor; fixed ends kill the boundary term, and the arbitrariness of the bump kills the bracket under the integral"
+    },
+    {
+     "text": "The vanishing bracket is the desired equation of motion — it is called the Euler–Lagrange equation. Let's check that it is not alien: substitute the mechanical Lagrangian $L = K - U$, where the kinetic part depends only on velocity and the potential part only on coordinate: the first term gives $m\\ddot{y}$, the second gives the force. This is exactly Newton's second law. So Newton is not abolished: he is a consequence.",
+     "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{y}} - \\frac{\\partial L}{\\partial y} = 0 \\;\\Longrightarrow\\; m\\ddot{y} = -\\frac{\\partial U}{\\partial y}",
+     "figure": "eulerlagrange",
+     "figCaption": "From a single requirement the familiar equations of motion grow"
+    }
+   ],
+   "plate": "S = \\int (K - U)\\,dt \\longrightarrow \\min",
+   "plateCap": "The true path is the one on which the action takes the least value",
+   "note": "Strictly speaking, the action is not always minimal: the correct condition is that it is stationary, i.e., it does not change to first order under a small variation. For ordinary problems this is a minimum, but there are cases where the stationary point turns out to be a saddle. The name \"principle of least action\" historically took root before this subtlety was clarified."
+  }
  },
  "es": {
   "title": "Principio de mínima acción",
@@ -741,39 +789,6 @@
      "unit": "s"
     }
    ]
-  },
-  "derivation": {
-   "title": "De dónde proviene el mínimo",
-   "lead": "Sigamos el razonamiento paso a paso: desde 'muchos caminos' hasta 'el real es aquel donde la acción no cambia con pequeñas perturbaciones'.",
-   "steps": [
-    {
-     "text": "Fijemos el inicio y el final: el cuerpo sale del punto $A$ en el instante $t_1$ y llega al punto $B$ en el instante $t_2$. Todo lo que está entre ellos aún no está dado — hay infinitos caminos, y cada uno es concebible.",
-     "latex": "y(t_1) = y_A, \\qquad y(t_2) = y_B",
-     "figure": "manypaths",
-     "figCaption": "Los extremos están fijos, el medio libre: cualquier curva entre los puntos es candidata"
-    },
-    {
-     "text": "A cada camino le asignamos un único número. Para ello, en cada instante tomamos la diferencia entre la energía cinética y la potencial, y la sumamos a lo largo de todo el tiempo de movimiento. La suma de trozos infinitesimales es una integral.",
-     "latex": "S = \\int_{t_1}^{t_2} \\big(K(t) - U(t)\\big)\\,dt",
-     "figure": "actionsum",
-     "figCaption": "La acción se suma por partes: en cada paso se toma la diferencia de energías"
-    },
-    {
-     "text": "Ahora comparemos los caminos. Tomemos el camino real y lo perturbamos ligeramente en el medio, sin tocar los extremos. Si la acción aumenta en ambas direcciones — estamos en un mínimo. Eso es precisamente lo que ocurre: en el movimiento real la acción es la menor.",
-     "latex": "\\delta S = 0 \\quad \\text{con una pequeña variación de la trayectoria}",
-     "figure": "actionmin",
-     "figCaption": "Curva de acción: el camino real está en el fondo, desviarse en cualquier dirección lo eleva"
-    },
-    {
-     "text": "La condición «la acción no cambia con pequeñas perturbaciones» es una ecuación para la función. Desarrollándola, obtenemos la ecuación de Euler-Lagrange, y para la energía mecánica se convierte exactamente en la segunda ley de Newton. Es decir, Newton no es anulado: es una consecuencia.",
-     "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{y}} - \\frac{\\partial L}{\\partial y} = 0 \\;\\Longrightarrow\\; m\\ddot{y} = -\\frac{\\partial U}{\\partial y}",
-     "figure": "noether",
-     "figCaption": "De una sola condición surgen las ecuaciones de movimiento habituales"
-    }
-   ],
-   "plate": "S = \\int (K - U)\\,dt \\longrightarrow \\min",
-   "plateCap": "El camino real es aquel en el que la acción toma el menor valor",
-   "note": "Estrictamente hablando, la acción no siempre es mínima: la condición correcta es que sea estacionaria, es decir, que no cambie en primer orden bajo pequeñas perturbaciones. Para problemas ordinarios es un mínimo, pero hay casos donde el punto estacionario resulta ser un punto de silla. El nombre 'principio de mínima acción' se consolidó históricamente antes de que se aclarara este matiz."
   },
   "math": {
    "title": "Matemáticas que aquí se necesitaron",
@@ -950,7 +965,7 @@
     ],
     "answer": 0,
     "why": "La energía total es igual en todos los caminos permitidos, por lo que minimizarla no tiene sentido. La diferencia distingue caminos y por eso sirve.",
-    "hint": "Спросите себя, чем допустимые пути вообще отличаются друг от друга. Полная энергия на всех них одинакова — значит, различить пути по ней нельзя. Что тогда остаётся?"
+    "hint": "Pregúntese en qué se diferencian realmente los caminos permitidos entre sí. La energía total es la misma en todos ellos — por lo tanto, no se pueden distinguir los caminos por ella. ¿Qué queda entonces?"
    },
    {
     "id": "a2",
@@ -964,7 +979,7 @@
     ],
     "answer": 1,
     "why": "Cerca del mínimo, el incremento es cuadrático en la desviación: una desviación dos veces mayor cuesta cuatro veces más. Se ve también en la gráfica: es una parábola.",
-    "hint": "Посмотрите на кривую действия справа от стенда: это прямая или парабола? Ответ про удвоение отклонения читается прямо с её формы."
+    "hint": "Mire la curva de acción a la derecha del stand: ¿es una recta o una parábola? La respuesta sobre la duplicación de la desviación se lee directamente de su forma."
    },
    {
     "id": "a3",
@@ -979,7 +994,7 @@
      "lo mismo"
     ],
     "why": "La condición de mínimo es matemáticamente equivalente a la ecuación de movimiento local que solo mira el momento actual. Son dos descripciones de lo mismo, no una predicción del futuro.",
-    "hint": "Сравните два описания одного и того же движения. Локальное уравнение смотрит только на текущий миг. Если оба описания дают одну и ту же траекторию, обязано ли тело что-то знать заранее?",
+    "hint": "Compare dos descripciones del mismo movimiento. La ecuación local solo mira el instante actual. Si ambas descripciones dan la misma trayectoria, ¿debe el cuerpo saber algo de antemano?",
     "needed": 2
    },
    {
@@ -990,9 +1005,66 @@
     "unit": "J·s",
     "why": "$\\Delta S = m a^2 \\pi^2 / (4T) = 2\\cdot4\\cdot9{,}87/8 \\approx 9{,}9$. Basta recordar la cuadraticidad: con una desviación dos veces mayor que en el ejemplo, resulta cuatro veces más que 2,5.",
     "tolAbs": 2,
-    "hint": "Прирост действия зависит от отклонения квадратично. В разобранном примере отклонение было вдвое меньше — во сколько раз меньше оказался прирост?"
+    "hint": "El incremento de la acción depende cuadráticamente de la desviación. En el ejemplo analizado, la desviación era la mitad — ¿cuántas veces menor resultó el incremento?"
    }
-  ]
+  ],
+  "derivation": {
+   "title": "De dónde sale el mínimo",
+   "lead": "Sigamos el razonamiento paso a paso: de «hay muchos caminos» a «el verdadero es aquel donde la acción no cambia ante una pequeña variación» — hasta llegar a la ecuación explícita para ese camino.",
+   "steps": [
+    {
+     "text": "Fijemos el principio y el final: el cuerpo sale del punto $A$ en el instante $t_1$ y llega al punto $B$ en el instante $t_2$. Todo lo que hay entre ellos aún no está determinado: hay infinitos caminos, y cada uno es concebible.",
+     "latex": "y(t_1) = y_A, \\qquad y(t_2) = y_B",
+     "figure": "manypaths",
+     "figCaption": "Los extremos están fijos, el medio es libre: cualquier curva entre los puntos es candidata"
+    },
+    {
+     "text": "A cada camino le asignamos un número. Para ello, en cada instante tomamos la diferencia entre la energía cinética y la potencial, y la sumamos a lo largo de todo el tiempo de movimiento. La suma de trozos infinitamente pequeños es una integral.",
+     "latex": "S = \\int_{t_1}^{t_2} \\big(K(t) - U(t)\\big)\\,dt",
+     "figure": "actionsum",
+     "figCaption": "La acción se acumula por trozos: en cada paso se toma la diferencia de energías"
+    },
+    {
+     "text": "Ahora comparemos caminos. Tomemos el camino verdadero y variémoslo ligeramente en el medio, sin tocar los extremos. Si la acción crece en ambas direcciones, estamos en un mínimo. Y eso es precisamente lo que ocurre: en el movimiento real la acción es mínima.",
+     "latex": "\\delta S = 0 \\quad \\text{para una pequeña variación del camino}",
+     "figure": "actionmin",
+     "figCaption": "Curva de la acción: el camino verdadero está en el fondo, cualquier desviación lo eleva"
+    },
+    {
+     "text": "«Variar el camino» es todavía una frase, no un cálculo. Convirtámosla en una fórmula: tomemos una función arbitraria $\\eta(t)$, igual a cero en ambos extremos, y sumémosla al camino verdadero con un factor pequeño $\\varepsilon$. El cero en los extremos no es un adorno: de lo contrario, el camino de prueba no partiría de $A$ o pasaría de largo por $B$, y no habría nada que comparar. Pero ahora, en lugar de un conjunto infinito de caminos, tenemos una familia parametrizada por un solo número $\\varepsilon$.",
+     "latex": "y_\\varepsilon(t) = y(t) + \\varepsilon\\,\\eta(t), \\qquad \\eta(t_1) = \\eta(t_2) = 0",
+     "figure": "actiontrial",
+     "figCaption": "La protuberancia η(t) se anula en los extremos, el factor ε fija su altura: un parámetro en lugar de infinitos caminos"
+    },
+    {
+     "text": "Sustituyendo el camino de prueba en la acción, obtenemos ya no un funcional, sino una función ordinaria de un número $S(\\varepsilon)$. Se puede expandir alrededor de cero: constante, término lineal, cuadrático y siguientes. Al camino verdadero le corresponde $\\varepsilon = 0$, y como allí hay un mínimo, el término lineal no puede existir: si el coeficiente de $\\varepsilon$ fuera distinto de cero, bastaría tomar $\\varepsilon$ de signo opuesto y la acción resultaría menor que en el camino verdadero. Ese coeficiente lineal es lo que se llama variación $\\delta S$: la notación $\\delta S = 0$ significa exactamente «el primer orden es nulo», no «la acción no cambia en absoluto». En algunos libros, con $\\delta$ se denota no el coeficiente, sino el cambio pequeño mismo, $\\delta S = \\varepsilon\\, dS/d\\varepsilon$; para nosotros no hay diferencia: cero sigue siendo cero para cualquier $\\varepsilon$.",
+     "latex": "S(\\varepsilon) = S(0) + \\varepsilon\\,\\underbrace{\\left.\\frac{dS}{d\\varepsilon}\\right|_{\\varepsilon=0}}_{\\delta S} + O(\\varepsilon^{2}), \\qquad \\delta S = 0",
+     "figure": "actionorder",
+     "figCaption": "Una tangente inclinada en cero siempre da un camino vecino más barato que el verdadero; por tanto, en el mínimo debe ser horizontal"
+    },
+    {
+     "text": "Solo queda escribir ese coeficiente. La adición $\\varepsilon\\eta$ cambia no solo la coordenada, sino también la velocidad: $y$ se convierte en $y + \\varepsilon\\eta$, y $\\dot{y}$ — respectivamente en $\\dot{y} + \\varepsilon\\dot{\\eta}$. A partir de aquí, la diferencia de energías integrando se llama lagrangiano, $L = K - U$; depende de ambas magnitudes, por lo que en primer orden recibe dos correcciones, cada una con su derivada parcial — es la regla de la cadena habitual. Reuniéndolas bajo la integral, obtenemos la forma explícita de la variación.",
+     "latex": "\\delta S = \\int_{t_1}^{t_2}\\left(\\frac{\\partial L}{\\partial y}\\,\\eta + \\frac{\\partial L}{\\partial \\dot{y}}\\,\\dot{\\eta}\\right)dt",
+     "figure": "actionchain",
+     "figCaption": "El desplazamiento del camino mueve tanto la coordenada como la pendiente; el lagrangiano responde a ambas — de ahí exactamente dos términos, y ninguno de más"
+    },
+    {
+     "text": "Para sacar $\\eta$ como factor común, el segundo término estorba: en él no está $\\eta$ misma, sino su derivada. Traslademos la derivada al factor vecino mediante integración por partes — entonces $\\eta$ se convierte en factor común, y el precio es un término de frontera, extraído de la integral. Pero este se evalúa precisamente en los extremos, donde $\\eta$ es cero por construcción: el término desaparece por completo, y es precisamente para esto que se fijaron los extremos. La integral restante debe anularse para cualquier $\\eta$ — y si el corchete fuera distinto de cero en algún punto, se podría colocar una protuberancia justo allí y romper la igualdad; por tanto, el corchete es cero en cada instante.",
+     "latex": "\\delta S = \\underbrace{\\left[\\frac{\\partial L}{\\partial \\dot{y}}\\,\\eta\\right]_{t_1}^{t_2}}_{=\\,0} + \\int_{t_1}^{t_2}\\left(\\frac{\\partial L}{\\partial y} - \\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{y}}\\right)\\eta\\,dt = 0",
+     "figure": "actionparts",
+     "figCaption": "La derivada se traslada de la protuberancia al factor de momento; los extremos fijos eliminan el término de frontera, y la arbitrariedad de la protuberancia — el corchete bajo la integral"
+    },
+    {
+     "text": "El corchete anulado es la ecuación de movimiento buscada: se llama ecuación de Euler-Lagrange. Comprobemos que no es ajena: sustituyamos el lagrangiano mecánico $L = K - U$, donde la parte cinética depende solo de la velocidad y la potencial solo de la coordenada: el primer término da $m\\ddot{y}$, el segundo — la fuerza. Resulta exactamente la segunda ley de Newton. Es decir, Newton no queda derogado: es una consecuencia.",
+     "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{y}} - \\frac{\\partial L}{\\partial y} = 0 \\;\\Longrightarrow\\; m\\ddot{y} = -\\frac{\\partial U}{\\partial y}",
+     "figure": "eulerlagrange",
+     "figCaption": "De un solo requisito surgen las ecuaciones de movimiento habituales"
+    }
+   ],
+   "plate": "S = \\int (K - U)\\,dt \\longrightarrow \\min",
+   "plateCap": "El camino real es aquel en el que la acción toma el valor mínimo",
+   "note": "Estrictamente hablando, la acción no siempre es mínima: la condición correcta es que sea estacionaria, es decir, que no cambie en primer orden ante una pequeña variación. Para problemas ordinarios es un mínimo, pero hay casos donde el punto estacionario resulta ser un punto de silla. El nombre «principio de mínima acción» se afianzó históricamente antes de que se aclarara esta sutileza."
+  }
  },
  "ar": {
   "title": "مبدأ الفعل الأقل",
@@ -1056,39 +1128,6 @@
      "unit": "s"
     }
    ]
-  },
-  "derivation": {
-   "title": "من أين يأتي الحد الأدنى",
-   "lead": "دعنا نتتبع المنطق خطوة بخطوة: من «مسارات كثيرة» إلى «الحقيقي هو الذي لا يتغير فيه الفعل عند اهتزاز صغير».",
-   "steps": [
-    {
-     "text": "نثبت البداية والنهاية: يغادر الجسم النقطة $A$ عند الزمن $t_1$ ويصل إلى النقطة $B$ عند الزمن $t_2$. كل ما بينهما ليس محددًا بعد — هناك عدد لا نهائي من المسارات، وكل منها ممكن.",
-     "latex": "y(t_1) = y_A, \\qquad y(t_2) = y_B",
-     "figure": "manypaths",
-     "figCaption": "النهايات ثابتة، الوسط حر: أي منحنى بين النقطتين هو مرشح"
-    },
-    {
-     "text": "نعطي لكل مسار رقمًا واحدًا. للقيام بذلك، نأخذ في كل لحظة الفرق بين الطاقة الحركية والطاقة الكامنة ونجمعه على كامل زمن الحركة. مجموع القطع المتناهية في الصغر هو التكامل.",
-     "latex": "S = \\int_{t_1}^{t_2} \\big(K(t) - U(t)\\big)\\,dt",
-     "figure": "actionsum",
-     "figCaption": "يتكون الفعل تدريجيًا: في كل خطوة نأخذ الفرق بين الطاقتين"
-    },
-    {
-     "text": "الآن نقارن المسارات. نأخذ المسار الحقيقي ونحركه قليلاً في المنتصف دون لمس النهايات. إذا زاد الفعل في كلا الاتجاهين — فنحن عند الحد الأدنى. وهذا ما يحدث بالضبط: في الحركة الحقيقية، الفعل هو الأصغر.",
-     "latex": "\\delta S = 0 \\quad \\text{عند اهتزاز صغير في المسار}",
-     "figure": "actionmin",
-     "figCaption": "منحنى الفعل: المسار الحقيقي عند القاع، الانحراف في أي اتجاه يرفعه"
-    },
-    {
-     "text": "شرط «لا يتغير الفعل عند اهتزاز صغير» هو معادلة على الدالة. بفكها، نحصل على معادلة أويلر-لاغرانج، وبالنسبة للطاقة الميكانيكية تتحول تمامًا إلى قانون نيوتن الثاني. أي أن نيوتن لم يُلغَ: إنه نتيجة.",
-     "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{y}} - \\frac{\\partial L}{\\partial y} = 0 \\;\\Longrightarrow\\; m\\ddot{y} = -\\frac{\\partial U}{\\partial y}",
-     "figure": "noether",
-     "figCaption": "من شرط واحد تنبثق معادلات الحركة المألوفة"
-    }
-   ],
-   "plate": "S = \\int (K - U)\\,dt \\longrightarrow \\min",
-   "plateCap": "المسار الحقيقي هو الذي يأخذ فيه الفعل أقل قيمة",
-   "note": "بالمعنى الدقيق، الفعل ليس دائمًا في حده الأدنى: الشرط الصحيح هو أنه ثابت، أي لا يتغير في الدرجة الأولى عند اهتزاز صغير. في المسائل العادية، هذا هو الحد الأدنى، ولكن هناك حالات تكون فيها النقطة الثابتة نقطة سرج. اسم «مبدأ الفعل الأقل» ترسخ تاريخيًا قبل اكتشاف هذه الدقة."
   },
   "math": {
    "title": "الرياضيات المطلوبة هنا",
@@ -1265,7 +1304,7 @@
     ],
     "answer": 0,
     "why": "الطاقة الكلية متساوية في جميع المسارات المسموح بها، لذا لا معنى لتصغيرها. الفرق يميز المسارات وبالتالي مناسب.",
-    "hint": "Спросите себя, чем допустимые пути вообще отличаются друг от друга. Полная энергия на всех них одинакова — значит, различить пути по ней нельзя. Что тогда остаётся?"
+    "hint": "اسأل نفسك: كيف تختلف المسارات المسموحة عن بعضها أصلًا؟ الطاقة الكلية فيها جميعًا متساوية — إذن لا يمكن تمييز المسارات بها. فما الذي يبقى إذن؟"
    },
    {
     "id": "a2",
@@ -1279,7 +1318,7 @@
     ],
     "answer": 1,
     "why": "بالقرب من الحد الأدنى، الزيادة تربيعية مع الانحراف: انحراف مضاعف يكلف أربعة أضعاف. يظهر ذلك أيضًا على الرسم البياني - إنه قطع مكافئ.",
-    "hint": "Посмотрите на кривую действия справа от стенда: это прямая или парабола? Ответ про удвоение отклонения читается прямо с её формы."
+    "hint": "انظر إلى منحنى الفعل على يمين اللوحة: هل هو خط مستقيم أم قطع مكافئ؟ الجواب حول مضاعفة الانحراف يُقرأ مباشرة من شكله."
    },
    {
     "id": "a3",
@@ -1294,7 +1333,7 @@
      "نفس الشيء"
     ],
     "why": "شرط الحد الأدنى مكافئ رياضيًا لمعادلة الحركة المحلية التي تنظر فقط إلى اللحظة الحالية. هذان وصفان لنفس الشيء، وليس توقعًا للمستقبل.",
-    "hint": "Сравните два описания одного и того же движения. Локальное уравнение смотрит только на текущий миг. Если оба описания дают одну и ту же траекторию, обязано ли тело что-то знать заранее?",
+    "hint": "قارن بين وصفين لنفس الحركة. المعادلة المحلية تنظر إلى اللحظة الحالية فقط. إذا كان كلا الوصفين يعطي نفس المسار، فهل يجب على الجسم أن يعرف شيئًا مسبقًا؟",
     "needed": 2
    },
    {
@@ -1305,8 +1344,65 @@
     "unit": "جول·ثانية",
     "why": "$\\Delta S = m a^2 \\pi^2 / (4T) = 2\\cdot4\\cdot9{,}87/8 \\approx 9{,}9$. يكفي تذكر التربيع: مع انحراف مضاعف مقارنة بالمثال، نحصل على أربعة أضعاف 2.5.",
     "tolAbs": 2,
-    "hint": "Прирост действия зависит от отклонения квадратично. В разобранном примере отклонение было вдвое меньше — во сколько раз меньше оказался прирост?"
+    "hint": "زيادة الفعل تعتمد على الانحراف تربيعيًا. في المثال المُحلَّل، كان الانحراف نصف القيمة — فكم مرة كانت الزيادة أقل؟"
    }
-  ]
+  ],
+  "derivation": {
+   "title": "من أين يأتي الحد الأدنى",
+   "lead": "دعنا نتتبع الاستدلال خطوة بخطوة: من «هناك مسارات كثيرة» مرورًا بـ «المسار الحقيقي هو الذي لا يتغير فيه الفعل عند اهتزاز صغير» وصولًا إلى معادلة صريحة لهذا المسار.",
+   "steps": [
+    {
+     "text": "نثبّت البداية والنهاية: يخرج الجسم من النقطة $A$ في اللحظة $t_1$ ويصل إلى النقطة $B$ في اللحظة $t_2$. كل ما بينهما غير محدد بعد — هناك عدد لا نهائي من المسارات، وكل منها ممكن.",
+     "latex": "y(t_1) = y_A, \\qquad y(t_2) = y_B",
+     "figure": "manypaths",
+     "figCaption": "النهايات مثبتة، والوسط حر: أي منحنى بين النقطتين مرشح"
+    },
+    {
+     "text": "نخصص لكل مسار رقمًا واحدًا. للقيام بذلك، في كل لحظة نأخذ الفرق بين الطاقة الحركية والطاقة الكامنة ونجمعه على كامل زمن الحركة. مجموع القطع المتناهية في الصغر هو التكامل.",
+     "latex": "S = \\int_{t_1}^{t_2} \\big(K(t) - U(t)\\big)\\,dt",
+     "figure": "actionsum",
+     "figCaption": "يتكون الفعل من قطع: في كل خطوة نأخذ فرق الطاقات"
+    },
+    {
+     "text": "الآن نقارن المسارات. نأخذ المسار الحقيقي ونحركه قليلاً في المنتصف، دون لمس النهايات. إذا زاد الفعل في كلا الاتجاهين — فنحن عند حد أدنى. وهذا بالضبط ما يحدث: عند الحركة الحقيقية يكون الفعل أصغر ما يمكن.",
+     "latex": "\\delta S = 0 \\quad \\text{عند اهتزاز صغير للمسار}",
+     "figure": "actionmin",
+     "figCaption": "منحنى الفعل: المسار الحقيقي عند القاع، والانحراف في أي اتجاه يرفعه"
+    },
+    {
+     "text": "«تحريك المسار» — عبارة وليست عملية حسابية. لنحولها إلى صيغة: نأخذ دالة عشوائية $\\eta(t)$ تساوي صفرًا عند الطرفين، ونضيفها إلى المسار الحقيقي بمعامل صغير $\\varepsilon$. الصفر عند الطرفين ليس للزينة: وإلا فإن المسار التجريبي لن يبدأ من $A$ أو سيخطئ $B$، ولن يكون هناك ما نقارنه. لكن الآن بدلاً من مجموعة لا نهائية من المسارات لدينا عائلة معلمة برقم واحد $\\varepsilon$.",
+     "latex": "y_\\varepsilon(t) = y(t) + \\varepsilon\\,\\eta(t), \\qquad \\eta(t_1) = \\eta(t_2) = 0",
+     "figure": "actiontrial",
+     "figCaption": "الحدبة η(t) مضغوطة إلى الصفر عند الطرفين، والمعامل ε يحدد ارتفاعها: معامل واحد بدلاً من لا نهائية المسارات"
+    },
+    {
+     "text": "بتعويض المسار التجريبي في الفعل، نحصل على دالة عادية لرقم واحد $S(\\varepsilon)$ وليس دالة. يمكننا مفككتها حول الصفر: ثابت، حد خطي، حد تربيعي وهكذا. المسار الحقيقي يقابله $\\varepsilon = 0$، وبما أن هناك قاعًا، لا يمكن أن يكون هناك حد خطي — لو كان المعامل عند $\\varepsilon$ غير صفري، يكفي أن نأخذ $\\varepsilon$ بإشارة معاكسة، وسيكون الفعل أصغر من الفعل على المسار الحقيقي. هذا المعامل الخطي يسمى تباين $\\delta S$: الكتابة $\\delta S = 0$ تعني بالضبط «الترتيب الأول فارغ»، وليس «الفعل لا يتغير إطلاقًا». في بعض الكتب يُشار بالرمز $\\delta$ إلى المعامل نفسه وليس إلى التغيير الصغير، $\\delta S = \\varepsilon\\, dS/d\\varepsilon$؛ بالنسبة لنا لا فرق — الصفر يبقى صفرًا لأي $\\varepsilon$.",
+     "latex": "S(\\varepsilon) = S(0) + \\varepsilon\\,\\underbrace{\\left.\\frac{dS}{d\\varepsilon}\\right|_{\\varepsilon=0}}_{\\delta S} + O(\\varepsilon^{2}), \\qquad \\delta S = 0",
+     "figure": "actionorder",
+     "figCaption": "المماس المائل عند الصفر يعطي دائمًا مسارًا مجاورًا أرخص من الحقيقي — لذلك عند الحد الأدنى يجب أن يكون أفقيًا"
+    },
+    {
+     "text": "بقي أن نكتب هذا المعامل. الإضافة $\\varepsilon\\eta$ تغير ليس فقط الإحداثي، بل السرعة أيضًا: $y$ تصبح $y + \\varepsilon\\eta$، و$\\dot{y}$ تصبح $\\dot{y} + \\varepsilon\\dot{\\eta}$. من هذه النقطة، يسمى الفرق بين الطاقات تحت التكامل لاغرانجيان، $L = K - U$؛ يعتمد على كلتا الكميتين، لذلك في الترتيب الأول يحصل على تصحيحين، كل منهما بمشتقة جزئية خاصة — هذه هي قاعدة السلسلة المعتادة. بجمعهما تحت التكامل، نحصل على الصيغة الصريحة للتباين.",
+     "latex": "\\delta S = \\int_{t_1}^{t_2}\\left(\\frac{\\partial L}{\\partial y}\\,\\eta + \\frac{\\partial L}{\\partial \\dot{y}}\\,\\dot{\\eta}\\right)dt",
+     "figure": "actionchain",
+     "figCaption": "إزاحة المسار تحرك الإحداثي والميل معًا؛ يستجيب اللاغرانجيان لكليهما — ومن هنا يأتي حدان بالضبط، ولا حد زائد"
+    },
+    {
+     "text": "إخراج $\\eta$ خارج القوس يعيقه الحد الثاني: فيه ليس $\\eta$ نفسها، بل مشتقتها. ننقل المشتقة إلى العامل المجاور بالتكامل بالتجزيء — عندها تصبح $\\eta$ عاملًا مشتركًا، والثمن هو حد حدي يُخرج خارج التكامل. لكنه يؤخذ عند الطرفين تمامًا، حيث $\\eta$ تساوي صفرًا بالبناء: يختفي الحد كليًا، ولهذا ثبّتنا النهايات. التكامل المتبقي يجب أن يتلاشى لأي $\\eta$ — ولو كان القوس غير صفري في مكان ما، يمكن وضع حدبة هناك بالضبط وإفساد المساواة؛ إذن القوس يساوي صفرًا في كل لحظة.",
+     "latex": "\\delta S = \\underbrace{\\left[\\frac{\\partial L}{\\partial \\dot{y}}\\,\\eta\\right]_{t_1}^{t_2}}_{=\\,0} + \\int_{t_1}^{t_2}\\left(\\frac{\\partial L}{\\partial y} - \\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{y}}\\right)\\eta\\,dt = 0",
+     "figure": "actionparts",
+     "figCaption": "تنتقل المشتقة من الحدبة إلى عامل الدفع؛ النهايات المثبتة تقتل الحد الحدي، وعشوائية الحدبة تقتل القوس تحت التكامل"
+    },
+    {
+     "text": "القوس الذي تلاشى هو معادلة الحركة المطلوبة — تسمى معادلة أويلر-لاغرانج. دعنا نتحقق من أنها ليست غريبة: نعوض لاغرانجيان الميكانيكي $L = K - U$، حيث يعتمد الجزء الحركي على السرعة فقط، والجزء الكامن على الإحداثي فقط: الحد الأول يعطي $m\\ddot{y}$، والثاني يعطي القوة. نحصل بالضبط على قانون نيوتن الثاني. أي أن نيوتن لم يُلغَ: إنه نتيجة.",
+     "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{y}} - \\frac{\\partial L}{\\partial y} = 0 \\;\\Longrightarrow\\; m\\ddot{y} = -\\frac{\\partial U}{\\partial y}",
+     "figure": "eulerlagrange",
+     "figCaption": "من شرط واحد تنمو معادلات الحركة المألوفة"
+    }
+   ],
+   "plate": "S = \\int (K - U)\\,dt \\longrightarrow \\min",
+   "plateCap": "المسار الحقيقي هو الذي يأخذ فيه الفعل أصغر قيمة",
+   "note": "بالمعنى الدقيق، الفعل ليس دائمًا أدنى ما يمكن: الشرط الصحيح هو أنه ثابت، أي لا يتغير في الترتيب الأول عند اهتزاز صغير. للمسائل العادية هذا هو الحد الأدنى، لكن توجد حالات تكون فيها النقطة الثابتة سرجًا. اسم «مبدأ الفعل الأصغر» ترسخ تاريخيًا قبل اكتشاف هذه الدقة."
+  }
  }
 }

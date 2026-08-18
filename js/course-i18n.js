@@ -12,6 +12,15 @@
 
     // Порядок значений: en, es, ar, fr (пятый язык добавлен tools/dict_lang.py)
     var DICT = {
+        'у ответа другой знак': ['your answer has the opposite sign', 'tu respuesta tiene el signo contrario', 'إجابتك بإشارة معاكسة', 'votre réponse a le signe opposé'],
+        'ноль здесь не подходит': ['zero will not do here', 'aquí el cero no sirve', 'الصفر لا يصلح هنا', 'zéro ne convient pas ici'],
+        'вы промахнулись больше чем в тысячу раз': ['you are off by more than a thousand times', 'te desviaste más de mil veces', 'أخطأت بأكثر من ألف ضعف', 'vous êtes à côté de plus de mille fois'],
+        'Не разобрал число. Можно так:': ['Could not read the number. Any of these will do:', 'No entendí el número. Puedes escribirlo así:', 'لم أفهم الرقم. يمكنك كتابته هكذا:', 'Nombre non compris. Vous pouvez l’écrire ainsi :'],
+        'Впишите число — хватит и порядка величины.': ['Type a number — an order of magnitude is enough.', 'Escribe un número: basta con el orden de magnitud.', 'اكتب رقماً — تكفي رتبة المقدار.', 'Entrez un nombre — un ordre de grandeur suffit.'],
+        'Осталось вопросов по токену': ['Questions left on this token', 'Preguntas restantes con este token', 'الأسئلة المتبقية بهذا الرمز', 'Questions restantes avec ce jeton'],
+        'На эту сессию лимит исчерпан': ['Session limit reached', 'Límite de la sesión alcanzado', 'انتهى حدّ هذه الجلسة', 'Limite de la session atteinte'],
+        'Ваш результат': ['Your result', 'Tu resultado', 'نتيجتك', 'Votre résultat'],
+        'Куда дальше': ['Where to next', 'Qué sigue', 'إلى أين بعد ذلك', 'Et ensuite'],
         'bridge42worlds · дерево знаний': ['bridge42worlds · knowledge tree',
             'bridge42worlds · árbol del conocimiento', 'bridge42worlds · شجرة المعرفة', 'bridge42worlds · arbre de connaissances'],
         'Как работать с этим курсом · сколько времени займёт · опыты · материалы по теме': [
@@ -130,6 +139,9 @@
             'Este material aún no está traducido a su idioma: se muestra el texto en ruso.',
             'لم تُترجم هذه المادة إلى لغتك بعد — يظهر النص الروسي.',
             'Ce contenu n’est pas encore traduit dans votre langue — le texte russe est affiché.'],
+        'развернуть в справочнике': ['open in the reference', 'ver en el compendio',
+            'افتح في المرجع', 'ouvrir dans l’aide-mémoire'],
+        'В курсе:': ['In the course:', 'En el curso:', 'في المقرر:', 'Dans le cours :'],
         'Вопросы': ['Questions', 'Preguntas', 'أسئلة', 'Questions'],
         // подписи шпаргалки: жили только в разметке memo.html и на всех языках были русскими
         'К параграфу': ['Back to the paragraph', 'Volver al párrafo', 'إلى الفقرة', 'Retour au paragraphe'],
@@ -219,6 +231,44 @@
         'Как запомнить:': ['How to remember:', 'Cómo recordarlo:', 'كيف تتذكره:', 'Comment retenir:'],
         'Не удалось загрузить материал': ['Could not load the material', 'No se pudo cargar el material',
             'تعذّر تحميل المادة', 'Impossible de charger le matériel'],
+
+        /* ── Длинный параграф: оглавление, «наверх», закладка, экраны ошибок (аудит 6.2) ── */
+        'Содержание параграфа': ['In this paragraph', 'Contenido del párrafo',
+            'محتويات الفقرة', 'Sommaire du paragraphe'],
+        'Наверх': ['Back to top', 'Volver arriba', 'إلى الأعلى', 'Haut de page'],
+        'Опыт': ['Experiment', 'Experimento', 'التجربة', 'Expérience'],
+        'Формула': ['Formula', 'Fórmula', 'الصيغة', 'Formule'],
+        'Вы читали отсюда': ['You stopped reading here', 'Aquí dejaste la lectura',
+            'توقّفت عن القراءة هنا', 'Vous vous êtes arrêté ici'],
+        'Продолжить': ['Continue', 'Continuar', 'متابعة', 'Continuer'],
+        'Закрыть': ['Close', 'Cerrar', 'إغلاق', 'Fermer'],
+        'Такой темы нет': ['No such topic', 'No existe ese tema',
+            'لا يوجد موضوع بهذا الاسم', 'Ce sujet n’existe pas'],
+        'В адресе указана тема, которой в курсе нет: похоже, ссылка устарела или в ней опечатка.': [
+            'The address points to a topic the course does not have — the link is probably outdated or misspelled.',
+            'La dirección apunta a un tema que el curso no tiene: seguramente el enlace está obsoleto o mal escrito.',
+            'يشير العنوان إلى موضوع غير موجود في المقرر: على الأرجح أنّ الرابط قديم أو به خطأ إملائي.',
+            'L’adresse pointe vers un sujet absent du cours : le lien est sans doute périmé ou mal orthographié.'],
+        'Такого параграфа нет': ['No such paragraph', 'No existe ese párrafo',
+            'لا توجد فقرة بهذا الاسم', 'Ce paragraphe n’existe pas'],
+        'В этой теме нет параграфа с таким адресом. Вот всё, что в ней есть:': [
+            'This topic has no paragraph at that address. Here is everything it does have:',
+            'Este tema no tiene ningún párrafo en esa dirección. Esto es todo lo que contiene:',
+            'لا تحتوي هذه المادة على فقرة بهذا العنوان، وهذا كل ما فيها:',
+            'Ce sujet ne contient aucun paragraphe à cette adresse. Voici tout ce qu’il contient :'],
+        'Темы курса': ['Course topics', 'Temas del curso', 'مواضيع المقرر', 'Sujets du cours'],
+        'Открыть дерево знаний': ['Open the knowledge tree', 'Abrir el árbol del conocimiento',
+            'افتح شجرة المعرفة', 'Ouvrir l’arbre de connaissances'],
+        'Похоже, оборвалась связь с сервером. Обновите страницу — обычно этого хватает.': [
+            'The connection to the server seems to have dropped. Reload the page — that usually settles it.',
+            'Parece que se perdió la conexión con el servidor. Recarga la página: suele bastar con eso.',
+            'يبدو أنّ الاتصال بالخادم قد انقطع. أعد تحميل الصفحة — عادةً ما يكفي ذلك.',
+            'La connexion au serveur semble interrompue. Rechargez la page — cela suffit en général.'],
+        'Обновить страницу': ['Reload the page', 'Recargar la página',
+            'إعادة تحميل الصفحة', 'Recharger la page'],
+        'Подробности для разработчика': ['Technical details', 'Detalles técnicos',
+            'تفاصيل تقنية', 'Détails techniques'],
+
         'Не удалось загрузить учебник': ['Could not load the textbook', 'No se pudo cargar el libro',
             'تعذّر تحميل الكتاب', 'Impossible de charger le manuel'],
         'Не удалось загрузить данные:': ['Could not load the data:', 'No se pudieron cargar los datos:',

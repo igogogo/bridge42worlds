@@ -181,11 +181,25 @@
   },
   "math": {
    "title": "Математика, которая здесь понадобилась",
-   "text": [
-    "Почему длина волны обратна импульсу. Держите в голове образ: чем тяжелее и быстрее объект, тем короче его волна, тем меньше он похож на волну и тем больше на частицу. Для электрона в атоме длина волны сравнима с размером атома — волновые свойства правят всем. Для пылинки массой в микрограмм, ползущей со скоростью миллиметр в секунду, длина волны выходит $10^{-25}$ метра, что в миллиард раз меньше атомного ядра. Волновые свойства есть у всего, но заметны только у лёгкого и медленного.",
-    "Что такое волновая функция и чем она отличается от волны на воде. Волна на воде — это высота, реальная и измеримая. Волновая функция не является ни высотой, ни давлением, ни чем-либо наблюдаемым: она может быть отрицательной и даже комплексной. Наблюдаема лишь её квадрат — вероятность. Полезная аналогия: волновая функция относится к вероятности примерно как амплитуда звука к громкости. Складываются амплитуды со знаком, а слышим мы квадрат — потому две волны и могут дать тишину.",
-    "Почему интерферируют именно амплитуды. Это ключ ко всей странности. Если бы складывались вероятности, две щели давали бы просто сумму двух пятен, как для песчинок. Но складываются амплитуды, а вероятность есть квадрат суммы, а не сумма квадратов. Разница между $(a+b)^{2}$ и $a^{2}+b^{2}$ равна $2ab$ — это и есть интерференционный член. Когда $b$ отрицательна, он делает вероятность меньше, чем от одной щели. Отсюда тёмные полосы.",
-    "Как читать условие целого числа волн. Оно совершенно то же самое, что для гитарной струны, только кольцевое. Волна, обежав орбиту, должна вернуться в исходную фазу — иначе при следующем обороте она наложится на себя со сдвигом и погасится. Разрешены только те орбиты, где укладывается целое число длин волн. Здесь стоит остановиться и оценить: тайна дискретных уровней атома, мучившая физиков сорок лет, оказалась той же задачей, которую Пифагор решил на струне за две с половиной тысячи лет до того."
+   "lead": "Вся странность двух щелей помещается в одно алгебраическое тождество; остальное — что означает модуль и откуда берётся целое число.",
+   "items": [
+    {
+     "what": "Квадрат суммы, а не сумма квадратов",
+     "why": "Седьмой шаг вывода объявляет наблюдаемой величиной $|\\psi|^{2}$, а складываются при этом сами $\\psi$. Разница между «сложить и возвести в квадрат» и «возвести в квадрат и сложить» — не тонкость записи: $(a+b)^{2} = a^{2} + b^{2} + 2ab$. Лишнее слагаемое $2ab$ и есть интерференционный член. Если бы складывались вероятности, две щели давали бы просто сумму двух картин, два пятна, как для песчинок. Складываются амплитуды, поэтому там, где $a$ и $b$ противоположны по знаку, вероятность выходит меньше, чем от одной щели: тёмная полоса появляется на месте, которое каждая щель по отдельности освещает.",
+     "latex": "(a+b)^{2} = a^{2} + b^{2} + \\underbrace{2ab}_{\\text{интерференция}}",
+     "kit": "probability"
+    },
+    {
+     "what": "Почему модуль, а не просто квадрат",
+     "why": "Седьмой шаг вывода объявляет наблюдаемой величиной квадрат модуля $|\\psi|^{2}$, и модуль здесь не для красоты. Сама $\\psi$ может быть отрицательной и вообще комплексной: знак и фаза нужны, чтобы амплитуды умели гасить друг друга, — без них не было бы и интерференционного слагаемого из предыдущего приёма. Наблюдаемой величине отрицательной быть нельзя, а просто квадрат комплексного числа запросто окажется и отрицательным, и комплексным. Поэтому берут именно квадрат модуля; раскрывается он как произведение числа на сопряжённое, $|\\psi|^{2} = \\psi^{*}\\psi$, и потому неотрицателен при любой фазе. Второе равенство того же шага, $\\int|\\psi|^{2}dx = 1$, означает буквально «частица где-то есть» и заодно задаёт размерность: раз интеграл по длине равен единице, у $|\\psi|^{2}$ размерность обратной длины. Значит перед нами плотность вероятности, а не вероятность: спрашивать вероятность в точке бессмысленно, её получают, умножив плотность на отрезок, — ровно так седьмой шаг и записан, $P(x)\\,dx = |\\psi(x)|^{2}dx$.",
+     "latex": "|\\psi|^{2} = \\psi^{*}\\psi \\geq 0, \\qquad \\int |\\psi|^{2}\\,dx = 1",
+     "kit": "complex"
+    },
+    {
+     "what": "Целое число берётся из замыкания",
+     "why": "Третий и четвёртый шаги вывода делают главное превращение параграфа: непрерывный набор орбит становится дискретным. Механизм чисто волновой. Обежав кольцо длиной $2\\pi r$, волна возвращается в исходную точку, и её фаза обязана совпасть с прежней — иначе на следующем обороте волна наложится на себя со сдвигом и погасит сама себя. Совпадение фазы и означает, что на длине орбиты уложилось целое число длин волн. Целое число тут не постулируется, а выживает: условие отбирает из непрерывного множества радиусов дискретный набор. Тот же приём работает у струны с закреплёнными концами и у частицы в ящике из первого параграфа.",
+     "latex": "2\\pi r = n\\lambda, \\quad n = 1, 2, 3, \\ldots \\;\\Longrightarrow\\; L = n\\hbar"
+    }
    ]
   },
   "example": {
@@ -411,8 +425,7 @@
      "амплитуд",
      "вероятност",
      "склад",
-     "перестают",
-     "какой путь"
+     "перестают"
     ],
     "needed": 2,
     "why": "Интерференция возникает потому, что складываются амплитуды двух неразличимых путей, а вероятность есть квадрат их суммы. Как только появляется информация о пройденном пути, пути становятся различимыми, и складываться начинают уже вероятности — а это просто два пятна без полос. Важна именно доступность сведений: если их стереть, полосы возвращаются.",
@@ -440,37 +453,74 @@
   ],
   "standNote": "The stand shows a de Broglie wave confined in a box. Switch the mode to probability density: the wave function can be negative, but its square cannot — and it is the square that tells where the particle will be found. Red dots are nodes, places where the particle is never detected. Note the strangeness: at the second level, the node is exactly in the middle, meaning the particle is both on the left and on the right, but never in the center. How it gets from one half to the other is a meaningless question — it has no trajectory.",
   "formula": {
-   "name": "De Broglie Hypothesis",
+   "name": "de Broglie hypothesis",
    "latex": "\\lambda = \\frac{h}{p} = \\frac{h}{mv}, \\qquad |\\psi|^{2} = \\text{probability density}",
    "alsoKnown": "Matter wave · Born's probabilistic interpretation",
    "authors": [
     {
      "who": "Louis de Broglie",
      "year": "1924",
-     "what": "proposed wave properties of matter from symmetry considerations, without a single experiment. The dissertation was a few pages long; he received the Nobel Prize five years later — faster than almost anyone in history"
+     "what": "postulated wave properties of matter from symmetry considerations, without a single experiment. The thesis was only a few pages long; he received the Nobel Prize five years later — faster than almost anyone in history"
     },
     {
      "who": "Clinton Davisson and Lester Germer",
      "year": "1927",
-     "what": "accidentally obtained electron diffraction on a nickel crystal. The crystal formed after they carelessly broke a flask and heated the sample to restore it — an accident that led to a Nobel Prize"
+     "what": "accidentally obtained electron diffraction on a nickel crystal. The crystal formed after they carelessly broke a flask and heated the sample to restore it — the accident turned into a Nobel Prize"
     },
     {
      "who": "Erwin Schrödinger",
      "year": "1926",
-     "what": "wrote down the equation for the matter wave, from which the energy levels of the atom emerge as harmonics. He himself considered the wave a real physical object and did not accept the probabilistic interpretation"
+     "what": "wrote down the equation for the matter wave, from which atomic energy levels emerge as harmonics. He himself considered the wave a real physical object and did not accept the probabilistic interpretation"
     },
     {
      "who": "Max Born",
      "year": "1926",
-     "what": "proposed that the square of the wave function be regarded as probability density. The idea occupied a footnote to an article and became the standard interpretation; the Nobel Prize for it came twenty‑eight years later"
+     "what": "proposed to consider the square of the wave function as the probability density. The idea took up a footnote to an article and became the standard interpretation; the Nobel Prize for it came twenty-eight years later"
     },
     {
      "who": "Claus Jönsson",
      "year": "1961",
-     "what": "first performed the double‑slit experiment with electrons literally, not just as a thought experiment. In 2002, readers of Physics World magazine named it the most beautiful experiment in the history of physics"
+     "what": "performed the double-slit experiment with electrons literally, not just as a thought experiment. In 2002, readers of Physics World magazine named it the most beautiful experiment in the history of physics"
     }
    ],
-   "story": "Feynman, in his lectures, declared the double‑slit experiment the only mystery of quantum mechanics, claiming that all other oddities follow from it. And he honestly warned: trying to understand how it works is futile, because no familiar picture is adequate. Particularly instructive is a detail often overlooked. If a detector is placed at the slits to learn which one the electron passed through, the fringes disappear — two patches remain, as for ordinary bullets. Moreover, it is not physical interference that matters, but the very availability of information: it is enough that information about the path is stored somewhere. Erase it afterwards — the fringes return. The delayed‑choice experiment has been performed, and the result is exactly that."
+   "story": "Feynman in his lectures declared the double-slit experiment the only mystery of quantum mechanics, claiming that all other oddities follow from it. And he honestly warned: trying to understand how it works is useless, because no familiar picture is suitable. Especially instructive is a detail that is often overlooked. If you place a detector at the slits and find out which one the electron went through, the fringes disappear — two spots remain, as for ordinary balls. Moreover, what matters is not the physical disturbance, but the very availability of information: it is enough that the path information is stored somewhere. Erase it later — the fringes return. The delayed-choice experiment was performed, and the result is exactly that.",
+   "symbols": [
+    {
+     "sym": "lambda",
+     "latex": "\\lambda",
+     "what": "de Broglie wavelength",
+     "unit": "m",
+     "note": "inversely proportional to momentum: the heavier and faster, the shorter the wave"
+    },
+    {
+     "sym": "psi",
+     "latex": "\\psi",
+     "what": "wave function",
+     "unit": "—",
+     "note": "not observable by itself and can be negative or complex"
+    },
+    {
+     "sym": "psi2",
+     "latex": "|\\psi|^{2}",
+     "what": "probability density",
+     "unit": "1/m",
+     "note": "probability of finding the particle at a given location; always non-negative"
+    },
+    {
+     "sym": "p",
+     "latex": "p",
+     "what": "particle momentum",
+     "unit": "kg·m/s",
+     "note": "related to wavelength in the same way as for a photon: $p = h/\\lambda$"
+    },
+    {
+     "sym": "n2",
+     "latex": "n",
+     "what": "quantum number",
+     "unit": "—",
+     "note": "harmonic number; the same integer as for a string"
+    }
+   ]
   },
   "symbols": [
    {
@@ -558,15 +608,6 @@
    ],
    "plate": "Matter possesses wave properties with wavelength $\\lambda = h/p$. The condition of an integer number of waves on the orbit gives discrete energy levels, and the squared wave function gives the probability to find the particle.",
    "note": "Limits of applicability and a major caveat. The Bohr model with orbits is only numerically correct and fundamentally wrong: the electron has no trajectory, and one cannot speak of its motion along a ring. The correct description is given by the Schrödinger equation, where the electron is represented by a three-dimensional probability cloud. Nevertheless, the reasoning with an integer number of waves remains valid and is still the best way to understand where quantization comes from. Just remember that this is scaffolding, not the building."
-  },
-  "math": {
-   "title": "Mathematics Needed Here",
-   "text": [
-    "Why wavelength is inversely proportional to momentum. Keep this image in mind: the heavier and faster an object, the shorter its wave, the less it looks like a wave and the more like a particle. For an electron in an atom, the wavelength is comparable to the atom’s size — wave properties dominate everything. For a dust grain of mass one microgram, crawling at a speed of one millimeter per second, the wavelength is $10^{-25}$ meters, a billion times smaller than an atomic nucleus. Wave properties exist for everything, but are noticeable only for light and slow objects.",
-    "What the wave function is and how it differs from a water wave. A water wave is a height, real and measurable. The wave function is neither height, nor pressure, nor anything observable: it can be negative or even complex. Only its square — the probability — is observable. A useful analogy: the wave function relates to probability roughly as sound amplitude relates to loudness. Amplitudes are added with sign, while we hear the square — that is why two waves can produce silence.",
-    "Why it is amplitudes that interfere. This is the key to all the strangeness. If probabilities were added, two slits would simply give the sum of two spots, as for sand grains. But amplitudes are added, and probability is the square of the sum, not the sum of squares. The difference between $(a+b)^{2}$ and $a^{2}+b^{2}$ equals $2ab$ — that is the interference term. When $b$ is negative, it makes the probability smaller than from a single slit. Hence the dark fringes.",
-    "How to read the condition of an integer number of waves. It is exactly the same as for a guitar string, only circular. A wave, traveling around the orbit, must return to its initial phase — otherwise, on the next revolution, it will superimpose with a shift and cancel out. Only those orbits are allowed where an integer number of wavelengths fit. It is worth pausing here and appreciating: the mystery of discrete atomic levels, which tormented physicists for forty years, turned out to be the same problem that Pythagoras solved on a string two and a half thousand years earlier."
-   ]
   },
   "example": {
    "title": "Numerical example: wavelength of an electron and a tennis ball",
@@ -791,8 +832,7 @@
      "amplitude",
      "probability",
      "add",
-     "cease",
-     "which path"
+     "cease"
     ],
     "needed": 2,
     "why": "Interference occurs because the amplitudes of two indistinguishable paths add, and probability is the square of their sum. As soon as information about which path is taken becomes available, the paths become distinguishable, and probabilities start adding — which is just two spots without fringes. It is the accessibility of information that matters: if it is erased, the fringes return.",
@@ -808,7 +848,30 @@
     "hint": "Divide Planck's constant by the product of mass and velocity. Estimate by orders of magnitude: 10⁻³⁴ divided by 10⁻³¹ · 10⁶.",
     "tolAbs": 1
    }
-  ]
+  ],
+  "math": {
+   "title": "The Math Needed Here",
+   "lead": "All the strangeness of the two slits fits into one algebraic identity; the rest is what the modulus means and where the integer comes from.",
+   "items": [
+    {
+     "what": "Square of the sum, not sum of squares",
+     "why": "The seventh step of the derivation declares $|\\psi|^{2}$ as the observable quantity, while it is the $\\psi$'s themselves that are added. The difference between 'add then square' and 'square then add' is not a matter of notation: $(a+b)^{2} = a^{2} + b^{2} + 2ab$. The extra term $2ab$ is the interference term. If probabilities were added, two slits would simply give the sum of two patterns, two spots, as for sand grains. Amplitudes are added, so where $a$ and $b$ have opposite signs, the probability comes out less than from a single slit: a dark fringe appears where each slit individually illuminates.",
+     "latex": "(a+b)^{2} = a^{2} + b^{2} + \\underbrace{2ab}_{\\text{interference}}",
+     "kit": "probability"
+    },
+    {
+     "what": "Why the modulus, not just the square",
+     "why": "The seventh step of the derivation declares the square of the modulus $|\\psi|^{2}$ as the observable quantity, and the modulus is not there for beauty. The $\\psi$ itself can be negative and even complex: the sign and phase are needed so that amplitudes can cancel each other out — without them there would be no interference term from the previous trick. The observable cannot be negative, and the plain square of a complex number can easily be both negative and complex. Therefore one takes exactly the square of the modulus; it expands as the product of the number and its conjugate, $|\\psi|^{2} = \\psi^{*}\\psi$, and hence is nonnegative for any phase. The second equality of the same step, $\\int|\\psi|^{2}dx = 1$, literally means 'the particle is somewhere' and also sets the dimension: since the integral over length equals one, $|\\psi|^{2}$ has the dimension of inverse length. So we have a probability density, not a probability: asking for the probability at a point is meaningless; it is obtained by multiplying the density by a segment — exactly as written in the seventh step, $P(x)\\,dx = |\\psi(x)|^{2}dx$.",
+     "latex": "|\\psi|^{2} = \\psi^{*}\\psi \\geq 0, \\qquad \\int |\\psi|^{2}\\,dx = 1",
+     "kit": "complex"
+    },
+    {
+     "what": "The integer comes from closure",
+     "why": "The third and fourth steps of the derivation make the main transformation of the paragraph: the continuous set of orbits becomes discrete. The mechanism is purely wave-like. Having gone around a ring of length $2\\pi r$, the wave returns to its starting point, and its phase must coincide with the previous one — otherwise, on the next turn, the wave will overlap itself with a shift and cancel itself out. The phase coincidence means that an integer number of wavelengths fits along the orbit length. The integer is not postulated here but survives: the condition selects a discrete set from the continuous set of radii. The same trick works for a string with fixed ends and for a particle in a box from the first paragraph.",
+     "latex": "2\\pi r = n\\lambda, \\quad n = 1, 2, 3, \\ldots \\;\\Longrightarrow\\; L = n\\hbar"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Ondas de materia",
@@ -940,15 +1003,6 @@
    ],
    "plate": "La materia posee propiedades ondulatorias con una longitud de onda $\\lambda = h/p$. La condición de un número entero de ondas en la órbita da niveles de energía discretos, y el cuadrado de la función de onda da la probabilidad de encontrar la partícula.",
    "note": "Límites de aplicabilidad y la salvedad principal. El modelo de Bohr con órbitas es solo numéricamente correcto y esencialmente incorrecto: el electrón no tiene trayectoria y no se puede hablar de su movimiento en un anillo. La descripción correcta la da la ecuación de Schrödinger, donde el electrón se representa como una nube tridimensional de probabilidad. Sin embargo, el razonamiento con un número entero de ondas sigue siendo válido y sigue siendo la mejor manera de entender de dónde proviene la cuantización. Solo recuerda que esto es un andamio, no el edificio."
-  },
-  "math": {
-   "title": "Matemáticas que fueron necesarias aquí",
-   "text": [
-    "Por qué la longitud de onda es inversa al momento. Ten en mente la imagen: cuanto más pesado y rápido es un objeto, más corta es su onda, menos se parece a una onda y más a una partícula. Para un electrón en un átomo, la longitud de onda es comparable al tamaño del átomo: las propiedades ondulatorias gobiernan todo. Para una mota de polvo de un microgramo que se arrastra a un milímetro por segundo, la longitud de onda resulta ser $10^{-25}$ metros, mil millones de veces más pequeña que el núcleo atómico. Las propiedades ondulatorias existen en todo, pero solo son notables en lo ligero y lento.",
-    "Qué es la función de onda y en qué se diferencia de una onda en el agua. Una onda en el agua es altura, real y medible. La función de onda no es altura, ni presión, ni nada observable: puede ser negativa e incluso compleja. Solo su cuadrado es observable: la probabilidad. Una analogía útil: la función de onda se relaciona con la probabilidad aproximadamente como la amplitud del sonido con el volumen. Las amplitudes se suman con signo, y oímos el cuadrado, por lo que dos ondas pueden dar silencio.",
-    "Por qué interfieren precisamente las amplitudes. Esta es la clave de toda la extrañeza. Si se sumaran las probabilidades, dos rendijas darían simplemente la suma de dos manchas, como para granos de arena. Pero se suman las amplitudes, y la probabilidad es el cuadrado de la suma, no la suma de los cuadrados. La diferencia entre $(a+b)^{2}$ y $a^{2}+b^{2}$ es $2ab$: ese es el término de interferencia. Cuando $b$ es negativa, hace que la probabilidad sea menor que la de una sola rendija. De ahí las franjas oscuras.",
-    "Cómo leer la condición de un número entero de ondas. Es exactamente lo mismo que para una cuerda de guitarra, solo que circular. La onda, después de recorrer la órbita, debe volver a la fase original; de lo contrario, en la siguiente vuelta se superpondría desplazada y se cancelaría. Solo están permitidas las órbitas en las que cabe un número entero de longitudes de onda. Aquí vale la pena detenerse y apreciar: el misterio de los niveles discretos del átomo, que atormentó a los físicos durante cuarenta años, resultó ser el mismo problema que Pitágoras resolvió en una cuerda dos mil quinientos años antes."
-   ]
   },
   "example": {
    "title": "Ejemplo con números: longitud de onda del electrón y de la pelota",
@@ -1260,6 +1314,29 @@
      "note": "número armónico; el mismo entero que en una cuerda."
     }
    ]
+  },
+  "math": {
+   "title": "Matemáticas que aquí se necesitaron",
+   "lead": "Toda la rareza de las dos rendijas cabe en una identidad algebraica; el resto — qué significa el módulo y de dónde sale el número entero.",
+   "items": [
+    {
+     "what": "El cuadrado de la suma, no la suma de los cuadrados",
+     "why": "El séptimo paso de la derivación declara que la magnitud observable es $|\\psi|^{2}$, y lo que se suman son las propias $\\psi$. La diferencia entre «sumar y luego elevar al cuadrado» y «elevar al cuadrado y luego sumar» no es un detalle de notación: $(a+b)^{2} = a^{2} + b^{2} + 2ab$. El término extra $2ab$ es el término de interferencia. Si se sumaran probabilidades, dos rendijas darían simplemente la suma de dos imágenes, dos manchas, como para los granos de arena. Se suman amplitudes, por lo que donde $a$ y $b$ tienen signos opuestos, la probabilidad resulta menor que con una sola rendija: aparece una franja oscura en un lugar que cada rendija por separado ilumina.",
+     "latex": "(a+b)^{2} = a^{2} + b^{2} + \\underbrace{2ab}_{\\text{interferencia}}",
+     "kit": "probability"
+    },
+    {
+     "what": "Por qué el módulo, y no simplemente el cuadrado",
+     "why": "El séptimo paso de la derivación declara que la magnitud observable es el cuadrado del módulo $|\\psi|^{2}$, y el módulo aquí no es por estética. La propia $\\psi$ puede ser negativa e incluso compleja: el signo y la fase son necesarios para que las amplitudes puedan cancelarse entre sí — sin ellos no existiría el término de interferencia del truco anterior. La magnitud observable no puede ser negativa, y el simple cuadrado de un número complejo puede resultar tanto negativo como complejo. Por eso se toma precisamente el cuadrado del módulo; se expande como el producto del número por su conjugado, $|\\psi|^{2} = \\psi^{*}\\psi$, y por tanto es no negativo para cualquier fase. La segunda igualdad de ese mismo paso, $\\int|\\psi|^{2}dx = 1$, significa literalmente «la partícula está en alguna parte» y además fija la dimensión: como la integral sobre la longitud es igual a uno, $|\\psi|^{2}$ tiene dimensiones de inverso de longitud. Por tanto, tenemos una densidad de probabilidad, no una probabilidad: preguntar por la probabilidad en un punto no tiene sentido; se obtiene multiplicando la densidad por un intervalo — exactamente como está escrito en el séptimo paso, $P(x)\\,dx = |\\psi(x)|^{2}dx$.",
+     "latex": "|\\psi|^{2} = \\psi^{*}\\psi \\geq 0, \\qquad \\int |\\psi|^{2}\\,dx = 1",
+     "kit": "complex"
+    },
+    {
+     "what": "El número entero surge del cierre",
+     "why": "El tercer y cuarto pasos de la derivación hacen la transformación principal del párrafo: el conjunto continuo de órbitas se vuelve discreto. El mecanismo es puramente ondulatorio. Tras recorrer un anillo de longitud $2\\pi r$, la onda regresa al punto inicial, y su fase debe coincidir con la anterior; de lo contrario, en la siguiente vuelta la onda se superpondría consigo misma con un desfase y se cancelaría. La coincidencia de fase significa que en la longitud de la órbita cabe un número entero de longitudes de onda. El número entero no se postula, sino que sobrevive: la condición selecciona un conjunto discreto de radios dentro del continuo. El mismo truco funciona para una cuerda con extremos fijos y para la partícula en una caja del primer párrafo.",
+     "latex": "2\\pi r = n\\lambda, \\quad n = 1, 2, 3, \\ldots \\;\\Longrightarrow\\; L = n\\hbar"
+    }
+   ]
   }
  },
  "ar": {
@@ -1272,37 +1349,74 @@
   ],
   "standNote": "يعرض الجناح موجة دي بروي المحصورة في صندوق. قم بتبديل الوضع إلى كثافة الاحتمال: يمكن أن تكون الدالة الموجية سالبة، لكن مربعها ليس كذلك، والمربع هو الذي يخبرنا أين سيُعثر على الجسيم. النقاط الحمراء هي العقد، الأماكن التي لا يُكتشف فيها الجسيم أبدًا. لاحظ الغرابة: في المستوى الثاني، العقدة في المنتصف تمامًا، مما يعني أن الجسيم يمكن أن يكون على اليسار واليمين، لكن ليس في المركز. كيف ينتقل من نصف إلى آخر؟ سؤال لا معنى له — ليس له مسار.",
   "formula": {
-   "name": "فرضية دي بروي",
+   "name": "فرضية دي برولي",
    "latex": "\\lambda = \\frac{h}{p} = \\frac{h}{mv}, \\qquad |\\psi|^{2} = \\text{كثافة الاحتمال}",
    "alsoKnown": "موجة المادة · تفسير بورن الاحتمالي",
    "authors": [
     {
-     "who": "لويس دي بروي",
+     "who": "لويس دي برولي",
      "year": "1924",
-     "what": "افترض خصائص موجية للمادة من اعتبارات التناظر، دون أي تجربة. كانت الأطروحة من بضع صفحات؛ حصل على جائزة نوبل بعد خمس سنوات — أسرع من أي شخص آخر تقريبًا في التاريخ"
+     "what": "افترض الخصائص الموجية للمادة من اعتبارات التناظر، دون أي تجربة. كانت الأطروحة بضع صفحات؛ حصل على جائزة نوبل بعد خمس سنوات - أسرع من أي شخص آخر في التاريخ تقريبًا"
     },
     {
      "who": "كلينتون دافيسون وليستر جيرمر",
      "year": "1927",
-     "what": "حصلوا بالصدفة على حيود الإلكترونات على بلورة النيكل. تشكلت البلورة بعد أن كسروا القارورة عن غير قصد وسخنوا العينة لاستعادتها — تحول الحادث إلى جائزة نوبل"
+     "what": "حصلوا بالصدفة على حيود الإلكترونات على بلورة نيكل. تشكلت البلورة بعد أن كسروا قارورة عن طريق الإهمال وسخنوا العينة لاستعادتها - تحول الحادث إلى جائزة نوبل"
     },
     {
-     "who": "إروين شرودنغر",
+     "who": "إرفين شرودنغر",
      "year": "1926",
-     "what": "كتب معادلة لموجة المادة، والتي تُستمد منها مستويات طاقة الذرة كتوافقيات. هو نفسه اعتبر الموجة كائنًا فيزيائيًا حقيقيًا ولم يقبل التفسير الاحتمالي"
+     "what": "كتب معادلة لموجة المادة، والتي من خلالها يتم الحصول على مستويات الطاقة للذرة كتوافقيات. اعتبر الموجة جسمًا فيزيائيًا حقيقيًا ولم يقبل التفسير الاحتمالي"
     },
     {
      "who": "ماكس بورن",
      "year": "1926",
-     "what": "اقترح اعتبار مربع الدالة الموجية كثافة احتمالية. احتلت الفكرة حاشية في مقال وأصبحت التفسير القياسي؛ مُنحت جائزة نوبل عنها بعد ثمانية وعشرين عامًا"
+     "what": "اقترح اعتبار مربع الدالة الموجية كثافة احتمالية. احتلت الفكرة حاشية لمقال وأصبحت التفسير القياسي؛ مُنحت جائزة نوبل بعد ثمانية وعشرين عامًا"
     },
     {
-     "who": "كلاوس يونسون",
+     "who": "كلاوس جونسون",
      "year": "1961",
-     "what": "أجرى لأول مرة تجربة الشق المزدوج مع الإلكترونات فعليًا وليس عقليًا. في عام 2002، أطلق عليه قراء مجلة Physics World اسم أجمل تجربة في تاريخ الفيزياء"
+     "what": "أجرى أول تجربة شق مزدوج مع الإلكترونات فعليًا وليس ذهنيًا. في عام 2002، صوّت قراء مجلة Physics World عليها كأجمل تجربة في تاريخ الفيزياء"
     }
    ],
-   "story": "أعلن فاينمان في محاضراته أن تجربة الشق المزدوج هي اللغز الوحيد لميكانيكا الكم، مدعيًا أن جميع الغرائب الأخرى تتبعها. وحذر بصراحة: محاولة فهم كيف يعمل هذا لا طائل منه، لأنه لا توجد صورة مألوفة تصلح. ومن المفيد بشكل خاص تفصيل يتم تجاهله غالبًا. إذا تم وضع كاشف عند الشقوق ومعرفة أي شق مر منه الإلكترون، تختفي الأهداب — ويبقى بقعتان، كما في الكرات العادية. والأمر المهم ليس التأثير الفيزيائي، بل مجرد توفر المعلومات: يكفي أن يتم تخزين معلومات المسار في مكان ما. محوها لاحقًا — تعود الأهداب. تم إجراء تجربة الاختيار المؤجل، وكانت النتيجة كذلك."
+   "story": "أعلن فاينمان في محاضراته أن تجربة الشق المزدوج هي اللغز الوحيد لميكانيكا الكم، مدعيًا أن جميع الغرائب الأخرى تتبع منها. وحذر بصراحة: محاولة فهم كيفية عملها غير مجدية، لأنه لا توجد صورة مألوفة تصلح. ومن المفيد بشكل خاص تفصيل غالبًا ما يتم تجاهله. إذا وضعت كاشفًا عند الشقوق وعرفت من خلال أي شق مر الإلكترون، تختفي الأهداب - وتبقى بقعتان، كما هو الحال مع الكرات العادية. والأهم ليس التأثير الفيزيائي، بل توفر المعلومات نفسها: يكفي أن تُحفظ معلومات المسار في مكان ما. امسحها لاحقًا - تعود الأهداب. تم إجراء تجربة الاختيار المؤجل، والنتيجة هي بالضبط ذلك.",
+   "symbols": [
+    {
+     "sym": "lambda",
+     "latex": "\\lambda",
+     "what": "طول موجة دي برولي",
+     "unit": "m",
+     "note": "يتناسب عكسيًا مع الزخم: كلما كان الجسم أثقل وأسرع، كانت الموجة أقصر"
+    },
+    {
+     "sym": "psi",
+     "latex": "\\psi",
+     "what": "الدالة الموجية",
+     "unit": "—",
+     "note": "في حد ذاتها غير قابلة للملاحظة وقد تكون سالبة أو مركبة"
+    },
+    {
+     "sym": "psi2",
+     "latex": "|\\psi|^{2}",
+     "what": "كثافة الاحتمال",
+     "unit": "1/m",
+     "note": "احتمال العثور على الجسيم في مكان معين؛ دائمًا غير سالب"
+    },
+    {
+     "sym": "p",
+     "latex": "p",
+     "what": "زخم الجسيم",
+     "unit": "kg·m/s",
+     "note": "مرتبط بطول الموجة بنفس الطريقة كما في الفوتون: $p = h/\\lambda$"
+    },
+    {
+     "sym": "n2",
+     "latex": "n",
+     "what": "عدد كمي",
+     "unit": "—",
+     "note": "رقم التوافقي؛ نفس العدد الصحيح كما في الوتر"
+    }
+   ]
   },
   "symbols": [
    {
@@ -1390,15 +1504,6 @@
    ],
    "plate": "المادة تمتلك خصائص موجية بطول موجة $\\lambda = h/p$. شرط عدد صحيح من الموجات على المدار يعطي مستويات طاقة متقطعة، ومربع الدالة الموجية يحدد احتمال العثور على الجسيم.",
    "note": "حدود التطبيق والتحذير الأساسي. نموذج بور مع المدارات صحيح عددياً لكنه غير صحيح جوهرياً: لا مسار للإلكترون، ولا يمكن الحديث عن حركته في حلقة. الوصف الصحيح يقدمه معادلة شرودنغر، حيث يمثل الإلكترون بسحابة احتمال ثلاثية الأبعاد. ومع ذلك، يبقى الاستدلال بالعدد الصحيح من الموجات صحيحاً وهو أفضل وسيلة لفهم مصدر التكميم. فقط تذكر أن هذه سقالات وليست بناءً."
-  },
-  "math": {
-   "title": "الرياضيات التي استُخدمت هنا",
-   "text": [
-    "لماذا طول الموجة عكسي مع الزخم. احتفظ في ذهنك بصورة: كلما كان الجسم أثقل وأسرع، كان طول موجته أقصر، وكلما قل شبهه بالموجة وزاد شبهه بالجسيم. بالنسبة للإلكترون في الذرة، طول الموجة مماثل لحجم الذرة — الخصائص الموجية تسود كل شيء. بالنسبة لحبيبة غبار كتلتها ميكروغرام، تزحف بسرعة ملليمتر في الثانية، طول الموجة يبلغ $10^{-25}$ متر، وهو أصغر بمليار مرة من نواة الذرة. الخصائص الموجية موجودة في كل شيء، لكنها ملحوظة فقط في الخفيف والبطيء.",
-    "ما هي الدالة الموجية وكيف تختلف عن الموجة على الماء. الموجة على الماء هي ارتفاع، حقيقي وقابل للقياس. الدالة الموجية ليست ارتفاعاً ولا ضغطاً ولا أي شيء قابل للملاحظة: يمكن أن تكون سالبة وحتى مركبة. فقط مربعها هو القابل للملاحظة — الاحتمال. تشبيه مفيد: الدالة الموجية بالنسبة للاحتمال مثل سعة الصوت بالنسبة للجهارة. السعات تجمع مع الإشارة، ونحن نسمع المربع — ولهذا يمكن لموجتين أن تعطيا صمتاً.",
-    "لماذا تتداخل السعات بالتحديد. هذا هو مفتاح كل الغرابة. لو كانت الاحتمالات هي التي تجمع، لكان الشقان يعطيان ببساطة مجموع بقعتين، كما في حبيبات الرمل. لكن السعات تجمع، والاحتمال هو مربع المجموع، وليس مجموع المربعين. الفرق بين $(a+b)^{2}$ و $a^{2}+b^{2}$ يساوي $2ab$ — وهذا هو حد التداخل. عندما يكون $b$ سالباً، يجعل الاحتمال أصغر منه من شق واحد. ومن هنا الخطوط المظلمة.",
-    "كيف نقرأ شرط العدد الصحيح من الموجات. إنه تماماً نفس الشرط لوتار الغيتار، لكن بشكل حلقي. الموجة، بعد دورانها حول المدار، يجب أن تعود إلى الطور الأولي — وإلا فعند الدوران التالي ستتراكب مع نفسها بإزاحة وتلغي نفسها. فقط المدارات التي تسمح بعدد صحيح من الأطوال الموجية مسموح بها. هنا يجدر التوقف والتقدير: سر المستويات المتقطعة للذرة، الذي أربك الفيزيائيين لأربعين عاماً، تبين أنه نفس المسألة التي حلها فيثاغورس على الوتر قبل ألفين وخمسمائة عام."
-   ]
   },
   "example": {
    "title": "مثال بأرقام: الطول الموجي للإلكترون والكرة",
@@ -1623,8 +1728,7 @@
      "سعة",
      "احتمال",
      "جمع",
-     "تتوقف",
-     "أي مسار"
+     "تتوقف"
     ],
     "needed": 2,
     "why": "ينشأ التداخل لأن سعات المسارين غير القابلين للتمييز تُجمع، والاحتمال هو مربع مجموعهما. بمجرد ظهور معلومات عن المسار المقطوع، تصبح المسارات قابلة للتمييز، ويبدأ جمع الاحتمالات بدلاً من ذلك — وهذا يعطي بقعتين بدون أهداب. المهم هو توفر المعلومات: إذا تم محوها، تعود الأهداب.",
@@ -1640,7 +1744,30 @@
     "hint": "اقسم ثابت بلانك على حاصل ضرب الكتلة والسرعة. قدر بالرتب: 10⁻³⁴ مقسومة على 10⁻³¹ × 10⁶.",
     "tolAbs": 1
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "كل غرابة الشقين تتلخص في متطابقة جبرية واحدة؛ والباقي هو ما يعنيه المقياس ومن أين يأتي العدد الصحيح.",
+   "items": [
+    {
+     "what": "مربع المجموع، وليس مجموع المربعات",
+     "why": "الخطوة السابعة من الاستنتاج تعلن أن الكمية القابلة للملاحظة هي $|\\psi|^{2}$، بينما تُجمع الـ $\\psi$ نفسها. الفرق بين «اجمع ثم ربّع» و«ربّع ثم اجمع» ليس دقة تدوين: $(a+b)^{2} = a^{2} + b^{2} + 2ab$. الحد الإضافي $2ab$ هو حد التداخل. إذا كانت الاحتمالات تُجمع، لكان الشقان يعطيان ببساطة مجموع صورتين، بقعتين، كما في حالة حبيبات الرمل. تُجمع السعات، لذلك حيثما يكون $a$ و $b$ متعاكسين في الإشارة، يكون الاحتمال الناتج أقل من احتمال شق واحد: يظهر شريط مظلم في مكان يضيئه كل شق على حدة.",
+     "latex": "(a+b)^{2} = a^{2} + b^{2} + \\underbrace{2ab}_{\\text{تداخل}}",
+     "kit": "probability"
+    },
+    {
+     "what": "لماذا المقياس وليس مجرد مربع",
+     "why": "الخطوة السابعة من الاستنتاج تعلن أن الكمية القابلة للملاحظة هي مربع المقياس $|\\psi|^{2}$، والمقياس هنا ليس للزينة. الـ $\\psi$ نفسها يمكن أن تكون سالبة أو حتى مركبة: الإشارة والطور ضروريان لكي تتمكن السعات من إطفاء بعضها البعض — وبدونهما لن يكون هناك حد التداخل من الحيلة السابقة. الكمية القابلة للملاحظة لا يمكن أن تكون سالبة، ومربع عدد مركب ببساطة يمكن أن يكون سالبًا أو مركبًا. لذلك نأخذ مربع المقياس؛ وهو يُفكك كحاصل ضرب العدد في مرافقه، $|\\psi|^{2} = \\psi^{*}\\psi$، وبالتالي فهو غير سالب لأي طور. المساواة الثانية في نفس الخطوة، $\\int|\\psi|^{2}dx = 1$، تعني حرفيًا «الجسيم موجود في مكان ما» وتحدد أيضًا البعد: بما أن التكامل على طول يساوي واحدًا، فإن $|\\psi|^{2}$ له بُعد معكوس الطول. إذن نحن أمام كثافة احتمال وليس احتمالًا: السؤال عن احتمال في نقطة ما لا معنى له، بل يُحصل عليه بضرب الكثافة في قطعة صغيرة — تمامًا كما هو مكتوب في الخطوة السابعة، $P(x)\\,dx = |\\psi(x)|^{2}dx$.",
+     "latex": "|\\psi|^{2} = \\psi^{*}\\psi \\geq 0, \\qquad \\int |\\psi|^{2}\\,dx = 1",
+     "kit": "complex"
+    },
+    {
+     "what": "العدد الصحيح يأتي من الإغلاق",
+     "why": "الخطوتان الثالثة والرابعة من الاستنتاج تقومان بالتحول الرئيسي في الفقرة: مجموعة المدارات المستمرة تصبح منفصلة. الآلية موجية بحتة. بعد الدوران حول حلقة طولها $2\\pi r$، تعود الموجة إلى نقطة البداية، ويجب أن يتطابق طورها مع الطور السابق — وإلا في اللفة التالية ستتراكب الموجة مع نفسها بإزاحة وتلغي نفسها. تطابق الطور يعني أن عددًا صحيحًا من الأطوال الموجية قد احتواه طول المدار. العدد الصحيح هنا ليس مفترضًا، بل ينجو: الشرط يختار من مجموعة الأنصاف القطر المستمرة مجموعة منفصلة. نفس الحيلة تعمل مع وتر مربوط الطرفين ومع جسيم في صندوق من الفقرة الأولى.",
+     "latex": "2\\pi r = n\\lambda, \\quad n = 1, 2, 3, \\ldots \\;\\Longrightarrow\\; L = n\\hbar"
+    }
+   ]
+  }
  },
  "tags": [
   "hydrogen",

@@ -1,0 +1,890 @@
+{
+ "id": "guide",
+ "topic": "fluids",
+ "schema": "b42.guide/1",
+ "kind": "guide",
+ "ru": {
+  "title": "Как работать с этим материалом",
+  "subtitle": "Методичка для самостоятельного изучения",
+  "lead": "Вместо материальной точки — сплошная среда: вода, которая давит, течёт и тормозит сама себя. Новых законов тема не вводит ни одного; меняется только то, какой кусок вещества выделяют мысленно и к чему применяют второй закон Ньютона.",
+  "budget": {
+   "title": "Сколько это займёт",
+   "lead": "Тема рассчитана примерно на 3,5–4,5 часа вдумчивой работы. Это не «прочитать за вечер»: при быстром чтении материал не удерживается. Разумный ритм — один параграф за подход.",
+   "rows": [
+    {
+     "what": "Обзорная глава",
+     "time": "15–20 мин",
+     "note": "читается один раз, без формул — задаёт контекст"
+    },
+    {
+     "what": "Параграф 1 · Давление в покоящейся жидкости",
+     "time": "60–80 мин",
+     "note": "стенд, вывод формулы и проверка знаний"
+    },
+    {
+     "what": "Параграф 2 · Течение: неразрывность и Бернулли",
+     "time": "60–80 мин",
+     "note": "стенд, вывод формулы и проверка знаний"
+    },
+    {
+     "what": "Параграф 3 · Вязкость и сопротивление",
+     "time": "60–80 мин",
+     "note": "стенд, вывод формулы и проверка знаний"
+    },
+    {
+     "what": "Итоговая проверка",
+     "time": "15 мин",
+     "note": "вопросы на понимание, не на память"
+    }
+   ],
+   "note": "Если на параграф уходит вдвое больше — это нормально и даже хорошо. Плохо обратное: пробежать за двадцать минут и решить, что понятно."
+  },
+  "level": {
+   "title": "На кого рассчитан",
+   "text": [
+    "Нужна механика: второй закон Ньютона, работа и кинетическая энергия. Из термодинамики хватит плотности и молекулярной картины вещества. Из математики — производная и один определённый интеграл; векторный анализ не обязателен.",
+    "Темы, на которые опирается этот материал: Механика, Термодинамика. Если они не пройдены, часть выводов будет держаться на честном слове.",
+    "Честно о границе: в этой теме до сих пор не решено — существуют ли гладкие решения уравнений Навье — Стокса при любом начале — за ответ обещан миллион долларов."
+   ]
+  },
+  "howto": {
+   "title": "Как проходить параграф",
+   "lead": "Порядок блоков внутри параграфа не случаен — он повторяет естественный путь понимания: сначала образ, потом опыт, потом строгость, потом проверка. Рекомендуем не перескакивать.",
+   "steps": [
+    {
+     "n": "1",
+     "what": "Посмотрите на картинку и прочитайте вступление",
+     "how": "Две минуты. Задача — поймать образ, а не запомнить детали. Образ потом станет крючком, за который зацепится формула."
+    },
+    {
+     "n": "2",
+     "what": "Поиграйте со стендом ДО чтения вывода",
+     "how": "Обязательный шаг, самый недооценённый. Подвигайте ползунки, посмотрите, что растёт, а что падает. Попробуйте предсказать, что произойдёт, ПЕРЕД тем как двигать. Когда потом дойдёте до формулы, она опишет уже знакомое поведение — и запомнится вдвое легче."
+    },
+    {
+     "n": "3",
+     "what": "Прочитайте вывод формулы по шагам",
+     "how": "Каждый шаг снабжён схемой. Не идите дальше, пока текущий шаг непонятен: вывод устроен как лестница, пропустив ступеньку, дальше будете карабкаться. Если застряли — нажмите «спросить тьютора» прямо на этом разделе."
+    },
+    {
+     "n": "4",
+     "what": "Разберите константы",
+     "how": "Не заучивайте числа — поймите, что означает каждая единица измерения: из записи единицы обычно видно, как величина устроена и на что её надо умножать. Мнемоники под каждой константой — для тех, кому всё-таки нужно запомнить цифру."
+    },
+    {
+     "n": "5",
+     "what": "Пройдите пример с числами вместе с текстом",
+     "how": "Не читайте решение глазами — считайте параллельно на бумаге. Разница огромна: при чтении кажется понятным всё, при счёте всплывают настоящие вопросы."
+    },
+    {
+     "n": "6",
+     "what": "Ответьте на вопросы",
+     "how": "Отвечайте до того, как посмотрите варианты, — сформулируйте мысль про себя. Вопросы качественные, считать почти не нужно: проверяется понимание, а не арифметика."
+    },
+    {
+     "n": "7",
+     "what": "Распечатайте или сохраните шпаргалку",
+     "how": "Одна карточка на параграф. Через неделю именно она вернёт материал в память за две минуты вместо получаса перечитывания."
+    }
+   ]
+  },
+  "stuck": {
+   "title": "Что делать, если застряли",
+   "items": [
+    {
+     "case": "Не понял шаг вывода",
+     "do": "Нажмите «не понимаю — подведи к идее» под ближайшим вопросом или «спросить тьютора» в разделе. Тьютор не назовёт ответ — он задаст встречный вопрос, который обычно и распутывает узел."
+    },
+    {
+     "case": "Формула кажется абстрактной",
+     "do": "Вернитесь к стенду и покрутите именно те величины, что стоят в формуле. Абстракция исчезает, когда видишь, как символ двигает стрелку прибора."
+    },
+    {
+     "case": "Не сходится размерность",
+     "do": "Это лучший сигнал, что где-то ошибка. Проверьте по разделу констант: единицы всегда подсказывают, что на что нужно умножить."
+    },
+    {
+     "case": "Всё понятно, но через день забылось",
+     "do": "Нормально. Сделайте домашний опыт из параграфа — физическое действие закрепляет память надёжнее любого повторения. И пройдите тест ещё раз через несколько дней."
+    }
+   ]
+  },
+  "experiments": {
+   "title": "Опыты, которые стоит проделать",
+   "lead": "Каждый занимает несколько минут и не требует ничего, кроме кухни. Это не украшение курса — именно они превращают прочитанное в понятое.",
+   "items": [
+    {
+     "p": "1",
+     "what": "Картезианский водолаз",
+     "how": "Наполните пластиковую бутылку водой доверху. …"
+    },
+    {
+     "p": "1",
+     "what": "Перевёрнутый стакан на листе бумаги",
+     "how": "Налейте стакан водой до самых краёв, накройте плотным листом — подойдёт открытка или кусок картона, — прижмите ладонью и переверните над раковиной. …"
+    },
+    {
+     "p": "2",
+     "what": "Две полоски бумаги",
+     "how": "Нарежьте две полоски бумаги шириной сантиметра три и длиной сантиметров двадцать. …"
+    },
+    {
+     "p": "2",
+     "what": "Шарик от пинг-понга в струе фена",
+     "how": "Включите фен на холодный режим, направьте струю вертикально вверх и положите в неё шарик от настольного тенниса. …"
+    },
+    {
+     "p": "3",
+     "what": "Шарик в мёде и шарик в воде",
+     "how": "Возьмите две одинаковые прозрачные банки, налейте в одну воду, в другую жидкий мёд. …"
+    },
+    {
+     "p": "3",
+     "what": "Струя из бутылки с двумя отверстиями",
+     "how": "В пластиковой бутылке проделайте на одной высоте два отверстия: одно диаметром около 2 мм, другое около 4 мм. …"
+    }
+   ]
+  },
+  "next": {
+   "title": "Куда двигаться после темы",
+   "items": [
+    "Термодинамика: вязкость, теплопроводность и диффузия оказываются тремя лицами одного механизма переноса.",
+    "Волны — звук описывается той же сплошной средой, только сжимаемой.",
+    "Открытые вопросы курса: турбулентность не решена до сих пор, и существование гладкого решения уравнений Навье — Стокса входит в число задач тысячелетия."
+   ]
+  },
+  "library": {
+   "title": "Материалы по теме на сайте",
+   "lead": "Курс не изолирован: законы и учёные, упомянутые здесь, имеют собственные страницы в нашей базе — с формулами, связями и статьями, где этот закон работает на практике.",
+   "laws": [
+    {
+     "id": "archimedes_principle",
+     "name": "Основное уравнение гидростатики и закон Архимеда",
+     "note": "разбирается в параграфе 1"
+    },
+    {
+     "id": "bernoullis_principle",
+     "name": "Уравнение Бернулли",
+     "note": "разбирается в параграфе 2"
+    },
+    {
+     "id": "navier_stokes_equations",
+     "name": "уравнения Навье — Стокса",
+     "note": "разбирается в параграфе 3"
+    },
+    {
+     "id": "poiseuille_equation",
+     "name": "уравнение Пуазёйля",
+     "note": "разбирается в параграфе 3"
+    }
+   ],
+   "scientists": [
+    {
+     "id": "Archimedes",
+     "name": "Archimedes"
+    },
+    {
+     "id": "Daniel_Bernoulli",
+     "name": "Daniel Bernoulli"
+    },
+    {
+     "id": "Leonhard_Euler",
+     "name": "Leonhard Euler"
+    },
+    {
+     "id": "Isaac_Newton",
+     "name": "Isaac Newton"
+    },
+    {
+     "id": "George_Gabriel_Stokes",
+     "name": "George Gabriel Stokes"
+    }
+   ],
+   "tags": [
+    {
+     "id": "water",
+     "name": "вода"
+    },
+    {
+     "id": "viscosity",
+     "name": "вязкость"
+    },
+    {
+     "id": "computational_fluid_dynamics",
+     "name": "вычислительная гидродинамика"
+    },
+    {
+     "id": "turbulence",
+     "name": "турбулентность"
+    },
+    {
+     "id": "superfluidity",
+     "name": "сверхтекучесть"
+    }
+   ]
+  }
+ },
+ "en": {
+  "title": "How to Work with This Material",
+  "subtitle": "A Guide for Self-Study",
+  "lead": "Instead of a point mass, we consider a continuous medium: water that presses, flows, and slows itself down. This topic introduces no new laws; only the piece of matter we mentally isolate and to which we apply Newton's second law changes.",
+  "budget": {
+   "title": "How Long It Will Take",
+   "lead": "The topic is designed for about 3.5–4.5 hours of thoughtful work. This is not 'read in one evening': with fast reading, the material doesn't stick. A reasonable pace is one section per sitting.",
+   "rows": [
+    {
+     "what": "Overview chapter",
+     "time": "15–20 min",
+     "note": "read once, without formulas — sets the context"
+    },
+    {
+     "what": "Section 1 · Pressure in a stationary fluid",
+     "time": "60–80 min",
+     "note": "interactive demo, derivation of the formula, and knowledge check"
+    },
+    {
+     "what": "Section 2 · Flow: continuity and Bernoulli",
+     "time": "60–80 min",
+     "note": "interactive demo, derivation of the formula, and knowledge check"
+    },
+    {
+     "what": "Section 3 · Viscosity and drag",
+     "time": "60–80 min",
+     "note": "interactive demo, derivation of the formula, and knowledge check"
+    },
+    {
+     "what": "Final test",
+     "time": "15 min",
+     "note": "questions on understanding, not memory"
+    }
+   ],
+   "note": "If a section takes twice as long, that's normal and even good. The opposite is bad: skimming through in twenty minutes and deciding it's clear."
+  },
+  "level": {
+   "title": "Who It Is For",
+   "text": [
+    "You need mechanics: Newton's second law, work, and kinetic energy. From thermodynamics, density and the molecular picture of matter suffice. From mathematics, you need derivatives and one definite integral; vector analysis is not required.",
+    "Topics this material builds on: Mechanics, Thermodynamics. If you haven't covered them, some conclusions will rest on trust.",
+    "Honest about the boundary: in this topic, it is still unsolved whether smooth solutions to the Navier–Stokes equations exist for any initial condition — a million dollars is promised for the answer."
+   ]
+  },
+  "howto": {
+   "title": "How to Work Through a Section",
+   "lead": "The order of blocks within a section is not random — it mirrors the natural path of understanding: first an image, then an experiment, then rigor, then a check. We recommend not skipping ahead.",
+   "steps": [
+    {
+     "n": "1",
+     "what": "Look at the picture and read the introduction",
+     "how": "Two minutes. The goal is to grasp the image, not memorize details. The image will later become a hook for the formula."
+    },
+    {
+     "n": "2",
+     "what": "Play with the interactive demo BEFORE reading the derivation",
+     "how": "A mandatory step, the most underestimated. Move the sliders, see what increases and what decreases. Try to predict what will happen BEFORE moving them. When you later get to the formula, it will describe already familiar behavior — and will be remembered twice as easily."
+    },
+    {
+     "n": "3",
+     "what": "Read the derivation of the formula step by step",
+     "how": "Each step is accompanied by a diagram. Do not move on until the current step is clear: the derivation is like a ladder; if you skip a rung, you'll be climbing with difficulty. If you're stuck, click 'ask the tutor' right on that section."
+    },
+    {
+     "n": "4",
+     "what": "Examine the constants",
+     "how": "Don't memorize numbers — understand what each unit means: from the unit notation, you can usually see how the quantity is structured and what it should be multiplied by. Mnemonics under each constant are for those who still need to remember the digit."
+    },
+    {
+     "n": "5",
+     "what": "Work through the numerical example along with the text",
+     "how": "Don't just read the solution — calculate in parallel on paper. The difference is huge: when reading, everything seems clear; when calculating, real questions surface."
+    },
+    {
+     "n": "6",
+     "what": "Answer the questions",
+     "how": "Answer before looking at the options — formulate your thought internally. The questions are qualitative; you hardly need to calculate: they test understanding, not arithmetic."
+    },
+    {
+     "n": "7",
+     "what": "Print or save the cheat sheet",
+     "how": "One card per section. In a week, it will bring the material back to memory in two minutes instead of half an hour of rereading."
+    }
+   ]
+  },
+  "stuck": {
+   "title": "What to Do If You Get Stuck",
+   "items": [
+    {
+     "case": "I don't understand a step in the derivation",
+     "do": "Click 'I don't understand — lead me to the idea' under the nearest question or 'ask the tutor' in the section. The tutor won't give the answer — they'll ask a counter-question that usually untangles the knot."
+    },
+    {
+     "case": "The formula seems abstract",
+     "do": "Go back to the interactive demo and adjust exactly the quantities that appear in the formula. Abstraction disappears when you see how a symbol moves the instrument's needle."
+    },
+    {
+     "case": "The dimensions don't match",
+     "do": "This is the best signal that there's an error somewhere. Check the constants section: units always hint at what should be multiplied by what."
+    },
+    {
+     "case": "Everything is clear, but forgotten the next day",
+     "do": "That's normal. Do the home experiment from the section — physical action consolidates memory better than any repetition. And take the test again after a few days."
+    }
+   ]
+  },
+  "experiments": {
+   "title": "Experiments Worth Trying",
+   "lead": "Each takes a few minutes and requires nothing but a kitchen. They are not a decoration of the course — they are what turns reading into understanding.",
+   "items": [
+    {
+     "p": "1",
+     "what": "Cartesian diver",
+     "how": "Fill a plastic bottle with water to the brim. ..."
+    },
+    {
+     "p": "1",
+     "what": "Inverted glass on a sheet of paper",
+     "how": "Fill a glass with water to the very edge, cover with a stiff sheet — a postcard or a piece of cardboard works — press with your palm and turn it over over the sink. ..."
+    },
+    {
+     "p": "2",
+     "what": "Two strips of paper",
+     "how": "Cut two strips of paper about three centimeters wide and twenty centimeters long. ..."
+    },
+    {
+     "p": "2",
+     "what": "Ping-pong ball in a hairdryer stream",
+     "how": "Turn the hairdryer to cold mode, point the stream vertically upward, and place a table tennis ball in it. ..."
+    },
+    {
+     "p": "3",
+     "what": "Ball in honey and ball in water",
+     "how": "Take two identical transparent jars, pour water into one and liquid honey into the other. ..."
+    },
+    {
+     "p": "3",
+     "what": "Stream from a bottle with two holes",
+     "how": "In a plastic bottle, make two holes at the same height: one about 2 mm in diameter, the other about 4 mm. ..."
+    }
+   ]
+  },
+  "next": {
+   "title": "Where to go next",
+   "items": [
+    "Thermodynamics: viscosity, thermal conductivity, and diffusion turn out to be three faces of the same transport mechanism.",
+    "Waves: sound is described by the same continuous medium, but compressible.",
+    "Open questions of the course: turbulence remains unsolved, and the existence of a smooth solution to the Navier–Stokes equations is one of the Millennium Prize Problems."
+   ]
+  },
+  "library": {
+   "title": "Related materials on the site",
+   "lead": "The course is not isolated: the laws and scientists mentioned here have their own pages in our database — with formulas, connections, and articles where these laws are applied in practice.",
+   "laws": [
+    {
+     "id": "archimedes_principle",
+     "name": "Fundamental equation of hydrostatics and Archimedes' principle",
+     "note": "discussed in Section 1"
+    },
+    {
+     "id": "bernoullis_principle",
+     "name": "Bernoulli's equation",
+     "note": "discussed in Section 2"
+    },
+    {
+     "id": "navier_stokes_equations",
+     "name": "Navier–Stokes equations",
+     "note": "discussed in Section 3"
+    },
+    {
+     "id": "poiseuille_equation",
+     "name": "Poiseuille's equation",
+     "note": "discussed in Section 3"
+    }
+   ],
+   "scientists": [
+    {
+     "id": "Archimedes",
+     "name": "Archimedes"
+    },
+    {
+     "id": "Daniel_Bernoulli",
+     "name": "Daniel Bernoulli"
+    },
+    {
+     "id": "Leonhard_Euler",
+     "name": "Leonhard Euler"
+    },
+    {
+     "id": "Isaac_Newton",
+     "name": "Isaac Newton"
+    },
+    {
+     "id": "George_Gabriel_Stokes",
+     "name": "George Gabriel Stokes"
+    }
+   ],
+   "tags": [
+    {
+     "id": "water",
+     "name": "water"
+    },
+    {
+     "id": "viscosity",
+     "name": "viscosity"
+    },
+    {
+     "id": "computational_fluid_dynamics",
+     "name": "computational fluid dynamics"
+    },
+    {
+     "id": "turbulence",
+     "name": "turbulence"
+    },
+    {
+     "id": "superfluidity",
+     "name": "superfluidity"
+    }
+   ]
+  }
+ },
+ "es": {
+  "title": "Cómo trabajar con este material",
+  "subtitle": "Guía para el estudio autónomo",
+  "lead": "En lugar de un punto material, un medio continuo: agua que presiona, fluye y se frena a sí misma. El tema no introduce ninguna ley nueva; solo cambia qué porción de sustancia se delimita mentalmente y a qué se aplica la segunda ley de Newton.",
+  "budget": {
+   "title": "Cuánto tiempo tomará",
+   "lead": "El tema está pensado para unas 3,5–4,5 horas de trabajo concentrado. No es para «leer en una tarde»: con una lectura rápida el material no se retiene. Un ritmo razonable es un apartado por sesión.",
+   "rows": [
+    {
+     "what": "Capítulo de visión general",
+     "time": "15–20 min",
+     "note": "se lee una vez, sin fórmulas — establece el contexto"
+    },
+    {
+     "what": "Apartado 1 · Presión en un fluido en reposo",
+     "time": "60–80 min",
+     "note": "simulador, deducción de la fórmula y comprobación de conocimientos"
+    },
+    {
+     "what": "Apartado 2 · Flujo: continuidad y Bernoulli",
+     "time": "60–80 min",
+     "note": "simulador, deducción de la fórmula y comprobación de conocimientos"
+    },
+    {
+     "what": "Apartado 3 · Viscosidad y resistencia",
+     "time": "60–80 min",
+     "note": "simulador, deducción de la fórmula y comprobación de conocimientos"
+    },
+    {
+     "what": "Comprobación final",
+     "time": "15 min",
+     "note": "preguntas de comprensión, no de memoria"
+    }
+   ],
+   "note": "Si un apartado te lleva el doble de tiempo, es normal e incluso bueno. Lo malo es lo contrario: repasarlo en veinte minutos y pensar que está claro."
+  },
+  "level": {
+   "title": "A quién va dirigido",
+   "text": [
+    "Se necesita mecánica: segunda ley de Newton, trabajo y energía cinética. De termodinámica basta con la densidad y la imagen molecular de la materia. De matemáticas, derivadas y una integral definida; el análisis vectorial no es necesario.",
+    "Temas en los que se apoya este material: Mecánica, Termodinámica. Si no los has estudiado, parte de las conclusiones se sostendrán solo por fe.",
+    "Honestamente sobre el límite: en este tema aún no se ha resuelto si existen soluciones suaves de las ecuaciones de Navier-Stokes para cualquier condición inicial; por la respuesta se promete un millón de dólares."
+   ]
+  },
+  "howto": {
+   "title": "Cómo abordar un apartado",
+   "lead": "El orden de los bloques dentro de un apartado no es casual: repite el camino natural de la comprensión: primero la imagen, luego la experiencia, luego el rigor, luego la comprobación. Recomendamos no saltarse pasos.",
+   "steps": [
+    {
+     "n": "1",
+     "what": "Mira la imagen y lee la introducción",
+     "how": "Dos minutos. La tarea es captar la imagen, no memorizar detalles. La imagen luego se convierte en el gancho del que cuelga la fórmula."
+    },
+    {
+     "n": "2",
+     "what": "Juega con el simulador ANTES de leer la deducción",
+     "how": "Paso obligatorio, el más subestimado. Mueve los deslizadores, observa qué aumenta y qué disminuye. Intenta predecir qué ocurrirá ANTES de mover. Cuando luego llegues a la fórmula, describirá un comportamiento ya conocido y se recordará el doble de fácil."
+    },
+    {
+     "n": "3",
+     "what": "Lee la deducción de la fórmula paso a paso",
+     "how": "Cada paso va acompañado de un esquema. No avances hasta que el paso actual esté claro: la deducción es como una escalera; si saltas un escalón, luego tendrás que trepar. Si te atascas, pulsa «preguntar al tutor» justo en esa sección."
+    },
+    {
+     "n": "4",
+     "what": "Analiza las constantes",
+     "how": "No memorices números; entiende qué significa cada unidad de medida: de la escritura de la unidad suele verse cómo está construida la magnitud y por qué hay que multiplicarla. Las reglas mnemotécnicas bajo cada constante son para quienes necesiten recordar la cifra."
+    },
+    {
+     "n": "5",
+     "what": "Recorre el ejemplo numérico junto con el texto",
+     "how": "No leas la solución solo con los ojos; calcula en paralelo en papel. La diferencia es enorme: al leer parece que todo está claro; al calcular surgen las preguntas reales."
+    },
+    {
+     "n": "6",
+     "what": "Responde las preguntas",
+     "how": "Responde antes de mirar las opciones; formula tu idea mentalmente. Las preguntas son cualitativas, casi no hay que calcular: se evalúa la comprensión, no la aritmética."
+    },
+    {
+     "n": "7",
+     "what": "Imprime o guarda la chuleta",
+     "how": "Una tarjeta por apartado. En una semana, será ella la que te devuelva el material a la memoria en dos minutos en lugar de media hora de relectura."
+    }
+   ]
+  },
+  "stuck": {
+   "title": "Qué hacer si te atascas",
+   "items": [
+    {
+     "case": "No entiendo un paso de la deducción",
+     "do": "Pulsa «no entiendo — llévame a la idea» bajo la pregunta más cercana o «preguntar al tutor» en la sección. El tutor no dará la respuesta; hará una pregunta que suele deshacer el nudo."
+    },
+    {
+     "case": "La fórmula parece abstracta",
+     "do": "Vuelve al simulador y manipula precisamente las magnitudes que aparecen en la fórmula. La abstracción desaparece cuando ves cómo el símbolo mueve la aguja del instrumento."
+    },
+    {
+     "case": "Las dimensiones no cuadran",
+     "do": "Es la mejor señal de que hay un error en alguna parte. Revisa la sección de constantes: las unidades siempre indican qué hay que multiplicar por qué."
+    },
+    {
+     "case": "Todo está claro, pero al día siguiente se olvida",
+     "do": "Es normal. Haz el experimento casero del apartado: la acción física fija la memoria mejor que cualquier repetición. Y vuelve a hacer el test unos días después."
+    }
+   ]
+  },
+  "experiments": {
+   "title": "Experimentos que vale la pena hacer",
+   "lead": "Cada uno toma unos minutos y no requiere nada más que la cocina. No son un adorno del curso; son lo que convierte lo leído en comprendido.",
+   "items": [
+    {
+     "p": "1",
+     "what": "Buzo cartesiano",
+     "how": "Llena una botella de plástico con agua hasta el borde. …"
+    },
+    {
+     "p": "1",
+     "what": "Vaso invertido sobre una hoja de papel",
+     "how": "Llena un vaso con agua hasta el borde, cúbrelo con una hoja gruesa —sirve una postal o un trozo de cartón—, presiónalo con la palma e inviértelo sobre el fregadero. …"
+    },
+    {
+     "p": "2",
+     "what": "Dos tiras de papel",
+     "how": "Corta dos tiras de papel de unos tres centímetros de ancho y veinte de largo. …"
+    },
+    {
+     "p": "2",
+     "what": "Pelota de ping-pong en la corriente de un secador",
+     "how": "Enciende el secador en modo frío, dirige la corriente verticalmente hacia arriba y coloca en ella una pelota de tenis de mesa. …"
+    },
+    {
+     "p": "3",
+     "what": "Pelota en miel y pelota en agua",
+     "how": "Toma dos frascos transparentes iguales; vierte agua en uno y miel líquida en el otro. …"
+    },
+    {
+     "p": "3",
+     "what": "Chorro de una botella con dos orificios",
+     "how": "En una botella de plástico, haz dos agujeros a la misma altura: uno de unos 2 mm de diámetro y otro de unos 4 mm. …"
+    }
+   ]
+  },
+  "next": {
+   "title": "Hacia dónde avanzar después del tema",
+   "items": [
+    "Termodinámica: la viscosidad, la conductividad térmica y la difusión resultan ser tres caras de un mismo mecanismo de transporte.",
+    "Ondas: el sonido se describe con el mismo medio continuo, solo que compresible.",
+    "Preguntas abiertas del curso: la turbulencia sigue sin resolverse, y la existencia de una solución suave de las ecuaciones de Navier-Stokes está entre los problemas del milenio."
+   ]
+  },
+  "library": {
+   "title": "Materiales sobre el tema en el sitio",
+   "lead": "El curso no está aislado: las leyes y los científicos mencionados aquí tienen sus propias páginas en nuestra base de datos, con fórmulas, conexiones y artículos donde esta ley se aplica en la práctica.",
+   "laws": [
+    {
+     "id": "archimedes_principle",
+     "name": "Ecuación fundamental de la hidrostática y principio de Arquímedes",
+     "note": "se analiza en la sección 1"
+    },
+    {
+     "id": "bernoullis_principle",
+     "name": "Ecuación de Bernoulli",
+     "note": "se analiza en la sección 2"
+    },
+    {
+     "id": "navier_stokes_equations",
+     "name": "Ecuaciones de Navier-Stokes",
+     "note": "se analizan en la sección 3"
+    },
+    {
+     "id": "poiseuille_equation",
+     "name": "Ecuación de Poiseuille",
+     "note": "se analiza en la sección 3"
+    }
+   ],
+   "scientists": [
+    {
+     "id": "Archimedes",
+     "name": "Arquímedes"
+    },
+    {
+     "id": "Daniel_Bernoulli",
+     "name": "Daniel Bernoulli"
+    },
+    {
+     "id": "Leonhard_Euler",
+     "name": "Leonhard Euler"
+    },
+    {
+     "id": "Isaac_Newton",
+     "name": "Isaac Newton"
+    },
+    {
+     "id": "George_Gabriel_Stokes",
+     "name": "George Gabriel Stokes"
+    }
+   ],
+   "tags": [
+    {
+     "id": "water",
+     "name": "agua"
+    },
+    {
+     "id": "viscosity",
+     "name": "viscosidad"
+    },
+    {
+     "id": "computational_fluid_dynamics",
+     "name": "dinámica de fluidos computacional"
+    },
+    {
+     "id": "turbulence",
+     "name": "turbulencia"
+    },
+    {
+     "id": "superfluidity",
+     "name": "superfluidez"
+    }
+   ]
+  }
+ },
+ "ar": {
+  "title": "كيفية التعامل مع هذه المادة",
+  "subtitle": "دليل منهجي للدراسة الذاتية",
+  "lead": "بدلاً من النقطة المادية — وسط متصل: ماء يضغط ويتدفق ويبطئ نفسه بنفسه. لا يقدم هذا الموضوع أي قوانين جديدة؛ فقط يتغير الجزء من المادة الذي نعزله ذهنياً والذي نطبق عليه قانون نيوتن الثاني.",
+  "budget": {
+   "title": "كم سيستغرق هذا",
+   "lead": "الموضوع مصمم لحوالي 3.5-4.5 ساعة من العمل المركز. هذا ليس 'قراءة في المساء': عند القراءة السريعة لا تثبت المادة. الإيقاع المعقول هو فقرة واحدة في الجلسة.",
+   "rows": [
+    {
+     "what": "فصل نظرة عامة",
+     "time": "15-20 دقيقة",
+     "note": "يُقرأ مرة واحدة، بدون معادلات — يضع السياق"
+    },
+    {
+     "what": "الفقرة 1 · الضغط في السائل الساكن",
+     "time": "60-80 دقيقة",
+     "note": "تجربة تفاعلية، اشتقاق المعادلة واختبار المعرفة"
+    },
+    {
+     "what": "الفقرة 2 · التدفق: الاستمرارية وبرنولي",
+     "time": "60-80 دقيقة",
+     "note": "تجربة تفاعلية، اشتقاق المعادلة واختبار المعرفة"
+    },
+    {
+     "what": "الفقرة 3 · اللزوجة والمقاومة",
+     "time": "60-80 دقيقة",
+     "note": "تجربة تفاعلية، اشتقاق المعادلة واختبار المعرفة"
+    },
+    {
+     "what": "الاختبار النهائي",
+     "time": "15 دقيقة",
+     "note": "أسئلة للفهم، وليس للحفظ"
+    }
+   ],
+   "note": "إذا استغرق الفصل ضعف الوقت، فهذا طبيعي بل وجيد. السيء هو العكس: أن تقرأه في عشرين دقيقة وتظن أنك فهمت."
+  },
+  "level": {
+   "title": "لمن صُمم هذا",
+   "text": [
+    "تحتاج إلى الميكانيكا: قانون نيوتن الثاني، الشغل والطاقة الحركية. من الديناميكا الحرارية يكفي الكثافة والصورة الجزيئية للمادة. من الرياضيات — المشتقة وتكامل محدد واحد؛ تحليل المتجهات ليس ضرورياً.",
+    "المواضيع التي يعتمد عليها هذا المادة: الميكانيكا، الديناميكا الحرارية. إذا لم تكن قد درستها، فبعض الاستنتاجات ستكون مبنية على الثقة.",
+    "بصراحة عن الحدود: في هذا الموضوع لم يُحل بعد — هل توجد حلول ناعمة لمعادلات نافييه-ستوكس لأي شروط ابتدائية — مقابل الإجابة وُعد بمليون دولار."
+   ]
+  },
+  "howto": {
+   "title": "كيف تتابع الفقرة",
+   "lead": "ترتيب الأقسام داخل الفقرة ليس عشوائياً — إنه يكرر المسار الطبيعي للفهم: أولاً صورة، ثم تجربة، ثم دقة، ثم اختبار. ننصحك بعدم القفز.",
+   "steps": [
+    {
+     "n": "1",
+     "what": "انظر إلى الصورة واقرأ المقدمة",
+     "how": "دقيقتان. الهدف هو التقاط صورة، وليس حفظ التفاصيل. الصورة ستصبح لاحقاً الخطاف الذي ستعلق عليه المعادلة."
+    },
+    {
+     "n": "2",
+     "what": "العب بالتجربة التفاعلية قبل قراءة الاشتقاق",
+     "how": "خطوة إلزامية، والأكثر استخفافاً بها. حرك المنزلقات، ولاحظ ما يزيد وما ينقص. حاول أن تتنبأ بما سيحدث قبل أن تحرك. عندما تصل لاحقاً إلى المعادلة، ستصف سلوكاً مألوفاً بالفعل — وستتذكرها بسهولة مضاعفة."
+    },
+    {
+     "n": "3",
+     "what": "اقرأ اشتقاق المعادلة خطوة بخطوة",
+     "how": "كل خطوة مصحوبة برسم تخطيطي. لا تتقدم حتى تفهم الخطوة الحالية: الاشتقاق مبني كسلم، إذا فاتتك درجة، ستتسلق بصعوبة. إذا علقت — اضغط 'اسأل المعلم' مباشرة في هذا القسم."
+    },
+    {
+     "n": "4",
+     "what": "حلل الثوابت",
+     "how": "لا تحفظ الأرقام — افهم ما يعنيه كل وحدة قياس: من كتابة الوحدة عادة ما يتضح كيف تُبنى الكمية وعلى ماذا يجب ضربها. وسائل الحفظ تحت كل ثابت — لمن يحتاج حقاً حفظ الرقم."
+    },
+    {
+     "n": "5",
+     "what": "اتبع المثال العددي مع النص",
+     "how": "لا تقرأ الحل بعينيك فقط — احسب بالتوازي على الورق. الفرق كبير: عند القراءة يبدو كل شيء واضحاً، وعند الحساب تظهر الأسئلة الحقيقية."
+    },
+    {
+     "n": "6",
+     "what": "أجب عن الأسئلة",
+     "how": "أجب قبل أن تنظر إلى الخيارات — صغ الفكرة في ذهنك. الأسئلة نوعية، لا تحتاج إلى حساب تقريباً: الهدف هو الفهم، وليس الحساب."
+    },
+    {
+     "n": "7",
+     "what": "اطبع أو احفظ ورقة الغش",
+     "how": "بطاقة واحدة لكل فقرة. بعد أسبوع، هي وحدها ستعيد المادة إلى ذاكرتك في دقيقتين بدلاً من نصف ساعة من إعادة القراءة."
+    }
+   ]
+  },
+  "stuck": {
+   "title": "ماذا تفعل إذا علقت",
+   "items": [
+    {
+     "case": "لم أفهم خطوة في الاشتقاق",
+     "do": "اضغط 'لا أفهم — قربني من الفكرة' تحت أقرب سؤال أو 'اسأل المعلم' في القسم. المعلم لن يعطيك الإجابة — سيطرح عليك سؤالاً مضاداً، والذي عادة ما يحل العقدة."
+    },
+    {
+     "case": "المعادلة تبدو مجردة",
+     "do": "ارجع إلى التجربة التفاعلية وحرك بالضبط الكميات الموجودة في المعادلة. يختفي التجريد عندما ترى كيف يحرك الرمز مؤشر الجهاز."
+    },
+    {
+     "case": "الأبعاد غير متطابقة",
+     "do": "هذه أفضل إشارة على وجود خطأ ما. تحقق من قسم الثوابت: الوحدات دائماً تخبرك بما يجب ضربه في ماذا."
+    },
+    {
+     "case": "كل شيء واضح، لكن نسيته بعد يوم",
+     "do": "هذا طبيعي. قم بتجربة منزلية من الفقرة — الفعل الجسدي يثبت الذاكرة بشكل أفضل من أي تكرار. وأعد الاختبار بعد بضعة أيام."
+    }
+   ]
+  },
+  "experiments": {
+   "title": "تجارب تستحق القيام بها",
+   "lead": "كل واحدة تستغرق بضع دقائق ولا تتطلب سوى المطبخ. هذه ليست زينة للدورة — إنها ما يحول المقروء إلى مفهوم.",
+   "items": [
+    {
+     "p": "1",
+     "what": "غواص ديكارت",
+     "how": "املأ زجاجة بلاستيكية بالماء حتى الحافة. ..."
+    },
+    {
+     "p": "1",
+     "what": "كوب مقلوب على ورقة",
+     "how": "املأ كوباً بالماء حتى حافته، غطه بورقة سميكة — بطاقة بريدية أو قطعة كرتون — اضغط براحة يدك واقلبه فوق الحوض. ..."
+    },
+    {
+     "p": "2",
+     "what": "شريطان من الورق",
+     "how": "قص شريطين من الورق بعرض حوالي ثلاثة سنتيمترات وطول حوالي عشرين سنتيمتراً. ..."
+    },
+    {
+     "p": "2",
+     "what": "كرة بينج بونج في تيار مجفف الشعر",
+     "how": "شغل مجفف الشعر على الوضع البارد، ووجه التيار عمودياً إلى الأعلى وضع فيه كرة تنس الطاولة. ..."
+    },
+    {
+     "p": "3",
+     "what": "كرة في العسل وكرة في الماء",
+     "how": "خذ برطمانين شفافين متطابقين، صب الماء في أحدهما والعسل السائل في الآخر. ..."
+    },
+    {
+     "p": "3",
+     "what": "تيار من زجاجة بفتحتين",
+     "how": "في زجاجة بلاستيكية اصنع فتحتين على نفس الارتفاع: واحدة بقطر حوالي 2 مم والأخرى حوالي 4 مم. ..."
+    }
+   ]
+  },
+  "next": {
+   "title": "إلى أين تتجه بعد هذا الموضوع",
+   "items": [
+    "الديناميكا الحرارية: اللزوجة والتوصيل الحراري والانتشار تظهر كثلاثة أوجه لآلية نقل واحدة.",
+    "الموجات: يوصف الصوت بنفس الوسط المستمر، لكنه قابل للانضغاط.",
+    "أسئلة مفتوحة في الدورة: الاضطراب لم يُحل بعد، ووجود حل أملس لمعادلات نافييه-ستوكس يعد من مسائل الألفية."
+   ]
+  },
+  "library": {
+   "title": "مواد حول الموضوع في الموقع",
+   "lead": "الدورة ليست معزولة: القوانين والعلماء المذكورون هنا لديهم صفحات خاصة في قاعدتنا - مع الصيغ والروابط والمقالات حيث يعمل هذا القانون عمليًا.",
+   "laws": [
+    {
+     "id": "archimedes_principle",
+     "name": "المعادلة الأساسية للهيدروستاتيكا وقانون أرخميدس",
+     "note": "يُشرح في الفقرة 1"
+    },
+    {
+     "id": "bernoullis_principle",
+     "name": "معادلة برنولي",
+     "note": "تُشرح في الفقرة 2"
+    },
+    {
+     "id": "navier_stokes_equations",
+     "name": "معادلات نافييه-ستوكس",
+     "note": "تُشرح في الفقرة 3"
+    },
+    {
+     "id": "poiseuille_equation",
+     "name": "معادلة بويزويل",
+     "note": "تُشرح في الفقرة 3"
+    }
+   ],
+   "scientists": [
+    {
+     "id": "Archimedes",
+     "name": "أرخميدس"
+    },
+    {
+     "id": "Daniel_Bernoulli",
+     "name": "دانييل برنولي"
+    },
+    {
+     "id": "Leonhard_Euler",
+     "name": "ليونارد أويلر"
+    },
+    {
+     "id": "Isaac_Newton",
+     "name": "إسحاق نيوتن"
+    },
+    {
+     "id": "George_Gabriel_Stokes",
+     "name": "جورج غابرييل ستوكس"
+    }
+   ],
+   "tags": [
+    {
+     "id": "water",
+     "name": "ماء"
+    },
+    {
+     "id": "viscosity",
+     "name": "لزوجة"
+    },
+    {
+     "id": "computational_fluid_dynamics",
+     "name": "ديناميكا الموائع الحاسوبية"
+    },
+    {
+     "id": "turbulence",
+     "name": "اضطراب"
+    },
+    {
+     "id": "superfluidity",
+     "name": "سيولة فائقة"
+    }
+   ]
+  }
+ }
+}

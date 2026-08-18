@@ -15,37 +15,37 @@
   ],
   "examples_from_articles": [
    {
-    "id": "2607.15243",
-    "date": "2026-07-16",
+    "id": "2601.17098",
+    "date": "2026-01-23",
     "title": {
-     "ru": "Иллюзия точности: как проверка ИИ в акустике вводит в заблуждение",
-     "en": "The Illusion of Accuracy: How AI Testing in Acoustics Misleads",
-     "es": "La ilusión de la precisión: cómo la validación de la IA en acústica induce a error",
-     "ar": "وهم الدقة: كيف يخدع اختبار الذكاء الاصطناعي في الصوتيات"
+     "ru": "Как волны рассказывают о мире",
+     "en": "How Waves Tell Us About the World",
+     "es": "Cómo las ondas cuentan el mundo",
+     "ar": "كيف تحكي الموجات عن العالم"
     },
-    "why": "gravitational_waves"
+    "why": "wave_propagation, energy_transfer"
    },
    {
-    "id": "2607.14868",
-    "date": "2026-07-16",
+    "id": "2606.21905",
+    "date": "2026-06-20",
     "title": {
-     "ru": "Спин из изгиба: как кривизна закручивает звук",
-     "en": "Spin from Bend: How Curvature Twists Sound",
-     "es": "El giro de la flexión: cómo la curvatura retuerce el sonido",
-     "ar": "الغزل من التقوس: كيف يمنح الانحناء الصوت زخمًا زاويًا"
+     "ru": "Подводный интернет-кабель как гигантское ухо: ловим шторма и землетрясения",
+     "en": "An Old Cable Catches Storms and Earthquakes",
+     "es": "Un viejo cable capta tormentas y terremotos",
+     "ar": "كابل بحري قديم يلتقط العواصف والزلازل"
     },
-    "why": "gravitational_waves"
+    "why": "wave_propagation, seismic_waves"
    },
    {
-    "id": "2607.14783",
-    "date": "2026-07-16",
+    "id": "2608.11673v1",
+    "date": "2026-08-12",
     "title": {
-     "ru": "Радар без призраков: новая 'мелодия' против ложных целей",
-     "en": "Radar Without Ghosts: A New 'Melody' Against False Targets",
-     "es": "Radar sin fantasmas: una nueva 'melodía' contra los falsos objetivos",
-     "ar": "رادار بلا أشباح: 'لحن' جديد ضد الأهداف الوهمية"
+     "ru": "Гравитационный слух: как услышать шёпот сливающихся чёрных дыр",
+     "en": "Gravitational Hearing: How to Catch the Whisper of Merging Black Holes",
+     "es": "Audición gravitacional: cómo escuchar el susurro de los agujeros negros en fusión",
+     "ar": "السمع الثقالي: كيف نسمع همس اندماج الثقوب السوداء"
     },
-    "why": "gravitational_waves"
+    "why": "travelling_wave, gravitational_waves"
    }
   ]
  },
@@ -182,11 +182,26 @@
   },
   "math": {
    "title": "Математика, которая здесь понадобилась",
-   "text": [
-    "Что означает $f(x - vt)$ на пальцах. Представьте, что вы нарисовали горб на длинной ленте и тянете ленту вправо. Форма горба не меняется, меняется только то, напротив какой отметки на столе он сейчас находится. Записать это можно так: чтобы узнать высоту в точке $x$ в момент $t$, посмотрите, какая высота была в точке $x - vt$ в самом начале. Вычитание внутри скобки — это и есть «отмотать назад на пройденный путь». Если поставить плюс, волна поедет влево.",
-    "Почему длина волны и период — разные вещи. Их путают чаще всего остального в этой теме. Представьте забор из штакетин: расстояние между штакетинами — это длина волны, свойство пространства. А теперь представьте, что вы идёте вдоль забора и считаете штакетины: сколько их проходит мимо вас в секунду — это частота, свойство времени. Одна и та же волна: измеряете линейкой — получаете длину, измеряете секундомером — частоту. Скорость связывает их, потому что скорость и есть метры, делённые на секунды.",
-    "Что такое фаза. Это ответ на вопрос «в каком месте своего качания сейчас находится точка» — наверху, внизу, на подъёме. Удобно измерять её в долях полного круга, потому что качание есть проекция вращения (это разбиралось в теме о колебаниях). Полный оборот — $2\\pi$ радиан, и потому в формуле волны везде появляются двойки с пи. Волновое число $k$ отвечает на вопрос, сколько фазы набегает на одном метре пути, а частота $\\omega$ — сколько за одну секунду.",
-    "Почему энергия зависит от квадрата амплитуды. Тот же довод, что для пружины: чтобы отклонить вдвое дальше, нужна вдвое большая сила на вдвое большем пути, а работа есть произведение — значит вчетверо. Практическое следствие важно: звук вдвое большей амплитуды несёт вчетверо больше энергии, а волна цунами вдвое большей высоты разрушительнее вчетверо. Именно из-за квадрата в акустике пользуются логарифмической шкалой децибел — иначе числа получались бы неудобными."
+   "lead": "Понадобятся три вещи: сдвиг аргумента функции, угловая мера фазы и право заменить любую форму синусом.",
+   "items": [
+    {
+     "what": "Почему минус в скобке везёт волну вправо",
+     "why": "Первый шаг вывода ничего не вычисляет, он подбирает запись. Приём общий: чтобы сдвинуть график любой функции вправо на величину $s$, из аргумента вычитают $s$ — значение, стоявшее в нуле, оказывается в точке $s$, а сама форма не меняется. У бегущей волны сдвиг накапливается со временем и равен пройденному пути $vt$, отсюда и запись $f(x - vt)$. Читать её удобно так: чтобы узнать высоту в точке $x$ в момент $t$, посмотрите, какая высота была в точке $x - vt$ в самом начале. Плюс вместо минуса пустит волну влево. Второй шаг проверяет, что запись честная. Точка постоянного аргумента едет вместе с гребнем; продифференцировав условие $x - vt = \\text{const}$, получаем $dx/dt = v$. Скорость не пришлось вписывать отдельно — она уже содержится в способе записи.",
+     "latex": "y(x,t) = f(x - vt), \\qquad x - vt = \\text{const} \\;\\Longrightarrow\\; \\frac{dx}{dt} = v",
+     "kit": "derivative"
+    },
+    {
+     "what": "Фаза, радианы и откуда взялось 2π",
+     "why": "В третьем шаге вывода у синуса появляется аргумент $\\frac{2\\pi}{\\lambda}(x - vt)$, и двойка с пи возникают словно из воздуха. Причина простая: синус повторяется, когда его аргумент набирает $2\\pi$, а волна обязана повториться через длину волны в пространстве и через период во времени. Значит, на отрезке $\\lambda$ аргумент должен набрать ровно полный круг — отсюда множитель $k = 2\\pi/\\lambda$, и по той же причине $\\omega = 2\\pi/T$. Сам аргумент называется фазой и отвечает на вопрос, в каком месте своего качания точка находится сейчас: наверху, внизу, на подъёме. Мерить его углом естественно, потому что качание есть проекция равномерного вращения на ось. Тогда $k$ читается как «сколько фазы набегает на метре пути», а $\\omega$ — «сколько за секунду».",
+     "latex": "k = \\frac{2\\pi}{\\lambda}, \\qquad \\omega = \\frac{2\\pi}{T} = 2\\pi f",
+     "kit": "polar"
+    },
+    {
+     "what": "Зачем в выводе понадобился Фурье",
+     "why": "Третий шаг делает подмену, которая выглядит произволом: вместо произвольной формы берётся синус. Оправдание — теорема Фурье: любое периодическое возмущение раскладывается в сумму синусов кратных частот, а непериодическое — в интеграл по частотам. Работает это только благодаря линейности среды: она откликается на каждый синус независимо от прочих, поэтому отклики можно считать порознь и складывать в конце. Отсюда и право разобрать одну синусоиду вместо всех волн сразу. Практическое следствие видно в примере с числами: низкий голос на 100 Гц, высокий на 1000 Гц и медицинский ультразвук на 5 МГц считаются по одной и той же формуле $\\lambda = v/f$, потому что каждый из них — синусоидальная составляющая. Подробнее этот приём разобран в аппендиксе параграфа.",
+     "latex": "f(t) = \\sum_{n} A_n \\sin(\\omega_n t + \\varphi_n)",
+     "kit": "fourier"
+    }
    ]
   },
   "example": {
@@ -561,15 +576,6 @@
    "plate": "A wave is a shape traveling through a medium: $y = A\\sin(kx - \\omega t)$. Frequency is set by the source, speed by the medium, and wavelength is their quotient.",
    "note": "Limits of applicability. Everything said is valid for small-amplitude linear waves: when the disturbance is small, the medium restores it proportionally to displacement, and waves superpose independently. At large amplitude, linearity breaks down — crests overtake troughs, the wave overturns (this is how surf is born), and sound turns into a shock wave instead of a sine. Moreover, in some media the speed depends on frequency — this is called dispersion, and it causes a complex signal to spread out along the way."
   },
-  "math": {
-   "title": "Mathematics Needed Here",
-   "text": [
-    "What $f(x - vt)$ means intuitively. Imagine you drew a bump on a long ribbon and you pull the ribbon to the right. The shape of the bump does not change; only the position relative to marks on the table changes. You can write it like this: to find the height at point $x$ at time $t$, look at what the height was at point $x - vt$ at the beginning. The subtraction inside the parentheses is like 'rewinding by the distance traveled'. If you use a plus, the wave moves left.",
-    "Why wavelength and period are different things. They are confused more than anything else in this topic. Imagine a picket fence: the distance between pickets is the wavelength, a property of space. Now imagine you walk along the fence and count pickets: how many pass you per second is the frequency, a property of time. The same wave: measure with a ruler — you get wavelength; measure with a stopwatch — you get frequency. Speed links them because speed is meters divided by seconds.",
-    "What is phase. It answers the question 'at what point in its oscillation is the point now' — at the top, bottom, on the rise. It is convenient to measure it in fractions of a full circle, because oscillation is a projection of rotation (as covered in the topic on oscillations). A full revolution is $2\\pi$ radians, and that's why twos with pi appear everywhere in the wave formula. The wavenumber $k$ tells how much phase accumulates per meter of path, and the angular frequency $\\omega$ tells how much per second.",
-    "Why energy depends on the square of amplitude. The same reasoning as for a spring: to deflect twice as far, you need twice the force over twice the distance, and work is the product — so four times. The practical consequence is important: sound with twice the amplitude carries four times the energy, and a tsunami wave twice as high is four times more destructive. It is because of the square that acoustics uses a logarithmic decibel scale — otherwise numbers would be unwieldy."
-   ]
-  },
   "example": {
    "title": "Example with numbers: voice wavelength and why bass is heard through a wall",
    "lead": "We calculate what everyone has observed but rarely connected to a formula.",
@@ -751,39 +757,63 @@
    "where": "Sound and music, sonar and ultrasound, seismic exploration, radio communication, resolution of microscopes and any wave-based device.",
    "watchOut": "A common mistake is to think that matter moves along with the wave. A chip on water bobs up and down but does not drift away; energy travels, water stays."
   },
+  "math": {
+   "title": "The Math Needed Here",
+   "lead": "Three things are needed: shifting a function's argument, an angular measure of phase, and the right to replace any shape with a sine.",
+   "items": [
+    {
+     "what": "Why the minus in the parentheses moves the wave to the right",
+     "why": "The first step of the derivation doesn't compute anything; it just chooses a notation. The trick is general: to shift the graph of any function to the right by $s$, subtract $s$ from the argument — the value that was at zero now sits at $s$, and the shape itself doesn't change. For a traveling wave, the shift accumulates over time and equals the distance traveled $vt$, hence the notation $f(x - vt)$. It's convenient to read it this way: to find the height at point $x$ at time $t$, look at what the height was at point $x - vt$ at the very beginning. A plus instead of a minus would send the wave to the left. The second step checks that the notation is honest. A point of constant argument travels along with the crest; differentiating the condition $x - vt = \\text{const}$ gives $dx/dt = v$. The speed didn't have to be inserted separately — it's already contained in the way of writing.",
+     "latex": "y(x,t) = f(x - vt), \\qquad x - vt = \\text{const} \\;\\Longrightarrow\\; \\frac{dx}{dt} = v",
+     "kit": "derivative"
+    },
+    {
+     "what": "Phase, radians, and where 2π came from",
+     "why": "In the third step of the derivation, the sine gets an argument $\\frac{2\\pi}{\\lambda}(x - vt)$, and the two with pi appears out of thin air. The reason is simple: sine repeats when its argument accumulates $2\\pi$, and the wave must repeat over a wavelength in space and over a period in time. So over the interval $\\lambda$, the argument must accumulate exactly one full circle — hence the factor $k = 2\\pi/\\lambda$, and for the same reason $\\omega = 2\\pi/T$. The argument itself is called the phase and answers the question of where in its oscillation the point is right now: at the top, at the bottom, on the rise. Measuring it as an angle is natural because oscillation is the projection of uniform rotation onto an axis. Then $k$ reads as \"how much phase accumulates per meter of path,\" and $\\omega$ as \"how much per second.\"",
+     "latex": "k = \\frac{2\\pi}{\\lambda}, \\qquad \\omega = \\frac{2\\pi}{T} = 2\\pi f",
+     "kit": "polar"
+    },
+    {
+     "what": "Why Fourier was needed in the derivation",
+     "why": "The third step makes a substitution that looks like an arbitrary choice: instead of an arbitrary shape, a sine is taken. The justification is Fourier's theorem: any periodic disturbance can be decomposed into a sum of sines of multiple frequencies, and a non-periodic one into an integral over frequencies. This works only because of the linearity of the medium: it responds to each sine independently of the others, so the responses can be computed separately and added at the end. Hence the right to analyze a single sinusoid instead of all waves at once. The practical consequence is seen in the numerical example: a low voice at 100 Hz, a high one at 1000 Hz, and medical ultrasound at 5 MHz are all calculated with the same formula $\\lambda = v/f$, because each is a sinusoidal component. This technique is detailed in the appendix of the section.",
+     "latex": "f(t) = \\sum_{n} A_n \\sin(\\omega_n t + \\varphi_n)",
+     "kit": "fourier"
+    }
+   ]
+  },
   "quiz": [
    {
     "id": "w1",
     "type": "mcq",
-    "q": "Sound travels from air into water, where its speed is four times greater. What happens to its frequency and wavelength?",
+    "q": "Sound travels from air into water, where its speed is four times greater. What happens to the frequency and wavelength?",
     "options": [
-     "Frequency increases fourfold, wavelength does not change",
-     "Frequency stays the same, wavelength increases fourfold",
-     "Both quantities increase fourfold",
-     "Both quantities stay the same, only the amplitude changes"
+     "The frequency quadruples, the wavelength does not change",
+     "The frequency remains the same, the wavelength quadruples",
+     "Both quantities quadruple",
+     "Both quantities do not change, only the amplitude changes"
     ],
     "answer": 1,
-    "why": "Oscillations on both sides of the boundary must match—otherwise the media would tear apart. So frequency is always conserved. Speed is determined by the medium and changes, and wavelength is their quotient and changes with speed. This is exactly why light refracts.",
-    "hint": "Consider what happens right at the boundary: air molecules push water molecules. Can they do so at different frequencies?"
+    "why": "The oscillations on both sides of the boundary must match — otherwise the media would tear apart. So the frequency is always conserved. The speed is determined by the medium and changes, while the wavelength is the ratio of the two and changes with the speed. This is exactly why light refracts.",
+    "hint": "Think about what happens at the boundary: air molecules push water molecules. Can they do this at different frequencies?"
    },
    {
     "id": "w2",
     "type": "mcq",
-    "q": "Why, through a wall, is the bass of neighbor's music mostly heard?",
+    "q": "Why is it mostly bass that is heard through a wall from a neighbor's music?",
     "options": [
      "Low sounds are naturally louder",
-     "Long bass wavelengths are comparable to obstacle sizes and bend around them, while short high-frequency ones are not",
-     "The wall absorbs high frequencies, turning them into heat",
+     "Long bass waves are comparable to the size of obstacles and bend around them, while short high-frequency waves are not",
+     "The wall absorbs high frequencies, converting them into heat",
      "The ear is more sensitive to low frequencies"
     ],
     "answer": 1,
-    "why": "A wave bends around obstacles comparable to its wavelength. For bass at 100 Hz, the wavelength is 3.4 meters—comparable to a door or wall, so it passes. For high frequencies, wavelengths are centimeters, and they reflect. This is diffraction, and the same limits the resolution of a microscope.",
-    "hint": "Calculate the wavelength for 100 Hz and for 5000 Hz at 340 m/s and compare with the size of a doorway."
+    "why": "A wave bends around obstacles comparable to its wavelength. For bass at 100 Hz, the wavelength is 3.4 meters — comparable to a door or wall, so it passes. For high frequencies, the wavelength is centimeters, so they reflect. This is diffraction, and the same effect limits the resolution of a microscope.",
+    "hint": "Calculate the wavelength for 100 Hz and for 5000 Hz at a speed of 340 m/s and compare with the size of a doorway."
    },
    {
     "id": "w3",
     "type": "free",
-    "q": "In your own words: what exactly moves in a wave if the substance stays in place?",
+    "q": "In your own words: what exactly moves in a wave if the matter stays in place?",
     "keywords": [
      "form",
      "disturbance",
@@ -791,21 +821,22 @@
      "phase",
      "state",
      "not matter",
-     "transfers",
-     "synchronized"
+     "transferred",
+     "transmitted",
+     "coherent"
     ],
     "needed": 2,
-    "why": "The shape of the disturbance and the energy it carries move. Each particle of the medium only oscillates around its equilibrium position and passes the motion to its neighbor, like spectators in a stadium doing the wave while staying in their seats. At the end of the path, the energy can do work, even though the medium itself has not traveled there.",
-    "hint": "Remember the chip on water: it bobs but does not drift to shore. Yet the wave does deliver something to the shore—what exactly?"
+    "why": "What moves is the form of the disturbance and the energy it carries. Each particle of the medium only oscillates about its equilibrium position and passes the motion to its neighbor, like spectators at a stadium passing a wave while staying in place. At the end of the path, the energy can do work, even though matter did not travel there.",
+    "hint": "Remember a piece of wood on water: it bobs but does not float to the shore. Yet the wave still delivers something to the shore — what is it?"
    },
    {
     "id": "w4",
     "type": "estimate",
-    "q": "Speed of sound is 340 m/s. What is the wavelength of the note A4 (440 Hz)? In centimeters.",
+    "q": "The speed of sound is 340 m/s. What is the wavelength of the note A in the first octave, i.e., 440 Hz? In centimeters.",
     "answer": 77,
     "unit": "cm",
-    "why": "λ = 340/440 ≈ 0.77 m, which is 77 centimeters. A useful reference: it is about the length of an arm. This immediately explains why instruments in the midrange have sizes around half a meter—the resonator must be comparable to the wavelength.",
-    "hint": "Divide speed by frequency. Rough estimate: 340 is slightly less than 440, so the answer will be slightly less than a meter.",
+    "why": "λ = 340/440 ≈ 0.77 m, which is 77 centimeters. A useful reference: this is about the length of an arm. From this, it is immediately clear why mid-range instruments have sizes on the order of half a meter — the resonator must be comparable to the wavelength.",
+    "hint": "Divide the speed by the frequency. Rough estimate: 340 is slightly less than 440, so the answer will be slightly less than a meter.",
     "tolAbs": 10
    }
   ]
@@ -940,15 +971,6 @@
    ],
    "plate": "Onda es una forma que viaja por un medio: $y = A\\sin(kx - \\omega t)$. La frecuencia la fija la fuente, la velocidad el medio, y la longitud de onda se obtiene como cociente de ambas.",
    "note": "Límites de validez. Todo lo dicho es válido para ondas lineales de pequeña amplitud: cuando la perturbación es pequeña, el medio responde proporcionalmente al desplazamiento y las ondas se superponen independientemente. Con amplitudes grandes, la linealidad se rompe: las crestas comienzan a adelantar a los valles, la onda se vuelca (así nace el oleaje de la rompiente) y el sonido, en lugar de un seno, se convierte en una onda de choque. Además, en algunos medios la velocidad depende de la frecuencia —esto se denomina dispersión— y, debido a ella, una señal compleja se descompone a lo largo del camino."
-  },
-  "math": {
-   "title": "Matemáticas que se necesitaron aquí",
-   "text": [
-    "Qué significa $f(x - vt)$ en palabras sencillas. Imagine que dibuja una joroba en una cinta larga y tira de la cinta hacia la derecha. La forma de la joroba no cambia; solo cambia frente a qué marca de la mesa se encuentra ahora. Se puede escribir así: para conocer la altura en el punto $x$ en el instante $t$, mire qué altura había en el punto $x - vt$ al principio. La resta dentro del paréntesis es precisamente \"retroceder el camino recorrido\". Si se coloca un signo más, la onda viajará hacia la izquierda.",
-    "Por qué la longitud de onda y el período son conceptos diferentes. Se confunden más que cualquier otro concepto en este tema. Imagine una cerca de tablillas: la distancia entre tablillas es la longitud de onda, una propiedad del espacio. Ahora imagine que camina a lo largo de la cerca contando tablillas: cuántas pasan por usted en un segundo es la frecuencia, una propiedad del tiempo. La misma onda: si mide con una regla, obtiene la longitud; si mide con un cronómetro, obtiene la frecuencia. La velocidad las relaciona, porque la velocidad son metros divididos por segundos.",
-    "Qué es la fase. Es la respuesta a la pregunta \"en qué punto de su oscilación se encuentra ahora el punto\" — arriba, abajo, subiendo. Es conveniente medirla en fracciones de círculo completo, porque la oscilación es una proyección de un movimiento circular (esto se trató en el tema de oscilaciones). Una vuelta completa son $2\\pi$ radianes, y por eso en la fórmula de la onda aparecen por doquier doses con pi. El número de onda $k$ responde a cuánta fase se acumula en un metro de camino, y la frecuencia angular $\\omega$ a cuánta en un segundo.",
-    "Por qué la energía depende del cuadrado de la amplitud. El mismo argumento que para un resorte: para desviarlo el doble de lejos, se necesita una fuerza doble sobre una distancia doble, y el trabajo es el producto, luego es cuatro veces mayor. La consecuencia práctica es importante: un sonido de amplitud doble transporta cuatro veces más energía, y una ola de tsunami de altura doble es cuatro veces más destructiva. Precisamente por el cuadrado, en acústica se usa la escala logarítmica de decibelios; de lo contrario, los números serían incómodos."
-   ]
   },
   "example": {
    "title": "Ejemplo con números: longitud de onda de la voz y por qué se oyen los graves a través de la pared",
@@ -1189,7 +1211,31 @@
     "hint": "Divida la velocidad entre la frecuencia. Aproximación: 340 es un poco menor que 440, así que la respuesta será un poco menor que un metro.",
     "tolAbs": 10
    }
-  ]
+  ],
+  "math": {
+   "title": "Matemáticas que aquí se necesitaron",
+   "lead": "Se necesitan tres cosas: el desplazamiento del argumento de una función, la medida angular de la fase y el derecho a reemplazar cualquier forma por un seno.",
+   "items": [
+    {
+     "what": "Por qué el signo menos en el paréntesis lleva la onda hacia la derecha",
+     "why": "El primer paso de la deducción no calcula nada, solo elige una notación. El truco es general: para desplazar la gráfica de cualquier función hacia la derecha en una cantidad $s$, se resta $s$ del argumento — el valor que estaba en cero se encuentra ahora en el punto $s$, y la forma en sí no cambia. En una onda viajera, el desplazamiento se acumula con el tiempo y es igual a la distancia recorrida $vt$, de ahí la notación $f(x - vt)$. Se lee convenientemente así: para conocer la altura en el punto $x$ en el instante $t$, mira qué altura había en el punto $x - vt$ al principio. Un signo más en lugar del menos enviará la onda hacia la izquierda. El segundo paso verifica que la notación es honesta. El punto de argumento constante viaja junto con la cresta; diferenciando la condición $x - vt = \\text{const}$, obtenemos $dx/dt = v$. La velocidad no tuvo que ser introducida por separado — ya está contenida en la forma de escribir.",
+     "latex": "y(x,t) = f(x - vt), \\qquad x - vt = \\text{const} \\;\\Longrightarrow\\; \\frac{dx}{dt} = v",
+     "kit": "derivative"
+    },
+    {
+     "what": "Fase, radianes y de dónde salió 2π",
+     "why": "En el tercer paso de la deducción, al seno se le añade el argumento $\\frac{2\\pi}{\\lambda}(x - vt)$, y el dos y el pi aparecen como de la nada. La razón es simple: el seno se repite cuando su argumento alcanza $2\\pi$, y la onda debe repetirse a lo largo de una longitud de onda en el espacio y a lo largo de un período en el tiempo. Por lo tanto, en el segmento $\\lambda$, el argumento debe completar exactamente un círculo completo — de ahí el factor $k = 2\\pi/\\lambda$, y por la misma razón $\\omega = 2\\pi/T$. El argumento en sí se llama fase y responde a la pregunta de en qué punto de su oscilación se encuentra la partícula ahora: arriba, abajo, subiendo. Medirlo como un ángulo es natural, porque la oscilación es la proyección de un movimiento circular uniforme sobre un eje. Entonces $k$ se lee como \"cuánta fase se acumula por metro de camino\", y $\\omega$ como \"cuánta por segundo\".",
+     "latex": "k = \\frac{2\\pi}{\\lambda}, \\qquad \\omega = \\frac{2\\pi}{T} = 2\\pi f",
+     "kit": "polar"
+    },
+    {
+     "what": "Por qué se necesitó Fourier en la deducción",
+     "why": "El tercer paso hace una sustitución que parece arbitraria: en lugar de una forma arbitraria, se toma un seno. La justificación es el teorema de Fourier: cualquier perturbación periódica se descompone en una suma de senos de frecuencias múltiples, y una no periódica en una integral sobre frecuencias. Esto funciona solo gracias a la linealidad del medio: responde a cada seno independientemente de los demás, por lo que las respuestas se pueden calcular por separado y sumar al final. De ahí el derecho a analizar una sola sinusoide en lugar de todas las ondas a la vez. La consecuencia práctica se ve en el ejemplo con números: una voz grave a 100 Hz, una aguda a 1000 Hz y un ultrasonido médico a 5 MHz se calculan con la misma fórmula $\\lambda = v/f$, porque cada uno es un componente sinusoidal. Este truco se detalla en el apéndice del párrafo.",
+     "latex": "f(t) = \\sum_{n} A_n \\sin(\\omega_n t + \\varphi_n)",
+     "kit": "fourier"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "ما هي الموجة",
@@ -1321,15 +1367,6 @@
    ],
    "plate": "الموجة هي شكل يجري في الوسط: $y = A\\sin(kx - \\omega t)$. التردد يحدده المصدر، السرعة يحددها الوسط، طول الموجة يُحصل عليه كحاصل قسمتهما.",
    "note": "حدود الانطباق. كل ما قيل صحيح للموجات الخطية ذات السعة الصغيرة: عندما يكون الاضطراب صغيراً، يعيده الوسط بشكل متناسب مع الإزاحة، وتتراكب الموجات باستقلالية. عند السعة الكبيرة، تنكسر الخطية – تبدأ القمم بتجاوز القيعان، وتنقلب الموجة (وهكذا يولد الأمواج المتكسرة)، ويتحول الصوت بدلاً من الجيب إلى موجة صادمة. إضافةً إلى ذلك، في بعض الأوساط، تعتمد السرعة على التردد – وهذا يُسمى التشتت، ونتيجة له تتفرق الإشارة المعقدة على الطريق."
-  },
-  "math": {
-   "title": "الرياضيات التي احتجناها هنا",
-   "text": [
-    "ما معنى $f(x - vt)$ بأصابع اليد. تخيل أنك رسمت حدبة على شريط طويل وتسحب الشريط إلى اليمين. شكل الحدبة لا يتغير، فقط يتغير أي علامة على الطاولة هي المقابلة لها حالياً. يمكن كتابة هذا كالتالي: لمعرفة الارتفاع عند النقطة $x$ في اللحظة $t$، انظر إلى الارتفاع الذي كان عند النقطة $x - vt$ في البداية. الطرح داخل القوس هو 'التراجع إلى الوراء بمقدار المسافة المقطوعة'. إذا وضعت جمعاً، تتحرك الموجة إلى اليسار.",
-    "لماذا طول الموجة والزمن الدوري شيئان مختلفان. يخلط بينهما أكثر من أي شيء آخر في هذا الموضوع. تخيل سياجاً من ألواح: المسافة بين اللوحين هي طول الموجة، خاصية مكانية. والآن تخيل أنك تمشي على طول السياج وتعد الألواح: كم لوحاً يمر بك في الثانية – هذا هو التردد، خاصية زمنية. الموجة نفسها: تقيس بمسطرة – تحصل على الطول، تقيس بساعة إيقاف – تحصل على التردد. السرعة تربط بينهما، لأن السرعة هي متر مقسوم على ثوانٍ.",
-    "ما هو الطور. هذا هو إجابة سؤال 'في أي مكان من تذبذبها توجد النقطة حالياً' – في القمة، في القاع، في الصعود. من المناسب قياسه بأجزاء من الدائرة الكاملة، لأن التذبذب هو إسقاط لدوران (تم شرحه في موضوع الاهتزازات). دورة كاملة مقدارها $2\\pi$ راديان، ولهذا يظهر في كل مكان في صيغة الموجة أضعاف باي. العدد الموجي $k$ يجيب على سؤال: كم طوراً يتجمع في متر واحد من المسار، والتردد الزاوي $\\omega$: كم في ثانية واحدة.",
-    "لماذا تعتمد الطاقة على مربع السعة. نفس الحجة كما للزنبرك: لإزاحة ضعف المسافة، تحتاج قوة مضاعفة على طريق مضاعف، والشغل هو حاصل ضرب – أي أربعة أضعاف. النتيجة العملية مهمة: صوت ذو سعة مضاعفة يحمل طاقة مضاعفة أربع مرات، وموجة تسونامي ذات ارتفاع مضاعف تدمر أربعة أضعاف. بسبب المربع في الصوتيات، يستخدم المقياس اللوغاريتمي للديسيبل – وإلا لكانت الأرقام غير مريحة."
-   ]
   },
   "example": {
    "title": "مثال بالأرقام: طول موجة الصوت ولماذا يُسمع الباص خلف الجدار",
@@ -1570,6 +1607,30 @@
     "hint": "اقسم السرعة على التردد. تقريب: 340 أصغر قليلاً من 440، لذا ستكون الإجابة أقل بقليل من متر.",
     "tolAbs": 10
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "ستكون هناك حاجة إلى ثلاثة أشياء: إزاحة وسيط الدالة، وقياس زاوي للطور، والحق في استبدال أي شكل بجيب.",
+   "items": [
+    {
+     "what": "لماذا الطرح بين القوسين ينقل الموجة إلى اليمين",
+     "why": "الخطوة الأولى في الاشتقاق لا تحسب شيئًا، بل تختار صيغة للكتابة. الأسلوب عام: لتحريك الرسم البياني لأي دالة إلى اليمين بمقدار $s$، يُطرح $s$ من الوسيط — القيمة التي كانت عند الصفر تصبح عند النقطة $s$، والشكل نفسه لا يتغير. في الموجة المتحركة، تتراكم الإزاحة مع الزمن وتكون مساوية للمسافة المقطوعة $vt$، ومن هنا تأتي الكتابة $f(x - vt)$. من السهل قراءتها هكذا: لمعرفة الارتفاع عند النقطة $x$ في اللحظة $t$، انظر إلى الارتفاع الذي كان عند النقطة $x - vt$ في البداية. الموجب بدل السالب سيرسل الموجة إلى اليسار. الخطوة الثانية تتحقق من أن الكتابة صحيحة. نقطة الوسيط الثابت تتحرك مع القمة؛ وباشتقاق الشرط $x - vt = \\text{const}$، نحصل على $dx/dt = v$. لم تكن السرعة بحاجة إلى إدراجها بشكل منفصل — فهي موجودة بالفعل في طريقة الكتابة.",
+     "latex": "y(x,t) = f(x - vt), \\qquad x - vt = \\text{const} \\;\\Longrightarrow\\; \\frac{dx}{dt} = v",
+     "kit": "derivative"
+    },
+    {
+     "what": "الطور، والراديان، ومن أين جاء 2π",
+     "why": "في الخطوة الثالثة من الاشتقاق، يظهر للجيب وسيط $\\frac{2\\pi}{\\lambda}(x - vt)$، ويبدو أن الاثنين والطاء يأتيان من العدم. السبب بسيط: الجيب يتكرر عندما يصل وسيطه إلى $2\\pi$، والموجة يجب أن تتكرر عبر الطول الموجي في المكان وعبر الزمن الدوري. إذن، على المقطع $\\lambda$، يجب أن يصل الوسيط إلى دورة كاملة بالضبط — ومن هنا العامل $k = 2\\pi/\\lambda$، وبنفس السبب $\\omega = 2\\pi/T$. الوسيط نفسه يسمى الطور ويجيب على السؤال: في أي نقطة من تذبذبها تكون النقطة الآن: في الأعلى، في الأسفل، في الصعود. قياسه بزاوية أمر طبيعي، لأن التذبذب هو إسقاط لدوران منتظم على محور. عندها يُقرأ $k$ على أنه «كم طورًا يتراكم على متر من المسار»، و$\\omega$ — «كم في الثانية».",
+     "latex": "k = \\frac{2\\pi}{\\lambda}, \\qquad \\omega = \\frac{2\\pi}{T} = 2\\pi f",
+     "kit": "polar"
+    },
+    {
+     "what": "لماذا كانت هناك حاجة إلى فورييه في الاشتقاق",
+     "why": "الخطوة الثالثة تقوم باستبدال يبدو تعسفيًا: بدلاً من الشكل التعسفي، يُؤخذ جيب. التبرير هو نظرية فورييه: أي اضطراب دوري يُحلل إلى مجموع جيوب بترددات مضاعفة، وغير الدوري — إلى تكامل على الترددات. هذا يعمل فقط بفضل خطية الوسط: فهو يستجيب لكل جيب بشكل مستقل عن الآخرين، لذلك يمكن حساب الاستجابات بشكل منفصل وجمعها في النهاية. ومن هنا يأتي الحق في تحليل جيب واحد بدلاً من كل الموجات دفعة واحدة. النتيجة العملية واضحة في المثال العددي: صوت منخفض عند 100 هرتز، وصوت مرتفع عند 1000 هرتز، وموجات فوق صوتية طبية عند 5 ميغاهرتز تُحسب بنفس الصيغة $\\lambda = v/f$، لأن كل منها مكوّن جيبي. هذه الطريقة موضحة بالتفصيل في ملحق الفقرة.",
+     "latex": "f(t) = \\sum_{n} A_n \\sin(\\omega_n t + \\varphi_n)",
+     "kit": "fourier"
+    }
+   ]
+  }
  }
 }

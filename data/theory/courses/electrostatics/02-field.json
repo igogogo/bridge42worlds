@@ -15,37 +15,37 @@
   ],
   "examples_from_articles": [
    {
-    "id": "2607.14764",
-    "date": "2026-07-16",
+    "id": "2603.13448",
+    "date": "2026-03-13",
     "title": {
-     "ru": "Бозонный гул цемента: терагерцы слушают нано-неоднородности",
-     "en": "Cement's Boson Hum: Terahertz Waves Eavesdrop on Nano-Inhomogeneities",
-     "es": "El zumbido bosónico del cemento: los terahercios escuchan las nano-heterogeneidades",
-     "ar": "همهمة البوزون في الإسمنت: تيراهرتز تستمع إلى اللاتجانسات النانوية"
+     "ru": "Невидимый океан, удерживающий атом",
+     "en": "The Invisible Ocean That Holds the Atom",
+     "es": "El océano invisible que sostiene el átomo",
+     "ar": "المحيط الخفي الذي يمسك بالذرة"
     },
-    "why": "electromagnetism"
+    "why": "electric_field, field_picture"
    },
    {
-    "id": "2607.11058",
-    "date": "2026-07-13",
+    "id": "2603.23751",
+    "date": "2026-03-24",
     "title": {
-     "ru": "Нейросеть слышит магнитную музыку",
-     "en": "Neural Network Hears Magnetic Music",
-     "es": "La red neuronal escucha música magnética",
-     "ar": "الشبكة العصبية تستمع إلى الموسيقى المغناطيسية"
+     "ru": "Атомы чувствуют электричество без проводов",
+     "en": "Atoms Feel Electricity Without Wires",
+     "es": "Los átomos sienten la electricidad sin cables",
+     "ar": "الذرات تلتقط الكهرباء دون أسلاك"
     },
-    "why": "electromagnetism"
+    "why": "electric_field, field_sensing"
    },
    {
-    "id": "2607.10561",
-    "date": "2026-07-12",
+    "id": "2604.17825",
+    "date": "2026-04-20",
     "title": {
-     "ru": "Жидкое зеркало горизонта: как партонный океан дарует чёрным дырам электрическую душу",
-     "en": "The Liquid Mirror of the Horizon: How a Partonic Ocean Gives Black Holes an Electric Soul",
-     "es": "El espejo líquido del horizonte: cómo el océano de partones otorga un alma eléctrica a los agujeros negros",
-     "ar": "المرآة السائلة للأفق: كيف يمنح محيط البارتونات الثقوبَ السوداء جوهرًا كهربائيًا"
+     "ru": "Как измерить электрический ветер за Луной",
+     "en": "How to Measure the Electric Wind Behind the Moon",
+     "es": "Cómo medir el viento eléctrico detrás de la Luna",
+     "ar": "كيف نقيس الرياح الكهربائية خلف القمر؟"
     },
-    "why": "electromagnetism"
+    "why": "electric_field, field_in_space"
    }
   ]
  },
@@ -175,11 +175,26 @@
   },
   "math": {
    "title": "Математика, которая здесь понадобилась",
-   "text": [
-    "Что такое векторное поле — совсем просто. Представьте карту ветров: в каждой точке карты нарисована стрелочка, показывающая, куда и с какой силой дует. Никакого предмета в этой точке нет, а стрелка есть. Электрическое поле устроено точно так же, только вместо ветра — сила, которая подействовала бы на пробный заряд, если бы вы его туда положили. Величина задана заранее, независимо от того, воспользуетесь вы ею или нет.",
-    "Почему поле делят на заряд. Тут работает та же логика, что при переходе от «сколько стоит вся покупка» к «сколько стоит килограмм». Цена килограмма — характеристика товара, а не вашей корзины. Точно так же напряжённость — характеристика точки пространства, а не пробного заряда. Положите заряд вдвое больший — сила будет вдвое больше, а поле останется прежним.",
-    "Что означает поток и почему теорема Гаусса верна. Вообразите, что из заряда во все стороны бьют струи воды, и общий расход постоянен. Обтяните заряд любой оболочкой — резиновым мешком произвольной формы. Сколько воды втекает внутрь, столько и вытекает: весь расход обязан пройти через оболочку, какой бы кривой она ни была. Это и есть теорема Гаусса. А работает она лишь потому, что поле убывает как квадрат, а площадь растёт как квадрат, — они в точности гасят друг друга.",
-    "Почему внутри полости поля нет. Возьмите оболочку, внутри которой нет источников. Струй внутрь не поступает, значит суммарный поток через любую внутреннюю поверхность равен нулю. Если добавить соображения симметрии, окажется, что и само поле нулевое, а не просто уравновешенное. Это не приближение и не результат экранирования каким-то материалом — чистая геометрия обратного квадрата. Отсюда клетка Фарадея, защита электроники и то, что в самолёте, куда бьёт молния, пассажиры ничего не чувствуют."
+   "lead": "Понадобятся три вещи: функция, возвращающая вектор в каждой точке, деление на пробный заряд как нормировка и подсчёт потока через поверхность.",
+   "items": [
+    {
+     "what": "Поле как функция, возвращающая стрелку",
+     "why": "Обычная функция принимает число и возвращает число. Векторное поле принимает точку пространства и возвращает вектор: в трёх измерениях это три числа на каждую точку. Стенд рисует именно такую функцию — стрелки расставлены по всей сцене, а не только там, где что-то лежит. Уберите второй заряд, и стрелки останутся: значение $\\vec{E}(\\vec{r})$ задано заранее, до того как в точку что-нибудь попадёт. Именно об этом первый шаг вывода, где пробный заряд из описания исчезает. Та же конструкция обслуживает и другие поля: в пройденной теме о жидкостях ею задано поле скоростей, где стрелка в точке говорит, куда и как быстро течёт вещество, а дальше в курсе ею же задаётся магнитное поле. Сама конструкция важнее того, что именно ею задают.",
+     "latex": "\\vec{E}(\\vec{r}) = \\big(E_x(x,y,z),\\; E_y(x,y,z),\\; E_z(x,y,z)\\big)",
+     "kit": "field"
+    },
+    {
+     "what": "Деление на пробный заряд — это нормировка",
+     "why": "Первый шаг вывода состоит из одного действия: сила делится на величину пробного заряда. Приём называется нормировкой, и смысл его в том, чтобы выкинуть из описания то, что к предмету описания не относится. Сила зависит и от источника, и от того, что мы принесли; частное зависит только от источника и от точки. Тем же ходом получают плотность (масса на объём) и давление (сила на площадь): всякий раз делят на величину, которую хотят перестать замечать. Проверяется нормировка по единицам: ньютон на кулон читается буквально как «сила, приходящаяся на единицу заряда», и это не пояснение к формуле, а сама формула, прочитанная вслух.",
+     "latex": "[\\,E\\,] = \\frac{\\text{Н}}{\\text{Кл}} = \\frac{\\text{В}}{\\text{м}}",
+     "kit": "dimension"
+    },
+    {
+     "what": "Поток и почему радиус сокращается",
+     "why": "Поток есть произведение поля на площадь, сквозь которую оно проходит, и в пятом шаге вывода он считается через сферу радиуса $r$. Поле убывает как $1/r^{2}$, площадь сферы растёт как $r^{2}$, произведение теряет $r$ вовсе. Сокращение не случайность: обратный квадрат и есть следствие того, что влияние источника распределено ровно по сфере, поэтому рост площади и убывание поля обязаны гасить друг друга. Отсюда формулировка теоремы Гаусса: поток через замкнутую поверхность равен заключённому внутри заряду, делённому на $\\varepsilon_0$, и не зависит ни от радиуса, ни от формы поверхности. Шестой шаг — прямое следствие: заряда внутри полости нет, значит нет и потока.",
+     "latex": "\\Phi = E \\cdot 4\\pi r^{2} = \\frac{kQ}{r^{2}} \\cdot 4\\pi r^{2} = 4\\pi k Q = \\frac{Q}{\\varepsilon_0}",
+     "kit": "flux"
+    }
    ]
   },
   "example": {
@@ -546,15 +561,6 @@
    "plate": "The field is the force per unit charge, specified in advance at every point in space. It is not a way of speaking, but a physical object: it has energy, carries momentum, and outlives its source.",
    "note": "Limits of applicability and clarification about the test charge. Strictly speaking, the introduced charge itself creates a field and distorts what is being measured. Therefore, the definition implies an extremely small charge — so small that the perturbation can be neglected. In classical theory this is a pure convention, but in reality you cannot take a charge smaller than the elementary charge, and at very small scales the measurement inevitably disturbs the measured quantity. This is the first hint of a difficulty that will become central in quantum physics."
   },
-  "math": {
-   "title": "The Mathematics Needed Here",
-   "text": [
-    "What is a vector field — quite simple. Imagine a wind map: at each point on the map there is an arrow showing where and with what force the wind blows. There is no object at that point, but the arrow exists. The electric field works exactly the same way, only instead of wind, it's the force that would act on a test charge if you placed it there. The magnitude is predetermined, regardless of whether you use it or not.",
-    "Why the field is divided by charge. The same logic works as when moving from 'how much does the whole purchase cost' to 'how much does a kilogram cost.' The price per kilogram is a property of the goods, not of your basket. Similarly, the field strength is a property of a point in space, not of the test charge. Put a charge twice as large — the force will be twice as large, but the field remains the same.",
-    "What flux means and why Gauss's theorem is true. Imagine that jets of water shoot out from the charge in all directions, and the total flow rate is constant. Cover the charge with any shell — a rubber bag of arbitrary shape. As much water flows in, as much flows out: all the flow must pass through the shell, no matter how curved it is. That is Gauss's theorem. And it works only because the field decreases as the square, and the area grows as the square — they exactly cancel each other.",
-    "Why there is no field inside a cavity. Take a shell with no sources inside. No jets enter, so the total flux through any internal surface is zero. If you add symmetry considerations, it turns out that the field itself is zero, not just balanced. This is not an approximation or the result of shielding by some material — it is pure inverse-square geometry. Hence the Faraday cage, protection of electronics, and why passengers in an airplane struck by lightning feel nothing."
-   ]
-  },
   "example": {
    "title": "Numerical example: field near Earth's surface and why you don't notice it",
    "lead": "Earth is charged, and there is a constant electric field in the air. Let's calculate what it means for a person.",
@@ -793,7 +799,31 @@
     "hint": "In a uniform field, voltage is field strength times distance. Do not forget to convert centimeters to meters.",
     "tolAbs": 6
    }
-  ]
+  ],
+  "math": {
+   "title": "The Math Needed Here",
+   "lead": "Three things are needed: a function that returns a vector at each point, division by a test charge as a normalization, and calculating flux through a surface.",
+   "items": [
+    {
+     "what": "Field as a function returning an arrow",
+     "why": "An ordinary function takes a number and returns a number. A vector field takes a point in space and returns a vector: in three dimensions, that's three numbers for each point. The exhibit draws exactly such a function—arrows are placed throughout the scene, not just where something is located. Remove the second charge, and the arrows remain: the value $\\vec{E}(\\vec{r})$ is defined in advance, before anything is placed at the point. This is precisely what the first step of the derivation does, where the test charge disappears from the description. The same construction serves other fields: in the earlier topic on fluids, it defines the velocity field, where an arrow at a point indicates where and how fast the substance flows, and later in the course, it defines the magnetic field. The construction itself is more important than what it defines.",
+     "latex": "\\vec{E}(\\vec{r}) = \\big(E_x(x,y,z),\\; E_y(x,y,z),\\; E_z(x,y,z)\\big)",
+     "kit": "field"
+    },
+    {
+     "what": "Division by test charge is normalization",
+     "why": "The first step of the derivation consists of a single action: the force is divided by the magnitude of the test charge. This technique is called normalization, and its purpose is to remove from the description what is not relevant to the subject. The force depends on both the source and what we brought; the quotient depends only on the source and the point. The same approach yields density (mass per volume) and pressure (force per area): in each case, we divide by the quantity we want to stop noticing. Normalization is checked by units: newton per coulomb reads literally as \"force per unit charge,\" and this is not an explanation of the formula but the formula itself, read aloud.",
+     "latex": "[\\,E\\,] = \\frac{\\text{N}}{\\text{C}} = \\frac{\\text{V}}{\\text{m}}",
+     "kit": "dimension"
+    },
+    {
+     "what": "Flux and why the radius cancels",
+     "why": "Flux is the product of the field and the area through which it passes, and in the fifth step of the derivation, it is calculated through a sphere of radius $r$. The field decreases as $1/r^{2}$, the sphere's area grows as $r^{2}$, and the product loses $r$ entirely. The cancellation is not a coincidence: the inverse square is precisely a consequence of the source's influence being distributed evenly over the sphere, so the increase in area and the decrease in field must cancel each other out. Hence the formulation of Gauss's law: the flux through a closed surface equals the enclosed charge divided by $\\varepsilon_0$, and it does not depend on the radius or the shape of the surface. The sixth step is a direct consequence: there is no charge inside the cavity, so there is no flux.",
+     "latex": "\\Phi = E \\cdot 4\\pi r^{2} = \\frac{kQ}{r^{2}} \\cdot 4\\pi r^{2} = 4\\pi k Q = \\frac{Q}{\\varepsilon_0}",
+     "kit": "flux"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Campo",
@@ -918,15 +948,6 @@
    ],
    "plate": "El campo es la fuerza por unidad de carga, dada de antemano en cada punto del espacio. No es una forma de hablar, sino un objeto físico: tiene energía, transporta momento y sobrevive a su fuente.",
    "note": "Límites de aplicabilidad y aclaración sobre la carga de prueba. Estrictamente hablando, la carga introducida crea su propio campo y distorsiona lo que se mide. Por lo tanto, en la definición se entiende una carga extremadamente pequeña, tan pequeña que la perturbación puede despreciarse. En la teoría clásica esto es pura convención, pero en realidad no se puede tomar una carga menor que la elemental, y a escalas muy pequeñas la medición inevitablemente perturba lo medido. Esta es la primera pista de la dificultad que se volverá central en la física cuántica."
-  },
-  "math": {
-   "title": "Matemáticas que se necesitaron aquí",
-   "text": [
-    "Qué es un campo vectorial: muy simple. Imagine un mapa de vientos: en cada punto del mapa hay una flecha que muestra hacia dónde y con qué fuerza sopla. No hay ningún objeto en ese punto, pero la flecha está. El campo eléctrico funciona exactamente igual, solo que en lugar del viento, la fuerza que actuaría sobre una carga de prueba si la colocara allí. La magnitud está dada de antemano, independientemente de si la usa o no.",
-    "Por qué se divide el campo por la carga. Aquí aplica la misma lógica que al pasar de 'cuánto cuesta toda la compra' a 'cuánto cuesta el kilo'. El precio por kilo es una característica del producto, no de su cesta. Del mismo modo, la intensidad del campo es una característica del punto del espacio, no de la carga de prueba. Coloque una carga doble: la fuerza será el doble, pero el campo seguirá siendo el mismo.",
-    "Qué significa flujo y por qué el teorema de Gauss es válido. Imagine que desde la carga brotan chorros de agua en todas direcciones, y el caudal total es constante. Envuelva la carga con cualquier envoltura: una bolsa de goma de forma arbitraria. Tanta agua entra como sale: todo el caudal debe atravesar la envoltura, por muy torcida que sea. Eso es el teorema de Gauss. Y funciona solo porque el campo decrece como el cuadrado y el área crece como el cuadrado: se cancelan exactamente.",
-    "Por qué no hay campo dentro de una cavidad. Tome una envoltura sin fuentes en su interior. No entra ningún chorro, por lo que el flujo total a través de cualquier superficie interna es cero. Si se añaden consideraciones de simetría, resulta que el mismo campo es cero, no solo equilibrado. Esto no es una aproximación ni el resultado de un apantallamiento por algún material: es pura geometría del inverso del cuadrado. De ahí la jaula de Faraday, la protección de la electrónica y el hecho de que en un avión alcanzado por un rayo, los pasajeros no sienten nada."
-   ]
   },
   "example": {
    "title": "Ejemplo con números: el campo en la superficie terrestre y por qué no lo notas",
@@ -1166,7 +1187,31 @@
     "hint": "En un campo uniforme, el voltaje es la intensidad multiplicada por la distancia. No olvides convertir centímetros a metros.",
     "tolAbs": 6
    }
-  ]
+  ],
+  "math": {
+   "title": "Matemáticas que se necesitaron aquí",
+   "lead": "Se necesitan tres cosas: una función que devuelve un vector en cada punto, la división por una carga de prueba como normalización y el cálculo del flujo a través de una superficie.",
+   "items": [
+    {
+     "what": "El campo como una función que devuelve una flecha",
+     "why": "Una función ordinaria toma un número y devuelve un número. Un campo vectorial toma un punto del espacio y devuelve un vector: en tres dimensiones, son tres números por cada punto. El stand dibuja precisamente esa función: las flechas están distribuidas por toda la escena, no solo donde hay algo. Quita la segunda carga y las flechas permanecerán: el valor de $\\vec{E}(\\vec{r})$ está definido de antemano, antes de que algo llegue a ese punto. De esto trata el primer paso de la derivación, donde la carga de prueba desaparece de la descripción. La misma construcción sirve para otros campos: en el tema ya visto de fluidos, define el campo de velocidades, donde la flecha en un punto indica hacia dónde y con qué rapidez fluye la sustancia, y más adelante en el curso define el campo magnético. La construcción en sí es más importante que lo que se defina con ella.",
+     "latex": "\\vec{E}(\\vec{r}) = \\big(E_x(x,y,z),\\; E_y(x,y,z),\\; E_z(x,y,z)\\big)",
+     "kit": "field"
+    },
+    {
+     "what": "Dividir por la carga de prueba es una normalización",
+     "why": "El primer paso de la derivación consiste en una sola acción: dividir la fuerza por la magnitud de la carga de prueba. El procedimiento se llama normalización, y su sentido es eliminar de la descripción aquello que no pertenece al objeto de estudio. La fuerza depende tanto de la fuente como de lo que traemos; el cociente depende solo de la fuente y del punto. Con el mismo procedimiento se obtienen la densidad (masa por volumen) y la presión (fuerza por área): en cada caso se divide por la magnitud que se quiere dejar de notar. La normalización se verifica por las unidades: newton por culombio se lee literalmente como \"fuerza por unidad de carga\", y esto no es una explicación de la fórmula, sino la fórmula misma leída en voz alta.",
+     "latex": "[\\,E\\,] = \\frac{\\text{N}}{\\text{C}} = \\frac{\\text{V}}{\\text{m}}",
+     "kit": "dimension"
+    },
+    {
+     "what": "Flujo y por qué el radio se cancela",
+     "why": "El flujo es el producto del campo por el área a través de la cual pasa, y en el quinto paso de la derivación se calcula a través de una esfera de radio $r$. El campo disminuye como $1/r^{2}$, el área de la esfera crece como $r^{2}$, el producto pierde $r$ por completo. La cancelación no es casualidad: el inverso del cuadrado es consecuencia de que la influencia de la fuente se distribuye uniformemente sobre la esfera, por lo que el aumento del área y la disminución del campo deben anularse mutuamente. De ahí la formulación del teorema de Gauss: el flujo a través de una superficie cerrada es igual a la carga encerrada dividida por $\\varepsilon_0$, y no depende ni del radio ni de la forma de la superficie. El sexto paso es una consecuencia directa: no hay carga dentro de la cavidad, por lo tanto no hay flujo.",
+     "latex": "\\Phi = E \\cdot 4\\pi r^{2} = \\frac{kQ}{r^{2}} \\cdot 4\\pi r^{2} = 4\\pi k Q = \\frac{Q}{\\varepsilon_0}",
+     "kit": "flux"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "المجال",
@@ -1291,15 +1336,6 @@
    ],
    "plate": "المجال هو القوة لكل وحدة شحنة، محددة مسبقًا في كل نقطة في الفضاء. إنه ليس أسلوبًا للكلام، بل كائن فيزيائي: له طاقة، وينقل كمية حركة، ويفوق مصدره.",
    "note": "حدود قابلية التطبيق وتوضيح بخصوص الشحنة الاختبارية. بالمعنى الدقيق، الشحنة المدخلة تخلق مجالًا بنفسها وتشوه ما يتم قياسه. لذلك، في التعريف يُفترض شحنة صغيرة جدًا — بحيث يمكن إهمال الاضطراب. في النظرية التقليدية، هذا مجرد اصطلاح، لكن في الواقع لا يمكن أخذ شحنة أصغر من الشحنة الأولية، وعلى المقاييس الصغيرة جدًا، القياس يزعج بالضرورة ما يتم قياسه. هذا أول تلميح لصعوبة ستصبح مركزية في الفيزياء الكمية."
-  },
-  "math": {
-   "title": "الرياضيات التي كانت مطلوبة هنا",
-   "text": [
-    "ما هو المجال المتجهي — بسيط جدًا. تخيل خريطة للرياح: في كل نقطة على الخريطة يُرسم سهم يوضح إلى أين وبأي قوة تهب. لا يوجد جسم في تلك النقطة، ولكن السهم موجود. المجال الكهربائي مصمم تمامًا بنفس الطريقة، فقط بدلاً من الرياح — قوة تؤثر على شحنة اختبارية إذا وضعتها هناك. المقدار محدد مسبقًا، بغض النظر عما إذا كنت تستخدمه أم لا.",
-    "لماذا يقسم المجال على الشحنة. هنا تعمل نفس المنطق عند الانتقال من 'كم تكلف كل المشتريات' إلى 'كم يكلف الكيلوغرام'. سعر الكيلوغرام هو خاصية للسلعة، وليس لسلة مشترياتك. كذلك شدة المجال هي خاصية لنقطة في الفضاء، وليس للشحنة الاختبارية. ضع شحنة مضاعفة — ستكون القوة مضاعفة، لكن المجال سيبقى كما هو.",
-    "ماذا يعني التدفق ولماذا نظرية غاوس صحيحة. تخيل أن من الشحنة تنطلق نفاثات ماء في جميع الاتجاهات، والتدفق الكلي ثابت. قم بتغطية الشحنة بأي غلاف — كيس مطاطي بأي شكل. بقدر ما يدخل من الماء، يخرج: كل التدفق يجب أن يمر عبر الغلاف، مهما كان معوجًا. هذه هي نظرية غاوس. وهي تعمل فقط لأن المجال يتناقص كمربع، والمساحة تزداد كمربع — إنهما يلغي كل منهما الآخر بالضبط.",
-    "لماذا لا يوجد مجال داخل التجويف. خذ غلافًا لا توجد فيه مصادر من الداخل. لا تدخل نفاثات إلى الداخل، وبالتالي التدفق الكلي عبر أي سطح داخلي يساوي صفرًا. إذا أضفنا اعتبارات التناظر، سنجد أن المجال نفسه صفر، وليس مجرد متوازن. هذا ليس تقريبًا وليس نتيجة حماية بمادة ما — إنها هندسة خالصة للقانون التربيعي العكسي. من هنا يأتي قفص فاراداي، وحماية الإلكترونيات، وفي الطائرة التي يضربها البرق، لا يشعر الركاب بشيء."
-   ]
   },
   "example": {
    "title": "مثال بأرقام: المجال عند سطح الأرض ولماذا لا تلاحظونه",
@@ -1539,7 +1575,31 @@
     "hint": "في مجال منتظم، الجهد هو شدة المجال مضروبة في المسافة. لا تنسَ تحويل السنتيمترات إلى أمتار.",
     "tolAbs": 6
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "ستكون هناك حاجة إلى ثلاثة أشياء: دالة تُرجع متجهًا في كل نقطة، والقسمة على شحنة اختبارية كتطبيع، وحساب التدفق عبر سطح.",
+   "items": [
+    {
+     "what": "المجال كدالة تُرجع سهمًا",
+     "why": "الدالة العادية تأخذ رقمًا وتُرجع رقمًا. المجال المتجهي يأخذ نقطة في الفضاء ويُرجع متجهًا: في الأبعاد الثلاثة، هذا يعني ثلاثة أرقام لكل نقطة. يرسم العرض التوضيحي مثل هذه الدالة تمامًا — الأسهم موزعة في جميع أنحاء المشهد، وليس فقط حيث يوجد شيء ما. أزل الشحنة الثانية، وستبقى الأسهم: قيمة $\\vec{E}(\\vec{r})$ محددة مسبقًا، قبل أن يصل أي شيء إلى النقطة. هذا هو بالضبط ما يحدث في الخطوة الأولى من الاشتقاق، حيث تختفي الشحنة الاختبارية من الوصف. نفس البنية تخدم أيضًا مجالات أخرى: في الموضوع الذي مررنا عنه حول السوائل، يتم استخدامها لتمثيل مجال السرعة، حيث يخبرنا السهم عند نقطة ما إلى أين وبأي سرعة يتدفق الوسط، وفي وقت لاحق من الدورة يتم استخدامها لتمثيل المجال المغناطيسي. البنية نفسها أكثر أهمية من ما يتم تمثيله بها.",
+     "latex": "\\vec{E}(\\vec{r}) = \\big(E_x(x,y,z),\\; E_y(x,y,z),\\; E_z(x,y,z)\\big)",
+     "kit": "field"
+    },
+    {
+     "what": "القسمة على شحنة اختبارية هي تطبيع",
+     "why": "تتكون الخطوة الأولى من الاشتقاق من إجراء واحد: القوة مقسومة على مقدار الشحنة الاختبارية. تسمى هذه التقنية بالتطبيع، ومعناها هو إزالة من الوصف ما لا يتعلق بموضوع الوصف. تعتمد القوة على كل من المصدر وما أحضرناه؛ الناتج يعتمد فقط على المصدر والنقطة. بنفس الطريقة نحصل على الكثافة (الكتلة لكل حجم) والضغط (القوة لكل مساحة): في كل مرة نقسم على الكمية التي نريد التوقف عن ملاحظتها. يتم التحقق من التطبيع من خلال الوحدات: نيوتن لكل كولوم يُقرأ حرفيًا على أنه \"القوة لكل وحدة شحنة\"، وهذا ليس شرحًا للصيغة، بل هو الصيغة نفسها تُقرأ بصوت عالٍ.",
+     "latex": "[\\,E\\,] = \\frac{\\text{N}}{\\text{C}} = \\frac{\\text{V}}{\\text{m}}",
+     "kit": "dimension"
+    },
+    {
+     "what": "التدفق ولماذا يتم اختصار نصف القطر",
+     "why": "التدفق هو حاصل ضرب المجال في المساحة التي يمر عبرها، وفي الخطوة الخامسة من الاشتقاق يُحسب عبر كرة نصف قطرها $r$. يتناقص المجال بمقدار $1/r^{2}$، وتزداد مساحة الكرة بمقدار $r^{2}$، ويفقد حاصل الضرب $r$ تمامًا. هذا الاختصار ليس مصادفة: التربيع العكسي هو نتيجة لتوزيع تأثير المصدر بالتساوي على الكرة، لذلك يجب أن يلغي نمو المساحة وانخفاض المجال بعضهما البعض. ومن هنا تأتي صياغة نظرية غاوس: التدفق عبر سطح مغلق يساوي الشحنة المحصورة بداخله مقسومة على $\\varepsilon_0$، ولا يعتمد على نصف القطر ولا على شكل السطح. الخطوة السادسة هي نتيجة مباشرة: لا توجد شحنة داخل التجويف، وبالتالي لا يوجد تدفق.",
+     "latex": "\\Phi = E \\cdot 4\\pi r^{2} = \\frac{kQ}{r^{2}} \\cdot 4\\pi r^{2} = 4\\pi k Q = \\frac{Q}{\\varepsilon_0}",
+     "kit": "flux"
+    }
+   ]
+  }
  },
  "tags": [
   "pulsar",

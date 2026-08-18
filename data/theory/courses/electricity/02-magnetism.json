@@ -14,37 +14,37 @@
   "scientists": [],
   "examples_from_articles": [
    {
-    "id": "2607.10285",
-    "date": "2026-07-11",
+    "id": "2603.08594",
+    "date": "2026-03-09",
     "title": {
-     "ru": "Раскопки реальности: два режима обучения нейросети на примере модели Изинга",
-     "en": "Excavations of Reality: Two Modes of Neural Network Learning via the Ising Model",
-     "es": "Excavando la realidad: los dos modos de aprendizaje de una red neuronal con el modelo de Ising",
-     "ar": "تنقيب الواقع: نمطان لتدريب الشبكة العصبية عبر نموذج إيزينج"
+     "ru": "Компас, который слышит атомы",
+     "en": "A Compass That Hears Atoms",
+     "es": "Una brújula que escucha a los átomos",
+     "ar": "بوصلة تسمع الذرات"
     },
-    "why": "magnetar, magnetic_reconnection"
+    "why": "magnetic_field, magnetometry"
    },
    {
-    "id": "2607.04359",
-    "date": "2026-07-05",
-    "title": {
-     "ru": "Сёрфинг на гребне радиовсплеска: как хаос разгоняет частицы в магнетарах",
-     "en": "Surfing the Wave of a Radio Burst: How Chaos Accelerates Particles in Magnetars",
-     "es": "Surfeando en la cresta de un estallido de radio: cómo el caos acelera partículas en magnetares",
-     "ar": "ركوب الأمواج على قمة التدفق الراديوي: كيف تُسرّع الفوضى الجسيمات في النجوم المغناطيسية"
-    },
-    "why": "magnetar, magnetic_reconnection"
-   },
-   {
-    "id": "2606.28458",
+    "id": "2606.27833",
     "date": "2026-06-26",
     "title": {
-     "ru": "Магнитный балет кристаллов: ИИ подслушивает углы обменных связей",
-     "en": "Magnetic Ballet of Crystals: AI Eavesdrops on Exchange Bond Angles",
-     "es": "Ballet magnético de los cristales: la IA escucha los ángulos de los enlaces de intercambio",
-     "ar": "السيمفونية المغناطيسية للبلورات: الذكاء الاصطناعي يتنصت على زوايا روابط التبادل"
+     "ru": "Как рождается магнитное поле в пустоте",
+     "en": "How Magnetic Fields Are Born in a Void",
+     "es": "Cómo nace un campo magnético en el vacío",
+     "ar": "كيف يولد المجال المغناطيسي في الفراغ"
     },
-    "why": "magnetar, magnetic_reconnection"
+    "why": "magnetic_field, field_generation"
+   },
+   {
+    "id": "2605.01947",
+    "date": "2026-05-03",
+    "title": {
+     "ru": "Магнитные корни солнечного ветра",
+     "en": "The Magnetic Roots of the Solar Wind",
+     "es": "Las raíces magnéticas del viento solar",
+     "ar": "الجذور المغناطيسية للرياح الشمسية"
+    },
+    "why": "magnetic_field, solar_wind"
    }
   ]
  },
@@ -174,11 +174,26 @@
   },
   "math": {
    "title": "Математика, которая здесь понадобилась",
-   "text": [
-    "Что такое векторное произведение на пальцах. Обычное умножение даёт число, векторное — вектор, причём перпендикулярный обоим сомножителям. Найти направление проще всего рукой: направьте четыре пальца правой руки вдоль скорости, согните их в сторону поля — большой палец покажет силу для положительного заряда. Для отрицательного — в противоположную сторону. Это не мнемонический трюк, а определение, и им пользуются все, включая тех, кто занимается этим полжизни.",
-    "Почему сила поперёк не совершает работы. Представьте, что вы толкаете тележку строго вбок, а она катится вперёд. Как бы вы ни старались, вперёд вы её не разгоните и не замедлите — только повернёте. Работа есть произведение силы на путь, пройденный вдоль неё, а вдоль магнитной силы путь не проходится вовсе. Отсюда и невозможность магнитного двигателя: постоянный магнит энергии не даёт, потому что не умеет её передавать.",
-    "Почему период не зависит от скорости. Разгоните частицу вдвое — она пойдёт вдвое быстрее, но и круг опишет вдвое больший. Длина пути выросла вдвое, скорость выросла вдвое, время осталось прежним. Это то же самое сокращение, что делает период маятника независимым от амплитуды: две величины меняются согласованно и гасят друг друга в отношении. Такие совпадения в физике всегда указывают на что-то важное — здесь на них выросла целая отрасль.",
-    "Что означает единица тесла. Она огромна: магнитное поле Земли составляет всего пять стотысячных тесла, поле обычного магнитика на холодильнике около одной сотой, а поле томографа — три. Чтобы почувствовать масштаб: в поле в один тесла электрон описывает круг радиусом в доли миллиметра, а протон — около сантиметра. Разница ровно в отношении их масс, потому что радиус пропорционален импульсу."
+   "lead": "Математика здесь векторная: произведение, которое даёт направление поперёк, и привычка смотреть, какая величина в ответе сократилась.",
+   "items": [
+    {
+     "what": "Векторное произведение даёт новое направление",
+     "why": "Запись $\\vec F = q\\,\\vec v \\times \\vec B$ отличается от привычного умножения тем, что результат не число, а вектор, и лежит он поперёк обоих сомножителей сразу. Модуль даёт синус: $F = qvB\\sin\\alpha$, поэтому вдоль поля сила равна нулю, а поперёк максимальна. На стенде это не проверить: там частицу всегда запускают поперёк поля, синус равен единице, и потому траектория — ровная окружность. Наклонная скорость дала бы винтовую линию, окружность со сносом вдоль поля, но такого случая стенд не показывает. Направление находят правой рукой: четыре пальца вдоль $\\vec v$, сгибаем их к $\\vec B$, большой показывает силу для положительного заряда. У скалярного произведения роль обратная: оно отвечает на вопрос «насколько вдоль» и даёт косинус. Именно оно стоит в первом шаге вывода, где работа $\\vec F\\cdot d\\vec r$ содержит $\\cos 90^\\circ$, то есть ноль. Одна пара операций объясняет и форму траектории, и невозможность магнитного двигателя.",
+     "latex": "|\\vec v \\times \\vec B| = vB\\sin\\alpha, \\qquad \\vec F \\cdot d\\vec r = F\\,dr\\cos\\alpha",
+     "kit": "dotcross"
+    },
+    {
+     "what": "Когда переменная сокращается в ответе",
+     "why": "Четвёртый шаг вывода — чистая алгебра с большими последствиями. Радиус растёт со скоростью: $R = mv/qB$. Период есть длина окружности, делённая на скорость: $T = 2\\pi R/v$. Подставляем одно в другое, и $v$ уходит из ответа целиком. Полезно замечать такие сокращения ещё до вычислений: если числитель и знаменатель зависят от величины одинаково, в отношении её не останется. Здесь путь вырос вдвое, скорость выросла вдвое, время не изменилось. Есть и обратная сторона приёма: сокращение показывает, от чего ответ всё-таки зависит. В периоде остались масса, заряд и поле — потому циклотрон настраивают на одну частоту раз и навсегда, а он разгоняет частицу до самого края.",
+     "latex": "T = \\frac{2\\pi R}{v} = \\frac{2\\pi}{v}\\cdot\\frac{mv}{qB} = \\frac{2\\pi m}{qB}",
+     "kit": "propto"
+    },
+    {
+     "what": "Как из ничтожных чисел выходит сантиметр",
+     "why": "Пример с масс-спектрометром держится на арифметике показателей. Под корнем стоит масса иона $2\\cdot 10^{-26}$ кг, умноженная на удвоенное напряжение $4\\cdot 10^{3}$ В и делённая на заряд $1{,}6\\cdot 10^{-19}$ Кл. При умножении показатели складываются, при делении вычитаются: $-26 + 3$ даёт $-23$, затем $-23 - (-19)$ даёт $-4$. Корень делит показатель пополам, оставляя $10^{-2}$, а деление на поле $0{,}5$ Тл удваивает — так и получаются знакомые четыре с половиной сантиметра, величина, которую видно на детекторе глазом. Урок общий и нужный далеко за пределами магнетизма: «мало» и «много» не существуют сами по себе, а только по отношению к тому, на что величина умножается и делится. Масса иона ничтожна, но рядом стоит ещё более ничтожный заряд, и их отношение возвращает ответ в человеческий масштаб. Прежде чем отбросить маленькое число, посмотрите, с чем оно встретится дальше; и считайте показатели отдельно от мантисс — так ошибка на порядок видна сразу, до всякого калькулятора.",
+     "latex": "\\frac{2Um}{q} \\approx \\frac{4\\cdot 10^{3}\\cdot 2\\cdot 10^{-26}}{1{,}6\\cdot 10^{-19}} = 5\\cdot 10^{-4} \\;\\Longrightarrow\\; R = \\frac{1}{B}\\sqrt{5\\cdot 10^{-4}} \\approx 4{,}5\\cdot 10^{-2}\\ \\text{м}",
+     "kit": "order"
+    }
    ]
   },
   "example": {
@@ -328,7 +343,7 @@
     },
     {
      "h": "Итог",
-     "text": "Сила оказалась одна и та же, посчитанная двумя способами. В одной системе мы называем её магнитной, в другой — электрической. Магнетизм есть релятивистский эффект электростатики, и он заметен при ничтожных скоростях дрейфа только потому, что кулоновские силы чудовищно велики: относительная поправка порядка $10^{-13}$, умноженная на $10^{42}$, даёт вполне ощутимую величину. Именно это соображение и делает магнитную стрелку косвенным доказательством теории относительности — задолго до всяких быстрых частиц."
+     "text": "Сила оказалась одна и та же, посчитанная двумя способами. В одной системе мы называем её магнитной, в другой — электрической. Магнетизм есть релятивистский эффект электростатики. Смущает здесь одно: дрейф идёт со скоростью порядка $10^{-4}$ м/с, и относительный дисбаланс плотностей заряда набирается лишь порядка $(v/c)^{2}$ — исчезающе мало. Заметной силу делает не эта малая доля сама по себе, а масштаб кулоновского взаимодействия: оно несравнимо сильнее тяготения — для двух электронов отношение этих сил около $10^{42}$, — и полный заряд ионов и электронов в проводе огромен. Поэтому даже ничтожная нескомпенсированная его часть даёт силу, которую видно на опыте. Именно это соображение и делает магнитную стрелку косвенным доказательством теории относительности — задолго до всяких быстрых частиц."
     }
    ]
   },
@@ -402,7 +417,6 @@
      "батаре",
      "ток",
      "электрическ",
-     "поле источника",
      "поворачива",
      "распредел",
      "не магнит"
@@ -547,15 +561,6 @@
    "plate": "Magnetic force is perpendicular to velocity, therefore it does no work and merely turns the particle. Radius is proportional to momentum, and period is completely independent of speed.",
    "note": "Limits of applicability. The constancy of the period breaks down at near-light speeds: mass increases, and the particle starts to lag. That is why a conventional cyclotron cannot accelerate protons above about twenty megaelectronvolts, and for higher energies synchrotrons are built, where the frequency is adjusted on the fly. Moreover, everything said applies to a uniform field; in a non-uniform field, drifts are added, and trajectories become much more complex — the entire physics of plasma confinement rests on this."
   },
-  "math": {
-   "title": "Mathematics that was needed here",
-   "text": [
-    "What is a cross product in simple terms. Ordinary multiplication gives a number, cross product gives a vector, and one perpendicular to both factors. The easiest way to find the direction is with your hand: point the four fingers of your right hand along the velocity, curl them toward the field — your thumb shows the force for a positive charge. For a negative charge, it's the opposite direction. This is not a mnemonic trick but a definition, and everyone uses it, including those who have been doing this for half their lives.",
-    "Why a perpendicular force does no work. Imagine you push a cart strictly sideways while it rolls forward. No matter how hard you try, you won't speed it up or slow it down — only turn it. Work is the product of force and the distance traveled along it, and no distance is traveled along the magnetic force. Hence the impossibility of a magnetic motor: a permanent magnet does not provide energy because it cannot transfer it.",
-    "Why the period does not depend on speed. Double the particle's speed — it goes twice as fast, but also traces a circle twice as large. The path length doubled, the speed doubled, the time remains the same. It is the same cancellation that makes the period of a pendulum independent of amplitude: two quantities change in concert and cancel each other in the ratio. Such coincidences in physics always point to something important — here, an entire industry grew out of them.",
-    "What the unit tesla means. It is huge: Earth's magnetic field is only five hundred-thousandths of a tesla, the field of an ordinary fridge magnet is about one hundredth, and an MRI scanner's field is three. To get a sense of scale: in a one-tesla field, an electron traces a circle with a radius of fractions of a millimeter, and a proton about a centimeter. The difference is exactly the ratio of their masses, because radius is proportional to momentum."
-   ]
-  },
   "example": {
    "title": "Numerical example: a mass spectrometer",
    "lead": "A device that separates atoms by mass — a direct application of the radius formula.",
@@ -685,28 +690,6 @@
     }
    ]
   },
-  "appendix": {
-   "title": "Appendix for the Curious: Magnetism as a Consequence of Relativity",
-   "lead": "Not part of the test. About how all magnetic force arises from electrostatics and length contraction.",
-   "blocks": [
-    {
-     "h": "Setup",
-     "text": "Consider a current-carrying wire: positive ions are stationary, electrons drift. The wire is overall neutral — the charge densities are equal. A positive charge flies nearby, parallel to the wire, at a speed equal to the electron drift speed. In the wire's frame, it experiences a magnetic attractive force."
-    },
-    {
-     "h": "Switching to the Charge's Frame",
-     "text": "There, the charge is at rest, and a stationary charge does not feel a magnetic field. The force must vanish — but forces do not disappear just by changing perspective; otherwise, one reference frame would see a collision, and another would not. So a different force must act in the new frame."
-    },
-    {
-     "h": "What Changed",
-     "text": "In the charge's frame, electrons are at rest, and ions are moving. According to relativity, a moving ruler contracts — so the distances between ions have shortened, their density increased, while the electron density decreased. The wire is no longer neutral. An excess charge appears, and with it, an ordinary Coulomb force."
-    },
-    {
-     "h": "Conclusion",
-     "text": "The force turns out to be the same, calculated in two ways. In one frame we call it magnetic, in the other electric. Magnetism is a relativistic effect of electrostatics, and it becomes noticeable at tiny drift speeds only because Coulomb forces are enormously large: a relative correction of order $10^{-13}$ multiplied by $10^{42}$ yields a quite tangible magnitude. It is precisely this reasoning that makes the magnetic needle an indirect proof of relativity — long before any fast particles."
-    }
-   ]
-  },
   "memo": {
    "essence": "Magnetic force acts only on a moving charge, is directed perpendicular to both velocity and field, does no work, and makes the particle move in a circle.",
    "keyIdeas": [
@@ -777,7 +760,6 @@
      "batter",
      "current",
      "electri",
-     "source field",
      "rotat",
      "distribut",
      "not magnet"
@@ -796,7 +778,53 @@
     "hint": "If R is proportional to the square root of m, then the ratio of radii is the square root of the mass ratio. The square root of 1.17 is just under 1.1.",
     "tolAbs": 0.04
    }
-  ]
+  ],
+  "math": {
+   "title": "The Math Needed Here",
+   "lead": "The math here is vector-based: a product that gives a direction sideways, and the habit of checking which quantity cancels out in the answer.",
+   "items": [
+    {
+     "what": "The cross product gives a new direction",
+     "why": "The expression $\\vec F = q\\,\\vec v \\times \\vec B$ differs from ordinary multiplication in that the result is not a number but a vector, and it lies perpendicular to both factors at once. Its magnitude involves the sine: $F = qvB\\sin\\alpha$, so along the field the force is zero, and perpendicular it is maximal. You can't test this on the setup: there the particle is always launched perpendicular to the field, the sine equals one, and therefore the trajectory is a perfect circle. An inclined velocity would give a helical line, a circle with drift along the field, but the setup does not show such a case. The direction is found with the right hand: four fingers along $\\vec v$, bend them toward $\\vec B$, the thumb points to the force for a positive charge. The dot product plays the opposite role: it answers the question \"how much along\" and gives the cosine. It appears in the first step of the derivation, where the work $\\vec F\\cdot d\\vec r$ contains $\\cos 90^\\circ$, i.e., zero. One pair of operations explains both the shape of the trajectory and the impossibility of a magnetic motor.",
+     "latex": "|\\vec v \\times \\vec B| = vB\\sin\\alpha, \\qquad \\vec F \\cdot d\\vec r = F\\,dr\\cos\\alpha",
+     "kit": "dotcross"
+    },
+    {
+     "what": "When a variable cancels in the answer",
+     "why": "The fourth step of the derivation is pure algebra with big consequences. The radius grows with speed: $R = mv/qB$. The period is the circumference divided by the speed: $T = 2\\pi R/v$. Substituting one into the other, $v$ drops out of the answer entirely. It is useful to notice such cancellations before calculating: if the numerator and denominator depend on a quantity in the same way, it will not remain in the ratio. Here the path doubled, the speed doubled, the time did not change. There is also a flip side to this trick: the cancellation shows what the answer does depend on. In the period, mass, charge, and field remain—so the cyclotron is tuned to one frequency once and for all, and it accelerates the particle to the very edge.",
+     "latex": "T = \\frac{2\\pi R}{v} = \\frac{2\\pi}{v}\\cdot\\frac{mv}{qB} = \\frac{2\\pi m}{qB}",
+     "kit": "propto"
+    },
+    {
+     "what": "How a centimeter emerges from tiny numbers",
+     "why": "The mass spectrometer example relies on exponent arithmetic. Under the square root is the ion mass $2\\cdot 10^{-26}$ kg, multiplied by twice the voltage $4\\cdot 10^{3}$ V and divided by the charge $1.6\\cdot 10^{-19}$ C. When multiplying, exponents add; when dividing, they subtract: $-26 + 3$ gives $-23$, then $-23 - (-19)$ gives $-4$. The square root halves the exponent, leaving $10^{-2}$, and dividing by the field $0.5$ T doubles it—so we get the familiar four and a half centimeters, a quantity visible on the detector by eye. The lesson is general and useful far beyond magnetism: \"small\" and \"large\" do not exist by themselves, but only relative to what the quantity is multiplied and divided by. The ion mass is tiny, but next to it stands an even tinier charge, and their ratio brings the answer back to human scale. Before discarding a small number, see what it will encounter next; and count exponents separately from mantissas—then an order-of-magnitude error is visible immediately, before any calculator.",
+     "latex": "\\frac{2Um}{q} \\approx \\frac{4\\cdot 10^{3}\\cdot 2\\cdot 10^{-26}}{1.6\\cdot 10^{-19}} = 5\\cdot 10^{-4} \\;\\Longrightarrow\\; R = \\frac{1}{B}\\sqrt{5\\cdot 10^{-4}} \\approx 4.5\\cdot 10^{-2}\\ \\text{m}",
+     "kit": "order"
+    }
+   ]
+  },
+  "appendix": {
+   "title": "Appendix for the Curious: Magnetism as a Consequence of Relativity",
+   "lead": "Not part of the test. About how the entire magnetic force arises from electrostatics and length contraction.",
+   "blocks": [
+    {
+     "h": "Setup",
+     "text": "Take a current-carrying wire: positive ions are stationary, electrons drift. The wire is overall neutral—charge densities are equal. Nearby, a positive charge flies parallel to the wire at a speed equal to the electron drift speed. In the wire's frame, a magnetic attraction acts on it."
+    },
+    {
+     "h": "Switch to the charge's frame",
+     "text": "There it is at rest, and a stationary charge does not feel a magnetic field. The force must disappear—but forces do not vanish when you change your point of view, otherwise one reference frame would see a collision and another would not. So in the new frame some other force acts."
+    },
+    {
+     "h": "What changed",
+     "text": "In the charge's frame, electrons are at rest and ions move. According to relativity, a moving ruler shortens—so the distances between ions have contracted, and their density has increased, while the electron density, on the contrary, has decreased. The wire is no longer neutral. An excess charge appears, and with it, an ordinary Coulomb force."
+    },
+    {
+     "h": "Conclusion",
+     "text": "The force turns out to be the same, calculated in two ways. In one frame we call it magnetic, in the other—electric. Magnetism is a relativistic effect of electrostatics. One thing here is puzzling: the drift speed is on the order of $10^{-4}$ m/s, and the relative imbalance in charge densities accumulates only on the order of $(v/c)^{2}$—vanishingly small. What makes the force noticeable is not this small fraction by itself, but the scale of the Coulomb interaction: it is incomparably stronger than gravity—for two electrons, the ratio of these forces is about $10^{42}$—and the total charge of ions and electrons in the wire is enormous. Therefore, even a negligible uncompensated part of it gives a force visible in experiment. It is precisely this consideration that makes the magnetic needle an indirect proof of relativity—long before any fast particles."
+    }
+   ]
+  }
  },
  "es": {
   "title": "Campo magnético",
@@ -921,15 +949,6 @@
    ],
    "plate": "La fuerza magnética es perpendicular a la velocidad, por lo tanto no realiza trabajo y solo desvía la partícula. El radio es proporcional al momento, y el período no depende de la velocidad en absoluto.",
    "note": "Límites de aplicabilidad. La constancia del período se rompe a velocidades cercanas a la luz: la masa aumenta y la partícula empieza a retrasarse. Es por esto que el ciclotrón ordinario no acelera protones más allá de unos veinte megaelectronvoltios, y para energías mayores se construyen sincrotrones, donde la frecuencia se ajusta sobre la marcha. Además, todo lo dicho se refiere a un campo uniforme; en un campo no uniforme se añaden derivas y las trayectorias se vuelven mucho más complejas — en esto se basa toda la física del confinamiento de plasma."
-  },
-  "math": {
-   "title": "Matemáticas que se necesitaron aquí",
-   "text": [
-    "Qué es el producto vectorial explicado con las manos. La multiplicación ordinaria da un número, la vectorial da un vector, además perpendicular a ambos factores. Encontrar la dirección es más fácil con la mano: dirija los cuatro dedos de la mano derecha a lo largo de la velocidad, dóblelos hacia el campo — el pulgar mostrará la fuerza para una carga positiva. Para una negativa — en dirección opuesta. Esto no es un truco mnemotécnico, sino una definición, y la usan todos, incluidos aquellos que se dedican a esto media vida.",
-    "Por qué la fuerza perpendicular no realiza trabajo. Imagine que empuja un carro estrictamente hacia un lado, y él rueda hacia adelante. Por más que se esfuerce, no lo acelerará ni lo frenará hacia adelante — solo lo girará. El trabajo es el producto de la fuerza por el camino recorrido a lo largo de ella, y a lo largo de la fuerza magnética no se recorre camino alguno. De ahí la imposibilidad de un motor magnético: un imán permanente no da energía, porque no sabe transferirla.",
-    "Por qué el período no depende de la velocidad. Acelere la partícula al doble — irá el doble de rápido, pero también describirá un círculo el doble de grande. La longitud del camino se duplicó, la velocidad se duplicó, el tiempo sigue siendo el mismo. Es la misma cancelación que hace que el período del péndulo sea independiente de la amplitud: dos cantidades cambian de manera coordinada y se anulan mutuamente en la relación. Tales coincidencias en física siempre señalan algo importante — aquí sobre ellas creció toda una rama.",
-    "Qué significa la unidad tesla. Es enorme: el campo magnético de la Tierra es de solo cinco cienmilésimas de tesla, el campo de un imán común de refrigerador es de alrededor de una centésima, y el campo de un tomógrafo es de tres. Para sentir la escala: en un campo de un tesla, un electrón describe un círculo de radio de fracciones de milímetro, y un protón de alrededor de un centímetro. La diferencia es exactamente en la relación de sus masas, porque el radio es proporcional al momento."
-   ]
   },
   "example": {
    "title": "Ejemplo con números: espectrómetro de masas",
@@ -1060,28 +1079,6 @@
     }
    ]
   },
-  "appendix": {
-   "title": "Apéndice para curiosos: el magnetismo como consecuencia de la relatividad",
-   "lead": "No entra en la evaluación. Sobre cómo, a partir de la electrostática y la contracción de longitudes, se obtiene toda la fuerza magnética.",
-   "blocks": [
-    {
-     "h": "Planteamiento",
-     "text": "Tomemos un cable con corriente: los iones positivos están inmóviles, los electrones se desplazan. El cable es en general neutro — las densidades de carga son iguales. Cerca, paralelamente al cable, vuela una carga positiva con una velocidad igual a la velocidad de deriva de los electrones. En el sistema del cable, sobre ella actúa una fuerza magnética de atracción."
-    },
-    {
-     "h": "Pasamos al sistema de la carga",
-     "text": "Allí, la carga está en reposo, y una carga en reposo no siente el campo magnético. La fuerza debería desaparecer — pero las fuerzas no desaparecen al cambiar el punto de vista, de lo contrario un sistema de referencia vería una colisión y otro no. Por lo tanto, en el nuevo sistema actúa alguna otra fuerza."
-    },
-    {
-     "h": "Qué ha cambiado",
-     "text": "En el sistema de la carga, los electrones están en reposo y los iones se mueven. Según la teoría de la relatividad, una regla en movimiento se acorta — por lo tanto, las distancias entre los iones se han reducido, su densidad ha aumentado, mientras que la densidad de electrones, por el contrario, ha disminuido. El cable ha dejado de ser neutro. Aparece una carga excesiva y, con ella, la fuerza coulombiana habitual."
-    },
-    {
-     "h": "Conclusión",
-     "text": "La fuerza resulta ser la misma, calculada de dos maneras. En un sistema la llamamos magnética, en el otro, eléctrica. El magnetismo es un efecto relativista de la electrostática, y es perceptible a velocidades de deriva insignificantes solo porque las fuerzas coulombianas son enormes: la corrección relativa del orden de $10^{-13}$, multiplicada por $10^{42}$, da una magnitud perfectamente apreciable. Precisamente esta consideración hace de la aguja magnética una prueba indirecta de la teoría de la relatividad — mucho antes de cualquier partícula rápida."
-    }
-   ]
-  },
   "memo": {
    "essence": "La fuerza magnética actúa solo sobre una carga en movimiento, está dirigida transversalmente a la velocidad y al campo, no realiza trabajo y hace que la partícula se mueva en una trayectoria circular.",
    "keyIdeas": [
@@ -1152,7 +1149,6 @@
      "baterí",
      "corrient",
      "eléctric",
-     "campo de la fuente",
      "gir",
      "distribu",
      "no magnét"
@@ -1171,7 +1167,53 @@
     "hint": "Si R es proporcional a la raíz de m, entonces la relación de radios es la raíz de la relación de masas. La raíz de 1,17 es un poco menos de 1,1.",
     "tolAbs": 0.04
    }
-  ]
+  ],
+  "math": {
+   "title": "Matemáticas necesarias aquí",
+   "lead": "Las matemáticas aquí son vectoriales: un producto que da una dirección transversal y el hábito de ver qué cantidad se cancela en la respuesta.",
+   "items": [
+    {
+     "what": "El producto vectorial da una nueva dirección",
+     "why": "La expresión $\\vec F = q\\,\\vec v \\times \\vec B$ difiere de la multiplicación habitual en que el resultado no es un número, sino un vector, y se encuentra transversal a ambos factores a la vez. El módulo viene dado por el seno: $F = qvB\\sin\\alpha$, por lo que a lo largo del campo la fuerza es cero, y transversalmente es máxima. En el soporte no se puede comprobar esto: allí la partícula siempre se lanza transversalmente al campo, el seno es igual a uno, y por eso la trayectoria es una circunferencia perfecta. Una velocidad inclinada daría una hélice, una circunferencia con deriva a lo largo del campo, pero ese caso no se muestra en el soporte. La dirección se encuentra con la mano derecha: cuatro dedos a lo largo de $\\vec v$, se doblan hacia $\\vec B$, y el pulgar indica la fuerza para una carga positiva. En el producto escalar el papel es inverso: responde a la pregunta \"¿cuánto a lo largo?\" y da el coseno. Es precisamente el que aparece en el primer paso de la deducción, donde el trabajo $\\vec F\\cdot d\\vec r$ contiene $\\cos 90^\\circ$, es decir, cero. Un par de operaciones explica tanto la forma de la trayectoria como la imposibilidad de un motor magnético.",
+     "latex": "|\\vec v \\times \\vec B| = vB\\sin\\alpha, \\qquad \\vec F \\cdot d\\vec r = F\\,dr\\cos\\alpha",
+     "kit": "dotcross"
+    },
+    {
+     "what": "Cuando una variable se cancela en la respuesta",
+     "why": "El cuarto paso de la deducción es álgebra pura con grandes consecuencias. El radio crece con la velocidad: $R = mv/qB$. El período es la longitud de la circunferencia dividida por la velocidad: $T = 2\\pi R/v$. Sustituimos una en la otra, y $v$ desaparece por completo de la respuesta. Es útil notar tales cancelaciones antes de calcular: si el numerador y el denominador dependen de una magnitud de la misma manera, en la relación no quedará. Aquí el camino se duplicó, la velocidad se duplicó, el tiempo no cambió. También hay otra cara de la moneda: la cancelación muestra de qué depende realmente la respuesta. En el período quedan la masa, la carga y el campo, por lo que el ciclotrón se ajusta a una sola frecuencia de una vez por todas, y acelera la partícula hasta el borde.",
+     "latex": "T = \\frac{2\\pi R}{v} = \\frac{2\\pi}{v}\\cdot\\frac{mv}{qB} = \\frac{2\\pi m}{qB}",
+     "kit": "propto"
+    },
+    {
+     "what": "Cómo de números diminutos sale un centímetro",
+     "why": "El ejemplo del espectrómetro de masas se basa en la aritmética de los exponentes. Bajo la raíz está la masa del ion $2\\cdot 10^{-26}$ kg, multiplicada por el doble del voltaje $4\\cdot 10^{3}$ V y dividida por la carga $1{,}6\\cdot 10^{-19}$ C. Al multiplicar, los exponentes se suman; al dividir, se restan: $-26 + 3$ da $-23$, luego $-23 - (-19)$ da $-4$. La raíz divide el exponente por la mitad, dejando $10^{-2}$, y la división por el campo de $0{,}5$ T lo duplica, dando así los familiares cuatro centímetros y medio, una magnitud que se ve en el detector a simple vista. La lección es general y útil mucho más allá del magnetismo: \"poco\" y \"mucho\" no existen por sí mismos, sino solo en relación con aquello por lo que la magnitud se multiplica y se divide. La masa del ion es diminuta, pero al lado hay una carga aún más diminuta, y su relación devuelve la respuesta a la escala humana. Antes de descartar un número pequeño, mira con qué se encontrará más adelante; y calcula los exponentes por separado de las mantisas, así un error de orden de magnitud se ve de inmediato, antes de cualquier calculadora.",
+     "latex": "\\frac{2Um}{q} \\approx \\frac{4\\cdot 10^{3}\\cdot 2\\cdot 10^{-26}}{1{,}6\\cdot 10^{-19}} = 5\\cdot 10^{-4} \\;\\Longrightarrow\\; R = \\frac{1}{B}\\sqrt{5\\cdot 10^{-4}} \\approx 4{,}5\\cdot 10^{-2}\\ \\text{m}",
+     "kit": "order"
+    }
+   ]
+  },
+  "appendix": {
+   "title": "Apéndice para curiosos: el magnetismo como consecuencia de la relatividad",
+   "lead": "No entra en la verificación. Sobre cómo de la electrostática y la contracción de longitudes se obtiene toda la fuerza magnética.",
+   "blocks": [
+    {
+     "h": "Planteamiento",
+     "text": "Tomemos un cable con corriente: los iones positivos están inmóviles, los electrones se desplazan. El cable es en general neutro: las densidades de carga son iguales. Junto al cable, paralelamente, vuela una carga positiva con una velocidad igual a la velocidad de deriva de los electrones. En el sistema del cable, actúa sobre ella una fuerza magnética de atracción."
+    },
+    {
+     "h": "Pasamos al sistema de la carga",
+     "text": "Allí está en reposo, y una carga en reposo no siente el campo magnético. La fuerza debe desaparecer, pero las fuerzas no desaparecen al cambiar el punto de vista; de lo contrario, un sistema de referencia vería una colisión y otro no. Entonces, en el nuevo sistema actúa alguna otra fuerza."
+    },
+    {
+     "h": "Qué ha cambiado",
+     "text": "En el sistema de la carga, los electrones están en reposo y los iones se mueven. Según la teoría de la relatividad, una regla en movimiento se acorta, por lo que las distancias entre los iones se han reducido y su densidad ha aumentado, mientras que la densidad de los electrones, por el contrario, ha disminuido. El cable ha dejado de ser neutro. Ha aparecido una carga excedente y, con ella, la fuerza de Coulomb habitual."
+    },
+    {
+     "h": "Conclusión",
+     "text": "La fuerza resultó ser la misma, calculada de dos maneras. En un sistema la llamamos magnética, en el otro, eléctrica. El magnetismo es un efecto relativista de la electrostática. Lo que aquí desconcierta es que la deriva se produce a una velocidad del orden de $10^{-4}$ m/s, y el desequilibrio relativo de las densidades de carga alcanza solo un orden de $(v/c)^{2}$, es decir, increíblemente pequeño. Lo que hace notable a la fuerza no es esta pequeña fracción por sí misma, sino la escala de la interacción de Coulomb: es incomparablemente más fuerte que la gravedad; para dos electrones, la relación de estas fuerzas es alrededor de $10^{42}$, y la carga total de iones y electrones en el cable es enorme. Por eso, incluso una parte no compensada insignificante da una fuerza que se ve experimentalmente. Es precisamente esta consideración la que convierte a la aguja magnética en una prueba indirecta de la teoría de la relatividad, mucho antes de cualquier partícula rápida."
+    }
+   ]
+  }
  },
  "ar": {
   "title": "الحقل المغناطيسي",
@@ -1296,15 +1338,6 @@
    ],
    "plate": "القوة المغناطيسية عمودية على السرعة، لذلك لا تبذل شغلًا وتقوم فقط بتحريف الجسيم. نصف القطر يتناسب مع كمية الحركة، والدورة مستقلة تمامًا عن السرعة.",
    "note": "حدود التطبيق. ثبات الدورة يختل عند السرعات قريبة من الضوء: تزداد الكتلة، ويبدأ الجسيم في التأخر. لهذا السبب لا يسرع السيكلوترون العادي البروتونات فوق حوالي عشرين ميغا إلكترون فولت، وللطاقات العالية تُبنى السنكروترونات حيث يُضبط التردد أثناء التشغيل. بالإضافة إلى ذلك، كل ما قيل ينطبق على المجال المنتظم؛ في المجال غير المنتظم تظهر انحرافات إضافية، وتصبح المسارات أكثر تعقيدًا — على هذا تقوم فيزياء حصر البلازما."
-  },
-  "math": {
-   "title": "الرياضيات التي كانت ضرورية هنا",
-   "text": [
-    "ما هو الضرب الاتجاهي بطريقة الأصابع. الضرب العادي يعطي عددًا، والضرب الاتجاهي يعطي متجهًا، عموديًا على كلا العامليْن. أسهل طريقة لإيجاد الاتجاه هي باليد: وجه أربعة أصابع من يدك اليمنى على طول السرعة، ثم اثنها باتجاه المجال — سيشير الإبهام إلى القوة للشحنة الموجبة. للشحنة السالبة، الاتجاه معاكس. هذه ليست حيلة ذاكرة، بل تعريف، ويستخدمها الجميع، حتى من يعملون في هذا المجال نصف حياتهم.",
-    "لماذا القوة العمودية لا تبذل شغلًا. تخيل أنك تدفع عربة جانبًا تمامًا، وهي تتدحرج للأمام. مهما حاولت، لن تسرعها أو تبطئها للأمام — فقط ستديرها. الشغل هو حاصل ضرب القوة في المسافة المقطوعة على طولها، وعلى طول القوة المغناطيسية لا تقطع المسافة أبدًا. ومن هنا استحالة المحرك المغناطيسي: المغناطيس الدائم لا يعطي طاقة، لأنه لا يعرف كيف ينقلها.",
-    "لماذا الدورة لا تعتمد على السرعة. ضاعف سرعة الجسيم — سيسير أسرع بمرتين، لكنه سيرسم دائرة أكبر بمرتين أيضًا. زاد طول المسار مرتين، وزادت السرعة مرتين، فبقي الزمن كما هو. هذا هو نفس الإلغاء الذي يجعل دورة البندول مستقلة عن السعة: كميتان تتغيران بشكل متناغم وتلغي إحداهما الأخرى في النسبة. هذه التوافقات في الفيزياء تشير دائمًا إلى شيء مهم — هنا قام عليها فرع كامل.",
-    "ماذا تعني وحدة تسلا. إنها ضخمة: المجال المغناطيسي للأرض يبلغ فقط خمسة على مائة ألف من تسلا، مجال مغناطيس الثلاجة العادي حوالي واحد على مائة، ومجال التصوير بالرنين المغناطيسي ثلاثة. لتشعر بالمقياس: في مجال مقداره واحد تسلا، يرسم الإلكترون دائرة نصف قطرها أجزاء من المليمتر، والبروتون حوالي سنتيمتر. الفرق يساوي تمامًا نسبة كتلتيهما، لأن نصف القطر يتناسب مع كمية الحركة."
-   ]
   },
   "example": {
    "title": "مثال بأرقام: مطياف الكتلة",
@@ -1435,28 +1468,6 @@
     }
    ]
   },
-  "appendix": {
-   "title": "ملحق للمهتمين: المغناطيسية كنتيجة للنسبية",
-   "lead": "غير مدرج في الاختبار. حول كيفية الحصول على كل القوة المغناطيسية من الكهرباء الساكنة وتقلص الأطوال.",
-   "blocks": [
-    {
-     "h": "الوضع",
-     "text": "لنأخذ سلكًا يمر به تيار: الأيونات الموجبة ثابتة، والإلكترونات تنجرف. السلك متعادل كهربائيًا بشكل عام - كثافات الشحنات متساوية. بجانبه، وبموازاة السلك، تطير شحنة موجبة بسرعة مساوية لسرعة انجراف الإلكترونات. في إطار السلك، تؤثر عليها قوة مغناطيسية جاذبة."
-    },
-    {
-     "h": "الانتقال إلى إطار الشحنة",
-     "text": "هناك، الشحنة ساكنة، والشحنة الساكنة لا تشعر بالمجال المغناطيسي. يجب أن تختفي القوة - لكن القوى لا تختفي بتغير وجهة النظر، وإلا لرأى إطار مرجعي تصادمًا بينما الآخر لا يراه. إذن، في الإطار الجديد، تؤثر قوة أخرى."
-    },
-    {
-     "h": "ما الذي تغير",
-     "text": "في إطار الشحنة، الإلكترونات ساكنة والأيونات تتحرك. وفقًا لنظرية النسبية، المسطرة المتحركة تقصر - مما يعني أن المسافات بين الأيونات تقلصت، وكثافتها زادت، بينما كثافة الإلكترونات انخفضت. توقف السلك عن كونه متعادلًا. ظهرت شحنة زائدة، ومعها قوة كولوم عادية."
-    },
-    {
-     "h": "الخلاصة",
-     "text": "القوة هي نفسها، محسوبة بطريقتين. في إطار واحد نسميها مغناطيسية، وفي الآخر كهربائية. المغناطيسية هي تأثير نسبوي للكهرباء الساكنة، وهي ملحوظة حتى عند سرعات الانجراف الضئيلة فقط لأن القوى الكولومية هائلة جدًا: التصحيح النسبي من رتبة $10^{-13}$، مضروبًا في $10^{42}$، يعطي قيمة محسوسة تمامًا. هذه الفكرة تحديدًا تجعل إبرة المغناطيس دليلاً غير مباشر على نظرية النسبية - قبل وقت طويل من أي جسيمات سريعة."
-    }
-   ]
-  },
   "memo": {
    "essence": "القوة المغناطيسية تؤثر فقط على الشحنة المتحركة، واتجاهها عمودي على السرعة والمجال، ولا تبذل شغلًا، وتجعل الجسيم يتحرك في مسار دائري.",
    "keyIdeas": [
@@ -1527,7 +1538,6 @@
      "بطارية",
      "تيار",
      "كهربائي",
-     "مجال المصدر",
      "يدور",
      "توزيع",
      "ليس مغناطيسي"
@@ -1546,7 +1556,53 @@
     "hint": "إذا كان R يتناسب مع جذر m، فإن نسبة أنصاف الأقطار هي جذر نسبة الكتل. جذر 1.17 هو أقل بقليل من 1.1.",
     "tolAbs": 0.04
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات التي نحتاجها هنا",
+   "lead": "الرياضيات هنا متجهية: حاصل ضرب يعطي اتجاهًا عرضيًا، وعادة ملاحظة أي كمية تلغي في الناتج.",
+   "items": [
+    {
+     "what": "الضرب الاتجاهي يعطي اتجاهًا جديدًا",
+     "why": "الصيغة $\\vec F = q\\,\\vec v \\times \\vec B$ تختلف عن الضرب العادي في أن الناتج ليس عددًا بل متجهًا، ويقع عموديًا على كلا العاملين معًا. المقدار يعطى بالجيب: $F = qvB\\sin\\alpha$، لذلك القوة تساوي صفرًا على طول المجال، وتكون قصوى عند التعامد. لا يمكن اختبار ذلك في المعمل: هناك تُطلق الجسيمات دائمًا عموديًا على المجال، فيكون الجيب يساوي واحدًا، ولذلك يكون المسار دائرة تامة. السرعة المائلة كانت ستعطي مسارًا حلزونيًا، دائرة مع انجراف على طول المجال، لكن المعمل لا يُظهر هذه الحالة. الاتجاه يُحدد باليد اليمنى: الأصابع الأربعة على طول $\\vec v$، ثم تُثنى نحو $\\vec B$، والإبهام يشير إلى القوة للشحنة الموجبة. دور الضرب القياسي معاكس: فهو يجيب على سؤال \"إلى أي مدى على طول\" ويعطي جيب التمام. هو بالضبط ما يظهر في الخطوة الأولى من الاشتقاق، حيث العمل $\\vec F\\cdot d\\vec r$ يحتوي على $\\cos 90^\\circ$، أي صفر. زوج واحد من العمليات يفسر كلاً من شكل المسار واستحالة محرك مغناطيسي.",
+     "latex": "|\\vec v \\times \\vec B| = vB\\sin\\alpha, \\qquad \\vec F \\cdot d\\vec r = F\\,dr\\cos\\alpha",
+     "kit": "dotcross"
+    },
+    {
+     "what": "عندما يُحذف متغير من الناتج",
+     "why": "الخطوة الرابعة في الاشتقاق هي جبر خالص له عواقب كبيرة. نصف القطر يزداد مع السرعة: $R = mv/qB$. الدور هو محيط الدائرة مقسومًا على السرعة: $T = 2\\pi R/v$. نعوض أحدهما في الآخر، فتختفي $v$ تمامًا من الناتج. من المفيد ملاحظة مثل هذه الاختصارات قبل الحسابات: إذا كان البسط والمقام يعتمدان على كمية بنفس الطريقة، فلن تبقى في النسبة. هنا تضاعف المسار، وتضاعفت السرعة، فلم يتغير الزمن. هناك جانب آخر لهذه الطريقة: الاختصار يُظهر ما الذي يعتمد عليه الناتج فعلاً. في الدور تبقى الكتلة والشحنة والمجال — لذلك يُضبط السيكلوترون على تردد واحد نهائيًا، وهو يسرع الجسيم حتى الحافة.",
+     "latex": "T = \\frac{2\\pi R}{v} = \\frac{2\\pi}{v}\\cdot\\frac{mv}{qB} = \\frac{2\\pi m}{qB}",
+     "kit": "propto"
+    },
+    {
+     "what": "كيف تخرج سنتيمترات من أعداد ضئيلة",
+     "why": "مثال مطياف الكتلة يعتمد على حساب الأسس. تحت الجذر توجد كتلة الأيون $2\\cdot 10^{-26}$ كجم مضروبة في ضعف الجهد $4\\cdot 10^{3}$ فولت ومقسومة على الشحنة $1{,}6\\cdot 10^{-19}$ كولوم. عند الضرب تُجمع الأسس، وعند القسمة تُطرح: $-26 + 3$ يعطي $-23$، ثم $-23 - (-19)$ يعطي $-4$. الجذر يقسم الأس إلى نصفين، تاركًا $10^{-2}$، والقسمة على المجال $0{,}5$ تسلا تضاعفه — وهكذا نحصل على الأربعة سنتيمترات ونصف المألوفة، وهي كمية يمكن رؤيتها بالعين على الكاشف. الدرس عام ومفيد خارج نطاق المغناطيسية: \"القليل\" و\"الكثير\" لا وجود لهما بذاتهما، بل فقط بالنسبة إلى ما تُضرب به الكمية أو تُقسم عليه. كتلة الأيون ضئيلة، لكن بجانبها شحنة أكثر ضآلة، ونسبتهما تعيد الناتج إلى المقياس البشري. قبل أن تتجاهل عددًا صغيرًا، انظر إلى ما سيقابله لاحقًا؛ واحسب الأسس منفصلة عن المعاملات — فخطأ في رتبة المقدار سيظهر فورًا، قبل أي آلة حاسبة.",
+     "latex": "\\frac{2Um}{q} \\approx \\frac{4\\cdot 10^{3}\\cdot 2\\cdot 10^{-26}}{1{,}6\\cdot 10^{-19}} = 5\\cdot 10^{-4} \\;\\Longrightarrow\\; R = \\frac{1}{B}\\sqrt{5\\cdot 10^{-4}} \\approx 4{,}5\\cdot 10^{-2}\\ \\text{م}",
+     "kit": "order"
+    }
+   ]
+  },
+  "appendix": {
+   "title": "ملحق للمهتمين: المغناطيسية كنتيجة للنسبية",
+   "lead": "ليس ضمن الاختبار. حول كيف نحصل على القوة المغناطيسية كلها من الكهروستاتيكا وانكماش الأطوال.",
+   "blocks": [
+    {
+     "h": "الطرح",
+     "text": "لنأخذ سلكًا يمر به تيار: الأيونات الموجبة ثابتة، والإلكترونات تنجرف. السلك متعادل كليًا — كثافات الشحنات متساوية. بجانب السلك، وبالتوازي معه، يطير شحنة موجبة بسرعة تساوي سرعة انجراف الإلكترونات. في إطار السلك، تؤثر عليها قوة مغناطيسية جاذبة."
+    },
+    {
+     "h": "الانتقال إلى إطار الشحنة",
+     "text": "هناك تكون ساكنة، والشحنة الساكنة لا تشعر بالمجال المغناطيسي. يجب أن تختفي القوة — لكن القوى لا تختفي بتغيير وجهة النظر، وإلا لرأى إطار مرجعي تصادمًا بينما لا يراه الآخر. إذن في الإطار الجديد تعمل قوة أخرى."
+    },
+    {
+     "h": "ما الذي تغير",
+     "text": "في إطار الشحنة، تكون الإلكترونات ساكنة والأيونات متحركة. وفقًا للنظرية النسبية، المسطرة المتحركة تقصر — إذن المسافات بين الأيونات تقلصت، وكثافتها زادت، بينما كثافة الإلكترونات، على العكس، انخفضت. لم يعد السلك متعادلاً. ظهرت شحنة زائدة، ومعها قوة كولوم عادية."
+    },
+    {
+     "h": "الخلاصة",
+     "text": "القوة كانت واحدة، حُسبت بطريقتين. في إطار نسميها مغناطيسية، وفي الآخر كهربائية. المغناطيسية هي تأثير نسبوي للكهروستاتيكا. ما يربك هنا هو أن الانجراف يتم بسرعة من رتبة $10^{-4}$ م/ث، والاختلال النسبي في كثافات الشحنات يصل فقط إلى رتبة $(v/c)^{2}$ — وهو ضئيل جدًا. ما يجعل القوة ملحوظة ليس هذه النسبة الصغيرة بحد ذاتها، بل حجم التفاعل الكولومي: فهو أقوى بما لا يقاس من الجاذبية — بالنسبة لإلكترونين، نسبة هاتين القوتين حوالي $10^{42}$ — والشحنة الكلية للأيونات والإلكترونات في السلك هائلة. لذلك حتى جزء ضئيل غير معوض منها يعطي قوة تُرى في التجربة. هذه الفكرة بالذات تجعل إبرة البوصلة دليلاً غير مباشر على النظرية النسبية — قبل أي جسيمات سريعة."
+    }
+   ]
+  }
  },
  "tags": [
   "magnetar",

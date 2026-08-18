@@ -177,11 +177,25 @@
   },
   "math": {
    "title": "Математика, которая здесь понадобилась",
-   "text": [
-    "Что такое разность хода — совсем просто. Представьте двух курьеров, вышедших одновременно из одной точки к вашей двери разными улицами. Если один путь длиннее ровно на целое число кварталов, курьеры придут в ногу — шаг в шаг. Если длиннее на полтора квартала, один будет ступать правой, когда второй левой. Волны точно так же: важно не абсолютное расстояние, а насколько один путь длиннее другого, измеренное в длинах волн. Целое число — совпали, целое с половиной — противофаза и взаимное уничтожение.",
-    "Почему при сложении близких частот получается пульсация. Вообразите двух барабанщиков, отбивающих почти одинаковый темп: один сто ударов в минуту, другой сто два. Сначала они бьют вместе, звук громкий. Постепенно второй убегает вперёд, и к моменту, когда он опередит на полудара, удары попадают в промежутки — звук размазывается. Ещё немного, и он опередит на целый удар: снова вместе. За минуту такое совпадение случится ровно два раза — разность темпов. Это и есть частота биений, и она не требует никаких формул, только счёта.",
-    "Как понять эффект Доплера без формулы. Представьте, что вы стоите в воде, а к вам плывёт утка, крякая раз в секунду. Каждый крик уходит в воздух со своей скоростью, но утка за секунду успевает приблизиться — и следующий крик стартует уже ближе. Значит промежутки между приходящими к вам криками короче секунды. Вы слышите чаще, чем утка крякает. Когда она проплывёт мимо и станет удаляться, всё наоборот. Ничего, кроме сложения расстояний, здесь нет.",
-    "Почему в интерференции энергия не пропадает. Это место, где часто возникает подозрение в нарушении сохранения. Разгадка в квадрате. Сложив две волны в фазе, получаем вдвое большую амплитуду — но вчетверо большую энергию, а не вдвое. В противофазе получаем ноль. Усреднив по экрану, получим ровно сумму исходных энергий: половина мест получила вчетверо, половина — ничего, среднее вышло вдвое. Энергия не создаётся и не исчезает, она перераспределяется в пространстве."
+   "lead": "Понадобятся сумма косинусов, усреднение квадрата и чтение компактной записи с двойным знаком.",
+   "items": [
+    {
+     "what": "Сумма косинусов и лишняя двойка в биениях",
+     "why": "Пятый шаг вывода складывает два близких по частоте колебания и получает произведение: быстрый косинус на средней частоте, умноженный на медленный. Медленный сомножитель $\\cos\\frac{\\omega_1-\\omega_2}{2}t$ называют огибающей — сам по себе он не слышен, он управляет размахом. Дальше место, где легко ошибиться вдвое. Ухо реагирует на громкость, а громкость задаётся размахом безразлично к знаку, то есть модулем огибающей. У модуля косинуса период вдвое короче, чем у самого косинуса: максимум громкости приходится и на плюс единицу, и на минус единицу. Поэтому в огибающей стоит половина разности частот, а слышится полная разность. Шестой шаг именно об этом: $f_{\\text{б}} = |f_1 - f_2|$, а не половина.",
+     "latex": "\\cos\\omega_1 t + \\cos\\omega_2 t = 2\\underbrace{\\cos\\frac{\\omega_1-\\omega_2}{2}t}_{\\text{огибающая}}\\cos\\frac{\\omega_1+\\omega_2}{2}t"
+    },
+    {
+     "what": "Среднее квадрата, а не квадрат среднего",
+     "why": "Четвёртый шаг вывода снимает подозрение в нарушении сохранения энергии, и весь довод держится на одном различии. Энергия пропорциональна квадрату амплитуды, поэтому усреднять по экрану нужно квадрат, а не саму амплитуду. Сделаем неправильно: средняя амплитуда по чередующимся полосам равна $\\frac{1}{2}(2A_0 + 0) = A_0$, её квадрат $A_0^2$ — ровно вдвое меньше того, что принесли два источника. Сделаем правильно: усредняем квадраты, $\\frac{1}{2}\\left[(2A_0)^2 + 0\\right] = 2A_0^2$, и это в точности $A_0^2 + A_0^2$. Энергия сошлась. Квадрат среднего и среднее квадрата совпадают лишь тогда, когда величина вообще не меняется; во всех остальных случаях второе больше. На том же различии стоит действующее значение переменного тока.",
+     "latex": "\\langle A^{2}\\rangle = \\tfrac{1}{2}\\left[(2A_0)^{2} + 0\\right] = 2A_0^{2} \\;>\\; \\langle A\\rangle^{2} = A_0^{2}",
+     "kit": "rms"
+    },
+    {
+     "what": "Двойной знак и первое приближение",
+     "why": "Запись $f' = f_0\\,v/(v \\mp u)$ в седьмом шаге — это две формулы, сложенные в одну. Верхний знак берут при сближении, нижний при удалении, но проверять выбор надёжнее не по правилу, а по смыслу: при сближении знаменатель обязан уменьшиться, значит частота растёт. В примере с числами так и вышло, 744 Гц против 661 Гц. Полезно и приближение для медленного движения. При $u \\ll v$ дробь $1/(1 - u/v)$ почти равна $1 + u/v$ — это первый член разложения, и он превращает формулу в простое правило: относительный сдвиг частоты равен отношению скоростей. Для сирены $u/v = 20/340 \\approx 0{,}06$, что даёт около 741 Гц вместо точных 744. Тем же приближением оценивают скорость удаления галактики по малому красному смещению.",
+     "latex": "f' = f_0\\frac{v}{v \\mp u} \\approx f_0\\left(1 \\pm \\frac{u}{v}\\right), \\qquad \\frac{\\Delta f}{f_0} \\approx \\pm\\frac{u}{v}",
+     "kit": "taylor"
+    }
    ]
   },
   "example": {
@@ -553,15 +567,6 @@
    "plate": "Waves add by displacements. Path difference of an integer number of wavelengths gives enhancement, half-integer gives cancellation; close frequencies produce beats at their difference frequency; source motion shifts frequency.",
    "note": "Limits of applicability. A stable interference pattern is obtained only with coherent waves — with constant phase difference. Two ordinary lamps will not produce fringes: their emission phases change chaotically billions of times per second, and the pattern smears into uniform light. That is why Young passed light from one source through two slits, rather than using two candles. Moreover, the given Doppler formula is valid for sound, where a medium exists; for light it is different — there is no preferred medium, and the distinction between source and observer motion disappears, which became one of the first hints at relativity theory."
   },
-  "math": {
-   "title": "Mathematics Needed Here",
-   "text": [
-    "What is path difference — quite simple. Imagine two couriers leaving simultaneously from one point to your door via different streets. If one path is longer by exactly an integer number of blocks, the couriers arrive in step — step for step. If longer by one and a half blocks, one will step with the right foot when the other steps with the left. Waves are the same: what matters is not the absolute distance, but how much longer one path is than the other, measured in wavelengths. An integer — they coincide; integer plus a half — opposite phase and mutual cancellation.",
-    "Why adding close frequencies produces pulsation. Imagine two drummers beating almost the same tempo: one 100 beats per minute, the other 102. At first they strike together, sound loud. Gradually the second pulls ahead, and by the time he is half a beat ahead, the strikes fall in between — sound smears. A bit more, and he is a full beat ahead: together again. In one minute such coincidence happens exactly twice — the difference in tempos. That is the beat frequency, and it requires no formulas, only counting.",
-    "How to understand the Doppler effect without a formula. Imagine you are standing in water, and a duck swims toward you quacking once per second. Each quack travels through the air at its own speed, but the duck gets closer during that second — so the next quack starts closer. Hence the intervals between arriving quacks are shorter than a second. You hear more often than the duck quacks. When it passes and moves away, the opposite. Nothing more than adding distances is involved.",
-    "Why energy is not lost in interference. This is where suspicion of violation of conservation often arises. The answer is in the square. Adding two waves in phase gives twice the amplitude — but four times the energy, not twice. Out of phase gives zero. Averaging over the screen, we get exactly the sum of the original energies: half the places got four times, half got nothing, average came out to twice. Energy is neither created nor destroyed; it is redistributed in space."
-   ]
-  },
   "example": {
    "title": "Numerical example: how many beats a detuned string produces and how much the siren's pitch changes",
    "lead": "Two problems from one section: one for a musician, the other for someone standing by the road.",
@@ -784,7 +789,7 @@
      "approach",
      "shorten",
      "compress",
-     "approach",
+     "coming closer",
      "recede",
      "stretch",
      "wavelength",
@@ -805,7 +810,30 @@
     "hint": "The ray passes through the film twice. What path difference is needed for cancellation, and how many times smaller should the thickness be?",
     "tolAbs": 30
    }
-  ]
+  ],
+  "math": {
+   "title": "The math needed here",
+   "lead": "You will need the sum of cosines, averaging of squares, and reading compact notation with a double sign.",
+   "items": [
+    {
+     "what": "Sum of cosines and the extra factor of two in beats",
+     "why": "The fifth step of the derivation adds two oscillations of close frequencies and gets a product: a fast cosine at the average frequency multiplied by a slow one. The slow factor $\\cos\\frac{\\omega_1-\\omega_2}{2}t$ is called the envelope — it is not heard by itself, it controls the amplitude. Then comes a place where it is easy to make a factor-of-two error. The ear responds to loudness, and loudness is set by the amplitude regardless of sign, that is, by the modulus of the envelope. The modulus of a cosine has a period twice as short as the cosine itself: the maximum loudness occurs both at plus one and at minus one. Therefore, the envelope has half the frequency difference, but the full difference is heard. Step six is exactly about this: $f_{\\text{beats}} = |f_1 - f_2|$, not half of it.",
+     "latex": "\\cos\\omega_1 t + \\cos\\omega_2 t = 2\\underbrace{\\cos\\frac{\\omega_1-\\omega_2}{2}t}_{\\text{envelope}}\\cos\\frac{\\omega_1+\\omega_2}{2}t"
+    },
+    {
+     "what": "Mean of the square, not the square of the mean",
+     "why": "The fourth step of the derivation clears the suspicion of violating energy conservation, and the whole argument rests on one distinction. Energy is proportional to the square of the amplitude, so you need to average the square, not the amplitude itself. If we do it wrong: the average amplitude over alternating bands is $\\frac{1}{2}(2A_0 + 0) = A_0$, its square $A_0^2$ is exactly half of what the two sources brought. If we do it right: we average the squares, $\\frac{1}{2}\\left[(2A_0)^2 + 0\\right] = 2A_0^2$, and that is exactly $A_0^2 + A_0^2$. Energy checks out. The square of the mean and the mean of the square coincide only when the quantity does not change at all; in all other cases the latter is larger. The same distinction underlies the RMS value of alternating current.",
+     "latex": "\\langle A^{2}\\rangle = \\tfrac{1}{2}\\left[(2A_0)^{2} + 0\\right] = 2A_0^{2} \\;>\\; \\langle A\\rangle^{2} = A_0^{2}",
+     "kit": "rms"
+    },
+    {
+     "what": "Double sign and first approximation",
+     "why": "The expression $f' = f_0\\,v/(v \\mp u)$ in step seven is two formulas folded into one. The upper sign is taken when approaching, the lower when receding, but it is safer to check the choice not by a rule but by meaning: when approaching, the denominator must decrease, so the frequency increases. In the numerical example that is what happened, 744 Hz versus 661 Hz. The approximation for slow motion is also useful. When $u \\ll v$, the fraction $1/(1 - u/v)$ is almost equal to $1 + u/v$ — this is the first term of the expansion, and it turns the formula into a simple rule: the relative frequency shift equals the ratio of speeds. For the siren, $u/v = 20/340 \\approx 0.06$, which gives about 741 Hz instead of the exact 744. The same approximation is used to estimate the recession speed of a galaxy from a small redshift.",
+     "latex": "f' = f_0\\frac{v}{v \\mp u} \\approx f_0\\left(1 \\pm \\frac{u}{v}\\right), \\qquad \\frac{\\Delta f}{f_0} \\approx \\pm\\frac{u}{v}",
+     "kit": "taylor"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Interferencia y Doppler",
@@ -818,28 +846,66 @@
   "standNote": "Cambie el simulador al modo de dos ondas y varíe lentamente la relación de frecuencias desde uno hacia arriba. Con igualdad exacta, las ondas van al unísono. Se separan un poco y aparece un latido lento: los lugares donde se suman corren a lo largo del eje, y la amplitud total crece y decrece hasta cero. Observe el gráfico inferior: el punto de prueba oscila ahora con volumen variable. Eso es lo que el oído escucha como un 'uau-uau' al afinar una guitarra.",
   "formula": {
    "name": "Principio de superposición y condición de interferencia",
-   "latex": "\\Delta = m\\lambda \\;\\text{— amplificación}, \\qquad \\Delta = \\left(m + \\tfrac{1}{2}\\right)\\lambda \\;\\text{— extinción}",
+   "latex": "\\Delta = m\\lambda \\;\\text{— refuerzo}, \\qquad \\Delta = \\left(m + \\tfrac{1}{2}\\right)\\lambda \\;\\text{— extinción}",
    "alsoKnown": "Suma de ondas · condición de máximos y mínimos",
    "authors": [
     {
      "who": "Christiaan Huygens",
      "year": "1678",
-     "what": "declaró que la luz es una onda y construyó sobre ello la teoría de la reflexión y la refracción. Perdió la discusión con Newton en vida: la autoridad del autor de los 'Principia' pesó más que los argumentos."
+     "what": "afirmó que la luz es una onda y construyó sobre ello una teoría de la reflexión y la refracción. Perdió la disputa contra Newton en vida: la autoridad del autor de los 'Principia' pesó más que los argumentos"
     },
     {
      "who": "Thomas Young",
      "year": "1801",
-     "what": "realizó el experimento de las dos rendijas y obtuvo franjas inexplicables para las partículas. Su trabajo fue recibido con burlas en la prensa británica; el reconocimiento llegó veinte años después, tras los trabajos de Fresnel."
+     "what": "realizó el experimento de la doble rendija y obtuvo franjas inexplicables para las partículas. Su trabajo fue recibido con burlas en la prensa británica; el reconocimiento llegó veinte años después, tras los trabajos de Fresnel"
     },
     {
      "who": "Augustin Fresnel",
      "year": "1818",
-     "what": "presentó al concurso de la Academia la teoría ondulatoria de la difracción. Poisson, partidario de los corpúsculos, dedujo de ella una consecuencia absurda, según él: en el centro de la sombra de un disco circular debía haber una mancha brillante. Arago realizó el experimento y la mancha estaba allí."
+     "what": "presentó al concurso de la Academia su teoría ondulatoria de la difracción. Poisson, partidario de las partículas, dedujo de ella una consecuencia que le pareció absurda: en el centro de la sombra de un disco circular debería haber una mancha brillante. Arago realizó el experimento: la mancha estaba allí"
     },
     {
      "who": "Christian Doppler",
      "year": "1842",
-     "what": "predijo el cambio de frecuencia con el movimiento de la fuente al analizar el color de las estrellas dobles. Se equivocó en las estrellas, pero el efecto resultó correcto y fue confirmado auditivamente tres años después, con trompetistas en un vagón abierto."
+     "what": "predijo el cambio de frecuencia cuando la fuente se mueve, analizando el color de las estrellas dobles. Se equivocó en cuanto a las estrellas, pero el efecto resultó correcto y se confirmó de oído tres años después, con trompetistas en un vagón abierto"
+    }
+   ],
+   "story": "La historia más hermosa aquí es la de la mancha de Poisson. En 1818, Fresnel presentó a la Academia de Ciencias su teoría ondulatoria de la luz. Siméon Poisson, un convencido opositor, se propuso demostrar su absurdo: si se sigue la teoría de Fresnel, dedujo, entonces detrás de un disco opaco circular, exactamente en el centro de la sombra, debería haber una mancha brillante, pues las ondas que rodean el borde llegarían al centro con el mismo retraso y se sumarían. El argumento parecía demoledor: ¿quién ha visto luz en el centro mismo de una sombra? El presidente de la comisión, Arago, fue en silencio al laboratorio e hizo el experimento. La mancha estaba allí. La objeción, concebida como una sentencia, se convirtió en la confirmación decisiva, y en física todavía se la llama mancha de Poisson, por el nombre del hombre que no creía.",
+   "symbols": [
+    {
+     "sym": "Delta",
+     "latex": "\\Delta",
+     "what": "diferencia de camino",
+     "unit": "m",
+     "note": "cuánto más largo es un camino que el otro; es precisamente esto lo que decide si habrá refuerzo o extinción"
+    },
+    {
+     "sym": "m",
+     "latex": "m",
+     "what": "orden del máximo",
+     "unit": "—",
+     "note": "número entero: cuántas longitudes de onda caben en la diferencia de camino"
+    },
+    {
+     "sym": "fbeat",
+     "latex": "f_{\\text{b}}",
+     "what": "frecuencia de pulsaciones",
+     "unit": "Hz",
+     "note": "es igual a la diferencia de frecuencias: dos cuerdas que difieren en 2 Hz producen dos pulsaciones por segundo"
+    },
+    {
+     "sym": "u",
+     "latex": "u",
+     "what": "velocidad de la fuente o del observador",
+     "unit": "m/s",
+     "note": "en el efecto Doppler es importante quién se mueve exactamente; las fórmulas para estos casos son diferentes"
+    },
+    {
+     "sym": "f0",
+     "latex": "f_0",
+     "what": "frecuencia propia de la fuente",
+     "unit": "Hz",
+     "note": "lo que se emite; la frecuencia recibida difiere de ella cuando hay movimiento"
     }
    ]
   },
@@ -930,15 +996,6 @@
    ],
    "plate": "Las ondas se suman mediante desplazamientos. La diferencia de camino en un número entero de longitudes de onda produce refuerzo; en un número semientero, anulación; frecuencias cercanas producen batidos con frecuencia igual a su diferencia; el movimiento de la fuente desplaza la frecuencia.",
    "note": "Límites de aplicabilidad. Un patrón de franjas estable solo se obtiene con ondas coherentes — con diferencia de fase constante. Dos lámparas comunes no darán franjas: sus fases de emisión cambian caóticamente miles de millones de veces por segundo, y el patrón se difumina en luz uniforme. Por eso Young hacía pasar luz de una sola fuente a través de dos rendijas, en lugar de usar dos velas. Además, la fórmula de Doppler presentada es válida para el sonido, donde hay un medio; para la luz es diferente — allí no hay un medio privilegiado, y la diferencia entre movimiento de la fuente y del observador desaparece, lo que se convirtió en una de las primeras pistas hacia la teoría de la relatividad."
-  },
-  "math": {
-   "title": "Matemáticas que se necesitaron aquí",
-   "text": [
-    "Qué es la diferencia de camino — algo muy simple. Imagine dos mensajeros que salen al mismo tiempo de un mismo punto hacia su puerta por calles diferentes. Si un camino es más largo exactamente por un número entero de manzanas, los mensajeros llegarán a la par — paso a paso. Si es más largo por una manzana y media, uno pisará con el pie derecho mientras el otro con el izquierdo. Las ondas hacen exactamente igual: lo importante no es la distancia absoluta, sino cuánto más largo es un camino que el otro, medido en longitudes de onda. Número entero — coinciden; entero más media — antifase y aniquilación mutua.",
-    "Por qué la suma de frecuencias cercanas produce pulsaciones. Imagine dos bateristas tocando un ritmo casi igual: uno cien golpes por minuto, el otro ciento dos. Al principio golpean juntos, el sonido es fuerte. Poco a poco el segundo se adelanta, y cuando se adelanta por medio golpe, los golpes caen en los intervalos — el sonido se difumina. Un poco más y se adelanta por un golpe entero: de nuevo juntos. En un minuto, tal coincidencia ocurre exactamente dos veces — la diferencia de ritmos. Esta es la frecuencia de batido, y no requiere ninguna fórmula, solo contar.",
-    "Cómo entender el efecto Doppler sin fórmula. Imagínese de pie en el agua, y un pato nada hacia usted graznando una vez por segundo. Cada graznido viaja en el aire a su velocidad, pero el pato se acerca en un segundo — y el siguiente graznido parte ya más cerca. Por tanto, los intervalos entre los graznidos que llegan a usted son menores de un segundo. Usted oye más seguido de lo que el pato grazna. Cuando pase de largo y se aleje, todo al revés. No hay nada más que suma de distancias.",
-    "Por qué en la interferencia la energía no desaparece. Este es el punto donde a menudo surge la sospecha de violación de la conservación. La clave está en el cuadrado. Al sumar dos ondas en fase, obtenemos una amplitud doble — pero una energía cuádruple, no doble. En antifase obtenemos cero. Promediando sobre la pantalla, obtenemos exactamente la suma de las energías originales: la mitad de los lugares recibe cuatro veces, la mitad nada, el promedio resulta el doble. La energía no se crea ni se destruye, se redistribuye en el espacio."
-   ]
   },
   "example": {
    "title": "Ejemplo con números: cuántos batidos da una cuerda desafinada y cuánto cambia el tono de una sirena",
@@ -1183,7 +1240,30 @@
     "hint": "El rayo atraviesa la película dos veces. ¿Qué diferencia de camino se necesita para la cancelación y cuántas veces menor debe ser el grosor?",
     "tolAbs": 30
    }
-  ]
+  ],
+  "math": {
+   "title": "Matemáticas que aquí se necesitaron",
+   "lead": "Se necesitarán la suma de cosenos, el promedio del cuadrado y la lectura de una notación compacta con doble signo.",
+   "items": [
+    {
+     "what": "Suma de cosenos y el dos de más en los batidos",
+     "why": "El quinto paso de la deducción suma dos oscilaciones de frecuencias cercanas y obtiene un producto: un coseno rápido a la frecuencia media multiplicado por uno lento. Al factor lento $\\cos\\frac{\\omega_1-\\omega_2}{2}t$ se le llama envolvente; por sí solo no se oye, controla la amplitud. Aquí es fácil equivocarse por un factor de dos. El oído reacciona al volumen, y el volumen está dado por la amplitud sin importar el signo, es decir, por el módulo de la envolvente. El módulo del coseno tiene un periodo la mitad de corto que el propio coseno: el máximo de volumen ocurre tanto en más uno como en menos uno. Por eso en la envolvente va la mitad de la diferencia de frecuencias, pero se oye la diferencia completa. El sexto paso trata precisamente de esto: $f_{\\text{bat}} = |f_1 - f_2|$, no la mitad.",
+     "latex": "\\cos\\omega_1 t + \\cos\\omega_2 t = 2\\underbrace{\\cos\\frac{\\omega_1-\\omega_2}{2}t}_{\\text{envolvente}}\\cos\\frac{\\omega_1+\\omega_2}{2}t"
+    },
+    {
+     "what": "El promedio del cuadrado, no el cuadrado del promedio",
+     "why": "El cuarto paso de la deducción disipa la sospecha de violación de la conservación de la energía, y todo el argumento se sostiene en una distinción. La energía es proporcional al cuadrado de la amplitud, por lo que al promediar sobre la pantalla hay que promediar el cuadrado, no la amplitud misma. Si lo hacemos mal: la amplitud media sobre franjas alternas es $\\frac{1}{2}(2A_0 + 0) = A_0$, su cuadrado $A_0^2$ es exactamente la mitad de lo que aportan las dos fuentes. Si lo hacemos bien: promediamos los cuadrados, $\\frac{1}{2}\\left[(2A_0)^2 + 0\\right] = 2A_0^2$, y esto es exactamente $A_0^2 + A_0^2$. La energía cuadra. El cuadrado del promedio y el promedio del cuadrado coinciden solo cuando la magnitud no varía en absoluto; en todos los demás casos, el segundo es mayor. En esa misma distinción se basa el valor eficaz de la corriente alterna.",
+     "latex": "\\langle A^{2}\\rangle = \\tfrac{1}{2}\\left[(2A_0)^{2} + 0\\right] = 2A_0^{2} \\;>\\; \\langle A\\rangle^{2} = A_0^{2}",
+     "kit": "rms"
+    },
+    {
+     "what": "Doble signo y primera aproximación",
+     "why": "La expresión $f' = f_0\\,v/(v \\mp u)$ en el séptimo paso son dos fórmulas en una. El signo superior se toma al acercarse, el inferior al alejarse, pero es más fiable comprobar la elección no por la regla, sino por el sentido: al acercarse, el denominador debe disminuir, por lo que la frecuencia aumenta. En el ejemplo numérico así resultó: 744 Hz frente a 661 Hz. También es útil la aproximación para movimiento lento. Cuando $u \\ll v$, la fracción $1/(1 - u/v)$ es casi igual a $1 + u/v$ — es el primer término del desarrollo— y convierte la fórmula en una regla simple: el desplazamiento relativo de frecuencia es igual a la relación de velocidades. Para la sirena, $u/v = 20/340 \\approx 0{,}06$, lo que da unos 741 Hz en lugar de los 744 exactos. Con la misma aproximación se estima la velocidad de alejamiento de una galaxia a partir del pequeño corrimiento al rojo.",
+     "latex": "f' = f_0\\frac{v}{v \\mp u} \\approx f_0\\left(1 \\pm \\frac{u}{v}\\right), \\qquad \\frac{\\Delta f}{f_0} \\approx \\pm\\frac{u}{v}",
+     "kit": "taylor"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "التداخل ودوبلر",
@@ -1196,31 +1276,68 @@
   "standNote": "بدّل المنصة إلى وضع الموجتين وقم بتغيير نسبة الترددات ببطء من الواحد لأعلى. عند التساوي التام، تسير الموجتان متوافقتين. افترقتا قليلًا — يظهر خفقان بطيء: المواضع التي تتراكم فيها الموجات تجري على طول المحور، ويتذبذب المدى الكلي صعودًا وهبوطًا حتى الصفر. لاحظ الرسم البياني في الأسفل: النقطة التجريبية الآن تتأرجح بشدة متغيرة. هذا بالضبط ما تسمعه الأذن كصوت \"واو-واو\" عند ضبط الجيتار.",
   "formula": {
    "name": "مبدأ التراكب وشرط التداخل",
-   "latex": "\\Delta = m\\lambda \\;\\text{— تضخيم}, \\qquad \\Delta = \\left(m + \\tfrac{1}{2}\\right)\\lambda \\;\\text{— إخماد}",
-   "alsoKnown": "تراكب الموجات · شرط القيم العظمى والصغرى",
+   "latex": "\\Delta = m\\lambda \\;\\text{— تقوية}, \\qquad \\Delta = \\left(m + \\tfrac{1}{2}\\right)\\lambda \\;\\text{— إخماد}",
+   "alsoKnown": "تراكب الموجات · شرط العظمى والصغرى",
    "authors": [
     {
      "who": "كريستيان هويجنز",
      "year": "1678",
-     "what": "أعلن أن الضوء موجة، وبنى عليها نظرية الانعكاس والانكسار. خسر الجدال أمام نيوتن في حياته — سلطة مؤلف «المبادئ» رجحت كفة الحجج"
+     "what": "أعلن أن الضوء موجة، وبنى على ذلك نظرية الانعكاس والانكسار. خسر الجدال أمام نيوتن في حياته — فسلطة مؤلف «الأصول» رجحت كفته"
     },
     {
      "who": "توماس يونغ",
      "year": "1801",
-     "what": "أجرى تجربة الشقين المزدوج وحصل على أشرطة لا يمكن تفسيرها بالجسيمات. قوبل العمل بسخرية في الصحافة البريطانية؛ وجاء الاعتراف بعد عشرين عامًا، بعد أعمال فريسنل"
+     "what": "أجرى تجربة الشقين المزدوجين وحصل على أهداب لا يمكن تفسيرها بالجسيمات. قوبل عمله بالسخرية في الصحافة البريطانية؛ وجاء الاعتراف بعد عشرين عامًا، بعد أعمال فرينل"
     },
     {
-     "who": "أوغستان فريسنل",
+     "who": "أوغستان فرينل",
      "year": "1818",
-     "what": "قدم لنظرية الحيود الموجية في مسابقة الأكاديمية. استنتج بواسون، المؤيد للجسيمات، منها نتيجة سخيفة في رأيه: يجب أن تكون بقعة مضيئة في وسط ظل قرص دائري. أجرى أراجو التجربة — وُجدت البقعة"
+     "what": "قدم إلى مسابقة الأكاديمية نظرية موجية للحيود. استنتج بواسون، المؤيد لنظرية الجسيمات، منها نتيجة سخيفة كما بدا له: في مركز ظل قرص دائري يجب أن تكون بقعة مضيئة. أجرى أراغو التجربة — فكانت البقعة هناك"
     },
     {
      "who": "كريستيان دوبلر",
      "year": "1842",
-     "what": "تنبأ بتغير التردد عند حركة المصدر، أثناء تحليله لألوان النجوم المزدوجة. أخطأ في النجوم، لكن التأثير كان صحيحًا وثبت سمعيًا بعد ثلاث سنوات — مع عازفي بوق في عربة مفتوحة"
+     "what": "تنبأ بتغير التردد عند حركة المصدر، أثناء دراسته لون النجوم المزدوجة. أخطأ في النجوم، لكن التأثير كان صحيحًا وتم تأكيده سمعيًا بعد ثلاث سنوات — مع عازفي بوق في عربة مكشوفة"
     }
    ],
-   "story": "أجمل قصة هنا هي قصة بقعة بواسون. في عام 1818، قدم فريسنل للأكاديمية الفرنسية نظرية الضوء الموجية. سيميون بواسون، المعارض المقتنع، أخذ ليبين سخافتها: إذا اتبعنا نظرية فريسنل، استنتج، فلا بد أن يكون خلف قرص معتم دائري، تمامًا في منتصف الظل، بقعة مضيئة — لأن الموجات التي دارت حول الحافة ستصل إلى المركز بنفس التأخير وتتراكم. بدت الحجة قاتلة: من رأى ضوءًا في وسط الظل؟ رئيس اللجنة أراجو ذهب بصمت إلى المختبر وأجرى التجربة. البقعة كانت موجودة. الاعتراض الذي صُمم كحكم أصبح تأكيدًا حاسمًا، ولا يزال في الفيزياء يُسمى بقعة بواسون — باسم الشخص الذي لم يصدق."
+   "story": "أجمل قصة هنا هي قصة بقعة بواسون. في عام 1818، قدم فرينل إلى أكاديمية العلوم نظريته الموجية للضوء. سيميون بواسون، المعارض المقتنع، عزم على إظهار سخافتها: إذا اتبعنا نظرية فرينل، كما استنتج، فإنه خلف قرص معتم دائري، في منتصف الظل تمامًا، يجب أن تكون بقعة مضيئة — لأن الموجات التي تلتف حول الحافة تصل إلى المركز بنفس التأخير وتتراكب. بدت الحجة قاتلة: من رأى ضوءًا في منتصف الظل؟ رئيس اللجنة أراغو ذهب بصمت إلى المختبر وأجرى التجربة. كانت البقعة موجودة. الاعتراض الذي صُمم ليكون حكمًا بالإعدام أصبح تأكيدًا حاسمًا، وما زال الفيزيائيون يسمونه بقعة بواسون — باسم الرجل الذي لم يؤمن.",
+   "symbols": [
+    {
+     "sym": "Delta",
+     "latex": "\\Delta",
+     "what": "فرق المسار",
+     "unit": "m",
+     "note": "كم يزيد مسار عن الآخر؛ هو الذي يحدد ما إذا كان هناك تقوية أم إخماد"
+    },
+    {
+     "sym": "m",
+     "latex": "m",
+     "what": "رتبة العظمى",
+     "unit": "—",
+     "note": "عدد صحيح: كم عدد الأطوال الموجية التي تتناسب مع فرق المسار"
+    },
+    {
+     "sym": "fbeat",
+     "latex": "f_{\\text{khafq}}",
+     "what": "تردد الخفقان",
+     "unit": "Hz",
+     "note": "يساوي فرق الترددين: وتران يختلفان بمقدار 2 هرتز يعطيان خفقتين في الثانية"
+    },
+    {
+     "sym": "u",
+     "latex": "u",
+     "what": "سرعة المصدر أو الراصد",
+     "unit": "m/s",
+     "note": "في تأثير دوبلر، المهم من يتحرك بالضبط — فالصيغ تختلف بين الحالتين"
+    },
+    {
+     "sym": "f0",
+     "latex": "f_0",
+     "what": "التردد الذاتي للمصدر",
+     "unit": "Hz",
+     "note": "ما يُشع؛ التردد المستقبَل يختلف عنه عند الحركة"
+    }
+   ]
   },
   "symbols": [
    {
@@ -1308,15 +1425,6 @@
    ],
    "plate": "تتجمع الموجات بالإزاحات. فرق المسار بعدد صحيح من أطوال الموجات يعطي تعزيزًا، وبعدد صحيح ونصف يعطي إلغاءً؛ الترددات المتقاربة تعطي خفقانًا بتردد يساوي فرقها؛ حركة المصدر تُزاح التردد.",
    "note": "حدود قابلية التطبيق. يتم الحصول على نمط مستقر من الأهداب فقط مع الموجات المترابطة — بفارق طور ثابت. مصباحان عاديان لن يعطيا أهدابًا: أطوار إشعاعهما تتغير بشكل عشوائي مليارات المرات في الثانية، ويتم مسح النمط إلى ضوء منتظم. لهذا السبب، مرر يونغ الضوء من مصدر واحد عبر شقين، بدلاً من استخدام شمعتين. علاوة على ذلك، فإن صيغة دوبلر المذكورة صحيحة للصوت، حيث يوجد وسط؛ أما بالنسبة للضوء فهي مختلفة — فلا يوجد وسط مميز، ويختفي الفرق بين حركة المصدر والمراقب، وهذا كان أحد التلميحات الأولى لنظرية النسبية."
-  },
-  "math": {
-   "title": "الرياضيات التي استُخدمت هنا",
-   "text": [
-    "ما هو فرق المسار؟ الأمر بسيط جدًا. تخيل اثنين من السعاة يخرجان في نفس الوقت من نفس النقطة إلى باب منزلك عبر شوارع مختلفة. إذا كان أحد المسارات أطول بعدد صحيح من المربعات السكنية، فإن السعاة سيصلون متزامنين — خطوة بخطوة. إذا كان أطول بمقدار مربع ونصف، فسيطأ أحدهما باليمنى بينما الآخر باليسرى. الموجات هي نفسها: المهم ليس المسافة المطلقة، بل مقدار طول أحد المسارين عن الآخر، مقاسًا بأطوال الموجات. عدد صحيح — متطابقان، عدد صحيح ونصف — طور معاكس وإلغاء متبادل.",
-    "لماذا ينتج عن جمع ترددات متقاربة نبض؟ تخيل عازفي طبول يضربان بإيقاع متقارب: واحد يضرب مئة مرة في الدقيقة، والآخر مئة واثنتين. في البداية يضربان معًا، الصوت عالٍ. تدريجيًا، يتقدم الثاني، وعندما يتقدم بنصف ضربة، تقع الضربات في الفواصل الزمنية — ينتشر الصوت. قليلًا بعد ذلك، يتقدم بضربة كاملة: يعودان معًا. خلال دقيقة، يحدث هذا التزامن مرتين بالضبط — الفرق في الإيقاع. هذا هو تردد الخفقان، ولا يتطلب أي صيغ، فقط العد.",
-    "كيف تفهم تأثير دوبلر بدون صيغة. تخيل أنك تقف في الماء، وبطة تسبح نحوك وتصدر صوتًا مرة كل ثانية. كل صوت ينتقل في الهواء بسرعته، لكن البطة تنجز الاقتراب خلال ثانية — ويبدأ الصوت التالي من مسافة أقرب. لذا، الفترات الزمنية بين الأصوات القادمة إليك تكون أقصر من ثانية. تسمعها بتردد أعلى مما تصدره البطة. عندما تسبح البطة بجانبك وتبتعد، يحدث العكس. لا شيء هنا سوى جمع المسافات.",
-    "لماذا لا تختفي الطاقة في التداخل؟ هذا هو المكان الذي يظهر فيه الشك غالبًا في انتهاك الحفظ. الحل في التربيع. بجمع موجتين في الطور، نحصل على سعة مضاعفة — ولكن طاقة أكبر بأربع مرات، وليس ضعفين. في الطور المعاكس، نحصل على صفر. بأخذ المتوسط عبر الشاشة، نحصل بالضبط على مجموع الطاقات الأصلية: نصف المواقع حصلت على أربعة أضعاف، والنصف الآخر على لا شيء، والمتوسط أصبح ضعفين. الطاقة لا تُخلق ولا تُفنى، بل تُعاد توزيعها في الفضاء."
-   ]
   },
   "example": {
    "title": "مثال بأرقام: كم عدد النبضات التي يعطيها وتر غير مضبوط وكم يتغير نغمة صفارة الإنذار",
@@ -1561,6 +1669,29 @@
     "hint": "يمر الشعاع عبر الفيلم مرتين. ما فرق المسار المطلوب للإلغاء، وبكم مرة يجب أن يكون السمك أصغر؟",
     "tolAbs": 30
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات التي سنحتاجها هنا",
+   "lead": "سنحتاج إلى مجموع جيب التمام، ومتوسط المربع، وقراءة التدوين المختصر بالإشارة المزدوجة.",
+   "items": [
+    {
+     "what": "مجموع جيب التمام والاثنين الزائد في النبضات",
+     "why": "الخطوة الخامسة من الاشتقاق تجمع تذبذبين متقاربين في التردد وتحصل على حاصل ضرب: جيب تمام سريع عند التردد المتوسط مضروبًا في جيب تمام بطيء. العامل البطيء $\\cos\\frac{\\omega_1-\\omega_2}{2}t$ يسمى الغلاف - وهو في حد ذاته غير مسموع، ولكنه يتحكم في السعة. هنا مكان يسهل فيه الخطأ بمقدار الضعف. تستجيب الأذن لشدة الصوت، وتُحدد الشدة بالسعة بغض النظر عن الإشارة، أي بقيمة الغلاف المطلقة. دورة جيب التمام للقيمة المطلقة هي نصف دورة جيب التمام نفسه: تحدث أقصى شدة عند زائد واحد وسالب واحد على حد سواء. لذلك، في الغلاف نجد نصف فرق الترددات، ولكن يُسمع الفرق الكامل. الخطوة السادسة تدور حول هذا بالضبط: $f_{\\text{ب}} = |f_1 - f_2|$، وليس النصف.",
+     "latex": "\\cos\\omega_1 t + \\cos\\omega_2 t = 2\\underbrace{\\cos\\frac{\\omega_1-\\omega_2}{2}t}_{\\text{الغلاف}}\\cos\\frac{\\omega_1+\\omega_2}{2}t"
+    },
+    {
+     "what": "متوسط المربع، وليس مربع المتوسط",
+     "why": "الخطوة الرابعة من الاشتقاق تزيل الشك حول انتهاك حفظ الطاقة، وتعتمد الحجة بأكملها على فرق واحد. تتناسب الطاقة مع مربع السعة، لذلك يجب أن نحسب متوسط المربع على الشاشة، وليس السعة نفسها. إذا فعلنا ذلك بشكل خاطئ: متوسط السعة عبر الأشرطة المتناوبة يساوي $\\frac{1}{2}(2A_0 + 0) = A_0$، ومربعه $A_0^2$ - وهو بالضبط نصف ما يقدمه المصدران. إذا فعلنا ذلك بشكل صحيح: نحسب متوسط المربعات، $\\frac{1}{2}\\left[(2A_0)^2 + 0\\right] = 2A_0^2$، وهذا يساوي بالضبط $A_0^2 + A_0^2$. الطاقة متسقة. يتطابق مربع المتوسط ومتوسط المربع فقط عندما لا تتغير الكمية إطلاقًا؛ وفي جميع الحالات الأخرى، يكون الثاني أكبر. على نفس الفرق يعتمد مفهوم القيمة الفعالة للتيار المتردد.",
+     "latex": "\\langle A^{2}\\rangle = \\tfrac{1}{2}\\left[(2A_0)^{2} + 0\\right] = 2A_0^{2} \\;>\\; \\langle A\\rangle^{2} = A_0^{2}",
+     "kit": "rms"
+    },
+    {
+     "what": "الإشارة المزدوجة والتقريب الأول",
+     "why": "الصيغة $f' = f_0\\,v/(v \\mp u)$ في الخطوة السابعة هي صيغتان مدمجتان في واحدة. تؤخذ الإشارة العلوية عند الاقتراب، والسفلية عند الابتعاد، ولكن من الأفضل التحقق من الاختيار ليس من القاعدة، بل من المعنى: عند الاقتراب، يجب أن ينخفض المقام، وبالتالي يزداد التردد. في المثال العددي، كان الأمر كذلك، 744 هرتز مقابل 661 هرتز. من المفيد أيضًا التقريب للحركة البطيئة. عندما $u \\ll v$، فإن الكسر $1/(1 - u/v)$ يساوي تقريبًا $1 + u/v$ - وهذا هو الحد الأول من المفكوك، وهو يحول الصيغة إلى قاعدة بسيطة: الإزاحة النسبية للتردد تساوي نسبة السرعات. بالنسبة لصفارة الإنذار، $u/v = 20/340 \\approx 0{,}06$، مما يعطي حوالي 741 هرتز بدلاً من 744 الدقيقة. وبنفس التقريب تُقدَّر سرعة ابتعاد المجرة من الانزياح الأحمر الصغير.",
+     "latex": "f' = f_0\\frac{v}{v \\mp u} \\approx f_0\\left(1 \\pm \\frac{u}{v}\\right), \\qquad \\frac{\\Delta f}{f_0} \\approx \\pm\\frac{u}{v}",
+     "kit": "taylor"
+    }
+   ]
+  }
  }
 }

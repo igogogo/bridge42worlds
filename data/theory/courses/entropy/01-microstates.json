@@ -16,37 +16,37 @@
   ],
   "examples_from_articles": [
    {
-    "id": "2607.14868",
-    "date": "2026-07-16",
+    "id": "2605.17196",
+    "date": "2026-05-16",
     "title": {
-     "ru": "Спин из изгиба: как кривизна закручивает звук",
-     "en": "Spin from Bend: How Curvature Twists Sound",
-     "es": "El giro de la flexión: cómo la curvatura retuerce el sonido",
-     "ar": "الغزل من التقوس: كيف يمنح الانحناء الصوت زخمًا زاويًا"
+     "ru": "Демон Максвелла и квантовый страж тепла",
+     "en": "Maxwell's Demon and the Quantum Guardian of Heat",
+     "es": "El demonio de Maxwell y el guardián cuántico del calor",
+     "ar": "شيطان ماكسويل وحارس الحرارة الكمومي"
     },
-    "why": "entropy, quantum_thermodynamics"
+    "why": "maxwells_demon, entropy"
    },
    {
-    "id": "2607.14764",
+    "id": "2607.14738",
     "date": "2026-07-16",
     "title": {
-     "ru": "Бозонный гул цемента: терагерцы слушают нано-неоднородности",
-     "en": "Cement's Boson Hum: Terahertz Waves Eavesdrop on Nano-Inhomogeneities",
-     "es": "El zumbido bosónico del cemento: los terahercios escuchan las nano-heterogeneidades",
-     "ar": "همهمة البوزون في الإسمنت: تيراهرتز تستمع إلى اللاتجانسات النانوية"
+     "ru": "Сложность толпы: почему усреднённая энтропия не работает",
+     "en": "The Complexity of Crowds: Why Averages Fail",
+     "es": "La complejidad de la multitud: por qué el promedio no funciona",
+     "ar": "تعقيد الجموع: لماذا لا يكفي المتوسط"
     },
-    "why": "entropy, quantum_thermodynamics"
+    "why": "entropy, microstates"
    },
    {
-    "id": "2607.10561",
-    "date": "2026-07-12",
+    "id": "2607.12766",
+    "date": "2026-07-14",
     "title": {
-     "ru": "Жидкое зеркало горизонта: как партонный океан дарует чёрным дырам электрическую душу",
-     "en": "The Liquid Mirror of the Horizon: How a Partonic Ocean Gives Black Holes an Electric Soul",
-     "es": "El espejo líquido del horizonte: cómo el océano de partones otorga un alma eléctrica a los agujeros negros",
-     "ar": "المرآة السائلة للأفق: كيف يمنح محيط البارتونات الثقوبَ السوداء جوهرًا كهربائيًا"
+     "ru": "Эндоцитоз как молекулярная толкотня: как энтропия помогает клетке глотать частицы",
+     "en": "How Cells Swallow Particles: The Power of Molecular Jostling",
+     "es": "Cómo las células engullen partículas: el poder del bullicio molecular",
+     "ar": "كيف تبتلع الخلية الجسيمات: قوة التدافع الجزيئي"
     },
-    "why": "entropy, quantum_thermodynamics"
+    "why": "entropy, statistical_force"
    }
   ]
  },
@@ -169,11 +169,25 @@
   },
   "math": {
    "title": "Математика, которая здесь понадобилась",
-   "text": [
-    "Первое — факториал и биномиальный коэффициент. $N!$ есть число способов расставить $N$ различимых предметов по порядку, а $\\binom{N}{n}$ — число способов выбрать из них $n$ штук, не различая порядок внутри выбора. Именно последнее нам и нужно: какие частицы слева, а не в каком порядке они там оказались.",
-    "Второе — формула Стирлинга. Факториалы огромны, но их логарифмы считаются просто: $\\ln N! \\approx N\\ln N - N$. Для $N = 100$ это даёт 360,5 против точных 363,7 — ошибка меньше процента, а для физических $N$ порядка $10^{23}$ она исчезает вовсе. Прекрасный пример осознанного пренебрежения из первой темы.",
-    "Третье — почему колокол сужается. Логарифм биномиального коэффициента вблизи максимума ведёт себя как парабола, а экспонента от параболы есть гауссова кривая с шириной порядка корня из $N$. Отсюда и знаменитый закон корня, встречающийся всюду от опросов общественного мнения до дробового шума в электронике.",
-    "Четвёртое — логарифм как мера. Логарифм превращает умножение в сложение, и это единственная функция, которая так умеет. Поэтому всякий раз, когда нужна величина, складывающаяся при объединении независимых систем, из чего-то перемножающегося, — появляется логарифм. Так энтропия, информация и звуковой децибел оказались устроены одинаково."
+   "lead": "Всё держится на умении сосчитать раскладки, на одном свойстве логарифма и на том, как ведёт себя случайный разброс.",
+   "items": [
+    {
+     "what": "Факториал считает порядок, сочетание — состав",
+     "why": "$N!$ — число способов выстроить $N$ различимых предметов в очередь: на первое место $N$ кандидатов, на второе $N-1$, и так далее. В третьем шаге вывода нужно не это. Вопрос там стоит иначе: какие именно частицы оказались слева, а в каком порядке они там расположились — безразлично. Значит, лишние перестановки надо поделить: $n!$ внутри левой половины и $(N-n)!$ внутри правой. Так и получается биномиальный коэффициент. Смысл его проверяется на краях: при $n = N$ остаётся ровно одна раскладка, потому что $0! = 1$. Считать такие факториалы целиком неудобно уже при $N = 100$: в $100!$ сто пятьдесят восемь цифр, хотя сам ответ четвёртого шага, $\\binom{100}{50} \\approx 1{,}0\\cdot 10^{29}$, получается без труда. А при $N \\sim 10^{23}$ прямой счёт невозможен — и не нужен: нужен не сам факториал, а его логарифм, и его даёт формула Стирлинга $\\ln N! \\approx N\\ln N - N$ с ошибкой меньше процента.",
+     "latex": "\\binom{N}{n} = \\frac{N!}{n!\\,(N-n)!}, \\qquad \\ln N! \\approx N\\ln N - N",
+     "kit": "combinatorics"
+    },
+    {
+     "what": "Зачем в определении энтропии логарифм",
+     "why": "Логарифм — единственная функция, превращающая произведение в сумму. В пятом шаге вывода это решает всё. Поставьте рядом две независимые системы: их микросостояния сочетаются каждое с каждым, поэтому числа перемножаются, $W_{1+2} = W_1 W_2$. А энтропия обязана вести себя как энергия или объём: два одинаковых сосуда дают удвоенную величину, а не возведённую в квадрат. Логарифм и есть переходник между этими двумя требованиями. Отсюда видно и то, почему основание логарифма не принципиально: смена основания меняет только постоянный множитель, а его всегда можно спрятать в $k_B$. Это пригодится в третьем параграфе, где то же самое число состояний считают в битах.",
+     "latex": "S_{1+2} = k_B\\ln(W_1 W_2) = k_B\\ln W_1 + k_B\\ln W_2"
+    },
+    {
+     "what": "Почему разброс растёт как корень",
+     "why": "В шестом шаге вывода появляется $\\sigma \\approx \\sqrt{N}/2$ — типичное отклонение числа частиц слева от половины. Корень взят не наугад. Каждая частица даёт свой независимый вклад в отклонение, вклады случайны по знаку и потому частично гасят друг друга: складываются не сами отклонения, а их квадраты. Сумма $N$ квадратов даёт $N$, а разброс — корень из него. Дальше важно одно сравнение: система растёт как $N$, а её дрожание как $\\sqrt{N}$, значит относительное дрожание падает как $1/\\sqrt{N}$. Именно поэтому на стенде десять частиц пляшут как попало, а четыреста держатся в узком коридоре — и поэтому при $N \\sim 10^{24}$ второе начало становится неотличимым от точного закона.",
+     "latex": "\\sigma \\approx \\frac{\\sqrt{N}}{2}, \\qquad \\frac{\\sigma}{N} \\approx \\frac{1}{2\\sqrt{N}}",
+     "kit": "probability"
+    }
    ]
   },
   "example": {
@@ -540,15 +554,6 @@
    "plate": "Entropy is the logarithm of the number of ways to arrange the system internally while its external appearance remains unchanged. The second law is not a prohibition but an overwhelming numerical superiority of some states over others.",
    "note": "Hence an important clarification regarding the word 'disorder'. Entropy is not about aesthetics: books arranged alphabetically and books in a heap differ not in beauty but in the number of arrangements we agree to consider identical. Entropy depends on what exactly we consider indistinguishable — and this is not a flaw of the definition but its content. A demon that distinguishes individual molecules would see a different entropy; we will return to this in the third section."
   },
-  "math": {
-   "title": "The mathematics needed here",
-   "text": [
-    "First — factorial and binomial coefficient. $N!$ is the number of ways to arrange $N$ distinguishable objects in order, and $\\binom{N}{n}$ is the number of ways to choose $n$ of them without distinguishing the order within the choice. The latter is exactly what we need: which particles are on the left, not the order in which they ended up there.",
-    "Second — Stirling's formula. Factorials are enormous, but their logarithms are easy to compute: $\\ln N! \\approx N\\ln N - N$. For $N = 100$ this gives 360.5 against the exact 363.7 — an error of less than one percent, and for physical $N$ on the order of $10^{23}$ it vanishes entirely. A perfect example of deliberate neglect from the first topic.",
-    "Third — why the bell curve narrows. The logarithm of the binomial coefficient near its maximum behaves like a parabola, and the exponential of a parabola is a Gaussian curve with a width on the order of the square root of $N$. Hence the famous square-root law, encountered everywhere from opinion polls to shot noise in electronics.",
-    "Fourth — logarithm as a measure. The logarithm turns multiplication into addition, and it is the only function that does so. Therefore, whenever we need a quantity that adds when independent systems are combined, starting from something that multiplies, the logarithm appears. Thus entropy, information, and the acoustic decibel turn out to be structured the same way."
-   ]
-  },
   "example": {
    "title": "Numerical Example: Will All Air Gather in One Corner of the Room?",
    "lead": "We calculate what is usually presented as impossible and verify that it's not a matter of impossibility.",
@@ -797,7 +802,30 @@
     "hint": "Total microstates 2¹⁰⁰ ≈ 10³⁰, and almost all are concentrated near equal division. How many arrangements correspond to 'all left'?",
     "tolAbs": 2
    }
-  ]
+  ],
+  "math": {
+   "title": "The math you'll need here",
+   "lead": "Everything rests on counting combinations, one property of logarithms, and how random scatter behaves.",
+   "items": [
+    {
+     "what": "Factorial counts order, combination counts composition",
+     "why": "$N!$ is the number of ways to arrange $N$ distinct objects in a line: there are $N$ candidates for the first position, $N-1$ for the second, and so on. In the third step of the derivation, we don't need that. The question there is different: which particles ended up on the left, but the order in which they are arranged is irrelevant. So we must divide out the extra permutations: $n!$ within the left half and $(N-n)!$ within the right half. That gives the binomial coefficient. Its meaning is checked at the edges: when $n = N$, there is exactly one arrangement, because $0! = 1$. Computing such factorials in full becomes unwieldy already at $N = 100$: $100!$ has one hundred fifty-eight digits, though the answer to the fourth step, $\\binom{100}{50} \\approx 1{,}0\\cdot 10^{29}$, is obtained without difficulty. And for $N \\sim 10^{23}$, direct computation is impossible—and unnecessary: we need not the factorial itself but its logarithm, which is given by Stirling's formula $\\ln N! \\approx N\\ln N - N$ with an error of less than a percent.",
+     "latex": "\\binom{N}{n} = \\frac{N!}{n!\\,(N-n)!}, \\qquad \\ln N! \\approx N\\ln N - N",
+     "kit": "combinatorics"
+    },
+    {
+     "what": "Why the logarithm in the definition of entropy",
+     "why": "The logarithm is the only function that turns a product into a sum. In the fifth step of the derivation, this solves everything. Put two independent systems side by side: their microstates combine with each other, so the numbers multiply, $W_{1+2} = W_1 W_2$. But entropy must behave like energy or volume: two identical vessels give a doubled quantity, not a squared one. The logarithm is the adapter between these two requirements. This also shows why the base of the logarithm is not crucial: changing the base only changes a constant factor, which can always be absorbed into $k_B$. This will be useful in the third section, where the same number of states is counted in bits.",
+     "latex": "S_{1+2} = k_B\\ln(W_1 W_2) = k_B\\ln W_1 + k_B\\ln W_2"
+    },
+    {
+     "what": "Why the scatter grows as a square root",
+     "why": "In the sixth step of the derivation, $\\sigma \\approx \\sqrt{N}/2$ appears—the typical deviation of the number of particles on the left from half. The root is not taken at random. Each particle contributes its own independent contribution to the deviation; the contributions are random in sign and thus partially cancel each other: it is not the deviations that add, but their squares. The sum of $N$ squares gives $N$, and the scatter is the square root of that. Then one comparison matters: the system grows as $N$, while its jitter grows as $\\sqrt{N}$, so the relative jitter falls as $1/\\sqrt{N}$. That is why on a stand ten particles dance randomly, while four hundred stay within a narrow corridor—and why for $N \\sim 10^{24}$ the second law becomes indistinguishable from an exact law.",
+     "latex": "\\sigma \\approx \\frac{\\sqrt{N}}{2}, \\qquad \\frac{\\sigma}{N} \\approx \\frac{1}{2\\sqrt{N}}",
+     "kit": "probability"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Entropía según Boltzmann",
@@ -915,15 +943,6 @@
    ],
    "plate": "La entropía es el logaritmo del número de formas de organizar el sistema internamente con una apariencia externa fija. El segundo principio no es una prohibición, sino una abrumadora superioridad de unos estados sobre otros en cantidad.",
    "note": "De aquí una aclaración importante sobre la palabra «desorden». La entropía no trata de estética: los libros ordenados alfabéticamente y los amontonados no se diferencian por la belleza, sino por el número de disposiciones que aceptamos como iguales. La entropía depende de qué consideramos indistinguible — y esto no es un defecto de la definición, sino su contenido. Un demonio que distinguiera moléculas individuales vería una entropía diferente; volveremos a esto en el tercer parágrafo."
-  },
-  "math": {
-   "title": "Las matemáticas que se necesitaron aquí",
-   "text": [
-    "Primero — el factorial y el coeficiente binomial. $N!$ es el número de formas de ordenar $N$ objetos distinguibles, y $\\binom{N}{n}$ es el número de formas de elegir $n$ de ellos sin distinguir el orden dentro de la elección. Precisamente esto último es lo que necesitamos: qué partículas están a la izquierda, no en qué orden están allí.",
-    "Segundo — la fórmula de Stirling. Los factoriales son enormes, pero sus logaritmos se calculan fácilmente: $\\ln N! \\approx N\\ln N - N$. Para $N = 100$ da 360,5 frente al exacto 363,7 — un error menor del uno por ciento, y para $N$ físicos del orden de $10^{23}$ desaparece por completo. Un excelente ejemplo de desprecio consciente del primer tema.",
-    "Tercero — por qué la campana se estrecha. El logaritmo del coeficiente binomial cerca del máximo se comporta como una parábola, y la exponencial de una parábola es una curva gaussiana con anchura del orden de la raíz de $N$. De ahí la famosa ley de la raíz, que aparece en todas partes, desde encuestas de opinión pública hasta el ruido de disparo en electrónica.",
-    "Cuarto — el logaritmo como medida. El logaritmo convierte la multiplicación en suma, y es la única función que lo hace. Por lo tanto, cada vez que se necesita una magnitud que se sume al combinar sistemas independientes, a partir de algo que se multiplica, aparece el logaritmo. Así, la entropía, la información y el decibelio sonoro resultaron estar construidos de la misma manera."
-   ]
   },
   "example": {
    "title": "Ejemplo con números: ¿se juntará el aire en una esquina de la habitación?",
@@ -1170,7 +1189,30 @@
     "hint": "Total de microestados: 2¹⁰⁰ ≈ 10³⁰, y casi todos se concentran cerca de la división igual. ¿Cuántas configuraciones corresponden a «todas a la izquierda»?",
     "tolAbs": 2
    }
-  ]
+  ],
+  "math": {
+   "title": "Matemáticas que aquí se necesitaron",
+   "lead": "Todo se sostiene en saber contar las distribuciones, en una propiedad del logaritmo y en cómo se comporta la dispersión aleatoria.",
+   "items": [
+    {
+     "what": "El factorial cuenta el orden, la combinación cuenta la composición",
+     "why": "$N!$ es el número de formas de ordenar $N$ objetos distinguibles en una fila: para el primer lugar hay $N$ candidatos, para el segundo $N-1$, y así sucesivamente. En el tercer paso de la derivación no se necesita esto. Allí la pregunta es diferente: qué partículas quedaron a la izquierda, y en qué orden están dispuestas es irrelevante. Por lo tanto, hay que dividir las permutaciones extra: $n!$ dentro de la mitad izquierda y $(N-n)!$ dentro de la derecha. Así se obtiene el coeficiente binomial. Su significado se comprueba en los extremos: cuando $n = N$ queda exactamente una distribución, porque $0! = 1$. Calcular factoriales completos es incómodo ya para $N = 100$: en $100!$ hay ciento cincuenta y ocho dígitos, aunque la respuesta del cuarto paso, $\\binom{100}{50} \\approx 1{,}0\\cdot 10^{29}$, se obtiene sin dificultad. Y para $N \\sim 10^{23}$ el cálculo directo es imposible, y no es necesario: no se necesita el factorial en sí, sino su logaritmo, y lo da la fórmula de Stirling $\\ln N! \\approx N\\ln N - N$ con un error menor del uno por ciento.",
+     "latex": "\\binom{N}{n} = \\frac{N!}{n!\\,(N-n)!}, \\qquad \\ln N! \\approx N\\ln N - N",
+     "kit": "combinatorics"
+    },
+    {
+     "what": "Por qué el logaritmo en la definición de entropía",
+     "why": "El logaritmo es la única función que convierte un producto en una suma. En el quinto paso de la derivación esto lo resuelve todo. Coloque dos sistemas independientes uno junto al otro: sus microestados se combinan cada uno con cada uno, por lo que los números se multiplican, $W_{1+2} = W_1 W_2$. Pero la entropía debe comportarse como la energía o el volumen: dos recipientes iguales dan una magnitud doble, no elevada al cuadrado. El logaritmo es el adaptador entre estos dos requisitos. De aquí también se ve por qué la base del logaritmo no es importante: cambiar la base solo cambia un factor constante, y siempre se puede ocultar en $k_B$. Esto será útil en el tercer párrafo, donde el mismo número de estados se cuenta en bits.",
+     "latex": "S_{1+2} = k_B\\ln(W_1 W_2) = k_B\\ln W_1 + k_B\\ln W_2"
+    },
+    {
+     "what": "Por qué la dispersión crece como la raíz",
+     "why": "En el sexto paso de la derivación aparece $\\sigma \\approx \\sqrt{N}/2$: la desviación típica del número de partículas a la izquierda respecto a la mitad. La raíz no está tomada al azar. Cada partícula contribuye de manera independiente a la desviación; las contribuciones son aleatorias en signo y por eso se cancelan parcialmente: no se suman las desviaciones en sí, sino sus cuadrados. La suma de $N$ cuadrados da $N$, y la dispersión es la raíz de eso. Luego es importante una comparación: el sistema crece como $N$, y su fluctuación como $\\sqrt{N}$, por lo tanto la fluctuación relativa cae como $1/\\sqrt{N}$. Es por eso que en el soporte diez partículas bailan de cualquier manera, pero cuatrocientas se mantienen en un corredor estrecho, y por eso cuando $N \\sim 10^{24}$ la segunda ley se vuelve indistinguible de una ley exacta.",
+     "latex": "\\sigma \\approx \\frac{\\sqrt{N}}{2}, \\qquad \\frac{\\sigma}{N} \\approx \\frac{1}{2\\sqrt{N}}",
+     "kit": "probability"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "إنتروبيا بولتزمان",
@@ -1288,15 +1330,6 @@
    ],
    "plate": "الإنتروبيا هي لوغاريتم عدد الطرق لترتيب النظام من الداخل مع بقاء الشكل الخارجي ثابتاً. القانون الثاني ليس منعاً، بل تفوق ساحق لحالات على أخرى من حيث العدد.",
    "note": "من هنا توضيح مهم لكلمة 'فوضى'. الإنتروبيا ليست عن الجماليات: الكتب المرتبة أبجدياً والمكدسة في كومة لا تختلف في الجمال، بل في عدد التوزيعات التي نتفق على اعتبارها متطابقة. الإنتروبيا تعتمد على ما نعتبره غير قابل للتمييز بالضبط — وهذا ليس عيباً في التعريف، بل مضمونه. شيطان يميز الجزيئات الفردية سيرى إنتروبيا مختلفة؛ سنعود إلى هذا في الفقرة الثالثة."
-  },
-  "math": {
-   "title": "الرياضيات التي كانت مطلوبة هنا",
-   "text": [
-    "أولاً — المضروب ومعامل ذي الحدين. $N!$ هو عدد طرق ترتيب $N$ عنصراً مميزاً بالترتيب، و $\\binom{N}{n}$ هو عدد طرق اختيار $n$ منها دون تمييز الترتيب داخل الاختيار. الأخير هو ما نحتاجه بالضبط: أي الجسيمات على اليسار، وليس بأي ترتيب هي هناك.",
-    "ثانياً — صيغة ستيرلينغ. المضروبات ضخمة، لكن لوغاريتماتها تُحسب ببساطة: $\\ln N! \\approx N\\ln N - N$. لـ $N = 100$ يعطي هذا 360,5 مقابل 363,7 بالضبط — خطأ أقل من واحد بالمائة، وبالنسبة لقيم $N$ الفيزيائية حوالي $10^{23}$ يختفي تماماً. مثال رائع على الإهمال المتعمد من الموضوع الأول.",
-    "ثالثاً — لماذا يضيق الجرس. لوغاريتم معامل ذي الحدين قرب القمة يتصرف مثل قطع مكافئ، والأسي من القطع المكافئ هو منحنى غاوسي بعرض في حدود جذر $N$. من هنا يأتي قانون الجذر الشهير، الذي يظهر في كل مكان من استطلاعات الرأي إلى ضوضاء الطلقات في الإلكترونيات.",
-    "رابعاً — اللوغاريتم كمقياس. اللوغاريتم يحول الضرب إلى جمع، وهذه هي الدالة الوحيدة التي تفعل ذلك. لذلك كلما دعت الحاجة إلى كمية تُجمع عند دمج أنظمة مستقلة، من شيء يُضرب — يظهر اللوغاريتم. هكذا تبين أن الإنتروبيا والمعلومات والديسيبل الصوتي لها نفس البنية."
-   ]
   },
   "example": {
    "title": "مثال عددي: هل سيجتمع الهواء في زاوية واحدة من الغرفة؟",
@@ -1546,7 +1579,30 @@
     "hint": "إجمالي الحالات الميكروية هو 2¹⁰⁰ ≈ 10³⁰، وجميعها تقريباً تتركز بالقرب من التقسيم المتساوي. كم ترتيباً يمثل «الكل على اليسار»؟",
     "tolAbs": 2
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "كل شيء يعتمد على القدرة على حساب التوزيعات، وعلى خاصية واحدة للوغاريتم، وعلى سلوك التشتت العشوائي.",
+   "items": [
+    {
+     "what": "المضروب يحسب الترتيب، والتوافيق تحسب التكوين",
+     "why": "$N!$ هو عدد طرق ترتيب $N$ عناصر مميزة في صف: للمكان الأول $N$ مرشحين، وللمكان الثاني $N-1$، وهكذا. في الخطوة الثالثة من الاشتقاق، لا نحتاج إلى هذا. السؤال هناك مختلف: أي الجسيمات بالضبط على اليسار، والترتيب الذي توجد به هناك غير مهم. لذلك، يجب قسمة التباديل الزائدة: $n!$ داخل النصف الأيسر و$(N-n)!$ داخل النصف الأيمن. هكذا نحصل على معامل ذي الحدين. يمكن التحقق من معناه عند الأطراف: عندما $n = N$، يبقى توزيع واحد فقط، لأن $0! = 1$. حساب هذه المضاريب كاملة غير مريح بالفعل عند $N = 100$: في $100!$ يوجد مئة وثمانية وخمسون رقمًا، على الرغم من أن إجابة الخطوة الرابعة نفسها، $\\binom{100}{50} \\approx 1{,}0\\cdot 10^{29}$، تُحصل عليها دون عناء. وعند $N \\sim 10^{23}$، الحساب المباشر مستحيل — وغير ضروري: المطلوب ليس المضروب نفسه، بل لوغاريتمه، وتعطيه صيغة ستيرلينغ $\\ln N! \\approx N\\ln N - N$ بخطأ أقل من واحد بالمائة.",
+     "latex": "\\binom{N}{n} = \\frac{N!}{n!\\,(N-n)!}, \\qquad \\ln N! \\approx N\\ln N - N",
+     "kit": "combinatorics"
+    },
+    {
+     "what": "لماذا اللوغاريتم في تعريف الإنتروبيا",
+     "why": "اللوغاريتم هو الدالة الوحيدة التي تحول الضرب إلى جمع. في الخطوة الخامسة من الاشتقاق، هذا يحسم كل شيء. ضع نظامين مستقلين جنبًا إلى جنب: حالاتهما الدقيقة تتحد كل منها مع كل الأخرى، لذلك تتضاعف الأعداد، $W_{1+2} = W_1 W_2$. بينما يجب أن تتصرف الإنتروبيا مثل الطاقة أو الحجم: وعاءان متماثلان يعطيان ضعف الكمية، وليس مربعها. اللوغاريتم هو الجسر بين هذين المطلبين. من هنا يتضح أيضًا لماذا أساس اللوغاريتم غير جوهري: تغيير الأساس يغير فقط عاملًا ثابتًا، ويمكن دائمًا إخفاؤه في $k_B$. سيكون هذا مفيدًا في الفقرة الثالثة، حيث يُحسب نفس عدد الحالات بالبت.",
+     "latex": "S_{1+2} = k_B\\ln(W_1 W_2) = k_B\\ln W_1 + k_B\\ln W_2"
+    },
+    {
+     "what": "لماذا ينمو التشتت كالجذر التربيعي",
+     "why": "في الخطوة السادسة من الاشتقاق يظهر $\\sigma \\approx \\sqrt{N}/2$ — الانحراف النموذجي لعدد الجسيمات على اليسار عن النصف. الجذر ليس عشوائيًا. كل جسيم يعطي مساهمة مستقلة في الانحراف، والمساهمات عشوائية في الإشارة وبالتالي تلغي بعضها البعض جزئيًا: لا تُجمع الانحرافات نفسها، بل مربعاتها. مجموع $N$ مربعًا يعطي $N$، والانحراف هو جذره التربيعي. بعد ذلك، هناك مقارنة واحدة مهمة: النظام ينمو مثل $N$، بينما ارتجافه مثل $\\sqrt{N}$، وبالتالي فإن الارتجاف النسبي ينخفض مثل $1/\\sqrt{N}$. لهذا السبب، على المنصة، عشرة جسيمات ترقص بشكل عشوائي، بينما أربعمائة تبقى في ممر ضيق — ولهذا، عند $N \\sim 10^{24}$، يصبح القانون الثاني لا يمكن تمييزه عن قانون دقيق.",
+     "latex": "\\sigma \\approx \\frac{\\sqrt{N}}{2}, \\qquad \\frac{\\sigma}{N} \\approx \\frac{1}{2\\sqrt{N}}",
+     "kit": "probability"
+    }
+   ]
+  }
  },
  "tags": [
   "entropy"

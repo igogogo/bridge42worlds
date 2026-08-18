@@ -24,6 +24,28 @@ CYR = re.compile(r"[А-Яа-яЁё]")
 ROOTS = [Path("data/theory/courses"), Path("data/theory/lectures"), Path("data/theory")]
 
 
+def shape_broken(ru, tr):
+    """Правда ли перевод потерял форму оригинала.
+
+    Третий вид пробела, который не ловили ни «нет ключа», ни «есть кириллица»: ключ на месте,
+    кириллицы нет, а внутри пусто или список короче русского. Так бывает после пересборки русской
+    ветки — в путеводитель добавили законы, в тему параграф, — и на английской странице темы
+    оставался один параграф из трёх при полностью зелёной проверке. Разбор и починка россыпью:
+    tools/translation_holes.py.
+    """
+    if isinstance(ru, dict):
+        if not isinstance(tr, dict):
+            return True
+        return any(k not in tr or shape_broken(v, tr[k]) for k, v in ru.items())
+    if isinstance(ru, list):
+        if not isinstance(tr, list) or len(tr) < len(ru):
+            return True
+        return any(shape_broken(a, b) for a, b in zip(ru, tr))
+    if isinstance(ru, str):
+        return bool(ru.strip()) and isinstance(tr, str) and not tr.strip()
+    return False
+
+
 def branches(d):
     """Наборы языковых веток в файле.
 
@@ -84,6 +106,12 @@ RULES — critical:
 - Keep the EXACT same JSON structure and keys; only values change.
 - Keep the tone of the original: clear, engaging, no condescension, no jargon left unexplained.
 - No alcohol analogies.
+- NEVER refer to an answer by its position ("the third option", "the last choice"): the
+  options are shuffled when shown, so such a sentence is simply false for the reader.
+  Refer to WHAT the option says instead, mirroring how the Russian original does it.
+- Keyword lists for free answers: keep them distinct. No duplicates and no key that is a
+  substring of another one in the same list — the grader counts substring hits, and two
+  nested keys let one word of the reader pass a threshold that asks for two.
 - Physics terminology must be the standard one used in {lang}-language textbooks.
 
 Return STRICT JSON with the same shape as the input, nothing else.
@@ -147,7 +175,9 @@ def graft(orig, got):
     if isinstance(orig, dict):
         if not isinstance(got, dict):
             return orig
-        return {k: (orig[k] if k in ("id", "model", "type", "href", "icon") else graft(v, got.get(k)))
+        # `kit` — тот же случай: это ключ карточки справочника, а не текст. Переведённый на
+        # испанский, он уводил врезку на /mathkit.html#m-simetría, которой не существует.
+        return {k: (orig[k] if k in ("id", "model", "type", "href", "icon", "kit") else graft(v, got.get(k)))
                 for k, v in orig.items()}
     if isinstance(orig, list):
         if not isinstance(got, list) or len(got) != len(orig):
@@ -206,9 +236,24 @@ def translate_block(block, lang, chunk_chars=6000):
         batch[k] = v
         size += s
     flush()
+
+    # МЕЛЬЧЕ, А НЕ СНОВА. «Повторный прогон возьмётся за них» — обещание, которое конвейер
+    # не выполнял: следующий заход отправлял тот же блок тем же куском, ответ обрывался в том
+    # же месте, и блок возвращался в очередь вечно. Четыре захода подряд по двум параграфам
+    # реального газа стояли ровно так, а те же блоки кусками по полторы тысячи знаков
+    # перевелись с первого раза. Значит дело не в модели и не в языке, а в размере порции —
+    # и решать это должен конвейер сам, а не человек руками.
+    if failed and chunk_chars > 1200:
+        again = {k: block[k] for k in dict.fromkeys(failed) if k in block}
+        print(f"    ↻ {lang}: {', '.join(sorted(again))} — не поместились, режу вдвое мельче"
+              f" ({chunk_chars} → {chunk_chars // 2})", flush=True)
+        got = translate_block(again, lang, chunk_chars // 2)
+        out.update(got)
+        failed = [k for k in failed if k not in got]
+
     if failed:
-        print(f"    ⚠️ {lang}: не переведены {', '.join(sorted(set(failed)))} — оставлены пустыми,"
-              f" повторный прогон возьмётся за них", flush=True)
+        print(f"    ⚠️ {lang}: не переведены {', '.join(sorted(set(failed)))} — даже мелкими"
+              f" кусками; это уже не размер, смотреть руками", flush=True)
     return out
 
 
@@ -343,7 +388,9 @@ def main():
                     gaps = list(br["ru"].keys())
                 else:
                     gaps = [k for k in br["ru"]
-                            if k not in br[l] or CYR.search(json.dumps(br[l][k], ensure_ascii=False))]
+                            if k not in br[l]
+                            or CYR.search(json.dumps(br[l][k], ensure_ascii=False))
+                            or shape_broken(br["ru"][k], br[l][k])]
                 if gaps:
                     missing[(owner, l)] = gaps
         if missing:
@@ -402,6 +449,14 @@ def main():
         for got in ex.map(work, todo):
             done += got
     print(f"✅ переведено блоков: {done}", flush=True)
+
+    # Подстрочники формул модель по инструкции не трогает, и русские буквы остаются внутри
+    # формулы (ро с русским подстрочником). Детектор видит кириллицу и ставит блок в очередь
+    # каждый прогон, за деньги, без надежды сойтись. Поэтому сразу после перевода переводим
+    # обозначения на международную запись; словарь и разбор — tools/symbols_latin.py.
+    if done:
+        import subprocess
+        subprocess.run([sys.executable, "tools/symbols_latin.py", "--apply"])
 
 
 if __name__ == "__main__":

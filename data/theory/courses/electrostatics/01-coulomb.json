@@ -13,37 +13,37 @@
   "scientists": [],
   "examples_from_articles": [
    {
-    "id": "2607.14764",
-    "date": "2026-07-16",
+    "id": "2603.07243",
+    "date": "2026-03-07",
     "title": {
-     "ru": "Бозонный гул цемента: терагерцы слушают нано-неоднородности",
-     "en": "Cement's Boson Hum: Terahertz Waves Eavesdrop on Nano-Inhomogeneities",
-     "es": "El zumbido bosónico del cemento: los terahercios escuchan las nano-heterogeneidades",
-     "ar": "همهمة البوزون في الإسمنت: تيراهرتز تستمع إلى اللاتجانسات النانوية"
+     "ru": "Как прикосновение рождает электричество",
+     "en": "How Touch Sparks Electricity",
+     "es": "Cómo el tacto genera electricidad",
+     "ar": "كيف يولد اللمس الكهرباء"
     },
-    "why": "electromagnetism"
+    "why": "electric_charge, triboelectricity"
    },
    {
-    "id": "2607.11058",
-    "date": "2026-07-13",
+    "id": "2605.09540",
+    "date": "2026-05-10",
     "title": {
-     "ru": "Нейросеть слышит магнитную музыку",
-     "en": "Neural Network Hears Magnetic Music",
-     "es": "La red neuronal escucha música magnética",
-     "ar": "الشبكة العصبية تستمع إلى الموسيقى المغناطيسية"
+     "ru": "Заряженные частицы в воде: почему одинаковое притягивается",
+     "en": "Charged Particles in Water: Why Like Attracts Like",
+     "es": "Partículas cargadas en el agua: por qué lo igual se atrae",
+     "ar": "الجسيمات المشحونة في الماء: لماذا يتجاذب المتشابه"
     },
-    "why": "electromagnetism"
+    "why": "coulomb_force, like_charges"
    },
    {
-    "id": "2607.10561",
-    "date": "2026-07-12",
+    "id": "2608.00468v1",
+    "date": "2026-08-01",
     "title": {
-     "ru": "Жидкое зеркало горизонта: как партонный океан дарует чёрным дырам электрическую душу",
-     "en": "The Liquid Mirror of the Horizon: How a Partonic Ocean Gives Black Holes an Electric Soul",
-     "es": "El espejo líquido del horizonte: cómo el océano de partones otorga un alma eléctrica a los agujeros negros",
-     "ar": "المرآة السائلة للأفق: كيف يمنح محيط البارتونات الثقوبَ السوداء جوهرًا كهربائيًا"
+     "ru": "Где живёт заряд",
+     "en": "Where Charge Lives",
+     "es": "Dónde vive la carga",
+     "ar": "أين يعيش الشحنة الكهربائية؟"
     },
-    "why": "electromagnetism"
+    "why": "electric_charge, charge_distribution"
    }
   ]
  },
@@ -180,11 +180,26 @@
   },
   "math": {
    "title": "Математика, которая здесь понадобилась",
-   "text": [
-    "Почему снова квадрат. Ровно та же причина, что и у тяготения: влияние источника как бы размазывается по сфере, а её площадь растёт как квадрат радиуса. Представьте, что из заряда во все стороны бьют невидимые нити, и их количество не меняется с расстоянием — меняется только густота. Через сферу вдвое большего радиуса проходят те же нити, но площадь вчетверо больше, значит на единицу площади приходится вчетверо меньше. Фарадей так и мыслил, и его силовые линии — это буквально те самые нити. Показатель степени здесь сообщает не о свойствах заряда, а о том, что пространство трёхмерно.",
-    "Как складывать силы от нескольких зарядов. Это векторное сложение, и здесь важно не путать его с обычным. Две силы по 3 ньютона дают 6, если направлены одинаково; ноль, если противоположно; и 4,24 (то есть $3\\sqrt{2}$), если под прямым углом. Правило то же, что при сложении перемещений: пройти три шага на север и три на восток — это не шесть шагов от исходной точки, а примерно четыре с четвертью по диагонали. На стенде поля складываются вдоль одной прямой, и потому всё сводится к сложению со знаком.",
-    "Что такое обратная задача о точке равновесия. Мы ищем место, где два вклада уравновешиваются. Приравняв $q_1/r_1^2 = q_2/r_2^2$ и извлекая корень, получаем, что расстояния относятся как корни из зарядов. Отсюда несимметричность: если один заряд вчетверо больше, точка равновесия окажется вдвое дальше от него — корень из четырёх. Полезная привычка: всякий раз, когда в задаче появляется квадрат, ожидайте, что в ответе появится корень.",
-    "Чему равен один кулон и почему он такой большой. Это заряд $6{,}24\\cdot 10^{18}$ электронов, и в электростатике он чудовищно велик: два заряда по одному кулону на расстоянии метра отталкивались бы с силой в девять миллиардов ньютонов — как вес миллиона тонн. Причина в том, что кулон определили через ток, удобный для техники: это ампер, умноженный на секунду. Через провод такой заряд протекает за одну секунду при обычном токе — а вот накопить его на теле статически невозможно, воздух пробьётся задолго до этого."
+   "lead": "Три приёма: чтение степенной зависимости в обе стороны, арифметика показателей десятки и сложение стрелок вместо чисел.",
+   "items": [
+    {
+     "what": "Степенная зависимость читается в обе стороны",
+     "why": "Запись $F \\propto 1/r^{2}$ говорит не про конкретные числа, а про то, как отклик следует за причиной: отодвинули заряды вдвое — сила упала вчетверо, втрое — вдевятеро. Но у пропорции есть и обратный ход, и именно им мы пользуемся в шестом шаге вывода. Там ищется точка, где два вклада уравновешивают друг друга: из равенства $q_1/r_1^{2} = q_2/r_2^{2}$ расстояния выражаются уже через корни из зарядов. Квадрат, переходя через знак равенства, становится корнем — поэтому заряд вчетверо больший отодвигает точку равновесия ровно вдвое, а не вчетверо. Привычка, полезная на весь курс: увидели в условии квадрат — ждите корень в ответе.",
+     "latex": "F \\propto \\frac{1}{r^{2}} \\qquad\\Longleftrightarrow\\qquad \\frac{r_2}{r_1} = \\sqrt{\\frac{q_2}{q_1}}",
+     "kit": "propto"
+    },
+    {
+     "what": "Как считать в степенях десятки",
+     "why": "Во втором шаге вывода стоит дробь из четырёх множителей с показателями от $-31$ до $9$; в лоб такое не считают. Показатели складывают отдельно от мантисс. Возведение в квадрат удваивает показатель: $(1{,}6\\cdot10^{-19})^{2} = 2{,}6\\cdot10^{-38}$, $(9{,}1\\cdot10^{-31})^{2} = 8{,}3\\cdot10^{-61}$. Деление показатели вычитает: в числителе остаётся $10^{-28}$, в знаменателе $10^{-71}$, разность равна $43$. Мантиссы дают множитель около $0{,}4$ — они сдвигают ответ меньше чем на порядок и на вывод не влияют. Отсюда и $10^{42}$: соотношение сил решено показателями ещё до того, как мы взялись за калькулятор.",
+     "latex": "\\frac{9\\cdot10^{9}\\cdot 2{,}6\\cdot10^{-38}}{6{,}7\\cdot10^{-11}\\cdot 8{,}3\\cdot10^{-61}} = \\frac{2{,}3\\cdot10^{-28}}{5{,}5\\cdot10^{-71}} \\approx 4\\cdot10^{42}",
+     "kit": "order"
+    },
+    {
+     "what": "Силы складываются как перемещения",
+     "why": "Пятый шаг вывода — принцип суперпозиции — записан со стрелками: $\\vec{F} = \\sum_i \\vec{F}_i$. Стрелки здесь не украшение. Две силы по три ньютона дают шесть, если направлены одинаково, ноль, если навстречу, и около $4{,}2$ (то есть $3\\sqrt{2}$), если под прямым углом. Правило то же, что при сложении шагов: три шага на север и три на восток не дают шести шагов от исходной точки. На стенде все заряды лежат на одной прямой, поэтому векторное сложение вырождается в сложение чисел со знаком — эта поблажка и позволяет увидеть точку нулевого поля глазами. В плоской задаче поблажки уже не будет, и придётся раскладывать силы по осям.",
+     "latex": "\\left|\\vec{F}_1 + \\vec{F}_2\\right| = \\sqrt{F_1^{2} + F_2^{2} + 2F_1F_2\\cos\\alpha}",
+     "kit": "vector"
+    }
    ]
   },
   "example": {
@@ -563,15 +578,6 @@
    "plate": "Charges interact via the inverse square law — like masses, but $10^{42}$ times stronger and with two signs. It is the two signs that make electricity unnoticeable in everyday life and all-powerful inside matter.",
    "note": "Limits of applicability. The formula is valid for point stationary charges in vacuum. Moving charges also create a magnetic field, and with fast motion there is a delay — the field does not rearrange instantaneously. In matter, the force is weakened by polarization of the medium: in water it drops by a factor of 80, and that is why salt dissociates into ions in water but remains a crystal when dry. At distances on the order of the atomic size, the classical formula stops working altogether — there quantum mechanics is needed."
   },
-  "math": {
-   "title": "The math needed here",
-   "text": [
-    "Why the square again. Exactly the same reason as for gravity: the influence of the source is spread over a sphere, and its area grows as the square of the radius. Imagine that from the charge invisible threads shoot out in all directions, and their number does not change with distance — only the density changes. Through a sphere of twice the radius the same threads pass, but the area is four times larger, so per unit area there is four times less. Faraday thought exactly this way, and his lines of force are literally those threads. The exponent here tells not about the properties of the charge, but about the fact that space is three-dimensional.",
-    "How to add forces from several charges. This is vector addition, and it is important not to confuse it with ordinary addition. Two forces of 3 newtons give 6 if directed the same; zero if opposite; and 4.24 (that is $3\\sqrt{2}$) if at a right angle. The rule is the same as for adding displacements: walking three steps north and three east is not six steps from the starting point, but about four and a quarter diagonally. On a stand, the fields add along a straight line, so everything reduces to addition with signs.",
-    "What is the inverse problem of the equilibrium point. We look for a place where the two contributions balance. Equating $q_1/r_1^2 = q_2/r_2^2$ and taking the square root, we get that the distances are proportional to the square roots of the charges. Hence the asymmetry: if one charge is four times larger, the equilibrium point will be twice as far from it — the square root of four. A useful habit: whenever a square appears in a problem, expect that a square root will appear in the answer.",
-    "What is one coulomb and why it is so big. This is the charge of $6.24\\cdot 10^{18}$ electrons, and in electrostatics it is monstrously large: two charges of one coulomb each at a distance of one meter would repel with a force of nine billion newtons — like the weight of a million tons. The reason is that the coulomb was defined through a current convenient for technology: it is an ampere multiplied by a second. Such a charge flows through a wire in one second at an ordinary current — but to accumulate it on a body statically is impossible; the air would break down long before that."
-   ]
-  },
   "example": {
    "title": "Numerical example: Comb against the entire Earth",
    "lead": "We calculate that childhood experiment and at the same time check how much stronger electricity is than gravity.",
@@ -815,7 +821,31 @@
     "hint": "Both forces decrease as the square of distance, so when dividing, r² cancels. What remains is the ratio of constants multiplied by the squares of charge and mass.",
     "tolAbs": 2
    }
-  ]
+  ],
+  "math": {
+   "title": "The Math You'll Need Here",
+   "lead": "Three tricks: reading power laws in both directions, arithmetic with powers of ten, and adding arrows instead of numbers.",
+   "items": [
+    {
+     "what": "Power laws read in both directions",
+     "why": "The expression $F \\propto 1/r^{2}$ doesn't tell you specific numbers, but how the response follows the cause: move the charges twice as far apart, and the force drops to a quarter; three times as far, and it drops to a ninth. But a proportion also works in reverse, and that's what we use in step six of the derivation. There we look for the point where two contributions balance each other: from the equality $q_1/r_1^{2} = q_2/r_2^{2}$, the distances are expressed in terms of the square roots of the charges. A square, when moved across the equals sign, becomes a square root — so a charge four times larger shifts the equilibrium point exactly twice as far, not four times. A habit useful for the whole course: if you see a square in the given, expect a square root in the answer.",
+     "latex": "F \\propto \\frac{1}{r^{2}} \\qquad\\Longleftrightarrow\\qquad \\frac{r_2}{r_1} = \\sqrt{\\frac{q_2}{q_1}}",
+     "kit": "propto"
+    },
+    {
+     "what": "How to calculate with powers of ten",
+     "why": "In the second step of the derivation, there's a fraction with four factors, with exponents from $-31$ to $9$; you don't compute that directly. Exponents are added separately from the mantissas. Squaring doubles the exponent: $(1{,}6\\cdot10^{-19})^{2} = 2{,}6\\cdot10^{-38}$, $(9{,}1\\cdot10^{-31})^{2} = 8{,}3\\cdot10^{-61}$. Division subtracts exponents: the numerator gives $10^{-28}$, the denominator $10^{-71}$, and the difference is $43$. The mantissas give a factor around $0{,}4$ — they shift the answer by less than an order of magnitude and don't affect the conclusion. Hence the $10^{42}$: the ratio of forces is decided by the exponents even before you touch a calculator.",
+     "latex": "\\frac{9\\cdot10^{9}\\cdot 2{,}6\\cdot10^{-38}}{6{,}7\\cdot10^{-11}\\cdot 8{,}3\\cdot10^{-61}} = \\frac{2{,}3\\cdot10^{-28}}{5{,}5\\cdot10^{-71}} \\approx 4\\cdot10^{42}",
+     "kit": "order"
+    },
+    {
+     "what": "Forces add like displacements",
+     "why": "The fifth step of the derivation — the superposition principle — is written with arrows: $\\vec{F} = \\sum_i \\vec{F}_i$. The arrows are not decoration. Two forces of three newtons each give six if they point in the same direction, zero if they oppose, and about $4{,}2$ (that is, $3\\sqrt{2}$) if they are at a right angle. The rule is the same as adding steps: three steps north and three steps east do not put you six steps from the starting point. On the test stand, all charges lie on a single line, so vector addition degenerates into adding signed numbers — this simplification lets you see the point of zero field by eye. In a two-dimensional problem, that simplification won't be there, and you'll have to break forces into components.",
+     "latex": "\\left|\\vec{F}_1 + \\vec{F}_2\\right| = \\sqrt{F_1^{2} + F_2^{2} + 2F_1F_2\\cos\\alpha}",
+     "kit": "vector"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Carga y ley de Coulomb",
@@ -947,15 +977,6 @@
    ],
    "plate": "Las cargas interactúan según la ley del inverso del cuadrado, como las masas, pero $10^{42}$ veces más fuerte y con dos signos. Es precisamente la dualidad de signos lo que hace que la electricidad sea imperceptible en la vida cotidiana y todopoderosa dentro de la materia.",
    "note": "Límites de aplicabilidad. La fórmula es válida para cargas puntuales estacionarias en el vacío. Las cargas en movimiento también crean un campo magnético, y con movimiento rápido aparece un retardo: el campo no se reconfigura instantáneamente. En la materia, la fuerza se ve atenuada por la polarización del medio: en el agua disminuye 80 veces, y por eso la sal se disocia en iones en agua, mientras que en seco permanece como cristal. A distancias del orden del tamaño atómico, la fórmula clásica deja de funcionar por completo; allí se necesita la mecánica cuántica."
-  },
-  "math": {
-   "title": "Matemáticas que aquí hicieron falta",
-   "text": [
-    "Por qué de nuevo el cuadrado. Exactamente la misma razón que la gravedad: la influencia de la fuente se extiende sobre una esfera, y su área crece como el cuadrado del radio. Imagina que desde la carga brotan hilos invisibles en todas direcciones, y su cantidad no cambia con la distancia — solo cambia la densidad. A través de una esfera de radio doble pasan los mismos hilos, pero el área es cuatro veces mayor, por lo que por unidad de área hay cuatro veces menos. Faraday pensaba así, y sus líneas de fuerza son literalmente esos hilos. El exponente aquí no informa sobre las propiedades de la carga, sino que el espacio es tridimensional.",
-    "Cómo sumar fuerzas de varias cargas. Es una suma vectorial, y aquí es importante no confundirla con la ordinaria. Dos fuerzas de 3 newtons dan 6 si están dirigidas igual; cero, si opuestas; y 4,24 (es decir $3\\sqrt{2}$), si están en ángulo recto. La regla es la misma que al sumar desplazamientos: caminar tres pasos al norte y tres al este no son seis pasos desde el punto de partida, sino aproximadamente cuatro y un cuarto en diagonal. En el soporte los campos se suman a lo largo de una línea recta, y por eso todo se reduce a una suma con signo.",
-    "Qué es el problema inverso del punto de equilibrio. Buscamos el lugar donde dos contribuciones se equilibran. Igualando $q_1/r_1^2 = q_2/r_2^2$ y tomando raíz, obtenemos que las distancias se relacionan como las raíces de las cargas. De ahí la asimetría: si una carga es cuatro veces mayor, el punto de equilibrio estará al doble de distancia de ella — raíz de cuatro. Un hábito útil: cada vez que en el problema aparece un cuadrado, espera que en la respuesta aparezca una raíz.",
-    "Cuánto vale un culombio y por qué es tan grande. Es la carga de $6{,}24\\cdot 10^{18}$ electrones, y en electrostática es enormemente grande: dos cargas de un culombio a un metro de distancia se repelerían con una fuerza de nueve mil millones de newtons — como el peso de un millón de toneladas. La razón es que el culombio se definió a partir de la corriente, conveniente para la técnica: es un amperio multiplicado por un segundo. A través de un conductor, tal carga fluye en un segundo con una corriente normal — pero acumularla estáticamente en un cuerpo es imposible, el aire se rompería mucho antes."
-   ]
   },
   "example": {
    "title": "Ejemplo con números: el peine contra toda la Tierra",
@@ -1182,8 +1203,8 @@
      "cerc",
      "lej",
      "inhomog",
-     "masfuert",
-     "separ",
+     "más fuert",
+     "estira",
      "reorient"
     ],
     "needed": 2,
@@ -1200,7 +1221,31 @@
     "hint": "Ambas fuerzas disminuyen como el cuadrado de la distancia, por lo que al dividir se cancela r². Queda la relación de constantes multiplicada por los cuadrados de la carga y la masa.",
     "tolAbs": 2
    }
-  ]
+  ],
+  "math": {
+   "title": "Matemáticas que aquí se necesitaron",
+   "lead": "Tres trucos: leer la dependencia de potencia en ambas direcciones, la aritmética de los exponentes de diez y la suma de flechas en lugar de números.",
+   "items": [
+    {
+     "what": "La dependencia de potencia se lee en ambas direcciones",
+     "why": "La expresión $F \\propto 1/r^{2}$ no habla de números concretos, sino de cómo la respuesta sigue a la causa: si alejas las cargas al doble, la fuerza cae a la cuarta parte; si las alejas al triple, cae a la novena parte. Pero la proporción también tiene un camino inverso, y es precisamente el que usamos en el sexto paso de la deducción. Allí se busca el punto donde dos contribuciones se equilibran: de la igualdad $q_1/r_1^{2} = q_2/r_2^{2}$ las distancias se expresan ya mediante raíces de las cargas. El cuadrado, al pasar al otro lado del signo igual, se convierte en raíz; por eso una carga cuatro veces mayor desplaza el punto de equilibrio exactamente al doble, no al cuádruple. Un hábito útil para todo el curso: si ves un cuadrado en la condición, espera una raíz en la respuesta.",
+     "latex": "F \\propto \\frac{1}{r^{2}} \\qquad\\Longleftrightarrow\\qquad \\frac{r_2}{r_1} = \\sqrt{\\frac{q_2}{q_1}}",
+     "kit": "propto"
+    },
+    {
+     "what": "Cómo calcular con potencias de diez",
+     "why": "En el segundo paso de la deducción hay una fracción de cuatro factores con exponentes que van de $-31$ a $9$; no se calcula directamente. Los exponentes se suman por separado de las mantisas. Elevar al cuadrado duplica el exponente: $(1{,}6\\cdot10^{-19})^{2} = 2{,}6\\cdot10^{-38}$, $(9{,}1\\cdot10^{-31})^{2} = 8{,}3\\cdot10^{-61}$. La división resta exponentes: en el numerador queda $10^{-28}$, en el denominador $10^{-71}$, la diferencia es $43$. Las mantisas dan un factor de alrededor de $0{,}4$ — desplazan la respuesta en menos de un orden de magnitud y no afectan la deducción. De ahí el $10^{42}$: la relación de fuerzas está decidida por los exponentes antes de que toquemos la calculadora.",
+     "latex": "\\frac{9\\cdot10^{9}\\cdot 2{,}6\\cdot10^{-38}}{6{,}7\\cdot10^{-11}\\cdot 8{,}3\\cdot10^{-61}} = \\frac{2{,}3\\cdot10^{-28}}{5{,}5\\cdot10^{-71}} \\approx 4\\cdot10^{42}",
+     "kit": "order"
+    },
+    {
+     "what": "Las fuerzas se suman como desplazamientos",
+     "why": "El quinto paso de la deducción — el principio de superposición — se escribe con flechas: $\\vec{F} = \\sum_i \\vec{F}_i$. Las flechas aquí no son un adorno. Dos fuerzas de tres newtons cada una dan seis si están en la misma dirección, cero si van en direcciones opuestas, y alrededor de $4{,}2$ (es decir, $3\\sqrt{2}$) si forman un ángulo recto. La regla es la misma que al sumar pasos: tres pasos al norte y tres al este no dan seis pasos desde el punto de partida. En el montaje, todas las cargas están en una línea recta, por lo que la suma vectorial se reduce a sumar números con signo — esta concesión permite ver el punto de campo nulo a simple vista. En un problema plano ya no habrá tal concesión, y habrá que descomponer las fuerzas en ejes.",
+     "latex": "\\left|\\vec{F}_1 + \\vec{F}_2\\right| = \\sqrt{F_1^{2} + F_2^{2} + 2F_1F_2\\cos\\alpha}",
+     "kit": "vector"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "الشحنة وقانون كولوم",
@@ -1219,25 +1264,69 @@
     {
      "who": "شارل أوغستان كولوم",
      "year": "1785",
-     "what": "قاس القوة بميزان الالتواء من تصميمه الخاص وأثبت التربيع العكسي. كان الجهاز حساسًا لدرجة أنه يتأثر بحركة الهواء، وكان على كولوم الانتظار حتى تهدأ الغرفة."
+     "what": "قام بقياس القوة باستخدام ميزان الليّ الذي صممه بنفسه وأثبت التربيع العكسي. كان الجهاز حساسًا جدًا لدرجة أنه يتأثر بحركة الهواء، وكان على كولوم الانتظار حتى تهدأ الغرفة."
     },
     {
      "who": "هنري كافنديش",
      "year": "1773",
-     "what": "حصل على نفس النتيجة قبل اثني عشر عامًا وبشكل أكثر دقة، لكنه لم ينشر. تم العثور على ملاحظاته ونشرها بعد مائة عام — وبحلول ذلك الوقت كان القانون قد حمل اسم كولوم."
+     "what": "حصل على نفس النتيجة قبل ذلك باثنتي عشرة سنة وبدقة أكبر، لكنه لم ينشرها. تم العثور على ملاحظاته ونشرها بعد مئة عام — وبحلول ذلك الوقت كان القانون قد حمل اسم كولوم."
     },
     {
      "who": "جوزيف بريستلي",
      "year": "1767",
-     "what": "لاحظ أن القوة داخل كرة مجوفة مشحونة منعدمة، وقياسًا على نظرية نيوتن للجاذبية استنتج أن القانون يجب أن يكون تربيعًا عكسيًا. تبين أن التخمين صحيح قبل ثمانية عشر عامًا من القياس."
+     "what": "لاحظ أن القوة داخل كرة مشحونة مجوفة تساوي صفرًا، وقياسًا على نظرية نيوتن للجاذبية، استنتج أن القانون يجب أن يكون تربيعيًا عكسيًا. كان تخمينه صحيحًا قبل ثمانية عشر عامًا من القياس."
     },
     {
      "who": "روبرت ميليكان",
      "year": "1909",
-     "what": "قاس الشحنة الأولية بحركة قطرات زيت صغيرة في مجال كهربائي وأظهر أن الشحنة دائماً مضاعف صحيح لنفس الكمية. أصبح تكميم الشحنة حقيقة تجريبية."
+     "what": "قام بقياس الشحنة الأولية من خلال حركة قطرات زيت صغيرة في مجال كهربائي وأظهر أن الشحنة دائمًا مضاعف لنفس القيمة. أصبح تكميم الشحنة حقيقة تجريبية."
     }
    ],
-   "story": "قصة اختبار الأس رائعة. بريستلي، ثم كافنديش وماكسويل فكروا هكذا: إذا كان القانون تربيعًا عكسيًا تمامًا، فإن المجال داخل كرة مشحونة يجب أن يكون صفرًا تمامًا — مساهمات جميع أجزاء السطح تلغي بعضها البعض. إذا اختلف الأس ولو قليلاً عن 2، سيكون التعويض غير كامل وسيظهر مجال داخلي. اختبار غياب المجال أسهل بكثير من قياس القوة: يكفي جهاز حساس وصبر. تم صقل هذه الطريقة إلى أقصى حد، واليوم من المعروف أن الأس يساوي اثنين بدقة تصل إلى $10^{-16}$. قلة من قوانين الفيزياء تم اختبارها بهذه الدقة — وتم اختبارها، في جوهرها، بتجربة سلبية."
+   "story": "قصة التحقق من الأس هي قصة رائعة. بريستلي، ثم كافنديش وماكسويل، فكروا على النحو التالي: إذا كان القانون تربيعيًا عكسيًا تمامًا، فإن المجال داخل كرة مشحونة يجب أن يكون صفرًا تمامًا — لأن مساهمات جميع أجزاء السطح تلغي بعضها البعض. إذا كان الأس مختلفًا ولو قليلًا عن اثنين، فإن التعويض لن يكون كاملاً وسيظهر مجال داخل الكرة. التحقق من غياب المجال أسهل بكثير من قياس القوة: يكفي جهاز حساس وصبر. تم صقل هذه التقنية إلى أقصى حد، واليوم نعرف أن الأس يساوي اثنين بدقة تصل إلى $10^{-16}$. قلة من قوانين الفيزياء تم اختبارها بهذه الدقة — وتم اختبارها في الأساس بتجربة سلبية.",
+   "symbols": [
+    {
+     "sym": "F",
+     "latex": "F",
+     "what": "قوة التفاعل",
+     "unit": "N",
+     "note": "وفقًا لقانون نيوتن الثالث، تؤثر على كلتا الشحنتين بنفس المقدار."
+    },
+    {
+     "sym": "q",
+     "latex": "q_1, q_2",
+     "what": "مقدار الشحنتين",
+     "unit": "C",
+     "note": "مع الإشارة: الشحنات المتشابهة تتنافر، والمختلفة تتجاذب."
+    },
+    {
+     "sym": "r",
+     "latex": "r",
+     "what": "المسافة بين الشحنتين",
+     "unit": "m",
+     "note": "الصيغة دقيقة للشحنات النقطية؛ وللكرات، تكون المسافة بين المركزين."
+    },
+    {
+     "sym": "k",
+     "latex": "k",
+     "what": "معامل التناسب",
+     "unit": "N·m²/C²",
+     "note": "$9\\cdot 10^{9}$ — رقم ضخم، وفيه تكمن قوة الكهرباء."
+    },
+    {
+     "sym": "eps",
+     "latex": "\\varepsilon_0",
+     "what": "الثابت الكهربائي",
+     "unit": "F/m",
+     "note": "من خلاله ومن خلال الثابت المغناطيسي يتم التعبير عن سرعة الضوء — وهذا سيتضح في موضوع المغناطيسية."
+    },
+    {
+     "sym": "e",
+     "latex": "e",
+     "what": "الشحنة الأولية",
+     "unit": "C",
+     "note": "$1{,}6\\cdot 10^{-19}$; أي شحنة ملحوظة هي مضاعف لها."
+    }
+   ]
   },
   "symbols": [
    {
@@ -1332,15 +1421,6 @@
    ],
    "plate": "تتفاعل الشحنات وفقًا لقانون التربيع العكسي - مثل الكتل، ولكن أقوى بـ $10^{42}$ مرة وبعلامتين. هذه الازدواجية في العلامة تجعل الكهرباء غير مرئية في الحياة اليومية وقادرة على كل شيء داخل المادة.",
    "note": "حدود الصلاحية. الصيغة صحيحة للشحنات النقطية الثابتة في الفراغ. الشحنات المتحركة تُنشئ أيضًا مجالًا مغناطيسيًا، ومع الحركة السريعة يظهر تأخير - المجال لا يتغير فوريًا. في المادة، تضعف القوة بسبب استقطاب الوسط: في الماء تنخفض 80 مرة، ولهذا يتحلل الملح في الماء إلى أيونات بينما يبقى بلورة في الحالة الجافة. على مسافات بحجم الذرة، تتوقف الصيغة الكلاسيكية عن العمل تمامًا - هناك نحتاج ميكانيكا الكم."
-  },
-  "math": {
-   "title": "الرياضيات التي سنحتاجها هنا",
-   "text": [
-    "لماذا المربع مرة أخرى؟ نفس السبب كما في الجاذبية: تأثير المصدر ينتشر على سطح كرة، ومساحتها تزداد كمربع نصف القطر. تخيل أن من الشحنة تنطلق خيوط غير مرئية في كل الاتجاهات، وعددها لا يتغير مع المسافة - فقط كثافتها تتغير. عبر كرة نصف قطرها ضعف، تمر نفس الخيوط لكن المساحة أربع مرات أكبر، لذا لكل وحدة مساحة نحصل على ربع العدد. هكذا كان يفكر فاراداي، وخطوط قوته هي حرفياً تلك الخيوط. الأس هنا لا يخبرنا عن خصائص الشحنة، بل عن كون الفضاء ثلاثي الأبعاد.",
-    "كيف نجمع القوى من عدة شحنات. هذا جمع اتجاهي، ومن المهم عدم الخلط بينه وبين الجمع العادي. قوتان كل منهما 3 نيوتن تعطيان 6 إذا كانتا في نفس الاتجاه؛ صفر إذا كانتا متعاكستين؛ و 4.24 (أي $3\\sqrt{2}$) إذا كانتا بزاوية قائمة. القاعدة نفسها كما في جمع الإزاحات: المشي ثلاث خطوات شمالاً وثلاث شرقاً لا يعطي ست خطوات من نقطة البداية، بل حوالي أربعة وربع قطرياً. في المنصة، المجالات تتجمع على خط مستقيم واحد، لذا يتحول الأمر إلى جمع مع إشارة.",
-    "ما هي المسألة العكسية لنقطة التوازن. نحن نبحث عن مكان يتوازن فيه التأثيران. بمساواة $q_1/r_1^2 = q_2/r_2^2$ وأخذ الجذر، نحصل على أن المسافات تتناسب مع جذور الشحنات. من هنا عدم التماثل: إذا كانت إحدى الشحنات أربع مرات أكبر، فإن نقطة التوازن ستكون على بعد ضعف من الشحنة الأكبر - جذر الأربعة. عادة مفيدة: كلما ظهر مربع في المسألة، توقع أن يظهر جذر في الإجابة.",
-    "ما قيمة واحد كولوم ولماذا هو كبير جداً. هذه شحنة $6{,}24\\cdot 10^{18}$ إلكترون، وهي في الكهروسكونية هائلة جداً: شحنتان كل منهما كولوم واحد على مسافة متر تتنافران بقوة تسعة مليارات نيوتن - مثل وزن مليون طن. السبب أن الكولوم عُرف من خلال التيار المناسب للهندسة: هو أمبير مضروب في ثانية. من خلال سلك، هذه الشحنة تتدفق في ثانية واحدة بتيار عادي - لكن تجميعها على جسم سكونياً مستحيل، الهواء سينهار قبل ذلك بكثير."
-   ]
   },
   "example": {
    "title": "مثال بأرقام: المشط ضد الأرض كلها",
@@ -1585,7 +1665,31 @@
     "hint": "كلتا القوتين تتناقصان كمربع المسافة، لذا عند القسمة، تلغى r^2. يبقى نسبة الثوابت مضروبة في مربعي الشحنة والكتلة.",
     "tolAbs": 2
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "ثلاث حيل: قراءة العلاقة الأسية في الاتجاهين، وحساب أسس العشرة، وجمع الأسهم بدلاً من الأرقام.",
+   "items": [
+    {
+     "what": "العلاقة الأسية تُقرأ في الاتجاهين",
+     "why": "الصيغة $F \\propto 1/r^{2}$ لا تخبرنا عن أرقام محددة، بل عن كيفية تبعية الاستجابة للسبب: إذا ضاعفت المسافة بين الشحنتين، تقل القوة إلى الربع؛ وإذا ضاعفتها ثلاث مرات، تقل إلى التسع. لكن للتناسب اتجاه عكسي أيضًا، وهو ما نستخدمه في الخطوة السادسة من الاستنتاج. هناك نبحث عن النقطة التي يتوازن فيها التأثيران: من المساواة $q_1/r_1^{2} = q_2/r_2^{2}$ تُعبر المسافات بدلالة الجذور التربيعية للشحنات. المربع، عند انتقاله عبر علامة المساواة، يصبح جذرًا تربيعيًا — لذلك الشحنة الأكبر بأربع مرات تُبعد نقطة التوازن بمقدار الضعف تمامًا، وليس أربعة أضعاف. عادة مفيدة طوال الدورة: إذا رأيت مربعًا في المعطيات، توقع جذرًا في الإجابة.",
+     "latex": "F \\propto \\frac{1}{r^{2}} \\qquad\\Longleftrightarrow\\qquad \\frac{r_2}{r_1} = \\sqrt{\\frac{q_2}{q_1}}",
+     "kit": "propto"
+    },
+    {
+     "what": "كيف نحسب بأسس العشرة",
+     "why": "في الخطوة الثانية من الاستنتاج، لدينا كسر من أربعة عوامل بأسس تتراوح من $-31$ إلى $9$؛ لا يُحسب هذا مباشرة. تُجمع الأسس بشكل منفصل عن المعاملات. التربيع يضاعف الأس: $(1{,}6\\cdot10^{-19})^{2} = 2{,}6\\cdot10^{-38}$، $(9{,}1\\cdot10^{-31})^{2} = 8{,}3\\cdot10^{-61}$. القسمة تطرح الأسس: في البسط يبقى $10^{-28}$، وفي المقام $10^{-71}$، والفرق يساوي $43$. المعاملات تعطي عاملًا حوالي $0{,}4$ — وهي تغيّر الإجابة بأقل من مرتبة واحدة ولا تؤثر على الاستنتاج. ومن هنا يأتي $10^{42}$: نسبة القوى تُحدد بالأسس قبل أن نمسك بالآلة الحاسبة.",
+     "latex": "\\frac{9\\cdot10^{9}\\cdot 2{,}6\\cdot10^{-38}}{6{,}7\\cdot10^{-11}\\cdot 8{,}3\\cdot10^{-61}} = \\frac{2{,}3\\cdot10^{-28}}{5{,}5\\cdot10^{-71}} \\approx 4\\cdot10^{42}",
+     "kit": "order"
+    },
+    {
+     "what": "القوى تُجمع مثل الإزاحات",
+     "why": "الخطوة الخامسة من الاستنتاج — مبدأ التراكب — تُكتب بأسهم: $\\vec{F} = \\sum_i \\vec{F}_i$. الأسهم هنا ليست للزينة. قوتان مقدار كل منهما ثلاثة نيوتن تعطيان ستة إذا كانتا في نفس الاتجاه، وصفرًا إذا كانتا متعاكستين، وحوالي $4{,}2$ (أي $3\\sqrt{2}$) إذا كانتا متعامدتين. القاعدة نفسها عند جمع الخطوات: ثلاث خطوات شمالًا وثلاث خطوات شرقًا لا تعطي ست خطوات من نقطة البداية. في المنصة، جميع الشحنات تقع على خط مستقيم واحد، لذلك يتحول الجمع الاتجاهي إلى جمع أرقام بإشارات — هذا التبسيط يسمح برؤية نقطة المجال الصفري بالعين المجردة. في المسائل المستوية، لن يكون هناك تبسيط، وسيتعين علينا تحليل القوى إلى مركبات.",
+     "latex": "\\left|\\vec{F}_1 + \\vec{F}_2\\right| = \\sqrt{F_1^{2} + F_2^{2} + 2F_1F_2\\cos\\alpha}",
+     "kit": "vector"
+    }
+   ]
+  }
  },
  "tags": [
   "gravity",

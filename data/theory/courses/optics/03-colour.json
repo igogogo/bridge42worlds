@@ -15,37 +15,37 @@
   "scientists": [],
   "examples_from_articles": [
    {
-    "id": "2607.15243",
-    "date": "2026-07-16",
+    "id": "2606.28366",
+    "date": "2026-06-14",
     "title": {
-     "ru": "Иллюзия точности: как проверка ИИ в акустике вводит в заблуждение",
-     "en": "The Illusion of Accuracy: How AI Testing in Acoustics Misleads",
-     "es": "La ilusión de la precisión: cómo la validación de la IA en acústica induce a error",
-     "ar": "وهم الدقة: كيف يخدع اختبار الذكاء الاصطناعي في الصوتيات"
+     "ru": "Разгадана тайна бегущих теней при затмении",
+     "en": "The Mystery of Eclipse Shadow Bands Solved",
+     "es": "Resuelto el misterio de las sombras corredizas en los eclipses",
+     "ar": "كشف سر أشرطة الظل الجارية أثناء الكسوف"
     },
-    "why": "photometry, spectroscopy"
+    "why": "diffraction, shadow_bands"
    },
    {
-    "id": "2607.15045",
-    "date": "2026-07-16",
+    "id": "2605.08708",
+    "date": "2026-05-09",
     "title": {
-     "ru": "Цветной мир через один пиксель",
-     "en": "A Colorful World Through a Single Pixel",
-     "es": "Mundo colorido a través de un solo píxel",
-     "ar": "عالم الألوان عبر بكسل واحد"
+     "ru": "Почему один и тот же материал светится по-разному",
+     "en": "Why the Same Material Glows Differently",
+     "es": "Por qué el mismo material brilla de manera diferente",
+     "ar": "لماذا يتوهج نفس المادة بشكل مختلف"
     },
-    "why": "photometry, spectroscopy"
+    "why": "colour, emission_spectrum"
    },
    {
-    "id": "2607.14894",
-    "date": "2026-07-16",
+    "id": "2608.13019v1",
+    "date": "2026-08-13",
     "title": {
-     "ru": "Почему программа для улучшения фото ошибается на чужих снимках",
-     "en": "Why photo enhancement software fails on unfamiliar images",
-     "es": "Por qué el programa de mejora de fotos se equivoca en imágenes ajenas",
-     "ar": "لماذا تخطئ برامج تحسين الصور في الصور غير المألوفة؟"
+     "ru": "Цветной маршрутизатор: наноструктура, которая видит как камера",
+     "en": "A Color Router That Sees Like a Camera",
+     "es": "Un enrutador de color que ve como una cámara",
+     "ar": "موجّه ألوان: بنية نانوية ترى مثل الكاميرا"
     },
-    "why": "photometry, spectroscopy"
+    "why": "colour, light_splitting"
    }
   ]
  },
@@ -180,11 +180,26 @@
   },
   "math": {
    "title": "Математика, которая здесь понадобилась",
-   "text": [
-    "Почему четвёртая степень даёт такой сильный эффект. Синий и красный отличаются по длине волны меньше чем вдвое — казалось бы, разница невелика. Но возведите в четвёртую: отношение 700 к 450 равно 1,56, а в четвёртой степени это уже 5,9. Всегда проверяйте, в какой степени входит величина: там, где показатель высокий, малые различия становятся большими. Это общее правило, и оно объясняет, почему в физике так важно знать не только от чего зависит, но и как сильно.",
-    "Что означает дифракция на пальцах. Представьте волны на воде, проходящие через проход в волноломе. Если проход широкий, волны идут за ним ровной полосой. Если узкий — сравнимый с расстоянием между гребнями, — за проходом расходятся полукругом, как от точечного источника. Отверстие превращается в новый источник, и чем оно уже, тем шире веер. Свет ведёт себя точно так же, просто его длина волны так мала, что для этого нужны очень узкие щели.",
-    "Почему нельзя увидеть мельче половины длины волны. Волна физически не может нести информацию о деталях, которые мельче её самой, — примерно как нельзя ощупать мелкую гравировку рукой в толстой варежке. Изображение точки получается размытым пятнышком, и два пятна сливаются, если центры ближе половины длины волны. Отсюда простое следствие: чтобы видеть мельче, нужна не лучшая линза, а более короткая волна. Так и появились ультрафиолетовая литография, рентгеноструктурный анализ и электронный микроскоп.",
-    "Как связаны цвет и частота. Цвет определяется частотой, а она при переходе между средами не меняется. Длина волны меняется — в воде она короче в 1,33 раза, — но цвет остаётся прежним. Поэтому под водой красное остаётся красным. Полезно держать в голове, что видимый диапазон занимает ровно одну октаву: красный вдвое длиннее фиолетового. У звука мы слышим десять октав, у света видим одну — и вся живопись, весь дизайн и все закаты умещаются в этом единственном удвоении."
+   "lead": "Здесь понадобятся анализ размерностей, степенной закон и счёт по порядкам величины.",
+   "items": [
+    {
+     "what": "Размерности вместо уравнений",
+     "why": "Первые три шага вывода получают закон Рэлея, не решая ни одного уравнения электродинамики. Приём такой: выписываем честный список величин, от которых ответ вообще может зависеть — объём частицы, расстояние до неё, длина волны, — и требуем, чтобы единицы измерения сошлись. Амплитуда обязана убывать как единица на расстояние, иначе не сохранится энергия. Объём приносит метры в кубе, расстояние забирает один метр, и чтобы остаток стал безразмерным, в знаменателе обязана оказаться длина волны в квадрате. Другого показателя не подобрать. Так первые два шага дают только амплитуду; четвёртая степень появляется в третьем шаге, где амплитуда возводится в квадрат: интенсивность есть квадрат амплитуды, и $\\lambda^{2}$ в знаменателе становится $\\lambda^{4}$. Метод не даёт числового множителя перед выражением, зато однозначно задаёт, в какой степени входит каждая величина, — а именно степень и решает здесь всё.",
+     "latex": "A \\propto \\frac{V}{r\\,\\lambda^{2}} \\;\\Longrightarrow\\; I \\propto A^{2} \\propto \\frac{V^{2}}{r^{2}\\lambda^{4}}",
+     "kit": "dimension"
+    },
+    {
+     "what": "Степенной закон: в степень идёт отношение",
+     "why": "В четвёртом шаге вывода отношение длин волн 700 к 450 равно всего 1,56, а рассеяние отличается почти вшестеро. Причина в устройстве степенной зависимости: в четвёртую степень возводится именно отношение величин, а не их разность. Отсюда рабочее правило чтения формул — смотрите не только от чего зависит, но и в какой степени: чем выше показатель, тем увереннее скромная разница причин оборачивается разительной разницей следствий. Для малых изменений есть удобный частный случай: относительное изменение результата примерно вчетверо больше относительного изменения длины волны, сдвиг на процент даёт четыре процента. Но на краях видимого диапазона, где длины волн различаются в полтора раза, эта линейная прикидка уже врёт, и отношение приходится честно возводить в четвёртую.",
+     "latex": "\\frac{I_1}{I_2}=\\left(\\frac{\\lambda_2}{\\lambda_1}\\right)^{4}, \\qquad \\frac{\\Delta I}{I}\\approx 4\\,\\frac{\\Delta\\lambda}{\\lambda}\\;\\text{— только при малых сдвигах}",
+     "kit": "propto"
+    },
+    {
+     "what": "Порядки величины вместо точных чисел",
+     "why": "Седьмой шаг вывода ставит рядом 0,2 микрона у света и 0,05 нанометра у электрона, а пример с числами — бактерию в тысячу нанометров, вирус в сотню и молекулу ДНК в два. Точные значения здесь не нужны, нужен ответ на вопрос «во сколько раз», и считается он степенями десяти: $2\\cdot 10^{-7}$ против $5\\cdot 10^{-11}$ — показатели различаются на четыре, множители дают поправку, итого примерно в четыре тысячи раз. Такой счёт сразу отвечает на главный вопрос параграфа: предел оптического микроскопа лежит между размером бактерии и размером вируса, поэтому одно видно, а другое нет. Привычка сначала прикинуть порядок и лишь потом считать точно экономит и время, и ошибки.",
+     "latex": "\\frac{d_{\\text{свет}}}{d_{\\text{эл}}} \\sim \\frac{2\\cdot 10^{-7}}{5\\cdot 10^{-11}} \\approx 4\\cdot 10^{3}",
+     "kit": "order"
+    }
    ]
   },
   "example": {
@@ -441,24 +456,24 @@
   ],
   "standNote": "Switch the stand to two-wave mode — this models what happens with two slits. By changing the frequency ratio, you see how waves of different lengths add up. The main takeaway from the stand: the shorter the wavelength, the more frequently the maxima and minima alternate. Hence the whole section — short waves distinguish fine details, long waves do not; short waves scatter strongly, long waves scatter weakly.",
   "formula": {
-   "name": "Rayleigh Scattering and Resolution Limit",
+   "name": "Rayleigh scattering and the resolution limit",
    "latex": "I \\propto \\frac{1}{\\lambda^{4}}, \\qquad d_{\\min} \\approx \\frac{\\lambda}{2n\\sin\\theta}",
-   "alsoKnown": "Fourth power law · Abbe criterion",
+   "alsoKnown": "Inverse fourth power law · Abbe criterion",
    "authors": [
     {
      "who": "Isaac Newton",
      "year": "1704",
-     "what": "split white light with a prism and, more importantly, recombined it with a second prism. He proved that colors are not created in the glass but are already present in white light — contrary to the two-thousand-year tradition of considering color as a corruption of whiteness."
+     "what": "split white light with a prism and, more importantly, recombined it with a second prism. He proved that colors are not born in the glass but are already present in white light, contrary to the two-thousand-year tradition of considering color as a corruption of whiteness."
     },
     {
      "who": "John William Strutt (Lord Rayleigh)",
      "year": "1871",
-     "what": "explained the blueness of the sky by obtaining the scattering dependence on the fourth power of frequency. The derivation was made almost entirely from dimensional considerations — without solving the equations of electrodynamics."
+     "what": "explained the blueness of the sky, obtaining the dependence of scattering on the fourth power of frequency. The derivation was made almost entirely from dimensional considerations, without solving the equations of electrodynamics."
     },
     {
      "who": "Ernst Abbe",
      "year": "1873",
-     "what": "established the resolution limit of the microscope: seeing details smaller than about half a wavelength is fundamentally impossible. Before him, opticians believed the problem was the quality of glass polishing."
+     "what": "established the resolution limit of the microscope: seeing details smaller than about half the wavelength is fundamentally impossible. Before him, opticians believed that the quality of glass polishing was the issue."
     },
     {
      "who": "Augustin Fresnel",
@@ -468,10 +483,47 @@
     {
      "who": "Stefan Hell",
      "year": "1994",
-     "what": "came up with how to bypass the Abbe limit using the nonlinear response of molecules. Nobel Prize 2014; today microscopes see details of twenty nanometers — ten times finer than what was considered impossible."
+     "what": "came up with a way to bypass the Abbe limit using the nonlinear response of molecules. Nobel Prize in 2014; today microscopes see details as small as twenty nanometers — ten times smaller than what was considered impossible."
     }
    ],
-   "story": "Newton's prism experiment is usually described incompletely, but the most important part is in the second half. People could split light with a prism before Newton; the prevailing explanation was that glass spoils white light, coloring it more strongly the longer the path inside. Newton performed a crucial experiment: he isolated one color from the spectrum with a narrow slit and passed it through a second prism — the color did not change, no further spoiling occurred. Then he recombined the entire spectrum with a second prism and obtained white light. Therefore, colors are not created by glass but are present in white light from the beginning. This was an example of how to do a crucial experiment: not confirming one's own idea but cutting off another's."
+   "story": "Newton's prism experiment is usually presented incompletely, and the most important part is in the second half. Splitting light with a prism was possible before Newton; the prevailing explanation was that glass spoils white light, coloring it more strongly the longer the path inside. Newton performed a decisive experiment: he isolated one color from the spectrum with a narrow slit and passed it through a second prism — the color did not change, no further spoiling occurred. Then he recombined the entire spectrum with a second prism and obtained white light. Thus, colors are not created by glass but are present in white light from the beginning. This was an example of how a decisive experiment is conducted: not one that confirms one's own idea, but one that eliminates another's.",
+   "symbols": [
+    {
+     "sym": "I",
+     "latex": "I",
+     "what": "intensity of scattered light",
+     "unit": "W/m²",
+     "note": "inversely proportional to the fourth power of the wavelength"
+    },
+    {
+     "sym": "lambda",
+     "latex": "\\lambda",
+     "what": "wavelength",
+     "unit": "m",
+     "note": "for visible light from 400 to 700 nm — a difference of almost twice, and in the fourth power already sixfold"
+    },
+    {
+     "sym": "d",
+     "latex": "d_{\\min}",
+     "what": "resolution limit",
+     "unit": "m",
+     "note": "smallest distinguishable distance between details"
+    },
+    {
+     "sym": "theta",
+     "latex": "\\theta",
+     "what": "aperture angle of the objective",
+     "unit": "°",
+     "note": "the wider the objective collects light, the better the resolution"
+    },
+    {
+     "sym": "NA",
+     "latex": "\\text{NA}",
+     "what": "numerical aperture",
+     "unit": "—",
+     "note": "$n\\sin\\theta$; for the best objectives with oil immersion about 1.4"
+    }
+   ]
   },
   "symbols": [
    {
@@ -559,41 +611,6 @@
    ],
    "plate": "Scattering on small particles goes as the fourth power of frequency — hence the blue sky and red sunset. The resolution of any instrument is limited to half the wavelength, and this is a property of the wave, not of the technology.",
    "note": "Limits of applicability. Rayleigh's law is valid only for particles much smaller than the wavelength — air molecules. For fog droplets and clouds, whose size is comparable to the wavelength, a different, much more complex Mie solution applies, and there scattering is almost independent of color: therefore clouds and fog are white, not blue. The Abbe limit is also circumvented — in the last thirty years, methods have been invented to obtain resolution ten times better, using the nonlinear response of molecules. The limit remains valid for linear optics and is circumvented by stepping outside its framework."
-  },
-  "math": {
-   "title": "The Mathematics Needed Here",
-   "text": [
-    "Why the fourth power produces such a strong effect. Blue and red differ in wavelength by less than a factor of two — seemingly a small difference. But raise it to the fourth: the ratio 700 to 450 equals 1.56, and to the fourth power it is already 5.9. Always check the power of a quantity: where the exponent is high, small differences become large. This is a general rule, and it explains why in physics it is important to know not only what something depends on, but also how strongly.",
-    "What diffraction means in simple terms. Imagine water waves passing through a gap in a breakwater. If the gap is wide, the waves continue as a straight strip. If it is narrow — comparable to the distance between crests — they spread out in a semicircle behind the gap, like from a point source. The aperture becomes a new source, and the narrower it is, the wider the fan. Light behaves exactly the same way, only its wavelength is so small that very narrow slits are needed for this effect.",
-    "Why you cannot see details smaller than half the wavelength. A wave physically cannot carry information about features smaller than itself — much like you cannot feel fine engraving with a hand in a thick mitten. The image of a point becomes a blurred spot, and two spots merge if their centers are closer than half a wavelength. Hence a simple consequence: to see smaller details, you need not a better lens but a shorter wave. That is how ultraviolet lithography, X-ray crystallography, and the electron microscope came to be.",
-    "How color and frequency are related. Color is determined by frequency, which does not change when transitioning between media. The wavelength changes — in water it is 1.33 times shorter — but the color remains the same. Therefore, underwater, red remains red. It is useful to keep in mind that the visible range spans exactly one octave: red is twice as long as violet. For sound we hear ten octaves, for light we see only one — and all painting, all design, and all sunsets fit into this single doubling."
-   ]
-  },
-  "example": {
-   "title": "Example with numbers: why the sky is blue and what a microscope sees",
-   "lead": "Two estimates explaining half of everything you see with your eyes.",
-   "given": "Wavelengths: blue 450 nm, red 700 nm. A microscope objective with numerical aperture 1.4 uses green light 550 nm. Find the ratio of scattering intensities and the resolution limit of the microscope.",
-   "law": "$I \\propto \\lambda^{-4}$; $\\;d_{\\min} \\approx \\dfrac{\\lambda}{2\\,\\text{NA}}$",
-   "solution": [
-    {
-     "text": "Ratio of wavelengths.",
-     "latex": "\\frac{\\lambda_{\\text{cr}}}{\\lambda_{\\text{sin}}} = \\frac{700}{450} \\approx 1{,}556"
-    },
-    {
-     "text": "Raise to the fourth power — this is the gain of blue in scattering.",
-     "latex": "1{,}556^{4} \\approx 5{,}86"
-    },
-    {
-     "text": "Now the resolution limit of the microscope.",
-     "latex": "d_{\\min} = \\frac{550\\ \\text{nm}}{2 \\cdot 1{,}4} \\approx 196\\ \\text{nm}"
-    },
-    {
-     "text": "Compare with the sizes of objects.",
-     "latex": "\\text{bacterium} \\sim 1000\\ \\text{nm}, \\quad \\text{virus} \\sim 100\\ \\text{nm}, \\quad \\text{DNA molecule} \\sim 2\\ \\text{nm}"
-    }
-   ],
-   "answer": "Blue scatters almost six times more strongly than red. An optical microscope resolves details no smaller than about 200 nanometers.",
-   "check": "A sanity check: both answers are consistent with observations. The sky is indeed blue, not slightly bluish — a sixfold difference is large. It also explains why it is not violet, even though violet would scatter even more: there is less violet in the solar spectrum, and the eye is noticeably less sensitive to it. The second answer is even more illustrative: a bacterium is visible under an optical microscope, but a virus is not. That is why viruses, whose existence was hypothesized since the 1890s, were first seen only in 1931, when the electron microscope with a wavelength thousands of times smaller was built."
   },
   "constants": {
    "title": "Quantities in this section",
@@ -811,7 +828,57 @@
     "hint": "Find the ratio of wavelengths and raise it to the fourth power. 1.5 to the fourth is about five.",
     "tolAbs": 1.5
    }
-  ]
+  ],
+  "math": {
+   "title": "The math needed here",
+   "lead": "Here we need dimensional analysis, power laws, and order-of-magnitude estimates.",
+   "items": [
+    {
+     "what": "Dimensions instead of equations",
+     "why": "The first three steps of the derivation obtain Rayleigh's law without solving a single equation of electrodynamics. The trick is this: we write down an honest list of quantities on which the answer can possibly depend — the volume of the particle, the distance to it, the wavelength — and require that the units match. The amplitude must decay as one over distance, otherwise energy would not be conserved. The volume brings meters cubed, the distance takes away one meter, and for the remainder to become dimensionless, the wavelength squared must appear in the denominator. No other exponent can be chosen. Thus the first two steps give only the amplitude; the fourth power appears in the third step, where the amplitude is squared: intensity is the square of the amplitude, and $\\lambda^{2}$ in the denominator becomes $\\lambda^{4}$. The method does not give the numerical factor in front of the expression, but it uniquely determines the power to which each quantity enters — and it is precisely the power that decides everything here.",
+     "latex": "A \\propto \\frac{V}{r\\,\\lambda^{2}} \\;\\Longrightarrow\\; I \\propto A^{2} \\propto \\frac{V^{2}}{r^{2}\\lambda^{4}}",
+     "kit": "dimension"
+    },
+    {
+     "what": "Power law: the ratio goes into the exponent",
+     "why": "In the fourth step of the derivation, the ratio of wavelengths 700 to 450 is only 1.56, yet the scattering differs almost sixfold. The reason lies in the nature of a power law: it is the ratio of quantities that is raised to the fourth power, not their difference. Hence the working rule for reading formulas — look not only at what depends on what, but also to what power: the higher the exponent, the more confidently a modest difference in causes turns into a striking difference in effects. For small changes there is a convenient special case: the relative change in the result is approximately four times the relative change in wavelength; a shift of one percent gives four percent. But at the edges of the visible range, where wavelengths differ by a factor of one and a half, this linear estimate already fails, and the ratio must be honestly raised to the fourth.",
+     "latex": "\\frac{I_1}{I_2}=\\left(\\frac{\\lambda_2}{\\lambda_1}\\right)^{4}, \\qquad \\frac{\\Delta I}{I}\\approx 4\\,\\frac{\\Delta\\lambda}{\\lambda}\\;\\text{— only for small shifts}",
+     "kit": "propto"
+    },
+    {
+     "what": "Orders of magnitude instead of exact numbers",
+     "why": "The seventh step of the derivation places side by side 0.2 microns for light and 0.05 nanometers for the electron, and the example with numbers — a bacterium at a thousand nanometers, a virus at a hundred, and a DNA molecule at two. Exact values are not needed here; what is needed is the answer to the question 'by how many times', and it is counted in powers of ten: $2\\cdot 10^{-7}$ versus $5\\cdot 10^{-11}$ — the exponents differ by four, the coefficients give a correction, and the total is roughly four thousand times. Such counting immediately answers the main question of the section: the limit of the optical microscope lies between the size of a bacterium and the size of a virus, so one is visible and the other is not. The habit of first estimating the order of magnitude and only then calculating exactly saves both time and errors.",
+     "latex": "\\frac{d_{\\text{light}}}{d_{\\text{el}}} \\sim \\frac{2\\cdot 10^{-7}}{5\\cdot 10^{-11}} \\approx 4\\cdot 10^{3}",
+     "kit": "order"
+    }
+   ]
+  },
+  "example": {
+   "title": "Example with numbers: why the sky is blue and what a microscope sees",
+   "lead": "Two estimates that explain half of everything you see with your eyes.",
+   "given": "Wavelengths: blue 450 nm, red 700 nm. A microscope objective with a numerical aperture of 1.4 works with green light of 550 nm. Find the ratio of scattering intensities and the resolution limit of the microscope.",
+   "law": "$I \\propto \\lambda^{-4}$; $\\;d_{\\min} \\approx \\dfrac{\\lambda}{2\\,\\text{NA}}$",
+   "solution": [
+    {
+     "text": "The ratio of wavelengths.",
+     "latex": "\\frac{\\lambda_{\\text{red}}}{\\lambda_{\\text{blue}}} = \\frac{700}{450} \\approx 1{,}556"
+    },
+    {
+     "text": "Raise to the fourth power — this is the advantage of blue in scattering.",
+     "latex": "1{,}556^{4} \\approx 5{,}86"
+    },
+    {
+     "text": "Now the resolution limit of the microscope.",
+     "latex": "d_{\\min} = \\frac{550\\ \\text{nm}}{2 \\cdot 1{,}4} \\approx 196\\ \\text{nm}"
+    },
+    {
+     "text": "Compare with the sizes of objects.",
+     "latex": "\\text{bacterium} \\sim 1000\\ \\text{nm}, \\quad \\text{virus} \\sim 100\\ \\text{nm}, \\quad \\text{DNA molecule} \\sim 2\\ \\text{nm}"
+    }
+   ],
+   "answer": "Blue scatters almost six times more strongly than red. An optical microscope can distinguish details no smaller than about 200 nanometers.",
+   "check": "A sanity check, and both answers agree with what is observed. The sky is indeed blue, not just slightly bluish — the sixfold difference is large. This also explains why it is not violet, although violet would scatter even more: there is less of it in the solar spectrum, and the eye is noticeably less sensitive to it. The second answer is even more illustrative: a bacterium is visible under an optical microscope, but a virus is not. That is why viruses, whose existence had been suspected since the 1890s, were first seen only in 1931, when an electron microscope with a wavelength thousands of times smaller was built."
+  }
  },
  "es": {
   "title": "Color y difracción",
@@ -941,15 +1008,6 @@
    ],
    "plate": "La dispersión en partículas pequeñas varía con la cuarta potencia de la frecuencia — de ahí el cielo azul y el atardecer rojo. La resolución de cualquier instrumento está limitada a la mitad de la longitud de onda, y esto es una propiedad de la onda, no de la técnica.",
    "note": "Límites de aplicabilidad. La ley de Rayleigh solo es válida para partículas mucho más pequeñas que la longitud de onda — como las moléculas de aire. Para gotas de niebla y nubes, cuyo tamaño es comparable a la longitud de onda, funciona otra solución mucho más compleja, la de Mie, y allí la dispersión casi no depende del color: por eso las nubes y la niebla son blancas, no azules. El límite de Abbe también se puede eludir — en los últimos treinta años se han ideado formas de obtener una resolución diez veces mejor utilizando la respuesta no lineal de las moléculas. El límite sigue siendo válido para la óptica lineal y se supera saliendo de su marco."
-  },
-  "math": {
-   "title": "Matemáticas que se necesitaron aquí",
-   "text": [
-    "Por qué la cuarta potencia produce un efecto tan fuerte. El azul y el rojo difieren en longitud de onda menos del doble — aparentemente la diferencia es pequeña. Pero eleve a la cuarta potencia: la relación de 700 a 450 es 1,56, y en la cuarta potencia ya es 5,9. Siempre verifique en qué potencia aparece una magnitud: donde el exponente es alto, las pequeñas diferencias se vuelven grandes. Esta es una regla general, y explica por qué en física es importante saber no solo de qué depende, sino también cuán fuertemente.",
-    "Qué significa la difracción en términos simples. Imagine ondas en el agua pasando por una abertura en un rompeolas. Si la abertura es ancha, las ondas continúan en una banda recta. Si es estrecha — comparable a la distancia entre crestas —, después de la abertura se extienden en un semicírculo, como desde una fuente puntual. La abertura se convierte en una nueva fuente, y cuanto más estrecha, más amplio el abanico. La luz se comporta exactamente igual, solo que su longitud de onda es tan pequeña que se necesitan rendijas muy estrechas.",
-    "Por qué no se puede ver más pequeño que la mitad de la longitud de onda. Una onda físicamente no puede transportar información sobre detalles más pequeños que ella misma — algo así como no poder palpar un grabado fino con la mano enguantada. La imagen de un punto resulta ser una mancha borrosa, y dos manchas se fusionan si sus centros están a menos de media longitud de onda. De ahí una consecuencia simple: para ver más pequeño no se necesita una lente mejor, sino una onda más corta. Así aparecieron la litografía ultravioleta, el análisis de estructura de rayos X y el microscopio electrónico.",
-    "Cómo se relacionan el color y la frecuencia. El color está determinado por la frecuencia, y esta no cambia al pasar de un medio a otro. La longitud de onda cambia — en el agua es 1,33 veces más corta —, pero el color sigue siendo el mismo. Por eso bajo el agua el rojo sigue siendo rojo. Es útil tener en cuenta que el rango visible ocupa exactamente una octava: el rojo es el doble de largo que el violeta. Del sonido oímos diez octavas, de la luz vemos una — y toda la pintura, el diseño y todas las puestas de sol caben en esta única duplicación."
-   ]
   },
   "example": {
    "title": "Ejemplo con números: por qué el cielo es azul y qué ve el microscopio",
@@ -1193,7 +1251,31 @@
     "hint": "Encuentre la relación de longitudes de onda y elévela a la cuarta potencia. Uno y medio a la cuarta es aproximadamente cinco.",
     "tolAbs": 1.5
    }
-  ]
+  ],
+  "math": {
+   "title": "Las matemáticas que aquí se necesitaron",
+   "lead": "Aquí se necesitarán el análisis dimensional, la ley de potencias y el cálculo por órdenes de magnitud.",
+   "items": [
+    {
+     "what": "Dimensiones en lugar de ecuaciones",
+     "why": "Los primeros tres pasos de la derivación obtienen la ley de Rayleigh sin resolver ninguna ecuación de electrodinámica. El truco es este: escribimos una lista honesta de las magnitudes de las que la respuesta podría depender — el volumen de la partícula, la distancia a ella, la longitud de onda — y exigimos que las unidades de medida coincidan. La amplitud debe decrecer como uno sobre la distancia, de lo contrario la energía no se conserva. El volumen aporta metros cúbicos, la distancia quita un metro, y para que el resto sea adimensional, en el denominador debe aparecer la longitud de onda al cuadrado. No se puede elegir otro exponente. Así, los primeros dos pasos dan solo la amplitud; la cuarta potencia aparece en el tercer paso, donde la amplitud se eleva al cuadrado: la intensidad es el cuadrado de la amplitud, y $\\lambda^{2}$ en el denominador se convierte en $\\lambda^{4}$. El método no da el factor numérico que multiplica la expresión, pero especifica de manera inequívoca en qué grado entra cada magnitud — y es precisamente el grado lo que aquí lo decide todo.",
+     "latex": "A \\propto \\frac{V}{r\\,\\lambda^{2}} \\;\\Longrightarrow\\; I \\propto A^{2} \\propto \\frac{V^{2}}{r^{2}\\lambda^{4}}",
+     "kit": "dimension"
+    },
+    {
+     "what": "Ley de potencias: en el exponente va la razón",
+     "why": "En el cuarto paso de la derivación, la razón de longitudes de onda de 700 a 450 es solo 1.56, pero la dispersión difiere casi seis veces. La razón está en la estructura de la ley de potencias: se eleva a la cuarta potencia precisamente la razón de las magnitudes, no su diferencia. De ahí la regla práctica para leer fórmulas: fíjate no solo en de qué depende, sino también en en qué grado: cuanto mayor es el exponente, con más seguridad una modesta diferencia de causas se convierte en una llamativa diferencia de efectos. Para cambios pequeños hay un caso particular útil: el cambio relativo del resultado es aproximadamente cuatro veces mayor que el cambio relativo de la longitud de onda; un desplazamiento del uno por ciento da un cuatro por ciento. Pero en los extremos del rango visible, donde las longitudes de onda difieren en un factor de uno y medio, esta aproximación lineal ya falla, y la razón hay que elevarla honestamente a la cuarta.",
+     "latex": "\\frac{I_1}{I_2}=\\left(\\frac{\\lambda_2}{\\lambda_1}\\right)^{4}, \\qquad \\frac{\\Delta I}{I}\\approx 4\\,\\frac{\\Delta\\lambda}{\\lambda}\\;\\text{— solo para desplazamientos pequeños}",
+     "kit": "propto"
+    },
+    {
+     "what": "Órdenes de magnitud en lugar de números exactos",
+     "why": "El séptimo paso de la derivación coloca lado a lado 0.2 micras para la luz y 0.05 nanómetros para el electrón, y el ejemplo con números: una bacteria de mil nanómetros, un virus de cien y una molécula de ADN de dos. Los valores exactos no son necesarios aquí, lo que se necesita es la respuesta a la pregunta «¿cuántas veces?», y se calcula con potencias de diez: $2\\cdot 10^{-7}$ contra $5\\cdot 10^{-11}$ — los exponentes difieren en cuatro, los coeficientes dan una corrección, total aproximadamente cuatro mil veces. Este cálculo responde de inmediato a la pregunta principal del párrafo: el límite del microscopio óptico se encuentra entre el tamaño de una bacteria y el de un virus, por lo que uno se ve y el otro no. El hábito de estimar primero el orden y solo luego calcular con precisión ahorra tiempo y errores.",
+     "latex": "\\frac{d_{\\text{luz}}}{d_{\\text{el}}} \\sim \\frac{2\\cdot 10^{-7}}{5\\cdot 10^{-11}} \\approx 4\\cdot 10^{3}",
+     "kit": "order"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "اللون والحيود",
@@ -1205,37 +1287,74 @@
   ],
   "standNote": "حوِّل المنصة إلى وضع الموجتين - هذا نموذج لما يحدث عند شقين. بتغيير نسبة الترددات، ترى كيف تتراكب الموجات ذات الأطوال المختلفة. الشيء الرئيسي الذي ينبغي أن تأخذه من المنصة: كلما قصر طول الموجة، تكررت القيم العظمى والصغرى أكثر. ومن هنا تأتي الفقرة بأكملها - الموجة القصيرة تميز التفاصيل الصغيرة، والطويلة لا تميزها؛ القصيرة تتشتت بقوة، والطويلة تتشتت بضعف.",
   "formula": {
-   "name": "تشتت رايلي وحد التحليل",
+   "name": "تبعثر رايلي وحد الدقة",
    "latex": "I \\propto \\frac{1}{\\lambda^{4}}, \\qquad d_{\\min} \\approx \\frac{\\lambda}{2n\\sin\\theta}",
    "alsoKnown": "قانون القوة الرابعة · معيار آبي",
    "authors": [
     {
      "who": "إسحاق نيوتن",
      "year": "1704",
-     "what": "حلل الضوء الأبيض بمنشور، والأهم أنه أعاد تجميعه بمنشور ثانٍ. أثبت أن الألوان لا تتولد في الزجاج، بل موجودة أصلاً في الضوء الأبيض - خلافاً لتقليد دام ألفي عام يعتبر اللون فساداً للبياض."
+     "what": "حلل الضوء الأبيض بمنشور، والأهم من ذلك، أعاد تجميعه بمنشور ثانٍ. أثبت أن الألوان لا تولد في الزجاج، بل موجودة بالفعل في الضوء الأبيض، خلافًا لتقليد دام ألفي عام يعتبر اللون فسادًا للبياض."
     },
     {
      "who": "جون ويليام ستروت (اللورد رايلي)",
      "year": "1871",
-     "what": "فسر زرقة السماء بحصوله على علاقة التشتت مع القوة الرابعة للتردد. وقد تم الاستنتاج بالكامل تقريباً من اعتبارات الأبعاد - بدون حل معادلات الديناميكا الكهربائية."
+     "what": "فسر زرقة السماء، وحصل على اعتماد التبعثر على القوة الرابعة للتردد. الاستنتاج تم تقريبًا بالكامل من اعتبارات الأبعاد - دون حل معادلات الديناميكا الكهربائية."
     },
     {
      "who": "إرنست آبي",
      "year": "1873",
-     "what": "وضع حد تحليل المجهر: من المستحيل مبدئياً رؤية تفاصيل أصغر من نصف طول الموجة تقريباً. قبله، كان علماء البصريات يعتقدون أن الأمر يتعلق بجودة صقل الزجاج."
+     "what": "حدد حد دقة المجهر: من المستحيل مبدئيًا رؤية تفاصيل أصغر من نصف طول الموجة تقريبًا. قبله، كان خبراء البصريات يعتقدون أن الأمر يتعلق بجودة صقل الزجاج."
     },
     {
-     "who": "أوغستين فريسنل",
+     "who": "أوغستان فريسنل",
      "year": "1818",
-     "what": "بنى نظرية كمية للحيود، موضحاً لماذا يصل الضوء خلف العائق. صيغه سمحت بحساب النمط، وليس فقط التنبؤ بوجوده."
+     "what": "بنى نظرية كمية للحيود، موضحًا لماذا يصل الضوء إلى ما بعد العائق. معادلاته سمحت بحساب النمط، وليس فقط التنبؤ بوجوده."
     },
     {
      "who": "شتيفان هيل",
      "year": "1994",
-     "what": "ابتكر طريقة لتجاوز حد آبي باستخدام الاستجابة غير الخطية للجزيئات. جائزة نوبل 2014؛ اليوم ترى المجاهر تفاصيل بعشرين نانومتراً - أصغر بعشر مرات مما كان يعتقد أنه مستحيل."
+     "what": "ابتكر طريقة لتجاوز حد آبي باستخدام الاستجابة غير الخطية للجزيئات. جائزة نوبل 2014؛ اليوم المجاهر ترى تفاصيل بعشرين نانومتر - أصغر بعشر مرات مما كان يعتبر مستحيلًا."
     }
    ],
-   "story": "عادة ما تُروى تجربة نيوتن بالمنشور بشكل ناقص، والأهم هو الجزء الثاني. قبل نيوتن، كان تحليل الضوء بالمنشور معروفاً، وكان التفسير السائد أن الزجاج يفسد الضوء الأبيض، فيلونه كلما زاد المسار داخله. أجرى نيوتن التجربة الحاسمة: عزل لوناً واحداً من الطيف بشق ضيق وأمرره عبر منشور ثانٍ - لم يتغير اللون، ولم يحدث أي فساد إضافي. ثم جمع الطيف كاملاً بمنشور ثانٍ فحصل على ضوء أبيض. إذن، الألوان لا تُخلق بالزجاج، بل موجودة في الأبيض أصلاً. كانت هذه نموذجاً لكيفية إجراء تجربة حاسمة: لا لتأكيد فكرته، بل لقطع فكرة الآخرين."
+   "story": "عادةً ما تُروى تجربة نيوتن بالمنشور بشكل ناقص، والأهم فيها هو الجزء الثاني. فمن قبل نيوتن، كان تحليل الضوء بالمنشور معروفًا؛ وكان التفسير السائد أن الزجاج يفسد الضوء الأبيض، فيلونه أكثر كلما طال المسار داخله. أجرى نيوتن التجربة الحاسمة: عزل لونًا واحدًا من الطيف بشق ضيق ومرره عبر منشور ثانٍ - لم يتغير اللون، ولم يحدث أي فساد إضافي. ثم جمع الطيف كله بمنشور ثانٍ وحصل على ضوء أبيض. إذن، الألوان لا تُخلق بالزجاج، بل موجودة في الأبيض أصلًا. كان هذا مثالًا على كيفية إجراء تجربة حاسمة: لا لتأكيد فكرته، بل لقطع فكرة الآخرين.",
+   "symbols": [
+    {
+     "sym": "I",
+     "latex": "I",
+     "what": "شدة الضوء المتبعثر",
+     "unit": "W/m²",
+     "note": "تتناسب عكسيًا مع القوة الرابعة لطول الموجة"
+    },
+    {
+     "sym": "lambda",
+     "latex": "\\lambda",
+     "what": "طول الموجة",
+     "unit": "m",
+     "note": "للضوء المرئي من 400 إلى 700 نانومتر - الفرق تقريبًا الضعف، وفي القوة الرابعة يصبح ستة أضعاف"
+    },
+    {
+     "sym": "d",
+     "latex": "d_{\\min}",
+     "what": "حد الدقة",
+     "unit": "m",
+     "note": "أصغر مسافة يمكن تمييزها بين التفاصيل"
+    },
+    {
+     "sym": "theta",
+     "latex": "\\theta",
+     "what": "زاوية فتحة العدسة",
+     "unit": "°",
+     "note": "كلما كانت العدسة تجمع الضوء بشكل أوسع، كان الدقة أفضل"
+    },
+    {
+     "sym": "NA",
+     "latex": "\\text{NA}",
+     "what": "الفتحة العددية",
+     "unit": "—",
+     "note": "$n\\sin\\theta$؛ لأفضل العدسات مع الغمر بالزيت حوالي 1.4"
+    }
+   ]
   },
   "symbols": [
    {
@@ -1323,15 +1442,6 @@
    ],
    "plate": "التشتت على الجسيمات الصغيرة يسير كالقوة الرابعة للتردد - من هنا السماء الزرقاء وغروب الشمس الأحمر. دقة أي جهاز محدودة بنصف الطول الموجي، وهذه خاصية للموجة وليس للتكنولوجيا.",
    "note": "حدود الصلاحية. قانون رايلي صالح فقط للجسيمات الأصغر بكثير من الطول الموجي - جزيئات الهواء. بالنسبة لقطرات الضباب والسحب، التي يكون حجمها مقارنًا بالطول الموجي، يعمل حل آخر أكثر تعقيدًا هو حل مي، وهناك التشتت لا يعتمد تقريبًا على اللون: لذلك السحب والضباب بيضاء وليست زرقاء. يمكن التغلب على حد أب أيضًا - في الثلاثين سنة الماضية، تم ابتكار طرق للحصول على دقة أفضل بعشر مرات باستخدام الاستجابة غير الخطية للجزيئات. يظل الحد صحيحًا للبصريات الخطية ويتم تجاوزه بالخروج عن إطارها."
-  },
-  "math": {
-   "title": "الرياضيات التي نحتاجها هنا",
-   "text": [
-    "لماذا تعطي القوة الرابعة مثل هذا التأثير القوي. يختلف الأزرق والأحمر في الطول الموجي بأقل من الضعف - قد تبدو الفجوة صغيرة. ولكن ارفع إلى القوة الرابعة: النسبة 700 إلى 450 تساوي 1.56، وفي القوة الرابعة تصبح 5.9. تحقق دائمًا من القوة التي تدخل فيها الكمية: حيثما كان الأس مرتفعًا، تصبح الاختلافات الصغيرة كبيرة. هذه قاعدة عامة، وتشرح لماذا في الفيزياء من المهم معرفة ليس فقط ما تعتمد عليه، ولكن أيضًا بكم تعتمد.",
-    "ماذا يعني الحيود بشكل مبسط. تخيل موجات على الماء تمر عبر ممر في حاجز الأمواج. إذا كان الممر واسعًا، تذهب الموجات خلفه في شريط مستقيم. إذا كان ضيقًا - مقارنًا بالمسافة بين القمم - تنتشر خلفه في نصف دائرة، كما من مصدر نقطي. تتحول الفتحة إلى مصدر جديد، وكلما كانت أضيق، كلما كان المروحة أوسع. يتصرف الضوء بنفس الطريقة تمامًا، فقط طول موجته صغير جدًا لدرجة أن الأمر يتطلب شقوقًا ضيقة جدًا.",
-    "لماذا لا يمكن رؤية أصغر من نصف الطول الموجي. لا يمكن للموجة فيزيائيًا أن تحمل معلومات عن تفاصيل أصغر منها - تقريبًا مثل عدم القدرة على تحسس نقش دقيق بيد في قفاز سميك. صورة النقطة تصبح بقعة ضبابية، وتندمج البقعتان إذا كانت المراكز أقرب من نصف الطول الموجي. من هنا نتيجة بسيطة: لرؤية أصغر، لا نحتاج عدسة أفضل، بل موجة أقصر. هكذا ظهرت الطباعة الحجرية فوق البنفسجية، وتحليل الأشعة السينية الهيكلي، والميكروسكوب الإلكتروني.",
-    "كيف يرتبط اللون والتردد. اللون يحدده التردد، وهو لا يتغير عند الانتقال بين الأوساط. يتغير الطول الموجي - في الماء يصبح أقصر بمقدار 1.33 مرة - لكن اللون يبقى نفسه. لذلك تحت الماء، يبقى الأحمر أحمر. من المفيد أن نضع في الاعتبار أن النطاق المرئي يشغل تمامًا أوكتافًا واحدًا: الأحمر أطول مرتين من البنفسجي. في الصوت، نسمع عشرة أوكتافات، في الضوء نرى واحدًا - وكل الرسم، كل التصميم، وكل الغروب يتسع في هذا المضاعفة الواحدة."
-   ]
   },
   "example": {
    "title": "مثال بأرقام: لماذا السماء زرقاء وما يراه المجهر",
@@ -1578,7 +1688,31 @@
     "hint": "أوجد نسبة طولي الموجة وارفعها إلى القوة الرابعة. واحد ونصف مرفوع للرابعة يساوي تقريباً خمسة.",
     "tolAbs": 1.5
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "هنا ستكون هناك حاجة إلى تحليل الأبعاد، والقانون الأسّي، والحساب حسب رتب المقدار.",
+   "items": [
+    {
+     "what": "الأبعاد بدلاً من المعادلات",
+     "why": "الخطوات الثلاث الأولى من الاشتقاق تحصل على قانون رايلي دون حل أي معادلة من معادلات الديناميكا الكهربائية. الطريقة هي: نكتب قائمة صادقة بالكميات التي قد يعتمد عليها الجواب بشكل عام — حجم الجسيم، المسافة إليه، الطول الموجي — ونطلب أن تتطابق وحدات القياس. يجب أن تتناقص السعة بمقدار واحد على المسافة، وإلا لن يُحفظ الطاقة. الحجم يجلب مترًا مكعبًا، والمسافة تأخذ مترًا واحدًا، ولكي يصبح الباقي بلا أبعاد، يجب أن يظهر الطول الموجي مربعًا في المقام. لا يمكن اختيار أس آخر. هكذا تعطي الخطوتان الأوليان السعة فقط؛ أما القوة الرابعة فتظهر في الخطوة الثالثة، حيث تُربَّع السعة: الشدة هي مربع السعة، و $\\lambda^{2}$ في المقام يصبح $\\lambda^{4}$. لا تعطي الطريقة معاملًا عدديًا أمام التعبير، لكنها تحدد بشكل قاطع في أي قوة تدخل كل كمية — والقوة هي التي تحسم كل شيء هنا.",
+     "latex": "A \\propto \\frac{V}{r\\,\\lambda^{2}} \\;\\Longrightarrow\\; I \\propto A^{2} \\propto \\frac{V^{2}}{r^{2}\\lambda^{4}}",
+     "kit": "dimension"
+    },
+    {
+     "what": "القانون الأسّي: في الأس تدخل النسبة",
+     "why": "في الخطوة الرابعة من الاشتقاق، نسبة الأطوال الموجية 700 إلى 450 تساوي 1.56 فقط، بينما يختلف التشتت بنحو ستة أضعاف. السبب في بنية الاعتماد الأسي: يُرفع إلى القوة الرابعة نسبة الكميات وليس فرقها. من هنا قاعدة عملية لقراءة الصيغ — انظر ليس فقط إلى ما تعتمد عليه، بل أيضًا إلى بأي قوة: كلما كان الأس أعلى، كلما تحول الفرق المتواضع في الأسباب بثقة إلى فرق مذهل في النتائج. للتغيرات الصغيرة هناك حالة خاصة مريحة: التغير النسبي في النتيجة أكبر بنحو أربع مرات من التغير النسبي في الطول الموجي، أي أن انزياحًا بنسبة واحد بالمئة يعطي أربعة بالمئة. لكن عند أطراف النطاق المرئي، حيث تختلف الأطوال الموجية بمقدار مرة ونصف، فإن هذا التقدير الخطي يكذب بالفعل، ويجب رفع النسبة بأمانة إلى القوة الرابعة.",
+     "latex": "\\frac{I_1}{I_2}=\\left(\\frac{\\lambda_2}{\\lambda_1}\\right)^{4}, \\qquad \\frac{\\Delta I}{I}\\approx 4\\,\\frac{\\Delta\\lambda}{\\lambda}\\;\\text{— فقط عند الإزاحات الصغيرة}",
+     "kit": "propto"
+    },
+    {
+     "what": "رتب المقدار بدلاً من الأرقام الدقيقة",
+     "why": "الخطوة السابعة من الاشتقاق تضع جنبًا إلى جنب 0.2 ميكرون للضوء و0.05 نانومتر للإلكترون، ومثال بالأرقام — بكتيريا بألف نانومتر، وفيروس بمئة، وجزيء DNA باثنين. القيم الدقيقة ليست مطلوبة هنا، بل المطلوب إجابة على سؤال «بكم مرة»، ويُحسب بأسس العشرة: $2\\cdot 10^{-7}$ مقابل $5\\cdot 10^{-11}$ — يختلف الأسّان بأربعة، والمعاملات تعطي تصحيحًا، والمجموع حوالي أربعة آلاف مرة. هذا الحساب يجيب فورًا على السؤال الرئيسي للفقرة: حد المجهر الضوئي يقع بين حجم البكتيريا وحجم الفيروس، لذلك تُرى واحدة ولا يُرى الآخر. عادة تقدير الرتبة أولاً ثم الحساب الدقيق لاحقًا توفر الوقت والأخطاء.",
+     "latex": "\\frac{d_{\\text{ضوء}}}{d_{\\text{إلكترون}}} \\sim \\frac{2\\cdot 10^{-7}}{5\\cdot 10^{-11}} \\approx 4\\cdot 10^{3}",
+     "kit": "order"
+    }
+   ]
+  }
  },
  "tags": [
   "virus",

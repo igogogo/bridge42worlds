@@ -181,11 +181,26 @@
   },
   "math": {
    "title": "Математика, которая здесь понадобилась",
-   "text": [
-    "Почему получается именно экспонента. Всякий раз, когда скорость изменения пропорциональна текущему количеству, ответ экспоненциальный — это самое частое дифференциальное уравнение в природе. Так растёт капитал с процентами, так остывает чай, так гаснет звук в зале. Здесь количество убывает, поэтому показатель отрицательный. Практическое следствие: у экспоненты нет конца. Радиоактивное вещество не исчезает полностью никогда — за каждый период остаётся половина от предыдущего.",
-    "Что означает отсутствие памяти. Ядро, просуществовавшее миллиард лет, имеет ровно те же шансы распасться в ближайшую секунду, что и только что образовавшееся. Это резко отличается от привычной жизни: человек, лампочка и подшипник изнашиваются, и вероятность отказа со временем растёт. У ядра износа нет. Полезная проверка понимания: если из ста ядер за час распалось пятьдесят, то за следующий час распадётся не пятьдесят, а двадцать пять — от оставшихся.",
-    "Как считать в уме через периоды. Гораздо удобнее пользоваться не экспонентой, а степенями двойки. Прошёл один период — осталась половина, два — четверть, три — восьмая, десять — примерно одна тысячная. Отсюда практическое правило: за десять периодов полураспада активность падает в тысячу раз, за двадцать — в миллион. Именно поэтому отработавшее ядерное топливо выдерживают в бассейнах: самые активные изотопы с периодами в дни и месяцы за несколько лет уходят почти полностью.",
-    "Почему туннелирование даёт такой разброс. Вероятность просачивания сквозь барьер зависит от его высоты и ширины экспоненциально. Значит небольшое изменение энергии альфа-частицы — скажем, с 4 до 9 МэВ — меняет показатель экспоненты на десятки, а саму вероятность в $10^{20}$ раз и более. Отсюда закон Гейгера–Нэттола: логарифм периода полураспада линейно зависит от обратного корня из энергии. Экспонента всегда даёт огромные разбросы от малых изменений."
+   "lead": "Одно уравнение первого порядка, один логарифм и один закон больших чисел — вся математика этого параграфа.",
+   "items": [
+    {
+     "what": "Как разделение переменных даёт экспоненту",
+     "why": "Третий шаг вывода назван по имени приёма, но само действие пропущено. В уравнении $dN = -\\lambda N\\,dt$ искомая величина и время перемешаны в одном произведении; делим обе части на $N$ — и они расходятся по разные стороны знака равенства: слева только $N$, справа только $t$. Теперь каждую сторону можно интегрировать отдельно, и это вся суть метода. Слева получается $\\ln N$, справа $-\\lambda t + C$; потенцируем и приходим к $N = N_0 e^{-\\lambda t}$, причём $N_0$ берётся из условия $N(0) = N_0$, а не из самого уравнения. У приёма есть цена: делить на $N$ позволено, пока $N \\neq 0$. Нуля экспонента и правда не достигает ни в какой момент, но это свойство непрерывной модели, а не вещества: ядер целое число, и последнее из них распадается в конечный момент времени. Формула верна, пока $N$ велико — тогда доля распавшихся за $dt$ действительно близка к $\\lambda\\,dt$. Когда $N$ падает до единиц, плавного убывания нет вовсе, остаются отдельные случайные события, и считать приходится вероятностями; об этом третья врезка.",
+     "latex": "\\frac{dN}{N} = -\\lambda\\,dt \\;\\Longrightarrow\\; \\ln N = -\\lambda t + C \\;\\Longrightarrow\\; N = N_0 e^{-\\lambda t}",
+     "kit": "separation"
+    },
+    {
+     "what": "Логарифм переводит долю в срок",
+     "why": "В четвёртом шаге неизвестное сидит в показателе: $1/2 = e^{-\\lambda T_{1/2}}$. Достать его оттуда умеет только логарифм — функция, обратная возведению в степень, ради этого и заведённая. Логарифмируем обе части: $\\lambda T_{1/2} = \\ln 2$, откуда $T_{1/2} \\approx 0{,}693/\\lambda$. Тем же действием получена последняя строка примера: $t = T_{1/2}\\ln(N_0/N)/\\ln 2$. Переход от записи с $e$ к записи со степенью двойки есть смена основания, и $\\ln 2$ ровно этот пересчёт и означает; закон при этом один и тот же. Отсюда счёт в уме: $2^{10} = 1024 \\approx 10^{3}$, значит десять периодов дают падение в тысячу раз, двадцать — в миллион. Понятно и почему в примере логарифм не понадобился: доля $0{,}25$ оказалась точной степенью двойки, и показатель прочитался прямо.",
+     "latex": "\\tfrac{1}{2} = e^{-\\lambda T_{1/2}} \\;\\Longrightarrow\\; T_{1/2} = \\frac{\\ln 2}{\\lambda}, \\qquad 2^{10} \\approx 10^{3}",
+     "kit": "exponent"
+    },
+    {
+     "what": "Почему миллиард ядер точнее одного",
+     "why": "Первый шаг вывода определяет $\\lambda$ как вероятность распада в единицу времени, и для одного ядра из этого не следует ничего: событие либо случится, либо нет. Строгий закон второго шага держится на законе больших чисел. Если ядер $N$ и распадаются они независимо друг от друга, среднее число распадов за $dt$ равно $\\lambda N\\,dt$, а разброс вокруг среднего имеет порядок корня из этого числа. Значит относительное отклонение падает как $1/\\sqrt{N}$: при $10^{20}$ ядрах оно составляет $10^{-10}$, и закон выглядит точным, хотя каждое отдельное событие случайно. Отсюда же понятно, почему в опыте с сотней монет к концу видны заметные отклонения, а слабые источники считают подолгу: чтобы уменьшить погрешность вдвое, число зарегистрированных распадов приходится учетверить.",
+     "latex": "\\langle \\Delta N\\rangle = \\lambda N\\,\\Delta t, \\qquad \\frac{\\text{разброс}}{\\text{среднее}} \\sim \\frac{1}{\\sqrt{N}}",
+     "kit": "probability"
+    }
    ]
   },
   "example": {
@@ -559,15 +574,6 @@
    "plate": "For a single nucleus, the moment of decay is fundamentally unpredictable; for many, the fraction decayed obeys a strict exponential law, independent of any external conditions.",
    "note": "Limits of applicability and an important clarification. The independence from external conditions is almost absolute, but not entirely: for decays that proceed via electron capture from the nearest shell, the rate depends slightly on the chemical state — the effect amounts to fractions of a percent and has been measured. Moreover, under extreme conditions in stars, where atoms are completely ionized, some half-lives change by factors. For all terrestrial applications, the law can be considered absolute."
   },
-  "math": {
-   "title": "The mathematics needed here",
-   "text": [
-    "Why exactly an exponential emerges. Whenever the rate of change is proportional to the current quantity, the answer is exponential — this is the most common differential equation in nature. This is how capital grows with interest, how tea cools, how sound fades in a hall. Here the quantity decreases, so the exponent is negative. A practical consequence: the exponential has no end. A radioactive substance never disappears completely — after each period, half of the previous amount remains.",
-    "What memorylessness means. A nucleus that has existed for a billion years has exactly the same chance of decaying in the next second as one just formed. This is sharply different from everyday life: a person, a light bulb, and a bearing wear out, and the probability of failure increases with time. A nucleus has no wear. A useful check of understanding: if fifty out of one hundred nuclei decay in an hour, then in the next hour not fifty but twenty-five will decay — from the remaining ones.",
-    "How to calculate in your head using half-lives. It is much more convenient to use powers of two rather than the exponential. After one period, half remains; after two, a quarter; after three, an eighth; after ten, roughly one thousandth. Hence a practical rule: after ten half-lives, activity drops by a factor of a thousand; after twenty, by a factor of a million. That is why spent nuclear fuel is stored in pools: the most active isotopes with half-lives of days and months decay almost completely in a few years.",
-    "Why tunneling gives such a spread. The probability of penetrating a barrier depends exponentially on its height and width. Thus a small change in the alpha particle energy — say, from 4 to 9 MeV — changes the exponent by tens and the probability by $10^{20}$ times or more. Hence the Geiger–Nuttall law: the logarithm of the half-life depends linearly on the inverse square root of the energy. The exponential always yields huge spreads from small changes."
-   ]
-  },
   "example": {
    "title": "Example with Numbers: Radiocarbon Dating",
    "lead": "Calculating the age of an archaeological find is a task solved in laboratories worldwide.",
@@ -808,7 +814,31 @@
     "hint": "Which power of two corresponds to one-eighth? That many half-lives have passed.",
     "tolAbs": 2
    }
-  ]
+  ],
+  "math": {
+   "title": "The mathematics needed here",
+   "lead": "One first-order equation, one logarithm, and one law of large numbers — that's all the mathematics in this section.",
+   "items": [
+    {
+     "what": "How separation of variables yields an exponential",
+     "why": "The third step of the derivation is named after the technique, but the action itself is omitted. In the equation $dN = -\\lambda N\\,dt$, the unknown quantity and time are mixed in a single product; we divide both sides by $N$ — and they separate to opposite sides of the equals sign: only $N$ on the left, only $t$ on the right. Now each side can be integrated separately, and that is the whole essence of the method. On the left we get $\\ln N$, on the right $-\\lambda t + C$; exponentiating, we arrive at $N = N_0 e^{-\\lambda t}$, where $N_0$ is taken from the condition $N(0) = N_0$, not from the equation itself. The technique has a price: dividing by $N$ is allowed only as long as $N \\neq 0$. Indeed, the exponential never reaches zero at any moment, but this is a property of the continuous model, not of matter: nuclei are integer, and the last one decays at a finite time. The formula holds while $N$ is large — then the fraction decaying in $dt$ is indeed close to $\\lambda\\,dt$. When $N$ drops to units, there is no smooth decrease at all; only individual random events remain, and one must count probabilities; that is the third inset.",
+     "latex": "\\frac{dN}{N} = -\\lambda\\,dt \\;\\Longrightarrow\\; \\ln N = -\\lambda t + C \\;\\Longrightarrow\\; N = N_0 e^{-\\lambda t}",
+     "kit": "separation"
+    },
+    {
+     "what": "The logarithm converts a fraction into a time",
+     "why": "In the fourth step, the unknown sits in the exponent: $1/2 = e^{-\\lambda T_{1/2}}$. Only the logarithm can extract it from there — the function inverse to exponentiation, invented precisely for this purpose. We take the logarithm of both sides: $\\lambda T_{1/2} = \\ln 2$, whence $T_{1/2} \\approx 0.693/\\lambda$. The same operation yields the last line of the example: $t = T_{1/2}\\ln(N_0/N)/\\ln 2$. The transition from the notation with $e$ to the notation with a power of two is a change of base, and $\\ln 2$ is exactly that conversion; the law is the same. Hence mental arithmetic: $2^{10} = 1024 \\approx 10^{3}$, so ten half-lives give a thousandfold decrease, twenty — a millionfold. It is also clear why the logarithm was not needed in the example: the fraction $0.25$ turned out to be an exact power of two, and the exponent was read directly.",
+     "latex": "\\tfrac{1}{2} = e^{-\\lambda T_{1/2}} \\;\\Longrightarrow\\; T_{1/2} = \\frac{\\ln 2}{\\lambda}, \\qquad 2^{10} \\approx 10^{3}",
+     "kit": "exponent"
+    },
+    {
+     "what": "Why a billion nuclei are more accurate than one",
+     "why": "The first step of the derivation defines $\\lambda$ as the probability of decay per unit time, and for a single nucleus nothing follows from this: the event either happens or not. The rigorous law of the second step rests on the law of large numbers. If there are $N$ nuclei and they decay independently, the average number of decays in $dt$ is $\\lambda N\\,dt$, and the spread around the average is of the order of the square root of that number. Hence the relative deviation falls as $1/\\sqrt{N}$: for $10^{20}$ nuclei it is $10^{-10}$, and the law looks exact, although each individual event is random. From this it is also clear why in an experiment with a hundred coins noticeable deviations are seen toward the end, and why weak sources are counted for a long time: to halve the error, the number of registered decays must be quadrupled.",
+     "latex": "\\langle \\Delta N\\rangle = \\lambda N\\,\\Delta t, \\qquad \\frac{\\text{spread}}{\\text{average}} \\sim \\frac{1}{\\sqrt{N}}",
+     "kit": "probability"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Radiactividad",
@@ -938,15 +968,6 @@
    ],
    "plate": "Para un solo núcleo, el momento de la desintegración es fundamentalmente impredecible; para muchos, la fracción desintegrada obedece una ley exponencial rigurosa que no depende de ninguna condición externa.",
    "note": "Límites de aplicabilidad y una aclaración importante. La independencia de las condiciones externas es casi absoluta, pero no del todo: para las desintegraciones que ocurren mediante captura de electrones de la capa más cercana, la velocidad depende ligeramente del estado químico; el efecto es de fracciones de porcentaje y ha sido medido. Además, en condiciones extremas en estrellas, donde los átomos están completamente ionizados, algunos períodos cambian en factores. Para todas las aplicaciones terrestres, la ley puede considerarse absoluta."
-  },
-  "math": {
-   "title": "Matemáticas necesarias aquí",
-   "text": [
-    "Por qué se obtiene precisamente una exponencial. Siempre que la velocidad de cambio es proporcional a la cantidad actual, la respuesta es exponencial: es la ecuación diferencial más común en la naturaleza. Así crece el capital con intereses, así se enfría el té, así se apaga el sonido en una sala. Aquí la cantidad disminuye, por lo que el exponente es negativo. Consecuencia práctica: la exponencial no tiene fin. Una sustancia radiactiva nunca desaparece por completo; en cada período queda la mitad del anterior.",
-    "Qué significa la ausencia de memoria. Un núcleo que ha existido durante mil millones de años tiene exactamente las mismas probabilidades de desintegrarse en el próximo segundo que uno recién formado. Esto contrasta fuertemente con la vida cotidiana: una persona, una bombilla y un rodamiento se desgastan, y la probabilidad de fallo aumenta con el tiempo. El núcleo no se desgasta. Una comprobación útil de comprensión: si de cien núcleos se desintegran cincuenta en una hora, en la siguiente hora se desintegrarán no cincuenta, sino veinticinco, de los que quedan.",
-    "Cómo calcular mentalmente usando períodos. Es mucho más conveniente usar no la exponencial, sino potencias de dos. Pasado un período, queda la mitad; dos, un cuarto; tres, un octavo; diez, aproximadamente una milésima. De ahí una regla práctica: en diez períodos de semidesintegración la actividad cae mil veces, en veinte, un millón. Por eso el combustible nuclear gastado se almacena en piscinas: los isótopos más activos con períodos de días y meses desaparecen casi por completo en unos pocos años.",
-    "Por qué el tunelamiento produce tal dispersión. La probabilidad de filtrarse a través de la barrera depende exponencialmente de su altura y anchura. Así, un pequeño cambio en la energía de la partícula alfa, por ejemplo de 4 a 9 MeV, cambia el exponente en decenas y la probabilidad misma en $10^{20}$ veces o más. De ahí la ley de Geiger-Nuttall: el logaritmo del período de semidesintegración depende linealmente de la raíz inversa de la energía. La exponencial siempre produce enormes dispersiones a partir de pequeños cambios."
-   ]
   },
   "example": {
    "title": "Ejemplo con números: datación por radiocarbono",
@@ -1188,7 +1209,31 @@
     "hint": "¿A qué potencia de dos corresponde un octavo? Ese es el número de periodos transcurridos.",
     "tolAbs": 2
    }
-  ]
+  ],
+  "math": {
+   "title": "Las matemáticas que aquí se necesitaron",
+   "lead": "Una ecuación de primer orden, un logaritmo y una ley de los grandes números: toda la matemática de este apartado.",
+   "items": [
+    {
+     "what": "Cómo la separación de variables produce la exponencial",
+     "why": "El tercer paso de la derivación se nombra por la técnica, pero la acción en sí se omite. En la ecuación $dN = -\\lambda N\\,dt$, la cantidad buscada y el tiempo están mezclados en un solo producto; dividimos ambos lados por $N$ — y se separan a lados opuestos del signo igual: a la izquierda solo $N$, a la derecha solo $t$. Ahora cada lado se puede integrar por separado, y esa es toda la esencia del método. A la izquierda se obtiene $\\ln N$, a la derecha $-\\lambda t + C$; exponenciamos y llegamos a $N = N_0 e^{-\\lambda t}$, donde $N_0$ se toma de la condición $N(0) = N_0$, no de la ecuación en sí. La técnica tiene un costo: dividir por $N$ está permitido mientras $N \\neq 0$. La exponencial, de hecho, no alcanza el cero en ningún momento, pero eso es una propiedad del modelo continuo, no de la materia: los núcleos son un número entero, y el último de ellos se desintegra en un momento finito. La fórmula es válida mientras $N$ sea grande — entonces la fracción desintegrada en $dt$ es realmente cercana a $\\lambda\\,dt$. Cuando $N$ cae a unidades, no hay un decrecimiento suave en absoluto, quedan eventos aleatorios individuales, y hay que calcular con probabilidades; de eso trata el tercer recuadro.",
+     "latex": "\\frac{dN}{N} = -\\lambda\\,dt \\;\\Longrightarrow\\; \\ln N = -\\lambda t + C \\;\\Longrightarrow\\; N = N_0 e^{-\\lambda t}",
+     "kit": "separation"
+    },
+    {
+     "what": "El logaritmo convierte la fracción en tiempo",
+     "why": "En el cuarto paso, la incógnita está en el exponente: $1/2 = e^{-\\lambda T_{1/2}}$. Solo el logaritmo —la función inversa de la potenciación, creada precisamente para esto— puede extraerla de ahí. Tomamos logaritmos en ambos lados: $\\lambda T_{1/2} = \\ln 2$, de donde $T_{1/2} \\approx 0{,}693/\\lambda$. Con la misma acción se obtiene la última línea del ejemplo: $t = T_{1/2}\\ln(N_0/N)/\\ln 2$. El paso de la notación con $e$ a la notación con potencia de dos es un cambio de base, y $\\ln 2$ es exactamente ese factor de conversión; la ley es la misma. De ahí el cálculo mental: $2^{10} = 1024 \\approx 10^{3}$, así que diez períodos dan una reducción a la milésima parte, veinte a la millonésima. También se entiende por qué en el ejemplo no se necesitó el logaritmo: la fracción $0{,}25$ resultó ser una potencia exacta de dos, y el exponente se leyó directamente.",
+     "latex": "\\tfrac{1}{2} = e^{-\\lambda T_{1/2}} \\;\\Longrightarrow\\; T_{1/2} = \\frac{\\ln 2}{\\lambda}, \\qquad 2^{10} \\approx 10^{3}",
+     "kit": "exponent"
+    },
+    {
+     "what": "Por qué mil millones de núcleos son más precisos que uno",
+     "why": "El primer paso de la derivación define $\\lambda$ como la probabilidad de desintegración por unidad de tiempo, y para un solo núcleo de esto no se sigue nada: el evento ocurre o no ocurre. La ley estricta del segundo paso se basa en la ley de los grandes números. Si hay $N$ núcleos y se desintegran independientemente unos de otros, el número promedio de desintegraciones en $dt$ es $\\lambda N\\,dt$, y la dispersión alrededor del promedio es del orden de la raíz cuadrada de ese número. Por lo tanto, la desviación relativa cae como $1/\\sqrt{N}$: con $10^{20}$ núcleos es $10^{-10}$, y la ley parece exacta, aunque cada evento individual sea aleatorio. De aquí también se entiende por qué en el experimento con cien monedas se ven desviaciones notables al final, y por qué las fuentes débiles se cuentan durante mucho tiempo: para reducir el error a la mitad, el número de desintegraciones registradas debe cuadruplicarse.",
+     "latex": "\\langle \\Delta N\\rangle = \\lambda N\\,\\Delta t, \\qquad \\frac{\\text{dispersión}}{\\text{promedio}} \\sim \\frac{1}{\\sqrt{N}}",
+     "kit": "probability"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "النشاط الإشعاعي",
@@ -1207,30 +1252,67 @@
     {
      "who": "هنري بيكريل",
      "year": "1896",
-     "what": "اكتشف أن ملح اليورانيوم يعرض لوح التصوير في الظلام. كان يستعد لتجارب مع ضوء الشمس، ولكن بسبب المطر لم ينتظر، وطور الألواح تحسبًا — فرأى الصورة."
+     "what": "اكتشف أن ملح اليورانيوم يعرض لوح التصوير للضوء في الظلام. كان يستعد لتجارب مع ضوء الشمس، لم ينتظر المطر، فطوّر الألواح على أي حال — ورأى الصورة"
     },
     {
-     "who": "ماريا سكوودوفسكا-كوري",
+     "who": "ماري سكوودوفسكا-كوري",
      "year": "1898",
-     "what": "صاغت مصطلح «النشاط الإشعاعي» واكتشفت البولونيوم والراديوم، بعد أن عالجت يدويًا أطنانًا من خام اليورانيوم. أثبتت أن الإشعاع خاصية للذرات نفسها، وليس للمركبات الكيميائية."
+     "what": "أدخلت مصطلح «النشاط الإشعاعي» واكتشفت البولونيوم والراديوم، بعد معالجة يدوية لأطنان من خام اليورانيوم. أثبتت أن الإشعاع هو خاصية للذرات نفسها، وليس للمركبات الكيميائية"
     },
     {
      "who": "إرنست رذرفورد وفريدريك سودي",
      "year": "1902",
-     "what": "أثبتا قانون التحلل الأسي وطرحا فكرة جريئة: عند التحلل يتحول عنصر إلى آخر. لاحقًا تذكر سودي أن رذرفورد طلب عدم تسمية ذلك تحولاً (transmutation) لئلا يظن الناس أنهما خيميائيان."
+     "what": "أثبتا القانون الأسي للتحلل وطرحا فكرة جريئة: أثناء التحلل، يتحول عنصر إلى آخر. لاحقًا تذكر سودي أن رذرفورد طلب عدم تسمية هذا بالتحول الخيميائي، حتى لا يُظن أنهما كيميائيان"
     },
     {
      "who": "جورج جاموف",
      "year": "1928",
-     "what": "فسر اضمحلال ألفا بالنفق عبر حاجز كولوم. كان هذا أول تطبيق لميكانيكا الكم على النواة، وشرح لماذا تختلف أعمار النصف بمقدار $10^{24}$ مرة."
+     "what": "فسر تحلل ألفا بالنفق عبر الحاجز الكولومي. كان هذا أول تطبيق لميكانيكا الكم على النواة وفسر لماذا تختلف فترات عمر النصف بعامل $10^{24}$"
     },
     {
-     "who": "ويلارد ليبي",
+     "who": "ويلارد ليببي",
      "year": "1949",
-     "what": "طور التأريخ بالكربون المشع. اختبر الطريقة على عينات من مقابر مصرية قديمة ذات عمر معروف؛ وكان التطابق ممتازًا. جائزة نوبل في الكيمياء عام 1960."
+     "what": "طوّر التأريخ بالكربون المشع. اختبر الطريقة على عينات من مقابر مصر القديمة ذات العمر المعروف؛ كان التطابق ممتازًا. جائزة نوبل في الكيمياء عام 1960"
     }
    ],
-   "story": "كانت ماري كوري تعمل مع الراديوم دون أن تدرك خطورته: إذ كان الإشعاع يُعتبر في ذلك الوقت علاجيًا، وكانت كريمات ومقويات الراديوم تباع في الصيدليات. كانت تحمل أنابيب الاختبار في جيب معطفها وتستمتع بتوهجها في ظلام المختبر. توفيت عام 1934 بفقر الدم اللاتنسجي — والذي كان شبه المؤكد نتيجة التعرض الطويل للإشعاع. لا تزال دفاتر مختبرها وحتى كتاب الطبخ الخاص بها مشعة لدرجة أنها تُحفظ في صناديق من الرصاص: فمن يرغب في رؤيتها يُعطى ملابس واقية ويُطلب منه التوقيع على إخلاء مسؤولية. الراديوم-226 له عمر نصف يبلغ 1600 سنة، لذا ستبقى الدفاتر خطيرة لمدة ألف وخمسمائة سنة أخرى."
+   "story": "عملت ماري كوري مع الراديوم دون أن تدرك الخطر: في ذلك الوقت كان الإشعاع يعتبر علاجيًا إلى حد ما، وكانت كريمات ومنشطات الراديوم تُباع في الصيدليات. كانت تحمل أنابيب الاختبار في جيب معطفها وتعجب بتوهجها في ظلام المختبر. توفيت في عام 1934 بفقر الدم اللاتنسجي — وهو شبه مؤكد نتيجة التعرض للإشعاع لسنوات طويلة. لا تزال دفاتر مختبرها وحتى كتاب الطبخ الخاص بها مشعة لدرجة أنها تُحفظ في صناديق من الرصاص: من يرغب في رؤيتها يُعطى ملابس واقية ويُطلب منه التوقيع على إخلاء مسؤولية. الراديوم-226 له عمر نصف يبلغ 1600 عام، لذا ستبقى الدفاتر خطرة لمدة ألف وخمسمائة عام أخرى.",
+   "symbols": [
+    {
+     "sym": "N",
+     "latex": "N",
+     "what": "عدد الأنوية غير المتحللة",
+     "unit": "—",
+     "note": "يتناقص أسيًا؛ بالنسبة لنواة فردية لا يمكن التنبؤ بأي شيء"
+    },
+    {
+     "sym": "lambda2",
+     "latex": "\\lambda",
+     "what": "ثابت التحلل",
+     "unit": "1/ث",
+     "note": "احتمال تحلل نواة واحدة في وحدة الزمن؛ لا يعتمد على أي شيء خارجي"
+    },
+    {
+     "sym": "T12",
+     "latex": "T_{1/2}",
+     "what": "عمر النصف",
+     "unit": "ث، سنوات",
+     "note": "الزمن الذي يتحلل فيه النصف؛ من 4.5 مليار سنة لليورانيوم-238 إلى أجزاء من الثانية"
+    },
+    {
+     "sym": "A_act",
+     "latex": "A",
+     "what": "النشاط الإشعاعي",
+     "unit": "بيكريل",
+     "note": "عدد التحللات في الثانية؛ البيكريل هو تحلل واحد في الثانية، وهي كمية صغيرة جدًا"
+    },
+    {
+     "sym": "alpha_b",
+     "latex": "\\alpha,\\beta,\\gamma",
+     "what": "أنواع الإشعاع",
+     "unit": "—",
+     "note": "نواة الهيليوم، إلكترون، وفوتون عالي الطاقة؛ تختلف في قدرتها على الاختراق بآلاف المرات"
+    }
+   ]
   },
   "symbols": [
    {
@@ -1318,15 +1400,6 @@
    ],
    "plate": "بالنسبة لنواة واحدة، لحظة الاضمحلال غير قابلة للتنبؤ من حيث المبدأ؛ بالنسبة للعديد، يتبع الجزء المنحل قانونًا أسيًا صارمًا لا يعتمد على أي ظروف خارجية.",
    "note": "حدود التطبيق وتوضيح مهم. الاستقلال عن الظروف الخارجية شبه مطلق، ولكن ليس تمامًا: بالنسبة للاضمحلالات التي تتم عن طريق التقاط إلكترون من الغلاف الأقرب، تعتمد السرعة قليلاً على الحالة الكيميائية – التأثير أجزاء من المئة وقد تم قياسه. بالإضافة إلى ذلك، في الظروف القاسية في النجوم حيث تكون الذرات متأينة بالكامل، تتغير بعض الأعمار بعوامل. لجميع التطبيقات الأرضية، يمكن اعتبار القانون مطلقًا."
-  },
-  "math": {
-   "title": "الرياضيات التي كانت ضرورية هنا",
-   "text": [
-    "لماذا تكون النتيجة دائمًا دالة أسية. كلما كانت سرعة التغير متناسبة مع الكمية الحالية، تكون الإجابة أسية – هذه هي المعادلة التفاضلية الأكثر شيوعًا في الطبيعة. هكذا ينمو رأس المال بالفائدة، هكذا يبرد الشاي، هكذا يخفت الصوت في القاعة. هنا الكمية تتناقص، لذلك الأس سالب. النتيجة العملية: الدالة الأسية لا نهاية لها. المادة المشعة لا تختفي تمامًا أبدًا – في كل فترة يبقى نصف السابق.",
-    "ماذا يعني غياب الذاكرة. النواة التي بقيت مليار سنة لديها نفس فرص الاضمحلال في الثانية التالية مثل النواة المشكلة حديثًا. هذا يختلف بشدة عن الحياة العادية: الإنسان، المصباح، والمحمل يبلى، واحتمال الفشل يزداد مع الزمن. النواة لا تبلى. اختبار مفيد للفهم: إذا انحلت خمسون نواة من مئة في ساعة، ففي الساعة التالية ستنحل خمسة وعشرون – من المتبقي.",
-    "كيف تحسب ذهنيًا باستخدام الأعمار. من الأسهل بكثير استخدام قوى العدد 2 بدلاً من الدالة الأسية. تمر فترة واحدة – يبقى النصف، فترتان – الربع، ثلاث – الثمن، عشر – حوالي واحد من الألف. من هنا قاعدة عملية: بعد عشرة أعمار نصف، ينخفض النشاط ألف مرة، وبعد عشرين – مليون مرة. لهذا السبب يتم تخزين الوقود النووي المستنفذ في أحواض: أكثر النظائر نشاطًا بأعمار أيام وأشهر تختفي بالكامل تقريبًا بعد بضع سنوات.",
-    "لماذا يعطي النفق الكمي هذا التشتت. احتمال التسرب عبر الحاجز يعتمد على ارتفاعه وعرضه بشكل أسي. لذلك تغيير صغير في طاقة جسيم ألفا – على سبيل المثال، من 4 إلى 9 مليون إلكترون فولت – يغير الأس بعشرات، والاحتمال نفسه بعامل $10^{20}$ مرة أو أكثر. من هنا قانون جيجر-ناتول: لوغاريتم عمر النصف يعتمد خطيًا على الجذر التربيعي العكسي للطاقة. الدالة الأسية تعطي دائمًا تشتتًا كبيرًا من تغييرات صغيرة."
-   ]
   },
   "example": {
    "title": "مثال بالأرقام: التأريخ بالكربون المشع",
@@ -1568,7 +1641,31 @@
     "hint": "أي قوة للعدد 2 تساوي الثمن؟ هذا العدد من الأعمار نصف قد مضى.",
     "tolAbs": 2
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "معادلة تفاضلية من الدرجة الأولى، لوغاريتم واحد، وقانون الأعداد الكبيرة — كل رياضيات هذا القسم.",
+   "items": [
+    {
+     "what": "كيف يعطي فصل المتغيرات دالة أسية",
+     "why": "الخطوة الثالثة في الاشتقاق سُميت باسم الأسلوب، لكن الفعل نفسه تم حذفه. في المعادلة $dN = -\\lambda N\\,dt$، الكمية المطلوبة والزمن مختلطان في حاصل ضرب واحد؛ نقسم كلا الطرفين على $N$ — فينفصلان على جانبي علامة المساواة: على اليسار فقط $N$، وعلى اليمين فقط $t$. الآن يمكن تكامل كل جانب على حدة، وهذا هو جوهر الطريقة. على اليسار نحصل على $\\ln N$، وعلى اليمين $-\\lambda t + C$؛ وبأخذ الأس نحصل على $N = N_0 e^{-\\lambda t}$، حيث تؤخذ $N_0$ من الشرط $N(0) = N_0$، وليس من المعادلة نفسها. لهذا الأسلوب ثمن: القسمة على $N$ مسموحة طالما $N \\neq 0$. الدالة الأسية بالفعل لا تصل إلى الصفر في أي لحظة، لكن هذه خاصية للنموذج المستمر، وليست للمادة: عدد النوى عدد صحيح، وآخر نواة تتحلل في لحظة زمنية محدودة. الصيغة صحيحة طالما $N$ كبير — عندها يكون جزء النوى المتحللة خلال $dt$ قريبًا بالفعل من $\\lambda\\,dt$. عندما ينخفض $N$ إلى أعداد صغيرة، لا يوجد تناقص سلس على الإطلاق، تبقى أحداث عشوائية منفصلة، ويجب الحساب بالاحتمالات؛ وهذا ما يتناوله الإطار الثالث.",
+     "latex": "\\frac{dN}{N} = -\\lambda\\,dt \\;\\Longrightarrow\\; \\ln N = -\\lambda t + C \\;\\Longrightarrow\\; N = N_0 e^{-\\lambda t}",
+     "kit": "separation"
+    },
+    {
+     "what": "اللوغاريتم يحول النسبة إلى زمن",
+     "why": "في الخطوة الرابعة، المجهول موجود في الأس: $1/2 = e^{-\\lambda T_{1/2}}$. لا يمكن استخراجه من هناك إلا باللوغاريتم — الدالة العكسية للرفع إلى قوة، ولهذا الغرض وُجدت. نأخذ اللوغاريتم لكلا الطرفين: $\\lambda T_{1/2} = \\ln 2$، ومنه $T_{1/2} \\approx 0{,}693/\\lambda$. بنفس العملية حصلنا على السطر الأخير من المثال: $t = T_{1/2}\\ln(N_0/N)/\\ln 2$. الانتقال من الصيغة التي تحتوي على $e$ إلى الصيغة التي تحتوي على قوة العدد 2 هو تغيير للأساس، و$\\ln 2$ هو بالضبط معامل التحويل هذا؛ والقانون واحد في الحالتين. من هنا الحساب الذهني: $2^{10} = 1024 \\approx 10^{3}$، أي أن عشرة أنصاف عمر تعطي انخفاضًا بمقدار ألف مرة، وعشرون — بمقدار مليون. ومن الواضح أيضًا لماذا لم نحتاج إلى اللوغاريتم في المثال: النسبة $0{,}25$ كانت قوة دقيقة للعدد 2، والأس قُرئ مباشرة.",
+     "latex": "\\tfrac{1}{2} = e^{-\\lambda T_{1/2}} \\;\\Longrightarrow\\; T_{1/2} = \\frac{\\ln 2}{\\lambda}, \\qquad 2^{10} \\approx 10^{3}",
+     "kit": "exponent"
+    },
+    {
+     "what": "لماذا مليار نواة أدق من نواة واحدة",
+     "why": "الخطوة الأولى في الاشتقاق تعرف $\\lambda$ على أنها احتمال الاضمحلال في وحدة الزمن، وبالنسبة لنواة واحدة لا يترتب على ذلك شيء: الحدث إما يحدث أو لا. القانون الدقيق في الخطوة الثانية يعتمد على قانون الأعداد الكبيرة. إذا كان عدد النوى $N$ وتتحلل بشكل مستقل عن بعضها البعض، فإن متوسط عدد الاضمحلالات خلال $dt$ يساوي $\\lambda N\\,dt$، والانحراف حول المتوسط من رتبة الجذر التربيعي لهذا العدد. وبالتالي، فإن الانحراف النسبي يتناقص مثل $1/\\sqrt{N}$: عند $10^{20}$ نواة يكون $10^{-10}$، ويبدو القانون دقيقًا، على الرغم من أن كل حدث فردي عشوائي. من هنا أيضًا يتضح لماذا في تجربة مع مئة عملة معدنية تظهر انحرافات ملحوظة في النهاية، ولماذا تُحسب المصادر الضعيفة لفترة طويلة: لتقليل الخطأ إلى النصف، يجب مضاعفة عدد الاضمحلالات المسجلة أربع مرات.",
+     "latex": "\\langle \\Delta N\\rangle = \\lambda N\\,\\Delta t, \\qquad \\frac{\\text{deviation}}{\\text{average}} \\sim \\frac{1}{\\sqrt{N}}",
+     "kit": "probability"
+    }
+   ]
+  }
  },
  "tags": [
   "carbon",

@@ -181,11 +181,25 @@
   },
   "math": {
    "title": "Математика, которая здесь понадобилась",
-   "text": [
-    "Задача спасателя — лучший способ понять принцип Ферма без формул. Вы стоите на пляже и видите тонущего человека в воде наискосок. По песку вы бежите быстро, в воде плывёте медленно. Как добраться скорее всего? Не по прямой — прямая проходит слишком много воды. И не бежать до ближайшей к нему точки берега — это лишний крюк по песку. Оптимально бежать по песку чуть в сторону цели, а войти в воду там, где остаток пути короче. Именно так ломается луч на границе, и по совершенно той же причине.",
-    "Почему в ответе появляется синус. Синус угла — это отношение поперечного смещения к пройденному пути. Когда вы чуть сдвигаете точку входа в воду, выигрыш во времени на одном участке и проигрыш на другом определяются именно проекциями, то есть синусами. Приравняв выигрыш проигрышу, вы получаете условие минимума. Формально это и делает производная, но смысл именно такой: в оптимальной точке сдвиг уже ничего не даёт.",
-    "Что означает стационарность. Минимум функции — место, где касательная горизонтальна: сдвинувшись чуть в любую сторону, вы почти ничего не меняете. Отсюда, кстати, следует и способ понимать интерференционное объяснение: вблизи оптимального пути соседние пути отличаются по времени настолько мало, что их волны приходят в фазе и складываются, а вдали от него — разбегаются по фазе и гасятся. Стационарность и есть условие того, что соседи не мешают.",
-    "Как читать формулу линзы. Величины, обратные расстояниям, складываются. Это тот же приём, что при параллельном соединении сопротивлений, и он всегда означает: чем больше слагаемое, тем меньше вклад. Предмет далеко — единица делённая на расстояние почти ноль, и изображение получается в фокусе. Предмет в фокусе — изображение уходит в бесконечность. Держите это как проверку: в любой задаче на линзу сначала посмотрите, что происходит с предметом на бесконечности и в фокусе."
+   "lead": "Здесь понадобятся производная как способ поймать минимум, область значений синуса и умение складывать обратные величины.",
+   "items": [
+    {
+     "what": "Как производная находит быстрейший путь",
+     "why": "В третьем шаге вывода время записано как функция одного-единственного числа: где именно луч пересечёт границу. Дальше задача чисто математическая — найти то положение точки перехода, при котором время наименьшее. Приём общий: в точке минимума касательная к графику горизонтальна, значит производная обращается в ноль. Четвёртый шаг ровно это и проделывает. Важно, что возникшие при дифференцировании дроби не абстрактны: $x/\\sqrt{a^{2}+x^{2}}$ есть противолежащий катет, делённый на гипотенузу, то есть синус угла падения. Поэтому закон Снеллиуса выпадает из производной сам, без единого добавочного предположения. Оговорка в примечании к выводу про стационарность относится к тому же условию: нулевая производная отмечает и минимум, и максимум, и точку перегиба, а какой это случай, решает уже физика задачи.",
+     "latex": "\\frac{dt}{dx}=0 \\;\\Longleftrightarrow\\; \\frac{\\sin\\alpha_1}{v_1}=\\frac{\\sin\\alpha_2}{v_2}",
+     "kit": "derivative"
+    },
+    {
+     "what": "Синус упирается в единицу",
+     "why": "В шестом шаге вывода мы решаем уравнение $\\sin\\alpha_2 = (n_1/n_2)\\sin\\alpha_1$. Синус любого угла не превышает единицы, и это не соглашение, а прямое следствие определения: катет не бывает длиннее гипотенузы. Значит, когда свет идёт из плотной среды в менее плотную и правая часть переваливает за единицу, уравнение решений не имеет вовсе. Математика тут не ломается — она сообщает физический факт: преломлённого луча не существует, весь свет отражается обратно. Граничный угол, при котором правая часть впервые равна единице, находят обратной функцией: $\\alpha_{\\text{кр}} = \\arcsin(n_2/n_1)$, для воды это $\\arcsin(1/1{,}33) \\approx 48{,}8^\\circ$. Привычка полезная: если формула требует невозможного, спрашивайте, какое явление она этим описывает, а не ищите ошибку в выкладке.",
+     "latex": "\\sin\\alpha_2 = \\frac{n_1}{n_2}\\sin\\alpha_1 > 1 \\;\\Longrightarrow\\; \\text{решения нет: полное отражение}"
+    },
+    {
+     "what": "Складываются не расстояния, а обратные им",
+     "why": "Формула тонкой линзы в последнем шаге вывода складывает не сами расстояния, а обратные им величины. Это меняет всё поведение. Обратная величина тем меньше, чем больше исходная, поэтому далёкий предмет вносит почти ноль, и изображение садится точно в фокус. Наоборот, предмет, поставленный в фокус, даёт $1/d' = 0$, то есть изображение уходит в бесконечность, а лучи выходят параллельным пучком. Разрешив формулу относительно $f$, видно и общее свойство: фокусное расстояние есть произведение расстояний, делённое на сумму, и потому оно всегда меньше меньшего из них. Тот же приём встречается в параллельном соединении сопротивлений. Оба предельных случая, бесконечность и фокус, удобно держать как проверку любой задачи на линзу.",
+     "latex": "\\frac{1}{f}=\\frac{1}{d}+\\frac{1}{d'} \\;\\Longleftrightarrow\\; f=\\frac{d\\,d'}{d+d'}",
+     "kit": "propto"
+    }
    ]
   },
   "example": {
@@ -561,15 +575,6 @@
    "plate": "At the boundary between media, the ray bends so that the product of the refractive index and the sine of the angle is conserved. This is both a result of wave delay and a consequence of light taking the fastest path.",
    "note": "Limitations and refinement of Fermat's principle. Strictly speaking, light chooses not a minimum but a stationary value of time: there are cases where the actual path corresponds to a maximum or saddle point — for example, reflection from a concave mirror. Moreover, the intuitive formulation 'light chooses' is misleading: light does not choose and does not know in advance. Quantum electrodynamics explains it differently — light travels by all paths simultaneously, but the contributions of neighboring paths cancel each other out everywhere except near the stationary path, where they add up. Fermat's principle turned out to be a consequence of interference."
   },
-  "math": {
-   "title": "Mathematics Needed Here",
-   "text": [
-    "The lifeguard problem is the best way to understand Fermat's principle without formulas. You stand on the beach and see a drowning person in the water at an angle. On sand you run fast, in water you swim slowly. How to get there fastest? Not in a straight line — the straight line goes through too much water. And not run to the point on the shore closest to them — that is an extra detour on sand. Optimally, run on the sand a bit toward the target, and enter the water where the remaining path is shorter. This is exactly how a ray bends at the boundary, and for precisely the same reason.",
-    "Why sine appears in the answer. The sine of an angle is the ratio of the transverse displacement to the path length. When you shift the entry point slightly, the time gain on one segment and loss on the other are determined precisely by the projections, i.e., the sines. Equating gain and loss gives the minimum condition. Formally, that's what the derivative does, but the meaning is exactly this: at the optimal point, a shift no longer yields any improvement.",
-    "What stationarity means. The minimum of a function is where the tangent is horizontal: shifting a little in any direction changes almost nothing. From this, by the way, comes a way to understand the interference explanation: near the optimal path, neighboring paths differ so little in time that their waves arrive in phase and add up, while far from it they become out of phase and cancel. Stationarity is precisely the condition that neighbors do not interfere.",
-    "How to read the lens formula. The reciprocals of distances are summed. This is the same trick as with parallel resistors, and it always means: the larger the term, the smaller its contribution. Object far away — one divided by distance is nearly zero, and the image is at the focus. Object at the focus — image goes to infinity. Keep this as a check: in any lens problem, first look at what happens with the object at infinity and at the focus."
-   ]
-  },
   "example": {
    "title": "Example with Numbers: Why a Pool Looks Shallower and How Fiber Optics Works",
    "lead": "Two problems based on one law: one explains an everyday optical illusion, the other intercontinental communication.",
@@ -812,7 +817,30 @@
     "hint": "Apparent depth is true depth divided by refractive index. Water's index is about 4/3.",
     "tolAbs": 0.3
    }
-  ]
+  ],
+  "math": {
+   "title": "The Math Needed Here",
+   "lead": "Here we need the derivative as a way to catch a minimum, the range of the sine, and the ability to add reciprocals.",
+   "items": [
+    {
+     "what": "How the derivative finds the fastest path",
+     "why": "In the third step of the derivation, time is written as a function of a single number: where exactly the ray crosses the boundary. The task then becomes purely mathematical—find the position of the transition point that minimizes time. The general trick: at a minimum, the tangent to the graph is horizontal, so the derivative is zero. The fourth step does exactly that. Importantly, the fractions that arise during differentiation are not abstract: $x/\\sqrt{a^{2}+x^{2}}$ is the opposite leg divided by the hypotenuse, i.e., the sine of the angle of incidence. Thus, Snell's law falls out of the derivative by itself, without any additional assumption. The caveat in the note about stationarity refers to the same condition: a zero derivative marks a minimum, a maximum, or an inflection point, and which case it is, is decided by the physics of the problem.",
+     "latex": "\\frac{dt}{dx}=0 \\;\\Longleftrightarrow\\; \\frac{\\sin\\alpha_1}{v_1}=\\frac{\\sin\\alpha_2}{v_2}",
+     "kit": "derivative"
+    },
+    {
+     "what": "Sine is bounded by one",
+     "why": "In the sixth step of the derivation, we solve the equation $\\sin\\alpha_2 = (n_1/n_2)\\sin\\alpha_1$. The sine of any angle does not exceed one, and this is not a convention but a direct consequence of the definition: a leg cannot be longer than the hypotenuse. Therefore, when light goes from a denser medium to a less dense one and the right-hand side exceeds one, the equation has no solutions at all. The math does not break—it tells a physical fact: the refracted ray does not exist, all light reflects back. The critical angle at which the right-hand side first equals one is found by the inverse function: $\\alpha_{\\text{crit}} = \\arcsin(n_2/n_1)$, for water this is $\\arcsin(1/1.33) \\approx 48.8^\\circ$. A useful habit: if a formula requires the impossible, ask what phenomenon it describes, rather than looking for an error in the calculation.",
+     "latex": "\\sin\\alpha_2 = \\frac{n_1}{n_2}\\sin\\alpha_1 > 1 \\;\\Longrightarrow\\; \\text{no solution: total reflection}"
+    },
+    {
+     "what": "Not distances but their reciprocals are added",
+     "why": "The thin lens formula in the last step of the derivation adds not the distances themselves but their reciprocals. This changes the entire behavior. The reciprocal is smaller the larger the original, so a distant object contributes almost zero, and the image sits exactly at the focus. Conversely, an object placed at the focus gives $1/d' = 0$, meaning the image goes to infinity, and the rays emerge as a parallel beam. Solving the formula for $f$ reveals a general property: the focal length is the product of the distances divided by their sum, and therefore it is always smaller than the smaller of the two. The same trick appears in parallel resistances. Both limiting cases, infinity and focus, are handy as checks for any lens problem.",
+     "latex": "\\frac{1}{f}=\\frac{1}{d}+\\frac{1}{d'} \\;\\Longleftrightarrow\\; f=\\frac{d\\,d'}{d+d'}",
+     "kit": "propto"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Reflexión y refracción",
@@ -942,15 +970,6 @@
    ],
    "plate": "En la frontera entre medios, el rayo se quiebra de modo que el producto del índice de refracción por el seno del ángulo se conserva. Esto es a la vez resultado del retardo ondulatorio y consecuencia de que la luz sigue el camino más rápido.",
    "note": "Límites de aplicabilidad y aclaración sobre el principio de Fermat. Estrictamente hablando, la luz no elige el mínimo, sino un valor estacionario del tiempo: hay casos donde el camino real da un máximo o un punto de silla — por ejemplo, la reflexión en un espejo cóncavo. Además, la formulación intuitiva de que «la luz elige» es engañosa: la luz no elige ni sabe de antemano. La electrodinámica cuántica lo explica de otra manera: la luz recorre todos los caminos a la vez, pero las contribuciones de caminos vecinos se cancelan mutuamente en todas partes excepto en las proximidades del estacionario, donde se suman. El principio de Fermat resultó ser una consecuencia de la interferencia."
-  },
-  "math": {
-   "title": "Matemáticas que se necesitaron aquí",
-   "text": [
-    "El problema del salvavidas es la mejor manera de entender el principio de Fermat sin fórmulas. Estás en la playa y ves a una persona ahogándose en el agua en diagonal. Corres rápido por la arena, nadas lento en el agua. ¿Cómo llegar más rápido? No en línea recta — la recta pasa demasiado tiempo en el agua. Tampoco correr hasta el punto de la orilla más cercano a él — eso es un rodeo innecesario por la arena. Lo óptimo es correr por la arena un poco hacia el objetivo y entrar al agua donde el resto del camino es más corto. Así es exactamente como se quiebra un rayo en la frontera, y por la misma razón.",
-    "Por qué aparece el seno en la respuesta. El seno de un ángulo es la relación entre el desplazamiento transversal y la distancia recorrida. Cuando desplazas ligeramente el punto de entrada al agua, la ganancia de tiempo en un tramo y la pérdida en el otro vienen dadas precisamente por las proyecciones, es decir, los senos. Al igualar ganancia y pérdida, obtienes la condición de mínimo. Formalmente esto lo hace la derivada, pero el significado es ese: en el punto óptimo, un desplazamiento ya no aporta nada.",
-    "Qué significa estacionariedad. El mínimo de una función es el lugar donde la tangente es horizontal: al desplazarte ligeramente en cualquier dirección, apenas cambias algo. De aquí, por cierto, se sigue también la manera de entender la explicación interferencial: cerca del camino óptimo, los caminos vecinos difieren en tiempo tan poco que sus ondas llegan en fase y se suman, mientras que lejos de él se desfasan y se cancelan. La estacionariedad es la condición de que los vecinos no interfieran.",
-    "Cómo leer la fórmula de la lente. Las cantidades inversas a las distancias se suman. Es el mismo truco que en la conexión en paralelo de resistencias, y siempre significa: cuanto mayor es el término, menor es la contribución. Objeto lejano — la unidad dividida por la distancia es casi cero, y la imagen se forma en el foco. Objeto en el foco — la imagen va al infinito. Tengan esto como verificación: en cualquier problema de lentes, primero miren qué sucede con el objeto en el infinito y en el foco."
-   ]
   },
   "example": {
    "title": "Ejemplo con números: por qué la piscina parece menos profunda y cómo funciona la fibra óptica",
@@ -1194,7 +1213,30 @@
     "hint": "La profundidad aparente es la profundidad real dividida por el índice de refracción. El índice del agua es aproximadamente 4/3.",
     "tolAbs": 0.3
    }
-  ]
+  ],
+  "math": {
+   "title": "Matemáticas que se necesitaron aquí",
+   "lead": "Aquí se necesitarán la derivada como forma de encontrar el mínimo, el rango del seno y la habilidad de sumar inversos.",
+   "items": [
+    {
+     "what": "Cómo la derivada encuentra el camino más rápido",
+     "why": "En el tercer paso de la deducción, el tiempo se escribe como función de un único número: dónde exactamente el rayo cruza la frontera. A partir de ahí, el problema es puramente matemático: encontrar la posición del punto de transición en la que el tiempo es mínimo. El método es general: en el punto de mínimo, la tangente a la gráfica es horizontal, por lo que la derivada se anula. El cuarto paso hace exactamente eso. Es importante que las fracciones que surgen al derivar no son abstractas: $x/\\sqrt{a^{2}+x^{2}}$ es el cateto opuesto dividido por la hipotenusa, es decir, el seno del ángulo de incidencia. Por eso, la ley de Snell surge de la derivada por sí sola, sin ninguna suposición adicional. La observación en la nota sobre la estacionariedad se refiere a la misma condición: la derivada cero marca tanto el mínimo como el máximo y el punto de inflexión, y qué caso es, lo decide la física del problema.",
+     "latex": "\\frac{dt}{dx}=0 \\;\\Longleftrightarrow\\; \\frac{\\sin\\alpha_1}{v_1}=\\frac{\\sin\\alpha_2}{v_2}",
+     "kit": "derivative"
+    },
+    {
+     "what": "El seno choca con uno",
+     "why": "En el sexto paso de la deducción resolvemos la ecuación $\\sin\\alpha_2 = (n_1/n_2)\\sin\\alpha_1$. El seno de cualquier ángulo no supera uno, y esto no es una convención, sino una consecuencia directa de la definición: un cateto no puede ser más largo que la hipotenusa. Por lo tanto, cuando la luz pasa de un medio más denso a uno menos denso y el lado derecho supera uno, la ecuación no tiene solución alguna. Las matemáticas no se rompen aquí: nos informan de un hecho físico: el rayo refractado no existe, toda la luz se refleja de vuelta. El ángulo límite, en el que el lado derecho es igual a uno por primera vez, se encuentra con la función inversa: $\\alpha_{\\text{cr}} = \\arcsin(n_2/n_1)$, para el agua es $\\arcsin(1/1{,}33) \\approx 48{,}8^\\circ$. Es un hábito útil: si una fórmula exige algo imposible, pregúntate qué fenómeno está describiendo, en lugar de buscar un error en el cálculo.",
+     "latex": "\\sin\\alpha_2 = \\frac{n_1}{n_2}\\sin\\alpha_1 > 1 \\;\\Longrightarrow\\; \\text{no hay solución: reflexión total}"
+    },
+    {
+     "what": "No se suman las distancias, sino sus inversos",
+     "why": "La fórmula de la lente delgada en el último paso de la deducción no suma las distancias en sí, sino sus inversos. Esto cambia todo el comportamiento. El inverso es tanto menor cuanto mayor es la distancia original, por lo que un objeto lejano aporta casi cero, y la imagen se sitúa exactamente en el foco. Por el contrario, un objeto colocado en el foco da $1/d' = 0$, es decir, la imagen se va al infinito y los rayos salen en un haz paralelo. Despejando la fórmula para $f$, se ve también una propiedad general: la distancia focal es el producto de las distancias dividido por su suma, y por lo tanto siempre es menor que la menor de ellas. El mismo truco aparece en la conexión en paralelo de resistencias. Ambos casos límite, el infinito y el foco, son útiles como comprobación en cualquier problema de lentes.",
+     "latex": "\\frac{1}{f}=\\frac{1}{d}+\\frac{1}{d'} \\;\\Longleftrightarrow\\; f=\\frac{d\\,d'}{d+d'}",
+     "kit": "propto"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "الانعكاس والانكسار",
@@ -1324,15 +1366,6 @@
    ],
    "plate": "عند حد الوسطين، ينكسر الشعاع بحيث يظل حاصل ضرب معامل الانكسار في جيب الزاوية محفوظاً. هذا هو نتيجة تأخر الموجة ونتيجة لكون الضوء يسلك أسرع مسار.",
    "note": "حدود التطبيق وتوضيح لمبدأ فيرما. بالمعنى الدقيق، لا يختار الضوء قيمة صغرى بل قيمة ساكنة للزمن: هناك حالات حيث يعطي المسار الحقيقي قيمة عظمى أو نقطة سرج — مثل الانعكاس من مرآة مقعرة. علاوة على ذلك، الصياغة البديهية 'الضوء يختار' مضللة: الضوء لا يختار شيئاً ولا يعرف مسبقاً. تفسر الديناميكا الكهربائية الكمومية ذلك بشكل مختلف — فالضوء يسلك جميع المسارات دفعة واحدة، لكن إسهامات المسارات المتجاورة تلغي بعضها البعض في كل مكان باستثناء محيط المسار الساكن حيث تتراكم. تبين أن مبدأ فيرما هو نتيجة للتداخل."
-  },
-  "math": {
-   "title": "الرياضيات التي كانت مطلوبة هنا",
-   "text": [
-    "مهمة المنقذ — أفضل طريقة لفهم مبدأ فيرما بدون معادلات. أنت تقف على الشاطئ وترى شخصاً يغرق في الماء بشكل مائل. على الرمل تركض بسرعة، في الماء تسبح ببطء. كيف تصل بأسرع وقت؟ ليس بخط مستقيم — الخط المستقيم يمر عبر الكثير من الماء. ولا بالركض إلى أقرب نقطة من الشاطئ إليه — فهذا دوران زائد على الرمل. الأفضل أن تركض على الرمل قليلاً نحو الهدف، ثم تدخل الماء حيث يكون باقي المسار أقصر. هكذا ينكسر الشعاع عند الحدود، ولنفس السبب تماماً.",
-    "لماذا يظهر جيب الزاوية في الإجابة. جيب الزاوية هو نسبة الإزاحة العرضية إلى المسافة المقطوعة. عندما تنقل نقطة الدخول إلى الماء قليلاً، فإن الربح في الزمن في جزء والخسارة في جزء آخر تحدده الإسقاطات، أي الجيوب. بمساواة الربح بالخسارة تحصل على شرط الصغرى. شكلياً هذا ما تفعله المشتقة، لكن المعنى هو ذلك: عند النقطة المثلى، لا يعطي الإزاحة شيئاً.",
-    "ماذا تعني السكونية. الصغرى للدالة هي مكان يكون فيه المماس أفقياً: إذا تحركت قليلاً في أي اتجاه، لا تغير شيئاً تقريباً. من هنا، بالمناسبة، تأتي طريقة فهم التفسير التداخلي: بالقرب من المسار الأمثل، تختلف المسارات المجاورة في الزمن بمقدار ضئيل جداً بحيث تصل موجاتها في الطور وتتراكم، بينما بعيداً عنه تتشتت في الطور وتُلغى. السكونية هي شرط عدم إزعاج الجيران.",
-    "كيف تقرأ معادلة العدسة. القيم المقلوبة للمسافات تُجمع. هذه هي نفس الطريقة المستخدمة في توصيل المقاومات على التوازي، وهي تعني دائماً: كلما كان الحد أكبر، كان المساهمة أصغر. الجسم بعيد — واحد مقسوم على المسافة تقريباً صفر، وتتكون الصورة في البؤرة. الجسم في البؤرة — تذهب الصورة إلى اللانهاية. احتفظ بهذا كاختبار: في أي مسألة على العدسة، انظر أولاً ماذا يحدث عندما يكون الجسم في اللانهاية وفي البؤرة."
-   ]
   },
   "example": {
    "title": "مثال بالأرقام: لماذا يبدو المسبح أقل عمقًا وكيف يعمل الألياف البصرية",
@@ -1576,7 +1609,30 @@
     "hint": "العمق الظاهري هو العمق الحقيقي مقسوماً على معامل الانكسار. معامل انكسار الماء تقريباً 4/3.",
     "tolAbs": 0.3
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "هنا سنحتاج إلى المشتقة كطريقة لإيجاد الحد الأدنى، ونطاق دالة الجيب، والقدرة على جمع القيم العكسية.",
+   "items": [
+    {
+     "what": "كيف تجد المشتقة المسار الأسرع",
+     "why": "في الخطوة الثالثة من الاشتقاق، يُكتب الزمن كدالة لعدد واحد فقط: أين يعبر الشعاع الحدود بالضبط. بعد ذلك، تصبح المسألة رياضية بحتة — إيجاد موضع نقطة العبور الذي يجعل الزمن أصغر ما يمكن. الأسلوب عام: عند نقطة الحد الأدنى، يكون المماس للمنحنى أفقيًا، وبالتالي تكون المشتقة صفرًا. الخطوة الرابعة تفعل ذلك تمامًا. من المهم أن الكسور الناتجة عن التفاضل ليست مجردة: $x/\\sqrt{a^{2}+x^{2}}$ هو الضلع المقابل مقسومًا على الوتر، أي جيب زاوية السقوط. لذلك، ينتج قانون سنيل من المشتقة تلقائيًا، دون أي افتراض إضافي. الملاحظة في تعليق الاشتقاق حول الثبات تشير إلى نفس الشرط: المشتقة الصفرية تميز كلاً من الحد الأدنى والحد الأقصى ونقطة الانقلاب، وأي حالة هي التي يحددها فيزياء المسألة.",
+     "latex": "\\frac{dt}{dx}=0 \\;\\Longleftrightarrow\\; \\frac{\\sin\\alpha_1}{v_1}=\\frac{\\sin\\alpha_2}{v_2}",
+     "kit": "derivative"
+    },
+    {
+     "what": "الجيب يصطدم بالواحد",
+     "why": "في الخطوة السادسة من الاشتقاق، نحل المعادلة $\\sin\\alpha_2 = (n_1/n_2)\\sin\\alpha_1$. جيب أي زاوية لا يتجاوز الواحد، وهذا ليس مجرد اتفاق، بل نتيجة مباشرة للتعريف: الضلع لا يمكن أن يكون أطول من الوتر. لذلك، عندما ينتقل الضوء من وسط كثيف إلى وسط أقل كثافة ويتجاوز الطرف الأيمن الواحد، لا يكون للمعادلة حلول إطلاقًا. الرياضيات هنا لا تنهار — بل تخبرنا بحقيقة فيزيائية: لا يوجد شعاع منكسر، بل ينعكس كل الضوء مرة أخرى. الزاوية الحرجة، التي عندها يساوي الطرف الأيمن الواحد لأول مرة، تُوجد بالدالة العكسية: $\\alpha_{\\text{crit}} = \\arcsin(n_2/n_1)$، وبالنسبة للماء تكون $\\arcsin(1/1.33) \\approx 48.8^\\circ$. عادة مفيدة: إذا تطلبت الصيغة مستحيلًا، اسأل عن الظاهرة التي تصفها، بدلاً من البحث عن خطأ في الحساب.",
+     "latex": "\\sin\\alpha_2 = \\frac{n_1}{n_2}\\sin\\alpha_1 > 1 \\;\\Longrightarrow\\; \\text{لا يوجد حل: انعكاس كلي}"
+    },
+    {
+     "what": "لا تُجمع المسافات بل مقلوباتها",
+     "why": "صيغة العدسة الرقيقة في الخطوة الأخيرة من الاشتقاق لا تجمع المسافات نفسها، بل قيمها العكسية. هذا يغير السلوك بالكامل. القيمة العكسية تكون أصغر كلما كان الأصل أكبر، لذلك الجسم البعيد يساهم بقيمة تقارب الصفر، وتقع الصورة تمامًا في البؤرة. على العكس، الجسم الموضوع في البؤرة يعطي $1/d' = 0$، أي أن الصورة تذهب إلى اللانهاية، وتخرج الأشعة كحزمة متوازية. بحل الصيغة بالنسبة إلى $f$، نرى خاصية عامة: البعد البؤري هو حاصل ضرب المسافتين مقسومًا على مجموعهما، وبالتالي فهو دائمًا أصغر من أصغرهما. نفس الأسلوب يظهر في التوصيل على التوازي للمقاومات. كلتا الحالتين الحديتين، اللانهاية والبؤرة، مفيدتان كفحص لأي مسألة على العدسات.",
+     "latex": "\\frac{1}{f}=\\frac{1}{d}+\\frac{1}{d'} \\;\\Longleftrightarrow\\; f=\\frac{d\\,d'}{d+d'}",
+     "kit": "propto"
+    }
+   ]
+  }
  },
  "tags": [
   "speed_of_light"

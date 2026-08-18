@@ -14,37 +14,37 @@
   ],
   "examples_from_articles": [
    {
-    "id": "2607.13089",
+    "id": "2608.14455v1",
+    "date": "2026-08-14",
+    "title": {
+     "ru": "Погода против климата: как отличить шум от сигнала",
+     "en": "Weather vs. Climate: How to Tell Noise from Signal",
+     "es": "El tiempo frente al clima: cómo distinguir el ruido de la señal",
+     "ar": "الطقس مقابل المناخ: كيف نميز الضجيج عن الإشارة"
+    },
+    "why": "model_limits, signal_and_noise"
+   },
+   {
+    "id": "2607.19912",
+    "date": "2026-07-01",
+    "title": {
+     "ru": "Цифровая тень трактора: точная копия в движении",
+     "en": "A Tractor’s Digital Shadow: An Exact Copy in Motion",
+     "es": "La sombra digital del tractor: una copia exacta en movimiento",
+     "ar": "الظل الرقمي للجرار: نسخة طبق الأصل في حركة مستمرة"
+    },
+    "why": "model_and_reality, digital_twin"
+   },
+   {
+    "id": "2607.11344",
     "date": "2026-07-13",
     "title": {
-     "ru": "Реставрация Z3: щелчки реле воскрешают утраченный компьютер",
-     "en": "Restoring the Z3: How Relay Clicks Brought a Lost Computer Back to Life",
-     "es": "Restauración del Z3: los clics de los relés resucitan la computadora perdida",
-     "ar": "ترميم Z3: نقرات المرحّلات تُحيي حاسوبًا مفقودًا"
+     "ru": "Укрощение хаоса: как алгоритмы предвидят будущее",
+     "en": "Taming Chaos: How Algorithms Predict the Future",
+     "es": "Domando el caos: cómo los algoritmos predicen el futuro",
+     "ar": "ترويض الفوضى: كيف تستشرف الخوارزميات المستقبل"
     },
-    "why": "information_theory, numerical_simulation"
-   },
-   {
-    "id": "2607.02613",
-    "date": "2026-07-01",
-    "title": {
-     "ru": "Калейдоскоп симметрий: новый рекорд в подсчёте хордальных графов",
-     "en": "Kaleidoscope of Symmetries: A New Record in Counting Chordal Graphs",
-     "es": "Caleidoscopio de simetrías: nuevo récord en el conteo de grafos cordales",
-     "ar": "مشكال التناظرات: رقم قياسي جديد في تعداد الرسوم البيانية الوترية"
-    },
-    "why": "information_theory, numerical_simulation"
-   },
-   {
-    "id": "2607.01068",
-    "date": "2026-07-01",
-    "title": {
-     "ru": "Сито бесконечности: как Q-пространства сплетаются с измеримыми кардиналами",
-     "en": "The Sieve of Infinity: How Q-spaces Intertwine with Measurable Cardinals",
-     "es": "El tamiz del infinito: cómo los Q-espacios se entrelazan con los cardinales medibles",
-     "ar": "غربال اللامتناهي: كيف تتشابك فضاءات Q مع الكاردينالات القابلة للقياس"
-    },
-    "why": "information_theory, numerical_simulation"
+    "why": "model_limits, predictability"
    }
   ]
  },
@@ -149,11 +149,26 @@
   },
   "math": {
    "title": "Математика, которая здесь понадобилась",
-   "text": [
-    "Главный приём этого параграфа — оценка малости. Это не вычисление, а сравнение: мы берём отброшенную величину, делим на оставленную и смотрим на порядок отношения.",
-    "Формально за этим стоит разложение в ряд. Точное выражение для силы тяжести на высоте $h$ есть $g(h) = g_0 R^2/(R+h)^2$. При $h \\ll R$ его раскладывают и оставляют первый поправочный член: $g(h) \\approx g_0 (1 - 2h/R)$. Именно эта двойка и появилась в нашей оценке.",
-    "Общее правило, которым дальше пользуемся постоянно: при малом $x$ верно $(1+x)^n \\approx 1 + nx$. Проверьте на пальцах: $1{,}02^{3}$ — калькулятор даёт 1,0612, приближение даёт 1,06. Расхождение в четвёртом знаке, а считать можно в уме.",
-    "Смысл этого приёма глубже, чем экономия усилий. Он показывает, какая именно величина в задаче маленькая, — а значит, где именно модель начнёт ломаться, если эта величина перестанет быть маленькой."
+   "lead": "Весь параграф держится на одном действии: разделить отброшенное на оставленное и посмотреть на порядок частного.",
+   "items": [
+    {
+     "what": "Пренебречь — значит поделить",
+     "why": "Во втором шаге вывода мы не спрашиваем, мала ли поправка к силе тяжести сама по себе. Мы делим её на саму силу тяжести и получаем $3\\cdot10^{-6}$. В третьем шаге делим силу сопротивления на вес, в примере с шариком — $0{,}02$ Н на $0{,}33$ Н. Каждый раз в ответе выходит число без единиц, и это не случайность, а необходимость: «мало» имеет смысл только по сравнению с величиной той же размерности. Утверждение «сопротивление воздуха мало» само по себе пусто: сила в сотую долю ньютона ничтожна для камня и решает всё для пылинки. Отсюда правило на весь курс: критерий применимости модели записывается отношением, а не разностью, и сравнивается с единицей.",
+     "latex": "\\frac{\\Delta g}{g} \\approx 3\\cdot 10^{-6} \\ll 1, \\qquad \\frac{F_{\\text{сопр}}}{mg} \\approx 0{,}06 \\ll 1",
+     "kit": "dimension"
+    },
+    {
+     "what": "Откуда в оценке взялась двойка",
+     "why": "Точное выражение для силы тяжести на высоте есть $g(h) = g_0 R^2/(R+h)^2$, и никакой двойки перед $h/R$ в нём нет. Она появляется при линеаризации: при малом $x$ любая степень заменяется прямой, $(1+x)^n \\approx 1 + nx$, а здесь $x = h/R$ и $n = -2$. Показатель степени и стал множителем — тем самым, что стоит во втором шаге вывода. Проверьте на пальцах: $1{,}02^3$ калькулятор даёт 1,0612, приближение даёт 1,06, расхождение в четвёртом знаке. Польза приёма не в экономии арифметики. Показатель прямо говорит, во сколько раз ответ чувствительнее малой величины, чем она сама, — то есть заранее указывает, что именно сломает модель, когда перестанет быть малым.",
+     "latex": "(1+x)^{n} \\approx 1 + nx \\;\\; (|x| \\ll 1) \\;\\Longrightarrow\\; \\frac{g(h)}{g_0} = \\Big(1+\\frac{h}{R}\\Big)^{-2} \\approx 1 - \\frac{2h}{R}",
+     "kit": "taylor"
+    },
+    {
+     "what": "Одна-две значащие цифры и почему их хватает",
+     "why": "В примере ни одно число не взято точнее двух значащих цифр, а многие — всего с одной: коэффициент формы $0{,}5$, площадь $3\\cdot10^{-4}$ м², сила сопротивления $0{,}02$ Н. Две цифры стоят у плотности воздуха $1{,}2$ кг/м³, у плотности стали $7800$ кг/м³ и у веса шарика $0{,}33$ Н — точнее не понадобилось нигде. Это не небрежность, а соответствие вопросу. Решить надо «да или нет», и ответ вышел 6 % — далеко и от 60 %, и от 0,6 %. Пока отношение отстоит от единицы на порядок и больше, уточнение мантисс вывода не изменит; считать всерьёз стоит только тогда, когда оценка привела в опасную близость к единице. У листа бумаги той же массы площадь больше в сотни раз, отношение сдвигается на два порядка и переваливает за единицу — вывод становится противоположным, и для этого снова не понадобилось ни одной точной цифры.",
+     "latex": "\\frac{F_{\\text{сопр}}}{mg} \\sim 10^{-2}\\ (\\text{шарик}) \\qquad \\frac{F_{\\text{сопр}}}{mg} \\ge 1\\ (\\text{лист})",
+     "kit": "order"
+    }
    ]
   },
   "example": {
@@ -497,15 +512,6 @@
    "plate": "A model is a phenomenon plus a list of what we have neglected, plus an estimate of how valid that is. Without the third part, a model becomes a guess.",
    "note": "Hence a practical rule for the entire course: whenever you encounter a formula, immediately ask what it assumes. Ideal gas—that molecules do not attract. Hooke's law—that deformation is small. Carnot efficiency formula—that the process is infinitely slow. The answer to this question is usually the content of the topic."
   },
-  "math": {
-   "title": "Mathematics that was needed here",
-   "text": [
-    "The main technique of this section is order-of-magnitude estimation. It is not computation but comparison: we take the discarded quantity, divide by the kept one, and look at the order of the ratio.",
-    "Formally, this is based on series expansion. The exact expression for gravity at height $h$ is $g(h) = g_0 R^2/(R+h)^2$. For $h \\ll R$, it is expanded and the first correction term is kept: $g(h) \\approx g_0 (1 - 2h/R)$. That very factor of 2 appeared in our estimate.",
-    "The general rule, which we will use constantly: for small $x$, $(1+x)^n \\approx 1 + nx$. Test it with your fingers: $1.02^3$—calculator gives 1.0612, the approximation gives 1.06. The discrepancy is in the fourth digit, and you can calculate it in your head.",
-    "The meaning of this technique goes deeper than saving effort. It shows exactly which quantity in the problem is small—and therefore where the model will break down if that quantity ceases to be small."
-   ]
-  },
   "example": {
    "title": "Example with numbers: when neglect stops working",
    "lead": "The problem is not about a formula, but about the decision on a formula. Almost nothing to calculate — the order of steps itself matters.",
@@ -746,6 +752,30 @@
      "text": "A point particle is powerless where the essence of the phenomenon lies in shape and rotation. A figure skater pulls in their arms and spins faster — a point cannot do that, it has no moment of inertia. A cat falling rotates to land on its feet without support — by redistributing body parts. A reentry vehicle enters the atmosphere at a strictly chosen angle, and every detail of the heat shield matters. In all three cases, a different approximation is needed: rigid body, system of bodies, continuum."
     }
    ]
+  },
+  "math": {
+   "title": "The math needed here",
+   "lead": "The whole section rests on one operation: divide what is discarded by what is kept, and look at the order of the quotient.",
+   "items": [
+    {
+     "what": "To neglect means to divide",
+     "why": "In the second step of the derivation, we do not ask whether the correction to gravity is small by itself. We divide it by gravity itself and get $3\\cdot10^{-6}$. In the third step, we divide the drag force by the weight, in the ball example — $0.02$ N by $0.33$ N. Each time the answer is a dimensionless number, and this is not a coincidence but a necessity: 'small' makes sense only compared to a quantity of the same dimension. The statement 'air resistance is small' is empty by itself: a force of a hundredth of a newton is negligible for a stone and decisive for a dust particle. Hence the rule for the whole course: the applicability criterion of a model is written as a ratio, not a difference, and compared to unity.",
+     "latex": "\\frac{\\Delta g}{g} \\approx 3\\cdot 10^{-6} \\ll 1, \\qquad \\frac{F_{\\text{drag}}}{mg} \\approx 0.06 \\ll 1",
+     "kit": "dimension"
+    },
+    {
+     "what": "Where the two in the estimate came from",
+     "why": "The exact expression for gravity at altitude is $g(h) = g_0 R^2/(R+h)^2$, and there is no factor of two before $h/R$ in it. It appears upon linearization: for small $x$, any power is replaced by a straight line, $(1+x)^n \\approx 1 + nx$, and here $x = h/R$ and $n = -2$. The exponent became the multiplier — the one that appears in the second step of the derivation. Check by hand: $1.02^3$ gives 1.0612 on a calculator, the approximation gives 1.06, the discrepancy is in the fourth digit. The benefit of the trick is not in saving arithmetic. The exponent directly tells how many times the answer is more sensitive than the small quantity itself — that is, it indicates in advance what will break the model when it ceases to be small.",
+     "latex": "(1+x)^{n} \\approx 1 + nx \\;\\; (|x| \\ll 1) \\;\\Longrightarrow\\; \\frac{g(h)}{g_0} = \\Big(1+\\frac{h}{R}\\Big)^{-2} \\approx 1 - \\frac{2h}{R}",
+     "kit": "taylor"
+    },
+    {
+     "what": "One or two significant digits and why they suffice",
+     "why": "In the example, no number is taken with more than two significant digits, and many have only one: the shape factor $0.5$, the area $3\\cdot10^{-4}$ m², the drag force $0.02$ N. Two digits appear for air density $1.2$ kg/m³, steel density $7800$ kg/m³, and the ball's weight $0.33$ N — nowhere was more precision needed. This is not carelessness but a match to the question. The decision is 'yes or no', and the answer came out 6% — far from both 60% and 0.6%. As long as the ratio is an order of magnitude away from unity, refining the mantissas will not change the conclusion; serious calculation is worth doing only when the estimate brings you dangerously close to unity. For a sheet of paper of the same mass, the area is hundreds of times larger, the ratio shifts by two orders of magnitude and exceeds unity — the conclusion becomes opposite, and again no precise digits were needed.",
+     "latex": "\\frac{F_{\\text{drag}}}{mg} \\sim 10^{-2}\\ (\\text{ball}) \\qquad \\frac{F_{\\text{drag}}}{mg} \\ge 1\\ (\\text{sheet})",
+     "kit": "order"
+    }
+   ]
   }
  },
  "es": {
@@ -846,15 +876,6 @@
    ],
    "plate": "Un modelo es el fenómeno más una lista de lo que hemos despreciado, más una evaluación de qué tan válido es. Sin la tercera parte, el modelo se convierte en una conjetura.",
    "note": "De aquí se deriva una regla práctica para todo el curso: al encontrar una fórmula, pregúntense inmediatamente qué se supone en ella. Gas ideal: que las moléculas no se atraen. Ley de Hooke: que la deformación es pequeña. Fórmula de eficiencia de Carnot: que el proceso es infinitamente lento. La respuesta a esta pregunta suele ser el contenido del tema."
-  },
-  "math": {
-   "title": "Matemáticas que fueron necesarias aquí",
-   "text": [
-    "La técnica principal de este párrafo es la estimación de pequeñez. No es un cálculo, sino una comparación: tomamos la cantidad despreciada, la dividimos entre la conservada y observamos el orden de magnitud de la razón.",
-    "Formalmente, detrás de esto hay una expansión en serie. La expresión exacta para la fuerza de gravedad a una altura $h$ es $g(h) = g_0 R^2/(R+h)^2$. Cuando $h \\ll R$ se expande y se deja el primer término correctivo: $g(h) \\approx g_0 (1 - 2h/R)$. Ese dos es el que apareció en nuestra estimación.",
-    "La regla general que usamos constantemente de ahora en adelante: para $x$ pequeño se cumple $(1+x)^n \\approx 1 + nx$. Compruébenlo con los dedos: $1{,}02^{3}$: la calculadora da 1,0612, la aproximación da 1,06. La discrepancia está en el cuarto dígito, y se puede calcular mentalmente.",
-    "El significado de esta técnica es más profundo que ahorrar esfuerzo. Muestra qué cantidad exactamente es pequeña en el problema y, por lo tanto, dónde comenzará a fallar el modelo si esa cantidad deja de ser pequeña."
-   ]
   },
   "example": {
    "title": "Ejemplo con números: cuándo la aproximación deja de ser válida",
@@ -1098,6 +1119,30 @@
      "text": "El punto material es impotente allí donde la esencia del fenómeno reside en la forma y la rotación. Un patinador acerca los brazos y gira más rápido — el punto no puede hacer eso, no tiene momento de inercia. Un gato en caída se da la vuelta para caer sobre sus patas sin apoyo, mediante la redistribución de las partes del cuerpo. Una cápsula de descenso entra en la atmósfera con un ángulo estrictamente elegido, y aquí cada detalle del revestimiento es importante. En los tres casos se necesita otra aproximación: cuerpo rígido, sistema de cuerpos, medio continuo."
     }
    ]
+  },
+  "math": {
+   "title": "Las matemáticas que aquí se necesitaron",
+   "lead": "Todo el apartado se sostiene sobre una sola operación: dividir lo despreciado entre lo conservado y observar el orden del cociente.",
+   "items": [
+    {
+     "what": "Despreciar significa dividir",
+     "why": "En el segundo paso de la deducción no preguntamos si la corrección a la fuerza de gravedad es pequeña por sí misma. La dividimos entre la propia fuerza de gravedad y obtenemos $3\\cdot10^{-6}$. En el tercer paso dividimos la fuerza de resistencia entre el peso, en el ejemplo de la bolita, $0{,}02$ N entre $0{,}33$ N. Cada vez la respuesta es un número sin unidades, y esto no es casualidad, sino una necesidad: «pequeño» solo tiene sentido en comparación con una magnitud de la misma dimensión. La afirmación «la resistencia del aire es pequeña» es vacía por sí sola: una fuerza de una centésima de newton es insignificante para una piedra y lo decide todo para una mota de polvo. De aquí surge la regla para todo el curso: el criterio de aplicabilidad de un modelo se escribe como un cociente, no como una diferencia, y se compara con la unidad.",
+     "latex": "\\frac{\\Delta g}{g} \\approx 3\\cdot 10^{-6} \\ll 1, \\qquad \\frac{F_{\\text{res}}}{mg} \\approx 0{,}06 \\ll 1",
+     "kit": "dimension"
+    },
+    {
+     "what": "De dónde salió el dos en la estimación",
+     "why": "La expresión exacta para la fuerza de gravedad a una altura es $g(h) = g_0 R^2/(R+h)^2$, y no contiene ningún dos delante de $h/R$. Aparece al linealizar: para $x$ pequeño, cualquier potencia se reemplaza por una recta, $(1+x)^n \\approx 1 + nx$, y aquí $x = h/R$ y $n = -2$. El exponente se convierte en el factor, ese mismo que aparece en el segundo paso de la deducción. Compruébelo con los dedos: $1{,}02^3$ la calculadora da 1,0612, la aproximación da 1,06, la diferencia está en la cuarta cifra. La utilidad del truco no está en ahorrar aritmética. El exponente indica directamente cuántas veces la respuesta es más sensible que la propia magnitud pequeña, es decir, anticipa qué es lo que romperá el modelo cuando deje de ser pequeño.",
+     "latex": "(1+x)^{n} \\approx 1 + nx \\;\\; (|x| \\ll 1) \\;\\Longrightarrow\\; \\frac{g(h)}{g_0} = \\Big(1+\\frac{h}{R}\\Big)^{-2} \\approx 1 - \\frac{2h}{R}",
+     "kit": "taylor"
+    },
+    {
+     "what": "Una o dos cifras significativas y por qué son suficientes",
+     "why": "En el ejemplo, ningún número se toma con más de dos cifras significativas, y muchos solo con una: el coeficiente de forma $0{,}5$, el área $3\\cdot10^{-4}$ m², la fuerza de resistencia $0{,}02$ N. Dos cifras aparecen en la densidad del aire $1{,}2$ kg/m³, en la densidad del acero $7800$ kg/m³ y en el peso de la bolita $0{,}33$ N; en ningún otro lugar se necesitó más precisión. Esto no es descuido, sino correspondencia con la pregunta. Hay que decidir «sí o no», y la respuesta fue 6 % — lejos tanto de 60 % como de 0,6 %. Mientras el cociente se aleje de la unidad por un orden de magnitud o más, afinar las mantisas no cambiará la conclusión; vale la pena calcular en serio solo cuando la estimación acerca peligrosamente a la unidad. Para una hoja de papel de la misma masa, el área es cientos de veces mayor, el cociente se desplaza dos órdenes de magnitud y supera la unidad — la conclusión se vuelve opuesta, y para ello tampoco se necesitó ninguna cifra exacta.",
+     "latex": "\\frac{F_{\\text{res}}}{mg} \\sim 10^{-2}\\ (\\text{bolita}) \\qquad \\frac{F_{\\text{res}}}{mg} \\ge 1\\ (\\text{hoja})",
+     "kit": "order"
+    }
+   ]
   }
  },
  "ar": {
@@ -1198,15 +1243,6 @@
    ],
    "plate": "النموذج هو ظاهرة بالإضافة إلى قائمة بما أهملناه، بالإضافة إلى تقدير لمدى مشروعية ذلك. بدون الجزء الثالث، يتحول النموذج إلى تخمين.",
    "note": "من هنا قاعدة عملية للدورة بأكملها: عند مواجهة صيغة، اسأل فوراً ما المفترض فيها. الغاز المثالي - أن الجزيئات لا تتجاذب. قانون هوك - أن التشوه صغير. صيغة كفاءة كارنو - أن العملية بطيئة بلا حدود. الإجابة على هذا السؤال عادة ما تكون محتوى الموضوع."
-  },
-  "math": {
-   "title": "الرياضيات التي تطلبها هنا",
-   "text": [
-    "التقنية الرئيسية في هذا القسم هي تقدير الصغر. هذا ليس حساباً بل مقارنة: نأخذ الكمية المهملة، نقسمها على الكمية المتبقية، وننظر إلى رتبة النسبة.",
-    "رياضياً، وراء هذا توسع إلى متسلسلة. التعبير الدقيق لقوة الجاذبية على ارتفاع $h$ هو $g(h) = g_0 R^2/(R+h)^2$. عندما $h \\ll R$، يُوسع ويُترك الحد التصحيحي الأول: $g(h) \\approx g_0 (1 - 2h/R)$. هذا الرقم 2 هو الذي ظهر في تقديرنا.",
-    "القاعدة العامة التي نستخدمها باستمرار: لـ $x$ صغير، $(1+x)^n \\approx 1 + nx$. تحقق باليد: $1{,}02^{3}$ - الآلة الحاسبة تعطي 1.0612، التقريب يعطي 1.06. الفرق في الرقم الرابع، ويمكن الحساب ذهنياً.",
-    "معنى هذه التقنية أعمق من توفير الجهد. إنها تُظهر أي كمية بالضبط صغيرة في المسألة - وبالتالي أين سيبدأ النموذج في الانهيار إذا توقفت هذه الكمية عن كونها صغيرة."
-   ]
   },
   "example": {
    "title": "مثال بالأرقام: عندما يتوقف الإهمال عن العمل",
@@ -1448,6 +1484,30 @@
      "kind": "حدود التطبيق",
      "h": "أين تتوقف النقطة عن العمل",
      "text": "النقطة المادية عاجزة حيث جوهر الظاهرة في الشكل والدوران. المتزلج يضغط ذراعيه ويدور أسرع — النقطة لا تستطيع ذلك، ليس لها عزم قصور. القطة في السقوط تقلب نفسها على أقدامها دون دعامة — عن طريق إعادة توزيع أجزاء الجسم. مركبة الهبوط تدخل الغلاف الجوي بزاوية محددة بدقة، وكل تفصيلة في الغلاف مهمة. في هذه الحالات الثلاث، نحتاج إلى تقريب مختلف: جسم صلب، منظومة أجسام، وسط متصل."
+    }
+   ]
+  },
+  "math": {
+   "title": "الرياضيات التي نحتاجها هنا",
+   "lead": "يعتمد هذا القسم بأكمله على عملية واحدة: قسمة ما تم إهماله على ما تم إبقاؤه، ثم النظر إلى رتبة الناتج.",
+   "items": [
+    {
+     "what": "الإهمال يعني القسمة",
+     "why": "في الخطوة الثانية من الاشتقاق، لا نسأل ما إذا كان التصحيح لقوة الجاذبية صغيرًا بحد ذاته. بل نقسمه على قوة الجاذبية نفسها ونحصل على $3\\cdot10^{-6}$. في الخطوة الثالثة، نقسم قوة المقاومة على الوزن، وفي مثال الكرة، نقسم $0{,}02$ نيوتن على $0{,}33$ نيوتن. في كل مرة، تكون النتيجة عددًا بلا وحدات، وهذا ليس مصادفة بل ضرورة: \"صغير\" لا معنى له إلا بالمقارنة مع كمية من نفس البعد. القول \"مقاومة الهواء صغيرة\" بحد ذاته فارغ: قوة تعادل جزءًا من مائة من النيوتن لا تُذكر بالنسبة لحجر، لكنها حاسمة بالنسبة لذرة غبار. ومن هنا تأتي القاعدة طوال الدورة: معيار قابلية تطبيق النموذج يُكتب كنسبة وليس كفرق، ويُقارن بالواحد.",
+     "latex": "\\frac{\\Delta g}{g} \\approx 3\\cdot 10^{-6} \\ll 1, \\qquad \\frac{F_{\\text{مقاومة}}}{mg} \\approx 0{,}06 \\ll 1",
+     "kit": "dimension"
+    },
+    {
+     "what": "من أين جاء الرقم اثنان في التقدير",
+     "why": "التعبير الدقيق لقوة الجاذبية عند ارتفاع معين هو $g(h) = g_0 R^2/(R+h)^2$، ولا يوجد فيه أي اثنان قبل $h/R$. يظهر الاثنان عند الخطية: عندما يكون $x$ صغيرًا، يمكن استبدال أي قوة بخط مستقيم، $(1+x)^n \\approx 1 + nx$، وهنا $x = h/R$ و $n = -2$. الأس يصبح المضاعف — وهو نفسه الذي يظهر في الخطوة الثانية من الاشتقاق. تحقق بنفسك: $1{,}02^3$ يعطيك الحاسبة 1.0612، والتقريب يعطي 1.06، والفرق في الرقم الرابع. فائدة هذه الطريقة ليست في توفير الحساب. الأس يخبرك مباشرة بكم مرة يكون الجواب أكثر حساسية من الكمية الصغيرة نفسها — أي أنه يحدد مسبقًا ما الذي سيكسر النموذج عندما يتوقف عن كونه صغيرًا.",
+     "latex": "(1+x)^{n} \\approx 1 + nx \\;\\; (|x| \\ll 1) \\;\\Longrightarrow\\; \\frac{g(h)}{g_0} = \\Big(1+\\frac{h}{R}\\Big)^{-2} \\approx 1 - \\frac{2h}{R}",
+     "kit": "taylor"
+    },
+    {
+     "what": "رقم أو رقمان معنويان ولماذا يكفيان",
+     "why": "في المثال، لا يوجد رقم واحد مأخوذ بدقة أكبر من رقمين معنويين، والعديد منها برقم واحد فقط: معامل الشكل $0{,}5$، المساحة $3\\cdot10^{-4}$ م²، قوة المقاومة $0{,}02$ نيوتن. رقمان معنويان موجودان في كثافة الهواء $1{,}2$ كجم/م³، وفي كثافة الفولاذ $7800$ كجم/م³، وفي وزن الكرة $0{,}33$ نيوتن — لم نحتاج إلى دقة أكبر في أي مكان. هذا ليس إهمالًا، بل تطابق مع السؤال. المطلوب هو الإجابة بـ\"نعم\" أو \"لا\"، والنتيجة كانت 6% — بعيدة جدًا عن 60% وعن 0.6%. طالما أن النسبة تبعد عن الواحد بمرتبة أو أكثر، فإن تحسين الأرقام لن يغير النتيجة؛ يستحق الحساب الدقيق فقط عندما يقترب التقدير من الواحد بشكل خطير. بالنسبة لورقة بنفس الكتلة، تكون المساحة أكبر بمئات المرات، وتنتقل النسبة بمرتبتين وتتجاوز الواحد — والنتيجة تصبح معاكسة، ومرة أخرى لم نحتج إلى أي رقم دقيق.",
+     "latex": "\\frac{F_{\\text{مقاومة}}}{mg} \\sim 10^{-2}\\ (\\text{كرة}) \\qquad \\frac{F_{\\text{مقاومة}}}{mg} \\ge 1\\ (\\text{ورقة})",
+     "kit": "order"
     }
    ]
   }

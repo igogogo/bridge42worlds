@@ -169,11 +169,26 @@
   },
   "math": {
    "title": "Математика, которая здесь понадобилась",
-   "text": [
-    "Почему диагональ длиннее — самая суть вывода в одной фразе. Представьте, что вы бросаете мяч вертикально вверх в едущем автобусе и ловите его. Для вас мяч летит вверх-вниз по прямой. Для человека на улице он описывает дугу, потому что успевает уехать вбок. Путь по дуге длиннее пути по прямой — с этим никто не спорит. У мяча это не создаёт проблем: его скорость для уличного наблюдателя тоже больше, и время выходит то же. А вот у света скорость обязана остаться той же. Путь длиннее, скорость та же — значит время больше. Другого выхода нет.",
-    "Как читать лоренц-фактор. Величина $\\gamma$ равна единице при нулевой скорости и растёт до бесконечности при приближении к световой. Полезно запомнить несколько значений: при 10 % скорости света γ = 1,005 — полпроцента; при 50 % — 1,15; при 87 % — 2 (время идёт вдвое медленнее); при 99 % — 7; при 99,99 % — 71. Обратите внимание на характер роста: он почти незаметен до половины и стремителен под конец. Это типичное поведение функции с корнем из разности в знаменателе.",
-    "Почему поправка второго порядка. При малом $x$ верно $1/\\sqrt{1-x} \\approx 1 + x/2$ — то самое разложение из вводной темы. Подставив $x = v^2/c^2$, получаем, что отклонение от единицы идёт как квадрат отношения скоростей. Для самолёта это $10^{-13}$, для спутника $10^{-10}$. Именно поэтому эффект тысячелетиями оставался незамеченным: он не мал, он ничтожен на всех доступных человеку скоростях — кроме тех, что достигаются в ускорителях.",
-    "Что означает относительность одновременности. Это не про то, что мы поздно узнаём о событиях из-за задержки сигнала. Задержку легко учесть, и её учитывают. Речь о другом: даже после всех поправок на время распространения два наблюдателя разойдутся в вопросе, что произошло раньше. Одновременность — не свойство пары событий, а свойство пары событий и системы отсчёта. Именно здесь ломается интуиция, и никакой аналогии из обыденного опыта для этого не существует."
+   "lead": "Прямоугольный треугольник, один алгебраический приём с корнем и одно разложение при малой скорости.",
+   "items": [
+    {
+     "what": "Треугольник, в который сложился весь вывод",
+     "why": "В третьем шаге вывода мы разбираем половину такта световых часов и получаем прямоугольный треугольник. Прямой угол здесь не подгонка: за полтакта часы смещаются строго вбок, а расстояние между зеркалами отмеряется поперёк движения. Два перемещения перпендикулярны, поэтому складываются не арифметически, а как катеты: полное перемещение вспышки есть их векторная сумма, и длина этой суммы даётся теоремой Пифагора. Отсюда и вид уравнения шага. Половина такта нужна затем, чтобы вспышка шла в одну сторону: на полном такте её путь ломаный, и треугольника не получится.",
+     "latex": "\\left(\\frac{c\\,\\Delta t}{2}\\right)^{2} = L^{2} + \\left(\\frac{v\\,\\Delta t}{2}\\right)^{2}",
+     "kit": "vector"
+    },
+    {
+     "what": "Как из-под корня выносят скорость света",
+     "why": "Четвёртый и пятый шаги вывода это чистая алгебра, но с приёмом, который стоит запомнить. Собрав $\\Delta t^{2}(c^{2}-v^{2}) = 4L^{2}$, мы получаем время с разностью квадратов скоростей под корнем. В таком виде формула ничего не подсказывает. Выносим $c^{2}$ за скобку и извлекаем корень: остаётся множитель $c$ снаружи и безразмерная комбинация $v/c$ внутри. Теперь $2L/c$ узнаётся как собственный такт часов, а всё остальное сводится к одному чистому числу. Приём общий: выделите из выражения его естественный масштаб, и то, что останется, само покажет, велик эффект или ничтожен.",
+     "latex": "\\sqrt{c^{2}-v^{2}} = c\\sqrt{1-\\beta^{2}}, \\qquad \\beta = \\frac{v}{c}",
+     "kit": "dimension"
+    },
+    {
+     "what": "Почему поправка идёт по квадрату скорости",
+     "why": "В шестом шаге появляется приближение $\\gamma \\approx 1 + v^{2}/2c^{2}$. Оно берётся из разложения $1/\\sqrt{1-x} \\approx 1 + x/2$ при малом $x$: вблизи нуля гладкую функцию заменяют касательной прямой, а роль малой величины играет $x = v^{2}/c^{2}$. Существенно здесь не само приближение, а то, что первая поправка идёт по $x$, то есть по квадрату отношения скоростей. Отсюда и число параграфа: при $v = 100$ м/с отношение $v/c$ равно $3\\cdot 10^{-7}$, а отклонение $\\gamma$ от единицы равно половине его квадрата, около $6\\cdot 10^{-14}$. Возведение в квадрат превращает малую величину в ничтожную.",
+     "latex": "\\frac{1}{\\sqrt{1-x}} \\approx 1 + \\frac{x}{2}, \\qquad x = \\frac{v^{2}}{c^{2}} \\ll 1",
+     "kit": "taylor"
+    }
    ]
   },
   "example": {
@@ -541,15 +556,6 @@
    "plate": "From the constancy of the speed of light and the Pythagorean theorem, it follows that moving clocks run slower by a factor $\\gamma = 1/\\sqrt{1-v^{2}/c^{2}}$, and simultaneity depends on the observer.",
    "note": "Limits of applicability and common confusion. Time dilation is relative: for a passenger on a train, the platform clock runs slow, and this is not a contradiction — they simply use different definitions of simultaneity. The twin paradox seems to break symmetry, but the asymmetry comes from the turn: the traveling twin changes reference frames, the stay-at-home does not. Also, this entire theory applies only to inertial frames; in the presence of gravity, general relativity is required."
   },
-  "math": {
-   "title": "The Mathematics Needed Here",
-   "text": [
-    "Why the diagonal is longer — the essence of the derivation in one sentence. Imagine throwing a ball straight up in a moving bus and catching it. For you, the ball goes up and down in a straight line. For a person outside, it traces an arc because it moves sideways. The arc is longer than the straight line — no one argues with that. For the ball, this poses no problem: its speed for the outside observer is also greater, so the time is the same. But for light, the speed must remain the same. The path is longer, the speed is the same — so the time is longer. No other way.",
-    "How to read the Lorentz factor. The quantity $\\gamma$ equals 1 at zero speed and grows to infinity as speed approaches light speed. It is useful to remember a few values: at 10% of light speed, γ = 1.005 — half a percent; at 50% — 1.15; at 87% — 2 (time runs twice as slow); at 99% — 7; at 99.99% — 71. Note the growth pattern: almost imperceptible up to half, then rapid toward the end. This is typical behavior of a function with a square root of a difference in the denominator.",
-    "Why the correction is second order. For small $x$, we have $1/\\sqrt{1-x} \\approx 1 + x/2$ — the same expansion from the introduction. Substituting $x = v^2/c^2$, we find that the deviation from 1 goes as the square of the speed ratio. For an airplane, this is $10^{-13}$, for a satellite $10^{-10}$. This is why the effect went unnoticed for millennia: it is not just small, it is negligible at all speeds accessible to humans — except those achieved in accelerators.",
-    "What relativity of simultaneity means. It is not about us learning about events late due to signal delay. Delay is easy to account for, and it is accounted for. It is about something else: even after all corrections for propagation time, two observers will disagree on which event happened first. Simultaneity is not a property of a pair of events, but a property of a pair of events and a reference frame. This is where intuition breaks, and no analogy from everyday experience exists for this."
-   ]
-  },
   "example": {
    "title": "Example with numbers: muons that shouldn't reach the ground",
    "lead": "The most visual test of the theory — particles from cosmic rays that reach the Earth's surface despite arithmetic.",
@@ -777,7 +783,7 @@
      "constant",
      "does not depend",
      "reference frame",
-     "reference frames",
+     "inertial frame",
      "time",
      "space",
      "postulate"
@@ -796,7 +802,31 @@
     "hint": "Square 0.6, subtract from 1, and take the square root. The numbers are chosen to give a tidy result.",
     "tolAbs": 0.1
    }
-  ]
+  ],
+  "math": {
+   "title": "The math needed here",
+   "lead": "A right triangle, one algebraic trick with a root, and one expansion at low speed.",
+   "items": [
+    {
+     "what": "The triangle into which the whole derivation fits",
+     "why": "In the third step of the derivation, we analyze half a tick of the light clock and get a right triangle. The right angle is not a coincidence: in half a tick, the clock shifts strictly sideways, and the distance between the mirrors is measured across the motion. The two displacements are perpendicular, so they add not arithmetically but as legs: the total displacement of the flash is their vector sum, and the length of this sum is given by the Pythagorean theorem. Hence the form of the step's equation. Half a tick is needed so that the flash goes in one direction: over a full tick, its path is broken, and no triangle results.",
+     "latex": "\\left(\\frac{c\\,\\Delta t}{2}\\right)^{2} = L^{2} + \\left(\\frac{v\\,\\Delta t}{2}\\right)^{2}",
+     "kit": "vector"
+    },
+    {
+     "what": "How to take the speed of light out of the root",
+     "why": "The fourth and fifth steps of the derivation are pure algebra, but with a trick worth remembering. Collecting $\\Delta t^{2}(c^{2}-v^{2}) = 4L^{2}$, we get time with a difference of squares of speeds under the root. In this form, the formula suggests nothing. We factor out $c^{2}$ and take the root: a factor $c$ remains outside and a dimensionless combination $v/c$ inside. Now $2L/c$ is recognized as the clock's own tick, and everything else reduces to a single pure number. The trick is general: extract the natural scale from an expression, and what remains will itself show whether the effect is large or negligible.",
+     "latex": "\\sqrt{c^{2}-v^{2}} = c\\sqrt{1-\\beta^{2}}, \\qquad \\beta = \\frac{v}{c}",
+     "kit": "dimension"
+    },
+    {
+     "what": "Why the correction goes by the square of the speed",
+     "why": "In the sixth step, the approximation $\\gamma \\approx 1 + v^{2}/2c^{2}$ appears. It comes from the expansion $1/\\sqrt{1-x} \\approx 1 + x/2$ for small $x$: near zero, a smooth function is replaced by its tangent line, and the role of the small quantity is played by $x = v^{2}/c^{2}$. What matters here is not the approximation itself, but that the first correction goes by $x$, i.e., by the square of the speed ratio. Hence the number in the section: at $v = 100$ m/s, the ratio $v/c$ is $3\\cdot 10^{-7}$, and the deviation of $\\gamma$ from unity is half its square, about $6\\cdot 10^{-14}$. Squaring turns a small quantity into a negligible one.",
+     "latex": "\\frac{1}{\\sqrt{1-x}} \\approx 1 + \\frac{x}{2}, \\qquad x = \\frac{v^{2}}{c^{2}} \\ll 1",
+     "kit": "taylor"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Dos postulados",
@@ -914,15 +944,6 @@
    ],
    "plate": "De la constancia de la velocidad de la luz y del teorema de Pitágoras se deduce que los relojes en movimiento van más lentos en un factor $\\gamma = 1/\\sqrt{1-v^{2}/c^{2}}$, y que la simultaneidad depende del observador.",
    "note": "Límites de aplicabilidad y confusión común. La dilatación es relativa: para el pasajero del tren, el reloj del andén va más lento, y eso no es una contradicción — simplemente utilizan diferentes definiciones de simultaneidad. La paradoja de los gemelos parece una violación de la simetría, pero la simetría se rompe por el giro: el gemelo que viaja cambia de sistema de referencia, mientras que el que se queda no. Además, toda esta teoría solo se aplica a sistemas inerciales; en presencia de gravedad se requiere la relatividad general."
-  },
-  "math": {
-   "title": "Matemáticas que se necesitaron aquí",
-   "text": [
-    "Por qué la diagonal es más larga: la esencia de la derivación en una frase. Imagine que lanza una pelota verticalmente hacia arriba en un autobús en movimiento y la atrapa. Para usted, la pelota viaja verticalmente hacia arriba y hacia abajo en línea recta. Para una persona en la calle, la pelota describe un arco porque el autobús se desplaza lateralmente. El camino en arco es más largo que la línea recta, nadie discute eso. En el caso de la pelota, esto no causa problemas: su velocidad para el observador en la calle también es mayor, y el tiempo es el mismo. Pero para la luz, la velocidad debe permanecer igual. Camino más largo, misma velocidad, entonces el tiempo es mayor. No hay otra opción.",
-    "Cómo leer el factor de Lorentz. El valor de $\\gamma$ es igual a la unidad a velocidad cero y crece hasta infinito al acercarse a la velocidad de la luz. Es útil recordar algunos valores: al 10 % de la velocidad de la luz, γ = 1,005 — medio por ciento; al 50 % — 1,15; al 87 % — 2 (el tiempo va a la mitad de velocidad); al 99 % — 7; al 99,99 % — 71. Observe la naturaleza del crecimiento: casi imperceptible hasta la mitad y muy rápido al final. Este es el comportamiento típico de una función con una raíz de la diferencia en el denominador.",
-    "Por qué la corrección es de segundo orden. Para $x$ pequeño se cumple $1/\\sqrt{1-x} \\approx 1 + x/2$ — la misma expansión del tema introductorio. Sustituyendo $x = v^2/c^2$, obtenemos que la desviación de la unidad va como el cuadrado de la relación de velocidades. Para un avión es $10^{-13}$, para un satélite $10^{-10}$. Precisamente por esto el efecto pasó desapercibido durante milenios: no es pequeño, es insignificante a todas las velocidades accesibles para el ser humano, excepto las alcanzadas en aceleradores.",
-    "Qué significa la relatividad de la simultaneidad. No se trata de que nos enteramos tarde de los eventos debido al retardo de la señal. El retardo se puede corregir fácilmente y se corrige. Se trata de otra cosa: incluso después de todas las correcciones por tiempo de propagación, dos observadores discreparán sobre qué ocurrió primero. La simultaneidad no es una propiedad de un par de eventos, sino una propiedad de un par de eventos y un sistema de referencia. Aquí es donde se rompe la intuición, y no existe ninguna analogía de la experiencia cotidiana para esto."
-   ]
   },
   "example": {
    "title": "Ejemplo con números: muones que no deberían llegar",
@@ -1151,7 +1172,7 @@
      "constante",
      "no depende",
      "sistema de referencia",
-     "sistema de referencia",
+     "marco de referencia",
      "tiempo",
      "espacio",
      "postulado"
@@ -1170,7 +1191,31 @@
     "hint": "Eleve 0,6 al cuadrado, réstelo de uno y extraiga la raíz. Los números están elegidos para que dé un resultado limpio.",
     "tolAbs": 0.1
    }
-  ]
+  ],
+  "math": {
+   "title": "Matemáticas que se necesitaron aquí",
+   "lead": "Un triángulo rectángulo, un truco algebraico con una raíz y una expansión a baja velocidad.",
+   "items": [
+    {
+     "what": "El triángulo en el que se resumió toda la derivación",
+     "why": "En el tercer paso de la derivación analizamos medio ciclo del reloj de luz y obtenemos un triángulo rectángulo. El ángulo recto no es una coincidencia: en medio ciclo, el reloj se desplaza estrictamente hacia un lado, y la distancia entre los espejos se mide perpendicularmente al movimiento. Los dos desplazamientos son perpendiculares, por lo que no se suman aritméticamente, sino como catetos: el desplazamiento total del destello es su suma vectorial, y la longitud de esta suma viene dada por el teorema de Pitágoras. De ahí la forma de la ecuación del paso. Se necesita medio ciclo para que el destello vaya en una sola dirección: en un ciclo completo, su trayectoria es quebrada y no se forma un triángulo.",
+     "latex": "\\left(\\frac{c\\,\\Delta t}{2}\\right)^{2} = L^{2} + \\left(\\frac{v\\,\\Delta t}{2}\\right)^{2}",
+     "kit": "vector"
+    },
+    {
+     "what": "Cómo se extrae la velocidad de la luz de la raíz",
+     "why": "El cuarto y quinto paso de la derivación son álgebra pura, pero con un truco que vale la pena recordar. Al reunir $\\Delta t^{2}(c^{2}-v^{2}) = 4L^{2}$, obtenemos el tiempo con una diferencia de cuadrados de velocidades bajo la raíz. En esta forma, la fórmula no sugiere nada. Sacamos $c^{2}$ como factor común y extraemos la raíz: queda un factor $c$ fuera y una combinación adimensional $v/c$ dentro. Ahora $2L/c$ se reconoce como el período propio del reloj, y todo lo demás se reduce a un número puro. El truco es general: extraiga de la expresión su escala natural, y lo que quede mostrará por sí mismo si el efecto es grande o insignificante.",
+     "latex": "\\sqrt{c^{2}-v^{2}} = c\\sqrt{1-\\beta^{2}}, \\qquad \\beta = \\frac{v}{c}",
+     "kit": "dimension"
+    },
+    {
+     "what": "Por qué la corrección va con el cuadrado de la velocidad",
+     "why": "En el sexto paso aparece la aproximación $\\gamma \\approx 1 + v^{2}/2c^{2}$. Se obtiene de la expansión $1/\\sqrt{1-x} \\approx 1 + x/2$ para $x$ pequeño: cerca de cero, una función suave se reemplaza por su recta tangente, y el papel de la cantidad pequeña lo juega $x = v^{2}/c^{2}$. Lo importante aquí no es la aproximación en sí, sino que la primera corrección va con $x$, es decir, con el cuadrado de la relación de velocidades. De ahí el número del párrafo: para $v = 100$ m/s, la relación $v/c$ es $3\\cdot 10^{-7}$, y la desviación de $\\gamma$ respecto a la unidad es la mitad de su cuadrado, alrededor de $6\\cdot 10^{-14}$. Elevar al cuadrado convierte una cantidad pequeña en una insignificante.",
+     "latex": "\\frac{1}{\\sqrt{1-x}} \\approx 1 + \\frac{x}{2}, \\qquad x = \\frac{v^{2}}{c^{2}} \\ll 1",
+     "kit": "taylor"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "المسلمتان",
@@ -1288,15 +1333,6 @@
    ],
    "plate": "من ثبات سرعة الضوء ونظرية فيثاغورس ينتج أن الساعات المتحركة تسير أبطأ بمقدار $\\gamma = 1/\\sqrt{1-v^{2}/c^{2}}$ مرة، وأن التزامن يعتمد على المراقب.",
    "note": "حدود التطبيق والارتباك الشائع. التمدد نسبي: بالنسبة لراكب القطار، ساعة المنصة تتأخر، وهذا ليس تناقضًا — إنهم ببساطة يستخدمون تعريفات مختلفة للتزامن. مفارقة التوأم تبدو وكأنها انتهاك للتماثل، لكن التماثل يكسره الدوران: التوأم المسافر يغير الإطار المرجعي، بينما التوأم الباقي لا يغيره. بالإضافة إلى ذلك، هذه النظرية تنطبق فقط على الأطر القصورية؛ بوجود الجاذبية، نحتاج إلى النسبية العامة."
-  },
-  "math": {
-   "title": "الرياضيات التي نحتاجها هنا",
-   "text": [
-    "لماذا القطر أطول — جوهر الاشتقاق في جملة واحدة. تخيل أنك ترمي كرة إلى الأعلى عموديًا في حافلة متحركة وتلتقطها. بالنسبة لك، تتحرك الكرة لأعلى ولأسفل في خط مستقيم. بالنسبة لشخص في الخارج، فإنها ترسم قوسًا لأنها تتحرك جانبيًا. المسار على القوس أطول من المسار المستقيم — لا أحد ينكر ذلك. بالنسبة للكرة، لا يسبب هذا مشكلة: سرعتها بالنسبة للمراقب الخارجي أكبر أيضًا، وبالتالي الزمن نفسه. أما بالنسبة للضوء، فالسرعة يجب أن تبقى كما هي. المسار أطول، السرعة نفسها — إذن الزمن أكبر. لا خيار آخر.",
-    "كيفية قراءة عامل لورنتز. قيمة $\\gamma$ تساوي واحدًا عند السرعة الصفرية وتزداد إلى ما لا نهاية عند الاقتراب من سرعة الضوء. من المفيد تذكر بعض القيم: عند 10% من سرعة الضوء، γ = 1.005 — نصف في المئة؛ عند 50% — 1.15؛ عند 87% — 2 (الزمن يسير أبطأ بمقدار الضعفين)؛ عند 99% — 7؛ عند 99.99% — 71. لاحظ طبيعة النمو: يكاد يكون غير ملحوظ حتى النصف وسريع في النهاية. هذا سلوك نموذجي لدالة ذات جذر فرق في المقام.",
-    "لماذا التصحيح من الدرجة الثانية. عند $x$ صغير، $1/\\sqrt{1-x} \\approx 1 + x/2$ — هذا هو التوسع من الموضوع التمهيدي. بتعويض $x = v^2/c^2$، نحصل على أن الانحراف عن الواحد يساوي مربع نسبة السرعات. بالنسبة للطائرة، هذا $10^{-13}$، وبالنسبة للقمر الصناعي $10^{-10}$. لهذا السبب بقي التأثير غير ملحوظ لآلاف السنين: إنه ليس صغيرًا، بل تافه في جميع السرعات المتاحة للبشر — باستثناء تلك التي تتحقق في المسرعات.",
-    "ماذا تعني نسبية التزامن. هذا ليس عن معرفتنا المتأخرة بالأحداث بسبب تأخر الإشارة. من السهل حساب التأخر ويتم أخذه في الاعتبار. الأمر مختلف: حتى بعد كل التصحيحات لزمن الانتشار، يختلف المراقبان حول أي حدث وقع أولاً. التزامن ليس خاصية لزوج من الأحداث، بل خاصية لزوج من الأحداث وإطار مرجعي. هنا تنكسر البديهة، ولا يوجد أي تشبيه من التجربة اليومية لهذا."
-   ]
   },
   "example": {
    "title": "مثال بأرقام: الميونات التي لا ينبغي أن تصل",
@@ -1544,7 +1580,31 @@
     "hint": "ارفع 0,6 للتربيع، اطرح من الواحد، ثم خذ الجذر التربيعي. الأرقام مُختارة بحيث تكون النتيجة جميلة.",
     "tolAbs": 0.1
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "مثلث قائم الزاوية، خدعة جبرية واحدة مع جذر، وتبسيط واحد عند السرعات الصغيرة.",
+   "items": [
+    {
+     "what": "المثلث الذي يتشكل منه الاستنتاج بأكمله",
+     "why": "في الخطوة الثالثة من الاستنتاج، نقوم بتحليل نصف دورة من الساعة الضوئية ونحصل على مثلث قائم الزاوية. الزاوية القائمة هنا ليست مصادفة: خلال نصف الدورة، تتحرك الساعة جانبيًا تمامًا، والمسافة بين المرآتين تقاس عموديًا على اتجاه الحركة. الإزاحتان متعامدتان، لذلك لا تُجمع حسابيًا بل كضلعي القائمة: الإزاحة الكلية للومضة هي مجموعهما الاتجاهي، وطول هذا المجموع يُعطى بنظرية فيثاغورس. من هنا يأتي شكل معادلة الخطوة. نصف الدورة ضروري لكي تنتقل الومضة في اتجاه واحد: في الدورة الكاملة، يكون مسارها مكسورًا ولا يتشكل مثلث.",
+     "latex": "\\left(\\frac{c\\,\\Delta t}{2}\\right)^{2} = L^{2} + \\left(\\frac{v\\,\\Delta t}{2}\\right)^{2}",
+     "kit": "vector"
+    },
+    {
+     "what": "كيف نخرج سرعة الضوء من تحت الجذر",
+     "why": "الخطوتان الرابعة والخامسة من الاستنتاج هي جبر خالص، لكن مع خدعة تستحق التذكر. بعد تجميع $\\Delta t^{2}(c^{2}-v^{2}) = 4L^{2}$، نحصل على الوقت مع فرق مربعات السرعات تحت الجذر. في هذا الشكل، لا توحي الصيغة بأي شيء. نخرج $c^{2}$ كعامل مشترك ونأخذ الجذر: يبقى العامل $c$ في الخارج والتركيبة اللابعدية $v/c$ في الداخل. الآن نتعرف على $2L/c$ كزمن الدورة الذاتية للساعة، وكل شيء آخر يختزل إلى عدد نقي واحد. الخدعة عامة: افصل المقياس الطبيعي للتعبير، وما يتبقى سيُظهر بنفسه ما إذا كان التأثير كبيرًا أم ضئيلًا.",
+     "latex": "\\sqrt{c^{2}-v^{2}} = c\\sqrt{1-\\beta^{2}}, \\qquad \\beta = \\frac{v}{c}",
+     "kit": "dimension"
+    },
+    {
+     "what": "لماذا التصحيح يسير وفق مربع السرعة",
+     "why": "في الخطوة السادسة، يظهر التقريب $\\gamma \\approx 1 + v^{2}/2c^{2}$. وهو مأخوذ من التوسع $1/\\sqrt{1-x} \\approx 1 + x/2$ عند قيم صغيرة لـ $x$: بالقرب من الصفر، نستبدل الدالة الملساء بخط المماس، ودور الكمية الصغيرة يلعبه $x = v^{2}/c^{2}$. المهم هنا ليس التقريب نفسه، بل أن التصحيح الأول يسير وفق $x$، أي وفق مربع نسبة السرعات. ومن هنا يأتي رقم الفقرة: عند $v = 100$ م/ث، تكون النسبة $v/c$ مساوية $3\\cdot 10^{-7}$، وانحراف $\\gamma$ عن الواحد يساوي نصف مربعها، حوالي $6\\cdot 10^{-14}$. التربيع يحول الكمية الصغيرة إلى كمية ضئيلة.",
+     "latex": "\\frac{1}{\\sqrt{1-x}} \\approx 1 + \\frac{x}{2}, \\qquad x = \\frac{v^{2}}{c^{2}} \\ll 1",
+     "kit": "taylor"
+    }
+   ]
+  }
  },
  "tags": [
   "speed_of_light",

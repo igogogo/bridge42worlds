@@ -17,37 +17,37 @@
   ],
   "examples_from_articles": [
    {
-    "id": "2607.07102",
-    "date": "2026-07-08",
+    "id": "2608.04512v1",
+    "date": "2026-08-05",
     "title": {
-     "ru": "Небесная механика клеток: как кривизна диктует размер",
-     "en": "Celestial Mechanics of Cells: How Curvature Dictates Size",
-     "es": "Mecánica celeste de las células: cómo la curvatura dicta el tamaño",
-     "ar": "الميكانيكا السماوية للخلايا: كيف يُملي الانحناء الحجم"
+     "ru": "Приливы крадут луны у близких планет",
+     "en": "Tides Steal Moons from Close-In Planets",
+     "es": "Las mareas roban lunas a los planetas cercanos",
+     "ar": "المدّ والجزر يسرق أقمار الكواكب القريبة"
     },
-    "why": "gravity, neutron_star"
+    "why": "tidal_forces, moons"
    },
    {
-    "id": "2606.25186",
-    "date": "2026-06-23",
+    "id": "2606.20789",
+    "date": "2026-06-18",
     "title": {
-     "ru": "Космический портной: как причинность снимает мерку с нейтронных звёзд",
-     "en": "The Cosmic Tailor: How Causality Takes Measurements of Neutron Stars",
-     "es": "El sastre cósmico: cómo la causalidad toma la medida a las estrellas de neutrones",
-     "ar": "الخياط الكوني: كيف تأخذ السببية قياسات النجوم النيوترونية"
+     "ru": "Как приливные волны сортируют планеты",
+     "en": "How Tidal Waves Sort Planets",
+     "es": "Cómo las mareas internas clasifican los planetas",
+     "ar": "كيف تفرز موجات المد الكواكب"
     },
-    "why": "gravity, neutron_star"
+    "why": "tidal_forces, orbits"
    },
    {
-    "id": "2606.23926",
-    "date": "2026-06-22",
+    "id": "2606.14738v1",
+    "date": "2026-06-02",
     "title": {
-     "ru": "Нейтронный гравита-вальс и танец с дефектом",
-     "en": "Neutron Gravita-Waltz and Dance with a Defect",
-     "es": "Vals gravitacional de neutrones y danza con defecto",
-     "ar": "الرقصة الجاذبية للنجوم النيوترونية وانحراف المدار"
+     "ru": "Левитирующая графитовая паутина ловит лунные объятия",
+     "en": "Levitating Graphite Web Captures the Moon's Embrace",
+     "es": "Telaraña de grafito levitante captura los abrazos lunares",
+     "ar": "شبكة الجرافيت المحلقة تلتقط أحضان القمر"
     },
-    "why": "gravity, neutron_star"
+    "why": "tidal_forces, free_fall"
    }
   ]
  },
@@ -177,11 +177,26 @@
   },
   "math": {
    "title": "Математика, которая здесь понадобилась",
-   "text": [
-    "Почему появляется куб расстояния. Само притяжение убывает как квадрат, а нас интересует не оно, а его разность в двух близких точках — то есть насколько быстро оно меняется. Возьмите горку: важна не высота, а крутизна, и крутизна всегда убывает быстрее самой высоты. Формально производная от $1/d^2$ есть $-2/d^3$ — вот и весь ответ. Отсюда практическое следствие: приливное действие падает с расстоянием так стремительно, что близкая Луна побеждает громадное Солнце.",
-    "Как получаются два горба, а не один. Тут помогает такой образ. Представьте трёх бегунов, растянувшихся в цепочку и бегущих к финишу, причём чем ближе к финишу, тем сильнее их тянет. Передний тянется сильнее всех и отрывается вперёд. Задний тянется слабее всех и отстаёт. С точки зрения среднего цепочка растягивается в обе стороны — хотя тянет всех в одну. Земля и есть такая цепочка: вода спереди убегает к Луне, вода сзади отстаёт, и оба раза получается горб.",
-    "Что означает «локально» в принципе эквивалентности. Ровно то же, что означает касательная к кривой: в достаточно малой окрестности точки кривую нельзя отличить от прямой, но во всей области — можно. Точно так же в достаточно малой падающей комнате тяготение неотличимо от его отсутствия, а в большой — уже отличимо, потому что предметы у противоположных стен будут медленно сходиться, следуя к общему центру. Размер комнаты, при котором это станет заметно, и есть мера того, насколько неоднородно поле.",
-    "Почему приливная сила пропорциональна размеру тела. Разность чего-либо между двумя точками тем больше, чем дальше точки друг от друга — это очевидно и не требует формул. Точку разорвать нечем: у неё нет двух концов. Отсюда и вывод, что приливные эффекты важны для протяжённых объектов — океанов, планет, звёзд, — и совершенно ничтожны для человека. У поверхности чёрной дыры звёздной массы, впрочем, разность на длине человеческого роста уже смертельна, и явление получило соответствующее название."
+   "lead": "Понадобится разложение почти равных величин, производная как мера крутизны и вычитание векторов.",
+   "items": [
+    {
+     "what": "Разность почти равных величин",
+     "why": "В пятом шаге стоит разность двух очень близких чисел: притяжение на расстоянии $d-R$ минус притяжение на расстоянии $d$. Посчитать оба по отдельности и вычесть нельзя — искомая разность утонет в округлении. Вместо этого выносят общий множитель и пользуются разложением $(1+x)^{n} \\approx 1 + nx$, верным при малом $x$. Здесь $x = R/d$, и для Земли с Луной это около одной шестидесятой. Отброшено при этом не бесконечно малое: следующий член разложения относится к удержанному как $1{,}5\\,x$, то есть даёт поправку около двух с половиной процентов. Для формулы, объясняющей механизм, этого хватает с запасом, но точность у неё именно такая. Приём стоит запомнить отдельно от приливов: всякий раз, когда физический эффект есть разность двух почти одинаковых величин, его считают не вычитанием, а первым членом разложения.",
+     "latex": "\\frac{1}{(d-R)^{2}} = \\frac{1}{d^{2}}\\left(1-\\frac{R}{d}\\right)^{-2} \\approx \\frac{1}{d^{2}}\\left(1 + \\frac{2R}{d}\\right)",
+     "kit": "taylor"
+    },
+    {
+     "what": "Куб появляется из производной",
+     "why": "Итог пятого шага содержит расстояние в кубе, хотя исходный закон знает только квадрат. Причина в том, что приливная сила есть не само притяжение, а быстрота его изменения с расстоянием, то есть производная. У степенной функции производная понижает показатель на единицу и одновременно выносит его множителем наружу: $(x^{n})' = n\\,x^{n-1}$. Показатель $-2$ переходит в $-3$, из $1/d^{2}$ получается $-2/d^{3}$ — степень в знаменателе выросла с квадрата до куба, а двойка в числителе приливной формулы это тот самый вынесенный показатель. Направление тут легко перепутать: производная показатель понижает, интегрирование — повышает, $\\int x^{n}\\,dx = x^{n+1}/(n+1)$. Поэтому производная уводит $1/d^{2}$ в куб, а интеграл того же выражения — обратно в первую степень. Отсюда прямо следует численная проверка седьмого шага: приливное действие убывает с расстоянием быстрее притяжения, и близкая Луна обходит Солнце вдвое — отношение $2{,}2$. Насколько же Луна уступает Солнцу по обычному притяжению, считает уже пример с числами: там первая строка решения даёт 178 раз.",
+     "latex": "\\frac{d}{dx}\\,x^{-2} = -2x^{-3} \\;\\Longrightarrow\\; \\Delta g \\approx R \\cdot \\frac{2GM}{d^{3}}",
+     "kit": "derivative"
+    },
+    {
+     "what": "Приливная сила есть разность векторов",
+     "why": "В четвёртом шаге приливная сила определена как поле в данной точке минус поле в центре тела. Вычитание здесь векторное, и именно поэтому горбов выходит два, а не один. У ближней точки разность направлена к Луне: притяжение там сильнее среднего. У дальней точки та же разность направлена от Луны: притяжение там слабее среднего, и остаток смотрит наружу. Никакой центробежной силы для второго горба не требуется — об этом и говорит примечание к выводу. Складывать и вычитать нужно стрелки, а не числа: длина разности двух почти равных векторов бывает крошечной, а направление у неё при этом любое.",
+     "latex": "\\vec{F}_{\\text{прил}}(\\vec{r}) = m\\left[\\vec{g}(\\vec{r}_0 + \\vec{r}) - \\vec{g}(\\vec{r}_0)\\right]",
+     "kit": "vector"
+    }
    ]
   },
   "example": {
@@ -541,15 +556,6 @@
    "plate": "Gravity can be eliminated by transitioning to a free-falling reference frame — but only at a single point. The remainder, stretching an extended body on both sides, is the tidal force.",
    "note": "An important clarification to the high-school explanation. It is often said that the second bulge arises from the centrifugal force of the Earth's rotation around the common center of mass with the Moon. That explanation gives the correct answer, but for the wrong reason: tides would exist even for a non-rotating Earth simply falling toward the Moon. The real reason is the inhomogeneity of the field, and it does not require any rotation. It's easy to check: tides from the Sun are also double, even though the Earth's rotation around the barycenter with the Sun is irrelevant."
   },
-  "math": {
-   "title": "The Mathematics Needed Here",
-   "text": [
-    "Why the cube of the distance appears. Attraction itself falls off as the square, but we are interested not in the attraction itself, but in its difference between two nearby points – that is, how quickly it changes. Take a hill: the important thing is not the height, but the steepness, and the steepness always decreases faster than the height itself. Formally, the derivative of $1/d^2$ is $-2/d^3$ – that is the whole answer. Hence a practical consequence: tidal action falls off so rapidly with distance that the nearby Moon beats the enormous Sun.",
-    "How two bulges arise instead of one. Here an image helps. Imagine three runners stretched in a line, all running toward a finish line, and the closer to the finish, the stronger they are pulled. The front runner is pulled most strongly and moves ahead. The rear runner is pulled least and falls behind. From the viewpoint of the middle runner, the chain stretches in both directions – even though everyone is being pulled in the same direction. The Earth is just such a chain: water in front runs away from the Moon, water in the rear lags behind, and in both cases a bulge forms.",
-    "What 'locally' means in the equivalence principle. Exactly what the tangent to a curve means: in a sufficiently small neighborhood of a point, a curve cannot be distinguished from a straight line, but over a larger region it can. Similarly, in a sufficiently small falling room, gravity is indistinguishable from its absence, while in a large room it becomes distinguishable, because objects at opposite walls will slowly converge, following the common center. The size of the room at which this becomes noticeable is a measure of how inhomogeneous the field is.",
-    "Why tidal force is proportional to the size of the body. The difference of something between two points is greater the farther apart the points are – this is obvious and requires no formulas. A point cannot be torn apart: it has no two ends. Hence the conclusion that tidal effects are important for extended objects – oceans, planets, stars – and completely negligible for humans. Near the surface of a stellar‑mass black hole, however, the difference over a human height is already lethal, and the phenomenon has earned an appropriate name."
-   ]
-  },
   "example": {
    "title": "Example with Numbers: How Much the Moon Pulls and How Much the Sun",
    "lead": "A problem whose answer contradicts first impressions: the winner is not the one with greater mass.",
@@ -784,7 +790,31 @@
     "hint": "If a quantity is proportional to one divided by the cube of distance, what happens when distance doubles?",
     "tolAbs": 1
    }
-  ]
+  ],
+  "math": {
+   "title": "The Math Needed Here",
+   "lead": "We need the expansion of nearly equal quantities, the derivative as a measure of steepness, and vector subtraction.",
+   "items": [
+    {
+     "what": "Difference of nearly equal quantities",
+     "why": "In step five, there is a difference of two very close numbers: attraction at distance $d-R$ minus attraction at distance $d$. Calculating both separately and subtracting is not possible—the desired difference would be lost in rounding. Instead, we factor out a common factor and use the expansion $(1+x)^{n} \\approx 1 + nx$, valid for small $x$. Here $x = R/d$, and for the Earth and Moon this is about one sixtieth. What is discarded is not infinitesimal: the next term in the expansion is about $1.5\\,x$ relative to the retained term, giving a correction of about two and a half percent. For a formula explaining the mechanism, this is more than enough, but the accuracy is exactly that. This technique is worth remembering apart from tides: whenever a physical effect is the difference of two nearly equal quantities, it is calculated not by subtraction but by the first term of an expansion.",
+     "latex": "\\frac{1}{(d-R)^{2}} = \\frac{1}{d^{2}}\\left(1-\\frac{R}{d}\\right)^{-2} \\approx \\frac{1}{d^{2}}\\left(1 + \\frac{2R}{d}\\right)",
+     "kit": "taylor"
+    },
+    {
+     "what": "The cube appears from the derivative",
+     "why": "The result of step five contains distance cubed, although the original law only knows the square. The reason is that tidal force is not the attraction itself, but the rate of change of attraction with distance, i.e., the derivative. For a power function, the derivative lowers the exponent by one and simultaneously brings it out as a factor: $(x^{n})' = n\\,x^{n-1}$. The exponent $-2$ becomes $-3$, from $1/d^{2}$ we get $-2/d^{3}$—the power in the denominator increases from square to cube, and the two in the numerator of the tidal formula is that very factor. The direction is easy to confuse here: the derivative lowers the exponent, integration raises it, $\\int x^{n}\\,dx = x^{n+1}/(n+1)$. Therefore, the derivative takes $1/d^{2}$ to the cube, while the integral of the same expression goes back to the first power. This directly implies the numerical check of step seven: tidal action decreases with distance faster than attraction, and the nearby Moon surpasses the Sun by a factor of $2.2$. How much the Moon lags behind the Sun in ordinary attraction is calculated in the example with numbers: there the first line of the solution gives 178 times.",
+     "latex": "\\frac{d}{dx}\\,x^{-2} = -2x^{-3} \\;\\Longrightarrow\\; \\Delta g \\approx R \\cdot \\frac{2GM}{d^{3}}",
+     "kit": "derivative"
+    },
+    {
+     "what": "Tidal force is a difference of vectors",
+     "why": "In step four, the tidal force is defined as the field at a given point minus the field at the center of the body. This subtraction is vectorial, and that is why there are two bulges, not one. For the near point, the difference points toward the Moon: the attraction there is stronger than average. For the far point, the same difference points away from the Moon: the attraction there is weaker than average, and the remainder points outward. No centrifugal force is needed for the second bulge—this is what the note to the derivation says. One must add and subtract arrows, not numbers: the length of the difference of two nearly equal vectors can be tiny, and its direction can be anything.",
+     "latex": "\\vec{F}_{\\text{tidal}}(\\vec{r}) = m\\left[\\vec{g}(\\vec{r}_0 + \\vec{r}) - \\vec{g}(\\vec{r}_0)\\right]",
+     "kit": "vector"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Las mareas y la ingravidez",
@@ -909,15 +939,6 @@
    ],
    "plate": "La gravedad puede eliminarse pasando a un sistema de referencia en caída libre — pero solo en un punto. El residuo, que estira un cuerpo extenso por ambos lados, es la fuerza de marea.",
    "note": "Una aclaración importante a la explicación escolar. A menudo se dice que la segunda joroba surge debido a la fuerza centrífuga de la rotación de la Tierra alrededor del centro de masa común con la Luna. Esta explicación da la respuesta correcta, pero por una razón incorrecta: las mareas existirían incluso en una Tierra que no rotara, simplemente cayendo hacia la Luna. La verdadera razón es la inhomogeneidad del campo, y no requiere ninguna rotación. Es fácil comprobarlo: las mareas del Sol también son dobles, aunque la rotación de la Tierra alrededor del baricentro con el Sol no tiene nada que ver."
-  },
-  "math": {
-   "title": "Matemáticas que aquí se necesitan",
-   "text": [
-    "Por qué aparece el cubo de la distancia. La atracción misma disminuye como el cuadrado, pero a nosotros no nos interesa ella, sino su diferencia en dos puntos cercanos — es decir, qué tan rápido cambia. Tome una colina: lo importante no es la altura, sino la pendiente, y la pendiente siempre disminuye más rápido que la altura misma. Formalmente, la derivada de $1/d^2$ es $-2/d^3$ — esa es toda la respuesta. De aquí se sigue una consecuencia práctica: el efecto de marea disminuye con la distancia tan rápidamente que la Luna cercana vence al enorme Sol.",
-    "Cómo se obtienen dos abultamientos y no uno. Aquí ayuda una imagen. Imagine tres corredores alineados en cadena corriendo hacia la meta, y cuanto más cerca de la meta, más fuerte son atraídos. El delantero es atraído con más fuerza y se despega hacia adelante. El trasero es atraído con menos fuerza y se queda atrás. Desde el punto de vista del del medio, la cadena se estira en ambas direcciones — aunque todos son atraídos hacia un mismo lado. La Tierra es esa cadena: el agua de adelante escapa hacia la Luna, el agua de atrás se retrasa, y en ambos casos se forma un abultamiento.",
-    "Qué significa 'localmente' en el principio de equivalencia. Exactamente lo mismo que significa la tangente a una curva: en una vecindad suficientemente pequeña de un punto, la curva no se puede distinguir de una recta, pero en toda la región sí se puede. Del mismo modo, en una habitación en caída libre suficientemente pequeña, la gravedad es indistinguible de su ausencia, pero en una grande ya es distinguible, porque los objetos en paredes opuestas se acercarán lentamente, siguiendo hacia un centro común. El tamaño de la habitación en el que esto se vuelve notable es la medida de cuán inhomogéneo es el campo.",
-    "Por qué la fuerza de marea es proporcional al tamaño del cuerpo. La diferencia de algo entre dos puntos es tanto mayor cuanto más alejados estén los puntos entre sí — esto es obvio y no requiere fórmulas. Un punto no se puede romper: no tiene dos extremos. De aquí se sigue que los efectos de marea son importantes para objetos extensos — océanos, planetas, estrellas — y completamente insignificantes para los humanos. En la superficie de un agujero negro de masa estelar, sin embargo, la diferencia a lo largo de la estatura humana ya es letal, y el fenómeno ha recibido un nombre apropiado."
-   ]
   },
   "example": {
    "title": "Ejemplo con números: ¿cuántas veces atrae la Luna y cuántas el Sol?",
@@ -1150,7 +1171,31 @@
     "hint": "Si una magnitud es proporcional a uno dividido por el cubo de la distancia, ¿qué ocurre al duplicar la distancia?",
     "tolAbs": 1
    }
-  ]
+  ],
+  "math": {
+   "title": "Matemáticas que se necesitaron aquí",
+   "lead": "Se necesitará la expansión de cantidades casi iguales, la derivada como medida de la pendiente y la resta de vectores.",
+   "items": [
+    {
+     "what": "Diferencia de cantidades casi iguales",
+     "why": "En el quinto paso se tiene la diferencia de dos números muy cercanos: la atracción a distancia $d-R$ menos la atracción a distancia $d$. Calcular ambos por separado y restar no es posible: la diferencia buscada se pierde en el redondeo. En su lugar, se factoriza un factor común y se usa la expansión $(1+x)^{n} \\approx 1 + nx$, válida para $x$ pequeño. Aquí $x = R/d$, y para la Tierra y la Luna es alrededor de una sexagésima parte. Lo que se desprecia no es infinitesimal: el siguiente término de la expansión se relaciona con el retenido como $1{,}5\\,x$, es decir, da una corrección de alrededor del dos y medio por ciento. Para una fórmula que explica el mecanismo, esto es más que suficiente, pero su precisión es exactamente esa. Vale la pena recordar este truco aparte de las mareas: cada vez que un efecto físico es la diferencia de dos cantidades casi iguales, se calcula no restando, sino con el primer término de la expansión.",
+     "latex": "\\frac{1}{(d-R)^{2}} = \\frac{1}{d^{2}}\\left(1-\\frac{R}{d}\\right)^{-2} \\approx \\frac{1}{d^{2}}\\left(1 + \\frac{2R}{d}\\right)",
+     "kit": "taylor"
+    },
+    {
+     "what": "El cubo aparece a partir de la derivada",
+     "why": "El resultado del quinto paso contiene la distancia al cubo, aunque la ley original solo conoce el cuadrado. La razón es que la fuerza de marea no es la atracción en sí, sino la rapidez de su cambio con la distancia, es decir, la derivada. Para una función potencia, la derivada reduce el exponente en uno y simultáneamente lo saca como factor: $(x^{n})' = n\\,x^{n-1}$. El exponente $-2$ pasa a $-3$, de $1/d^{2}$ se obtiene $-2/d^{3}$: el grado en el denominador crece de cuadrado a cubo, y el dos en el numerador de la fórmula de marea es ese exponente extraído. Aquí es fácil confundir la dirección: la derivada reduce el exponente, la integración lo aumenta, $\\int x^{n}\\,dx = x^{n+1}/(n+1)$. Por lo tanto, la derivada lleva $1/d^{2}$ al cubo, mientras que la integral de la misma expresión lo lleva de vuelta a la primera potencia. De aquí se sigue directamente la verificación numérica del séptimo paso: el efecto de marea disminuye con la distancia más rápido que la atracción, y la Luna cercana supera al Sol en el doble: la relación $2{,}2$. Cuánto cede la Luna al Sol en atracción ordinaria lo calcula el ejemplo con números: allí la primera línea de la solución da 178 veces.",
+     "latex": "\\frac{d}{dx}\\,x^{-2} = -2x^{-3} \\;\\Longrightarrow\\; \\Delta g \\approx R \\cdot \\frac{2GM}{d^{3}}",
+     "kit": "derivative"
+    },
+    {
+     "what": "La fuerza de marea es una diferencia de vectores",
+     "why": "En el cuarto paso, la fuerza de marea se define como el campo en un punto dado menos el campo en el centro del cuerpo. La resta aquí es vectorial, y es precisamente por eso que hay dos protuberancias, no una. Para el punto cercano, la diferencia apunta hacia la Luna: la atracción allí es más fuerte que el promedio. Para el punto lejano, la misma diferencia apunta en dirección opuesta a la Luna: la atracción allí es más débil que el promedio, y el resto apunta hacia afuera. No se necesita ninguna fuerza centrífuga para la segunda protuberancia, como se señala en la nota a la derivación. Hay que sumar y restar flechas, no números: la longitud de la diferencia de dos vectores casi iguales puede ser diminuta, pero su dirección puede ser cualquiera.",
+     "latex": "\\vec{F}_{\\text{marea}}(\\vec{r}) = m\\left[\\vec{g}(\\vec{r}_0 + \\vec{r}) - \\vec{g}(\\vec{r}_0)\\right]",
+     "kit": "vector"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "المد والجزر وانعدام الوزن",
@@ -1275,15 +1320,6 @@
    ],
    "plate": "يمكن إلغاء الجاذبية بالانتقال إلى إطار مرجعي ساقط سقوطًا حرًا — ولكن فقط في نقطة واحدة. البقية، التي تمدد الجسم الممتد من كلا الجانبين، هي قوة المد والجزر.",
    "note": "توضيح مهم للتفسير المدرسي. غالبًا ما يُقال إن السنام الثاني ينشأ بسبب قوة الطرد المركزي لدوران الأرض حول مركز الكتلة المشترك مع القمر. هذا التفسير يعطي إجابة صحيحة لكن لسبب خاطئ: المد والجزر سيكون موجودًا حتى لو كانت الأرض غير دوارة، فقط تسقط نحو القمر. السبب الحقيقي هو عدم تجانس المجال، ولا يتطلب أي دوران. من السهل التحقق: المد والجزر من الشمس أيضًا مزدوج، على الرغم من أن دوران الأرض حول مركز الثقل مع الشمس لا علاقة له بالأمر."
-  },
-  "math": {
-   "title": "الرياضيات اللازمة هنا",
-   "text": [
-    "لماذا يظهر مكعب المسافة. قوة الجذب نفسها تتناقص كمربع، لكننا لا نهتم بها، بل بفرقها في نقطتين قريبتين – أي مدى سرعة تغيرها. خذ تلاً: المهم ليس الارتفاع، بل الانحدار، والانحدار دائمًا يتناقص أسرع من الارتفاع نفسه. رسميًا، مشتقة $1/d^2$ هي $-2/d^3$ – هذا هو الجواب كله. ومن هنا الاستنتاج العملي: تأثير المد والجزر يتناقص مع المسافة بسرعة بحيث أن القمر القريب يغلب الشمس الهائلة.",
-    "كيف نحصل على حدبتين وليس واحدة. هنا يساعدنا هذا التصوّر. تخيل ثلاثة عدائين يمتدون في خط ويجرون نحو خط النهاية، وكلما اقتربوا من خط النهاية، زاد جذبهم. العداء الأمامي يُجذب بقوة أكبر وينطلق إلى الأمام. العداء الخلفي يُجذب بقوة أقل ويتخلف. من وجهة نظر العداء الأوسط، الخط يتمدد في كلا الاتجاهين – على الرغم من أن الجميع يُجذبون في اتجاه واحد. الأرض هي مثل هذا الخط: الماء في الأمام يهرب نحو القمر، والماء في الخلف يتخلف، وفي كلتا الحالتين نحصل على حدبة.",
-    "ماذا يعني «محليًا» في مبدأ التكافؤ. هو نفس ما يعنيه المماس للمنحنى: في جوار صغير بما يكفي لنقطة، لا يمكن تمييز المنحنى عن الخط المستقيم، ولكن في المنطقة بأكملها يمكن ذلك. بنفس الطريقة، في غرفة ساقطة صغيرة بما يكفي، لا يمكن تمييز الجاذبية عن عدم وجودها، بينما في غرفة كبيرة يمكن تمييزها، لأن الأجسام عند الجدران المتقابلة ستتقارب ببطء، متتبعة مركزًا مشتركًا. حجم الغرفة الذي يصبح عنده هذا ملحوظًا هو مقياس مدى عدم تجانس المجال.",
-    "لماذا تتناسب قوة المد والجزر مع حجم الجسم. الفرق بين نقطتين هو أكبر كلما كانت النقطتان أبعد عن بعضهما – وهذا واضح ولا يحتاج إلى صيغ. لا يمكن تمزيق نقطة: ليس لها طرفان. ومن هنا نستنتج أن تأثيرات المد والجزر مهمة للأجسام الممتدة – المحيطات، الكواكب، النجوم – وهي ضئيلة تمامًا بالنسبة للإنسان. على سطح ثقب أسود ذي كتلة نجمية، مع ذلك، فإن الفرق على طول قامة الإنسان يكون مميتًا، وقد حصلت الظاهرة على اسم مناسب."
-   ]
   },
   "example": {
    "title": "مثال بأرقام: بكم مرة تجذب القمر وبكم تجذب الشمس؟",
@@ -1516,7 +1552,31 @@
     "hint": "إذا كانت الكمية متناسبة مع واحد على مكعب المسافة، ماذا يحدث عند مضاعفة المسافة؟",
     "tolAbs": 1
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "ستكون هناك حاجة إلى تحليل الكميات المتقاربة، والمشتقة كمقياس للانحدار، وطرح المتجهات.",
+   "items": [
+    {
+     "what": "الفرق بين كميتين متقاربتين",
+     "why": "في الخطوة الخامسة يوجد فرق بين رقمين متقاربين جدًا: الجذب على مسافة $d-R$ ناقص الجذب على مسافة $d$. لا يمكن حساب كل منهما على حدة ثم طرحهما، لأن الفرق المطلوب سيغرق في التقريب. بدلاً من ذلك، يتم إخراج العامل المشترك واستخدام التحليل $(1+x)^{n} \\approx 1 + nx$، الصحيح عندما يكون $x$ صغيرًا. هنا $x = R/d$، وبالنسبة للأرض والقمر هذا حوالي واحد على ستين. ما يتم إهماله ليس متناهيًا في الصغر: الحد التالي في التحليل يتناسب مع الحد المحتفظ به بمقدار $1.5\\,x$، أي يعطي تصحيحًا حوالي اثنين ونصف في المئة. بالنسبة لصيغة تشرح الآلية، هذا كافٍ بزيادة، لكن الدقة هي بالضبط هذه. من الجدير تذكر هذه الطريقة بشكل منفصل عن المد والجزر: كلما كان التأثير الفيزيائي هو الفرق بين كميتين متقاربتين، لا يُحسب بالطرح بل بالحد الأول من التحليل.",
+     "latex": "\\frac{1}{(d-R)^{2}} = \\frac{1}{d^{2}}\\left(1-\\frac{R}{d}\\right)^{-2} \\approx \\frac{1}{d^{2}}\\left(1 + \\frac{2R}{d}\\right)",
+     "kit": "taylor"
+    },
+    {
+     "what": "المكعب يظهر من المشتقة",
+     "why": "نتيجة الخطوة الخامسة تحتوي على المسافة مرفوعة إلى مكعب، على الرغم من أن القانون الأصلي يعرف المربع فقط. السبب هو أن قوة المد والجزر ليست الجذب نفسه، بل معدل تغيره مع المسافة، أي المشتقة. بالنسبة للدالة الأسية، المشتقة تخفض الأس بمقدار واحد وفي نفس الوقت تخرجه كمعامل: $(x^{n})' = n\\,x^{n-1}$. الأس $-2$ يتحول إلى $-3$، ومن $1/d^{2}$ نحصل على $-2/d^{3}$ — الأس في المقام يزداد من المربع إلى المكعب، والاثنان في بسط صيغة المد والجزر هو ذلك الأس المُخرج. من السهل الخلط هنا: المشتقة تخفض الأس، والتكامل يرفعه، $\\int x^{n}\\,dx = x^{n+1}/(n+1)$. لذلك المشتقة تحول $1/d^{2}$ إلى مكعب، بينما التكامل لنفس التعبير يعيده إلى الأس الأول. من هنا يتبع مباشرة التحقق العددي للخطوة السابعة: تأثير المد والجزر يتناقص مع المسافة أسرع من الجذب، والقمر القريب يتفوق على الشمس بمرتين — النسبة $2.2$. أما مقدار تفوق القمر على الشمس في الجذب العادي، فيحسبه المثال بالأرقام: هناك السطر الأول من الحل يعطي 178 مرة.",
+     "latex": "\\frac{d}{dx}\\,x^{-2} = -2x^{-3} \\;\\Longrightarrow\\; \\Delta g \\approx R \\cdot \\frac{2GM}{d^{3}}",
+     "kit": "derivative"
+    },
+    {
+     "what": "قوة المد والجزر هي فرق متجهات",
+     "why": "في الخطوة الرابعة، تُعرَّف قوة المد والجزر على أنها المجال عند نقطة معينة ناقص المجال عند مركز الجسم. الطرح هنا متجهي، ولهذا السبب يوجد حدبتان وليس واحدة. عند النقطة القريبة، الفرق موجه نحو القمر: الجذب هناك أقوى من المتوسط. عند النقطة البعيدة، نفس الفرق موجه بعيدًا عن القمر: الجذب هناك أضعف من المتوسط، والباقي يشير إلى الخارج. لا حاجة لأي قوة طاردة مركزية للحدبة الثانية — وهذا ما تشير إليه الملاحظة على الاشتقاق. يجب جمع وطرح الأسهم، وليس الأرقام: طول الفرق بين متجهين متقاربين قد يكون ضئيلًا، لكن اتجاهه يمكن أن يكون أي شيء.",
+     "latex": "\\vec{F}_{\\text{tid}}(\\vec{r}) = m\\left[\\vec{g}(\\vec{r}_0 + \\vec{r}) - \\vec{g}(\\vec{r}_0)\\right]",
+     "kit": "vector"
+    }
+   ]
+  }
  },
  "tags": [
   "sun",

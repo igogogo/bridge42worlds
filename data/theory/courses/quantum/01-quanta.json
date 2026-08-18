@@ -182,11 +182,26 @@
   },
   "math": {
    "title": "Математика, которая здесь понадобилась",
-   "text": [
-    "Почему порционность убирает бесконечность. Представьте, что в казну поступают взносы, но каждая касса принимает только купюры своего достоинства: первая рублёвые, вторая сторублёвые, тысячная — миллионные. Если у населения на руках в среднем по сто рублей, кассы с крупным номиналом не получат ничего: платить нечем. Ровно так тепловая энергия $kT$ не может оплатить квант $h\\nu$, если он много больше. Высокочастотные моды остаются пустыми, и сумма сходится. Классика ошибалась, полагая, что любую моду можно возбудить сколь угодно малой порцией.",
-    "Что означает экспонента в формуле Планка. Множитель $e^{-h\\nu/kT}$ — вероятность того, что тепловое движение случайно наберёт энергию, достаточную для кванта. Это то же самое распределение Больцмана, что мы разбирали в термодинамике: вероятность найти систему в состоянии с энергией $E$ падает экспоненциально. Квантовая механика здесь не добавила нового распределения, она добавила дискретность уровней, к которым его применяют.",
-    "Почему фотоэффект нельзя объяснить волной. Волна отдаёт энергию непрерывно, поэтому слабый свет должен был бы выбивать электроны, но с задержкой — пока накопится нужное количество. Расчёт даёт задержку в часы. Опыт показывает наносекунды и полное отсутствие эффекта ниже пороговой частоты. Обе особенности несовместимы с волной и обе тривиальны для частиц: квант либо приносит достаточно за один раз, либо не приносит.",
-    "Как читать формулу уровней в ящике. Энергия идёт как $n^{2}/L^{2}$. Отсюда сразу два практических вывода. Первый: уровни не равноотстоящие, а расходящиеся — расстояние между третьим и четвёртым больше, чем между первым и вторым. Второй: чем теснее ящик, тем выше все уровни. Сожмите ящик вдвое — энергии вырастут вчетверо. Это объясняет, почему электрон в маленьком атоме связан сильнее, и почему квантовые точки светятся разным цветом в зависимости от размера."
+   "lead": "Три привычки чтения формул: когда интеграл расходится, что стоит в показателе экспоненты и как вынуть ответ из одних показателей степени.",
+   "items": [
+    {
+     "what": "Когда интеграл обращается в бесконечность",
+     "why": "Во втором шаге вывода стоит $\\int_0^{\\infty}\\nu^{2}kT\\,d\\nu = \\infty$, и это не описка, а честный ответ. Интеграл здесь — сумма вкладов от всех частот: число мод растёт как куб частоты, поэтому на интервал $d\\nu$ приходится $\\nu^{2}d\\nu$ мод, и каждая берёт свои $kT$. Сходимость решает не малость шага, а поведение слагаемого на бесконечности: если оно не убывает достаточно быстро, накопленная площадь растёт без предела. Здесь оно не убывает вовсе, а растёт квадратично. Гипотеза Планка меняет ровно это место: средняя энергия моды начинает падать экспоненциально, хвост перестаёт давать вклад, и та же сумма оказывается конечной.",
+     "latex": "\\int_0^{\\infty}\\nu^{2}kT\\,d\\nu = \\infty, \\qquad \\int_0^{\\infty}\\frac{h\\nu^{3}\\,d\\nu}{e^{h\\nu/kT}-1} < \\infty",
+     "kit": "integral"
+    },
+    {
+     "what": "Отношение двух энергий в показателе",
+     "why": "В показателе экспоненты может стоять только чистое число, и формула Планка из четвёртого шага это правило соблюдает: $h\\nu/kT$ есть квант энергии, поделённый на тепловую энергию. Всё поведение кривой читается из этого отношения, ничего не вычисляя. Когда оно мало (низкие частоты), работает приближение $e^{x}\\approx 1+x$: знаменатель $e^{x}-1$ превращается в $x$, и средняя энергия моды возвращается к классическому $kT$. Когда оно велико (высокие частоты), $e^{x}$ огромно, и средняя энергия гаснет экспоненциально: тепловому движению нечем оплатить порцию $h\\nu$. Горб спектра стоит там, где отношение порядка единицы.",
+     "latex": "\\frac{h\\nu}{kT}\\ll 1:\\;\\; \\langle E\\rangle \\to kT; \\qquad \\frac{h\\nu}{kT}\\gg 1:\\;\\; \\langle E\\rangle \\approx h\\nu\\,e^{-h\\nu/kT}",
+     "kit": "exponent"
+    },
+    {
+     "what": "Как читать степени в формуле уровней",
+     "why": "Последний шаг вывода даёт $E_n = n^{2}h^{2}/8mL^{2}$, но дальше формулу удобнее читать как две пропорции, а не считать по ней. Первая: $E \\propto n^{2}$, уровни не равноотстоящие, а расходящиеся, промежуток между третьим и четвёртым больше, чем между первым и вторым. Ровно это и видно на лесенке стенда. Вторая: $E \\propto 1/L^{2}$, сожмите ящик вдвое, и все уровни поднимутся вчетверо, потому что двойка входит в квадрате. Чтение через пропорцию отвечает на вопрос «во сколько раз» сразу и не требует ни постоянной Планка, ни массы: при делении постоянные множители сокращаются.",
+     "latex": "E_n \\propto \\frac{n^{2}}{L^{2}} \\;\\Longrightarrow\\; \\frac{E(L/2)}{E(L)} = 4",
+     "kit": "propto"
+    }
    ]
   },
   "example": {
@@ -443,36 +458,73 @@
   "standNote": "At the exhibit: a particle in a box — the simplest problem where everything is calculated exactly. Change the level number and watch the ladder on the right: the distances between levels increase because energy goes as the square of the number. Note the lowest level: it is not zero. A particle in a box cannot stand still — it always has a minimum energy, and this is a direct consequence of the fact that a wave must fit at least one half-wave.",
   "formula": {
    "name": "Planck's hypothesis and the photoelectric effect equation",
-   "latex": "E = h\\nu, \\qquad h\\nu = A_{\\text{out}} + \\frac{mv^{2}}{2}",
+   "latex": "E = h\\nu, \\qquad h\\nu = A_{\\text{work function}} + \\frac{mv^{2}}{2}",
    "alsoKnown": "Energy quantum · Einstein's formula for the photoelectric effect",
    "authors": [
     {
      "who": "Gustav Kirchhoff",
      "year": "1859",
-     "what": "posed the problem of blackbody radiation and proved that its spectrum depends only on temperature, not on the substance. For forty years the problem was considered technical, and it turned out to be the entrance to new physics."
+     "what": "posed the problem of black-body radiation and proved that its spectrum depends only on temperature, not on the material. For forty years the problem was considered technical, but it turned out to be the gateway to new physics"
     },
     {
      "who": "Max Planck",
      "year": "1900",
-     "what": "obtained the correct formula by assuming the quantization of energy. In a letter to his son, he admitted that he had either made a discovery on the level of Newton or had made a mistake. The discovery turned out to be deeper than he was ready to admit."
+     "what": "obtained the correct formula by assuming energy is quantized. In a letter to his son he admitted that he had either made a discovery on the level of Newton or had made a mistake. The discovery turned out to be deeper than he was ready to acknowledge"
     },
     {
      "who": "Albert Einstein",
      "year": "1905",
-     "what": "explained the photoelectric effect by taking quanta as real particles of light. Even Planck considered this step excessive and opposed it for ten years."
+     "what": "explained the photoelectric effect by treating quanta as real particles of light. Even Planck considered this step excessive and opposed it for ten years"
     },
     {
      "who": "Robert Millikan",
      "year": "1916",
-     "what": "spent ten years conducting experiments hoping to disprove Einstein — and confirmed his formula with high precision, simultaneously measuring Planck's constant. He later wrote that the result forced him to accept the theory against his own expectations."
+     "what": "spent ten years conducting experiments hoping to refute Einstein, but instead confirmed his formula with high precision, also measuring Planck's constant. He later wrote that the result forced him to accept the theory against his own expectations"
     },
     {
      "who": "Arthur Compton",
      "year": "1923",
-     "what": "showed that an X-ray quantum collides with an electron like a billiard ball, with conservation of momentum. After that, it became impossible to doubt the reality of photons."
+     "what": "showed that an X-ray quantum collides with an electron like a billiard ball, conserving momentum. After that, doubting the reality of photons became impossible"
     }
    ],
-   "story": "Planck was a convinced conservative in science and accepted his own hypothesis with great reluctance. He viewed quantization as a formal computational device rather than a property of nature, and spent years trying to derive the same formula by classical means. In his autobiography, he left a bitter observation that became famous: a new scientific truth triumphs not because its opponents are convinced, but because the opponents gradually die out, and the new generation grows up with it from the beginning. He was speaking in part about himself — the man who discovered the quantum and spent his whole life hoping it would turn out to be a misunderstanding."
+   "story": "Planck was a staunch conservative in science and accepted his own hypothesis with great reluctance. He regarded quantization as a formal computational trick, not as a property of nature, and spent years trying to derive the same formula by classical means. In his autobiography he left a bitter observation that became famous: a new scientific truth triumphs not because its opponents are convinced, but because they gradually die out, and the new generation grows up with it from the start. He was speaking partly about himself — a man who discovered the quantum and spent his life hoping it would turn out to be a misunderstanding.",
+   "symbols": [
+    {
+     "sym": "h",
+     "latex": "h",
+     "what": "Planck constant",
+     "unit": "J·s",
+     "note": "quantum of action; determines the scale at which classical physics breaks down"
+    },
+    {
+     "sym": "nu",
+     "latex": "\\nu",
+     "what": "frequency of radiation",
+     "unit": "Hz",
+     "note": "the energy of a quantum depends on it, not on brightness — that's the whole point"
+    },
+    {
+     "sym": "A",
+     "latex": "A_{\\text{work function}}",
+     "what": "work function",
+     "unit": "J or eV",
+     "note": "how much is needed to tear an electron out of a metal; for cesium it's 2.1 eV, for platinum 5.6"
+    },
+    {
+     "sym": "nu0",
+     "latex": "\\nu_0",
+     "what": "red boundary of the photoelectric effect",
+     "unit": "Hz",
+     "note": "below it there is no effect at all, no matter how bright the lamp"
+    },
+    {
+     "sym": "E_n",
+     "latex": "E_n",
+     "what": "energy levels in a box",
+     "unit": "J",
+     "note": "$E_n = n^{2}h^{2}/8mL^{2}$ — they grow as the square of the number"
+    }
+   ]
   },
   "symbols": [
    {
@@ -560,15 +612,6 @@
    ],
    "plate": "Energy is transferred in quanta $E = h\\nu$. This eliminates the ultraviolet catastrophe, explains the photoelectric effect, and generates discrete levels wherever a particle is confined.",
    "note": "Limits of applicability and why we don't notice quantization. Planck's constant is incredibly small: $6.6\\cdot10^{-34}$ J·s. For a swing with frequency 0.5 Hz, the energy quantum is $3\\cdot10^{-34}$ J — to notice a step, one would have to measure the swing's energy to 34 decimal places. Therefore, in the macroscopic world everything appears continuous. Quantization becomes noticeable when the action of a system is comparable to $h$, i.e., on the scale of atoms."
-  },
-  "math": {
-   "title": "Mathematics needed here",
-   "text": [
-    "Why quantization removes infinity. Imagine contributions to a treasury, but each counter accepts only bills of a specific denomination: the first takes rubles, the second hundred-ruble notes, the thousandth takes million-ruble notes. If the population on average has one hundred rubles, counters with large denominations receive nothing: there is nothing to pay with. Similarly, thermal energy $kT$ cannot afford a quantum $h\\nu$ if it is much larger. High-frequency modes remain empty, and the sum converges. Classical physics was wrong in assuming that any mode can be excited with an arbitrarily small amount.",
-    "What the exponential in Planck's formula means. The factor $e^{-h\\nu/kT}$ is the probability that thermal motion randomly accumulates enough energy for a quantum. This is the same Boltzmann distribution we discussed in thermodynamics: the probability of finding a system in a state with energy $E$ decreases exponentially. Quantum mechanics did not introduce a new distribution here; it introduced the discreteness of levels to which that distribution is applied.",
-    "Why the photoelectric effect cannot be explained by a wave. A wave gives energy continuously, so weak light should still eject electrons, but with a delay — until enough energy accumulates. Calculation yields a delay of hours. Experiment shows nanoseconds and a complete absence of the effect below the threshold frequency. Both features are incompatible with a wave and both are trivial for particles: a quantum either brings enough at once or it doesn't.",
-    "How to read the formula for levels in a box. Energy goes as $n^{2}/L^{2}$. Two practical conclusions follow immediately. First: the levels are not equally spaced but diverging — the gap between the third and fourth is larger than between the first and second. Second: the tighter the box, the higher all levels. Squeeze the box to half size — energies quadruple. This explains why an electron in a small atom is bound more tightly, and why quantum dots emit different colors depending on their size."
-   ]
   },
   "example": {
    "title": "Example with numbers: photoelectric effect and why red light is powerless",
@@ -811,7 +854,31 @@
     "hint": "Use the formula: energy in electronvolts equals 1240 divided by the wavelength in nanometers.",
     "tolAbs": 0.4
    }
-  ]
+  ],
+  "math": {
+   "title": "The Math Needed Here",
+   "lead": "Three habits for reading formulas: when an integral diverges, what stands in the exponent, and how to extract an answer from exponents alone.",
+   "items": [
+    {
+     "what": "When an integral goes to infinity",
+     "why": "In the second step of the derivation, we have $\\int_0^{\\infty}\\nu^{2}kT\\,d\\nu = \\infty$, and this is not a typo but an honest answer. The integral here is the sum of contributions from all frequencies: the number of modes grows as the cube of frequency, so on an interval $d\\nu$ there are $\\nu^{2}d\\nu$ modes, each taking its own $kT$. Convergence is determined not by the smallness of the step, but by the behavior of the integrand at infinity: if it does not decrease fast enough, the accumulated area grows without bound. Here it does not decrease at all, but grows quadratically. Planck's hypothesis changes exactly this place: the average energy of a mode begins to fall exponentially, the tail stops contributing, and the same sum becomes finite.",
+     "latex": "\\int_0^{\\infty}\\nu^{2}kT\\,d\\nu = \\infty, \\qquad \\int_0^{\\infty}\\frac{h\\nu^{3}\\,d\\nu}{e^{h\\nu/kT}-1} < \\infty",
+     "kit": "integral"
+    },
+    {
+     "what": "The ratio of two energies in the exponent",
+     "why": "In the exponent of an exponential, there can only be a pure number, and Planck's formula from the fourth step obeys this rule: $h\\nu/kT$ is the quantum of energy divided by thermal energy. All the behavior of the curve can be read from this ratio without calculating anything. When it is small (low frequencies), the approximation $e^{x}\\approx 1+x$ works: the denominator $e^{x}-1$ becomes $x$, and the average energy of a mode returns to the classical $kT$. When it is large (high frequencies), $e^{x}$ is huge, and the average energy dies out exponentially: thermal motion cannot afford the portion $h\\nu$. The peak of the spectrum is where the ratio is of order one.",
+     "latex": "\\frac{h\\nu}{kT}\\ll 1:\\;\\; \\langle E\\rangle \\to kT; \\qquad \\frac{h\\nu}{kT}\\gg 1:\\;\\; \\langle E\\rangle \\approx h\\nu\\,e^{-h\\nu/kT}",
+     "kit": "exponent"
+    },
+    {
+     "what": "How to read the powers in the energy level formula",
+     "why": "The last step of the derivation gives $E_n = n^{2}h^{2}/8mL^{2}$, but it is more convenient to read the formula as two proportions rather than to calculate with it. First: $E \\propto n^{2}$, the levels are not equally spaced but diverge; the gap between the third and fourth is larger than between the first and second. This is exactly what is seen on the ladder of the stand. Second: $E \\propto 1/L^{2}$; squeeze the box twice, and all levels rise fourfold, because the two enters squared. Reading via proportion answers the question 'by how many times' immediately and requires neither Planck's constant nor mass: when dividing, the constant factors cancel.",
+     "latex": "E_n \\propto \\frac{n^{2}}{L^{2}} \\;\\Longrightarrow\\; \\frac{E(L/2)}{E(L)} = 4",
+     "kit": "propto"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Cuantos",
@@ -941,15 +1008,6 @@
    ],
    "plate": "La energía se transmite en cuantos $E = h\\nu$. Esto elimina la catástrofe ultravioleta, explica el efecto fotoeléctrico y genera niveles discretos en cualquier lugar donde una partícula esté confinada.",
    "note": "Límites de aplicabilidad y por qué no percibimos la cuantización. La constante de Planck es extraordinariamente pequeña: $6{,}6\\cdot 10^{-34}$ J·s. Para un columpio con frecuencia 0,5 Hz, el cuanto de energía es $3\\cdot 10^{-34}$ julios — para notar el escalón, habría que medir la energía del columpio con una precisión de treinta y cuatro decimales. Por eso en el macrocosmos todo parece continuo. La cuantización se vuelve apreciable cuando la acción del sistema es comparable a $h$, es decir, a escala atómica."
-  },
-  "math": {
-   "title": "Matemáticas que se necesitan aquí",
-   "text": [
-    "Por qué la cuantización elimina el infinito. Imagine que llegan contribuciones al tesoro, pero cada caja solo acepta billetes de un valor: la primera billetes de un rublo, la segunda de cien rublos, la milésima de un millón. Si la población tiene en promedio cien rublos, las cajas con denominaciones grandes no reciben nada: no hay con qué pagar. Exactamente así, la energía térmica $kT$ no puede pagar un cuanto $h\\nu$ si este es mucho mayor. Los modos de alta frecuencia permanecen vacíos, y la suma converge. La física clásica se equivocaba al suponer que cualquier modo puede excitarse con una porción arbitrariamente pequeña.",
-    "Qué significa la exponencial en la fórmula de Planck. El factor $e^{-h\\nu/kT}$ es la probabilidad de que el movimiento térmico alcance aleatoriamente una energía suficiente para el cuanto. Es la misma distribución de Boltzmann que analizamos en termodinámica: la probabilidad de encontrar un sistema en un estado con energía $E$ decae exponencialmente. La mecánica cuántica no agregó aquí una nueva distribución, sino la discretización de los niveles a los que se aplica.",
-    "Por qué el efecto fotoeléctrico no puede explicarse con una onda. Una onda entrega energía de forma continua, por lo que una luz débil debería extraer electrones, pero con retardo — hasta que se acumule la cantidad necesaria. El cálculo da un retardo de horas. El experimento muestra nanosegundos y la ausencia total del efecto por debajo de la frecuencia umbral. Ambas características son incompatibles con una onda y ambas son triviales para partículas: un cuanto trae suficiente de una vez, o no trae nada.",
-    "Cómo leer la fórmula de los niveles en una caja. La energía va como $n^{2}/L^{2}$. De aquí se obtienen dos conclusiones prácticas. Primero: los niveles no son equidistantes, sino que divergen — la distancia entre el tercero y el cuarto es mayor que entre el primero y el segundo. Segundo: cuanto más pequeña es la caja, más altos son todos los niveles. Si se comprime la caja a la mitad, las energías se cuadruplican. Esto explica por qué un electrón en un átomo pequeño está más fuertemente ligado, y por qué los puntos cuánticos emiten diferentes colores según su tamaño."
-   ]
   },
   "example": {
    "title": "Ejemplo con números: el efecto fotoeléctrico y por qué la luz roja es impotente",
@@ -1192,7 +1250,31 @@
     "hint": "Usa la fórmula: la energía en electronvoltios es igual a 1240 dividido por la longitud de onda en nanómetros.",
     "tolAbs": 0.4
    }
-  ]
+  ],
+  "math": {
+   "title": "Matemáticas que aquí se necesitaron",
+   "lead": "Tres hábitos de lectura de fórmulas: cuando la integral diverge, qué está en el exponente y cómo extraer la respuesta de los exponentes.",
+   "items": [
+    {
+     "what": "Cuando la integral se vuelve infinita",
+     "why": "En el segundo paso de la derivación está $\\int_0^{\\infty}\\nu^{2}kT\\,d\\nu = \\infty$, y no es un error tipográfico, sino una respuesta honesta. La integral aquí es la suma de contribuciones de todas las frecuencias: el número de modos crece como el cubo de la frecuencia, por lo que en el intervalo $d\\nu$ hay $\\nu^{2}d\\nu$ modos, y cada uno toma su $kT$. La convergencia no la decide lo pequeño del paso, sino el comportamiento del sumando en el infinito: si no decrece lo suficientemente rápido, el área acumulada crece sin límite. Aquí no decrece en absoluto, sino que crece cuadráticamente. La hipótesis de Planck cambia exactamente este lugar: la energía promedio del modo comienza a caer exponencialmente, la cola deja de contribuir, y la misma suma resulta finita.",
+     "latex": "\\int_0^{\\infty}\\nu^{2}kT\\,d\\nu = \\infty, \\qquad \\int_0^{\\infty}\\frac{h\\nu^{3}\\,d\\nu}{e^{h\\nu/kT}-1} < \\infty",
+     "kit": "integral"
+    },
+    {
+     "what": "La razón de dos energías en el exponente",
+     "why": "En el exponente solo puede haber un número puro, y la fórmula de Planck del cuarto paso cumple esta regla: $h\\nu/kT$ es el cuanto de energía dividido por la energía térmica. Todo el comportamiento de la curva se lee de esta razón, sin calcular nada. Cuando es pequeña (bajas frecuencias), funciona la aproximación $e^{x}\\approx 1+x$: el denominador $e^{x}-1$ se convierte en $x$, y la energía promedio del modo vuelve al clásico $kT$. Cuando es grande (altas frecuencias), $e^{x}$ es enorme, y la energía promedio se apaga exponencialmente: el movimiento térmico no tiene con qué pagar la porción $h\\nu$. La joroba del espectro está donde la razón es del orden de la unidad.",
+     "latex": "\\frac{h\\nu}{kT}\\ll 1:\\;\\; \\langle E\\rangle \\to kT; \\qquad \\frac{h\\nu}{kT}\\gg 1:\\;\\; \\langle E\\rangle \\approx h\\nu\\,e^{-h\\nu/kT}",
+     "kit": "exponent"
+    },
+    {
+     "what": "Cómo leer las potencias en la fórmula de los niveles",
+     "why": "El último paso de la derivación da $E_n = n^{2}h^{2}/8mL^{2}$, pero luego la fórmula es más cómoda de leer como dos proporciones, no de calcular con ella. Primera: $E \\propto n^{2}$, los niveles no están equiespaciados, sino que divergen, el intervalo entre el tercero y el cuarto es mayor que entre el primero y el segundo. Exactamente esto se ve en la escalera del stand. Segunda: $E \\propto 1/L^{2}$, comprime la caja a la mitad, y todos los niveles subirán al cuádruple, porque el dos entra al cuadrado. Leer mediante proporción responde a la pregunta «¿cuántas veces?» de inmediato y no requiere ni la constante de Planck ni la masa: al dividir, los factores constantes se cancelan.",
+     "latex": "E_n \\propto \\frac{n^{2}}{L^{2}} \\;\\Longrightarrow\\; \\frac{E(L/2)}{E(L)} = 4",
+     "kit": "propto"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "الكمات",
@@ -1204,37 +1286,74 @@
   ],
   "standNote": "على المنصة، جسيم في صندوق — أبسط مسألة حيث يُحسب كل شيء بدقة. غيّر رقم المستوى وراقب السلم على اليمين: المسافات بين المستويات تزداد لأن الطاقة تتناسب مع مربع الرقم. لاحظ المستوى السفلي:他不是 صفرًا. لا يمكن للجسيم في صندوق أن يظل ساكنًا — يبقى لديه دائمًا طاقة دنيا، وهذا نتيجة مباشرة لضرورة أن تحتوي الموجة على نصف موجة واحدة على الأقل.",
   "formula": {
-   "name": "فرضية بلانك ومعادلة التأثير الكهروضوئي",
-   "latex": "E = h\\nu, \\qquad h\\nu = A_{\\text{مخرج}} + \\frac{mv^{2}}{2}",
-   "alsoKnown": "كم الطاقة · معادلة آينشتاين للتأثير الكهروضوئي",
+   "name": "فرضية بلانك ومعادلة الظاهرة الكهروضوئية",
+   "latex": "E = h\\nu, \\qquad h\\nu = A_{\\text{خروج}} + \\frac{mv^{2}}{2}",
+   "alsoKnown": "كم الطاقة · معادلة أينشتاين للظاهرة الكهروضوئية",
    "authors": [
     {
      "who": "غوستاف كيرشوف",
      "year": "1859",
-     "what": "طرح مسألة إشعاع الجسم الأسود وأثبت أن طيفه يعتمد فقط على درجة الحرارة وليس على المادة. اعتُبرت المسألة تقنية لمدة أربعين عامًا، واتضح أنها مدخل إلى فيزياء جديدة"
+     "what": "طرح مسألة إشعاع الجسم الأسود المطلق وأثبت أن طيفه يعتمد فقط على درجة الحرارة وليس على المادة. اعتُبرت المسألة تقنية لمدة أربعين عامًا، وتبين أنها المدخل إلى فيزياء جديدة"
     },
     {
      "who": "ماكس بلانك",
      "year": "1900",
-     "what": "حصل على الصيغة الصحيحة بافتراض تكميم الطاقة. في رسالة لابنه اعترف بأنه إما قام باكتشاف بمستوى نيوتن أو أخطأ. تبين أن الاكتشاف أعمق مما كان مستعدًا للاعتراف به"
+     "what": "حصل على المعادلة الصحيحة بافتراض تكميم الطاقة. في رسالة إلى ابنه اعترف بأنه إما حقق اكتشافًا بمستوى نيوتن أو أنه مخطئ. تبين أن الاكتشاف أعمق مما كان مستعدًا للاعتراف به"
     },
     {
-     "who": "ألبرت آينشتاين",
+     "who": "ألبرت أينشتاين",
      "year": "1905",
-     "what": "شرح التأثير الكهروضوئي باعتبار الكمات جسيمات ضوء حقيقية. حتى بلانك اعتبر هذه الخطوة مبالغًا فيها وعارضها لمدة عشر سنوات"
+     "what": "فسر الظاهرة الكهروضوئية بافتراض أن الكمات هي جسيمات ضوء حقيقية. حتى بلانك اعتبر هذه الخطوة مفرطة وعارضها لمدة عشر سنوات"
     },
     {
      "who": "روبرت ميليكان",
      "year": "1916",
-     "what": "أجرى تجارب لعشر سنوات أملاً في دحض آينشتاين — وأكد صيغته بدقة عالية، وقاس ثابت بلانك بالمناسبة. كتب لاحقًا أن النتيجة أرغمته على قبول النظرية رغم توقعاته"
+     "what": "أجرى تجارب لعشر سنوات على أمل دحض نظرية أينشتاين، فقام بتأكيد معادلته بدقة عالية، وقاس ثابت بلانك في نفس الوقت. كتب لاحقًا أن النتيجة أجبرته على قبول النظرية رغم توقعاته"
     },
     {
      "who": "آرثر كومبتون",
      "year": "1923",
-     "what": "أظهر أن كم الأشعة السينية يصطدم بالإلكترون مثل كرة بلياردو، مع حفظ الزخم. بعد ذلك أصبح الشك في واقعية الفوتونات مستحيلاً"
+     "what": "أظهر أن كم الأشعة السينية يصطدم بالإلكترون مثل كرة البلياردو، مع الحفاظ على الزخم. بعد ذلك أصبح من المستحيل الشك في واقعية الفوتونات"
     }
    ],
-   "story": "كان بلانك محافظًا متحمسًا في العلم، وقبل فرضيته هو نفسه على مضض كبير. اعتبر التكميم أسلوبًا حسابيًا شكليًا وليس خاصية للطبيعة، وأمضى سنوات في محاولة استنتاج نفس الصيغة بالوسائل الكلاسيكية. في سيرته الذاتية ترك ملاحظة مريرة أصبحت مشهورة: الحقيقة العلمية الجديدة لا تنتصر لأن خصومها يُقنعون، بل لأن الخصوم يموتون تدريجيًا، والجيل الجديد ينشأ عليها منذ البداية. كان يتحدث عن نفسه أيضًا — الرجل الذي اكتشف الكم وأمضى حياته يأمل أن يكون سوء فهم."
+   "story": "كان بلانك محافظًا مقتنعًا في العلم، وقبل فرضيته الخاصة على مضض كبير. اعتبر التكميم أسلوبًا حسابيًا شكليًا وليس خاصية من خصائص الطبيعة، وأمضى سنوات في محاولات لاشتقاق نفس المعادلة بالطرق الكلاسيكية. في سيرته الذاتية ترك ملاحظة مريرة أصبحت مشهورة: الحقيقة العلمية الجديدة تنتصر ليس لأن خصومها يُقنعون، بل لأنهم يموتون تدريجيًا، وينشأ جيل جديد معتاد عليها منذ البداية. كان يتحدث أيضًا عن نفسه - الرجل الذي اكتشف الكم وأمضى حياته يأمل أن يكون سوء فهم.",
+   "symbols": [
+    {
+     "sym": "h",
+     "latex": "h",
+     "what": "ثابت بلانك",
+     "unit": "J·s",
+     "note": "كم الفعل؛ يحدد المقياس الذي تتوقف عنده الفيزياء الكلاسيكية عن العمل"
+    },
+    {
+     "sym": "nu",
+     "latex": "\\nu",
+     "what": "تردد الإشعاع",
+     "unit": "Hz",
+     "note": "طاقة الكم تعتمد عليه وليس على السطوع - هذا هو جوهر الأمر"
+    },
+    {
+     "sym": "A",
+     "latex": "A_{\\text{خروج}}",
+     "what": "دالة الشغل",
+     "unit": "J أو eV",
+     "note": "الطاقة اللازمة لانتزاع إلكترون من المعدن؛ للسيزيوم 2.1 eV، وللبلاتين 5.6"
+    },
+    {
+     "sym": "nu0",
+     "latex": "\\nu_0",
+     "what": "الحد الأحمر للظاهرة الكهروضوئية",
+     "unit": "Hz",
+     "note": "تحته لا يحدث التأثير إطلاقًا، مهما كان المصباح ساطعًا"
+    },
+    {
+     "sym": "E_n",
+     "latex": "E_n",
+     "what": "مستويات الطاقة في الصندوق",
+     "unit": "J",
+     "note": "$E_n = n^{2}h^{2}/8mL^{2}$ - تزداد كمربع الرقم"
+    }
+   ]
   },
   "symbols": [
    {
@@ -1322,15 +1441,6 @@
    ],
    "plate": "تنتقل الطاقة في كميات $E = h\\nu$. هذا يزيل كارثة الأشعة فوق البنفسجية، ويشرح التأثير الكهروضوئي، وينتج مستويات متقطعة كلما كان الجسيم محصورًا.",
    "note": "حدود التطبيق ولماذا لا نلاحظ التكميم. ثابت بلانك صغير جدًا: $6{,}6\\cdot 10^{-34}$ جول·ثانية. بالنسبة لأرجوحة بتردد 0.5 هرتز، كمية الطاقة هي $3\\cdot 10^{-34}$ جول — لملاحظة الدرجة، سيتعين قياس طاقة الأرجوحة بدقة تصل إلى الرقم الرابع والثلاثين بعد العلامة. لذلك في العالم الكلي يبدو كل شيء مستمرًا. يصبح التكميم ملحوظًا عندما يكون فعل النظام مماثلاً لـ $h$، أي على مقياس الذرات."
-  },
-  "math": {
-   "title": "الرياضيات التي كانت مطلوبة هنا",
-   "text": [
-    "لماذا يزيل التكميم اللانهاية. تخيل أن الخزانة تستقبل مدفوعات، لكن كل شباك يقبل فقط فئات محددة: الأول يقبل فئة الروبل، الثاني فئة المائة روبل، الألف فئة المليون. إذا كان لدى السكان في المتوسط مائة روبل، فلن تحصل الشباك ذات الفئات الكبيرة على شيء: لا يوجد ما يدفع. بنفس الطريقة، الطاقة الحرارية $kT$ لا يمكنها دفع كمية $h\\nu$ إذا كانت أكبر بكثير. تبقى الأنماط عالية التردد فارغة، ويتقارب المجموع. كانت الكلاسيكية مخطئة في افتراض أن أي نمط يمكن إثارته بكمية صغيرة جدًا.",
-    "ماذا يعني الأس في صيغة بلانك. العامل $e^{-h\\nu/kT}$ هو احتمال أن الحركة الحرارية تجمع عشوائيًا طاقة كافية لكم. هذا هو توزيع بولتزمان نفسه الذي ناقشناه في الديناميكا الحرارية: احتمال العثور على نظام في حالة ذات طاقة $E$ يتناقص أسيًا. ميكانيكا الكم لم تضف توزيعًا جديدًا هنا، بل أضافت تكميم المستويات التي يُطبق عليها.",
-    "لماذا لا يمكن تفسير التأثير الكهروضوئي بالموجة. الموجة تعطي الطاقة بشكل مستمر، لذلك الضوء الضعيف يجب أن يقتلع الإلكترونات ولكن مع تأخير — حتى تتراكم الكمية المطلوبة. الحساب يعطي تأخيرًا بالساعات. التجربة تظهر نانوثانية وغيابًا تامًا للتأثير تحت التردد الحرج. كلتا الخاصيتين غير متوافقتين مع الموجة وكلتاهما تافهتان مع الجسيمات: الكم إما أن يجلب ما يكفي دفعة واحدة أو لا يجلب.",
-    "كيف نقرأ صيغة المستويات في الصندوق. الطاقة تسير كـ $n^{2}/L^{2}$. من هنا نستنتج نتيجتين عمليتين: الأولى: المستويات ليست متساوية البعد بل متباعدة — المسافة بين الثالث والرابع أكبر من المسافة بين الأول والثاني. الثانية: كلما كان الصندوق أضيق، كلما ارتفعت جميع المستويات. اضغط الصندوق إلى النصف — سترتفع الطاقة أربعة أضعاف. هذا يشرح لماذا الإلكترون في ذرة صغيرة مرتبط بقوة أكبر، ولماذا النقاط الكمومية تتوهج بألوان مختلفة اعتمادًا على الحجم."
-   ]
   },
   "example": {
    "title": "مثال بالأرقام: التأثير الكهروضوئي ولماذا الضوء الأحمر عاجز",
@@ -1575,7 +1685,31 @@
     "hint": "استخدم المعادلة: الطاقة بالإلكترون فولت تساوي 1240 مقسومة على الطول الموجي بالنانومتر.",
     "tolAbs": 0.4
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "ثلاث عادات لقراءة الصيغ: عندما يتباعد التكامل، وما الذي يقف في أس الدالة الأسية، وكيفية استخراج الإجابة من الأسس وحدها.",
+   "items": [
+    {
+     "what": "عندما يتحول التكامل إلى ما لا نهاية",
+     "why": "في الخطوة الثانية من الاشتقاق لدينا $\\int_0^{\\infty}\\nu^{2}kT\\,d\\nu = \\infty$، وهذا ليس خطأ مطبعيًا بل إجابة صادقة. التكامل هنا هو مجموع المساهمات من جميع الترددات: عدد الأنماط ينمو كمكعب التردد، لذلك في الفاصل $d\\nu$ يوجد $\\nu^{2}d\\nu$ نمطًا، وكل نمط يأخذ $kT$ الخاص به. التقارب لا يحدده صغر الخطوة، بل سلوك الحد عند اللانهاية: إذا لم يتناقص بسرعة كافية، فإن المساحة المتراكمة تنمو بلا حدود. هنا لا يتناقص إطلاقًا، بل ينمو تربيعيًا. فرضية بلانك تغير هذا المكان بالضبط: متوسط طاقة النمط يبدأ في الانخفاض أسيًا، ويتوقف الذيل عن المساهمة، ويصبح نفس المجموع محدودًا.",
+     "latex": "\\int_0^{\\infty}\\nu^{2}kT\\,d\\nu = \\infty, \\qquad \\int_0^{\\infty}\\frac{h\\nu^{3}\\,d\\nu}{e^{h\\nu/kT}-1} < \\infty",
+     "kit": "integral"
+    },
+    {
+     "what": "نسبة طاقتين في الأس",
+     "why": "في الأس لا يمكن أن يكون هناك سوى رقم نقي، وصيغة بلانك من الخطوة الرابعة تلتزم بهذه القاعدة: $h\\nu/kT$ هو كمية الطاقة مقسومة على الطاقة الحرارية. يمكن قراءة كل سلوك المنحنى من هذه النسبة دون حساب أي شيء. عندما تكون صغيرة (ترددات منخفضة)، يعمل التقريب $e^{x}\\approx 1+x$: المقام $e^{x}-1$ يتحول إلى $x$، ويعود متوسط طاقة النمط إلى $kT$ الكلاسيكي. عندما تكون كبيرة (ترددات عالية)، يكون $e^{x}$ ضخمًا، وينطفئ متوسط الطاقة أسيًا: الحركة الحرارية لا تستطيع دفع ثمن الحصة $h\\nu$. تقع سنام الطيف حيث تكون النسبة في حدود الواحد.",
+     "latex": "\\frac{h\\nu}{kT}\\ll 1:\\;\\; \\langle E\\rangle \\to kT; \\qquad \\frac{h\\nu}{kT}\\gg 1:\\;\\; \\langle E\\rangle \\approx h\\nu\\,e^{-h\\nu/kT}",
+     "kit": "exponent"
+    },
+    {
+     "what": "كيفية قراءة الأسس في صيغة المستويات",
+     "why": "الخطوة الأخيرة من الاشتقاق تعطي $E_n = n^{2}h^{2}/8mL^{2}$، ولكن من الأفضل قراءة الصيغة كنسبتين وليس حسابها مباشرة. الأولى: $E \\propto n^{2}$، المستويات ليست متساوية المسافات بل متباعدة، والفجوة بين الثالث والرابع أكبر من تلك بين الأول والثاني. هذا بالضبط ما نراه على سلم المنصة. الثانية: $E \\propto 1/L^{2}$، اضغط الصندوق إلى النصف، وسترتفع جميع المستويات أربعة أضعاف، لأن الاثنين تدخل في المربع. القراءة عبر النسبة تجيب على سؤال \"بكم مرة\" فورًا ولا تتطلب ثابت بلانك أو الكتلة: عند القسمة، تلغى العوامل الثابتة.",
+     "latex": "E_n \\propto \\frac{n^{2}}{L^{2}} \\;\\Longrightarrow\\; \\frac{E(L/2)}{E(L)} = 4",
+     "kit": "propto"
+    }
+   ]
+  }
  },
  "tags": [
   "pulsar"

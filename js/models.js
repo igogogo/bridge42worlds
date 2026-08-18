@@ -2550,8 +2550,12 @@
 
                         // — 2. Спектр: кривая Планка и где стоит её пик
                         var base = H - 42, top = mapH + 54, x0 = pad, x1 = W - pad;
-                        // ось длин волн: от 0,05 до 5 мм в логарифме — пик влезает при любой T
-                        var LG0 = Math.log10(5e-5), LG1 = Math.log10(5e-3);
+                        // Ось длин волн подстраивается под пик: раньше она была намертво
+                        // 0,05-5 мм, и уже при z ≈ 21 пик уезжал за левый край вместе с
+                        // подписью — стенд молча показывал кусок кривой без максимума,
+                        // хотя врезка обещала «обе картины на одной шкале».
+                        var lm = lamMax(d.T);
+                        var LG0 = Math.log10(lm / 30), LG1 = Math.log10(lm * 30);
                         var SX = KIT.scale({ min: LG0, max: LG1, from: x0, to: x1 });
                         var peak = planck(lamMax(d.T), d.T) || 1;
                         var pts = [];
@@ -2783,6 +2787,343 @@
         };
     }
 
+    /** Труба переменного сечения: неразрывность и Бернулли на одном стенде. */
+    function flowModel(data) {
+        var RHO = 1000;                                   // вода, кг/м³
+        var G = 9.81;
+
+        // Неразрывность: через любое сечение за секунду проходит одинаковый объём.
+        // Отсюда узкое место = быстрое течение, а Бернулли добавляет: быстрое = низкое давление.
+        function speeds(st) {
+            var A1 = Math.PI * Math.pow(st.d1 / 2000, 2);  // диаметр в мм → площадь в м²
+            var A2 = Math.PI * Math.pow(st.d2 / 2000, 2);
+            var Q = st.Q / 1000;                           // л/с → м³/с
+            return { A1: A1, A2: A2, v1: Q / A1, v2: Q / A2 };
+        }
+
+        return {
+            cfg: {
+                i18n: data.i18n,
+                params: data.params.map(function (p) { return { key: p.key, label: p.key, min: p.min, max: p.max, step: p.step, value: p.value, unit: p.unit }; }),
+                animate: function (t, st) { return { t: t, ph: (t * 0.7) % 1 }; },
+                derive: function (st, a) {
+                    var s = speeds(st);
+                    // Бернулли вдоль горизонтальной трубы: p + ρv²/2 = const
+                    var dp = RHO * (s.v2 * s.v2 - s.v1 * s.v1) / 2;      // насколько давление ПАДАЕТ в узком
+                    var p2raw = st.p1 * 1000 - dp;                       // кПа → Па
+                    // Ниже давления насыщенного пара жидкость вскипает, и уравнение Бернулли
+                    // перестаёт описывать происходящее: показывать «минус три атмосферы» —
+                    // значит учить несуществующей физике. Упираемся в предел и говорим об этом.
+                    var PVAP = 2340;
+                    var p2 = Math.max(PVAP, p2raw);
+                    return { v1: s.v1, v2: s.v2, dp: dp / 1000, p2: p2 / 1000,
+                             ratio: s.A1 / s.A2, ph: a.ph,
+                             cavitation: p2raw < PVAP,                   // ниже давления насыщенного пара воды
+                             head: dp / (RHO * G) };                     // тот же перепад в метрах столба
+                },
+                stage: {
+                    height: 280,
+                    draw: function (g, ctx) {
+                        var W = ctx.W, H = ctx.H, col = ctx.c, st = ctx.state, d = ctx.derived;
+                        var midY = 110, pad = 30;
+                        var h1 = Math.max(10, st.d1 * 0.9), h2 = Math.max(6, st.d2 * 0.9);
+                        var xA = pad + 40, xB = W * 0.42, xC = W * 0.58, xD = W - pad - 40;
+
+                        // — стенки трубы: широкая часть, сужение, узкая часть
+                        function wall(sign) {
+                            var y1 = midY + sign * h1 / 2, y2 = midY + sign * h2 / 2;
+                            KIT.polyline(g, [[pad, y1], [xB, y1], [xC, y2], [W - pad, y2]],
+                                         { color: col.border, width: 2 });
+                        }
+                        wall(-1); wall(1);
+
+                        // — частицы: в узком месте те же частицы идут гуще и быстрее
+                        var lanes = 5;
+                        for (var i = 0; i < 26; i++) {
+                            var f = ((i / 26) + d.ph) % 1;
+                            var x = pad + f * (W - pad * 2);
+                            var k = x < xB ? 0 : (x > xC ? 1 : (x - xB) / (xC - xB));
+                            var hh = h1 + (h2 - h1) * k;
+                            var lane = (i % lanes) / (lanes - 1) - 0.5;
+                            KIT.body(g, x, midY + lane * hh * 0.82, { shape: 'dot', size: 4, color: '#155E74' });
+                        }
+
+                        // — скорости стрелками: длина пропорциональна скорости
+                        KIT.arrow(g, xA, midY, Math.min(46, d.v1 * 14), 0, { color: '#155E74', width: 2, head: 5 });
+                        KIT.arrow(g, xD - 30, midY, Math.min(60, d.v2 * 14), 0, { color: '#9B2C2C', width: 2.4, head: 6 });
+                        KIT.text(g, d.v1.toFixed(2) + ' ' + ctx.T('unit_ms'), xA + 4, midY - h1 / 2 - 10,
+                                 { size: 10.5, color: '#155E74' });
+                        KIT.text(g, d.v2.toFixed(2) + ' ' + ctx.T('unit_ms'), xD - 26, midY - h2 / 2 - 10,
+                                 { size: 10.5, color: '#9B2C2C' });
+
+                        // — манометры: столбики показывают, где давление больше
+                        var base = H - 40;
+                        function gauge(x, val, color, label) {
+                            // Высота столбика — доля от давления на входе, а не абсолютные
+                            // полсотни пикселей на килопаскаль: при жёстком масштабе оба
+                            // манометра упирались в потолок и выглядели одинаково, то есть
+                            // ровно та разница, ради которой стенд и сделан, была не видна.
+                            var hgt = Math.max(4, Math.min(96, 90 * val / (st.p1 * 1.05)));
+                            KIT.bar(g, x - 16, base, 32, 10, { split: 1, border: col.border });
+                            g.fillStyle = color;
+                            g.fillRect(x - 8, base - hgt, 16, hgt);
+                            KIT.text(g, Math.round(val) + ' ' + ctx.T('unit_kPa'), x, base + 20,
+                                     { size: 10.5, color: color, align: 'center' });
+                            KIT.text(g, label, x, base - hgt - 8, { size: 10, color: col.soft, align: 'center' });
+                        }
+                        gauge(xA, st.p1, '#155E74', ctx.T('wide'));
+                        gauge(xD - 10, d.p2, d.cavitation ? '#9B2C2C' : '#8F6417', ctx.T('narrow'));
+                        // Перепад честно мал: на умолчаниях он 4% от давления на входе, и на
+                        // столбиках это два пикселя. Поэтому саму разницу показываем отдельно —
+                        // пунктиром от уровня входа и подписью, иначе читатель видит два
+                        // одинаковых столбика там, где параграф обещает разницу.
+                        var hA = Math.max(4, Math.min(96, 90 * st.p1 / (st.p1 * 1.05)));
+                        var hB = Math.max(4, Math.min(96, 90 * d.p2 / (st.p1 * 1.05)));
+                        if (hA - hB > 0.7) {
+                            KIT.dashed(g, [3, 4], function () {
+                                g.strokeStyle = '#9B2C2C'; g.lineWidth = 1;
+                                g.beginPath(); g.moveTo(xA + 10, base - hA);
+                                g.lineTo(xD - 26, base - hA); g.stroke();
+                            });
+                            KIT.arrow(g, xD - 10, base - hA, 0, hA - hB, { color: '#9B2C2C', width: 1.6, head: 4 });
+                            KIT.text(g, 'Δp ' + Math.abs(d.dp).toFixed(1) + ' ' + ctx.T('unit_kPa'),
+                                     xD - 34, base - (hA + hB) / 2, { size: 10, color: '#9B2C2C', align: 'right' });
+                        }
+
+                        KIT.readout(g, [
+                            { text: ctx.T('title'), y: 18, size: 11.5, weight: '600', color: '#155E74' },
+                            { text: ctx.T('sameFlow') + ' ' + st.Q + ' ' + ctx.T('unit_ls'), y: 34, size: 10.5, color: col.soft },
+                            { text: d.cavitation ? ctx.T('cavitation') : ctx.T('dropIs') + ' ' + Math.abs(d.dp).toFixed(1) + ' ' + ctx.T('unit_kPa'),
+                              y: 50, size: 10.5, color: d.cavitation ? '#9B2C2C' : col.soft }
+                        ], { x: W - pad, align: 'right' });
+                    }
+                },
+                formula: function (st, d, T) {
+                    return '<span class="xf-op">' + T('continuity') + ': A₁v₁ = A₂v₂ → </span>' +
+                        '<span class="xf-res">' + d.v2.toFixed(2) + ' ' + T('unit_ms') + '</span>' +
+                        '<span class="xf-op"> · p + ρv²/2 = const → </span><span class="xf-var">' +
+                        d.p2.toFixed(1) + ' ' + T('unit_kPa') + '</span>' +
+                        '<br><i>' + T('sectionRatio') + ' ' + d.ratio.toFixed(1) + '× · ' +
+                        T('headIs') + ' ' + d.head.toFixed(2) + ' ' + T('unit_m') + '</i>';
+                },
+                plot: {
+                    height: 170,
+                    x: { label: 'xD2', min: 6, max: 40 },
+                    y: { label: 'yP', min: 0, max: function (s) { return Math.round(s.p1 * 1.1); } },
+                    samples: 90,
+                    curve: function (d2, s) {
+                        var A1 = Math.PI * Math.pow(s.d1 / 2000, 2), A2 = Math.PI * Math.pow(d2 / 2000, 2);
+                        var Q = s.Q / 1000, v1 = Q / A1, v2 = Q / A2;
+                        return Math.max(2.34, s.p1 - RHO * (v2 * v2 - v1 * v1) / 2 / 1000);
+                    },
+                    marker: function (s, a, d) { return { x: s.d2, y: Math.max(0, d.p2) }; }
+                }
+            },
+            extras: function (st, d, T) {
+                return '<b>v₁</b> ' + d.v1.toFixed(2) + ' &nbsp;·&nbsp; <b>v₂</b> ' + d.v2.toFixed(2) +
+                    ' ' + T('unit_ms') + ' &nbsp;·&nbsp; <b>Δp</b> ' + d.dp.toFixed(1) + ' ' + T('unit_kPa');
+            }
+        };
+    }
+
+    /** Распределение Максвелла: три разные «средние скорости» одного газа и хвост распределения. */
+    function maxwellModel(data) {
+        var K = 1.380649e-23, NA = 6.02214076e23;
+
+        function mass(st) { return st.M / 1000 / NA; }              // г/моль → кг на молекулу
+        /** Плотность вероятности по модулю скорости. */
+        function f(v, st) {
+            var m = mass(st), a = m / (2 * K * st.T);
+            return 4 * Math.PI * Math.pow(a / Math.PI, 1.5) * v * v * Math.exp(-a * v * v);
+        }
+        function vProb(st) { return Math.sqrt(2 * K * st.T / mass(st)); }
+        function vMean(st) { return Math.sqrt(8 * K * st.T / (Math.PI * mass(st))); }
+        function vRms(st) { return Math.sqrt(3 * K * st.T / mass(st)); }
+
+        return {
+            cfg: {
+                i18n: data.i18n,
+                params: data.params.map(function (p) { return { key: p.key, label: p.key, min: p.min, max: p.max, step: p.step, value: p.value, unit: p.unit }; }),
+                animate: function (t, st) { return { t: t, ph: t }; },
+                derive: function (st, a) {
+                    var vp = vProb(st), vm = vMean(st), vr = vRms(st);
+                    // доля молекул быстрее порога — численно, тем же распределением
+                    var vmax = vr * 3.2, n = 400, dv = vmax / n, above = 0, all = 0;
+                    for (var i = 0; i < n; i++) {
+                        var v = (i + 0.5) * dv, w = f(v, st) * dv;
+                        all += w;
+                        if (v >= st.vcut) above += w;
+                    }
+                    return { vp: vp, vm: vm, vr: vr, ph: a.ph, vmax: vmax,
+                             frac: all > 0 ? above / all : 0, peak: f(vp, st) };
+                },
+                stage: {
+                    height: 285,
+                    draw: function (g, ctx) {
+                        var W = ctx.W, H = ctx.H, col = ctx.c, st = ctx.state, d = ctx.derived;
+                        var pad = 34, base = H - 46, top = 44;
+                        var SX = KIT.scale({ min: 0, max: d.vmax, from: pad, to: W - pad });
+                        var SY = KIT.scale({ min: 0, max: d.peak * 1.15, from: base, to: top });
+
+                        var pts = [];
+                        for (var i = 0; i <= 160; i++) {
+                            var v = d.vmax * i / 160;
+                            pts.push([SX(v), SY(f(v, st))]);
+                        }
+                        KIT.axis(g, pad, W - pad, base, { color: col.border });
+                        // хвост правее порога закрашен: это и есть «сколько молекул быстрее»
+                        KIT.alpha(g, 0.22, function () {
+                            g.fillStyle = '#9B2C2C';
+                            g.beginPath(); g.moveTo(SX(st.vcut), base);
+                            for (var j = 0; j <= 120; j++) {
+                                var vv = st.vcut + (d.vmax - st.vcut) * j / 120;
+                                g.lineTo(SX(vv), SY(f(vv, st)));
+                            }
+                            g.lineTo(SX(d.vmax), base); g.closePath(); g.fill();
+                        });
+                        KIT.polyline(g, pts, { color: '#155E74', width: 2.4 });
+
+                        // три «средние» скорости одного газа: они разные, и это не описка
+                        [[d.vp, ctx.T('vProb'), '#8F6417'], [d.vm, ctx.T('vMean'), '#4C6B4E'],
+                         [d.vr, ctx.T('vRms'), '#155E74']].forEach(function (m) {
+                            KIT.marker(g, SX(m[0]), top - 8, base, { color: m[2], width: 1.4,
+                                label: m[1] + ' ' + Math.round(m[0]), size: 10 });
+                        });
+                        KIT.marker(g, SX(st.vcut), top - 8, base, { color: '#9B2C2C', width: 2,
+                            label: ctx.T('cut'), size: 10 });
+
+                        KIT.text(g, ctx.T('xV'), W - pad, base + 16, { size: 10, color: col.soft, align: 'right' });
+                        KIT.readout(g, [
+                            { text: ctx.T('title'), y: 18, size: 11.5, weight: '600', color: '#155E74' },
+                            { text: ctx.T('fasterThan') + ' ' + st.vcut + ' ' + ctx.T('unit_ms') + ': ' +
+                                    (d.frac * 100).toFixed(d.frac < 0.01 ? 3 : 1) + ' %', y: 34, size: 10.5, color: '#9B2C2C' }
+                        ]);
+                    }
+                },
+                formula: function (st, d, T) {
+                    return '<span class="xf-op">v_вер = √(2kT/m) = </span><span class="xf-res">' +
+                        Math.round(d.vp) + ' ' + T('unit_ms') + '</span>' +
+                        '<span class="xf-op"> · ⟨v⟩ = </span><span class="xf-var">' + Math.round(d.vm) + '</span>' +
+                        '<span class="xf-op"> · v_скв = </span><span class="xf-var">' + Math.round(d.vr) + '</span>' +
+                        '<br><i>' + T('ratioIs') + ' 1 : ' + (d.vm / d.vp).toFixed(2) + ' : ' + (d.vr / d.vp).toFixed(2) +
+                        ' — ' + T('ratioNote') + '</i>';
+                },
+                plot: {
+                    height: 170,
+                    x: { label: 'xT', min: 100, max: 1500 },
+                    y: { label: 'yV', min: 0, max: function (s) { return Math.round(Math.sqrt(3 * K * 1500 / (s.M / 1000 / NA))); } },
+                    samples: 90,
+                    curve: function (T, s) { return Math.sqrt(3 * K * T / (s.M / 1000 / NA)); },
+                    marker: function (s, a, d) { return { x: s.T, y: d.vr }; }
+                }
+            },
+            extras: function (st, d, T) {
+                return '<b>' + T('vProb') + '</b> ' + Math.round(d.vp) + ' &nbsp;·&nbsp; <b>' + T('vMean') + '</b> ' +
+                    Math.round(d.vm) + ' &nbsp;·&nbsp; <b>' + T('vRms') + '</b> ' + Math.round(d.vr) + ' ' + T('unit_ms');
+            }
+        };
+    }
+
+    /** Явления переноса: диффузия как случайное блуждание. Расплывание идёт как корень из времени. */
+    function transportModel(data) {
+        // Одна и та же длина свободного пробега управляет всеми тремя переносами:
+        // массы (диффузия), импульса (вязкость) и энергии (теплопроводность).
+        function lambda(st) { return st.lam * 1e-9; }                 // нм → м
+        function vth(st) { return st.v; }                             // м/с, тепловая скорость
+        function D(st) { return lambda(st) * vth(st) / 3; }           // коэффициент диффузии
+        function width(st, t) { return Math.sqrt(2 * D(st) * t); }    // ширина пятна, м
+
+        return {
+            cfg: {
+                i18n: data.i18n,
+                params: data.params.map(function (p) { return { key: p.key, label: p.key, min: p.min, max: p.max, step: p.step, value: p.value, unit: p.unit }; }),
+                animate: function (t, st) { return { t: t, ph: (t % 6) / 6 }; },
+                derive: function (st, a) {
+                    var t = st.time;
+                    var w = width(st, t);
+                    return { D: D(st), w: w, wmm: w * 1000, ph: a.ph,
+                             // сколько времени нужно, чтобы уйти на метр — отсюда видно,
+                             // почему запах в комнате разносит сквозняк, а не диффузия
+                             tMeter: 1 / (2 * D(st)),
+                             steps: vth(st) * t / lambda(st) };
+                },
+                stage: {
+                    height: 275,
+                    draw: function (g, ctx) {
+                        var W = ctx.W, H = ctx.H, col = ctx.c, st = ctx.state, d = ctx.derived;
+                        var pad = 32, cx = W / 2, cy = 96;
+
+                        // — облако частиц: ширина растёт как корень из времени
+                        var scale = 150 / Math.max(1e-6, width(st, st.time * 4));   // подгон под кадр
+                        var px = Math.min(150, d.w * scale * 1000);
+                        for (var i = 0; i < 90; i++) {
+                            // устойчивый «шум»: одно и то же зерно на кадр, движение только от времени
+                            var r1 = Math.sin(i * 12.9898) * 43758.5453;
+                            var r2 = Math.sin(i * 78.233) * 12345.6789;
+                            var gx = (r1 - Math.floor(r1)) * 2 - 1, gy = (r2 - Math.floor(r2)) * 2 - 1;
+                            KIT.body(g, cx + gx * px, cy + gy * px * 0.42,
+                                     { shape: 'dot', size: 3.5, color: '#155E74' });
+                        }
+                        KIT.dashed(g, [3, 4], function () {
+                            g.strokeStyle = '#9B2C2C'; g.lineWidth = 1.4;
+                            g.beginPath(); g.ellipse(cx, cy, Math.max(3, px), Math.max(2, px * 0.42), 0, 0, 6.2832); g.stroke();
+                        });
+                        KIT.text(g, ctx.T('cloud'), pad, 20, { size: 10.5, color: col.soft });
+                        KIT.text(g, d.wmm < 10 ? d.wmm.toFixed(2) + ' ' + ctx.T('unit_mm')
+                                               : (d.wmm / 1000).toFixed(2) + ' ' + ctx.T('unit_m'),
+                                 cx, cy + px * 0.42 + 18, { size: 11, color: '#9B2C2C', align: 'center' });
+
+                        // — корень из времени: график ширины
+                        var base = H - 40, top = 176, x0 = pad, x1 = W - pad;
+                        var tmax = 120;
+                        var SX = KIT.scale({ min: 0, max: tmax, from: x0, to: x1 });
+                        var wmax = width(st, tmax);
+                        var SY = KIT.scale({ min: 0, max: wmax, from: base, to: top });
+                        var pts = [];
+                        for (var k = 0; k <= 90; k++) {
+                            var tt = tmax * k / 90;
+                            pts.push([SX(tt), SY(width(st, tt))]);
+                        }
+                        KIT.axis(g, x0, x1, base, { color: col.border });
+                        KIT.polyline(g, pts, { color: '#155E74', width: 2.2 });
+                        KIT.marker(g, SX(Math.min(tmax, st.time)), top, base, { color: '#9B2C2C', width: 1.6,
+                            label: ctx.T('now'), size: 10 });
+                        KIT.text(g, ctx.T('xTime'), x1, base + 16, { size: 10, color: col.soft, align: 'right' });
+                        KIT.text(g, ctx.T('sqrtNote'), x0 + 6, top - 6, { size: 10, color: col.soft });
+
+                        KIT.readout(g, [
+                            { text: ctx.T('title'), y: 18, size: 11.5, weight: '600', color: '#155E74' },
+                            { text: 'D ≈ ' + d.D.toExponential(1) + ' ' + ctx.T('unit_m2s'), y: 34, size: 10.5, color: col.soft }
+                        ], { x: W - pad, align: 'right' });
+                    }
+                },
+                formula: function (st, d, T) {
+                    var days = d.tMeter / 86400;
+                    return '<span class="xf-op">D = λv/3 = </span><span class="xf-res">' +
+                        d.D.toExponential(1) + ' ' + T('unit_m2s') + '</span>' +
+                        '<span class="xf-op"> · x = √(2Dt) = </span><span class="xf-var">' +
+                        (d.wmm < 10 ? d.wmm.toFixed(2) + ' ' + T('unit_mm') : (d.wmm / 1000).toFixed(2) + ' ' + T('unit_m')) +
+                        '</span><br><i>' + T('meterTakes') + ' ' +
+                        (days > 1 ? days.toFixed(0) + ' ' + T('unit_days') : (d.tMeter / 3600).toFixed(1) + ' ' + T('unit_hours')) +
+                        ' — ' + T('whyDraft') + '</i>';
+                },
+                plot: {
+                    height: 170,
+                    x: { label: 'xTime2', min: 0, max: 120 },
+                    y: { label: 'yWidth', min: 0, max: function (s) { return width(s, 120) * 1000; } },
+                    samples: 90,
+                    curve: function (t, s) { return width(s, t) * 1000; },
+                    marker: function (s, a, d) { return { x: s.time, y: d.wmm }; }
+                }
+            },
+            extras: function (st, d, T) {
+                return '<b>D</b> ' + d.D.toExponential(1) + ' ' + T('unit_m2s') +
+                    ' &nbsp;·&nbsp; <b>' + T('widthIs') + '</b> ' + d.wmm.toFixed(2) + ' ' + T('unit_mm') +
+                    ' &nbsp;·&nbsp; <b>' + T('stepsIs') + '</b> ' + d.steps.toExponential(1);
+            }
+        };
+    }
+
     var FACTORIES = { gas: gasModel, kettle: kettleModel, engine: engineModel,
                       motion: motionModel, newton: newtonModel, collision: collisionModel,
                       rotation: rotationModel, oscillator: oscillatorModel,
@@ -2790,8 +3131,720 @@
                       orbit: orbitModel, wave: waveModel, charge: chargeModel, magnet: magnetModel,
                       srt: srtModel, quantum: quantumModel, nucleus: nucleusModel,
                       action: actionModel, expansion: expansionModel, cmb: cmbModel,
-                      dark: darkModel };
+                      dark: darkModel, flow: flowModel, maxwell: maxwellModel,
+                      transport: transportModel };
     global.B42Models = {};
     Object.keys(FACTORIES).forEach(function (k) { global.B42Models[k] = withUnits(FACTORIES[k]); });
     global.B42Models._localizeUnits = localizeUnits;   // для проверок
+
+    // Стенды, приехавшие заготовками, живут в собственной области видимости и
+    // складывают себя в B42ModelsExtra. Подбираем их тем же ключом и той же обёрткой
+    // withUnits, что и остальные: иначе стенд есть, а единицы на нём не переключаются.
+    // Делается на следующем тике — заготовки ниже по файлу и до этой строки ещё не выполнены.
+    setTimeout(function () {
+        var extra = global.B42ModelsExtra || {};
+        Object.keys(extra).forEach(function (k) {
+            if (!global.B42Models[k]) global.B42Models[k] = withUnits(extra[k]);
+        });
+    }, 0);
+
+    /* из tools\_model_realgas.js */
+/* _model_realgas.js — ЗАГОТОВКА фабрики стенда темы realgas.
+
+   КАК ПОДКЛЮЧАТЬ (для ведущей сессии). Файл самодостаточен: он кладёт фабрику в
+   window.B42ModelsExtra.realgas и js/models.js не трогает. Дальше нужно:
+     1) переименовать в js/models-realgas.js и подключить ПОСЛЕ js/stage-kit.js;
+     2) добавить строку realgas: realgasModel в FACTORIES внутри js/models.js
+        (или прогнать B42ModelsExtra через тот же withUnits, что и остальные, —
+        здесь единицы в подписи не подставляются, так что обёртка безвредна).
+   Данные ползунков и подписи лежат в data/theory/realgas.json.
+
+   ЧТО СЧИТАЕТ. Всё в приведённых координатах: p/p_c = 8(T/T_c)/(3V/V_c − 1) − 3/(V/V_c)².
+   В них кривая ОДНА на все вещества — это закон соответственных состояний, и потому
+   купол сосуществования и спинодаль считаются один раз при загрузке, а не каждый кадр.
+   Купол — правило равных площадей Максвелла: бисекция по давлению, площади через
+   аналитическую первообразную F(V) = (8T/3)·ln(3V − 1) + 3/V. Проверено счётом:
+   при T/T_c = 0,90 выходит p_s = 0,6470, V_l = 0,6035, V_g = 2,3489, невязка 1e-13.
+
+   ПРЕССЕТЫ. Постоянные a и b держатся в полной справочной точности (CO₂ b = 0,04267 л/моль),
+   а ползунки показывают ближайшее значение своей сетки (42,7). Иначе критическая
+   температура CO₂ съезжала бы с 304,0 на 303,8 К и расходилась с текстом параграфа.
+   У гелия a = 0,0346 мельче шага ползунка 0,01 — это и есть причина держать его пресетом,
+   и стенд пишет об этом подписью, а не умалчивает.
+
+   ОТСТУПЛЕНИЕ ОТ ПЛАНА. Отдельной кнопки «идеальный газ» нет: движок explorable даёт
+   один ряд кнопок, и он занят выбором вещества. Идеальная изотерма нарисована всегда —
+   серым пунктиром с подписью, расхождение видно без переключения. Если кнопка нужна,
+   её место — в modes, но тогда вещества придётся вынести в отдельный контрол. */
+
+(function (global) {
+    'use strict';
+    var KIT = global.B42Kit;
+
+    /** Реальный газ: уравнение Ван-дер-Ваальса, купол сосуществования и критическая точка. */
+    function realgasModel(data) {
+        var R = 0.083145;                       // л·бар/(моль·К) — под литры и бары
+        var ZC = 3 / 8;                         // критический коэффициент сжимаемости модели
+
+        // a — л²·бар/моль², b — л/моль; bG/aG — то, что показывает ползунок на своей сетке;
+        // Tc/pc/Vc/Zc — ИЗМЕРЕННЫЕ значения, они стоят рядом с расчётными, а не вместо них.
+        var PRESETS = {
+            co2:   { a: 3.640,  b: 0.04267, aG: 3.64, bG: 42.7, Tc: 304.13, pc: 73.77,  Vc: 94.0, Zc: 0.274 },
+            water: { a: 5.536,  b: 0.03049, aG: 5.54, bG: 30.5, Tc: 647.10, pc: 220.64, Vc: 55.9, Zc: 0.229 },
+            n2:    { a: 1.370,  b: 0.03870, aG: 1.37, bG: 38.7, Tc: 126.19, pc: 33.96,  Vc: 89.4, Zc: 0.289 },
+            he:    { a: 0.0346, b: 0.02380, aG: 0.03, bG: 23.8, Tc: 5.195,  pc: 2.275,  Vc: 57.3, Zc: 0.301 }
+        };
+        var mode = 'co2', host = null;
+
+        // ── приведённое уравнение и его производная ────────────────────────
+        function pr(Tr, V) { return 8 * Tr / (3 * V - 1) - 3 / (V * V); }
+        function dpr(Tr, V) { return -24 * Tr / ((3 * V - 1) * (3 * V - 1)) + 6 / (V * V * V); }
+        function Fint(Tr, V) { return (8 * Tr / 3) * Math.log(3 * V - 1) + 3 / V; }
+
+        // Локальные минимум и максимум изотермы — концы запрещённого участка (спинодаль).
+        function extrema(Tr) {
+            var out = [], prev = null;
+            for (var V = 0.36; V < 24; V *= 1.002) {
+                var d = dpr(Tr, V);
+                if (prev && prev.d * d < 0) out.push(refine(function (x) { return dpr(Tr, x); }, prev.V, V));
+                prev = { V: V, d: d };
+                if (out.length === 2) break;
+            }
+            return out;                          // [V локального минимума p, V локального максимума p]
+        }
+        function refine(f, lo, hi) {
+            for (var i = 0; i < 60; i++) { var m = (lo + hi) / 2; if (f(lo) * f(m) <= 0) hi = m; else lo = m; }
+            return (lo + hi) / 2;
+        }
+        // Крайние корни уравнения pr(Tr,V) = ps: жидкость слева от впадины, пар справа от горба.
+        function edgeRoots(Tr, ps, Vmin, Vmax) {
+            var Vl = refine(function (x) { return pr(Tr, x) - ps; }, 0.3400001, Vmin);
+            var hi = Vmax;
+            while (pr(Tr, hi) > ps && hi < 5000) hi *= 1.6;
+            var Vg = refine(function (x) { return pr(Tr, x) - ps; }, Vmax, hi);
+            return { Vl: Vl, Vg: Vg };
+        }
+
+        /** Правило равных площадей: давление насыщения и объёмы фаз при данной T/T_c. */
+        function maxwell(Tr) {
+            if (Tr >= 0.99999) return null;
+            var e = extrema(Tr);
+            if (e.length < 2) return null;
+            var lo = Math.max(1e-5, pr(Tr, e[0])), hi = pr(Tr, e[1]);
+            if (!(hi > lo)) return null;
+            for (var i = 0; i < 50; i++) {
+                var ps = (lo + hi) / 2, r = edgeRoots(Tr, ps, e[0], e[1]);
+                // площадь под кривой минус площадь под площадкой: знак говорит, куда двигать ps
+                if (Fint(Tr, r.Vg) - Fint(Tr, r.Vl) - ps * (r.Vg - r.Vl) > 0) lo = ps; else hi = ps;
+            }
+            var ps2 = (lo + hi) / 2, rr = edgeRoots(Tr, ps2, e[0], e[1]);
+            return { ps: ps2, Vl: rr.Vl, Vg: rr.Vg, Vsl: e[0], Vsg: e[1] };
+        }
+
+        // Купол и спинодаль в приведённых координатах одни и те же для ВСЕХ веществ,
+        // поэтому считаются один раз при первом кадре, а не каждый раз заново.
+        var DOME = null, SPIN = null, MX = {};
+        function dome() {
+            if (DOME) return DOME;
+            DOME = []; SPIN = [];
+            for (var Tr = 0.80; Tr < 0.9995; Tr += 0.01) {
+                var m = maxwell(Tr);
+                if (!m) continue;
+                DOME.push({ Tr: Tr, ps: m.ps, Vl: m.Vl, Vg: m.Vg });
+                SPIN.push({ Vl: m.Vsl, pl: pr(Tr, m.Vsl), Vg: m.Vsg, pg: pr(Tr, m.Vsg) });
+            }
+            DOME.push({ Tr: 1, ps: 1, Vl: 1, Vg: 1 });
+            SPIN.push({ Vl: 1, pl: 1, Vg: 1, pg: 1 });
+            return DOME;
+        }
+        function mx(Tr) {                        // кэш по шагу ползунка (0,01)
+            var k = Tr.toFixed(3);
+            if (!(k in MX)) MX[k] = maxwell(Tr);
+            return MX[k];
+        }
+
+        function P(st) {
+            if (mode === 'custom') return { a: st.a, b: st.b / 1000, meas: null };
+            var q = PRESETS[mode];
+            return { a: q.a, b: q.b, meas: q };
+        }
+        function crit(st) {
+            var q = P(st), b = Math.max(1e-6, q.b);
+            return { Tc: 8 * q.a / (27 * R * b), pc: q.a / (27 * b * b), Vc: 3 * b * 1000, meas: q.meas };
+        }
+        // Пресет физически двигает ползунки a и b: иначе на экране одно, а в расчёте другое.
+        function syncPreset() {
+            if (mode === 'custom' || !host) return;
+            var q = PRESETS[mode], inputs = host.querySelectorAll('.xpl-ctrl input');
+            [[2, q.aG], [3, q.bG]].forEach(function (p) {
+                if (inputs[p[0]] && parseFloat(inputs[p[0]].value) !== p[1]) {
+                    inputs[p[0]].value = p[1];
+                    inputs[p[0]].dispatchEvent(new Event('input'));
+                }
+            });
+        }
+
+        return {
+            modes: ['co2', 'water', 'n2', 'he', 'custom'],
+            getMode: function () { return mode; },
+            setMode: function (m) { mode = m; syncPreset(); },
+            bindHost: function (el) { host = el; },
+            cfg: {
+                i18n: data.i18n,
+                params: data.params.map(function (p) {
+                    return { key: p.key, label: p.key, min: p.min, max: p.max, step: p.step, value: p.value, unit: p.unit };
+                }),
+                animate: function (t) { syncPreset(); return { t: t }; },
+                derive: function (st) {
+                    var c = crit(st), Tr = st.T, Vr = st.V, m = Tr < 1 ? mx(Tr) : null;
+                    var two = !!(m && Vr > m.Vl && Vr < m.Vg);
+                    var prNow = two ? m.ps : pr(Tr, Vr);
+                    return {
+                        Tr: Tr, Vr: Vr, pr: prNow, two: two, m: m,
+                        Tc: c.Tc, pc: c.pc, Vc: c.Vc, meas: c.meas,
+                        Tk: Tr * c.Tc, pbar: prNow * c.pc, Vcm: Vr * c.Vc,
+                        // доля пара по правилу рычага: точка делит площадку в обратном отношении
+                        xVap: two ? (Vr - m.Vl) / (m.Vg - m.Vl) : (Tr >= 1 || Vr >= (m ? m.Vg : 0) ? 1 : 0),
+                        Z: ZC * prNow * Vr / Tr
+                    };
+                },
+                stage: {
+                    height: 306,
+                    draw: function (g, ctx) {
+                        var W = ctx.W, H = ctx.H, col = ctx.c, st = ctx.state, d = ctx.derived, T = ctx.T;
+                        var padL = 126, padR = 16, top = 28, base = H - 40;
+                        var VMIN = 0.45, VMAX = 6.2, PMAX = 2.0;
+                        var SX = KIT.scale({ min: VMIN, max: VMAX, from: padL, to: W - padR });
+                        var SY = KIT.scale({ min: 0, max: PMAX, from: base, to: top });
+                        function pts(Tr, v0, v1, n) {
+                            var out = [];
+                            for (var i = 0; i <= n; i++) {
+                                var v = v0 + (v1 - v0) * i / n, p = pr(Tr, v);
+                                out.push(p >= 0 && p <= PMAX ? [SX(v), SY(p)] : null);
+                            }
+                            return out;
+                        }
+                        dome();
+
+                        KIT.axis(g, padL, W - padR, base, { color: col.border });
+                        g.save(); g.strokeStyle = col.border; g.lineWidth = 1;
+                        g.beginPath(); g.moveTo(padL, top - 6); g.lineTo(padL, base); g.stroke(); g.restore();
+                        KIT.text(g, T('xV'), W - padR, base + 16, { size: 10, color: col.soft, align: 'right' });
+                        KIT.text(g, T('yP'), padL - 4, top - 10, { size: 10, color: col.soft, align: 'left' });
+
+                        // — купол сосуществования: слева ветвь жидкости, справа ветвь пара
+                        var poly = [], k;
+                        for (k = 0; k < DOME.length; k++) poly.push([SX(DOME[k].Vl), SY(DOME[k].ps)]);
+                        for (k = DOME.length - 1; k >= 0; k--) poly.push([SX(DOME[k].Vg), SY(DOME[k].ps)]);
+                        g.save(); g.globalAlpha = 0.14; g.fillStyle = '#155E74';
+                        g.beginPath();
+                        poly.forEach(function (p, i) { if (i) g.lineTo(p[0], p[1]); else g.moveTo(p[0], p[1]); });
+                        g.closePath(); g.fill(); g.restore();
+                        KIT.polyline(g, poly, { color: '#155E74', width: 1.6, alpha: 0.75 });
+
+                        // — спинодаль: внутри неё состояний нет вовсе, между ней и куполом они метастабильны
+                        var sp = [];
+                        for (k = 0; k < SPIN.length; k++) if (SPIN[k].pl >= 0) sp.push([SX(SPIN[k].Vl), SY(SPIN[k].pl)]);
+                        for (k = SPIN.length - 1; k >= 0; k--) if (SPIN[k].pg >= 0) sp.push([SX(SPIN[k].Vg), SY(SPIN[k].pg)]);
+                        KIT.polyline(g, sp, { color: '#9B2C2C', width: 1.3, dash: [4, 4], alpha: 0.8 });
+
+                        // — бледное семейство изотерм: чтобы был виден ход всей поверхности
+                        [0.85, 0.90, 0.95, 1.05, 1.15, 1.30].forEach(function (Tr) {
+                            KIT.polyline(g, pts(Tr, VMIN, VMAX, 160), { color: col.soft, width: 1, alpha: 0.35 });
+                        });
+
+                        // — идеальный газ при той же температуре: p/p_c = (T/T_c)/(Z_c·V/V_c)
+                        var idl = [];
+                        for (k = 0; k <= 160; k++) {
+                            var v = VMIN + (VMAX - VMIN) * k / 160, pi = st.T / (ZC * v);
+                            idl.push(pi <= PMAX ? [SX(v), SY(pi)] : null);
+                        }
+                        KIT.polyline(g, idl, { color: col.soft, width: 1.4, dash: [2, 4] });
+
+                        // — текущая изотерма и площадка на ней
+                        var mm = d.m;
+                        KIT.polyline(g, pts(st.T, VMIN, VMAX, 220),
+                                     { color: '#155E74', width: st.T === 1 ? 2.8 : 2.2 });
+                        if (mm) {
+                            KIT.polyline(g, [[SX(mm.Vl), SY(mm.ps)], [SX(Math.min(VMAX, mm.Vg)), SY(mm.ps)]],
+                                         { color: '#9B2C2C', width: 2.8 });
+                            KIT.text(g, T('liq'), SX(mm.Vl), SY(mm.ps) - 9, { size: 9.5, color: '#9B2C2C' });
+                            KIT.text(g, T('vap'), SX(Math.min(VMAX, mm.Vg)), SY(mm.ps) - 9, { size: 9.5, color: '#9B2C2C' });
+                        } else {
+                            KIT.text(g, T('above'), (padL + W - padR) / 2, top + 12, { size: 10, color: col.soft });
+                        }
+
+                        // — критическая точка
+                        KIT.body(g, SX(1), SY(1), { shape: 'dot', size: 5, color: '#2e9e5b' });
+                        KIT.text(g, T('crit'), SX(1) + 8, SY(1) - 10, { size: 9.5, color: '#2e9e5b', align: 'left' });
+
+                        // — текущее состояние
+                        KIT.body(g, SX(st.V), SY(d.pr), { shape: 'dot', size: 6, color: '#8F6417' });
+                        KIT.marker(g, SX(st.V), SY(d.pr), base, { color: '#8F6417', width: 1.2 });
+                        KIT.text(g, d.two ? T('twoPhase') : T('oneFluid'),
+                                 SX(st.V), SY(d.pr) - 12, { size: 10, color: '#8F6417' });
+                        if (d.two) {
+                            KIT.text(g, T('lever') + ': ' + T('vap') + ' ' + Math.round(d.xVap * 100) + ' % · ' +
+                                     T('liq') + ' ' + Math.round((1 - d.xVap) * 100) + ' %',
+                                     SX(st.V), SY(d.pr) + 16, { size: 9.5, color: '#8F6417' });
+                        }
+                        KIT.text(g, T('ideal'), W - padR, top + 4, { size: 9.5, color: col.soft, align: 'right' });
+
+                        // — табличка настоящих единиц: расчёт рядом с измеренным, ничего не прячем
+                        var y = top + 2, L = 10;
+                        KIT.text(g, T('crit'), L, y, { size: 10.5, weight: '600', color: '#155E74', align: 'left' });
+                        [[T('tcLab'), d.Tc.toFixed(d.Tc < 20 ? 2 : 1) + ' ' + T('unit_k'), d.meas && d.meas.Tc],
+                         [T('pcLab'), d.pc.toFixed(d.pc < 10 ? 2 : 1) + ' ' + T('unit_bar'), d.meas && d.meas.pc],
+                         [T('vcLab'), d.Vc.toFixed(0) + ' ' + T('unit_cm3'), d.meas && d.meas.Vc],
+                         [T('zcLab'), ZC.toFixed(3), d.meas && d.meas.Zc]
+                        ].forEach(function (row, i) {
+                            var yy = y + 18 + i * 30;
+                            KIT.text(g, row[0], L, yy, { size: 9.5, color: col.soft, align: 'left' });
+                            KIT.text(g, row[1], L, yy + 12, { size: 10.5, color: '#155E74', align: 'left' });
+                            if (row[2] != null) {
+                                KIT.text(g, T('measured') + ' ' + row[2], L, yy + 23,
+                                         { size: 9, color: '#9B2C2C', align: 'left' });
+                            }
+                        });
+                        KIT.text(g, mode === 'he' ? T('heNote') : (mode === 'custom' ? T('corr') : T('presetLock')),
+                                 L, base + 30, { size: 9, color: col.soft, align: 'left' });
+                    }
+                },
+                formula: function (st, d, T) {
+                    return '<span class="xf-op">p/p_c = 8(T/T_c)/(3V/V_c &minus; 1) &minus; 3(V/V_c)&#8315;&#178; = </span>' +
+                        '<span class="xf-res">' + d.pr.toFixed(3) + '</span>' +
+                        '<span class="xf-op"> &nbsp;&#8594;&nbsp; </span><span class="xf-var">' +
+                        d.pbar.toFixed(d.pbar < 10 ? 2 : 1) + ' ' + T('unit_bar') + '</span>' +
+                        '<span class="xf-op"> при </span><span class="xf-var">' +
+                        d.Tk.toFixed(d.Tk < 20 ? 2 : 1) + ' ' + T('unit_k') + '</span>' +
+                        '<br><i>' + (d.two
+                            ? T('twoPhase') + ': ' + T('vap') + ' ' + Math.round(d.xVap * 100) + ' %, ' +
+                              T('liq') + ' ' + Math.round((1 - d.xVap) * 100) + ' %'
+                            : T('corr')) + '</i>';
+                },
+                plot: {
+                    height: 168,
+                    x: { label: 'xV2', min: 0.5, max: 6 },
+                    y: { label: 'yZ', min: 0, max: 1.2 },
+                    samples: 120,
+                    // Z вдоль текущей изотермы: единица — идеальный газ, провал — реальный
+                    curve: function (v, s) {
+                        var m = s.T < 1 ? mx(s.T) : null;
+                        var p = (m && v > m.Vl && v < m.Vg) ? m.ps : pr(s.T, v);
+                        return Math.max(0, Math.min(1.2, ZC * p * v / s.T));
+                    },
+                    marker: function (s, a, d) { return { x: s.V, y: Math.max(0, Math.min(1.2, d.Z)) }; }
+                }
+            },
+            extras: function (st, d, T) {
+                return '<b>' + T('tcLab') + '</b> ' + d.Tc.toFixed(d.Tc < 20 ? 2 : 1) + ' ' + T('unit_k') +
+                    ' &nbsp;·&nbsp; <b>' + T('pcLab') + '</b> ' + d.pc.toFixed(d.pc < 10 ? 2 : 1) + ' ' + T('unit_bar') +
+                    ' &nbsp;·&nbsp; <b>' + T('vcLab') + '</b> ' + d.Vc.toFixed(0) + ' ' + T('unit_cm3') +
+                    ' &nbsp;·&nbsp; <b>Z</b> ' + d.Z.toFixed(3);
+            }
+        };
+    }
+
+    global.B42ModelsExtra = global.B42ModelsExtra || {};
+    global.B42ModelsExtra.realgas = realgasModel;
+})(window);
+
+    /* из tools\_model_rigidbody.js */
+/* _model_rigidbody.js — ЗАГОТОВКА фабрики стенда темы «Твёрдое тело».
+   js/models.js я не трогаю: ведущая сессия вклеивает эту функцию рядом с
+   rotationModel и добавляет в реестр строку  rigid: rigidModel.
+   Данные — data/theory/rigid.json, в параграфах поле "model": "rigid".
+
+   ТРИ РОЛИ ОДНОГО СТЕНДА (переключатель режима, как MODES в engineModel):
+     spinup — §1: I = k·mR², штейнеровская добавка md², ε = M/I, ω(t) и обороты за 2 с;
+     gyro   — §2: L = Iω, M = mga·sinθ, Ω = mga/(Iω) и период прецессии;
+     drift  — §3: один полёт шарика двумя следами, a_кор = 2ωv и число Россби.
+
+   Ползунки общие на все три роли, поэтому лишние прячутся: SHOW перечисляет
+   ИНДЕКСЫ параметров (порядок — как в rigid.json), а applyVisibility ходит по
+   .xpl-ctrl внутри host. Host приходит через bindHost — course.html его уже зовёт.
+
+   ПРОВЕРОЧНЫЕ ЗНАЧЕНИЯ (посчитаны, сходятся с текстом параграфов):
+     spinup по умолчанию (обруч, m 2,0, R 0,35, M 3,5): I = 0,245 кг·м², ε = 14,29 рад/с²,
+       за 2 с ω = 28,57 рад/с, 4,55 оборота; переключение обруч→диск ровно удваивает ε;
+       стержень при R = 0,40 и d = 0,20 даёт 1/12 + 1/4 = 1/3, то есть I = 0,1067 кг·м².
+     gyro по умолчанию (обруч, m 2,0, R 0,35, ω₀ 30, a 0,25, θ 30°): L = 7,35 кг·м²/с,
+       mga = 4,905 Н·м, Ω = 0,667 рад/с, оборот оси за 9,42 с; при протяжке θ Ω не меняется.
+     drift по умолчанию (ω 2,0, v 2,0, площадка 0,5 м): a_кор = 8 м/с², снос ωvt² = 0,25 м
+       к краю площадки (t = 0,25 с), Ro = v/(2ωR) = 1,0.
+*/
+
+function rigidModel(data) {
+    var MODES = ['spinup', 'gyro', 'drift'];
+    // какие ползунки показывать в каждой роли (индексы в data.params)
+    var SHOW = { spinup: [0, 1, 2, 3, 4], gyro: [0, 1, 2, 5, 6, 7], drift: [8, 9] };
+    var SHAPES = ['shape_hoop', 'shape_disc', 'shape_ball', 'shape_rod'];
+    var KCOEF = [1, 0.5, 0.4, 1 / 12];
+    var G = 9.81, PLATE = 0.5;        // радиус вращающейся площадки, м — фиксирован
+    var SPIN_T = 2, SPIN_CYCLE = 2.6; // разгон 2 с, потом пауза и сброс
+
+    var mode = 'spinup', host = null;
+
+    function lang() { return (document.documentElement.getAttribute('lang')) || 'ru'; }
+    function T(key) { var d = data.i18n && data.i18n[lang()]; return (d && d[key]) || key; }
+
+    function kOf(st) { return KCOEF[Math.round(st.shape)] || 1; }
+    function inertiaOwn(st) { return kOf(st) * st.m * st.R * st.R; }   // относительно центра масс
+    function inertiaAdd(st) { return st.m * st.d * st.d; }             // добавка Штейнера
+    function inertia(st) { return inertiaOwn(st) + (mode === 'spinup' ? inertiaAdd(st) : 0); }
+    function epsOf(st) { var I = inertia(st); return I > 0 ? st.Mt / I : 0; }
+    function torqueMax(st) { return st.m * G * st.arm; }               // mga — при θ = 90°
+    function torqueOf(st) { return torqueMax(st) * Math.sin(st.th * Math.PI / 180); }
+    function precess(st) {                                            // Ω = mga/(Iω): sinθ сократился
+        var L = inertiaOwn(st) * st.w0;
+        return L > 0 ? torqueMax(st) / L : 0;
+    }
+    function fmtNum(v, n) { return v.toFixed(n == null ? 2 : n).replace('.', ','); }
+
+    // ── видимость ползунков: роли пользуются разными наборами ──
+    function applyVisibility() {
+        if (!host) return;
+        var wraps = host.querySelectorAll('.xpl-ctrl'), keep = SHOW[mode] || [];
+        for (var i = 0; i < wraps.length; i++) {
+            wraps[i].style.display = keep.indexOf(i) >= 0 ? '' : 'none';
+        }
+    }
+
+    return {
+        modes: MODES,
+        getMode: function () { return mode; },
+        setMode: function (m) { if (MODES.indexOf(m) >= 0) { mode = m; applyVisibility(); } },
+        bindHost: function (el) { host = el; applyVisibility(); },
+        cfg: {
+            i18n: data.i18n,
+            params: data.params.map(function (p) {
+                var out = { key: p.key, label: p.key, min: p.min, max: p.max, step: p.step, value: p.value, unit: p.unit };
+                // форма — не число, а имя: подпись значения рисуем сами
+                if (p.key === 'shape') out.fmt = function (v) { return T(SHAPES[Math.round(v)] || SHAPES[0]); };
+                return out;
+            }),
+
+            animate: function (t, st) {
+                if (mode === 'spinup') {
+                    var tt = Math.min(t % SPIN_CYCLE, SPIN_T), e = epsOf(st);
+                    return { t: tt, phase: 0.5 * e * tt * tt, w: e * tt };
+                }
+                if (mode === 'gyro') {
+                    return { t: t, phase: precess(st) * t, spin: st.w0 * t };
+                }
+                // drift: шарик летит от центра, пока не дойдёт до края площадки
+                var tFly = PLATE / Math.max(0.1, st.vb);
+                var tt2 = (t % (tFly * 1.35));
+                return { t: Math.min(tt2, tFly), tFly: tFly, plate: st.wd * t };
+            },
+
+            derive: function (st, a) {
+                if (mode === 'spinup') {
+                    return { t: a.t, phase: a.phase, w: a.w, I: inertia(st), I0: inertiaOwn(st),
+                             Iadd: inertiaAdd(st), eps: epsOf(st), k: kOf(st),
+                             turns: a.phase / (2 * Math.PI) };
+                }
+                if (mode === 'gyro') {
+                    var I = inertiaOwn(st);
+                    var Om = precess(st);
+                    return { t: a.t, phase: a.phase, spin: a.spin, I: I, L: I * st.w0,
+                             M: torqueOf(st), Mmax: torqueMax(st), Om: Om,
+                             Tp: Om > 0 ? 2 * Math.PI / Om : Infinity };
+                }
+                var f = st.vb > 0 ? st.wd / st.vb : 0;
+                return { t: a.t, tFly: a.tFly, plate: a.plate, aCor: 2 * st.wd * st.vb,
+                         drift: st.wd * st.vb * a.t * a.t,
+                         Ro: st.wd > 0 ? st.vb / (2 * st.wd * PLATE) : Infinity, f: f };
+            },
+
+            stage: {
+                height: 250,
+                draw: function (g, ctx) {
+                    if (mode === 'spinup') return drawSpin(g, ctx);
+                    if (mode === 'gyro') return drawGyro(g, ctx);
+                    return drawDrift(g, ctx);
+                }
+            },
+
+            formula: function (st, d) {
+                if (mode === 'spinup') {
+                    var add = d.Iadd > 1e-9
+                        ? '<span class="xf-op"> + md&#178; = </span><span class="xf-var">' + fmtNum(d.Iadd, 3) + '</span>'
+                        : '';
+                    return '<span class="xf-op">I = k&#183;mR&#178; = </span><span class="xf-var">' + fmtNum(d.k, 3) +
+                        '</span><span class="xf-op"> &#183; </span><span class="xf-var">' + fmtNum(st.m, 1) +
+                        '</span><span class="xf-op"> &#183; </span><span class="xf-var">' + fmtNum(st.R, 2) +
+                        '</span><span class="xf-op">&#178;</span>' + add +
+                        '<span class="xf-op"> &#8594; </span><span class="xf-res">' + fmtNum(d.I, 3) + ' ' + T('unit_kgm2') + '</span>' +
+                        '<br><span class="xf-op">&#949; = M / I = </span><span class="xf-res">' + fmtNum(d.eps, 2) + ' ' + T('unit_rads2') + '</span>' +
+                        '<span class="xf-op"> &nbsp;·&nbsp; &#969;(2 с) = </span><span class="xf-var">' +
+                        fmtNum(d.eps * SPIN_T, 1) + ' ' + T('unit_rads') + '</span>' +
+                        '<br><i>' + T('spinNote') + '</i>';
+                }
+                if (mode === 'gyro') {
+                    return '<span class="xf-op">L = I&#969; = </span><span class="xf-var">' + fmtNum(d.L, 2) +
+                        '</span><span class="xf-op"> &nbsp;·&nbsp; M = mga&#183;sin&#952; = </span><span class="xf-var">' +
+                        fmtNum(d.M, 2) + ' ' + T('unit_nm') + '</span>' +
+                        '<br><span class="xf-op">&#937; = mga / (I&#969;) = </span><span class="xf-res">' +
+                        fmtNum(d.Om, 3) + ' ' + T('unit_rads') + '</span>' +
+                        '<span class="xf-op"> &nbsp;·&nbsp; ' + T('precPeriod') + ' </span><span class="xf-var">' +
+                        fmtNum(d.Tp, 2) + ' ' + T('unit_s') + '</span>' +
+                        '<br><i>' + T('precNote') + '</i>';
+                }
+                return '<span class="xf-op">a<sub>кор</sub> = 2&#969;v = </span><span class="xf-res">' +
+                    fmtNum(d.aCor, 2) + ' ' + T('unit_ms2') + '</span>' +
+                    '<span class="xf-op"> &nbsp;·&nbsp; ' + T('rossby') + ' Ro = v/(2&#969;R) = </span><span class="xf-var">' +
+                    (isFinite(d.Ro) ? fmtNum(d.Ro, 2) : '&#8734;') + '</span>';
+            },
+
+            // График строится один раз, а ролей три, поэтому подписи осей — геттеры:
+            // движок делает T(pl.x.label) каждый кадр, и геттер отдаёт ключ текущего режима.
+            // По оси Y всюду выбраны величины ПОРЯДКА единиц и больше: движок подписывает
+            // деления через Math.round, и доли (Ω ≈ 0,67) на нём читались бы как «1».
+            plot: {
+                height: 160,
+                x: {
+                    get label() { return mode === 'spinup' ? 'xMassR' : (mode === 'gyro' ? 'xOmega0' : 'xOmegaD'); },
+                    get min() { return mode === 'spinup' ? 0.5 : (mode === 'gyro' ? 5 : 0); },
+                    get max() { return mode === 'spinup' ? 10 : (mode === 'gyro' ? 50 : 4); }
+                },
+                y: {
+                    get label() { return mode === 'spinup' ? 'yEps' : (mode === 'gyro' ? 'yPrecT' : 'yCor'); },
+                    min: 0,
+                    max: function (s) {
+                        if (mode === 'spinup') {
+                            var per = kOf(s) * s.R * s.R + s.d * s.d;        // I на килограмм массы
+                            return per > 0 ? Math.ceil(s.Mt / (0.5 * per)) : 10;
+                        }
+                        if (mode === 'gyro') {
+                            var I0 = kOf(s) * s.m * s.R * s.R;
+                            return Math.ceil(2 * Math.PI * I0 * 50 / Math.max(1e-6, s.m * G * s.arm));
+                        }
+                        return Math.ceil(2 * 4 * s.vb);
+                    }
+                },
+                samples: 90,
+                // spinup: ε = M/(m·(kR² + d²)) — та же гипербола, что a = F/m у второго закона
+                // gyro:   период прецессии растёт линейно с ω₀ (быстрее крутится — медленнее ведёт ось)
+                // drift:  a_кор = 2ωv — прямая через ноль
+                curve: function (x, s) {
+                    if (mode === 'spinup') {
+                        var per = kOf(s) * s.R * s.R + s.d * s.d;
+                        return (x > 0 && per > 0) ? s.Mt / (x * per) : null;
+                    }
+                    if (mode === 'gyro') {
+                        var I0 = kOf(s) * s.m * s.R * s.R, mga = s.m * G * s.arm;
+                        return mga > 0 ? 2 * Math.PI * I0 * x / mga : null;
+                    }
+                    return 2 * x * s.vb;
+                },
+                marker: function (s, a, d) {
+                    if (mode === 'spinup') return { x: s.m, y: d.eps };
+                    if (mode === 'gyro') return { x: s.w0, y: d.Tp };
+                    return { x: s.wd, y: d.aCor };
+                }
+            }
+        },
+
+        extras: function (st, d) {
+            if (mode === 'spinup') {
+                var e = epsOf(st), w2 = e * SPIN_T;
+                return '<b>I</b> ' + fmtNum(inertia(st), 3) + ' ' + T('unit_kgm2') +
+                    (inertiaAdd(st) > 1e-9 ? ' &nbsp;(' + T('steiner') + ' ' + fmtNum(inertiaAdd(st), 3) + ')' : '') +
+                    ' &nbsp;·&nbsp; <b>&#949;</b> ' + fmtNum(e, 2) + ' ' + T('unit_rads2') +
+                    ' &nbsp;·&nbsp; <b>&#969;(2 с)</b> ' + fmtNum(w2, 1) + ' ' + T('unit_rads') +
+                    ' &nbsp;·&nbsp; ' + fmtNum(0.5 * e * SPIN_T * SPIN_T / (2 * Math.PI), 2) + ' ' + T('turns');
+            }
+            if (mode === 'gyro') {
+                var Om = precess(st);
+                return '<b>I</b> ' + fmtNum(inertiaOwn(st), 3) + ' ' + T('unit_kgm2') +
+                    ' &nbsp;·&nbsp; <b>L</b> ' + fmtNum(inertiaOwn(st) * st.w0, 2) +
+                    ' &nbsp;·&nbsp; <b>M</b> ' + fmtNum(torqueOf(st), 2) + ' ' + T('unit_nm') +
+                    ' &nbsp;·&nbsp; <b>&#937;</b> ' + fmtNum(Om, 3) + ' ' + T('unit_rads') +
+                    ' &nbsp;·&nbsp; ' + T('precPeriod') + ' ' + (Om > 0 ? fmtNum(2 * Math.PI / Om, 2) : '&#8734;') + ' ' + T('unit_s');
+            }
+            var Ro = st.wd > 0 ? st.vb / (2 * st.wd * PLATE) : Infinity;
+            return '<b>a<sub>кор</sub></b> ' + fmtNum(2 * st.wd * st.vb, 2) + ' ' + T('unit_ms2') +
+                ' &nbsp;·&nbsp; <b>Ro</b> ' + (isFinite(Ro) ? fmtNum(Ro, 2) : '&#8734;') +
+                ' &nbsp;·&nbsp; ' + fmtNum(PLATE / Math.max(0.1, st.vb), 2) + ' ' + T('unit_s') + ' до края';
+        }
+    };
+
+    // ═══════════ РОЛЬ 1: РАЗГОН ═══════════════════════════════════════════
+    // Тело крутится вокруг оси, отмеченной крестиком; при d > 0 ось уезжает от
+    // центра масс, и штейнеровская добавка видна отдельной строкой.
+    function drawSpin(g, ctx) {
+        var W = ctx.W, H = ctx.H, col = ctx.c, st = ctx.state, d = ctx.derived;
+        var cx = W * 0.30, cy = H * 0.50;
+        var pxPerM = Math.min(H * 0.34, W * 0.20) / Math.max(0.05, st.R);   // радиус тела ~ фиксированный на экране
+        var rr = st.R * pxPerM, dd = st.d * pxPerM, sh = Math.round(st.shape);
+        var ax = cx, ay = cy;                       // ось (центр вращения) стоит на месте
+        var bx = ax + Math.cos(d.phase) * dd;       // центр масс ездит вокруг оси, если d > 0
+        var by = ay + Math.sin(d.phase) * dd;
+
+        g.save();
+        g.translate(bx, by); g.rotate(d.phase);
+        g.strokeStyle = col.link; g.fillStyle = col.link; g.lineWidth = 2;
+        if (sh === 0) {                              // обруч
+            g.lineWidth = 7; g.beginPath(); g.arc(0, 0, rr, 0, 6.2832); g.stroke();
+        } else if (sh === 3) {                       // стержень: R — это длина
+            KIT.alpha(g, 0.30, function () { g.fillRect(-rr / 2, -6, rr, 12); });
+            g.lineWidth = 2; g.strokeRect(-rr / 2, -6, rr, 12);
+        } else {                                     // диск и шар
+            KIT.alpha(g, sh === 2 ? 0.20 : 0.32, function () {
+                g.beginPath(); g.arc(0, 0, rr, 0, 6.2832); g.fill();
+            });
+            if (sh === 2) KIT.alpha(g, 0.22, function () {
+                g.beginPath(); g.arc(0, 0, rr * 0.55, 0, 6.2832); g.fill();
+            });
+            g.beginPath(); g.arc(0, 0, rr, 0, 6.2832); g.stroke();
+        }
+        // метка на теле, чтобы вращение читалось глазом
+        g.strokeStyle = col.accent; g.lineWidth = 2.5;
+        g.beginPath(); g.moveTo(0, 0); g.lineTo(sh === 3 ? rr / 2 : rr, 0); g.stroke();
+        g.restore();
+
+        // ось и центр масс
+        if (dd > 2) {
+            KIT.dashed(g, [3, 3], function () {
+                g.strokeStyle = col.soft; g.lineWidth = 1;
+                g.beginPath(); g.moveTo(ax, ay); g.lineTo(bx, by); g.stroke();
+            });
+            KIT.body(g, bx, by, { shape: 'dot', size: 7, color: col.soft });
+            KIT.text(g, ctx.T('axisShift'), ax, ay - 14, { color: col.text, size: 10 });
+        } else {
+            KIT.text(g, ctx.T('axisOwn'), ax, ay - 14, { color: col.soft, size: 10 });
+        }
+        g.strokeStyle = col.warn; g.lineWidth = 2;
+        g.beginPath();
+        g.moveTo(ax - 6, ay - 6); g.lineTo(ax + 6, ay + 6);
+        g.moveTo(ax + 6, ay - 6); g.lineTo(ax - 6, ay + 6);
+        g.stroke();
+
+        // момент силы — дуга у обода
+        if (st.Mt > 0) {
+            g.strokeStyle = col.warn; g.lineWidth = 2;
+            g.beginPath(); g.arc(ax, ay, rr + 16, -0.9, 0.35); g.stroke();
+            KIT.text(g, 'M = ' + fmtNum(st.Mt, 1) + ' ' + T('unit_nm'), ax, ay + rr + 40, { color: col.warn, size: 11 });
+        }
+
+        // правая колонка: числа крупно
+        var x = W * 0.62;
+        KIT.readout(g, [
+            { text: 'I = ' + fmtNum(d.I, 3) + ' ' + T('unit_kgm2'), y: 34, size: 13, weight: '600', color: col.text },
+            d.Iadd > 1e-9 ? { text: T('steiner') + ' md² = ' + fmtNum(d.Iadd, 3), y: 52, size: 10.5, color: col.accent } : null,
+            { text: 'ε = M / I = ' + fmtNum(d.eps, 2) + ' ' + T('unit_rads2'), y: 78, size: 12, color: col.text },
+            { text: 'ω = ' + fmtNum(d.w, 1) + ' ' + T('unit_rads'), y: 100, size: 12, color: col.link },
+            { text: fmtNum(d.turns, 2) + ' ' + T('turns'), y: 120, size: 10.5, color: col.soft },
+            { text: 't = ' + fmtNum(d.t, 2) + ' ' + T('unit_s'), y: 142, size: 10.5, color: col.soft }
+        ], { x: x, align: 'left' });
+    }
+
+    // ═══════════ РОЛЬ 2: ГИРОСКОП ═════════════════════════════════════════
+    // Вид сбоку-сверху: опора внизу, ось наклонена на θ, конец оси едет по конусу.
+    function drawGyro(g, ctx) {
+        var W = ctx.W, H = ctx.H, col = ctx.c, st = ctx.state, d = ctx.derived;
+        var px = W * 0.32, py = H * 0.86;                       // точка опоры
+        var scale = Math.min(H * 0.62, W * 0.30) / 0.5;         // 0,5 м — во всю высоту сцены
+        var th = st.th * Math.PI / 180, aLen = st.arm * scale;
+        // проекция конуса: горизонталь сжата вдвое, чтобы читалась перспектива
+        var hx = Math.sin(th) * aLen * Math.cos(d.phase), hy = Math.sin(th) * aLen * 0.42 * Math.sin(d.phase);
+        var tipX = px + hx, tipY = py - Math.cos(th) * aLen + hy;
+
+        // конус, который описывает ось
+        KIT.dashed(g, [4, 4], function () {
+            g.strokeStyle = col.border; g.lineWidth = 1;
+            g.beginPath();
+            g.ellipse(px, py - Math.cos(th) * aLen, Math.sin(th) * aLen, Math.sin(th) * aLen * 0.42, 0, 0, 6.2832);
+            g.stroke();
+            g.beginPath(); g.moveTo(px, py); g.lineTo(px - Math.sin(th) * aLen, py - Math.cos(th) * aLen);
+            g.moveTo(px, py); g.lineTo(px + Math.sin(th) * aLen, py - Math.cos(th) * aLen);
+            g.stroke();
+            g.strokeStyle = col.soft;
+            g.beginPath(); g.moveTo(px, py); g.lineTo(px, py - aLen * 1.25); g.stroke();
+        });
+        KIT.text(g, ctx.T('cone'), px, py - Math.cos(th) * aLen - Math.sin(th) * aLen * 0.42 - 12,
+                 { color: col.soft, size: 10 });
+
+        // ось волчка и тело на ней
+        KIT.polyline(g, [[px, py], [tipX, tipY]], { color: col.text, width: 2.5 });
+        var bodyR = Math.max(10, st.R * scale * 0.5);
+        g.save(); g.translate(tipX, tipY);
+        g.rotate(Math.atan2(tipY - py, tipX - px) + Math.PI / 2);
+        g.strokeStyle = col.link; g.fillStyle = col.link; g.lineWidth = 2;
+        KIT.alpha(g, 0.28, function () { g.beginPath(); g.ellipse(0, 0, bodyR, bodyR * 0.34, 0, 0, 6.2832); g.fill(); });
+        g.beginPath(); g.ellipse(0, 0, bodyR, bodyR * 0.34, 0, 0, 6.2832); g.stroke();
+        g.restore();
+
+        // опора
+        KIT.body(g, px, py, { shape: 'dot', size: 8, color: col.text });
+        KIT.ground(g, px - 44, px + 44, py + 3, { color: col.soft });
+        KIT.text(g, ctx.T('pivot'), px, py + 22, { color: col.soft, size: 10 });
+
+        // векторы: L вдоль оси, M горизонтально (перпендикулярно L)
+        var ux = (tipX - px), uy = (tipY - py), ul = Math.hypot(ux, uy) || 1;
+        KIT.arrow(g, tipX, tipY, ux / ul * 42, uy / ul * 42,
+                  { color: col.link, width: 2.5, head: 8, label: 'L', labelSize: 12 });
+        KIT.arrow(g, tipX, tipY, -uy / ul * 38, ux / ul * 38,
+                  { color: col.warn, width: 2.5, head: 8, label: 'M', labelSize: 12 });
+
+        var x = W * 0.63;
+        KIT.readout(g, [
+            { text: 'L = Iω = ' + fmtNum(d.L, 2), y: 34, size: 13, weight: '600', color: col.text },
+            { text: 'M = mga·sinθ = ' + fmtNum(d.M, 2) + ' ' + T('unit_nm'), y: 56, size: 11.5, color: col.warn },
+            { text: 'Ω = mga/(Iω) = ' + fmtNum(d.Om, 3) + ' ' + T('unit_rads'), y: 80, size: 12, color: col.text },
+            { text: T('precPeriod') + ' ' + fmtNum(d.Tp, 2) + ' ' + T('unit_s'), y: 100, size: 10.5, color: col.soft },
+            { text: T('precNote'), y: 126, size: 10, color: col.accent }
+        ], { x: x, align: 'left' });
+    }
+
+    // ═══════════ РОЛЬ 3: СНОС ═════════════════════════════════════════════
+    // Один и тот же полёт нарисован дважды: слева прямая (неподвижная система),
+    // справа дуга (система площадки). Это же и кухонный опыт §3 с листом бумаги.
+    function drawDrift(g, ctx) {
+        var W = ctx.W, H = ctx.H, col = ctx.c, st = ctx.state, d = ctx.derived;
+        var rad = Math.min(H * 0.38, W * 0.20);
+        var cy = H * 0.46, cxs = [W * 0.26, W * 0.70];
+        var frac = d.tFly > 0 ? Math.min(1, d.t / d.tFly) : 0;
+
+        for (var s = 0; s < 2; s++) {
+            var cx = cxs[s], rotFrame = (s === 1);
+            g.strokeStyle = col.border; g.lineWidth = 1.5;
+            g.beginPath(); g.arc(cx, cy, rad, 0, 6.2832); g.stroke();
+            // метка на краю площадки — видно, что площадка крутится
+            var mark = rotFrame ? 0 : d.plate;
+            KIT.body(g, cx + Math.cos(mark) * rad, cy + Math.sin(mark) * rad, { shape: 'dot', size: 8, color: col.accent });
+
+            // след шарика: 40 точек от старта до текущего момента
+            var pts = [], i, u, ang;
+            for (i = 0; i <= 40; i++) {
+                u = frac * i / 40;
+                if (rotFrame) {                       // в системе площадки след закручен назад
+                    ang = -st.wd * (u * d.tFly);
+                    pts.push([cx + Math.cos(ang) * u * rad, cy + Math.sin(ang) * u * rad]);
+                } else {                              // в неподвижной — прямая
+                    pts.push([cx + u * rad, cy]);
+                }
+            }
+            if (pts.length > 1) KIT.polyline(g, pts, { color: rotFrame ? col.warn : col.link, width: 2.5 });
+            KIT.body(g, pts[pts.length - 1][0], pts[pts.length - 1][1], { shape: 'dot', size: 11, color: rotFrame ? col.warn : col.link });
+            KIT.body(g, cx, cy, { shape: 'dot', size: 6, color: col.soft });
+
+            KIT.text(g, ctx.T(rotFrame ? 'frameRot' : 'frameLab'), cx, cy - rad - 22, { color: col.text, size: 11, weight: '600' });
+            KIT.text(g, ctx.T(rotFrame ? 'curved' : 'straight'), cx, cy - rad - 8, { color: rotFrame ? col.warn : col.link, size: 10 });
+            KIT.text(g, 'R = ' + fmtNum(PLATE, 2) + ' м', cx, cy + rad + 20, { color: col.soft, size: 10 });
+        }
+
+        KIT.readout(g, [
+            { text: 'a кор = 2ωv = ' + fmtNum(d.aCor, 2) + ' ' + T('unit_ms2'), y: H - 26, size: 11.5, weight: '600', color: col.warn },
+            { text: T('rossby') + ' Ro = ' + (isFinite(d.Ro) ? fmtNum(d.Ro, 2) : '∞'), y: H - 10, size: 10.5, color: col.soft }
+        ], { x: 14, align: 'left' });
+    }
+}
+
+
+    // rigidModel объявлен ниже как обычная функция того же замыкания — она поднимается,
+    // поэтому регистрируется здесь же, без ожидания.
+    global.B42ModelsExtra = global.B42ModelsExtra || {};
+    global.B42ModelsExtra.rigid = rigidModel;
 })(window);

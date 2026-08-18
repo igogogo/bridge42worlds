@@ -30,6 +30,11 @@
         '.tq-fb{margin-top:10px;font-size:13.5px;line-height:1.6;padding:10px 12px;border-radius:9px}',
         '.tq-fb.ok{background:rgba(46,125,50,.10);color:var(--text)}',
         '.tq-fb.no{background:rgba(179,27,27,.07);color:var(--text)}',
+        /* Подсказка про формат ввода — это не вердикт: она не красит ответ ни в зелёный,
+           ни в красный, потому что читатель ещё не ответил. */
+        '.tq-tip{margin-top:8px;font-size:12.5px;line-height:1.7;color:var(--soft)}',
+        '.tq-tip code{font-family:var(--mono,monospace);font-size:12px;background:var(--tag-bg);',
+        'padding:1px 6px;border-radius:5px;margin:0 2px;white-space:nowrap}',
         '.tq-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}',
         '.tq-ask{font-size:12.5px;padding:5px 12px;border-radius:14px;cursor:pointer;background:none;',
         'border:1px solid var(--border);color:var(--soft)}',
@@ -118,6 +123,104 @@
         return (global.B42Icons && B42Icons[name]) ? B42Icons[name](size || 16) : (fallback || '');
     }
 
+    /* Подпись интерфейса — всегда отдельным узлом.
+       Словарь курса (js/course-i18n.js) сверяет текст узла ЦЕЛИКОМ — так он не может случайно
+       зацепить содержание урока. Значит, склейка «Как на самом деле: » + переведённый текст
+       даёт узел, которого в словаре нет, и подпись остаётся русской на всех языках. Раньше так
+       и было со всеми вердиктами разбора. Держим подписи в своих узлах, содержание — в своих. */
+    function lab(text) {
+        var s = document.createElement('span');
+        s.textContent = text;                 // ровно ключ словаря, без разметки вокруг
+        return s;
+    }
+    /* Запись числа — всегда своим узлом с dir="ltr".
+       В арабской карточке абзац идёт справа налево, и «·» между цифрами двунаправленный
+       алгоритм считает нейтралью: «5·10³²» ложится на экран как «10³²·5» — читатель видит
+       другое число. Раньше беды не было случайно: печатали «5e+32», а латинская «e» держала
+       запись слева направо сама. Отдельный узел с dir изолирует её (UA-стиль сам даёт
+       unicode-bidi: isolate), а единица измерения остаётся в направлении страницы. */
+    function ltr(text) {
+        var s = document.createElement('span');
+        s.dir = 'ltr';
+        s.textContent = text;
+        return s;
+    }
+    /* Примеры записи числа. В <code> словарь не заходит — и правильно: «5·10³²» переводить
+       нечего, а сломать разметку примера легко. dir — по той же причине, что и выше. */
+    function codeEl(text) {
+        var c = document.createElement('code');
+        c.dir = 'ltr';
+        c.textContent = text;
+        return c;
+    }
+    /** Собирает содержимое из кусочков: строка — текстовым узлом, узел — как есть. */
+    function fill(host, parts) {
+        parts.forEach(function (p) {
+            if (p == null || p === false) return;
+            host.appendChild(typeof p === 'string' ? document.createTextNode(p) : p);
+        });
+        return host;
+    }
+
+    /* Число так, как оно написано в уроке. «5e+32» — запись из отладчика: в тексте то же
+       число выглядит как 5·10³², и читателю не с чем сравнивать свой ответ. Обычные числа
+       не трогаем — экспонента появляется ровно там, где её показал бы и сам JS. */
+    var SUP = ['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹'];
+    function supText(n) {
+        return String(n).split('').map(function (c) { return c === '-' ? '⁻' : SUP[+c]; }).join('');
+    }
+    function numText(v) {
+        if (typeof v !== 'number' || !isFinite(v)) return String(v);
+        var a = Math.abs(v), out;
+        if (a !== 0 && (a >= 1e5 || a < 1e-4)) {
+            var e = Math.floor(Math.log10(a));
+            var m = Number((v / Math.pow(10, e)).toPrecision(3));
+            out = (Math.abs(m) === 1 ? (m < 0 ? '-' : '') : m + '·') + '10' + supText(e);
+        } else {
+            out = String(Number(v.toPrecision(6)));
+        }
+        // Десятичный разделитель — как в самом уроке: «0,16» на всех языках, кроме английского.
+        // Иначе рядом оказывались две записи одного числа: «Площадь порядка 0,16» в тексте и
+        // «Точное значение: 9.9» в разборе. Разбор ввода понимает обе записи, так что читателю
+        // это ничем не грозит — но выглядело как чужая вставка.
+        if ((global.B42_LANG || 'ru') !== 'en') out = out.replace('.', ',');
+        return out.replace(/^-/, '−');        // типографский минус, как в тексте уроков
+    }
+
+    /* Насколько промахнулись — словами, которые можно произнести вслух.
+       Раньше здесь было res.off.toFixed(1) + '×', а грейдер честно отдаёт Infinity там, где
+       «во столько-то раз» сказать нельзя: ответ нулём или с другим знаком. Читатель видел
+       «вы промахнулись в Infinity×» — на десяти вопросах-прикидках из пятидесяти семи.
+       Точность тоже приводим в чувство: «в 3.2×» человеку понятно, «в 1247.3×» — нет,
+       это уже просто «очень далеко». */
+    function missParts(res, L, unit) {
+        if (res.kind === 'abs') {
+            return [lab(L.estOffBy || 'вы промахнулись на'), ' ',
+                    ltr(numText(Number(res.off.toPrecision(2)))), unit];
+        }
+        if (res.reason === 'sign') return [lab(L.estOffSign || 'у ответа другой знак')];
+        if (res.reason === 'zero') return [lab(L.estOffZero || 'ноль здесь не подходит')];
+        if (!isFinite(res.off) || res.off >= 1000) {
+            return [lab(L.estOffFar || 'вы промахнулись больше чем в тысячу раз')];
+        }
+        return [lab(L.estOff || 'вы промахнулись в'), ' ',
+                ltr(Number(res.off.toPrecision(2)) + '×')];
+    }
+
+    /* Формулы в разборе набираются так же, как в тексте урока. Страница прогоняет KaTeX один
+       раз после отрисовки, а разбор появляется позже — по нажатию, — поэтому прогоняем сами;
+       иначе читатель видит сырое «$\pi \cdot 0{,}1$». Разделители те же, что в course.html. */
+    function renderMath(node) {
+        if (!global.renderMathInElement) return;
+        try {
+            global.renderMathInElement(node, {
+                delimiters: [{ left: '$$', right: '$$', display: true },
+                             { left: '$', right: '$', display: false }],
+                throwOnError: false
+            });
+        } catch (e) {}
+    }
+
     // ═════════════ БОТ ═════════════
     function Bot(opts) {
         injectStyle();
@@ -164,21 +267,25 @@
         /* icon — необязательный знак из набора перед текстом. Раньше он был вшит в саму
            строку («🔑 Нужен токен…»), из-за чего эмодзи ехал в файлы переводов и рисовался
            системой по-разному. Текст кладём через textContent: он приходит из локали и
-           разметкой быть не должен. */
+           разметкой быть не должен.
+           text может быть и списком кусочков — тогда подпись живёт в своём узле и остаётся
+           переводимой (см. lab() выше): «лимит исчерпан» + « (10).» одной строкой словарь
+           не находит. */
         function msg(text, who, icon) {
             var m = el('div', 'tb-msg ' + who);
-            if (icon) {
-                m.innerHTML = tIcon(icon, 15, '');
-                m.appendChild(document.createTextNode(' ' + text));
-            } else {
-                m.textContent = text;
-            }
+            if (icon) m.innerHTML = tIcon(icon, 15, '');
+            if (Array.isArray(text)) fill(m, icon ? [' '].concat(text) : text);
+            else if (icon) m.appendChild(document.createTextNode(' ' + text));
+            else m.textContent = text;
             body.appendChild(m); body.scrollTop = body.scrollHeight;
             return m;
         }
         function setCtx(c) {
             ctx = c || { title: '', text: '' };
-            ctxLine.textContent = ctx.title ? ((L.botCtx || 'по разделу') + ': ' + ctx.title) : '';
+            ctxLine.innerHTML = '';
+            // Подпись и название раздела — разными узлами: склеенное «по разделу: Гамильтониан»
+            // словарь курса не узнаёт и на английской странице подпись остаётся русской.
+            if (ctx.title) fill(ctxLine, [lab(L.botCtx || 'по разделу'), ': ' + ctx.title]);
         }
         function open(c, seed) {
             if (c) setCtx(c);
@@ -266,7 +373,8 @@
         async function ask(question, mode, demoHint) {
             if (busy || !question.trim()) return;
             if (asked >= MAX_Q) {                                  // лимит на сессию: 10 вопросов/подсказок
-                msg((L.sessionLimit || '⏳ На эту сессию лимит исчерпан') + ' (' + MAX_Q + ').', 'sys');
+                msg([lab(L.sessionLimit || 'На эту сессию лимит исчерпан'), ' (' + MAX_Q + ').'],
+                    'sys', 'clock');
                 return;
             }
             question = question.trim().slice(0, MAX_LEN);           // и на длину одного вопроса
@@ -299,8 +407,11 @@
                 pend.remove();
                 if (r.ok && data.answer) {
                     msg(data.answer, 'bot');
-                    if (typeof data.left === 'number' && data.left <= 20)
-                        quotaLine.textContent = (L.tokenLeft || 'Осталось вопросов по токену') + ': ' + data.left;
+                    if (typeof data.left === 'number' && data.left <= 20) {
+                        // подпись отдельным узлом — иначе словарь её не найдёт (см. lab())
+                        quotaLine.innerHTML = '';
+                        fill(quotaLine, [lab(L.tokenLeft || 'Осталось вопросов по токену'), ': ' + data.left]);
+                    }
                 } else if (data.error === 'token_required' || data.error === 'token_invalid') {
                     msg(L.tokenNeeded || 'Нужен токен доступа — он выдаётся на неделю и ограничен по числу вопросов.', 'sys', 'key');
                     var got = promptToken();
@@ -362,10 +473,18 @@
                 // Пояснение `why` написано под ВЕРНЫЙ ответ, поэтому после промаха его нельзя
                 // приклеивать к вердикту встык: получалось «Не совсем. Именно так: …», будто
                 // читатель ответил правильно. Отделяем строкой и подводкой.
-                fb.innerHTML = tIcon(correct ? 'check' : 'paradox', 16, correct ? '✓' : '?') + ' ' +
-                    (correct ? (L.right || 'Верно!') : (L.notQuite || 'Не совсем.')) +
-                    (q.why ? (correct ? '<br>' : '<br>' + (L.howItIs || 'Как на самом деле:') + ' ') + q.why : '');
+                // Подпись вердикта и текст урока — разными узлами, иначе подпись непереводима
+                // (см. lab() выше): словарь ищет узел целиком.
+                fb.innerHTML = tIcon(correct ? 'check' : 'paradox', 16, correct ? '✓' : '?');
+                fill(fb, [
+                    ' ', lab(correct ? (L.right || 'Верно!') : (L.notQuite || 'Не совсем.')),
+                    q.why && el('br'),
+                    q.why && !correct && lab(L.howItIs || 'Как на самом деле:'),
+                    q.why && !correct && ' ',
+                    q.why && el('span', null, q.why)      // содержание урока — с его разметкой
+                ]);
                 fb.style.display = '';
+                renderMath(fb);
                 actions.innerHTML = ''; actions.style.display = '';
                 // Кнопка «довести до идеи» — бот в режиме hint (правильный ответ не выдаёт)
                 var askBtn = el('button', 'tq-ask', '');
@@ -397,6 +516,24 @@
                 var eb = el('button', 'tq-send', L.check || 'Проверить'); eb.type = 'button';
                 ew.appendChild(ei); ew.appendChild(eu); ew.appendChild(eb);
                 card.appendChild(ew);
+                // Подсказка про запись числа. Живёт под полем и появляется только тогда, когда
+                // мы ввод не поняли: до этого читателю не о чем читать инструкцию.
+                var etip = el('div', 'tq-tip'); etip.style.display = 'none';
+                etip.setAttribute('role', 'status');
+                card.appendChild(etip);
+                function showTip(parts) {
+                    etip.innerHTML = '';
+                    fill(etip, parts);
+                    etip.style.display = '';
+                    ei.setAttribute('aria-invalid', 'true');
+                    ei.focus();
+                }
+                function hideTip() {
+                    etip.style.display = 'none';
+                    ei.removeAttribute('aria-invalid');
+                }
+                // Начал править ввод — замечание убираем: оно про прошлую запись, а не про эту.
+                ei.addEventListener('input', hideTip);
                 eb.addEventListener('click', function () {
                     var raw = ei.value.trim();
                     // Правило проверки — одно на проект, js/quiz-grade.js: оно понимает и
@@ -404,22 +541,38 @@
                     // правило жило прямо здесь, знало только множитель и потому не пропускало
                     // даже точный авторский ответ там, где автор писал ±0,1.
                     var G = (typeof B42Grade !== 'undefined') ? B42Grade : null;
-                    if (!G || !isFinite(G.parseValue(raw))) return;
+                    if (!G) { console.warn('B42Grade не подключён — проверка прикидок не работает'); }
+                    // Молчащая кнопка — худшее из возможного: читатель не понимает, сломалось
+                    // у него или у нас, и жмёт ещё раз. Говорим, какая запись понимается,
+                    // и попытку не засчитываем.
+                    if (!raw) {
+                        showTip([lab(L.estEmpty || 'Впишите число — хватит и порядка величины.')]);
+                        return;
+                    }
+                    if (!G || !isFinite(G.parseValue(raw))) {
+                        showTip([lab(L.estFormat || 'Не разобрал число. Можно так:'), ' ',
+                            codeEl('5·10³²'), ' ', codeEl('10⁻³⁴'), ' ', codeEl('0,5'), ' ', codeEl('−10')]);
+                        return;
+                    }
+                    hideTip();
                     var res = G.estimate(raw, q);
                     var ok = res.ok;
                     // Единица «—» означает «безразмерная»: подставлять её в текст нельзя,
                     // иначе получается «промахнулись на 0.65 —» и двойное тире рядом.
                     var unit = (q.unit && q.unit !== '—') ? ' ' + q.unit : '';
-                    var miss = res.kind === 'abs'
-                        ? ((L.estOffBy || 'вы промахнулись на') + ' ' + Number(res.off.toPrecision(2)) + unit)
-                        : ((L.estOff || 'вы промахнулись в') + ' ' + res.off.toFixed(1) + '×');
                     fb.className = 'tq-fb ' + (ok ? 'ok' : 'no');
-                    fb.innerHTML = tIcon(ok ? 'check' : 'paradox', 16, ok ? '✓' : '?') + ' ' +
-                        (ok ? (L.estRight || 'Порядок верный!') : (L.estWrong || 'Мимо порядка.')) +
-                        ' ' + (L.estAnswer || 'Точное значение') + ': <b>' + q.answer + unit + '</b>' +
-                        (ok ? '' : ' — ' + miss) +
-                        '<br>' + (q.why || '');
+                    fb.innerHTML = tIcon(ok ? 'check' : 'paradox', 16, ok ? '✓' : '?');
+                    // Каждая подпись — своим узлом: иначе словарь курса её не найдёт и на
+                    // английской странице останется русское «Точное значение».
+                    fill(fb, [
+                        ' ', lab(ok ? (L.estRight || 'Порядок верный!') : (L.estWrong || 'Мимо порядка.')),
+                        ' ', lab(L.estAnswer || 'Точное значение'), ': ',
+                        fill(el('b'), [ltr(numText(q.answer)), unit])
+                    ]);
+                    if (!ok) fill(fb, [' — '].concat(missParts(res, L, unit)));
+                    if (q.why) fill(fb, [el('br'), el('span', null, q.why)]);
                     fb.style.display = '';
+                    renderMath(fb);
                     results[q.id] = { correct: ok, answer: raw };
                     ei.disabled = true; eb.disabled = true; eb.style.opacity = .5;
                     actions.innerHTML = ''; actions.style.display = '';
@@ -501,12 +654,21 @@
         var lv = levels.slice().reverse().find(function (x) { return pct >= x.min; }) || levels[0];
         root.innerHTML = '';
         var card = el('div', 'tq-score');
-        card.appendChild(el('h3', null, (L.yourResult || 'Ваш результат') + ': ' + score.right + '/' + score.total + ' — ' + lv.title));
+        // Подпись — своим узлом, балл и вердикт — своими: склейку словарь не находит (см. lab()).
+        var h3 = el('h3');
+        fill(h3, [lab(L.yourResult || 'Ваш результат'),
+                  ': ' + score.right + '/' + score.total + ' — ', lab(lv.title)]);
+        card.appendChild(h3);
         var bar = el('div', 'tq-score-bar');
-        var fill = el('div', 'tq-score-fill'); fill.style.width = pct + '%';
-        bar.appendChild(fill); card.appendChild(bar);
+        var barFill = el('div', 'tq-score-fill'); barFill.style.width = pct + '%';
+        bar.appendChild(barFill); card.appendChild(bar);
         card.appendChild(el('p', null, lv.text));
-        if (lv.next) card.appendChild(el('p', null, '<b>' + (L.whereNext || 'Куда дальше') + ':</b> ' + lv.next));
+        if (lv.next) {
+            var p = el('p');
+            var b = el('b'); b.appendChild(lab(L.whereNext || 'Куда дальше')); b.appendChild(document.createTextNode(':'));
+            fill(p, [b, ' ', el('span', null, lv.next)]);
+            card.appendChild(p);
+        }
         root.appendChild(card);
         return card;
     }

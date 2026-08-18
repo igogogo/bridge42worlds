@@ -186,11 +186,26 @@
   },
   "math": {
    "title": "Математика, которая здесь понадобилась",
-   "text": [
-    "Почему сигнал быстрый, а электроны медленные. Возьмите садовый шланг, уже заполненный водой. Открыв кран, вы получите струю с дальнего конца практически сразу — но не потому, что вода долетела, а потому что давление передалось по всей длине. Каждая молекула лишь чуть-чуть подвинула соседнюю. В проводе то же самое: поле устанавливается со скоростью, близкой к световой, и все электроны трогаются одновременно, хотя каждый ползёт медленно. Отсюда и ответ на детский вопрос, почему свет зажигается сразу.",
-    "Что такое скорость дрейфа. Электроны в металле и без всякого напряжения носятся с бешеными скоростями — порядка тысячи километров в секунду, хаотично во все стороны. Поле добавляет к этому хаосу крошечный общий сдвиг: как рой мошкары, который весь целиком медленно сносит ветром, хотя каждая мошка мечется гораздо быстрее. Ток создаёт именно этот снос, а не собственное движение.",
-    "Почему получается постоянная скорость, а не ускорение. Поле действует постоянной силой, и по Ньютону электрон должен разгоняться бесконечно. Но каждое столкновение обнуляет накопленное. Устанавливается равновесие: сколько поле набрало за время между ударами, столько удар и отнял. Ровно так парашютист падает с постоянной скоростью, хотя тяжесть тянет его непрерывно, — и ровно так же устроено любое трение.",
-    "Почему в потерях квадрат, а в передаче первая степень. Передаваемая мощность есть произведение напряжения на ток, и её можно набрать по-разному: большим током при малом напряжении или наоборот. А потери в проводе зависят только от тока, причём квадратично. Значит выгодно всеми силами уменьшать ток. Подняв напряжение вдесятеро и уменьшив ток вдесятеро, вы передадите ту же мощность, а потеряете в сто раз меньше. Вся архитектура электросетей с их подстанциями выросла из этого сопоставления квадрата с единицей."
+   "lead": "Три приёма: как считают поток через сечение, что делать с постоянной силой, которая не разгоняет, и почему показатель степени решает всё.",
+   "items": [
+    {
+     "what": "Как из плотности и скорости выходит поток",
+     "why": "В первом шаге вывода стоит $I = neSu$, и это не формула, которую надо запомнить, а универсальный способ считать поток. Возьмите сечение провода $S$ и отложите от него отрезок длины $u$: ровно столько заряды успевают пройти за секунду. Все, кто оказался внутри цилиндра объёмом $Su$, пересекут сечение; их число есть $nSu$, а перенесённый заряд — $enSu$. Тем же приёмом считают расход воды в трубе, поток машин через перекрёсток и число молекул, ударяющихся о стенку: плотность умножить на площадь и на скорость. Проверьте размерность — единицы собираются в ампер сами, и это лучшая проверка того, что множители расставлены верно.",
+     "latex": "I = \\underbrace{n}_{1/\\text{м}^{3}} \\cdot \\underbrace{e}_{\\text{Кл}} \\cdot \\underbrace{S\\,u}_{\\text{м}^{3}/\\text{с}} \\;=\\; \\text{Кл}/\\text{с} = \\text{А}",
+     "kit": "flux"
+    },
+    {
+     "what": "Сила постоянна, а скорость всё равно постоянна",
+     "why": "Второй шаг вывода выглядит как нарушение законов Ньютона: поле давит на электрон неизменной силой $eE$, значит он обязан разгоняться без конца. Разгоняется, но недолго. График скорости отдельного электрона — пила: участок равномерного разгона, потом столкновение обнуляет набранное, и всё начинается заново. В точке излома производной не существует вовсе, поэтому работают не мгновенные значения, а среднее по множеству зубцов. Такое среднее со временем не растёт: его задаёт высота зубца, то есть время свободного пробега, — чем реже столкновения, тем выше дрейф. Здесь стоит быть внимательным к множителю. Если бы все пробеги длились ровно $\\tau$, скорость на каждом зубце росла бы от нуля до $a\\tau$ линейно, и среднее вышло бы вдвое меньше вершины: $eE\\tau/2m$. В шаге вывода двойки нет, и это не описка: времена свободного пробега не одинаковы, а распределены экспоненциально, и у такого распределения среднее время, прошедшее с последнего столкновения, равно самому $\\tau$, а не его половине. Пила — картинка для интуиции, формула Друде — результат аккуратного усреднения; расходятся они ровно вдвое, и лучше знать, где именно. Сам приём — усреднять быстрый хаос до медленного тренда — пригодится всюду, где трение уравновешивает силу.",
+     "latex": "a = \\frac{eE}{m} = \\text{const}, \\qquad \\langle u\\rangle_{\\text{пила}} = \\frac{a\\tau}{2}, \\qquad u_{\\text{Друде}} = a\\tau = \\frac{eE\\tau}{m}",
+     "kit": "derivative"
+    },
+    {
+     "what": "Первая степень против квадрата",
+     "why": "В шестом шаге вывода сталкиваются два выражения для мощности: переданная $P = UI$ и потерянная $P = I^{2}R$. Ток входит в первое в первой степени, во второе — во второй, и это решает всю архитектуру энергетики. Зафиксируем переданную мощность и поднимем напряжение вдесятеро: ток упадёт вдесятеро, а потери — в сто раз, потому что квадрат превращает десятку в сотню. Правило общее: когда две величины зависят от одного множителя с разными показателями, давить надо на тот, что входит в большей степени. Так же читается и $R = \\rho L/S$: удвоив длину провода, вы удвоите сопротивление, а удвоив диаметр — уменьшите его вчетверо, ведь площадь идёт как квадрат.",
+     "latex": "P_{\\text{перед}} \\propto I, \\qquad P_{\\text{потери}} \\propto I^{2} \\;\\Longrightarrow\\; I \\downarrow 10 \\;\\Rightarrow\\; P_{\\text{потери}} \\downarrow 100",
+     "kit": "propto"
+    }
    ]
   },
   "example": {
@@ -571,15 +586,6 @@
    "plate": "Current is a flow of a charged crowd crawling through an obstructing lattice. Hence the proportionality of voltage to current, heating proportional to the square of the current, and the increase of resistance with temperature.",
    "note": "Limits of applicability. Ohm's law is not a fundamental law of nature, but a property of certain materials under certain conditions. It is violated wherever it gets interesting: in a semiconductor diode current flows only in one direction, in a gas discharge resistance decreases with increasing current, in a superconductor it vanishes entirely. The Drude model is also crude: it does not explain why metals have so many free electrons and insulators have none — only quantum theory of solids answers that."
   },
-  "math": {
-   "title": "Mathematics that was needed here",
-   "text": [
-    "Why the signal is fast and electrons are slow. Take a garden hose already filled with water. When you turn on the tap, water comes out of the far end almost immediately — not because the water traveled that fast, but because pressure propagated along the entire length. Each molecule only slightly pushes its neighbor. The same happens in a wire: the field establishes at nearly the speed of light, and all electrons start moving simultaneously, although each crawls slowly. Hence the answer to a child's question why the light turns on immediately.",
-    "What is drift velocity. Electrons in a metal, even without any voltage, race around at furious speeds — on the order of a thousand kilometers per second, chaotically in all directions. The field adds a tiny overall shift to this chaos: like a swarm of midges that is slowly carried by the wind as a whole, even though each midge darts about much faster. The current is precisely this drift, not the individual motion.",
-    "Why a constant speed results, not acceleration. The field exerts a constant force, and according to Newton, the electron should accelerate indefinitely. But each collision resets the accumulated speed. An equilibrium is established: as much as the field gains between collisions, the collision takes away. Just like a skydiver falls at a constant speed even though gravity continuously pulls them — and that is exactly how any friction works.",
-    "Why losses have a square, and transmission has the first power. The transmitted power is the product of voltage and current, and it can be achieved in different ways: high current at low voltage or vice versa. But losses in the wire depend only on current, and quadratically. So it is advantageous to reduce current as much as possible. By raising the voltage tenfold and reducing the current tenfold, you transmit the same power but lose a hundred times less. The entire architecture of electric grids with their substations grew out of this comparison of a square to a first power."
-   ]
-  },
   "example": {
    "title": "Example with numbers: how slowly electrons actually crawl",
    "lead": "We calculate the drift velocity in an ordinary household wire — the number will be surprising.",
@@ -820,7 +826,31 @@
     "hint": "Power is the product of voltage and current. What needs to be done to find current?",
     "tolAbs": 1
    }
-  ]
+  ],
+  "math": {
+   "title": "The math you'll need here",
+   "lead": "Three tricks: how to calculate flow through a cross-section, what to do with a constant force that doesn't accelerate, and why the exponent decides everything.",
+   "items": [
+    {
+     "what": "How density and speed give flow",
+     "why": "In the first step of the derivation, we have $I = neSu$, and this is not a formula to memorize but a universal way to calculate flow. Take a cross-section of the wire $S$ and mark off a segment of length $u$ from it: this is exactly how far charges travel in one second. All charges inside the cylinder of volume $Su$ will cross the section; their number is $nSu$, and the charge carried is $enSu$. The same trick is used to calculate water flow in a pipe, the flow of cars through an intersection, and the number of molecules hitting a wall: density times area times speed. Check the dimensions — the units combine to give amperes by themselves, and this is the best check that the factors are placed correctly.",
+     "latex": "I = \\underbrace{n}_{1/\\text{m}^{3}} \\cdot \\underbrace{e}_{\\text{C}} \\cdot \\underbrace{S\\,u}_{\\text{m}^{3}/\\text{s}} \\;=\\; \\text{C}/\\text{s} = \\text{A}",
+     "kit": "flux"
+    },
+    {
+     "what": "The force is constant, but the speed is still constant",
+     "why": "The second step of the derivation looks like a violation of Newton's laws: the field pushes the electron with a constant force $eE$, so it must accelerate indefinitely. It does accelerate, but not for long. The velocity graph of a single electron is a sawtooth: a segment of uniform acceleration, then a collision resets the gained speed, and everything starts over. At the break point, the derivative does not exist at all, so we work not with instantaneous values but with the average over many teeth. Such an average does not grow with time: it is set by the height of the tooth, i.e., the free-flight time — the rarer the collisions, the higher the drift. Here you need to be careful with the factor. If all flights lasted exactly $\\tau$, the speed on each tooth would grow from zero to $a\\tau$ linearly, and the average would be half the peak: $eE\\tau/2m$. In the derivation step, there is no factor of 2, and this is not a typo: free-flight times are not equal but exponentially distributed, and for such a distribution, the average time since the last collision equals $\\tau$ itself, not half of it. The sawtooth is a picture for intuition; the Drude formula is the result of careful averaging; they differ by exactly a factor of 2, and it's better to know where. The trick itself — averaging fast chaos into a slow trend — will be useful everywhere friction balances a force.",
+     "latex": "a = \\frac{eE}{m} = \\text{const}, \\qquad \\langle u\\rangle_{\\text{sawtooth}} = \\frac{a\\tau}{2}, \\qquad u_{\\text{Drude}} = a\\tau = \\frac{eE\\tau}{m}",
+     "kit": "derivative"
+    },
+    {
+     "what": "First power versus square",
+     "why": "In the sixth step of the derivation, two expressions for power collide: the transmitted $P = UI$ and the lost $P = I^{2}R$. The current enters the first to the first power, and the second to the second power, and this decides the entire architecture of power engineering. Fix the transmitted power and raise the voltage tenfold: the current drops tenfold, and the losses drop a hundredfold, because the square turns ten into a hundred. The rule is general: when two quantities depend on one factor with different exponents, you should push on the one with the higher power. The same reading applies to $R = \\rho L/S$: doubling the wire length doubles the resistance, while doubling the diameter reduces it by a factor of four, since area goes as the square.",
+     "latex": "P_{\\text{trans}} \\propto I, \\qquad P_{\\text{loss}} \\propto I^{2} \\;\\Longrightarrow\\; I \\downarrow 10 \\;\\Rightarrow\\; P_{\\text{loss}} \\downarrow 100",
+     "kit": "propto"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Corriente y resistencia",
@@ -957,15 +987,6 @@
    ],
    "plate": "La corriente es un flujo de multitud cargada arrastrándose a través de una red que obstaculiza. De ahí la proporcionalidad entre voltaje y corriente, el calentamiento proporcional al cuadrado de la corriente, y el aumento de la resistencia con la temperatura.",
    "note": "Límites de aplicabilidad. La ley de Ohm no es una ley fundamental de la naturaleza, sino una propiedad de ciertos materiales bajo ciertas condiciones. Se viola en todas partes donde es interesante: en un diodo semiconductor la corriente solo fluye en una dirección, en una descarga de gas la resistencia disminuye al aumentar la corriente, en un superconductor desaparece por completo. El modelo de Drude también es tosco: no explica por qué un metal tiene tantos electrones libres y un aislante ninguno, — solo la teoría cuántica del estado sólido responde a eso."
-  },
-  "math": {
-   "title": "Matemáticas que fueron necesarias aquí",
-   "text": [
-    "Por qué la señal es rápida y los electrones lentos. Tome una manguera de jardín ya llena de agua. Al abrir el grifo, obtendrá un chorro en el extremo lejano casi de inmediato, pero no porque el agua haya llegado, sino porque la presión se transmitió a lo largo de toda la longitud. Cada molécula apenas empujó a la vecina. En el cable ocurre lo mismo: el campo se establece a una velocidad cercana a la de la luz, y todos los electrones se mueven simultáneamente, aunque cada uno se arrastra lentamente. De ahí la respuesta a la pregunta infantil de por qué la luz se enciende de inmediato.",
-    "Qué es la velocidad de deriva. Los electrones en un metal, incluso sin voltaje, se mueven a velocidades enormes — del orden de miles de kilómetros por segundo, caóticamente en todas direcciones. El campo agrega a este caos un pequeño desplazamiento común: como un enjambre de mosquitos que es arrastrado lentamente por el viento, aunque cada mosquito se agita mucho más rápido. La corriente crea precisamente este arrastre, no el movimiento propio.",
-    "Por qué se obtiene una velocidad constante y no una aceleración. El campo actúa con una fuerza constante, y según Newton el electrón debería acelerarse indefinidamente. Pero cada colisión anula lo acumulado. Se establece un equilibrio: lo que el campo ganó durante el tiempo entre impactos, el impacto lo quitó. Exactamente así cae un paracaidista a velocidad constante, aunque la gravedad lo atrae continuamente — y así está constituida cualquier fricción.",
-    "Por qué en las pérdidas es el cuadrado y en la transmisión la primera potencia. La potencia transmitida es el producto del voltaje por la corriente, y se puede lograr de diferentes maneras: con gran corriente y bajo voltaje o viceversa. Pero las pérdidas en el cable dependen solo de la corriente, y de forma cuadrática. Por lo tanto, es ventajoso reducir la corriente tanto como sea posible. Al aumentar el voltaje diez veces y reducir la corriente diez veces, se transmite la misma potencia y se pierde cien veces menos. Toda la arquitectura de las redes eléctricas con sus subestaciones surgió de esta comparación del cuadrado con la unidad."
-   ]
   },
   "example": {
    "title": "Ejemplo con números: qué tan lentamente se arrastran realmente los electrones",
@@ -1207,7 +1228,31 @@
     "hint": "La potencia es el producto del voltaje por la corriente. ¿Qué hay que hacer para encontrar la corriente?",
     "tolAbs": 1
    }
-  ]
+  ],
+  "math": {
+   "title": "Matemáticas que se necesitaron aquí",
+   "lead": "Tres trucos: cómo se calcula el flujo a través de una sección, qué hacer con una fuerza constante que no acelera, y por qué el exponente lo decide todo.",
+   "items": [
+    {
+     "what": "Cómo el flujo surge de la densidad y la velocidad",
+     "why": "En el primer paso de la derivación está $I = neSu$, y no es una fórmula para memorizar, sino una forma universal de calcular flujos. Tome la sección del cable $S$ y marque desde ella un segmento de longitud $u$: exactamente esa distancia recorren las cargas en un segundo. Todos los que están dentro del cilindro de volumen $Su$ cruzarán la sección; su número es $nSu$, y la carga transportada es $enSu$. El mismo truco se usa para calcular el caudal de agua en una tubería, el flujo de autos en un cruce y el número de moléculas que golpean una pared: densidad multiplicada por área y por velocidad. Verifique las dimensiones: las unidades se combinan en amperios por sí solas, y esa es la mejor comprobación de que los factores están bien colocados.",
+     "latex": "I = \\underbrace{n}_{1/\\text{m}^{3}} \\cdot \\underbrace{e}_{\\text{C}} \\cdot \\underbrace{S\\,u}_{\\text{m}^{3}/\\text{s}} \\;=\\; \\text{C}/\\text{s} = \\text{A}",
+     "kit": "flux"
+    },
+    {
+     "what": "La fuerza es constante, pero la velocidad también lo es",
+     "why": "El segundo paso de la derivación parece violar las leyes de Newton: el campo empuja al electrón con una fuerza constante $eE$, por lo que debería acelerar sin fin. Acelera, pero no por mucho tiempo. La gráfica de la velocidad de un electrón individual es una sierra: un tramo de aceleración uniforme, luego una colisión que anula lo ganado, y todo comienza de nuevo. En el punto de quiebre la derivada no existe en absoluto, por lo que no se usan valores instantáneos, sino el promedio sobre muchos dientes. Ese promedio no crece con el tiempo: lo fija la altura del diente, es decir, el tiempo de vuelo libre; cuanto menos frecuentes son las colisiones, mayor es la deriva. Aquí hay que prestar atención al factor. Si todos los recorridos duraran exactamente $\\tau$, la velocidad en cada diente crecería linealmente de cero a $a\\tau$, y el promedio sería la mitad del pico: $eE\\tau/2m$. En el paso de la derivación no hay un dos, y no es un error: los tiempos de vuelo libre no son iguales, sino que están distribuidos exponencialmente, y en esa distribución el tiempo promedio transcurrido desde la última colisión es igual a $\\tau$ mismo, no a su mitad. La sierra es una imagen para la intuición; la fórmula de Drude es el resultado de un promedio cuidadoso; difieren exactamente en un factor de dos, y es mejor saber dónde. El truco en sí —promediar el caos rápido hasta obtener una tendencia lenta— servirá en todas partes donde la fricción equilibra una fuerza.",
+     "latex": "a = \\frac{eE}{m} = \\text{const}, \\qquad \\langle u\\rangle_{\\text{sierra}} = \\frac{a\\tau}{2}, \\qquad u_{\\text{Drude}} = a\\tau = \\frac{eE\\tau}{m}",
+     "kit": "derivative"
+    },
+    {
+     "what": "Primera potencia contra cuadrado",
+     "why": "En el sexto paso de la derivación chocan dos expresiones para la potencia: la transmitida $P = UI$ y la perdida $P = I^{2}R$. La corriente entra en la primera con exponente uno, en la segunda con exponente dos, y esto decide toda la arquitectura de la energía. Fijemos la potencia transmitida y subamos el voltaje diez veces: la corriente cae diez veces, y las pérdidas caen cien veces, porque el cuadrado convierte diez en cien. La regla es general: cuando dos cantidades dependen de un mismo factor con diferentes exponentes, hay que presionar sobre el que entra con mayor potencia. Así se lee también $R = \\rho L/S$: si duplicas la longitud del cable, duplicas la resistencia; si duplicas el diámetro, la reduces a la cuarta parte, porque el área va como el cuadrado.",
+     "latex": "P_{\\text{transmitida}} \\propto I, \\qquad P_{\\text{pérdidas}} \\propto I^{2} \\;\\Longrightarrow\\; I \\downarrow 10 \\;\\Rightarrow\\; P_{\\text{pérdidas}} \\downarrow 100",
+     "kit": "propto"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "التيار والمقاومة",
@@ -1344,15 +1389,6 @@
    ],
    "plate": "التيار هو تدفق حشد مشحون يزحف عبر شبكة معيقة. ومن هنا تأتي تناسب الجهد مع التيار، والتسخين المتناسب مع مربع التيار، وزيادة المقاومة مع درجة الحرارة.",
    "note": "حدود التطبيق. قانون أوم ليس قانونًا طبيعيًا أساسيًا، بل خاصية لمواد معينة في ظروف معينة. يُخالف في كل مكان مثير للاهتمام: في الصمام الثنائي الشبه موصل، يسري التيار في اتجاه واحد فقط، في التفريغ الغازي تقل المقاومة مع زيادة التيار، في الموصل الفائق تختفي تمامًا. نموذج درود تقريبي أيضًا: لا يشرح لماذا تحتوي المعادن على هذا العدد الكبير من الإلكترونات الحرة بينما العوازل لا تحتوي على أي منها - فقط نظرية الكم للأجسام الصلبة تجيب على ذلك."
-  },
-  "math": {
-   "title": "الرياضيات التي كانت ضرورية هنا",
-   "text": [
-    "لماذا الإشارة سريعة والإلكترونات بطيئة. خذ خرطوم حديقة مملوءًا بالفعل بالماء. بمجرد فتح الصنبور، تحصل على تيار من الطرف البعيد على الفور تقريبًا - ليس لأن الماء وصل، بل لأن الضغط انتقل على طول الخرطوم. كل جزيء حرك جاره قليلاً. في السلك نفس الشيء: المجال ينتشر بسرعة قريبة من سرعة الضوء، وتتحرك جميع الإلكترونات في وقت واحد، على الرغم من أن كل واحد يزحف ببطء. ومن هنا يأتي الجواب على سؤال الطفولة لماذا يضيء الضوء فورًا.",
-    "ما هي سرعة الانجراف. الإلكترونات في المعدن حتى بدون جهد تتحرك بسرعات هائلة - حوالي ألف كيلومتر في الثانية، بشكل عشوائي في كل الاتجاهات. يضيف المجال إلى هذه الفوضى انزياحًا صغيرًا مشتركًا: مثل سرب من البراغيش ينجرف ببطء ككل بفعل الرياح، على الرغم من أن كل برغوث يتحرك أسرع بكثير. التيار يخلق هذا الانجراف، وليس الحركة الذاتية.",
-    "لماذا نحصل على سرعة ثابتة وليس تسارعًا. يؤثر المجال بقوة ثابتة، ووفقًا لنيوتن يجب أن يتسارع الإلكترون بلا حدود. لكن كل تصادم يعيد السرعة إلى الصفر. ينشأ توازن: ما تكتسبه من المجال بين التصادمات، يفقده في التصادم. تمامًا مثل المظلي الذي يسقط بسرعة ثابتة على الرغم من أن الجاذبية تسحبه باستمرار - وهكذا يعمل أي احتكاك.",
-    "لماذا الخسائر تربيعية والنقل خطي. القدرة المنقولة هي حاصل ضرب الجهد في التيار، ويمكن تحقيقها بطرق مختلفة: تيار كبير بجهد صغير أو العكس. أما الخسائر في السلك فتعتمد فقط على التيار، وبشكل تربيعي. لذلك من المفيد تقليل التيار قدر الإمكان. برفع الجهد عشرة أضعاف وخفض التيار عشرة أضعاف، تنقل نفس القدرة ولكن تخسر أقل بمئة مرة. كل بنية شبكات الكهرباء مع محطاتها التحويلية نشأت من هذه المقارنة بين المربع والواحد."
-   ]
   },
   "example": {
    "title": "مثال بالأرقام: ما مدى بطء حركة الإلكترونات في الواقع",
@@ -1594,7 +1630,31 @@
     "hint": "القدرة هي حاصل ضرب الجهد في التيار. ما الذي يجب فعله لإيجاد التيار؟",
     "tolAbs": 1
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات اللازمة هنا",
+   "lead": "ثلاث حيل: كيف نحسب التدفق عبر مقطع، وماذا نفعل مع قوة ثابتة لا تسرع، ولماذا الأس يحسم كل شيء.",
+   "items": [
+    {
+     "what": "كيف ينتج التدفق من الكثافة والسرعة",
+     "why": "في الخطوة الأولى من الاشتقاق نجد $I = neSu$، وهذه ليست معادلة يجب حفظها، بل طريقة عامة لحساب التدفق. خذ مقطعًا من السلك مساحته $S$ وضع عليه قطعة بطول $u$: هذا بالضبط ما تقطعه الشحنات في ثانية. كل من يوجد داخل الأسطوانة ذات الحجم $Su$ سيعبر المقطع؛ عددهم $nSu$، والشحنة المنقولة $enSu$. بنفس الطريقة نحسب تدفق الماء في أنبوب، وتدفق السيارات عبر تقاطع، وعدد الجزيئات التي تصطدم بالجدار: الكثافة مضروبة في المساحة والسرعة. تحقق من الأبعاد — الوحدات تتجمع لتكوين الأمبير تلقائيًا، وهذا أفضل تحقق من صحة ترتيب العوامل.",
+     "latex": "I = \\underbrace{n}_{1/\\text{م}^{3}} \\cdot \\underbrace{e}_{\\text{كولوم}} \\cdot \\underbrace{S\\,u}_{\\text{م}^{3}/\\text{ث}} \\;=\\; \\text{كولوم}/\\text{ث} = \\text{أمبير}",
+     "kit": "flux"
+    },
+    {
+     "what": "القوة ثابتة، لكن السرعة تظل ثابتة",
+     "why": "الخطوة الثانية في الاشتقاق تبدو وكأنها تنتهك قوانين نيوتن: الحقل يدفع الإلكترون بقوة ثابتة $eE$، لذا يجب أن يتسارع بلا نهاية. إنه يتسارع، لكن ليس لوقت طويل. مخطط سرعة إلكترون فردي هو سن المنشار: فترة تسارع منتظم، ثم تصادم يلغي ما اكتسبه، ويبدأ كل شيء من جديد. عند نقطة الانكسار لا وجود للمشتقة إطلاقًا، لذا لا نستخدم القيم اللحظية، بل المتوسط عبر العديد من الأسنان. هذا المتوسط لا يزداد مع الزمن: ارتفاع السن يحدده، أي زمن الطيران الحر — كلما كانت التصادمات أقل، كان الانجراف أعلى. هنا يجب الانتباه إلى العامل. إذا كانت جميع المسافات الحرة تساوي تمامًا $\\tau$، فإن السرعة على كل سن تنمو من صفر إلى $a\\tau$ خطيًا، والمتوسط سيكون نصف القمة: $eE\\tau/2m$. في خطوة الاشتقاق لا يوجد اثنان، وهذا ليس خطأ مطبعي: أزمنة الطيران الحر ليست متساوية، بل موزعة أسياً، وفي هذا التوزيع متوسط الزمن المنقضي منذ آخر تصادم يساوي $\\tau$ نفسه، وليس نصفه. سن المنشار صورة للحدس، ومعادلة درودي نتيجة متوسط دقيق؛ يختلفان بمقدار النصف بالضبط، ومن الأفضل معرفة أين. نفس الحيلة — متوسط الفوضى السريعة إلى اتجاه بطيء — ستكون مفيدة في كل مكان يوازن فيه الاحتكاك قوة.",
+     "latex": "a = \\frac{eE}{m} = \\text{ثابت}, \\qquad \\langle u\\rangle_{\\text{سن المنشار}} = \\frac{a\\tau}{2}, \\qquad u_{\\text{درودي}} = a\\tau = \\frac{eE\\tau}{m}",
+     "kit": "derivative"
+    },
+    {
+     "what": "الأس الأول مقابل الأس الثاني",
+     "why": "في الخطوة السادسة من الاشتقاق، تتصادم تعبيران للقدرة: المنقولة $P = UI$ والمفقودة $P = I^{2}R$. التيار يدخل الأول بأس واحد، والثاني بأس اثنين، وهذا يحسم بنية الطاقة الكهربائية كلها. ثبت القدرة المنقولة وارفع الجهد عشرة أضعاف: التيار ينخفض عشرة أضعاف، والخسائر مئة ضعف، لأن المربع يحول العشرة إلى مئة. القاعدة عامة: عندما تعتمد كميتان على نفس العامل بأسس مختلفة، اضغط على الذي يدخل بأس أكبر. هكذا نقرأ أيضًا $R = \\rho L/S$: مضاعفة طول السلك تضاعف المقاومة، بينما مضاعفة القطر تقللها أربع مرات، لأن المساحة تتناسب مع المربع.",
+     "latex": "P_{\\text{المنقولة}} \\propto I, \\qquad P_{\\text{الخسائر}} \\propto I^{2} \\;\\Longrightarrow\\; I \\downarrow 10 \\;\\Rightarrow\\; P_{\\text{الخسائر}} \\downarrow 100",
+     "kit": "propto"
+    }
+   ]
+  }
  },
  "laws": [
   "ohms_law"

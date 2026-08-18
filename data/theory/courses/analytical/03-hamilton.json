@@ -102,31 +102,55 @@
   },
   "derivation": {
    "title": "Как траектория превращается в точку",
-   "lead": "Переход делается в три шага и меняет не физику, а способ на неё смотреть.",
+   "lead": "Переход меняет не физику, а способ на неё смотреть: скорость обменивается на импульс, и одно уравнение второго порядка распадается на два первого.",
    "steps": [
     {
      "text": "В лагранжевом описании независимыми были координата и скорость. Гамильтон заменяет скорость на импульс — ту самую величину, которая, как мы выяснили, сохраняется при симметрии. Взамен получается симметричная пара переменных.",
      "latex": "(q, \\dot{q}) \\;\\longrightarrow\\; (q, p), \\qquad p = \\frac{\\partial L}{\\partial \\dot{q}}",
-     "figure": "action",
+     "figure": "qptrade",
      "figCaption": "Скорость уступает место импульсу — переменные становятся равноправными"
+    },
+    {
+     "text": "Заменить переменную в функции простой подстановкой нельзя: подставив в $L(q,\\dot{q})$ выражение $\\dot{q}(p)$, мы получим функцию, по которой исходный лагранжиан восстанавливается лишь с точностью до постоянной. Правильный обмен называется преобразованием Лежандра: из функции вычитают произведение старой переменной на её наклон. Смысл геометрический: выпуклую кривую можно задать точками, а можно семейством её касательных, и второе описание знает о ней ровно столько же. Обмен обратим, пока $\\partial^2 L/\\partial \\dot{q}^2 \\neq 0$: у выпуклой кривой каждому наклону отвечает ровно одна точка касания.",
+     "latex": "H(q, p) = p\\,\\dot{q} - L(q, \\dot{q}), \\qquad \\dot{q} = \\dot{q}(q, p) \\;\\text{из}\\; p = \\frac{\\partial L}{\\partial \\dot{q}}",
+     "figure": "legendre",
+     "figCaption": "Касательная с наклоном p отсекает на оси отрезок −H: это второе описание той же кривой"
+    },
+    {
+     "text": "Проверим, что обмен честный. Если $H$ и правда зависит только от $q$ и $p$, то в его дифференциале не должно остаться $d\\dot{q}$. Дифференцируем $H = p\\dot{q} - L$ сразу по всем трём аргументам и смотрим на скобку при $d\\dot{q}$: там стоит $p - \\partial L/\\partial \\dot{q}$, а это ноль по самому определению импульса. Скорость исчезает не по нашему желанию — мы заранее вычли ровно то произведение, которое её убирает.",
+     "latex": "dH = \\dot{q}\\,dp + \\underbrace{\\left(p - \\frac{\\partial L}{\\partial \\dot{q}}\\right)}_{=\\;0}\\,d\\dot{q} - \\frac{\\partial L}{\\partial q}\\,dq",
+     "figure": "hcancel",
+     "figCaption": "Три слагаемых дифференциала: среднее гасится определением импульса, и скорость уходит из описания"
+    },
+    {
+     "text": "Осталась одна незнакомая производная — $\\partial L/\\partial q$. Уравнение Лагранжа из прошлого параграфа как раз и говорит, чему она равна: производной импульса по времени. Подставляем и сравниваем результат с общим видом дифференциала функции двух переменных. Приращения $dq$ и $dp$ независимы, поэтому коэффициенты при них обязаны совпасть по отдельности — отсюда и берётся пара уравнений.",
+     "latex": "\\frac{\\partial L}{\\partial q} = \\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{q}} = \\dot{p} \\quad\\Longrightarrow\\quad dH = \\dot{q}\\,dp - \\dot{p}\\,dq = \\frac{\\partial H}{\\partial p}\\,dp + \\frac{\\partial H}{\\partial q}\\,dq",
+     "figure": "coefmatch",
+     "figCaption": "Два выражения для одного дифференциала: dq и dp независимы, коэффициенты сравниваются порознь"
     },
     {
      "text": "Вместо одного уравнения второго порядка получаются два первого. Читаются они просто: первое говорит, куда система движется, второе — как меняется её импульс. Обратите внимание на минус: он и делает движение вращением, а не разбеганием.",
      "latex": "\\dot{q} = \\frac{\\partial H}{\\partial p}, \\qquad \\dot{p} = -\\frac{\\partial H}{\\partial q}",
-     "figure": "energyswap",
+     "figure": "heqpair",
      "figCaption": "Два уравнения вместо одного: координата и импульс меняются согласованно"
     },
     {
      "text": "Нарисуем состояние точкой на плоскости $(q, p)$. Для груза на пружине энергия складывается из двух квадратов, а линия постоянной энергии на такой плоскости — эллипс. Движение оказывается обходом этого эллипса с постоянной скоростью по площади.",
      "latex": "H = \\frac{p^2}{2m} + \\frac{kq^2}{2} = \\text{const}",
-     "figure": "shadow",
+     "figure": "phaseellipse",
      "figCaption": "Колебание в фазовом пространстве — замкнутая кривая, а не линия туда-обратно"
     },
     {
      "text": "Сохранение энергии на этом языке выглядит наглядно: точка не может сойти со своей кривой. А теорема Лиувилля добавляет: если взять не одну точку, а облако начальных состояний, его площадь не меняется со временем. Отсюда позже вырастет статистическая физика.",
      "latex": "\\frac{dH}{dt} = 0, \\qquad \\text{площадь облака состояний} = \\text{const}",
-     "figure": "anywell",
+     "figure": "stayoncurve",
      "figCaption": "Замкнутая кривая — это и есть закон сохранения энергии в фазовом виде"
+    },
+    {
+     "text": "Осталось понять, почему площадь облака не меняется. Пара $(\\dot{q}, \\dot{p})$ — это поле скоростей на фазовой плоскости: по нему течёт «жидкость», сложенная из состояний. Растяжение этой жидкости вдоль оси $q$ равно $\\partial \\dot{q}/\\partial q$, вдоль оси $p$ — $\\partial \\dot{p}/\\partial p$, а по уравнениям Гамильтона это одна и та же смешанная производная $H$, взятая с разными знаками. Они гасятся при любом гамильтониане: течение несжимаемо, поэтому пятно вольно растягиваться и заворачиваться, но не менять площадь.",
+     "latex": "\\frac{\\partial \\dot{q}}{\\partial q} + \\frac{\\partial \\dot{p}}{\\partial p} = \\frac{\\partial^2 H}{\\partial q\\,\\partial p} - \\frac{\\partial^2 H}{\\partial p\\,\\partial q} = 0",
+     "figure": "phaseblob",
+     "figCaption": "Пятно начальных состояний вытягивается и изгибается, но площадь у него та же"
     }
    ],
    "plate": "\\dot{q} = \\partial H/\\partial p, \\qquad \\dot{p} = -\\partial H/\\partial q",
@@ -339,7 +363,7 @@
      "облако",
      "миллиард",
      "квант",
-     "нет траектор",
+     "ансамбл",
      "фазов"
     ],
     "why": "Траекторию миллиардов частиц не нарисовать, а облако состояний — можно; в квантовой механике траектории нет вообще, а состояние остаётся. Язык состояний пережил обе смены картины мира.",
@@ -410,39 +434,6 @@
      "unit": "—"
     }
    ]
-  },
-  "derivation": {
-   "title": "How a trajectory becomes a point",
-   "lead": "The transition is done in three steps and changes not the physics, but the way of looking at it.",
-   "steps": [
-    {
-     "text": "In the Lagrangian description, coordinate and velocity were independent. Hamilton replaces velocity with momentum — the very quantity that, as we found, is conserved under symmetry. In return, we get a symmetric pair of variables.",
-     "latex": "(q, \\dot{q}) \\;\\longrightarrow\\; (q, p), \\qquad p = \\frac{\\partial L}{\\partial \\dot{q}}",
-     "figure": "action",
-     "figCaption": "Velocity gives way to momentum — the variables become equal in rights"
-    },
-    {
-     "text": "Instead of one second-order equation, we get two first-order ones. They are read simply: the first says where the system is moving, the second how its momentum changes. Note the minus sign: it makes motion a rotation, not a divergence.",
-     "latex": "\\dot{q} = \\frac{\\partial H}{\\partial p}, \\qquad \\dot{p} = -\\frac{\\partial H}{\\partial q}",
-     "figure": "energyswap",
-     "figCaption": "Two equations instead of one: coordinate and momentum change in concert"
-    },
-    {
-     "text": "Let us draw the state as a point on the $(q, p)$ plane. For a mass on a spring, energy is the sum of two squares, and the constant-energy line on that plane is an ellipse. Motion turns out to be a traversal of this ellipse with a constant speed in area.",
-     "latex": "H = \\frac{p^2}{2m} + \\frac{kq^2}{2} = \\text{const}",
-     "figure": "shadow",
-     "figCaption": "Oscillation in phase space is a closed curve, not a back-and-forth line"
-    },
-    {
-     "text": "Conservation of energy in this language looks clear: the point cannot leave its curve. And Liouville's theorem adds: if we take not one point but a cloud of initial states, its area does not change over time. From this, statistical physics will later grow.",
-     "latex": "\\frac{dH}{dt} = 0, \\qquad \\text{area of cloud of states} = \\text{const}",
-     "figure": "anywell",
-     "figCaption": "Closed curve — that is the law of conservation of energy in phase space form"
-    }
-   ],
-   "plate": "\\dot{q} = \\partial H/\\partial p, \\qquad \\dot{p} = -\\partial H/\\partial q",
-   "plateCap": "State of the system is a point $(q,p)$, motion is the path of this point along the constant-energy line",
-   "note": "The Hamiltonian does not always coincide with total energy: if constraints depend on time or rotating coordinates are chosen, these two quantities diverge. For the course problems, the coincidence holds, but it is worth remembering the difference."
   },
   "math": {
    "title": "Mathematics needed here",
@@ -624,7 +615,7 @@
     ],
     "answer": 1,
     "why": "A point specifies the pair $(q,p)$ — coordinate and momentum. This is enough to predict all subsequent motion.",
-    "hint": "Спросите себя, что нужно знать, чтобы предсказать всё дальнейшее движение. Одних координат не хватает — чего именно недостаёт?"
+    "hint": "Ask yourself what you need to know to predict all further motion. Coordinates alone are not enough — what exactly is missing?"
    },
    {
     "id": "h2",
@@ -638,7 +629,7 @@
     ],
     "answer": 1,
     "why": "The point cannot leave the constant-energy line, and for an oscillator this line is an ellipse. The closedness of the curve is energy conservation in phase space form.",
-    "hint": "Через период система возвращается в то же самое состояние: та же координата, тот же импульс. Что это означает для линии, которую точка чертит на плоскости?"
+    "hint": "After a period, the system returns to the same state: the same coordinate, the same momentum. What does this mean for the line that the point draws on the plane?"
    },
    {
     "id": "h3",
@@ -650,11 +641,11 @@
      "cloud",
      "billion",
      "quantum",
-     "no trajectory",
+     "ensemble",
      "phase"
     ],
     "why": "You cannot draw the trajectory of billions of particles, but you can draw a cloud of states; in quantum mechanics there is no trajectory at all, but the state remains. The language of states survived both changes of worldview.",
-    "hint": "Вспомните, что в квантовой механике измеряют не траекторию, а состояние. На каком языке удобнее говорить о состояниях — только координат или координат с импульсами?",
+    "hint": "Recall that in quantum mechanics, one measures not a trajectory but a state. In which language is it more convenient to speak about states — only coordinates or coordinates with momenta?",
     "needed": 2
    },
    {
@@ -665,9 +656,66 @@
     "unit": "states",
     "why": "The area of the ellipse is about $\\pi \\cdot 0{,}1 \\cdot 0{,}5 \\approx 0{,}16$ J·s. Divide by $10^{-34}$ — we get about $10^{33}$. The exact factor is not important: the point is that quantum effects are unnoticeable on this scale.",
     "tolFactor": 10,
-    "hint": "Оцените площадь области в фазовой плоскости как произведение амплитуды на импульс, а потом поделите её на квант действия."
+    "hint": "Estimate the area of the region in the phase plane as the product of amplitude and momentum, and then divide it by the quantum of action."
    }
-  ]
+  ],
+  "derivation": {
+   "title": "How a trajectory turns into a point",
+   "lead": "The transition changes not the physics, but the way we look at it: velocity is traded for momentum, and one second-order equation splits into two first-order ones.",
+   "steps": [
+    {
+     "text": "In the Lagrangian description, coordinate and velocity were independent. Hamilton replaces velocity with momentum — the very quantity that, as we found out, is conserved under symmetry. In return, we get a symmetric pair of variables.",
+     "latex": "(q, \\dot{q}) \\;\\longrightarrow\\; (q, p), \\qquad p = \\frac{\\partial L}{\\partial \\dot{q}}",
+     "figure": "qptrade",
+     "figCaption": "Velocity gives way to momentum — the variables become equal partners"
+    },
+    {
+     "text": "You cannot replace a variable in a function by simple substitution: substituting $\\dot{q}(p)$ into $L(q,\\dot{q})$ gives a function from which the original Lagrangian can be recovered only up to a constant. The correct exchange is called the Legendre transform: from the function we subtract the product of the old variable and its slope. The meaning is geometric: a convex curve can be specified by points, or by a family of its tangent lines, and the second description knows just as much about it. The exchange is reversible as long as $\\partial^2 L/\\partial \\dot{q}^2 \\neq 0$: for a convex curve, each slope corresponds to exactly one point of tangency.",
+     "latex": "H(q, p) = p\\,\\dot{q} - L(q, \\dot{q}), \\qquad \\dot{q} = \\dot{q}(q, p) \\;\\text{from}\\; p = \\frac{\\partial L}{\\partial \\dot{q}}",
+     "figure": "legendre",
+     "figCaption": "A tangent with slope p cuts off a segment −H on the axis: this is a second description of the same curve"
+    },
+    {
+     "text": "Let's check that the exchange is honest. If $H$ really depends only on $q$ and $p$, then its differential should have no $d\\dot{q}$ left. We differentiate $H = p\\dot{q} - L$ with respect to all three arguments at once and look at the bracket next to $d\\dot{q}$: it contains $p - \\partial L/\\partial \\dot{q}$, which is zero by the very definition of momentum. Velocity disappears not by our wish — we have subtracted exactly the product that removes it.",
+     "latex": "dH = \\dot{q}\\,dp + \\underbrace{\\left(p - \\frac{\\partial L}{\\partial \\dot{q}}\\right)}_{=\\;0}\\,d\\dot{q} - \\frac{\\partial L}{\\partial q}\\,dq",
+     "figure": "hcancel",
+     "figCaption": "Three terms of the differential: the middle one is killed by the definition of momentum, and velocity leaves the description"
+    },
+    {
+     "text": "One unfamiliar derivative remains — $\\partial L/\\partial q$. The Lagrange equation from the previous section tells us exactly what it equals: the time derivative of momentum. We substitute and compare the result with the general form of the differential of a function of two variables. The increments $dq$ and $dp$ are independent, so the coefficients in front of them must match separately — this is where the pair of equations comes from.",
+     "latex": "\\frac{\\partial L}{\\partial q} = \\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{q}} = \\dot{p} \\quad\\Longrightarrow\\quad dH = \\dot{q}\\,dp - \\dot{p}\\,dq = \\frac{\\partial H}{\\partial p}\\,dp + \\frac{\\partial H}{\\partial q}\\,dq",
+     "figure": "coefmatch",
+     "figCaption": "Two expressions for one differential: dq and dp are independent, coefficients are compared separately"
+    },
+    {
+     "text": "Instead of one second-order equation, we get two first-order ones. They read simply: the first says where the system is moving, the second — how its momentum changes. Note the minus sign: it is what makes the motion a rotation, not a runaway.",
+     "latex": "\\dot{q} = \\frac{\\partial H}{\\partial p}, \\qquad \\dot{p} = -\\frac{\\partial H}{\\partial q}",
+     "figure": "heqpair",
+     "figCaption": "Two equations instead of one: coordinate and momentum change in concert"
+    },
+    {
+     "text": "Let's draw the state as a point on the $(q, p)$ plane. For a mass on a spring, the energy is the sum of two squares, and the line of constant energy on such a plane is an ellipse. The motion turns out to be a traversal of this ellipse at a constant rate of area sweep.",
+     "latex": "H = \\frac{p^2}{2m} + \\frac{kq^2}{2} = \\text{const}",
+     "figure": "phaseellipse",
+     "figCaption": "An oscillation in phase space is a closed curve, not a back-and-forth line"
+    },
+    {
+     "text": "Conservation of energy in this language looks visual: the point cannot leave its curve. And Liouville's theorem adds: if you take not one point but a cloud of initial states, its area does not change with time. From this, statistical physics will later grow.",
+     "latex": "\\frac{dH}{dt} = 0, \\qquad \\text{area of the cloud of states} = \\text{const}",
+     "figure": "stayoncurve",
+     "figCaption": "A closed curve is the law of conservation of energy in phase form"
+    },
+    {
+     "text": "It remains to understand why the area of the cloud does not change. The pair $(\\dot{q}, \\dot{p})$ is a velocity field on the phase plane: a 'fluid' made of states flows along it. The stretching of this fluid along the $q$ axis is $\\partial \\dot{q}/\\partial q$, along the $p$ axis — $\\partial \\dot{p}/\\partial p$, and by Hamilton's equations these are the same mixed derivative of $H$, taken with opposite signs. They cancel for any Hamiltonian: the flow is incompressible, so a blob may stretch and curl freely, but it cannot change its area.",
+     "latex": "\\frac{\\partial \\dot{q}}{\\partial q} + \\frac{\\partial \\dot{p}}{\\partial p} = \\frac{\\partial^2 H}{\\partial q\\,\\partial p} - \\frac{\\partial^2 H}{\\partial p\\,\\partial q} = 0",
+     "figure": "phaseblob",
+     "figCaption": "A blob of initial states stretches and bends, but its area remains the same"
+    }
+   ],
+   "plate": "\\dot{q} = \\partial H/\\partial p, \\qquad \\dot{p} = -\\partial H/\\partial q",
+   "plateCap": "The state of the system is a point $(q,p)$, the motion is the path of this point along the line of constant energy",
+   "note": "The Hamiltonian does not always coincide with the total energy: if the constraints in the system depend on time or rotating coordinates are chosen, these two quantities diverge. For the problems in this course, the coincidence holds, but it is worth remembering the difference."
+  }
  },
  "es": {
   "title": "Hamiltoniano y espacio de fases",
@@ -721,39 +769,6 @@
      "unit": "—"
     }
    ]
-  },
-  "derivation": {
-   "title": "Cómo la trayectoria se convierte en un punto",
-   "lead": "La transición se realiza en tres pasos y no cambia la física, sino la forma de mirarla.",
-   "steps": [
-    {
-     "text": "En la descripción lagrangiana, la coordenada y la velocidad eran independientes. Hamilton reemplaza la velocidad por el impulso — la misma cantidad que, como descubrimos, se conserva bajo simetría. A cambio, se obtiene un par simétrico de variables.",
-     "latex": "(q, \\dot{q}) \\;\\longrightarrow\\; (q, p), \\qquad p = \\frac{\\partial L}{\\partial \\dot{q}}",
-     "figure": "action",
-     "figCaption": "La velocidad cede el paso al impulso — las variables se vuelven equivalentes"
-    },
-    {
-     "text": "En lugar de una ecuación de segundo orden, se obtienen dos de primer orden. Se leen de manera simple: la primera dice hacia dónde se mueve el sistema, la segunda cómo cambia su impulso. Observe el signo menos: es lo que hace que el movimiento sea una rotación, no una dispersión.",
-     "latex": "\\dot{q} = \\frac{\\partial H}{\\partial p}, \\qquad \\dot{p} = -\\frac{\\partial H}{\\partial q}",
-     "figure": "energyswap",
-     "figCaption": "Dos ecuaciones en lugar de una: la coordenada y el impulso cambian de manera coordinada"
-    },
-    {
-     "text": "Dibujemos el estado como un punto en el plano $(q, p)$. Para una masa en un resorte, la energía es la suma de dos cuadrados, y la línea de energía constante en ese plano es una elipse. El movimiento resulta ser un recorrido de esa elipse a velocidad constante en área.",
-     "latex": "H = \\frac{p^2}{2m} + \\frac{kq^2}{2} = \\text{const}",
-     "figure": "shadow",
-     "figCaption": "La oscilación en el espacio de fases es una curva cerrada, no una línea de ida y vuelta"
-    },
-    {
-     "text": "La conservación de la energía en este lenguaje es evidente: el punto no puede salir de su curva. Y el teorema de Liouville añade: si tomamos no un punto, sino una nube de estados iniciales, su área no cambia con el tiempo. De aquí surgirá más tarde la física estadística.",
-     "latex": "\\frac{dH}{dt} = 0, \\qquad \\text{área de la nube de estados} = \\text{const}",
-     "figure": "anywell",
-     "figCaption": "La curva cerrada es precisamente la ley de conservación de la energía en forma de fase"
-    }
-   ],
-   "plate": "\\dot{q} = \\partial H/\\partial p, \\qquad \\dot{p} = -\\partial H/\\partial q",
-   "plateCap": "El estado del sistema es un punto $(q,p)$, el movimiento es el camino de ese punto a lo largo de la línea de energía constante",
-   "note": "El hamiltoniano no siempre coincide con la energía total: si las ligaduras del sistema dependen del tiempo o se eligen coordenadas rotatorias, estas dos cantidades divergen. Para los problemas del curso, la coincidencia se cumple, pero conviene recordar la diferencia."
   },
   "math": {
    "title": "Las matemáticas que se necesitaron aquí",
@@ -935,7 +950,7 @@
     ],
     "answer": 1,
     "why": "El punto define el par $(q,p)$: coordenada y momento. Esto es suficiente para predecir todo el movimiento posterior.",
-    "hint": "Спросите себя, что нужно знать, чтобы предсказать всё дальнейшее движение. Одних координат не хватает — чего именно недостаёт?"
+    "hint": "Pregúntese qué necesita saber para predecir todo el movimiento posterior. Las coordenadas por sí solas no bastan: ¿qué falta exactamente?"
    },
    {
     "id": "h2",
@@ -949,7 +964,7 @@
     ],
     "answer": 1,
     "why": "El punto no puede salirse de la línea de energía constante, y para un oscilador esa línea es una elipse. El cierre de la curva es la conservación de la energía en forma de fase.",
-    "hint": "Через период система возвращается в то же самое состояние: та же координата, тот же импульс. Что это означает для линии, которую точка чертит на плоскости?"
+    "hint": "Después de un período, el sistema vuelve al mismo estado: la misma coordenada, el mismo momento. ¿Qué significa esto para la línea que el punto traza en el plano?"
    },
    {
     "id": "h3",
@@ -961,11 +976,11 @@
      "nube",
      "mil millon",
      "cuant",
-     "no trayector",
+     "conjunto",
      "fas"
     ],
     "why": "No se puede dibujar la trayectoria de miles de millones de partículas, pero sí la nube de estados; en mecánica cuántica no existe trayectoria alguna, pero el estado permanece. El lenguaje de los estados sobrevivió a ambos cambios de paradigma.",
-    "hint": "Вспомните, что в квантовой механике измеряют не траекторию, а состояние. На каком языке удобнее говорить о состояниях — только координат или координат с импульсами?",
+    "hint": "Recuerde que en mecánica cuántica no se mide la trayectoria, sino el estado. ¿En qué lenguaje es más conveniente hablar de estados: solo coordenadas o coordenadas con momentos?",
     "needed": 2
    },
    {
@@ -976,9 +991,66 @@
     "unit": "estados",
     "why": "El área de la elipse es del orden de $\\pi \\cdot 0{,}1 \\cdot 0{,}5 \\approx 0{,}16$ J·s. Dividiendo por $10^{-34}$ se obtiene alrededor de $10^{33}$. El factor exacto no es importante: lo relevante es que la cuanticidad es imperceptible a esa escala.",
     "tolFactor": 10,
-    "hint": "Оцените площадь области в фазовой плоскости как произведение амплитуды на импульс, а потом поделите её на квант действия."
+    "hint": "Estime el área de la región en el plano de fases como el producto de la amplitud por el momento, y luego divídala por el cuanto de acción."
    }
-  ]
+  ],
+  "derivation": {
+   "title": "Cómo una trayectoria se convierte en un punto",
+   "lead": "La transición no cambia la física, sino la forma de mirarla: la velocidad se intercambia por el momento, y una ecuación de segundo orden se descompone en dos de primer orden.",
+   "steps": [
+    {
+     "text": "En la descripción lagrangiana, la coordenada y la velocidad eran independientes. Hamilton reemplaza la velocidad por el momento: esa misma cantidad que, como descubrimos, se conserva bajo simetría. A cambio, se obtiene un par de variables simétricas.",
+     "latex": "(q, \\dot{q}) \\;\\longrightarrow\\; (q, p), \\qquad p = \\frac{\\partial L}{\\partial \\dot{q}}",
+     "figure": "qptrade",
+     "figCaption": "La velocidad cede su lugar al momento: las variables se vuelven equivalentes"
+    },
+    {
+     "text": "No se puede reemplazar la variable en una función mediante una simple sustitución: al sustituir en $L(q,\\dot{q})$ la expresión $\\dot{q}(p)$, obtenemos una función a partir de la cual el lagrangiano original se recupera solo hasta una constante. El intercambio correcto se llama transformación de Legendre: de la función se resta el producto de la variable antigua por su pendiente. El significado es geométrico: una curva convexa se puede definir por puntos o por la familia de sus tangentes, y la segunda descripción sabe tanto sobre ella como la primera. El intercambio es reversible mientras $\\partial^2 L/\\partial \\dot{q}^2 \\neq 0$: en una curva convexa, a cada pendiente le corresponde exactamente un punto de tangencia.",
+     "latex": "H(q, p) = p\\,\\dot{q} - L(q, \\dot{q}), \\qquad \\dot{q} = \\dot{q}(q, p) \\;\\text{de}\\; p = \\frac{\\partial L}{\\partial \\dot{q}}",
+     "figure": "legendre",
+     "figCaption": "La tangente con pendiente p corta en el eje un segmento −H: esta es la segunda descripción de la misma curva"
+    },
+    {
+     "text": "Comprobemos que el intercambio es honesto. Si $H$ realmente depende solo de $q$ y $p$, entonces en su diferencial no debería quedar $d\\dot{q}$. Derivamos $H = p\\dot{q} - L$ con respecto a los tres argumentos a la vez y observamos el paréntesis que multiplica a $d\\dot{q}$: allí está $p - \\partial L/\\partial \\dot{q}$, que es cero por la propia definición de momento. La velocidad no desaparece por nuestro deseo: hemos restado de antemano exactamente el producto que la elimina.",
+     "latex": "dH = \\dot{q}\\,dp + \\underbrace{\\left(p - \\frac{\\partial L}{\\partial \\dot{q}}\\right)}_{=\\;0}\\,d\\dot{q} - \\frac{\\partial L}{\\partial q}\\,dq",
+     "figure": "hcancel",
+     "figCaption": "Tres términos del diferencial: el del medio se anula por la definición de momento, y la velocidad sale de la descripción"
+    },
+    {
+     "text": "Queda una derivada desconocida: $\\partial L/\\partial q$. La ecuación de Lagrange del párrafo anterior precisamente dice a qué es igual: a la derivada temporal del momento. Sustituimos y comparamos el resultado con la forma general del diferencial de una función de dos variables. Los incrementos $dq$ y $dp$ son independientes, por lo que los coeficientes deben coincidir por separado; de ahí surge el par de ecuaciones.",
+     "latex": "\\frac{\\partial L}{\\partial q} = \\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{q}} = \\dot{p} \\quad\\Longrightarrow\\quad dH = \\dot{q}\\,dp - \\dot{p}\\,dq = \\frac{\\partial H}{\\partial p}\\,dp + \\frac{\\partial H}{\\partial q}\\,dq",
+     "figure": "coefmatch",
+     "figCaption": "Dos expresiones para un mismo diferencial: dq y dp son independientes, los coeficientes se comparan por separado"
+    },
+    {
+     "text": "En lugar de una ecuación de segundo orden, se obtienen dos de primer orden. Se leen simplemente: la primera dice hacia dónde se mueve el sistema, la segunda, cómo cambia su momento. Observe el signo menos: es lo que hace que el movimiento sea una rotación, no una dispersión.",
+     "latex": "\\dot{q} = \\frac{\\partial H}{\\partial p}, \\qquad \\dot{p} = -\\frac{\\partial H}{\\partial q}",
+     "figure": "heqpair",
+     "figCaption": "Dos ecuaciones en lugar de una: la coordenada y el momento cambian de manera coordinada"
+    },
+    {
+     "text": "Dibujemos el estado como un punto en el plano $(q, p)$. Para una masa en un resorte, la energía se compone de dos cuadrados, y la línea de energía constante en ese plano es una elipse. El movimiento resulta ser un recorrido de esa elipse con velocidad constante en área.",
+     "latex": "H = \\frac{p^2}{2m} + \\frac{kq^2}{2} = \\text{const}",
+     "figure": "phaseellipse",
+     "figCaption": "Una oscilación en el espacio de fases es una curva cerrada, no una línea de ida y vuelta"
+    },
+    {
+     "text": "La conservación de la energía en este lenguaje se ve clara: el punto no puede salirse de su curva. Y el teorema de Liouville añade: si tomamos no un punto, sino una nube de estados iniciales, su área no cambia con el tiempo. De aquí crecerá más tarde la física estadística.",
+     "latex": "\\frac{dH}{dt} = 0, \\qquad \\text{área de la nube de estados} = \\text{const}",
+     "figure": "stayoncurve",
+     "figCaption": "La curva cerrada es la ley de conservación de la energía en forma de fase"
+    },
+    {
+     "text": "Queda por entender por qué el área de la nube no cambia. El par $(\\dot{q}, \\dot{p})$ es un campo de velocidades en el plano de fases: por él fluye un «líquido» formado por estados. El estiramiento de este líquido a lo largo del eje $q$ es $\\partial \\dot{q}/\\partial q$, a lo largo del eje $p$ es $\\partial \\dot{p}/\\partial p$, y según las ecuaciones de Hamilton, son la misma derivada mixta de $H$ tomada con signos opuestos. Se cancelan para cualquier hamiltoniano: el flujo es incompresible, por lo que la mancha puede estirarse y enrollarse libremente, pero no cambiar su área.",
+     "latex": "\\frac{\\partial \\dot{q}}{\\partial q} + \\frac{\\partial \\dot{p}}{\\partial p} = \\frac{\\partial^2 H}{\\partial q\\,\\partial p} - \\frac{\\partial^2 H}{\\partial p\\,\\partial q} = 0",
+     "figure": "phaseblob",
+     "figCaption": "La mancha de estados iniciales se estira y se dobla, pero su área es la misma"
+    }
+   ],
+   "plate": "\\dot{q} = \\partial H/\\partial p, \\qquad \\dot{p} = -\\partial H/\\partial q",
+   "plateCap": "El estado del sistema es un punto $(q,p)$; el movimiento es el camino de ese punto a lo largo de la línea de energía constante",
+   "note": "El hamiltoniano no siempre coincide con la energía total: si las ligaduras del sistema dependen del tiempo o se eligen coordenadas rotatorias, estas dos cantidades divergen. Para los problemas del curso, la coincidencia se cumple, pero vale la pena recordar la diferencia."
+  }
  },
  "ar": {
   "title": "هاملتوني وفضاء الطور",
@@ -1032,39 +1104,6 @@
      "unit": "—"
     }
    ]
-  },
-  "derivation": {
-   "title": "كيف يتحول المسار إلى نقطة",
-   "lead": "الانتقال يتم في ثلاث خطوات ولا يغير الفيزياء، بل طريقة النظر إليها.",
-   "steps": [
-    {
-     "text": "في الوصف اللاغرانجي، كانت الإحداثيات والسرعة مستقلتين. يستبدل هاملتون السرعة بالزخم - نفس الكمية التي، كما اكتشفنا، تُحفظ تحت التناظر. في المقابل، نحصل على زوج متماثل من المتغيرات.",
-     "latex": "(q, \\dot{q}) \\;\\longrightarrow\\; (q, p), \\qquad p = \\frac{\\partial L}{\\partial \\dot{q}}",
-     "figure": "action",
-     "figCaption": "السرعة تفسح المجال للزخم - تصبح المتغيرات متكافئة"
-    },
-    {
-     "text": "بدلاً من معادلة واحدة من الدرجة الثانية، نحصل على معادلتين من الدرجة الأولى. قراءتها بسيطة: الأولى تخبر أين يتجه النظام، والثانية كيف يتغير زخمه. انتبه إلى علامة الناقص: هي التي تجعل الحركة دورانًا وليس تفرقعًا.",
-     "latex": "\\dot{q} = \\frac{\\partial H}{\\partial p}, \\qquad \\dot{p} = -\\frac{\\partial H}{\\partial q}",
-     "figure": "energyswap",
-     "figCaption": "معادلتان بدلاً من واحدة: الإحداثي والزخم يتغيران بشكل منسق"
-    },
-    {
-     "text": "لنرسم الحالة كنقطة على المستوى $(q, p)$. بالنسبة لثقل على نابض، تتكون الطاقة من مربعين، وخط الطاقة الثابت على هذا المستوى هو قطع ناقص. الحركة تكون دورانًا حول هذا القطع الناقص بسرعة مساحية ثابتة.",
-     "latex": "H = \\frac{p^2}{2m} + \\frac{kq^2}{2} = \\text{const}",
-     "figure": "shadow",
-     "figCaption": "الاهتزاز في فضاء الطور - منحنى مغلق، وليس خطًا ذهابًا وإيابًا"
-    },
-    {
-     "text": "حفظ الطاقة بهذه اللغة يبدو واضحًا: لا يمكن للنقطة أن تخرج عن منحناها. وتضيف نظرية ليوفيل: إذا أخذنا ليست نقطة واحدة، بل سحابة من الحالات الأولية، فإن مساحتها لا تتغير مع الزمن. من هنا ستنشأ لاحقًا الفيزياء الإحصائية.",
-     "latex": "\\frac{dH}{dt} = 0, \\qquad \\text{مساحة سحابة الحالات} = \\text{const}",
-     "figure": "anywell",
-     "figCaption": "المنحنى المغلق - هذا هو قانون حفظ الطاقة في شكل طوري"
-    }
-   ],
-   "plate": "\\dot{q} = \\partial H/\\partial p, \\qquad \\dot{p} = -\\partial H/\\partial q",
-   "plateCap": "حالة النظام هي نقطة $(q,p)$، والحركة هي مسار هذه النقطة على طول خط الطاقة الثابت",
-   "note": "الهاملتوني لا يتطابق دائمًا مع الطاقة الكلية: إذا كانت القيود في النظام تعتمد على الزمن أو تم اختيار إحداثيات دوارة، فإن هاتين الكميتين تتباعدان. بالنسبة لمسائل الدورة، يتحقق التطابق، لكن يجدر تذكر الفرق."
   },
   "math": {
    "title": "الرياضيات التي كانت مطلوبة هنا",
@@ -1246,7 +1285,7 @@
     ],
     "answer": 1,
     "why": "النقطة تحدد زوجاً $(q,p)$ - الإحداثيات والزخم. هذا يكفي للتنبؤ بكل الحركة المستقبلية.",
-    "hint": "Спросите себя, что нужно знать, чтобы предсказать всё дальнейшее движение. Одних координат не хватает — чего именно недостаёт?"
+    "hint": "اسأل نفسك ما الذي تحتاج معرفته للتنبؤ بكل الحركة اللاحقة. الإحداثيات وحدها لا تكفي — ما الذي ينقص بالتحديد؟"
    },
    {
     "id": "h2",
@@ -1260,7 +1299,7 @@
     ],
     "answer": 1,
     "why": "لا يمكن للنقطة أن تخرج عن خط الطاقة الثابتة، وبالنسبة للمهتز، هذا الخط هو قطع ناقص. إغلاق المنحنى هو حفظ الطاقة في الصورة الطورية.",
-    "hint": "Через период система возвращается в то же самое состояние: та же координата, тот же импульс. Что это означает для линии, которую точка чертит на плоскости?"
+    "hint": "بعد دورة، يعود النظام إلى نفس الحالة: نفس الإحداثي، نفس العزم. ماذا يعني هذا بالنسبة للخط الذي ترسمه النقطة على المستوى؟"
    },
    {
     "id": "h3",
@@ -1271,12 +1310,12 @@
      "مسار",
      "سحابة",
      "مليار",
-     "كم",
-     "لا مسار",
+     "الكم",
+     "تجمع",
      "طوري"
     ],
     "why": "لا يمكن رسم مسار مليارات الجسيمات، بينما يمكن رسم سحابة الحالات؛ في ميكانيكا الكم، لا يوجد مسار على الإطلاق، بينما تبقى الحالة. لغة الحالات نجت من كلا التغييرين في صورة العالم.",
-    "hint": "Вспомните, что в квантовой механике измеряют не траекторию, а состояние. На каком языке удобнее говорить о состояниях — только координат или координат с импульсами?",
+    "hint": "تذكر أنه في ميكانيكا الكم لا نقيس المسار بل الحالة. بأي لغة يكون التحدث عن الحالات أكثر ملاءمة — بالإحداثيات فقط أم بالإحداثيات والعزم؟",
     "needed": 2
    },
    {
@@ -1287,8 +1326,65 @@
     "unit": "حالة",
     "why": "مساحة القطع الناقص من رتبة $\\pi \\cdot 0{,}1 \\cdot 0{,}5 \\approx 0{,}16$ J·s. نقسم على $10^{-34}$ - نحصل على حوالي $10^{33}$. العامل الدقيق غير مهم: المهم أن الكمومية على هذا المقياس غير ملحوظة.",
     "tolFactor": 10,
-    "hint": "Оцените площадь области в фазовой плоскости как произведение амплитуды на импульс, а потом поделите её на квант действия."
+    "hint": "قدر مساحة المنطقة في المستوى الطوري كحاصل ضرب السعة في العزم، ثم اقسمها على كم الفعل."
    }
-  ]
+  ],
+  "derivation": {
+   "title": "كيف يتحول المسار إلى نقطة",
+   "lead": "الانتقال لا يغير الفيزياء، بل يغير طريقة النظر إليها: تُستبدل السرعة بالزخم، وتتحلل معادلة واحدة من الدرجة الثانية إلى معادلتين من الدرجة الأولى.",
+   "steps": [
+    {
+     "text": "في صيغة لاغرانج، كان الإحداثي والسرعة مستقلين. هاملتون يستبدل السرعة بالزخم - تلك الكمية التي، كما اكتشفنا، محفوظة في حالة التناظر. في المقابل، نحصل على زوج متماثل من المتغيرات.",
+     "latex": "(q, \\dot{q}) \\;\\longrightarrow\\; (q, p), \\qquad p = \\frac{\\partial L}{\\partial \\dot{q}}",
+     "figure": "qptrade",
+     "figCaption": "السرعة تفسح المجال للزخم - تصبح المتغيرات متكافئة"
+    },
+    {
+     "text": "لا يمكن استبدال متغير في دالة باستبدال بسيط: إذا عوضنا في $L(q,\\dot{q})$ بالتعبير $\\dot{q}(p)$، نحصل على دالة لا يمكن استعادة لاغرانج الأصلي منها إلا حتى ثابت. التبادل الصحيح يسمى تحويل لييجاندر: من الدالة يُطرح حاصل ضرب المتغير القديم في ميله. المعنى هندسي: يمكن تحديد منحنى محدب بالنقاط، أو بعائلة مماساته، والوصف الثاني يعرف عنه نفس القدر. التبادل قابل للعكس طالما $\\partial^2 L/\\partial \\dot{q}^2 \\neq 0$: بالنسبة لمنحنى محدب، لكل ميل هناك نقطة تماس واحدة بالضبط.",
+     "latex": "H(q, p) = p\\,\\dot{q} - L(q, \\dot{q}), \\qquad \\dot{q} = \\dot{q}(q, p) \\;\\text{من}\\; p = \\frac{\\partial L}{\\partial \\dot{q}}",
+     "figure": "legendre",
+     "figCaption": "المماس بميل p يقطع على المحور قطعة −H: هذا وصف ثانٍ لنفس المنحنى"
+    },
+    {
+     "text": "دعونا نتحقق من أن التبادل عادل. إذا كان H يعتمد فقط على q و p، فلا ينبغي أن يبقى $d\\dot{q}$ في تفاضله. نشتق $H = p\\dot{q} - L$ بالنسبة لجميع المتغيرات الثلاثة وننظر إلى القوس عند $d\\dot{q}$: هناك $p - \\partial L/\\partial \\dot{q}$، وهذا صفر حسب تعريف الزخم نفسه. السرعة تختفي ليس برغبتنا - لقد طرحنا مسبقًا بالضبط ذلك المنتج الذي يزيلها.",
+     "latex": "dH = \\dot{q}\\,dp + \\underbrace{\\left(p - \\frac{\\partial L}{\\partial \\dot{q}}\\right)}_{=\\;0}\\,d\\dot{q} - \\frac{\\partial L}{\\partial q}\\,dq",
+     "figure": "hcancel",
+     "figCaption": "ثلاثة حدود للتفاضل: الأوسط يُلغى بتعريف الزخم، وتخرج السرعة من الوصف"
+    },
+    {
+     "text": "بقي مشتق واحد غير مألوف - $\\partial L/\\partial q$. معادلة لاغرانج من الفقرة السابقة تخبرنا بالضبط بما يساويه: مشتقة الزخم بالنسبة للزمن. نعوض ونقارن النتيجة بالشكل العام لتفاضل دالة بمتغيرين. الزيادات $dq$ و $dp$ مستقلة، لذا يجب أن تتطابق المعاملات بشكل منفصل - من هنا يأتي زوج المعادلات.",
+     "latex": "\\frac{\\partial L}{\\partial q} = \\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{q}} = \\dot{p} \\quad\\Longrightarrow\\quad dH = \\dot{q}\\,dp - \\dot{p}\\,dq = \\frac{\\partial H}{\\partial p}\\,dp + \\frac{\\partial H}{\\partial q}\\,dq",
+     "figure": "coefmatch",
+     "figCaption": "تعبيران لتفاضل واحد: dq و dp مستقلان، تتم مقارنة المعاملات بشكل منفصل"
+    },
+    {
+     "text": "بدلاً من معادلة واحدة من الدرجة الثانية، نحصل على معادلتين من الدرجة الأولى. تُقرأ ببساطة: الأولى تخبرنا أين يتجه النظام، والثانية - كيف يتغير زخمه. لاحظ علامة الطرح: هي التي تجعل الحركة دورانًا، وليس تفرقًا.",
+     "latex": "\\dot{q} = \\frac{\\partial H}{\\partial p}, \\qquad \\dot{p} = -\\frac{\\partial H}{\\partial q}",
+     "figure": "heqpair",
+     "figCaption": "معادلتان بدلاً من واحدة: الإحداثي والزخم يتغيران بشكل متناسق"
+    },
+    {
+     "text": "لنرسم الحالة كنقطة على المستوى $(q, p)$. بالنسبة لكتلة على نابض، تتكون الطاقة من مربعين، وخط الطاقة الثابتة على هذا المستوى هو قطع ناقص. الحركة هي دوران حول هذا القطع الناقص بسرعة ثابتة بالنسبة للمساحة.",
+     "latex": "H = \\frac{p^2}{2m} + \\frac{kq^2}{2} = \\text{ثابت}",
+     "figure": "phaseellipse",
+     "figCaption": "الاهتزاز في فضاء الطور - منحنى مغلق، وليس خطًا ذهابًا وإيابًا"
+    },
+    {
+     "text": "حفظ الطاقة بهذه اللغة يبدو واضحًا: النقطة لا يمكن أن تخرج عن منحناها. ونظرية ليوفيل تضيف: إذا أخذنا ليس نقطة واحدة، بل سحابة من الحالات الابتدائية، فإن مساحتها لا تتغير مع الزمن. من هنا ستنمو لاحقًا الفيزياء الإحصائية.",
+     "latex": "\\frac{dH}{dt} = 0, \\qquad \\text{مساحة سحابة الحالات} = \\text{ثابت}",
+     "figure": "stayoncurve",
+     "figCaption": "المنحنى المغلق - هذا هو قانون حفظ الطاقة في شكل طوري"
+    },
+    {
+     "text": "يبقى أن نفهم لماذا لا تتغير مساحة السحابة. الزوج $(\\dot{q}, \\dot{p})$ هو حقل سرعات على مستوى الطور: يتدفق عبره \"سائل\" مكون من الحالات. تمدد هذا السائل على طول المحور q يساوي $\\partial \\dot{q}/\\partial q$، وعلى طول المحور p - $\\partial \\dot{p}/\\partial p$، ووفقًا لمعادلات هاملتون، هذان هما نفس المشتق المختلط لـ H، مأخوذان بإشارتين مختلفتين. يلغي كل منهما الآخر لأي هاملتوني: التدفق غير قابل للانضغاط، لذلك يمكن للبقعة أن تتمدد وتلتف بحرية، لكنها لا تغير مساحتها.",
+     "latex": "\\frac{\\partial \\dot{q}}{\\partial q} + \\frac{\\partial \\dot{p}}{\\partial p} = \\frac{\\partial^2 H}{\\partial q\\,\\partial p} - \\frac{\\partial^2 H}{\\partial p\\,\\partial q} = 0",
+     "figure": "phaseblob",
+     "figCaption": "بقعة الحالات الابتدائية تتمدد وتنحني، لكن مساحتها تبقى كما هي"
+    }
+   ],
+   "plate": "\\dot{q} = \\partial H/\\partial p, \\qquad \\dot{p} = -\\partial H/\\partial q",
+   "plateCap": "حالة النظام هي نقطة $(q,p)$، والحركة هي مسار هذه النقطة على خط الطاقة الثابتة",
+   "note": "هاملتوني لا يتطابق دائمًا مع الطاقة الكلية: إذا كانت القيود في النظام تعتمد على الزمن أو تم اختيار إحداثيات دوارة، فإن هاتين الكميتين تتباعدان. بالنسبة لمسائل الدورة، التطابق يتحقق، لكن يجدر تذكر الاختلاف."
+  }
  }
 }
