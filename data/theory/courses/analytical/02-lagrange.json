@@ -103,12 +103,12 @@
   },
   "derivation": {
    "title": "Как симметрия превращается в сохранение",
-   "lead": "Рассуждение короткое, если не пугаться значка производной по функции.",
+   "lead": "Один и тот же ход повторяется трижды: находим координату, от которой лагранжиан не зависит, — и получаем сохраняющуюся величину. Сначала сдвиг в пространстве, потом поворот, в конце особый случай — сдвиг по времени.",
    "steps": [
     {
      "text": "Возьмём уравнение, которое мы получили в прошлом параграфе из принципа наименьшего действия. Оно связывает две величины: как лагранжиан меняется при сдвиге координаты и как — при изменении скорости.",
      "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{q}} = \\frac{\\partial L}{\\partial q}",
-     "figure": "action",
+     "figure": "elstart",
      "figCaption": "Уравнение движения в форме, к которой привела вариация действия"
     },
     {
@@ -126,7 +126,7 @@
     {
      "text": "Но если производная по времени от чего-то равна нулю, то это что-то не меняется во времени. Мы получили закон сохранения, не постулируя его.",
      "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{q}} = 0 \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial \\dot{q}} = \\text{const}",
-     "figure": "momentum",
+     "figure": "pconserve",
      "figCaption": "Сохраняющаяся величина — обобщённый импульс"
     },
     {
@@ -435,39 +435,6 @@
     }
    ]
   },
-  "derivation": {
-   "title": "How symmetry turns into conservation",
-   "lead": "The reasoning is short if you are not afraid of the derivative with respect to a function.",
-   "steps": [
-    {
-     "text": "Take the equation we obtained in the previous section from the principle of least action. It connects two quantities: how the Lagrangian changes with a coordinate shift and how it changes with a change in velocity.",
-     "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{q}} = \\frac{\\partial L}{\\partial q}",
-     "figure": "action",
-     "figCaption": "Equation of motion in the form resulting from variation of action"
-    },
-    {
-     "text": "Now suppose the system is symmetric with respect to a coordinate shift: move the setup by a meter — nothing changed. In the language of formulas, this means the Lagrangian does not depend on $q$ at all, so the right-hand side is zero.",
-     "latex": "\\frac{\\partial L}{\\partial q} = 0",
-     "figure": "noether",
-     "figCaption": "Each symmetry corresponds to its own conserved quantity"
-    },
-    {
-     "text": "But if the time derivative of something is zero, then that something does not change over time. We have obtained a conservation law without postulating it.",
-     "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{q}} = 0 \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial \\dot{q}} = \\text{const}",
-     "figure": "momentum",
-     "figCaption": "Conserved quantity — generalized momentum"
-    },
-    {
-     "text": "Let's check with a simple case. For a free body, the Lagrangian is only kinetic energy. The derivative with respect to velocity gives the familiar momentum: conservation of momentum turns out to be a consequence of the homogeneity of space.",
-     "latex": "L = \\frac{m\\dot{x}^2}{2} \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial \\dot{x}} = m\\dot{x} = p",
-     "figure": "elastic",
-     "figCaption": "Collision: momentum before and after is the same because space is homogeneous"
-    }
-   ],
-   "plate": "\\text{symmetry} \\;\\longrightarrow\\; \\text{conservation law}",
-   "plateCap": "Homogeneity of space gives momentum, homogeneity of time gives energy, isotropy gives angular momentum",
-   "note": "The theorem requires continuous symmetry: the shift can be made arbitrarily small. Discrete symmetries — for example, mirror reflection — do not give a conserved quantity in this sense, although they impose strong constraints on physics."
-  },
   "math": {
    "title": "Mathematics needed here",
    "lead": "One new notation and one familiar idea in an unfamiliar place.",
@@ -745,39 +712,6 @@
     }
    ]
   },
-  "derivation": {
-   "title": "Cómo la simetría se convierte en conservación",
-   "lead": "El razonamiento es corto, si no temes al símbolo de derivada respecto a una función.",
-   "steps": [
-    {
-     "text": "Tomemos la ecuación que obtuvimos en el párrafo anterior a partir del principio de mínima acción. Relaciona dos cantidades: cómo cambia el lagrangiano con un desplazamiento de la coordenada y cómo cambia con un cambio de velocidad.",
-     "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{q}} = \\frac{\\partial L}{\\partial q}",
-     "figure": "action",
-     "figCaption": "Ecuación de movimiento en la forma a la que llevó la variación de la acción"
-    },
-    {
-     "text": "Ahora supongamos que el sistema es simétrico respecto al desplazamiento de la coordenada: movemos el dispositivo un metro y no ha cambiado nada. En lenguaje de fórmulas, esto significa que el lagrangiano no depende de $q$, es decir, el lado derecho es cero.",
-     "latex": "\\frac{\\partial L}{\\partial q} = 0",
-     "figure": "noether",
-     "figCaption": "A cada simetría le corresponde su cantidad conservada"
-    },
-    {
-     "text": "Pero si la derivada temporal de algo es cero, entonces ese algo no cambia en el tiempo. Hemos obtenido una ley de conservación sin postularla.",
-     "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{q}} = 0 \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial \\dot{q}} = \\text{const}",
-     "figure": "momentum",
-     "figCaption": "La cantidad conservada es el momento generalizado"
-    },
-    {
-     "text": "Verifiquemos en un caso simple. Para un cuerpo libre, el lagrangiano es solo la energía cinética. La derivada respecto a la velocidad da el momento familiar: la conservación del momento resultó ser consecuencia de la homogeneidad del espacio.",
-     "latex": "L = \\frac{m\\dot{x}^2}{2} \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial \\dot{x}} = m\\dot{x} = p",
-     "figure": "elastic",
-     "figCaption": "Colisión: el momento antes y después es el mismo porque el espacio es homogéneo"
-    }
-   ],
-   "plate": "\\text{simetría} \\;\\longrightarrow\\; \\text{ley de conservación}",
-   "plateCap": "La homogeneidad del espacio da el momento, la homogeneidad del tiempo la energía, la isotropía el momento angular",
-   "note": "El teorema requiere simetría continua: el desplazamiento puede ser arbitrariamente pequeño. Las simetrías discretas —por ejemplo, la reflexión especular— no dan una cantidad conservada en este sentido, aunque imponen fuertes restricciones a la física."
-  },
   "math": {
    "title": "Matemáticas que aquí se necesitaron",
    "lead": "Una notación nueva y una idea familiar en un lugar inusual.",
@@ -1054,39 +988,6 @@
      "unit": "يعتمد على q"
     }
    ]
-  },
-  "derivation": {
-   "title": "كيف يتحول التماثل إلى حفظ",
-   "lead": "المنطق قصير، إذا لم تخف من رمز الاشتقاق بالنسبة للدالة.",
-   "steps": [
-    {
-     "text": "لنأخذ المعادلة التي حصلنا عليها في الفقرة السابقة من مبدأ الفعل الأصغر. وهي تربط بين كميتين: كيف يتغير اللاغرانجيان عند إزاحة الإحداثي، وكيف يتغير عند تغير السرعة.",
-     "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{q}} = \\frac{\\partial L}{\\partial q}",
-     "figure": "action",
-     "figCaption": "معادلة الحركة بالشكل الذي أدى إليه تباين الفعل"
-    },
-    {
-     "text": "الآن لنفترض أن النظام متماثل بالنسبة لإزاحة الإحداثي: نقلنا الجهاز بمتر - لم يتغير شيء. بلغة الصيغ، هذا يعني أن اللاغرانجيان لا يعتمد على $q$ على الإطلاق، أي أن الطرف الأيمن يساوي صفرًا.",
-     "latex": "\\frac{\\partial L}{\\partial q} = 0",
-     "figure": "noether",
-     "figCaption": "كل تماثل يقابله كمية محفوظة خاصة به"
-    },
-    {
-     "text": "ولكن إذا كان المشتق الزمني لشيء ما يساوي صفرًا، فإن هذا الشيء لا يتغير مع الزمن. لقد حصلنا على قانون الحفظ دون افتراضه.",
-     "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{q}} = 0 \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial \\dot{q}} = \\text{const}",
-     "figure": "momentum",
-     "figCaption": "الكمية المحفوظة - الزخم المعمم"
-    },
-    {
-     "text": "دعنا نتحقق من حالة بسيطة. بالنسبة لجسم حر، اللاغرانجيان هو فقط الطاقة الحركية. المشتق بالنسبة للسرعة يعطي الزخم المألوف: تبين أن حفظ الزخم هو نتيجة لتجانس الفضاء.",
-     "latex": "L = \\frac{m\\dot{x}^2}{2} \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial \\dot{x}} = m\\dot{x} = p",
-     "figure": "elastic",
-     "figCaption": "تصادم: الزخم قبل وبعد متساوٍ، لأن الفضاء متجانس"
-    }
-   ],
-   "plate": "\\text{تماثل} \\;\\longrightarrow\\; \\text{قانون الحفظ}",
-   "plateCap": "تجانس الفضاء يعطي الزخم، تجانس الزمن يعطي الطاقة، الخواص يعطي الزخم الزاوي",
-   "note": "تتطلب النظرية تماثلًا مستمرًا: يمكن جعل الإزاحة صغيرة بقدر ما نريد. التماثلات المنفصلة - مثل الانعكاس المرآوي - لا تعطي كمية محفوظة بهذا المعنى، رغم أنها تفرض قيودًا قوية على الفيزياء."
   },
   "math": {
    "title": "الرياضيات التي كانت ضرورية هنا",

@@ -135,13 +135,13 @@
     },
     {
      "text": "А теперь то, что не сходится. Возьмём две точки на небе, разделённые двумя градусами. В момент, когда излучение вышло, между ними было расстояние, которое свет не мог пройти за всё время от начала: они лежали за горизонтом друг друга. Общей истории у них не было — а температура одинаковая до пятого знака. Это называют проблемой горизонта.",
-     "latex": "\\text{угол} \\sim 1^\\circ \\;-\\; \\text{предел, где связь была возможна}",
+     "latex": "\\text{причинный горизонт} \\sim 2^\\circ \\;-\\; \\text{предел, где связь была возможна}",
      "figure": "horizon",
      "figCaption": "Две области за горизонтом друг друга: сигнал между ними пройти не успевал"
     },
     {
-     "text": "Вторая странность видна в размере пятен. До рекомбинации плазма несла звуковые волны со скоростью около $c/\\sqrt{3}$, и к моменту выхода света звук успел пройти вполне определённое расстояние $r_{\\text{зв}}$ — это линейка известной длины, отпечатанная на всём небе. Угол, под которым мы её видим с расстояния $D$, зависит не только от самого расстояния, но и от геометрии пространства по дороге: в замкнутом мире лучи сходятся и пятно кажется крупнее плоского расчёта, в открытом — мельче. Измерение даёт ровно плоский случай, около градуса, откуда полная плотность равна критической с точностью до долей процента.",
-     "latex": "\\theta \\approx \\frac{r_{\\text{зв}}}{D} \\approx 1^\\circ \\;\\Longrightarrow\\; \\Omega_{\\text{общ}} = 1{,}000 \\pm 0{,}002",
+     "text": "Вторая странность видна в размере пятен. До рекомбинации плазма несла звуковые волны со скоростью около $c/\\sqrt{3}$, и к моменту выхода света звук успел пройти вполне определённое расстояние $r_{\\text{зв}}$ — это линейка известной длины, отпечатанная на всём небе. Угол, под которым мы её видим с расстояния $D$, зависит не только от самого расстояния, но и от геометрии пространства по дороге: в замкнутом мире лучи сходятся и пятно кажется крупнее плоского расчёта, в открытом — мельче. Измерение даёт ровно плоский случай, около градуса, — и по одному реликтовому фону полная плотность равна критической с точностью около процента. Прижать её до долей процента одним углом нельзя: разные пары параметров дают тот же угол, поэтому реликт складывают с независимой линейкой — акустическим следом в распределении галактик; вместе они и дают $1{,}000 \\pm 0{,}002$. И это не тот же градус, что в проблеме горизонта: причинный горизонт покрывает около двух градусов, а звук успевал пройти в $\\sqrt{3}$ раз меньше — отсюда примерно один.",
+     "latex": "\\theta \\approx \\frac{r_{\\text{зв}}}{D} \\approx 1^\\circ \\;\\Longrightarrow\\; \\Omega_{\\text{общ}} = 1{,}00 \\pm 0{,}01",
      "figure": "flatangle",
      "figCaption": "Линейка одна и та же, а угол разный: он и меряет кривизну пространства между нами и поверхностью последнего рассеяния"
     },
@@ -456,51 +456,6 @@
     }
    ]
   },
-  "derivation": {
-   "title": "Why radiation must exist and why it is exactly that way",
-   "lead": "Let's go from 'earlier it was denser' to the number 2.725 K, and then see what doesn't fit in this picture without inflation.",
-   "steps": [
-    {
-     "text": "Let's go backward in time. Distances shrink, density increases, and radiation contracts along with the expansion: wavelengths become shorter, meaning the energy of each quantum is greater. Compressed radiation is hot radiation. Hence it follows that the early state was hot, and this is not an assumption but expansion reversed.",
-     "latex": "T \\propto \\frac{1}{a} \\;\\Longrightarrow\\; T = T_0 (1 + z)",
-     "figure": "cooldown",
-     "figCaption": "The same radiation: compressed was hot, stretched became cold"
-    },
-    {
-     "text": "While the matter is ionized, light does not travel through it: it scatters off free electrons and stalls. Transparency occurs when electrons bind into atoms. For hydrogen, this happens around three thousand kelvins — noticeably lower than 'ionization energy divided by Boltzmann's constant', because there are far more photons than atoms, and even a rare tail of the distribution keeps breaking atoms apart for a long time.",
-     "latex": "T_{\\text{rec}} \\approx 3000\\ \\text{K}, \\qquad z_{\\text{rec}} \\approx 1100",
-     "figure": "recombination",
-     "figCaption": "Left: plasma and light in fog, right: neutral atoms and light escapes freely"
-    },
-    {
-     "text": "The light that emerged at that moment flies to us unhindered. Along the way, it is stretched by the same expansion: by as many times as the Universe has grown. A thousandfold stretch turns the glow of hot gas into microwaves.",
-     "latex": "T_0 = \\frac{T_{\\text{rec}}}{1 + z_{\\text{rec}}} \\approx \\frac{3000}{1100} \\approx 2{,}7\\ \\text{K}",
-     "figure": "redshiftwave",
-     "figCaption": "The same light on its way to us: stretched as many times as the Universe has grown"
-    },
-    {
-     "text": "The position of the spectrum peak provides a test. Substituting the measured temperature into Wien's law, we get a little more than a millimeter — the microwave range. That is exactly what the antenna in Holmdel saw, and the COBE satellite in 1990 showed that the shape of the spectrum coincides with the Planck spectrum with an accuracy unattainable for any laboratory source.",
-     "latex": "\\lambda_{\\max} = \\frac{2{,}898 \\cdot 10^{-3}}{2{,}725} \\approx 1{,}06\\ \\text{mm}",
-     "figure": "planckpeak",
-     "figCaption": "The colder the body, the farther right the peak: for the relic it is in millimeter waves"
-    },
-    {
-     "text": "And now for what doesn't fit. Take two points in the sky separated by two degrees. At the moment when the radiation emerged, the distance between them was such that light could not travel it in all the time since the beginning: they were beyond each other's horizon. They had no common history — yet the temperature is the same to the fifth decimal place. This is called the horizon problem.",
-     "latex": "\\text{angle} \\sim 1^\\circ \\;-\\; \\text{limit where contact was possible}",
-     "figure": "horizon",
-     "figCaption": "Two regions beyond each other's horizon: a signal between them could not travel in time"
-    },
-    {
-     "text": "Inflation explains it this way: before the hot stage, the Universe expanded extremely rapidly for a very short time. Then everything we see today came from a single tiny region that had time to become homogeneous before the expansion. At the same time, a second puzzle is solved — why space is so close to flat: any curvature is stretched by the expansion nearly to zero, like wrinkles on an inflating balloon.",
-     "latex": "a \\;\\to\\; a \\cdot e^{N}, \\qquad N \\approx 60",
-     "figure": "inflation",
-     "figCaption": "Everything visible today came from a single region that had time to even out before inflation"
-    }
-   ],
-   "plate": "T = T_0(1+z), \\qquad \\lambda_{\\max} = b/T",
-   "plateCap": "Two simple formulas connect the noise in the antenna to the state of the Universe at an age of three hundred and eighty thousand years. Everything else in this paragraph is consequences and what cannot be derived from them.",
-   "note": "Inflation is not as reliably established a part of the picture as the cooling of the relic. Cooling follows from expansion and is verified by the spectrum; inflation was devised to fit observations and still does not have a single form: there are dozens of models, and which one is correct is unknown. It is worth learning it exactly like this: a strong explanation with an open end."
-  },
   "math": {
    "title": "The math that was needed here",
    "lead": "Three things: how to read the spectrum, why the logarithm on the graph, and what 'sixty e-folds' means.",
@@ -801,51 +756,6 @@
     }
    ]
   },
-  "derivation": {
-   "title": "Por qué la radiación debe existir y por qué es precisamente así",
-   "lead": "Pasaremos de «antes era más denso» al número 2,725 K, y luego veremos qué no cuadra en este panorama sin la inflación.",
-   "steps": [
-    {
-     "text": "Retrocedamos en el tiempo. Las distancias se acortan, la densidad aumenta, y la radiación se comprime con la expansión: las longitudes de onda se acortan, por lo que la energía de cada cuanto es mayor. La radiación comprimida es radiación caliente. De aquí se deduce que el estado temprano era caliente, y esto no es una suposición, sino la expansión invertida.",
-     "latex": "T \\propto \\frac{1}{a} \\;\\Longrightarrow\\; T = T_0 (1 + z)",
-     "figure": "cooldown",
-     "figCaption": "La misma radiación: comprimida era caliente, estirada se ha vuelto fría"
-    },
-    {
-     "text": "Mientras la materia está ionizada, la luz no viaja libremente: se dispersa en electrones libres y se queda en el lugar. La transparencia llega cuando los electrones se enlazan formando átomos. Para el hidrógeno, esto ocurre alrededor de tres mil kelvin — notablemente por debajo de la «energía de ionización dividida por la constante de Boltzmann», porque hay muchos más fotones que átomos, e incluso la cola rara de la distribución desintegra los átomos durante mucho tiempo.",
-     "latex": "T_{\\text{rec}} \\approx 3000\\ \\text{K}, \\qquad z_{\\text{rec}} \\approx 1100",
-     "figure": "recombination",
-     "figCaption": "A la izquierda, plasma y luz en la niebla; a la derecha, átomos neutros y la luz se va libremente"
-    },
-    {
-     "text": "La luz que salió en ese momento viaja hacia nosotros sin obstáculos. En el camino se estira por la misma expansión: tanto como ha crecido el Universo. Un estiramiento de mil veces convierte el resplandor del gas incandescente en microondas.",
-     "latex": "T_0 = \\frac{T_{\\text{rec}}}{1 + z_{\\text{rec}}} \\approx \\frac{3000}{1100} \\approx 2{,}7\\ \\text{K}",
-     "figure": "redshiftwave",
-     "figCaption": "La misma luz en su camino hacia nosotros: estirada tanto como ha crecido el Universo"
-    },
-    {
-     "text": "La posición del pico del espectro proporciona una verificación. Sustituyendo la temperatura medida en la ley de Wien, obtenemos un poco más de un milímetro — el rango de las microondas. Esto es exactamente lo que vio la antena en Holmdel, y el satélite COBE en 1990 mostró que la forma del espectro coincide con la de Planck con una precisión inalcanzable para cualquier fuente de laboratorio.",
-     "latex": "\\lambda_{\\max} = \\frac{2{,}898 \\cdot 10^{-3}}{2{,}725} \\approx 1{,}06\\ \\text{mm}",
-     "figure": "planckpeak",
-     "figCaption": "Cuanto más frío es el cuerpo, más a la derecha está el pico: en el relicto está en ondas milimétricas"
-    },
-    {
-     "text": "Y ahora lo que no encaja. Tomemos dos puntos en el cielo separados por dos grados. En el momento en que la radiación salió, la distancia entre ellos era tal que la luz no pudo recorrerla desde el principio: estaban más allá del horizonte el uno del otro. No tenían historia común — y sin embargo la temperatura es igual hasta el quinto decimal. Esto se llama el problema del horizonte.",
-     "latex": "\\text{ángulo} \\sim 1^\\circ \\; - \\; \\text{límite donde la comunicación era posible}",
-     "figure": "horizon",
-     "figCaption": "Dos regiones más allá del horizonte mutuo: una señal no tenía tiempo de viajar entre ellas"
-    },
-    {
-     "text": "La inflación lo explica así: antes de la etapa caliente, el Universo se infló extremadamente rápido durante un breve instante. Entonces, todo lo que vemos hoy provino de una diminuta región que logró homogeneizarse antes de la inflación. Al mismo tiempo se resuelve un segundo enigma — por qué el espacio es tan cercano a plano: cualquier curvatura se estira casi a cero con la inflación, como las arrugas en un globo que se infla.",
-     "latex": "a \\;\\to\\; a \\cdot e^{N}, \\qquad N \\approx 60",
-     "figure": "inflation",
-     "figCaption": "Todo lo visible hoy salió de una región que logró uniformizarse antes de la inflación"
-    }
-   ],
-   "plate": "T = T_0(1+z), \\qquad \\lambda_{\\max} = b/T",
-   "plateCap": "Dos fórmulas simples relacionan el ruido en la antena con el estado del Universo a la edad de trescientos ochenta mil años. Todo lo demás en esta sección son consecuencias y lo que no se deduce de ellas.",
-   "note": "La inflación no es una parte del cuadro tan fiable como el enfriamiento del relicto. El enfriamiento se deduce de la expansión y ha sido verificado por el espectro; la inflación se inventó para ajustarse a las observaciones y hasta ahora no tiene una forma única: hay decenas de modelos, y no se sabe cuál es el correcto. Vale la pena aprenderla así: una explicación poderosa con un final abierto."
-  },
   "math": {
    "title": "Las matemáticas necesarias aquí",
    "lead": "Tres cosas: cómo se lee el espectro, por qué el logaritmo en el gráfico, y qué significa «sesenta e-folds».",
@@ -1145,51 +1055,6 @@
      "unit": "—"
     }
    ]
-  },
-  "derivation": {
-   "title": "لماذا يجب أن يكون الإشعاع موجودًا ولماذا هو بهذه الصورة بالضبط",
-   "lead": "سننتقل من «في السابق كان أكثر كثافة» إلى الرقم 2,725 K، ثم ننظر ما لا يتوافق في هذه الصورة دون التضخم.",
-   "steps": [
-    {
-     "text": "لنعد بالزمن إلى الوراء. تقل المسافات، وتزداد الكثافة، وينضغط الإشعاع مع التوسع: تصبح أطوال الموجات أقصر، وبالتالي تزداد طاقة كل كم. الإشعاع المضغوط هو إشعاع ساخن. ومن هنا يتبع أن الحالة المبكرة كانت ساخنة، وهذا ليس افتراضًا، بل هو تمدد معكوس.",
-     "latex": "T \\propto \\frac{1}{a} \\;\\Longrightarrow\\; T = T_0 (1 + z)",
-     "figure": "cooldown",
-     "figCaption": "نفس الإشعاع: المضغوط كان ساخنًا، والمتمدد أصبح باردًا"
-    },
-    {
-     "text": "طالما أن المادة مؤينة، لا ينتشر الضوء فيها: فهو يتشتت على الإلكترونات الحرة ويدور في مكانه. تحدث الشفافية عندما ترتبط الإلكترونات في ذرات. بالنسبة للهيدروجين، يحدث هذا عند حوالي ثلاثة آلاف كلفن - أقل بشكل ملحوظ من «طاقة التأين مقسومة على ثابت بولتزمان» لأن الفوتونات أكثر بكثير من الذرات، وحتى ذيل التوزيع النادر يعمل على تفكيك الذرات مرة أخرى لفترة طويلة.",
-     "latex": "T_{\\text{rec}} \\approx 3000\\ \\text{K}, \\qquad z_{\\text{rec}} \\approx 1100",
-     "figure": "recombination",
-     "figCaption": "على اليسار بلازما وضوء في ضباب، وعلى اليمين ذرات متعادلة والضوء يغادر بحرية"
-    },
-    {
-     "text": "الضوء الذي خرج في تلك اللحظة يسافر إلينا دون عائق. على طول الطريق، يتمدد بنفس التمدد: بنفس المقدار الذي نما به الكون. يؤدي التمدد بألف مرة إلى تحويل وهج الغاز الساخن إلى موجات ميكروية.",
-     "latex": "T_0 = \\frac{T_{\\text{rec}}}{1 + z_{\\text{rec}}} \\approx \\frac{3000}{1100} \\approx 2{,}7\\ \\text{K}",
-     "figure": "redshiftwave",
-     "figCaption": "نفس الضوء في طريقه إلينا: متمدد بنفس المقدار الذي نما به الكون"
-    },
-    {
-     "text": "يعطي موضع ذروة الطيف اختبارًا. بتعويض درجة الحرارة المقاسة في قانون فين، نحصل على ما يزيد قليلاً عن ميليمتر - نطاق الموجات الميكروية. وهذا بالضبط ما رآه الهوائي في هولمديل، وأظهر القمر الصناعي COBE في عام 1990 أن شكل الطيف يتطابق مع طيف بلانك بدقة لا يمكن تحقيقها لأي مصدر مختبري.",
-     "latex": "\\lambda_{\\max} = \\frac{2{,}898 \\cdot 10^{-3}}{2{,}725} \\approx 1{,}06\\ \\text{mm}",
-     "figure": "planckpeak",
-     "figCaption": "كلما كان الجسم أبرد، كانت الذروة إلى اليمين: ذروة الإشعاع الأثري في موجات ميليمترية"
-    },
-    {
-     "text": "والآن ما لا يتوافق. خذ نقطتين في السماء تفصل بينهما درجتان. في اللحظة التي خرج فيها الإشعاع، كانت المسافة بينهما لا يمكن للضوء قطعها منذ البداية: كانتا تقعان خلف أفق بعضهما البعض. لم تكن لهما قصة مشتركة - لكن درجة الحرارة متطابقة حتى الخانة الخامسة. وهذا ما يسمى مشكلة الأفق.",
-     "latex": "\\text{angle} \\sim 1^\\circ \\;-\\; \\text{الحد الذي كان الاتصال ممكنًا}",
-     "figure": "horizon",
-     "figCaption": "منطقتان خلف أفق بعضهما البعض: لم يكن للإشارة وقت لتعبر بينهما"
-    },
-    {
-     "text": "يشرح التضخم ذلك على النحو التالي: قبل المرحلة الساخنة، تمدد الكون لفترة قصيرة جدًا وبسرعة فائقة. عندها، كل ما نراه اليوم خرج من منطقة صغيرة واحدة تمكنت من أن تصبح متجانسة قبل التمدد. وفي الوقت نفسه، يتم حل اللغز الثاني - لماذا الفضاء قريب جدًا من المسطح: أي انحناء يتمدد بفعل التضخم إلى الصفر تقريبًا، مثل التجاعيد على بالون يتم نفخه.",
-     "latex": "a \\;\\to\\; a \\cdot e^{N}, \\qquad N \\approx 60",
-     "figure": "inflation",
-     "figCaption": "كل ما هو مرئي اليوم خرج من منطقة واحدة تمكنت من التجانس قبل التمدد"
-    }
-   ],
-   "plate": "T = T_0(1+z), \\qquad \\lambda_{\\max} = b/T",
-   "plateCap": "صيغتان بسيطتان تربطان الضوضاء في الهوائي بحالة الكون في عمر ثلاثمائة وثمانين ألف سنة. كل شيء آخر في هذه الفقرة هو نتائج وما لا يستنتج منها.",
-   "note": "التضخم ليس جزءًا من الصورة بنفس درجة الموثوقية مثل تبريد الإشعاع الأثري. التبريد يتبع من التمدد وقد تم التحقق منه بواسطة الطيف؛ أما التضخم فقد ابتكر لتفسير المشاهدات ولا يزال ليس له شكل واحد: هناك عشرات النماذج، وأيها صحيح غير معروف. يجدر تعلمه بهذه الطريقة: تفسير قوي بنهاية مفتوحة."
   },
   "math": {
    "title": "الرياضيات التي كانت ضرورية هنا",

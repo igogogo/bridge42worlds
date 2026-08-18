@@ -512,56 +512,6 @@
     "note": "a quantity whose logarithm is entropy"
    }
   ],
-  "derivation": {
-   "title": "Rigorous derivation: how memory is replaced by dimensionality",
-   "lead": "Let's go through it slowly—every step matters. We start with the usual second law and arrive at the idea that motion is a line in state space.",
-   "steps": [
-    {
-     "text": "Newton's second law is a second-order equation in time. To solve it, you need two initial conditions, not one. Formally: knowing only $x(t)$, you cannot compute $x(t+dt)$; you also need $x(t-dt)$ to estimate the velocity. That's memory of the past.",
-     "latex": "m\\frac{d^{2}x}{dt^{2}} = F(x)",
-     "figure": "secondlaw",
-     "figCaption": "A second-order equation requires knowledge of both position and velocity—a single instant is not enough."
-    },
-    {
-     "text": "We change the language of description. We declare the state to be not a coordinate but a pair. One second-order equation splits into two first-order equations—without memory.",
-     "latex": "\\text{state} = (x, v): \\qquad \\frac{dx}{dt} = v, \\qquad \\frac{dv}{dt} = \\frac{F(x)}{m}",
-     "figure": "axes",
-     "figCaption": "Two first-order equations instead of one second-order: order is reduced, dimensionality is increased."
-    },
-    {
-     "text": "Where the new variable comes from. Velocity is not an artificial addition but an encapsulated history: the difference between two neighboring positions squeezed into a single number. Instead of storing the coordinate at two instants, we store the coordinate and its derivative at one.",
-     "latex": "v(t) = \\lim_{dt \\to 0} \\frac{x(t) - x(t-dt)}{dt}",
-     "figure": "secant",
-     "figCaption": "The derivative packs the immediate past into a number attached to the present."
-    },
-    {
-     "text": "The trick generalizes. A third-order equation requires a triple, fourth-order a quadruple. Each successive derivative packs deeper and deeper past—just like the coefficients of a Taylor series store the behavior of a function in the neighborhood of a single point.",
-     "latex": "(x,\\,v,\\,a): \\quad \\frac{dx}{dt} = v, \\;\\; \\frac{dv}{dt} = a, \\;\\; \\frac{da}{dt} = \\ldots",
-     "figure": "tangent",
-     "figCaption": "Taylor series is the same idea: the entire history of a function is encoded in a set of numbers at one point."
-    },
-    {
-     "text": "Now the main consequence. Since the state has become a point, motion has become a line. For a mass on a spring, energy is kinetic plus potential and is constant—and that is the equation of an ellipse in the coordinate-momentum plane.",
-     "latex": "E = \\frac{p^{2}}{2m} + \\frac{kx^{2}}{2} = \\text{const} \\;\\Longrightarrow\\; \\frac{p^{2}}{2mE} + \\frac{x^{2}}{2E/k} = 1",
-     "figure": "energyswap",
-     "figCaption": "A closed curve in the phase plane is the statement 'energy is conserved, motion is periodic'."
-    },
-    {
-     "text": "Add friction—and the ellipse turns into a spiral winding toward the origin. Notice: to understand this, we didn't solve the equation. The shape of the trajectory answers the question about the fate of the system before any formula appears. It was from this observation that Poincaré began the qualitative theory of dynamical systems.",
-     "latex": "\\frac{dE}{dt} = -bv^{2} < 0 \\;\\Longrightarrow\\; \\text{spiral inward}",
-     "figure": "friction",
-     "figCaption": "Friction drives the trajectory inward: the qualitative answer is visible without any solution."
-    },
-    {
-     "text": "And the final step—to statistics. For one particle, phase space is six-dimensional. For a mole of gas, the dimension is about $6 \\cdot 10^{23}$: keeping track of a point is impossible now and forever. So physics abandons the point and moves to volume. Boltzmann entropy is the logarithm of the number of states, that is, literally the logarithm of the phase volume.",
-     "latex": "S = k_B \\ln W, \\qquad W \\sim V_{\\Gamma}",
-     "figure": "microcontact",
-     "figCaption": "When a point cannot be tracked, one tracks density. Hence all of statistical physics."
-    }
-   ],
-   "plate": "The transition to phase space is a replacement of memory by dimensionality. The past is not discarded, it is encoded in additional coordinates of the present.",
-   "note": "The trick works even where memory does not reduce to a derivative. Example—hysteresis: wetting of a porous rock and its reverse drying follow different curves, and the same moisture content means different things. The fix is to add a flag for the direction of the process to the state. The flag is the same kind of encapsulated history as velocity is for coordinate. Industrial reservoir models are built exactly this way; if an unexplained dependence on history appears, it is a sure sign that some variable was forgotten to be included in the state."
-  },
   "example": {
    "title": "Numerical example: area of an ellipse and where Planck's constant came from in quantum theory",
    "lead": "We calculate the area of the phase trajectory of an ordinary mass on a spring. The answer turns out to be unexpectedly insightful.",
@@ -871,56 +821,6 @@
     "note": "magnitud cuyo logaritmo es la entropía"
    }
   ],
-  "derivation": {
-   "title": "Derivación rigurosa: cómo la memoria se reemplaza por la dimensionalidad",
-   "lead": "Analicemos lentamente — aquí cada paso es importante. Comencemos con la segunda ley habitual y lleguemos a que el movimiento es una línea en el espacio de estados.",
-   "steps": [
-    {
-     "text": "La segunda ley de Newton es una ecuación de segundo orden en el tiempo. Para resolverla se necesitan dos condiciones iniciales, no una. Formalmente: conociendo solo $x(t)$, no se puede calcular $x(t+dt)$; se necesita también $x(t-dt)$ para estimar la velocidad. Y eso es memoria del pasado.",
-     "latex": "m\\frac{d^{2}x}{dt^{2}} = F(x)",
-     "figure": "secondlaw",
-     "figCaption": "Una ecuación de segundo orden requiere conocer tanto la posición como la velocidad — un solo instante no es suficiente."
-    },
-    {
-     "text": "Cambiamos el lenguaje de descripción. Declaramos como estado no una coordenada, sino un par. Una ecuación de segundo orden se descompone en dos ecuaciones de primer orden — sin memoria.",
-     "latex": "\\text{estado} = (x, v): \\qquad \\frac{dx}{dt} = v, \\qquad \\frac{dv}{dt} = \\frac{F(x)}{m}",
-     "figure": "axes",
-     "figCaption": "Dos ecuaciones de primer orden en lugar de una de segundo: el orden se reduce, la dimensionalidad aumenta."
-    },
-    {
-     "text": "De dónde surgió la nueva variable. La velocidad no es un añadido artificial, sino una historia encapsulada: la diferencia de dos posiciones vecinas comprimida en un solo número. En lugar de almacenar la coordenada en dos instantes, almacenamos la coordenada y su derivada en uno.",
-     "latex": "v(t) = \\lim_{dt \\to 0} \\frac{x(t) - x(t-dt)}{dt}",
-     "figure": "secant",
-     "figCaption": "La derivada empaqueta el pasado más cercano en un número asignado al presente."
-    },
-    {
-     "text": "El truco se generaliza. Una ecuación de tercer orden requerirá una tripleta, una de cuarto una cuádrupla. Cada derivada sucesiva empaqueta un pasado cada vez más profundo — exactamente como los coeficientes de la serie de Taylor almacenan el comportamiento de una función en el entorno de un punto.",
-     "latex": "(x,\\,v,\\,a): \\quad \\frac{dx}{dt} = v, \\;\\; \\frac{dv}{dt} = a, \\;\\; \\frac{da}{dt} = \\ldots",
-     "figure": "tangent",
-     "figCaption": "La serie de Taylor — la misma idea: toda la historia de la función está codificada en un conjunto de números en un solo punto."
-    },
-    {
-     "text": "Ahora la principal consecuencia. Como el estado se ha convertido en un punto, el movimiento se ha convertido en una línea. Para una masa en un resorte, la energía se compone de cinética y potencial y no cambia — y eso es la ecuación de una elipse en el plano coordenada-momento.",
-     "latex": "E = \\frac{p^{2}}{2m} + \\frac{kx^{2}}{2} = \\text{const} \\;\\Longrightarrow\\; \\frac{p^{2}}{2mE} + \\frac{x^{2}}{2E/k} = 1",
-     "figure": "energyswap",
-     "figCaption": "Una curva cerrada en el plano de fase — eso es la afirmación «la energía se conserva, el movimiento es periódico»."
-    },
-    {
-     "text": "Agreguemos fricción — y la elipse se convertirá en una espiral que se enrolla hacia el origen. Observen: para entender esto no resolvimos la ecuación. La forma de la trayectoria responde a la pregunta sobre el destino del sistema antes de que aparezca una fórmula. Fue con esta observación que Poincaré comenzó la teoría cualitativa de los sistemas dinámicos.",
-     "latex": "\\frac{dE}{dt} = -bv^{2} < 0 \\;\\Longrightarrow\\; \\text{espiral hacia adentro}",
-     "figure": "friction",
-     "figCaption": "La fricción lleva la trayectoria hacia adentro: la respuesta cualitativa se ve sin ninguna solución."
-    },
-    {
-     "text": "Y el último paso — hacia la estadística. Para una partícula, el espacio de fases es hexadimensional. Para un mol de gas, las dimensiones son del orden de $6 \\cdot 10^{23}$: seguir un punto es imposible ahora y siempre. Entonces la física abandona el punto y pasa al volumen. La entropía de Boltzmann es el logaritmo del número de estados, es decir, literalmente el logaritmo del volumen de fase.",
-     "latex": "S = k_B \\ln W, \\qquad W \\sim V_{\\Gamma}",
-     "figure": "microcontact",
-     "figCaption": "Cuando no se puede seguir un punto, se sigue la densidad. De ahí toda la física estadística."
-    }
-   ],
-   "plate": "La transición al espacio de fases es el reemplazo de la memoria por la dimensionalidad. El pasado no se descarta, se codifica en las coordenadas adicionales del presente.",
-   "note": "El truco también funciona donde la memoria no se reduce a una derivada. Ejemplo: histéresis: la humectación de una roca porosa y el secado inverso siguen curvas diferentes, y la misma humedad significa cosas distintas. Se corrige añadiendo al estado una bandera de la dirección del proceso. La bandera es la misma historia encapsulada que la velocidad para la coordenada. Los modelos industriales de yacimientos están diseñados así; si aparece una dependencia inexplicable de la historia, es una señal segura de que se olvidó incluir alguna variable en el estado."
-  },
   "example": {
    "title": "Ejemplo con números: área de la elipse y de dónde surgió la constante de Planck en la cuántica",
    "lead": "Calculamos el área de la trayectoria en el espacio fásico de una masa común en un resorte. La respuesta resultará sorprendentemente reveladora.",
@@ -1229,56 +1129,6 @@
      "note": "كمية لوجاريتمها هو الإنتروبيا"
     }
    ]
-  },
-  "derivation": {
-   "title": "استنتاج صارم: كيف تحل البعدية محل الذاكرة",
-   "lead": "دعنا نتحلل ببطء — كل خطوة مهمة هنا. سنبدأ بقانون نيوتن الثاني العادي ونصل إلى أن الحركة هي خط في فضاء الحالات.",
-   "steps": [
-    {
-     "text": "قانون نيوتن الثاني هو معادلة من الدرجة الثانية بالنسبة للزمن. لحلها، نحتاج شرطين ابتدائيين، ليس شرطًا واحدًا. بشكل رسمي: بمعرفة $x(t)$ فقط، لا يمكنك حساب $x(t+dt)$؛ تحتاج أيضًا $x(t-dt)$ لتقدير السرعة. وهذه ذاكرة عن الماضي.",
-     "latex": "m\\frac{d^{2}x}{dt^{2}} = F(x)",
-     "figure": "secondlaw",
-     "figCaption": "تتطلب المعادلة من الدرجة الثانية معرفة كل من الموقع والسرعة — لحظة واحدة لا تكفي."
-    },
-    {
-     "text": "نغير لغة الوصف. نعلن أن الحالة ليست الإحداثي، بل زوج. تنقسم معادلة واحدة من الدرجة الثانية إلى معادلتين من الدرجة الأولى — بدون ذاكرة.",
-     "latex": "\\text{حالة} = (x, v): \\qquad \\frac{dx}{dt} = v, \\qquad \\frac{dv}{dt} = \\frac{F(x)}{m}",
-     "figure": "axes",
-     "figCaption": "معادلتان من الدرجة الأولى بدلاً من معادلة واحدة من الدرجة الثانية: انخفض الترتيب وارتفعت البعدية."
-    },
-    {
-     "text": "من أين أتى المتغير الجديد. السرعة ليست إضافة مصطنعة، بل تاريخ مغلف: الفرق بين موقعين متجاورين، مضغوط في رقم واحد. بدلاً من تخزين الإحداثي في لحظتين، نخزن الإحداثي والمشتق في لحظة واحدة.",
-     "latex": "v(t) = \\lim_{dt \\to 0} \\frac{x(t) - x(t-dt)}{dt}",
-     "figure": "secant",
-     "figCaption": "يغلف المشتق الماضي القريب في رقم يُنسب إلى الحاضر."
-    },
-    {
-     "text": "التقنية تعمم. معادلة من الدرجة الثالثة تتطلب ثلاثية، والرابعة رباعية. كل مشتق تالٍ يغلف ماضيًا أعمق — تمامًا كما تخزن معاملات متسلسلة تايلور سلوك الدالة في جوار نقطة واحدة.",
-     "latex": "(x,\\,v,\\,a): \\quad \\frac{dx}{dt} = v, \\;\\; \\frac{dv}{dt} = a, \\;\\; \\frac{da}{dt} = \\ldots",
-     "figure": "tangent",
-     "figCaption": "متسلسلة تايلور — نفس الفكرة: كل تاريخ الدالة مُشفَّر في مجموعة أرقام في نقطة واحدة."
-    },
-    {
-     "text": "الآن النتيجة الرئيسية. بمجرد أن أصبحت الحالة نقطة، أصبحت الحركة خطًا. بالنسبة لكتلة على نابض، تتكون الطاقة من الحركة والوضع ولا تتغير — وهذه معادلة قطع ناقص في مستوى الإحداثي-الزخم.",
-     "latex": "E = \\frac{p^{2}}{2m} + \\frac{kx^{2}}{2} = \\text{ثابت} \\;\\Longrightarrow\\; \\frac{p^{2}}{2mE} + \\frac{x^{2}}{2E/k} = 1",
-     "figure": "energyswap",
-     "figCaption": "المنحنى المغلق في مستوى الطور هو بالضبط تأكيد أن 'الطاقة محفوظة، الحركة دورية'."
-    },
-    {
-     "text": "أضف الاحتكاك — وسيتحول القطع الناقص إلى حلزون، يلتف نحو نقطة الأصل. لاحظ: لفهم هذا، لم نحل المعادلة. شكل المسار يجيب على سؤال مصير النظام قبل ظهور الصيغة. من هذه الملاحظة بدأ بوانكاريه النظرية النوعية للأنظمة الديناميكية.",
-     "latex": "\\frac{dE}{dt} = -bv^{2} < 0 \\;\\Longrightarrow\\; \\text{حلزون إلى الداخل}",
-     "figure": "friction",
-     "figCaption": "الاحتكاك يوجه المسار إلى الداخل: إجابة نوعية مرئية دون أي حل."
-    },
-    {
-     "text": "والخطوة الأخيرة — إلى الإحصاء. لجسيم واحد، فضاء الطور سداسي الأبعاد. لمول غاز، عدد الأبعاد حوالي $6 \\cdot 10^{23}$: تتبع نقطة مستحيل الآن ولن يكون ممكنًا أبدًا. حينئذ، تتخلى الفيزياء عن النقطة وتنتقل إلى الحجم. إنتروبيا بولتزمان هي لوغاريتم عدد الحالات، أي حرفيًا لوغاريتم حجم الطور.",
-     "latex": "S = k_B \\ln W, \\qquad W \\sim V_{\\Gamma}",
-     "figure": "microcontact",
-     "figCaption": "عندما لا يمكن تتبع النقطة، يتم تتبع الكثافة. من هنا تبدأ كل الفيزياء الإحصائية."
-    }
-   ],
-   "plate": "الانتقال إلى فضاء الطور هو استبدال الذاكرة بالبعدية. الماضي لا يُهمل، بل يُشفَّر في الإحداثيات الإضافية للحاضر.",
-   "note": "التقنية تعمل أيضًا حيث لا تقتصر الذاكرة على المشتق. مثال — التخلفية: تبلل الصخور المسامية والتجفيف العكسي يسيران في منحنيات مختلفة، ونفس الرطوبة تعني أشياء مختلفة. يُعالج بإضافة علامة اتجاه العملية إلى الحالة. العلامة هي نفس التاريخ المغلف مثل السرعة للإحداثي. نماذج الخزان الصناعية مصممة هكذا تمامًا؛ إذا ظهر فيها اعتماد غير مفسر على التاريخ، فهذه علامة أكيدة على أن متغيرًا ما نُسي تضمينه في الحالة."
   },
   "example": {
    "title": "مثال بالأرقام: مساحة القطع الناقص ومن أين جاء ثابت بلانك في الكم",

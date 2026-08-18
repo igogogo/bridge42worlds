@@ -107,7 +107,7 @@
     {
      "text": "В лагранжевом описании независимыми были координата и скорость. Гамильтон заменяет скорость на импульс — ту самую величину, которая, как мы выяснили, сохраняется при симметрии. Взамен получается симметричная пара переменных.",
      "latex": "(q, \\dot{q}) \\;\\longrightarrow\\; (q, p), \\qquad p = \\frac{\\partial L}{\\partial \\dot{q}}",
-     "figure": "action",
+     "figure": "qptrade",
      "figCaption": "Скорость уступает место импульсу — переменные становятся равноправными"
     },
     {
@@ -131,19 +131,19 @@
     {
      "text": "Вместо одного уравнения второго порядка получаются два первого. Читаются они просто: первое говорит, куда система движется, второе — как меняется её импульс. Обратите внимание на минус: он и делает движение вращением, а не разбеганием.",
      "latex": "\\dot{q} = \\frac{\\partial H}{\\partial p}, \\qquad \\dot{p} = -\\frac{\\partial H}{\\partial q}",
-     "figure": "energyswap",
+     "figure": "heqpair",
      "figCaption": "Два уравнения вместо одного: координата и импульс меняются согласованно"
     },
     {
      "text": "Нарисуем состояние точкой на плоскости $(q, p)$. Для груза на пружине энергия складывается из двух квадратов, а линия постоянной энергии на такой плоскости — эллипс. Движение оказывается обходом этого эллипса с постоянной скоростью по площади.",
      "latex": "H = \\frac{p^2}{2m} + \\frac{kq^2}{2} = \\text{const}",
-     "figure": "shadow",
+     "figure": "phaseellipse",
      "figCaption": "Колебание в фазовом пространстве — замкнутая кривая, а не линия туда-обратно"
     },
     {
      "text": "Сохранение энергии на этом языке выглядит наглядно: точка не может сойти со своей кривой. А теорема Лиувилля добавляет: если взять не одну точку, а облако начальных состояний, его площадь не меняется со временем. Отсюда позже вырастет статистическая физика.",
      "latex": "\\frac{dH}{dt} = 0, \\qquad \\text{площадь облака состояний} = \\text{const}",
-     "figure": "anywell",
+     "figure": "stayoncurve",
      "figCaption": "Замкнутая кривая — это и есть закон сохранения энергии в фазовом виде"
     },
     {
@@ -435,39 +435,6 @@
     }
    ]
   },
-  "derivation": {
-   "title": "How a trajectory becomes a point",
-   "lead": "The transition is done in three steps and changes not the physics, but the way of looking at it.",
-   "steps": [
-    {
-     "text": "In the Lagrangian description, coordinate and velocity were independent. Hamilton replaces velocity with momentum — the very quantity that, as we found, is conserved under symmetry. In return, we get a symmetric pair of variables.",
-     "latex": "(q, \\dot{q}) \\;\\longrightarrow\\; (q, p), \\qquad p = \\frac{\\partial L}{\\partial \\dot{q}}",
-     "figure": "action",
-     "figCaption": "Velocity gives way to momentum — the variables become equal in rights"
-    },
-    {
-     "text": "Instead of one second-order equation, we get two first-order ones. They are read simply: the first says where the system is moving, the second how its momentum changes. Note the minus sign: it makes motion a rotation, not a divergence.",
-     "latex": "\\dot{q} = \\frac{\\partial H}{\\partial p}, \\qquad \\dot{p} = -\\frac{\\partial H}{\\partial q}",
-     "figure": "energyswap",
-     "figCaption": "Two equations instead of one: coordinate and momentum change in concert"
-    },
-    {
-     "text": "Let us draw the state as a point on the $(q, p)$ plane. For a mass on a spring, energy is the sum of two squares, and the constant-energy line on that plane is an ellipse. Motion turns out to be a traversal of this ellipse with a constant speed in area.",
-     "latex": "H = \\frac{p^2}{2m} + \\frac{kq^2}{2} = \\text{const}",
-     "figure": "shadow",
-     "figCaption": "Oscillation in phase space is a closed curve, not a back-and-forth line"
-    },
-    {
-     "text": "Conservation of energy in this language looks clear: the point cannot leave its curve. And Liouville's theorem adds: if we take not one point but a cloud of initial states, its area does not change over time. From this, statistical physics will later grow.",
-     "latex": "\\frac{dH}{dt} = 0, \\qquad \\text{area of cloud of states} = \\text{const}",
-     "figure": "anywell",
-     "figCaption": "Closed curve — that is the law of conservation of energy in phase space form"
-    }
-   ],
-   "plate": "\\dot{q} = \\partial H/\\partial p, \\qquad \\dot{p} = -\\partial H/\\partial q",
-   "plateCap": "State of the system is a point $(q,p)$, motion is the path of this point along the constant-energy line",
-   "note": "The Hamiltonian does not always coincide with total energy: if constraints depend on time or rotating coordinates are chosen, these two quantities diverge. For the course problems, the coincidence holds, but it is worth remembering the difference."
-  },
   "math": {
    "title": "Mathematics needed here",
    "lead": "No new technique — just a new perspective on the plane.",
@@ -746,39 +713,6 @@
     }
    ]
   },
-  "derivation": {
-   "title": "Cómo la trayectoria se convierte en un punto",
-   "lead": "La transición se realiza en tres pasos y no cambia la física, sino la forma de mirarla.",
-   "steps": [
-    {
-     "text": "En la descripción lagrangiana, la coordenada y la velocidad eran independientes. Hamilton reemplaza la velocidad por el impulso — la misma cantidad que, como descubrimos, se conserva bajo simetría. A cambio, se obtiene un par simétrico de variables.",
-     "latex": "(q, \\dot{q}) \\;\\longrightarrow\\; (q, p), \\qquad p = \\frac{\\partial L}{\\partial \\dot{q}}",
-     "figure": "action",
-     "figCaption": "La velocidad cede el paso al impulso — las variables se vuelven equivalentes"
-    },
-    {
-     "text": "En lugar de una ecuación de segundo orden, se obtienen dos de primer orden. Se leen de manera simple: la primera dice hacia dónde se mueve el sistema, la segunda cómo cambia su impulso. Observe el signo menos: es lo que hace que el movimiento sea una rotación, no una dispersión.",
-     "latex": "\\dot{q} = \\frac{\\partial H}{\\partial p}, \\qquad \\dot{p} = -\\frac{\\partial H}{\\partial q}",
-     "figure": "energyswap",
-     "figCaption": "Dos ecuaciones en lugar de una: la coordenada y el impulso cambian de manera coordinada"
-    },
-    {
-     "text": "Dibujemos el estado como un punto en el plano $(q, p)$. Para una masa en un resorte, la energía es la suma de dos cuadrados, y la línea de energía constante en ese plano es una elipse. El movimiento resulta ser un recorrido de esa elipse a velocidad constante en área.",
-     "latex": "H = \\frac{p^2}{2m} + \\frac{kq^2}{2} = \\text{const}",
-     "figure": "shadow",
-     "figCaption": "La oscilación en el espacio de fases es una curva cerrada, no una línea de ida y vuelta"
-    },
-    {
-     "text": "La conservación de la energía en este lenguaje es evidente: el punto no puede salir de su curva. Y el teorema de Liouville añade: si tomamos no un punto, sino una nube de estados iniciales, su área no cambia con el tiempo. De aquí surgirá más tarde la física estadística.",
-     "latex": "\\frac{dH}{dt} = 0, \\qquad \\text{área de la nube de estados} = \\text{const}",
-     "figure": "anywell",
-     "figCaption": "La curva cerrada es precisamente la ley de conservación de la energía en forma de fase"
-    }
-   ],
-   "plate": "\\dot{q} = \\partial H/\\partial p, \\qquad \\dot{p} = -\\partial H/\\partial q",
-   "plateCap": "El estado del sistema es un punto $(q,p)$, el movimiento es el camino de ese punto a lo largo de la línea de energía constante",
-   "note": "El hamiltoniano no siempre coincide con la energía total: si las ligaduras del sistema dependen del tiempo o se eligen coordenadas rotatorias, estas dos cantidades divergen. Para los problemas del curso, la coincidencia se cumple, pero conviene recordar la diferencia."
-  },
   "math": {
    "title": "Las matemáticas que se necesitaron aquí",
    "lead": "Ninguna técnica nueva, solo una nueva visión del plano.",
@@ -1056,39 +990,6 @@
      "unit": "—"
     }
    ]
-  },
-  "derivation": {
-   "title": "كيف يتحول المسار إلى نقطة",
-   "lead": "الانتقال يتم في ثلاث خطوات ولا يغير الفيزياء، بل طريقة النظر إليها.",
-   "steps": [
-    {
-     "text": "في الوصف اللاغرانجي، كانت الإحداثيات والسرعة مستقلتين. يستبدل هاملتون السرعة بالزخم - نفس الكمية التي، كما اكتشفنا، تُحفظ تحت التناظر. في المقابل، نحصل على زوج متماثل من المتغيرات.",
-     "latex": "(q, \\dot{q}) \\;\\longrightarrow\\; (q, p), \\qquad p = \\frac{\\partial L}{\\partial \\dot{q}}",
-     "figure": "action",
-     "figCaption": "السرعة تفسح المجال للزخم - تصبح المتغيرات متكافئة"
-    },
-    {
-     "text": "بدلاً من معادلة واحدة من الدرجة الثانية، نحصل على معادلتين من الدرجة الأولى. قراءتها بسيطة: الأولى تخبر أين يتجه النظام، والثانية كيف يتغير زخمه. انتبه إلى علامة الناقص: هي التي تجعل الحركة دورانًا وليس تفرقعًا.",
-     "latex": "\\dot{q} = \\frac{\\partial H}{\\partial p}, \\qquad \\dot{p} = -\\frac{\\partial H}{\\partial q}",
-     "figure": "energyswap",
-     "figCaption": "معادلتان بدلاً من واحدة: الإحداثي والزخم يتغيران بشكل منسق"
-    },
-    {
-     "text": "لنرسم الحالة كنقطة على المستوى $(q, p)$. بالنسبة لثقل على نابض، تتكون الطاقة من مربعين، وخط الطاقة الثابت على هذا المستوى هو قطع ناقص. الحركة تكون دورانًا حول هذا القطع الناقص بسرعة مساحية ثابتة.",
-     "latex": "H = \\frac{p^2}{2m} + \\frac{kq^2}{2} = \\text{const}",
-     "figure": "shadow",
-     "figCaption": "الاهتزاز في فضاء الطور - منحنى مغلق، وليس خطًا ذهابًا وإيابًا"
-    },
-    {
-     "text": "حفظ الطاقة بهذه اللغة يبدو واضحًا: لا يمكن للنقطة أن تخرج عن منحناها. وتضيف نظرية ليوفيل: إذا أخذنا ليست نقطة واحدة، بل سحابة من الحالات الأولية، فإن مساحتها لا تتغير مع الزمن. من هنا ستنشأ لاحقًا الفيزياء الإحصائية.",
-     "latex": "\\frac{dH}{dt} = 0, \\qquad \\text{مساحة سحابة الحالات} = \\text{const}",
-     "figure": "anywell",
-     "figCaption": "المنحنى المغلق - هذا هو قانون حفظ الطاقة في شكل طوري"
-    }
-   ],
-   "plate": "\\dot{q} = \\partial H/\\partial p, \\qquad \\dot{p} = -\\partial H/\\partial q",
-   "plateCap": "حالة النظام هي نقطة $(q,p)$، والحركة هي مسار هذه النقطة على طول خط الطاقة الثابت",
-   "note": "الهاملتوني لا يتطابق دائمًا مع الطاقة الكلية: إذا كانت القيود في النظام تعتمد على الزمن أو تم اختيار إحداثيات دوارة، فإن هاتين الكميتين تتباعدان. بالنسبة لمسائل الدورة، يتحقق التطابق، لكن يجدر تذكر الفرق."
   },
   "math": {
    "title": "الرياضيات التي كانت مطلوبة هنا",

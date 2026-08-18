@@ -2892,5 +2892,713 @@ window.B42FigText = {
     "es": "el área de la mancha es la misma",
     "ar": "مساحة البقعة هي نفسها",
     "fr": "l’aire de la tache est la même"
+  },
+  "слой воздуха толщиной Δh покоится": {
+    "en": "a layer of air of thickness Δh is at rest",
+    "es": "una capa de aire de espesor Δh está en reposo",
+    "ar": "طبقة هواء سماكتها Δh في حالة سكون",
+    "fr": "une couche d'air d'épaisseur Δh est au repos"
+  },
+  "столб воздуха": {
+    "en": "column of air",
+    "es": "columna de aire",
+    "ar": "عمود الهواء",
+    "fr": "colonne d'air"
+  },
+  "сумма трёх сил равна нулю": {
+    "en": "the three forces sum to zero",
+    "es": "las tres fuerzas suman cero",
+    "ar": "مجموع القوى الثلاث يساوي صفراً",
+    "fr": "la somme des trois forces est nulle"
+  },
+  "отношение не зависит от толщины слоя": {
+    "en": "the ratio does not depend on the layer thickness",
+    "es": "la razón no depende del espesor de la capa",
+    "ar": "النسبة لا تعتمد على سماكة الطبقة",
+    "fr": "le rapport ne dépend pas de l'épaisseur"
+  },
+  "толстый слой": {
+    "en": "thick layer",
+    "es": "capa gruesa",
+    "ar": "طبقة سميكة",
+    "fr": "couche épaisse"
+  },
+  "тоньше": {
+    "en": "thinner",
+    "es": "más delgada",
+    "ar": "أرق",
+    "fr": "plus mince"
+  },
+  "в пределе": {
+    "en": "in the limit",
+    "es": "en el límite",
+    "ar": "في الحد",
+    "fr": "à la limite"
+  },
+  "одна температура: плотность идёт следом за давлением": {
+    "en": "one temperature: density follows the pressure",
+    "es": "una sola temperatura: la densidad sigue a la presión",
+    "ar": "درجة حرارة واحدة: الكثافة تتبع الضغط",
+    "fr": "une seule température : la densité suit la pression"
+  },
+  "T одинакова": {
+    "en": "T is the same",
+    "es": "T es la misma",
+    "ar": "T واحدة",
+    "fr": "T identique"
+  },
+  "давление высокое": {
+    "en": "high pressure",
+    "es": "presión alta",
+    "ar": "ضغط مرتفع",
+    "fr": "pression élevée"
+  },
+  "давление низкое": {
+    "en": "low pressure",
+    "es": "presión baja",
+    "ar": "ضغط منخفض",
+    "fr": "pression faible"
+  },
+  "наклон пропорционален самому значению": {
+    "en": "the slope is proportional to the value itself",
+    "es": "la pendiente es proporcional al propio valor",
+    "ar": "الميل يتناسب مع القيمة نفسها",
+    "fr": "la pente est proportionnelle à la valeur elle-même"
+  },
+  "высота ⟶": {
+    "en": "altitude ⟶",
+    "es": "altura ⟶",
+    "ar": "الارتفاع ⟵",
+    "fr": "altitude ⟶"
+  },
+  "только высота": {
+    "en": "altitude only",
+    "es": "solo la altura",
+    "ar": "الارتفاع وحده",
+    "fr": "l'altitude seule"
+  },
+  "∫ каждую часть отдельно": {
+    "en": "∫ each side separately",
+    "es": "∫ cada parte por separado",
+    "ar": "∫ كل طرف على حدة",
+    "fr": "∫ chaque membre séparément"
+  },
+  "каждая шкала высот отнимает одну и ту же долю": {
+    "en": "each scale height removes the same fraction",
+    "es": "cada altura de escala quita la misma fracción",
+    "ar": "كل ارتفاع مقياسي يقتطع النسبة نفسها",
+    "fr": "chaque hauteur d'échelle retire la même fraction"
+  },
+  "высота, в шкалах H": {
+    "en": "altitude, in units of H",
+    "es": "altura, en unidades de H",
+    "ar": "الارتفاع بوحدات H",
+    "fr": "altitude, en unités de H"
+  },
+  "у каждого газа своя шкала высот": {
+    "en": "every gas has its own scale height",
+    "es": "cada gas tiene su propia altura de escala",
+    "ar": "لكل غاز ارتفاعه المقياسي",
+    "fr": "chaque gaz a sa propre hauteur d'échelle"
+  },
+  "водород: 120 км": {
+    "en": "hydrogen: 120 km",
+    "es": "hidrógeno: 120 km",
+    "ar": "الهيدروجين: 120 km",
+    "fr": "hydrogène : 120 km"
+  },
+  "азот: 8,7 км": {
+    "en": "nitrogen: 8.7 km",
+    "es": "nitrógeno: 8,7 km",
+    "ar": "النيتروجين: 8.7 km",
+    "fr": "azote : 8,7 km"
+  },
+  "углекислый газ: 5,5 км": {
+    "en": "carbon dioxide: 5.5 km",
+    "es": "dióxido de carbono: 5,5 km",
+    "ar": "ثاني أكسيد الكربون: 5.5 km",
+    "fr": "dioxyde de carbone : 5,5 km"
+  },
+  "высота, км": {
+    "en": "altitude, km",
+    "es": "altura, km",
+    "ar": "الارتفاع، km",
+    "fr": "altitude, km"
+  },
+  "H = kT / (mg): чем тяжелее молекула, тем ниже столб": {
+    "en": "H = kT/(mg): the heavier the molecule, the lower the column",
+    "es": "H = kT/(mg): cuanto más pesada la molécula, más bajo el pilar",
+    "ar": "H = kT/(mg): كلما ثقل الجزيء انخفض العمود",
+    "fr": "H = kT/(mg) : plus la molécule est lourde, plus la colonne est basse"
+  },
+  "заселённость падает экспоненциально с энергией": {
+    "en": "level population falls exponentially with energy",
+    "es": "la población decae exponencialmente con la energía",
+    "ar": "إشغال المستوى يتناقص أسّياً مع الطاقة",
+    "fr": "la population décroît exponentiellement avec l'énergie"
+  },
+  "колебание N₂: 11 kT": {
+    "en": "N₂ vibration: 11 kT",
+    "es": "vibración de N₂: 11 kT",
+    "ar": "اهتزاز N₂: 11 kT",
+    "fr": "vibration de N₂ : 11 kT"
+  },
+  "одна молекула из 80 000": {
+    "en": "one molecule in 80,000",
+    "es": "una molécula de cada 80 000",
+    "ar": "جزيء واحد من كل 80000",
+    "fr": "une molécule sur 80 000"
+  },
+  "счёт пересечений одинаков в обе стороны": {
+    "en": "the count of crossings is the same both ways",
+    "es": "el número de cruces es igual en ambos sentidos",
+    "ar": "عدد العبورات متساوٍ في الاتجاهين",
+    "fr": "le nombre de traversées est le même dans les deux sens"
+  },
+  "горячее": {
+    "en": "hotter",
+    "es": "más caliente",
+    "ar": "أسخن",
+    "fr": "plus chaud"
+  },
+  "холоднее": {
+    "en": "colder",
+    "es": "más frío",
+    "ar": "أبرد",
+    "fr": "plus froid"
+  },
+  "энергии больше": {
+    "en": "more energy",
+    "es": "más energía",
+    "ar": "طاقة أكبر",
+    "fr": "plus d'énergie"
+  },
+  "энергии меньше": {
+    "en": "less energy",
+    "es": "menos energía",
+    "ar": "طاقة أقل",
+    "fr": "moins d'énergie"
+  },
+  "переносится разность энергий, а не число частиц": {
+    "en": "what is transported is the difference of energies, not the number of particles",
+    "es": "se transporta la diferencia de energías, no el número de partículas",
+    "ar": "المنقول هو فرق الطاقات، لا عدد الجسيمات",
+    "fr": "ce qui est transporté est la différence d'énergies, non le nombre de particules"
+  },
+  "молекула помнит последнее столкновение": {
+    "en": "a molecule remembers its last collision",
+    "es": "la molécula recuerda su última colisión",
+    "ar": "الجزيء يتذكر آخر تصادم له",
+    "fr": "la molécule se souvient de sa dernière collision"
+  },
+  "приносит энергию точки x &#8722; &#955;": {
+    "en": "it brings the energy of the point x &#8722; &#955;",
+    "es": "trae la energía del punto x &#8722; &#955;",
+    "ar": "يحمل طاقة النقطة x &#8722; &#955;",
+    "fr": "elle apporte l'énergie du point x &#8722; &#955;"
+  },
+  "на отрезке в две длины пробега кривая неотличима от прямой": {
+    "en": "over two mean free paths the curve is indistinguishable from a straight line",
+    "es": "en dos recorridos libres medios la curva es indistinguible de una recta",
+    "ar": "على مسافة مسارين حرين يصبح المنحنى غير مميز عن الخط المستقيم",
+    "fr": "sur deux libres parcours la courbe est indiscernable d'une droite"
+  },
+  "профиль температуры": {
+    "en": "temperature profile",
+    "es": "perfil de temperatura",
+    "ar": "منحنى توزع درجة الحرارة",
+    "fr": "profil de température"
+  },
+  "одноатомный: три степени свободы": {
+    "en": "monatomic: three degrees of freedom",
+    "es": "monoatómico: tres grados de libertad",
+    "ar": "أحادي الذرة: ثلاث درجات حرية",
+    "fr": "monoatomique : trois degrés de liberté"
+  },
+  "двухатомный: пять": {
+    "en": "diatomic: five",
+    "es": "diatómico: cinco",
+    "ar": "ثنائي الذرة: خمس",
+    "fr": "diatomique : cinq"
+  },
+  "теплоёмкость одной молекулы": {
+    "en": "heat capacity of a single molecule",
+    "es": "capacidad calorífica de una molécula",
+    "ar": "السعة الحرارية لجزيء واحد",
+    "fr": "capacité thermique d'une seule molécule"
+  },
+  "рост температуры": {
+    "en": "temperature rises",
+    "es": "la temperatura crece",
+    "ar": "اتجاه ازدياد الحرارة",
+    "fr": "la température croît"
+  },
+  "поток тепла": {
+    "en": "heat flux",
+    "es": "flujo de calor",
+    "ar": "التدفق الحراري",
+    "fr": "flux de chaleur"
+  },
+  "плотный газ": {
+    "en": "dense gas",
+    "es": "gas denso",
+    "ar": "غاز كثيف",
+    "fr": "gaz dense"
+  },
+  "разрежённый вдвое": {
+    "en": "twice as rarefied",
+    "es": "dos veces más enrarecido",
+    "ar": "أقل كثافة بمقدار الضعف",
+    "fr": "deux fois plus raréfié"
+  },
+  "пробег короче": {
+    "en": "shorter free path",
+    "es": "recorrido más corto",
+    "ar": "مسار حر أقصر",
+    "fr": "libre parcours plus court"
+  },
+  "пробег вдвое длиннее": {
+    "en": "free path twice as long",
+    "es": "recorrido dos veces más largo",
+    "ar": "مسار حر أطول بالضعف",
+    "fr": "libre parcours deux fois plus long"
+  },
+  "произведение n&#183;&#955; не зависит от давления": {
+    "en": "the product n&#183;&#955; does not depend on pressure",
+    "es": "el producto n&#183;&#955; no depende de la presión",
+    "ar": "الجداء n&#183;&#955; لا يعتمد على الضغط",
+    "fr": "le produit n&#183;&#955; ne dépend pas de la pression"
+  },
+  "температура падает по прямой в каждом слое": {
+    "en": "temperature falls along a straight line in each layer",
+    "es": "la temperatura cae en línea recta en cada capa",
+    "ar": "تنخفض درجة الحرارة خطياً داخل كل طبقة",
+    "fr": "la température décroît linéairement dans chaque couche"
+  },
+  "кирпич": {
+    "en": "brick",
+    "es": "ladrillo",
+    "ar": "الطوب",
+    "fr": "brique"
+  },
+  "утеплитель": {
+    "en": "insulation",
+    "es": "aislante",
+    "ar": "المادة العازلة",
+    "fr": "isolant"
+  },
+  "R = L / &#954;, сопротивления складываются": {
+    "en": "R = L / &#954;, resistances add up",
+    "es": "R = L / &#954;, las resistencias se suman",
+    "ar": "R = L / &#954;، المقاومات تتجمع",
+    "fr": "R = L / &#954;, les résistances s'additionnent"
+  },
+  "поток одинаков во всех сечениях": {
+    "en": "the flux is the same through every cross-section",
+    "es": "el flujo es el mismo en todas las secciones",
+    "ar": "التدفق نفسه عبر كل مقطع",
+    "fr": "le flux est le même à travers chaque section"
+  },
+  "диэлектрик: колебания решётки": {
+    "en": "insulator: lattice vibrations",
+    "es": "dieléctrico: vibraciones de la red",
+    "ar": "عازل: اهتزازات الشبكة البلورية",
+    "fr": "diélectrique : vibrations du réseau"
+  },
+  "металл: электроны проводимости": {
+    "en": "metal: conduction electrons",
+    "es": "metal: electrones de conducción",
+    "ar": "معدن: إلكترونات التوصيل",
+    "fr": "métal : électrons de conduction"
+  },
+  "медленно": {
+    "en": "slow",
+    "es": "lento",
+    "ar": "بطيء",
+    "fr": "lent"
+  },
+  "быстро": {
+    "en": "fast",
+    "es": "rápido",
+    "ar": "سريع",
+    "fr": "rapide"
+  },
+  "&#954; / (&#963;T) = 2,44&#183;10&#8315;&#8312; Вт&#183;Ом/К&#178;": {
+    "en": "&#954; / (&#963;T) = 2.44&#183;10&#8315;&#8312; W&#183;&#937;/K&#178;",
+    "es": "&#954; / (&#963;T) = 2,44&#183;10&#8315;&#8312; W&#183;&#937;/K&#178;",
+    "ar": "&#954; / (&#963;T) = 2.44&#183;10&#8315;&#8312; W&#183;&#937;/K&#178;",
+    "fr": "&#954; / (&#963;T) = 2,44&#183;10&#8315;&#8312; W&#183;&#937;/K&#178;"
+  },
+  "одни и те же частицы несут заряд и тепло": {
+    "en": "the same particles carry both charge and heat",
+    "es": "las mismas partículas llevan carga y calor",
+    "ar": "الجسيمات نفسها تحمل الشحنة والحرارة",
+    "fr": "les mêmes particules transportent charge et chaleur"
+  },
+  "одна температура — разные скорости": {
+    "en": "one temperature — many speeds",
+    "es": "una temperatura, muchas velocidades",
+    "ar": "درجة حرارة واحدة — سرعات مختلفة",
+    "fr": "une température, des vitesses variées"
+  },
+  "сколько молекул": {
+    "en": "how many molecules",
+    "es": "cuántas moléculas",
+    "ar": "كم عدد الجزيئات",
+    "fr": "combien de molécules"
+  },
+  "вопрос не «какая скорость», а «какая доля»": {
+    "en": "the question is not «what speed» but «what fraction»",
+    "es": "la pregunta no es «qué velocidad» sino «qué fracción»",
+    "ar": "السؤال ليس «ما السرعة» بل «ما النسبة»",
+    "fr": "la question n'est pas «quelle vitesse» mais «quelle fraction»"
+  },
+  "пространство скоростей": {
+    "en": "velocity space",
+    "es": "espacio de velocidades",
+    "ar": "فضاء السرعات",
+    "fr": "espace des vitesses"
+  },
+  "одна молекула": {
+    "en": "one molecule",
+    "es": "una molécula",
+    "ar": "جزيء واحد",
+    "fr": "une molécule"
+  },
+  "модуль скорости —": {
+    "en": "the speed is",
+    "es": "el módulo de la velocidad es",
+    "ar": "مقدار السرعة هو",
+    "fr": "le module de la vitesse est"
+  },
+  "расстояние от нуля": {
+    "en": "the distance from the origin",
+    "es": "la distancia al origen",
+    "ar": "المسافة من نقطة الأصل",
+    "fr": "la distance à l'origine"
+  },
+  "весь газ — облако точек, самое густое у начала координат": {
+    "en": "the whole gas is a cloud of points, densest near the origin",
+    "es": "todo el gas es una nube de puntos, más densa cerca del origen",
+    "ar": "الغاز كله سحابة من النقاط، أكثفها قرب نقطة الأصل",
+    "fr": "tout le gaz est un nuage de points, plus dense près de l'origine"
+  },
+  "ни одно направление не выделено": {
+    "en": "no direction is singled out",
+    "es": "ninguna dirección es privilegiada",
+    "ar": "لا اتجاه مُفضَّل على غيره",
+    "fr": "aucune direction n'est privilégiée"
+  },
+  "одинаковый модуль —": {
+    "en": "same speed —",
+    "es": "mismo módulo:",
+    "ar": "المقدار نفسه —",
+    "fr": "même module —"
+  },
+  "одинаковая плотность": {
+    "en": "same density",
+    "es": "misma densidad",
+    "ar": "الكثافة نفسها",
+    "fr": "même densité"
+  },
+  "плотность облака — функция одного только модуля": {
+    "en": "the density of the cloud depends on the speed alone",
+    "es": "la densidad de la nube depende solo del módulo",
+    "ar": "كثافة السحابة دالة في المقدار وحده",
+    "fr": "la densité du nuage ne dépend que du module"
+  },
+  "вероятность энергии падает по экспоненте": {
+    "en": "the probability of an energy falls exponentially",
+    "es": "la probabilidad de una energía cae exponencialmente",
+    "ar": "احتمال الطاقة يتناقص أُسّيًا",
+    "fr": "la probabilité d'une énergie décroît exponentiellement"
+  },
+  "энергия &#949;": {
+    "en": "energy &#949;",
+    "es": "energía &#949;",
+    "ar": "الطاقة &#949;",
+    "fr": "énergie &#949;"
+  },
+  "энергии складываются": {
+    "en": "energies add",
+    "es": "las energías se suman",
+    "ar": "الطاقات تُجمَع",
+    "fr": "les énergies s'additionnent"
+  },
+  "вероятности умножаются": {
+    "en": "probabilities multiply",
+    "es": "las probabilidades se multiplican",
+    "ar": "الاحتمالات تُضرَب",
+    "fr": "les probabilités se multiplient"
+  },
+  "сумму в произведение превращает только экспонента": {
+    "en": "only the exponential turns a sum into a product",
+    "es": "solo la exponencial convierte una suma en un producto",
+    "ar": "الدالة الأُسّية وحدها تحوّل الجمع إلى ضرب",
+    "fr": "seule l'exponentielle change une somme en produit"
+  },
+  "все молекулы с модулем v лежат в шаровом слое": {
+    "en": "every molecule of speed v lies in a spherical shell",
+    "es": "todas las moléculas de módulo v están en una capa esférica",
+    "ar": "كل الجزيئات ذات المقدار v تقع في قشرة كروية",
+    "fr": "toutes les molécules de module v sont dans une coque sphérique"
+  },
+  "площадь сферы": {
+    "en": "area of the sphere",
+    "es": "área de la esfera",
+    "ar": "مساحة الكرة",
+    "fr": "aire de la sphère"
+  },
+  "толщина слоя": {
+    "en": "thickness of the shell",
+    "es": "espesor de la capa",
+    "ar": "سُمك القشرة",
+    "fr": "épaisseur de la coque"
+  },
+  "объём 4&#960;v²dv": {
+    "en": "volume 4&#960;v²dv",
+    "es": "volumen 4&#960;v²dv",
+    "ar": "الحجم 4&#960;v²dv",
+    "fr": "volume 4&#960;v²dv"
+  },
+  "при v → 0 слой стягивается в точку — медленных молекул почти нет": {
+    "en": "as v → 0 the shell shrinks to a point — slow molecules are almost absent",
+    "es": "cuando v → 0 la capa se reduce a un punto: casi no hay moléculas lentas",
+    "ar": "عندما v → 0 تنكمش القشرة إلى نقطة — تكاد الجزيئات البطيئة تنعدم",
+    "fr": "quand v → 0 la coque se réduit à un point : presque pas de molécules lentes"
+  },
+  "горка получается из борьбы двух сомножителей": {
+    "en": "the hump is the result of two competing factors",
+    "es": "la joroba surge de la pugna entre dos factores",
+    "ar": "الحدبة نتيجة تنازع عاملين",
+    "fr": "la bosse naît de la lutte entre deux facteurs"
+  },
+  "слева душит геометрия, справа — экспонента, максимум посередине": {
+    "en": "geometry chokes it on the left, the exponential on the right, the peak sits between",
+    "es": "geometría a la izquierda, exponencial a la derecha: el máximo en medio",
+    "ar": "الهندسة تخنقها يسارًا والأُسّية يمينًا، والقمة بينهما",
+    "fr": "la géométrie l'étouffe à gauche, l'exponentielle à droite, le maximum est entre les deux"
+  },
+  "три скорости одного и того же газа": {
+    "en": "three speeds of one and the same gas",
+    "es": "tres velocidades del mismo gas",
+    "ar": "ثلاث سرعات لغاز واحد بعينه",
+    "fr": "trois vitesses d'un seul et même gaz"
+  },
+  "вероятнейшая": {
+    "en": "most probable",
+    "es": "más probable",
+    "ar": "الأكثر احتمالًا",
+    "fr": "la plus probable"
+  },
+  "средняя": {
+    "en": "mean",
+    "es": "media",
+    "ar": "المتوسطة",
+    "fr": "moyenne"
+  },
+  "среднеквадр.": {
+    "en": "rms",
+    "es": "cuadr. media",
+    "ar": "الجذر التربيعي",
+    "fr": "quadr. moyenne"
+  },
+  "длинный хвост тянет среднее вправо": {
+    "en": "the long tail pulls the mean to the right",
+    "es": "la cola larga arrastra la media hacia la derecha",
+    "ar": "الذيل الطويل يجذب المتوسط إلى اليمين",
+    "fr": "la longue queue tire la moyenne vers la droite"
+  },
+  "отношение 1 : 1,128 : 1,225 одинаково для любого газа": {
+    "en": "the ratio 1 : 1.128 : 1.225 is the same for any gas",
+    "es": "la razón 1 : 1,128 : 1,225 es la misma para cualquier gas",
+    "ar": "النسبة 1 : 1,128 : 1,225 واحدة لأي غاز",
+    "fr": "le rapport 1 : 1,128 : 1,225 est le même pour tout gaz"
+  },
+  "порог сдвинулся чуть — хвост вырос в разы": {
+    "en": "the threshold barely moved — the tail grew several times over",
+    "es": "el umbral se movió poco, la cola creció varias veces",
+    "ar": "العتبة تحركت قليلًا — والذيل تضاعف أضعافًا",
+    "fr": "le seuil a peu bougé — la queue a été multipliée"
+  },
+  "порог": {
+    "en": "threshold",
+    "es": "umbral",
+    "ar": "العتبة",
+    "fr": "seuil"
+  },
+  "быстрее порога": {
+    "en": "faster than the threshold",
+    "es": "más rápidas que el umbral",
+    "ar": "أسرع من العتبة",
+    "fr": "plus vite que le seuil"
+  },
+  "средняя скорость подросла на проценты, доля за порогом — в разы": {
+    "en": "the mean speed rose by percents, the fraction beyond the threshold by factors",
+    "es": "la velocidad media subió un pequeño porcentaje; la fracción tras el umbral, varias veces",
+    "ar": "السرعة المتوسطة ارتفعت نسبًا مئوية، أما النسبة وراء العتبة فتضاعفت",
+    "fr": "la vitesse moyenne gagne des pour cent, la fraction au-delà du seuil est multipliée"
+  },
+  "подставляем L = K(q&#775;) &#8722; U(q)": {
+    "en": "substitute L = K(q&#775;) &#8722; U(q)",
+    "es": "sustituimos L = K(q&#775;) &#8722; U(q)",
+    "ar": "نُعوّض L = K(q&#775;) &#8722; U(q)",
+    "fr": "on remplace L = K(q&#775;) &#8722; U(q)"
+  },
+  "масса на ускорение": {
+    "en": "mass times acceleration",
+    "es": "masa por aceleración",
+    "ar": "الكتلة في التسارع",
+    "fr": "masse fois accélération"
+  },
+  "сила": {
+    "en": "force",
+    "es": "fuerza",
+    "ar": "القوة",
+    "fr": "force"
+  },
+  "Ньютон получился следствием, а не отдельным постулатом": {
+    "en": "Newton comes out as a consequence, not a separate postulate",
+    "es": "Newton resulta una consecuencia, no un postulado aparte",
+    "ar": "قانون نيوتن ينتج نتيجةً، لا مُسلَّمةً منفصلة",
+    "fr": "Newton en découle : ce n'est pas un postulat séparé"
+  },
+  "одно уравнение связывает два разных вопроса": {
+    "en": "one equation ties together two different questions",
+    "es": "una ecuación enlaza dos preguntas distintas",
+    "ar": "معادلة واحدة تربط سؤالين مختلفين",
+    "fr": "une équation relie deux questions différentes"
+  },
+  "сдвинем координату": {
+    "en": "shift the coordinate",
+    "es": "desplacemos la coordenada",
+    "ar": "نُزيح الإحداثي",
+    "fr": "déplaçons la coordonnée"
+  },
+  "изменим скорость": {
+    "en": "change the velocity",
+    "es": "cambiemos la velocidad",
+    "ar": "نُغيّر السرعة",
+    "fr": "changeons la vitesse"
+  },
+  "ответ на второй вопрос, взятый по времени, равен первому": {
+    "en": "the answer to the second question, differentiated in time, equals the first",
+    "es": "la respuesta a la segunda pregunta, derivada en el tiempo, es igual a la primera",
+    "ar": "جواب السؤال الثاني، مشتقّاً بالزمن، يساوي جواب الأول",
+    "fr": "la réponse à la seconde question, dérivée en temps, égale la première"
+  },
+  "координата меняется, а импульс держится": {
+    "en": "the coordinate keeps changing, the momentum holds",
+    "es": "la coordenada cambia y el momento se mantiene",
+    "ar": "الإحداثي يتغيّر بينما كمية الحركة ثابتة",
+    "fr": "la coordonnée varie, la quantité de mouvement tient"
+  },
+  "&#8706;L/&#8706;q&#775; — ровная линия": {
+    "en": "&#8706;L/&#8706;q&#775; — a flat line",
+    "es": "&#8706;L/&#8706;q&#775;: una línea plana",
+    "ar": "&#8706;L/&#8706;q&#775; — خط مستقيم أفقي",
+    "fr": "&#8706;L/&#8706;q&#775; — une ligne plate"
+  },
+  "сама координата при этом гуляет": {
+    "en": "while the coordinate itself wanders",
+    "es": "mientras la propia coordenada oscila",
+    "ar": "في حين أنّ الإحداثي نفسه يتذبذب",
+    "fr": "alors que la coordonnée, elle, oscille"
+  },
+  "вторую переменную выбираем заново": {
+    "en": "the second variable is chosen anew",
+    "es": "la segunda variable se elige de nuevo",
+    "ar": "نختار المتغيّر الثاني من جديد",
+    "fr": "on choisit à nouveau la seconde variable"
+  },
+  "координата и скорость": {
+    "en": "coordinate and velocity",
+    "es": "coordenada y velocidad",
+    "ar": "الإحداثي والسرعة",
+    "fr": "coordonnée et vitesse"
+  },
+  "координата и импульс": {
+    "en": "coordinate and momentum",
+    "es": "coordenada y momento",
+    "ar": "الإحداثي وكمية الحركة",
+    "fr": "coordonnée et quantité de mouvement"
+  },
+  "теперь обе переменные равноправны": {
+    "en": "now both variables stand on equal footing",
+    "es": "ahora ambas variables están en pie de igualdad",
+    "ar": "الآن المتغيّران متكافئان",
+    "fr": "les deux variables sont désormais sur un pied d'égalité"
+  },
+  "два уравнения первого порядка вместо одного второго": {
+    "en": "two first-order equations instead of one of second order",
+    "es": "dos ecuaciones de primer orden en lugar de una de segundo",
+    "ar": "معادلتان من الرتبة الأولى بدل واحدة من الرتبة الثانية",
+    "fr": "deux équations du premier ordre au lieu d'une du second"
+  },
+  "вот этот минус": {
+    "en": "this very minus",
+    "es": "justo este signo menos",
+    "ar": "هذه الإشارة السالبة بالذات",
+    "fr": "c'est ce signe moins"
+  },
+  "без минуса точки разбегались бы; с ним они ходят по кругу": {
+    "en": "without the minus the points would run apart; with it they go round",
+    "es": "sin el menos los puntos se dispersarían; con él giran en círculo",
+    "ar": "بدون الإشارة السالبة تتباعد النقاط؛ ومعها تدور في حلقة",
+    "fr": "sans le moins les points s'écarteraient ; avec lui ils tournent"
+  },
+  "состояние груза — одна точка на плоскости (q, p)": {
+    "en": "the state of the weight is one point on the (q, p) plane",
+    "es": "el estado de la masa es un punto en el plano (q, p)",
+    "ar": "حالة الكتلة نقطة واحدة في المستوي (q, p)",
+    "fr": "l'état de la masse est un point du plan (q, p)"
+  },
+  "q = 0, вся энергия в движении": {
+    "en": "q = 0, all the energy is in motion",
+    "es": "q = 0: toda la energía está en el movimiento",
+    "ar": "q = 0، الطاقة كلّها في الحركة",
+    "fr": "q = 0, toute l'énergie est dans le mouvement"
+  },
+  "энергия в пружине": {
+    "en": "energy stored in the spring",
+    "es": "energía en el resorte",
+    "ar": "الطاقة مخزّنة في النابض",
+    "fr": "énergie dans le ressort"
+  },
+  "полный обход эллипса — один период колебания": {
+    "en": "one lap round the ellipse is one period of the oscillation",
+    "es": "una vuelta completa a la elipse es un período de oscilación",
+    "ar": "دورة كاملة حول القطع الناقص تساوي زمناً دورياً واحداً",
+    "fr": "un tour complet de l'ellipse fait une période d'oscillation"
+  },
+  "каждому запасу энергии — своя замкнутая кривая": {
+    "en": "each amount of energy has its own closed curve",
+    "es": "a cada cantidad de energía le corresponde su curva cerrada",
+    "ar": "لكل مقدار من الطاقة منحنٍ مغلق خاص به",
+    "fr": "à chaque réserve d'énergie sa propre courbe fermée"
+  },
+  "меньше энергии": {
+    "en": "less energy",
+    "es": "menos energía",
+    "ar": "طاقة أقل",
+    "fr": "moins d'énergie"
+  },
+  "больше энергии": {
+    "en": "more energy",
+    "es": "más energía",
+    "ar": "طاقة أكبر",
+    "fr": "plus d'énergie"
+  },
+  "сойти на соседнюю кривую точка не может": {
+    "en": "the point cannot step onto a neighbouring curve",
+    "es": "el punto no puede pasar a una curva vecina",
+    "ar": "لا يمكن للنقطة الانتقال إلى منحنٍ مجاور",
+    "fr": "le point ne peut pas passer sur une courbe voisine"
+  },
+  "около пятнадцати процентов": {
+    "en": "about fifteen per cent",
+    "es": "cerca del quince por ciento",
+    "ar": "نحو خمسة عشر بالمئة",
+    "fr": "environ quinze pour cent"
   }
 };

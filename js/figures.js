@@ -2737,7 +2737,7 @@
         s += '<circle cx="' + xT + '" cy="' + ya(1) + '" r="4.5" fill="' + INK + '"/>';
         s += txt(xT + 8, ya(1) - 8, 'сегодня', INK, 10.5, 'start');
         s += txt(44, ya(1) + 4, 'a', SOFT, 11, 'end');
-        [[0.1, 'z = 0,1', 'проценты', MOSS], [0.5, 'z = 0,5', 'десятки процентов', SOFT],
+        [[0.1, 'z = 0,1', 'проценты', MOSS], [0.5, 'z = 0,5', 'около пятнадцати процентов', SOFT],
          [1, 'z = 1', 'вся кривая', WARN]].forEach(function (m) {
             var a = 1 / (1 + m[0]), x = xu(Math.log(a) / k), y = ya(a);
             s += '<line x1="' + x.toFixed(1) + '" y1="' + y.toFixed(1) + '" x2="' + x.toFixed(1) + '" y2="' + base +
@@ -2828,6 +2828,182 @@
     };
 
     // Теорема Лиувилля: пятно состояний течёт как несжимаемая жидкость.
+    // Шаг «Эйлер — Лагранж это Ньютон». Раньше здесь стояла таблица Нётер из соседнего
+    // параграфа: схема существовала и рисовалась, но рассказывала про другое (находка сверки).
+    F.eulerlagrange = function () {
+        var W = 440, H = 224;
+        var s = txt(W / 2, 22, 'подставляем L = K(q&#775;) &#8722; U(q)', INK, 11.5);
+        s += txt(112, 58, 'd/dt (&#8706;L/&#8706;q&#775;)', LINK, 13);
+        s += txt(224, 58, '&#8722;', SOFT, 13);
+        s += txt(316, 58, '&#8706;L/&#8706;q', WARN, 13);
+        s += txt(400, 58, '= 0', INK, 13);
+        s += arrow(112, 70, 112, 106, LINK, 'ahl');
+        s += arrow(316, 70, 316, 106, WARN, 'ahw');
+        function box(cx, top, bot, color) {
+            var x = cx - 84;
+            return '<rect x="' + x + '" y="112" width="168" height="58" rx="6" fill="' + color +
+                   '" opacity="0.10"/><rect x="' + x + '" y="112" width="168" height="58" rx="6" ' +
+                   'fill="none" stroke="' + color + '" stroke-width="1.4"/>' +
+                   txt(cx, 138, top, color, 12.5) + txt(cx, 159, bot, SOFT, 10.5);
+        }
+        s += box(112, 'd/dt (m&#8201;q&#775;) = m&#8201;q&#776;', 'масса на ускорение', LINK);
+        s += box(316, '&#8722;&#8706;U/&#8706;q = F', 'сила', WARN);
+        s += txt(W / 2, 196, 'm&#8201;q&#776; = F', INK, 14);
+        s += txt(W / 2, H - 8, 'Ньютон получился следствием, а не отдельным постулатом', SOFT, 10.5);
+        return svg(W, H, s);
+    };
+
+    // Шаг «берём уравнение из прошлого параграфа»: две части уравнения отвечают на два
+    // разных вопроса — что будет, если сдвинуть координату, и что, если изменить скорость.
+    F.elstart = function () {
+        var W = 440, H = 212;
+        var s = txt(W / 2, 22, 'одно уравнение связывает два разных вопроса', INK, 11.5);
+        function panel(x, title, color) {
+            return '<rect x="' + x + '" y="38" width="180" height="104" rx="8" fill="none" stroke="' +
+                   BORD + '" stroke-width="1.4"/>' + txt(x + 90, 58, title, color, 11);
+        }
+        s += panel(28, 'сдвинем координату', WARN);
+        s += panel(232, 'изменим скорость', LINK);
+        s += '<line x1="48" y1="118" x2="188" y2="118" stroke="' + BORD + '" stroke-width="1.2"/>';
+        s += mol(88, 110, 8, SOFT);
+        s += mol(126, 110, 8, WARN);
+        s += arrow(94, 88, 120, 88, WARN, 'ahw');
+        s += txt(107, 82, '&#948;q', WARN, 10.5);
+        s += txt(118, 136, '&#8706;L/&#8706;q', WARN, 12);
+        s += '<line x1="252" y1="118" x2="392" y2="118" stroke="' + BORD + '" stroke-width="1.2"/>';
+        s += mol(286, 110, 8, SOFT);
+        s += arrow(296, 110, 330, 110, SOFT);
+        s += arrow(296, 88, 368, 88, LINK, 'ahl');
+        s += txt(332, 82, '&#948;q&#775;', LINK, 10.5);
+        s += txt(322, 136, '&#8706;L/&#8706;q&#775;', LINK, 12);
+        s += txt(W / 2, 172, 'd/dt (&#8706;L/&#8706;q&#775;) = &#8706;L/&#8706;q', INK, 13.5);
+        s += txt(W / 2, H - 8, 'ответ на второй вопрос, взятый по времени, равен первому', SOFT, 10.5);
+        return svg(W, H, s);
+    };
+
+    // Шаг «производная равна нулю — значит, величина сохраняется»: координата гуляет,
+    // а комбинация держится ровной линией.
+    F.pconserve = function () {
+        var W = 440, H = 218, x0 = 58, x1 = 396, base = 158;
+        var s = txt(W / 2, 22, 'координата меняется, а импульс держится', INK, 11.5);
+        s += '<line x1="' + x0 + '" y1="' + base + '" x2="' + x1 + '" y2="' + base +
+             '" stroke="' + SOFT + '" stroke-width="1"/>';
+        s += txt(x1 + 12, base + 5, 't', SOFT, 12, 'start');
+        var i, pts = [];
+        for (i = 0; i <= 80; i++) {
+            var u = i / 80, x = x0 + (x1 - x0) * u;
+            pts.push(x.toFixed(1) + ',' + (base - 28 - 20 * Math.sin(6.6 * u)).toFixed(1));
+        }
+        s += '<polyline points="' + pts.join(' ') + '" fill="none" stroke="' + BORD + '" stroke-width="2"/>';
+        s += '<line x1="' + x0 + '" y1="72" x2="' + x1 + '" y2="72" stroke="' + LINK + '" stroke-width="2.8"/>';
+        s += txt(x0 + 2, 62, '&#8706;L/&#8706;q&#775; — ровная линия', LINK, 11, 'start');
+        s += txt(x0 + 2, 178, 'сама координата при этом гуляет', SOFT, 10.5, 'start');
+        s += txt(W / 2, 200, 'd/dt (&#8706;L/&#8706;q&#775;) = 0 &#8658; &#8706;L/&#8706;q&#775; = const', INK, 13);
+        return svg(W, H, s);
+    };
+
+    // Шаг «Гамильтон меняет скорость на импульс»: та же система, вторая переменная другая.
+    F.qptrade = function () {
+        var W = 440, H = 190;
+        var s = txt(W / 2, 22, 'вторую переменную выбираем заново', INK, 11.5);
+        function pair(x, a, b, colorB, note) {
+            var g = '<rect x="' + x + '" y="46" width="150" height="54" rx="8" fill="none" stroke="' +
+                    BORD + '" stroke-width="1.4"/>';
+            g += txt(x + 46, 80, a, INK, 15);
+            g += txt(x + 75, 80, ',', SOFT, 15);
+            g += txt(x + 106, 80, b, colorB, 15);
+            g += txt(x + 75, 122, note, SOFT, 10.5);
+            return g;
+        }
+        s += pair(30, 'q', 'q&#775;', SOFT, 'координата и скорость');
+        s += pair(260, 'q', 'p', LINK, 'координата и импульс');
+        s += arrow(190, 72, 252, 72, LINK, 'ahl');
+        s += txt(221, 62, 'p = &#8706;L/&#8706;q&#775;', LINK, 11);
+        s += txt(W / 2, 158, 'теперь обе переменные равноправны', SOFT, 10.5);
+        return svg(W, H, s);
+    };
+
+    // Шаг «два уравнения вместо одного»: минус в правом уравнении и есть причина того,
+    // что движение на плоскости получается вращением, а не разбеганием.
+    F.heqpair = function () {
+        var W = 440, H = 236, cx = 140, cy = 132;
+        var s = txt(W / 2, 20, 'два уравнения первого порядка вместо одного второго', INK, 11.5);
+        s += '<line x1="' + (cx - 92) + '" y1="' + cy + '" x2="' + (cx + 92) + '" y2="' + cy +
+             '" stroke="' + SOFT + '" stroke-width="1"/>';
+        s += '<line x1="' + cx + '" y1="' + (cy - 76) + '" x2="' + cx + '" y2="' + (cy + 76) +
+             '" stroke="' + SOFT + '" stroke-width="1"/>';
+        s += txt(cx + 100, cy + 14, 'q', SOFT, 12);
+        s += txt(cx + 13, cy - 80, 'p', SOFT, 12);
+        var i, a, r = 54;
+        for (i = 0; i < 8; i++) {
+            a = i * Math.PI / 4;
+            var x = cx + r * Math.cos(a), y = cy - r * 0.72 * Math.sin(a);
+            s += arrow(x.toFixed(1), y.toFixed(1), (x + 21 * Math.sin(a)).toFixed(1),
+                       (y + 15 * Math.cos(a)).toFixed(1), LINK, 'ahl');
+        }
+        s += txt(330, 96, 'q&#775; = &#8706;H/&#8706;p', INK, 13);
+        s += txt(330, 130, 'p&#775; = &#8722;&#8706;H/&#8706;q', WARN, 13);
+        s += txt(330, 154, 'вот этот минус', WARN, 10.5);
+        s += txt(W / 2, H - 8, 'без минуса точки разбегались бы; с ним они ходят по кругу', SOFT, 10.5);
+        return svg(W, H, s);
+    };
+
+    // Шаг «состояние — точка на плоскости (q, p)»: для пружины линия постоянной энергии эллипс.
+    F.phaseellipse = function () {
+        var W = 440, H = 232, cx = 208, cy = 130, rx = 106, ry = 58;
+        var s = txt(W / 2, 20, 'состояние груза — одна точка на плоскости (q, p)', INK, 11.5);
+        s += '<line x1="' + (cx - rx - 28) + '" y1="' + cy + '" x2="' + (cx + rx + 28) + '" y2="' + cy +
+             '" stroke="' + SOFT + '" stroke-width="1"/>';
+        s += '<line x1="' + cx + '" y1="' + (cy - ry - 24) + '" x2="' + cx + '" y2="' + (cy + ry + 24) +
+             '" stroke="' + SOFT + '" stroke-width="1"/>';
+        s += txt(cx + rx + 36, cy + 14, 'q', SOFT, 12);
+        s += txt(cx + 13, cy - ry - 28, 'p', SOFT, 12);
+        s += '<ellipse cx="' + cx + '" cy="' + cy + '" rx="' + rx + '" ry="' + ry + '" fill="' + LINK +
+             '" opacity="0.07"/><ellipse cx="' + cx + '" cy="' + cy + '" rx="' + rx + '" ry="' + ry +
+             '" fill="none" stroke="' + LINK + '" stroke-width="2.4"/>';
+        s += '<circle cx="' + cx + '" cy="' + (cy - ry) + '" r="4.5" fill="' + INK + '"/>';
+        s += txt(cx, cy - ry - 10, 'q = 0, вся энергия в движении', INK, 10.5);
+        s += '<circle cx="' + (cx + rx) + '" cy="' + cy + '" r="4.5" fill="' + INK + '"/>';
+        s += txt(cx + rx + 10, cy - 6, 'p = 0', INK, 10.5, 'start');
+        s += txt(cx + rx + 10, cy + 10, 'энергия в пружине', SOFT, 10, 'start');
+        s += arrow(cx - rx + 6, cy + 30, cx - rx + 2, cy - 6, LINK, 'ahl');
+        s += txt(W / 2, cy + ry + 34, 'p&#178;/2m + k&#8201;q&#178;/2 = E', INK, 12.5);
+        s += txt(W / 2, H - 8, 'полный обход эллипса — один период колебания', SOFT, 10.5);
+        return svg(W, H, s);
+    };
+
+    // Шаг «точка не сходит со своей кривой»: разным запасам энергии — разные кривые,
+    // и перепрыгнуть с одной на другую движение не может.
+    F.stayoncurve = function () {
+        var W = 440, H = 224, cx = 214, cy = 122;
+        var s = txt(W / 2, 20, 'каждому запасу энергии — своя замкнутая кривая', INK, 11.5);
+        s += '<line x1="' + (cx - 132) + '" y1="' + cy + '" x2="' + (cx + 132) + '" y2="' + cy +
+             '" stroke="' + SOFT + '" stroke-width="1"/>';
+        s += '<line x1="' + cx + '" y1="' + (cy - 74) + '" x2="' + cx + '" y2="' + (cy + 74) +
+             '" stroke="' + SOFT + '" stroke-width="1"/>';
+        s += txt(cx + 140, cy + 14, 'q', SOFT, 12);
+        s += txt(cx + 13, cy - 78, 'p', SOFT, 12);
+        [[54, 30], [122, 66]].forEach(function (e) {
+            s += '<ellipse cx="' + cx + '" cy="' + cy + '" rx="' + e[0] + '" ry="' + e[1] +
+                 '" fill="none" stroke="' + BORD + '" stroke-width="1.5" stroke-dasharray="5,4"/>';
+        });
+        s += '<ellipse cx="' + cx + '" cy="' + cy + '" rx="88" ry="48" fill="none" stroke="' + LINK +
+             '" stroke-width="2.4"/>';
+        var px = cx + 88 * Math.cos(-0.9), py = cy - 48 * Math.sin(-0.9);
+        s += '<circle cx="' + px.toFixed(1) + '" cy="' + py.toFixed(1) + '" r="5" fill="' + INK + '"/>';
+        s += arrow(px.toFixed(1), py.toFixed(1), (px + 34).toFixed(1), (py + 20).toFixed(1), WARN, 'ahw');
+        var mx = px + 24, my = py + 14;
+        s += '<line x1="' + (mx - 7) + '" y1="' + (my - 7) + '" x2="' + (mx + 7) + '" y2="' + (my + 7) +
+             '" stroke="' + WARN + '" stroke-width="2.4"/>';
+        s += '<line x1="' + (mx + 7) + '" y1="' + (my - 7) + '" x2="' + (mx - 7) + '" y2="' + (my + 7) +
+             '" stroke="' + WARN + '" stroke-width="2.4"/>';
+        s += txt(cx - 96, cy + 84, 'меньше энергии', SOFT, 10.5);
+        s += txt(cx + 96, cy + 84, 'больше энергии', SOFT, 10.5);
+        s += txt(W / 2, 198, 'dH/dt = 0', INK, 13);
+        s += txt(W / 2, H - 8, 'сойти на соседнюю кривую точка не может', SOFT, 10.5);
+        return svg(W, H, s);
+    };
+
     F.phaseblob = function () {
         var W = 440, H = 226, cx = 210, cy = 118, rx = 118, ry = 62;
         var s = txt(W / 2, 20, 'облако состояний течёт как несжимаемая жидкость', INK, 11.5);
@@ -3165,19 +3341,19 @@
 
     // Стационарный профиль в двухслойной стенке: ломаная из прямых, поток один и тот же.
     F.condwall = function () {
-        var W = 430, H = 210, x0 = 70, x1 = 190, x2 = 330;
+        var W = 430, H = 220, x0 = 70, x1 = 190, x2 = 330;
         var s = txt(W / 2, 20, 'температура падает по прямой в каждом слое', SOFT, 10.5);
         s += '<rect x="' + x0 + '" y="34" width="' + (x1 - x0) + '" height="122" fill="' + WARN + '" opacity="0.12" stroke="' + BORD + '"/>';
         s += '<rect x="' + x1 + '" y="34" width="' + (x2 - x1) + '" height="122" fill="' + LINK + '" opacity="0.12" stroke="' + BORD + '"/>';
-        s += txt((x0 + x1) / 2, 172, 'кирпич', SOFT, 10.5);
-        s += txt((x1 + x2) / 2, 172, 'утеплитель', SOFT, 10.5);
+        s += txt((x0 + x1) / 2, 174, 'кирпич', SOFT, 10.5);
+        s += txt((x1 + x2) / 2, 174, 'утеплитель', SOFT, 10.5);
         s += '<path d="M' + x0 + ',52 L' + x1 + ',72 L' + x2 + ',140" fill="none" stroke="' + INK + '" stroke-width="2.2"/>';
         s += mol(x0, 52, 4, INK); s += mol(x1, 72, 4, INK); s += mol(x2, 140, 4, INK);
         s += txt(x0 - 10, 50, 'T&#8321;', INK, 12, 'end');
         s += txt(x2 + 10, 144, 'T&#8322;', INK, 12, 'start');
-        [64, 96, 128].forEach(function (y) { s += arrow(x0 + 14, y, x2 - 8, y, SOFT); });
-        s += txt(W / 2, 196, 'R = L / &#954;, сопротивления складываются', INK, 12.5);
-        s += txt(W / 2, H - 4, 'поток одинаков во всех сечениях', SOFT, 10.5);
+        [86, 168, 250].forEach(function (x) { s += arrow(x, 148, x + 60, 148, SOFT); });
+        s += txt(W / 2, 198, 'R = L / &#954;, сопротивления складываются', INK, 12.5);
+        s += txt(W / 2, H - 6, 'поток одинаков во всех сечениях', SOFT, 10.5);
         return svg(W, H, s);
     };
 
@@ -3193,14 +3369,409 @@
         }
         s += '<path d="M40,96 Q66,64 92,96 Q118,128 144,96 Q170,64 196,96" fill="none" stroke="' +
              WARN + '" stroke-width="2"/>';
-        [70, 104, 130].forEach(function (y) {
+        [79, 113].forEach(function (y) {
             s += arrow(234, y, 396, y, LINK, 'ahl');
         });
-        [252, 300, 348].forEach(function (x) { s += mol(x, 88, 3.5, LINK); });
+        [[256, 79], [312, 79], [280, 113], [344, 113]].forEach(function (p) {
+            s += mol(p[0], p[1], 3.5, LINK);
+        });
         s += txt(118, 156, 'медленно', WARN, 10.5);
         s += txt(320, 156, 'быстро', LINK, 10.5);
         s += txt(W / 2, 182, '&#954; / (&#963;T) = 2,44&#183;10&#8315;&#8312; Вт&#183;Ом/К&#178;', INK, 13);
         s += txt(W / 2, H - 4, 'одни и те же частицы несут заряд и тепло', SOFT, 10.5);
+        return svg(W, H, s);
+    };
+
+    // Барометрия, шаг 1. Тонкий слой воздуха покоится: три силы в сумме дают ноль.
+    F.barolayer = function () {
+        var W = 440, H = 236;
+        var s = txt(W / 2, 18, 'слой воздуха толщиной Δh покоится', INK, 11.5);
+        s += '<rect x="30" y="34" width="90" height="170" fill="' + LINK + '" opacity="0.08" stroke="' + BORD + '" stroke-width="1"/>';
+        s += '<rect x="30" y="104" width="90" height="22" fill="' + LINK + '" opacity="0.30" stroke="' + LINK + '" stroke-width="1.4"/>';
+        s += '<line x1="120" y1="104" x2="250" y2="96" stroke="' + SOFT + '" stroke-width="1" stroke-dasharray="3,3"/>';
+        s += '<line x1="120" y1="126" x2="250" y2="132" stroke="' + SOFT + '" stroke-width="1" stroke-dasharray="3,3"/>';
+        s += txt(75, 220, 'столб воздуха', SOFT, 10.5);
+        s += '<rect x="250" y="96" width="140" height="36" fill="' + LINK + '" opacity="0.18" stroke="' + LINK + '" stroke-width="1.6"/>';
+        s += txt(320, 119, 'A · Δh', INK, 12);
+        s += arrow(285, 176, 285, 136, LINK, 'ahl');
+        s += txt(285, 192, 'p(h) · A', LINK, 11);
+        s += arrow(285, 52, 285, 92, INK);
+        s += txt(285, 44, 'p(h + Δh) · A', INK, 11);
+        s += arrow(362, 136, 362, 176, WARN, 'ahw');
+        s += txt(362, 192, 'ρ · A · Δh · g', WARN, 11);
+        s += txt(W / 2, 226, 'сумма трёх сил равна нулю', SOFT, 10.5);
+        return svg(W, H, s);
+    };
+
+    // Барометрия, шаг 2. Толщина слоя из ответа выпадает — переход к пределу законен.
+    F.baroslope = function () {
+        var W = 430, H = 206;
+        var s = txt(W / 2, 20, 'отношение не зависит от толщины слоя', INK, 11.5);
+        [[46, 62, 'толстый слой'], [176, 30, 'тоньше'], [306, 11, 'в пределе']].forEach(function (b) {
+            var x = b[0], hgt = b[1], base = 150;
+            s += '<rect x="' + x + '" y="' + (base - hgt) + '" width="90" height="' + hgt +
+                 '" fill="' + LINK + '" opacity="0.20" stroke="' + LINK + '" stroke-width="1.4"/>';
+            s += txt(x + 45, base - hgt - 8, 'Δh', LINK, 11);
+            s += txt(x + 45, 170, b[2], SOFT, 10.5);
+            s += '<line x1="' + (x + 96) + '" y1="' + (base - hgt) + '" x2="' + (x + 96) + '" y2="' + base +
+                 '" stroke="' + SOFT + '" stroke-width="1"/>';
+            s += txt(x + 104, base - hgt / 2 + 4, 'Δp', SOFT, 10.5, 'start');
+        });
+        s += txt(W / 2, 194, 'Δp / Δh = −ρg   ⟶   dp/dh = −ρg', INK, 13);
+        return svg(W, H, s);
+    };
+
+    // Барометрия, шаг 3. При одной температуре плотность идёт следом за давлением.
+    F.barodensity = function () {
+        var W = 430, H = 198, seed = 11;
+        function rnd() { seed = (seed * 1103515 + 12345) % 2147483; return seed / 2147483; }
+        var s = txt(W / 2, 18, 'одна температура: плотность идёт следом за давлением', INK, 11.5);
+        s += txt(W / 2, 36, 'T одинакова', SOFT, 10.5);
+        [[60, 30, INK, 'давление высокое'], [250, 9, SOFT, 'давление низкое']].forEach(function (b) {
+            var x = b[0], n = b[1], i;
+            s += '<rect x="' + x + '" y="46" width="130" height="106" fill="' + LINK +
+                 '" opacity="0.08" stroke="' + BORD + '" stroke-width="1"/>';
+            for (i = 0; i < n; i++) {
+                s += mol(Math.round(x + 8 + rnd() * 114), Math.round(54 + rnd() * 90), 3.6, b[2]);
+            }
+            s += txt(x + 65, 170, b[3], b[2], 11);
+        });
+        s += txt(W / 2, 190, 'ρ = m · p / (kT)', INK, 12.5);
+        return svg(W, H, s);
+    };
+
+    // Барометрия, шаг 4. Наклон в каждой точке пропорционален самому значению.
+    F.baroode = function () {
+        var W = 430, H = 202, x0 = 62, x1 = 396, base = 158, top = 42, L = x1 - x0, amp = base - top;
+        var s = txt(W / 2, 20, 'наклон пропорционален самому значению', INK, 11.5), pts = [], x, u;
+        for (x = x0; x <= x1; x += 3) {
+            u = (x - x0) / L;
+            pts.push(x + ',' + (base - amp * Math.exp(-2.2 * u)));
+        }
+        s += '<line x1="' + x0 + '" y1="' + base + '" x2="' + x1 + '" y2="' + base + '" stroke="' + BORD + '" stroke-width="1"/>';
+        s += '<line x1="' + x0 + '" y1="' + base + '" x2="' + x0 + '" y2="' + (top - 6) + '" stroke="' + BORD + '" stroke-width="1"/>';
+        s += '<polyline points="' + pts.join(' ') + '" fill="none" stroke="' + LINK + '" stroke-width="2.6"/>';
+        [0.06, 0.38, 0.78].forEach(function (u2) {
+            var xt = x0 + u2 * L, yt = base - amp * Math.exp(-2.2 * u2),
+                k = amp * 2.2 / L * Math.exp(-2.2 * u2), d = 30;
+            s += '<line x1="' + (xt - d) + '" y1="' + (yt - k * d) + '" x2="' + (xt + d) + '" y2="' + (yt + k * d) +
+                 '" stroke="' + WARN + '" stroke-width="1.8"/>';
+            s += '<circle cx="' + xt + '" cy="' + yt + '" r="3.4" fill="' + WARN + '"/>';
+        });
+        s += txt(x0 - 8, top + 4, 'p', INK, 12, 'end');
+        s += txt(x1, base + 18, 'высота ⟶', SOFT, 10, 'end');
+        s += txt(W / 2, 194, 'dp/dh = −(mg/kT) · p', INK, 12.5);
+        return svg(W, H, s);
+    };
+
+    // Барометрия, шаг 5. Разделение переменных: давление налево, высота направо.
+    F.barointeg = function () {
+        var W = 430, H = 118;
+        var s = txt(118, 48, 'dp / p', LINK, 17);
+        s += txt(214, 48, '=', INK, 16);
+        s += txt(318, 48, '−(mg/kT) · dh', WARN, 17);
+        s += '<line x1="72" y1="64" x2="164" y2="64" stroke="' + LINK + '" stroke-width="1.5"/>';
+        s += '<line x1="240" y1="64" x2="396" y2="64" stroke="' + WARN + '" stroke-width="1.5"/>';
+        s += txt(118, 82, 'только давление', SOFT, 11);
+        s += txt(318, 82, 'только высота', SOFT, 11);
+        s += txt(214, 104, '∫ каждую часть отдельно', INK, 12);
+        return svg(W, H, s);
+    };
+
+    // Барометрия, шаг 6. Экспонента: каждая шкала высот отнимает одну и ту же долю.
+    F.baroexp = function () {
+        var W = 440, H = 214, x0 = 64, x1 = 400, base = 162, top = 42, L = x1 - x0, amp = base - top;
+        var s = txt(W / 2, 20, 'каждая шкала высот отнимает одну и ту же долю', INK, 11.5), pts = [], x, u;
+        for (x = x0; x <= x1; x += 3) {
+            u = (x - x0) / L;
+            pts.push(x + ',' + (base - amp * Math.exp(-4 * u)));
+        }
+        s += '<line x1="' + x0 + '" y1="' + base + '" x2="' + x1 + '" y2="' + base + '" stroke="' + BORD + '" stroke-width="1"/>';
+        s += '<line x1="' + x0 + '" y1="' + base + '" x2="' + x0 + '" y2="' + (top - 6) + '" stroke="' + BORD + '" stroke-width="1"/>';
+        s += '<polyline points="' + pts.join(' ') + '" fill="none" stroke="' + LINK + '" stroke-width="2.6"/>';
+        s += txt(x0 - 8, top + 4, '100 %', INK, 10.5, 'end');
+        [[1, '37 %', 'H'], [2, '14 %', '2H'], [3, '5 %', '3H']].forEach(function (b) {
+            var xm = x0 + L * b[0] / 4, ym = base - amp * Math.exp(-b[0]);
+            s += '<line x1="' + xm + '" y1="' + base + '" x2="' + xm + '" y2="' + ym +
+                 '" stroke="' + SOFT + '" stroke-width="1" stroke-dasharray="4,4"/>';
+            s += '<circle cx="' + xm + '" cy="' + ym + '" r="3.4" fill="' + WARN + '"/>';
+            s += txt(xm, ym - 10, b[1], WARN, 10.5);
+            s += txt(xm, base + 17, b[2], INK, 11);
+        });
+        s += txt(x1, base + 34, 'высота, в шкалах H', SOFT, 10, 'end');
+        s += txt(W / 2, 204, 'p = p₀ · exp(−h / H)', INK, 12.5);
+        return svg(W, H, s);
+    };
+
+    // Барометрия, шаг 7. У каждого газа своя шкала высот: она обратна массе молекулы.
+    F.baroscale = function () {
+        var W = 440, H = 218, x0 = 60, x1 = 296, base = 170, top = 44, L = x1 - x0, amp = base - top;
+        var s = txt(W / 2, 20, 'у каждого газа своя шкала высот', INK, 11.5);
+        s += '<line x1="' + x0 + '" y1="' + base + '" x2="' + x1 + '" y2="' + base + '" stroke="' + BORD + '" stroke-width="1"/>';
+        s += '<line x1="' + x0 + '" y1="' + base + '" x2="' + x0 + '" y2="' + (top - 6) + '" stroke="' + BORD + '" stroke-width="1"/>';
+        [[120, LINK, 'водород: 120 км', 60], [8.7, INK, 'азот: 8,7 км', 82], [5.5, WARN, 'углекислый газ: 5,5 км', 104]]
+            .forEach(function (b) {
+                var pts = [], x, km;
+                for (x = x0; x <= x1; x += 3) {
+                    km = (x - x0) / L * 40;
+                    pts.push(x + ',' + (base - amp * Math.exp(-km / b[0])));
+                }
+                s += '<polyline points="' + pts.join(' ') + '" fill="none" stroke="' + b[1] + '" stroke-width="2.4"/>';
+                s += '<line x1="316" y1="' + (b[3] - 4) + '" x2="342" y2="' + (b[3] - 4) + '" stroke="' + b[1] + '" stroke-width="2.4"/>';
+                s += txt(348, b[3], b[2], b[1], 10.5, 'start');
+            });
+        s += txt(x0 - 8, top + 4, 'p', INK, 12, 'end');
+        s += txt(x1, base + 18, 'высота, км', SOFT, 10, 'end');
+        s += txt(W / 2, 206, 'H = kT / (mg): чем тяжелее молекула, тем ниже столб', SOFT, 10.5);
+        return svg(W, H, s);
+    };
+
+    // Шаг 8. Общий закон: заселённость уровня падает экспоненциально с его энергией.
+    F.boltzlevels = function () {
+        var W = 440, H = 218, x = 126, wmax = 176;
+        var s = txt(W / 2, 20, 'заселённость падает экспоненциально с энергией', INK, 11.5);
+        [[170, 1, 'E = 0', '100 %'], [140, 0.368, 'kT', '37 %'], [110, 0.135, '2kT', '14 %'], [80, 0.050, '3kT', '5 %']]
+            .forEach(function (b) {
+                var y = b[0], w = Math.max(2, wmax * b[1]);
+                s += '<line x1="' + (x - 8) + '" y1="' + y + '" x2="' + (x + wmax + 8) + '" y2="' + y +
+                     '" stroke="' + BORD + '" stroke-width="1"/>';
+                s += '<rect x="' + x + '" y="' + (y - 11) + '" width="' + w + '" height="11" fill="' + LINK + '" opacity="0.55"/>';
+                s += txt(x - 16, y + 4, b[2], INK, 11.5, 'end');
+                s += txt(x + wmax + 16, y + 4, b[3], SOFT, 10.5, 'start');
+            });
+        s += '<line x1="' + (x - 8) + '" y1="48" x2="' + (x + wmax + 8) + '" y2="48" stroke="' + WARN +
+             '" stroke-width="1.4" stroke-dasharray="5,4"/>';
+        s += '<rect x="' + x + '" y="41" width="2" height="7" fill="' + WARN + '"/>';
+        s += txt(x - 16, 52, 'колебание N₂: 11 kT', WARN, 10.5, 'end');
+        s += txt(x + wmax + 16, 52, 'одна молекула из 80 000', WARN, 10.5, 'start');
+        s += txt(W / 2, 206, 'n₂ / n₁ = exp(−ΔE / kT)', INK, 12.5);
+        return svg(W, H, s);
+    };
+
+
+    // ── Распределение Максвелла: у газа нет одной скорости, есть кривая ───────
+
+    /* Заготовка кривой для схем ниже: точки ломаной по готовой функции.
+       Масштаб по вертикали задаётся явно (scaleY), чтобы на одной картинке можно было
+       рисовать сомножители с разными «потолками» и сравнивать их форму, а не величину. */
+    function mxPath(x0, y0, wpx, hpx, xmax, scaleY, fn) {
+        var p = '', n = 120;
+        for (var i = 0; i <= n; i++) {
+            var x = xmax * i / n, X = x0 + wpx * i / n, Y = y0 - hpx * fn(x) / scaleY;
+            p += (i ? ' L' : 'M') + X.toFixed(1) + ',' + Y.toFixed(1);
+        }
+        return p;
+    }
+
+    // 1. Одной скорости у газа нет: спрашивать надо про долю в интервале.
+    F.mxspread = function () {
+        var W = 450, H = 196, x0 = 22, y0 = 36, bw = 186, bh = 116, base = y0 + bh;
+        var s = txt(W / 2, 20, 'одна температура — разные скорости', INK, 11.5);
+        s += '<rect x="' + x0 + '" y="' + y0 + '" width="' + bw + '" height="' + bh +
+             '" fill="none" stroke="' + INK + '" stroke-width="1.6"/>';
+        [[54, 62, 30, -8], [104, 54, 11, 13], [148, 74, 42, 7], [66, 104, 7, -15],
+         [112, 120, 28, -20], [168, 112, 15, 17], [46, 136, 36, 5], [154, 44, 6, 11]]
+        .forEach(function (p) {
+            s += mol(p[0], p[1], 4.5);
+            s += arrow(p[0] + 6, p[1], p[0] + 6 + p[2], p[1] + p[3], LINK, 'ahl');
+        });
+        var bx = 254;
+        [9, 25, 43, 52, 41, 27, 15, 8, 4].forEach(function (h, i) {
+            s += '<rect x="' + (bx + i * 19) + '" y="' + (base - h) + '" width="15" height="' + h +
+                 '" fill="' + LINK + '" opacity="0.7"/>';
+        });
+        s += '<line x1="' + (bx - 10) + '" y1="' + base + '" x2="' + (bx + 178) + '" y2="' + base +
+             '" stroke="' + BORD + '" stroke-width="1"/>';
+        s += txt(bx + 84, base + 16, 'скорость', SOFT, 10.5);
+        s += txt(bx + 84, y0 + 4, 'сколько молекул', SOFT, 10.5);
+        s += txt(W / 2, H - 6, 'вопрос не «какая скорость», а «какая доля»', SOFT, 10.5);
+        return svg(W, H, s);
+    };
+
+    // 2. Пространство скоростей: молекула — точка, газ — облако точек.
+    F.mxvspace = function () {
+        var W = 440, H = 214, cx = 148, cy = 116, R = 84;
+        var s = txt(W / 2, 20, 'пространство скоростей', INK, 11.5);
+        s += '<line x1="' + (cx - R - 16) + '" y1="' + cy + '" x2="' + (cx + R + 16) + '" y2="' + cy +
+             '" stroke="' + BORD + '" stroke-width="1"/>';
+        s += '<line x1="' + cx + '" y1="' + (cy + R + 16) + '" x2="' + cx + '" y2="' + (cy - R - 16) +
+             '" stroke="' + BORD + '" stroke-width="1"/>';
+        s += txt(cx + R + 26, cy + 4, 'v&#8339;', SOFT, 11);
+        s += txt(cx + 10, cy - R - 22, 'v<tspan font-size="8" dy="2">y</tspan>', SOFT, 11, 'start');
+        [[6, -10], [-14, 8], [22, 16], [-28, -20], [38, -8], [-8, 32], [16, -34], [-40, 26],
+         [48, 30], [-52, -14], [30, 52], [-22, -48], [62, -24], [-64, 18], [10, 64], [-36, -58],
+         [70, 44], [-74, -36], [44, -70], [2, 4], [-6, -2], [18, -4], [-18, -14], [26, -28],
+         [-30, 40], [54, 6], [-46, -4]].forEach(function (p) {
+            var d = Math.sqrt(p[0] * p[0] + p[1] * p[1]);
+            s += '<circle cx="' + (cx + p[0]) + '" cy="' + (cy + p[1]) + '" r="3" fill="' + LINK +
+                 '" opacity="' + (d > 60 ? 0.35 : 0.75) + '"/>';
+        });
+        s += arrow(cx, cy, cx + 48, cy + 30, WARN, 'ahw');
+        s += txt(cx + 56, cy + 52, 'одна молекула', WARN, 10.5, 'start');
+        s += txt(268, 88, 'модуль скорости —', SOFT, 10.5, 'start');
+        s += txt(268, 104, 'расстояние от нуля', SOFT, 10.5, 'start');
+        s += txt(W / 2, H - 6, 'весь газ — облако точек, самое густое у начала координат', SOFT, 10.5);
+        return svg(W, H, s);
+    };
+
+    // 3. Изотропия: плотность облака зависит только от модуля.
+    F.mxisotropy = function () {
+        var W = 430, H = 206, cx = 148, cy = 112, R = 74;
+        var s = txt(W / 2, 20, 'ни одно направление не выделено', INK, 11.5);
+        s += '<line x1="' + (cx - R - 18) + '" y1="' + cy + '" x2="' + (cx + R + 18) + '" y2="' + cy +
+             '" stroke="' + BORD + '" stroke-width="1"/>';
+        s += '<line x1="' + cx + '" y1="' + (cy + R + 18) + '" x2="' + cx + '" y2="' + (cy - R - 18) +
+             '" stroke="' + BORD + '" stroke-width="1"/>';
+        [30, 52, 74].forEach(function (r, i) {
+            s += '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none" stroke="' + LINK +
+                 '" stroke-width="1.2" stroke-dasharray="4,4" opacity="' + (0.8 - i * 0.18) + '"/>';
+        });
+        [0.6, 2.1, 3.9, 5.2].forEach(function (a) {
+            s += '<circle cx="' + (cx + 52 * Math.cos(a)).toFixed(1) + '" cy="' + (cy + 52 * Math.sin(a)).toFixed(1) +
+                 '" r="4.5" fill="' + WARN + '"/>';
+        });
+        s += arrow(cx, cy, cx + 52 * Math.cos(0.6), cy + 52 * Math.sin(0.6), SOFT);
+        s += txt(cx + 8, cy + 44, 'v', SOFT, 11, 'start');
+        s += txt(288, 96, 'одинаковый модуль —', INK, 10.5, 'start');
+        s += txt(288, 112, 'одинаковая плотность', INK, 10.5, 'start');
+        s += txt(W / 2, H - 6, 'плотность облака — функция одного только модуля', SOFT, 10.5);
+        return svg(W, H, s);
+    };
+
+    // 4. Больцмановский множитель: энергии складываются, вероятности умножаются.
+    F.mxboltz = function () {
+        var W = 450, H = 208, x0 = 42, base = 150, wpx = 170, hpx = 96;
+        var s = txt(W / 2, 20, 'вероятность энергии падает по экспоненте', INK, 11.5);
+        s += '<line x1="' + x0 + '" y1="' + base + '" x2="' + (x0 + wpx + 14) + '" y2="' + base +
+             '" stroke="' + BORD + '" stroke-width="1"/>';
+        s += '<line x1="' + x0 + '" y1="' + base + '" x2="' + x0 + '" y2="' + (base - hpx - 14) +
+             '" stroke="' + BORD + '" stroke-width="1"/>';
+        [[1.0, LINK, 2.2], [0.42, WARN, 1.8]].forEach(function (c) {
+            s += '<path d="' + mxPath(x0, base, wpx, hpx, 3, 1, function (t) { return Math.exp(-t * c[0]); }) +
+                 '" fill="none" stroke="' + c[1] + '" stroke-width="' + c[2] + '"/>';
+        });
+        s += txt(x0 + 116, base - 60, 'горячее', WARN, 10.5, 'start');
+        s += txt(x0 + 56, base - 22, 'холоднее', LINK, 10.5, 'start');
+        s += txt(x0 + wpx / 2, base + 18, 'энергия &#949;', SOFT, 10.5);
+        var rx = 268;
+        s += '<rect x="' + rx + '" y="50" width="64" height="44" fill="' + LINK +
+             '" opacity="0.14" stroke="' + LINK + '"/>';
+        s += '<rect x="' + (rx + 86) + '" y="50" width="64" height="44" fill="' + LINK +
+             '" opacity="0.14" stroke="' + LINK + '"/>';
+        s += txt(rx + 32, 78, '&#949;₁', INK, 13);
+        s += txt(rx + 118, 78, '&#949;₂', INK, 13);
+        s += txt(rx + 75, 118, 'энергии складываются', SOFT, 10.5);
+        s += txt(rx + 75, 136, 'вероятности умножаются', SOFT, 10.5);
+        s += txt(rx + 75, 164, 'p(&#949;₁+&#949;₂) = p(&#949;₁)·p(&#949;₂)', INK, 11);
+        s += txt(W / 2, H - 6, 'сумму в произведение превращает только экспонента', SOFT, 10.5);
+        return svg(W, H, s);
+    };
+
+    // 5. Шаровой слой: единственный источник множителя v².
+    F.mxshell = function () {
+        var W = 440, H = 214, cx = 132, cy = 116, R = 78;
+        var s = txt(W / 2, 20, 'все молекулы с модулем v лежат в шаровом слое', INK, 11.5);
+        s += '<circle cx="' + cx + '" cy="' + cy + '" r="' + R + '" fill="' + LINK + '" opacity="0.10"/>';
+        s += '<circle cx="' + cx + '" cy="' + cy + '" r="' + R + '" fill="none" stroke="' + LINK + '" stroke-width="1.5"/>';
+        s += '<circle cx="' + cx + '" cy="' + cy + '" r="' + (R - 9) + '" fill="none" stroke="' + LINK + '" stroke-width="1.5"/>';
+        s += '<ellipse cx="' + cx + '" cy="' + cy + '" rx="' + R + '" ry="26" fill="none" stroke="' +
+             SOFT + '" stroke-width="1" stroke-dasharray="4,4"/>';
+        s += arrow(cx, cy, cx + 53, cy - 51, INK);
+        s += txt(cx + 24, cy - 40, 'v', INK, 12, 'start');
+        s += '<line x1="' + (cx + R - 12) + '" y1="' + (cy + 34) + '" x2="' + (cx + R + 22) + '" y2="' + (cy + 50) +
+             '" stroke="' + SOFT + '" stroke-width="1"/>';
+        s += txt(cx + R + 26, cy + 54, 'dv', SOFT, 10.5, 'start');
+        var rx = 262;
+        s += txt(rx, 72, 'площадь сферы', SOFT, 10.5, 'start');
+        s += txt(rx, 92, '4&#960;v²', INK, 15, 'start');
+        s += txt(rx, 118, 'толщина слоя', SOFT, 10.5, 'start');
+        s += txt(rx, 138, 'dv', INK, 15, 'start');
+        s += '<line x1="' + rx + '" y1="152" x2="' + (rx + 132) + '" y2="152" stroke="' + BORD + '" stroke-width="1"/>';
+        s += txt(rx, 174, 'объём 4&#960;v²dv', WARN, 12.5, 'start');
+        s += txt(W / 2, H - 6, 'при v → 0 слой стягивается в точку — медленных молекул почти нет', SOFT, 10);
+        return svg(W, H, s);
+    };
+
+    // 6. Горка как произведение растущего v² на падающую экспоненту.
+    F.mxproduct = function () {
+        var W = 450, H = 216, x0 = 44, base = 166, wpx = 350, hpx = 118, XM = 2.6;
+        var s = txt(W / 2, 20, 'горка получается из борьбы двух сомножителей', INK, 11.5);
+        s += '<line x1="' + x0 + '" y1="' + base + '" x2="' + (x0 + wpx + 12) + '" y2="' + base +
+             '" stroke="' + BORD + '" stroke-width="1"/>';
+        s += '<line x1="' + x0 + '" y1="' + base + '" x2="' + x0 + '" y2="' + (base - hpx - 12) +
+             '" stroke="' + BORD + '" stroke-width="1"/>';
+        s += '<path d="' + mxPath(x0, base, wpx, hpx, XM, XM * XM, function (x) { return x * x; }) +
+             '" fill="none" stroke="' + SOFT + '" stroke-width="1.6" stroke-dasharray="5,4"/>';
+        s += '<path d="' + mxPath(x0, base, wpx, hpx, XM, 1, function (x) { return Math.exp(-x * x); }) +
+             '" fill="none" stroke="' + WARN + '" stroke-width="1.6" stroke-dasharray="5,4"/>';
+        s += '<path d="' + mxPath(x0, base, wpx, hpx, XM, Math.exp(-1), function (x) { return x * x * Math.exp(-x * x); }) +
+             '" fill="none" stroke="' + LINK + '" stroke-width="2.6"/>';
+        s += txt(x0 + 300, base - 108, 'v²', SOFT, 12.5, 'start');
+        s += txt(x0 + 112, base - 98, 'e^(&#8722;mv²/2kT)', WARN, 11, 'start');
+        s += txt(x0 + 170, base - 82, 'f(v)', LINK, 12.5, 'start');
+        s += txt(x0 + wpx / 2, base + 18, 'скорость', SOFT, 10.5);
+        s += txt(W / 2, H - 6, 'слева душит геометрия, справа — экспонента, максимум посередине', SOFT, 10.5);
+        return svg(W, H, s);
+    };
+
+    // 7. Три характерные скорости на одной несимметричной кривой.
+    F.mxthree = function () {
+        var W = 460, H = 208, x0 = 36, base = 156, wpx = 266, hpx = 98, XM = 3.0;
+        var SY = Math.exp(-1), i, xx;
+        var fn = function (x) { return x * x * Math.exp(-x * x); };
+        var px = function (x) { return x0 + wpx * x / XM; };
+        var py = function (x) { return base - hpx * fn(x) / SY; };
+        var s = txt(x0 + wpx / 2, 20, 'три скорости одного и того же газа', INK, 11.5);
+        var p = 'M' + px(1.2247).toFixed(1) + ',' + base;
+        for (i = 0; i <= 60; i++) { xx = 1.2247 + (XM - 1.2247) * i / 60; p += ' L' + px(xx).toFixed(1) + ',' + py(xx).toFixed(1); }
+        p += ' L' + px(XM).toFixed(1) + ',' + base + ' Z';
+        s += '<path d="' + p + '" fill="' + LINK + '" opacity="0.16"/>';
+        s += '<line x1="' + x0 + '" y1="' + base + '" x2="' + (x0 + wpx + 10) + '" y2="' + base +
+             '" stroke="' + BORD + '" stroke-width="1"/>';
+        s += '<path d="' + mxPath(x0, base, wpx, hpx, XM, SY, fn) + '" fill="none" stroke="' + LINK + '" stroke-width="2.4"/>';
+        [[1, INK, 'вероятнейшая', '1,00'], [1.1284, MOSS, 'средняя', '1,13'], [1.2247, WARN, 'среднеквадр.', '1,22']]
+        .forEach(function (m, k) {
+            var X = px(m[0]).toFixed(1);
+            s += '<line x1="' + X + '" y1="' + base + '" x2="' + X + '" y2="' + (base - hpx - 8 - k * 9) +
+                 '" stroke="' + m[1] + '" stroke-width="1.5"/>';
+            s += '<rect x="316" y="' + (58 + k * 24) + '" width="11" height="11" fill="' + m[1] + '"/>';
+            s += txt(334, 68 + k * 24, m[2], INK, 10.5, 'start');
+            s += txt(452, 68 + k * 24, m[3], SOFT, 10.5, 'end');
+        });
+        s += txt(x0 + wpx / 2 + 30, base + 18, 'длинный хвост тянет среднее вправо', SOFT, 10.5);
+        s += txt(W / 2, H - 6, 'отношение 1 : 1,128 : 1,225 одинаково для любого газа', SOFT, 10.5);
+        return svg(W, H, s);
+    };
+
+    // 8. Хвост: доля за порогом отзывается на нагрев несоразмерно сильно.
+    F.mxtail = function () {
+        var W = 460, H = 214, x0 = 40, base = 160, wpx = 372, hpx = 100, XM = 3.2, CUT = 2.0;
+        var SY = Math.exp(-1);
+        var px = function (x) { return x0 + wpx * x / XM; };
+        var s = txt(W / 2, 20, 'порог сдвинулся чуть — хвост вырос в разы', INK, 11.5);
+        [[1.0, LINK, 0.20], [1.22, WARN, 0.32]].forEach(function (c) {
+            var w = c[0];
+            var fn = function (x) { var u = x / w; return u * u * Math.exp(-u * u) / w; };
+            var p = 'M' + px(CUT).toFixed(1) + ',' + base, i, xx;
+            for (i = 0; i <= 60; i++) {
+                xx = CUT + (XM - CUT) * i / 60;
+                p += ' L' + px(xx).toFixed(1) + ',' + (base - hpx * fn(xx) / SY).toFixed(1);
+            }
+            p += ' L' + px(XM).toFixed(1) + ',' + base + ' Z';
+            s += '<path d="' + p + '" fill="' + c[1] + '" opacity="' + c[2] + '"/>';
+            s += '<path d="' + mxPath(x0, base, wpx, hpx, XM, SY, fn) + '" fill="none" stroke="' + c[1] + '" stroke-width="2.2"/>';
+        });
+        s += '<line x1="' + x0 + '" y1="' + base + '" x2="' + (x0 + wpx + 10) + '" y2="' + base +
+             '" stroke="' + BORD + '" stroke-width="1"/>';
+        s += '<line x1="' + px(CUT).toFixed(1) + '" y1="' + base + '" x2="' + px(CUT).toFixed(1) +
+             '" y2="40" stroke="' + INK + '" stroke-width="1.8" stroke-dasharray="4,3"/>';
+        s += txt(px(CUT) - 6, 36, 'порог', INK, 10.5, 'end');
+        s += '<rect x="350" y="46" width="11" height="11" fill="' + LINK + '" opacity="0.85"/>';
+        s += txt(368, 56, 'холоднее', LINK, 10.5, 'start');
+        s += '<rect x="350" y="68" width="11" height="11" fill="' + WARN + '" opacity="0.85"/>';
+        s += txt(368, 78, 'горячее', WARN, 10.5, 'start');
+        s += txt(px(2.6), base + 18, 'быстрее порога', SOFT, 10.5);
+        s += txt(W / 2, H - 6, 'средняя скорость подросла на проценты, доля за порогом — в разы', SOFT, 10.5);
         return svg(W, H, s);
     };
 
