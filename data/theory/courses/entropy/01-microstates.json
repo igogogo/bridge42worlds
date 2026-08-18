@@ -173,7 +173,7 @@
    "items": [
     {
      "what": "Факториал считает порядок, сочетание — состав",
-     "why": "$N!$ — число способов выстроить $N$ различимых предметов в очередь: на первое место $N$ кандидатов, на второе $N-1$, и так далее. В третьем шаге вывода нужно не это. Вопрос там стоит иначе: какие именно частицы оказались слева, а в каком порядке они там расположились — безразлично. Значит, лишние перестановки надо поделить: $n!$ внутри левой половины и $(N-n)!$ внутри правой. Так и получается биномиальный коэффициент. Смысл его проверяется на краях: при $n = N$ остаётся ровно одна раскладка, потому что $0! = 1$. Считать такие факториалы целиком невозможно уже при $N = 100$, но целиком они и не нужны — нужен их логарифм, а его даёт формула Стирлинга $\\ln N! \\approx N\\ln N - N$ с ошибкой меньше процента.",
+     "why": "$N!$ — число способов выстроить $N$ различимых предметов в очередь: на первое место $N$ кандидатов, на второе $N-1$, и так далее. В третьем шаге вывода нужно не это. Вопрос там стоит иначе: какие именно частицы оказались слева, а в каком порядке они там расположились — безразлично. Значит, лишние перестановки надо поделить: $n!$ внутри левой половины и $(N-n)!$ внутри правой. Так и получается биномиальный коэффициент. Смысл его проверяется на краях: при $n = N$ остаётся ровно одна раскладка, потому что $0! = 1$. Считать такие факториалы целиком неудобно уже при $N = 100$: в $100!$ сто пятьдесят восемь цифр, хотя сам ответ четвёртого шага, $\\binom{100}{50} \\approx 1{,}0\\cdot 10^{29}$, получается без труда. А при $N \\sim 10^{23}$ прямой счёт невозможен — и не нужен: нужен не сам факториал, а его логарифм, и его даёт формула Стирлинга $\\ln N! \\approx N\\ln N - N$ с ошибкой меньше процента.",
      "latex": "\\binom{N}{n} = \\frac{N!}{n!\\,(N-n)!}, \\qquad \\ln N! \\approx N\\ln N - N",
      "kit": "combinatorics"
     },
@@ -555,13 +555,7 @@
    "note": "Hence an important clarification regarding the word 'disorder'. Entropy is not about aesthetics: books arranged alphabetically and books in a heap differ not in beauty but in the number of arrangements we agree to consider identical. Entropy depends on what exactly we consider indistinguishable — and this is not a flaw of the definition but its content. A demon that distinguishes individual molecules would see a different entropy; we will return to this in the third section."
   },
   "math": {
-   "title": "The mathematics needed here",
-   "text": [
-    "First — factorial and binomial coefficient. $N!$ is the number of ways to arrange $N$ distinguishable objects in order, and $\\binom{N}{n}$ is the number of ways to choose $n$ of them without distinguishing the order within the choice. The latter is exactly what we need: which particles are on the left, not the order in which they ended up there.",
-    "Second — Stirling's formula. Factorials are enormous, but their logarithms are easy to compute: $\\ln N! \\approx N\\ln N - N$. For $N = 100$ this gives 360.5 against the exact 363.7 — an error of less than one percent, and for physical $N$ on the order of $10^{23}$ it vanishes entirely. A perfect example of deliberate neglect from the first topic.",
-    "Third — why the bell curve narrows. The logarithm of the binomial coefficient near its maximum behaves like a parabola, and the exponential of a parabola is a Gaussian curve with a width on the order of the square root of $N$. Hence the famous square-root law, encountered everywhere from opinion polls to shot noise in electronics.",
-    "Fourth — logarithm as a measure. The logarithm turns multiplication into addition, and it is the only function that does so. Therefore, whenever we need a quantity that adds when independent systems are combined, starting from something that multiplies, the logarithm appears. Thus entropy, information, and the acoustic decibel turn out to be structured the same way."
-   ]
+   "title": "The mathematics needed here"
   },
   "example": {
    "title": "Numerical Example: Will All Air Gather in One Corner of the Room?",
@@ -931,13 +925,7 @@
    "note": "De aquí una aclaración importante sobre la palabra «desorden». La entropía no trata de estética: los libros ordenados alfabéticamente y los amontonados no se diferencian por la belleza, sino por el número de disposiciones que aceptamos como iguales. La entropía depende de qué consideramos indistinguible — y esto no es un defecto de la definición, sino su contenido. Un demonio que distinguiera moléculas individuales vería una entropía diferente; volveremos a esto en el tercer parágrafo."
   },
   "math": {
-   "title": "Las matemáticas que se necesitaron aquí",
-   "text": [
-    "Primero — el factorial y el coeficiente binomial. $N!$ es el número de formas de ordenar $N$ objetos distinguibles, y $\\binom{N}{n}$ es el número de formas de elegir $n$ de ellos sin distinguir el orden dentro de la elección. Precisamente esto último es lo que necesitamos: qué partículas están a la izquierda, no en qué orden están allí.",
-    "Segundo — la fórmula de Stirling. Los factoriales son enormes, pero sus logaritmos se calculan fácilmente: $\\ln N! \\approx N\\ln N - N$. Para $N = 100$ da 360,5 frente al exacto 363,7 — un error menor del uno por ciento, y para $N$ físicos del orden de $10^{23}$ desaparece por completo. Un excelente ejemplo de desprecio consciente del primer tema.",
-    "Tercero — por qué la campana se estrecha. El logaritmo del coeficiente binomial cerca del máximo se comporta como una parábola, y la exponencial de una parábola es una curva gaussiana con anchura del orden de la raíz de $N$. De ahí la famosa ley de la raíz, que aparece en todas partes, desde encuestas de opinión pública hasta el ruido de disparo en electrónica.",
-    "Cuarto — el logaritmo como medida. El logaritmo convierte la multiplicación en suma, y es la única función que lo hace. Por lo tanto, cada vez que se necesita una magnitud que se sume al combinar sistemas independientes, a partir de algo que se multiplica, aparece el logaritmo. Así, la entropía, la información y el decibelio sonoro resultaron estar construidos de la misma manera."
-   ]
+   "title": "Las matemáticas que se necesitaron aquí"
   },
   "example": {
    "title": "Ejemplo con números: ¿se juntará el aire en una esquina de la habitación?",
@@ -1304,13 +1292,7 @@
    "note": "من هنا توضيح مهم لكلمة 'فوضى'. الإنتروبيا ليست عن الجماليات: الكتب المرتبة أبجدياً والمكدسة في كومة لا تختلف في الجمال، بل في عدد التوزيعات التي نتفق على اعتبارها متطابقة. الإنتروبيا تعتمد على ما نعتبره غير قابل للتمييز بالضبط — وهذا ليس عيباً في التعريف، بل مضمونه. شيطان يميز الجزيئات الفردية سيرى إنتروبيا مختلفة؛ سنعود إلى هذا في الفقرة الثالثة."
   },
   "math": {
-   "title": "الرياضيات التي كانت مطلوبة هنا",
-   "text": [
-    "أولاً — المضروب ومعامل ذي الحدين. $N!$ هو عدد طرق ترتيب $N$ عنصراً مميزاً بالترتيب، و $\\binom{N}{n}$ هو عدد طرق اختيار $n$ منها دون تمييز الترتيب داخل الاختيار. الأخير هو ما نحتاجه بالضبط: أي الجسيمات على اليسار، وليس بأي ترتيب هي هناك.",
-    "ثانياً — صيغة ستيرلينغ. المضروبات ضخمة، لكن لوغاريتماتها تُحسب ببساطة: $\\ln N! \\approx N\\ln N - N$. لـ $N = 100$ يعطي هذا 360,5 مقابل 363,7 بالضبط — خطأ أقل من واحد بالمائة، وبالنسبة لقيم $N$ الفيزيائية حوالي $10^{23}$ يختفي تماماً. مثال رائع على الإهمال المتعمد من الموضوع الأول.",
-    "ثالثاً — لماذا يضيق الجرس. لوغاريتم معامل ذي الحدين قرب القمة يتصرف مثل قطع مكافئ، والأسي من القطع المكافئ هو منحنى غاوسي بعرض في حدود جذر $N$. من هنا يأتي قانون الجذر الشهير، الذي يظهر في كل مكان من استطلاعات الرأي إلى ضوضاء الطلقات في الإلكترونيات.",
-    "رابعاً — اللوغاريتم كمقياس. اللوغاريتم يحول الضرب إلى جمع، وهذه هي الدالة الوحيدة التي تفعل ذلك. لذلك كلما دعت الحاجة إلى كمية تُجمع عند دمج أنظمة مستقلة، من شيء يُضرب — يظهر اللوغاريتم. هكذا تبين أن الإنتروبيا والمعلومات والديسيبل الصوتي لها نفس البنية."
-   ]
+   "title": "الرياضيات التي كانت مطلوبة هنا"
   },
   "example": {
    "title": "مثال عددي: هل سيجتمع الهواء في زاوية واحدة من الغرفة؟",

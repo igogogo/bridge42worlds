@@ -178,7 +178,7 @@
    "items": [
     {
      "what": "Почему работа считается интегралом",
-     "why": "Работа равна силе, умноженной на путь, только пока сила постоянна. В первом шаге вывода она меняется на каждом сантиметре — по закону обратных квадратов, — и постоянного множителя, на который можно было бы умножить путь, просто нет. Выход обычный: путь режется на куски настолько короткие, что на каждом силу можно считать неизменной; вклады складываются, а длина куска устремляется к нулю. Это и записано как $\\int_{r_1}^{r_2} kQq\\,dr/r^{2}$. Результат стоит запомнить отдельно: интегрирование понижает показатель степени на единицу, поэтому из $1/r^{2}$ получается $1/r$. Отсюда и расхождение двух главных формул темы — поле убывает как квадрат расстояния, а потенциал и энергия как первая степень.",
+     "why": "Работа равна силе, умноженной на путь, только пока сила постоянна. В первом шаге вывода она меняется на каждом сантиметре — по закону обратных квадратов, — и постоянного множителя, на который можно было бы умножить путь, просто нет. Выход обычный: путь режется на куски настолько короткие, что на каждом силу можно считать неизменной; вклады складываются, а длина куска устремляется к нулю. Это и записано как $\\int_{r_1}^{r_2} kQq\\,dr/r^{2}$. Результат стоит запомнить отдельно: интегрирование показатель степени повышает на единицу, $\\int r^{n}\\,dr = r^{n+1}/(n+1)$. Здесь показатель равен $-2$ и становится $-1$ — из $1/r^{2}$ выходит $1/r$. Растёт показатель, а падает при этом степень в знаменателе. Отсюда и расхождение двух главных формул темы — поле убывает как квадрат расстояния, а потенциал и энергия как первая степень.",
      "latex": "\\int_{r_1}^{r_2}\\frac{dr}{r^{2}} = \\left[-\\frac{1}{r}\\right]_{r_1}^{r_2} = \\frac{1}{r_1} - \\frac{1}{r_2}",
      "kit": "integral"
     },
@@ -559,13 +559,7 @@
    "note": "Limits of applicability and a key practical clarification. The concept of potential exists only because the electrostatic field is conservative — work does not depend on the path. As soon as changing magnetic fields appear, this ceases to be true: then the work along a closed loop is nonzero, which is the basis of any electric generator. Potential in the usual sense cannot be introduced then, and a more general description will be needed. This will be the main topic of the next section of the course."
   },
   "math": {
-   "title": "Mathematics needed here",
-   "text": [
-    "Why potential is more convenient than field. Imagine a topographic map. The field is arrows showing where a ball will roll at each point: magnitude and direction, i.e., two numbers. Potential is the altitude above sea level: one number. But from altitudes everything is recovered: the ball rolls where the slope is steepest downward. We replaced a map of arrows with a map of altitudes and lost exactly nothing, but adding altitudes from several hills is much simpler than adding arrows.",
-    "What 'the field is the derivative of the potential with a minus sign' means. The minus is not a formality. The ball rolls downward, i.e., towards decreasing altitude — so the force is directed to where the potential is lower. A steep slope means a large force, a gentle slope means a small force, a flat area means zero. That's why the unit of field strength can be written as volt per meter: it literally means 'how many volts are lost per meter of path.'",
-    "What an equipotential line is. On a map it is a contour line — a line of equal altitude. Walking along it, you neither rise nor descend, so you do no work against gravity. In electricity the same: moving a charge along an equipotential does no work at all. And another property familiar to anyone who reads maps: contour lines are always perpendicular to the lines of steepest slope. Therefore, field lines always cross equipotentials at right angles.",
-    "Why energy is negative in a well. The same choice of reference as in gravity: zero is set at infinity. Opposite charges attract; to separate them work is needed, so near each other they sit in a well, below zero. Like charges, on the other hand, fly apart on their own, releasing energy — their energy is positive, a hill. The sign of energy immediately tells whether the system is bound or will fall apart: exactly the same rule that determined the type of orbit in the topic on gravity."
-   ]
+   "title": "Mathematics needed here"
   },
   "example": {
    "title": "Example with numbers: why a bird is unharmed but a person is not",
@@ -989,13 +983,7 @@
    "note": "Límites de aplicabilidad y aclaración práctica principal. El concepto de potencial existe solo porque el campo electrostático es conservativo — el trabajo no depende del camino. En cuanto aparecen campos magnéticos variables, esto deja de ser cierto: allí el trabajo a lo largo de un circuito cerrado no es cero, en lo que se basa cualquier generador eléctrico. Entonces no se puede introducir el potencial en sentido habitual, y se necesitará una descripción más general. Este será el tema principal del próximo tema del curso."
   },
   "math": {
-   "title": "Matemáticas que aquí se necesitaron",
-   "text": [
-    "Por qué el potencial es más conveniente que el campo. Imagine un mapa del terreno. El campo son flechas que indican hacia dónde rodará una pelota en cada punto: magnitud y dirección, es decir, dos números. El potencial es la altura sobre el nivel del mar: un número. Pero a partir de las alturas se recupera todo: la pelota rueda hacia donde la pendiente es más pronunciada hacia abajo. Hemos reemplazado un mapa de flechas por un mapa de alturas y no hemos perdido nada, pero sumar las alturas de varias colinas es mucho más fácil que sumar flechas.",
-    "Qué significa «el campo es la derivada del potencial con signo menos». El menos no es una formalidad. La pelota rueda hacia abajo, es decir, hacia donde disminuye la altura; por lo tanto, la fuerza se dirige hacia donde el potencial es menor. Una pendiente pronunciada implica una fuerza grande, una pendiente suave una pequeña, una superficie plana una fuerza nula. Precisamente por eso la unidad de campo eléctrico se puede escribir como voltio por metro: literalmente «cuántos voltios se pierden por cada metro de recorrido».",
-    "Qué es una línea equipotencial. En un mapa es una curva de nivel: línea de igual altura. Caminando a lo largo de ella, no se sube ni se baja, por lo tanto no se realiza trabajo contra la gravedad. En electricidad es igual: moviendo una carga a lo largo de una equipotencial no se realiza trabajo. Y otra propiedad conocida por quienes leen mapas: las curvas de nivel siempre son perpendiculares a las líneas de máxima pendiente. Por eso las líneas de campo siempre cruzan las equipotenciales en ángulo recto.",
-    "Por qué la energía en un pozo es negativa. Es la misma elección de referencia que en la gravedad: el cero se sitúa en el infinito. Las cargas opuestas se atraen, para separarlas se necesita trabajo, por lo tanto cerca están en un pozo, por debajo de cero. Las cargas iguales, en cambio, se repelen, liberando energía, su energía es positiva, es una colina. El signo de la energía indica de inmediato si el sistema está ligado o se desintegrará: exactamente la misma regla que determinaba el tipo de órbita en el tema de la gravedad."
-   ]
+   "title": "Matemáticas que aquí se necesitaron"
   },
   "example": {
    "title": "Ejemplo con números: por qué el pájaro está ileso y la persona no",
@@ -1362,13 +1350,7 @@
    "note": "حدود التطبيق والتوضيح العملي الرئيسي. مفهوم الجهد موجود فقط لأن المجال الكهروستاتيكي محافظ — الشغل لا يعتمد على المسار. بمجرد ظهور مجالات مغناطيسية متغيرة، لم يعد هذا صحيحًا: حيث يكون الشغل حول مسار مغلق غير صفري، وهو ما يقوم عليه أي مولد كهربائي. عندها لا يمكن تعريف الجهد بالمعنى المألوف، وسنحتاج إلى وصف أكثر عمومية. سيكون هذا الموضوع الرئيسي للموضوع التالي من الدورة."
   },
   "math": {
-   "title": "الرياضيات التي كانت ضرورية هنا",
-   "text": [
-    "لماذا الجهد أكثر ملاءمة من المجال. تخيل خريطة تضاريس. المجال هو أسهم تظهر أين سيتدحرج الكرة في كل نقطة: المقدار والاتجاه، أي رقمين. الجهد هو الارتفاع عن مستوى سطح البحر: رقم واحد. ولكن من الارتفاعات يمكن استعادة كل شيء: الكرة تتدحرج إلى حيث المنحدر أكثر انحدارًا نحو الأسفل. لقد استبدلنا خريطة الأسهم بخريطة ارتفاعات ولم نفقد شيئًا، لكن جمع ارتفاعات من عدة تلال أسهل بكثير من جمع الأسهم.",
-    "ماذا يعني \"المجال هو مشتقة الجهد بإشارة سالبة\". الإشارة السالبة هنا ليست شكلية. الكرة تتدحرج إلى أسفل، أي نحو انخفاض الارتفاع، مما يعني أن القوة موجهة نحو حيث الجهد أقل. المنحدر الحاد يعني قوة كبيرة، المنحدر اللطيف يعني قوة صغيرة، الأرض المستوية تعني صفرًا. ولهذا يمكن كتابة وحدة شدة المجال كـ فولت لكل متر: هذا حرفيًا \"كم فولت يُفقد لكل متر من المسار\".",
-    "ما هو خط تساوي الجهد. على الخريطة هو خط كنتور — خط ارتفاع متساوٍ. السير على طوله لا يرفعك أو يخفضك، وبالتالي لا تبذل شغلًا ضد الجاذبية. في الكهرباء نفس الشيء: تحريك شحنة على طول خط تساوي الجهد لا يبذل أي شغل. وخاصية أخرى يعرفها كل من قرأ الخرائط: خطوط الكنتور دائمًا عمودية على خطوط أشد الانحدار. لذلك خطوط المجال دائمًا تتقاطع مع خطوط تساوي الجهد بزاوية قائمة.",
-    "لماذا الطاقة سالبة في الحفرة. نفس اختيار المرجع كما في الجاذبية: الصفر عند اللانهاية. الشحنات المختلفة تتجاذب، لفصلها نحتاج شغل، لذا فهي تقع في حفرة تحت الصفر. الشحنات المتماثلة، على العكس، تتباعد تلقائيًا وتطلق طاقة، لذا طاقتها موجبة، وهي تلة. إشارة الطاقة تخبرنا فورًا ما إذا كان النظام مرتبطًا أم سيتفكك: نفس القاعدة التي حددت نوع المدار في موضوع الجاذبية."
-   ]
+   "title": "الرياضيات التي كانت ضرورية هنا"
   },
   "example": {
    "title": "مثال بأرقام: لماذا يبقى الطائر سليمًا بينما الإنسان لا",

@@ -170,7 +170,7 @@
      "figCaption": "Трение уводит траекторию внутрь: качественный ответ виден без всякого решения."
     },
     {
-     "text": "И последний шаг — к статистике. У одной частицы фазовое пространство шестимерно. У моля газа измерений порядка $6 \\cdot 10^{23}$: следить за точкой невозможно ни сейчас, ни когда-либо. Тогда физика отказывается от точки и переходит к объёму. Энтропия Больцмана есть логарифм числа состояний, то есть буквально логарифм фазового объёма.",
+     "text": "И последний шаг — к статистике. У одной частицы фазовое пространство шестимерно. У моля газа измерений вшестеро больше, чем частиц, — порядка $3{,}6 \\cdot 10^{24}$: следить за точкой невозможно ни сейчас, ни когда-либо. Тогда физика отказывается от точки и переходит к объёму. Энтропия Больцмана есть логарифм числа состояний, то есть буквально логарифм фазового объёма.",
      "latex": "S = k_B \\ln W, \\qquad W \\sim V_{\\Gamma}",
      "figure": "microcontact",
      "figCaption": "Когда точку отследить нельзя, следят за плотностью. Отсюда вся статистическая физика."
@@ -197,7 +197,7 @@
     },
     {
      "what": "Эллипс, у которого время убрано в угол",
-     "why": "В пятом шаге вывода сохранение энергии записано как уравнение эллипса в осях координата-импульс, и времени в нём нет вовсе. Это параметрическая кривая: время не исчезло, оно стало параметром вдоль линии — тот же приём, каким окружность описывают через $x=\\cos t$, $y=\\sin t$. Если растянуть оси так, чтобы оба слагаемых энергии выглядели одинаково, эллипс станет окружностью, движение по ней — равномерным вращением, а фаза колебания окажется буквально полярным углом. Потому и площадь в примере считается школьной формулой $\\pi a b$. Для моля газа та же площадь становится объёмом в пространстве размерности $6\\cdot10^{23}$: сосчитать его нельзя, но нужен обычно логарифм, а логарифм произведения есть сумма — отсюда и аддитивность энтропии.",
+     "why": "В пятом шаге вывода сохранение энергии записано как уравнение эллипса в осях координата-импульс, и времени в нём нет вовсе. Это параметрическая кривая: время не исчезло, оно стало параметром вдоль линии — тот же приём, каким окружность описывают через $x=\\cos t$, $y=\\sin t$. Если растянуть оси так, чтобы оба слагаемых энергии выглядели одинаково, эллипс станет окружностью, движение по ней — равномерным вращением, а фаза колебания окажется буквально полярным углом. Потому и площадь в примере считается школьной формулой $\\pi a b$. Для моля газа та же площадь становится объёмом в пространстве размерности $6N \\approx 3{,}6\\cdot10^{24}$ — по три координаты и три импульса на каждую из $6\\cdot10^{23}$ частиц: сосчитать его нельзя, но нужен обычно логарифм, а логарифм произведения есть сумма — отсюда и аддитивность энтропии.",
      "latex": "\\frac{x^{2}}{2E/k} + \\frac{p^{2}}{2mE} = 1, \\qquad S_{\\text{эл}} = \\pi A\\,p_{\\max}",
      "kit": "polar"
     }
@@ -563,13 +563,7 @@
    "note": "The trick works even where memory does not reduce to a derivative. Example—hysteresis: wetting of a porous rock and its reverse drying follow different curves, and the same moisture content means different things. The fix is to add a flag for the direction of the process to the state. The flag is the same kind of encapsulated history as velocity is for coordinate. Industrial reservoir models are built exactly this way; if an unexplained dependence on history appears, it is a sure sign that some variable was forgotten to be included in the state."
   },
   "math": {
-   "title": "Mathematics needed here",
-   "text": [
-    "The first concept is the order of a differential equation. It is the highest derivative that appears in it, and it equals the number of initial conditions needed for a unique solution. A first-order equation requires one number, a second-order two. Hence the dimension of the state space: it equals the order of the equation.",
-    "The second is a parametric curve. An ordinary graph shows $x$ as a function of time. A phase trajectory shows $p$ as a function of $x$, with time hidden inside as the parameter along the curve. This is the same trick used to describe a circle: instead of $y = \\sqrt{1-x^2}$, one writes $x = \\cos t$, $y = \\sin t$—and there are no more discontinuities.",
-    "The third is the Markov property, and it is central here. A process is called Markovian if the future depends only on the present, not on how the system arrived at that present. In coordinates, the motion is non-Markovian; in the coordinate-momentum pair, it is Markovian. Note: physics did not change, only the description changed.",
-    "The fourth is multidimensional volume. For $N$ particles, phase space has $6N$ dimensions, and the volume in it is computed as the product of all intervals. This sounds frightening, but usually it's not the volume itself that is needed, but its logarithm—and the logarithm of a product is the sum of the logarithms. That is exactly why entropy is additive: put two systems together—entropies add."
-   ]
+   "title": "Mathematics needed here"
   },
   "example": {
    "title": "Numerical example: area of an ellipse and where Planck's constant came from in quantum theory",
@@ -931,13 +925,7 @@
    "note": "El truco también funciona donde la memoria no se reduce a una derivada. Ejemplo: histéresis: la humectación de una roca porosa y el secado inverso siguen curvas diferentes, y la misma humedad significa cosas distintas. Se corrige añadiendo al estado una bandera de la dirección del proceso. La bandera es la misma historia encapsulada que la velocidad para la coordenada. Los modelos industriales de yacimientos están diseñados así; si aparece una dependencia inexplicable de la historia, es una señal segura de que se olvidó incluir alguna variable en el estado."
   },
   "math": {
-   "title": "Las matemáticas que se necesitaron aquí",
-   "text": [
-    "El primer concepto es el orden de una ecuación diferencial. Es la derivada más alta que aparece en ella, y es igual al número de condiciones iniciales necesarias para una solución única. Una ecuación de primer orden requiere un número, una de segundo, dos. De ahí la dimensionalidad del espacio de estados: es igual al orden de la ecuación.",
-    "El segundo es la curva paramétrica. Una gráfica habitual muestra $x$ como función del tiempo. La trayectoria de fase muestra $p$ como función de $x$, y el tiempo está oculto como un parámetro a lo largo de la curva. Es el mismo truco con el que se describe un círculo: en lugar de $y = \\sqrt{1-x^2}$ se escribe $x = \\cos t$, $y = \\sin t$ — y ya no hay discontinuidades.",
-    "El tercero es la propiedad de Markov, y es central aquí. Un proceso se llama markoviano si el futuro depende solo del presente, no de cómo el sistema llegó a ese presente. En la coordenada, el movimiento es no markoviano; en el par coordenada-momento, es markoviano. Nótese: no cambió la física, cambió la descripción.",
-    "El cuarto es el volumen multidimensional. Para $N$ partículas, el espacio de fases tiene $6N$ dimensiones, y el volumen se calcula como el producto de todos los intervalos. Suena aterrador, pero normalmente no se necesita el volumen mismo, sino su logaritmo — y el logaritmo de un producto es la suma de logaritmos. Es por eso que la entropía es aditiva: se suman dos sistemas — las entropías se suman."
-   ]
+   "title": "Las matemáticas que se necesitaron aquí"
   },
   "example": {
    "title": "Ejemplo con números: área de la elipse y de dónde surgió la constante de Planck en la cuántica",
@@ -1299,13 +1287,7 @@
    "note": "التقنية تعمل أيضًا حيث لا تقتصر الذاكرة على المشتق. مثال — التخلفية: تبلل الصخور المسامية والتجفيف العكسي يسيران في منحنيات مختلفة، ونفس الرطوبة تعني أشياء مختلفة. يُعالج بإضافة علامة اتجاه العملية إلى الحالة. العلامة هي نفس التاريخ المغلف مثل السرعة للإحداثي. نماذج الخزان الصناعية مصممة هكذا تمامًا؛ إذا ظهر فيها اعتماد غير مفسر على التاريخ، فهذه علامة أكيدة على أن متغيرًا ما نُسي تضمينه في الحالة."
   },
   "math": {
-   "title": "الرياضيات المطلوبة هنا",
-   "text": [
-    "المفهوم الأول — رتبة المعادلة التفاضلية. وهي أكبر مشتق يظهر فيها، وهي تساوي عدد الشروط الابتدائية اللازمة لحل فريد. معادلة من الرتبة الأولى تتطلب رقمًا واحدًا، والثانية تتطلب رقمين. ومن هنا بعدية فضاء الحالات: إنها تساوي رتبة المعادلة.",
-    "المفهوم الثاني — منحنى وسيطي. الرسم البياني العادي يظهر $x$ كدالة للزمن. مسار الطور يظهر $p$ كدالة $x$، والزمن مخفي داخليًا كوسيط على طول المنحنى. هذه هي نفس التقنية المستخدمة لوصف دائرة: بدلاً من $y = \\sqrt{1-x^2}$ يكتبون $x = \\cos t$, $y = \\sin t$ — ولا توجد فجوات بعد الآن.",
-    "المفهوم الثالث — خاصية ماركوف، وهي مركزية هنا. تُسمى العملية ماركوفية إذا كان المستقبل يعتمد فقط على الحاضر، وليس على كيفية وصول النظام إلى هذا الحاضر. في الإحداثي، الحركة غير ماركوفية، في الزوج إحداثي-زخم — ماركوفية. لاحظ: لم تتغير الفيزياء، تغير الوصف.",
-    "المفهوم الرابع — الحجم متعدد الأبعاد. لـ $N$ جسيم، فضاء الطور له $6N$ بعدًا، ويُحسب الحجم فيه كحاصل ضرب كل الفترات. يبدو هذا مخيفًا، لكن عادةً ما نحتاج ليس الحجم نفسه، بل لوغاريتمه — ولوغاريتم حاصل الضرب هو مجموع اللوغاريتمات. ولهذا السبب الإنتروبيا مضافة: نجمع نظامين — تُجمع الإنتروبيات."
-   ]
+   "title": "الرياضيات المطلوبة هنا"
   },
   "example": {
    "title": "مثال بالأرقام: مساحة القطع الناقص ومن أين جاء ثابت بلانك في الكم",

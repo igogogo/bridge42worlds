@@ -191,15 +191,14 @@
     },
     {
      "what": "Почему модуль, а не просто квадрат",
-     "why": "В таблице обозначений у $\\psi$ стоит прочерк вместо единицы измерения, а у $|\\psi|^{2}$ — обратный метр, и оба факта работают. Сама $\\psi$ может быть отрицательной и вообще комплексной: знак и фаза нужны, чтобы амплитуды умели гасить друг друга. Наблюдаемой величине отрицательной быть нельзя, поэтому берут не квадрат, а квадрат модуля $|\\psi|^{2} = \\psi^{*}\\psi$, неотрицательный при любой фазе. Обратный метр говорит, что перед нами плотность, а не вероятность: спрашивать вероятность в точке бессмысленно, плотность умножают на отрезок. Условие $\\int|\\psi|^{2}dx = 1$ из того же шага означает буквально «частица где-то есть».",
+     "why": "Седьмой шаг вывода записывает наблюдаемую величину как $|\\psi|^{2} = \\psi^{*}\\psi$, и модуль здесь не для красоты. Сама $\\psi$ может быть отрицательной и вообще комплексной: знак и фаза нужны, чтобы амплитуды умели гасить друг друга, — без них не было бы и интерференционного слагаемого из предыдущего приёма. Наблюдаемой величине отрицательной быть нельзя, а просто квадрат комплексного числа запросто окажется и отрицательным, и комплексным. Поэтому берут квадрат модуля, то есть произведение числа на сопряжённое: он неотрицателен при любой фазе. Второе равенство того же шага, $\\int|\\psi|^{2}dx = 1$, означает буквально «частица где-то есть» и заодно задаёт размерность: раз интеграл по длине равен единице, у $|\\psi|^{2}$ размерность обратной длины. Значит перед нами плотность вероятности, а не вероятность: спрашивать вероятность в точке бессмысленно, её получают, умножив плотность на отрезок, — ровно так седьмой шаг и записан, $P(x)\\,dx = |\\psi(x)|^{2}dx$.",
      "latex": "|\\psi|^{2} = \\psi^{*}\\psi \\geq 0, \\qquad \\int |\\psi|^{2}\\,dx = 1",
      "kit": "complex"
     },
     {
      "what": "Целое число берётся из замыкания",
      "why": "Третий и четвёртый шаги вывода делают главное превращение параграфа: непрерывный набор орбит становится дискретным. Механизм чисто волновой. Обежав кольцо длиной $2\\pi r$, волна возвращается в исходную точку, и её фаза обязана совпасть с прежней — иначе на следующем обороте волна наложится на себя со сдвигом и погасит сама себя. Совпадение фазы и означает, что на длине орбиты уложилось целое число длин волн. Целое число тут не постулируется, а выживает: условие отбирает из непрерывного множества радиусов дискретный набор. Тот же приём работает у струны с закреплёнными концами и у частицы в ящике из первого параграфа.",
-     "latex": "2\\pi r = n\\lambda, \\quad n = 1, 2, 3, \\ldots \\;\\Longrightarrow\\; L = n\\hbar",
-     "kit": "fourier"
+     "latex": "2\\pi r = n\\lambda, \\quad n = 1, 2, 3, \\ldots \\;\\Longrightarrow\\; L = n\\hbar"
     }
    ]
   },
@@ -575,13 +574,7 @@
    "note": "Limits of applicability and a major caveat. The Bohr model with orbits is only numerically correct and fundamentally wrong: the electron has no trajectory, and one cannot speak of its motion along a ring. The correct description is given by the Schrödinger equation, where the electron is represented by a three-dimensional probability cloud. Nevertheless, the reasoning with an integer number of waves remains valid and is still the best way to understand where quantization comes from. Just remember that this is scaffolding, not the building."
   },
   "math": {
-   "title": "Mathematics Needed Here",
-   "text": [
-    "Why wavelength is inversely proportional to momentum. Keep this image in mind: the heavier and faster an object, the shorter its wave, the less it looks like a wave and the more like a particle. For an electron in an atom, the wavelength is comparable to the atom’s size — wave properties dominate everything. For a dust grain of mass one microgram, crawling at a speed of one millimeter per second, the wavelength is $10^{-25}$ meters, a billion times smaller than an atomic nucleus. Wave properties exist for everything, but are noticeable only for light and slow objects.",
-    "What the wave function is and how it differs from a water wave. A water wave is a height, real and measurable. The wave function is neither height, nor pressure, nor anything observable: it can be negative or even complex. Only its square — the probability — is observable. A useful analogy: the wave function relates to probability roughly as sound amplitude relates to loudness. Amplitudes are added with sign, while we hear the square — that is why two waves can produce silence.",
-    "Why it is amplitudes that interfere. This is the key to all the strangeness. If probabilities were added, two slits would simply give the sum of two spots, as for sand grains. But amplitudes are added, and probability is the square of the sum, not the sum of squares. The difference between $(a+b)^{2}$ and $a^{2}+b^{2}$ equals $2ab$ — that is the interference term. When $b$ is negative, it makes the probability smaller than from a single slit. Hence the dark fringes.",
-    "How to read the condition of an integer number of waves. It is exactly the same as for a guitar string, only circular. A wave, traveling around the orbit, must return to its initial phase — otherwise, on the next revolution, it will superimpose with a shift and cancel out. Only those orbits are allowed where an integer number of wavelengths fit. It is worth pausing here and appreciating: the mystery of discrete atomic levels, which tormented physicists for forty years, turned out to be the same problem that Pythagoras solved on a string two and a half thousand years earlier."
-   ]
+   "title": "Mathematics Needed Here"
   },
   "example": {
    "title": "Numerical example: wavelength of an electron and a tennis ball",
@@ -957,13 +950,7 @@
    "note": "Límites de aplicabilidad y la salvedad principal. El modelo de Bohr con órbitas es solo numéricamente correcto y esencialmente incorrecto: el electrón no tiene trayectoria y no se puede hablar de su movimiento en un anillo. La descripción correcta la da la ecuación de Schrödinger, donde el electrón se representa como una nube tridimensional de probabilidad. Sin embargo, el razonamiento con un número entero de ondas sigue siendo válido y sigue siendo la mejor manera de entender de dónde proviene la cuantización. Solo recuerda que esto es un andamio, no el edificio."
   },
   "math": {
-   "title": "Matemáticas que fueron necesarias aquí",
-   "text": [
-    "Por qué la longitud de onda es inversa al momento. Ten en mente la imagen: cuanto más pesado y rápido es un objeto, más corta es su onda, menos se parece a una onda y más a una partícula. Para un electrón en un átomo, la longitud de onda es comparable al tamaño del átomo: las propiedades ondulatorias gobiernan todo. Para una mota de polvo de un microgramo que se arrastra a un milímetro por segundo, la longitud de onda resulta ser $10^{-25}$ metros, mil millones de veces más pequeña que el núcleo atómico. Las propiedades ondulatorias existen en todo, pero solo son notables en lo ligero y lento.",
-    "Qué es la función de onda y en qué se diferencia de una onda en el agua. Una onda en el agua es altura, real y medible. La función de onda no es altura, ni presión, ni nada observable: puede ser negativa e incluso compleja. Solo su cuadrado es observable: la probabilidad. Una analogía útil: la función de onda se relaciona con la probabilidad aproximadamente como la amplitud del sonido con el volumen. Las amplitudes se suman con signo, y oímos el cuadrado, por lo que dos ondas pueden dar silencio.",
-    "Por qué interfieren precisamente las amplitudes. Esta es la clave de toda la extrañeza. Si se sumaran las probabilidades, dos rendijas darían simplemente la suma de dos manchas, como para granos de arena. Pero se suman las amplitudes, y la probabilidad es el cuadrado de la suma, no la suma de los cuadrados. La diferencia entre $(a+b)^{2}$ y $a^{2}+b^{2}$ es $2ab$: ese es el término de interferencia. Cuando $b$ es negativa, hace que la probabilidad sea menor que la de una sola rendija. De ahí las franjas oscuras.",
-    "Cómo leer la condición de un número entero de ondas. Es exactamente lo mismo que para una cuerda de guitarra, solo que circular. La onda, después de recorrer la órbita, debe volver a la fase original; de lo contrario, en la siguiente vuelta se superpondría desplazada y se cancelaría. Solo están permitidas las órbitas en las que cabe un número entero de longitudes de onda. Aquí vale la pena detenerse y apreciar: el misterio de los niveles discretos del átomo, que atormentó a los físicos durante cuarenta años, resultó ser el mismo problema que Pitágoras resolvió en una cuerda dos mil quinientos años antes."
-   ]
+   "title": "Matemáticas que fueron necesarias aquí"
   },
   "example": {
    "title": "Ejemplo con números: longitud de onda del electrón y de la pelota",
@@ -1407,13 +1394,7 @@
    "note": "حدود التطبيق والتحذير الأساسي. نموذج بور مع المدارات صحيح عددياً لكنه غير صحيح جوهرياً: لا مسار للإلكترون، ولا يمكن الحديث عن حركته في حلقة. الوصف الصحيح يقدمه معادلة شرودنغر، حيث يمثل الإلكترون بسحابة احتمال ثلاثية الأبعاد. ومع ذلك، يبقى الاستدلال بالعدد الصحيح من الموجات صحيحاً وهو أفضل وسيلة لفهم مصدر التكميم. فقط تذكر أن هذه سقالات وليست بناءً."
   },
   "math": {
-   "title": "الرياضيات التي استُخدمت هنا",
-   "text": [
-    "لماذا طول الموجة عكسي مع الزخم. احتفظ في ذهنك بصورة: كلما كان الجسم أثقل وأسرع، كان طول موجته أقصر، وكلما قل شبهه بالموجة وزاد شبهه بالجسيم. بالنسبة للإلكترون في الذرة، طول الموجة مماثل لحجم الذرة — الخصائص الموجية تسود كل شيء. بالنسبة لحبيبة غبار كتلتها ميكروغرام، تزحف بسرعة ملليمتر في الثانية، طول الموجة يبلغ $10^{-25}$ متر، وهو أصغر بمليار مرة من نواة الذرة. الخصائص الموجية موجودة في كل شيء، لكنها ملحوظة فقط في الخفيف والبطيء.",
-    "ما هي الدالة الموجية وكيف تختلف عن الموجة على الماء. الموجة على الماء هي ارتفاع، حقيقي وقابل للقياس. الدالة الموجية ليست ارتفاعاً ولا ضغطاً ولا أي شيء قابل للملاحظة: يمكن أن تكون سالبة وحتى مركبة. فقط مربعها هو القابل للملاحظة — الاحتمال. تشبيه مفيد: الدالة الموجية بالنسبة للاحتمال مثل سعة الصوت بالنسبة للجهارة. السعات تجمع مع الإشارة، ونحن نسمع المربع — ولهذا يمكن لموجتين أن تعطيا صمتاً.",
-    "لماذا تتداخل السعات بالتحديد. هذا هو مفتاح كل الغرابة. لو كانت الاحتمالات هي التي تجمع، لكان الشقان يعطيان ببساطة مجموع بقعتين، كما في حبيبات الرمل. لكن السعات تجمع، والاحتمال هو مربع المجموع، وليس مجموع المربعين. الفرق بين $(a+b)^{2}$ و $a^{2}+b^{2}$ يساوي $2ab$ — وهذا هو حد التداخل. عندما يكون $b$ سالباً، يجعل الاحتمال أصغر منه من شق واحد. ومن هنا الخطوط المظلمة.",
-    "كيف نقرأ شرط العدد الصحيح من الموجات. إنه تماماً نفس الشرط لوتار الغيتار، لكن بشكل حلقي. الموجة، بعد دورانها حول المدار، يجب أن تعود إلى الطور الأولي — وإلا فعند الدوران التالي ستتراكب مع نفسها بإزاحة وتلغي نفسها. فقط المدارات التي تسمح بعدد صحيح من الأطوال الموجية مسموح بها. هنا يجدر التوقف والتقدير: سر المستويات المتقطعة للذرة، الذي أربك الفيزيائيين لأربعين عاماً، تبين أنه نفس المسألة التي حلها فيثاغورس على الوتر قبل ألفين وخمسمائة عام."
-   ]
+   "title": "الرياضيات التي استُخدمت هنا"
   },
   "example": {
    "title": "مثال بأرقام: الطول الموجي للإلكترون والكرة",

@@ -186,12 +186,6 @@
   },
   "math": {
    "title": "Математика, которая здесь понадобилась",
-   "text": [
-    "Почему сигнал быстрый, а электроны медленные. Возьмите садовый шланг, уже заполненный водой. Открыв кран, вы получите струю с дальнего конца практически сразу — но не потому, что вода долетела, а потому что давление передалось по всей длине. Каждая молекула лишь чуть-чуть подвинула соседнюю. В проводе то же самое: поле устанавливается со скоростью, близкой к световой, и все электроны трогаются одновременно, хотя каждый ползёт медленно. Отсюда и ответ на детский вопрос, почему свет зажигается сразу.",
-    "Что такое скорость дрейфа. Электроны в металле и без всякого напряжения носятся с бешеными скоростями — порядка тысячи километров в секунду, хаотично во все стороны. Поле добавляет к этому хаосу крошечный общий сдвиг: как рой мошкары, который весь целиком медленно сносит ветром, хотя каждая мошка мечется гораздо быстрее. Ток создаёт именно этот снос, а не собственное движение.",
-    "Почему получается постоянная скорость, а не ускорение. Поле действует постоянной силой, и по Ньютону электрон должен разгоняться бесконечно. Но каждое столкновение обнуляет накопленное. Устанавливается равновесие: сколько поле набрало за время между ударами, столько удар и отнял. Ровно так парашютист падает с постоянной скоростью, хотя тяжесть тянет его непрерывно, — и ровно так же устроено любое трение.",
-    "Почему в потерях квадрат, а в передаче первая степень. Передаваемая мощность есть произведение напряжения на ток, и её можно набрать по-разному: большим током при малом напряжении или наоборот. А потери в проводе зависят только от тока, причём квадратично. Значит выгодно всеми силами уменьшать ток. Подняв напряжение вдесятеро и уменьшив ток вдесятеро, вы передадите ту же мощность, а потеряете в сто раз меньше. Вся архитектура электросетей с их подстанциями выросла из этого сопоставления квадрата с единицей."
-   ],
    "lead": "Три приёма: как считают поток через сечение, что делать с постоянной силой, которая не разгоняет, и почему показатель степени решает всё.",
    "items": [
     {
@@ -202,8 +196,8 @@
     },
     {
      "what": "Сила постоянна, а скорость всё равно постоянна",
-     "why": "Второй шаг вывода выглядит как нарушение законов Ньютона: поле давит на электрон неизменной силой $eE$, значит он обязан разгоняться без конца. Разгоняется, но недолго. График скорости отдельного электрона — пила: участок равномерного разгона длиной $\\tau$, потом столкновение обнуляет набранное, и всё начинается заново. В точке излома производной не существует вовсе, поэтому здесь работают не мгновенные значения, а среднее по множеству зубцов. Такое среднее со временем не растёт: оно задаётся высотой зубца, то есть временем свободного пробега. Отсюда и $u = eE\\tau/m$ — чем реже столкновения, тем выше дрейф. Приём усреднять быстрый хаос до медленного тренда пригодится всюду, где трение уравновешивает силу.",
-     "latex": "a = \\frac{eE}{m} = \\text{const}, \\qquad u \\sim a\\,\\tau = \\frac{eE\\tau}{m}",
+     "why": "Второй шаг вывода выглядит как нарушение законов Ньютона: поле давит на электрон неизменной силой $eE$, значит он обязан разгоняться без конца. Разгоняется, но недолго. График скорости отдельного электрона — пила: участок равномерного разгона, потом столкновение обнуляет набранное, и всё начинается заново. В точке излома производной не существует вовсе, поэтому работают не мгновенные значения, а среднее по множеству зубцов. Такое среднее со временем не растёт: его задаёт высота зубца, то есть время свободного пробега, — чем реже столкновения, тем выше дрейф. Здесь стоит быть внимательным к множителю. Если бы все пробеги длились ровно $\\tau$, скорость на каждом зубце росла бы от нуля до $a\\tau$ линейно, и среднее вышло бы вдвое меньше вершины: $eE\\tau/2m$. В шаге вывода двойки нет, и это не описка: времена свободного пробега не одинаковы, а распределены экспоненциально, и у такого распределения среднее время, прошедшее с последнего столкновения, равно самому $\\tau$, а не его половине. Пила — картинка для интуиции, формула Друде — результат аккуратного усреднения; расходятся они ровно вдвое, и лучше знать, где именно. Сам приём — усреднять быстрый хаос до медленного тренда — пригодится всюду, где трение уравновешивает силу.",
+     "latex": "a = \\frac{eE}{m} = \\text{const}, \\qquad \\langle u\\rangle_{\\text{пила}} = \\frac{a\\tau}{2}, \\qquad u_{\\text{Друде}} = a\\tau = \\frac{eE\\tau}{m}",
      "kit": "derivative"
     },
     {
@@ -593,13 +587,7 @@
    "note": "Limits of applicability. Ohm's law is not a fundamental law of nature, but a property of certain materials under certain conditions. It is violated wherever it gets interesting: in a semiconductor diode current flows only in one direction, in a gas discharge resistance decreases with increasing current, in a superconductor it vanishes entirely. The Drude model is also crude: it does not explain why metals have so many free electrons and insulators have none — only quantum theory of solids answers that."
   },
   "math": {
-   "title": "Mathematics that was needed here",
-   "text": [
-    "Why the signal is fast and electrons are slow. Take a garden hose already filled with water. When you turn on the tap, water comes out of the far end almost immediately — not because the water traveled that fast, but because pressure propagated along the entire length. Each molecule only slightly pushes its neighbor. The same happens in a wire: the field establishes at nearly the speed of light, and all electrons start moving simultaneously, although each crawls slowly. Hence the answer to a child's question why the light turns on immediately.",
-    "What is drift velocity. Electrons in a metal, even without any voltage, race around at furious speeds — on the order of a thousand kilometers per second, chaotically in all directions. The field adds a tiny overall shift to this chaos: like a swarm of midges that is slowly carried by the wind as a whole, even though each midge darts about much faster. The current is precisely this drift, not the individual motion.",
-    "Why a constant speed results, not acceleration. The field exerts a constant force, and according to Newton, the electron should accelerate indefinitely. But each collision resets the accumulated speed. An equilibrium is established: as much as the field gains between collisions, the collision takes away. Just like a skydiver falls at a constant speed even though gravity continuously pulls them — and that is exactly how any friction works.",
-    "Why losses have a square, and transmission has the first power. The transmitted power is the product of voltage and current, and it can be achieved in different ways: high current at low voltage or vice versa. But losses in the wire depend only on current, and quadratically. So it is advantageous to reduce current as much as possible. By raising the voltage tenfold and reducing the current tenfold, you transmit the same power but lose a hundred times less. The entire architecture of electric grids with their substations grew out of this comparison of a square to a first power."
-   ]
+   "title": "Mathematics that was needed here"
   },
   "example": {
    "title": "Example with numbers: how slowly electrons actually crawl",
@@ -980,13 +968,7 @@
    "note": "Límites de aplicabilidad. La ley de Ohm no es una ley fundamental de la naturaleza, sino una propiedad de ciertos materiales bajo ciertas condiciones. Se viola en todas partes donde es interesante: en un diodo semiconductor la corriente solo fluye en una dirección, en una descarga de gas la resistencia disminuye al aumentar la corriente, en un superconductor desaparece por completo. El modelo de Drude también es tosco: no explica por qué un metal tiene tantos electrones libres y un aislante ninguno, — solo la teoría cuántica del estado sólido responde a eso."
   },
   "math": {
-   "title": "Matemáticas que fueron necesarias aquí",
-   "text": [
-    "Por qué la señal es rápida y los electrones lentos. Tome una manguera de jardín ya llena de agua. Al abrir el grifo, obtendrá un chorro en el extremo lejano casi de inmediato, pero no porque el agua haya llegado, sino porque la presión se transmitió a lo largo de toda la longitud. Cada molécula apenas empujó a la vecina. En el cable ocurre lo mismo: el campo se establece a una velocidad cercana a la de la luz, y todos los electrones se mueven simultáneamente, aunque cada uno se arrastra lentamente. De ahí la respuesta a la pregunta infantil de por qué la luz se enciende de inmediato.",
-    "Qué es la velocidad de deriva. Los electrones en un metal, incluso sin voltaje, se mueven a velocidades enormes — del orden de miles de kilómetros por segundo, caóticamente en todas direcciones. El campo agrega a este caos un pequeño desplazamiento común: como un enjambre de mosquitos que es arrastrado lentamente por el viento, aunque cada mosquito se agita mucho más rápido. La corriente crea precisamente este arrastre, no el movimiento propio.",
-    "Por qué se obtiene una velocidad constante y no una aceleración. El campo actúa con una fuerza constante, y según Newton el electrón debería acelerarse indefinidamente. Pero cada colisión anula lo acumulado. Se establece un equilibrio: lo que el campo ganó durante el tiempo entre impactos, el impacto lo quitó. Exactamente así cae un paracaidista a velocidad constante, aunque la gravedad lo atrae continuamente — y así está constituida cualquier fricción.",
-    "Por qué en las pérdidas es el cuadrado y en la transmisión la primera potencia. La potencia transmitida es el producto del voltaje por la corriente, y se puede lograr de diferentes maneras: con gran corriente y bajo voltaje o viceversa. Pero las pérdidas en el cable dependen solo de la corriente, y de forma cuadrática. Por lo tanto, es ventajoso reducir la corriente tanto como sea posible. Al aumentar el voltaje diez veces y reducir la corriente diez veces, se transmite la misma potencia y se pierde cien veces menos. Toda la arquitectura de las redes eléctricas con sus subestaciones surgió de esta comparación del cuadrado con la unidad."
-   ]
+   "title": "Matemáticas que fueron necesarias aquí"
   },
   "example": {
    "title": "Ejemplo con números: qué tan lentamente se arrastran realmente los electrones",
@@ -1367,13 +1349,7 @@
    "note": "حدود التطبيق. قانون أوم ليس قانونًا طبيعيًا أساسيًا، بل خاصية لمواد معينة في ظروف معينة. يُخالف في كل مكان مثير للاهتمام: في الصمام الثنائي الشبه موصل، يسري التيار في اتجاه واحد فقط، في التفريغ الغازي تقل المقاومة مع زيادة التيار، في الموصل الفائق تختفي تمامًا. نموذج درود تقريبي أيضًا: لا يشرح لماذا تحتوي المعادن على هذا العدد الكبير من الإلكترونات الحرة بينما العوازل لا تحتوي على أي منها - فقط نظرية الكم للأجسام الصلبة تجيب على ذلك."
   },
   "math": {
-   "title": "الرياضيات التي كانت ضرورية هنا",
-   "text": [
-    "لماذا الإشارة سريعة والإلكترونات بطيئة. خذ خرطوم حديقة مملوءًا بالفعل بالماء. بمجرد فتح الصنبور، تحصل على تيار من الطرف البعيد على الفور تقريبًا - ليس لأن الماء وصل، بل لأن الضغط انتقل على طول الخرطوم. كل جزيء حرك جاره قليلاً. في السلك نفس الشيء: المجال ينتشر بسرعة قريبة من سرعة الضوء، وتتحرك جميع الإلكترونات في وقت واحد، على الرغم من أن كل واحد يزحف ببطء. ومن هنا يأتي الجواب على سؤال الطفولة لماذا يضيء الضوء فورًا.",
-    "ما هي سرعة الانجراف. الإلكترونات في المعدن حتى بدون جهد تتحرك بسرعات هائلة - حوالي ألف كيلومتر في الثانية، بشكل عشوائي في كل الاتجاهات. يضيف المجال إلى هذه الفوضى انزياحًا صغيرًا مشتركًا: مثل سرب من البراغيش ينجرف ببطء ككل بفعل الرياح، على الرغم من أن كل برغوث يتحرك أسرع بكثير. التيار يخلق هذا الانجراف، وليس الحركة الذاتية.",
-    "لماذا نحصل على سرعة ثابتة وليس تسارعًا. يؤثر المجال بقوة ثابتة، ووفقًا لنيوتن يجب أن يتسارع الإلكترون بلا حدود. لكن كل تصادم يعيد السرعة إلى الصفر. ينشأ توازن: ما تكتسبه من المجال بين التصادمات، يفقده في التصادم. تمامًا مثل المظلي الذي يسقط بسرعة ثابتة على الرغم من أن الجاذبية تسحبه باستمرار - وهكذا يعمل أي احتكاك.",
-    "لماذا الخسائر تربيعية والنقل خطي. القدرة المنقولة هي حاصل ضرب الجهد في التيار، ويمكن تحقيقها بطرق مختلفة: تيار كبير بجهد صغير أو العكس. أما الخسائر في السلك فتعتمد فقط على التيار، وبشكل تربيعي. لذلك من المفيد تقليل التيار قدر الإمكان. برفع الجهد عشرة أضعاف وخفض التيار عشرة أضعاف، تنقل نفس القدرة ولكن تخسر أقل بمئة مرة. كل بنية شبكات الكهرباء مع محطاتها التحويلية نشأت من هذه المقارنة بين المربع والواحد."
-   ]
+   "title": "الرياضيات التي كانت ضرورية هنا"
   },
   "example": {
    "title": "مثال بالأرقام: ما مدى بطء حركة الإلكترونات في الواقع",

@@ -1308,5 +1308,521 @@ window.B42FigText = {
     "es": "misma luminosidad: el brillo aparente mide la distancia",
     "ar": "اللمعان نفسه، فالسطوع الظاهري يقيس المسافة",
     "fr": "même luminosité, donc la luminosité apparente donne la distance"
+  },
+  "слои идут с разной скоростью": {
+    "en": "layers move at different speeds",
+    "es": "las capas van a distinta velocidad",
+    "ar": "طبقات تتحرك بسرعات مختلفة",
+    "fr": "les couches vont à des vitesses différentes"
+  },
+  "перескок": {
+    "en": "hop across",
+    "es": "salto",
+    "ar": "قفزة",
+    "fr": "saut"
+  },
+  "стенка: скорость нуль": {
+    "en": "wall: zero velocity",
+    "es": "pared: velocidad cero",
+    "ar": "الجدار: سرعة صفر",
+    "fr": "paroi : vitesse nulle"
+  },
+  "перенос импульса": {
+    "en": "momentum transport",
+    "es": "transporte de momento",
+    "ar": "نقل الزخم",
+    "fr": "transport de quantité de mouvement"
+  },
+  "поперёк потока": {
+    "en": "across the flow",
+    "es": "a través del flujo",
+    "ar": "عبر التدفق",
+    "fr": "en travers de l'écoulement"
+  },
+  "опыт, которым меряют вязкость": {
+    "en": "the experiment that measures viscosity",
+    "es": "el experimento que mide la viscosidad",
+    "ar": "التجربة التي تقيس اللزوجة",
+    "fr": "l'expérience qui mesure la viscosité"
+  },
+  "верхняя пластина: скорость u": {
+    "en": "upper plate: speed u",
+    "es": "placa superior: velocidad u",
+    "ar": "اللوح العلوي: السرعة u",
+    "fr": "plaque supérieure : vitesse u"
+  },
+  "нижняя пластина: скорость нуль": {
+    "en": "lower plate: zero speed",
+    "es": "placa inferior: velocidad cero",
+    "ar": "اللوح السفلي: سرعة صفر",
+    "fr": "plaque inférieure : vitesse nulle"
+  },
+  "зазор h": {
+    "en": "gap h",
+    "es": "separación h",
+    "ar": "الفجوة h",
+    "fr": "entrefer h"
+  },
+  "скорость растёт равномерно поперёк зазора": {
+    "en": "speed grows uniformly across the gap",
+    "es": "la velocidad crece uniformemente a través de la separación",
+    "ar": "تنمو السرعة بانتظام عبر الفجوة",
+    "fr": "la vitesse croît uniformément dans l'entrefer"
+  },
+  "что держит цилиндр внутри потока": {
+    "en": "what holds the cylinder inside the flow",
+    "es": "qué sostiene el cilindro dentro del flujo",
+    "ar": "ما الذي يمسك الأسطوانة داخل التدفق",
+    "fr": "ce qui retient le cylindre dans l'écoulement"
+  },
+  "вязкое трение": {
+    "en": "viscous friction",
+    "es": "fricción viscosa",
+    "ar": "الاحتكاك اللزج",
+    "fr": "frottement visqueux"
+  },
+  "перепад давления гонит, трение держит": {
+    "en": "pressure difference drives, friction holds back",
+    "es": "la diferencia de presión empuja, la fricción frena",
+    "ar": "فرق الضغط يدفع والاحتكاك يكبح",
+    "fr": "la différence de pression pousse, le frottement retient"
+  },
+  "параболический профиль скорости": {
+    "en": "parabolic velocity profile",
+    "es": "perfil parabólico de velocidad",
+    "ar": "توزيع السرعة القطعي المكافئ",
+    "fr": "profil parabolique des vitesses"
+  },
+  "у стенки нуль": {
+    "en": "zero at the wall",
+    "es": "cero en la pared",
+    "ar": "صفر عند الجدار",
+    "fr": "nul à la paroi"
+  },
+  "на оси быстрее всего": {
+    "en": "fastest on the axis",
+    "es": "lo más rápido en el eje",
+    "ar": "الأسرع عند المحور",
+    "fr": "le plus rapide sur l'axe"
+  },
+  "средняя скорость вдвое меньше максимальной": {
+    "en": "the mean speed is half the maximum",
+    "es": "la velocidad media es la mitad de la máxima",
+    "ar": "متوسط السرعة نصف القيمة القصوى",
+    "fr": "la vitesse moyenne vaut la moitié du maximum"
+  },
+  "расход собирается по кольцам": {
+    "en": "the flow rate is summed over rings",
+    "es": "el caudal se suma por anillos",
+    "ar": "يُجمع التدفق على شكل حلقات",
+    "fr": "le débit se somme anneau par anneau"
+  },
+  "сечение трубы": {
+    "en": "pipe cross-section",
+    "es": "sección del tubo",
+    "ar": "مقطع الأنبوب",
+    "fr": "section du tube"
+  },
+  "дальние кольца шире, но течение в них медленнее": {
+    "en": "outer rings are wider, but the flow in them is slower",
+    "es": "los anillos exteriores son más anchos, pero el flujo en ellos es más lento",
+    "ar": "الحلقات الخارجية أوسع لكن الجريان فيها أبطأ",
+    "fr": "les anneaux extérieurs sont plus larges, mais l'écoulement y est plus lent"
+  },
+  "радиус в четвёртой степени": {
+    "en": "radius to the fourth power",
+    "es": "el radio a la cuarta potencia",
+    "ar": "نصف القطر أُس أربعة",
+    "fr": "le rayon à la puissance quatre"
+  },
+  "радиус меньше на четверть — расход втрое": {
+    "en": "radius down a quarter — flow rate down threefold",
+    "es": "el radio baja un cuarto: el caudal cae tres veces",
+    "ar": "نقص نصف القطر الربع يخفض التدفق ثلاث مرات",
+    "fr": "rayon réduit d'un quart : débit divisé par trois"
+  },
+  "расход": {
+    "en": "flow rate",
+    "es": "caudal",
+    "ar": "التدفق",
+    "fr": "débit"
+  },
+  "инерция против вязкости": {
+    "en": "inertia against viscosity",
+    "es": "inercia frente a viscosidad",
+    "ar": "القصور الذاتي في مواجهة اللزوجة",
+    "fr": "inertie contre viscosité"
+  },
+  "ламинарное": {
+    "en": "laminar",
+    "es": "laminar",
+    "ar": "صفائحي",
+    "fr": "laminaire"
+  },
+  "турбулентное": {
+    "en": "turbulent",
+    "es": "turbulento",
+    "ar": "مضطرب",
+    "fr": "turbulent"
+  },
+  "вязкость сильнее": {
+    "en": "viscosity wins",
+    "es": "gana la viscosidad",
+    "ar": "اللزوجة أقوى",
+    "fr": "la viscosité l'emporte"
+  },
+  "инерция сильнее": {
+    "en": "inertia wins",
+    "es": "gana la inercia",
+    "ar": "القصور الذاتي أقوى",
+    "fr": "l'inertie l'emporte"
+  },
+  "три силы и предельная скорость": {
+    "en": "three forces and the terminal speed",
+    "es": "tres fuerzas y la velocidad límite",
+    "ar": "ثلاث قوى والسرعة الحدية",
+    "fr": "trois forces et la vitesse limite"
+  },
+  "вес шарика": {
+    "en": "weight of the ball",
+    "es": "peso de la bola",
+    "ar": "وزن الكرة",
+    "fr": "poids de la bille"
+  },
+  "выталкивающая сила": {
+    "en": "buoyant force",
+    "es": "empuje",
+    "ar": "قوة الطفو",
+    "fr": "poussée d'Archimède"
+  },
+  "сопротивление по Стоксу": {
+    "en": "Stokes drag",
+    "es": "resistencia de Stokes",
+    "ar": "مقاومة ستوكس",
+    "fr": "traînée de Stokes"
+  },
+  "равновесие трёх сил задаёт предельную скорость": {
+    "en": "the balance of three forces sets the terminal speed",
+    "es": "el equilibrio de tres fuerzas fija la velocidad límite",
+    "ar": "توازن القوى الثلاث يحدد السرعة الحدية",
+    "fr": "l'équilibre des trois forces fixe la vitesse limite"
+  },
+  "за одно и то же время": {
+    "en": "in one and the same time",
+    "es": "en el mismo tiempo",
+    "ar": "في الزمن نفسه",
+    "fr": "pendant le même temps"
+  },
+  "сколько втекло, столько и вытекло: A₁v₁ = A₂v₂": {
+    "en": "what flows in flows out: A₁v₁ = A₂v₂",
+    "es": "lo que entra, sale: A₁v₁ = A₂v₂",
+    "ar": "ما يدخل يخرج: A₁v₁ = A₂v₂",
+    "fr": "ce qui entre ressort : A₁v₁ = A₂v₂"
+  },
+  "что изменилось за &#916;t": {
+    "en": "what changed in &#916;t",
+    "es": "qué cambió en &#916;t",
+    "ar": "ما الذي تغيّر خلال Δt",
+    "fr": "ce qui a changé en &#916;t"
+  },
+  "середина не изменилась": {
+    "en": "the middle is unchanged",
+    "es": "el centro no cambió",
+    "ar": "الوسط لم يتغيّر",
+    "fr": "le milieu n’a pas changé"
+  },
+  "как будто перенесли &#916;V": {
+    "en": "as if &#916;V had been moved",
+    "es": "como si se trasladara &#916;V",
+    "ar": "كأنّ ΔV قد نُقل",
+    "fr": "comme si &#916;V avait été déplacé"
+  },
+  "вся бухгалтерия сводится к двум концам": {
+    "en": "the whole accounting reduces to the two ends",
+    "es": "toda la cuenta se reduce a los dos extremos",
+    "ar": "كل الحساب يختصر إلى الطرفين",
+    "fr": "tout le bilan se réduit aux deux extrémités"
+  },
+  "работа сил давления на концах": {
+    "en": "work of the pressure forces at the ends",
+    "es": "trabajo de las fuerzas de presión en los extremos",
+    "ar": "شغل قوى الضغط عند الطرفين",
+    "fr": "travail des forces de pression aux extrémités"
+  },
+  "работа = p·A·&#916;x = p·&#916;V": {
+    "en": "work = p·A·&#916;x = p·&#916;V",
+    "es": "trabajo = p·A·&#916;x = p·&#916;V",
+    "ar": "الشغل = p·A·Δx = p·ΔV",
+    "fr": "travail = p·A·&#916;x = p·&#916;V"
+  },
+  "подъём порции на разность высот": {
+    "en": "lifting the parcel through a height difference",
+    "es": "elevación de la porción por la diferencia de altura",
+    "ar": "رفع الجزء بمقدار فرق الارتفاع",
+    "fr": "élévation de la portion sur la différence de hauteur"
+  },
+  "уровень отсчёта": {
+    "en": "reference level",
+    "es": "nivel de referencia",
+    "ar": "مستوى الإسناد",
+    "fr": "niveau de référence"
+  },
+  "работа тяжести: &#8722;&#961;·&#916;V·g·(h₂ &#8722; h₁)": {
+    "en": "work of gravity: &#8722;&#961;·&#916;V·g·(h₂ &#8722; h₁)",
+    "es": "trabajo del peso: &#8722;&#961;·&#916;V·g·(h₂ &#8722; h₁)",
+    "ar": "شغل الثقل: −ρ·ΔV·g·(h₂ − h₁)",
+    "fr": "travail du poids : &#8722;&#961;·&#916;V·g·(h₂ &#8722; h₁)"
+  },
+  "энергия движения растёт как квадрат скорости": {
+    "en": "energy of motion grows as the square of speed",
+    "es": "la energía del movimiento crece como el cuadrado de la velocidad",
+    "ar": "طاقة الحركة تنمو مع مربّع السرعة",
+    "fr": "l’énergie du mouvement croît comme le carré de la vitesse"
+  },
+  "скорость вдвое — энергия вчетверо": {
+    "en": "twice the speed, four times the energy",
+    "es": "el doble de velocidad, el cuádruple de energía",
+    "ar": "ضعف السرعة، أربعة أضعاف الطاقة",
+    "fr": "vitesse doublée, énergie quadruplée"
+  },
+  "полная работа = прирост кинетической энергии": {
+    "en": "total work = gain in kinetic energy",
+    "es": "trabajo total = aumento de la energía cinética",
+    "ar": "الشغل الكلي = الزيادة في الطاقة الحركية",
+    "fr": "travail total = gain d’énergie cinétique"
+  },
+  "давление": {
+    "en": "pressure",
+    "es": "presión",
+    "ar": "الضغط",
+    "fr": "pression"
+  },
+  "тяжесть": {
+    "en": "gravity",
+    "es": "peso",
+    "ar": "الثقل",
+    "fr": "poids"
+  },
+  "движение": {
+    "en": "motion",
+    "es": "movimiento",
+    "ar": "الحركة",
+    "fr": "mouvement"
+  },
+  "&#916;V входит в каждое слагаемое и сокращается": {
+    "en": "&#916;V appears in every term and cancels",
+    "es": "&#916;V aparece en cada término y se cancela",
+    "ar": "ΔV يظهر في كل حدّ ويُختصر",
+    "fr": "&#916;V figure dans chaque terme et se simplifie"
+  },
+  "вдоль линии тока сумма не меняется": {
+    "en": "along a streamline the sum does not change",
+    "es": "a lo largo de una línea de corriente la suma no cambia",
+    "ar": "على طول خط الانسياب لا يتغيّر المجموع",
+    "fr": "le long d’une ligne de courant la somme ne change pas"
+  },
+  "сумма одна и та же": {
+    "en": "the same total",
+    "es": "la misma suma",
+    "ar": "المجموع نفسه",
+    "fr": "la même somme"
+  },
+  "широко": {
+    "en": "wide",
+    "es": "ancha",
+    "ar": "واسع",
+    "fr": "large"
+  },
+  "узко": {
+    "en": "narrow",
+    "es": "estrecha",
+    "ar": "ضيّق",
+    "fr": "étroit"
+  },
+  "выше": {
+    "en": "higher",
+    "es": "más alto",
+    "ar": "أعلى",
+    "fr": "plus haut"
+  },
+  "трубка Вентури": {
+    "en": "Venturi tube",
+    "es": "tubo de Venturi",
+    "ar": "أنبوب فنتوري",
+    "fr": "tube de Venturi"
+  },
+  "трубка Пито": {
+    "en": "Pitot tube",
+    "es": "tubo de Pitot",
+    "ar": "أنبوب بيتو",
+    "fr": "tube de Pitot"
+  },
+  "перепад давления меряет и расход, и скорость": {
+    "en": "a pressure difference measures both flow rate and speed",
+    "es": "una diferencia de presión mide tanto el caudal como la velocidad",
+    "ar": "فرق الضغط يقيس التدفّق والسرعة معاً",
+    "fr": "une différence de pression mesure le débit et la vitesse"
+  },
+  "жидкость в покое давит только по нормали": {
+    "en": "a fluid at rest pushes only along the normal",
+    "es": "un fluido en reposo empuja solo según la normal",
+    "ar": "المائع الساكن يدفع عمودياً على السطح فقط",
+    "fr": "un fluide au repos ne pousse que selon la normale"
+  },
+  "площадка A": {
+    "en": "area A",
+    "es": "área A",
+    "ar": "المساحة A",
+    "fr": "surface A"
+  },
+  "сдвига нет": {
+    "en": "no shear",
+    "es": "sin cizalla",
+    "ar": "لا قصّ",
+    "fr": "pas de cisaillement"
+  },
+  "клин в жидкости: три грани, три силы давления": {
+    "en": "a wedge in the fluid: three faces, three pressure forces",
+    "es": "una cuña en el fluido: tres caras, tres fuerzas de presión",
+    "ar": "إسفين داخل المائع: ثلاثة أوجه وثلاث قوى ضغط",
+    "fr": "un coin dans le fluide : trois faces, trois forces"
+  },
+  "сбоку": {
+    "en": "from the side",
+    "es": "por el lado",
+    "ar": "من الجانب",
+    "fr": "par le côté"
+  },
+  "снизу": {
+    "en": "from below",
+    "es": "por abajo",
+    "ar": "من الأسفل",
+    "fr": "par le bas"
+  },
+  "сверху": {
+    "en": "from above",
+    "es": "por arriba",
+    "ar": "من الأعلى",
+    "fr": "par le haut"
+  },
+  "на наклонную грань": {
+    "en": "on the inclined face",
+    "es": "sobre la cara inclinada",
+    "ar": "على الوجه المائل",
+    "fr": "sur la face inclinée"
+  },
+  "вес": {
+    "en": "weight",
+    "es": "peso",
+    "ar": "الوزن",
+    "fr": "poids"
+  },
+  "силы давления ∝ L²": {
+    "en": "pressure forces ∝ L²",
+    "es": "fuerzas de presión ∝ L²",
+    "ar": "قوى الضغط ∝ L²",
+    "fr": "forces de pression ∝ L²"
+  },
+  "вес ∝ L³": {
+    "en": "weight ∝ L³",
+    "es": "peso ∝ L³",
+    "ar": "الوزن ∝ L³",
+    "fr": "poids ∝ L³"
+  },
+  "уменьшаем клин — вес исчезает быстрее сил давления": {
+    "en": "shrink the wedge: weight vanishes faster than pressure",
+    "es": "al encoger la cuña el peso se va antes que la presión",
+    "ar": "بتصغير الإسفين يتلاشى الوزن أسرع من قوى الضغط",
+    "fr": "on réduit le coin : le poids s'efface avant la pression"
+  },
+  "добавленное давление доходит до каждой точки": {
+    "en": "added pressure reaches every point",
+    "es": "la presión añadida llega a todos los puntos",
+    "ar": "الضغط المضاف يصل إلى كل نقطة",
+    "fr": "la pression ajoutée atteint chaque point"
+  },
+  "выигрыш в силе равен отношению площадей, в работе — нет": {
+    "en": "force gain equals the area ratio; no gain in work",
+    "es": "la fuerza gana la razón de áreas; el trabajo no gana",
+    "ar": "الكسب في القوة نسبة المساحتين ولا كسب في الشغل",
+    "fr": "gain en force = rapport des aires ; aucun gain en travail"
+  },
+  "вертикальный столбик жидкости в равновесии": {
+    "en": "a vertical column of fluid in equilibrium",
+    "es": "una columna vertical de fluido en equilibrio",
+    "ar": "عمود رأسي من المائع في اتزان",
+    "fr": "une colonne verticale de fluide à l'équilibre"
+  },
+  "разность давлений сверху и снизу равна весу столбика": {
+    "en": "the pressure difference holds up the column's weight",
+    "es": "la diferencia de presiones sostiene el peso de la columna",
+    "ar": "فرق الضغط يحمل وزن العمود",
+    "fr": "l'écart de pression porte le poids de la colonne"
+  },
+  "разная форма, одна глубина — одна сила на дно": {
+    "en": "different shapes, same depth: same force on the bottom",
+    "es": "formas distintas, misma profundidad, misma fuerza",
+    "ar": "أشكال مختلفة وعمق واحد: القوة على القاع نفسها",
+    "fr": "formes différentes, même profondeur, même force"
+  },
+  "сила на дно одна и та же": {
+    "en": "the force on the bottom is the same",
+    "es": "la fuerza sobre el fondo es la misma",
+    "ar": "القوة على القاع واحدة",
+    "fr": "la force sur le fond est la même"
+  },
+  "лишний вес несут наклонные стенки": {
+    "en": "the extra weight is carried by the slanted walls",
+    "es": "el peso sobrante lo llevan las paredes inclinadas",
+    "ar": "الوزن الزائد تحمله الجدران المائلة",
+    "fr": "le poids en trop est repris par les parois"
+  },
+  "сообщающиеся сосуды: две несмешивающиеся жидкости": {
+    "en": "communicating vessels: two immiscible liquids",
+    "es": "vasos comunicantes: dos líquidos inmiscibles",
+    "ar": "أوانٍ مستطرقة: سائلان لا يمتزجان",
+    "fr": "vases communicants : deux liquides non miscibles"
+  },
+  "общий уровень": {
+    "en": "common level",
+    "es": "nivel común",
+    "ar": "المستوى المشترك",
+    "fr": "niveau commun"
+  },
+  "высоты столбов обратны плотностям": {
+    "en": "column heights are inverse to the densities",
+    "es": "las alturas son inversas a las densidades",
+    "ar": "الارتفاعان يتناسبان عكسياً مع الكثافتين",
+    "fr": "les hauteurs sont inverses des masses volumiques"
+  },
+  "силы давления на грани погружённого бруска": {
+    "en": "pressure forces on the faces of a submerged block",
+    "es": "fuerzas de presión sobre un bloque sumergido",
+    "ar": "قوى الضغط على أوجه كتلة مغمورة",
+    "fr": "forces de pression sur un bloc immergé"
+  },
+  "боковые гасятся": {
+    "en": "side forces cancel",
+    "es": "las laterales se anulan",
+    "ar": "الجانبية تتلاشى",
+    "fr": "les latérales s'annulent"
+  },
+  "разность этих сил и есть ρgV": {
+    "en": "the difference of these forces is exactly ρgV",
+    "es": "la diferencia de estas fuerzas es ρgV",
+    "ar": "الفرق بين هاتين القوتين هو ρgV",
+    "fr": "la différence de ces forces vaut ρgV"
+  },
+  "чем плотнее тело, тем глубже оно сидит": {
+    "en": "the denser the body, the deeper it sits",
+    "es": "cuanto más denso el cuerpo, más se hunde",
+    "ar": "كلما زادت كثافة الجسم غاص أعمق",
+    "fr": "plus le corps est dense, plus il s'enfonce"
+  },
+  "доля под водой = ρтела / ρжидкости": {
+    "en": "submerged fraction = ρ(body) / ρ(fluid)",
+    "es": "fracción sumergida = ρ(cuerpo) / ρ(fluido)",
+    "ar": "الجزء المغمور = ρ(الجسم) / ρ(المائع)",
+    "fr": "fraction immergée = ρ(corps) / ρ(fluide)"
   }
 };

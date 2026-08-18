@@ -189,17 +189,11 @@
   },
   "math": {
    "title": "Математика, которая здесь понадобилась",
-   "text": [
-    "Что такое поток — совсем просто. Представьте дождь и подставленную под него рамку. Поток — это сколько капель пролетает сквозь рамку. Он зависит от трёх вещей: насколько сильный дождь (поле), какая рамка большая (площадь) и как она наклонена (угол). Поверните рамку ребром к дождю — сквозь неё не пролетит ничего, хотя дождь идёт по-прежнему. Магнитный поток устроен ровно так же, только вместо капель — силовые линии.",
-    "Почему важна именно производная. Ток идёт не от потока, а от скорости его изменения. Аналогия: ваш банковский счёт может быть огромным, но если он не меняется, никакого движения денег нет. Движение — это приход и расход, то есть производная от остатка. Магнит, лежащий на катушке неподвижно, — это большой неизменный счёт: тока нет. Двиньте его — появится расход, появится и ток. Отсюда же следует, почему быстрое движение даёт большее напряжение, чем медленное.",
-    "Что означает знак минус на пальцах. Природа сопротивляется изменению. Подносите магнит к катушке — возникший в ней ток создаёт поле, отталкивающее магнит. Отводите — ток меняет направление и начинает притягивать. Всегда наперекор. Причина не в упрямстве природы, а в сохранении энергии: чтобы получить электричество, вы обязаны совершить механическую работу, преодолевая это сопротивление. Именно поэтому генератор на электростанции становится тяжелее вращать, когда потребители включают нагрузку.",
-    "Почему из вращения выходит синус. Поток через вращающуюся рамку меняется по косинусу угла, а угол растёт равномерно со временем. Производная косинуса есть синус со знаком — вот и вся причина синусоидальной формы напряжения в розетке. Это тот же самый переход, что связывал в теме о колебаниях координату и скорость: равномерное вращение даёт синус в проекции. Круг снова оказался спрятан внутри колебания."
-   ],
    "lead": "Понадобятся две вещи: что такое поток сквозь контур и почему в законе стоит скорость изменения, а не сама величина.",
    "items": [
     {
      "what": "Поток: поле, площадь и косинус",
-     "why": "Поток $\\Phi = BS\\cos\\alpha$ считает, сколько силовых линий пронизывает контур, и собран он из трёх сомножителей: густота линий, размер рамки и её наклон. Косинус здесь не украшение, а проекция: работает не вся площадь, а только та её часть, которую поле видит. Поверните рамку ребром — угол прямой, косинус ноль, поток ноль, хотя поле никуда не делось. Отсюда сразу читаются три способа менять поток, перечисленные в четвёртом шаге вывода: двигать проводник, меняя площадь; усиливать магнит, меняя поле; поворачивать рамку, меняя угол. Движущийся стержень пользуется первым, трансформатор вторым, генератор третьим. Сам приём считать «сколько прошло сквозь площадку» одинаков для света, тепла и текущей жидкости.",
+     "why": "Поток $\\Phi = BS\\cos\\alpha$ считает, сколько силовых линий пронизывает контур, и собран он из трёх сомножителей: густота линий, размер рамки и её наклон. Косинус здесь не украшение, а проекция: работает не вся площадь, а только та её часть, которую поле видит. Поверните рамку ребром — угол прямой, косинус ноль, поток ноль, хотя поле никуда не делось. Отсюда сразу читаются три способа менять поток — по одному на каждый сомножитель: двигать проводник, меняя площадь; менять само поле; поворачивать рамку, меняя угол. Подпись к четвёртому шагу вывода называет их разом, но выведены они в разных местах: первым пользуется движущийся стержень из первых четырёх шагов, третьим — вращающаяся рамка шестого шага, вторым — трансформатор седьмого, где не движется ничто и меняется только поток в общем сердечнике. Сам приём считать «сколько прошло сквозь площадку» одинаков для света, тепла и текущей жидкости.",
      "latex": "\\Phi = \\vec B \\cdot \\vec S = B\\,S\\cos\\alpha",
      "kit": "flux"
     },
@@ -597,13 +591,7 @@
    "note": "Limits of applicability and an important clarification. The law in flux form works flawlessly almost always, but there is a subtlety: it unifies two different physical mechanisms. When the conductor moves, the EMF arises from the Lorentz force acting on charges. When the field itself changes and the loop is stationary, no charges are magnetically pushed — there a genuine vortex electric field is born, existing even in empty space. That these are two different phenomena described by the same formula was noticed precisely by Einstein, and his dissatisfaction with this asymmetry directly led to the theory of relativity."
   },
   "math": {
-   "title": "The mathematics needed here",
-   "text": [
-    "What is flux — quite simple. Imagine rain and a frame held under it. Flux is how many raindrops pass through the frame. It depends on three things: how heavy the rain (field), how big the frame (area), and how it is tilted (angle). Turn the frame edge-on to the rain — nothing passes through it, even though the rain continues. Magnetic flux works exactly the same, only instead of raindrops we have field lines.",
-    "Why the derivative matters. Current flows not from flux but from the rate of change of flux. Analogy: your bank account can be huge, but if it doesn't change, there is no movement of money. Movement is deposits and withdrawals, i.e., the derivative of the balance. A magnet resting motionless on a coil is a large unchanging account: no current. Move it — a withdrawal appears, and current appears. From this it follows why fast motion gives a larger voltage than slow motion.",
-    "What the minus sign means in simple terms. Nature resists change. Bring a magnet toward a coil — the induced current creates a field that repels the magnet. Pull it away — the current reverses direction and starts attracting. Always contrary. The reason is not nature's stubbornness but energy conservation: to get electricity, you must do mechanical work to overcome this resistance. This is exactly why the generator at a power plant becomes harder to turn when consumers turn on a load.",
-    "Why rotation yields a sine. The flux through a rotating loop changes as the cosine of the angle, and the angle grows uniformly with time. The derivative of cosine is sine with a sign — that's the whole reason for the sinusoidal voltage in the outlet. It's the same transition that connected coordinate and velocity in the topic of oscillations: uniform rotation gives a sine in projection. The circle is again hidden inside the oscillation."
-   ]
+   "title": "The mathematics needed here"
   },
   "example": {
    "title": "Numerical example: what a loop produces and why a transformer is needed",
@@ -989,13 +977,7 @@
    "note": "Límites de aplicabilidad y una aclaración importante. La ley en forma de flujo funciona impecablemente casi siempre, pero hay un detalle: combina dos mecanismos físicos diferentes. Cuando el conductor se mueve, la FEM surge de la fuerza de Lorentz sobre las cargas. Cuando el campo mismo cambia y el circuito está estacionario, ninguna fuerza magnética empuja las cargas: allí nace un verdadero campo eléctrico vorticial, que existe incluso en el vacío. Que se trata de dos fenómenos diferentes descritos por la misma fórmula lo notó precisamente Einstein, y su insatisfacción con esta asimetría llevó directamente a la teoría de la relatividad."
   },
   "math": {
-   "title": "Matemáticas que fueron necesarias aquí",
-   "text": [
-    "Qué es el flujo — muy simple. Imagine la lluvia y un marco colocado debajo. El flujo es cuántas gotas pasan a través del marco. Depende de tres cosas: qué tan fuerte es la lluvia (el campo), qué tan grande es el marco (el área) y cómo está inclinado (el ángulo). Gire el marco de canto hacia la lluvia — no pasará ninguna gota, aunque la lluvia sigue cayendo. El flujo magnético funciona exactamente igual, solo que en lugar de gotas son las líneas de campo.",
-    "Por qué es importante la derivada. La corriente no viene del flujo, sino de la velocidad de su cambio. Analogía: su cuenta bancaria puede ser enorme, pero si no cambia, no hay movimiento de dinero. El movimiento son ingresos y gastos, es decir, la derivada del saldo. Un imán inmóvil sobre una bobina es como una cuenta grande e inmutable: no hay corriente. Muévalo — aparecen gastos, aparece corriente. De aquí se sigue también por qué un movimiento rápido da un voltaje mayor que uno lento.",
-    "Qué significa el signo menos en términos simples. La naturaleza se resiste al cambio. Acerca un imán a una bobina — la corriente inducida crea un campo que repele el imán. Aléjalo — la corriente cambia de dirección y comienza a atraerlo. Siempre en contra. La razón no es la terquedad de la naturaleza, sino la conservación de la energía: para obtener electricidad, debes realizar trabajo mecánico, venciendo esta resistencia. Por eso el generador en una central eléctrica se vuelve más difícil de girar cuando los consumidores conectan una carga.",
-    "Por qué de la rotación sale un seno. El flujo a través de una espira giratoria varía según el coseno del ángulo, y el ángulo crece uniformemente con el tiempo. La derivada del coseno es menos seno — esa es toda la razón de la forma sinusoidal del voltaje en el tomacorriente. Es la misma transición que en el tema de oscilaciones relacionaba la coordenada y la velocidad: una rotación uniforme da un seno en la proyección. El círculo vuelve a estar escondido dentro de la oscilación."
-   ]
+   "title": "Matemáticas que fueron necesarias aquí"
   },
   "example": {
    "title": "Ejemplo con números: cuánto da una bobina y para qué sirve el transformador",
@@ -1377,13 +1359,7 @@
    "note": "حدود الصلاحية وتوضيح مهم. القانون بصيغة التدفق يعمل بشكل لا تشوبه شائبة دائمًا تقريبًا، لكن هناك دقة: فهو يجمع بين آليتين فيزيائيتين مختلفتين. عندما يتحرك الموصل، تنشأ القوة الدافعة الكهربائية من قوة لورنتز المؤثرة على الشحنات. عندما يتغير المجال نفسه وتكون الدائرة ثابتة، لا توجد شحنات تدفع مغناطيسيًا — بل يُولد هناك مجال كهربائي دوامي حقيقي موجود حتى في الفراغ. أن هاتين ظاهرتين مختلفتين توصفان بصيغة واحدة لاحظها أينشتاين، وسخطه على هذا اللاتناظر قاده مباشرة إلى نظرية النسبية."
   },
   "math": {
-   "title": "الرياضيات التي كانت ضرورية هنا",
-   "text": [
-    "ما هو التدفق — بسيط جدًا. تخيل مطرًا وإطارًا موضوعًا تحته. التدفق هو عدد قطرات المطر التي تمر عبر الإطار. يعتمد على ثلاثة أشياء: شدة المطر (المجال)، وحجم الإطار (المساحة)، وزاوية ميله. أدر الإطار بحافته نحو المطر — لن تمر عبره أي قطرة، رغم أن المطر لا يزال يهطل. التدفق المغناطيسي مشابه تمامًا، لكن بدلاً من القطرات هناك خطوط القوة.",
-    "لماذا المشتقة مهمة. التيار لا ينشأ من التدفق نفسه، بل من معدل تغيره. تشبيه: قد يكون رصيدك البنكي ضخمًا، لكن إذا لم يتغير، فلا حركة للأموال. الحركة هي الإيداع والسحب، أي مشتقة الرصيد. مغناطيس موضوع على ملف ساكن — هو رصيد كبير ثابت: لا تيار. حركه — يظهر سحب، ويظهر تيار. ومن هنا أيضًا، لماذا الحركة السريعة تعطي جهدًا أكبر من الحركة البطيئة.",
-    "ما معنى علامة الطرح ببساطة. الطبيعة تقاوم التغيير. تقرب مغناطيسًا من ملف — التيار الناتج يخلق مجالًا يدفع المغناطيس بعيدًا. تبعده — يتغير اتجاه التيار ويبدأ في جذب المغناطيس. دائمًا في الاتجاه المعاكس. السبب ليس عناد الطبيعة، بل حفظ الطاقة: للحصول على الكهرباء، يجب عليك بذل شغل ميكانيكي للتغلب على هذه المقاومة. ولهذا يصبح تدوير المولد في محطة الكهرباء أصعب عندما يربط المستهلكون الحمل.",
-    "لماذا ينتج عن الدوران جيب. التدفق عبر إطار دوار يتغير وفق جيب تمام الزاوية، والزاوية تزداد بانتظام مع الزمن. مشتقة جيب التمام هي الجيب بإشارة — وهذا هو السبب الكامل لشكل الجيب للجهد في المقبس. هذا هو نفس الانتقال الذي ربط الإحداثي والسرعة في موضوع الاهتزازات: الدوران المنتظم يعطي جيبًا في الإسقاط. الدائرة مرة أخرى مخبأة داخل الاهتزاز."
-   ]
+   "title": "الرياضيات التي كانت ضرورية هنا"
   },
   "example": {
    "title": "مثال بالأرقام: كم ينتج الملف وما فائدة المحول",

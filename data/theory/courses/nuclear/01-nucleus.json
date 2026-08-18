@@ -185,7 +185,7 @@
    "items": [
     {
      "what": "Откуда в формуле дробные степени",
-     "why": "Во втором и третьем шагах вывода появляются $A^{1/3}$ и $A^{2/3}$, и взяты они не из подгонки. Ядерное вещество несжимаемо, значит объём пропорционален числу нуклонов, а радиус растёт как корень кубический из него: отсюда и запись $R \\approx 1{,}2\\cdot10^{-15}A^{1/3}$ в списке обозначений. Площадь поверхности идёт как квадрат радиуса, то есть как $A^{2/3}$, и это ровно поверхностный член. Тот же корень объясняет $A^{1/3}$ в знаменателе кулоновского слагаемого: энергия отталкивания обратна размеру, а размер задан кубическим корнем. Дробный показатель не усложнение, а запись того, через какую степень длины величина связана с объёмом. Отношение поверхности к объёму падает как $A^{-1/3}$, и потому поверхностная поправка вредит лёгким ядрам сильнее, чем тяжёлым.",
+     "why": "Дробные степени появляются в третьем и четвёртом шагах вывода — $A^{2/3}$ и $A^{1/3}$, — и взяты они не из подгонки. Во втором шаге дробей ещё нет: объёмное слагаемое идёт прямо по $A$. Ядерное вещество несжимаемо, значит объём пропорционален числу нуклонов, а радиус растёт как корень кубический из него: отсюда и запись $R \\approx 1{,}2\\cdot10^{-15}A^{1/3}$ в списке обозначений. Площадь поверхности идёт как квадрат радиуса, то есть как $A^{2/3}$, и это ровно поверхностный член. Тот же корень объясняет $A^{1/3}$ в знаменателе кулоновского слагаемого: энергия отталкивания обратна размеру, а размер задан кубическим корнем. Дробный показатель не усложнение, а запись того, через какую степень длины величина связана с объёмом. Отношение поверхности к объёму падает как $A^{-1/3}$, и потому поверхностная поправка вредит лёгким ядрам сильнее, чем тяжёлым.",
      "latex": "V \\propto A \\;\\Longrightarrow\\; R \\propto A^{1/3} \\;\\Longrightarrow\\; S \\propto A^{2/3}",
      "kit": "propto"
     },
@@ -576,13 +576,7 @@
    "note": "Limits of applicability. The liquid drop model describes medium and heavy nuclei well, but noticeably errs on light ones: for helium-4 it gives about 5.7 MeV per nucleon instead of the actual 7.1. The reason is that shell effects are significant for light nuclei — the same as in atoms, but for nucleons. Nuclei with magic numbers of protons or neutrons (2, 8, 20, 28, 50, 82, 126) are noticeably more stable than predicted, and helium-4 with two protons and two neutrons is doubly magic. Full description requires a combination of both models."
   },
   "math": {
-   "title": "The mathematics needed here",
-   "text": [
-    "Why volume grows as $A$ and surface as $A^{2/3}$. The nucleus is a tightly packed sphere, and its volume is proportional to the number of nucleons. The radius then grows as the cube root of $A$, and the surface area as the square of the radius, i.e., as $A^{2/3}$. An important consequence: the fraction of surface nucleons falls with nuclear size as $A^{-1/3}$, so the surface correction especially harms light nuclei. This is exactly the same volume-to-surface ratio that makes small animals heat-losing and large ones heat-retaining.",
-    "Why the Coulomb term is quadratic and the volume term linear. This is the essence of nuclear structure. Nuclear attraction is short-range: each nucleon feels only its nearest neighbors, and their number does not grow with nuclear size — hence linearity. Electric repulsion is long-range: each proton repels all others, and the number of pairs grows as $Z^{2}$. So as the nucleus grows, repulsion overtakes attraction, and sooner or later it wins. This is why the table of elements is finite.",
-    "What the symmetry term means. Protons and neutrons are different particles, and each species fills its own levels independently, obeying the Pauli exclusion principle. Imagine two identical pools: filling both equally is more favorable than filling one twice as much, because the water level will be lower. An imbalance between proton and neutron numbers forces occupation of higher states, and the energy grows as the square of the imbalance.",
-    "How to read the binding energy curve. It rises from helium, reaches a maximum near iron, and slowly declines to uranium. Everything to the left of the maximum gains energy from fusion; everything to the right, from fission. Iron gains nothing either way and thus accumulates in the cores of massive stars, and when enough accumulates, the star loses its energy source and collapses. One graph explains the reactor, the Sun, and the supernova."
-   ]
+   "title": "The mathematics needed here"
   },
   "example": {
    "title": "Example with numbers: mass defect of helium",
@@ -957,13 +951,7 @@
    "note": "Límites de aplicabilidad. El modelo de gota líquida describe bien los núcleos medianos y pesados, pero se equivoca notablemente en los ligeros: para el helio-4 da alrededor de 5,7 MeV por nucleón en lugar de los 7,1 reales. La razón es que en los núcleos ligeros son importantes los efectos de capa — los mismos que en el átomo, pero para nucleones. Los núcleos con números mágicos de protones o neutrones (2, 8, 20, 28, 50, 82, 126) son notablemente más estables de lo predicho, y el helio-4 con dos protones y dos neutrones es doblemente mágico. Una descripción completa requiere la combinación de ambos modelos."
   },
   "math": {
-   "title": "Matemáticas que se necesitaron aquí",
-   "text": [
-    "Por qué el volumen crece como $A$ y la superficie como $A^{2/3}$. El núcleo es una esfera densamente empaquetada, y su volumen es proporcional al número de nucleones. El radio entonces crece como la raíz cúbica de $A$, y el área de la superficie como el cuadrado del radio, es decir, como $A^{2/3}$. De ahí una consecuencia importante: la fracción de nucleones superficiales disminuye con el tamaño del núcleo como $A^{-1/3}$, y por eso la corrección de superficie perjudica especialmente a los núcleos ligeros. Es exactamente la misma relación de volumen y superficie que hace que los animales pequeños pierdan calor y los grandes lo acumulen.",
-    "Por qué el término coulombiano es cuadrático y el de volumen lineal. En esto reside toda la esencia de la estructura del núcleo. La atracción nuclear es de corto alcance: cada nucleón solo siente a sus vecinos más cercanos, y su número no crece con el tamaño del núcleo — de ahí la linealidad. La repulsión eléctrica es de largo alcance: cada protón repele a todos los demás, y el número de pares crece como $Z^{2}$. Por lo tanto, al crecer el núcleo, la repulsión aumenta más rápido que la atracción, y tarde o temprano vence. Precisamente por eso la tabla de elementos es finita.",
-    "Qué significa el término de simetría. Los protones y neutrones son partículas diferentes, y cada tipo llena sus niveles de forma independiente, obedeciendo el principio de exclusión de Pauli. Imagina dos piscinas idénticas: llenar ambas por igual es más ventajoso que llenar una con el doble, porque el nivel del agua será más bajo. Un desequilibrio entre el número de protones y neutrones obliga a poblar estados más altos, y la energía crece como el cuadrado del desequilibrio.",
-    "Cómo leer la curva de energía de enlace. Crece desde el helio, alcanza un máximo cerca del hierro y desciende lentamente hacia el uranio. Todo lo que está a la izquierda del máximo gana energía al fusionarse; todo lo que está a la derecha, al fisionarse. El hierro no gana ni pierde energía de ninguna manera y por eso se acumula en los núcleos de las estrellas masivas, y cuando se acumula lo suficiente, la estrella pierde su fuente de energía y colapsa. Un solo gráfico explica el reactor, el Sol y la supernova."
-   ]
+   "title": "Matemáticas que se necesitaron aquí"
   },
   "example": {
    "title": "Ejemplo con números: defecto de masa del helio",
@@ -1338,13 +1326,7 @@
    "note": "حدود التطبيق. نموذج القطرة يصف النوى المتوسطة والثقيلة جيدًا ويخطئ بشكل ملحوظ في الخفيفة: بالنسبة للهيليوم-4 يعطي حوالي 5.7 MeV لكل نوكليون بدلاً من 7.1 الحقيقية. السبب هو أن التأثيرات الغلافية كبيرة في النوى الخفيفة — نفسها كما في الذرة، ولكن للنوكليونات. النوى ذات الأعداد السحرية من البروتونات أو النيوترونات (2, 8, 20, 28, 50, 82, 126) أكثر استقرارًا بشكل ملحوظ من المتوقع، والهيليوم-4 ذو البروتونين والنيوترونين هو سحري مزدوج. الوصف الكامل يتطلب مزيجًا من كلا النموذجين."
   },
   "math": {
-   "title": "الرياضيات التي تطلبتها هذه المسألة",
-   "text": [
-    "لماذا ينمو الحجم كـ $A$ والسطح كـ $A^{2/3}$. النواة كرة متراصة، وحجمها يتناسب مع عدد النوكليونات. إذن نصف القطر ينمو كالجذر التكعيبي لـ $A$، ومساحة السطح كمربع نصف القطر، أي كـ $A^{2/3}$. من هنا نتيجة مهمة: نسبة النوكليونات السطحية تتناقص مع نمو النواة كـ $A^{-1/3}$، ولذلك فإن تصحيح السطح يضر النوى الخفيفة بشكل خاص. هذه بالضبط نفس علاقة الحجم والسطح التي تجعل الحيوانات الصغيرة تفقد حرارتها والكبيرة تخزنها.",
-    "لماذا الحد الكولومي تربيعي والحجمي خطي. في هذا جوهر بنية النواة. التجاذب النووي قصير المدى: كل نوكليون يشعر فقط بأقرب جيرانه، وعددهم لا يزيد مع حجم النواة — ومن هنا الخطية. التنافر الكهربائي بعيد المدى: كل بروتون يتنافر مع جميع البروتونات الأخرى، وعدد الأزواج ينمو كـ $Z^{2}$. إذن مع نمو النواة، يزداد التنافر أسرع من التجاذب، وعاجلاً أم آجلاً ينتصر. ولهذا فإن جدول العناصر منتهٍ.",
-    "ماذا يعني حد التناظر. البروتونات والنيوترونات جسيمات مختلفة، وكل نوع يملأ مستوياته بشكل مستقل، خاضعًا لمبدأ استبعاد باولي. تخيل حوضين متطابقين: ملء كليهما بالتساوي أفضل من ملء واحد بضعف الكمية، لأن مستوى الماء سيكون أقل. الانحراف بين عدد البروتونات والنيوترونات يجبر على شغل حالات أعلى، والطاقة تنمو كمربع الانحراف.",
-    "كيف نقرأ منحنى طاقة الربط. ينمو من الهيليوم، يصل إلى قمة قرب الحديد ثم يهبط ببطء نحو اليورانيوم. كل ما هو يسار القمة يكتسب طاقة بالاندماج؛ كل ما هو يمينها يكتسب طاقة بالانشطار. الحديد لا يعطي طاقة لا بهذا ولا بذاك، ولذا يتراكم في نوى النجوم الضخمة، وعندما يتراكم كفاية، يفقد النجم مصدر طاقته وينهار. رسم بياني واحد يشرح المفاعل والشمس والمستعر الأعظم."
-   ]
+   "title": "الرياضيات التي تطلبتها هذه المسألة"
   },
   "example": {
    "title": "مثال بالأرقام: عجز كتلة الهيليوم",

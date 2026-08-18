@@ -179,7 +179,7 @@
    "items": [
     {
      "what": "Поле как функция, возвращающая стрелку",
-     "why": "Обычная функция принимает число и возвращает число. Векторное поле принимает точку пространства и возвращает вектор: в трёх измерениях это три числа на каждую точку. Стенд рисует именно такую функцию — стрелки расставлены по всей сцене, а не только там, где что-то лежит. Уберите второй заряд, и стрелки останутся: значение $\\vec{E}(\\vec{r})$ задано заранее, до того как в точку что-нибудь попадёт. Именно об этом первый шаг вывода, где пробный заряд из описания исчезает. Та же конструкция дальше в курсе опишет поле скоростей в жидкости и поле температур в стержне: сама она важнее того, что именно ею задают.",
+     "why": "Обычная функция принимает число и возвращает число. Векторное поле принимает точку пространства и возвращает вектор: в трёх измерениях это три числа на каждую точку. Стенд рисует именно такую функцию — стрелки расставлены по всей сцене, а не только там, где что-то лежит. Уберите второй заряд, и стрелки останутся: значение $\\vec{E}(\\vec{r})$ задано заранее, до того как в точку что-нибудь попадёт. Именно об этом первый шаг вывода, где пробный заряд из описания исчезает. Та же конструкция обслуживает и другие поля: дальше в курсе ею задаётся магнитное поле, а в теме о жидкостях — поле скоростей, где стрелка в точке говорит, куда и как быстро течёт вещество. Сама конструкция важнее того, что именно ею задают.",
      "latex": "\\vec{E}(\\vec{r}) = \\big(E_x(x,y,z),\\; E_y(x,y,z),\\; E_z(x,y,z)\\big)",
      "kit": "field"
     },
@@ -562,13 +562,7 @@
    "note": "Limits of applicability and clarification about the test charge. Strictly speaking, the introduced charge itself creates a field and distorts what is being measured. Therefore, the definition implies an extremely small charge — so small that the perturbation can be neglected. In classical theory this is a pure convention, but in reality you cannot take a charge smaller than the elementary charge, and at very small scales the measurement inevitably disturbs the measured quantity. This is the first hint of a difficulty that will become central in quantum physics."
   },
   "math": {
-   "title": "The Mathematics Needed Here",
-   "text": [
-    "What is a vector field — quite simple. Imagine a wind map: at each point on the map there is an arrow showing where and with what force the wind blows. There is no object at that point, but the arrow exists. The electric field works exactly the same way, only instead of wind, it's the force that would act on a test charge if you placed it there. The magnitude is predetermined, regardless of whether you use it or not.",
-    "Why the field is divided by charge. The same logic works as when moving from 'how much does the whole purchase cost' to 'how much does a kilogram cost.' The price per kilogram is a property of the goods, not of your basket. Similarly, the field strength is a property of a point in space, not of the test charge. Put a charge twice as large — the force will be twice as large, but the field remains the same.",
-    "What flux means and why Gauss's theorem is true. Imagine that jets of water shoot out from the charge in all directions, and the total flow rate is constant. Cover the charge with any shell — a rubber bag of arbitrary shape. As much water flows in, as much flows out: all the flow must pass through the shell, no matter how curved it is. That is Gauss's theorem. And it works only because the field decreases as the square, and the area grows as the square — they exactly cancel each other.",
-    "Why there is no field inside a cavity. Take a shell with no sources inside. No jets enter, so the total flux through any internal surface is zero. If you add symmetry considerations, it turns out that the field itself is zero, not just balanced. This is not an approximation or the result of shielding by some material — it is pure inverse-square geometry. Hence the Faraday cage, protection of electronics, and why passengers in an airplane struck by lightning feel nothing."
-   ]
+   "title": "The Mathematics Needed Here"
   },
   "example": {
    "title": "Numerical example: field near Earth's surface and why you don't notice it",
@@ -935,13 +929,7 @@
    "note": "Límites de aplicabilidad y aclaración sobre la carga de prueba. Estrictamente hablando, la carga introducida crea su propio campo y distorsiona lo que se mide. Por lo tanto, en la definición se entiende una carga extremadamente pequeña, tan pequeña que la perturbación puede despreciarse. En la teoría clásica esto es pura convención, pero en realidad no se puede tomar una carga menor que la elemental, y a escalas muy pequeñas la medición inevitablemente perturba lo medido. Esta es la primera pista de la dificultad que se volverá central en la física cuántica."
   },
   "math": {
-   "title": "Matemáticas que se necesitaron aquí",
-   "text": [
-    "Qué es un campo vectorial: muy simple. Imagine un mapa de vientos: en cada punto del mapa hay una flecha que muestra hacia dónde y con qué fuerza sopla. No hay ningún objeto en ese punto, pero la flecha está. El campo eléctrico funciona exactamente igual, solo que en lugar del viento, la fuerza que actuaría sobre una carga de prueba si la colocara allí. La magnitud está dada de antemano, independientemente de si la usa o no.",
-    "Por qué se divide el campo por la carga. Aquí aplica la misma lógica que al pasar de 'cuánto cuesta toda la compra' a 'cuánto cuesta el kilo'. El precio por kilo es una característica del producto, no de su cesta. Del mismo modo, la intensidad del campo es una característica del punto del espacio, no de la carga de prueba. Coloque una carga doble: la fuerza será el doble, pero el campo seguirá siendo el mismo.",
-    "Qué significa flujo y por qué el teorema de Gauss es válido. Imagine que desde la carga brotan chorros de agua en todas direcciones, y el caudal total es constante. Envuelva la carga con cualquier envoltura: una bolsa de goma de forma arbitraria. Tanta agua entra como sale: todo el caudal debe atravesar la envoltura, por muy torcida que sea. Eso es el teorema de Gauss. Y funciona solo porque el campo decrece como el cuadrado y el área crece como el cuadrado: se cancelan exactamente.",
-    "Por qué no hay campo dentro de una cavidad. Tome una envoltura sin fuentes en su interior. No entra ningún chorro, por lo que el flujo total a través de cualquier superficie interna es cero. Si se añaden consideraciones de simetría, resulta que el mismo campo es cero, no solo equilibrado. Esto no es una aproximación ni el resultado de un apantallamiento por algún material: es pura geometría del inverso del cuadrado. De ahí la jaula de Faraday, la protección de la electrónica y el hecho de que en un avión alcanzado por un rayo, los pasajeros no sienten nada."
-   ]
+   "title": "Matemáticas que se necesitaron aquí"
   },
   "example": {
    "title": "Ejemplo con números: el campo en la superficie terrestre y por qué no lo notas",
@@ -1308,13 +1296,7 @@
    "note": "حدود قابلية التطبيق وتوضيح بخصوص الشحنة الاختبارية. بالمعنى الدقيق، الشحنة المدخلة تخلق مجالًا بنفسها وتشوه ما يتم قياسه. لذلك، في التعريف يُفترض شحنة صغيرة جدًا — بحيث يمكن إهمال الاضطراب. في النظرية التقليدية، هذا مجرد اصطلاح، لكن في الواقع لا يمكن أخذ شحنة أصغر من الشحنة الأولية، وعلى المقاييس الصغيرة جدًا، القياس يزعج بالضرورة ما يتم قياسه. هذا أول تلميح لصعوبة ستصبح مركزية في الفيزياء الكمية."
   },
   "math": {
-   "title": "الرياضيات التي كانت مطلوبة هنا",
-   "text": [
-    "ما هو المجال المتجهي — بسيط جدًا. تخيل خريطة للرياح: في كل نقطة على الخريطة يُرسم سهم يوضح إلى أين وبأي قوة تهب. لا يوجد جسم في تلك النقطة، ولكن السهم موجود. المجال الكهربائي مصمم تمامًا بنفس الطريقة، فقط بدلاً من الرياح — قوة تؤثر على شحنة اختبارية إذا وضعتها هناك. المقدار محدد مسبقًا، بغض النظر عما إذا كنت تستخدمه أم لا.",
-    "لماذا يقسم المجال على الشحنة. هنا تعمل نفس المنطق عند الانتقال من 'كم تكلف كل المشتريات' إلى 'كم يكلف الكيلوغرام'. سعر الكيلوغرام هو خاصية للسلعة، وليس لسلة مشترياتك. كذلك شدة المجال هي خاصية لنقطة في الفضاء، وليس للشحنة الاختبارية. ضع شحنة مضاعفة — ستكون القوة مضاعفة، لكن المجال سيبقى كما هو.",
-    "ماذا يعني التدفق ولماذا نظرية غاوس صحيحة. تخيل أن من الشحنة تنطلق نفاثات ماء في جميع الاتجاهات، والتدفق الكلي ثابت. قم بتغطية الشحنة بأي غلاف — كيس مطاطي بأي شكل. بقدر ما يدخل من الماء، يخرج: كل التدفق يجب أن يمر عبر الغلاف، مهما كان معوجًا. هذه هي نظرية غاوس. وهي تعمل فقط لأن المجال يتناقص كمربع، والمساحة تزداد كمربع — إنهما يلغي كل منهما الآخر بالضبط.",
-    "لماذا لا يوجد مجال داخل التجويف. خذ غلافًا لا توجد فيه مصادر من الداخل. لا تدخل نفاثات إلى الداخل، وبالتالي التدفق الكلي عبر أي سطح داخلي يساوي صفرًا. إذا أضفنا اعتبارات التناظر، سنجد أن المجال نفسه صفر، وليس مجرد متوازن. هذا ليس تقريبًا وليس نتيجة حماية بمادة ما — إنها هندسة خالصة للقانون التربيعي العكسي. من هنا يأتي قفص فاراداي، وحماية الإلكترونيات، وفي الطائرة التي يضربها البرق، لا يشعر الركاب بشيء."
-   ]
+   "title": "الرياضيات التي كانت مطلوبة هنا"
   },
   "example": {
    "title": "مثال بأرقام: المجال عند سطح الأرض ولماذا لا تلاحظونه",

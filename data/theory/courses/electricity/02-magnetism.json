@@ -174,17 +174,11 @@
   },
   "math": {
    "title": "Математика, которая здесь понадобилась",
-   "text": [
-    "Что такое векторное произведение на пальцах. Обычное умножение даёт число, векторное — вектор, причём перпендикулярный обоим сомножителям. Найти направление проще всего рукой: направьте четыре пальца правой руки вдоль скорости, согните их в сторону поля — большой палец покажет силу для положительного заряда. Для отрицательного — в противоположную сторону. Это не мнемонический трюк, а определение, и им пользуются все, включая тех, кто занимается этим полжизни.",
-    "Почему сила поперёк не совершает работы. Представьте, что вы толкаете тележку строго вбок, а она катится вперёд. Как бы вы ни старались, вперёд вы её не разгоните и не замедлите — только повернёте. Работа есть произведение силы на путь, пройденный вдоль неё, а вдоль магнитной силы путь не проходится вовсе. Отсюда и невозможность магнитного двигателя: постоянный магнит энергии не даёт, потому что не умеет её передавать.",
-    "Почему период не зависит от скорости. Разгоните частицу вдвое — она пойдёт вдвое быстрее, но и круг опишет вдвое больший. Длина пути выросла вдвое, скорость выросла вдвое, время осталось прежним. Это то же самое сокращение, что делает период маятника независимым от амплитуды: две величины меняются согласованно и гасят друг друга в отношении. Такие совпадения в физике всегда указывают на что-то важное — здесь на них выросла целая отрасль.",
-    "Что означает единица тесла. Она огромна: магнитное поле Земли составляет всего пять стотысячных тесла, поле обычного магнитика на холодильнике около одной сотой, а поле томографа — три. Чтобы почувствовать масштаб: в поле в один тесла электрон описывает круг радиусом в доли миллиметра, а протон — около сантиметра. Разница ровно в отношении их масс, потому что радиус пропорционален импульсу."
-   ],
    "lead": "Математика здесь векторная: произведение, которое даёт направление поперёк, и привычка смотреть, какая величина в ответе сократилась.",
    "items": [
     {
      "what": "Векторное произведение даёт новое направление",
-     "why": "Запись $\\vec F = q\\,\\vec v \\times \\vec B$ отличается от привычного умножения тем, что результат не число, а вектор, и лежит он поперёк обоих сомножителей сразу. Модуль даёт синус: $F = qvB\\sin\\alpha$, поэтому вдоль поля сила равна нулю, а поперёк максимальна — это и видно на стенде, когда поворачиваешь скорость. Направление находят правой рукой: четыре пальца вдоль $\\vec v$, сгибаем их к $\\vec B$, большой показывает силу для положительного заряда. У скалярного произведения роль обратная: оно отвечает на вопрос «насколько вдоль» и даёт косинус. Именно оно стоит в первом шаге вывода, где работа $\\vec F\\cdot d\\vec r$ содержит $\\cos 90^\\circ$, то есть ноль. Одна пара операций объясняет и форму траектории, и невозможность магнитного двигателя.",
+     "why": "Запись $\\vec F = q\\,\\vec v \\times \\vec B$ отличается от привычного умножения тем, что результат не число, а вектор, и лежит он поперёк обоих сомножителей сразу. Модуль даёт синус: $F = qvB\\sin\\alpha$, поэтому вдоль поля сила равна нулю, а поперёк максимальна. На стенде это не проверить: там частицу всегда запускают поперёк поля, синус равен единице, и потому траектория — ровная окружность. Наклонная скорость дала бы винтовую линию, окружность со сносом вдоль поля, но такого случая стенд не показывает. Направление находят правой рукой: четыре пальца вдоль $\\vec v$, сгибаем их к $\\vec B$, большой показывает силу для положительного заряда. У скалярного произведения роль обратная: оно отвечает на вопрос «насколько вдоль» и даёт косинус. Именно оно стоит в первом шаге вывода, где работа $\\vec F\\cdot d\\vec r$ содержит $\\cos 90^\\circ$, то есть ноль. Одна пара операций объясняет и форму траектории, и невозможность магнитного двигателя.",
      "latex": "|\\vec v \\times \\vec B| = vB\\sin\\alpha, \\qquad \\vec F \\cdot d\\vec r = F\\,dr\\cos\\alpha",
      "kit": "dotcross"
     },
@@ -195,9 +189,9 @@
      "kit": "propto"
     },
     {
-     "what": "Умножение порядков: когда ничтожное велико",
-     "why": "В аппендиксе стоит оценка, которая на первый взгляд кажется подозрительной: относительная поправка порядка $10^{-13}$, помноженная на $10^{42}$, даёт вполне ощутимую величину. Ничего странного тут нет — при умножении степеней показатели складываются, и от произведения остаётся $10^{29}$. Урок общий и нужный далеко за пределами магнетизма: «мало» и «много» не существуют сами по себе, а только по отношению к тому, на что величина умножается. Релятивистская поправка при скорости дрейфа в доли миллиметра в секунду действительно ничтожна, но кулоновские силы, к которым она применяется, чудовищно велики, и остатка хватает, чтобы повернулась стрелка компаса. Прежде чем отбросить малую поправку, посмотрите, на что она множится.",
-     "latex": "10^{-13} \\cdot 10^{42} = 10^{29}",
+     "what": "Как из ничтожных чисел выходит сантиметр",
+     "why": "Пример с масс-спектрометром держится на арифметике показателей. Под корнем стоит масса иона $2\\cdot 10^{-26}$ кг, умноженная на удвоенное напряжение $4\\cdot 10^{3}$ В и делённая на заряд $1{,}6\\cdot 10^{-19}$ Кл. При умножении показатели складываются, при делении вычитаются: $-26 + 3$ даёт $-23$, затем $-23 - (-19)$ даёт $-4$. Корень делит показатель пополам, оставляя $10^{-2}$, а деление на поле $0{,}5$ Тл удваивает — так и получаются знакомые четыре с половиной сантиметра, величина, которую видно на детекторе глазом. Урок общий и нужный далеко за пределами магнетизма: «мало» и «много» не существуют сами по себе, а только по отношению к тому, на что величина умножается и делится. Масса иона ничтожна, но рядом стоит ещё более ничтожный заряд, и их отношение возвращает ответ в человеческий масштаб. Прежде чем отбросить маленькое число, посмотрите, с чем оно встретится дальше; и считайте показатели отдельно от мантисс — так ошибка на порядок видна сразу, до всякого калькулятора.",
+     "latex": "\\frac{2Um}{q} \\approx \\frac{4\\cdot 10^{3}\\cdot 2\\cdot 10^{-26}}{1{,}6\\cdot 10^{-19}} = 5\\cdot 10^{-4} \\;\\Longrightarrow\\; R = \\frac{1}{B}\\sqrt{5\\cdot 10^{-4}} \\approx 4{,}5\\cdot 10^{-2}\\ \\text{м}",
      "kit": "order"
     }
    ]
@@ -569,13 +563,7 @@
    "note": "Limits of applicability. The constancy of the period breaks down at near-light speeds: mass increases, and the particle starts to lag. That is why a conventional cyclotron cannot accelerate protons above about twenty megaelectronvolts, and for higher energies synchrotrons are built, where the frequency is adjusted on the fly. Moreover, everything said applies to a uniform field; in a non-uniform field, drifts are added, and trajectories become much more complex — the entire physics of plasma confinement rests on this."
   },
   "math": {
-   "title": "Mathematics that was needed here",
-   "text": [
-    "What is a cross product in simple terms. Ordinary multiplication gives a number, cross product gives a vector, and one perpendicular to both factors. The easiest way to find the direction is with your hand: point the four fingers of your right hand along the velocity, curl them toward the field — your thumb shows the force for a positive charge. For a negative charge, it's the opposite direction. This is not a mnemonic trick but a definition, and everyone uses it, including those who have been doing this for half their lives.",
-    "Why a perpendicular force does no work. Imagine you push a cart strictly sideways while it rolls forward. No matter how hard you try, you won't speed it up or slow it down — only turn it. Work is the product of force and the distance traveled along it, and no distance is traveled along the magnetic force. Hence the impossibility of a magnetic motor: a permanent magnet does not provide energy because it cannot transfer it.",
-    "Why the period does not depend on speed. Double the particle's speed — it goes twice as fast, but also traces a circle twice as large. The path length doubled, the speed doubled, the time remains the same. It is the same cancellation that makes the period of a pendulum independent of amplitude: two quantities change in concert and cancel each other in the ratio. Such coincidences in physics always point to something important — here, an entire industry grew out of them.",
-    "What the unit tesla means. It is huge: Earth's magnetic field is only five hundred-thousandths of a tesla, the field of an ordinary fridge magnet is about one hundredth, and an MRI scanner's field is three. To get a sense of scale: in a one-tesla field, an electron traces a circle with a radius of fractions of a millimeter, and a proton about a centimeter. The difference is exactly the ratio of their masses, because radius is proportional to momentum."
-   ]
+   "title": "Mathematics that was needed here"
   },
   "example": {
    "title": "Numerical example: a mass spectrometer",
@@ -944,13 +932,7 @@
    "note": "Límites de aplicabilidad. La constancia del período se rompe a velocidades cercanas a la luz: la masa aumenta y la partícula empieza a retrasarse. Es por esto que el ciclotrón ordinario no acelera protones más allá de unos veinte megaelectronvoltios, y para energías mayores se construyen sincrotrones, donde la frecuencia se ajusta sobre la marcha. Además, todo lo dicho se refiere a un campo uniforme; en un campo no uniforme se añaden derivas y las trayectorias se vuelven mucho más complejas — en esto se basa toda la física del confinamiento de plasma."
   },
   "math": {
-   "title": "Matemáticas que se necesitaron aquí",
-   "text": [
-    "Qué es el producto vectorial explicado con las manos. La multiplicación ordinaria da un número, la vectorial da un vector, además perpendicular a ambos factores. Encontrar la dirección es más fácil con la mano: dirija los cuatro dedos de la mano derecha a lo largo de la velocidad, dóblelos hacia el campo — el pulgar mostrará la fuerza para una carga positiva. Para una negativa — en dirección opuesta. Esto no es un truco mnemotécnico, sino una definición, y la usan todos, incluidos aquellos que se dedican a esto media vida.",
-    "Por qué la fuerza perpendicular no realiza trabajo. Imagine que empuja un carro estrictamente hacia un lado, y él rueda hacia adelante. Por más que se esfuerce, no lo acelerará ni lo frenará hacia adelante — solo lo girará. El trabajo es el producto de la fuerza por el camino recorrido a lo largo de ella, y a lo largo de la fuerza magnética no se recorre camino alguno. De ahí la imposibilidad de un motor magnético: un imán permanente no da energía, porque no sabe transferirla.",
-    "Por qué el período no depende de la velocidad. Acelere la partícula al doble — irá el doble de rápido, pero también describirá un círculo el doble de grande. La longitud del camino se duplicó, la velocidad se duplicó, el tiempo sigue siendo el mismo. Es la misma cancelación que hace que el período del péndulo sea independiente de la amplitud: dos cantidades cambian de manera coordinada y se anulan mutuamente en la relación. Tales coincidencias en física siempre señalan algo importante — aquí sobre ellas creció toda una rama.",
-    "Qué significa la unidad tesla. Es enorme: el campo magnético de la Tierra es de solo cinco cienmilésimas de tesla, el campo de un imán común de refrigerador es de alrededor de una centésima, y el campo de un tomógrafo es de tres. Para sentir la escala: en un campo de un tesla, un electrón describe un círculo de radio de fracciones de milímetro, y un protón de alrededor de un centímetro. La diferencia es exactamente en la relación de sus masas, porque el radio es proporcional al momento."
-   ]
+   "title": "Matemáticas que se necesitaron aquí"
   },
   "example": {
    "title": "Ejemplo con números: espectrómetro de masas",
@@ -1319,13 +1301,7 @@
    "note": "حدود التطبيق. ثبات الدورة يختل عند السرعات قريبة من الضوء: تزداد الكتلة، ويبدأ الجسيم في التأخر. لهذا السبب لا يسرع السيكلوترون العادي البروتونات فوق حوالي عشرين ميغا إلكترون فولت، وللطاقات العالية تُبنى السنكروترونات حيث يُضبط التردد أثناء التشغيل. بالإضافة إلى ذلك، كل ما قيل ينطبق على المجال المنتظم؛ في المجال غير المنتظم تظهر انحرافات إضافية، وتصبح المسارات أكثر تعقيدًا — على هذا تقوم فيزياء حصر البلازما."
   },
   "math": {
-   "title": "الرياضيات التي كانت ضرورية هنا",
-   "text": [
-    "ما هو الضرب الاتجاهي بطريقة الأصابع. الضرب العادي يعطي عددًا، والضرب الاتجاهي يعطي متجهًا، عموديًا على كلا العامليْن. أسهل طريقة لإيجاد الاتجاه هي باليد: وجه أربعة أصابع من يدك اليمنى على طول السرعة، ثم اثنها باتجاه المجال — سيشير الإبهام إلى القوة للشحنة الموجبة. للشحنة السالبة، الاتجاه معاكس. هذه ليست حيلة ذاكرة، بل تعريف، ويستخدمها الجميع، حتى من يعملون في هذا المجال نصف حياتهم.",
-    "لماذا القوة العمودية لا تبذل شغلًا. تخيل أنك تدفع عربة جانبًا تمامًا، وهي تتدحرج للأمام. مهما حاولت، لن تسرعها أو تبطئها للأمام — فقط ستديرها. الشغل هو حاصل ضرب القوة في المسافة المقطوعة على طولها، وعلى طول القوة المغناطيسية لا تقطع المسافة أبدًا. ومن هنا استحالة المحرك المغناطيسي: المغناطيس الدائم لا يعطي طاقة، لأنه لا يعرف كيف ينقلها.",
-    "لماذا الدورة لا تعتمد على السرعة. ضاعف سرعة الجسيم — سيسير أسرع بمرتين، لكنه سيرسم دائرة أكبر بمرتين أيضًا. زاد طول المسار مرتين، وزادت السرعة مرتين، فبقي الزمن كما هو. هذا هو نفس الإلغاء الذي يجعل دورة البندول مستقلة عن السعة: كميتان تتغيران بشكل متناغم وتلغي إحداهما الأخرى في النسبة. هذه التوافقات في الفيزياء تشير دائمًا إلى شيء مهم — هنا قام عليها فرع كامل.",
-    "ماذا تعني وحدة تسلا. إنها ضخمة: المجال المغناطيسي للأرض يبلغ فقط خمسة على مائة ألف من تسلا، مجال مغناطيس الثلاجة العادي حوالي واحد على مائة، ومجال التصوير بالرنين المغناطيسي ثلاثة. لتشعر بالمقياس: في مجال مقداره واحد تسلا، يرسم الإلكترون دائرة نصف قطرها أجزاء من المليمتر، والبروتون حوالي سنتيمتر. الفرق يساوي تمامًا نسبة كتلتيهما، لأن نصف القطر يتناسب مع كمية الحركة."
-   ]
+   "title": "الرياضيات التي كانت ضرورية هنا"
   },
   "example": {
    "title": "مثال بأرقام: مطياف الكتلة",

@@ -116,6 +116,7 @@
     padding:12px 0;margin-top:14px;border-top:1px solid var(--rule)}
   .k-ex-check{font-size:.88rem;line-height:1.65;color:var(--ink-soft);margin-top:10px;font-style:italic}
   /* константы */
+  .k-lead-sm{max-width:680px;font-size:.95rem;line-height:1.6;color:var(--ink-soft);margin:0 0 12px}
   .k-kit-link{display:inline-block;margin:2px 0 14px;font-size:.85rem;color:var(--steel);
     text-decoration:none;border-bottom:1px dashed var(--steel)}
   .k-kit-link:hover{color:var(--brass);border-bottom-color:var(--brass)}
@@ -815,7 +816,7 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
                       resonance: 'resonance', entropy: 'entropy',
                       orbit: 'orbit', wave: 'wave', charge: 'charge', magnet: 'magnet',
                       srt: 'srt', quantum: 'quantum', nucleus: 'nucleus',
-                      action: 'action', expansion: 'expansion', cmb: 'cmb', dark: 'dark' }[lesson.model];
+                      action: 'action', expansion: 'expansion', cmb: 'cmb', dark: 'dark', flow: 'flow' }[lesson.model];
       if (factory) {
         var mdl = B42Models[factory](modelData);
         var wrap = el('div'); wrap.style.margin = '20px 0';
@@ -934,6 +935,7 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
     if (L.math) {
       var m = el('section', 'k-sec');
       m.appendChild(el('h2', null, ic('sigma') + ' ' + L.math.title));
+      if (L.math.lead) m.appendChild(el('p', 'k-lead-sm', md(L.math.lead)));
       (L.math.items || []).forEach(function (it) {
         // Два имени у одних и тех же полей: часть материалов написана как what/why, часть как
         // h/text. Раньше несовпадение давало пустой заголовок и слово «undefined» абзацем —
@@ -946,7 +948,7 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
         // недостижим ни одной ссылкой из места, где студент спотыкается.
         if (it.kit) {
           var kl = el('a', 'k-kit-link', (B42_T('развернуть в справочнике') || 'развернуть в справочнике') + ' →');
-          kl.href = '/mathkit.html?lang=' + LANG + '#' + it.kit;
+          kl.href = '/mathkit.html?lang=' + LANG + '#m-' + it.kit;
           m.appendChild(kl);
         }
       });

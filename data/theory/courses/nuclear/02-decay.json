@@ -185,7 +185,7 @@
    "items": [
     {
      "what": "Как разделение переменных даёт экспоненту",
-     "why": "Третий шаг вывода назван по имени приёма, но само действие пропущено. В уравнении $dN = -\\lambda N\\,dt$ искомая величина и время перемешаны в одном произведении; делим обе части на $N$ — и они расходятся по разные стороны знака равенства: слева только $N$, справа только $t$. Теперь каждую сторону можно интегрировать отдельно, и это вся суть метода. Слева получается $\\ln N$, справа $-\\lambda t + C$; потенцируем и приходим к $N = N_0 e^{-\\lambda t}$, причём $N_0$ берётся из условия $N(0) = N_0$, а не из самого уравнения. У приёма есть цена: делить на $N$ позволено, пока $N \\neq 0$. Здесь это не ограничение, а сама физика — нуля решение не достигает ни в какой момент, и потому радиоактивное вещество не исчезает полностью никогда.",
+     "why": "Третий шаг вывода назван по имени приёма, но само действие пропущено. В уравнении $dN = -\\lambda N\\,dt$ искомая величина и время перемешаны в одном произведении; делим обе части на $N$ — и они расходятся по разные стороны знака равенства: слева только $N$, справа только $t$. Теперь каждую сторону можно интегрировать отдельно, и это вся суть метода. Слева получается $\\ln N$, справа $-\\lambda t + C$; потенцируем и приходим к $N = N_0 e^{-\\lambda t}$, причём $N_0$ берётся из условия $N(0) = N_0$, а не из самого уравнения. У приёма есть цена: делить на $N$ позволено, пока $N \\neq 0$. Нуля экспонента и правда не достигает ни в какой момент, но это свойство непрерывной модели, а не вещества: ядер целое число, и последнее из них распадается в конечный момент времени. Формула верна, пока $N$ велико — тогда доля распавшихся за $dt$ действительно близка к $\\lambda\\,dt$. Когда $N$ падает до единиц, плавного убывания нет вовсе, остаются отдельные случайные события, и считать приходится вероятностями; об этом третья врезка.",
      "latex": "\\frac{dN}{N} = -\\lambda\\,dt \\;\\Longrightarrow\\; \\ln N = -\\lambda t + C \\;\\Longrightarrow\\; N = N_0 e^{-\\lambda t}",
      "kit": "separation"
     },
@@ -575,13 +575,7 @@
    "note": "Limits of applicability and an important clarification. The independence from external conditions is almost absolute, but not entirely: for decays that proceed via electron capture from the nearest shell, the rate depends slightly on the chemical state — the effect amounts to fractions of a percent and has been measured. Moreover, under extreme conditions in stars, where atoms are completely ionized, some half-lives change by factors. For all terrestrial applications, the law can be considered absolute."
   },
   "math": {
-   "title": "The mathematics needed here",
-   "text": [
-    "Why exactly an exponential emerges. Whenever the rate of change is proportional to the current quantity, the answer is exponential — this is the most common differential equation in nature. This is how capital grows with interest, how tea cools, how sound fades in a hall. Here the quantity decreases, so the exponent is negative. A practical consequence: the exponential has no end. A radioactive substance never disappears completely — after each period, half of the previous amount remains.",
-    "What memorylessness means. A nucleus that has existed for a billion years has exactly the same chance of decaying in the next second as one just formed. This is sharply different from everyday life: a person, a light bulb, and a bearing wear out, and the probability of failure increases with time. A nucleus has no wear. A useful check of understanding: if fifty out of one hundred nuclei decay in an hour, then in the next hour not fifty but twenty-five will decay — from the remaining ones.",
-    "How to calculate in your head using half-lives. It is much more convenient to use powers of two rather than the exponential. After one period, half remains; after two, a quarter; after three, an eighth; after ten, roughly one thousandth. Hence a practical rule: after ten half-lives, activity drops by a factor of a thousand; after twenty, by a factor of a million. That is why spent nuclear fuel is stored in pools: the most active isotopes with half-lives of days and months decay almost completely in a few years.",
-    "Why tunneling gives such a spread. The probability of penetrating a barrier depends exponentially on its height and width. Thus a small change in the alpha particle energy — say, from 4 to 9 MeV — changes the exponent by tens and the probability by $10^{20}$ times or more. Hence the Geiger–Nuttall law: the logarithm of the half-life depends linearly on the inverse square root of the energy. The exponential always yields huge spreads from small changes."
-   ]
+   "title": "The mathematics needed here"
   },
   "example": {
    "title": "Example with Numbers: Radiocarbon Dating",
@@ -955,13 +949,7 @@
    "note": "Límites de aplicabilidad y una aclaración importante. La independencia de las condiciones externas es casi absoluta, pero no del todo: para las desintegraciones que ocurren mediante captura de electrones de la capa más cercana, la velocidad depende ligeramente del estado químico; el efecto es de fracciones de porcentaje y ha sido medido. Además, en condiciones extremas en estrellas, donde los átomos están completamente ionizados, algunos períodos cambian en factores. Para todas las aplicaciones terrestres, la ley puede considerarse absoluta."
   },
   "math": {
-   "title": "Matemáticas necesarias aquí",
-   "text": [
-    "Por qué se obtiene precisamente una exponencial. Siempre que la velocidad de cambio es proporcional a la cantidad actual, la respuesta es exponencial: es la ecuación diferencial más común en la naturaleza. Así crece el capital con intereses, así se enfría el té, así se apaga el sonido en una sala. Aquí la cantidad disminuye, por lo que el exponente es negativo. Consecuencia práctica: la exponencial no tiene fin. Una sustancia radiactiva nunca desaparece por completo; en cada período queda la mitad del anterior.",
-    "Qué significa la ausencia de memoria. Un núcleo que ha existido durante mil millones de años tiene exactamente las mismas probabilidades de desintegrarse en el próximo segundo que uno recién formado. Esto contrasta fuertemente con la vida cotidiana: una persona, una bombilla y un rodamiento se desgastan, y la probabilidad de fallo aumenta con el tiempo. El núcleo no se desgasta. Una comprobación útil de comprensión: si de cien núcleos se desintegran cincuenta en una hora, en la siguiente hora se desintegrarán no cincuenta, sino veinticinco, de los que quedan.",
-    "Cómo calcular mentalmente usando períodos. Es mucho más conveniente usar no la exponencial, sino potencias de dos. Pasado un período, queda la mitad; dos, un cuarto; tres, un octavo; diez, aproximadamente una milésima. De ahí una regla práctica: en diez períodos de semidesintegración la actividad cae mil veces, en veinte, un millón. Por eso el combustible nuclear gastado se almacena en piscinas: los isótopos más activos con períodos de días y meses desaparecen casi por completo en unos pocos años.",
-    "Por qué el tunelamiento produce tal dispersión. La probabilidad de filtrarse a través de la barrera depende exponencialmente de su altura y anchura. Así, un pequeño cambio en la energía de la partícula alfa, por ejemplo de 4 a 9 MeV, cambia el exponente en decenas y la probabilidad misma en $10^{20}$ veces o más. De ahí la ley de Geiger-Nuttall: el logaritmo del período de semidesintegración depende linealmente de la raíz inversa de la energía. La exponencial siempre produce enormes dispersiones a partir de pequeños cambios."
-   ]
+   "title": "Matemáticas necesarias aquí"
   },
   "example": {
    "title": "Ejemplo con números: datación por radiocarbono",
@@ -1335,13 +1323,7 @@
    "note": "حدود التطبيق وتوضيح مهم. الاستقلال عن الظروف الخارجية شبه مطلق، ولكن ليس تمامًا: بالنسبة للاضمحلالات التي تتم عن طريق التقاط إلكترون من الغلاف الأقرب، تعتمد السرعة قليلاً على الحالة الكيميائية – التأثير أجزاء من المئة وقد تم قياسه. بالإضافة إلى ذلك، في الظروف القاسية في النجوم حيث تكون الذرات متأينة بالكامل، تتغير بعض الأعمار بعوامل. لجميع التطبيقات الأرضية، يمكن اعتبار القانون مطلقًا."
   },
   "math": {
-   "title": "الرياضيات التي كانت ضرورية هنا",
-   "text": [
-    "لماذا تكون النتيجة دائمًا دالة أسية. كلما كانت سرعة التغير متناسبة مع الكمية الحالية، تكون الإجابة أسية – هذه هي المعادلة التفاضلية الأكثر شيوعًا في الطبيعة. هكذا ينمو رأس المال بالفائدة، هكذا يبرد الشاي، هكذا يخفت الصوت في القاعة. هنا الكمية تتناقص، لذلك الأس سالب. النتيجة العملية: الدالة الأسية لا نهاية لها. المادة المشعة لا تختفي تمامًا أبدًا – في كل فترة يبقى نصف السابق.",
-    "ماذا يعني غياب الذاكرة. النواة التي بقيت مليار سنة لديها نفس فرص الاضمحلال في الثانية التالية مثل النواة المشكلة حديثًا. هذا يختلف بشدة عن الحياة العادية: الإنسان، المصباح، والمحمل يبلى، واحتمال الفشل يزداد مع الزمن. النواة لا تبلى. اختبار مفيد للفهم: إذا انحلت خمسون نواة من مئة في ساعة، ففي الساعة التالية ستنحل خمسة وعشرون – من المتبقي.",
-    "كيف تحسب ذهنيًا باستخدام الأعمار. من الأسهل بكثير استخدام قوى العدد 2 بدلاً من الدالة الأسية. تمر فترة واحدة – يبقى النصف، فترتان – الربع، ثلاث – الثمن، عشر – حوالي واحد من الألف. من هنا قاعدة عملية: بعد عشرة أعمار نصف، ينخفض النشاط ألف مرة، وبعد عشرين – مليون مرة. لهذا السبب يتم تخزين الوقود النووي المستنفذ في أحواض: أكثر النظائر نشاطًا بأعمار أيام وأشهر تختفي بالكامل تقريبًا بعد بضع سنوات.",
-    "لماذا يعطي النفق الكمي هذا التشتت. احتمال التسرب عبر الحاجز يعتمد على ارتفاعه وعرضه بشكل أسي. لذلك تغيير صغير في طاقة جسيم ألفا – على سبيل المثال، من 4 إلى 9 مليون إلكترون فولت – يغير الأس بعشرات، والاحتمال نفسه بعامل $10^{20}$ مرة أو أكثر. من هنا قانون جيجر-ناتول: لوغاريتم عمر النصف يعتمد خطيًا على الجذر التربيعي العكسي للطاقة. الدالة الأسية تعطي دائمًا تشتتًا كبيرًا من تغييرات صغيرة."
-   ]
+   "title": "الرياضيات التي كانت ضرورية هنا"
   },
   "example": {
    "title": "مثال بالأرقام: التأريخ بالكربون المشع",

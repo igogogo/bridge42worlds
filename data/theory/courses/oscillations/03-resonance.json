@@ -172,8 +172,8 @@
      "figCaption": "Добротность отвечает сразу на два вопроса: во сколько раз вырастет размах и насколько узок будет пик."
     },
     {
-     "text": "И физический смысл добротности с другой стороны: она показывает, сколько колебаний система совершает, прежде чем затухнет. Камертон с добротностью в тысячу звучит около тысячи периодов. Одна и та же величина отвечает и за остроту резонанса, и за длительность звучания — это не совпадение, а две стороны одного.",
-     "latex": "Q = 2\\pi \\frac{E}{\\Delta E \\text{ за период}} \\approx \\pi \\cdot N_{\\text{колебаний до затухания}}",
+     "text": "И физический смысл добротности с другой стороны: она задаёт, сколько колебаний система успевает сделать, пока размах не упадёт в $e$ раз. Число это не сама добротность, а $Q/\\pi$: камертон с добротностью тысяча звучит около трёхсот двадцати периодов. Одна и та же величина отвечает и за остроту резонанса, и за длительность звучания — это не совпадение, а две стороны одного.",
+     "latex": "Q = 2\\pi \\frac{E}{\\Delta E \\text{ за период}} = \\pi N, \\qquad N = \\frac{Q}{\\pi}",
      "figure": "energyswap",
      "figCaption": "Добротность есть отношение запасённой энергии к теряемой за период — потому она же задаёт и время звучания."
     },
@@ -205,8 +205,8 @@
     },
     {
      "what": "Экспонента, спрятанная в слове «затухание»",
-     "why": "Седьмой шаг вывода приравнивает добротность числу колебаний до затухания, и этот переход стоит развернуть. Трение отбирает за период не фиксированную порцию энергии, а фиксированную долю: чем больше размах, тем больше потери. Постоянная доля за равные промежутки времени — это и есть определение экспоненты. Поэтому размах спадает как $A_0e^{-\\gamma t}$, а энергия, пропорциональная квадрату размаха, — вдвое быстрее. Отсюда и два вида одной записи: считая по энергии, получаем $Q = 2\\pi E/\\Delta E$, считая по размаху — $Q \\approx \\pi N$. Множитель отличается вдвое не по недосмотру, а потому что квадрат в показателе удваивает скорость спада.",
-     "latex": "A(t) = A_0e^{-\\gamma t}, \\qquad E(t) = E_0e^{-2\\gamma t}",
+     "why": "Седьмой шаг вывода переводит добротность в число колебаний до затухания, и этот переход стоит развернуть. Трение отбирает за период не фиксированную порцию энергии, а фиксированную долю: чем больше размах, тем больше потери. Постоянная доля за равные промежутки времени — это и есть определение экспоненты. Поэтому размах спадает как $A_0e^{-\\gamma t}$, а энергия, пропорциональная квадрату размаха, — вдвое быстрее. Дальше остаётся счёт. Размах падает в $e$ раз за время $1/\\gamma$, период равен $2\\pi/\\omega_0$, значит периодов укладывается $N = \\omega_0/2\\pi\\gamma = Q/\\pi$. Отсюда и числа: камертон с добротностью тысяча звучит около трёхсот двадцати периодов, а не тысячу. Множитель $\\pi$ здесь не поправка на аккуратность, а перевод времени затухания в число периодов; запись через энергию, $Q = 2\\pi E/\\Delta E$ за период, отличается ещё вдвое, потому что энергия спадает быстрее размаха.",
+     "latex": "A(t) = A_0e^{-\\gamma t}, \\qquad E(t) = E_0e^{-2\\gamma t}, \\qquad N = \\frac{Q}{\\pi}",
      "kit": "exponent"
     }
    ]
@@ -239,7 +239,7 @@
     },
     {
      "text": "А вдали от резонанса, на удвоенной частоте, — почти ничего: втрое меньше статического отклонения и в двадцать раз меньше резонансного размаха.",
-     "latex": "A(2\\omega_0) \\approx 0{,}066\\ \\text{м} \\"
+     "latex": "A(2\\omega_0) \\approx 0{,}066\\ \\text{м}"
     }
    ],
    "answer": "На резонансе размах около 1,3 метра — в шесть с половиной раз больше, чем дала бы та же сила, приложенная неподвижно. Вдали от резонанса та же сила почти не даёт эффекта.",
@@ -600,13 +600,7 @@
    "note": "Limits of applicability. The formula is derived for a linear system: Hooke's force proportional to displacement, friction proportional to velocity. At large amplitudes, a real spring ceases to be linear, the peak tilts, and a sudden transition between regimes appears. Moreover, we have only considered the steady-state solution — in the first seconds after the force is applied, the amplitude grows gradually, and that is precisely why the bridge in Broughton did not collapse immediately."
   },
   "math": {
-   "title": "The Math Needed Here",
-   "text": [
-    "First — why squares add up. The elastic response of a system is in phase with displacement, while the viscous response is in phase with velocity, i.e., exactly a quarter period ahead. Quantities shifted by a quarter period behave like perpendicular vectors: they add not arithmetically but by the Pythagorean theorem. Hence the square root of the sum of squares in the denominator, rather than just the sum.",
-    "Second — what a resonance curve is from a function perspective. It is a function with a maximum, whose position is determined by the system parameters and sharpness by friction. Strictly speaking, the amplitude maximum occurs slightly to the left of $\\omega_0$, at $\\omega = \\sqrt{\\omega_0^2 - 2\\gamma^2}$, but with small friction the difference is indistinguishable and is usually neglected — another example of deliberate neglect from the first topic.",
-    "Third — approximation near the maximum. The difference of squares factors into a product, and near resonance the expression simplifies: $\\omega_0^2 - \\omega^2 = (\\omega_0-\\omega)(\\omega_0+\\omega) \\approx 2\\omega_0(\\omega_0 - \\omega)$. From this it follows that the width of the peak at half power level equals $2\\gamma$ — an estimate used when reading any spectrum.",
-    "Fourth — why a dimensionless quantity is more important than dimensional ones. The problem has five parameters: mass, stiffness, friction, force, and frequency. But the shape of the curve depends only on two dimensionless combinations: the frequency ratio and the quality factor. This is a direct application of what we discussed in the topic on dimensions — and that is why one graph works for a bridge, a tuning fork, and a radio receiver all at once."
-   ]
+   "title": "The Math Needed Here"
   },
   "example": {
    "title": "Example with Numbers: How Many Times a Finger Is Stronger Than Itself",
@@ -636,7 +630,7 @@
     },
     {
      "text": "And far from resonance, at double the frequency, almost nothing.",
-     "latex": "A(2\\omega_0) \\approx 0.066\\ \\text{m} \\"
+     "latex": "A(2\\omega_0) \\approx 0.066\\ \\text{m}"
     }
    ],
    "answer": "At resonance the amplitude is about 1.3 meters — six and a half times greater than the same force would produce if applied statically. Far from resonance, the same force has almost no effect.",
@@ -997,13 +991,7 @@
    "note": "Límites de aplicabilidad. La fórmula se ha derivado para un sistema lineal: la fuerza de Hooke es proporcional al desplazamiento, la fricción a la velocidad. Con amplitudes grandes, un resorte real deja de ser lineal, el pico se inclina y aparece una transición abrupta entre modos. Además, solo hemos buscado la solución estacionaria — en los primeros segundos después de aplicar la fuerza, la amplitud aumenta gradualmente, y es por eso que el puente de Broughton no colapsó de inmediato."
   },
   "math": {
-   "title": "Matemáticas que aquí se necesitan",
-   "text": [
-    "Primero: por qué se suman los cuadrados. La respuesta elástica del sistema va en fase con el desplazamiento, mientras que la viscosa va en fase con la velocidad, es decir, con un adelanto de exactamente un cuarto de periodo. Las magnitudes desfasadas en un cuarto de periodo se comportan como vectores perpendiculares: no se suman aritméticamente, sino por el teorema de Pitágoras. De ahí la raíz de la suma de cuadrados en el denominador, y no simplemente la suma.",
-    "Segundo: qué es una curva de resonancia desde el punto de vista de una función. Es una función con un máximo, cuya posición viene dada por los parámetros del sistema, y la agudeza, por el rozamiento. Estrictamente hablando, el máximo de amplitud se alcanza un poco a la izquierda de ω0, en ω = √(ω₀² - 2γ²), pero con rozamiento pequeño la diferencia es imperceptible y normalmente se desprecia — otro ejemplo de desprecio consciente del primer tema.",
-    "Tercero: aproximación cerca del máximo. La diferencia de cuadrados se descompone en un producto, y cerca de la resonancia la expresión se simplifica: ω₀² - ω² = (ω₀-ω)(ω₀+ω) ≈ 2ω₀(ω₀ - ω). De aquí se obtiene que el ancho del pico a media potencia es 2γ — una estimación que se utiliza al leer cualquier espectro.",
-    "Cuarto: por qué una magnitud adimensional es más importante que las dimensionales. El problema tiene cinco parámetros: masa, rigidez, rozamiento, fuerza y frecuencia. Pero la forma de la curva depende solo de dos combinaciones adimensionales: la relación de frecuencias y el factor de calidad. Esto es una aplicación directa de lo que vimos en el tema de dimensiones, y es la razón por la que un solo gráfico sirve para un puente, un diapasón y un receptor de radio a la vez."
-   ]
+   "title": "Matemáticas que aquí se necesitan"
   },
   "example": {
    "title": "Ejemplo con números: ¿cuántas veces un dedo es más fuerte que sí mismo?",
@@ -1033,7 +1021,7 @@
     },
     {
      "text": "Y lejos de la resonancia, al doble de la frecuencia, casi nada.",
-     "latex": "A(2\\omega_0) \\approx 0{,}066\\ \\text{m} \\"
+     "latex": "A(2\\omega_0) \\approx 0{,}066\\ \\text{m}"
     }
    ],
    "answer": "En resonancia, la amplitud es de aproximadamente 1,3 metros — seis veces y media mayor que la que daría la misma fuerza aplicada estáticamente. Lejos de la resonancia, la misma fuerza casi no tiene efecto.",
@@ -1394,13 +1382,7 @@
    "note": "حدود قابلية التطبيق. الصيغة مشتقة لنظام خطي: قوة هوك تتناسب مع الإزاحة، والاحتكاك مع السرعة. عند السعات الكبيرة، يتوقف الزنبرك الحقيقي عن كونه خطيًا، تميل الذروة، ويظهر انتقال مفاجئ بين الأنماط. بالإضافة إلى ذلك، بحثنا فقط عن الحل المستقر - في الثواني الأولى بعد تطبيق القوة، تزداد السعة تدريجيًا، ولهذا لم ينهار جسر بروتون على الفور."
   },
   "math": {
-   "title": "الرياضيات التي نحتاجها هنا",
-   "text": [
-    "أولاً — لماذا تُجمع المربعات. الاستجابة المرنة للنظام تكون متزامنة مع الإزاحة، بينما الاستجابة اللزجة تكون متزامنة مع السرعة أي متقدمة بمقدار ربع الدورة بالضبط. الكميات المزاحة بمقدار ربع دورة تتصرف مثل متجهات متعامدة: لا تُجمع جمعاً حسابياً، بل وفق نظرية فيثاغورس. ومن هنا يأتي الجذر التربيعي لمجموع المربعات في المقام، وليس مجرد المجموع.",
-    "ثانياً — ما هو منحنى الرنين من وجهة نظر دالة. إنها دالة لها قيمة عظمى، يحدد موقعها معلمات النظام، وتحدد حدتها الاحتكاك. بالمعنى الدقيق، تبلغ السعة قيمتها العظمى عند نقطة يسار $\\omega_0$ قليلاً، عند $\\omega = \\sqrt{\\omega_0^2 - 2\\gamma^2}$، لكن مع الاحتكاك الصغير يكون الفرق غير ملحوظ، وعادةً يُهمل — مثال آخر على الإهمال المتعمد من الموضوع الأول.",
-    "ثالثاً — التقريب بالقرب من القيمة العظمى. يُحلل فرق المربعات إلى حاصل ضرب، وبالقرب من الرنين يُبسط التعبير: $\\omega_0^2 - \\omega^2 = (\\omega_0-\\omega)(\\omega_0+\\omega) \\approx 2\\omega_0(\\omega_0 - \\omega)$. ومن هنا تحديداً نحصل على أن عرض الذروة عند مستوى نصف القدرة يساوي $2\\gamma$ — وهو التقدير الذي يُستخدم عند قراءة أي طيف.",
-    "رابعاً — لماذا الكمية اللابعدية أهم من الكميات ذات البعد. للمسألة خمس معلمات: الكتلة، الصلابة، الاحتكاك، القوة، والتردد. لكن شكل المنحنى يعتمد فقط على تركيبتين لابعديتين: نسبة الترددات وعامل الجودة. هذا تطبيق مباشر لما ناقشناه في موضوع الأبعاد — ولهذا السبب يناسب رسم بياني واحد جسراً وشوكة رنانة وجهاز استقبال راديوي في آن واحد."
-   ]
+   "title": "الرياضيات التي نحتاجها هنا"
   },
   "example": {
    "title": "مثال بالأرقام: كم مرة يكون الإصبع أقوى من نفسه",
@@ -1430,7 +1412,7 @@
     },
     {
      "text": "أما بعيداً عن الرنين، عند تردد مضاعف، فلا شيء تقريباً.",
-     "latex": "A(2\\omega_0) \\approx 0{,}066\\ \\text{م} \\"
+     "latex": "A(2\\omega_0) \\approx 0{,}066\\ \\text{م}"
     }
    ],
    "answer": "عند الرنين تبلغ السعة حوالي 1.3 متر — أي أكبر بست مرات ونصف مما كانت ستعطيه نفس القوة مطبقة بشكل ثابت. بعيداً عن الرنين لا تكاد نفس القوة تنتج أي تأثير.",

@@ -187,7 +187,8 @@
     {
      "what": "Почему бит — это логарифм по основанию два",
      "why": "Один вопрос с ответом «да» или «нет» делит множество вариантов пополам. Чтобы найти один вариант из восьми, нужно три вопроса, из шестнадцати — четыре: число вопросов есть $\\log_2$ от числа вариантов. Отсюда и единица измерения. В первом шаге вывода это даёт $H = \\log_2 W$ там, где Больцман писал $S = k_B\\ln W$: величина одна и та же, разошлись только основания логарифма. Перевод между ними — постоянный множитель, потому что $\\log_2 x = \\ln x / \\ln 2$. Вот откуда $\\ln 2 \\approx 0{,}693$ берётся в формуле Ландауэра и почему оттуда его не убрать: стирание бита уменьшает число состояний памяти ровно вдвое, а натуральный логарифм двойки и есть цена этого «вдвое» в непрерывных единицах.",
-     "latex": "S = k_B \\ln 2 \\cdot H, \\qquad \\log_2 x = \\frac{\\ln x}{\\ln 2}"
+     "latex": "S = k_B \\ln 2 \\cdot H, \\qquad \\log_2 x = \\frac{\\ln x}{\\ln 2}",
+     "kit": "exponent"
     },
     {
      "what": "Сумма с весами — это среднее",
@@ -577,13 +578,7 @@
    "note": "An important clarification about the demon. Landauer and Bennett's answer does not forbid the demon from working — it forbids it from working in a cycle indefinitely. As long as memory is available, the demon steadily creates a temperature difference, and there is no violation: it simply consumes clean memory as fuel. Empty memory turns out to be as much a resource as a charged battery — and this is perhaps the most unexpected consequence of the entire story."
   },
   "math": {
-   "title": "The Mathematics Needed Here",
-   "text": [
-    "First — why the bit is defined via the logarithm base two. One question with a 'yes or no' answer splits the set of options in half. To find one option out of eight, you need three questions; out of sixteen, four: the number of questions is $\\log_2$ of the number of options. Hence the unit of measurement.",
-    "Second — Shannon's formula for unequal probabilities. If outcomes are not equally likely, the average message length is smaller: $H = -\\sum p_i\\log_2 p_i$. Test it on a biased coin: with $p = 0.9$, $H \\approx 0.47$ bits instead of one. It is on this difference that all data compression works — from zip to jpeg format.",
-    "Third — conversion between scales. One bit equals $\\ln 2 \\approx 0.693$ natural units, and in thermal units — $k_B\\ln 2 \\approx 9.6\\cdot 10^{-24}$ J/K. This is literally the exchange rate between computer science and thermodynamics, and it is not a metaphor: the quantity has been measured experimentally.",
-    "Fourth — work of isothermal expansion. For a gas of one molecule, pressure $P = k_BT/V$, and work when doubling the volume equals $\\int k_BT\\,dV/V = k_BT\\ln 2$. The same logarithm of two as in bit erasure — and this is no coincidence: in both cases the number of available states changes by a factor of two."
-   ]
+   "title": "The Mathematics Needed Here"
   },
   "example": {
    "title": "Example with numbers: how much heat must a processor dissipate",
@@ -963,13 +958,7 @@
    "note": "Una aclaración importante sobre el demonio. La respuesta de Landauer y Bennett no prohíbe al demonio trabajar — le prohíbe trabajar en un ciclo infinito. Mientras tenga memoria suficiente, el demonio crea una diferencia de temperatura sin violación alguna: simplemente consume memoria limpia como combustible. La memoria vacía resulta ser un recurso como una batería cargada — y esa es quizás la consecuencia más inesperada de toda esta historia."
   },
   "math": {
-   "title": "Matemáticas que se necesitaron aquí",
-   "text": [
-    "Primero — por qué el bit se define mediante el logaritmo en base dos. Una pregunta con respuesta sí o no divide el conjunto de opciones a la mitad. Para encontrar una opción entre ocho, se necesitan tres preguntas; entre dieciséis, cuatro: el número de preguntas es $\\log_2$ del número de opciones. De ahí la unidad de medida.",
-    "Segundo — la fórmula de Shannon para probabilidades desiguales. Si los resultados no son igualmente probables, la longitud media del mensaje es menor: $H = -\\sum p_i\\log_2 p_i$. Pruébenlo con una moneda sesgada: con $p = 0{,}9$ se obtiene $H \\approx 0{,}47$ bits en lugar de uno. En esta diferencia se basa toda compresión de datos — desde zip hasta el formato jpeg.",
-    "Tercero — la conversión entre escalas. Un bit equivale a $\\ln 2 \\approx 0{,}693$ unidades naturales, y en unidades térmicas a $k_B\\ln 2 \\approx 9{,}6\\cdot 10^{-24}$ J/K. Es literalmente un tipo de cambio entre la informática y la termodinámica, y no es una metáfora: la magnitud se ha medido experimentalmente.",
-    "Cuarto — el trabajo de expansión isotérmica. Para un gas de una molécula, la presión es $P = k_BT/V$, y el trabajo al duplicar el volumen es $\\int k_BT\\,dV/V = k_BT\\ln 2$. El mismo logaritmo de dos que en el borrado de un bit — y no es una coincidencia: en ambos casos, el número de estados disponibles se reduce a la mitad."
-   ]
+   "title": "Matemáticas que se necesitaron aquí"
   },
   "example": {
    "title": "Ejemplo con números: cuánto calor debe disipar un procesador",
@@ -1415,13 +1404,7 @@
    "note": "توضيح مهم عن الشيطان. إجابة لانداوير وبينيت لا تمنع الشيطان من العمل - بل تمنعه من العمل في دورة لا نهائية. طالما أن الذاكرة كافية، ينتج الشيطان بانتظام فرق درجات حرارة، ولا يوجد أي انتهاك: إنه ببساطة يستهلك الذاكرة الفارغة كوقود. الذاكرة غير المملوءة تصبح مورداً مثل بطارية مشحونة - وهذا، ربما، هو أكثر النتائج غير المتوقعة في القصة بأكملها."
   },
   "math": {
-   "title": "الرياضيات التي تطلبتها هنا",
-   "text": [
-    "أولاً - لماذا يعرف البت من خلال اللوغاريتم للأساس 2. سؤال واحد بإجابة 'نعم أو لا' يقسم عدد الخيارات إلى نصفين. لإيجاد خيار واحد من ثمانية، نحتاج ثلاثة أسئلة، من ستة عشر - أربعة: عدد الأسئلة هو $\\log_2$ من عدد الخيارات. ومن هنا وحدة القياس.",
-    "ثانياً - صيغة شانون للاحتمالات غير المتساوية. إذا كانت النتائج غير متساوية الاحتمال، فإن متوسط طول الرسالة أقل: $H = -\\sum p_i\\log_2 p_i$. جربها على عملة منحازة: عند $p = 0{,}9$ نحصل على $H \\approx 0{,}47$ بت بدلاً من واحد. على هذا الفرق يعمل كل ضغط بيانات - من zip إلى صيغة jpeg.",
-    "ثالثاً - التحويل بين المقاييس. بت واحد يساوي $\\ln 2 \\approx 0{,}693$ وحدة طبيعية، وبالوحدات الحرارية $k_B\\ln 2 \\approx 9{,}6\\cdot 10^{-24}$ جول/كلفن. هذا حرفياً سعر الصرف بين علم المعلومات والثرموديناميك، وليس استعارة: القيمة تم قياسها تجريبياً.",
-    "رابعاً - شغل التمدد متساوي الحرارة. لغاز مكون من جزيء واحد، الضغط $P = k_BT/V$، والشغل عند مضاعفة الحجم يساوي $\\int k_BT\\,dV/V = k_BT\\ln 2$. نفس لوغاريتم 2 كما في مسح البت - وهذا ليس مصادفة: في كلتا الحالتين، عدد الحالات المتاحة يتغير إلى النصف."
-   ]
+   "title": "الرياضيات التي تطلبتها هنا"
   },
   "example": {
    "title": "مثال بالأرقام: كمية الحرارة التي يجب أن يُبددها المعالج",

@@ -164,8 +164,8 @@
      "figCaption": "Возвращение неизбежно и совершенно недостижимо одновременно: срок растёт экспоненциально с числом частиц."
     },
     {
-     "text": "Подставим числа для стакана воды. Показатель степени сам оказывается числом с двадцатью тремя знаками. Возраст Вселенной — жалкие $10^{17}$ секунд. Разница такова, что слова «когда-нибудь вернётся» теряют физический смысл.",
-     "latex": "N \\sim 10^{24}: \\quad \\tau_P \\sim 10^{10^{23}}\\ \\text{с} \\;\\;\\text{против}\\;\\; t_{\\text{Вселенной}} \\approx 4 \\cdot 10^{17}\\ \\text{с}",
+     "text": "Подставим числа для стакана воды. Показатель степени сам оказывается числом с двадцатью четырьмя знаками. Возраст Вселенной — жалкие $10^{17}$ секунд. Разница такова, что слова «когда-нибудь вернётся» теряют физический смысл.",
+     "latex": "N \\sim 10^{24}: \\quad \\tau_P \\sim 10^{3 \\cdot 10^{23}}\\ \\text{с} \\;\\;\\text{против}\\;\\; t_{\\text{Вселенной}} \\approx 4 \\cdot 10^{17}\\ \\text{с}",
      "figure": "massprop",
      "figCaption": "Оба возражения формально верны и практически бессодержательны. Это и есть ответ Больцмана."
     },
@@ -191,8 +191,8 @@
     },
     {
      "what": "Экспонента, у которой показатель сам огромен",
-     "why": "В пятом шаге время возвращения Пуанкаре оказывается $\\tau_P \\sim \\tau_0 2^{N}$. Разница между этим и любой степенью вроде $N^{100}$ принципиальна: степень растёт быстро, экспонента — несопоставимо быстрее, и при больших $N$ сравнение просто теряет смысл. Дальше происходит то, к чему стоит привыкнуть отдельно. Показатель $N$ сам оказывается числом в двадцать четыре знака, и результат приходится записывать степенью в степени: $10^{10^{23}}$. Такая башня и не является «очень большим числом» в обычном понимании — у неё в показателе больше цифр, чем атомов в наблюдаемой Вселенной. Появление башни степеней всегда служит сигналом: событие следует считать не редким, а невозможным на любом осмысленном горизонте.",
-     "latex": "\\tau_P \\sim \\tau_0\\, e^{S/k_B} \\sim \\tau_0\\, 2^{N}, \\qquad N \\sim 10^{24} \\;\\Rightarrow\\; \\tau_P \\sim 10^{10^{23}}\\ \\text{с}",
+     "why": "В пятом шаге время возвращения Пуанкаре оказывается $\\tau_P \\sim \\tau_0 2^{N}$. Разница между этим и любой степенью вроде $N^{100}$ принципиальна: степень растёт быстро, экспонента — несопоставимо быстрее, и при больших $N$ сравнение просто теряет смысл. Дальше происходит то, к чему стоит привыкнуть отдельно. Показатель $N$ сам оказывается числом в двадцать пять знаков, и перевод двойки в десятку почти его не убавляет: $2^{N} = 10^{N\\lg 2} \\approx 10^{3 \\cdot 10^{23}}$. Результат приходится записывать степенью в степени, и в верхнем показателе стоит число из двадцати четырёх знаков. Такая башня перестаёт быть «очень большим числом» в обычном понимании: атомов в наблюдаемой Вселенной около $10^{80}$, и рядом с $10^{3 \\cdot 10^{23}}$ эта величина неотличима от единицы. Появление башни степеней всегда служит сигналом: событие следует считать не редким, а невозможным на любом осмысленном горизонте.",
+     "latex": "\\tau_P \\sim \\tau_0\\, e^{S/k_B} \\sim \\tau_0\\, 2^{N}, \\qquad N \\sim 10^{24} \\;\\Rightarrow\\; \\tau_P \\sim 10^{N\\lg 2} \\approx 10^{3 \\cdot 10^{23}}\\ \\text{с}",
      "kit": "exponent"
     },
     {
@@ -407,7 +407,7 @@
      "Замкнутых систем в природе не бывает, поэтому теорема неприменима"
     ],
     "answer": 1,
-    "why": "Теорема верна, и возражение по существу справедливо. Но для стакана воды время возвращения выражается числом, у которого сам показатель степени имеет двадцать три знака. По сравнению с ним возраст Вселенной равен нулю. Закон вероятностен — и настолько, что различить это невозможно.",
+    "why": "Теорема верна, и возражение по существу справедливо. Но для стакана воды время возвращения выражается числом, у которого сам показатель степени имеет двадцать четыре знака. По сравнению с ним возраст Вселенной равен нулю. Закон вероятностен — и настолько, что различить это невозможно.",
     "hint": "Спросите не «вернётся ли», а «когда». Как срок зависит от числа частиц?"
    },
    {
@@ -572,13 +572,7 @@
    "note": "It is worth separating what we know from what we do not know. We know: if a system starts from an improbable state, it will almost certainly move toward a probable one, and this fully explains all observed irreversibility — cooling, mixing, aging. We do not know: why the initial state was exactly like that. Roger Penrose estimated the fraction of suitable initial states as one divided by ten to the power of ten to the power of one hundred twenty-three. Writing that down in ordinary digits is impossible — there aren't enough atoms in the Universe for the digits."
   },
   "math": {
-   "title": "Mathematics needed here",
-   "text": [
-    "First — what time reversal symmetry means. Formally: substitute $t \\to -t$ into the equation and see if it changes. The second derivative does not change sign (two minuses cancel), the first does. Therefore Newton's equation is symmetric, but an equation with friction $m\\ddot{x} = -b\\dot{x}$ is not. Friction already contains an arrow of time because it is itself the result of averaging over molecules.",
-    "Second — exponential vs power law. The recurrence time grows as $2^N$, not as $N^2$ or $N^{100}$. The difference is fundamental: any power law at large $N$ loses to an exponential so badly that comparison becomes meaningless. That is why the transition from ten particles to $10^{24}$ is not a quantitative but a qualitative change.",
-    "Third — power tower. The number $10^{10^{123}}$ is read from bottom to top and is not \"a very large number\" in the usual sense: it has more digits in the exponent than atoms in the observable universe. Such quantities appear rarely in physics and always signal that an event should be considered not rare but impossible on any meaningful horizon.",
-    "Fourth — conditional probability and why reasoning backward in time is risky. The statistical argument is symmetric: it equally predicts an increase of entropy both into the future and into the past. Applied backward, it gives a clearly wrong answer — yesterday entropy was lower, not higher. The only rescue is an additional condition: we know that the universe started with low entropy. This condition must be introduced from the outside, and it is called the past hypothesis."
-   ]
+   "title": "Mathematics needed here"
   },
   "example": {
    "title": "Numerical example: how long to wait for tea to warm itself up",
@@ -949,13 +943,7 @@
    "note": "Vale la pena separar lo que sabemos de lo que no sabemos. Sabemos: si un sistema parte de un estado improbable, casi con toda seguridad irá hacia uno probable, y esto explica toda la irreversibilidad observada — enfriamiento, mezcla, envejecimiento. No sabemos: por qué el estado inicial fue exactamente ese. Roger Penrose estimó la fracción de estados iniciales adecuados como uno dividido por diez elevado a diez elevado a ciento veintitrés. Escribir tal número con dígitos ordinarios es imposible — no hay suficientes átomos en el Universo para los signos."
   },
   "math": {
-   "title": "Las matemáticas que aquí se necesitaron",
-   "text": [
-    "Primero: qué significa la simetría bajo inversión temporal. Formalmente: sustituya $t \\to -t$ en la ecuación y vea si cambia. La segunda derivada no cambia de signo (dos menos se cancelan), la primera sí cambia. Por lo tanto, la ecuación de Newton es simétrica, pero la ecuación con fricción $m\\ddot{x} = -b\\dot{x}$ no lo es. La fricción ya contiene una flecha del tiempo, porque ella misma es el resultado de promediar sobre moléculas.",
-    "Segundo: la exponente frente a la potencia. El tiempo de recurrencia crece como $2^N$, no como $N^2$ o $N^{100}$. La diferencia es fundamental: cualquier función potencia para $N$ grande pierde frente a la exponente hasta tal punto que la comparación pierde sentido. Por eso mismo, el paso de diez partículas a $10^{24}$ no es un cambio cuantitativo, sino cualitativo.",
-    "Tercero: la torre de exponentes. El número $10^{10^{123}}$ se lee de abajo arriba y no es un «número muy grande» en el sentido habitual: tiene más dígitos en el exponente que átomos en el universo observable. Tales cantidades aparecen raramente en física y siempre sirven como señal de que un evento debe considerarse no raro, sino imposible en cualquier horizonte significativo.",
-    "Cuarto: la probabilidad condicional y por qué razonar hacia atrás en el tiempo es arriesgado. El argumento estadístico es simétrico: predice igualmente el aumento de entropía hacia el futuro y hacia el pasado. Aplicado hacia atrás, da una respuesta evidentemente incorrecta: ayer la entropía era menor, no mayor. Solo lo salva una condición adicional: sabemos que el Universo comenzó con baja entropía. Esta condición debe introducirse desde fuera, y se llama la hipótesis del pasado."
-   ]
+   "title": "Las matemáticas que aquí se necesitaron"
   },
   "example": {
    "title": "Ejemplo con números: cuánto esperar hasta que el té se caliente solo",
@@ -1326,13 +1314,7 @@
    "note": "يجدر الفصل بين ما نعرفه وما لا نعرفه. نعرف: إذا بدأ النظام من حالة غير محتملة، فإنه سيتجه شبه المؤكد نحو حالة محتملة، وهذا يفسر تمامًا جميع اللارجعة المرصودة - التبريد، الخلط، الشيخوخة. لا نعرف: لماذا كانت الحالة الابتدائية هكذا تمامًا. قدر روجر بنروز نسبة الحالات الابتدائية المناسبة بواحد مقسومًا على عشرة أس عشرة أس مائة وثلاثة وعشرين. كتابة هذا بالأرقام العادية مستحيلة - لا تكفي ذرات الكون للأرقام."
   },
   "math": {
-   "title": "الرياضيات التي نحتاجها هنا",
-   "text": [
-    "أولاً: ما معنى التناظر تحت انعكاس الزمن؟ رسمياً: عوّض $t \\to -t$ في المعادلة ولاحظ هل تغيرت. المشتقة الثانية لا تغير إشارتها (اثنان سالبين يلغيان)، أما الأولى فتغيرها. لذلك معادلة نيوتن متناظرة، بينما معادلة ذات احتكاك $m\\ddot{x} = -b\\dot{x}$ ليست كذلك. الاحتكاك يحمل سهماً زمنياً لأنه ناتج عن متوسط الحركة الجزيئية.",
-    "ثانياً: الدالة الأسية مقابل الدالة الأسية. زمن العودة ينمو كـ $2^N$ وليس كـ $N^2$ أو $N^{100}$. الفرق جوهري: أي دالة أسية عند $N$ كبير تخسر أمام الدالة الأسية لدرجة أن المقارنة تفقد معناها. لذلك الانتقال من عشر جسيمات إلى $10^{24}$ ليس تغيراً كمياً بل نوعياً.",
-    "ثالثاً: برج الأسس. العدد $10^{10^{123}}$ يُقرأ من الأسفل إلى الأعلى وليس مجرد «عدد كبير جداً» بالمعنى العادي: فهو يحتوي على أرقام في الأس أكثر من ذرات الكون المرئي. تظهر مثل هذه الأعداد في الفيزياء نادراً وتكون دائماً إشارة على أن الحدث ليس نادراً بل مستحيلاً في أي أفق زمني معقول.",
-    "رابعاً: الاحتمال الشرطي ولماذا الاستدلال إلى الماضي خطير. الحجة الإحصائية متناظرة: تتنبأ بنفس القدر بزيادة الإنتروبيا في المستقبل والماضي. إذا طُبقت إلى الماضي، تعطي إجابة خاطئة قطعاً: الإنتروبيا كانت أقل أمس، وليس أعلى. لا ينقذنا إلا شرط إضافي: نحن نعلم أن الكون بدأ بانتروبيا منخفضة. هذا الشرط يجب إدخاله من الخارج ويسمى فرضية الماضي."
-   ]
+   "title": "الرياضيات التي نحتاجها هنا"
   },
   "example": {
    "title": "مثال عددي: كم تنتظر حتى يسخن الشاي نفسه بنفسه",

@@ -186,15 +186,14 @@
    "items": [
     {
      "what": "Почему множитель именно квадрат скорости",
-     "why": "В четвёртом шаге вывода получается $\\Delta m = \\Delta E/c^{2}$, и вопрос «почему квадрат» решается размерностью, а не физикой. Энергия имеет размерность массы, умноженной на квадрат скорости, это видно уже из $mv^{2}/2$. Значит переводной множитель от массы к энергии обязан быть квадратом какой-то скорости, а единственная скорость, одинаковая во всех системах отсчёта, световая. Никакой другой комбинации из $m$ и $c$ с размерностью энергии не составить. Отсюда и смысл формулы: $c^{2}$ работает коэффициентом пересчёта килограммов в джоули, как тысяча между километром и метром. Мерь мы время в световых секундах, формула читалась бы просто $E = m$.",
+     "why": "В четвёртом шаге вывода получается $\\Delta m = \\Delta E/c^{2}$, и вопрос «почему квадрат» решается размерностью, а не физикой. Энергия имеет размерность массы, умноженной на квадрат скорости, это видно уже из $mv^{2}/2$. Значит переводной множитель от массы к энергии обязан быть квадратом какой-то скорости, а единственная скорость, одинаковая во всех системах отсчёта, световая. Никакой другой комбинации из $m$ и $c$ с размерностью энергии не составить. Отсюда и смысл формулы: $c^{2}$ работает коэффициентом пересчёта килограммов в джоули, как тысяча между километром и метром. Мерь мы расстояние в световых секундах, скорость света оказалась бы равна единице, и формула читалась бы просто $E = m$.",
      "latex": "[E] = \\frac{\\text{кг}\\cdot\\text{м}^{2}}{\\text{с}^{2}} = [m]\\cdot[v]^{2}",
      "kit": "dimension"
     },
     {
      "what": "Треугольник из энергии, импульса и массы",
      "why": "Последний шаг вывода даёт соотношение с тремя квадратами. Читать его удобнее не как формулу, а как прямоугольный треугольник: катеты $pc$ и $mc^{2}$, гипотенуза $E$. Сразу видны оба предельных случая. Покоящееся тело: импульс ноль, один катет исчезает, остаётся $E = mc^{2}$. Фотон: масса ноль, исчезает другой катет, остаётся $E = pc$, то есть безмассовая частица возможна. Главная же ценность такой записи в том, что $E$ и $p$ у разных наблюдателей разные, а комбинация $E^{2} - (pc)^{2}$ у всех одна и та же. Величины, не зависящие от системы отсчёта, называют инвариантами, и считать в теории относительности удобнее именно через них.",
-     "latex": "E^{2} = (pc)^{2} + (mc^{2})^{2} \\quad\\Longrightarrow\\quad E^{2} - (pc)^{2} = (mc^{2})^{2}",
-     "kit": "symmetry"
+     "latex": "E^{2} = (pc)^{2} + (mc^{2})^{2} \\quad\\Longrightarrow\\quad E^{2} - (pc)^{2} = (mc^{2})^{2}"
     },
     {
      "what": "Где в формуле спрятана привычная кинетическая энергия",
@@ -580,13 +579,7 @@
    "note": "Limits of applicability and an important terminological clarification. Older textbooks speak of a speed-dependent 'relativistic mass' $m\\gamma$. Today we do not do this: mass is defined as an invariant, the same in all frames, and it is energy that increases. The reason is not pedantry — the concept of relativistic mass works for longitudinal motion but breaks down for transverse motion, causing more confusion than convenience. Another clarification: the formula does not mean that matter is easily converted into energy. In chemical reactions the mass defect is of order $10^{-10}$, in nuclear reactions $10^{-3}$, and only annihilation yields unity."
   },
   "math": {
-   "title": "Mathematics Needed Here",
-   "text": [
-    "Why the square of the speed of light appears in the formula. People often look for deep meaning, but it is simple: $c^{2}$ acts as a conversion factor between units of mass and energy, like 1000 between kilometers and meters. If we measured time in the same units as distance — in light-seconds — the formula would simply be $E = m$. The square appears because energy has dimensions of mass times speed squared, and no other combination of mass and the speed of light can be formed. This is the same dimensional analysis from the introductory topic.",
-    "How to read the energy-momentum relation. $E^{2} = (pc)^{2} + (mc^{2})^{2}$ is the Pythagorean theorem, where the legs are momentum and mass, and the hypotenuse is total energy. This immediately gives two limiting cases. A body at rest: momentum zero, energy equals mass. A photon: mass zero, energy equals momentum times the speed of light. And everything in between. The triangle is a convenient picture to avoid confusion with relativistic formulas.",
-    "What is mass defect. Assemble a nucleus from protons and neutrons — its mass turns out to be less than the sum of the masses of the parts. The difference went into binding energy released during assembly. Analogy: to separate stuck magnets, you must do work, so the stuck system contains less energy than the separated ones — and less energy means less mass. The difference is negligible for magnets and noticeable for nuclei: for helium it is 0.7 percent.",
-    "Why you cannot accelerate to the speed of light. Look at the energy formula: the denominator contains a square root that goes to zero at $v = c$. Energy goes to infinity. You can accelerate as much as you like, but each subsequent increment of speed costs more than the previous one, and the last step costs an infinite amount. This is directly visible in accelerators: protons in a collider move at 0.999999990 c, and further acceleration hardly changes the speed, but increases the energy."
-   ]
+   "title": "Mathematics Needed Here"
   },
   "example": {
    "title": "Numerical Example: How Much Energy in a Gram and Why the Sun Shines",
@@ -964,13 +957,7 @@
    "note": "Límites de aplicabilidad y una aclaración importante sobre la terminología. En libros antiguos se habla de una 'masa relativista' $m\\gamma$ que crece con la velocidad. Hoy no se hace así: la masa se define como un invariante, igual en todos los sistemas, y lo que crece es la energía. La razón no es pedantería: el concepto de masa relativista funciona para el movimiento longitudinal y falla para el transversal, generando más confusión que utilidad. Otra aclaración: la fórmula no significa que la materia se convierta fácilmente en energía. En reacciones químicas, el defecto de masa es del orden de $10^{-10}$, en reacciones nucleares de $10^{-3}$, y solo la aniquilación da la unidad."
   },
   "math": {
-   "title": "Las matemáticas que fueron necesarias aquí",
-   "text": [
-    "Por qué en la fórmula aparece el cuadrado de la velocidad de la luz. A menudo se busca un significado profundo, pero es simple: $c^{2}$ actúa como factor de conversión entre unidades de masa y energía, como 1000 entre kilómetros y metros. Si midiéramos el tiempo en las mismas unidades que la distancia —en segundos luz—, la fórmula sería simplemente $E = m$. El cuadrado aparece porque la energía tiene dimensiones de masa por velocidad al cuadrado, y no se puede formar ninguna otra combinación con masa y velocidad de la luz. Es el mismo análisis dimensional del tema introductorio.",
-    "Cómo leer la relación entre energía y momento. $E^{2} = (pc)^{2} + (mc^{2})^{2}$ es el teorema de Pitágoras, donde los catetos son el momento y la masa, y la hipotenusa es la energía total. De aquí se siguen dos casos límite. Cuerpo en reposo: momento cero, energía igual a la masa. Fotón: masa cero, energía igual al momento por la velocidad de la luz. Y entre ellos todo lo intermedio. El triángulo es una imagen útil para no confundirse con las fórmulas relativistas.",
-    "Qué es el defecto de masa. Ensamble un núcleo a partir de protones y neutrones: su masa resultará menor que la suma de las masas de las partes. La diferencia se fue en energía de enlace, liberada durante el ensamblaje. Analogía: para separar imanes pegados hay que realizar trabajo, por lo que los imanes pegados contienen menos energía que separados — y menos energía implica menos masa. La diferencia es insignificante para imanes y notable para núcleos: en el helio es del 0,7 por ciento.",
-    "Por qué no se puede acelerar hasta la velocidad de la luz. Mire la fórmula de la energía: en el denominador hay una raíz que se anula para $v = c$. La energía tiende a infinito. Se puede acelerar tanto como se quiera, pero cada nuevo incremento de velocidad cuesta más que el anterior, y el último paso cuesta infinito. En los aceleradores se ve directamente: los protones en un colisionador se mueven a 0,999999990 c, y una mayor aceleración casi no cambia la velocidad, pero aumenta la energía."
-   ]
+   "title": "Las matemáticas que fueron necesarias aquí"
   },
   "example": {
    "title": "Ejemplo con números: cuánta energía hay en un gramo y por qué brilla el Sol",
@@ -1348,13 +1335,7 @@
    "note": "حدود الصلاحية وتوضيح مهم حول المصطلحات. في الكتب القديمة يكتبون عن «الكتلة النسبية» $m\\gamma$ التي تزداد مع السرعة. اليوم لا نفعل ذلك: الكتلة تعرف باعتبارها لامتغيرة، نفسها في جميع الأطر، والطاقة هي التي تزداد. السبب ليس التحذلق — مفهوم الكتلة النسبية يعمل للحركة الطولية وينهار للعرضية، مما يولد ارتباكاً أكثر من الفائدة. توضيح آخر: الصيغة لا تعني أن المادة تتحول بسهولة إلى طاقة. في التفاعلات الكيميائية، عجز الكتلة من رتبة $10^{-10}$، وفي النووية $10^{-3}$، فقط الإفناء يعطي واحداً."
   },
   "math": {
-   "title": "الرياضيات التي كانت ضرورية هنا",
-   "text": [
-    "لماذا مربع سرعة الضوء في الصيغة. كثيراً ما يبحثون عن معنى عميق، لكنه بسيط: $c^{2}$ يعمل كمعامل تحويل بين وحدات الكتلة والطاقة، مثل 1000 بين الكيلومتر والمتر. إذا كنا نقيس الزمن بنفس وحدات المسافة — بالثواني الضوئية — لكانت الصيغة ببساطة $E = m$. يظهر المربع لأن الطاقة لها بعد كتلة مضروبة في مربع سرعة، ولا يمكن تركيب أي توليفة أخرى من الكتلة وسرعة الضوء. هذا هو نفس تحليل الأبعاد من الموضوع التمهيدي.",
-    "كيف نقرأ علاقة الطاقة والزخم. $E^{2} = (pc)^{2} + (mc^{2})^{2}$ — نظرية فيثاغورس، حيث الساقان هما الزخم والكتلة، والوتر هو الطاقة الكلية. من هنا حالتان حديتان مباشرتان. جسم ساكن: الزخم صفر، الطاقة تساوي الكتلة. فوتون: الكتلة صفر، الطاقة تساوي الزخم مضروباً في سرعة الضوء. وبينهما كل الحالات الوسيطة. المثلث صورة مريحة لتجنب الخلط في الصيغ النسبية.",
-    "ما هو عجز الكتلة. اجمع نواة من بروتونات ونيوترونات — ستكون كتلتها أقل من مجموع كتل الأجزاء. الفرق ذهب إلى طاقة الارتباط التي انطلقت أثناء التجميع. تشبيه: لتفكيك مغناطيسين ملتصقين، يجب بذل شغل، لذا الملتصقان يحويان طاقة أقل من المنفصلين — وبما أن الطاقة أقل، فالكتلة أقل. الفرق ضئيل للمغناطيس وملحوظ للنوى: في الهيليوم يبلغ 0.7 بالمئة.",
-    "لماذا لا يمكن التسريع إلى سرعة الضوء. انظر إلى صيغة الطاقة: في المقام جذر يصبح صفراً عند $v = c$. الطاقة تذهب إلى اللانهاية. يمكن التسريع بقدر ما نريد، لكن كل زيادة تالية في السرعة تكلف أكثر من السابقة، والخطوة الأخيرة تكلف لا متناهياً. في المسرعات يظهر هذا بوضوح: البروتونات في المصادم تتحرك بسرعة 0.999999990 c، والتسريع الإضافي لا يغير السرعة تقريباً بل يزيد الطاقة."
-   ]
+   "title": "الرياضيات التي كانت ضرورية هنا"
   },
   "example": {
    "title": "مثال بالأرقام: كم من الطاقة في غرام ولماذا تشرق الشمس",

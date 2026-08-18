@@ -196,16 +196,10 @@
     },
     {
      "what": "Откуда взялось число 1240",
-     "why": "В примере длину волны получают делением 1240 на энергию в электронвольтах, и число выглядит взятым из воздуха. Это не табличная величина, а произведение двух постоянных, переписанное в удобных единицах: $\\lambda = hc/E$, где $hc = 1{,}986\\cdot10^{-25}$ Дж·м. Разделите на электронвольт $1{,}602\\cdot10^{-19}$ Дж и выразите метры в нанометрах — получится 1240 эВ·нм. Подпись единиц здесь и есть всё содержание: делите на энергию в эВ, получаете нанометры; делите на длину волны в нм, получаете эВ. Та же проверка работает в шестом шаге, где постоянная Ридберга собрана из четырёх констант: комбинация $k^{2}me^{4}/(4\\pi c\\hbar^{3})$ обязана выйти в обратных метрах, и если не выходит, ошибка сделана до подстановки чисел.",
+     "why": "В примере длину волны получают делением 1240 на энергию в электронвольтах, и число выглядит взятым из воздуха. Это не табличная величина, а произведение двух постоянных, переписанное в удобных единицах: $\\lambda = hc/E$, где $hc = 1{,}986\\cdot10^{-25}$ Дж·м. Разделите на электронвольт $1{,}602\\cdot10^{-19}$ Дж и выразите метры в нанометрах — получится 1240 эВ·нм. Подпись единиц здесь и есть всё содержание: делите на энергию в эВ, получаете нанометры; делите на длину волны в нм, получаете эВ. Та же проверка работает в шестом шаге, где постоянная Ридберга собрана уже из пяти констант: к четвёрке $k$, $m$, $e$, $\\hbar$, дающей в четвёртом шаге 13,6 эВ, добавляется скорость света — она и переводит энергию в обратные метры. Комбинация $k^{2}me^{4}/(4\\pi c\\hbar^{3})$ обязана выйти в обратных метрах, и если не выходит, ошибка сделана до подстановки чисел.",
      "latex": "\\lambda = \\frac{hc}{E}, \\qquad hc \\approx 1240\\ \\text{эВ}\\cdot\\text{нм}",
      "kit": "dimension"
     }
-   ],
-   "text": [
-    "Почему уровни отрицательны и сгущаются кверху. Отсчёт ведётся от свободного электрона: его энергия принята за ноль. Связанный электрон сидит в яме, значит его энергия ниже нуля. Чем глубже — тем сильнее связан. Формула $-13{,}6/n^{2}$ означает, что первый уровень глубоко на дне, второй вчетверо ближе к краю, третий вдевятеро. Расстояния между уровнями быстро сокращаются, и у самого края их бесконечно много — потому серии линий сгущаются к границе.",
-    "Как читать серии. Номер нижнего уровня задаёт серию, номер верхнего — линию внутри неё. Серия Лаймана ($n=1$) лежит в ультрафиолете, потому что переходы на самый глубокий уровень отдают больше всего энергии. Серия Бальмера ($n=2$) попадает в видимый диапазон — единственная, которую видно глазом, и потому именно её обнаружили первой. Серия Пашена ($n=3$) уходит в инфракрасное. Все три описываются одной формулой с разным первым слагаемым.",
-    "Откуда 13,6 электронвольта. Это комбинация четырёх констант: массы электрона, его заряда, постоянной Кулона и постоянной Планка. Тот факт, что из них получается именно 13,6, — не подгонка: величина вычисляется независимо и совпадает с измеренной ионизацией водорода. Такие совпадения и служат подтверждением теории. Проверьте порядок сами: это примерно в сто тысяч раз меньше энергии покоя электрона.",
-    "Почему поглощение даёт те же линии. Переход вверх требует ровно такого же кванта, что выделяется при переходе вниз, — разность уровней одна и та же. Поэтому холодный газ вырезает из проходящего сплошного света именно те длины волн, которые сам излучал бы, будучи горячим. Отсюда и тёмные линии Фраунгофера: свет из глубины Солнца проходит через его более холодную атмосферу и теряет свои же частоты."
    ]
   },
   "example": {
@@ -581,13 +575,7 @@
    "note": "حدود قابلية التطبيق. يعطي نموذج بور مستويات صحيحة للهيدروجين والأيونات الشبيهة بالهيدروجين، ولكنه يفشل تمامًا مع الهيليوم. السبب هو عدم وجود مدارات أساسًا، وأن إلكترونين يتفاعلان مع بعضهما. بالإضافة إلى ذلك، لا يشرح النموذج شدة الخطوط ولا انشقاقها في المجال المغناطيسي ولا البنية الدقيقة. كل هذا يقدمه معادلة شرودنغر، التي ستكون في الفقرة التالية. بور نفسه وصف نموذجه بأنه بناء مؤقت — وكان على حق."
   },
   "math": {
-   "title": "الرياضيات التي كانت ضرورية هنا",
-   "text": [
-    "لماذا المستويات سالبة وتتقارب للأعلى. يُحسب المرجع من الإلكترون الحر: طاقته تعتبر صفرًا. الإلكترون المرتبط يكون في حفرة، لذا طاقته أقل من الصفر. كلما كان أعمق، كان الارتباط أقوى. الصيغة $-13{,}6/n^{2}$ تعني أن المستوى الأول عميق في القاع، والثاني أقرب بضعفين إلى الحافة، والثالث تسع مرات. المسافات بين المستويات تتقلص بسرعة، وعند الحافة يوجد عدد لا نهائي منها — ولهذا تتقارب متسلسلات الخطوط نحو الحد.",
-    "كيفية قراءة المتسلسلات. رقم المستوى السفلي يحدد المتسلسلة، ورقم المستوى العلوي يحدد الخط داخلها. متسلسلة ليمان ($n=1$) تقع في فوق البنفسجي، لأن الانتقالات إلى أعمق مستوى تعطي أكبر طاقة. متسلسلة بالمر ($n=2$) تقع في النطاق المرئي — الوحيدة التي تراها العين، ولذا اكتُشفت أولاً. متسلسلة باشن ($n=3$) تذهب إلى تحت الأحمر. الثلاث موصوفة بصيغة واحدة مع حد أول مختلف.",
-    "من أين تأتي 13.6 إلكترون فولت. إنها مزيج من أربعة ثوابت: كتلة الإلكترون، شحنته، ثابت كولوم، وثابت بلانك. حقيقة أنهم يعطون 13.6 بالضبط ليس تلفيقًا: القيمة تُحسب بشكل مستقل وتتطابق مع تأين الهيدروجين المقاس. مثل هذه التطابقات تعمل كتأكيد للنظرية. تحقق من الترتيب بنفسك: إنها أصغر بحوالي مائة ألف مرة من طاقة سكون الإلكترون.",
-    "لماذا يعطي الامتصاص نفس الخطوط. الانتقال لأعلى يتطلب نفس الكم تمامًا الذي يُطلق عند الانتقال لأسفل — فرق المستوى هو نفسه. لذلك، يقتطع الغاز البارد من الضوء المستمر المار نفس الأطوال الموجية التي كان سيشعها لو كان ساخنًا. ومن هنا تأتي الخطوط المظلمة لفراونهوفر: الضوء من أعماق الشمس يمر عبر غلافها الجوي الأكثر برودة ويفقد تردداته الخاصة."
-   ]
+   "title": "الرياضيات التي كانت ضرورية هنا"
   },
   "example": {
    "title": "مثال بالأرقام: الخط الأحمر للهيدروجين",
@@ -962,13 +950,7 @@
    "note": "Limitations. The Bohr model gives correct levels for hydrogen and hydrogen-like ions and completely fails already for helium. The reason is that there are no orbits at all, and the two electrons interact with each other. Moreover, the model does not explain the intensities of lines, nor their splitting in a magnetic field, nor the fine structure. All of this is provided by the Schrödinger equation, which is the next section. Bohr himself called his model a temporary construction — and turned out to be right."
   },
   "math": {
-   "title": "The Mathematics Needed Here",
-   "text": [
-    "Why levels are negative and crowd together upward. The reference is taken from a free electron: its energy is assumed to be zero. A bound electron sits in a well, so its energy is below zero. The deeper it is, the more strongly bound. The formula $-13{,}6/n^{2}$ means that the first level is deep at the bottom, the second is four times closer to the edge, the third nine times. The distances between levels quickly shrink, and at the very edge there are infinitely many — therefore the line series crowd toward the boundary.",
-    "How to read the series. The number of the lower level defines the series, the number of the upper level defines the line within it. The Lyman series ($n=1$) lies in the ultraviolet because transitions to the deepest level give off the most energy. The Balmer series ($n=2$) falls in the visible range — the only one visible to the eye, and therefore it was discovered first. The Paschen series ($n=3$) goes into the infrared. All three are described by one formula with a different first term.",
-    "Where does 13.6 electronvolts come from? It is a combination of four constants: the electron mass, its charge, Coulomb's constant, and Planck's constant. The fact that they yield exactly 13.6 is not a fit: the value is computed independently and matches the measured ionization of hydrogen. Such coincidences serve as confirmation of the theory. Check the order yourself: it is about a hundred thousand times smaller than the rest energy of an electron.",
-    "Why absorption gives the same lines. A transition upward requires exactly the same quantum as is released in a transition downward — the level difference is the same. Therefore, a cold gas cuts out from passing continuous light exactly those wavelengths that it would emit if it were hot. Hence the Fraunhofer dark lines: light from the Sun's interior passes through its cooler atmosphere and loses its own frequencies."
-   ]
+   "title": "The Mathematics Needed Here"
   },
   "example": {
    "title": "Numerical example: the red hydrogen line",
@@ -1344,13 +1326,7 @@
    "note": "Límites de aplicabilidad. El modelo de Bohr da los niveles correctos del hidrógeno y de los iones hidrogenoides, y fracasa por completo ya en el helio. La razón es que no hay órbitas en absoluto, y dos electrones interactúan entre sí. Además, el modelo no explica ni las intensidades de las líneas, ni su desdoblamiento en un campo magnético, ni la estructura fina. Todo esto lo proporciona la ecuación de Schrödinger, que se trata en la siguiente sección. El propio Bohr llamó a su modelo una construcción temporal, y tenía razón."
   },
   "math": {
-   "title": "Matemáticas que se necesitaron aquí",
-   "text": [
-    "Por qué los niveles son negativos y se condensan hacia arriba. La referencia se toma del electrón libre: su energía se considera cero. Un electrón ligado está en un pozo, por lo que su energía es inferior a cero. Cuanto más profundo, más fuertemente está ligado. La fórmula $-13{,}6/n^{2}$ significa que el primer nivel está en el fondo, el segundo cuatro veces más cerca del borde, el tercero nueve veces más cerca. Las distancias entre niveles se reducen rápidamente, y cerca del borde hay infinitos; por eso las series de líneas se condensan hacia el límite.",
-    "Cómo leer las series. El número del nivel inferior da la serie, el del nivel superior la línea dentro de ella. La serie de Lyman ($n=1$) está en el ultravioleta, porque las transiciones al nivel más profundo liberan más energía. La serie de Balmer ($n=2$) cae en el rango visible, la única que se ve a simple vista, y por eso se descubrió primero. La serie de Paschen ($n=3$) se adentra en el infrarrojo. Las tres se describen con una misma fórmula con diferente primer término.",
-    "De dónde vienen los 13,6 electronvoltios. Es una combinación de cuatro constantes: la masa del electrón, su carga, la constante de Coulomb y la constante de Planck. El hecho de que a partir de ellas se obtengan exactamente 13,6 no es un ajuste: el valor se calcula de manera independiente y coincide con la ionización medida del hidrógeno. Tales coincidencias sirven como confirmación de la teoría. Verifique el orden usted mismo: es aproximadamente cien mil veces menor que la energía en reposo del electrón.",
-    "Por qué la absorción da las mismas líneas. Una transición hacia arriba requiere exactamente el mismo cuanto que el que se libera en una transición hacia abajo: la diferencia de niveles es la misma. Por lo tanto, un gas frío extrae de la luz continua que lo atraviesa precisamente las longitudes de onda que él mismo emitiría si estuviera caliente. De ahí las líneas oscuras de Fraunhofer: la luz del interior del Sol atraviesa su atmósfera más fría y pierde sus propias frecuencias."
-   ]
+   "title": "Matemáticas que se necesitaron aquí"
   },
   "example": {
    "title": "Ejemplo con números: la línea roja del hidrógeno",
