@@ -1,0 +1,268 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""№40 «Подсветка понятий в тексте» — доразметка после генерации, без обращений к модели.
+
+Зачем. 9 августа список тегов убрали из промпта разбора (tags_in_prompt=false) с расчётом
+«когда заработает вектор, разметим после генерации, по эмбеддингам» — вторую половину не
+написали. Замер 18.08: у полных разборов, вышедших с 9 августа, маркеров НЕТ ВООБЩЕ (0 из 9),
+у экспрессов 24%. Текст перестал давать ссылки внутрь сайта — а это и есть дорога вглубь,
+ради которой читатель возвращается.
+
+Что делает. Берёт понятия, УЖЕ привязанные к статье (tags/laws + tags_vec/laws_vec от
+tools/tag_by_vector.py), ищет их упоминания в тексте и оборачивает в те же маркеры, что
+ставила модель: [tag:id]как в тексте[/tag]. Ничего не выдумывает: связь статьи с понятием
+установлена раньше и вектором, здесь только находится место в тексте.
+
+Словарь — единый реестр data/concepts.json: понятие, которого в реестре нет, не размечается,
+даже если лежит в tags_vec. Названия берутся из языковых словарей: реестр решает, что
+существует, витрина — как это звучит на языке читателя.
+
+СОПОСТАВЛЕНИЕ ОСНОВ — не своё. Правило взято из js/site-search.js (sameWord): общая часть
+не меньше четырёх букв, либо не меньше трёх и покрывает слово целиком минус окончание.
+Оно уже отвечает за живой поиск и выверено на «чёрные дыры» ⇄ «чёрную дыру» и на том, чтобы
+«оси» не слипались с «осцилляторами». Второй морфологии в проекте быть не должно.
+
+ГДЕ НЕ РАЗМЕЧАЕМ. oneliner, description, fun_fact, title — запрет из промпта генерации:
+эти поля уходят в заголовок и карточку соцсети без обработки, маркер там станет мусором.
+Размечаем text и — у полного разбора — разделы, где маркеры разрешены промптом.
+
+    python tools/highlight_concepts.py --ids 2608.14502v1 --dry --show
+    python tools/highlight_concepts.py --tiers simple,popular --limit 50
+    python tools/highlight_concepts.py --tiers advanced --limit 50
+"""
+import argparse
+import json
+import re
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
+# Справочники лежат в главном дереве, когда работаем из worktree.
+MAIN = Path("C:/Users/nadez/PycharmProjects/bridge42worlds")
+LANGS = ("ru", "en", "es", "ar", "fr")
+
+# Поля, где маркеры разрешены. text есть у всех уровней; остальные — только у полного
+# разбора. Список повторяет промпт data/prompts/article-generate-advanced.txt.
+FIELDS_ALL = ("text",)
+FIELDS_ADVANCED = ("text", "context", "methods", "results", "implications",
+                   "future_development", "impact_on", "next_steps", "key_problems_connection")
+
+# Буквы, из которых состоят окончания в наших языках: все гласные плюс служебные
+# согласные падежей и множественного числа (-й, -х, -м, -в, -ть, -s, -n, -r).
+ENDING_CHARS = set("аеиоуыэюяйьъхмвст" + "aeiouy" + "snrxtm" + "éèê")
+
+WORD = re.compile(r"[^\W\d_]+", re.UNICODE)
+MARKER = re.compile(r"\[(tag|law|scientist):[^\]]+\].*?\[/\1\]", re.S)
+
+
+def norm(s):
+    return s.lower().replace("\u0451", "\u0435")      # ё → е
+
+
+def same_word(w, h):
+    """Одно и то же слово с точностью до окончания.
+
+    За основу взято правило js/site-search.js:sameWord, но здесь оно СТРОЖЕ, и это
+    осознанно. В поиске широта полезна: человек ищет и рад лишнему совпадению. В тексте
+    статьи наоборот — ложная ссылка хуже отсутствующей, читатель кликает и попадает не
+    туда. Правило поиска ловило «тепло» на «теплоёмкость» (общий префикс 5) и испанское
+    «entrega» на «entropía» (общий префикс 4) — проверено на живых статьях 19.08.
+
+    Держим два условия вместо одного: расхождение допускается только В ХВОСТЕ (общая
+    часть покрывает слово почти целиком) и длины близки — окончание не бывает длиннее
+    трёх букв ни в одном из наших пяти языков.
+    """
+    n = min(len(w), len(h))
+    if n < 3 or abs(len(w) - len(h)) > 3:
+        return False
+    i = 0
+    while i < n and w[i] == h[i]:
+        i += 1
+    if i < 3:
+        return False
+    ta, tb = w[i:], h[i:]
+    if len(ta) > 3 or len(tb) > 3:
+        return False
+    # Хвост должен ВЫГЛЯДЕТЬ окончанием, а не куском корня. Без этого «белок» садится на
+    # «белого» (общая часть «бело», хвосты «к» и «го») и «вода» на «водород». Согласная в
+    # хвосте — почти всегда корень; окончания наших пяти языков состоят из гласных и
+    # небольшого набора служебных согласных.
+    return all(c in ENDING_CHARS for c in ta + tb)
+
+
+def load(p, default=None):
+    p = Path(p)
+    if not p.exists():
+        try:
+            rel = p.relative_to(ROOT)
+        except ValueError:
+            rel = None
+        if rel is not None and (MAIN / rel).exists():
+            p = MAIN / rel
+    try:
+        return json.loads(p.read_text(encoding="utf-8"))
+    except Exception:
+        return default if default is not None else {}
+
+
+def registry():
+    reg = load(ROOT / "data" / "concepts.json").get("concepts") or {}
+    if not reg:
+        print("нет data/concepts.json — без реестра размечать нечем")
+    return reg
+
+
+def names_for(lang):
+    """id → (вид маркера, название) на этом языке. Теги и законы в одном словаре: для
+    текста разница между ними только в том, какой маркер поставить."""
+    out = {}
+    for cid, v in load(ROOT / f"lang/{lang}/data/tags.json").items():
+        if isinstance(v, dict) and v.get("name"):
+            out[cid] = ("tag", v["name"])
+    for cid, v in load(ROOT / f"lang/{lang}/data/laws.json").items():
+        if isinstance(v, dict) and v.get("name"):
+            out[cid] = ("law", v["name"])       # закон точнее тега — он и выигрывает
+    return out
+
+
+def free_zones(text):
+    """Куски текста ВНЕ существующих маркеров: внутрь размеченного не лезем."""
+    zones, pos = [], 0
+    for m in MARKER.finditer(text):
+        if m.start() > pos:
+            zones.append((pos, m.start()))
+        pos = m.end()
+    if pos < len(text):
+        zones.append((pos, len(text)))
+    return zones or [(0, len(text))]
+
+
+def find_span(text, name):
+    """Где в тексте упомянуто понятие. Первое вхождение ВНЕ маркеров или None.
+
+    Сравниваем по СЛОВАМ, а не подстрокой: подстрока ловит «ген» внутри «генерации»
+    и «вода» внутри «водорода», а слово — нет.
+    """
+    want = [norm(w) for w in WORD.findall(name)]
+    if not want:
+        return None
+    for zs, ze in free_zones(text):
+        toks = [(m.start(), m.end(), norm(m.group(0))) for m in WORD.finditer(text, zs, ze)]
+        for i in range(len(toks) - len(want) + 1):
+            if all(same_word(want[j], toks[i + j][2]) for j in range(len(want))):
+                return toks[i][0], toks[i + len(want) - 1][1]
+    return None
+
+
+def mark_text(text, cands, names, used):
+    """Одно вхождение на понятие: подсветка — это дорога вглубь, а не раскраска. Второе и
+    третье упоминание того же понятия ведут туда же и только рябят в глазах."""
+    added = []
+    for cid in cands:
+        if cid in used or cid not in names:
+            continue
+        kind, name = names[cid]
+        span = find_span(text, name)
+        if not span:
+            continue
+        a, b = span
+        frag = text[a:b]
+        text = text[:a] + "[" + kind + ":" + cid + "]" + frag + "[/" + kind + "]" + text[b:]
+        used.add(cid)
+        added.append((cid, frag))
+    return text, added
+
+
+def candidates(tier_data, art):
+    """Понятия, уже привязанные к статье. Порядок важен: сначала выбранное моделью главным,
+    потом вектор — при равном месте в тексте выигрывает более осмысленная связь."""
+    out = []
+    for src in (art.get("tags"), art.get("laws"),
+                tier_data.get("tags_vec"), tier_data.get("laws_vec")):
+        for cid in (src or []):
+            if cid not in out:
+                out.append(cid)
+    return out
+
+
+def process_article(path, reg, names_by_lang, tiers, dry, show=False):
+    art = load(path)
+    if not art:
+        return 0, []
+    changed, report = 0, []
+    for tier in tiers:
+        if tier not in art:
+            continue
+        fields = FIELDS_ADVANCED if tier == "advanced" else FIELDS_ALL
+        for lang in LANGS:
+            data = (art.get(tier) or {}).get(lang)
+            if not isinstance(data, dict):
+                continue
+            names = names_by_lang[lang]
+            cands = [c for c in candidates(data, art) if c in reg]
+            used = set()
+            for f in fields:
+                s = data.get(f)
+                if not isinstance(s, str) or len(s) < 40:
+                    continue
+                new, added = mark_text(s, cands, names, used)
+                if added:
+                    data[f] = new
+                    changed += len(added)
+                    report.append((tier, lang, f, added))
+    if changed and not dry:
+        # Пишем только при изменении: ночная перезапись всех data.json обновляла lastmod,
+        # роботы переобходили сайт и мы упирались в лимит Cloudflare (tag_by_vector.py:86).
+        Path(path).write_text(json.dumps(art, ensure_ascii=False, indent=2), encoding="utf-8")
+    if show:
+        for tier, lang, f, added in report:
+            for cid, frag in added:
+                print("    " + tier + "/" + lang + "/" + f + ": [" + cid + "] \u2190 \u00ab" + frag + "\u00bb")
+    return changed, report
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--tiers", default="simple,popular",
+                    help="уровни через запятую; порядок владельца: сначала simple,popular, потом advanced")
+    ap.add_argument("--ids", default="", help="конкретные статьи через запятую")
+    ap.add_argument("--limit", type=int, default=0, help="сколько статей взять (0 — все)")
+    ap.add_argument("--dry", action="store_true", help="ничего не писать")
+    ap.add_argument("--show", action="store_true", help="показать каждое совпадение")
+    args = ap.parse_args()
+
+    reg = registry()
+    if not reg:
+        return 1
+    names_by_lang = {lg: names_for(lg) for lg in LANGS}
+    tiers = [t.strip() for t in args.tiers.split(",") if t.strip()]
+
+    arch = ROOT / "lang" / "ru" / "archive"
+    if args.ids:
+        want = {x.strip() for x in args.ids.split(",") if x.strip()}
+        files = [p for p in arch.glob("*/*/data.json") if p.parent.name in want]
+    else:
+        files = sorted(arch.glob("*/*/data.json"), reverse=True)
+        if args.limit:
+            files = files[:args.limit]
+
+    total, touched = 0, 0
+    for p in files:
+        n, _rep = process_article(p, reg, names_by_lang, tiers, args.dry, show=args.show)
+        if n:
+            touched += 1
+            total += n
+            if args.show:
+                print("  " + p.parent.name + ": +" + str(n))
+    head = "(сухо) " if args.dry else ""
+    print("\n" + head + "статей затронуто: " + str(touched) + " из " + str(len(files))
+          + ", маркеров поставлено: " + str(total))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
