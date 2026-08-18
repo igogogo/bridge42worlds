@@ -198,6 +198,35 @@ def lessons(topic):
     return out
 
 
+def site_names():
+    """Названия законов и тегов по-русски — из справочников сайта, если он рядом.
+
+    Иначе в путеводителе стояло бы «boltzmann distribution» и «thermal conductivity»:
+    идентификаторы читаемы для машины, а страница у нас для человека.
+    """
+    base = Path("..") / "bridge42worlds" / "lang" / "ru" / "data"
+    out = {"law": {}, "tag": {}}
+    try:
+        laws = json.loads((base / "laws-lite.json").read_text(encoding="utf-8"))
+        for k, v in laws.items():
+            n = (v or {}).get("name")
+            if n:
+                out["law"][k] = n
+    except Exception:
+        pass
+    try:
+        tags = json.loads((base / "tags-list.json").read_text(encoding="utf-8"))
+        for t in tags:
+            if isinstance(t, dict) and t.get("en") and t.get("ru"):
+                out["tag"][t["en"]] = t["ru"]
+    except Exception:
+        pass
+    return out
+
+
+NAMES = site_names()
+
+
 def hours(rows):
     """Часы по самой таблице бюджета, а не по памяти автора.
 
@@ -264,8 +293,13 @@ def build(topic, sample, node):
             if lid in seen_l:
                 continue
             seen_l.add(lid)
+            # Имя формулы подставляем ТОЛЬКО когда закон у параграфа один: иначе первому
+            # в списке доставалось чужое имя, и в путеводителе выходило «ficks_law —
+            # Формула Эйнштейна — Смолуховского» (находка сверки).
+            single = len(ent.get("laws") or []) == 1
             laws.append({"id": lid,
-                         "name": fname if (j == 0 and fname) else lid.replace("_", " "),
+                         "name": (fname if (single and fname)
+                                  else NAMES["law"].get(lid) or lid.replace("_", " ")),
                          "note": f"разбирается в параграфе {i}"})
         for s in ent.get("scientists") or []:
             if s not in seen_s:
@@ -278,7 +312,7 @@ def build(topic, sample, node):
         for t in (d.get("entities") or {}).get("tags") or []:
             if t not in seen_t:
                 seen_t.add(t)
-                tags.append({"id": t, "name": t.replace("_", " ")})
+                tags.append({"id": t, "name": NAMES["tag"].get(t) or t.replace("_", " ")})
 
     # Общая часть «как проходить» берётся у термодинамики, но пример в шаге про константы
     # там свой, термодинамический (джоуль на кельвин против джоуля на моль-кельвин).
