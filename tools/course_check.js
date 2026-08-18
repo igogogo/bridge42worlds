@@ -20,6 +20,34 @@ const MODELS = new Set([...modSrc.matchAll(/(\w+):\s*\w+Model[,\s}]/g)].map(m =>
 const courseSrc = fs.readFileSync(ROOT + '/course.html', 'utf8');
 const FACTORY = new Set([...courseSrc.matchAll(/(\w+):\s*'(\w+)'/g)].filter(m => MODELS.has(m[2])).map(m => m[1]));
 
+// Связи урока ведут на страницы сайта. Проверяем, что такие страницы вообще есть:
+// урок про гидростатику ссылался на Паскаля и Торричелли, которых в базе нет, и обе
+// ссылки открывались как 404 — при полностью зелёной проверке. Граф читаем из соседнего
+// рабочего дерева сайта; нет его рядом — молча пропускаем, это не ошибка курса.
+const GRAPH = path.resolve(ROOT, '..', 'bridge42worlds', 'data', 'knowledge-graph.json');
+let KNOWN = null;
+if (fs.existsSync(GRAPH)) {
+    try {
+        const g = JSON.parse(fs.readFileSync(GRAPH, 'utf8'));
+        KNOWN = { tag: new Set(), law: new Set(), sci: new Set() };
+        (g.nodes || []).forEach(n => {
+            const i = String(n.id).indexOf(':');
+            if (i > 0 && KNOWN[n.kind]) KNOWN[n.kind].add(String(n.id).slice(i + 1));
+        });
+    } catch (e) { KNOWN = null; }
+}
+function checkEntities(where, ent) {
+    if (!KNOWN || !ent) return;
+    [['tags', 'tag', 'тег'], ['laws', 'law', 'закон'], ['scientists', 'sci', 'учёный']]
+        .forEach(([field, kind, word]) => {
+            (ent[field] || []).forEach(id => {
+                if (!KNOWN[kind].has(id)) {
+                    bad.push(`${where}: ${word} «${id}» — на сайте такой страницы нет, ссылка даст 404`);
+                }
+            });
+        });
+}
+
 const tree = readJSON(C + '/index.json');
 const topicsInTree = tree.topics.map(t => t.id);
 
@@ -47,12 +75,27 @@ topicsInTree.forEach(tid => {
         const L = readJSON(f); if (!L) return;
         const ru = L.ru || {};
         REQUIRED.forEach(k => { if (!ru[k]) warn.push(`${tid}/${l.id}: нет блока «${k}»`); });
+        checkEntities(`${tid}/${l.id}`, L.entities);
         if (L.model && !FACTORY.has(L.model)) bad.push(`${tid}/${l.id}: модель «${L.model}» не зарегистрирована в course.html`);
         if (L.model && !fs.existsSync(ROOT + '/data/theory/' + L.model + '.json')) bad.push(`${tid}/${l.id}: нет данных модели ${L.model}.json`);
         (ru.derivation && ru.derivation.steps || []).forEach((s, i) => {
             if (s.figure && !FIGS.has(s.figure)) bad.push(`${tid}/${l.id}: шаг ${i + 1} — схемы «${s.figure}» нет в figures.js`);
             if (!s.figure) warn.push(`${tid}/${l.id}: шаг ${i + 1} без схемы`);
         });
+        // Достроили вывод по-русски, перевод остался прежним — и проверка молчала: она смотрит
+        // только в L.ru. Пробел перевода конвейер видит по отсутствию ключа или по кириллице,
+        // а здесь ключ на месте и кириллицы нет — читатель на другом языке просто получает
+        // старый, более короткий вывод. Сравниваем длину списка шагов.
+        if (ru.derivation && ru.derivation.steps) {
+            ['en', 'es', 'ar', 'fr'].forEach(lang => {
+                const d = L[lang] && L[lang].derivation;
+                if (!d || !d.steps) return;                       // блока нет — это обычный пробел перевода
+                if (d.steps.length !== ru.derivation.steps.length) {
+                    warn.push(`${tid}/${l.id}: вывод [${lang}] отстал от русского — ` +
+                              `${d.steps.length} шагов против ${ru.derivation.steps.length}`);
+                }
+            });
+        }
         (ru.quiz || []).forEach((q, i) => {
             if (q.type === 'mcq' && typeof q.answer !== 'number') bad.push(`${tid}/${l.id}: вопрос ${i + 1} mcq без числового answer`);
             if (q.type === 'mcq' && q.options && (q.answer < 0 || q.answer >= q.options.length)) bad.push(`${tid}/${l.id}: вопрос ${i + 1} answer вне диапазона`);

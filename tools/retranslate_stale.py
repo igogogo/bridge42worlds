@@ -19,6 +19,11 @@ import subprocess
 import sys
 from pathlib import Path
 
+# Отчёт печатается по-русски, а консоль Windows отдаёт cp1252 — без этого падало на
+# первой же строке вывода и инструмент был недоступен именно на рабочей машине.
+if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 ROOTS = [Path("data/theory/courses"), Path("data/theory")]
 LANGS = ("en", "es", "ar", "fr")
 # поля, которые переводятся; служебные (id, schema, model, entities) не трогаем

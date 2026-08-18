@@ -724,7 +724,7 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
       var tr = el('tr');
       var c1 = el('td', 'k-const-sym', '§' + i.p); c1.style.fontSize = '.9rem';
       tr.appendChild(c1);
-      tr.appendChild(el('td', null, '<div class="k-const-name">' + i.what + '</div><div class="k-const-why">' + i.why + '</div>'));
+      tr.appendChild(el('td', null, '<div class="k-const-name">' + i.what + '</div><div class="k-const-why">' + (i.why || i.how || '') + '</div>'));
       t3.appendChild(tr);
     });
     ex.appendChild(t3);
@@ -816,7 +816,7 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
                       resonance: 'resonance', entropy: 'entropy',
                       orbit: 'orbit', wave: 'wave', charge: 'charge', magnet: 'magnet',
                       srt: 'srt', quantum: 'quantum', nucleus: 'nucleus',
-                      action: 'action', expansion: 'expansion', cmb: 'cmb', dark: 'dark', flow: 'flow' }[lesson.model];
+                      action: 'action', expansion: 'expansion', cmb: 'cmb', dark: 'dark', flow: 'flow', maxwell: 'maxwell', transport: 'transport' }[lesson.model];
       if (factory) {
         var mdl = B42Models[factory](modelData);
         var wrap = el('div'); wrap.style.margin = '20px 0';

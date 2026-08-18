@@ -1549,7 +1549,8 @@
         s += arrow(cx, cy + 15, cx, cy + 52, INK);
         s += arrow(cx - 12, cy - 15, cx - 12, cy - 46, LINK, 'ahl');
         s += arrow(cx + 12, cy - 15, cx + 12, cy - 40, WARN, 'ahw');
-        s += txt(cx + 24, cy + 42, 'v', SOFT, 11, 'start');
+        s += arrow(cx + 44, cy - 4, cx + 44, cy + 30, SOFT);
+        s += txt(cx + 52, cy + 18, 'v', SOFT, 11, 'start');
         s += txt(228, 64, 'вес шарика', INK, 11, 'start');
         s += txt(228, 92, 'выталкивающая сила', LINK, 11, 'start');
         s += txt(228, 120, 'сопротивление по Стоксу', WARN, 11, 'start');
@@ -1648,10 +1649,10 @@
         s += '<circle cx="302" cy="85" r="11" fill="' + WARN + '" opacity="0.55"/>';
         s += '<line x1="113" y1="137" x2="113" y2="' + base +
             '" stroke="' + SOFT + '" stroke-width="1" stroke-dasharray="3,3"/>';
-        s += '<line x1="330" y1="80" x2="330" y2="' + base +
+        s += '<line x1="302" y1="134" x2="302" y2="' + base +
             '" stroke="' + SOFT + '" stroke-width="1" stroke-dasharray="3,3"/>';
         s += txt(126, 158, 'h₁', SOFT, 11, 'start');
-        s += txt(342, 132, 'h₂', SOFT, 11, 'start');
+        s += txt(310, 156, 'h₂', SOFT, 11, 'start');
         s += arrow(302, 98, 302, 126, WARN, 'ahw');
         s += txt(268, 118, '&#961;&#916;V·g', WARN, 10.5, 'end');
         s += txt(418, 166, 'уровень отсчёта', SOFT, 10, 'end');
@@ -1671,8 +1672,8 @@
         s += '<rect x="270" y="42" width="60" height="28" fill="' + WARN +
             '" opacity="0.16" stroke="' + WARN + '" stroke-dasharray="3,3"/>';
         s += mol(285, 56, 4, WARN) + mol(300, 50, 4, WARN) + mol(314, 62, 4, WARN);
-        s += arrow(336, 56, 392, 56, WARN, 'ahw');
-        s += txt(376, 38, 'v₂ = 2v₁', WARN, 11);
+        s += arrow(336, 56, 380, 56, WARN, 'ahw');   // ровно вдвое длиннее первой (22 px)
+        s += txt(372, 38, 'v₂ = 2v₁', WARN, 11);
         s += '<rect x="110" y="' + (base - 20) + '" width="40" height="20" fill="' + LINK + '" opacity="0.75"/>';
         s += '<rect x="290" y="' + (base - 80) + '" width="40" height="80" fill="' + WARN + '" opacity="0.75"/>';
         s += '<line x1="60" y1="' + base + '" x2="392" y2="' + base + '" stroke="' + BORD + '" stroke-width="1"/>';
