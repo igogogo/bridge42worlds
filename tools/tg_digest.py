@@ -45,8 +45,8 @@ def esc(s):
     return (s or "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
-def candidates(n, pick=None):
-    idx = json.loads((ROOT / "lang/ru/articles-index.json").read_text(encoding="utf-8"))
+def candidates(n, pick=None, lang="ru"):
+    idx = json.loads((ROOT / f"lang/{lang}/articles-index.json").read_text(encoding="utf-8"))
     seen, out = set(), []
     for a in sorted(idx, key=lambda x: x["date"], reverse=True):
         if a.get("version") != "popular" or a["id"] in seen:
@@ -54,7 +54,7 @@ def candidates(n, pick=None):
         seen.add(a["id"])
         if pick and a["id"] not in pick:
             continue
-        cover = ROOT / "lang/ru/archive" / a["date"] / a["id"] / "ai.webp"
+        cover = ROOT / "lang/ru/archive" / a["date"] / a["id"] / "ai.webp"  # обложки живут у ru
         if not cover.exists() or not (a.get("description") or "").strip():
             continue
         url = SITE + (a.get("url") or "").replace("/index.html", "/")
@@ -79,7 +79,11 @@ def candidates(n, pick=None):
     return out
 
 
-def post(token, chat, art, dry=False):
+LINK_TEXT = {"ru": "Читать целиком →", "en": "Read the full story →",
+             "ar": "اقرأ المقال كاملاً ←", "es": "Leer completo →", "fr": "Lire en entier →"}
+
+
+def post(token, chat, art, dry=False, lang="ru"):
     # Подпись: заголовок, живой текст карточки, ссылка. Без хэштегов-простыней и без
     # «читайте далее» — текст карточки и так писался как приглашение, дублировать его
     # призывом значит не доверять собственному тексту.
@@ -108,6 +112,10 @@ def main():
     ap.add_argument("--pick", nargs="*")
     ap.add_argument("--chat")
     ap.add_argument("--dry", action="store_true")
+    # Язык дайджеста: канал @bridge42worlds_en завёл владелец 18.08. Индексы и тексты
+    # карточек уже существуют на пяти языках, поэтому второй канал — это параметр,
+    # а не вторая система. Ссылка ведёт на страницу того же языка.
+    ap.add_argument("--lang", default="ru", choices=("ru", "en", "es", "ar", "fr"))
     args = ap.parse_args()
 
     e = env()
@@ -117,11 +125,11 @@ def main():
         print("нет TG_BOT_TOKEN / TG_CHAT_ID в .env")
         return 1
 
-    arts = candidates(args.n, set(args.pick) if args.pick else None)
+    arts = candidates(args.n, set(args.pick) if args.pick else None, lang=args.lang)
     if not arts:
         print("нечего публиковать: нет свежих статей с обложкой и текстом карточки")
         return 1
-    ok = sum(1 for a in arts if post(token, chat, a, args.dry))
+    ok = sum(1 for a in arts if post(token, chat, a, args.dry, lang=args.lang))
     print(f"\n{'показано' if args.dry else 'опубликовано'}: {ok} из {len(arts)}")
     return 0
 

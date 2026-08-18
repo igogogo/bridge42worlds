@@ -24,6 +24,9 @@ set PYTHONUNBUFFERED=1
 
 REM Публичный канал @bridge42worlds создан владельцем 18.08, бот дан админом.
 python tools\tg_digest.py --n 3 --chat @bridge42worlds >> "%LOGDIR%\digest_%STAMP%.log" 2>&1
+REM Английский канал (владелец завёл 18.08): та же тройка статей, английские
+REM карточки и ссылки на английские страницы. Аудитория EN больше по определению.
+python tools\tg_digest.py --n 3 --lang en --chat @bridge42worlds_en >> "%LOGDIR%\digest_%STAMP%.log" 2>&1
 set RC=%ERRORLEVEL%
 
 echo [%DATE% %TIME%] digest rc=%RC% >> "%LOGDIR%\digest-history.log"
