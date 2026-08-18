@@ -7,6 +7,90 @@
    Подставляется в одной функции txt() — см. figures.js. Файл подключать ПЕРЕД figures.js.
    Собран tools/figures_i18n.py; после правки подписей в схемах прогнать его заново. */
 window.B42FigText = {
+  "сдвиг: та же установка на новом месте": {
+    "en": "shift: the same setup in a new place",
+    "es": "desplazamiento: el mismo montaje en otro lugar",
+    "ar": "إزاحة: التجربة نفسها في مكان جديد",
+    "fr": "translation : le même dispositif ailleurs"
+  },
+  "скорость та же": {
+    "en": "velocity unchanged",
+    "es": "la velocidad no cambia",
+    "ar": "السرعة نفسها",
+    "fr": "la vitesse ne change pas"
+  },
+  "ε любое — значит, множитель при ε равен нулю": {
+    "en": "ε is arbitrary — so the coefficient of ε vanishes",
+    "es": "ε es arbitrario: el coeficiente de ε es cero",
+    "ar": "ε اختياري — إذن معامل ε يساوي صفراً",
+    "fr": "ε est quelconque : le coefficient de ε est nul"
+  },
+  "сдвигаем оба тела сразу": {
+    "en": "shift both bodies at once",
+    "es": "desplazamos ambos cuerpos a la vez",
+    "ar": "نُزيح الجسمين معاً",
+    "fr": "on translate les deux corps ensemble"
+  },
+  "сдвиг на ε": {
+    "en": "shift by ε",
+    "es": "desplazamiento ε",
+    "ar": "إزاحة بمقدار ε",
+    "fr": "translation de ε"
+  },
+  "расстояние то же — лагранжиан не изменился": {
+    "en": "same separation — the Lagrangian is unchanged",
+    "es": "misma distancia: el lagrangiano no cambia",
+    "ar": "المسافة نفسها — اللاغرانجي لم يتغيّر",
+    "fr": "même distance : le lagrangien ne change pas"
+  },
+  "сохраняется сумма импульсов, а не каждый по отдельности": {
+    "en": "the sum of the momenta is conserved, not each one separately",
+    "es": "se conserva la suma de los momentos, no cada uno por separado",
+    "ar": "يُحفَظ مجموع كميات الحركة لا كلٌّ على حدة",
+    "fr": "c'est la somme des quantités de mouvement qui se conserve"
+  },
+  "поворот на ε: радиус не меняется": {
+    "en": "rotation by ε: the radius stays the same",
+    "es": "rotación ε: el radio no cambia",
+    "ar": "دوران بمقدار ε: نصف القطر ثابت",
+    "fr": "rotation de ε : le rayon ne change pas"
+  },
+  "U зависит только от r": {
+    "en": "U depends on r only",
+    "es": "U depende solo de r",
+    "ar": "U يعتمد على r وحده",
+    "fr": "U ne dépend que de r"
+  },
+  "угол в L не входит": {
+    "en": "the angle does not enter L",
+    "es": "el ángulo no aparece en L",
+    "ar": "الزاوية لا تظهر في L",
+    "fr": "l'angle n'apparaît pas dans L"
+  },
+  "момент импульса — обобщённый импульс для угла": {
+    "en": "angular momentum is the generalized momentum of the angle",
+    "es": "el momento angular es el momento generalizado del ángulo",
+    "ar": "الزخم الزاوي هو الزخم المعمَّم المرافق للزاوية",
+    "fr": "le moment cinétique est le moment généralisé de l'angle"
+  },
+  "опыт, начатый позже, идёт точно так же": {
+    "en": "an experiment started later runs exactly the same",
+    "es": "un experimento iniciado más tarde transcurre igual",
+    "ar": "تجربة تبدأ لاحقاً تسير بالطريقة نفسها",
+    "fr": "une expérience lancée plus tard se déroule de même"
+  },
+  "старт": {
+    "en": "start",
+    "es": "inicio",
+    "ar": "البداية",
+    "fr": "départ"
+  },
+  "сдвиг во времени даёт сохранение энергии": {
+    "en": "shifting in time yields conservation of energy",
+    "es": "el desplazamiento en el tiempo da la conservación de la energía",
+    "ar": "الإزاحة في الزمن تعطي حفظ الطاقة",
+    "fr": "la translation dans le temps donne la conservation de l'énergie"
+  },
   "стенка": {
     "en": "wall",
     "es": "pared",
@@ -1824,5 +1908,989 @@ window.B42FigText = {
     "es": "fracción sumergida = ρ(cuerpo) / ρ(fluido)",
     "ar": "الجزء المغمور = ρ(الجسم) / ρ(المائع)",
     "fr": "fraction immergée = ρ(corps) / ρ(fluide)"
+  },
+  "кривую обращают точка за точкой": {
+    "en": "the curve is inverted point by point",
+    "es": "la curva se invierte punto por punto",
+    "ar": "يُعكس المنحنى نقطة بنقطة",
+    "fr": "la courbe est inversée point par point"
+  },
+  "v(r): измерено": {
+    "en": "v(r): measured",
+    "es": "v(r): medido",
+    "ar": "v(r): مقيس",
+    "fr": "v(r) : mesuré"
+  },
+  "масса растёт линейно, плотность падает как обратный квадрат": {
+    "en": "mass grows linearly, density falls as the inverse square",
+    "es": "la masa crece linealmente, la densidad cae como el inverso del cuadrado",
+    "ar": "الكتلة تنمو خطياً والكثافة تتناقص كمقلوب المربع",
+    "fr": "la masse croît linéairement, la densité décroît comme l'inverse du carré"
+  },
+  "масса отклоняет луч — и картинка смещается": {
+    "en": "mass bends the ray, and the image shifts",
+    "es": "la masa desvía el rayo y la imagen se desplaza",
+    "ar": "الكتلة تحرف الشعاع فتنزاح الصورة",
+    "fr": "la masse dévie le rayon et l'image se déplace"
+  },
+  "видимые положения": {
+    "en": "apparent positions",
+    "es": "posiciones aparentes",
+    "ar": "المواضع الظاهرية",
+    "fr": "positions apparentes"
+  },
+  "источник": {
+    "en": "source",
+    "es": "fuente",
+    "ar": "المصدر",
+    "fr": "source"
+  },
+  "угол отклонения вдвое больше ньютоновского": {
+    "en": "the deflection angle is twice the Newtonian one",
+    "es": "el ángulo de desviación es el doble del newtoniano",
+    "ar": "زاوية الانحراف ضعف القيمة النيوتونية",
+    "fr": "l'angle de déviation vaut le double de la valeur newtonienne"
+  },
+  "дрейф мал, тепловая скорость велика": {
+    "en": "the drift is tiny, the thermal speed is huge",
+    "es": "la deriva es mínima, la velocidad térmica enorme",
+    "ar": "الانجراف ضئيل والسرعة الحرارية هائلة",
+    "fr": "la dérive est minime, la vitesse thermique énorme"
+  },
+  "пластина едет": {
+    "en": "plate moving",
+    "es": "placa en movimiento",
+    "ar": "اللوح يتحرك",
+    "fr": "plaque en mouvement"
+  },
+  "пластина стоит": {
+    "en": "plate at rest",
+    "es": "placa en reposo",
+    "ar": "اللوح ساكن",
+    "fr": "plaque immobile"
+  },
+  "&#10216;v&#10217; &#8776; 460 м/с": {
+    "en": "⟨v⟩ ≈ 460 m/s",
+    "es": "⟨v⟩ ≈ 460 m/s",
+    "ar": "⟨v⟩ ≈ 460 م/ث",
+    "fr": "⟨v⟩ ≈ 460 m/s"
+  },
+  "u — сантиметры в секунду": {
+    "en": "u — centimetres per second",
+    "es": "u: centímetros por segundo",
+    "ar": "u — سنتيمترات في الثانية",
+    "fr": "u — centimètres par seconde"
+  },
+  "шесть направлений — по одной шестой на каждое": {
+    "en": "six directions — one sixth each",
+    "es": "seis direcciones: un sexto cada una",
+    "ar": "ستة اتجاهات — سُدس لكل منها",
+    "fr": "six directions — un sixième chacune"
+  },
+  "вдоль площадки —": {
+    "en": "along the patch —",
+    "es": "a lo largo del área:",
+    "ar": "بمحاذاة المساحة —",
+    "fr": "le long de la surface —"
+  },
+  "ничего не переносят": {
+    "en": "carry nothing across",
+    "es": "no transportan nada",
+    "ar": "لا تنقل شيئًا",
+    "fr": "ne transportent rien"
+  },
+  "в каждую сторону": {
+    "en": "in each direction",
+    "es": "en cada sentido",
+    "ar": "في كل اتجاه",
+    "fr": "dans chaque sens"
+  },
+  "молекула помнит слой, в котором столкнулась": {
+    "en": "a molecule remembers the layer where it last collided",
+    "es": "la molécula recuerda la capa donde chocó por última vez",
+    "ar": "الجزيء يتذكر الطبقة التي اصطدم فيها آخر مرة",
+    "fr": "la molécule se souvient de la couche où elle a heurté"
+  },
+  "разность приносимого = 2&#955;&#183;du/dy": {
+    "en": "difference carried = 2λ·du/dy",
+    "es": "diferencia transportada = 2λ·du/dy",
+    "ar": "الفرق المنقول = 2λ·du/dy",
+    "fr": "différence transportée = 2λ·du/dy"
+  },
+  "сколько носильщиков &#215; сколько приносит каждый": {
+    "en": "how many carriers × how much each brings",
+    "es": "cuántos portadores × cuánto trae cada uno",
+    "ar": "عدد الحاملات × ما ينقله كل منها",
+    "fr": "combien de porteurs × ce qu'apporte chacun"
+  },
+  "носильщиков через площадку": {
+    "en": "carriers crossing the patch",
+    "es": "portadores que cruzan el área",
+    "ar": "حاملات تعبر المساحة",
+    "fr": "porteurs traversant la surface"
+  },
+  "импульса приносит каждый": {
+    "en": "momentum brought by each",
+    "es": "momento que trae cada uno",
+    "ar": "الزخم الذي ينقله كل منها",
+    "fr": "impulsion apportée par chacun"
+  },
+  "трение получилось, а не было постулировано": {
+    "en": "friction came out of it; it was not postulated",
+    "es": "el rozamiento resultó, no se postuló",
+    "ar": "الاحتكاك نتج ولم يُفترض",
+    "fr": "le frottement en résulte, il n'est pas postulé"
+  },
+  "носильщиков вдвое меньше — каждый идёт вдвое дальше": {
+    "en": "half as many carriers — each one goes twice as far",
+    "es": "la mitad de portadores: cada uno va el doble de lejos",
+    "ar": "الحاملات نصف العدد — وكل منها يقطع ضعف المسافة",
+    "fr": "deux fois moins de porteurs — chacun va deux fois plus loin"
+  },
+  "плотный газ: пробег мал": {
+    "en": "dense gas: short free path",
+    "es": "gas denso: recorrido libre corto",
+    "ar": "غاز كثيف: مسار حر قصير",
+    "fr": "gaz dense : libre parcours court"
+  },
+  "разрежённый: пробег велик": {
+    "en": "rarefied gas: long free path",
+    "es": "gas enrarecido: recorrido libre largo",
+    "ar": "غاز مخلخل: مسار حر طويل",
+    "fr": "gaz raréfié : libre parcours long"
+  },
+  "&#961;&#955; = nm &#183; 1/(&#8730;2&#183;n&#963;): концентрация сокращается": {
+    "en": "ρλ = nm · 1/(√2·nσ): the concentration cancels",
+    "es": "ρλ = nm · 1/(√2·nσ): la concentración se cancela",
+    "ar": "ρλ = nm · 1/(√2·nσ): التركيز يُختصر",
+    "fr": "ρλ = nm · 1/(√2·nσ) : la concentration s'élimine"
+  },
+  "нагрев: газ густеет, жидкость жидеет": {
+    "en": "on heating the gas thickens and the liquid thins",
+    "es": "al calentar, el gas espesa y el líquido se aligera",
+    "ar": "بالتسخين تزداد لزوجة الغاز وتقل لزوجة السائل",
+    "fr": "en chauffant, le gaz épaissit et le liquide s'allège"
+  },
+  "газ: &#8776; &#8730;T": {
+    "en": "gas: ≈ √T",
+    "es": "gas: ≈ √T",
+    "ar": "غاز: ≈ √T",
+    "fr": "gaz : ≈ √T"
+  },
+  "жидкость: &#8776; exp(E/kT)": {
+    "en": "liquid: ≈ exp(E/kT)",
+    "es": "líquido: ≈ exp(E/kT)",
+    "ar": "سائل: ≈ exp(E/kT)",
+    "fr": "liquide : ≈ exp(E/kT)"
+  },
+  "механизмы разные — потому и знак разный": {
+    "en": "different mechanisms — hence the opposite sign",
+    "es": "mecanismos distintos: de ahí el signo opuesto",
+    "ar": "الآليتان مختلفتان — ومن هنا اختلاف الإشارة",
+    "fr": "mécanismes différents — d'où le signe opposé"
+  },
+  "один механизм — три коэффициента": {
+    "en": "one mechanism — three coefficients",
+    "es": "un mecanismo, tres coeficientes",
+    "ar": "آلية واحدة — ثلاثة معاملات",
+    "fr": "un mécanisme — trois coefficients"
+  },
+  "диффузия": {
+    "en": "diffusion",
+    "es": "difusión",
+    "ar": "الانتشار",
+    "fr": "diffusion"
+  },
+  "теплопроводность": {
+    "en": "thermal conduction",
+    "es": "conducción térmica",
+    "ar": "التوصيل الحراري",
+    "fr": "conduction thermique"
+  },
+  "вязкость": {
+    "en": "viscosity",
+    "es": "viscosidad",
+    "ar": "اللزوجة",
+    "fr": "viscosité"
+  },
+  "переносится:": {
+    "en": "what is carried:",
+    "es": "qué se transporta:",
+    "ar": "ما يُنقل:",
+    "fr": "ce qui est transporté :"
+  },
+  "число частиц": {
+    "en": "number of particles",
+    "es": "número de partículas",
+    "ar": "عدد الجسيمات",
+    "fr": "nombre de particules"
+  },
+  "поток = &#8722;(1/3)&#955;&#10216;v&#10217; &#183; градиент того, что переносится": {
+    "en": "flux = −(1/3)λ⟨v⟩ · gradient of whatever is carried",
+    "es": "flujo = −(1/3)λ⟨v⟩ · gradiente de lo que se transporta",
+    "ar": "التدفق = −(1/3)λ⟨v⟩ · تدرّج ما يُنقل",
+    "fr": "flux = −(1/3)λ⟨v⟩ · gradient de ce qui est transporté"
+  },
+  "число Прандтля: что расплывается быстрее — импульс или тепло": {
+    "en": "Prandtl number: what spreads faster — momentum or heat",
+    "es": "número de Prandtl: qué se difunde antes, el momento o el calor",
+    "ar": "عدد براندتل: أيهما ينتشر أسرع — الزخم أم الحرارة",
+    "fr": "nombre de Prandtl : qu'est-ce qui diffuse le plus vite — l'impulsion ou la chaleur"
+  },
+  "ртуть": {
+    "en": "mercury",
+    "es": "mercurio",
+    "ar": "الزئبق",
+    "fr": "mercure"
+  },
+  "газы": {
+    "en": "gases",
+    "es": "gases",
+    "ar": "الغازات",
+    "fr": "gaz"
+  },
+  "вода": {
+    "en": "water",
+    "es": "agua",
+    "ar": "الماء",
+    "fr": "eau"
+  },
+  "глицерин": {
+    "en": "glycerol",
+    "es": "glicerina",
+    "ar": "الغليسرين",
+    "fr": "glycérine"
+  },
+  "у всех газов около 0,7 — переносчик-то один": {
+    "en": "about 0.7 for every gas — the carrier is one and the same",
+    "es": "cerca de 0,7 en todos los gases: el portador es el mismo",
+    "ar": "نحو 0.7 لجميع الغازات — الحامل واحد",
+    "fr": "environ 0,7 pour tous les gaz — le porteur est le même"
+  },
+  "почему 3000 К, а не 158 000 К": {
+    "en": "why 3000 K and not 158 000 K",
+    "es": "por qué 3000 K y no 158 000 K",
+    "ar": "لماذا 3000 كلفن وليس 158 000",
+    "fr": "pourquoi 3000 K et non 158 000 K"
+  },
+  "на атом — полтора миллиарда фотонов": {
+    "en": "a billion and a half photons per atom",
+    "es": "mil quinientos millones de fotones por átomo",
+    "ar": "مليار ونصف فوتون لكل ذرة",
+    "fr": "un milliard et demi de photons par atome"
+  },
+  "13,6 эВ": {
+    "en": "13.6 eV",
+    "es": "13,6 eV",
+    "ar": "13.6 eV",
+    "fr": "13,6 eV"
+  },
+  "хвост ещё ионизует": {
+    "en": "the tail still ionizes",
+    "es": "la cola aún ioniza",
+    "ar": "الذيل ما زال يؤيّن",
+    "fr": "la queue ionise encore"
+  },
+  "энергия фотона →": {
+    "en": "photon energy →",
+    "es": "energía del fotón →",
+    "ar": "طاقة الفوتون →",
+    "fr": "énergie du photon →"
+  },
+  "хвост нарисован крупнее: на деле там один фотон из миллиарда": {
+    "en": "the tail is drawn larger: in reality it holds one photon in a billion",
+    "es": "la cola se dibuja mayor: en realidad, un fotón de cada mil millones",
+    "ar": "الذيل مرسوم أكبر مما هو عليه: في الواقع فوتون واحد من كل مليار",
+    "fr": "la queue est dessinée plus grande : en réalité un photon sur un milliard"
+  },
+  "одна и та же линейка под разным углом": {
+    "en": "the same ruler seen at different angles",
+    "es": "la misma regla vista con ángulos distintos",
+    "ar": "المسطرة نفسها تُرى بزوايا مختلفة",
+    "fr": "la même règle vue sous des angles différents"
+  },
+  "размер пятна известен: докуда дошёл звук в плазме": {
+    "en": "the spot size is known: how far sound travelled in the plasma",
+    "es": "el tamaño de la mancha se conoce: hasta dónde llegó el sonido en el plasma",
+    "ar": "حجم البقعة معروف: إلى أين وصل الصوت في البلازما",
+    "fr": "la taille de la tache est connue : jusqu'où le son a voyagé dans le plasma"
+  },
+  "сфера": {
+    "en": "sphere",
+    "es": "esfera",
+    "ar": "كرة",
+    "fr": "sphère"
+  },
+  "плоскость": {
+    "en": "plane",
+    "es": "plano",
+    "ar": "مستوٍ",
+    "fr": "plan"
+  },
+  "седло": {
+    "en": "saddle",
+    "es": "silla de montar",
+    "ar": "سرج",
+    "fr": "selle"
+  },
+  "угол больше": {
+    "en": "wider angle",
+    "es": "ángulo mayor",
+    "ar": "زاوية أكبر",
+    "fr": "angle plus grand"
+  },
+  "ровно 1°": {
+    "en": "exactly 1°",
+    "es": "exactamente 1°",
+    "ar": "‏1° بالضبط",
+    "fr": "exactement 1°"
+  },
+  "угол меньше": {
+    "en": "narrower angle",
+    "es": "ángulo menor",
+    "ar": "زاوية أصغر",
+    "fr": "angle plus petit"
+  },
+  "измеряют ровно градус — значит, пространство плоское": {
+    "en": "one degree is what is measured — so space is flat",
+    "es": "se mide justo un grado: el espacio es plano",
+    "ar": "المقاس درجة واحدة بالضبط — إذن الفضاء مسطّح",
+    "fr": "on mesure exactement un degré : l'espace est plat"
+  },
+  "пробный путь: истинный плюс горб с множителем ε": {
+    "en": "trial path: the true one plus a bump scaled by ε",
+    "es": "camino de prueba: el real más una joroba con factor ε",
+    "ar": "المسار التجريبي: المسار الحقيقي زائد نتوء بمعامل ε",
+    "fr": "chemin d'essai : le vrai plus une bosse de facteur ε"
+  },
+  "форма горба любая, концы прижаты": {
+    "en": "the bump may have any shape, the ends stay pinned",
+    "es": "la joroba puede tener cualquier forma, los extremos quedan fijos",
+    "ar": "شكل النتوء اختياري، والطرفان يبقيان مثبتين",
+    "fr": "la bosse peut avoir n'importe quelle forme, les extrémités restent fixées"
+  },
+  "что означает «первый порядок обязан обнулиться»": {
+    "en": "what «the first order must vanish» means",
+    "es": "qué significa «el primer orden debe anularse»",
+    "ar": "ماذا يعني «يجب أن تنعدم الرتبة الأولى»",
+    "fr": "ce que signifie « le premier ordre doit s'annuler »"
+  },
+  "c₁ ≠ 0: есть куда упасть": {
+    "en": "c₁ ≠ 0: there is room to fall",
+    "es": "c₁ ≠ 0: hay hacia dónde caer",
+    "ar": "c₁ ≠ 0: هناك متسع للهبوط",
+    "fr": "c₁ ≠ 0 : il y a de quoi descendre"
+  },
+  "ненулевой наклон в нуле означает: рядом есть путь дешевле": {
+    "en": "a nonzero slope at zero means a cheaper path lies right next to it",
+    "es": "una pendiente no nula en cero significa que al lado hay un camino más barato",
+    "ar": "ميل غير صفري عند الصفر يعني وجود مسار أرخص بالجوار",
+    "fr": "une pente non nulle en zéro signifie qu'un chemin moins coûteux est juste à côté"
+  },
+  "сдвиг пути меняет сразу две вещи": {
+    "en": "shifting the path changes two things at once",
+    "es": "desplazar el camino cambia dos cosas a la vez",
+    "ar": "إزاحة المسار تغيّر أمرين في آن واحد",
+    "fr": "déplacer le chemin change deux choses à la fois"
+  },
+  "наклоны разные": {
+    "en": "the slopes differ",
+    "es": "las pendientes difieren",
+    "ar": "الميلان مختلفان",
+    "fr": "les pentes diffèrent"
+  },
+  "сдвиг координаты": {
+    "en": "shift of the coordinate",
+    "es": "desplazamiento de la coordenada",
+    "ar": "إزاحة الإحداثي",
+    "fr": "décalage de la coordonnée"
+  },
+  "сдвиг наклона": {
+    "en": "shift of the slope",
+    "es": "cambio de la pendiente",
+    "ar": "تغيّر الميل",
+    "fr": "changement de la pente"
+  },
+  "штрих — производная по времени": {
+    "en": "prime = derivative with respect to time",
+    "es": "la prima = derivada respecto al tiempo",
+    "ar": "الشرطة = المشتقة بالنسبة إلى الزمن",
+    "fr": "le prime = dérivée par rapport au temps"
+  },
+  "два слагаемых вариации — это цепное правило, ничего больше": {
+    "en": "the two terms of the variation are just the chain rule, nothing more",
+    "es": "los dos términos de la variación son solo la regla de la cadena, nada más",
+    "ar": "حدّا التغاير ليسا سوى قاعدة السلسلة، لا أكثر",
+    "fr": "les deux termes de la variation ne sont que la règle de la chaîne, rien de plus"
+  },
+  "производная переезжает с горба на импульсный множитель": {
+    "en": "the derivative moves from the bump onto the momentum factor",
+    "es": "la derivada pasa de la joroba al factor de momento",
+    "ar": "المشتقة تنتقل من النتوء إلى معامل كمية الحركة",
+    "fr": "la dérivée passe de la bosse au facteur d'impulsion"
+  },
+  "по частям": {
+    "en": "by parts",
+    "es": "por partes",
+    "ar": "بالتجزئة",
+    "fr": "par parties"
+  },
+  "[ ∂L/∂y′ · η ] на концах": {
+    "en": "[ ∂L/∂y′ · η ] at the ends",
+    "es": "[ ∂L/∂y′ · η ] en los extremos",
+    "ar": "[ ∂L/∂y′ · η ] عند الطرفين",
+    "fr": "[ ∂L/∂y′ · η ] aux extrémités"
+  },
+  "граничный член гибнет: концы закреплены": {
+    "en": "the boundary term dies: the ends are fixed",
+    "es": "el término de frontera muere: los extremos están fijos",
+    "ar": "الحد الحدّي يتلاشى: الطرفان مثبتان",
+    "fr": "le terme de bord disparaît : les extrémités sont fixées"
+  },
+  "удары со всех сторон почти гасятся": {
+    "en": "hits from every side almost cancel",
+    "es": "los golpes de todos lados casi se cancelan",
+    "ar": "الضربات من كل الجهات تكاد تلغي بعضها",
+    "fr": "les chocs de tous côtés s'annulent presque"
+  },
+  "зерно": {
+    "en": "grain",
+    "es": "grano",
+    "ar": "حُبيبة",
+    "fr": "grain"
+  },
+  "перевес": {
+    "en": "net excess",
+    "es": "exceso neto",
+    "ar": "الفائض",
+    "fr": "excédent net"
+  },
+  "N ≈ 10²⁰ ударов в секунду": {
+    "en": "N ≈ 10²⁰ hits per second",
+    "es": "N ≈ 10²⁰ golpes por segundo",
+    "ar": "N ≈ 10²⁰ ضربة في الثانية",
+    "fr": "N ≈ 10²⁰ chocs par seconde"
+  },
+  "перевес ~ √N, то есть доля 1/√N от всех ударов": {
+    "en": "excess ~ √N, i.e. a fraction 1/√N of all hits",
+    "es": "exceso ~ √N, o sea una fracción 1/√N de los golpes",
+    "ar": "الفائض ~ √N، أي نسبة 1/√N من كل الضربات",
+    "fr": "excédent ~ √N, soit une fraction 1/√N des chocs"
+  },
+  "путь длинный, смещение короткое": {
+    "en": "the path is long, the displacement is short",
+    "es": "el camino es largo, el desplazamiento corto",
+    "ar": "المسار طويل والإزاحة قصيرة",
+    "fr": "le chemin est long, le déplacement court"
+  },
+  "через N шагов": {
+    "en": "after N steps",
+    "es": "tras N pasos",
+    "ar": "بعد N خطوة",
+    "fr": "après N pas"
+  },
+  "смещение x": {
+    "en": "displacement x",
+    "es": "desplazamiento x",
+    "ar": "الإزاحة x",
+    "fr": "déplacement x"
+  },
+  "длина пути N·ℓ растёт как N": {
+    "en": "path length N·ℓ grows as N",
+    "es": "la longitud del camino N·ℓ crece como N",
+    "ar": "طول المسار N·ℓ ينمو مثل N",
+    "fr": "la longueur du chemin N·ℓ croît comme N"
+  },
+  "смещение растёт как √N": {
+    "en": "displacement grows as √N",
+    "es": "el desplazamiento crece como √N",
+    "ar": "الإزاحة تنمو مثل √N",
+    "fr": "le déplacement croît comme √N"
+  },
+  "квадрат суммы: что переживает усреднение": {
+    "en": "square of a sum: what survives averaging",
+    "es": "cuadrado de una suma: qué sobrevive al promediar",
+    "ar": "مربع المجموع: ما الذي يبقى بعد المتوسّط",
+    "fr": "carré d'une somme : ce qui survit à la moyenne"
+  },
+  "ℓᵢ² — всегда положительны": {
+    "en": "ℓᵢ² — always positive",
+    "es": "ℓᵢ² — siempre positivos",
+    "ar": "ℓᵢ² — موجبة دائمًا",
+    "fr": "ℓᵢ² — toujours positifs"
+  },
+  "ℓᵢℓⱼ — в среднем нуль": {
+    "en": "ℓᵢℓⱼ — zero on average",
+    "es": "ℓᵢℓⱼ — cero en promedio",
+    "ar": "ℓᵢℓⱼ — صفر في المتوسّط",
+    "fr": "ℓᵢℓⱼ — nuls en moyenne"
+  },
+  "их больше, но они гасятся": {
+    "en": "there are more of them, but they cancel",
+    "es": "son más numerosos, pero se cancelan",
+    "ar": "عددها أكبر لكنها تلغي بعضها",
+    "fr": "ils sont plus nombreux, mais ils s'annulent"
+  },
+  "остаётся только диагональ: N членов": {
+    "en": "only the diagonal remains: N terms",
+    "es": "sólo queda la diagonal: N términos",
+    "ar": "يبقى القطر فقط: N حدًّا",
+    "fr": "seule la diagonale reste : N termes"
+  },
+  "вчетверо дольше — вдвое дальше": {
+    "en": "four times longer — twice as far",
+    "es": "cuatro veces más tiempo, el doble de lejos",
+    "ar": "أربعة أضعاف الزمن — ضعف المسافة",
+    "fr": "quatre fois plus longtemps — deux fois plus loin"
+  },
+  "кривая круче всего в начале": {
+    "en": "the curve is steepest at the start",
+    "es": "la curva es más empinada al principio",
+    "ar": "المنحنى أشدّ انحدارًا في البداية",
+    "fr": "la courbe est la plus raide au début"
+  },
+  "взвесь в поле тяжести приходит в равновесие": {
+    "en": "a suspension in gravity settles into equilibrium",
+    "es": "una suspensión en gravedad alcanza el equilibrio",
+    "ar": "المعلّق في حقل الجاذبية يبلغ التوازن",
+    "fr": "une suspension dans la pesanteur atteint l'équilibre"
+  },
+  "оседание": {
+    "en": "settling",
+    "es": "sedimentación",
+    "ar": "الترسّب",
+    "fr": "sédimentation"
+  },
+  "встречные потоки равны — картина не меняется": {
+    "en": "the opposing fluxes are equal — the picture does not change",
+    "es": "los flujos opuestos son iguales: la imagen no cambia",
+    "ar": "التدفّقان المتعاكسان متساويان — الصورة لا تتغيّر",
+    "fr": "les flux opposés sont égaux — l'image ne change pas"
+  },
+  "в равновесии два потока равны": {
+    "en": "at equilibrium the two fluxes are equal",
+    "es": "en equilibrio los dos flujos son iguales",
+    "ar": "عند التوازن يتساوى التدفّقان",
+    "fr": "à l'équilibre les deux flux sont égaux"
+  },
+  "снос силой": {
+    "en": "drift under the force",
+    "es": "arrastre por la fuerza",
+    "ar": "الانجراف بفعل القوة",
+    "fr": "dérive sous la force"
+  },
+  "подставили n = n₀e^(−Fx/kT) — сократились и n, и F": {
+    "en": "substitute n = n₀e^(−Fx/kT) — both n and F cancel",
+    "es": "sustituimos n = n₀e^(−Fx/kT): se cancelan n y F",
+    "ar": "بالتعويض n = n₀e^(−Fx/kT) يُختصر كلّ من n و F",
+    "fr": "on substitue n = n₀e^(−Fx/kT) — n et F s'éliminent"
+  },
+  "трение и разброс задаются одной величиной": {
+    "en": "friction and spreading are set by one and the same quantity",
+    "es": "la fricción y la dispersión las fija una misma magnitud",
+    "ar": "الاحتكاك والانتشار يحدّدهما المقدار نفسه",
+    "fr": "le frottement et l'étalement sont fixés par une même grandeur"
+  },
+  "откуда берётся коэффициент трения": {
+    "en": "where the friction coefficient comes from",
+    "es": "de dónde sale el coeficiente de fricción",
+    "ar": "من أين يأتي معامل الاحتكاك",
+    "fr": "d'où vient le coefficient de frottement"
+  },
+  "вязкость η": {
+    "en": "viscosity η",
+    "es": "viscosidad η",
+    "ar": "اللزوجة η",
+    "fr": "viscosité η"
+  },
+  "скорость v": {
+    "en": "velocity v",
+    "es": "velocidad v",
+    "ar": "السرعة v",
+    "fr": "vitesse v"
+  },
+  "сила трения": {
+    "en": "drag force",
+    "es": "fuerza de fricción",
+    "ar": "قوة الاحتكاك",
+    "fr": "force de frottement"
+  },
+  "положения крупинки через равные промежутки": {
+    "en": "positions of one grain at equal time intervals",
+    "es": "posiciones de un grano a intervalos iguales",
+    "ar": "مواضع الحُبيبة على فترات زمنية متساوية",
+    "fr": "positions d'un grain à intervalles égaux"
+  },
+  "сетка окуляра": {
+    "en": "eyepiece grid",
+    "es": "retícula del ocular",
+    "ar": "شبكة العدسة العينية",
+    "fr": "réticule de l'oculaire"
+  },
+  "каждый отрезок — смещение за 30 секунд": {
+    "en": "each segment is the displacement in 30 seconds",
+    "es": "cada segmento es el desplazamiento en 30 segundos",
+    "ar": "كل قطعة هي الإزاحة خلال 30 ثانية",
+    "fr": "chaque segment est le déplacement en 30 secondes"
+  },
+  "усредняем квадраты отрезков — получаем ⟨x²⟩": {
+    "en": "average the squares of the segments — that is ⟨x²⟩",
+    "es": "promediamos los cuadrados de los segmentos: eso es ⟨x²⟩",
+    "ar": "نأخذ متوسّط مربّعات القطع فنحصل على ⟨x²⟩",
+    "fr": "on moyenne les carrés des segments — c'est ⟨x²⟩"
+  },
+  "гребень стоит на своём узле сопутствующей сетки": {
+    "en": "a crest stays on its own comoving grid node",
+    "es": "la cresta permanece en su nodo de la malla comóvil",
+    "ar": "القمة تبقى عند عقدتها في الشبكة المرافقة",
+    "fr": "la crête reste sur son nœud de la grille comobile"
+  },
+  "λ при излучении": {
+    "en": "λ at emission",
+    "es": "λ en la emisión",
+    "ar": "λ عند الإصدار",
+    "fr": "λ à l'émission"
+  },
+  "λ при приёме": {
+    "en": "λ at reception",
+    "es": "λ en la recepción",
+    "ar": "λ عند الاستقبال",
+    "fr": "λ à la réception"
+  },
+  "Δχ между гребнями не меняется — растёт только a": {
+    "en": "Δχ between crests is unchanged — only a grows",
+    "es": "Δχ entre crestas no cambia: solo crece a",
+    "ar": "Δχ بين القمتين لا يتغير — ينمو a فقط",
+    "fr": "Δχ entre les crêtes ne change pas — seul a croît"
+  },
+  "узор линий не искажается — он смещается целиком": {
+    "en": "the line pattern is not distorted — it shifts as a whole",
+    "es": "el patrón de líneas no se deforma: se desplaza entero",
+    "ar": "نمط الخطوط لا يتشوّه — بل ينزاح ككل",
+    "fr": "le motif des raies ne se déforme pas — il se décale en bloc"
+  },
+  "лаборатория": {
+    "en": "laboratory",
+    "es": "laboratorio",
+    "ar": "المختبر",
+    "fr": "laboratoire"
+  },
+  "Hα 656 нм": {
+    "en": "Hα 656 nm",
+    "es": "Hα 656 nm",
+    "ar": "Hα 656 nm",
+    "fr": "Hα 656 nm"
+  },
+  "Hα 702 нм": {
+    "en": "Hα 702 nm",
+    "es": "Hα 702 nm",
+    "ar": "Hα 702 nm",
+    "fr": "Hα 702 nm"
+  },
+  "по каждой линии z выходит одним и тем же": {
+    "en": "every line must give the same z",
+    "es": "cada línea debe dar el mismo z",
+    "ar": "كل خط يعطي القيمة نفسها لـ z",
+    "fr": "chaque raie donne le même z"
+  },
+  "рядом с сегодня кривая a(t) — почти прямая": {
+    "en": "near today the curve a(t) is almost a straight line",
+    "es": "cerca de hoy la curva a(t) es casi una recta",
+    "ar": "قرب اليوم يكون منحنى a(t) شبه مستقيم",
+    "fr": "près d'aujourd'hui la courbe a(t) est presque une droite"
+  },
+  "настоящая a(t)": {
+    "en": "true a(t)",
+    "es": "a(t) real",
+    "ar": "a(t) الحقيقي",
+    "fr": "vraie a(t)"
+  },
+  "сегодня": {
+    "en": "today",
+    "es": "hoy",
+    "ar": "اليوم",
+    "fr": "aujourd'hui"
+  },
+  "z = 0,1": {
+    "en": "z = 0.1",
+    "es": "z = 0,1",
+    "ar": "z = 0.1",
+    "fr": "z = 0,1"
+  },
+  "z = 0,5": {
+    "en": "z = 0.5",
+    "es": "z = 0,5",
+    "ar": "z = 0.5",
+    "fr": "z = 0,5"
+  },
+  "проценты": {
+    "en": "a few percent",
+    "es": "unos pocos por ciento",
+    "ar": "بضعة بالمئة",
+    "fr": "quelques pour cent"
+  },
+  "десятки процентов": {
+    "en": "tens of percent",
+    "es": "decenas de por ciento",
+    "ar": "عشرات بالمئة",
+    "fr": "des dizaines de pour cent"
+  },
+  "вся кривая": {
+    "en": "the whole curve",
+    "es": "toda la curva",
+    "ar": "المنحنى كله",
+    "fr": "toute la courbe"
+  },
+  "линейная формула честна примерно до z = 0,1": {
+    "en": "the linear formula holds up to about z = 0.1",
+    "es": "la fórmula lineal vale hasta z ≈ 0,1",
+    "ar": "الصيغة الخطية صالحة حتى z ≈ 0.1 تقريبًا",
+    "fr": "la formule linéaire est valable jusqu'à z ≈ 0,1 environ"
+  },
+  "мысленная плоскость в неоднородном газе": {
+    "en": "an imaginary plane in a non-uniform gas",
+    "es": "un plano imaginario en un gas no uniforme",
+    "ar": "مستوٍ تخيّلي في غاز غير متجانس",
+    "fr": "un plan imaginaire dans un gaz non uniforme"
+  },
+  "больше пересечений": {
+    "en": "more crossings",
+    "es": "más cruces",
+    "ar": "عمليات عبور أكثر",
+    "fr": "plus de traversées"
+  },
+  "меньше пересечений": {
+    "en": "fewer crossings",
+    "es": "menos cruces",
+    "ar": "عمليات عبور أقل",
+    "fr": "moins de traversées"
+  },
+  "гуще": {
+    "en": "denser",
+    "es": "más denso",
+    "ar": "أكثف",
+    "fr": "plus dense"
+  },
+  "реже": {
+    "en": "sparser",
+    "es": "más diluido",
+    "ar": "أقل كثافة",
+    "fr": "moins dense"
+  },
+  "слева молекул больше — значит, и пересечений слева направо больше": {
+    "en": "more molecules on the left, so more crossings from left to right",
+    "es": "hay más moléculas a la izquierda, por eso hay más cruces de izquierda a derecha",
+    "ar": "الجزيئات أكثر على اليسار، لذلك العبور من اليسار إلى اليمين أكثر",
+    "fr": "plus de molécules à gauche, donc plus de traversées de gauche à droite"
+  },
+  "грубая модель: шесть направлений, по одной шестой на каждое": {
+    "en": "a crude model: six directions, one sixth for each",
+    "es": "modelo tosco: seis direcciones, un sexto para cada una",
+    "ar": "نموذج تقريبي: ستة اتجاهات، سدس لكل منها",
+    "fr": "modèle grossier : six directions, un sixième pour chacune"
+  },
+  "на единицу площади за секунду": {
+    "en": "per unit area per second",
+    "es": "por unidad de área y segundo",
+    "ar": "لكل وحدة مساحة في الثانية",
+    "fr": "par unité de surface et par seconde"
+  },
+  "точный расчёт даёт ¼ вместо ⅙ — на оценку порядка это не влияет": {
+    "en": "the exact calculation gives ¼ instead of ⅙ — the order of magnitude is unaffected",
+    "es": "el cálculo exacto da ¼ en vez de ⅙: el orden de magnitud no cambia",
+    "ar": "الحساب الدقيق يعطي ¼ بدل ⅙ — ورتبة المقدار لا تتغيّر",
+    "fr": "le calcul exact donne ¼ au lieu de ⅙ — sans effet sur l'ordre de grandeur"
+  },
+  "молекула приносит концентрацию с расстояния λ": {
+    "en": "a molecule brings the concentration from a distance λ away",
+    "es": "la molécula trae la concentración desde una distancia λ",
+    "ar": "الجزيء يحمل التركيز من مسافة λ",
+    "fr": "la molécule apporte la concentration depuis une distance λ"
+  },
+  "последнее столкновение": {
+    "en": "last collision",
+    "es": "última colisión",
+    "ar": "آخر تصادم",
+    "fr": "dernière collision"
+  },
+  "приносит n(x−λ)": {
+    "en": "brings n(x−λ)",
+    "es": "trae n(x−λ)",
+    "ar": "يحمل n(x−λ)",
+    "fr": "apporte n(x−λ)"
+  },
+  "между столкновениями молекула летит по прямой и ничего не забывает": {
+    "en": "between collisions a molecule flies straight and forgets nothing",
+    "es": "entre colisiones la molécula vuela recto y no olvida nada",
+    "ar": "بين التصادمات يطير الجزيء في خط مستقيم ولا ينسى شيئاً",
+    "fr": "entre deux collisions la molécule vole en ligne droite et n'oublie rien"
+  },
+  "на длине λ концентрация меняется почти линейно": {
+    "en": "over a length λ the concentration changes almost linearly",
+    "es": "en una longitud λ la concentración cambia casi linealmente",
+    "ar": "على طول λ يتغيّر التركيز خطياً تقريباً",
+    "fr": "sur une longueur λ la concentration varie presque linéairement"
+  },
+  "поток идёт против градиента": {
+    "en": "the flux runs against the gradient",
+    "es": "el flujo va en contra del gradiente",
+    "ar": "التدفق يسير عكس التدرّج",
+    "fr": "le flux va à contre-gradient"
+  },
+  "поток j": {
+    "en": "flux j",
+    "es": "flujo j",
+    "ar": "التدفق j",
+    "fr": "flux j"
+  },
+  "рост концентрации": {
+    "en": "concentration increases",
+    "es": "la concentración crece",
+    "ar": "التركيز يتزايد",
+    "fr": "la concentration croît"
+  },
+  "поток и градиент смотрят в разные стороны — отсюда минус": {
+    "en": "flux and gradient point opposite ways — hence the minus sign",
+    "es": "flujo y gradiente apuntan en sentidos opuestos: de ahí el signo menos",
+    "ar": "التدفق والتدرّج في اتجاهين متعاكسين — ومن هنا إشارة السالب",
+    "fr": "flux et gradient pointent en sens opposés — d'où le signe moins"
+  },
+  "что втекло минус что вытекло — то накопилось": {
+    "en": "what flowed in minus what flowed out is what accumulated",
+    "es": "lo que entró menos lo que salió es lo que se acumuló",
+    "ar": "ما دخل ناقص ما خرج هو ما تراكم",
+    "fr": "ce qui est entré moins ce qui est sorti, voilà ce qui s'est accumulé"
+  },
+  "накопление": {
+    "en": "accumulation",
+    "es": "acumulación",
+    "ar": "التراكم",
+    "fr": "accumulation"
+  },
+  "ширина пятна растёт как корень из времени": {
+    "en": "the width of the spot grows as the square root of time",
+    "es": "el ancho de la mancha crece como la raíz cuadrada del tiempo",
+    "ar": "عرض البقعة يزداد كجذر الزمن",
+    "fr": "la largeur de la tache croît comme la racine du temps"
+  },
+  "ширина": {
+    "en": "width",
+    "es": "ancho",
+    "ar": "العرض",
+    "fr": "largeur"
+  },
+  "вчетверо дольше — всего вдвое шире": {
+    "en": "four times longer — only twice as wide",
+    "es": "cuatro veces más tiempo, solo el doble de ancho",
+    "ar": "أربعة أضعاف الزمن — الضِعف فقط في العرض",
+    "fr": "quatre fois plus longtemps — seulement deux fois plus large"
+  },
+  "от чего зависит коэффициент диффузии": {
+    "en": "what the diffusion coefficient depends on",
+    "es": "de qué depende el coeficiente de difusión",
+    "ar": "على ماذا يعتمد معامل الانتشار",
+    "fr": "de quoi dépend le coefficient de diffusion"
+  },
+  "длина пробега": {
+    "en": "mean free path",
+    "es": "recorrido libre medio",
+    "ar": "المسار الحر المتوسط",
+    "fr": "libre parcours moyen"
+  },
+  "тепловая скорость": {
+    "en": "thermal speed",
+    "es": "velocidad térmica",
+    "ar": "السرعة الحرارية",
+    "fr": "vitesse thermique"
+  },
+  "нагрели вдвое — D вырос почти втрое; сжали вдвое — D упал вдвое": {
+    "en": "double the temperature — D nearly triples; double the pressure — D halves",
+    "es": "doblar la temperatura casi triplica D; doblar la presión lo reduce a la mitad",
+    "ar": "مضاعفة الحرارة تزيد D نحو ثلاثة أضعاف؛ مضاعفة الضغط تنصّفه",
+    "fr": "doubler la température triple presque D ; doubler la pression le divise par deux"
+  },
+  "время": {
+    "en": "time",
+    "es": "tiempo",
+    "ar": "الزمن",
+    "fr": "temps"
+  },
+  "выпуклая кривая: каждому наклону — своя касательная": {
+    "en": "a convex curve: one tangent for every slope",
+    "es": "curva convexa: una tangente para cada pendiente",
+    "ar": "منحنى محدّب: لكل ميل مماس واحد",
+    "fr": "courbe convexe : une tangente pour chaque pente"
+  },
+  "наклон = p": {
+    "en": "slope = p",
+    "es": "pendiente = p",
+    "ar": "الميل = p",
+    "fr": "pente = p"
+  },
+  "дифференцируем H = p&#8201;q&#775; &#8722; L по всем переменным сразу": {
+    "en": "differentiate H = p&#8201;q&#775; &#8722; L in all variables at once",
+    "es": "diferenciamos H = p&#8201;q&#775; &#8722; L en todas las variables a la vez",
+    "ar": "نفاضل H = p&#8201;q&#775; &#8722; L بالنسبة لكل المتغيرات معًا",
+    "fr": "différentions H = p&#8201;q&#775; &#8722; L selon toutes les variables"
+  },
+  "ноль по определению импульса": {
+    "en": "zero by the definition of momentum",
+    "es": "cero por la definición del momento",
+    "ar": "صفر بحكم تعريف كمية الحركة",
+    "fr": "nul par la définition de l’impulsion"
+  },
+  "скорость исчезла из ответа — обмен честный": {
+    "en": "velocity is gone from the answer: the swap is honest",
+    "es": "la velocidad desaparece del resultado: el cambio es legítimo",
+    "ar": "اختفت السرعة من النتيجة: التبديل سليم",
+    "fr": "la vitesse a disparu du résultat : l’échange est honnête"
+  },
+  "dq и dp независимы — коэффициенты сравниваем порознь": {
+    "en": "dq and dp are independent: coefficients match separately",
+    "es": "dq y dp son independientes: los coeficientes se igualan por separado",
+    "ar": "dq وdp مستقلان: تُطابق المعاملات كلٌّ على حدة",
+    "fr": "dq et dp sont indépendants : coefficients comparés séparément"
+  },
+  "из Лежандра и Лагранжа": {
+    "en": "from Legendre and Lagrange",
+    "es": "de Legendre y Lagrange",
+    "ar": "من ليجاندر ولاغرانج",
+    "fr": "de Legendre et Lagrange"
+  },
+  "общий вид дифференциала": {
+    "en": "the general form of a differential",
+    "es": "forma general del diferencial",
+    "ar": "الصيغة العامة للتفاضل",
+    "fr": "forme générale de la différentielle"
+  },
+  "минус пришёл из первой строки, а не введён рукой": {
+    "en": "the minus comes from the first line, not by hand",
+    "es": "el signo menos viene de la primera línea, no se pone a mano",
+    "ar": "الإشارة السالبة تأتي من السطر الأول لا باليد",
+    "fr": "le moins vient de la première ligne, pas de la main"
+  },
+  "облако состояний течёт как несжимаемая жидкость": {
+    "en": "the cloud of states flows like an incompressible fluid",
+    "es": "la nube de estados fluye como un fluido incompresible",
+    "ar": "سحابة الحالات تجري كمائع غير قابل للانضغاط",
+    "fr": "le nuage d’états s’écoule comme un fluide incompressible"
+  },
+  "позже": {
+    "en": "later",
+    "es": "más tarde",
+    "ar": "لاحقًا",
+    "fr": "plus tard"
+  },
+  "ещё позже": {
+    "en": "later still",
+    "es": "aún más tarde",
+    "ar": "بعد ذلك",
+    "fr": "encore plus tard"
+  },
+  "площадь пятна одна и та же": {
+    "en": "the area of the blob is the same",
+    "es": "el área de la mancha es la misma",
+    "ar": "مساحة البقعة هي نفسها",
+    "fr": "l’aire de la tache est la même"
   }
 };
