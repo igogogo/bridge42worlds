@@ -11,8 +11,22 @@ data/knowledge-graph.json.
 tags.json/laws.json/scientists.json; раздел — из /data/arxiv-categories.json, уже используется
 поиском для .cat-chip). Раздел↔тег выводится из articles-index.json (какие теги встречаются в
 статьях каждого раздела) — прямой связи раздел↔тег нигде не хранится, это агрегат по корпусу.
-Офлайн, без API. Источники: data/tags-graph.json, data/laws-graph.json,
-lang/{default}/data/scientists.json, data/arxiv-categories.json, lang/{default}/articles-index.json.
+Офлайн, без API. ИСТОЧНИК ПОНЯТИЙ — единый реестр data/concepts.json (решение владельца
+2026-08-18: одна классификация вместо двух веток). Витрины data/tags-graph.json и
+data/laws-graph.json остаются запасным путём: пока не все читатели переехали, граф должен
+собираться и без реестра. Остальное — lang/{default}/data/scientists.json,
+data/arxiv-categories.json, lang/{default}/articles-index.json.
+
+ЧТО ДАЁТ РЕЕСТР. Раньше вид узла приезжал из двух разных таксономий и на двух языках:
+у тегов level ∈ {concept, method, object, math, substance, instrument, phenomenon},
+у законов type ∈ {закон, уравнение, эффект, теорема, принцип, изобретение}. Одно и то же
+понятие «эффект» лежало в двух ящиках с разными подписями, и фильтровать по виду было
+нечем. Теперь sub — единый kind из реестра, 13 значений на одном языке.
+
+ПРЕФИКСЫ t:/l: СОХРАНЕНЫ. Они не про классификацию, а про адрес страницы (/tags/x.html
+против /laws/x.html) и про клиентский код, который читает вид узла по первой букве id.
+Три понятия, поглотившие одноимённый тег (hawking_radiation, gravitational_lensing,
+casimir_effect), дают два узла — как и раньше: у них две живые страницы.
 """
 
 import json
@@ -27,17 +41,54 @@ def _jl(p):
     return json.loads(p.read_text(encoding="utf-8")) if p.exists() else {}
 
 
+# Русские типы законов из старых витрин → единый kind реестра. Нужна только на
+# запасном пути: когда реестра нет, граф всё равно должен говорить на одном языке.
+LAW_KIND = {"закон": "law", "уравнение": "equation", "теорема": "theorem",
+            "принцип": "principle", "эффект": "effect", "изобретение": "invention"}
+
+
+def _from_registry():
+    """Понятия из единого реестра в форме, которую ждёт остальной построитель.
+
+    Возвращает (tg, lg) — те же словари, что раньше читались из витрин, плюс уже
+    приведённый kind. Пусто, если реестра нет: тогда вызывающий берёт витрины.
+    """
+    reg = _jl("data/concepts.json").get("concepts", {})
+    if not reg:
+        return {}, {}
+    tg, lg = {}, {}
+    for cid, c in reg.items():
+        kind = c.get("kind", "concept")
+        if c.get("origin") == "tag" or c.get("absorbed_tag"):
+            tg[cid] = {"level": kind, "related": list(c.get("related", [])),
+                       "scientists": list(c.get("scientists", [])),
+                       "article_count": c.get("article_count", 0)}
+        if c.get("origin") == "law":
+            lg[cid] = {"type": kind, "tags": list(c.get("tags_of_law", [])),
+                       "related": list(c.get("related", [])),
+                       "scientists": list(c.get("scientists", [])),
+                       "influenced_by": list(c.get("influenced_by", []))}
+    return tg, lg
+
+
 def main():
-    tg = _jl("data/tags-graph.json").get("graph", {})
-    lg = _jl("data/laws-graph.json").get("graph", {})
+    tg, lg = _from_registry()
+    src = "реестр понятий"
+    if not tg and not lg:
+        tg = _jl("data/tags-graph.json").get("graph", {})
+        lg = _jl("data/laws-graph.json").get("graph", {})
+        for n in lg.values():                       # витрины говорят по-русски
+            n["type"] = LAW_KIND.get(n.get("type", "закон"), "law")
+        src = "витрины (реестра нет)"
     sci = _jl(f"lang/{DEFAULT_LANG}/data/scientists.json")
     cats = _jl("data/arxiv-categories.json")
+    print(f"  источник понятий: {src} — {len(tg)} тегов, {len(lg)} законов")
 
     nodes = {}
     for tid, n in tg.items():
         nodes[f"t:{tid}"] = {"id": f"t:{tid}", "kind": "tag", "sub": n.get("level", "concept")}
     for lid, n in lg.items():
-        nodes[f"l:{lid}"] = {"id": f"l:{lid}", "kind": "law", "sub": n.get("type", "закон")}
+        nodes[f"l:{lid}"] = {"id": f"l:{lid}", "kind": "law", "sub": n.get("type", "law")}
     for name in sci:
         nodes[f"s:{name}"] = {"id": f"s:{name}", "kind": "sci", "sub": "sci"}
     for cid in cats:
@@ -49,14 +100,22 @@ def main():
         if a in nodes and b in nodes and a != b:
             edges.add((min(a, b), max(a, b), t))
 
-    # tag ↔ tag
+    # tag ↔ tag и tag ↔ law. После слияния в реестр связи стали перекрёстными: 22 пары
+    # ведут от тега к закону и столько же обратно. Тип ребра определяем по тому, где
+    # цель РЕАЛЬНО есть, а не по тому, откуда пришли — иначе связь молча пропадает.
     for tid, n in tg.items():
         for r in n.get("related", []):
-            add(f"t:{tid}", f"t:{r}", "tag-tag")
-    # law ↔ law
+            if f"t:{r}" in nodes:
+                add(f"t:{tid}", f"t:{r}", "tag-tag")
+            elif f"l:{r}" in nodes:
+                add(f"l:{r}", f"t:{tid}", "law-tag")
+    # law ↔ law и law ↔ tag
     for lid, n in lg.items():
         for r in n.get("related", []):
-            add(f"l:{lid}", f"l:{r}", "law-law")
+            if f"l:{r}" in nodes:
+                add(f"l:{lid}", f"l:{r}", "law-law")
+            elif f"t:{r}" in nodes:
+                add(f"l:{lid}", f"t:{r}", "law-tag")
     # law ↔ tag, law ↔ sci (открыли), law ↔ sci (оказали влияние — отдельный тип ребра,
     # см. закон↔учёный полнота: Пуанкаре/Лоренц у теории относительности, Гук у законов
     # Ньютона — не первооткрыватели, но реальный вклад не должен теряться из графа)

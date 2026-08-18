@@ -1849,16 +1849,31 @@ _TAGS_REGISTRY = None
 
 
 def _tags_registry():
-    """Множество зарегистрированных тегов — из data/tags-graph.json, один раз на прогон."""
+    """Множество зарегистрированных понятий — из data/concepts.json, один раз на прогон.
+
+    С 18.08 источник правды — единый реестр (решение владельца: одна классификация).
+    Для валидации разметки это не косметика: витрина тегов знает 363 понятия, реестр —
+    535, и закон, размеченный в тексте как [tag:hawking_radiation], по витрине выглядел
+    бы незарегистрированным. Витрина остаётся запасным путём, пока слой совместимости
+    не прогнан везде.
+    """
     global _TAGS_REGISTRY
     if _TAGS_REGISTRY is None:
+        try:
+            reg = json.loads(Path("data/concepts.json").read_text(encoding="utf-8"))
+            ids = set((reg.get("concepts") or {}).keys())
+            if ids:
+                _TAGS_REGISTRY = ids
+                return _TAGS_REGISTRY
+        except Exception:
+            pass
         try:
             g = json.loads(Path("data/tags-graph.json").read_text(encoding="utf-8"))
             _TAGS_REGISTRY = set((g.get("graph") or {}).keys())
         except Exception:
             # Реестр не прочитался — валидация невозможна. Пропускаем ВСЁ и говорим об
             # этом: молча пропустить хуже, но молча выбросить все теги ещё хуже.
-            print("    ⚠️ tags-graph.json не прочитался — валидация тегов пропущена")
+            print("    ⚠️ ни concepts.json, ни tags-graph.json не прочитались — валидация тегов пропущена")
             _TAGS_REGISTRY = None
             return set()
     return _TAGS_REGISTRY if _TAGS_REGISTRY is not None else set()
@@ -2131,16 +2146,37 @@ def update_authors_graph(article):
 
 
 def update_tag_counts(scipop):
+    """Счётчик статей и учёные тега — накапливаются по ходу генерации.
+
+    Пишем В ОБА места: витрину (её читают страницы) и единый реестр понятий (он
+    источник правды с 18.08). Иначе реестр отстаёт от жизни, а витрина, собранная из
+    него слоем совместимости, откатывает счётчики назад — замер 18.08 показал
+    расхождение уже через минуту после сборки реестра, на четырёх тегах.
+    """
+    ids = [t for t in [scipop.get("main_tag", "")] + scipop.get("extra_tags", []) if t]
+    if not ids:
+        return
     gp = Path("data/tags-graph.json")
-    if not gp.exists(): return
-    graph = json.loads(gp.read_text(encoding="utf-8"))
-    for t in [scipop.get("main_tag", "")] + scipop.get("extra_tags", []):
-        if t and t in graph.get("graph", {}):
-            graph["graph"][t]["article_count"] = graph["graph"][t].get("article_count", 0) + 1
-            if "scientists" not in graph["graph"][t]: graph["graph"][t]["scientists"] = []
-            for s in scipop.get("scientists", []):
-                if s not in graph["graph"][t]["scientists"]: graph["graph"][t]["scientists"].append(s)
-    write_json_atomic(gp, graph)
+    if gp.exists():
+        graph = json.loads(gp.read_text(encoding="utf-8"))
+        for t in ids:
+            if t in graph.get("graph", {}):
+                graph["graph"][t]["article_count"] = graph["graph"][t].get("article_count", 0) + 1
+                if "scientists" not in graph["graph"][t]: graph["graph"][t]["scientists"] = []
+                for s in scipop.get("scientists", []):
+                    if s not in graph["graph"][t]["scientists"]: graph["graph"][t]["scientists"].append(s)
+        write_json_atomic(gp, graph)
+    cp = Path("data/concepts.json")
+    if cp.exists():
+        reg = json.loads(cp.read_text(encoding="utf-8"))
+        node = reg.get("concepts") or {}
+        for t in ids:
+            if t in node:
+                node[t]["article_count"] = node[t].get("article_count", 0) + 1
+                sci = node[t].setdefault("scientists", [])
+                for s in scipop.get("scientists", []):
+                    if s not in sci: sci.append(s)
+        write_json_atomic(cp, reg)
 
 
 # ── Pages ──
@@ -2942,6 +2978,40 @@ GRAPH_LABELS = {
 }
 
 
+
+# Виды понятий единого реестра для фильтров графа (решение владельца 18.08).
+# Ключи совпадают с kind в data/concepts.json — ровно 13 видов, сгруппированных
+# по четырём осям. Группы не выдуманы под интерфейс: «каркас» — то, что объясняет
+# (закон, принцип, теорема), «методы» — то, чем добывают, «объекты» — то, что
+# изучают, «понятия» — язык, на котором говорят. Волна назвала три группы и девять
+# видов; concept, math, effect и invention она не упомянула, их разложил я:
+# эффект наблюдают — значит к объектам и явлениям, изобретение это прибор в
+# широком смысле — к методам, а concept и math языка не имеют вовсе и образуют
+# четвёртую группу. Иначе 232 понятия из 535 остались бы без единой галочки.
+GRAPH_KINDS = {
+    "ru": {'kinds': 'Виды:', 'g_frame': 'каркас', 'g_method': 'методы', 'g_object': 'объекты', 'g_idea': 'понятия', 'law': 'закон', 'principle': 'принцип', 'theorem': 'теорема', 'method': 'метод', 'instrument': 'прибор', 'equation': 'уравнение', 'invention': 'изобретение', 'object': 'объект', 'substance': 'вещество', 'phenomenon': 'явление', 'effect': 'эффект', 'concept': 'понятие', 'math': 'математика'},
+    "en": {'kinds': 'Kinds:', 'g_frame': 'framework', 'g_method': 'methods', 'g_object': 'objects', 'g_idea': 'concepts', 'law': 'law', 'principle': 'principle', 'theorem': 'theorem', 'method': 'method', 'instrument': 'instrument', 'equation': 'equation', 'invention': 'invention', 'object': 'object', 'substance': 'substance', 'phenomenon': 'phenomenon', 'effect': 'effect', 'concept': 'concept', 'math': 'mathematics'},
+    "es": {'kinds': 'Tipos:', 'g_frame': 'marco', 'g_method': 'métodos', 'g_object': 'objetos', 'g_idea': 'conceptos', 'law': 'ley', 'principle': 'principio', 'theorem': 'teorema', 'method': 'método', 'instrument': 'instrumento', 'equation': 'ecuación', 'invention': 'invención', 'object': 'objeto', 'substance': 'sustancia', 'phenomenon': 'fenómeno', 'effect': 'efecto', 'concept': 'concepto', 'math': 'matemáticas'},
+    "fr": {'kinds': 'Types :', 'g_frame': 'charpente', 'g_method': 'méthodes', 'g_object': 'objets', 'g_idea': 'concepts', 'law': 'loi', 'principle': 'principe', 'theorem': 'théorème', 'method': 'méthode', 'instrument': 'instrument', 'equation': 'équation', 'invention': 'invention', 'object': 'objet', 'substance': 'substance', 'phenomenon': 'phénomène', 'effect': 'effet', 'concept': 'concept', 'math': 'mathématiques'},
+    "ar": {'kinds': 'الأنواع:', 'g_frame': 'الهيكل', 'g_method': 'الطرائق', 'g_object': 'الأجسام', 'g_idea': 'المفاهيم', 'law': 'قانون', 'principle': 'مبدأ', 'theorem': 'مبرهنة', 'method': 'طريقة', 'instrument': 'أداة', 'equation': 'معادلة', 'invention': 'اختراع', 'object': 'جسم', 'substance': 'مادة', 'phenomenon': 'ظاهرة', 'effect': 'أثر', 'concept': 'مفهوم', 'math': 'رياضيات'},
+    "zh": {'kinds': '种类：', 'g_frame': '骨架', 'g_method': '方法', 'g_object': '对象', 'g_idea': '概念', 'law': '定律', 'principle': '原理', 'theorem': '定理', 'method': '方法', 'instrument': '仪器', 'equation': '方程', 'invention': '发明', 'object': '物体', 'substance': '物质', 'phenomenon': '现象', 'effect': '效应', 'concept': '概念', 'math': '数学'},
+}
+
+
+def _graph_kind_labels(lang):
+    """Подписи видов и групп для шаблона графа. Отсутствующий язык падает на английский,
+    а не на пустую строку: пустая галочка без подписи выглядит как поломка вёрстки."""
+    k = GRAPH_KINDS.get(lang) or GRAPH_KINDS["en"]
+    out = {"kinds_label": safe(k["kinds"])}
+    for g in ("frame", "method", "object", "idea"):
+        out[f"group_{g}"] = safe(k[f"g_{g}"])
+    for kind in ("law", "principle", "theorem", "method", "instrument", "equation",
+                 "invention", "object", "substance", "phenomenon", "effect",
+                 "concept", "math"):
+        out[f"kind_{kind}"] = safe(k[kind])
+    return out
+
+
 def generate_knowledge_graph_page(lang):
     """Страница единого графа знаний (теги⇄законы⇄учёные) с тумблерами типов узлов/рёбер."""
     tpl = load_template("graph-explorer")
@@ -2962,6 +3032,7 @@ def generate_knowledge_graph_page(lang):
         edge_tag_law=safe(loc["edge_tag_law"]), edge_tag_sci=safe(loc["edge_tag_sci"]), edge_law_sci=safe(loc["edge_law_sci"]),
         edge_tag_tag=safe(loc["edge_tag_tag"]), edge_law_law=safe(loc["edge_law_law"]), edge_sci_sci=safe(loc["edge_sci_sci"]),
         edge_law_influence=safe(loc["edge_law_influence"]), preset_core=safe(loc["preset_core"]), preset_all=safe(loc["preset_all"]),
+        **_graph_kind_labels(lang),
         loading_text=safe(LOADING_LABEL.get(lang, LOADING_LABEL["en"]))
     ), encoding="utf-8")
 

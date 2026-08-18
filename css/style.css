@@ -367,6 +367,28 @@ body.graph-fs-open { overflow: hidden; }
     background: var(--card-bg); border: 1px solid var(--border); color: var(--text); transition: all 0.15s;
 }
 .kg-row button:hover { border-color: var(--link); color: var(--link); }
+
+/* Виды понятий: группа — крупная галочка, внутри неё мелкие виды.
+   Владелец 18.08: «в графе можно ставить галочки на группе классификации, и будет чище».
+   Тринадцать видов в один ряд — это и есть то месиво, которого он не хочет видеть на
+   телефоне, поэтому единица управления здесь ГРУППА, а виды — её раскрытие. */
+.kg-kinds-row { align-items: flex-start; }
+.kg-group {
+    display: inline-flex; flex-direction: column; gap: 2px;
+    padding: 3px 8px; border: 0.5px solid var(--border); border-radius: 8px;
+}
+.kg-group-t { font-weight: 600; }
+.kg-group-t input[type="checkbox"] { width: 13px; height: 13px; }
+.kg-subs { display: flex; flex-wrap: wrap; gap: 2px 8px; padding-inline-start: 15px; }
+.kg-subs label { color: var(--soft); font-size: 11px; }
+
+@media (max-width: 700px) {
+    /* На узком экране остаются четыре группы. Виды никуда не деваются — их включает
+       галочка группы; открывать тринадцать штук на 375px некуда, а месиво из них
+       перекрывает сам граф, ради которого сюда и пришли. */
+    .kg-subs { display: none; }
+    .kg-group { padding: 3px 10px; }
+}
 /* Три отдельных поля (тег/закон/учёный) — уже, чтобы все влезали в ряд; было одно общее
    поле на все типы — с учётом ~60 узлов один выпадающий список был перегружен/путался. */
 .kg-search-input {

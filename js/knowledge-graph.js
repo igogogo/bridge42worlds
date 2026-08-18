@@ -190,10 +190,17 @@
                 }
 
                 var kinds = checked('kg-kind'), edges = checked('kg-edge');
+                // Виды понятий из единого реестра (13 значений в n.sub). Пустой набор =
+                // «все виды»: фильтр, который по умолчанию всё прячет, читается как поломка.
+                // Учёные и разделы под эту ось не попадают — у них своя галочка выше, и
+                // отсекать их видом понятия значило бы выключать их молча.
+                var subs = checked('kg-sub'), anySub = false;
+                for (var _s in subs) { if (subs[_s]) { anySub = true; break; } }
                 var byId = {}, candIds = [];
                 kg.nodes.forEach(function (n) {
                     byId[n.id] = n;
                     if (!kinds[n.kind]) return;
+                    if (anySub && (n.kind === 'tag' || n.kind === 'law') && !subs[n.sub]) return;
                     candIds.push(n.id);
                 });
                 var candSet = {};
@@ -244,10 +251,43 @@
     // Чекбоксы → перестроить граф.
     document.addEventListener('change', function (e) {
         var t = e.target;
-        if (t.classList && (t.classList.contains('kg-kind') || t.classList.contains('kg-edge'))) {
+        if (!t.classList) return;
+        // Галочка группы включает и выключает все виды внутри себя. Обратная связь тоже
+        // нужна: сняли последний вид — группа гаснет, отметили все — загорается. Без этого
+        // галочка группы врёт о состоянии, а врущий контрол хуже отсутствующего.
+        if (t.classList.contains('kg-group-all')) {
+            var g = t.getAttribute('data-group');
+            document.querySelectorAll('.kg-sub[data-group="' + g + '"]').forEach(function (c) {
+                c.checked = t.checked;
+            });
+        } else if (t.classList.contains('kg-sub')) {
+            var gg = t.getAttribute('data-group');
+            var all = document.querySelectorAll('.kg-sub[data-group="' + gg + '"]');
+            var on = 0;
+            all.forEach(function (c) { if (c.checked) on++; });
+            var head = document.querySelector('.kg-group-all[data-group="' + gg + '"]');
+            if (head) {
+                head.checked = on === all.length;
+                head.indeterminate = on > 0 && on < all.length;
+            }
+        }
+        if (t.classList.contains('kg-kind') || t.classList.contains('kg-edge')
+            || t.classList.contains('kg-sub') || t.classList.contains('kg-group-all')) {
             if (window.__kgRebuild) window.__kgRebuild();
         }
     });
+
+    // Сброс видов — отдельной кнопкой: снять четыре группы поодиночке дольше, чем нажать раз.
+    var kindsClear = document.getElementById('kg-kinds-clear');
+    if (kindsClear) {
+        kindsClear.addEventListener('click', function () {
+            document.querySelectorAll('.kg-sub, .kg-group-all').forEach(function (c) {
+                c.checked = false;
+                c.indeterminate = false;
+            });
+            if (window.__kgRebuild) window.__kgRebuild();
+        });
+    }
 
     // Поиск: своя выпадашка подсказок на поле (не нативный datalist) — список меняется на
     // каждое нажатие клавиши (поиск по вхождению, не только с начала), отсортирован по
@@ -383,6 +423,12 @@
         set.forEach(function (tp) { (EDGE_KINDS[tp] || tp.split('-')).forEach(function (k) { kinds[k] = 1; }); });
         document.querySelectorAll('.kg-edge').forEach(function (c) { c.checked = set.indexOf(c.value) !== -1; });
         document.querySelectorAll('.kg-kind').forEach(function (c) { c.checked = !!kinds[c.value]; });
+        // Пресет — это крупный мазок по типам узлов; удерживать поверх него тонкий фильтр
+        // по видам нельзя: получилась бы пустая картинка при внешне выбранном пресете.
+        document.querySelectorAll('.kg-sub, .kg-group-all').forEach(function (c) {
+            c.checked = false;
+            c.indeterminate = false;
+        });
         if (window.__kgRebuild) window.__kgRebuild();
     };
 })();
