@@ -281,7 +281,13 @@ def generate_express(article, abstract_text, tags_input, scientists_keys):
     статьи. Даёт mini+simple разом. Обложка/мозаика всё равно берутся из PDF (см. build_article),
     просто текст для генерации — дешёвый и короткий. tags_input — обычно урезанное express-
     подмножество (лестница дешевле не только по input article_text, но и по списку тегов в промте)."""
-    tags_list = ", ".join(t["en"] for t in tags_input)
+    # Экспресс — последняя дверь, через которую теги ещё уходили в промпт. Решение владельца
+    # 2026-08-09 «разметка вектором, не промптом» исполнили наполовину: полный разбор ключ
+    # tags_in_prompt=False уважает (см. generate_advanced), а здесь стояла безусловная строка.
+    # Цена видна на живой статье: разбор прямо про нейтрино получил neutron_star, потому что
+    # в express-списке 53 тега и neutrino в него не входит. Теперь один ключ правит обе двери,
+    # а теги ставит вектор (tools/tag_by_vector.py, шаг фабрики перед публикацией).
+    tags_list = (", ".join(t["en"] for t in tags_input) if TAGS_IN_PROMPT else _NO_TAGS_BLOCK)
     scientists_list = ", ".join(scientists_keys)
     prompt = load_prompt("article-generate-express").format(
         tags_list=tags_list, scientists_list=scientists_list, abstract_text=abstract_text)
