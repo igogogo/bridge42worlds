@@ -2902,6 +2902,204 @@
         };
     }
 
+    /** Распределение Максвелла: три разные «средние скорости» одного газа и хвост распределения. */
+    function maxwellModel(data) {
+        var K = 1.380649e-23, NA = 6.02214076e23;
+
+        function mass(st) { return st.M / 1000 / NA; }              // г/моль → кг на молекулу
+        /** Плотность вероятности по модулю скорости. */
+        function f(v, st) {
+            var m = mass(st), a = m / (2 * K * st.T);
+            return 4 * Math.PI * Math.pow(a / Math.PI, 1.5) * v * v * Math.exp(-a * v * v);
+        }
+        function vProb(st) { return Math.sqrt(2 * K * st.T / mass(st)); }
+        function vMean(st) { return Math.sqrt(8 * K * st.T / (Math.PI * mass(st))); }
+        function vRms(st) { return Math.sqrt(3 * K * st.T / mass(st)); }
+
+        return {
+            cfg: {
+                i18n: data.i18n,
+                params: data.params.map(function (p) { return { key: p.key, label: p.key, min: p.min, max: p.max, step: p.step, value: p.value, unit: p.unit }; }),
+                animate: function (t, st) { return { t: t, ph: t }; },
+                derive: function (st, a) {
+                    var vp = vProb(st), vm = vMean(st), vr = vRms(st);
+                    // доля молекул быстрее порога — численно, тем же распределением
+                    var vmax = vr * 3.2, n = 400, dv = vmax / n, above = 0, all = 0;
+                    for (var i = 0; i < n; i++) {
+                        var v = (i + 0.5) * dv, w = f(v, st) * dv;
+                        all += w;
+                        if (v >= st.vcut) above += w;
+                    }
+                    return { vp: vp, vm: vm, vr: vr, ph: a.ph, vmax: vmax,
+                             frac: all > 0 ? above / all : 0, peak: f(vp, st) };
+                },
+                stage: {
+                    height: 285,
+                    draw: function (g, ctx) {
+                        var W = ctx.W, H = ctx.H, col = ctx.c, st = ctx.state, d = ctx.derived;
+                        var pad = 34, base = H - 46, top = 44;
+                        var SX = KIT.scale({ min: 0, max: d.vmax, from: pad, to: W - pad });
+                        var SY = KIT.scale({ min: 0, max: d.peak * 1.15, from: base, to: top });
+
+                        var pts = [];
+                        for (var i = 0; i <= 160; i++) {
+                            var v = d.vmax * i / 160;
+                            pts.push([SX(v), SY(f(v, st))]);
+                        }
+                        KIT.axis(g, pad, W - pad, base, { color: col.border });
+                        // хвост правее порога закрашен: это и есть «сколько молекул быстрее»
+                        KIT.alpha(g, 0.22, function () {
+                            g.fillStyle = '#9B2C2C';
+                            g.beginPath(); g.moveTo(SX(st.vcut), base);
+                            for (var j = 0; j <= 120; j++) {
+                                var vv = st.vcut + (d.vmax - st.vcut) * j / 120;
+                                g.lineTo(SX(vv), SY(f(vv, st)));
+                            }
+                            g.lineTo(SX(d.vmax), base); g.closePath(); g.fill();
+                        });
+                        KIT.polyline(g, pts, { color: '#155E74', width: 2.4 });
+
+                        // три «средние» скорости одного газа: они разные, и это не описка
+                        [[d.vp, ctx.T('vProb'), '#8F6417'], [d.vm, ctx.T('vMean'), '#4C6B4E'],
+                         [d.vr, ctx.T('vRms'), '#155E74']].forEach(function (m) {
+                            KIT.marker(g, SX(m[0]), top - 8, base, { color: m[2], width: 1.4,
+                                label: m[1] + ' ' + Math.round(m[0]), size: 10 });
+                        });
+                        KIT.marker(g, SX(st.vcut), top - 8, base, { color: '#9B2C2C', width: 2,
+                            label: ctx.T('cut'), size: 10 });
+
+                        KIT.text(g, ctx.T('xV'), W - pad, base + 16, { size: 10, color: col.soft, align: 'right' });
+                        KIT.readout(g, [
+                            { text: ctx.T('title'), y: 18, size: 11.5, weight: '600', color: '#155E74' },
+                            { text: ctx.T('fasterThan') + ' ' + st.vcut + ' ' + ctx.T('unit_ms') + ': ' +
+                                    (d.frac * 100).toFixed(d.frac < 0.01 ? 3 : 1) + ' %', y: 34, size: 10.5, color: '#9B2C2C' }
+                        ]);
+                    }
+                },
+                formula: function (st, d, T) {
+                    return '<span class="xf-op">v_вер = √(2kT/m) = </span><span class="xf-res">' +
+                        Math.round(d.vp) + ' ' + T('unit_ms') + '</span>' +
+                        '<span class="xf-op"> · ⟨v⟩ = </span><span class="xf-var">' + Math.round(d.vm) + '</span>' +
+                        '<span class="xf-op"> · v_скв = </span><span class="xf-var">' + Math.round(d.vr) + '</span>' +
+                        '<br><i>' + T('ratioIs') + ' 1 : ' + (d.vm / d.vp).toFixed(2) + ' : ' + (d.vr / d.vp).toFixed(2) +
+                        ' — ' + T('ratioNote') + '</i>';
+                },
+                plot: {
+                    height: 170,
+                    x: { label: 'xT', min: 100, max: 1500 },
+                    y: { label: 'yV', min: 0, max: function (s) { return Math.round(Math.sqrt(3 * K * 1500 / (s.M / 1000 / NA))); } },
+                    samples: 90,
+                    curve: function (T, s) { return Math.sqrt(3 * K * T / (s.M / 1000 / NA)); },
+                    marker: function (s, a, d) { return { x: s.T, y: d.vr }; }
+                }
+            },
+            extras: function (st, d, T) {
+                return '<b>' + T('vProb') + '</b> ' + Math.round(d.vp) + ' &nbsp;·&nbsp; <b>' + T('vMean') + '</b> ' +
+                    Math.round(d.vm) + ' &nbsp;·&nbsp; <b>' + T('vRms') + '</b> ' + Math.round(d.vr) + ' ' + T('unit_ms');
+            }
+        };
+    }
+
+    /** Явления переноса: диффузия как случайное блуждание. Расплывание идёт как корень из времени. */
+    function transportModel(data) {
+        // Одна и та же длина свободного пробега управляет всеми тремя переносами:
+        // массы (диффузия), импульса (вязкость) и энергии (теплопроводность).
+        function lambda(st) { return st.lam * 1e-9; }                 // нм → м
+        function vth(st) { return st.v; }                             // м/с, тепловая скорость
+        function D(st) { return lambda(st) * vth(st) / 3; }           // коэффициент диффузии
+        function width(st, t) { return Math.sqrt(2 * D(st) * t); }    // ширина пятна, м
+
+        return {
+            cfg: {
+                i18n: data.i18n,
+                params: data.params.map(function (p) { return { key: p.key, label: p.key, min: p.min, max: p.max, step: p.step, value: p.value, unit: p.unit }; }),
+                animate: function (t, st) { return { t: t, ph: (t % 6) / 6 }; },
+                derive: function (st, a) {
+                    var t = st.time;
+                    var w = width(st, t);
+                    return { D: D(st), w: w, wmm: w * 1000, ph: a.ph,
+                             // сколько времени нужно, чтобы уйти на метр — отсюда видно,
+                             // почему запах в комнате разносит сквозняк, а не диффузия
+                             tMeter: 1 / (2 * D(st)),
+                             steps: vth(st) * t / lambda(st) };
+                },
+                stage: {
+                    height: 275,
+                    draw: function (g, ctx) {
+                        var W = ctx.W, H = ctx.H, col = ctx.c, st = ctx.state, d = ctx.derived;
+                        var pad = 32, cx = W / 2, cy = 96;
+
+                        // — облако частиц: ширина растёт как корень из времени
+                        var scale = 150 / Math.max(1e-6, width(st, st.time * 4));   // подгон под кадр
+                        var px = Math.min(150, d.w * scale * 1000);
+                        for (var i = 0; i < 90; i++) {
+                            // устойчивый «шум»: одно и то же зерно на кадр, движение только от времени
+                            var r1 = Math.sin(i * 12.9898) * 43758.5453;
+                            var r2 = Math.sin(i * 78.233) * 12345.6789;
+                            var gx = (r1 - Math.floor(r1)) * 2 - 1, gy = (r2 - Math.floor(r2)) * 2 - 1;
+                            KIT.body(g, cx + gx * px, cy + gy * px * 0.42,
+                                     { shape: 'dot', size: 3.5, color: '#155E74' });
+                        }
+                        KIT.dashed(g, [3, 4], function () {
+                            g.strokeStyle = '#9B2C2C'; g.lineWidth = 1.4;
+                            g.beginPath(); g.ellipse(cx, cy, Math.max(3, px), Math.max(2, px * 0.42), 0, 0, 6.2832); g.stroke();
+                        });
+                        KIT.text(g, ctx.T('cloud'), pad, 20, { size: 10.5, color: col.soft });
+                        KIT.text(g, d.wmm < 10 ? d.wmm.toFixed(2) + ' ' + ctx.T('unit_mm')
+                                               : (d.wmm / 1000).toFixed(2) + ' ' + ctx.T('unit_m'),
+                                 cx, cy + px * 0.42 + 18, { size: 11, color: '#9B2C2C', align: 'center' });
+
+                        // — корень из времени: график ширины
+                        var base = H - 40, top = 176, x0 = pad, x1 = W - pad;
+                        var tmax = 120;
+                        var SX = KIT.scale({ min: 0, max: tmax, from: x0, to: x1 });
+                        var wmax = width(st, tmax);
+                        var SY = KIT.scale({ min: 0, max: wmax, from: base, to: top });
+                        var pts = [];
+                        for (var k = 0; k <= 90; k++) {
+                            var tt = tmax * k / 90;
+                            pts.push([SX(tt), SY(width(st, tt))]);
+                        }
+                        KIT.axis(g, x0, x1, base, { color: col.border });
+                        KIT.polyline(g, pts, { color: '#155E74', width: 2.2 });
+                        KIT.marker(g, SX(Math.min(tmax, st.time)), top, base, { color: '#9B2C2C', width: 1.6,
+                            label: ctx.T('now'), size: 10 });
+                        KIT.text(g, ctx.T('xTime'), x1, base + 16, { size: 10, color: col.soft, align: 'right' });
+                        KIT.text(g, ctx.T('sqrtNote'), x0 + 6, top - 6, { size: 10, color: col.soft });
+
+                        KIT.readout(g, [
+                            { text: ctx.T('title'), y: 18, size: 11.5, weight: '600', color: '#155E74' },
+                            { text: 'D ≈ ' + d.D.toExponential(1) + ' ' + ctx.T('unit_m2s'), y: 34, size: 10.5, color: col.soft }
+                        ], { x: W - pad, align: 'right' });
+                    }
+                },
+                formula: function (st, d, T) {
+                    var days = d.tMeter / 86400;
+                    return '<span class="xf-op">D = λv/3 = </span><span class="xf-res">' +
+                        d.D.toExponential(1) + ' ' + T('unit_m2s') + '</span>' +
+                        '<span class="xf-op"> · x = √(2Dt) = </span><span class="xf-var">' +
+                        (d.wmm < 10 ? d.wmm.toFixed(2) + ' ' + T('unit_mm') : (d.wmm / 1000).toFixed(2) + ' ' + T('unit_m')) +
+                        '</span><br><i>' + T('meterTakes') + ' ' +
+                        (days > 1 ? days.toFixed(0) + ' ' + T('unit_days') : (d.tMeter / 3600).toFixed(1) + ' ' + T('unit_hours')) +
+                        ' — ' + T('whyDraft') + '</i>';
+                },
+                plot: {
+                    height: 170,
+                    x: { label: 'xTime2', min: 0, max: 120 },
+                    y: { label: 'yWidth', min: 0, max: function (s) { return width(s, 120) * 1000; } },
+                    samples: 90,
+                    curve: function (t, s) { return width(s, t) * 1000; },
+                    marker: function (s, a, d) { return { x: s.time, y: d.wmm }; }
+                }
+            },
+            extras: function (st, d, T) {
+                return '<b>D</b> ' + d.D.toExponential(1) + ' ' + T('unit_m2s') +
+                    ' &nbsp;·&nbsp; <b>' + T('widthIs') + '</b> ' + d.wmm.toFixed(2) + ' ' + T('unit_mm') +
+                    ' &nbsp;·&nbsp; <b>' + T('stepsIs') + '</b> ' + d.steps.toExponential(1);
+            }
+        };
+    }
+
     var FACTORIES = { gas: gasModel, kettle: kettleModel, engine: engineModel,
                       motion: motionModel, newton: newtonModel, collision: collisionModel,
                       rotation: rotationModel, oscillator: oscillatorModel,
@@ -2909,7 +3107,8 @@
                       orbit: orbitModel, wave: waveModel, charge: chargeModel, magnet: magnetModel,
                       srt: srtModel, quantum: quantumModel, nucleus: nucleusModel,
                       action: actionModel, expansion: expansionModel, cmb: cmbModel,
-                      dark: darkModel, flow: flowModel };
+                      dark: darkModel, flow: flowModel, maxwell: maxwellModel,
+                      transport: transportModel };
     global.B42Models = {};
     Object.keys(FACTORIES).forEach(function (k) { global.B42Models[k] = withUnits(FACTORIES[k]); });
     global.B42Models._localizeUnits = localizeUnits;   // для проверок
