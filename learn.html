@@ -181,7 +181,7 @@
   }
 
   fetch('/data/theory/courses/index.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (d) {
-    var C = d[LANG] || d.ru, byId = {};
+    var C = B42Lang.pick(d) || d.ru, byId = {};
     // Состав курса задаётся ОДНИМ списком — верхним. Языковые ветки дают только перевод
     // названий, и накладываются поверх по id.
     //

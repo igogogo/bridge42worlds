@@ -112,7 +112,7 @@
   fetch('/data/theory/mathkit.json', { cache: 'no-cache' })
     .then(function (r) { return r.json(); })
     .then(function (d) {
-      var T = d[LANG] || d.ru;
+      var T = B42Lang.pick(d) || d.ru;
       document.title = T.title + ' — bridge42worlds';
       document.getElementById('h').textContent = T.title;
       document.getElementById('sub').textContent = T.subtitle;

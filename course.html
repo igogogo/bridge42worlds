@@ -512,7 +512,7 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
 
   // ── ОБЗОРНАЯ ГЛАВА (видение темы) ──
   function renderOverview(c) {
-    var C = c[LANG] || c.ru;
+    var C = B42Lang.pick(c) || c.ru;
     document.title = C.title + ' — bridge42worlds';
     root.appendChild(el('h1', null, C.title));
     root.appendChild(el('div', 'k-sub', C.subtitle));
@@ -650,10 +650,10 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
 
   // ── МЕТОДИЧКА (как работать с курсом) ──
   function renderGuide(g, course) {
-    var G = g[LANG] || g.ru;
+    var G = B42Lang.pick(g) || g.ru;
     document.title = G.title + ' — bridge42worlds';
     var nav = el('div', 'k-nav');
-    var back = el('a', null, '← ' + (course[LANG] || course.ru).title); back.href = '?t=' + course.id; nav.appendChild(back);
+    var back = el('a', null, '← ' + (B42Lang.pick(course) || course.ru).title); back.href = '?t=' + course.id; nav.appendChild(back);
     root.appendChild(nav);
     root.appendChild(el('h1', null, G.title));
     root.appendChild(el('div', 'k-sub', G.subtitle));
@@ -770,12 +770,12 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
 
   // ── ПАРАГРАФ (урок с выводом) ──
   function renderLesson(lesson, course, modelData) {
-    var L = lesson[LANG] || lesson.ru;
-    document.title = L.title + ' — ' + (course[LANG] || course.ru).title + ' — bridge42worlds';
+    var L = B42Lang.pick(lesson) || lesson.ru;
+    document.title = L.title + ' — ' + (B42Lang.pick(course) || course.ru).title + ' — bridge42worlds';
 
     // навигация по курсу
     var nav = el('div', 'k-nav');
-    var back = el('a', null, '← ' + (course[LANG] || course.ru).title); back.href = '?t=' + course.id; nav.appendChild(back);
+    var back = el('a', null, '← ' + (B42Lang.pick(course) || course.ru).title); back.href = '?t=' + course.id; nav.appendChild(back);
     course.lessons.forEach(function (l, i) {
       var a = el('a', l.id === lesson.id ? 'active' : '', (i + 1) + '. ' + l.title);
       a.href = '?t=' + course.id + '&p=' + l.id; nav.appendChild(a);

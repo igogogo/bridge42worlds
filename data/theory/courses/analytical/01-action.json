@@ -179,7 +179,7 @@
     }
    ],
    "answer": "Горб высотой в один метр стоит примерно $2{,}5$ Дж·с лишнего действия. Стенд показывает то же число — сверьте.",
-   "sanity": "Проверка на здравый смысл: прирост пропорционален квадрату отклонения, значит вдвое больший горб обойдётся вчетверо дороже. Именно поэтому кривая действия на графике — парабола, а не прямая."
+   "check": "Проверка на здравый смысл: прирост пропорционален квадрату отклонения, значит вдвое больший горб обойдётся вчетверо дороже. Именно поэтому кривая действия на графике — парабола, а не прямая."
   },
   "constants": {
    "title": "Величины этого параграфа",
@@ -272,7 +272,11 @@
   },
   "appendix": {
    "title": "Для любознательных: почему именно $K - U$, а не сумма",
-   "text": "Естественно было бы предположить, что природа экономит полную энергию $K + U$. Но она сохраняется и потому одинакова на всех путях — экономить нечего. Разность же ведёт себя иначе: она различает пути, на которых тело медленно поднимается, и те, где оно быстро проскакивает высоту. Проверить это можно прямо на стенде: сделайте отклонение положительным и отрицательным. Полная энергия в обоих случаях устроена похоже, а действие растёт одинаково в обе стороны — именно потому, что в него входит разность."
+   "blocks": [
+    {
+     "text": "Естественно было бы предположить, что природа экономит полную энергию $K + U$. Но она сохраняется и потому одинакова на всех путях — экономить нечего. Разность же ведёт себя иначе: она различает пути, на которых тело медленно поднимается, и те, где оно быстро проскакивает высоту. Проверить это можно прямо на стенде: сделайте отклонение положительным и отрицательным. Полная энергия в обоих случаях устроена похоже, а действие растёт одинаково в обе стороны — именно потому, что в него входит разность."
+    }
+   ]
   },
   "memo": {
    "essence": "Из бесконечности путей между двумя точками природа выбирает тот, на котором действие — накопленная за путь разность кинетической и потенциальной энергии — принимает наименьшее значение. Второй закон Ньютона следует отсюда, а не наоборот.",
@@ -313,7 +317,8 @@
      "Разность проще считать"
     ],
     "answer": 0,
-    "why": "Полная энергия одинакова на всех допустимых путях, поэтому минимизировать её бессмысленно. Разность различает пути и потому годится."
+    "why": "Полная энергия одинакова на всех допустимых путях, поэтому минимизировать её бессмысленно. Разность различает пути и потому годится.",
+    "hint": "Спросите себя, чем допустимые пути вообще отличаются друг от друга. Полная энергия на всех них одинакова — значит, различить пути по ней нельзя. Что тогда остаётся?"
    },
    {
     "id": "a2",
@@ -326,7 +331,8 @@
      "Уменьшилось вдвое"
     ],
     "answer": 1,
-    "why": "Вблизи минимума прирост квадратичен по отклонению: вдвое большее отклонение обходится вчетверо дороже. Это видно и на графике — там парабола."
+    "why": "Вблизи минимума прирост квадратичен по отклонению: вдвое большее отклонение обходится вчетверо дороже. Это видно и на графике — там парабола.",
+    "hint": "Посмотрите на кривую действия справа от стенда: это прямая или парабола? Ответ про удвоение отклонения читается прямо с её формы."
    },
    {
     "id": "a3",
@@ -340,7 +346,9 @@
      "не знает",
      "то же самое"
     ],
-    "why": "Требование минимума математически эквивалентно локальному уравнению движения, которое смотрит только на текущий момент. Это два описания одного и того же, а не предсказание будущего."
+    "why": "Требование минимума математически эквивалентно локальному уравнению движения, которое смотрит только на текущий момент. Это два описания одного и того же, а не предсказание будущего.",
+    "hint": "Сравните два описания одного и того же движения. Локальное уравнение смотрит только на текущий миг. Если оба описания дают одну и ту же траекторию, обязано ли тело что-то знать заранее?",
+    "needed": 2
    },
    {
     "id": "a4",
@@ -349,7 +357,8 @@
     "answer": 9.9,
     "unit": "Дж·с",
     "why": "$\\Delta S = m a^2 \\pi^2 / (4T) = 2\\cdot4\\cdot9{,}87/8 \\approx 9{,}9$. Достаточно помнить квадратичность: при вдвое большем отклонении, чем в примере, выходит вчетверо больше 2,5.",
-    "tolAbs": 2
+    "tolAbs": 2,
+    "hint": "Прирост действия зависит от отклонения квадратично. В разобранном примере отклонение было вдвое меньше — во сколько раз меньше оказался прирост?"
    }
   ]
  },
@@ -485,7 +494,7 @@
     }
    ],
    "answer": "A hump one meter high costs about $2{,}5$ J·s of extra action. The stand shows the same number — check it.",
-   "sanity": "Reality check: the increase is proportional to the square of the deviation, so a hump twice as large would cost four times as much. That is why the action curve on the graph is a parabola, not a line."
+   "check": "Reality check: the increase is proportional to the square of the deviation, so a hump twice as large would cost four times as much. That is why the action curve on the graph is a parabola, not a line."
   },
   "constants": {
    "title": "Quantities in this section",
@@ -580,7 +589,11 @@
   },
   "appendix": {
    "title": "For the curious: why exactly $K - U$ and not the sum",
-   "text": "It would be natural to assume that nature economizes on total energy $K + U$. But it is conserved and therefore the same on all paths — there is nothing to economize. The difference behaves differently: it distinguishes paths where the body rises slowly from those where it quickly passes the height. You can check this directly on a stand: make the deviation positive and negative. Total energy is similar in both cases, but action grows equally in both directions — precisely because it includes the difference."
+   "blocks": [
+    {
+     "text": "It would be natural to assume that nature economizes on total energy $K + U$. But it is conserved and therefore the same on all paths — there is nothing to economize. The difference behaves differently: it distinguishes paths where the body rises slowly from those where it quickly passes the height. You can check this directly on a stand: make the deviation positive and negative. Total energy is similar in both cases, but action grows equally in both directions — precisely because it includes the difference."
+    }
+   ]
   },
   "memo": {
    "essence": "From the infinity of paths between two points, nature chooses the one on which the action — the accumulated difference between kinetic and potential energy over the path — takes the smallest value. Newton's second law follows from this, not the other way around.",
@@ -621,7 +634,8 @@
      "The difference is easier to calculate"
     ],
     "answer": 0,
-    "why": "Total energy is the same on all allowed paths, so minimizing it is meaningless. The difference distinguishes paths and is therefore suitable."
+    "why": "Total energy is the same on all allowed paths, so minimizing it is meaningless. The difference distinguishes paths and is therefore suitable.",
+    "hint": "Спросите себя, чем допустимые пути вообще отличаются друг от друга. Полная энергия на всех них одинакова — значит, различить пути по ней нельзя. Что тогда остаётся?"
    },
    {
     "id": "a2",
@@ -634,7 +648,8 @@
      "It halves"
     ],
     "answer": 1,
-    "why": "Near the minimum, the increase is quadratic in deviation: twice the deviation costs four times more. This is also visible on the graph — it's a parabola."
+    "why": "Near the minimum, the increase is quadratic in deviation: twice the deviation costs four times more. This is also visible on the graph — it's a parabola.",
+    "hint": "Посмотрите на кривую действия справа от стенда: это прямая или парабола? Ответ про удвоение отклонения читается прямо с её формы."
    },
    {
     "id": "a3",
@@ -648,7 +663,9 @@
      "does not know",
      "same thing"
     ],
-    "why": "The requirement of a minimum is mathematically equivalent to a local equation of motion that only looks at the current moment. These are two descriptions of the same thing, not a prediction of the future."
+    "why": "The requirement of a minimum is mathematically equivalent to a local equation of motion that only looks at the current moment. These are two descriptions of the same thing, not a prediction of the future.",
+    "hint": "Сравните два описания одного и того же движения. Локальное уравнение смотрит только на текущий миг. Если оба описания дают одну и ту же траекторию, обязано ли тело что-то знать заранее?",
+    "needed": 2
    },
    {
     "id": "a4",
@@ -657,7 +674,8 @@
     "answer": 9.9,
     "unit": "J·s",
     "why": "$\\Delta S = m a^2 \\pi^2 / (4T) = 2\\cdot4\\cdot9{,}87/8 \\approx 9{,}9$. It's enough to remember the quadratic dependence: with twice the deviation as in the example, it is four times more than 2.5.",
-    "tolAbs": 2
+    "tolAbs": 2,
+    "hint": "Прирост действия зависит от отклонения квадратично. В разобранном примере отклонение было вдвое меньше — во сколько раз меньше оказался прирост?"
    }
   ]
  },
@@ -793,7 +811,7 @@
     }
    ],
    "answer": "Una protuberancia de un metro de altura cuesta aproximadamente $2{,}5$ J·s de acción extra. El stand muestra el mismo número — compruébelo.",
-   "sanity": "Verificación de sentido común: el incremento es proporcional al cuadrado de la desviación, por lo tanto una protuberancia el doble de grande costará cuatro veces más. Precisamente por eso la curva de acción en la gráfica es una parábola, no una recta."
+   "check": "Verificación de sentido común: el incremento es proporcional al cuadrado de la desviación, por lo tanto una protuberancia el doble de grande costará cuatro veces más. Precisamente por eso la curva de acción en la gráfica es una parábola, no una recta."
   },
   "constants": {
    "title": "Magnitudes de esta sección",
@@ -886,7 +904,11 @@
   },
   "appendix": {
    "title": "Para curiosos: por qué precisamente $K - U$ y no la suma",
-   "text": "Naturalmente se podría suponer que la naturaleza ahorra la energía total $K + U$. Pero ella se conserva y por lo tanto es igual en todos los caminos: no hay nada que ahorrar. La diferencia, en cambio, se comporta de otra manera: distingue caminos en los que el cuerpo sube lentamente de aquellos en los que pasa rápidamente la altura. Se puede comprobar directamente en el banco de pruebas: haga la desviación positiva y negativa. La energía total en ambos casos es similar, pero la acción crece igual en ambas direcciones — precisamente porque incluye la diferencia."
+   "blocks": [
+    {
+     "text": "Naturalmente se podría suponer que la naturaleza ahorra la energía total $K + U$. Pero ella se conserva y por lo tanto es igual en todos los caminos: no hay nada que ahorrar. La diferencia, en cambio, se comporta de otra manera: distingue caminos en los que el cuerpo sube lentamente de aquellos en los que pasa rápidamente la altura. Se puede comprobar directamente en el banco de pruebas: haga la desviación positiva y negativa. La energía total en ambos casos es similar, pero la acción crece igual en ambas direcciones — precisamente porque incluye la diferencia."
+    }
+   ]
   },
   "memo": {
    "essence": "De la infinidad de caminos entre dos puntos, la naturaleza elige aquel en el que la acción —la diferencia de energía cinética y potencial acumulada a lo largo del camino— toma el valor más pequeño. La segunda ley de Newton se deduce de aquí, no al revés.",
@@ -927,7 +949,8 @@
      "La diferencia es más fácil de calcular"
     ],
     "answer": 0,
-    "why": "La energía total es igual en todos los caminos permitidos, por lo que minimizarla no tiene sentido. La diferencia distingue caminos y por eso sirve."
+    "why": "La energía total es igual en todos los caminos permitidos, por lo que minimizarla no tiene sentido. La diferencia distingue caminos y por eso sirve.",
+    "hint": "Спросите себя, чем допустимые пути вообще отличаются друг от друга. Полная энергия на всех них одинакова — значит, различить пути по ней нельзя. Что тогда остаётся?"
    },
    {
     "id": "a2",
@@ -940,7 +963,8 @@
      "Disminuyó a la mitad"
     ],
     "answer": 1,
-    "why": "Cerca del mínimo, el incremento es cuadrático en la desviación: una desviación dos veces mayor cuesta cuatro veces más. Se ve también en la gráfica: es una parábola."
+    "why": "Cerca del mínimo, el incremento es cuadrático en la desviación: una desviación dos veces mayor cuesta cuatro veces más. Se ve también en la gráfica: es una parábola.",
+    "hint": "Посмотрите на кривую действия справа от стенда: это прямая или парабола? Ответ про удвоение отклонения читается прямо с её формы."
    },
    {
     "id": "a3",
@@ -954,7 +978,9 @@
      "no sabe",
      "lo mismo"
     ],
-    "why": "La condición de mínimo es matemáticamente equivalente a la ecuación de movimiento local que solo mira el momento actual. Son dos descripciones de lo mismo, no una predicción del futuro."
+    "why": "La condición de mínimo es matemáticamente equivalente a la ecuación de movimiento local que solo mira el momento actual. Son dos descripciones de lo mismo, no una predicción del futuro.",
+    "hint": "Сравните два описания одного и того же движения. Локальное уравнение смотрит только на текущий миг. Если оба описания дают одну и ту же траекторию, обязано ли тело что-то знать заранее?",
+    "needed": 2
    },
    {
     "id": "a4",
@@ -963,7 +989,8 @@
     "answer": 9.9,
     "unit": "J·s",
     "why": "$\\Delta S = m a^2 \\pi^2 / (4T) = 2\\cdot4\\cdot9{,}87/8 \\approx 9{,}9$. Basta recordar la cuadraticidad: con una desviación dos veces mayor que en el ejemplo, resulta cuatro veces más que 2,5.",
-    "tolAbs": 2
+    "tolAbs": 2,
+    "hint": "Прирост действия зависит от отклонения квадратично. В разобранном примере отклонение было вдвое меньше — во сколько раз меньше оказался прирост?"
    }
   ]
  },
@@ -1099,7 +1126,7 @@
     }
    ],
    "answer": "التحدب بارتفاع متر واحد يكلف حوالي $2.5$ J·s من الفعل الإضافي. العرض يظهر نفس الرقم — تحقق.",
-   "sanity": "التحقق من المنطق السليم: الزيادة تتناسب مع مربع الانحراف، لذا تحدب أكبر بمرتين سيكلف أربع مرات أكثر. لهذا السبب منحنى الفعل على الرسم البياني هو قطع مكافئ، وليس خطاً مستقيماً."
+   "check": "التحقق من المنطق السليم: الزيادة تتناسب مع مربع الانحراف، لذا تحدب أكبر بمرتين سيكلف أربع مرات أكثر. لهذا السبب منحنى الفعل على الرسم البياني هو قطع مكافئ، وليس خطاً مستقيماً."
   },
   "constants": {
    "title": "كميات هذا القسم",
@@ -1192,7 +1219,11 @@
   },
   "appendix": {
    "title": "للمهتمين: لماذا $K - U$ وليس المجموع",
-   "text": "سيكون من الطبيعي افتراض أن الطبيعة توفر الطاقة الكلية $K + U$. لكنها محفوظة وبالتالي متساوية في جميع المسارات - لا شيء لتوفره. أما الفرق فيتصرف بشكل مختلف: فهو يميز بين المسارات التي يصعد فيها الجسم ببطء وتلك التي يجتاز فيها الارتفاع بسرعة. يمكن التحقق من ذلك مباشرة على المنصة: اجعل الانحراف موجبًا وسالبًا. الطاقة الكلية في كلتا الحالتين متشابهة، ولكن الفعل يزداد بالتساوي في كلا الاتجاهين - لأن الفرق يدخل فيه."
+   "blocks": [
+    {
+     "text": "سيكون من الطبيعي افتراض أن الطبيعة توفر الطاقة الكلية $K + U$. لكنها محفوظة وبالتالي متساوية في جميع المسارات - لا شيء لتوفره. أما الفرق فيتصرف بشكل مختلف: فهو يميز بين المسارات التي يصعد فيها الجسم ببطء وتلك التي يجتاز فيها الارتفاع بسرعة. يمكن التحقق من ذلك مباشرة على المنصة: اجعل الانحراف موجبًا وسالبًا. الطاقة الكلية في كلتا الحالتين متشابهة، ولكن الفعل يزداد بالتساوي في كلا الاتجاهين - لأن الفرق يدخل فيه."
+    }
+   ]
   },
   "memo": {
    "essence": "من بين عدد لا نهائي من المسارات بين نقطتين، تختار الطبيعة المسار الذي يكون فيه الفعل - الفرق المتراكم بين الطاقة الحركية والطاقة الكامنة على طول المسار - أصغر قيمة. قانون نيوتن الثاني يتبع من هذا، وليس العكس.",
@@ -1233,7 +1264,8 @@
      "الفرق أسهل في الحساب"
     ],
     "answer": 0,
-    "why": "الطاقة الكلية متساوية في جميع المسارات المسموح بها، لذا لا معنى لتصغيرها. الفرق يميز المسارات وبالتالي مناسب."
+    "why": "الطاقة الكلية متساوية في جميع المسارات المسموح بها، لذا لا معنى لتصغيرها. الفرق يميز المسارات وبالتالي مناسب.",
+    "hint": "Спросите себя, чем допустимые пути вообще отличаются друг от друга. Полная энергия на всех них одинакова — значит, различить пути по ней нельзя. Что тогда остаётся?"
    },
    {
     "id": "a2",
@@ -1246,7 +1278,8 @@
      "انخفض إلى النصف"
     ],
     "answer": 1,
-    "why": "بالقرب من الحد الأدنى، الزيادة تربيعية مع الانحراف: انحراف مضاعف يكلف أربعة أضعاف. يظهر ذلك أيضًا على الرسم البياني - إنه قطع مكافئ."
+    "why": "بالقرب من الحد الأدنى، الزيادة تربيعية مع الانحراف: انحراف مضاعف يكلف أربعة أضعاف. يظهر ذلك أيضًا على الرسم البياني - إنه قطع مكافئ.",
+    "hint": "Посмотрите на кривую действия справа от стенда: это прямая или парабола? Ответ про удвоение отклонения читается прямо с её формы."
    },
    {
     "id": "a3",
@@ -1260,7 +1293,9 @@
      "لا يعرف",
      "نفس الشيء"
     ],
-    "why": "شرط الحد الأدنى مكافئ رياضيًا لمعادلة الحركة المحلية التي تنظر فقط إلى اللحظة الحالية. هذان وصفان لنفس الشيء، وليس توقعًا للمستقبل."
+    "why": "شرط الحد الأدنى مكافئ رياضيًا لمعادلة الحركة المحلية التي تنظر فقط إلى اللحظة الحالية. هذان وصفان لنفس الشيء، وليس توقعًا للمستقبل.",
+    "hint": "Сравните два описания одного и того же движения. Локальное уравнение смотрит только на текущий миг. Если оба описания дают одну и ту же траекторию, обязано ли тело что-то знать заранее?",
+    "needed": 2
    },
    {
     "id": "a4",
@@ -1269,7 +1304,8 @@
     "answer": 9.9,
     "unit": "جول·ثانية",
     "why": "$\\Delta S = m a^2 \\pi^2 / (4T) = 2\\cdot4\\cdot9{,}87/8 \\approx 9{,}9$. يكفي تذكر التربيع: مع انحراف مضاعف مقارنة بالمثال، نحصل على أربعة أضعاف 2.5.",
-    "tolAbs": 2
+    "tolAbs": 2,
+    "hint": "Прирост действия зависит от отклонения квадратично. В разобранном примере отклонение было вдвое меньше — во сколько раз меньше оказался прирост?"
    }
   ]
  }

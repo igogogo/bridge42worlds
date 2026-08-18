@@ -120,6 +120,16 @@
         'Как на самом деле:': ['How it actually works:', 'Cómo es en realidad:',
             'كيف الأمر في الحقيقة:', 'Ce qu’il en est vraiment :'],
         'вы промахнулись на': ['you were off by', 'te desviaste en', 'أخطأت بمقدار', 'vous vous êtes trompé de'],
+        'Этот материал ещё не переведён на ваш язык — показан английский текст.': [
+            'This material has not been translated into your language yet — showing the English text.',
+            'Este material aún no está traducido a su idioma: se muestra el texto en inglés.',
+            'لم تُترجم هذه المادة إلى لغتك بعد — يظهر النص الإنجليزي.',
+            'Ce contenu n’est pas encore traduit dans votre langue — le texte anglais est affiché.'],
+        'Этот материал ещё не переведён на ваш язык — показан русский текст.': [
+            'This material has not been translated into your language yet — showing the Russian text.',
+            'Este material aún no está traducido a su idioma: se muestra el texto en ruso.',
+            'لم تُترجم هذه المادة إلى لغتك بعد — يظهر النص الروسي.',
+            'Ce contenu n’est pas encore traduit dans votre langue — le texte russe est affiché.'],
         'Вопросы': ['Questions', 'Preguntas', 'أسئلة', 'Questions'],
         // подписи шпаргалки: жили только в разметке memo.html и на всех языках были русскими
         'К параграфу': ['Back to the paragraph', 'Volver al párrafo', 'إلى الفقرة', 'Retour au paragraphe'],
@@ -362,5 +372,50 @@
         start();
     }
 
+    /* ── Ветка материала на языке страницы ──────────────────────────────────────────
+       Материалы переводятся не мгновенно: пятый язык сейчас есть у одной темы из
+       шестнадцати. Раньше страницы писали `d[LANG] || d.ru` — то есть француз получал
+       русский текст во французской рамке и НИКАКОГО предупреждения. Это ровно тот
+       молчаливый откат, который мы вычищаем из генератора: читатель не понимает, это
+       так задумано или сломалось.
+
+       Теперь: сначала язык страницы, потом английский, только потом русский —
+       латиница читается шире кириллицы, — и один раз на страницу показывается честная
+       плашка «переведено не всё». */
+    var FALLBACK_ORDER = ['en', 'ru'];
+    var noticeShown = false;
+
+    function showFallbackNotice(shownLang) {
+        if (noticeShown || LANG === 'ru') return;
+        noticeShown = true;
+        var say = function () {
+            if (!document.body || document.getElementById('b42-lang-notice')) return;
+            var box = document.createElement('div');
+            box.id = 'b42-lang-notice';
+            box.style.cssText = 'max-width:680px;margin:10px auto 0;padding:9px 14px;border-radius:10px;' +
+                'font-size:13px;line-height:1.5;background:var(--tag-bg,#eee);color:var(--muted,#555);' +
+                'border:1px solid var(--border,#ddd)';
+            box.textContent = shownLang === 'en'
+                ? 'Этот материал ещё не переведён на ваш язык — показан английский текст.'
+                : 'Этот материал ещё не переведён на ваш язык — показан русский текст.';
+            document.body.insertBefore(box, document.body.firstChild);
+            translate(box);
+        };
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', say);
+        else say();
+    }
+
+    /** Достаёт языковую ветку с честным откатом. Возвращает null, если веток нет вовсе. */
+    function pick(obj) {
+        if (!obj || typeof obj !== 'object') return obj;
+        if (obj[LANG]) return obj[LANG];
+        for (var i = 0; i < FALLBACK_ORDER.length; i++) {
+            var l = FALLBACK_ORDER[i];
+            if (obj[l]) { showFallbackNotice(l); return obj[l]; }
+        }
+        return null;
+    }
+
+    global.B42Lang = { pick: pick, current: function () { return LANG; } };
     global.B42_T = tr;
 })(window);

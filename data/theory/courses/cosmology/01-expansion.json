@@ -183,7 +183,7 @@
     }
    ],
    "answer": "Галактика удаляется со скоростью около $21\\,000$ км/с и находится примерно в $300$ Мпк — это порядка миллиарда световых лет. Поставьте на стенде расстояние $300$ и сверьте все три числа.",
-   "sanity": "Проверка на здравый смысл: $21\\,000$ км/с — это семь процентов скорости света, и красное смещение вышло тоже семь процентов. Так и должно быть: при малых $z$ эти два числа совпадают. Если у вас получилось, что скорость составляет проценты от световой, а $z$ — десятки процентов, где-то потеряна скорость света."
+   "check": "Проверка на здравый смысл: $21\\,000$ км/с — это семь процентов скорости света, и красное смещение вышло тоже семь процентов. Так и должно быть: при малых $z$ эти два числа совпадают. Если у вас получилось, что скорость составляет проценты от световой, а $z$ — десятки процентов, где-то потеряна скорость света."
   },
   "constants": {
    "title": "Константы: откуда взялись и что означают",
@@ -279,7 +279,11 @@
   },
   "appendix": {
    "title": "Почему это не противоречит теории относительности",
-   "text": "Запрет из специальной теории относительности касается движения объектов друг относительно друга в одной точке пространства: обгонать свет нельзя. Расширение — про другое: между двумя далёкими галактиками прибывает пространство, и суммарная скорость их разлёта может превышать $c$ без того, чтобы кто-то из них двигался быстрее света в своей окрестности. Локально, у себя, каждая галактика покоится, и никакой сигнал никого не обгоняет. Именно поэтому космологическое красное смещение и доплеровский сдвиг — разные вещи, хотя в области малых $z$ они дают одинаковые числа."
+   "blocks": [
+    {
+     "text": "Запрет из специальной теории относительности касается движения объектов друг относительно друга в одной точке пространства: обгонать свет нельзя. Расширение — про другое: между двумя далёкими галактиками прибывает пространство, и суммарная скорость их разлёта может превышать $c$ без того, чтобы кто-то из них двигался быстрее света в своей окрестности. Локально, у себя, каждая галактика покоится, и никакой сигнал никого не обгоняет. Именно поэтому космологическое красное смещение и доплеровский сдвиг — разные вещи, хотя в области малых $z$ они дают одинаковые числа."
+    }
+   ]
   },
   "memo": {
    "essence": "Расстояния между галактиками растут пропорционально самим расстояниям: $v = H_0 d$. Свет, идущий сквозь растущее пространство, растягивается в $(1+z)$ раз, поэтому красное смещение — измеримый след истории расширения, а не скорости источника.",
@@ -320,7 +324,8 @@
      "Потому что галактики движутся во всех направлениях случайно"
     ],
     "answer": 0,
-    "why": "Перейдя в другую галактику, мы вычтем её скорость из всех остальных и получим ровно тот же закон. Такое свойство есть только у линейной зависимости — она и означает отсутствие выделенной точки."
+    "why": "Перейдя в другую галактику, мы вычтем её скорость из всех остальных и получим ровно тот же закон. Такое свойство есть только у линейной зависимости — она и означает отсутствие выделенной точки.",
+    "hint": "Перейдите мысленно в другую галактику и вычтите её скорость из скоростей всех остальных. При какой зависимости скорости от расстояния картина не изменится?"
    },
    {
     "id": "c2",
@@ -333,7 +338,8 @@
      "Спектр искажён межгалактической пылью"
     ],
     "answer": 0,
-    "why": "$1+z$ — это отношение наблюдаемой длины волны к лабораторной, оно же отношение размеров Вселенной. Удвоение волны означает $z = 1$ и двукратный рост за время пути. Скорость при таком $z$ считать по $v = cz$ уже нельзя."
+    "why": "$1+z$ — это отношение наблюдаемой длины волны к лабораторной, оно же отношение размеров Вселенной. Удвоение волны означает $z = 1$ и двукратный рост за время пути. Скорость при таком $z$ считать по $v = cz$ уже нельзя.",
+    "hint": "Отношение наблюдаемой длины волны к лабораторной — это и есть 1 + z. Волна растянулась вдвое: чему тогда равно само z?"
    },
    {
     "id": "c3",
@@ -347,7 +353,9 @@
      "групп",
      "связан"
     ],
-    "why": "На малых расстояниях взаимное тяготение сильнее расширения, и связанные системы — галактики, их группы и скопления — не разбегаются. Расширение проявляется там, где тяготение уже не удерживает: от десятков мегапарсек."
+    "why": "На малых расстояниях взаимное тяготение сильнее расширения, и связанные системы — галактики, их группы и скопления — не разбегаются. Расширение проявляется там, где тяготение уже не удерживает: от десятков мегапарсек.",
+    "hint": "Сравните на расстоянии семисот килопарсек две вещи: скорость расширения и взаимное тяготение двух галактик. Что из них там сильнее?",
+    "needed": 2
    },
    {
     "id": "c4",
@@ -356,7 +364,8 @@
     "answer": 200,
     "unit": "Мпк",
     "why": "$d = v/H_0 = 14\\,000/70 = 200$ Мпк. Считать удобно так: при $H_0 = 70$ каждые $70$ км/с — это один мегапарсек, значит $14\\,000$ км/с дают $200$.",
-    "tolAbs": 30
+    "tolAbs": 30,
+    "hint": "При H₀ = 70 каждые 70 км/с скорости дают один мегапарсек расстояния. Сколько раз 70 укладывается в 14 000?"
    }
   ]
  },
@@ -513,7 +522,7 @@
     }
    ],
    "answer": "The galaxy is receding at about $21\\,000$ km/s and is located roughly $300$ Mpc away — that's about a billion light-years. Set the distance to $300$ on the stand and check all three numbers.",
-   "sanity": "Sanity check: $21\\,000$ km/s is seven percent of the speed of light, and the redshift also came out to seven percent. That's how it should be: for small $z$ these two numbers coincide. If you got that the velocity is a few percent of light speed while $z$ is tens of percent, then the speed of light was lost somewhere."
+   "check": "Sanity check: $21\\,000$ km/s is seven percent of the speed of light, and the redshift also came out to seven percent. That's how it should be: for small $z$ these two numbers coincide. If you got that the velocity is a few percent of light speed while $z$ is tens of percent, then the speed of light was lost somewhere."
   },
   "constants": {
    "title": "Constants: where they come from and what they mean",
@@ -609,7 +618,11 @@
   },
   "appendix": {
    "title": "Why this does not contradict relativity",
-   "text": "The prohibition from special relativity concerns the motion of objects relative to each other at a single point in space: nothing can outrun light. Expansion is different: space is being added between two distant galaxies, and the total recession speed can exceed $c$ without any of them moving faster than light in its own vicinity. Locally, each galaxy is at rest, and no signal overtakes anything. That is why cosmological redshift and Doppler shift are different things, although at small $z$ they yield the same numbers."
+   "blocks": [
+    {
+     "text": "The prohibition from special relativity concerns the motion of objects relative to each other at a single point in space: nothing can outrun light. Expansion is different: space is being added between two distant galaxies, and the total recession speed can exceed $c$ without any of them moving faster than light in its own vicinity. Locally, each galaxy is at rest, and no signal overtakes anything. That is why cosmological redshift and Doppler shift are different things, although at small $z$ they yield the same numbers."
+    }
+   ]
   },
   "memo": {
    "essence": "Distances between galaxies grow proportionally to the distances themselves: $v = H_0 d$. Light traveling through expanding space is stretched by a factor $(1+z)$, so redshift is a measurable trace of the expansion history, not of the source's speed.",
@@ -650,7 +663,8 @@
      "Because galaxies move randomly in all directions"
     ],
     "answer": 0,
-    "why": "By moving to another galaxy, we subtract its velocity from all others and get exactly the same law. This property holds only for a linear relationship — it means there is no special point."
+    "why": "By moving to another galaxy, we subtract its velocity from all others and get exactly the same law. This property holds only for a linear relationship — it means there is no special point.",
+    "hint": "Перейдите мысленно в другую галактику и вычтите её скорость из скоростей всех остальных. При какой зависимости скорости от расстояния картина не изменится?"
    },
    {
     "id": "c2",
@@ -663,7 +677,8 @@
      "The spectrum is distorted by intergalactic dust"
     ],
     "answer": 0,
-    "why": "$1+z$ is the ratio of observed wavelength to laboratory wavelength, also the ratio of the Universe's sizes. Doubling the wavelength means $z = 1$ and twofold growth during the travel time. The velocity at such $z$ can no longer be calculated by $v = cz$."
+    "why": "$1+z$ is the ratio of observed wavelength to laboratory wavelength, also the ratio of the Universe's sizes. Doubling the wavelength means $z = 1$ and twofold growth during the travel time. The velocity at such $z$ can no longer be calculated by $v = cz$.",
+    "hint": "Отношение наблюдаемой длины волны к лабораторной — это и есть 1 + z. Волна растянулась вдвое: чему тогда равно само z?"
    },
    {
     "id": "c3",
@@ -677,7 +692,9 @@
      "group",
      "bound"
     ],
-    "why": "On small scales, mutual gravity is stronger than expansion, and bound systems — galaxies, their groups and clusters — do not fly apart. Expansion becomes apparent where gravity can no longer hold things together: from tens of megaparsecs."
+    "why": "On small scales, mutual gravity is stronger than expansion, and bound systems — galaxies, their groups and clusters — do not fly apart. Expansion becomes apparent where gravity can no longer hold things together: from tens of megaparsecs.",
+    "hint": "Сравните на расстоянии семисот килопарсек две вещи: скорость расширения и взаимное тяготение двух галактик. Что из них там сильнее?",
+    "needed": 2
    },
    {
     "id": "c4",
@@ -686,7 +703,8 @@
     "answer": 200,
     "unit": "Mpc",
     "why": "$d = v/H_0 = 14\\,000/70 = 200$ Mpc. It's convenient to think: with $H_0 = 70$, every $70$ km/s corresponds to one megaparsec, so $14\\,000$ km/s gives $200$.",
-    "tolAbs": 30
+    "tolAbs": 30,
+    "hint": "При H₀ = 70 каждые 70 км/с скорости дают один мегапарсек расстояния. Сколько раз 70 укладывается в 14 000?"
    }
   ]
  },
@@ -843,7 +861,7 @@
     }
    ],
    "answer": "La galaxia se aleja a una velocidad de unos $21\\,000$ km/s y se encuentra a unos $300$ Mpc — esto es del orden de mil millones de años luz. Coloque en el banco la distancia $300$ y verifique los tres números.",
-   "sanity": "Prueba de cordura: $21\\,000$ km/s es el siete por ciento de la velocidad de la luz, y el corrimiento al rojo también resultó ser del siete por ciento. Así debe ser: para $z$ pequeños, estos dos números coinciden. Si le ha resultado que la velocidad es un porcentaje de la velocidad de la luz y $z$ es un porcentaje de decenas, en algún lado se perdió la velocidad de la luz."
+   "check": "Prueba de cordura: $21\\,000$ km/s es el siete por ciento de la velocidad de la luz, y el corrimiento al rojo también resultó ser del siete por ciento. Así debe ser: para $z$ pequeños, estos dos números coinciden. Si le ha resultado que la velocidad es un porcentaje de la velocidad de la luz y $z$ es un porcentaje de decenas, en algún lado se perdió la velocidad de la luz."
   },
   "constants": {
    "title": "Constantes: de dónde vienen y qué significan",
@@ -939,7 +957,11 @@
   },
   "appendix": {
    "title": "Por qué esto no contradice la teoría de la relatividad",
-   "text": "La prohibición de la teoría de la relatividad especial se refiere al movimiento de objetos entre sí en un mismo punto del espacio: no se puede superar la luz. La expansión es otra cosa: entre dos galaxias lejanas se genera espacio, y la velocidad total de su separación puede exceder $c$ sin que ninguna de ellas se mueva más rápido que la luz en su vecindad. Localmente, cada galaxia está en reposo, y ninguna señal supera a otra. Precisamente por eso el corrimiento al rojo cosmológico y el desplazamiento Doppler son diferentes, aunque en el rango de $z$ pequeño dan los mismos números."
+   "blocks": [
+    {
+     "text": "La prohibición de la teoría de la relatividad especial se refiere al movimiento de objetos entre sí en un mismo punto del espacio: no se puede superar la luz. La expansión es otra cosa: entre dos galaxias lejanas se genera espacio, y la velocidad total de su separación puede exceder $c$ sin que ninguna de ellas se mueva más rápido que la luz en su vecindad. Localmente, cada galaxia está en reposo, y ninguna señal supera a otra. Precisamente por eso el corrimiento al rojo cosmológico y el desplazamiento Doppler son diferentes, aunque en el rango de $z$ pequeño dan los mismos números."
+    }
+   ]
   },
   "memo": {
    "essence": "Las distancias entre galaxias crecen proporcionalmente a las propias distancias: $v = H_0 d$. La luz que viaja a través del espacio en expansión se estira en un factor $(1+z)$, por lo que el corrimiento al rojo es una huella medible de la historia de la expansión, no de la velocidad de la fuente.",
@@ -980,7 +1002,8 @@
      "Porque las galaxias se mueven en todas direcciones aleatoriamente"
     ],
     "answer": 0,
-    "why": "Al trasladarnos a otra galaxia, restamos su velocidad de todas las demás y obtenemos exactamente la misma ley. Esta propiedad solo la tiene una relación lineal — y eso significa que no hay un punto privilegiado."
+    "why": "Al trasladarnos a otra galaxia, restamos su velocidad de todas las demás y obtenemos exactamente la misma ley. Esta propiedad solo la tiene una relación lineal — y eso significa que no hay un punto privilegiado.",
+    "hint": "Перейдите мысленно в другую галактику и вычтите её скорость из скоростей всех остальных. При какой зависимости скорости от расстояния картина не изменится?"
    },
    {
     "id": "c2",
@@ -993,7 +1016,8 @@
      "El espectro está distorsionado por polvo intergaláctico"
     ],
     "answer": 0,
-    "why": "$1+z$ es la relación entre la longitud de onda observada y la de laboratorio, y también la relación de los tamaños del Universo. Duplicar la longitud de onda significa $z = 1$ y un crecimiento doble durante el viaje. La velocidad para tal $z$ ya no puede calcularse con $v = cz$."
+    "why": "$1+z$ es la relación entre la longitud de onda observada y la de laboratorio, y también la relación de los tamaños del Universo. Duplicar la longitud de onda significa $z = 1$ y un crecimiento doble durante el viaje. La velocidad para tal $z$ ya no puede calcularse con $v = cz$.",
+    "hint": "Отношение наблюдаемой длины волны к лабораторной — это и есть 1 + z. Волна растянулась вдвое: чему тогда равно само z?"
    },
    {
     "id": "c3",
@@ -1007,7 +1031,9 @@
      "grupo",
      "ligado"
     ],
-    "why": "A distancias pequeñas, la gravedad mutua es más fuerte que la expansión, y los sistemas ligados — galaxias, sus grupos y cúmulos — no se separan. La expansión se manifiesta donde la gravedad ya no retiene: a partir de decenas de megapársecs."
+    "why": "A distancias pequeñas, la gravedad mutua es más fuerte que la expansión, y los sistemas ligados — galaxias, sus grupos y cúmulos — no se separan. La expansión se manifiesta donde la gravedad ya no retiene: a partir de decenas de megapársecs.",
+    "hint": "Сравните на расстоянии семисот килопарсек две вещи: скорость расширения и взаимное тяготение двух галактик. Что из них там сильнее?",
+    "needed": 2
    },
    {
     "id": "c4",
@@ -1016,7 +1042,8 @@
     "answer": 200,
     "unit": "Mpc",
     "why": "$d = v/H_0 = 14\\,000/70 = 200$ Mpc. Es fácil calcularlo: con $H_0 = 70$, cada $70$ km/s corresponden a un megapársec, entonces $14\\,000$ km/s dan $200$.",
-    "tolAbs": 30
+    "tolAbs": 30,
+    "hint": "При H₀ = 70 каждые 70 км/с скорости дают один мегапарсек расстояния. Сколько раз 70 укладывается в 14 000?"
    }
   ]
  },
@@ -1173,7 +1200,7 @@
     }
    ],
    "answer": "المجرة تبتعد بسرعة حوالي $21\\,000$ km/s وتقع على بعد حوالي $300$ Mpc — أي حوالي مليار سنة ضوئية. ضع المسافة $300$ على المنصة وقارن الأرقام الثلاثة.",
-   "sanity": "فحص الفطرة السليمة: $21\\,000$ km/s هي سبعة بالمائة من سرعة الضوء، والانزياح الأحمر هو أيضًا سبعة بالمائة. هذا هو المفروض: عند $z$ الصغير، يتطابق الرقمان. إذا حصلت على أن السرعة هي نسبة مئوية من سرعة الضوء بينما $z$ عشرات بالمائة، فهناك خطأ في مكان ما في سرعة الضوء."
+   "check": "فحص الفطرة السليمة: $21\\,000$ km/s هي سبعة بالمائة من سرعة الضوء، والانزياح الأحمر هو أيضًا سبعة بالمائة. هذا هو المفروض: عند $z$ الصغير، يتطابق الرقمان. إذا حصلت على أن السرعة هي نسبة مئوية من سرعة الضوء بينما $z$ عشرات بالمائة، فهناك خطأ في مكان ما في سرعة الضوء."
   },
   "constants": {
    "title": "الثوابت: من أين أتت وماذا تعني",
@@ -1269,7 +1296,11 @@
   },
   "appendix": {
    "title": "لماذا لا يتعارض هذا مع نظرية النسبية",
-   "text": "المنع من النسبية الخاصة يتعلق بحركة الأجسام بالنسبة لبعضها البعض في نفس النقطة من الفضاء: لا يمكن تجاوز الضوء. التوسع شيء آخر: بين مجرتين بعيدتين، يزداد الفضاء، والسرعة الكلية لابتعادهما يمكن أن تتجاوز $c$ دون أن يتحرك أي منهما أسرع من الضوء في محيطه. محليًا، كل مجرة ساكنة في مكانها، ولا توجد إشارة تتجاوز أي شيء. لهذا السبب، الانزياح الأحمر الكوني والإزاحة الدوبلرية شيئان مختلفان، رغم أنهما يعطيان نفس الأرقام في نطاق $z$ الصغير."
+   "blocks": [
+    {
+     "text": "المنع من النسبية الخاصة يتعلق بحركة الأجسام بالنسبة لبعضها البعض في نفس النقطة من الفضاء: لا يمكن تجاوز الضوء. التوسع شيء آخر: بين مجرتين بعيدتين، يزداد الفضاء، والسرعة الكلية لابتعادهما يمكن أن تتجاوز $c$ دون أن يتحرك أي منهما أسرع من الضوء في محيطه. محليًا، كل مجرة ساكنة في مكانها، ولا توجد إشارة تتجاوز أي شيء. لهذا السبب، الانزياح الأحمر الكوني والإزاحة الدوبلرية شيئان مختلفان، رغم أنهما يعطيان نفس الأرقام في نطاق $z$ الصغير."
+    }
+   ]
   },
   "memo": {
    "essence": "المسافات بين المجرات تنمو بتناسب مع المسافات نفسها: $v = H_0 d$. الضوء الذي يسير عبر الفضاء المتوسع يتمدد بمعدل $(1+z)$ مرة، وبالتالي فإن الانزياح الأحمر هو أثر قابل للقياس لتاريخ التوسع، وليس لسرعة المصدر.",
@@ -1310,7 +1341,8 @@
      "لأن المجرات تتحرك في جميع الاتجاهات بشكل عشوائي"
     ],
     "answer": 0,
-    "why": "بالانتقال إلى مجرة أخرى، سنطرح سرعتها من سرعات البقية وسنحصل على نفس القانون تمامًا. هذه الخاصية موجودة فقط في العلاقة الخطية — وهي تعني عدم وجود نقطة مميزة."
+    "why": "بالانتقال إلى مجرة أخرى، سنطرح سرعتها من سرعات البقية وسنحصل على نفس القانون تمامًا. هذه الخاصية موجودة فقط في العلاقة الخطية — وهي تعني عدم وجود نقطة مميزة.",
+    "hint": "Перейдите мысленно в другую галактику и вычтите её скорость из скоростей всех остальных. При какой зависимости скорости от расстояния картина не изменится?"
    },
    {
     "id": "c2",
@@ -1323,7 +1355,8 @@
      "الطيف مشوه بسبب الغبار بين المجرات"
     ],
     "answer": 0,
-    "why": "$1+z$ هي نسبة الطول الموجي المرصود إلى المخبري، وهي نفس نسبة حجم الكون. مضاعفة الطول تعني $z = 1$ والنمو المضاعف خلال زمن الرحلة. لا يمكن حساب السرعة عند هذا $z$ باستخدام $v = cz$."
+    "why": "$1+z$ هي نسبة الطول الموجي المرصود إلى المخبري، وهي نفس نسبة حجم الكون. مضاعفة الطول تعني $z = 1$ والنمو المضاعف خلال زمن الرحلة. لا يمكن حساب السرعة عند هذا $z$ باستخدام $v = cz$.",
+    "hint": "Отношение наблюдаемой длины волны к лабораторной — это и есть 1 + z. Волна растянулась вдвое: чему тогда равно само z?"
    },
    {
     "id": "c3",
@@ -1337,7 +1370,9 @@
      "مجموعة",
      "مرتبط"
     ],
-    "why": "على مسافات صغيرة، تكون الجاذبية المتبادلة أقوى من التوسع، والأنظمة المرتبطة — المجرات ومجموعاتها وعناقيدها — لا تتباعد. يظهر التوسع حيث لا تستطيع الجاذبية الاحتفاظ بها: من عشرات الميغابارسك."
+    "why": "على مسافات صغيرة، تكون الجاذبية المتبادلة أقوى من التوسع، والأنظمة المرتبطة — المجرات ومجموعاتها وعناقيدها — لا تتباعد. يظهر التوسع حيث لا تستطيع الجاذبية الاحتفاظ بها: من عشرات الميغابارسك.",
+    "hint": "Сравните на расстоянии семисот килопарсек две вещи: скорость расширения и взаимное тяготение двух галактик. Что из них там сильнее?",
+    "needed": 2
    },
    {
     "id": "c4",
@@ -1346,7 +1381,8 @@
     "answer": 200,
     "unit": "Mpc",
     "why": "$d = v/H_0 = 14,000/70 = 200$ Mpc. من السهل الحساب: عندما $H_0 = 70$، كل $70$ km/s تعادل ميغابارسك واحد، لذا $14,000$ km/s تعطي $200$.",
-    "tolAbs": 30
+    "tolAbs": 30,
+    "hint": "При H₀ = 70 каждые 70 км/с скорости дают один мегапарсек расстояния. Сколько раз 70 укладывается в 14 000?"
    }
   ]
  }

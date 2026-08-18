@@ -174,7 +174,7 @@
     }
    ],
    "answer": "Точка обходит эллипс с полуосями 0,06 и 0,46 примерно за 1,6 с — это и есть период колебаний.",
-   "sanity": "Проверка на здравый смысл: если увеличить амплитуду вдвое, эллипс вырастет вдвое по обеим осям, а время обхода не изменится. Это то же самое свойство маятника, о котором говорилось в теме колебаний, но здесь оно видно геометрически."
+   "check": "Проверка на здравый смысл: если увеличить амплитуду вдвое, эллипс вырастет вдвое по обеим осям, а время обхода не изменится. Это то же самое свойство маятника, о котором говорилось в теме колебаний, но здесь оно видно геометрически."
   },
   "constants": {
    "title": "Величины этого параграфа",
@@ -267,7 +267,11 @@
   },
   "appendix": {
    "title": "Для любознательных: теорема Лиувилля и стрела времени",
-   "text": "Если взять не одну точку, а маленькое пятно начальных состояний, то со временем оно будет растягиваться и изгибаться — но его площадь останется неизменной. Это теорема Лиувилля. Из неё следует неожиданное: информация о начальном состоянии в механике не теряется, она только размазывается по пространству состояний до неузнаваемости. Именно на этом различии — «потеряна» против «размазана» — держится весь разговор о стреле времени из темы энтропии."
+   "blocks": [
+    {
+     "text": "Если взять не одну точку, а маленькое пятно начальных состояний, то со временем оно будет растягиваться и изгибаться — но его площадь останется неизменной. Это теорема Лиувилля. Из неё следует неожиданное: информация о начальном состоянии в механике не теряется, она только размазывается по пространству состояний до неузнаваемости. Именно на этом различии — «потеряна» против «размазана» — держится весь разговор о стреле времени из темы энтропии."
+    }
+   ]
   },
   "memo": {
    "essence": "Состояние системы — точка $(q,p)$ в фазовом пространстве, а движение — путь этой точки. Уравнения Гамильтона описывают этот путь двумя симметричными уравнениями первого порядка, а сохранение энергии выглядит как замкнутость кривой.",
@@ -308,7 +312,8 @@
      "Момент времени"
     ],
     "answer": 1,
-    "why": "Точка задаёт пару $(q,p)$ — координату и импульс. Этого достаточно, чтобы предсказать всё дальнейшее движение."
+    "why": "Точка задаёт пару $(q,p)$ — координату и импульс. Этого достаточно, чтобы предсказать всё дальнейшее движение.",
+    "hint": "Спросите себя, что нужно знать, чтобы предсказать всё дальнейшее движение. Одних координат не хватает — чего именно недостаёт?"
    },
    {
     "id": "h2",
@@ -321,7 +326,8 @@
      "Потому что импульс всегда положителен"
     ],
     "answer": 1,
-    "why": "Точка не может сойти с линии постоянной энергии, а для осциллятора эта линия — эллипс. Замкнутость кривой и есть сохранение энергии в фазовом виде."
+    "why": "Точка не может сойти с линии постоянной энергии, а для осциллятора эта линия — эллипс. Замкнутость кривой и есть сохранение энергии в фазовом виде.",
+    "hint": "Через период система возвращается в то же самое состояние: та же координата, тот же импульс. Что это означает для линии, которую точка чертит на плоскости?"
    },
    {
     "id": "h3",
@@ -336,7 +342,9 @@
      "нет траектор",
      "фазов"
     ],
-    "why": "Траекторию миллиардов частиц не нарисовать, а облако состояний — можно; в квантовой механике траектории нет вообще, а состояние остаётся. Язык состояний пережил обе смены картины мира."
+    "why": "Траекторию миллиардов частиц не нарисовать, а облако состояний — можно; в квантовой механике траектории нет вообще, а состояние остаётся. Язык состояний пережил обе смены картины мира.",
+    "hint": "Вспомните, что в квантовой механике измеряют не траекторию, а состояние. На каком языке удобнее говорить о состояниях — только координат или координат с импульсами?",
+    "needed": 2
    },
    {
     "id": "h4",
@@ -345,7 +353,8 @@
     "answer": 5e+32,
     "unit": "состояний",
     "why": "Площадь эллипса порядка $\\pi \\cdot 0{,}1 \\cdot 0{,}5 \\approx 0{,}16$ Дж·с. Делим на $10^{-34}$ — выходит около $10^{33}$. Точный множитель неважен: важно, что квантовость на таком масштабе незаметна.",
-    "tolFactor": 10
+    "tolFactor": 10,
+    "hint": "Оцените площадь области в фазовой плоскости как произведение амплитуды на импульс, а потом поделите её на квант действия."
    }
   ]
  },
@@ -476,7 +485,7 @@
     }
    ],
    "answer": "The point goes around the ellipse with semi-axes 0,06 and 0,46 in about 1,6 s — that is the period of oscillation.",
-   "sanity": "Sanity check: if the amplitude is doubled, the ellipse grows twice along both axes, but the traversal time does not change. This is the same property of the pendulum that was discussed in the topic of oscillations, but here it is seen geometrically."
+   "check": "Sanity check: if the amplitude is doubled, the ellipse grows twice along both axes, but the traversal time does not change. This is the same property of the pendulum that was discussed in the topic of oscillations, but here it is seen geometrically."
   },
   "constants": {
    "title": "Quantities of This Section",
@@ -569,7 +578,11 @@
   },
   "appendix": {
    "title": "For the Curious: Liouville's Theorem and the Arrow of Time",
-   "text": "If you take not one point, but a small patch of initial states, over time it will stretch and bend — but its area will remain unchanged. This is Liouville's theorem. From it follows an unexpected conclusion: information about the initial state in mechanics is not lost, it is only smeared over the state space beyond recognition. It is precisely on this distinction — 'lost' vs 'smeared' — that the entire discussion of the arrow of time from the topic of entropy rests."
+   "blocks": [
+    {
+     "text": "If you take not one point, but a small patch of initial states, over time it will stretch and bend — but its area will remain unchanged. This is Liouville's theorem. From it follows an unexpected conclusion: information about the initial state in mechanics is not lost, it is only smeared over the state space beyond recognition. It is precisely on this distinction — 'lost' vs 'smeared' — that the entire discussion of the arrow of time from the topic of entropy rests."
+    }
+   ]
   },
   "memo": {
    "essence": "The state of a system is a point $(q,p)$ in phase space, and motion is the path of this point. Hamilton's equations describe this path by two symmetric first-order equations, and energy conservation appears as the closedness of the curve.",
@@ -610,7 +623,8 @@
      "An instant in time"
     ],
     "answer": 1,
-    "why": "A point specifies the pair $(q,p)$ — coordinate and momentum. This is enough to predict all subsequent motion."
+    "why": "A point specifies the pair $(q,p)$ — coordinate and momentum. This is enough to predict all subsequent motion.",
+    "hint": "Спросите себя, что нужно знать, чтобы предсказать всё дальнейшее движение. Одних координат не хватает — чего именно недостаёт?"
    },
    {
     "id": "h2",
@@ -623,7 +637,8 @@
      "Because momentum is always positive"
     ],
     "answer": 1,
-    "why": "The point cannot leave the constant-energy line, and for an oscillator this line is an ellipse. The closedness of the curve is energy conservation in phase space form."
+    "why": "The point cannot leave the constant-energy line, and for an oscillator this line is an ellipse. The closedness of the curve is energy conservation in phase space form.",
+    "hint": "Через период система возвращается в то же самое состояние: та же координата, тот же импульс. Что это означает для линии, которую точка чертит на плоскости?"
    },
    {
     "id": "h3",
@@ -638,7 +653,9 @@
      "no trajectory",
      "phase"
     ],
-    "why": "You cannot draw the trajectory of billions of particles, but you can draw a cloud of states; in quantum mechanics there is no trajectory at all, but the state remains. The language of states survived both changes of worldview."
+    "why": "You cannot draw the trajectory of billions of particles, but you can draw a cloud of states; in quantum mechanics there is no trajectory at all, but the state remains. The language of states survived both changes of worldview.",
+    "hint": "Вспомните, что в квантовой механике измеряют не траекторию, а состояние. На каком языке удобнее говорить о состояниях — только координат или координат с импульсами?",
+    "needed": 2
    },
    {
     "id": "h4",
@@ -647,7 +664,8 @@
     "answer": 5e+32,
     "unit": "states",
     "why": "The area of the ellipse is about $\\pi \\cdot 0{,}1 \\cdot 0{,}5 \\approx 0{,}16$ J·s. Divide by $10^{-34}$ — we get about $10^{33}$. The exact factor is not important: the point is that quantum effects are unnoticeable on this scale.",
-    "tolFactor": 10
+    "tolFactor": 10,
+    "hint": "Оцените площадь области в фазовой плоскости как произведение амплитуды на импульс, а потом поделите её на квант действия."
    }
   ]
  },
@@ -778,7 +796,7 @@
     }
    ],
    "answer": "El punto recorre la elipse con semiejes 0,06 y 0,46 en aproximadamente 1,6 s — este es el período de oscilación.",
-   "sanity": "Comprobación de sentido común: si se duplica la amplitud, la elipse se duplica en ambos ejes, pero el tiempo de recorrido no cambia. Es la misma propiedad del péndulo que se mencionó en el tema de oscilaciones, pero aquí se ve geométricamente."
+   "check": "Comprobación de sentido común: si se duplica la amplitud, la elipse se duplica en ambos ejes, pero el tiempo de recorrido no cambia. Es la misma propiedad del péndulo que se mencionó en el tema de oscilaciones, pero aquí se ve geométricamente."
   },
   "constants": {
    "title": "Magnitudes de esta sección",
@@ -871,7 +889,11 @@
   },
   "appendix": {
    "title": "Para los curiosos: teorema de Liouville y la flecha del tiempo",
-   "text": "Si se toma no un solo punto, sino una pequeña mancha de estados iniciales, con el tiempo esta se estirará y deformará — pero su área permanecerá constante. Esto es el teorema de Liouville. De él se sigue algo inesperado: la información sobre el estado inicial en mecánica no se pierde, solo se esparce por el espacio de estados hasta hacerse irreconocible. Es precisamente en esta diferencia — «perdida» frente a «esparcida» — que se basa toda la discusión sobre la flecha del tiempo del tema de entropía."
+   "blocks": [
+    {
+     "text": "Si se toma no un solo punto, sino una pequeña mancha de estados iniciales, con el tiempo esta se estirará y deformará — pero su área permanecerá constante. Esto es el teorema de Liouville. De él se sigue algo inesperado: la información sobre el estado inicial en mecánica no se pierde, solo se esparce por el espacio de estados hasta hacerse irreconocible. Es precisamente en esta diferencia — «perdida» frente a «esparcida» — que se basa toda la discusión sobre la flecha del tiempo del tema de entropía."
+    }
+   ]
   },
   "memo": {
    "essence": "El estado del sistema es un punto $(q,p)$ en el espacio de fases, y el movimiento es el camino de ese punto. Las ecuaciones de Hamilton describen este camino mediante dos ecuaciones simétricas de primer orden, y la conservación de la energía se manifiesta como el cierre de la curva.",
@@ -912,7 +934,8 @@
      "El instante de tiempo"
     ],
     "answer": 1,
-    "why": "El punto define el par $(q,p)$: coordenada y momento. Esto es suficiente para predecir todo el movimiento posterior."
+    "why": "El punto define el par $(q,p)$: coordenada y momento. Esto es suficiente para predecir todo el movimiento posterior.",
+    "hint": "Спросите себя, что нужно знать, чтобы предсказать всё дальнейшее движение. Одних координат не хватает — чего именно недостаёт?"
    },
    {
     "id": "h2",
@@ -925,7 +948,8 @@
      "Porque el momento siempre es positivo"
     ],
     "answer": 1,
-    "why": "El punto no puede salirse de la línea de energía constante, y para un oscilador esa línea es una elipse. El cierre de la curva es la conservación de la energía en forma de fase."
+    "why": "El punto no puede salirse de la línea de energía constante, y para un oscilador esa línea es una elipse. El cierre de la curva es la conservación de la energía en forma de fase.",
+    "hint": "Через период система возвращается в то же самое состояние: та же координата, тот же импульс. Что это означает для линии, которую точка чертит на плоскости?"
    },
    {
     "id": "h3",
@@ -940,7 +964,9 @@
      "no trayector",
      "fas"
     ],
-    "why": "No se puede dibujar la trayectoria de miles de millones de partículas, pero sí la nube de estados; en mecánica cuántica no existe trayectoria alguna, pero el estado permanece. El lenguaje de los estados sobrevivió a ambos cambios de paradigma."
+    "why": "No se puede dibujar la trayectoria de miles de millones de partículas, pero sí la nube de estados; en mecánica cuántica no existe trayectoria alguna, pero el estado permanece. El lenguaje de los estados sobrevivió a ambos cambios de paradigma.",
+    "hint": "Вспомните, что в квантовой механике измеряют не траекторию, а состояние. На каком языке удобнее говорить о состояниях — только координат или координат с импульсами?",
+    "needed": 2
    },
    {
     "id": "h4",
@@ -949,7 +975,8 @@
     "answer": 5e+32,
     "unit": "estados",
     "why": "El área de la elipse es del orden de $\\pi \\cdot 0{,}1 \\cdot 0{,}5 \\approx 0{,}16$ J·s. Dividiendo por $10^{-34}$ se obtiene alrededor de $10^{33}$. El factor exacto no es importante: lo relevante es que la cuanticidad es imperceptible a esa escala.",
-    "tolFactor": 10
+    "tolFactor": 10,
+    "hint": "Оцените площадь области в фазовой плоскости как произведение амплитуды на импульс, а потом поделите её на квант действия."
    }
   ]
  },
@@ -1080,7 +1107,7 @@
     }
    ],
    "answer": "النقطة تدور حول القطع الناقص بأنصاف محاور 0,06 و0,46 تقريبًا في 1,6 s — هذه هي فترة التذبذب.",
-   "sanity": "فحص المنطق السليم: إذا ضاعفنا السعة، سيتضاعف القطع الناقص على كلا المحورين، بينما لا يتغير زمن الدوران. هذه نفس خاصية البندول التي نوقشت في موضوع التذبذبات، لكنها هنا مرئية هندسيًا."
+   "check": "فحص المنطق السليم: إذا ضاعفنا السعة، سيتضاعف القطع الناقص على كلا المحورين، بينما لا يتغير زمن الدوران. هذه نفس خاصية البندول التي نوقشت في موضوع التذبذبات، لكنها هنا مرئية هندسيًا."
   },
   "constants": {
    "title": "كميات هذا القسم",
@@ -1173,7 +1200,11 @@
   },
   "appendix": {
    "title": "للمهتمين: نظرية ليوفيل وسهم الزمن",
-   "text": "إذا أخذنا ليس نقطة واحدة، بل بقعة صغيرة من الحالات الابتدائية، فمع الزمن ستمتد وتنحني — لكن مساحتها ستبقى ثابتة. هذه نظرية ليوفيل. منها يتبع أمر غير متوقع: المعلومات عن الحالة الابتدائية في الميكانيكا لا تُفقد، بل تنتشر في فضاء الحالة حتى تصبح غير قابلة للتعرف. على هذا الفرق — 'مفقودة' مقابل 'منتشرة' — يقوم كل الحديث عن سهم الزمن من موضوع الإنتروبيا."
+   "blocks": [
+    {
+     "text": "إذا أخذنا ليس نقطة واحدة، بل بقعة صغيرة من الحالات الابتدائية، فمع الزمن ستمتد وتنحني — لكن مساحتها ستبقى ثابتة. هذه نظرية ليوفيل. منها يتبع أمر غير متوقع: المعلومات عن الحالة الابتدائية في الميكانيكا لا تُفقد، بل تنتشر في فضاء الحالة حتى تصبح غير قابلة للتعرف. على هذا الفرق — 'مفقودة' مقابل 'منتشرة' — يقوم كل الحديث عن سهم الزمن من موضوع الإنتروبيا."
+    }
+   ]
   },
   "memo": {
    "essence": "حالة النظام هي نقطة $(q,p)$ في الفضاء الطوري، والحركة هي مسار هذه النقطة. معادلات هاميلتون تصف هذا المسار بمعادلتين متماثلتين من الرتبة الأولى، ويظهر حفظ الطاقة كإغلاق المنحنى.",
@@ -1214,7 +1245,8 @@
      "لحظة زمنية"
     ],
     "answer": 1,
-    "why": "النقطة تحدد زوجاً $(q,p)$ - الإحداثيات والزخم. هذا يكفي للتنبؤ بكل الحركة المستقبلية."
+    "why": "النقطة تحدد زوجاً $(q,p)$ - الإحداثيات والزخم. هذا يكفي للتنبؤ بكل الحركة المستقبلية.",
+    "hint": "Спросите себя, что нужно знать, чтобы предсказать всё дальнейшее движение. Одних координат не хватает — чего именно недостаёт?"
    },
    {
     "id": "h2",
@@ -1227,7 +1259,8 @@
      "لأن الزخم موجب دائماً"
     ],
     "answer": 1,
-    "why": "لا يمكن للنقطة أن تخرج عن خط الطاقة الثابتة، وبالنسبة للمهتز، هذا الخط هو قطع ناقص. إغلاق المنحنى هو حفظ الطاقة في الصورة الطورية."
+    "why": "لا يمكن للنقطة أن تخرج عن خط الطاقة الثابتة، وبالنسبة للمهتز، هذا الخط هو قطع ناقص. إغلاق المنحنى هو حفظ الطاقة في الصورة الطورية.",
+    "hint": "Через период система возвращается в то же самое состояние: та же координата, тот же импульс. Что это означает для линии, которую точка чертит на плоскости?"
    },
    {
     "id": "h3",
@@ -1242,7 +1275,9 @@
      "لا مسار",
      "طوري"
     ],
-    "why": "لا يمكن رسم مسار مليارات الجسيمات، بينما يمكن رسم سحابة الحالات؛ في ميكانيكا الكم، لا يوجد مسار على الإطلاق، بينما تبقى الحالة. لغة الحالات نجت من كلا التغييرين في صورة العالم."
+    "why": "لا يمكن رسم مسار مليارات الجسيمات، بينما يمكن رسم سحابة الحالات؛ في ميكانيكا الكم، لا يوجد مسار على الإطلاق، بينما تبقى الحالة. لغة الحالات نجت من كلا التغييرين في صورة العالم.",
+    "hint": "Вспомните, что в квантовой механике измеряют не траекторию, а состояние. На каком языке удобнее говорить о состояниях — только координат или координат с импульсами?",
+    "needed": 2
    },
    {
     "id": "h4",
@@ -1251,7 +1286,8 @@
     "answer": 5e+32,
     "unit": "حالة",
     "why": "مساحة القطع الناقص من رتبة $\\pi \\cdot 0{,}1 \\cdot 0{,}5 \\approx 0{,}16$ J·s. نقسم على $10^{-34}$ - نحصل على حوالي $10^{33}$. العامل الدقيق غير مهم: المهم أن الكمومية على هذا المقياس غير ملحوظة.",
-    "tolFactor": 10
+    "tolFactor": 10,
+    "hint": "Оцените площадь области в фазовой плоскости как произведение амплитуды на импульс, а потом поделите её на квант действия."
    }
   ]
  }

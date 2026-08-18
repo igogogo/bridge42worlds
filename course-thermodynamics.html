@@ -450,7 +450,7 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
       window.__COURSE_ENTITIES = data.entities;
       // Нет ветки языка — показываем русскую. Пустая страница с TypeError хуже, чем текст
       // на чужом языке: читатель хотя бы видит стенды, формулы и может переключить язык.
-      UI = data.ui[LANG] || data.ui.ru; COURSE = data.course[LANG] || data.course.ru;
+      UI = B42Lang.pick(data.ui) || data.ui.ru; COURSE = B42Lang.pick(data.course) || data.course.ru;
       BOT = B42Tutor.Bot({ lang: LANG, strings: UI, maxQuestions: 10, maxLen: 600 });
       // модели курса грузим параллельно — их JSON'ы уже существуют и переиспользуются со стендов
       return Promise.all(data.models.map(function (m) {

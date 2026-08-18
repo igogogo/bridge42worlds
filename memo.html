@@ -198,7 +198,7 @@
     fetch('/data/theory/courses/' + TOPIC + '/course.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }),
     fetch('/data/theory/courses/' + TOPIC + '/' + PART + '.json', { cache: 'no-cache' }).then(function (r) { return r.json(); })
   ]).then(function (res) {
-    var course = res[0], lesson = res[1], L = lesson[LANG] || lesson.ru, C = course[LANG] || course.ru;
+    var course = res[0], lesson = res[1], L = B42Lang.pick(lesson) || lesson.ru, C = B42Lang.pick(course) || course.ru;
     var idx = course.lessons.findIndex(function (l) { return l.id === lesson.id; });
     document.title = 'Шпаргалка · ' + L.title + ' — bridge42worlds';
     document.getElementById('back').href = '/course.html?t=' + TOPIC + '&p=' + PART;

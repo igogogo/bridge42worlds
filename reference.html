@@ -120,7 +120,7 @@
   function hit(text) { return !query || (text || '').toLowerCase().indexOf(query) >= 0; }
 
   function cardFormula(f) {
-    var loc = f[LANG] || f.ru; if (!loc) return null;
+    var loc = B42Lang.pick(f) || f.ru; if (!loc) return null;
     if (!hit([loc.name, loc.latex, loc.alsoKnown, loc.title].join(' '))) return null;
     var c = el('div', 'r-card');
     var eq = el('div', 'r-eq'); tex(eq, loc.latex); c.appendChild(eq);
@@ -150,7 +150,7 @@
   }
 
   function cardConst(k) {
-    var loc = k[LANG] || k.ru || k;
+    var loc = B42Lang.pick(k) || k.ru || k;
     if (!hit([loc.name, k.sym, k.value, loc.why].join(' '))) return null;
     var c = el('div', 'r-card');
     var row = el('div', 'r-cst');
@@ -168,7 +168,7 @@
   }
 
   function cardPrinciple(p) {
-    var loc = p[LANG] || p.ru;
+    var loc = B42Lang.pick(p) || p.ru;
     if (!hit([loc.h, loc.t].join(' '))) return null;
     var c = el('div', 'r-card');
     c.appendChild(el('div', 'r-pr-h', ic(p.icon, 16) + ' ' + loc.h));
@@ -205,7 +205,7 @@
   fetch('/data/theory/reference.json', { cache: 'no-cache' })
     .then(function (r) { return r.json(); })
     .then(function (d) {
-      D = d; T = d[LANG] || d.ru;
+      D = d; T = B42Lang.pick(d) || d.ru;
       document.title = T.title + ' — bridge42worlds';
       document.getElementById('h').textContent = T.title;
       document.getElementById('sub').textContent = T.subtitle;
