@@ -237,6 +237,14 @@ def _log_lang_fallback(kind, article_id, category="", attempt=0):
 # механизмов. Без списка модель даёт ОДИН главный тег своими словами, а не выдумывает набор.
 TAGS_IN_PROMPT = CONFIG.get("tags_in_prompt", True)
 
+_NO_SCI_BLOCK = (
+    "УЧЁНЫЕ: списка учёных в промпте нет намеренно — их привяжет машина знаний по законам "
+    "и понятиям статьи. Не выдумывай имена и не размечай их маркерами."
+)
+_NO_LAWS_BLOCK = (
+    "ЗАКОНЫ: списка законов в промпте нет намеренно — их привяжет вектор по смыслу. "
+    "Не выдумывай идентификаторы законов и не размечай их маркерами."
+)
 _NO_TAGS_BLOCK = (
     "ТЕГИ: списка тегов в этом промпте нет намеренно — остальные теги статья получит "
     "привязкой по смыслу. От тебя нужен ТОЛЬКО main_tag: одно понятие, о котором статья, "
@@ -251,8 +259,14 @@ def generate_advanced(article, text, tags_input, scientists_keys, law_ids=None, 
     gen_context.build_block. Пустая строка — законное значение: вектор мог быть недоступен,
     и тогда промпт возвращается к прежнему виду вместо падения разбора."""
     tags_list = (", ".join(t["en"] for t in tags_input) if TAGS_IN_PROMPT else _NO_TAGS_BLOCK)
-    scientists_list = ", ".join(scientists_keys)
-    laws_list = ", ".join(law_ids or [])
+    # Учёных тоже не спрашиваем списком: их выводит машина знаний по законам и понятиям
+    # статьи (tag_by_vector → scientists_vec). 201 имя в каждом промпте — это плата за то,
+    # что реестр уже знает точнее. Ключ общий с тегами и законами.
+    scientists_list = (", ".join(scientists_keys) if TAGS_IN_PROMPT else _NO_SCI_BLOCK)
+    # Законы уходят тем же путём, что и теги: их ставит вектор (tag_by_vector считает
+    # и tags_vec, и laws_vec). Держать в промпте список идентификаторов - платить
+    # за то, что потом всё равно пересчитывается по смыслу.
+    laws_list = (", ".join(law_ids or []) if TAGS_IN_PROMPT else _NO_LAWS_BLOCK)
     prompt = load_prompt("article-generate-advanced").format(
         tags_list=tags_list, scientists_list=scientists_list, laws_list=laws_list,
         article_text=text, context_block=context_block or "")
@@ -288,7 +302,10 @@ def generate_express(article, abstract_text, tags_input, scientists_keys):
     # в express-списке 53 тега и neutrino в него не входит. Теперь один ключ правит обе двери,
     # а теги ставит вектор (tools/tag_by_vector.py, шаг фабрики перед публикацией).
     tags_list = (", ".join(t["en"] for t in tags_input) if TAGS_IN_PROMPT else _NO_TAGS_BLOCK)
-    scientists_list = ", ".join(scientists_keys)
+    # Учёных тоже не спрашиваем списком: их выводит машина знаний по законам и понятиям
+    # статьи (tag_by_vector → scientists_vec). 201 имя в каждом промпте — это плата за то,
+    # что реестр уже знает точнее. Ключ общий с тегами и законами.
+    scientists_list = (", ".join(scientists_keys) if TAGS_IN_PROMPT else _NO_SCI_BLOCK)
     prompt = load_prompt("article-generate-express").format(
         tags_list=tags_list, scientists_list=scientists_list, abstract_text=abstract_text)
     reinforce = "\n\nВНИМАНИЕ: все текстовые поля пиши СТРОГО на русском языке. Не отвечай на английском."

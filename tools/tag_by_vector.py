@@ -428,6 +428,8 @@ def main():
     ex = sorted(old_dead - new_dead)[:12]
     print("например:", ex)
 
+    # Реестр понятий: источник связи «понятие → его учёные».
+    _REG = json.loads((ROOT / "data" / "concepts.json").read_text(encoding="utf-8"))["concepts"]         if (ROOT / "data" / "concepts.json").exists() else {}
     if args.apply:
         n = 0
         for aid, tags in got.items():
@@ -440,12 +442,25 @@ def main():
             # где русская версия статьи размечена по смыслу, а английская и арабская —
             # по-старому, из промпта. Один и тот же материал с разными связями в разных
             # языках — худший вид расхождения: его никто не заметит.
+            # Учёные — ВЫВОДИМ, а не спрашиваем у модели (владелец 2026-08-18: «учёные
+            # должны быть связаны с законами автоматом, это отдельный процесс»). В реестре
+            # понятий у 466 из 536 записей есть свои учёные, и закон знает своих авторов
+            # точнее, чем модель, которой в промпт кладут список из 201 имени. Берём
+            # объединение по назначенным законам и тегам, режем до шести: страница с
+            # двадцатью именами не связь, а шум.
+            sci = []
+            for cid in list(laws_got.get(aid, [])) + list(tags):
+                for name in (_REG.get(cid, {}).get("scientists") or []):
+                    if name not in sci:
+                        sci.append(name)
+            sci = sci[:6]
             for tier in ("simple", "popular", "advanced"):
                 for _lang in ("ru", "en", "es", "ar", "fr"):
                     v = d.get(tier, {}).get(_lang)
                     if isinstance(v, dict):
                         v["tags_vec"] = tags
                         v["laws_vec"] = laws_got.get(aid, [])
+                        v["scientists_vec"] = sci
                 v = d.get(tier, {}).get("ru")
                 if isinstance(v, dict):
                     v["tags_vec"] = tags

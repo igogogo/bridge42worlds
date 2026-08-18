@@ -1555,6 +1555,22 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
                                "zh": "相关文章", "fr": "Articles similaires", "ar": "مقالات ذات صلة"}.get(lang, "Related articles")
     loc["feedback_nav"] = {"ru": "Отклик", "en": "Feedback", "es": "Comentarios", "zh": "反馈",
                             "fr": "Retour", "ar": "التعليقات"}.get(lang, "Feedback")
+    # №41 «Цитатные связи». Заголовок говорит ровно то, что есть: не «связанные работы»,
+    # а «из того, что цитирует эта статья, мы разбирали вот это». Связь провёл автор
+    # статьи, а не наш вектор, и подпись не должна присваивать нам чужую заслугу.
+    loc["cited_ours"] = {"ru": "Из цитируемого мы разбирали",
+                         "en": "From its references, we covered",
+                         "es": "De sus referencias, analizamos",
+                         "zh": "在其参考文献中，我们解读过",
+                         "fr": "Parmi ses références, nous avons analysé",
+                         "ar": "من مراجعها، تناولنا"}.get(lang, "From its references, we covered")
+    loc["cited_ours_hint"] = {"ru": "ссылку поставил автор статьи, разбор — наш",
+                              "en": "the link is the author’s, the write-up is ours",
+                              "es": "el enlace es del autor, el análisis es nuestro",
+                              "zh": "引用来自作者，解读来自我们",
+                              "fr": "le lien vient de l’auteur, l’analyse est la nôtre",
+                              "ar": "الإحالة من المؤلف، والتحليل منا"}.get(
+        lang, "the link is the author’s, the write-up is ours")
 
     # "Следующая статья" — на ту же строку, что заголовок отклика (юзер-фидбек 2026-07-15:
     # "следующая статья поставить надо с отзывами, как раз на строку в которой было
@@ -1910,6 +1926,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
         fun_fact_html=fun_html,
         reading_html=reading_html, jsonld_html=jsonld_html,
         related_label=safe(loc.get("related_articles", "Related articles")),
+        cited_ours_label=safe(loc["cited_ours"]), cited_ours_hint=safe(loc["cited_ours_hint"]),
         categories_html=categories_html,
         fav_title=safe(nav_fav_title(lang)),
         like_title=safe(reaction_titles(lang)["like"]),
@@ -2080,6 +2097,17 @@ def sci_notation(v):
     return s
 
 
+def _display_sci(scipop):
+    """Учёные статьи: сначала выведенные машиной знаний (scientists_vec), иначе прежние.
+
+    Владелец 2026-08-18: «учёные должны быть связаны с законами автоматом, это отдельный
+    процесс». Список имён убран из промптов; привязку считает tag_by_vector по законам и
+    понятиям статьи. Пока по статье нет расчёта — показываем то, что стояло раньше,
+    чтобы связи не пропали на время перехода.
+    """
+    return [x for x in (scipop.get("scientists_vec") or []) if x] or scipop.get("scientists", [])
+
+
 def _display_tags(scipop):
     """Теги статьи для показа и индекса: вектор, с откатом на прежние.
 
@@ -2186,7 +2214,7 @@ def update_index(scipop, article, date_str, lang, version, abstract=""):
         # Законы в индексе — из вектора, как и на странице. Иначе карточка в ленте
         # покажет один набор, а страница другой.
         "laws": (scipop.get("laws_vec") or scipop.get("laws") or []),
-        "scientists": scipop.get("scientists", []), "url": url,
+        "scientists": _display_sci(scipop), "url": url,
         "reading": reading_minutes(scipop),
         "categories": article.get("categories", []),
         "primary_category": article.get("primary_category", ""),
@@ -2241,7 +2269,7 @@ def update_tag_counts(scipop):
             if t in graph.get("graph", {}):
                 graph["graph"][t]["article_count"] = graph["graph"][t].get("article_count", 0) + 1
                 if "scientists" not in graph["graph"][t]: graph["graph"][t]["scientists"] = []
-                for s in scipop.get("scientists", []):
+                for s in _display_sci(scipop):
                     if s not in graph["graph"][t]["scientists"]: graph["graph"][t]["scientists"].append(s)
         write_json_atomic(gp, graph)
     cp = Path("data/concepts.json")
@@ -2252,7 +2280,7 @@ def update_tag_counts(scipop):
             if t in node:
                 node[t]["article_count"] = node[t].get("article_count", 0) + 1
                 sci = node[t].setdefault("scientists", [])
-                for s in scipop.get("scientists", []):
+                for s in _display_sci(scipop):
                     if s not in sci: sci.append(s)
         write_json_atomic(cp, reg)
 
@@ -5178,7 +5206,7 @@ def _index_entry(scipop, data, date_str, lang, version):
         # Законы в индексе — из вектора, как и на странице. Иначе карточка в ленте
         # покажет один набор, а страница другой.
         "laws": (scipop.get("laws_vec") or scipop.get("laws") or []),
-        "scientists": scipop.get("scientists", []), "url": url,
+        "scientists": _display_sci(scipop), "url": url,
         "reading": reading_minutes(scipop),
         "categories": data.get("categories", []),
         "primary_category": data.get("primary_category", ""),
