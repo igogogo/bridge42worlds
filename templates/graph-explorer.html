@@ -82,6 +82,47 @@
         <label><input type="checkbox" class="kg-edge" value="law-sci" checked> $edge_law_sci</label>
         <label><input type="checkbox" class="kg-edge" value="law-influence" checked> $edge_law_influence</label>
     </div>
+    <!-- Виды понятий (решение владельца 18.08: одна классификация, «в графе можно ставить
+         галочки на группе классификации, и будет чище»). Тринадцать видов — это тринадцать
+         галочек, на телефоне месиво; поэтому основная единица здесь ГРУППА, а виды внутри
+         неё раскрываются на широком экране. Пустой набор галочек = показываем всё:
+         фильтр, который по умолчанию всё скрывает, читатель воспринимает как поломку. -->
+    <div class="kg-row kg-kinds-row"><strong>$kinds_label</strong>
+        <span class="kg-group">
+            <label class="kg-group-t"><input type="checkbox" class="kg-group-all" data-group="frame"> $group_frame</label>
+            <span class="kg-subs">
+                <label><input type="checkbox" class="kg-sub" data-group="frame" value="law"> $kind_law</label>
+                <label><input type="checkbox" class="kg-sub" data-group="frame" value="principle"> $kind_principle</label>
+                <label><input type="checkbox" class="kg-sub" data-group="frame" value="theorem"> $kind_theorem</label>
+            </span>
+        </span>
+        <span class="kg-group">
+            <label class="kg-group-t"><input type="checkbox" class="kg-group-all" data-group="method"> $group_method</label>
+            <span class="kg-subs">
+                <label><input type="checkbox" class="kg-sub" data-group="method" value="method"> $kind_method</label>
+                <label><input type="checkbox" class="kg-sub" data-group="method" value="instrument"> $kind_instrument</label>
+                <label><input type="checkbox" class="kg-sub" data-group="method" value="equation"> $kind_equation</label>
+                <label><input type="checkbox" class="kg-sub" data-group="method" value="invention"> $kind_invention</label>
+            </span>
+        </span>
+        <span class="kg-group">
+            <label class="kg-group-t"><input type="checkbox" class="kg-group-all" data-group="object"> $group_object</label>
+            <span class="kg-subs">
+                <label><input type="checkbox" class="kg-sub" data-group="object" value="object"> $kind_object</label>
+                <label><input type="checkbox" class="kg-sub" data-group="object" value="substance"> $kind_substance</label>
+                <label><input type="checkbox" class="kg-sub" data-group="object" value="phenomenon"> $kind_phenomenon</label>
+                <label><input type="checkbox" class="kg-sub" data-group="object" value="effect"> $kind_effect</label>
+            </span>
+        </span>
+        <span class="kg-group">
+            <label class="kg-group-t"><input type="checkbox" class="kg-group-all" data-group="idea"> $group_idea</label>
+            <span class="kg-subs">
+                <label><input type="checkbox" class="kg-sub" data-group="idea" value="concept"> $kind_concept</label>
+                <label><input type="checkbox" class="kg-sub" data-group="idea" value="math"> $kind_math</label>
+            </span>
+        </span>
+        <button type="button" id="kg-kinds-clear">$clear_label</button>
+    </div>
     <div class="kg-row"><strong>$presets_label</strong>
         <button type="button" onclick="kgPreset('core')">$preset_core</button>
         <button type="button" onclick="kgPreset('all')">$preset_all</button>
