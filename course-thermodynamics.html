@@ -141,7 +141,8 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
 <script src="/js/explorable.js?v=c74a61999e"></script>
 <script src="/js/stage-kit.js?v=60398c6218"></script>
 <script src="/js/models.js?v=c30f059bd2"></script>
-<script src="/js/tutor.js?v=f19cb1f829"></script>
+<script src="/js/quiz-grade.js?v=1"></script>
+<script src="/js/tutor.js?v=f19cb1f830"></script>
 <script>
 (function () {
   var LANG = window.B42_LANG || 'ru', COURSE, UI, BOT, MODELDATA = {};
@@ -449,7 +450,7 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
       window.__COURSE_ENTITIES = data.entities;
       // Нет ветки языка — показываем русскую. Пустая страница с TypeError хуже, чем текст
       // на чужом языке: читатель хотя бы видит стенды, формулы и может переключить язык.
-      UI = data.ui[LANG] || data.ui.ru; COURSE = data.course[LANG] || data.course.ru;
+      UI = B42Lang.pick(data.ui) || data.ui.ru; COURSE = B42Lang.pick(data.course) || data.course.ru;
       BOT = B42Tutor.Bot({ lang: LANG, strings: UI, maxQuestions: 10, maxLen: 600 });
       // модели курса грузим параллельно — их JSON'ы уже существуют и переиспользуются со стендов
       return Promise.all(data.models.map(function (m) {

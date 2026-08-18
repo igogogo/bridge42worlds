@@ -194,7 +194,7 @@
     }
    ],
    "answer": "Нужной массы примерно втрое больше видимой, то есть около двух третей массы внутри этого радиуса не светится. Если считать до края гало, а не до 15 кпк, отношение доходит до пяти и выше — потому и говорят о пяти шестых.",
-   "sanity": "Проверка на здравый смысл: масса вышла порядка $10^{11}$ масс Солнца — столько и приписывают крупной галактике, значит порядок не потерян. Если бы получилось $10^{6}$ или $10^{20}$, ошибка была бы в переводе парсеков или в квадрате скорости, и это самые частые два места."
+   "check": "Проверка на здравый смысл: масса вышла порядка $10^{11}$ масс Солнца — столько и приписывают крупной галактике, значит порядок не потерян. Если бы получилось $10^{6}$ или $10^{20}$, ошибка была бы в переводе парсеков или в квадрате скорости, и это самые частые два места."
   },
   "constants": {
    "title": "Константы: откуда взялись и что означают",
@@ -290,7 +290,11 @@
   },
   "appendix": {
    "title": "Может, дело в законе тяготения, а не в невидимом веществе",
-   "text": "Это законный вопрос, и его давно проверяют. Модифицированная динамика (MOND) описывает кривые вращения галактик даже лучше, чем тёмная материя: она предсказывает связь между светимостью галактики и её скоростью вращения, которая действительно наблюдается. Но дальше начинаются трудности. Скопления галактик MOND недостаточно удерживает. Угловой спектр реликта воспроизводится плохо. Скопление Пули, где масса и газ разъехались, объяснить изменённым законом тяготения трудно. Поэтому сегодня большинство работает в рамках тёмной материи, не считая вопрос закрытым: сама MOND-связь остаётся фактом, который тёмная материя объясняет неуверенно."
+   "blocks": [
+    {
+     "text": "Это законный вопрос, и его давно проверяют. Модифицированная динамика (MOND) описывает кривые вращения галактик даже лучше, чем тёмная материя: она предсказывает связь между светимостью галактики и её скоростью вращения, которая действительно наблюдается. Но дальше начинаются трудности. Скопления галактик MOND недостаточно удерживает. Угловой спектр реликта воспроизводится плохо. Скопление Пули, где масса и газ разъехались, объяснить изменённым законом тяготения трудно. Поэтому сегодня большинство работает в рамках тёмной материи, не считая вопрос закрытым: сама MOND-связь остаётся фактом, который тёмная материя объясняет неуверенно."
+    }
+   ]
   },
   "memo": {
    "essence": "Скорости звёзд на краях галактик, движение галактик в скоплениях, гравитационное линзирование и анизотропия реликта требуют тяготеющей материи впятеро больше видимой. Яркость далёких сверхновых требует ускоренного расширения, то есть составляющей с постоянной плотностью и отрицательным давлением. Обе составляющие описаны количественно и не объяснены по природе.",
@@ -331,7 +335,8 @@
      "Скорость звёзд падает быстрее, чем предсказывает Кеплер"
     ],
     "answer": 0,
-    "why": "Если масса кончилась, скорость обязана падать как $1/\\sqrt{r}$. Измеренная кривая идёт плоско, а это означает, что масса продолжает расти пропорционально радиусу — и не светится."
+    "why": "Если масса кончилась, скорость обязана падать как $1/\\sqrt{r}$. Измеренная кривая идёт плоско, а это означает, что масса продолжает расти пропорционально радиусу — и не светится.",
+    "hint": "Если бы вся масса была собрана в центре, скорость падала бы как единица на корень из радиуса. Сравните это с тем, что показывает измеренная кривая."
    },
    {
     "id": "d2",
@@ -344,7 +349,8 @@
      "Тяготение материи слабеет с расстоянием"
     ],
     "answer": 0,
-    "why": "В уравнении Фридмана вклад материи идёт как $1/a^3$, а вклад тёмной энергии постоянен. Поэтому рано или поздно второе слагаемое становится главным — независимо от начальных долей."
+    "why": "В уравнении Фридмана вклад материи идёт как $1/a^3$, а вклад тёмной энергии постоянен. Поэтому рано или поздно второе слагаемое становится главным — независимо от начальных долей.",
+    "hint": "Материя при расширении разбавляется, а плотность тёмной энергии не меняется. Что станет с их отношением через много миллиардов лет?"
    },
    {
     "id": "d3",
@@ -358,7 +364,9 @@
      "эталон",
      "светимост"
     ],
-    "why": "Нужен объект с известной настоящей светимостью: тогда по видимой яркости считается расстояние. Сверхновые типа Ia вспыхивают почти одинаково, поэтому работают стандартными свечами, а у галактик светимость разная."
+    "why": "Нужен объект с известной настоящей светимостью: тогда по видимой яркости считается расстояние. Сверхновые типа Ia вспыхивают почти одинаково, поэтому работают стандартными свечами, а у галактик светимость разная.",
+    "hint": "Чтобы получить расстояние по видимой яркости, нужно знать настоящую светимость объекта. У каких объектов она почти одинакова?",
+    "needed": 2
    },
    {
     "id": "d4",
@@ -366,8 +374,9 @@
     "q": "Звёзды на радиусе 10 кпк движутся со скоростью 200 км/с. Оцените массу внутри этой орбиты в миллиардах масс Солнца. (1 кпк ≈ 3,1·10¹⁹ м, G = 6,67·10⁻¹¹, M☉ = 2·10³⁰ кг.)",
     "answer": 93,
     "unit": "млрд M☉",
-    "tolerance": 25,
-    "why": "$M = v^2 r / G = (2\\cdot10^5)^2 \\cdot 3{,}1\\cdot10^{20} / 6{,}67\\cdot10^{-11} \\approx 1{,}9\\cdot10^{41}$ кг, это примерно $9{,}3\\cdot10^{10}$ масс Солнца, то есть около девяноста миллиардов."
+    "why": "$M = v^2 r / G = (2\\cdot10^5)^2 \\cdot 3{,}1\\cdot10^{20} / 6{,}67\\cdot10^{-11} \\approx 1{,}9\\cdot10^{41}$ кг, это примерно $9{,}3\\cdot10^{10}$ масс Солнца, то есть около девяноста миллиардов.",
+    "tolAbs": 25,
+    "hint": "Считайте по M = v²r/G. Переведите и скорость, и радиус в единицы СИ — и не потеряйте квадрат у скорости."
    }
   ]
  },
@@ -535,7 +544,7 @@
     }
    ],
    "answer": "The required mass is about three times the visible mass, meaning about two-thirds of the mass inside this radius does not shine. If we count to the edge of the halo instead of 15 kpc, the ratio reaches five or more — hence the talk of five-sixths.",
-   "sanity": "Sanity check: the mass came out to about $10^{11}$ solar masses — that's what is attributed to a large galaxy, so the order of magnitude is correct. If the result were $10^{6}$ or $10^{20}$, the error would be in converting parsecs or in the square of the velocity, and these are the two most common mistakes."
+   "check": "Sanity check: the mass came out to about $10^{11}$ solar masses — that's what is attributed to a large galaxy, so the order of magnitude is correct. If the result were $10^{6}$ or $10^{20}$, the error would be in converting parsecs or in the square of the velocity, and these are the two most common mistakes."
   },
   "constants": {
    "title": "Constants: where they come from and what they mean",
@@ -631,7 +640,11 @@
   },
   "appendix": {
    "title": "Maybe it's the law of gravity, not invisible matter",
-   "text": "This is a legitimate question, and it has been tested for a long time. Modified Newtonian dynamics (MOND) describes galactic rotation curves even better than dark matter: it predicts a relationship between a galaxy's luminosity and its rotation speed that is indeed observed. But then difficulties begin. MOND does not sufficiently hold galaxy clusters together. The angular spectrum of the CMB is reproduced poorly. The Bullet Cluster, where mass and gas separated, is difficult to explain by modified gravity. Therefore, today most work within the framework of dark matter, not considering the question closed: the MOND relation itself remains a fact that dark matter explains uncertainly."
+   "blocks": [
+    {
+     "text": "This is a legitimate question, and it has been tested for a long time. Modified Newtonian dynamics (MOND) describes galactic rotation curves even better than dark matter: it predicts a relationship between a galaxy's luminosity and its rotation speed that is indeed observed. But then difficulties begin. MOND does not sufficiently hold galaxy clusters together. The angular spectrum of the CMB is reproduced poorly. The Bullet Cluster, where mass and gas separated, is difficult to explain by modified gravity. Therefore, today most work within the framework of dark matter, not considering the question closed: the MOND relation itself remains a fact that dark matter explains uncertainly."
+    }
+   ]
   },
   "memo": {
    "essence": "The speeds of stars at the edges of galaxies, the motion of galaxies in clusters, gravitational lensing, and the anisotropy of the CMB require five times more gravitating matter than visible. The brightness of distant supernovae requires accelerated expansion, that is, a component with constant density and negative pressure. Both components are described quantitatively and not explained in nature.",
@@ -672,7 +685,8 @@
      "The speed of stars falls faster than Kepler predicts"
     ],
     "answer": 0,
-    "why": "If the mass ended, the speed must fall as $1/\\sqrt{r}$. The measured curve is flat, meaning that the mass continues to grow proportionally to radius — and does not shine."
+    "why": "If the mass ended, the speed must fall as $1/\\sqrt{r}$. The measured curve is flat, meaning that the mass continues to grow proportionally to radius — and does not shine.",
+    "hint": "Если бы вся масса была собрана в центре, скорость падала бы как единица на корень из радиуса. Сравните это с тем, что показывает измеренная кривая."
    },
    {
     "id": "d2",
@@ -685,7 +699,8 @@
      "Matter's gravity weakens with distance"
     ],
     "answer": 0,
-    "why": "In the Friedmann equation, the matter contribution goes as $1/a^3$, while the dark energy contribution is constant. Therefore, sooner or later the second term becomes dominant — regardless of initial fractions."
+    "why": "In the Friedmann equation, the matter contribution goes as $1/a^3$, while the dark energy contribution is constant. Therefore, sooner or later the second term becomes dominant — regardless of initial fractions.",
+    "hint": "Материя при расширении разбавляется, а плотность тёмной энергии не меняется. Что станет с их отношением через много миллиардов лет?"
    },
    {
     "id": "d3",
@@ -699,7 +714,9 @@
      "standard",
      "luminosity"
     ],
-    "why": "Need an object with known true luminosity: then the distance is calculated from apparent brightness. Type Ia supernovae explode almost identically, so they work as standard candles, while galaxies have varying luminosities."
+    "why": "Need an object with known true luminosity: then the distance is calculated from apparent brightness. Type Ia supernovae explode almost identically, so they work as standard candles, while galaxies have varying luminosities.",
+    "hint": "Чтобы получить расстояние по видимой яркости, нужно знать настоящую светимость объекта. У каких объектов она почти одинакова?",
+    "needed": 2
    },
    {
     "id": "d4",
@@ -707,8 +724,9 @@
     "q": "Stars at a radius of 10 kpc move at 200 km/s. Estimate the mass inside this orbit in billions of solar masses. (1 kpc ≈ 3.1·10¹⁹ m, G = 6.67·10⁻¹¹, M☉ = 2·10³⁰ kg.)",
     "answer": 93,
     "unit": "billion M☉",
-    "tolerance": 25,
-    "why": "$M = v^2 r / G = (2\\cdot10^5)^2 \\cdot 3{,}1\\cdot10^{20} / 6{,}67\\cdot10^{-11} \\approx 1{,}9\\cdot10^{41}$ kg, which is about $9{,}3\\cdot10^{10}$ solar masses, i.e., about ninety billion."
+    "why": "$M = v^2 r / G = (2\\cdot10^5)^2 \\cdot 3{,}1\\cdot10^{20} / 6{,}67\\cdot10^{-11} \\approx 1{,}9\\cdot10^{41}$ kg, which is about $9{,}3\\cdot10^{10}$ solar masses, i.e., about ninety billion.",
+    "tolAbs": 25,
+    "hint": "Считайте по M = v²r/G. Переведите и скорость, и радиус в единицы СИ — и не потеряйте квадрат у скорости."
    }
   ]
  },
@@ -876,7 +894,7 @@
     }
    ],
    "answer": "La masa necesaria es aproximadamente el triple de la visible, es decir, cerca de dos tercios de la masa dentro de este radio no brillan. Si se cuenta hasta el borde del halo, no hasta 15 kpc, la relación llega a cinco o más — por eso se habla de cinco sextos.",
-   "sanity": "Verificación de sentido común: la masa resultó del orden de $10^{11}$ masas solares — eso es lo que se atribuye a una galaxia grande, por lo que el orden no se perdió. Si hubiera resultado $10^{6}$ o $10^{20}$, el error estaría en la conversión de pársecs o en el cuadrado de la velocidad, y esos son los dos lugares más comunes."
+   "check": "Verificación de sentido común: la masa resultó del orden de $10^{11}$ masas solares — eso es lo que se atribuye a una galaxia grande, por lo que el orden no se perdió. Si hubiera resultado $10^{6}$ o $10^{20}$, el error estaría en la conversión de pársecs o en el cuadrado de la velocidad, y esos son los dos lugares más comunes."
   },
   "constants": {
    "title": "Constantes: de dónde vienen y qué significan",
@@ -972,7 +990,11 @@
   },
   "appendix": {
    "title": "Quizás se trate de la ley de gravedad, no de la materia invisible",
-   "text": "Esta es una pregunta legítima, y se ha estado verificando durante mucho tiempo. La dinámica modificada (MOND) describe las curvas de rotación de las galaxias incluso mejor que la materia oscura: predice una relación entre la luminosidad de una galaxia y su velocidad de rotación, que efectivamente se observa. Pero luego vienen las dificultades. MOND no retiene suficientemente los cúmulos de galaxias. El espectro angular del fondo cósmico de microondas se reproduce mal. El cúmulo Bala, donde la masa y el gas se separaron, es difícil de explicar con una ley de gravedad modificada. Por eso hoy la mayoría trabaja en el marco de la materia oscura, sin considerar el tema cerrado: la propia relación MOND sigue siendo un hecho que la materia oscura explica de manera insegura."
+   "blocks": [
+    {
+     "text": "Esta es una pregunta legítima, y se ha estado verificando durante mucho tiempo. La dinámica modificada (MOND) describe las curvas de rotación de las galaxias incluso mejor que la materia oscura: predice una relación entre la luminosidad de una galaxia y su velocidad de rotación, que efectivamente se observa. Pero luego vienen las dificultades. MOND no retiene suficientemente los cúmulos de galaxias. El espectro angular del fondo cósmico de microondas se reproduce mal. El cúmulo Bala, donde la masa y el gas se separaron, es difícil de explicar con una ley de gravedad modificada. Por eso hoy la mayoría trabaja en el marco de la materia oscura, sin considerar el tema cerrado: la propia relación MOND sigue siendo un hecho que la materia oscura explica de manera insegura."
+    }
+   ]
   },
   "memo": {
    "essence": "Las velocidades de las estrellas en los bordes de las galaxias, el movimiento de las galaxias en los cúmulos, el lente gravitacional y la anisotropía del fondo cósmico requieren una materia gravitante cinco veces mayor que la visible. El brillo de las supernovas lejanas requiere una expansión acelerada, es decir, un componente con densidad constante y presión negativa. Ambos componentes se describen cuantitativamente y no se explican en su naturaleza.",
@@ -1013,7 +1035,8 @@
      "La velocidad de las estrellas disminuye más rápido de lo que predice Kepler"
     ],
     "answer": 0,
-    "why": "Si la masa se acaba, la velocidad debe caer como $1/\\sqrt{r}$. La curva medida es plana, lo que significa que la masa continúa creciendo proporcionalmente al radio — y no brilla."
+    "why": "Si la masa se acaba, la velocidad debe caer como $1/\\sqrt{r}$. La curva medida es plana, lo que significa que la masa continúa creciendo proporcionalmente al radio — y no brilla.",
+    "hint": "Если бы вся масса была собрана в центре, скорость падала бы как единица на корень из радиуса. Сравните это с тем, что показывает измеренная кривая."
    },
    {
     "id": "d2",
@@ -1026,7 +1049,8 @@
      "La gravedad de la materia se debilita con la distancia"
     ],
     "answer": 0,
-    "why": "En la ecuación de Friedman, la contribución de la materia va como $1/a^3$, mientras que la contribución de la energía oscura es constante. Por lo tanto, tarde o temprano el segundo término se vuelve dominante — independientemente de las proporciones iniciales."
+    "why": "En la ecuación de Friedman, la contribución de la materia va como $1/a^3$, mientras que la contribución de la energía oscura es constante. Por lo tanto, tarde o temprano el segundo término se vuelve dominante — independientemente de las proporciones iniciales.",
+    "hint": "Материя при расширении разбавляется, а плотность тёмной энергии не меняется. Что станет с их отношением через много миллиардов лет?"
    },
    {
     "id": "d3",
@@ -1040,7 +1064,9 @@
      "estándar",
      "luminosidad"
     ],
-    "why": "Se necesita un objeto con luminosidad real conocida: entonces a partir del brillo aparente se calcula la distancia. Las supernovas tipo Ia estallan de manera casi idéntica, por lo que funcionan como velas estándar, mientras que la luminosidad de las galaxias varía."
+    "why": "Se necesita un objeto con luminosidad real conocida: entonces a partir del brillo aparente se calcula la distancia. Las supernovas tipo Ia estallan de manera casi idéntica, por lo que funcionan como velas estándar, mientras que la luminosidad de las galaxias varía.",
+    "hint": "Чтобы получить расстояние по видимой яркости, нужно знать настоящую светимость объекта. У каких объектов она почти одинакова?",
+    "needed": 2
    },
    {
     "id": "d4",
@@ -1048,8 +1074,9 @@
     "q": "Las estrellas en un radio de 10 kpc se mueven a una velocidad de 200 km/s. Estima la masa dentro de esta órbita en miles de millones de masas solares. (1 kpc ≈ 3,1·10¹⁹ m, G = 6,67·10⁻¹¹, M☉ = 2·10³⁰ kg.)",
     "answer": 93,
     "unit": "mil millones M☉",
-    "tolerance": 25,
-    "why": "$M = v^2 r / G = (2\\cdot10^5)^2 \\cdot 3{,}1\\cdot10^{20} / 6{,}67\\cdot10^{-11} \\approx 1{,}9\\cdot10^{41}$ kg, que es aproximadamente $9{,}3\\cdot10^{10}$ masas solares, es decir, alrededor de noventa mil millones."
+    "why": "$M = v^2 r / G = (2\\cdot10^5)^2 \\cdot 3{,}1\\cdot10^{20} / 6{,}67\\cdot10^{-11} \\approx 1{,}9\\cdot10^{41}$ kg, que es aproximadamente $9{,}3\\cdot10^{10}$ masas solares, es decir, alrededor de noventa mil millones.",
+    "tolAbs": 25,
+    "hint": "Считайте по M = v²r/G. Переведите и скорость, и радиус в единицы СИ — и не потеряйте квадрат у скорости."
    }
   ]
  },
@@ -1217,7 +1244,7 @@
     }
    ],
    "answer": "الكتلة المطلوبة أكبر بثلاث مرات تقريبًا من الكتلة المرئية، أي حوالي ثلثي الكتلة داخل هذا نصف القطر غير مضيئة. إذا حسبنا حتى حافة الهالة، وليس حتى 15 kpc، تصل النسبة إلى خمسة أو أكثر — ولهذا يقولون عن خمسة أسداس.",
-   "sanity": "التحقق من المنطق السليم: الكتلة الناتجة من رتبة $10^{11}$ كتلة شمسية — هذا ما يُنسب لمجرة كبيرة، إذن لم نفقد الترتيب. إذا حصلنا على $10^{6}$ أو $10^{20}$، لكان الخطأ في تحويل الفرسخ الفلكي أو في مربع السرعة، وهما أكثر مكانين شيوعًا للخطأ."
+   "check": "التحقق من المنطق السليم: الكتلة الناتجة من رتبة $10^{11}$ كتلة شمسية — هذا ما يُنسب لمجرة كبيرة، إذن لم نفقد الترتيب. إذا حصلنا على $10^{6}$ أو $10^{20}$، لكان الخطأ في تحويل الفرسخ الفلكي أو في مربع السرعة، وهما أكثر مكانين شيوعًا للخطأ."
   },
   "constants": {
    "title": "الثوابت: من أين أتت وماذا تعني",
@@ -1313,7 +1340,11 @@
   },
   "appendix": {
    "title": "ربما الأمر في قانون الجاذبية، وليس في مادة غير مرئية",
-   "text": "هذا سؤال مشروع، وقد تم اختباره منذ زمن. الديناميكا المعدلة (MOND) تصف منحنيات دوران المجرات حتى أفضل من المادة المظلمة: تتنبأ بربط بين لمعان المجرة وسرعة دورانها، وهو ما يُلاحظ بالفعل. لكن بعد ذلك تبدأ الصعوبات. عناقيد المجرات لا تمسكها MOND بشكل كاف. طيف زاوية الإشعاع الخلفي لا يُعاد إنتاجه جيداً. عنقود الرصاصة، حيث انفصلت الكتلة والغاز، يصعب تفسيره بقانون جاذبية معدل. لذلك اليوم يعمل معظم العلماء في إطار المادة المظلمة، مع عدم اعتبار المسألة مغلقة: علاقة MOND نفسها تبقى حقيقة تفسرها المادة المظلمة بشكل غير مؤكد."
+   "blocks": [
+    {
+     "text": "هذا سؤال مشروع، وقد تم اختباره منذ زمن. الديناميكا المعدلة (MOND) تصف منحنيات دوران المجرات حتى أفضل من المادة المظلمة: تتنبأ بربط بين لمعان المجرة وسرعة دورانها، وهو ما يُلاحظ بالفعل. لكن بعد ذلك تبدأ الصعوبات. عناقيد المجرات لا تمسكها MOND بشكل كاف. طيف زاوية الإشعاع الخلفي لا يُعاد إنتاجه جيداً. عنقود الرصاصة، حيث انفصلت الكتلة والغاز، يصعب تفسيره بقانون جاذبية معدل. لذلك اليوم يعمل معظم العلماء في إطار المادة المظلمة، مع عدم اعتبار المسألة مغلقة: علاقة MOND نفسها تبقى حقيقة تفسرها المادة المظلمة بشكل غير مؤكد."
+    }
+   ]
   },
   "memo": {
    "essence": "سرعات النجوم على أطراف المجرات، حركة المجرات في العناقيد، العدسة الجاذبية، وتغاير الخلفية الكونية تتطلب مادة جاذبة أكبر بخمس مرات من المرئية. سطوع المستعرات العظمى البعيدة يتطلب توسعاً متسارعاً، أي مكون بكثافة ثابتة وضغط سالب. كلا المكونين موصوفان كمياً ولم يفسرا طبيعياً.",
@@ -1354,7 +1385,8 @@
      "سرعة النجوم تنخفض أسرع مما يتنبأ به كبلر"
     ],
     "answer": 0,
-    "why": "إذا كانت الكتلة قد انتهت، فمن المفترض أن تنخفض السرعة بمعدل $1/\\sqrt{r}$. المنحنى المقاس مسطح، وهذا يعني أن الكتلة تستمر في النمو بشكل متناسب مع نصف القطر - وهي لا تشع ضوءًا."
+    "why": "إذا كانت الكتلة قد انتهت، فمن المفترض أن تنخفض السرعة بمعدل $1/\\sqrt{r}$. المنحنى المقاس مسطح، وهذا يعني أن الكتلة تستمر في النمو بشكل متناسب مع نصف القطر - وهي لا تشع ضوءًا.",
+    "hint": "Если бы вся масса была собрана в центре, скорость падала бы как единица на корень из радиуса. Сравните это с тем, что показывает измеренная кривая."
    },
    {
     "id": "d2",
@@ -1367,7 +1399,8 @@
      "جاذبية المادة تضعف مع المسافة"
     ],
     "answer": 0,
-    "why": "في معادلة فريدمان، مساهمة المادة تساوي $1/a^3$ بينما مساهمة الطاقة المظلمة ثابتة. لذلك، عاجلاً أم آجلاً، يصبح الحد الثاني هو المسيطر - بغض النظر عن النسب الأولية."
+    "why": "في معادلة فريدمان، مساهمة المادة تساوي $1/a^3$ بينما مساهمة الطاقة المظلمة ثابتة. لذلك، عاجلاً أم آجلاً، يصبح الحد الثاني هو المسيطر - بغض النظر عن النسب الأولية.",
+    "hint": "Материя при расширении разбавляется, а плотность тёмной энергии не меняется. Что станет с их отношением через много миллиардов лет?"
    },
    {
     "id": "d3",
@@ -1381,7 +1414,9 @@
      "معيار",
      "لمعان"
     ],
-    "why": "نحن بحاجة إلى جسم ذي لمعان حقيقي معروف: ثم يتم حساب المسافة من السطوع الظاهري. المستعرات العظمى من النوع Ia تتوهج بشكل متطابق تقريباً، لذا فهي تعمل كشمعة قياسية، بينما لمعان المجرات مختلف."
+    "why": "نحن بحاجة إلى جسم ذي لمعان حقيقي معروف: ثم يتم حساب المسافة من السطوع الظاهري. المستعرات العظمى من النوع Ia تتوهج بشكل متطابق تقريباً، لذا فهي تعمل كشمعة قياسية، بينما لمعان المجرات مختلف.",
+    "hint": "Чтобы получить расстояние по видимой яркости, нужно знать настоящую светимость объекта. У каких объектов она почти одинакова?",
+    "needed": 2
    },
    {
     "id": "d4",
@@ -1389,8 +1424,9 @@
     "q": "تتحرك النجوم على نصف قطر 10 kpc بسرعة 200 km/s. قدّر الكتلة داخل هذا المدار بمليارات الكتل الشمسية. (1 kpc ≈ 3,1·10¹⁹ m، G = 6,67·10⁻¹¹، M☉ = 2·10³⁰ kg)",
     "answer": 93,
     "unit": "مليار M☉",
-    "tolerance": 25,
-    "why": "$M = v^2 r / G = (2\\cdot10^5)^2 \\cdot 3{,}1\\cdot10^{20} / 6{,}67\\cdot10^{-11} \\approx 1{,}9\\cdot10^{41}$ kg، وهذا تقريباً $9{,}3\\cdot10^{10}$ كتلة شمسية، أي حوالي تسعين مليارًا."
+    "why": "$M = v^2 r / G = (2\\cdot10^5)^2 \\cdot 3{,}1\\cdot10^{20} / 6{,}67\\cdot10^{-11} \\approx 1{,}9\\cdot10^{41}$ kg، وهذا تقريباً $9{,}3\\cdot10^{10}$ كتلة شمسية، أي حوالي تسعين مليارًا.",
+    "tolAbs": 25,
+    "hint": "Считайте по M = v²r/G. Переведите и скорость, и радиус в единицы СИ — и не потеряйте квадрат у скорости."
    }
   ]
  }

@@ -189,7 +189,7 @@
     }
    ],
    "answer": "Около 970 нм — самый край инфракрасного, рядом с видимым. Три тысячи кельвинов — это температура нити в лампе накаливания, и вещество тогда светилось примерно так же, тускло-красным. Поставьте на стенде $z = 1100$ и сверьте оба числа.",
-   "sanity": "Проверка на здравый смысл: если бы мы ошиблись и взяли $z = 11$ вместо $1100$, вышло бы $33$ К и пик в десятых долях миллиметра — всё ещё микроволны. Ни о каком свечении речи бы не было. Порядок здесь решает всё, и в этом смысл прикидки: ответ должен попадать в тот диапазон, о котором вы говорите словами."
+   "check": "Проверка на здравый смысл: если бы мы ошиблись и взяли $z = 11$ вместо $1100$, вышло бы $33$ К и пик в десятых долях миллиметра — всё ещё микроволны. Ни о каком свечении речи бы не было. Порядок здесь решает всё, и в этом смысл прикидки: ответ должен попадать в тот диапазон, о котором вы говорите словами."
   },
   "constants": {
    "title": "Константы: откуда взялись и что означают",
@@ -285,7 +285,11 @@
   },
   "appendix": {
    "title": "Почему это стена, а не предел телескопа",
-   "text": "Обычно, чтобы увидеть более далёкое, нужен больший телескоп. Здесь не так. Раньше рекомбинации Вселенная была непрозрачной: свет в плазме не летел, а рассеивался, и никакая оптика не покажет того, что не было испущено свободно. Поэтому реликт — не самая слабая картинка, доступная нам, а последняя: за ней в электромагнитном диапазоне нет ничего. Заглянуть глубже можно только другими посланниками: нейтрино, которые отвязались от вещества ещё раньше, и первичными гравитационными волнами, для которых плазма прозрачна. Ни те, ни другие первичные сигналы пока не зарегистрированы."
+   "blocks": [
+    {
+     "text": "Обычно, чтобы увидеть более далёкое, нужен больший телескоп. Здесь не так. Раньше рекомбинации Вселенная была непрозрачной: свет в плазме не летел, а рассеивался, и никакая оптика не покажет того, что не было испущено свободно. Поэтому реликт — не самая слабая картинка, доступная нам, а последняя: за ней в электромагнитном диапазоне нет ничего. Заглянуть глубже можно только другими посланниками: нейтрино, которые отвязались от вещества ещё раньше, и первичными гравитационными волнами, для которых плазма прозрачна. Ни те, ни другие первичные сигналы пока не зарегистрированы."
+    }
+   ]
   },
   "memo": {
    "essence": "Реликтовое излучение — свет, вышедший в возрасте Вселенной триста восемьдесят тысяч лет, когда вещество стало прозрачным при трёх тысячах кельвинов. Расширение растянуло его в тысячу с лишним раз, и сегодня это микроволны с температурой 2,725 К. Его почти идеальная однородность объясняется инфляцией — коротким чрезвычайно быстрым раздуванием до горячей стадии.",
@@ -326,7 +330,8 @@
      "Раньше излучения вообще не существовало"
     ],
     "answer": 0,
-    "why": "Пока вещество ионизовано, свет рассеивается на свободных электронах и не улетает. Рекомбинация делает газ нейтральным и прозрачным — с этого момента свет летит свободно."
+    "why": "Пока вещество ионизовано, свет рассеивается на свободных электронах и не улетает. Рекомбинация делает газ нейтральным и прозрачным — с этого момента свет летит свободно.",
+    "hint": "Свет не улетает, пока рассеивается на свободных электронах. Что должно произойти с электронами, чтобы туман расчистился?"
    },
    {
     "id": "m2",
@@ -339,7 +344,8 @@
      "Почему во Вселенной больше материи, чем антиматерии"
     ],
     "answer": 0,
-    "why": "Это проблема горизонта. Если всё видимое вышло из одной крошечной успевшей выровняться области, одинаковая температура перестаёт быть загадкой. Заодно снимается вопрос о плоскостности пространства."
+    "why": "Это проблема горизонта. Если всё видимое вышло из одной крошечной успевшей выровняться области, одинаковая температура перестаёт быть загадкой. Заодно снимается вопрос о плоскостности пространства.",
+    "hint": "Возьмите две точки неба, разделённые парой градусов. Успел бы свет пройти между ними за всё время от начала до момента, когда реликт вышел в путь?"
    },
    {
     "id": "m3",
@@ -353,7 +359,9 @@
      "любой",
      "и здесь"
     ],
-    "why": "Горячая плазма заполняла всё пространство, включая то место, где сейчас мы. Мы видим свет, вышедший из областей, находящихся сегодня на одинаковом расстоянии во все стороны, — поэтому картинка приходит со всего неба."
+    "why": "Горячая плазма заполняла всё пространство, включая то место, где сейчас мы. Мы видим свет, вышедший из областей, находящихся сегодня на одинаковом расстоянии во все стороны, — поэтому картинка приходит со всего неба.",
+    "hint": "Горячая плазма заполняла всё пространство, включая то место, где сейчас мы. Откуда тогда к нам приходит вышедший из неё свет?",
+    "needed": 2
    },
    {
     "id": "m4",
@@ -361,8 +369,9 @@
     "q": "Пик спектра реликта сегодня приходится примерно на 1 мм. На какую длину волны он приходился при красном смещении 9 (то есть когда Вселенная была в десять раз меньше)? Ответ в микрометрах.",
     "answer": 100,
     "unit": "мкм",
-    "tolerance": 20,
-    "why": "Длина волны растягивается в $(1+z)$ раз, значит в прошлом она была во столько же раз короче: $1\\ \\text{мм}/10 = 100$ мкм. Считать через температуру не нужно — множитель тот же."
+    "why": "Длина волны растягивается в $(1+z)$ раз, значит в прошлом она была во столько же раз короче: $1\\ \\text{мм}/10 = 100$ мкм. Считать через температуру не нужно — множитель тот же.",
+    "tolAbs": 20,
+    "hint": "Длина волны растягивается в (1 + z) раз, значит в прошлом она была во столько же раз короче. Чему равно (1 + z) при z = 9?"
    }
   ]
  },
@@ -525,7 +534,7 @@
     }
    ],
    "answer": "About 970 nm — the very edge of the infrared, next to visible. Three thousand kelvin is the temperature of a filament in an incandescent lamp, and the matter then glowed roughly the same, dim red. Take $z = 1100$ on the demo and compare both numbers.",
-   "sanity": "Reality check: if we made a mistake and took $z = 11$ instead of $1100$, we would get $33$ K and a peak in tenths of a millimeter — still microwaves. There would be no glow at all. Order of magnitude decides everything here, and that's the point of the estimate: the answer should fall into the range you describe in words."
+   "check": "Reality check: if we made a mistake and took $z = 11$ instead of $1100$, we would get $33$ K and a peak in tenths of a millimeter — still microwaves. There would be no glow at all. Order of magnitude decides everything here, and that's the point of the estimate: the answer should fall into the range you describe in words."
   },
   "constants": {
    "title": "Constants: where they come from and what they mean",
@@ -621,7 +630,11 @@
   },
   "appendix": {
    "title": "Why this is a wall, not a telescope limit",
-   "text": "Usually, to see farther, you need a larger telescope. Not here. Before recombination, the Universe was opaque: light did not travel through the plasma but scattered, and no optics can show what was never freely emitted. Therefore, the CMB is not the faintest image available to us, but the last one: beyond it in the electromagnetic range there is nothing. To look deeper, only other messengers can be used: neutrinos, which decoupled from matter even earlier, and primordial gravitational waves, for which the plasma is transparent. Neither of these primary signals has been detected yet."
+   "blocks": [
+    {
+     "text": "Usually, to see farther, you need a larger telescope. Not here. Before recombination, the Universe was opaque: light did not travel through the plasma but scattered, and no optics can show what was never freely emitted. Therefore, the CMB is not the faintest image available to us, but the last one: beyond it in the electromagnetic range there is nothing. To look deeper, only other messengers can be used: neutrinos, which decoupled from matter even earlier, and primordial gravitational waves, for which the plasma is transparent. Neither of these primary signals has been detected yet."
+    }
+   ]
   },
   "memo": {
    "essence": "The cosmic microwave background is the light that emerged when the Universe was three hundred eighty thousand years old, when matter became transparent at three thousand kelvins. Expansion stretched it over a thousand times, and today it is microwaves with a temperature of 2.725 K. Its near-perfect homogeneity is explained by inflation — a short, extremely rapid expansion before the hot stage.",
@@ -662,7 +675,8 @@
      "Earlier, radiation did not exist at all"
     ],
     "answer": 0,
-    "why": "While matter is ionized, light scatters off free electrons and does not escape. Recombination makes the gas neutral and transparent — from that moment, light travels freely."
+    "why": "While matter is ionized, light scatters off free electrons and does not escape. Recombination makes the gas neutral and transparent — from that moment, light travels freely.",
+    "hint": "Свет не улетает, пока рассеивается на свободных электронах. Что должно произойти с электронами, чтобы туман расчистился?"
    },
    {
     "id": "m2",
@@ -675,7 +689,8 @@
      "Why there is more matter than antimatter in the Universe"
     ],
     "answer": 0,
-    "why": "This is the horizon problem. If everything visible came from a single tiny region that had time to equalize, the uniform temperature is no longer a puzzle. It also resolves the flatness problem."
+    "why": "This is the horizon problem. If everything visible came from a single tiny region that had time to equalize, the uniform temperature is no longer a puzzle. It also resolves the flatness problem.",
+    "hint": "Возьмите две точки неба, разделённые парой градусов. Успел бы свет пройти между ними за всё время от начала до момента, когда реликт вышел в путь?"
    },
    {
     "id": "m3",
@@ -689,7 +704,9 @@
      "any",
      "and here"
     ],
-    "why": "Hot plasma filled all space, including the place where we are now. We see light that came from regions that today are at the same distance in all directions — thus the image comes from the entire sky."
+    "why": "Hot plasma filled all space, including the place where we are now. We see light that came from regions that today are at the same distance in all directions — thus the image comes from the entire sky.",
+    "hint": "Горячая плазма заполняла всё пространство, включая то место, где сейчас мы. Откуда тогда к нам приходит вышедший из неё свет?",
+    "needed": 2
    },
    {
     "id": "m4",
@@ -697,8 +714,9 @@
     "q": "The peak of the CMB spectrum today is at about 1 mm. What wavelength did it correspond to at a redshift of 9 (i.e., when the Universe was ten times smaller)? Answer in micrometers.",
     "answer": 100,
     "unit": "μm",
-    "tolerance": 20,
-    "why": "Wavelength stretches by a factor of $(1+z)$, so in the past it was shorter by the same factor: $1\\ \\text{mm}/10 = 100$ μm. No need to calculate via temperature — the factor is the same."
+    "why": "Wavelength stretches by a factor of $(1+z)$, so in the past it was shorter by the same factor: $1\\ \\text{mm}/10 = 100$ μm. No need to calculate via temperature — the factor is the same.",
+    "tolAbs": 20,
+    "hint": "Длина волны растягивается в (1 + z) раз, значит в прошлом она была во столько же раз короче. Чему равно (1 + z) при z = 9?"
    }
   ]
  },
@@ -861,7 +879,7 @@
     }
    ],
    "answer": "Alrededor de 970 nm — el extremo del infrarrojo, cerca del visible. Tres mil kelvin es la temperatura del filamento en una lámpara incandescente, y la materia entonces brillaba más o menos igual, de un rojo tenue. Ponga $z = 1100$ en la pizarra y verifique ambos números.",
-   "sanity": "Comprobación de sentido común: si nos hubiéramos equivocado y tomado $z = 11$ en lugar de $1100$, obtendríamos $33$ K y un pico en décimas de milímetro — todavía microondas. No habría ninguna luminiscencia. El orden de magnitud lo decide todo, y ese es el sentido de la estimación: la respuesta debe caer en el rango del que se habla."
+   "check": "Comprobación de sentido común: si nos hubiéramos equivocado y tomado $z = 11$ en lugar de $1100$, obtendríamos $33$ K y un pico en décimas de milímetro — todavía microondas. No habría ninguna luminiscencia. El orden de magnitud lo decide todo, y ese es el sentido de la estimación: la respuesta debe caer en el rango del que se habla."
   },
   "constants": {
    "title": "Constantes: de dónde vienen y qué significan",
@@ -957,7 +975,11 @@
   },
   "appendix": {
    "title": "Por qué es un muro y no un límite del telescopio",
-   "text": "Normalmente, para ver algo más lejano se necesita un telescopio más grande. Aquí no es así. Antes de la recombinación, el Universo era opaco: la luz en el plasma no viajaba, sino que se dispersaba, y ninguna óptica mostrará lo que no fue emitido libremente. Por lo tanto, el fondo cósmico no es la imagen más débil disponible, sino la última: más allá de ella no hay nada en el rango electromagnético. Se puede mirar más allá solo con otros mensajeros: neutrinos, que se desacoplaron de la materia aún antes, y ondas gravitacionales primordiales, para las que el plasma es transparente. Ni unas ni otras señales primarias han sido registradas hasta ahora."
+   "blocks": [
+    {
+     "text": "Normalmente, para ver algo más lejano se necesita un telescopio más grande. Aquí no es así. Antes de la recombinación, el Universo era opaco: la luz en el plasma no viajaba, sino que se dispersaba, y ninguna óptica mostrará lo que no fue emitido libremente. Por lo tanto, el fondo cósmico no es la imagen más débil disponible, sino la última: más allá de ella no hay nada en el rango electromagnético. Se puede mirar más allá solo con otros mensajeros: neutrinos, que se desacoplaron de la materia aún antes, y ondas gravitacionales primordiales, para las que el plasma es transparente. Ni unas ni otras señales primarias han sido registradas hasta ahora."
+    }
+   ]
   },
   "memo": {
    "essence": "La radiación de fondo es la luz que emergió cuando el Universo tenía trescientos ochenta mil años, cuando la materia se volvió transparente a tres mil kelvin. La expansión la estiró más de mil veces, y hoy son microondas con una temperatura de 2,725 K. Su homogeneidad casi perfecta se explica por la inflación — una breve expansión extremadamente rápida antes de la etapa caliente.",
@@ -998,7 +1020,8 @@
      "Antes no existía la radiación en absoluto"
     ],
     "answer": 0,
-    "why": "Mientras la materia está ionizada, la luz se dispersa en los electrones libres y no escapa. La recombinación hace que el gas sea neutro y transparente; a partir de ese momento, la luz viaja libremente."
+    "why": "Mientras la materia está ionizada, la luz se dispersa en los electrones libres y no escapa. La recombinación hace que el gas sea neutro y transparente; a partir de ese momento, la luz viaja libremente.",
+    "hint": "Свет не улетает, пока рассеивается на свободных электронах. Что должно произойти с электронами, чтобы туман расчистился?"
    },
    {
     "id": "m2",
@@ -1011,7 +1034,8 @@
      "Por qué hay más materia que antimateria en el Universo"
     ],
     "answer": 0,
-    "why": "Es el problema del horizonte. Si todo lo visible proviene de una pequeña región que logró equilibrarse, la temperatura uniforme deja de ser un enigma. También se resuelve la cuestión de la planitud del espacio."
+    "why": "Es el problema del horizonte. Si todo lo visible proviene de una pequeña región que logró equilibrarse, la temperatura uniforme deja de ser un enigma. También se resuelve la cuestión de la planitud del espacio.",
+    "hint": "Возьмите две точки неба, разделённые парой градусов. Успел бы свет пройти между ними за всё время от начала до момента, когда реликт вышел в путь?"
    },
    {
     "id": "m3",
@@ -1025,7 +1049,9 @@
      "cualquier",
      "y aquí"
     ],
-    "why": "El plasma caliente llenaba todo el espacio, incluido el lugar donde estamos ahora. Vemos la luz que salió de regiones que hoy se encuentran a la misma distancia en todas direcciones, por lo que la imagen proviene de todo el cielo."
+    "why": "El plasma caliente llenaba todo el espacio, incluido el lugar donde estamos ahora. Vemos la luz que salió de regiones que hoy se encuentran a la misma distancia en todas direcciones, por lo que la imagen proviene de todo el cielo.",
+    "hint": "Горячая плазма заполняла всё пространство, включая то место, где сейчас мы. Откуда тогда к нам приходит вышедший из неё свет?",
+    "needed": 2
    },
    {
     "id": "m4",
@@ -1033,8 +1059,9 @@
     "q": "El pico del espectro de la radiación de fondo hoy se encuentra aproximadamente en 1 mm. ¿En qué longitud de onda se encontraba cuando el corrimiento al rojo era 9 (es decir, cuando el Universo era diez veces más pequeño)? Respuesta en micrómetros.",
     "answer": 100,
     "unit": "µm",
-    "tolerance": 20,
-    "why": "La longitud de onda se estira en un factor de $(1+z)$, por lo que en el pasado era el mismo número de veces más corta: $1\\ \\text{mm}/10 = 100$ µm. No es necesario calcular mediante la temperatura, el factor es el mismo."
+    "why": "La longitud de onda se estira en un factor de $(1+z)$, por lo que en el pasado era el mismo número de veces más corta: $1\\ \\text{mm}/10 = 100$ µm. No es necesario calcular mediante la temperatura, el factor es el mismo.",
+    "tolAbs": 20,
+    "hint": "Длина волны растягивается в (1 + z) раз, значит в прошлом она была во столько же раз короче. Чему равно (1 + z) при z = 9?"
    }
   ]
  },
@@ -1197,7 +1224,7 @@
     }
    ],
    "answer": "حوالي 970 nm — هي أقصى حافة الأشعة تحت الحمراء، بجوار المرئي. ثلاثة آلاف كلفن هي درجة حرارة فتيل المصباح المتوهج، وكانت المادة تلمع حينها تقريبًا بنفس الطريقة، أحمر باهت. ضع $z = 1100$ وتحقق من كلا الرقمين.",
-   "sanity": "فحص المنطق السليم: إذا أخطأنا وأخذنا $z = 11$ بدلاً من $1100$، لكانت النتيجة $33$ K وذروة في أجزاء من عشرة من المليمتر — لا تزال موجات ميكروية. لم يكن هناك أي توهج. هنا الترتيب يحدد كل شيء، وهذا هو مغزى التقدير: يجب أن تقع الإجابة في النطاق الذي نتحدث عنه بالكلمات."
+   "check": "فحص المنطق السليم: إذا أخطأنا وأخذنا $z = 11$ بدلاً من $1100$، لكانت النتيجة $33$ K وذروة في أجزاء من عشرة من المليمتر — لا تزال موجات ميكروية. لم يكن هناك أي توهج. هنا الترتيب يحدد كل شيء، وهذا هو مغزى التقدير: يجب أن تقع الإجابة في النطاق الذي نتحدث عنه بالكلمات."
   },
   "constants": {
    "title": "الثوابت: من أين أتت وماذا تعني",
@@ -1293,7 +1320,11 @@
   },
   "appendix": {
    "title": "لماذا هذا جدار وليس حد التلسكوب",
-   "text": "عادة، لرؤية شيء أبعد، تحتاج إلى تلسكوب أكبر. ليس الأمر كذلك هنا. قبل إعادة التركيب، كان الكون معتمًا: الضوء في البلازما لم ينتقل بل تبعثر، ولا يمكن لأي بصريات أن تظهر ما لم ينبعث بحرية. لذلك، الإشعاع الكوني ليس أضعف صورة متاحة لنا، بل هي الأخيرة: خلفها في النطاق الكهرومغناطيسي لا يوجد شيء. يمكن النظر أعمق فقط بواسطة رسل آخرين: النيوترينوات التي انفصلت عن المادة في وقت مبكر، وموجات الجاذبية الأولية التي تكون البلازما شفافة بالنسبة لها. لم يتم تسجيل أي من هذه الإشارات الأولية حتى الآن."
+   "blocks": [
+    {
+     "text": "عادة، لرؤية شيء أبعد، تحتاج إلى تلسكوب أكبر. ليس الأمر كذلك هنا. قبل إعادة التركيب، كان الكون معتمًا: الضوء في البلازما لم ينتقل بل تبعثر، ولا يمكن لأي بصريات أن تظهر ما لم ينبعث بحرية. لذلك، الإشعاع الكوني ليس أضعف صورة متاحة لنا، بل هي الأخيرة: خلفها في النطاق الكهرومغناطيسي لا يوجد شيء. يمكن النظر أعمق فقط بواسطة رسل آخرين: النيوترينوات التي انفصلت عن المادة في وقت مبكر، وموجات الجاذبية الأولية التي تكون البلازما شفافة بالنسبة لها. لم يتم تسجيل أي من هذه الإشارات الأولية حتى الآن."
+    }
+   ]
   },
   "memo": {
    "essence": "الإشعاع الكوني الميكروي هو ضوء صدر عندما كان عمر الكون ثلاثمائة وثمانين ألف سنة، عندما أصبحت المادة شفافة عند ثلاثة آلاف كلفن. التمدد مدده أكثر من ألف مرة، واليوم هو موجات ميكروية بدرجة حرارة 2.725 كلفن. تجانسه المثالي تقريبًا يفسره التضخم - تمدد قصير وسريع للغاية قبل المرحلة الساخنة.",
@@ -1334,7 +1365,8 @@
      "لم يكن الإشعاع موجودًا من قبل"
     ],
     "answer": 0,
-    "why": "طالما أن المادة متأينة، فإن الضوء يتشتت على الإلكترونات الحرة ولا يهرب. إعادة الاتحاد تجعل الغاز متعادلاً وشفافًا — ومنذ تلك اللحظة، ينتقل الضوء بحرية."
+    "why": "طالما أن المادة متأينة، فإن الضوء يتشتت على الإلكترونات الحرة ولا يهرب. إعادة الاتحاد تجعل الغاز متعادلاً وشفافًا — ومنذ تلك اللحظة، ينتقل الضوء بحرية.",
+    "hint": "Свет не улетает, пока рассеивается на свободных электронах. Что должно произойти с электронами, чтобы туман расчистился?"
    },
    {
     "id": "m2",
@@ -1347,7 +1379,8 @@
      "لماذا يوجد في الكون مادة أكثر من المادة المضادة"
     ],
     "answer": 0,
-    "why": "هذه مشكلة الأفق. إذا كان كل ما نراه قد خرج من منطقة صغيرة واحدة تمكنت من التساوي، فإن درجة الحرارة المتساوية تتوقف عن أن تكون لغزًا. كما يتم حل مسألة استواء الفضاء."
+    "why": "هذه مشكلة الأفق. إذا كان كل ما نراه قد خرج من منطقة صغيرة واحدة تمكنت من التساوي، فإن درجة الحرارة المتساوية تتوقف عن أن تكون لغزًا. كما يتم حل مسألة استواء الفضاء.",
+    "hint": "Возьмите две точки неба, разделённые парой градусов. Успел бы свет пройти между ними за всё время от начала до момента, когда реликт вышел в путь?"
    },
    {
     "id": "m3",
@@ -1361,7 +1394,9 @@
      "أي",
      "وهنا"
     ],
-    "why": "البلازما الساخنة ملأت كل الفضاء، بما في ذلك المكان الذي نحن فيه الآن. نحن نرى الضوء الذي خرج من مناطق تقع اليوم على نفس المسافة في جميع الاتجاهات — لذلك تأتي الصورة من كل السماء."
+    "why": "البلازما الساخنة ملأت كل الفضاء، بما في ذلك المكان الذي نحن فيه الآن. نحن نرى الضوء الذي خرج من مناطق تقع اليوم على نفس المسافة في جميع الاتجاهات — لذلك تأتي الصورة من كل السماء.",
+    "hint": "Горячая плазма заполняла всё пространство, включая то место, где сейчас мы. Откуда тогда к нам приходит вышедший из неё свет?",
+    "needed": 2
    },
    {
     "id": "m4",
@@ -1369,8 +1404,9 @@
     "q": "ذروة طيف الإشعاع الخلفي اليوم تقع عند حوالي 1 مم. على أي طول موجي كانت تقع عند انزياح أحمر 9 (أي عندما كان الكون أصغر بعشر مرات)؟ الإجابة بالميكرومتر.",
     "answer": 100,
     "unit": "µm",
-    "tolerance": 20,
-    "why": "الطول الموجي يتمدد بمقدار $(1+z)$ مرة، لذا في الماضي كان أقصر بنفس المقدار: $1\\ \\text{mm}/10 = 100$ µm. لا حاجة للحساب عبر درجة الحرارة — المضاعف نفسه."
+    "why": "الطول الموجي يتمدد بمقدار $(1+z)$ مرة، لذا في الماضي كان أقصر بنفس المقدار: $1\\ \\text{mm}/10 = 100$ µm. لا حاجة للحساب عبر درجة الحرارة — المضاعف نفسه.",
+    "tolAbs": 20,
+    "hint": "Длина волны растягивается в (1 + z) раз, значит в прошлом она была во столько же раз короче. Чему равно (1 + z) при z = 9?"
    }
   ]
  }

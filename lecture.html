@@ -153,7 +153,7 @@
     fetch('/data/theory/lectures/index.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }),
     fetch('/data/theory/lectures/' + id + '.json', { cache: 'no-cache' }).then(function (r) { return r.json(); })
   ]).then(function (res) {
-    var idx = res[0], L = res[1][LANG] || res[1].ru;
+    var idx = res[0], L = B42Lang.pick(res[1]) || res[1].ru;
     document.title = L.title + ' — bridge42worlds';
 
     // навигация по лекциям цикла

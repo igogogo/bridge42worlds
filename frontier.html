@@ -127,7 +127,7 @@
   function paras(host, arr) { (arr || []).forEach(function (p) { host.appendChild(el('p', null, p)); }); }
 
   fetch('/data/theory/frontier.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (d) {
-    var C = d[LANG] || d.ru, toc = [];
+    var C = B42Lang.pick(d) || d.ru, toc = [];
     document.title = C.title + ' — bridge42worlds';
 
     root.appendChild(el('h1', null, C.title));

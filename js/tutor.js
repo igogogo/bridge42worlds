@@ -359,8 +359,12 @@
                 // Верно — галочка из набора, мимо — знак вопроса (paradox): он про «подумай ещё»,
                 // а не про ошибку. Эмодзи здесь рисовала система, и «✅» на каждой ОС был своего
                 // оттенка зелёного — рядом со штриховым набором это выбивалось.
+                // Пояснение `why` написано под ВЕРНЫЙ ответ, поэтому после промаха его нельзя
+                // приклеивать к вердикту встык: получалось «Не совсем. Именно так: …», будто
+                // читатель ответил правильно. Отделяем строкой и подводкой.
                 fb.innerHTML = tIcon(correct ? 'check' : 'paradox', 16, correct ? '✓' : '?') + ' ' +
-                    (correct ? (L.right || 'Верно!') : (L.notQuite || 'Не совсем.')) + ' ' + (q.why || '');
+                    (correct ? (L.right || 'Верно!') : (L.notQuite || 'Не совсем.')) +
+                    (q.why ? (correct ? '<br>' : '<br>' + (L.howItIs || 'Как на самом деле:') + ' ') + q.why : '');
                 fb.style.display = '';
                 actions.innerHTML = ''; actions.style.display = '';
                 // Кнопка «довести до идеи» — бот в режиме hint (правильный ответ не выдаёт)
@@ -394,17 +398,26 @@
                 ew.appendChild(ei); ew.appendChild(eu); ew.appendChild(eb);
                 card.appendChild(ew);
                 eb.addEventListener('click', function () {
-                    var raw = ei.value.trim().replace(/\s/g, '').replace(',', '.');
-                    var val = parseFloat(raw.replace(/(\d)[eE]?[x*×]10\^?(-?\d+)/, '$1e$2'));
-                    if (!isFinite(val)) return;
-                    var tol = q.tolerance || 3;
-                    var ratio = val > 0 && q.answer > 0 ? Math.max(val / q.answer, q.answer / val) : Infinity;
-                    var ok = ratio <= tol;
+                    var raw = ei.value.trim();
+                    // Правило проверки — одно на проект, js/quiz-grade.js: оно понимает и
+                    // абсолютную погрешность, и множитель, и отрицательные ответы. Раньше
+                    // правило жило прямо здесь, знало только множитель и потому не пропускало
+                    // даже точный авторский ответ там, где автор писал ±0,1.
+                    var G = (typeof B42Grade !== 'undefined') ? B42Grade : null;
+                    if (!G || !isFinite(G.parseValue(raw))) return;
+                    var res = G.estimate(raw, q);
+                    var ok = res.ok;
+                    // Единица «—» означает «безразмерная»: подставлять её в текст нельзя,
+                    // иначе получается «промахнулись на 0.65 —» и двойное тире рядом.
+                    var unit = (q.unit && q.unit !== '—') ? ' ' + q.unit : '';
+                    var miss = res.kind === 'abs'
+                        ? ((L.estOffBy || 'вы промахнулись на') + ' ' + Number(res.off.toPrecision(2)) + unit)
+                        : ((L.estOff || 'вы промахнулись в') + ' ' + res.off.toFixed(1) + '×');
                     fb.className = 'tq-fb ' + (ok ? 'ok' : 'no');
                     fb.innerHTML = tIcon(ok ? 'check' : 'paradox', 16, ok ? '✓' : '?') + ' ' +
                         (ok ? (L.estRight || 'Порядок верный!') : (L.estWrong || 'Мимо порядка.')) +
-                        ' ' + (L.estAnswer || 'Точное значение') + ': <b>' + q.answer + ' ' + (q.unit || '') + '</b>' +
-                        (ok ? '' : ' — ' + (L.estOff || 'вы промахнулись в') + ' ' + ratio.toFixed(1) + '×') +
+                        ' ' + (L.estAnswer || 'Точное значение') + ': <b>' + q.answer + unit + '</b>' +
+                        (ok ? '' : ' — ' + miss) +
                         '<br>' + (q.why || '');
                     fb.style.display = '';
                     results[q.id] = { correct: ok, answer: raw };
@@ -440,16 +453,27 @@
                 });
             } else {
                 var opts = el('div', 'tq-opts');
-                q.options.forEach(function (text, i) {
+                // Порядок вариантов перемешиваем. В данных верный ответ стоит вторым в 64%
+                // вопросов и ни разу — последним: стратегия «всегда жми второй» давала около
+                // двух третей правильных, то есть проверка знаний проверяла привычку автора,
+                // а не читателя. Перемешиваем один раз при отрисовке (не при каждом клике),
+                // чтобы подсветка верного и неверного осталась на своих местах.
+                var order = q.options.map(function (_, i) { return i; });
+                for (var oi = order.length - 1; oi > 0; oi--) {
+                    var oj = Math.floor(Math.random() * (oi + 1));
+                    var tmp = order[oi]; order[oi] = order[oj]; order[oj] = tmp;
+                }
+                order.forEach(function (src, shown) {
+                    var text = q.options[src];
                     var b = el('button', 'tq-opt', text); b.type = 'button';
                     b.addEventListener('click', function () {
                         var all = opts.querySelectorAll('.tq-opt');
                         all.forEach(function (x, xi) {
                             x.disabled = true;
-                            if (xi === q.answer) x.classList.add('right');
-                            else if (xi === i) x.classList.add('wrong');
+                            if (order[xi] === q.answer) x.classList.add('right');
+                            else if (xi === shown) x.classList.add('wrong');
                         });
-                        settle(i === q.answer, text);
+                        settle(src === q.answer, text);
                     });
                     opts.appendChild(b);
                 });

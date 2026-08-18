@@ -175,7 +175,7 @@
     }
    ],
    "answer": "Импульс сохранился полностью, энергия упала с 18 до 12 Дж — треть ушла в тепло и деформацию.",
-   "sanity": "Проверка на здравый смысл: почему повезло именно импульсу? Потому что однородность пространства при ударе никуда не делась, а вот механическая энергия перешла в тепло — то есть в другую форму, за которой мы в этой задаче не следим."
+   "check": "Проверка на здравый смысл: почему повезло именно импульсу? Потому что однородность пространства при ударе никуда не делась, а вот механическая энергия перешла в тепло — то есть в другую форму, за которой мы в этой задаче не следим."
   },
   "constants": {
    "title": "Величины этого параграфа",
@@ -267,7 +267,11 @@
   },
   "appendix": {
    "title": "Для любознательных: почему координата может быть углом",
-   "text": "Если в качестве $q$ взять угол поворота, то $\\partial L/\\partial \\dot{\\varphi}$ окажется моментом импульса — той самой величиной, что растёт у фигуриста. Ни одной новой формулы выводить не пришлось: подставили другую координату, получили другой закон сохранения. Именно эта универсальность и делает лагранжев подход языком современной физики: он не привязан к конкретной геометрии задачи."
+   "blocks": [
+    {
+     "text": "Если в качестве $q$ взять угол поворота, то $\\partial L/\\partial \\dot{\\varphi}$ окажется моментом импульса — той самой величиной, что растёт у фигуриста. Ни одной новой формулы выводить не пришлось: подставили другую координату, получили другой закон сохранения. Именно эта универсальность и делает лагранжев подход языком современной физики: он не привязан к конкретной геометрии задачи."
+    }
+   ]
   },
   "memo": {
    "essence": "Каждой непрерывной симметрии отвечает своя сохраняющаяся величина. Однородность пространства даёт импульс, однородность времени — энергию, изотропность — момент импульса. Законы сохранения не постулируются, а выводятся.",
@@ -308,7 +312,8 @@
      "Из зеркальной симметрии"
     ],
     "answer": 0,
-    "why": "Независимость лагранжиана от координаты означает однородность пространства, и именно она даёт сохранение импульса."
+    "why": "Независимость лагранжиана от координаты означает однородность пространства, и именно она даёт сохранение импульса.",
+    "hint": "Теорема Нётер связывает симметрию с сохранением. Сдвиньте мысленно всю установку на метр в сторону: что при таком сдвиге не изменится?"
    },
    {
     "id": "n2",
@@ -321,7 +326,8 @@
      "Энергия тоже сохраняется, просто мы её неверно считаем"
     ],
     "answer": 1,
-    "why": "Полная энергия действительно сохраняется, но часть её уходит в тепло — форму, за которой мы в задаче не следим. Импульс же остаётся механическим целиком."
+    "why": "Полная энергия действительно сохраняется, но часть её уходит в тепло — форму, за которой мы в задаче не следим. Импульс же остаётся механическим целиком.",
+    "hint": "Импульс сохраняется, потому что суммарная внешняя сила равна нулю. А энергия — куда она может уйти внутри самих тел, если наружу ничего не улетает?"
    },
    {
     "id": "n3",
@@ -336,7 +342,9 @@
      "ноль",
      "сохран"
     ],
-    "why": "Это значит, что сдвиг системы ничего не меняет. Тогда правая часть уравнения движения обращается в ноль, а величина под производной по времени остаётся постоянной."
+    "why": "Это значит, что сдвиг системы ничего не меняет. Тогда правая часть уравнения движения обращается в ноль, а величина под производной по времени остаётся постоянной.",
+    "hint": "Если координата не входит в лагранжиан, производная по этой координате равна нулю. Подставьте это в уравнение Эйлера — Лагранжа: что тогда обязано оставаться постоянным во времени?",
+    "needed": 2
    },
    {
     "id": "n4",
@@ -344,8 +352,9 @@
     "q": "Фигурист уменьшил момент инерции с 4 до 1 кг·м². Угловая скорость была 2 рад/с. Оцените новую в рад/с.",
     "answer": 8,
     "unit": "рад/с",
-    "tolerance": 1.5,
-    "why": "Момент импульса $I\\omega$ сохраняется: $4\\cdot2 = 1\\cdot\\omega$, значит $\\omega = 8$ рад/с."
+    "why": "Момент импульса $I\\omega$ сохраняется: $4\\cdot2 = 1\\cdot\\omega$, значит $\\omega = 8$ рад/с.",
+    "tolAbs": 1.5,
+    "hint": "Сохраняется произведение Iω. Момент инерции уменьшили в четыре раза — что это означает для угловой скорости?"
    }
   ]
  },
@@ -476,7 +485,7 @@
     }
    ],
    "answer": "Momentum is fully conserved, energy dropped from 18 to 12 J — a third went into heat and deformation.",
-   "sanity": "Reality check: why did momentum get lucky? Because the homogeneity of space during the collision did not disappear, but mechanical energy turned into heat — that is, into another form that we are not tracking in this problem."
+   "check": "Reality check: why did momentum get lucky? Because the homogeneity of space during the collision did not disappear, but mechanical energy turned into heat — that is, into another form that we are not tracking in this problem."
   },
   "constants": {
    "title": "Quantities of this section",
@@ -568,7 +577,11 @@
   },
   "appendix": {
    "title": "For the curious: why a coordinate can be an angle",
-   "text": "If we take the rotation angle as $q$, then $\\partial L/\\partial \\dot{\\varphi}$ turns out to be angular momentum — the very quantity that increases for the figure skater. Not a single new formula had to be derived: we substituted a different coordinate and got a different conservation law. It is this universality that makes the Lagrangian approach the language of modern physics: it is not tied to the specific geometry of the problem."
+   "blocks": [
+    {
+     "text": "If we take the rotation angle as $q$, then $\\partial L/\\partial \\dot{\\varphi}$ turns out to be angular momentum — the very quantity that increases for the figure skater. Not a single new formula had to be derived: we substituted a different coordinate and got a different conservation law. It is this universality that makes the Lagrangian approach the language of modern physics: it is not tied to the specific geometry of the problem."
+    }
+   ]
   },
   "memo": {
    "essence": "Each continuous symmetry corresponds to a conserved quantity. Homogeneity of space gives momentum, homogeneity of time gives energy, isotropy gives angular momentum. Conservation laws are not postulated but derived.",
@@ -609,7 +622,8 @@
      "From mirror symmetry"
     ],
     "answer": 0,
-    "why": "Independence of the Lagrangian from a coordinate means homogeneity of space, and that is what gives momentum conservation."
+    "why": "Independence of the Lagrangian from a coordinate means homogeneity of space, and that is what gives momentum conservation.",
+    "hint": "Теорема Нётер связывает симметрию с сохранением. Сдвиньте мысленно всю установку на метр в сторону: что при таком сдвиге не изменится?"
    },
    {
     "id": "n2",
@@ -622,7 +636,8 @@
      "Energy is also conserved, we just calculate it incorrectly"
     ],
     "answer": 1,
-    "why": "Total energy is indeed conserved, but part of it goes into heat — a form we do not track in the problem. Momentum remains entirely mechanical."
+    "why": "Total energy is indeed conserved, but part of it goes into heat — a form we do not track in the problem. Momentum remains entirely mechanical.",
+    "hint": "Импульс сохраняется, потому что суммарная внешняя сила равна нулю. А энергия — куда она может уйти внутри самих тел, если наружу ничего не улетает?"
    },
    {
     "id": "n3",
@@ -637,7 +652,9 @@
      "zero",
      "conserved"
     ],
-    "why": "This means that a shift of the system changes nothing. Then the right-hand side of the equation of motion becomes zero, and the quantity under the time derivative remains constant."
+    "why": "This means that a shift of the system changes nothing. Then the right-hand side of the equation of motion becomes zero, and the quantity under the time derivative remains constant.",
+    "hint": "Если координата не входит в лагранжиан, производная по этой координате равна нулю. Подставьте это в уравнение Эйлера — Лагранжа: что тогда обязано оставаться постоянным во времени?",
+    "needed": 2
    },
    {
     "id": "n4",
@@ -645,8 +662,9 @@
     "q": "A figure skater reduced their moment of inertia from 4 to 1 kg·m². The angular velocity was 2 rad/s. Estimate the new value in rad/s.",
     "answer": 8,
     "unit": "rad/s",
-    "tolerance": 1.5,
-    "why": "Angular momentum $I\\omega$ is conserved: $4\\cdot2 = 1\\cdot\\omega$, so $\\omega = 8$ rad/s."
+    "why": "Angular momentum $I\\omega$ is conserved: $4\\cdot2 = 1\\cdot\\omega$, so $\\omega = 8$ rad/s.",
+    "tolAbs": 1.5,
+    "hint": "Сохраняется произведение Iω. Момент инерции уменьшили в четыре раза — что это означает для угловой скорости?"
    }
   ]
  },
@@ -777,7 +795,7 @@
     }
    ],
    "answer": "El momento se conservó completamente, la energía cayó de 18 a 12 J — un tercio se fue en calor y deformación.",
-   "sanity": "Verificación de sentido común: ¿por qué le fue bien al momento? Porque la homogeneidad del espacio en el choque no desapareció, mientras que la energía mecánica se transformó en calor — es decir, en otra forma que no estamos siguiendo en este problema."
+   "check": "Verificación de sentido común: ¿por qué le fue bien al momento? Porque la homogeneidad del espacio en el choque no desapareció, mientras que la energía mecánica se transformó en calor — es decir, en otra forma que no estamos siguiendo en este problema."
   },
   "constants": {
    "title": "Magnitudes de esta sección",
@@ -869,7 +887,11 @@
   },
   "appendix": {
    "title": "Para los curiosos: por qué la coordenada puede ser un ángulo",
-   "text": "Si se toma como $q$ el ángulo de rotación, entonces $\\partial L/\\partial \\dot{\\varphi}$ resulta ser el momento angular — la misma cantidad que aumenta en el patinador. No fue necesario deducir ninguna fórmula nueva: se sustituyó otra coordenada, se obtuvo otra ley de conservación. Es esta universalidad la que hace del enfoque lagrangiano el lenguaje de la física moderna: no está ligado a la geometría específica del problema."
+   "blocks": [
+    {
+     "text": "Si se toma como $q$ el ángulo de rotación, entonces $\\partial L/\\partial \\dot{\\varphi}$ resulta ser el momento angular — la misma cantidad que aumenta en el patinador. No fue necesario deducir ninguna fórmula nueva: se sustituyó otra coordenada, se obtuvo otra ley de conservación. Es esta universalidad la que hace del enfoque lagrangiano el lenguaje de la física moderna: no está ligado a la geometría específica del problema."
+    }
+   ]
   },
   "memo": {
    "essence": "A cada simetría continua le corresponde una cantidad conservada. La homogeneidad del espacio da el momento lineal, la homogeneidad del tiempo la energía, la isotropía el momento angular. Las leyes de conservación no se postulan, sino que se deducen.",
@@ -910,7 +932,8 @@
      "De la simetría especular"
     ],
     "answer": 0,
-    "why": "La independencia del lagrangiano respecto a la coordenada significa homogeneidad del espacio, y es precisamente ella la que da la conservación del momento lineal."
+    "why": "La independencia del lagrangiano respecto a la coordenada significa homogeneidad del espacio, y es precisamente ella la que da la conservación del momento lineal.",
+    "hint": "Теорема Нётер связывает симметрию с сохранением. Сдвиньте мысленно всю установку на метр в сторону: что при таком сдвиге не изменится?"
    },
    {
     "id": "n2",
@@ -923,7 +946,8 @@
      "La energía también se conserva, simplemente la calculamos mal"
     ],
     "answer": 1,
-    "why": "La energía total realmente se conserva, pero una parte se convierte en calor — una forma que no rastreamos en el problema. El momento lineal en cambio permanece completamente mecánico."
+    "why": "La energía total realmente se conserva, pero una parte se convierte en calor — una forma que no rastreamos en el problema. El momento lineal en cambio permanece completamente mecánico.",
+    "hint": "Импульс сохраняется, потому что суммарная внешняя сила равна нулю. А энергия — куда она может уйти внутри самих тел, если наружу ничего не улетает?"
    },
    {
     "id": "n3",
@@ -938,7 +962,9 @@
      "cero",
      "conserv"
     ],
-    "why": "Esto significa que un desplazamiento del sistema no cambia nada. Entonces el lado derecho de la ecuación de movimiento se anula, y la magnitud bajo la derivada temporal permanece constante."
+    "why": "Esto significa que un desplazamiento del sistema no cambia nada. Entonces el lado derecho de la ecuación de movimiento se anula, y la magnitud bajo la derivada temporal permanece constante.",
+    "hint": "Если координата не входит в лагранжиан, производная по этой координате равна нулю. Подставьте это в уравнение Эйлера — Лагранжа: что тогда обязано оставаться постоянным во времени?",
+    "needed": 2
    },
    {
     "id": "n4",
@@ -946,8 +972,9 @@
     "q": "Un patinador redujo su momento de inercia de 4 a 1 kg·m². La velocidad angular era 2 rad/s. Estime la nueva en rad/s.",
     "answer": 8,
     "unit": "rad/s",
-    "tolerance": 1.5,
-    "why": "El momento angular $I\\omega$ se conserva: $4\\cdot2 = 1\\cdot\\omega$, por lo tanto $\\omega = 8$ rad/s."
+    "why": "El momento angular $I\\omega$ se conserva: $4\\cdot2 = 1\\cdot\\omega$, por lo tanto $\\omega = 8$ rad/s.",
+    "tolAbs": 1.5,
+    "hint": "Сохраняется произведение Iω. Момент инерции уменьшили в четыре раза — что это означает для угловой скорости?"
    }
   ]
  },
@@ -1078,7 +1105,7 @@
     }
    ],
    "answer": "انحفظ الزخم بالكامل، وانخفضت الطاقة من 18 إلى 12 جول — ذهب الثلث إلى حرارة وتشوه.",
-   "sanity": "فحص المنطق السليم: لماذا حظي الزخم بالحفظ؟ لأن تجانس الفضاء لم يختفِ أثناء التصادم، بينما تحولت الطاقة الميكانيكية إلى حرارة – أي إلى شكل آخر لا نتابعه في هذه المسألة."
+   "check": "فحص المنطق السليم: لماذا حظي الزخم بالحفظ؟ لأن تجانس الفضاء لم يختفِ أثناء التصادم، بينما تحولت الطاقة الميكانيكية إلى حرارة – أي إلى شكل آخر لا نتابعه في هذه المسألة."
   },
   "constants": {
    "title": "المقادير في هذا القسم",
@@ -1170,7 +1197,11 @@
   },
   "appendix": {
    "title": "للمهتمين: لماذا يمكن أن يكون الإحداثي زاوية",
-   "text": "إذا اتخذنا $q$ كزاوية دوران، فإن $\\partial L/\\partial \\dot{\\varphi}$ سيكون الزخم الزاوي — نفس الكمية التي تزداد عند المتزلج. لم نحتج إلى استنتاج أي معادلة جديدة: عوضنا بإحداثي آخر، وحصلنا على قانون حفظ آخر. هذه العالمية هي ما تجعل منهج لاغرانج لغة الفيزياء الحديثة: فهو غير مرتبط بهندسة محددة للمسألة."
+   "blocks": [
+    {
+     "text": "إذا اتخذنا $q$ كزاوية دوران، فإن $\\partial L/\\partial \\dot{\\varphi}$ سيكون الزخم الزاوي — نفس الكمية التي تزداد عند المتزلج. لم نحتج إلى استنتاج أي معادلة جديدة: عوضنا بإحداثي آخر، وحصلنا على قانون حفظ آخر. هذه العالمية هي ما تجعل منهج لاغرانج لغة الفيزياء الحديثة: فهو غير مرتبط بهندسة محددة للمسألة."
+    }
+   ]
   },
   "memo": {
    "essence": "كل تناظر مستمر له كمية محفوظة مقابلة. تجانس الفضاء يعطي كمية الحركة، وتجانس الزمن يعطي الطاقة، والتناظر الخواصي يعطي الزخم الزاوي. قوانين الحفظ لا تُفترض بل تُستنتج.",
@@ -1211,7 +1242,8 @@
      "من التناظر المرآتي"
     ],
     "answer": 0,
-    "why": "استقلال اللاغرانجي عن الإحداثي يعني تجانس الفضاء، وهو الذي يعطي حفظ كمية الحركة."
+    "why": "استقلال اللاغرانجي عن الإحداثي يعني تجانس الفضاء، وهو الذي يعطي حفظ كمية الحركة.",
+    "hint": "Теорема Нётер связывает симметрию с сохранением. Сдвиньте мысленно всю установку на метр в сторону: что при таком сдвиге не изменится?"
    },
    {
     "id": "n2",
@@ -1224,7 +1256,8 @@
      "الطاقة أيضًا تُحفظ، لكننا نحسبها بشكل خاطئ"
     ],
     "answer": 1,
-    "why": "الطاقة الكلية تُحفظ بالفعل، لكن جزءًا منها يتحول إلى حرارة - شكل لا نتبعه في المسألة. أما كمية الحركة فتبقى ميكانيكية بالكامل."
+    "why": "الطاقة الكلية تُحفظ بالفعل، لكن جزءًا منها يتحول إلى حرارة - شكل لا نتبعه في المسألة. أما كمية الحركة فتبقى ميكانيكية بالكامل.",
+    "hint": "Импульс сохраняется, потому что суммарная внешняя сила равна нулю. А энергия — куда она может уйти внутри самих тел, если наружу ничего не улетает?"
    },
    {
     "id": "n3",
@@ -1239,7 +1272,9 @@
      "صفر",
      "حفظ"
     ],
-    "why": "هذا يعني أن إزاحة النظام لا تغير شيئًا. عندها يصبح الطرف الأيمن من معادلة الحركة صفرًا، وتبقى الكمية تحت المشتقة الزمنية ثابتة."
+    "why": "هذا يعني أن إزاحة النظام لا تغير شيئًا. عندها يصبح الطرف الأيمن من معادلة الحركة صفرًا، وتبقى الكمية تحت المشتقة الزمنية ثابتة.",
+    "hint": "Если координата не входит в лагранжиан, производная по этой координате равна нулю. Подставьте это в уравнение Эйлера — Лагранжа: что тогда обязано оставаться постоянным во времени?",
+    "needed": 2
    },
    {
     "id": "n4",
@@ -1247,8 +1282,9 @@
     "q": "قلل متزلج فني عزم القصور الذاتي من 4 إلى 1 كجم·م². كانت السرعة الزاوية 2 راد/ث. قدر السرعة الزاوية الجديدة بوحدة راد/ث.",
     "answer": 8,
     "unit": "راديان/ثانية",
-    "tolerance": 1.5,
-    "why": "الزخم الزاوي $I\\omega$ يُحفظ: $4\\cdot2 = 1\\cdot\\omega$، إذن $\\omega = 8$ راديان/ثانية."
+    "why": "الزخم الزاوي $I\\omega$ يُحفظ: $4\\cdot2 = 1\\cdot\\omega$، إذن $\\omega = 8$ راديان/ثانية.",
+    "tolAbs": 1.5,
+    "hint": "Сохраняется произведение Iω. Момент инерции уменьшили в четыре раза — что это означает для угловой скорости?"
    }
   ]
  }
