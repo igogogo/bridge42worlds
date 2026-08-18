@@ -1,0 +1,350 @@
+/* tools/_figs_rigidbody_2.js — ЗАГОТОВКА СХЕМ к параграфу rigidbody/02-gyroscope
+   («Момент импульса и гироскоп»). Восемь функций, по одной на каждый шаг вывода.
+
+   КУДА ВКЛЕИВАТЬ. Внутрь IIFE в js/figures.js, рядом с остальными F.* — здесь напрямую
+   используются его помощники svg / txt / arrow / mol и цвета INK, SOFT, LINK, WARN, BORD, MOSS.
+   Отдельным файлом это не работает и работать не должно: обёртки модуля тут намеренно нет,
+   чтобы ведущая сессия просто перенесла тело.
+
+   ЦВЕТОВОЕ СОГЛАШЕНИЕ ПАРАГРАФА (держится во всех восьми схемах):
+     WARN  — вектор момента импульса L и всё, что с ним происходит;
+     LINK  — приращение dL и скорости точек тела;
+     INK   — силы (вес) и вспомогательная геометрия со стрелками;
+     BORD  — пунктир: вертикаль, окружности обхода, конус прецессии;
+     MOSS  — момент силы M (он всюду перпендикулярен плоскости рисунка или горизонтален).
+
+   ЯЗЫК. Все словесные подписи идут через txt(), то есть через label(), — переводить их
+   надо в js/figures-i18n.js. Полный список русских строк выписан комментарием в конце файла. */
+
+// 1. L = Iω: точки бегут по кругу, а вектор смотрит вдоль оси.
+F.rigilvec = function () {
+    var W = 470, H = 236, cx = 156, cy = 146;
+    var s = txt(W / 2, 18, 'вектор смотрит вдоль оси, а не туда, куда бегут точки тела', SOFT, 10.5);
+    // колесо, видимое под углом
+    s += '<ellipse cx="' + cx + '" cy="' + cy + '" rx="76" ry="29" fill="' + LINK +
+         '" opacity="0.12" stroke="' + LINK + '" stroke-width="1.6"/>';
+    s += '<ellipse cx="' + cx + '" cy="' + cy + '" rx="24" ry="9" fill="none" stroke="' + BORD + '"/>';
+    // ось
+    s += '<line x1="' + cx + '" y1="' + (cy + 44) + '" x2="' + cx + '" y2="' + (cy - 40) +
+         '" stroke="' + SOFT + '" stroke-width="2"/>';
+    // вектор L
+    s += arrow(cx, cy - 40, cx, 46, WARN, 'ahw');
+    s += txt(cx + 14, 60, 'L = I&#969;', WARN, 16, 'start');
+    // скорости точек обода: справа вниз, слева вверх
+    s += mol(cx + 76, cy, 4.5, LINK);
+    s += mol(cx - 76, cy, 4.5, LINK);
+    s += arrow(cx + 76, cy - 14, cx + 76, cy + 24, LINK, 'ahl');
+    s += arrow(cx - 76, cy + 24, cx - 76, cy - 14, LINK, 'ahl');
+    s += txt(cx, cy + 60, 'скорости точек тела', LINK, 10.5);
+    // круговая стрелка вокруг оси — правило правой руки
+    s += '<path d="M' + (cx - 40) + ',' + (cy - 30) + ' A 40 14 0 1 1 ' + (cx + 38) + ',' + (cy - 30) +
+         '" fill="none" stroke="' + INK + '" stroke-width="1.5" marker-end="url(#ah)"/>';
+    // правая колонка
+    s += txt(306, 92, 'правило правой руки:', SOFT, 10.5, 'start');
+    s += txt(306, 108, 'пальцы по вращению,', SOFT, 10.5, 'start');
+    s += txt(306, 124, 'большой &#8212; вдоль L', SOFT, 10.5, 'start');
+    s += txt(306, 156, 'вдоль оси &#8212; единственное', SOFT, 10.5, 'start');
+    s += txt(306, 172, 'направление, которое', SOFT, 10.5, 'start');
+    s += txt(306, 188, 'вращение не уносит', SOFT, 10.5, 'start');
+    return svg(W, H, s);
+};
+
+// 2. dL = M·dt: приращение идёт вдоль момента, а не вдоль самого L.
+F.rigidldt = function () {
+    var W = 470, H = 220, ox = 96, oy = 168;
+    var s = txt(W / 2, 18, 'приращение направлено вдоль момента, а не вдоль самого L', SOFT, 10.5);
+    var lx = 244, ly = 82;                      // конец вектора L
+    // приращение строго перпендикулярно L: направление L = (148,-86), нормаль = (86,148)/171,2
+    var dx = 277, dy = 138;                     // конец приращения
+    s += arrow(ox, oy, lx, ly, WARN, 'ahw');
+    s += txt((ox + lx) / 2 - 14, (oy + ly) / 2 - 8, 'L', WARN, 16);
+    s += arrow(lx, ly, dx, dy, LINK, 'ahl');
+    s += txt(dx + 10, dy - 6, 'dL = M&#183;dt', LINK, 12.5, 'start');
+    // прямой угол между L и dL
+    s += '<path d="M' + (lx - 10) + ',' + (ly + 6) + ' L' + (lx - 4) + ',' + (ly + 16) + ' L' + (lx + 6) +
+         ',' + (ly + 10) + '" fill="none" stroke="' + SOFT + '" stroke-width="1"/>';
+    // новый вектор
+    s += '<line x1="' + ox + '" y1="' + oy + '" x2="' + dx + '" y2="' + dy + '" stroke="' + SOFT +
+         '" stroke-width="1.6" stroke-dasharray="5,4"/>';
+    s += txt(dx + 10, dy + 16, 'L + dL', SOFT, 12, 'start');
+    // дуга поворота
+    s += '<path d="M' + (ox + 120) + ',' + (oy - 74) + ' A 142 142 0 0 1 ' + (ox + 146) + ',' + (oy - 40) +
+         '" fill="none" stroke="' + BORD + '" stroke-width="1.4"/>';
+    s += mol(ox, oy, 4, INK);
+    // сравнение двух записей
+    s += txt(56, 200, 'M = I&#949; &#8212; только «быстрее или медленнее»', SOFT, 10.5, 'start');
+    s += txt(56, 214, 'dL/dt = M &#8212; ещё и «куда повернётся ось»', INK, 10.5, 'start');
+    return svg(W, H, s);
+};
+
+// 3. M = 0: направление оси сохраняется в полёте.
+F.rigifree = function () {
+    var W = 470, H = 200;
+    var s = txt(W / 2, 18, 'нулевой момент сохраняет и длину L, и направление оси', SOFT, 10.5);
+    s += '<path d="M40,168 Q235,74 430,168" fill="none" stroke="' + BORD +
+         '" stroke-width="1.4" stroke-dasharray="5,4"/>';
+    var pos = [[78, 152], [235, 121], [392, 152]];
+    for (var i = 0; i < pos.length; i++) {
+        var x = pos[i][0], y = pos[i][1];
+        s += '<ellipse cx="' + x + '" cy="' + y + '" rx="24" ry="9" fill="' + LINK +
+             '" opacity="0.14" stroke="' + LINK + '" stroke-width="1.4"/>';
+        s += arrow(x, y, x + 21, y - 34, WARN, 'ahw');   // все три стрелки параллельны
+        s += mol(x, y, 3, SOFT);
+    }
+    s += txt(78, 100, 'L', WARN, 13);
+    s += txt(235, 70, 'L', WARN, 13);
+    s += txt(392, 100, 'L', WARN, 13);
+    s += txt(W / 2, 186, 'пуля с нарезом &#183; фрисби &#183; закрученный спутник', SOFT, 11);
+    s += txt(W - 20, 152, '&#969; &#8776; 2&#183;10&#8308; рад/с', SOFT, 10.5, 'end');
+    s += txt(W - 20, 166, 'у пули', SOFT, 10.5, 'end');
+    return svg(W, H, s);
+};
+
+// 4. Тяжёлый волчок: плечо a·sinθ, момент горизонтален и перпендикулярен L.
+F.rigitorq2 = function () {
+    var W = 470, H = 266, ox = 150, oy = 226;
+    var s = txt(W / 2, 18, 'момент веса перпендикулярен и оси, и вертикали', SOFT, 10.5);
+    // вертикаль через точку опоры
+    s += '<line x1="' + ox + '" y1="' + oy + '" x2="' + ox + '" y2="56" stroke="' + BORD +
+         '" stroke-width="1.4" stroke-dasharray="5,4"/>';
+    // ось волчка
+    var ax = 258, ay = 88, mx = 216, my = 140;   // конец оси и центр масс
+    s += '<line x1="' + ox + '" y1="' + oy + '" x2="' + ax + '" y2="' + ay + '" stroke="' + SOFT +
+         '" stroke-width="2.4"/>';
+    // корпус волчка
+    s += '<ellipse cx="' + mx + '" cy="' + my + '" rx="40" ry="14" fill="' + LINK +
+         '" opacity="0.14" stroke="' + LINK + '" stroke-width="1.4" transform="rotate(-38 ' + mx + ' ' + my + ')"/>';
+    s += mol(mx, my, 5, INK);
+    s += txt(mx - 34, my - 6, 'ц. м.', SOFT, 10.5, 'end');
+    // опора
+    s += mol(ox, oy, 4, INK);
+    s += '<line x1="' + (ox - 52) + '" y1="' + (oy + 4) + '" x2="' + (ox + 82) + '" y2="' + (oy + 4) +
+         '" stroke="' + INK + '" stroke-width="2"/>';
+    s += txt(ox - 58, oy + 4, 'O', INK, 12, 'end');
+    // угол theta
+    s += '<path d="M' + ox + ',' + (oy - 58) + ' A 58 58 0 0 1 ' + (ox + 36) + ',' + (oy - 46) +
+         '" fill="none" stroke="' + SOFT + '" stroke-width="1.2"/>';
+    s += txt(ox + 18, oy - 56, '&#952;', SOFT, 13, 'start');
+    // вес
+    s += arrow(mx, my, mx, my + 62, INK, 'ah');
+    s += txt(mx + 12, my + 44, 'm g', INK, 13, 'start');
+    // плечо a·sinθ
+    s += '<line x1="' + ox + '" y1="' + my + '" x2="' + mx + '" y2="' + my + '" stroke="' + MOSS +
+         '" stroke-width="1.4" stroke-dasharray="4,3"/>';
+    s += txt((ox + mx) / 2, my + 14, 'a&#183;sin&#952;', MOSS, 11.5);
+    s += txt(198, my + 46, 'a', SOFT, 12);
+    // вектор L вдоль оси
+    s += arrow(ax, ay, ax + 44, ay - 56, WARN, 'ahw');
+    s += txt(ax + 56, ay - 56, 'L', WARN, 15, 'start');
+    // момент — на нас, перпендикулярно плоскости рисунка
+    s += '<circle cx="360" cy="182" r="14" fill="none" stroke="' + MOSS + '" stroke-width="1.8"/>';
+    s += '<circle cx="360" cy="182" r="3.4" fill="' + MOSS + '"/>';
+    s += txt(382, 178, 'M &#8212; на нас,', MOSS, 10.5, 'start');
+    s += txt(382, 192, 'горизонтален', MOSS, 10.5, 'start');
+    s += txt(W / 2 + 60, H - 8, 'M &#8869; L  и  M &#8869; вертикали', MOSS, 12);
+    return svg(W, H, s);
+};
+
+// 5. dL перпендикулярно L и горизонтально: длина и вертикальная проекция сохраняются, ось идёт по конусу.
+F.rigicone = function () {
+    var W = 470, H = 256, ox = 236, oy = 224, ey = 82, rx = 84;
+    var s = txt(W / 2, 18, 'ни длина L, ни его вертикальная проекция не меняются', SOFT, 10.5);
+    // вертикаль
+    s += '<line x1="' + ox + '" y1="' + oy + '" x2="' + ox + '" y2="48" stroke="' + BORD +
+         '" stroke-width="1.4" stroke-dasharray="5,4"/>';
+    // конус
+    s += '<line x1="' + ox + '" y1="' + oy + '" x2="' + (ox - rx) + '" y2="' + ey + '" stroke="' + BORD +
+         '" stroke-width="1.3"/>';
+    s += '<line x1="' + ox + '" y1="' + oy + '" x2="' + (ox + rx) + '" y2="' + ey + '" stroke="' + BORD +
+         '" stroke-width="1.3"/>';
+    s += '<ellipse cx="' + ox + '" cy="' + ey + '" rx="' + rx + '" ry="25" fill="none" stroke="' + BORD +
+         '" stroke-width="1.3" stroke-dasharray="5,4"/>';
+    // вектор L вдоль образующей
+    s += arrow(ox, oy, ox + rx, ey, WARN, 'ahw');
+    s += txt(ox + rx - 34, ey + 44, 'L', WARN, 16);
+    // приращение — по касательной к окружности, вниз по рисунку
+    s += arrow(ox + rx, ey, ox + rx, ey + 40, LINK, 'ahl');
+    s += txt(ox + rx + 10, ey + 26, 'dL', LINK, 13, 'start');
+    // обход по окружности
+    s += '<path d="M' + (ox - 30) + ',' + (ey - 24) + ' A ' + rx + ' 25 0 0 1 ' + (ox + 44) + ',' + (ey - 18) +
+         '" fill="none" stroke="' + SOFT + '" stroke-width="1.4" marker-end="url(#ah)"/>';
+    s += txt(ox, ey - 38, 'конец L едет по окружности', SOFT, 10.5);
+    // вертикальная проекция
+    s += '<line x1="' + (ox - rx) + '" y1="' + ey + '" x2="' + (ox - rx - 42) + '" y2="' + ey +
+         '" stroke="' + BORD + '" stroke-width="1"/>';
+    s += arrow(ox - rx - 30, oy, ox - rx - 30, ey + 2, MOSS, 'ah');
+    s += txt(ox - rx - 38, (oy + ey) / 2, 'L&#183;cos&#952;', MOSS, 11, 'end');
+    // угол
+    s += '<path d="M' + ox + ',' + (oy - 62) + ' A 62 62 0 0 1 ' + (ox + 36) + ',' + (oy - 50) +
+         '" fill="none" stroke="' + SOFT + '" stroke-width="1.2"/>';
+    s += txt(ox + 18, oy - 60, '&#952;', SOFT, 13, 'start');
+    s += mol(ox, oy, 4, INK);
+    s += txt(W - 16, 150, '|L| = const', WARN, 11.5, 'end');
+    s += txt(W - 16, 166, 'L&#183;cos&#952; = const', MOSS, 11.5, 'end');
+    s += txt(W - 16, 182, '&#8658; наклон заперт', INK, 11.5, 'end');
+    return svg(W, H, s);
+};
+
+// 6. Вид сверху: дуга M·dt на радиусе L·sinθ — отсюда Ω, и синус сокращается.
+F.rigiprec = function () {
+    var W = 470, H = 256, cx = 168, cy = 132, r = 86;
+    var s = txt(W / 2, 18, 'вид сверху: угол поворота есть дуга, делённая на радиус', SOFT, 10.5);
+    s += '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none" stroke="' + BORD +
+         '" stroke-width="1.3" stroke-dasharray="5,4"/>';
+    s += mol(cx, cy, 4, INK);
+    // радиус — горизонтальная проекция L
+    s += arrow(cx, cy, cx + r, cy, WARN, 'ahw');
+    s += txt(cx + r / 2, cy + 16, 'L&#183;sin&#952;', WARN, 12);
+    // положение через dt
+    var px = cx + 81, py = cy - 30;
+    s += '<line x1="' + cx + '" y1="' + cy + '" x2="' + px + '" y2="' + py + '" stroke="' + WARN +
+         '" stroke-width="1.4" stroke-dasharray="4,3"/>';
+    // дуга приращения
+    s += '<path d="M' + (cx + r) + ',' + cy + ' A ' + r + ' ' + r + ' 0 0 0 ' + px + ',' + py +
+         '" fill="none" stroke="' + LINK + '" stroke-width="2.4" marker-end="url(#ahl)"/>';
+    s += txt(cx + r + 14, cy - 20, '|dL| = M&#183;dt', LINK, 12, 'start');
+    // угол dφ
+    s += '<path d="M' + (cx + 34) + ',' + cy + ' A 34 34 0 0 0 ' + (cx + 32) + ',' + (cy - 12) +
+         '" fill="none" stroke="' + SOFT + '" stroke-width="1.2"/>';
+    s += txt(cx + 44, cy - 12, 'd&#966;', SOFT, 12, 'start');
+    // вывод
+    s += txt(cx, cy + r + 34, 'd&#966; = M&#183;dt / (L&#183;sin&#952;)', INK, 13);
+    s += txt(W / 2 + 40, H - 44, '&#937; = mga&#183;sin&#952; / (I&#969;&#183;sin&#952;) = mga / (I&#969;)', INK, 14);
+    s += txt(W / 2 + 40, H - 22, 'sin&#952; сокращается: наклон в ответ не входит', WARN, 11);
+    return svg(W, H, s);
+};
+
+// 7. Велосипедное колесо на верёвке: числа параграфа на картинке.
+F.rigiwheel = function () {
+    var W = 470, H = 248, hx = 116, hy = 112, wx = 306;
+    var s = txt(W / 2, 18, 'колесо не падает, а обходит круг за девять с половиной секунд', SOFT, 10.5);
+    // окружность, по которой ходит колесо
+    s += '<ellipse cx="' + hx + '" cy="' + hy + '" rx="190" ry="42" fill="none" stroke="' + BORD +
+         '" stroke-width="1.3" stroke-dasharray="5,4"/>';
+    s += '<path d="M' + (hx + 150) + ',' + (hy + 36) + ' A 190 42 0 0 1 ' + (hx + 186) + ',' + (hy + 8) +
+         '" fill="none" stroke="' + SOFT + '" stroke-width="1.4" marker-end="url(#ah)"/>';
+    // верёвка и подвес
+    s += '<line x1="' + hx + '" y1="30" x2="' + hx + '" y2="' + hy + '" stroke="' + INK + '" stroke-width="1.6"/>';
+    s += '<line x1="' + (hx - 30) + '" y1="30" x2="' + (hx + 30) + '" y2="30" stroke="' + INK + '" stroke-width="2.6"/>';
+    // ось
+    s += '<line x1="' + hx + '" y1="' + hy + '" x2="' + wx + '" y2="' + hy + '" stroke="' + INK + '" stroke-width="3"/>';
+    // колесо с ребра
+    s += '<ellipse cx="' + wx + '" cy="' + hy + '" rx="17" ry="58" fill="' + LINK +
+         '" opacity="0.12" stroke="' + LINK + '" stroke-width="2"/>';
+    for (var k = -2; k <= 2; k++) {
+        s += '<line x1="' + wx + '" y1="' + hy + '" x2="' + (wx + k * 6) + '" y2="' + (hy + k * 26) +
+             '" stroke="' + BORD + '" stroke-width="1"/>';
+    }
+    s += mol(wx, hy, 4.5, INK);
+    // вес
+    s += arrow(wx, hy, wx, hy + 74, INK, 'ah');
+    s += txt(wx + 12, hy + 60, 'm g', INK, 12.5, 'start');
+    // вектор L
+    s += arrow(wx, hy, 424, hy, WARN, 'ahw');
+    s += txt(400, hy - 12, 'L = 7,35', WARN, 12.5);
+    // плечо
+    s += '<line x1="' + hx + '" y1="' + (hy + 96) + '" x2="' + wx + '" y2="' + (hy + 96) + '" stroke="' + MOSS +
+         '" stroke-width="1.2" stroke-dasharray="4,3"/>';
+    s += arrow(hx, hy + 96, wx - 2, hy + 96, MOSS, 'ah');
+    s += txt((hx + wx) / 2, hy + 90, 'a = 0,25 м', MOSS, 11.5);
+    // числа
+    s += txt(W / 2, H - 22, 'I = 0,245 кг&#183;м&#178; &#183; &#969; = 30 рад/с &#183; &#937; = 0,667 рад/с &#183; оборот оси за 9,4 с', INK, 11.5);
+    return svg(W, H, s);
+};
+
+// 8. Земля как волчок: вздутие, момент Луны и Солнца, конус в 25 772 года.
+F.rigiearth = function () {
+    var W = 470, H = 268, cx = 168, cy = 168, R = 58;
+    var s = txt(W / 2, 18, 'та же формула на планете: ось описывает конус за 25 772 года', SOFT, 10.5);
+    // конус прецессии вокруг вертикали
+    s += '<line x1="' + cx + '" y1="' + cy + '" x2="' + cx + '" y2="44" stroke="' + BORD +
+         '" stroke-width="1.3" stroke-dasharray="5,4"/>';
+    s += '<ellipse cx="' + cx + '" cy="50" rx="48" ry="15" fill="none" stroke="' + BORD +
+         '" stroke-width="1.3" stroke-dasharray="5,4"/>';
+    s += '<path d="M' + (cx - 34) + ',42 A 48 15 0 0 1 ' + (cx + 20) + ',37" fill="none" stroke="' + SOFT +
+         '" stroke-width="1.3" marker-end="url(#ah)"/>';
+    s += '<line x1="' + cx + '" y1="' + cy + '" x2="' + (cx - 48) + '" y2="50" stroke="' + BORD + '" stroke-width="1.1"/>';
+    // Земля и экваториальное вздутие
+    s += '<ellipse cx="' + cx + '" cy="' + cy + '" rx="' + (R + 13) + '" ry="' + (R - 3) +
+         '" fill="' + WARN + '" opacity="0.10" stroke="' + WARN + '" stroke-width="1.3" stroke-dasharray="4,3" ' +
+         'transform="rotate(-23.44 ' + cx + ' ' + cy + ')"/>';
+    s += '<circle cx="' + cx + '" cy="' + cy + '" r="' + R + '" fill="' + LINK +
+         '" opacity="0.14" stroke="' + LINK + '" stroke-width="1.6"/>';
+    // экватор
+    s += '<ellipse cx="' + cx + '" cy="' + cy + '" rx="' + R + '" ry="17" fill="none" stroke="' + LINK +
+         '" stroke-width="1.2" transform="rotate(-23.44 ' + cx + ' ' + cy + ')"/>';
+    // ось и вектор L
+    s += '<line x1="' + (cx - 36) + '" y1="' + (cy + 84) + '" x2="' + (cx + 30) + '" y2="' + (cy - 70) +
+         '" stroke="' + SOFT + '" stroke-width="2"/>';
+    s += arrow(cx, cy, cx + 44, cy - 102, WARN, 'ahw');
+    s += txt(cx + 56, cy - 100, 'L', WARN, 15, 'start');
+    // угол наклона
+    s += '<path d="M' + cx + ',' + (cy - 74) + ' A 74 74 0 0 1 ' + (cx + 30) + ',' + (cy - 68) +
+         '" fill="none" stroke="' + SOFT + '" stroke-width="1.2"/>';
+    s += txt(cx + 6, cy - 82, '23,44&#176;', SOFT, 10.5, 'start');
+    s += txt(cx - 74, cy + 40, 'вздутие', WARN, 10.5, 'end');
+    // притяжение Луны и Солнца
+    s += mol(400, 118, 9, SOFT);
+    s += txt(400, 100, 'Луна', SOFT, 10.5);
+    s += '<circle cx="400" cy="200" r="12" fill="none" stroke="' + SOFT + '" stroke-width="1.6"/>';
+    s += txt(400, 226, 'Солнце', SOFT, 10.5);
+    s += arrow(384, 126, cx + 74, cy - 10, MOSS, 'ah');
+    s += arrow(384, 194, cx + 74, cy + 26, MOSS, 'ah');
+    s += txt(312, 160, 'момент', MOSS, 10.5);
+    s += txt(W / 2, H - 8, 'L = 5,85&#183;10&#179;&#179; &#183; &#937; = 7,73&#183;10&#8315;&#185;&#178; рад/с &#183; M = 1,8&#183;10&#178;&#178; Н&#183;м', INK, 11.5);
+    return svg(W, H, s);
+};
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   РУССКИЕ ПОДПИСИ НА СХЕМАХ — на перевод в js/figures-i18n.js.
+   Порядок соответствует появлению в файле; чисто символьные подписи
+   (L, m g, θ, dφ, a·sinθ, L·cosθ, 23,44°, O, формулы с числами) не перечислены,
+   они одинаковы на всех языках.
+
+   rigilvec:
+     'вектор смотрит вдоль оси, а не туда, куда бегут точки тела'
+     'скорости точек тела'
+     'правило правой руки:'
+     'пальцы по вращению,'
+     'большой — вдоль L'
+     'вдоль оси — единственное'
+     'направление, которое'
+     'вращение не уносит'
+
+   rigidldt:
+     'приращение направлено вдоль момента, а не вдоль самого L'
+     'M = Iε — только «быстрее или медленнее»'
+     'dL/dt = M — ещё и «куда повернётся ось»'
+
+   rigifree:
+     'нулевой момент сохраняет и длину L, и направление оси'
+     'пуля с нарезом · фрисби · закрученный спутник'
+     'у пули'
+
+   rigitorq2:
+     'момент веса перпендикулярен и оси, и вертикали'
+     'ц. м.'
+     'M — на нас,'
+     'горизонтален'
+     'M ⊥ L  и  M ⊥ вертикали'
+
+   rigicone:
+     'ни длина L, ни его вертикальная проекция не меняются'
+     'конец L едет по окружности'
+     '⇒ наклон заперт'
+
+   rigiprec:
+     'вид сверху: угол поворота есть дуга, делённая на радиус'
+     'sinθ сокращается: наклон в ответ не входит'
+
+   rigiwheel:
+     'колесо не падает, а обходит круг за девять с половиной секунд'
+     'a = 0,25 м'   (число одинаково, но слово «м» переводится)
+
+   rigiearth:
+     'та же формула на планете: ось описывает конус за 25 772 года'
+     'вздутие'
+     'Луна'
+     'Солнце'
+     'момент'
+   ───────────────────────────────────────────────────────────────────────────── */

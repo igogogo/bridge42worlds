@@ -304,6 +304,92 @@
     border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
   .k-chal-btn:hover{border-color:var(--accent);color:var(--accent)}
   @media (max-width:640px){.k-chal{padding:12px 13px}}
+
+  /* ── Длинный параграф: оглавление, «наверх», закладка ───────────────────────────────
+     Самый длинный параграф курса (cosmology/03-dark) — двадцать экранов на десктопе и
+     под семьдесят на телефоне. В нём не было ни оглавления, ни возврата наверх, ни памяти
+     о прочитанном: вернувшийся назавтра читатель начинал сначала (аудит 6.2).
+     Всё три вещи живут здесь и появляются только на странице параграфа. */
+
+  /* Оглавление. Узкий экран — свёрнутая полоса над текстом (одна строка, не съедает экран);
+     широкий — колонка слева в поле страницы, как на других длинных страницах сайта. */
+  .k-toc{max-width:680px;margin:0 0 20px;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+  .k-toc summary{display:flex;align-items:center;gap:10px;min-height:44px;padding:4px 2px;cursor:pointer;
+    list-style:none;font-family:var(--font-display);font-size:13px;letter-spacing:.02em;color:var(--ink-soft)}
+  .k-toc summary::-webkit-details-marker{display:none}
+  .k-toc summary:hover{color:var(--ink)}
+  .k-toc-num{margin-inline-start:auto;font-variant-numeric:tabular-nums;opacity:.8}
+  .k-toc-caret{font-size:10px;line-height:1;transition:transform .15s ease}
+  .k-toc[open] .k-toc-caret{transform:rotate(180deg)}
+  .k-toc-list{display:block;margin:0 0 8px;padding:0}
+  /* 40 px по высоте — минимальная кликабельная зона на телефоне */
+  .k-toc-list a{display:block;min-height:40px;padding-block:11px;padding-inline:12px 4px;line-height:1.35;
+    font-family:var(--font-display);font-size:13.5px;color:var(--ink-soft);text-decoration:none;
+    border-inline-start:2px solid transparent;transition:color .12s ease,border-color .12s ease}
+  .k-toc-list a:hover{color:var(--steel)}
+  .k-toc-list a.active{color:var(--ink);font-weight:700;border-inline-start-color:var(--brass)}
+  /* Порог 1280 — при нём слева от колонки текста остаётся ровно поле под оглавление
+     (тело страницы 900 px по центру, значит просвет = 50vw − 450). Ниже порога колонке
+     негде встать, и оглавление честно сворачивается в полосу. */
+  @media (min-width:1280px){
+    .k-toc{position:fixed;top:84px;left:max(12px,calc(50% - 624px));width:160px;margin:0;z-index:50;
+      max-height:calc(100vh - 130px);overflow-y:auto;overscroll-behavior:contain;
+      border:none;border-inline-start:1px solid var(--rule);padding-inline-start:12px}
+    [dir="rtl"] .k-toc{left:auto;right:max(12px,calc(50% - 624px))}
+    .k-toc summary{pointer-events:none;min-height:0;padding:0 0 8px;font-size:10.5px;
+      text-transform:uppercase;letter-spacing:.1em}
+    .k-toc-caret{display:none}
+    .k-toc-list{margin:0}
+    .k-toc-list a{min-height:0;padding-block:6px;font-size:12.5px;overflow-wrap:break-word}
+  }
+  /* Запас под прилипшую шапку сайта — на случай перехода по якорю силами браузера
+     (по оглавлению прокруткой правит скрипт, там высота шапки меряется на месте) */
+  #k-root h2,#k-root [data-toc]{scroll-margin-top:100px}
+  @media (max-width:640px){#k-root h2,#k-root [data-toc]{scroll-margin-top:114px}}
+
+  /* «Наверх» — над кнопкой тьютора (та фиксирована справа снизу, 52 px), поэтому bottom:84 */
+  .k-top{position:fixed;right:20px;bottom:84px;z-index:880;width:44px;height:44px;border-radius:50%;
+    border:1px solid var(--rule);background:var(--paper-raised);color:var(--ink-soft);
+    font-family:var(--font-display);font-size:19px;line-height:1;cursor:pointer;
+    display:none;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(20,25,35,.12)}
+  .k-top.on{display:flex}
+  .k-top:hover{color:var(--ink);border-color:var(--steel)}
+  @media (max-width:640px){.k-top{right:14px;bottom:76px}}
+
+  /* Закладка. Плашка стоит в потоке под подзаголовком, а не висит поверх текста: читатель
+     всегда приходит на страницу сверху и видит её сразу, а прокрутив — забывает о ней. */
+  .k-mark{position:relative;display:flex;align-items:center;flex-wrap:wrap;gap:10px;max-width:680px;
+    margin:0 0 20px;padding-block:11px;padding-inline:14px 52px;   /* справа — место под крестик */
+    background:var(--paper-raised);border:1px solid var(--rule);border-inline-start:3px solid var(--brass);
+    font-family:var(--font-display);font-size:13px;line-height:1.45;color:var(--ink-soft)}
+  .k-mark-t{flex:1 1 160px;min-width:0}
+  .k-mark-t b{display:block;color:var(--ink);font-weight:700}
+  .k-mark-w{overflow-wrap:anywhere}
+  .k-mark-go{font-family:var(--font-display);font-size:13px;min-height:40px;padding:0 16px;
+    cursor:pointer;white-space:nowrap;
+    background:none;border:1px solid var(--steel);border-radius:20px;color:var(--steel)}
+  .k-mark-go:hover{background:var(--steel);color:var(--paper)}
+  /* Крестик в углу, а не в ряду: на 375 px ряд переносился, и он уезжал отдельной строкой */
+  .k-mark-x{position:absolute;top:5px;inset-inline-end:5px;width:40px;height:40px;
+    font-family:var(--font-display);font-size:17px;line-height:1;cursor:pointer;
+    background:none;border:none;border-radius:50%;color:var(--ink-soft)}
+  .k-mark-x:hover{color:var(--ink);background:var(--rule)}
+
+  /* Экран «такой темы нет»: не стектрейс, а список того, что есть */
+  .k-oops{max-width:680px}
+  .k-oops-list{margin:16px 0 0;border-top:1px solid var(--rule)}
+  .k-oops-list a{display:block;min-height:44px;padding:13px 2px;text-decoration:none;color:inherit;
+    border-bottom:1px solid var(--rule);transition:padding-inline-start .15s}
+  .k-oops-list a:hover{padding-inline-start:8px}
+  .k-oops-list a:hover .k-oops-n{color:var(--steel)}
+  .k-oops-n{font-family:var(--font-display);font-size:1.05rem;font-weight:700;color:var(--ink)}
+  .k-oops-s{font-size:.9rem;line-height:1.5;color:var(--ink-soft);margin-top:2px}
+  .k-oops-what{font-family:var(--font-mono);font-size:.82rem;color:var(--brass);
+    margin:0 0 18px;overflow-wrap:anywhere}
+  .k-oops-dev{max-width:680px;margin:28px 0 0;font-family:var(--font-display);font-size:12px;color:var(--ink-soft)}
+  .k-oops-dev summary{cursor:pointer;min-height:40px;display:flex;align-items:center}
+  .k-oops-dev pre{margin-top:6px;font-family:var(--font-mono);font-size:11.5px;line-height:1.6;
+    white-space:pre-wrap;overflow-wrap:anywhere;color:var(--ink-soft)}
 </style>
     <link rel="stylesheet" href="/css/style.css?v=7bd7159ffb">
 
@@ -361,6 +447,80 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
   // свои иконки вместо эмодзи — единый вид во всех системах
   function ic(name, size) { return (window.B42Icons && B42Icons[name]) ? B42Icons[name](size || 15) : ''; }
 
+  /* Подпись интерфейса на языке страницы. Словарь живёт в js/course-i18n.js и подключается
+     НИЖЕ этого скрипта — но вызывается T() уже из обработчиков и промисов, когда файл разобран.
+     Русский текст здесь и есть ключ словаря: так же устроена вся остальная страница. */
+  function T(ru) { var v = window.B42_T && window.B42_T(ru); return v || ru; }
+
+  // ── прокрутка: одна точка правды на страницу ──────────────────────────────────────
+  // Параграф про тёмную материю — двадцать экранов на десктопе и под семьдесят на телефоне.
+  // Оглавление, кнопка «наверх» и закладка слушают прокрутку втроём, поэтому считаются
+  // в одном кадре: три независимых слушателя на такой длине заметно дёргают скролл.
+  function scrollY() { return window.pageYOffset || document.documentElement.scrollTop || 0; }
+  function docH() { return Math.max(document.documentElement.scrollHeight, document.body.scrollHeight); }
+  function topOf(node) { return node.getBoundingClientRect().top + scrollY(); }
+  var scrollJobs = [], scrollTick = false;
+  function scrollFrame() {
+    scrollTick = false;
+    for (var i = 0; i < scrollJobs.length; i++) { try { scrollJobs[i](); } catch (e) {} }
+  }
+  function watchScroll(fn) {
+    scrollJobs.push(fn);
+    if (scrollJobs.length === 1) {
+      window.addEventListener('scroll', function () {
+        if (!scrollTick) { scrollTick = true; requestAnimationFrame(scrollFrame); }
+      }, { passive: true });
+      window.addEventListener('resize', scrollFrame, { passive: true });
+    }
+    try { fn(); } catch (e) {}
+  }
+  var TOC_WIDE = 1280;   // тот же порог, что в медиазапросе .k-toc: ниже колонке слева негде встать
+
+  /* Шапка сайта прилипает к верху двумя полосами (панель + строка языков): 87 px на десктопе,
+     под 100 на телефоне. Якорь без поправки уводит заголовок ПОД неё — читатель прыгает
+     «в никуда». Высоту меряем на месте, а не вписываем числом: полосы живут в общем
+     css/style.css и sitenav.js, их размер не наш и меняется. */
+  var STICKY = 0;
+  function measureSticky() {
+    var max = 0;
+    Array.prototype.forEach.call(document.body.children, function (e) {
+      var cs = getComputedStyle(e), p = cs.position;
+      if (p !== 'sticky' && p !== 'fixed') return;
+      // Считаем по объявленному top плюс высота, а не по текущему прямоугольнику: на
+      // непрокрученной странице полосы ещё стоят в потоке и меряются ниже, чем прилипнут
+      // (у нас это давало 111 вместо 87 — и якорь промахивался ровно на эту разницу).
+      var t = parseFloat(cs.top);
+      if (!isFinite(t) || t < 0 || t > 160) return;
+      // только полосы у верхнего края: кнопки тьютора и «наверх» висят внизу, top у них auto
+      var h = e.getBoundingClientRect().height;
+      if (h > 0 && t + h > max && t + h < 200) max = t + h;
+    });
+    STICKY = Math.round(max);
+  }
+  /* Прокрутка к цели, которая может уехать. Пока идёт плавная анимация (html{scroll-behavior:
+     smooth} в общем css), содержимое НАД целью успевает сдвинуться: догружаются картинки,
+     стенд каждые 300 мс переписывает свои подписи. Браузер считает цель один раз, в начале,
+     и промахивается на десятки пикселей — на «Проверьте себя» заголовок уезжал под шапку.
+     Поэтому дожидаемся остановки и, если промахнулись, поправляемся (не больше двух раз). */
+  function scrollToWanted(want) {
+    window.scrollTo(0, Math.max(0, Math.round(want())));
+    var last = -1, ticks = 0, fixes = 0;
+    var iv = setInterval(function () {
+      var y = scrollY();
+      if (y === last) {
+        var w = Math.max(0, Math.round(want()));
+        if (Math.abs(w - y) > 12 && fixes < 2) { fixes++; window.scrollTo(0, w); }
+        else { clearInterval(iv); return; }
+      }
+      last = y;
+      if (++ticks > 16) clearInterval(iv);
+    }, 150);
+  }
+  function scrollToNode(node) {
+    measureSticky();
+    scrollToWanted(function () { return topOf(node) - STICKY - 12; });
+  }
+
   // Любые формулы В ТЕКСТЕ (переменные, соотношения) тоже должны быть набраны математически,
   // а не обычным шрифтом. Пишем их в контенте как $...$ и прогоняем весь блок авто-рендером.
   function renderMath(node) {
@@ -380,6 +540,190 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
     if (!window.katex) { target.textContent = latex; return; }
     try { katex.render(latex, target, { throwOnError: false, displayMode: display !== false }); }
     catch (e) { target.textContent = latex; }
+  }
+
+  // ── кнопка «наверх» ───────────────────────────────────────────────────────────────
+  // Появляется после первого экрана. Кнопка тьютора зафиксирована справа снизу (52 px),
+  // поэтому эта встаёт над ней, а не поверх — см. bottom в .k-top.
+  function mountTopButton() {
+    if (document.querySelector('.k-top')) return;
+    var b = el('button', 'k-top', '↑');
+    b.type = 'button';
+    b.title = T('Наверх');
+    b.setAttribute('aria-label', T('Наверх'));
+    b.addEventListener('click', function () { window.scrollTo(0, 0); });
+    document.body.appendChild(b);
+    watchScroll(function () { b.classList.toggle('on', scrollY() > window.innerHeight * 0.9); });
+  }
+
+  // ── оглавление параграфа ──────────────────────────────────────────────────────────
+  // Собирается из того, что уже нарисовано: заголовки h2 разделов плюс три ориентира без
+  // заголовка (введение, стенд, карточка формулы) — их помечает renderLesson через data-toc.
+  // Возвращает список пунктов: закладка переиспользует его, чтобы назвать место остановки.
+  function buildToc(slot) {
+    var items = [];
+    Array.prototype.forEach.call(root.querySelectorAll('[data-toc], h2'), function (n, i) {
+      var label = n.hasAttribute('data-toc') ? n.getAttribute('data-toc') : n.textContent.trim();
+      if (!label) return;
+      if (!n.id) n.id = 'k-s' + (i + 1);
+      items.push({ id: n.id, node: n, label: label });
+    });
+    if (items.length < 3) return null;          // короткому параграфу оглавление только мешает
+
+    var box = el('details', 'k-toc');
+    box.open = window.innerWidth >= TOC_WIDE;   // колонка слева открыта всегда, полоса — по нажатию
+    var sum = el('summary');
+    sum.appendChild(el('span', null, T('Содержание параграфа')));
+    sum.appendChild(el('span', 'k-toc-num', String(items.length)));
+    sum.appendChild(el('span', 'k-toc-caret', '▾'));
+    box.appendChild(sum);
+
+    var nav = el('nav', 'k-toc-list');
+    items.forEach(function (it) {
+      var a = document.createElement('a');
+      a.href = '#' + it.id;
+      a.textContent = it.label;
+      a.addEventListener('click', function (e) {
+        e.preventDefault();                     // адрес не трогаем: в нём язык и параграф
+        // Список сворачиваем ДО прокрутки: на телефоне он занимает пол-экрана, и если убрать
+        // его после, страница уедет на его высоту и заголовок промахнётся мимо экрана.
+        if (window.innerWidth < TOC_WIDE) box.open = false;
+        var t = document.getElementById(it.id);
+        if (t) scrollToNode(t);
+      });
+      it.link = a;
+      nav.appendChild(a);
+    });
+    box.appendChild(nav);
+    slot.appendChild(box);
+
+    // Поворот телефона и растянутое окно меняют сторону порога — пересогласуем состояние.
+    var wasWide = window.innerWidth >= TOC_WIDE;
+    window.addEventListener('resize', function () {
+      var wide = window.innerWidth >= TOC_WIDE;
+      if (wide !== wasWide) { wasWide = wide; box.open = wide; }
+    }, { passive: true });
+    // На широком экране заголовок колонки не кликается (pointer-events:none), но с клавиатуры
+    // свернуть её всё-таки можно — и развернуть было бы уже нечем: стрелка там скрыта.
+    box.addEventListener('toggle', function () {
+      if (window.innerWidth >= TOC_WIDE && !box.open) box.open = true;
+    });
+
+    var active = -1;
+    measureSticky();
+    window.addEventListener('resize', measureSticky, { passive: true });
+    watchScroll(function () {
+      var best = 0, edge = STICKY + 24;   // раздел считается текущим, как только ушёл под шапку
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].node.getBoundingClientRect().top <= edge) best = i; else break;
+      }
+      if (best !== active) {
+        if (active >= 0) items[active].link.classList.remove('active');
+        items[best].link.classList.add('active');
+        active = best;
+      }
+      // в узкой колонке активный пункт может уехать за край — подтягиваем его в видимое
+      if (window.innerWidth >= TOC_WIDE && box.scrollHeight > box.clientHeight + 2) {
+        var a = items[best].link, t = a.offsetTop, b2 = t + a.offsetHeight;
+        if (t < box.scrollTop) box.scrollTop = Math.max(0, t - 8);
+        else if (b2 > box.scrollTop + box.clientHeight) box.scrollTop = b2 - box.clientHeight + 8;
+      }
+    });
+    return items;
+  }
+
+  // ── закладка ──────────────────────────────────────────────────────────────────────
+  // Помним, где читатель остановился, и при возврате ПРЕДЛАГАЕМ продолжить, а не прыгаем
+  // сами: самовольный прыжок посреди текста пугает сильнее, чем начало сначала.
+  // Держим и абсолютную позицию, и раздел со смещением внутри него — картинки грузятся
+  // не мгновенно, высота страницы между визитами гуляет, а раздел стоит на месте.
+  function mountBookmark(slot, lessonId, items) {
+    var KEY = 'b42_read_' + TOPIC + '_' + lessonId;
+    var MIN = Math.max(560, Math.round(window.innerHeight * 0.9));   // меньше экрана — не закладка
+    var saved = null, finished = false, lastSave = 0, deepest = 0;
+    try { saved = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { saved = null; }
+    if (saved && saved.y) deepest = saved.y;
+    function drop() { try { localStorage.removeItem(KEY); } catch (e) {} }
+
+    function sectionHere() {
+      var cur = null, edge = STICKY + 24;
+      for (var i = 0; items && i < items.length; i++) {
+        if (items[i].node.getBoundingClientRect().top <= edge) cur = items[i]; else break;
+      }
+      return cur;
+    }
+
+    function save() {
+      var y = scrollY(), vh = window.innerHeight, h = docH();
+      // Дочитал до конца — забываем: назавтра он начинает новый параграф, а не этот.
+      // Условие h > 2*vh страхует от ложного «дочитал» на ещё не выросшей странице.
+      if (y > 0 && h > vh * 2 && y + vh >= h - 240) { finished = true; drop(); return; }
+      // Пишем только самую дальнюю точку. Иначе «наверх» посреди чтения (или возврат к
+      // формуле) переписывал бы закладку началом страницы — а продолжать хочется оттуда,
+      // докуда дочитал.
+      if (finished || y < MIN || y < deepest) return;
+      var now = Date.now();
+      if (now - lastSave < 700) return;
+      lastSave = now;
+      deepest = y;
+      var sec = sectionHere();
+      try {
+        localStorage.setItem(KEY, JSON.stringify({
+          y: Math.round(y),
+          sec: sec ? sec.id : null,
+          off: sec ? Math.round(y - topOf(sec.node)) : 0,
+          label: sec ? sec.label : '',
+          pct: Math.max(1, Math.min(99, Math.round(100 * (y + vh) / h))),
+          ts: Date.now()
+        }));
+      } catch (e) {}
+    }
+    watchScroll(save);
+    // последний штрих перед уходом со страницы — тут троттлинг только мешает
+    function flush() { lastSave = 0; save(); }
+    window.addEventListener('pagehide', flush);
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState === 'hidden') flush();
+    });
+
+    // Плашка нужна только тем, кто действительно читал: меньше экрана прокрутки — не в счёт.
+    // Пришли по якорю из оглавления — читатель уже знает, куда идёт, не мешаем.
+    if (!saved || !saved.y || saved.y < MIN || location.hash) return;
+
+    var box = el('div', 'k-mark');
+    function hide() { if (box.parentNode) box.parentNode.removeChild(box); }
+
+    var txt = el('div', 'k-mark-t');
+    txt.appendChild(el('b', null, T('Вы читали отсюда')));
+    var where = el('span', 'k-mark-w');
+    where.textContent = (saved.label ? saved.label + ' · ' : '') + (saved.pct || 1) + '%';
+    txt.appendChild(where);
+    box.appendChild(txt);
+
+    var go = el('button', 'k-mark-go', T('Продолжить'));
+    go.type = 'button';
+    go.addEventListener('click', function () {
+      var sec = saved.sec && document.getElementById(saved.sec);
+      hide();   // убираем плашку ДО прокрутки: иначе страница уедет на её высоту
+      scrollToWanted(function () {
+        var y = sec ? topOf(sec) + (saved.off || 0) : saved.y;
+        return Math.min(y, Math.max(0, docH() - window.innerHeight));
+      });
+    });
+    box.appendChild(go);
+
+    var x = el('button', 'k-mark-x', '✕');
+    x.type = 'button';
+    x.title = T('Закрыть');
+    x.setAttribute('aria-label', T('Закрыть'));
+    // Закрыл плашку — значит, продолжать с той точки не собирается: отпускаем старую отметку,
+    // чтобы сегодняшнее чтение записалось поверх, а не тонуло под вчерашней глубиной.
+    x.addEventListener('click', function () { deepest = 0; hide(); });
+    box.appendChild(x);
+
+    slot.appendChild(box);
+    // прокрутил дальше отметки сам — плашка своё отработала
+    watchScroll(function () { if (box.parentNode && scrollY() > saved.y - 40) hide(); });
   }
 
   // ── общий словарь констант: одна константа описана один раз на весь курс ──
@@ -792,6 +1136,11 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
     root.appendChild(el('h1', null, L.title));
     root.appendChild(el('div', 'k-sub', L.subtitle));
 
+    // Места под закладку и оглавление. Заполняются в самом конце, когда параграф собран
+    // целиком: оглавление строится по тому, что реально нарисовано, а не по схеме данных.
+    var markSlot = el('div'); root.appendChild(markSlot);
+    var tocSlot = el('div'); root.appendChild(tocSlot);
+
     // Образная картинка параграфа — зрительный якорь до чтения текста
     var hero = el('div', 'k-hero');
     var heroImg = el('img');
@@ -805,6 +1154,8 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
     root.appendChild(unitSwitch());
 
     var intro = el('section', 'k-sec');
+    // Три ориентира параграфа живут без заголовка h2 — помечаем их для оглавления вручную
+    intro.setAttribute('data-toc', T('Введение'));
     L.intro.forEach(function (p) { intro.appendChild(el('p', null, md(p))); });
     root.appendChild(intro);
 
@@ -820,6 +1171,7 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
       if (factory) {
         var mdl = B42Models[factory](modelData);
         var wrap = el('div'); wrap.style.margin = '20px 0';
+        wrap.setAttribute('data-toc', T('Опыт'));
         // Многорежимная модель (процессы + двигатель) — кнопки переключения над стендом.
         // Без них третий параграф показывал бы только изотерму, а он именно про четыре процесса.
         var mount = el('div');
@@ -870,6 +1222,7 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
     // карточка закона: имя, формула, авторы, история
     if (L.formula) {
       var lw = el('div', 'k-law');
+      lw.setAttribute('data-toc', T('Формула'));
       lw.appendChild(el('div', 'k-law-name', ic('scale') + ' ' + L.formula.name));
       var eq = el('div', 'k-law-eq'); tex(eq, L.formula.latex); lw.appendChild(eq);
       if (L.formula.alsoKnown) lw.appendChild(el('div', 'k-law-alt', L.formula.alsoKnown));
@@ -1114,6 +1467,117 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
     else pn.appendChild(el('span'));
     if (idx < course.lessons.length - 1) { var na = el('a', null, course.lessons[idx + 1].title + ' →'); na.href = '?t=' + course.id + '&p=' + course.lessons[idx + 1].id; na.style.textAlign = 'right'; pn.appendChild(na); }
     root.appendChild(pn);
+
+    // Оглавление и закладка — последним шагом и через нулевой таймаут: подписи интерфейса
+    // переводит MutationObserver в course-i18n.js, а он срабатывает микрозадачей, то есть
+    // раньше любого таймаута. Возьмись мы за заголовки сразу — списали бы их непереведёнными.
+    setTimeout(function () {
+      mountBookmark(markSlot, lesson.id, buildToc(tocSlot));
+    }, 0);
+  }
+
+  // ── человеческие экраны ошибок ────────────────────────────────────────────────────
+  // Раньше несуществующая тема (?t=нетакой) давала пустую страницу и SyntaxError в консоли:
+  // сервер отдавал на 404 html-заглушку, r.json() спотыкался о «<», и читателю показывали
+  // текст исключения. Различаем «такого нет» и «не доехало» и в обоих случаях говорим словами.
+  function clearRoot() { while (root.firstChild) root.removeChild(root.firstChild); }
+
+  function oopsHead(title, lead) {
+    clearRoot();
+    document.title = title + ' — bridge42worlds';
+    var box = el('div', 'k-oops');
+    box.appendChild(el('h1', null, title));
+    if (lead) box.appendChild(el('p', 'k-lead', lead));
+    root.appendChild(box);
+    return box;
+  }
+
+  function learnLink() {
+    var p = el('p', 'k-lead-sm');
+    var a = document.createElement('a');
+    a.className = 'k-frontier-link';
+    a.href = '/learn.html?lang=' + LANG;
+    a.textContent = T('Открыть дерево знаний') + ' →';
+    p.appendChild(a);
+    return p;
+  }
+
+  /* Кусок адреса на арабской странице. Через <bdi>: без изоляции двунаправленный алгоритм
+     утаскивает ведущий «?» в конец строки, и «?t=nosuch» читается как «t=nosuch?». */
+  function oopsWhat(text) {
+    var d = el('div', 'k-oops-what');
+    var b = document.createElement('bdi');
+    b.textContent = text;
+    d.appendChild(b);
+    return d;
+  }
+
+  // Заголовки приходят из данных и из адреса — ставим их textContent, а не в разметку.
+  function oopsList(rows) {
+    var wrap = el('div', 'k-oops-list');
+    rows.forEach(function (r) {
+      var a = document.createElement('a');
+      a.href = r.href;
+      var n = el('div', 'k-oops-n'); n.textContent = r.title; a.appendChild(n);
+      if (r.sub) { var s = el('div', 'k-oops-s'); s.textContent = r.sub; a.appendChild(s); }
+      wrap.appendChild(a);
+    });
+    return wrap;
+  }
+
+  function renderNoTopic(badId) {
+    var box = oopsHead(T('Такой темы нет'),
+      T('В адресе указана тема, которой в курсе нет: похоже, ссылка устарела или в ней опечатка.'));
+    if (badId) box.appendChild(oopsWhat('?t=' + badId));
+    box.appendChild(learnLink());
+    fetch('/data/theory/courses/index.json', { cache: 'no-cache' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (idx) {
+        var branch = (idx && window.B42Lang && B42Lang.pick(idx)) || idx;
+        var list = (branch && branch.topics) || (idx && idx.topics) || [];
+        if (!list.length) return;
+        var sec = el('section', 'k-sec');
+        sec.appendChild(el('h2', null, T('Темы курса')));
+        sec.appendChild(oopsList(list.map(function (t) {
+          return { href: '?t=' + encodeURIComponent(t.id) + '&lang=' + LANG, title: t.title, sub: t.sub };
+        })));
+        box.appendChild(sec);
+      })
+      .catch(function () { /* списка нет — ссылка на дерево знаний выше уже есть */ });
+  }
+
+  function renderNoLesson(course, badPart) {
+    var C = (window.B42Lang && B42Lang.pick(course)) || course.ru || {};
+    var box = oopsHead(T('Такого параграфа нет'),
+      T('В этой теме нет параграфа с таким адресом. Вот всё, что в ней есть:'));
+    box.appendChild(oopsWhat('?t=' + TOPIC + '&p=' + badPart));
+    var sec = el('section', 'k-sec');
+    sec.appendChild(el('h2', null, C.title || T('Темы курса')));
+    var rows = (course.lessons || []).map(function (l, i) {
+      return {
+        href: '?t=' + encodeURIComponent(course.id) + '&p=' + encodeURIComponent(l.id) + '&lang=' + LANG,
+        title: (i + 1) + '. ' + l.title, sub: l.sub
+      };
+    });
+    sec.appendChild(oopsList(rows));
+    box.appendChild(sec);
+    box.appendChild(learnLink());
+  }
+
+  function renderOops(e) {
+    var box = oopsHead(T('Не удалось загрузить материал'),
+      T('Похоже, оборвалась связь с сервером. Обновите страницу — обычно этого хватает.'));
+    var b = el('button', 'k-mark-go', T('Обновить страницу'));
+    b.type = 'button';
+    b.addEventListener('click', function () { location.reload(); });
+    box.appendChild(b);
+    box.appendChild(learnLink());
+    var det = el('details', 'k-oops-dev');
+    var s = el('summary'); s.textContent = T('Подробности для разработчика'); det.appendChild(s);
+    var pre = document.createElement('pre');
+    pre.textContent = String((e && (e.stack || e.message)) || e || '');
+    det.appendChild(pre);
+    box.appendChild(det);
   }
 
   var UI_STRINGS = {
@@ -1144,34 +1608,52 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
     .then(function (d) { CONSTANTS = d.items; })
     .catch(function () { CONSTANTS = null; });
 
-  fetch(BASE + 'course.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (course) {
+  /* 404 — это «такого нет», а не «сломался JSON». Различаем здесь: раньше на несуществующей
+     теме r.json() парсил html-заглушку сервера и падал с SyntaxError, а читатель получал
+     текст исключения на пустой странице. */
+  function jget(url) {
+    return fetch(url, { cache: 'no-cache' }).then(function (r) {
+      if (!r.ok) { var e = new Error('HTTP ' + r.status + ' · ' + url); e.httpStatus = r.status; throw e; }
+      return r.json();
+    });
+  }
+  function lessonFail(e, course, part) {
+    if (e && e.httpStatus === 404) renderNoLesson(course, part); else renderOops(e);
+  }
+
+  // Кнопка «наверх» нужна на любом виде страницы. Через setTimeout — чтобы подписи брались
+  // из словаря course-i18n.js, который подключён ниже этого скрипта.
+  setTimeout(mountTopButton, 0);
+
+  jget(BASE + 'course.json').then(function (course) {
     // оглавление на языке читателя: заголовки параграфов лежат в языковых ветках
     if (course[LANG] && course[LANG].lessons) course.lessons = course[LANG].lessons;
     BOT = B42Tutor.Bot({ lang: LANG, strings: UI_STRINGS, maxQuestions: 10, maxLen: 600 });
     if (PART === 'guide') {
-      return fetch(BASE + 'guide.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (g) {
+      return jget(BASE + 'guide.json').then(function (g) {
         renderGuide(g, course);
         setTimeout(function () { renderMath(root); }, 300);
-      });
+      }, function (e) { lessonFail(e, course, PART); });
     }
     if (!PART) { renderOverview(course); setTimeout(function () { renderMath(root); }, 300); return; }
-    return fetch(BASE + PART + '.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (lesson) {
+    return jget(BASE + PART + '.json').then(function (lesson) {
       function done(md2) {
         renderLesson(lesson, course, md2);
         // формулы внутри обычного текста ($...$) — тоже математическим набором
         setTimeout(function () { renderMath(root); }, 300);
       }
       if (!lesson.model) { done(null); return; }
-      return fetch('/data/theory/' + lesson.model + '.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(done);
-    });
-  }).catch(function (e) {
-    root.appendChild(el('h1', null, 'Не удалось загрузить материал'));
-    root.appendChild(el('p', null, String(e)));
-  });
+      // Не приехал файл стенда — параграф всё равно открывается. Раньше одна недостающая
+      // модель гасила весь урок и уводила читателя на экран ошибки.
+      return jget('/data/theory/' + lesson.model + '.json').then(done, function () { done(null); });
+    }, function (e) { lessonFail(e, course, PART); });
+  }, function (e) {
+    if (e && e.httpStatus === 404) renderNoTopic(TOPIC); else renderOops(e);
+  }).catch(function (e) { renderOops(e); });
 })();
 </script>
 
-<script src="/js/course-i18n.js?v=37e49bc0b4"></script>
+<script src="/js/course-i18n.js?v=494ca8f047"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {

@@ -55,6 +55,12 @@ def at_revision(path, rev):
         return None
 
 
+def same(a, b):
+    """Одинаковы ли два блока. Сравниваем текстом, чтобы списки и словари шли наравне."""
+    return json.dumps(a, ensure_ascii=False, sort_keys=True) == \
+           json.dumps(b, ensure_ascii=False, sort_keys=True)
+
+
 def branches(d):
     """Языковые ветки: наверху файла или внутри полей (ui/course у учебника)."""
     if isinstance(d.get("ru"), dict):
@@ -85,9 +91,8 @@ def main():
             for key, val in (nb.get("ru") or {}).items():
                 if key in SKIP:
                     continue
-                before = (ob.get("ru") or {}).get(key)
-                if before is None or json.dumps(before, ensure_ascii=False, sort_keys=True) == \
-                                     json.dumps(val, ensure_ascii=False, sort_keys=True):
+                old_ru = ob.get("ru") or {}
+                if key not in old_ru or same(old_ru[key], val):
                     continue
                 # Русский блок изменился. Но если ту же правку внесли и в языковую ветку
                 # (так бывает при структурных правках — переименовали поле во всех языках
@@ -97,9 +102,19 @@ def main():
                     lb = nb.get(lang)
                     if not (isinstance(lb, dict) and key in lb):
                         continue
-                    lang_before = (ob.get(lang) or {}).get(key)
-                    lang_now = lb.get(key)
-                    lang_changed = json.dumps(lang_before, ensure_ascii=False, sort_keys=True) !=                                    json.dumps(lang_now, ensure_ascii=False, sort_keys=True)
+                    old_lang = ob.get(lang)
+                    if isinstance(old_lang, dict) and key in old_lang:
+                        lang_changed = not same(old_lang[key], lb[key])
+                    else:
+                        # Перевода этого ключа в той ревизии не было вовсе. Раньше здесь
+                        # сравнивали json.dumps(None) — «null» — с текстом перевода; они,
+                        # понятно, не совпадали, ключ засчитывался как «поправили на всех
+                        # языках сразу» и в отчёт не попадал. Молчал инструмент ровно про
+                        # свой случай: блок сперва перевели, а потом починили по-русски.
+                        # Отсутствие старого перевода ничего не доказывает, а перевод одного
+                        # ключа стоит дешевле, чем строчка, которую мы уже признали ошибкой,
+                        # оставшаяся у читателя, — считаем такой перевод устаревшим.
+                        lang_changed = False
                     if not lang_changed:
                         stale.append("%s%s · %s [%s]" % (f.parent.name + "/" + f.stem,
                                                          ("." + owner) if owner else "", key, lang))

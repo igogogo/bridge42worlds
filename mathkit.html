@@ -34,13 +34,18 @@
   .m-toc a:hover{color:var(--accent)}
   .m-toc a.lvl{font-weight:700;color:var(--ink);margin-top:12px;border-color:var(--accent)}
 
-  .m-lvl{margin:34px 0 14px;display:flex;align-items:center;gap:10px}
+  .m-lvl{margin:34px 0 14px;display:flex;align-items:center;gap:10px;scroll-margin-top:var(--m-anchor,20px)}
   .m-lvl-n{font-family:var(--font-display);font-size:13px;font-weight:700;text-transform:uppercase;
     letter-spacing:.1em;color:var(--muted);white-space:nowrap}
   .m-lvl::after{content:"";flex:1;height:2px;background:var(--line)}
 
   .m-card{border:1px solid var(--line);border-radius:13px;background:var(--surface);
-    padding:17px 19px;margin-bottom:14px;scroll-margin-top:20px}
+    padding:17px 19px;margin-bottom:14px;scroll-margin-top:var(--m-anchor,20px);
+    transition:border-color .3s,box-shadow .3s}
+  /* Читатель приходит сюда по ссылке из врезки параграфа: карточку под якорем надо не только
+     показать, но и назвать глазу — иначе среди двух десятков одинаковых он ищет нужную заново. */
+  .m-card:target,.m-card.is-target{border-color:var(--accent);
+    box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent)}
   .m-name{font-family:var(--font-display);font-size:17px;font-weight:600;display:flex;
     align-items:center;gap:9px;margin-bottom:11px}
   .m-name svg{color:var(--accent);flex:none}
@@ -111,6 +116,43 @@
     catch (e) { node.textContent = latex; }
   }
 
+  // Карточки рождаются из fetch, то есть уже после того, как браузер разобрал адрес и не нашёл
+  // якорь. Поэтому со ссылки вида ?lang=ru#m-taylor читатель попадал наверх страницы и искал
+  // формулу руками. Доводим сами и помечаем карточку — :target тут не спасает, он только красит.
+  // Шапку и строку языков sitenav делает липкими уже после загрузки, и высота у них своя на
+  // каждом языке и ширине (на арабском 375 это 99 px против 87 на десктопе). Меряем их, а не
+  // подбираем отступ на глаз, иначе карточка приезжает ровно под шапку. Считаем по прямым детям
+  // body: боковое оглавление тоже липкое, но оно сбоку и в счёт не идёт. Результат кладём в
+  // переменную, которой пользуется scroll-margin-top, — тогда и родной прыжок браузера по
+  // клику в оглавлении встаёт правильно, без нашего вмешательства.
+  function syncAnchorPad() {
+    var pad = 0, kids = document.body.children;
+    for (var i = 0; i < kids.length; i++) {
+      var r = kids[i].getBoundingClientRect();
+      if (!r.height || r.top > 120) continue;
+      var p = getComputedStyle(kids[i]).position;
+      if (p === 'fixed' || p === 'sticky') pad = Math.max(pad, r.bottom);
+    }
+    document.documentElement.style.setProperty('--m-anchor', (pad + 14) + 'px');
+  }
+  window.addEventListener('resize', syncAnchorPad);
+
+  var marked = null;
+  function goToHash(smooth) {
+    var id = decodeURIComponent((location.hash || '').slice(1));
+    if (!id) return false;
+    var node = document.getElementById(id);
+    if (!node) return false;
+    syncAnchorPad();
+    if (marked && marked !== node) marked.classList.remove('is-target');
+    marked = node;
+    node.classList.add('is-target');
+    // 'instant', а не 'auto': в style.css у html стоит scroll-behavior: smooth, и 'auto' её
+    // наследует — первый заход и поправки на подросшую вёрстку выглядели бы как рывки.
+    node.scrollIntoView({ behavior: smooth ? 'smooth' : 'instant', block: 'start', inline: 'nearest' });
+    return true;
+  }
+
   fetch('/data/theory/mathkit.json', { cache: 'no-cache' })
     .then(function (r) { return r.json(); })
     .then(function (d) {
@@ -174,6 +216,28 @@
         a.href = '#m-' + it.id;
         toc.appendChild(a);
       });
+
+      // Первый заход — сразу, без анимации: страница только что построилась, прокручивать
+      // читателю нечего. Но она ещё дорастает под нами: KaTeX дотягивает свои шрифты, формулы
+      // прибавляют в высоте, и якорь уезжает вниз. Поэтому пока высота гуляет — держим карточку
+      // на месте, а как только читатель сам взялся за колесо, отпускаем и больше не вмешиваемся.
+      syncAnchorPad();
+      if (goToHash(false)) {
+        var held = true;
+        var release = function () { held = false; if (ro) ro.disconnect(); };
+        var ro = window.ResizeObserver ? new ResizeObserver(function () { if (held) goToHash(false); }) : null;
+        if (ro) ro.observe(document.body);
+        ['wheel', 'touchstart', 'keydown', 'pointerdown'].forEach(function (ev) {
+          window.addEventListener(ev, release, { once: true, passive: true });
+        });
+        window.addEventListener('load', function () { if (held) goToHash(false); });
+        // Отдельная точка — шрифты KaTeX: они приходят последними и разом меняют высоту всех формул.
+        if (document.fonts && document.fonts.ready) {
+          document.fonts.ready.then(function () { if (held) goToHash(false); });
+        }
+        setTimeout(release, 6000);
+      }
+      window.addEventListener('hashchange', function () { goToHash(true); });
     })
     .catch(function (e) { root.appendChild(el('div', 'm-empty', String(e))); });
 })();
