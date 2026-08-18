@@ -494,5 +494,1340 @@
     "hint": "Сначала определите γ: у одноатомного газа работают только три поступательные степени свободы. Молярную массу переведите в килограммы на моль, иначе ответ уйдёт в тридцать раз."
    }
   ]
+ },
+ "en": {
+  "formula": {
+   "name": "Mayer's relation and heat capacity via degrees of freedom",
+   "latex": "C_p - C_V = R, \\qquad C_V = \\frac{i}{2}R, \\qquad \\gamma = \\frac{C_p}{C_V} = \\frac{i+2}{i}",
+   "alsoKnown": "Mayer's equation; equipartition theorem; adiabatic index γ",
+   "authors": [
+    {
+     "who": "Julius Robert Mayer",
+     "year": "1842",
+     "what": "in the article 'Remarks on the Forces of Inanimate Nature' he linked heat and work and calculated the mechanical equivalent of heat precisely from the difference in heat capacities of air — essentially from the very formula that bears his name"
+    },
+    {
+     "who": "James Prescott Joule",
+     "year": "1845",
+     "what": "released compressed gas into an evacuated vessel and found no temperature change: this means the internal energy of a rarefied gas depends on temperature and not on volume — an assumption without which Mayer's derivation falls apart"
+    },
+    {
+     "who": "Pierre-Simon Laplace",
+     "year": "1816",
+     "what": "corrected Newton's formula for the speed of sound by replacing isothermal compressibility with adiabatic compressibility, thereby turning an acoustic experiment into a measuring instrument for γ"
+    },
+    {
+     "who": "James Clerk Maxwell",
+     "year": "1875",
+     "what": "in a lecture on molecules called the discrepancy between measured heat capacities and the equipartition theorem the most notable failure of molecular theory — and honestly admitted he had no explanation"
+    },
+    {
+     "who": "Albert Einstein",
+     "year": "1907",
+     "what": "using the heat capacity of a solid, showed what Maxwell was missing: a degree of freedom does not work if its quantum is more expensive than kT — and the drop in heat capacity upon cooling came out naturally"
+    }
+   ],
+   "story": "Mayer was a ship's doctor. In 1840 he sailed to Java and, while bleeding sailors, noticed that venous blood in the tropics was lighter than usual — as if in a hot climate the body burns less oxygen. From this he came to the idea that heat and work are the same thing, only in different currencies, and the exchange rate is constant. He had nothing to calculate this rate with: he had no instruments. He took other people's tabulated heat capacities of air at constant pressure and at constant volume, subtracted one from the other, and declared that the difference is exactly the heat that went into pushing apart the atmosphere. The logic is impeccable, and we will repeat it below verbatim. The answer came out almost fifteen percent below the correct one — 3.58 joules per calorie instead of 4.18 — simply because the tabulated heat capacities of that time were poor. Then the story turns sad. Mayer's article was initially rejected, priority was given to Joule, who measured the same rate with careful experiments, and Mayer himself threw himself out of a window in 1850 and spent several years in a sanatorium. Recognition came in the sixties when Tyndall and Clausius brought his work back into circulation. The formula he derived from two other people's numbers and one line of reasoning still stands in textbooks today.",
+   "symbols": [
+    {
+     "sym": "C_V",
+     "latex": "C_V",
+     "what": "molar heat capacity at constant volume",
+     "unit": "J/(mol·K)",
+     "note": "how much heat a mole of gas asks for per degree if the vessel is rigid; for air 20.8"
+    },
+    {
+     "sym": "C_p",
+     "latex": "C_p",
+     "what": "molar heat capacity at constant pressure",
+     "unit": "J/(mol·K)",
+     "note": "same, but the piston is free and the gas expands along the way; for air 29.1"
+    },
+    {
+     "sym": "R",
+     "latex": "R",
+     "what": "universal gas constant",
+     "unit": "J/(mol·K)",
+     "note": "here it reads as the fee for expanding a mole by one degree at constant pressure"
+    },
+    {
+     "sym": "U",
+     "latex": "U",
+     "what": "internal energy of the gas",
+     "unit": "J",
+     "note": "sum of the energies of molecular motion; for an ideal gas depends only on temperature"
+    },
+    {
+     "sym": "i",
+     "latex": "i",
+     "what": "number of degrees of freedom of a molecule",
+     "unit": "dimensionless",
+     "note": "not a geometric characteristic, but a count of ways to store energy that WORK at a given temperature"
+    },
+    {
+     "sym": "γ",
+     "latex": "\\gamma",
+     "what": "adiabatic index",
+     "unit": "dimensionless",
+     "note": "ratio of C_p to C_V; being dimensionless makes it measurable without units of heat"
+    },
+    {
+     "sym": "θ",
+     "latex": "\\theta",
+     "what": "characteristic temperature of a degree of freedom",
+     "unit": "K",
+     "note": "quantum divided by k_B: the price of the first step in degrees; for nitrogen rotation 2.9 K, for vibration 3390 K"
+    },
+    {
+     "sym": "c",
+     "latex": "c",
+     "what": "speed of sound",
+     "unit": "m/s",
+     "note": "in a gas depends on temperature and not on pressure: the formula includes the ratio of p to ρ"
+    },
+    {
+     "sym": "M",
+     "latex": "M",
+     "what": "molar mass of the gas",
+     "unit": "kg/mol",
+     "note": "for air 0.028 97 — an average over the mixture; for helium 0.004 00"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Rigorous derivation",
+   "lead": "From the ready-made material we will need only two bricks: the first law of thermodynamics and the equation of state pV = nRT. There will be no new postulates in the derivation, but there will be one assumption that we will name out loud and then test for strength.",
+   "steps": [
+    {
+     "text": "Let's start with the fact that the question 'what is the heat capacity of a gas' is posed incompletely. Heat capacity is the ratio of the heat received to the increase in temperature, but heat is not a function of state: it depends on the path by which the gas went from the initial point to the final point. Take the same portion of air and supply the same joules to it in two ways. In a rigid cylinder, the thermometer will go noticeably further than under a free piston—and these are not different substances, but different processes. Hence the two numbers in the reference book: 718 and 1005 joules per kilogram per degree, differing by exactly 1.40 times.",
+     "latex": "C \\equiv \\frac{\\delta Q}{dT} \\;\\text{depends on path}; \\qquad c_V^{\\text{air}} = 718, \\quad c_p^{\\text{air}} = 1005 \\ \\frac{\\text{J}}{\\text{kg}\\cdot\\text{K}}",
+     "figure": "realheat",
+     "figCaption": "One gas, one portion of heat, two vessels: in a rigid cylinder the temperature rises more than under a free piston"
+    },
+    {
+     "text": "Let's fix the piston. Then the volume does not change, the gas does not move anything and does no work: in the first law, the second term vanishes, and all the supplied heat goes into internal energy. The definition of heat capacity at constant volume is obtained immediately, and this is precisely a definition, not a consequence. Note the index V on the partial derivative: it is a load-bearing structure here, not a decoration—about energy, they ask how it grows with temperature at constant volume, and another question would give another answer.",
+     "latex": "\\delta Q = dU + p\\,dV, \\qquad dV = 0 \\;\\Longrightarrow\\; \\delta Q = dU \\;\\Longrightarrow\\; C_V \\equiv \\left(\\frac{\\partial U}{\\partial T}\\right)_V",
+     "figure": "realpiston",
+     "figCaption": "Piston on a stop: the gas does not move anything, and all the heat remains inside—in the speed of molecules"
+    },
+    {
+     "text": "Now let's release the piston and put a constant load on it so that the pressure remains unchanged. To the previous account is added the work of expansion. Let's calculate it for a mole of ideal gas: from pV = RT at constant p it follows that the product of p and the increase in volume equals R multiplied by the increase in temperature. This is the main surprise of the derivation—the surcharge per degree is R joules per mole and does not depend on pressure, volume, or whether we have helium or carbon dioxide. Under normal conditions, a mole occupies 24 liters, and for one degree it pushes the atmosphere apart by about 82 cubic centimeters.",
+     "latex": "p\\,\\Delta V = R\\,\\Delta T \\quad (p = \\text{const}), \\qquad \\delta Q_p = dU + p\\,dV",
+     "figure": "realwork",
+     "figCaption": "Free piston with a load: the gas heats up and simultaneously lifts the atmosphere, and the price for this is exactly R per mole and per degree"
+    },
+    {
+     "text": "Subtract one from the other. The increase in internal energy is the same in both cases—and here lies the assumption without which the whole derivation is incorrect: the internal energy of an ideal gas depends only on temperature, not on volume. Joule tested this in 1845: he released compressed gas into an evacuated vessel, so the gas did no work against anything, and the temperature did not change. So spreading molecules 'for free'—in the absence of forces between them—costs no energy. For the van der Waals gas from the first paragraph of this topic, the assumption is already incorrect; there molecules attract, and pulling them apart requires energy expenditure.",
+     "latex": "C_p = \\left(\\frac{\\partial U}{\\partial T}\\right)_p + R = C_V + R \\;\\Longrightarrow\\; \\boxed{\\,C_p - C_V = R\\,} \\quad (\\text{Mayer, 1842})",
+     "figure": "realmayer",
+     "figCaption": "Two measured numbers and one difference: 29.10 minus 20.79 gives 8.31—the universal gas constant"
+    },
+    {
+     "text": "Mayer's relation gives the difference, but not the heat capacities themselves. The value of C_V has to be taken from counting: how many independent ways a molecule has to store energy. The equipartition theorem answers that for each such way there is on average half kT, and then the molar heat capacity equals i halves R. Let's check on the simplest gas. For monatomic helium, the molecule is a point; it can only move in three directions, so i = 3 and C_V should equal 12.47 J/(mol·K), and C_p—20.79. The reference book gives 12.5 and 20.79. Coincidence to the third significant digit, and there were no fitting parameters in the calculation.",
+     "latex": "\\bar\\varepsilon = \\frac{i}{2}k_BT \\;\\Longrightarrow\\; U = \\frac{i}{2}RT, \\quad C_V = \\frac{i}{2}R; \\qquad i = 3:\\; C_V = 12{,}47,\\; C_p = 20{,}79\\ \\frac{\\text{J}}{\\text{mol}\\cdot\\text{K}}",
+     "figure": "realdof",
+     "figCaption": "Three directions of motion—three degrees of freedom: the formula gives 12.47, helium shows 12.5"
+    },
+    {
+     "text": "We move to a diatomic molecule—and the count breaks. A dumbbell has three translational degrees, two rotational (around the axis of the dumbbell there is nothing to rotate) and two vibrational, because vibration along the bond stores energy twice: in speed and in stretching the spring. Total seven, so C_V should be 29.1. The measured heat capacity of nitrogen at room temperature is 20.8, that is, exactly five halves R. Two degrees of freedom simply do not respond. The explanation is not in the rigidity of the bond, but in the fact that energy is given out in portions: the vibrational step of nitrogen costs 3390 kelvins, the thermal trifle of 300 kelvins does not reach it, and the vibration is silent (the population of the first step is 1.2·10⁻⁵—the calculation is analyzed in the paragraph on the Boltzmann factor). The rotational step, on the contrary, costs only 2.9 kelvins and is wide open. Here the quantum sticks out of classical thermodynamics: the numbers are integers, but which ones—is decided not by the geometry of the molecule, but by temperature.",
+     "latex": "i_{\\text{class}} = 3 + 2 + 2 = 7 \\;\\Rightarrow\\; C_V = 29{,}1; \\qquad \\text{experiment: } C_V(\\mathrm{N_2}) = 20{,}8 = \\tfrac{5}{2}R; \\qquad \\theta_{\\text{rot}} = 2{,}9\\,\\text{K} \\ll T \\ll \\theta_{\\text{vib}} = 3390\\,\\text{K}",
+     "figure": "realladder",
+     "figCaption": "Rotational steps are smaller than the thermal quantum and work; the vibrational one is eleven times more expensive than kT and is silent"
+    },
+    {
+     "text": "Since we now know how to calculate C_V, and we know the difference, we will also calculate the ratio. It turns out to be a pure fraction of an integer: γ = (i + 2)/i. This is the most practical quantity of the entire paragraph, and here's why. Heat capacity is difficult to measure: you need a calorimeter, you need to know the mass of the gas, you need to account for the heat capacity of the vessel itself and losses to the environment. And γ is dimensionless—it requires neither units of heat nor units of mass. Three possible values stand far apart: 1.67 for monatomic, 1.40 for diatomic, 1.29 for a molecule with unfrozen vibration. They just need to be distinguished, and this is already a task for any experiment where γ enters the answer.",
+     "latex": "\\gamma = \\frac{C_p}{C_V} = \\frac{C_V + R}{C_V} = 1 + \\frac{2}{i} = \\frac{i+2}{i}: \\qquad \\tfrac{5}{3} = 1{,}67, \\quad \\tfrac{7}{5} = 1{,}40, \\quad \\tfrac{9}{7} = 1{,}29",
+     "figure": "realgamma",
+     "figCaption": "Three values of γ on one scale: the fewer working degrees of freedom a molecule has, the larger γ is"
+    },
+    {
+     "text": "Such an experiment exists, and it does not even require a laboratory: sound. In a sound wave, compressions and rarefactions alternate thousands of times per second, heat does not have time to flow between neighboring regions, and the process goes along an adiabat—and γ enters it as an exponent (the adiabatic equation itself is derived in the topic on engines; we take it ready-made). Hence c = √(γp/ρ), that is, c = √(γRT/M). Newton in the 'Principia' considered compressions isothermal, which is equivalent to γ = 1, and got 290 m/s against the measured 343—a miss of fifteen percent that lasted more than a century until Laplace in 1816 put the adiabatic exponent back in place. Today the formula is read in the reverse direction: 343 m/s for air give γ = 1.40 and i = 5, helium's 1007 m/s give i = 3, and 267 m/s for carbon dioxide give i ≈ 6.9, because for a linear triatomic molecule the deformation vibration costs only 960 kelvins and at room temperature is almost half unfrozen. A stopwatch measured the number of degrees of freedom.",
+     "latex": "c = \\sqrt{\\frac{\\gamma p}{\\rho}} = \\sqrt{\\frac{\\gamma R T}{M}} \\;\\Longrightarrow\\; \\gamma = \\frac{c^{2}M}{RT}, \\quad i = \\frac{2}{\\gamma - 1}; \\qquad \\mathrm{He}\\ 1007, \\;\\text{air}\\ 343, \\;\\mathrm{CO_2}\\ 267\\ \\text{m/s}",
+     "figure": "realsound",
+     "figCaption": "Newton considered the wave isothermal and got 290 m/s; the adiabatic factor γ adds the missing fifteen percent"
+    }
+   ],
+   "plate": "C_p - C_V = R, \\qquad C_V = \\frac{i}{2}R, \\qquad \\gamma = \\frac{i+2}{i}",
+   "plateCap": "On the left is the price of piston freedom: exactly R joules per mole and per degree, the same for any ideal gas. In the middle is the heat capacity itself, assembled from an integer number of working degrees of freedom. On the right is the dimensionless ratio that connects these two statements with a stopwatch and therefore is easiest to test in experiment.",
+   "note": "Let's collect the assumptions, which are also the boundaries of the formulas. First: the gas is ideal, that is, U = U(T). As soon as the attraction of molecules ceases to be negligible—and in the first paragraph of this topic we folded it into the correction a/V²—the difference C_p − C_V ceases to equal R and begins to depend on volume; the general formula is given below, in the appendix. Second: the number i was considered integer and constant. In fact, this is not so, and the vibrational degree of freedom turns on not like a switch, but smoothly, smeared over several hundred degrees; integers are a good approximation only in the temperature window where all steps are certainly either much lower than kT or much higher. Third: air is not a gas, but a mixture, and all its 'diatomic' numbers are averaged over nitrogen, oxygen, and argon; a pure mixture of diatomic gases would give exactly 1.4000, argon raises the calculated value to 1.4015, and the slightly opened vibration of oxygen at room temperature (its $\\theta = 2270$ K) pulls back to the reference 1.400—three decimal places here are not a decoration, but the result of opposing effects. Fourth: the equipartition theorem is a classical theorem, and it was derived for a system where energy can take any values; where this is not true, it does not 'slightly err' but gives a qualitatively wrong answer, and it was precisely on heat capacities that this was first discovered. Fifth: the formula for the speed of sound assumes that heat exchange does not have time at all and that all degrees of freedom have time to exchange energy with translational motion during one compression. The second condition for carbon dioxide is satisfied at the limit, and at high frequencies its γ changes before our eyes—this is also mentioned in the appendix."
+  },
+  "math": {
+   "title": "The Math You'll Need Here",
+   "lead": "Three places where it's easy to slip up on autopilot: the subscript on a partial derivative, the behavior of the exponential, and reading proportionality under a square root.",
+   "items": [
+    {
+     "what": "Partial derivative and what's in its subscript",
+     "why": "The notation (∂U/∂T)_V reads: \"we change the temperature, while keeping the volume constant.\" The subscript is not a marginal note, but half the problem statement: for a function of several variables, there is no \"derivative with respect to T\" — there is a derivative with respect to T along a chosen direction. For an ideal gas, both derivatives — at constant volume and at constant pressure — happen to coincide, because U doesn't depend on volume at all, and the whole Mayer's relation rests on that. Once the energy starts to depend on volume, the coincidence disappears: in general, C_p − C_V is assembled from three derivatives at once, and there you won't get R or any other universal constant. A useful skill: when you see a derivative without a subscript in thermodynamics, immediately ask what is held fixed — otherwise the expression is simply undefined.",
+     "latex": "\\left(\\frac{\\partial U}{\\partial T}\\right)_V \\neq \\left(\\frac{\\partial U}{\\partial T}\\right)_p \\;\\text{in general}; \\qquad C_p - C_V = T\\left(\\frac{\\partial p}{\\partial T}\\right)_V\\left(\\frac{\\partial V}{\\partial T}\\right)_p",
+     "kit": "partial"
+    },
+    {
+     "what": "Exponential as a switch, not a slope",
+     "why": "The fraction of molecules that reach a step of height θ is given by the factor exp(−θ/T), and its whole behavior is that it changes not gradually, but abruptly. At θ/T = 3, that's already five percent — the step is noticeably populated. At θ/T = 11.3, it's 1.2·10⁻⁵ — one molecule in eighty thousand is populated, and the contribution to heat capacity vanishes. Between these two cases, there's only a factor of nearly four in temperature, but the result differs by a factor of four thousand. Hence the integers in i: a degree of freedom almost always either fully works or fully stays silent, and the intermediate state occupies a narrow window. The exact form of the transition is the Einstein function, shown on the right; for small θ/T it tends to 1, i.e., to classical equipartition, and for large θ/T it falls off as an exponential. We won't dissect the Boltzmann factor itself here; it's derived in the topic on statistics.",
+     "latex": "\\frac{C_{\\text{vib}}}{R} = \\frac{x^{2}e^{x}}{(e^{x}-1)^{2}}, \\quad x = \\frac{\\theta}{T}: \\qquad x \\ll 1 \\Rightarrow 1, \\qquad x = 3.2 \\Rightarrow 0.45, \\qquad x = 11.3 \\Rightarrow 1.6\\cdot10^{-3}",
+     "kit": "exponent"
+    },
+    {
+     "what": "Proportionality under the root: what affects what more strongly",
+     "why": "In the speed of sound formula, under the square root there are two properties of the gas — the adiabatic index γ and the molar mass M. Both enter in the same form, but they differ greatly in magnitude. γ can only wander between 1.29 and 1.67, and its square root is between 1.14 and 1.29: a spread of only fifteen percent, no matter how you slice it. But the molar mass ranges from 2 g/mol for hydrogen to 44 for carbon dioxide and beyond, i.e., by tens of times, and its square root varies by factors. Practical conclusion: if the speed of sound in two gases differs by a factor of three, it's almost certainly due to mass, not molecular structure. Check with helium and air: mass gives a factor of 2.69, the index only 1.09, together 2.94, and the measured ratio 1007/343 equals 2.94.",
+     "latex": "c \\propto \\sqrt{\\frac{\\gamma}{M}}: \\qquad \\frac{c_{\\mathrm{He}}}{c_{\\text{air}}} = \\sqrt{\\frac{1.667}{1.400}}\\cdot\\sqrt{\\frac{28.97}{4.00}} = 1.09 \\cdot 2.69 = 2.94",
+     "kit": "propto"
+    }
+   ]
+  },
+  "example": {
+   "title": "Example with numbers",
+   "lead": "Let's take a cubic meter of ordinary room air and heat it by ten degrees in two ways. Then, without touching the calorimeter at all, we'll extract the number of degrees of freedom from a single measured quantity—the speed of sound.",
+   "given": "A cubic meter of air at 20 °C (293.15 K) and pressure 101,325 Pa. Molar mass of air M = 28.97 g/mol, C_V = 5/2·R, C_p = 7/2·R, R = 8.314 J/(mol·K). Heat by ΔT = 10 K first in a rigid container, then under a free piston. Second part: the measured speed of sound in the same air is c = 343 m/s—find γ and i from it.",
+   "law": "Q = n·C·ΔT, where C equals C_V at constant volume and C_p = C_V + R at constant pressure; the number of moles is taken from pV = nRT. For the second part, γ = c²M/(RT) and i = 2/(γ − 1).",
+   "solution": [
+    {
+     "text": "How many moles fit in a cubic meter. This is the usual equation of state, and the number is useful to remember: at room conditions, a cubic meter of air contains just over forty moles, that is, about 1.2 kilograms.",
+     "latex": "n = \\frac{pV}{RT} = \\frac{101\\,325 \\cdot 1}{8{,}314 \\cdot 293{,}15} = \\frac{101\\,325}{2437} = 41{,}6\\ \\text{mol}"
+    },
+    {
+     "text": "Rigid container. No work is done, all heat goes into internal energy.",
+     "latex": "Q_V = n\\,C_V\\,\\Delta T = 41{,}6 \\cdot 20{,}79 \\cdot 10 = 8{,}65\\cdot10^{3}\\ \\text{J} \\approx 8{,}6\\ \\text{kJ}"
+    },
+    {
+     "text": "Free piston. Same plus work of expansion.",
+     "latex": "Q_p = n\\,C_p\\,\\Delta T = 41{,}6 \\cdot 29{,}10 \\cdot 10 = 1{,}21\\cdot10^{4}\\ \\text{J} \\approx 12{,}1\\ \\text{kJ}"
+    },
+    {
+     "text": "We'll compute the difference in two independent ways. First, via Mayer's relation. Second, honestly, through work: at constant pressure, the volume increases proportionally to absolute temperature; ten degrees from 293 give an increase of 3.4 percent in volume, that is, 34 liters, and pushing back the atmosphere takes p·ΔV. The numbers coincide to within rounding—and it couldn't be otherwise, since $p\\,\\Delta V = pV\\,\\Delta T/T = nR\\,\\Delta T$—and this is a check of the derivation.",
+     "latex": "n R \\Delta T = 41{,}6 \\cdot 8{,}314 \\cdot 10 = 3459\\ \\text{J}; \\qquad \\Delta V = V\\frac{\\Delta T}{T} = \\frac{10}{293{,}15} = 0{,}0341\\ \\text{m}^3, \\quad p\\,\\Delta V = 101\\,325 \\cdot 0{,}0341 = 3456\\ \\text{J}"
+    },
+    {
+     "text": "Now the speed of sound. We substitute the measured 343 m/s and solve the formula for γ, and then for i. There are no thermal units in this calculation at all—only meters, seconds, kilograms, and kelvins.",
+     "latex": "\\gamma = \\frac{c^{2}M}{RT} = \\frac{343^{2}\\cdot 0{,}028\\,97}{8{,}314\\cdot293{,}15} = \\frac{3408}{2437} = 1{,}398 \\;\\Longrightarrow\\; i = \\frac{2}{\\gamma-1} = \\frac{2}{0{,}398} = 5{,}02"
+    }
+   ],
+   "answer": "The rigid container requires 8.6 kJ, the free piston—12.1 kJ: heating at constant pressure costs forty percent more, and the entire difference, 3.46 kJ, went into expansion work. And the speed of sound 343 m/s gives γ = 1.398 and i = 5.02—those very five degrees of freedom obtained with a stopwatch and a ruler, without a single joule in the calculation.",
+   "check": "Three checks. First—return to the numbers from the introduction: divide the obtained heats by the mass of air. The mass is 41.6 · 0.028 97 = 1.205 kg, so the specific heat capacities come out 8649/(1.205·10) = 718 and 12 106/(1.205·10) = 1005 joules per kilogram per degree. These are the two reference figures with which the paragraph began, and they were not substituted—they were obtained. Second check, common sense: 12 kJ is a kilowatt kettle working for twelve seconds. Warming a cubic meter of air by ten degrees indeed costs almost nothing, and all the difficulty of heating is not in the air itself, but in the fact that it leaks away and that walls have to be heated. Third, reverse: if in the calculation i had turned out to be about three, one should look for an error in the molar mass: for the same 343 m/s to give γ = 5/3, the air would have to weigh 34.5 g/mol instead of 29. And if it had come out seven, it would be worth checking the temperature: at 1000 K, γ of air drops to 1.34, and i there indeed approaches six."
+  },
+  "constants": {
+   "title": "Constants of this section",
+   "lead": "Four numbers. The first is assigned by definition, the second lives in every ventilation calculation, the third is dimensionless and therefore measurable, the fourth explains why the second is not what classical theory promises.",
+   "items": [
+    {
+     "sym": "R",
+     "latex": "R",
+     "name": "Universal gas constant",
+     "value": "8.314 462 618",
+     "unit": "J/(mol·K)",
+     "why": "Since 2019, it is not measured but calculated exactly: R = N_A·k_B, and both constants on the right-hand side are fixed by the definitions of units. In this section, R acquires a completely everyday meaning — it is the price of expansion: how many extra joules a mole of gas asks for each degree if it is allowed to push the atmosphere apart. In specific form for air, R/M = 287 J/(kg·K), which is exactly the difference 1005 − 718.",
+     "mnemo": "\"Eight and a third.\" The old form is also useful: in calories, R ≈ 1.987 ≈ 2 cal/(mol·K) — hence the rule that the difference in molar heat capacities is about two calories per degree."
+    },
+    {
+     "sym": "c_p air",
+     "latex": "c_p^{\\text{air}}",
+     "name": "Specific heat capacity of air at constant pressure",
+     "value": "1005 (at 20 °C); molar 29.10",
+     "unit": "J/(kg·K) and J/(mol·K)",
+     "why": "The working number for all ventilation and climate control: a cubic meter of air weighs 1.2 kg, so heating it by one degree costs about 1.2 kJ. Hence the quick estimate of supply unit power: if you supply 300 cubic meters per hour and heat by 25 degrees, that is 300·1.2·1005·25/3600 ≈ 2.5 kW. The pair c_V = 718 and c_p = 1005 differs by exactly 287, i.e., by R/M — Mayer's relation in specific form.",
+     "mnemo": "\"A thousand joules per kilogram per degree\" — with an error of half a percent. The second figure, 718, is easily obtained by subtracting 287."
+    },
+    {
+     "sym": "γ air",
+     "latex": "\\gamma_{\\text{air}}",
+     "name": "Heat capacity ratio (adiabatic index) of air",
+     "value": "1.400 (at 20 °C)",
+     "unit": "dimensionless",
+     "why": "The only constant in this section that has no units — and that is why it is the easiest to measure: it is extracted from the speed of sound, from the pop of a cork, from the pressure change during rapid compression. The value 7/5 indicates that air molecules have five degrees of freedom. The number is not eternal: at 1000 K, vibrations of nitrogen and oxygen begin to unfreeze, and γ drops to 1.34 — so turbine and diesel calculations use a variable γ, not the textbook 1.4.",
+     "mnemo": "Seven fifths — because i = 5. The whole table comes from one fraction (i + 2)/i: 5/3 for monatomic, 7/5 for diatomic, 9/7 — if a diatomic molecule also gets a vibration. Around 1.29 at room temperature, carbon dioxide also ends up, but for its own reason: its deformation vibration is partially unfrozen."
+    },
+    {
+     "sym": "θ vib(N₂)",
+     "latex": "\\theta_{\\text{vib}}(\\mathrm{N_2})",
+     "name": "Characteristic vibrational temperature of the nitrogen molecule",
+     "value": "3390",
+     "unit": "K",
+     "why": "The price of the first vibrational step of the N—N bond, expressed in degrees: kθ = ħω. At 300 K, the ratio θ/T is 11.3, the Boltzmann factor gives 1.2·10⁻⁵, and the vibrational degree of freedom drops out of the heat capacity — hence the five instead of seven. For comparison, the rotational step of the same nitrogen costs 2.9 K, i.e., it is open in any weather. A detailed calculation of occupancy is in the section on the Boltzmann factor.",
+     "mnemo": "Three thousand four hundred degrees — that is almost the melting point of tungsten (3695 K). The vibrational quantum of nitrogen is so expensive that at such a temperature the most refractory metal is already almost flowing."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "How This Connects to the Rest of the Course",
+   "lead": "The number of degrees of freedom is the most portable result of this section: it appears in engines, in thermal conductivity, in statistics, and even in solids, where there are no gas molecules at all.",
+   "items": [
+    {
+     "h": "Engines and the Adiabatic Process",
+     "text": "The exponent γ, obtained here from counting degrees of freedom, appears as the exponent in the adiabatic equation pV^γ = const, and through it, in the compression temperature and in efficiency. In the topic on engines, we took γ directly from the geometry of the molecule; now it is clear that geometry sets only the upper limit, while how many degrees of freedom actually work is decided by temperature. A diesel engine ignites fuel without a spark precisely because γ > 1: compression by a factor of twenty raises the air temperature by 20^0.4 ≈ 3.3 times, that is, from 300 to a thousand kelvins. If γ were equal to one (that is, if the molecule had infinitely many working degrees of freedom), compression would not heat at all, and heat engines as we know them would not exist."
+    },
+    {
+     "h": "The Boltzmann Factor",
+     "text": "The freezing out of vibrations, which makes i equal to five instead of seven, is purely the exponential exp(−θ/T) from the topic on statistics. There it is derived and calculated quantitatively: θ = 3390 K, the ratio is 11.3, the population is 1.2·10⁻⁵. Here we use the result as a ready-made rule: a degree of freedom works if its quantum is cheaper than kT. Heat capacity turned out to be the first place in physics where energy quantization manifested itself in a macroscopic measurement — thirty years before it was given a name."
+    },
+    {
+     "h": "Thermal Conductivity and Viscosity",
+     "text": "In the formula for the thermal conductivity of a gas κ = ⅓·n·v̄·λ·c, the last factor is the heat capacity of a single molecule, c = (i/2)k_B, that is, the same counting of degrees of freedom, but per particle rather than per mole. Therefore, helium conducts heat better than nitrogen at equal concentration not because of its degrees of freedom, but despite them: it has fewer of them, and the factor c loses — but the light molecule flies faster and travels farther, and the gain in v̄ and λ more than compensates for this loss. There also appears the Prandtl number, which contains the ratio of C_p to C_V — another place where γ comes to the fore."
+    },
+    {
+     "h": "Solids and Phonons",
+     "text": "The same counting works in a crystal: an atom in a lattice has three directions of vibration, each storing energy twice, giving a total of six halves of kT, that is, C = 3R = 24.9 J/(mol·K) — the Dulong–Petit law. It holds for copper, silver, and lead, but fails for diamond, whose heat capacity at room temperature is only 6.1: the bonds in diamond are stiff, the vibrational quanta are expensive, and most of the degrees of freedom are frozen out in exactly the same way as the vibration of nitrogen. Einstein analyzed this case in 1907, Debye refined it in 1912, and the quanta of lattice vibrations have been called phonons ever since."
+    },
+    {
+     "h": "The First and Second Sections of This Topic",
+     "text": "Mayer's relation is derived for an ideal gas. A real gas from the first section, with its corrections a and b, gives a different difference in heat capacities, and the closer to the critical point, the stronger the discrepancy: at the critical point itself, C_p goes to infinity, because there the gas expands at constant pressure without any resistance. The surface from the second section also has its own heat capacity, and this is why σ decreases with temperature — but that is another story."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Fun: Test with your own hands",
+   "lead": "Both experiments below are heard with your ears, not seen with your eyes: γ enters the speed of sound, and therefore the pitch. The kitchen turns out to be a perfectly suitable acoustics laboratory.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "kitchen experiment",
+     "h": "The bottle's hum drops if you pour carbon dioxide into it",
+     "text": "Take two identical empty bottles. Blow across the neck of the first one — you'll get a steady hum; remember its pitch (or record it on your phone and compare later with any tuner). Into the second, put a spoonful of baking soda, pour in a little vinegar, and once the foam settles, carefully 'pour' the gas from that bottle into a third, dry and empty one: carbon dioxide is one and a half times heavier than air and pours almost like water. Do not screw the cap on any bottle — the gas is released vigorously, and a closed bottle becomes a pressure vessel. Now blow across the neck of the third bottle. The tone is noticeably lower.",
+     "answer": "A bottle with a neck is a Helmholtz resonator, and its frequency is directly proportional to the speed of sound in the gas inside. In pure carbon dioxide, c = 267 m/s versus 343 in air, a ratio of 0.78 — that's a drop of 435 cents, i.e., a bit more than a major third and less than a fourth. But you won't have pure gas in the bottle: pouring gives a mixture, about seventy percent carbon dioxide and thirty percent remaining air. Let's calculate honestly for such a mixture: molar mass 39.5 g/mol instead of 44, γ = 1.31 instead of 1.29, speed 285 m/s — and the drop comes out to about 320 cents, i.e., roughly a minor third, three semitones. That's exactly what you should expect by ear; if you hear more than four semitones, you were lucky with gas purity. Note that the tone changes doubly: both the molar mass increased and γ decreased, because a triatomic molecule has more degrees of freedom active. The same experiment with helium from a balloon gives the opposite effect and much stronger: in helium, sound travels 2.94 times faster, and the hum goes up by 1865 cents, i.e., about one and a half octaves."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "kitchen experiment",
+     "h": "The tone of hot cocoa creeps upward",
+     "text": "Put a spoonful of cocoa or instant coffee into a mug, pour hot water over it, and stir vigorously. Now start tapping the bottom of the mug rhythmically with a spoon — once per second, without stopping, for about twenty seconds. The first taps give a dull low sound, and then the pitch creeps upward and over ten seconds rises by a third, and if you're lucky, almost an octave. No cooling occurs during this time, and the pitch changes not because of temperature.",
+     "answer": "The culprit is air bubbles that you mixed in with the powder. The frequency at which the mug with liquid resonates is proportional to the speed of sound in that liquid, and the speed of sound is the square root of the ratio of elasticity to density. Bubbles add almost nothing to density — air is a thousand times lighter than water — but they catastrophically spoil elasticity: compressing water is hard, but a bubble compresses readily, and the elasticity of the mixture is set by it. Moreover, on sound frequencies the bubble compresses adiabatically, so its elasticity is γp — and here the adiabatic index from our paragraph comes straight into the kitchen. Order of magnitude: with a bubble fraction of one thousandth of the volume, the speed of sound in the mixture drops to about 365 m/s versus 1500 in pure water — a factor of four. Bubbles rise and dissolve, the fraction falls, the speed grows, the pitch creeps up. The effect is called the hot chocolate effect; Frank Crawford described it carefully in 1982, and it works with any powder that brings air with it."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradox",
+     "h": "A heater does not increase the energy of the air in a room",
+     "text": "You turned on the heater, the temperature in the room rose from 18 to 24 degrees. By how much did the internal energy of the air in the room increase?",
+     "answer": "By nothing. The room communicates with the outside — cracks, ventilation, gaps — so the pressure in it is constant and equal to atmospheric. Let's write the internal energy of the air in a room of volume V: U = n·C_V·T, and the number of moles itself equals pV/(RT). The temperature cancels, and we are left with U = (i/2)·p·V, where there is no temperature at all. For a room of 50 cubic meters, this is 2.5 · 10⁵ · 50 = 12.5 megajoules at any temperature. The heat given off by the heater went not into the air but outside — together with some of the molecules that left, making room for the expanded rest. So where does the coziness go? First, not only the air heats up, but also the walls, furniture, floor, and their heat capacity is orders of magnitude larger. Second, comfort is set not by the energy of the air but by its temperature: it determines both the heat loss from your skin and the rate of evaporation from it. The paradox perfectly shows that 'the amount of heat in a room' is not a physical quantity but a colloquial phrase."
+    },
+    {
+     "icon": "fact",
+     "kind": "fun fact",
+     "h": "Maxwell admitted the defeat of molecular theory",
+     "text": "The equipartition theorem is a beautiful and general result: each degree of freedom gets half kT, with no exceptions. The trouble is that when counting from spectra, a diatomic molecule has clearly more than seven degrees of freedom (the internal motions of atoms alone give a whole forest), while the measured heat capacity stubbornly gave five. Maxwell in an 1875 lecture called this the most notable failure of molecular theory and did not hide the problem behind caveats. Kelvin later included the same story among the 'clouds' over 19th-century physics.",
+     "answer": "The solution came from where it was least expected. In 1900, Planck introduced quanta while dealing with radiation, and in 1907 Einstein applied the same idea to the heat capacity of solids and obtained its decrease upon cooling — the very thing classical theory could not do. After that, it became clear for gases too: a degree of freedom is not 'present' or 'absent'; it is switched on if its quantum is cheaper than kT. The beauty of the story is that the quantum could have been noticed in heat capacity tables half a century before Planck, no spectroscopy required. It was lying there, in plain sight, in the difference between five and seven."
+    },
+    {
+     "icon": "edge",
+     "kind": "limit of applicability",
+     "h": "Diamond is colder than classical physics allows",
+     "text": "The same counting of degrees of freedom in a solid gives the Dulong–Petit law: an atom in a lattice has three directions of vibration, each counted twice (motion and elasticity), totaling six halves of kT and a molar heat capacity of 3R = 24.9 J/(mol·K). It checks out beautifully: copper 24.4, silver 25.4, lead 26.4 — all around 25, regardless of what the metal is.",
+     "answer": "Now diamond: 6.1 J/(mol·K) at room temperature, four times less than promised. The reason is exactly the same as for nitrogen with its five instead of seven. Carbon–carbon bonds in diamond are extremely stiff, the vibrational quanta are correspondingly expensive, the characteristic temperature is about 2000 kelvins, and at 300 K most vibrational degrees of freedom are frozen out. Heat the diamond to a thousand degrees — the heat capacity rises to the Dulong–Petit limit. The same mechanism, the same exponential, a different scale. Incidentally, it is the stiffness of bonds that makes diamond a record holder in thermal conductivity: phonons in it travel fast and far, although there are few of them."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "What we glossed over",
+   "blocks": [
+    {
+     "h": "Mayer's relation holds only for an ideal gas",
+     "text": "In general, the difference in heat capacities is expressed through derivatives of the equation of state and is not equal to any universal constant. For an ideal gas, both derivatives are computed mentally and yield exactly R. For a van der Waals gas from the first section, a correction appears that grows with density and with approach to the critical temperature — near the critical point the denominator goes to zero, and the difference diverges to infinity. For condensed media, the formula also works, but the result turns out to be tiny: for water at 25 °C, the difference C_p − C_V is only 0.79 J/(mol·K) — ten times smaller than R, because water hardly expands when heated. Hence the practical rule: for liquids and solids, reference books list C_p and the difference is usually neglected, while for gases it must be taken into account.",
+     "latex": "C_p - C_V = -T\\frac{(\\partial V/\\partial T)_p^{2}}{(\\partial V/\\partial p)_T}; \\qquad \\text{vdW: } C_p - C_V = \\frac{R}{1 - \\dfrac{2a(V-b)^{2}}{RTV^{3}}}"
+    },
+    {
+     "h": "Degrees of freedom are not switched on by a toggle",
+     "text": "The integer i is a convenient idealization. In reality, each vibrational mode contributes a smooth function of temperature to the heat capacity, and the transition from \"silent\" to \"active\" is smeared over about an order of magnitude in T. Let us calculate this for nitrogen using the Einstein formula on the right: at 300 K, vibration adds only 0.0016·R to C_V, i.e., six hundredths of a percent; at 1000 K it is already 0.41·R (the heat capacity grows from 2.50·R to 2.91·R, i.e., by almost seventeen percent); at 3000 K — 0.90·R out of the unit promised by classical theory. There is no click; there is a smooth rise spanning thousands of degrees. Rotations are quantized too, but their steps are usually small; an exception is hydrogen, whose rotational θ is about 85 K: its C_V slides down from 5/2·R starting already around 200 K and by 60 kelvins reaches 3/2·R — a diatomic gas begins to behave like a monatomic one. With hydrogen it gets even more interesting: its ortho and para forms have different rotational ladders and interconvert very slowly, so the measured heat capacity depends on how long the sample has been kept cold.",
+     "latex": "\\frac{C_V}{R} = \\frac{3}{2} + \\sum_{\\text{rot}}\\!(\\dots) + \\sum_{\\text{vib}} \\frac{x_k^{2}e^{x_k}}{(e^{x_k}-1)^{2}}, \\qquad x_k = \\frac{\\theta_k}{T}"
+    },
+    {
+     "h": "The exponent γ has a frequency dependence",
+     "text": "The formula c = √(γRT/M) silently assumes that during one compression all degrees of freedom manage to exchange energy with translational motion. For air this holds with a huge margin. But for carbon dioxide, the deformation vibration is excited slowly: the molecule needs thousands of collisions to absorb or release a vibrational quantum. At low frequencies, sound manages to \"see\" the full heat capacity and travels at 267 m/s. At high frequencies, the vibration does not have time to engage, the effective γ rises toward 1.40, and the speed increases to 278 m/s — by four percent. Between these regimes lies a region of strong absorption: the wave's energy leaks into vibrations and returns with a delay. This is why carbon dioxide dampens sound so effectively, and it is through this absorption that intramolecular relaxation rates are measured.",
+     "latex": "\\omega\\tau \\ll 1: \\; \\gamma = 1{,}29,\\; c = 267\\ \\text{m/s}; \\qquad \\omega\\tau \\gg 1: \\; \\gamma = 1{,}40,\\; c = 278\\ \\text{m/s}"
+    },
+    {
+     "h": "Air is a mixture, and it can be humid",
+     "text": "All the \"diatomic\" numbers for air are the result of averaging over 78 percent nitrogen, 21 percent oxygen, and almost one percent monatomic argon. Argon slightly shifts the calculated γ upward from exactly 1.4000 to 1.4015, while oxygen's vibration pulls it back: its characteristic temperature is 2270 K; at 293 K, the Einstein function gives 0.026 per molecule — a tiny contribution, but enough to bring the calculation back to 1.4004. The reference value 1.400 turns out to be the result of two opposing effects, not a simple fraction 7/5. Humidity acts in the opposite direction and more strongly than it seems: a water molecule weighs 18 g/mol versus 29 for average air, so humid air is LIGHTER than dry air, and sound travels faster in it. Let us calculate the limiting case: at 30 °C and full humidity, water vapor in air is 4.2 percent by volume, the average molar mass drops from 28.97 to 28.5 g/mol, and this alone adds 0.8 percent to the speed. At the same time, γ drops from 1.400 to 1.397, because triatomic water has more active degrees of freedom, but this takes away only 0.13 percent — an effect six times weaker than the mass effect. The net result is about plus 0.7 percent; at 20 °C it is half that, 0.4 percent. For comparison, temperature does incomparably more: from 0 to 30 °C, the speed of sound rises from 331 to 349 m/s, i.e., by five percent."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "Heat capacity is a property of a process, not a substance. At constant pressure, a gas, in addition to being heated, pushes the atmosphere apart, and the surcharge is exactly R per mole per degree: C_p − C_V = R. C_V itself is given by counting the active degrees of freedom, C_V = (i/2)R, and their number is determined not by the geometry of the molecule, but by temperature: a step works if its quantum is cheaper than kT. The ratio γ = (i+2)/i is dimensionless and therefore is measured by the speed of sound.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "Payment for expansion",
+     "text": "C_p − C_V = R — the surcharge does not depend on pressure or on what gas it is: it equals the work p·ΔV = R·ΔT"
+    },
+    {
+     "icon": "scale",
+     "title": "C_V = (i/2)R",
+     "text": "Half kT for each active degree of freedom: i = 3 for helium gives 12.47 against the measured 12.5"
+    },
+    {
+     "icon": "fact",
+     "title": "Five, not seven",
+     "text": "For nitrogen, rotations are open (θ = 2.9 K), vibration is closed (θ = 3390 K). Integers in i are set by quantum, not geometry"
+    },
+    {
+     "icon": "edge",
+     "title": "γ is measured with a stopwatch",
+     "text": "c = √(γRT/M): 343 m/s gives i = 5, helium's 1007 gives i = 3. Newton without γ erred by 15%, Laplace corrected in 1816"
+    }
+   ],
+   "where": [
+    "Ventilation and climate control: a cubic meter of air weighs 1.2 kg, and heating it by one degree costs about 1.2 kJ",
+    "Diesel: compression by twenty times raises the temperature by 20^0.4 ≈ 3.3 times — fuel ignites without a spark plug, all because γ > 1",
+    "Acoustics: the speed of sound depends on temperature and not on pressure, so in frost sound travels slower",
+    "Helium in the voice: the pitch does not 'rise' — the resonances of the larynx shift upward because in helium sound travels 2.9 times faster",
+    "Turbine and engine design: at high temperatures γ drops from 1.40 to 1.34, and the textbook 1.4 has to be replaced with a table"
+   ],
+   "watchOut": "Three traps. First — saying 'heat capacity of air' without specifying what is fixed: the difference between 718 and 1005 is forty percent, and in ventilation calculations this is not a trifle. Second — considering i a geometric characteristic of the molecule: for the same nitrogen molecule, i equals five at room temperature and tends to seven at three thousand kelvins. Third — thinking that the speed of sound increases with pressure: the formula includes the ratio γp/ρ, and when a gas is compressed both grow, so the dependence remains only on temperature."
+  },
+  "quiz": [
+   {
+    "id": "hc1",
+    "type": "mcq",
+    "q": "A mole of helium is heated by 1 K at constant pressure, spending 20.79 J. The same mole is heated by 1 K in a rigid container, spending 12.47 J. Where did the missing 8.3 J go in the first case?",
+    "options": [
+     "They went into expansion work: the gas pushed the atmosphere, and the payment is R·ΔT",
+     "They went into heating the piston and cylinder walls themselves",
+     "They went into exciting rotations — at constant pressure, molecules start to rotate",
+     "Nowhere: 8.31 J is calorimeter error, the heat capacities are actually equal"
+    ],
+    "answer": 0,
+    "why": "At constant pressure, the volume of a mole grows with temperature: from pV = RT it follows that p·ΔV = R·ΔT, i.e., exactly 8.314 J per degree. This work is done against the atmosphere and does not remain in the gas. The answer about heating the piston and walls is wrong because the heat capacity of the container is not part of the molar heat capacity of the gas; it is subtracted by separate calibration. The answer about exciting rotations is doubly impossible: helium is monatomic, there is nothing to rotate, and the number of active degrees of freedom depends on temperature, not on whether the piston is free or not. The fourth contradicts arithmetic: 20.79/12.47 = 1.667 = 5/3, too precise a ratio for an error.",
+    "hint": "Write the first law: the heat supplied goes into the increase in internal energy plus work. The internal energy of an ideal gas depends only on temperature, and the temperature increased equally in both experiments."
+   },
+   {
+    "id": "hc2",
+    "type": "mcq",
+    "q": "The speed of sound in helium is 1007 m/s, in air 343 — 2.94 times greater. Helium is monatomic (γ = 1.67) and light (M = 4 g/mol). What gives the main contribution to this factor of 2.94?",
+    "options": [
+     "Molar mass: it gives a factor of 2.69, while γ gives only 1.09",
+     "The adiabatic index: γ for helium is almost twice as large, and that decides it",
+     "Both contributions are roughly equal: about 1.7 from mass and about 1.7 from γ",
+     "Neither: helium is lighter, so its molecules move faster, and mass and γ are not in the formula"
+    ],
+    "answer": 0,
+    "why": "In the formula c = √(γRT/M), both properties are under the root, but their ranges are incomparable. The ratio of molar masses is 28.97/4.00 = 7.24, its square root is 2.69. The ratio of adiabatic indices is 1.667/1.400 = 1.19, its root is 1.09. The product 2.69 · 1.09 = 2.94 — exactly the measured value. The answer 'the adiabatic index decides' is numerically wrong: γ for helium is only 19% larger than for air, not twice. The answer 'neither' correctly senses the physics (helium molecules are indeed faster), but that is exactly what is written in the formula as the factor 1/√M — there is no separate mechanism here. General rule: γ varies between 1.29 and 1.67, while molar mass varies by tens of times, so large differences in sound speed are almost always about mass.",
+    "hint": "Calculate the two roots separately: the root of the ratio of γ and the root of the inverse ratio of molar masses. Which one is further from unity?"
+   },
+   {
+    "id": "hc3",
+    "type": "free",
+    "q": "In your own words: for a diatomic nitrogen molecule, the classical count gives seven degrees of freedom, but the measured heat capacity corresponds to five. Why?",
+    "keywords": [
+     "quantum",
+     "vibration",
+     "frozen",
+     "out",
+     "step",
+     "portion",
+     "temperature",
+     "kT",
+     "Boltzmann",
+     "3390"
+    ],
+    "needed": 2,
+    "why": "Because energy cannot be delivered in arbitrarily small portions. Three translational and two rotational degrees of freedom work: the rotational step of nitrogen costs 2.9 K, and the thermal energy at 300 K covers it with a huge margin. The two vibrational ones do not work: the vibrational step of the N—N bond costs 3390 K, i.e., eleven times more than kT at room temperature, and the Boltzmann factor gives a population of 1.2·10⁻⁵ — about one molecule in eighty thousand vibrates, and such a contribution to heat capacity is not measurable. Hence i = 3 + 2 + 0 = 5 and C_V = 5/2·R = 20.8 J/(mol·K). Importantly, the molecule is not 'rigid' — it is quite capable of vibrating, but at 300 K only a vanishing fraction does. Heat nitrogen to a thousand kelvins, and the heat capacity will creep up, and by three thousand it will approach the promised seven halves of R.",
+    "hint": "Compare two quantities: the price of one quantum of nitrogen vibration (in degrees it is 3390 K) and the thermal small change available to a molecule at 300 K. Which is larger and by how much?"
+   },
+   {
+    "id": "hc4",
+    "type": "estimate",
+    "q": "Argon is monatomic, its molar mass is 39.95 g/mol. Estimate the speed of sound in argon at 20 °C (293 K). Answer in meters per second. Use R = 8.31 J/(mol·K).",
+    "answer": 319,
+    "unit": "m/s",
+    "why": "Monatomic gas — so i = 3 and γ = (3 + 2)/3 = 5/3 = 1.667. Substitute: c = √(γRT/M) = √(1.667 · 8.31 · 293 / 0.03995) = √(4058/0.03995) = √101600 ≈ 319 m/s. The reference value is 319 m/s. A quick estimate without a calculator: argon is 1.5 times heavier than air (39.95 vs 28.97, ratio 1.38, root 1.17), but γ is larger by 1.19 times (root 1.09), so c should be about 343 · 1.09/1.17 ≈ 320 m/s. A useful error check: 292 m/s means you took γ = 1.4 instead of 5/3, and ten meters per second means the molar mass stayed in grams.",
+    "tolAbs": 20,
+    "hint": "First determine γ: for a monatomic gas only three translational degrees of freedom work. Convert the molar mass to kilograms per mole, otherwise the answer will be off by a factor of thirty."
+   }
+  ],
+  "title": "Heat Capacities C_V and C_p: Where Does the Heat Go",
+  "subtitle": "Section 3 · Mayer's relation, degrees of freedom, and the speed of sound",
+  "intro": [
+   "Open a reference book at the word 'air' and find the heat capacity. There will be two numbers: 718 and 1005 joules per kilogram per degree. They differ by forty percent, both are correct, and neither is a typo. The substance is the same, the temperature is the same, but there are two answers—because the question was not fully specified.",
+   "The difference arises from what we held fixed while heating. A gas in a rigid cylinder can only get hotter. A gas under a free piston heats up and, in passing, pushes the atmosphere apart, and that requires work, and someone has to pay for it—the same stove pays. Hence the second number. Remarkably, the surcharge is calculated exactly, in one line, and does not depend on what the gas is: this is Mayer's relation.",
+   "Next, we will ask where the value of C_V itself comes from, and we will obtain it by counting the directions in which a molecule can move. The count will give seven for a diatomic gas, but experiment stubbornly shows five, and at this point quantum mechanics pokes out of classical thermodynamics. And in the end, it turns out that the number of degrees of freedom can be measured with a stopwatch: the ratio γ = C_p/C_V is dimensionless and therefore reads directly from the speed of sound."
+  ],
+  "standNote": "The stand for this topic draws van der Waals isotherms, and you should take one detail from it—the gray dashed hyperbola labeled 'ideal gas'. It is always drawn: it is the same gas, calculated using $pV = nRT$. Everything we derive below lives on it—the relation $C_p - C_V = R$ relies on the fact that internal energy depends only on temperature, and that is true where the gas is ideal. Set the reduced temperature to $T/T_c = 1.30$ and move the volume slider all the way to the right: the solid curve approaches the dashed line but does not merge with it—the lower panel, where $Z = pV/nRT$ is plotted, shows 0.91 instead of unity. Return the volume to $V/V_c = 1$, and $Z$ drops to 0.63. The stand simply does not reach the ideal gas, and that is honest: the room air from our example sits at $V/V_c$ around two hundred fifty, far beyond the right edge of the graph—there $Z$ is indeed unity. Now lower the temperature to 1.00 and look at the left half: the curves diverge, and with them the heat capacities diverge. At the critical point itself, the tangent to the isotherm becomes horizontal, meaning the gas expands at constant pressure with no resistance at all—and the difference $C_p - C_V$ turns not into $R$, but into infinity. Keep this picture in mind: it shows the boundary beyond which the neat formula of this section stops working."
+ },
+ "es": {
+  "formula": {
+   "name": "Relación de Mayer y capacidad calorífica mediante los grados de libertad",
+   "latex": "C_p - C_V = R, \\qquad C_V = \\frac{i}{2}R, \\qquad \\gamma = \\frac{C_p}{C_V} = \\frac{i+2}{i}",
+   "alsoKnown": "Ecuación de Mayer; teorema de equipartición de la energía entre los grados de libertad; índice adiabático γ",
+   "authors": [
+    {
+     "who": "Julius Robert Mayer",
+     "year": "1842",
+     "what": "en el artículo «Observaciones sobre las fuerzas de la naturaleza inanimada» relacionó el calor y el trabajo y calculó el equivalente mecánico del calor precisamente a partir de la diferencia de las capacidades caloríficas del aire — en esencia, a partir de la misma fórmula que lleva su nombre"
+    },
+    {
+     "who": "James Prescott Joule",
+     "year": "1845",
+     "what": "dejó escapar gas comprimido en un recipiente evacuado y no observó cambio de temperatura: esto significa que la energía interna de un gas enrarecido depende de la temperatura y no del volumen — un supuesto sin el cual la deducción de Mayer se desmorona"
+    },
+    {
+     "who": "Pierre-Simon Laplace",
+     "year": "1816",
+     "what": "corrigió la fórmula de Newton para la velocidad del sonido, reemplazando la compresibilidad isotérmica por la adiabática, y así convirtió el experimento acústico en un instrumento de medición para γ"
+    },
+    {
+     "who": "James Clerk Maxwell",
+     "year": "1875",
+     "what": "en una conferencia sobre moléculas calificó la discrepancia entre las capacidades caloríficas medidas y el teorema de equipartición como el fracaso más notable de la teoría molecular — y honestamente admitió que no tenía explicación"
+    },
+    {
+     "who": "Albert Einstein",
+     "year": "1907",
+     "what": "con la capacidad calorífica de los sólidos mostró lo que le faltaba a Maxwell: un grado de libertad no funciona si su cuanto es más caro que kT — y la disminución de la capacidad calorífica al enfriar surgió por sí sola"
+    }
+   ],
+   "story": "Mayer era médico de a bordo. En 1840 navegaba hacia Java y, al sangrar a los marineros, notó que la sangre venosa en los trópicos era más clara de lo normal — como si en un clima cálido el cuerpo quemara menos oxígeno. De ahí llegó a la idea de que el calor y el trabajo son lo mismo, solo que en diferentes monedas, y el tipo de cambio es constante. No tenía con qué calcular ese tipo de cambio: no tenía instrumentos. Tomó las capacidades caloríficas tabuladas del aire a presión constante y a volumen constante, restó una de la otra y declaró que la diferencia es exactamente el calor que se fue para expandir la atmósfera. La lógica es impecable, y la repetiremos a continuación palabra por palabra. El resultado fue casi un quince por ciento inferior al correcto — 3,58 julios por caloría en lugar de 4,18 — simplemente porque las capacidades caloríficas tabuladas de aquella época eran malas. La historia posterior no es alegre. El artículo de Mayer fue rechazado al principio, la prioridad se le dio a Joule, que midió el mismo tipo de cambio con experimentos cuidadosos, y el propio Mayer en 1850 se arrojó por una ventana y pasó varios años en un sanatorio. El reconocimiento llegó en los años sesenta, cuando Tyndall y Clausius devolvieron su trabajo a la circulación. La fórmula que dedujo a partir de dos números ajenos y un razonamiento sigue en los libros de texto hasta hoy.",
+   "symbols": [
+    {
+     "sym": "C_V",
+     "latex": "C_V",
+     "what": "capacidad calorífica molar a volumen constante",
+     "unit": "J/(mol·K)",
+     "note": "cuánto calor pide un mol de gas por grado si el recipiente es rígido; para el aire, 20,8"
+    },
+    {
+     "sym": "C_p",
+     "latex": "C_p",
+     "what": "capacidad calorífica molar a presión constante",
+     "unit": "J/(mol·K)",
+     "note": "lo mismo, pero el pistón está libre y el gas se expande por el camino; para el aire, 29,1"
+    },
+    {
+     "sym": "R",
+     "latex": "R",
+     "what": "constante universal de los gases",
+     "unit": "J/(mol·K)",
+     "note": "aquí se lee como el costo de expandir un mol en un grado a presión constante"
+    },
+    {
+     "sym": "U",
+     "latex": "U",
+     "what": "energía interna del gas",
+     "unit": "J",
+     "note": "suma de las energías de movimiento de las moléculas; para un gas ideal depende solo de la temperatura"
+    },
+    {
+     "sym": "i",
+     "latex": "i",
+     "what": "número de grados de libertad de la molécula",
+     "unit": "adimensional",
+     "note": "no es una característica geométrica, sino un conteo de las formas de almacenar energía que FUNCIONAN a una temperatura dada"
+    },
+    {
+     "sym": "γ",
+     "latex": "\\gamma",
+     "what": "índice adiabático",
+     "unit": "adimensional",
+     "note": "relación entre C_p y C_V; su adimensionalidad lo hace medible sin unidades de calor"
+    },
+    {
+     "sym": "θ",
+     "latex": "\\theta",
+     "what": "temperatura característica de un grado de libertad",
+     "unit": "K",
+     "note": "el cuanto dividido por k_B: el precio del primer escalón en grados; para la rotación del nitrógeno, 2,9 K; para la vibración, 3390 K"
+    },
+    {
+     "sym": "c",
+     "latex": "c",
+     "what": "velocidad del sonido",
+     "unit": "m/s",
+     "note": "en un gas depende de la temperatura y no de la presión: en la fórmula entra la relación p/ρ"
+    },
+    {
+     "sym": "M",
+     "latex": "M",
+     "what": "masa molar del gas",
+     "unit": "kg/mol",
+     "note": "para el aire, 0,028 97 — un promedio sobre la mezcla; para el helio, 0,004 00"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Derivación rigurosa",
+   "lead": "De lo ya hecho solo necesitaremos dos ladrillos: la primera ley de la termodinámica y la ecuación de estado pV = nRT. No habrá ningún postulado nuevo en la derivación, pero sí una suposición que mencionaremos en voz alta y luego pondremos a prueba.",
+   "steps": [
+    {
+     "text": "Empecemos por señalar que la pregunta «¿cuál es la capacidad calorífica de un gas?» está mal planteada. La capacidad calorífica es la relación entre el calor recibido y el aumento de temperatura, pero el calor no es una función de estado: depende del camino por el que el gas pasó del estado inicial al final. Tome la misma porción de aire y suminístrele los mismos julios de dos maneras. En un recipiente rígido, el termómetro subirá notablemente más que bajo un pistón libre, y no se trata de sustancias diferentes, sino de procesos diferentes. De ahí los dos números en los manuales: 718 y 1005 julios por kilogramo por grado, que difieren exactamente en un factor de 1,40.",
+     "latex": "C \\equiv \\frac{\\delta Q}{dT} \\;\\text{depende del camino}; \\qquad c_V^{\\text{aire}} = 718, \\quad c_p^{\\text{aire}} = 1005 \\ \\frac{\\text{J}}{\\text{kg}\\cdot\\text{K}}",
+     "figure": "realheat",
+     "figCaption": "Un mismo gas, una misma cantidad de calor, dos recipientes: en el recipiente rígido la temperatura aumenta más que bajo un pistón libre"
+    },
+    {
+     "text": "Fijemos el pistón. Entonces el volumen no cambia, el gas no mueve nada y no realiza trabajo: en la primera ley, el segundo término se anula y todo el calor suministrado se convierte en energía interna. La definición de capacidad calorífica a volumen constante se obtiene de inmediato, y es precisamente una definición, no una consecuencia. Observe el subíndice V en la derivada parcial: aquí es una estructura portante, no un adorno; se pregunta cómo crece la energía con la temperatura a volumen constante, y otra pregunta daría otra respuesta.",
+     "latex": "\\delta Q = dU + p\\,dV, \\qquad dV = 0 \\;\\Longrightarrow\\; \\delta Q = dU \\;\\Longrightarrow\\; C_V \\equiv \\left(\\frac{\\partial U}{\\partial T}\\right)_V",
+     "figure": "realpiston",
+     "figCaption": "Pistón bloqueado: el gas no mueve nada y todo el calor permanece en el interior, en la velocidad de las moléculas"
+    },
+    {
+     "text": "Ahora soltemos el pistón y coloquemos sobre él un peso constante para que la presión se mantenga invariable. Al cálculo anterior se añade el trabajo de expansión. Calculemos este trabajo para un mol de gas ideal: de pV = RT, a p constante, se deduce que el producto de p por el aumento de volumen es igual a R multiplicado por el aumento de temperatura. Esta es la principal sorpresa de la derivación: el pago por grado es R julios por mol y no depende ni de la presión, ni del volumen, ni de si tenemos helio o dióxido de carbono. En condiciones normales, un mol ocupa 24 litros, y por cada grado expande la atmósfera aproximadamente 82 centímetros cúbicos.",
+     "latex": "p\\,\\Delta V = R\\,\\Delta T \\quad (p = \\text{const}), \\qquad \\delta Q_p = dU + p\\,dV",
+     "figure": "realwork",
+     "figCaption": "Pistón libre con peso: el gas se calienta y, de paso, levanta la atmósfera, y el costo es exactamente R por mol y por grado"
+    },
+    {
+     "text": "Restamos uno de otro. El aumento de energía interna es el mismo en ambos casos, y aquí está la suposición sin la cual toda la derivación es incorrecta: la energía interna de un gas ideal depende solo de la temperatura, no del volumen. Joule lo comprobó en 1845: dejó escapar gas comprimido en un recipiente evacuado, de modo que el gas no realizó trabajo contra nada, y la temperatura no cambió. Por lo tanto, separar las moléculas «gratis» —en ausencia de fuerzas entre ellas— no cuesta energía. Para el gas de van der Waals del primer apartado de este tema, la suposición ya no es válida; allí las moléculas se atraen y hay que gastar energía para separarlas.",
+     "latex": "C_p = \\left(\\frac{\\partial U}{\\partial T}\\right)_p + R = C_V + R \\;\\Longrightarrow\\; \\boxed{\\,C_p - C_V = R\\,} \\quad (\\text{Mayer, 1842})",
+     "figure": "realmayer",
+     "figCaption": "Dos números medidos y una diferencia: 29,10 menos 20,79 da 8,31 — la constante universal de los gases"
+    },
+    {
+     "text": "La relación de Mayer da la diferencia, pero no las capacidades caloríficas en sí. El valor de C_V habrá que tomarlo del cálculo: cuántas formas independientes tiene una molécula de almacenar energía. El teorema de equipartición responde que por cada una de esas formas corresponde en promedio la mitad de kT, y entonces la capacidad calorífica molar es i por R partido por 2. Comprobemos con el gas más simple. En el helio monoatómico, la molécula es un punto; solo puede moverse en tres direcciones, por lo tanto i = 3 y C_V debe ser 12,47 J/(mol·K), y C_p = 20,79. Los manuales dan 12,5 y 20,79. Coincidencia hasta la tercera cifra significativa, y no hubo parámetros de ajuste en el cálculo.",
+     "latex": "\\bar\\varepsilon = \\frac{i}{2}k_BT \\;\\Longrightarrow\\; U = \\frac{i}{2}RT, \\quad C_V = \\frac{i}{2}R; \\qquad i = 3:\\; C_V = 12{,}47,\\; C_p = 20{,}79\\ \\frac{\\text{J}}{\\text{mol}\\cdot\\text{K}}",
+     "figure": "realdof",
+     "figCaption": "Tres direcciones de movimiento — tres grados de libertad: la fórmula da 12,47, el helio muestra 12,5"
+    },
+    {
+     "text": "Pasamos a la molécula diatómica y el cálculo se rompe. La pesa tiene tres grados de libertad de traslación, dos de rotación (alrededor del eje de la pesa no hay nada que girar) y dos de vibración, porque la vibración a lo largo del enlace almacena energía dos veces: en la velocidad y en el estiramiento del resorte. En total siete, por lo tanto C_V debería ser 29,1. La capacidad calorífica medida del nitrógeno a temperatura ambiente es 20,8, es decir, exactamente cinco medios R. Dos grados de libertad simplemente no responden. La explicación no está en la rigidez del enlace, sino en que la energía se entrega en porciones: el escalón de vibración del nitrógeno cuesta 3390 kelvin, la pequeñez térmica de 300 kelvin no llega a él, y la vibración permanece en silencio (la población del primer escalón es 1,2·10⁻⁵ — el cálculo se detalla en el apartado sobre el factor de Boltzmann). El escalón de rotación, por el contrario, cuesta solo 2,9 kelvin y está abierto de par en par. Aquí es donde el cuanto sobresale de la termodinámica clásica: los números son enteros, pero cuáles exactamente lo decide no la geometría de la molécula, sino la temperatura.",
+     "latex": "i_{\\text{clás}} = 3 + 2 + 2 = 7 \\;\\Rightarrow\\; C_V = 29{,}1; \\qquad \\text{experimento: } C_V(\\mathrm{N_2}) = 20{,}8 = \\tfrac{5}{2}R; \\qquad \\theta_{\\text{rot}} = 2{,}9\\,\\text{K} \\ll T \\ll \\theta_{\\text{vib}} = 3390\\,\\text{K}",
+     "figure": "realladder",
+     "figCaption": "Los escalones de rotación son más pequeños que el cuanto térmico y funcionan; el de vibración es once veces más caro que kT y permanece en silencio"
+    },
+    {
+     "text": "Como ahora sabemos calcular C_V y conocemos la diferencia, calculemos también la relación. Resulta una fracción pura de un número entero: γ = (i + 2)/i. Esta es la magnitud más práctica de todo el apartado, y he aquí por qué. La capacidad calorífica es difícil de medir: se necesita un calorímetro, conocer la masa del gas, tener en cuenta la capacidad calorífica del propio recipiente y las pérdidas al entorno. Pero γ es adimensional: no requiere unidades de calor ni de masa. Tres valores posibles están muy separados entre sí: 1,67 para el monoatómico, 1,40 para el diatómico, 1,29 para una molécula con vibración descongelada. Basta con distinguirlos, y eso ya es tarea para cualquier experimento en el que γ aparezca en el resultado.",
+     "latex": "\\gamma = \\frac{C_p}{C_V} = \\frac{C_V + R}{C_V} = 1 + \\frac{2}{i} = \\frac{i+2}{i}: \\qquad \\tfrac{5}{3} = 1{,}67, \\quad \\tfrac{7}{5} = 1{,}40, \\quad \\tfrac{9}{7} = 1{,}29",
+     "figure": "realgamma",
+     "figCaption": "Tres valores de γ en una misma escala: cuantos menos grados de libertad activos tenga la molécula, mayor es γ"
+    },
+    {
+     "text": "Ese experimento existe y ni siquiera requiere laboratorio: el sonido. En una onda sonora, las compresiones y rarefacciones se suceden miles de veces por segundo, el calor no tiene tiempo de fluir entre regiones adyacentes y el proceso es adiabático, y en la ecuación adiabática γ aparece como exponente (la propia ecuación adiabática se deriva en el tema sobre motores; la tomamos ya hecha). De ahí c = √(γp/ρ), es decir, c = √(γRT/M). Newton en los «Principia» consideró las compresiones isotérmicas, lo que equivale a γ = 1, y obtuvo 290 m/s frente a los 343 medidos: un error del quince por ciento que se mantuvo durante más de un siglo, hasta que Laplace en 1816 devolvió el exponente adiabático a su lugar. Hoy la fórmula se lee al revés: 343 m/s en el aire dan γ = 1,40 e i = 5; los 1007 m/s del helio dan i = 3; y los 267 m/s del dióxido de carbono dan i ≈ 6,9, porque en la molécula triatómica lineal la vibración de deformación cuesta solo 960 kelvin y a temperatura ambiente está descongelada casi en su mitad. Un cronómetro midió el número de grados de libertad.",
+     "latex": "c = \\sqrt{\\frac{\\gamma p}{\\rho}} = \\sqrt{\\frac{\\gamma R T}{M}} \\;\\Longrightarrow\\; \\gamma = \\frac{c^{2}M}{RT}, \\quad i = \\frac{2}{\\gamma - 1}; \\qquad \\mathrm{He}\\ 1007, \\;\\text{aire}\\ 343, \\;\\mathrm{CO_2}\\ 267\\ \\text{m/s}",
+     "figure": "realsound",
+     "figCaption": "Newton consideró la onda isotérmica y obtuvo 290 m/s; el factor adiabático γ añade el quince por ciento que faltaba"
+    }
+   ],
+   "plate": "C_p - C_V = R, \\qquad C_V = \\frac{i}{2}R, \\qquad \\gamma = \\frac{i+2}{i}",
+   "plateCap": "A la izquierda, el precio de la libertad del pistón: exactamente R julios por mol y por grado, igual para cualquier gas ideal. En el centro, la propia capacidad calorífica, construida a partir de un número entero de grados de libertad activos. A la derecha, la relación adimensional que conecta estas dos afirmaciones con un cronómetro y, por tanto, es la más fácil de comprobar experimentalmente.",
+   "note": "Reunamos las suposiciones, que también son los límites de validez de las fórmulas. Primera: el gas es ideal, es decir, U = U(T). En cuanto la atracción entre moléculas deja de ser despreciable —y en el primer apartado de este tema la resumimos en la corrección a/V²— la diferencia C_p − C_V deja de ser igual a R y comienza a depender del volumen; la fórmula general se da más abajo, en el apéndice. Segunda: el número i se consideró entero y constante. En realidad no es así, y el grado de libertad vibracional no se activa con un interruptor, sino gradualmente, repartido a lo largo de varios cientos de grados; los números enteros son una buena aproximación solo en la ventana de temperaturas donde todos los escalones están claramente muy por debajo de kT o muy por encima. Tercera: el aire no es un gas, sino una mezcla, y todos sus números «diatómicos» están promediados sobre nitrógeno, oxígeno y argón; una mezcla pura de gases diatómicos daría exactamente 1,4000, el argón eleva el valor calculado a 1,4015, y la vibración del oxígeno ligeramente activada a temperatura ambiente (su $\\theta = 2270$ K) lo arrastra de vuelta al valor de referencia de 1,400 — tres cifras decimales aquí no son un adorno, sino el resultado de efectos contrapuestos. Cuarta: el teorema de equipartición es un teorema clásico, y se demostró para un sistema donde la energía puede tomar cualquier valor; allí donde esto no es cierto, no es que «se equivoque un poco», sino que da una respuesta cualitativamente incorrecta, y fue precisamente en las capacidades caloríficas donde esto se descubrió por primera vez. Quinta: la fórmula de la velocidad del sonido supone que el intercambio de calor no ocurre en absoluto y que todos los grados de libertad logran intercambiar energía con el movimiento de traslación durante una sola compresión. La segunda condición para el dióxido de carbono se cumple al límite, y a altas frecuencias su γ cambia a la vista — también se menciona esto en el apéndice."
+  },
+  "math": {
+   "title": "Matemáticas que se necesitaron aquí",
+   "lead": "Tres lugares donde es fácil equivocarse automáticamente: el subíndice de la derivada parcial, el comportamiento de la exponencial y la lectura de la proporcionalidad bajo la raíz.",
+   "items": [
+    {
+     "what": "Derivada parcial y qué lleva en el subíndice",
+     "why": "La notación (∂U/∂T)_V se lee así: «cambiamos la temperatura, cuidando que el volumen no cambie». El subíndice no es una anotación al margen, sino la mitad de la condición del problema: para una función de varias variables no existe «la derivada respecto a T», sino la derivada respecto a T a lo largo de la dirección elegida. Para un gas ideal, ambas derivadas — a volumen constante y a presión constante — coinciden por casualidad, porque U no depende del volumen en absoluto, y toda la deducción de Mayer se sostiene en esto. Si la energía comienza a depender del volumen, la coincidencia desaparece: en el caso general, C_p − C_V se compone de tres derivadas a la vez, y ahí ya no saldrá ni R ni ninguna otra constante universal. Habilidad útil: al ver una derivada sin subíndice en termodinámica, pregúntese de inmediato qué está fijo; de lo contrario, la expresión simplemente no está definida.",
+     "latex": "\\left(\\frac{\\partial U}{\\partial T}\\right)_V \\neq \\left(\\frac{\\partial U}{\\partial T}\\right)_p \\;\\text{en el caso general}; \\qquad C_p - C_V = T\\left(\\frac{\\partial p}{\\partial T}\\right)_V\\left(\\frac{\\partial V}{\\partial T}\\right)_p",
+     "kit": "partial"
+    },
+    {
+     "what": "La exponencial como interruptor, no como pendiente",
+     "why": "La fracción de moléculas que alcanzan el escalón de altura θ está dada por el factor exp(−θ/T), y su comportamiento es que cambia no gradualmente, sino de forma abrupta. Con θ/T = 3 ya es un cinco por ciento: el escalón está notablemente poblado. Con θ/T = 11,3 es 1,2·10⁻⁵ — está poblada una molécula de cada ochenta mil, y la contribución a la capacidad calorífica desaparece. Entre estos dos casos hay apenas un factor de casi cuatro en temperatura, y el resultado difiere en cuatro mil veces. De ahí los números enteros en i: un grado de libertad casi siempre o funciona por completo o está completamente mudo, y el estado intermedio ocupa una ventana estrecha. La forma exacta de la transición es la función de Einstein, que está a la derecha; para θ/T pequeño tiende a uno, es decir, a la equipartición clásica; para θ/T grande cae como una exponencial. No vamos a analizar aquí el factor de Boltzmann en sí; está derivado en el tema de estadística.",
+     "latex": "\\frac{C_{\\text{vib}}}{R} = \\frac{x^{2}e^{x}}{(e^{x}-1)^{2}}, \\quad x = \\frac{\\theta}{T}: \\qquad x \\ll 1 \\Rightarrow 1, \\qquad x = 3{,}2 \\Rightarrow 0{,}45, \\qquad x = 11{,}3 \\Rightarrow 1{,}6\\cdot10^{-3}",
+     "kit": "exponent"
+    },
+    {
+     "what": "Proporcionalidad bajo la raíz: qué influye más en qué",
+     "why": "En la fórmula de la velocidad del sonido, bajo la raíz hay dos propiedades del gas: el exponente γ y la masa molar M. Ambas entran de la misma forma, pero son completamente diferentes en magnitud. γ solo puede variar entre 1,29 y 1,67, y su raíz, entre 1,14 y 1,29: una dispersión de solo el quince por ciento, vaya donde vaya. Pero la masa molar varía de 2 g/mol para el hidrógeno a 44 para el dióxido de carbono y más allá, es decir, decenas de veces, y su raíz, varias veces. Conclusión práctica: si la velocidad del sonido en dos gases difiere tres veces, casi con seguridad se trata de la masa, no de la estructura de la molécula. Comprobación con helio y aire: la masa da un factor de 2,69, el exponente solo 1,09, juntos 2,94, y la relación medida 1007/343 es 2,94.",
+     "latex": "c \\propto \\sqrt{\\frac{\\gamma}{M}}: \\qquad \\frac{c_{\\mathrm{He}}}{c_{\\text{aire}}} = \\sqrt{\\frac{1{,}667}{1{,}400}}\\cdot\\sqrt{\\frac{28{,}97}{4{,}00}} = 1{,}09 \\cdot 2{,}69 = 2{,}94",
+     "kit": "propto"
+    }
+   ]
+  },
+  "example": {
+   "title": "Ejemplo con números",
+   "lead": "Tomemos un metro cúbico de aire ordinario de una habitación y calentémoslo diez grados de dos maneras. Luego, sin tocar el calorímetro en absoluto, extraigamos el número de grados de libertad de una única magnitud medida: la velocidad del sonido.",
+   "given": "Un metro cúbico de aire a 20 °C (293,15 K) y presión de 101 325 Pa. La masa molar del aire M = 28,97 g/mol, C_V = 5/2·R, C_p = 7/2·R, R = 8,314 J/(mol·K). Calentar ΔT = 10 K primero en un recipiente rígido, luego bajo un pistón libre. Segunda parte: la velocidad del sonido medida en el mismo aire c = 343 m/s — hallar a partir de ella γ y i.",
+   "law": "Q = n·C·ΔT, donde C es igual a C_V a volumen constante y C_p = C_V + R a presión constante; el número de moles se obtiene de pV = nRT. Para la segunda parte, γ = c²M/(RT) e i = 2/(γ − 1).",
+   "solution": [
+    {
+     "text": "Cuántos moles caben en un metro cúbico. Es la ecuación de estado habitual, y el número es útil recordarlo: en condiciones ambientales, en un metro cúbico de aire hay un poco más de cuarenta moles, es decir, alrededor de 1,2 kilogramos.",
+     "latex": "n = \\frac{pV}{RT} = \\frac{101\\,325 \\cdot 1}{8{,}314 \\cdot 293{,}15} = \\frac{101\\,325}{2437} = 41{,}6\\ \\text{mol}"
+    },
+    {
+     "text": "Recipiente rígido. No hay trabajo, todo el calor va a la energía interna.",
+     "latex": "Q_V = n\\,C_V\\,\\Delta T = 41{,}6 \\cdot 20{,}79 \\cdot 10 = 8{,}65\\cdot10^{3}\\ \\text{J} \\approx 8{,}6\\ \\text{kJ}"
+    },
+    {
+     "text": "Pistón libre. Lo mismo más el trabajo de expansión.",
+     "latex": "Q_p = n\\,C_p\\,\\Delta T = 41{,}6 \\cdot 29{,}10 \\cdot 10 = 1{,}21\\cdot10^{4}\\ \\text{J} \\approx 12{,}1\\ \\text{kJ}"
+    },
+    {
+     "text": "La diferencia la calcularemos de dos maneras independientes. La primera, mediante la fórmula de Mayer. La segunda, honestamente, a través del trabajo: a presión constante, el volumen crece proporcionalmente a la temperatura absoluta; diez grados sobre 293 dan un aumento del 3,4 por ciento del volumen, es decir, 34 litros, y para desplazar la atmósfera se necesita p·ΔV. Los números coinciden salvo redondeos — no podría ser de otro modo, ya que $p\\,\\Delta V = pV\\,\\Delta T/T = nR\\,\\Delta T$, — y esto es precisamente la verificación del razonamiento.",
+     "latex": "n R \\Delta T = 41{,}6 \\cdot 8{,}314 \\cdot 10 = 3459\\ \\text{J}; \\qquad \\Delta V = V\\frac{\\Delta T}{T} = \\frac{10}{293{,}15} = 0{,}0341\\ \\text{m}^3, \\quad p\\,\\Delta V = 101\\,325 \\cdot 0{,}0341 = 3456\\ \\text{J}"
+    },
+    {
+     "text": "Ahora la velocidad del sonido. Sustituimos los 343 m/s medidos y resolvemos la fórmula para γ y luego para i. En este cálculo no hay ninguna unidad térmica — solo metros, segundos, kilogramos y kelvins.",
+     "latex": "\\gamma = \\frac{c^{2}M}{RT} = \\frac{343^{2}\\cdot 0{,}028\\,97}{8{,}314\\cdot293{,}15} = \\frac{3408}{2437} = 1{,}398 \\;\\Longrightarrow\\; i = \\frac{2}{\\gamma-1} = \\frac{2}{0{,}398} = 5{,}02"
+    }
+   ],
+   "answer": "El recipiente rígido requiere 8,6 kJ, el pistón libre — 12,1 kJ: calentar a presión constante cuesta un cuarenta por ciento más, y toda la diferencia, 3,46 kJ, se fue en trabajo de expansión. Y la velocidad del sonido de 343 m/s da γ = 1,398 e i = 5,02 — esos mismos cinco grados de libertad, obtenidos con un cronómetro y una regla, sin un solo julio en el cálculo.",
+   "check": "Tres comprobaciones. Primera: volver a los números del principio: dividamos los calores obtenidos por la masa de aire. La masa es 41,6 · 0,028 97 = 1,205 kg, por lo que los calores específicos resultan 8649/(1,205·10) = 718 y 12 106/(1,205·10) = 1005 julios por kilogramo y por grado. Son esos dos valores de referencia con los que comenzó el párrafo, y no se introdujeron — se obtuvieron. Segunda comprobación, de sentido común: 12 kJ es un hervidor de un kilovatio funcionando doce segundos. Calentar un metro cúbico de aire diez grados realmente casi no cuesta nada, y toda la dificultad de la calefacción no está en el aire en sí, sino en que se escapa y en que hay que calentar las paredes. Tercera, inversa: si en el cálculo i hubiera salido alrededor de tres, habría que buscar un error en la masa molar: para que los mismos 343 m/s dieran γ = 5/3, el aire tendría que pesar 34,5 g/mol en lugar de 29. Y si hubiera salido siete, valdría la pena verificar la temperatura: a 1000 K, γ del aire cae a 1,34, y allí i realmente se acerca a seis."
+  },
+  "constants": {
+   "title": "Constantes de este apartado",
+   "lead": "Cuatro números. El primero está fijado por definición, el segundo vive en cada cálculo de ventilación, el tercero es adimensional y por tanto medible, el cuarto explica por qué el segundo no es como la física clásica promete.",
+   "items": [
+    {
+     "sym": "R",
+     "latex": "R",
+     "name": "Constante universal de los gases",
+     "value": "8,314 462 618",
+     "unit": "J/(mol·K)",
+     "why": "Desde 2019 no se mide, sino que se calcula exactamente: R = N_A·k_B, y ambas constantes del lado derecho están fijadas por la definición de las unidades. En este apartado, R adquiere un sentido totalmente cotidiano: es el precio de la expansión: cuántos julios extra pide un mol de gas por cada grado, si se le permite empujar la atmósfera. En forma específica para el aire, R/M = 287 J/(kg·K), que es exactamente la diferencia entre 1005 y 718.",
+     "mnemo": "«Ocho y pico». También es útil la forma antigua: en calorías, R ≈ 1,987 ≈ 2 cal/(mol·K); de ahí la regla de que la diferencia de capacidades caloríficas molares es de aproximadamente dos calorías por grado."
+    },
+    {
+     "sym": "c_p aire",
+     "latex": "c_p^{\\text{aire}}",
+     "name": "Capacidad calorífica específica del aire a presión constante",
+     "value": "1005 (a 20 °C); molar 29,10",
+     "unit": "J/(kg·K) y J/(mol·K)",
+     "why": "El número de trabajo de toda la ventilación y la climatización: un metro cúbico de aire pesa 1,2 kg, por lo que calentarlo un grado cuesta unos 1,2 kJ. De ahí la estimación rápida de la potencia de una unidad de suministro: si suministra 300 metros cúbicos por hora y calienta 25 grados, esto es 300·1,2·1005·25/3600 ≈ 2,5 kW. El par c_V = 718 y c_p = 1005 difiere exactamente en 287, es decir, en R/M: la relación de Mayer en forma específica.",
+     "mnemo": "«Mil julios por kilogramo y grado» — con un error de medio por ciento. La segunda cifra, 718, se obtiene fácilmente restando 287."
+    },
+    {
+     "sym": "γ aire",
+     "latex": "\\gamma_{\\text{aire}}",
+     "name": "Índice adiabático del aire",
+     "value": "1,400 (a 20 °C)",
+     "unit": "adimensional",
+     "why": "La única constante de este apartado que no tiene unidades, y precisamente por eso es la más fácil de medir: se extrae de la velocidad del sonido, del chasquido de un corcho, de la diferencia de presión en una compresión rápida. El valor 7/5 indica que las moléculas de aire tienen cinco grados de libertad activos. El número no es eterno: a 1000 K las vibraciones del nitrógeno y el oxígeno comienzan a desbloquearse, y γ cae a 1,34; por eso los cálculos de turbinas y diésel se hacen con γ variable, no con el 1,4 de los libros de texto.",
+     "mnemo": "Siete quintos — porque i = 5. Toda la tabla sale de una sola fracción (i + 2)/i: 5/3 para monoatómicos, 7/5 para diatómicos, 9/7 si en una molécula diatómica también se activa la vibración. Aproximadamente ahí, alrededor de 1,29, a temperatura ambiente se encuentra también el dióxido de carbono, pero por su propia razón: tiene parcialmente desbloqueada la vibración de deformación."
+    },
+    {
+     "sym": "θ vib(N₂)",
+     "latex": "\\theta_{\\text{vib}}(\\mathrm{N_2})",
+     "name": "Temperatura característica de vibración de la molécula de nitrógeno",
+     "value": "3390",
+     "unit": "K",
+     "why": "El precio del primer escalón de vibración del enlace N—N, expresado en grados: kθ = ħω. A 300 K, la relación θ/T es 11,3, el factor de Boltzmann da 1,2·10⁻⁵, y el grado de libertad vibracional queda excluido de la capacidad calorífica; de ahí el cinco en lugar del siete. Para comparar, el escalón rotacional del mismo nitrógeno cuesta 2,9 K, es decir, está abierto a cualquier temperatura. El cálculo detallado de la población está en el apartado sobre el factor de Boltzmann.",
+     "mnemo": "Tres mil cuatrocientos grados — casi la temperatura de fusión del wolframio (3695 K). El cuanto de vibración del nitrógeno es tan caro que a esa temperatura el metal más refractario ya casi fluye."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Cómo se relaciona con el resto del curso",
+   "lead": "El número de grados de libertad es el resultado más transferible de esta sección: aparece en motores, en conductividad térmica, en estadística e incluso en sólidos, donde no hay moléculas de gas.",
+   "items": [
+    {
+     "h": "Motores y adiabática",
+     "text": "El exponente γ, obtenido aquí a partir del conteo de grados de libertad, entra como exponente en la ecuación de la adiabática pV^γ = const, y a través de ella, en la temperatura de compresión y en el rendimiento. En el tema de motores, γ lo tomábamos directamente de la geometría de la molécula; ahora se ve que la geometría solo fija el límite superior, y cuántos grados de libertad funcionan realmente lo decide la temperatura. El diésel enciende el combustible sin bujía precisamente porque γ > 1: una compresión de veinte veces eleva la temperatura del aire en 20^0,4 ≈ 3,3 veces, es decir, de 300 a mil kelvins. Si γ fuera igual a uno (es decir, si la molécula tuviera infinitos grados de libertad activos), la compresión no calentaría en absoluto, y no existirían las máquinas térmicas en su forma actual."
+    },
+    {
+     "h": "Factor de Boltzmann",
+     "text": "La congelación de las vibraciones, por la cual i es cinco y no siete, es en estado puro la exponencial exp(−θ/T) del tema de estadística. Allí se deduce y se calcula cuantitativamente: θ = 3390 K, relación 11,3, población 1,2·10⁻⁵. Aquí usamos el resultado como una regla ya hecha: un grado de libertad funciona si su cuanto es más barato que kT. La capacidad calorífica resultó ser el primer lugar en física donde la cuantización de la energía se manifestó en una medición macroscópica, treinta años antes de que se le diera nombre."
+    },
+    {
+     "h": "Conductividad térmica y viscosidad",
+     "text": "En la fórmula de la conductividad térmica del gas κ = ⅓·n·v̄·λ·c, el último factor es la capacidad calorífica de una molécula, c = (i/2)k_B, es decir, el mismo conteo de grados de libertad, pero por unidad y no por mol. Por eso el helio conduce mejor el calor que el nitrógeno a igual concentración, no gracias a los grados de libertad, sino a pesar de ellos: tiene menos, y el factor c pierde; pero la molécula ligera vuela más rápido y recorre más distancia, y la ventaja en v̄ y λ compensa con creces esa pérdida. Allí aparece también el número de Prandtl, que contiene la relación C_p/C_V, otro lugar donde γ sale a la luz."
+    },
+    {
+     "h": "Sólido y fonones",
+     "text": "El mismo conteo funciona en el cristal: un átomo en la red tiene tres direcciones de vibración, cada una almacena energía dos veces, total seis mitades de kT, es decir, C = 3R = 24,9 J/(mol·K): la ley de Dulong y Petit. Se cumple para el cobre, la plata, el plomo, y falla para el diamante, cuya capacidad calorífica a temperatura ambiente es solo 6,1: los enlaces del diamante son rígidos, los cuantos de vibración son caros, y la mayor parte de los grados de libertad se ha congelado exactamente igual que la vibración del nitrógeno. Einstein analizó este caso en 1907, Debye lo refinó en 1912, y desde entonces los cuantos de las vibraciones de la red se llaman fonones."
+    },
+    {
+     "h": "Primera y segunda secciones de este tema",
+     "text": "La relación de Mayer se obtuvo para un gas ideal. El gas real de la primera sección, con sus correcciones a y b, da otra diferencia de capacidades caloríficas, y cuanto más cerca del punto crítico, mayor es la divergencia: en el propio punto crítico, C_p se vuelve infinita, porque allí el gas se expande a presión constante sin resistencia alguna. La superficie de la segunda sección también tiene su propia capacidad calorífica, y por eso σ disminuye con la temperatura, pero eso ya es otra historia."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Curiosidades: compruébelo con sus manos",
+   "lead": "Ambos experimentos a continuación se escuchan con los oídos, no se ven con los ojos: γ entra en la velocidad del sonido y, por tanto, en el tono. La cocina resulta ser un laboratorio acústico perfectamente adecuado.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "experimento de cocina",
+     "h": "El zumbido de una botella baja si se le echa dióxido de carbono",
+     "text": "Tome dos botellas vacías idénticas. Sople a través del cuello de la primera: obtendrá un zumbido constante, recuerde su tono (o grábelo con el teléfono y luego compárelo con cualquier afinador). En la segunda, eche una cucharada de bicarbonato, vierta un poco de vinagre de mesa y, en cuanto la espuma se asiente, 'vierta' con cuidado el gas de esta botella en una tercera, seca y vacía: el dióxido de carbono es una vez y media más pesado que el aire y se vierte casi como el agua. No enrosque la tapa en ninguna de las botellas: el gas se libera violentamente y una botella cerrada se convierte en un recipiente a presión. Ahora sople a través del cuello de la tercera botella. El tono es notablemente más bajo.",
+     "answer": "Una botella con cuello es un resonador de Helmholtz, y su frecuencia es directamente proporcional a la velocidad del sonido en el gas que contiene. En dióxido de carbono puro, c = 267 m/s frente a 343 en el aire, una relación de 0,78, lo que supone un descenso de 435 cents, es decir, algo más de una tercera mayor y menos de una cuarta. Pero no tendrá gas puro en la botella: al verter se obtiene una mezcla, aproximadamente un setenta por ciento de dióxido de carbono y un treinta por ciento de aire restante. Calculemos honestamente para esta mezcla: masa molar 39,5 g/mol en lugar de 44, γ = 1,31 en lugar de 1,29, velocidad 285 m/s, y el descenso resulta ser de unos 320 cents, es decir, aproximadamente una tercera menor, tres semitonos. Eso es lo que debe esperar de oído; si oye más de cuatro semitonos, ha tenido suerte con la pureza del gas. Observe que el tono cambia doblemente: tanto la masa molar ha aumentado como γ ha disminuido, porque la molécula triatómica tiene más grados de libertad activos. El mismo experimento con helio de un globo produce el efecto contrario y mucho más fuerte: en el helio el sonido viaja 2,94 veces más rápido, y el zumbido sube 1865 cents, es decir, aproximadamente una octava y media."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "experimento de cocina",
+     "h": "El tono del chocolate caliente sube",
+     "text": "Eche una cucharada de cacao o café instantáneo en una taza, vierta agua caliente y revuelva enérgicamente. Ahora comience a golpear rítmicamente el fondo de la taza con la cucharilla, una vez por segundo, sin parar, durante unos veinte segundos. Los primeros golpes darán un sonido sordo y grave, y luego el tono subirá y en diez segundos ascenderá una tercera, y si tiene suerte, casi una octava. No se produce ningún enfriamiento en este tiempo, y el tono no cambia debido a la temperatura.",
+     "answer": "Los culpables son las burbujas de aire que ha mezclado junto con el polvo. La frecuencia a la que responde la taza con líquido es proporcional a la velocidad del sonido en ese líquido, y la velocidad del sonido es la raíz de la relación entre elasticidad y densidad. Las burbujas apenas añaden nada a la densidad (el aire es mil veces más ligero que el agua), pero arruinan catastróficamente la elasticidad: es difícil comprimir el agua, pero una burbuja se comprime fácilmente, y es ella la que determina la elasticidad de la mezcla. Además, la burbuja se comprime adiabáticamente a frecuencias de sonido, es decir, su elasticidad es igual a γp, y aquí es donde el exponente adiabático de nuestro párrafo sale directamente a la cocina. Orden de magnitud: con una fracción de burbujas de una milésima del volumen, la velocidad del sonido en la mezcla cae a aproximadamente 365 m/s frente a 1500 en agua pura, es decir, cuatro veces menos. Las burbujas suben y se disuelven, la fracción disminuye, la velocidad aumenta y el tono sube. El efecto se llama 'hot chocolate effect'; fue descrito cuidadosamente por Frank Crawford en 1982, y funciona con cualquier polvo que traiga aire consigo."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoja",
+     "h": "El calentador no aumenta la energía del aire en la habitación",
+     "text": "Ha encendido el calentador, la temperatura en la habitación ha subido de 18 a 24 grados. ¿Cuánto ha aumentado la energía interna del aire en la habitación?",
+     "answer": "Nada. La habitación se comunica con el exterior (rendijas, ventilación, grietas), por lo que la presión en ella es constante e igual a la atmosférica. Escribamos la energía interna del aire en la habitación de volumen V: U = n·C_V·T, y el número de moles es igual a pV/(RT). La temperatura se cancela, y queda U = (i/2)·p·V, donde no hay ninguna temperatura. Para una habitación de 50 metros cúbicos, esto es 2,5 · 10⁵ · 50 = 12,5 megajulios a cualquier temperatura. El calor que ha emitido el calentador no ha ido al aire, sino al exterior, junto con parte de las moléculas que han salido, dejando espacio a las demás que se han expandido. ¿Dónde va entonces el confort? En primer lugar, no solo se calienta el aire, sino también las paredes, los muebles, el suelo, cuya capacidad calorífica es órdenes de magnitud mayor. En segundo lugar, el confort no lo determina la energía del aire, sino su temperatura: esta determina tanto la transferencia de calor de su piel como la velocidad de evaporación de la misma. La paradoja muestra perfectamente que 'la cantidad de calor en la habitación' no es una magnitud física, sino una expresión coloquial."
+    },
+    {
+     "icon": "fact",
+     "kind": "dato curioso",
+     "h": "Maxwell admitió la derrota de la teoría molecular",
+     "text": "El teorema de equipartición es un resultado hermoso y general: a cada grado de libertad le corresponde media kT, sin excepciones. El problema es que, al contar según los espectros, una molécula diatómica tiene claramente más de siete grados de libertad (solo los movimientos internos de los átomos dan un bosque entero), y la capacidad calorífica medida daba obstinadamente cinco. Maxwell, en una conferencia de 1875, llamó a esto el fracaso más notable de la teoría molecular y no ocultó el problema con excusas. Kelvin más tarde incluyó el mismo tema entre las 'nubes' sobre la física del siglo XIX.",
+     "answer": "La solución llegó de donde no se esperaba. En 1900, Planck introdujo los cuantos al abordar la radiación, y en 1907 Einstein aplicó la misma idea a la capacidad calorífica de los sólidos y obtuvo su disminución al enfriarse, algo que la física clásica no podía explicar. Después quedó claro también para los gases: un grado de libertad no 'existe' o 'no existe', está activado si su cuanto es más barato que kT. La belleza de la historia es que el cuanto se podía haber notado en las tablas de capacidades caloríficas medio siglo antes de Planck, sin necesidad de espectroscopia. Ahí estaba, a la vista, en la diferencia entre cinco y siete."
+    },
+    {
+     "icon": "edge",
+     "kind": "límite de aplicabilidad",
+     "h": "El diamante es más frío de lo que permite la física clásica",
+     "text": "El mismo conteo de grados de libertad en un sólido da la ley de Dulong y Petit: un átomo en una red tiene tres direcciones de vibración, cada una cuenta dos veces (movimiento y elasticidad), total seis mitades de kT y una capacidad calorífica molar de 3R = 24,9 J/(mol·K). Se comprueba perfectamente: cobre 24,4, plata 25,4, plomo 26,4, todos alrededor de 25, independientemente del metal.",
+     "answer": "Ahora el diamante: 6,1 J/(mol·K) a temperatura ambiente, cuatro veces menos de lo prometido. La razón es exactamente la misma que para el nitrógeno con su cinco en lugar de siete. Los enlaces carbono-carbono en el diamante son extremadamente rígidos, los cuantos de vibración son correspondientemente caros, la temperatura característica es de unos 2000 kelvin, y a 300 K la mayoría de los grados de libertad vibracionales están congelados. Caliente el diamante a mil grados: la capacidad calorífica subirá hacia el límite de Dulong-Petit. El mismo mecanismo, la misma exponencial, otra escala. Por cierto, es precisamente la rigidez de los enlaces lo que hace del diamante un récord en conductividad térmica: los fonones viajan rápido y lejos, aunque sean pocos."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "Lo que simplificamos",
+   "blocks": [
+    {
+     "h": "La relación de Mayer es válida solo para el gas ideal",
+     "text": "En general, la diferencia de capacidades caloríficas se expresa mediante derivadas de la ecuación de estado y no es igual a una constante universal. Para un gas ideal, ambas derivadas se calculan mentalmente y dan exactamente R. Para el gas de van der Waals del primer párrafo, aparece una corrección que crece con la densidad y al acercarse a la temperatura crítica; cerca del punto crítico, el denominador se anula y la diferencia tiende a infinito. Para medios condensados, la fórmula también funciona, pero el resultado es diminuto: para el agua a 25 °C, la diferencia C_p − C_V es solo 0,79 J/(mol·K), diez veces menor que R, porque el agua apenas se expande al calentarse. De ahí la regla práctica: para líquidos y sólidos, en los manuales se da C_p y la diferencia se suele despreciar, mientras que para gases es obligatorio distinguirlas.",
+     "latex": "C_p - C_V = -T\\frac{(\\partial V/\\partial T)_p^{2}}{(\\partial V/\\partial p)_T}; \\qquad \\text{VdW: } C_p - C_V = \\frac{R}{1 - \\dfrac{2a(V-b)^{2}}{RTV^{3}}}"
+    },
+    {
+     "h": "Los grados de libertad no se activan con un interruptor",
+     "text": "El número entero i es una idealización conveniente. En realidad, cada modo vibracional contribuye a la capacidad calorífica con una función suave de la temperatura, y la transición de \"silencioso\" a \"activo\" se extiende aproximadamente un orden de magnitud en T. Calculemos esto para el nitrógeno con la fórmula de Einstein a la derecha: a 300 K, la vibración añade a C_V solo 0.0016·R, es decir, seis centésimas por ciento; a 1000 K ya es 0.41·R (la capacidad calorífica crece de 2.50·R a 2.91·R, casi un diecisiete por ciento); a 3000 K, es 0.90·R de la unidad prometida por la clásica. No hay ningún clic, hay un aumento suave que abarca miles de grados. Las rotaciones también están cuantizadas, solo que sus escalones suelen ser pequeños; la excepción es el hidrógeno, cuya temperatura rotacional θ es de unos 85 K: su C_V desciende de 5/2·R ya desde aproximadamente 200 K y a 60 kelvins llega a 3/2·R: un gas diatómico comienza a comportarse como uno monoatómico. Con el hidrógeno es aún más interesante: sus formas orto y para tienen diferentes escaleras rotacionales y se convierten entre sí muy lentamente, por lo que la capacidad calorífica medida depende de cuánto tiempo ha estado la muestra en frío.",
+     "latex": "\\frac{C_V}{R} = \\frac{3}{2} + \\sum_{\\text{rot}}\\!(\\dots) + \\sum_{\\text{vib}} \\frac{x_k^{2}e^{x_k}}{(e^{x_k}-1)^{2}}, \\qquad x_k = \\frac{\\theta_k}{T}"
+    },
+    {
+     "h": "El exponente γ tiene dependencia de la frecuencia",
+     "text": "La fórmula c = √(γRT/M) supone implícitamente que durante una compresión todos los grados de libertad tienen tiempo de intercambiar energía con el movimiento de traslación. Para el aire, esto se cumple con gran margen. Pero en el dióxido de carbono, la vibración de deformación se excita lentamente: la molécula necesita miles de colisiones para absorber o ceder un cuanto vibracional. A bajas frecuencias, el sonido \"ve\" la capacidad calorífica completa y viaja a 267 m/s. A altas frecuencias, la vibración no tiene tiempo de activarse, el γ efectivo sube a 1.40 y la velocidad aumenta a 278 m/s, un cuatro por ciento más. Entre estos regímenes hay una región de fuerte absorción: la energía de la onda se fuga hacia las vibraciones y regresa con retraso. Por eso el dióxido de carbono amortigua tanto el sonido, y por esta misma absorción se miden las velocidades de relajación intramolecular.",
+     "latex": "\\omega\\tau \\ll 1: \\; \\gamma = 1{,}29,\\; c = 267\\ \\text{m/s}; \\qquad \\omega\\tau \\gg 1: \\; \\gamma = 1{,}40,\\; c = 278\\ \\text{m/s}"
+    },
+    {
+     "h": "El aire es una mezcla y puede estar húmedo",
+     "text": "Todos los números \"diatómicos\" para el aire son el resultado de promediar sobre el 78 por ciento de nitrógeno, el 21 por ciento de oxígeno y casi un uno por ciento de argón monoatómico. El argón desplaza ligeramente el γ calculado desde el valor exacto de 1.4000 hacia 1.4015, y la vibración del oxígeno lo empuja de vuelta: su temperatura característica es 2270 K, a 293 K la función de Einstein da 0.026 por molécula: una contribución diminuta, pero suficiente para devolver el cálculo a 1.4004. El valor de referencia de 1.400 resulta ser el resultado de dos efectos opuestos, no una simple fracción 7/5. La humedad actúa en la otra dirección y más fuerte de lo que parece: la molécula de agua pesa 18 g/mol frente a 29 del aire promedio, por lo que el aire húmedo es MÁS LIGERO que el seco y el sonido viaja más rápido en él. Calculemos el caso límite: a 30 °C y humedad total, el vapor de agua en el aire es 4.2 por ciento en volumen, la masa molar promedio cae de 28.97 a 28.5 g/mol, y solo esto añade un 0.8 por ciento a la velocidad. Además, γ cae de 1.400 a 1.397, porque el agua triatómica tiene más grados de libertad activos, pero esto resta solo un 0.13 por ciento: un efecto seis veces más débil que el de la masa. El resultado es alrededor de más 0.7 por ciento; a 20 °C es la mitad, 0.4 por ciento. Para comparar, la temperatura hace muchísimo más: de 0 a 30 °C, la velocidad del sonido aumenta de 331 a 349 m/s, es decir, un cinco por ciento."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "La capacidad calorífica es una propiedad del proceso, no de la sustancia. A presión constante, el gas, además de calentarse, empuja la atmósfera, y el costo adicional es exactamente R por mol y por grado: C_p − C_V = R. La propia C_V se obtiene contando los grados de libertad activos, C_V = (i/2)R, y su número lo decide no la geometría de la molécula, sino la temperatura: un escalón funciona si su cuanto es más barato que kT. La relación γ = (i+2)/i es adimensional y por eso se mide con la velocidad del sonido.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "Pago por la expansión",
+     "text": "C_p − C_V = R — el costo adicional no depende ni de la presión ni del tipo de gas: es igual al trabajo p·ΔV = R·ΔT"
+    },
+    {
+     "icon": "scale",
+     "title": "C_V = (i/2)R",
+     "text": "Media kT por cada grado de libertad activo: i = 3 en el helio da 12,47 frente a los 12,5 medidos"
+    },
+    {
+     "icon": "fact",
+     "title": "Cinco, no siete",
+     "text": "En el nitrógeno, las rotaciones están abiertas (θ = 2,9 K), la vibración está cerrada (θ = 3390 K). Los números enteros en i los pone el cuanto, no la geometría"
+    },
+    {
+     "icon": "edge",
+     "title": "γ se mide con cronómetro",
+     "text": "c = √(γRT/M): 343 m/s dan i = 5, los 1007 del helio dan i = 3. Newton, sin γ, se equivocó en un 15 %, Laplace lo corrigió en 1816"
+    }
+   ],
+   "where": [
+    "Ventilación y climatización: un metro cúbico de aire pesa 1,2 kg, y calentarlo un grado cuesta unos 1,2 kJ",
+    "Diésel: la compresión veinte veces eleva la temperatura en 20^0,4 ≈ 3,3 veces — el combustible se enciende sin bujía, y todo porque γ > 1",
+    "Acústica: la velocidad del sonido depende de la temperatura y no de la presión, por eso en el frío el sonido viaja más lento",
+    "Helio en la voz: el tono no 'sube' — las resonancias de la laringe se desplazan hacia arriba porque en el helio el sonido viaja 2,9 veces más rápido",
+    "Cálculo de turbinas y motores: a altas temperaturas γ cae de 1,40 a 1,34, y el 1,4 de los libros hay que sustituirlo por una tabla"
+   ],
+   "watchOut": "Tres trampas. La primera: decir 'capacidad calorífica del aire' sin especificar qué está fijo: la diferencia entre 718 y 1005 es del cuarenta por ciento y en el cálculo de ventilación no es una nimiedad. La segunda: considerar i una característica geométrica de la molécula: en la misma molécula de nitrógeno, i es cinco a temperatura ambiente y tiende a siete a tres mil kelvin. La tercera: pensar que la velocidad del sonido aumenta con la presión: en la fórmula entra la relación γp/ρ, y al comprimir un gas ambos crecen, así que la dependencia queda solo con la temperatura."
+  },
+  "quiz": [
+   {
+    "id": "hc1",
+    "type": "mcq",
+    "q": "Un mol de helio se calentó 1 K a presión constante, gastando 20.79 J. El mismo mol se calentó 1 K en un recipiente rígido, gastando 12.47 J. ¿A dónde fueron a parar los 8.3 J que faltan en el primer caso?",
+    "options": [
+     "Se usaron en el trabajo de expansión: el gas empujó a la atmósfera, y el pago es R·ΔT",
+     "Se usaron en calentar el propio pistón y las paredes del cilindro",
+     "Se usaron en excitar rotaciones — a presión constante las moléculas empiezan a girar",
+     "A ningún lado: 8.31 J es el error del calorímetro, los calores específicos son en realidad iguales"
+    ],
+    "answer": 0,
+    "why": "A presión constante, el volumen de un mol crece junto con la temperatura: de pV = RT se deduce p·ΔV = R·ΔT, es decir, exactamente 8.314 J por grado. Este trabajo se realiza contra la atmósfera y no permanece en el gas. La respuesta sobre calentar el pistón y las paredes es incorrecta porque la capacidad calorífica del recipiente no entra en la definición de la capacidad calorífica molar del gas; se resta mediante una calibración separada. La respuesta sobre excitar rotaciones es doblemente imposible: el helio es monoatómico, no hay nada que girar, y el número de grados de libertad activos depende de la temperatura, no de si el pistón está libre o no. La cuarta contradice la aritmética: 20.79/12.47 = 1.667 = 5/3, una relación demasiado precisa para ser un error.",
+    "hint": "Escribe la primera ley: el calor suministrado se va en el aumento de la energía interna más el trabajo. La energía interna de un gas ideal depende solo de la temperatura, y la temperatura aumentó igual en ambos experimentos."
+   },
+   {
+    "id": "hc2",
+    "type": "mcq",
+    "q": "La velocidad del sonido en el helio es 1007 m/s, en el aire 343 — 2.94 veces mayor. El helio es monoatómico (γ = 1.67) y ligero (M = 4 g/mol). ¿Qué contribuye principalmente a este factor de 2.94?",
+    "options": [
+     "La masa molar: da un factor de 2.69, y el exponente γ solo 1.09",
+     "El exponente adiabático: γ en el helio es casi el doble, y eso decide",
+     "Ambas contribuciones son aproximadamente iguales: alrededor de 1.7 de la masa y alrededor de 1.7 de γ",
+     "Ni lo uno ni lo otro: el helio es más ligero, por eso sus moléculas se mueven más rápido, y la masa y γ no entran en la fórmula"
+    ],
+    "answer": 0,
+    "why": "En la fórmula c = √(γRT/M) ambas propiedades están bajo la raíz, pero su rango no es comparable. La relación de masas molares es 28.97/4.00 = 7.24, su raíz es 2.69. La relación de exponentes es 1.667/1.400 = 1.19, su raíz es 1.09. El producto 2.69 · 1.09 = 2.94 — exactamente el valor medido. La respuesta \"decide el exponente adiabático\" se equivoca numéricamente: γ en el helio es solo un 19% mayor que en el aire, no el doble. La respuesta \"ni lo uno ni lo otro\" siente correctamente la física (las moléculas de helio son realmente más rápidas), pero eso es precisamente lo que está escrito en la fórmula como factor 1/√M — no hay un mecanismo separado aquí. La regla general: γ varía entre 1.29 y 1.67, mientras que la masa molar varía en decenas de veces, por lo que las grandes diferencias en la velocidad del sonido casi siempre se deben a la masa.",
+    "hint": "Calcula las dos raíces por separado: la raíz de la relación de γ y la raíz de la relación inversa de masas molares. ¿Cuál está más lejos de 1?"
+   },
+   {
+    "id": "hc3",
+    "type": "free",
+    "q": "Con tus propias palabras: para la molécula diatómica de nitrógeno, el cálculo clásico da siete grados de libertad, pero la capacidad calorífica medida corresponde a cinco. ¿Por qué?",
+    "keywords": [
+     "cuántico",
+     "vibración",
+     "congelado",
+     "apagado",
+     "escalón",
+     "porción",
+     "temperatura",
+     "kT",
+     "Boltzmann",
+     "3390"
+    ],
+    "needed": 2,
+    "why": "Porque la energía no se puede entregar en porciones arbitrariamente pequeñas. Tres grados de libertad traslacionales y dos rotacionales funcionan: el escalón rotacional del nitrógeno cuesta 2.9 K, la energía térmica a 300 K lo supera con un margen colosal. Los dos vibracionales no funcionan: el escalón de vibración del enlace N—N cuesta 3390 K, es decir, once veces más que kT a temperatura ambiente, y el factor de Boltzmann da una población de 1.2·10⁻⁵ — vibra aproximadamente una molécula de cada ochenta mil, y tal contribución a la capacidad calorífica no es medible. De ahí i = 3 + 2 + 0 = 5 y C_V = 5/2·R = 20.8 J/(mol·K). Es importante: la molécula no es \"rígida\" — es perfectamente capaz de vibrar, solo que a 300 K lo hace una fracción insignificantemente pequeña. Calienta el nitrógeno a mil kelvin, y la capacidad calorífica comenzará a subir, y hacia tres mil se acercará a los prometidos siete medios R.",
+    "hint": "Compara dos cantidades: el precio de un cuanto de vibración del nitrógeno (en grados es 3390 K) y la pequeñez térmica de la que dispone la molécula a 300 K. ¿Cuál es mayor y en cuántas veces?"
+   },
+   {
+    "id": "hc4",
+    "type": "estimate",
+    "q": "El argón es monoatómico, su masa molar es 39.95 g/mol. Estima la velocidad del sonido en argón a 20 °C (293 K). Respuesta en metros por segundo. Toma R = 8.31 J/(mol·K).",
+    "answer": 319,
+    "unit": "m/s",
+    "why": "Gas monoatómico — significa i = 3 y γ = (3 + 2)/3 = 5/3 = 1.667. Sustituimos: c = √(γRT/M) = √(1.667 · 8.31 · 293 / 0.03995) = √(4058/0.03995) = √101600 ≈ 319 m/s. El valor de referencia es 319 m/s. Una estimación rápida sin calculadora: el argón es 1.5 veces más pesado que el aire (39.95 contra 28.97, relación 1.38, raíz 1.17), pero γ es mayor en 1.19 veces (raíz 1.09), por lo que c debería ser aproximadamente 343 · 1.09/1.17 ≈ 320 m/s. Una comprobación útil de errores: 292 m/s significa que tomaste γ = 1.4 en lugar de 5/3, y diez metros por segundo significa que la masa molar quedó en gramos.",
+    "tolAbs": 20,
+    "hint": "Primero determina γ: en un gas monoatómico solo funcionan los tres grados de libertad traslacionales. Convierte la masa molar a kilogramos por mol, de lo contrario la respuesta se irá por un factor de treinta."
+   }
+  ],
+  "title": "Capacidades caloríficas C_V y C_p: hacia dónde va el calor",
+  "subtitle": "Párrafo 3 · Relación de Mayer, grados de libertad y velocidad del sonido",
+  "intro": [
+   "Abra un manual en la palabra «aire» y busque la capacidad calorífica. Encontrará dos números: 718 y 1005 julios por kilogramo por grado. Difieren en un cuarenta por ciento, ambos son correctos, y ninguno es un error tipográfico. La sustancia es la misma, la temperatura es la misma, pero hay dos respuestas: porque la pregunta se planteó de forma incompleta.",
+   "La diferencia surge de qué mantuvimos fijo mientras calentábamos. Un gas en un recipiente rígido solo puede calentarse. Un gas bajo un pistón libre se calienta y, de paso, empuja la atmósfera, y para ello se necesita trabajo, y alguien debe pagarlo: lo paga la misma placa. De ahí el segundo número. Es notable que el recargo se calcula exactamente, en una línea, y no depende de qué gas sea: es la relación de Mayer.",
+   "A continuación preguntaremos de dónde sale el propio valor de C_V, y lo obtendremos contando las direcciones en las que una molécula puede moverse. El conteo dará para un gas diatómico siete, pero la experiencia obstinadamente muestra cinco, y en este punto la termodinámica clásica deja ver un destello de cuántica. Y al final resultará que el número de grados de libertad se puede medir con un cronómetro: la relación γ = C_p/C_V es adimensional y, por tanto, se lee directamente de la velocidad del sonido."
+  ],
+  "standNote": "El stand de este tema dibuja las isotermas de Van der Waals, y de él hay que tomar un detalle: la hipérbola punteada gris con la etiqueta «gas ideal». Siempre está dibujada: es el mismo gas calculado según $pV = nRT$. Todo lo que derivaremos a continuación vive precisamente en ella: la relación $C_p - C_V = R$ se basa en que la energía interna depende solo de la temperatura, y eso es cierto donde el gas es ideal. Ajusten la temperatura reducida a $T/T_c = 1{,}30$ y lleven el deslizador de volumen completamente a la derecha: la curva sólida se acerca a la punteada, pero no se funde con ella — el panel inferior, donde se representa $Z = pV/nRT$, muestra 0,91 en lugar de 1. Vuelvan el volumen a $V/V_c = 1$, y $Z$ caerá a 0,63. El stand simplemente no alcanza el gas ideal, y eso es honesto: el aire de la habitación de nuestro ejemplo se encuentra en un $V/V_c$ del orden de doscientos cincuenta, muy lejos del borde derecho de la gráfica — allí $Z$ es efectivamente 1. Ahora bajen la temperatura a 1,00 y miren la mitad izquierda: las curvas se separan, y con ellas se separan las capacidades caloríficas. En el propio punto crítico, la tangente a la isoterma se vuelve horizontal, es decir, el gas se expande a presión constante sin resistencia alguna — y la diferencia $C_p - C_V$ no se convierte en $R$, sino en infinito. Mantengan esta imagen en mente: muestra el límite más allá del cual la fórmula cuidadosa de este apartado deja de funcionar."
+ },
+ "ar": {
+  "formula": {
+   "name": "علاقة ماير والسعة الحرارية من خلال درجات الحرية",
+   "latex": "C_p - C_V = R, \\qquad C_V = \\frac{i}{2}R, \\qquad \\gamma = \\frac{C_p}{C_V} = \\frac{i+2}{i}",
+   "alsoKnown": "معادلة ماير؛ نظرية التوزيع المتساوي للطاقة على درجات الحرية؛ أس الأدياباتيك γ",
+   "authors": [
+    {
+     "who": "يوليوس روبرت ماير",
+     "year": "1842",
+     "what": "في مقالته «ملاحظات حول قوى الطبيعة غير الحية» ربط الحرارة والشغل وحسب المكافئ الميكانيكي للحرارة من الفرق في السعات الحرارية للهواء – في الأساس من نفس الصيغة التي تحمل اسمه"
+    },
+    {
+     "who": "جيمس بريسكوت جول",
+     "year": "1845",
+     "what": "أطلق غازًا مضغوطًا في وعاء مفرغ ولم يلاحظ أي تغير في درجة الحرارة: وهذا يعني أن الطاقة الداخلية للغاز المخلخل تعتمد على درجة الحرارة ولا تعتمد على الحجم – وهو افتراض بدونه ينهار استنتاج ماير"
+    },
+    {
+     "who": "بيير سيمون لابلاس",
+     "year": "1816",
+     "what": "صحح صيغة نيوتن لسرعة الصوت، مستبدلاً الانضغاطية متساوية الحرارة بالانضغاطية الأدياباتيكية، وبذلك حوّل التجربة الصوتية إلى أداة قياس لـ γ"
+    },
+    {
+     "who": "جيمس كليرك ماكسويل",
+     "year": "1875",
+     "what": "في محاضرة عن الجزيئات وصف التناقض بين السعات الحرارية المقاسة ونظرية التوزيع المتساوي بأنه أبرز فشل للنظرية الجزيئية – واعترف بصدق أنه لا يملك تفسيرًا"
+    },
+    {
+     "who": "ألبرت أينشتاين",
+     "year": "1907",
+     "what": "أظهر من خلال السعة الحرارية للمواد الصلبة ما كان ينقص ماكسويل: درجة الحرية لا تعمل إذا كان كمها أغلى من kT – وبالتالي فإن انخفاض السعة الحرارية عند التبريد نشأ من تلقاء نفسه"
+    }
+   ],
+   "story": "كان ماير طبيبًا على متن سفينة. في عام 1840 كان متجهًا إلى جاوة، وأثناء فصده الدماء للبحارة لاحظ أن الدم الوريدي في المناطق الاستوائية أفتح من المعتاد – كما لو أن الجسم في المناخ الحار يحرق كمية أقل من الأكسجين. ومن هنا توصل إلى فكرة أن الحرارة والشغل هما نفس الشيء، فقط بعملتين مختلفتين، وسعر الصرف ثابت. لم يكن لديه أدوات لحساب هذا السعر: لم تكن لديه أجهزة. أخذ السعات الحرارية للهواء عند ضغط ثابت وعند حجم ثابت من جداول الآخرين، طرح أحدهما من الآخر، وأعلن أن الفرق هو بالضبط الحرارة التي ذهبت لدفع الغلاف الجوي. المنطق لا تشوبه شائبة، وسنكرره أدناه حرفيًا. كانت النتيجة أقل بنحو خمسة عشر بالمائة من القيمة الصحيحة – 3.58 جول لكل سعرة حرارية بدلاً من 4.18 – فقط لأن السعات الحرارية الجدولية في ذلك الوقت كانت رديئة. ثم أصبحت القصة حزينة. رُفضت مقالة ماير في البداية، وأُعطي الأولوية لجول الذي قاس نفس السعر بتجارب دقيقة، وماير نفسه في عام 1850 ألقى بنفسه من النافذة وقضى عدة سنوات في مصحة. جاء الاعتراف في ستينيات القرن التاسع عشر عندما أعاد تيندال وكلاوزيوس عمله إلى التداول. الصيغة التي استنتجها من رقمين أجنبيين وفكرة واحدة لا تزال موجودة في الكتب المدرسية حتى اليوم.",
+   "symbols": [
+    {
+     "sym": "C_V",
+     "latex": "C_V",
+     "what": "السعة الحرارية المولية عند حجم ثابت",
+     "unit": "J/(mol·K)",
+     "note": "كمية الحرارة التي يطلبها مول من الغاز لدرجة واحدة إذا كان الوعاء صلبًا؛ للهواء 20.8"
+    },
+    {
+     "sym": "C_p",
+     "latex": "C_p",
+     "what": "السعة الحرارية المولية عند ضغط ثابت",
+     "unit": "J/(mol·K)",
+     "note": "نفس الشيء، لكن المكبس حر والغاز يتمدد على طول الطريق؛ للهواء 29.1"
+    },
+    {
+     "sym": "R",
+     "latex": "R",
+     "what": "ثابت الغاز العام",
+     "unit": "J/(mol·K)",
+     "note": "هنا يُقرأ كدفعة مقابل تمدد مول بدرجة واحدة عند ضغط ثابت"
+    },
+    {
+     "sym": "U",
+     "latex": "U",
+     "what": "الطاقة الداخلية للغاز",
+     "unit": "J",
+     "note": "مجموع طاقات حركة الجزيئات؛ للغاز المثالي تعتمد فقط على درجة الحرارة"
+    },
+    {
+     "sym": "i",
+     "latex": "i",
+     "what": "عدد درجات حرية الجزيء",
+     "unit": "بلا أبعاد",
+     "note": "ليست خاصية هندسية، بل عدد طرق تخزين الطاقة التي تعمل عند درجة حرارة معينة"
+    },
+    {
+     "sym": "γ",
+     "latex": "\\gamma",
+     "what": "أس الأدياباتيك",
+     "unit": "بلا أبعاد",
+     "note": "نسبة C_p إلى C_V؛ كونه بلا أبعاد يجعله قابلاً للقياس بدون وحدات حرارة"
+    },
+    {
+     "sym": "θ",
+     "latex": "\\theta",
+     "what": "درجة الحرارة المميزة لدرجة الحرية",
+     "unit": "K",
+     "note": "الكم مقسومًا على k_B: سعر الدرجة الأولى بالدرجات؛ لدوران النيتروجين 2.9 K، وللاهتزاز 3390 K"
+    },
+    {
+     "sym": "c",
+     "latex": "c",
+     "what": "سرعة الصوت",
+     "unit": "m/s",
+     "note": "في الغاز تعتمد على درجة الحرارة ولا تعتمد على الضغط: في الصيغة تدخل نسبة p إلى ρ"
+    },
+    {
+     "sym": "M",
+     "latex": "M",
+     "what": "الكتلة المولية للغاز",
+     "unit": "kg/mol",
+     "note": "للهواء 0.02897 – متوسط للخليط؛ للهيليوم 0.00400"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "الاشتقاق الدقيق",
+   "lead": "من الجاهز سنحتاج فقط إلى لبنة البناء: القانون الأول للديناميكا الحرارية ومعادلة الحالة pV = nRT. لن يكون هناك أي مسلمة جديدة في الاشتقاق، لكن سيكون هناك افتراض واحد سنذكره بصوت عالٍ ثم نختبر متانته.",
+   "steps": [
+    {
+     "text": "لنبدأ من حقيقة أن السؤال «ما هي السعة الحرارية للغاز؟» غير مكتمل. السعة الحرارية هي نسبة الحرارة الممتصة إلى الزيادة في درجة الحرارة، لكن الحرارة ليست دالة حالة: فهي تعتمد على المسار الذي سلكه الغاز من النقطة الابتدائية إلى النهائية. خذ نفس الكمية من الهواء وزودها بنفس الجولات بطريقتين. في أسطوانة صلبة، سيرتفع مقياس الحرارة أكثر بشكل ملحوظ منه تحت مكبس حر، وهذا ليس بسبب اختلاف المواد بل بسبب اختلاف العمليات. ومن هنا يأتي الرقمان في الكتب المرجعية: 718 و 1005 جول لكل كيلوغرام لكل درجة، ويختلفان بنسبة 1.40 بالضبط.",
+     "latex": "C \\equiv \\frac{\\delta Q}{dT} \\;\\text{تعتمد على المسار}; \\qquad c_V^{\\text{الهواء}} = 718, \\quad c_p^{\\text{الهواء}} = 1005 \\ \\frac{\\text{جول}}{\\text{كجم}\\cdot\\text{كلفن}}",
+     "figure": "realheat",
+     "figCaption": "غاز واحد، كمية حرارة واحدة، وعاءان: في الأسطوانة الصلبة ترتفع درجة الحرارة أكثر مما تحت المكبس الحر"
+    },
+    {
+     "text": "نثبت المكبس. عندها لا يتغير الحجم، والغاز لا يحرك شيئًا ولا يبذل شغلًا: في القانون الأول يختفي الحد الثاني، وكل الحرارة الموردة تذهب إلى الطاقة الداخلية. تعريف السعة الحرارية عند حجم ثابت يظهر مباشرة، وهذا تعريف وليس نتيجة. لاحظ الفهرس V في المشتقة الجزئية: إنه عنصر حامل وليس زخرفة — يُسأل عن الطاقة كيف تزداد مع درجة الحرارة عند حجم ثابت، وسؤال آخر يعطي إجابة أخرى.",
+     "latex": "\\delta Q = dU + p\\,dV, \\qquad dV = 0 \\;\\Longrightarrow\\; \\delta Q = dU \\;\\Longrightarrow\\; C_V \\equiv \\left(\\frac{\\partial U}{\\partial T}\\right)_V",
+     "figure": "realpiston",
+     "figCaption": "مكبس مثبت: الغاز لا يحرك شيئًا، وكل الحرارة تبقى داخله — في سرعة الجزيئات"
+    },
+    {
+     "text": "الآن نحرر المكبس ونضع عليه ثقلًا ثابتًا بحيث يظل الضغط ثابتًا. يُضاف إلى الحساب السابق شغل التمدد. لنحسبه لمول واحد من الغاز المثالي: من pV = RT عند ثبات p ينتج أن حاصل ضرب p في زيادة الحجم يساوي R مضروبًا في زيادة درجة الحرارة. هذه هي المفاجأة الرئيسية في الاشتقاق — الدفعة الإضافية لكل درجة تساوي R جول لكل مول ولا تعتمد على الضغط ولا على الحجم ولا على ما إذا كان غازنا هيليوم أو ثاني أكسيد الكربون. في الظروف العادية، يحتل المول 24 لترًا، وعند درجة واحدة يزيح الغلاف الجوي بحوالي 82 سنتيمترًا مكعبًا.",
+     "latex": "p\\,\\Delta V = R\\,\\Delta T \\quad (p = \\text{ثابت}), \\qquad \\delta Q_p = dU + p\\,dV",
+     "figure": "realwork",
+     "figCaption": "مكبس حر مع ثقل: الغاز يسخن ويرفع الغلاف الجوي في نفس الوقت، والثمن هو R بالضبط لكل مول ولكل درجة"
+    },
+    {
+     "text": "نطرح واحدًا من الآخر. الزيادة في الطاقة الداخلية هي نفسها في كلتا الحالتين — وهنا يوجد الافتراض الذي بدونه يكون الاشتقاق كله خاطئًا: الطاقة الداخلية للغاز المثالي تعتمد فقط على درجة الحرارة، وليس على الحجم. اختبر جول هذا في عام 1845: أطلق غازًا مضغوطًا في وعاء مفرغ، بحيث لم يبذل الغاز شغلًا ضد أي شيء، ولم تتغير درجة الحرارة. إذن، توسيع الجزيئات «مجانًا» — في غياب القوى بينها — لا يكلف طاقة. بالنسبة لغاز فان دير فالس من الفقرة الأولى من هذا الموضوع، الافتراض لم يعد صحيحًا، فهناك الجزيئات تتجاذب، ويجب إنفاق طاقة لتفريقها.",
+     "latex": "C_p = \\left(\\frac{\\partial U}{\\partial T}\\right)_p + R = C_V + R \\;\\Longrightarrow\\; \\boxed{\\,C_p - C_V = R\\,} \\quad (\\text{ماير، 1842})",
+     "figure": "realmayer",
+     "figCaption": "رقمان مقاسان وفرق واحد: 29.10 ناقص 20.79 يعطي 8.31 — ثابت الغاز العام"
+    },
+    {
+     "text": "علاقة ماير تعطي الفرق، لكن ليس السعات الحرارية نفسها. يجب أخذ قيمة C_V من الحساب: كم عدد الطرق المستقلة التي يمكن للجزيء أن يخزن بها الطاقة. تنص نظرية التوزيع المتساوي على أن لكل طريقة من هذه الطرق متوسط نصف kT، وبالتالي تكون السعة الحرارية المولية تساوي i مضروبًا في نصف R. دعونا نتحقق من ذلك على أبسط غاز. في الهيليوم أحادي الذرة، الجزيء نقطة، يمكنه التحرك فقط في ثلاثة اتجاهات، إذن i = 3 و C_V يجب أن تساوي 12.47 جول/(مول·كلفن)، و C_p تساوي 20.79. الكتاب المرجعي يعطي 12.5 و 20.79. تطابق حتى الرقم المعنوي الثالث، ولم تكن هناك أي معاملات ضبط في الحساب.",
+     "latex": "\\bar\\varepsilon = \\frac{i}{2}k_BT \\;\\Longrightarrow\\; U = \\frac{i}{2}RT, \\quad C_V = \\frac{i}{2}R; \\qquad i = 3:\\; C_V = 12{,}47,\\; C_p = 20{,}79\\ \\frac{\\text{جول}}{\\text{مول}\\cdot\\text{كلفن}}",
+     "figure": "realdof",
+     "figCaption": "ثلاثة اتجاهات للحركة — ثلاث درجات حرية: الصيغة تعطي 12.47، والهيليوم يظهر 12.5"
+    },
+    {
+     "text": "ننتقل إلى الجزيء ثنائي الذرة — وينكسر الحساب. للدمبل ثلاث درجات انتقالية، ودرجتان دورانيّتان (حول محور الدمبل لا يوجد ما يدور)، ودرجتان اهتزازيّتان، لأن الاهتزاز على طول الرابطة يخزن الطاقة مرتين: في السرعة وفي تمدد الزنبرك. المجموع سبع، إذن C_V يجب أن تكون 29.1. السعة الحرارية المقاسة للنيتروجين عند درجة حرارة الغرفة هي 20.8، أي بالضبط خمسة أنصاف R. درجتا حرية ببساطة لا تستجيبان. اللغز ليس في صلابة الرابطة، بل في أن الطاقة تُعطى على شكل دفعات: درجة الاهتزاز للنيتروجين تكلف 3390 كلفن، والحرارة الصغيرة البالغة 300 كلفن لا تصل إليها، والاهتزاز صامت (إشغال الدرجة الأولى هو 1.2·10⁻⁵ — الحساب مفصل في فقرة عامل بولتزمان). درجة الدوران، على العكس، تكلف 2.9 كلفن فقط وهي مفتوحة على مصراعيها. هنا يبرز الكم من الديناميكا الحرارية الكلاسيكية: الأرقام صحيحة، لكن أي منها بالضبط — لا يقرره هندسة الجزيء، بل درجة الحرارة.",
+     "latex": "i_{\\text{الكلاسيكي}} = 3 + 2 + 2 = 7 \\;\\Rightarrow\\; C_V = 29{,}1; \\qquad \\text{التجربة: } C_V(\\mathrm{N_2}) = 20{,}8 = \\tfrac{5}{2}R; \\qquad \\theta_{\\text{الدوران}} = 2{,}9\\,\\text{كلفن} \\ll T \\ll \\theta_{\\text{الاهتزاز}} = 3390\\,\\text{كلفن}",
+     "figure": "realladder",
+     "figCaption": "درجات الدوران أصغر من الكم الحراري وتعمل، ودرجة الاهتزاز أغلى بإحدى عشرة مرة من kT وتصمت"
+    },
+    {
+     "text": "بما أننا نعرف الآن كيفية حساب C_V، ونعرف الفرق، فلنحسب النسبة أيضًا. تنتج ككسر نقي من عدد صحيح: γ = (i + 2)/i. هذه هي الكمية الأكثر عملية في هذا القسم، وإليك السبب. من الصعب قياس السعة الحرارية: تحتاج إلى مسعر، وتحتاج إلى معرفة كتلة الغاز، وتحتاج إلى مراعاة السعة الحرارية للوعاء نفسه والخسائر في البيئة المحيطة. أما γ فهي بلا أبعاد — لا تتطلب وحدات حرارة ولا وحدات كتلة. ثلاث قيم محتملة تقع بعيدًا عن بعضها: 1.67 لأحادي الذرة، 1.40 لثنائي الذرة، 1.29 لجزيء مع اهتزاز غير مجمد. يجب فقط تمييزها، وهذه مهمة لأي تجربة تدخل فيها γ في الإجابة.",
+     "latex": "\\gamma = \\frac{C_p}{C_V} = \\frac{C_V + R}{C_V} = 1 + \\frac{2}{i} = \\frac{i+2}{i}: \\qquad \\tfrac{5}{3} = 1{,}67, \\quad \\tfrac{7}{5} = 1{,}40, \\quad \\tfrac{9}{7} = 1{,}29",
+     "figure": "realgamma",
+     "figCaption": "ثلاث قيم لـ γ على مقياس واحد: كلما قل عدد درجات الحرية العاملة للجزيء، زادت γ"
+    },
+    {
+     "text": "مثل هذه التجربة موجودة، ولا تتطلب حتى مختبرًا: الصوت. في موجة صوتية، تتناوب الانضغاطات والتخلخلات آلاف المرات في الثانية، ولا يتوفر للحرارة الوقت للانتقال بين المناطق المجاورة، وتتم العملية على طول خط أديباتي — وتدخل γ فيه كأس (معادلة الأديباتي مشتقة في موضوع المحركات، نأخذها جاهزة). من هنا c = √(γp/ρ)، أي c = √(γRT/M). اعتبر نيوتن في «المبادئ» الانضغاطات متساوية الحرارة، وهو ما يعادل γ = 1، وحصل على 290 م/ث بينما القياسات تعطي 343 — خطأ بنسبة خمسة عشر بالمائة، استمر لأكثر من قرن حتى أعاد لابلاس في عام 1816 مؤشر الأديباتي إلى مكانه. اليوم تُقرأ الصيغة بالعكس: 343 م/ث للهواء تعطي γ = 1.40 و i = 5، و 1007 م/ث للهيليوم تعطي i = 3، و 267 م/ث لثاني أكسيد الكربون تعطي i ≈ 6.9، لأن اهتزاز التشوه للجزيء الخطي ثلاثي الذرة يكلف 960 كلفن فقط وعند درجة حرارة الغرفة يكون غير مجمد تقريبًا في منتصفه. ساعة الإيقاف قاست عدد درجات الحرية.",
+     "latex": "c = \\sqrt{\\frac{\\gamma p}{\\rho}} = \\sqrt{\\frac{\\gamma R T}{M}} \\;\\Longrightarrow\\; \\gamma = \\frac{c^{2}M}{RT}, \\quad i = \\frac{2}{\\gamma - 1}; \\qquad \\mathrm{He}\\ 1007, \\;\\text{الهواء}\\ 343, \\;\\mathrm{CO_2}\\ 267\\ \\text{م/ث}",
+     "figure": "realsound",
+     "figCaption": "نيوتن اعتبر الموجة متساوية الحرارة وحصل على 290 م/ث؛ معامل الأديباتي γ يضيف الخمسة عشر بالمائة المفقودة"
+    }
+   ],
+   "plate": "C_p - C_V = R, \\qquad C_V = \\frac{i}{2}R, \\qquad \\gamma = \\frac{i+2}{i}",
+   "plateCap": "على اليسار — ثمن حرية المكبس: بالضبط R جول لكل مول ولكل درجة، نفسه لأي غاز مثالي. في الوسط — السعة الحرارية نفسها، مبنية من عدد صحيح من درجات الحرية العاملة. على اليمين — النسبة بلا أبعاد التي تربط هذين البيانين بساعة الإيقاف وبالتالي يسهل التحقق منها في التجربة.",
+   "note": "لنجمع الافتراضات، وهي أيضًا حدود الصيغ. أولاً: الغاز مثالي، أي U = U(T). بمجرد أن يصبح تجاذب الجزيئات غير مهمل — وقد قمنا في الفقرة الأولى من هذا الموضوع بطيّه في التصحيح a/V² — يتوقف الفرق C_p − C_V عن مساواة R ويبدأ في الاعتماد على الحجم؛ الصيغة العامة معطاة أدناه، في الملحق. ثانيًا: العدد i كان يُعتبر عددًا صحيحًا وثابتًا. في الواقع ليس كذلك، ودرجة الاهتزاز لا تُفعَّل بمفتاح، بل بسلاسة، موزعة على عدة مئات من الدرجات؛ الأعداد الصحيحة تقريب جيد فقط في نافذة درجات حرارة حيث تكون جميع الدرجات إما أقل بكثير من kT أو أعلى بكثير منها. ثالثًا: الهواء ليس غازًا بل خليطًا، وجميع أرقامه «ثنائية الذرة» متوسطات على النيتروجين والأكسجين والأرجون؛ خليط نقي من غازات ثنائية الذرة سيعطي 1.4000 بالضبط، والأرجون يرفع القيمة المحسوبة إلى 1.4015، واهتزاز الأكسجين المفتوح قليلاً عند درجة حرارة الغرفة (θ = 2270 كلفن) يسحبها مرة أخرى إلى القيمة المرجعية 1.400 — الأرقام الثلاثة بعد الفاصلة هنا ليست زخرفة بل نتيجة تأثيرات متضادة. رابعًا: نظرية التوزيع المتساوي هي نظرية كلاسيكية، وقد اشتُقت لنظام يمكن للطاقة أن تأخذ أي قيم؛ حيثما لا يكون ذلك صحيحًا، لا «تخطئ قليلاً»، بل تعطي إجابة خاطئة نوعيًا، وعلى السعات الحرارية تحديدًا اكتُشف هذا لأول مرة. خامسًا: صيغة سرعة الصوت تفترض أن التبادل الحراري لا يحدث إطلاقًا وأن جميع درجات الحرية تنجح في تبادل الطاقة مع الحركة الانتقالية خلال زمن انضغاط واحد. الشرط الثاني لثاني أكسيد الكربون يتحقق عند الحد، وعند الترددات العالية تتغير γ أمام العينين — وهذا مذكور أيضًا في الملحق."
+  },
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "ثلاثة مواضع يسهل الخطأ فيها تلقائيًا: المؤشر في المشتقة الجزئية، سلوك الدالة الأسية، وقراءة التناسب تحت الجذر.",
+   "items": [
+    {
+     "what": "المشتقة الجزئية وما يُكتب في مؤشرها",
+     "why": "التدوين (∂U/∂T)_V يُقرأ هكذا: «نغيّر درجة الحرارة مع الحرص على أن يبقى الحجم ثابتًا». المؤشر ليس مجرد علامة هامشية، بل هو نصف شروط المسألة: بالنسبة لدالة متعددة المتغيرات لا توجد «مشتقة بالنسبة إلى T»، بل مشتقة بالنسبة إلى T على طول اتجاه مختار. بالنسبة للغاز المثالي، تتطابق المشتقتان — عند ثبات الحجم وعند ثبات الضغط — مصادفةً، لأن U لا تعتمد إطلاقًا على الحجم، واشتقاق ماير بأكمله يعتمد على هذا. بمجرد أن تبدأ الطاقة بالاعتماد على الحجم، يختفي التطابق: في الحالة العامة، C_p − C_V يتكون من ثلاث مشتقات معًا، ولن نحصل على R ولا على أي ثابت عام آخر. مهارة مفيدة: عندما ترى في الديناميكا الحرارية مشتقة بدون مؤشر، اسأل فورًا ما هو الثابت، وإلا فإن التعبير ببساطة غير محدد.",
+     "latex": "\\left(\\frac{\\partial U}{\\partial T}\\right)_V \\neq \\left(\\frac{\\partial U}{\\partial T}\\right)_p \\;\\text{في الحالة العامة}; \\qquad C_p - C_V = T\\left(\\frac{\\partial p}{\\partial T}\\right)_V\\left(\\frac{\\partial V}{\\partial T}\\right)_p",
+     "kit": "partial"
+    },
+    {
+     "what": "الدالة الأسية كمفتاح كهربائي، وليس كمنحدر",
+     "why": "نسبة الجزيئات التي تصل إلى الدرجة بارتفاع θ تُعطى بالعامل exp(−θ/T)، وطبيعته أنه يتغير ليس تدريجيًا بل انهياريًا. عند θ/T = 3 تكون هذه النسبة خمسة بالمائة — الدرجة مأهولة بشكل ملحوظ. عند θ/T = 11.3 تكون 1.2·10⁻⁵ — مأهولة بجزيء واحد من بين ثمانين ألفًا، والمساهمة في السعة الحرارية تختفي. بين هاتين الحالتين لا يوجد سوى عامل أقل بقليل من أربعة في درجة الحرارة، بينما تختلف النتيجة أربعة آلاف مرة. من هنا تأتي الأعداد الصحيحة في i: درجة الحرية إما تعمل بالكامل أو تصمت بالكامل تقريبًا، والحالة الوسيطة تشغل نافذة ضيقة. الشكل الدقيق للانتقال هو دالة أينشتاين، وهي على اليمين؛ عند θ/T صغيرة تقترب من الواحد، أي من التوزيع المتساوي الكلاسيكي، وعند θ/T كبيرة تنخفض كدالة أسية. لن نقوم بتحليل عامل بولتزمان نفسه هنا، فقد اشتق في موضوع الإحصاء.",
+     "latex": "\\frac{C_{\\text{اهتزازي}}}{R} = \\frac{x^{2}e^{x}}{(e^{x}-1)^{2}}, \\quad x = \\frac{\\theta}{T}: \\qquad x \\ll 1 \\Rightarrow 1, \\qquad x = 3{,}2 \\Rightarrow 0{,}45, \\qquad x = 11{,}3 \\Rightarrow 1{,}6\\cdot10^{-3}",
+     "kit": "exponent"
+    },
+    {
+     "what": "التناسب تحت الجذر: ما الذي يؤثر أكثر",
+     "why": "في صيغة سرعة الصوت تحت الجذر توجد خاصيتان للغاز: الأس γ والكتلة المولية M. كلاهما يدخل بنفس الشكل، لكنهما يختلفان تمامًا في المقدار. قيمة γ يمكن أن تتراوح فقط بين 1.29 و1.67، وجذرها بين 1.14 و1.29: الانتشار حوالي خمسة عشر بالمائة فقط، أينما نظرت. بينما الكتلة المولية تتغير من 2 غ/مول للهيدروجين إلى 44 لثاني أكسيد الكربون وما بعده، أي بعشرات المرات، وجذرها يتغير بعوامل مضاعفة. الاستنتاج العملي: إذا اختلفت سرعة الصوت في غازين بثلاث مرات، فالأمر على الأرجح يعود إلى الكتلة، وليس إلى بنية الجزيء. التحقق مع الهيليوم والهواء: الكتلة تعطي عامل 2.69، والأس فقط 1.09، معًا 2.94، والنسبة المقاسة 1007/343 تساوي 2.94.",
+     "latex": "c \\propto \\sqrt{\\frac{\\gamma}{M}}: \\qquad \\frac{c_{\\mathrm{He}}}{c_{\\text{هواء}}} = \\sqrt{\\frac{1{,}667}{1{,}400}}\\cdot\\sqrt{\\frac{28{,}97}{4{,}00}} = 1{,}09 \\cdot 2{,}69 = 2{,}94",
+     "kit": "propto"
+    }
+   ]
+  },
+  "example": {
+   "title": "مثال بالأرقام",
+   "lead": "لنأخذ مترًا مكعبًا من الهواء العادي في الغرفة ونُسخّنه بعشر درجات بطريقتين. ثم، دون لمس المسعّر إطلاقًا، نستخرج عدد درجات الحرية من كمية واحدة مُقاسة فقط — سرعة الصوت.",
+   "given": "متر مكعب من الهواء عند 20 °م (293,15 ك) وضغط 101,325 باسكال. الكتلة المولية للهواء M = 28,97 غ/مول، C_V = 5/2·R، C_p = 7/2·R، R = 8,314 جول/(مول·ك). التسخين بمقدار ΔT = 10 ك أولاً في أسطوانة صلبة، ثم تحت مكبس حر. الجزء الثاني: سرعة الصوت المُقاسة في نفس الهواء c = 343 م/ث — لإيجاد γ و i منها.",
+   "law": "Q = n·C·ΔT، حيث C تساوي C_V عند ثبات الحجم و C_p = C_V + R عند ثبات الضغط؛ عدد المولات نأخذه من pV = nRT. للجزء الثاني: γ = c²M/(RT) و i = 2/(γ − 1).",
+   "solution": [
+    {
+     "text": "كم مولًا في المتر المكعب؟ هذه معادلة الحالة المعتادة، والعدد مفيد لتذكره: في الظروف الغرفية، في المتر المكعب من الهواء يزيد قليلًا عن أربعين مولًا، أي حوالي 1,2 كيلوغرام.",
+     "latex": "n = \\frac{pV}{RT} = \\frac{101\\,325 \\cdot 1}{8{,}314 \\cdot 293{,}15} = \\frac{101\\,325}{2437} = 41{,}6\\ \\text{مول}"
+    },
+    {
+     "text": "الأسطوانة الصلبة. لا شغل، كل الحرارة تذهب إلى الطاقة الداخلية.",
+     "latex": "Q_V = n\\,C_V\\,\\Delta T = 41{,}6 \\cdot 20{,}79 \\cdot 10 = 8{,}65\\cdot10^{3}\\ \\text{جول} \\approx 8{,}6\\ \\text{كيلوجول}"
+    },
+    {
+     "text": "المكبس الحر. نفس الشيء بالإضافة إلى شغل التمدد.",
+     "latex": "Q_p = n\\,C_p\\,\\Delta T = 41{,}6 \\cdot 29{,}10 \\cdot 10 = 1{,}21\\cdot10^{4}\\ \\text{جول} \\approx 12{,}1\\ \\text{كيلوجول}"
+    },
+    {
+     "text": "الفرق نحسبه بطريقتين مستقلتين. الأولى — بصيغة ماير. الثانية — بصدق، من خلال الشغل: عند ثبات الضغط، يزداد الحجم تناسبًا مع درجة الحرارة المطلقة، عشر درجات من 293 تعطي زيادة بنسبة 3,4 بالمئة في الحجم، أي 34 لترًا، ولإزاحة الغلاف الجوي يذهب p·ΔV. الأرقام تتطابق حتى حدود التقريب — ولا يمكن أن يكون الأمر غير ذلك، لأن $p\\,\\Delta V = pV\\,\\Delta T/T = nR\\,\\Delta T$ — وهذا هو التحقق من الاشتقاق.",
+     "latex": "n R \\Delta T = 41{,}6 \\cdot 8{,}314 \\cdot 10 = 3459\\ \\text{جول}; \\qquad \\Delta V = V\\frac{\\Delta T}{T} = \\frac{10}{293{,}15} = 0{,}0341\\ \\text{م}^3, \\quad p\\,\\Delta V = 101\\,325 \\cdot 0{,}0341 = 3456\\ \\text{جول}"
+    },
+    {
+     "text": "الآن سرعة الصوت. نعوض بالقيمة المُقاسة 343 م/ث ونحل الصيغة بالنسبة إلى γ، ثم إلى i. لا توجد أي وحدات حرارية في هذا الحساب إطلاقًا — فقط أمتار وثوانٍ وكيلوغرامات وكلفنات.",
+     "latex": "\\gamma = \\frac{c^{2}M}{RT} = \\frac{343^{2}\\cdot 0{,}028\\,97}{8{,}314\\cdot293{,}15} = \\frac{3408}{2437} = 1{,}398 \\;\\Longrightarrow\\; i = \\frac{2}{\\gamma-1} = \\frac{2}{0{,}398} = 5{,}02"
+    }
+   ],
+   "answer": "الأسطوانة الصلبة تتطلب 8,6 كيلوجول، والمكبس الحر — 12,1 كيلوجول: التسخين عند ثبات الضغط أغلى بأربعين بالمئة، والفرق كله، 3,46 كيلوجول، ذهب إلى شغل التمدد. وسرعة الصوت 343 م/ث تعطي γ = 1,398 و i = 5,02 — تلك الدرجات الخمس من الحرية، التي حصلنا عليها بساعة الإيقاف والمسطرة، دون جول واحد في الحساب.",
+   "check": "ثلاثة تحققات. الأول — نعود إلى الأرقام من المقدمة: نقسم الحرارة الناتجة على كتلة الهواء. الكتلة تساوي 41,6 · 0,028 97 = 1,205 كجم، إذن السعتان الحراريتان النوعيتان تخرجان 8649/(1,205·10) = 718 و 12 106/(1,205·10) = 1005 جول لكل كيلوجرام لكل درجة. هذان هما الرقمان المرجعيان اللذان بدأت بهما الفقرة، ولم يتم إدخالهما — بل تم الحصول عليهما. التحقق الثاني، على المنطق السليم: 12 كيلوجول — هذا غلاية بقدرة كيلوواط اشتغلت اثنتي عشرة ثانية. تسخين متر مكعب من الهواء بعشر درجات لا يكلف شيئًا تقريبًا، وكل صعوبة التدفئة ليست في الهواء نفسه، بل في أنه يتسرب وأنه يجب تسخين الجدران. الثالث، العكسي: إذا كان في الحساب i حوالي ثلاثة، فيجب البحث عن خطأ في الكتلة المولية: لكي تعطي نفس 343 م/ث γ = 5/3، يجب أن يزن الهواء 34,5 غ/مول بدلًا من 29. وإذا خرج سبعة، فيجب فحص درجة الحرارة: عند 1000 ك تنخفض γ للهواء إلى 1,34، و i هناك تقترب بالفعل من ستة."
+  },
+  "constants": {
+   "title": "ثوابت هذا القسم",
+   "lead": "أربعة أرقام. الأول مُعيّن بالتعريف، والثاني يعيش في كل حساب للتهوية، والثالث بلا أبعاد ولذلك قابل للقياس، والرابع يفسر لماذا الثاني ليس كما يَعِده الكلاسيك.",
+   "items": [
+    {
+     "sym": "R",
+     "latex": "R",
+     "name": "ثابت الغاز العام",
+     "value": "8,314 462 618",
+     "unit": "J/(mol·K)",
+     "why": "منذ عام 2019 لا يُقاس بل يُحسب بدقة: R = N_A·k_B، وكلتا الثابتين في الطرف الأيمن محددتان بتعريف الوحدات. في هذا القسم يظهر لـ R معنى يومي تمامًا — إنه ثمن التمدد: كم جولًا إضافيًا يطلبه مول من الغاز لكل درجة، إذا سُمح له بدفع الغلاف الجوي. في الصيغة النوعية للهواء R/M = 287 J/(kg·K)، وهذا بالضبط الفرق 1005 − 718.",
+     "mnemo": "\"ثمانية وثلث\". ومفيد أيضًا الشكل القديم: بالسعرات R ≈ 1.987 ≈ 2 cal/(mol·K) — ومن هنا القاعدة أن الفرق بين السعتين الحراريتين للمول يساوي تقريبًا سعرتين لكل درجة."
+    },
+    {
+     "sym": "c_p هواء",
+     "latex": "c_p^{\\text{هواء}}",
+     "name": "السعة الحرارية النوعية للهواء عند ضغط ثابت",
+     "value": "1005 (عند 20 °C)؛ المولية 29.10",
+     "unit": "J/(kg·K) و J/(mol·K)",
+     "why": "الرقم العملي لكل التهوية وتكييف الهواء: المتر المكعب من الهواء يزن 1.2 كجم، لذا تسخينه درجة واحدة يكلف حوالي 1.2 كيلوجول. ومن هنا تقدير فوري لقدرة وحدة الإمداد: تدفع 300 متر مكعب في الساعة وتسخن 25 درجة — هذا 300·1.2·1005·25/3600 ≈ 2.5 كيلوواط. الزوج c_V = 718 و c_p = 1005 يختلفان تمامًا بمقدار 287، أي R/M — علاقة ماير في الصيغة النوعية.",
+     "mnemo": "\"ألف جول لكل كيلوجرام لكل درجة\" — بخطأ نصف بالمئة. الرقم الثاني، 718، يُحصل عليه بسهولة بطرح 287."
+    },
+    {
+     "sym": "γ هواء",
+     "latex": "\\gamma_{\\text{هواء}}",
+     "name": "معامل أديباتي للهواء",
+     "value": "1.400 (عند 20 °C)",
+     "unit": "بلا أبعاد",
+     "why": "الثابت الوحيد في هذا القسم الذي ليس له وحدات — ولهذا تحديدًا هو الأسهل قياسًا: يُستخرج من سرعة الصوت، من فرقعة الفلين، من فرق الضغط عند الضغط السريع. القيمة 7/5 تقول إن جزيئات الهواء لها خمس درجات حرية. الرقم ليس أبديًا: عند 1000 كلفن تبدأ اهتزازات النيتروجين والأكسجين في التحرر، وينخفض γ إلى 1.34 — لذلك تُجرى حسابات التوربينات والديزل بقيمة γ متغيرة، وليس بـ 1.4 التعليمية.",
+     "mnemo": "سبعة أخماس — لأن i = 5. الجدول كله يُشتق من كسر واحد (i + 2)/i: 5/3 للغازات أحادية الذرة، 7/5 لثنائية الذرة، 9/7 — إذا عمل اهتزاز أيضًا في جزيء ثنائي الذرة. وحوالي 1.29 عند درجة حرارة الغرفة يظهر ثاني أكسيد الكربون أيضًا، لكن لسبب خاص به: عنده اهتزاز تشوهي محرر جزئيًا."
+    },
+    {
+     "sym": "θ اهتزاز(N₂)",
+     "latex": "\\theta_{\\text{اهتزاز}}(\\mathrm{N_2})",
+     "name": "درجة الحرارة المميزة لاهتزاز جزيء النيتروجين",
+     "value": "3390",
+     "unit": "K",
+     "why": "ثمن أول درجة في سلم اهتزاز الرابطة N—N، معبرًا عنه بالدرجات: kθ = ħω. عند 300 كلفن تكون النسبة θ/T تساوي 11.3، ومعامل بولتزمان يعطي 1.2·10⁻⁵، ودرجة الحرية الاهتزازية تسقط من السعة الحرارية — ومن هنا الخمسة بدل السبعة. للمقارنة، درجة الدوران لنفس النيتروجين تساوي 2.9 كلفن، أي أنها مفتوحة في أي طقس. الحساب التفصيلي للإشغال — في قسم معامل بولتزمان.",
+     "mnemo": "ثلاثة آلاف وأربعمائة درجة — تقريبًا درجة انصهار التنجستن (3695 كلفن). كمية اهتزاز النيتروجين غالية جدًا لدرجة أنه عند هذه الحرارة، المعدن الأكثر صهرًا يكاد ينساب."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "كيف يرتبط هذا ببقية الدورة",
+   "lead": "عدد درجات الحرية هو النتيجة الأكثر قابلية للنقل في هذا القسم: يظهر في المحركات، وفي التوصيل الحراري، وفي الإحصاء، وحتى في الأجسام الصلبة حيث لا توجد جزيئات غاز على الإطلاق.",
+   "items": [
+    {
+     "h": "المحركات والأديابات",
+     "text": "الأس γ، الذي حصلنا عليه هنا من حساب درجات الحرية، يدخل كأسًا في معادلة الأديابات pV^γ = const، ومن خلالها في درجة حرارة الانضغاط وفي الكفاءة. في موضوع المحركات، أخذنا γ مباشرة من هندسة الجزيء؛ الآن نرى أن الهندسة تحدد فقط الحد الأعلى، وكم عدد درجات الحرية التي تعمل فعليًا يقرره درجة الحرارة. يشعل الديزل الوقود بدون شمعة احتراق على وجه التحديد لأن γ > 1: الانضغاط بعشرين مرة يرفع درجة حرارة الهواء بمقدار 20^0.4 ≈ 3.3 مرة، أي من 300 إلى ألف كلفن. لو كانت γ تساوي واحدًا (أي لو كان للجزيء عدد لا نهائي من درجات الحرية العاملة)، لما كان الانضغاط يسخن إطلاقًا، ولما كانت المحركات الحرارية موجودة بالشكل الحالي."
+    },
+    {
+     "h": "معامل بولتزمان",
+     "text": "تجميد الاهتزازات، الذي يجعل i يساوي خمسة وليس سبعة، هو بشكل نقي الأس exp(−θ/T) من موضوع الإحصاء. هناك تم اشتقاقه وحسابه كميًا: θ = 3390 كلفن، النسبة 11.3، الإشغال 1.2·10⁻⁵. هنا نستخدم النتيجة كقاعدة جاهزة: درجة الحرية تعمل إذا كان كمها أرخص من kT. تبين أن السعة الحرارية هي أول مكان في الفيزياء حيث ظهر تكميم الطاقة في قياس ماكروسكوبي، قبل ثلاثين عامًا من إيجاد اسم له."
+    },
+    {
+     "h": "التوصيل الحراري واللزوجة",
+     "text": "في صيغة التوصيل الحراري للغاز κ = ⅓·n·v̄·λ·c، العامل الأخير هو السعة الحرارية لجزيء واحد، c = (i/2)k_B، أي نفس حساب درجات الحرية، لكن لكل جزيء وليس لكل مول. لذلك ينقل الهيليوم الحرارة أفضل من النيتروجين عند نفس التركيز ليس بفضل درجات الحرية، بل على الرغم منها: لديه عدد أقل، والعامل c يخسر، لكن الجزيء الخفيف يطير أسرع ويقطع مسافة أطول، والفوز في v̄ وλ يغطي هذه الخسارة بفائض. هناك أيضًا يظهر عدد براندتل، الذي يحتوي على نسبة C_p إلى C_V، وهو مكان آخر يظهر فيه γ."
+    },
+    {
+     "h": "الجسم الصلب والفونونات",
+     "text": "نفس الحساب يعمل في البلورة: للذرة في الشبكة ثلاثة اتجاهات للاهتزاز، كل اتجاه يخزن الطاقة مرتين، المجموع ستة أنصاف kT، أي C = 3R = 24.9 جول/(مول·كلفن) — قانون دولون وبيتي. ينطبق على النحاس والفضة والرصاص، لكنه يفشل مع الألماس، الذي عند درجة حرارة الغرفة سعته الحرارية فقط 6.1: الروابط في الألماس صلبة، كموات الاهتزاز غالية، ومعظم درجات الحرية مجمدة تمامًا مثل اهتزاز النيتروجين. حل أينشتاين هذه الحالة في عام 1907، وحسّنها ديباي في عام 1912، ومنذ ذلك الحين تسمى كموات اهتزازات الشبكة بالفونونات."
+    },
+    {
+     "h": "القسمان الأول والثاني من هذا الموضوع",
+     "text": "علاقة ماير مشتقة للغاز المثالي. الغاز الحقيقي من القسم الأول مع تصحيحاته a وb يعطي فرقًا مختلفًا في السعات الحرارية، وكلما اقتربنا من النقطة الحرجة، زاد الاختلاف: عند النقطة الحرجة نفسها، تصبح C_p لانهائية، لأن الغاز يتمدد عند ضغط ثابت دون أي مقاومة. السطح من القسم الثاني له أيضًا سعته الحرارية الخاصة، ولهذا تنخفض σ مع درجة الحرارة، لكن هذه قصة منفصلة."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "مثير للاهتمام: تحقق بنفسك",
+   "lead": "كلتا التجربتين التاليتين تُسمعان بالأذن، ولا تُريان بالعين: γ تدخل في سرعة الصوت، وبالتالي في درجة النغمة. المطبخ يتبين أنه مختبر صوتي مناسب تمامًا.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "تجربة في المطبخ",
+     "h": "طنين الزجاجة ينخفض إذا سكبت فيها غاز ثاني أكسيد الكربون",
+     "text": "خذ زجاجتين فارغتين متطابقتين. انفخ عبر عنق الأولى - ستحصل على طنين ثابت، تذكر درجته (أو سجله على هاتفك، ثم قارنه في أي موالف). في الثانية، ضع ملعقة من صودا الخبز، وأضف قليلًا من الخل، وبمجرد أن يهدأ الرغوة، انقل الغاز من هذه الزجاجة إلى ثالثة جافة وفارغة بحذر: ثاني أكسيد الكربون أثقل من الهواء مرة ونصف ويتدفق تقريبًا مثل الماء. لا تُحكم إغلاق أي زجاجة - الغاز ينبعث بعنف، والزجاجة المغلقة تصبح وعاءً تحت الضغط. الآن انفخ عبر عنق الزجاجة الثالثة. ستلاحظ أن النغمة أقل بشكل ملحوظ.",
+     "answer": "الزجاجة ذات العنق هي مرنان هيلمهولتز، وتردده يتناسب طرديًا مع سرعة الصوت في الغاز الذي بداخله. في ثاني أكسيد الكربون النقي، c = 267 م/ث مقابل 343 في الهواء، النسبة 0.78 - وهذا انخفاض بمقدار 435 سنتًا، أي أكثر بقليل من ثالثة كبيرة وأقل من رابعة. لكن لن تحصل على غاز نقي في الزجاجة: بالصب، ستحصل على خليط، حوالي سبعين بالمائة ثاني أكسيد الكربون وثلاثين بالمائة هواء متبقٍ. لنحسب بدقة لمثل هذا الخليط: الكتلة المولية 39.5 غ/مول بدلاً من 44، معامل γ = 1.31 بدلاً من 1.29، السرعة 285 م/ث - والانخفاض حوالي 320 سنتًا، أي حوالي ثالثة صغيرة، ثلاثة أنصاف نغمات. هذا هو بالضبط ما يجب أن تتوقعه بالأذن؛ إذا سمعت أكثر من أربعة أنصاف نغمات - فأنت محظوظ بنقاء الغاز. لاحظ أن النغمة تتغير بشكل مزدوج: الكتلة المولية زادت، و γ انخفض، لأن الجزيء ثلاثي الذرات لديه درجات حرية أكثر. نفس التجربة مع الهيليوم من بالون تعطي تأثيرًا معاكسًا وأقوى بكثير: في الهيليوم، ينتقل الصوت أسرع 2.94 مرة، والطنين يرتفع بمقدار 1865 سنتًا، أي حوالي أوكتاف ونصف."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "تجربة في المطبخ",
+     "h": "نغمة الكاكاو الساخن ترتفع",
+     "text": "ضع ملعقة من الكاكاو أو القهوة سريعة الذوبان في كوب، واسكب الماء الساخن وحرك بقوة. الآن ابدأ بالنقر بإيقاع على قاع الكوب بالملعقة - مرة في الثانية، دون توقف، لمدة عشرين ثانية. الضربات الأولى ستعطي صوتًا منخفضًا مكتومًا، ثم سترتفع النغمة وسترتفع خلال عشر ثوانٍ بمقدار ثالثة، وإذا كنت محظوظًا - تقريبًا أوكتاف. لا يحدث أي تبريد خلال هذا الوقت، والتغير في النغمة ليس بسبب درجة الحرارة.",
+     "answer": "السبب هو فقاعات الهواء التي خلطتها مع المسحوق. التردد الذي يستجيب به الكوب مع السائل يتناسب مع سرعة الصوت في ذلك السائل، وسرعة الصوت هي جذر نسبة المرونة إلى الكثافة. الفقاعات لا تضيف شيئًا تقريبًا إلى الكثافة - الهواء أخف من الماء بألف مرة - لكنها تدمر المرونة بشكل كارثي: ضغط الماء صعب، بينما الفقاعة تنضغط بسهولة، ومرونة الخليط تحددها هي. علاوة على ذلك، تنضغط الفقاعة على الترددات الصوتية بشكل ثابت الحرارة، أي أن مرونتها تساوي γp - وهنا يظهر معامل ثبات الحرارة من فقرتنا مباشرة في المطبخ. ترتيب الحجم: عند نسبة فقاعات تبلغ واحدًا في الألف من الحجم، تنخفض سرعة الصوت في الخليط إلى حوالي 365 م/ث مقابل 1500 في الماء النقي - أي أربع مرات. الفقاعات تصعد وتذوب، وتنخفض النسبة، وتزداد السرعة، وترتفع النغمة. يُسمى التأثير بتأثير الشوكولاتة الساخنة؛ وصفه فرانك كروفورد بدقة في عام 1982، ويعمل مع أي مسحوق يجلب معه الهواء."
+    },
+    {
+     "icon": "paradox",
+     "kind": "مفارقة",
+     "h": "المدفأة لا تزيد طاقة الهواء في الغرفة",
+     "text": "قمت بتشغيل المدفأة، ارتفعت درجة الحرارة في الغرفة من 18 إلى 24 درجة. كم زادت الطاقة الداخلية للهواء في الغرفة؟",
+     "answer": "لم تزد إطلاقًا. الغرفة متصلة بالخارج - شقوق، تهوية، فتحات - لذلك الضغط فيها ثابت ويساوي الضغط الجوي. نكتب الطاقة الداخلية للهواء في غرفة بحجم V: U = n·C_V·T، وعدد المولات نفسه يساوي pV/(RT). درجة الحرارة تُختصر، ويبقى U = (i/2)·p·V، حيث لا توجد أي درجة حرارة. لغرفة بحجم 50 مترًا مكعبًا، هذا يساوي 2.5 · 10⁵ · 50 = 12.5 ميغاجول عند أي درجة حرارة. الحرارة التي أعطتها المدفأة لم تذهب إلى الهواء، بل إلى الخارج - مع جزء من الجزيئات التي خرجت، تاركة مكانًا للباقي المتمدد. أين يذهب الراحة إذن؟ أولاً، لا يسخن الهواء فقط، بل أيضًا الجدران والأثاث والأرضية، وسعتها الحرارية أكبر بمراتب. ثانيًا، الراحة لا تحددها طاقة الهواء، بل درجة حرارته: فهي تحدد فقدان الحرارة من جلدك وسرعة التبخر منه. توضح المفارقة بشكل ممتاز أن \"كمية الحرارة في الغرفة\" ليست كمية فيزيائية، بل تعبيرًا عاميًا."
+    },
+    {
+     "icon": "fact",
+     "kind": "حقيقة مثيرة",
+     "h": "ماكسويل اعترف بهزيمة النظرية الجزيئية",
+     "text": "نظرية التوزيع المتساوي هي نتيجة جميلة وعامة: لكل درجة حرية نصف kT، دون أي استثناءات. المشكلة أنه عند العد من الأطياف، كان للجزيء ثنائي الذرة درجات حرية أكثر من سبعة بالتأكيد (فقط الحركات الداخلية للذرات تعطي غابة كاملة)، بينما السعة الحرارية المقاسة أعطت بعناد خمسة. ماكسويل في محاضرة عام 1875 وصف هذا بأنه الإخفاق الأبرز للنظرية الجزيئية ولم يخفِ المشكلة وراء تحفظات. كلفن لاحقًا أدرج نفس الموضوع في \"سحب\" فيزياء القرن التاسع عشر.",
+     "answer": "الحل جاء من حيث لم يتوقعوه. في عام 1900، قدم بلانك الكمات أثناء تعامله مع الإشعاع، وفي عام 1907 طبق أينشتاين نفس الفكرة على السعة الحرارية للمادة الصلبة وحصل على انخفاضها عند التبريد - وهو ما لم تستطع الفيزياء الكلاسيكية تفسيره. بعد ذلك أصبح واضحًا أيضًا مع الغازات: درجة الحرية ليست \"موجودة\" أو \"غير موجودة\"، بل هي مفعلة إذا كان كمها أرخص من kT. جمال القصة هو أن الكم كان يمكن ملاحظته في جدول السعات الحرارية قبل بلانك بنصف قرن، دون الحاجة إلى أي مطيافية. لقد كان هناك، مرئيًا، في الفرق بين خمسة وسبعة."
+    },
+    {
+     "icon": "edge",
+     "kind": "حدود التطبيق",
+     "h": "الألماس أبرد مما تسمح به الفيزياء الكلاسيكية",
+     "text": "نفس حساب درجات الحرية في المادة الصلبة يعطي قانون دولونغ-بيتي: للذرة في الشبكة ثلاثة اتجاهات للاهتزاز، كل منها يُحسب مرتين (الحركة والمرونة)، المجموع ستة أنصاف kT وسعة حرارية مولية 3R = 24.9 جول/(مول·ك). يُتحقق منه بشكل ممتاز: النحاس 24.4، الفضة 25.4، الرصاص 26.4 - كلها حوالي 25، بغض النظر عن نوع المعدن.",
+     "answer": "الآن الألماس: 6.1 جول/(مول·ك) عند درجة حرارة الغرفة، أي أقل بأربع مرات مما وعد به. السبب هو نفسه تمامًا كما في النيتروجين بخمسة بدلاً من سبعة. روابط الكربون-كربون في الألماس صلبة للغاية، وكمات الاهتزاز باهظة الثمن، ودرجة الحرارة المميزة حوالي 2000 كلفن، وعند 300 كلفن معظم درجات الحرية الاهتزازية متجمدة. سخّن الألماس إلى ألف درجة - سترتفع السعة الحرارية إلى حد دولونغ-بيتي. نفس الآلية، نفس الدالة الأسية، مقياس مختلف. بالمناسبة، صلابة الروابط هي ما يجعل الألماس رائدًا في التوصيل الحراري: الفونونات فيه تنتقل بسرعة وبعيدًا، على الرغم من قلة عددها."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "ما الذي أهملناه",
+   "blocks": [
+    {
+     "h": "علاقة ماير صحيحة فقط للغاز المثالي",
+     "text": "في الحالة العامة، يُعبَّر عن الفرق بين السعتين الحراريتين من خلال مشتقات معادلة الحالة، ولا يساوي أي ثابت عام. بالنسبة للغاز المثالي، يُحسب المشتقان ذهنيًا ويعطيان بالضبط R. أما بالنسبة لغاز فان دير فالس من الفقرة الأولى، يظهر تصحيح يزداد مع الكثافة ومع الاقتراب من درجة الحرارة الحرجة — بالقرب من النقطة الحرجة، يتلاشى المقام ويذهب الفرق إلى اللانهاية. بالنسبة للمواد المكثفة، تعمل الصيغة أيضًا، لكن النتيجة تكون ضئيلة: بالنسبة للماء عند 25 درجة مئوية، الفرق C_p − C_V يساوي فقط 0.79 جول/(مول·كلفن) — أي أقل بعشر مرات من R، لأن الماء يتمدد قليلًا عند التسخين. ومن هنا تأتي القاعدة العملية: بالنسبة للسوائل والمواد الصلبة، تُعطى C_p في المراجع وعادةً ما يُهمل الفرق، بينما بالنسبة للغازات يجب التمييز بينهما.",
+     "latex": "C_p - C_V = -T\\frac{(\\partial V/\\partial T)_p^{2}}{(\\partial V/\\partial p)_T}; \\qquad \\text{فدف: } C_p - C_V = \\frac{R}{1 - \\dfrac{2a(V-b)^{2}}{RTV^{3}}}"
+    },
+    {
+     "h": "درجات الحرية لا تُفعَّل بمفتاح",
+     "text": "العدد الصحيح i هو تمثيل مثالي مناسب. في الواقع، تساهم كل درجة اهتزازية في السعة الحرارية بدالة سلسة لدرجة الحرارة، والانتقال من \"صامتة\" إلى \"عاملة\" موزع على مدى واسع من T. لنحسب ذلك للنيتروجين باستخدام معادلة أينشتاين على اليمين: عند 300 كلفن، يضيف الاهتزاز إلى C_V فقط 0.0016·R، أي ستة أجزاء من مائة بالمائة؛ عند 1000 كلفن يصبح 0.41·R (تزداد السعة الحرارية من 2.50·R إلى 2.91·R، أي ما يقرب من سبعة عشر بالمائة)؛ عند 3000 كلفن — 0.90·R من الوحدة التي وعدت بها الفيزياء الكلاسيكية. لا يوجد نقرة، بل ارتفاع تدريجي على مدى آلاف الدرجات. كما أن الدوران مكمَّم أيضًا، لكن خطواته عادة ما تكون صغيرة؛ الاستثناء هو الهيدروجين، الذي تبلغ درجة حرارته المميزة للدوران حوالي 85 كلفن: تنخفض C_V الخاصة به من 5/2·R بدءًا من حوالي 200 كلفن، وعند 60 كلفن تصل إلى 3/2·R — يبدأ الغاز ثنائي الذرة في التصرف مثل غاز أحادي الذرة. مع الهيدروجين يصبح الأمر أكثر إثارة للاهتمام: فشكلاه الأورثو والبارا لهما سلالم دورانية مختلفة ويتحولان إلى بعضهما البعض ببطء شديد، لذا تعتمد السعة الحرارية المقاسة على المدة التي قضاها العينة في البرد.",
+     "latex": "\\frac{C_V}{R} = \\frac{3}{2} + \\sum_{\\text{دور}}\\!(\\dots) + \\sum_{\\text{اهتزاز}} \\frac{x_k^{2}e^{x_k}}{(e^{x_k}-1)^{2}}, \\qquad x_k = \\frac{\\theta_k}{T}"
+    },
+    {
+     "h": "للأس γ اعتماد ترددي",
+     "text": "تفترض الصيغة c = √(γRT/M) ضمنيًا أنه خلال زمن ضغطة واحدة، تتبادل جميع درجات الحرية الطاقة مع الحركة الانتقالية. بالنسبة للهواء، هذا صحيح بهامش كبير. لكن بالنسبة لثاني أكسيد الكربون، يتأرجح الاهتزاز التشوهي ببطء: يحتاج الجزيء إلى آلاف التصادمات لالتقاط أو إطلاق كم اهتزازي. عند الترددات المنخفضة، ينجح الصوت في \"رؤية\" السعة الحرارية الكاملة ويسير بسرعة 267 م/ث. عند الترددات العالية، لا ينجح الاهتزاز في التفعيل، ويرتفع γ الفعال إلى 1.40، وتزداد السرعة إلى 278 م/ث — أي بنسبة أربعة بالمائة. بين هذين النظامين توجد منطقة امتصاص قوي: تتدفق طاقة الموجة إلى الاهتزازات وتعود متأخرة. لهذا السبب يخمد ثاني أكسيد الكربون الصوت كثيرًا، وبنفس هذا الامتصاص تُقاس سرعات الاسترخاء داخل الجزيئي.",
+     "latex": "\\omega\\tau \\ll 1: \\; \\gamma = 1{,}29,\\; c = 267\\ \\text{م/ث}; \\qquad \\omega\\tau \\gg 1: \\; \\gamma = 1{,}40,\\; c = 278\\ \\text{م/ث}"
+    },
+    {
+     "h": "الهواء خليط، وقد يكون رطبًا",
+     "text": "جميع الأرقام \"ثنائية الذرة\" للهواء هي نتيجة متوسط على 78 بالمائة من النيتروجين، و21 بالمائة من الأكسجين، وحوالي واحد بالمائة من الأرجون أحادي الذرة. يزيح الأرجون γ المحسوب قليلاً إلى الأعلى من 1.4000 الصافية إلى 1.4015، بينما يسحبه اهتزاز الأكسجين إلى الأسفل: درجة حرارته المميزة 2270 كلفن، وعند 293 كلفن تعطي دالة أينشتاين 0.026 لكل جزيء — مساهمة ضئيلة، لكنها كافية لإعادة الحساب إلى 1.4004. القيمة المرجعية 1.400 هي نتيجة تأثيرين متعاكسين، وليست كسرًا بسيطًا 7/5. تعمل الرطوبة في الاتجاه الآخر وبشكل أقوى مما يبدو: جزيء الماء يزن 18 جم/مول مقابل 29 لمتوسط الهواء، لذا فإن الهواء الرطب أخف من الجاف، ويمر الصوت فيه أسرع. لنحسب الحالة القصوى: عند 30 درجة مئوية ورطوبة كاملة، يكون بخار الماء في الهواء 4.2 بالمائة من حيث الحجم، وينخفض متوسط الكتلة المولية من 28.97 إلى 28.5 جم/مول، وهذا وحده يضيف 0.8 بالمائة إلى السرعة. وفي الوقت نفسه، ينخفض γ من 1.400 إلى 1.397، لأن الماء ثلاثي الذرة لديه درجات حرية أكثر نشاطًا، لكن هذا يخصم فقط 0.13 بالمائة — تأثير أضعف بست مرات من تأثير الكتلة. النتيجة حوالي زائد 0.7 بالمائة؛ عند 20 درجة مئوية يكون النصف، أي 0.4 بالمائة. للمقارنة، تفعل درجة الحرارة أكثر بكثير: من 0 إلى 30 درجة مئوية، تزداد سرعة الصوت من 331 إلى 349 م/ث، أي بنسبة خمسة بالمائة."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "السعة الحرارية خاصية للعملية وليست للمادة. عند ثبات الضغط، يزيح الغاز الغلاف الجوي بالإضافة إلى التسخين، والدفعة الإضافية تساوي تمامًا R لكل مول ولكل درجة: C_p − C_V = R. أما C_V نفسها فيعطيها حساب درجات الحرية النشطة، C_V = (i/2)R، وعددها لا تحدده هندسة الجزيء بل درجة الحرارة: الدرجة تعمل إذا كان كمها أرخص من kT. النسبة γ = (i+2)/i بلا أبعاد، ولذلك تُقاس بسرعة الصوت.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "ثمن التمدد",
+     "text": "C_p − C_V = R — الدفعة الإضافية لا تعتمد على الضغط ولا على نوع الغاز: إنها تساوي الشغل p·ΔV = R·ΔT"
+    },
+    {
+     "icon": "scale",
+     "title": "C_V = (i/2)R",
+     "text": "نصف kT لكل درجة حرية نشطة: i = 3 للهيليوم يعطي 12.47 مقابل 12.5 المقاسة"
+    },
+    {
+     "icon": "fact",
+     "title": "خمسة وليست سبعة",
+     "text": "عند النيتروجين، الدوران مفتوح (θ = 2.9 K)، والاهتزاز مغلق (θ = 3390 K). الأعداد الصحيحة في i يحددها الكم، وليس الهندسة"
+    },
+    {
+     "icon": "edge",
+     "title": "γ تُقاس بساعة الإيقاف",
+     "text": "c = √(γRT/M): 343 م/ث تعطي i = 5، والهيليوم 1007 — i = 3. نيوتن بدون γ أخطأ بنسبة 15%، ولاپلاس صححها في 1816"
+    }
+   ],
+   "where": [
+    "التهوية وتكييف الهواء: المتر المكعب من الهواء يزن 1.2 كجم، وتسخينه درجة واحدة يكلف حوالي 1.2 كيلوجول",
+    "الديزل: الضغط إلى عشرين ضعفًا يرفع درجة الحرارة إلى 20^0.4 ≈ 3.3 مرة — الوقود يشتعل بدون شمعة، وكل ذلك لأن γ > 1",
+    "الصوتيات: سرعة الصوت تعتمد على درجة الحرارة ولا تعتمد على الضغط، لذلك في البرد ينتقل الصوت أبطأ",
+    "الهيليوم في الصوت: النغمة لا «ترتفع» — رنانات الحنجرة ترتفع لأن الصوت في الهيليوم أسرع 2.9 مرة",
+    "حساب التوربينات والمحركات: عند درجات الحرارة المرتفعة، تنخفض γ من 1.40 إلى 1.34، ويجب استبدال القيمة التعليمية 1.4 بجدول"
+   ],
+   "watchOut": "ثلاثة فخاخ. الأول: قول «السعة الحرارية للهواء» دون تحديد ما هو ثابت: الفرق بين 718 و1005 هو أربعون بالمائة، وفي حساب التهوية ليس بالأمر الهين. الثاني: اعتبار i خاصية هندسية للجزيء: بالنسبة لنفس جزيء النيتروجين، i يساوي خمسة عند درجة حرارة الغرفة ويقترب من سبعة عند ثلاثة آلاف كلفن. الثالث: الاعتقاد بأن سرعة الصوت تزداد مع الضغط: في الصيغة تدخل النسبة γp/ρ، وعند ضغط الغاز يزداد كلاهما، لذا يبقى الاعتماد فقط على درجة الحرارة."
+  },
+  "quiz": [
+   {
+    "id": "hc1",
+    "type": "mcq",
+    "q": "تم تسخين مول من الهيليوم بمقدار 1 كلفن عند ضغط ثابت، واستُهلك 20.79 جول. تم تسخين نفس المول بمقدار 1 كلفن في أسطوانة صلبة، واستُهلك 12.47 جول. أين ذهبت الـ 8.3 جول المفقودة في الحالة الأولى؟",
+    "options": [
+     "ذهبت إلى عمل التمدد: الغاز دفع الغلاف الجوي، والثمن يساوي R·ΔT",
+     "ذهبت إلى تسخين المكبس وجدران الأسطوانة نفسها",
+     "ذهبت إلى إثارة الدوران — عند الضغط الثابت تبدأ الجزيئات بالدوران",
+     "لا مكان: 8.31 جول هو خطأ في المسعر، والسعتان الحراريتان متساويتان في الواقع"
+    ],
+    "answer": 0,
+    "why": "عند الضغط الثابت، يزداد حجم المول مع درجة الحرارة: من pV = RT نستنتج p·ΔV = R·ΔT، أي بالضبط 8.314 جول لكل درجة. هذا العمل يُبذل ضد الغلاف الجوي ولا يبقى في الغاز. الإجابة عن تسخين المكبس والجدران خاطئة لأن السعة الحرارية للوعاء لا تدخل في تعريف السعة الحرارية المولارية للغاز، بل تُطرح بمعايرة منفصلة. الإجابة عن إثارة الدوران مستحيلة مرتين: الهيليوم أحادي الذرة، لا يوجد ما يدور، وعدد درجات الحرية النشطة يعتمد على درجة الحرارة، وليس على ما إذا كان المكبس حرًا أم لا. الرابع يتعارض مع الحساب: 20.79/12.47 = 1.667 = 5/3، وهي نسبة دقيقة جدًا لخطأ.",
+    "hint": "اكتب القانون الأول: الحرارة المضافة تذهب إلى زيادة الطاقة الداخلية زائد العمل. الطاقة الداخلية للغاز المثالي تعتمد فقط على درجة الحرارة، ودرجة الحرارة زادت بالتساوي في التجربتين."
+   },
+   {
+    "id": "hc2",
+    "type": "mcq",
+    "q": "سرعة الصوت في الهيليوم 1007 م/ث، وفي الهواء 343 — أي أكبر بـ 2.94 مرة. الهيليوم أحادي الذرة (γ = 1.67) وخفيف (M = 4 غ/مول). ما الذي يساهم بشكل أساسي في هذه الـ 2.94 مرة؟",
+    "options": [
+     "الكتلة المولية: تعطي عامل 2.69، بينما الأس γ يعطي فقط 1.09",
+     "معامل ثبات الحرارة: γ للهيليوم أكبر مرتين تقريبًا، وهذا هو الحاسم",
+     "المساهمان متساويان تقريبًا: حوالي 1.7 من الكتلة وحوالي 1.7 من γ",
+     "لا هذا ولا ذاك: الهيليوم أخف، لذا جزيئاته أسرع، والكتلة وγ لا تدخلان في الصيغة"
+    ],
+    "answer": 0,
+    "why": "في الصيغة c = √(γRT/M) كلا الخاصيتين تحت الجذر، لكن مداهما لا يضاهى. نسبة الكتل المولية 28.97/4.00 = 7.24، جذرها 2.69. نسبة المعاملين 1.667/1.400 = 1.19، جذرها 1.09. حاصل الضرب 2.69 · 1.09 = 2.94 — بالضبط القيمة المقاسة. الإجابة \"معامل ثبات الحرارة هو الحاسم\" مخطئة عدديًا: γ للهيليوم أكبر من هواء بنسبة 19% فقط، وليس الضعف. الإجابة \"لا هذا ولا ذاك\" تحس الفيزياء بشكل صحيح (جزيئات الهيليوم أسرع بالفعل)، لكن هذا بالضبط ما هو مكتوب في الصيغة كعامل 1/√M — لا توجد آلية منفصلة هنا. القاعدة العامة: γ يتأرجح بين 1.29 و1.67، بينما الكتلة المولية تختلف بعشرات المرات، لذا الاختلافات الكبيرة في سرعة الصوت تكون دائمًا تقريبًا بسبب الكتلة.",
+    "hint": "احسب الجذرين بشكل منفصل: جذر نسبة γ وجذر النسبة العكسية للكتل المولية. أي منهما أبعد عن الواحد؟"
+   },
+   {
+    "id": "hc3",
+    "type": "free",
+    "q": "بكلماتك الخاصة: بالنسبة لجزيء النيتروجين ثنائي الذرة، العد الكلاسيكي يعطي سبع درجات حرية، لكن السعة الحرارية المقاسة تقابل خمس درجات. لماذا؟",
+    "keywords": [
+     "كم",
+     "اهتزاز",
+     "متجمد",
+     "مجمدة",
+     "درجات",
+     "حصة",
+     "درجة حرارة",
+     "kT",
+     "بولتزمان",
+     "3390"
+    ],
+    "needed": 2,
+    "why": "لأن الطاقة لا يمكن إعطاؤها بكميات صغيرة بشكل تعسفي. ثلاث درجات انتقالية ودرجتان دورانية تعملان: درجة الدوران للنيتروجين تساوي 2.9 كلفن، والطاقة الحرارية عند 300 كلفن تغطيها بهامش هائل. الدرجتان الاهتزازيتان لا تعملان: درجة اهتزاز الرابطة N—N تساوي 3390 كلفن، أي أغلى بـ 11 مرة من kT عند درجة حرارة الغرفة، وعامل بولتزمان يعطي إشغالًا قدره 1.2·10⁻⁵ — يهتز حوالي جزيء واحد من كل ثمانين ألفًا، وهذا المساهمة في السعة الحرارية لا يمكن قياسها. ومن هنا i = 3 + 2 + 0 = 5 و C_V = 5/2·R = 20.8 جول/(مول·كلفن). المهم: الجزيء ليس \"صلبًا\" — إنه قادر تمامًا على الاهتزاز، فقط عند 300 كلفن تفعل ذلك نسبة ضئيلة جدًا. سخّن النيتروجين إلى ألف كلفن، وستبدأ السعة الحرارية في الارتفاع، وعند ثلاثة آلاف تقترب من 7/2 R الموعودة.",
+    "hint": "قارن بين كميتين: سعر كمية اهتزاز واحدة للنيتروجين (بالدرجات هو 3390 كلفن) والكمية الحرارية الصغيرة المتاحة للجزيء عند 300 كلفن. أيهما أكبر وبكم مرة؟"
+   },
+   {
+    "id": "hc4",
+    "type": "estimate",
+    "q": "الأرجون أحادي الذرة، كتلته المولية 39.95 غ/مول. قدّر سرعة الصوت في الأرجون عند 20 درجة مئوية (293 كلفن). أجب بالأمتار في الثانية. اعتبر R = 8.31 جول/(مول·كلفن).",
+    "answer": 319,
+    "unit": "م/ث",
+    "why": "غاز أحادي الذرة — يعني i = 3 و γ = (3 + 2)/3 = 5/3 = 1.667. نعوض: c = √(γRT/M) = √(1.667 · 8.31 · 293 / 0.03995) = √(4058/0.03995) = √101600 ≈ 319 م/ث. القيمة المرجعية — 319 م/ث. تقدير سريع بدون آلة حاسبة: الأرجون أثقل من الهواء بـ 1.5 مرة (39.95 مقابل 28.97، النسبة 1.38، الجذر 1.17)، لكن γ أكبر بـ 1.19 مرة (الجذر 1.09)، لذا يجب أن تكون c حوالي 343 · 1.09/1.17 ≈ 320 م/ث. فحص مفيد للخطأ: 292 م/ث تعني أنك أخذت γ = 1.4 بدلاً من 5/3، وعشرة أمتار في الثانية تعني أن الكتلة المولية بقيت بالغرامات.",
+    "tolAbs": 20,
+    "hint": "أولاً حدد γ: في الغاز أحادي الذرة تعمل فقط ثلاث درجات انتقالية. حوّل الكتلة المولية إلى كيلوغرامات لكل مول، وإلا سيبتعد الجواب بثلاثين مرة."
+   }
+  ],
+  "title": "السعتان الحراريتان C_V و C_p: أين تذهب الحرارة",
+  "subtitle": "الفقرة 3 · علاقة ماير، درجات الحرية، وسرعة الصوت",
+  "intro": [
+   "افتح كتابًا مرجعيًا عند كلمة \"هواء\" وابحث عن السعة الحرارية. ستجد رقمين: 718 و1005 جول لكل كيلوجرام لكل درجة. يختلفان بنسبة أربعين بالمئة، وكلاهما صحيح، ولا أيهما خطأ مطبعي. المادة واحدة، ودرجة الحرارة واحدة، والإجابة اثنتان — لأن السؤال كان غير مكتمل.",
+   "ينشأ الفرق من ما أبقيناه ثابتًا أثناء التسخين. الغاز في أسطوانة صلبة يمكنه فقط أن يسخن. الغاز تحت مكبس حر يسخن ويدفع الغلاف الجوي جانبًا، وهذا يتطلب شغلًا، ويجب على شخص ما أن يدفع ثمنه — تدفعه نفس الموقدة. ومن هنا يأتي الرقم الثاني. والجميل أن الدفعة الإضافية تُحسب بدقة، في سطر واحد، ولا تعتمد على نوع الغاز: هذه علاقة ماير.",
+   "بعد ذلك سنسأل من أين تأتي قيمة C_V نفسها، ونحصل عليها من عدّ الاتجاهات التي يمكن للجزيء أن يتحرك فيها. العد سيعطي سبعة للغاز ثنائي الذرة، بينما ستظهر التجربة بعناد خمسة، وفي هذه النقطة تبرز الكم من الديناميكا الحرارية الكلاسيكية. وفي النهاية سنجد أن عدد درجات الحرية يمكن قياسه بساعة إيقاف: النسبة γ = C_p/C_V بلا أبعاد، وبالتالي تُقرأ مباشرة من سرعة الصوت."
+  ],
+  "standNote": "رسم هذا الموضوع يظهر متساوي الحرارة لفان دير فالس، ويجب أن نأخذ منه تفصيلة واحدة — القطع الزائد الرمادي المتقطع المسمى \"غاز مثالي\". إنه مرسوم دائمًا: إنه نفس الغاز محسوبًا باستخدام $pV = nRT$. كل ما سنستنتجه أدناه يعيش عليه — علاقة $C_p - C_V = R$ تعتمد على أن الطاقة الداخلية تعتمد فقط على درجة الحرارة، وهذا صحيح حيث الغاز مثالي. اضبط درجة الحرارة المخفضة $T/T_c = 1{,}30$ وحرّك منزلق الحجم إلى اليمين حتى النهاية: المنحنى الصلب يقترب من الخط المتقطع لكنه لا يندمج معه — اللوحة السفلية، حيث $Z = pV/nRT$، تُظهر 0.91 بدلاً من واحد. أعد الحجم إلى $V/V_c = 1$، وسينخفض $Z$ إلى 0.63. الرسم ببساطة لا يصل إلى الغاز المثالي، وهذا صادق: هواء الغرفة من مثالنا يقع عند $V/V_c$ حوالي مئتين وخمسين، بعيدًا عن الحافة اليمنى للرسم البياني — هناك $Z$ يساوي واحدًا حقًا. الآن اخفض درجة الحرارة إلى 1.00 وانظر إلى النصف الأيسر: المنحنيات تتباعد، ومعها تتباعد السعتان الحراريتان. عند النقطة الحرجة نفسها، يصبح مماس متساوي الحرارة أفقيًا، أي أن الغاز يتمدد عند ضغط ثابت دون أي مقاومة — والفرق $C_p - C_V$ لا يساوي $R$ بل ما لا نهاية. احتفظ بهذه الصورة في ذهنك: إنها تُظهر الحد الذي تفشل عنده الصيغة الأنيقة لهذه الفقرة."
  }
 }

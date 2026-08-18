@@ -473,5 +473,1274 @@
     "hint": "Два действия. Сначала момент инерции диска I = ½mR² — не забудьте, что R стоит в квадрате. Потом ε = M/I."
    }
   ]
+ },
+ "en": {
+  "formula": {
+   "name": "Rotation equation of a rigid body and moment of inertia",
+   "latex": "M = I\\varepsilon, \\qquad I = \\sum_i m_i r_i^2",
+   "alsoKnown": "Newton's second law for rotation; moment of inertia about an axis. Rule for recalculating to a parallel axis — the Huygens–Steiner theorem: I = I_c + md²",
+   "authors": [
+    {
+     "who": "Christiaan Huygens",
+     "year": "1673",
+     "what": "in 'Horologium Oscillatorium' solved the problem of the center of oscillation of a compound pendulum — that is, he was the first to calculate the quantity that would later be called the moment of inertia — and proved the interchangeability of the suspension point and the center of oscillation"
+    },
+    {
+     "who": "Isaac Newton",
+     "year": "1687",
+     "what": "in 'Principia' gave the second law F = ma for a point; the rotation equation is obtained by summing this law over the points of the body, but Newton himself did not analyze the rotation of a rigid body in general"
+    },
+    {
+     "who": "Leonhard Euler",
+     "year": "1765",
+     "what": "in 'Theory of the Motion of Rigid Bodies' introduced the term 'moment of inertia' itself, wrote the rotation equations and the concept of principal axes — the rotation of rigid bodies became a separate science"
+    },
+    {
+     "who": "Jakob Steiner",
+     "year": "1840",
+     "what": "gave the parallel axis theorem its current formulation; in essence the result was already contained in Huygens, and therefore it is rightly called the Huygens–Steiner theorem"
+    }
+   ],
+   "story": "In 1646, Marin Mersenne proposed to the seventeen-year-old Huygens a problem on which Descartes and Roberval had already stumbled: where in a compound pendulum — not a weight on a string, but an oscillating body — is the point that oscillates like a simple pendulum of the same length? The problem looked geometric, but turned out to be about the distribution of mass, and Huygens struggled with it for almost thirty years. He published the answer only in 1673, in the fourth part of 'Horologium Oscillatorium', and in that answer our sum $\\sum m_i r_i^2$ already stands — but without a name. Euler would give it a name almost a hundred years later. Along the way, Huygens proved something that seems accidental and is not: if you suspend the body from the found center of oscillation, the period does not change, and the former suspension point becomes the new center of oscillation. A century and a half later, Henry Kater built a reversible pendulum (1817) on this interchangeability and measured the acceleration of free fall with an accuracy of about one hundred-thousandth; the world did not know a better gravimeter for a good hundred years. All this grew out of one sum, which we will obtain in two steps.",
+   "symbols": [
+    {
+     "sym": "ω",
+     "latex": "\\omega",
+     "what": "angular velocity",
+     "unit": "rad/s",
+     "note": "the same for all points of the body — this is the very definition of a rigid body"
+    },
+    {
+     "sym": "ε",
+     "latex": "\\varepsilon",
+     "what": "angular acceleration",
+     "unit": "rad/s²",
+     "note": "derivative of angular velocity, dω/dt; plays the role of ordinary acceleration for rotation"
+    },
+    {
+     "sym": "I",
+     "latex": "I",
+     "what": "moment of inertia about an axis",
+     "unit": "kg·m²",
+     "note": "property not of the body but of the pair 'body and axis': one wheel has three different I for three different axes"
+    },
+    {
+     "sym": "M",
+     "latex": "M",
+     "what": "moment of force about an axis",
+     "unit": "N·m",
+     "note": "force multiplied by lever arm; dimension coincides with joule, but it is not energy — the unit is written precisely as N·m"
+    },
+    {
+     "sym": "r_i",
+     "latex": "r_i",
+     "what": "distance of a body point to the axis",
+     "unit": "m",
+     "note": "precisely to the axis, not to the center of the body — the most common mistake when substituting"
+    },
+    {
+     "sym": "k",
+     "latex": "k",
+     "what": "shape coefficient",
+     "unit": "dimensionless",
+     "note": "I = k·mR²; equals the mean square of the distance to the axis in fractions of R² and never exceeds one"
+    },
+    {
+     "sym": "d",
+     "latex": "d",
+     "what": "distance between parallel axes",
+     "unit": "m",
+     "note": "enters the correction md² squared, so shifting the axis becomes expensive quickly"
+    },
+    {
+     "sym": "E_rot",
+     "latex": "E_{\\text{rot}}",
+     "what": "rotational kinetic energy",
+     "unit": "J",
+     "note": "½Iω² — the same ½mv², only different letters; from it we will extract the moment of inertia"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Rigorous derivation",
+   "lead": "We need exactly three things, and we already have them all: the definition of a rigid body, the kinetic energy of a point ½mv², and Newton's laws — the second and the third. Neither the moment of inertia nor the equation of rotation will be postulated — both will emerge along the way.",
+   "steps": [
+    {
+     "text": "A rigid body is a body in which the distances between any two points do not change. From this alone it follows that during rotation about a fixed axis, all points rotate through the same angle in the same time. Otherwise, the points would move apart, and the distance between them would change. Hence, the angular velocity $\\omega = d\\varphi/dt$ is common to the whole body — a single number for billions of atoms. But the linear velocity is different for each point: the farther from the axis, the longer the circle it traces, and the faster the point moves. And immediately a small detail that often trips people up: $r$ is the distance to the AXIS, not to the center of the body. For a long shaft, a point at the end and a point at the middle lie at the same $r$ if both are at the same radius.",
+     "latex": "\\omega = \\frac{d\\varphi}{dt}\\ \\text{— one for the whole body}, \\qquad v_i = \\omega\\, r_i",
+     "figure": "rigiomega",
+     "figCaption": "The angle of rotation is the same for all points, but the velocity is different: v = ω·r. The distance is measured to the axis, not to the center of the body."
+    },
+    {
+     "text": "Now we sum the kinetic energy over all points of the body. Each contributes $\\tfrac12 m_i v_i^2$, and instead of $v_i$ we can write $\\omega r_i$. Then the key step happens: $\\omega$ is the same in all terms, so $\\omega^2$ factors out of the sum, leaving inside a combination of only the masses of the points and their distances to the axis. There is no motion in it — it is a pure property of the body and the chosen axis, which can be calculated once and then used. This combination is called the moment of inertia. Compare the two energy expressions: for translational motion ½mv², for rotation ½Iω². They match letter for letter, and this directly shows that $I$ plays the role of mass for rotation. The unit follows from the definition: kilogram times meter squared.",
+     "latex": "E = \\sum_i \\tfrac{1}{2} m_i v_i^2 = \\sum_i \\tfrac{1}{2} m_i (\\omega r_i)^2 = \\tfrac{1}{2}\\Bigl(\\underbrace{\\sum_i m_i r_i^2}_{I}\\Bigr)\\omega^2, \\qquad [\\,I\\,] = \\text{kg}\\cdot\\text{m}^2",
+     "figure": "rigisum",
+     "figCaption": "ω factors out of the sum because it is the same for the whole body. What remains is Σm r² — a quantity with no motion inside: only the body and the axis."
+    },
+    {
+     "text": "The measure of force for rotation is not assigned by decree but chosen by work. Suppose a force $\\vec F$ is applied to a point of the body at distance $r$ from the axis. Decompose it into two components: along the radius and perpendicular to it. The radial component pulls the point toward or away from the axis, but the point moves strictly perpendicular to the radius during rotation — so this component does no work at all and has no effect on rotation. What remains is the tangential component. For a small rotation $d\\varphi$, the point travels a distance $r\\,d\\varphi$, and the work is $F_t\\, r\\, d\\varphi$. Look at the combination that appears as a factor multiplying $d\\varphi$: the product of force and distance to the axis. This is called the moment of force. In vector notation, it is the magnitude of the cross product $\\vec r \\times \\vec F$, that is, force times the lever arm — the length of the perpendicular dropped from the axis to the line of action of the force. This, by the way, is why a door handle is placed at the far edge from the hinges.",
+     "latex": "dA = F_t\\, r\\, d\\varphi \\equiv M\\, d\\varphi, \\qquad M = F_t\\, r = |\\vec r \\times \\vec F| = F\\,r\\sin\\alpha, \\qquad [\\,M\\,] = \\text{N}\\cdot\\text{m}",
+     "figure": "rigitorque",
+     "figCaption": "Only the tangential component causes rotation. The work for a rotation by dφ is F_t·r·dφ, and the factor multiplying dφ is the moment of force."
+    },
+    {
+     "text": "Before writing the equation, we must get rid of internal forces, and there are countless of them in a body: each atom holds onto its neighbors. Newton's third law says that the forces between two points are equal in magnitude and opposite in direction — but this alone is not enough. We also need a detail that is usually mentioned in a low voice: the forces of interaction between points of a rigid body have a common line of action; they are directed along the straight line connecting the points. Then the sum of their moments about any axis collapses into the cross product of the difference of radius vectors with the force, and the difference of radius vectors lies along the same line as the force. The cross product of parallel vectors is zero. Hence, internal moments cancel strictly in pairs — every single one — and only external ones enter the equation.",
+     "latex": "\\vec M_{12} + \\vec M_{21} = \\vec r_1 \\times \\vec F_{12} + \\vec r_2 \\times \\vec F_{21} = (\\vec r_1 - \\vec r_2) \\times \\vec F_{12} = 0",
+     "figure": "rigiinner",
+     "figCaption": "Internal forces lie on the same line as the segment connecting the points, so their moments cancel in pairs. Only external ones remain."
+    },
+    {
+     "text": "Putting it all together. External moments do work $M\\,d\\varphi$ for a rotation by $d\\varphi$, and all of it goes into the kinetic energy of rotation: the body is rigid, there is nothing to deform, and internal forces, as we just showed, have zero net contribution. We equate and differentiate. The moment of inertia is constant for a fixed axis — the body does not change shape, points do not move — so $d(\\tfrac12 I\\omega^2) = I\\omega\\,d\\omega$. Substituting $d\\varphi = \\omega\\,dt$, the $\\omega$ cancels on both sides. What remains is the equation usually presented as a separate law. We have introduced no new axiom: we only summed Newton's second law over the points and used the definition of work. The correspondence is letter for letter: mass becomes moment of inertia, force becomes moment of force, acceleration becomes angular acceleration.",
+     "latex": "M\\,d\\varphi = d\\Bigl(\\tfrac{1}{2} I \\omega^2\\Bigr) = I\\omega\\, d\\omega, \\quad d\\varphi = \\omega\\, dt \\;\\Longrightarrow\\; M = I\\,\\frac{d\\omega}{dt} = I\\varepsilon",
+     "figure": "rigieps",
+     "figCaption": "Three pairs of correspondences: m ↔ I, F ↔ M, a ↔ ε. The equation of rotation is the same second law, rewritten in angular quantities."
+    },
+    {
+     "text": "The moment of inertia is easiest to calculate where there is nothing to calculate. For a hoop — a thin ring, a bicycle wheel, a flywheel with a massive rim — all points lie at the same distance $R$ from the axis, so $r^2$ factors out of the sum entirely, leaving just the mass: $I = mR^2$. This is the maximum: for given $m$ and $R$, it cannot be larger; there is nowhere for the material to be beyond $R$. For a disk, the mass is spread from the center to the edge, and the sum becomes an integral over thin rings. For a solid sphere, the same method gives $\\tfrac25 mR^2$; for a thin rod rotated about its midpoint perpendicular to itself, it is $\\tfrac1{12} mL^2$. One word about the letter: in the expression $I = kmR^2$, the $R$ always means the characteristic size that appears in the formula itself — for a hoop, disk, and sphere it is the radius, and for a rod it is the full length $L$. And now the main point: these fractions need not be memorized. Divide $I$ by $mR^2$, and you will see that the coefficient is exactly the mean square distance of the points to the axis, expressed in units of $R^2$. For a hoop, all points are at $R$, the mean square is $R^2$, the coefficient is one. For a disk it is one half, for a sphere two fifths, for a rod one twelfth — and the last number, by the way, is familiar to anyone who has calculated the variance of a uniform distribution on an interval. It is the same quantity.",
+     "latex": "I = k\\,mR^2,\\quad k = \\frac{\\langle r^2\\rangle}{R^2}; \\qquad I_{\\text{disk}} = \\int_0^R r^2\\,\\frac{2m}{R^2}\\,r\\,dr = \\tfrac{1}{2}mR^2, \\qquad I_{\\text{rod}} = \\int_{-L/2}^{L/2} x^2\\,\\frac{m}{L}\\,dx = \\tfrac{1}{12}mL^2",
+     "figure": "rigishapes",
+     "figCaption": "Hoop 1, disk ½, sphere ⅖, rod 1/12. The coefficient is the mean square distance to the axis in units of R², and there is no need to memorize it."
+    },
+    {
+     "text": "The moment of inertia belongs not to the body alone but to the pair “body and axis”: shift the axis, and the number changes. How much it changes, you do not need to recalculate from scratch. Suppose the first axis passes through the center of mass, and a point of the body is at vector $\\vec r$ from it, in the plane perpendicular to the axis. Draw a second axis parallel to the first, and denote by $\\vec d$ the vector from the new axis to the center of mass. Then the distance from the point to the new axis is $|\\vec r + \\vec d\\,|$, and its square enters the sum. Expanding the square gives three terms. The first is the moment of inertia about the axis through the center of mass. The third equals $md^2$: the vector $\\vec d$ is the same for all points, and the sum of masses is the mass of the body. The second contains $\\sum m_i \\vec r_i$, and this sum is zero simply by the definition of the center of mass — the center of mass is the point about which the weighted sum of radius vectors vanishes. The middle term disappears, leaving the Huygens–Steiner theorem. Let us test it on a rod: about the midpoint it is $\\tfrac1{12}mL^2$; shifting the axis to the end, $d = L/2$, the addition is $mL^2/4$, together $\\tfrac1{12} + \\tfrac14 = \\tfrac13$ — exactly the tabulated value for a rod rotated about its end. And another consequence reads directly from the formula: $md^2$ is never negative, so among all parallel axes, the moment of inertia is minimal for the one passing through the center of mass.",
+     "latex": "I = \\sum_i m_i \\bigl|\\vec r_i + \\vec d\\,\\bigr|^2 = \\underbrace{\\sum_i m_i r_i^2}_{I_c} \\;+\\; 2\\,\\vec d\\cdot\\underbrace{\\sum_i m_i \\vec r_i}_{=\\;0} \\;+\\; d^2\\underbrace{\\sum_i m_i}_{m} \\;=\\; I_c + md^2",
+     "figure": "rigistein",
+     "figCaption": "The middle term vanishes: Σm·r = 0 — that is the definition of the center of mass. What remains is I = I_c + md², and the moment of inertia is always smallest about the center of mass."
+    },
+    {
+     "text": "Let us test everything at once on rolling. A body rolls down a height $h$ without slipping; this means the point of contact is at rest at every instant, the static friction force does no work, and total energy is conserved. At the top there was potential energy $mgh$; at the bottom, the sum of translational $\\tfrac12 mv^2$ and rotational $\\tfrac12 I\\omega^2$. The relation between them is given by the rolling condition: in one revolution, the body travels a distance equal to the circumference, hence $v = \\omega R$. Substituting $I = kmR^2$ — and watch what happens. The mass appears as a factor in all three terms and cancels. The radius enters the moment of inertia squared, and the rolling condition brings $R^2$ into the denominator — they cancel each other. In the answer, only the height and one dimensionless number remain. A hoop, with $k = 1$, gives exactly half of its energy to rotation and arrives at the bottom $\\sqrt2$ times slower than a body sliding without friction; a sphere with $k = 2/5$ gives less than a third and arrives first. No “heavier is faster” or “larger is faster” works here: the race is decided by shape and shape alone.",
+     "latex": "mgh = \\tfrac{1}{2}mv^2 + \\tfrac{1}{2}I\\omega^2, \\quad I = kmR^2,\\ \\ \\omega = \\frac{v}{R} \\;\\Longrightarrow\\; mgh = \\tfrac{1}{2}mv^2(1+k) \\;\\Longrightarrow\\; v = \\sqrt{\\frac{2gh}{1+k}}",
+     "figure": "rigiroll",
+     "figCaption": "From a height of 1 m: sphere 3.74 m/s, disk 3.62, hoop 3.13. Neither mass nor radius entered the answer — only the shape factor decides."
+    }
+   ],
+   "plate": "M = I\\varepsilon \\qquad I = \\sum_i m_i r_i^2 = k\\,mR^2 \\qquad I = I_c + md^2",
+   "plateCap": "On the left — Newton's second law rewritten for rotation: moment instead of force, moment of inertia instead of mass, angular acceleration instead of linear. In the middle — what the moment of inertia is made of: mass times the square of the distance to the axis, and a dimensionless shape factor. On the right — the rule for recalculating to a parallel axis. Three lines, and the whole section is in them.",
+   "note": "Let us note where the derivation silently narrowed. First: our axis is fixed and does not move. As long as this holds, the moment of inertia is a single number, and $M$ and $\\varepsilon$ point in the same direction. For a freely flying body this is not true: the quantity connecting moment with rotation turns out to be a table of nine numbers, and a single number will no longer suffice. We will name it in the appendix and pass it to the next section. Second: $I$ was assumed constant because the body is rigid; if the body changes shape, a second term appears in the derivative, but deformable bodies are not considered here at all. Third: in the rolling step, energy is conserved, meaning rolling friction and air resistance are neglected. For a steel ball on a smooth board this is justified to within a few percent, for a soft ball on a carpet it is not. Fourth, purely arithmetic: we replaced the sum $\\sum m_i r_i^2$ with an integral, that is, we treated matter as continuous. For a body of $10^{23}$ atoms, this approximation is more accurate than any measurement, and one has to recall it only in problems about two dumbbell masses on a massless rod — there the sum is finite and the integral is unnecessary."
+  },
+  "math": {
+   "title": "The Math Needed Here",
+   "lead": "Three stories: how a sum over points becomes an integral, why both vector products were needed in one derivation, and why dimensional analysis catches two different errors here.",
+   "items": [
+    {
+     "what": "From sum to integral: how I is calculated for a continuous body",
+     "why": "The definition $I = \\sum m_i r_i^2$ literally implies enumerating points, but a body has $10^{23}$ points. The transition to an integral is the usual replacement of a sum over small pieces by an integral over mass: $\\sum m_i r_i^2 \\to \\int r^2\\,dm$. The only trick is this: you must choose the piece so that ALL its points have the same distance to the axis, otherwise it is unclear which $r$ to substitute. For a disk, such a piece is a thin ring of radius $r$ and thickness $dr$; its area is $2\\pi r\\,dr$, and its mass at surface density $m/(\\pi R^2)$ equals $(2m/R^2)\\,r\\,dr$. For a rod, the piece is a segment $dx$ with mass $(m/L)\\,dx$. The most common mistake here is taking a rectangular strip for the disk: its points have different distances to the axis, and the integral will be wrong. And note a beautiful coincidence: the integral for the rod is exactly the variance of a uniform distribution on an interval, $L^2/12$. The moment of inertia of a homogeneous body is the mean square distance multiplied by mass.",
+     "latex": "\\sum_i m_i r_i^2 \\;\\longrightarrow\\; \\int r^2\\,dm, \\qquad dm_{\\text{ring}} = \\frac{2m}{R^2}\\,r\\,dr \\;\\Longrightarrow\\; I = \\int_0^R \\frac{2m}{R^2}\\,r^3\\,dr = \\frac{1}{2}mR^2",
+     "kit": "integral"
+    },
+    {
+     "what": "Both vector products, and both for a reason",
+     "why": "In this section, both operations appeared, and each worked through its own property. The cross product gave the definition of torque: $|\\vec r \\times \\vec F| = rF\\sin\\alpha$, where the sine automatically filters out the radial component of the force—the one that does not cause rotation. And it also settled the question of internal forces in one stroke: the cross product of parallel vectors is zero, and the forces between points of a rigid body are precisely parallel to the segment between those points. The dot product appeared in the parallel axis theorem, when expanding the square of the modulus of a sum: $|\\vec r + \\vec d\\,|^2 = r^2 + 2\\,\\vec r\\cdot\\vec d + d^2$. The cross term is linear in $\\vec r$, and therefore its sum over points collapses to $\\vec d \\cdot \\sum m_i \\vec r_i$—and that is zero. Note the difference in nature: the dot product yields a number, the cross product yields a vector (and that is why torque has a direction, which will be discussed in the next section).",
+     "latex": "|\\vec a\\times\\vec b| = ab\\sin\\alpha,\\quad \\vec a\\parallel\\vec b \\Rightarrow \\vec a\\times\\vec b = 0; \\qquad |\\vec r+\\vec d\\,|^2 = (\\vec r+\\vec d\\,)\\cdot(\\vec r+\\vec d\\,) = r^2 + 2\\,\\vec r\\cdot\\vec d + d^2",
+     "kit": "dotcross"
+    },
+    {
+     "what": "Dimensional analysis: why newton-meter and joule are not the same",
+     "why": "The first check is simple. Moment of inertia is measured in kg·m², angular acceleration in s⁻² (radian is dimensionless), their product gives kg·m²·s⁻², which is indeed a newton-meter. The equation $M = I\\varepsilon$ passes dimensional analysis. The second check for rolling: under the square root we have acceleration times length, i.e., m²/s², the root gives m/s—a speed, as it should be; $k$ is dimensionless and cannot spoil anything. Now the nuisance that dimensional analysis does NOT catch: newton-meter and joule have the same dimensions, but torque and energy are different quantities, and you cannot add them. The reason is the radian: work equals torque multiplied by angle, and the angle in radians is dimensionless, so it is invisible in the dimensions. Therefore, torque is conventionally written in N·m, and energy in J, although formally they are the same combination of units. The rule is simple: dimensional analysis can disprove a formula, but it cannot prove it.",
+     "latex": "[\\,I\\varepsilon\\,] = \\text{kg}\\cdot\\text{m}^2\\cdot\\text{s}^{-2} = \\text{N}\\cdot\\text{m} = [\\,M\\,]; \\qquad \\left[\\sqrt{\\frac{2gh}{1+k}}\\,\\right] = \\sqrt{\\frac{\\text{m}}{\\text{s}^2}\\cdot\\text{m}} = \\frac{\\text{m}}{\\text{s}}",
+     "kit": "dimension"
+    }
+   ]
+  },
+  "example": {
+   "title": "Example with numbers",
+   "lead": "Let's spin a bicycle wheel — the one that is on the stand by default — and check the answer in three independent ways.",
+   "given": "Rear bicycle wheel: rim radius R = 0.35 m, mass of the rim with tire m = 2.0 kg. Almost all the mass is on the rim, so we consider the wheel a thin hoop. A constant torque M = 3.5 N·m is applied to the rim — this is, for example, a force of 10 N pulling a rope wound around the rim. We ignore the spokes, hub, and bearing friction for now. Find the moment of inertia, angular acceleration, angular velocity, and number of revolutions after 2 seconds. And separately — what changes if the same mass is spread over a disk.",
+   "law": "I = k·mR², where k = 1 for a hoop and ½ for a disk; ε = M/I; with constant ε, angular velocity grows as ω = εt, and the angle as φ = ½εt².",
+   "solution": [
+    {
+     "text": "Moment of inertia. For a hoop, all the mass is at radius R, so there is nothing to integrate: r² is taken out of the sum entirely, and only the mass remains.",
+     "latex": "I = mR^2 = 2{,}0 \\cdot 0{,}35^2 = 2{,}0 \\cdot 0{,}1225 = 0{,}245\\ \\text{kg}\\cdot\\text{m}^2"
+    },
+    {
+     "text": "Angular acceleration. Divide the torque by the moment of inertia — just like dividing force by mass.",
+     "latex": "\\varepsilon = \\frac{M}{I} = \\frac{3{,}5}{0{,}245} = 14{,}29\\ \\frac{\\text{rad}}{\\text{s}^2}"
+    },
+    {
+     "text": "After two seconds. Angular velocity grows linearly, the angle quadratically; to convert radians to revolutions, divide by 2π = 6.283.",
+     "latex": "\\omega = \\varepsilon t = 14{,}29 \\cdot 2 = 28{,}6\\ \\frac{\\text{rad}}{\\text{s}}, \\qquad \\varphi = \\tfrac{1}{2}\\varepsilon t^2 = 28{,}6\\ \\text{rad} = \\frac{28{,}6}{6{,}283} = 4{,}55\\ \\text{revolutions}"
+    },
+    {
+     "text": "The same question for a disk of the same mass and the same radius. The moment of inertia is half, so the angular acceleration is twice, and the angle over the same time is twice as large.",
+     "latex": "I_{\\text{disk}} = \\tfrac{1}{2}mR^2 = 0{,}1225\\ \\text{kg}\\cdot\\text{m}^2, \\qquad \\varepsilon = \\frac{3{,}5}{0{,}1225} = 28{,}6\\ \\frac{\\text{rad}}{\\text{s}^2}, \\qquad \\omega(2\\,\\text{s}) = 57{,}1\\ \\frac{\\text{rad}}{\\text{s}} \\;\\;(9{,}1\\ \\text{revolutions})"
+    }
+   ],
+   "answer": "Hoop: I = 0.245 kg·m², ε = 14.3 rad/s², after two seconds 28.6 rad/s and 4.55 revolutions. A disk of the same mass and the same radius: half the moment of inertia, twice the acceleration, 57.1 rad/s and 9.1 revolutions. The mass is the same, the size is the same — the whole difference is in where the matter is located.",
+   "check": "Three checks, and each catches its own error. The first is energy-based, the most rigorous. The work of the applied torque is M·φ = 3.5 · 28.6 = 100 J; the rotational kinetic energy is ½Iω² = ½ · 0.245 · 28.6² = 100 J. It matches to the last digit, and it could not be otherwise: we derived the equation M = Iε precisely from the equality of work and energy. If these two numbers differ for you, the error is in arithmetic, not physics. The second check is common sense. 28.6 rad/s is 4.55 revolutions per second, i.e., 273 revolutions per minute; with a circumference of 2πR = 2.20 m, the wheel would roll at a speed of 10 m/s, exactly 36 km/h. Plausible: a bicycle really accelerates to such a speed in a couple of seconds, and a force of 10 N on the rim is a suspended liter bag of milk, a quite human magnitude. The third is an arithmetic trap. 0.35² = 0.1225, not 0.0125 and not 1.225; if you got I = 0.0245 or 2.45, a factor of ten is lost or extra right here. And an honest caveat at the end: a real wheel is not a hoop. The hub weighs quite a bit and sits near the axis, the spokes are also distributed over the radius, so the actual shape factor is closer to 0.75 than to 1 — the arithmetic of this correction is analyzed in the appendix."
+  },
+  "constants": {
+   "title": "Constants of this section",
+   "lead": "One number here is not measured at all, but follows from geometry; the second converts revolutions into radians; the third came from the mechanics of the Earth; the fourth tells about the interiors of planets.",
+   "items": [
+    {
+     "sym": "k",
+     "latex": "k",
+     "name": "Shape factors",
+     "value": "1 · ½ · ⅖ · ⅓ · 1/12",
+     "unit": "dimensionless",
+     "why": "Hoop (thin ring) — 1; solid disk or cylinder — ½; solid sphere — ⅖; thin-walled sphere — ⅔; rod about its end — ⅓, about its center — 1/12. Each of these numbers is the mean square distance to the axis, expressed in fractions of R², and none of them can exceed one: there is simply nowhere for matter to be beyond R. For a thick-walled pipe with inner radius r, the factor is ½(1 + r²/R²) and smoothly goes from ½ for a solid cylinder to 1 for a thin ring. None of these numbers are measured — they are all calculated, and therefore absolutely precise, unlike properties of matter.",
+     "mnemo": "The closer the mass to the axis, the smaller k. The sequence is restored by looking at the body: hoop 1 → disk ½ → sphere ⅖ → rod about its center 1/12. Nothing to memorize, just ask yourself where the matter sits."
+    },
+    {
+     "sym": "2π",
+     "latex": "2\\pi",
+     "name": "Radian, revolution, and revolutions per minute",
+     "value": "2π = 6.2832 rad per revolution; 1 rpm = 0.10472 rad/s",
+     "unit": "rad",
+     "why": "An angle in radians is the ratio of arc length to radius, that is, meter per meter. Therefore, the radian is dimensionless, and that is why in rotation formulas there is no conversion factor anywhere: v = ωR, a = ω²R and φ = ½εt² work only in radians and break if you substitute degrees. Practical side: the nameplate revolutions of motors and flywheels are always given in rpm, but formulas use rad/s. The conversion factor is 2π/60 = 0.10472, the inverse is 9.549.",
+     "mnemo": "From rpm to rad/s — divide by 9.55 (which is 60/2π). 3000 rpm gives 314 rad/s, and in the number 314 you immediately recognize π. Conversely — multiply by 9.55."
+    },
+    {
+     "sym": "g",
+     "latex": "g",
+     "name": "Acceleration due to gravity",
+     "value": "9.80665 (for estimates 9.81)",
+     "unit": "m/s²",
+     "const": "g",
+     "why": "In this section, g appears in exactly one place — in rolling down a hill, where it stands in the combination 2gh/(1+k). It does not enter either the moment of inertia or the equation of rotation at all, and this is worth realizing separately: spinning up a flywheel in weightlessness is no easier than on Earth, because inertia has nothing to do with gravity. But in the physical pendulum, g appears again — and that is why it is measured with Kater's pendulum.",
+     "mnemo": "√(2gh) — the speed of free fall from height h: at h = 1 m it is 4.43 m/s. Any rolling body will arrive slower by exactly a factor of √(1+k): hoop by 1.41 times, sphere by 1.18."
+    },
+    {
+     "sym": "I⊕",
+     "latex": "I_\\oplus",
+     "name": "Moment of inertia of the Earth",
+     "value": "0.3307 · M⊕R⊕² = 8.02 · 10³⁷",
+     "unit": "kg·m²",
+     "why": "The shape factor of the Earth is 0.3307, while for a uniform sphere it would be 0.4. The difference is not cosmetic: it directly indicates that matter becomes denser toward the center — the iron core is more than three times denser than the mantle. The moment of inertia of a planet is measured by the motion of its axis and by the orbits of artificial satellites, and then models of internal structure are checked against it — this is one of the few ways to learn something about the interior without looking inside. The Moon has 0.394, almost a uniform sphere with a tiny core; Mars has 0.364; Saturn about 0.22 — matter is concentrated toward the center more than anywhere else in the Solar System.",
+     "mnemo": "0.4 means 'spread evenly'. Less than 0.4 — 'denser toward the center', more — 'mass shifted outward' (for a hollow sphere it would be 0.67). One number, and you can already see whether the planet has a heavy core."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "How this connects to the rest of the course",
+   "lead": "Moment of inertia stands at a crossroads: to its left are the kinematics of rotation and conservation of energy, to its right — the gyroscope, rotating frames of reference, and analytical mechanics.",
+   "items": [
+    {
+     "h": "Rotation and frames of reference",
+     "text": "Everything we used here from kinematics — angular velocity, the relation v = ωR, centripetal acceleration ω²R — is derived in the topic 'Oscillations and rotation', in the section on rotation and frames of reference. There it is also explained why an observer on a rotating disk is forced to introduce a force without a source. Here we took these results as ready-made and added to them exactly one thing: mass distributed over a body."
+    },
+    {
+     "h": "Conservation laws",
+     "text": "The eighth step of the derivation relies entirely on conservation of energy, and without the topic 'Conservation laws' there would be nothing to write it from. From there also comes the habit of looking for a quantity that does not change during motion — here it turned out to be zero in the middle term. The very concept of the center of mass we introduced right here, in the seventh step, and not as a convenient point, but as a definition: the center of mass is the point relative to which Σm·r equals zero. It is precisely this equality that zeroed the middle term in the parallel axis theorem. Without the center of mass, the theorem of parallel axes simply would not exist."
+    },
+    {
+     "h": "Oscillations: physical pendulum",
+     "text": "Suspend any body at a point above its center of mass and give it a swing — the period will be T = 2π√(I/(mgd)), where I is the moment of inertia about the suspension axis, and d is the distance from the axis to the center of mass. Both quantities are exactly those in this section. For a uniform rod of length 1 m, suspended at one end, I = mL²/3 and d = L/2, whence T = 2π√(2L/3g) = 1.64 s — noticeably faster than the 2.01 s of a bob on a string of the same length. This is exactly the problem Huygens solved, and from it pendulum clocks grew."
+    },
+    {
+     "h": "What's next",
+     "text": "The next section of the topic will take the same product Iω, but look at it as a vector — and explain the gyroscope and the top. The third will go into rotating frames of reference. And in analytical mechanics, the same quantity will appear under a different name: if you take the angle of rotation as a coordinate, then the moment of inertia will take the place of mass in the expression for kinetic energy — a 'generalized mass' for a generalized coordinate."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Fun: Try It Yourself",
+   "lead": "The two experiments below require two bottles of water, a freezer, and two eggs. Both demonstrate the same thing: moment of inertia depends on whether the substance moves with the body.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "kitchen experiment",
+     "h": "Race of Two Bottles: Water vs. Ice",
+     "text": "Take two identical plastic bottles. Fill both with water to about nine-tenths full—do not fill to the brim: when freezing, water expands by nine percent, and a full closed bottle will bulge or burst. Screw the caps on loosely. Put one bottle in the freezer overnight, standing upright—you cannot lay it on its side with a loose cap, it will leak—and leave the other in the room. In the morning, make a ramp: any flat board about 1.2 m long—an ironing board or a removed shelf works—with one end raised about fifteen centimeters. Release both bottles at the same time, and before letting go, decide which will arrive first.",
+     "answer": "The liquid one arrives first, and by a large margin. The water inside the rolling bottle barely spins: the walls slide over it, water viscosity is low, and the time is only a second and a half. Practically only the plastic shell spins, and it weighs about thirty grams against half a kilogram of contents, so the effective shape factor for the liquid bottle is about 0.05. For the frozen one, the contents become part of the solid body, and it is a solid cylinder, k = ½. Let's calculate the accelerations: a = g·sinθ/(1+k), with sinθ = 0.125 that is 1.17 m/s² versus 0.82. The liquid bottle covers its 1.2 meters in 1.43 s, the icy one in 1.71 s; when the liquid one finishes, the icy one lags by about 35 centimeters. The gap is visible without a stopwatch. And immediately a control experiment against the explanation \"ice is lighter\": put the bottles on a scale. The mass is the same; the water hasn't gone anywhere. The race is decided not by weight but by whether the contents spin with the bottle. A fair caveat: on a very long slope, the water gradually gets involved in the rotation, and the gap will begin to shrink—the effect lives precisely because the slope is short."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "kitchen experiment",
+     "h": "Raw Egg vs. Boiled Egg",
+     "text": "Boil one egg hard, leave the second raw, and mark it with a pencil so you don't mix them up. Spin both flat on a smooth plate—with the same flick of your fingers. Decide in advance two things: which will spin up faster and which will spin longer.",
+     "answer": "The boiled egg is a true solid: the contents accelerate with the shell, all the energy you put in goes into rotating the whole, and the egg spins fast and long. The raw egg barely spins: your fingers accelerate almost only the shell, while the white and yolk stay in place—the same as with the water bottle. Then viscous friction between the shell and the contents slows the shell, and the raw egg stops after a couple of seconds. But the most interesting part is the second move of the experiment, for which it is done. Spin the raw egg, touch it with your finger, and immediately release. The boiled egg will stop dead after such a touch. The raw one will start moving again: you stopped the shell, but the liquid inside has by then spun up a little and now spins the shell back. This is direct, hands-on proof that moment of inertia is about where and how matter moves, not just how much of it there is. And note: the usual culinary test \"raw or boiled\" is a kitchen experiment in solid mechanics, invented long before that mechanics was written down."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradox",
+     "h": "Solid or Hollow—How to Tell Without Cutting Open",
+     "text": "Before you are two spheres. Externally they are indistinguishable, same diameter, same mass on a scale. One is solid, cast from a light alloy; the other is hollow, with a thin wall of heavy metal. Neither a ruler nor a scale solves the problem. How can you tell them apart in thirty seconds without cutting anything?",
+     "answer": "Roll both down an inclined board from the same height. For a solid sphere, k = ⅖; for a hollow sphere, k = ⅔. With h = 1 m, the speeds at the bottom are 3.74 and 3.43 m/s—a nine percent gap, visible to the naked eye on a meter-long board, and on a two-meter board it becomes indecent. The reason is that for the hollow one, the mass is pushed to the surface, the mean square distance from the axis is larger, and a larger fraction of energy goes into spinning: k/(1+k) gives 40 percent versus 29. And the numbers must be stated honestly: the coefficient ⅔ is valid for a truly thin wall. For a sphere with a wall one-tenth of the radius, k is already 0.60, the speed at the bottom is 3.50 m/s, and the gap shrinks from nine percent to seven—noticeable, but not as generous. The same technique, in industrial form, is used to check the uniformity of castings. And the same technique, on a planetary scale, is used to judge a planet's interior: Earth's coefficient of 0.3307 indicates a heavy core, while the Moon's 0.394 indicates an almost homogeneous sphere. No one has looked inside either a casting or the Moon."
+    },
+    {
+     "icon": "fact",
+     "kind": "interesting fact",
+     "h": "Flywheel: Storing Energy in Rotation",
+     "text": "Rotational energy equals ½Iω², and angular velocity enters squared, while mass enters linearly. Therefore, it is more advantageous to spin faster than to add weight. Let's calculate: a steel disk with mass 100 kg and radius 0.5 m has I = ½·100·0.25 = 12.5 kg·m². At 10,000 revolutions per minute, that is ω = 1047 rad/s and E = ½·12.5·1047² = 6.9 MJ, which is 1.9 kWh. Let's check for rupture: the rim of such a disk moves at ωR = 524 m/s, and steel breaks at about this very speed, so our flywheel is ideal. A real steel one of this radius is spun at half that speed, and it stores four times less, 1.7 MJ. For comparison: the same hundred kilograms lifted ten meters (the roof of a three-story building) stores 9.8 kJ—seven hundred times less.",
+     "answer": "Hence the whole history of flywheels—from the stone potter's wheel and the flywheel of Watt's steam engine to the storage devices installed today in tram depots and subways to recover braking energy. Interestingly, the limiting factor is not mass or motor power, but the strength of the rim: the point on the rim is held from flying apart only by the material itself, and the maximum rim speed is determined by the strength-to-density ratio. Steel sets this limit rather low, so modern flywheels are not cast but wound from carbon fiber: it is almost five times lighter than steel and yet stronger in tension along the fiber, and the limiting speed goes as the square root of the strength-to-density ratio—by this ratio, carbon fiber beats steel by about three times. Also, a wound flywheel, upon failure, produces no large fragments, which is not a minor consideration for a device storing megajoules."
+    },
+    {
+     "icon": "edge",
+     "kind": "limit of applicability",
+     "h": "When Rolling Stops Being Rolling",
+     "text": "The formula v = √(2gh/(1+k)) is derived assuming the body rolls without slipping: the point of contact is at rest at each moment, and static friction does no work. This assumption is not free, and it does not always hold.",
+     "answer": "For a body to roll rather than skid, static friction must be able to spin it up. The required force is mg·sinθ·k/(1+k), the available force is μmg·cosθ, and from this we get the rolling condition: tan θ ≤ μ(1+k)/k. Substituting μ = 0.3: a hoop will start slipping already at 31 degrees, while a sphere will hold out until 46. The reason is visible directly in the formula: the larger k, the larger the fraction of energy that must go into rotation, and the harder friction has to work. Beyond the threshold, part of the energy goes into heat, and our formula gives an overestimated answer. The second silent debt is rolling friction, which we ignored entirely. It is orders of magnitude weaker than sliding (for a steel ball on steel, the coefficient is about 0.001; for a bicycle tire on asphalt, about 0.004), so on a meter-long board it is negligible, but on a long descent it determines everything. Hence the practical rule: our answer is an upper bound on speed, which a real body approaches the closer, the harder the body itself and the surface beneath it."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "What we glossed over",
+   "blocks": [
+    {
+     "h": "One number instead of a table of nine: the inertia tensor",
+     "text": "As long as the axis is fixed, the moment of inertia is a single number, and the torque and angular acceleration point in the same direction. A free body has no axis: it can be any axis and change over time. Then the quantity describing rotational inertia turns out to be not a number but a table of nine numbers — the inertia tensor. The good news is that for any body there exist three mutually perpendicular axes, called principal axes, about which everything becomes simple again: one number for each. Our formulas I = kmR² are precisely the principal moments of symmetric bodies. Everything that cannot be described by a single number begins in the next section; here it suffices to remember that the moment of inertia without specifying the axis is meaningless.",
+     "latex": "I_{\\alpha\\beta} = \\sum_i m_i\\bigl(r_i^2\\,\\delta_{\\alpha\\beta} - x_{i\\alpha}x_{i\\beta}\\bigr)"
+    },
+    {
+     "h": "Rolling without slipping is an assumption, not a fact",
+     "text": "In step eight we wrote v = ωR and declared that static friction does no work. The first is the condition for rolling, and it holds only as long as friction is sufficient; the threshold is given by the inequality below. The second is strictly true: the point of contact is at rest at the instant of contact, and a force applied to a point at rest does no work — but that is precisely why static friction does not dissipate energy; it merely redistributes it between translation and rotation. What we discarded is rolling friction: it is associated with deformation of the body and the support and does consume energy. Its order of magnitude is two to three orders lower than sliding friction, and on a kitchen ramp it can be neglected without any qualms.",
+     "latex": "F_{\\text{fric}} = mg\\sin\\theta\\,\\frac{k}{1+k} \\le \\mu\\, mg\\cos\\theta \\;\\Longrightarrow\\; \\tan\\theta \\le \\mu\\,\\frac{1+k}{k}"
+    },
+    {
+     "h": "A real wheel is not a hoop",
+     "text": "In the example we treated a bicycle wheel as a thin ring and got k = 1. Let's check how rough that is. The rim with tire and tube is about 1.5 kg at the same radius of 0.35 m, and they are indeed a hoop. Thirty-two spokes at 5 grams each give 0.16 kg, but they are distributed along the radius like rods, and their contribution is calculated with a factor of ⅓. The hub weighs 0.4 kg and sits right at the axis, so its contribution is almost zero. Adding up: I = 1.5·0.35² + 0.16·⅓·0.35² = 0.184 + 0.007 = 0.190 kg·m² for a total mass of 2.06 kg, whence k = 0.190/(2.06·0.1225) = 0.75. That is, a real wheel is a quarter 'easier to spin up' than an ideal hoop of the same mass, and the blame lies almost entirely with the hub. The same calculation explains why in cycling they fuss so much over the mass of the rim and almost ignore the mass of the hub: a gram on the rim costs more than a gram at the axis by as many times as the square of the distance is larger."
+    },
+    {
+     "h": "Ideal bearing and constant torque",
+     "text": "In the wheel example, the torque of 3.5 N·m was the only one — we simply discarded friction in the bearings. Let's check whether that is legitimate. A bicycle wheel spun up to 28.6 rad/s and left alone stops in a couple of minutes. Thus the braking torque is on the order of I·ω/t = 0.245·28.6/120 ≈ 0.06 N·m — almost sixty times smaller than the accelerating torque. When calculating acceleration, it can and should be discarded; when calculating coasting, by no means, because there it is the only one. The same applies to the constancy of torque: a rope wound around the rim pulls with constant force, but a muscle or an electric motor does not, and then ε ceases to be constant, and the formulas ω = εt and φ = ½εt² have to be replaced by integrals."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "The measure of inertia in rotation is not mass but the sum $\\sum m_i r_i^2$: what matters is not only how much matter there is, but also how far it is from the axis. This sum falls out by itself once you add up the kinetic energy over the points of the body, and along with it falls out Newton's second law for rotation $M = I\\varepsilon$. Everything else — shape factors, the parallel axis theorem, the race of bodies down a hill — are consequences of these two lines.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "M = Iε",
+     "text": "The same Newton's second law: torque instead of force, moment of inertia instead of mass, angular acceleration instead of linear. It is not postulated but summed over points"
+    },
+    {
+     "icon": "scale",
+     "title": "I = k·mR²",
+     "text": "The coefficient k is the mean square distance from the axis in units of R²: hoop 1, disk ½, sphere ⅖, rod 1/12. It can never exceed 1"
+    },
+    {
+     "icon": "fact",
+     "title": "I = I_c + md²",
+     "text": "The Huygens–Steiner theorem follows from the equality Σm·r = 0, that is, from the very definition of the center of mass. Therefore, an axis through the center of mass is always the 'lightest'"
+    },
+    {
+     "icon": "edge",
+     "title": "The race is decided by shape",
+     "text": "v = √(2gh/(1+k)): neither mass nor radius enters the answer. The hoop always comes last — whether a child's or a tractor's"
+    }
+   ],
+   "where": [
+    "Flywheel: energy ½Iω², so the rim is made heavy and spun up to thousands of revolutions — speed enters squared",
+    "Wheels: 'light wheels' are valued not for their mass per se, but for moving mass from the rim to the axis",
+    "Door handle and wrench: torque is force times lever arm, so the handle is placed at the far edge from the hinges",
+    "Physical pendulum and Huygens' pendulum clock; Kater's reversible pendulum, which was used for a century to measure g",
+    "Planetary science: the measured coefficient of 0.3307 for Earth and 0.394 for the Moon is direct evidence of what is inside them"
+   ],
+   "watchOut": "Three pitfalls. First: taking r as the distance to the center of the body rather than to the axis; for a rod rotated about its end instead of its middle, this makes exactly a factor of four difference. Second: thinking that the moment of inertia belongs to the body: it belongs to the pair 'body and axis', and one wheel has three different I for three different axes. Third: confusing newton-meter with joule: they have the same dimensions, but torque is not energy; it is energy per radian, and they cannot be added."
+  },
+  "title": "Moment of inertia and the equation of rotation",
+  "subtitle": "Section 1 · Why mass is not enough for rotation and where the coefficients 1, ½, ⅖ come from",
+  "intro": [
+   "Push an empty cart, then a loaded one — the difference is obvious, and mass is its measure. Now try something else. Take a dumbbell or a rolling pin by the middle and spin it around a vertical axis; then take it by the very end and spin it the same way. The substance is the same, down to the last gram, but the resistance to spinning up is completely different. So, for rotation, mass is not suitable as a measure of inertia: we need a quantity that remembers not only how much matter there is, but also where it lies.",
+   "This quantity is called the moment of inertia. We will not declare it. It will fall out by itself, if we once carefully sum the kinetic energy over all points of the body: the combination $\\sum m_i r_i^2$ will come out from under the sum sign, and there will be nowhere for it to go. From the same summation we will also get Newton's second law for rotation $M = I\\varepsilon$, and the rule for recalculating to a shifted axis, and the coefficients 1, ½, ⅖, 1/12, which are usually suggested to memorize — but there is no need to memorize them, because each is simply the mean square of the distance to the axis.",
+   "We will test the theory with a hill. We will release a hoop, a disk, and a ball from the same height and name in advance both the finish order and the gap in speeds. The most unexpected thing in the answer is what is not in it: neither mass nor radius. A heavy tractor wheel and a child's hoop arrive at the bottom simultaneously, and the race is decided by a single dimensionless number."
+  ],
+  "standNote": "The stand of this section is in the \"Acceleration\" mode, and it can do exactly what we are about to derive: assemble the moment of inertia from mass and shape, add a correction for the axis shift, and turn the moment of force into angular acceleration. Start with what is set by default: a hoop of mass 2.0 kg, radius 0.35 m, moment 3.5 N·m. The stand will show $I = 0.245$ kg·m², $\\varepsilon = 14.3$ rad/s², and in two seconds the wheel will spin up to 28.6 rad/s — that is four and a half revolutions. Now switch the shape from hoop to disk and do not touch anything else: the moment of inertia will drop exactly by half, the angular acceleration will exactly double. The mass is the same, the radius is the same — only where the matter lies has changed, and that alone was enough. The third thing for which the stand was made: set a rod, length 0.40 m, and pull the axis shift slider $d$ to 0.20 m, that is, move the axis to the very end of the rod. The proper moment of inertia gives $\\tfrac{1}{12}mR^2$, the addition $md^2$ gives another $\\tfrac{1}{4}mR^2$, together it is exactly $\\tfrac{1}{3}mR^2$. This is the Huygens–Steiner theorem, which we will derive in the seventh step; here it is checked with one movement of the slider.",
+  "quiz": [
+   {
+    "id": "ri1",
+    "type": "mcq",
+    "q": "Two hoops roll down the same hill without slipping. The first is a child's hoop, mass 1 kg, radius 10 cm. The second is a tractor wheel rim, mass 200 kg, radius 80 cm. Who reaches the bottom first?",
+    "options": [
+     "They arrive simultaneously: neither mass nor radius enters the answer",
+     "The heavy one: it has more potential energy stored",
+     "The light one: it is easier to spin up",
+     "The large one: at the same angular speed it has greater linear speed"
+    ],
+    "answer": 0,
+    "why": "In the equation mgh = ½mv² + ½kmR²ω², the mass appears as a factor in all three terms and cancels completely. The radius enters the moment of inertia squared, and the rolling condition ω = v/R brings R² into the denominator — they cancel each other. What remains is v = √(2gh/(1+k)), where the only property of the body that survives is a dimensionless shape factor. Both bodies are hoops, k = 1 for both, so the speed is the same: for h = 1 m it is 3.13 m/s. The answer about the greater energy reserve of the heavy one catches a correct observation: the energy is indeed greater — but the mass that this energy must accelerate is greater by exactly the same factor. The fourth option confuses the speed of the center with angular speed: the large wheel indeed rotates more slowly, but it moves with the same speed.",
+    "hint": "Write down the energy conservation law for rolling, substitute I = kmR² and ω = v/R, and see which letters survive after cancellation."
+   },
+   {
+    "id": "ri2",
+    "type": "mcq",
+    "q": "A uniform rod is rotated about an axis perpendicular to it. By what factor is the moment of inertia about an axis through one end greater than that about an axis through the center?",
+    "options": [
+     "By a factor of 4",
+     "By a factor of 2",
+     "By a factor of 3",
+     "By a factor of 12"
+    ],
+    "answer": 0,
+    "why": "About the center, I = mL²/12. The axis through the end is at a distance d = L/2 from the center of mass, and the parallel axis theorem adds md² = mL²/4, which is 3mL²/12. Together that gives 4mL²/12 = mL²/3 — exactly four times greater. The tempting answer 'by a factor of 2' comes from thinking that the lever arm simply doubled; but the distance enters the moment of inertia squared, and it is the square of the length that is added, not the length itself. You can verify this on the stand of the section: place a rod of length 0.40 m and drag the axis offset slider to 0.20 m.",
+    "hint": "Use the parallel axis theorem and substitute d = L/2. Do not forget that it involves d², not d."
+   },
+   {
+    "id": "ri3",
+    "type": "free",
+    "q": "In your own words: why does the answer for rolling, v = √(2gh/(1+k)), contain neither the mass of the body nor its radius — even though both explicitly appeared in the energy equation?",
+    "keywords": [
+     "cancel",
+     "factor",
+     "square",
+     "shape",
+     "fraction",
+     "share",
+     "dimensionless",
+     "same"
+    ],
+    "needed": 2,
+    "why": "The mass appears as a factor in all three terms of the equation mgh = ½mv² + ½kmR²ω² and therefore cancels completely. The radius disappears more subtly: it enters the moment of inertia squared, and the rolling condition ω = v/R brings R² into the denominator, and they cancel each other. After cancellation, the only thing left from the body is a dimensionless number k, and its meaning is transparent: k/(1+k) is the fraction of stored energy that goes into rotation, not into forward motion. For a hoop it is half, for a disk a third, for a sphere twenty-nine percent. The answer is determined not by 'how much matter' but by 'what fraction of energy the body must spend on spinning up'.",
+    "hint": "Write down all three terms of the energy equation, substitute I = kmR² and ω = v/R, and see which letters appear in each term."
+   },
+   {
+    "id": "ri4",
+    "type": "estimate",
+    "q": "A flywheel is a solid steel disk with mass 8.0 kg and radius 0.20 m. A constant torque of 2.0 N·m is applied to it. What angular acceleration will it get? Answer in rad/s².",
+    "answer": 12.5,
+    "unit": "rad/s²",
+    "tolAbs": 2,
+    "why": "First, the moment of inertia: for a disk, k = ½, so I = ½ · 8.0 · 0.20² = ½ · 8.0 · 0.04 = 0.16 kg·m². Then, as with Newton's second law: ε = M/I = 2.0/0.16 = 12.5 rad/s². A sanity check: in three seconds the flywheel will spin up to 37.5 rad/s, which is 358 revolutions per minute, and will store ½ · 0.16 · 37.5² = 113 J. Two common mistakes: forgetting the factor ½ and getting 6.25, or squaring the diameter instead of the radius and getting 3.1.",
+    "hint": "Two steps. First, the moment of inertia of a disk I = ½mR² — do not forget that R is squared. Then ε = M/I."
+   }
+  ]
+ },
+ "es": {
+  "title": "Momento de inercia y ecuación de rotación",
+  "subtitle": "Párrafo 1 · Por qué para la rotación la masa no es suficiente y de dónde salen los coeficientes 1, ½, ⅖",
+  "intro": [
+   "Empuja un carro vacío y luego uno cargado: la diferencia es obvia, y su medida es la masa. Ahora prueba otra cosa. Toma una mancuerna o un rodillo por el medio y hazlo girar alrededor de un eje vertical; luego tómalo por el extremo y hazlo girar igual. La materia es la misma, hasta el último gramo, pero la resistencia a girar es completamente diferente. Entonces, para la rotación la masa no sirve como medida de inercia: se necesita una magnitud que recuerde no solo cuánta materia hay, sino también dónde está.",
+   "Esta magnitud se llama momento de inercia. No lo vamos a declarar. Saldrá solo, si una vez sumamos cuidadosamente la energía cinética de todos los puntos del cuerpo: la combinación $\\sum m_i r_i^2$ saldrá fuera de la suma, y no tendrá a dónde ir. De la misma suma se obtendrá también la segunda ley de Newton para la rotación $M = I\\varepsilon$, y la regla de recálculo para un eje desplazado, y los coeficientes 1, ½, ⅖, 1/12, que suelen ofrecer memorizar, pero no es necesario memorizarlos, porque cada uno es simplemente el cuadrado medio de la distancia al eje.",
+   "Probaremos la teoría con una colina. Haremos rodar desde la misma altura un aro, un disco y una esfera, y predeciremos tanto el orden de llegada como la diferencia de velocidades. Lo más inesperado en la respuesta es lo que no contiene: ni masa, ni radio. Una rueda pesada de tractor y un aro infantil llegan abajo al mismo tiempo, y la carrera la decide un único número adimensional."
+  ],
+  "standNote": "El stand de este párrafo está en modo «Aceleración», y hace exactamente lo que vamos a deducir: reunir el momento de inercia a partir de la masa y la forma, añadir la corrección por el desplazamiento del eje y convertir el momento de fuerza en aceleración angular. Empieza con lo que está por defecto: un aro de masa 2,0 kg, radio 0,35 m, momento 3,5 N·m. El stand mostrará $I = 0{,}245$ kg·m², $\\varepsilon = 14{,}3$ rad/s², y en dos segundos la rueda girará hasta 28,6 rad/s, que son cuatro vueltas y media. Ahora cambia la forma de aro a disco y no toques nada más: el momento de inercia caerá exactamente a la mitad, la aceleración angular crecerá exactamente al doble. La masa es la misma, el radio es el mismo: solo ha cambiado dónde está la materia, y eso ha sido suficiente. Tercero, para lo que el stand fue hecho: pon una barra, longitud 0,40 m, y mueve el deslizador de desplazamiento del eje $d$ hasta 0,20 m, es decir, traslada el eje al extremo de la barra. El momento de inercia propio da $\\tfrac{1}{12}mR^2$, la adición $md^2$ da otros $\\tfrac{1}{4}mR^2$, juntos dan exactamente $\\tfrac{1}{3}mR^2$. Este es el teorema de Huygens-Steiner, que deduciremos en el séptimo paso; aquí se comprueba con un solo movimiento del deslizador.",
+  "formula": {
+   "name": "Ecuación de rotación de un cuerpo rígido y momento de inercia",
+   "latex": "M = I\\varepsilon, \\qquad I = \\sum_i m_i r_i^2",
+   "alsoKnown": "Segunda ley de Newton para la rotación; momento de inercia respecto a un eje. Regla de conversión para un eje paralelo: teorema de Huygens-Steiner: I = I_c + md²",
+   "authors": [
+    {
+     "who": "Christiaan Huygens",
+     "year": "1673",
+     "what": "en 'Horologium Oscillatorium' resolvió el problema del centro de oscilación de un péndulo compuesto, es decir, fue el primero en calcular la cantidad que más tarde se llamaría momento de inercia, y demostró la reciprocidad entre el punto de suspensión y el centro de oscilación"
+    },
+    {
+     "who": "Isaac Newton",
+     "year": "1687",
+     "what": "en los 'Principia' dio la segunda ley F = ma para un punto; la ecuación de rotación se obtiene sumando esta ley para todos los puntos del cuerpo, pero Newton no trató la rotación de un cuerpo rígido en general"
+    },
+    {
+     "who": "Leonhard Euler",
+     "year": "1765",
+     "what": "en 'Teoría del movimiento de los cuerpos rígidos' introdujo el término 'momento de inercia', escribió las ecuaciones de rotación y el concepto de ejes principales: la rotación de cuerpos rígidos se convirtió en una ciencia separada"
+    },
+    {
+     "who": "Jakob Steiner",
+     "year": "1840",
+     "what": "dio al teorema de los ejes paralelos su formulación actual; en esencia, el resultado ya estaba contenido en Huygens, por lo que se llama con razón teorema de Huygens-Steiner"
+    }
+   ],
+   "story": "En 1646, Marin Mersenne propuso al joven Huygens de diecisiete años un problema en el que ya habían tropezado Descartes y Roberval: ¿dónde está, en un péndulo compuesto —no una pesa en una cuerda, sino un cuerpo que oscila— el punto que oscila igual que un péndulo simple de la misma longitud? El problema parecía geométrico, pero resultó ser sobre la distribución de la masa, y Huygens estuvo lidiando con él durante casi treinta años. Publicó la respuesta solo en 1673, en la cuarta parte de 'Horologium Oscillatorium', y en esa respuesta ya aparece nuestra suma $\\sum m_i r_i^2$ — solo que sin nombre. El nombre se lo daría Euler casi cien años después. De paso, Huygens demostró algo que parece casual y no lo es: si se suspende el cuerpo por el centro de oscilación encontrado, el período no cambia, y el punto de suspensión anterior se convierte en el nuevo centro de oscilación. Un siglo y medio después, Henry Kater construyó sobre esta reciprocidad el péndulo de reversión (1817) y midió la aceleración de la gravedad con una precisión de aproximadamente una cienmilésima; el mundo no conoció un mejor gravímetro durante unos cien años. Todo esto surgió de una suma que obtendremos en dos pasos.",
+   "symbols": [
+    {
+     "sym": "ω",
+     "latex": "\\omega",
+     "what": "velocidad angular",
+     "unit": "rad/s",
+     "note": "la misma para todos los puntos del cuerpo: esto es lo que define un cuerpo rígido"
+    },
+    {
+     "sym": "ε",
+     "latex": "\\varepsilon",
+     "what": "aceleración angular",
+     "unit": "rad/s²",
+     "note": "derivada de la velocidad angular, dω/dt; para la rotación desempeña el papel de la aceleración ordinaria"
+    },
+    {
+     "sym": "I",
+     "latex": "I",
+     "what": "momento de inercia respecto al eje",
+     "unit": "kg·m²",
+     "note": "propiedad no del cuerpo, sino del par 'cuerpo y eje': una misma rueda tiene tres I diferentes para tres ejes diferentes"
+    },
+    {
+     "sym": "M",
+     "latex": "M",
+     "what": "momento de fuerza respecto al eje",
+     "unit": "N·m",
+     "note": "fuerza multiplicada por el brazo; la dimensión coincide con el julio, pero no es energía: la unidad se escribe precisamente N·m"
+    },
+    {
+     "sym": "r_i",
+     "latex": "r_i",
+     "what": "distancia del punto del cuerpo al eje",
+     "unit": "m",
+     "note": "precisamente al eje, no al centro del cuerpo: el error más común al sustituir"
+    },
+    {
+     "sym": "k",
+     "latex": "k",
+     "what": "coeficiente de forma",
+     "unit": "adimensional",
+     "note": "I = k·mR²; es igual al cuadrado medio de la distancia al eje en fracciones de R² y nunca supera la unidad"
+    },
+    {
+     "sym": "d",
+     "latex": "d",
+     "what": "distancia entre ejes paralelos",
+     "unit": "m",
+     "note": "entra en la corrección md² al cuadrado, por lo que desplazar el eje encarece rápidamente"
+    },
+    {
+     "sym": "E_rot",
+     "latex": "E_{\\text{rot}}",
+     "what": "energía cinética de rotación",
+     "unit": "J",
+     "note": "½Iω² — es la misma ½mv², solo que con otras letras; de aquí extraeremos el momento de inercia"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Derivación rigurosa",
+   "lead": "Se necesitan exactamente tres cosas, y todas ya las tenemos: la definición de cuerpo rígido, la energía cinética de un punto ½mv² y las leyes de Newton — la segunda y la tercera. Ni el momento de inercia ni la ecuación de rotación se postulan; ambos surgirán en el camino.",
+   "steps": [
+    {
+     "text": "Un cuerpo rígido es aquel en el que las distancias entre dos puntos cualesquiera no cambian. De esto solo se sigue lo principal: al girar alrededor de un eje fijo, todos los puntos giran el mismo ángulo en el mismo tiempo. Si no fuera así, los puntos se separarían y la distancia entre ellos cambiaría. Por lo tanto, la velocidad angular $\\omega = d\\varphi/dt$ es común para todo el cuerpo: un solo número para miles de millones de átomos. Pero la velocidad lineal es diferente para cada punto: cuanto más lejos del eje, más larga es la circunferencia descrita y más rápido se mueve el punto. Y de inmediato un detalle con el que a menudo se tropieza: $r$ es la distancia al EJE, no al centro del cuerpo. En un eje largo, un punto en el extremo y un punto en el medio están al mismo $r$ si ambos están al mismo radio.",
+     "latex": "\\omega = \\frac{d\\varphi}{dt}\\ \\text{— una para todo el cuerpo}, \\qquad v_i = \\omega\\, r_i",
+     "figure": "rigiomega",
+     "figCaption": "El ángulo de giro es el mismo para todos los puntos, la velocidad es propia: v = ω·r. La distancia se mide hasta el eje, no hasta el centro del cuerpo."
+    },
+    {
+     "text": "Ahora sumamos la energía cinética de todos los puntos del cuerpo. Cada uno contribuye con $\\tfrac12 m_i v_i^2$, y en lugar de $v_i$ podemos escribir $\\omega r_i$. Entonces ocurre lo que se buscaba: $\\omega$ es la misma en todos los términos, por lo que $\\omega^2$ sale de la suma, y dentro queda una combinación solo de las masas de los puntos y sus distancias al eje. No hay movimiento en ella: es una propiedad pura del cuerpo y del eje elegido, se puede calcular una vez y luego usarla. Esta combinación se llama momento de inercia. Compare las dos expresiones de la energía: para el movimiento de traslación ½mv², para la rotación ½Iω². Coinciden letra por letra, y esto indica directamente que $I$ juega el papel de la masa para la rotación. La unidad se deduce de la definición: kilogramo por metro al cuadrado.",
+     "latex": "E = \\sum_i \\tfrac{1}{2} m_i v_i^2 = \\sum_i \\tfrac{1}{2} m_i (\\omega r_i)^2 = \\tfrac{1}{2}\\Bigl(\\underbrace{\\sum_i m_i r_i^2}_{I}\\Bigr)\\omega^2, \\qquad [\\,I\\,] = \\text{kg}\\cdot\\text{m}^2",
+     "figure": "rigisum",
+     "figCaption": "ω sale de la suma porque es una para todo el cuerpo. Queda Σm r² — una magnitud sin movimiento interno: solo el cuerpo y el eje."
+    },
+    {
+     "text": "La medida de la fuerza para la rotación tampoco se asigna por decreto, sino que se elige mediante el trabajo. Supongamos que en un punto del cuerpo a una distancia $r$ del eje se aplica una fuerza $\\vec F$. La descomponemos en dos componentes: a lo largo del radio y perpendicular a él. La radial tira del punto hacia el eje o alejándolo, pero el punto en rotación se mueve estrictamente perpendicular al radio — por lo tanto, esta componente no realiza trabajo alguno y no afecta la rotación. Queda la tangencial. Al girar un ángulo pequeño $d\\varphi$, el punto recorre una distancia $r\\,d\\varphi$, y el trabajo es $F_t\\, r\\, d\\varphi$. Observe qué combinación ha quedado como factor de $d\\varphi$: el producto de la fuerza por la distancia al eje. Esto se llama momento de fuerza. En notación vectorial, es el módulo del producto vectorial $\\vec r \\times \\vec F$, es decir, la fuerza multiplicada por el brazo — la longitud de la perpendicular trazada desde el eje hasta la línea de acción de la fuerza. De aquí, por cierto, viene la manija de la puerta en el borde más alejado de las bisagras.",
+     "latex": "dA = F_t\\, r\\, d\\varphi \\equiv M\\, d\\varphi, \\qquad M = F_t\\, r = |\\vec r \\times \\vec F| = F\\,r\\sin\\alpha, \\qquad [\\,M\\,] = \\text{N}\\cdot\\text{m}",
+     "figure": "rigitorque",
+     "figCaption": "Solo la componente tangencial produce giro. El trabajo en un giro de dφ es F_t·r·dφ, y el factor de dφ es el momento de fuerza."
+    },
+    {
+     "text": "Antes de escribir la ecuación, hay que deshacerse de las fuerzas internas, y en un cuerpo hay innumerables: cada átomo se aferra a sus vecinos. La tercera ley de Newton dice que las fuerzas entre dos puntos son iguales en magnitud y opuestas en dirección, pero esto no basta. Se necesita un detalle que generalmente se menciona en voz baja: las fuerzas de interacción entre puntos de un cuerpo rígido tienen una línea de acción común, están dirigidas a lo largo de la línea recta que conecta esos puntos. Entonces la suma de sus momentos con respecto a cualquier eje se reduce al producto vectorial de la diferencia de los radios vectores por la fuerza, y la diferencia de los radios vectores está a lo largo de la misma línea que la fuerza. El producto vectorial de vectores paralelos es cero. Por lo tanto, los momentos internos se cancelan estrictamente por pares — todos y cada uno — y en la ecuación solo entrarán los externos.",
+     "latex": "\\vec M_{12} + \\vec M_{21} = \\vec r_1 \\times \\vec F_{12} + \\vec r_2 \\times \\vec F_{21} = (\\vec r_1 - \\vec r_2) \\times \\vec F_{12} = 0",
+     "figure": "rigiinner",
+     "figCaption": "Las fuerzas internas están en la misma línea que el segmento que une los puntos, por lo que sus momentos se cancelan por pares. Solo quedan las externas."
+    },
+    {
+     "text": "Reunimos todo. Los momentos externos realizan un trabajo $M\\,d\\varphi$ en un giro de $d\\varphi$, y todo se convierte en energía cinética de rotación: el cuerpo es rígido, no hay nada que deformar, y las fuerzas internas, como acabamos de mostrar, anulan su contribución. Igualamos y diferenciamos. El momento de inercia con un eje fijo es constante — el cuerpo no cambia de forma, los puntos no se trasladan — por lo tanto $d(\\tfrac12 I\\omega^2) = I\\omega\\,d\\omega$. Sustituimos $d\\varphi = \\omega\\,dt$, y $\\omega$ se cancela en ambos lados. Queda la ecuación que generalmente se presenta ya hecha, como una ley separada. No hemos introducido ningún axioma nuevo: solo hemos sumado la segunda ley de Newton y la definición de trabajo. La correspondencia resultó letra por letra: la masa se convierte en momento de inercia, la fuerza en momento de fuerza, la aceleración en aceleración angular.",
+     "latex": "M\\,d\\varphi = d\\Bigl(\\tfrac{1}{2} I \\omega^2\\Bigr) = I\\omega\\, d\\omega, \\quad d\\varphi = \\omega\\, dt \\;\\Longrightarrow\\; M = I\\,\\frac{d\\omega}{dt} = I\\varepsilon",
+     "figure": "rigieps",
+     "figCaption": "Tres pares de correspondencias: m ↔ I, F ↔ M, a ↔ ε. La ecuación de rotación es la misma segunda ley, reescrita en magnitudes angulares."
+    },
+    {
+     "text": "Calcular el momento de inercia es más fácil donde no hay nada que calcular. En un aro — un anillo delgado, una rueda de bicicleta, un volante con llanta maciza — todos los puntos están a la misma distancia $R$ del eje, por lo que $r^2$ sale completamente de la suma y queda simplemente la masa: $I = mR^2$. Esto es el máximo: para dados $m$ y $R$, no puede ser mayor, más allá de $R$ la materia no tiene dónde estar. En un disco, la masa está distribuida desde el centro hasta el borde, y la suma se convierte en una integral sobre anillos delgados. En una esfera sólida, por el mismo método se obtiene $\\tfrac25 mR^2$, en una varilla delgada que gira alrededor de su centro perpendicularmente a sí misma, $\\tfrac1{12} mL^2$. Una palabra sobre la letra: en la expresión $I = kmR^2$, bajo $R$ se entiende cada vez el tamaño característico que aparece en la fórmula misma — para el aro, el disco y la esfera es el radio, y para la varilla es su longitud total $L$. Y ahora lo principal: estas fracciones no hay que memorizarlas. Divida $I$ entre $mR^2$ y verá que el coeficiente es exactamente el cuadrado medio de la distancia de los puntos al eje, expresado en fracciones de $R^2$. En el aro, todos los puntos están a $R$, el cuadrado medio es $R^2$, el coeficiente es uno. En el disco es la mitad, en la esfera dos quintos, en la varilla un doceavo — y este último número, por cierto, es familiar para cualquiera que haya calculado la varianza de una distribución uniforme en un segmento. Es la misma cantidad.",
+     "latex": "I = k\\,mR^2,\\quad k = \\frac{\\langle r^2\\rangle}{R^2}; \\qquad I_{\\text{disco}} = \\int_0^R r^2\\,\\frac{2m}{R^2}\\,r\\,dr = \\tfrac{1}{2}mR^2, \\qquad I_{\\text{varilla}} = \\int_{-L/2}^{L/2} x^2\\,\\frac{m}{L}\\,dx = \\tfrac{1}{12}mL^2",
+     "figure": "rigishapes",
+     "figCaption": "Aro 1, disco ½, esfera ⅖, varilla 1/12. El coeficiente es el cuadrado medio de la distancia al eje en unidades de R², y no es necesario memorizarlo."
+    },
+    {
+     "text": "El momento de inercia no pertenece al cuerpo, sino al par «cuerpo y eje»: si desplaza el eje, el número cambia. Cuánto exactamente, no tendrá que recalcularlo. Supongamos que el primer eje pasa por el centro de masa, y un punto del cuerpo está a una distancia vectorial $\\vec r$ de él, en el plano perpendicular al eje. Trazamos un segundo eje paralelo al primero y denotamos por $\\vec d$ el vector desde el nuevo eje hasta el centro de masa. Entonces la distancia del punto al nuevo eje es $|\\vec r + \\vec d\\,|$, y en la suma entrará el cuadrado de este módulo. Desarrollamos el paréntesis — obtenemos tres términos. El primero es el momento de inercia con respecto al eje que pasa por el centro de masa. El tercero es igual a $md^2$: el vector $\\vec d$ es el mismo para todos los puntos, y la suma de las masas es la masa del cuerpo. El segundo contiene $\\sum m_i \\vec r_i$, y esta suma es cero simplemente por la definición de centro de masa — el centro de masa es el punto con respecto al cual la suma ponderada de los radios vectores se anula. El término medio desaparece, queda el teorema de Huygens-Steiner. Verifiquemos en la varilla: alrededor del centro $\\tfrac1{12}mL^2$; trasladamos el eje al extremo, $d = L/2$, la adición es $mL^2/4$, en total $\\tfrac1{12} + \\tfrac14 = \\tfrac13$ — exactamente el valor tabulado para una varilla que gira alrededor de su extremo. Y otra consecuencia se lee directamente de la fórmula: $md^2$ nunca es negativo, por lo tanto, de todos los ejes paralelos, el momento de inercia es mínimo para el que pasa por el centro de masa.",
+     "latex": "I = \\sum_i m_i \\bigl|\\vec r_i + \\vec d\\,\\bigr|^2 = \\underbrace{\\sum_i m_i r_i^2}_{I_c} \\;+\\; 2\\,\\vec d\\cdot\\underbrace{\\sum_i m_i \\vec r_i}_{=\\;0} \\;+\\; d^2\\underbrace{\\sum_i m_i}_{m} \\;=\\; I_c + md^2",
+     "figure": "rigistein",
+     "figCaption": "El término medio desaparece: Σm·r = 0 — esta es la definición de centro de masa. Queda I = I_c + md², y a través del centro de masa el momento de inercia es siempre el menor."
+    },
+    {
+     "text": "Verifiquemos todo de una vez en el rodamiento. Un cuerpo rueda desde una altura $h$ sin deslizamiento; por lo tanto, el punto de contacto está en reposo en cada instante, la fuerza de fricción estática no realiza trabajo, y la energía total se conserva. Arriba había energía potencial $mgh$, abajo — la suma de la traslacional $\\tfrac12 mv^2$ y la rotacional $\\tfrac12 I\\omega^2$. La relación entre ellas la da la condición de rodadura: en una vuelta, el cuerpo recorre la longitud de la circunferencia, de donde $v = \\omega R$. Sustituimos $I = kmR^2$ — y observe lo que sucede. La masa está como factor en los tres términos y se cancela. El radio entra en el momento de inercia al cuadrado, y la condición de rodadura trae $R^2$ al denominador — se cancelan mutuamente. En la respuesta quedan la altura y un número adimensional. El aro, con $k = 1$, entrega a la rotación exactamente la mitad de la energía y llega abajo $\\sqrt2$ veces más lento que un cuerpo que desliza sin fricción; la esfera con $k = 2/5$ entrega menos de un tercio y llega primero. Ningún «más pesado es más rápido» ni «más grande es más rápido» funciona aquí: la carrera la decide la forma, y solo la forma.",
+     "latex": "mgh = \\tfrac{1}{2}mv^2 + \\tfrac{1}{2}I\\omega^2, \\quad I = kmR^2,\\ \\ \\omega = \\frac{v}{R} \\;\\Longrightarrow\\; mgh = \\tfrac{1}{2}mv^2(1+k) \\;\\Longrightarrow\\; v = \\sqrt{\\frac{2gh}{1+k}}",
+     "figure": "rigiroll",
+     "figCaption": "Desde una altura de 1 m: esfera 3,74 m/s, disco 3,62, aro 3,13. Ni la masa ni el radio entraron en la respuesta — solo el coeficiente de forma."
+    }
+   ],
+   "plate": "M = I\\varepsilon \\qquad I = \\sum_i m_i r_i^2 = k\\,mR^2 \\qquad I = I_c + md^2",
+   "plateCap": "A la izquierda — la segunda ley de Newton reescrita para la rotación: momento en lugar de fuerza, momento de inercia en lugar de masa, aceleración angular en lugar de lineal. En el medio — de qué se compone el momento de inercia: masa multiplicada por el cuadrado de la distancia al eje, y un coeficiente de forma adimensional. A la derecha — la regla para cambiar a un eje paralelo. Tres líneas, y en ellas todo el párrafo.",
+   "note": "Observemos dónde la derivación se estrechó silenciosamente. Primero: el eje está fijo y no se va a ninguna parte. Mientras sea así, el momento de inercia es un solo número, y $M$ y $\\varepsilon$ apuntan en la misma dirección. Para un cuerpo que vuela libremente, esto no es cierto: la magnitud que relaciona el momento con la rotación resulta ser una tabla de nueve números, y con un solo número ya no se puede arreglar. La llamaremos en el apéndice y la pasaremos al siguiente párrafo. Segundo: $I$ se consideró constante porque el cuerpo es rígido; si el cuerpo cambia de forma, en la derivada aparecerá un segundo término, pero los cuerpos deformables no se consideran aquí en absoluto. Tercero: en el paso del rodamiento, la energía se conserva, es decir, se han despreciado la fricción de rodadura y la resistencia del aire. Para una bola de acero sobre una tabla lisa, esto se justifica con una precisión de porcentajes; para una pelota blanda sobre una alfombra, no. Cuarto, puramente aritmético: la suma $\\sum m_i r_i^2$ se reemplazó por una integral, es decir, consideramos la materia continua. Para un cuerpo de $10^{23}$ átomos, esta aproximación es más precisa que cualquier medición, y hay que recordarla solo en problemas con dos masas de mancuerna en una varilla sin masa — allí la suma es finita y la integral no es necesaria."
+  },
+  "math": {
+   "title": "Matemáticas que se necesitaron aquí",
+   "lead": "Tres temas: cómo la suma sobre puntos se convierte en integral, por qué en una derivación se necesitaron ambos productos de vectores y por qué la verificación dimensional detecta aquí dos errores diferentes a la vez.",
+   "items": [
+    {
+     "what": "De la suma a la integral: cómo se calcula I para un cuerpo continuo",
+     "why": "La definición $I = \\sum m_i r_i^2$ literalmente implica enumerar puntos, y en un cuerpo hay $10^{23}$ puntos. El paso a la integral es el reemplazo habitual de la suma sobre pequeños trozos por una integral sobre la masa: $\\sum m_i r_i^2 \\to \\int r^2\\,dm$. Todo el truco está en uno: hay que elegir el trozo de modo que TODOS sus puntos tengan la misma distancia al eje, de lo contrario no está claro qué $r$ sustituir. Para un disco, ese trozo es un anillo delgado de radio $r$ y espesor $dr$; su área es $2\\pi r\\,dr$, y su masa, con densidad superficial $m/(\\pi R^2)$, es igual a $(2m/R^2)\\,r\\,dr$. Para una barra, el trozo es un segmento $dx$ con masa $(m/L)\\,dx$. El error más común aquí es tomar una tira rectangular para el disco: sus puntos tienen distancias diferentes al eje, y la integral saldrá incorrecta. Y note la hermosa coincidencia: la integral para la barra es exactamente la varianza de la distribución uniforme en un intervalo, $L^2/12$. El momento de inercia de un cuerpo homogéneo es el cuadrado medio de la distancia multiplicado por la masa.",
+     "latex": "\\sum_i m_i r_i^2 \\;\\longrightarrow\\; \\int r^2\\,dm, \\qquad dm_{\\text{anillo}} = \\frac{2m}{R^2}\\,r\\,dr \\;\\Longrightarrow\\; I = \\int_0^R \\frac{2m}{R^2}\\,r^3\\,dr = \\frac{1}{2}mR^2",
+     "kit": "integral"
+    },
+    {
+     "what": "Ambos productos de vectores, y ambos con razón",
+     "why": "En este párrafo se encontraron ambas operaciones, y cada una trabajó con su propiedad. El producto vectorial dio la definición de momento: $|\\vec r \\times \\vec F| = rF\\sin\\alpha$, donde el seno automáticamente descarta la componente radial de la fuerza, la que no hace girar nada. Y también cerró de una vez la cuestión de las fuerzas internas: el producto vectorial de vectores paralelos es cero, y las fuerzas entre puntos de un cuerpo rígido son precisamente paralelas al segmento entre esos puntos. El producto escalar apareció en el teorema de los ejes paralelos, al expandir el cuadrado del módulo de la suma: $|\\vec r + \\vec d\\,|^2 = r^2 + 2\\,\\vec r\\cdot\\vec d + d^2$. El término cruzado es lineal en $\\vec r$, y por lo tanto su suma sobre puntos se reduce a $\\vec d \\cdot \\sum m_i \\vec r_i$ — y esto ya es cero. Note la diferencia en el carácter: el producto escalar da un número, el vectorial da un vector (y es precisamente por eso que el momento tiene una dirección, de la que se hablará en el siguiente párrafo).",
+     "latex": "|\\vec a\\times\\vec b| = ab\\sin\\alpha,\\quad \\vec a\\parallel\\vec b \\Rightarrow \\vec a\\times\\vec b = 0; \\qquad |\\vec r+\\vec d\\,|^2 = (\\vec r+\\vec d\\,)\\cdot(\\vec r+\\vec d\\,) = r^2 + 2\\,\\vec r\\cdot\\vec d + d^2",
+     "kit": "dotcross"
+    },
+    {
+     "what": "Verificación dimensional: por qué newton por metro y julio no son lo mismo",
+     "why": "La primera verificación es simple. El momento de inercia se mide en kg·m², la aceleración angular en s⁻² (el radián es adimensional), su producto da kg·m²·s⁻², que es newton por metro. La ecuación $M = I\\varepsilon$ resiste la verificación dimensional. La segunda verificación sobre el rodamiento: bajo la raíz hay aceleración por longitud, es decir, m²/s², la raíz da m/s — velocidad, como debe ser; $k$ es adimensional y no puede estropear nada. Ahora la molestia que la dimensión NO detecta: newton por metro y julio tienen la misma dimensión, pero el momento de fuerza y la energía son magnitudes diferentes, no se pueden sumar. La razón está en el radián: el trabajo es igual al momento multiplicado por el ángulo, y el ángulo en radianes es adimensional, y en la dimensión no se ve. Por eso el momento se escribe en N·m, y la energía en J, aunque formalmente sea la misma combinación de unidades. La regla es simple: la dimensión puede refutar una fórmula, pero no puede confirmarla.",
+     "latex": "[\\,I\\varepsilon\\,] = \\text{kg}\\cdot\\text{m}^2\\cdot\\text{s}^{-2} = \\text{N}\\cdot\\text{m} = [\\,M\\,]; \\qquad \\left[\\sqrt{\\frac{2gh}{1+k}}\\,\\right] = \\sqrt{\\frac{\\text{m}}{\\text{s}^2}\\cdot\\text{m}} = \\frac{\\text{m}}{\\text{s}}",
+     "kit": "dimension"
+    }
+   ]
+  },
+  "example": {
+   "title": "Ejemplo con números",
+   "lead": "Hagamos girar la rueda de una bicicleta, la misma que está en el soporte por defecto, y verifiquemos la respuesta de tres maneras independientes.",
+   "given": "Rueda trasera de una bicicleta: radio de la llanta R = 0,35 m, masa de la llanta con el neumático m = 2,0 kg. Casi toda la masa está en la llanta, por lo que consideramos la rueda como un aro delgado. Se aplica un momento constante M = 3,5 N·m a la llanta; esto es, por ejemplo, una fuerza de 10 N que tira de una cuerda enrollada alrededor de la llanta. Los radios, el buje y la fricción en los rodamientos los ignoramos por ahora. Encontrar el momento de inercia, la aceleración angular, la velocidad angular y el número de revoluciones después de 2 segundos. Y por separado, qué cambiaría si la misma masa se distribuyera en un disco.",
+   "law": "I = k·mR², donde k = 1 para un aro y ½ para un disco; ε = M/I; con ε constante, la velocidad angular crece como ω = εt, y el ángulo como φ = ½εt².",
+   "solution": [
+    {
+     "text": "Momento de inercia. En un aro, toda la masa está en el radio R, por lo que no hay nada que integrar: r² se saca de la suma por completo, y queda la masa.",
+     "latex": "I = mR^2 = 2{,}0 \\cdot 0{,}35^2 = 2{,}0 \\cdot 0{,}1225 = 0{,}245\\ \\text{kg}\\cdot\\text{m}^2"
+    },
+    {
+     "text": "Aceleración angular. Dividimos el momento entre el momento de inercia, igual que dividimos la fuerza entre la masa.",
+     "latex": "\\varepsilon = \\frac{M}{I} = \\frac{3{,}5}{0{,}245} = 14{,}29\\ \\frac{\\text{rad}}{\\text{s}^2}"
+    },
+    {
+     "text": "Después de dos segundos. La velocidad angular crece linealmente, el ángulo cuadráticamente; para convertir radianes a revoluciones, dividimos entre 2π = 6,283.",
+     "latex": "\\omega = \\varepsilon t = 14{,}29 \\cdot 2 = 28{,}6\\ \\frac{\\text{rad}}{\\text{s}}, \\qquad \\varphi = \\tfrac{1}{2}\\varepsilon t^2 = 28{,}6\\ \\text{rad} = \\frac{28{,}6}{6{,}283} = 4{,}55\\ \\text{revoluciones}"
+    },
+    {
+     "text": "La misma pregunta para un disco de la misma masa y el mismo radio. El momento de inercia es la mitad, por lo que la aceleración angular es el doble, y el ángulo en el mismo tiempo es el doble.",
+     "latex": "I_{\\text{disco}} = \\tfrac{1}{2}mR^2 = 0{,}1225\\ \\text{kg}\\cdot\\text{m}^2, \\qquad \\varepsilon = \\frac{3{,}5}{0{,}1225} = 28{,}6\\ \\frac{\\text{rad}}{\\text{s}^2}, \\qquad \\omega(2\\,\\text{s}) = 57{,}1\\ \\frac{\\text{rad}}{\\text{s}} \\;\\;(9{,}1\\ \\text{revoluciones})"
+    }
+   ],
+   "answer": "Aro: I = 0,245 kg·m², ε = 14,3 rad/s², después de dos segundos 28,6 rad/s y 4,55 revoluciones. Disco de la misma masa y el mismo radio: momento de inercia la mitad, aceleración el doble, 57,1 rad/s y 9,1 revoluciones. La masa es la misma, el tamaño es el mismo: toda la diferencia está en dónde se encuentra la materia.",
+   "check": "Tres comprobaciones, y cada una atrapa un error diferente. La primera es energética, la más estricta. El trabajo del momento aplicado es M·φ = 3,5 · 28,6 = 100 J; la energía cinética de rotación es ½Iω² = ½ · 0,245 · 28,6² = 100 J. Coincide hasta el último dígito, y no podría ser de otra manera: la ecuación M = Iε la obtuvimos precisamente de la igualdad entre trabajo y energía. Si estos dos números no coinciden, el error es de aritmética, no de física. La segunda comprobación es de sentido común. 28,6 rad/s son 4,55 revoluciones por segundo, es decir, 273 revoluciones por minuto; con una circunferencia de 2πR = 2,20 m, la rueda rodaría a una velocidad de 10 m/s, exactamente 36 km/h. Es plausible: una bicicleta realmente acelera a esa velocidad en un par de segundos, y una fuerza de 10 N en la llanta es como una bolsa de leche de un litro colgada, una magnitud bastante humana. La tercera es una trampa aritmética. 0,35² = 0,1225, no 0,0125 ni 1,225; si obtuviste I = 0,0245 o 2,45, el factor de diez se perdió o sobró aquí. Y una aclaración honesta para terminar: una rueda real no es un aro. El buje pesa bastante y está cerca del eje, los radios también están distribuidos a lo largo del radio, por lo que el factor de forma real está más cerca de 0,75 que de 1; la aritmética de esta corrección se analiza en el apéndice."
+  },
+  "constants": {
+   "title": "Constantes de esta sección",
+   "lead": "Un número aquí no se mide en absoluto, sino que se deduce de la geometría; el segundo convierte revoluciones en radianes; el tercero proviene de la mecánica terrestre; el cuarto nos habla del interior de los planetas.",
+   "items": [
+    {
+     "sym": "k",
+     "latex": "k",
+     "name": "Coeficientes de forma",
+     "value": "1 · ½ · ⅖ · ⅓ · 1/12",
+     "unit": "adimensionales",
+     "why": "Un aro (anillo delgado) — 1; un disco sólido o cilindro — ½; una esfera sólida — ⅖; una esfera de pared delgada — ⅔; una varilla alrededor de su extremo — ⅓, alrededor de su centro — 1/12. Cada uno de estos números es el cuadrado medio de la distancia al eje, expresado en fracciones de R², y ninguno puede exceder la unidad: más allá de R la materia simplemente no tiene dónde estar. Para un tubo de pared gruesa con radio interno r, el coeficiente es ½(1 + r²/R²) y varía suavemente desde ½ para un cilindro sólido hasta 1 para un aro delgado. Ninguno de estos números se mide; todos se calculan y, por lo tanto, son absolutamente exactos, a diferencia de las propiedades de la materia.",
+     "mnemo": "Cuanto más cerca está la masa del eje, menor es k. La serie se reconstruye con una mirada al cuerpo: aro 1 → disco ½ → esfera ⅖ → varilla alrededor del centro 1/12. No hay nada que memorizar; basta con preguntarse dónde está la materia."
+    },
+    {
+     "sym": "2π",
+     "latex": "2\\pi",
+     "name": "Radián, revolución y revoluciones por minuto",
+     "value": "2π = 6,2832 rad en una revolución; 1 rpm = 0,10472 rad/s",
+     "unit": "rad",
+     "why": "El ángulo en radianes es la relación entre la longitud del arco y el radio, es decir, metro sobre metro. Por lo tanto, el radián es adimensional, y es por eso que en las fórmulas de rotación no aparece ningún factor de conversión: v = ωR, a = ω²R y φ = ½εt² funcionan solo en radianes y se rompen si se sustituyen grados. El lado práctico: las revoluciones nominales de motores y volantes siempre se dan en rpm, pero en las fórmulas se usan rad/s. El factor de conversión es 2π/60 = 0,10472, el inverso es 9,549.",
+     "mnemo": "De rpm a rad/s — divida por 9,55 (que es 60/2π). 3000 rpm dan 314 rad/s, y en el número 314 se reconoce inmediatamente π. Para la conversión inversa, multiplique por 9,55."
+    },
+    {
+     "sym": "g",
+     "latex": "g",
+     "name": "Aceleración de la gravedad",
+     "value": "9,80665 (para estimaciones 9,81)",
+     "unit": "m/s²",
+     "const": "g",
+     "why": "En esta sección, g aparece exactamente en un lugar: en el descenso por una pendiente, donde está en la combinación 2gh/(1+k). No entra ni en el momento de inercia ni en la ecuación de rotación, y esto vale la pena reconocerlo por separado: hacer girar un volante en ingravidez no es más fácil que en la Tierra, porque la inercia no tiene relación con la gravedad. Pero en el péndulo físico, g aparece de nuevo, y es precisamente por eso que se mide con el péndulo de Kater.",
+     "mnemo": "√(2gh) — velocidad de caída libre desde una altura h: para h = 1 m, es 4,43 m/s. Cualquier cuerpo rodante llegará más lento exactamente en √(1+k) veces: un aro en 1,41 veces, una esfera en 1,18."
+    },
+    {
+     "sym": "I⊕",
+     "latex": "I_\\oplus",
+     "name": "Momento de inercia de la Tierra",
+     "value": "0,3307 · M⊕R⊕² = 8,02 · 10³⁷",
+     "unit": "kg·m²",
+     "why": "El coeficiente de forma de la Tierra es 0,3307, mientras que para una esfera homogénea sería 0,4. La diferencia no es cosmética: indica directamente que la materia se vuelve más densa hacia el centro — el núcleo de hierro es más de tres veces más denso que el manto. El momento de inercia del planeta se mide a partir del movimiento de su eje y de las órbitas de los satélites artificiales, y luego se utilizan para verificar los modelos de estructura interna — es una de las pocas formas de conocer algo sobre el interior sin mirar dentro. La Luna tiene 0,394, casi una esfera homogénea con un núcleo diminuto; Marte tiene 0,364; Saturno alrededor de 0,22 — la materia está concentrada hacia el centro más que en cualquier otro lugar del sistema solar.",
+     "mnemo": "0,4 — 'distribuido uniformemente'. Menos de 0,4 — 'más denso hacia el centro', más — 'masa desplazada hacia afuera' (para una esfera hueca sería 0,67). Un solo número y ya se ve si el planeta tiene un núcleo pesado."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Cómo se relaciona con el resto del curso",
+   "lead": "El momento de inercia se encuentra en una encrucijada: a su izquierda están la cinemática de la rotación y la conservación de la energía; a su derecha, el giroscopio, los sistemas de referencia rotatorios y la mecánica analítica.",
+   "items": [
+    {
+     "h": "Rotación y sistemas de referencia",
+     "text": "Todo lo que usamos aquí de la cinemática — velocidad angular, relación v = ωR, aceleración centrípeta ω²R — se deriva en el tema 'Oscilaciones y rotación', en la sección sobre rotación y sistemas de referencia. Allí también se explica por qué un observador en un disco giratorio se ve obligado a introducir una fuerza sin fuente. Aquí tomamos estos resultados como dados y les agregamos exactamente una cosa: la masa distribuida en el cuerpo."
+    },
+    {
+     "h": "Leyes de conservación",
+     "text": "El octavo paso de la derivación se basa enteramente en la conservación de la energía, y sin el tema 'Leyes de conservación' no habría de dónde sacarlo. De ahí también proviene el hábito de buscar una cantidad que no cambia durante el movimiento — aquí resultó ser cero en el término medio. El concepto mismo de centro de masa lo introdujimos aquí, en el séptimo paso, y no como un punto conveniente, sino como una definición: el centro de masa es el punto con respecto al cual Σm·r es igual a cero. Es precisamente esta igualdad la que anuló el término medio en el teorema de Steiner. Sin el centro de masa, el teorema de los ejes paralelos simplemente no existiría."
+    },
+    {
+     "h": "Oscilaciones: péndulo físico",
+     "text": "Cuelgue cualquier cuerpo de un punto por encima de su centro de masa y déjelo oscilar: el período será T = 2π√(I/(mgd)), donde I es el momento de inercia respecto al eje de suspensión y d es la distancia desde el eje hasta el centro de masa. Ambas cantidades son exactamente las de esta sección. Para una varilla homogénea de 1 m de longitud, suspendida por un extremo, I = mL²/3 y d = L/2, de donde T = 2π√(2L/3g) = 1,64 s — notablemente más rápido que los 2,01 s de una masa puntual en una cuerda de la misma longitud. Este es precisamente el problema que resolvió Huygens, y de ahí surgieron los relojes de péndulo."
+    },
+    {
+     "h": "Qué sigue",
+     "text": "La siguiente sección del tema tomará el mismo producto Iω, pero lo verá como un vector, y explicará el giroscopio y la peonza. La tercera se adentrará en los sistemas de referencia rotatorios. Y en mecánica analítica, la misma cantidad aparecerá bajo otro nombre: si se toma como coordenada el ángulo de rotación, el momento de inercia ocupará el lugar de la masa en la expresión de la energía cinética — una 'masa generalizada' para una coordenada generalizada."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Curiosidad: compruébelo con sus manos",
+   "lead": "Los dos experimentos siguientes requieren dos botellas de agua, un congelador y dos huevos. Ambos demuestran lo mismo: el momento de inercia depende de si la materia se mueve junto con el cuerpo.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "experimento de cocina",
+     "h": "Carrera de dos botellas: agua contra hielo",
+     "text": "Tome dos botellas de plástico idénticas. Llene ambas con agua hasta aproximadamente nueve décimas partes; no las llene hasta arriba: al congelarse, el agua se expande un nueve por ciento, y una botella llena y cerrada se hinchará o reventará. Enrosque las tapas sin apretar. Ponga una botella en el congelador de pie desde la noche anterior; no la ponga de lado con la tapa sin apretar, pues se derramará. La otra déjela en la habitación. Por la mañana, haga una rampa: cualquier tabla plana de unos 1,2 m de largo, como una tabla de planchar o un estante desmontado, con un extremo elevado unos quince centímetros. Suelte ambas botellas al mismo tiempo y, antes de soltarlas, decida cuál llegará primero.",
+     "answer": "La líquida llega primero, y con gran ventaja. El agua dentro de la botella que rueda apenas gira: las paredes se deslizan sobre ella, la viscosidad del agua es baja y el tiempo es de un segundo y medio. Prácticamente solo gira la cáscara de plástico, que pesa unos treinta gramos frente al medio kilo del contenido, por lo que el coeficiente de forma efectivo de la botella líquida es de unos 0,05. En la congelada, el contenido se ha convertido en parte del sólido, y es un cilindro macizo, k = ½. Calculamos las aceleraciones: a = g·sinθ/(1+k), con sinθ = 0,125, esto es 1,17 m/s² frente a 0,82. La líquida recorre sus 1,2 metros en 1,43 s; la congelada en 1,71 s; cuando la líquida termina, la congelada va unos 35 centímetros por detrás. La diferencia se ve sin cronómetro. Y de inmediato, un experimento de control contra la explicación de \"el hielo es más ligero\": ponga las botellas en una balanza. La masa es la misma; el agua no ha ido a ninguna parte. La carrera no la decide el peso, sino si el contenido gira junto con la botella. Una aclaración honesta: en una pendiente muy larga, el agua se va involucrando gradualmente en la rotación, y la diferencia comenzará a reducirse; el efecto vive precisamente porque la pendiente es corta."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "experimento de cocina",
+     "h": "Huevo crudo contra huevo cocido",
+     "text": "Cueza un huevo duro, deje el otro crudo y márquelo con un lápiz para no confundirlos. Haga girar ambos sobre un plato liso, con el mismo golpe de dedo. Decida de antemano dos cosas: cuál girará más rápido y cuál durará más tiempo.",
+     "answer": "El huevo cocido es un verdadero sólido: el contenido se acelera junto con la cáscara, toda la energía invertida va a la rotación del conjunto, y el huevo gira rápido y durante mucho tiempo. El crudo apenas gira: los dedos aceleran casi solo la cáscara, mientras que la clara y la yema permanecen en su lugar, lo mismo que con la botella de agua. Luego, la fricción viscosa entre la cáscara y el contenido frena la cáscara, y el huevo crudo se detiene en un par de segundos. Pero lo más interesante es la segunda parte del experimento, para la cual se hace. Haga girar el huevo crudo, tóquelo con el dedo y suéltelo de inmediato. El cocido, tras ese toque, se detendrá por completo. El crudo se moverá de nuevo: usted detuvo la cáscara, pero el líquido interior, que para entonces ya había girado un poco, ahora hace girar la cáscara de nuevo. Esta es una prueba directa, comprobable con las manos, de que el momento de inercia se trata de dónde y cómo se mueve la materia, no solo de cuánta hay. Y observe: la prueba culinaria habitual de \"crudo o cocido\" es un experimento de mecánica de sólidos realizado en la cocina, inventado mucho antes de que esa mecánica se formulara."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoja",
+     "h": "Macizo o hueco: cómo distinguirlos sin abrirlos",
+     "text": "Tiene dos esferas. Exteriormente son indistinguibles, mismo diámetro, y en la balanza muestran la misma masa. Una es maciza, fundida en una aleación ligera; la otra es hueca, con una pared delgada de metal pesado. Ni la regla ni la balanza resuelven el problema. ¿Cómo distinguirlas en treinta segundos sin cortar nada?",
+     "answer": "Haga rodar ambas desde la misma altura por una tabla inclinada. Para la esfera maciza, k = ⅖; para la esfera hueca, k = ⅔. Con h = 1 m, las velocidades en la parte inferior son 3,74 y 3,43 m/s, una diferencia del nueve por ciento, visible a simple vista en una tabla de un metro, y en una de dos metros se vuelve obscena. La razón es que en la hueca la masa está desplazada hacia la superficie, el cuadrado medio de la distancia al eje es mayor, y se necesita una mayor fracción de energía para la rotación: k/(1+k) da 40 por ciento frente a 29. Y hay que ser honestos con los números: el coeficiente ⅔ es válido para una pared realmente delgada. Para una esfera con una pared de una décima parte del radio, k ya es 0,60, la velocidad en la parte inferior es 3,50 m/s, y la diferencia se reduce del nueve por ciento al siete, notable pero no tan generosa. Con el mismo truco, pero en versión industrial, se comprueba la homogeneidad de las piezas fundidas. Y con el mismo truco, pero a escala planetaria, se juzga el interior de los planetas: el coeficiente de 0,3307 de la Tierra indica un núcleo pesado, y el de 0,394 de la Luna, una esfera casi homogénea. Nadie ha mirado dentro de una pieza fundida ni dentro de la Luna."
+    },
+    {
+     "icon": "fact",
+     "kind": "dato curioso",
+     "h": "Volante de inercia: cómo almacenar energía en la rotación",
+     "text": "La energía de rotación es ½Iω², y la velocidad angular entra al cuadrado, mientras que la masa lo hace linealmente. Por lo tanto, es más ventajoso girar más rápido que aumentar la masa. Calculemos: un disco de acero de 100 kg y radio 0,5 m tiene I = ½·100·0,25 = 12,5 kg·m². A 10 000 revoluciones por minuto, ω = 1047 rad/s y E = ½·12,5·1047² = 6,9 MJ, es decir, 1,9 kWh. Comprobemos la rotura: en el borde de ese disco, la velocidad es ωR = 524 m/s, y el acero se rompe aproximadamente a esa misma velocidad, así que nuestro volante es ideal. Un volante de acero real de ese radio se hace girar a la mitad de velocidad, y almacena cuatro veces menos, 1,7 MJ. Para comparar: los mismos cien kilogramos elevados diez metros (el techo de un edificio de tres pisos) almacenan 9,8 kJ, setecientas veces menos.",
+     "answer": "De ahí toda la historia de los volantes de inercia, desde la rueda de alfarero de piedra y el volante de la máquina de vapor de Watt hasta los acumuladores que hoy se instalan en los depósitos de tranvías y metros para recuperar la energía de frenado. Es interesante que el límite no lo imponen la masa ni la potencia del motor, sino la resistencia del borde: al punto en el borde lo mantiene unido solo el propio material, y la velocidad periférica máxima está determinada por la relación entre resistencia y densidad. El acero pone ese límite bastante bajo, por lo que los volantes modernos no se funden, sino que se enrollan con fibra de carbono: es casi cinco veces más ligera que el acero y, además, más resistente a la tracción a lo largo de la fibra, y la velocidad límite va como la raíz cuadrada de la relación resistencia-densidad; en esa relación, la fibra de carbono supera al acero unas tres veces. Además, en caso de rotura, un volante enrollado no produce fragmentos grandes, lo cual no es una consideración menor para un dispositivo que almacena megajulios."
+    },
+    {
+     "icon": "edge",
+     "kind": "límite de aplicabilidad",
+     "h": "Cuando rodar deja de ser rodar",
+     "text": "La fórmula v = √(2gh/(1+k)) se deriva suponiendo que el cuerpo rueda sin deslizamiento: el punto de contacto está en reposo en cada instante y la fricción estática no realiza trabajo. Esta suposición no es gratuita y no siempre se cumple.",
+     "answer": "Para que el cuerpo ruede y no patine, la fricción estática debe ser capaz de hacerlo girar. La fuerza requerida es mg·sinθ·k/(1+k), la disponible es μmg·cosθ, y de ahí la condición de rodadura: tg θ ≤ μ(1+k)/k. Sustituyamos μ = 0,3: un aro comenzará a deslizar ya a 31 grados, mientras que una esfera aguantará hasta 46. La razón se ve directamente en la fórmula: cuanto mayor es k, mayor es la fracción de energía que debe ir a la rotación y más esfuerzo debe hacer la fricción. Más allá del umbral, parte de la energía se convierte en calor, y nuestra fórmula da una respuesta sobreestimada. La segunda deuda silenciosa es la fricción de rodadura, que hemos despreciado por completo. Es órdenes de magnitud más débil que la fricción de deslizamiento (para una bola de acero sobre acero, el coeficiente es de unos 0,001; para un neumático de bicicleta sobre asfalto, unos 0,004), por lo que en una tabla de un metro no se nota, pero en una pendiente larga lo determina todo. De ahí la regla práctica: nuestra respuesta es un límite superior de la velocidad, al que el cuerpo real se acerca tanto más cuanto más rígidos sean el propio cuerpo y la superficie bajo él."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "Lo que hemos simplificado",
+   "blocks": [
+    {
+     "h": "Un número en lugar de una tabla de nueve: el tensor de inercia",
+     "text": "Mientras el eje está fijo, el momento de inercia es un solo número, y el momento de fuerza y la aceleración angular apuntan en la misma dirección. En un cuerpo libre no hay eje: puede ser cualquiera y cambiar con el tiempo. Entonces, la magnitud que describe la inercia en la rotación resulta ser no un número, sino una tabla de nueve números: el tensor de inercia. La buena noticia es que para cualquier cuerpo existen tres ejes mutuamente perpendiculares, llamados ejes principales, alrededor de los cuales todo vuelve a ser simple: un número para cada uno. Nuestras fórmulas I = kmR² son precisamente los momentos principales de cuerpos simétricos. Todo lo que no se describe con un solo número comienza en el siguiente párrafo; aquí basta recordar que el momento de inercia sin especificar el eje no tiene sentido.",
+     "latex": "I_{\\alpha\\beta} = \\sum_i m_i\\bigl(r_i^2\\,\\delta_{\\alpha\\beta} - x_{i\\alpha}x_{i\\beta}\\bigr)"
+    },
+    {
+     "h": "Rodadura sin deslizamiento: una suposición, no un hecho",
+     "text": "En el octavo paso escribimos v = ωR y declaramos que la fricción estática no realiza trabajo. Lo primero es la condición de rodadura, y se mantiene solo mientras haya suficiente fricción; el umbral lo da la desigualdad siguiente. Lo segundo es estrictamente cierto: el punto de contacto está en reposo en el momento del contacto, y una fuerza aplicada a un punto en reposo no realiza trabajo; pero precisamente por eso la fricción estática no consume energía, solo la redistribuye entre el movimiento de traslación y la rotación. Lo que se ha descartado es la fricción de rodadura: está relacionada con la deformación del cuerpo y del apoyo, y sí consume energía. Su orden de magnitud es dos o tres órdenes menor que el de la fricción de deslizamiento, y en una pendiente de cocina se puede despreciar sin remordimientos.",
+     "latex": "F_{\\text{roce}} = mg\\sin\\theta\\,\\frac{k}{1+k} \\le \\mu\\, mg\\cos\\theta \\;\\Longrightarrow\\; \\tan\\theta \\le \\mu\\,\\frac{1+k}{k}"
+    },
+    {
+     "h": "Una rueda real no es un aro",
+     "text": "En el ejemplo calculamos la rueda de bicicleta como un anillo delgado y obtuvimos k = 1. Veamos qué tan aproximado es. La llanta con el neumático y la cámara pesan alrededor de 1,5 kg en el mismo radio de 0,35 m, y de hecho son un aro. Treinta y dos radios de 5 gramos cada uno dan 0,16 kg, pero están distribuidos a lo largo del radio como varillas, y su contribución se calcula con el coeficiente ⅓. El buje pesa 0,4 kg y está cerca del eje, su contribución es casi nula. Sumamos: I = 1,5·0,35² + 0,16·⅓·0,35² = 0,184 + 0,007 = 0,190 kg·m² con una masa total de 2,06 kg, de donde k = 0,190/(2,06·0,1225) = 0,75. Es decir, una rueda real es un cuarto 'más ligera de acelerar' que un aro ideal de la misma masa, y la culpa es casi por completo del buje. El mismo cálculo explica por qué en el ciclismo se preocupan tanto por la masa de la llanta y casi no por la del buje: un gramo en la llanta cuesta más que un gramo en el eje, tantas veces como el cuadrado de la distancia es mayor."
+    },
+    {
+     "h": "Rodamiento ideal y momento constante",
+     "text": "En el ejemplo de la rueda, el momento de 3,5 N·m era el único: simplemente descartamos la fricción en los rodamientos. Evaluemos si esto es legítimo. Una rueda de bicicleta acelerada hasta 28,6 rad/s, dejada en reposo, se detiene en un par de minutos. Entonces, el momento de frenado es del orden de I·ω/t = 0,245·28,6/120 ≈ 0,06 N·m, casi sesenta veces menor que el momento de aceleración. Al calcular la aceleración, se puede y se debe descartar; al calcular el tiempo de desaceleración, de ninguna manera, porque allí es el único momento. Exactamente lo mismo ocurre con la constancia del momento: una cuerda enrollada en la llanta tira con fuerza constante, pero un músculo o un motor eléctrico no, y entonces ε deja de ser constante, y las fórmulas ω = εt y φ = ½εt² deben reemplazarse por integrales."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "La medida de la inercia en la rotación no es la masa, sino la suma $\\sum m_i r_i^2$: importa no solo cuánta materia hay, sino también qué tan lejos está del eje. Esta suma surge naturalmente al sumar la energía cinética sobre los puntos del cuerpo, y junto con ella surge la segunda ley de Newton para la rotación $M = I\\varepsilon$. Todo lo demás — los coeficientes de forma, el teorema de los ejes paralelos, la carrera de cuerpos por una pendiente — son consecuencias de estas dos líneas.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "M = Iε",
+     "text": "La misma segunda ley de Newton: momento en lugar de fuerza, momento de inercia en lugar de masa, aceleración angular en lugar de lineal. No se postula, sino que se suma sobre los puntos"
+    },
+    {
+     "icon": "scale",
+     "title": "I = k·mR²",
+     "text": "El coeficiente k es el cuadrado medio de la distancia al eje en fracciones de R²: aro 1, disco ½, esfera ⅖, varilla 1/12. Nunca puede ser mayor que 1"
+    },
+    {
+     "icon": "fact",
+     "title": "I = I_c + md²",
+     "text": "El teorema de Huygens-Steiner se deduce de la igualdad Σm·r = 0, es decir, de la propia definición del centro de masas. Por eso, el eje que pasa por el centro de masas es siempre el 'más ligero'"
+    },
+    {
+     "icon": "edge",
+     "title": "La forma decide la carrera",
+     "text": "v = √(2gh/(1+k)): ni la masa ni el radio aparecen en la respuesta. El aro llega último siempre, tanto el de un niño como el de un tractor"
+    }
+   ],
+   "where": [
+    "Volante de inercia: la energía es ½Iω², por eso la llanta se hace pesada y se acelera hasta miles de revoluciones: la velocidad entra al cuadrado",
+    "Ruedas: las 'ruedas ligeras' se valoran no por su masa en sí, sino porque la masa se aleja de la llanta hacia el eje",
+    "Manija de puerta y llave inglesa: el momento es fuerza por brazo, por eso la manija se coloca en el borde más alejado de las bisagras",
+    "Péndulo físico y reloj de péndulo de Huygens; péndulo de Kater, con el que durante cien años se midió g",
+    "Planetología: el coeficiente medido de 0,3307 para la Tierra y 0,394 para la Luna es evidencia directa de lo que hay en su interior"
+   ],
+   "watchOut": "Tres trampas. La primera: considerar r como la distancia al centro del cuerpo, no al eje; para una varilla que gira alrededor de un extremo en lugar del centro, la diferencia es exactamente de cuatro veces. La segunda: pensar que el momento de inercia pertenece al cuerpo: pertenece al par 'cuerpo y eje', y una misma rueda tiene tres I diferentes para tres ejes diferentes. La tercera: confundir newton-metro con julio: tienen la misma dimensión, pero el momento de fuerza no es energía, sino energía por radián, y no se pueden sumar."
+  },
+  "quiz": [
+   {
+    "id": "ri1",
+    "type": "mcq",
+    "q": "Dos aros ruedan sin deslizamiento por la misma colina. El primero es de un niño, masa 1 kg, radio 10 cm. El segundo es la llanta de una rueda de tractor, masa 200 kg, radio 80 cm. ¿Quién llega primero abajo?",
+    "options": [
+     "Llegan al mismo tiempo: ni la masa ni el radio entran en la respuesta",
+     "El pesado: tiene más energía potencial almacenada",
+     "El ligero: es más fácil de hacer girar",
+     "El grande: con la misma velocidad angular tiene mayor velocidad lineal"
+    ],
+    "answer": 0,
+    "why": "En la ecuación mgh = ½mv² + ½kmR²ω² la masa es un factor en los tres términos y se cancela por completo. El radio entra en el momento de inercia al cuadrado, y la condición de rodadura ω = v/R trae R² al denominador — se cancelan mutuamente. Queda v = √(2gh/(1+k)), donde de las propiedades del cuerpo solo sobrevive un coeficiente de forma adimensional. Ambos cuerpos son aros, k = 1 para ambos, por lo que la velocidad es la misma: para h = 1 m es 3,13 m/s. La respuesta sobre la mayor energía del pesado se basa en una observación correcta: la energía es de hecho mayor, pero la masa que hay que acelerar con esa energía es mayor en la misma proporción. La cuarta opción confunde la velocidad del centro con la angular: la rueda grande efectivamente gira más lento, pero se mueve a la misma velocidad.",
+    "hint": "Escribe la conservación de la energía para el rodamiento, sustituye I = kmR² y ω = v/R, y observa qué letras sobreviven tras las cancelaciones."
+   },
+   {
+    "id": "ri2",
+    "type": "mcq",
+    "q": "Una barra homogénea gira alrededor de un eje perpendicular a ella. ¿Cuántas veces es mayor el momento de inercia respecto a un eje que pasa por un extremo que respecto al eje que pasa por el centro?",
+    "options": [
+     "4 veces",
+     "2 veces",
+     "3 veces",
+     "12 veces"
+    ],
+    "answer": 0,
+    "why": "Respecto al centro, I = mL²/12. El eje por el extremo está a una distancia d = L/2 del centro de masas, y el teorema de Huygens-Steiner añade md² = mL²/4, es decir, 3mL²/12. En total resulta 4mL²/12 = mL²/3 — exactamente cuatro veces mayor. La respuesta tentadora \"2 veces\" viene de pensar que el brazo simplemente se duplicó; pero la distancia entra al cuadrado en el momento de inercia, y no se añade la longitud, sino su cuadrado. Se puede comprobar también en el banco del párrafo: coloque una barra de 0,40 m y mueva el deslizador de desplazamiento del eje hasta 0,20 m.",
+    "hint": "Tome el teorema de los ejes paralelos y sustituya d = L/2. No olvide que en él aparece d², no d."
+   },
+   {
+    "id": "ri3",
+    "type": "free",
+    "q": "Con tus propias palabras: ¿por qué en la respuesta para el rodamiento v = √(2gh/(1+k)) no aparecen ni la masa del cuerpo ni su radio, aunque ambos estaban explícitamente en la ecuación de la energía?",
+    "keywords": [
+     "cancel",
+     "factor",
+     "cuadrado",
+     "forma",
+     "proporción",
+     "fracción",
+     "adimensional",
+     "misma"
+    ],
+    "needed": 2,
+    "why": "La masa es un factor en los tres términos de la ecuación mgh = ½mv² + ½kmR²ω² y por lo tanto se cancela por completo. El radio desaparece de manera más sutil: entra en el momento de inercia al cuadrado, y la condición de rodadura ω = v/R trae R² al denominador, y se cancelan mutuamente. Tras las cancelaciones, del cuerpo queda un único número adimensional k, y su significado es transparente: k/(1+k) es la fracción de la energía almacenada que se va en rotación, no en movimiento hacia adelante. Para un aro es la mitad, para un disco un tercio, para una esfera veintinueve por ciento. La respuesta no la determina \"cuánta materia\", sino \"qué fracción de la energía el cuerpo está obligado a gastar en girar\".",
+    "hint": "Escribe los tres términos de la ecuación de la energía, sustituye I = kmR² y ω = v/R, y observa qué letras aparecen en cada término."
+   },
+   {
+    "id": "ri4",
+    "type": "estimate",
+    "q": "Un volante de inercia es un disco macizo de acero de masa 8,0 kg y radio 0,20 m. Se le aplica un momento constante de 2,0 N·m. ¿Qué aceleración angular adquirirá? Respuesta en rad/s².",
+    "answer": 12.5,
+    "unit": "rad/s²",
+    "tolAbs": 2,
+    "why": "Primero el momento de inercia: es un disco, por lo tanto k = ½, y I = ½ · 8,0 · 0,20² = ½ · 8,0 · 0,04 = 0,16 kg·m². Luego, como con la segunda ley de Newton: ε = M/I = 2,0/0,16 = 12,5 rad/s². Comprobación con el sentido común: en tres segundos el volante acelerará hasta 37,5 rad/s, lo que son 358 revoluciones por minuto, y almacenará ½ · 0,16 · 37,5² = 113 J. Dos errores frecuentes: olvidar el coeficiente ½ y obtener 6,25, o elevar al cuadrado el diámetro en lugar del radio y obtener 3,1.",
+    "hint": "Dos pasos. Primero el momento de inercia del disco I = ½mR² — no olvide que R está al cuadrado. Luego ε = M/I."
+   }
+  ]
+ },
+ "ar": {
+  "title": "لحظة القصور الذاتي ومعادلة الدوران",
+  "subtitle": "الفقرة 1 · لماذا لا تكفي الكتلة للدوران ومن أين تأتي المعاملات 1، ½، ⅖",
+  "intro": [
+   "ادفع عربة فارغة ثم عربة محملة — الفرق واضح، ومقياسه الكتلة. الآن جرب شيئًا آخر. خذ دمبلًا أو شوبكًا من منتصفه وأدره حول محور رأسي؛ ثم خذه من طرفه وأدره بنفس الطريقة. المادة هي نفسها، حتى آخر غرام، لكن مقاومة الدوران مختلفة تمامًا. إذن، للدوران، الكتلة ليست مقياسًا للقصور الذاتي: نحتاج إلى كمية لا تتذكر فقط كمية المادة، بل أيضًا أين توجد.",
+   "هذه الكمية تسمى لحظة القصور الذاتي. لن نعلن عنها. ستظهر من تلقاء نفسها، بمجرد أن نجمع الطاقة الحركية بدقة على جميع نقاط الجسم: سينتج المجموع $\\sum m_i r_i^2$ خارج علامة المجموع، ولن يكون أمامه مكان يذهب إليه. من نفس الجمع سنحصل أيضًا على قانون نيوتن الثاني للدوران $M = I\\varepsilon$، وقاعدة التحويل لمحور مزاح، والمعاملات 1، ½، ⅖، 1/12، التي يُقترح عادةً حفظها عن ظهر قلب — لكن لا حاجة لحفظها، لأن كل واحد منها هو ببساطة متوسط مربع المسافة إلى المحور.",
+   "سنختبر النظرية باستخدام منحدر. سنطلق من نفس الارتفاع طوقًا وقرصًا وكرة، وسنحدد مسبقًا ترتيب الوصول والفجوة في السرعات. أكثر ما يثير الدهشة في الإجابة هو ما لا يوجد فيها: لا الكتلة ولا نصف القطر. عجلة جرار ثقيلة وطوق طفل يصلان إلى الأسفل في نفس الوقت، والسباق يقرره رقم واحد بلا أبعاد."
+  ],
+  "standNote": "منصة هذه الفقرة في وضع \"التسارع\"، وهي تفعل بالضبط ما سنشتقه الآن: تجمع لحظة القصور الذاتي من الكتلة والشكل، وتضيف تصحيحًا لإزاحة المحور، وتحول عزم القوة إلى تسارع زاوي. ابدأ بما هو معروض افتراضيًا: طوق كتلته 2.0 كجم، ونصف قطره 0.35 م، وعزم 3.5 نيوتن·م. ستعرض المنصة $I = 0.245$ كجم·م²، $\\varepsilon = 14.3$ راد/ث²، وخلال ثانيتين ستدور العجلة حتى 28.6 راد/ث — أي أربع دورات ونصف. الآن بدّل الشكل من الطوق إلى القرص ولا تلمس أي شيء آخر: ستنخفض لحظة القصور الذاتي إلى النصف تمامًا، وسيتضاعف التسارع الزاوي إلى الضعف تمامًا. الكتلة نفسها، ونصف القطر نفسه — تغير فقط مكان المادة، وكان ذلك كافيًا. ثالثًا، وهو الغرض من المنصة: ضع قضيبًا، وطول 0.40 م، واسحب منزلق إزاحة المحور $d$ إلى 0.20 م، أي انقل المحور إلى نهاية القضيب. لحظة القصور الذاتي الذاتية تعطي $\\tfrac{1}{12}mR^2$، والإضافة $md^2$ تعطي $\\tfrac{1}{4}mR^2$ إضافية، معًا يعطيان بالضبط $\\tfrac{1}{3}mR^2$. هذه نظرية هويجنز-شتاينر، التي سنشتقها في الخطوة السابعة؛ هنا يتم التحقق منها بحركة واحدة للمنزلق.",
+  "formula": {
+   "name": "معادلة دوران الجسم الصلب وعزم القصور الذاتي",
+   "latex": "M = I\\varepsilon, \\qquad I = \\sum_i m_i r_i^2",
+   "alsoKnown": "قانون نيوتن الثاني للدوران؛ عزم القصور الذاتي بالنسبة لمحور. قاعدة التحويل إلى محور موازٍ — نظرية هويجنز-شتاينر: I = I_c + md²",
+   "authors": [
+    {
+     "who": "كريستيان هويجنز",
+     "year": "1673",
+     "what": "في كتابه 'بندول الساعات' حل مسألة مركز التأرجح للبندول المركب — أي أنه أول من حسب الكمية التي سُميت لاحقًا بعزم القصور الذاتي — وأثبت قابلية التبادل بين نقطة التعليق ومركز التأرجح"
+    },
+    {
+     "who": "إسحاق نيوتن",
+     "year": "1687",
+     "what": "في 'المبادئ' أعطى القانون الثاني F = ma لنقطة؛ معادلة الدوران تُشتق بجمع هذا القانون على نقاط الجسم، لكن نيوتن نفسه لم يتناول دوران الجسم الصلب بشكل عام"
+    },
+    {
+     "who": "ليونارد أويلر",
+     "year": "1765",
+     "what": "في 'نظرية حركة الأجسام الصلبة' أدخل مصطلح 'عزم القصور الذاتي' نفسه، وكتب معادلات الدوران ومفهوم المحاور الرئيسية — أصبح دوران الجسم الصلب علمًا مستقلاً"
+    },
+    {
+     "who": "ياكوب شتاينر",
+     "year": "1840",
+     "what": "أعطى نظرية المحاور المتوازية صيغتها الحالية؛ في الجوهر كانت النتيجة موجودة بالفعل عند هويجنز، ولذلك تُسمى بحق نظرية هويجنز-شتاينر"
+    }
+   ],
+   "story": "في عام 1646، اقترح مارين ميرسين على هويجنز البالغ من العمر سبعة عشر عامًا مسألة تعثر فيها ديكارت وروبرفال: أين توجد النقطة في البندول المركب — ليس ثقلًا على خيط، بل جسمًا يتأرجح — التي تتأرجح مثل بندول بسيط بنفس الطول؟ بدت المسألة هندسية، لكنها اتضح أنها تتعلق بتوزيع الكتلة، واشتغل بها هويجنز قرابة ثلاثين عامًا. نشر الإجابة فقط في عام 1673، في الجزء الرابع من 'بندول الساعات'، وفي تلك الإجابة يوجد مجموعنا $\\sum m_i r_i^2$ — لكن بدون اسم. سيطلق عليه أويلر اسمًا بعد ما يقرب من مائة عام. وعلى طول الطريق، أثبت هويجنز شيئًا يبدو عشوائيًا وهو ليس كذلك: إذا عُلّق الجسم من مركز التأرجح المُكتشف، فإن الفترة لا تتغير، وتصبح نقطة التعليق السابقة مركز التأرجح الجديد. بعد قرن ونصف، استخدم هنري كاتر هذا التبادل لبناء بندول عكسي (1817) وقياس تسارع الجاذبية بدقة تصل إلى جزء من مائة ألف؛ ولم يعرف العالم مقياس جاذبية أفضل لمدة مائة عام. كل هذا نما من مجموع واحد سنحصل عليه في خطوتين.",
+   "symbols": [
+    {
+     "sym": "ω",
+     "latex": "\\omega",
+     "what": "السرعة الزاوية",
+     "unit": "راديان/ثانية",
+     "note": "نفسها لجميع نقاط الجسم — هذا هو تعريف الجسم الصلب"
+    },
+    {
+     "sym": "ε",
+     "latex": "\\varepsilon",
+     "what": "التسارع الزاوي",
+     "unit": "راديان/ثانية²",
+     "note": "مشتقة السرعة الزاوية، dω/dt؛ يلعب دور التسارع العادي في الدوران"
+    },
+    {
+     "sym": "I",
+     "latex": "I",
+     "what": "عزم القصور الذاتي بالنسبة لمحور",
+     "unit": "كجم·م²",
+     "note": "خاصية ليست للجسم بل للزوج 'جسم ومحور': للعجلة الواحدة ثلاثة قيم مختلفة لـ I لثلاثة محاور مختلفة"
+    },
+    {
+     "sym": "M",
+     "latex": "M",
+     "what": "عزم القوة بالنسبة لمحور",
+     "unit": "نيوتن·م",
+     "note": "القوة مضروبة في ذراعها؛ البعد يتطابق مع الجول، لكنها ليست طاقة — تُكتب الوحدة دائمًا نيوتن·م"
+    },
+    {
+     "sym": "r_i",
+     "latex": "r_i",
+     "what": "مسافة نقطة الجسم عن المحور",
+     "unit": "م",
+     "note": "إلى المحور وليس إلى مركز الجسم — الخطأ الأكثر شيوعًا عند التعويض"
+    },
+    {
+     "sym": "k",
+     "latex": "k",
+     "what": "معامل الشكل",
+     "unit": "بلا أبعاد",
+     "note": "I = k·mR²؛ يساوي متوسط مربع المسافة إلى المحور مقسومًا على R² ولا يتجاوز الواحد أبدًا"
+    },
+    {
+     "sym": "d",
+     "latex": "d",
+     "what": "المسافة بين المحورين المتوازيين",
+     "unit": "م",
+     "note": "تدخل في التصحيح md² بالتربيع، لذا إزاحة المحور تكلف بسرعة"
+    },
+    {
+     "sym": "E_rot",
+     "latex": "E_{\\text{rot}}",
+     "what": "الطاقة الحركية الدورانية",
+     "unit": "جول",
+     "note": "½Iω² — نفس ½mv²، لكن بحروف مختلفة؛ منها نستخرج عزم القصور الذاتي"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "الاشتقاق الدقيق",
+   "lead": "سنحتاج إلى ثلاثة أشياء فقط، وكلها متوفرة بالفعل: تعريف الجسم الصلب، والطاقة الحركية لنقطة ½mv²، وقوانين نيوتن - الثاني والثالث. نحن لا نفترض مسبقًا لا عزم القصور الذاتي ولا معادلة الدوران - كلاهما سيظهران على طول الطريق.",
+   "steps": [
+    {
+     "text": "الجسم الصلب هو الجسم الذي لا تتغير فيه المسافات بين أي نقطتين. من هذا وحده يتبع الشيء الرئيسي: عند الدوران حول محور ثابت، تدور جميع النقاط خلال نفس الوقت بنفس الزاوية. لو كان الأمر مختلفًا، لتحركت النقاط بعيدًا عن بعضها البعض، وتغيرت المسافة بينها. إذن، السرعة الزاوية $\\omega = d\\varphi/dt$ مشتركة للجسم كله، رقم واحد لمليارات الذرات. لكن السرعة الخطية لكل نقطة مختلفة: كلما ابتعدت عن المحور، كلما طالت الدائرة الموصوفة وزادت سرعة النقطة. وهناك تفصيل صغير يتعثر فيه الكثيرون غالبًا: $r$ هي المسافة إلى المحور، وليس إلى مركز الجسم. في عمود طويل، نقطة عند الطرف ونقطة في المنتصف تقعان على نفس $r$ إذا كانت كلتاهما على نفس نصف القطر.",
+     "latex": "\\omega = \\frac{d\\varphi}{dt}\\ \\text{— واحدة للجسم كله}, \\qquad v_i = \\omega\\, r_i",
+     "figure": "rigiomega",
+     "figCaption": "زاوية الدوران واحدة لجميع النقاط، والسرعة خاصة بكل نقطة: v = ω·r. المسافة تُقاس إلى المحور، وليس إلى مركز الجسم."
+    },
+    {
+     "text": "الآن نجمع الطاقة الحركية لجميع نقاط الجسم. كل نقطة تساهم بـ $\\tfrac12 m_i v_i^2$، وبدلاً من $v_i$ يمكننا كتابة $\\omega r_i$. ثم يحدث ما كان من أجله كل هذا: $\\omega$ هي نفسها في جميع الحدود، لذلك يمكن إخراج $\\omega^2$ خارج علامة المجموع، ويبقى داخل المجموع مزيج من كتل النقاط وبعدها عن المحور فقط. لا حركة في هذا - إنها خاصية خالصة للجسم والمحور المختار، يمكن حسابها مرة واحدة ثم استخدامها. هذا المزيج يسمى عزم القصور الذاتي. قارن بين صيغتي الطاقة: للحركة الانتقالية ½mv²، وللدوران ½Iω². إنهما متطابقتان حرفيًا، وهذا يشير مباشرة إلى أن $I$ يلعب دور الكتلة في الدوران. الوحدة تُقرأ من التعريف: كيلوجرام مضروبًا في متر مربع.",
+     "latex": "E = \\sum_i \\tfrac{1}{2} m_i v_i^2 = \\sum_i \\tfrac{1}{2} m_i (\\omega r_i)^2 = \\tfrac{1}{2}\\Bigl(\\underbrace{\\sum_i m_i r_i^2}_{I}\\Bigr)\\omega^2, \\qquad [\\,I\\,] = \\text{kg}\\cdot\\text{m}^2",
+     "figure": "rigisum",
+     "figCaption": "ω تُخرج خارج المجموع لأنها واحدة للجسم كله. يبقى Σm r² - كمية بلا حركة داخلها: الجسم والمحور فقط."
+    },
+    {
+     "text": "مقياس القوة للدوران أيضًا لا يُفرض بمرسوم، بل يُختار بناءً على الشغل. لنفترض أن قوة $\\vec F$ تؤثر على نقطة من الجسم على مسافة $r$ من المحور. نقسمها إلى مركبتين: على طول نصف القطر وعمودية عليه. المركبة الشعاعية تسحب النقطة نحو المحور أو بعيدًا عنه، والنقطة أثناء الدوران تتحرك عموديًا على نصف القطر تمامًا - لذلك هذه المركبة لا تبذل شغلًا إطلاقًا ولا تؤثر على الدوران بأي شكل. يبقى المركبة المماسية. عند الدوران بزاوية صغيرة $d\\varphi$، تقطع النقطة مسافة $r\\,d\\varphi$، ويكون الشغل مساويًا $F_t\\, r\\, d\\varphi$. انظر إلى أي مزيج يقف كمعامل عند $d\\varphi$: حاصل ضرب القوة في المسافة إلى المحور. هذا ما يسمى عزم القوة. في الصياغة المتجهية، هو معامل الضرب الاتجاهي $\\vec r \\times \\vec F$، أي القوة مضروبة في الذراع - طول العمود النازل من المحور إلى خط عمل القوة. من هنا، بالمناسبة، مقبض الباب على الحافة البعيدة عن المفصلات.",
+     "latex": "dA = F_t\\, r\\, d\\varphi \\equiv M\\, d\\varphi, \\qquad M = F_t\\, r = |\\vec r \\times \\vec F| = F\\,r\\sin\\alpha, \\qquad [\\,M\\,] = \\text{N}\\cdot\\text{m}",
+     "figure": "rigitorque",
+     "figCaption": "المركبة المماسية فقط هي التي تدير. الشغل المبذول خلال زاوية dφ يساوي F_t·r·dφ، والمعامل عند dφ هو عزم القوة."
+    },
+    {
+     "text": "قبل كتابة المعادلة، يجب التخلص من القوى الداخلية، وهي كثيرة جدًا في الجسم: كل ذرة متماسكة بجيرانها. قانون نيوتن الثالث يقول إن القوى بين نقطتين متساوية في المقدار ومتعاكسة في الاتجاه - لكن هذا وحده غير كافٍ. نحتاج أيضًا إلى تفصيل يُذكر عادةً بصوت خافت: قوى التفاعل بين نقاط الجسم الصلب لها خط عمل مشترك، فهي موجهة على طول الخط المستقيم الذي يصل بين هاتين النقطتين. عندها يكون مجموع عزومها بالنسبة لأي محور يساوي الضرب الاتجاهي لفرق متجهي نصف القطر في القوة، وفرق متجهي نصف القطر يقع على طول نفس الخط المستقيم الذي تقع عليه القوة. الضرب الاتجاهي لمتجهين متوازيين يساوي صفرًا. إذن، العزوم الداخلية تُلغى بدقة في أزواج - كلها دون استثناء - وستدخل في المعادلة العزوم الخارجية فقط.",
+     "latex": "\\vec M_{12} + \\vec M_{21} = \\vec r_1 \\times \\vec F_{12} + \\vec r_2 \\times \\vec F_{21} = (\\vec r_1 - \\vec r_2) \\times \\vec F_{12} = 0",
+     "figure": "rigiinner",
+     "figCaption": "القوى الداخلية تقع على نفس الخط المستقيم مع القطعة الواصلة بين النقطتين، لذلك تُلغى عزومها في أزواج. تبقى القوى الخارجية فقط."
+    },
+    {
+     "text": "نجمع. العزوم الخارجية خلال زاوية $d\\varphi$ تبذل شغلًا $M\\,d\\varphi$، وكلها تتحول إلى طاقة حركية دورانية: الجسم صلب، لا يوجد ما يشوهه، والقوى الداخلية كما أظهرنا للتو ألغت مساهمتها. نساوي ونفاضل. عزم القصور الذاتي ثابت عندما يكون المحور ثابتًا - الجسم لا يغير شكله، النقاط لا تنتقل - لذلك $d(\\tfrac12 I\\omega^2) = I\\omega\\,d\\omega$. نعوض $d\\varphi = \\omega\\,dt$، و$\\omega$ في الطرفين تُختصر. تبقى المعادلة التي تُقدم عادةً جاهزة، كقانون منفصل. لم نقدم أي بديهية جديدة: فقط جمعنا قانون نيوتن الثاني وتعريف الشغل على النقاط. التطابق حرفي: الكتلة تتحول إلى عزم القصور الذاتي، القوة إلى عزم القوة، التسارع إلى التسارع الزاوي.",
+     "latex": "M\\,d\\varphi = d\\Bigl(\\tfrac{1}{2} I \\omega^2\\Bigr) = I\\omega\\, d\\omega, \\quad d\\varphi = \\omega\\, dt \\;\\Longrightarrow\\; M = I\\,\\frac{d\\omega}{dt} = I\\varepsilon",
+     "figure": "rigieps",
+     "figCaption": "ثلاثة أزواج من التطابقات: m ↔ I، F ↔ M، a ↔ ε. معادلة الدوران هي نفس قانون نيوتن الثاني، معاد كتابته بكميات زاوية."
+    },
+    {
+     "text": "حساب عزم القصور الذاتي أسهل حيث لا يوجد ما يحسب. في الحلقة - حلقة رفيعة، عجلة دراجة، حدافة بحافة ضخمة - جميع النقاط تقع على نفس المسافة $R$ من المحور، لذلك يمكن إخراج $r^2$ من المجموع بالكامل ويبقى مجرد الكتلة: $I = mR^2$. هذا هو الحد الأقصى: عند معطى $m$ و $R$، لا يوجد أكبر من ذلك، فالمادة لا يمكن أن تكون أبعد من $R$. في القرص، الكتلة موزعة من المركز إلى الحافة، ويتحول المجموع إلى تكامل على حلقات رفيعة. في الكرة المصمتة، بنفس الطريقة نحصل على $\\tfrac25 mR^2$، وفي قضيب رفيع يدور حول منتصفه بشكل عمودي عليه - $\\tfrac1{12} mL^2$. كلمة واحدة عن الحرف: تحت $R$ في الصيغة $I = kmR^2$ يُفهم في كل مرة البعد المميز الذي يظهر في الصيغة نفسها - في الحلقة والقرص والكرة هو نصف القطر، وفي القضيب هو طوله الكامل $L$. والآن الشيء الرئيسي: هذه الكسور لا تحتاج إلى حفظ. اقسم $I$ على $mR^2$، وسترى أن المعامل هو بالضبط متوسط مربع مسافات النقاط إلى المحور، معبرًا عنه بكسور $R^2$. في الحلقة جميع النقاط على $R$، متوسط المربع يساوي $R^2$، المعامل واحد. في القرص نصف، في الكرة خمسان، في القضيب واحد على اثني عشر - والرقم الأخير، بالمناسبة، مألوف لكل من حسب تباين التوزيع المنتظم على قطعة. إنها نفس الكمية.",
+     "latex": "I = k\\,mR^2,\\quad k = \\frac{\\langle r^2\\rangle}{R^2}; \\qquad I_{\\text{disk}} = \\int_0^R r^2\\,\\frac{2m}{R^2}\\,r\\,dr = \\tfrac{1}{2}mR^2, \\qquad I_{\\text{rod}} = \\int_{-L/2}^{L/2} x^2\\,\\frac{m}{L}\\,dx = \\tfrac{1}{12}mL^2",
+     "figure": "rigishapes",
+     "figCaption": "الحلقة 1، القرص ½، الكرة ⅖، القضيب 1/12. المعامل هو متوسط مربع المسافة إلى المحور بوحدات R²، ولا يحتاج إلى حفظ."
+    },
+    {
+     "text": "عزم القصور الذاتي لا يخص الجسم، بل يخص الزوج «جسم ومحور»: حرّك المحور - وسيتغير الرقم. كم بالضبط، لن نحتاج إلى إعادة الحساب. لنفترض أن المحور الأول يمر عبر مركز الكتلة، ونقطة من الجسم تبعد عنه بمتجه $\\vec r$، مرسوم في المستوى العمودي على المحور. نرسم محورًا ثانيًا موازيًا للأول ونرمز بـ $\\vec d$ للمتجه من المحور الجديد إلى مركز الكتلة. إذن مسافة النقطة إلى المحور الجديد تساوي $|\\vec r + \\vec d\\,|$، وسيدخل في المجموع مربع هذا المقياس. نفك الأقواس - نحصل على ثلاثة حدود. الأول هو عزم القصور الذاتي بالنسبة للمحور المار بمركز الكتلة. الثالث يساوي $md^2$: المتجه $\\vec d$ هو نفسه لجميع النقاط، ومجموع الكتل هو كتلة الجسم. الثاني يحتوي على $\\sum m_i \\vec r_i$، وهذا المجموع يساوي صفرًا ببساطة حسب تعريف مركز الكتلة - مركز الكتلة هو النقطة التي بالنسبة لها يكون المجموع الموزون لمتجهات نصف القطر مساويًا للصفر. الحد الأوسط يختفي، وتبقى نظرية هويجنز - شتاينر. دعونا نتحقق على قضيب: حول المنتصف $\\tfrac1{12}mL^2$؛ ننقل المحور إلى الطرف، $d = L/2$، الإضافة $mL^2/4$، معًا $\\tfrac1{12} + \\tfrac14 = \\tfrac13$ - بالضبط القيمة الجدولية لقضيب يدور حول طرفه. وهناك نتيجة أخرى تُقرأ مباشرة من الصيغة: $md^2$ لا يكون سالبًا أبدًا، إذن من بين جميع المحاور المتوازية، يكون عزم القصور الذاتي أصغريًا عند المحور المار بمركز الكتلة.",
+     "latex": "I = \\sum_i m_i \\bigl|\\vec r_i + \\vec d\\,\\bigr|^2 = \\underbrace{\\sum_i m_i r_i^2}_{I_c} \\;+\\; 2\\,\\vec d\\cdot\\underbrace{\\sum_i m_i \\vec r_i}_{=\\;0} \\;+\\; d^2\\underbrace{\\sum_i m_i}_{m} \\;=\\; I_c + md^2",
+     "figure": "rigistein",
+     "figCaption": "الحد الأوسط يختفي: Σm·r = 0 - وهذا هو تعريف مركز الكتلة. يبقى I = I_c + md²، وعبر مركز الكتلة يكون عزم القصور الذاتي دائمًا الأصغر."
+    },
+    {
+     "text": "دعونا نتحقق من كل شيء دفعة واحدة على التدحرج. جسم يتدحرج من ارتفاع $h$ دون انزلاق؛ هذا يعني أن نقطة التلامس ساكنة في كل لحظة، وقوة الاحتكاك الساكن لا تبذل شغلًا، والطاقة الكلية محفوظة. في الأعلى كانت هناك طاقة وضع $mgh$، في الأسفل - مجموع الطاقة الانتقالية $\\tfrac12 mv^2$ والدورانية $\\tfrac12 I\\omega^2$. العلاقة بينهما تعطي شرط التدحرج: خلال دورة واحدة يقطع الجسم محيطًا، ومنه $v = \\omega R$. نعوض $I = kmR^2$ - وانظر ماذا يحدث. الكتلة تقف كمعامل في جميع الحدود الثلاثة وتُختصر. نصف القطر يدخل في عزم القصور الذاتي مربعًا، وشرط التدحرج يجلب $R^2$ إلى المقام - يلغي كل منهما الآخر. في الإجابة يبقى الارتفاع وعدد لا بعدي واحد. الحلقة، التي عندها $k = 1$، تعطي للدوران نصف الطاقة بالضبط وتصل إلى الأسفل أبطأ بمقدار $\\sqrt2$ مرة من جسم ينزلق دون احتكاك؛ الكرة ذات $k = 2/5$ تعطي أقل من الثلث وتصل أولاً. لا «الأثقل أسرع» ولا «الأكبر أسرع» تعمل هنا: السباق يقرره الشكل والشكل فقط.",
+     "latex": "mgh = \\tfrac{1}{2}mv^2 + \\tfrac{1}{2}I\\omega^2, \\quad I = kmR^2,\\ \\ \\omega = \\frac{v}{R} \\;\\Longrightarrow\\; mgh = \\tfrac{1}{2}mv^2(1+k) \\;\\Longrightarrow\\; v = \\sqrt{\\frac{2gh}{1+k}}",
+     "figure": "rigiroll",
+     "figCaption": "من ارتفاع 1 م: الكرة 3.74 م/ث، القرص 3.62، الحلقة 3.13. لا الكتلة ولا نصف القطر دخلا في الإجابة - فقط معامل الشكل هو الذي يقرر."
+    }
+   ],
+   "plate": "M = I\\varepsilon \\qquad I = \\sum_i m_i r_i^2 = k\\,mR^2 \\qquad I = I_c + md^2",
+   "plateCap": "على اليسار - قانون نيوتن الثاني، معاد كتابته للدوران: العزم بدلاً من القوة، عزم القصور الذاتي بدلاً من الكتلة، التسارع الزاوي بدلاً من الخطي. في الوسط - مما يتكون عزم القصور الذاتي: الكتلة مضروبة في مربع المسافة إلى المحور، ومعامل الشكل اللا بعدي. على اليمين - قاعدة إعادة الحساب لمحور متوازٍ. ثلاثة أسطر، وفيها الفقرة كلها.",
+   "note": "لنلاحظ أين ضاق الاشتقاق بصمت. أولاً: المحور لدينا ثابت ولا يتحرك. ما دام الأمر كذلك، عزم القصور الذاتي رقم واحد، و$M$ و$\\varepsilon$ ينظران في اتجاه واحد. بالنسبة لجسم يطير بحرية، هذا غير صحيح: الكمية التي تربط العزم بالدوران تتحول إلى جدول من تسعة أرقام، ولا يمكن الاكتفاء برقم واحد. سنسميها في الملحق ونمررها إلى الفقرة التالية. ثانيًا: $I$ اعتُبر ثابتًا لأن الجسم صلب؛ بمجرد أن يغير الجسم شكله - سيظهر حد ثانٍ في المشتقة، لكن الأجسام القابلة للتشوه لا تُدرس هنا إطلاقًا. ثالثًا: في خطوة التدحرج، الطاقة محفوظة، أي أن احتكاك التدحرج ومقاومة الهواء مُهملان. بالنسبة لكرة فولاذية على لوح أملس، هذا مبرر بدقة تصل إلى نسب مئوية، أما بالنسبة لكرة ناعمة على سجادة - فلا. رابعًا، وهو حسابي بحت: استبدلنا المجموع $\\sum m_i r_i^2$ بتكامل، أي اعتبرنا المادة مستمرة. بالنسبة لجسم من $10^{23}$ ذرة، هذا التقريب أدق من أي قياس، ولا نحتاج إلى تذكره إلا في مسائل عن كتلتين دمبل على قضيب عديم الوزن - هناك المجموع منتهٍ والتكامل غير ضروري."
+  },
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "ثلاثة مواضيع: كيف يتحول المجموع على النقاط إلى تكامل، ولماذا احتاج أحد البراهين إلى كلا حاصلَي الضرب للمتجهات، ولماذا يكتشف التحقق بالأبعاد هنا خطأين مختلفين في آن واحد.",
+   "items": [
+    {
+     "what": "من المجموع إلى التكامل: كيف نحسب عزم القصور الذاتي I لجسم صلب",
+     "why": "التعريف $I = \\sum m_i r_i^2$ حرفيًا يعني تعداد النقاط، وفي الجسم يوجد $10^{23}$ نقطة. الانتقال إلى التكامل هو مجرد استبدال المجموع على القطع الصغيرة بتكامل على الكتلة: $\\sum m_i r_i^2 \\to \\int r^2\\,dm$. كل الحيلة في شيء واحد: يجب اختيار القطعة بحيث تكون لجميع نقاطها نفس المسافة إلى المحور، وإلا فمن غير الواضح أي $r$ نضع. بالنسبة للقرص، هذه القطعة هي حلقة رقيقة نصف قطرها $r$ وسمكها $dr$؛ مساحتها $2\\pi r\\,dr$، وكتلتها عند الكثافة السطحية $m/(\\pi R^2)$ تساوي $(2m/R^2)\\,r\\,dr$. بالنسبة للقضيب، القطعة هي جزء $dx$ بكتلة $(m/L)\\,dx$. الخطأ الأكثر شيوعًا هنا هو أخذ شريط مستطيل للقرص: فمسافات نقاطه إلى المحور مختلفة، وسيكون التكامل غير صحيح. ولاحظ التوافق الجميل: تكامل القضيب هو بالضبط تباين التوزيع المنتظم على فترة، $L^2/12$. عزم القصور الذاتي لجسم متجانس هو متوسط مربع المسافة مضروبًا في الكتلة.",
+     "latex": "\\sum_i m_i r_i^2 \\;\\longrightarrow\\; \\int r^2\\,dm, \\qquad dm_{\\text{حلقة}} = \\frac{2m}{R^2}\\,r\\,dr \\;\\Longrightarrow\\; I = \\int_0^R \\frac{2m}{R^2}\\,r^3\\,dr = \\frac{1}{2}mR^2",
+     "kit": "integral"
+    },
+    {
+     "what": "كلا حاصلَي الضرب للمتجهات، وكلاهما في محله",
+     "why": "في هذا القسم التقينا بالعمليتين، وكل واحدة عملت بخاصيتها. الضرب الاتجاهي أعطى تعريف العزم: $|\\vec r \\times \\vec F| = rF\\sin\\alpha$، حيث الجيب يزيل تلقائيًا المركبة الشعاعية للقوة — تلك التي لا تدور شيئًا. وهو أيضًا أغلق سؤال القوى الداخلية بضربة واحدة: الضرب الاتجاهي لمتجهين متوازيين يساوي صفرًا، والقوى بين نقاط الجسم الصلب هي بالضبط موازية للقطعة بين تلك النقاط. أما الضرب القياسي فقد ظهر في نظرية المحاور المتوازية، عند فك مربع معامل المجموع: $|\\vec r + \\vec d\\,|^2 = r^2 + 2\\,\\vec r\\cdot\\vec d + d^2$. الحد المختلط خطي في $\\vec r$، ولذلك مجموعه على النقاط ينطوي إلى $\\vec d \\cdot \\sum m_i \\vec r_i$ — وهذا صفر. لاحظ الفرق في الطبيعة: الضرب القياسي يعطي عددًا، والضرب الاتجاهي يعطي متجهًا (ولهذا السبب بالذات للعزم اتجاه، وهو ما سنتحدث عنه في القسم التالي).",
+     "latex": "|\\vec a\\times\\vec b| = ab\\sin\\alpha,\\quad \\vec a\\parallel\\vec b \\Rightarrow \\vec a\\times\\vec b = 0; \\qquad |\\vec r+\\vec d\\,|^2 = (\\vec r+\\vec d\\,)\\cdot(\\vec r+\\vec d\\,) = r^2 + 2\\,\\vec r\\cdot\\vec d + d^2",
+     "kit": "dotcross"
+    },
+    {
+     "what": "التحقق بالأبعاد: لماذا نيوتن·متر وجول ليسا نفس الشيء",
+     "why": "الفحص الأول بسيط. عزم القصور الذاتي يُقاس بالكيلوغرام·متر²، والتسارع الزاوي بـ ثانية⁻² (الراديان بلا أبعاد)، وحاصل ضربهما يعطي كغ·م²·ث⁻²، وهذا هو نيوتن·متر. المعادلة $M = I\\varepsilon$ تتحمل الأبعاد. الفحص الثاني للتدحرج: تحت الجذر يوجد تسارع مضروبًا في طول، أي م²/ث²، والجذر يعطي م/ث — سرعة، كما ينبغي؛ و$k$ بلا أبعاد ولا يمكن أن يفسد شيئًا. والآن المشكلة التي لا يكتشفها التحقق بالأبعاد: نيوتن·متر وجول لهما نفس الأبعاد، لكن عزم القوة والطاقة كميتان مختلفتان، ولا يمكن جمعهما. السبب هو الراديان: الشغل يساوي العزم مضروبًا في الزاوية، والزاوية بالراديان بلا أبعاد، وهي غير مرئية في الأبعاد. لذلك من المعتاد كتابة العزم بـ نيوتن·متر، والطاقة بـ جول، رغم أنهما رسميًا نفس التركيبة من الوحدات. القاعدة بسيطة: الأبعاد يمكن أن تدحض معادلة، لكنها لا تستطيع تأكيدها.",
+     "latex": "[\\,I\\varepsilon\\,] = \\text{كغ}\\cdot\\text{م}^2\\cdot\\text{ث}^{-2} = \\text{نيوتن}\\cdot\\text{م} = [\\,M\\,]; \\qquad \\left[\\sqrt{\\frac{2gh}{1+k}}\\,\\right] = \\sqrt{\\frac{\\text{م}}{\\text{ث}^2}\\cdot\\text{م}} = \\frac{\\text{م}}{\\text{ث}}",
+     "kit": "dimension"
+    }
+   ]
+  },
+  "example": {
+   "title": "مثال بالأرقام",
+   "lead": "لنُدِر عجلة دراجة هوائية — تلك الموجودة على الحامل افتراضيًا — ولنتحقق من الإجابة بثلاث طرق مستقلة.",
+   "given": "العجلة الخلفية للدراجة: نصف قطر الحافة R = 0.35 م، كتلة الحافة مع الإطار m = 2.0 كجم. تقريبًا كل الكتلة موزعة على الحافة، لذلك نعتبر العجلة حلقة رفيعة. تؤثر على الحافة عزم ثابت M = 3.5 نيوتن·م — وهذا مثلًا قوة مقدارها 10 نيوتن تسحب حبلًا ملفوفًا حول الحافة. نتجاهل حاليًا الأسلاك والمحور والاحتكاك في المحامل. المطلوب: حساب عزم القصور الذاتي، والتسارع الزاوي، والسرعة الزاوية، وعدد اللفات بعد ثانيتين. وبشكل منفصل — ما الذي سيتغير إذا تم توزيع نفس الكتلة على قرص.",
+   "law": "I = k·mR²، حيث k = 1 للحلقة و½ للقرص؛ ε = M/I؛ عند ثبات ε، السرعة الزاوية تزداد خطيًا كـ ω = εt، والزاوية تزداد تربيعيًا كـ φ = ½εt².",
+   "solution": [
+    {
+     "text": "عزم القصور الذاتي. في الحلقة، كل الكتلة على نصف القطر R، لذلك لا حاجة للتكامل: r² يُستخرج من المجموع كاملًا، ويبقى الكتلة.",
+     "latex": "I = mR^2 = 2{,}0 \\cdot 0{,}35^2 = 2{,}0 \\cdot 0{,}1225 = 0{,}245\\ \\text{kg}\\cdot\\text{m}^2"
+    },
+    {
+     "text": "التسارع الزاوي. نقسم العزم على عزم القصور الذاتي — تمامًا كما نقسم القوة على الكتلة.",
+     "latex": "\\varepsilon = \\frac{M}{I} = \\frac{3{,}5}{0{,}245} = 14{,}29\\ \\frac{\\text{rad}}{\\text{s}^2}"
+    },
+    {
+     "text": "بعد ثانيتين. السرعة الزاوية تزداد خطيًا، والزاوية تربيعيًا؛ لتحويل الراديان إلى لفات، نقسم على 2π = 6.283.",
+     "latex": "\\omega = \\varepsilon t = 14{,}29 \\cdot 2 = 28{,}6\\ \\frac{\\text{rad}}{\\text{s}}, \\qquad \\varphi = \\tfrac{1}{2}\\varepsilon t^2 = 28{,}6\\ \\text{rad} = \\frac{28{,}6}{6{,}283} = 4{,}55\\ \\text{rev}"
+    },
+    {
+     "text": "نفس السؤال لقرص له نفس الكتلة ونفس نصف القطر. عزم القصور الذاتي نصف القيمة، وبالتالي التسارع الزاوي ضعف القيمة، والزاوية في نفس الزمن ضعف القيمة.",
+     "latex": "I_{\\text{disk}} = \\tfrac{1}{2}mR^2 = 0{,}1225\\ \\text{kg}\\cdot\\text{m}^2, \\qquad \\varepsilon = \\frac{3{,}5}{0{,}1225} = 28{,}6\\ \\frac{\\text{rad}}{\\text{s}^2}, \\qquad \\omega(2\\,\\text{s}) = 57{,}1\\ \\frac{\\text{rad}}{\\text{s}} \\;\\;(9{,}1\\ \\text{rev})"
+    }
+   ],
+   "answer": "الحلقة: I = 0.245 كجم·م²، ε = 14.3 راد/ث²، بعد ثانيتين 28.6 راد/ث و4.55 لفة. القرص بنفس الكتلة ونفس نصف القطر: عزم قصور ذاتي نصف القيمة، تسارع ضعف القيمة، 57.1 راد/ث و9.1 لفة. الكتلة متساوية، الحجم متساوي — الفرق كله في مكان توزيع المادة.",
+   "check": "ثلاثة تحققات، وكل واحد يلتقط خطأً مختلفًا. الأول — تحقق الطاقة، وهو الأكثر دقة. الشغل المبذول بواسطة العزم المطبق يساوي M·φ = 3.5 · 28.6 = 100 جول؛ الطاقة الحركية الدورانية تساوي ½Iω² = ½ · 0.245 · 28.6² = 100 جول. تطابق حتى الرقم الأخير، ولا يمكن أن يكون غير ذلك: معادلة M = Iε اشتقيناها بالضبط من مساواة الشغل والطاقة. إذا اختلف هذان الرقمان لديك — فالخطأ في الحساب، وليس في الفيزياء. التحقق الثاني — على المنطق السليم. 28.6 راد/ث تعادل 4.55 لفة في الثانية، أي 273 لفة في الدقيقة؛ مع محيط 2πR = 2.20 م، كانت العجلة ستتدحرج بسرعة 10 م/ث، أي 36 كم/س بالضبط. هذا معقول: الدراجة الهوائية بالفعل تتسارع إلى هذه السرعة خلال ثانيتين، والقوة 10 نيوتن على الحافة — تعادل كيس حليب سعته لتر واحد معلق، مقدار إنساني تمامًا. الثالث — فخ حسابي. 0.35² = 0.1225، وليس 0.0125 ولا 1.225؛ إذا حصلت على I = 0.0245 أو 2.45، فقد فقدت أو أضفت عامل عشرة هنا بالذات. وملاحظة صادقة في الختام: العجلة الحقيقية ليست حلقة. المحور يزن كثيرًا ويقع قرب المحور، والأسلاك موزعة أيضًا على نصف القطر، لذا فإن معامل الشكل الحقيقي أقرب إلى 0.75 منه إلى 1 — حساب هذا التصحيح مشروح في الملحق."
+  },
+  "constants": {
+   "title": "ثوابت هذا القسم",
+   "lead": "رقم واحد هنا لا يُقاس إطلاقًا، بل يُستنتج من الهندسة؛ والثاني يحول الدورات إلى راديان؛ والثالث جاء من ميكانيكا الأرض؛ والرابع يخبرنا عن باطن الكواكب.",
+   "items": [
+    {
+     "sym": "k",
+     "latex": "k",
+     "name": "معاملات الشكل",
+     "value": "1 · ½ · ⅖ · ⅓ · 1/12",
+     "unit": "بدون أبعاد",
+     "why": "الطوق (حلقة رفيعة) — 1؛ القرص المصمت أو الأسطوانة — ½؛ الكرة المصمتة — ⅖؛ الكرة رقيقة الجدران — ⅔؛ القضيب حول نهايته — ⅓، حول منتصفه — 1/12. كل رقم من هذه الأرقام هو متوسط مربع المسافة إلى المحور، معبرًا عنه بكسور من R²، ولا يمكن لأي منها أن يتجاوز الواحد: فالمادة ببساطة لا مكان لها أبعد من R. بالنسبة لأنبوب سميك الجدران بنصف قطر داخلي r، يكون المعامل ½(1 + r²/R²) وينتقل بسلاسة من ½ للأسطوانة المصمتة إلى 1 للحلقة الرفيعة. لا يُقاس أي من هذه الأرقام — بل كلها محسوبة، وبالتالي فهي دقيقة تمامًا، على عكس خصائص المادة.",
+     "mnemo": "كلما اقتربت الكتلة من المحور، قلّ k. يمكن استرجاع السلسلة بالنظر إلى الجسم: الطوق 1 ← القرص ½ ← الكرة ⅖ ← القضيب حول منتصفه 1/12. لا شيء لتحفظه، يكفي أن تسأل نفسك أين توجد المادة."
+    },
+    {
+     "sym": "2π",
+     "latex": "2\\pi",
+     "name": "الراديان، الدورة، والدورات في الدقيقة",
+     "value": "2π = 6.2832 راد في الدورة؛ 1 دورة/دقيقة = 0.10472 راد/ثانية",
+     "unit": "راد",
+     "why": "الزاوية بالراديان هي نسبة طول القوس إلى نصف القطر، أي متر على متر. لذلك الراديان بلا أبعاد، ولهذا السبب لا يظهر أي معامل تحويل في معادلات الدوران: v = ωR، a = ω²R و φ = ½εt² تعمل فقط بالراديان وتنهار إذا عوضت بالدرجات. الجانب العملي: دورات المحركات والحدافات في المواصفات تُعطى دائمًا بالدورة/دقيقة، بينما في المعادلات نستخدم راد/ثانية. معامل التحويل 2π/60 = 0.10472، والعكسي 9.549.",
+     "mnemo": "من دورة/دقيقة إلى راد/ثانية — اقسم على 9.55 (أي 60/2π). 3000 دورة/دقيقة تعطي 314 راد/ثانية، وفي العدد 314 تتعرف فورًا على π. للعكس — اضرب في 9.55."
+    },
+    {
+     "sym": "g",
+     "latex": "g",
+     "name": "تسارع الجاذبية الأرضية",
+     "value": "9.80665 (للتقدير 9.81)",
+     "unit": "م/ث²",
+     "const": "g",
+     "why": "في هذا القسم، تدخل g في مكان واحد فقط — في التدحرج على منحدر، حيث تظهر في التركيبة 2gh/(1+k). وهي لا تدخل إطلاقًا في عزم القصور الذاتي ولا في معادلة الدوران، وهذا يستحق أن يُدرك بشكل منفصل: تدوير حدافة في انعدام الوزن ليس أسهل بأي حال من الأحوال مما هو على الأرض، لأن القصور الذاتي لا علاقة له بالجاذبية. لكن في البندول الفيزيائي تظهر g مرة أخرى — ولهذا السبب يُقاس بها بندول كاتر.",
+     "mnemo": "√(2gh) — سرعة السقوط الحر من ارتفاع h: عند h = 1 م تكون 4.43 م/ث. أي جسم متدحرج سيصل أبطأ بمقدار √(1+k) بالضبط: الطوق 1.41 مرة، الكرة 1.18."
+    },
+    {
+     "sym": "I⊕",
+     "latex": "I_\\oplus",
+     "name": "عزم القصور الذاتي للأرض",
+     "value": "0.3307 · M⊕R⊕² = 8.02 · 10³⁷",
+     "unit": "كغ·م²",
+     "why": "معامل شكل الأرض يساوي 0.3307، بينما لو كانت الكرة متجانسة لكان 0.4. الفرق ليس تجميليًا: فهو يخبرنا مباشرة أن المادة تزداد كثافة نحو المركز — نواة الحديد أكثر كثافة بثلاث مرات من الوشاح. يُقاس عزم القصور الذاتي للكوكب من حركة محوره ومن مدارات الأقمار الصناعية، ثم تُختبر نماذج البنية الداخلية بناءً عليه — وهذه إحدى الطرق القليلة لمعرفة شيء عن باطن الأرض دون النظر إلى داخله. القمر 0.394، شبه كرة متجانسة بنواة صغيرة؛ المريخ 0.364؛ زحل حوالي 0.22 — المادة متركزة نحو المركز أكثر من أي جسم آخر في النظام الشمسي.",
+     "mnemo": "0.4 — تعني «موزعة بالتساوي». أقل من 0.4 — «أكثر كثافة نحو المركز»، أكثر — «الكتلة موزعة للخارج» (للكرة المجوفة سيكون 0.67). رقم واحد، وترى فورًا ما إذا كان للكوكب نواة ثقيلة."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "كيف يرتبط هذا ببقية الدورة",
+   "lead": "يقف عزم القصور الذاتي عند مفترق طرق: على يساره حركيات الدوران وحفظ الطاقة، وعلى يمينه الجيروسكوب والأطر المرجعية الدوارة والميكانيكا التحليلية.",
+   "items": [
+    {
+     "h": "الدوران والأطر المرجعية",
+     "text": "كل ما استخدمناه هنا من الحركيات — السرعة الزاوية، العلاقة v = ωR، التسارع المركزي ω²R — تم اشتقاقه في موضوع «الاهتزازات والدوران»، في قسم الدوران والأطر المرجعية. وهناك أيضًا تم تحليل لماذا يضطر الراصد على قرص دوار إلى افتراض قوة بدون مصدر. هنا أخذنا هذه النتائج جاهزة وأضفنا إليها شيئًا واحدًا فقط: الكتلة الموزعة على الجسم."
+    },
+    {
+     "h": "قوانين الحفظ",
+     "text": "الخطوة الثامنة من الاشتقاق تعتمد كليًا على حفظ الطاقة، وبدون موضوع «قوانين الحفظ» لم يكن لدينا أساس لكتابتها. ومن هناك أيضًا عادة البحث عن كمية لا تتغير أثناء الحركة — وهنا كانت صفرًا في الحد الأوسط. أما مفهوم مركز الكتلة نفسه فقد قدمناه هنا، في الخطوة السابعة، ليس كنقطة ملائمة، بل كتعريف: مركز الكتلة هو النقطة التي تكون فيها Σm·r صفرًا. هذه المساواة هي التي صفّرت الحد الأوسط في نظرية شتاينر. بدون مركز الكتلة، لم تكن نظرية المحاور المتوازية لتوجد أصلًا."
+    },
+    {
+     "h": "الاهتزازات: البندول الفيزيائي",
+     "text": "علّق أي جسم من نقطة فوق مركز كتلته وأرجحه — سيكون الزمن الدوري T = 2π√(I/(mgd))، حيث I هو عزم القصور الذاتي بالنسبة لمحور التعليق، و d هي المسافة من المحور إلى مركز الكتلة. كلتا الكميتين هما بالضبط ما في هذا القسم. بالنسبة لقضيب متجانس طوله 1 متر، معلق من نهايته، I = mL²/3 و d = L/2، ومنه T = 2π√(2L/3g) = 1.64 ثانية — أسرع بشكل ملحوظ من 2.01 ثانية لثقل على خيط بنفس الطول. هذه هي بالضبط المسألة التي حلها هويجنز، ومنها نشأت ساعات البندول."
+    },
+    {
+     "h": "ماذا بعد",
+     "text": "القسم التالي من الموضوع سيأخذ نفس حاصل الضرب Iω، لكنه سينظر إليه كمتجه — وسيشرح الجيروسكوب والقمة الدوارة. الثالث سينتقل إلى الأطر المرجعية الدوارة. وفي الميكانيكا التحليلية، ستظهر نفس الكمية تحت اسم مختلف: إذا أخذنا زاوية الدوران كإحداثي، فإن عزم القصور الذاتي سيحل محل الكتلة في تعبير الطاقة الحركية — «كتلة معممة» عند إحداثي معمم."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "مثير للاهتمام: تحقق بنفسك",
+   "lead": "التجربتان التاليتان تتطلبان زجاجتين من الماء، وثلاجة، وبيضتين. كلاهما يظهران نفس الشيء: عزم القصور الذاتي يعتمد على ما إذا كانت المادة تتحرك مع الجسم أم لا.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "تجربة في المطبخ",
+     "h": "سباق الزجاجتين: الماء مقابل الجليد",
+     "text": "خذ زجاجتين بلاستيكيتين متطابقتين. املأ كلاهما بالماء حتى حوالي تسعة أعشار الحجم — لا تملأهما حتى الحافة: عند التجميد يتمدد الماء بنسبة تسعة بالمائة، والزجاجة الممتلئة المغلقة ستنفخ أو تنفجر. اربط الأغطية بشكل غير محكم. ضع إحدى الزجاجتين في الثلاجة من المساء في وضع مستقيم — لا يمكن وضعها على جانبها بغطاء غير محكم، لأنها ستتسرب — بينما تبقى الثانية في الغرفة. في الصباح، اصنع منحدرًا: أي لوح مستوٍ بطول حوالي 1.2 متر — لوح كي أو رف مخلوع سيفي بالغرض — مع رفع أحد الطرفين حوالي خمسة عشر سنتيمترًا. أطلق الزجاجتين في نفس الوقت، وقبل أن تتركهما، قرر أيهما ستصل أولاً.",
+     "answer": "الزجاجة السائلة تصل أولاً وبفارق كبير. الماء داخل الزجاجة المتدحرجة بالكاد يدور: الجدران تنزلق عليه، ولزوجة الماء منخفضة، والوقت ثانية ونصف. في الواقع، يدور الغلاف البلاستيكي فقط، ويزن حوالي ثلاثين جرامًا مقابل نصف كيلوغرام من المحتوى، لذا فإن معامل الشكل الفعال للزجاجة السائلة حوالي 0.05. بالنسبة للزجاجة المجمدة، أصبح المحتوى جزءًا من الجسم الصلب، وهو أسطوانة صلبة، k = ½. نحسب التسارعات: a = g·sinθ/(1+k)، عند sinθ = 0.125 يكون 1.17 م/ث² مقابل 0.82. الزجاجة السائلة تقطع مسافة 1.2 متر في 1.43 ثانية، والجليدية في 1.71 ثانية؛ عندما تنهي السائلة السباق، تتخلف الجليدية بحوالي 35 سنتيمترًا. الفارق مرئي بدون ساعة توقيت. وعلى الفور، تجربة تحكم ضد تفسير \"الجليد أخف\": ضع الزجاجتين على ميزان. الكتلة متساوية، الماء لم يختفِ. السباق لا يحدده الوزن، بل ما إذا كان المحتوى يدور مع الزجاجة. ملاحظة صادقة: على منحدر طويل جدًا، يبدأ الماء تدريجيًا في الدوران، وسيبدأ الفارق في التقلص — التأثير يعيش فقط لأن المنحدر قصير."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "تجربة في المطبخ",
+     "h": "البيضة النيئة مقابل البيضة المسلوقة",
+     "text": "اسلق بيضة جيدًا، واترك الثانية نيئة، وسمها بقلم رصاص حتى لا تخلط بينهما. قم بتدوير كلتيهما على طبق أملس — بنقرة إصبع متساوية. قرر مسبقًا أمرين: أيها ستدور بشكل أسرع وأيها ستدوم لفترة أطول.",
+     "answer": "البيضة المسلوقة هي جسم صلب حقيقي: المحتوى يتسارع مع القشرة، وكل الطاقة المستثمرة تذهب إلى دوران الكل، والبيضة تدور بسرعة ولفترة طويلة. النيئة بالكاد تدور: الأصابع تسرع القشرة فقط تقريبًا، بينما يبقى البياض والصفار في مكانهما — نفس الشيء مع زجاجة الماء. بعد ذلك، يعمل الاحتكاك اللزج بين القشرة والمحتوى على إبطاء القشرة، وتتوقف البيضة النيئة بعد بضع ثوانٍ. لكن الأكثر إثارة للاهتمام هو الجزء الثاني من التجربة، الذي من أجله تُجرى. قم بتدوير البيضة النيئة، المسها بإصبعك ثم اتركها فورًا. المسلوقة بعد هذه اللمسة ستتوقف تمامًا. النيئة ستبدأ بالدوران مرة أخرى: لقد أوقفت القشرة، لكن السائل بداخلها قد اكتسب بعض الدوران بحلول ذلك الوقت وهو الآن يعيد تدوير القشرة. هذا دليل مباشر، يمكن التحقق منه باليد، على أن عزم القصور الذاتي يتعلق بمكان وكيفية تحرك المادة، وليس فقط بكميتها. ولاحظ: اختبار الطهي المعتاد \"نيئة أم مسلوقة\" هو تجربة ميكانيكا الأجسام الصلبة في المطبخ، اخترعت قبل وقت طويل من تدوين هذه الميكانيكا."
+    },
+    {
+     "icon": "paradox",
+     "kind": "مفارقة",
+     "h": "صلب أم مجوف — كيف تميز دون فتحه",
+     "text": "أمامك كرتان. من الخارج لا يمكن تمييزهما، القطر متساوٍ، وعلى الميزان تظهران نفس الكتلة. واحدة صلبة، مصبوبة من سبيكة خفيفة؛ الثانية مجوفة، بجدار رقيق من معدن ثقيل. لا المسطرة ولا الميزان يحلان المشكلة. كيف تميز بينهما في ثلاثين ثانية دون قطع أي شيء؟",
+     "answer": "أطلقهما معًا من نفس الارتفاع على لوح مائل. للكرة الصلبة k = ⅖، وللكرة المجوفة k = ⅔. عند h = 1 م، تكون السرعات في الأسفل 3.74 و3.43 م/ث — فارق تسعة بالمائة، مرئي بالعين المجردة على لوح بطول متر، وعلى لوح بطول مترين يصبح واضحًا جدًا. السبب هو أن الكتلة في الكرة المجوفة موزعة على السطح، ومتوسط مربع المسافة من المحور أكبر، ويتم إنفاق جزء أكبر من الطاقة على الدوران: k/(1+k) يعطي 40 بالمائة مقابل 29. ويجب ذكر الأرقام بصدق: المعامل ⅔ صحيح لجدار رقيق حقًا. بالنسبة لكرة بجدار يساوي عُشر نصف القطر، k يساوي بالفعل 0.60، والسرعة في الأسفل 3.50 م/ث، ويتقلص الفارق من تسعة بالمائة إلى سبعة — ملحوظ، لكنه ليس سخيًا. بنفس الأسلوب، ولكن في التنفيذ الصناعي، يتم فحص تجانس المسبوكات. وبنفس الأسلوب، ولكن على نطاق كوكبي، يتم الحكم على باطن الكوكب: معامل 0.3307 للأرض يعني نواة ثقيلة، و0.394 للقمر يعني كرة شبه متجانسة. لم ينظر أحد إلى داخل المسبوكة ولا إلى داخل القمر."
+    },
+    {
+     "icon": "fact",
+     "kind": "حقيقة مثيرة للاهتمام",
+     "h": "الدولاب الموازن: كيفية تخزين الطاقة في الدوران",
+     "text": "طاقة الدوران تساوي ½Iω²، والسرعة الزاوية تدخل في التربيع، بينما الكتلة خطيًا. لذلك، من الأفضل التدوير بشكل أسرع بدلاً من زيادة الوزن. لنحسب: قرص فولاذي كتلته 100 كجم ونصف قطره 0.5 م له I = ½·100·0.25 = 12.5 كجم·م². عند 10,000 دورة في الدقيقة، هذا يعطي ω = 1047 راد/ث و E = ½·12.5·1047² = 6.9 ميجا جول، أي 1.9 كيلوواط ساعة. دعنا نتحقق من التمزق: على حافة هذا القرص، السرعة ωR = 524 م/ث، والفولاذ يتمزق تقريبًا عند هذه السرعة بالذات، لذا فإن دولابنا الموازن مثالي. الفولاذ الحقيقي بهذا نصف القطر يُدار ببطء مضاعف، ويخزن أربع مرات أقل، 1.7 ميجا جول. للمقارنة: نفس المائة كيلوغرام، مرفوعة عشرة أمتار (سطح مبنى من ثلاثة طوابق)، تخزن 9.8 كيلو جول — أقل بسبعمائة مرة.",
+     "answer": "من هنا يأتي تاريخ الدولاب الموازن بأكمله — من عجلة الخزاف الحجرية ودولاب محرك واط البخاري إلى أجهزة التخزين التي توضع اليوم في مستودعات الترام والمترو لاستعادة طاقة الكبح. المثير للاهتمام أن الأمر لا يتعلق بالكتلة ولا بقوة المحرك، بل بقوة الحافة: النقطة على الحافة تبقى متماسكة فقط بفضل المادة نفسها، والسرعة المحيطية القصوى تحددها نسبة القوة إلى الكثافة. الفولاذ يضع هذا الحد منخفضًا جدًا، لذلك لا يتم صب الدولاب الموازن الحديث، بل يُلف من ألياف الكربون: إنه أخف بخمس مرات تقريبًا من الفولاذ وفي نفس الوقت أقوى في الشد على طول الألياف، والسرعة القصوى تتبع الجذر التربيعي لنسبة القوة إلى الكثافة — وبهذه النسبة تتفوق ألياف الكربون على الفولاذ بحوالي ثلاث مرات. بالإضافة إلى ذلك، عند التمزق، لا يحتوي الدولاب الملفوف على شظايا كبيرة، وهو اعتبار ليس بالآخر لجهاز يخزن ميجا جول."
+    },
+    {
+     "icon": "edge",
+     "kind": "حدود التطبيق",
+     "h": "عندما يتوقف التدحرج عن كونه تدحرجًا",
+     "text": "صيغة v = √(2gh/(1+k)) اشتقت بافتراض أن الجسم يتدحرج دون انزلاق: نقطة التلامس ساكنة في كل لحظة، واحتكاك السكون لا يبذل شغلًا. هذا الافتراض ليس مجانيًا، ولا يصمد دائمًا.",
+     "answer": "لكي يتدحرج الجسم بدلاً من أن ينزلق، يجب أن يتمكن احتكاك السكون من تدويره. القوة المطلوبة تساوي mg·sinθ·k/(1+k)، والمتاحة هي μmg·cosθ، ومن هنا شرط التدحرج: tg θ ≤ μ(1+k)/k. نعوض μ = 0.3: الطوق سيبدأ في الانزلاق عند 31 درجة بالفعل، بينما الكرة ستصمد حتى 46. السبب واضح في الصيغة: كلما زاد k، زادت نسبة الطاقة التي يجب توجيهها إلى الدوران، وزاد الجهد الذي يجب أن يبذله الاحتكاك. بعد العتبة، يذهب جزء من الطاقة إلى الحرارة، وصيغتنا تعطي إجابة مبالغًا فيها. الدين الثاني الصامت هو احتكاك التدحرج، الذي تجاهلناه تمامًا. إنه أضعف بمراتب من الانزلاق (لكرة فولاذية على فولاذ، المعامل حوالي 0.001، ولإطار دراجة على أسفلت حوالي 0.004)، لذلك على لوح بطول متر لا يمكن إهماله، بينما على منحدر طويل يحدد كل شيء. من هنا القاعدة العملية: إجابتنا هي الحد الأعلى للسرعة، والذي يقترب منه الجسم الحقيقي كلما كان هو والسطح تحته أكثر صلابة."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "ما الذي أهملناه",
+   "blocks": [
+    {
+     "h": "رقم واحد بدلاً من جدول من تسعة: موتر القصور الذاتي",
+     "text": "عندما يكون المحور مثبتاً، يكون عزم القصور الذاتي رقماً واحداً، ويكون عزم القوة والتسارع الزاوي في نفس الاتجاه. أما الجسم الحر فليس له محور: يمكن أن يكون أي محور ويتغير مع الزمن. عندها تكون الكمية التي تصف القصور الذاتي أثناء الدوران ليست رقماً، بل جدولاً من تسعة أرقام - موتر القصور الذاتي. الخبر السار هو أنه لأي جسم توجد ثلاثة محاور متعامدة تسمى المحاور الرئيسية، وعند الدوران حولها يصبح كل شيء بسيطاً مرة أخرى: رقم واحد لكل محور. صيغنا I = kmR² هي بالضبط العزوم الرئيسية للأجسام المتناظرة. كل ما لا يمكن وصفه برقم واحد يبدأ في الفقرة التالية؛ هنا يكفي أن نتذكر أن عزم القصور الذاتي بدون تحديد المحور لا معنى له.",
+     "latex": "I_{\\alpha\\beta} = \\sum_i m_i\\bigl(r_i^2\\,\\delta_{\\alpha\\beta} - x_{i\\alpha}x_{i\\beta}\\bigr)"
+    },
+    {
+     "h": "التدحرج دون انزلاق - افتراض وليس حقيقة",
+     "text": "في الخطوة الثامنة كتبنا v = ωR وأعلنا أن احتكاك السكون لا يبذل شغلاً. الأول هو شرط التدحرج، وهو يظل صحيحاً فقط طالما كان الاحتكاك كافياً؛ الحد الأقصى تعطيه المتباينة أدناه. الثاني صحيح بدقة: نقطة التلامس في لحظة التلامس تكون ساكنة، والقوة المؤثرة على نقطة ساكنة لا تبذل شغلاً - ولكن لهذا السبب لا يستهلك احتكاك السكون طاقة، بل يعيد توزيعها فقط بين الحركة الانتقالية والدوران. أما ما تم إهماله فهو احتكاك التدحرج: فهو مرتبط بتشوه الجسم والدعامة ويستهلك الطاقة بالفعل. مقداره أقل بمرتبتين إلى ثلاث مراتب من احتكاك الانزلاق، وعلى منحدر المطبخ يمكن إهماله دون أي تأنيب ضمير.",
+     "latex": "F_{\\text{tr}} = mg\\sin\\theta\\,\\frac{k}{1+k} \\le \\mu\\, mg\\cos\\theta \\;\\Longrightarrow\\; \\tan\\theta \\le \\mu\\,\\frac{1+k}{k}"
+    },
+    {
+     "h": "العجلة الحقيقية ليست حلقة",
+     "text": "في المثال حسبنا عجلة الدراجة كحلقة رفيعة وحصلنا على k = 1. دعنا نتحقق من مدى تقريبية هذا. الحافة مع الإطار والأنبوب الداخلي حوالي 1.5 كجم على نفس نصف القطر 0.35 م، وهي بالفعل حلقة. اثنتان وثلاثون سلكاً بوزن 5 جرامات تعطي 0.16 كجم، لكنها موزعة على نصف القطر كقضبان، ومساهمتها تحسب بمعامل ⅓. المحور يزن 0.4 كجم ويقع بالقرب من المحور، ومساهمته شبه معدومة. نجمع: I = 1.5·0.35² + 0.16·⅓·0.35² = 0.184 + 0.007 = 0.190 كجم·م² عند كتلة كلية 2.06 كجم، ومنها k = 0.190/(2.06·0.1225) = 0.75. أي أن العجلة الحقيقية \"أخف في التدوير\" بمقدار الربع من الحلقة المثالية بنفس الكتلة، والسبب في ذلك هو المحور بالكامل تقريباً. نفس الحساب يفسر لماذا في رياضة الدراجات يهتمون كثيراً بكتلة الحافة ولا يكادون يحسبون كتلة المحور: الجرام على الحافة يكلف أكثر من الجرام عند المحور بمقدار يساوي مربع المسافة."
+    },
+    {
+     "h": "محمل مثالي وعزم ثابت",
+     "text": "في مثال العجلة كان العزم 3.5 نيوتن·م هو الوحيد - لقد تجاهلنا ببساطة الاحتكاك في المحامل. دعنا نقيم ما إذا كان هذا مشروعاً. عجلة دراجة دوارة بسرعة 28.6 راديان/ثانية، إذا تركت وشأنها، تتوقف خلال دقيقتين. إذن عزم الكبح هو حوالي I·ω/t = 0.245·28.6/120 ≈ 0.06 نيوتن·م - أي أقل بحوالي ستين مرة من عزم التسارع. عند حساب التسارع يمكن ويجب إهماله؛ عند حساب الانطلاق (بعد توقف القوة) لا يجوز إهماله أبداً، لأنه هناك يبقى العزم الوحيد. نفس الشيء مع ثبات العزم: حبل ملفوف على الحافة يسحب بقوة ثابتة، أما العضلة أو المحرك الكهربائي فلا، وعندها يتوقف ε عن الثبات، ويجب استبدال الصيغ ω = εt و φ = ½εt² بتكاملات."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "مقياس القصور الذاتي أثناء الدوران ليس الكتلة، بل المجموع $\\sum m_i r_i^2$: المهم ليس فقط كمية المادة، بل أيضاً مدى بعدها عن المحور. هذا المجموع يظهر من تلقاء نفسه، بمجرد جمع الطاقة الحركية على نقاط الجسم، ومعه يظهر قانون نيوتن الثاني للدوران $M = I\\varepsilon$. كل شيء آخر - معاملات الشكل، نظرية المحاور المتوازية، سباق الأجسام على المنحدر - هي نتائج لهذين السطرين.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "M = Iε",
+     "text": "نفس قانون نيوتن الثاني: العزم بدلاً من القوة، عزم القصور الذاتي بدلاً من الكتلة، التسارع الزاوي بدلاً من الخطي. إنه ليس مفروضاً، بل مجموع على النقاط"
+    },
+    {
+     "icon": "scale",
+     "title": "I = k·mR²",
+     "text": "المعامل k هو متوسط مربع المسافة إلى المحور في كسور R²: الحلقة 1، القرص ½، الكرة ⅖، القضيب 1/12. لا يمكن أن يكون أكبر من واحد أبداً"
+    },
+    {
+     "icon": "fact",
+     "title": "I = I_c + md²",
+     "text": "نظرية هويغنز-شتاينر تنتج من المساواة Σm·r = 0، أي من تعريف مركز الكتلة نفسه. لذلك المحور عبر مركز الكتلة هو دائماً \"الأخف\""
+    },
+    {
+     "icon": "edge",
+     "title": "الشكل يحسم السباق",
+     "text": "v = √(2gh/(1+k)): لا الكتلة ولا نصف القطر يدخلان في الإجابة. الحلقة تصل أخيراً دائماً - سواء كانت لعبة أطفال أو عجلة جرار"
+    }
+   ],
+   "where": [
+    "الدولاب الموازن: الطاقة ½Iω²، لذلك يجعلون الحافة ثقيلة ويديرونها بآلاف الدورات - السرعة تدخل في المربع",
+    "العجلات: \"العجلات الخفيفة\" تُقدر ليس لكتلتها في حد ذاتها، بل لأنها تنقل الكتلة من الحافة إلى المحور",
+    "مقبض الباب ومفتاح الربط: العزم هو القوة في الذراع، لذلك يوضع المقبض عند الحافة البعيدة عن المفصلات",
+    "البندول الفيزيائي وساعة البندول لهويغنز؛ بندول كاتر العكسي الذي قاسوا به g لمدة مئة عام",
+    "علم الكواكب: المعامل المقاس 0.3307 للأرض و 0.394 للقمر - دليل مباشر على ما بداخلهما"
+   ],
+   "watchOut": "ثلاثة فخاخ. الأول: اعتبار r هو المسافة إلى مركز الجسم، وليس إلى المحور؛ بالنسبة لقضيب يدور حول نهايته بدلاً من منتصفه، هذا فرق أربع مرات بالضبط. الثاني: الاعتقاد بأن عزم القصور الذاتي خاص بالجسم: إنه خاص بالزوج \"جسم ومحور\"، والعجلة الواحدة لها ثلاثة عزوم مختلفة لثلاثة محاور مختلفة. الثالث: الخلط بين نيوتن·متر والجول: أبعادهما واحدة، لكن عزم القوة ليس طاقة، بل طاقة لكل راديان، ولا يمكن جمعهما."
+  },
+  "quiz": [
+   {
+    "id": "ri1",
+    "type": "mcq",
+    "q": "حلقتان تتدحرجان من نفس التل دون انزلاق. الأولى حلقة أطفال، كتلتها 1 كجم، ونصف قطرها 10 سم. الثانية حلقة عجلة جرار، كتلتها 200 كجم، ونصف قطرها 80 سم. من يصل إلى الأسفل أولاً؟",
+    "options": [
+     "يصلان في نفس الوقت: لا الكتلة ولا نصف القطر يدخلان في الإجابة",
+     "الثقيلة: لديها مخزون أكبر من الطاقة الكامنة",
+     "الخفيفة: من الأسهل تدويرها",
+     "الكبيرة: عند نفس السرعة الزاوية، تكون سرعتها الخطية أكبر"
+    ],
+    "answer": 0,
+    "why": "في المعادلة mgh = ½mv² + ½kmR²ω²، الكتلة عامل في جميع الحدود الثلاثة وتُختصر بالكامل. نصف القطر يدخل في عزم القصور الذاتي مربعًا، وشرط التدحرج ω = v/R يجلب R² في المقام - فيلغي كل منهما الآخر. يتبقى v = √(2gh/(1+k))، حيث لا يبقى من خصائص الجسم سوى معامل شكل بلا أبعاد. كلتا الحلقتين حلقتان، k = 1 لكلتيهما، وبالتالي السرعة واحدة: عند h = 1 م تكون 3.13 م/ث. الإجابة عن المخزون الأكبر للطاقة في الثقيلة تصطاد بملاحظة صحيحة: الطاقة بالفعل أكبر - ولكن بنفس المقدار تكون الكتلة أكبر أيضًا، والتي يجب تسريعها بهذه الطاقة. الرابع يخلط بين سرعة المركز والسرعة الزاوية: العجلة الكبيرة تدور بالفعل أبطأ، لكنها تتحرك بنفس السرعة.",
+    "hint": "اكتب قانون حفظ الطاقة للتدحرج، وعوّض فيه I = kmR² و ω = v/R ولاحظ أي الحروف تبقى بعد الاختصار."
+   },
+   {
+    "id": "ri2",
+    "type": "mcq",
+    "q": "قضيب منتظم يُدار حول محور عمودي عليه. كم مرة يكون عزم القصور الذاتي حول محور يمر عبر الطرف أكبر من عزم القصور الذاتي حول محور يمر عبر المنتصف؟",
+    "options": [
+     "4 مرات",
+     "مرتين",
+     "3 مرات",
+     "12 مرة"
+    ],
+    "answer": 0,
+    "why": "بالنسبة للمنتصف I = mL²/12. المحور عبر الطرف يبعد عن مركز الكتلة بمسافة d = L/2، ونظرية هويجنز-شتاينر تضيف md² = mL²/4، أي 3mL²/12. معًا يصبح 4mL²/12 = mL²/3 - أي أكبر بأربع مرات بالضبط. الإجابة المغرية \"مرتين\" تأتي من فكرة أن الذراع تضاعفت ببساطة؛ لكن المسافة تدخل في عزم القصور الذاتي مربعة، ويُضاف مربع الطول وليس الطول. يمكن التحقق من ذلك على منصة الفقرة: ضع قضيبًا طوله 0.40 م واسحب منزلق إزاحة المحور إلى 0.20 م.",
+    "hint": "استخدم نظرية المحاور المتوازية وعوّض d = L/2. لا تنسَ أنها تتضمن d² وليس d."
+   },
+   {
+    "id": "ri3",
+    "type": "free",
+    "q": "بكلماتك الخاصة: لماذا في إجابة التدحرج v = √(2gh/(1+k)) لا توجد كتلة الجسم ولا نصف قطره - على الرغم من أن كلاهما كانا ظاهرين في معادلة الطاقة؟",
+    "keywords": [
+     "اختصار",
+     "عامل",
+     "مربع",
+     "شكل",
+     "نسبة",
+     "جزء",
+     "بلا أبعاد",
+     "متطابق"
+    ],
+    "needed": 2,
+    "why": "الكتلة عامل في جميع الحدود الثلاثة للمعادلة mgh = ½mv² + ½kmR²ω² وبالتالي تُختصر بالكامل. نصف القطر يختفي بمكر: يدخل في عزم القصور الذاتي مربعًا، وشرط التدحرج ω = v/R يجلب R² في المقام، فيلغي كل منهما الآخر. بعد الاختصار، يتبقى من الجسم عدد واحد بلا أبعاد k، ومعناه واضح: k/(1+k) هو جزء الطاقة المخزنة الذي يذهب إلى الدوران وليس إلى الحركة الأمامية. بالنسبة للحلقة هذا النصف، وللقرص الثلث، وللكرة تسعة وعشرون بالمئة. الإجابة لا يحددها \"كم المادة\" بل \"أي جزء من الطاقة يجب أن يدفعه الجسم للدوران\".",
+    "hint": "اكتب جميع الحدود الثلاثة لمعادلة الطاقة، وعوّض I = kmR² و ω = v/R ولاحظ أي الحروف موجودة في كل حد."
+   },
+   {
+    "id": "ri4",
+    "type": "estimate",
+    "q": "حدافة - قرص فولاذي مصمت كتلته 8.0 كجم ونصف قطره 0.20 م. يُطبق عليها عزم ثابت مقداره 2.0 نيوتن·م. ما التسارع الزاوي الذي ستحصل عليه؟ الإجابة بوحدة راديان/ثانية².",
+    "answer": 12.5,
+    "unit": "راديان/ثانية²",
+    "tolAbs": 2,
+    "why": "أولاً عزم القصور الذاتي: قرص، إذن k = ½، و I = ½ · 8.0 · 0.20² = ½ · 8.0 · 0.04 = 0.16 كجم·م². ثم كما في قانون نيوتن الثاني: ε = M/I = 2.0/0.16 = 12.5 راديان/ثانية². فحص بالمنطق السليم: خلال ثلاث ثوانٍ، ستدور الحدافة حتى 37.5 راديان/ثانية، أي 358 دورة في الدقيقة، وتخزن ½ · 0.16 · 37.5² = 113 جول. خطآن شائعان: نسيان المعامل ½ والحصول على 6.25، أو تربيع القطر بدلاً من نصف القطر والحصول على 3.1.",
+    "hint": "خطوتان. أولاً عزم القصور الذاتي للقرص I = ½mR² - لا تنسَ أن R مربع. ثم ε = M/I."
+   }
+  ]
  }
 }

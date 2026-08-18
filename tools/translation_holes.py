@@ -22,12 +22,24 @@
 import glob
 import io
 import json
+import re
 import sys
 
 if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 LANGS = ("en", "es", "ar", "fr")
+
+# Разбор, который ссылается на НОМЕР варианта, врёт: варианты перемешиваются при показе.
+# В русском такие места вычищены и проверка их ловит, а перевод заводит их заново — модель
+# охотно пишет «the third option» там, где в оригинале сказано «ответ про то, что…».
+# Это не пробел и не дыра формы: текст на месте и переведён, — поэтому отдельным признаком.
+POSITIONAL = re.compile(
+    r"(перв|втор|трет|четвёрт|последн)\w*\s+вариант"
+    r"|(first|second|third|fourth|last)\s+(option|answer|choice)"
+    r"|(primera|segunda|tercera|cuarta|última)\s+opci"
+    r"|(première|deuxième|troisième|quatrième|dernière)\s+(option|réponse)"
+    r"|الخيار\s+(الأول|الثاني|الثالث|الرابع|الأخير)", re.I)
 ROOTS = ["data/theory/courses/*/*.json", "data/theory/*.json"]
 
 
@@ -49,7 +61,10 @@ def compare(ru, tr, path, out):
     if isinstance(ru, list):
         if not isinstance(tr, list):
             return
-        if len(tr) < len(ru):
+        # keywords — исключение: там список короче законно. Чистка вложенных ключей
+        # (tools/keywords_clean.py) убирает «طول» при наличии «على طول», и в переводе
+        # ключей честно меньше, чем в русском. Сравнивать их длины значит ругаться на порядок.
+        if len(tr) < len(ru) and not path.endswith("keywords"):
             out.append((path, "список короче: %d против %d" % (len(tr), len(ru))))
         for i in range(min(len(ru), len(tr))):
             compare(ru[i], tr[i], "%s[%d]" % (path, i), out)
@@ -57,6 +72,8 @@ def compare(ru, tr, path, out):
     if isinstance(ru, str):
         if ru.strip() and isinstance(tr, str) and not tr.strip():
             out.append((path, "пусто, а в русском %d знаков" % len(ru.strip())))
+        elif isinstance(tr, str) and POSITIONAL.search(tr) and not POSITIONAL.search(ru):
+            out.append((path, "разбор ссылается на номер варианта, хотя в русском этого нет"))
 
 
 def main():

@@ -485,5 +485,1315 @@
     "hint": "Всё есть прямо в формуле $\\Omega = mga/(I\\omega)$: подставьте числа и не забудьте, что $a$ — это расстояние от точки подвеса до центра масс, а не радиус колеса."
    }
   ]
+ },
+ "en": {
+  "title": "Angular Momentum and the Gyroscope",
+  "subtitle": "Section 2 · Why a spinning top doesn't fall, but turns sideways",
+  "intro": [
+   "Spin a top and tilt it. From everything we know so far, it should fall: the weight is applied at the center of mass, the center of mass hangs away from the pivot point, there is a lever arm, there is a torque—and nothing opposes that torque. The support pushes exactly at the tip, its lever arm is zero, and it provides no torque. The top must fall. It doesn't.",
+   "Instead of falling, something stranger happens: the tilt of the axis holds, and the axis itself slowly circles the vertical. The answer 'the spinning holds it' explains nothing until we say what the spinning actually does. The explanation turns out to be entirely geometric, and no new force is needed. A rotating body has a vector—angular momentum—that points along its axis. Gravity adds to this vector an increment directed along its torque. And the torque of gravity is perpendicular to both the vector and the vertical at once. These two perpendicularities lock the tilt of the axis in place.",
+   "Next, we'll get $\\vec L = I\\vec\\omega$, rewrite the rotation equation from the first section in vector form, derive the precession rate $\\Omega = mga/(I\\omega)$, and discover that the tilt of the axis doesn't appear in it at all—it canceled along the way. Then we'll test the formula on a bicycle wheel, where the axis circles in nine and a half seconds, and on Earth, where the same formula gives twenty-six thousand years."
+  ],
+  "standNote": "Switch the stand to 'Gyroscope' mode. The shape, mass, and radius are the same as in the first section—they still combine to give the moment of inertia $I$. Three sliders have been added: initial angular velocity $\\omega_0$, lever arm $a$ from the pivot point to the center of mass, and tilt of the axis $\\theta$. The stand calculates and displays four numbers: $L = I\\omega$, torque $M = mga\\sin\\theta$, precession rate $\\Omega$, and the period of the axis's circuit.\n\nMake exactly two movements on it. First: drag the tilt slider from 10 to 80 degrees. The torque changes almost sixfold—the sine grows from 0.17 to 0.98—but $\\Omega$ doesn't budge. This is the test of step 6, where the sine canceled, and it's the most unexpected result of the section: a steeply tilted top circles the vertical at exactly the same rate as a nearly vertical one. Second movement: drag $\\omega_0$ from 5 to 50 rad/s. Precession doesn't speed up; it slows down—by exactly the same factor.\n\nAt the defaults (hoop, $m = 2.0$ kg, $R = 0.35$ m, $\\omega = 30$ rad/s, $a = 0.25$ m) the stand shows $I = 0.245$ kg·m², $L = 7.35$ kg·m²/s, $\\Omega = 0.667$ rad/s, and a period of 9.4 s. The torque depends on the tilt: with the axis horizontal it's the full $mga = 4.90$ N·m, at a 30-degree tilt it's half that, 2.45 N·m—but $\\Omega$ is the same in both cases. The same numbers are calculated by hand in step 7.",
+  "formula": {
+   "name": "Angular momentum and precession rate",
+   "latex": "\\vec L = I\\vec\\omega, \\qquad \\frac{d\\vec L}{dt} = \\vec M, \\qquad \\Omega = \\frac{mga}{I\\omega}",
+   "alsoKnown": "Moment equation in vector form; formula for regular precession of a heavy symmetric top. For the Earth, the same phenomenon is called the precession of the equinoxes",
+   "authors": [
+    {
+     "who": "Hipparchus of Nicaea",
+     "year": "about 127 BC",
+     "what": "compared his measurements of the position of Spica with the records of Timocharis made a century and a half earlier and found that the vernal equinox point creeps along the ecliptic by at least a degree per century. The caution in the wording was appropriate: the true rate is 1.4 degrees per century. He discovered the phenomenon but did not know the cause."
+    },
+    {
+     "who": "Isaac Newton",
+     "year": "1687",
+     "what": "in the third book of the Principia explained the precession of the equinoxes by the attraction of the Moon and Sun on the equatorial bulge of the Earth. This is the first calculation of a gyroscope in history—and it was done on a planet, a century and a half before a gyroscope was assembled on a table."
+    },
+    {
+     "who": "Leonhard Euler",
+     "year": "1765",
+     "what": "in 'Theory of the Motion of Rigid Bodies' wrote the equations of rotation in body-fixed axes, introduced the principal axes of inertia and the angles bearing his name; from these equations precession and nutation emerge as particular solutions."
+    },
+    {
+     "who": "Léon Foucault",
+     "year": "1852",
+     "what": "built a fast rotor in a gimbal mount, showed that its axis holds its direction while the room turns with the Earth, and gave the device its name: gyroscope, 'one who watches the rotation'."
+    }
+   ],
+   "story": "Between the discovery and the explanation here lie eighteen centuries, and between the explanation and the correct explanation another sixty years. Newton in the Principia obtained an almost correct value for the precession of the Earth's axis, but made two errors along the way: he thought the Moon acts on the Earth's bulge about four and a half times stronger than the Sun, whereas the true ratio is a little over two, and at the same time he incorrectly estimated the bulge itself. The errors partially canceled each other, and the answer came out close to the truth. A rigorous derivation was given by Jean le Rond d'Alembert in 1749, and it is from him that the theory of precession is usually counted as a calculation rather than a guess.\n\nThe instrument appeared later than the theory. In 1851 Foucault demonstrated the Earth's rotation with a pendulum, and the next year he wanted to show the same thing without a long wire and a high dome. He took a heavy disk, spun it up to several hundred revolutions per second, and suspended it in a gimbal mount where no torque could reach it. The axis held its direction while the whole laboratory slowly turned relative to it. The experiment was inconclusive for a purely engineering reason: friction in the bearings ate the rotation within a few minutes, and nothing could be measured quantitatively. The name remained. Half a century later, Hermann Anschütz-Kaempfe took on a task for which a magnetic compass is completely unsuitable—navigation inside the steel hull of a submarine—and in 1908 built a working gyrocompass. From that moment, the gyroscope turned from a demonstration toy into an instrument without which no airplane flies and no rocket reaches orbit.",
+   "symbols": [
+    {
+     "sym": "L",
+     "latex": "\\vec L",
+     "what": "angular momentum of the body",
+     "unit": "kg·m²/s",
+     "note": "a vector; when rotating about a principal axis, it is directed along the axis by the right-hand rule, not in the direction the points of the body run."
+    },
+    {
+     "sym": "I",
+     "latex": "I",
+     "what": "moment of inertia about the axis of rotation",
+     "unit": "kg·m²",
+     "note": "taken ready-made from the first section: $I = kmR^2$, where $k$ is 1 for a hoop, ½ for a disk, ⅖ for a sphere."
+    },
+    {
+     "sym": "ω",
+     "latex": "\\vec\\omega",
+     "what": "angular velocity of proper rotation",
+     "unit": "rad/s",
+     "note": "also a vector along the axis; for a symmetric body rotating about a principal axis, $\\vec L$ and $\\vec\\omega$ are parallel—in general they are not."
+    },
+    {
+     "sym": "M",
+     "latex": "\\vec M",
+     "what": "torque of external forces about the pivot point",
+     "unit": "N·m",
+     "note": "for a heavy top this is the torque of weight; the reaction of the support is applied at the pivot point itself, its lever arm is zero, so it produces no torque."
+    },
+    {
+     "sym": "Ω",
+     "latex": "\\Omega",
+     "what": "angular velocity of precession",
+     "unit": "rad/s",
+     "note": "the rate at which the axis goes around the vertical; do not confuse with $\\omega$—for a fast top, $\\Omega$ is tens and hundreds of times smaller."
+    },
+    {
+     "sym": "θ",
+     "latex": "\\theta",
+     "what": "angle of inclination of the axis to the vertical",
+     "unit": "rad or °",
+     "note": "does not enter the final formula: it cancels out. A vertical top ($\\theta = 0$) does not precess at all—there is no torque."
+    },
+    {
+     "sym": "a",
+     "latex": "a",
+     "what": "distance from the pivot point to the center of mass",
+     "unit": "m",
+     "note": "measured along the axis; the farther the center of mass from the pivot, the greater the torque and the faster the precession."
+    },
+    {
+     "sym": "g",
+     "latex": "g",
+     "what": "acceleration due to gravity",
+     "unit": "m/s²",
+     "const": "g",
+     "note": "enters only through the torque of weight; in weightlessness $M = 0$, there is no precession, the axis simply holds its direction."
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Rigorous derivation",
+   "lead": "From the first section, we need exactly two things: the definition of moment of inertia $I$ and the equation of rotation $M = I\\varepsilon$. Both are taken as given; we will not rediscover them. Everything else in this derivation is not physics but vector geometry: two perpendicularities and one arc.",
+   "steps": [
+    {
+     "text": "Consider a body rotating about a fixed axis with angular velocity $\\omega$. Each of its points has momentum $m_i v_i$ and lever arm $r_i$ — the distance to the axis. The sum of the products of momentum and lever arm is called the angular momentum about the axis. Substituting $v_i = \\omega r_i$ from the first section, the familiar sum factors out: it is the same moment of inertia $I$.\n\nBut $L$ is not a number; it is a vector, and its direction is the source of half the confusion in this topic. It points ALONG THE AXIS, not in the direction the body's points are moving. The choice is not arbitrary: the axis direction is the only direction in the body that rotation leaves in place; all others rotate with it, and only along the axis can you draw an arrow so that it does not run away. Which way along the axis is given by the right-hand rule: curl your fingers in the direction of rotation, and your thumb points along $\\vec L$.",
+     "latex": "L = \\sum_i m_i v_i r_i = \\sum_i m_i \\omega r_i^{2} = \\Bigl(\\sum_i m_i r_i^{2}\\Bigr)\\,\\omega = I\\omega, \\qquad \\vec L = I\\vec\\omega",
+     "figure": "rigilvec",
+     "figCaption": "Points on the rim run in circles, but the vector $\\vec L$ points along the axis: it is the only direction that rotation leaves in place"
+    },
+    {
+     "text": "Differentiate this equality with respect to time. The body is rigid, the axis is the same, so $I$ is constant and comes out of the derivative. What remains is the derivative of angular velocity — angular acceleration $\\vec\\varepsilon$ — and the product $I\\vec\\varepsilon$ we already know: it is the moment of external forces, the equation of rotation from the first section.\n\nFormally, we have written nothing new. Substantively, we have written everything. The scalar form $M = I\\varepsilon$ can answer exactly one question: faster or slower. The vector form also answers the question \"which way will the axis turn,\" and that is precisely what concerns us. It must be read literally and without corrections from common sense: in time $dt$, the vector $\\vec L$ receives an increment $d\\vec L = \\vec M\\,dt$ directed WHERE THE MOMENT POINTS. Not where $\\vec L$ itself points, and not where the force pulls.",
+     "latex": "\\frac{d\\vec L}{dt} = I\\,\\frac{d\\vec\\omega}{dt} = I\\vec\\varepsilon = \\vec M \\qquad \\Longrightarrow \\qquad d\\vec L = \\vec M\\,dt",
+     "figure": "rigidldt",
+     "figCaption": "The increment adds to the vector by the parallelogram rule and is directed along the moment, not along $\\vec L$ itself"
+    },
+    {
+     "text": "First, consider the simple case: no external moment. Then $\\vec L$ is constant, and constancy of a vector means constancy of two things at once: magnitude and direction. The magnitude is remembered more often (the figure skater pulling in her arms is analyzed in the topic \"Conservation Laws\"), but in engineering the second half almost always works: a freely flying spinning body holds its axis in space.\n\nA rifled bullet: a twist rate of 25 centimeters at a speed of 800 m/s gives 3200 revolutions per second, i.e., $\\omega \\approx 2\\cdot10^{4}$ rad/s — one hundred ninety thousand revolutions per minute. The axis of such a bullet holds along the trajectory, and the bullet does not tumble but goes nose-first. A frisbee at ten revolutions per second holds its plane and therefore glides rather than falls. A satellite spun about an axis aimed at a desired point maintains its pointing without a single thruster firing. In all three cases, it is not a \"force\" that works but simply the absence of moment.",
+     "latex": "\\vec M = 0 \\;\\Longrightarrow\\; \\vec L = \\mathrm{const} \\;\\Longrightarrow\\; |\\vec L| = \\mathrm{const}\\ \\ \\text{and}\\ \\ \\hat L = \\mathrm{const}",
+     "figure": "rigifree",
+     "figCaption": "Zero moment preserves not only the magnitude $L$ but also the direction of the axis in space — on this rests all spin stabilization"
+    },
+    {
+     "text": "Now turn on gravity. A top rests with its tip at point $O$, the axis is tilted from the vertical by angle $\\theta$, and the center of mass lies on the axis at distance $a$ from the tip. The weight $m\\vec g$ is applied at the center of mass and directed downward. The moment about the pivot is the cross product of the radius vector and the force.\n\nThe magnitude reads as force times lever arm, and here the lever arm is the horizontal distance from the vertical through the tip to the center of mass, i.e., $a\\sin\\theta$. The direction is given by the cross product rule: the result is perpendicular to both factors. Perpendicular to the weight — hence perpendicular to the vertical, hence strictly horizontal at any tilt. Perpendicular to the radius vector, which lies along the axis — hence perpendicular to $\\vec L$, which also lies there. Remember both perpendicularities: the next step consists entirely of them.",
+     "latex": "\\vec M = \\vec r \\times m\\vec g, \\qquad |\\vec M| = m g a \\sin\\theta, \\qquad \\vec M \\perp \\vec L, \\quad \\vec M \\perp \\hat z",
+     "figure": "rigitorq2",
+     "figCaption": "The lever arm of the weight is the horizontal distance $a\\sin\\theta$; the moment itself is perpendicular to both the axis and the vertical, i.e., horizontal"
+    },
+    {
+     "text": "The key step, and it is entirely geometric. Only that part of the increment directed along the vector itself changes its length; the transverse part only rotates it. This is verified in one line: differentiate the squared length and get twice the dot product of the vector and its derivative. Since $\\vec M \\perp \\vec L$, this product is zero — the length $L$ is constant, no matter what the weight does.\n\nBut this one perpendicularity is not enough: the axis could tilt without changing the length of $\\vec L$. Here the second perpendicularity works. The moment is horizontal, so its vertical projection is zero, so the vertical component $L_z$ also does not change. Adding up: the length is constant, the vertical projection is constant, — hence their ratio $\\cos\\theta$ is constant. The tilt of the axis is locked. What remains to change is only the azimuth: the tip of the vector $\\vec L$ moves along a horizontal circle, and the axis traces a cone about the vertical.\n\nHere is the answer to the section's question. The top does not fall not because something props it from below, and not because rotation creates some new force. To fall means to increase $\\theta$, and for that one must either shorten $\\vec L$ or reduce its vertical part. A horizontal moment perpendicular to $\\vec L$ can do neither.",
+     "latex": "\\frac{d}{dt}\\bigl(\\vec L\\cdot\\vec L\\bigr) = 2\\,\\vec L\\cdot\\frac{d\\vec L}{dt} = 2\\,\\vec L\\cdot\\vec M = 0 \\;\\Longrightarrow\\; L = \\mathrm{const}; \\qquad \\frac{dL_z}{dt} = M_z = 0 \\;\\Longrightarrow\\; \\cos\\theta = \\frac{L_z}{L} = \\mathrm{const}",
+     "figure": "rigicone",
+     "figCaption": "The increment is horizontal and perpendicular to $\\vec L$: neither the length of the vector nor its vertical projection changes — only an azimuthal rotation remains"
+    },
+    {
+     "text": "Let us calculate the speed of this rotation. It is convenient to look from above: there only what moves is visible. The horizontal projection of the vector $\\vec L$ has length $L\\sin\\theta$ — this is the radius of the circle along which the tip of the vector moves. In time $dt$, the tip shifts by $|d\\vec L| = M\\,dt$, and the shift is perpendicular to the projection, i.e., purely along the arc, adding nothing to the radius. The angle of rotation is the arc divided by the radius.\n\nAnd here happens what was worth calculating. In the numerator is the moment $mga\\sin\\theta$, in the denominator the radius $L\\sin\\theta$. The sines cancel, and the tilt of the axis disappears from the answer completely. A top tilted almost horizontally goes around the vertical with exactly the same angular speed as a top standing almost upright. This is exactly the case where the formula knows more than intuition: on a stand this is checked with one move of the $\\theta$ slider.",
+     "latex": "d\\varphi = \\frac{|d\\vec L|}{L\\sin\\theta} = \\frac{M\\,dt}{L\\sin\\theta} \\;\\Longrightarrow\\; \\Omega = \\frac{d\\varphi}{dt} = \\frac{M}{L\\sin\\theta} = \\frac{mga\\,\\sin\\theta}{I\\omega\\,\\sin\\theta} = \\frac{mga}{I\\omega}",
+     "figure": "rigiprec",
+     "figCaption": "Top view: in $dt$ the tip of the vector traverses an arc $M\\,dt$ along a circle of radius $L\\sin\\theta$ — hence the angular speed of precession"
+    },
+    {
+     "text": "Let us read the formula in words. In the numerator is everything that topples the top: mass, gravity, the offset of the center of mass. In the denominator is everything that resists: moment of inertia and intrinsic rotation. And the main consequence contradicts first impression — the faster the top is spun, the SLOWER it precesses. It seems that a fast one should also run sideways faster; in fact, the opposite, and the reason is visible from the derivation: in the same time, the same moment gives the same increment $d\\vec L$, but it rotates a long vector by a smaller angle.\n\nFrom here immediately follows how it all ends. Friction at the tip eats away $\\omega$, the denominator melts, $\\Omega$ grows — the axis begins to go around faster and faster. The accelerating precession before the fall is not the cause of the end but its herald.\n\nNumbers on a bicycle wheel removed from the fork and suspended by one end of the axle. Mass $m = 2.0$ kg, almost all on the rim of radius $R = 0.35$ m, so $I = mR^{2}$ (first section, hoop coefficient $k = 1$). Spun up to $\\omega = 30$ rad/s — about five revolutions per second. The rope holds the axle at distance $a = 0.25$ m from the wheel's center.",
+     "latex": "I = 0.245\\ \\text{kg·m}^2,\\quad L = I\\omega = 7.35\\ \\frac{\\text{kg·m}^2}{\\text{s}},\\quad M = mga = 4.905\\ \\text{N·m}, \\qquad \\Omega = \\frac{4.905}{7.35} = 0.667\\ \\frac{\\text{rad}}{\\text{s}}, \\quad T = \\frac{2\\pi}{\\Omega} = 9.4\\ \\text{s}",
+     "figure": "rigiwheel",
+     "figCaption": "A wheel suspended by one end of the axle does not fall but goes around in nine and a half seconds — and in that time it manages to spin 45 times"
+    },
+    {
+     "text": "The same formula on a planetary scale. The Earth is not a sphere: due to diurnal rotation, its equatorial radius is 21 kilometers larger than the polar one, and around the equator runs a bulge. The Moon and the Sun pull the near side of this bulge more strongly than the far side, and a moment results that tends to lay the equator into the orbital plane — i.e., to straighten the axis. But the moment is perpendicular to the axis, and we already know what such a moment does: the axis does not straighten but precesses, maintaining a tilt of 23.44° and going around in 25,772 years. The difference from the top here is in sign: for the top, gravity topples the axis, and the precession goes in the same direction as the top's spin, while the Moon and the Sun straighten the axis — the moment is directed oppositely, and the Earth's axis goes around against its own rotation. Astronomers call this the retrograde motion of the equinoxes.\n\nLet us turn the formula around and find the moment responsible for this. The Earth's moment of inertia $I = 0.3307\\,MR^{2} = 8.02\\cdot10^{37}$ kg·m², angular velocity by sidereal day $\\omega = 7.292\\cdot10^{-5}$ rad/s, hence $L = 5.85\\cdot10^{33}$ kg·m²/s. Precession speed: 50.29 arcseconds per year, i.e., $7.73\\cdot10^{-12}$ rad/s. Now $M = \\Omega L \\sin\\varepsilon$ — the same formula from step 6, but solved for the moment.\n\nThe answer must be checked independently, otherwise it is not a calculation but a fit. The moment from an attracting body is calculated directly: it is proportional to the difference of principal moments of inertia $C - A$, i.e., to that very non-sphericity. The Moon gives $1.24\\cdot10^{22}$ N·m, the Sun — $0.57\\cdot10^{22}$, the sum $1.81\\cdot10^{22}$. It agrees with the first number to fractions of a percent, and at the same time the contribution of each is visible: the Moon is 2.2 times stronger than the Sun, although it yields to it in mass by 27 million times — it wins by the cube of the distance.",
+     "latex": "M = \\Omega\\,L\\,\\sin\\varepsilon = 7.73\\cdot10^{-12}\\cdot 5.85\\cdot10^{33}\\cdot 0.398 = 1.80\\cdot10^{22}\\ \\text{N·m}; \\qquad \\tfrac{3}{4}\\,\\frac{Gm}{r^{3}}\\,(C-A)\\sin 2\\varepsilon\\ \\Big|_{\\text{Moon}+\\text{Sun}} = 1.81\\cdot10^{22}\\ \\text{N·m}",
+     "figure": "rigiearth",
+     "figCaption": "The Earth's axis traces a cone with half-angle 23.44° in 25,772 years. The formula is the same as for the top — only the moment is created by the Moon and the Sun, and the role of the lever arm is played by the equatorial bulge"
+    }
+   ],
+   "plate": "\\Omega = \\frac{mga}{I\\omega}",
+   "plateCap": "On the left — how fast the axis goes around the vertical. On the right — what topples the top divided by what resists. The tilt of the axis is absent from the formula entirely: it canceled along the way, and this is the only truly unexpected result of the section.",
+   "note": "Let us list what we silently assumed — these are the boundaries of the formula. First: $\\vec L$ is directed strictly along the axis. Strictly, this is true only for a symmetric body rotating about a principal axis; in general, $\\vec L$ and $\\vec\\omega$ are not parallel, and a completely different mechanics results — about that in the appendix. Second: the top is fast, i.e., $\\Omega \\ll \\omega$, which is the same as $I\\omega^{2} \\gg mga$. For our wheel, the threshold $\\sqrt{mga/I} = \\sqrt{4.905/0.245} = 4.5$ rad/s at operating 30 — a nearly sevenfold margin. A slow top does not obey the formula. Third: we obtained a particular solution where $\\theta$ is strictly constant; the general solution also contains nutation — a small trembling of the axis that a real top shows in the first half-second after launch. Fourth: there is no friction, $\\omega$ is constant, the pivot is stationary. A real tip slides, rolls, and heats up, and it is precisely friction at the pivot that is responsible for the most beautiful effects — the rising boiled egg and the tumbling tippe-top toy."
+  },
+  "math": {
+   "title": "The Math Needed Here",
+   "lead": "There is almost no physics in this section—just three geometric facts about vectors. We'll cover them separately, because each one works far beyond the gyroscope.",
+   "items": [
+    {
+     "what": "Derivative of a vector: length and direction separately",
+     "why": "Any increment of a vector splits into two parts: along the vector itself and perpendicular to it. The first changes the length, the second only the direction, and nothing else. Formally, this is written via the derivative of the squared length: it equals twice the dot product of the vector and its derivative. If the derivative is perpendicular to the vector, the product is zero, and the length is constant. The converse is also true: if the length is constant, the derivative must be perpendicular.\n\nThis fact is the entire gyroscope in one line. But it also explains completely different things, because the vector in it can be anything. Take velocity: a force perpendicular to velocity does not change its magnitude—hence uniform circular motion, and hence the magnetic Lorentz force does no work. Take the radius vector: velocity perpendicular to it means motion along a circle of constant radius. The same math on three different vectors.",
+     "latex": "\\frac{d}{dt}\\,|\\vec A|^{2} = 2\\,\\vec A\\cdot\\frac{d\\vec A}{dt} \\qquad \\Longrightarrow \\qquad \\Bigl(\\frac{d\\vec A}{dt} \\perp \\vec A\\Bigr) \\iff \\bigl(|\\vec A| = \\mathrm{const}\\bigr)",
+     "kit": "derivative"
+    },
+    {
+     "what": "Cross product: where both perpendicularities come from",
+     "why": "Torque is defined via the cross product: its magnitude equals the product of the lengths times the sine of the angle between them, and its direction is perpendicular to both factors by the right-hand rule. In our problem, the factors are the radius vector along the top's axis and the vertical weight. Hence both perpendicularities of step 5 come for free, without any physics: perpendicular to the vertical (the torque is horizontal) and perpendicular to the axis (the torque is perpendicular to $\\vec L$).\n\nThe sine of the angle gives another consequence worth checking by hand. When the axis becomes strictly vertical, the angle between the radius vector and the weight is zero, the sine is zero, there is no torque at all—and no precession either. Such a top is called sleeping: it stands straight and seems motionless. This state lives exactly until friction knocks it slightly sideways; then the sine ceases to be zero, and the top wakes up.",
+     "latex": "\\vec M = \\vec r \\times m\\vec g, \\qquad |\\vec M| = m g a \\sin\\theta, \\qquad \\vec M \\perp \\vec r,\\ \\ \\vec M \\perp \\vec g, \\qquad \\theta \\to 0 \\;\\Longrightarrow\\; \\vec M \\to 0",
+     "kit": "dotcross"
+    },
+    {
+     "what": "Angle as arc divided by radius—and a compact notation for all of precession",
+     "why": "In step 6, we computed the rotation angle as the ratio of arc to radius. This is the definition of a radian, and it works only for small angles, where the arc does not differ from the chord—and our angle is infinitesimal by construction, so there is no nitpicking. It is only important not to mix up the radius: the tip of the vector $\\vec L$ does not travel along a circle of radius $L$, but along a horizontal circle of radius $L\\sin\\theta$, because the vertical component does not move.\n\nEverything folds into one line that replaces the whole derivation. If a vector of constant length rotates about some axis with angular velocity $\\vec\\Omega$, then its derivative equals the cross product $\\vec\\Omega$ with the vector itself: the magnitude is exactly $\\Omega L \\sin\\theta$, and the direction is perpendicular to both. Equate this to the torque—and you get the same precession formula in one line. Remember this notation: in the third section it will become a working tool, but here it is just a beautiful coincidence.",
+     "latex": "\\Omega = \\frac{|d\\vec L|}{L\\sin\\theta\\;dt} \\qquad \\Longleftrightarrow \\qquad \\frac{d\\vec L}{dt} = \\vec\\Omega \\times \\vec L, \\quad \\bigl|\\vec\\Omega \\times \\vec L\\bigr| = \\Omega L \\sin\\theta = M",
+     "kit": "vector"
+    }
+   ]
+  },
+  "example": {
+   "title": "Example with numbers",
+   "lead": "Let's calculate a child's spinning top—and also find out at what rotation speed our formula stops being valid. The second part is more interesting than the first.",
+   "given": "Spinning top: a disk of mass $m = 80$ g and radius $R = 3.0$ cm, mounted on a stem; the tip is 3.0 cm below the disk's center, so $a = 0.030$ m. The axis is tilted at $\\theta = 20°$. Spun up to $\\omega = 300$ rad/s—that's 48 revolutions per second. $g = 9.81$ m/s². Find the precession speed and period, then figure out what happens when friction reduces $\\omega$ to 30 rad/s.",
+   "law": "The disk's moment of inertia $I = \\tfrac12 mR^{2}$ is taken ready-made from the first section. Then $L = I\\omega$, $M = mga\\sin\\theta$, and $\\Omega = mga/(I\\omega)$—the formula from step 6.",
+   "solution": [
+    {
+     "text": "Moment of inertia. We neglect the stem's mass: it is small and mostly sits close to the axis, so it contributes little to $\\sum m r^{2}$.",
+     "latex": "I = \\tfrac12 m R^{2} = 0.5 \\cdot 0.080 \\cdot (0.030)^{2} = 3.60\\cdot10^{-5}\\ \\text{kg·m}^{2}"
+    },
+    {
+     "text": "Angular momentum and torque due to gravity. Note: the torque came out small, eight thousandths of a newton-meter—but $L$ is also not large.",
+     "latex": "L = I\\omega = 3.60\\cdot10^{-5}\\cdot 300 = 1.080\\cdot10^{-2}\\ \\frac{\\text{kg·m}^{2}}{\\text{s}}, \\qquad M = mga\\sin 20° = 0.023544 \\cdot 0.342 = 8.05\\cdot10^{-3}\\ \\text{N·m}"
+    },
+    {
+     "text": "Precession speed. You can calculate it two ways—via $M/(L\\sin\\theta)$ or directly with the final formula, where the sine is already canceled. The answers must match, and this is a good check of your arithmetic.",
+     "latex": "\\Omega = \\frac{M}{L\\sin\\theta} = \\frac{8.05\\cdot10^{-3}}{1.080\\cdot10^{-2}\\cdot 0.342} = 2.18\\ \\frac{\\text{rad}}{\\text{s}} \\;=\\; \\frac{mga}{I\\omega} = \\frac{0.023544}{1.080\\cdot10^{-2}} = 2.18\\ \\frac{\\text{rad}}{\\text{s}}"
+    },
+    {
+     "text": "Period of one revolution around the axis and the number of spin revolutions during that time. The ratio $\\omega/\\Omega$ also serves as a check of the fast-top condition: the larger it is, the more reliable the formula.",
+     "latex": "T = \\frac{2\\pi}{\\Omega} = \\frac{6.283}{2.18} = 2.88\\ \\text{s}, \\qquad \\frac{\\omega}{\\Omega} = \\frac{300}{2.18} = 138"
+    },
+    {
+     "text": "Now about slowing down. Friction reduces $\\omega$, and the formula promises that $\\Omega$ grows inversely proportionally: plugging in 30 rad/s gives 21.8 rad/s. This number can no longer be trusted—it is of the same order as the spin itself, while the whole derivation relied on the opposite, $\\Omega \\ll \\omega$. Formally, $\\Omega$ and $\\omega$ become equal when $I\\omega^{2} = mga$; this is a lower-bound estimate, the true boundary lies higher—the exact condition is discussed in the appendix.",
+     "latex": "\\Omega = \\omega \\iff \\omega_{*} = \\sqrt{\\frac{mga}{I}} = \\sqrt{\\frac{0.023544}{3.60\\cdot10^{-5}}} = \\sqrt{654} = 25.6\\ \\frac{\\text{rad}}{\\text{s}}"
+    }
+   ],
+   "answer": "The top precesses at 2.18 rad/s and completes a circle in 2.9 seconds, managing to spin around its own axis 138 times in that interval. While the top is well spun up, the formula is accurate: at 300 rad/s the correction is about two percent. But it breaks down long before stopping—a rough estimate of the threshold gives 26 rad/s, the exact one (in the appendix) is about 78, i.e., roughly thirteen revolutions per second. Below this, the top still spins, but it no longer has a smooth precession around the vertical.",
+   "check": "Let's check in two ways. First, by eye: three seconds per revolution around the axis for a well-spun top is plausible—it's the slow, majestic motion you actually see.\n\\nSecond, by comparison with the wheel from step seven. The wheel's moment of inertia is 6800 times larger, but the torque due to gravity is only 208 times larger, and it is spun ten times slower. Multiplying the ratios: $\\Omega_{\\text{wheel}}/\\Omega_{\\text{top}} = 208 \\cdot 10 / 6800 = 0.31$, meaning the wheel should precess three times slower than the top. And indeed: 0.667 versus 2.18, ratio 0.31. Two independent calculations agree—arithmetic is fine.\n\\nAnd an honest caveat about what the calculation omits. A real top's tip is not a point: it slides and rolls on the table, the support point wanders, and friction adds up, slowly raising the axis toward the vertical. A toy top usually doesn't tilt more and more; instead, it straightens up as it spins up—and that's not our formula but a separate effect of friction at the contact point, the same one that makes a hard-boiled egg stand up when spun."
+  },
+  "constants": {
+   "title": "Constants of this section",
+   "lead": "All four are about the Earth, because the Earth is the main experimental specimen here: a top with a mass of six septillion kilograms that people have been observing for twenty-two centuries.",
+   "items": [
+    {
+     "sym": "ω⊕",
+     "latex": "\\omega_\\oplus",
+     "name": "Angular velocity of Earth's rotation",
+     "value": "7.292 115 · 10⁻⁵",
+     "unit": "rad/s",
+     "why": "It is calculated from the sidereal day — 86,164.1 seconds — not from the familiar 86,400. The difference of 3 minutes 56 seconds accumulates because during a day the Earth travels about a degree along its orbit, and to have the Sun again at the same point in the sky, it has to turn that extra degree. Astronomy lives by the sidereal day, everyday life by the solar day. The angular momentum of the Earth, which we calculate in step eight, includes precisely the sidereal value.",
+     "mnemo": "Seven and three tenths times ten to the minus fifth is about 15 degrees per hour, exactly the separation between neighboring time zones. Hence the navigators' rule: an hour of longitude equals fifteen degrees."
+    },
+    {
+     "sym": "I⊕/MR²",
+     "latex": "\\frac{I_\\oplus}{M_\\oplus R_\\oplus^{2}}",
+     "name": "Dimensionless moment of inertia of the Earth",
+     "value": "0.3307",
+     "unit": "dimensionless",
+     "why": "For a uniform sphere this coefficient is exactly 0.4. For the Earth it is smaller — and this is direct evidence, based on nothing else, that the mass is concentrated toward the center: a heavy iron core under a light rocky mantle. The number is measured from precession and satellite motion, not from drilling, and historically it was the first quantitative argument for a metallic core. For comparison: the Moon has 0.394 — almost a uniform sphere, almost no core; the Sun has 0.070 — matter is pulled toward the center extraordinarily strongly.",
+     "mnemo": "The smaller the coefficient, the more strongly the mass is concentrated toward the center. 0.4 — uniform sphere; 0.33 — Earth; 0.07 — Sun; 0 — a point."
+    },
+    {
+     "sym": "H",
+     "latex": "H",
+     "name": "Dynamic flattening of the Earth, $(C-A)/C$",
+     "value": "0.003 273 7 = 1 / 305.46",
+     "unit": "dimensionless",
+     "why": "The difference between the moment of inertia about the polar axis and about the equatorial axis, divided by the former. This is the non-sphericity that the Moon and Sun grab hold of: if the Earth were a perfect sphere, there would be no torque and no precession. Three thousandths look negligible, but they produce a torque of $1.8\\cdot10^{22}$ N·m and all twenty-six thousand years. The reciprocal, 305, is also famous: Euler computed it as the period of free polar motion in days. Observed is 433 days, and the discrepancy is the price for the Earth not being a perfectly rigid body.",
+     "mnemo": "Three thousandths — the entire geometric cause of precession. And its reciprocal, 305 days, is Euler's prediction, which nature corrected to 433."
+    },
+    {
+     "sym": "p",
+     "latex": "p",
+     "name": "Precession constant (general precession in longitude)",
+     "value": "50.29",
+     "unit": "arcseconds per year",
+     "why": "A full circle is 1,296,000 arcseconds; dividing by 50.29 gives 25,770 years, and with the unrounded 50.2877″ — the well-known 25,772 years. Over the two thousand years since the ancient catalogs, the vernal equinox point has moved by almost 28 degrees — that is, almost a full zodiac sign of 30 degrees. Hence the famous discrepancy: the astrological 'sign' and the constellation where the Sun actually is have drifted apart by about one item on the list. Strictly speaking, one distinguishes lunisolar precession (50.39″ per year — what our formula calculates) and general precession in longitude (50.29″); the difference is due to the slow rotation of the ecliptic plane itself from planetary attraction. We used 50.29, and for the estimate of the torque in step eight the choice affects only the third decimal: 1.796 versus 1.800.",
+     "mnemo": "Fifty arcseconds per year is the apparent diameter of the Moon in about 37 years, that is, in one generation. Hipparchus noticed the shift because he compared his measurements with records from a century and a half earlier."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "How this connects to the rest of the course",
+   "lead": "The equation $d\\vec L/dt = \\vec M$ is one of the most far-reaching formulas in the course: it works equally well on a spinning top, a planet, a proton in a scanner, and a neutron star.",
+   "items": [
+    {
+     "h": "Moment of inertia (Section 1 of this topic)",
+     "text": "Everything we used here — $I = kmR^{2}$ and the coefficients 1, ½, ⅖, 1/12 — was derived there and taken here as a given. From there also comes the equation $M = I\\varepsilon$, which in the second step is simply rewritten in vector form. If the precession formula seems to come out of nowhere, look at it this way: the numerator is the torque from the first section, the denominator is the angular momentum assembled from the moment of inertia of that same first section."
+    },
+    {
+     "h": "Conservation laws (topic \"Mechanics\")",
+     "text": "The conservation of angular momentum is derived there from the isotropy of space, and there the figure skater who pulls in her arms and spins faster is analyzed. Here we use the same law from the other side: we are interested not in the fact that the length of $\\vec L$ is conserved, but that its direction is conserved, and what happens when the torque is not zero."
+    },
+    {
+     "h": "Rotating frame (Section 3 of this topic)",
+     "text": "The formula $d\\vec A/dt = \\vec\\Omega \\times \\vec A$, which appeared here as a compact notation for precession, will become the main working tool there: applied twice, it gives the centrifugal and Coriolis forces. For now, remember it as a fact about a rotating vector — the body in Section 3 will be a point, and angular momentum will not be needed there at all."
+    },
+    {
+     "h": "Spin and magnetic resonance",
+     "text": "A proton has its own angular momentum — spin — and an associated magnetic moment. In an external field, a torque acts on the magnetic moment, perpendicular to the spin, and then our derivation repeats exactly: the spin does not align with the field but precesses around it at a rate $\\Omega = \\gamma B$. In a field of 1.5 tesla, that is 64 million revolutions per second. An MRI scanner listens precisely to this precession, so a knee image is a direct application of the formula derived on a spinning top."
+    },
+    {
+     "h": "Pulsars",
+     "text": "When the core of a massive star collapses into a neutron star, its radius shrinks by a factor of about 70,000. The moment of inertia scales as the square of the radius, angular momentum is conserved, so the angular velocity grows as the inverse square of the radius — by almost five billion times. From the Sun's 25 days, that would give more than two thousand revolutions per second. The fastest observed are around 716 — and that is an honest discrepancy: most of the angular momentum is carried away by the ejected envelope. The pulsar's axis, like that of any free top, holds its direction in space, and therefore its radiation reaches us as strictly periodic pulses."
+    },
+    {
+     "h": "Gravity and relativity",
+     "text": "In general relativity, a rotating mass drags space itself along, and a gyroscope hanging nearby experiences an additional torque. The effect was predicted by Josef Lense and Hans Thirring in 1918, and measured by the Gravity Probe B satellite, whose four ultra-precise gyroscopes drifted by 37.2 milliarcseconds over a year, with 39.2 predicted. The physics is different, but the equation is the same: $d\\vec L/dt = \\vec M$."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Fun: try it with your hands",
+   "lead": "The two experiments below require a boiled egg and a book with a rubber band. Both demonstrate things that do not follow from our formula — and that is exactly why they are worth doing.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "kitchen experiment",
+     "h": "A boiled egg stands on its end",
+     "text": "Boil an egg hard and cool it. Lay it on its side on a smooth table and spin it as fast as you can with your fingers. After a second or two, the egg will rise by itself and spin upright on its blunt end. A raw egg will not do the same — why is explained in the first paragraph: the liquid inside barely spins with the shell. You don't need a plate under the egg; nothing breaks; you just need a smooth, dry table.",
+     "answer": "The first thing to note: when the egg stands up, its center of mass RISES by about a centimeter. This is work against gravity, and it is done using rotational energy — after rising, the egg spins noticeably slower. So there must be a force that does this work, and there is: sliding friction at the point of contact. While the egg lies on its side and spins, the contact point slips on the table, and the friction force provides a torque that lifts the egg.\n\nThis is the only place in the paragraph where friction decides everything — in our derivation, it was absent altogether. And honestly, the full solution to this problem was obtained only in 2002. Keith Moffatt and Yasuhiro Shimomura published it in Nature, showing that the rising speed is determined by a single dimensionless condition linking rotation and friction, and that if spun too slowly, the egg will never stand up. The problem looks like a toy, yet it took longer to solve than many accelerator questions.\n\nThe same mechanism works in the tippe-top toy — a mushroom with a cut-off top that, when spun on its cap, flips over and stands on its stem, raising its center of mass by several centimeters."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "kitchen experiment",
+     "h": "A book thrown three ways",
+     "text": "Take a thick book, tie it with a rubber band across so it doesn't open in flight. Toss it a little above the sofa or bed, spinning it in three different ways: around the spine (the axis runs along the spine: the book rotates like a door on its hinges, only the axis is in the middle); flat like a frisbee, around an axis sticking out of the cover; and over the head, around a horizontal axis parallel to the top edge. The first two times, the book will calmly reach the sofa in the same rotation. The third time, it will inevitably flip around the spine — and it flips every time, no matter how you throw it.",
+     "answer": "The book has three dimensions, and each axis has its own moment of inertia. For our book 20 × 15 × 3 cm, the ratios come out to 2.67 : 1.75 : 1: the largest is around the axis sticking out of the cover, the smallest around the spine, and in the middle is exactly the axis around which the book refuses to spin. This is a general law: free rotation is stable around the axes of greatest and least moment of inertia and unstable around the middle, intermediate one. Poinsot proved this in 1834, and there is no special physics here — only that $\\vec L$ is generally not parallel to $\\vec\\omega$, while in our derivation we assumed they were parallel.\n\nIt is easy to check that this is not a property of the book: the same flip is shown by a tennis racket, a TV remote, and a phone. The most famous recording was made in 1985 on the Salyut-7 station: cosmonaut Vladimir Dzhanibekov unscrewed a wing nut, it flew off into weightlessness, traveled a few centimeters, and tumbled, then again, then again — with a steady period. In weightlessness, where nothing interferes, the tumbles go on forever, and the phenomenon got the name of the Dzhanibekov effect."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradox",
+     "h": "Where does the energy of precession come from",
+     "text": "A precessing wheel moves — so this motion has kinetic energy. But the torque of gravity is horizontal, the center of mass moves along a horizontal circle, and gravity does no work: the force is vertical, the displacement horizontal. The spin itself also gives nothing, $\\omega$ is constant by condition. Where did the energy come from?",
+     "answer": "From a very short fall at the very beginning. When you release the wheel, it does not start precessing instantly: first the axis sags a little, and it is on this sagging that gravity does work. Then the axis rises back, sags again — this is nutation — the oscillations quickly damp out due to friction, and a steady precession remains at a slightly lower level.\n\nThe numbers match, but not as simply as one would like. The moment of inertia of our wheel about the transverse axis through the suspension point is $\\tfrac12 mR^{2} + ma^{2} = 0.2475$ kg·m², and the kinetic energy of precession is $\\tfrac12 \\cdot 0.2475 \\cdot 0.667^{2} = 0.055$ J. And the sagging turns out to be twice as generous as needed for one precession: to the average level, the axis drops by 1.3 degrees, i.e., the center of mass descends by 5.6 millimeters, and gravity gives off $mgh = 0.11$ J. The second half is not lost — nutation takes it: the oscillation of the axis goes at the same magnitude of speed as the precession, so it carries away exactly the same amount. Friction eats the nutation in a second, the axis remains at the average level, and the precession lives on with its 0.055 J. Nothing is lost and nothing is taken from nowhere.\n\nIt is useful to estimate the scale: the energy of the wheel's own rotation $\\tfrac12 I\\omega^{2} = 110$ J, so the precession carries away one two-thousandth of it, and together with nutation — one thousandth. That is why it can be considered free and why in the derivation we calmly wrote $\\omega = \\mathrm{const}$."
+    },
+    {
+     "icon": "fact",
+     "kind": "fun fact",
+     "h": "The North Star is a position, not a name",
+     "text": "The Earth's axis traces a cone over 25,772 years, and with it, the north celestial pole moves across the sky. Today, near it is α Ursae Minoris, which we call the North Star. It was not always so and will not remain so.",
+     "answer": "In the time of the Egyptian pyramids, around 2700 BC, the celestial pole stood near Thuban — α Draconis, and it is toward it, according to one version, that the narrow shafts in the Great Pyramid of Giza are directed. The closest approach of the North Star to the pole will be around 2100 AD — at 27 arcminutes — and then it will begin to move away. In about 12,000 years, its place will be taken by Vega, one of the brightest stars in the sky, and the pole star will become truly noticeable.\n\nHipparchus discovered all this without knowing either the cause or what he had discovered: he simply compared his measurements of the longitude of Spica with the records of Timocharis made 150 years earlier, and found a discrepancy of two degrees, too large for an error. A century and a half of observations against one and a half degrees per century — a rare case where a discovery is made by patience, not instruments. The cause was named by Newton eighteen centuries later."
+    },
+    {
+     "icon": "edge",
+     "kind": "limit of applicability",
+     "h": "Where the mechanical gyroscope ends",
+     "text": "The rotor in a gimbal mount was for a century and a half the only way to remember a direction. Today, in a phone, in an airplane, and in a rocket, there are devices called gyroscopes inside which nothing rotates at all.",
+     "answer": "The mechanical gyroscope is wonderful as long as long-term operation is not needed. Its trouble is drift: any parasitic torque in the bearings, however small, according to the formula $\\Omega = M/(I\\omega)$ turns the axis, and the error accumulates linearly with time. A good aviation gyroscope drifts by a degree per hour, the best laboratory ones by hundredths of a degree; for a multi-hour flight without satellite correction, this is not enough.\n\nThe first workaround was the Sagnac effect: if you send two light beams around a ring in opposite directions, then when the ring rotates, the beams arrive with different travel times, and the difference is proportional to the angular velocity. No bearings, no inertia, nothing wears out. A laser gyroscope based on this principle has been on airplanes since the seventies, and a fiber-optic one — almost everywhere precision is needed.\n\nIn a phone, however, there is a third option — micromechanical: a silicon plate the size of a grain of sand oscillates, and the rotation of the device shifts the plane of its oscillations. Strictly speaking, this is no longer a gyroscope, but a measurer of the Coriolis effect, and it works on the physics of the third paragraph, not this one. Its accuracy is orders of magnitude worse than a laser one, but it costs a dollar and fits in a phone case — something no one could have expected from a Foucault top."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "What we glossed over",
+   "blocks": [
+    {
+     "h": "Nutation: a jitter that is not in our formula",
+     "text": "We obtained a particular solution — regular precession, where the tilt of the axis is strictly constant. The general solution also contains oscillations of $\\theta$, called nutation. They are easy to see: if you release a tilted top from complete rest, without giving it a push in azimuth, it will first start to fall; the fall will spin up precession, precession will raise the axis back — and the tip of the axis will trace not a circle but a small cycloid. The frequency of these oscillations for a fast top is approximately $I\\omega/I_\\perp$, where $I_\\perp$ is the moment of inertia about the transverse axis through the pivot point. For our wheel this is $0.245 \\cdot 30 / 0.2475 = 29.7$ rad/s — almost $\\omega$ itself, meaning the jitter is very fast and very small. Its amplitude is also calculated: an axis released from rest drops by $\\Delta\\theta = M I_\\perp/(I\\omega)^{2} = 1.3°$ to the average level and by twice that, 2.6°, at the lowest point of the swing. Friction damps these oscillations within a second, leaving a steady circular motion at the average level.\n\nEarth also has nutation, and it has long been measured. Its main term is 9.2 arcseconds with a period of 18.6 years, and this period is not accidental: it is the time for one revolution of the nodes of the lunar orbit. The torque from the Moon is not constant precisely because the plane of its orbit slowly rotates. Nutation was discovered by James Bradley in 1748, after observing for exactly one such period.",
+     "latex": "\\omega_{\\text{nut}} \\approx \\frac{I\\omega}{I_\\perp}, \\qquad \\Delta\\theta \\approx \\frac{M\\,I_\\perp}{(I\\omega)^{2}} = \\frac{4.905 \\cdot 0.2475}{7.35^{2}} = 0.022\\ \\text{rad} = 1.3°, \\qquad \\text{full swing } 2\\Delta\\theta = 2.6°"
+    },
+    {
+     "h": "Angular momentum is not always along the axis",
+     "text": "In the first step we wrote $\\vec L = I\\vec\\omega$, as if $I$ were an ordinary number. In general this is not so: the moment of inertia is a tensor, and $\\vec L$ is parallel to $\\vec\\omega$ only when rotation is about one of the three principal axes of the body. Every body has such axes — exactly three, mutually perpendicular — and they correspond to three principal moments of inertia $I_1 < I_2 < I_3$.\n\nThis leads to something our formula does not know at all: free rotation is stable about the axes with the largest and smallest moments and unstable about the intermediate one. This is the intermediate axis theorem, proved by Poinsot in 1834; in the kitchen it is demonstrated with a book and a rubber band, in space — with the Dzhanibekov nut. Earth also does not rotate strictly about its figure axis: the pole wanders in a spiral a few meters across with a period of 433 days. Euler predicted 305 days for a perfectly rigid Earth — this is $1/H$, the inverse of the dynamic flattening from the constants table — and the discrepancy with the observed 433 days is a measure of the fact that Earth is elastic, not rigid.",
+     "latex": "\\vec L = \\hat I\\,\\vec\\omega, \\qquad \\vec L \\parallel \\vec\\omega \\iff \\vec\\omega\\ \\text{along a principal axis}; \\qquad I_1 < I_2 < I_3:\\ \\text{rotation about } I_2\\ \\text{is unstable}"
+    },
+    {
+     "h": "The top slows down, but we assumed ω constant",
+     "text": "Strictly speaking, the formula $\\Omega = mga/(I\\omega)$ is derived for constant $\\omega$, but for a real top it decreases. The quasi-stationary approximation saves us: as long as friction is small compared to the rotation itself, the formula can be applied at each moment, substituting the current $\\omega(t)$. This is exactly how the observed picture is obtained — the axis traces increasingly faster circles.\n\nBut the approximation has a bottom. The condition for a fast top, $I\\omega^{2} \\gg mga$, is eventually violated, and a rough estimate of the threshold is $\\omega_{*} = \\sqrt{mga/I}$: for the top from the example it is 25.6 rad/s, for the wheel 4.5 rad/s. This estimate is too low, and it is more honest to state where the real boundary is. If we do not discard the transverse moment of inertia, the condition for the existence of regular precession looks like this: $(I\\omega)^{2} \\ge 4\\,I_\\perp\\,mga\\cos\\theta$. For the top at a tilt of 20°, the transverse moment about the tip is $\\tfrac14 mR^{2} + ma^{2} = 9.0\\cdot10^{-5}$ kg·m², and the condition gives not 26 but about 78 rad/s — three times the rough estimate. And for the wheel the axis is horizontal, the cosine is zero, the right-hand side vanishes entirely: a regular solution exists at any spin, but the catch is that at slow spin one still has to get into it — nutation will not be a small ripple but a full-scale wobble of the axis. Below the threshold, precession becomes comparable to the intrinsic rotation, nutation ceases to be a small correction, and there is no longer any 'tilt is constant' — the top falls over. Along with that, the last assumption disappears: the pivot point is not ideal, the tip slides and rolls, and this friction separately raises or lowers the axis — an effect that stands a boiled egg on end and flips a tippe top.",
+     "latex": "\\Omega(t) = \\frac{mga}{I\\,\\omega(t)} \\quad \\text{works while} \\quad \\omega \\gg \\omega_{*} = \\sqrt{\\frac{mga}{I}}; \\qquad \\text{exactly: } (I\\omega)^{2} \\ge 4\\,I_\\perp\\,mga\\cos\\theta"
+    },
+    {
+     "h": "What lies behind our 1.8·10²² N·m",
+     "text": "Both estimates of the eighth step are honestly independent — one comes from the observed precession period, the other from the law of gravitation — but both rely on the same quantity $C - A$, the difference of Earth's principal moments of inertia. The agreement to fractions of a percent therefore checks the arithmetic and the model of Earth's shape, not the theory of gravitation itself.\n\nWhat is missing from the calculation. We averaged the torque over the orbits of the Moon and the Sun, thereby discarding all nutation. We did not distinguish between luni-solar precession (50.39″ per year) and general precession in longitude (50.29″): the difference is due to the slow rotation of the ecliptic plane itself caused by planetary attraction. We treated Earth as rigid, whereas the oceans, the liquid outer core, and the viscous mantle respond to the tidal torque in their own ways, and modern precession models are already geophysics, not top mechanics. Finally, there is a relativistic addition: the geodetic precession of Earth's axis is about 19 milliarcseconds per year against 50,290 milliarcseconds of the main effect — 2,500 times smaller, but it has been measured and is included in modern astronomical standards.",
+     "latex": "M = \\Omega L \\sin\\varepsilon = 1.80\\cdot10^{22}\\ \\text{N·m} \\quad \\text{versus} \\quad M_{\\text{Moon}} + M_{\\text{Sun}} = 1.24\\cdot10^{22} + 0.57\\cdot10^{22} = 1.81\\cdot10^{22}\\ \\text{N·m}"
+    }
+   ]
+  },
+  "memo": {
+   "essence": "Angular momentum $\\vec L = I\\vec\\omega$ is a vector along the axis. The equation $d\\vec L/dt = \\vec M$ says that torque adds to it an increment in ITS direction. For a heavy top, the torque is horizontal and perpendicular to $\\vec L$, so it can neither shorten the vector nor reduce its vertical component: the tilt of the axis is locked, only the azimuth changes. The speed of this motion is $\\Omega = mga/(I\\omega)$, and the tilt does not enter it.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "$\\Omega = mga/(I\\omega)$",
+     "text": "The faster the top spins, the SLOWER it precesses: $\\omega$ is in the denominator"
+    },
+    {
+     "icon": "scale",
+     "title": "Two perpendicularities",
+     "text": "$\\vec M \\perp \\vec L$ keeps the vector's length, $\\vec M \\perp$ vertical keeps its vertical projection. Together they lock the tilt"
+    },
+    {
+     "icon": "fact",
+     "title": "The tilt canceled out",
+     "text": "$\\sin\\theta$ appears both in the torque and in the turning radius, so the angle does not enter the precession speed at all"
+    },
+    {
+     "icon": "edge",
+     "title": "Earth is the same top",
+     "text": "25,772 years, tilt 23.44°, torque from the Moon and Sun on the equatorial bulge $1.8\\cdot10^{22}$ N·m"
+    }
+   ],
+   "where": [
+    "Bicycle wheel on a rope: the axle does not fall but goes around a circle in 9.4 seconds",
+    "Rifled bullet and frisbee: zero torque keeps the axis direction, and the body does not tumble",
+    "Gyrocompass and aviation gyroscope: the axis remembers its direction, and drift is calculated with the same $\\Omega = M/(I\\omega)$",
+    "Precession of Earth's axis: 50.3 arcseconds per year, change of the pole star, shift of the zodiac by one sign",
+    "Magnetic resonance imaging: the proton spin precesses in a 1.5 T field at 64 MHz"
+   ],
+   "watchOut": "Three traps. First, thinking that $\\vec L$ points where the body's points run; it points along the axis, and the right-hand rule here is not a decoration but a definition. Second, expecting that a fast-spinning top will also move sideways faster; it is the opposite, $\\omega$ is in the denominator. Third, applying the formula to a slow top: it is valid only when $I\\omega^{2} \\gg mga$, and below the threshold $\\sqrt{mga/I}$ precession becomes comparable to the spin itself, and there is no constant tilt anymore."
+  },
+  "quiz": [
+   {
+    "id": "rg1",
+    "type": "mcq",
+    "q": "The axis of a spinning top is tilted, gravity pulls the center of mass down, and the torque about the tip is not zero. Why doesn't the axis fall?",
+    "options": [
+     "The torque is horizontal: it can neither change the length of $\\vec L$ nor reduce its vertical component, and lowering the axis requires one of the two",
+     "The torque of gravity is balanced by the reaction force at the pivot, so the net torque is zero",
+     "The centrifugal force arising during rotation lifts the axis and compensates gravity",
+     "The axis actually does fall, just so slowly that it is imperceptible during the observation time"
+    ],
+    "answer": 0,
+    "why": "The tilt of the axis is determined by the ratio of the vertical projection $L_z$ to the length $L$. The torque is horizontal, so its vertical projection is zero and $L_z$ does not change; the torque is perpendicular to $\\vec L$, so the length does not change either. The ratio is constant, the tilt is locked, only the azimuth is free.\n\nThe answer about balanced torques is checked in one line: the reaction force is applied at the pivot point itself, its lever arm relative to that point is zero, so it produces no torque at all. The centrifugal force option is wrong because no such force exists in an inertial frame—inertial forces appear only when switching to a rotating frame, as mentioned in the third paragraph; moreover, it would be directed away from the axis, not upward. The 'falls imperceptibly' option describes a real top, but for a different reason: a real axis does slowly droop, but due to friction, which is absent in our derivation, whereas an ideal top keeps its tilt strictly forever.",
+    "hint": "Lowering the axis means increasing the angle $\\theta$, i.e., decreasing $\\cos\\theta = L_z/L$. Look at which two quantities must change for that, and ask whether a horizontal torque can change either of them."
+   },
+   {
+    "id": "rg2",
+    "type": "mcq",
+    "q": "The same top is spun twice as fast—everything else unchanged. What happens to the precession rate?",
+    "options": [
+     "It halves",
+     "It doubles",
+     "It stays the same: the torque of gravity is the same",
+     "It quadruples"
+    ],
+    "answer": 0,
+    "why": "$\\Omega = mga/(I\\omega)$—the spin angular velocity is in the denominator, so precession is inversely proportional to spin. You can understand this without the formula: in time $dt$, the torque gives the same increment $d\\vec L = \\vec M\\,dt$, but it now rotates a vector twice as long, so by half the angle.\n\nThe 'doubles' option is the most common intuitive error in this topic: it seems that a fast top should also run sideways faster. The 'stays the same' option is true for the torque, but not for precession: the numerator is indeed the same, but the denominator has changed. You can also check this by eye—a dying top darts across the table much faster than a freshly spun one, even though the torque of gravity is exactly the same.",
+    "hint": "Write down the formula and see whether $\\omega$ is in the numerator or denominator. Then check yourself by observation: how does a top behave just before it falls, when the spin has almost died?"
+   },
+   {
+    "id": "rg3",
+    "type": "free",
+    "q": "In your own words: why can a torque perpendicular to the vector $\\vec L$ not change the length of that vector, but only rotate it?",
+    "keywords": [
+     "perpendicular",
+     "length",
+     "direction",
+     "rotate",
+     "increment",
+     "along",
+     "projection",
+     "scalar"
+    ],
+    "needed": 2,
+    "why": "The increment of a vector can be decomposed into two parts: one along the vector itself and one across it. Only the first lengthens or shortens, the second purely rotates. If the increment is entirely perpendicular, there is simply no longitudinal part, so the length remains unchanged.\n\nFormally, it is one line: the derivative of the squared length equals twice the dot product of the vector and its derivative, and the dot product of perpendicular vectors is zero. The converse is also true—if the length is constant, the derivative must be perpendicular.\n\nIt is useful to note that the vector here can be anything. The same reasoning explains why a force perpendicular to velocity does not change its magnitude: hence uniform circular motion, and also why the magnetic force does no work.",
+    "hint": "Decompose the increment into two components—along the vector and across—and ask what each does. Or compute the derivative of $\\vec L \\cdot \\vec L$."
+   },
+   {
+    "id": "rg4",
+    "type": "estimate",
+    "q": "A bicycle wheel of mass 2.0 kg with moment of inertia $I = 0.245$ kg·m² is spun up to $\\omega = 30$ rad/s and hung by the end of its axle at a distance $a = 0.10$ m from the wheel's center. What is the angular velocity of precession? Answer in rad/s, $g = 9.81$ m/s².",
+    "answer": 0.267,
+    "unit": "rad/s",
+    "why": "$\\Omega = mga/(I\\omega) = 2.0 \\cdot 9.81 \\cdot 0.10 / (0.245 \\cdot 30) = 1.962/7.35 = 0.267$ rad/s. The period of the axis's orbit is $T = 2\\pi/\\Omega = 23.5$ s—almost half a minute per revolution.\n\nA check without a calculator: in step seven, with a lever arm of 0.25 m, the result was 0.667 rad/s. Here the lever arm is 2.5 times smaller, and it enters the formula linearly, so the answer should also be 2.5 times smaller: $0.667/2.5 = 0.267$. It matches.\n\nAlso check the fast-top condition: $\\sqrt{mga/I} = \\sqrt{1.962/0.245} = 2.8$ rad/s against the working 30—a more than tenfold margin, so the formula applies confidently.",
+    "tolAbs": 0.05,
+    "hint": "Everything is directly in the formula $\\Omega = mga/(I\\omega)$: plug in the numbers and don't forget that $a$ is the distance from the pivot to the center of mass, not the wheel's radius."
+   }
+  ]
+ },
+ "es": {
+  "formula": {
+   "name": "Momento angular y velocidad de precesión",
+   "latex": "\\vec L = I\\vec\\omega, \\qquad \\frac{d\\vec L}{dt} = \\vec M, \\qquad \\Omega = \\frac{mga}{I\\omega}",
+   "alsoKnown": "Ecuación de momentos en forma vectorial; fórmula de la precesión regular de una peonza simétrica pesada. Para la Tierra, el mismo fenómeno se llama precesión de los equinoccios",
+   "authors": [
+    {
+     "who": "Hiparco de Nicea",
+     "year": "alrededor del 127 a. C.",
+     "what": "comparó sus mediciones de la posición de Espiga con los registros de Timocares, hechos un siglo y medio antes, y descubrió que el punto del equinoccio de primavera se desplaza a lo largo de la eclíptica no menos de un grado por siglo. La cautela en la formulación era apropiada: la velocidad real es de 1,4 grados por siglo. Descubrió el fenómeno, pero no conoció las causas"
+    },
+    {
+     "who": "Isaac Newton",
+     "year": "1687",
+     "what": "en el tercer libro de los 'Principia' explicó la precesión de los equinoccios por la atracción de la Luna y el Sol sobre el abultamiento ecuatorial de la Tierra. Este es el primer cálculo de un giroscopio en la historia, y se hizo directamente sobre un planeta, siglo y medio antes de que se construyera un giroscopio sobre una mesa"
+    },
+    {
+     "who": "Leonhard Euler",
+     "year": "1765",
+     "what": "en 'Teoría del movimiento de los cuerpos sólidos' escribió las ecuaciones de rotación en ejes fijos al cuerpo, introdujo los ejes principales de inercia y los ángulos que llevan su nombre; de estas ecuaciones, la precesión y la nutación se obtienen como soluciones particulares"
+    },
+    {
+     "who": "Léon Foucault",
+     "year": "1852",
+     "what": "construyó un rotor rápido en un soporte cardán, mostró que su eje mantiene la dirección mientras la habitación gira junto con la Tierra, y le dio al dispositivo su nombre: gyroscope, 'el que mira la rotación'"
+    }
+   ],
+   "story": "Entre el descubrimiento y la explicación pasaron dieciocho siglos, y entre la explicación y la explicación correcta, otros sesenta años. Newton en los 'Principia' obtuvo un número casi correcto para la precesión del eje terrestre, pero en el camino se equivocó dos veces: pensó que la Luna actúa sobre el abultamiento de la Tierra aproximadamente cuatro veces y media más fuerte que el Sol, mientras que la relación real es un poco más del doble, y al mismo tiempo estimó incorrectamente el propio abultamiento. Los errores se compensaron parcialmente entre sí, y el resultado se pareció a la verdad. La derivación rigurosa la dio Jean Le Rond d'Alembert en 1749, y es a partir de él que se suele contar la teoría de la precesión como un cálculo, no como una conjetura.\n\nEl dispositivo apareció después de la teoría. Foucault en 1851 demostró la rotación de la Tierra con un péndulo, y al año siguiente quiso mostrar lo mismo sin una cuerda larga y una cúpula alta. Tomó un disco pesado, lo hizo girar a varios cientos de revoluciones por segundo y lo suspendió en un soporte cardán, donde ningún momento podía alcanzarlo. El eje mantenía la dirección, mientras todo el laboratorio giraba lentamente respecto a él. El experimento resultó poco convincente por una razón puramente técnica: la fricción en los cojinetes consumía la rotación en pocos minutos, y no se pudo medir nada cuantitativamente. Quedó el nombre. Medio siglo después, Hermann Anschütz-Kaempfe abordó el problema para el cual la brújula magnética no sirve en absoluto: la navegación dentro del casco de acero de un submarino, y en 1908 construyó un girocompás funcional. Desde ese momento, el giroscopio pasó de ser un juguete de demostración a un dispositivo sin el cual ningún avión vuela y ningún cohete alcanza la órbita.",
+   "symbols": [
+    {
+     "sym": "L",
+     "latex": "\\vec L",
+     "what": "momento angular del cuerpo",
+     "unit": "kg·m²/s",
+     "note": "vector; al girar alrededor del eje principal, se dirige a lo largo del eje según la regla de la mano derecha, no hacia donde corren los puntos del cuerpo"
+    },
+    {
+     "sym": "I",
+     "latex": "I",
+     "what": "momento de inercia respecto al eje de rotación",
+     "unit": "kg·m²",
+     "note": "se toma de la primera sección: $I = kmR^2$, donde $k$ es 1 para un aro, ½ para un disco, ⅖ para una esfera"
+    },
+    {
+     "sym": "ω",
+     "latex": "\\vec\\omega",
+     "what": "velocidad angular de rotación propia",
+     "unit": "rad/s",
+     "note": "también un vector a lo largo del eje; para un cuerpo simétrico que gira alrededor del eje principal, $\\vec L$ y $\\vec\\omega$ son paralelos; en el caso general no lo son"
+    },
+    {
+     "sym": "M",
+     "latex": "\\vec M",
+     "what": "momento de las fuerzas externas respecto al punto de apoyo",
+     "unit": "N·m",
+     "note": "para una peonza pesada, es el momento del peso; la reacción del soporte se aplica en el propio punto de apoyo, su brazo es cero, no produce momento"
+    },
+    {
+     "sym": "Ω",
+     "latex": "\\Omega",
+     "what": "velocidad angular de precesión",
+     "unit": "rad/s",
+     "note": "velocidad con la que el eje recorre la vertical; no confundir con $\\omega$: para una peonza rápida, $\\Omega$ es decenas y cientos de veces menor"
+    },
+    {
+     "sym": "θ",
+     "latex": "\\theta",
+     "what": "ángulo de inclinación del eje respecto a la vertical",
+     "unit": "rad o °",
+     "note": "no entra en la fórmula final: se cancela. Una peonza vertical ($\\theta = 0$) no precesa en absoluto: no hay momento"
+    },
+    {
+     "sym": "a",
+     "latex": "a",
+     "what": "distancia desde el punto de apoyo hasta el centro de masa",
+     "unit": "m",
+     "note": "se mide a lo largo del eje; cuanto más lejos esté el centro de masa del apoyo, mayor será el momento y más rápida la precesión"
+    },
+    {
+     "sym": "g",
+     "latex": "g",
+     "what": "aceleración de la gravedad",
+     "unit": "m/s²",
+     "const": "g",
+     "note": "entra solo a través del momento del peso; en ingravidez $M = 0$, no hay precesión, el eje simplemente mantiene la dirección"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Derivación rigurosa",
+   "lead": "Del primer apartado solo necesitamos dos cosas: la definición de momento de inercia $I$ y la ecuación de rotación $M = I\\varepsilon$. Ambas se toman como dadas, no las vamos a redescubrir. Todo lo demás en esta derivación no es física, sino geometría de vectores: dos perpendicularidades y un arco.",
+   "steps": [
+    {
+     "text": "Tomemos un cuerpo que gira alrededor de un eje fijo con velocidad angular $\\omega$. Cada punto tiene un momento lineal $m_i v_i$ y un brazo $r_i$: la distancia al eje. La suma de los productos del momento lineal por el brazo se llama momento angular respecto al eje. Sustituimos $v_i = \\omega r_i$ del primer apartado, y la suma conocida se factoriza sola: es el mismo momento de inercia $I$.\n\nPero $L$ no es un número, sino un vector, y su dirección es la fuente de la mitad de la confusión en este tema. Apunta A LO LARGO DEL EJE, no hacia donde corren los puntos del cuerpo. La elección no es arbitraria: la dirección del eje es la única dirección en el cuerpo que la rotación deja en su lugar; todas las demás giran con él, y solo a lo largo del eje se puede dibujar una flecha que no se escape. Hacia dónde a lo largo del eje lo determina la regla de la mano derecha: dobla los dedos en el sentido de la rotación y el pulgar señalará $\\vec L$.",
+     "latex": "L = \\sum_i m_i v_i r_i = \\sum_i m_i \\omega r_i^{2} = \\Bigl(\\sum_i m_i r_i^{2}\\Bigr)\\,\\omega = I\\omega, \\qquad \\vec L = I\\vec\\omega",
+     "figure": "rigilvec",
+     "figCaption": "Los puntos de la llanta corren en círculo, pero el vector $\\vec L$ apunta a lo largo del eje: es la única dirección que la rotación deja en su lugar"
+    },
+    {
+     "text": "Diferenciemos esta igualdad con respecto al tiempo. El cuerpo es rígido, el eje es el mismo, por lo tanto $I$ es constante y sale de la derivada. Queda la derivada de la velocidad angular: la aceleración angular $\\vec\\varepsilon$, y el producto $I\\vec\\varepsilon$ ya lo conocemos: es el momento de las fuerzas externas, la ecuación de rotación del primer apartado.\n\nFormalmente no hemos escrito nada nuevo. En cuanto al contenido, lo hemos escrito todo. La forma escalar $M = I\\varepsilon$ solo puede responder a una pregunta: más rápido o más lento. La forma vectorial responde además a la pregunta \"hacia dónde girará el eje\", que es la que nos ocupa. Hay que leerla literalmente y sin corregirla con el sentido común: en el tiempo $dt$ el vector $\\vec L$ recibe un incremento $d\\vec L = \\vec M\\,dt$ dirigido HACIA DONDE MIRA EL MOMENTO. No hacia donde mira el propio $\\vec L$, ni hacia donde tira la fuerza.",
+     "latex": "\\frac{d\\vec L}{dt} = I\\,\\frac{d\\vec\\omega}{dt} = I\\vec\\varepsilon = \\vec M \\qquad \\Longrightarrow \\qquad d\\vec L = \\vec M\\,dt",
+     "figure": "rigidldt",
+     "figCaption": "El incremento se suma al vector según la regla del paralelogramo y se dirige a lo largo del momento, no a lo largo del propio $\\vec L$"
+    },
+    {
+     "text": "Primero analicemos el caso simple: no hay momento externo. Entonces $\\vec L$ es constante, y la constancia de un vector implica la constancia de dos cosas: su longitud y su dirección. La longitud se menciona más a menudo (la patinadora que junta los brazos se analiza en el tema \"Leyes de conservación\"), pero en la tecnología casi siempre funciona la segunda parte: un cuerpo giratorio que vuela libremente mantiene su eje en el espacio.\n\nUna bala con estrías: el paso de estría es de 25 centímetros a una velocidad de 800 m/s, lo que da 3200 revoluciones por segundo, es decir, $\\omega \\approx 2\\cdot10^{4}$ rad/s: ciento noventa mil revoluciones por minuto. El eje de esa bala se mantiene a lo largo de la trayectoria, y la bala no da vueltas de campana, sino que va de punta. Un frisbee a diez revoluciones por segundo mantiene su plano y por eso planea, no se cae. Un satélite, girado alrededor de un eje apuntando a un punto deseado, mantiene la orientación sin encender ni un solo motor. En los tres casos no actúa una \"fuerza\", sino simplemente la ausencia de momento.",
+     "latex": "\\vec M = 0 \\;\\Longrightarrow\\; \\vec L = \\mathrm{const} \\;\\Longrightarrow\\; |\\vec L| = \\mathrm{const}\\ \\ \\text{y}\\ \\ \\hat L = \\mathrm{const}",
+     "figure": "rigifree",
+     "figCaption": "El momento nulo conserva no solo la magnitud $L$, sino también la dirección del eje en el espacio: en esto se basa toda la estabilización por rotación"
+    },
+    {
+     "text": "Ahora incluyamos la gravedad. La peonza se apoya en la punta en el punto $O$, el eje está inclinado respecto a la vertical un ángulo $\\theta$, el centro de masa está en el eje a una distancia $a$ de la punta. El peso $m\\vec g$ está aplicado en el centro de masa y dirigido hacia abajo. El momento respecto al punto de apoyo es igual al producto vectorial del radio vector por la fuerza.\n\nEl módulo se lee como fuerza por brazo, y aquí el brazo es la distancia horizontal desde la vertical que pasa por la punta hasta el centro de masa, es decir, $a\\sin\\theta$. La dirección la da la regla del producto vectorial: el resultado es perpendicular a ambos factores. Es perpendicular al peso, por lo tanto perpendicular a la vertical, por lo tanto estrictamente horizontal para cualquier inclinación. Es perpendicular al radio vector, que está a lo largo del eje, por lo tanto también perpendicular a $\\vec L$, que está en el mismo lugar. Recuerde ambas perpendicularidades: el siguiente paso consiste enteramente en ellas.",
+     "latex": "\\vec M = \\vec r \\times m\\vec g, \\qquad |\\vec M| = m g a \\sin\\theta, \\qquad \\vec M \\perp \\vec L, \\quad \\vec M \\perp \\hat z",
+     "figure": "rigitorq2",
+     "figCaption": "El brazo del peso es la distancia horizontal $a\\sin\\theta$; el momento mismo es perpendicular tanto al eje como a la vertical, es decir, horizontal"
+    },
+    {
+     "text": "El paso clave, y es completamente geométrico. La longitud de un vector solo la cambia la parte del incremento que es paralela a él; la parte transversal solo lo hace girar. Se comprueba en una línea: diferenciamos el cuadrado de la longitud y obtenemos el doble del producto escalar del vector por su derivada. Como $\\vec M \\perp \\vec L$, ese producto es cero: la longitud $L$ es constante, haga lo que haga el peso.\n\nPero esta perpendicularidad no basta: el eje podría inclinarse sin cambiar la longitud de $\\vec L$. Aquí actúa la segunda perpendicularidad. El momento es horizontal, por lo tanto su proyección vertical es cero, por lo tanto la componente vertical $L_z$ tampoco cambia. Sumamos: la longitud es constante, la proyección vertical es constante, por lo tanto también lo es su cociente $\\cos\\theta$. La inclinación del eje está bloqueada. Solo queda el azimut: el extremo del vector $\\vec L$ recorre una circunferencia horizontal, y el eje describe un cono alrededor de la vertical.\n\nAquí está la respuesta a la pregunta del apartado. La peonza no se cae no porque algo la sostenga desde abajo, ni porque la rotación cree una nueva fuerza. Caer significa aumentar $\\theta$, y para eso hay que acortar $\\vec L$ o disminuir su componente vertical. El momento horizontal, perpendicular a $\\vec L$, no puede hacer ni lo uno ni lo otro.",
+     "latex": "\\frac{d}{dt}\\bigl(\\vec L\\cdot\\vec L\\bigr) = 2\\,\\vec L\\cdot\\frac{d\\vec L}{dt} = 2\\,\\vec L\\cdot\\vec M = 0 \\;\\Longrightarrow\\; L = \\mathrm{const}; \\qquad \\frac{dL_z}{dt} = M_z = 0 \\;\\Longrightarrow\\; \\cos\\theta = \\frac{L_z}{L} = \\mathrm{const}",
+     "figure": "rigicone",
+     "figCaption": "El incremento es horizontal y perpendicular a $\\vec L$: no cambian ni la longitud del vector ni su proyección vertical; solo queda la rotación en azimut"
+    },
+    {
+     "text": "Calculemos la velocidad de esa rotación. Es más fácil mirar desde arriba: allí solo se ve lo que se mueve. La proyección horizontal del vector $\\vec L$ tiene longitud $L\\sin\\theta$: es el radio de la circunferencia por la que se mueve el extremo del vector. En el tiempo $dt$ el extremo se desplaza $|d\\vec L| = M\\,dt$, y el desplazamiento es perpendicular a la proyección, es decir, va puramente a lo largo del arco, sin añadir nada al radio. El ángulo de giro es el arco dividido por el radio.\n\nY aquí ocurre lo que valía la pena calcular. En el numerador está el momento $mga\\sin\\theta$, en el denominador el radio $L\\sin\\theta$. Los senos se cancelan y la inclinación del eje desaparece por completo de la respuesta. Una peonza casi tumbada recorre la vertical exactamente con la misma velocidad angular que una casi vertical. Este es precisamente el caso en que la fórmula sabe más que la intuición: en el banco de pruebas se comprueba con un solo movimiento del deslizador $\\theta$.",
+     "latex": "d\\varphi = \\frac{|d\\vec L|}{L\\sin\\theta} = \\frac{M\\,dt}{L\\sin\\theta} \\;\\Longrightarrow\\; \\Omega = \\frac{d\\varphi}{dt} = \\frac{M}{L\\sin\\theta} = \\frac{mga\\,\\sin\\theta}{I\\omega\\,\\sin\\theta} = \\frac{mga}{I\\omega}",
+     "figure": "rigiprec",
+     "figCaption": "Vista superior: en $dt$ el extremo del vector recorre un arco $M\\,dt$ sobre una circunferencia de radio $L\\sin\\theta$: de ahí la velocidad angular de precesión"
+    },
+    {
+     "text": "Leamos la fórmula con palabras. En el numerador está todo lo que tumba la peonza: masa, gravedad, desplazamiento del centro de masa. En el denominador todo lo que se resiste: momento de inercia y rotación propia. Y la consecuencia principal contradice la primera impresión: cuanto más rápido gira la peonza, MÁS LENTA es su precesión. Parece que la rápida debería correr también más rápido hacia un lado; en realidad es al revés, y la razón se ve en la derivación: en el mismo tiempo, el mismo momento da el mismo incremento $d\\vec L$, pero hace girar un vector largo un ángulo menor.\n\nDe aquí se deduce también cómo termina todo. La fricción en la punta consume $\\omega$, el denominador se derrite, $\\Omega$ crece: el eje empieza a recorrer el círculo cada vez más rápido. La precesión acelerada antes de la caída no es la causa del final, sino su precursor.\n\nNúmeros con una rueda de bicicleta, desmontada de la horquilla y suspendida por un extremo del eje. Masa $m = 2{,}0$ kg, casi toda en la llanta de radio $R = 0{,}35$ m, por lo tanto $I = mR^{2}$ (primer apartado, coeficiente del aro $k = 1$). Girada a $\\omega = 30$ rad/s: unas cinco revoluciones por segundo. La cuerda sostiene el eje a una distancia $a = 0{,}25$ m del centro de la rueda.",
+     "latex": "I = 0{,}245\\ \\text{kg·m}^2,\\quad L = I\\omega = 7{,}35\\ \\frac{\\text{kg·m}^2}{\\text{s}},\\quad M = mga = 4{,}905\\ \\text{N·m}, \\qquad \\Omega = \\frac{4{,}905}{7{,}35} = 0{,}667\\ \\frac{\\text{rad}}{\\text{s}}, \\quad T = \\frac{2\\pi}{\\Omega} = 9{,}4\\ \\text{s}",
+     "figure": "rigiwheel",
+     "figCaption": "La rueda, suspendida por un extremo del eje, no se cae, sino que recorre un círculo en nueve segundos y medio, y en ese tiempo gira 45 veces"
+    },
+    {
+     "text": "La misma fórmula a escala planetaria. La Tierra no es una esfera: debido a la rotación diaria, su radio ecuatorial es 21 kilómetros mayor que el polar, y alrededor del ecuador hay un abultamiento. La Luna y el Sol tiran del lado cercano de ese abultamiento con más fuerza que del lejano, y se produce un momento que tiende a poner el ecuador en el plano de la órbita, es decir, a enderezar el eje. Pero el momento es perpendicular al eje, y ya sabemos lo que hace ese momento: el eje no se endereza, sino que precesa, manteniendo la inclinación de 23,44° y recorriendo el círculo en 25 772 años. La diferencia con la peonza está en el signo: en la peonza, la gravedad tumba el eje y el recorrido va en el mismo sentido en que gira la peonza, mientras que la Luna y el Sol enderezan el eje: el momento está dirigido en sentido opuesto, y el eje terrestre recorre el círculo en sentido contrario a su propia rotación. Los astrónomos llaman a esto movimiento retrógrado de los equinoccios.\n\nDemos la vuelta a la fórmula y encontremos el momento responsable. El momento de inercia de la Tierra es $I = 0{,}3307\\,MR^{2} = 8{,}02\\cdot10^{37}$ kg·m², la velocidad angular según el día sidéreo es $\\omega = 7{,}292\\cdot10^{-5}$ rad/s, de donde $L = 5{,}85\\cdot10^{33}$ kg·m²/s. La velocidad de precesión: 50,29 segundos de arco por año, es decir, $7{,}73\\cdot10^{-12}$ rad/s. Ahora $M = \\Omega L \\sin\\varepsilon$: la misma fórmula del paso 6, pero resuelta para el momento.\n\nLa respuesta hay que verificarla de forma independiente; si no, no es un cálculo, sino un ajuste. El momento debido al cuerpo atractor se calcula directamente: es proporcional a la diferencia de los momentos de inercia principales $C - A$, es decir, a esa misma falta de esfericidad. La Luna da $1{,}24\\cdot10^{22}$ N·m, el Sol $0{,}57\\cdot10^{22}$, la suma $1{,}81\\cdot10^{22}$. Coincide con el primer número hasta fracciones de porcentaje, y de paso se ve la contribución de cada uno: la Luna es 2,2 veces más fuerte que el Sol, aunque su masa es 27 millones de veces menor: gana por el cubo de la distancia.",
+     "latex": "M = \\Omega\\,L\\,\\sin\\varepsilon = 7{,}73\\cdot10^{-12}\\cdot 5{,}85\\cdot10^{33}\\cdot 0{,}398 = 1{,}80\\cdot10^{22}\\ \\text{N·m}; \\qquad \\tfrac{3}{4}\\,\\frac{Gm}{r^{3}}\\,(C-A)\\sin 2\\varepsilon\\ \\Big|_{\\text{Luna}+\\text{Sol}} = 1{,}81\\cdot10^{22}\\ \\text{N·m}",
+     "figure": "rigiearth",
+     "figCaption": "El eje de la Tierra describe un cono con semiángulo de 23,44° en 25 772 años. La fórmula es la misma que la de la peonza, solo que el momento lo crean la Luna y el Sol, y el papel del brazo lo desempeña el abultamiento ecuatorial"
+    }
+   ],
+   "plate": "\\Omega = \\frac{mga}{I\\omega}",
+   "plateCap": "A la izquierda, la rapidez con que el eje recorre la vertical. A la derecha, lo que tumba la peonza dividido por lo que se resiste. La inclinación del eje no aparece en la fórmula: se canceló en el camino, y este es el único resultado realmente inesperado del apartado.",
+   "note": "Enumeremos lo que hemos supuesto en silencio: son las fronteras de la fórmula. Primero: $\\vec L$ está dirigido estrictamente a lo largo del eje. Esto es estrictamente cierto solo para un cuerpo simétrico que gira alrededor de un eje principal; en general, $\\vec L$ y $\\vec\\omega$ no son paralelos, y se obtiene una mecánica completamente diferente: sobre ello en el apéndice. Segundo: la peonza es rápida, es decir, $\\Omega \\ll \\omega$, lo que equivale a $I\\omega^{2} \\gg mga$. Para nuestra rueda, el umbral es $\\sqrt{mga/I} = \\sqrt{4{,}905/0{,}245} = 4{,}5$ rad/s frente a los 30 de trabajo: un margen de casi siete veces. Una peonza lenta no obedece la fórmula. Tercero: hemos obtenido una solución particular en la que $\\theta$ es estrictamente constante; la general contiene además la nutación: una pequeña vibración del eje que una peonza real muestra durante el primer medio segundo después del lanzamiento. Cuarto: no hay fricción, $\\omega$ es constante, el punto de apoyo está fijo. Una punta real se desliza, rueda y se calienta, y es precisamente la fricción en el punto de apoyo la responsable de los efectos más bonitos: el huevo cocido que se levanta y el juguete que se da la vuelta, el tip-top."
+  },
+  "math": {
+   "title": "Matemáticas que aquí se necesitaron",
+   "lead": "En este apartado hay casi nada de física: hay tres hechos geométricos sobre vectores. Los examinamos por separado, porque cada uno de los tres funciona mucho más allá del giroscopio.",
+   "items": [
+    {
+     "what": "Derivada de un vector: la longitud por un lado, la dirección por otro",
+     "why": "Cualquier incremento de un vector se descompone en dos partes: a lo largo del propio vector y transversal a él. La primera cambia la longitud, la segunda solo la dirección, y no de otra manera. Formalmente, esto se escribe mediante la derivada del cuadrado de la longitud: es igual al doble del producto escalar del vector por su derivada. Si la derivada es perpendicular al vector, el producto es cero y la longitud es constante. Y viceversa: si la longitud es constante, la derivada debe ser perpendicular.\n\nEste hecho es todo el giroscopio en una línea. Pero también explica cosas completamente diferentes, porque el vector aquí puede ser cualquiera. Tome la velocidad: una fuerza perpendicular a la velocidad no cambia su módulo — de ahí el movimiento circular uniforme y también que la fuerza magnética de Lorentz no realiza trabajo. Tome el radio vector: la velocidad perpendicular a él significa movimiento a lo largo de una circunferencia de radio constante. La misma matemática en tres vectores distintos.",
+     "latex": "\\frac{d}{dt}\\,|\\vec A|^{2} = 2\\,\\vec A\\cdot\\frac{d\\vec A}{dt} \\qquad \\Longrightarrow \\qquad \\Bigl(\\frac{d\\vec A}{dt} \\perp \\vec A\\Bigr) \\iff \\bigl(|\\vec A| = \\mathrm{const}\\bigr)",
+     "kit": "derivative"
+    },
+    {
+     "what": "Producto vectorial: de dónde salen ambas perpendicularidades",
+     "why": "El momento de la fuerza se define mediante el producto vectorial: el módulo es igual al producto de las longitudes por el seno del ángulo entre ellos, y la dirección es perpendicular a ambos factores según la regla de la mano derecha. En nuestro problema, los factores son el radio vector a lo largo del eje de la peonza y el peso vertical. De ahí, ambas perpendicularidades del paso 5 se obtienen gratis, sin ninguna física: la perpendicularidad a la vertical (el momento es horizontal) y la perpendicularidad al eje (el momento es perpendicular a $\\vec L$).\n\nEl seno del ángulo da otra consecuencia que vale la pena comprobar con las manos. Cuando el eje se pone estrictamente vertical, el ángulo entre el radio vector y el peso es cero, el seno es cero, no hay momento en absoluto — y tampoco precesión. Tal peonza se llama dormida: se mantiene erguida y parece inmóvil. Este estado dura exactamente hasta que la fricción la inclina un poco hacia un lado; entonces el seno deja de ser cero y la peonza se despierta.",
+     "latex": "\\vec M = \\vec r \\times m\\vec g, \\qquad |\\vec M| = m g a \\sin\\theta, \\qquad \\vec M \\perp \\vec r,\\ \\ \\vec M \\perp \\vec g, \\qquad \\theta \\to 0 \\;\\Longrightarrow\\; \\vec M \\to 0",
+     "kit": "dotcross"
+    },
+    {
+     "what": "El ángulo como arco dividido por el radio — y la escritura compacta de toda la precesión",
+     "why": "En el paso 6 calculamos el ángulo de giro como la relación entre el arco y el radio. Esta es la definición de radián, y solo funciona para ángulos pequeños, donde el arco no se distingue de la cuerda — y en nuestro caso el ángulo es infinitesimal por construcción, así que no hay objeciones. Solo es importante no confundir el radio: el extremo del vector $\\vec L$ no se mueve a lo largo de una circunferencia de radio $L$, sino a lo largo de una circunferencia horizontal de radio $L\\sin\\theta$, porque la componente vertical no se mueve.\n\nTodo junto se condensa en una línea que reemplaza toda la deducción. Si un vector de longitud constante gira alrededor de un eje con velocidad angular $\\vec\\Omega$, entonces su derivada es igual al producto vectorial de $\\vec\\Omega$ por el propio vector: el módulo es precisamente $\\Omega L \\sin\\theta$, y la dirección es perpendicular a ambos. Iguale esto al momento — y obtendrá la misma fórmula de precesión en una línea. Recuerde esta escritura: en el tercer apartado se convertirá en una herramienta de trabajo, y aquí por ahora es solo una hermosa coincidencia.",
+     "latex": "\\Omega = \\frac{|d\\vec L|}{L\\sin\\theta\\;dt} \\qquad \\Longleftrightarrow \\qquad \\frac{d\\vec L}{dt} = \\vec\\Omega \\times \\vec L, \\quad \\bigl|\\vec\\Omega \\times \\vec L\\bigr| = \\Omega L \\sin\\theta = M",
+     "kit": "vector"
+    }
+   ]
+  },
+  "example": {
+   "title": "Ejemplo con números",
+   "lead": "Calculemos una peonza infantil — y de paso averigüemos a qué velocidad de rotación nuestra fórmula deja de ser válida. Lo segundo es más interesante que lo primero.",
+   "given": "Peonza: un disco de masa $m = 80$ g y radio $R = 3{,}0$ cm, montado sobre un eje; la punta está 3,0 cm por debajo del centro del disco, así que $a = 0{,}030$ m. El eje está inclinado $\\theta = 20°$. Gira a $\\omega = 300$ rad/s — esto es 48 revoluciones por segundo. $g = 9{,}81$ m/s². Hallar la velocidad y el período de precesión, y luego entender qué sucederá cuando la fricción reduzca $\\omega$ a 30 rad/s.",
+   "law": "El momento de inercia del disco $I = \\tfrac12 mR^{2}$ lo tomamos ya listo de la primera sección. Luego $L = I\\omega$, $M = mga\\sin\\theta$ y $\\Omega = mga/(I\\omega)$ — la fórmula del paso 6.",
+   "solution": [
+    {
+     "text": "Momento de inercia. No consideramos la masa del eje: es pequeña y casi toda está cerca del eje, así que contribuye poco a $\\sum m r^{2}$.",
+     "latex": "I = \\tfrac12 m R^{2} = 0{,}5 \\cdot 0{,}080 \\cdot (0{,}030)^{2} = 3{,}60\\cdot10^{-5}\\ \\text{kg·m}^{2}"
+    },
+    {
+     "text": "Momento angular y momento de la fuerza de gravedad. Observa: el momento resultó pequeño, ocho milésimas de newton-metro, — pero $L$ tampoco es grande.",
+     "latex": "L = I\\omega = 3{,}60\\cdot10^{-5}\\cdot 300 = 1{,}080\\cdot10^{-2}\\ \\frac{\\text{kg·m}^{2}}{\\text{s}}, \\qquad M = mga\\sin 20° = 0{,}023544 \\cdot 0{,}342 = 8{,}05\\cdot10^{-3}\\ \\text{N·m}"
+    },
+    {
+     "text": "Velocidad de precesión. Se puede calcular de dos maneras: mediante $M/(L\\sin\\theta)$ o directamente con la fórmula final, donde el seno ya se ha cancelado. La respuesta debe coincidir, y esto es una buena comprobación de la aritmética.",
+     "latex": "\\Omega = \\frac{M}{L\\sin\\theta} = \\frac{8{,}05\\cdot10^{-3}}{1{,}080\\cdot10^{-2}\\cdot 0{,}342} = 2{,}18\\ \\frac{\\text{rad}}{\\text{s}} \\;=\\; \\frac{mga}{I\\omega} = \\frac{0{,}023544}{1{,}080\\cdot10^{-2}} = 2{,}18\\ \\frac{\\text{rad}}{\\text{s}}"
+    },
+    {
+     "text": "Período de giro alrededor del eje y número de rotaciones propias durante ese giro. La relación $\\omega/\\Omega$ es también una comprobación de la condición de peonza rápida: cuanto mayor sea, más fiable es la fórmula.",
+     "latex": "T = \\frac{2\\pi}{\\Omega} = \\frac{6{,}283}{2{,}18} = 2{,}88\\ \\text{s}, \\qquad \\frac{\\omega}{\\Omega} = \\frac{300}{2{,}18} = 138"
+    },
+    {
+     "text": "Ahora sobre la desaceleración. La fricción reduce $\\omega$, y la fórmula promete que $\\Omega$ crece inversamente proporcional: sustituyendo 30 rad/s, obtenemos 21,8 rad/s. Ya no se puede confiar en este número — es del mismo orden que la propia rotación, y toda la derivación se basaba en lo contrario, $\\Omega \\ll \\omega$. Formalmente, $\\Omega$ y $\\omega$ se igualan cuando $I\\omega^{2} = mga$; esto es una estimación del límite inferior, el límite real está más arriba — la condición exacta se analiza en el apéndice.",
+     "latex": "\\Omega = \\omega \\iff \\omega_{*} = \\sqrt{\\frac{mga}{I}} = \\sqrt{\\frac{0{,}023544}{3{,}60\\cdot10^{-5}}} = \\sqrt{654} = 25{,}6\\ \\frac{\\text{rad}}{\\text{s}}"
+    }
+   ],
+   "answer": "La peonza precesa a 2,18 rad/s y recorre el círculo en 2,9 segundos, logrando girar sobre su propio eje 138 veces durante ese tiempo. Mientras la peonza esté bien girada, la fórmula es precisa: a 300 rad/s la corrección es de alrededor del dos por ciento. Pero se estropea mucho antes de detenerse — una estimación aproximada del umbral da 26 rad/s, la exacta (en el apéndice) es de unos 78, es decir, aproximadamente trece revoluciones por segundo. Por debajo de esto, la peonza aún gira, pero ya no tiene un movimiento regular alrededor de la vertical.",
+   "check": "Comprobemos de dos maneras. La primera, a simple vista: tres segundos para una vuelta alrededor del eje en una peonza bien girada es plausible, es un movimiento lento y majestuoso, que es justo lo que se observa.\n\nLa segunda, comparando con la rueda del séptimo paso. La rueda tiene un momento de inercia 6800 veces mayor, pero el momento de la fuerza de gravedad es solo 208 veces mayor, y gira diez veces más lento. Multiplicamos las relaciones: $\\Omega_{\\text{rueda}}/\\Omega_{\\text{peonza}} = 208 \\cdot 10 / 6800 = 0{,}31$, es decir, la rueda debe precesar tres veces más lento que la peonza. Así es: 0,667 frente a 2,18, la relación es 0,31. Dos cálculos independientes coinciden — la aritmética está en orden.\n\nY una aclaración honesta sobre lo que no está en el cálculo. La punta real de la peonza no es un punto: se desliza sobre la mesa y rueda, el punto de apoyo se mueve, y se añade fricción que lentamente levanta el eje hacia la vertical. Una peonza de juguete normalmente no se inclina cada vez más, sino que se endereza a medida que acelera — y esto ya no es nuestra fórmula, sino un efecto separado de fricción en el punto de contacto, el mismo que levanta un huevo duro girando."
+  },
+  "constants": {
+   "title": "Constantes de este apartado",
+   "lead": "Las cuatro tratan sobre la Tierra, porque la Tierra es aquí el principal espécimen experimental: un peón de seis septillones de kilogramos que la humanidad observa desde hace veintidós siglos.",
+   "items": [
+    {
+     "sym": "ω⊕",
+     "latex": "\\omega_\\oplus",
+     "name": "Velocidad angular de rotación de la Tierra",
+     "value": "7,292 115 · 10⁻⁵",
+     "unit": "rad/s",
+     "why": "Se calcula a partir del día sidéreo — 86 164,1 segundos —, no de los habituales 86 400. La diferencia de 3 minutos y 56 segundos se acumula porque en un día la Tierra recorre aproximadamente un grado en su órbita, y para que el Sol vuelva a estar en el mismo punto del cielo hay que girar ese grado adicional. La astronomía vive según el día sidéreo, la vida cotidiana según el solar. En el momento angular de la Tierra, que calculamos en el octavo paso, entra precisamente el valor sidéreo.",
+     "mnemo": "Siete y tres décimas por diez a la menos cinco son aproximadamente 15 grados por hora, justo lo que separa los husos horarios adyacentes. De ahí la regla de los navegantes: una hora de longitud equivale a quince grados."
+    },
+    {
+     "sym": "I⊕/MR²",
+     "latex": "\\frac{I_\\oplus}{M_\\oplus R_\\oplus^{2}}",
+     "name": "Momento de inercia adimensional de la Tierra",
+     "value": "0,3307",
+     "unit": "adimensional",
+     "why": "Para una esfera homogénea este coeficiente es exactamente 0,4. En la Tierra es menor — y esto es una evidencia directa, sin necesidad de nada más, de que la masa se concentra hacia el centro: un núcleo pesado de hierro bajo un manto rocoso ligero. El número se mide mediante la precesión y el movimiento de los satélites, no mediante perforaciones, y fue históricamente el primer argumento cuantitativo a favor de un núcleo metálico. Para comparar: en la Luna es 0,394 — casi una esfera homogénea, casi sin núcleo; en el Sol es 0,070 — la materia está extraordinariamente concentrada hacia el centro.",
+     "mnemo": "Cuanto menor es el coeficiente, más concentrada está la masa hacia el centro. 0,4 — esfera homogénea; 0,33 — Tierra; 0,07 — Sol; 0 — punto."
+    },
+    {
+     "sym": "H",
+     "latex": "H",
+     "name": "Achatamiento dinámico de la Tierra, $(C-A)/C$",
+     "value": "0,003 273 7 = 1 / 305,46",
+     "unit": "adimensional",
+     "why": "La diferencia entre el momento de inercia respecto al eje polar y respecto al ecuatorial, dividida por el primero. Es precisamente esa falta de esfericidad de la que tiran la Luna y el Sol: si la Tierra fuera una esfera perfecta, no habría momento ni precesión. Tres milésimas parecen despreciables, pero son las que producen un momento de $1{,}8\\cdot10^{22}$ N·m y los veintiséis mil años. El inverso, 305, también es famoso: Euler lo calculó como el período de la oscilación libre del polo en días. Se observan 433 días, y la discrepancia es el precio de que la Tierra no sea un cuerpo absolutamente rígido.",
+     "mnemo": "Tres milésimas son toda la causa geométrica de la precesión. Y su inverso, 305 días, es la predicción de Euler que la naturaleza corrigió a 433."
+    },
+    {
+     "sym": "p",
+     "latex": "p",
+     "name": "Constante de precesión (precesión general en longitud)",
+     "value": "50,29",
+     "unit": "segundos de arco por año",
+     "why": "El círculo completo son 1 296 000 segundos de arco; dividimos por 50,29 y obtenemos 25 770 años, y con el valor sin redondear de 50,2877″ — los 25 772 años que se suelen citar. En los dos mil años transcurridos desde los catálogos antiguos, el punto del equinoccio de primavera se ha desplazado casi 28 grados — es decir, casi un signo zodiacal entero de 30 grados. De ahí la conocida discrepancia: el «signo» astrológico y la constelación en la que realmente está el Sol se han separado aproximadamente un elemento de la lista. Estrictamente, se distingue entre precesión lunisolar (50,39″ por año — lo que calcula nuestra fórmula) y la general en longitud (50,29″), la diferencia la produce el lento giro del propio plano de la eclíptica debido a la atracción de los planetas. Hemos calculado con 50,29, y en la estimación del momento en el octavo paso la elección solo afecta al tercer dígito: 1,796 frente a 1,800.",
+     "mnemo": "Cincuenta segundos de arco por año equivalen al diámetro aparente de la Luna en unos 37 años, es decir, en una generación. Hiparco notó el desplazamiento porque comparó sus mediciones con los registros de un siglo y medio antes."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Cómo se relaciona con el resto del curso",
+   "lead": "La ecuación $d\\vec L/dt = \\vec M$ es una de las fórmulas de mayor alcance del curso: funciona igualmente en una peonza, en un planeta, en un protón en un tomógrafo y en una estrella de neutrones.",
+   "items": [
+    {
+     "h": "Momento de inercia (párrafo 1 de este tema)",
+     "text": "Todo lo que hemos usado aquí, — $I = kmR^{2}$ y los coeficientes 1, ½, ⅖, 1/12 — se obtuvo allí y se toma aquí ya preparado. De allí también proviene la ecuación $M = I\\varepsilon$, que en el segundo paso simplemente se reescribe en forma vectorial. Si la fórmula de la precesión parece surgida de la nada, mírala así: el numerador es el momento de fuerza del primer párrafo, el denominador es el momento angular, formado a partir del momento de inercia del mismo primer párrafo."
+    },
+    {
+     "h": "Leyes de conservación (tema «Mecánica»)",
+     "text": "La conservación del momento angular se deduce allí de la isotropía del espacio, y allí mismo se analiza la patinadora que junta los brazos y gira más rápido. Aquí usamos la misma ley desde otro lado: no nos interesa que se conserve la longitud de $\\vec L$, sino que se conserve su dirección, y qué sucede cuando el momento no es cero."
+    },
+    {
+     "h": "Sistema en rotación (párrafo 3 de este tema)",
+     "text": "La fórmula $d\\vec A/dt = \\vec\\Omega \\times \\vec A$, que aquí apareció como una notación compacta de la precesión, allí se convertirá en la principal herramienta de trabajo: aplicada dos veces, da las fuerzas centrífuga y de Coriolis. Por ahora, recuérdala como un hecho sobre un vector que gira: el cuerpo en el tercer párrafo será un punto, y el momento angular no lo necesitaremos allí en absoluto."
+    },
+    {
+     "h": "Espín y resonancia magnética",
+     "text": "El protón tiene su propio momento angular — el espín — y un momento magnético asociado. En un campo externo, sobre el momento magnético actúa un momento de fuerza perpendicular al espín, y luego se repite exactamente nuestra deducción: el espín no se alinea con el campo, sino que precesa alrededor de él con una velocidad $\\Omega = \\gamma B$. En un campo de 1,5 teslas, eso son 64 millones de revoluciones por segundo. El tomógrafo de resonancia magnética escucha precisamente esta precesión, por lo que la imagen de la rodilla es una aplicación directa de la fórmula deducida con la peonza."
+    },
+    {
+     "h": "Púlsares",
+     "text": "Cuando el núcleo de una estrella masiva colapsa en una estrella de neutrones, su radio disminuye aproximadamente 70 mil veces. El momento de inercia va como el cuadrado del radio, el momento angular se conserva, por lo tanto la velocidad angular crece como el radio a la menos dos — casi cinco mil millones de veces. De los 25 días solares resultarían más de dos mil rotaciones por segundo. Las más rápidas observadas son alrededor de 716 — y esta es una discrepancia honesta: la mayor parte del momento angular se la lleva la envoltura expulsada. El eje del púlsar, como el de cualquier peonza libre, mantiene su dirección en el espacio, y por eso su radiación nos llega en pulsos estrictamente periódicos."
+    },
+    {
+     "h": "Gravedad y relatividad",
+     "text": "En la relatividad general, una masa en rotación arrastra consigo el propio espacio, y un giroscopio que cuelga cerca experimenta un momento adicional. El efecto fue predicho por Josef Lense y Hans Thirring en 1918, y lo midió el satélite Gravity Probe B, cuyos cuatro giroscopios de alta precisión se desviaron 37,2 milisegundos de arco en un año, frente a los 39,2 predichos. La física es diferente, pero la ecuación es la misma: $d\\vec L/dt = \\vec M$."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Curiosidades: compruébelo con sus manos",
+   "lead": "Los dos experimentos siguientes requieren un huevo cocido y un libro con una goma elástica. Ambos muestran cosas que no se deducen de nuestra fórmula, y por eso merece la pena realizarlos.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "experimento de cocina",
+     "h": "El huevo cocido se pone de pie",
+     "text": "Cueza un huevo duro y déjelo enfriar. Colóquelo de lado sobre una mesa lisa y hágalo girar con los dedos lo más rápido posible. Tras un segundo o dos, el huevo se levantará por sí solo y girará de pie, sobre el extremo romo. Un huevo crudo no hace lo mismo; el porqué se explica en el primer párrafo: el líquido interior apenas gira junto con la cáscara. No hace falta poner un plato debajo, no se rompe nada; solo se necesita una mesa lisa y seca.",
+     "answer": "Lo primero que hay que notar es que el centro de masas del huevo, al ponerse de pie, SE ELEVA aproximadamente un centímetro. Esto es trabajo contra la gravedad, y se realiza a costa de la energía de rotación: después de elevarse, el huevo gira notablemente más lento. Por tanto, debe haber una fuerza que realice ese trabajo, y la hay: la fricción de deslizamiento en el punto de contacto. Mientras el huevo está de lado y gira, el punto de contacto resbala sobre la mesa, y la fuerza de fricción produce un momento que levanta el huevo.\n\nEste es el único lugar del párrafo donde todo lo decide la fricción; en nuestra deducción no aparecía en absoluto. Y hay que decir con honestidad: la solución completa de este problema se obtuvo recién en 2002. Keith Moffatt y Yasuhiro Shimomura la publicaron en Nature, mostrando que la velocidad de levantamiento está determinada por una condición adimensional que relaciona la rotación con la fricción, y que si se hace girar demasiado lento, el huevo nunca se levantará. El problema parece de juguete, pero se resolvió en más tiempo que muchas cuestiones de aceleradores de partículas.\n\nEl mismo mecanismo se da en el juguete tip-top, un trompo con la parte superior cortada que, al girar sobre su cabeza, se da la vuelta y se pone de pie sobre su pie, elevando su centro de masas varios centímetros."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "experimento de cocina",
+     "h": "Un libro lanzado de tres maneras",
+     "text": "Tome un libro grueso y átelo con una goma elástica a lo ancho para que no se abra en el aire. Láncelo no muy alto sobre un sofá o una cama, haciéndolo girar de tres maneras distintas: alrededor del lomo (el eje va a lo largo del lomo: el libro gira como una puerta sobre sus bisagras, solo que el eje está en el medio); plano, como un frisbee, alrededor de un eje que sobresale de la tapa; y por encima de la cabeza, alrededor de un eje horizontal paralelo al borde superior. Las dos primeras veces, el libro llegará tranquilamente al sofá con el mismo giro. La tercera vez, inevitablemente se dará la vuelta alrededor del lomo, y se da la vuelta cada vez, sin importar cómo lo lance.",
+     "answer": "El libro tiene tres dimensiones, y a cada eje le corresponde un momento de inercia. Para nuestro libro de 20 × 15 × 3 cm, las relaciones resultan 2,67 : 1,75 : 1: el mayor es alrededor del eje que sobresale de la tapa, el menor alrededor del lomo, y en el medio está justamente el eje alrededor del cual el libro no quiere girar. Esta es una ley general: la rotación libre es estable alrededor del eje de mayor y menor momento de inercia, e inestable alrededor del eje intermedio. Poinsot lo demostró en 1834, y no hay ninguna física especial aquí, solo que $\\vec L$ en general no es paralelo a $\\vec\\omega$, mientras que en nuestra deducción los considerábamos paralelos.\n\nEs fácil comprobar que esto no es una propiedad del libro: el mismo giro lo muestran una raqueta de tenis, un mando de televisión y un teléfono. La grabación más famosa se hizo en 1985 en la estación 'Salyut-7': el cosmonauta Vladimir Dzhanibekov desenroscó una tuerca de mariposa, esta salió volando en gravedad cero, recorrió unos centímetros y dio una voltereta, luego otra, luego otra, con un período constante. En gravedad cero, donde nada lo impide, las volteretas continúan indefinidamente, y el fenómeno recibió el nombre de efecto Dzhanibekov."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoja",
+     "h": "De dónde sale la energía de la precesión",
+     "text": "Una rueda en precesión se mueve, por lo que ese movimiento tiene energía cinética. Pero el momento de la gravedad es horizontal, el centro de masas recorre una circunferencia horizontal, y la gravedad no realiza trabajo: la fuerza es vertical, el desplazamiento horizontal. La rotación propia tampoco cede nada, $\\omega$ es constante por condición. ¿De dónde ha salido la energía?",
+     "answer": "De una caída muy corta al principio. Cuando suelta la rueda, no comienza a precesar instantáneamente: primero el eje se hunde un poco, y es en ese hundimiento donde la gravedad realiza trabajo. Luego el eje vuelve a subir, se hunde de nuevo: eso es la nutación, las oscilaciones se amortiguan rápidamente por la fricción, y queda una precesión uniforme a un nivel ligeramente más bajo.\n\nLos números cuadran, pero no tan simplemente como uno quisiera. El momento de inercia de nuestra rueda respecto al eje transversal que pasa por el punto de suspensión es $\\tfrac12 mR^{2} + ma^{2} = 0{,}2475$ kg·m², y la energía cinética de precesión es $\\tfrac12 \\cdot 0{,}2475 \\cdot 0{,}667^{2} = 0{,}055$ J. Y el hundimiento resulta ser el doble de generoso de lo necesario para una precesión: hasta el nivel medio, el eje desciende 1,3 grados, es decir, el centro de masas baja 5,6 milímetros, y la gravedad entrega en ese proceso $mgh = 0{,}11$ J. La segunda mitad no se ha perdido: la toma la nutación; la oscilación del eje tiene la misma magnitud de velocidad que la precesión y, por tanto, se lleva exactamente la misma cantidad. La fricción elimina la nutación en un segundo, el eje permanece en el nivel medio, y la precesión continúa con sus 0,055 J. No se pierde nada ni se crea de la nada.\n\nEs útil evaluar la escala: la energía de rotación propia de la rueda es $\\tfrac12 I\\omega^{2} = 110$ J, es decir, la precesión se lleva una dosmilésima parte de ella, y junto con la nutación, una milésima. Por eso se puede considerar gratuita y por eso en la deducción escribimos tranquilamente $\\omega = \\mathrm{const}$."
+    },
+    {
+     "icon": "fact",
+     "kind": "dato curioso",
+     "h": "La Estrella Polar es un cargo, no un nombre",
+     "text": "El eje de la Tierra recorre un cono en 25 772 años, y con él se desplaza por el cielo el polo norte celeste. Hoy, cerca de él se encuentra α de la Osa Menor, a la que llamamos Estrella Polar. No siempre fue así y no lo seguirá siendo.",
+     "answer": "En la época de la construcción de las pirámides de Egipto, alrededor del 2700 a.C., el polo celeste estaba cerca de Thuban, α de la constelación del Dragón, y es hacia ella, según una de las versiones, hacia donde apuntan los estrechos conductos de la pirámide de Keops. La Estrella Polar se acercará más al polo alrededor del año 2100, a 27 minutos de arco, y luego comenzará a alejarse. Dentro de unos 12 000 años, su lugar lo ocupará Vega, una de las estrellas más brillantes del cielo, y la estrella polar se volverá realmente notable.\n\nHiparco descubrió todo esto sin saber ni la causa ni lo que había descubierto: simplemente comparó sus mediciones de la longitud de Espiga con los registros de Timocares, hechos 150 años antes, y encontró una discrepancia de dos grados, demasiado grande para ser un error. Ciento cincuenta años de observaciones contra un grado y medio por siglo: un caso raro en el que un descubrimiento se hace con paciencia, no con instrumentos. La causa la dio Newton dieciocho siglos después."
+    },
+    {
+     "icon": "edge",
+     "kind": "límite de aplicabilidad",
+     "h": "Dónde termina el giroscopio mecánico",
+     "text": "El rotor en un soporte de cardán fue durante siglo y medio la única forma de recordar una dirección. Hoy, en el teléfono, en el avión y en el cohete hay dispositivos llamados giroscopios, dentro de los cuales no gira nada en absoluto.",
+     "answer": "El giroscopio mecánico es magnífico mientras no se necesite un funcionamiento prolongado. Su problema es la deriva: cualquier momento parásito en los cojinetes, por pequeño que sea, según la fórmula $\\Omega = M/(I\\omega)$ desvía el eje, y el error se acumula linealmente con el tiempo. Un buen giroscopio de aviación deriva un grado por hora; los mejores de laboratorio, centésimas de grado; para un vuelo de muchas horas sin corrección por satélite, esto es insuficiente.\n\nEl primer camino alternativo fue el efecto Sagnac: si se hacen circular dos rayos de luz en sentidos opuestos por un anillo, al girar el anillo los rayos llegan con tiempos de tránsito diferentes, y la diferencia es proporcional a la velocidad angular. Sin cojinetes, sin inercia, nada se desgasta. El giroscopio láser basado en este principio se utiliza en aviones desde los años setenta; el de fibra óptica, en casi cualquier lugar donde se necesite precisión.\n\nEn el teléfono, en cambio, hay una tercera variante: el micromecánico. Una placa de silicio del tamaño de un grano de arena oscila, y la rotación del dispositivo altera el plano de su oscilación. Estrictamente hablando, ya no es un giroscopio, sino un medidor del efecto Coriolis, y funciona con la física del tercer párrafo, no de este. Su precisión es órdenes de magnitud peor que la del láser, pero cuesta un dólar y cabe en la carcasa del teléfono, algo que nadie podía esperar del trompo de Foucault."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "Lo que simplificamos",
+   "blocks": [
+    {
+     "h": "Nutación: el temblor que no está en nuestra fórmula",
+     "text": "Obtuvimos una solución particular: la precesión regular, donde la inclinación del eje es estrictamente constante. La solución general contiene además oscilaciones de $\\theta$, llamadas nutación. Verlas es simple: si sueltas una peonza inclinada desde el reposo total, sin empujarla en azimut, primero comenzará a caer, la caída acelerará la precesión, la precesión levantará el eje de nuevo — y el extremo del eje no seguirá una circunferencia, sino una cicloide pequeña. La frecuencia de estas oscilaciones para una peonza rápida es aproximadamente $I\\omega/I_\\perp$, donde $I_\\perp$ es el momento de inercia respecto al eje transversal que pasa por el punto de apoyo. Para nuestra rueda, esto es $0{,}245 \\cdot 30 / 0{,}2475 = 29{,}7$ rad/s — casi la propia $\\omega$, es decir, el temblor es muy rápido y muy pequeño. Su amplitud también se calcula: el eje soltado desde el reposo desciende $\\Delta\\theta = M I_\\perp/(I\\omega)^{2} = 1{,}3°$ hasta el nivel medio, y el doble, 2,6°, en el punto más bajo de la oscilación. La fricción amortigua estas oscilaciones en un segundo, y queda un recorrido uniforme alrededor del nivel medio.\n\nLa Tierra también tiene nutación, y se ha medido desde hace tiempo. Su término principal es de 9,2 segundos de arco con un período de 18,6 años, y este período no es casual: es la duración de una revolución de los nodos de la órbita lunar. El momento de la Luna no es constante precisamente porque el plano de su órbita gira lentamente. La nutación fue descubierta por James Bradley en 1748, tras dedicar exactamente un período de este tipo a las observaciones.",
+     "latex": "\\omega_{\\text{nut}} \\approx \\frac{I\\omega}{I_\\perp}, \\qquad \\Delta\\theta \\approx \\frac{M\\,I_\\perp}{(I\\omega)^{2}} = \\frac{4{,}905 \\cdot 0{,}2475}{7{,}35^{2}} = 0{,}022\\ \\text{rad} = 1{,}3°, \\qquad \\text{amplitud total } 2\\Delta\\theta = 2{,}6°"
+    },
+    {
+     "h": "El momento angular no siempre va a lo largo del eje",
+     "text": "En el primer paso escribimos $\\vec L = I\\vec\\omega$, como si $I$ fuera un número ordinario. En general, esto no es así: el momento de inercia es un tensor, y $\\vec L$ es paralelo a $\\vec\\omega$ solo cuando la rotación ocurre alrededor de uno de los tres ejes principales del cuerpo. Todo cuerpo tiene tales ejes, son exactamente tres, mutuamente perpendiculares, y les corresponden tres momentos de inercia principales $I_1 < I_2 < I_3$.\n\nDe aquí se sigue algo que nuestra fórmula no conoce en absoluto: la rotación libre es estable alrededor de los ejes con momento máximo y mínimo, e inestable alrededor del intermedio. Esto es el teorema del eje intermedio, demostrado por Poinsot en 1834; en la cocina se muestra con un libro con una goma elástica, en el espacio, con la tuerca de Dzhanibekov. La Tierra tampoco rota estrictamente alrededor de su eje de figura: el polo deambula en una espiral de unos pocos metros de diámetro con un período de 433 días. Euler, para una Tierra perfectamente rígida, predijo 305 días — esto es $1/H$, el inverso del achatamiento dinámico de la tabla de constantes — y la discrepancia con los 433 días observados es una medida de que la Tierra es elástica, no rígida.",
+     "latex": "\\vec L = \\hat I\\,\\vec\\omega, \\qquad \\vec L \\parallel \\vec\\omega \\iff \\vec\\omega\\ \\text{a lo largo del eje principal}; \\qquad I_1 < I_2 < I_3:\\ \\text{la rotación alrededor de } I_2\\ \\text{es inestable}"
+    },
+    {
+     "h": "La peonza se frena, y nosotros considerábamos ω constante",
+     "text": "Estrictamente hablando, la fórmula $\\Omega = mga/(I\\omega)$ se dedujo para $\\omega$ constante, pero en una peonza real disminuye. Lo que nos salva es la aproximación cuasiestacionaria: mientras la fricción sea pequeña comparada con la propia rotación, la fórmula se puede aplicar en cada instante, sustituyendo la $\\omega(t)$ actual. Así es como se obtiene la imagen observada: el eje describe círculos cada vez más rápidos.\n\nPero la aproximación tiene un límite. La condición de peonza rápida $I\\omega^{2} \\gg mga$ tarde o temprano se viola, y una estimación aproximada del umbral es $\\omega_{*} = \\sqrt{mga/I}$: para la peonza del ejemplo, 25,6 rad/s; para la rueda, 4,5 rad/s. Esta estimación es baja, y es más honesto decir dónde está el límite real. Si no descartamos el momento de inercia transversal, la condición para la existencia de precesión regular se ve así: $(I\\omega)^{2} \\ge 4\\,I_\\perp\\,mga\\cos\\theta$. Para la peonza con una inclinación de 20°, el momento transversal respecto a la punta es $\\tfrac14 mR^{2} + ma^{2} = 9{,}0\\cdot10^{-5}$ kg·m², y la condición da no 26, sino alrededor de 78 rad/s — tres veces más que la estimación aproximada. Y en la rueda, el eje es horizontal, el coseno es cero, el lado derecho desaparece por completo: la solución regular existe para cualquier velocidad de giro; otra cosa es que a baja velocidad aún hay que alcanzarla — la nutación no será una ondulación pequeña, sino un bamboleo completo del eje. Por debajo del umbral, la precesión se vuelve comparable a la rotación propia, la nutación deja de ser una pequeña corrección, y ya no hay «inclinación constante» — la peonza se cae. Al mismo tiempo desaparece la última suposición: el punto de apoyo no es ideal, la punta se desliza y rueda, y esta fricción por separado levanta o baja el eje — un efecto que hace que un huevo duro se levante y que invierte un trompo tipo tip-top.",
+     "latex": "\\Omega(t) = \\frac{mga}{I\\,\\omega(t)} \\quad \\text{válida mientras} \\quad \\omega \\gg \\omega_{*} = \\sqrt{\\frac{mga}{I}}; \\qquad \\text{exactamente: } (I\\omega)^{2} \\ge 4\\,I_\\perp\\,mga\\cos\\theta"
+    },
+    {
+     "h": "Qué hay detrás de nuestros 1,8·10²² N·m",
+     "text": "Ambas estimaciones del octavo paso son honestamente independientes — una proviene del período de precesión observado, la otra de la ley de gravitación — pero ambas se apoyan en la misma cantidad $C - A$, la diferencia de los momentos de inercia principales de la Tierra. La coincidencia hasta fracciones de porcentaje, por lo tanto, verifica la aritmética y el modelo de la forma de la Tierra, no la propia teoría de la gravitación.\n\nLo que no está en el cálculo. Promediamos el momento sobre las órbitas de la Luna y el Sol, descartando así toda la nutación. No distinguimos entre la precesión lunisolar (50,39″ por año) y la precesión general en longitud (50,29″): la diferencia la da el lento giro del propio plano de la eclíptica debido a la atracción de los planetas. Consideramos la Tierra rígida, mientras que los océanos, el núcleo externo líquido y el manto viscoso responden al momento de marea de manera diferente, y los modelos modernos de precesión son ya geofísica, no mecánica de peonzas. Y finalmente, hay una contribución relativista: la precesión geodésica del eje terrestre es de unos 19 milisegundos de arco por año frente a los 50 290 milisegundos del efecto principal — dos mil quinientas veces menor, pero se ha medido y entra en los estándares astronómicos modernos.",
+     "latex": "M = \\Omega L \\sin\\varepsilon = 1{,}80\\cdot10^{22}\\ \\text{N·m} \\quad \\text{contra} \\quad M_{\\text{Luna}} + M_{\\text{Sol}} = 1{,}24\\cdot10^{22} + 0{,}57\\cdot10^{22} = 1{,}81\\cdot10^{22}\\ \\text{N·m}"
+    }
+   ]
+  },
+  "memo": {
+   "essence": "El momento angular $\\vec L = I\\vec\\omega$ es un vector a lo largo del eje. La ecuación $d\\vec L/dt = \\vec M$ dice que el momento le añade un incremento en SU dirección. En una peonza pesada, el momento es horizontal y perpendicular a $\\vec L$, por lo que no puede ni acortar el vector ni reducir su componente vertical: la inclinación del eje está bloqueada, solo cambia el acimut. La velocidad de este movimiento es $\\Omega = mga/(I\\omega)$, y la inclinación no aparece en ella.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "$\\Omega = mga/(I\\omega)$",
+     "text": "Cuanto más rápido gira la peonza, MÁS LENTA es su precesión: $\\omega$ está en el denominador"
+    },
+    {
+     "icon": "scale",
+     "title": "Dos perpendicularidades",
+     "text": "$\\vec M \\perp \\vec L$ mantiene la longitud del vector, $\\vec M \\perp$ vertical mantiene su proyección vertical. Juntas bloquean la inclinación"
+    },
+    {
+     "icon": "fact",
+     "title": "La inclinación se cancela",
+     "text": "$\\sin\\theta$ aparece tanto en el momento como en el radio de giro, por lo que el ángulo no afecta en absoluto a la velocidad de precesión"
+    },
+    {
+     "icon": "edge",
+     "title": "La Tierra es la misma peonza",
+     "text": "25 772 años, inclinación de 23,44°, momento de la Luna y el Sol sobre el abultamiento ecuatorial de $1{,}8\\cdot10^{22}$ N·m"
+    }
+   ],
+   "where": [
+    "Rueda de bicicleta colgada de una cuerda: el eje no cae, sino que recorre un círculo en 9,4 segundos",
+    "Bala estriada y frisbee: el momento nulo conserva la dirección del eje y el cuerpo no da vueltas",
+    "Girocompás y giroscopio de aviación: el eje recuerda su dirección, y la deriva se calcula con la misma $\\Omega = M/(I\\omega)$",
+    "Precesión del eje terrestre: 50,3 segundos de arco por año, cambio de la estrella polar, desplazamiento del zodíaco en un signo",
+    "Resonancia magnética: el espín del protón precesa en un campo de 1,5 T con una frecuencia de 64 MHz"
+   ],
+   "watchOut": "Tres trampas. La primera es pensar que $\\vec L$ apunta hacia donde corren los puntos del cuerpo; apunta a lo largo del eje, y la regla de la mano derecha no es un adorno, sino una definición. La segunda es esperar que una peonza que gira rápido también se mueva lateralmente más rápido; todo lo contrario, $\\omega$ está en el denominador. La tercera es aplicar la fórmula a una peonza lenta: solo es válida cuando $I\\omega^{2} \\gg mga$, y por debajo del umbral $\\sqrt{mga/I}$ la precesión se compara con la rotación propia y ya no hay una inclinación constante."
+  },
+  "quiz": [
+   {
+    "id": "rg1",
+    "type": "mcq",
+    "q": "El eje de una peonza girada está inclinado, el peso tira del centro de masas hacia abajo, el momento respecto a la punta no es cero. ¿Por qué entonces el eje no baja?",
+    "options": [
+     "El momento es horizontal: no puede cambiar la longitud de $\\vec L$ ni disminuir su componente vertical, y bajar el eje requiere una de las dos cosas",
+     "El momento del peso está equilibrado por el momento de la reacción del apoyo, de modo que el momento total es cero",
+     "La fuerza centrífuga que surge durante la rotación levanta el eje y compensa el peso",
+     "El eje en realidad baja, pero tan lentamente que durante el tiempo de observación no se nota"
+    ],
+    "answer": 0,
+    "why": "La inclinación del eje está dada por la relación entre la proyección vertical $L_z$ y la longitud $L$. El momento es horizontal, por lo que su proyección vertical es cero y $L_z$ no cambia; el momento es perpendicular a $\\vec L$, por lo que tampoco cambia la longitud. La relación es constante, la inclinación está bloqueada, solo el azimut es libre.\n\nLa respuesta sobre los momentos equilibrados se comprueba en una línea: la reacción del apoyo se aplica en el propio punto de apoyo, su brazo respecto a ese punto es cero, no produce ningún momento. La opción de la fuerza centrífuga no es válida porque no existe tal fuerza en un sistema de referencia inercial: la fuerza de inercia aparece solo al pasar a un sistema en rotación, y de eso trata el tercer párrafo; además, estaría dirigida desde el eje, no hacia arriba. La opción \"baja imperceptiblemente\" describe una peonza real, pero por otra razón: el eje real realmente baja lentamente, pero debido a la fricción, que no está en nuestro razonamiento, y una peonza ideal mantiene la inclinación estrictamente para siempre.",
+    "hint": "Bajar el eje es aumentar el ángulo $\\theta$, es decir, disminuir $\\cos\\theta = L_z/L$. Mira qué dos cantidades deben cambiar para eso, y pregunta si el momento horizontal puede cambiar alguna de ellas."
+   },
+   {
+    "id": "rg2",
+    "type": "mcq",
+    "q": "La misma peonza se hace girar el doble de rápido, todo lo demás sin cambios. ¿Qué ocurre con la velocidad de precesión?",
+    "options": [
+     "Disminuye a la mitad",
+     "Aumenta al doble",
+     "No cambia: el momento de la gravedad es el mismo",
+     "Aumenta al cuádruple"
+    ],
+    "answer": 0,
+    "why": "$\\Omega = mga/(I\\omega)$: la velocidad angular propia está en el denominador, por lo que la precesión es inversamente proporcional al giro. Se puede entender sin fórmula: en el tiempo $dt$ el momento produce el mismo incremento $d\\vec L = \\vec M\\,dt$, pero ahora gira un vector dos veces más largo, por lo que el ángulo es la mitad.\n\nLa opción \"aumenta al doble\" es el error intuitivo más común en este tema: parece que una peonza rápida debería correr lateralmente más rápido. La opción \"no cambia\" es correcta para el momento, pero no para la precesión: el numerador es el mismo, pero el denominador cambió. Se puede comprobar visualmente: una peonza moribunda se agita por la mesa mucho más rápido que una recién girada, aunque el momento de gravedad es exactamente el mismo.",
+    "hint": "Escribe la fórmula y mira si $\\omega$ está en el numerador o en el denominador. Luego compruébalo con la observación: ¿cómo se comporta la peonza justo antes de caer, cuando la rotación casi se ha detenido?"
+   },
+   {
+    "id": "rg3",
+    "type": "free",
+    "q": "Con tus palabras: ¿por qué un momento perpendicular al vector $\\vec L$ no puede cambiar la longitud de este vector, sino solo girarlo?",
+    "keywords": [
+     "perpendicular",
+     "longitud",
+     "dirección",
+     "gira",
+     "incremento",
+     "a lo largo",
+     "proyección",
+     "escalar"
+    ],
+    "needed": 2,
+    "why": "El incremento de un vector se puede descomponer en dos partes: una dirigida a lo largo del propio vector y otra transversal. Solo la primera alarga o acorta, la segunda exclusivamente gira. Si el incremento es completamente perpendicular, simplemente no hay parte longitudinal, y la longitud permanece igual.\n\nFormalmente es una línea: la derivada del cuadrado de la longitud es igual al doble del producto escalar del vector por su derivada, y el producto escalar de vectores perpendiculares es cero. También es cierto lo contrario: si la longitud es constante, la derivada debe ser perpendicular.\n\nEs útil notar que el vector aquí puede ser cualquiera. El mismo razonamiento explica por qué una fuerza perpendicular a la velocidad no cambia su módulo: de ahí el movimiento circular uniforme y también que la fuerza magnética no realiza trabajo.",
+    "hint": "Descompón el incremento en dos componentes: a lo largo del vector y transversal, y pregunta de qué se encarga cada una. O calcula la derivada de $\\vec L \\cdot \\vec L$."
+   },
+   {
+    "id": "rg4",
+    "type": "estimate",
+    "q": "Una rueda de bicicleta de masa 2,0 kg con momento de inercia $I = 0{,}245$ kg·m² se hace girar hasta $\\omega = 30$ rad/s y se cuelga del extremo del eje a una distancia $a = 0{,}10$ m del centro de la rueda. ¿Cuál es la velocidad angular de precesión? Respuesta en rad/s, $g = 9{,}81$ m/s².",
+    "answer": 0.267,
+    "unit": "rad/s",
+    "why": "$\\Omega = mga/(I\\omega) = 2{,}0 \\cdot 9{,}81 \\cdot 0{,}10 / (0{,}245 \\cdot 30) = 1{,}962/7{,}35 = 0{,}267$ rad/s. El período de giro del eje es $T = 2\\pi/\\Omega = 23{,}5$ s: casi medio minuto por vuelta.\n\nComprobación sin calculadora: en el séptimo paso, con un brazo de 0,25 m, resultó 0,667 rad/s. Aquí el brazo es 2,5 veces menor, y entra en la fórmula linealmente, por lo que la respuesta debe ser 2,5 veces menor: $0{,}667/2{,}5 = 0{,}267$. Coincide.\n\nTambién verifica la condición de peonza rápida: $\\sqrt{mga/I} = \\sqrt{1{,}962/0{,}245} = 2{,}8$ rad/s frente a los 30 de trabajo: un margen de más de diez veces, la fórmula se aplica con confianza.",
+    "tolAbs": 0.05,
+    "hint": "Todo está directamente en la fórmula $\\Omega = mga/(I\\omega)$: sustituye los números y no olvides que $a$ es la distancia desde el punto de suspensión hasta el centro de masas, no el radio de la rueda."
+   }
+  ],
+  "title": "Momento angular y giroscopio",
+  "subtitle": "Párrafo 2 · Por qué la peonza no se cae, sino que se desvía hacia un lado",
+  "intro": [
+   "Haz girar una peonza e inclínala. Según todo lo que sabemos hasta ahora, debería caer: el peso se aplica en el centro de masa, el centro de masa cuelga a un lado del punto de apoyo, hay brazo, hay momento, y nada se opone a ese momento. El apoyo empuja exactamente en la punta, su brazo es cero y no produce ningún momento. La peonza debería caer. Pero no cae.",
+   "En lugar de caer, ocurre algo más extraño: la inclinación del eje se mantiene, y el propio eje recorre lentamente un círculo alrededor de la vertical. La respuesta 'la sostiene la rotación' no explica nada hasta que se dice qué hace exactamente la rotación. La explicación resultará ser completamente geométrica, y no hará falta ninguna fuerza nueva. Un cuerpo en rotación tiene un vector — el momento angular — que apunta a lo largo del eje. La fuerza de gravedad añade a este vector un incremento dirigido hacia donde apunta su momento. Y el momento de la gravedad resulta ser perpendicular tanto al vector mismo como a la vertical a la vez. Estas dos perpendicularidades bloquean la inclinación del eje de forma permanente.",
+   "A continuación obtendremos $\\vec L = I\\vec\\omega$, reescribiremos la ecuación de rotación del primer párrafo en forma vectorial, deduciremos la velocidad de precesión $\\Omega = mga/(I\\omega)$ y descubriremos que la inclinación del eje no aparece en ella en absoluto — se cancela en el camino. Luego comprobaremos la fórmula con una rueda de bicicleta, donde el eje recorre el círculo en nueve segundos y medio, y con la Tierra, donde la misma fórmula da veintiséis mil años."
+  ],
+  "standNote": "Cambie el soporte al modo 'Giroscopio'. La forma, la masa y el radio son los mismos que en el primer párrafo — con ellos se sigue calculando el momento de inercia $I$. Se han añadido tres controles deslizantes: velocidad angular inicial $\\omega_0$, brazo $a$ desde el punto de apoyo hasta el centro de masa, e inclinación del eje $\\theta$. El soporte calcula y muestra cuatro números: $L = I\\omega$, momento $M = mga\\sin\\theta$, velocidad de precesión $\\Omega$ y período de revolución del eje.\n\nHaga exactamente dos movimientos con él. Primero: arrastre el control de inclinación de 10 a 80 grados. El momento cambia casi seis veces — el seno crece de 0,17 a 0,98 — pero $\\Omega$ no se mueve en absoluto. Esta es la comprobación del paso 6, donde el seno se cancela, y es el resultado más inesperado del párrafo: una peonza muy inclinada recorre la vertical exactamente a la misma velocidad que una casi vertical. Segundo movimiento: arrastre $\\omega_0$ de 5 a 50 rad/s. La precesión no se acelera, sino que se ralentiza — exactamente en la misma proporción.\n\nCon los valores predeterminados (aro, $m = 2{,}0$ kg, $R = 0{,}35$ m, $\\omega = 30$ rad/s, $a = 0{,}25$ m) el soporte mostrará $I = 0{,}245$ kg·m², $L = 7{,}35$ kg·m²/s, $\\Omega = 0{,}667$ rad/s y un período de 9,4 s. El momento depende de la inclinación: con el eje horizontal es el total $mga = 4{,}90$ N·m, con una inclinación de 30 grados es la mitad, 2,45 N·m — pero $\\Omega$ es la misma en ambos casos. Esos mismos números se calculan a mano en el paso 7."
+ },
+ "ar": {
+  "title": "الزخم الزاوي والجيروسكوب",
+  "subtitle": "الفقرة 2 · لماذا لا يسقط القمة بل ينحرف جانبيًا",
+  "intro": [
+   "قم بتدوير القمة ثم قم بإمالتها. وفقًا لكل ما نعرفه حتى الآن، يجب أن تسقط: الوزن يؤثر على مركز الكتلة، ومركز الكتلة معلق بعيدًا عن نقطة الارتكاز، وهناك ذراع، وهناك عزم، ولا شيء يعارض هذا العزم. الدعم يدفع مباشرة إلى الطرف، وذراعه يساوي صفرًا، ولا ينتج أي عزم. يجب أن يسقط القمة. لكنه لا يسقط.",
+   "بدلاً من السقوط، يحدث شيء أغرب: يظل ميل المحور ثابتًا، بينما يدور المحور نفسه ببطء حول العمودي في دائرة. الجواب \"الدوران يمسكه\" لا يفسر شيئًا ما لم يُذكر ما يفعله الدوران بالضبط. سيكون التفسير هندسيًا بالكامل، ولن نحتاج إلى أي قوة جديدة. الجسم الدوار له متجه — الزخم الزاوي — موجه على طول المحور. قوة الجاذبية تضيف إلى هذا المتجه زيادة موجهة في اتجاه عزمها. وعزم الجاذبية يكون عموديًا على كل من المتجه نفسه وعلى العمودي في نفس الوقت. هذان التعامدان يحبسان ميل المحور بشكل دائم.",
+   "بعد ذلك سنحصل على $\\vec L = I\\vec\\omega$، ونعيد كتابة معادلة الدوران من الفقرة الأولى في صورة متجهة، ونستنتج سرعة المبادرة $\\Omega = mga/(I\\omega)$، ونكتشف أن ميل المحور لا يدخل فيها إطلاقًا — لقد اختصر في الطريق. ثم سنتحقق من الصيغة على عجلة دراجة، حيث يدور المحور دورة كاملة في تسع ثوانٍ ونصف، وعلى الأرض، حيث تعطي نفس الصيغة ستة وعشرين ألف سنة."
+  ],
+  "standNote": "بدّل المنصة إلى وضع \"الجيروسكوب\". الشكل والكتلة ونصف القطر هي نفسها كما في الفقرة الأولى — منها ما زال يُحسب عزم القصور الذاتي $I$. أُضيفت ثلاثة منزلقات: السرعة الزاوية الابتدائية $\\omega_0$، والذراع $a$ من نقطة الارتكاز إلى مركز الكتلة، وميل المحور $\\theta$. تحسب المنصة وتعرض أربعة أرقام: $L = I\\omega$، والعزم $M = mga\\sin\\theta$، وسرعة المبادرة $\\Omega$، وفترة دوران المحور.\n\nقم بحركتين فقط عليها. الأولى: اسحب منزلق الميل من 10 إلى 80 درجة. يتغير العزم عندها تقريبًا ستة أضعاف — الجيب يزداد من 0.17 إلى 0.98 — بينما $\\Omega$ لا تتحرك إطلاقًا. هذا هو اختبار الخطوة 6، حيث اختصر الجيب، وهو النتيجة الأكثر إثارة للدهشة في الفقرة: القمة المائلة بشدة تدور حول العمودي بنفس السرعة تمامًا مثل القمة شبه العمودية. الحركة الثانية: اسحب $\\omega_0$ من 5 إلى 50 راديان/ثانية. المبادرة عندها لا تتسارع بل تتباطأ — بنفس العدد من المرات تمامًا.\n\nعند القيم الافتراضية (طوق، $m = 2.0$ كجم، $R = 0.35$ م، $\\omega = 30$ راديان/ثانية، $a = 0.25$ م) ستعرض المنصة $I = 0.245$ كجم·م²، $L = 7.35$ كجم·م²/ثانية، $\\Omega = 0.667$ راديان/ثانية، وفترة 9.4 ثانية. العزم يعتمد على الميل: عند المحور الأفقي يكون $mga = 4.90$ نيوتن·م كاملًا، وعند ميل 30 درجة يكون نصف ذلك، 2.45 نيوتن·م — بينما $\\Omega$ هي نفسها في الحالتين. هذه الأرقام نفسها محسوبة يدويًا في الخطوة 7.",
+  "formula": {
+   "name": "الزخم الزاوي وسرعة البدارية",
+   "latex": "\\vec L = I\\vec\\omega, \\qquad \\frac{d\\vec L}{dt} = \\vec M, \\qquad \\Omega = \\frac{mga}{I\\omega}",
+   "alsoKnown": "معادلة العزوم في الصورة المتجهية؛ صيغة البدارية المنتظمة لقمة دوارة متناظرة ثقيلة. بالنسبة للأرض، تُسمى نفس الظاهرة ببادارية الاعتدالات",
+   "authors": [
+    {
+     "who": "هيبارخوس النيقي",
+     "year": "حوالي 127 قبل الميلاد",
+     "what": "قارن قياساته لموقع نجم السماك الأعزل بسجلات تيموخاريس التي تعود إلى قرن ونصف قبل ذلك، واكتشف أن نقطة الاعتدال الربيعي تزحف على طول دائرة البروج بما لا يقل عن درجة واحدة كل قرن. كان الحذر في الصياغة في محله: السرعة الحقيقية هي 1.4 درجة لكل قرن. لقد اكتشف الظاهرة لكنه لم يعرف أسبابها"
+    },
+    {
+     "who": "إسحاق نيوتن",
+     "year": "1687",
+     "what": "في الكتاب الثالث من 'المبادئ'، فسر بدارية الاعتدالات بجاذبية القمر والشمس للانتفاخ الاستوائي للأرض. هذا هو أول حساب جيروسكوب في التاريخ - وقد طُبق مباشرة على الكوكب، قبل قرن ونصف من تجميع الجيروسكوب على الطاولة"
+    },
+    {
+     "who": "ليونارد أويلر",
+     "year": "1765",
+     "what": "في 'نظرية حركة الأجسام الصلبة'، كتب معادلات الدوران في محاور مرتبطة بالجسم، وأدخل المحاور الرئيسية للقصور الذاتي والزوايا التي تحمل اسمه؛ من هذه المعادلات، تُشتق البدارية والتمايل كحلول خاصة"
+    },
+    {
+     "who": "ليون فوكو",
+     "year": "1852",
+     "what": "بنى دوارًا سريعًا في تعليق كارداني، وأظهر أن محوره يحافظ على اتجاهه بينما تدور الغرفة مع الأرض، وأعطى الجهاز اسمه: جيروسكوب، 'الذي ينظر إلى الدوران'"
+    }
+   ],
+   "story": "بين الاكتشاف والتفسير هنا مرت ثمانية عشر قرنًا، وبين التفسير والتفسير الصحيح - ستون عامًا أخرى. حصل نيوتن في 'المبادئ' على رقم شبه صحيح لبادارية محور الأرض، لكنه أخطأ مرتين في الطريق: فقد اعتقد أن القمر يؤثر على انتفاخ الأرض بقوة تعادل حوالي أربعة أضعاف ونصف قوة الشمس، بينما النسبة الحقيقية تزيد قليلاً عن الضعف، وفي نفس الوقت قدر الانتفاخ نفسه بشكل غير صحيح. الأخطاء عوضت بعضها جزئيًا، فخرجت النتيجة مشابهة للحقيقة. الاشتقاق الدقيق قدمه جان ليرون دالمبير في عام 1749، ومنذ ذلك الحين يُعتبر نظرية البدارية حسابًا وليس تخمينًا.\n\nالجهاز ظهر بعد النظرية. أظهر فوكو في عام 1851 دوران الأرض باستخدام بندول، وفي العام التالي أراد إظهار نفس الشيء دون خيط طويل وقبة عالية. أخذ قرصًا ثقيلًا، ولفه حتى عدة مئات من الدورات في الثانية، وعلقه في تعليق كارداني حيث لا يمكن لأي عزم أن يصل إليه. حافظ المحور على اتجاهه، بينما تحول المختبر بأكمله ببطء بالنسبة له. كانت التجربة غير مقنعة لسبب هندسي بحت: الاحتكاك في المحامل التهم الدوران في غضون دقائق، ولم يكن من الممكن قياس أي شيء كميًا. بقي الاسم. بعد نصف قرن، تولى هيرمان أنشوتز-كومبفيه مهمة لا تصلح لها البوصلة المغناطيسية إطلاقًا - الملاحة داخل هيكل فولاذي لغواصة - وفي عام 1908 بنى بوصلة جيروسكوبية تعمل. من تلك اللحظة، تحول الجيروسكوب من لعبة عرض إلى جهاز لا تطير بدونه أي طائرة ولا تصل إلى المدار أي صاروخ.",
+   "symbols": [
+    {
+     "sym": "L",
+     "latex": "\\vec L",
+     "what": "الزخم الزاوي للجسم",
+     "unit": "kg·m²/s",
+     "note": "متجه؛ عند الدوران حول محور رئيسي، يكون موجهًا على طول المحور وفق قاعدة اليد اليمنى، وليس في اتجاه حركة نقاط الجسم"
+    },
+    {
+     "sym": "I",
+     "latex": "I",
+     "what": "عزم القصور الذاتي حول محور الدوران",
+     "unit": "kg·m²",
+     "note": "مأخوذ جاهزًا من القسم الأول: $I = kmR^2$، حيث $k$ يساوي 1 للطوق، و½ للقرص، و⅖ للكرة"
+    },
+    {
+     "sym": "ω",
+     "latex": "\\vec\\omega",
+     "what": "السرعة الزاوية للدوران الذاتي",
+     "unit": "rad/s",
+     "note": "أيضًا متجه على طول المحور؛ لجسم متماثل يدور حول محور رئيسي، $\\vec L$ و $\\vec\\omega$ متوازيان - في الحالة العامة ليس كذلك"
+    },
+    {
+     "sym": "M",
+     "latex": "\\vec M",
+     "what": "عزم القوى الخارجية بالنسبة لنقطة الارتكاز",
+     "unit": "N·m",
+     "note": "بالنسبة لقمة دوارة ثقيلة، هذا هو عزم الوزن؛ رد فعل الارتكاز مطبق عند نقطة الارتكاز نفسها، وذراعه صفر، ولا يعطي عزمًا"
+    },
+    {
+     "sym": "Ω",
+     "latex": "\\Omega",
+     "what": "السرعة الزاوية للبادارية",
+     "unit": "rad/s",
+     "note": "السرعة التي يدور بها المحور حول العمودي؛ لا تخلط بينها وبين $\\omega$ - بالنسبة لقمة دوارة سريعة، تكون $\\Omega$ أقل بعشرات ومئات المرات"
+    },
+    {
+     "sym": "θ",
+     "latex": "\\theta",
+     "what": "زاوية ميل المحور عن العمودي",
+     "unit": "rad أو °",
+     "note": "لا تدخل في الصيغة النهائية: تُختصر. القمة الدوارة العمودية ($\\theta = 0$) لا تبادري إطلاقًا - لا يوجد عزم"
+    },
+    {
+     "sym": "a",
+     "latex": "a",
+     "what": "المسافة من نقطة الارتكاز إلى مركز الكتلة",
+     "unit": "m",
+     "note": "تُقاس على طول المحور؛ كلما كان مركز الكتلة أبعد عن الارتكاز، زاد العزم وزادت سرعة البدارية"
+    },
+    {
+     "sym": "g",
+     "latex": "g",
+     "what": "تسارع الجاذبية",
+     "unit": "m/s²",
+     "const": "g",
+     "note": "يدخل فقط من خلال عزم الوزن؛ في انعدام الوزن $M = 0$، لا توجد بدارية، والمحور ببساطة يحافظ على اتجاهه"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "الاشتقاق الصارم",
+   "lead": "من القسم الأول سنحتاج إلى شيئين فقط: تعريف عزم القصور الذاتي $I$ ومعادلة الدوران $M = I\\varepsilon$. كلاهما يُؤخذ جاهزًا، ولن نعيد اكتشافهما. كل ما تبقى في هذا الاشتقاق ليس فيزياء بل هندسة متجهات: تعامدان وقوس واحد.",
+   "steps": [
+    {
+     "text": "لنأخذ جسمًا يدور حول محور ثابت بسرعة زاوية $\\omega$. لكل نقطة فيه زخم $m_i v_i$ وذراع $r_i$ — المسافة إلى المحور. مجموع حاصل ضرب الزخم في الذراع يُسمى عزم الزخم الزاوي حول المحور. نعوّض $v_i = \\omega r_i$ من القسم الأول، وسيظهر المجموع المألوف من تلقاء نفسه: إنه نفس عزم القصور الذاتي $I$.\n\nلكن $L$ ليس عددًا بل متجهًا، واتجاهه هو مصدر نصف الالتباس في هذا الموضوع. إنه يشير على طول المحور، وليس إلى حيث تتحرك نقاط الجسم. الاختيار ليس اعتباطيًا: اتجاه المحور هو الاتجاه الوحيد في الجسم الذي يبقى ثابتًا أثناء الدوران، وكل الاتجاهات الأخرى تدور معه، وفقط على طول المحور يمكن رسم سهم بحيث لا يهرب إلى أي مكان. إلى أين بالضبط على طول المحور، يحدده قاعدة اليد اليمنى: اثنِ أصابعك في اتجاه الدوران، وسيشير إبهامك إلى $\\vec L$.",
+     "latex": "L = \\sum_i m_i v_i r_i = \\sum_i m_i \\omega r_i^{2} = \\Bigl(\\sum_i m_i r_i^{2}\\Bigr)\\,\\omega = I\\omega, \\qquad \\vec L = I\\vec\\omega",
+     "figure": "rigilvec",
+     "figCaption": "نقاط الحافة تتحرك في دائرة، بينما المتجه $\\vec L$ يشير على طول المحور: هذا هو الاتجاه الوحيد الذي يبقى ثابتًا أثناء الدوران"
+    },
+    {
+     "text": "نشتق هذه المعادلة بالنسبة للزمن. الجسم صلب، والمحور نفسه، لذا فإن $I$ ثابت ويُخرج خارج المشتقة. يتبقى مشتقة السرعة الزاوية — التسارع الزاوي $\\vec\\varepsilon$ — وحاصل الضرب $I\\vec\\varepsilon$ نعرفه بالفعل: إنه عزم القوى الخارجية، معادلة الدوران من القسم الأول.\n\nرسميًا، لم نكتب شيئًا جديدًا. من حيث المضمون، كتبنا كل شيء. الصيغة العددية $M = I\\varepsilon$ قادرة على الإجابة عن سؤال واحد فقط: أسرع أم أبطأ. أما الصيغة المتجهة فتجيب أيضًا عن سؤال «إلى أين سيتجه المحور»، وهو بالضبط ما يشغلنا. يجب قراءتها حرفيًا دون تعديلات من المنطق السليم: خلال الزمن $dt$، يحصل المتجه $\\vec L$ على إضافة $d\\vec L = \\vec M\\,dt$، موجهة إلى حيث يشير العزم. ليس إلى حيث يشير $\\vec L$ نفسه، ولا إلى حيث تسحب القوة.",
+     "latex": "\\frac{d\\vec L}{dt} = I\\,\\frac{d\\vec\\omega}{dt} = I\\vec\\varepsilon = \\vec M \\qquad \\Longrightarrow \\qquad d\\vec L = \\vec M\\,dt",
+     "figure": "rigidldt",
+     "figCaption": "الإضافة تُجمع مع المتجه وفق قاعدة متوازي الأضلاع وتكون موجهة على طول العزم، وليس على طول $\\vec L$ نفسه"
+    },
+    {
+     "text": "لنبدأ بالحالة البسيطة: لا يوجد عزم خارجي. عندها يكون $\\vec L$ ثابتًا، وثبات المتجه يعني ثبات شيئين معًا: الطول والاتجاه. عن الطول يُذكر أكثر (المتزلجة التي تضم ذراعيها، مشروحة في موضوع «قوانين الحفظ»)، لكن في التقنية يعمل النصف الثاني دائمًا تقريبًا: الجسم الملفوف الذي يطير بحرية يحافظ على اتجاه محوره في الفضاء.\n\nالرصاصة ذات السرطانة: خطوة السرطانة 25 سنتيمترًا عند سرعة 800 م/ث تعطي 3200 دورة في الثانية، أي $\\omega \\approx 2\\cdot10^{4}$ راديان/ث — مائة وتسعون ألف دورة في الدقيقة. محور هذه الرصاصة يبقى على طول المسار، والرصاصة لا تتقلب بل تتجه بمقدمتها للأمام. قرص الفريسبي عند عشر دورات في الثانية يحافظ على مستواه ولذلك ينزلق بدلًا من أن يسقط. القمر الصناعي الملفوف حول محور موجه نحو النقطة المطلوبة يحافظ على التوجيه دون تشغيل واحد للمحركات. في الحالات الثلاث، لا تعمل «قوة» بل مجرد غياب العزم.",
+     "latex": "\\vec M = 0 \\;\\Longrightarrow\\; \\vec L = \\mathrm{const} \\;\\Longrightarrow\\; |\\vec L| = \\mathrm{const}\\ \\ \\text{و}\\ \\ \\hat L = \\mathrm{const}",
+     "figure": "rigifree",
+     "figCaption": "العزم الصفري يحافظ ليس فقط على مقدار $L$، بل أيضًا على اتجاه المحور في الفضاء — على هذا يقوم كل تثبيت بالدوران"
+    },
+    {
+     "text": "الآن نضيف الجاذبية. القمة ترتكز بنقطة مدببة على النقطة $O$، والمحور مائل عن العمودي بزاوية $\\theta$، ومركز الكتلة يقع على المحور على مسافة $a$ من النقطة المدببة. الوزن $m\\vec g$ مؤثر عند مركز الكتلة وموجه للأسفل. العزم حول نقطة الارتكاز يساوي حاصل الضرب الاتجاهي لمتجه نصف القطر في القوة.\n\nالمقدار يُقرأ كقوة مضروبة في الذراع، والذراع هنا هي المسافة الأفقية من العمودي المار بالنقطة المدببة إلى مركز الكتلة، أي $a\\sin\\theta$. الاتجاه تحدده قاعدة حاصل الضرب الاتجاهي: الناتج عمودي على كلا العاملين. عمودي على الوزن — أي عمودي على العمودي، وبالتالي أفقي تمامًا عند أي ميل. عمودي على متجه نصف القطر الذي يقع على طول المحور — أي عمودي أيضًا على $\\vec L$ الذي يقع هناك. تذكر التعامدين: الخطوة التالية مبنية عليهما بالكامل.",
+     "latex": "\\vec M = \\vec r \\times m\\vec g, \\qquad |\\vec M| = m g a \\sin\\theta, \\qquad \\vec M \\perp \\vec L, \\quad \\vec M \\perp \\hat z",
+     "figure": "rigitorq2",
+     "figCaption": "ذراع الوزن — المسافة الأفقية $a\\sin\\theta$؛ العزم نفسه عمودي على المحور وعلى العمودي، أي أفقي"
+    },
+    {
+     "text": "الخطوة الأساسية، وهي هندسية بالكامل. طول المتجه لا يتغير إلا بالجزء من الإضافة الموازي له؛ الجزء العرضي يسبب الدوران فقط. يُتحقق من ذلك بسطر واحد: نشتق مربع الطول ونحصل على ضعف حاصل الضرب القياسي للمتجه مع مشتقته. بما أن $\\vec M \\perp \\vec L$، فإن هذا الضرب يساوي صفرًا — طول $L$ ثابت، مهما فعل الوزن.\n\nلكن هذا التعامد وحده لا يكفي: يمكن للمحور أن يميل دون تغيير طول $\\vec L$. هنا يعمل التعامد الثاني. العزم أفقي، لذا مركبته العمودية تساوي صفرًا، وبالتالي المركبة العمودية $L_z$ لا تتغير أيضًا. نجمع: الطول ثابت، المركبة العمودية ثابتة — إذن النسبة بينهما $\\cos\\theta$ ثابتة أيضًا. ميل المحور مقيد. يبقى فقط أن يتغير السمت: طرف المتجه $\\vec L$ يتحرك على دائرة أفقية، والمحور يرسم مخروطًا حول العمودي.\n\nوهذا هو جواب سؤال القسم. القمة لا تسقط ليس لأن شيئًا يسندها من الأسفل، ولا لأن الدوران يخلق قوة جديدة. السقوط يعني زيادة $\\theta$، ولذلك تحتاج إما إلى تقصير $\\vec L$ أو إنقاص مركبته العمودية. العزم الأفقي العمودي على $\\vec L$ لا يستطيع فعل أي منهما.",
+     "latex": "\\frac{d}{dt}\\bigl(\\vec L\\cdot\\vec L\\bigr) = 2\\,\\vec L\\cdot\\frac{d\\vec L}{dt} = 2\\,\\vec L\\cdot\\vec M = 0 \\;\\Longrightarrow\\; L = \\mathrm{const}; \\qquad \\frac{dL_z}{dt} = M_z = 0 \\;\\Longrightarrow\\; \\cos\\theta = \\frac{L_z}{L} = \\mathrm{const}",
+     "figure": "rigicone",
+     "figCaption": "الإضافة أفقية وعمودية على $\\vec L$: لا يتغير طول المتجه ولا مركبته العمودية — يبقى فقط الدوران في السمت"
+    },
+    {
+     "text": "لنحسب سرعة هذا الدوران. من الأفضل النظر من الأعلى: هناك نرى فقط ما يتحرك. الإسقاط الأفقي للمتجه $\\vec L$ له طول $L\\sin\\theta$ — هذا هو نصف قطر الدائرة التي يتحرك عليها طرف المتجه. خلال الزمن $dt$، ينتقل الطرف بمقدار $|d\\vec L| = M\\,dt$، والانتقال عمودي على الإسقاط، أي أنه على طول القوس تمامًا، دون إضافة إلى نصف القطر. زاوية الدوران — القوس مقسومًا على نصف القطر.\n\nوهنا يحدث ما يستحق الحساب. في البسط لدينا العزم $mga\\sin\\theta$، وفي المقام نصف القطر $L\\sin\\theta$. الجيبان يُختصران، ويختفي ميل المحور من الإجابة تمامًا. القمة المائلة تقريبًا أفقيًا تدور حول العمودي بنفس السرعة الزاوية تمامًا مثل القمة القائمة تقريبًا. هذه هي الحالة التي تعرف فيها الصيغة أكثر من الحدس: على المنصة يمكن التحقق منها بحركة واحدة لشريط التمرير $\\theta$.",
+     "latex": "d\\varphi = \\frac{|d\\vec L|}{L\\sin\\theta} = \\frac{M\\,dt}{L\\sin\\theta} \\;\\Longrightarrow\\; \\Omega = \\frac{d\\varphi}{dt} = \\frac{M}{L\\sin\\theta} = \\frac{mga\\,\\sin\\theta}{I\\omega\\,\\sin\\theta} = \\frac{mga}{I\\omega}",
+     "figure": "rigiprec",
+     "figCaption": "منظر علوي: خلال $dt$ يقطع طرف المتجه قوسًا $M\\,dt$ على دائرة نصف قطرها $L\\sin\\theta$ — ومن هنا تأتي السرعة الزاوية للبادئة"
+    },
+    {
+     "text": "لنقرأ الصيغة بالكلمات. في البسط كل ما يُسقط القمة: الكتلة، الجاذبية، إزاحة مركز الكتلة. في المقام كل ما يقاوم: عزم القصور الذاتي والدوران الذاتي. والنتيجة الرئيسية تناقض الانطباع الأول — كلما زادت سرعة دوران القمة، كانت البادئة أبطأ. يبدو أن السريع يجب أن يتحرك جانبًا أسرع؛ في الواقع العكس، والسبب واضح من الاشتقاق: في نفس الزمن، نفس العزم يعطي نفس الإضافة $d\\vec L$، لكنه يدير متجهًا أطول بزاوية أصغر.\n\nومن هنا مباشرة ما تنتهي إليه الأمور. الاحتكاك في النقطة المدببة يستهلك $\\omega$، والمقام يتضاءل، و$\\Omega$ يزداد — يبدأ المحور في الدوران حول الدائرة أسرع فأسرع. البادئة المتسارعة قبل السقوط ليست سبب النهاية بل نذيرها.\n\nأرقام على عجلة دراجة مرفوعة عن الشوكة ومعلقة من أحد طرفي محورها. الكتلة $m = 2{,}0$ كجم، معظمها على الحافة نصف قطرها $R = 0{,}35$ م، لذا $I = mR^{2}$ (القسم الأول، معامل الحلقة $k = 1$). دُوّرت حتى $\\omega = 30$ راديان/ث — حوالي خمس دورات في الثانية. الحبل يمسك المحور على مسافة $a = 0{,}25$ م من مركز العجلة.",
+     "latex": "I = 0{,}245\\ \\text{كجم·م}^2,\\quad L = I\\omega = 7{,}35\\ \\frac{\\text{كجم·م}^2}{\\text{ث}},\\quad M = mga = 4{,}905\\ \\text{نيوتن·م}, \\qquad \\Omega = \\frac{4{,}905}{7{,}35} = 0{,}667\\ \\frac{\\text{راديان}}{\\text{ث}}, \\quad T = \\frac{2\\pi}{\\Omega} = 9{,}4\\ \\text{ث}",
+     "figure": "rigiwheel",
+     "figCaption": "العجلة المعلقة من أحد طرفي محورها لا تسقط، بل تدور حول الدائرة في تسع ثوانٍ ونصف — وتنجح خلال هذا الوقت في الالتفاف 45 مرة"
+    },
+    {
+     "text": "نفس الصيغة على مقياس الكواكب. الأرض ليست كرة: بسبب دورانها اليومي، نصف قطرها الاستوائي أكبر بـ 21 كيلومترًا من القطبي، وحول خط الاستواء يوجد انتفاخ. القمر والشمس يجذبان الجانب القريب من هذا الانتفاخ بقوة أكبر من البعيد، وينتج عزم يسعى لوضع خط الاستواء في مستوى المدار — أي تقويم المحور. لكن العزم عمودي على المحور، ونحن نعرف بالفعل ما يفعله مثل هذا العزم: المحور لا يستقيم بل يبادئ، محافظًا على ميل 23.44° ويدور حول الدائرة في 25,772 سنة. الفرق عن القمة هنا في الإشارة: عند القمة، الجاذبية تُسقط المحور، والدوران يحدث في نفس اتجاه دوران القمة، بينما القمر والشمس يقوّمان المحور — العزم موجه عكسيًا، ومحور الأرض يدور حول الدائرة عكس دورانها الذاتي. يسمي الفلكيون هذا الحركة التراجعية لنقاط الاعتدال.\n\nلنعكس الصيغة ونجد العزم المسؤول عن ذلك. عزم القصور الذاتي للأرض $I = 0{,}3307\\,MR^{2} = 8{,}02\\cdot10^{37}$ كجم·م²، السرعة الزاوية حسب اليوم النجمي $\\omega = 7{,}292\\cdot10^{-5}$ راديان/ث، ومن هنا $L = 5{,}85\\cdot10^{33}$ كجم·م²/ث. سرعة البادئة: 50.29 ثانية قوسية في السنة، أي $7{,}73\\cdot10^{-12}$ راديان/ث. الآن $M = \\Omega L \\sin\\varepsilon$ — نفس صيغة الخطوة 6، لكن محلولة بالنسبة للعزم.\n\nيجب التحقق من الإجابة بشكل مستقل، وإلا فهذا ليس حسابًا بل ملاءمة. العزم من الجسم الجاذب يُحسب مباشرة: إنه متناسب مع فرق العزوم الرئيسية للقصور الذاتي $C - A$، أي مع عدم الكروية نفسه. القمر يعطي $1{,}24\\cdot10^{22}$ نيوتن·م، الشمس — $0{,}57\\cdot10^{22}$، المجموع $1{,}81\\cdot10^{22}$. يتطابق مع الرقم الأول حتى كسور النسبة المئوية، وفي نفس الوقت نرى مساهمة كل منهما: القمر أقوى من الشمس بـ 2.2 مرة، رغم أنه يفقد لها في الكتلة بـ 27 مليون مرة — يأخذ بمكعب المسافة.",
+     "latex": "M = \\Omega\\,L\\,\\sin\\varepsilon = 7{,}73\\cdot10^{-12}\\cdot 5{,}85\\cdot10^{33}\\cdot 0{,}398 = 1{,}80\\cdot10^{22}\\ \\text{نيوتن·م}; \\qquad \\tfrac{3}{4}\\,\\frac{Gm}{r^{3}}\\,(C-A)\\sin 2\\varepsilon\\ \\Big|_{\\text{القمر}+\\text{الشمس}} = 1{,}81\\cdot10^{22}\\ \\text{نيوتن·م}",
+     "figure": "rigiearth",
+     "figCaption": "محور الأرض يرسم مخروطًا بنصف زاوية 23.44° خلال 25,772 سنة. الصيغة نفسها كما في القمة — فقط العزم يصنعه القمر والشمس، ودور الذراع يلعبه الانتفاخ الاستوائي"
+    }
+   ],
+   "plate": "\\Omega = \\frac{mga}{I\\omega}",
+   "plateCap": "على اليسار — مدى سرعة دوران المحور حول العمودي. على اليمين — ما يُسقط القمة مقسومًا على ما يقاوم. ميل المحور غير موجود في الصيغة إطلاقًا: لقد اختُصر في الطريق، وهذه هي النتيجة الوحيدة غير المتوقعة حقًا في هذا القسم.",
+   "note": "لنعد ما افترضناه ضمنيًا — هذه هي حدود الصيغة. أولًا: $\\vec L$ موجه تمامًا على طول المحور. هذا صحيح تمامًا فقط لجسم متماثل يدور حول محور رئيسي؛ في الحالة العامة، $\\vec L$ و$\\vec\\omega$ غير متوازيين، وتنتج ميكانيكا مختلفة تمامًا — عنها في الملحق. ثانيًا: القمة سريعة، أي $\\Omega \\ll \\omega$، وهو نفس $I\\omega^{2} \\gg mga$. لعجلتنا، العتبة $\\sqrt{mga/I} = \\sqrt{4{,}905/0{,}245} = 4{,}5$ راديان/ث عند تشغيل 30 — هامش سبعة أضعاف تقريبًا. القمة البطيئة لا تخضع للصيغة. ثالثًا: حصلنا على حل خاص حيث $\\theta$ ثابت تمامًا؛ الحل العام يحتوي أيضًا على المبادلة — اهتزاز صغير للمحور، تظهره القمة الحقيقية في أول نصف ثانية بعد الإطلاق. رابعًا: لا يوجد احتكاك، $\\omega$ ثابتة، نقطة الارتكاز ثابتة. النقطة المدببة الحقيقية تنزلق وتتدحرج وتسخن، والاحتكاك في نقطة الارتكاز هو المسؤول عن أجمل التأثيرات — البيضة المسلوقة التي ترتفع ولعبة الانقلاب."
+  },
+  "math": {
+   "title": "الرياضيات التي نحتاجها هنا",
+   "lead": "لا يوجد فيزياء تقريبًا في هذا القسم — هناك ثلاث حقائق هندسية حول المتجهات. سنشرحها بشكل منفصل، لأن كل واحدة منها تعمل خارج نطاق الجيروسكوب.",
+   "items": [
+    {
+     "what": "مشتقة المتجه: الطول بشكل منفصل، والاتجاه بشكل منفصل",
+     "why": "أي زيادة في المتجه يمكن تحليلها إلى جزأين: على طول المتجه نفسه وعموديًا عليه. الأول يغير الطول، والثاني يغير الاتجاه فقط، ولا شيء غير ذلك. رسميًا، يُكتب هذا من خلال مشتقة مربع الطول: إنها تساوي ضعف الضرب القياسي للمتجه ومشتقته. إذا كانت المشتقة عمودية على المتجه، يكون الضرب صفرًا، والطول ثابت. والعكس صحيح أيضًا: إذا كان الطول ثابتًا، يجب أن تكون المشتقة عمودية.\n\nهذه الحقيقة هي كل الجيروسكوب في سطر واحد. لكنها تفسر أيضًا أشياء أخرى تمامًا، لأن المتجه هنا يمكن أن يكون أي شيء. خذ السرعة: القوة العمودية على السرعة لا تغير مقدارها — ومن هنا تأتي الحركة الدائرية المنتظمة، وكذلك قوة لورنتز المغناطيسية لا تبذل شغلًا. خذ متجه نصف القطر: السرعة العمودية عليه تعني الحركة على دائرة نصف قطرها ثابت. نفس الرياضيات على ثلاثة متجهات مختلفة.",
+     "latex": "\\frac{d}{dt}\\,|\\vec A|^{2} = 2\\,\\vec A\\cdot\\frac{d\\vec A}{dt} \\qquad \\Longrightarrow \\qquad \\Bigl(\\frac{d\\vec A}{dt} \\perp \\vec A\\Bigr) \\iff \\bigl(|\\vec A| = \\mathrm{const}\\bigr)",
+     "kit": "derivative"
+    },
+    {
+     "what": "الضرب الاتجاهي: من أين جاءت كلتا العموديتين",
+     "why": "عزم القوة معرّف من خلال الضرب الاتجاهي: المقدار يساوي حاصل ضرب الأطوال في جيب الزاوية بينهما، والاتجاه عمودي على كلا العاملين وفق قاعدة اليد اليمنى. في مسألتنا، العاملان هما متجه نصف القطر على طول محور القمة والوزن الرأسي. ومن هنا تأتي كلتا العموديتين في الخطوة 5 مجانًا، دون أي فيزياء: العمودية على الرأسي (العزم أفقي) والعمودية على المحور (العزم عمودي على $\\vec L$).\n\nجيب الزاوية يعطي نتيجة أخرى تستحق التحقق يدويًا. عندما يصبح المحور رأسيًا تمامًا، تكون الزاوية بين متجه نصف القطر والوزن صفرًا، وجيب الزاوية صفرًا، ولا يوجد عزم إطلاقًا — ولا مبادرة أيضًا. تسمى هذه القمة نائمة: إنها تقف مستقيمة وتبدو ثابتة. تعيش هذه الحالة تمامًا حتى يزيحها الاحتكاك قليلاً إلى الجانب؛ ثم يتوقف جيب الزاوية عن كونه صفرًا، وتستيقظ القمة.",
+     "latex": "\\vec M = \\vec r \\times m\\vec g, \\qquad |\\vec M| = m g a \\sin\\theta, \\qquad \\vec M \\perp \\vec r,\\ \\ \\vec M \\perp \\vec g, \\qquad \\theta \\to 0 \\;\\Longrightarrow\\; \\vec M \\to 0",
+     "kit": "dotcross"
+    },
+    {
+     "what": "الزاوية كقوس مقسوم على نصف القطر — وكتابة مدمجة لكل المبادرة",
+     "why": "في الخطوة 6، حسبنا زاوية الدوران كنسبة القوس إلى نصف القطر. هذا هو تعريف الراديان، وهو يعمل فقط للزوايا الصغيرة حيث لا يختلف القوس عن الوتر — وفي حالتنا الزاوية صغيرة بلا حدود بحكم البناء، لذا لا توجد مشكلة. المهم فقط ألا نخلط بين نصف القطر: نهاية المتجه $\\vec L$ تتحرك ليس على دائرة نصف قطرها $L$، بل على دائرة أفقية نصف قطرها $L\\sin\\theta$، لأن المركبة الرأسية لا تتحرك.\n\nكل ذلك يتلخص في سطر واحد يحل محل الاستنتاج بأكمله. إذا كان متجه بطول ثابت يدور حول محور ما بسرعة زاوية $\\vec\\Omega$، فإن مشتقته تساوي الضرب الاتجاهي $\\vec\\Omega$ في المتجه نفسه: المقدار هو بالضبط $\\Omega L \\sin\\theta$، والاتجاه عمودي على كليهما. ساوِ هذا بالعزم — وستحصل على نفس صيغة المبادرة في سطر واحد. تذكر هذه الكتابة: في القسم الثالث ستصبح أداة عمل، وهنا مجرد توافق جميل.",
+     "latex": "\\Omega = \\frac{|d\\vec L|}{L\\sin\\theta\\;dt} \\qquad \\Longleftrightarrow \\qquad \\frac{d\\vec L}{dt} = \\vec\\Omega \\times \\vec L, \\quad \\bigl|\\vec\\Omega \\times \\vec L\\bigr| = \\Omega L \\sin\\theta = M",
+     "kit": "vector"
+    }
+   ]
+  },
+  "example": {
+   "title": "مثال بالأرقام",
+   "lead": "لنحسب قمة دوّارة للأطفال — ونكتشف أيضًا عند أي سرعة دوران تصبح معادلتنا غير صحيحة. الثاني هنا أكثر إثارة من الأول.",
+   "given": "قمة دوّارة: قرص كتلته $m = 80$ غم ونصف قطره $R = 3{,}0$ سم، مثبت على ساق؛ الطرف السفلي يبعد 3.0 سم تحت مركز القرص، لذا $a = 0{,}030$ م. المحور مائل بزاوية $\\theta = 20°$. تم تدويرها حتى $\\omega = 300$ راد/ث — أي 48 دورة في الثانية. $g = 9{,}81$ م/ث². المطلوب إيجاد سرعة ودورة البدارية، ثم فهم ما سيحدث عندما يقلل الاحتكاك $\\omega$ إلى 30 راد/ث.",
+   "law": "عزم القصور الذاتي للقرص $I = \\tfrac12 mR^{2}$ نأخذه جاهزًا من الفقرة الأولى. ثم $L = I\\omega$، و$M = mga\\sin\\theta$، و$\\Omega = mga/(I\\omega)$ — معادلة الخطوة 6.",
+   "solution": [
+    {
+     "text": "عزم القصور الذاتي. لا نأخذ كتلة الساق في الحسبان: فهي صغيرة وتقع بالكامل تقريبًا بالقرب من المحور، لذا تساهم بشكل ضعيف في $\\sum m r^{2}$.",
+     "latex": "I = \\tfrac12 m R^{2} = 0{,}5 \\cdot 0{,}080 \\cdot (0{,}030)^{2} = 3{,}60\\cdot10^{-5}\\ \\text{kg·m}^{2}"
+    },
+    {
+     "text": "الزخم الزاوي وعزم قوة الجاذبية. لاحظ أن العزم صغير، ثمانية أجزاء من الألف من نيوتن متر — لكن $L$ ليس كبيرًا أيضًا.",
+     "latex": "L = I\\omega = 3{,}60\\cdot10^{-5}\\cdot 300 = 1{,}080\\cdot10^{-2}\\ \\frac{\\text{kg·m}^{2}}{\\text{s}}, \\qquad M = mga\\sin 20° = 0{,}023544 \\cdot 0{,}342 = 8{,}05\\cdot10^{-3}\\ \\text{N·m}"
+    },
+    {
+     "text": "سرعة البدارية. يمكن الحساب بطريقتين — عبر $M/(L\\sin\\theta)$ أو مباشرة بالمعادلة النهائية حيث تم اختصار الجيب. يجب أن تتطابق الإجابة، وهذا فحص جيد للحسابات.",
+     "latex": "\\Omega = \\frac{M}{L\\sin\\theta} = \\frac{8{,}05\\cdot10^{-3}}{1{,}080\\cdot10^{-2}\\cdot 0{,}342} = 2{,}18\\ \\frac{\\text{rad}}{\\text{s}} \\;=\\; \\frac{mga}{I\\omega} = \\frac{0{,}023544}{1{,}080\\cdot10^{-2}} = 2{,}18\\ \\frac{\\text{rad}}{\\text{s}}"
+    },
+    {
+     "text": "دورة الالتفاف حول المحور وعدد الدورات الذاتية خلال هذه الدورة. النسبة $\\omega/\\Omega$ هي أيضًا فحص لشرط القمة السريعة: كلما كانت أكبر، كانت المعادلة أكثر موثوقية.",
+     "latex": "T = \\frac{2\\pi}{\\Omega} = \\frac{6{,}283}{2{,}18} = 2{,}88\\ \\text{s}, \\qquad \\frac{\\omega}{\\Omega} = \\frac{300}{2{,}18} = 138"
+    },
+    {
+     "text": "الآن عن التباطؤ. الاحتكاك يقلل $\\omega$، وتعد المعادلة بأن $\\Omega$ يزداد عكسيًا: بتعويض 30 راد/ث، نحصل على 21.8 راد/ث. لا يمكن الوثوق بهذا الرقم بعد الآن — فهو من نفس رتبة الدوران نفسه، بينما كان الاشتقاق كله يعتمد على العكس، $\\Omega \\ll \\omega$. رسميًا، يتساوى $\\Omega$ و$\\omega$ عندما $I\\omega^{2} = mga$؛ هذا تقدير للحد الأدنى، والحد الفعلي أعلى — الشرط الدقيق مشروح في الملحق.",
+     "latex": "\\Omega = \\omega \\iff \\omega_{*} = \\sqrt{\\frac{mga}{I}} = \\sqrt{\\frac{0{,}023544}{3{,}60\\cdot10^{-5}}} = \\sqrt{654} = 25{,}6\\ \\frac{\\text{rad}}{\\text{s}}"
+    }
+   ],
+   "answer": "القمة الدوّارة تبادر بسرعة 2.18 راد/ث وتكمل دورة حول المحور في 2.9 ثانية، وخلال هذا الوقت تدور حول محورها 138 مرة. طالما أن القمة تدور بسرعة، تكون المعادلة دقيقة: عند 300 راد/ث يكون التصحيح حوالي اثنين بالمئة. لكنها تفسد قبل التوقف بوقت طويل — تقدير تقريبي للحد يعطي 26 راد/ث، والدقيق (في الملحق) حوالي 78، أي حوالي ثلاثة عشر دورة في الثانية. تحت هذا الحد، لا تزال القمة تدور، لكن لم يعد لديها التفاف منتظم حول العمودي.",
+   "check": "نتحقق بطريقتين. الأولى — بالعين: ثلاث ثوانٍ لدورة واحدة حول المحور لقمة دوارة جيدة التماثل معقولة، فهي حركة بطيئة مهيبة كما نراها تمامًا.\n\nالثانية — بالمقارنة مع العجلة من الخطوة السابعة. عجلة القصور الذاتي للعجلة أكبر بـ 6800 مرة، لكن عزم الجاذبية أكبر بـ 208 مرة فقط، وهي تدور أبطأ بعشر مرات. نضرب النسب: $\\Omega_{\\text{wheel}}/\\Omega_{\\text{top}} = 208 \\cdot 10 / 6800 = 0{,}31$، أي أن العجلة يجب أن تبادر أبطأ بثلاث مرات من القمة. وهذا ما يحدث: 0.667 مقابل 2.18، النسبة 0.31. حسابان مستقلان تطابقا — الحسابات سليمة.\n\nوملاحظة صادقة حول ما ليس في الحساب. الطرف الحقيقي للقمة ليس نقطة: فهو ينزلق على الطاولة ويتدحرج، ونقطة الارتكاز تتحرك، ويضاف احتكاك يرفع المحور ببطء نحو العمودي. القمة اللعبة عادة لا تميل أكثر فأكثر، بل تستقيم كلما زادت سرعتها — وهذا ليس معادلتنا، بل تأثير احتكاك منفصل عند نقطة التلامس، وهو نفس التأثير الذي يرفع البيضة المسلوقة المغزولة."
+  },
+  "constants": {
+   "title": "ثوابت هذا القسم",
+   "lead": "جميعها الأربعة تخص الأرض، لأن الأرض هنا هي العينة التجريبية الرئيسية: قمة دوّارة كتلتها ستة سكستيليونات كيلوغرام، يراقبها البشر منذ اثنين وعشرين قرنًا.",
+   "items": [
+    {
+     "sym": "ω⊕",
+     "latex": "\\omega_\\oplus",
+     "name": "السرعة الزاوية لدوران الأرض",
+     "value": "7,292 115 · 10⁻⁵",
+     "unit": "راديان/ثانية",
+     "why": "تُحسب بناءً على اليوم النجمي — 86,164.1 ثانية — وليس على اليوم الشمسي المعتاد البالغ 86,400 ثانية. الفرق البالغ 3 دقائق و56 ثانية ينشأ لأن الأرض تقطع خلال اليوم حوالي درجة في مدارها، ولكي تعود الشمس إلى نفس النقطة في السماء، يجب أن تدور الأرض درجة إضافية. علم الفلك يعتمد على اليوم النجمي، بينما الحياة اليومية تعتمد على اليوم الشمسي. في الزخم الزاوي للأرض، الذي نحسبه في الخطوة الثامنة، تدخل القيمة النجمية تحديدًا.",
+     "mnemo": "سبعة وثلاثة أعشار في عشرة أس سالب خمسة — أي حوالي 15 درجة في الساعة، وهو بالضبط ما يفصل بين المناطق الزمنية المتجاورة. ومن هنا قاعدة الملاحين: ساعة خط الطول تساوي خمس عشرة درجة."
+    },
+    {
+     "sym": "I⊕/MR²",
+     "latex": "\\frac{I_\\oplus}{M_\\oplus R_\\oplus^{2}}",
+     "name": "عزم القصور الذاتي اللابعدي للأرض",
+     "value": "0.3307",
+     "unit": "بلا أبعاد",
+     "why": "بالنسبة لكرة متجانسة، هذا المعامل يساوي 0.4 تمامًا. بالنسبة للأرض، هو أقل — وهذا دليل مباشر، لا يعتمد على أي شيء آخر، على أن الكتلة متركزة نحو المركز: نواة حديدية ثقيلة تحت غطاء صخري خفيف. يُقاس الرقم من البدارية وحركة الأقمار الصناعية، وليس من الحفر، وهو تاريخيًا أول دليل كمي لصالح نواة معدنية. للمقارنة: القمر 0.394 — شبه كرة متجانسة، لا نواة تقريبًا؛ الشمس 0.070 — المادة متركزة نحو المركز بشكل غير عادي.",
+     "mnemo": "كلما كان المعامل أصغر، كانت الكتلة أكثر تركيزًا نحو المركز. 0.4 — كرة متجانسة؛ 0.33 — الأرض؛ 0.07 — الشمس؛ 0 — نقطة."
+    },
+    {
+     "sym": "H",
+     "latex": "H",
+     "name": "التفلطح الديناميكي للأرض، $(C-A)/C$",
+     "value": "0.0032737 = 1 / 305.46",
+     "unit": "بلا أبعاد",
+     "why": "الفرق بين عزم القصور الذاتي حول المحور القطبي وعزم القصور الذاتي حول المحور الاستوائي، مقسومًا على الأول. هذا هو اللا كروية الذي تتعلق به الشمس والقمر: لو كانت الأرض كرة مثالية، لما كان هناك عزم ولما كانت هناك بدارية. ثلاثة أجزاء من الألف تبدو مهملة، لكنها تعطي عزمًا قدره $1.8\\cdot10^{22}$ نيوتن·متر وكل ستة وعشرين ألف سنة. الرقم المعكوس، 305، مشهور أيضًا: حسابه أويلر كفترة تذبذب حر للقطب بالأيام. يُلاحظ 433 يومًا، والفرق هو الثمن الذي ندفعه لأن الأرض ليست جسمًا صلبًا تمامًا.",
+     "mnemo": "ثلاثة أجزاء من الألف — كل السبب الهندسي للبدارية. والمعكوس، 305 يومًا، هو تنبؤ أويلر الذي صححته الطبيعة إلى 433."
+    },
+    {
+     "sym": "p",
+     "latex": "p",
+     "name": "ثابت البدارية (البدارية العامة في خط الطول)",
+     "value": "50.29",
+     "unit": "ثانية قوسية في السنة",
+     "why": "الدائرة الكاملة — 1,296,000 ثانية قوسية؛ نقسم على 50.29 فنحصل على 25,770 سنة، وبالقيمة غير المدورة 50.2877″ — تلك السنوات الـ25,772 التي تُذكر عادة. على مدى ألفي سنة منذ الكتالوجات القديمة، تحركت نقطة الاعتدال الربيعي حوالي 28 درجة — أي ما يقرب من علامة زودياك كاملة من 30 درجة. ومن هنا الاختلاف المعروف: العلامة الفلكية والكوكبة التي تكون فيها الشمس فعليًا تباعدتا بمقدار عنصر واحد تقريبًا في القائمة. بالمعنى الدقيق، نميز بين البدارية القمرية الشمسية (50.39″ في السنة — ما تحسبه صيغتنا) والبدارية العامة في خط الطول (50.29″)، والفرق سببه دوران بطيء لمستوى مسير الشمس نفسه بسبب جاذبية الكواكب. حسبنا باستخدام 50.29، وتأثير الاختيار على تقدير العزم في الخطوة الثامنة يظهر فقط في الرقم الثالث: 1.796 مقابل 1.800.",
+     "mnemo": "خمسون ثانية قوسية في السنة — هذا هو القطر الظاهري للقمر تقريبًا خلال 37 عامًا، أي خلال جيل واحد. لاحظ هيبارخوس الإزاحة لأنه قارن قياساته بسجلات عمرها قرن ونصف."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "كيف يرتبط هذا ببقية الدورة",
+   "lead": "المعادلة $d\\vec L/dt = \\vec M$ هي واحدة من أكثر الصيغ بعدًا في الدورة: فهي تعمل بنفس الطريقة على القمة الدوارة، وعلى الكوكب، وعلى البروتون في جهاز التصوير المقطعي، وعلى النجم النيوتروني.",
+   "items": [
+    {
+     "h": "عزم القصور الذاتي (الفقرة 1 من هذا الموضوع)",
+     "text": "كل ما استخدمناه هنا — $I = kmR^{2}$ والمعاملات 1، ½، ⅖، 1/12 — تم اشتقاقه هناك وأُخذ هنا جاهزًا. ومن هناك أيضًا المعادلة $M = I\\varepsilon$، التي أُعيدت كتابتها في الخطوة الثانية ببساطة في صورة متجهة. إذا بدت صيغة البدارية وكأنها جاءت من العدم، فانظر إليها هكذا: البسط هو عزم القوة من الفقرة الأولى، والمقام هو الزخم الزاوي، المُجمَّع من عزم القصور الذاتي من نفس الفقرة الأولى."
+    },
+    {
+     "h": "قوانين الحفظ (موضوع \"الميكانيكا\")",
+     "text": "اشتقاق حفظ الزخم الزاوي هناك يأتي من خواص التناظر (isotropy) للفضاء، وهناك أيضًا تم تحليل حالة المتزلجة التي تضغط ذراعيها وتتسارع في الدوران. هنا نستخدم نفس القانون من الجانب الآخر: نحن مهتمون ليس بأن طول $\\vec L$ محفوظ، بل بأن اتجاهه محفوظ، وما يحدث عندما لا يكون العزم صفرًا."
+    },
+    {
+     "h": "النظام الدوار (الفقرة 3 من هذا الموضوع)",
+     "text": "الصيغة $d\\vec A/dt = \\vec\\Omega \\times \\vec A$، التي ظهرت هنا كتدوين مضغوط للبدارية، ستصبح هناك الأداة الرئيسية للعمل: عند تطبيقها مرتين، تعطي قوة الطرد المركزي وقوة كوريوليس. في الوقت الحالي، احفظها كحقيقة حول متجه يدور — الجسم في الفقرة الثالثة سيكون نقطة، ولن نحتاج إلى الزخم الزاوي هناك على الإطلاق."
+    },
+    {
+     "h": "السبين والرنين المغناطيسي",
+     "text": "البروتون له زخم زاوي جوهري خاص به — السبين — وعزم مغناطيسي مرتبط به. في مجال خارجي، يعمل عزم قوة على العزم المغناطيسي، عموديًا على السبين، ثم يتكرر استنتاجنا بالضبط: السبين لا يدور باتجاه المجال، بل يبادر حوله بسرعة $\\Omega = \\gamma B$. في مجال 1.5 تسلا، هذا يساوي 64 مليون دورة في الثانية. جهاز التصوير بالرنين المغناطيسي يستمع إلى هذه البدارية بالضبط، لذا فإن صورة الركبة هي تطبيق مباشر للصيغة المشتقة على القمة الدوارة."
+    },
+    {
+     "h": "النجوم النابضة (النباضات)",
+     "text": "عندما ينهار نواة نجم ضخم إلى نجم نيوتروني، ينخفض نصف قطره حوالي 70 ألف مرة. عزم القصور الذاتي يتناسب مع مربع نصف القطر، والزخم الزاوي محفوظ، لذا فإن السرعة الزاوية تزداد بمقدار نصف القطر مرفوعًا للقوة -2 — أي ما يقرب من خمسة مليارات مرة. من 25 يومًا شمسيًا، سينتج أكثر من ألفي دورة في الثانية. أسرع ما لوحظ هو حوالي 716 دورة في الثانية — وهذا اختلاف صادق: معظم الزخم الزاوي يُفقد مع الغلاف المُلقى. محور النباض، كما هو الحال في أي قمة حرة، يحافظ على اتجاهه في الفضاء، وبالتالي فإن إشعاعه يصل إلينا بنبضات دورية صارمة."
+    },
+    {
+     "h": "الجاذبية والنسبية",
+     "text": "في النظرية النسبية العامة، الكتلة الدوارة تسحب الفضاء نفسه معها، والجيروسكوب المعلق بالقرب منها يتعرض لعزم إضافي. تنبأ بهذا التأثير جوزيف لينزي وهانز تيرينج في عام 1918، وقام القمر الصناعي Gravity Probe B بقياسه، حيث انحرفت جيروسكوباته الأربعة فائقة الدقة بمقدار 37.2 مللي ثانية قوسية في السنة مقابل 39.2 متوقعة. الفيزياء مختلفة، لكن المعادلة هي نفسها: $d\\vec L/dt = \\vec M$."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "مثير للاهتمام: جرّب بنفسك",
+   "lead": "التجربتان التاليتان تتطلبان بيضة مسلوقة وكتابًا مربوطًا بمطاط. كلتاهما تُظهران أشياء لا تتبع من معادلتنا، ولهذا السبب بالتحديد تستحقان التجربة.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "تجربة في المطبخ",
+     "h": "بيضة مسلوقة تقف على طرفها",
+     "text": "اسلق بيضة جيدًا وبرّدها. ضعها على جانبها على طاولة ملساء ولفّها بأصابعك بأسرع ما يمكن. بعد ثانية أو ثانية ونصف، سترتفع البيضة من تلقاء نفسها وتدور واقفة على طرفها الحاد. البيضة النيئة لن تفعل ذلك — والسبب موضح في الفقرة الأولى: السائل بداخلها لا يدور تقريبًا مع القشرة. لا حاجة لطبق تحت البيضة، فلن ينكسر شيء؛ تحتاج فقط إلى طاولة ملساء وجافة.",
+     "answer": "أول ما يجب ملاحظته: مركز كتلة البيضة يرتفع حوالي سنتيمتر عند وقوفها. هذا شغل ضد الجاذبية، ويتم باستخدام طاقة الدوران — تدور البيضة بشكل أبطأ بشكل ملحوظ بعد الارتفاع. إذن يجب أن تكون هناك قوة تقوم بهذا الشغل، وهي موجودة: احتكاك الانزلاق عند نقطة التلامس. بينما تستلقي البيضة على جانبها وتدور، تنزلق نقطة التلامس على الطاولة، وتعطي قوة الاحتكاك عزمًا يرفع البيضة.\n\nهذا هو المكان الوحيد في الفقرة حيث يلعب الاحتكاك دورًا حاسمًا — في اشتقاقنا لم يكن موجودًا على الإطلاق. ويجب أن نكون صادقين: الحل الكامل لهذه المسألة لم يُحصل عليه إلا في عام 2002. نشر كيث موفات وياسوهيرو شيمومورا الحل في Nature، موضحين أن سرعة الوقوف تحدد بشرط بلا أبعاد يربط الدوران بالاحتكاك، وأنه إذا كان الدوران بطيئًا جدًا، فلن تقف البيضة أبدًا. تبدو المسألة لعبة، لكن حلها استغرق وقتًا أطول من العديد من الأسئلة في مسرعات الجسيمات.\n\nنفس الآلية تعمل في لعبة تيب-توب — فطر بقمة مقطوعة، عندما يُلف على قبعته، ينقلب ويقف على ساقه، رافعًا مركز كتلته عدة سنتيمترات."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "تجربة في المطبخ",
+     "h": "كتاب يُرمى بثلاث طرق",
+     "text": "خذ كتابًا سميكًا، واربطه بمطاط عرضيًا حتى لا يفتح أثناء الطيران. اقذفه عاليًا فوق أريكة أو سرير، مع لفه بثلاث طرق مختلفة: حول العمود الفقري (المحور على طول العمود الفقري: يدور الكتاب مثل باب على مفصلات، لكن المحور في المنتصف)؛ بشكل مسطح، مثل فريسبي، حول محور بارز من الغلاف؛ وفوق الرأس، حول محور أفقي موازٍ للحافة العلوية. في أول مرتين، يصل الكتاب بهدوء إلى الأريكة بنفس الدوران. في المرة الثالثة، سينقلب حتمًا حول العمود الفقري — وينقلب في كل مرة، مهما رميته.",
+     "answer": "للكتاب ثلاثة أبعاد، ولكل محور عزم قصور ذاتي خاص به. لكتابنا 20 × 15 × 3 سم، النسب هي 2.67 : 1.75 : 1: الأكبر حول المحور البارز من الغلاف، والأصغر حول العمود الفقري، وفي المنتصف بالضبط المحور الذي لا يريد الكتاب أن يدور حوله. هذا قانون عام: الدوران الحر مستقر حول محور أكبر وأصغر عزم قصور ذاتي، وغير مستقر حول المحور المتوسط. أثبت بوانسو ذلك في عام 1834، ولا توجد فيزياء خاصة هنا — فقط حقيقة أن $\\vec L$ في الحالة العامة ليس موازيًا لـ $\\vec\\omega$، بينما في اشتقاقنا اعتبرناهما متوازيين.\n\nمن السهل التحقق من أن هذه ليست خاصية للكتاب: نفس الانقلاب يظهر في مضرب تنس، وجهاز تحكم تلفزيون، وهاتف. أشهر تسجيل تم في عام 1985 على محطة \"ساليوت-7\": قام رائد الفضاء فلاديمير دجانبيكوف بفك صمولة مجنحة، فطارت في انعدام الوزن، وقطعت بضعة سنتيمترات ثم انقلبت، ثم مرة أخرى، ثم مرة أخرى — بفترة منتظمة. في انعدام الوزن، حيث لا شيء يعيق، تستمر الانقلابات إلى ما لا نهاية، وأصبحت الظاهرة تُعرف باسم تأثير دجانبيكوف."
+    },
+    {
+     "icon": "paradox",
+     "kind": "مفارقة",
+     "h": "من أين تأتي طاقة البدارية",
+     "text": "عجلة البدارية تتحرك — إذن لهذه الحركة طاقة حركية. لكن عزم الجاذبية أفقي، ومركز الكتلة يتحرك في دائرة أفقية، والجاذبية لا تبذل شغلًا: القوة رأسية، والإزاحة أفقية. الدوران الذاتي أيضًا لا يعطي شيئًا، $\\omega$ ثابت حسب الشرط. من أين جاءت الطاقة؟",
+     "answer": "من سقوط قصير جدًا في البداية. عندما تترك العجلة، لا تبدأ البدارية فورًا: أولًا، يهبط المحور قليلًا، وعند هذا الهبوط تبذل الجاذبية شغلًا. بعد ذلك، يرتفع المحور مرة أخرى، ثم يهبط مرة أخرى — وهذا هو المبادأة (النوتة) — وسرعان ما تخمد التذبذبات بالاحتكاك، ويبقى بدارية منتظمة عند مستوى أقل قليلاً.\n\nالأرقام تتطابق، لكن ليس بالبساطة التي نتمناها. عزم القصور الذاتي لعجلتنا حول المحور العرضي عبر نقطة التعليق يساوي $\\tfrac12 mR^{2} + ma^{2} = 0.2475$ كغ·م²، والطاقة الحركية للبدارية هي $\\tfrac12 \\cdot 0.2475 \\cdot 0.667^{2} = 0.055$ جول. والهبوط يكون أكثر سخاءً بمرتين مما هو مطلوب لبدارية واحدة: إلى المستوى المتوسط، ينخفض المحور بمقدار 1.3 درجة، أي أن مركز الكتلة ينخفض بمقدار 5.6 ملم، والجاذبية تعطي عندها $mgh = 0.11$ جول. النصف الثاني لم يضيع — تأخذه المبادأة: تذبذب المحور بنفس السرعة تقريبًا مثل البدارية، وبالتالي يحمل نفس القدر. الاحتكاك يخمد المبادأة في ثانية، ويبقى المحور عند المستوى المتوسط، وتستمر البدارية بطاقتها 0.055 جول. لا شيء ضاع ولا شيء أُخذ من العدم.\n\nمن المفيد تقدير الحجم: الطاقة الحركية للدوران الذاتي للعجلة $\\tfrac12 I\\omega^{2} = 110$ جول، أي أن البدارية تحمل جزءًا من ألفين منها، ومع المبادأة — جزءًا من ألف. لهذا يمكن اعتبارها مجانية، ولهذا كتبنا في الاشتقاق بهدوء $\\omega = \\mathrm{const}$."
+    },
+    {
+     "icon": "fact",
+     "kind": "حقيقة ممتعة",
+     "h": "النجم القطبي — منصب وليس اسمًا",
+     "text": "محور الأرض يرسم مخروطًا خلال 25,772 سنة، ومعها يتحرك القطب الشمالي للعالم في السماء. اليوم، بالقرب منه يوجد α الدب الأصغر، التي نسميها النجم القطبي. لم يكن الأمر كذلك دائمًا ولن يبقى كذلك.",
+     "answer": "في زمن بناء الأهرامات المصرية، حوالي 2700 قبل الميلاد، كان القطب الشمالي للعالم بالقرب من توبان — α التنين، وإليها، وفقًا لإحدى النظريات، موجهة الممرات الضيقة في هرم خوفو. الأقرب إلى القطب سيصل النجم القطبي حوالي عام 2100 — على بعد 27 دقيقة قوسية — ثم سيبدأ بالابتعاد. بعد حوالي 12 ألف سنة، سيحل مكانه فيغا، أحد ألمع نجوم السماء، وسيصبح النجم القطبي ملحوظًا حقًا.\n\nاكتشف هيبارخوس كل هذا دون أن يعرف السبب أو حتى ما اكتشفه: لقد قارن ببساطة قياساته لخط طول السماك الأعزل مع سجلات تيموكاريس، التي تم إجراؤها قبل 150 عامًا، واكتشف اختلافًا بمقدار درجتين، وهو أكبر من أن يكون خطأ. قرن ونصف من الملاحظات مقابل درجة ونصف في القرن — حالة نادرة حيث يتم الاكتشاف بالصبر، وليس بالأدوات. السبب حدده نيوتن بعد ثمانية عشر قرنًا."
+    },
+    {
+     "icon": "edge",
+     "kind": "حدود التطبيق",
+     "h": "أين ينتهي الجيروسكوب الميكانيكي",
+     "text": "الدوار في التعليق الكارداني كان لمدة قرن ونصف الطريقة الوحيدة لتذكر الاتجاه. اليوم، في الهاتف والطائرة والصاروخ توجد أجهزة تسمى جيروسكوبات، لا يدور بداخلها شيء على الإطلاق.",
+     "answer": "الجيروسكوب الميكانيكي رائع طالما لا تحتاج إلى عمل طويل. مشكلته هي الانجراف: أي عزم طفيلي في المحامل، مهما كان صغيرًا، وفقًا للمعادلة $\\Omega = M/(I\\omega)$ يدير المحور، والخطأ يتراكم خطيًا مع الوقت. جيروسكوب طيران جيد ينحرف بدرجة في الساعة، وأفضل المختبرات — بأجزاء من المئة؛ لرحلة طويلة بدون تصحيح الأقمار الصناعية، هذا غير كافٍ.\n\nأول طريق بديل كان تأثير سانياك: إذا أرسلت شعاعي ضوء في حلقة باتجاهين متعاكسين، فعند دوران الحلقة، يصل الشعاعان بأوقات مختلفة، والفرق يتناسب مع السرعة الزاوية. لا محامل، لا قصور ذاتي، لا تآكل. جيروسكوب الليزر على هذا المبدأ موجود في الطائرات منذ السبعينيات، والألياف البصرية — في كل مكان تقريبًا حيث تكون الدقة مطلوبة.\n\nفي الهاتف، يوجد خيار ثالث — ميكانيكي دقيق: لوحة سيليكون بحجم حبة رمل تهتز، ودوران الجهاز يزيح مستوى اهتزازها. بالمعنى الدقيق، هذا ليس جيروسكوبًا، بل مقياس تأثير كوريوليس، ويعمل بفيزياء الفقرة الثالثة، وليس هذه. دقته أسوأ بمراتب من الليزري، لكنه يكلف دولارًا ويوضع في جسم الهاتف — وهو ما لم يكن أحد يتوقعه من قمة فوكو."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "ما الذي أهملناه",
+   "blocks": [
+    {
+     "h": "المبادرة: ارتجاف غير موجود في معادلتنا",
+     "text": "لقد حصلنا على حل خاص — وهو المبادرة المنتظمة حيث يكون ميل المحور ثابتًا تمامًا. الحل العام يحتوي أيضًا على تذبذبات في $\\theta$ تسمى المبادرة. من السهل رؤيتها: إذا تركت قمة دوارة مائلة من السكون التام دون دفعها في الاتجاه السمتي، فستبدأ أولاً في السقوط، والسقوط سيشغل المبادرة، والمبادرة سترفع المحور مرة أخرى — وسيتحرك طرف المحور ليس على طول دائرة بل على طول منحني دائري صغير. تردد هذه التذبذبات للقمة السريعة يساوي تقريبًا $I\\omega/I_\\perp$، حيث $I_\\perp$ هي عزم القصور الذاتي حول المحور العرضي عبر نقطة الارتكاز. بالنسبة لعجلتنا هذا يساوي $0{,}245 \\cdot 30 / 0{,}2475 = 29{,}7$ راديان/ثانية — تقريبًا $\\omega$ نفسها، أي أن الارتجاف سريع جدًا وصغير جدًا. مداه يُحسب أيضًا: المحور المُطلق من السكون ينخفض بمقدار $\\Delta\\theta = M I_\\perp/(I\\omega)^{2} = 1{,}3°$ إلى المستوى المتوسط وبمقدار ضعف ذلك، 2.6°، في أدنى نقطة للتأرجح. الاحتكاك يخمد هذه التذبذبات خلال ثانية، ويبقى الدوران المنتظم حول المستوى المتوسط.\n\nالأرض أيضًا لديها مبادرة وقد تم قياسها منذ زمن طويل. مكونها الرئيسي هو 9.2 ثانية قوسية بفترة 18.6 سنة، وهذه الفترة ليست مصادفة: إنها مدة دوران عقد مدار القمر. العزم من القمر ليس ثابتًا على وجه التحديد لأن مستوى مداره يدور ببطء نفسه. اكتشف المبادرة جيمس برادلي في عام 1748، بعد أن أمضى فترة واحدة بالضبط من هذه الفترة في المراقبة.",
+     "latex": "\\omega_{\\text{nut}} \\approx \\frac{I\\omega}{I_\\perp}, \\qquad \\Delta\\theta \\approx \\frac{M\\,I_\\perp}{(I\\omega)^{2}} = \\frac{4{,}905 \\cdot 0{,}2475}{7{,}35^{2}} = 0{,}022\\ \\text{rad} = 1{,}3°, \\qquad \\text{full swing } 2\\Delta\\theta = 2{,}6°"
+    },
+    {
+     "h": "الزخم الزاوي ليس دائمًا على طول المحور",
+     "text": "في الخطوة الأولى كتبنا $\\vec L = I\\vec\\omega$، كما لو أن $I$ رقم عادي. في الحالة العامة ليس الأمر كذلك: عزم القصور الذاتي هو موتر، و$\\vec L$ موازٍ لـ $\\vec\\omega$ فقط عندما يكون الدوران حول أحد المحاور الرئيسية الثلاثة للجسم. لكل جسم مثل هذه المحاور، وهي ثلاثة بالضبط، متعامدة بشكل متبادل، وتقابلها ثلاثة عزوم قصور ذاتي رئيسية $I_1 < I_2 < I_3$.\n\nمن هنا يتبع ما لا تعرفه معادلتنا إطلاقًا: الدوران الحر مستقر حول المحاور ذات العزم الأكبر والأصغر وغير مستقر حول المحور الأوسط. هذه هي نظرية المحور الوسيط، التي أثبتها بوانسو في عام 1834؛ في المطبخ تُعرض بكتاب مربوط بشريط مطاطي، وفي الفضاء بصامولة جانيبيكوف. الأرض أيضًا لا تدور بدقة حول محور الشكل: القطب يتجول في حلزوني بقطر عدة أمتار بفترة 433 يومًا. أويلر للأرض الصلبة تمامًا توقع 305 يومًا — وهذا هو $1/H$، معكوس التفلطح الديناميكي من جدول الثوابت — والفرق عن 433 يومًا المرصودة هو مقياس لمرونة الأرض وليست صلبة.",
+     "latex": "\\vec L = \\hat I\\,\\vec\\omega, \\qquad \\vec L \\parallel \\vec\\omega \\iff \\vec\\omega\\ \\text{على طول المحور الرئيسي}; \\qquad I_1 < I_2 < I_3:\\ \\text{الدوران حول } I_2\\ \\text{غير مستقر}"
+    },
+    {
+     "h": "القمة تتباطأ، ونحن اعتبرنا ω ثابتة",
+     "text": "بالمعنى الدقيق، الصيغة $\\Omega = mga/(I\\omega)$ مشتقة لـ $\\omega$ ثابتة، بينما في القمة الحقيقية تتناقص. ما ينقذنا هو التقريب شبه الساكن: طالما أن الاحتكاك صغير مقارنة بالدوران نفسه، يمكن تطبيق الصيغة في كل لحظة، مع وضع $\\omega(t)$ الحالي. هكذا نحصل على الصورة المرصودة — المحور يرسم دوائر أسرع فأسرع.\n\nلكن للتقريب قاع. شرط القمة السريعة $I\\omega^{2} \\gg mga$ سيُخترق عاجلاً أم آجلاً، والتقدير التقريبي للحد هو $\\omega_{*} = \\sqrt{mga/I}$: بالنسبة للقمة في المثال 25.6 راديان/ثانية، وللعجلة 4.5 راديان/ثانية. هذا التقدير أقل من الواقع، والأصدق أن نقول أين الحد الحقيقي. إذا لم نتجاهل عزم القصور الذاتي العرضي، فإن شرط وجود مبادرة منتظمة يبدو هكذا: $(I\\omega)^{2} \\ge 4\\,I_\\perp\\,mga\\cos\\theta$. بالنسبة للقمة عند ميل 20°، العزم العرضي بالنسبة للطرف يساوي $\\tfrac14 mR^{2} + ma^{2} = 9{,}0\\cdot10^{-5}$ كغ·م²، والشرط يعطي ليس 26 بل حوالي 78 راديان/ثانية — ثلاثة أضعاف التقدير التقريبي. وبالنسبة للعجلة، المحور أفقي، وجيب التمام يساوي صفرًا، والطرف الأيمن يختفي تمامًا: الحل المنتظم موجود عند أي دوران، ولكن عند الدوران البطيء يجب الوصول إليه — ستكون المبادرة ليست تموجًا صغيرًا بل تأرجحًا كاملاً للمحور. تحت الحد، تصبح المبادرة مماثلة للدوران الذاتي، وتتوقف المبادرة عن كونها تصحيحًا صغيرًا، ولا يوجد 'الميل ثابت' بعد الآن — القمة تسقط. وفي الوقت نفسه يختفي الافتراض الأخير: نقطة الارتكاز ليست مثالية، والطرف ينزلق ويدحرج، وهذا الاحتكاك يرفع أو يخفض المحور بشكل منفصل — تأثير يجعل البيضة المسلوقة تقف ويقلب القمة المنقلبة.",
+     "latex": "\\Omega(t) = \\frac{mga}{I\\,\\omega(t)} \\quad \\text{صالح طالما} \\quad \\omega \\gg \\omega_{*} = \\sqrt{\\frac{mga}{I}}; \\qquad \\text{بدقة: } (I\\omega)^{2} \\ge 4\\,I_\\perp\\,mga\\cos\\theta"
+    },
+    {
+     "h": "ما وراء 1.8·10²² نيوتن·متر",
+     "text": "كلا التقديرين في الخطوة الثامنة مستقلان بصدق — أحدهما يأتي من فترة المبادرة المرصودة، والآخر من قانون الجاذبية — لكن كلاهما يعتمد على نفس الكمية $C - A$، الفرق بين عزوم القصور الذاتي الرئيسية للأرض. التطابق حتى أجزاء من المئة يختبر الحساب ونموذج شكل الأرض، وليس نظرية الجاذبية نفسها.\n\nما هو غير موجود في الحساب. لقد قمنا بمتوسط العزم على مدارات القمر والشمس، مما أسقط كل المبادرة. لم نميز بين المبادرة القمرية الشمسية (50.39″ في السنة) والمبادرة العامة في خط الطول (50.29″): الفرق ناتج عن الدوران البطيء لمستوى مسير الشمس نفسه بسبب جاذبية الكواكب. اعتبرنا الأرض صلبة، بينما المحيطات واللب الخارجي السائل والوشاح اللزج تستجيب للعزم المدّي بطريقتها الخاصة، والنماذج الحديثة للمبادرة هي بالفعل جيوفيزياء وليست ميكانيكا قمة دوارة. وأخيرًا، هناك إضافة نسبوية: المبادرة الجيوديسية لمحور الأرض تبلغ حوالي 19 مللي ثانية قوسية في السنة مقابل 50,290 مللي ثانية من التأثير الرئيسي — أصغر بمقدار 2500 مرة، لكنها مُقاسة ومُدرجة في المعايير الفلكية الحديثة.",
+     "latex": "M = \\Omega L \\sin\\varepsilon = 1{,}80\\cdot10^{22}\\ \\text{N·m} \\quad \\text{مقابل} \\quad M_{\\text{القمر}} + M_{\\text{الشمس}} = 1{,}24\\cdot10^{22} + 0{,}57\\cdot10^{22} = 1{,}81\\cdot10^{22}\\ \\text{N·m}"
+    }
+   ]
+  },
+  "memo": {
+   "essence": "عزم الزخم الزاوي $\\vec L = I\\vec\\omega$ هو متجه على طول المحور. المعادلة $d\\vec L/dt = \\vec M$ تعني أن العزم يضيف إليه زيادة في اتجاهه هو. بالنسبة للقمة الثقيلة، العزم أفقي وعمودي على $\\vec L$، لذلك لا يمكنه تقصير المتجه ولا تقليل مركبه الرأسي: ميل المحور محبوس، ويتغير فقط السمت. سرعة هذه الحركة هي $\\Omega = mga/(I\\omega)$، والميل لا يدخل فيها.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "$\\Omega = mga/(I\\omega)$",
+     "text": "كلما زادت سرعة دوران القمة، كانت المبادرة أبطأ: $\\omega$ في المقام"
+    },
+    {
+     "icon": "scale",
+     "title": "عموديتان",
+     "text": "$\\vec M \\perp \\vec L$ يحافظ على طول المتجه، و$\\vec M \\perp$ العمودي يحافظ على مركبه الرأسي. معًا يحبسان الميل"
+    },
+    {
+     "icon": "fact",
+     "title": "الميل اختُصر",
+     "text": "$\\sin\\theta$ موجود في كل من العزم ونصف قطر الدوران، لذلك لا تدخل الزاوية في سرعة المبادرة إطلاقًا"
+    },
+    {
+     "icon": "edge",
+     "title": "الأرض هي نفسها قمة",
+     "text": "25,772 سنة، ميل 23.44°، عزم القمر والشمس على الانتفاخ الاستوائي $1.8\\cdot10^{22}$ نيوتن·م"
+    }
+   ],
+   "where": [
+    "عجلة دراجة معلقة بحبل: المحور لا يسقط، بل يدور حول دائرة في 9.4 ثانية",
+    "رصاصة بسرقة حلزونية وقرص طائر: العزم الصفري يحافظ على اتجاه المحور، والجسم لا يتقلب",
+    "بوصلة جيروسكوبية وجيروسكوب طائرة: المحور يتذكر الاتجاه، والانحراف يُحسب بنفس المعادلة $\\Omega = M/(I\\omega)$",
+    "مبادرة محور الأرض: 50.3 ثانية قوسية في السنة، تغير النجم القطبي، وانزياح الأبراج بمقدار برج",
+    "جهاز التصوير بالرنين المغناطيسي: سبين البروتون يبادِر في مجال 1.5 تسلا بتردد 64 ميجاهرتز"
+   ],
+   "watchOut": "ثلاثة فخاخ. الأول: الاعتقاد أن $\\vec L$ يشير إلى حيث تتحرك نقاط الجسم؛ بل هو على طول المحور، وقاعدة اليد اليمنى هنا ليست زينة بل تعريف. الثاني: توقع أن القمة سريعة الدوران ستميل جانبيًا أسرع؛ بل العكس، $\\omega$ في المقام. الثالث: تطبيق المعادلة على قمة بطيئة: فهي صحيحة فقط عندما $I\\omega^{2} \\gg mga$، وأقل من العتبة $\\sqrt{mga/I}$ تصبح المبادرة مماثلة للدوران الذاتي ولا يوجد ميل ثابت."
+  },
+  "quiz": [
+   {
+    "id": "rg1",
+    "type": "mcq",
+    "q": "محور القمة الدوارة مائل، والوزن يسحب مركز الكتلة لأسفل، والعزم حول نقطة الارتكاز ليس صفرًا. لماذا لا ينخفض المحور؟",
+    "options": [
+     "العزم أفقي: لا يمكنه تغيير طول $\\vec L$ ولا تقليل مركبتها الرأسية، وخفض المحور يتطلب أحد الأمرين",
+     "عزم الوزن متوازن مع عزم رد الفعل من الدعامة، لذا فإن العزم الكلي يساوي صفرًا",
+     "القوة الطاردة المركزية الناشئة عن الدوران ترفع المحور وتعوض الوزن",
+     "المحور في الواقع ينخفض، لكن ببطء شديد لدرجة أنه غير ملحوظ خلال فترة المراقبة"
+    ],
+    "answer": 0,
+    "why": "ميل المحور محدد بنسبة الإسقاط الرأسي $L_z$ إلى طول $L$. العزم أفقي، لذا فإن إسقاطه الرأسي صفر ولا يتغير $L_z$؛ والعزم عمودي على $\\vec L$، لذا لا يتغير الطول أيضًا. النسبة ثابتة، والميل مقيد، والحرية فقط في السمت.\n\nالإجابة حول توازن العزوم تُفحص في سطر واحد: قوة رد الفعل تؤثر عند نقطة الارتكاز نفسها، وذراعها بالنسبة لتلك النقطة يساوي صفرًا، لذا فهي لا تنتج عزمًا إطلاقًا. الخيار المتعلق بالقوة الطاردة المركزية غير صحيح لأنه لا توجد مثل هذه القوة في إطار مرجعي ساكن — قوة القصور الذاتي تظهر فقط عند الانتقال إلى إطار دوار، وهذا ما يذكره الفقرة الثالثة؛ علاوة على ذلك، ستكون موجهة بعيدًا عن المحور وليس لأعلى. الخيار «ينخفض بشكل غير ملحوظ» يصف قمة حقيقية، لكن لسبب مختلف: المحور الحقيقي ينخفض ببطء بالفعل، لكن بسبب الاحتكاك، وهو غير موجود في اشتقاقنا، بينما القمة المثالية تحافظ على ميلها إلى الأبد.",
+    "hint": "خفض المحور هو زيادة الزاوية $\\theta$، أي تقليل $\\cos\\theta = L_z/L$. انظر إلى الكميتين اللتين يجب أن تتغيرا لهذا، واسأل نفسك هل يمكن للعزم الأفقي أن يغير أيًا منهما."
+   },
+   {
+    "id": "rg2",
+    "type": "mcq",
+    "q": "نفس القمة الدوارة تم تدويرها بسرعة مضاعفة — كل شيء آخر دون تغيير. ماذا يحدث لسرعة المبادرة؟",
+    "options": [
+     "ستنخفض إلى النصف",
+     "ستزداد إلى الضعف",
+     "لن تتغير: عزم قوة الجاذبية هو نفسه",
+     "ستزداد أربع مرات"
+    ],
+    "answer": 0,
+    "why": "$\\Omega = mga/(I\\omega)$ — السرعة الزاوية الذاتية في المقام، لذا فإن المبادرة تتناسب عكسيًا مع سرعة الدوران. يمكن فهم ذلك حتى بدون معادلة: خلال الزمن $dt$، يعطي العزم نفس الزيادة $d\\vec L = \\vec M\\,dt$، لكنه الآن يدور متجهًا أطول بمرتين، وبالتالي بزاوية أصغر بمرتين.\n\nالخيار «ستزداد إلى الضعف» هو الخطأ الحدسي الأكثر شيوعًا في هذا الموضوع: يبدو أن القمة السريعة يجب أن تتحرك جانبيًا أسرع. الخيار «لن تتغير» صحيح بالنسبة للعزم، ولكن ليس للمبادرة: البسط هو نفسه بالفعل، لكن المقام تغير. يمكنك التحقق من ذلك بصريًا — القمة المحتضرة تتحرك على الطاولة أسرع بكثير من القمة الطازجة، على الرغم من أن عزم الجاذبية هو نفسه تمامًا.",
+    "hint": "اكتب المعادلة وانظر ما إذا كانت $\\omega$ في البسط أم المقام. ثم اختبر نفسك بالملاحظة: كيف تتصرف القمة قبل سقوطها مباشرة، عندما يكون الدوران قد كاد يتوقف؟"
+   },
+   {
+    "id": "rg3",
+    "type": "free",
+    "q": "بكلماتك الخاصة: لماذا لا يمكن للعزم العمودي على المتجه $\\vec L$ أن يغير طول هذا المتجه، بل يديره فقط؟",
+    "keywords": [
+     "عمودي",
+     "اتجاه",
+     "يدور",
+     "زيادة",
+     "على طول",
+     "إسقاط",
+     "قياسي"
+    ],
+    "needed": 2,
+    "why": "يمكن تحليل زيادة المتجه إلى جزأين: جزء على طول المتجه نفسه وجزء عرضي. الجزء الأول فقط يطيل أو يقصر، والثاني يدور فقط. إذا كانت الزيادة عمودية بالكامل، فلا يوجد جزء طولي، ويبقى الطول كما هو.\n\nرسميًا، هذا سطر واحد: مشتقة مربع الطول تساوي ضعف حاصل الضرب القياسي للمتجه ومشتقته، وحاصل الضرب القياسي للمتجهات المتعامدة يساوي صفرًا. والعكس صحيح أيضًا — إذا كان الطول ثابتًا، فإن المشتقة يجب أن تكون عمودية.\n\nمن المفيد ملاحظة أن المتجه هنا يمكن أن يكون أي شيء. نفس المنطق يفسر لماذا القوة العمودية على السرعة لا تغير مقدارها: من هنا تأتي الحركة الدائرية المنتظمة، ومن هنا أيضًا لا تبذل القوة المغناطيسية شغلًا.",
+    "hint": "حلل الزيادة إلى مركبتين — على طول المتجه وعرضيًا — واسأل ما وظيفة كل منهما. أو احسب مشتقة $\\vec L \\cdot \\vec L$."
+   },
+   {
+    "id": "rg4",
+    "type": "estimate",
+    "q": "عجلة دراجة كتلتها 2.0 كجم وعزم قصور ذاتي $I = 0.245$ كجم·م² تدور بسرعة $\\omega = 30$ راد/ث وتُعلَّق من نهاية محورها على مسافة $a = 0.10$ م من مركز العجلة. ما السرعة الزاوية للمبادرة؟ الإجابة بوحدة راد/ث، $g = 9.81$ م/ث².",
+    "answer": 0.267,
+    "unit": "راد/ث",
+    "why": "$\\Omega = mga/(I\\omega) = 2.0 \\cdot 9.81 \\cdot 0.10 / (0.245 \\cdot 30) = 1.962/7.35 = 0.267$ راد/ث. فترة دوران المحور $T = 2\\pi/\\Omega = 23.5$ ث — حوالي نصف دقيقة لكل دورة.\n\nتحقق بدون آلة حاسبة: في الخطوة السابعة، مع ذراع 0.25 م، كانت النتيجة 0.667 راد/ث. الذراع هنا أصغر بـ 2.5 مرة، ويدخل في المعادلة خطيًا، لذا يجب أن تكون الإجابة أصغر بـ 2.5 مرة: $0.667/2.5 = 0.267$. متطابقة.\n\nتحقق أيضًا من شرط القمة السريعة: $\\sqrt{mga/I} = \\sqrt{1.962/0.245} = 2.8$ راد/ث مقابل 30 راد/ث — هامش أكثر من عشرة أضعاف، لذا فإن المعادلة قابلة للتطبيق بثقة.",
+    "tolAbs": 0.05,
+    "hint": "كل شيء موجود مباشرة في المعادلة $\\Omega = mga/(I\\omega)$: عوّض بالأرقام ولا تنس أن $a$ هي المسافة من نقطة التعليق إلى مركز الكتلة، وليس نصف قطر العجلة."
+   }
+  ]
  }
 }

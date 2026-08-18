@@ -106,6 +106,12 @@ RULES — critical:
 - Keep the EXACT same JSON structure and keys; only values change.
 - Keep the tone of the original: clear, engaging, no condescension, no jargon left unexplained.
 - No alcohol analogies.
+- NEVER refer to an answer by its position ("the third option", "the last choice"): the
+  options are shuffled when shown, so such a sentence is simply false for the reader.
+  Refer to WHAT the option says instead, mirroring how the Russian original does it.
+- Keyword lists for free answers: keep them distinct. No duplicates and no key that is a
+  substring of another one in the same list — the grader counts substring hits, and two
+  nested keys let one word of the reader pass a threshold that asks for two.
 - Physics terminology must be the standard one used in {lang}-language textbooks.
 
 Return STRICT JSON with the same shape as the input, nothing else.
@@ -230,9 +236,24 @@ def translate_block(block, lang, chunk_chars=6000):
         batch[k] = v
         size += s
     flush()
+
+    # МЕЛЬЧЕ, А НЕ СНОВА. «Повторный прогон возьмётся за них» — обещание, которое конвейер
+    # не выполнял: следующий заход отправлял тот же блок тем же куском, ответ обрывался в том
+    # же месте, и блок возвращался в очередь вечно. Четыре захода подряд по двум параграфам
+    # реального газа стояли ровно так, а те же блоки кусками по полторы тысячи знаков
+    # перевелись с первого раза. Значит дело не в модели и не в языке, а в размере порции —
+    # и решать это должен конвейер сам, а не человек руками.
+    if failed and chunk_chars > 1200:
+        again = {k: block[k] for k in dict.fromkeys(failed) if k in block}
+        print(f"    ↻ {lang}: {', '.join(sorted(again))} — не поместились, режу вдвое мельче"
+              f" ({chunk_chars} → {chunk_chars // 2})", flush=True)
+        got = translate_block(again, lang, chunk_chars // 2)
+        out.update(got)
+        failed = [k for k in failed if k not in got]
+
     if failed:
-        print(f"    ⚠️ {lang}: не переведены {', '.join(sorted(set(failed)))} — оставлены пустыми,"
-              f" повторный прогон возьмётся за них", flush=True)
+        print(f"    ⚠️ {lang}: не переведены {', '.join(sorted(set(failed)))} — даже мелкими"
+              f" кусками; это уже не размер, смотреть руками", flush=True)
     return out
 
 

@@ -481,5 +481,1304 @@
     "hint": "Формула Лапласа для капли, а не для мыльного пузыря. И радиус переводите в метры: 5 мкм = 5·10⁻⁶ м."
    }
   ]
+ },
+ "en": {
+  "title": "Surface Tension and Capillaries",
+  "subtitle": "Section 2 · Laplace's Formula and the Height of Rise in a Tube",
+  "intro": [
+   "Place a sewing needle on water — carefully, flat. It will lie there, even though steel is eight times denser than water and, according to Archimedes' law, should sink to the bottom. Sprinkle ground pepper on water — it also lies. Run your finger across the surface of a filled glass: you feel something like a film that needs to be pressed through.",
+   "There is no film there — the water is the same both on the surface and in the depths. The point is what is NOT on the surface: neighbors. Liquid molecules attract each other — that is the very force that in the first section we folded into the correction $a/V^2$ of the van der Waals equation. Inside the liquid, the attractions on a molecule are balanced from all sides. At the boundary with air, the upper half of partners is simply absent, and there appears both a force directed inward and an energy that an internal molecule did not have. This energy is proportional not to the volume of the liquid, but to the area of its boundary — that is where everything that follows comes from.",
+   "Next, we will calculate this cost, estimating it from the heat of vaporization, and see where the estimate misses. Then we will convert energy into force and make sure that joules per square meter and newtons per meter are the same number. We will derive Laplace's formula for a drop and for a soap bubble, Young's condition for the contact angle, and the formula for the rise in a tube. And at the end, we will ask the formula whether a tree can lift water by capillaries alone to a height of one hundred meters. The answer will be negative, and that will be the most interesting part of this section."
+  ],
+  "standNote": "The stand for this section is common to the topic: it draws van der Waals isotherms, the coexistence dome, and the critical point. Take one thing from it. Set the reduced temperature $T/T_c$ to 0.80 and look at the dome: beneath it, liquid and vapor live together, and between them there is a boundary — the very one for a square meter of which we are about to pay. Now slowly move the slider toward 1.00. The dome narrows, the density difference between liquid and vapor melts away, and exactly at the critical point the dome collapses into a point and the boundary disappears entirely. Along with it, the subject of this section disappears: the surface tension of water drops from 0.076 N/m at zero degrees to 0.059 at one hundred and vanishes at the critical point. There is nothing to pay for the surface because the surface no longer exists. By moving one slider, you literally watch $\\sigma$ fade away.",
+  "formula": {
+   "name": "Laplace's formula and the law of capillary rise",
+   "latex": "\\Delta p = \\frac{2\\sigma}{R}, \\qquad h = \\frac{2\\sigma\\cos\\theta}{\\rho g r}",
+   "alsoKnown": "Laplace's formula for the pressure jump on a curved surface (for a soap bubble with two surfaces the coefficient doubles: 4σ/R); the capillary rise formula is known as Jurin's law. The general Laplace form for a surface of arbitrary shape: Δp = σ(1/R₁ + 1/R₂)",
+   "authors": [
+    {
+     "who": "Francis Hauksbee",
+     "year": "1709",
+     "what": "performed the first quantitative experiments with narrow tubes and showed that the height of rise depends on the tube's bore, not on the thickness of its walls — meaning the surface matters, not the mass of glass"
+    },
+    {
+     "who": "James Jurin",
+     "year": "1718",
+     "what": "measured the rise in tubes of different bores and formulated the inverse proportionality of height to radius; the rule bears his name"
+    },
+    {
+     "who": "Thomas Young",
+     "year": "1805",
+     "what": "introduced the concept of surface tension as a real force and derived the equilibrium condition of three tensions at the contact line — that is, the contact angle"
+    },
+    {
+     "who": "Pierre-Simon Laplace",
+     "year": "1805",
+     "what": "in a supplement to 'Celestial Mechanics' proved that the pressure jump at the boundary equals the tension multiplied by the sum of the two principal curvatures, and reduced all of capillarity to a single formula"
+    },
+    {
+     "who": "Josiah Willard Gibbs",
+     "year": "1878",
+     "what": "built the thermodynamics of surfaces: σ is the excess free energy per unit area, and from this it also follows how impurities accumulate at the boundary and lower the tension"
+    }
+   ],
+   "story": "The most unexpected twist in this story happened in the kitchen. In the 1880s, Agnes Pockels managed the household in her parents' home in Braunschweig; university was closed to women, and she knew physics from her brother's textbooks. Noticing that clean and soapy water in a basin behave differently, she assembled an apparatus from what was at hand: a tin trough, a button on a thread as the sensitive element of a balance, and a tin strip that could partition part of the surface and change its area. With this she measured the tension and watched it drop when a drop of oil fell on the water. There was nowhere to publish her results, and in 1891 she wrote to Lord Rayleigh — he translated the letter and sent it to Nature with a note that the work deserved full publication. Pockels' trough is the direct ancestor of the Langmuir trough, on which molecular monolayers were later built and Nobel Prizes were won.\n\nThe second twist is quieter. In 1901, twenty-two-year-old Einstein published his first paper — precisely on capillarity: he tried to extract the law of intermolecular attraction from the values of σ for different liquids. Later he called this work worthless, and in essence he was right — the hypothesis was not confirmed. But the very choice of topic says a lot. Surface tension was then the shortest way to reach numerically to molecules that no one had yet seen: you measure a force on kitchen scales — you get the binding energy between particles.",
+   "symbols": [
+    {
+     "sym": "σ",
+     "latex": "\\sigma",
+     "what": "surface tension (also surface energy)",
+     "unit": "N/m, also J/m²",
+     "note": "one quantity in two units: J/m² = N·m/m² = N/m. For water at 20 °C it is 0.0728"
+    },
+    {
+     "sym": "Δp",
+     "latex": "\\Delta p",
+     "what": "pressure jump on a curved surface",
+     "unit": "Pa",
+     "note": "pressure is always higher on the side where the surface is convex; for a flat surface there is no jump at all"
+    },
+    {
+     "sym": "R",
+     "latex": "R",
+     "what": "radius of curvature of the surface",
+     "unit": "m",
+     "note": "for a drop and a bubble it is their own radius, for a meniscus in a tube it is the radius of the spherical segment, not the tube radius"
+    },
+    {
+     "sym": "r",
+     "latex": "r",
+     "what": "radius of the capillary tube or pore",
+     "unit": "m",
+     "note": "specifically the radius, not the diameter: substituting the diameter underestimates the answer by half and goes unnoticed because the order of magnitude remains"
+    },
+    {
+     "sym": "θ",
+     "latex": "\\theta",
+     "what": "contact angle of wetting",
+     "unit": "degrees",
+     "note": "measured inside the liquid from the solid surface; θ < 90° — the liquid wets and rises, θ > 90° — it does not wet and falls"
+    },
+    {
+     "sym": "h",
+     "latex": "h",
+     "what": "height of capillary rise",
+     "unit": "m",
+     "note": "measured from the free level of the liquid in a wide vessel to the lowest point of the meniscus"
+    },
+    {
+     "sym": "ρ",
+     "latex": "\\rho",
+     "what": "density of the liquid",
+     "unit": "kg/m³",
+     "note": "strictly speaking, the difference between the densities of the liquid and the displaced gas, but for water and air the correction is less than one thousandth"
+    },
+    {
+     "sym": "g",
+     "latex": "g",
+     "what": "acceleration due to gravity",
+     "unit": "m/s²",
+     "const": "g",
+     "note": "appears only in the rise formula; gravity does not enter Laplace's formula at all, and therefore in weightlessness a drop is exactly a sphere"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Rigorous derivation",
+   "lead": "We need exactly one physical statement, and we already have it from the first section: liquid molecules attract each other. Everything else is accounting for energy, force, and the balance of forces on an imaginary cut. Neither Laplace's formula nor Jurin's law will be declared ready-made: both will emerge from equilibrium.",
+   "steps": [
+    {
+     "text": "Take a molecule deep inside the liquid. Neighbors surround it on all sides, each pulls toward itself, and the sum of attractions is zero—not because there are no forces, but because they are balanced. Now lift the same molecule to the boundary with air. Above, there are practically no neighbors: the density of saturated vapor at room temperature is tens of thousands of times less than the density of the liquid. Half of the partners have disappeared, the attraction from below remains—a resultant force directed inward appears, and energy appears that the internal molecule did not have. Note what this cost is proportional to: not the volume of the liquid, but the number of molecules that ended up on the boundary, i.e., the area of the boundary. The cost per square meter is called surface tension. One caveat, which will be needed in the next step: at constant temperature, one pays not with total energy but with free energy—the part that can be returned as work. The free energy of the boundary per unit area is what Gibbs called tension; in the formula below, $F_{\\text{surf}}$ is precisely that, not a force (the force will appear in the third step).",
+     "latex": "F_{\\text{surf}} = \\sigma A, \\qquad \\sigma = \\left(\\frac{\\partial F}{\\partial A}\\right)_{T,\\,V}, \\qquad [\\sigma] = \\frac{\\text{J}}{\\text{m}^{2}}",
+     "figure": "realneigh",
+     "figCaption": "Inside the liquid, attractions from neighbors are balanced; for a molecule at the boundary, there are no neighbors in the upper half—leaving a force inward and energy proportional to the area"
+    },
+    {
+     "text": "Let's estimate the cost numerically, knowing almost nothing about the liquid. Evaporating a mole of water costs about 44 kilojoules—this is work against the attraction of ALL neighbors at once, i.e., 7.3·10⁻²⁰ joules per molecule. How many molecules fit on a square meter of surface? The concentration in liquid water is $n = \\rho N_A/M = 3{,}3\\cdot10^{28}$ m⁻³, and the surface density is $n$ to the two-thirds power: 1.04·10¹⁹ per square meter. A molecule at the boundary loses not all neighbors, but a fraction; let's take a quarter for the estimate. Multiplying, we get 0.19 J/m². The measured value is 0.073. We overestimated by a factor of 2.6, and part of the gap is accounting. We counted bond energy, but the measured σ is free energy; the total energy of the water surface is larger, about 0.117 J/m² at 20 °C, because a new boundary is born, taking heat from the surroundings. Against that, the miss is not 2.6 times but 1.6. The rest is physics: the reverse calculation says that the factor before the heat of vaporization is not a quarter but about one sixth. The reason is characteristic of water: a molecule on the surface turns hydrogen bonds sideways, to neighbors in its own layer, instead of simply losing them. The estimate honestly caught the order of magnitude and honestly missed in the factor—more than that from a back-of-the-envelope calculation should not be expected.",
+     "latex": "\\sigma \\sim \\frac{1}{4}\\cdot\\frac{\\Delta H_{\\text{evap}}}{N_A}\\cdot n^{2/3} = \\frac{1}{4}\\cdot 7{,}3\\cdot10^{-20}\\cdot 1{,}04\\cdot10^{19} = 0{,}19\\ \\frac{\\text{J}}{\\text{m}^{2}} \\quad\\text{against measured } 0{,}073",
+     "figure": "realarea",
+     "figCaption": "Estimate from the heat of vaporization gives 0.19 J/m² against measured 0.073: the order of magnitude is captured, the factor is not"
+    },
+    {
+     "text": "Now let's convert energy into force. Take a U-shaped frame with a movable crossbar of length $L$ and stretch a soap film over it. To pull the crossbar by $\\Delta x$, one must do work $F\\,\\Delta x$—and all of it goes into the new surface. The area of the frame increased by $L\\,\\Delta x$, but the film has two sides, outer and inner, so twice as much new surface is created. Equating, we get $F = 2\\sigma L$. Hence the double meaning of σ: on the left it stood in joules per square meter, on the right it turned out to be newtons per meter, and these are the same quantity because J/m² = N·m/m² = N/m. Not two different properties, but one notation in two units. Also note what is absent from the answer: $\\Delta x$. The force does not grow with stretching—the film is not a spring. Rubber resists more and more when stretched because its bonds stretch; in a soap film, bonds do not stretch, new molecules simply come to the surface from the bulk.",
+     "latex": "F\\,\\Delta x = \\sigma\\,\\Delta A = \\sigma\\cdot 2L\\,\\Delta x \\;\\Longrightarrow\\; F = 2\\sigma L, \\qquad \\frac{\\text{J}}{\\text{m}^{2}} = \\frac{\\text{N}\\cdot\\text{m}}{\\text{m}^{2}} = \\frac{\\text{N}}{\\text{m}}",
+     "figure": "realframe",
+     "figCaption": "Frame with a movable crossbar: work against tension equals the energy of the new surface, and σ is read directly in newtons per meter"
+    },
+    {
+     "text": "A flat surface contracts along itself and presses on nothing. A curved one presses: contracting, it squeezes what is under it. Let's calculate by how much. Mentally cut a drop of radius $R$ with a plane through the center and look at the equilibrium of one half. Through the cut, two forces act on it. The first is tension along the cut line: the circumference $2\\pi R$ multiplied by σ pulls the half toward its partner. The second is the excess pressure inside, acting on the area of the circle $\\pi R^2$ and pushing the halves apart. Equating—and the radius in the first power cancels against the square, leaving an inverse dependence. The smaller the drop, the stronger it is compressed: a fog droplet of radius 1 micron holds an extra 146 kilopascals inside, almost one and a half atmospheres above external pressure.",
+     "latex": "\\Delta p\\cdot \\pi R^{2} = \\sigma\\cdot 2\\pi R \\;\\Longrightarrow\\; \\Delta p = \\frac{2\\sigma}{R}; \\qquad R = 1\\ \\text{μm}: \\;\\; \\Delta p = \\frac{2\\cdot 0{,}0728}{10^{-6}} = 1{,}46\\cdot10^{5}\\ \\text{Pa}",
+     "figure": "realdrop",
+     "figCaption": "Hemisphere in equilibrium: tension along the cut circumference 2πRσ against excess pressure acting on the area πR²"
+    },
+    {
+     "text": "A soap bubble has a thin film, but it has two surfaces—outer and inner—and each pulls in its own way. The same cut gives twice the contracting force, and the coefficient doubles: $\\Delta p = 4\\sigma/R$. The numbers are amusing. A bubble of radius 2 centimeters with σ of soap solution 0.025 N/m holds an extra 5 pascals inside—that's half a millimeter of water column, a twenty-thousandth of an atmosphere. But from this follows something you can check with your hands. Put two inflated bubbles on the ends of a tube with a valve in the middle and open the valve: the small one will deflate into the large one. Intuition suggests the opposite—\"pressures will equalize, the bubbles will become the same\"—but in the formula, pressure is inversely proportional to radius, and for the small one it is HIGHER. Air goes from where the pressure is higher; the small one shrinks, its pressure rises even more, and the process accelerates by itself. Exactly this would happen to the alveoli in the lungs—small ones would collapse into large ones—if not for surfactant, which lowers σ the more strongly the more compressed the alveolus is, thereby reversing the sign of the feedback.",
+     "latex": "\\Delta p = \\frac{4\\sigma}{R}; \\qquad R = 2\\ \\text{cm},\\;\\; \\sigma = 0{,}025\\ \\text{N/m}: \\;\\; \\Delta p = \\frac{4\\cdot 0{,}025}{0{,}02} = 5\\ \\text{Pa} \\approx 0{,}5\\ \\text{mm H₂O}",
+     "figure": "realbubble",
+     "figCaption": "The film has two surfaces, so the coefficient doubles; pressure is inversely proportional to radius, and therefore the smaller bubble deflates into the larger one"
+    },
+    {
+     "text": "So far, the liquid has bordered only on gas. Put it on a solid—now there are three boundaries: solid–gas, solid–liquid, and liquid–gas, each with its own tension. Where all three meet, there is a contact line, and on it three tensions pull in three directions. The line can move only along the solid surface, so equilibrium is determined by the horizontal projection: $\\sigma_{\\text{sg}}$ pulls the line toward the dry side, $\\sigma_{\\text{sl}}$ toward the wetted side, and the tension of the liquid itself pulls along the tangent to its surface, giving a projection $\\sigma\\cos\\theta$. Equating, we get Young's condition. It reads simply: if it is cheaper for the solid to border on the liquid than on the gas, the numerator is positive, the angle is acute, the liquid spreads. For clean glass with water, the numerator is almost equal to σ, and θ is close to zero: the drop spreads into a puddle. On paraffin, θ = 105°—water gathers into balls. For mercury on glass, 140°: it wets almost nothing. Hence the shape of the meniscus: for a wetting liquid, the edges climb up the wall and the surface bends downward; for a non-wetting liquid, everything is the opposite.",
+     "latex": "\\sigma_{\\text{sg}} = \\sigma_{\\text{sl}} + \\sigma\\cos\\theta \\;\\Longrightarrow\\; \\cos\\theta = \\frac{\\sigma_{\\text{sg}} - \\sigma_{\\text{sl}}}{\\sigma}",
+     "figure": "realwet",
+     "figCaption": "Three tensions at the contact line; their horizontal balance sets the contact angle, and with it the shape of the meniscus"
+    },
+    {
+     "text": "Let's put it all together. A narrow tube, wetting liquid, the meniscus climbed up and pulled the column along. What holds this column? Tension along the contact line—a circumference of length $2\\pi r$; the vertical projection $\\sigma\\cos\\theta$ pulls upward. Downward pulls the weight of the raised column $\\rho g\\,\\pi r^{2} h$. Equating—and again the radius in the first power cancels against the square: the narrower the tube, the higher the rise, because the perimeter falls as $r$, and the mass as $r^{2}$. The same result is obtained from Laplace's formula if you notice that the meniscus in a tube of radius $r$ with angle θ is a piece of a sphere of radius $R = r/\\cos\\theta$: the jump $2\\sigma\\cos\\theta/r$ balances $\\rho g h$. Numbers: for water on clean glass, a tube of radius 0.1 mm gives 14.8 cm, radius 0.5 mm—only 3 cm. Mercury with its $\\cos 140^\\circ = -0{,}77$ flips the sign: in a tube of radius 1 mm it DESCENDS by 5.6 mm. Therefore, in a mercury barometer, the channel is made wide and a tabulated correction for capillary depression is introduced.",
+     "latex": "\\rho g\\,\\pi r^{2} h = \\sigma\\cos\\theta\\cdot 2\\pi r \\;\\Longrightarrow\\; h = \\frac{2\\sigma\\cos\\theta}{\\rho g r}; \\qquad r = 0{,}1\\ \\text{mm}: \\;\\; h = \\frac{2\\cdot 0{,}0728}{1000\\cdot 9{,}81\\cdot 10^{-4}} = 0{,}148\\ \\text{m}",
+     "figure": "realcap",
+     "figCaption": "Weight of the column against tension along the perimeter: the perimeter falls as r, the weight as r², so with narrowing of the tube the rise increases"
+    },
+    {
+     "text": "Let's invert the formula and ask it what the whole section is for. What should the tube be to lift water to the top of a century-old tree—to a hundred meters? Answer: radius 0.15 microns, one and a half ten-thousandths of a millimeter. The water-conducting vessels and tracheids of a tree are two orders of magnitude wider: a typical radius is about 10 microns, and such a tube lifts water to one and a half meters—less than the height of a currant bush. The conclusion is harsh and unambiguous: the capillaries of the trunk do not lift water up; they only conduct it. The work is done by nanopores in the cell walls of the leaf: the radius there is on the order of 10 nanometers, and the meniscus in such a pore can hold a pressure difference of $2\\sigma/r \\approx 15$ MPa—one and a half hundred atmospheres, with a colossal margin. Evaporation through stomata continuously pulls water, the menisci in the pores bend deeper, and the entire column in the trunk turns out to be stretched: the pressure in it is not just below atmospheric, but negative, in a sequoia trunk about −2 MPa. Water in a tree is not pushed from below, but hangs on the menisci of the leaf—and it is held by the same σ.",
+     "latex": "r = \\frac{2\\sigma}{\\rho g h} = \\frac{2\\cdot 0{,}0728}{1000\\cdot 9{,}81\\cdot 100} = 1{,}5\\cdot10^{-7}\\ \\text{m}; \\qquad r_{\\text{vessel}} \\approx 10\\ \\text{μm} \\;\\Longrightarrow\\; h \\approx 1{,}5\\ \\text{m}",
+     "figure": "realtree",
+     "figCaption": "A hundred meters requires pores of radius 0.15 μm; trunk vessels are a hundred times wider and give one and a half meters—the column is held by leaf nanopores"
+    }
+   ],
+   "plate": "\\Delta p = \\frac{2\\sigma}{R} \\qquad h = \\frac{2\\sigma\\cos\\theta}{\\rho g r}",
+   "plateCap": "On the left—what curvature costs: the steeper the surface is curved, the stronger it squeezes what is under it. On the right—the same pressure jump, only balanced by the weight of the raised column. The second is obtained from the first by one substitution: the meniscus in a tube of radius $r$ with contact angle θ is a piece of a sphere of radius $R = r/\\cos\\theta$.",
+   "note": "Let's list what we assumed along the way—these are the boundaries of the formulas. First: the surface was considered a sphere. For a free drop this is true (in zero gravity—exactly; on Earth—as long as the drop is smaller than the capillary length of 2.7 mm), and for a meniscus in a tube it is true only while the tube is narrow; in a wide tube, Jurin's formula greatly overestimates the answer. Second: the contact angle was considered a constant of the substance. In reality, it has hysteresis of tens of degrees and a strong dependence on roughness—more on this in the appendix. Third: σ was considered constant. It depends on temperature (for water it falls from 0.076 at 0 °C to 0.059 at 100 °C) and catastrophically on impurities: one drop of detergent is enough to reduce it by a factor of two or three. Fourth: we did not account for the weight of the liquid itself in the meniscus above its lowest point. This weight is held by the same tension, so the column rises not higher but lower than calculated—by about $r/3$: for a tube of 0.1 mm this is two hundredths of a percent, for a millimeter one already about two percent. Fifth: gravity did not enter Laplace's formula at all, i.e., the drop was considered small; a large drop on a table flattens, and its curvature at the top and sides is different. And sixth, the most important for practice: everywhere equilibrium was assumed. Jurin's formula gives the final height of rise, but says nothing about time: the narrower the capillary, the higher it lifts and the slower it does so, because viscous resistance grows as $r^{-4}$. This is already the topic of viscosity and flow through pipes."
+  },
+  "math": {
+   "title": "The Math You Need Here",
+   "lead": "Three topics, all about getting an answer without solving equations: reading dimensions, order-of-magnitude estimates, and force as the derivative of energy.",
+   "items": [
+    {
+     "what": "Joule per square meter and newton per meter are the same unit",
+     "why": "The statement \"surface energy and surface tension are the same thing\" can be checked without thinking about physics at all: just cancel the meters. A joule is a newton-meter, so J/m² = N·m/m² = N/m, and there is no choice here. The same trick guards against errors in the rise formula. Plug units into $2\\sigma\\cos\\theta/(\\rho g r)$: cosine is dimensionless, the denominator is kg/m³ · m/s² · m = kg/(m·s²) = Pa, the numerator is N/m, and N/m divided by N/m² gives a meter. The height comes out in meters — the formula is at least not garbled. If someone mistakenly wrote $r^2$ in the denominator, the dimension would immediately expose it.",
+     "latex": "[\\sigma] = \\frac{\\text{J}}{\\text{m}^{2}} = \\frac{\\text{N}\\cdot\\text{m}}{\\text{m}^{2}} = \\frac{\\text{N}}{\\text{m}}, \\qquad \\frac{[\\sigma]}{[\\rho][g][r]} = \\frac{\\text{N}/\\text{m}}{\\text{Pa}} = \\frac{\\text{N}/\\text{m}}{\\text{N}/\\text{m}^{2}} = \\text{m}",
+     "kit": "dimension"
+    },
+    {
+     "what": "Order-of-magnitude estimate and capillary length",
+     "why": "In the second step of the derivation, we got σ from the heat of vaporization and missed by a factor of 2.6. That is a normal result for an order-of-magnitude estimate: it answers the question \"hundredths or tenths,\" not \"0.073 or 0.075.\" The same trick gives the main scale of the whole topic. Let's ask at what size gravity compares with tension: the pressure of a column $\\rho g L$ against the Laplace pressure $\\sigma/L$. Equating them gives the capillary length $\\lambda_c = \\sqrt{\\sigma/\\rho g}$, which for water is 2.7 mm. Below that, tension rules: a drop is a sphere, an insect walks on water, water does not leak from gauze. Above that, gravity rules: a drop flattens, a puddle spreads. The dimensionless ratio $\\mathrm{Bo} = \\rho g L^{2}/\\sigma$ (the Bond number) is simply the square of the size in capillary lengths, and it immediately shows whose world we are in.",
+     "latex": "\\rho g L \\sim \\frac{\\sigma}{L} \\;\\Longrightarrow\\; \\lambda_c = \\sqrt{\\frac{\\sigma}{\\rho g}} = \\sqrt{\\frac{0{,}0728}{1000\\cdot 9{,}81}} = 2{,}7\\ \\text{mm}, \\qquad \\mathrm{Bo} = \\frac{\\rho g L^{2}}{\\sigma} = \\left(\\frac{L}{\\lambda_c}\\right)^{2}",
+     "kit": "order"
+    },
+    {
+     "what": "Force as the derivative of energy",
+     "why": "We derived the Laplace formula by balancing forces on a cut. There is a second way, shorter and more reliable: equate the work of pressure to the increase in surface energy when the drop is imagined to expand by $dR$. The surface energy is $E = \\sigma\\cdot 4\\pi R^{2}$, its derivative is $8\\pi\\sigma R$; the work of pressure is $\\Delta p\\cdot 4\\pi R^{2}\\,dR$. Equating them gives $2\\sigma/R$ in one line. The value of the trick is that it does not require guessing which forces are applied where: just compute the energy as a function of one parameter and differentiate. Check it on a soap bubble: there are two surfaces, $E = 2\\sigma\\cdot4\\pi R^{2}$, the derivative is twice as large — and the coefficient honestly doubles to $4\\sigma/R$, without any new physics. The same trick for a surface of arbitrary shape gives the general form of the Laplace formula with two principal radii.",
+     "latex": "dE = \\sigma\\,d\\!\\left(4\\pi R^{2}\\right) = 8\\pi\\sigma R\\,dR, \\quad \\delta A = \\Delta p\\cdot 4\\pi R^{2}dR \\;\\Longrightarrow\\; \\Delta p = \\frac{2\\sigma}{R}; \\qquad \\Delta p = \\sigma\\left(\\frac{1}{R_1}+\\frac{1}{R_2}\\right)",
+     "kit": "derivative"
+    }
+   ]
+  },
+  "example": {
+   "title": "Example with numbers",
+   "lead": "Let's calculate what a surface costs when there is a lot of it: turn a glass of water into fog and look at the energy, area, and pressure inside the droplets.",
+   "given": "A glass of water with volume $V = 200$ ml is sprayed into a fog of identical droplets with radius $R = 1$ μm. The surface tension of water is $\\sigma = 0.0728$ N/m, density is 1000 kg/m³, specific heat capacity is 4.18 kJ/(kg·K), specific heat of vaporization is 2.26 MJ/kg. Find the number of droplets, their total surface area, the energy spent on it, and the excess pressure inside a droplet.",
+   "law": "The volume and total surface area of a set of identical spheres are related as $A = 3V/R$; the work against surface tension is $\\sigma\\,\\Delta A$; the excess pressure inside a droplet is given by the Laplace formula $\\Delta p = 2\\sigma/R$.",
+   "solution": [
+    {
+     "text": "How many droplets were obtained. The volume of one is four-thirds pi r cubed; at a radius of a micron, this is a bit more than four attoliters.",
+     "latex": "N = \\frac{V}{\\frac{4}{3}\\pi R^{3}} = \\frac{2\\cdot10^{-4}}{4.19\\cdot10^{-18}} = 4.8\\cdot10^{13}"
+    },
+    {
+     "text": "Total surface area. It is not necessary to calculate through $N$: the ratio of area to volume for a sphere is $3/R$, and the number of droplets cancels out by itself.",
+     "latex": "A = N\\cdot 4\\pi R^{2} = \\frac{3V}{R} = \\frac{3\\cdot 2\\cdot10^{-4}}{10^{-6}} = 600\\ \\text{m}^{2}"
+    },
+    {
+     "text": "Work against surface tension. The initial surface of the water in the glass (about 0.004 m²) can be neglected: it is a hundred and fifty thousand times smaller than the new one.",
+     "latex": "W = \\sigma\\,(A - A_0) \\approx \\sigma A = 0.0728\\cdot 600 = 43.7\\ \\text{J}"
+    },
+    {
+     "text": "Pressure inside the droplet. Laplace formula, radius in meters.",
+     "latex": "\\Delta p = \\frac{2\\sigma}{R} = \\frac{2\\cdot 0.0728}{10^{-6}} = 1.46\\cdot10^{5}\\ \\text{Pa} = 1.44\\ \\text{atm}"
+    }
+   ],
+   "answer": "About 4.8·10¹³ droplets, total surface area 600 m² — that's six hundred square meters of a garden plot folded into a glass of water. Creating this surface cost 44 joules. Inside each droplet, the pressure is 146 kPa higher than outside — an excess of almost one and a half atmospheres.",
+   "check": "Forty-four joules — is that a lot or a little? Heating the same 200 grams of water by a single degree costs 836 joules, nineteen times more: all the surface energy of the fog is equivalent to heating the water by 0.05 degrees. And evaporating this water costs 452 kilojoules — ten thousand times more than creating the surface. Hence a rule worth remembering: surface energy is almost never visible in the energy balance, but it is perfectly visible in FORCES and PRESSURES. One and a half extra atmospheres in a droplet invisible to the eye is a quantity that both meteorologists and nozzle designers take into account. The second check, the reverse one: the area increased by 156,000 times, and evaporation occurs from the surface — therefore, sprayed water evaporates incomparably faster than poured water, and this is the basis for humidifiers, fuel injectors, and spray drying. And if in your calculation the area came out on the order of a few square meters, look for lost microns: 1 μm = 10⁻⁶ m, not 10⁻³."
+  },
+  "constants": {
+   "title": "Constants of this section",
+   "lead": "Four numbers. Three of them are surface tensions of specific liquids, the fourth is not a property of an instrument or an experiment, but a scale that divides the world into 'small' and 'large'.",
+   "items": [
+    {
+     "sym": "σ_water",
+     "latex": "\\sigma_{\\text{H}_2\\text{O}}",
+     "name": "Surface tension of water",
+     "value": "0.0728 at 20 °C (0.0756 at 0 °C, 0.0589 at 100 °C)",
+     "unit": "N/m, also J/m²",
+     "why": "Anomalously large value for a light liquid: for most organic liquids it is 0.02–0.03, i.e., three to four times less. The reason is given by the hydrogen bond — a water molecule holds onto its neighbors not only by weak attraction, as in §1, but also by a directed bridge through hydrogen. With temperature, the tension falls almost linearly and goes to zero at the critical point: there the liquid–vapor boundary disappears, and there is nothing to pay for.",
+     "mnemo": "Remember it as 'seven hundredths of a newton per meter' — then two figures can be calculated in your head: a drop of radius 1 mm holds inside an extra one and a half hundred pascals, and a tube of radius 0.1 mm lifts water about 15 centimeters."
+    },
+    {
+     "sym": "σ_soap",
+     "latex": "\\sigma_{\\text{soap}}",
+     "name": "Surface tension of soap solution",
+     "value": "0.025 (bubble solution) — 0.035 (kitchen concentration)",
+     "unit": "N/m",
+     "why": "Soap does not 'make water slippery' — it reduces its tension by two to three times. The molecule of a surfactant is two-faced: one end loves water, the other avoids it, so such a molecule arranges itself at the boundary with its tail outward and replaces the expensive water surface with a cheap one. Hence everything at once: fabric soaks through instead of holding water as a film in the pores; grease comes off dishes; a paperclip on water sinks from one drop of detergent. And hence also that pure water cannot be foamed, but soapy water can.",
+     "mnemo": "Two to three times less than pure water. The ratio is visible in the kitchen without instruments: from a pipette, soapy water produces about 2.4 times more drops than pure water for the same milliliter."
+    },
+    {
+     "sym": "σ_Hg",
+     "latex": "\\sigma_{\\text{Hg}}",
+     "name": "Surface tension of mercury",
+     "value": "0.485 at 20 °C, contact angle on glass about 140°",
+     "unit": "N/m",
+     "why": "Six and a half times greater than water's: on the surface of liquid metal, metallic bonds break, and they are much stronger than hydrogen bonds. Together with the non-wetting of glass, this gives two familiar pictures — mercury gathers into balls on any surface, and in a narrow tube it does not rise but falls. Barometrists know this as capillary depression and introduce a tabulated correction for it.",
+     "mnemo": "Half a newton per meter. At the same time, the capillary length of mercury is 1.9 mm — LESS than water's, although σ is six times greater: the density is 13.6 times higher, and gravity wins earlier."
+    },
+    {
+     "sym": "λ_c",
+     "latex": "\\lambda_c",
+     "name": "Capillary length of water",
+     "value": "2.7",
+     "unit": "mm",
+     "why": "Not a constant of the instrument, but the liquid's own scale: the size at which weight compares with tension, $\\lambda_c = \\sqrt{\\sigma/\\rho g}$. Everything smaller lives in the world of tension — a drop is exactly a sphere, a water strider does not sink, water hangs in gauze. Everything larger lives in the world of gravity — a drop flattens, a puddle spreads, a column collapses. Hence also the limit on the size of a raindrop: larger than a few millimeters it cannot hold together and is torn apart by the oncoming air.",
+     "mnemo": "Two to three millimeters — this is the size of a drop falling from a faucet. Remember this drop: it stands exactly on the boundary of two worlds."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "How this relates to the rest of the course",
+   "lead": "Surface tension is not a separate topic, but the flip side of the same intermolecular attraction that in §1 explained the deviation of a real gas from an ideal one.",
+   "items": [
+    {
+     "h": "First section: the same force, different accounting",
+     "text": "In §1, the attraction of molecules turned into the correction $a/V^{2}$ — a pressure deficit at the wall because a molecule is pulled back by its own. Here the same attraction is counted not through pressure, but through the energy of the boundary. The bridge between sections is visible on the stand: σ of water falls from 0.076 N/m at 0 °C to 0.059 at 100 °C and goes to zero exactly at the critical point, whose coordinates we obtained in §1. The reason is one: there the difference between liquid and vapor disappears, and with it the boundary itself. No boundary — nothing to pay for."
+    },
+    {
+     "h": "Hydrostatics: water strider and gauze on a glass",
+     "text": "In the topic of pressure in a resting fluid, we twice referred to tension without calculating: the water strider stays on the surface, and water does not pour through the gauze covering an inverted glass. Now this can be calculated. A mesh cell of radius $r$ holds a pressure difference up to $2\\sigma/r$; to hold a column of 12 cm, i.e., 1.2 kPa, a radius of about 0.12 mm is needed. The gauze cell is just these tenths of a millimeter, so the experiment works — but at the limit, and with a coarse mesh it no longer works."
+    },
+    {
+     "h": "Viscosity: capillary lifts, but also slows",
+     "text": "The Jurin formula gives the final height and is silent about time. And time is determined by viscosity: the resistance to flow in a tube grows as $r^{-4}$ — this is Poiseuille's law from the topic of viscous flows. The result is a fork familiar to anyone who has chosen paper towels: wide pores absorb quickly, but not high; narrow ones — high, but slowly. For the same reason, the rise of water in brick masonry formally should reach a dozen meters, but in reality stops around a meter: evaporation from the wall manages to carry water away faster than narrow pores pull it up."
+    },
+    {
+     "h": "Phase transitions: why boiling needs a start",
+     "text": "A nucleus of a new phase — a bubble in a liquid or a droplet in vapor — is initially small, and therefore its surface is expensive compared to the gain in volume. Hence superheated liquid, which does not boil without nucleation centers, and supercooled vapor, which does not condense without condensation nuclei. The quantitative side of this is the Kelvin formula in the appendix: above a small droplet, the saturated vapor pressure is higher than above a flat surface, and therefore small droplets evaporate in favor of large ones."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Fun: Try It with Your Hands",
+   "lead": "Surface tension is a rare topic where a home experiment is not just an illustration but a measurement: with a kitchen pipette, σ can be measured seriously, with an accuracy of tens of percent.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "kitchen experiment",
+     "h": "A paperclip that floats, and a drop of detergent that sinks it",
+     "text": "Pour water into a plate. Tear off a piece of paper napkin, place it on the water, and put a paperclip or a sewing needle on the napkin. After half a minute, the napkin will soak and sink, but the paperclip will remain lying. Look from the side: around it, the surface is dented into a dimple. Now drop a drop of dishwashing liquid into the far edge of the plate—and don't blink.",
+     "answer": "The paperclip is not held by Archimedes' principle: steel is 7.8 times denser than water, and displacing its own volume is not enough. It is held by the dent in the surface—or rather, by the tension along two lines of contact on the sides. Let's calculate the limit. The weight of a cylindrical needle of length $L$ and diameter $d$ is $\\rho_{\\text{steel}}\\,g\\,\\pi d^{2}L/4$, and the tension on both sides gives an upward force of at most $2\\sigma L$. The length cancels out, leaving $d_{\\max} = \\sqrt{8\\sigma/(\\pi\\rho_{\\text{steel}} g)} = 1.56$ mm. An ordinary sewing needle has a diameter of 0.6–0.8 mm, so it has a fourfold margin in mass—that's why it lies confidently. But with a 3 mm nail, the experiment will not work no matter how careful you are, and this is a prediction of the formula, not a matter of skill.\n\nNow about the drop of detergent. The new equilibrium gives $d_{\\max} = 1.0$ mm—the limit dropped only by a factor of 1.5, and by this arithmetic, a thin needle should have held. It sinks instantly for another reason: soap spreads over the surface, creating a gradient in σ, and a gradient in tension pulls the surface away from the drop (this is called the Marangoni effect). The paperclip is literally yanked out of its dimple, and the surfactant molecule also changes the contact angle. It is worth doing the experiment the other way too: drop the detergent in advance, stir, and try to place a paperclip on the already equilibrated soapy solution—a thin needle will lie, though noticeably more reluctantly."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "kitchen experiment",
+     "h": "Counting drops: measure σ with a kitchen pipette",
+     "text": "Take a pipette or a syringe without a needle. Fill it with clean water and release exactly 5 milliliters drop by drop into a measuring cup, counting the drops. Rinse, fill with water with a dissolved drop of dishwashing liquid, and repeat—the same 5 milliliters, the same tip, the same pace. Compare the numbers of drops.",
+     "answer": "A drop detaches when its weight equals the tension holding it along the circumference of the tip: $mg = 2\\pi r\\sigma$. This is Tate's law, and it is the basis of the stalagmometer—an instrument used to measure σ a hundred years ago. For a tip of radius 1 mm and pure water, we get $m = 2\\pi\\cdot10^{-3}\\cdot0.0728/9.81 = 47$ mg, which is about 21 drops per milliliter.\n\nBut the interesting thing is not the absolute value, but the ratio. The tip radius and $g$ are the same in both series, so the number of drops per given volume is inversely proportional to σ: $N_{\\text{soap}}/N_{\\text{water}} = \\sigma_{\\text{water}}/\\sigma_{\\text{soap}} \\approx 0.073/0.030 = 2.4$. Where pure water took a hundred drops, soapy water takes about two hundred and forty. An honest caveat, without which agreement with the kitchen would be rigged: Tate's law overestimates the drop mass by about a factor of 1.5, because during detachment some liquid remains hanging on the tip—this is the Harkins and Brown correction. With it, our 47 mg becomes 31, i.e., 32 drops per milliliter, while the kitchen gives 20–25. It still matches, but by a different route: the drop hangs on the OUTER edge of the tip, and in a pharmacy pipette it is not a millimeter but one and a half. One and a half millimeters give an ideal 70 mg, with the correction 47 mg—the very 21 drops per milliliter. That is why the absolute value of σ is measured so roughly, but the ratio is quite decent: the correction is almost the same for both liquids and cancels out in the ratio."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradox",
+     "h": "A castle is built from wet sand, not dry or flooded",
+     "text": "Dry sand crumbles. Sand under water also crumbles. But wet sand holds a vertical wall and a tower half a meter high. Water is not glue and does not stick anything together—where does the strength come from, and why does it disappear as soon as you add water?",
+     "answer": "Between neighboring grains of sand, moisture collects into tiny bridges with a concave surface. A concave surface, according to the Laplace formula, means reduced pressure inside the bridge, and this reduced pressure attracts the grains to each other. Let's estimate the force. A grain of radius 100 μm, a bridge neck with a radius of curvature of about 10 μm: the pressure reduction $2\\sigma/r \\approx 15$ kPa, and the attractive force is on the order of $\\pi r_{\\text{grain}}\\sigma \\approx 2\\cdot10^{-5}$ N. The weight of the grain itself at a density of 2650 kg/m³ is about $1\\cdot10^{-7}$ N. The capillary force is two hundred times greater than the weight, and that is why the tower stands.\n\nNow the rest is clear. In dry sand, there are no bridges—nothing to hold. In flooded sand, they are also absent: the water is continuous, there are no concave bridges left, and the whole structure crumbles again. The strength lives only in a narrow range of humidity, usually from one to several percent by mass, and this is exactly what everyone has felt on the beach empirically. The same physics makes flour lumpy, makes salt stick in the salt shaker, and makes dust hold on a damp cloth."
+    },
+    {
+     "icon": "fact",
+     "kind": "fun fact",
+     "h": "A spoon of oil on a pond and the first measurement of the size of a molecule",
+     "text": "In 1774, Benjamin Franklin poured a teaspoon of olive oil onto a pond in Clapham, London, and delightedly described how the ripple instantly calmed over an area of about half an acre. He stopped there. More than a hundred years later, Lord Rayleigh took his numbers and simply divided the volume by the area.",
+     "answer": "A teaspoon is 5 milliliters, i.e., 5·10⁻⁶ m³. Half an acre is about 2000 m². Divide: the film thickness is 2.5·10⁻⁹ meters, two and a half nanometers. There is no physics here except dividing volume by area—and the result is stunning: the oil spread to a thickness of ONE molecule and then refused to spread further. The length of an oleic acid molecule is indeed about two nanometers. Thus, the size of a molecule was measured for the first time, and the instrument was a pond.\n\nThis line was continued by the already mentioned Agnes Pockels: her trough allowed compressing the monolayer with a strip and watching when the tension would start to drop—that is, when the molecules would stand shoulder to shoulder. Irving Langmuir turned her kitchen device into a laboratory one, received the Nobel Prize in 1932 for work on monolayers, and today the Langmuir–Blodgett trough stands in laboratories where films one molecule thick are grown."
+    },
+    {
+     "icon": "edge",
+     "kind": "limit of applicability",
+     "h": "Lotus leaf and a contact angle that does not exist",
+     "text": "Young's condition gives a single number θ for a given pair of 'liquid–solid'. On a real surface, this number does not exist: a drop on a tilted glass does not roll off while the tilt is small, and its front edge stands at one angle, while the back edge at another—the difference reaches several tens of degrees.",
+     "answer": "Young assumed the surface to be perfectly smooth and chemically homogeneous. A real one is rough, and on each irregularity the contact line catches. Hence the contact angle hysteresis: the advancing angle is larger than the receding angle, and the drop holds on a slope until the difference in projections exceeds the gravitational force. Roughness, moreover, AMPLIFIES the original property of the surface, not smooths it: according to the Wenzel formula, the cosine is multiplied by a roughness factor, so that a wettable surface becomes even more wettable, and a non-wettable one becomes even more non-wettable.\n\nThe lotus leaf takes this to the extreme. Its surface is covered with waxy bumps of a few microns, and on top of them an even finer structure; water does not sink between the bumps but rests on their tops, supported by air cushions. This is the Cassie regime, and the effective contact angle reaches 160°: the drop is almost a ball, rolls off at the slightest tilt, and carries away dust. Industrial water-repellent coatings reproduce exactly this geometry, not chemistry—and therefore stop working as soon as a surfactant (i.e., ordinary detergent) fills the air pockets."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "What we glossed over",
+   "blocks": [
+    {
+     "h": "The meniscus is not a hemisphere, and the Jurin formula is not exact",
+     "text": "We assumed that the meniscus in a tube is a spherical cap of radius $R = r/\\cos\\theta$. This is true as long as the tube is much narrower than the capillary length: then gravity does not have time to distort the shape. When $r$ is comparable to 2.7 mm, the meniscus is noticeably flattened, and the formula overestimates the answer. A practical example: for mercury in a tube with a radius of 5 mm, our formula gives a depression of 1.1 mm, while barometric tables give fractions of a millimeter, because a meniscus of that width physically cannot become a spherical segment with an angle of 140°. That is why the channel of precise mercury barometers is made 8–10 mm wide: there the correction is small and well tabulated. A second, more modest correction works in the same direction: the weight of the liquid itself in the meniscus above its lowest point holds the same tension, and the column rises lower than calculated by about $r/3$.",
+     "latex": "R_{\\text{men}} = \\frac{r}{\\cos\\theta} \\;\\Longrightarrow\\; \\Delta p = \\frac{2\\sigma\\cos\\theta}{r} = \\rho g h, \\qquad h_{\\text{exact}} \\approx \\frac{2\\sigma\\cos\\theta}{\\rho g r} - \\frac{r}{3}"
+    },
+    {
+     "h": "The contact angle is not a constant of the material",
+     "text": "Tables say \"water on glass — 0°, on paraffin — 105°\", as if it were a property of the pair of materials. On an ideally smooth and chemically homogeneous surface, that would be so. A real surface is rough and contaminated, and instead of a single angle it has a whole interval: the advancing angle (when the edge moves forward) is larger than the receding angle (when the edge retreats), and the difference — hysteresis — can reach 20–50°. Roughness comes into play via the Wenzel formula, and if the liquid sits on the tops of irregularities, resting on air, then via the Cassie formula. The practical conclusion is simple: calculating capillary rise using the tabulated θ gives a number with an accuracy of tens of percent, and it is reliable only for a completely wetting pair, where $\\cos\\theta$ is already almost unity.",
+     "latex": "\\cos\\theta^{*} = r_{\\text{rough}}\\cos\\theta \\;\\;(\\text{Wenzel}), \\qquad \\cos\\theta^{*} = f\\cos\\theta - (1-f) \\;\\;(\\text{Cassie})"
+    },
+    {
+     "h": "σ depends on impurities, and its gradient drives the liquid",
+     "text": "Surface tension is the most capricious of the constants in this course. Hundredths of a percent of a surface-active substance is enough to reduce it by a factor of one and a half, and tenths — by a factor of two, because such a molecule itself goes to the interface and concentrates there; this is described quantitatively by the Gibbs adsorption equation. Therefore, measurements of σ require almost manic cleanliness — Agnes Pockels washed her trough for hours — and for the same reason, no experiment in this section will work in a container where something fatty was recently washed. But the variability of σ also has its own physics: if the tension at different points of the surface is different, the surface flows from small σ to large σ and drags the liquid along with it. This is the Marangoni effect. Sprinkle ground pepper on water and drop a drop of detergent in the middle: the pepper will scatter to the edges — not \"repelled\", but carried away with the surface. It also sinks the paperclip in the first experiment, and it also drives spice grains in a pot heated from below, where the σ gradient is created not by an impurity but by temperature."
+    },
+    {
+     "h": "Kelvin formula: vapor is denser over a small droplet",
+     "text": "We assumed that the curvature of the surface changes only mechanics. It also changes thermodynamics: a molecule on a convex surface has even fewer neighbors than on a flat one, and it is easier for it to escape. The saturated vapor pressure over a droplet is therefore higher than over a flat surface, and the smaller the droplet, the stronger the effect. Numbers: for a droplet of radius 1 μm, the excess is 0.11%, and for 10 nm — already 11%. This has two consequences. First, in perfectly clean air, fog does not form even with noticeable supersaturation — a tiny embryo immediately evaporates back, and condensation nuclei, i.e., dust particles and salt particles, are needed. Second, in a cloud, large droplets grow at the expense of small ones, because it is harder for small ones to retain their vapor — this is how a raindrop gathers from fog. It is derived from the equality of chemical potentials of liquid and vapor, with the Laplace pressure jump added; its closest relative is the Clausius–Clapeyron equation from the topic of phase transitions. Here we take only the result.",
+     "latex": "\\ln\\frac{p(r)}{p_\\infty} = \\frac{2\\sigma V_m}{r\\,RT}; \\qquad r = 1\\ \\text{μm}: +0.11\\,\\%, \\qquad r = 10\\ \\text{nm}: +11\\,\\%"
+    }
+   ]
+  },
+  "memo": {
+   "essence": "A molecule at the boundary lacks half of its neighbors, and for each square meter of the boundary the liquid pays energy σ. The same σ, rewritten in newtons per meter, is the surface tension—this is one number in two units. A curved surface compresses what is beneath it by $\\Delta p = 2\\sigma/R$ (for a film with two surfaces—$4\\sigma/R$), and this same jump raises the liquid in a narrow tube to $h = 2\\sigma\\cos\\theta/(\\rho g r)$.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "J/m² = N/m",
+     "text": "Surface energy and surface tension are one quantity in two units; a frame with a crossbar converts one into the other in a single line"
+    },
+    {
+     "icon": "scale",
+     "title": "Inversely proportional to radius",
+     "text": "$\\Delta p = 2\\sigma/R$: the smaller the droplet, the more strongly it is compressed. Inside a micron-sized droplet there are an extra one and a half atmospheres"
+    },
+    {
+     "icon": "fact",
+     "title": "The sign is determined by the cosine",
+     "text": "$\\theta < 90^\\circ$ — the liquid rises, $\\theta > 90^\\circ$ — it falls. Water in glass climbs up, mercury in the same glass goes down"
+    },
+    {
+     "icon": "edge",
+     "title": "Capillary length 2.7 mm",
+     "text": "The boundary of two worlds: on smaller scales tension rules (a droplet is a sphere), on larger scales gravity rules (a droplet is a pancake)"
+    }
+   ],
+   "where": [
+    "Nozzles and spraying: 200 ml of water in micron-sized droplets give 600 m² of surface and therefore evaporate incomparably faster than poured water",
+    "Detergents: surfactants reduce σ by two to three times, and water finally penetrates the pores of fabric instead of hanging on them as a film",
+    "Lungs: surfactant reduces tension the more strongly the smaller the alveolus, and prevents small ones from collapsing into large ones",
+    "Wick, blotting paper, paper towel, brickwork: narrow pores raise higher but draw more slowly",
+    "Mercury barometer: capillary depression in a narrow channel requires a tabulated correction, so the channel is made wide",
+    "Castle from wet sand: water bridges between sand grains pull them together with a force equal to two hundred times the weight of a grain"
+   ],
+   "watchOut": "Three pitfalls. First—confusing $2\\sigma/R$ and $4\\sigma/R$: the four appears only where the film has two surfaces, that is, in a soap bubble; a droplet and a meniscus have one surface. Second—substituting the diameter instead of the radius into the rise formula: the answer is underestimated exactly by half and looks plausible because the order of magnitude is preserved. Third, substantive—thinking that capillaries raise water in trees: they conduct it, while evaporation through the leaf nanopores raises it, and the water in the trunk is not compressed but stretched."
+  },
+  "quiz": [
+   {
+    "id": "sf1",
+    "type": "mcq",
+    "q": "Two soap bubbles, one large and one small, are blown on the ends of a tube with a closed tap in the middle. The tap is opened. What will happen?",
+    "options": [
+     "The bubbles will exchange air and become the same size",
+     "The small one will shrink, and the large one will inflate even more",
+     "The large one will shrink into the small one: it has a larger surface and more stored energy",
+     "Nothing will change: the film is stretched equally, so it presses equally"
+    ],
+    "answer": 1,
+    "why": "The pressure inside a bubble is $\\Delta p = 4\\sigma/R$, inversely proportional to the radius, so the small bubble has HIGHER pressure. Air flows from where the pressure is higher; the small bubble shrinks, its pressure increases even more, and the process accelerates on its own — there is no equilibrium in between. The answer 'the large bubble will shrink into the small one' confuses pressure with energy: the total surface energy of the large bubble is indeed greater, but the flow is driven by the pressure difference, not by the stored energy. The fourth option is the most common mistake: the tension is indeed the same for both, but what presses is not the tension but the curvature. This is how alveoli in the lungs would behave if it were not for surfactant, which reduces σ precisely in the collapsed ones.",
+    "hint": "Write down $\\Delta p = 4\\sigma/R$ for both bubbles and compare. Who has higher pressure — the one with smaller $R$ or the one with larger?"
+   },
+   {
+    "id": "sf2",
+    "type": "mcq",
+    "q": "Water rose in a capillary tube to 15 cm and stopped. The same tube was replaced with an identical one but shorter: its top edge is now only 5 cm above the water level in the vessel. What will happen?",
+    "options": [
+     "Water will continuously flow out through the edge — a perpetual fountain",
+     "Water will reach the edge and stop, and the meniscus will become flatter",
+     "Water will rise only 5 cm, but the meniscus will retain its previous curvature, and part of the tube will remain dry",
+     "Water will not rise at all: a short tube cannot create the necessary suction"
+    ],
+    "answer": 1,
+    "why": "The rise stops when the Laplace jump $2\\sigma\\cos\\theta/r$ balances the weight of the column $\\rho g h$. If the tube is shorter than the equilibrium height, the column hits the edge, but equilibrium must still hold — and the system adjusts the only free parameter, the curvature of the meniscus: it flattens just enough so that the jump becomes equal to $\\rho g\\cdot 5$ cm, i.e., three times smaller than before. At the edge of the cut, the contact line is pinned and can hold any angle over a wide range — this is called pinning at the edge. The answer about a perpetual fountain would violate energy conservation: to detach a drop and let it flow out, you must create new surface, and that costs exactly the energy released by the rise. The third option fails because the curvature of the meniscus and the height of the column are rigidly linked: you cannot keep the curvature and not reach the edge at the same time.",
+    "hint": "In the formula $h = 2\\sigma\\cos\\theta/(\\rho g r)$, the tube radius and σ have not changed, but $h$ has been forcibly reduced by a factor of three. Which quantity in the formula remains free?"
+   },
+   {
+    "id": "sf3",
+    "type": "free",
+    "q": "In your own words: why can a tall tree not lift water by the capillaries of the trunk alone, and what then lifts it to a hundred meters?",
+    "keywords": [
+     "radius",
+     "narrow",
+     "wide",
+     "vessel",
+     "nanopore",
+     "leaf",
+     "evaporation",
+     "negative",
+     "stretched",
+     "meniscus",
+     "0.15"
+    ],
+    "needed": 2,
+    "why": "The height of rise is inversely proportional to the radius: $h = 2\\sigma\\cos\\theta/(\\rho g r)$. To lift water to 100 meters, a tube with a radius of 0.15 microns is needed. The vessels and tracheids of the trunk are about a hundred times wider — radius on the order of 10 microns — and such a tube gives at most a meter and a half. So the capillaries of the trunk do not lift water; they only conduct it. What lifts it is evaporation through the stomata of the leaf: menisci in the nanopores of cell walls (radius about 10 nm) can sustain a pressure difference of about 15 MPa and pull water upward like a piston. The column is not compressed but stretched — the pressure in a sequoia trunk is negative, about −2 MPa. Water in a tree hangs on the menisci of the leaf, not pushed from below.",
+    "hint": "Invert the rise formula and find what radius is needed for a hundred meters. Then compare with the real width of tree vessels — and think where in the tree there are pores orders of magnitude narrower."
+   },
+   {
+    "id": "sf4",
+    "type": "estimate",
+    "q": "Estimate the excess pressure inside a fog droplet of radius 5 μm. Surface tension of water is 0.073 N/m. Answer in kilopascals.",
+    "answer": 29,
+    "unit": "kPa",
+    "why": "$\\Delta p = 2\\sigma/R = 2\\cdot0.073/(5\\cdot10^{-6}) = 2.9\\cdot10^{4}$ Pa, i.e., 29 kPa. In your head: 0.146 divided by five microns — that is 0.146 multiplied by 2·10⁵, about three tens of kilopascals. A sanity check: almost a third of an atmosphere inside a droplet that you cannot even see — and this is modest; for a micron droplet the pressure is five times greater. The most common mistake here is to take $4\\sigma/R$: the factor of four is only for a film with two surfaces, but a droplet has one surface. The second most common is forgetting to convert microns to meters.",
+    "tolAbs": 6,
+    "hint": "Laplace's formula for a droplet, not for a soap bubble. And convert the radius to meters: 5 μm = 5·10⁻⁶ m."
+   }
+  ]
+ },
+ "es": {
+  "title": "Tensión superficial y capilares",
+  "subtitle": "Párrafo 2 · Fórmula de Laplace y altura de ascenso en un tubo",
+  "intro": [
+   "Coloque una aguja de coser sobre el agua, con cuidado, en posición horizontal. Flotará, aunque el acero es ocho veces más denso que el agua y, según la ley de Arquímedes, debería hundirse. Espolvoree pimienta molida sobre el agua; también flota. Pase el dedo por la superficie de un vaso lleno: se siente algo así como una película que hay que presionar.",
+   "No hay tal película: el agua es la misma tanto en la superficie como en el fondo. La cuestión es lo que NO hay en la superficie: vecinos. Las moléculas del líquido se atraen entre sí; esa es la misma fuerza que en el primer párrafo resumimos en la corrección $a/V^2$ de la ecuación de Van der Waals. Dentro del líquido, las atracciones de una molécula están equilibradas por todos lados. En el límite con el aire, la mitad superior de los compañeros simplemente no existe, y aparece tanto una fuerza dirigida hacia el interior como una energía que la molécula interna no tenía. Esta energía es proporcional no al volumen del líquido, sino al área de su superficie; de ahí surge todo lo demás.",
+   "A continuación calcularemos este costo, estimándolo a partir del calor de vaporización, y veremos dónde falla la estimación. Luego convertiremos la energía en fuerza y comprobaremos que los julios por metro cuadrado y los newtons por metro son el mismo número. Derivaremos la fórmula de Laplace para una gota y para una burbuja de jabón, la condición de Young para el ángulo de contacto y la fórmula de ascenso en un tubo. Y al final le preguntaremos a la fórmula si un árbol puede elevar agua solo con capilares hasta cien metros. La respuesta será negativa, y será el punto más interesante del párrafo."
+  ],
+  "standNote": "El stand de este párrafo es común para el tema: dibuja las isotermas de Van der Waals, la cúpula de coexistencia de fases y el punto crítico. Tome una cosa de él. Ponga la temperatura reducida $T/T_c$ en 0,80 y mire la cúpula: debajo de ella, el líquido y el vapor coexisten, y entre ellos hay un límite: ese mismo por cuyo metro cuadrado vamos a pagar. Ahora mueva lentamente el control deslizante hacia 1,00. La cúpula se estrecha, la diferencia de densidades entre líquido y vapor se desvanece, y exactamente en el punto crítico la cúpula colapsa en un punto y el límite desaparece por completo. Junto con él desaparece el objeto de este párrafo: la tensión superficial del agua cae de 0,076 N/m a cero grados a 0,059 a cien y se anula en el punto crítico. Ya no hay nada por lo que pagar por la superficie, porque la superficie ya no existe. Moviendo un solo control deslizante, literalmente observa cómo se apaga $\\sigma$.",
+  "formula": {
+   "name": "Fórmula de Laplace y ley de ascenso capilar",
+   "latex": "\\Delta p = \\frac{2\\sigma}{R}, \\qquad h = \\frac{2\\sigma\\cos\\theta}{\\rho g r}",
+   "alsoKnown": "Fórmula de Laplace para el salto de presión en una superficie curva (en una burbuja de jabón con dos superficies el coeficiente se duplica: 4σ/R); la fórmula del ascenso capilar se conoce como ley de Jurin. La forma general de Laplace para una superficie de forma arbitraria: Δp = σ(1/R₁ + 1/R₂)",
+   "authors": [
+    {
+     "who": "Francis Hauksbee",
+     "year": "1709",
+     "what": "realizó los primeros experimentos cuantitativos con tubos estrechos y demostró que la altura de ascenso depende de la luz del tubo, no del grosor de sus paredes, lo que significa que actúa la superficie, no la masa del vidrio"
+    },
+    {
+     "who": "James Jurin",
+     "year": "1718",
+     "what": "midió el ascenso en tubos de diferentes luces y formuló la proporcionalidad inversa de la altura con el radio; la regla lleva su nombre"
+    },
+    {
+     "who": "Thomas Young",
+     "year": "1805",
+     "what": "introdujo la noción de tensión superficial como una fuerza real y obtuvo la condición de equilibrio de las tres tensiones en la línea de contacto, es decir, el ángulo de contacto"
+    },
+    {
+     "who": "Pierre-Simon Laplace",
+     "year": "1805",
+     "what": "en el suplemento a la 'Mecánica celeste' demostró que el salto de presión en la frontera es igual a la tensión multiplicada por la suma de las dos curvaturas principales, y redujo toda la capilaridad a una sola fórmula"
+    },
+    {
+     "who": "Josiah Willard Gibbs",
+     "year": "1878",
+     "what": "construyó la termodinámica de las superficies: σ es la energía libre excesiva por unidad de área, y de aquí se sigue también cómo la impureza se acumula en la frontera y reduce la tensión"
+    }
+   ],
+   "story": "El giro más inesperado de esta historia ocurrió en la cocina. En la década de 1880, Agnes Pockels llevaba la casa en la casa de sus padres en Brunswick; la universidad estaba cerrada para las mujeres, y ella conocía la física por los libros de texto de su hermano. Al notar que el agua limpia y la jabonosa en el recipiente se comportaban de manera diferente, montó un aparato con lo que tenía a mano: una bandeja de hojalata, un botón en un hilo como elemento sensible de la balanza y una tira de estaño con la que podía separar parte de la superficie y cambiar su área. Con esto medía la tensión y observaba cómo caía cuando una gota de aceite caía sobre el agua. No había dónde publicar los resultados, y en 1891 escribió a Lord Rayleigh, quien tradujo la carta y la envió a Nature con una nota de que el trabajo merecía publicarse por completo. La bandeja de Pockels es el antepasado directo de la balanza de Langmuir, sobre la que luego se construyeron monocapas moleculares y se obtuvieron premios Nobel.\n\nEl segundo giro es más silencioso. En 1901, un Einstein de veintidós años publicó su primer artículo, precisamente sobre capilaridad: intentaba extraer la ley de atracción intermolecular a partir de los valores de σ en diferentes líquidos. Más tarde llamó a este trabajo inútil, y en esencia tenía razón: la hipótesis no se confirmó. Pero la elección misma del tema dice mucho. La tensión superficial era entonces la forma más corta de alcanzar numéricamente las moléculas que nadie había visto todavía: mides la fuerza en una balanza de cocina y obtienes la energía de enlace entre partículas.",
+   "symbols": [
+    {
+     "sym": "σ",
+     "latex": "\\sigma",
+     "what": "tensión superficial (también energía superficial)",
+     "unit": "N/m, también J/m²",
+     "note": "una misma magnitud en dos unidades: J/m² = N·m/m² = N/m. Para el agua a 20 °C es 0,0728"
+    },
+    {
+     "sym": "Δp",
+     "latex": "\\Delta p",
+     "what": "salto de presión en una superficie curva",
+     "unit": "Pa",
+     "note": "la presión siempre es mayor en el lado hacia el que la superficie es convexa; en una superficie plana no hay salto"
+    },
+    {
+     "sym": "R",
+     "latex": "R",
+     "what": "radio de curvatura de la superficie",
+     "unit": "m",
+     "note": "en una gota y una burbuja es su propio radio; en un menisco en un tubo es el radio del segmento esférico, no el radio del tubo"
+    },
+    {
+     "sym": "r",
+     "latex": "r",
+     "what": "radio del tubo capilar o del poro",
+     "unit": "m",
+     "note": "es el radio, no el diámetro: sustituir el diámetro reduce la respuesta a la mitad y pasa desapercibido porque el orden de magnitud se conserva"
+    },
+    {
+     "sym": "θ",
+     "latex": "\\theta",
+     "what": "ángulo de contacto (de mojado)",
+     "unit": "grados",
+     "note": "se mide dentro del líquido desde la superficie sólida; θ < 90° — el líquido moja y asciende, θ > 90° — no moja y desciende"
+    },
+    {
+     "sym": "h",
+     "latex": "h",
+     "what": "altura de ascenso capilar",
+     "unit": "m",
+     "note": "se mide desde el nivel libre del líquido en un recipiente ancho hasta el punto más bajo del menisco"
+    },
+    {
+     "sym": "ρ",
+     "latex": "\\rho",
+     "what": "densidad del líquido",
+     "unit": "kg/m³",
+     "note": "estrictamente hablando, la diferencia de densidades del líquido y del gas desplazado, pero para agua y aire la corrección es menor de una milésima"
+    },
+    {
+     "sym": "g",
+     "latex": "g",
+     "what": "aceleración de la gravedad",
+     "unit": "m/s²",
+     "const": "g",
+     "note": "entra solo en la fórmula del ascenso; en la fórmula de Laplace la gravedad no entra en absoluto, y por eso en ingravidez una gota es exactamente una esfera"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Derivación rigurosa",
+   "lead": "Se necesita exactamente una afirmación física, y ya la tenemos del primer párrafo: las moléculas del líquido se atraen. Todo lo demás es cálculo de energía, cálculo de fuerza y equilibrio de fuerzas en un corte imaginario. Ni la fórmula de Laplace ni la ley de Jurin las daremos por sentadas: ambas surgirán del equilibrio.",
+   "steps": [
+    {
+     "text": "Tomemos una molécula en el interior del líquido. Los vecinos la rodean por todos lados, cada uno tira hacia sí, y la suma de las atracciones es cero, no porque no haya fuerzas, sino porque están equilibradas. Ahora subamos esa misma molécula a la frontera con el aire. Arriba prácticamente no hay vecinos: la densidad del vapor saturado a temperatura ambiente es decenas de miles de veces menor que la del líquido. La mitad de los compañeros ha desaparecido, la atracción desde abajo permanece: aparece una fuerza resultante dirigida hacia el interior, y aparece una energía que la molécula interna no tenía. Obsérvese a qué es proporcional este costo: no al volumen del líquido, sino al número de moléculas que se encuentran en la frontera, es decir, al área de la frontera. La magnitud del costo por metro cuadrado es lo que se llama tensión superficial. Una salvedad, que necesitaremos en el siguiente paso: a temperatura constante no se paga con la energía total, sino con la energía libre, aquella parte que se puede recuperar como trabajo. A la energía libre de la frontera por unidad de área fue a la que Gibbs llamó tensión; en la fórmula siguiente, $F_{\\text{sup}}$ es precisamente eso, no una fuerza (la fuerza aparecerá en el tercer paso).",
+     "latex": "F_{\\text{sup}} = \\sigma A, \\qquad \\sigma = \\left(\\frac{\\partial F}{\\partial A}\\right)_{T,\\,V}, \\qquad [\\sigma] = \\frac{\\text{J}}{\\text{m}^{2}}",
+     "figure": "realneigh",
+     "figCaption": "Dentro del líquido, las atracciones de los vecinos están equilibradas; en una molécula en la frontera, la mitad superior de vecinos no existe: queda una fuerza hacia adentro y una energía proporcional al área"
+    },
+    {
+     "text": "Estimemos el costo numéricamente, sin saber casi nada del líquido. Evaporar un mol de agua cuesta unos 44 kilojulios: es el trabajo contra la atracción de TODOS los vecinos a la vez, es decir, 7,3·10⁻²⁰ julios por molécula. ¿Cuántas moléculas caben en un metro cuadrado de superficie? La concentración en agua líquida es $n = \\rho N_A/M = 3{,}3\\cdot10^{28}$ m⁻³, y la densidad superficial es $n$ elevado a dos tercios: 1,04·10¹⁹ por metro cuadrado. Una molécula en la frontera no pierde a todos los vecinos, sino a una parte; tomemos para la estimación una cuarta parte. Multiplicamos y obtenemos 0,19 J/m². El valor medido es 0,073. Hemos sobreestimado en 2,6 veces, y parte de la discrepancia es contabilidad. Calculamos la energía de enlace, pero la σ medida es la energía libre; la energía total de la superficie del agua es mayor, alrededor de 0,117 J/m² a 20 °C, porque la nueva frontera nace tomando calor del entorno. Contra ella, el error ya no es de 2,6 veces, sino de 1,6. El resto es física: el cálculo inverso dice que el factor que multiplica al calor de evaporación no es un cuarto, sino aproximadamente un sexto. La razón es característica del agua: una molécula en la superficie orienta los enlaces de hidrógeno hacia los lados, hacia los vecinos de su propia capa, en lugar de simplemente perderlos. La estimación capturó honestamente el orden de magnitud y falló honestamente en el factor: no se debería esperar más de un cálculo a ojo.",
+     "latex": "\\sigma \\sim \\frac{1}{4}\\cdot\\frac{\\Delta H_{\\text{evap}}}{N_A}\\cdot n^{2/3} = \\frac{1}{4}\\cdot 7{,}3\\cdot10^{-20}\\cdot 1{,}04\\cdot10^{19} = 0{,}19\\ \\frac{\\text{J}}{\\text{m}^{2}} \\quad\\text{contra los medidos } 0{,}073",
+     "figure": "realarea",
+     "figCaption": "La estimación a partir del calor de evaporación da 0,19 J/m² frente a los 0,073 medidos: se captura el orden de magnitud, pero no el factor"
+    },
+    {
+     "text": "Ahora traduzcamos la energía en fuerza. Tomemos un marco en forma de U con una barra móvil de longitud $L$ y estiremos una película de jabón sobre él. Para desplazar la barra una distancia $\\Delta x$, hay que realizar un trabajo $F\\,\\Delta x$, y todo él se invierte en nueva superficie. El área del marco ha aumentado en $L\\,\\Delta x$, pero la película tiene dos caras, externa e interna, por lo que se crea el doble de nueva superficie. Igualando, obtenemos $F = 2\\sigma L$. De ahí el doble significado de σ: a la izquierda estaba en julios por metro cuadrado, a la derecha resulta estar en newtons por metro, y es la misma magnitud, porque J/m² = N·m/m² = N/m. No son dos propiedades distintas, sino una misma expresión en dos unidades. Obsérvese también lo que no aparece en la respuesta: $\\Delta x$. La fuerza no crece con el estiramiento: la película no es un muelle. El caucho al estirarse opone cada vez más resistencia porque en él se estiran los enlaces; en la película de jabón los enlaces no se estiran, simplemente nuevas moléculas llegan a la superficie desde el volumen.",
+     "latex": "F\\,\\Delta x = \\sigma\\,\\Delta A = \\sigma\\cdot 2L\\,\\Delta x \\;\\Longrightarrow\\; F = 2\\sigma L, \\qquad \\frac{\\text{J}}{\\text{m}^{2}} = \\frac{\\text{N}\\cdot\\text{m}}{\\text{m}^{2}} = \\frac{\\text{N}}{\\text{m}}",
+     "figure": "realframe",
+     "figCaption": "Marco con barra móvil: el trabajo contra la tensión es igual a la energía de la nueva superficie, y σ se lee directamente en newtons por metro"
+    },
+    {
+     "text": "Una superficie plana se contrae a lo largo de sí misma y no presiona sobre nada. Una superficie curvada sí presiona: al contraerse, comprime lo que tiene debajo. Calculemos cuánto. Imaginemos que cortamos una gota de radio $R$ con un plano que pase por el centro y observemos el equilibrio de una de las mitades. A través del corte actúan dos fuerzas sobre ella. La primera es la tensión a lo largo de la línea de corte: la longitud de la circunferencia $2\\pi R$, multiplicada por σ, tira de la mitad hacia su compañera. La segunda es la presión excedente en el interior, que actúa sobre el área del círculo $\\pi R^2$ y separa las mitades. Igualando, el radio de primera potencia se cancela contra el cuadrado, dejando una dependencia inversa. Cuanto más pequeña es la gota, más comprimida está: una gota de niebla de radio 1 micra mantiene en su interior 146 kilopascales adicionales, casi una atmósfera y media por encima de la presión exterior.",
+     "latex": "\\Delta p\\cdot \\pi R^{2} = \\sigma\\cdot 2\\pi R \\;\\Longrightarrow\\; \\Delta p = \\frac{2\\sigma}{R}; \\qquad R = 1\\ \\text{μm}: \\;\\; \\Delta p = \\frac{2\\cdot 0{,}0728}{10^{-6}} = 1{,}46\\cdot10^{5}\\ \\text{Pa}",
+     "figure": "realdrop",
+     "figCaption": "Semiesfera en equilibrio: la tensión a lo largo de la circunferencia del corte 2πRσ contra la presión excedente que actúa sobre el área πR²"
+    },
+    {
+     "text": "En una burbuja de jabón la película es delgada, pero tiene dos superficies, externa e interna, y cada una tira por su lado. El mismo corte da una fuerza de contracción doble, y el coeficiente se duplica: $\\Delta p = 4\\sigma/R$. Los números resultan divertidos. Una burbuja de radio 2 centímetros con σ de la solución jabonosa de 0,025 N/m mantiene en su interior 5 pascales adicionales: eso es medio milímetro de columna de agua, una veinte milésima de atmósfera. Pero de aquí se sigue algo que se puede comprobar con las manos. Coloque dos burbujas infladas en los extremos de un tubo con una llave en el medio y abra la llave: la pequeña se desinflará en la grande. La intuición sugiere lo contrario —“las presiones se igualarán, las burbujas se harán iguales”—, pero en la fórmula la presión es inversa al radio, y en la pequeña es MAYOR. El aire va de donde la presión es más alta; la pequeña disminuye, su presión aumenta aún más, y el proceso se acelera solo. Exactamente así se comportarían los alvéolos en los pulmones —los pequeños colapsarían en los grandes— si no fuera por el surfactante, que reduce σ tanto más cuanto más comprimido está el alvéolo, invirtiendo así el signo de la retroalimentación.",
+     "latex": "\\Delta p = \\frac{4\\sigma}{R}; \\qquad R = 2\\ \\text{cm},\\;\\; \\sigma = 0{,}025\\ \\text{N/m}: \\;\\; \\Delta p = \\frac{4\\cdot 0{,}025}{0{,}02} = 5\\ \\text{Pa} \\approx 0{,}5\\ \\text{mm c.a.}",
+     "figure": "realbubble",
+     "figCaption": "La película tiene dos superficies, por lo que el coeficiente se duplica; la presión es inversa al radio, y por eso la burbuja más pequeña se desinfla en la más grande"
+    },
+    {
+     "text": "Hasta ahora el líquido solo limitaba con un gas. Pongámoslo sobre un sólido: ahora hay tres fronteras: sólido-gas, sólido-líquido y líquido-gas, y cada una tiene su propia tensión. Donde las tres se encuentran, hay una línea de contacto, y en ella tres tensiones tiran en tres direcciones. La línea solo puede moverse a lo largo de la superficie del sólido, por lo que el equilibrio lo determina la proyección horizontal: $\\sigma_{\\text{sg}}$ tira de la línea hacia la zona seca, $\\sigma_{\\text{sl}}$ hacia la zona mojada, y la tensión del propio líquido tira a lo largo de la tangente a su superficie, es decir, da una proyección $\\sigma\\cos\\theta$. Igualando, obtenemos la condición de Young. Se lee simplemente: si al sólido le resulta más barato limitar con el líquido que con el gas, el numerador es positivo, el ángulo es agudo, el líquido se extiende. Con agua sobre vidrio limpio, el numerador es casi σ, y θ es cercano a cero: la gota se extiende formando un charco. Sobre parafina, θ = 105°: el agua se agrupa en gotas esféricas. El mercurio sobre vidrio tiene 140°: no moja casi nada. De ahí también la forma del menisco: en un líquido que moja, los bordes suben por la pared y la superficie se hunde; en uno que no moja, todo lo contrario.",
+     "latex": "\\sigma_{\\text{sg}} = \\sigma_{\\text{sl}} + \\sigma\\cos\\theta \\;\\Longrightarrow\\; \\cos\\theta = \\frac{\\sigma_{\\text{sg}} - \\sigma_{\\text{sl}}}{\\sigma}",
+     "figure": "realwet",
+     "figCaption": "Tres tensiones en la línea de contacto; su equilibrio horizontal determina el ángulo de contacto y, con él, la forma del menisco"
+    },
+    {
+     "text": "Juntémoslo todo. Un tubo estrecho, un líquido que moja, el menisco ha subido y ha arrastrado consigo la columna. ¿Qué sostiene esa columna? La tensión a lo largo de la línea de contacto, una circunferencia de longitud $2\\pi r$; hacia arriba tira la proyección vertical $\\sigma\\cos\\theta$. Hacia abajo tira el peso de la columna levantada $\\rho g\\,\\pi r^{2} h$. Igualando, de nuevo el radio de primera potencia se cancela contra el cuadrado: cuanto más estrecho es el tubo, mayor es la elevación, porque el perímetro disminuye como $r$, y la masa como $r^{2}$. El mismo resultado se obtiene de la fórmula de Laplace si se observa que el menisco en un tubo de radio $r$ con ángulo θ es un trozo de esfera de radio $R = r/\\cos\\theta$: el salto $2\\sigma\\cos\\theta/r$ equilibra $\\rho g h$. Números: para agua sobre vidrio limpio, un tubo de radio 0,1 mm da 14,8 cm; de radio 0,5 mm, ya solo 3 cm. El mercurio, con su $\\cos 140^\\circ = -0{,}77$, invierte el signo: en un tubo de radio 1 mm DESCIENDE 5,6 mm. Por eso en el barómetro de mercurio el canal se hace ancho y se introduce una corrección tabulada por depresión capilar.",
+     "latex": "\\rho g\\,\\pi r^{2} h = \\sigma\\cos\\theta\\cdot 2\\pi r \\;\\Longrightarrow\\; h = \\frac{2\\sigma\\cos\\theta}{\\rho g r}; \\qquad r = 0{,}1\\ \\text{mm}: \\;\\; h = \\frac{2\\cdot 0{,}0728}{1000\\cdot 9{,}81\\cdot 10^{-4}} = 0{,}148\\ \\text{m}",
+     "figure": "realcap",
+     "figCaption": "El peso de la columna contra la tensión a lo largo del perímetro: el perímetro disminuye como r, el peso como r², por lo que al estrechar el tubo la elevación aumenta"
+    },
+    {
+     "text": "Invirtamos la fórmula y preguntémosle aquello para lo que se escribió todo el párrafo. ¿Qué tubo se necesita para elevar agua hasta la copa de un árbol centenario, a cien metros? Respuesta: radio de 0,15 micras, una diezmilésima y media de milímetro. Los vasos conductores y traqueidas del árbol son dos órdenes de magnitud más anchos: un radio típico de unas 10 micras, y un tubo así eleva agua a metro y medio, menos que la altura de un arbusto de grosella. La conclusión es dura e inequívoca: los capilares del tronco no elevan el agua, solo la conducen. El trabajo lo hacen los nanoporos en las paredes celulares de la hoja: su radio es del orden de 10 nanómetros, y un menisco en un poro así puede sostener una diferencia de $2\\sigma/r \\approx 15$ MPa, ciento cincuenta atmósferas, con un margen colosal. La evaporación a través de los estomas va retirando agua continuamente, los meniscos en los poros se hunden más, y toda la columna en el tronco queda estirada: la presión en ella no es simplemente inferior a la atmosférica, sino negativa, en el tronco de una secoya alrededor de −2 MPa. El agua en el árbol no es empujada desde abajo, sino que cuelga de los meniscos de la hoja, y la sostiene esa misma σ.",
+     "latex": "r = \\frac{2\\sigma}{\\rho g h} = \\frac{2\\cdot 0{,}0728}{1000\\cdot 9{,}81\\cdot 100} = 1{,}5\\cdot10^{-7}\\ \\text{m}; \\qquad r_{\\text{vaso}} \\approx 10\\ \\text{μm} \\;\\Longrightarrow\\; h \\approx 1{,}5\\ \\text{m}",
+     "figure": "realtree",
+     "figCaption": "Cien metros requieren poros de radio 0,15 μm; los vasos del tronco son cien veces más anchos y dan metro y medio: la columna la sostienen los nanoporos de la hoja"
+    }
+   ],
+   "plate": "\\Delta p = \\frac{2\\sigma}{R} \\qquad h = \\frac{2\\sigma\\cos\\theta}{\\rho g r}",
+   "plateCap": "A la izquierda, cuánto cuesta la curvatura: cuanto más curvada está la superficie, más comprime lo que tiene debajo. A la derecha, el mismo salto de presión, pero equilibrado por el peso de la columna levantada. La segunda se obtiene de la primera con una simple sustitución: el menisco en un tubo de radio $r$ con ángulo de contacto θ es un trozo de esfera de radio $R = r/\\cos\\theta$.",
+   "note": "Enumeremos lo que hemos supuesto por el camino: estos son los límites de las fórmulas. Primero: la superficie se consideró esférica. Para una gota libre es cierto (en ingravidez, exactamente; en la Tierra, mientras la gota sea más pequeña que la longitud capilar de 2,7 mm), y para un menisco en un tubo es cierto solo si el tubo es estrecho; en un tubo ancho, la fórmula de Jurin sobreestima mucho la respuesta. Segundo: el ángulo de contacto se consideró una constante de la sustancia. En realidad tiene histéresis de decenas de grados y una fuerte dependencia de la rugosidad; sobre esto en el apéndice. Tercero: σ se consideró constante. Depende de la temperatura (para el agua cae de 0,076 a 0 °C a 0,059 a 100 °C) y de manera catastrófica de las impurezas: una gota de detergente basta para reducirla a la mitad o a la tercera parte. Cuarto: no hemos tenido en cuenta el peso del propio líquido en el menisco por encima de su punto más bajo. Ese peso lo sostiene la misma tensión, por lo que la columna no sube más, sino menos de lo calculado, aproximadamente en $r/3$: para un tubo de 0,1 mm es un dos por ciento, para uno de un milímetro ya alrededor del dos por ciento. Quinto: la gravedad no entraba en la fórmula de Laplace, es decir, la gota se consideraba pequeña; una gota grande sobre una mesa se aplana, y su curvatura arriba y en los lados es diferente. Y sexto, lo más importante para la práctica: en todo se consideró equilibrio. La fórmula de Jurin da la altura final de elevación, pero no dice nada sobre el tiempo: cuanto más estrecho es el capilar, más alto eleva y más lentamente lo hace, porque la resistencia viscosa crece como $r^{-4}$. Ese es ya el tema de la viscosidad y el flujo en tuberías."
+  },
+  "math": {
+   "title": "Matemáticas que aquí se necesitaron",
+   "lead": "Tres temas, y los tres sobre cómo obtener una respuesta sin resolver ecuaciones: lectura de dimensiones, estimación por orden de magnitud y la fuerza como derivada de la energía.",
+   "items": [
+    {
+     "what": "Julio por metro cuadrado y newton por metro son la misma unidad",
+     "why": "La afirmación «la energía superficial y la tensión superficial son lo mismo» se puede comprobar sin pensar en física en absoluto: basta con cancelar los metros. El julio es un newton por metro, por lo tanto J/m² = N·m/m² = N/m, y no hay elección aquí. El mismo truco protege contra errores en la fórmula de la ascensión. Sustituya las unidades en $2\\sigma\\cos\\theta/(\\rho g r)$: el coseno es adimensional, en el denominador kg/m³ · m/s² · m = kg/(m·s²) = Pa, en el numerador N/m, y N/m dividido por N/m² da metros. La altura resultó en metros: la fórmula al menos no está tergiversada. Si alguien por error hubiera escrito $r^2$ en el denominador, la dimensión lo habría delatado inmediatamente.",
+     "latex": "[\\sigma] = \\frac{\\text{J}}{\\text{m}^{2}} = \\frac{\\text{N}\\cdot\\text{m}}{\\text{m}^{2}} = \\frac{\\text{N}}{\\text{m}}, \\qquad \\frac{[\\sigma]}{[\\rho][g][r]} = \\frac{\\text{N}/\\text{m}}{\\text{Pa}} = \\frac{\\text{N}/\\text{m}}{\\text{N}/\\text{m}^{2}} = \\text{m}",
+     "kit": "dimension"
+    },
+    {
+     "what": "Estimación por orden de magnitud y longitud capilar",
+     "why": "En el segundo paso de la derivación obtuvimos σ a partir del calor de vaporización y fallamos por un factor de 2,6. Esto es un resultado normal de una estimación por orden de magnitud: responde a la pregunta «¿centésimas o décimas?», no «¿0,073 o 0,075?». El mismo truco da también la escala principal de todo el tema. Preguntemos: ¿a qué tamaño la gravedad se compara con la tensión? La presión de la columna $\\rho g L$ contra la presión de Laplace $\\sigma/L$. Igualando, obtenemos la longitud capilar $\\lambda_c = \\sqrt{\\sigma/\\rho g}$, que para el agua es 2,7 mm. Por debajo de ella, la tensión domina: la gota es una esfera, el insecto camina sobre el agua, el agua no se derrama de la gasa. Por encima, la gravedad domina: la gota se aplana, el charco se extiende. La relación adimensional $\\mathrm{Bo} = \\rho g L^{2}/\\sigma$ (número de Bond) es simplemente el cuadrado del tamaño en longitudes capilares, y de inmediato se ve de quién es el mundo.",
+     "latex": "\\rho g L \\sim \\frac{\\sigma}{L} \\;\\Longrightarrow\\; \\lambda_c = \\sqrt{\\frac{\\sigma}{\\rho g}} = \\sqrt{\\frac{0{,}0728}{1000\\cdot 9{,}81}} = 2{,}7\\ \\text{mm}, \\qquad \\mathrm{Bo} = \\frac{\\rho g L^{2}}{\\sigma} = \\left(\\frac{L}{\\lambda_c}\\right)^{2}",
+     "kit": "order"
+    },
+    {
+     "what": "La fuerza como derivada de la energía",
+     "why": "La fórmula de Laplace la derivamos mediante el balance de fuerzas en un corte. Hay un segundo camino, más corto y más fiable: igualar el trabajo de la presión al incremento de energía superficial al expandir mentalmente la gota en $dR$. La energía superficial es $E = \\sigma\\cdot 4\\pi R^{2}$, su derivada es $8\\pi\\sigma R$; el trabajo de la presión es $\\Delta p\\cdot 4\\pi R^{2}\\,dR$. Igualando, obtenemos $2\\sigma/R$ en una línea. El valor del truco es que no requiere adivinar qué fuerzas se aplican dónde: basta con calcular la energía como función de un parámetro y diferenciar. Pruébelo con una burbuja de jabón: allí hay dos superficies, $E = 2\\sigma\\cdot4\\pi R^{2}$, la derivada es el doble — y el coeficiente se duplica honestamente a $4\\sigma/R$, sin ninguna física nueva. El mismo truco para una superficie de forma arbitraria da la forma general de la fórmula de Laplace con dos radios principales.",
+     "latex": "dE = \\sigma\\,d\\!\\left(4\\pi R^{2}\\right) = 8\\pi\\sigma R\\,dR, \\quad \\delta A = \\Delta p\\cdot 4\\pi R^{2}dR \\;\\Longrightarrow\\; \\Delta p = \\frac{2\\sigma}{R}; \\qquad \\Delta p = \\sigma\\left(\\frac{1}{R_1}+\\frac{1}{R_2}\\right)",
+     "kit": "derivative"
+    }
+   ]
+  },
+  "example": {
+   "title": "Ejemplo con números",
+   "lead": "Calculemos cuánto cuesta la superficie cuando hay mucha: convirtamos un vaso de agua en niebla y observemos la energía, el área y la presión dentro de las gotas.",
+   "given": "Un vaso de agua con volumen $V = 200$ ml se pulverizó en niebla con gotas idénticas de radio $R = 1$ μm. La tensión superficial del agua es $\\sigma = 0{,}0728$ N/m, la densidad es 1000 kg/m³, el calor específico es 4,18 kJ/(kg·K), el calor latente de vaporización es 2,26 MJ/kg. Encontrar el número de gotas, su área total, la energía gastada en ella y la presión excesiva dentro de la gota.",
+   "law": "El volumen y el área total de un conjunto de esferas iguales se relacionan como $A = 3V/R$; el trabajo contra la tensión es igual a $\\sigma\\,\\Delta A$; la presión excesiva dentro de la gota la da la fórmula de Laplace $\\Delta p = 2\\sigma/R$.",
+   "solution": [
+    {
+     "text": "Cuántas gotas se obtuvieron. El volumen de una es cuatro tercios de pi por radio al cubo; con un radio de una micra, esto es un poco más de cuatro attolitros.",
+     "latex": "N = \\frac{V}{\\frac{4}{3}\\pi R^{3}} = \\frac{2\\cdot10^{-4}}{4{,}19\\cdot10^{-18}} = 4{,}8\\cdot10^{13}"
+    },
+    {
+     "text": "Área total. No es necesario calcularla a través de $N$: la relación entre área y volumen para una esfera es $3/R$, y el número de gotas se cancela solo.",
+     "latex": "A = N\\cdot 4\\pi R^{2} = \\frac{3V}{R} = \\frac{3\\cdot 2\\cdot10^{-4}}{10^{-6}} = 600\\ \\text{m}^{2}"
+    },
+    {
+     "text": "Trabajo contra la tensión. Se puede despreciar la superficie inicial del agua en el vaso (alrededor de 0,004 m²): es ciento cincuenta mil veces menor que la nueva.",
+     "latex": "W = \\sigma\\,(A - A_0) \\approx \\sigma A = 0{,}0728\\cdot 600 = 43{,}7\\ \\text{J}"
+    },
+    {
+     "text": "Presión dentro de la gota. Fórmula de Laplace, radio en metros.",
+     "latex": "\\Delta p = \\frac{2\\sigma}{R} = \\frac{2\\cdot 0{,}0728}{10^{-6}} = 1{,}46\\cdot10^{5}\\ \\text{Pa} = 1{,}44\\ \\text{atm}"
+    }
+   ],
+   "answer": "Alrededor de 4,8·10¹³ gotas, área total 600 m² — esto es seiscientos metros cuadrados de parcela, comprimidos en un vaso de agua. La creación de esta superficie costó 44 julios. Dentro de cada gota la presión es 146 kPa mayor que la exterior — un exceso de casi una atmósfera y media.",
+   "check": "¿Cuarenta y cuatro julios es mucho o poco? Calentar los mismos 200 gramos de agua en un solo grado cuesta 836 julios, diecinueve veces más: toda la energía superficial de la niebla equivale a calentar el agua en 0,05 grados. Y evaporar esta agua cuesta 452 kilojulios — diez mil veces más que crear la superficie. De aquí la regla que vale la pena recordar: la energía superficial casi nunca se nota en el balance energético, pero se nota muy bien en las FUERZAS y PRESIONES. Una atmósfera y media extra en una gota invisible — una magnitud que tienen en cuenta tanto los meteorólogos como los diseñadores de inyectores. La segunda comprobación, inversa: el área creció 156 mil veces, y la evaporación ocurre desde la superficie — por lo tanto, el agua pulverizada se evapora incomparablemente más rápido que la vertida, y en esto se basan los humidificadores, los inyectores de combustible y el secado por aspersión. Y si en tu cálculo el área resultó del orden de unos pocos metros cuadrados, busca los micrómetros perdidos: 1 μm = 10⁻⁶ m, no 10⁻³."
+  },
+  "constants": {
+   "title": "Constantes de esta sección",
+   "lead": "Cuatro números. Tres de ellos son tensiones superficiales de líquidos concretos; el cuarto no es una propiedad del aparato ni del experimento, sino una escala que divide el mundo en «pequeño» y «grande».",
+   "items": [
+    {
+     "sym": "σ_agua",
+     "latex": "\\sigma_{\\text{H}_2\\text{O}}",
+     "name": "Tensión superficial del agua",
+     "value": "0,0728 a 20 °C (0,0756 a 0 °C, 0,0589 a 100 °C)",
+     "unit": "N/m, también J/m²",
+     "why": "Valor anómalamente alto para un líquido ligero: en la mayoría de los líquidos orgánicos es de 0,02–0,03, es decir, de tres a cuatro veces menor. La causa es el enlace de hidrógeno: la molécula de agua se agarra a sus vecinas no solo por una atracción débil, como en §1, sino también mediante un puente direccional a través del hidrógeno. Con la temperatura, la tensión disminuye casi linealmente y se anula en el punto crítico: allí la interfaz líquido-vapor desaparece y no hay nada que pagar.",
+     "mnemo": "Piénsalo como «siete centésimas de newton por metro»: así dos cifras se calculan mentalmente: una gota de radio 1 mm retiene en su interior un exceso de presión de unas ciento cincuenta pascales, y un tubo de radio 0,1 mm eleva el agua unos 15 centímetros."
+    },
+    {
+     "sym": "σ_jabón",
+     "latex": "\\sigma_{\\text{jabón}}",
+     "name": "Tensión de la solución jabonosa",
+     "value": "0,025 (solución para burbujas) — 0,035 (concentración doméstica)",
+     "unit": "N/m",
+     "why": "El jabón no «hace el agua resbaladiza»: reduce su tensión de dos a tres veces. La molécula del tensioactivo es de doble cara: un extremo ama el agua, el otro la evita, por lo que esta molécula se coloca en la interfaz con la cola hacia afuera y reemplaza la cara superficie acuosa cara por una barata. De ahí todo: la tela se empapa por completo en lugar de retener el agua como una película en los poros; la grasa se desprende de los platos; el clip se hunde en el agua con una gota de detergente. Y también que el agua pura no se puede hacer espuma, pero la jabonosa sí.",
+     "mnemo": "De dos a tres veces menor que la del agua pura. La proporción se ve en la cocina sin instrumentos: de un cuentagotas salen aproximadamente 2,4 veces más gotas de agua jabonosa que de agua pura, para el mismo mililitro."
+    },
+    {
+     "sym": "σ_Hg",
+     "latex": "\\sigma_{\\text{Hg}}",
+     "name": "Tensión superficial del mercurio",
+     "value": "0,485 a 20 °C, ángulo de contacto con el vidrio de unos 140°",
+     "unit": "N/m",
+     "why": "Seis veces y media mayor que la del agua: en la superficie del metal líquido se rompen enlaces metálicos, que son mucho más fuertes que los de hidrógeno. Junto con el no mojado del vidrio, esto da dos imágenes familiares: el mercurio se acumula en gotas esféricas sobre cualquier superficie, y en un tubo estrecho no sube, sino que baja. Los barometristas lo conocen como depresión capilar y aplican una corrección tabulada.",
+     "mnemo": "Medio newton por metro. Sin embargo, la longitud capilar del mercurio es de 1,9 mm — MENOR que la del agua, aunque σ es seis veces mayor: la densidad es 13,6 veces mayor, y la gravedad vence antes."
+    },
+    {
+     "sym": "λ_c",
+     "latex": "\\lambda_c",
+     "name": "Longitud capilar del agua",
+     "value": "2,7",
+     "unit": "mm",
+     "why": "No es una constante del aparato, sino una escala propia del líquido: el tamaño en el que el peso se compara con la tensión, $\\lambda_c = \\sqrt{\\sigma/\\rho g}$. Todo lo más pequeño vive en el mundo de la tensión: la gota es exactamente esférica, el zapatero no se hunde, el agua cuelga de la gasa. Todo lo más grande vive en el mundo de la gravedad: la gota se aplana, el charco se extiende, la columna se hunde. De ahí también el límite del tamaño de las gotas de lluvia: más de unos pocos milímetros no se sostienen y se rompen por el aire que las golpea.",
+     "mnemo": "Dos o tres milímetros: el tamaño de una gota que se desprende del grifo. Recuerda esa gota: está exactamente en la frontera de dos mundos."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Cómo se relaciona con el resto del curso",
+   "lead": "La tensión superficial no es un tema aparte, sino la otra cara de la misma atracción intermolecular que en §1 explicaba la desviación del gas real respecto al ideal.",
+   "items": [
+    {
+     "h": "Primera sección: la misma fuerza, otra contabilidad",
+     "text": "En §1 la atracción de las moléculas se convirtió en la corrección $a/V^{2}$: el déficit de presión en la pared se debe a que las moléculas son atraídas hacia atrás por sus compañeras. Aquí la misma atracción se calcula no mediante la presión, sino mediante la energía de la interfaz. El puente entre las secciones se ve en el gráfico: la σ del agua cae de 0,076 N/m a 0 °C a 0,059 a 100 °C y se anula exactamente en el punto crítico, cuyas coordenadas obtuvimos en §1. La razón es una: allí desaparece la diferencia entre líquido y vapor, y con ella la propia interfaz. Sin interfaz, no hay nada que pagar."
+    },
+    {
+     "h": "Hidrostática: el zapatero y la gasa en el vaso",
+     "text": "En el tema de la presión en un líquido en reposo nos referimos dos veces a la tensión sin calcularla: el zapatero se sostiene en la superficie, y el agua no se derrama a través de la gasa que cubre un vaso invertido. Ahora se puede calcular. Una celda de malla de radio $r$ soporta una diferencia de presión de hasta $2\\sigma/r$; para sostener una columna de 12 cm, es decir, 1,2 kPa, se necesita un radio de unos 0,12 mm. La gasa tiene celdas de esas décimas de milímetro, por lo que el experimento funciona, pero al límite, y con una malla gruesa ya no sale."
+    },
+    {
+     "h": "Viscosidad: el capilar eleva, pero también frena",
+     "text": "La fórmula de Jurin da la altura final y no dice nada sobre el tiempo. Pero el tiempo lo determina la viscosidad: la resistencia al flujo en un tubo crece como $r^{-4}$: es la ley de Poiseuille del tema de flujos viscosos. Resulta una disyuntiva familiar para quien elige toallas de papel: los poros anchos absorben rápido, pero no alto; los estrechos, alto, pero lento. Por la misma razón, el ascenso del agua en una pared de ladrillo formalmente debería llegar a decenas de metros, pero en la práctica se detiene alrededor de un metro: la evaporación de la pared alcanza a llevarse el agua más rápido de lo que los poros estrechos la atraen."
+    },
+    {
+     "h": "Transiciones de fase: por qué la ebullición necesita un inicio",
+     "text": "El germen de una nueva fase —una burbuja en el líquido o una gotita en el vapor— es primero pequeño, y por tanto su superficie es cara en comparación con la ganancia en volumen. De ahí el líquido sobrecalentado que no hierve sin centros de nucleación, y el vapor subenfriado que no condensa sin núcleos de condensación. El aspecto cuantitativo es la fórmula de Kelvin en el apéndice: sobre una gota pequeña, la presión de vapor saturado es mayor que sobre una superficie plana, y por eso las gotas pequeñas se evaporan en favor de las grandes."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Curiosidades: compruébelo con sus manos",
+   "lead": "La tensión superficial es un tema poco común donde el experimento casero no es una ilustración, sino una medición: con un cuentagotas de cocina, σ se mide en serio, con una precisión de decenas de por ciento.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "experimento de cocina",
+     "h": "El clip que flota y la gota de detergente que lo hunde",
+     "text": "Vierta agua en un plato. Arranque un trozo de servilleta de papel, colóquelo sobre el agua y, sobre la servilleta, un clip o una aguja de coser. Pasado medio minuto, la servilleta se mojará y se hundirá, pero el clip permanecerá flotando. Mire de lado: a su alrededor, la superficie se hunde formando una pequeña depresión. Ahora deje caer una gota de lavavajillas en el borde opuesto del plato, y no parpadee.",
+     "answer": "El clip no se sostiene por Arquímedes: el acero es 7,8 veces más denso que el agua, y no le basta con desplazar su propio volumen. Lo sostiene la curvatura de la superficie, o más precisamente, la tensión a lo largo de las dos líneas de contacto laterales. Calculemos el límite. El peso de una aguja cilíndrica de longitud $L$ y diámetro $d$ es $\\rho_{\\text{ac}}\\,g\\,\\pi d^{2}L/4$, y la tensión en ambos lados proporciona una fuerza hacia arriba de no más de $2\\sigma L$. La longitud se cancela, y queda $d_{\\max} = \\sqrt{8\\sigma/(\\pi\\rho_{\\text{ac}} g)} = 1{,}56$ mm. Una aguja de coser común tiene un diámetro de 0,6 a 0,8 mm, es decir, tiene un margen de masa de cuatro veces; por eso se sostiene con seguridad. Pero con un clavo de 3 mm, el experimento no funcionará por mucho cuidado que se ponga, y eso es una predicción de la fórmula, no una cuestión de destreza.\n\nAhora, la gota de detergente. El nuevo equilibrio da $d_{\\max} = 1{,}0$ mm: el límite ha caído solo una vez y media, y según esta aritmética, una aguja fina debería sostenerse. Se hunde instantáneamente por otra razón: el jabón se extiende por la superficie, creando un gradiente de σ, y el gradiente de tensión arrastra la superficie lejos de la gota (esto se llama efecto Marangoni). El clip es literalmente arrancado de su depresión, y la molécula de surfactante que llega también cambia el ángulo de contacto. Vale la pena hacer el experimento al revés: añadir el detergente ANTES, mezclar bien, y luego intentar colocar el clip sobre la solución jabonosa ya en equilibrio: la aguja fina se sostendrá, aunque notablemente con menos ganas."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "experimento de cocina",
+     "h": "Contar gotas: mida σ con un cuentagotas de cocina",
+     "text": "Tome un cuentagotas o una jeringa sin aguja. Llénelo con agua limpia y suelte exactamente 5 mililitros en un vaso medidor, contando las gotas. Enjuague, llénelo con agua con una gota de lavavajillas disuelta y repita: los mismos 5 mililitros, la misma boquilla, el mismo ritmo. Compare el número de gotas.",
+     "answer": "La gota se desprende cuando su peso iguala la tensión que la sostiene a lo largo de la circunferencia de la boquilla: $mg = 2\\pi r\\sigma$. Esta es la ley de Tate, y en ella se basa el estalagmómetro, el instrumento con el que se medía σ hace cien años. Para una boquilla de radio 1 mm y agua limpia, obtenemos $m = 2\\pi\\cdot10^{-3}\\cdot0{,}0728/9{,}81 = 47$ mg, es decir, aproximadamente 21 gotas por mililitro.\n\nPero lo interesante no es el valor absoluto, sino la proporción. El radio de la boquilla y $g$ son los mismos en ambas series, por lo que el número de gotas para un volumen dado es inversamente proporcional a σ: $N_{\\text{jab}}/N_{\\text{agua}} = \\sigma_{\\text{agua}}/\\sigma_{\\text{jab}} \\approx 0{,}073/0{,}030 = 2{,}4$. Donde el agua limpia necesitó cien gotas, la jabonosa necesita unas doscientas cuarenta. Una advertencia honesta, sin la cual el acuerdo con la cocina sería un amaño: la ley de Tate sobreestima la masa de la gota en aproximadamente una vez y media, porque al desprenderse, parte del líquido queda colgando de la boquilla; esta es la corrección de Harkins y Brown. Con ella, nuestros 47 mg se convierten en 31, es decir, en 32 gotas por mililitro, mientras que la cocina da 20-25. Todo concuerda, pero por otro camino: la gota cuelga del BORDE EXTERIOR de la boquilla, y en un cuentagotas de farmacia ese borde no es de un milímetro, sino de uno y medio. Un milímetro y medio da unos perfectos 70 mg, con la corrección 47 mg, esas mismas 21 gotas por mililitro. Por eso el valor absoluto de σ se mide tan toscamente, pero la proporción, bastante bien: la corrección es casi la misma para ambos líquidos y se cancela en la proporción."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoja",
+     "h": "El castillo se construye con arena húmeda, no con arena seca ni empapada",
+     "text": "La arena seca se desmorona. La arena bajo el agua también se desmorona. Pero la húmeda sostiene una pared vertical y una torre de medio metro de altura. El agua no es pegamento y no pega nada: ¿de dónde viene la resistencia y por qué desaparece en cuanto se añade más agua?",
+     "answer": "Entre los granos de arena vecinos, la humedad se acumula en pequeños puentes con superficie cóncava. Una superficie cóncava, según la fórmula de Laplace, implica una presión reducida dentro del puente, y esa presión reducida atrae los granos entre sí. Estimemos la fuerza. Un grano de arena de radio 100 μm, con un cuello de puente de radio de curvatura de unos 10 μm: la depresión es $2\\sigma/r \\approx 15$ kPa, y la fuerza de atracción es del orden de $\\pi r_{\\text{arena}}\\sigma \\approx 2\\cdot10^{-5}$ N. El peso del propio grano, con una densidad de 2650 kg/m³, es de unos $1\\cdot10^{-7}$ N. La fuerza capilar es doscientas veces mayor que el peso, y por eso la torre se mantiene.\n\nAhora se entiende el resto. En la arena seca no hay puentes: no hay nada que sostenga. En la arena empapada tampoco: el agua es continua, no quedan puentes cóncavos, y toda la construcción se desmorona de nuevo. La resistencia vive solo en un estrecho intervalo de humedad, generalmente de uno a varios por ciento en masa, y eso es exactamente lo que todos hemos comprobado en la playa empíricamente. La misma física hace que la harina forme grumos, que la sal se apelmace en el salero y que el polvo se adhiera a un trapo húmedo."
+    },
+    {
+     "icon": "fact",
+     "kind": "dato curioso",
+     "h": "Una cucharada de aceite en un estanque y la primera medición del tamaño de una molécula",
+     "text": "En 1774, Benjamin Franklin vertió una cucharadita de aceite de oliva en un estanque en Clapham, Londres, y describió con placer cómo la ondulación se calmó instantáneamente en un área de aproximadamente medio acre. Se detuvo ahí. Más de cien años después, Lord Rayleigh tomó sus cifras y simplemente dividió el volumen entre el área.",
+     "answer": "Una cucharadita son 5 mililitros, es decir, 5·10⁻⁶ m³. Medio acre son unos 2000 m². Dividimos: el espesor de la película es de 2,5·10⁻⁹ metros, dos nanómetros y medio. No hay más física que dividir el volumen entre el área, pero el resultado es asombroso: el aceite se extendió hasta un espesor de UNA molécula y se negó a extenderse más. La longitud de una molécula de ácido oleico es, efectivamente, de unos dos nanómetros. Así se midió por primera vez el tamaño de una molécula, y el instrumento fue un estanque.\n\nEsta línea fue continuada por la ya mencionada Agnes Pockels: su cubeta permitía comprimir la monocapa con una barrera y observar cuándo la tensión empezaba a caer, es decir, cuando las moléculas quedaban apretadas. Irving Langmuir convirtió su aparato de cocina en uno de laboratorio, obtuvo el Premio Nobel de 1932 por sus trabajos con monocapas, y hoy la cubeta de Langmuir-Blodgett está en laboratorios donde se cultivan películas de una molécula de espesor."
+    },
+    {
+     "icon": "edge",
+     "kind": "límite de aplicabilidad",
+     "h": "La hoja de loto y el ángulo de contacto que no existe",
+     "text": "La condición de Young da un único valor de θ para un par dado de líquido-sólido. En una superficie real, ese valor no existe: una gota sobre un vidrio inclinado no rueda mientras la inclinación sea pequeña, y su borde delantero forma un ángulo, mientras que el trasero forma otro; la diferencia puede llegar a varias decenas de grados.",
+     "answer": "Young supuso una superficie perfectamente lisa y químicamente homogénea. La real es rugosa, y en cada irregularidad la línea de contacto se engancha. De ahí la histéresis del ángulo de contacto: el ángulo de avance es mayor que el de retroceso, y la gota se mantiene en la pendiente mientras la diferencia de proyecciones no supere la fuerza de rodadura. Además, la rugosidad AMPLIFICA la propiedad original de la superficie, no la suaviza: según la fórmula de Wenzel, el coseno se multiplica por un factor de rugosidad, de modo que lo mojable se vuelve aún más mojable, y lo no mojable, aún más no mojable.\n\nLa hoja de loto lleva esto al extremo. Su superficie está cubierta de protuberancias cerosas de unas pocas micras, y sobre ellas una estructura aún más fina; el agua no se hunde entre las protuberancias, sino que reposa sobre sus cimas, apoyándose en colchones de aire. Este es el régimen de Cassie, y el ángulo de contacto efectivo alcanza los 160°: la gota es casi una esfera, rueda con la más mínima inclinación y se lleva el polvo consigo. Los recubrimientos hidrofugantes industriales reproducen precisamente esta geometría, no la química, y por eso dejan de funcionar en cuanto una sustancia tensioactiva (es decir, un detergente común) llena los bolsillos de aire."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "Lo que simplificamos",
+   "blocks": [
+    {
+     "h": "El menisco no es una semiesfera, y la fórmula de Jurin no es exacta",
+     "text": "Supusimos que el menisco en el tubo es un segmento de esfera de radio $R = r/\\cos\\theta$. Esto es válido mientras el tubo sea mucho más estrecho que la longitud capilar: entonces la gravedad no tiene tiempo de distorsionar la forma. Cuando $r$ es comparable a 2,7 mm, el menisco está notablemente aplanado y la fórmula sobreestima el resultado. Un ejemplo práctico: para mercurio en un tubo de 5 mm de radio, nuestra fórmula da una depresión de 1,1 mm, mientras que las tablas barométricas dan fracciones de milímetro, porque un menisco de ese ancho físicamente no puede convertirse en un segmento esférico con un ángulo de 140°. Por eso, en los barómetros de mercurio de precisión, el canal se hace de 8 a 10 mm de ancho: allí la corrección es pequeña y está bien tabulada. Una segunda corrección, más modesta, actúa en el mismo sentido: el peso del propio líquido en el menisco por encima de su punto más bajo sostiene la misma tensión, y la columna se eleva menos de lo calculado, aproximadamente en $r/3$.",
+     "latex": "R_{\\text{men}} = \\frac{r}{\\cos\\theta} \\;\\Longrightarrow\\; \\Delta p = \\frac{2\\sigma\\cos\\theta}{r} = \\rho g h, \\qquad h_{\\text{prec}} \\approx \\frac{2\\sigma\\cos\\theta}{\\rho g r} - \\frac{r}{3}"
+    },
+    {
+     "h": "El ángulo de contacto no es una constante del material",
+     "text": "En las tablas se escribe \"agua sobre vidrio: 0°, sobre parafina: 105°\", como si fuera una propiedad del par de sustancias. En una superficie idealmente lisa y químicamente homogénea, así sería. La superficie real es rugosa y está contaminada, y en lugar de un solo ángulo tiene un intervalo completo: el ángulo de avance (cuando el borde avanza) es mayor que el de retroceso (cuando el borde retrocede); la diferencia, la histéresis, alcanza de 20 a 50°. La rugosidad interviene según la fórmula de Wenzel, y si el líquido se asienta sobre las cimas de las irregularidades, apoyándose en el aire, según la fórmula de Cassie. La conclusión práctica es simple: el cálculo de la ascensión capilar con el θ tabulado da un número con una precisión de decenas de por ciento, y es fiable solo para pares completamente mojantes, donde $\\cos\\theta$ ya es casi uno.",
+     "latex": "\\cos\\theta^{*} = r_{\\text{rug}}\\cos\\theta \\;\\;(\\text{Wenzel}), \\qquad \\cos\\theta^{*} = f\\cos\\theta - (1-f) \\;\\;(\\text{Cassie})"
+    },
+    {
+     "h": "σ depende de las impurezas, y su gradiente impulsa el líquido",
+     "text": "La tensión superficial es la más caprichosa de las constantes de este curso. Centésimas de porcentaje de una sustancia tensoactiva bastan para reducirla a la mitad y media, y décimas para duplicar la reducción, porque esa molécula tiende a ir a la interfaz y concentrarse allí; cuantitativamente lo describe la ecuación de adsorción de Gibbs. Por eso, medir σ exige una limpieza casi maniática: Agnes Pockels lavaba su cubeta durante horas. Y por eso mismo, ningún experimento de este apartado funcionará en un recipiente donde recientemente se haya lavado algo grasiento. Pero la variabilidad de σ también tiene su propia física: si la tensión es diferente en distintos puntos de la superficie, la superficie fluye desde el σ pequeño hacia el grande y arrastra consigo el líquido. Es el efecto Marangoni. Espolvorea pimienta molida sobre el agua y deja caer una gota de detergente en el centro: la pimienta se dispersará hacia los bordes, no porque sea \"empujada\", sino porque viaja con la superficie. Es el mismo efecto que hunde el clip en el primer experimento, y el que mueve los granos de especias en una cacerola calentada por debajo, donde el gradiente de σ no lo crea una impureza, sino la temperatura."
+    },
+    {
+     "h": "Fórmula de Kelvin: sobre una gota pequeña, el vapor es más denso",
+     "text": "Consideramos que la curvatura de la superficie solo cambia la mecánica. Pero también cambia la termodinámica: una molécula en una superficie convexa tiene aún menos vecinos que en una plana, y le resulta más fácil escapar. Por lo tanto, la presión de vapor saturado sobre una gota es mayor que sobre agua plana, y tanto mayor cuanto más pequeña es la gota. Cifras: para una gota de radio 1 μm, el exceso es del 0,11 %, y para 10 nm, ya del 11 %. De aquí se derivan dos consecuencias. Primera: en aire perfectamente limpio, la niebla no se forma ni siquiera con una sobresaturación notable: una diminuta semilla se evapora inmediatamente, y se necesitan núcleos de condensación, es decir, partículas de polvo y sales. Segunda: en una nube, las gotas grandes crecen a expensas de las pequeñas, porque a las pequeñas les cuesta más retener su vapor; así, una gota de lluvia se forma a partir de la niebla. Se deduce de la igualdad de los potenciales químicos del líquido y del vapor, a la que se añade el salto de presión de Laplace; su pariente más cercano es la ecuación de Clausius-Clapeyron, del tema de transiciones de fase. Aquí solo tomamos el resultado.",
+     "latex": "\\ln\\frac{p(r)}{p_\\infty} = \\frac{2\\sigma V_m}{r\\,RT}; \\qquad r = 1\\ \\mu\\text{m}: +0{,}11\\,\\%, \\qquad r = 10\\ \\text{nm}: +11\\,\\%"
+    }
+   ]
+  },
+  "memo": {
+   "essence": "A una molécula en la frontera le falta la mitad de sus vecinos, y por cada metro cuadrado de frontera el líquido paga con energía σ. Esa misma σ, reescrita en newtons por metro, es la fuerza de tensión: es un solo número en dos unidades. Una superficie curvada comprime lo que tiene debajo en $\\Delta p = 2\\sigma/R$ (en una película con dos superficies, $4\\sigma/R$), y ese mismo salto eleva el líquido en un tubo estrecho hasta $h = 2\\sigma\\cos\\theta/(\\rho g r)$.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "J/m² = N/m",
+     "text": "La energía superficial y la tensión superficial son la misma magnitud en dos unidades; un marco con una barra deslizante convierte una en la otra en una sola línea."
+    },
+    {
+     "icon": "scale",
+     "title": "Inversamente proporcional al radio",
+     "text": "$\\Delta p = 2\\sigma/R$: cuanto más pequeña es la gota, más comprimida está. Dentro de una gota micrométrica hay una atmósfera y media extra."
+    },
+    {
+     "icon": "fact",
+     "title": "El signo lo decide el coseno",
+     "text": "$\\theta < 90^\\circ$: el líquido asciende; $\\theta > 90^\\circ$: desciende. El agua en el vidrio sube, el mercurio en el mismo vidrio baja."
+    },
+    {
+     "icon": "edge",
+     "title": "Longitud capilar 2,7 mm",
+     "text": "La frontera de dos mundos: a escalas más pequeñas domina la tensión (la gota es una esfera), a escalas mayores domina la gravedad (la gota es una torta)."
+    }
+   ],
+   "where": [
+    "Boquillas y pulverización: 200 ml de agua en gotas micrométricas dan 600 m² de superficie y por eso se evaporan incomparablemente más rápido que el agua vertida.",
+    "Detergentes: los surfactantes reducen σ de dos a tres veces, y el agua finalmente penetra en los poros de la tela en lugar de quedar suspendida como una película.",
+    "Pulmones: el surfactante reduce la tensión tanto más cuanto más pequeña es la alveola, y evita que las pequeñas colapsen en grandes.",
+    "Mecha, papel secante, toalla de papel, mampostería de ladrillo: los poros estrechos elevan más alto, pero succionan más lentamente.",
+    "Barómetro de mercurio: la depresión capilar en un canal estrecho requiere una corrección tabulada, por eso el canal se hace ancho.",
+    "Castillo de arena húmeda: los puentes de agua entre los granos de arena los unen con una fuerza equivalente a doscientos pesos de un grano."
+   ],
+   "watchOut": "Tres trampas. La primera: confundir $2\\sigma/R$ y $4\\sigma/R$: el cuatro aparece solo donde la película tiene dos superficies, es decir, en una burbuja de jabón; en una gota y en un menisco la superficie es una sola. La segunda: sustituir en la fórmula de ascenso el diámetro en lugar del radio: la respuesta se reduce exactamente a la mitad y parece plausible porque el orden de magnitud se conserva. La tercera, conceptual: pensar que los capilares elevan el agua en los árboles: ellos la conducen, pero quien la eleva es la evaporación a través de los nanoporos de la hoja, y el agua en el tronco no está comprimida, sino estirada."
+  },
+  "quiz": [
+   {
+    "id": "sf1",
+    "type": "mcq",
+    "q": "Dos pompas de jabón, una grande y una pequeña, están infladas en los extremos de un tubo con una llave cerrada en el medio. Se abre la llave. ¿Qué ocurrirá?",
+    "options": [
+     "Las pompas intercambiarán aire y se volverán del mismo tamaño",
+     "La pequeña se desinflará y la grande se inflará aún más",
+     "La grande se desinflará en la pequeña: tiene más superficie y más energía almacenada",
+     "Nada cambiará: la película está igualmente tensa, por lo que presiona igual"
+    ],
+    "answer": 1,
+    "why": "La presión dentro de una pompa es $\\Delta p = 4\\sigma/R$, inversamente proporcional al radio, por lo que en la pequeña es MAYOR. El aire va de donde la presión es más alta; la pequeña disminuye, su presión aumenta aún más, y el proceso se acelera solo — no hay equilibrio intermedio. La respuesta \"la grande se desinflará en la pequeña\" confunde presión con energía: la energía superficial total de la pompa grande es efectivamente mayor, pero el flujo lo impulsa la diferencia de presión, no la reserva de energía. La cuarta es el error más común: la tensión es igual en ambas, pero lo que presiona no es la tensión, sino la curvatura. Así se comportarían también los alvéolos en los pulmones, si no fuera por el surfactante, que reduce σ precisamente en los comprimidos.",
+    "hint": "Escriba $\\Delta p = 4\\sigma/R$ para ambas pompas y compare. ¿Quién tiene mayor presión: el de menor $R$ o el de mayor?"
+   },
+   {
+    "id": "sf2",
+    "type": "mcq",
+    "q": "El agua subió en un tubo capilar 15 cm y se detuvo. El mismo tubo se reemplazó por uno exactamente igual pero corto: su borde superior ahora está solo a 5 cm sobre el nivel del agua en el recipiente. ¿Qué ocurrirá?",
+    "options": [
+     "El agua fluirá continuamente por el borde — se obtendrá una fuente perpetua",
+     "El agua llegará al borde y se detendrá, y el menisco se volverá más plano",
+     "El agua subirá solo 5 cm, pero el menisco conservará su curvatura anterior, y parte del tubo quedará seca",
+     "El agua no subirá en absoluto: un tubo corto no puede crear la depresión necesaria"
+    ],
+    "answer": 1,
+    "why": "La subida se detiene cuando el salto de Laplace $2\\sigma\\cos\\theta/r$ equilibra el peso de la columna $\\rho g h$. Si el tubo es más corto que la altura de equilibrio, la columna choca con el borde, pero el equilibrio debe cumplirse igualmente — y el sistema ajusta el único parámetro libre, la curvatura del menisco: se aplana justo lo necesario para que el salto sea igual a $\\rho g \\cdot 5$ cm, es decir, tres veces menor que antes. En el borde del corte, la línea de contacto se fija y puede mantener cualquier ángulo en un amplio rango — esto se llama anclaje en el borde. La respuesta de la fuente perpetua violaría la conservación de la energía: para que una gota se desprenda y fluya, hay que crear nueva superficie, y eso cuesta exactamente la energía que liberó la subida. La tercera no es válida porque la curvatura del menisco y la altura de la columna están rígidamente relacionadas: no se puede conservar la curvatura y no llegar al borde al mismo tiempo.",
+    "hint": "En la fórmula $h = 2\\sigma\\cos\\theta/(\\rho g r)$, el radio del tubo y σ no han cambiado, y $h$ se ha reducido forzosamente a un tercio. ¿Qué magnitud en la fórmula queda libre?"
+   },
+   {
+    "id": "sf3",
+    "type": "free",
+    "q": "Con sus propias palabras: ¿por qué un árbol alto no puede elevar agua solo con los capilares del tronco, y qué la eleva entonces a cien metros?",
+    "keywords": [
+     "radio",
+     "estrecho",
+     "ancho",
+     "vaso",
+     "nanoporos",
+     "hoja",
+     "evaporación",
+     "negativa",
+     "estirado",
+     "menisco",
+     "0,15"
+    ],
+    "needed": 2,
+    "why": "La altura de ascenso es inversa al radio: $h = 2\\sigma\\cos\\theta/(\\rho g r)$. Para elevar agua a 100 metros se necesita un tubo de radio 0,15 micras. Los vasos y traqueidas del tronco son aproximadamente cien veces más anchos — radio del orden de 10 micras — y tal tubo da como máximo un metro y medio. Por lo tanto, los capilares del tronco no elevan el agua, solo la conducen. La eleva la evaporación a través de los estomas de la hoja: los meniscos en los nanoporos de las paredes celulares (radio de unos 10 nm) pueden mantener una diferencia de unos 15 MPa y tiran del agua hacia arriba, como un pistón. La columna no está comprimida, sino estirada — la presión en el tronco de una secuoya es negativa, del orden de −2 MPa. El agua en el árbol cuelga de los meniscos de la hoja, no es empujada desde abajo.",
+    "hint": "Invierta la fórmula de ascenso y encuentre qué radio se necesita para cien metros. Luego compárelo con el ancho real de los vasos del árbol — y piense dónde en el árbol hay poros varios órdenes de magnitud más estrechos."
+   },
+   {
+    "id": "sf4",
+    "type": "estimate",
+    "q": "Estime la presión excesiva dentro de una gota de niebla de radio 5 μm. La tensión superficial del agua es 0,073 N/m. Responda en kilopascales.",
+    "answer": 29,
+    "unit": "kPa",
+    "why": "$\\Delta p = 2\\sigma/R = 2\\cdot0{,}073/(5\\cdot10^{-6}) = 2{,}9\\cdot10^{4}$ Pa, es decir, 29 kPa. Mentalmente: 0,146 dividido por cinco micras — esto es 0,146 multiplicado por 2·10⁵, alrededor de tres decenas de kilopascales. Verificación por sentido común: casi un tercio de la atmósfera dentro de una gota que ni siquiera se puede ver — y esto es modesto, en una gota de una micra la presión es cinco veces mayor. El error más común aquí es tomar $4\\sigma/R$: el cuatro solo aparece en una película con dos superficies, pero en una gota hay una sola superficie. El segundo error más frecuente es olvidar convertir micras a metros.",
+    "tolAbs": 6,
+    "hint": "Fórmula de Laplace para una gota, no para una pompa de jabón. Y convierta el radio a metros: 5 μm = 5·10⁻⁶ m."
+   }
+  ]
+ },
+ "ar": {
+  "title": "التوتر السطحي والشعيرات الدموية",
+  "subtitle": "الفقرة 2 · معادلة لابلاس وارتفاع الارتفاع في الأنبوب",
+  "intro": [
+   "ضع إبرة خياطة على الماء - بحذر، بشكل مسطح. ستبقى طافية، على الرغم من أن الفولاذ أكثر كثافة من الماء بثماني مرات ووفقًا لقانون أرخميدس يجب أن تغوص إلى القاع. رش الفلفل المطحون على الماء - سيبقى أيضًا. مرر إصبعك على سطح كوب مملوء: ستشعر بشيء يشبه الغشاء الذي يجب اختراقه.",
+   "لا يوجد أي غشاء هناك - الماء هو نفسه على السطح وفي العمق. الأمر يتعلق بما هو غير موجود على السطح: الجيران. تنجذب جزيئات السائل إلى بعضها البعض - هذه هي القوة التي قمنا في الفقرة الأولى بطيها في تصحيح $a/V^2$ في معادلة فان دير فالس. داخل السائل، تكون قوى الجذب على الجزيء متوازنة من جميع الجهات. على الحدود مع الهواء، لا يوجد شركاء في النصف العلوي، فتظهر قوة موجهة إلى الداخل وطاقة لم تكن موجودة لدى الجزيء الداخلي. هذه الطاقة تتناسب ليس مع حجم السائل، بل مع مساحة سطحه - ومن هنا يأتي كل ما يلي.",
+   "بعد ذلك سنحسب هذه التكلفة، مقدرين إياها من حرارة التبخر، وسنرى أين يخطئ التقدير. ثم سنحول الطاقة إلى قوة ونتأكد من أن الجول لكل متر مربع والنيوتن لكل متر هما نفس الرقم. سنشتق معادلة لابلاس للقطرة وفقاعة الصابون، وشرط يونغ لزاوية التلامس، ومعادلة الارتفاع في الأنبوب. وفي النهاية سنسأل المعادلة: هل يمكن للشجرة أن ترفع الماء بالشعيرات الدموية وحدها إلى ارتفاع مائة متر؟ سيكون الجواب بالنفي، وهذا سيكون الجزء الأكثر إثارة للاهتمام في الفقرة."
+  ],
+  "standNote": "حامل هذه الفقرة مشترك للموضوع: يرسم متساوي الحرارة لفان دير فالس، وقبة التعايش بين الطورين، والنقطة الحرجة. خذ منه شيئًا واحدًا. اضبط درجة الحرارة المخفضة $T/T_c$ على 0.80 وانظر إلى القبة: تحتها يعيش السائل والبخار معًا، وبينهما حد - هو نفسه الذي سندفع ثمن المتر المربع منه الآن. الآن حرك المنزلق ببطء نحو 1.00. تضيق القبة، ويذوب الفرق في كثافة السائل والبخار، وعند النقطة الحرجة بالضبط تنهار القبة إلى نقطة ويختفي الحد تمامًا. معه يختفي موضوع هذه الفقرة: ينخفض التوتر السطحي للماء من 0.076 نيوتن/م عند صفر درجة إلى 0.059 عند مائة درجة ويصبح صفرًا عند النقطة الحرجة. لا يوجد ما ندفع ثمنه للسطح، لأن السطح لم يعد موجودًا. بتحريك منزلق واحد، ترى حرفيًا كيف تنطفئ $\\sigma$.",
+  "formula": {
+   "name": "معادلة لابلاس وقانون الارتفاع الشعري",
+   "latex": "\\Delta p = \\frac{2\\sigma}{R}, \\qquad h = \\frac{2\\sigma\\cos\\theta}{\\rho g r}",
+   "alsoKnown": "معادلة لابلاس للقفزة الضغطية على سطح منحنٍ (لفقاعة الصابون ذات السطحين يُضاعف المعامل ليصبح 4σ/R)؛ تُعرف معادلة الارتفاع الشعري بقانون جورين. الصيغة العامة لمعادلة لابلاس لسطح ذي شكل عشوائي: Δp = σ(1/R₁ + 1/R₂)",
+   "authors": [
+    {
+     "who": "فرانسيس هوكسبي",
+     "year": "1709",
+     "what": "أجرى أولى التجارب الكمية على الأنابيب الضيقة وأظهر أن ارتفاع السائل يعتمد على قطر الأنبوب وليس على سمك جدرانه، مما يعني أن السطح هو المسؤول وليس كتلة الزجاج"
+    },
+    {
+     "who": "جيمس جورين",
+     "year": "1718",
+     "what": "قاس الارتفاع في أنابيب بأقطار مختلفة وصاغ التناسب العكسي بين الارتفاع ونصف القطر؛ وتُعرف القاعدة باسمه"
+    },
+    {
+     "who": "توماس يونغ",
+     "year": "1805",
+     "what": "أدخل مفهوم التوتر السطحي كقوة حقيقية وحصل على شرط توازن التوترات الثلاثة على خط التلامس، أي زاوية التلامس"
+    },
+    {
+     "who": "بيير سيمون لابلاس",
+     "year": "1805",
+     "what": "أثبت في ملحق لـ«الميكانيكا السماوية» أن القفزة الضغطية على الحدود تساوي التوتر مضروبًا في مجموع الانحناءين الرئيسيين، واختزل كل الظواهر الشعرية في معادلة واحدة"
+    },
+    {
+     "who": "جوزيا ويلارد جيبس",
+     "year": "1878",
+     "what": "بنى الديناميكا الحرارية للسطوح: σ هي الطاقة الحرة الزائدة لكل وحدة مساحة، ومن هنا يتبين أيضًا كيف تتراكم الشوائب على الحدود وتقلل التوتر"
+    }
+   ],
+   "story": "أكثر التحولات غير المتوقعة في هذه القصة حدثت في المطبخ. في ثمانينيات القرن التاسع عشر، كانت أغنيس بوكيلس تدير شؤون المنزل في منزل والديها في براونشفايغ؛ كانت الجامعة مغلقة أمام النساء، وكانت تعرف الفيزياء من كتب أخيها المدرسية. لاحظت أن الماء النقي والماء الصابوني في الحوض يتصرفان بشكل مختلف، فجمعت جهازًا مما كان متاحًا: حوضًا من الصفيح، وزرًا على خيط كعنصر حساس في الميزان، وشريطًا من القصدير يمكنها به عزل جزء من السطح وتغيير مساحته. وبهذا قامت بقياس التوتر وراقبت كيف ينخفض عندما تسقط قطرة زيت على الماء. لم يكن هناك مكان لنشر النتائج، ففي عام 1891 كتبت إلى اللورد رايلي، الذي ترجم رسالتها وأرسلها إلى مجلة نيتشر مع ملاحظة أن العمل يستحق النشر كاملًا. حوض بوكيلس هو السلف المباشر لحوض لانجموير، الذي بُني عليه لاحقًا أحاديات الجزيئات وحصلوا به على جوائز نوبل.\n\nالتحول الثاني أكثر هدوءًا. في عام 1901، نشر أينشتاين البالغ من العمر اثنين وعشرين عامًا أول ورقة له، وكانت عن الظواهر الشعرية: حاول استخلاص قانون التجاذب بين الجزيئات من قيم σ لسوائل مختلفة. لاحقًا وصف هذا العمل بأنه عديم القيمة، وكان محقًا في جوهره — لم تُؤكد الفرضية. لكن اختيار الموضوع نفسه يقول الكثير. كان التوتر السطحي آنذاك أقصر طريقة للوصول بالأرقام إلى الجزيئات التي لم يرها أحد بعد: تقيس القوة بميزان مطبخ وتحصل على طاقة الارتباط بين الجسيمات.",
+   "symbols": [
+    {
+     "sym": "σ",
+     "latex": "\\sigma",
+     "what": "التوتر السطحي (ويسمى أيضًا الطاقة السطحية)",
+     "unit": "N/m، وهي أيضًا J/m²",
+     "note": "كمية واحدة بوحدتين: J/m² = N·m/m² = N/m. للماء عند 20 °C تساوي 0.0728"
+    },
+    {
+     "sym": "Δp",
+     "latex": "\\Delta p",
+     "what": "القفزة الضغطية على سطح منحنٍ",
+     "unit": "Pa",
+     "note": "الضغط دائمًا أعلى في الجانب الذي يكون فيه السطح محدبًا؛ بالنسبة لسطح مستوٍ لا توجد قفزة إطلاقًا"
+    },
+    {
+     "sym": "R",
+     "latex": "R",
+     "what": "نصف قطر انحناء السطح",
+     "unit": "m",
+     "note": "بالنسبة للقطرة والفقاعة فهو نصف قطرهما، وبالنسبة للغضروف في الأنبوب فهو نصف قطر القطعة الكروية، وليس نصف قطر الأنبوب"
+    },
+    {
+     "sym": "r",
+     "latex": "r",
+     "what": "نصف قطر الأنبوب الشعري أو المسام",
+     "unit": "m",
+     "note": "نصف القطر وليس القطر: استبدال القطر يقلل الإجابة إلى النصف ويبقى غير ملحوظ لأن رتبة المقدار تبقى كما هي"
+    },
+    {
+     "sym": "θ",
+     "latex": "\\theta",
+     "what": "زاوية التلامس",
+     "unit": "درجات",
+     "note": "تُقاس داخل السائل من السطح الصلب؛ θ < 90° يعني أن السائل يبلل السطح ويرتفع، θ > 90° يعني أنه لا يبلله وينخفض"
+    },
+    {
+     "sym": "h",
+     "latex": "h",
+     "what": "ارتفاع الارتفاع الشعري",
+     "unit": "m",
+     "note": "يُقاس من المستوى الحر للسائل في وعاء واسع إلى أدنى نقطة في الغضروف"
+    },
+    {
+     "sym": "ρ",
+     "latex": "\\rho",
+     "what": "كثافة السائل",
+     "unit": "kg/m³",
+     "note": "بالمعنى الدقيق، هو الفرق بين كثافة السائل وكثافة الغاز المزاح، لكن بالنسبة للماء والهواء يكون التصحيح أقل من جزء من الألف"
+    },
+    {
+     "sym": "g",
+     "latex": "g",
+     "what": "تسارع الجاذبية",
+     "unit": "m/s²",
+     "const": "g",
+     "note": "يدخل فقط في معادلة الارتفاع؛ أما معادلة لابلاس فلا تتضمن الجاذبية إطلاقًا، ولهذا في انعدام الوزن تكون القطرة كروية تمامًا"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "الاشتقاق الدقيق",
+   "lead": "سنحتاج إلى عبارة فيزيائية واحدة فقط، وهي موجودة بالفعل من الفقرة الأولى: جزيئات السائل تتجاذب. كل ما تبقى هو حساب الطاقة، وحساب القوة، وتوازن القوى على مقطع تخيلي. لن نعلن أن صيغة لابلاس أو قانون جورين جاهزان: كلاهما سيخرج من التوازن.",
+   "steps": [
+    {
+     "text": "لنأخذ جزيئًا في عمق السائل. يحيط به الجيران من جميع الجهات، كل واحد يجذبه إليه، ومجموع التجاذبات يساوي صفرًا — ليس لعدم وجود قوى، بل لأنها متوازنة. الآن لنرفع نفس الجزيء إلى الحد الفاصل مع الهواء. من الأعلى لا يوجد جيران تقريبًا: كثافة البخار المشبع عند درجة حرارة الغرفة أقل بعشرات الآلاف من المرات من كثافة السائل. اختفى نصف الشركاء، وبقي التجاذب من الأسفل — تظهر قوة محصلة موجهة إلى الداخل، وتظهر طاقة لم تكن لدى الجزيء الداخلي. لاحظوا ما تتناسب معه هذه التكلفة: ليس مع حجم السائل، بل مع عدد الجزيئات التي وجدت نفسها على الحد، أي مساحة الحد. مقدار التكلفة لكل متر مربع يسمى التوتر السطحي. ملاحظة واحدة، ستكون مفيدة في الخطوة التالية: عند درجة حرارة ثابتة، لا يُدفع بالطاقة الكاملة، بل بالطاقة الحرة — ذلك الجزء منها الذي يمكن إرجاعه كشغل. الطاقة الحرة للحد لكل وحدة مساحة، هي ما أسماه جيبس بالتوتر؛ في الصيغة أدناه $F_{\\text{السطحية}}$ هي هي، وليست قوة (القوة ستظهر في الخطوة الثالثة).",
+     "latex": "F_{\\text{السطحية}} = \\sigma A, \\qquad \\sigma = \\left(\\frac{\\partial F}{\\partial A}\\right)_{T,\\,V}, \\qquad [\\sigma] = \\frac{\\text{جول}}{\\text{م}^{2}}",
+     "figure": "realneigh",
+     "figCaption": "داخل السائل، تجاذبات الجيران متوازنة؛ عند الجزيء على الحد، لا يوجد جيران في النصف العلوي — تبقى قوة إلى الداخل وطاقة تتناسب مع المساحة"
+    },
+    {
+     "text": "لنقدر التكلفة رقميًا، دون معرفة أي شيء تقريبًا عن السائل. تبخير مول من الماء يكلف حوالي 44 كيلوجول — وهذا شغل ضد تجاذب جميع الجيران دفعة واحدة، أي 7.3·10⁻²⁰ جول لكل جزيء. كم عدد الجزيئات التي تتسع على متر مربع من السطح؟ التركيز في الماء السائل $n = \\rho N_A/M = 3{,}3\\cdot10^{28}$ م⁻³، والكثافة السطحية هي $n$ مرفوعة إلى أس ثلثين: 1.04·10¹⁹ لكل متر مربع. الجزيء على الحد لا يفقد جميع الجيران، بل جزءًا منهم؛ لنأخذ للتقريب ربعًا. نضرب ونحصل على 0.19 جول/م². القيمة المقاسة هي 0.073. لقد بالغنا بمقدار 2.6 مرة، وجزء من الفجوة هو محاسبة. كنا نحسب طاقة الروابط، أما σ المقاسة فهي الطاقة الحرة؛ الطاقة الكلية لسطح الماء أكبر، حوالي 0.117 جول/م² عند 20 درجة مئوية، لأن الحد الجديد يولد آخذًا الحرارة من المحيط. مقابلها، الخطأ لم يعد 2.6 مرة بل 1.6. الباقي فيزياء: الحساب العكسي يقول إن المعامل أمام حرارة التبخر ليس ربعًا، بل حوالي سدس. السبب مميز للماء: الجزيء على السطح يوجه روابطه الهيدروجينية جانبًا، نحو جيرانه في نفس الطبقة، بدلاً من مجرد فقدانها. التقدير التقريبي التقط رتبة المقدار بصدق وأخطأ في المعامل بصدق — أكثر من ذلك من الحساب التقريبي لا ينبغي توقعه.",
+     "latex": "\\sigma \\sim \\frac{1}{4}\\cdot\\frac{\\Delta H_{\\text{التبخر}}}{N_A}\\cdot n^{2/3} = \\frac{1}{4}\\cdot 7{,}3\\cdot10^{-20}\\cdot 1{,}04\\cdot10^{19} = 0{,}19\\ \\frac{\\text{جول}}{\\text{م}^{2}} \\quad\\text{مقابل المقاس } 0{,}073",
+     "figure": "realarea",
+     "figCaption": "التقدير من حرارة التبخر يعطي 0.19 جول/م² مقابل 0.073 المقاسة: رتبة المقدار ملتقطة، المعامل لا"
+    },
+    {
+     "text": "الآن لنحول الطاقة إلى قوة. لنأخذ إطارًا على شكل حرف U مع عارضة متحركة طولها $L$ ولنمدده بغشاء صابون. لسحب العارضة مسافة $\\Delta x$، يجب بذل شغل $F\\,\\Delta x$ — وكلها ستذهب إلى سطح جديد. مساحة الإطار زادت بمقدار $L\\,\\Delta x$، لكن للغشاء وجهين، خارجي وداخلي، لذلك يُنشأ سطح جديد ضعف ذلك. نساوي ونحصل على $F = 2\\sigma L$. من هنا المعنى المزدوج لـ σ: على اليسار كانت بالجول لكل متر مربع، وعلى اليمين ظهرت بالنيوتن لكل متر، وهما نفس الكمية، لأن جول/م² = نيوتن·م/م² = نيوتن/م. ليست خاصيتين مختلفتين، بل كتابة واحدة بوحدتين. لاحظوا أيضًا ما هو غائب عن الإجابة: $\\Delta x$. القوة لا تزداد مع التمدد — الغشاء ليس نابضًا. المطاط عند تمدده يقاوم بقوة أكبر، لأن الروابط تتمدد فيه؛ في غشاء الصابون الروابط لا تتمدد، فقط جزيئات جديدة تأتي إلى السطح من الحجم.",
+     "latex": "F\\,\\Delta x = \\sigma\\,\\Delta A = \\sigma\\cdot 2L\\,\\Delta x \\;\\Longrightarrow\\; F = 2\\sigma L, \\qquad \\frac{\\text{جول}}{\\text{م}^{2}} = \\frac{\\text{نيوتن}\\cdot\\text{م}}{\\text{م}^{2}} = \\frac{\\text{نيوتن}}{\\text{م}}",
+     "figure": "realframe",
+     "figCaption": "إطار بعارضة متحركة: الشغل ضد التوتر يساوي طاقة السطح الجديد، و σ تُقرأ مباشرة بالنيوتن لكل متر"
+    },
+    {
+     "text": "السطح المستوي ينكمش على نفسه ولا يضغط على أي شيء. السطح المنحني يضغط: بانكماشه، يعصر ما تحته. لنحسب كم. نقطع قطرة نصف قطرها $R$ عقليًا بمستوى يمر بالمركز وننظر إلى توازن أحد النصفين. عبر القطع تؤثر عليه قوتان. الأولى — التوتر على طول خط القطع: محيط الدائرة $2\\pi R$ مضروبًا في σ يسحب النصف نحو نظيره. الثانية — الضغط الزائد داخل القطرة، المؤثر على مساحة الدائرة $\\pi R^2$ ويدفع النصفين بعيدًا عن بعضهما. نساوي — ونصف القطر من الدرجة الأولى يُختصر مقابل المربع، تاركًا علاقة عكسية. كلما كانت القطرة أصغر، كانت أكثر انضغاطًا: قطرة ضباب نصف قطرها 1 ميكرومتر تحتفظ بداخلها بـ 146 كيلوباسكال إضافية، أي ما يقرب من ضغط جوي ونصف فوق الضغط الخارجي.",
+     "latex": "\\Delta p\\cdot \\pi R^{2} = \\sigma\\cdot 2\\pi R \\;\\Longrightarrow\\; \\Delta p = \\frac{2\\sigma}{R}; \\qquad R = 1\\ \\text{ميكرومتر}: \\;\\; \\Delta p = \\frac{2\\cdot 0{,}0728}{10^{-6}} = 1{,}46\\cdot10^{5}\\ \\text{باسكال}",
+     "figure": "realdrop",
+     "figCaption": "نصف كرة في توازن: التوتر على طول محيط القطع 2πRσ ضد الضغط الزائد المؤثر على المساحة πR²"
+    },
+    {
+     "text": "في فقاعة الصابون الغشاء رقيق، لكن له سطحين — خارجي وداخلي، وكل منهما يسحب بطريقته. نفس القطع يعطي قوة شد ضعف ذلك، والمعامل يتضاعف: $\\Delta p = 4\\sigma/R$. الأرقام مضحكة. فقاعة نصف قطرها 2 سنتيمتر عند σ لمحلول الصابون 0.025 نيوتن/م تحتفظ بداخلها بـ 5 باسكال إضافية — هذا نصف ملليمتر من عمود الماء، جزء من عشرين ألفًا من الغلاف الجوي. لكن من هنا يأتي شيء يمكن التحقق منه باليدين. ضع فقاعتين منفوختين على طرفي أنبوب بصنبور في المنتصف وافتح الصنبور: الصغيرة ستفرغ في الكبيرة. الحدس يوحي بالعكس — «الضغوط ستتعادل، الفقاعات ستصبح متساوية» — لكن في الصيغة الضغط يتناسب عكسيًا مع نصف القطر، وعند الصغيرة يكون أكبر. الهواء يذهب من حيث الضغط أعلى؛ الصغيرة تصغر، ضغطها يزداد أكثر، والعملية تتسارع ذاتيًا. هكذا تمامًا كانت ستعمل الحويصلات الهوائية في الرئتين — الصغيرة كانت ستنهار في الكبيرة — لولا السورفكتانت، الذي يخفض σ كلما زاد انضغاط الحويصلة، وبالتالي يقلب إشارة التغذية الراجعة.",
+     "latex": "\\Delta p = \\frac{4\\sigma}{R}; \\qquad R = 2\\ \\text{سم},\\;\\; \\sigma = 0{,}025\\ \\text{نيوتن/م}: \\;\\; \\Delta p = \\frac{4\\cdot 0{,}025}{0{,}02} = 5\\ \\text{باسكال} \\approx 0{,}5\\ \\text{مم عمود ماء}",
+     "figure": "realbubble",
+     "figCaption": "للغشاء سطحان، لذلك يتضاعف المعامل؛ الضغط يتناسب عكسيًا مع نصف القطر، ولذلك تفرغ الفقاعة الأصغر في الأكبر"
+    },
+    {
+     "text": "حتى الآن كان السائل يلامس الغاز فقط. لنضعه على صلب — الآن هناك ثلاثة حدود: صلب–غاز، صلب–سائل، وسائل–غاز، ولكل منها توتره الخاص. حيث تلتقي الثلاثة، يوجد خط تماس، وعليه ثلاثة توترات تسحب في ثلاثة اتجاهات. الخط يمكن أن يتحرك فقط على طول سطح الصلب، لذلك التوازن تحدده الإسقاط الأفقي: $\\sigma_{\\text{صلب-غاز}}$ يسحب الخط نحو الجهة الجافة، $\\sigma_{\\text{صلب-سائل}}$ نحو المبللة، وتوتر السائل نفسه يسحب على طول المماس لسطحه، أي يعطي إسقاطًا $\\sigma\\cos\\theta$. نساوي ونحصل على شرط يونغ. يُقرأ ببساطة: إذا كان للصلب أرخص أن يلامس السائل بدلاً من الغاز، فالبسط موجب، والزاوية حادة، والسائل ينتشر. للزجاج النظيف مع الماء، البسط يساوي تقريبًا σ، وθ قريب من الصفر: القطرة تنتشر كبركة. على البارافين θ = 105° — الماء يتجمع في كرات. للزئبق على الزجاج 140°: لا يبلل أي شيء تقريبًا. من هنا شكل الغضروف الهلالي: عند سائل مبلل، الأطراف تتسلق الجدار وينحني السطح لأسفل، وعند غير المبلل العكس.",
+     "latex": "\\sigma_{\\text{صلب-غاز}} = \\sigma_{\\text{صلب-سائل}} + \\sigma\\cos\\theta \\;\\Longrightarrow\\; \\cos\\theta = \\frac{\\sigma_{\\text{صلب-غاز}} - \\sigma_{\\text{صلب-سائل}}}{\\sigma}",
+     "figure": "realwet",
+     "figCaption": "ثلاثة توترات على خط التماس؛ توازنها الأفقي يحدد زاوية التماس، ومعها شكل الغضروف الهلالي"
+    },
+    {
+     "text": "لنجمع كل شيء معًا. أنبوب ضيق، سائل مبلل، الغضروف الهلالي صعد للأعلى وسحب العمود خلفه. ما الذي يمسك هذا العمود؟ التوتر على طول خط التماس — محيط دائرة طوله $2\\pi r$؛ إلى الأعلى يسحب الإسقاط الرأسي $\\sigma\\cos\\theta$. إلى الأسفل يسحب وزن العمود المرفوع $\\rho g\\,\\pi r^{2} h$. نساوي — ومرة أخرى نصف القطر من الدرجة الأولى يُختصر مقابل المربع: كلما كان الأنبوب أضيق، كان الارتفاع أكبر، لأن المحيط يتناقص كـ $r$، والكتلة كـ $r^{2}$. نفس النتيجة تُحصل أيضًا من صيغة لابلاس، إذا لاحظنا أن الغضروف الهلالي في أنبوب نصف قطره $r$ بزاوية θ هو جزء من كرة نصف قطرها $R = r/\\cos\\theta$: القفزة $2\\sigma\\cos\\theta/r$ توازن $\\rho g h$. الأرقام: للماء على زجاج نظيف، أنبوب نصف قطره 0.1 مم يعطي 14.8 سم، نصف قطره 0.5 مم — فقط 3 سم. الزئبق مع $\\cos 140^\\circ = -0{,}77$ يقلب الإشارة: في أنبوب نصف قطره 1 مم ينخفض بمقدار 5.6 مم. لذلك في بارومتر الزئبق، القناة تصنع واسعة ويُدخل تصحيح جدولي للانخفاض الشعري.",
+     "latex": "\\rho g\\,\\pi r^{2} h = \\sigma\\cos\\theta\\cdot 2\\pi r \\;\\Longrightarrow\\; h = \\frac{2\\sigma\\cos\\theta}{\\rho g r}; \\qquad r = 0{,}1\\ \\text{مم}: \\;\\; h = \\frac{2\\cdot 0{,}0728}{1000\\cdot 9{,}81\\cdot 10^{-4}} = 0{,}148\\ \\text{م}",
+     "figure": "realcap",
+     "figCaption": "وزن العمود ضد التوتر على طول المحيط: المحيط يتناقص كـ r، الوزن كـ r²، لذلك مع تضييق الأنبوب يزداد الارتفاع"
+    },
+    {
+     "text": "نقلب الصيغة ونسألها ما الذي كُتبت الفقرة من أجله. ما الذي يجب أن يكون عليه الأنبوب لرفع الماء إلى قمة شجرة عمرها قرن — إلى مائة متر؟ الجواب: نصف قطر 0.15 ميكرون، أي جزء من عشرة آلاف من المليمتر. الأوعية الناقلة للماء والقصيبات في الشجرة أعرض بمرتبتين من حيث الحجم: نصف القطر النموذجي حوالي 10 ميكرون، ومثل هذا الأنبوب يرفع الماء إلى متر ونصف — أقل من ارتفاع شجيرة الكشمش. الاستنتاج قاسٍ وواضح: الشعيرات الدموية في الجذع لا ترفع الماء إلى الأعلى، بل تنقله فقط. العمل تقوم به المسام النانوية في جدران خلايا الورقة: نصف قطرها حوالي 10 نانومتر، والغضروف الهلالي في مثل هذا المسام قادر على تحمل فرق $2\\sigma/r \\approx 15$ ميجاباسكال — مائة وخمسين ضغطًا جويًا، بهامش هائل. التبخر عبر الثغور يسحب الماء باستمرار، والغضاريف الهلالية في المسام تنحني أعمق، والعمود كله في الجذع يصبح مشدودًا: الضغط فيه ليس فقط أقل من الضغط الجوي، بل سالب، في جذع السيكويا حوالي −2 ميجاباسكال. الماء في الشجرة لا يُدفع من الأسفل، بل معلق على غضاريف الورقة — ويمسكه نفس σ.",
+     "latex": "r = \\frac{2\\sigma}{\\rho g h} = \\frac{2\\cdot 0{,}0728}{1000\\cdot 9{,}81\\cdot 100} = 1{,}5\\cdot10^{-7}\\ \\text{م}; \\qquad r_{\\text{الوعاء}} \\approx 10\\ \\text{ميكرومتر} \\;\\Longrightarrow\\; h \\approx 1{,}5\\ \\text{م}",
+     "figure": "realtree",
+     "figCaption": "مائة متر تتطلب مسامًا نصف قطرها 0.15 ميكرومتر؛ أوعية الجذع أعرض بمئة مرة وتعطي مترًا ونصف — العمود تمسكه مسام الورقة النانوية"
+    }
+   ],
+   "plate": "\\Delta p = \\frac{2\\sigma}{R} \\qquad h = \\frac{2\\sigma\\cos\\theta}{\\rho g r}",
+   "plateCap": "على اليسار — كم تكلفة الانحناء: كلما كان السطح أكثر انحناءً، كان يعصر ما تحته بقوة أكبر. على اليمين — نفس قفزة الضغط، لكن متوازنة بوزن العمود المرفوع. الثانية تُحصل من الأولى بتعويض واحد: الغضروف الهلالي في أنبوب نصف قطره $r$ بزاوية تماس θ — هو جزء من كرة نصف قطرها $R = r/\\cos\\theta$.",
+   "note": "لنعد ما افترضناه على طول الطريق — هذه هي حدود الصيغ. أولاً: السطح اعتبر كرة. لقطرة حرة هذا صحيح (في انعدام الجاذبية — بالضبط، على الأرض — طالما القطرة أصغر من الطول الشعري 2.7 مم)، وللغضروف الهلالي في أنبوب صحيح فقط طالما الأنبوب ضيق؛ في الواسع صيغة جورين تبالغ كثيرًا في الإجابة. ثانيًا: زاوية التماس اعتبرت ثابتة للمادة. في الواقع لها تأخير بعشرات الدرجات واعتماد قوي على الخشونة — عن هذا في الملحق. ثالثًا: σ اعتبرت ثابتة. هي تعتمد على درجة الحرارة (للماء تنخفض من 0.076 عند 0 درجة مئوية إلى 0.059 عند 100 درجة مئوية) وبشكل كارثي على الشوائب: قطرة واحدة من المنظف تكفي لخفضها مرتين إلى ثلاث مرات. رابعًا: لم نأخذ في الاعتبار وزن السائل نفسه في الغضروف الهلالي فوق أدنى نقطة له. هذا الوزن يمسكه نفس التوتر، لذلك العمود يقف ليس أعلى بل أقل من المحسوب — بحوالي $r/3$: لأنبوب 0.1 مم هذا جزء من مئتين، للمليمتر حوالي اثنين بالمائة. خامسًا: الجاذبية لم تدخل في صيغة لابلاس إطلاقًا، أي أن القطرة اعتبرت صغيرة؛ قطرة كبيرة على طاولة تنبسط، وانحناءها من الأعلى ومن الجوانب مختلف. وسادسًا، الأهم للتطبيق: في كل مكان اعتبر توازن. صيغة جورين تعطي الارتفاع النهائي، لكنها لا تقول شيئًا عن الزمن: كلما كان الشعري أضيق، كلما رفع أعلى وكلما فعل ذلك أبطأ، لأن المقاومة اللزجة تزداد كـ $r^{-4}$. هذا موضوع اللزوجة والتدفق في الأنابيب."
+  },
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "ثلاثة موضوعات، وكلها تدور حول كيفية الحصول على إجابة دون حل المعادلات: قراءة الأبعاد، والتقدير حسب رتبة المقدار، والقوة كمشتقة للطاقة.",
+   "items": [
+    {
+     "what": "الجول لكل متر مربع والنيوتن لكل متر هما وحدة واحدة",
+     "why": "يمكن التحقق من العبارة \"الطاقة السطحية والتوتر السطحي هما نفس الشيء\" دون التفكير في الفيزياء على الإطلاق: يكفي اختزال الأمتار. الجول هو نيوتن·متر، وبالتالي جول/م² = نيوتن·متر/م² = نيوتن/م، ولا يوجد أي خيار هنا. نفس الأسلوب يحمي من خطأ في صيغة الارتفاع. عوّض بالوحدات في $2\\sigma\\cos\\theta/(\\rho g r)$: جيب التمام بلا أبعاد، وفي المقام كغ/م³ · م/ث² · م = كغ/(م·ث²) = باسكال، وفي البسط نيوتن/م، ونيوتن/م مقسومًا على نيوتن/م² يعطي مترًا. حصلنا على الارتفاع بالأمتار — الصيغة على الأقل ليست محرفة. إذا كتب شخص ما بالخطأ $r^2$ في المقام، لكان البعد كشف ذلك فورًا.",
+     "latex": "[\\sigma] = \\frac{\\text{J}}{\\text{m}^{2}} = \\frac{\\text{N}\\cdot\\text{m}}{\\text{m}^{2}} = \\frac{\\text{N}}{\\text{m}}, \\qquad \\frac{[\\sigma]}{[\\rho][g][r]} = \\frac{\\text{N}/\\text{m}}{\\text{Pa}} = \\frac{\\text{N}/\\text{m}}{\\text{N}/\\text{m}^{2}} = \\text{m}",
+     "kit": "dimension"
+    },
+    {
+     "what": "تقدير رتبة المقدار والطول الشعري",
+     "why": "في الخطوة الثانية من الاشتقاق حصلنا على σ من حرارة التبخر وأخطأنا بمعامل 2.6. هذه نتيجة طبيعية لتقدير رتبة المقدار: إنه يجيب على سؤال \"أجزاء من المئة أم أجزاء من العشرة\"، وليس \"0.073 أم 0.075\". نفس الأسلوب يعطينا أيضًا المقياس الرئيسي للموضوع بأكمله. دعنا نسأل: عند أي حجم تتساوى الجاذبية مع التوتر؟ ضغط العمود $\\rho g L$ مقابل ضغط لابلاس $\\sigma/L$. نساوي بينهما — نحصل على الطول الشعري $\\lambda_c = \\sqrt{\\sigma/\\rho g}$، وبالنسبة للماء 2.7 مم. أصغر من ذلك، يهيمن التوتر: القطرة كرة، الحشرة تمشي على الماء، الماء لا ينسكب من الشاش. أكبر من ذلك، تهيمن الجاذبية: القطرة تنبسط، البركة تنتشر. النسبة بلا أبعاد $\\mathrm{Bo} = \\rho g L^{2}/\\sigma$ (رقم بوند) هي ببساطة مربع الحجم بوحدات الأطوال الشعرية، ومنها يتضح فورًا أي عالم نعيش فيه.",
+     "latex": "\\rho g L \\sim \\frac{\\sigma}{L} \\;\\Longrightarrow\\; \\lambda_c = \\sqrt{\\frac{\\sigma}{\\rho g}} = \\sqrt{\\frac{0{,}0728}{1000\\cdot 9{,}81}} = 2{,}7\\ \\text{mm}, \\qquad \\mathrm{Bo} = \\frac{\\rho g L^{2}}{\\sigma} = \\left(\\frac{L}{\\lambda_c}\\right)^{2}",
+     "kit": "order"
+    },
+    {
+     "what": "القوة كمشتقة للطاقة",
+     "why": "لقد اشتقنا صيغة لابلاس عن طريق توازن القوى على مقطع. هناك طريقة ثانية، أقصر وأكثر موثوقية: مساواة عمل الضغط بزيادة الطاقة السطحية عند تضخيم القطرة ذهنيًا بمقدار $dR$. طاقة السطح $E = \\sigma\\cdot 4\\pi R^{2}$، ومشتقتها $8\\pi\\sigma R$؛ عمل الضغط $\\Delta p\\cdot 4\\pi R^{2}\\,dR$. نساوي بينهما — نحصل على $2\\sigma/R$ في سطر واحد. قيمة هذه الطريقة هي أنها لا تتطلب تخمين القوى المطبقة وأين: يكفي حساب الطاقة كدالة لمعامل واحد واشتقاقها. تحقق من ذلك على فقاعة الصابون: هناك سطحان، $E = 2\\sigma\\cdot4\\pi R^{2}$، والمشتقة ضعف ذلك — والمعامل يتضاعف بأمانة إلى $4\\sigma/R$، دون أي فيزياء جديدة. نفس الطريقة لسطح ذي شكل عشوائي تعطي الصيغة العامة لصيغة لابلاس بنصفَي القطر الرئيسيين.",
+     "latex": "dE = \\sigma\\,d\\!\\left(4\\pi R^{2}\\right) = 8\\pi\\sigma R\\,dR, \\quad \\delta A = \\Delta p\\cdot 4\\pi R^{2}dR \\;\\Longrightarrow\\; \\Delta p = \\frac{2\\sigma}{R}; \\qquad \\Delta p = \\sigma\\left(\\frac{1}{R_1}+\\frac{1}{R_2}\\right)",
+     "kit": "derivative"
+    }
+   ]
+  },
+  "example": {
+   "title": "مثال بالأرقام",
+   "lead": "لنحسب تكلفة السطح عندما يكون كثيرًا جدًا: نحول كوب ماء إلى ضباب وننظر إلى الطاقة والمساحة والضغط داخل القطرات.",
+   "given": "تم رش كوب ماء بحجم $V = 200$ مل إلى ضباب من قطرات متطابقة نصف قطرها $R = 1$ ميكرومتر. التوتر السطحي للماء $\\sigma = 0{,}0728$ نيوتن/م، الكثافة 1000 كغ/م³، السعة الحرارية النوعية 4,18 كيلوجول/(كغ·كلفن)، الحرارة النوعية للتبخر 2,26 ميجاجول/كغ. المطلوب: عدد القطرات، مساحتها الكلية، الطاقة المستهلكة عليها، والضغط الزائد داخل القطرة.",
+   "law": "حجم ومساحة مجموعة من الكرات المتطابقة مرتبطان بالعلاقة $A = 3V/R$؛ الشغل ضد التوتر يساوي $\\sigma\\,\\Delta A$؛ الضغط الزائد داخل القطرة تعطيه معادلة لابلاس $\\Delta p = 2\\sigma/R$.",
+   "solution": [
+    {
+     "text": "كم عدد القطرات الناتجة؟ حجم الواحدة هو أربعة أثلاث باي آر تكعيب؛ عند نصف قطر ميكروني يكون أكبر قليلاً من أربعة أتولترات.",
+     "latex": "N = \\frac{V}{\\frac{4}{3}\\pi R^{3}} = \\frac{2\\cdot10^{-4}}{4{,}19\\cdot10^{-18}} = 4{,}8\\cdot10^{13}"
+    },
+    {
+     "text": "المساحة الكلية. ليس من الضروري الحساب عبر $N$: نسبة المساحة إلى الحجم للكرة تساوي $3/R$، وعدد القطرات يُختصر تلقائيًا.",
+     "latex": "A = N\\cdot 4\\pi R^{2} = \\frac{3V}{R} = \\frac{3\\cdot 2\\cdot10^{-4}}{10^{-6}} = 600\\ \\text{م}^{2}"
+    },
+    {
+     "text": "الشغل ضد التوتر. يمكن إهمال السطح الأصلي للماء في الكوب (حوالي 0,004 م²): إنه أصغر بمئة وخمسين ألف مرة من السطح الجديد.",
+     "latex": "W = \\sigma\\,(A - A_0) \\approx \\sigma A = 0{,}0728\\cdot 600 = 43{,}7\\ \\text{جول}"
+    },
+    {
+     "text": "الضغط داخل القطرة. معادلة لابلاس، نصف القطر بالمتر.",
+     "latex": "\\Delta p = \\frac{2\\sigma}{R} = \\frac{2\\cdot 0{,}0728}{10^{-6}} = 1{,}46\\cdot10^{5}\\ \\text{باسكال} = 1{,}44\\ \\text{جو}"
+    }
+   ],
+   "answer": "حوالي 4,8·10¹³ قطرة، المساحة الكلية 600 م² — أي ما يعادل ستة أفدنة من الأرض الزراعية مطوية في كوب ماء. كلف إنشاء هذا السطح 44 جولاً. داخل كل قطرة، الضغط أعلى بمقدار 146 كيلوباسكال من الضغط الخارجي — زيادة تقارب جوًا ونصف.",
+   "check": "أربعة وأربعون جولاً — هل هذا كثير أم قليل؟ تسخين نفس الـ 200 غرام من الماء بدرجة واحدة فقط يكلف 836 جولاً، أي أكثر بتسعة عشر ضعفًا: كل طاقة سطح الضباب تعادل تسخين الماء بمقدار 0.05 درجة. وتبخير هذا الماء يكلف 452 كيلوجولاً — أي أكثر بعشرة آلاف ضعف من إنشاء السطح. ومن هنا القاعدة التي تستحق التذكر: طاقة السطح لا تظهر أبدًا تقريبًا في توازن الطاقة، لكنها تظهر بوضوح في القوى والضغوط. جو ونصف إضافي في قطرة غير مرئية للعين — قيمة يأخذها في الحسبان علماء الأرصاد ومصممو الفوهات. التحقق الثاني، بالعكس: المساحة زادت 156 ألف مرة، والتبخر يحدث من السطح — لذلك يتبخر الماء المرشوش أسرع بما لا يقاس من الماء المسكوب، وعليه تقوم أجهزة ترطيب الهواء وفوهات الوقود والتجفيف بالرش. وإذا خرجت في حساباتك مساحة من بضعة أمتار مربعة، فابحث عن الميكرونات المفقودة: 1 ميكرومتر = 10⁻⁶ م، وليس 10⁻³."
+  },
+  "constants": {
+   "title": "ثوابت هذا القسم",
+   "lead": "أربعة أرقام. ثلاثة منها هي توترات سطوح لسوائل محددة، والرابع ليس خاصية لجهاز ولا خاصية لتجربة، بل مقياس يقسم العالم إلى «صغير» و«كبير».",
+   "items": [
+    {
+     "sym": "σ_الماء",
+     "latex": "\\sigma_{\\text{H}_2\\text{O}}",
+     "name": "التوتر السطحي للماء",
+     "value": "0.0728 عند 20 درجة مئوية (0.0756 عند 0 درجة مئوية، 0.0589 عند 100 درجة مئوية)",
+     "unit": "N/m، وهي أيضًا J/m²",
+     "why": "قيمة كبيرة بشكل شاذ لسائل خفيف: معظم السوائل العضوية لها 0.02–0.03، أي أقل بثلاث إلى أربع مرات. السبب هو الرابطة الهيدروجينية — جزيء الماء يتمسك بجيرانه ليس فقط بتجاذب ضعيف كما في §1، ولكن أيضًا بجسر موجه عبر الهيدروجين. مع درجة الحرارة، ينخفض التوتر بشكل شبه خطي ويصبح صفرًا عند النقطة الحرجة: هناك يختفي الحد الفاصل بين السائل والبخار، ولا يبقى ما يستحق الدفع.",
+     "mnemo": "تذكرها كـ «سبعة أجزاء من مائة نيوتن لكل متر» — عندها يمكن حساب رقمين ذهنيًا: قطرة نصف قطرها 1 مم تحتفظ بداخلها بمئة وخمسين باسكال إضافية، وأنبوب نصف قطره 0.1 مم يرفع الماء حوالي 15 سنتيمترًا."
+    },
+    {
+     "sym": "σ_الصابون",
+     "latex": "\\sigma_{\\text{صابون}}",
+     "name": "توتر محلول الصابون",
+     "value": "0.025 (محلول الفقاعات) — 0.035 (تركيز المطبخ)",
+     "unit": "N/m",
+     "why": "الصابون لا يجعل الماء «زلقًا» — بل يقلل توتره السطحي بمقدار مرتين إلى ثلاث مرات. جزيء المادة الخافضة للتوتر السطحي ثنائي الوجه: أحد طرفيه يحب الماء والآخر يتجنبه، لذلك مثل هذا الجزيء يرتب نفسه على السطح بذيله إلى الخارج ويستبدل سطح الماء المكلف بسطح رخيص. من هنا كل شيء: القماش يبتل تمامًا بدلاً من أن يحتفظ بالماء كغشاء في المسام؛ الدهون تنفصل عن الأطباق؛ مشبك الورق يغرق في الماء من قطرة واحدة من المنظف. ومن هنا أيضًا أن الماء النقي لا يمكن رغوته، بينما الماء الصابوني يمكن.",
+     "mnemo": "أقل بمرتين إلى ثلاث مرات من الماء النقي. النسبة مرئية في المطبخ بدون أدوات: من قطارة ماء صابوني تخرج حوالي 2.4 مرة قطرات أكثر من الماء النقي لنفس المليلتر."
+    },
+    {
+     "sym": "σ_الزئبق",
+     "latex": "\\sigma_{\\text{Hg}}",
+     "name": "التوتر السطحي للزئبق",
+     "value": "0.485 عند 20 درجة مئوية، زاوية التماس على الزجاج حوالي 140°",
+     "unit": "N/m",
+     "why": "أكبر بست مرات ونصف من توتر الماء: على سطح المعدن السائل تتمزق الروابط المعدنية، وهي أقوى بكثير من الروابط الهيدروجينية. مع عدم تبلل الزجاج، يعطي هذا صورتين مألوفتين — الزئبق يتجمع في كرات على أي سطح، وفي أنبوب ضيق لا يرتفع بل ينخفض. خبراء البارومترات يعرفون هذا كانخفاض شعري ويطبقون عليه تصحيحًا جدوليًا.",
+     "mnemo": "نصف نيوتن لكل متر. ومع ذلك، الطول الشعري للزئبق هو 1.9 مم — أقل من طول الماء، على الرغم من أن σ أكبر بست مرات: الكثافة أعلى بـ 13.6 مرة، والجاذبية تتغلب في وقت أبكر."
+    },
+    {
+     "sym": "λ_c",
+     "latex": "\\lambda_c",
+     "name": "الطول الشعري للماء",
+     "value": "2.7",
+     "unit": "mm",
+     "why": "ليس ثابتًا للجهاز، بل مقياسًا خاصًا للسائل: الحجم الذي يتساوى عنده الوزن مع التوتر، $\\lambda_c = \\sqrt{\\sigma/\\rho g}$. كل ما هو أصغر يعيش في عالم التوتر — القطرة كرة تمامًا، حشرة الماء لا تغرق، الماء يعلق في الشاش. كل ما هو أكبر يعيش في عالم الجاذبية — القطرة تنبسط، البركة تنتشر، العمود ينهار. من هنا أيضًا حد حجم قطرة المطر: أكبر من بضعة ملليمترات لا تبقى متماسكة وتتمزق بفعل الهواء المتدفق.",
+     "mnemo": "اثنان إلى ثلاثة ملليمترات — هذا هو حجم القطرة التي تسقط من الصنبور. تذكر هذه القطرة: إنها تقف بالضبط على الحد الفاصل بين العالمين."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "كيف يرتبط هذا ببقية الدورة",
+   "lead": "التوتر السطحي ليس موضوعًا منفصلاً، بل هو الوجه الآخر لنفس التجاذب بين الجزيئات الذي فسر به في §1 انحراف الغاز الحقيقي عن المثالي.",
+   "items": [
+    {
+     "h": "القسم الأول: نفس القوة، محاسبة مختلفة",
+     "text": "في §1 تحول تجاذب الجزيئات إلى تصحيح $a/V^{2}$ — نقص في الضغط عند الجدار لأن الجزيء يُسحب للخلف بواسطة جيرانه. هنا نفس التجاذب يُحسب ليس من خلال الضغط بل من خلال طاقة السطح. الجسر بين القسمين مرئي على المنصة: توتر الماء σ ينخفض من 0.076 N/m عند 0 درجة مئوية إلى 0.059 عند 100 درجة مئوية ويصبح صفرًا تمامًا عند النقطة الحرجة، التي حصلنا على إحداثياتها في §1. السبب واحد: هناك يختفي الفرق بين السائل والبخار، ومعه يختفي السطح نفسه. لا سطح — لا شيء لدفع ثمنه."
+    },
+    {
+     "h": "الهيدروستاتيكا: حشرة الماء والشاش على الكوب",
+     "text": "في موضوع الضغط في السائل الساكن، أشرنا مرتين إلى التوتر دون حسابه: حشرة الماء تبقى على السطح، والماء لا ينسكب عبر الشاش الذي يغطي كوبًا مقلوبًا. الآن يمكن حسابه. خلية شبكة نصف قطرها $r$ تتحمل فرق ضغط يصل إلى $2\\sigma/r$؛ لتحمل عمودًا بارتفاع 12 سم، أي 1.2 كيلوباسكال، نحتاج نصف قطر حوالي 0.12 مم. في الشاش، الخلية هي بالضبط هذه الأعشار من المليمتر، لذلك تعمل التجربة — ولكن عند الحد، ومع شبكة خشنة لا تنجح."
+    },
+    {
+     "h": "اللزوجة: الشعري يرفع، لكنه أيضًا يبطئ",
+     "text": "معادلة جورين تعطي الارتفاع النهائي ولا تتحدث عن الزمن. والزمن تحدده اللزوجة: مقاومة التدفق في الأنبوب تزداد كـ $r^{-4}$ — هذا قانون بويزويل من موضوع التدفقات اللزجة. النتيجة هي مفارقة مألوفة لكل من اختار المناشف الورقية: المسام الواسعة تمتص بسرعة، لكن ليس عاليًا؛ المسام الضيقة تمتص عاليًا، لكن ببطء. لنفس السبب، صعود الماء في جدار من الطوب نظريًا يجب أن يصل إلى عشرات الأمتار، لكنه في الواقع يتوقف عند حوالي متر: التبخر من الجدار ينجح في حمل الماء بعيدًا أسرع من قدرة المسام الضيقة على سحبه."
+    },
+    {
+     "h": "التحولات الطورية: لماذا يحتاج الغليان إلى بداية",
+     "text": "نواة الطور الجديد — فقاعة في السائل أو قطيرة في البخار — تكون صغيرة في البداية، وبالتالي سطحها مكلف مقارنة بالكسب في الحجم. من هنا السائل المسخن فوق درجة الغليان الذي لا يغلي بدون مراكز تكوين البخار، والبخار المبرد دون درجة التكاثف الذي لا يتكاثف بدون نوى التكاثف. الجانب الكمي لهذا هو معادلة كلفن في الملحق: فوق قطيرة صغيرة، ضغط البخار المشبع أعلى منه فوق سطح مستو، ولذلك القطرات الصغيرة تتبخر لصالح الكبيرة."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "مثير للاهتمام: جرّب بيديك",
+   "lead": "التوتر السطحي موضوع نادر حيث تكون التجربة المنزلية ليست مجرد توضيح بل قياسًا: باستخدام قطارة المطبخ يمكن قياس σ بدقة تصل إلى عشرات بالمئة.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "تجربة في المطبخ",
+     "h": "مشبك ورق يطفو، وقطرة صابون تغرقه",
+     "text": "املأ طبقًا بالماء. افصل قطعة من منديل ورقي وضعها على الماء، ثم ضع مشبك ورق أو إبرة خياطة على المنديل. بعد نصف دقيقة يبتل المنديل ويغرق، بينما يبقى المشبك طافيًا. انظر من الجانب: ستلاحظ أن السطح منخفض حوله. الآن أسقط قطرة من سائل غسيل الأطباق في الطرف البعيد من الطبق، ولا ترمش.",
+     "answer": "المشبك لا يطفو وفقًا لأرخميدس: الفولاذ أثقل من الماء بـ 7.8 مرة، ولا يكفي إزاحته لحجمه. ما يبقيه هو انخفاض السطح، وبشكل أدق التوتر على طول خطي التلامس على الجانبين. لنحسب الحد الأقصى. وزن إبرة أسطوانية طولها $L$ وقطرها $d$ هو $\\rho_{\\text{فولاذ}}\\,g\\,\\pi d^{2}L/4$، والتوتر على الجانبين يعطي قوة رفع قصوى $2\\sigma L$. الطول يُختصر، ويتبقى $d_{\\max} = \\sqrt{8\\sigma/(\\pi\\rho_{\\text{فولاذ}} g)} = 1{,}56$ مم. إبرة الخياطة العادية قطرها 0.6–0.8 مم، أي أن لديها هامشًا رباعيًا في الكتلة، لذلك تطفو بثقة. أما مع مسمار قطره 3 مم فلن تنجح التجربة مهما كانت الدقة، وهذا تنبؤ بالمعادلة وليس مسألة براعة.\n\nالآن بخصوص قطرة الصابون. التوازن الجديد يعطي $d_{\\max} = 1{,}0$ مم — انخفض الحد بمقدار مرة ونصف فقط، ووفقًا لهذه الحسابات كان يجب أن تبقى الإبرة الرفيعة طافية. لكنها تغرق فورًا لسبب آخر: الصابون ينتشر على السطح مكونًا تدرجًا في σ، وتدرج التوتر يسحب السطح بعيدًا عن القطرة (وهذا يسمى تأثير مارانجوني). المشبك يُقتلع حرفيًا من انخفاضه، وجزيء الفاعل بالسطح القادم يغير أيضًا زاوية التلامس. يجدر تجربة الأمر بالعكس أيضًا: أسقط الصابون مسبقًا، وحرّك المحلول، ثم حاول وضع مشبك على محلول صابوني متوازن — الإبرة الرفيعة ستطفو، وإن كان ذلك على مضض ملحوظ."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "تجربة في المطبخ",
+     "h": "عدّ القطرات: قس σ بقطارة المطبخ",
+     "text": "خذ قطارة أو حقنة بدون إبرة. املأها بماء نقي وأطلق قطرات حتى تفرغ 5 ملليلترات بالضبط في كأس قياس، مع عدّ القطرات. اغسلها، ثم املأها بماء مذاب فيه قطرة من سائل غسيل الأطباق وكرر العملية — نفس الـ 5 ملليلترات، نفس الطرف، نفس الإيقاع. قارن عدد القطرات.",
+     "answer": "تتساقط القطرة عندما يتساوى وزنها مع التوتر الذي يمسكها على محيط الفوهة: $mg = 2\\pi r\\sigma$. هذا قانون تيت، وبناءً عليه صُمم مقياس التقطير (stalagmometer) — الأداة التي قيست بها σ منذ مئة عام. لفوهة نصف قطرها 1 مم وماء نقي نحصل على $m = 2\\pi\\cdot10^{-3}\\cdot0{,}0728/9{,}81 = 47$ ملغ، أي حوالي 21 قطرة لكل ملليلتر.\n\nلكن المثير للاهتمام ليس القيمة المطلقة بل النسبة. نصف قطر الفوهة و $g$ متماثلان في السلسلتين، لذا فإن عدد القطرات لحجم معين يتناسب عكسيًا مع σ: $N_{\\text{صابون}}/N_{\\text{ماء}} = \\sigma_{\\text{ماء}}/\\sigma_{\\text{صابون}} \\approx 0{,}073/0{,}030 = 2{,}4$. حيث استهلك الماء النقي مئة قطرة، يستهلك الماء الصابوني حوالي مئتين وأربعين. تحفظ صادق، بدونه لكان التوافق مع المطبخ تزويرًا: قانون تيت يبالغ في كتلة القطرة بحوالي مرة ونصف، لأن جزءًا من السائل يبقى معلقًا على الفوهة عند الانفصال — هذا تصحيح هاركينز وبراون. معه تتحول 47 ملغ إلى 31، أي إلى 32 قطرة لكل ملليلتر، بينما يعطي المطبخ 20–25. كل شيء يتوافق على أي حال، لكن بطريقة مختلفة: القطرة تتدلى على الحافة الخارجية للفوهة، وهي في قطارة الصيدلية ليست ملليمترًا بل ملليمترًا ونصف. ملليمتر ونصف يعطي 70 ملغ مثالية، مع التصحيح 47 ملغ — تلك الـ 21 قطرة لكل ملليلتر. لهذا السبب تقاس القيمة المطلقة لـ σ بشكل تقريبي، بينما النسبة تقاس بدقة معقولة: التصحيح متطابق تقريبًا لكلتا السائلين ويُختصر في النسبة."
+    },
+    {
+     "icon": "paradox",
+     "kind": "مفارقة",
+     "h": "القلعة تُبنى من الرمل المبلل، لا من الجاف ولا من المغمور",
+     "text": "الرمل الجاف ينهار. الرمل تحت الماء ينهار أيضًا. أما الرمل الرطب فيحمل جدارًا عموديًا وبرجًا بارتفاع نصف متر. الماء ليس غراء ولا يلصق شيئًا — من أين تأتي الصلابة ولماذا تختفي بمجرد إضافة المزيد من الماء؟",
+     "answer": "بين حبيبات الرمل المتجاورة تتجمع الرطوبة في جسور صغيرة ذات سطح مقعر. السطح المقعر وفقًا لمعادلة لابلاس يعني ضغطًا منخفضًا داخل الجسر، وهذا الضغط المنخفض يجذب الحبيبات إلى بعضها. لنقدر القوة. حبيبة رمل نصف قطرها 100 ميكرومتر، وعنق الجسر نصف قطر انحناءه حوالي 10 ميكرومتر: انخفاض الضغط $2\\sigma/r \\approx 15$ كيلوباسكال، وقوة التجاذب بالتقريب $\\pi r_{\\text{حبيبة}}\\sigma \\approx 2\\cdot10^{-5}$ نيوتن. وزن الحبيبة نفسها عند كثافة 2650 كجم/م³ حوالي $1\\cdot10^{-7}$ نيوتن. القوة الشعرية أكبر من الوزن بمئتي مرة، ولذلك يقف البرج.\n\nالآن يتضح الباقي. في الرمل الجاف لا توجد جسور — لا شيء يمسك. في الرمل المغمور بالماء لا توجد أيضًا: الماء مستمر، لا جسور مقعرة، والبناء ينهار من جديد. الصلابة تعيش فقط في نطاق ضيق من الرطوبة، عادة من واحد إلى عدة بالمئة بالكتلة، وهذا بالضبط ما جربه الجميع على الشاطئ. نفس الفيزياء تجعل الدقيق يتكتل، وتلصق الملح في المملحة، وتجعل الغبار يلتصق بقطعة قماش مبللة."
+    },
+    {
+     "icon": "fact",
+     "kind": "حقيقة ممتعة",
+     "h": "ملعقة زيت على البركة وأول قياس لحجم الجزيء",
+     "text": "في عام 1774، سكب بنجامين فرانكلين ملعقة صغيرة من زيت الزيتون على بركة في كلافام بلندن، ووصف بسرور كيف هدأت التموجات فورًا على مساحة نصف فدان تقريبًا. توقف عند هذا الحد. بعد أكثر من مئة عام، أخذ اللورد رايلي أرقامه وقسم الحجم على المساحة.",
+     "answer": "ملعقة صغيرة تعادل 5 ملليلترات، أي 5·10⁻⁶ م³. نصف فدان حوالي 2000 م². نقسم: سماكة الفيلم 2.5·10⁻⁹ متر، أي اثنان ونصف نانومتر. لا فيزياء هنا سوى قسمة الحجم على المساحة — والنتيجة مذهلة: الزيت انتشر حتى سماكة جزيء واحد ورفض الانتشار أكثر. طول جزيء حمض الأوليك حوالي نانومترين. هكذا قُيس حجم الجزيء لأول مرة، وكانت الأداة بركة.\n\nواصلت هذا الخط أغنيس بوكيلس المذكورة سابقًا: حوضها الصغير سمح بضغط الطبقة الأحادية بشريط ومراقبة متى يبدأ التوتر بالانخفاض — أي عندما تصطف الجزيئات متلاصقة. حوّلها إيرفينغ لانغموير إلى أداة مخبرية، وحصل على جائزة نوبل عام 1932 لأعماله على الطبقات الأحادية، واليوم يقف حوض لانغموير-بلودجيت في مختبرات حيث تُزرع أغشية بسماكة جزيء واحد."
+    },
+    {
+     "icon": "edge",
+     "kind": "حدود التطبيق",
+     "h": "ورقة اللوتس وزاوية تلامس غير موجودة",
+     "text": "معادلة يونغ تعطي رقمًا واحدًا θ لزوج معين «سائل-صلب». على سطح حقيقي هذا الرقم غير موجود: قطرة على زجاج مائل لا تنزلق إذا كان الميل صغيرًا، وحافتها الأمامية تقف بزاوية مختلفة عن الخلفية — الفرق يصل إلى عدة عشرات من الدرجات.",
+     "answer": "افترض يونغ سطحًا أملسًا تمامًا ومتجانسًا كيميائيًا. السطح الحقيقي خشن، وعلى كل نتوء يعلق خط التلامس. من هنا يأتي تخلف زاوية التلامس: زاوية التقدم أكبر من زاوية الانحسار، والقطرة تبقى على الميل طالما أن فرق الإسقاطات لا يتجاوز قوة الانزلاق. الخشونة أيضًا تعزز الخاصية الأصلية للسطح بدلًا من تخفيفها: وفقًا لمعادلة وينزل، يُضرب جيب التمام بمعامل الخشونة، لذا يصبح السطح القابل للبلل أكثر قابلية، وغير القابل أكثر مقاومة.\n\nورقة اللوتس تصل بهذا إلى أقصى حد. سطحها مغطى بنتوءات شمعية بضعة ميكرومترات، وفوقها بنية أدق؛ الماء لا يغوص بين النتوءات بل يستقر على قممها مستندًا إلى وسائد هوائية. هذا نمط كاسي، وزاوية التلامس الفعالة تصل إلى 160°: القطرة شبه كروية، تتدحرج عند أدنى ميل وتأخذ معها الغبار. الطلاءات الصناعية الطاردة للماء تحاكي هذه الهندسة وليس الكيمياء — ولذلك تتوقف عن العمل عندما يملأ الفاعل بالسطح (أي المنظف العادي) الجيوب الهوائية."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "ما الذي أهملناه",
+   "blocks": [
+    {
+     "h": "الغضروف الهلالي ليس نصف كرة، ومعادلة جورين ليست دقيقة",
+     "text": "افترضنا أن الغضروف الهلالي في الأنبوب هو جزء من كرة نصف قطرها $R = r/\\cos\\theta$. هذا صحيح طالما أن الأنبوب أضيق بكثير من الطول الشعري: عندها لا يتوفر للجاذبية وقت لتشويه الشكل. عندما يكون $r$ مقاربًا لـ 2.7 مم، يكون الغضروف الهلالي مفلطحًا بشكل ملحوظ، وتكون المعادلة مبالغة في الإجابة. مثال من الممارسة: للزئبق في أنبوب نصف قطره 5 مم، تعطينا معادلتنا انخفاضًا قدره 1.1 مم، بينما تعطي الجداول البارومترية أجزاءً من المليمتر، لأن غضروفًا هلاليًا بهذا العرض لا يمكن فيزيائيًا أن يصبح قطعة كروية بزاوية 140 درجة. لهذا السبب تحديدًا، في البارومترات الزئبقية الدقيقة، يُجعل قناة الأنبوب بعرض 8-10 مم: حيث يكون التصحيح صغيرًا ومُجدولًا جيدًا. التصحيح الثاني، الأكثر تواضعًا، يعمل في نفس الاتجاه: وزن السائل نفسه في الغضروف الهلالي فوق أدنى نقطة له يحافظ على نفس التوتر، ويرتفع العمود أقل من المحسوب بحوالي $r/3$.",
+     "latex": "R_{\\text{men}} = \\frac{r}{\\cos\\theta} \\;\\Longrightarrow\\; \\Delta p = \\frac{2\\sigma\\cos\\theta}{r} = \\rho g h, \\qquad h_{\\text{exact}} \\approx \\frac{2\\sigma\\cos\\theta}{\\rho g r} - \\frac{r}{3}"
+    },
+    {
+     "h": "زاوية التلامس ليست ثابتة للمادة",
+     "text": "في الجداول يُكتب \"الماء على الزجاج - 0°، على البارافين - 105°\"، كما لو كانت خاصية لزوج من المواد. على سطح أملس تمامًا ومتجانس كيميائيًا، سيكون الأمر كذلك. السطح الحقيقي خشن وملوث، وبدلاً من زاوية واحدة لديه فترة كاملة: زاوية التقدم (عندما تتحرك الحافة للأمام) أكبر من زاوية الانحسار (عندما تتراجع الحافة)، والفرق - التباطؤ - يصل إلى 20-50 درجة. الخشونة تدخل في الاعتبار وفقًا لمعادلة وينزل، وإذا كان السائل يجلس على قمم المخالفات مستندًا على الهواء، فوفقًا لمعادلة كاسي. الاستنتاج العملي بسيط: حساب الارتفاع الشعري باستخدام θ المجدولة يعطي رقمًا بدقة تصل إلى عشرات بالمئة، وهو موثوق فقط للأزواج المبللة تمامًا حيث $\\cos\\theta$ تقريبًا يساوي واحدًا.",
+     "latex": "\\cos\\theta^{*} = r_{\\text{rough}}\\cos\\theta \\;\\;(\\text{Wenzel}), \\qquad \\cos\\theta^{*} = f\\cos\\theta - (1-f) \\;\\;(\\text{Cassie})"
+    },
+    {
+     "h": "σ تعتمد على الشوائب، وتدرجها يدفع السائل",
+     "text": "التوتر السطحي هو أكثر الثوابت تقلبًا في هذا الدرس. أجزاء من مئة بالمئة من مادة خافضة للتوتر السطحي كافية لخفضه إلى مرة ونصف، وأجزاء من عشرة بالمئة تكفي لخفضه إلى النصف، لأن مثل هذا الجزيء يذهب بنفسه إلى السطح ويتركز هناك؛ كميًا يصف ذلك معادلة امتزاز جيبس. لذلك تتطلب قياسات σ نظافة شبه مهووسة - كانت أغنيس بوكيلز تغسل حوضها لساعات - ولهذا السبب أيضًا لن تنجح أي تجربة في هذا القسم في وعاء غُسل فيه شيء دهني مؤخرًا. لكن لتغير σ فيزياؤه الخاصة: إذا كان التوتر مختلفًا في أماكن مختلفة من السطح، فإن السطح يتدفق من σ الصغير إلى الكبير ويسحب السائل معه. هذا هو تأثير مارانجوني. انثر فلفلًا مطحونًا على الماء وأسقط قطرة من المنظف في المنتصف: سيهرب الفلفل إلى الحواف - ليس \"مدفوعًا\" بل يتحرك مع السطح. هو أيضًا يغرق مشبك الورق في التجربة الأولى، وهو أيضًا يحرك حبيبات التوابل في قدر مسخن من الأسفل، حيث لا ينشئ التدرج في σ شائبة بل درجة الحرارة."
+    },
+    {
+     "h": "معادلة كلفن: فوق القطرة الصغيرة البخار أكثر كثافة",
+     "text": "اعتبرنا أن انحناء السطح يغير الميكانيكا فقط. إنه يغير أيضًا الديناميكا الحرارية: الجزيء على سطح محدب لديه جيران أقل من على سطح مستوٍ، ومن الأسهل له أن يهرب. لذلك ضغط البخار المشبع فوق قطرة أعلى منه فوق سطح مستوٍ من الماء، وكلما كانت القطرة أصغر كان الفرق أكبر. الأرقام: لقطرة نصف قطرها 1 ميكرومتر، الزيادة 0.11%، ولقطرة 10 نانومتر، بالفعل 11%. من هنا نتيجتان. الأولى: في هواء نقي تمامًا، لا يتشكل الضباب حتى مع فرط تشبع ملحوظ - فالنواة الصغيرة تتبخر فورًا مرة أخرى، وهناك حاجة إلى نوى تكاثف، أي جزيئات غبار وملح. الثانية: في السحابة، تنمو القطرات الكبيرة على حساب الصغيرة، لأنه من الأصعب على الصغيرة الاحتفاظ ببخارها - هكذا تتجمع قطرة المطر من الضباب. تُشتق من تساوي الكمونات الكيميائية للسائل والبخار، مع إضافة قفزة لابلاس في الضغط؛ أقرب قريب لها هو معادلة كلاوزيوس-كلابيرون من موضوع التحولات الطورية. هنا نأخذ النتيجة فقط.",
+     "latex": "\\ln\\frac{p(r)}{p_\\infty} = \\frac{2\\sigma V_m}{r\\,RT}; \\qquad r = 1\\ \\text{\\mu m}: +0{,}11\\,\\%, \\qquad r = 10\\ \\text{nm}: +11\\,\\%"
+    }
+   ]
+  },
+  "memo": {
+   "essence": "الجزيء عند الحدود ينقصه نصف الجيران، وعن كل متر مربع من الحدود يدفع السائل طاقة σ. نفس σ، معاد كتابتها بالنيوتن لكل متر، هي قوة التوتر — هذا رقم واحد بوحدتين. السطح المنحني يضغط ما تحته بمقدار $\\Delta p = 2\\sigma/R$ (للغشاء ذي السطحين — $4\\sigma/R$)، وهذا القفز نفسه يرفع السائل في أنبوب ضيق إلى $h = 2\\sigma\\cos\\theta/(\\rho g r)$.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "جول/م² = نيوتن/م",
+     "text": "الطاقة السطحية والتوتر السطحي — كمية واحدة بوحدتين؛ إطار مع عارضة يحول الواحدة إلى الأخرى في سطر واحد"
+    },
+    {
+     "icon": "scale",
+     "title": "عكسي مع نصف القطر",
+     "text": "$\\Delta p = 2\\sigma/R$: كلما كانت القطرة أصغر، زاد انضغاطها. في قطرة ميكرونية يوجد داخل ضغط زائد يبلغ جوا ونصف"
+    },
+    {
+     "icon": "fact",
+     "title": "جيب التمام يحدد الإشارة",
+     "text": "$\\theta < 90^\\circ$ — يرتفع السائل، $\\theta > 90^\\circ$ — ينخفض. الماء في الزجاج يتسلق لأعلى، والزئبق في نفس الزجاج ينزل لأسفل"
+    },
+    {
+     "icon": "edge",
+     "title": "الطول الشعري 2.7 مم",
+     "text": "حدود العالمين: الأصغر يحكمه التوتر (القطرة كرة)، والأكبر يحكمه الجاذبية (القطرة قرص)"
+    }
+   ],
+   "where": [
+    "الفوهات والرش: 200 مل من الماء في قطرات ميكرونية تعطي 600 م² من السطح، وبالتالي تتبخر أسرع بما لا يقاس من الماء المسكوب",
+    "المنظفات: المواد الخافضة للتوتر السطحي تقلل σ مرتين إلى ثلاث مرات، وأخيراً يتغلغل الماء في مسام القماش بدلاً من أن يعلق عليها كغشاء",
+    "الرئتان: الفاعل بالسطح يقلل التوتر كلما كانت الحويصلة أصغر، ويمنع الصغيرة من الانهيار إلى كبيرة",
+    "الفتيل، وورق النشاف، والمنشفة الورقية، والبناء بالطوب: المسام الضيقة ترفع أعلى، لكنها تمتص ببطء أكبر",
+    "بارومتر الزئبق: الانخفاض الشعري في القناة الضيقة يتطلب تصحيحاً جدولياً، لذلك تُصنع القناة واسعة",
+    "قلعة من الرمل المبلل: جسور الماء بين حبيبات الرمل تشدها بقوة تعادل مئتي وزن حبة الرمل"
+   ],
+   "watchOut": "ثلاثة فخاخ. الأول: الخلط بين $2\\sigma/R$ و $4\\sigma/R$: الأربعة تظهر فقط حيث يكون للغشاء سطحان، أي في فقاعة الصابون؛ في القطرة والغضروف المفصلي السطح واحد. الثاني: وضع القطر في معادلة الارتفاع بدلاً من نصف القطر: تكون الإجابة أقل بمقدار النصف بالضبط وتبدو معقولة لأن ترتيب المقدار محفوظ. الثالث، وهو جوهري: الاعتقاد بأن الشعيرات ترفع الماء في الأشجار: هي توصل الماء، والرفع يتم بواسطة التبخر عبر المسام النانوية في الورقة، والماء في الجذع ليس مضغوطاً بل مشدوداً."
+  },
+  "quiz": [
+   {
+    "id": "sf1",
+    "type": "mcq",
+    "q": "فقاعتان صابونيتان، كبيرة وصغيرة، منفوختان على طرفي أنبوب مع صنبور مغلق في المنتصف. يُفتح الصنبور. ماذا سيحدث؟",
+    "options": [
+     "ستتبادل الفقاعتان الهواء وتصبحان بنفس الحجم",
+     "ستنكمش الصغيرة وتتضخم الكبيرة أكثر",
+     "ستنكمش الكبيرة لتصبح صغيرة: لأن مساحتها أكبر وطاقتها المخزنة أكبر",
+     "لن يتغير شيء: الغشاء مشدود بنفس القوة، لذا يضغط بنفس القوة"
+    ],
+    "answer": 1,
+    "why": "الضغط داخل الفقاعة $\\Delta p = 4\\sigma/R$ يتناسب عكسياً مع نصف القطر، لذا يكون أكبر في الصغيرة. ينتقل الهواء من حيث الضغط أعلى؛ الصغيرة تنكمش، ويزداد ضغطها أكثر، وتتسارع العملية ذاتياً — لا يوجد توازن في المنتصف. الإجابة «الكبيرة ستنكمش لتصبح صغيرة» تخلط بين الضغط والطاقة: الطاقة السطحية الكلية للفقاعة الكبيرة أكبر بالفعل، لكن التدفق يحركه فرق الضغط، ليس مخزون الطاقة. الرابعة هي الخطأ الأكثر شيوعاً: التوتر السطحي متساوٍ بالفعل في كلتيهما، لكن ما يضغط هو الانحناء، وليس التوتر. هكذا تتصرف الحويصلات الهوائية في الرئتين لولا السورفاكتانت الذي يخفض σ خاصة في المنضغطة.",
+    "hint": "اكتب $\\Delta p = 4\\sigma/R$ لكلتا الفقاعتين وقارن. أيهما ضغطه أعلى: الذي نصف قطره أصغر أم الأكبر؟"
+   },
+   {
+    "id": "sf2",
+    "type": "mcq",
+    "q": "ارتفع الماء في أنبوب شعري إلى 15 سم وتوقف. استُبدل الأنبوب بآخر مماثل تماماً لكنه قصير: قمته العلوية الآن على ارتفاع 5 سم فقط فوق سطح الماء في الوعاء. ماذا سيحدث؟",
+    "options": [
+     "سيتدفق الماء باستمرار من القمة — سيكون لدينا نافورة أبدية",
+     "سيصل الماء إلى القمة ويتوقف، ويصبح الغضروف المفصلي أكثر تسطحاً",
+     "سيرتفع الماء فقط 5 سم، لكن الغضروف المفصلي سيحتفظ بانحناءه السابق، وسيبقى جزء من الأنبوب جافاً",
+     "لن يرتفع الماء إطلاقاً: الأنبوب القصير لا يمكنه خلق الشفط اللازم"
+    ],
+    "answer": 1,
+    "why": "يتوقف الارتفاع عندما يوازن قفزة لابلاس $2\\sigma\\cos\\theta/r$ وزن العمود $\\rho g h$. إذا كان الأنبوب أقصر من الارتفاع التوازني، يصطدم العمود بالقمة، لكن التوازن يجب أن يتحقق — ويضبط النظام المعامل الحر الوحيد، وهو انحناء الغضروف المفصلي: يتسطح تماماً بالقدر الذي يجعل القفزة تساوي $\\rho g\\cdot 5$ سم، أي ثلث القيمة السابقة. على حافة القمة، يكون خط التلامس مثبتاً ويمكنه تحمل أي زاوية في نطاق واسع — وهذا يسمى التثبيت على الحافة. إجابة النافورة الأبدية تنتهك حفظ الطاقة: لانفصال قطرة وتدفقها، يجب إنشاء سطح جديد، وهذا يكلف بالضبط الطاقة التي حررها الارتفاع. الثالث غير صحيح لأن انحناء الغضروف المفصلي وارتفاع العمود مرتبطان بشكل صارم: لا يمكن الحفاظ على الانحناء وعدم الوصول إلى القمة في نفس الوقت.",
+    "hint": "في المعادلة $h = 2\\sigma\\cos\\theta/(\\rho g r)$، لم يتغير نصف قطر الأنبوب ولا σ، لكن h خُفضت قسراً إلى الثلث. أي كمية في المعادلة بقيت حرة؟"
+   },
+   {
+    "id": "sf3",
+    "type": "free",
+    "q": "بكلماتك الخاصة: لماذا لا تستطيع الشجرة الطويلة رفع الماء بالشعيرات الدموية في جذعها فقط، وما الذي يرفعه إذن إلى ارتفاع مئة متر؟",
+    "keywords": [
+     "نصف القطر",
+     "ضيق",
+     "واسع",
+     "وعاء",
+     "مسام نانوية",
+     "ورقة",
+     "تبخر",
+     "سلبي",
+     "تمدد",
+     "غضروف مفصلي",
+     "0.15"
+    ],
+    "needed": 2,
+    "why": "ارتفاع الرفع يتناسب عكسياً مع نصف القطر: $h = 2\\sigma\\cos\\theta/(\\rho g r)$. لرفع الماء إلى 100 متر، نحتاج أنبوباً نصف قطره 0.15 ميكرون. أوعية وقصيبات الجذع أعرض بحوالي مئة مرة — نصف قطرها حوالي 10 ميكرون — ومثل هذا الأنبوب يعطي على الأكثر متراً ونصفاً. إذن الشعيرات في الجذع لا ترفع الماء، بل تنقله فقط. ما يرفعه هو التبخر عبر الثغور في الورقة: الغضاريف الهلالية في المسام النانوية لجدران الخلايا (نصف قطر حوالي 10 نانومتر) قادرة على تحمل فرق ضغط حوالي 15 ميجا باسكال وتسحب الماء إلى الأعلى مثل مكبس. العمود ليس مضغوطاً بل ممدوداً — الضغط في جذع السيكويا سلبي، حوالي −2 ميجا باسكال. الماء في الشجرة معلق على غضاريف الورقة، وليس مدفوعاً من الأسفل.",
+    "hint": "اقلب معادلة الارتفاع واحسب نصف القطر اللازم لمئة متر. ثم قارن بالعرض الحقيقي لأوعية الشجرة — وفكر أين توجد مسام أصغر بعدة مراتب في الشجرة."
+   },
+   {
+    "id": "sf4",
+    "type": "estimate",
+    "q": "قدر الضغط الزائد داخل قطرة ضباب نصف قطرها 5 ميكرومتر. التوتر السطحي للماء 0.073 نيوتن/متر. أجب بالكيلوباسكال.",
+    "answer": 29,
+    "unit": "كيلوباسكال",
+    "why": "$\\Delta p = 2\\sigma/R = 2\\cdot0.073/(5\\cdot10^{-6}) = 2.9\\cdot10^{4}$ باسكال، أي 29 كيلوباسكال. في الذهن: 0.146 مقسومة على خمسة ميكرونات — هذا 0.146 مضروباً في 2·10⁵، حوالي ثلاثين كيلوباسكال. التحقق بالمنطق السليم: ما يقرب من ثلث الضغط الجوي داخل قطرة لا يمكن حتى رؤيتها بالعين — وهذا متواضع، ففي قطرة بحجم ميكرون الضغط أكبر بخمس مرات. الخطأ الأكثر شيوعاً هنا هو استخدام $4\\sigma/R$: الرقم 4 يظهر فقط في غشاء ذي سطحين، بينما القطرة لها سطح واحد. الخطأ الثاني من حيث الشيوع هو نسيان تحويل الميكرونات إلى أمتار.",
+    "tolAbs": 6,
+    "hint": "معادلة لابلاس للقطرة، وليس لفقاعة الصابون. وحوّل نصف القطر إلى أمتار: 5 ميكرومتر = 5·10⁻⁶ م."
+   }
+  ]
  }
 }
