@@ -2234,6 +2234,18 @@ html[dir="rtl"] .cov-bar-tot, html[dir="rtl"] .cov-bar-take { left: auto; right:
    Крестику containing block даёт сам fixed, отдельный relative не нужен. */
 .tip-close { position: absolute; top: 2px; right: 4px; width: 18px; height: 18px; line-height: 1;
   border: none; background: none; color: var(--soft); font-size: 15px; cursor: pointer; padding: 0; }
+/* На телефоне крестик — единственный способ закрыть подсказку, а 18px пальцем не берутся:
+   он читался как «съехавший», потому что мимо него легко промахнуться, а текст подсказки
+   подходит под него вплотную. Даём палец (28px), отступ от края и гарантированное место
+   под крестик справа, чтобы первая строка не уезжала под него. RTL зеркалим тем же. */
+@media (max-width: 640px) {
+  .tip-close { top: 4px; right: 4px; width: 28px; height: 28px; font-size: 17px;
+    display: flex; align-items: center; justify-content: center; }
+  .tag-tooltip, .graph-tooltip { padding-right: 34px; }
+  html[dir="rtl"] .tip-close { right: auto; left: 4px; }
+  html[dir="rtl"] .tag-tooltip, html[dir="rtl"] .graph-tooltip {
+    padding-right: 10px; padding-left: 34px; }
+}
 .tip-close:hover { color: var(--link); }
 html[dir="rtl"] .tag-tooltip { padding-right: 10px; padding-left: 22px; }
 html[dir="rtl"] .tip-close { right: auto; left: 4px; }

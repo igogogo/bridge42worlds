@@ -1766,6 +1766,32 @@ function initAllTooltips() {
         if (TOUCH) {
             // У авторов тултип не нужен (владелец): обычная ссылка, один тап — переход.
             if (el.dataset.author) return;
+            // РАЗДЕЛЫ. Тап по чипу раздела — это ФИЛЬТР, а не подсказка. Обработчик ниже
+            // гасит клик на фазе погружения (stopImmediatePropagation), и до фильтра
+            // (bar.onclick, filterByCategory) он не доходил вовсе: на телефоне раздел
+            // нажимался и ничего не происходило (владелец 2026-08-18: «нажал раздел,
+            // фильтр не сработал»). На десктопе баг невидим — там подсказка по наведению,
+            // а клик уходит фильтру. Описание раздела на телефоне даём долгим нажатием.
+            if (el.classList && (el.classList.contains('cat-chip') ||
+                                 el.classList.contains('card-cat') ||
+                                 el.classList.contains('cat-badge'))) {
+                var lpTimer = null, lpFired = false;
+                el.addEventListener('touchstart', function () {
+                    lpFired = false;
+                    lpTimer = setTimeout(function () { lpFired = true; showTipFor(el); }, 500);
+                }, { passive: true });
+                ['touchend', 'touchmove', 'touchcancel'].forEach(function (ev) {
+                    el.addEventListener(ev, function () {
+                        if (lpTimer) { clearTimeout(lpTimer); lpTimer = null; }
+                    }, { passive: true });
+                });
+                // После долгого нажатия показали описание — обычный клик тогда не нужен,
+                // иначе следом сработает и фильтр, и читатель получит два действия за один тап.
+                el.addEventListener('click', function (e) {
+                    if (lpFired) { e.preventDefault(); e.stopPropagation(); lpFired = false; }
+                }, true);
+                return;
+            }
             // capture=true обязателен: у тегов В ТЕКСТЕ статьи висит собственный
             // onclick="window.location=..." прямо в разметке генератора, и без перехвата
             // на фазе погружения наш обработчик приходил вторым — тап давал «подсветку
