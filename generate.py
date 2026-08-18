@@ -1205,6 +1205,64 @@ _ORIG_ABS = {
 }
 
 
+# Плашка у NC/ND-работ и её пояснение (в подсказке). Объясняем читателю, почему разбор
+# такой работы легален: копирайт защищает выражение, а не факты и идеи; наш текст — наша
+# собственная работа, авторский материал (рисунки, подписи) не воспроизводится, дословная
+# аннотация показывается неизменной со ссылкой на источник.
+_ANALYSIS_BADGE = {
+    "ru": "собственный разбор", "en": "independent analysis", "es": "análisis propio",
+    "fr": "analyse indépendante", "ar": "تحليل مستقل",
+}
+_ANALYSIS_NOTE = {
+    "ru": "Лицензия этой работы не разрешает переработку авторских материалов, поэтому здесь "
+          "только наш собственный текст: рисунки и подписи авторов не используются, оригинальная "
+          "аннотация приведена без изменений со ссылкой на источник. Пересказ идей своими "
+          "словами — самостоятельное произведение: авторское право защищает форму, а не сами "
+          "идеи и факты.",
+    "en": "The licence of this paper does not permit adaptation of the authors' materials, so this "
+          "page contains only our own text: the authors' figures and captions are not used, and "
+          "the original abstract appears unchanged with a link to the source. Explaining ideas in "
+          "our own words is an independent work: copyright protects expression, not ideas or facts.",
+    "es": "La licencia de este trabajo no permite adaptar los materiales de los autores, así que "
+          "esta página contiene solo nuestro propio texto: no se usan sus figuras ni leyendas, y el "
+          "resumen original aparece sin cambios con enlace a la fuente. Explicar ideas con palabras "
+          "propias es una obra independiente: el copyright protege la expresión, no las ideas.",
+    "fr": "La licence de ce travail n'autorise pas l'adaptation des contenus des auteurs : cette "
+          "page ne contient donc que notre propre texte, sans leurs figures ni légendes, et le "
+          "résumé original est reproduit tel quel avec un lien vers la source. Expliquer des idées "
+          "avec ses propres mots est une œuvre indépendante : le droit d'auteur protège "
+          "l'expression, pas les idées.",
+    "ar": "رخصة هذا العمل لا تسمح بتحوير مواد المؤلفين، لذا لا تحتوي هذه الصفحة إلا على نصنا "
+          "الخاص: لا نستخدم رسومهم أو تعليقاتهم، والملخص الأصلي معروض دون تغيير مع رابط "
+          "المصدر. شرح الأفكار بكلماتنا عمل مستقل: حقوق النشر تحمي الصياغة لا الأفكار والحقائق.",
+}
+
+
+# Снятие с публикации для NC/ND-работ: текст в модалке «Я автор». Подтверждение — письмо
+# с институтского адреса; снятие делает человек после проверки, не автомат.
+_TAKEDOWN = {
+    "ru": {"body": "Вы автор этой работы и не хотите, чтобы наш разбор был опубликован? "
+                   "Напишите нам с рабочего или университетского адреса — после подтверждения "
+                   "мы снимем страницу с публикации.",
+           "btn": "Я автор — снять с публикации"},
+    "en": {"body": "Are you an author of this paper and would prefer our analysis not to be "
+                   "published? Email us from your institutional address; once confirmed, we "
+                   "will take the page down.",
+           "btn": "I am the author — request removal"},
+    "es": {"body": "¿Es usted autor de este trabajo y prefiere que nuestro análisis no esté "
+                   "publicado? Escríbanos desde su correo institucional; tras confirmarlo, "
+                   "retiraremos la página.",
+           "btn": "Soy el autor: solicitar retirada"},
+    "fr": {"body": "Vous êtes l'un des auteurs et préférez que notre analyse ne soit pas "
+                   "publiée ? Écrivez-nous depuis votre adresse institutionnelle ; après "
+                   "confirmation, nous retirerons la page.",
+           "btn": "Je suis l'auteur : demander le retrait"},
+    "ar": {"body": "هل أنت من مؤلفي هذا العمل وتفضل عدم نشر تحليلنا؟ راسلنا من بريدك "
+                   "الجامعي، وبعد التأكد سنزيل الصفحة.",
+           "btn": "أنا المؤلف — طلب إزالة الصفحة"},
+}
+
+
 def original_abstract_html(article, lang):
     """Аннотация работы словами её авторов — в конце продвинутой версии, мелким текстом.
 
@@ -1757,8 +1815,25 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
         categories_html = badges
 
     lic = article.get("license_url", "")
-    lic_name = "CC BY 4.0" if "by/4.0" in lic else (
-        "CC BY-SA 4.0" if "by-sa" in lic else ("CC0" if "zero" in lic else "CC BY"))
+    lic_name = article.get("license_name") or license_label(lic)
+    # Признак «собственный разбор» (владелец 18.08: «ставим определённый признак и
+    # объясняем, почему это легально»). У NC/ND-работ рядом с лицензией — плашка с
+    # пояснением в подсказке: наш текст оригинален, авторский материал не воспроизводится.
+    license_note_html, author_takedown_html = "", ""
+    if article.get("license_class") == "analysis":
+        note = _ANALYSIS_NOTE.get(lang, _ANALYSIS_NOTE["en"])
+        license_note_html = (f' · <span class="lic-analysis" title="{attr_safe(note)}">'
+                             f'{safe(_ANALYSIS_BADGE.get(lang, _ANALYSIS_BADGE["en"]))}</span>')
+        # Кнопка снятия (владелец 18.08: «я автор — снять с публикации, после подтверждения»).
+        # Письмо с рабочего адреса и есть подтверждение личности: снимаем руками после
+        # проверки, автомат ничего не удаляет. Живёт в модалке «Я автор» — u автора одна
+        # дверь на все вопросы.
+        td = _TAKEDOWN.get(lang, _TAKEDOWN["en"])
+        author_takedown_html = (
+            f'<hr><p>{safe(td["body"])}</p>'
+            f'<p><a class="takedown-link" href="mailto:author@bridge42worlds.academy'
+            f'?subject=Takedown%20request%20-%20{attr_safe(article.get("id", ""))}">'
+            f'{safe(td["btn"])}</a></p>')
 
     # hreflang ведёт на index.html каждого языка, а не на текущий уровень: языковые
     # альтернативы обязаны указывать на канонические адреса, иначе поисковик отбрасывает
@@ -1822,7 +1897,8 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
         next_arrow="←" if lang in RTL_LANGS else "→",
         express_locked_js="true" if scipop.get("express_locked") else "false",
         license_label=safe(loc.get("license", "Original")),
-        license_url=lic, license_name=lic_name,
+        license_url=lic, license_name=lic_name, license_note_html=license_note_html,
+        author_takedown_html=author_takedown_html,
         canonical_url=canonical_url, page_url=page_url, hreflang_links=hreflang_links,
         tags_side_html=tags_side_html, article_graph_html=article_graph_html,
         mosaic_html=mosaic_html, ai_cover_html=ai_cover_html,
@@ -1910,6 +1986,7 @@ def save_data_json(versions_ru, article, date_str, folder, translations=None, ca
         "authors": article.get("authors", []), "date": date_str,
         "license": article.get("license_url", ""),
         "license_name": article.get("license_name") or license_label(article.get("license_url", "")),
+        **({"license_class": article["license_class"]} if article.get("license_class") else {}),
         "tags": _ok_tags,
         **({"tags_unverified": _bad_tags} if _bad_tags else {}),
         "laws": scipop_adv.get("laws", []),
@@ -4256,6 +4333,7 @@ def regenerate_all_html(only=None, force=False):
             "authors": data.get("authors", []),
             "license_url": data.get("license", ""),
             "license_name": data.get("license_name") or license_label(data.get("license", "")),
+            "license_class": data.get("license_class", ""),
             "categories": data.get("categories", []),
             "primary_category": data.get("primary_category", ""),
             "refined": data.get("refined", False),
@@ -4407,7 +4485,7 @@ def build_article(a, date_str, inputs, force=False, express=False, **kw):
 
 
 def _build_article(a, date_str, inputs, force=False, express=False, known_license=None, no_fetch=False,
-                   only_langs=None):
+                   only_langs=None, allow_restricted=False):
     """Фаза A: arXiv + PDF + все вызовы DeepSeek. Пишет только в папку статьи (гонок нет).
     Возвращает подготовленный dict либо None (пропущено/ошибка).
     express=True — дешёвый режим (см. TODO.md): один вызов generate_express() по авторской
@@ -4454,13 +4532,36 @@ def _build_article(a, date_str, inputs, force=False, express=False, known_licens
         # вообще: не тянем atom и PDF (текст берём из авторской аннотации a["summary"], обложка —
         # заглушка-мультиязычная карточка). Оба флага дефолт-выключены → обычный путь без изменений.
         if known_license is not None:
-            oai_xml, lic_url, allowed = "", known_license, True
+            oai_xml, lic_url = "", known_license
         else:
             oai_xml = get_license(a["id"])
-            allowed, lic_url = is_allowed_license(oai_xml)
-        if not allowed:
+            _, lic_url = is_allowed_license(oai_xml)
+        # Решение по классу лицензии (владелец 2026-08-18, после пропуска 2606.12457
+        # «расширяем забор»): free — полный конвейер; analysis (NC-семейство) — берём,
+        # но публикуем ТОЛЬКО собственный текст: авторские рисунки и подписи не
+        # используются, на странице признак «собственный разбор» с пояснением легальности
+        # и кнопка снятия для автора; no — не берём. allow_restricted оставлен как
+        # явный флаг run.py ids, но с расширением забора класс analysis проходит и без него.
+        cls = license_class(lic_url)
+        if cls == "no":
             print(f"  ⏭️ {a['id']} — license: {lic_url or 'none'}")
+            # Журнал отказов. До 2026-08-18 отказ жил только в консоли, и вопрос владельца
+            # «почему мы пропустили вот эту работу» был неотвечаем в принципе: id отвергнутой
+            # работы не оставался нигде (расследование по 2606.12457). Дозапись jsonl — тот же
+            # приём, что у data/gap-suggestions.jsonl: переживает прогоны, грепается за секунду.
+            try:
+                with open("data/rejected.jsonl", "a", encoding="utf-8") as rj:
+                    rj.write(json.dumps({"id": a["id"], "day": date_str, "gate": "license",
+                                         "license": lic_url or "",
+                                         "ts": datetime.now().isoformat(timespec="minutes")},
+                                        ensure_ascii=False) + "\n")
+            except Exception:
+                pass
             return None
+        if cls == "analysis":
+            a["license_class"] = "analysis"
+            print(f"  ⚠️ {a['id']} — {license_label(lic_url)}: только собственный разбор, "
+                  f"авторские рисунки и подписи не берём")
         a["license_url"], a["license_name"] = lic_url, license_label(lic_url)
         # atom.xml только сохраняется для истории, в контенте не участвует — при известной лицензии
         # не тратим на него отдельный запрос к arXiv (юзер 2026-07-24: брать из базы, меньше arXiv).
@@ -4507,6 +4608,12 @@ def _build_article(a, date_str, inputs, force=False, express=False, known_licens
         if not no_fetch and config.get("keep_pdf", True) and pdf != article_folder / "original.pdf":
             # мёртвый вес на масштабе — можно не хранить; при реюзе PDF файл уже на месте
             (article_folder / "original.pdf").write_bytes(pdf.read_bytes())
+        # NC-ND: авторские рисунки и их подписи не берём. Сам рисунок мы бы ещё могли показать
+        # неизменным, но подписи к нему у нас переводятся на пять языков — а это уже переработка
+        # авторского текста, которую ND запрещает. Обложка у статьи своя (FLUX), страница по
+        # существу ничего не теряет.
+        if a.get("license_class") == "analysis":
+            imgs, captions = [], []
         images = save_images(imgs, a["id"], article_folder) if imgs else []
         captions = captions[:len(images)]  # выравниваем по числу сохранённых картинок
         if not text: text = a["summary"]
@@ -5299,7 +5406,7 @@ def _refresh_all_aggregates():
     update_all_authors()
 
 
-def generate_ids(id_list, force=False, express=False):
+def generate_ids(id_list, force=False, express=False, allow_restricted=False):
     """Генерирует конкретные статьи по списку arXiv id. Дата берётся из метаданных
     статьи (published), поэтому статьи корректно ложатся в свои дни.
 
@@ -5317,7 +5424,8 @@ def generate_ids(id_list, force=False, express=False):
             print(f"  ❌ {aid}: нет метаданных на arXiv")
             return None
         date_str = iso_day(a.get("published")) or TARGET_DATE
-        item = build_article(a, date_str, inputs, force=force, express=express)
+        item = build_article(a, date_str, inputs, force=force, express=express,
+                             allow_restricted=allow_restricted)
         if item: item["date_str"] = date_str
         return item
 

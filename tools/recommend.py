@@ -223,7 +223,7 @@ def translate_recommend(out, lang):
             "neighbours": out["neighbours"], "frontier": out.get("frontier") or {}}
 
 
-def build(aid, show=False):
+def build(aid, show=False, hints=""):
     """Рекомендации для одной статьи. Возвращает словарь или None."""
     hits = list(ROOT.glob(f"lang/ru/archive/*/{aid}/data.json"))
     if not hits:
@@ -310,6 +310,13 @@ def build(aid, show=False):
         "",
         f"СОСЕДНИЕ РАБОТЫ ИЗ АРХИВА (найдены по смыслу):{NL}{lines_txt}",
         "",
+        # Редакционные подсказки (--hints): направления, которые редакция просит рассмотреть.
+        # Правило опоры для них НЕ ослабляется: нашлась опора в списке соседей — направление
+        # входит как обычное; не нашлась — либо не входит, либо входит с прямой пометкой
+        # «спекулятивное направление» в самом тексте, без наукообразия.
+        *( ["НАПРАВЛЕНИЯ, КОТОРЫЕ РЕДАКЦИЯ ПРОСИТ РАССМОТРЕТЬ (не обязан включать все; "
+            "включай только те, где найдёшь опору среди соседей, либо честно помечай в "
+            "тексте как спекулятивные):", hints, ""] if hints else [] ),
         "Ответь JSON:",
         '{"seen": "...", "strength": "...",',
         ' "directions": [{"text": "...", "based_on": ["id"]}],',
@@ -478,6 +485,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("aid", nargs="?")
     ap.add_argument("--show", action="store_true")
+    ap.add_argument("--hints", help="файл с редакционными направлениями для рассмотрения")
     ap.add_argument("--all-full", action="store_true")
     ap.add_argument("--fix-links", action="store_true",
                     help="дописать соседям признак полной версии (бесплатно, без модели)")
@@ -510,7 +518,10 @@ def main():
             if d.pop("recommend", None):
                 p.write_text(json.dumps(d, ensure_ascii=False, indent=2), encoding="utf-8")
                 print(f"{args.aid}: прежний раздел убран, считаем заново")
-    build(args.aid, show=args.show)
+    hints = ""
+    if args.hints:
+        hints = Path(args.hints).read_text(encoding="utf-8").strip()
+    build(args.aid, show=args.show, hints=hints)
     return 0
 
 

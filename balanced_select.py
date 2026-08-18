@@ -23,7 +23,12 @@ DUMP = Path(r"C:/Users/nadez/Downloads/arxiv-metadata-oai-snapshot.json")
 # Компактный индекс (arxiv_index_build.py) — 107 МБ вместо 5 ГБ. Если он есть, снапшот не нужен.
 INDEX = Path("data/arxiv-index.jsonl")
 OUT_DIR = Path("data/bulk-select")
-ALLOWED = ("by/4.0", "by-sa/4.0", "zero/1.0", "nonexclusive-distrib/1.0")
+# Свободные лицензии — полный конвейер. NC-семейство (решение владельца 2026-08-18 после
+# пропуска 2606.12457: «расширяем забор, не берём картинки, ставим признак») — тоже берём,
+# но конвейер помечает их license_class=analysis: только собственный текст, авторские
+# рисунки и подписи не используются (см. gen_arxiv.license_class и _build_article).
+ALLOWED = ("by/4.0", "by-sa/4.0", "zero/1.0", "nonexclusive-distrib/1.0",
+           "by-nc-nd/4.0", "by-nc-sa/4.0", "by-nc/4.0")
 DEFAULT_LANG = "ru"
 
 

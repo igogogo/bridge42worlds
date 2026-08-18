@@ -197,6 +197,12 @@ def license_label(lic_url):
     работе неверно названная лицензия хуже, чем никакая.
     """
     u = lic_url or ""
+    if "by-nc-nd/4.0" in u:
+        return "CC BY-NC-ND 4.0"
+    if "by-nc-sa/4.0" in u:
+        return "CC BY-NC-SA 4.0"
+    if "by-nc/4.0" in u:
+        return "CC BY-NC 4.0"
     if "by-sa/4.0" in u:
         return "CC BY-SA 4.0"
     if "by/4.0" in u:
@@ -206,6 +212,31 @@ def license_label(lic_url):
     if "nonexclusive-distrib" in u:
         return "arXiv non-exclusive"
     return "license"
+
+
+# Лицензии, под которыми работу МОЖНО разобрать своими словами, но НЕЛЬЗЯ перерабатывать
+# авторский текст и изображения. NC — некоммерческое использование (наш сайт без рекламы
+# и платного доступа), ND — запрет производных.
+#
+# Что именно это разрешает нам. Копирайт защищает выражение, а не факты и идеи: пересказ
+# работы своими словами — это наша собственная работа, а не производная от чужой (так живёт
+# вся научная журналистика). Дословная авторская аннотация показывается неизменной, с именем
+# автора и ссылкой на источник — это разрешённое распространение оригинала. А вот перевод
+# авторских подписей к рисункам — уже переработка чужого текста, и её мы не делаем: у таких
+# работ рисунки из PDF не берём вовсе, обложка у статьи своя.
+ANALYSIS_ONLY = ("by-nc-nd/4.0", "by-nc-sa/4.0", "by-nc/4.0")
+
+
+def license_class(lic_url):
+    """free — свободная переработка; analysis — только собственный разбор; no — не берём."""
+    u = lic_url or ""
+    if not u:
+        return "no"
+    if any(a in u for a in ("by/4.0", "by-sa/4.0", "zero/1.0", "nonexclusive-distrib/1.0")):
+        return "free"
+    if any(a in u for a in ANALYSIS_ONLY):
+        return "analysis"
+    return "no"
 
 
 def get_license(arxiv_id):

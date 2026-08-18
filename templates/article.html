@@ -69,6 +69,7 @@
         <h3>$author_verify_label</h3>
         <p>$author_verify_body</p>
         <p><a href="mailto:author@bridge42worlds.academy?subject=Verify%20author%20-%20$id">author@bridge42worlds.academy</a></p>
+        $author_takedown_html
     </div>
 </div>
 
@@ -87,7 +88,7 @@ $nav_html
             <!-- Источник у статьи один (arXiv), у авторской работы их три: живой html,
                  PDF и полный архив с данными. Подставляет генератор одной переменной —
                  разной вёрстки для этого не нужно. -->
-            $source_meta_html · $date · <a href="$license_url" target="_blank" rel="noopener">$license_name</a> · $reading_html
+            $source_meta_html · $date · <a href="$license_url" target="_blank" rel="noopener">$license_name</a>$license_note_html · $reading_html
         </div>
         <div class="meta-cats">$categories_html</div>
         <div class="oneliner">$oneliner</div>

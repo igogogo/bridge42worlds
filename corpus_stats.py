@@ -46,7 +46,10 @@ _DUMP_CANDIDATES = [
 DUMP = next((c for c in _DUMP_CANDIDATES if c.exists()), _DUMP_CANDIDATES[0])
 OUT = Path("data/corpus-stats.json")
 YEARS = ("25", "26")  # arXiv id YYMM.xxxxx → 2025-2026
-ALLOWED = ("by/4.0", "by-sa/4.0", "zero/1.0", "nonexclusive-distrib/1.0")
+# Единственный источник истины по лицензиям — gen_arxiv.license_class (free/analysis/no).
+# Своя копия списка здесь уже разъезжалась с конвейером (2026-08-18: NC-семейство открыли
+# в отборе, а статистика продолжала считать его закрытым — числа врали бы молча).
+from gen_arxiv import license_class  # noqa: E402
 
 
 def lic_key(lic):
@@ -65,7 +68,7 @@ def lic_key(lic):
 
 
 def is_allowed(lic):
-    return bool(lic) and any(a in lic for a in ALLOWED)
+    return license_class(lic) != "no"
 
 
 def section_group(cats_field):

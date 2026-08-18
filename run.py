@@ -844,7 +844,8 @@ def cmd_ids(args):
     if not ids:
         print("❌ не указано ни одного id (позиционно или через --ids-file)")
         sys.exit(1)
-    generate.generate_ids(ids, force=args.force, express=getattr(args, 'express', False))
+    generate.generate_ids(ids, force=args.force, express=getattr(args, 'express', False),
+                          allow_restricted=getattr(args, 'allow_restricted', False))
 
 
 def cmd_author(args):
@@ -1178,7 +1179,13 @@ def build_parser():
     # (tools/field.py) нужен как поле вокруг, а не как десяток полных разборов.
     s.add_argument("--express", action="store_true",
                    help="экспресс вместо полного разбора (в десять раз дешевле)")
-    s.set_defaults(func=cmd_ids, refine=False, express=False)
+    # Точечное решение по конкретной работе. Массовый отбор (дневная очередь, bulk) этого
+    # флага не знает и берёт только свободные лицензии — так и должно остаться.
+    s.add_argument("--allow-restricted", action="store_true",
+                   help="взять работу под CC BY-NC-ND / NC-SA / NC: публикуем ТОЛЬКО собственный "
+                        "разбор и неизменную авторскую аннотацию со ссылкой, авторские рисунки "
+                        "и подписи не берём")
+    s.set_defaults(func=cmd_ids, refine=False, express=False, allow_restricted=False)
 
     s = sub.add_parser("author", help="статьи автора за период (с превью-подтверждением)")
     s.add_argument("name", help='имя автора, формат "Family, Given"')
