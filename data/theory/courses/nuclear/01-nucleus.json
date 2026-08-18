@@ -816,7 +816,31 @@
     "hint": "Binding energy per nucleon is the total binding energy divided by the number of nucleons. How many are in helium-4?",
     "tolAbs": 0.5
    }
-  ]
+  ],
+  "math": {
+   "title": "The math that was needed here",
+   "lead": "Three tricks: fractional powers as a way to express the connection with volume, counting pairs instead of counting protons, and finding the maximum of a sum of competing contributions.",
+   "items": [
+    {
+     "what": "Where fractional powers come from in the formula",
+     "why": "Fractional powers appear in the third and fourth steps of the derivation — $A^{2/3}$ and $A^{1/3}$ — and they are not from fitting. In the second step there are no fractions: the volume term goes directly as $A$. Nuclear matter is incompressible, so the volume is proportional to the number of nucleons, and the radius grows as its cube root: hence the notation $R \\approx 1.2\\cdot10^{-15}A^{1/3}$ in the list of symbols. The surface area goes as the square of the radius, i.e., as $A^{2/3}$, and that is exactly the surface term. The same root explains the $A^{1/3}$ in the denominator of the Coulomb term: the repulsion energy is inversely proportional to the size, and the size is given by the cube root. The fractional exponent is not a complication but a way to express through which power of length the quantity is related to volume. The surface-to-volume ratio falls as $A^{-1/3}$, and therefore the surface correction harms light nuclei more than heavy ones.",
+     "latex": "V \\propto A \\;\\Longrightarrow\\; R \\propto A^{1/3} \\;\\Longrightarrow\\; S \\propto A^{2/3}",
+     "kit": "propto"
+    },
+    {
+     "what": "Why $Z(Z-1)$ in the Coulomb term",
+     "why": "In the fourth step we have $Z(Z-1)$, not $Z^{2}$, and the difference is substantive. The electric energy is a sum over pairs of protons, not over protons: each pair is counted once. The number of pairs from $Z$ items is the number of combinations $C(Z,2) = Z(Z-1)/2$, for uranium that is 4186 pairs versus 92 protons. The two goes into the coefficient $a_C$, and $Z(Z-1)$ remains in the formula. The one in the parentheses is not cosmetic: a single proton has no pair at all, and hydrogen has no Coulomb term. For large $Z$, the difference between $Z(Z-1)$ and $Z^{2}$ is about a percent, so in estimates one writes just the square. And it is this square that overtakes the linear volume term: a nucleon always has roughly the same number of neighbors, but with the growth of the nucleus there are more and more pairs.",
+     "latex": "E_{\\text{Coul}} \\propto \\sum_{i<j} 1 = C(Z,2) = \\frac{Z(Z-1)}{2}",
+     "kit": "combinatorics"
+    },
+    {
+     "what": "Where the binding energy has its maximum in $Z$",
+     "why": "The stand reports which $Z$ is favorable for a given $A$, but the action itself is not in the derivation steps. Two terms depend on the number of protons, and they pull in opposite directions: the Coulomb term punishes extra protons, the symmetry term punishes any deviation from the equality $A = 2Z$. Let us fix the mass number and require the greatest binding energy: we set the derivative with respect to $Z$ to zero at constant $A$. Differentiating with respect to one variable while the others are frozen is called the partial derivative. It turns out $Z = (A/2)\\,/\\left(1 + a_C A^{2/3}/(4a_A)\\right)$. For oxygen, the correction in the denominator is small and gives $Z \\approx 8$, i.e., half and half; for $A = 238$ it equals $0.29$ and gives $Z \\approx 92$ — that is uranium. The neutron excess in heavy nuclei turns out to be a consequence of one derivative.",
+     "latex": "\\frac{\\partial B}{\\partial Z} = 0 \\;\\Longrightarrow\\; Z = \\frac{A}{2}\\left(1 + \\frac{a_C A^{2/3}}{4a_A}\\right)^{-1}",
+     "kit": "partial"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Estructura del núcleo",
@@ -1188,7 +1212,31 @@
     "hint": "La energía de enlace por nucleón es la energía de enlace total dividida por el número de nucleones. ¿Cuántos hay en el helio-4?",
     "tolAbs": 0.5
    }
-  ]
+  ],
+  "math": {
+   "title": "Matemáticas que aquí se necesitaron",
+   "lead": "Tres trucos: potencias fraccionarias como forma de expresar la relación con el volumen, contar pares en lugar de contar protones y buscar el máximo de una suma de contribuciones opuestas.",
+   "items": [
+    {
+     "what": "De dónde salen las potencias fraccionarias en la fórmula",
+     "why": "Las potencias fraccionarias aparecen en los pasos tercero y cuarto de la deducción — $A^{2/3}$ y $A^{1/3}$ — y no provienen de un ajuste. En el segundo paso aún no hay fracciones: el término de volumen va directamente con $A$. La materia nuclear es incompresible, por lo que el volumen es proporcional al número de nucleones, y el radio crece como su raíz cúbica: de ahí la expresión $R \\approx 1{,}2\\cdot10^{-15}A^{1/3}$ en la lista de notaciones. El área superficial va como el cuadrado del radio, es decir, como $A^{2/3}$, y ese es exactamente el término de superficie. La misma raíz explica el $A^{1/3}$ en el denominador del término de Coulomb: la energía de repulsión es inversa al tamaño, y el tamaño está dado por la raíz cúbica. El exponente fraccionario no es una complicación, sino una forma de expresar a través de qué potencia de la longitud la magnitud se relaciona con el volumen. La relación superficie-volumen cae como $A^{-1/3}$, y por eso la corrección de superficie perjudica más a los núcleos ligeros que a los pesados.",
+     "latex": "V \\propto A \\;\\Longrightarrow\\; R \\propto A^{1/3} \\;\\Longrightarrow\\; S \\propto A^{2/3}",
+     "kit": "propto"
+    },
+    {
+     "what": "Por qué en el término de Coulomb $Z(Z-1)$",
+     "why": "En el cuarto paso aparece $Z(Z-1)$, no $Z^{2}$, y la diferencia es sustancial. La energía eléctrica es una suma sobre pares de protones, no sobre protones: cada par se cuenta una vez. El número de pares de $Z$ elementos es igual al número de combinaciones $C(Z,2) = Z(Z-1)/2$; para el uranio son 4186 pares frente a 92 protones. El dos se va al coeficiente $a_C$, y $Z(Z-1)$ permanece en la fórmula. El uno en el paréntesis no es cosmético: un protón solitario no tiene ningún par, y el hidrógeno no tiene término de Coulomb. Para $Z$ grande, la diferencia entre $Z(Z-1)$ y $Z^{2}$ es de alrededor del uno por ciento, por lo que en estimaciones se escribe simplemente el cuadrado. Y es precisamente este cuadrado el que supera al término de volumen lineal: los vecinos de un nucleón siempre son aproximadamente los mismos, pero los pares aumentan con el tamaño del núcleo.",
+     "latex": "E_{\\text{cul}} \\propto \\sum_{i<j} 1 = C(Z,2) = \\frac{Z(Z-1)}{2}",
+     "kit": "combinatorics"
+    },
+    {
+     "what": "Dónde tiene el máximo la energía de enlace respecto a $Z$",
+     "why": "El apartado informa qué $Z$ es favorable para un $A$ dado, pero la acción en sí no está en los pasos de la deducción. Del número de protones dependen dos términos, y tiran en direcciones opuestas: el de Coulomb castiga el exceso de protones, el de simetría castiga cualquier desviación de la igualdad $A = 2Z$. Fijemos el número másico y exijamos la máxima energía de enlace: igualamos a cero la derivada respecto a $Z$ con $A$ constante. Derivar respecto a una variable manteniendo las demás fijas es lo que se llama derivada parcial. Resulta $Z = (A/2)\\,/\\left(1 + a_C A^{2/3}/(4a_A)\\right)$. Para el oxígeno la corrección en el denominador es pequeña y da $Z \\approx 8$, es decir, la mitad; para $A = 238$ es igual a $0{,}29$ y da $Z \\approx 92$ — esto es el uranio. El exceso de neutrones en los núcleos pesados resulta ser consecuencia de una sola derivada.",
+     "latex": "\\frac{\\partial B}{\\partial Z} = 0 \\;\\Longrightarrow\\; Z = \\frac{A}{2}\\left(1 + \\frac{a_C A^{2/3}}{4a_A}\\right)^{-1}",
+     "kit": "partial"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "بنية النواة",
@@ -1560,7 +1608,31 @@
     "hint": "طاقة الربط النوعية هي طاقة الربط الكلية مقسومة على عدد النيوكليونات. كم عددها في الهيليوم-4؟",
     "tolAbs": 0.5
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "ثلاث تقنيات: الأسس الكسرية كطريقة لربط الحجم، عد الأزواج بدلاً من عد البروتونات، وإيجاد الحد الأقصى لمجموع المساهمات المتعارضة.",
+   "items": [
+    {
+     "what": "من أين تأتي الأسس الكسرية في الصيغة",
+     "why": "تظهر الأسس الكسرية في الخطوتين الثالثة والرابعة من الاشتقاق - $A^{2/3}$ و $A^{1/3}$ - وهي ليست من تركيب البيانات. في الخطوة الثانية لا توجد كسور بعد: الحد الحجمي يتناسب طردياً مع $A$. المادة النووية غير قابلة للانضغاط، لذا فإن الحجم يتناسب مع عدد النويات، ونصف القطر ينمو كالجذر التكعيبي له: ومن هنا يأتي التعبير $R \\approx 1{,}2\\cdot10^{-15}A^{1/3}$ في قائمة الرموز. مساحة السطح تتناسب مع مربع نصف القطر، أي مع $A^{2/3}$، وهذا هو حد السطح بالضبط. نفس الجذر يفسر $A^{1/3}$ في مقام حد كولوم: طاقة التنافر تتناسب عكسياً مع الحجم، والحجم محدد بالجذر التكعيبي. الأس الكسري ليس تعقيداً، بل هو تدوين لكيفية ارتباط الكمية بالحجم من خلال قوة الطول. نسبة السطح إلى الحجم تتناقص مع $A^{-1/3}$، ولهذا السبب يكون تصحيح السطح أكثر ضرراً للنوى الخفيفة منه للنوى الثقيلة.",
+     "latex": "V \\propto A \\;\\Longrightarrow\\; R \\propto A^{1/3} \\;\\Longrightarrow\\; S \\propto A^{2/3}",
+     "kit": "propto"
+    },
+    {
+     "what": "لماذا في حد كولوم $Z(Z-1)$",
+     "why": "في الخطوة الرابعة نجد $Z(Z-1)$ وليس $Z^{2}$، والفرق جوهري هنا. الطاقة الكهربائية هي مجموع على أزواج البروتونات، وليس على البروتونات نفسها: كل زوج يُحسب مرة واحدة. عدد الأزواج من $Z$ عنصراً يساوي عدد التوافيق $C(Z,2) = Z(Z-1)/2$، وبالنسبة لليورانيوم هذا يعطي 4186 زوجاً مقابل 92 بروتوناً. الاثنان يذهبان إلى المعامل $a_C$، بينما يبقى $Z(Z-1)$ في الصيغة. الواحد بين القوسين ليس تجميلياً: البروتون المنفرد ليس له زوج إطلاقاً، والهيدروجين لا يملك حد كولوم. عند قيم $Z$ الكبيرة، يكون الفرق بين $Z(Z-1)$ و $Z^{2}$ حوالي واحد بالمئة، لذلك في التقديرات التقريبية يُكتب المربع فقط. وهذا المربع بالتحديد هو الذي يتفوق على الحد الحجمي الخطي: جيران النيوكليون دائمًا متوازنون تقريبًا، بينما يزداد عدد الأزواج مع نمو النواة.",
+     "latex": "E_{\\text{كولوم}} \\propto \\sum_{i<j} 1 = C(Z,2) = \\frac{Z(Z-1)}{2}",
+     "kit": "combinatorics"
+    },
+    {
+     "what": "أين الحد الأقصى لطاقة الارتباط بالنسبة إلى $Z$",
+     "why": "يخبرنا المعيار أي $Z$ هو الأفضل عند قيمة معينة لـ $A$، لكن الفعل نفسه غير موجود في خطوات الاشتقاق. يعتمدان على عدد البروتونات حدان، وهما يسحبان في اتجاهين متعاكسين: حد كولوم يعاقب على البروتونات الزائدة، وحد التناظر يعاقب على أي انحراف عن المساواة $A = 2Z$. نثبت العدد الكتلي ونطلب أكبر طاقة ارتباط: نساوي المشتقة بالنسبة إلى $Z$ بالصفر مع ثبات $A$. التفاضل بالنسبة لمتغير واحد مع تجميد الباقي هو ما يسمى بالمشتقة الجزئية. النتيجة هي $Z = (A/2)\\,/\\left(1 + a_C A^{2/3}/(4a_A)\\right)$. بالنسبة للأكسجين، التصحيح في المقام صغير ويعطي $Z \\approx 8$، أي بالتساوي؛ عند $A = 238$ يساوي $0{,}29$ ويعطي $Z \\approx 92$ - وهذا هو اليورانيوم. فائض النيوترونات في النوى الثقيلة يتبين أنه نتيجة لمشتقة واحدة.",
+     "latex": "\\frac{\\partial B}{\\partial Z} = 0 \\;\\Longrightarrow\\; Z = \\frac{A}{2}\\left(1 + \\frac{a_C A^{2/3}}{4a_A}\\right)^{-1}",
+     "kit": "partial"
+    }
+   ]
+  }
  },
  "tags": [
   "helium",

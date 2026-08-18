@@ -973,6 +973,160 @@
    "calc": "Change and Accumulation",
    "vector": "Direction and Field",
    "adv": "Language of Modern Physics"
+  },
+  "items": {
+   "dimension": {
+    "name": "Dimension",
+    "means": "Every quantity lives in its own units, and you cannot add different ones — just as you cannot add meters to seconds. Checking dimensions catches most errors in a few seconds and sometimes even hints at the form of a formula: if the answer must be time, and you have length and acceleration at hand, the only combination is the square root of their ratio.",
+    "where": "Language of Physics · paragraph 1; used in every calculation in the course",
+    "catch": "The argument of sine, logarithm, and exponential must be dimensionless. If meters appear under a sine, a factor has been lost somewhere.",
+    "latex": "[v] = \\frac{[L]}{[T]} = \\text{m}/\\text{s}"
+   },
+   "order": {
+    "name": "Order of magnitude",
+    "means": "An answer like 'about a hundred thousand' is often more valuable than '104,271.8': it checks the very formulation of the problem. A quick mental estimate shows whether the result is reasonable before you spend an hour on a careful calculation.",
+    "where": "Estimates in every paragraph; Fermi estimate in the section on models",
+    "catch": "An error of an order of magnitude is not a trifle: it is the difference between a warm radiator and a fire."
+   },
+   "propto": {
+    "name": "Proportionality and power",
+    "means": "The exponent tells how quickly the response catches up with the cause. A square means: double it, get four times. An inverse square — double the distance, get four times weaker. Most physical laws are recognized precisely by their exponent.",
+    "where": "Braking distance, Coulomb's law, universal gravitation, light intensity",
+    "catch": "Proportionality holds all else being equal. If mass changes along with $v$, the ratio is already different."
+   },
+   "derivative": {
+    "name": "Derivative",
+    "means": "The rate of change: how fast a quantity changes right now, not on average over an hour. On a graph, it is the steepness of the curve at a point. All dynamics are written with derivatives, because the laws of nature say not 'where the body is' but 'how it changes its state'.",
+    "where": "Kinematics, Newton's laws, oscillation equations",
+    "catch": "The derivative is not a 'small change' but a limit of a ratio. At a kink in the graph, it does not exist at all: at a velocity jump, acceleration is infinite, and that is a sign of idealization."
+   },
+   "integral": {
+    "name": "Integral",
+    "means": "Accumulation: we sum many small contributions. The area under the velocity graph is the distance traveled, the area under the force-versus-displacement graph is the work done. The integral and the derivative are inverse operations, so from one description of motion the other is always recovered.",
+    "where": "Work and energy, heat in thermodynamics, field flux",
+    "catch": "The constant of integration is the initial condition. Forgetting it, you lose where the body was at the start."
+   },
+   "diffeq": {
+    "name": "Differential equation",
+    "means": "A law of nature is almost always written as a relation between a quantity and its own rate of change. Solving the equation means obtaining the entire history of motion from a local rule. The same equation describes a mass on a spring, current oscillations in a circuit, and small swings of a pendulum: the physics is different, the mathematics is one.",
+    "where": "Oscillator, radioactive decay, cooling of a body, oscillatory circuit",
+    "catch": "The solution is not unique without initial conditions: the equation defines a family of trajectories, and the conditions select one from it."
+   },
+   "exponent": {
+    "name": "Exponential",
+    "means": "It appears whenever the rate of change is proportional to the quantity itself. Hence the constancy of the half-life period: in the same time, the same fraction disappears, not the same amount. Tea cools and a capacitor discharges the same way.",
+    "where": "Radioactive decay, cooling, capacitor discharge, barometric formula",
+    "catch": "Exponential growth in nature always runs into a limit. The model is valid as long as the resource is not exhausted."
+   },
+   "vector": {
+    "name": "Vector and projections",
+    "means": "A quantity with direction. The main trick: decompose along axes and then work with each axis independently — that is why horizontal motion does not affect vertical fall. Choosing convenient axes often solves a problem faster than any calculation.",
+    "where": "Inclined plane, circular motion, addition of forces",
+    "catch": "You can add projections only in one system of axes. Changing the frame of reference changes the numbers, but not the vector itself."
+   },
+   "dotcross": {
+    "name": "Dot and cross product",
+    "means": "The dot product answers the question 'how much along': work equals force times distance times the cosine of the angle — a force perpendicular to motion does no work. The cross product answers 'how much across' and gives a new direction: this is how torque and the Lorentz force arise.",
+    "where": "Work, torque, magnetic force, flux through a surface",
+    "catch": "The cross product is not commutative: swapping factors changes the sign, that is, the direction to the opposite."
+   },
+   "field": {
+    "name": "Field",
+    "means": "A quantity defined at every point in space. Faraday's idea: not 'charge acts on charge through emptiness', but 'charge creates a field, the field acts on charge'. This turned out to be not a convenient picture but physical reality — the field itself carries energy and momentum and exists even when the source has disappeared.",
+    "where": "Electrostatics, magnetism, gravitation, waves",
+    "catch": "Field lines are not trajectories: a charge moves along a line only if it started from rest and the line is straight."
+   },
+   "gradient": {
+    "name": "Gradient",
+    "means": "It indicates the direction of the fastest growth of a quantity and its steepness. Force is directed against the gradient of energy — that is, where energy decreases fastest. Hence the intuitive rule: a body rolls down the slope of a potential well.",
+    "where": "Potential energy, electric potential, thermal conductivity",
+    "catch": "The minus sign in the formula is mandatory: without it, the body would roll uphill."
+   },
+   "flux": {
+    "name": "Flux and divergence",
+    "means": "Flux counts how much field passes through a surface, divergence tells whether there is a source inside. Gauss's theorem says literally: the field flowing out of a closed shell is proportional to the charge inside it. Symmetric problems are solved by this trick in one line instead of a page of integrals.",
+    "where": "Electrostatics, magnetism, Maxwell's equations",
+    "catch": "The theorem is always true, but useful only with symmetry: otherwise the field cannot be taken out of the integral."
+   },
+   "complex": {
+    "name": "Complex numbers",
+    "means": "A way to store amplitude and phase in one number. An oscillation becomes a rotation in the plane, adding oscillations becomes adding vectors, and differentiation becomes multiplication by $i\\omega$. In quantum mechanics, complexity ceases to be a trick and becomes part of the description of the state.",
+    "where": "Alternating current, waves, Schrödinger equation",
+    "catch": "In a classical problem, only the real part has physical meaning; in quantum mechanics, the phase is observable through interference."
+   },
+   "fourier": {
+    "name": "Fourier decomposition",
+    "means": "Any complex signal is decomposed into simple harmonics. This is not a mathematical trick but physics: a string really oscillates as a set of standing waves, and the ear really decomposes sound by frequencies. The spectrum is precisely the coefficients of the decomposition.",
+    "where": "Waves, spectra, sound timbre, signal processing",
+    "catch": "The shorter the pulse, the wider its spectrum. This is not a property of the instrument but a mathematical identity — and the root of the uncertainty relation."
+   },
+   "probability": {
+    "name": "Probability and statistics",
+    "means": "When there are on the order of Avogadro's number of particles, tracking each one is meaningless and unnecessary: measurable quantities are averages. Temperature is average energy, pressure is the averaged flux of momentum. Fluctuations fall as the square root of the number of particles, which is why the macroscopic world looks deterministic.",
+    "where": "Molecular physics, entropy, quantum mechanics",
+    "catch": "The average need not be a typical value: for a strongly asymmetric distribution, the average may never occur."
+   },
+   "matrix": {
+    "name": "Matrices and operators",
+    "means": "A matrix is a rule for transforming one vector into another: rotation, stretching, Lorentz transformation. The eigenvectors of such a rule are directions that it does not deflect but only scales. In quantum mechanics, the eigenvalues of an operator are precisely the possible measurement results.",
+    "where": "Lorentz transformations, inertia tensor, quantum mechanics",
+    "catch": "The order of factors matters. Noncommutativity of operators is not a technical detail but the source of the uncertainty relation."
+   },
+   "tensor": {
+    "name": "Tensors",
+    "means": "Not every relation between vectors reduces to multiplication by a number. Pull an anisotropic crystal — it deforms not strictly along the applied force. A tensor describes such a relation: it takes a direction and returns a direction, and its components change under rotation of axes consistently, so that the physical quantity itself does not depend on the choice of axes. It is precisely this property that makes tensors the language of relativity: an equation written in tensor form is valid in all frames of reference at once.",
+    "where": "Inertia tensor, stresses in a medium, general relativity",
+    "catch": "A tensor is not a 'table of numbers' but a rule for transforming those numbers. A set of components without a transformation law is not a tensor."
+   },
+   "symmetry": {
+    "name": "Symmetry and groups",
+    "means": "Symmetry is a transformation after which nothing has changed. The set of such transformations forms a group, and its structure dictates which particles and interactions are possible at all. By Noether's theorem, every continuous symmetry gives a conservation law: time shift — energy, space shift — momentum, rotation — angular momentum.",
+    "where": "Conservation laws, particle physics, crystallography",
+    "catch": "Symmetry can be broken by a state while remaining a symmetry of the equations: a pencil falls in a specific direction, although all directions are equal.",
+    "latex": "S \\rightarrow \\text{conserved quantity}"
+   },
+   "taylor": {
+    "name": "Taylor series and linear approximation",
+    "means": "Any smooth function near a point can be replaced by a polynomial: first the value, then the slope, then the curvature. Physics almost always suffices with the first two terms — that is what 'for small x' means. From this come all the familiar approximations: sin x ≈ x for the pendulum, (1+x)ⁿ ≈ 1+nx for relativistic energy, e^x ≈ 1+x for weak heating. The point is not economy of letters: the expansion shows WHICH quantity we neglected and when it will no longer be permissible to neglect it.",
+    "where": "Small oscillations of a pendulum, mv²/2 from relativistic energy, tides, weak field",
+    "catch": "'Small' is not 'small by eye' but dimensionless: small compared to something. Until you name what you are comparing with, the approximation is not justified.",
+    "latex": "f(x) \\approx f(0) + f'(0)\\,x + \\tfrac{1}{2}f''(0)\\,x^{2}"
+   },
+   "polar": {
+    "name": "Polar coordinates",
+    "means": "When motion is around a center, Cartesian x and y get in the way: both change in a complex way. We replace them with distance r and angle φ — and the problem straightens out. A planet's orbit in polar coordinates is written in one line, and the law of areas becomes the constancy of r²·dφ/dt. The rule is simple: choose coordinates according to the symmetry of the problem, not out of habit.",
+    "where": "Kepler's laws, orbits, rotation, field of a point charge",
+    "catch": "Velocity in polar coordinates has two parts: along the radius and across it. Forgetting the second, you lose exactly what keeps the body in orbit.",
+    "latex": "x = r\\cos\\varphi, \\quad y = r\\sin\\varphi, \\qquad v^{2} = \\dot r^{2} + r^{2}\\dot\\varphi^{2}"
+   },
+   "combinatorics": {
+    "name": "How many ways",
+    "means": "Statistical physics begins with counting: in how many ways can molecules be distributed among halves of a vessel, electrons among levels, coins among tails. The main tool is the number of combinations C(N,k) = N!/(k!(N−k)!). It is this that turns 'disorder' into an exact number, and entropy from a metaphor into the logarithm of that number.",
+    "where": "Microstates and entropy, distribution of molecules, radiation spectrum",
+    "catch": "The factorial grows monstrously fast, and computing it head-on for N = 10²³ is meaningless. For large numbers, one works with the logarithm: ln N! ≈ N ln N − N.",
+    "latex": "C(N,k) = \\frac{N!}{k!\\,(N-k)!}, \\qquad \\ln N! \\approx N\\ln N - N"
+   },
+   "partial": {
+    "name": "Partial derivative",
+    "means": "If a quantity depends on several variables, asking 'how fast does it change' is meaningless until it is said — with what held constant. The partial derivative is the answer to the refined question: change one, keep the rest. In thermodynamics, this is not a formality but physics: pressure with respect to volume at constant temperature and at constant entropy are two different quantities, and that is why isotherm and adiabat go differently.",
+    "where": "Thermodynamic processes, wave equation, fields",
+    "catch": "The notation with an index below is not decoration: (∂P/∂V)_T and (∂P/∂V)_S differ both numerically and in meaning. The index says what exactly you held fixed.",
+    "latex": "\\left(\\frac{\\partial P}{\\partial V}\\right)_{T} \\neq \\left(\\frac{\\partial P}{\\partial V}\\right)_{S}"
+   },
+   "rms": {
+    "name": "Average and root mean square",
+    "means": "For gas molecules, the average velocity by projection is zero: as many fly left as right. So 'average velocity' here describes nothing. The average SQUARE works: it is not destroyed by signs and is related to energy. Its square root is the root mean square velocity, the one that enters the relation between temperature and motion.",
+    "where": "Temperature and molecular speed, noise, measurement error",
+    "catch": "The root mean square speed is greater than the average absolute speed, and the most probable speed is less than both. Three different numbers for one gas: it matters which one the problem requires.",
+    "latex": "\\langle v_x \\rangle = 0, \\qquad v_{\\text{rms}} = \\sqrt{\\langle v^{2}\\rangle} = \\sqrt{\\frac{3kT}{m}}"
+   },
+   "separation": {
+    "name": "Separation of variables",
+    "means": "A technique for solving differential equations where everything that depends on the sought quantity is gathered on one side, and everything that depends on time on the other, after which both sides are integrated. Thus from 'the rate of decrease is proportional to the amount' one gets the decay exponential, and from 'the rate of growth is proportional to the size' — the expansion exponential. The method solves most first-order equations encountered in the course.",
+    "where": "Law of radioactive decay, capacitor discharge, cooling of a body",
+    "catch": "Dividing by the sought quantity is possible only if it is not zero. The case N = 0 must be treated separately — and it is often the equilibrium of the problem.",
+    "latex": "\\frac{dN}{N} = -\\lambda\\,dt \\;\\Longrightarrow\\; \\ln N = -\\lambda t + C"
+   }
   }
  },
  "es": {
@@ -987,6 +1141,160 @@
    "calc": "Cambio y acumulación",
    "vector": "Dirección y campo",
    "adv": "El lenguaje de la física moderna"
+  },
+  "items": {
+   "dimension": {
+    "name": "Dimensión",
+    "means": "Cada magnitud vive en sus propias unidades, y no se pueden sumar diferentes — como no se pueden sumar metros con segundos. La verificación de dimensiones detecta la mayoría de los errores en unos segundos y a veces sugiere directamente la forma de la fórmula: si la respuesta debe ser un tiempo, y tenemos longitud y aceleración, la única combinación es la raíz de su cociente.",
+    "where": "Lenguaje de la física · párrafo 1; se usa en cada cálculo del curso",
+    "catch": "El argumento del seno, logaritmo y exponencial debe ser adimensional. Si bajo el seno aparecen metros — se ha perdido un factor en algún lugar.",
+    "latex": "[v] = \\frac{[L]}{[T]} = \\text{m}/\\text{s}"
+   },
+   "order": {
+    "name": "Orden de magnitud",
+    "means": "Una respuesta 'aproximadamente cien mil' a menudo es más valiosa que '104 271,8': verifica el planteamiento mismo del problema. Una estimación mental muestra si el resultado es razonable, antes de que gastes una hora en un cálculo cuidadoso.",
+    "where": "Estimaciones en cada párrafo; estimación de Fermi en la sección sobre modelos",
+    "catch": "Un error de orden de magnitud no es una nimiedad: es la diferencia entre un radiador tibio y un incendio."
+   },
+   "propto": {
+    "name": "Proporcionalidad y potencia",
+    "means": "El exponente indica qué tan rápido la respuesta alcanza a la causa. El cuadrado significa: duplicamos — obtenemos el cuádruple. El inverso del cuadrado — duplicamos la distancia, obtenemos cuatro veces menos. La mayoría de las leyes físicas se reconocen precisamente por su exponente.",
+    "where": "Distancia de frenado, ley de Coulomb, gravitación universal, intensidad de la luz",
+    "catch": "La proporcionalidad es válida si todo lo demás permanece constante. Si junto con $v$ cambia también la masa, la relación ya es otra."
+   },
+   "derivative": {
+    "name": "Derivada",
+    "means": "La tasa de cambio: qué tan rápido cambia una magnitud en este momento, no en promedio durante una hora. En una gráfica es la pendiente de la curva en un punto. Toda la dinámica está escrita con derivadas, porque las leyes de la naturaleza no dicen 'dónde está el cuerpo', sino 'cómo cambia su estado'.",
+    "where": "Cinemática, leyes de Newton, ecuaciones de oscilación",
+    "catch": "La derivada no es un 'cambio pequeño', sino el límite de un cociente. En un punto anguloso de la gráfica no existe en absoluto: en un salto de velocidad la aceleración es infinita, y eso es señal de idealización."
+   },
+   "integral": {
+    "name": "Integral",
+    "means": "Acumulación: sumamos muchos aportes pequeños. El área bajo la gráfica de velocidad es la distancia recorrida; el área bajo la gráfica de fuerza respecto al desplazamiento es el trabajo realizado. La integral y la derivada son operaciones inversas, por lo que a partir de una descripción del movimiento siempre se puede recuperar la otra.",
+    "where": "Trabajo y energía, calor en termodinámica, flujo de campo",
+    "catch": "La constante de integración son las condiciones iniciales. Si la olvidas, pierdes dónde estaba el cuerpo al principio."
+   },
+   "diffeq": {
+    "name": "Ecuación diferencial",
+    "means": "Una ley de la naturaleza casi siempre está escrita como una relación entre una magnitud y su propia tasa de cambio. Resolver la ecuación significa obtener toda la historia del movimiento a partir de una regla local. La misma ecuación describe una masa en un resorte, las oscilaciones de corriente en un circuito y las pequeñas oscilaciones de un péndulo: la física es diferente, las matemáticas son las mismas.",
+    "where": "Oscilador, desintegración radiactiva, enfriamiento de un cuerpo, circuito oscilante",
+    "catch": "La solución no es única sin condiciones iniciales: la ecuación define una familia de trayectorias, y las condiciones eligen una de ellas."
+   },
+   "exponent": {
+    "name": "Exponencial",
+    "means": "Aparece siempre que la tasa de cambio es proporcional a la propia magnitud. De ahí la constancia del período de semidesintegración: en el mismo tiempo desaparece la misma fracción, no la misma cantidad. Así se enfría el té y se descarga un condensador.",
+    "where": "Desintegración radiactiva, enfriamiento, descarga de condensador, fórmula barométrica",
+    "catch": "El crecimiento exponencial en la naturaleza siempre choca con una limitación. El modelo es válido mientras el recurso no se agote."
+   },
+   "vector": {
+    "name": "Vector y proyecciones",
+    "means": "Una magnitud con dirección. El truco principal: descomponer en ejes y luego trabajar con cada eje de forma independiente — por eso el movimiento horizontal no afecta la caída vertical. Elegir ejes convenientes a menudo resuelve el problema más rápido que cualquier cálculo.",
+    "where": "Plano inclinado, movimiento circular, suma de fuerzas",
+    "catch": "Solo se pueden sumar proyecciones en un mismo sistema de ejes. Un cambio de sistema de referencia cambia los números, pero no el vector en sí."
+   },
+   "dotcross": {
+    "name": "Producto escalar y vectorial",
+    "means": "El producto escalar responde a la pregunta '¿cuánto en la misma dirección?': el trabajo es la fuerza multiplicada por la distancia y por el coseno del ángulo — una fuerza perpendicular al movimiento no realiza trabajo. El producto vectorial responde '¿cuánto en dirección transversal?' y da una nueva dirección: así surgen el momento de fuerza y la fuerza de Lorentz.",
+    "where": "Trabajo, momento de fuerza, fuerza magnética, flujo a través de una superficie",
+    "catch": "El producto vectorial no es conmutativo: intercambiar los factores cambia el signo, es decir, la dirección a la opuesta."
+   },
+   "field": {
+    "name": "Campo",
+    "means": "Una magnitud definida en cada punto del espacio. La idea de Faraday: no 'una carga actúa sobre otra a través del vacío', sino 'una carga crea un campo, el campo actúa sobre la carga'. Esto resultó no ser una imagen conveniente, sino una realidad física: el campo mismo lleva energía e impulso y existe incluso cuando la fuente ha desaparecido.",
+    "where": "Electrostática, magnetismo, gravitación, ondas",
+    "catch": "Las líneas de campo no son trayectorias: una carga se mueve a lo largo de una línea solo si partió del reposo y la línea es recta."
+   },
+   "gradient": {
+    "name": "Gradiente",
+    "means": "Indica la dirección del crecimiento más rápido de una magnitud y su pendiente. La fuerza se dirige en contra del gradiente de energía — es decir, hacia donde la energía disminuye más rápido. De ahí la regla intuitiva: un cuerpo rueda cuesta abajo en un pozo de potencial.",
+    "where": "Energía potencial, potencial eléctrico, conductividad térmica",
+    "catch": "El signo menos en la fórmula es obligatorio: sin él, el cuerpo rodaría cuesta arriba."
+   },
+   "flux": {
+    "name": "Flujo y divergencia",
+    "means": "El flujo cuenta cuánto campo atraviesa una superficie; la divergencia indica si hay una fuente en el interior. El teorema de Gauss dice literalmente: el campo que sale de una superficie cerrada es proporcional a la carga en su interior. Los problemas con simetría se resuelven con este método en una línea en lugar de una página de integrales.",
+    "where": "Electrostática, magnetismo, ecuaciones de Maxwell",
+    "catch": "El teorema es siempre válido, pero útil solo con simetría: de lo contrario, el campo no se puede sacar de la integral."
+   },
+   "complex": {
+    "name": "Números complejos",
+    "means": "Una forma de almacenar amplitud y fase en un solo número. Una oscilación se convierte en una rotación en el plano, la suma de oscilaciones en suma de vectores, y la diferenciación en multiplicación por $i\\omega$. En mecánica cuántica, la complejidad deja de ser un truco y se convierte en parte de la descripción del estado.",
+    "where": "Corriente alterna, ondas, ecuación de Schrödinger",
+    "catch": "En un problema clásico, solo la parte real tiene significado físico; en cuántica, la fase es observable a través de la interferencia."
+   },
+   "fourier": {
+    "name": "Descomposición de Fourier",
+    "means": "Cualquier señal compleja se descompone en armónicos simples. Esto no es un truco matemático, sino física: una cuerda realmente vibra como un conjunto de ondas estacionarias, y el oído realmente descompone el sonido en frecuencias. El espectro son precisamente los coeficientes de la descomposición.",
+    "where": "Ondas, espectros, timbre del sonido, procesamiento de señales",
+    "catch": "Cuanto más corto es el pulso, más ancho es su espectro. Esto no es una propiedad del instrumento, sino una identidad matemática — y la raíz de la relación de incertidumbre."
+   },
+   "probability": {
+    "name": "Probabilidad y estadística",
+    "means": "Cuando hay partículas del orden del número de Avogadro, seguir cada una es inútil e innecesario: las magnitudes medibles son promedios. La temperatura es la energía promedio, la presión es el flujo promedio de impulso. Las fluctuaciones disminuyen como la raíz del número de partículas, por lo que el mundo macroscópico parece determinista.",
+    "where": "Física molecular, entropía, mecánica cuántica",
+    "catch": "El promedio no tiene por qué ser un valor típico: en una distribución muy asimétrica, el promedio puede no aparecer en absoluto."
+   },
+   "matrix": {
+    "name": "Matrices y operadores",
+    "means": "Una matriz es una regla para transformar un vector en otro: rotación, estiramiento, transformación de Lorentz. Los vectores propios de tal regla son direcciones que no desvía, sino que solo escala. En mecánica cuántica, los valores propios de un operador son precisamente los posibles resultados de una medición.",
+    "where": "Transformaciones de Lorentz, tensor de inercia, mecánica cuántica",
+    "catch": "El orden de los factores importa. La no conmutatividad de los operadores no es un detalle técnico, sino la fuente de la relación de incertidumbre."
+   },
+   "tensor": {
+    "name": "Tensores",
+    "means": "No toda relación entre vectores se reduce a multiplicar por un número. Estira un cristal anisotrópico: se deforma no exactamente en la dirección de la fuerza aplicada. Un tensor describe tal relación: toma una dirección y devuelve una dirección, y sus componentes cambian al rotar los ejes de manera consistente, de modo que la magnitud física misma no depende de la elección de los ejes. Es precisamente esta propiedad la que hace de los tensores el lenguaje de la teoría de la relatividad: una ecuación escrita tensorialmente es válida en todos los sistemas de referencia a la vez.",
+    "where": "Tensor de inercia, tensiones en un medio, relatividad general",
+    "catch": "Un tensor no es una 'tabla de números', sino una regla de transformación de esos números. Un conjunto de componentes sin ley de transformación no es un tensor."
+   },
+   "symmetry": {
+    "name": "Simetría y grupos",
+    "means": "La simetría es una transformación tras la cual nada cambia. El conjunto de tales transformaciones forma un grupo, y su estructura dicta qué partículas e interacciones son posibles en absoluto. Según el teorema de Noether, cada simetría continua da una ley de conservación: desplazamiento en el tiempo — energía, desplazamiento en el espacio — impulso, rotación — momento angular.",
+    "where": "Leyes de conservación, física de partículas, cristalografía",
+    "catch": "La simetría puede estar rota por el estado, permaneciendo simetría de las ecuaciones: un lápiz cae en una dirección concreta, aunque todas las direcciones sean equivalentes.",
+    "latex": "S \\rightarrow \\text{magnitud conservada}"
+   },
+   "taylor": {
+    "name": "Serie de Taylor y aproximación lineal",
+    "means": "Cualquier función suave cerca de un punto se puede reemplazar por un polinomio: primero por su valor, luego por su pendiente, luego por su curvatura. La física casi siempre se conforma con los dos primeros términos — eso es 'para x pequeño'. De ahí salen todas las aproximaciones habituales: sin x ≈ x para el péndulo, (1+x)ⁿ ≈ 1+nx para la energía relativista, e^x ≈ 1+x para un calentamiento débil. El sentido no es ahorrar letras: el desarrollo muestra QUÉ magnitud hemos despreciado y cuándo dejará de ser válido despreciarla.",
+    "where": "Pequeñas oscilaciones del péndulo, mv²/2 a partir de la energía relativista, mareas, campo débil",
+    "catch": "'Pequeño' no significa 'pequeño a simple vista', sino adimensional: pequeño en comparación con algo. Si no se dice con qué se compara, la aproximación no está justificada.",
+    "latex": "f(x) \\approx f(0) + f'(0)\\,x + \\tfrac{1}{2}f''(0)\\,x^{2}"
+   },
+   "polar": {
+    "name": "Coordenadas polares",
+    "means": "Cuando el movimiento ocurre alrededor de un centro, las coordenadas cartesianas x e y estorban: ambas cambian de manera complicada. Las reemplazamos por la distancia r y el ángulo φ — y el problema se endereza. La órbita de un planeta en coordenadas polares se escribe en una línea, y la ley de las áreas se convierte en la constancia de r²·dφ/dt. La regla es simple: elige las coordenadas según la simetría del problema, no por costumbre.",
+    "where": "Leyes de Kepler, órbitas, rotación, campo de una carga puntual",
+    "catch": "La velocidad en coordenadas polares tiene dos partes: a lo largo del radio y transversal a él. Si olvidas la segunda, pierdes precisamente lo que mantiene al cuerpo en órbita.",
+    "latex": "x = r\\cos\\varphi, \\quad y = r\\sin\\varphi, \\qquad v^{2} = \\dot r^{2} + r^{2}\\dot\\varphi^{2}"
+   },
+   "combinatorics": {
+    "name": "Cuántas formas hay",
+    "means": "La física estadística comienza con un conteo: de cuántas maneras se pueden distribuir las moléculas entre las dos mitades de un recipiente, los electrones entre los niveles, las monedas entre caras y cruces. La herramienta principal es el número de combinaciones C(N,k) = N!/(k!(N−k)!). Es precisamente él el que convierte el 'desorden' en un número exacto, y la entropía — de metáfora en el logaritmo de ese número.",
+    "where": "Microestados y entropía, distribución de moléculas, espectro de radiación",
+    "catch": "El factorial crece monstruosamente rápido, y calcularlo directamente para N = 10²³ no tiene sentido. Para números grandes se trabaja con el logaritmo: ln N! ≈ N ln N − N.",
+    "latex": "C(N,k) = \\frac{N!}{k!\\,(N-k)!}, \\qquad \\ln N! \\approx N\\ln N - N"
+   },
+   "partial": {
+    "name": "Derivada parcial",
+    "means": "Si una magnitud depende de varias variables, preguntar 'qué tan rápido cambia' no tiene sentido hasta que se diga — ¿manteniendo qué constante? La derivada parcial es la respuesta a la pregunta precisada: cambiamos una, mantenemos las demás. En termodinámica esto no es una formalidad, sino física: la presión respecto al volumen a temperatura constante y a entropía constante son dos magnitudes diferentes, y por eso la isoterma y la adiabática van de manera distinta.",
+    "where": "Procesos termodinámicos, ecuación de onda, campos",
+    "catch": "La notación con subíndice no es un adorno: (∂P/∂V)_T y (∂P/∂V)_S difieren tanto numéricamente como en significado. El subíndice indica qué mantuviste exactamente.",
+    "latex": "\\left(\\frac{\\partial P}{\\partial V}\\right)_{T} \\neq \\left(\\frac{\\partial P}{\\partial V}\\right)_{S}"
+   },
+   "rms": {
+    "name": "Promedio y valor cuadrático medio",
+    "means": "En las moléculas de un gas, la velocidad promedio por proyección es cero: tantas van a la izquierda como a la derecha. Por lo tanto, 'velocidad promedio' aquí no describe nada. Funciona el promedio del CUADRADO: no se anula con los signos y está relacionado con la energía. Su raíz es la velocidad cuadrática media, la misma que entra en la relación entre temperatura y movimiento.",
+    "where": "Temperatura y velocidad de las moléculas, ruido, error de medición",
+    "catch": "La velocidad cuadrática media es mayor que la velocidad promedio en módulo, y la más probable es menor que ambas. Tres números diferentes para un mismo gas: es importante cuál requiere el problema.",
+    "latex": "\\langle v_x \\rangle = 0, \\qquad v_{\\text{rms}} = \\sqrt{\\langle v^{2}\\rangle} = \\sqrt{\\frac{3kT}{m}}"
+   },
+   "separation": {
+    "name": "Separación de variables",
+    "means": "Un método para resolver ecuaciones diferenciales donde todo lo que depende de la magnitud buscada se agrupa a un lado, y todo lo que depende del tiempo, al otro, tras lo cual se integran ambos lados. Así, de 'la tasa de disminución es proporcional a la cantidad' se obtiene la exponencial de la desintegración, y de 'la tasa de crecimiento es proporcional al tamaño' — la exponencial de la expansión. El método resuelve la mayoría de las ecuaciones de primer orden que aparecen en el curso.",
+    "where": "Ley de desintegración radiactiva, descarga de condensador, enfriamiento de un cuerpo",
+    "catch": "Dividir por la magnitud buscada solo es posible si no es cero. El caso N = 0 debe tratarse por separado — y a menudo es precisamente el equilibrio del problema.",
+    "latex": "\\frac{dN}{N} = -\\lambda\\,dt \\;\\Longrightarrow\\; \\ln N = -\\lambda t + C"
+   }
   }
  },
  "ar": {
@@ -1001,6 +1309,160 @@
    "calc": "التغير والتراكم",
    "vector": "الاتجاه والمجال",
    "adv": "لغة الفيزياء الحديثة"
+  },
+  "items": {
+   "dimension": {
+    "name": "البُعد",
+    "means": "كل كمية تعيش في وحداتها الخاصة، ولا يمكن جمع كميات مختلفة — كما لا يمكن جمع أمتار مع ثوانٍ. فحص الأبعاد يلتقط معظم الأخطاء في ثوانٍ، وأحيانًا يلمّح مباشرةً إلى شكل الصيغة: إذا كان الجواب يجب أن يكون زمنًا، وكان لديك طول وتسارع، فإن التركيبة الوحيدة هي الجذر التربيعي لنسبتهما.",
+    "where": "لغة الفيزياء · الفقرة 1؛ يُستخدم في كل حساب في الدورة",
+    "catch": "وسيطة الجيب واللوغاريتم والأس يجب أن تكون بلا أبعاد. إذا ظهرت أمتار تحت الجيب، فقد فُقد عامل ما.",
+    "latex": "[v] = \\frac{[L]}{[T]} = \\text{م}/\\text{ث}"
+   },
+   "order": {
+    "name": "رتبة المقدار",
+    "means": "الجواب «حوالي مئة ألف» غالبًا أثمن من «104271.8»: إنه يفحص صياغة المسألة نفسها. التقدير الذهني يُظهر ما إذا كانت النتيجة معقولة قبل أن تقضي ساعة في حساب دقيق.",
+    "where": "تقديرات في كل فقرة؛ تقدير فيرمي في قسم النماذج",
+    "catch": "خطأ في رتبة المقدار ليس تافهًا: إنه الفرق بين مشعاع دافئ وحريق."
+   },
+   "propto": {
+    "name": "التناسب والأس",
+    "means": "الأس يخبرك بمدى سرعة استجابة الأثر للسبب. التربيع يعني: ضاعفت فتحصل على أربعة أضعاف. التربيع العكسي — ضاعفت المسافة فتحصل على ربع الشدة. معظم القوانين الفيزيائية تُعرف من الأس.",
+    "where": "مسافة الكبح، قانون كولوم، الجاذبية العامة، شدة الضوء",
+    "catch": "التناسب صحيح مع تساوي العوامل الأخرى. إذا تغيرت الكتلة مع $v$، فإن العلاقة تصبح مختلفة."
+   },
+   "derivative": {
+    "name": "المشتقة",
+    "means": "معدل التغير: مدى سرعة تغير الكمية الآن، وليس في المتوسط خلال ساعة. على الرسم البياني هو ميل المنحنى عند نقطة. كل الديناميكا مكتوبة بالمشتقات، لأن قوانين الطبيعة لا تقول «أين الجسم» بل «كيف يتغير حالته».",
+    "where": "الحركة، قوانين نيوتن، معادلات الاهتزاز",
+    "catch": "المشتقة ليست «تغيرًا صغيرًا»، بل نهاية نسبة. عند نقطة الانكسار لا وجود لها: عند قفزة السرعة، التسارع لا نهائي، وهذا علامة على المثالية."
+   },
+   "integral": {
+    "name": "التكامل",
+    "means": "التراكم: نجمع العديد من المساهمات الصغيرة. المساحة تحت منحنى السرعة هي المسافة المقطوعة، والمساحة تحت منحنى القوة مقابل الإزاحة هي الشغل المبذول. التكامل والمشتقة عمليتان عكسيتان، لذا من وصف واحد للحركة يمكن دائمًا استعادة الآخر.",
+    "where": "الشغل والطاقة، الحرارة في الديناميكا الحرارية، تدفق المجال",
+    "catch": "ثابت التكامل هو الشروط الابتدائية. نسيانه يفقدك مكان الجسم في البداية."
+   },
+   "diffeq": {
+    "name": "المعادلة التفاضلية",
+    "means": "قانون الطبيعة دائمًا ما يُكتب كعلاقة بين الكمية ومعدل تغيرها. حل المعادلة يعني من قاعدة محلية الحصول على تاريخ الحركة كله. نفس المعادلة تصف ثقلًا على نابض، وتيارًا متذبذبًا في دائرة، وتأرجحًا صغيرًا لرقاص: الفيزياء مختلفة، والرياضيات واحدة.",
+    "where": "المذبذب، الاضمحلال الإشعاعي، تبريد الجسم، دائرة الرنين",
+    "catch": "الحل ليس فريدًا بدون شروط ابتدائية: المعادلة تحدد عائلة من المسارات، والشروط تختار واحدًا منها."
+   },
+   "exponent": {
+    "name": "الدالة الأسية",
+    "means": "تظهر دائمًا عندما يكون معدل التغير متناسبًا مع الكمية نفسها. ومن هنا ثبات فترة نصف العمر: في نفس الزمن تختفي نفس النسبة، وليس نفس الكمية. هكذا يبرد الشاي وتفرغ المكثفة.",
+    "where": "الاضمحلال الإشعاعي، التبريد، تفريغ المكثفة، الصيغة البارومترية",
+    "catch": "النمو الأسي في الطبيعة يصطدم دائمًا بحد. النموذج صحيح ما دام المورد غير مستنفد."
+   },
+   "vector": {
+    "name": "المتجه والإسقاطات",
+    "means": "كمية لها اتجاه. الأسلوب الرئيسي: حلل إلى محاور ثم اعمل مع كل محور بشكل مستقل — ولهذا لا تؤثر الحركة الأفقية على السقوط الرأسي. اختيار محاور مناسبة غالبًا ما يحل المسألة أسرع من أي حسابات.",
+    "where": "المستوى المائل، الحركة الدائرية، جمع القوى",
+    "catch": "لا يمكن جمع الإسقاطات إلا في نفس نظام المحاور. تغيير الإطار المرجعي يغير الأرقام، لكن ليس المتجه نفسه."
+   },
+   "dotcross": {
+    "name": "الجداء القياسي والجداء الاتجاهي",
+    "means": "الجداء القياسي يجيب على سؤال «كم في الاتجاه نفسه»: الشغل يساوي القوة مضروبة في المسافة وفي جيب تمام الزاوية — القوة العمودية على الحركة لا تبذل شغلًا. الجداء الاتجاهي يجيب على «كم في الاتجاه العمودي» ويعطي اتجاهًا جديدًا: هكذا ينشأ عزم القوة وقوة لورنتز.",
+    "where": "الشغل، عزم القوة، القوة المغناطيسية، التدفق عبر سطح",
+    "catch": "الجداء الاتجاهي ليس تبديليًا: تبديل العوامل يغير الإشارة، أي الاتجاه إلى العكس."
+   },
+   "field": {
+    "name": "المجال",
+    "means": "كمية معطاة في كل نقطة في الفضاء. فكرة فاراداي: ليس «شحنة تؤثر على شحنة عبر الفراغ»، بل «شحنة تخلق مجالًا، والمجال يؤثر على الشحنة». تبين أن هذا ليس صورة مريحة بل حقيقة فيزيائية — المجال نفسه يحمل طاقة وزخمًا ويوجد حتى عندما يختفي المصدر.",
+    "where": "الكهرباء الساكنة، المغناطيسية، الجاذبية، الموجات",
+    "catch": "خطوط المجال ليست مسارات: الشحنة تتحرك على طول الخط فقط إذا بدأت من السكون وكان الخط مستقيمًا."
+   },
+   "gradient": {
+    "name": "التدرج",
+    "means": "يشير إلى اتجاه أسرع نمو للكمية ومدى انحداره. القوة موجهة عكس تدرج الطاقة — أي نحو حيث تتناقص الطاقة بأسرع ما يمكن. ومن هنا القاعدة البديهية: الجسم يتدحرج على منحدر حفرة الجهد.",
+    "where": "الطاقة الكامنة، الجهد الكهربائي، التوصيل الحراري",
+    "catch": "علامة الناقص في الصيغة إلزامية: بدونها كان الجسم سيتدحرج صعودًا."
+   },
+   "flux": {
+    "name": "التدفق والتباعد",
+    "means": "التدفق يحسب مقدار المجال الذي يمر عبر سطح، والتباعد يخبرنا إذا كان هناك مصدر بالداخل. نظرية غاوس تقول حرفيًا: المجال المتدفق من غلاف مغلق يتناسب مع الشحنة بداخله. المسائل المتناظرة تُحل بهذه الطريقة في سطر واحد بدلًا من صفحة تكاملات.",
+    "where": "الكهرباء الساكنة، المغناطيسية، معادلات ماكسويل",
+    "catch": "النظرية صحيحة دائمًا، لكنها مفيدة فقط مع التناظر: وإلا لا يمكن إخراج المجال من تحت التكامل."
+   },
+   "complex": {
+    "name": "الأعداد المركبة",
+    "means": "طريقة لتخزين السعة والطور في عدد واحد. يصبح الاهتزاز دورانًا على المستوى، وجمع الاهتزازات جمعًا للمتجهات، والتفاضل ضربًا في $i\\omega$. في ميكانيكا الكم، تتوقف المركبات عن كونها حيلة وتصبح جزءًا من وصف الحالة.",
+    "where": "التيار المتردد، الموجات، معادلة شرودنغر",
+    "catch": "في المسألة الكلاسيكية، الجزء الحقيقي فقط له معنى فيزيائي؛ في الكم، الطور قابل للملاحظة عبر التداخل."
+   },
+   "fourier": {
+    "name": "تحليل فورييه",
+    "means": "أي إشارة معقدة تتحلل إلى توافقيات بسيطة. هذا ليس خدعة رياضية بل فيزياء: الوتر يهتز فعلًا بمجموعة من الموجات المستقرة، والأذن تحلل الصوت إلى ترددات. الطيف هو معاملات التحليل.",
+    "where": "الموجات، الأطياف، جرس الصوت، معالجة الإشارات",
+    "catch": "كلما كان النبض أقصر، كان طيفه أوسع. هذه ليست خاصية للجهاز بل تطابق رياضي — وأصل علاقة اللايقين."
+   },
+   "probability": {
+    "name": "الاحتمال والإحصاء",
+    "means": "عندما يكون عدد الجسيمات بحدود عدد أفوجادرو، فإن تتبع كل جسيم لا معنى له وليس ضروريًا: الكميات القابلة للقياس هي متوسطات. درجة الحرارة هي متوسط الطاقة، والضغط هو متوسط تدفق الزخم. التقلبات تنخفض كجذر عدد الجسيمات، لذلك يبدو العالم macroscopic حتميًا.",
+    "where": "الفيزياء الجزيئية، الإنتروبيا، ميكانيكا الكم",
+    "catch": "المتوسط ليس بالضرورة قيمة نموذجية: في توزيع غير متماثل بشدة، قد لا يظهر المتوسط إطلاقًا."
+   },
+   "matrix": {
+    "name": "المصفوفات والمؤثرات",
+    "means": "المصفوفة هي قاعدة تحويل متجه إلى آخر: دوران، تمدد، تحويل لورنتز. المتجهات الذاتية لهذه القاعدة هي الاتجاهات التي لا تنحرف بل تتدرج فقط. في ميكانيكا الكم، القيم الذاتية للمؤثر هي النتائج الممكنة للقياس.",
+    "where": "تحويلات لورنتز، موتر العطالة، ميكانيكا الكم",
+    "catch": "ترتيب العوامل مهم. عدم التبديل بين المؤثرات ليس تفصيلًا تقنيًا بل مصدر علاقة اللايقين."
+   },
+   "tensor": {
+    "name": "الموترات",
+    "means": "ليست كل علاقة بين المتجهات اختزالًا إلى ضرب بعدد. اسحب بلورة غير متناحية — ستتشوه ليس تمامًا على طول القوة المطبقة. يصف الموتر هذه العلاقة: يأخذ اتجاهًا ويعيد اتجاهًا، ومكوناته تتغير عند دوران المحاور بشكل متناسق، بحيث لا تعتمد الكمية الفيزيائية نفسها على اختيار المحاور. هذه الخاصية هي ما يجعل الموترات لغة النسبية: معادلة مكتوبة بشكل موتر صحيحة في جميع الأطر المرجعية دفعة واحدة.",
+    "where": "موتر العطالة، الإجهادات في وسط، النسبية العامة",
+    "catch": "الموتر ليس «جدول أرقام»، بل قاعدة تحويل هذه الأرقام. مجموعة مكونات بدون قانون تحويل ليست موترًا."
+   },
+   "symmetry": {
+    "name": "التناظر والزمر",
+    "means": "التناظر هو تحويل لا يغير شيئًا. مجموعة هذه التحويلات تشكل زمرة، وبنيتها تملي أي الجسيمات والتفاعلات ممكنة أصلًا. وفقًا لنظرية نويثر، كل تناظر مستمر يعطي قانون حفظ: الإزاحة في الزمن — الطاقة، الإزاحة في المكان — الزخم، الدوران — الزخم الزاوي.",
+    "where": "قوانين الحفظ، فيزياء الجسيمات، علم البلورات",
+    "catch": "يمكن أن يكون التناظر مكسورًا بالحالة بينما يبقى تناظرًا للمعادلات: قلم يسقط في اتجاه معين رغم أن جميع الاتجاهات متكافئة.",
+    "latex": "S \\rightarrow \\text{كمية محفوظة}"
+   },
+   "taylor": {
+    "name": "متسلسلة تايلور والتقريب الخطي",
+    "means": "أي دالة ناعمة قرب نقطة يمكن استبدالها بمتعددة حدود: أولًا القيمة، ثم الميل، ثم الانحناء. الفيزياء غالبًا تكتفي بالحدين الأولين — وهذا هو «عندما x صغير». من هنا تأتي كل التقريبات المألوفة: sin x ≈ x للرقاص، (1+x)ⁿ ≈ 1+nx للطاقة النسبية، e^x ≈ 1+x للتسخين الضعيف. المغزى ليس توفير الحروف: التحليل يظهر أي كمية أهملنا ومتى لم يعد الإهمال ممكنًا.",
+    "where": "الاهتزازات الصغيرة للرقاص، mv²/2 من الطاقة النسبية، المد والجزر، المجال الضعيف",
+    "catch": "«صغير» ليس «صغيرًا بالعين»، بل بلا أبعاد: صغير مقارنة بشيء ما. ما لم تذكر بماذا تقارن، فإن التقريب غير مبرر.",
+    "latex": "f(x) \\approx f(0) + f'(0)\\,x + \\tfrac{1}{2}f''(0)\\,x^{2}"
+   },
+   "polar": {
+    "name": "الإحداثيات القطبية",
+    "means": "عندما تكون الحركة حول مركز، فإن x وy الديكارتيتين تعيقان: كلاهما يتغير بشكل معقد. نستبدلهما بالمسافة r والزاوية φ — وتستقيم المسألة. مدار الكوكب في الإحداثيات القطبية يُكتب في سطر واحد، وقانون المساحات يتحول إلى ثبات r²·dφ/dt. القاعدة بسيطة: اختر الإحداثيات وفقًا لتناظر المسألة، لا وفقًا للعادة.",
+    "where": "قوانين كبلر، المدارات، الدوران، مجال شحنة نقطية",
+    "catch": "السرعة في الإحداثيات القطبية لها جزءان: على طول نصف القطر وعمودي عليه. نسيان الثاني يفقدك ما يبقي الجسم في المدار.",
+    "latex": "x = r\\cos\\varphi, \\quad y = r\\sin\\varphi, \\qquad v^{2} = \\dot r^{2} + r^{2}\\dot\\varphi^{2}"
+   },
+   "combinatorics": {
+    "name": "كم عدد الطرق",
+    "means": "الفيزياء الإحصائية تبدأ بالعد: بكم طريقة يمكن توزيع الجزيئات على نصفي الوعاء، والإلكترونات على المستويات، والعملات على الوجه والظهر. الأداة الأساسية هي عدد التوافيق C(N,k) = N!/(k!(N−k)!). هو الذي يحول «الفوضى» إلى رقم دقيق، والإنتروبيا من استعارة إلى لوغاريتم هذا الرقم.",
+    "where": "الحالات الدقيقة والإنتروبيا، توزيع الجزيئات، طيف الإشعاع",
+    "catch": "المضروب ينمو بسرعة هائلة، وحسابه مباشرة عند N = 10²³ لا معنى له. للأعداد الكبيرة نعمل مع اللوغاريتم: ln N! ≈ N ln N − N.",
+    "latex": "C(N,k) = \\frac{N!}{k!\\,(N-k)!}, \\qquad \\ln N! \\approx N\\ln N - N"
+   },
+   "partial": {
+    "name": "المشتقة الجزئية",
+    "means": "إذا كانت الكمية تعتمد على عدة متغيرات، فإن السؤال «كم تتغير بسرعة» لا معنى له ما لم يُحدد ما هو الثابت. المشتقة الجزئية هي إجابة السؤال المُحكَم: نغير واحدًا ونبقي الباقي. في الديناميكا الحرارية هذا ليس شكليًا بل فيزياء: الضغط بالنسبة للحجم عند ثبات درجة الحرارة وعند ثبات الإنتروبيا كميتان مختلفتان، ولهذا تسير الأيسوثرم والأديابات بشكل مختلف.",
+    "where": "العمليات الترموديناميكية، معادلة الموجة، الحقول",
+    "catch": "الرمز بالمؤشر السفلي ليس زخرفة: (∂P/∂V)_T و (∂P/∂V)_S يختلفان عددًا ومعنى. المؤشر يخبرك بماذا أبقيت ثابتًا.",
+    "latex": "\\left(\\frac{\\partial P}{\\partial V}\\right)_{T} \\neq \\left(\\frac{\\partial P}{\\partial V}\\right)_{S}"
+   },
+   "rms": {
+    "name": "المتوسط والجذر التربيعي المتوسط",
+    "means": "بالنسبة لجزيئات الغاز، متوسط السرعة حسب الإسقاط يساوي صفرًا: عدد متساوٍ يطير لليسار ولليمين. لذا «متوسط السرعة» هنا لا يصف شيئًا. يعمل متوسط المربع: لا يُلغى بالإشارات ويرتبط بالطاقة. جذره هو السرعة الجذرية التربيعية المتوسطة، تلك التي تدخل في العلاقة بين درجة الحرارة والحركة.",
+    "where": "درجة الحرارة وسرعة الجزيئات، الضوضاء، خطأ القياس",
+    "catch": "السرعة الجذرية التربيعية المتوسطة أكبر من متوسط السرعة بالقيمة المطلقة، والسرعة الأكثر احتمالًا أصغر منهما. ثلاثة أرقام مختلفة لنفس الغاز: المهم أيها تتطلبه المسألة.",
+    "latex": "\\langle v_x \\rangle = 0, \\qquad v_{\\text{جذر متوسط التربيع}} = \\sqrt{\\langle v^{2}\\rangle} = \\sqrt{\\frac{3kT}{m}}"
+   },
+   "separation": {
+    "name": "فصل المتغيرات",
+    "means": "أسلوب حل المعادلات التفاضلية حيث يُجمع كل ما يعتمد على الكمية المطلوبة في جانب، وكل ما يعتمد على الزمن في الجانب الآخر، ثم يُكامل الطرفان. هكذا من «معدل التناقص يتناسب مع الكمية» نحصل على دالة الاضمحلال الأسية، ومن «معدل النمو يتناسب مع الحجم» نحصل على دالة التوسع الأسية. الطريقة تحل معظم معادلات الدرجة الأولى في الدورة.",
+    "where": "قانون الاضمحلال الإشعاعي، تفريغ المكثفة، تبريد الجسم",
+    "catch": "القسمة على الكمية المطلوبة ممكنة فقط إذا لم تكن صفرًا. حالة N = 0 يجب معالجتها بشكل منفصل — وغالبًا ما تكون هي توازن المسألة.",
+    "latex": "\\frac{dN}{N} = -\\lambda\\,dt \\;\\Longrightarrow\\; \\ln N = -\\lambda t + C"
+   }
   }
  }
 }

@@ -802,7 +802,31 @@
     "hint": "Square 0.6, subtract from 1, and take the square root. The numbers are chosen to give a tidy result.",
     "tolAbs": 0.1
    }
-  ]
+  ],
+  "math": {
+   "title": "The math needed here",
+   "lead": "A right triangle, one algebraic trick with a root, and one expansion at low speed.",
+   "items": [
+    {
+     "what": "The triangle into which the whole derivation fits",
+     "why": "In the third step of the derivation, we analyze half a tick of the light clock and get a right triangle. The right angle is not a coincidence: in half a tick, the clock shifts strictly sideways, and the distance between the mirrors is measured across the motion. The two displacements are perpendicular, so they add not arithmetically but as legs: the total displacement of the flash is their vector sum, and the length of this sum is given by the Pythagorean theorem. Hence the form of the step's equation. Half a tick is needed so that the flash goes in one direction: over a full tick, its path is broken, and no triangle results.",
+     "latex": "\\left(\\frac{c\\,\\Delta t}{2}\\right)^{2} = L^{2} + \\left(\\frac{v\\,\\Delta t}{2}\\right)^{2}",
+     "kit": "vector"
+    },
+    {
+     "what": "How to take the speed of light out of the root",
+     "why": "The fourth and fifth steps of the derivation are pure algebra, but with a trick worth remembering. Collecting $\\Delta t^{2}(c^{2}-v^{2}) = 4L^{2}$, we get time with a difference of squares of speeds under the root. In this form, the formula suggests nothing. We factor out $c^{2}$ and take the root: a factor $c$ remains outside and a dimensionless combination $v/c$ inside. Now $2L/c$ is recognized as the clock's own tick, and everything else reduces to a single pure number. The trick is general: extract the natural scale from an expression, and what remains will itself show whether the effect is large or negligible.",
+     "latex": "\\sqrt{c^{2}-v^{2}} = c\\sqrt{1-\\beta^{2}}, \\qquad \\beta = \\frac{v}{c}",
+     "kit": "dimension"
+    },
+    {
+     "what": "Why the correction goes by the square of the speed",
+     "why": "In the sixth step, the approximation $\\gamma \\approx 1 + v^{2}/2c^{2}$ appears. It comes from the expansion $1/\\sqrt{1-x} \\approx 1 + x/2$ for small $x$: near zero, a smooth function is replaced by its tangent line, and the role of the small quantity is played by $x = v^{2}/c^{2}$. What matters here is not the approximation itself, but that the first correction goes by $x$, i.e., by the square of the speed ratio. Hence the number in the section: at $v = 100$ m/s, the ratio $v/c$ is $3\\cdot 10^{-7}$, and the deviation of $\\gamma$ from unity is half its square, about $6\\cdot 10^{-14}$. Squaring turns a small quantity into a negligible one.",
+     "latex": "\\frac{1}{\\sqrt{1-x}} \\approx 1 + \\frac{x}{2}, \\qquad x = \\frac{v^{2}}{c^{2}} \\ll 1",
+     "kit": "taylor"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Dos postulados",
@@ -1167,7 +1191,31 @@
     "hint": "Eleve 0,6 al cuadrado, réstelo de uno y extraiga la raíz. Los números están elegidos para que dé un resultado limpio.",
     "tolAbs": 0.1
    }
-  ]
+  ],
+  "math": {
+   "title": "Matemáticas que se necesitaron aquí",
+   "lead": "Un triángulo rectángulo, un truco algebraico con una raíz y una expansión a baja velocidad.",
+   "items": [
+    {
+     "what": "El triángulo en el que se resumió toda la derivación",
+     "why": "En el tercer paso de la derivación analizamos medio ciclo del reloj de luz y obtenemos un triángulo rectángulo. El ángulo recto no es una coincidencia: en medio ciclo, el reloj se desplaza estrictamente hacia un lado, y la distancia entre los espejos se mide perpendicularmente al movimiento. Los dos desplazamientos son perpendiculares, por lo que no se suman aritméticamente, sino como catetos: el desplazamiento total del destello es su suma vectorial, y la longitud de esta suma viene dada por el teorema de Pitágoras. De ahí la forma de la ecuación del paso. Se necesita medio ciclo para que el destello vaya en una sola dirección: en un ciclo completo, su trayectoria es quebrada y no se forma un triángulo.",
+     "latex": "\\left(\\frac{c\\,\\Delta t}{2}\\right)^{2} = L^{2} + \\left(\\frac{v\\,\\Delta t}{2}\\right)^{2}",
+     "kit": "vector"
+    },
+    {
+     "what": "Cómo se extrae la velocidad de la luz de la raíz",
+     "why": "El cuarto y quinto paso de la derivación son álgebra pura, pero con un truco que vale la pena recordar. Al reunir $\\Delta t^{2}(c^{2}-v^{2}) = 4L^{2}$, obtenemos el tiempo con una diferencia de cuadrados de velocidades bajo la raíz. En esta forma, la fórmula no sugiere nada. Sacamos $c^{2}$ como factor común y extraemos la raíz: queda un factor $c$ fuera y una combinación adimensional $v/c$ dentro. Ahora $2L/c$ se reconoce como el período propio del reloj, y todo lo demás se reduce a un número puro. El truco es general: extraiga de la expresión su escala natural, y lo que quede mostrará por sí mismo si el efecto es grande o insignificante.",
+     "latex": "\\sqrt{c^{2}-v^{2}} = c\\sqrt{1-\\beta^{2}}, \\qquad \\beta = \\frac{v}{c}",
+     "kit": "dimension"
+    },
+    {
+     "what": "Por qué la corrección va con el cuadrado de la velocidad",
+     "why": "En el sexto paso aparece la aproximación $\\gamma \\approx 1 + v^{2}/2c^{2}$. Se obtiene de la expansión $1/\\sqrt{1-x} \\approx 1 + x/2$ para $x$ pequeño: cerca de cero, una función suave se reemplaza por su recta tangente, y el papel de la cantidad pequeña lo juega $x = v^{2}/c^{2}$. Lo importante aquí no es la aproximación en sí, sino que la primera corrección va con $x$, es decir, con el cuadrado de la relación de velocidades. De ahí el número del párrafo: para $v = 100$ m/s, la relación $v/c$ es $3\\cdot 10^{-7}$, y la desviación de $\\gamma$ respecto a la unidad es la mitad de su cuadrado, alrededor de $6\\cdot 10^{-14}$. Elevar al cuadrado convierte una cantidad pequeña en una insignificante.",
+     "latex": "\\frac{1}{\\sqrt{1-x}} \\approx 1 + \\frac{x}{2}, \\qquad x = \\frac{v^{2}}{c^{2}} \\ll 1",
+     "kit": "taylor"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "المسلمتان",
@@ -1532,7 +1580,31 @@
     "hint": "ارفع 0,6 للتربيع، اطرح من الواحد، ثم خذ الجذر التربيعي. الأرقام مُختارة بحيث تكون النتيجة جميلة.",
     "tolAbs": 0.1
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "مثلث قائم الزاوية، خدعة جبرية واحدة مع جذر، وتبسيط واحد عند السرعات الصغيرة.",
+   "items": [
+    {
+     "what": "المثلث الذي يتشكل منه الاستنتاج بأكمله",
+     "why": "في الخطوة الثالثة من الاستنتاج، نقوم بتحليل نصف دورة من الساعة الضوئية ونحصل على مثلث قائم الزاوية. الزاوية القائمة هنا ليست مصادفة: خلال نصف الدورة، تتحرك الساعة جانبيًا تمامًا، والمسافة بين المرآتين تقاس عموديًا على اتجاه الحركة. الإزاحتان متعامدتان، لذلك لا تُجمع حسابيًا بل كضلعي القائمة: الإزاحة الكلية للومضة هي مجموعهما الاتجاهي، وطول هذا المجموع يُعطى بنظرية فيثاغورس. من هنا يأتي شكل معادلة الخطوة. نصف الدورة ضروري لكي تنتقل الومضة في اتجاه واحد: في الدورة الكاملة، يكون مسارها مكسورًا ولا يتشكل مثلث.",
+     "latex": "\\left(\\frac{c\\,\\Delta t}{2}\\right)^{2} = L^{2} + \\left(\\frac{v\\,\\Delta t}{2}\\right)^{2}",
+     "kit": "vector"
+    },
+    {
+     "what": "كيف نخرج سرعة الضوء من تحت الجذر",
+     "why": "الخطوتان الرابعة والخامسة من الاستنتاج هي جبر خالص، لكن مع خدعة تستحق التذكر. بعد تجميع $\\Delta t^{2}(c^{2}-v^{2}) = 4L^{2}$، نحصل على الوقت مع فرق مربعات السرعات تحت الجذر. في هذا الشكل، لا توحي الصيغة بأي شيء. نخرج $c^{2}$ كعامل مشترك ونأخذ الجذر: يبقى العامل $c$ في الخارج والتركيبة اللابعدية $v/c$ في الداخل. الآن نتعرف على $2L/c$ كزمن الدورة الذاتية للساعة، وكل شيء آخر يختزل إلى عدد نقي واحد. الخدعة عامة: افصل المقياس الطبيعي للتعبير، وما يتبقى سيُظهر بنفسه ما إذا كان التأثير كبيرًا أم ضئيلًا.",
+     "latex": "\\sqrt{c^{2}-v^{2}} = c\\sqrt{1-\\beta^{2}}, \\qquad \\beta = \\frac{v}{c}",
+     "kit": "dimension"
+    },
+    {
+     "what": "لماذا التصحيح يسير وفق مربع السرعة",
+     "why": "في الخطوة السادسة، يظهر التقريب $\\gamma \\approx 1 + v^{2}/2c^{2}$. وهو مأخوذ من التوسع $1/\\sqrt{1-x} \\approx 1 + x/2$ عند قيم صغيرة لـ $x$: بالقرب من الصفر، نستبدل الدالة الملساء بخط المماس، ودور الكمية الصغيرة يلعبه $x = v^{2}/c^{2}$. المهم هنا ليس التقريب نفسه، بل أن التصحيح الأول يسير وفق $x$، أي وفق مربع نسبة السرعات. ومن هنا يأتي رقم الفقرة: عند $v = 100$ م/ث، تكون النسبة $v/c$ مساوية $3\\cdot 10^{-7}$، وانحراف $\\gamma$ عن الواحد يساوي نصف مربعها، حوالي $6\\cdot 10^{-14}$. التربيع يحول الكمية الصغيرة إلى كمية ضئيلة.",
+     "latex": "\\frac{1}{\\sqrt{1-x}} \\approx 1 + \\frac{x}{2}, \\qquad x = \\frac{v^{2}}{c^{2}} \\ll 1",
+     "kit": "taylor"
+    }
+   ]
+  }
  },
  "tags": [
   "speed_of_light",

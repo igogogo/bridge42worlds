@@ -821,7 +821,31 @@
     "hint": "Both forces decrease as the square of distance, so when dividing, r² cancels. What remains is the ratio of constants multiplied by the squares of charge and mass.",
     "tolAbs": 2
    }
-  ]
+  ],
+  "math": {
+   "title": "The Math You'll Need Here",
+   "lead": "Three tricks: reading power laws in both directions, arithmetic with powers of ten, and adding arrows instead of numbers.",
+   "items": [
+    {
+     "what": "Power laws read in both directions",
+     "why": "The expression $F \\propto 1/r^{2}$ doesn't tell you specific numbers, but how the response follows the cause: move the charges twice as far apart, and the force drops to a quarter; three times as far, and it drops to a ninth. But a proportion also works in reverse, and that's what we use in step six of the derivation. There we look for the point where two contributions balance each other: from the equality $q_1/r_1^{2} = q_2/r_2^{2}$, the distances are expressed in terms of the square roots of the charges. A square, when moved across the equals sign, becomes a square root — so a charge four times larger shifts the equilibrium point exactly twice as far, not four times. A habit useful for the whole course: if you see a square in the given, expect a square root in the answer.",
+     "latex": "F \\propto \\frac{1}{r^{2}} \\qquad\\Longleftrightarrow\\qquad \\frac{r_2}{r_1} = \\sqrt{\\frac{q_2}{q_1}}",
+     "kit": "propto"
+    },
+    {
+     "what": "How to calculate with powers of ten",
+     "why": "In the second step of the derivation, there's a fraction with four factors, with exponents from $-31$ to $9$; you don't compute that directly. Exponents are added separately from the mantissas. Squaring doubles the exponent: $(1{,}6\\cdot10^{-19})^{2} = 2{,}6\\cdot10^{-38}$, $(9{,}1\\cdot10^{-31})^{2} = 8{,}3\\cdot10^{-61}$. Division subtracts exponents: the numerator gives $10^{-28}$, the denominator $10^{-71}$, and the difference is $43$. The mantissas give a factor around $0{,}4$ — they shift the answer by less than an order of magnitude and don't affect the conclusion. Hence the $10^{42}$: the ratio of forces is decided by the exponents even before you touch a calculator.",
+     "latex": "\\frac{9\\cdot10^{9}\\cdot 2{,}6\\cdot10^{-38}}{6{,}7\\cdot10^{-11}\\cdot 8{,}3\\cdot10^{-61}} = \\frac{2{,}3\\cdot10^{-28}}{5{,}5\\cdot10^{-71}} \\approx 4\\cdot10^{42}",
+     "kit": "order"
+    },
+    {
+     "what": "Forces add like displacements",
+     "why": "The fifth step of the derivation — the superposition principle — is written with arrows: $\\vec{F} = \\sum_i \\vec{F}_i$. The arrows are not decoration. Two forces of three newtons each give six if they point in the same direction, zero if they oppose, and about $4{,}2$ (that is, $3\\sqrt{2}$) if they are at a right angle. The rule is the same as adding steps: three steps north and three steps east do not put you six steps from the starting point. On the test stand, all charges lie on a single line, so vector addition degenerates into adding signed numbers — this simplification lets you see the point of zero field by eye. In a two-dimensional problem, that simplification won't be there, and you'll have to break forces into components.",
+     "latex": "\\left|\\vec{F}_1 + \\vec{F}_2\\right| = \\sqrt{F_1^{2} + F_2^{2} + 2F_1F_2\\cos\\alpha}",
+     "kit": "vector"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Carga y ley de Coulomb",
@@ -1197,7 +1221,31 @@
     "hint": "Ambas fuerzas disminuyen como el cuadrado de la distancia, por lo que al dividir se cancela r². Queda la relación de constantes multiplicada por los cuadrados de la carga y la masa.",
     "tolAbs": 2
    }
-  ]
+  ],
+  "math": {
+   "title": "Matemáticas que aquí se necesitaron",
+   "lead": "Tres trucos: leer la dependencia de potencia en ambas direcciones, la aritmética de los exponentes de diez y la suma de flechas en lugar de números.",
+   "items": [
+    {
+     "what": "La dependencia de potencia se lee en ambas direcciones",
+     "why": "La expresión $F \\propto 1/r^{2}$ no habla de números concretos, sino de cómo la respuesta sigue a la causa: si alejas las cargas al doble, la fuerza cae a la cuarta parte; si las alejas al triple, cae a la novena parte. Pero la proporción también tiene un camino inverso, y es precisamente el que usamos en el sexto paso de la deducción. Allí se busca el punto donde dos contribuciones se equilibran: de la igualdad $q_1/r_1^{2} = q_2/r_2^{2}$ las distancias se expresan ya mediante raíces de las cargas. El cuadrado, al pasar al otro lado del signo igual, se convierte en raíz; por eso una carga cuatro veces mayor desplaza el punto de equilibrio exactamente al doble, no al cuádruple. Un hábito útil para todo el curso: si ves un cuadrado en la condición, espera una raíz en la respuesta.",
+     "latex": "F \\propto \\frac{1}{r^{2}} \\qquad\\Longleftrightarrow\\qquad \\frac{r_2}{r_1} = \\sqrt{\\frac{q_2}{q_1}}",
+     "kit": "propto"
+    },
+    {
+     "what": "Cómo calcular con potencias de diez",
+     "why": "En el segundo paso de la deducción hay una fracción de cuatro factores con exponentes que van de $-31$ a $9$; no se calcula directamente. Los exponentes se suman por separado de las mantisas. Elevar al cuadrado duplica el exponente: $(1{,}6\\cdot10^{-19})^{2} = 2{,}6\\cdot10^{-38}$, $(9{,}1\\cdot10^{-31})^{2} = 8{,}3\\cdot10^{-61}$. La división resta exponentes: en el numerador queda $10^{-28}$, en el denominador $10^{-71}$, la diferencia es $43$. Las mantisas dan un factor de alrededor de $0{,}4$ — desplazan la respuesta en menos de un orden de magnitud y no afectan la deducción. De ahí el $10^{42}$: la relación de fuerzas está decidida por los exponentes antes de que toquemos la calculadora.",
+     "latex": "\\frac{9\\cdot10^{9}\\cdot 2{,}6\\cdot10^{-38}}{6{,}7\\cdot10^{-11}\\cdot 8{,}3\\cdot10^{-61}} = \\frac{2{,}3\\cdot10^{-28}}{5{,}5\\cdot10^{-71}} \\approx 4\\cdot10^{42}",
+     "kit": "order"
+    },
+    {
+     "what": "Las fuerzas se suman como desplazamientos",
+     "why": "El quinto paso de la deducción — el principio de superposición — se escribe con flechas: $\\vec{F} = \\sum_i \\vec{F}_i$. Las flechas aquí no son un adorno. Dos fuerzas de tres newtons cada una dan seis si están en la misma dirección, cero si van en direcciones opuestas, y alrededor de $4{,}2$ (es decir, $3\\sqrt{2}$) si forman un ángulo recto. La regla es la misma que al sumar pasos: tres pasos al norte y tres al este no dan seis pasos desde el punto de partida. En el montaje, todas las cargas están en una línea recta, por lo que la suma vectorial se reduce a sumar números con signo — esta concesión permite ver el punto de campo nulo a simple vista. En un problema plano ya no habrá tal concesión, y habrá que descomponer las fuerzas en ejes.",
+     "latex": "\\left|\\vec{F}_1 + \\vec{F}_2\\right| = \\sqrt{F_1^{2} + F_2^{2} + 2F_1F_2\\cos\\alpha}",
+     "kit": "vector"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "الشحنة وقانون كولوم",
@@ -1216,25 +1264,69 @@
     {
      "who": "شارل أوغستان كولوم",
      "year": "1785",
-     "what": "قاس القوة بميزان الالتواء من تصميمه الخاص وأثبت التربيع العكسي. كان الجهاز حساسًا لدرجة أنه يتأثر بحركة الهواء، وكان على كولوم الانتظار حتى تهدأ الغرفة."
+     "what": "قام بقياس القوة باستخدام ميزان الليّ الذي صممه بنفسه وأثبت التربيع العكسي. كان الجهاز حساسًا جدًا لدرجة أنه يتأثر بحركة الهواء، وكان على كولوم الانتظار حتى تهدأ الغرفة."
     },
     {
      "who": "هنري كافنديش",
      "year": "1773",
-     "what": "حصل على نفس النتيجة قبل اثني عشر عامًا وبشكل أكثر دقة، لكنه لم ينشر. تم العثور على ملاحظاته ونشرها بعد مائة عام — وبحلول ذلك الوقت كان القانون قد حمل اسم كولوم."
+     "what": "حصل على نفس النتيجة قبل ذلك باثنتي عشرة سنة وبدقة أكبر، لكنه لم ينشرها. تم العثور على ملاحظاته ونشرها بعد مئة عام — وبحلول ذلك الوقت كان القانون قد حمل اسم كولوم."
     },
     {
      "who": "جوزيف بريستلي",
      "year": "1767",
-     "what": "لاحظ أن القوة داخل كرة مجوفة مشحونة منعدمة، وقياسًا على نظرية نيوتن للجاذبية استنتج أن القانون يجب أن يكون تربيعًا عكسيًا. تبين أن التخمين صحيح قبل ثمانية عشر عامًا من القياس."
+     "what": "لاحظ أن القوة داخل كرة مشحونة مجوفة تساوي صفرًا، وقياسًا على نظرية نيوتن للجاذبية، استنتج أن القانون يجب أن يكون تربيعيًا عكسيًا. كان تخمينه صحيحًا قبل ثمانية عشر عامًا من القياس."
     },
     {
      "who": "روبرت ميليكان",
      "year": "1909",
-     "what": "قاس الشحنة الأولية بحركة قطرات زيت صغيرة في مجال كهربائي وأظهر أن الشحنة دائماً مضاعف صحيح لنفس الكمية. أصبح تكميم الشحنة حقيقة تجريبية."
+     "what": "قام بقياس الشحنة الأولية من خلال حركة قطرات زيت صغيرة في مجال كهربائي وأظهر أن الشحنة دائمًا مضاعف لنفس القيمة. أصبح تكميم الشحنة حقيقة تجريبية."
     }
    ],
-   "story": "قصة اختبار الأس رائعة. بريستلي، ثم كافنديش وماكسويل فكروا هكذا: إذا كان القانون تربيعًا عكسيًا تمامًا، فإن المجال داخل كرة مشحونة يجب أن يكون صفرًا تمامًا — مساهمات جميع أجزاء السطح تلغي بعضها البعض. إذا اختلف الأس ولو قليلاً عن 2، سيكون التعويض غير كامل وسيظهر مجال داخلي. اختبار غياب المجال أسهل بكثير من قياس القوة: يكفي جهاز حساس وصبر. تم صقل هذه الطريقة إلى أقصى حد، واليوم من المعروف أن الأس يساوي اثنين بدقة تصل إلى $10^{-16}$. قلة من قوانين الفيزياء تم اختبارها بهذه الدقة — وتم اختبارها، في جوهرها، بتجربة سلبية."
+   "story": "قصة التحقق من الأس هي قصة رائعة. بريستلي، ثم كافنديش وماكسويل، فكروا على النحو التالي: إذا كان القانون تربيعيًا عكسيًا تمامًا، فإن المجال داخل كرة مشحونة يجب أن يكون صفرًا تمامًا — لأن مساهمات جميع أجزاء السطح تلغي بعضها البعض. إذا كان الأس مختلفًا ولو قليلًا عن اثنين، فإن التعويض لن يكون كاملاً وسيظهر مجال داخل الكرة. التحقق من غياب المجال أسهل بكثير من قياس القوة: يكفي جهاز حساس وصبر. تم صقل هذه التقنية إلى أقصى حد، واليوم نعرف أن الأس يساوي اثنين بدقة تصل إلى $10^{-16}$. قلة من قوانين الفيزياء تم اختبارها بهذه الدقة — وتم اختبارها في الأساس بتجربة سلبية.",
+   "symbols": [
+    {
+     "sym": "F",
+     "latex": "F",
+     "what": "قوة التفاعل",
+     "unit": "N",
+     "note": "وفقًا لقانون نيوتن الثالث، تؤثر على كلتا الشحنتين بنفس المقدار."
+    },
+    {
+     "sym": "q",
+     "latex": "q_1, q_2",
+     "what": "مقدار الشحنتين",
+     "unit": "C",
+     "note": "مع الإشارة: الشحنات المتشابهة تتنافر، والمختلفة تتجاذب."
+    },
+    {
+     "sym": "r",
+     "latex": "r",
+     "what": "المسافة بين الشحنتين",
+     "unit": "m",
+     "note": "الصيغة دقيقة للشحنات النقطية؛ وللكرات، تكون المسافة بين المركزين."
+    },
+    {
+     "sym": "k",
+     "latex": "k",
+     "what": "معامل التناسب",
+     "unit": "N·m²/C²",
+     "note": "$9\\cdot 10^{9}$ — رقم ضخم، وفيه تكمن قوة الكهرباء."
+    },
+    {
+     "sym": "eps",
+     "latex": "\\varepsilon_0",
+     "what": "الثابت الكهربائي",
+     "unit": "F/m",
+     "note": "من خلاله ومن خلال الثابت المغناطيسي يتم التعبير عن سرعة الضوء — وهذا سيتضح في موضوع المغناطيسية."
+    },
+    {
+     "sym": "e",
+     "latex": "e",
+     "what": "الشحنة الأولية",
+     "unit": "C",
+     "note": "$1{,}6\\cdot 10^{-19}$; أي شحنة ملحوظة هي مضاعف لها."
+    }
+   ]
   },
   "symbols": [
    {
@@ -1573,7 +1665,31 @@
     "hint": "كلتا القوتين تتناقصان كمربع المسافة، لذا عند القسمة، تلغى r^2. يبقى نسبة الثوابت مضروبة في مربعي الشحنة والكتلة.",
     "tolAbs": 2
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "ثلاث حيل: قراءة العلاقة الأسية في الاتجاهين، وحساب أسس العشرة، وجمع الأسهم بدلاً من الأرقام.",
+   "items": [
+    {
+     "what": "العلاقة الأسية تُقرأ في الاتجاهين",
+     "why": "الصيغة $F \\propto 1/r^{2}$ لا تخبرنا عن أرقام محددة، بل عن كيفية تبعية الاستجابة للسبب: إذا ضاعفت المسافة بين الشحنتين، تقل القوة إلى الربع؛ وإذا ضاعفتها ثلاث مرات، تقل إلى التسع. لكن للتناسب اتجاه عكسي أيضًا، وهو ما نستخدمه في الخطوة السادسة من الاستنتاج. هناك نبحث عن النقطة التي يتوازن فيها التأثيران: من المساواة $q_1/r_1^{2} = q_2/r_2^{2}$ تُعبر المسافات بدلالة الجذور التربيعية للشحنات. المربع، عند انتقاله عبر علامة المساواة، يصبح جذرًا تربيعيًا — لذلك الشحنة الأكبر بأربع مرات تُبعد نقطة التوازن بمقدار الضعف تمامًا، وليس أربعة أضعاف. عادة مفيدة طوال الدورة: إذا رأيت مربعًا في المعطيات، توقع جذرًا في الإجابة.",
+     "latex": "F \\propto \\frac{1}{r^{2}} \\qquad\\Longleftrightarrow\\qquad \\frac{r_2}{r_1} = \\sqrt{\\frac{q_2}{q_1}}",
+     "kit": "propto"
+    },
+    {
+     "what": "كيف نحسب بأسس العشرة",
+     "why": "في الخطوة الثانية من الاستنتاج، لدينا كسر من أربعة عوامل بأسس تتراوح من $-31$ إلى $9$؛ لا يُحسب هذا مباشرة. تُجمع الأسس بشكل منفصل عن المعاملات. التربيع يضاعف الأس: $(1{,}6\\cdot10^{-19})^{2} = 2{,}6\\cdot10^{-38}$، $(9{,}1\\cdot10^{-31})^{2} = 8{,}3\\cdot10^{-61}$. القسمة تطرح الأسس: في البسط يبقى $10^{-28}$، وفي المقام $10^{-71}$، والفرق يساوي $43$. المعاملات تعطي عاملًا حوالي $0{,}4$ — وهي تغيّر الإجابة بأقل من مرتبة واحدة ولا تؤثر على الاستنتاج. ومن هنا يأتي $10^{42}$: نسبة القوى تُحدد بالأسس قبل أن نمسك بالآلة الحاسبة.",
+     "latex": "\\frac{9\\cdot10^{9}\\cdot 2{,}6\\cdot10^{-38}}{6{,}7\\cdot10^{-11}\\cdot 8{,}3\\cdot10^{-61}} = \\frac{2{,}3\\cdot10^{-28}}{5{,}5\\cdot10^{-71}} \\approx 4\\cdot10^{42}",
+     "kit": "order"
+    },
+    {
+     "what": "القوى تُجمع مثل الإزاحات",
+     "why": "الخطوة الخامسة من الاستنتاج — مبدأ التراكب — تُكتب بأسهم: $\\vec{F} = \\sum_i \\vec{F}_i$. الأسهم هنا ليست للزينة. قوتان مقدار كل منهما ثلاثة نيوتن تعطيان ستة إذا كانتا في نفس الاتجاه، وصفرًا إذا كانتا متعاكستين، وحوالي $4{,}2$ (أي $3\\sqrt{2}$) إذا كانتا متعامدتين. القاعدة نفسها عند جمع الخطوات: ثلاث خطوات شمالًا وثلاث خطوات شرقًا لا تعطي ست خطوات من نقطة البداية. في المنصة، جميع الشحنات تقع على خط مستقيم واحد، لذلك يتحول الجمع الاتجاهي إلى جمع أرقام بإشارات — هذا التبسيط يسمح برؤية نقطة المجال الصفري بالعين المجردة. في المسائل المستوية، لن يكون هناك تبسيط، وسيتعين علينا تحليل القوى إلى مركبات.",
+     "latex": "\\left|\\vec{F}_1 + \\vec{F}_2\\right| = \\sqrt{F_1^{2} + F_2^{2} + 2F_1F_2\\cos\\alpha}",
+     "kit": "vector"
+    }
+   ]
+  }
  },
  "tags": [
   "gravity",

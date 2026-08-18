@@ -657,7 +657,64 @@
     "tolAbs": 1.5,
     "hint": "The product Iω is conserved. The moment of inertia was reduced by a factor of four—what does this mean for the angular velocity?"
    }
-  ]
+  ],
+  "derivation": {
+   "title": "How symmetry turns into conservation",
+   "lead": "The same move is repeated three times: we find a coordinate on which the Lagrangian does not depend, and we get a conserved quantity. First, a shift in space, then a rotation, and at the end a special case—a shift in time.",
+   "steps": [
+    {
+     "text": "Take the equation we obtained in the previous section from the principle of least action. It relates two quantities: how the Lagrangian changes when the coordinate is shifted and how it changes when the velocity is varied.",
+     "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{q}} = \\frac{\\partial L}{\\partial q}",
+     "figure": "elstart",
+     "figCaption": "The equation of motion in the form to which the variation of the action led"
+    },
+    {
+     "text": "Now suppose the system is symmetric under a shift of the coordinate: you move the setup by a meter—nothing changes. In the language of formulas, this means the Lagrangian does not depend on $q$ at all, so the right-hand side is zero.",
+     "latex": "\\frac{\\partial L}{\\partial q} = 0",
+     "figure": "noether",
+     "figCaption": "Each symmetry corresponds to its own conserved quantity"
+    },
+    {
+     "text": "This is worth checking, not taking on faith. A shift is a replacement $q \\to q + \\varepsilon$ with the same $\\varepsilon$ at all times, and the velocity does not change at all under such a replacement: the derivative of a constant is zero. So the entire response of the Lagrangian goes through its first argument and, for small $\\varepsilon$, equals $\\varepsilon\\,\\partial L/\\partial q$. Symmetry requires that this response be zero for any $\\varepsilon$, which happens only if the factor multiplying $\\varepsilon$ is itself zero.",
+     "latex": "\\frac{d}{dt}(q+\\varepsilon) = \\dot{q}, \\qquad L(q+\\varepsilon,\\dot{q}) - L(q,\\dot{q}) = \\varepsilon\\,\\frac{\\partial L}{\\partial q} + O(\\varepsilon^{2})",
+     "figure": "shiftinvar",
+     "figCaption": "A shift does not touch velocities: both setups move identically, the difference is only in position"
+    },
+    {
+     "text": "But if the time derivative of something is zero, then that something does not change over time. We have obtained a conservation law without postulating it.",
+     "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{q}} = 0 \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial \\dot{q}} = \\text{const}",
+     "figure": "pconserve",
+     "figCaption": "The conserved quantity is the generalized momentum"
+    },
+    {
+     "text": "Let's check on a simple case. For a free body, the Lagrangian is just the kinetic energy. The derivative with respect to velocity gives the familiar momentum: conservation of momentum turned out to be a consequence of the homogeneity of space.",
+     "latex": "L = \\frac{m\\dot{x}^2}{2} \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial \\dot{x}} = m\\dot{x} = p",
+     "figure": "elastic",
+     "figCaption": "Collision: momentum before and after is the same because space is homogeneous"
+    },
+    {
+     "text": "A free body is a degenerate case: nothing acts on it, and it is not hard for it to conserve momentum. Take two interacting bodies: the coordinate of each honestly enters the Lagrangian through the potential, and separately neither derivative $\\partial L/\\partial x_i$ is zero. But you must shift both at once—only then the distance $x_2 - x_1$ remains the same and the translation goes unnoticed; instead of two zeros, you get one, but for the sum. Adding the Euler–Lagrange equations for both bodies, we see that it is the sum of momenta that is constant—exactly what the stand shows for any impact.",
+     "latex": "U = U(x_2 - x_1) \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial x_1} + \\frac{\\partial L}{\\partial x_2} = 0 \\;\\Longrightarrow\\; \\frac{d}{dt}\\bigl(p_1 + p_2\\bigr) = 0",
+     "figure": "shiftpair",
+     "figCaption": "Shifting the whole system: the mutual distance is the same—therefore the sum of momenta is conserved"
+    },
+    {
+     "text": "Now take the angle as the coordinate. The position of a point is given by the pair $(r, \\varphi)$; the velocity splits into radial $\\dot{r}$ and transverse $r\\dot{\\varphi}$, and the kinetic energy is the sum of their squares. If the interaction depends only on the distance to the axis—as for a planet around a star or a figure skater around the vertical—then the angle does not enter the Lagrangian, and its derivative is zero. The generalized momentum corresponding to the angle turns out to be the angular momentum; the factor $r^{2}$ here is not decoration—it is precisely what spins up the skater when arms are pulled in.",
+     "latex": "L = \\frac{m}{2}\\bigl(\\dot{r}^{2} + r^{2}\\dot{\\varphi}^{2}\\bigr) - U(r) \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial \\dot{\\varphi}} = m r^{2}\\dot{\\varphi} = I\\omega = \\text{const}",
+     "figure": "rotcoord",
+     "figCaption": "Rotation changes only the angle: radius and potential remain the same, so mr²ω is conserved"
+    },
+    {
+     "text": "Time is a special case: $t$ is not a coordinate but a parameter; you cannot substitute it in place of $q$, and the derivation has to be built anew. Suppose time does not enter the Lagrangian explicitly: an experiment started today and tomorrow proceeds identically. Differentiate $L$ with respect to time along the motion and replace $\\partial L/\\partial q$ in the first term using the Euler–Lagrange equation: the entire right-hand side collects into a single total derivative. Therefore, the difference $\\dot{q}\\,\\partial L/\\partial\\dot{q} - L$ is constant, and for an ordinary mechanical system it equals $K + U$—the familiar total energy.",
+     "latex": "\\frac{dL}{dt} = \\frac{\\partial L}{\\partial q}\\dot{q} + \\frac{\\partial L}{\\partial \\dot{q}}\\ddot{q} = \\frac{d}{dt}\\left(\\dot{q}\\,\\frac{\\partial L}{\\partial \\dot{q}}\\right) \\;\\Longrightarrow\\; E = \\dot{q}\\,\\frac{\\partial L}{\\partial \\dot{q}} - L = \\text{const}",
+     "figure": "timeshift",
+     "figCaption": "Homogeneity of time: identical experiments at different moments give conservation of energy"
+    }
+   ],
+   "plate": "\\text{symmetry} \\;\\longrightarrow\\; \\text{conservation law}",
+   "plateCap": "Homogeneity of space gives momentum, homogeneity of time gives energy, isotropy gives angular momentum",
+   "note": "The theorem requires continuous symmetry: the shift can be made arbitrarily small. Discrete symmetries—for example, mirror reflection—do not yield a conserved quantity in this sense, although they impose strong constraints on physics."
+  }
  },
  "es": {
   "title": "El lagrangiano y las simetrías",
@@ -934,7 +991,64 @@
     "tolAbs": 1.5,
     "hint": "Se conserva el producto Iω. El momento de inercia se redujo a la cuarta parte, ¿qué significa esto para la velocidad angular?"
    }
-  ]
+  ],
+  "derivation": {
+   "title": "Cómo la simetría se convierte en conservación",
+   "lead": "El mismo procedimiento se repite tres veces: encontramos una coordenada de la que el lagrangiano no depende, y obtenemos una cantidad conservada. Primero una traslación en el espacio, luego una rotación, y al final un caso especial: una traslación en el tiempo.",
+   "steps": [
+    {
+     "text": "Tomemos la ecuación que obtuvimos en la sección anterior a partir del principio de mínima acción. Relaciona dos cantidades: cómo cambia el lagrangiano con un desplazamiento de la coordenada y cómo cambia con un cambio de velocidad.",
+     "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{q}} = \\frac{\\partial L}{\\partial q}",
+     "figure": "elstart",
+     "figCaption": "Ecuación de movimiento en la forma a la que condujo la variación de la acción"
+    },
+    {
+     "text": "Ahora supongamos que el sistema es simétrico respecto a la traslación de la coordenada: movemos el montaje un metro y nada cambia. En el lenguaje de las fórmulas, esto significa que el lagrangiano no depende de $q$ en absoluto, es decir, el lado derecho es igual a cero.",
+     "latex": "\\frac{\\partial L}{\\partial q} = 0",
+     "figure": "noether",
+     "figCaption": "A cada simetría le corresponde una cantidad conservada"
+    },
+    {
+     "text": "Esto vale la pena verificarlo, no aceptarlo sin más. Una traslación es el reemplazo $q \\to q + \\varepsilon$ con el mismo $\\varepsilon$ en todos los instantes de tiempo, y la velocidad no cambia en absoluto bajo tal reemplazo: la derivada de una constante es cero. Por lo tanto, toda la respuesta del lagrangiano pasa a través de su primer argumento y, para un $\\varepsilon$ pequeño, es igual a $\\varepsilon\\,\\partial L/\\partial q$. La simetría requiere que esta respuesta sea cero para cualquier $\\varepsilon$, y esto solo ocurre si el factor que multiplica a $\\varepsilon$ es cero.",
+     "latex": "\\frac{d}{dt}(q+\\varepsilon) = \\dot{q}, \\qquad L(q+\\varepsilon,\\dot{q}) - L(q,\\dot{q}) = \\varepsilon\\,\\frac{\\partial L}{\\partial q} + O(\\varepsilon^{2})",
+     "figure": "shiftinvar",
+     "figCaption": "La traslación no afecta a las velocidades: ambos montajes se mueven igual, la diferencia está solo en la posición"
+    },
+    {
+     "text": "Pero si la derivada temporal de algo es cero, entonces ese algo no cambia con el tiempo. Hemos obtenido una ley de conservación sin postularla.",
+     "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{q}} = 0 \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial \\dot{q}} = \\text{const}",
+     "figure": "pconserve",
+     "figCaption": "La cantidad conservada es el momento generalizado"
+    },
+    {
+     "text": "Verifiquemos en un caso simple. Para un cuerpo libre, el lagrangiano es solo la energía cinética. La derivada con respecto a la velocidad da el momento habitual: la conservación del momento resultó ser una consecuencia de la homogeneidad del espacio.",
+     "latex": "L = \\frac{m\\dot{x}^2}{2} \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial \\dot{x}} = m\\dot{x} = p",
+     "figure": "elastic",
+     "figCaption": "Colisión: el momento antes y después es el mismo porque el espacio es homogéneo"
+    },
+    {
+     "text": "El cuerpo libre es un caso degenerado: nada actúa sobre él, y conservar el momento no le cuesta esfuerzo. Tomemos dos cuerpos que interactúan: la coordenada de cada uno entra honestamente en el lagrangiano a través del potencial, y por separado ninguna derivada $\\partial L/\\partial x_i$ es cero. Pero hay que trasladar ambos a la vez, solo entonces la distancia $x_2 - x_1$ permanece igual y la traslación pasa desapercibida; en lugar de dos ceros obtenemos uno, pero para la suma. Sumando las ecuaciones de Euler-Lagrange para ambos cuerpos, vemos que lo que es constante es la suma de los momentos, que es lo que muestra el soporte en cualquier choque.",
+     "latex": "U = U(x_2 - x_1) \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial x_1} + \\frac{\\partial L}{\\partial x_2} = 0 \\;\\Longrightarrow\\; \\frac{d}{dt}\\bigl(p_1 + p_2\\bigr) = 0",
+     "figure": "shiftpair",
+     "figCaption": "Trasladamos el sistema completo: la distancia mutua es la misma, por lo tanto se conserva la suma de los momentos"
+    },
+    {
+     "text": "Ahora tomemos como coordenada el ángulo. La posición del punto se especifica mediante el par $(r, \\varphi)$; la velocidad se descompone en radial $\\dot{r}$ y transversal $r\\dot{\\varphi}$, y la energía cinética es la suma de sus cuadrados. Si la interacción depende solo de la distancia al eje, como en el caso de un planeta alrededor de una estrella o de un patinador alrededor de la vertical, el ángulo no entra en el lagrangiano y su derivada es cero. El momento generalizado correspondiente al ángulo resulta ser el momento angular; el factor $r^{2}$ no es un adorno: es precisamente el que hace girar más rápido al patinador cuando junta los brazos.",
+     "latex": "L = \\frac{m}{2}\\bigl(\\dot{r}^{2} + r^{2}\\dot{\\varphi}^{2}\\bigr) - U(r) \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial \\dot{\\varphi}} = m r^{2}\\dot{\\varphi} = I\\omega = \\text{const}",
+     "figure": "rotcoord",
+     "figCaption": "La rotación cambia solo el ángulo: el radio y el potencial son los mismos, por lo tanto se conserva mr²ω"
+    },
+    {
+     "text": "El caso del tiempo es especial: $t$ no es una coordenada, sino un parámetro, no se puede sustituir en lugar de $q$, y la derivación hay que hacerla de nuevo. Supongamos que el tiempo no entra explícitamente en el lagrangiano: un experimento comenzado hoy y mañana transcurre igual. Derivamos $L$ con respecto al tiempo a lo largo del movimiento y reemplazamos en el primer término $\\partial L/\\partial q$ usando la ecuación de Euler-Lagrange: todo el lado derecho se reúne en una derivada total. Por lo tanto, es constante la diferencia $\\dot{q}\\,\\partial L/\\partial\\dot{q} - L$, que para un sistema mecánico ordinario es igual a $K + U$, la energía total habitual.",
+     "latex": "\\frac{dL}{dt} = \\frac{\\partial L}{\\partial q}\\dot{q} + \\frac{\\partial L}{\\partial \\dot{q}}\\ddot{q} = \\frac{d}{dt}\\left(\\dot{q}\\,\\frac{\\partial L}{\\partial \\dot{q}}\\right) \\;\\Longrightarrow\\; E = \\dot{q}\\,\\frac{\\partial L}{\\partial \\dot{q}} - L = \\text{const}",
+     "figure": "timeshift",
+     "figCaption": "Homogeneidad del tiempo: experimentos idénticos en momentos diferentes dan lugar a la conservación de la energía"
+    }
+   ],
+   "plate": "\\text{simetría} \\;\\longrightarrow\\; \\text{ley de conservación}",
+   "plateCap": "La homogeneidad del espacio da el momento, la homogeneidad del tiempo da la energía, la isotropía da el momento angular",
+   "note": "El teorema requiere una simetría continua: la traslación se puede hacer arbitrariamente pequeña. Las simetrías discretas, como la reflexión especular, no dan una cantidad conservada en este sentido, aunque imponen fuertes restricciones a la física."
+  }
  },
  "ar": {
   "title": "لاغرانجيان والتماثلات",
@@ -1211,6 +1325,63 @@
     "tolAbs": 1.5,
     "hint": "الجداء Iω محفوظ. تم تقليل عزم القصور الذاتي إلى الربع - ماذا يعني هذا بالنسبة للسرعة الزاوية؟"
    }
-  ]
+  ],
+  "derivation": {
+   "title": "كيف يتحول التناظر إلى حفظ",
+   "lead": "نفس الخطوة تتكرر ثلاث مرات: نجد الإحداثي الذي لا يعتمد عليه لاغرانجيان — ونحصل على كمية محفوظة. أولاً الإزاحة في الفضاء، ثم الدوران، وفي النهاية حالة خاصة — الإزاحة في الزمن.",
+   "steps": [
+    {
+     "text": "لنأخذ المعادلة التي حصلنا عليها في الفقرة السابقة من مبدأ الفعل الأصغر. إنها تربط بين كميتين: كيف يتغير لاغرانجيان عند إزاحة الإحداثي وكيف يتغير عند تغير السرعة.",
+     "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{q}} = \\frac{\\partial L}{\\partial q}",
+     "figure": "elstart",
+     "figCaption": "معادلة الحركة بالصيغة التي أدى إليها تباين الفعل"
+    },
+    {
+     "text": "الآن لنفترض أن النظام متماثل بالنسبة لإزاحة الإحداثي: نقلنا الجهاز مترًا واحدًا — لم يتغير شيء. بلغة الصيغ هذا يعني أن لاغرانجيان لا يعتمد إطلاقًا على $q$، أي أن الطرف الأيمن يساوي صفرًا.",
+     "latex": "\\frac{\\partial L}{\\partial q} = 0",
+     "figure": "noether",
+     "figCaption": "لكل تناظر كمية محفوظة مقابلة"
+    },
+    {
+     "text": "هذا يستحق التحقق، وليس قبوله كمسلّمة. الإزاحة هي استبدال $q \\to q + \\varepsilon$ بنفس $\\varepsilon$ في جميع اللحظات الزمنية، والسرعة لا تتغير إطلاقًا تحت هذا الاستبدال: مشتقة الثابت تساوي صفرًا. إذن، كل استجابة لاغرانجيان تأتي من خلال الوسيط الأول، وعندما يكون $\\varepsilon$ صغيرًا تكون مساوية لـ $\\varepsilon\\,\\partial L/\\partial q$. التماثل يتطلب أن تكون هذه الاستجابة صفرًا لأي $\\varepsilon$ — وهذا لا يحدث إلا إذا كان المعامل عند $\\varepsilon$ يساوي صفرًا نفسه.",
+     "latex": "\\frac{d}{dt}(q+\\varepsilon) = \\dot{q}, \\qquad L(q+\\varepsilon,\\dot{q}) - L(q,\\dot{q}) = \\varepsilon\\,\\frac{\\partial L}{\\partial q} + O(\\varepsilon^{2})",
+     "figure": "shiftinvar",
+     "figCaption": "الإزاحة لا تلمس السرعات: كلا الجهازين يتحركان بنفس الطريقة، الفرق فقط في الموضع"
+    },
+    {
+     "text": "لكن إذا كان المشتق الزمني لشيء ما يساوي صفرًا، فإن هذا الشيء لا يتغير مع الزمن. لقد حصلنا على قانون حفظ دون أن نفترضه.",
+     "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{q}} = 0 \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial \\dot{q}} = \\text{const}",
+     "figure": "pconserve",
+     "figCaption": "الكمية المحفوظة — الزخم المعمم"
+    },
+    {
+     "text": "لنتحقق من ذلك في حالة بسيطة. بالنسبة لجسم حر، لاغرانجيان هو فقط الطاقة الحركية. المشتقة بالنسبة للسرعة تعطي الزخم المألوف: تبين أن حفظ الزخم هو نتيجة لتجانس الفضاء.",
+     "latex": "L = \\frac{m\\dot{x}^2}{2} \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial \\dot{x}} = m\\dot{x} = p",
+     "figure": "elastic",
+     "figCaption": "التصادم: الزخم قبل وبعد متساوٍ، لأن الفضاء متجانس"
+    },
+    {
+     "text": "الجسم الحر حالة خاصة: لا تؤثر عليه قوى، وليس من الصعب عليه حفظ الزخم. لنأخذ جسمين متفاعلين: إحداثي كل منهما يدخل بصدق في لاغرانجيان من خلال الجهد، وبشكل منفصل لا يساوي أي من المشتقتين $\\partial L/\\partial x_i$ صفرًا. لكن يجب إزاحة كلاهما معًا — فقط عندها تبقى المسافة $x_2 - x_1$ كما هي ويمر الإزاحة دون أن يُلاحظ؛ بدلاً من صفرين نحصل على صفر واحد، لكن للمجموع. بجمع معادلتي أويلر-لاغرانج لكلا الجسمين، نرى أن الثابت هو مجموع الزخمين — وهذا ما يظهره الجهاز عند أي اصطدام.",
+     "latex": "U = U(x_2 - x_1) \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial x_1} + \\frac{\\partial L}{\\partial x_2} = 0 \\;\\Longrightarrow\\; \\frac{d}{dt}\\bigl(p_1 + p_2\\bigr) = 0",
+     "figure": "shiftpair",
+     "figCaption": "نزيح النظام بأكمله: المسافة المتبادلة تبقى كما هي — لذلك يتم حفظ مجموع الزخمين"
+    },
+    {
+     "text": "الآن لنأخذ الزاوية كإحداثي. نحدد موضع النقطة بالزوج $(r, \\varphi)$؛ السرعة تتحلل إلى شعاعية $\\dot{r}$ وعرضية $r\\dot{\\varphi}$، والطاقة الحركية تتكون من مربعيهما. إذا كان التفاعل يعتمد فقط على المسافة من المحور — كما هو الحال بالنسبة لكوكب حول نجم أو متزلج حول محور عمودي — فإن الزاوية لا تدخل في لاغرانجيان، ومشتقتها بالنسبة لها تساوي صفرًا. الزخم المعمم المقابل للزاوية هو عزم الزخم؛ العامل $r^{2}$ هنا ليس للزينة — بل هو الذي يسرع المتزلج عندما يضم ذراعيه.",
+     "latex": "L = \\frac{m}{2}\\bigl(\\dot{r}^{2} + r^{2}\\dot{\\varphi}^{2}\\bigr) - U(r) \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial \\dot{\\varphi}} = m r^{2}\\dot{\\varphi} = I\\omega = \\text{const}",
+     "figure": "rotcoord",
+     "figCaption": "الدوران يغير الزاوية فقط: نصف القطر والجهد يبقيان كما هما، لذلك يتم حفظ mr²ω"
+    },
+    {
+     "text": "الحالة مع الزمن خاصة: $t$ ليس إحداثيًا بل معاملًا، لا يمكن وضعه مكان $q$، ويجب بناء الاستنتاج من جديد. لنفترض أن الزمن لا يدخل في لاغرانجيان بشكل صريح: تجربة تبدأ اليوم وغدًا تسير بنفس الطريقة. لنشتق $L$ بالنسبة للزمن على طول الحركة ونستبدل في الحد الأول $\\partial L/\\partial q$ بمعادلة أويلر-لاغرانج: الطرف الأيمن بأكمله يتجمع في مشتقة كاملة واحدة. إذن، الثابت هو الفرق $\\dot{q}\\,\\partial L/\\partial\\dot{q} - L$، وبالنسبة لنظام ميكانيكي عادي يساوي $K + U$ — الطاقة الكلية المألوفة.",
+     "latex": "\\frac{dL}{dt} = \\frac{\\partial L}{\\partial q}\\dot{q} + \\frac{\\partial L}{\\partial \\dot{q}}\\ddot{q} = \\frac{d}{dt}\\left(\\dot{q}\\,\\frac{\\partial L}{\\partial \\dot{q}}\\right) \\;\\Longrightarrow\\; E = \\dot{q}\\,\\frac{\\partial L}{\\partial \\dot{q}} - L = \\text{const}",
+     "figure": "timeshift",
+     "figCaption": "تجانس الزمن: تجارب متطابقة في لحظات مختلفة تعطي حفظ الطاقة"
+    }
+   ],
+   "plate": "\\text{تناظر} \\;\\longrightarrow\\; \\text{قانون حفظ}",
+   "plateCap": "تجانس الفضاء يعطي الزخم، تجانس الزمن يعطي الطاقة، الخواص (isotropy) يعطي عزم الزخم",
+   "note": "تتطلب النظرية تناظرًا مستمرًا: يمكن جعل الإزاحة صغيرة بقدر ما نشاء. التناظرات المنفصلة — مثل الانعكاس المرآتي — لا تعطي كمية محفوظة بهذا المعنى، وإن كانت تفرض قيودًا قوية على الفيزياء."
+  }
  }
 }

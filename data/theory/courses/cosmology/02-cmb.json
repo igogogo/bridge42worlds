@@ -685,7 +685,64 @@
     "tolAbs": 20,
     "hint": "The wavelength stretches by a factor of (1 + z), so in the past it was that many times shorter. What is (1 + z) when z = 9?"
    }
-  ]
+  ],
+  "derivation": {
+   "title": "Why radiation must exist and why it is exactly like this",
+   "lead": "Let's go from 'it used to be denser' to the number 2.725 K, and then see what doesn't fit in this picture without inflation.",
+   "steps": [
+    {
+     "text": "Let's go back in time. Distances shrink, density increases, and radiation compresses with expansion: wavelengths become shorter, so the energy of each quantum is greater. Compressed radiation is hot radiation. It follows that the early state was hot, and this is not an assumption but expansion reversed.",
+     "latex": "T \\propto \\frac{1}{a} \\;\\Longrightarrow\\; T = T_0 (1 + z)",
+     "figure": "cooldown",
+     "figCaption": "The same radiation: compressed was hot, stretched became cold"
+    },
+    {
+     "text": "While matter is ionized, light does not travel through it: it scatters off free electrons and stays in place. Transparency occurs when electrons bind into atoms. For hydrogen this happens around three thousand kelvins — noticeably lower than 'ionization energy divided by Boltzmann's constant', because there are many more photons than atoms, and even a rare tail of the distribution keeps breaking atoms apart for a long time.",
+     "latex": "T_{\\text{rec}} \\approx 3000\\ \\text{K}, \\qquad z_{\\text{rec}} \\approx 1100",
+     "figure": "recombination",
+     "figCaption": "On the left, plasma and light in fog; on the right, neutral atoms and light escapes freely"
+    },
+    {
+     "text": "How much lower is calculated on the margins. The ionization energy of hydrogen is 13.6 eV, corresponding to a temperature of 158,000 K, but any photon from the hot tail of the distribution can break an atom, and there are about one and a half billion photons for each atom in the Universe. Atoms survive only from the moment when the fraction of the tail, decreasing as $e^{-E/kT}$, becomes smaller than the inverse of this number: the logarithm of one and a half billion is twenty-one, and the naive 158,000 K is divided by that same factor. A factor of about two remains — it comes from the exact calculation using the Saha equation, which also takes into account the number of states available to the freed electron; the answer lands at three thousand.",
+     "latex": "\\frac{E_{\\text{ion}}}{k} = 158\\,000\\ \\text{K}, \\quad \\frac{n_\\gamma}{n_{\\text{at}}} \\approx 1{,}5\\cdot 10^{9} \\;\\Longrightarrow\\; T \\approx \\frac{158\\,000}{\\ln(1{,}5\\cdot 10^{9})} \\approx 7500\\ \\text{K}",
+     "figure": "phototail",
+     "figCaption": "The threshold of 13.6 eV lies far in the tail of the distribution, but there are nine orders of magnitude more photons than atoms — and the tail lasts a long time"
+    },
+    {
+     "text": "The light that came out at that moment travels to us without hindrance. Along the way it is stretched by the same expansion: by as many times as the Universe has grown. A thousandfold stretching turns the glow of hot gas into microwaves.",
+     "latex": "T_0 = \\frac{T_{\\text{rec}}}{1 + z_{\\text{rec}}} \\approx \\frac{3000}{1100} \\approx 2{,}7\\ \\text{K}",
+     "figure": "redshiftwave",
+     "figCaption": "The same light on its way to us: stretched as many times as the Universe has grown"
+    },
+    {
+     "text": "The position of the spectrum peak provides a check. Substituting the measured temperature into Wien's law gives just over a millimeter — the microwave range. This is exactly what the antenna in Holmdel saw, and the COBE satellite in 1990 showed that the shape of the spectrum matches the Planckian one with an accuracy unattainable for any laboratory source.",
+     "latex": "\\lambda_{\\max} = \\frac{2{,}898 \\cdot 10^{-3}}{2{,}725} \\approx 1{,}06\\ \\text{mm}",
+     "figure": "planckpeak",
+     "figCaption": "The colder the body, the further to the right the peak: for the relic it is in millimeter waves"
+    },
+    {
+     "text": "And now what does not fit. Take two points on the sky separated by two degrees. At the moment when the radiation came out, the distance between them was such that light could not have traveled it in all the time since the beginning: they were beyond each other's horizon. They had no common history — yet the temperature is the same to the fifth decimal place. This is called the horizon problem.",
+     "latex": "\\text{causal horizon} \\sim 2^\\circ \\;\\-\\; \\text{limit where contact was possible}",
+     "figure": "horizon",
+     "figCaption": "Two regions beyond each other's horizon: a signal between them could not have traveled"
+    },
+    {
+     "text": "The second oddity is visible in the size of the spots. Before recombination, the plasma carried sound waves at about $c/\\sqrt{3}$, and by the time the light came out, sound had managed to travel a well-defined distance $r_{\\text{snd}}$ — this is a ruler of known length imprinted on the entire sky. The angle at which we see it from a distance $D$ depends not only on that distance but also on the geometry of space along the way: in a closed world, rays converge and the spot appears larger than in a flat calculation; in an open world, smaller. The measurement gives exactly the flat case, about one degree — and from the CMB alone, the total density equals the critical one to about one percent. It cannot be pinned down to fractions of a percent with a single angle: different pairs of parameters give the same angle, so the CMB is combined with an independent ruler — the acoustic trace in the distribution of galaxies; together they give $1{,}000 \\pm 0{,}002$. And this is not the same degree as in the horizon problem: the causal horizon covers about two degrees, while sound managed to travel $\\sqrt{3}$ times less — hence about one.",
+     "latex": "\\theta \\approx \\frac{r_{\\text{snd}}}{D} \\approx 1^\\circ \\;\\Longrightarrow\\; \\Omega_{\\text{tot}} = 1{,}00 \\pm 0{,}01",
+     "figure": "flatangle",
+     "figCaption": "The ruler is the same, but the angle is different: it measures the curvature of space between us and the surface of last scattering"
+    },
+    {
+     "text": "Inflation explains it this way: before the hot stage, the Universe expanded extremely rapidly for a very short time. Then everything we see today came out of one tiny region that had time to become homogeneous before the expansion. At the same time, the second puzzle is solved — why space is so close to flat: any curvature is stretched by the expansion almost to zero, like wrinkles on an inflating balloon.",
+     "latex": "a \\;\\to\\; a \\cdot e^{N}, \\qquad N \\approx 60",
+     "figure": "inflation",
+     "figCaption": "Everything visible today came out of one region that had time to even out before the expansion"
+    }
+   ],
+   "plate": "T = T_0(1+z), \\qquad \\lambda_{\\max} = b/T",
+   "plateCap": "Two simple formulas connect the noise in the antenna with the state of the Universe at the age of three hundred eighty thousand years. Everything else in this section is consequences and what cannot be derived from them.",
+   "note": "Inflation is not as reliable a part of the picture as the cooling of the relic. The cooling follows from expansion and is verified by the spectrum; inflation was invented to fit observations and still has no unique form: there are dozens of models, and which one is correct is unknown. It should be taught exactly like this: a strong explanation with an open end."
+  }
  },
  "es": {
   "title": "Radiación cósmica de fondo e inflación",
@@ -985,7 +1042,64 @@
     "tolAbs": 20,
     "hint": "La longitud de onda se estira por un factor de (1 + z), por lo que en el pasado era ese mismo factor más corta. ¿Cuánto vale (1 + z) cuando z = 9?"
    }
-  ]
+  ],
+  "derivation": {
+   "title": "Por qué debe haber radiación y por qué es así",
+   "lead": "Pasemos de «antes era más denso» al número 2,725 K, y luego veamos qué no encaja en esta imagen sin la inflación.",
+   "steps": [
+    {
+     "text": "Vayamos hacia atrás en el tiempo. Las distancias se acortan, la densidad aumenta y la radiación se comprime con la expansión: las longitudes de onda se acortan, por lo que la energía de cada cuanto es mayor. La radiación comprimida es radiación caliente. De esto se deduce que el estado temprano era caliente, y esto no es una suposición, sino la expansión invertida.",
+     "latex": "T \\propto \\frac{1}{a} \\;\\Longrightarrow\\; T = T_0 (1 + z)",
+     "figure": "cooldown",
+     "figCaption": "La misma radiación: comprimida estaba caliente, estirada se ha enfriado"
+    },
+    {
+     "text": "Mientras la materia está ionizada, la luz no viaja: se dispersa en los electrones libres y se queda en el mismo lugar. La transparencia llega cuando los electrones se unen en átomos. Para el hidrógeno esto ocurre alrededor de tres mil kelvin, notablemente menos que «la energía de ionización dividida por la constante de Boltzmann», porque hay muchos más fotones que átomos, e incluso la cola rara de la distribución tarda mucho en romper los átomos de nuevo.",
+     "latex": "T_{\\text{rec}} \\approx 3000\\ \\text{K}, \\qquad z_{\\text{rec}} \\approx 1100",
+     "figure": "recombination",
+     "figCaption": "A la izquierda, plasma y luz en la niebla; a la derecha, átomos neutros y la luz se va libremente"
+    },
+    {
+     "text": "Cuánto menos se calcula al margen. La energía de ionización del hidrógeno, 13,6 eV, corresponde a una temperatura de 158 000 K, pero cualquier fotón de la cola caliente de la distribución puede romper el átomo, y hay aproximadamente mil quinientos millones de fotones por cada átomo en el universo. Los átomos sobreviven solo desde el momento en que la fracción de la cola, que decrece como $e^{-E/kT}$, se vuelve menor que el inverso de ese número: el logaritmo de mil quinientos millones es veintiuno, y por eso se dividen los ingenuos 158 000 K. Queda un factor del orden de dos: lo da el cálculo exacto con la ecuación de Saha, donde también se tiene en cuenta el número de estados disponibles para el electrón liberado; la respuesta se asienta en tres mil.",
+     "latex": "\\frac{E_{\\text{ion}}}{k} = 158\\,000\\ \\text{K}, \\quad \\frac{n_\\gamma}{n_{\\text{at}}} \\approx 1{,}5\\cdot 10^{9} \\;\\Longrightarrow\\; T \\approx \\frac{158\\,000}{\\ln(1{,}5\\cdot 10^{9})} \\approx 7500\\ \\text{K}",
+     "figure": "phototail",
+     "figCaption": "El umbral de 13,6 eV está lejos en la cola de la distribución, pero hay nueve órdenes de magnitud más fotones que átomos, y la cola alcanza durante mucho tiempo"
+    },
+    {
+     "text": "La luz que salió en ese momento viaja hacia nosotros sin obstáculos. En el camino se estira con la misma expansión: en la misma cantidad en que ha crecido el universo. Un estiramiento mil veces mayor convierte el resplandor del gas caliente en microondas.",
+     "latex": "T_0 = \\frac{T_{\\text{rec}}}{1 + z_{\\text{rec}}} \\approx \\frac{3000}{1100} \\approx 2{,}7\\ \\text{K}",
+     "figure": "redshiftwave",
+     "figCaption": "La misma luz en camino hacia nosotros: estirada en la misma cantidad en que ha crecido el universo"
+    },
+    {
+     "text": "La posición del pico del espectro da una comprobación. Sustituyendo la temperatura medida en la ley de Wien, obtenemos un poco más de un milímetro: el rango de microondas. Esto es exactamente lo que vio la antena en Holmdel, y el satélite COBE en 1990 mostró que la forma del espectro coincide con la de Planck con una precisión inalcanzable para cualquier fuente de laboratorio.",
+     "latex": "\\lambda_{\\max} = \\frac{2{,}898 \\cdot 10^{-3}}{2{,}725} \\approx 1{,}06\\ \\text{mm}",
+     "figure": "planckpeak",
+     "figCaption": "Cuanto más frío es el cuerpo, más a la derecha está el pico: en el relicto está en ondas milimétricas"
+    },
+    {
+     "text": "Y ahora lo que no encaja. Tomemos dos puntos en el cielo separados por dos grados. En el momento en que la radiación salió, entre ellos había una distancia que la luz no pudo recorrer en todo el tiempo desde el principio: estaban más allá del horizonte el uno del otro. No tenían historia común, pero la temperatura es la misma hasta el quinto decimal. Esto se llama el problema del horizonte.",
+     "latex": "\\text{horizonte causal} \\sim 2^\\circ \\;-\\; \\text{límite donde la conexión era posible}",
+     "figure": "horizon",
+     "figCaption": "Dos regiones más allá del horizonte la una de la otra: la señal entre ellas no tuvo tiempo de viajar"
+    },
+    {
+     "text": "La segunda rareza se ve en el tamaño de las manchas. Antes de la recombinación, el plasma llevaba ondas sonoras a una velocidad de aproximadamente $c/\\sqrt{3}$, y para el momento en que la luz salió, el sonido había recorrido una distancia bien definida $r_{\\text{son}}$: esta es una regla de longitud conocida impresa en todo el cielo. El ángulo bajo el cual la vemos desde una distancia $D$ depende no solo de la distancia en sí, sino también de la geometría del espacio en el camino: en un mundo cerrado los rayos convergen y la mancha parece más grande que en el cálculo plano, en un mundo abierto, más pequeña. La medición da exactamente el caso plano, alrededor de un grado, y solo con el fondo cósmico de microondas la densidad total es igual a la crítica con una precisión de alrededor del uno por ciento. No se puede reducir a fracciones de porcentaje con un solo ángulo: diferentes pares de parámetros dan el mismo ángulo, por lo que el relicto se combina con una regla independiente: la huella acústica en la distribución de galaxias; juntos dan $1{,}000 \\pm 0{,}002$. Y este no es el mismo grado que en el problema del horizonte: el horizonte causal cubre alrededor de dos grados, y el sonido tuvo tiempo de recorrer $\\sqrt{3}$ veces menos, de ahí aproximadamente uno.",
+     "latex": "\\theta \\approx \\frac{r_{\\text{son}}}{D} \\approx 1^\\circ \\;\\Longrightarrow\\; \\Omega_{\\text{total}} = 1{,}00 \\pm 0{,}01",
+     "figure": "flatangle",
+     "figCaption": "La regla es la misma, pero el ángulo es diferente: mide la curvatura del espacio entre nosotros y la superficie de última dispersión"
+    },
+    {
+     "text": "La inflación explica esto así: antes de la etapa caliente, el universo se expandió muy brevemente a una velocidad extremadamente rápida. Entonces todo lo que vemos hoy salió de una pequeña región que tuvo tiempo de volverse homogénea antes de la expansión. De paso, se resuelve el segundo enigma: por qué el espacio está tan cerca de ser plano: cualquier curvatura se estira con la expansión casi hasta cero, como las arrugas en un globo que se infla.",
+     "latex": "a \\;\\to\\; a \\cdot e^{N}, \\qquad N \\approx 60",
+     "figure": "inflation",
+     "figCaption": "Todo lo visible hoy salió de una región que tuvo tiempo de igualarse antes de la expansión"
+    }
+   ],
+   "plate": "T = T_0(1+z), \\qquad \\lambda_{\\max} = b/T",
+   "plateCap": "Dos fórmulas simples conectan el ruido en la antena con el estado del universo a la edad de trescientos ochenta mil años. Todo lo demás en este párrafo son consecuencias y lo que no se deduce de ellas.",
+   "note": "La inflación no es una parte tan sólida de la imagen como el enfriamiento del relicto. El enfriamiento se deduce de la expansión y está verificado por el espectro; la inflación fue inventada para ajustar las observaciones y todavía no tiene una forma única: hay decenas de modelos, y no se sabe cuál es el correcto. Vale la pena aprenderla así: una explicación fuerte con un final abierto."
+  }
  },
  "ar": {
   "title": "إشعاع الخلفية الميكروي الكوني والتضخم",
@@ -1285,6 +1399,63 @@
     "tolAbs": 20,
     "hint": "يزداد الطول الموجي بمقدار (1 + z) مرة، مما يعني أنه في الماضي كان أقصر بنفس المقدار. كم يساوي (1 + z) عندما z = 9؟"
    }
-  ]
+  ],
+  "derivation": {
+   "title": "لماذا يجب أن يكون هناك إشعاع، ولماذا هو بهذا الشكل تحديدًا",
+   "lead": "سننتقل من عبارة «كان أكثر كثافة في الماضي» إلى الرقم 2.725 كلفن، ثم ننظر إلى ما لا يتوافق في هذه الصورة دون التضخم.",
+   "steps": [
+    {
+     "text": "لنعد بالزمن إلى الوراء. المسافات تتقلص، والكثافة تزداد، والإشعاع مع التمدد ينضغط: الأطوال الموجية تصبح أقصر، وبالتالي طاقة كل كمية أكبر. الإشعاع المضغوط هو إشعاع ساخن. ومن هنا يتبع أن الحالة المبكرة كانت ساخنة، وهذا ليس افتراضًا، بل تمدد معكوس.",
+     "latex": "T \\propto \\frac{1}{a} \\;\\Longrightarrow\\; T = T_0 (1 + z)",
+     "figure": "cooldown",
+     "figCaption": "نفس الإشعاع: المضغوط كان ساخنًا، والممدد أصبح باردًا"
+    },
+    {
+     "text": "طالما أن المادة مؤينة، فإن الضوء لا ينتقل فيها: فهو يتشتت على الإلكترونات الحرة ويظل مكانه. الشفافية تحدث عندما ترتبط الإلكترونات في ذرات. بالنسبة للهيدروجين، يحدث هذا عند حوالي ثلاثة آلاف كلفن — أقل بشكل ملحوظ من «طاقة التأين مقسومة على ثابت بولتزمان»، لأن عدد الفوتونات أكبر بكثير من عدد الذرات، وحتى الذيل النادر للتوزيع يستمر لفترة طويلة في تفكيك الذرات مرة أخرى.",
+     "latex": "T_{\\text{rek}} \\approx 3000\\ \\text{K}, \\qquad z_{\\text{rek}} \\approx 1100",
+     "figure": "recombination",
+     "figCaption": "على اليسار: بلازما وضوء في ضباب؛ على اليمين: ذرات متعادلة والضوء يغادر بحرية"
+    },
+    {
+     "text": "كم أقل؟ يُحسب ذلك تقريبًا. طاقة تأين الهيدروجين 13.6 إلكترون فولت تقابل درجة حرارة 158,000 كلفن، لكن أي فوتون من الذيل الساخن للتوزيع يمكنه تفكيك الذرة، وعدد الفوتونات في الكون حوالي مليار ونصف لكل ذرة. تبقى الذرات على قيد الحياة فقط منذ اللحظة التي تصبح فيها نسبة الذيل، التي تتناقص كـ $e^{-E/kT}$، أقل من معكوس هذا الرقم: لوغاريتم المليار ونصف يساوي واحدًا وعشرين، وعلى هذا المقدار تُقسم الـ 158,000 كلفن الساذجة. يتبقى عامل من الرتبة اثنين — يعطيه الحساب الدقيق بمعادلة ساخا، حيث يُؤخذ في الاعتبار أيضًا عدد الحالات المتاحة للإلكترون المتحرر؛ الإجابة تقع عند ثلاثة آلاف.",
+     "latex": "\\frac{E_{\\text{ion}}}{k} = 158\\,000\\ \\text{K}, \\quad \\frac{n_\\gamma}{n_{\\text{at}}} \\approx 1{,}5\\cdot 10^{9} \\;\\Longrightarrow\\; T \\approx \\frac{158\\,000}{\\ln(1{,}5\\cdot 10^{9})} \\approx 7500\\ \\text{K}",
+     "figure": "phototail",
+     "figCaption": "العتبة 13.6 إلكترون فولت تقع بعيدًا في ذيل التوزيع، لكن الفوتونات أكثر من الذرات بتسعة مراتب مقدارية — والذيل يكفي لفترة طويلة"
+    },
+    {
+     "text": "الضوء الذي خرج في تلك اللحظة يطير إلينا دون عوائق. في الطريق يتمدد بنفس التمدد: بنفس المقدار الذي نما فيه الكون. التمدد بألف مرة يحول توهج الغاز الساخن إلى موجات ميكروية.",
+     "latex": "T_0 = \\frac{T_{\\text{rek}}}{1 + z_{\\text{rek}}} \\approx \\frac{3000}{1100} \\approx 2{,}7\\ \\text{K}",
+     "figure": "redshiftwave",
+     "figCaption": "نفس الضوء في طريقه إلينا: ممدد بنفس المقدار الذي نما فيه الكون"
+    },
+    {
+     "text": "موضع قمة الطيف يعطي اختبارًا. بتعويض درجة الحرارة المقاسة في قانون فين، نحصل على أكثر بقليل من مليمتر — النطاق الميكروي. هذا بالضبط ما رأته الهوائي في هولمديل، والقمر الصناعي COBE في عام 1990 أظهر أن شكل الطيف يطابق طيف بلانك بدقة لا يمكن تحقيقها لأي مصدر مخبري.",
+     "latex": "\\lambda_{\\max} = \\frac{2{,}898 \\cdot 10^{-3}}{2{,}725} \\approx 1{,}06\\ \\text{mm}",
+     "figure": "planckpeak",
+     "figCaption": "كلما كان الجسم أبرد، كانت القمة أكثر إلى اليمين: بالنسبة للإشعاع الأثري، تكون في موجات مليمترية"
+    },
+    {
+     "text": "والآن ما لا يتوافق. لنأخذ نقطتين في السماء تفصلهما درجتان. في اللحظة التي خرج فيها الإشعاع، كانت المسافة بينهما أكبر مما يمكن للضوء أن يقطعه خلال كل الوقت منذ البداية: كانتا خارج أفق بعضهما البعض. لم تكن لهما قصة مشتركة — لكن درجة الحرارة متطابقة حتى الخانة الخامسة. هذا يسمى مشكلة الأفق.",
+     "latex": "\\text{الأفق السببي} \\sim 2^\\circ \\;\\text{الحد الذي كان التواصل ممكنًا عنده}",
+     "figure": "horizon",
+     "figCaption": "منطقتان خارج أفق بعضهما البعض: الإشارة بينهما لم يكن لديها وقت لتنتقل"
+    },
+    {
+     "text": "الغرابة الثانية تظهر في حجم البقع. قبل إعادة التركيب، حملت البلازما موجات صوتية بسرعة حوالي $c/\\sqrt{3}$، وبحلول لحظة خروج الضوء، كان الصوت قد قطع مسافة محددة تمامًا $r_{\\text{sonic}}$ — هذه مسطرة ذات طول معروف مطبوعة على السماء كلها. الزاوية التي نراها بها من مسافة $D$ لا تعتمد فقط على المسافة نفسها، بل أيضًا على هندسة الفضاء في الطريق: في عالم مغلق، تتقارب الأشعة وتبدو البقعة أكبر من حساب المستوي، وفي عالم مفتوح — أصغر. القياس يعطي الحالة المستوية تمامًا، حوالي درجة واحدة — ومن الخلفية الميكروية وحدها، الكثافة الكلية تساوي الكثافة الحرجة بدقة حوالي واحد بالمئة. لا يمكن ضغطها إلى كسور بالمئة بزاوية واحدة: أزواج مختلفة من المعاملات تعطي نفس الزاوية، لذلك تُجمع الخلفية الميكروية مع مسطرة مستقلة — الأثر الصوتي في توزيع المجرات؛ معًا يعطيان $1{,}000 \\pm 0{,}002$. وهذه ليست نفس الدرجة كما في مشكلة الأفق: الأفق السببي يغطي حوالي درجتين، بينما الصوت تمكن من قطع مسافة أقل بمعامل $\\sqrt{3}$ — ومن هنا حوالي واحد.",
+     "latex": "\\theta \\approx \\frac{r_{\\text{sonic}}}{D} \\approx 1^\\circ \\;\\Longrightarrow\\; \\Omega_{\\text{total}} = 1{,}00 \\pm 0{,}01",
+     "figure": "flatangle",
+     "figCaption": "المسطرة واحدة، لكن الزاوية مختلفة: هي التي تقيس انحناء الفضاء بيننا وبين سطح التشتت الأخير"
+    },
+    {
+     "text": "التضخم يفسر هذا هكذا: قبل المرحلة الساخنة، تمدد الكون لفترة قصيرة جدًا بسرعة هائلة. إذن كل ما نراه اليوم خرج من منطقة صغيرة واحدة، تمكنت من أن تصبح متجانسة قبل التمدد. كما يحل اللغز الثاني — لماذا الفضاء قريب جدًا من المستوي: أي انحناء يتمدد بالتضخم إلى ما يقرب من الصفر، مثل التجاعيد على بالون يُنفخ.",
+     "latex": "a \\;\\to\\; a \\cdot e^{N}, \\qquad N \\approx 60",
+     "figure": "inflation",
+     "figCaption": "كل ما نراه اليوم خرج من منطقة واحدة تمكنت من أن تستوي قبل التمدد"
+    }
+   ],
+   "plate": "T = T_0(1+z), \\qquad \\lambda_{\\max} = b/T",
+   "plateCap": "صيغتان بسيطتان تربطان الضوضاء في الهوائي بحالة الكون في عمر ثلاثمائة وثمانين ألف سنة. كل شيء آخر في هذه الفقرة — نتائج وما لا يُستنتج منها.",
+   "note": "التضخم ليس بنفس درجة الموثوقية مثل تبريد الإشعاع الأثري. التبريد يتبع من التمدد وتم التحقق منه بالطيف؛ التضخم اخترع ليتناسب مع الملاحظات وما زال ليس له شكل واحد: هناك عشرات النماذج، وأيها صحيح غير معروف. يجب تعلمه هكذا: تفسير قوي بنهاية مفتوحة."
+  }
  }
 }

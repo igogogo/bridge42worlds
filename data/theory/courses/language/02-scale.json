@@ -801,7 +801,31 @@
     "hint": "Assemble from m and m/s² a combination of dimension m/s. What exponents must the wavelength and g have?",
     "tolAbs": 5
    }
-  ]
+  ],
+  "math": {
+   "title": "The Math You'll Need Here",
+   "lead": "You'll need powers and logarithms, but not as a calculation technique, rather as a way to talk about scales.",
+   "items": [
+    {
+     "what": "Dimensions turn into a system of equations",
+     "why": "The third and fourth steps of the derivation are the entire work of the method. By writing $\\mathsf{T} = \\mathsf{L}^{\\alpha}\\mathsf{M}^{\\beta}(\\mathsf{L}\\mathsf{T}^{-2})^{\\gamma}$, we collect the same letters together, and the requirement that 'the left and right sides have the same dimension' turns into three linear equations in three numbers. There is no physics left in it; from here on it's school algebra. What matters is this: there are exactly as many equations as there are base dimensions involved, and as many unknowns as there are quantities in the list. If there are more unknowns, the solution is not unique and the method gives not a formula but a family; that's when the dimensionless combinations of Buckingham's theorem appear. The same requirement implies a prohibition: under a logarithm, exponential, or sine, there can only be a dimensionless quantity.",
+     "latex": "\\mathsf{L}^{0}\\,\\mathsf{M}^{0}\\,\\mathsf{T}^{1} = \\mathsf{L}^{\\alpha+\\gamma}\\,\\mathsf{M}^{\\beta}\\,\\mathsf{T}^{-2\\gamma}",
+     "kit": "dimension"
+    },
+    {
+     "what": "A straight line on a double logarithm",
+     "why": "The power law $y = Cx^{n}$ becomes a straight line after taking the logarithm of both sides: $\\lg y = \\lg C + n\\lg x$. The slope of this line is the exponent, and the intercept with the axis is the multiplier. Therefore, on logarithmically scaled axes, any power law straightens out, and the exponent can be read off with a ruler. That's what Taylor did with the newspaper frames of the fireball from the history in this section: he plotted the logarithm of the radius against the logarithm of time and got a slope of two-fifths—exactly what $R \\sim (Et^{2}/\\rho)^{1/5}$ requires, where the energy itself enters to the one-fifth power. The reverse is more useful than the forward: seeing a straight line on a logarithmic plot, you already know that behind it is a power law, and you read the exponent without knowing anything about the mechanism.",
+     "latex": "\\lg y = \\lg C + n \\lg x, \\qquad R \\propto t^{2/5} \\;\\Longleftrightarrow\\; E \\propto \\frac{\\rho R^{5}}{t^{2}}",
+     "kit": "propto"
+    },
+    {
+     "what": "Why five rough estimates don't ruin the answer",
+     "why": "The estimate is carried out in terms of exponents: when multiplying, they add, and the mantissas are rounded to one digit. In the piano tuners example, five numbers are multiplied, each pulled out of thin air—and if the errors accumulated, the answer would be useless. They don't accumulate. It's convenient to look at logarithms, where the product becomes a sum, and an error of a factor of two becomes a term of about $\\pm0{,}3$. The terms are independent and of different signs, so the typical sum grows not as the number of factors, but as its square root: five factors with a factor-of-two error each give a total error of about a factor of five, which is less than an order of magnitude. This is the same square root of $N$ that governs the spread in any random walk.",
+     "latex": "\\sigma_{\\Sigma} = \\sqrt{N}\\,\\sigma_1, \\qquad 2^{\\sqrt{5}} \\approx 4{,}7",
+     "kit": "rms"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Dimensionalidad y orden de magnitud",
@@ -1168,7 +1192,31 @@
     "hint": "Combina m y m/s² para obtener una combinación con dimensión m/s. ¿Qué exponentes deben tener la longitud de onda y g?",
     "tolAbs": 5
    }
-  ]
+  ],
+  "math": {
+   "title": "Matemáticas que aquí se necesitaron",
+   "lead": "Se necesitarán potencias y logaritmos, pero no como técnica de cálculo, sino como una forma de hablar de escalas.",
+   "items": [
+    {
+     "what": "Las dimensiones se convierten en un sistema de ecuaciones",
+     "why": "Los pasos tercero y cuarto de la deducción son todo el trabajo del método. Al escribir $\\mathsf{T} = \\mathsf{L}^{\\alpha}\\mathsf{M}^{\\beta}(\\mathsf{L}\\mathsf{T}^{-2})^{\\gamma}$, juntamos las mismas letras, y el requisito de que «a la izquierda y a la derecha esté la misma dimensión» se convierte en tres ecuaciones lineales para tres números. Ya no hay física, solo álgebra escolar. Lo importante es otra cosa: hay tantas ecuaciones como dimensiones básicas involucradas, e incógnitas como magnitudes en la lista. Si hay más incógnitas, la solución no es única y el método no da una fórmula, sino una familia; entonces aparecen las combinaciones adimensionales del teorema de Buckingham. Del mismo requisito se sigue una prohibición: bajo un logaritmo, exponencial o seno solo puede haber una magnitud adimensional.",
+     "latex": "\\mathsf{L}^{0}\\,\\mathsf{M}^{0}\\,\\mathsf{T}^{1} = \\mathsf{L}^{\\alpha+\\gamma}\\,\\mathsf{M}^{\\beta}\\,\\mathsf{T}^{-2\\gamma}",
+     "kit": "dimension"
+    },
+    {
+     "what": "Una recta en doble logarítmico",
+     "why": "La dependencia potencial $y = Cx^{n}$ después de tomar logaritmos en ambos lados se convierte en una recta: $\\lg y = \\lg C + n\\lg x$. La pendiente de esta recta es el exponente, y la intersección con el eje es el factor. Por eso, en ejes logarítmicos, cualquier ley potencial se endereza, y el exponente se mide con una regla. Así hizo Taylor con las imágenes periodísticas de la bola de fuego de la historia de este párrafo: representó el logaritmo del radio frente al logaritmo del tiempo y obtuvo una pendiente de dos quintos, exactamente lo que requiere $R \\sim (Et^{2}/\\rho)^{1/5}$, donde la energía misma entra con exponente un quinto. Lo inverso es más útil que lo directo: al ver una recta en una gráfica logarítmica, ya sabes que detrás hay una ley potencial, y lees el exponente sin saber nada del mecanismo.",
+     "latex": "\\lg y = \\lg C + n \\lg x, \\qquad R \\propto t^{2/5} \\;\\Longleftrightarrow\\; E \\propto \\frac{\\rho R^{5}}{t^{2}}",
+     "kit": "propto"
+    },
+    {
+     "what": "Por qué cinco aproximaciones no estropean la respuesta",
+     "why": "La estimación se basa en los exponentes: al multiplicar se suman, y las mantisas se redondean a una cifra. En el ejemplo de los afinadores se multiplican cinco números, cada uno sacado de la nada, y si los errores se acumularan, la respuesta sería inútil. No se acumulan. Es conveniente mirar los logaritmos, donde el producto se convierte en suma, y un error de factor dos es un término de alrededor de $\\pm0{,}3$. Los términos son independientes y de signos distintos, por lo que la suma típica crece no como el número de factores, sino como su raíz cuadrada: cinco factores con un error de factor dos cada uno dan un error final de aproximadamente cinco veces, es decir, menos de un orden de magnitud. Es la misma raíz de $N$ que controla la dispersión en cualquier caminata aleatoria.",
+     "latex": "\\sigma_{\\Sigma} = \\sqrt{N}\\,\\sigma_1, \\qquad 2^{\\sqrt{5}} \\approx 4{,}7",
+     "kit": "rms"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "البُعد والترتيب من حيث المقدار",
@@ -1535,7 +1583,31 @@
     "hint": "اجمع من م و م/ث² توليفة ذات بُعد م/ث. ما هي الأسس التي يجب أن تكون لطول الموجة و g؟",
     "tolAbs": 5
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "ستحتاج إلى الأسس واللوغاريتمات، ولكن ليس كتقنية حساب، بل كوسيلة للحديث عن المقاييس.",
+   "items": [
+    {
+     "what": "تتحول الأبعاد إلى نظام معادلات",
+     "why": "الخطوتان الثالثة والرابعة من الاشتقاق هما كل عمل الطريقة. بكتابة $\\mathsf{T} = \\mathsf{L}^{\\alpha}\\mathsf{M}^{\\beta}(\\mathsf{L}\\mathsf{T}^{-2})^{\\gamma}$، نجمع الحروف المتشابهة معًا، ومتطلب \"نفس البعد على الجانبين\" يتحول إلى ثلاث معادلات خطية لثلاثة أرقام. لم يعد هناك فيزياء، بل جبر مدرسي. المهم هو: عدد المعادلات يساوي عدد الأبعاد الأساسية المشاركة، وعدد المجاهيل يساوي عدد الكميات في القائمة. إذا كان عدد المجاهيل أكبر، فإن الحل ليس فريدًا وتعطي الطريقة عائلة وليس صيغة؛ وهنا تظهر التوافيق اللابعدية في مبرهنة باكنجهام. من نفس المتطلب يأتي الحظر: تحت اللوغاريتم أو الأسي أو الجيب لا يوجد سوى كمية لا بعدية.",
+     "latex": "\\mathsf{L}^{0}\\,\\mathsf{M}^{0}\\,\\mathsf{T}^{1} = \\mathsf{L}^{\\alpha+\\gamma}\\,\\mathsf{M}^{\\beta}\\,\\mathsf{T}^{-2\\gamma}",
+     "kit": "dimension"
+    },
+    {
+     "what": "خط مستقيم على لوغاريتم مزدوج",
+     "why": "العلاقة الأسية $y = Cx^{n}$ بعد أخذ اللوغاريتم لكلا الطرفين تصبح خطًا مستقيمًا: $\\lg y = \\lg C + n\\lg x$. ميل هذا الخط هو الأس، ونقطة التقاطع مع المحور هي المضروب. لذلك، على محاور مدرجة لوغاريتميًا، أي قانون قوة يستقيم، ويُقرأ الأس بمسطرة. هكذا فعل تايلور مع لقطات الصحف لكرة النار في قصة هذا القسم: رسم لوغاريتم نصف القطر مقابل لوغاريتم الزمن وحصل على ميل يساوي خمسين — بالضبط ما يتطلبه $R \\sim (Et^{2}/\\rho)^{1/5}$، حيث تدخل الطاقة نفسها بقوة خمس. العكس أكثر فائدة من المباشر: إذا رأيت خطًا مستقيمًا على رسم لوغاريتمي، فأنت تعلم أن هناك قانون قوة خلفه، وتقرأ الأس دون معرفة الآلية.",
+     "latex": "\\lg y = \\lg C + n \\lg x, \\qquad R \\propto t^{2/5} \\;\\Longleftrightarrow\\; E \\propto \\frac{\\rho R^{5}}{t^{2}}",
+     "kit": "propto"
+    },
+    {
+     "what": "لماذا لا تفسد خمسة تخمينات الإجابة",
+     "why": "يتم التقدير وفقًا للأسس: عند الضرب تُجمع، وتُقرَّب الأجزاء العشرية إلى رقم واحد. في مثال ضبط البيانو، تم ضرب خمسة أرقام، كل منها مأخوذ من السقف — ولو تراكمت الأخطاء لكان الجواب عديم الفائدة. لكنها لا تتراكم. من المناسب النظر إلى اللوغاريتمات، حيث يصبح الضرب جمعًا، والخطأ بمقدار الضعف يصبح حدًا حوالي $\\pm0{,}3$. الحدود مستقلة ومختلفة الإشارات، لذا فإن المجموع النموذجي ينمو ليس كعدد العوامل، بل كجذره التربيعي: خمسة عوامل بخطأ مضاعف لكل منها تعطي خطأً نهائيًا حوالي خمسة أضعاف، أي أقل من رتبة مقدار. هذا هو نفس الجذر التربيعي لـ $N$ الذي يتحكم في التشتت في أي مشية عشوائية.",
+     "latex": "\\sigma_{\\Sigma} = \\sqrt{N}\\,\\sigma_1, \\qquad 2^{\\sqrt{5}} \\approx 4{,}7",
+     "kit": "rms"
+    }
+   ]
+  }
  },
  "tags": [
   "asteroid",

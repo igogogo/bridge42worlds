@@ -799,7 +799,31 @@
     "hint": "In a uniform field, voltage is field strength times distance. Do not forget to convert centimeters to meters.",
     "tolAbs": 6
    }
-  ]
+  ],
+  "math": {
+   "title": "The Math Needed Here",
+   "lead": "Three things are needed: a function that returns a vector at each point, division by a test charge as a normalization, and calculating flux through a surface.",
+   "items": [
+    {
+     "what": "Field as a function returning an arrow",
+     "why": "An ordinary function takes a number and returns a number. A vector field takes a point in space and returns a vector: in three dimensions, that's three numbers for each point. The exhibit draws exactly such a function—arrows are placed throughout the scene, not just where something is located. Remove the second charge, and the arrows remain: the value $\\vec{E}(\\vec{r})$ is defined in advance, before anything is placed at the point. This is precisely what the first step of the derivation does, where the test charge disappears from the description. The same construction serves other fields: in the earlier topic on fluids, it defines the velocity field, where an arrow at a point indicates where and how fast the substance flows, and later in the course, it defines the magnetic field. The construction itself is more important than what it defines.",
+     "latex": "\\vec{E}(\\vec{r}) = \\big(E_x(x,y,z),\\; E_y(x,y,z),\\; E_z(x,y,z)\\big)",
+     "kit": "field"
+    },
+    {
+     "what": "Division by test charge is normalization",
+     "why": "The first step of the derivation consists of a single action: the force is divided by the magnitude of the test charge. This technique is called normalization, and its purpose is to remove from the description what is not relevant to the subject. The force depends on both the source and what we brought; the quotient depends only on the source and the point. The same approach yields density (mass per volume) and pressure (force per area): in each case, we divide by the quantity we want to stop noticing. Normalization is checked by units: newton per coulomb reads literally as \"force per unit charge,\" and this is not an explanation of the formula but the formula itself, read aloud.",
+     "latex": "[\\,E\\,] = \\frac{\\text{N}}{\\text{C}} = \\frac{\\text{V}}{\\text{m}}",
+     "kit": "dimension"
+    },
+    {
+     "what": "Flux and why the radius cancels",
+     "why": "Flux is the product of the field and the area through which it passes, and in the fifth step of the derivation, it is calculated through a sphere of radius $r$. The field decreases as $1/r^{2}$, the sphere's area grows as $r^{2}$, and the product loses $r$ entirely. The cancellation is not a coincidence: the inverse square is precisely a consequence of the source's influence being distributed evenly over the sphere, so the increase in area and the decrease in field must cancel each other out. Hence the formulation of Gauss's law: the flux through a closed surface equals the enclosed charge divided by $\\varepsilon_0$, and it does not depend on the radius or the shape of the surface. The sixth step is a direct consequence: there is no charge inside the cavity, so there is no flux.",
+     "latex": "\\Phi = E \\cdot 4\\pi r^{2} = \\frac{kQ}{r^{2}} \\cdot 4\\pi r^{2} = 4\\pi k Q = \\frac{Q}{\\varepsilon_0}",
+     "kit": "flux"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Campo",
@@ -1163,7 +1187,31 @@
     "hint": "En un campo uniforme, el voltaje es la intensidad multiplicada por la distancia. No olvides convertir centímetros a metros.",
     "tolAbs": 6
    }
-  ]
+  ],
+  "math": {
+   "title": "Matemáticas que se necesitaron aquí",
+   "lead": "Se necesitan tres cosas: una función que devuelve un vector en cada punto, la división por una carga de prueba como normalización y el cálculo del flujo a través de una superficie.",
+   "items": [
+    {
+     "what": "El campo como una función que devuelve una flecha",
+     "why": "Una función ordinaria toma un número y devuelve un número. Un campo vectorial toma un punto del espacio y devuelve un vector: en tres dimensiones, son tres números por cada punto. El stand dibuja precisamente esa función: las flechas están distribuidas por toda la escena, no solo donde hay algo. Quita la segunda carga y las flechas permanecerán: el valor de $\\vec{E}(\\vec{r})$ está definido de antemano, antes de que algo llegue a ese punto. De esto trata el primer paso de la derivación, donde la carga de prueba desaparece de la descripción. La misma construcción sirve para otros campos: en el tema ya visto de fluidos, define el campo de velocidades, donde la flecha en un punto indica hacia dónde y con qué rapidez fluye la sustancia, y más adelante en el curso define el campo magnético. La construcción en sí es más importante que lo que se defina con ella.",
+     "latex": "\\vec{E}(\\vec{r}) = \\big(E_x(x,y,z),\\; E_y(x,y,z),\\; E_z(x,y,z)\\big)",
+     "kit": "field"
+    },
+    {
+     "what": "Dividir por la carga de prueba es una normalización",
+     "why": "El primer paso de la derivación consiste en una sola acción: dividir la fuerza por la magnitud de la carga de prueba. El procedimiento se llama normalización, y su sentido es eliminar de la descripción aquello que no pertenece al objeto de estudio. La fuerza depende tanto de la fuente como de lo que traemos; el cociente depende solo de la fuente y del punto. Con el mismo procedimiento se obtienen la densidad (masa por volumen) y la presión (fuerza por área): en cada caso se divide por la magnitud que se quiere dejar de notar. La normalización se verifica por las unidades: newton por culombio se lee literalmente como \"fuerza por unidad de carga\", y esto no es una explicación de la fórmula, sino la fórmula misma leída en voz alta.",
+     "latex": "[\\,E\\,] = \\frac{\\text{N}}{\\text{C}} = \\frac{\\text{V}}{\\text{m}}",
+     "kit": "dimension"
+    },
+    {
+     "what": "Flujo y por qué el radio se cancela",
+     "why": "El flujo es el producto del campo por el área a través de la cual pasa, y en el quinto paso de la derivación se calcula a través de una esfera de radio $r$. El campo disminuye como $1/r^{2}$, el área de la esfera crece como $r^{2}$, el producto pierde $r$ por completo. La cancelación no es casualidad: el inverso del cuadrado es consecuencia de que la influencia de la fuente se distribuye uniformemente sobre la esfera, por lo que el aumento del área y la disminución del campo deben anularse mutuamente. De ahí la formulación del teorema de Gauss: el flujo a través de una superficie cerrada es igual a la carga encerrada dividida por $\\varepsilon_0$, y no depende ni del radio ni de la forma de la superficie. El sexto paso es una consecuencia directa: no hay carga dentro de la cavidad, por lo tanto no hay flujo.",
+     "latex": "\\Phi = E \\cdot 4\\pi r^{2} = \\frac{kQ}{r^{2}} \\cdot 4\\pi r^{2} = 4\\pi k Q = \\frac{Q}{\\varepsilon_0}",
+     "kit": "flux"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "المجال",
@@ -1527,7 +1575,31 @@
     "hint": "في مجال منتظم، الجهد هو شدة المجال مضروبة في المسافة. لا تنسَ تحويل السنتيمترات إلى أمتار.",
     "tolAbs": 6
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "ستكون هناك حاجة إلى ثلاثة أشياء: دالة تُرجع متجهًا في كل نقطة، والقسمة على شحنة اختبارية كتطبيع، وحساب التدفق عبر سطح.",
+   "items": [
+    {
+     "what": "المجال كدالة تُرجع سهمًا",
+     "why": "الدالة العادية تأخذ رقمًا وتُرجع رقمًا. المجال المتجهي يأخذ نقطة في الفضاء ويُرجع متجهًا: في الأبعاد الثلاثة، هذا يعني ثلاثة أرقام لكل نقطة. يرسم العرض التوضيحي مثل هذه الدالة تمامًا — الأسهم موزعة في جميع أنحاء المشهد، وليس فقط حيث يوجد شيء ما. أزل الشحنة الثانية، وستبقى الأسهم: قيمة $\\vec{E}(\\vec{r})$ محددة مسبقًا، قبل أن يصل أي شيء إلى النقطة. هذا هو بالضبط ما يحدث في الخطوة الأولى من الاشتقاق، حيث تختفي الشحنة الاختبارية من الوصف. نفس البنية تخدم أيضًا مجالات أخرى: في الموضوع الذي مررنا عنه حول السوائل، يتم استخدامها لتمثيل مجال السرعة، حيث يخبرنا السهم عند نقطة ما إلى أين وبأي سرعة يتدفق الوسط، وفي وقت لاحق من الدورة يتم استخدامها لتمثيل المجال المغناطيسي. البنية نفسها أكثر أهمية من ما يتم تمثيله بها.",
+     "latex": "\\vec{E}(\\vec{r}) = \\big(E_x(x,y,z),\\; E_y(x,y,z),\\; E_z(x,y,z)\\big)",
+     "kit": "field"
+    },
+    {
+     "what": "القسمة على شحنة اختبارية هي تطبيع",
+     "why": "تتكون الخطوة الأولى من الاشتقاق من إجراء واحد: القوة مقسومة على مقدار الشحنة الاختبارية. تسمى هذه التقنية بالتطبيع، ومعناها هو إزالة من الوصف ما لا يتعلق بموضوع الوصف. تعتمد القوة على كل من المصدر وما أحضرناه؛ الناتج يعتمد فقط على المصدر والنقطة. بنفس الطريقة نحصل على الكثافة (الكتلة لكل حجم) والضغط (القوة لكل مساحة): في كل مرة نقسم على الكمية التي نريد التوقف عن ملاحظتها. يتم التحقق من التطبيع من خلال الوحدات: نيوتن لكل كولوم يُقرأ حرفيًا على أنه \"القوة لكل وحدة شحنة\"، وهذا ليس شرحًا للصيغة، بل هو الصيغة نفسها تُقرأ بصوت عالٍ.",
+     "latex": "[\\,E\\,] = \\frac{\\text{N}}{\\text{C}} = \\frac{\\text{V}}{\\text{m}}",
+     "kit": "dimension"
+    },
+    {
+     "what": "التدفق ولماذا يتم اختصار نصف القطر",
+     "why": "التدفق هو حاصل ضرب المجال في المساحة التي يمر عبرها، وفي الخطوة الخامسة من الاشتقاق يُحسب عبر كرة نصف قطرها $r$. يتناقص المجال بمقدار $1/r^{2}$، وتزداد مساحة الكرة بمقدار $r^{2}$، ويفقد حاصل الضرب $r$ تمامًا. هذا الاختصار ليس مصادفة: التربيع العكسي هو نتيجة لتوزيع تأثير المصدر بالتساوي على الكرة، لذلك يجب أن يلغي نمو المساحة وانخفاض المجال بعضهما البعض. ومن هنا تأتي صياغة نظرية غاوس: التدفق عبر سطح مغلق يساوي الشحنة المحصورة بداخله مقسومة على $\\varepsilon_0$، ولا يعتمد على نصف القطر ولا على شكل السطح. الخطوة السادسة هي نتيجة مباشرة: لا توجد شحنة داخل التجويف، وبالتالي لا يوجد تدفق.",
+     "latex": "\\Phi = E \\cdot 4\\pi r^{2} = \\frac{kQ}{r^{2}} \\cdot 4\\pi r^{2} = 4\\pi k Q = \\frac{Q}{\\varepsilon_0}",
+     "kit": "flux"
+    }
+   ]
+  }
  },
  "tags": [
   "pulsar",

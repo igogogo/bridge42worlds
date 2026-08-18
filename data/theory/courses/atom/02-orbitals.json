@@ -820,7 +820,31 @@
     "hint": "Use the formula 2n² or add the capacities of the s, p, d, and f subshells.",
     "tolAbs": 2
    }
-  ]
+  ],
+  "math": {
+   "title": "The math needed here",
+   "lead": "Three things are needed: coordinates matched to the symmetry of the problem, separation of variables, and one school-level sum.",
+   "items": [
+    {
+     "what": "Why spherical coordinates, not x, y, z",
+     "why": "The first step writes the equation with the potential $-ke^{2}/r$. In Cartesian coordinates this is $-ke^{2}/\\sqrt{x^{2}+y^{2}+z^{2}}$ — an expression in which all three variables are mixed, and the solution does not split into any parts. Switching to spherical coordinates $(r, \\theta, \\varphi)$ changes nothing in the physics and everything in the notation: the potential depends only on the first of them, the two angular ones do not enter at all. The general rule: choose coordinates so that the symmetry of the problem matches the symmetry of the grid. The price for this is a more complicated operator $\\nabla^{2}$, where factors $r^{2}$ and $\\sin\\theta$ appear. The gain outweighs the cost: it is from here that the second step splits the solution into radial and angular parts, and with it the division of quantum numbers into one radial and two angular.",
+     "latex": "U = -\\frac{ke^{2}}{\\sqrt{x^{2}+y^{2}+z^{2}}} \\;\\longrightarrow\\; U = -\\frac{ke^{2}}{r}",
+     "kit": "polar"
+    },
+    {
+     "what": "What it means to separate variables",
+     "why": "The second step writes the solution as a product $R(r)\\,Y(\\theta,\\varphi)$, and this is not a simplifying assumption but a method. The product is substituted into the equation and divided by itself; after that, all terms with $r$ gather on one side of the equality, all angular terms on the other. Two functions of different variables are equal to each other only in one case: if both are equal to the same number. This number is called the separation constant, and it is not arbitrary — the requirement of finiteness and single-valuedness of the solution leaves only a discrete set of values for it. This is how the two angular numbers of the fourth and fifth steps appear: $m_\\ell$ separates $\\theta$ and $\\varphi$, and $\\ell$ separates the angular part from the radial part and enters the latter as $\\ell(\\ell+1)$. The principal number $n$ comes differently: it is not a separation constant. It comes from the radial equation, where $\\ell(\\ell+1)$ is already a fixed number: for arbitrary energy the solution grows without bound at large $r$, and it remains finite only if the series terminates — and termination happens for integer $n > \\ell$, and that is the third step. What the two mechanisms have in common is that no number is postulated as in Bohr: both the discreteness of separation constants and the termination of the series follow from the single requirement of finiteness of the solution.",
+     "latex": "\\psi = R(r)\\,Y(\\theta,\\varphi): \\qquad f(r) = g(\\theta,\\varphi) = \\text{const}",
+     "kit": "separation"
+    },
+    {
+     "what": "The sum of odd numbers gives a square",
+     "why": "The seventh step sums $2(2\\ell+1)$ over all $\\ell$ from zero to $n-1$ and immediately yields $2n^{2}$. What is skipped is this: in the parentheses are the odd numbers 1, 3, 5, …, $2n-1$, and their sum equals $n^{2}$ for any $n$. The easiest way to see this is with a picture: a square is built up with corners. To a $2\\times2$ square add five cells and get $3\\times3$, to that add seven cells and get $4\\times4$; each corner is the next odd number. Multiply the result by two for spin — you get the shell capacities 2, 8, 18, 32. None of these four numbers is measured, all four are calculated, and all that had to be counted was the number of allowed sets of quantum numbers.",
+     "latex": "1 + 3 + 5 + \\ldots + (2n-1) = n^{2} \\;\\Longrightarrow\\; \\sum_{\\ell=0}^{n-1} 2(2\\ell+1) = 2n^{2}",
+     "kit": "combinatorics"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Orbitales",
@@ -1195,7 +1219,31 @@
     "hint": "Usa la fórmula 2n² o suma las capacidades de las subcapas s, p, d y f.",
     "tolAbs": 2
    }
-  ]
+  ],
+  "math": {
+   "title": "Matemáticas que aquí se necesitaron",
+   "lead": "Se necesitan tres cosas: coordenadas ajustadas a la simetría del problema, separación de variables y una suma escolar.",
+   "items": [
+    {
+     "what": "Por qué coordenadas esféricas y no x, y, z",
+     "why": "El primer paso escribe la ecuación con el potencial $-ke^{2}/r$. En coordenadas cartesianas esto es $-ke^{2}/\\sqrt{x^{2}+y^{2}+z^{2}}$ — una expresión en la que las tres variables están mezcladas y la solución no se descompone en ninguna parte. El paso a coordenadas esféricas $(r, \\theta, \\varphi)$ no cambia nada en la física y lo cambia todo en la escritura: el potencial depende solo de la primera de ellas, las dos angulares no entran en absoluto. La regla general es: las coordenadas se eligen de modo que la simetría del problema coincida con la simetría de la malla. El precio a pagar es un operador $\\nabla^{2}$ más complicado, donde aparecen factores $r^{2}$ y $\\sin\\theta$. El beneficio supera el costo: es de aquí de donde, en el segundo paso, se obtiene la separación en partes radial y angular, y con ella la división de los números cuánticos en uno radial y dos angulares.",
+     "latex": "U = -\\frac{ke^{2}}{\\sqrt{x^{2}+y^{2}+z^{2}}} \\;\\longrightarrow\\; U = -\\frac{ke^{2}}{r}",
+     "kit": "polar"
+    },
+    {
+     "what": "Qué significa separar variables",
+     "why": "El segundo paso escribe la solución como un producto $R(r)\\,Y(\\theta,\\varphi)$, y esto no es una suposición simplificadora, sino un método. El producto se sustituye en la ecuación y se divide por él mismo; después de esto, todos los términos con $r$ se reúnen en una parte de la igualdad, todos los angulares en la otra. Dos funciones de variables diferentes son iguales entre sí solo en un caso: si ambas son iguales al mismo número. Este número se llama constante de separación, y no es arbitrario: el requisito de que la solución sea finita y unívoca deja solo un conjunto discreto de valores. Así aparecen los dos números angulares de los pasos cuarto y quinto: $m_\\ell$ separa $\\theta$ y $\\varphi$, y $\\ell$ separa la parte angular de la radial y entra en esta última como $\\ell(\\ell+1)$. El número principal $n$ llega de otra manera: no es una constante de separación. Proviene de la ecuación radial, donde $\\ell(\\ell+1)$ ya está como un número fijo: para una energía arbitraria, la solución crece sin límite en $r$ grande, y permanece finita solo si la serie se corta; el corte ocurre para un entero $n > \\ell$, y esto es el tercer paso. Lo común a los dos mecanismos es que ningún número se postula, como en Bohr: tanto la discretitud de las constantes de separación como el corte de la serie se siguen del único requisito de finitud de la solución.",
+     "latex": "\\psi = R(r)\\,Y(\\theta,\\varphi): \\qquad f(r) = g(\\theta,\\varphi) = \\text{const}",
+     "kit": "separation"
+    },
+    {
+     "what": "La suma de números impares da un cuadrado",
+     "why": "El séptimo paso suma $2(2\\ell+1)$ para todos los $\\ell$ desde cero hasta $n-1$ y da inmediatamente $2n^{2}$. Se omite lo siguiente: en los paréntesis están los números impares 1, 3, 5, …, $2n-1$, y su suma es $n^{2}$ para cualquier $n$. Lo más fácil es verlo con una imagen: un cuadrado se crece añadiendo esquinas. A un cuadrado de $2\\times2$ se le añaden cinco celdas y se obtiene $3\\times3$; a este, siete celdas y se obtiene $4\\times4$; cada esquina es precisamente el siguiente número impar. Multiplique el resultado por dos espines: obtendrá la capacidad de la capa 2, 8, 18, 32. Ninguno de estos cuatro números se mide, los cuatro se calculan, y solo se necesitó contar el número de conjuntos permitidos de números cuánticos.",
+     "latex": "1 + 3 + 5 + \\ldots + (2n-1) = n^{2} \\;\\Longrightarrow\\; \\sum_{\\ell=0}^{n-1} 2(2\\ell+1) = 2n^{2}",
+     "kit": "combinatorics"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "المدارات",
@@ -1570,7 +1618,31 @@
     "hint": "استخدم الصيغة 2n² أو اجمع سعات تحت الأغلفة s، p، d و f.",
     "tolAbs": 2
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات اللازمة هنا",
+   "lead": "سنحتاج إلى ثلاثة أشياء: إحداثيات تتوافق مع تماثل المسألة، وفصل المتغيرات، ومجموع مدرسي واحد.",
+   "items": [
+    {
+     "what": "لماذا الإحداثيات كروية وليست x, y, z",
+     "why": "الخطوة الأولى تكتب المعادلة مع الجهد $-ke^{2}/r$. في الإحداثيات الديكارتية يكون هذا $-ke^{2}/\\sqrt{x^{2}+y^{2}+z^{2}}$ — تعبير تتشابك فيه المتغيرات الثلاثة، ولا ينفصل الحل إلى أي أجزاء. الانتقال إلى الإحداثيات الكروية $(r, \\theta, \\varphi)$ لا يغير شيئًا في الفيزياء ويغير كل شيء في الكتابة: الجهد يعتمد فقط على الأول منها، والزاويتان لا تدخلان فيه إطلاقًا. القاعدة العامة: تُختار الإحداثيات بحيث يتطابق تماثل المسألة مع تماثل الشبكة. الثمن هو تعقيد المؤثر $\\nabla^{2}$، حيث تظهر عوامل $r^{2}$ و $\\sin\\theta$. الفائدة أكبر من الثمن: من هنا تحديدًا، في الخطوة الثانية، نحصل على الفصل إلى جزء شعاعي وجزء زاوي، ومعها تقسيم الأعداد الكمومية إلى عدد شعاعي واحد وعددين زاويين.",
+     "latex": "U = -\\frac{ke^{2}}{\\sqrt{x^{2}+y^{2}+z^{2}}} \\;\\longrightarrow\\; U = -\\frac{ke^{2}}{r}",
+     "kit": "polar"
+    },
+    {
+     "what": "ماذا يعني فصل المتغيرات",
+     "why": "الخطوة الثانية تكتب الحل كحاصل ضرب $R(r)\\,Y(\\theta,\\varphi)$، وهذا ليس افتراضًا مبسطًا، بل طريقة. يُعوَّض بالحاصل في المعادلة ويُقسَم عليه؛ بعد ذلك، تُجمع جميع الحدود التي تحتوي $r$ في طرف واحد من المساواة، وجميع الحدود الزاوية في الطرف الآخر. دالتان لمتغيرين مختلفين تتساويان فقط في حالة واحدة: إذا كانت كلتاهما تساوي نفس العدد. يُسمى هذا العدد ثابت الفصل، وهو ليس عشوائيًا — فشرط كون الحل منتهيًا وأحادي القيمة يترك له فقط مجموعة منفصلة من القيم. هكذا يظهر العددان الزاويان في الخطوتين الرابعة والخامسة: $m_\\ell$ يفصل بين $\\theta$ و $\\varphi$، و$\\ell$ يفصل بين الجزء الزاوي والجزء الشعاعي ويدخل في الأخير بصيغة $\\ell(\\ell+1)$. العدد الرئيسي $n$ يأتي بطريقة أخرى: فهو ليس ثابت فصل. يأتي من المعادلة الشعاعية، حيث $\\ell(\\ell+1)$ موجود كعدد جاهز: عند طاقة عشوائية، ينمو الحل بلا حدود عند $r$ الكبيرة، ويبقى منتهيًا فقط إذا انقطع المتسلسلة، والانقطاع يحدث عند عدد صحيح $n > \\ell$، وهذه هي الخطوة الثالثة. القاسم المشترك بين الآليتين هو أنه لا يوجد عدد مفروض كما في نموذج بور: فكل من discreteness ثوابت الفصل وانقطاع المتسلسلة يتبعان من شرط واحد وهو كون الحل منتهيًا.",
+     "latex": "\\psi = R(r)\\,Y(\\theta,\\varphi): \\qquad f(r) = g(\\theta,\\varphi) = \\text{const}",
+     "kit": "separation"
+    },
+    {
+     "what": "مجموع الأعداد الفردية يعطي مربعًا",
+     "why": "الخطوة السابعة تجمع $2(2\\ell+1)$ لكل $\\ell$ من صفر إلى $n-1$ وتعطي فورًا $2n^{2}$. ما تم تخطيه هو: بين القوسين توجد الأعداد الفردية 1، 3، 5، …، $2n-1$، ومجموعها يساوي $n^{2}$ لأي $n$. أسهل طريقة لرؤية ذلك هي بالصورة: يُبنى المربع بإضافة زوايا. إلى مربع $2\\times2$ نضيف خمس خلايا فنحصل على $3\\times3$، إليه نضيف سبع خلايا فنحصل على $4\\times4$؛ كل زاوية هي عدد فردي تالٍ. اضرب الناتج في اثنين للسبين — تحصل على سعة الغلاف 2، 8، 18، 32. لا يوجد أي من هذه الأعداد الأربعة مقاسًا، بل كلها محسوبة، والحساب كان فقط لعدد المجموعات المسموح بها من الأعداد الكمومية.",
+     "latex": "1 + 3 + 5 + \\ldots + (2n-1) = n^{2} \\;\\Longrightarrow\\; \\sum_{\\ell=0}^{n-1} 2(2\\ell+1) = 2n^{2}",
+     "kit": "combinatorics"
+    }
+   ]
+  }
  },
  "tags": [
   "hydrogen",

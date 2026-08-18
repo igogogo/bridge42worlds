@@ -442,5 +442,1241 @@
     "tolAbs": 2
    }
   ]
+ },
+ "en": {
+  "title": "Flow: Continuity and Bernoulli",
+  "subtitle": "Section 2 · Why pressure is lower in a narrow place",
+  "intro": [
+   "A river squeezed between rocks accelerates — you can see it from a bridge, and it doesn't require physics. The water that entered the narrow place didn't disappear and didn't compress noticeably, and it has nowhere else to go: in one second, the same volume passes through any cross-section. Since the cross-section is smaller, the flow must be faster. That's the first thing we'll write as a formula.",
+   "The second statement is not obvious and almost always meets resistance: in a narrow place, the pressure on the wall is LESS than in a wide one. Intuition suggests the opposite — \"squeezed, so it presses harder.\" Here, intuition confuses two different things: how tightly packed the fluid is, and from what reserve the flow takes energy to accelerate. You can't accelerate water for free, and the only available source is its own pressure.",
+   "Both statements are consequences of two conservation laws, and nothing beyond them will be needed. From conservation of mass we get the continuity equation, from conservation of energy — Bernoulli's equation. We'll derive both honestly, and then look at where this pair of formulas stops working: on viscosity, on cavitation, and on the school explanation of wing lift, which is simply wrong."
+  ],
+  "standNote": "It's worth playing with the stand before the derivation. The slider Q sets the flow rate — how many liters per second go through the pipe; d₁ and d₂ are the diameters of the wide and narrow parts; p₁ is the pressure in the wide part. Watch two things at once: the velocity arrows (in the narrow place they are longer) and the manometer columns (in the narrow place they are lower). Narrow d₂ and see how the pressure difference grows: it goes not as the narrowing, but much steeper — the area falls as the square of the diameter, and the pressure responds to the square of the velocity. Bring d₂ to the minimum, and the stand will hit a cavitation warning: the calculated pressure went below the saturated vapor pressure, and the water would boil at that point. Further, the formula we are now deriving no longer describes what happens — and the stand says so directly, instead of drawing negative pascals.",
+  "formula": {
+   "name": "Bernoulli's equation",
+   "latex": "A_1 v_1 = A_2 v_2, \\qquad p + \\tfrac{1}{2}\\rho v^{2} + \\rho g h = \\text{const}",
+   "alsoKnown": "The first equality is the continuity equation, expressing conservation of mass. The second is Bernoulli's equation, expressing conservation of energy along a streamline",
+   "authors": [
+    {
+     "who": "Daniel Bernoulli",
+     "year": "1738",
+     "what": "in \"Hydrodynamica\" related the flow velocity of a fluid to its \"living force\" — the then name for kinetic energy — and obtained a relation between pressure head and velocity"
+    },
+    {
+     "who": "Leonhard Euler",
+     "year": "1752–1757",
+     "what": "derived the equations of motion for an ideal fluid and wrote the relation in the familiar modern form, with pressure as a separate term"
+    },
+    {
+     "who": "Henri Pitot",
+     "year": "1732",
+     "what": "built a bent tube that measures flow velocity by the height of water rise: the device appeared before the formula that explains it"
+    },
+    {
+     "who": "Giovanni Battista Venturi",
+     "year": "1797",
+     "what": "measured the pressure drop in a converging tube and turned the effect into a way to measure flow rate"
+    }
+   ],
+   "story": "The formula has a family story that textbooks usually omit. Daniel Bernoulli worked on \"Hydrodynamica\" in St. Petersburg, where the young Euler was nearby. The book appeared in 1738. A few years later, his father, Johann Bernoulli, published his own \"Hydraulics\", backdating the title page to 1732 — six years before his son's book. Father and son never reconciled. Yet neither of them wrote the formula in its present form: the pressure term as a separate member appeared in Euler, who arrived at it from the equations of motion, not from considerations of living force.",
+   "symbols": [
+    {
+     "sym": "p",
+     "latex": "p",
+     "what": "pressure at a given point in the flow",
+     "unit": "Pa",
+     "note": "static pressure: what a manometer would show if inserted flush into the wall, not facing the flow"
+    },
+    {
+     "sym": "ρ",
+     "latex": "\\rho",
+     "what": "fluid density",
+     "unit": "kg/m³",
+     "note": "in this formula it is constant — the fluid is assumed incompressible; for air this holds as long as the speed is much less than the speed of sound"
+    },
+    {
+     "sym": "v",
+     "latex": "v",
+     "what": "fluid velocity at the same point",
+     "unit": "m/s",
+     "note": "averaged over the cross-section; near the wall a real fluid is slowed by viscosity, but in the ideal model this is absent"
+    },
+    {
+     "sym": "h",
+     "latex": "h",
+     "what": "height of the point above a chosen reference level",
+     "unit": "m",
+     "note": "the reference level is arbitrary: only height differences enter the equation, so you can set zero wherever convenient"
+    },
+    {
+     "sym": "g",
+     "latex": "g",
+     "what": "acceleration due to gravity",
+     "unit": "m/s²",
+     "const": "g",
+     "note": "in a horizontal pipe the term with g is the same on both sides and simply cancels out"
+    },
+    {
+     "sym": "A",
+     "latex": "A",
+     "what": "cross-sectional area of the pipe",
+     "unit": "m²",
+     "note": "for a circular pipe A = πd²/4, so it decreases as the square of the diameter — hence the sharpness of the effect"
+    },
+    {
+     "sym": "Q",
+     "latex": "Q",
+     "what": "volumetric flow rate",
+     "unit": "m³/s",
+     "note": "the volume passing through a cross-section per second; this is what the first slider of the stand sets, only in liters"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Strict derivation",
+   "lead": "We will need exactly two conservation laws — mass and energy — and the work-energy theorem from mechanics. There will be no separate \"fluid physics\": we will take a piece of water and apply to it the same thing we applied to a block on a table.",
+   "steps": [
+    {
+     "text": "Let's start with mass. The flow is steady: the velocity pattern does not change with time, the fluid neither accumulates anywhere nor comes from nowhere. During time Δt, through the first cross-section, a column of length v₁Δt and volume A₁v₁Δt enters, and through the second, a column A₂v₂Δt exits. Since nothing has been added inside, these volumes are equal.",
+     "latex": "A_1 v_1 \\Delta t = A_2 v_2 \\Delta t \\;\\Longrightarrow\\; Q = A_1 v_1 = A_2 v_2",
+     "figure": "contintube",
+     "figCaption": "The same volume per second: in the narrow section it stretches out in length — meaning it moves faster"
+    },
+    {
+     "text": "Now energy. Let's isolate a portion of fluid occupying the pipe from the first section to the second, and follow it over Δt. The tail of the portion will shift by Δx₁ = v₁Δt, the head by Δx₂ = v₂Δt. The middle has not changed at all: the flow is steady, and where one particle left, exactly the same one immediately took its place. So the whole accounting reduces to two ends — a small volume ΔV is as if transferred from the first section to the second.",
+     "latex": "\\Delta V = A_1 \\Delta x_1 = A_2 \\Delta x_2 = Q\\,\\Delta t",
+     "figure": "flowslug",
+     "figCaption": "The middle of the pipe over Δt has not changed: only the volume ΔV is transferred from one end to the other"
+    },
+    {
+     "text": "We calculate the work done by pressure forces. From behind, the fluid pushes the selected portion with force p₁A₁ and pushes it along the direction of motion — the work is positive. From the front, the fluid standing in the way presses against it with force p₂A₂ — the work is negative. In both cases, the area cancels with the displacement length, leaving only the volume.",
+     "latex": "W_{\\text{press}} = p_1 A_1 \\Delta x_1 - p_2 A_2 \\Delta x_2 = (p_1 - p_2)\\,\\Delta V",
+     "figure": "presswork",
+     "figCaption": "Pressure acts like a piston: force p·A over path Δx gives work p·ΔV regardless of the cross-section shape"
+    },
+    {
+     "text": "We calculate the work done by gravity. Transferring volume ΔV from height h₁ to height h₂ means lifting mass ρΔV by the height difference. Gravity does work against the motion during the lift, hence the minus sign.",
+     "latex": "W_{\\text{grav}} = -\\rho\\,\\Delta V\\, g\\,(h_2 - h_1)",
+     "figure": "flowheight",
+     "figCaption": "The lift is paid for by work against gravity; on the descent the same term changes sign"
+    },
+    {
+     "text": "We calculate the increase in kinetic energy. For the same reason that the middle dropped out of the calculation, only the state of the two end portions changes: the mass ρΔV has stopped moving with speed v₁ and started moving with speed v₂.",
+     "latex": "\\Delta E_{\\text{kin}} = \\tfrac{1}{2}\\rho\\,\\Delta V\\,\\bigl(v_2^{2} - v_1^{2}\\bigr)",
+     "figure": "flowkinetic",
+     "figCaption": "The difference of squares of speeds: precisely squares, because energy depends on speed quadratically"
+    },
+    {
+     "text": "Putting it together. The work-energy theorem states that the total work of all forces equals the increase in kinetic energy. We have no other forces: we did not assume viscosity, so friction does no work.",
+     "latex": "(p_1 - p_2)\\,\\Delta V - \\rho g (h_2 - h_1)\\,\\Delta V = \\tfrac{1}{2}\\rho\\,\\Delta V\\,(v_2^{2} - v_1^{2})",
+     "figure": "bernsum",
+     "figCaption": "On the left — what the forces did, on the right — what it went into. The volume ΔV appears in every term and will now cancel"
+    },
+    {
+     "text": "We divide everything by ΔV and sort by indices: everything with a one on the left, everything with a two on the right. The cross-sections were chosen arbitrarily, so the equality means more than a relation between two points: along a streamline this sum does not change at all.",
+     "latex": "p_1 + \\tfrac{1}{2}\\rho v_1^{2} + \\rho g h_1 \\;=\\; p_2 + \\tfrac{1}{2}\\rho v_2^{2} + \\rho g h_2 \\;=\\; \\text{const}",
+     "figure": "bernconst",
+     "figCaption": "Three ways to store energy in a cubic meter of fluid. The whole column is the same, only the shares change"
+    },
+    {
+     "text": "Now the answer to the question from the introduction. Take a horizontal pipe: the heights are equal, the term with g is crossed out. The speed is greater in the narrow place — so, for the sum to remain the same, the pressure there must be lower. Substituting continuity, we get the pressure-drop formula, from which both classical instruments work: the Venturi tube measures flow rate by the pressure drop between the wide and narrow parts, the Pitot tube measures speed by completely stopping the flow at its nose.",
+     "latex": "p_1 - p_2 = \\frac{\\rho Q^{2}}{2}\\left(\\frac{1}{A_2^{2}} - \\frac{1}{A_1^{2}}\\right), \\qquad v = \\sqrt{\\frac{2\\,(p_0 - p)}{\\rho}}",
+     "figure": "venturipitot",
+     "figCaption": "Left: Venturi tube: the pressure drop between sections gives the flow rate. Right: Pitot tube: the stopped flow gives the speed"
+    }
+   ],
+   "plate": "p + \\tfrac{1}{2}\\rho v^{2} + \\rho g h = \\text{const}",
+   "plateCap": "Three terms — three ways to store energy in a cubic meter of fluid: pressure, motion, height. Along a streamline their sum is constant, and the flow can only transfer energy from one form to another. Acceleration is always at someone's expense.",
+   "note": "Let's list what we assumed along the way — this list is the boundary of the formula. First: the fluid is incompressible, ρ is constant; for air this ceases to be true roughly from a third of the speed of sound. Second: there is no viscosity. In a long pipe of constant cross-section, pressure drops even without any narrowing — simply due to friction, and this equation does not see such a drop at all. Third: the flow is steady; in a pulsating flow an additional term with the time derivative of velocity appears. Fourth, and most often forgotten: the equality is proved along ONE streamline, that is, for particles following each other along the same path. Comparing pressures at two points on different streamlines using this formula is generally not allowed. There is an exception — irrotational flow, where the constant is indeed the same for the entire flow — but that is a separate statement that must be proven, not implied. Half of the incorrect explanations in the physics of flight are built on this substitution."
+  },
+  "math": {
+   "title": "The math you'll need here",
+   "lead": "The derivation is short, but there are three places where it's easy to make a mistake on autopilot.",
+   "items": [
+    {
+     "what": "Why stationarity allows you to consider only the ends",
+     "why": "The energy of a selected portion at time t and at time t + Δt differs only by what happened at its edges: behind, a piece left the consideration; ahead, a piece entered. Everything in between remained the same over Δt — not 'approximately the same', but exactly, because stationarity means that the velocity and pressure fields at each point do not depend on time. This is the same trick as calculating the flux through a cross-section: you don't need to analyze the complex flow inside if you know what enters and leaves through the boundaries.",
+     "latex": "E(t+\\Delta t) - E(t) = e_2\\,\\Delta V - e_1\\,\\Delta V",
+     "kit": "flux"
+    },
+    {
+     "what": "Why the work done by pressure force equals p·ΔV",
+     "why": "Pressure is not a force, but force per unit area, so you can't directly multiply it by distance. The force is pA, the distance is Δx, and the product is pAΔx. But AΔx is simply the volume that passed through the cross-section. Hence an important consequence: the shape and size of the cross-section drop out of the answer; only pressure and volume matter. The same product p·ΔV will appear in thermodynamics as the work of gas expansion — and not by chance: it's the same quantity.",
+     "latex": "W = F\\,\\Delta x = pA\\,\\Delta x = p\\,\\Delta V"
+    },
+    {
+     "what": "Dimensional check: why the three terms can be added at all",
+     "why": "You can add pressure to velocity squared only after checking units, and it works. A pascal is a newton per square meter, and if you multiply numerator and denominator by a meter, you get joules per cubic meter. The term ρv²/2 gives kilograms per cubic meter times meters squared per second squared — again joules per cubic meter. And ρgh is the same. All three terms measure the same thing: how much energy is stored in a cubic meter of fluid. Bernoulli's equation is the law of conservation of energy divided by volume.",
+     "latex": "[\\,p\\,] = \\frac{\\text{N}}{\\text{m}^{2}} = \\frac{\\text{N}\\cdot\\text{m}}{\\text{m}^{3}} = \\frac{\\text{J}}{\\text{m}^{3}}",
+     "kit": "dimension"
+    }
+   ]
+  },
+  "example": {
+   "title": "Numerical example",
+   "lead": "Let's calculate exactly the configuration that is set by default on the stand — then you can compare the numbers with the pressure gauges.",
+   "given": "A horizontal pipe with water (ρ = 1000 kg/m³) narrows from diameter d₁ = 50 mm to d₂ = 25 mm. The flow rate is Q = 2 L/s, and the pressure in the wide part is p₁ = 200 kPa. Find the velocities in both cross-sections and the pressure in the narrow place.",
+   "law": "Q = A₁v₁ = A₂v₂, then p₁ + ρv₁²/2 = p₂ + ρv₂²/2 (heights are equal and cancel out)",
+   "solution": [
+    {
+     "text": "Cross-sectional areas. The diameter halved, so the area is quartered; it's worth seeing this before plugging in numbers.",
+     "latex": "A_1 = \\frac{\\pi d_1^{2}}{4} = 1{,}96\\cdot10^{-3}\\ \\text{m}^{2}, \\qquad A_2 = \\frac{\\pi d_2^{2}}{4} = 4{,}91\\cdot10^{-4}\\ \\text{m}^{2}"
+    },
+    {
+     "text": "Velocities from continuity. Convert the flow rate to cubic meters: 2 L/s = 0.002 m³/s. Since the area dropped by a factor of four, the velocity increased by a factor of four — no need to calculate the second one from scratch.",
+     "latex": "v_1 = \\frac{0{,}002}{1{,}96\\cdot10^{-3}} \\approx 1{,}02\\ \\text{m/s}, \\qquad v_2 = 4 v_1 \\approx 4{,}07\\ \\text{m/s}"
+    },
+    {
+     "text": "Pressure drop from Bernoulli. Calculate the difference of velocity squares and multiply by half the density.",
+     "latex": "\\Delta p = \\tfrac{1}{2}\\rho\\,(v_2^{2} - v_1^{2}) = 500\\,(16{,}6 - 1{,}04) \\approx 7{,}8\\cdot10^{3}\\ \\text{Pa}"
+    },
+    {
+     "text": "Pressure in the narrow place — the original minus the drop. It's useful to convert the drop to meters of water column: divide by ρg.",
+     "latex": "p_2 = 200 - 7{,}8 \\approx 192\\ \\text{kPa}, \\qquad \\frac{\\Delta p}{\\rho g} = \\frac{7800}{9810} \\approx 0{,}8\\ \\text{m}"
+    }
+   ],
+   "answer": "v₁ ≈ 1.02 m/s, v₂ ≈ 4.07 m/s, p₂ ≈ 192 kPa. The drop is about 7.8 kPa — that's roughly 0.8 meters of water column. Set Q = 2, d₁ = 50, d₂ = 25, p₁ = 200 on the stand and compare all four numbers.",
+   "check": "Is this reasonable? A velocity of about a meter per second for a water pipe is normal; above two or three meters per second, pipes start to make noise. A drop of 8 kilopascals is four percent of the original two hundred, so halving the diameter barely hinders the flow. Now the dangerous detail: narrow the narrow part by another factor of two, down to 13 millimeters — the velocity there will become about 15 meters per second, and the drop will grow from eight kilopascals to one hundred thirteen, eating more than half of the original pressure. The drop goes as the fourth power of the diameter ratio, so the four percent margin disappears instantly. Check this on the stand with the d₂ slider and bring it to the minimum — you'll hit cavitation."
+  },
+  "constants": {
+   "title": "Constants of this section",
+   "lead": "Four numbers that make up any water flow calculation. The last one is the boundary beyond which the formula ceases to be valid.",
+   "items": [
+    {
+     "sym": "ρ",
+     "latex": "\\rho_{\\text{H}_2\\text{O}}",
+     "name": "Density of water",
+     "value": "998",
+     "unit": "kg / m³",
+     "why": "At 20 °C it is 998, at 4 °C it is exactly 1000 to within fractions of a per mille. The round thousand is not a coincidence: the kilogram was historically defined as the mass of a liter of water, and the trace of this definition remains in the number. In problems, 1000 is used, and the rounding error is two tenths of a percent — less than the uncertainty of any other input number.",
+     "mnemo": "A cubic meter of water weighs a ton, a liter — a kilogram, a cubic centimeter — a gram. One chain for all cases."
+    },
+    {
+     "sym": "g",
+     "latex": "g",
+     "name": "Acceleration due to gravity",
+     "value": "9.806 65",
+     "unit": "m / s²",
+     "why": "The standard value adopted by convention in 1901: the actual g varies from 9.78 at the equator to 9.83 at the poles. In hydraulics, it is needed for the combination ρg — the weight of a cubic meter of liquid. For water, ρg ≈ 9810 N/m³, and this is the most useful derived number of the topic: divide the pressure difference in pascals by 9810 and you get meters of water column.",
+     "mnemo": "9.81 — 'almost ten'. Mental estimates are made with ten, and the two percent difference usually drowns in other assumptions."
+    },
+    {
+     "sym": "p₀",
+     "latex": "p_0",
+     "name": "Standard atmospheric pressure",
+     "value": "101 325",
+     "unit": "Pa",
+     "why": "Not a measured quantity, but a definition: since 1954, the standard atmosphere has been set exactly by this number. It is important because household pressure gauges show not the pressure itself, but its excess over atmospheric. Two hundred kilopascals on the stand is absolute pressure; a gauge in a building basement would show a hundred less.",
+     "mnemo": "One hundred kilopascals is ten meters of water column. Hence the diver's rule: every ten meters of depth adds an atmosphere."
+    },
+    {
+     "sym": "p_{sat}",
+     "latex": "p_{\\text{sat}}",
+     "name": "Saturated vapor pressure of water at 20 °C",
+     "value": "2340",
+     "unit": "Pa",
+     "why": "That very floor below which Bernoulli's equation ceases to describe what is happening. If the calculation gives a pressure less than this, the water does not 'find itself under negative pressure', but simply boils at room temperature — cavitation begins. This very number is embedded in the stand as a limiter. Note how small it is: from atmospheric pressure to boiling is only a little over forty times down, and the velocity enters the difference as a square.",
+     "mnemo": "2.34 kPa is about 24 centimeters of water column. That's how much water lacks to boil at room temperature."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "How this relates to the rest of the course",
+   "lead": "Bernoulli's equation is not an independent law: it is already known mechanics applied to a fluid and divided by volume.",
+   "items": [
+    {
+     "h": "Mechanics",
+     "text": "The entire derivation is one theorem about work and kinetic energy, the same one used to calculate the acceleration of a block. There is nothing specifically 'fluid' in it; the fluid merely forces one to calculate work through pressure and volume rather than force and path."
+    },
+    {
+     "h": "Hydrostatics from the first section",
+     "text": "Set v = 0 everywhere, and you are left with p + ρgh = const—the fundamental law of hydrostatics. Rest turns out to be a special case of flow with zero velocity, not a separate topic. Check the units: in both cases it is about joules per cubic meter."
+    },
+    {
+     "h": "Thermodynamics",
+     "text": "The lower boundary—cavitation—comes from the phase diagram: the saturated vapor pressure depends on temperature, so hot water cavitates earlier than cold water. Pumps that handle boiling water are designed differently than pumps for cold water, and this is a direct consequence of that section, not this one."
+    },
+    {
+     "h": "Waves and sound",
+     "text": "The upper boundary is compressibility. As long as the flow velocity is less than about a third of the speed of sound, the density can be considered constant, and everything presented works for air as well as for water. Above that begins gas dynamics, where density becomes another variable and the equation itself is restructured."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Fun: Try it yourself",
+   "lead": "The two experiments below take a minute each and require a sheet of paper and a hairdryer. Both demonstrate the same thing, and both are usually explained incorrectly.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "kitchen experiment",
+     "h": "Two strips of paper",
+     "text": "Cut two strips of paper about three centimeters wide and twenty centimeters long. Hold them vertically, parallel to each other, two or three centimeters apart, and blow steadily into the gap between them. Which way will they move?",
+     "answer": "They will not move apart but come together—the harder you blow, the closer they get. The explanation requires care, because applying the naive idea 'fast air between them means lower pressure' to the stream from your mouth is not valid: that air comes from your lungs, not from the room, and its total pressure is different. What works is this: the stream drags the surrounding room air along with it and accelerates it, sucking it into the gap. For that air, Bernoulli's equation applies honestly—the streamline starts in the still room and ends in the gap. Once accelerated, the pressure in the gap is lower than room pressure, while outside, the calm atmosphere presses on the strips. The difference brings them together. To check that it's not about the air stream itself: blow not into the gap but along the outer side of one strip—it will deflect toward the stream, again toward the low pressure."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "kitchen experiment",
+     "h": "Ping-pong ball in a hairdryer stream",
+     "text": "Turn on the hairdryer on the cold setting, point the stream vertically upward, and place a table tennis ball in it. It will hover. Now slowly tilt the hairdryer about thirty degrees—the ball will stay in the stream, hanging to the side of vertical. Why doesn't it fall out?",
+     "answer": "The stream is fastest in the middle and slower toward the edges. As soon as the ball shifts to the side, the air on the inner side flows around it faster than on the outer side, so the pressure on the inner side becomes lower—the ball is pulled back into the stream. There is a second way to say the same thing: the ball deflects the stream outward, and by Newton's third law, the deflected air pushes the ball inward. These are not two different explanations but the same event described in terms of pressure and momentum. Remember this pair of formulations—they will be needed for the wing."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradox",
+     "h": "Narrower but presses weaker",
+     "text": "A pipe in a narrow section squeezes the water harder, but the pressure gauge there shows less. Where is the error in the reasoning 'squeezed—so it presses harder'?",
+     "answer": "The error is in the word 'squeezed'. Water is incompressible: its density in the narrow section is exactly the same as in the wide one, no squeezing occurs. The pipe does not compress the water but directs it. The fluid entering the constriction must accelerate, and acceleration requires a force—so the pressure behind must be higher than in front. The low pressure in the narrow section is not the cause but the consequence: it is what remains after paying for the acceleration. The reverse also works: when the pipe widens again, the flow decelerates, and the pressure returns almost to its previous value. Almost—because part is lost to viscous friction, which is absent in our ideal model."
+    },
+    {
+     "icon": "fact",
+     "kind": "fun fact",
+     "h": "A shrimp that shoots with cavitation",
+     "text": "Cavitation is not only a problem for pumps and propellers, which it eats away with craters. The pistol shrimp snaps its claw so quickly that the water jet behind it accelerates to about thirty meters per second, the pressure in its wake drops below the saturated vapor pressure, and a vapor bubble is born. The collapse of the bubble produces a snap of about two hundred decibels—enough to stun small fish—and a flash of light shorter than ten nanoseconds. The temperature inside the collapsing bubble is estimated at thousands of kelvins. All this follows from a single line: velocity enters the pressure difference as a square."
+    },
+    {
+     "icon": "edge",
+     "kind": "limit of applicability",
+     "h": "Pitot tube and icing",
+     "text": "The instrument that measures an airplane's speed is Henri Pitot's tube from 1732, invented to measure the flow of the Seine. The nose faces into the flow, the air inside is brought to a complete stop, and the difference between this pressure and the static pressure gives the speed via the formula from step eight. The instrument's vulnerability is that it measures not speed directly but pressure: if the opening gets blocked by ice or a wasp, the readings become incorrect while still looking plausible. It was the freezing of the pitot tubes that set off the chain of events in the crash of Air France Flight 447 in 2009. Hence the heating of the tubes and three independent sets on each aircraft."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "Why a wing flies — and why the school explanation is wrong",
+   "blocks": [
+    {
+     "h": "The myth of equal travel time",
+     "text": "The explanation still printed in textbooks goes like this: the wing is curved on top, so the path along the upper surface is longer; two air particles that split at the leading edge are obliged to meet at the trailing edge at the same time; therefore, the upper one moves faster; therefore, by Bernoulli, the pressure on top is lower. The error is in the word \"obliged.\" No law requires the particles to meet. An experiment with a smoke pulse in a wind tunnel shows that the upper particle reaches the trailing edge noticeably EARLIER than the lower one — and this is not a minor correction. Moreover, if you honestly calculate the velocity difference from the difference in path lengths for a real airfoil, the lift comes out several times smaller than measured. Finally, the myth fails to explain the obvious: symmetric airfoils without any curvature produce lift just fine, a flat plate at an angle also flies, and airplanes fly upside down."
+    },
+    {
+     "h": "What actually happens",
+     "text": "The wing deflects the passing air downward. Behind the wing there remains a downwash — a descending jet about the width of the wingspan; helicopter pilots see it with the naked eye by the ripples on water. The air has gained downward momentum, so the wing exerted a downward force on it, so by Newton's third law the air exerts an upward force on the wing. That is the lift, and to a first approximation it equals the mass flow rate of the deflected air times the vertical velocity it acquires.",
+     "latex": "L \\approx \\dot m\\,\\Delta v_{\\downarrow}"
+    },
+    {
+     "h": "Circulation: the same answer in the language of pressure",
+     "text": "The exact theory says the same thing in other words. The flow around a wing is decomposed into a uniform stream plus a circular flow superimposed on it — the circulation Γ. Its value is not taken from thin air: the sharp trailing edge does not allow infinite speed when the flow goes around it, and this condition uniquely fixes Γ through the angle of attack and the curvature of the airfoil. The lift per unit span is then ρvΓ — the Zhukovsky–Kutta theorem. Circulation is what makes the speed on top greater than on the bottom; Bernoulli's equation then honestly converts the speed difference into a pressure difference. Note what was wrong in the myth: not Bernoulli himself, but the invented cause of the speed difference. The cause is circulation, not equal times.",
+     "latex": "L' = \\rho\\, v_{\\infty}\\, \\Gamma"
+    },
+    {
+     "h": "How to test yourself",
+     "text": "If an explanation of lift does not mention the downward deflection of the flow or circulation, and starts with the words \"the path on top is longer\" — it is wrong regardless of where it is printed. A good test for any explanation of flight: ask what it predicts for a flat plate at an angle of attack. The correct picture answers immediately — the flow is deflected downward, lift exists, and grows roughly linearly with the angle until stall. The myth of equal time cannot answer this question at all."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "Through any cross-section of the flow, the same volume passes per second: A₁v₁ = A₂v₂. The acceleration in a narrow place is paid for by pressure, because the sum p + ρv²/2 + ρgh along a streamline is constant. Low pressure where the flow is fast is not the cause of motion, but its price.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "Continuity is conservation of mass",
+     "text": "A₁v₁ = A₂v₂. Area drops as the square of the diameter, so halving the constriction speeds up the flow fourfold"
+    },
+    {
+     "icon": "scale",
+     "title": "Three terms — one energy",
+     "text": "p, ρv²/2, and ρgh are measured in joules per cubic meter. Bernoulli's equation is conservation of energy divided by volume"
+    },
+    {
+     "icon": "fact",
+     "title": "Fast means cheap in pressure",
+     "text": "The pressure drop grows as the square of the velocity, and for a given flow rate — as the fourth power of the diameter ratio"
+    },
+    {
+     "icon": "edge",
+     "title": "Limits are honestly listed",
+     "text": "No viscosity, no compressibility, steady flow, and the equality is along a single streamline. At the bottom, everything bottoms out in cavitation"
+    }
+   ],
+   "where": [
+    "Venturi flow meter: the pressure drop at a constriction gives the flow rate without moving parts",
+    "Pitot tube: the speed of an airplane, a boat, and wind in a wind tunnel",
+    "Atomizer and spray gun: the jet carries away air from the mouth of the tube, the pressure there drops, and the liquid is pushed up by atmospheric pressure from below",
+    "Cavitation: the calculation of pumps and propellers is done using the lower pressure limit, not the average"
+   ],
+   "watchOut": "Three common mistakes. The first is applying the formula to points on different streamlines: in general, this cannot be done. The second is forgetting about viscosity: in a long pipe, pressure drops even without any constriction, and the equation does not show this. The third is explaining the lift of a wing by the \"equal travel time\" of particles over and under the wing. This statement is simply wrong: measurements show that the upper particle reaches the trailing edge earlier than the lower one."
+  },
+  "quiz": [
+   {
+    "id": "f1",
+    "type": "mcq",
+    "q": "The diameter of a round pipe is halved, the flow rate remains the same. How will the water speed change in the narrow place?",
+    "options": [
+     "It will double",
+     "It will quadruple",
+     "It will not change: the same flow rate passes through both cross sections",
+     "It will halve: the water is more cramped"
+    ],
+    "answer": 1,
+    "why": "Continuity links speed to area, not diameter: A = πd²/4, so halving the diameter reduces the area by a factor of four. The flow rate A·v is conserved, so the speed must quadruple. The third option is correct in the first half of the sentence and incorrect in the conclusion: the flow rate is indeed the same, but that is exactly why the speed must increase.",
+    "hint": "Write the area of a circle in terms of the diameter. If the diameter is halved, by what factor does the area decrease—and by what factor must the speed then increase so that the product A·v remains the same?"
+   },
+   {
+    "id": "f2",
+    "type": "mcq",
+    "q": "Which explanation of the lift force of a wing is correct?",
+    "options": [
+     "The wing deflects the passing air downward, and by Newton's third law the air pushes the wing upward; in the language of pressures, the same thing is described by circulation",
+     "Air particles that split at the leading edge of the wing must meet at the trailing edge simultaneously, so the upper one goes faster",
+     "The upper side of the wing is longer, so the air has more room there and the pressure is lower",
+     "The pressure below is higher because the air there is compressed by the weight of the airplane"
+    ],
+    "answer": 0,
+    "why": "Deflecting the flow downward and circulation are the same event, described through momentum and through pressures. The requirement to meet at the trailing edge does not follow from any law, and experiment refutes it: the upper particle arrives earlier. The difference in path lengths gives a force many times smaller than measured, and symmetric profiles and upside-down flight finish off this version completely.",
+    "hint": "Ask yourself what each explanation predicts for a flat board at an angle of attack—its paths above and below are the same, but there is lift."
+   },
+   {
+    "id": "f3",
+    "type": "free",
+    "q": "In your own words: why in a narrow place of a horizontal pipe is the pressure LOWER, not higher?",
+    "keywords": [
+     "acceleration",
+     "accelerate",
+     "speed",
+     "kinetic",
+     "energy",
+     "work",
+     "conservation",
+     "fast"
+    ],
+    "needed": 2,
+    "why": "Because the fluid in the constriction must accelerate, and acceleration requires work. The only energy source for the flow is its own pressure, so the increase in kinetic energy is paid for by a drop in pressure: the sum p + ρv²/2 along a streamline is constant. Note that cause and effect go in this order: it is not low pressure that drives the water, but the acceleration of the water that lowers the pressure.",
+    "hint": "Ask where the energy for acceleration comes from. In a horizontal pipe, there is no height and no pump between the sections—what remains?"
+   },
+   {
+    "id": "f4",
+    "type": "estimate",
+    "q": "Water flows through a horizontal pipe: in the wide part the speed is 1 m/s, in the narrow part 5 m/s. By how many kilopascals is the pressure in the narrow place lower than in the wide one?",
+    "answer": 12,
+    "unit": "kPa",
+    "why": "Δp = ρ(v₂² − v₁²)/2 = 1000·(25 − 1)/2 = 12,000 Pa = 12 kPa. In your head: the difference of squares 25 and 1 is 24, half the density of water is 500, the product is 12,000. It is useful to convert to meters of column: 12,000 / 9810 ≈ 1.2 meters.",
+    "hint": "In a horizontal pipe, the term with height is crossed out. Square both speeds, subtract, and multiply by half the density of water.",
+    "tolAbs": 2
+   }
+  ]
+ },
+ "es": {
+  "title": "Flujo: continuidad y Bernoulli",
+  "subtitle": "Párrafo 2 · Por qué en un lugar estrecho la presión es menor",
+  "intro": [
+   "Un río, estrechado entre rocas, acelera — esto se ve desde el puente y no requiere física. El agua que entra en un lugar estrecho no desaparece ni se comprime notablemente, y no tiene a dónde más ir: por segundo, a través de cualquier sección pasa el mismo volumen. Como la sección es menor, tiene que fluir más rápido. Esto es lo primero que escribiremos con una fórmula.",
+   "La segunda afirmación no es obvia y casi siempre encuentra resistencia: en un lugar estrecho, la presión sobre la pared es MENOR que en uno ancho. La intuición sugiere lo contrario — «si se comprime, entonces presiona más fuerte». Aquí la intuición confunde dos cosas diferentes: cuán apretada está la fluidez y de qué reserva toma energía el flujo para acelerarse. No se puede acelerar el agua gratis, y la única fuente disponible es su propia presión.",
+   "Ambas afirmaciones son consecuencias de dos leyes de conservación, y no se necesitará nada más allá de ellas. De la conservación de la masa se obtendrá la ecuación de continuidad; de la conservación de la energía, la ecuación de Bernoulli. Derivaremos ambas honestamente, y luego veremos dónde este par de fórmulas deja de funcionar: en la viscosidad, en la cavitación y en la explicación escolar de la fuerza de sustentación de un ala, que simplemente es incorrecta."
+  ],
+  "standNote": "Vale la pena jugar con el stand con las manos antes de la derivación. El deslizador Q fija el caudal — cuántos litros por segundo pasan por la tubería; d₁ y d₂ son los diámetros de las partes ancha y estrecha; p₁ es la presión en la parte ancha. Observe dos cosas a la vez: las flechas de velocidad (en el lugar estrecho son más largas) y las columnas de los manómetros (en el lugar estrecho son más bajas). Reduzca d₂ y observe cómo crece la diferencia: no va como el estrechamiento, sino mucho más pronunciado — el área cae como el cuadrado del diámetro, y la presión responde al cuadrado de la velocidad. Lleve d₂ al mínimo, y el stand chocará con una advertencia de cavitación: la presión calculada ha caído por debajo de la presión de vapor saturado, y el agua en ese lugar herviría. Más allá, la fórmula que estamos derivando ya no describe lo que sucede — y el stand lo dice directamente, en lugar de dibujar pascales negativos.",
+  "formula": {
+   "name": "Ecuación de Bernoulli",
+   "latex": "A_1 v_1 = A_2 v_2, \\qquad p + \\tfrac{1}{2}\\rho v^{2} + \\rho g h = \\text{constante}",
+   "alsoKnown": "La primera igualdad es la ecuación de continuidad, una expresión de la conservación de la masa. La segunda es la ecuación de Bernoulli, una expresión de la conservación de la energía a lo largo de una línea de corriente.",
+   "authors": [
+    {
+     "who": "Daniel Bernoulli",
+     "year": "1738",
+     "what": "en su 'Hidrodinámica' relacionó la velocidad de salida de un fluido con la 'fuerza viva' — el nombre de entonces para la energía cinética — y obtuvo una relación entre la carga y la velocidad"
+    },
+    {
+     "who": "Leonhard Euler",
+     "year": "1752—1757",
+     "what": "derivó las ecuaciones del movimiento de un fluido ideal y escribió la relación en la forma habitual hoy, con la presión como término separado"
+    },
+    {
+     "who": "Henri Pitot",
+     "year": "1732",
+     "what": "construyó un tubo curvo que mide la velocidad del flujo por la altura a la que sube el agua: el instrumento apareció antes que la fórmula que lo explica"
+    },
+    {
+     "who": "Giovanni Battista Venturi",
+     "year": "1797",
+     "what": "midió la caída de presión en un tubo que se estrecha y convirtió el efecto en un método para medir el caudal"
+    }
+   ],
+   "story": "La fórmula tiene una historia familiar que no se suele contar en los libros de texto. Daniel Bernoulli trabajó en su 'Hidrodinámica' en San Petersburgo, donde estaba el joven Euler. El libro se publicó en 1738. Unos años después, su padre, Johann Bernoulli, publicó su 'Hidráulica', poniendo en la portada el año 1732 — con fecha retroactiva, seis años antes que el libro de su hijo. Padre e hijo no se reconciliaron hasta el final de sus vidas. Sin embargo, la fórmula en su forma actual no la escribió ninguno de los dos: el término con la presión como miembro separado apareció con Euler, quien llegó a ella a partir de las ecuaciones del movimiento, no de consideraciones sobre la fuerza viva.",
+   "symbols": [
+    {
+     "sym": "p",
+     "latex": "p",
+     "what": "presión en un punto dado del flujo",
+     "unit": "Pa",
+     "note": "presión estática: la que mostraría un manómetro empotrado en la pared al ras, no colocado contra la corriente"
+    },
+    {
+     "sym": "ρ",
+     "latex": "\\rho",
+     "what": "densidad del fluido",
+     "unit": "kg/m³",
+     "note": "en esta fórmula es constante — consideramos el fluido incompresible; para el aire esto es válido mientras la velocidad sea mucho menor que la del sonido"
+    },
+    {
+     "sym": "v",
+     "latex": "v",
+     "what": "velocidad del fluido en ese mismo punto",
+     "unit": "m/s",
+     "note": "promedio sobre la sección; en la pared, un fluido real se frena por la viscosidad, pero en el modelo ideal esto no existe"
+    },
+    {
+     "sym": "h",
+     "latex": "h",
+     "what": "altura del punto sobre el nivel elegido",
+     "unit": "m",
+     "note": "el nivel de referencia es arbitrario: en la ecuación solo entra la diferencia de alturas, por lo que el cero se puede poner donde sea conveniente"
+    },
+    {
+     "sym": "g",
+     "latex": "g",
+     "what": "aceleración de la gravedad",
+     "unit": "m/s²",
+     "const": "g",
+     "note": "en una tubería horizontal, el término con g es igual a ambos lados y simplemente se cancela"
+    },
+    {
+     "sym": "A",
+     "latex": "A",
+     "what": "área de la sección transversal de la tubería",
+     "unit": "m²",
+     "note": "para una tubería circular, A = πd²/4, es decir, cae como el cuadrado del diámetro — de ahí la brusquedad del efecto"
+    },
+    {
+     "sym": "Q",
+     "latex": "Q",
+     "what": "caudal volumétrico",
+     "unit": "m³/s",
+     "note": "volumen que pasa por la sección por segundo; es lo que fija el primer deslizador del stand, solo que en litros"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Derivación rigurosa",
+   "lead": "Necesitaremos exactamente dos leyes de conservación — la de masa y la de energía — y el teorema del trabajo de la mecánica. No habrá ninguna \"física de fluidos\" separada: tomaremos un trozo de agua y le aplicaremos lo mismo que aplicamos a un bloque sobre una mesa.",
+   "steps": [
+    {
+     "text": "Empecemos con la masa. El flujo es estacionario: el patrón de velocidades no cambia con el tiempo, el fluido no se acumula en ningún lugar ni aparece de la nada. En el tiempo Δt, a través de la primera sección entra una columna de longitud v₁Δt y volumen A₁v₁Δt, y a través de la segunda sale una columna A₂v₂Δt. Como nada se ha añadido en el interior, estos volúmenes son iguales.",
+     "latex": "A_1 v_1 \\Delta t = A_2 v_2 \\Delta t \\;\\Longrightarrow\\; Q = A_1 v_1 = A_2 v_2",
+     "figure": "contintube",
+     "figCaption": "El mismo volumen por segundo: en la sección estrecha se estira en longitud — por lo tanto, va más rápido"
+    },
+    {
+     "text": "Ahora la energía. Aislemos una porción de fluido que ocupa el tubo desde la primera sección hasta la segunda, y sigámosla durante Δt. La cola de la porción se desplaza Δx₁ = v₁Δt, la cabeza — Δx₂ = v₂Δt. El medio no ha cambiado en absoluto: el flujo es estacionario, y donde una partícula se fue, inmediatamente otra idéntica la reemplaza. Por lo tanto, toda la contabilidad se reduce a dos extremos: un pequeño volumen ΔV como si se hubiera transferido de la primera sección a la segunda.",
+     "latex": "\\Delta V = A_1 \\Delta x_1 = A_2 \\Delta x_2 = Q\\,\\Delta t",
+     "figure": "flowslug",
+     "figCaption": "El medio del tubo no cambia en Δt: solo el volumen ΔV se transfiere de un extremo al otro"
+    },
+    {
+     "text": "Calculamos el trabajo de las fuerzas de presión. Por detrás, el fluido empuja la porción aislada con una fuerza p₁A₁ y la empuja en la dirección del movimiento — el trabajo es positivo. Por delante, el fluido que está en el camino presiona en contra con una fuerza p₂A₂ — el trabajo es negativo. El área en ambos casos se cancela con la longitud del desplazamiento, dejando solo el volumen.",
+     "latex": "W_{\\text{pres}} = p_1 A_1 \\Delta x_1 - p_2 A_2 \\Delta x_2 = (p_1 - p_2)\\,\\Delta V",
+     "figure": "presswork",
+     "figCaption": "La presión actúa como un pistón: la fuerza p·A en la distancia Δx produce un trabajo p·ΔV independientemente de la forma de la sección"
+    },
+    {
+     "text": "Calculamos el trabajo de la gravedad. Transferir el volumen ΔV desde la altura h₁ a la altura h₂ significa elevar una masa ρΔV a una diferencia de alturas. La fuerza de gravedad durante la elevación trabaja en contra del movimiento, por lo tanto el signo es menos.",
+     "latex": "W_{\\text{grav}} = -\\rho\\,\\Delta V\\, g\\,(h_2 - h_1)",
+     "figure": "flowheight",
+     "figCaption": "La elevación se paga con trabajo contra la gravedad; al descender, el mismo término cambia de signo"
+    },
+    {
+     "text": "Calculamos el aumento de la energía cinética. Por la misma razón por la que el medio quedó fuera del cálculo, solo cambia el estado de las dos porciones extremas: la masa ρΔV dejó de moverse con velocidad v₁ y ahora se mueve con velocidad v₂.",
+     "latex": "\\Delta E_{\\text{cin}} = \\tfrac{1}{2}\\rho\\,\\Delta V\\,\\bigl(v_2^{2} - v_1^{2}\\bigr)",
+     "figure": "flowkinetic",
+     "figCaption": "Diferencia de cuadrados de velocidades: precisamente cuadrados, porque la energía depende de la velocidad cuadráticamente"
+    },
+    {
+     "text": "Juntamos todo. El teorema del trabajo y la energía cinética afirma que el trabajo total de todas las fuerzas es igual al aumento de la energía cinética. No tenemos otras fuerzas: no hemos supuesto viscosidad, por lo tanto la fricción no realiza trabajo.",
+     "latex": "(p_1 - p_2)\\,\\Delta V - \\rho g (h_2 - h_1)\\,\\Delta V = \\tfrac{1}{2}\\rho\\,\\Delta V\\,(v_2^{2} - v_1^{2})",
+     "figure": "bernsum",
+     "figCaption": "A la izquierda — lo que hicieron las fuerzas, a la derecha — en qué se convirtió. El volumen ΔV está en cada término y ahora se cancelará"
+    },
+    {
+     "text": "Dividimos todo por ΔV y separamos por índices: todo con uno a la izquierda, todo con dos a la derecha. Las secciones se eligieron arbitrariamente, por lo tanto la igualdad significa más que una relación entre dos puntos: a lo largo de la línea de corriente, esta suma no cambia en absoluto.",
+     "latex": "p_1 + \\tfrac{1}{2}\\rho v_1^{2} + \\rho g h_1 \\;=\\; p_2 + \\tfrac{1}{2}\\rho v_2^{2} + \\rho g h_2 \\;=\\; \\text{const}",
+     "figure": "bernconst",
+     "figCaption": "Tres formas de almacenar energía en un metro cúbico de fluido. La columna es la misma en su totalidad, solo cambian las proporciones"
+    },
+    {
+     "text": "Ahora la respuesta a la pregunta de la introducción. Tomemos un tubo horizontal: las alturas son iguales, el término con g se elimina. La velocidad en el lugar estrecho es mayor — por lo tanto, para que la suma permanezca igual, la presión allí debe ser menor. Sustituyendo la continuidad, obtenemos la fórmula de la diferencia de presión, de la cual funcionan ambos instrumentos clásicos: el tubo de Venturi mide el caudal por la diferencia entre las partes ancha y estrecha, el tubo de Pitot mide la velocidad, deteniendo completamente el flujo en su punta.",
+     "latex": "p_1 - p_2 = \\frac{\\rho Q^{2}}{2}\\left(\\frac{1}{A_2^{2}} - \\frac{1}{A_1^{2}}\\right), \\qquad v = \\sqrt{\\frac{2\\,(p_0 - p)}{\\rho}}",
+     "figure": "venturipitot",
+     "figCaption": "A la izquierda, tubo de Venturi: la diferencia entre secciones da el caudal. A la derecha, tubo de Pitot: el flujo detenido da la velocidad"
+    }
+   ],
+   "plate": "p + \\tfrac{1}{2}\\rho v^{2} + \\rho g h = \\text{const}",
+   "plateCap": "Tres términos — tres formas de almacenar energía en un metro cúbico de fluido: presión, movimiento, altura. A lo largo de la línea de corriente su suma es constante, y el flujo solo puede transferir energía de una forma a otra. La aceleración siempre es a costa de algo.",
+   "note": "Enumeremos lo que hemos supuesto en el camino — esta lista es el límite de la fórmula. Primero: el fluido es incompresible, ρ es constante; para el aire esto deja de ser cierto aproximadamente a partir de un tercio de la velocidad del sonido. Segundo: no hay viscosidad. En una tubería larga de sección constante, la presión cae sin ninguna constricción — simplemente por fricción, y esta ecuación no ve esa caída en absoluto. Tercero: el flujo es estacionario; en un flujo pulsante aparece un término adicional con la derivada de la velocidad respecto al tiempo. Cuarto, y se olvida con más frecuencia: la igualdad se demuestra a lo largo de UNA línea de corriente, es decir, para partículas que van una tras otra por el mismo camino. Comparar presiones en dos puntos en diferentes líneas de corriente con esta fórmula en general no se puede. Hay una excepción — flujo sin vórtices, donde la constante es realmente una para todo el flujo — pero es una afirmación separada que debe demostrarse, no suponerse. Precisamente en esta sustitución se basa la mitad de las explicaciones incorrectas en la física del vuelo."
+  },
+  "math": {
+   "title": "Matemáticas necesarias aquí",
+   "lead": "La derivación es corta, pero hay tres lugares donde es fácil equivocarse automáticamente.",
+   "items": [
+    {
+     "what": "Por qué la estacionariedad permite considerar solo los extremos",
+     "why": "La energía de una porción aislada en el instante t y en el instante t + Δt difiere solo en lo que ocurrió en sus bordes: por detrás, una parte salió de consideración; por delante, entró. Todo lo que está entre ellos permanece igual durante Δt, no 'aproximadamente igual', sino exactamente, porque la estacionariedad significa que el campo de velocidades y presiones en cada punto no depende del tiempo. Es el mismo truco que calcular el flujo a través de una sección: el flujo complejo en el interior no necesita ser analizado si se sabe qué entra y qué sale a través de los límites.",
+     "latex": "E(t+\\Delta t) - E(t) = e_2\\,\\Delta V - e_1\\,\\Delta V",
+     "kit": "flux"
+    },
+    {
+     "what": "Por qué el trabajo de la fuerza de presión es p·ΔV",
+     "why": "La presión no es una fuerza, sino una fuerza por unidad de área, por lo que no se puede multiplicar directamente por la distancia. La fuerza es pA, la distancia es Δx, el producto es pAΔx. Pero AΔx es simplemente el volumen que pasó a través de la sección. De ahí una consecuencia importante: la forma y el tamaño de la sección no aparecen en la respuesta, solo importan la presión y el volumen. El mismo producto p·ΔV aparecerá en termodinámica como el trabajo de expansión de un gas, y no es casualidad: es la misma cantidad.",
+     "latex": "W = F\\,\\Delta x = pA\\,\\Delta x = p\\,\\Delta V"
+    },
+    {
+     "what": "Verificación dimensional: por qué los tres términos se pueden sumar",
+     "why": "Se puede sumar presión con velocidad al cuadrado solo después de verificar las unidades, y funciona. Un pascal es un newton por metro cuadrado, y si multiplicamos el numerador y el denominador por un metro, obtenemos un julio por metro cúbico. El término ρv²/2 da kilogramos por metro cúbico multiplicados por metros al cuadrado por segundo al cuadrado, es decir, nuevamente julios por metro cúbico. Y ρgh también. Los tres términos miden lo mismo: cuánta energía está almacenada en un metro cúbico de fluido. La ecuación de Bernoulli es la ley de conservación de la energía dividida por el volumen.",
+     "latex": "[\\,p\\,] = \\frac{\\text{N}}{\\text{m}^{2}} = \\frac{\\text{N}\\cdot\\text{m}}{\\text{m}^{3}} = \\frac{\\text{J}}{\\text{m}^{3}}",
+     "kit": "dimension"
+    }
+   ]
+  },
+  "example": {
+   "title": "Ejemplo con números",
+   "lead": "Calculemos exactamente la configuración que está en el soporte por defecto; luego podrás comparar los números con los manómetros.",
+   "given": "Una tubería horizontal con agua (ρ = 1000 kg/m³) se estrecha de un diámetro d₁ = 50 mm a d₂ = 25 mm. El caudal es Q = 2 L/s, la presión en la parte ancha es p₁ = 200 kPa. Encuentra las velocidades en ambas secciones y la presión en el lugar estrecho.",
+   "law": "Q = A₁v₁ = A₂v₂, luego p₁ + ρv₁²/2 = p₂ + ρv₂²/2 (las alturas son iguales y se cancelan)",
+   "solution": [
+    {
+     "text": "Áreas de las secciones. El diámetro se redujo a la mitad, por lo tanto el área se reduce a la cuarta parte; esto se debe ver antes de sustituir números.",
+     "latex": "A_1 = \\frac{\\pi d_1^{2}}{4} = 1{,}96\\cdot10^{-3}\\ \\text{m}^{2}, \\qquad A_2 = \\frac{\\pi d_2^{2}}{4} = 4{,}91\\cdot10^{-4}\\ \\text{m}^{2}"
+    },
+    {
+     "text": "Velocidades a partir de la ecuación de continuidad. Convertimos el caudal a metros cúbicos: 2 L/s = 0,002 m³/s. Como el área se redujo a la cuarta parte, la velocidad se cuadruplicó; no es necesario calcular la segunda de nuevo.",
+     "latex": "v_1 = \\frac{0{,}002}{1{,}96\\cdot10^{-3}} \\approx 1{,}02\\ \\text{m/s}, \\qquad v_2 = 4 v_1 \\approx 4{,}07\\ \\text{m/s}"
+    },
+    {
+     "text": "Diferencia de presión a partir de Bernoulli. Calculamos la diferencia de los cuadrados de las velocidades y la multiplicamos por la mitad de la densidad.",
+     "latex": "\\Delta p = \\tfrac{1}{2}\\rho\\,(v_2^{2} - v_1^{2}) = 500\\,(16{,}6 - 1{,}04) \\approx 7{,}8\\cdot10^{3}\\ \\text{Pa}"
+    },
+    {
+     "text": "Presión en el lugar estrecho: la presión original menos la diferencia. Es útil convertir la diferencia a metros de columna de agua: dividir por ρg.",
+     "latex": "p_2 = 200 - 7{,}8 \\approx 192\\ \\text{kPa}, \\qquad \\frac{\\Delta p}{\\rho g} = \\frac{7800}{9810} \\approx 0{,}8\\ \\text{m}"
+    }
+   ],
+   "answer": "v₁ ≈ 1,02 m/s, v₂ ≈ 4,07 m/s, p₂ ≈ 192 kPa. La diferencia es de aproximadamente 7,8 kPa, que son unos 0,8 metros de columna de agua. Ajusta en el soporte Q = 2, d₁ = 50, d₂ = 25, p₁ = 200 y verifica los cuatro números.",
+   "check": "¿Es razonable? Una velocidad de alrededor de un metro por segundo para una tubería de agua es algo común; por encima de dos o tres metros por segundo, las tuberías empiezan a hacer ruido. Una diferencia de 8 kilopascales es el cuatro por ciento de los doscientos originales, es decir, la reducción a la mitad apenas obstaculiza el flujo. Ahora un detalle peligroso: reduce la parte estrecha a la mitad otra vez, hasta 13 milímetros; la velocidad allí será de unos 15 metros por segundo, y la diferencia aumentará de ocho kilopascales a ciento trece, es decir, consumirá más de la mitad de la presión original. La diferencia varía con la cuarta potencia de la relación de diámetros, por lo que el margen del cuatro por ciento desaparece instantáneamente. Compruébalo en el soporte moviendo el control deslizante de d₂ y llévalo al mínimo: te encontrarás con la cavitación."
+  },
+  "constants": {
+   "title": "Constantes de esta sección",
+   "lead": "Cuatro números con los que se compone cualquier cálculo de flujo de agua. El último es el límite a partir del cual la fórmula deja de ser válida.",
+   "items": [
+    {
+     "sym": "ρ",
+     "latex": "\\rho_{\\text{H}_2\\text{O}}",
+     "name": "Densidad del agua",
+     "value": "998",
+     "unit": "kg / m³",
+     "why": "A 20 °C es 998, a 4 °C es exactamente 1000 con precisión de fracciones de ppm. El mil redondo no es casualidad: el kilogramo se definió históricamente como la masa de un litro de agua, y el rastro de esta definición permanece en el número. En los problemas se toma 1000, y el error por redondeo es de dos décimas por ciento: menos que la incertidumbre de cualquier otro dato de entrada.",
+     "mnemo": "Un metro cúbico de agua pesa una tonelada, un litro pesa un kilogramo, un centímetro cúbico pesa un gramo. Una sola cadena para todos los casos."
+    },
+    {
+     "sym": "g",
+     "latex": "g",
+     "name": "Aceleración de la gravedad",
+     "value": "9,806 65",
+     "unit": "m / s²",
+     "why": "Valor estándar adoptado por convenio en 1901: la g real varía de 9,78 en el ecuador a 9,83 en los polos. En hidráulica se necesita para el producto ρg, el peso de un metro cúbico de líquido. Para el agua, ρg ≈ 9810 N/m³, y este es el número derivado más útil del tema: divide la caída de presión en pascales por 9810 y obtienes metros de columna de agua.",
+     "mnemo": "9,81 — «casi diez». Para estimaciones mentales se usa diez, y la diferencia del dos por ciento generalmente se pierde entre las demás suposiciones."
+    },
+    {
+     "sym": "p₀",
+     "latex": "p_0",
+     "name": "Presión atmosférica estándar",
+     "value": "101 325",
+     "unit": "Pa",
+     "why": "No es una magnitud medida, sino una definición: desde 1954 la atmósfera estándar se fijó exactamente con este número. Es importante porque los manómetros domésticos no muestran la presión, sino su exceso sobre la atmosférica. Doscientos kilopascales en el banco de pruebas son presión absoluta; un manómetro en el sótano de una casa marcaría cien menos.",
+     "mnemo": "Cien kilopascales son diez metros de columna de agua. De ahí la regla del buceador: cada diez metros de profundidad añaden una atmósfera."
+    },
+    {
+     "sym": "p_{sat}",
+     "latex": "p_{\\text{sat}}",
+     "name": "Presión de vapor saturado del agua a 20 °C",
+     "value": "2340",
+     "unit": "Pa",
+     "why": "Ese es el límite por debajo del cual la ecuación de Bernoulli deja de describir lo que ocurre. Si el cálculo da una presión menor, el agua no «se encuentra bajo presión negativa», sino que simplemente hierve a temperatura ambiente: comienza la cavitación. Precisamente este número está incorporado en el banco de pruebas como limitador. Obsérvese lo pequeño que es: desde la presión atmosférica hasta la ebullición hay solo un poco más de cuarenta veces hacia abajo, y la velocidad entra en la caída al cuadrado.",
+     "mnemo": "2,34 kPa son unos 24 centímetros de columna de agua. Eso es lo que le falta al agua para hervir a temperatura ambiente."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Cómo se relaciona con el resto del curso",
+   "lead": "La ecuación de Bernoulli no es una ley independiente: es la mecánica ya conocida aplicada a un fluido y dividida por el volumen.",
+   "items": [
+    {
+     "h": "Mecánica",
+     "text": "Toda la deducción es un único teorema sobre el trabajo y la energía cinética, el mismo que se usa para calcular la aceleración de un bloque. No hay nada específicamente «líquido» en ella; el líquido solo obliga a calcular el trabajo mediante presión y volumen, no mediante fuerza y desplazamiento."
+    },
+    {
+     "h": "Hidrostática del primer apartado",
+     "text": "Ponga v = 0 en todas partes, y quedará p + ρgh = const, la ley fundamental de la hidrostática. El reposo resulta ser un caso particular del flujo con velocidad cero, no un tema aparte. Compruébelo con las unidades: en ambos casos se trata de julios por metro cúbico."
+    },
+    {
+     "h": "Termodinámica",
+     "text": "El límite inferior, la cavitación, proviene del diagrama de fases: la presión de vapor saturado depende de la temperatura, por lo que el agua caliente cavita antes que la fría. Las bombas que manejan agua hirviendo se diseñan de manera diferente a las de agua fría, y esto es una consecuencia directa de ese apartado, no de este."
+    },
+    {
+     "h": "Ondas y sonido",
+     "text": "El límite superior es la compresibilidad. Mientras la velocidad del flujo sea menor que aproximadamente un tercio de la velocidad del sonido, la densidad puede considerarse constante, y todo lo expuesto funciona para el aire tan bien como para el agua. Por encima comienza la dinámica de gases, donde la densidad se convierte en otra variable y la ecuación misma se reestructura."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Curiosidades: compruébelo con sus manos",
+   "lead": "Los dos experimentos siguientes toman un minuto cada uno y requieren una hoja de papel y un secador de pelo. Ambos demuestran lo mismo y ambos suelen explicarse incorrectamente.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "experimento de cocina",
+     "h": "Dos tiras de papel",
+     "text": "Corte dos tiras de papel de unos tres centímetros de ancho y veinte centímetros de largo. Sujételas verticalmente y en paralelo, separadas por dos o tres centímetros, y sople justo en el espacio entre ellas. ¿Hacia dónde se separarán?",
+     "answer": "No se separarán, sino que se juntarán, tanto más cuanto más fuerte sople. La explicación requiere cuidado, porque aplicar directamente «entre ellas el aire es rápido, por lo tanto la presión es menor» a un chorro de la boca no es válido: ese aire proviene de los pulmones, no de la habitación, y su presión total es diferente. Lo que ocurre es que el chorro arrastra consigo el aire ambiente circundante y lo acelera, aspirándolo hacia el espacio. Para ese aire, la ecuación de Bernoulli es aplicable con rigor: la línea de corriente comienza en la habitación en reposo y llega al hueco. Al acelerarlo, la presión en el hueco es menor que la de la habitación, mientras que en el exterior las tiras reciben la presión atmosférica tranquila. Esa diferencia las junta. Una comprobación de que no se trata del flujo de aire en sí: sople no en el espacio, sino a lo largo del lado exterior de una tira: se desviará hacia el chorro, es decir, nuevamente hacia la zona de baja presión."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "experimento de cocina",
+     "h": "Pelota de ping-pong en el chorro del secador",
+     "text": "Encienda el secador en modo frío, dirija el chorro verticalmente hacia arriba y coloque una pelota de tenis de mesa en él. Quedará suspendida. Ahora incline lentamente el secador unos treinta grados: la pelota permanecerá en el chorro, colgando a un lado de la vertical. ¿Por qué no se cae?",
+     "answer": "El chorro es más rápido en el centro y más lento hacia los bordes. En cuanto la pelota se desplaza hacia un lado, el aire del lado interior la rodea más rápido que por el exterior, y la presión en el lado interior se vuelve menor: la pelota es empujada de vuelta al chorro. Hay una segunda forma de decir lo mismo: la pelota desvía el chorro hacia afuera, y por la tercera ley de Newton, el aire desviado empuja la pelota hacia adentro. No son dos explicaciones diferentes, sino el mismo fenómeno descrito mediante presiones y mediante impulso. Recuerde este par de formulaciones: ahora lo necesitaremos para el ala."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoja",
+     "h": "Se estrecha, pero presiona menos",
+     "text": "En un estrechamiento de una tubería, el agua se comprime con más fuerza, pero el manómetro allí marca menos. ¿Dónde está el error en el razonamiento «si se comprime, entonces presiona más»?",
+     "answer": "El error está en la palabra «comprime». El agua es incompresible: su densidad en el estrechamiento es exactamente la misma que en la parte ancha; no hay ninguna compresión. La tubería no comprime el agua, sino que la dirige. Al hacerlo, el líquido a la entrada de la contracción debe acelerarse, y la aceleración requiere una fuerza: por lo tanto, la presión detrás debe ser mayor que delante. La baja presión en el estrechamiento no es la causa, sino la consecuencia: es lo que queda después de pagar la aceleración. El proceso inverso también funciona: cuando la tubería se ensancha de nuevo, el flujo se frena y la presión casi vuelve a su valor anterior. Casi, porque parte se pierde por la fricción viscosa, que en nuestro modelo ideal no existe."
+    },
+    {
+     "icon": "fact",
+     "kind": "dato curioso",
+     "h": "Un cangrejo que dispara con cavitación",
+     "text": "La cavitación no es solo un problema para bombas y hélices, a las que les erosiona el metal formando cráteres. El camarón pistola cierra su pinza tan rápido que el chorro de agua que se forma detrás se acelera hasta unos treinta metros por segundo, la presión en la estela cae por debajo de la presión de vapor saturado y nace una burbuja de vapor. El colapso de la burbuja produce un chasquido de unos doscientos decibelios, suficiente para aturdir a peces pequeños, y un destello de luz de menos de diez nanosegundos. La temperatura dentro de la burbuja que colapsa se estima en miles de kelvins. Todo esto se deduce de una sola línea: la velocidad entra al cuadrado en la diferencia de presión."
+    },
+    {
+     "icon": "edge",
+     "kind": "límite de aplicabilidad",
+     "h": "Tubo de Pitot y congelamiento",
+     "text": "El instrumento que mide la velocidad de un avión es el tubo de Henri Pitot, de 1732, ideado para medir la corriente del Sena. La boquilla mira hacia el flujo, el aire en su interior se detiene por completo, y la diferencia entre esa presión y la estática da la velocidad mediante la fórmula del octavo paso. La vulnerabilidad del instrumento es que no mide la velocidad directamente, sino la presión: si el orificio se obstruye con hielo o una avispa, las lecturas se vuelven incorrectas, aunque sigan pareciendo plausibles. Fue precisamente la congelación de los sensores de presión de aire lo que desencadenó la cadena de eventos en el accidente del vuelo 447 de Air France en 2009. De ahí la calefacción de los tubos y tres conjuntos independientes en cada avión."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "Por qué vuela un ala — y por qué la explicación escolar es incorrecta",
+   "blocks": [
+    {
+     "h": "El mito del tiempo de recorrido igual",
+     "text": "La explicación que todavía se imprime en los libros de texto dice así: el ala es convexa por arriba, por lo que el camino por la superficie superior es más largo; dos partículas de aire que se separan en el borde de ataque deben encontrarse en el borde de salida al mismo tiempo; por lo tanto, la superior va más rápido; por lo tanto, según Bernoulli, la presión arriba es menor. El error está en la palabra \"deben\". Ninguna ley exige que las partículas se encuentren. El experimento con un impulso de humo en un túnel de viento muestra que la partícula superior llega al borde de salida notablemente ANTES que la inferior — y esto no es una pequeña corrección. Además, si se calcula honestamente la diferencia de velocidades a partir de la diferencia de longitudes de los caminos para un perfil real, la fuerza de sustentación resulta ser varias veces menor que la medida. Finalmente, el mito no explica lo obvio: los perfiles simétricos sin ninguna convexidad crean perfectamente sustentación, una placa plana en ángulo también vuela, y los aviones vuelan boca abajo."
+    },
+    {
+     "h": "Lo que realmente sucede",
+     "text": "El ala desvía el aire que pasa hacia abajo. Detrás del ala queda una estela descendente — una corriente descendente de un ancho del orden de la envergadura; los helicópteros la ven a simple vista por la agitación del agua. El aire recibió un impulso hacia abajo, por lo tanto, el ala actuó sobre él con una fuerza dirigida hacia abajo, por lo tanto, según la tercera ley de Newton, el aire actúa sobre el ala hacia arriba. Esta es la fuerza de sustentación, y en orden de magnitud es igual al flujo másico del aire desviado multiplicado por la velocidad vertical que adquirió.",
+     "latex": "L \\approx \\dot m\\,\\Delta v_{\\downarrow}"
+    },
+    {
+     "h": "Circulación: la misma respuesta en el lenguaje de las presiones",
+     "text": "La teoría exacta dice lo mismo con otras palabras. El flujo alrededor del ala se descompone en un flujo uniforme y un flujo circular superpuesto — la circulación Γ. Su valor no se toma de la nada: el borde de salida afilado no permite una velocidad infinita al rodearlo, y esta condición fija unívocamente Γ a través del ángulo de ataque y la curvatura del perfil. La fuerza de sustentación por unidad de envergadura es entonces ρvΓ — el teorema de Zhukovski y Kutta. La circulación es la que hace que la velocidad arriba sea mayor que abajo; la ecuación de Bernoulli después convierte honestamente la diferencia de velocidades en diferencia de presiones. Nótese que lo que estaba mal en el mito no es el propio Bernoulli, sino la causa inventada de la diferencia de velocidades. La causa es la circulación, no la igualdad de tiempos.",
+     "latex": "L' = \\rho\\, v_{\\infty}\\, \\Gamma"
+    },
+    {
+     "h": "Cómo comprobarlo",
+     "text": "Si una explicación de la sustentación no menciona ni la desviación del flujo hacia abajo ni la circulación, y comienza con las palabras \"el camino superior es más largo\" — es incorrecta, sin importar dónde esté impresa. Una buena prueba para cualquier explicación del vuelo: preguntar qué predice para una placa plana en ángulo de ataque. La imagen correcta responde de inmediato: el flujo se desvía hacia abajo, hay sustentación, crece aproximadamente linealmente con el ángulo hasta la pérdida. El mito del tiempo igual no puede responder a esta pregunta en absoluto."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "A través de cualquier sección del flujo por segundo pasa el mismo volumen: A₁v₁ = A₂v₂. La aceleración en un lugar estrecho se paga con presión, porque la suma p + ρv²/2 + ρgh a lo largo de una línea de corriente es constante. La baja presión donde hay velocidad rápida no es la causa del movimiento, sino su precio.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "La continuidad es la conservación de la masa",
+     "text": "A₁v₁ = A₂v₂. El área cae como el cuadrado del diámetro, por lo que una reducción a la mitad acelera el flujo cuatro veces"
+    },
+    {
+     "icon": "scale",
+     "title": "Tres términos — una energía",
+     "text": "p, ρv²/2 y ρgh se miden en julios por metro cúbico. La ecuación de Bernoulli es la conservación de la energía dividida por el volumen"
+    },
+    {
+     "icon": "fact",
+     "title": "Rápido — significa barato en presión",
+     "text": "La diferencia de presión crece como el cuadrado de la velocidad, y para un caudal dado, como la cuarta potencia de la relación de diámetros"
+    },
+    {
+     "icon": "edge",
+     "title": "Los límites están enumerados honestamente",
+     "text": "No hay viscosidad, no hay compresibilidad, el flujo es estacionario, la igualdad es a lo largo de una línea de corriente. Por debajo, todo choca con la cavitación"
+    }
+   ],
+   "where": [
+    "Medidor Venturi: la caída de presión en una contracción da el caudal sin partes móviles",
+    "Tubo de Pitot: la velocidad de aviones, barcos y viento en el túnel de un laboratorio aerodinámico",
+    "Pulverizador y pistola de pintura: el chorro arrastra el aire de la boca del tubo, la presión allí cae y el líquido es elevado por la presión atmosférica desde abajo",
+    "Cavitación: el cálculo de bombas y hélices se realiza según el límite inferior de presión, no según el promedio"
+   ],
+   "watchOut": "Tres errores comunes. El primero es aplicar la fórmula a puntos en diferentes líneas de corriente: en general, no se puede hacer. El segundo es olvidar la viscosidad: en una tubería larga, la presión cae incluso sin ninguna contracción, y la ecuación no lo muestra. El tercero es explicar la sustentación del ala por el \"tiempo de recorrido igual\" de las partículas sobre y bajo el ala. Esta afirmación es simplemente falsa: las mediciones muestran que la partícula superior llega al borde de salida antes que la inferior."
+  },
+  "quiz": [
+   {
+    "id": "f1",
+    "type": "mcq",
+    "q": "El diámetro de una tubería circular se reduce a la mitad, el caudal permanece igual. ¿Cómo cambiará la velocidad del agua en la parte estrecha?",
+    "options": [
+     "Aumentará al doble",
+     "Aumentará al cuádruple",
+     "No cambiará: por ambas secciones pasa el mismo caudal",
+     "Disminuirá a la mitad: al agua le queda más estrecho"
+    ],
+    "answer": 1,
+    "why": "La continuidad relaciona la velocidad con el área, no con el diámetro: A = πd²/4, por lo que reducir el diámetro a la mitad reduce el área a la cuarta parte. El caudal A·v se conserva, por lo tanto la velocidad aumenta al cuádruple. La tercera opción es correcta en la primera mitad de la frase e incorrecta en la conclusión: el caudal es efectivamente el mismo, pero precisamente por eso la velocidad debe aumentar.",
+    "hint": "Escriba el área del círculo en función del diámetro. Si el diámetro se reduce a la mitad, ¿en cuánto disminuye el área? ¿Y en cuánto debe entonces aumentar la velocidad para que el producto A·v permanezca igual?"
+   },
+   {
+    "id": "f2",
+    "type": "mcq",
+    "q": "¿Qué explicación de la fuerza de sustentación de un ala es correcta?",
+    "options": [
+     "El ala desvía el aire que pasa hacia abajo, y por la tercera ley de Newton el aire empuja el ala hacia arriba; en términos de presiones, lo mismo se describe mediante la circulación",
+     "Las partículas de aire que se separan en el borde de ataque del ala deben encontrarse simultáneamente en el borde de salida, por lo que la superior va más rápido",
+     "Por arriba el ala es más larga, por lo que el aire tiene más espacio y la presión es menor",
+     "Por abajo la presión es mayor porque allí el aire está comprimido por el peso del avión"
+    ],
+    "answer": 0,
+    "why": "La desviación del flujo hacia abajo y la circulación son el mismo fenómeno, descrito mediante el impulso y mediante las presiones. La exigencia de encontrarse en el borde de salida no se deduce de ninguna ley, y la experiencia la refuta: la partícula superior llega antes. La diferencia de longitudes de los caminos da una fuerza varias veces menor que la medida, y los perfiles simétricos y el vuelo invertido acaban con esta versión definitivamente.",
+    "hint": "Pregúntese qué predice cada explicación para una placa plana con ángulo de ataque: sus caminos superior e inferior son iguales, pero la sustentación existe."
+   },
+   {
+    "id": "f3",
+    "type": "free",
+    "q": "Con sus propias palabras: ¿por qué en un lugar estrecho de una tubería horizontal la presión es MENOR, y no mayor?",
+    "keywords": [
+     "aceleración",
+     "acelerar",
+     "velocidad",
+     "cinética",
+     "energía",
+     "trabajo",
+     "conservación",
+     "rápido"
+    ],
+    "needed": 2,
+    "why": "Porque el líquido en el estrechamiento debe acelerarse, y la aceleración requiere trabajo. La única fuente de energía del flujo es su propia presión, por lo que el aumento de energía cinética se paga con una caída de presión: la suma p + ρv²/2 a lo largo de una línea de corriente es constante. Observe que la causa y el efecto van en este orden: no es la baja presión la que empuja el agua, sino que la aceleración del agua reduce la presión.",
+    "hint": "Pregúntese de dónde sale la energía para acelerar. En una tubería horizontal no hay altura ni bomba entre las secciones, ¿qué queda?"
+   },
+   {
+    "id": "f4",
+    "type": "estimate",
+    "q": "El agua fluye por una tubería horizontal: en la parte ancha la velocidad es 1 m/s, en la estrecha 5 m/s. ¿En cuántos kilopascales es menor la presión en el lugar estrecho que en el ancho?",
+    "answer": 12,
+    "unit": "kPa",
+    "why": "Δp = ρ(v₂² − v₁²)/2 = 1000·(25 − 1)/2 = 12 000 Pa = 12 kPa. Mentalmente: la diferencia de cuadrados de 25 y 1 es 24, la mitad de la densidad del agua es 500, el producto es 12 000. Es útil convertir a metros de columna: 12 000 / 9810 ≈ 1,2 metros.",
+    "hint": "En una tubería horizontal, el término con la altura se elimina. Eleve ambas velocidades al cuadrado, reste y multiplique por la mitad de la densidad del agua.",
+    "tolAbs": 2
+   }
+  ]
+ },
+ "ar": {
+  "title": "التدفق: الاستمرارية وبرنولي",
+  "subtitle": "الفقرة 2 · لماذا يكون الضغط أقل في المكان الضيق",
+  "intro": [
+   "النهر المحصور بين الصخور يتسارع — هذا مرئي من الجسر ولا يتطلب فيزياء. الماء الذي دخل إلى المكان الضيق لم يختف ولم ينضغط بشكل ملحوظ، ولا مكان آخر له: في كل ثانية يمر نفس الحجم عبر أي مقطع. وبما أن المقطع أصغر، يجب أن يتدفق أسرع. هذا أول ما سنكتبه كمعادلة.",
+   "البيان الثاني غير بديهي ويواجه دائمًا تقريبًا مقاومة: في المكان الضيق، يكون الضغط على الجدار أقل منه في المكان الواسع. الحدس يوحي بالعكس — «ضغط، إذن يدفع بقوة أكبر». الحدس هنا يخلط بين أمرين مختلفين: مدى ضيق المكان على السائل، ومن أي مخزون يأخذ التدفق الطاقة للتسارع. لا يمكن تسريع الماء مجانًا، والمصدر الوحيد المتاح له هو ضغطه الخاص.",
+   "كلا البيانين ناتجان عن قانوني حفظ، ولا نحتاج إلى أكثر منهما. من حفظ الكتلة سنحصل على معادلة الاستمرارية، ومن حفظ الطاقة سنحصل على معادلة برنولي. سنشتق كلاهما بدقة، ثم ننظر إلى أين تتوقف هذه المعادلات عن العمل: عند اللزوجة، وعند التكهف، وعند التفسير المدرسي لقوة الرفع للجناح، وهو ببساطة غير صحيح."
+  ],
+  "standNote": "يمكنك تحريك المنصة بيديك قبل الاشتقاق. المنزلق Q يحدد معدل التدفق — كم لترًا في الثانية يمر عبر الأنبوب؛ d₁ و d₂ هما قطرا الجزء الواسع والضيق؛ p₁ هو الضغط في الجزء الواسع. راقب شيئين في نفس الوقت: أسهم السرعة (في المكان الضيق تكون أطول) وأعمدة المانومترات (في المكان الضيق تكون أقل). ضيّق d₂ ولاحظ كيف يزداد فرق الضغط: لا يزداد بنفس نسبة التضييق بل بشكل أسرع بكثير — المساحة تتناقص كمربع القطر، والضغط يستجيب لمربع السرعة. خفّض d₂ إلى الحد الأدنى، وستصل المنصة إلى تحذير بشأن التكهف: الضغط المحسوب انخفض إلى ما دون ضغط البخار المشبع، وكان الماء سيغلي في ذلك المكان. بعد ذلك، المعادلة التي نشتقها الآن لم تعد تصف ما يحدث — والمنصة تقول ذلك بوضوح، بدلاً من رسم باسكال سالبة.",
+  "formula": {
+   "name": "معادلة برنولي",
+   "latex": "A_1 v_1 = A_2 v_2, \\qquad p + \\tfrac{1}{2}\\rho v^{2} + \\rho g h = \\text{const}",
+   "alsoKnown": "المساواة الأولى هي معادلة الاستمرارية، وهي تعبير عن حفظ الكتلة. الثانية هي معادلة برنولي، وهي تعبير عن حفظ الطاقة على طول خط الانسياب",
+   "authors": [
+    {
+     "who": "دانييل برنولي",
+     "year": "1738",
+     "what": "في كتابه «هيدروديناميكا» ربط سرعة تدفق السائل بـ«القوة الحية» - الاسم القديم للطاقة الحركية - وحصل على علاقة بين الضغط والسرعة"
+    },
+    {
+     "who": "ليونارد أويلر",
+     "year": "1752-1757",
+     "what": "اشتق معادلات حركة المائع المثالي وكتب العلاقة بالشكل المألوف اليوم، مع الضغط كحد منفصل"
+    },
+    {
+     "who": "هنري بيتو",
+     "year": "1732",
+     "what": "بنى أنبوبًا منحنيًا يقيس سرعة التدفق من ارتفاع عمود الماء: الجهاز ظهر قبل الصيغة التي تفسره"
+    },
+    {
+     "who": "جيوفاني باتيستا فينتوري",
+     "year": "1797",
+     "what": "قاس انخفاض الضغط في أنبوب متضيق وحول التأثير إلى طريقة لقياس معدل التدفق"
+    }
+   ],
+   "story": "للمعادلة قصة عائلية لا يُكتب عنها عادة في الكتب المدرسية. عمل دانييل برنولي على «هيدروديناميكا» في سانت بطرسبرغ، حيث كان بجانبه الشاب أويلر. صدر الكتاب عام 1738. بعد بضع سنوات، نشر والده يوهان برنولي كتابه «هيدروليكا» واضعًا على صفحة العنوان عام 1732 - بأثر رجعي، قبل ست سنوات من كتاب ابنه. لم يتصالح الأب والابن حتى نهاية حياتهما. ومع ذلك، لم يكتب أي منهما المعادلة بشكلها الحالي: الحد مع الضغط كعضو منفصل ظهر عند أويلر، الذي توصل إليه من معادلات الحركة، وليس من اعتبارات القوة الحية.",
+   "symbols": [
+    {
+     "sym": "p",
+     "latex": "p",
+     "what": "الضغط عند نقطة معينة في التدفق",
+     "unit": "Pa",
+     "note": "الضغط الساكن: ما سيظهره مقياس الضغط المثبت في الجدار بشكل متساوٍ، وليس موضوعًا في اتجاه التدفق"
+    },
+    {
+     "sym": "ρ",
+     "latex": "\\rho",
+     "what": "كثافة السائل",
+     "unit": "kg/m³",
+     "note": "في هذه المعادلة هي ثابتة - نعتبر السائل غير قابل للانضغاط؛ بالنسبة للهواء هذا صحيح طالما أن السرعة أقل بكثير من سرعة الصوت"
+    },
+    {
+     "sym": "v",
+     "latex": "v",
+     "what": "سرعة السائل عند نفس النقطة",
+     "unit": "m/s",
+     "note": "متوسط عبر المقطع؛ بالقرب من الجدار يتباطأ السائل الحقيقي بسبب اللزوجة، لكن في النموذج المثالي لا يوجد هذا"
+    },
+    {
+     "sym": "h",
+     "latex": "h",
+     "what": "ارتفاع النقطة فوق المستوى المختار",
+     "unit": "m",
+     "note": "مستوى الإسناد اختياري: في المعادلة يدخل فقط فرق الارتفاعات، لذلك يمكن وضع الصفر حيثما هو مناسب"
+    },
+    {
+     "sym": "g",
+     "latex": "g",
+     "what": "تسارع الجاذبية",
+     "unit": "m/s²",
+     "const": "g",
+     "note": "في أنبوب أفقي، الحد الذي يحتوي g متساوٍ على الجانبين ويُحذف ببساطة"
+    },
+    {
+     "sym": "A",
+     "latex": "A",
+     "what": "مساحة مقطع الأنبوب",
+     "unit": "m²",
+     "note": "لأنبوب دائري A = πd²/4، أي أنها تتناقص كمربع القطر - ومن هنا تأتي حدة التأثير"
+    },
+    {
+     "sym": "Q",
+     "latex": "Q",
+     "what": "معدل التدفق الحجمي",
+     "unit": "m³/s",
+     "note": "الحجم الذي يمر عبر المقطع في الثانية؛ هذا ما يحدده شريط التمرير الأول في المنصة، ولكن باللترات"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "الاشتقاق الصارم",
+   "lead": "سنحتاج إلى قانونَي حفظ اثنين فقط — حفظ الكتلة وحفظ الطاقة — ونظرية الشغل في الميكانيكا. لن تكون هناك حاجة إلى «فيزياء سوائل» منفصلة: سنأخذ قطعة من الماء ونطبق عليها نفس ما طبقناه على كتلة على طاولة.",
+   "steps": [
+    {
+     "text": "لنبدأ بالكتلة. التدفق ثابت: صورة السرعات لا تتغير مع الزمن، والسائل لا يتراكم في أي مكان ولا يأتي من العدم. خلال الزمن Δt، يدخل عبر المقطع الأول عمود طوله v₁Δt وحجمه A₁v₁Δt، ويخرج عبر المقطع الثاني عمود حجمه A₂v₂Δt. وبما أنه لم يضف شيء في الداخل، فإن هذين الحجمين متساويان.",
+     "latex": "A_1 v_1 \\Delta t = A_2 v_2 \\Delta t \\;\\Longrightarrow\\; Q = A_1 v_1 = A_2 v_2",
+     "figure": "contintube",
+     "figCaption": "نفس الحجم في الثانية: في المقطع الضيق يتمدد في الطول — أي يتحرك أسرع"
+    },
+    {
+     "text": "الآن الطاقة. نعزل جزءًا من السائل يشغل الأنبوب من المقطع الأول إلى المقطع الثاني، ونتتبعه خلال الزمن Δt. يتحرك ذيل الجزء مسافة Δx₁ = v₁Δt، ويتحرك رأسه مسافة Δx₂ = v₂Δt. الوسط لم يتغير إطلاقًا: التدفق ثابت، وحيثما غادر جسيم، حل محله جسيم مماثل تمامًا. إذن، كل الحسابات تنحصر في الطرفين — كما لو أن حجمًا صغيرًا ΔV نُقل من المقطع الأول إلى المقطع الثاني.",
+     "latex": "\\Delta V = A_1 \\Delta x_1 = A_2 \\Delta x_2 = Q\\,\\Delta t",
+     "figure": "flowslug",
+     "figCaption": "منتصف الأنبوب خلال Δt لم يتغير: فقط الحجم ΔV انتقل من طرف إلى آخر"
+    },
+    {
+     "text": "نحسب شغل قوى الضغط. من الخلف، يدفع السائل الجزء المعزول بقوة p₁A₁ في اتجاه الحركة — الشغل موجب. من الأمام، يضغط السائل الموجود في الطريق بقوة p₂A₂ في الاتجاه المعاكس — الشغل سالب. المساحة تُختصر مع طول الإزاحة في كلتا الحالتين، تاركةً الحجم فقط.",
+     "latex": "W_{\\text{الضغط}} = p_1 A_1 \\Delta x_1 - p_2 A_2 \\Delta x_2 = (p_1 - p_2)\\,\\Delta V",
+     "figure": "presswork",
+     "figCaption": "الضغط يعمل كمكبس: القوة p·A على المسافة Δx تعطي شغلًا p·ΔV بغض النظر عن شكل المقطع"
+    },
+    {
+     "text": "نحسب شغل الجاذبية. نقل الحجم ΔV من الارتفاع h₁ إلى الارتفاع h₂ يعني رفع كتلة ρΔV بفارق الارتفاع. قوة الجاذبية أثناء الرفع تعاكس الحركة، لذا تكون الإشارة سالبة.",
+     "latex": "W_{\\text{الجاذبية}} = -\\rho\\,\\Delta V\\, g\\,(h_2 - h_1)",
+     "figure": "flowheight",
+     "figCaption": "الرفع يُدفع بشغل ضد الجاذبية؛ عند النزول، نفس الحد يغير إشارته"
+    },
+    {
+     "text": "نحسب الزيادة في الطاقة الحركية. لنفس السبب الذي جعل الوسط خارج الحسابات، تتغير حالة طرفي الجزء فقط: الكتلة ρΔV توقفت عن الحركة بالسرعة v₁ وأصبحت تتحرك بالسرعة v₂.",
+     "latex": "\\Delta E_{\\text{الحركية}} = \\tfrac{1}{2}\\rho\\,\\Delta V\\,\\bigl(v_2^{2} - v_1^{2}\\bigr)",
+     "figure": "flowkinetic",
+     "figCaption": "فرق مربعي السرعتين: مربعين تحديدًا، لأن الطاقة تعتمد على السرعة تربيعيًا"
+    },
+    {
+     "text": "نجمع. تنص نظرية الشغل والطاقة الحركية على أن الشغل الكلي لجميع القوى يساوي الزيادة في الطاقة الحركية. لا توجد قوى أخرى لدينا: لم نفترض لزوجة، لذا لا يبذل الاحتكاك أي شغل.",
+     "latex": "(p_1 - p_2)\\,\\Delta V - \\rho g (h_2 - h_1)\\,\\Delta V = \\tfrac{1}{2}\\rho\\,\\Delta V\\,(v_2^{2} - v_1^{2})",
+     "figure": "bernsum",
+     "figCaption": "على اليسار — ما فعلته القوى، على اليمين — إلى أين ذهب. الحجم ΔV موجود في كل حد وسيُختصر الآن"
+    },
+    {
+     "text": "نقسم كل شيء على ΔV ونفصل حسب المؤشرات: كل ما يحمل الرقم 1 إلى اليسار، وكل ما يحمل الرقم 2 إلى اليمين. المقاطع اختيرت عشوائيًا، لذا فإن المساواة تعني أكثر من مجرد علاقة بين نقطتين: على طول خط الانسياب، هذا المجموع لا يتغير إطلاقًا.",
+     "latex": "p_1 + \\tfrac{1}{2}\\rho v_1^{2} + \\rho g h_1 \\;=\\; p_2 + \\tfrac{1}{2}\\rho v_2^{2} + \\rho g h_2 \\;=\\; \\text{ثابت}",
+     "figure": "bernconst",
+     "figCaption": "ثلاث طرق لتخزين الطاقة في متر مكعب من السائل. العمود كله متطابق، فقط النسب تتغير"
+    },
+    {
+     "text": "الآن الإجابة على السؤال من المقدمة. لنأخذ أنبوبًا أفقيًا: الارتفاعات متساوية، والحد الذي يحتوي g يُحذف. السرعة في المكان الضيق أكبر — لذا، لكي يبقى المجموع كما هو، يجب أن يكون الضغط هناك أقل. بتعويض معادلة الاستمرارية، نحصل على صيغة فرق الضغط التي يعمل بها الجهازان الكلاسيكيان: أنبوب فنتوري يقيس معدل التدفق من فرق الضغط بين الجزء العريض والجزء الضيق، وأنبوب بيتو يقيس السرعة بإيقاف التدفق تمامًا عند فوهته.",
+     "latex": "p_1 - p_2 = \\frac{\\rho Q^{2}}{2}\\left(\\frac{1}{A_2^{2}} - \\frac{1}{A_1^{2}}\\right), \\qquad v = \\sqrt{\\frac{2\\,(p_0 - p)}{\\rho}}",
+     "figure": "venturipitot",
+     "figCaption": "على اليسار أنبوب فنتوري: فرق الضغط بين المقطعين يعطي معدل التدفق. على اليمين أنبوب بيتو: التدفق المتوقف يعطي السرعة"
+    }
+   ],
+   "plate": "p + \\tfrac{1}{2}\\rho v^{2} + \\rho g h = \\text{ثابت}",
+   "plateCap": "ثلاثة حدود — ثلاث طرق لتخزين الطاقة في متر مكعب من السائل: الضغط، الحركة، الارتفاع. على طول خط الانسياب، مجموعها ثابت، ولا يمكن للتدفق إلا أن يحول الطاقة من شكل إلى آخر. التسارع دائمًا على حساب شيء آخر.",
+   "note": "لنذكر ما افترضناه على طول الطريق — هذه القائمة هي حدود الصيغة. أولاً: السائل غير قابل للانضغاط، ρ ثابتة؛ بالنسبة للهواء، هذا يتوقف عن الصحة تقريبًا عند ثلث سرعة الصوت. ثانيًا: لا لزوجة. في أنبوب طويل بمقطع ثابت، ينخفض الضغط حتى بدون أي تضييق — فقط بسبب الاحتكاك، وهذه المعادلة لا ترى هذا الانخفاض إطلاقًا. ثالثًا: التدفق ثابت؛ في التدفق النابض، يظهر حد إضافي يحتوي على مشتقة السرعة بالنسبة للزمن. رابعًا، وهو الأكثر نسيانًا: المساواة مُثبتة على طول خط انسياب واحد، أي للجسيمات التي تتبع نفس المسار. لا يمكن مقارنة الضغوط عند نقطتين على خطوط انسياب مختلفة بهذه الصيغة في الحالة العامة. هناك استثناء — التدفق غير الدوامي، حيث الثابت فعلاً واحد للتدفق كله — لكن هذا بيان منفصل يحتاج إلى إثبات، وليس افتراضًا. على هذا الاستبدال بالضبط بُني نصف التفسيرات الخاطئة في فيزياء الطيران."
+  },
+  "math": {
+   "title": "الرياضيات التي نحتاجها هنا",
+   "lead": "الاشتقاق قصير، لكنه يحتوي على ثلاث نقاط يسهل الخطأ فيها تلقائيًا.",
+   "items": [
+    {
+     "what": "لماذا تسمح لنا الحالة المستقرة باعتبار الأطراف فقط",
+     "why": "طاقة الجزء المحدد في اللحظة t وفي اللحظة t + Δt تختلف فقط بما حدث عند طرفيه: من الخلف خرج جزء من الاعتبار، ومن الأمام دخل جزء. كل ما بينهما، خلال Δt، بقي كما هو — ليس \"تقريبًا كما هو\"، بل بالضبط، لأن الحالة المستقرة تعني أن مجال السرعات والضغوط في كل نقطة لا يعتمد على الزمن. هذه هي نفس الطريقة المتبعة في حساب التدفق عبر مقطع: يمكننا تجاهل التيار المعقد في الداخل إذا عرفنا ما يدخل وما يخرج عبر الحدود.",
+     "latex": "E(t+\\Delta t) - E(t) = e_2\\,\\Delta V - e_1\\,\\Delta V",
+     "kit": "flux"
+    },
+    {
+     "what": "لماذا عمل قوة الضغط يساوي p·ΔV",
+     "why": "الضغط ليس قوة، بل قوة لكل وحدة مساحة، لذلك لا يمكن ضربه مباشرة في المسافة. القوة تساوي pA، والمسافة تساوي Δx، والناتج هو pAΔx. لكن AΔx هو ببساطة الحجم الذي مر عبر المقطع. ومن هنا تأتي نتيجة مهمة: شكل وحجم المقطع لا يظهران في الإجابة، المهم هو الضغط والحجم فقط. نفس الناتج p·ΔV سيظهر في الديناميكا الحرارية كعمل تمدد الغاز — وهذا ليس مصادفة: إنها نفس الكمية.",
+     "latex": "W = F\\,\\Delta x = pA\\,\\Delta x = p\\,\\Delta V"
+    },
+    {
+     "what": "فحص الأبعاد: لماذا يمكن جمع الحدود الثلاثة أصلًا",
+     "why": "لا يمكن جمع الضغط مع مربع السرعة إلا بعد فحص الوحدات، وهذا الفحص ينجح. الباسكال هو نيوتن لكل متر مربع، وإذا ضربنا البسط والمقام في متر، نحصل على جول لكل متر مكعب. الحد ρv²/2 يعطي كيلوجرامات لكل متر مكعب مضروبة في أمتار مربعة لكل ثانية مربعة — أي مرة أخرى جول لكل متر مكعب. وكذلك ρgh. الحدود الثلاثة كلها تقيس شيئًا واحدًا: كمية الطاقة المخزنة في متر مكعب من السائل. معادلة برنولي هي قانون حفظ الطاقة مقسومًا على الحجم.",
+     "latex": "[\\,p\\,] = \\frac{\\text{N}}{\\text{m}^{2}} = \\frac{\\text{N}\\cdot\\text{m}}{\\text{m}^{3}} = \\frac{\\text{J}}{\\text{m}^{3}}",
+     "kit": "dimension"
+    }
+   ]
+  },
+  "example": {
+   "title": "مثال بالأرقام",
+   "lead": "لنحسب بالضبط نفس الإعداد الافتراضي في المعمل — ثم قارن الأرقام بمقاييس الضغط.",
+   "given": "أنبوب أفقي به ماء (ρ = 1000 كجم/م³) يضيق من قطر d₁ = 50 مم إلى d₂ = 25 مم. معدل التدفق Q = 2 لتر/ثانية، الضغط في الجزء الواسع p₁ = 200 كيلوباسكال. أوجد السرعتين في المقطعين والضغط في المكان الضيق.",
+   "law": "Q = A₁v₁ = A₂v₂، ثم p₁ + ρv₁²/2 = p₂ + ρv₂²/2 (الارتفاعان متساويان ويُحذفان)",
+   "solution": [
+    {
+     "text": "مساحتا المقطعين. القطر انخفض إلى النصف، إذن المساحة إلى الربع؛ من الجيد ملاحظة ذلك قبل التعويض بالأرقام.",
+     "latex": "A_1 = \\frac{\\pi d_1^{2}}{4} = 1{,}96\\cdot10^{-3}\\ \\text{m}^{2}, \\qquad A_2 = \\frac{\\pi d_2^{2}}{4} = 4{,}91\\cdot10^{-4}\\ \\text{m}^{2}"
+    },
+    {
+     "text": "السرعتان من معادلة الاستمرارية. نحول معدل التدفق إلى متر مكعب: 2 لتر/ثانية = 0.002 م³/ثانية. بما أن المساحة انخفضت إلى الربع، زادت السرعة إلى أربعة أضعاف — ليس من الضروري حساب الثانية من جديد.",
+     "latex": "v_1 = \\frac{0{,}002}{1{,}96\\cdot10^{-3}} \\approx 1{,}02\\ \\text{m/s}, \\qquad v_2 = 4 v_1 \\approx 4{,}07\\ \\text{m/s}"
+    },
+    {
+     "text": "فرق الضغط من معادلة برنولي. نحسب فرق مربعي السرعتين ونضربه في نصف الكثافة.",
+     "latex": "\\Delta p = \\tfrac{1}{2}\\rho\\,(v_2^{2} - v_1^{2}) = 500\\,(16{,}6 - 1{,}04) \\approx 7{,}8\\cdot10^{3}\\ \\text{Pa}"
+    },
+    {
+     "text": "الضغط في المكان الضيق — الضغط الأصلي ناقص فرق الضغط. من المفيد تحويل فرق الضغط إلى أمتار من عمود الماء: قسمة على ρg.",
+     "latex": "p_2 = 200 - 7{,}8 \\approx 192\\ \\text{kPa}, \\qquad \\frac{\\Delta p}{\\rho g} = \\frac{7800}{9810} \\approx 0{,}8\\ \\text{m}"
+    }
+   ],
+   "answer": "v₁ ≈ 1.02 م/ث، v₂ ≈ 4.07 م/ث، p₂ ≈ 192 كيلوباسكال. فرق الضغط حوالي 7.8 كيلوباسكال — أي حوالي 0.8 متر من عمود الماء. اضبط في المعمل Q = 2، d₁ = 50، d₂ = 25، p₁ = 200 وتحقق من الأرقام الأربعة.",
+   "check": "هل هذا معقول؟ سرعة حوالي متر في الثانية لأنبوب مياه — أمر عادي؛ فوق مترين أو ثلاثة أمتار في الثانية تبدأ الأنابيب في إصدار ضوضاء. فرق الضغط 8 كيلوباسكال — أي أربعة بالمائة من المائتي الأصلية، أي أن التضيق إلى النصف لا يعيق التدفق تقريبًا. والآن التفاصيل الخطيرة: ضيّق الجزء الضيق مرة أخرى إلى النصف، حتى 13 مليمترًا — ستصبح السرعة هناك حوالي 15 مترًا في الثانية، وسيرتفع فرق الضغط من ثمانية كيلوباسكال إلى مائة وثلاثة عشر، أي أنه سيلتهم أكثر من نصف الضغط الأصلي. فرق الضغط يتناسب مع القوة الرابعة لنسبة الأقطار، لذلك يختفي الاحتياطي البالغ أربعة بالمائة فورًا. تحقق من ذلك في المعمل بتحريك منزلق d₂ وصولًا إلى الحد الأدنى — ستصل إلى حد التكهف."
+  },
+  "constants": {
+   "title": "ثوابت هذا القسم",
+   "lead": "أربعة أرقام يتكون منها أي حساب لتدفق الماء. الأخير هو الحد الذي تصبح عنده المعادلة غير صحيحة.",
+   "items": [
+    {
+     "sym": "ρ",
+     "latex": "\\rho_{\\text{H}_2\\text{O}}",
+     "name": "كثافة الماء",
+     "value": "998",
+     "unit": "كجم / م³",
+     "why": "عند 20 درجة مئوية تكون 998، وعند 4 درجات مئوية تكون 1000 بالضبط بدقة تصل إلى أجزاء من الألف. الألف المستدير ليس مصادفة: الكيلوجرام تاريخيًا تم تعريفه ككتلة لتر من الماء، ولا يزال أثر هذا التعريف موجودًا في الرقم. في المسائل نستخدم 1000، والخطأ الناتج عن التقريب هو اثنان من عشرة في المئة - أقل من عدم اليقين في أي رقم آخر مُدخل.",
+     "mnemo": "المتر المكعب من الماء يزن طنًا، واللتر كيلوجرام، والسنتيمتر المكعب جرام. سلسلة واحدة تناسب كل الحالات."
+    },
+    {
+     "sym": "g",
+     "latex": "g",
+     "name": "تسارع الجاذبية الأرضية",
+     "value": "9,806 65",
+     "unit": "م / ث²",
+     "why": "قيمة معيارية تم اعتمادها بالاتفاق في عام 1901: قيمة g الحقيقية تتراوح من 9.78 عند خط الاستواء إلى 9.83 عند القطبين. في الهيدروليكا نحتاجها من أجل العلاقة ρg - وزن متر مكعب من السائل. بالنسبة للماء، ρg ≈ 9810 نيوتن/م³، وهذا هو الرقم المشتق الأكثر فائدة في هذا الموضوع: اقسم فرق الضغط بالباسكال على 9810 وستحصل على أمتار من عمود الماء.",
+     "mnemo": "9.81 - \"تقريبًا عشرة\". التقدير الذهني يتم باستخدام العشرة، والفرق بنسبة اثنين بالمئة عادةً يضيع في باقي الافتراضات."
+    },
+    {
+     "sym": "p₀",
+     "latex": "p_0",
+     "name": "الضغط الجوي القياسي",
+     "value": "101 325",
+     "unit": "باسكال",
+     "why": "ليست كمية مقاسة، بل تعريف: منذ عام 1954 تم تحديد الضغط الجوي القياسي بهذا الرقم بدقة. أهميته تكمن في أن مقاييس الضغط المنزلية لا تعرض الضغط المطلق بل الفرق بينه وبين الضغط الجوي. مئتا كيلوباسكال على المنصة هو الضغط المطلق؛ مقياس الضغط في قبو منزل سيظهر أقل بمئة.",
+     "mnemo": "مئة كيلوباسكال تعادل عشرة أمتار من عمود الماء. ومن هنا قاعدة الغواص: كل عشرة أمتار عمق تضيف جوًا واحدًا."
+    },
+    {
+     "sym": "p_{sat}",
+     "latex": "p_{\\text{sat}}",
+     "name": "ضغط البخار المشبع للماء عند 20 درجة مئوية",
+     "value": "2340",
+     "unit": "باسكال",
+     "why": "هذا هو الحد الذي تصبح عنده معادلة برنولي غير قادرة على وصف ما يحدث. إذا أعطى الحساب ضغطًا أقل من هذا، فإن الماء لا \"يصبح تحت ضغط سالب\"، بل يغلي ببساطة عند درجة حرارة الغرفة - يبدأ التكهف. هذا الرقم مدمج في المنصة كقيد. لاحظ كم هو صغير: من الضغط الجوي إلى الغليان هناك فرق يزيد قليلاً عن أربعين مرة، والسرعة تدخل في فرق الضغط كمربع.",
+     "mnemo": "2.34 كيلوباسكال تعادل حوالي 24 سنتيمترًا من عمود الماء. هذا هو النقص الذي يحتاجه الماء ليغلي عند درجة حرارة الغرفة."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "كيف يرتبط هذا ببقية الدورة",
+   "lead": "معادلة برنولي ليست قانوناً مستقلاً: إنها ميكانيكا معروفة بالفعل، مطبقة على السوائل ومقسومة على الحجم.",
+   "items": [
+    {
+     "h": "الميكانيكا",
+     "text": "الاشتقاق بأكمله هو نظرية واحدة حول الشغل والطاقة الحركية، نفس النظرية المستخدمة لحساب تسارع كتلة. لا يوجد فيها شيء خاص بـ\"السوائل\"؛ السائل فقط يجبرنا على حساب الشغل من خلال الضغط والحجم، وليس من خلال القوة والمسافة."
+    },
+    {
+     "h": "الهيدروستاتيكا من القسم الأول",
+     "text": "ضع v = 0 في كل مكان، وسيبقى p + ρgh = const — القانون الأساسي للهيدروستاتيكا. السكون هو حالة خاصة من التدفق بسرعة صفر، وليس موضوعاً منفصلاً. تحقق من الوحدات: في كلتا الحالتين نتحدث عن جول لكل متر مكعب."
+    },
+    {
+     "h": "الديناميكا الحرارية",
+     "text": "الحد الأدنى — التكهف — يأتي من مخطط الطور: ضغط البخار المشبع يعتمد على درجة الحرارة، لذلك الماء الساخن يتكهف في وقت أبكر من الماء البارد. المضخات التي تضخ الماء المغلي تُصمم بشكل مختلف عن مضخات الماء البارد، وهذا نتيجة مباشرة لذلك القسم، وليس هذا."
+    },
+    {
+     "h": "الموجات والصوت",
+     "text": "الحد الأعلى هو الانضغاطية. طالما أن سرعة التدفق أقل من حوالي ثلث سرعة الصوت، يمكن اعتبار الكثافة ثابتة، وكل ما سبق يعمل للهواء تماماً كما يعمل للماء. فوق ذلك تبدأ ديناميكا الغازات، حيث تصبح الكثافة متغيراً إضافياً، وتُعاد هيكلة المعادلة نفسها."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "مثير للاهتمام: تحقق بنفسك",
+   "lead": "التجربتان التاليتان تستغرقان دقيقة واحدة وتتطلبان ورقة ومجفف شعر. كلاهما يظهران نفس الشيء وكلاهما عادة ما يُفسَّر بشكل خاطئ.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "تجربة في المطبخ",
+     "h": "شريطان من الورق",
+     "text": "قص شريطين من الورق بعرض حوالي ثلاثة سنتيمترات وطول حوالي عشرين سنتيمترًا. أمسكهما عموديًا ومتوازيين مع بعضهما البعض، على مسافة سنتيمترين أو ثلاثة، وانفخ مباشرة في الفراغ بينهما. إلى أين سيتحركان؟",
+     "answer": "لن يتباعدا، بل سيتقاربان - وكلما نفخت بقوة أكبر، كان التقارب أشد. التفسير يتطلب دقة، لأنه لا يمكن تطبيق 'الهواء بينهما سريع، لذا الضغط أقل' مباشرة على النفخ من الفم: هذا الهواء جاء من الرئتين، وليس من الغرفة، وضغطه الكلي مختلف. ما يحدث هو: النفث يسحب الهواء المحيط من الغرفة ويسرعه، ممتصًا إياه إلى الفراغ. بالنسبة لهذا الهواء، معادلة برنولي تنطبق بصدق - خط الانسياب يبدأ من غرفة ساكنة ويصل إلى الفجوة. إذا تم تسريعه، فهذا يعني أن الضغط في الفجوة أقل من ضغط الغرفة، ومن الخارج يضغط الهواء الساكن على الشريطين. هذا الفرق هو ما يجمعهما. للتحقق من أن الأمر ليس بسبب تدفق الهواء بحد ذاته: انفخ ليس في الفراغ، بل على طول الجانب الخارجي لأحد الشريطين - سيميل نحو النفث، أي مرة أخرى نحو منطقة الضغط المنخفض."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "تجربة في المطبخ",
+     "h": "كرة بينج بونج في تيار مجفف الشعر",
+     "text": "شغّل مجفف الشعر على الوضع البارد، ووجّه التيار عموديًا لأعلى وضع كرة تنس الطاولة فيه. ستعلق في الهواء. الآن قم بإمالة المجفف ببطء بزاوية ثلاثين درجة تقريبًا - ستبقى الكرة في التيار، معلقة بجانب العمودي. لماذا لا تسقط؟",
+     "answer": "التيار أسرع في المنتصف وأبطأ عند الأطراف. بمجرد أن تزاح الكرة جانبًا، يمر الهواء على الجانب الداخلي أسرع منه على الجانب الخارجي، فيصبح الضغط على الجانب الداخلي أقل - فتُسحب الكرة مرة أخرى إلى التيار. هناك طريقة أخرى لقول نفس الشيء: الكرة تحرف التيار إلى الخارج، ووفقًا لقانون نيوتن الثالث، يدفع الهواء المنحرف الكرة إلى الداخل. هذان ليسا تفسيرين مختلفين، بل نفس الحدث الموصوف من خلال الضغط ومن خلال الزخم. تذكر هاتين الصيغتين - سنحتاجهما الآن للجناح."
+    },
+    {
+     "icon": "paradox",
+     "kind": "مفارقة",
+     "h": "ضيق - لكن الضغط أقل",
+     "text": "الأنبوب في المكان الضيق يضغط الماء بقوة أكبر، لكن مقياس الضغط هناك يُظهر ضغطًا أقل. أين الخطأ في الاستدلال 'ضغطنا - إذن يضغط بقوة أكبر'؟",
+     "answer": "الخطأ في كلمة 'ضغطنا'. الماء غير قابل للانضغاط: كثافته في المكان الضيق هي نفسها تمامًا كما في المكان الواسع، لا يحدث أي انضغاط. الأنبوب لا يضغط الماء، بل يوجهه. في هذه الأثناء، يجب أن يتسارع السائل عند مدخل التضييق، والتسارع يتطلب قوة - لذا يجب أن يكون الضغط خلفه أعلى من أمامه. الضغط المنخفض في المكان الضيق ليس سببًا، بل نتيجة: هو ما تبقى بعد دفع ثمن التسارع. والعكس صحيح أيضًا: عندما يتسع الأنبوب مرة أخرى، يتباطأ التدفق ويعود الضغط تقريبًا إلى ما كان عليه. تقريبًا - لأن جزءًا يضيع في الاحتكاك اللزج، وهو غير موجود في نموذجنا المثالي."
+    },
+    {
+     "icon": "fact",
+     "kind": "حقيقة مثيرة للاهتمام",
+     "h": "سرطان يطلق التجويف",
+     "text": "التجويف ليس فقط مشكلة المضخات والمراوح البحرية، حيث يأكل المعدن تاركًا حفرًا. سرطان فرس النبي (الروبيان السرعوفي) يغلق مخالبه بسرعة كبيرة لدرجة أن نفث الماء خلفه يتسارع إلى حوالي ثلاثين مترًا في الثانية، وينخفض الضغط في أثره إلى ما دون ضغط البخار المشبع، فيتولد فقاعة بخار. انهيار الفقاعة ينتج فرقعة حوالي مائتي ديسيبل - وهذا يكفي لإبهار الأسماك الصغيرة - وومضة ضوء أقصر من عشر نانوثانية. درجة الحرارة داخل الفقاعة المنهارة تقدر بآلاف الكلفن. كل هذا يتبع من سطر واحد: السرعة تدخل في فرق الضغط كمربع."
+    },
+    {
+     "icon": "edge",
+     "kind": "حدود التطبيق",
+     "h": "أنبوب بيتو والجليد",
+     "text": "الجهاز الذي يقيس سرعة الطائرة هو أنبوب هنري بيتو من عام 1732، اخترع لقياس تدفق نهر السين. الطرف الأمامي يواجه التيار، والهواء بداخله يتوقف تمامًا، والفرق بين هذا الضغط والضغط الساكن يعطي السرعة وفقًا للمعادلة من الخطوة الثامنة. نقطة ضعف الجهاز هي أنه لا يقيس السرعة مباشرة، بل الضغط: إذا انسدت الفتحة بالجليد أو بدبور، تصبح القراءات غير صحيحة مع بقائها معقولة. تجمد مستشعرات ضغط الهواء هو ما أطلق سلسلة الأحداث في كارثة رحلة الخطوط الجوية الفرنسية 447 في عام 2009. ومن هنا تأتي تدفئة الأنابيب وثلاث مجموعات مستقلة على الطائرة."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "لماذا يطير الجناح — ولماذا التفسير المدرسي خاطئ",
+   "blocks": [
+    {
+     "h": "أسطورة زمن العبور المتساوي",
+     "text": "التفسير الذي ما زال يُطبع في الكتب المدرسية يقول: الجناح محدب من الأعلى، لذا فإن المسار على السطح العلوي أطول؛ وجزيئا الهواء اللذان انفصلا عند مقدمة الجناح يجب أن يلتقيا عند الحافة الخلفية في نفس الوقت؛ لذلك يتحرك الجزء العلوي أسرع؛ وبالتالي حسب برنولي يكون الضغط من الأعلى أقل. الخطأ في كلمة «يجب». لا يوجد قانون يتطلب التقاء الجزيئين. تجربة نفث الدخان في نفق هوائي تُظهر أن الجزيء العلوي يصل إلى الحافة الخلفية في وقت أبكر بشكل ملحوظ من الجزيء السفلي — وهذا ليس تصحيحًا طفيفًا. علاوة على ذلك، إذا حسبنا بصدق فرق السرعات من فرق أطوال المسارات لملف حقيقي، فإن قوة الرفع ستكون أصغر بعدة مرات من المقاسة. أخيرًا، لا تفسر الأسطورة أمرًا واضحًا: الملامح المتناظرة دون أي تحدب تنتج قوة رفع بشكل ممتاز، واللوح المسطح بزاوية هجوم يطير أيضًا، والطائرات تطير رأسًا على عقب."
+    },
+    {
+     "h": "ما يحدث في الواقع",
+     "text": "الجناح يحرف الهواء المار بجانبه إلى الأسفل. خلف الجناح يبقى انحراف التدفق — نفاثة هابطة بعرض من رتبة طول الجناح؛ طيارو المروحيات يرونها بالعين المجردة من خلال تموج الماء. الهواء اكتسب زخمًا إلى الأسفل، إذن الجناح أثر عليه بقوة إلى الأسفل، إذن وفقًا لقانون نيوتن الثالث يؤثر الهواء على الجناح بقوة إلى الأعلى. هذه هي قوة الرفع، وبحسب رتبة المقدار تساوي معدل الكتلة للهواء المنحرف مضروبًا في السرعة الرأسية التي اكتسبها.",
+     "latex": "L \\approx \\dot m\\,\\Delta v_{\\downarrow}"
+    },
+    {
+     "h": "الدوران: نفس الإجابة بلغة الضغوط",
+     "text": "النظرية الدقيقة تقول نفس الشيء بكلمات أخرى. يتحلل جريان الجناح إلى تدفق منتظم وجريان دائري متراكب عليه — الدوران Γ. لا يُؤخذ مقداره من العدم: الحافة الخلفية الحادة لا تسمح بسرعة لا نهائية عند الالتفاف حولها، وهذا الشرط يحدد Γ بشكل فريد من خلال زاوية الهجوم وانحناء الملف. قوة الرفع لكل وحدة طول الجناح تساوي ρvΓ — نظرية جوكوفسكي وكوتا. الدوران هو الذي يجعل السرعة من الأعلى أكبر منها من الأسفل؛ معادلة برنولي بعد ذلك تحول بصدق فرق السرعات إلى فرق ضغوط. لاحظ ما كان خاطئًا في الأسطورة: ليس برنولي نفسه، بل السبب المختلق لفرق السرعات. السبب هو الدوران، وليس تساوي الأزمنة.",
+     "latex": "L' = \\rho\\, v_{\\infty}\\, \\Gamma"
+    },
+    {
+     "h": "كيف تختبر نفسك",
+     "text": "إذا كان تفسير قوة الرفع لا يذكر انحراف التدفق إلى الأسفل ولا الدوران، ويبدأ بعبارة «المسار من الأعلى أطول» — فهو خاطئ بغض النظر عن مكان طباعته. اختبار جيد لأي تفسير للطيران: اسأل ماذا يتنبأ للوح مسطح بزاوية هجوم. الصورة الصحيحة تجيب فورًا — التدفق ينحرف إلى الأسفل، توجد قوة رفع، وتزداد خطيًا تقريبًا مع الزاوية حتى الانهيار. أسطورة الزمن المتساوي لا تستطيع الإجابة على هذا السؤال إطلاقًا."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "يمر عبر أي مقطع من التدفق في الثانية نفس الحجم: A₁v₁ = A₂v₂. التسارع في المكان الضيق يُدفع ثمنه بالضغط، لأن المجموع p + ρv²/2 + ρgh على طول خط الانسياب ثابت. الضغط المنخفض حيث السرعة عالية — ليس سبب الحركة، بل ثمنها.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "الاستمرارية هي حفظ الكتلة",
+     "text": "A₁v₁ = A₂v₂. المساحة تتناقص كمربع القطر، لذا تضييق النصف يسرع التدفق أربع مرات"
+    },
+    {
+     "icon": "scale",
+     "title": "ثلاثة حدود — طاقة واحدة",
+     "text": "p و ρv²/2 و ρgh تُقاس بالجول لكل متر مكعب. معادلة برنولي هي حفظ الطاقة مقسومًا على الحجم"
+    },
+    {
+     "icon": "fact",
+     "title": "السرعة العالية تعني ضغطًا منخفضًا",
+     "text": "فرق الضغط يزداد كمربع السرعة، وعند معدل تدفق معين — كالقوة الرابعة لنسبة الأقطار"
+    },
+    {
+     "icon": "edge",
+     "title": "الحدود مذكورة بصدق",
+     "text": "لا لزوجة، لا انضغاطية، التدفق ثابت، والمساواة على طول خط انسياب واحد. من الأسفل كل شيء يصطدم بالتجويف"
+    }
+   ],
+   "where": [
+    "مقياس فنتوري: فرق الضغط عند التضييق يعطي معدل التدفق بدون أجزاء متحركة",
+    "أنبوب بيتو: سرعة الطائرة والقارب والرياح في نفق المختبر الهوائي",
+    "البخاخ ومسدس الرش: النفاثة تحمل الهواء بعيدًا عن فوهة الأنبوب، الضغط هناك ينخفض، والسائل يرتفع بفعل الضغط الجوي من الأسفل",
+    "التجويف: حساب المضخات والمراوح يتم على أساس الحد الأدنى للضغط، وليس المتوسط"
+   ],
+   "watchOut": "ثلاثة أخطاء شائعة. الأول — تطبيق المعادلة على نقاط على خطوط انسياب مختلفة: في الحالة العامة لا يجوز ذلك. الثاني — نسيان اللزوجة: في أنبوب طويل ينخفض الضغط حتى بدون أي تضييق، والمعادلة لا تُظهر ذلك. الثالث — تفسير قوة رفع الجناح بـ«تساوي زمن العبور» للجزيئات فوق الجناح وتحته. هذا الادعاء غير صحيح ببساطة: القياسات تُظهر أن الجزيء العلوي يصل إلى الحافة الخلفية قبل السفلي."
+  },
+  "quiz": [
+   {
+    "id": "f1",
+    "type": "mcq",
+    "q": "تم تقليل قطر أنبوب دائري إلى النصف، وبقي معدل التدفق كما هو. كيف تتغير سرعة الماء في المكان الضيق؟",
+    "options": [
+     "ستتضاعف",
+     "ستتضاعف أربع مرات",
+     "لن تتغير: يمر نفس معدل التدفق عبر كلا المقطعين",
+     "ستنخفض إلى النصف: الماء أصبح أكثر ضيقًا"
+    ],
+    "answer": 1,
+    "why": "الاستمرارية تربط السرعة بالمساحة، وليس بالقطر: A = πd²/4، لذا فإن تقليل القطر إلى النصف يقلل المساحة إلى الربع. معدل التدفق A·v محفوظ، لذا تزداد السرعة أربع مرات. الخيار الثالث صحيح في النصف الأول من الجملة وخاطئ في الاستنتاج: معدل التدفق هو نفسه بالفعل، ولكن لهذا السبب يجب أن تزداد السرعة.",
+    "hint": "اكتب مساحة الدائرة بدلالة القطر. إذا تم تقليل القطر إلى النصف، فكم مرة تنخفض المساحة - وكم مرة يجب أن تزداد السرعة حتى يبقى حاصل الضرب A·v كما هو؟"
+   },
+   {
+    "id": "f2",
+    "type": "mcq",
+    "q": "أي تفسير لقوة الرفع للجناح صحيح؟",
+    "options": [
+     "الجناح ينحرف الهواء المار إلى الأسفل، ووفقًا لقانون نيوتن الثالث يدفع الهواء الجناح إلى الأعلى؛ بلغة الضغوط يوصف نفس الشيء بالدوران",
+     "جزيئات الهواء التي تنقسم عند مقدمة الجناح يجب أن تلتقي عند الحافة الخلفية في نفس الوقت، لذا فإن الجزء العلوي يتحرك أسرع",
+     "الجزء العلوي من الجناح أطول، لذا الهواء هناك أكثر اتساعًا والضغط أقل",
+     "الضغط في الأسفل أعلى لأن الهواء هناك مضغوط بوزن الطائرة"
+    ],
+    "answer": 0,
+    "why": "انحراف التدفق إلى الأسفل والدوران هما نفس الحدث، موصوفان من خلال الزخم ومن خلال الضغوط. شرط الالتقاء عند الحافة الخلفية لا يتبع أي قانون، والتجربة تدحضه: الجزيء العلوي يصل مبكرًا. اختلاف أطوال المسارات يعطي قوة أقل بكثير مما يُقاس، والملفات المتناظرة والطيران بالمقلوب يدمران هذه النسخة نهائيًا.",
+    "hint": "اسأل نفسك ماذا يتنبأ كل تفسير للوحة مسطحة بزاوية هجوم - مساراتها العلوية والسفلية متساوية، لكن قوة الرفع موجودة."
+   },
+   {
+    "id": "f3",
+    "type": "free",
+    "q": "بكلماتك الخاصة: لماذا في المكان الضيق من أنبوب أفقي يكون الضغط أقل وليس أعلى؟",
+    "keywords": [
+     "تسارع",
+     "تسريع",
+     "سرعة",
+     "حركية",
+     "طاقة",
+     "شغل",
+     "حفظ",
+     "أسرع"
+    ],
+    "needed": 2,
+    "why": "لأن السائل في التضييق يجب أن يتسارع، والتسارع يتطلب شغلًا. المصدر الوحيد للطاقة للتدفق هو ضغطه الخاص، لذا فإن الزيادة في الطاقة الحركية تُدفع بانخفاض الضغط: مجموع p + ρv²/2 ثابت على طول خط الانسياب. لاحظ أن السبب والنتيجة بهذا الترتيب: ليس الضغط المنخفض هو الذي يدفع الماء، بل تسارع الماء هو الذي يخفض الضغط.",
+    "hint": "اسأل من أين تأتي الطاقة للتسارع. في أنبوب أفقي لا يوجد ارتفاع ولا مضخة بين المقطعين - ما الذي يتبقى؟"
+   },
+   {
+    "id": "f4",
+    "type": "estimate",
+    "q": "يتدفق الماء في أنبوب أفقي: في الجزء الواسع السرعة 1 م/ث، وفي الجزء الضيق 5 م/ث. بكم كيلوباسكال يكون الضغط في الجزء الضيق أقل منه في الجزء الواسع؟",
+    "answer": 12,
+    "unit": "كيلوباسكال",
+    "why": "Δp = ρ(v₂² − v₁²)/2 = 1000·(25 − 1)/2 = 12000 باسكال = 12 كيلوباسكال. في العقل: الفرق بين المربعين 25 و1 هو 24، نصف كثافة الماء هو 500، الناتج 12000. من المفيد التحويل إلى أمتار عمود: 12000 / 9810 ≈ 1.2 متر.",
+    "hint": "في الأنبوب الأفقي يتم شطب الحد الذي يحتوي على الارتفاع. قم بتربيع السرعتين، اطرح، واضرب في نصف كثافة الماء.",
+    "tolAbs": 2
+   }
+  ]
  }
 }

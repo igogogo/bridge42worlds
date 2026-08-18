@@ -788,6 +788,30 @@
    "where": "Calculating orbits and transfers, weighing stars and black holes, tides, searching for exoplanets, discovery of Neptune.",
    "watchOut": "The law is exact only for two bodies. The three-body problem is not solvable in general, and the precession of Mercury's perihelion already requires general relativity."
   },
+  "math": {
+   "title": "The Math Needed Here",
+   "lead": "Three things are needed: the cross product, writing a curve in terms of an angle, and the ability to work with ratios instead of numbers.",
+   "items": [
+    {
+     "what": "Cross product and zero moment",
+     "why": "In the first step of the derivation, we have $\\vec{M} = \\vec{r} \\times \\vec{F}$ — the cross product. Unlike ordinary multiplication, it depends on the angle between the factors: the result is greatest when they are perpendicular, and exactly zero when they lie on the same line. Physically, this is the lever arm. A force directed exactly at the pivot point cannot turn anything, no matter how large it is — it has no leverage. Therefore, the line \"force parallel to radius, so moment is zero\" requires nothing from gravity except one property: the force points toward the center. Kepler's second law follows from this and would remain valid for any law of force decrease.",
+     "latex": "\\vec{M} = \\vec{r} \\times \\vec{F}, \\qquad |\\vec{M}| = r F \\sin\\alpha \\;\\Longrightarrow\\; \\vec{M} = 0 \\ \\text{for}\\ \\alpha = 0",
+     "kit": "dotcross"
+    },
+    {
+     "what": "Curve written via angle",
+     "why": "In the sixth step, the orbit appears in an unusual form: $r(\\varphi)$, distance as a function of angle. These are polar coordinates — instead of the pair \"right and up,\" a point is given by the pair \"far and in which direction.\" For a central force, such a representation is natural: the center of attraction itself asks to be the origin, and then one formula describes all four curves at once. In Cartesian axes, the ellipse, parabola, and hyperbola give three different equations; in polar coordinates, the difference reduces to a single number under the cosine. It is easy to check: at $e = 0$, the cosine disappears, the radius no longer depends on the angle — leaving a circle, the same one obtained on the stand at speed 1.00.",
+     "latex": "r(\\varphi) = \\frac{p}{1 + e\\cos\\varphi}, \\qquad x = r\\cos\\varphi, \\quad y = r\\sin\\varphi",
+     "kit": "polar"
+    },
+    {
+     "what": "Ratios instead of numbers",
+     "why": "In the last step, Newton does not calculate the force acting on the Moon — he divides one acceleration by another. The Moon is sixty times farther, the inverse square gives 3600, and that's it: neither $G$ nor the Earth's mass is needed; they cancel out. This trick works wherever quantities are related by a power law: take the ratio, and constant factors disappear along with the need to know them. The same move in the problem about two satellites: from $T^{2} \\propto r^{3}$ it follows that $T \\propto r^{3/2}$, so four times farther means $4^{3/2} = 8$ times longer. In the example with the Sun's mass, the opposite is seen: there we need not a proportion but the number itself, and $G$ must be substituted.",
+     "latex": "\\frac{a_{\\text{Moon}}}{a_{\\text{apple}}} = \\left(\\frac{R_{\\oplus}}{r_{\\text{Moon}}}\\right)^{2} = \\frac{1}{60^{2}} = \\frac{1}{3600}",
+     "kit": "propto"
+    }
+   ]
+  },
   "quiz": [
    {
     "id": "g1",
@@ -796,12 +820,12 @@
     "options": [
      "Because the satellite's mass is always small compared to the planet's mass",
      "Because it cancels out: it appears both in the gravitational force and in Newton's second law",
-     "Because bodies are weightless in space",
+     "Because bodies in space are weightless",
      "It does depend, but the difference is too small to measure"
     ],
     "answer": 1,
-    "why": "On the left side of the equation we have $GMm/r^2$, on the right $mv^2/r$ — the satellite's mass appears on both sides and cancels exactly, not approximately. This is a direct consequence of the equality of inertial and gravitational mass, which is why in vacuum a feather and a hammer fall identically.",
-    "hint": "Write down the condition for a circular orbit: gravitational force equals mass times centripetal acceleration. What appears on both sides?"
+    "why": "On the left side of the equation we have $GMm/r^2$, on the right side $mv^2/r$ — the satellite's mass appears on both sides and cancels exactly, not approximately. This is a direct consequence of the equality of inertial and gravitational mass, and that is why in a vacuum a feather and a hammer fall equally.",
+    "hint": "Write down the condition for a circular orbit: the gravitational force equals mass times centripetal acceleration. What appears on both sides?"
    },
    {
     "id": "g2",
@@ -809,40 +833,41 @@
     "q": "A planet moves along an elongated ellipse. Where is its speed greatest?",
     "options": [
      "At the farthest point of the orbit",
-     "Speed is constant throughout the orbit",
+     "The speed is constant along the entire orbit",
      "At the point closest to the Sun — the lever arm is small, so the speed must be large",
      "At the points where the orbit crosses the minor axis"
     ],
     "answer": 2,
-    "why": "Angular momentum is conserved, meaning the product of speed and lever arm is constant. Decreasing the lever arm forces speed to increase — like a figure skater pulling in her arms. In January, Earth moves about a kilometer per second faster than in July.",
+    "why": "Angular momentum is conserved, meaning the product of speed and lever arm is constant. If the lever arm decreases, the speed must increase — like a figure skater pulling in her arms. In January, Earth moves about a kilometer per second faster than in July.",
     "hint": "Recall the experiment with a nut on a string. What happened to the speed when you shortened the radius?"
    },
    {
     "id": "g3",
     "type": "free",
-    "q": "In your own words: why does gravity decrease exactly as the square of the distance, and not as the first power or cube?",
+    "q": "In your own words: why does the gravitational force decrease exactly as the square of the distance, and not as the first power or cube?",
     "keywords": [
-     "spher",
+     "sphere",
      "area",
      "spread",
-     "distrib",
-     "three-dimension",
+     "distribut",
+     "three-dimensional",
+     "3D",
      "dimension",
      "square of radius",
-     "surfac"
+     "surface"
     ],
     "needed": 2,
-    "why": "The force from the source is as if spread over a sphere surrounding it, and the area of the sphere grows as the square of the radius. Per unit area there is less — by the same factor that the area has grown. The exponent directly tells the dimension of space: in a four-dimensional world it would be a cube.",
-    "hint": "Imagine a lamp in a dark room. Its light passes entirely through any imaginary sphere. What changes with distance — the amount of light or the area over which it is spread?"
+    "why": "The force from a source is as if spread over a sphere surrounding it, and the area of a sphere grows as the square of the radius. Per unit area, there is less and less — by the same factor as the area has grown. The exponent directly tells us the dimensionality of space: in a four-dimensional world it would be a cube.",
+    "hint": "Imagine a lamp in a dark room. Its light passes entirely through any imaginary sphere. What changes with distance — the amount of light or the area over which it is distributed?"
    },
    {
     "id": "g4",
     "type": "estimate",
-    "q": "A satellite orbits the Earth on an orbit with four times the radius of another. How many times greater is its orbital period?",
+    "q": "A satellite orbits Earth on an orbit with a radius four times larger than another. How many times larger is its orbital period?",
     "answer": 8,
     "unit": "times",
-    "why": "By the third law $T^2 \\propto r^3$, so $T \\propto r^{3/2}$. Increasing the radius fourfold gives a period $4^{3/2} = 8$ times larger. Check with familiar example: geostationary orbit is five times farther than low orbit, and its period is a day instead of 1.5 hours — about eleven times, close to $5^{3/2} \\approx 11$.",
-    "hint": "Write down Kepler's third law and take the ratio for two orbits. Radius enters as cube, period as square.",
+    "why": "By Kepler's third law, $T^2 \\propto r^3$, so $T \\propto r^{3/2}$. Increasing the radius by a factor of four gives a period $4^{3/2} = 8$ times larger. Check with a known case: a geostationary orbit is five times farther than a low orbit, and the period there is a day instead of an hour and a half — that's about eleven times, close to $5^{3/2} \\approx 11$.",
+    "hint": "Write down Kepler's third law and take the ratio for two orbits. The radius enters cubed, the period squared.",
     "tolAbs": 1
    }
   ]
@@ -856,78 +881,6 @@
    "Y setenta años después, Newton demostró que las tres reglas de Kepler no eran reglas en absoluto, sino consecuencias de una única fuerza. Este es quizás el ejemplo más convincente de lo que significa explicar en física: había tres observaciones independientes, y ahora hay una sola afirmación de la cual se derivan."
   ],
   "standNote": "En el soporte, un cuerpo en un campo gravitatorio. Siempre parte desde un mismo punto, y usted solo define su velocidad inicial — lateral, perpendicular a la dirección hacia el centro. Fije la velocidad exactamente en 1,00 y observe: obtendrá una circunferencia, excentricidad cero. Ahora reduzca a 0,80 — la circunferencia se convierte en una elipse, y el cuerpo acelerará al acercarse y frenará al alejarse. No hizo falta ninguna ley adicional: la fuerza es la misma.",
-  "formula": {
-   "name": "Ley de gravitación universal",
-   "latex": "F = G\\,\\frac{m_1 m_2}{r^{2}}",
-   "alsoKnown": "Ley del inverso del cuadrado · Gravitación newtoniana",
-   "authors": [
-    {
-     "who": "Johannes Kepler",
-     "year": "1609",
-     "what": "estableció las dos primeras leyes a partir de las observaciones de Marte: las órbitas son elipses con el Sol en un foco, y el radio vector barre áreas iguales en tiempos iguales. La tercera ley la encontró diez años después, probando relaciones literalmente al azar"
-    },
-    {
-     "who": "Robert Hooke",
-     "year": "1679",
-     "what": "fue el primero en sugerir que la fuerza disminuye con el cuadrado de la distancia y se lo escribió a Newton. No pudo demostrar que de esa fuerza se obtuviera una elipse — y después acusó a Newton de apropiarse de la idea. Newton, en respuesta, eliminó toda mención a Hooke de los *Principia*"
-    },
-    {
-     "who": "Isaac Newton",
-     "year": "1687",
-     "what": "demostró la ida y la vuelta: de la ley del inverso del cuadrado se siguen las tres leyes de Kepler, y de la elipticidad de las órbitas se sigue la ley del inverso del cuadrado. Además, estableció que la fuerza es universal — la misma para la manzana y para la Luna"
-    },
-    {
-     "who": "Henry Cavendish",
-     "year": "1798",
-     "what": "midió la constante $G$ con una balanza de torsión y así pesó la Tierra por primera vez. Antes de él, la fórmula de Newton solo daba relaciones de masas, no las masas mismas"
-    }
-   ],
-   "story": "La historia de la manzana es probablemente cierta — el propio Newton la contó al final de su vida, y varias personas la registraron. Pero su esencia no está en la caída. Newton, según sus palabras, se preguntó por qué la manzana cae hacia abajo y no hacia los lados, y por qué la misma fuerza no podría extenderse hasta la Luna. Luego hizo algo que nadie había hecho antes: comparó la aceleración de la manzana con la aceleración de la Luna. La Luna está sesenta veces más lejos del centro de la Tierra, por lo que según la ley del inverso del cuadrado, su aceleración debería ser 3600 veces menor — y el cálculo coincidió. Fue esta comprobación, no la caída en sí, el momento del descubrimiento.",
-   "symbols": [
-    {
-     "sym": "F",
-     "latex": "F",
-     "what": "fuerza de atracción",
-     "unit": "N",
-     "note": "dirigida a lo largo de la línea que conecta los cuerpos; atracción, nunca repulsión"
-    },
-    {
-     "sym": "G",
-     "latex": "G",
-     "what": "constante gravitacional",
-     "unit": "N·m²/kg²",
-     "note": "la peor medida de las constantes fundamentales — solo se conoce hasta el quinto dígito"
-    },
-    {
-     "sym": "m",
-     "latex": "m_1, m_2",
-     "what": "masas de los cuerpos",
-     "unit": "kg",
-     "note": "aquí son masas gravitacionales; que coincidan con las masas inerciales es un misterio aparte"
-    },
-    {
-     "sym": "r",
-     "latex": "r",
-     "what": "distancia entre los centros",
-     "unit": "m",
-     "note": "exactamente entre los centros, no entre las superficies: para esferas lo demostró Newton"
-    },
-    {
-     "sym": "a",
-     "latex": "a",
-     "what": "semieje mayor de la órbita",
-     "unit": "m",
-     "note": "la mitad del diámetro mayor de la elipse; en la tercera ley de Kepler aparece al cubo"
-    },
-    {
-     "sym": "e",
-     "latex": "e",
-     "what": "excentricidad",
-     "unit": "",
-     "note": "cero es una circunferencia, menor que uno es una elipse, uno es una parábola, mayor que uno es una hipérbola"
-    }
-   ]
-  },
   "derivation": {
    "title": "Derivación rigurosa: las tres leyes de Kepler a partir de una sola fuerza",
    "lead": "Vamos en sentido inverso al histórico: aceptemos la fuerza y obtengamos las observaciones. Primero derivemos la segunda ley — es la más simple y ni siquiera requiere la forma de la fuerza.",
@@ -1230,7 +1183,103 @@
     "hint": "Escriba la tercera ley de Kepler y tome la relación para dos órbitas. El radio aparece al cubo, el período al cuadrado.",
     "tolAbs": 1
    }
-  ]
+  ],
+  "math": {
+   "title": "Matemáticas que se necesitaron aquí",
+   "lead": "Se necesitan tres cosas: el producto vectorial, la representación de una curva mediante un ángulo y la habilidad de calcular con razones en lugar de números.",
+   "items": [
+    {
+     "what": "Producto vectorial y momento nulo",
+     "why": "En el primer paso de la deducción aparece $\\vec{M} = \\vec{r} \\times \\vec{F}$ — el producto vectorial. Se diferencia de la multiplicación ordinaria en que considera el ángulo entre los factores: el resultado es máximo cuando son perpendiculares, y exactamente cero cuando están sobre la misma línea. Físicamente, esto es el brazo de palanca. Una fuerza dirigida exactamente hacia el punto de apoyo no puede hacer girar nada, por grande que sea: no tiene palanca. Por lo tanto, la línea «la fuerza es paralela al radio, por lo tanto el momento es cero» no requiere de la gravedad nada más que una propiedad: la fuerza apunta al centro. La segunda ley de Kepler se deduce a partir de aquí y habría seguido siendo válida para cualquier ley de disminución de la fuerza.",
+     "latex": "\\vec{M} = \\vec{r} \\times \\vec{F}, \\qquad |\\vec{M}| = r F \\sin\\alpha \\;\\Longrightarrow\\; \\vec{M} = 0 \\ \\text{para}\\ \\alpha = 0",
+     "kit": "dotcross"
+    },
+    {
+     "what": "Curva representada mediante un ángulo",
+     "why": "En el sexto paso, la órbita aparece de una forma poco habitual: $r(\\varphi)$, la distancia como función del ángulo. Estas son coordenadas polares: en lugar del par «derecha y arriba», el punto se define por el par «lejos y en qué dirección». Para una fuerza central, esta representación es natural: el centro de atracción pide ser el origen, y entonces una sola fórmula describe las cuatro curvas a la vez. En ejes cartesianos, la elipse, la parábola y la hipérbola dan tres ecuaciones diferentes; en polares, la diferencia se reduce a un solo número bajo el coseno. Es fácil de comprobar: con $e = 0$ el coseno desaparece, el radio deja de depender del ángulo — queda una circunferencia, la misma que se obtiene en el soporte con velocidad 1,00.",
+     "latex": "r(\\varphi) = \\frac{p}{1 + e\\cos\\varphi}, \\qquad x = r\\cos\\varphi, \\quad y = r\\sin\\varphi",
+     "kit": "polar"
+    },
+    {
+     "what": "Razones en lugar de números",
+     "why": "En el último paso, Newton no calcula la fuerza que actúa sobre la Luna: divide una aceleración entre otra. La Luna está sesenta veces más lejos, el cuadrado inverso da 3600, y eso es todo: ni $G$ ni la masa de la Tierra fueron necesarias, se cancelaron. El truco funciona siempre que las cantidades estén relacionadas por una ley de potencia: tomamos la razón, y las constantes multiplicativas desaparecen junto con la necesidad de conocerlas. El mismo razonamiento en el problema de los dos satélites: de $T^{2} \\propto r^{3}$ se deduce $T \\propto r^{3/2}$, por lo tanto, cuatro veces más lejos significa $4^{3/2} = 8$ veces más tiempo. En el ejemplo de la masa del Sol se ve lo contrario: allí no se necesita una proporción, sino el número en sí, y hay que sustituir $G$.",
+     "latex": "\\frac{a_{\\text{Luna}}}{a_{\\text{manzana}}} = \\left(\\frac{R_{\\oplus}}{r_{\\text{Luna}}}\\right)^{2} = \\frac{1}{60^{2}} = \\frac{1}{3600}",
+     "kit": "propto"
+    }
+   ]
+  },
+  "formula": {
+   "name": "Ley de gravitación universal",
+   "latex": "F = G\\,\\frac{m_1 m_2}{r^{2}}",
+   "alsoKnown": "Ley de los cuadrados inversos · Gravitación newtoniana",
+   "authors": [
+    {
+     "who": "Johannes Kepler",
+     "year": "1609",
+     "what": "estableció las dos primeras leyes a partir de las observaciones de Marte: las órbitas son elipses con el Sol en un foco, y el radio vector barre áreas iguales en tiempos iguales. La tercera ley la encontró diez años después, probando relaciones literalmente al azar."
+    },
+    {
+     "who": "Robert Hooke",
+     "year": "1679",
+     "what": "fue el primero en conjeturar que la fuerza disminuye con el cuadrado de la distancia y se lo escribió a Newton. No pudo demostrar que de tal fuerza se obtiene una elipse, y más tarde acusó a Newton de apropiarse de la idea. En respuesta, Newton eliminó todas las menciones a Hooke de los 'Principia'."
+    },
+    {
+     "who": "Isaac Newton",
+     "year": "1687",
+     "what": "demostró ambas direcciones: de la ley de los cuadrados inversos se derivan las tres leyes de Kepler, y de la elipticidad de las órbitas se deduce la ley de los cuadrados inversos. Además estableció que la fuerza es universal: la misma para una manzana y para la Luna."
+    },
+    {
+     "who": "Henry Cavendish",
+     "year": "1798",
+     "what": "midió la constante $G$ con una balanza de torsión y, por primera vez, pesó la Tierra. Antes de él, la fórmula de Newton solo daba relaciones de masas, no las masas mismas."
+    }
+   ],
+   "story": "La historia de la manzana probablemente sea verdadera: Newton la contó él mismo al final de su vida, y varias personas la registraron. Pero su esencia no está en la caída. Newton, según sus palabras, se preguntó por qué la manzana cae hacia abajo y no hacia un lado, y por qué la misma fuerza no podría extenderse hasta la Luna. Luego hizo algo que nadie había hecho antes: comparó la aceleración de la manzana con la de la Luna. La Luna está sesenta veces más lejos del centro de la Tierra, por lo que según la ley de los cuadrados inversos su aceleración debería ser 3600 veces menor, y el cálculo coincidió. Fue esta verificación, no la caída en sí, el momento del descubrimiento.",
+   "symbols": [
+    {
+     "sym": "F",
+     "latex": "F",
+     "what": "fuerza de atracción",
+     "unit": "N",
+     "note": "dirigida a lo largo de la línea que une los cuerpos; atracción, nunca repulsión"
+    },
+    {
+     "sym": "G",
+     "latex": "G",
+     "what": "constante de gravitación universal",
+     "unit": "N·m²/kg²",
+     "note": "la peor medida de las constantes fundamentales: se conoce solo hasta el quinto decimal"
+    },
+    {
+     "sym": "m",
+     "latex": "m_1, m_2",
+     "what": "masas de los cuerpos",
+     "unit": "kg",
+     "note": "aquí son masas gravitatorias; que coincidan con las inerciales es un misterio aparte"
+    },
+    {
+     "sym": "r",
+     "latex": "r",
+     "what": "distancia entre los centros",
+     "unit": "m",
+     "note": "precisamente entre los centros, no entre las superficies: para esferas lo demostró Newton"
+    },
+    {
+     "sym": "a",
+     "latex": "a",
+     "what": "semieje mayor de la órbita",
+     "unit": "m",
+     "note": "la mitad del diámetro mayor de la elipse; en la tercera ley de Kepler aparece al cubo"
+    },
+    {
+     "sym": "e",
+     "latex": "e",
+     "what": "excentricidad",
+     "unit": "—",
+     "note": "cero es una circunferencia, menor que uno es una elipse, uno es una parábola, mayor que uno es una hipérbola"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "من كيبلر إلى نيوتن",
@@ -1557,61 +1606,86 @@
    "where": "حساب المدارات والتحليقات، وزن النجوم والثقوب السوداء، المد والجزر، البحث عن الكواكب الخارجية، اكتشاف نبتون.",
    "watchOut": "القانون دقيق فقط لجسمين. مشكلة الأجسام الثلاثة لا تحل بشكل عام، وإزاحة حضيض عطارد تتطلب بالفعل النظرية النسبية."
   },
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "ستكون هناك حاجة لثلاثة أشياء: الضرب الاتجاهي، تمثيل المنحنى عبر الزاوية، والقدرة على الحساب بالنسب بدلاً من الأرقام.",
+   "items": [
+    {
+     "what": "الضرب الاتجاهي والعزم الصفري",
+     "why": "في الخطوة الأولى من الاشتقاق تظهر المعادلة $\\vec{M} = \\vec{r} \\times \\vec{F}$ — الضرب الاتجاهي. يختلف عن الضرب العادي في أنه يراعي الزاوية بين العاملين: الناتج يكون أكبر ما يمكن عندما يكونان متعامدين، وصفرًا تمامًا عندما يكونان على خط مستقيم واحد. فيزيائيًا، هذا هو ذراع القوة. القوة الموجهة تمامًا نحو نقطة الارتكاز لا يمكنها أن تدير أي شيء، مهما كانت كبيرة — ليس لديها رافعة. لذلك، العبارة «القوة موازية لنصف القطر، وبالتالي العزم يساوي صفرًا» لا تتطلب من الجاذبية سوى خاصية واحدة: القوة موجهة نحو المركز. قانون كبلر الثاني يُشتق من هنا ويظل صحيحًا لأي قانون تناقص للقوة.",
+     "latex": "\\vec{M} = \\vec{r} \\times \\vec{F}, \\qquad |\\vec{M}| = r F \\sin\\alpha \\;\\Longrightarrow\\; \\vec{M} = 0 \\ \\text{عند}\\ \\alpha = 0",
+     "kit": "dotcross"
+    },
+    {
+     "what": "منحنى معرّف عبر الزاوية",
+     "why": "في الخطوة السادسة يظهر المدار بشكل غير مألوف: $r(\\varphi)$، المسافة كدالة للزاوية. هذه هي الإحداثيات القطبية — بدلاً من الزوج «يمين وأعلى»، تُحدد النقطة بزوج «بعيد وفي أي اتجاه». بالنسبة للقوة المركزية، هذا التمثيل طبيعي: مركز الجذب يفرض نفسه كنقطة أصل، وعندها تصف صيغة واحدة جميع المنحنيات الأربعة. في المحاور الديكارتية، القطع الناقص والقطع المكافئ والقطع الزائد تعطي ثلاث معادلات مختلفة؛ في الإحداثيات القطبية، يتلخص الاختلاف في رقم واحد تحت جيب التمام. من السهل التحقق: عندما $e = 0$، يختفي جيب التمام، ويتوقف نصف القطر عن الاعتماد على الزاوية — يبقى دائرة، وهي نفسها التي تظهر على المنصة عند سرعة 1.00.",
+     "latex": "r(\\varphi) = \\frac{p}{1 + e\\cos\\varphi}, \\qquad x = r\\cos\\varphi, \\quad y = r\\sin\\varphi",
+     "kit": "polar"
+    },
+    {
+     "what": "النسب بدلاً من الأرقام",
+     "why": "في الخطوة الأخيرة، لا يحسب نيوتن القوة المؤثرة على القمر — بل يقسم تسارعًا على آخر. القمر أبعد بستين مرة، والمربع العكسي يعطي 3600، وهذا كل شيء: لا حاجة إلى $G$ ولا إلى كتلة الأرض، فقد اختصرا. تعمل هذه الطريقة في كل مكان حيث ترتبط الكميات بعلاقة قوة: نأخذ النسبة، وتختفي الثوابت مع الحاجة إلى معرفتها. نفس النهج في مسألة القمرين الصناعيين: من $T^{2} \\propto r^{3}$ ينتج $T \\propto r^{3/2}$، وبالتالي أبعد بأربع مرات يعني أطول بـ $4^{3/2} = 8$ مرات. في مثال كتلة الشمس، نرى العكس: هناك نحتاج إلى القيمة نفسها، وليس النسبة، ولذا يجب إدخال $G$.",
+     "latex": "\\frac{a_{\\text{القمر}}}{a_{\\text{التفاحة}}} = \\left(\\frac{R_{\\oplus}}{r_{\\text{القمر}}}\\right)^{2} = \\frac{1}{60^{2}} = \\frac{1}{3600}",
+     "kit": "propto"
+    }
+   ]
+  },
   "quiz": [
    {
     "id": "g1",
     "type": "mcq",
-    "q": "لماذا لا تعتمد فترة مدار القمر الصناعي على كتلته؟",
+    "q": "لماذا لا يعتمد زمن دوران القمر الصناعي على كتلته؟",
     "options": [
      "لأن كتلة القمر الصناعي دائمًا صغيرة مقارنة بكتلة الكوكب",
-     "لأنها تُختزل: تدخل في قوة الجاذبية وفي قانون نيوتن الثاني",
-     "لأن الأجسام في الفضاء عديمة الوزن",
-     "إنها تعتمد، فقط الفارق صغير جدًا للقياس"
+     "لأنها تُختصر: فهي تدخل في كل من قوة الجاذبية وفي قانون نيوتن الثاني",
+     "لأن الأجسام في الفضاء تكون عديمة الوزن",
+     "إنه يعتمد، لكن الفرق صغير جدًا بحيث لا يمكن قياسه"
     ],
     "answer": 1,
-    "why": "على يسار المعادلة $GMm/r^2$، وعلى اليمين $mv^2/r$ — كتلة القمر الصناعي موجودة في كلا الجانبين وتُختزل تمامًا، وليس تقريبيًا. هذا نتيجة مباشرة لتساوي الكتلة القصورية والجاذبية، ولذلك في الفراغ تسقط الريشة والمطرقة بنفس الطريقة.",
-    "hint": "اكتب شرط المدار الدائري: قوة الجاذبية تساوي الكتلة مضروبة في التسارع المركزي. ماذا يوجد في كلا الجانبين؟"
+    "why": "على يسار المعادلة لدينا $GMm/r^2$، وعلى اليمين $mv^2/r$ — كتلة القمر الصناعي موجودة في كلا الطرفين وتُختصر تمامًا، وليس تقريبًا. هذا نتيجة مباشرة لتساوي الكتلة القصورية والجاذبية، ولذلك في الفراغ يسقط الريشة والمطرقة بنفس الطريقة.",
+    "hint": "اكتب شرط المدار الدائري: قوة الجاذبية تساوي الكتلة مضروبة في التسارع المركزي. ما الذي يوجد في كلا الطرفين؟"
    },
    {
     "id": "g2",
     "type": "mcq",
-    "q": "كوكب يتحرك في قطع ناقص طويل. أين تكون سرعته أكبر؟",
+    "q": "كوكب يتحرك في مدار إهليلجي ممدود. أين تكون سرعته القصوى؟",
     "options": [
-     "في أبعد نقطة في المدار",
+     "في أبعد نقطة عن الشمس",
      "السرعة ثابتة على طول المدار",
      "في أقرب نقطة إلى الشمس — الذراع صغير، لذا يجب أن تكون السرعة كبيرة",
-     "في النقاط التي يعبر فيها المحور الصغير"
+     "في النقاط التي يتقاطع فيها المدار مع المحور الأصغر"
     ],
     "answer": 2,
-    "why": "الزخم الزاوي محفوظ، أي حاصل ضرب السرعة في الذراع ثابت. بتقليل الذراع، يجب زيادة السرعة — مثل متزلجة تضغط يديها. الأرض في يناير تتحرك أسرع بحوالي كيلومتر في الثانية مما في يوليو.",
-    "hint": "تذكر تجربة الصامولة على الخيط. ماذا حدث للسرعة عندما قصرت نصف القطر؟"
+    "why": "الزخم الزاوي محفوظ، أي أن حاصل ضرب السرعة في الذراع ثابت. عندما يقل الذراع، يجب أن تزيد السرعة — مثل متزلجة على الجليد تضم ذراعيها. الأرض في يناير تتحرك أسرع بحوالي كيلومتر في الثانية مقارنة بيوليو.",
+    "hint": "تذكر تجربة الصامولة على خيط. ماذا حدث للسرعة عندما قصرت نصف القطر؟"
    },
    {
     "id": "g3",
     "type": "free",
-    "q": "بكلماتك الخاصة: لماذا تتناقص قوة الجاذبية تحديدًا كمربع المسافة، وليس كالقوة الأولى أو المكعب؟",
+    "q": "بكلماتك الخاصة: لماذا تتناقص قوة الجاذبية مع مربع المسافة وليس مع القوة الأولى أو المكعب؟",
     "keywords": [
-     "كرة",
-     "مساحة",
-     "انتشار",
-     "توزيع",
-     "ثلاثي الأبعاد",
-     "أبعاد",
-     "مربع نصف القطر",
-     "سطح"
+     "сфер",
+     "площад",
+     "размаз",
+     "распредел",
+     "трёхмерн",
+     "трехмерн",
+     "измерени",
+     "квадрат радиус",
+     "поверхност"
     ],
     "needed": 2,
-    "why": "القوة من المصدر تنتشر كما لو على كرة تحيط به، ومساحة الكرة تزداد كمربع نصف القطر. على كل وحدة مساحة يصبح أقل — بمقدار ما زادت المساحة. الأس يخبرنا مباشرة عن أبعاد الفضاء: في عالم رباعي الأبعاد سيكون مكعبًا.",
-    "hint": "تخيل مصباحًا في غرفة مظلمة. ضوءه يمر عبر أي كرة تخيلية بالكامل. ما الذي يتغير مع المسافة — كمية الضوء أم المساحة التي يوزع عليها؟"
+    "why": "القوة من المصدر تنتشر على سطح كرة تحيط به، ومساحة الكرة تزداد كمربع نصف القطر. لكل وحدة مساحة يقل النصيب — بنفس النسبة التي زادت بها المساحة. الأس يعطي بُعد الفضاء مباشرة: في عالم رباعي الأبعاد سيكون مكعبًا.",
+    "hint": "تخيل مصباحًا في غرفة مظلمة. ضوءه يمر عبر أي كرة وهمية بالكامل. ما الذي يتغير مع المسافة — كمية الضوء أم المساحة التي يتوزع عليها؟"
    },
    {
     "id": "g4",
     "type": "estimate",
-    "q": "قمر صناعي يدور حول الأرض في مدار نصف قطره أكبر بأربع مرات من آخر. كم مرة يكون زمن دورانه أكبر؟",
+    "q": "قمر صناعي يدور حول الأرض في مدار نصف قطره أكبر بأربع مرات من مدار آخر. كم مرة يكون زمن دورانه أكبر؟",
     "answer": 8,
     "unit": "مرة",
-    "why": "وفقًا للقانون الثالث $T^2 \\propto r^3$، إذن $T \\propto r^{3/2}$. بزيادة نصف القطر أربع مرات، نحصل على فترة $4^{3/2} = 8$ مرات أكبر. تحقق مع معروف: المدار الثابت جغرافيًا أبعد بخمس مرات من المدار المنخفض، والفترة هناك يوم بدلاً من ساعة ونصف — حوالي إحدى عشرة مرة، وهو قريب من $5^{3/2} \\approx 11$.",
-    "hint": "اكتب قانون كبلر الثالث وخذ النسبة لمدارين. نصف القطر يدخل في المكعب، والفترة في المربع.",
+    "why": "وفقًا للقانون الثالث $T^2 \\propto r^3$، إذن $T \\propto r^{3/2}$. بزيادة نصف القطر أربع مرات، نحصل على فترة $4^{3/2} = 8$ مرات أكبر. تحقق بمثال معروف: المدار الثابت بالنسبة للأرض أبعد بخمس مرات من المدار المنخفض، والفترة هناك يوم كامل بدل ساعة ونصف — حوالي إحدى عشرة مرة، وهو قريب من $5^{3/2} \\approx 11$.",
+    "hint": "اكتب قانون كبلر الثالث وخذ النسبة لمدارين. نصف القطر مرفوع للأس ثلاثة، والفترة للأس اثنين.",
     "tolAbs": 1
    }
   ]

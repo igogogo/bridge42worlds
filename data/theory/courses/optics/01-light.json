@@ -806,7 +806,31 @@
     "hint": "Divide the speed of light by the wavelength. First estimate the orders: 10⁸ divided by 10⁻⁷.",
     "tolAbs": 1
    }
-  ]
+  ],
+  "math": {
+   "title": "The math you'll need here",
+   "lead": "You'll need partial derivatives, dimensional analysis, and the ability to read a scale marked in powers of ten.",
+   "items": [
+    {
+     "what": "Partial derivative: what stays fixed",
+     "why": "Electric and magnetic fields depend on two things at once: the point in space and the moment in time. When we write $\\partial B/\\partial t$ in the first step of the derivation, the round letter means exactly one thing: we nail down the observation point and watch only the clock. An ordinary $d$ would ask differently—how the field changes for an observer who is moving. For a wave, the difference is fundamental: Maxwell's equations relate the change of the field over time at a given point to the difference of the fields at neighboring points at the same instant. It is precisely this coupling of two different derivatives that makes the disturbance run forward: a change in time here creates an inhomogeneity in space nearby, which in turn becomes a change in time a bit further on.",
+     "latex": "\\frac{\\partial B}{\\partial t}\\;\\text{— point is fixed}, \\qquad \\frac{\\partial B}{\\partial x}\\;\\text{— moment is fixed}",
+     "kit": "partial"
+    },
+    {
+     "what": "Where the square root in the speed comes from",
+     "why": "In the third step of the derivation, we have $c = 1/\\sqrt{\\varepsilon_0\\mu_0}$, and the square root looks like it came out of nowhere. Check the dimensions: the product of the electric and magnetic constants gives seconds squared per meter squared, its square root gives seconds per meter, and the reciprocal gives meters per second. No other combination of these two constants yields a speed, so the square root was inevitable even before any derivation. The same structure appears wherever there is a wave: the speed along a stretched string is the square root of tension divided by density, the speed of sound is the square root of elasticity over density. Under the root is always the ratio of what restores the system to equilibrium to what resists motion.",
+     "latex": "[\\varepsilon_0\\mu_0] = \\frac{\\text{s}^{2}}{\\text{m}^{2}} \\;\\Longrightarrow\\; \\left[\\frac{1}{\\sqrt{\\varepsilon_0\\mu_0}}\\right] = \\frac{\\text{m}}{\\text{s}}",
+     "kit": "dimension"
+    },
+    {
+     "what": "A scale where a step means multiplication",
+     "why": "In the sixth step of the derivation, the wavelength runs from $10^{3}$ meters to $10^{-12}$—fifteen orders of magnitude. On an ordinary ruler, you can't draw such a picture: if you represent a radio wave with a meter, X-rays get a segment thinner than an atom. So the scale is marked in powers of ten, and an equal segment on it means not addition but multiplication by ten. You count with exponent arithmetic: multiplying quantities corresponds to adding exponents, dividing to subtracting. That's how you get the frequency estimate from the note to the stand: $3\\cdot 10^{8}$ divided by $5\\cdot 10^{-7}$ is $0.6\\cdot 10^{15}$, that is, about $6\\cdot 10^{14}$ hertz. The phrase about one octave is read the same way: from 380 to 750 nanometers there is exactly one doubling.",
+     "latex": "\\nu = \\frac{c}{\\lambda} = \\frac{3\\cdot 10^{8}}{5\\cdot 10^{-7}} = 6\\cdot 10^{14}\\ \\text{Hz}",
+     "kit": "order"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Qué es la luz",
@@ -1174,7 +1198,31 @@
     "hint": "Divide la velocidad de la luz entre la longitud de onda. Primero estima los órdenes: 10⁸ dividido entre 10⁻⁷.",
     "tolAbs": 1
    }
-  ]
+  ],
+  "math": {
+   "title": "Matemáticas que aquí se necesitaron",
+   "lead": "Aquí se necesitarán la derivada parcial, la verificación de dimensiones y la capacidad de leer una escala marcada con potencias de diez.",
+   "items": [
+    {
+     "what": "Derivada parcial: qué mantenemos fijo",
+     "why": "Los campos eléctrico y magnético dependen de dos cosas a la vez: del punto del espacio y del instante de tiempo. Cuando en el primer paso de la deducción escribimos $\\partial B/\\partial t$, la letra redonda significa exactamente una cosa: fijamos el punto de observación con un clavo y solo seguimos el reloj. La $d$ ordinaria preguntaría de otra manera: cómo cambia el campo para un observador que se mueve. Para una onda, la diferencia es fundamental: las ecuaciones de Maxwell relacionan el cambio del campo en el tiempo en un punto dado con la diferencia de los campos en puntos vecinos en el mismo instante. Es precisamente el acoplamiento de dos derivadas diferentes lo que hace que la perturbación avance: el cambio en el tiempo aquí genera una inhomogeneidad en el espacio cercano, y esta a su vez se convierte en un cambio en el tiempo un poco más allá.",
+     "latex": "\\frac{\\partial B}{\\partial t}\\;\\text{— el punto está fijo}, \\qquad \\frac{\\partial B}{\\partial x}\\;\\text{— el instante está fijo}",
+     "kit": "partial"
+    },
+    {
+     "what": "De dónde sale la raíz en la velocidad",
+     "why": "En el tercer paso de la deducción aparece $c = 1/\\sqrt{\\varepsilon_0\\mu_0}$, y la raíz parece salida de la nada. Verifique las dimensiones: el producto de las constantes eléctrica y magnética da segundos al cuadrado por metros al cuadrado, su raíz cuadrada da segundos por metro, y el inverso da metros por segundo. No existe otra combinación de estas dos constantes que dé una velocidad, así que la raíz era inevitable incluso antes de cualquier deducción. La misma estructura se repite donde hay una onda: la velocidad en una cuerda tensa es la raíz de la tensión dividida por la densidad, la velocidad del sonido es la raíz de la elasticidad sobre la densidad. Bajo la raíz siempre está la relación entre lo que devuelve el sistema al equilibrio y lo que se opone al movimiento.",
+     "latex": "[\\varepsilon_0\\mu_0] = \\frac{\\text{s}^{2}}{\\text{m}^{2}} \\;\\Longrightarrow\\; \\left[\\frac{1}{\\sqrt{\\varepsilon_0\\mu_0}}\\right] = \\frac{\\text{m}}{\\text{s}}",
+     "kit": "dimension"
+    },
+    {
+     "what": "Escala donde un paso significa multiplicar",
+     "why": "En el sexto paso de la deducción, la longitud de onda va desde $10^{3}$ metros hasta $10^{-12}$: quince órdenes de magnitud. En una regla normal no se puede dibujar tal panorama: si la onda de radio se representa con un metro, a los rayos X les tocaría un segmento más delgado que un átomo. Por eso la escala se marca con potencias de diez, y un segmento igual en ella significa no una suma, sino una multiplicación por diez. Se cuenta con la aritmética de los exponentes: multiplicar cantidades corresponde a sumar exponentes, dividir a restarlos. Así se obtiene la estimación de la frecuencia de la nota del stand: $3\\cdot 10^{8}$ dividido por $5\\cdot 10^{-7}$ es $0{,}6\\cdot 10^{15}$, es decir, alrededor de $6\\cdot 10^{14}$ hercios. También se lee así la frase sobre una octava: de 380 a 750 nanómetros cabe exactamente una duplicación.",
+     "latex": "\\nu = \\frac{c}{\\lambda} = \\frac{3\\cdot 10^{8}}{5\\cdot 10^{-7}} = 6\\cdot 10^{14}\\ \\text{Hz}",
+     "kit": "order"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "ما هو الضوء",
@@ -1485,34 +1533,58 @@
    "where": "الاتصالات اللاسلكية، الميكروويف، التصوير الحراري، تحليل بنية الأشعة السينية، الألياف البصرية، النظارات المستقطبة.",
    "watchOut": "الصورة الموجية لا تفسر التأثير الكهروضوئي. الضوء في نفس الوقت موجة وتيار من الفوتونات، ولا توجد صورة واحدة له."
   },
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "ستحتاج هنا إلى المشتقة الجزئية، والتحقق من الأبعاد، والقدرة على قراءة مقياس مُدرَّج بقوى العشرة.",
+   "items": [
+    {
+     "what": "المشتقة الجزئية: ما الذي نُبقيه ثابتًا",
+     "why": "يعتمد المجالان الكهربائي والمغناطيسي على شيئين في آن واحد: نقطة في الفضاء ولحظة زمنية. عندما نكتب في الخطوة الأولى من الاشتقاق $\\partial B/\\partial t$، فإن الحرف الدائري يعني شيئًا واحدًا بالضبط: نُثبّت نقطة المراقبة بمسمار ونراقب الساعة فقط. أما $d$ العادية فستسأل بشكل مختلف: كيف يتغير المجال بالنسبة لمراقب يتحرك بنفسه. بالنسبة للموجة، الفرق جوهري: معادلات ماكسويل تربط تغير المجال مع الزمن عند نقطة معينة باختلاف المجالات عند نقاط مجاورة في نفس اللحظة. هذا الارتباط بين المشتقتين المختلفتين هو ما يجعل الاضطراب ينتقل إلى الأمام: التغير الزمني هنا يولّد عدم تجانس في المكان المجاور، والذي بدوره يتحول إلى تغير زمني أبعد قليلاً.",
+     "latex": "\\frac{\\partial B}{\\partial t}\\;\\text{— النقطة ثابتة}, \\qquad \\frac{\\partial B}{\\partial x}\\;\\text{— اللحظة ثابتة}",
+     "kit": "partial"
+    },
+    {
+     "what": "من أين يأتي الجذر في السرعة",
+     "why": "في الخطوة الثالثة من الاشتقاق نجد $c = 1/\\sqrt{\\varepsilon_0\\mu_0}$، ويبدو الجذر وكأنه ظهر من العدم. تحقق من الأبعاد: حاصل ضرب الثابتين الكهربائي والمغناطيسي يعطي ثوانٍ مربعة على أمتار مربعة، وجذره التربيعي يعطي ثانية على متر، ومقلوبه يعطي مترًا في الثانية. لا توجد تركيبة أخرى لهاتين الثابتتين تعطي سرعة، لذا كان الجذر حتميًا حتى قبل أي اشتقاق. يتكرر البناء نفسه في كل مكان توجد فيه موجة: سرعة الموجة على وتر مشدود تساوي جذر الشد مقسومًا على الكثافة، وسرعة الصوت تساوي جذر المرونة على الكثافة. تحت الجذر دائمًا نجد نسبة ما يعيد النظام إلى التوازن إلى ما يقاوم الحركة.",
+     "latex": "[\\varepsilon_0\\mu_0] = \\frac{\\text{s}^{2}}{\\text{m}^{2}} \\;\\Longrightarrow\\; \\left[\\frac{1}{\\sqrt{\\varepsilon_0\\mu_0}}\\right] = \\frac{\\text{m}}{\\text{s}}",
+     "kit": "dimension"
+    },
+    {
+     "what": "مقياس حيث الخطوة تعني الضرب",
+     "why": "في الخطوة السادسة من الاشتقاق، يتراوح الطول الموجي من $10^{3}$ أمتار إلى $10^{-12}$ — أي خمس عشرة مرتبة من الحجم. على مسطرة عادية لا يمكن رسم مثل هذا المشهد: إذا مثلنا موجة راديوية بمتر واحد، فسيحصل الأشعة السينية على قطعة أرق من الذرة. لذلك، يُدرَّج المقياس بقوى العشرة، والمسافة المتساوية عليه تعني ليس الجمع بل الضرب في عشرة. يُحسب عليه باستخدام حساب الأسس: ضرب الكميات يقابله جمع الأسس، والقسمة يقابلها الطرح. هكذا نحصل على تقدير التردد من ملاحظة اللوحة: $3\\cdot 10^{8}$ مقسومة على $5\\cdot 10^{-7}$ تعطي $0{,}6\\cdot 10^{15}$، أي حوالي $6\\cdot 10^{14}$ هرتز. كذلك تُقرأ عبارة الأوكتاف الواحد: من 380 إلى 750 نانومتر يوجد بالضبط مضاعفة واحدة.",
+     "latex": "\\nu = \\frac{c}{\\lambda} = \\frac{3\\cdot 10^{8}}{5\\cdot 10^{-7}} = 6\\cdot 10^{14}\\ \\text{Hz}",
+     "kit": "order"
+    }
+   ]
+  },
   "quiz": [
    {
     "id": "l1",
     "type": "mcq",
-    "q": "لماذا يُعتبر تطابق سرعة الموجة التي حسبها ماكسويل مع سرعة الضوء دليلاً حاسماً؟",
+    "q": "لماذا يعتبر تطابق السرعة التي حسبها ماكسويل للموجة مع سرعة الضوء حجة حاسمة؟",
     "options": [
-     "لأن ماكسويل كان عالماً موثوقاً جداً",
-     "لأن كلا الثابتين قيسا في تجارب على الشحنات والتيارات، حيث لم يكن الضوء موجوداً على الإطلاق — فالتطابق العشوائي بعدة أرقام لا يُصدق",
+     "لأن ماكسويل كان عالماً موثوقاً للغاية",
+     "لأن الثابتين قيسا في تجارب مع الشحنات والتيارات، حيث لم يكن للضوء أي دور، فمن غير المحتمل أن يكون التطابق إلى عدة أرقام معنوية مجرد صدفة",
      "لأنه لم تكن هناك تفسيرات أخرى لطبيعة الضوء في ذلك الوقت",
      "لأن هيرتز أكد ذلك"
     ],
     "answer": 1,
-    "why": "تم الحصول على القيم من قياس القوة بين الكرات المشحونة وبين الأسلاك المارة بها تيار. لم تتعلق أي تجربة بالضوء. لا يمكن تفسير التطابق بعدة أرقام مع البيانات الفلكية بالصدفة — وبالتالي فإن الضوء هو تلك الموجة. أكد هيرتز ذلك لاحقاً، لكن الاستنتاج تم قبله.",
-    "hint": "من أين جاءت القيم $\\varepsilon_0$ و $\\mu_0$؟ هل شارك الضوء في أي من تلك القياسات؟"
+    "why": "تم الحصول على القيم من قياس القوة بين الكرات المشحونة وبين الأسلاك التي تمر بها تيارات. لم تكن أي من التجارب متعلقة بالضوء. التطابق إلى عدة أرقام معنوية مع البيانات الفلكية لا يمكن تفسيره بالصدفة - إذن الضوء هو هذه الموجة. هيرتز أكد ذلك لاحقاً، لكن الاستنتاج تم قبله.",
+    "hint": "من أين جاءت قيمتا ε₀ و μ₀؟ هل كان للضوء أي دور في أي من تلك القياسات؟"
    },
    {
     "id": "l2",
     "type": "mcq",
     "q": "ينتقل الضوء من الهواء إلى الزجاج بمعامل انكسار 1.5. ماذا يحدث للتردد وطول الموجة؟",
     "options": [
-     "يقل التردد بمقدار 1.5 مرة، ولا يتغير طول الموجة",
-     "لا يتغير التردد، ويقل طول الموجة بمقدار 1.5 مرة",
-     "كلتا الكميتين تقلان بمقدار 1.5 مرة",
-     "كلتا الكميتين لا تتغيران، فقط الاتجاه يتغير"
+     "ينخفض التردد بمقدار 1.5 مرة، ولا يتغير طول الموجة",
+     "لا يتغير التردد، وينخفض طول الموجة بمقدار 1.5 مرة",
+     "تنخفض كلتا الكميتين بمقدار 1.5 مرة",
+     "لا تتغير أي من الكميتين، فقط يتغير الاتجاه"
     ],
     "answer": 1,
-    "why": "التردد يحدده المصدر ولا يمكن أن يتغير على الحدود — وإلا لتباعدت التذبذبات على الجانبين. السرعة تنخفض بمقدار $n$ مرة، وبالتالي ينخفض طول الموجة بنفس المقدار. ومن هنا الاستنتاج: اللون يحدده التردد وليس طول الموجة، وتحت الماء لا تغير الأجسام ألوانها.",
-    "hint": "ما الذي يجب أن يتطابق على جانبي الحدود حتى لا تتمزق الأوساط؟ هذه القاعدة اشتقناها سابقاً للصوت."
+    "why": "التردد يحدده المصدر ولا يمكن أن يتغير عند الحدود - وإلا لتباينت التذبذبات على الجانبين. تنخفض السرعة بمقدار n مرة، وبالتالي ينخفض طول الموجة بنفس المقدار. ومن هنا يتبع أن اللون يتحدد بالتردد وليس بطول الموجة، وتحت الماء لا تتغير ألوان الأجسام.",
+    "hint": "ما الذي يجب أن يتطابق على جانبي الحدود حتى لا تتمزق الوسائط؟ لقد اشتقنا هذه القاعدة بالفعل للصوت."
    },
    {
     "id": "l3",
@@ -1520,24 +1592,25 @@
     "q": "بكلماتك الخاصة: لماذا لا تحتاج الموجة الكهرومغناطيسية إلى وسط تنتشر فيه؟",
     "keywords": [
      "الحقول نفسها",
-     "يولد بعضها بعضاً",
-     "لا يحتاج حاملاً",
+     "تولد",
+     "بعضها البعض",
+     "لا حاجة لناقل",
      "الأثير",
-     "ذاتي الدعم",
-     "ليس مادة",
+     "ذاتية الاستمرار",
+     "ليست مادة",
      "حقل"
     ],
     "needed": 2,
-    "why": "تتذبذب الحقول نفسها: المجال الكهربائي المتغير يولد مجالاً مغناطيسياً، والمجال المغناطيسي المتغير يولد مجالاً كهربائياً. السلسلة تدعم نفسها وتنتقل عبر الفراغ دون أي حامل. الأثير الذي اخترع في القرن التاسع عشر تبين أنه مفهوم لا داعي له — بحث عنه مايكلسون ومورلي لمدة ثلاثين عاماً ولم يجداه.",
-    "hint": "ما الذي يتذبذب بالضبط في مثل هذه الموجة؟ هل هو شيء مادي يحتاج إلى دعامة؟"
+    "why": "تتذبذب الحقول نفسها: فالحقل الكهربائي المتغير يولد حقلاً مغناطيسياً، والحقل المغناطيسي المتغير يولد حقلاً كهربائياً. السلسلة تدعم نفسها وتنتقل عبر الفراغ دون أي ناقل. الأثير الذي اخترع في القرن التاسع عشر أصبح مفهوماً زائداً - بحث عنه مايكلسون ومورلي لمدة ثلاثين عاماً ولم يجداه.",
+    "hint": "ما الذي يتذبذب بالضبط في مثل هذه الموجة؟ هل هو شيء مادي يحتاج إلى دعم؟"
    },
    {
     "id": "l4",
     "type": "estimate",
-    "q": "ما هو تردد الضوء الأخضر المرئي بطول موجة 550 نانومتر؟ أعطِ أس العشرة بالهرتز.",
+    "q": "ما هو تردد الضوء الأخضر المرئي بطول موجة 550 نانومتر؟ أعط الأس العشري بالهرتز.",
     "answer": 14,
-    "unit": "الرتبة (أس العشرة)",
-    "why": "ν = c/λ = 3·10⁸ / 5,5·10⁻⁷ ≈ 5,5·10¹⁴ هرتز، أي من رتبة 10¹⁴. لاحظ: نصف ألف تريليون تذبذب في الثانية. لا يوجد جهاز يحسبها مباشرة — نحن دائماً نقيس طول الموجة ونحسب التردد.",
+    "unit": "الأس (قوة العشرة)",
+    "why": "ν = c/λ = 3·10⁸ / 5.5·10⁻⁷ ≈ 5.5·10¹⁴ هرتز، أي من رتبة 10¹⁴. لاحظ: نصف مليون مليار اهتزازة في الثانية. لا يوجد جهاز يحسبها مباشرة - نحن دائماً نقيس طول الموجة ونحسب التردد.",
     "hint": "اقسم سرعة الضوء على طول الموجة. أولاً قدر الرتب: 10⁸ مقسومة على 10⁻⁷.",
     "tolAbs": 1
    }

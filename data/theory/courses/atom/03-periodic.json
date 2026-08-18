@@ -811,7 +811,30 @@
     "hint": "Which subshells are filled in the fourth period? Add up their capacities: s gives 2, p gives 6, d gives 10.",
     "tolAbs": 2
    }
-  ]
+  ],
+  "math": {
+   "title": "The Math Needed Here",
+   "lead": "One equation of the form \"a quantity equals itself with a minus sign,\" one way to order states, and one addition where the order of terms matters.",
+   "items": [
+    {
+     "what": "The only number equal to itself with a minus sign",
+     "why": "The first step introduces the Pauli exclusion principle as a given, and it looks like a rule without a reason. Meanwhile, it is a short algebraic consequence. Electrons are indistinguishable, so swapping two of them changes nothing observable; we observe $|\\psi|^{2}$, so $\\psi$ itself either stays the same or changes sign. For electrons, the latter is true. Now put two electrons in the same state. The swap changes exactly nothing, so $\\psi$ equals itself, and at the same time it changes sign, so $\\psi$ equals $-\\psi$. The only number with this property is zero. A state with two electrons in the same quadruple $(n, \\ell, m_\\ell, m_s)$ does not exist not because something prevents them from being there, but because its probability is identically zero.",
+     "latex": "\\psi = -\\psi \\;\\Longrightarrow\\; \\psi = 0",
+     "kit": "symmetry"
+    },
+    {
+     "what": "Sorting by the sum of n plus ℓ",
+     "why": "The second step lists the filling order $1s, 2s, 2p, 3s, 3p, 4s, 3d$ and leaves unexplained the main oddity: the fourth shell starts before the third is finished. The order is not memorized but computed — this is the Klechkovsky rule, named among the authors. Each subshell is assigned a key $n + \\ell$ and sorted by it, and for equal keys, the one with smaller $n$ goes first. Check: for $4s$ the key is $4 + 0 = 4$, for $3d$ it is $3 + 2 = 5$, so $4s$ comes before. For $2p$ and $3s$ the keys are equal to three, and $2p$ with the smaller shell number goes first. This trick is worth remembering separately from chemistry: a long list that looks arbitrary often turns out to be sorted by a non-obvious key.",
+     "latex": "4s:\\; n+\\ell = 4 \\quad < \\quad 3d:\\; n+\\ell = 5"
+    },
+    {
+     "what": "The period length is not the shell capacity",
+     "why": "The third step adds up the places and gets 2, 8, 8, 18, 18, 32, while in the previous section the same table gave 2, 8, 18, 32. There is no contradiction: these are two different sums over the same set of states. The capacity $2n^{2}$ adds all states with the same $n$. The period length adds subshells in filling order, from one s-subshell to the next. Because of the d delay, these two groupings do not coincide: the fourth period gathers $4s + 3d + 4p = 2 + 10 + 6 = 18$, taking subshells from two shells at once. Hence the repetition of eights and eighteens in pairs. The rule is general and extends far beyond chemistry: in a sum, it matters by what criterion the terms are grouped, and the same set with different groupings gives different rows.",
+     "latex": "2n^{2} = 2,\\, 8,\\, 18,\\, 32 \\qquad \\text{vs} \\qquad T = 2,\\, 8,\\, 8,\\, 18,\\, 18,\\, 32",
+     "kit": "combinatorics"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Tabla periódica",
@@ -1182,7 +1205,30 @@
     "hint": "¿Qué subcapas se llenan en el cuarto período? Suma sus capacidades: s da 2, p da 6, d da 10.",
     "tolAbs": 2
    }
-  ]
+  ],
+  "math": {
+   "title": "Matemáticas que aquí se necesitaron",
+   "lead": "Una ecuación de la forma «la magnitud es igual a sí misma con signo menos», una manera de ordenar los estados y una suma en la que importa el orden de los sumandos.",
+   "items": [
+    {
+     "what": "El único número igual a sí mismo con signo menos",
+     "why": "El primer paso introduce el principio de exclusión de Pauli como un hecho dado, y la prohibición parece una regla sin razón. Sin embargo, es una breve consecuencia algebraica. Los electrones son indistinguibles, por lo que intercambiar dos de ellos no cambia nada observable; observamos $|\\psi|^{2}$, por lo tanto la propia $\\psi$ o se conserva o cambia de signo. Para los electrones, ocurre lo segundo. Ahora coloque dos electrones en el mismo estado. El intercambio no cambia absolutamente nada, es decir, $\\psi$ es igual a sí misma, y al mismo tiempo cambia de signo, es decir, $\\psi$ es igual a $-\\psi$. El único número con esa propiedad es cero. El estado con dos electrones en la misma cuaterna $(n, \\ell, m_\\ell, m_s)$ no existe no porque algo les impida estar allí, sino porque su probabilidad es idénticamente igual a cero.",
+     "latex": "\\psi = -\\psi \\;\\Longrightarrow\\; \\psi = 0",
+     "kit": "symmetry"
+    },
+    {
+     "what": "Ordenamiento por la suma de n más ℓ",
+     "why": "El segundo paso enumera el orden de llenado $1s, 2s, 2p, 3s, 3p, 4s, 3d$ y deja sin explicación la principal rareza: la cuarta capa comienza antes de que termine la tercera. El orden no se memoriza, sino que se calcula: esta es la regla de Klechkovsky, mencionada entre los autores. A cada subcapa se le asigna una clave $n + \\ell$ y se ordena según ella, y en caso de claves iguales, se coloca primero la que tiene menor $n$. Compruébelo: para $4s$ la clave es $4 + 0 = 4$, para $3d$ la clave es $3 + 2 = 5$, por lo tanto $4s$ va antes. Para $2p$ y $3s$ las claves son iguales a tres, y $2p$ con el número de capa menor va primero. Este truco vale la pena recordarlo aparte de la química: una lista larga que parece arbitraria a menudo resulta estar ordenada por una clave no obvia.",
+     "latex": "4s:\\; n+\\ell = 4 \\quad < \\quad 3d:\\; n+\\ell = 5"
+    },
+    {
+     "what": "La duración del período no es la capacidad de la capa",
+     "why": "El tercer paso suma los lugares y obtiene 2, 8, 8, 18, 18, 32, mientras que en el párrafo anterior para la misma tabla resultó 2, 8, 18, 32. No hay contradicción: son dos sumas diferentes sobre el mismo conjunto de estados. La capacidad $2n^{2}$ suma todos los estados con el mismo $n$. La duración del período suma las subcapas en el orden de llenado, desde una subcapa s hasta la siguiente. Debido al retraso de d, estas dos agrupaciones no coinciden: el cuarto período acumula $4s + 3d + 4p = 2 + 10 + 6 = 18$, tomando subcapas de dos capas a la vez. De ahí la repetición de ochos y dieciochos en pares. La regla es general y se extiende mucho más allá de la química: en una suma importa según qué criterio se dividen los sumandos, y el mismo conjunto con diferentes divisiones da diferentes filas.",
+     "latex": "2n^{2} = 2,\\, 8,\\, 18,\\, 32 \\qquad \\text{contra} \\qquad T = 2,\\, 8,\\, 8,\\, 18,\\, 18,\\, 32",
+     "kit": "combinatorics"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "جدول مندليف",
@@ -1194,37 +1240,74 @@
   ],
   "standNote": "يوضح سلم المستويات على الحامل الشيء الرئيسي: عدد الحالات محدود، وكل حالة يمكن أن تشغلها إلكترونات. تخيل أنك تملأ المستويات بالإلكترونات من الأسفل إلى الأعلى، واضعًا اثنين في كل حالة. هكذا بُنيت الذرة، ولهذا تتكرر خصائص العناصر: عندما تمتلئ قشرة معينة بالكامل، يبدأ الإلكترون التالي قشرة جديدة، ويتكرر كل شيء في سطر جديد.",
   "formula": {
-   "name": "مبدأ باولي للمنع",
-   "latex": "\\text{لا يمكن لإلكترونين أن يكون لهما نفس المجموعة } (n, \\ell, m_\\ell, m_s)",
+   "name": "مبدأ استبعاد باولي",
+   "latex": "\\text{لا يمكن لإلكترونين أن يمتلكا نفس المجموعة } (n, \\ell, m_\\ell, m_s)",
    "alsoKnown": "مبدأ الاستبعاد · قاعدة ملء الأغلفة",
    "authors": [
     {
-     "who": "دميتري مندليف",
+     "who": "ديميتري مندلييف",
      "year": "1869",
-     "what": "وضع الجدول وترك فيه خلايا فارغة، متنبئًا بخصائص عناصر غير معروفة. تنبأ بكثافة الغاليوم 5.9 — وكانت المقاسة 5.904. أصر المكتشف أولاً على قيمته 4.7 وأعاد القياس فقط بعد رسالة من بطرسبرغ"
+     "what": "أنشأ الجدول وترك فيه خلايا فارغة، متنبئًا بخصائص عناصر غير معروفة. بالنسبة للغاليوم تنبأ بكثافة 5.9 - والقياس الفعلي كان 5.904. أصر المكتشف أولاً على قيمته 4.7 وأعاد القياس فقط بعد رسالة من سانت بطرسبرغ"
     },
     {
      "who": "هنري موزلي",
      "year": "1913",
-     "what": "أظهر أن الترتيب في الجدول يُحدد بشحنة النواة وليس بالوزن الذري — مما أزال العديد من التناقضات القديمة. توفي عن سبعة وعشرين عامًا في غاليبولي؛ بعد ذلك توقف إرسال العلماء البريطانيين إلى الجبهة"
+     "what": "أظهر أن الترتيب في الجدول يُحدد بشحنة النواة وليس بالوزن الذري - مما أزال العديد من التناقضات القديمة. توفي في السابعة والعشرين من عمره في جاليبولي؛ بعد ذلك توقف إرسال العلماء البريطانيين إلى الجبهة"
     },
     {
      "who": "فولفغانغ باولي",
      "year": "1925",
-     "what": "صاغ مبدأ المنع. اعتبره هو نفسه قاعدة مؤقتة دون تبرير، وقال إنه لا يفهم من أين يأتي. ظهر التبرير بعد أربعين عامًا من نظرية الحقل"
+     "what": "صاغ مبدأ الاستبعاد. اعتبره هو نفسه قاعدة مؤقتة بدون مبرر وقال إنه لا يفهم من أين يأتي. ظهر المبرر بعد أربعين عامًا من نظرية المجال"
     },
     {
      "who": "فريدريش هوند",
      "year": "1927",
-     "what": "وضع قواعد ملء المدارات المتساوية الطاقة: تشغل الإلكترونات المدارات أولاً بشكل منفرد مع دوران متوازٍ، ثم تتزاوج. من هنا تأتي الخواص المغناطيسية للعديد من المواد"
+     "what": "وضع قواعد ملء المدارات المتدهورة: توزع الإلكترونات أولاً منفردة مع دوران متوازي ثم تتزاوج. من هنا تأتي الخصائص المغناطيسية للعديد من المواد"
     },
     {
      "who": "فسيفولود كليتشكوفسكي",
      "year": "1951",
-     "what": "وجد قاعدة ترتيب ملء المستويات في الذرات الثقيلة، موضحًا لماذا يمتلئ 4s قبل 3d. بدونه، تبدو بنية الدورة الرابعة اعتباطية"
+     "what": "وجد قاعدة ترتيب ملء المستويات في الذرات الثقيلة، موضحًا لماذا يمتلئ 4s قبل 3d. بدونه تبدو بنية الدورة الرابعة عشوائية"
     }
    ],
-   "story": "حُكيت عن باولي العديد من القصص، وجميعها تقريبًا عن قسوته. يُنسب إليه التعبير \"هذا ليس حتى خطأ\"، قاله عن عمل كان سيئًا لدرجة أنه لا يمكن دحضه. بعد سماع محاضرة لفيزيائي شاب، علق بأنه بالطبع مخطئ، ولكن ليس لدرجة تجعل ذلك مثيرًا للاهتمام. كان هناك أيضًا \"تأثير باولي\" شبه المزاح: كان يُعتقد أنه عند ظهوره في المختبر، تتعطل الأجهزة من تلقاء نفسها — طلب المجربون بجدية منه عدم الدخول. ومع ذلك، فقد اعتبر مبدأ المنع الخاص به غير مُرضٍ على وجه التحديد لأنه لم يستطع تبريره: كانت القاعدة تعمل بشكل لا تشوبه شائبة وتظل معلقة في الهواء. ظهر التفسير الدقيق — نظرية العلاقة بين السبين والإحصاء — فقط في نظرية الحقل الكمومي، وكان باولي نفسه قد ساهم فيها."
+   "story": "كانت هناك العديد من القصص عن باولي، وجميعها تقريبًا عن قسوته. له عبارة «هذا ليس حتى خطأ»، قالها عن عمل كان سيئًا لدرجة أنه لا يمكن دحضه. بعد سماع محاضرة لفيزيائي شاب، لاحظ أنه مخطئ بالتأكيد، ولكن ليس لدرجة تجعل الأمر مثيرًا للاهتمام. حتى أن هناك «تأثير باولي» شبه المزاح: كان يُعتقد أنه عند ظهوره في المختبر تتعطل الأجهزة من تلقاء نفسها - طلب المجربون منه بجدية ألا يدخل. في الوقت نفسه، اعتبر مبدأ الاستبعاد الخاص به غير مرضٍ على وجه التحديد لأنه لم يستطع تبريره: القاعدة عملت بشكل لا تشوبه شائبة وعلقت في الهواء. التفسير الدقيق - نظرية العلاقة بين السبين والإحصاء - ظهر فقط في نظرية المجال الكمومي، وباولي نفسه ساهم فيها.",
+   "symbols": [
+    {
+     "sym": "Z",
+     "latex": "Z",
+     "what": "заряд ядра, номер элемента",
+     "unit": "—",
+     "note": "именно он, а не атомный вес, задаёт положение в таблице — это установил Мозли"
+    },
+    {
+     "sym": "conf",
+     "latex": "1s^{2}2s^{2}\\ldots",
+     "what": "электронная конфигурация",
+     "unit": "—",
+     "note": "порядок заселения состояний; определяет химические свойства целиком"
+    },
+    {
+     "sym": "val",
+     "latex": "\\text{вал.}",
+     "what": "валентные электроны",
+     "unit": "—",
+     "note": "электроны внешней оболочки; только они участвуют в химии"
+    },
+    {
+     "sym": "period",
+     "latex": "T",
+     "what": "период таблицы",
+     "unit": "—",
+     "note": "строка; её длина равна числу состояний, заполняемых до следующей s-оболочки"
+    },
+    {
+     "sym": "group",
+     "latex": "\\text{гр.}",
+     "what": "группа",
+     "unit": "—",
+     "note": "столбец; элементы одной группы имеют одинаковое строение внешней оболочки"
+    }
+   ]
   },
   "symbols": [
    {
@@ -1553,7 +1636,30 @@
     "hint": "ما الأغلفة الفرعية التي تُملأ في الدورة الرابعة؟ اجمع سعاتها: s تعطي 2، p تعطي 6، d تعطي 10.",
     "tolAbs": 2
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "معادلة واحدة من الشكل «الكمية تساوي نفسها بإشارة سالبة»، وطريقة واحدة لترتيب الحالات، وجمع واحد يكون فيه ترتيب الحدود مهمًا.",
+   "items": [
+    {
+     "what": "العدد الوحيد الذي يساوي نفسه بإشارة سالبة",
+     "why": "الخطوة الأولى تقدم مبدأ باولي كأمر مسلم به، ويبدو المبدأ كقاعدة بدون سبب. ومع ذلك، فهو نتيجة جبرية قصيرة. الإلكترونات لا يمكن تمييزها، لذا فإن تبديل اثنين منها لا يغير أي شيء يمكن ملاحظته؛ نحن نلاحظ $|\\psi|^{2}$، وبالتالي فإن $\\psi$ نفسها إما أن تبقى كما هي أو تغير إشارتها. بالنسبة للإلكترونات، الصحيح هو الثاني. الآن ضع إلكترونين في نفس الحالة. التبديل لا يغير شيئًا على الإطلاق، أي أن $\\psi$ تساوي نفسها، وفي نفس الوقت تغير الإشارة، أي أن $\\psi$ تساوي $-\\psi$. العدد الوحيد الذي يمتلك هذه الخاصية هو الصفر. الحالة التي يوجد فيها إلكترونان في نفس الرباعية $(n, \\ell, m_\\ell, m_s)$ غير موجودة ليس لأن شيئًا يمنعها من التواجد هناك، ولكن لأن احتمالها يساوي صفرًا تمامًا.",
+     "latex": "\\psi = -\\psi \\;\\Longrightarrow\\; \\psi = 0",
+     "kit": "symmetry"
+    },
+    {
+     "what": "الترتيب حسب مجموع n زائد ℓ",
+     "why": "الخطوة الثانية تسرد ترتيب الامتلاء $1s, 2s, 2p, 3s, 3p, 4s, 3d$ وتترك بدون تفسير الغرابة الرئيسية: الغلاف الرابع يبدأ قبل أن ينتهي الثالث. الترتيب لا يُحفظ بل يُحسب - وهذه هي قاعدة كليتشكوفسكي، المذكورة بين المؤلفين. لكل تحت-غلاف يُعطى مفتاح $n + \\ell$ ويُرتَّب حسبه، وعند تساوي المفاتيح، يُقدَّم الذي له أصغر $n$. تحقق: بالنسبة لـ $4s$ المفتاح $4 + 0 = 4$، وبالنسبة لـ $3d$ المفتاح $3 + 2 = 5$، لذا $4s$ يأتي أولاً. بالنسبة لـ $2p$ و $3s$ المفتاحان متساويان ويساويان ثلاثة، و$2p$ يخرج أولاً برقم غلاف أصغر. هذه الخدعة تستحق أن تُحفظ بشكل منفصل عن الكيمياء: قائمة طويلة تبدو عشوائية غالبًا ما تكون مرتبة حسب مفتاح غير واضح.",
+     "latex": "4s:\\; n+\\ell = 4 \\quad < \\quad 3d:\\; n+\\ell = 5"
+    },
+    {
+     "what": "طول الدورة ليس سعة الغلاف",
+     "why": "الخطوة الثالثة تجمع الأماكن وتحصل على 2، 8، 8، 18، 18، 32، بينما في الفقرة السابقة لنفس الجدول حصلنا على 2، 8، 18، 32. لا يوجد تناقض: هذان مجموعان مختلفان لنفس مجموعة الحالات. السعة $2n^{2}$ تجمع كل الحالات ذات $n$ نفسه. طول الدورة يجمع تحت-الأغلفة بترتيب الامتلاء، من تحت-غلاف s إلى التالي. بسبب تأخر d، لا يتطابق هذان التجميعان: الدورة الرابعة تجمع $4s + 3d + 4p = 2 + 10 + 6 = 18$، آخذة تحت-أغلفة من غلافين في وقت واحد. من هنا يأتي تكرار الثمانية والثمانية عشر كأزواج. القاعدة عامة وتتجاوز الكيمياء بكثير: في المجموع، المهم هو المعيار الذي تقسم به الحدود، ونفس المجموعة بتقسيمات مختلفة تعطي صفوفًا مختلفة.",
+     "latex": "2n^{2} = 2,\\, 8,\\, 18,\\, 32 \\qquad \\text{مقابل} \\qquad T = 2,\\, 8,\\, 8,\\, 18,\\, 18,\\, 32",
+     "kit": "combinatorics"
+    }
+   ]
+  }
  },
  "tags": [
   "gravity",

@@ -457,5 +457,1289 @@
     "tolAbs": 15
    }
   ]
+ },
+ "en": {
+  "formula": {
+   "name": "Einstein–Smoluchowski formula",
+   "latex": "\\langle x^{2}\\rangle = 2Dt, \\qquad D = \\frac{k_B T}{6\\pi\\eta a}",
+   "alsoKnown": "The first equality is the law of random walk: it is the mean square displacement that grows proportionally to time, not the displacement itself. The second is the Einstein–Stokes relation, connecting the diffusion coefficient with the temperature of the medium and its viscosity.",
+   "authors": [
+    {
+     "who": "Robert Brown",
+     "year": "1827",
+     "what": "described the unceasing trembling of microscopic particles in water and proved by a series of experiments that the cause is not life: ground soot, glass, and a fragment of stone from the Sphinx trembled just the same."
+    },
+    {
+     "who": "Louis Georges Gouy",
+     "year": "1888",
+     "what": "experimentally ruled out external causes — light, temperature differences, vibrations, magnetic field — and was the first to clearly point to the thermal motion of molecules; he had no quantitative prediction."
+    },
+    {
+     "who": "Albert Einstein",
+     "year": "1905",
+     "what": "derived ⟨x²⟩ = 2Dt and expressed D in terms of temperature, viscosity, and Avogadro's number — turning an observation into a measuring instrument; he also explained why measuring the velocity of such a particle is meaningless."
+    },
+    {
+     "who": "Marian Smoluchowski",
+     "year": "1906",
+     "what": "arrived at the same law independently, by a kinetic path; his numerical coefficient differed from Einstein's by about a factor of two, and Einstein turned out to be right."
+    },
+    {
+     "who": "Jean Perrin",
+     "year": "1908–1913",
+     "what": "measured the displacements of grains under a microscope, obtained Avogadro's number from them, and brought together more than a dozen independent methods of determining it into a single table."
+    }
+   ],
+   "story": "Between observation and explanation lie eighty years, and this gap is instructive. The phenomenon was seen by everyone who held a microscope, but by itself it proved nothing: it was explained by evaporation, capillarity, electricity, and 'vital force'. What was missing was not observational skill but a formula — a statement of what exactly should be measured and what number should result. Einstein wrote his 1905 paper precisely for this: he was looking for a consequence of molecular theory that could be tested experimentally and could not be explained otherwise. Interestingly, he was not sure that he was describing an already discovered phenomenon: the patent examiner in Bern had almost no access to literature, and in the text he cautiously allows that it might be that very Brownian motion. Three years later Perrin showed that it was exactly that.",
+   "symbols": [
+    {
+     "sym": "⟨x²⟩",
+     "latex": "\\langle x^{2}\\rangle",
+     "what": "mean square displacement along one axis",
+     "unit": "m²",
+     "note": "specifically along ONE axis; in a plane you get 4Dt, in space 6Dt — the most common source of a factor error."
+    },
+    {
+     "sym": "D",
+     "latex": "D",
+     "what": "diffusion coefficient",
+     "unit": "m²/s",
+     "note": "the units read literally: square of length per time — that is, D sets the rate of growth of area, not length."
+    },
+    {
+     "sym": "t",
+     "latex": "t",
+     "what": "observation time",
+     "unit": "s",
+     "note": "counted from the moment when the particle was at the starting point; the law holds for times much longer than the particle's momentum relaxation time."
+    },
+    {
+     "sym": "k_B",
+     "latex": "k_B",
+     "what": "Boltzmann constant",
+     "unit": "J/K",
+     "const": "k_B",
+     "note": "the exchange rate between temperature and energy; it is through this constant that temperature enters the formula."
+    },
+    {
+     "sym": "T",
+     "latex": "T",
+     "what": "absolute temperature of the medium",
+     "unit": "K",
+     "note": "only in kelvins; the hotter the medium, the wider the spreading — and linearly, not in some other way."
+    },
+    {
+     "sym": "η",
+     "latex": "\\eta",
+     "what": "dynamic viscosity of the medium",
+     "unit": "Pa·s",
+     "note": "for water at 20 °C it is about 10⁻³, for air 55 times less — hence in air the trembling is roughly seven times more pronounced."
+    },
+    {
+     "sym": "a",
+     "latex": "a",
+     "what": "radius of the particle",
+     "unit": "m",
+     "note": "specifically the radius, not the diameter; D is inversely proportional to it, so a large particle trembles more weakly."
+    },
+    {
+     "sym": "γ",
+     "latex": "\\gamma",
+     "what": "viscous friction coefficient",
+     "unit": "kg/s",
+     "note": "defined by the equality F = γv; for a sphere in a viscous fluid Stokes derived γ = 6πηa."
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Rigorous derivation",
+   "lead": "We will follow Einstein's path. First, from combinatorics alone we obtain the square-root law—here no physics is needed at all. Then we relate the coefficient D to temperature and viscosity and see how Avogadro's number appears in the answer. We take exactly two results as given: the Boltzmann distribution and Stokes' formula for the friction of a sphere in a viscous fluid.",
+   "steps": [
+    {
+     "text": "Let's start with a puzzle. A grain with a radius of half a micron is about ten billion times heavier than a water molecule, and molecules hit it from all sides—about 10²⁰ impacts per second. One would think that such a number should balance perfectly. And it does—almost. The number of hits from the left and right in the same time is not strictly equal but fluctuates: for a sum of N random terms, the spread is of order √N. The relative imbalance is tiny, one ten-billionth, but the absolute number of hits is so large that even this fraction is enough.",
+     "latex": "N \\sim 10^{20}\\ \\text{s}^{-1}, \\qquad \\frac{\\Delta N}{N} \\sim \\frac{1}{\\sqrt{N}} \\sim 10^{-10}",
+     "figure": "brownkick",
+     "figCaption": "The impacts almost cancel each other out. What remains is an imbalance of the order of the square root of their number—and only that moves the grain"
+    },
+    {
+     "text": "Now the model. We don't need the details of the impacts: what matters is that the grain remembers its direction only very briefly. After a time τ it completely forgets where it was going, and its next jerk is in no way related to the previous one. So the trajectory is a chain of N = t/τ independent steps of roughly equal length ℓ and completely random direction. The position after time t is the sum of these steps. From here on, it's arithmetic, not physics.",
+     "latex": "x_N = \\sum_{i=1}^{N} \\ell_i, \\qquad N = \\frac{t}{\\tau}",
+     "figure": "randwalk",
+     "figCaption": "The path is a long broken line of N segments. The displacement from start to finish is a straight line, and it is much shorter than the path"
+    },
+    {
+     "text": "What should we calculate for this sum? The average is not suitable: each step is equally likely to be in either direction, so ⟨ℓᵢ⟩ = 0 and ⟨x⟩ = 0 for any N. Let's take the square—it does not distinguish signs. Expanding the square of the sum: we get N diagonal terms ℓᵢ² and almost N² cross terms ℓᵢℓⱼ. There are incomparably more cross terms, but each of them is zero on average: the steps are independent, so the average of the product equals the product of the averages, and the averages are zero. The diagonal terms, however, are squares—they are never negative and cannot cancel each other. Only the diagonal survives.",
+     "latex": "\\langle x_N^{2}\\rangle = \\sum_i \\langle \\ell_i^{2}\\rangle + \\sum_{i \\ne j} \\langle \\ell_i \\ell_j\\rangle = N\\ell^{2} + 0",
+     "figure": "sumsquare",
+     "figCaption": "The diagonal of the table—squares—add up. Everything else in the field averages to zero"
+    },
+    {
+     "text": "Substitute N = t/τ. The mean square displacement turns out to be proportional to time—this is the content of the law. The coefficient ℓ²/τ is denoted by 2D, and the two is not a decoration: with it, D coincides with the diffusion coefficient from Fick's law, which describes the spreading of an impurity through the same quantity. The displacement itself grows as the square root of time. Hence all the unusualness of the phenomenon: waiting four times longer only gets you twice as far.",
+     "latex": "\\langle x^{2}\\rangle = \\frac{\\ell^{2}}{\\tau}\\,t \\;\\equiv\\; 2Dt, \\qquad \\sqrt{\\langle x^{2}\\rangle} = \\sqrt{2Dt}",
+     "figure": "sqrtt",
+     "figCaption": "Square root of time: the curve is steepest at the beginning, and then the spreading almost stops"
+    },
+    {
+     "text": "Half the job is done: we know HOW the displacement grows, but we don't know what D equals. Here Einstein makes a move that makes this chapter worth reading. He introduces into the problem something that was not there—a gravitational field—and considers a suspension of identical particles in a quiescent fluid. In thermal equilibrium, the concentration of particles in a field with potential energy U falls according to Boltzmann's law. For gravity, U = m*gx, where m* is the mass of the particle minus the mass of the fluid it displaces. We get the same barometric formula as for air, only the height scale is different.",
+     "latex": "n(x) = n_0 \\exp\\!\\left(-\\frac{m^{*} g x}{k_B T}\\right)",
+     "figure": "sedimbal",
+     "figCaption": "The suspension does not settle to the bottom but establishes an exponential profile: thermal motion keeps particles up"
+    },
+    {
+     "text": "Now let's look at this equilibrium as a balance of two opposing fluxes. Gravity carries particles downward: each falls with a steady velocity v = m*g/γ, and the flux is nv. Diffusion carries them upward along the concentration gradient, with flux −D·dn/dx. Since the picture does not change, the fluxes are equal. Substituting the derivative of the Boltzmann exponential—and here the main thing happens: the concentration n cancels, because the derivative of the exponential is proportional to itself, and along with it m* and g cancel. The auxiliary field we introduced by hand disappears from the answer, leaving a relation that has nothing to do with gravity.",
+     "latex": "n\\,\\frac{m^{*} g}{\\gamma} \\;=\\; D\\,\\frac{m^{*} g}{k_B T}\\,n \\;\\Longrightarrow\\; D = \\frac{k_B T}{\\gamma}",
+     "figure": "fluxbal",
+     "figCaption": "Drift against diffusion. After substituting the exponential, everything cancels except D, kT, and γ"
+    },
+    {
+     "text": "One last factor remains. The friction coefficient γ for a sphere in a viscous fluid was calculated by Stokes back in 1851: γ = 6πηa. Substituting, we get the full formula. Note what happened to Avogadro's number: Boltzmann's constant is R/N_A, and the universal gas constant R is measured from gases without any atomic hypotheses. Thus, N_A enters the formula in the denominator—and becomes the only quantity in it that cannot be measured separately.",
+     "latex": "\\gamma = 6\\pi\\eta a \\;\\Longrightarrow\\; D = \\frac{k_B T}{6\\pi \\eta a} = \\frac{R T}{6\\pi \\eta a N_A}",
+     "figure": "stokesgam",
+     "figCaption": "Stokes' formula brings the particle size into the answer: the larger the sphere, the more viscosity holds it"
+    },
+    {
+     "text": "Putting it all together and turning toward experiment. The mean square displacement is expressed in terms of quantities that are measured independently: temperature with a thermometer, viscosity with a viscometer, particle radius with a microscope, time with a stopwatch. One unknown remains—N_A. Perrin photographed the same grain at equal intervals, recorded coordinates on an eyepiece grid, squared the displacements, and averaged over hundreds of segments. He got about 7·10²³, which, given the accuracy of that era, meant agreement with the current value of 6.02·10²³. The trembling of a grain turned out to be a way to count the molecules in a mole.",
+     "latex": "N_A = \\frac{R T\\, t}{3\\pi \\eta a \\,\\langle x^{2}\\rangle}",
+     "figure": "perrinjump",
+     "figCaption": "Perrin's experiment: the broken line is not a trajectory but a chain of positions at equal time intervals"
+    }
+   ],
+   "plate": "\\langle x^{2}\\rangle = 2Dt = \\frac{R T}{3\\pi \\eta a N_A}\\,t",
+   "plateCap": "On the left is what is seen through a microscope and measured with an eyepiece ruler. On the right are temperature, viscosity, sphere size, and the number of molecules in a mole. Everything except N_A is measured independently, so the equality works as a scale for molecules.",
+   "note": "Let's list what we assumed along the way—these are the boundaries of the formula. First: the steps are independent. At short times this is not true—the particle still remembers its velocity, and for times less than τ = m/γ the motion is ordinary, x proportional to t, not to the square root. For our grain, τ is about a hundred nanoseconds, and this segment was only observed in the 2010s, with optical tweezers. Second: Stokes' formula requires a sphere, a small Reynolds number, and a medium that is still continuous on the particle scale; for a particle the size of the mean free path of a gas, a Cunningham correction is needed. Third: the suspension is dilute, particles do not interfere with each other. Fourth, and the one that most often trips up in practice: the fluid must be at rest and at a single temperature. A difference of a tenth of a degree generates convection, which carries particles orders of magnitude farther than diffusion—and the observer sees a beautiful coherent flow instead of independent jiggling. Fifth: 2Dt refers to one axis. On a plane ⟨r²⟩ = 4Dt, in space 6Dt, and confusion in this factor is the most common error in data processing."
+  },
+  "math": {
+   "title": "The Math Needed Here",
+   "lead": "The derivation consists almost entirely of two techniques, and it is reasonable to examine both separately: they underpin both the result and its surprising nature.",
+   "items": [
+    {
+     "what": "Square of a sum: why there are more cross terms, but the diagonal ones survive",
+     "why": "In the third step of the derivation, we expand the square of a sum of N terms. There are exactly N diagonal terms ℓᵢ², and almost N² cross terms ℓᵢℓⱼ — for N in the billions, there are a billion times more cross terms. Nevertheless, on average only the diagonal ones remain. The reason is the independence of steps: the average of the product of two independent quantities equals the product of their averages, and each average is zero because a step is equally likely to go in either direction. Diagonal terms, being squares, are never negative and cannot cancel each other out in principle. It is worth checking this claim from the opposite side: if the steps are CORRELATED and each one continues the previous, the cross terms no longer vanish, their contribution is of order N², and the displacement grows as N, i.e., proportional to time. That is how an ordinary body moves. The square root of time is exactly the price paid for losing memory.",
+     "latex": "\\Bigl(\\sum_i \\ell_i\\Bigr)^{2} = \\sum_i \\ell_i^{2} + \\sum_{i \\ne j} \\ell_i \\ell_j, \\qquad \\langle \\ell_i \\ell_j\\rangle = \\langle \\ell_i\\rangle\\langle \\ell_j\\rangle = 0",
+     "kit": "probability"
+    },
+    {
+     "what": "Mean square instead of mean: why the root mean square is needed",
+     "why": "In the third and fourth steps, we calculate not the displacement but its square, and this is not a technical trick. The mean displacement is zero by symmetry and carries no information about how far the particle has gone. A measure of spread must not distinguish signs, and there are two candidates: the mean absolute value and the root mean square. The second wins because squares of independent quantities add, while absolute values do not add in any simple way. It is useful to remember what the root mean square is NOT: it is not literally the 'typical displacement'. For a Gaussian distribution, the mean absolute value is about 0.8 times it, and roughly one in three particles goes farther. It is a scale of spread, and the whole physics lies in how this scale grows.",
+     "latex": "\\langle x\\rangle = 0, \\qquad \\sigma = \\sqrt{\\langle x^{2}\\rangle - \\langle x\\rangle^{2}} = \\sqrt{\\langle x^{2}\\rangle}",
+     "kit": "rms"
+    },
+    {
+     "what": "The derivative of an exponential is proportional to itself",
+     "why": "In the sixth step, we divide the balance equation by the concentration n and obtain a relation in which it no longer appears. This is possible only because the derivative of a Boltzmann exponential is itself proportional to the exponential: for the function e^(−αx), the derivative is −α·e^(−αx). Because of this, n enters both sides in the same way and cancels entirely, along with the particle mass and the acceleration due to gravity. This technique is worth remembering separately from the problem: we introduce an auxiliary field, bring two processes into equilibrium with it, and then see that it does not appear in the answer. This means the relation between D and friction exists even without any field — the field was scaffolding that was removed after construction.",
+     "latex": "n(x) = n_0 e^{-\\alpha x} \\;\\Rightarrow\\; \\frac{dn}{dx} = -\\alpha\\,n(x), \\qquad \\alpha = \\frac{m^{*} g}{k_B T}",
+     "kit": "exponent"
+    }
+   ]
+  },
+  "example": {
+   "title": "A Numerical Example",
+   "lead": "Let us calculate exactly what Perrin saw under the microscope: one grain, one minute of observation. At the end, we will reverse the calculation and obtain Avogadro's number.",
+   "given": "A sphere of radius a = 0.5 μm is suspended in water at 20 °C (T = 293 K, η = 1.0·10⁻³ Pa·s). We observe for t = 60 s. Find the diffusion coefficient and the characteristic displacement along one axis.",
+   "law": "D = k_BT/(6πηa), then ⟨x²⟩ = 2Dt",
+   "solution": [
+    {
+     "text": "We calculate the numerator and denominator separately — this makes the order of magnitude of each part clear. The thermal energy k_BT at room temperature is approximately 4·10⁻²¹ joules; this number is worth remembering.",
+     "latex": "k_B T = 1{,}38\\cdot10^{-23}\\cdot 293 \\approx 4{,}05\\cdot10^{-21}\\ \\text{J}, \\qquad 6\\pi\\eta a \\approx 9{,}42\\cdot10^{-9}\\ \\text{kg/s}"
+    },
+    {
+     "text": "Dividing one by the other gives the diffusion coefficient. It is tiny: in one second, the particle spreads over a region of four-tenths of a square micrometer.",
+     "latex": "D = \\frac{4{,}05\\cdot10^{-21}}{9{,}42\\cdot10^{-9}} \\approx 4{,}3\\cdot10^{-13}\\ \\text{m}^{2}/\\text{s}"
+    },
+    {
+     "text": "The mean square displacement over a minute — and then we immediately take the square root, because we think in micrometers more easily than in square meters.",
+     "latex": "\\langle x^{2}\\rangle = 2Dt \\approx 5{,}2\\cdot10^{-11}\\ \\text{m}^{2}, \\qquad \\sqrt{\\langle x^{2}\\rangle} \\approx 7{,}2\\ \\text{μm}"
+    },
+    {
+     "text": "Now the reverse calculation — the very one Perrin performed. We treat the displacement as measured and Avogadro's number as unknown.",
+     "latex": "N_A = \\frac{R T\\, t}{3\\pi\\eta a\\,\\langle x^{2}\\rangle} = \\frac{8{,}314\\cdot 293\\cdot 60}{4{,}71\\cdot10^{-9}\\cdot 5{,}2\\cdot10^{-11}} \\approx 6\\cdot10^{23}"
+    }
+   ],
+   "answer": "D ≈ 4.3·10⁻¹³ m²/s; in one minute the particle moves along one axis by about 7 μm — that is, seven times its own diameter. The reverse calculation gives N_A ≈ 6·10²³ mol⁻¹.",
+   "check": "Is this reasonable? Seven microns in a minute for a particle a micron across — exactly what Brown described: the grain noticeably moves but does not go anywhere. At four hundred times magnification, that is a centimeter on the screen, impossible to miss. Now the most instructive comparison. From the equipartition of energy, the instantaneous speed of this grain is the square root of 3k_BT/m and is about 5 millimeters per second. In a minute, at that speed, it would have traveled almost a third of a meter — but it moved only seven microns from the start, forty thousand times less. This shows why experiments did not add up before Einstein: experimenters diligently measured the 'velocity' of a Brownian particle and got different numbers, because the more often you look, the higher the velocity you see. The meaningful quantity here is not velocity but displacement over a fixed time."
+  },
+  "constants": {
+   "title": "Constants of this section",
+   "lead": "Four numbers. The first two are the reason the whole experiment was started; the second two are properties of the medium without which the formula cannot be applied.",
+   "items": [
+    {
+     "sym": "k_B",
+     "latex": "k_B",
+     "name": "Boltzmann constant",
+     "value": "1.380 649 · 10⁻²³",
+     "unit": "J / K",
+     "why": "The exchange rate between temperature and energy. It is through it that temperature enters the diffusion coefficient: heat the medium, and spreading goes faster. It is useful to remember the product k_BT at room temperature: about 4·10⁻²¹ joules, or 1/40 electronvolt. This measure is enough to estimate by eye which processes thermal motion can trigger and which are beyond its power.",
+     "mnemo": "4·10⁻²¹ J — the \"room-temperature portion\" of energy. The number is worth keeping in mind next to 6·10²³."
+    },
+    {
+     "sym": "N_A",
+     "latex": "N_A",
+     "name": "Avogadro constant",
+     "value": "6.022 140 76 · 10²³",
+     "unit": "1 / mol",
+     "why": "The only quantity in the formula that cannot be measured separately — and that is why it was obtained from Perrin's experiment. The universal gas constant R is measured from gases without any atomic hypotheses, and k_B = R/N_A. So any measurement where R and k_B stand side by side is a hidden measurement of Avogadro's number. Since 2019, the value has been fixed exactly and the mole is defined through it.",
+     "mnemo": "Perrin got about 7·10²³ — ten percent above the current value. For 1908, that was a devastatingly accurate hit."
+    },
+    {
+     "sym": "η",
+     "latex": "\\eta_{\\text{H}_2\\text{O}}",
+     "name": "Dynamic viscosity of water at 20 °C",
+     "value": "1.002 · 10⁻³",
+     "unit": "Pa · s",
+     "why": "Exactly the quantity that both slows the particle and determines the amplitude of its trembling: in the formula it is the same. The round thousandth is a lucky coincidence, convenient for estimates. Strong temperature dependence: at 40 °C the viscosity drops by a factor of one and a half, so heated water gives noticeably more expansive motion than follows from the growth of T alone.",
+     "mnemo": "Water is a millipascal-second, air is 55 times thinner. Hence in air the trembling is about seven times wider: the square root of 55."
+    },
+    {
+     "sym": "λ",
+     "latex": "\\lambda_{\\text{air}}",
+     "name": "Mean free path in air (20 °C, 1 atm)",
+     "value": "68",
+     "unit": "nm",
+     "why": "The default value on the stand and a measure of how finely the molecule's motion is chopped. Between collisions, the molecule flies seven tenths of a micron divided by ten — a distance about seven times smaller than the wavelength of visible light. At the same time, it flies at about 470 m/s, and from these two numbers the stand assembles D = λv/3 ≈ 10⁻⁵ m²/s.",
+     "mnemo": "68 nm is about two hundred molecular diameters. Halve the pressure, and the mean free path doubles."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "How this relates to the rest of the course",
+   "lead": "This section is the junction of three topics, and in each it gives something back.",
+   "items": [
+    {
+     "h": "Molecules and temperature",
+     "text": "Equipartition of energy does not ask how large the body is: a Brownian particle has the same average kinetic energy of ³⁄₂k_BT as a single molecule. This leads to an unexpected consequence — a heavy particle does not tremble weaker, but slower: the energy is the same, so the square of the velocity is inversely proportional to the mass. Formally, we observe in the microscope the behavior of one \"molecule\", just a very large one."
+    },
+    {
+     "h": "Viscosity and Stokes' law",
+     "text": "The factor 6πηa comes from the hydrodynamics of viscous flow and brings with it all its conditions: a sphere, the liquid sticking to the surface, a small Reynolds number. The same coefficient γ describes both the damping and the amplitude of trembling — one quantity is responsible for both the loss of energy and its pumping."
+    },
+    {
+     "h": "Entropy and the second law",
+     "text": "Diffusion is the second law in action: an impurity spreads because the number of spread-out states is incomparably larger. But the particle also shows the flip side: on the scale of a single particle, deviations from \"what is supposed to be\" occur constantly, and the second law turns out to be a statement about probabilities, not a prohibition. By the way, the heat equation is the same as the diffusion equation, so heat spreads along a rod also as the square root of time."
+    },
+    {
+     "h": "Noise in electronics",
+     "text": "The relation D = k_BT/γ is the first example of a fluctuation-dissipation connection. It has an exact electrical counterpart: a resistor that dissipates energy also generates thermal noise, and the mean square noise voltage is 4k_BTR per hertz of bandwidth. Johnson measured it in 1928, Nyquist derived it the same year — by reasoning structured exactly like Einstein's."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Curiosity: try it with your own hands",
+   "lead": "The two experiments below demonstrate not so much Brownian motion itself, but why it took so long to catch: almost everything you see will be convection. The skill here is telling the two apart.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "kitchen experiment",
+     "h": "A drop of milk in still water",
+     "text": "Take two glasses of water at room temperature, place them away from radiators and windows, and let them sit for half an hour so that currents settle. Then lower a drop of milk into the first, and a drop of tea or food coloring into the second—gently, along the wall, using a straw, without stirring. Cover and do not move. After an hour, look at the boundaries of the spots: how much has each one blurred?",
+     "answer": "The boundary of the milk spot will remain sharp, while the dye will blur by a couple of millimeters. The numbers match exactly. Milk fat globules have a radius of about half a micron, for them D ≈ 4·10⁻¹³ m²/s, and in an hour the square root of 2Dt gives 0.06 millimeters—impossible to see. A dye molecule is a thousand times smaller, its D is about 5·10⁻¹⁰ m²/s, and in the same hour it comes out to about 2 millimeters. The ratio of blurring equals the square root of the ratio of coefficients, that is, about thirty. The main takeaway is unexpected: diffusion on kitchen scales practically does not work, and all noticeable movement is due to currents. If the spot moved a centimeter in an hour, you observed convection from a temperature difference of fractions of a degree, not molecules."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "kitchen experiment",
+     "h": "Smoke in a beam of light",
+     "text": "In a dark room, point a narrow bright flashlight beam along the wall and blow smoke from a just-extinguished match into it. Dust particles will flash as points. Now watch not the overall movement, but the neighbors: do two nearby points move in the same direction in a coordinated way—or does each live on its own?",
+     "answer": "Almost certainly coordinated—and this is not Brownian motion, but air currents. This is exactly the criterion Brown himself used to distinguish his phenomenon from drift: thermal trembling is independent for each particle, while a flow carries everyone together. Let's estimate what you would see in an ideal case. For a smoke particle with a radius of 0.15 μm in air, D ≈ 8·10⁻¹¹ m²/s, and in one second it shifts by about 13 microns. The eye from arm's length distinguishes a detail ten times larger—so with the naked eye you cannot catch the trembling; you need at least a 40x microscope or a phone macro lens. But compare media: in water, the same particle would travel only 1.7 microns in a second. Air is 55 times thinner than water, and the amplitude of trembling is larger by the square root of that, i.e., seven and a half times."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradox",
+     "h": "The second law is violated right before your eyes",
+     "text": "A grain regularly rises upward, against gravity, and particles in suspension sometimes gather more densely where there are already more of them. Entropy decreases at that moment. Why can't you build a perpetual motion machine from this?",
+     "answer": "Because the second law is a statement about probabilities, not a prohibition, and on the scale of a single micron-sized particle, deviations are comparable to the average. The perpetual motion machine breaks on something else: any device sensitive enough to catch a single fluctuation is itself subject to the same fluctuations. Smoluchowski analyzed this in 1912 using the example of a spring-loaded door that lets molecules through in one direction: the door is so light that thermal motion itself opens it, and the flow in both directions equalizes. Feynman in 1963 reassembled the same argument on a ratchet with a pawl and showed that when the gas and the ratchet are at the same temperature, the pawl slips off exactly as often as it holds—the average rotation is zero. Work appears only if the ratchet is colder than the gas, that is, when there is a temperature difference. No exception to the second law arises, but the precise formulation turns out to be subtler than the school version: modern fluctuation theorems say how many times exactly the 'correct' direction is more probable than the reverse."
+    },
+    {
+     "icon": "fact",
+     "kind": "fun fact",
+     "h": "Brown ground up the Sphinx",
+     "text": "Brown's verification was exemplary. Seeing trembling in particles from pollen, he suspected a living origin and immediately set out to refute it: he took pollen from plants that had died a century before the experiment in a herbarium—it trembled. He took soot, ground glass, metals, minerals—they trembled. He took, among other things, a crumb from a fragment of the Egyptian Sphinx—it trembled just the same. The list of non-living samples in his article takes up a good page. It also turned out that Brown was not the first: forty years before him, Jan Ingenhousz had seen the same thing in coal powder. But it was Brown's systematic control experiments that turned a curious observation into a physical fact that now required explanation."
+    },
+    {
+     "icon": "estimate",
+     "kind": "estimate",
+     "h": "Where Brownian motion ends",
+     "text": "The diffusion coefficient is inversely proportional to the radius, so the displacement falls as the square root of the radius—a weak dependence, and it seems that everything should tremble. Let's check with a quartz dust particle 50 microns across, still visible to the eye. Its radius is fifty times larger than that of the grain in the example, so the displacement is smaller by about seven times: about one micron per minute. Now let's calculate settling: according to Stokes, such a particle sinks at a speed of 2.2 millimeters per second, that is, in the same minute it descends thirteen centimeters. Settling is stronger than trembling by a hundred thousand times. That is the whole boundary of the phenomenon: Brownian motion is noticeable only for particles smaller than a few microns, where weight has already lost to thermal motion. That is why Perrin had to spend months selecting identical submicron resin spheres—half the work was not in observing, but in preparing the sample."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "The dispute over the reality of atoms: how it was settled",
+   "blocks": [
+    {
+     "h": "What exactly the opponents of atoms denied",
+     "text": "The position of the energeticists—Ostwald, Mach, Duhem—is easy to portray as stubbornness, and that would be unfair. Their argument was rigorous: thermodynamics describes heat, work, and transformations of substances without ever mentioning the atom; introducing into theory an entity that no one has seen or measured means replacing description with a picture. Mach demanded that physics speak only of relations between observable quantities. By the standards of 1895, there was no answer to this: the kinetic theory of gases explained the known facts well, but predicted nothing that could not be obtained otherwise. Boltzmann argued with them to the end of his life and died in 1906, two years before Perrin's results."
+    },
+    {
+     "h": "Why Brown himself proved nothing",
+     "text": "The jittering had been observed for eighty years, and all that time it decided nothing. It was explained by evaporation, capillary forces, convection, electricity, attraction between particles, remnants of vital force. Gouy in 1888 methodically ruled out external causes: the motion did not change in the dark, in a basement with constant temperature, in a magnetic field, or when lighting changed—and he pointed to the thermal motion of molecules. But that remained a plausible guess, because it was not said what exactly to measure and what number should come out. A phenomenon that is visible but predicts nothing is not evidence."
+    },
+    {
+     "h": "What Einstein added: the right measurable quantity",
+     "text": "The main thing in the 1905 paper is not only the formula, but the change of observable. Everyone before him measured the speed of a Brownian particle—and got different values, because it depends on how often you look: the shorter the interval, the larger the speed, and it has no limit. Einstein explained why, and proposed to measure not the speed, but the displacement over a fixed time. This can be checked with the numbers from our example: the instantaneous speed of a grain is about 5 mm/s, it loses its momentum in a time m/γ of the order of a hundred nanoseconds, during which it manages to travel less than a nanometer—that is the length of its random step. Multiply the square root of the number of such steps per minute by the length of one, and you get the same microns that the exact formula gave.",
+     "latex": "\\tau = \\frac{m}{\\gamma} \\sim 10^{-7}\\ \\text{s}, \\qquad \\ell = v_{\\text{th}}\\tau \\sim 10^{-10}\\ \\text{m}"
+    },
+    {
+     "h": "Perrin's argument: not one measurement, but a dozen and a half",
+     "text": "The decisive argument was not that Perrin obtained 7·10²³ from Brownian displacements. The decisive point was that he brought together in one table more than a dozen completely different ways to obtain the same number: viscosity of gases, distribution of suspension with height, rotational Brownian motion, the blue color of the sky, the spectrum of thermal radiation, the charge of the electron, counting alpha particles in radioactive decay. These methods have nothing in common—different physics, different instruments, different laboratories. All of them gave the same number to within a few percent. A coincidence of this kind cannot be explained by lucky fitting: either molecules exist, or nature conspired. Ostwald admitted defeat in 1909; Mach never did."
+    },
+    {
+     "h": "What this story teaches",
+     "text": "First: the decisive argument turns out to be not the most precise measurement, but the convergence of independent paths to a single number. One result can always be explained by systematic error; thirteen results from different fields—no longer. Second, less pleasant: a phenomenon can be seen for eighty years and extract nothing from it until someone says what exactly in it must be measured. Observation alone is not enough; you need a theory that makes a testable prediction. Third: the objections of the energeticists were removed not by persuasion, but by fulfilling their own requirement—the atom became observable because it could be counted."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "A grain in water trembles because the impacts of molecules are not completely canceled: the sum of N random pushes leaves an excess of the order of √N. The sum of independent random steps grows not as their number, but as the square root of it, so ⟨x²⟩ = 2Dt. By relating D to temperature and viscosity, Einstein turned the trembling of a grain into a scale for molecules, and Perrin used that scale to count Avogadro's number.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "⟨x²⟩ = 2Dt",
+     "text": "It is the square of displacement that grows proportionally to time, not the displacement itself. Four times longer—twice as far"
+    },
+    {
+     "icon": "sigma",
+     "title": "Cross terms cancel out",
+     "text": "In the square of the sum, there are N diagonal terms and almost N² cross terms. But the latter average to zero because the steps are independent"
+    },
+    {
+     "icon": "scale",
+     "title": "D = k_BT / 6πηa",
+     "text": "The same viscosity both slows the particle and sets the scale of its trembling: dissipation and fluctuation are linked"
+    },
+    {
+     "icon": "fact",
+     "title": "Evidence for atoms",
+     "text": "What convinced was not a single measurement, but a dozen and a half independent methods giving the same Avogadro's number"
+    }
+   ],
+   "where": [
+    "Determining particle size from their jitter—dynamic light scattering method",
+    "In the lungs, oxygen travels the last microns by diffusion: over such distances it is indeed fast",
+    "Heat spreads in a rod by the same √t law—the heat equation is the diffusion equation",
+    "Thermal noise in a resistor: the same connection between friction and fluctuation, but in an electrical circuit"
+   ],
+   "watchOut": "Three mistakes. First—thinking that displacement grows proportionally to time: it is its square that is proportional to time. Second—confusing displacement with distance traveled: the path equals Nℓ and grows linearly, while displacement grows as the square root, and over long times they differ by thousands of times. Third—the factor: 2Dt refers to one axis, on a plane it will be 4Dt, in space 6Dt."
+  },
+  "quiz": [
+   {
+    "id": "b1",
+    "type": "mcq",
+    "q": "A grain moves about 7 micrometers from the start in a minute. How long do you need to wait for it to move 14 micrometers?",
+    "options": [
+     "Two minutes",
+     "Four minutes",
+     "Half a minute",
+     "An hour"
+    ],
+    "answer": 1,
+    "why": "It is the mean square displacement that is proportional to time, not the displacement itself: ⟨x²⟩ = 2Dt. To double the displacement, the square must quadruple, so the time must quadruple as well. This is the key feature of a random walk: the longer you wait, the less advantageous it is to wait further.",
+    "hint": "Write the law not for the displacement but for its square. By what factor does the square increase if the displacement doubles?"
+   },
+   {
+    "id": "b2",
+    "type": "mcq",
+    "q": "About 10²⁰ molecules hit the grain every second from all sides at once. Why don't the impacts cancel each other out completely?",
+    "options": [
+     "They almost completely cancel: a relative excess of about 1/√N remains, and for a micron-sized particle that is just enough",
+     "On one side there are always noticeably more molecules than on the other",
+     "Molecules on one side are hotter, so they push harder",
+     "The grain attracts molecules, so they hit it asymmetrically"
+    ],
+    "answer": 0,
+    "why": "For a sum of N random variables, the spread grows as √N, so the relative excess is 1/√N. With N on the order of 10²⁰, that is one ten-billionth — a negligible fraction, but the absolute number of impacts is so large that the remainder is enough to move the particle. The other options require the medium to be inhomogeneous, but it is homogeneous: everything happens in an equilibrium fluid at a single temperature.",
+    "hint": "It is not about impacts being asymmetric on average — on average they are symmetric. The question is how much the number of impacts fluctuates around the average."
+   },
+   {
+    "id": "b3",
+    "type": "free",
+    "q": "In your own words: why does the sum of N random steps of length ℓ give a displacement of order √N·ℓ, not N·ℓ?",
+    "keywords": [
+     "square",
+     "cross",
+     "cross terms",
+     "independent",
+     "zero",
+     "sign",
+     "cancel",
+     "average"
+    ],
+    "needed": 2,
+    "why": "Because when you square the sum, two kinds of terms appear. The diagonal ones ℓᵢ² are squares, always positive, and simply add up; there are exactly N of them. The cross terms ℓᵢℓⱼ are much more numerous, but each is zero on average: the steps are independent, so the average of the product equals the product of the averages, and each average is zero. What remains is ⟨x²⟩ = Nℓ², so the displacement is of order √N·ℓ. A check from the opposite direction: if the steps were correlated and each continued the previous one, the cross terms would not vanish and the displacement would grow to N·ℓ — that is ordinary motion along a straight line.",
+    "hint": "Square the sum and look at what terms you get. Which ones cannot cancel each other out regardless of signs?"
+   },
+   {
+    "id": "b4",
+    "type": "estimate",
+    "q": "A particle moves about 7 micrometers along one axis in a minute. How many micrometers will it move in an hour?",
+    "answer": 54,
+    "unit": "µm",
+    "why": "The displacement grows as the square root of time. An hour is 60 times longer than a minute, so the displacement increases by a factor of √60 ≈ 7.7: 7 · 7.7 ≈ 54 µm. Note how small this is: in an hour the particle moves five hundredths of a millimeter. That is why diffusion does not mix anything on kitchen scales.",
+    "hint": "Do not multiply by 60. Ask yourself by what factor the square of the displacement grows — and only then take the square root.",
+    "tolAbs": 15
+   }
+  ],
+  "title": "Brownian motion: how molecules were seen",
+  "subtitle": "Section 3 · Random walk and Avogadro's number",
+  "intro": [
+   "In the summer of 1827, botanist Robert Brown aimed a microscope at particles released from pollen grains in a drop of water and saw that they did not stay still. The trembling did not fade after an hour or after a day. Brown checked whether it was life: he ground soot, glass, metals, and a fragment of stone from the Sphinx into dust — they all trembled the same way. So the cause was physical. What exactly it was remained unknown for another eighty years.",
+   "The dispute that this trembling eventually settled was larger than the phenomenon itself. By the end of the 19th century, the existence of atoms remained a hypothesis, and it had serious opponents: Ostwald, Mach, and Duhem pointed out that thermodynamics works perfectly well without invisible particles, and introducing the unobservable into science was a bad habit. There was almost nothing to counter: all arguments in favor of molecules were indirect.",
+   "In 1905, Einstein noticed that the trembling particle was the missing argument — if one stopped measuring its speed and started measuring its displacement. He predicted: the mean square displacement grows proportionally to time, and the proportionality coefficient is expressed through temperature, the viscosity of the medium, and Avogadro's number. Thus, a microscope with a stopwatch became an instrument for counting molecules. Three years later, Jean Perrin carried out that count. We will go through the entire path: from random walk to Avogadro's number."
+  ],
+  "standNote": "The stand calculates the diffusion of a molecule in a gas, not a particle in water, but the law is common, and the square root of time is best seen here. Set the mean free path to 68 nm and the thermal speed to 470 m/s — this is air at room temperature — and drag the time slider. The first thing that catches the eye: the spot grows slower and slower. In five seconds it spreads about a centimeter, but to get two, you need not ten seconds but twenty. That is the square root. Second: look at the collision counter — by the twentieth second there are about a hundred billion collisions, and all that for two centimeters. Third, the most useful for practice: the line “to move one meter, you need thirteen hours.” That is why a draft carries a smell across a room, not diffusion. And an honest caveat: the stand's formula D = λv/3 is an estimate; it underestimates the measured diffusion coefficient in air by about a factor of two; a more accurate kinetic calculation gives a larger factor. For the particle in this section, D is 25 million times smaller — so the example will yield microns, not centimeters."
+ },
+ "es": {
+  "formula": {
+   "name": "Fórmula de Einstein-Smoluchowski",
+   "latex": "\\langle x^{2}\\rangle = 2Dt, \\qquad D = \\frac{k_B T}{6\\pi\\eta a}",
+   "alsoKnown": "La primera igualdad es la ley del paseo aleatorio: el cuadrado medio del desplazamiento crece proporcionalmente al tiempo, no el desplazamiento en sí. La segunda es la relación de Einstein-Stokes, que conecta el coeficiente de difusión con la temperatura del medio y su viscosidad.",
+   "authors": [
+    {
+     "who": "Robert Brown",
+     "year": "1827",
+     "what": "describió el temblor incesante de partículas microscópicas en agua y demostró con varios experimentos que la causa no era la vida: el hollín molido, el vidrio y un fragmento de piedra de la Esfinge temblaban de la misma manera."
+    },
+    {
+     "who": "Louis Georges Gouy",
+     "year": "1888",
+     "what": "descartó experimentalmente las causas externas — luz, cambios de temperatura, vibraciones, campo magnético — y fue el primero en señalar claramente el movimiento térmico de las moléculas; no tenía una predicción cuantitativa."
+    },
+    {
+     "who": "Albert Einstein",
+     "year": "1905",
+     "what": "obtuvo ⟨x²⟩ = 2Dt y expresó D en términos de temperatura, viscosidad y número de Avogadro — convirtiendo la observación en un instrumento de medición; también explicó por qué medir la velocidad de una partícula así no tiene sentido."
+    },
+    {
+     "who": "Marian Smoluchowski",
+     "year": "1906",
+     "what": "llegó a la misma ley de forma independiente, por vía cinética; su coeficiente numérico difería del de Einstein aproximadamente en un factor de dos, y Einstein resultó tener la razón."
+    },
+    {
+     "who": "Jean Perrin",
+     "year": "1908-1913",
+     "what": "midió los desplazamientos de partículas bajo el microscopio, obtuvo de ellos el número de Avogadro y reunió más de una docena de métodos independientes para determinarlo en una sola tabla."
+    }
+   ],
+   "story": "Entre la observación y la explicación hay ochenta años, y esta brecha es instructiva. El fenómeno lo veían todos los que tenían un microscopio en sus manos, pero por sí solo no demostraba nada: se explicaba por evaporación, capilaridad, electricidad y por una \"fuerza vital\". No faltaba observación, sino una fórmula — una afirmación sobre qué exactamente medir y qué número debería resultar. Einstein escribió su artículo de 1905 precisamente para eso: buscaba una consecuencia de la teoría molecular que pudiera verificarse experimentalmente y que no pudiera explicarse de otra manera. Curiosamente, no estaba seguro de estar describiendo un fenómeno ya descubierto: el examinador de patentes en Berna casi no tenía acceso a la literatura, y en el texto admite con cautela que posiblemente se trate de ese mismo movimiento browniano. Tres años después, Perrin demostró que se trataba exactamente de eso.",
+   "symbols": [
+    {
+     "sym": "⟨x²⟩",
+     "latex": "\\langle x^{2}\\rangle",
+     "what": "cuadrado medio del desplazamiento a lo largo de un eje",
+     "unit": "m²",
+     "note": "precisamente a lo largo de UN eje; en el plano será 4Dt, en el espacio 6Dt — la fuente más común de errores en el factor."
+    },
+    {
+     "sym": "D",
+     "latex": "D",
+     "what": "coeficiente de difusión",
+     "unit": "m²/s",
+     "note": "las unidades se leen literalmente: cuadrado de longitud por tiempo — es decir, D define la velocidad de crecimiento del área, no de la longitud."
+    },
+    {
+     "sym": "t",
+     "latex": "t",
+     "what": "tiempo de observación",
+     "unit": "s",
+     "note": "se mide desde el momento en que la partícula estaba en el punto inicial; la ley es válida para tiempos mucho mayores que el tiempo de relajación del momento de la partícula."
+    },
+    {
+     "sym": "k_B",
+     "latex": "k_B",
+     "what": "constante de Boltzmann",
+     "unit": "J/K",
+     "const": "k_B",
+     "note": "el tipo de cambio entre temperatura y energía; es a través de ella que la temperatura entra en la fórmula."
+    },
+    {
+     "sym": "T",
+     "latex": "T",
+     "what": "temperatura absoluta del medio",
+     "unit": "K",
+     "note": "solo en kelvins; cuanto más caliente el medio, más amplia la dispersión — y linealmente, no de otra manera."
+    },
+    {
+     "sym": "η",
+     "latex": "\\eta",
+     "what": "viscosidad dinámica del medio",
+     "unit": "Pa·s",
+     "note": "para el agua a 20 °C es alrededor de 10⁻³, para el aire es 55 veces menor — por eso en el aire el temblor es aproximadamente siete veces más amplio."
+    },
+    {
+     "sym": "a",
+     "latex": "a",
+     "what": "radio de la partícula",
+     "unit": "m",
+     "note": "precisamente el radio, no el diámetro; D es inversamente proporcional a él, por lo que una partícula grande tiembla más débilmente."
+    },
+    {
+     "sym": "γ",
+     "latex": "\\gamma",
+     "what": "coeficiente de fricción viscosa",
+     "unit": "kg/s",
+     "note": "se define por la igualdad F = γv; para una esfera en un líquido viscoso, Stokes obtuvo γ = 6πηa."
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Derivación rigurosa",
+   "lead": "Seguiremos el camino de Einstein. Primero, a partir de la combinatoria, obtendremos la ley de la raíz cuadrada; aquí no se necesita ninguna física. Luego relacionaremos el coeficiente D con la temperatura y la viscosidad, y veremos cómo aparece el número de Avogadro en la respuesta. Tomaremos prestados exactamente dos resultados: la distribución de Boltzmann y la fórmula de Stokes para la fricción de una esfera en un fluido viscoso.",
+   "steps": [
+    {
+     "text": "Empecemos con un enigma. Una partícula de radio medio micrómetro es aproximadamente diez mil millones de veces más pesada que una molécula de agua, y las moléculas la golpean desde todos los lados, del orden de 10²⁰ impactos por segundo. Parecería que tal cantidad debería equilibrarse perfectamente. Y se equilibra, casi. El número de impactos desde la izquierda y desde la derecha en el mismo tiempo no es estrictamente igual, sino que fluctúa: para la suma de N variables aleatorias, la dispersión es del orden de √N. El desequilibrio relativo resulta insignificante, una diezmilmillonésima parte, pero el número absoluto de impactos es tan grande que incluso esa fracción es suficiente.",
+     "latex": "N \\sim 10^{20}\\ \\text{s}^{-1}, \\qquad \\frac{\\Delta N}{N} \\sim \\frac{1}{\\sqrt{N}} \\sim 10^{-10}",
+     "figure": "brownkick",
+     "figCaption": "Los impactos casi se cancelan entre sí. Queda un exceso del orden de la raíz cuadrada de su número, y es solo eso lo que mueve la partícula"
+    },
+    {
+     "text": "Ahora el modelo. No necesitamos los detalles de los impactos: solo importa que la partícula recuerda su dirección por muy poco tiempo. Después de un tiempo τ, olvida por completo hacia dónde se dirigía, y su siguiente salto no está relacionado con el anterior. Por lo tanto, la trayectoria es una cadena de N = t/τ pasos independientes de aproximadamente la misma longitud ℓ y dirección completamente aleatoria. La posición después del tiempo t es la suma de estos pasos. A partir de aquí comienza la aritmética, no la física.",
+     "latex": "x_N = \\sum_{i=1}^{N} \\ell_i, \\qquad N = \\frac{t}{\\tau}",
+     "figure": "randwalk",
+     "figCaption": "El camino es una línea quebrada larga de N segmentos. El desplazamiento desde el inicio hasta el final es una línea recta, y es mucho más corto que el camino"
+    },
+    {
+     "text": "¿Qué calcular de esta suma? El promedio no sirve: cada paso tiene la misma probabilidad de ir en una dirección u otra, por lo que ⟨ℓᵢ⟩ = 0 y ⟨x⟩ = 0 para cualquier N. Tomemos el cuadrado: no distingue signos. Desarrollamos el cuadrado de la suma: obtenemos N términos diagonales ℓᵢ² y casi N² términos cruzados ℓᵢℓⱼ. Los cruzados son incomparablemente más numerosos, pero cada uno de ellos es cero en promedio: los pasos son independientes, por lo que el promedio del producto es igual al producto de los promedios, y los promedios son cero. Los términos diagonales, en cambio, son cuadrados, nunca son negativos y no pueden cancelarse entre sí. Solo sobrevive la diagonal.",
+     "latex": "\\langle x_N^{2}\\rangle = \\sum_i \\langle \\ell_i^{2}\\rangle + \\sum_{i \\ne j} \\langle \\ell_i \\ell_j\\rangle = N\\ell^{2} + 0",
+     "figure": "sumsquare",
+     "figCaption": "La diagonal de la tabla son los cuadrados, que se suman. Todo el resto del campo se anula en promedio"
+    },
+    {
+     "text": "Sustituimos N = t/τ. El cuadrado medio del desplazamiento resulta proporcional al tiempo: este es el contenido de la ley. El coeficiente ℓ²/τ se denota como 2D, y el dos no es un adorno: con él, D coincide con el coeficiente de difusión de la ley de Fick, que describe la dispersión de una impureza a través de la misma cantidad. El desplazamiento en sí crece como la raíz cuadrada del tiempo. De ahí toda la singularidad del fenómeno: esperar cuatro veces más solo permite alejarse el doble.",
+     "latex": "\\langle x^{2}\\rangle = \\frac{\\ell^{2}}{\\tau}\\,t \\;\\equiv\\; 2Dt, \\qquad \\sqrt{\\langle x^{2}\\rangle} = \\sqrt{2Dt}",
+     "figure": "sqrtt",
+     "figCaption": "Raíz del tiempo: la curva es más pronunciada al principio, y luego la dispersión casi se detiene"
+    },
+    {
+     "text": "La mitad del trabajo está hecha: sabemos CÓMO crece el desplazamiento, pero no sabemos cuánto vale D. Aquí Einstein da el paso que vale la pena leer en este capítulo. Introduce en el problema algo que no estaba allí: el campo gravitatorio, y considera una suspensión de partículas idénticas en un fluido en reposo. En equilibrio térmico, la concentración de partículas en un campo con energía potencial U cae según la ley de Boltzmann. Para la gravedad, U = m*gx, donde m* es la masa de la partícula menos la masa del fluido desplazado. Se obtiene la misma fórmula barométrica que para el aire, solo que con una escala de alturas diferente.",
+     "latex": "n(x) = n_0 \\exp\\!\\left(-\\frac{m^{*} g x}{k_B T}\\right)",
+     "figure": "sedimbal",
+     "figCaption": "La suspensión no se asienta en el fondo, sino que se establece según una exponencial: el movimiento térmico mantiene las partículas arriba"
+    },
+    {
+     "text": "Ahora veamos este equilibrio como un balance de dos flujos opuestos. Hacia abajo, la gravedad arrastra las partículas: cada una cae con una velocidad estacionaria v = m*g/γ, y el flujo es nv. Hacia arriba, la difusión las lleva según el gradiente de concentración, el flujo es −D·dn/dx. Como la imagen no cambia, los flujos son iguales. Sustituimos la derivada de la exponencial de Boltzmann, y ocurre lo principal: la concentración n se cancela, porque la derivada de la exponencial es proporcional a ella misma, y junto con ella se cancelan m* y g. El campo auxiliar que introdujimos con nuestras manos desaparece de la respuesta, y queda una relación que no tiene nada que ver con la gravedad.",
+     "latex": "n\\,\\frac{m^{*} g}{\\gamma} \\;=\\; D\\,\\frac{m^{*} g}{k_B T}\\,n \\;\\Longrightarrow\\; D = \\frac{k_B T}{\\gamma}",
+     "figure": "fluxbal",
+     "figCaption": "Arrastre contra difusión. Después de sustituir la exponencial, todo se cancela excepto D, kT y γ"
+    },
+    {
+     "text": "Queda el último factor. El coeficiente de fricción γ para una esfera en un fluido viscoso fue calculado por Stokes ya en 1851: γ = 6πηa. Sustituimos y obtenemos la fórmula completa. Observe lo que sucede con el número de Avogadro: la constante de Boltzmann es R/N_A, y la constante universal de los gases R se mide con gases sin ninguna hipótesis atómica. Por lo tanto, N_A entra en la fórmula en el denominador y se convierte en la única cantidad en ella que no se puede medir por separado.",
+     "latex": "\\gamma = 6\\pi\\eta a \\;\\Longrightarrow\\; D = \\frac{k_B T}{6\\pi \\eta a} = \\frac{R T}{6\\pi \\eta a N_A}",
+     "figure": "stokesgam",
+     "figCaption": "La fórmula de Stokes introduce el tamaño de la partícula en la respuesta: cuanto más grande es la esfera, más la retiene la viscosidad"
+    },
+    {
+     "text": "Juntamos todo y lo orientamos hacia el experimento. El cuadrado medio del desplazamiento se expresa en términos de cantidades que se miden de forma independiente: la temperatura con un termómetro, la viscosidad con un viscosímetro, el radio de la partícula con un microscopio, el tiempo con un cronómetro. Solo queda una incógnita: N_A. Perrin fotografió la misma partícula a intervalos iguales, registró las coordenadas en la cuadrícula del ocular, elevó los desplazamientos al cuadrado y promedió sobre cientos de segmentos. Obtuvo alrededor de 7·10²³, lo que, con la precisión de esa época, significaba una coincidencia con el valor actual de 6,02·10²³. El temblor de la partícula resultó ser una forma de contar las moléculas en un mol.",
+     "latex": "N_A = \\frac{R T\\, t}{3\\pi \\eta a \\,\\langle x^{2}\\rangle}",
+     "figure": "perrinjump",
+     "figCaption": "Experimento de Perrin: la línea quebrada no es una trayectoria, sino una cadena de posiciones a intervalos iguales"
+    }
+   ],
+   "plate": "\\langle x^{2}\\rangle = 2Dt = \\frac{R T}{3\\pi \\eta a N_A}\\,t",
+   "plateCap": "A la izquierda, lo que se ve en el microscopio y se mide con la regla del ocular. A la derecha, temperatura, viscosidad, tamaño de la esfera y número de moléculas en un mol. Todo, excepto N_A, se mide de forma independiente, por lo que la igualdad funciona como una balanza para moléculas.",
+   "note": "Enumeremos lo que hemos supuesto en el camino: estos son los límites de la fórmula. Primero: los pasos son independientes. En tiempos cortos esto no es cierto: la partícula aún recuerda su velocidad, y en tiempos menores que τ = m/γ el movimiento es ordinario, x es proporcional a t, no a la raíz. Para nuestra partícula, τ es alrededor de cien nanosegundos, y este segmento solo se pudo observar en la década de 2010, con pinzas ópticas. Segundo: la fórmula de Stokes requiere una esfera, un número de Reynolds pequeño y un medio que en la escala de la partícula aún sea continuo; para una partícula del tamaño del recorrido libre medio de un gas, se necesita la corrección de Cunningham. Tercero: la suspensión está diluida, las partículas no interfieren entre sí. Cuarto, y en lo que más a menudo se tropieza en la práctica: el líquido debe estar en reposo y a una sola temperatura. Una diferencia de una décima de grado genera convección, que arrastra las partículas órdenes de magnitud más lejos que la difusión, y el observador ve un flujo coordinado y hermoso en lugar de un temblor independiente. Quinto: 2Dt se refiere a un solo eje. En el plano, ⟨r²⟩ = 4Dt; en el espacio, 6Dt, y la confusión en este factor es el error más común al procesar datos."
+  },
+  "math": {
+   "title": "Matemáticas que aquí se necesitaron",
+   "lead": "La deducción consiste casi por completo en dos trucos, y ambos conviene analizarlos por separado: de ellos dependen tanto el resultado como su carácter sorprendente.",
+   "items": [
+    {
+     "what": "El cuadrado de la suma: por qué hay más términos cruzados, pero sobreviven los diagonales",
+     "why": "En el tercer paso de la deducción desarrollamos el cuadrado de la suma de N términos. Hay exactamente N términos diagonales ℓᵢ², y casi N² términos cruzados ℓᵢℓⱼ — cuando N es del orden de mil millones, hay mil millones de veces más términos cruzados. Sin embargo, en promedio solo sobreviven los primeros. La razón es la independencia de los pasos: el promedio del producto de dos variables independientes es igual al producto de sus promedios, y cada promedio es cero, porque el paso tiene la misma probabilidad de ir en una dirección que en la contraria. Los términos diagonales, en cambio, son cuadrados, no pueden ser negativos y no pueden anularse entre sí en principio. Vale la pena comprobar esta afirmación desde el otro lado: si los pasos están CORRELACIONADOS y cada uno continúa al anterior, los términos cruzados dejan de anularse, su contribución es del orden de N², y el desplazamiento crece como N, es decir, proporcionalmente al tiempo. Así se mueve un cuerpo ordinario. La raíz del tiempo es exactamente el precio por perder la memoria.",
+     "latex": "\\Bigl(\\sum_i \\ell_i\\Bigr)^{2} = \\sum_i \\ell_i^{2} + \\sum_{i \\ne j} \\ell_i \\ell_j, \\qquad \\langle \\ell_i \\ell_j\\rangle = \\langle \\ell_i\\rangle\\langle \\ell_j\\rangle = 0",
+     "kit": "probability"
+    },
+    {
+     "what": "El cuadrado medio en lugar de la media: por qué se necesita la raíz del cuadrado medio",
+     "why": "En el tercer y cuarto paso calculamos no el desplazamiento, sino su cuadrado, y esto no es un truco técnico. El desplazamiento medio es cero por simetría y no aporta ninguna información sobre cuánto se ha alejado la partícula. La medida de dispersión no debe distinguir signos, y hay dos candidatos: el módulo medio y la raíz del cuadrado medio. Gana el segundo, porque se suman precisamente los cuadrados de variables independientes, mientras que los módulos no se suman de ninguna manera. Es útil recordar lo que la raíz del cuadrado medio NO es: no es el 'desplazamiento típico' literalmente. Para una distribución gaussiana, el módulo medio es aproximadamente 0,8 veces ese valor, y aproximadamente una de cada tres partículas se aleja más. Es una escala de dispersión, y toda la física está en cómo crece esa escala.",
+     "latex": "\\langle x\\rangle = 0, \\qquad \\sigma = \\sqrt{\\langle x^{2}\\rangle - \\langle x\\rangle^{2}} = \\sqrt{\\langle x^{2}\\rangle}",
+     "kit": "rms"
+    },
+    {
+     "what": "La derivada de la exponencial es proporcional a ella misma",
+     "why": "En el sexto paso dividimos la ecuación de balance por la concentración n y obtenemos una relación en la que esta ya no aparece. Esto solo es posible porque la derivada de la exponencial de Boltzmann es proporcional a la propia exponencial: para la función e^(−αx), la derivada es −α·e^(−αx). Debido a esto, n aparece en ambos lados de la misma manera y desaparece por completo, y con ella desaparecen la masa de la partícula y la aceleración de la gravedad. Vale la pena recordar este truco independientemente del problema: introducimos un campo auxiliar, lo usamos para llevar dos procesos al equilibrio y comprobamos que no aparece en la respuesta. Esto significa que la relación entre D y la fricción existe incluso sin campo — el campo fue un andamio que se retiró después de la construcción.",
+     "latex": "n(x) = n_0 e^{-\\alpha x} \\;\\Rightarrow\\; \\frac{dn}{dx} = -\\alpha\\,n(x), \\qquad \\alpha = \\frac{m^{*} g}{k_B T}",
+     "kit": "exponent"
+    }
+   ]
+  },
+  "example": {
+   "title": "Ejemplo con números",
+   "lead": "Calculemos exactamente lo que Perrin vio en el microscopio: una partícula, un minuto de observación. Y al final, invirtamos el cálculo y obtengamos el número de Avogadro.",
+   "given": "Una esfera de radio a = 0,5 μm suspendida en agua a 20 °C (T = 293 K, η = 1,0·10⁻³ Pa·s). Observamos durante t = 60 s. Encontrar el coeficiente de difusión y el desplazamiento característico a lo largo de un eje.",
+   "law": "D = k_BT/(6πηa), luego ⟨x²⟩ = 2Dt",
+   "solution": [
+    {
+     "text": "Calculamos el numerador y el denominador por separado — así se ve el orden de magnitud de cada parte. La energía térmica k_BT a temperatura ambiente es aproximadamente 4·10⁻²¹ julios; vale la pena recordar este número.",
+     "latex": "k_B T = 1{,}38\\cdot10^{-23}\\cdot 293 \\approx 4{,}05\\cdot10^{-21}\\ \\text{J}, \\qquad 6\\pi\\eta a \\approx 9{,}42\\cdot10^{-9}\\ \\text{kg/s}"
+    },
+    {
+     "text": "Dividimos uno entre el otro y obtenemos el coeficiente de difusión. Es diminuto: en un segundo, la partícula extiende una región de cuatro décimas de micrómetro cuadrado.",
+     "latex": "D = \\frac{4{,}05\\cdot10^{-21}}{9{,}42\\cdot10^{-9}} \\approx 4{,}3\\cdot10^{-13}\\ \\text{m}^{2}/\\text{s}"
+    },
+    {
+     "text": "El cuadrado medio del desplazamiento en un minuto — y de inmediato extraemos la raíz, porque en micrómetros pensamos mejor que en metros cuadrados.",
+     "latex": "\\langle x^{2}\\rangle = 2Dt \\approx 5{,}2\\cdot10^{-11}\\ \\text{m}^{2}, \\qquad \\sqrt{\\langle x^{2}\\rangle} \\approx 7{,}2\\ \\text{μm}"
+    },
+    {
+     "text": "Y ahora el paso inverso — el mismo que dio Perrin. Consideramos que lo medido es el desplazamiento, y la incógnita es el número de Avogadro.",
+     "latex": "N_A = \\frac{R T\\, t}{3\\pi\\eta a\\,\\langle x^{2}\\rangle} = \\frac{8{,}314\\cdot 293\\cdot 60}{4{,}71\\cdot10^{-9}\\cdot 5{,}2\\cdot10^{-11}} \\approx 6\\cdot10^{23}"
+    }
+   ],
+   "answer": "D ≈ 4,3·10⁻¹³ m²/s; en un minuto la partícula se desplaza a lo largo de un eje aproximadamente 7 μm — es decir, siete veces su diámetro. El cálculo inverso da N_A ≈ 6·10²³ mol⁻¹.",
+   "check": "¿Es razonable? Siete micras en un minuto para una partícula de una micra de diámetro — es exactamente lo que describió Brown: la partícula se mueve notablemente, pero no se va a ninguna parte. Con un aumento de cuatrocientas veces, esto es un centímetro en la pantalla, imposible de no ver. Ahora la comparación más instructiva. Según la equipartición de la energía, la velocidad instantánea de esta partícula es la raíz de 3k_BT/m y es de aproximadamente 5 milímetros por segundo. En un minuto, a esa velocidad, habría recorrido casi un tercio de metro — pero se ha alejado del punto de partida solo siete micras, cuarenta mil veces menos. Esto muestra por qué los experimentos no cuadraban antes de Einstein: los experimentadores medían diligentemente la 'velocidad' de la partícula browniana y obtenían números diferentes, porque cuanto más a menudo se mira, mayor velocidad se ve. La magnitud significativa aquí no es la velocidad, sino el desplazamiento en un tiempo fijo."
+  },
+  "constants": {
+   "title": "Constantes de esta sección",
+   "lead": "Cuatro números. Los dos primeros son la razón por la que se realizó todo el experimento; los dos segundos son propiedades del medio sin las cuales no se puede aplicar la fórmula.",
+   "items": [
+    {
+     "sym": "k_B",
+     "latex": "k_B",
+     "name": "Constante de Boltzmann",
+     "value": "1,380 649 · 10⁻²³",
+     "unit": "J / K",
+     "why": "El tipo de cambio entre temperatura y energía. Es a través de ella que la temperatura entra en el coeficiente de difusión: calientas el medio y la dispersión se acelera. Es útil recordar el producto k_BT a temperatura ambiente: alrededor de 4·10⁻²¹ julios, o 1/40 de electronvoltio. Esta medida es suficiente para estimar de un vistazo qué procesos puede desencadenar el movimiento térmico y cuáles están más allá de sus capacidades.",
+     "mnemo": "4·10⁻²¹ J — la \"ración de habitación\" de energía. Vale la pena tener este número en mente junto con 6·10²³."
+    },
+    {
+     "sym": "N_A",
+     "latex": "N_A",
+     "name": "Constante de Avogadro",
+     "value": "6,022 140 76 · 10²³",
+     "unit": "1 / mol",
+     "why": "La única cantidad en la fórmula que no se puede medir por separado, y por eso fue precisamente la que se obtuvo del experimento de Perrin. La constante universal de los gases R se mide con gases sin ninguna hipótesis atómica, y k_B = R/N_A. Por lo tanto, cualquier medición donde aparezcan R y k_B juntas es una medición oculta del número de Avogadro. Desde 2019, su valor está fijado exactamente y define el mol.",
+     "mnemo": "Perrin obtuvo alrededor de 7·10²³ — un diez por ciento por encima del valor actual. Para 1908, fue una precisión asombrosa."
+    },
+    {
+     "sym": "η",
+     "latex": "\\eta_{\\text{H}_2\\text{O}}",
+     "name": "Viscosidad dinámica del agua a 20 °C",
+     "value": "1,002 · 10⁻³",
+     "unit": "Pa · s",
+     "why": "Exactamente la magnitud que frena la partícula y determina la amplitud de su vibración: en la fórmula es la misma. La milésima redonda es una feliz coincidencia, conveniente para estimaciones. Fuerte dependencia de la temperatura: a 40 °C la viscosidad cae una vez y media, por lo que el agua caliente produce un movimiento notablemente más amplio de lo que se esperaría solo por el aumento de T.",
+     "mnemo": "El agua es un milipascal-segundo, el aire es 55 veces más fluido. Por eso en el aire la vibración es aproximadamente siete veces más amplia: la raíz de 55."
+    },
+    {
+     "sym": "λ",
+     "latex": "\\lambda_{\\text{aire}}",
+     "name": "Recorrido libre medio en el aire (20 °C, 1 atm)",
+     "value": "68",
+     "unit": "nm",
+     "why": "El valor por defecto en el banco de pruebas y la medida de cuán finamente está segmentado el movimiento de la molécula. Entre colisiones, la molécula recorre siete décimas de micrón divididas por diez — una distancia aproximadamente siete veces menor que la longitud de onda de la luz visible. Mientras tanto, vuela a una velocidad de unos 470 m/s, y de estos dos números el banco de pruebas ensambla D = λv/3 ≈ 10⁻⁵ m²/s.",
+     "mnemo": "68 nm — aproximadamente doscientos diámetros moleculares. Reduce la presión a la mitad y el recorrido libre se duplicará."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Cómo se relaciona con el resto del curso",
+   "lead": "Esta sección es la intersección de tres temas, y en cada uno devuelve algo.",
+   "items": [
+    {
+     "h": "Moléculas y temperatura",
+     "text": "La equipartición de la energía no pregunta cuál es el tamaño del cuerpo: la energía cinética media de una partícula browniana es la misma ³⁄₂k_BT que la de una molécula. De aquí surge una consecuencia inesperada: una partícula pesada no tiembla más débilmente, sino más lentamente: la energía es la misma, por lo que el cuadrado de la velocidad es inversamente proporcional a la masa. Formalmente, observamos en el microscopio el comportamiento de una \"molécula\", solo que muy grande."
+    },
+    {
+     "h": "Viscosidad y ley de Stokes",
+     "text": "El factor 6πηa proviene de la hidrodinámica del flujo viscoso y trae consigo todas sus condiciones: esfera, adherencia del líquido a la superficie, número de Reynolds pequeño. El mismo coeficiente γ describe tanto el frenado como la amplitud de la vibración: una sola magnitud es responsable tanto de la pérdida de energía como de su suministro."
+    },
+    {
+     "h": "Entropía y segunda ley",
+     "text": "La difusión es la segunda ley en acción: la impureza se dispersa porque hay incomparablemente más estados dispersos. Pero la partícula también muestra el otro lado: a la escala de una sola partícula, las desviaciones de lo \"esperado\" ocurren constantemente, y la segunda ley resulta ser una afirmación sobre probabilidades, no una prohibición. Por cierto, la ecuación del calor es la misma ecuación de difusión, por lo que el calor se propaga a lo largo de una barra también como la raíz del tiempo."
+    },
+    {
+     "h": "Ruido en electrónica",
+     "text": "La relación D = k_BT/γ es el primer ejemplo de la conexión entre fluctuaciones y disipación. Tiene un análogo eléctrico exacto: la resistencia que disipa energía también genera ruido térmico, y el cuadrado medio del voltaje de ruido es 4k_BTR por hercio de ancho de banda. Johnson lo midió en 1928, Nyquist lo dedujo el mismo año — con un razonamiento estructurado exactamente como el de Einstein."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Curiosidades: compruébelo con sus manos",
+   "lead": "Los dos experimentos siguientes muestran no tanto el movimiento browniano en sí, sino por qué tardaron tanto en detectarlo: casi todo lo que verá será convección. Saber distinguir uno de otro es la habilidad que se adquiere aquí.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "experimento de cocina",
+     "h": "Una gota de leche en agua en reposo",
+     "text": "Tome dos vasos de agua a temperatura ambiente, colóquelos lejos del radiador y de la ventana, y déjelos reposar media hora para que se asienten las corrientes. Luego, en el primero, deje caer una gota de leche, y en el segundo, una gota de té o colorante alimentario, siempre en silencio, por la pared, con una pajita, sin remover. Tápelos y no los mueva. Después de una hora, observe los bordes de las manchas: ¿cuánto se ha difuminado cada una?",
+     "answer": "El borde de la mancha de leche permanecerá nítido, mientras que el del colorante se habrá difuminado un par de milímetros. Los números coinciden exactamente. Los glóbulos de grasa de la leche tienen un radio de aproximadamente medio micrómetro, para ellos D ≈ 4·10⁻¹³ m²/s, y en una hora la raíz de 2Dt da 0,06 milímetros; es imposible verlo. La molécula de colorante es mil veces más pequeña, su D es de unos 5·10⁻¹⁰ m²/s, y en la misma hora resulta en unos 2 milímetros. La relación de difuminados es igual a la raíz de la relación de coeficientes, es decir, unas treinta veces. La conclusión principal del experimento es inesperada: la difusión a escalas de cocina prácticamente no funciona, y todo movimiento perceptible es debido a corrientes. Si la mancha se ha desplazado un centímetro en una hora, ha observado convección por una diferencia de temperatura de fracciones de grado, no moléculas."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "experimento de cocina",
+     "h": "Humo en un haz de luz",
+     "text": "En una habitación oscura, dirija un haz de luz estrecho y brillante a lo largo de la pared y haga pasar por él el humo de una cerilla recién apagada. Las partículas de polvo brillarán como puntos. Ahora no mire el movimiento en general, sino a los vecinos: ¿dos puntos cercanos se mueven en la misma dirección de manera coordinada, o cada uno vive por su cuenta?",
+     "answer": "Casi con seguridad se mueven de manera coordinada, y esto no es movimiento browniano, sino corrientes de aire. Este fue precisamente el criterio que usó el propio Brown para distinguir su fenómeno del arrastre: el temblor térmico es independiente para cada partícula, mientras que una corriente lleva a todas juntas. Estimemos lo que vería en el caso ideal. Para una partícula de humo de radio 0,15 μm en el aire, D ≈ 8·10⁻¹¹ m²/s, y en un segundo se desplaza aproximadamente 13 micrómetros. El ojo, a distancia de brazo extendido, distingue un detalle diez veces mayor; por lo tanto, a simple vista no se puede captar el temblor, se necesita al menos un microscopio de cuarenta aumentos o un objetivo macro de teléfono. Pero compare los medios: en agua, la misma partícula recorrería en un segundo solo 1,7 micrómetros. El aire es 55 veces menos denso que el agua, y la amplitud del temblor es mayor en la raíz de eso, es decir, en siete veces y media."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoja",
+     "h": "La segunda ley se viola ante sus ojos",
+     "text": "Una partícula se eleva regularmente, contra la gravedad, y las partículas en suspensión a veces se agrupan más densamente donde ya hay más. La entropía disminuye en ese momento. ¿Por qué no se puede construir una máquina de movimiento perpetuo a partir de esto?",
+     "answer": "Porque la segunda ley es una afirmación sobre probabilidades, no una prohibición, y a la escala de una partícula micrométrica las desviaciones son comparables al promedio. La máquina de movimiento perpetuo se rompe en otro punto: cualquier dispositivo lo suficientemente sensible para captar una fluctuación está él mismo sujeto a fluctuaciones similares. Smoluchowski analizó esto en 1912 con el ejemplo de una puerta con resorte que deja pasar moléculas en una dirección: la puerta es tan ligera que el movimiento térmico la abre por sí misma, y el flujo en ambas direcciones se iguala. Feynman en 1963 reconstruyó el mismo argumento con un trinquete y una trinquete, y mostró que a la misma temperatura del gas y del trinquete, la trinquete salta con la misma frecuencia con la que retiene: la rotación promedio es cero. El trabajo aparece solo si el trinquete está más frío que el gas, es decir, si hay una diferencia de temperatura. No surge ninguna excepción a la segunda ley, pero la formulación precisa resulta más sutil que la escolar: los teoremas modernos sobre fluctuaciones dicen cuántas veces más probable es la dirección 'correcta' en comparación con la inversa."
+    },
+    {
+     "icon": "fact",
+     "kind": "dato curioso",
+     "h": "Brown pulverizó a la Esfinge",
+     "text": "La verificación de Brown fue ejemplar. Al ver el temblor en partículas de polen, supuso un origen vivo e inmediatamente se dedicó a refutarlo: tomó polen de plantas muertas un siglo antes en un herbario: temblaba. Tomó hollín, vidrio molido, metales, minerales: temblaban. Tomó, entre otras cosas, una miga de un fragmento de piedra de la Esfinge egipcia: temblaba igual. La lista de muestras no vivas en su artículo ocupa una buena página. También resultó que Brown no fue el primero: cuarenta años antes, Jan Ingenhousz había visto lo mismo en polvo de carbón. Pero fueron los experimentos de control sistemáticos de Brown los que convirtieron una observación curiosa en un hecho físico que ahora requería explicación."
+    },
+    {
+     "icon": "estimate",
+     "kind": "estimación",
+     "h": "Dónde termina el movimiento browniano",
+     "text": "El coeficiente de difusión es inversamente proporcional al radio, por lo que el desplazamiento cae como la raíz del radio: una dependencia débil, y parece que todo debería temblar. Comprobemos con una partícula de cuarzo de 50 micrómetros de diámetro, aún visible a simple vista. Su radio es cincuenta veces mayor que el de la partícula del ejemplo, por lo que el desplazamiento es menor en unas siete veces: alrededor de un micrómetro por minuto. Ahora calculemos la sedimentación: según Stokes, esa partícula se hunde a una velocidad de 2,2 milímetros por segundo, es decir, en el mismo minuto desciende trece centímetros. La sedimentación es cien mil veces más fuerte que el temblor. He aquí todo el límite del fenómeno: el movimiento browniano solo es notable en partículas más pequeñas que unos pocos micrómetros, donde el peso ya ha perdido contra el movimiento térmico. Por eso Perrin tuvo que pasar meses seleccionando esferas de resina submicroscópicas idénticas: la mitad del trabajo no fue la observación, sino la preparación de la muestra."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "La disputa sobre la realidad de los átomos: cómo se resolvió",
+   "blocks": [
+    {
+     "h": "Qué negaban exactamente los oponentes de los átomos",
+     "text": "La posición de los energetistas — Ostwald, Mach, Duhem — es fácil de retratar como terquedad, y eso sería injusto. Su argumento era riguroso: la termodinámica describe el calor, el trabajo y las transformaciones de las sustancias sin mencionar jamás el átomo; introducir en la teoría una entidad que nadie ha visto ni medido es sustituir la descripción por una imagen. Mach exigía que la física hablara solo de relaciones entre cantidades observables. Según los estándares de 1895, no había respuesta para esto: la teoría cinético-molecular explicaba bien lo conocido, pero no predecía nada que no pudiera obtenerse de otra manera. Boltzmann discutió con ellos hasta el final de su vida y murió en 1906, dos años antes de los resultados de Perrin."
+    },
+    {
+     "h": "Por qué el propio Brown no demostró nada",
+     "text": "El temblor se observó durante ochenta años, y durante todo ese tiempo no resolvió nada. Se explicaba por evaporación, fuerzas capilares, convección, electricidad, atracción entre partículas, restos de fuerza vital. Gouy en 1888 descartó metódicamente las causas externas: el movimiento no cambiaba ni en la oscuridad, ni en un sótano con temperatura constante, ni en un campo magnético, ni al cambiar la iluminación — y señaló el movimiento térmico de las moléculas. Pero esto seguía siendo una conjetura plausible, porque no se decía qué medir exactamente y qué número debía salir. Un fenómeno que se ve pero que no predice nada no es un argumento."
+    },
+    {
+     "h": "Lo que añadió Einstein: la cantidad medible correcta",
+     "text": "Lo principal del trabajo de 1905 no es solo la fórmula, sino el cambio de lo observado. Todos antes de él medían la velocidad de la partícula browniana — y obtenían valores diferentes, porque depende de la frecuencia con que se mira: cuanto más corto es el intervalo, mayor resulta la velocidad, y no tiene límite. Einstein explicó por qué es así y propuso medir no la velocidad, sino el desplazamiento en un tiempo fijo. Esto se puede comprobar con los números de nuestro ejemplo: la velocidad instantánea de la partícula es de unos 5 mm/s, pierde su impulso en un tiempo m/γ del orden de cien nanosegundos, en ese tiempo recorre menos de un nanómetro — esa es la longitud de su paso aleatorio. Multiplique la raíz del número de tales pasos en un minuto por la longitud de uno, y obtendrá los mismos micrómetros que da la fórmula exacta.",
+     "latex": "\\tau = \\frac{m}{\\gamma} \\sim 10^{-7}\\ \\text{s}, \\qquad \\ell = v_{\\text{t}}\\tau \\sim 10^{-10}\\ \\text{m}"
+    },
+    {
+     "h": "El argumento de Perrin: no una medición, sino quince",
+     "text": "El argumento decisivo no fue que Perrin obtuviera 7·10²³ a partir de los desplazamientos brownianos. Lo decisivo fue que reunió en una sola tabla más de una docena de formas completamente diferentes de obtener el mismo número: viscosidad de los gases, distribución de la suspensión por altura, movimiento browniano rotacional, el azul del cielo, el espectro de la radiación térmica, la carga del electrón, el conteo de partículas alfa en la desintegración radiactiva. Estos métodos no tienen nada en común entre sí — física diferente, instrumentos diferentes, laboratorios diferentes. Todos dieron el mismo número con precisión de porcentajes. Una coincidencia de este tipo no puede explicarse por un ajuste afortunado: o las moléculas existen, o la naturaleza se ha confabulado. Ostwald admitió la derrota en 1909; Mach nunca la admitió."
+    },
+    {
+     "h": "Qué enseña esta historia",
+     "text": "Primero: el argumento decisivo no es la medición más precisa, sino la convergencia de caminos independientes hacia un mismo número. Un resultado siempre puede explicarse por un error sistemático; trece resultados de diferentes campos, ya no. Segundo, menos agradable: se puede ver un fenómeno durante ochenta años y no extraer nada de él, hasta que alguien diga qué es lo que hay que medir en él. La observación no basta, se necesita una teoría que haga una predicción comprobable. Tercero: las objeciones de los energetistas no se resolvieron convenciéndolos, sino cumpliendo su propia exigencia: el átomo se volvió observable porque se pudo contar."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "Una partícula en agua tiembla porque los impactos de las moléculas no se cancelan por completo: en la suma de N empujones aleatorios queda un exceso del orden de √N. La suma de pasos aleatorios independientes crece no como su número, sino como su raíz, por lo tanto ⟨x²⟩ = 2Dt. Al relacionar D con la temperatura y la viscosidad, Einstein convirtió el temblor de la partícula en una balanza para las moléculas, y Perrin en esa balanza contó el número de Avogadro.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "⟨x²⟩ = 2Dt",
+     "text": "El cuadrado del desplazamiento crece proporcionalmente al tiempo, no el desplazamiento. Cuatro veces más tiempo — dos veces más lejos"
+    },
+    {
+     "icon": "sigma",
+     "title": "Los términos cruzados se cancelan",
+     "text": "En el cuadrado de la suma hay N términos diagonales, y casi N² cruzados. Pero los segundos son cero en promedio, porque los pasos son independientes"
+    },
+    {
+     "icon": "scale",
+     "title": "D = k_BT / 6πηa",
+     "text": "La misma viscosidad frena la partícula y determina la amplitud de su temblor: disipación y fluctuación están relacionadas"
+    },
+    {
+     "icon": "fact",
+     "title": "El argumento a favor de los átomos",
+     "text": "No convenció una sola medición, sino quince métodos independientes que dieron el mismo número de Avogadro"
+    }
+   ],
+   "where": [
+    "Determinación del tamaño de partículas por su temblor — método de dispersión dinámica de la luz",
+    "En los pulmones, el oxígeno recorre los últimos micrómetros por difusión: a tales distancias es precisamente rápida",
+    "El calor en una barra se extiende según la misma ley √t — la ecuación del calor es la ecuación de difusión",
+    "Ruido térmico de una resistencia: la misma relación entre fricción y fluctuación, pero en un circuito eléctrico"
+   ],
+   "watchOut": "Tres errores. Primero: pensar que el desplazamiento crece proporcionalmente al tiempo: lo que es proporcional al tiempo es su cuadrado. Segundo: confundir desplazamiento con camino recorrido: el camino es Nℓ y crece linealmente, el desplazamiento crece como la raíz, y en tiempos largos difieren en miles de veces. Tercero: el factor: 2Dt se refiere a un eje, en el plano será 4Dt, en el espacio 6Dt."
+  },
+  "quiz": [
+   {
+    "id": "b1",
+    "type": "mcq",
+    "q": "Una partícula se aleja del inicio aproximadamente 7 μm por minuto. ¿Cuánto tiempo hay que esperar para que se aleje 14 μm?",
+    "options": [
+     "Dos minutos",
+     "Cuatro minutos",
+     "Medio minuto",
+     "Una hora"
+    ],
+    "answer": 1,
+    "why": "El desplazamiento cuadrático medio es proporcional al tiempo, no el desplazamiento en sí: ⟨x²⟩ = 2Dt. Para que el desplazamiento se duplique, el cuadrado debe cuadruplicarse, por lo tanto el tiempo también se cuadruplica. Esta es la característica principal del movimiento aleatorio: cuanto más esperas, menos ventajoso es esperar más.",
+    "hint": "Escribe la ley no para el desplazamiento, sino para su cuadrado. ¿Cuántas veces aumentará el cuadrado si el desplazamiento se duplica?"
+   },
+   {
+    "id": "b2",
+    "type": "mcq",
+    "q": "A la partícula la golpean del orden de 10²⁰ moléculas por segundo desde todos los lados a la vez. ¿Por qué los golpes no se anulan completamente entre sí?",
+    "options": [
+     "Se anulan casi por completo: queda un exceso relativo del orden de 1/√N, y para una partícula micrométrica eso es justo suficiente",
+     "De un lado siempre hay notablemente más moléculas que del otro",
+     "Las moléculas de un lado están más calientes, por eso empujan con más fuerza",
+     "La partícula atrae a las moléculas, y ellas la golpean de forma asimétrica"
+    ],
+    "answer": 0,
+    "why": "Para la suma de N variables aleatorias, la dispersión crece como √N, por lo que el exceso relativo es 1/√N. Con N del orden de 10²⁰, esto es una diez mil millonésima parte — una fracción insignificante, pero el número absoluto de golpes es tan grande que el resto es suficiente para mover la partícula. Las otras opciones requieren que el medio sea no homogéneo, pero es homogéneo: todo ocurre en un líquido en equilibrio a una sola temperatura.",
+    "hint": "No se trata de que los golpes sean asimétricos en promedio — en promedio son simétricos. La cuestión es cuánto fluctúa el número de golpes alrededor del promedio."
+   },
+   {
+    "id": "b3",
+    "type": "free",
+    "q": "Con tus palabras: ¿por qué la suma de N pasos aleatorios de longitud ℓ da un desplazamiento del orden de √N·ℓ, y no N·ℓ?",
+    "keywords": [
+     "cuadrado",
+     "cruzados",
+     "cruz",
+     "independ",
+     "cero",
+     "signo",
+     "anulan",
+     "promedio"
+    ],
+    "needed": 2,
+    "why": "Porque al elevar la suma al cuadrado aparecen dos tipos de términos. Los diagonales ℓᵢ² son cuadrados, siempre positivos y simplemente se suman; hay exactamente N. Los cruzados ℓᵢℓⱼ son mucho más numerosos, pero cada uno de ellos es en promedio cero: los pasos son independientes, por lo que el promedio del producto es igual al producto de los promedios, y cada promedio es cero. Queda ⟨x²⟩ = Nℓ², es decir, un desplazamiento del orden de √N·ℓ. Comprobación inversa: si los pasos estuvieran correlacionados y cada uno continuara al anterior, los términos cruzados no se anularían y el desplazamiento crecería hasta N·ℓ — eso es el movimiento normal en línea recta.",
+    "hint": "Eleva la suma al cuadrado y observa qué términos obtienes. ¿Cuáles de ellos no pueden anularse entre sí sin importar los signos?"
+   },
+   {
+    "id": "b4",
+    "type": "estimate",
+    "q": "Una partícula se aleja a lo largo de un eje aproximadamente 7 μm por minuto. ¿Cuántos micrómetros se alejará en una hora?",
+    "answer": 54,
+    "unit": "μm",
+    "why": "El desplazamiento crece como la raíz del tiempo. Una hora es 60 veces más larga que un minuto, por lo que el desplazamiento crecerá en √60 ≈ 7,7 veces: 7 · 7,7 ≈ 54 μm. Observa lo poco que es: en una hora la partícula se aleja cinco centésimas de milímetro. Por eso la difusión no mezcla nada a escalas de cocina.",
+    "hint": "No multipliques por 60. Pregúntate cuántas veces aumentará el cuadrado del desplazamiento — y solo después extrae la raíz.",
+    "tolAbs": 15
+   }
+  ],
+  "title": "Movimiento browniano: cómo vieron las moléculas",
+  "subtitle": "Párrafo 3 · Caminata aleatoria y número de Avogadro",
+  "intro": [
+   "En el verano de 1827, el botánico Robert Brown dirigió un microscopio hacia las partículas que salían de los granos de polen en una gota de agua y vio que no permanecían quietas. La vibración no se desvanecía ni después de una hora ni después de un día. Brown comprobó si era vida: molió hollín, vidrio, metales y un fragmento de piedra de la Esfinge: todas vibraban igual. Por lo tanto, la causa era física. Cuál exactamente, no se supo durante ochenta años.",
+   "La disputa que finalmente resolvió esta vibración era más grande que el fenómeno mismo. A finales del siglo XIX, la existencia de los átomos seguía siendo una hipótesis, y tenía oponentes serios: Ostwald, Mach y Duhem señalaban que la termodinámica funcionaba perfectamente sin partículas invisibles, y que introducir lo inobservable en la ciencia era un mal hábito. Casi no había nada que objetar: todos los argumentos a favor de las moléculas eran indirectos.",
+   "En 1905, Einstein notó que la partícula vibrante era el argumento que faltaba, si se dejaba de medir su velocidad y se empezaba a medir su desplazamiento. Predijo que el cuadrado medio del desplazamiento crece proporcionalmente al tiempo, y el coeficiente de proporcionalidad se expresa mediante la temperatura, la viscosidad del medio y el número de Avogadro. Así, el microscopio con cronómetro se convertía en un instrumento para contar moléculas. Tres años después, Jean Perrin llevó a cabo ese conteo. Recorreremos todo el camino: desde la caminata aleatoria hasta el número de Avogadro."
+  ],
+  "standNote": "El stand calcula la difusión de una molécula en un gas, no de una partícula en agua, pero la ley es común, y la raíz del tiempo se ve mejor en él. Ajuste la longitud de la trayectoria libre media a 68 nm y la velocidad térmica a 470 m/s (esto es aire a temperatura ambiente) y arrastre el control deslizante del tiempo. Lo primero que llama la atención: la mancha crece cada vez más lentamente. En cinco segundos se extiende aproximadamente un centímetro, y para obtener dos, no se necesitan diez segundos, sino veinte. Esa es la raíz. Segundo: mire el contador de colisiones: hacia el vigésimo segundo hay alrededor de cien mil millones, y todo para dos centímetros. Tercero, lo más útil para la práctica: la línea 'para alejarse un metro, se necesitan trece horas'. Por eso el olor se propaga por la habitación mediante corrientes de aire, no por difusión. Y una aclaración honesta: la fórmula del stand D = λv/3 es una estimación; subestima el coeficiente de difusión medido en el aire aproximadamente a la mitad; un cálculo cinético preciso da un factor mayor. Para la partícula de este párrafo, D es veinticinco millones de veces menor, por lo que en el ejemplo se obtienen micras, no centímetros."
+ },
+ "ar": {
+  "formula": {
+   "name": "معادلة أينشتاين-سمولوتشوفسكي",
+   "latex": "\\langle x^{2}\\rangle = 2Dt, \\qquad D = \\frac{k_B T}{6\\pi\\eta a}",
+   "alsoKnown": "المساواة الأولى هي قانون المشي العشوائي: متوسط مربع الإزاحة ينمو بشكل متناسب مع الزمن، وليس الإزاحة نفسها. الثانية هي علاقة أينشتاين-ستوكس، التي تربط معامل الانتشار بدرجة حرارة الوسط ولزوجته.",
+   "authors": [
+    {
+     "who": "روبرت براون",
+     "year": "1827",
+     "what": "وصف الاهتزاز المستمر للجسيمات المجهرية في الماء، وبسلسلة من التجارب أثبت أن السبب ليس الحياة: فقد اهتزت أيضًا السخام المطحون والزجاج وشظية من حجر أبو الهول."
+    },
+    {
+     "who": "لويس جورج غوي",
+     "year": "1888",
+     "what": "استبعد تجريبيًا الأسباب الخارجية - الضوء، وتغيرات درجة الحرارة، والاهتزازات، والمجال المغناطيسي - وكان أول من أشار بوضوح إلى الحركة الحرارية للجزيئات؛ لكن لم تكن لديه توقعات كمية."
+    },
+    {
+     "who": "ألبرت أينشتاين",
+     "year": "1905",
+     "what": "حصل على ⟨x²⟩ = 2Dt وعبر عن D بدلالة درجة الحرارة واللزوجة وعدد أفوجادرو - محولًا الملاحظة إلى أداة قياس؛ وشرح أيضًا لماذا لا معنى لقياس سرعة مثل هذا الجسيم."
+    },
+    {
+     "who": "ماريان سمولوتشوفسكي",
+     "year": "1906",
+     "what": "توصل إلى نفس القانون بشكل مستقل، عبر الطريقة الحركية؛ كان معامله العددي يختلف عن معامل أينشتاين بحوالي الضعف، وكان أينشتاين على صواب."
+    },
+    {
+     "who": "جان بيرين",
+     "year": "1908-1913",
+     "what": "قام بقياس إزاحات الحبيبات تحت المجهر، واستنتج منها عدد أفوجادرو، وجمع أكثر من عشر طرق مستقلة لتحديده في جدول واحد."
+    }
+   ],
+   "story": "بين الملاحظة والتفسير ثمانون عامًا، وهذه الفجوة مفيدة. الظاهرة رآها كل من حمل مجهرًا، لكنها في حد ذاتها لم تثبت شيئًا: فقد فُسرت بالتبخر، وبالشعيرات، وبالكهرباء، وبـ«القوة الحيوية». لم يكن النقص في الملاحظة، بل في المعادلة - بيان ما يجب قياسه بالضبط وما الرقم الذي يجب الحصول عليه. كتب أينشتاين ورقته عام 1905 لهذا الغرض بالضبط: كان يبحث عن نتيجة للنظرية الجزيئية يمكن التحقق منها تجريبيًا ولا يمكن تفسيرها بأي طريقة أخرى. ومن المثير للاهتمام أنه لم يكن متأكدًا من أنه يصف ظاهرة مكتشفة بالفعل: فخبير البراءات في برن لم يكن لديه أي إمكانية للوصول إلى الأدبيات تقريبًا، وفي النص يفترض بحذر أن الأمر قد يتعلق بحركة براونية. بعد ثلاث سنوات، أظهر بيرين أن الأمر يتعلق بها بالفعل.",
+   "symbols": [
+    {
+     "sym": "⟨x²⟩",
+     "latex": "\\langle x^{2}\\rangle",
+     "what": "متوسط مربع الإزاحة على طول محور واحد",
+     "unit": "م²",
+     "note": "على طول محور واحد فقط؛ على المستوى ستحصل على 4Dt، وفي الفضاء 6Dt - وهذا هو المصدر الأكثر شيوعًا للخطأ في العامل."
+    },
+    {
+     "sym": "D",
+     "latex": "D",
+     "what": "معامل الانتشار",
+     "unit": "م²/ث",
+     "note": "الوحدات تُقرأ حرفيًا: مربع الطول لكل زمن - أي أن D يحدد معدل نمو المساحة، وليس الطول."
+    },
+    {
+     "sym": "t",
+     "latex": "t",
+     "what": "زمن المراقبة",
+     "unit": "ث",
+     "note": "يُحسب من اللحظة التي كان فيها الجسيم في نقطة البداية؛ القانون صالح لأزمنة أكبر بكثير من زمن تلاشي زخم الجسيم."
+    },
+    {
+     "sym": "k_B",
+     "latex": "k_B",
+     "what": "ثابت بولتزمان",
+     "unit": "جول/كلفن",
+     "const": "k_B",
+     "note": "سعر الصرف بين درجة الحرارة والطاقة؛ من خلاله تدخل درجة الحرارة في المعادلة."
+    },
+    {
+     "sym": "T",
+     "latex": "T",
+     "what": "درجة الحرارة المطلقة للوسط",
+     "unit": "كلفن",
+     "note": "بالكلفن فقط؛ كلما كان الوسط أكثر سخونة، كان الانتشار أوسع - وبشكل خطي، وليس بأي شكل آخر."
+    },
+    {
+     "sym": "η",
+     "latex": "\\eta",
+     "what": "اللزوجة الديناميكية للوسط",
+     "unit": "باسكال·ثانية",
+     "note": "للماء عند 20 درجة مئوية حوالي 10⁻³، وللهواء أقل بـ 55 مرة - وبالتالي في الهواء يكون الاهتزاز أكبر بحوالي سبع مرات."
+    },
+    {
+     "sym": "a",
+     "latex": "a",
+     "what": "نصف قطر الجسيم",
+     "unit": "م",
+     "note": "نصف القطر وليس القطر؛ D يتناسب عكسيًا معه، لذلك الجسيم الكبير يهتز بشكل أضعف."
+    },
+    {
+     "sym": "γ",
+     "latex": "\\gamma",
+     "what": "معامل الاحتكاك اللزج",
+     "unit": "كجم/ث",
+     "note": "يُعرَّف بالمساواة F = γv؛ للكرة في سائل لزج، حصل ستوكس على γ = 6πηa."
+    }
+   ]
+  },
+  "derivation": {
+   "title": "الاشتقاق الصارم",
+   "lead": "سنسير على خطى أينشتاين. أولاً، من التوافقيات وحدها سنحصل على قانون الجذر التربيعي — لن نحتاج إلى أي فيزياء هنا. ثم سنربط المعامل D بدرجة الحرارة واللزوجة ونرى كيف يظهر عدد أفوجادرو في النتيجة. سنأخذ من الجاهز نتيجتين فقط: توزيع بولتزمان وصيغة ستوكس لاحتكاك كرة في سائل لزج.",
+   "steps": [
+    {
+     "text": "لنبدأ بلغز. حبيبة نصف قطرها نصف ميكرون أثقل من جزيء الماء بحوالي عشرة مليارات مرة، والجزيئات تضربها من جميع الجهات — بترتيب 10²⁰ ضربة في الثانية. يبدو أن هذا العدد يجب أن يتوازن بشكل مثالي. وهو يتوازن — تقريباً. عدد الضربات من اليسار واليمين في نفس الوقت ليس متساوياً تماماً، بل يتقلب: لمجموع N من الحدود العشوائية، يكون التشتت من رتبة √N. التفوق النسبي يصبح ضئيلاً، واحد على عشرة مليارات، لكن العدد المطلق للضربات كبير جداً لدرجة أن هذا الجزء يكفي.",
+     "latex": "N \\sim 10^{20}\\ \\text{s}^{-1}, \\qquad \\frac{\\Delta N}{N} \\sim \\frac{1}{\\sqrt{N}} \\sim 10^{-10}",
+     "figure": "brownkick",
+     "figCaption": "الضربات تلغي بعضها البعض تقريباً. يبقى تفوق من رتبة الجذر التربيعي لعددها — وهذا فقط هو ما يحرك الحبيبة"
+    },
+    {
+     "text": "الآن النموذج. لسنا بحاجة إلى تفاصيل الضربات: المهم فقط أن الحبيبة تتذكر اتجاهها لفترة قصيرة جداً. بعد زمن τ تنسى تماماً أين كانت تتجه، وقفزتها التالية لا علاقة لها بالسابقة. إذن، المسار عبارة عن سلسلة من N = t/τ خطوات مستقلة متساوية الطول تقريباً ℓ واتجاه عشوائي تماماً. الموضع بعد زمن t هو مجموع هذه الخطوات. من هنا تبدأ الحسابات، وليس الفيزياء.",
+     "latex": "x_N = \\sum_{i=1}^{N} \\ell_i, \\qquad N = \\frac{t}{\\tau}",
+     "figure": "randwalk",
+     "figCaption": "المسار — خط متكسر طويل من N قطعة. الإزاحة من البداية إلى النهاية — خط مستقيم، وهو أقصر بكثير من المسار"
+    },
+    {
+     "text": "ماذا نحسب في هذا المجموع؟ المتوسط غير مناسب: كل خطوة موجهة بالتساوي في الاتجاهين، لذا ⟨ℓᵢ⟩ = 0 و ⟨x⟩ = 0 لأي N. نأخذ المربع — فهو لا يميز بين الإشارات. نفك مربع المجموع: نحصل على N حدود قطرية ℓᵢ² وحوالي N² حدود متقاطعة ℓᵢℓⱼ. الحدود المتقاطعة أكثر بكثير، لكن كل منها في المتوسط صفر: الخطوات مستقلة، لذا متوسط الضرب يساوي حاصل ضرب المتوسطات، والمتوسطات تساوي صفراً. أما الحدود القطرية فهي مربعات، لا تكون سالبة أبداً ولا يمكن أن تلغي بعضها البعض. يبقى القطر فقط.",
+     "latex": "\\langle x_N^{2}\\rangle = \\sum_i \\langle \\ell_i^{2}\\rangle + \\sum_{i \\ne j} \\langle \\ell_i \\ell_j\\rangle = N\\ell^{2} + 0",
+     "figure": "sumsquare",
+     "figCaption": "قطر الجدول — المربعات، وهي تُجمع. كل الحقل الآخر يتلاشى في المتوسط"
+    },
+    {
+     "text": "نعوض N = t/τ. متوسط مربع الإزاحة يتناسب مع الزمن — وهذا هو محتوى القانون. المعامل ℓ²/τ يُرمز له بـ 2D، والاثنان ليسا للزينة: مع D يتطابق مع معامل الانتشار من قانون فيك، الذي يصف انتشار الشوائب بنفس الكمية. الإزاحة نفسها تنمو كجذر الزمن. من هنا تأتي كل غرابة الظاهرة: الانتظار أربعة أضعاف — فقط للذهاب ضعف المسافة.",
+     "latex": "\\langle x^{2}\\rangle = \\frac{\\ell^{2}}{\\tau}\\,t \\;\\equiv\\; 2Dt, \\qquad \\sqrt{\\langle x^{2}\\rangle} = \\sqrt{2Dt}",
+     "figure": "sqrtt",
+     "figCaption": "جذر الزمن: المنحنى أكثر انحداراً في البداية، ثم يكاد الانتشار يتوقف"
+    },
+    {
+     "text": "نصف العمل تم: نعرف كيف تنمو الإزاحة، لكننا لا نعرف قيمة D. هنا يقوم أينشتاين بخطوة تستحق قراءة هذا الفصل من أجلها. يُدخل في المسألة ما لم يكن فيها — مجال الجاذبية — وينظر إلى معلق من جسيمات متطابقة في سائل ساكن. في التوازن الحراري، ينخفض تركيز الجسيمات في مجال مع طاقة كامنة U وفقاً لقانون بولتزمان. للجاذبية U = m*gx، حيث m* هي كتلة الجسيم مطروحاً منها كتلة السائل المزاح. نحصل على نفس الصيغة البارومترية كما للهواء، لكن مقياس الارتفاع مختلف.",
+     "latex": "n(x) = n_0 \\exp\\!\\left(-\\frac{m^{*} g x}{k_B T}\\right)",
+     "figure": "sedimbal",
+     "figCaption": "المعلق لا يترسب إلى القاع، بل يتوزع أسياً: الحركة الحرارية تبقى الجسيمات في الأعلى"
+    },
+    {
+     "text": "الآن ننظر إلى هذا التوازن كتوازن بين تدفقين متعاكسين. إلى الأسفل تحمل الجاذبية الجسيمات: كل جسيم يسقط بسرعة ثابتة v = m*g/γ، والتدفق يساوي nv. إلى الأعلى يحملها الانتشار عبر تدرج التركيز، التدفق يساوي −D·dn/dx. بما أن الصورة لا تتغير، التدفقان متساويان. نعوض مشتقة الأس البولتزماني — ويحدث الشيء الرئيسي: التركيز n يُختصر، لأن مشتقة الأس تتناسب مع نفسه، ومعه تُختصر m* و g. المجال المساعد الذي أدخلناه بأيدينا يختفي من النتيجة، ويبقى ارتباط لا علاقة له بالجاذبية.",
+     "latex": "n\\,\\frac{m^{*} g}{\\gamma} \\;=\\; D\\,\\frac{m^{*} g}{k_B T}\\,n \\;\\Longrightarrow\\; D = \\frac{k_B T}{\\gamma}",
+     "figure": "fluxbal",
+     "figCaption": "الجر ضد الانتشار. بعد التعويض بالأس، يُختصر كل شيء باستثناء D و kT و γ"
+    },
+    {
+     "text": "بقي العامل الأخير. معامل الاحتكاك γ لكرة في سائل لزج حسبه ستوكس عام 1851: γ = 6πηa. نعوض — ونحصل على الصيغة كاملة. لاحظ ما حدث لعدد أفوجادرو: ثابت بولتزمان هو R/N_A، وثابت الغاز العام R يُقاس من الغازات دون أي فرضيات ذرية. إذن، N_A يدخل الصيغة في المقام — ويصبح الكمية الوحيدة فيها التي لا يمكن قياسها بشكل منفصل.",
+     "latex": "\\gamma = 6\\pi\\eta a \\;\\Longrightarrow\\; D = \\frac{k_B T}{6\\pi \\eta a} = \\frac{R T}{6\\pi \\eta a N_A}",
+     "figure": "stokesgam",
+     "figCaption": "صيغة ستوكس تُدخل حجم الجسيم في النتيجة: كلما كانت الكرة أكبر، كلما أمسكتها اللزوجة بقوة أكبر"
+    },
+    {
+     "text": "نجمع كل شيء معاً ونوجهه نحو التجربة. متوسط مربع الإزاحة معبر عنه بكميات تُقاس بشكل مستقل: درجة الحرارة بميزان حرارة، اللزوجة بمقياس اللزوجة، نصف قطر الجسيم بمجهر، الزمن بساعة توقيف. يبقى مجهول واحد — N_A. بيرين صور نفس الحبيبة على فترات متساوية، وسجل الإحداثيات على شبكة العدسة، وربّع الإزاحات، وحسب المتوسط عبر مئات المقاطع. حصل على حوالي 7·10²³، وهو ما يعني بدقة تلك الحقبة تطابقاً مع القيمة الحالية 6.02·10²³. ارتعاش الحبيبة تبين أنه وسيلة لعد الجزيئات في المول.",
+     "latex": "N_A = \\frac{R T\\, t}{3\\pi \\eta a \\,\\langle x^{2}\\rangle}",
+     "figure": "perrinjump",
+     "figCaption": "تجربة بيرين: الخط المتكسر ليس مساراً، بل سلسلة مواضع على فترات زمنية متساوية"
+    }
+   ],
+   "plate": "\\langle x^{2}\\rangle = 2Dt = \\frac{R T}{3\\pi \\eta a N_A}\\,t",
+   "plateCap": "على اليسار — ما يُرى في المجهر ويُقاس بمسطرة العدسة. على اليمين — درجة الحرارة، اللزوجة، حجم الكرة، وعدد الجزيئات في المول. كل شيء ما عدا N_A يُقاس بشكل مستقل، لذا تعمل المعادلة كميزان للجزيئات.",
+   "note": "لنعد ما افترضناه على طول الطريق — هذه هي حدود الصيغة. أولاً: الخطوات مستقلة. على الأزمنة القصيرة هذا غير صحيح — الجسيم ما زال يتذكر سرعته، وعلى أزمنة أقل من τ = m/γ تكون الحركة عادية، x يتناسب مع t وليس مع الجذر. لحبيبتنا τ حوالي مئة نانوثانية، وتمكن رؤية هذا الجزء فقط في العقد 2010، باستخدام الملاقط الضوئية. ثانياً: صيغة ستوكس تتطلب كرة، وعدد رينولدز صغير، ووسط لا يزال مستمراً على مقياس الجسيم؛ لجسيم بحجم متوسط المسار الحر للغاز، يلزم تصحيح كانينغهام. ثالثاً: المعلق مخفف، الجسيمات لا تعيق بعضها البعض. رابعاً، وهذا هو ما يتعثر فيه الناس غالباً عملياً: يجب أن يكون السائل ساكناً وبنفس درجة الحرارة. فرق بعُشر درجة يولّد حملًا حراريًا يحرك الجسيمات لمسافات أكبر بمراتب من الانتشار — ويرى المراقب تدفقاً منسقاً جميلاً بدلاً من ارتعاش مستقل. خامساً: 2Dt تتعلق بمحور واحد. على المستوى ⟨r²⟩ = 4Dt، في الفضاء 6Dt، والخلط في هذا العامل هو الخطأ الأكثر شيوعاً عند معالجة البيانات."
+  },
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "يتكون الاشتقاق بالكامل تقريبًا من تقنيتين، ومن الحكمة مناقشتهما بشكل منفصل: عليهما يعتمد كل من النتيجة وعدم توقعها.",
+   "items": [
+    {
+     "what": "مربع المجموع: لماذا يوجد عدد أكبر من الحدود التبادلية، بينما تبقى الحدود القطرية",
+     "why": "في الخطوة الثالثة من الاشتقاق، نفك مربع مجموع N من الحدود. عدد الحدود القطرية ℓᵢ² هو N بالضبط، بينما عدد الحدود التبادلية ℓᵢℓⱼ هو تقريبًا N² — عندما يكون N بليونًا، يكون عددها أكبر بمليار مرة. ومع ذلك، في المتوسط تبقى الأولى فقط. السبب هو استقلالية الخطوات: متوسط حاصل ضرب كميتين مستقلتين يساوي حاصل ضرب متوسطيهما، وكل متوسط يساوي صفرًا، لأن الخطوة تتجه باحتمال متساوٍ في الاتجاهين. أما الحدود القطرية فهي مربعات، ولا يمكن أن تكون سالبة، ولا يمكنها أن تلغي بعضها البعض من حيث المبدأ. يجدر التحقق من هذا الادعاء من الجانب الآخر: إذا كانت الخطوات مرتبطة وكل خطوة تستمر في اتجاه الخطوة السابقة، فإن الحدود التبادلية لا تصبح صفرًا، ومساهمتها من رتبة N²، وينمو الإزاحة مثل N، أي بما يتناسب مع الزمن. هكذا يتحرك الجسم العادي. الجذر التربيعي للزمن هو بالضبط الثمن المدفوع مقابل فقدان الذاكرة.",
+     "latex": "\\Bigl(\\sum_i \\ell_i\\Bigr)^{2} = \\sum_i \\ell_i^{2} + \\sum_{i \\ne j} \\ell_i \\ell_j, \\qquad \\langle \\ell_i \\ell_j\\rangle = \\langle \\ell_i\\rangle\\langle \\ell_j\\rangle = 0",
+     "kit": "probability"
+    },
+    {
+     "what": "متوسط المربع بدلاً من المتوسط: لماذا نحتاج إلى الجذر التربيعي لمتوسط المربع",
+     "why": "في الخطوتين الثالثة والرابعة، نحسب ليس الإزاحة بل مربعها، وهذا ليس حيلة تقنية. متوسط الإزاحة يساوي صفرًا بسبب التناظر ولا يحمل أي معلومات حول مدى ابتعاد الجسيم. مقياس التشتت يجب ألا يميز بين الإشارات، وهناك مرشحان: متوسط القيمة المطلقة والجذر التربيعي لمتوسط المربع. الثاني يفوز، لأن المربعات هي التي تُجمع للكميات المستقلة، بينما القيم المطلقة لا تُجمع بأي شكل. من المفيد أن نتذكر ما ليس عليه الجذر التربيعي لمتوسط المربع: إنه ليس \"الإزاحة النموذجية\" حرفيًا. بالنسبة لتوزيع غاوسي، متوسط القيمة المطلقة يساوي حوالي 0.8 منه، وحوالي ثلث الجسيمات تبتعد أكثر. هذا هو مقياس التشتت، وكل الفيزياء تكمن في كيفية نمو هذا المقياس.",
+     "latex": "\\langle x\\rangle = 0, \\qquad \\sigma = \\sqrt{\\langle x^{2}\\rangle - \\langle x\\rangle^{2}} = \\sqrt{\\langle x^{2}\\rangle}",
+     "kit": "rms"
+    },
+    {
+     "what": "مشتقة الدالة الأسية تتناسب مع الدالة نفسها",
+     "why": "في الخطوة السادسة، نقسم معادلة التوازن على التركيز n ونحصل على علاقة لا تحتوي عليه. هذا ممكن فقط لأن مشتقة الدالة الأسية البولتزمانية تتناسب مع الدالة نفسها: للدالة e^(−αx) المشتقة هي −α·e^(−αx). ولهذا السبب، يدخل n في كلا الطرفين بنفس الطريقة ويختفي تمامًا، ومعه يختفي كل من كتلة الجسيم وتسارع الجاذبية. يجدر تذكر هذه التقنية بشكل منفصل عن المسألة: نقدم مجالًا مساعدًا، ونجعل العمليتين في توازن، ونتأكد من أنه غير موجود في الإجابة. هذا يعني أن العلاقة بين D والاحتكاك موجودة حتى بدون أي مجال — وكان المجال مجرد سقالات أُزيلت بعد البناء.",
+     "latex": "n(x) = n_0 e^{-\\alpha x} \\;\\Rightarrow\\; \\frac{dn}{dx} = -\\alpha\\,n(x), \\qquad \\alpha = \\frac{m^{*} g}{k_B T}",
+     "kit": "exponent"
+    }
+   ]
+  },
+  "example": {
+   "title": "مثال بالأرقام",
+   "lead": "لنحسب بالضبط ما رآه بيرين تحت المجهر: حبيبة واحدة، دقيقة مراقبة واحدة. وفي النهاية، سنعكس الحساب ونحصل على رقم أفوجادرو.",
+   "given": "كرة نصف قطرها a = 0.5 ميكرومتر معلقة في الماء عند 20 درجة مئوية (T = 293 كلفن، η = 1.0·10⁻³ باسكال·ثانية). نراقب لمدة t = 60 ثانية. أوجد معامل الانتشار والإزاحة المميزة على طول محور واحد.",
+   "law": "D = k_BT/(6πηa)، ثم ⟨x²⟩ = 2Dt",
+   "solution": [
+    {
+     "text": "نحسب البسط والمقام بشكل منفصل — هكذا يتضح حجم كل جزء. الطاقة الحرارية k_BT في درجة حرارة الغرفة تساوي تقريبًا 4·10⁻²¹ جول، وهذا رقم يجدر تذكره.",
+     "latex": "k_B T = 1{,}38\\cdot10^{-23}\\cdot 293 \\approx 4{,}05\\cdot10^{-21}\\ \\text{J}, \\qquad 6\\pi\\eta a \\approx 9{,}42\\cdot10^{-9}\\ \\text{kg/s}"
+    },
+    {
+     "text": "نقسم الأول على الثاني ونحصل على معامل الانتشار. إنه صغير جدًا: في الثانية، تنتشر الجسيمات في منطقة تبلغ أربعة أعشار ميكرومتر مربع.",
+     "latex": "D = \\frac{4{,}05\\cdot10^{-21}}{9{,}42\\cdot10^{-9}} \\approx 4{,}3\\cdot10^{-13}\\ \\text{m}^{2}/\\text{s}"
+    },
+    {
+     "text": "متوسط مربع الإزاحة خلال دقيقة — ثم نستخرج الجذر فورًا، لأننا نفكر بالميكرومترات أفضل من الأمتار المربعة.",
+     "latex": "\\langle x^{2}\\rangle = 2Dt \\approx 5{,}2\\cdot10^{-11}\\ \\text{m}^{2}, \\qquad \\sqrt{\\langle x^{2}\\rangle} \\approx 7{,}2\\ \\text{μm}"
+    },
+    {
+     "text": "والآن الخطوة العكسية — تلك التي قام بها بيرين. نحن نعتبر الإزاحة هي المقاسة، والمجهول هو رقم أفوجادرو.",
+     "latex": "N_A = \\frac{R T\\, t}{3\\pi\\eta a\\,\\langle x^{2}\\rangle} = \\frac{8{,}314\\cdot 293\\cdot 60}{4{,}71\\cdot10^{-9}\\cdot 5{,}2\\cdot10^{-11}} \\approx 6\\cdot10^{23}"
+    }
+   ],
+   "answer": "D ≈ 4.3·10⁻¹³ م²/ث؛ خلال دقيقة، يبتعد الجسيم على طول محور واحد بحوالي 7 ميكرومتر — أي سبعة أضعاف قطره. الحساب العكسي يعطي N_A ≈ 6·10²³ مول⁻¹.",
+   "check": "هل هذا معقول؟ سبعة ميكرونات في الدقيقة لجسيم قطره ميكرون — هذا بالضبط ما وصفه براون: الحبيبة تتحرك بشكل ملحوظ، لكنها لا تذهب إلى أي مكان. عند تكبير أربعمائة مرة، هذا سنتيمتر على الشاشة، من المستحيل تفويته. الآن المقارنة الأكثر إفادة. من توزيع الطاقة بالتساوي، السرعة اللحظية لهذه الحبيبة تساوي الجذر التربيعي لـ 3k_BT/m وتساوي حوالي 5 مليمترات في الثانية. خلال دقيقة، بهذه السرعة كانت ستقطع حوالي ثلث متر — لكنها ابتعدت عن نقطة البداية سبعة ميكرونات فقط، أي أقل بأربعين ألف مرة. من هنا يتضح لماذا لم تنجح التجارب قبل أينشتاين: كان المجربون يقيسون بعناية \"سرعة\" الجسيم البراوني ويحصلون على أرقام مختلفة، لأنه كلما نظرت أكثر، رأيت سرعة أكبر. الكمية ذات المعنى هنا ليست السرعة، بل الإزاحة خلال زمن محدد."
+  },
+  "constants": {
+   "title": "ثوابت هذا القسم",
+   "lead": "أربعة أرقام. الأولان هما الغاية من التجربة كلها؛ والثانيان هما خصائص الوسط التي لا يمكن تطبيق المعادلة بدونها.",
+   "items": [
+    {
+     "sym": "k_B",
+     "latex": "k_B",
+     "name": "ثابت بولتزمان",
+     "value": "1,380 649 · 10⁻²³",
+     "unit": "J / K",
+     "why": "سعر الصرف بين درجة الحرارة والطاقة. من خلاله تدخل درجة الحرارة في معامل الانتشار: سخّن الوسط، فيزداد الانتشار سرعة. من المفيد تذكر حاصل الضرب k_BT عند درجة حرارة الغرفة: حوالي 4·10⁻²¹ جول، أو 1/40 إلكترون فولت. هذا المقياس يكفي لتقدير بالعين أي العمليات يمكن للحركة الحرارية أن تطلقها، وأيها فوق طاقتها.",
+     "mnemo": "4·10⁻²¹ J — «حصة الغرفة» من الطاقة. يستحق الرقم أن يُحفظ في الذاكرة بجانب 6·10²³."
+    },
+    {
+     "sym": "N_A",
+     "latex": "N_A",
+     "name": "ثابت أفوجادرو",
+     "value": "6,022 140 76 · 10²³",
+     "unit": "1 / mol",
+     "why": "الكمية الوحيدة في المعادلة التي لا يمكن قياسها بشكل منفصل، ولهذا كانت هي التي نتجت من تجربة بيرين. ثابت الغاز العام R يُقاس من الغازات دون أي فرضيات ذرية، وk_B = R/N_A. إذن، أي قياس يجمع R وk_B هو قياس خفي لعدد أفوجادرو. منذ 2019، تم تثبيت القيمة بدقة، ومن خلالها تم تعريف المول.",
+     "mnemo": "حصل بيرين على حوالي 7·10²³ — أعلى بنسبة عشرة بالمئة من القيمة الحالية. بالنسبة لعام 1908، كانت هذه إصابة دقيقة قاتلة."
+    },
+    {
+     "sym": "η",
+     "latex": "\\eta_{\\text{H}_2\\text{O}}",
+     "name": "اللزوجة الديناميكية للماء عند 20 °C",
+     "value": "1,002 · 10⁻³",
+     "unit": "Pa · s",
+     "why": "بالضبط الكمية التي تبطئ الجسيم وتحدد مدى ارتجافه: في المعادلة هي نفسها. الألف المستدير — مصادفة سعيدة، مناسبة للتقديرات. اعتماد قوي على درجة الحرارة: عند 40 °C تنخفض اللزوجة بمقدار مرة ونصف، لذا فإن الماء الساخن يعطي حركة أوسع بشكل ملحوظ مما يوحي به مجرد زيادة T.",
+     "mnemo": "الماء — ملي باسكال ثانية، والهواء أرق بـ 55 مرة. ومن هنا يكون الارتجاف في الهواء أوسع بسبع مرات تقريبًا: الجذر التربيعي لـ 55."
+    },
+    {
+     "sym": "λ",
+     "latex": "\\lambda_{\\text{الهواء}}",
+     "name": "متوسط المسار الحر في الهواء (20 °C، 1 ضغط جوي)",
+     "value": "68",
+     "unit": "nm",
+     "why": "القيمة الافتراضية على المنصة ومقياس لمدى دقة تقسيم حركة الجزيء. بين التصادمات، يقطع الجزيء سبعة أعشار ميكرون مقسومة على عشرة — مسافة أصغر بحوالي سبع مرات من طول موجة الضوء المرئي. وفي الوقت نفسه، يطير بسرعة حوالي 470 م/ث، ومن هذين الرقمين تجمع المنصة D = λv/3 ≈ 10⁻⁵ م²/ث.",
+     "mnemo": "68 نانومتر — حوالي مائتي قطر جزيئي. خفّض الضغط إلى النصف، وسيتضاعف متوسط المسار الحر."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "كيف يرتبط هذا ببقية الدورة",
+   "lead": "هذا القسم هو نقطة التقاء ثلاثة مواضيع، وفي كل منها يعيد شيئًا ما.",
+   "items": [
+    {
+     "h": "الجزيئات ودرجة الحرارة",
+     "text": "توزيع الطاقة بالتساوي لا يسأل عن حجم الجسم: متوسط الطاقة الحركية لحبيبة براونية يساوي نفس ³⁄₂k_BT لجزيء واحد. ومن هنا يتبع استنتاج غير متوقع — الحبيبة الثقيلة لا ترتجف بشكل أضعف، بل بشكل أبطأ: الطاقة نفسها، لذا فإن مربع السرعة يتناسب عكسيًا مع الكتلة. رسميًا، نلاحظ في المجهر سلوك «جزيء» واحد، لكنه كبير جدًا."
+    },
+    {
+     "h": "اللزوجة وقانون ستوكس",
+     "text": "العامل 6πηa يأتي من الديناميكا المائية للتدفق اللزج ويحمل معه جميع شروطه: كرة، التصاق السائل بالسطح، عدد رينولدز صغير. نفس المعامل γ يصف التباطؤ ومدى الارتجاف — كمية واحدة مسؤولة عن فقدان الطاقة وضخها في نفس الوقت."
+    },
+    {
+     "h": "الإنتروبيا والقانون الثاني",
+     "text": "الانتشار هو القانون الثاني في العمل: الشوائب تنتشر لأن الحالات المنتشرة أكثر بكثير. لكن الحبيبة تظهر أيضًا الجانب الآخر: على مقياس جسيم واحد، تحدث الانحرافات عن «المفترض» باستمرار، ويتضح أن القانون الثاني هو بيان حول الاحتمالات، وليس حظرًا. بالمناسبة، معادلة التوصيل الحراري هي نفس معادلة الانتشار، لذا تنتشر الحرارة على طول القضيب أيضًا كجذر تربيعي للزمن."
+    },
+    {
+     "h": "الضوضاء في الإلكترونيات",
+     "text": "العلاقة D = k_BT/γ هي أول مثال على الربط بين التقلبات والتبديد. لها نظير كهربائي دقيق: المقاومة التي تبدد الطاقة هي نفسها التي تولد الضوضاء الحرارية، ومتوسط مربع جهد الضوضاء يساوي 4k_BTR لكل هرتز من النطاق. قاسه جونسون في عام 1928، واشتقه نيكويست في نفس العام — بحجة منظمة تمامًا مثل حجة أينشتاين."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "مثير للاهتمام: تحقق بنفسك",
+   "lead": "التجربتان التاليتان لا تُظهران الحركة البراونية نفسها بقدر ما تُظهران لماذا استغرق اكتشافها وقتًا طويلاً: كل ما ستراه تقريبًا سيكون حملًا حراريًا. القدرة على التمييز بين الاثنين هي المهارة المطلوبة هنا.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "تجربة في المطبخ",
+     "h": "قطرة حليب في ماء ساكن",
+     "text": "خذ كأسين من الماء بدرجة حرارة الغرفة، وضعهما بعيدًا عن المدفأة والنافذة، واتركهما لمدة نصف ساعة حتى تهدأ التيارات. ثم أسقط في الأول قطرة حليب، وفي الثاني قطرة شاي أو ملون غذائي — بهدوء، على طول الجدار، باستخدام قشة، دون تحريك. غطِّهما ولا تحركهما. بعد ساعة، انظر إلى حدود البقع: إلى أي مدى تمددت كل واحدة؟",
+     "answer": "ستبقى حدود بقعة الحليب حادة، بينما تتمدد بقعة الملون بضعة ملليمترات. الأرقام تتطابق تمامًا. كريات الدهن في الحليب نصف قطرها حوالي نصف ميكرون، وبالنسبة لها D ≈ 4·10⁻¹³ م²/ث، وخلال ساعة يعطي الجذر التربيعي لـ 2Dt حوالي 0.06 ملليمتر — وهو ما لا يمكن رؤيته. جزيء الملون أصغر بألف مرة، وD له حوالي 5·10⁻¹⁰ م²/ث، وفي نفس الساعة ينتج حوالي 2 ملليمتر. نسبة التمدد تساوي الجذر التربيعي لنسبة المعاملات، أي حوالي ثلاثين. الاستنتاج الرئيسي غير متوقع: الانتشار على نطاق المطبخ لا يعمل عمليًا، وكل حركة ملحوظة هي تيارات. إذا تحركت البقعة سنتيمترًا خلال ساعة، فأنت تراقب حملًا حراريًا ناتجًا عن فرق درجات حرارة بكسور الدرجة، وليس جزيئات."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "تجربة في المطبخ",
+     "h": "دخان في شعاع ضوء",
+     "text": "في غرفة مظلمة، وجّه شعاعًا ضيقًا وساطعًا من مصباح يدوي على طول الجدار، وأطلق فيه دخانًا من عود ثقاب أُطفئ للتو. ستتوهج جزيئات الغبار كنقاط. الآن لا تنظر إلى الحركة العامة، بل إلى الجيران: هل تتحرك نقطتان قريبتان في نفس الاتجاه بشكل منسق — أم أن كل واحدة تعيش بمفردها؟",
+     "answer": "في الغالب بشكل منسق — وهذا ليس حركة براونية، بل تيارات هوائية. هذا هو المعيار الذي استخدمه براون نفسه لتمييز ظاهرته عن الانجراف: الاهتزاز الحراري مستقل لكل جسيم، بينما التيار يحمل الجميع معًا. دعنا نقدر ما ستراه في الحالة المثالية. لجسيم دخان نصف قطره 0.15 ميكرون في الهواء، D ≈ 8·10⁻¹¹ م²/ث، وفي ثانية يتحرك حوالي 13 ميكرون. العين من مسافة ذراع ممدودة تميز تفصيلًا أكبر بعشر مرات — لذا لا يمكن التقاط الاهتزاز بالعين المجردة، تحتاج على الأقل إلى مجهر بتكبير 40x أو عدسة ماكرو للهاتف. لكن قارن الوسائط: في الماء، نفس الجسيم كان سيقطع في ثانية 1.7 ميكرون فقط. الهواء أرق من الماء بـ 55 مرة، ومدى الاهتزاز أكبر بجذر هذا الرقم، أي حوالي سبع مرات ونصف."
+    },
+    {
+     "icon": "paradox",
+     "kind": "مفارقة",
+     "h": "القانون الثاني للديناميكا الحرارية يُنتهك أمام عينيك",
+     "text": "حبيبة ترتفع بانتظام إلى الأعلى، ضد الجاذبية، وجزيئات المعلق تتجمع أحيانًا بكثافة أكبر حيث يوجد الكثير منها بالفعل. الإنتروبيا في هذه اللحظة تتناقص. لماذا لا يمكن بناء آلة حركة أبدية من هذا؟",
+     "answer": "لأن القانون الثاني هو بيان حول الاحتمالات، وليس حظرًا، وعلى مقياس جسيم ميكروني واحد، تكون الانحرافات مماثلة للمتوسط. الآلة الأبدية تنكسر عند نقطة أخرى: أي جهاز حساس بما يكفي لالتقاط تذبذب واحد، هو نفسه عرضة لتذبذبات مماثلة. حلل سمولوتشوفسكي هذا في عام 1912 بمثال باب بنابض يسمح للجزيئات بالمرور في اتجاه واحد: الباب خفيف جدًا لدرجة أن الحركة الحرارية تفتحه بنفسها، ويتساوى التدفق في كلا الاتجاهين. أعاد فاينمان في عام 1963 بناء نفس الحجة على ترس مع سقاطة وأظهر أنه عند نفس درجة حرارة الغاز والترس، تقفز السقاطة بنفس التردد الذي تمسك به — متوسط الدوران صفر. يظهر الشغل فقط إذا كان الترس أبرد من الغاز، أي بوجود فرق درجات حرارة. لا يحدث أي استثناء للقانون الثاني، لكن الصياغة الدقيقة أكثر دقة من المدرسة: النظريات الحديثة عن التقلبات تخبرنا بكم مرة يكون الاتجاه \"الصحيح\" أكثر احتمالًا من العكسي."
+    },
+    {
+     "icon": "fact",
+     "kind": "حقيقة مثيرة",
+     "h": "براون سحق أبو الهول",
+     "text": "كان فحص براون نموذجيًا. بعد رؤية الاهتزاز في جزيئات حبوب اللقاح، افترض أصلًا حيويًا وسارع لدحضه: أخذ حبوب لقاح من نباتات ماتت قبل قرن من التجربة في معشبة — اهتزت. أخذ سخامًا وزجاجًا مسحوقًا ومعادن ومعادن — اهتزت. أخذ، من بين أشياء أخرى، فتاتًا من حجر مكسور من تمثال أبو الهول المصري — اهتزت بنفس الطريقة. قائمة العينات غير الحية في مقالته تستغرق صفحة كاملة. كما اتضح أن براون لم يكن الأول: قبل أربعين عامًا، رأى يان إنجنهاوس نفس الشيء في مسحوق الفحم. لكن التجارب الضابطة المنهجية التي أجراها براون هي التي حولت ملاحظة غريبة إلى حقيقة فيزيائية تتطلب تفسيرًا."
+    },
+    {
+     "icon": "estimate",
+     "kind": "تقدير",
+     "h": "أين تنتهي الحركة البراونية",
+     "text": "معامل الانتشار يتناسب عكسيًا مع نصف القطر، لذا فإن الإزاحة تتناقص كجذر نصف القطر — اعتماد ضعيف، ويبدو أن كل شيء يجب أن يهتز. دعنا نتحقق من حبيبة كوارتز بقطر 50 ميكرون، والتي لا تزال مرئية بالعين. نصف قطرها أكبر بخمسين مرة من الحبيبة في المثال، لذا فإن الإزاحة أصغر بحوالي سبع مرات: حوالي ميكرون واحد في الدقيقة. الآن دعنا نحسب الترسيب: وفقًا لستوكس، تغوص هذه الحبيبة بسرعة 2.2 ملليمتر في الثانية، أي في نفس الدقيقة تنزل 13 سنتيمترًا. الترسيب أقوى من الاهتزاز بمئة ألف مرة. هذا هو حد الظاهرة: الحركة البراونية ملحوظة فقط للجسيمات الأصغر من بضعة ميكرونات، حيث يكون الوزن قد خسر بالفعل أمام الحركة الحرارية. لهذا اضطر بيرين إلى قضاء أشهر في اختيار كرات راتنج متطابقة دون ميكرونية — نصف العمل لم يكن في المراقبة، بل في تحضير العينة."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "الجدل حول حقيقة الذرات: كيف حُسم",
+   "blocks": [
+    {
+     "h": "ما الذي أنكره خصوم الذرات بالضبط",
+     "text": "من السهل تصوير موقف أتباع الطاقة - أوستفالد، ماخ، دويم - على أنه عناد، وهذا سيكون غير عادل. كانت حجتهم صارمة: الديناميكا الحرارية تصف الحرارة، والشغل، وتحولات المواد دون أن تذكر الذرة؛ وإدخال كيان لم يره أحد ولم يقسه في النظرية يعني استبدال الوصف بصورة. طالب ماخ بأن تتحدث الفيزياء فقط عن العلاقات بين الكميات القابلة للرصد. وفقًا لمعايير عام 1895، لم يكن هناك ما يمكن الرد به: النظرية الحركية الجزيئية فسرت المعروف جيدًا، لكنها لم تتنبأ بأي شيء لا يمكن الحصول عليه بطرق أخرى. جادل بولتزمان معهم حتى نهاية حياته وتوفي في عام 1906، قبل عامين من نتائج بيرين."
+    },
+    {
+     "h": "لماذا لم يثبت براون نفسه شيئًا",
+     "text": "لوحظ الارتعاش لمدة ثمانين عامًا، وطوال هذا الوقت لم يحسم شيئًا. فُسر بالتبخر، والقوى الشعرية، والحمل الحراري، والكهرباء، والتجاذب بين الجسيمات، وبقايا القوة الحيوية. في عام 1888، استبعد غوي الأسباب الخارجية بشكل منهجي: الحركة لم تتغير في الظلام، ولا في قبو بدرجة حرارة ثابتة، ولا في مجال مغناطيسي، ولا عند تغيير الإضاءة - وأشار إلى الحركة الحرارية للجزيئات. لكن هذا بقي تخمينًا معقولًا، لأنه لم يُحدد ما الذي يجب قياسه وما الرقم الذي يجب أن يظهر. الظاهرة التي تُرى لكنها لا تتنبأ بأي شيء ليست حجة."
+    },
+    {
+     "h": "ما أضافه أينشتاين: الكمية القابلة للقياس الصحيحة",
+     "text": "الأهم في عمل عام 1905 ليس فقط المعادلة، بل تغيير الكمية المرصودة. كل من سبقه قاس سرعة جسيم براوني - وحصل على قيم مختلفة، لأنها تعتمد على عدد المرات التي تنظر فيها: كلما كانت الفترة أقصر، زادت السرعة، ولا حد لها. شرح أينشتاين لماذا، واقترح قياس الإزاحة بدلاً من السرعة خلال فترة زمنية محددة. يمكن التحقق من ذلك بأرقام مثالنا: السرعة اللحظية للجسيم حوالي 5 مم/ث، ويفقد زخمه خلال زمن m/γ من رتبة مئة نانوثانية، وخلال هذا الوقت يقطع أقل من نانومتر - هذا هو طول خطوته العشوائية. اضرب جذر عدد هذه الخطوات في الدقيقة في طول الخطوة الواحدة، وستحصل على نفس الميكرونات التي تعطيها المعادلة الدقيقة.",
+     "latex": "\\tau = \\frac{m}{\\gamma} \\sim 10^{-7}\\ \\text{s}, \\qquad \\ell = v_{\\text{thermal}}\\tau \\sim 10^{-10}\\ \\text{m}"
+    },
+    {
+     "h": "حجة بيرين: ليست قياسًا واحدًا، بل خمسة عشر قياسًا",
+     "text": "الحجة الحاسمة لم تكن أن بيرين حصل على 7·10²³ من إزاحات براونية. الحاسمة كانت أنه جمع في جدول واحد أكثر من عشرة طرق مختلفة تمامًا للحصول على نفس الرقم: لزوجة الغازات، توزيع المعلق حسب الارتفاع، الحركة البراونية الدورانية، الزرقة في السماء، طيف الإشعاع الحراري، شحنة الإلكترون، عد جسيمات ألفا أثناء التحلل الإشعاعي. هذه الطرق لا تشترك في أي شيء - فيزياء مختلفة، وأجهزة مختلفة، ومختبرات مختلفة. كلها أعطت نفس الرقم بدقة تصل إلى نسب مئوية. مثل هذا التوافق لا يمكن تفسيره باختيار موفق: إما أن الجزيئات موجودة، أو أن الطبيعة تواطأت. اعترف أوستفالد بالهزيمة في عام 1909؛ ماخ لم يعترف أبدًا."
+    },
+    {
+     "h": "ما تعلمه هذه القصة",
+     "text": "أولاً: الحجة الحاسمة ليست القياس الأكثر دقة، بل تقارب مسارات مستقلة إلى رقم واحد. يمكن دائمًا تفسير نتيجة واحدة بخطأ منهجي؛ ثلاث عشرة نتيجة من مجالات مختلفة - لا. ثانيًا، وهو أقل متعة: يمكن رؤية ظاهرة لمدة ثمانين عامًا ولا تستخرج منها شيئًا حتى يقول شخص ما ما الذي يجب قياسه فيها بالضبط. الملاحظة وحدها لا تكفي، بل هناك حاجة إلى نظرية تقدم تنبؤًا قابلًا للاختبار. ثالثًا: اعتراضات أتباع الطاقة لم تُحل بالإقناع، بل بتنفيذ مطلبهم الخاص - أصبحت الذرة قابلة للملاحظة لأنه أمكن عدّها."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "الجسيم في الماء يهتز لأن اصطدامات الجزيئات لا تُلغى تمامًا: لمجموع N من الصدمات العشوائية يبقى فائض من رتبة √N. مجموع الخطوات العشوائية المستقلة ينمو ليس كعددها، بل كجذره، لذلك ⟨x²⟩ = 2Dt. بربط D بدرجة الحرارة واللزوجة، حوّل أينشتاين اهتزاز الجسيم إلى ميزان للجزيئات، وبيرين على هذا الميزان عدّ رقم أفوجادرو.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "⟨x²⟩ = 2Dt",
+     "text": "مربع الإزاحة يتناسب مع الزمن، وليس الإزاحة نفسها. أربع مرات أطول - ضعف المسافة"
+    },
+    {
+     "icon": "sigma",
+     "title": "الحدود المتقاطعة تُلغى",
+     "text": "في مربع المجموع، عدد الحدود القطرية N، والمتقاطعة تقريبًا N². لكن الثانية في المتوسط صفر، لأن الخطوات مستقلة"
+    },
+    {
+     "icon": "scale",
+     "title": "D = k_BT / 6πηa",
+     "text": "نفس اللزوجة تبطئ الجسيم وتحدد مدى اهتزازه: التبدد والتقلب مرتبطان"
+    },
+    {
+     "icon": "fact",
+     "title": "حجة لصالح الذرات",
+     "text": "لم يقنع قياس واحد، بل خمسة عشر طريقة مستقلة أعطت نفس رقم أفوجادرو"
+    }
+   ],
+   "where": [
+    "تحديد حجم الجسيمات من اهتزازها - طريقة تشتت الضوء الديناميكي",
+    "في الرئتين، يقطع الأكسجين آخر ميكرونات بالانتشار: على هذه المسافات يكون سريعًا بالفعل",
+    "تنتشر الحرارة في قضيب وفق نفس القانون √t - معادلة التوصيل الحراري هي معادلة الانتشار",
+    "الضوضاء الحرارية للمقاوم: نفس العلاقة بين الاحتكاك والتقلب، لكن في دائرة كهربائية"
+   ],
+   "watchOut": "ثلاثة أخطاء. الأول: الاعتقاد بأن الإزاحة تتناسب مع الزمن: الزمن يتناسب مع مربعها. الثاني: الخلط بين الإزاحة والمسافة المقطوعة: المسافة تساوي Nℓ وتنمو خطيًا، بينما الإزاحة كجذر، وعلى أزمنة طويلة تختلف بآلاف المرات. الثالث: العامل: 2Dt يتعلق بمحور واحد، على المستوى سيكون 4Dt، في الفضاء 6Dt."
+  },
+  "quiz": [
+   {
+    "id": "b1",
+    "type": "mcq",
+    "q": "تبتعد الحبيبة عن نقطة البداية حوالي 7 ميكرومتر في الدقيقة. كم من الوقت يجب أن ننتظر حتى تبتعد 14 ميكرومتر؟",
+    "options": [
+     "دقيقتان",
+     "أربع دقائق",
+     "نصف دقيقة",
+     "ساعة"
+    ],
+    "answer": 1,
+    "why": "متناسب مع الزمن هو متوسط مربع الإزاحة، وليس الإزاحة نفسها: ⟨x²⟩ = 2Dt. لكي تتضاعف الإزاحة، يجب أن يتضاعف المربع أربع مرات، وبالتالي الزمن أيضًا أربع مرات. هذه هي السمة الرئيسية للمشي العشوائي: كلما طال الانتظار، كلما كان الانتظار أقل فائدة.",
+    "hint": "اكتب القانون ليس للإزاحة بل لمربعها. كم مرة سيزداد المربع إذا تضاعفت الإزاحة؟"
+   },
+   {
+    "id": "b2",
+    "type": "mcq",
+    "q": "تصطدم بالحبيبة حوالي 10²⁰ جزيء في الثانية من جميع الاتجاهات في وقت واحد. لماذا لا تلغي الصدمات بعضها البعض تمامًا؟",
+    "options": [
+     "تلغي بعضها البعض تقريبًا: يبقى تفوق نسبي من رتبة 1/√N، وهذا يكفي لجسيم ميكروني",
+     "من جهة واحدة يكون عدد الجزيئات دائمًا أكبر بشكل ملحوظ من الجهة الأخرى",
+     "الجزيئات من جهة واحدة أسخن، لذلك تدفع بقوة أكبر",
+     "الحبيبة تجذب الجزيئات، فتصطدم بها بشكل غير متماثل"
+    ],
+    "answer": 0,
+    "why": "لمجموع N من المتغيرات العشوائية، ينمو التشتت مثل √N، لذلك يكون التفوق النسبي 1/√N. عندما تكون N من رتبة 10²⁰، يكون هذا جزءًا من عشرة مليارات — حصة ضئيلة، لكن العدد المطلق للصدمات كبير جدًا لدرجة أن الباقي يكفي لتحريك الجسيم. الخيارات الأخرى تتطلب أن يكون الوسط غير متجانس، لكنه متجانس: كل شيء يحدث في سائل متوازن عند درجة حرارة واحدة.",
+    "hint": "الأمر لا يتعلق بأن الصدمات غير متماثلة في المتوسط — فهي متماثلة في المتوسط. السؤال هو: ما مدى تذبذب عدد الصدمات حول المتوسط؟"
+   },
+   {
+    "id": "b3",
+    "type": "free",
+    "q": "بكلماتك الخاصة: لماذا مجموع N خطوة عشوائية بطول ℓ يعطي إزاحة من رتبة √N·ℓ وليس N·ℓ؟",
+    "keywords": [
+     "مربع",
+     "متبادل",
+     "متقاطع",
+     "مستقل",
+     "صفر",
+     "إشارة",
+     "يلغي",
+     "متوسط"
+    ],
+    "needed": 2,
+    "why": "لأنه عند تربيع المجموع تظهر فئتان من الحدود. الحدود القطرية ℓᵢ² هي مربعات، وهي دائمًا موجبة وتُجمع ببساطة، وعددها N بالضبط. الحدود المتبادلة ℓᵢℓⱼ أكثر عددًا بكثير، لكن كل منها يساوي صفرًا في المتوسط: الخطوات مستقلة، لذا فإن متوسط الضرب يساوي حاصل ضرب المتوسطات، وكل متوسط يساوي صفرًا. يبقى ⟨x²⟩ = Nℓ²، أي إزاحة من رتبة √N·ℓ. تحقق عكسي: إذا كانت الخطوات مترابطة وكل خطوة تستمر في اتجاه السابقة، فلن تتلاشى الحدود المتبادلة وستنمو الإزاحة إلى N·ℓ — وهذا هو الحركة العادية على خط مستقيم.",
+    "hint": "قم بتربيع المجموع وانظر ما هي الحدود التي تظهر. أي منها لا يمكن أن يلغي بعضها البعض مهما كانت الإشارات؟"
+   },
+   {
+    "id": "b4",
+    "type": "estimate",
+    "q": "الجسيم يبتعد على طول محور واحد بحوالي 7 ميكرومتر في الدقيقة. كم ميكرومتر سيبتعد في ساعة؟",
+    "answer": 54,
+    "unit": "ميكرومتر",
+    "why": "الإزاحة تنمو كجذر الزمن. الساعة أطول من الدقيقة 60 مرة، لذا فإن الإزاحة ستنمو بمقدار √60 ≈ 7.7 مرة: 7 · 7.7 ≈ 54 ميكرومتر. لاحظ كم هو صغير هذا: في ساعة يبتعد الجسيم خمسة أجزاء من مئة من المليمتر. لهذا السبب لا يخلط الانتشار أي شيء على المستويات المنزلية.",
+    "hint": "لا تضرب في 60. اسأل نفسك كم مرة سيزداد مربع الإزاحة — ثم استخرج الجذر فقط.",
+    "tolAbs": 15
+   }
+  ],
+  "title": "الحركة البراونية: كيف شوهدت الجزيئات",
+  "subtitle": "الفقرة 3 · المشي العشوائي وعدد أفوجادرو",
+  "intro": [
+   "في صيف عام 1827، وجّه عالم النبات روبرت براون مجهره نحو حبيبات خرجت من حبوب اللقاح في قطرة ماء، فرأى أنها لا تبقى في مكانها. لم يخفت الاهتزاز لا بعد ساعة ولا بعد يوم. اختبر براون إن كانت الحياة هي السبب: فسحق السناج والزجاج والمعادن وقطعة من حجر أبي الهول إلى غبار — فاهتزت جميعها بنفس الطريقة. إذن السبب فيزيائي. لكن ما هو بالضبط، لم يُعرف إلا بعد ثمانين عامًا.",
+   "الجدال الذي حسمته هذه الاهتزازات في النهاية كان أكبر من الظاهرة نفسها. في نهاية القرن التاسع عشر، ظل وجود الذرات فرضية، وكان لها معارضون جادون: أوستفالد وماك ودويهم أشاروا إلى أن الديناميكا الحرارية تعمل بشكل ممتاز دون جزيئات غير مرئية، وأن إدخال ما لا يمكن ملاحظته في العلم عادة سيئة. لم يكن هناك ما يُرد به تقريبًا: كل الحجج لصالح الجزيئات كانت غير مباشرة.",
+   "في عام 1905، لاحظ أينشتاين أن الحبيبة المهتزة هي الحجة المفقودة — إذا توقفنا عن قياس سرعتها وبدأنا في قياس إزاحتها. تنبأ بأن متوسط مربع الإزاحة ينمو بشكل متناسب مع الزمن، وأن معامل التناسب يُعبَّر عنه من خلال درجة الحرارة ولزوجة الوسط وعدد أفوجادرو. وبذلك تحول المجهر مع ساعة الإيقاف إلى أداة لعدّ الجزيئات. بعد ثلاث سنوات، أجرى جان بيرين هذا العدّ. سنسير في هذا الطريق كاملاً: من المشي العشوائي إلى عدد أفوجادرو."
+  ],
+  "standNote": "يحسب التطبيق انتشار جزيء في غاز، وليس حبيبة في الماء، لكن القانون مشترك بينهما، وجذر الزمن يظهر فيه بشكل أفضل. اضبط متوسط المسار الحر على 68 نانومتر والسرعة الحرارية على 470 مترًا في الثانية — وهذا هو الهواء عند درجة حرارة الغرفة — واسحب شريط التمرير الزمني. أول ما يلفت النظر: البقعة تنمو بشكل أبطأ. خلال خمس ثوانٍ تنتشر حوالي سنتيمتر واحد، وللحصول على سنتيمترين تحتاج إلى عشرين ثانية وليس عشرًا. هذا هو الجذر. ثانيًا: انظر إلى عداد التصادمات — عند الثانية العشرين يبلغ حوالي مئة مليار، وكل ذلك من أجل سنتيمترين. ثالثًا، الأكثر فائدة عمليًا: السطر «للابتعاد مترًا واحدًا، تحتاج ثلاث عشرة ساعة». لهذا السبب تنتشر الرائحة عبر الغرفة بفعل تيار الهواء وليس الانتشار. وملاحظة صادقة: صيغة التطبيق D = λv/3 هي تقدير تقريبي، وهي أقل من معامل الانتشار المقاس في الهواء بحوالي الضعف، والحساب الحركي الدقيق يعطي معاملًا أكبر. أما بالنسبة للحبيبة في هذا الفصل، فإن D أصغر بخمسة وعشرين مليون مرة — لذلك في المثال ستحصل على ميكرومترات وليس سنتيمترات."
  }
 }

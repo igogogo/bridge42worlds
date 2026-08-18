@@ -695,7 +695,64 @@
     "tolAbs": 25,
     "hint": "Calculate using M = v²r/G. Convert both the speed and the radius to SI units — and do not lose the square of the speed."
    }
-  ]
+  ],
+  "derivation": {
+   "title": "How a conclusion about the invisible follows from measurements",
+   "lead": "Neither dark matter nor dark energy was 'assumed for beauty'. Both emerged as the difference between what was measured and what was calculated. Let's trace both conclusions.",
+   "steps": [
+    {
+     "text": "A star on a circular orbit: the gravity of the mass inside the orbit provides the centripetal acceleration. Equate and get the velocity. Importantly, only the mass INSIDE the orbit enters—the outer layers of a spherically symmetric distribution pull in no direction.",
+     "latex": "\\frac{G M(r) m}{r^2} = \\frac{m v^2}{r} \\;\\Longrightarrow\\; v(r) = \\sqrt{\\frac{G M(r)}{r}}",
+     "figure": "circularv",
+     "figCaption": "The velocity is set only by the mass inside the orbit: the outside does not attract"
+    },
+    {
+     "text": "Beyond the edge of the visible disk there is almost no luminous matter, so $M(r)$ barely grows further. Then the velocity must fall as the inverse square root of the radius—just like the planets in the Solar System, where almost all the mass is concentrated at the center.",
+     "latex": "M(r) \\approx \\text{const} \\;\\Longrightarrow\\; v \\propto \\frac{1}{\\sqrt{r}}",
+     "figure": "keplerfall",
+     "figCaption": "If the mass has ended, the velocity curve should go down"
+    },
+    {
+     "text": "Measurements give something else: the velocity reaches a plateau and holds to the very edge of what is measurable. For this to happen, the mass must continue to grow roughly in proportion to the radius. No light comes from there—hence the conclusion: the galaxy is surrounded by a halo of invisible gravitating matter.",
+     "latex": "v \\approx \\text{const} \\;\\Longrightarrow\\; M(r) \\propto r",
+     "figure": "flatcurve",
+     "figCaption": "The flat curve is exactly the observation from which the halo follows"
+    },
+    {
+     "text": "The plateau is now measured not by stars: the luminous disk ends, but neutral hydrogen extends two or three times farther and is visible in the 21 cm radio line, where the velocity is read from the Doppler shift. This gas contributes a few percent to the total mass—small against the halo, although at outer radii it is already more than the stars; in our reasoning it serves as a velocity marker at an empty radius. The curve is then not fitted to a 'flat' one, but inverted point by point: each measured $v$ at its own $r$ directly gives the mass inside that radius, and the derivative of mass with respect to the volume of a spherical shell gives the density. On the flat part, the density falls as the inverse square of the radius: this is the halo profile—a cloud without an edge, not a shell.",
+     "latex": "M(r) = \\frac{v^2(r)\\,r}{G}, \\qquad \\rho(r) = \\frac{1}{4\\pi r^2}\\frac{dM}{dr} = \\frac{v^2}{4\\pi G r^2}",
+     "figure": "massprofile",
+     "figCaption": "Each point of the curve gives the mass inside its radius, the derivative gives the density"
+    },
+    {
+     "text": "Velocities work only where there is something to orbit. A galaxy cluster is weighed by a second, independent method: its mass deflects rays from galaxies far behind, and they stretch into arcs and rings. The deflection angle of a ray passing at an impact parameter $b$ from a mass $M$ is given by general relativity—and it is exactly twice what Newton would give for a particle moving at the speed of light. Here neither orbits nor an assumption of equilibrium are needed: the distortion of the image measures the gravitating mass directly, and the answer again comes out about five times larger than the luminous mass.",
+     "latex": "\\alpha = \\frac{4GM}{c^2 b} \\;\\approx\\; 20'' \\quad \\text{at } M \\sim 10^{14} M_\\odot,\\; b \\sim 200\\ \\text{kpc}",
+     "figure": "lensdeflect",
+     "figCaption": "The deflection depends only on the mass and the impact parameter: no velocities, no equilibrium needed"
+    },
+    {
+     "text": "Now the second conclusion. The expansion is governed by the Friedmann equation: the growth rate is set by the density. Matter dilutes during expansion as the cube of the scale factor, while dark energy does not dilute at all—its density is constant. Therefore, over time it inevitably takes over.",
+     "latex": "\\left(\\frac{\\dot a}{a}\\right)^2 = H_0^2\\left(\\frac{\\Omega_m}{a^3} + \\Omega_\\Lambda\\right)",
+     "figure": "friedmann",
+     "figCaption": "Matter dilutes as 1/a³, dark energy remains constant"
+    },
+    {
+     "text": "While the matter density is high, gravity decelerates the expansion. When it falls below a certain threshold, the sign of the acceleration changes. Setting the second derivative to zero gives the moment of transition—and it occurs at a redshift of about 0.7, i.e., about six billion years ago.",
+     "latex": "\\ddot a = 0 \\;\\Longrightarrow\\; a^3 = \\frac{\\Omega_m}{2\\Omega_\\Lambda} \\;\\Longrightarrow\\; z \\approx 0{,}7",
+     "figure": "accelflip",
+     "figCaption": "While there is much matter, the expansion decelerates; when it has diluted, it accelerates"
+    },
+    {
+     "text": "An independent check: type Ia supernovae explode with almost the same luminosity, so the distance is calculated from the apparent brightness, and the redshift from the spectrum. If one is plotted against the other, distant supernovae turn out to be farther than any decelerating expansion predicts. This is exactly how acceleration was discovered.",
+     "latex": "m - M = 5\\lg\\frac{d}{10\\ \\text{pc}} \\quad \\text{— distance from apparent brightness}",
+     "figure": "standardcandle",
+     "figCaption": "Known luminosity turns apparent brightness into distance"
+    }
+   ],
+   "plate": "\\Omega_m \\approx 0{,}32, \\qquad \\Omega_\\Lambda \\approx 0{,}68",
+   "plateCap": "Of the 0.32 matter, only about 0.05 is ordinary matter: stars, gas, planets, and us. The rest is identified only by gravity.",
+   "note": "What is honest here and what is not. The observations are reliable and obtained by different independent methods. The word 'dark matter' describes the observations, not explains them: no particle has been found in any experiment, and the alternative with a modified law of gravity explains the rotation curves but fails on clusters and the cosmic microwave background. Dark energy is even worse: its density in vacuum, calculated in quantum field theory, diverges from the observed one by dozens of orders of magnitude. This is not an 'almost closed question', but the biggest hole in modern physics."
+  }
  },
  "es": {
   "title": "Materia oscura y energía oscura",
@@ -1000,7 +1057,64 @@
     "tolAbs": 25,
     "hint": "Calcula con M = v²r/G. Convierte tanto la velocidad como el radio a unidades del SI — y no pierdas el cuadrado de la velocidad."
    }
-  ]
+  ],
+  "derivation": {
+   "title": "Cómo de las mediciones se llega a la conclusión sobre lo invisible",
+   "lead": "Ni la materia oscura ni la energía oscura fueron 'supuestas por belleza'. Ambas aparecieron como la diferencia entre lo medido y lo calculado. Sigamos ambas deducciones.",
+   "steps": [
+    {
+     "text": "Una estrella en órbita circular: la gravedad de la masa dentro de la órbita proporciona la aceleración centrípeta. Igualamos y obtenemos la velocidad. Es importante que solo entra la masa DENTRO de la órbita: las capas externas de una distribución esféricamente simétrica no atraen hacia ningún lado.",
+     "latex": "\\frac{G M(r) m}{r^2} = \\frac{m v^2}{r} \\;\\Longrightarrow\\; v(r) = \\sqrt{\\frac{G M(r)}{r}}",
+     "figure": "circularv",
+     "figCaption": "La velocidad está determinada solo por la masa dentro de la órbita: lo externo no atrae"
+    },
+    {
+     "text": "Más allá del borde del disco visible casi no hay materia luminosa, por lo que $M(r)$ apenas crece más allá. Entonces la velocidad debe caer como la raíz inversa del radio, igual que en los planetas del sistema solar, donde casi toda la masa está concentrada en el centro.",
+     "latex": "M(r) \\approx \\text{const} \\;\\Longrightarrow\\; v \\propto \\frac{1}{\\sqrt{r}}",
+     "figure": "keplerfall",
+     "figCaption": "Si la masa se acabó, la curva de velocidades debe ir hacia abajo"
+    },
+    {
+     "text": "Las mediciones dan otra cosa: la velocidad alcanza una meseta y se mantiene hasta el borde de lo medible. Para que esto suceda, la masa debe seguir creciendo aproximadamente en proporción al radio. No llega luz de allí, de ahí la conclusión: la galaxia está rodeada por un halo de materia invisible que atrae gravitacionalmente.",
+     "latex": "v \\approx \\text{const} \\;\\Longrightarrow\\; M(r) \\propto r",
+     "figure": "flatcurve",
+     "figCaption": "La curva plana es la observación de la que se deduce el halo"
+    },
+    {
+     "text": "La meseta ya no se mide con estrellas: el disco luminoso termina, pero el hidrógeno neutro se extiende dos o tres veces más lejos y es visible en la línea de 21 cm, donde la velocidad se lee por el corrimiento Doppler. Este gas contribuye con un porcentaje a la masa total, lo cual es poco en comparación con el halo, aunque en los radios externos ya hay más gas que estrellas; en nuestro razonamiento, sirve como marcador de velocidad en un radio vacío. La curva no se ajusta a una 'plana', sino que se invierte punto por punto: cada $v$ medida en su $r$ da directamente la masa dentro de ese radio, y la derivada de la masa respecto al volumen de la capa esférica da la densidad. En la parte plana, la densidad cae como el inverso del cuadrado del radio: este es el perfil del halo, una nube sin borde, no una cáscara.",
+     "latex": "M(r) = \\frac{v^2(r)\\,r}{G}, \\qquad \\rho(r) = \\frac{1}{4\\pi r^2}\\frac{dM}{dr} = \\frac{v^2}{4\\pi G r^2}",
+     "figure": "massprofile",
+     "figCaption": "Cada punto de la curva da la masa dentro de su radio; la derivada da la densidad"
+    },
+    {
+     "text": "Las velocidades solo funcionan donde hay algo que orbite. Los cúmulos de galaxias se pesan de una segunda manera independiente: su masa desvía los rayos de luz de galaxias lejanas detrás de ellos, y estos se estiran en arcos y anillos. El ángulo de desviación de un rayo que pasa a una distancia de impacto $b$ de una masa $M$ lo da la relatividad general, y es exactamente el doble de lo que daría Newton para una partícula que viaja a la velocidad de la luz. Aquí no se necesitan órbitas ni suposiciones de equilibrio: la distorsión de la imagen mide directamente la masa gravitante, y la respuesta vuelve a ser aproximadamente cinco veces mayor que la masa luminosa.",
+     "latex": "\\alpha = \\frac{4GM}{c^2 b} \\;\\approx\\; 20'' \\quad \\text{para } M \\sim 10^{14} M_\\odot,\\; b \\sim 200\\ \\text{kpc}",
+     "figure": "lensdeflect",
+     "figCaption": "La desviación depende solo de la masa y la distancia de impacto: no se necesitan velocidades ni equilibrio"
+    },
+    {
+     "text": "Ahora la segunda conclusión. La expansión está gobernada por la ecuación de Friedmann: la tasa de crecimiento está determinada por la densidad. La materia se diluye con la expansión como el cubo del tamaño, mientras que la energía oscura no se diluye en absoluto; su densidad es constante. Por lo tanto, con el tiempo inevitablemente toma el control.",
+     "latex": "\\left(\\frac{\\dot a}{a}\\right)^2 = H_0^2\\left(\\frac{\\Omega_m}{a^3} + \\Omega_\\Lambda\\right)",
+     "figure": "friedmann",
+     "figCaption": "La materia se diluye como 1/a³, la energía oscura permanece constante"
+    },
+    {
+     "text": "Mientras la densidad de materia es alta, la gravedad frena la expansión. Cuando cae por debajo de cierto umbral, el signo de la aceleración cambia. Igualando la segunda derivada a cero, obtenemos el momento de transición, que ocurre aproximadamente en un corrimiento al rojo de 0,7, es decir, hace unos seis mil millones de años.",
+     "latex": "\\ddot a = 0 \\;\\Longrightarrow\\; a^3 = \\frac{\\Omega_m}{2\\Omega_\\Lambda} \\;\\Longrightarrow\\; z \\approx 0{,}7",
+     "figure": "accelflip",
+     "figCaption": "Mientras hay mucha materia, la expansión frena; cuando se diluye, se acelera"
+    },
+    {
+     "text": "Verificación independiente: las supernovas de tipo Ia estallan con una luminosidad casi idéntica, por lo que por su brillo aparente se calcula la distancia, y por su espectro, el corrimiento al rojo. Si se grafica uno contra el otro, las supernovas distantes resultan estar más lejos de lo que predice cualquier expansión desacelerada. Así fue como se descubrió la aceleración.",
+     "latex": "m - M = 5\\lg\\frac{d}{10\\ \\text{pc}} \\quad \\text{— distancia por brillo aparente}",
+     "figure": "standardcandle",
+     "figCaption": "Una luminosidad conocida convierte el brillo aparente en distancia"
+    }
+   ],
+   "plate": "\\Omega_m \\approx 0{,}32, \\qquad \\Omega_\\Lambda \\approx 0{,}68",
+   "plateCap": "De 0,32 de materia, solo alrededor de 0,05 es materia ordinaria: estrellas, gas, planetas y nosotros. El resto se ha identificado solo por su gravedad.",
+   "note": "Qué es honesto aquí y qué no. Las observaciones son fiables y se obtuvieron por métodos independientes. La palabra 'materia oscura' describe las observaciones, no las explica: la partícula no se ha encontrado en ningún experimento, y la alternativa de una ley de gravedad modificada explica las curvas de rotación, pero falla en los cúmulos y en el fondo cósmico de microondas. La energía oscura es aún peor: su densidad en el vacío, calculada en la teoría cuántica de campos, difiere de la observada en decenas de órdenes de magnitud. Esto no es una 'cuestión casi cerrada', sino el mayor agujero en la física moderna."
+  }
  },
  "ar": {
   "title": "المادة المظلمة والطاقة المظلمة",
@@ -1305,6 +1419,63 @@
     "tolAbs": 25,
     "hint": "احسب باستخدام M = v²r/G. حوّل السرعة ونصف القطر إلى وحدات النظام الدولي — ولا تفقد مربع السرعة."
    }
-  ]
+  ],
+  "derivation": {
+   "title": "كيف يُستنتج من القياسات وجود ما لا يُرى",
+   "lead": "لا المادة المظلمة ولا الطاقة المظلمة 'افترضتا من أجل الجمال'. كلتاهما ظهرتا كفرق بين ما قيس وما حُسب. دعونا نتتبع كلا الاستنتاجين.",
+   "steps": [
+    {
+     "text": "نجم في مدار دائري: جاذبية الكتلة داخل المدار توفر التسارع المركزي. نساوي ونحصل على السرعة. المهم أن الكتلة داخل المدار فقط هي التي تدخل — الطبقات الخارجية لتوزيع متماثل كرويًا لا تجذب في أي اتجاه.",
+     "latex": "\\frac{G M(r) m}{r^2} = \\frac{m v^2}{r} \\;\\Longrightarrow\\; v(r) = \\sqrt{\\frac{G M(r)}{r}}",
+     "figure": "circularv",
+     "figCaption": "السرعة تحددها فقط الكتلة داخل المدار: الخارج لا يجذب"
+    },
+    {
+     "text": "خارج حافة القرص المرئي لا يوجد تقريبًا أي مادة مضيئة، لذا فإن $M(r)$ لا تزيد كثيرًا بعد ذلك. عندها يجب أن تنخفض السرعة كجذر معكوس نصف القطر — تمامًا كما في كواكب النظام الشمسي، حيث تتركز الكتلة كلها تقريبًا في المركز.",
+     "latex": "M(r) \\approx \\text{const} \\;\\Longrightarrow\\; v \\propto \\frac{1}{\\sqrt{r}}",
+     "figure": "keplerfall",
+     "figCaption": "إذا انتهت الكتلة، يجب أن ينحني منحنى السرعات نحو الأسفل"
+    },
+    {
+     "text": "القياسات تعطي شيئًا آخر: السرعة تصل إلى هضبة وتبقى حتى أقصى حد يمكن قياسه. لكي يحدث هذا، يجب أن تستمر الكتلة في الزيادة تقريبًا بشكل متناسب مع نصف القطر. لا يأتي أي ضوء من هناك — ومن هنا الاستنتاج: تحيط بالمجرة هالة من مادة جاذبة غير مرئية.",
+     "latex": "v \\approx \\text{const} \\;\\Longrightarrow\\; M(r) \\propto r",
+     "figure": "flatcurve",
+     "figCaption": "المنحنى المسطح هو الملاحظة التي يُستنتج منها الهالة"
+    },
+    {
+     "text": "لم تعد الهضبة تقاس بالنجوم: القرص المضيء ينتهي، لكن الهيدروجين المحايد يمتد لمسافة ضعفين أو ثلاثة أضعاف ويُرى في خط راديوي عند 21 سم، حيث تُقرأ السرعة من الإزاحة الدوبلرية. يساهم هذا الغاز بنسبة قليلة في الكتلة الكلية — وهذا قليل مقارنة بالهالة، رغم أنه عند نصف القطر الخارجي يكون أكثر من النجوم؛ في منطقنا هو بمثابة علامة سرعة عند نصف قطر فارغ. بعد ذلك لا يُلائم المنحنى ليكون 'مسطحًا'، بل يُحول نقطة بنقطة: كل سرعة مقاسة $v$ عند نصف قطرها $r$ تعطي مباشرة الكتلة داخل ذلك نصف القطر، ومشتقة الكتلة بالنسبة لحجم الطبقة الكروية تعطي الكثافة. عند الجزء المسطح، تنخفض الكثافة كمقلوب مربع نصف القطر: هذا هو ملف الهالة — سحابة بلا حافة، وليس غلافًا.",
+     "latex": "M(r) = \\frac{v^2(r)\\,r}{G}, \\qquad \\rho(r) = \\frac{1}{4\\pi r^2}\\frac{dM}{dr} = \\frac{v^2}{4\\pi G r^2}",
+     "figure": "massprofile",
+     "figCaption": "كل نقطة على المنحنى تعطي الكتلة داخل نصف قطرها، والمشتقة تعطي الكثافة"
+    },
+    {
+     "text": "السرعات تعمل فقط حيث يوجد ما يدور في مدار. تُوزن عناقيد المجرات بطريقة ثانية مستقلة: كتلتها تحرف أشعة قادمة من مجرات خلفها بعيدة، فتمتد إلى أقواس وحلقات. زاوية انحراف الشعاع المار على مسافة تصادم $b$ من كتلة $M$ تعطيها النظرية النسبية العامة — وهي أكبر بمرتين بالضبط مما كانت ستعطيه نيوتن لجسيم يتحرك بسرعة الضوء. هنا لا نحتاج مدارات ولا افتراض توازن: تشوه الصورة يقيس الكتلة الجاذبة مباشرة، والنتيجة مرة أخرى أكبر بنحو خمس مرات من الكتلة المضيئة.",
+     "latex": "\\alpha = \\frac{4GM}{c^2 b} \\;\\approx\\; 20'' \\quad \\text{عند } M \\sim 10^{14} M_\\odot,\\; b \\sim 200\\ \\text{كيلو فرسخ فلكي}",
+     "figure": "lensdeflect",
+     "figCaption": "الانحراف يعتمد فقط على الكتلة ومسافة التصادم: لا حاجة لسرعات ولا توازن"
+    },
+    {
+     "text": "الآن الاستنتاج الثاني. التوسع يحكمه معادلة فريدمان: معدل النمو تحدده الكثافة. المادة تتخلخل أثناء التوسع كمكعب الحجم، بينما الطاقة المظلمة لا تتخلخل إطلاقًا، كثافتها ثابتة. لذلك مع مرور الوقت تسيطر حتمًا.",
+     "latex": "\\left(\\frac{\\dot a}{a}\\right)^2 = H_0^2\\left(\\frac{\\Omega_m}{a^3} + \\Omega_\\Lambda\\right)",
+     "figure": "friedmann",
+     "figCaption": "المادة تتخلخل كـ 1/a³، الطاقة المظلمة تبقى ثابتة"
+    },
+    {
+     "text": "ما دامت كثافة المادة كبيرة، الجاذبية تبطئ التوسع. عندما تنخفض دون عتبة معينة، تتغير إشارة التسارع. بمساواة المشتقة الثانية بالصفر، نحصل على لحظة الانتقال — وهي تقع عند انزياح أحمر حوالي 0.7، أي قبل حوالي ستة مليارات سنة.",
+     "latex": "\\ddot a = 0 \\;\\Longrightarrow\\; a^3 = \\frac{\\Omega_m}{2\\Omega_\\Lambda} \\;\\Longrightarrow\\; z \\approx 0{,}7",
+     "figure": "accelflip",
+     "figCaption": "ما دامت المادة كثيرة، التوسع يتباطأ؛ وعندما تتخلخل — يتسارع"
+    },
+    {
+     "text": "تحقق مستقل: المستعرات العظمى من النوع Ia تتوهج بلمعان شبه متطابق، لذا من السطوع الظاهري نحسب المسافة، ومن الطيف نحسب الانزياح الأحمر. إذا رسمنا أحدهما مقابل الآخر، نجد أن المستعرات البعيدة أبعد مما يتنبأ به أي توسع متباطئ. هكذا اكتشف التسارع.",
+     "latex": "m - M = 5\\lg\\frac{d}{10\\ \\text{فرسخ فلكي}} \\quad \\text{— المسافة من السطوع الظاهري}",
+     "figure": "standardcandle",
+     "figCaption": "اللمعان المعروف يحول السطوع الظاهري إلى مسافة"
+    }
+   ],
+   "plate": "\\Omega_m \\approx 0{,}32, \\qquad \\Omega_\\Lambda \\approx 0{,}68",
+   "plateCap": "من 0.32 من المادة، حوالي 0.05 فقط هي مادة عادية: نجوم، غاز، كواكب ونحن. الباقي لم يُتعرف عليه إلا من خلال الجاذبية.",
+   "note": "ما هو صادق هنا وما ليس كذلك. الملاحظات موثوقة وحصلنا عليها بطرق مستقلة مختلفة. كلمة 'مادة مظلمة' تصف الملاحظات ولا تفسرها: لم يُعثر على أي جسيم في أي تجربة، والبديل بقانون جاذبية معدل يفسر منحنيات الدوران لكنه يفشل في العناقيد وفي الخلفية الكونية الميكروية. الطاقة المظلمة أسوأ: كثافتها في الفراغ، المحسوبة في نظرية الحقل الكمومي، تتباعد عن الملاحظة بعشرات المراتب. هذه ليست 'مسألة شبه محسومة' بل أكبر ثغرة في الفيزياء الحديثة."
+  }
  }
 }

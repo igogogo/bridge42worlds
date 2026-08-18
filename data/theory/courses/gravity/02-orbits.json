@@ -826,7 +826,31 @@
     "hint": "Circular orbital speed is the square root of GM divided by r. How does it change if r is doubled?",
     "tolAbs": 0.6
    }
-  ]
+  ],
+  "math": {
+   "title": "The Math Needed Here",
+   "lead": "You will need the integral with an arbitrary constant, the square root as a ratio, and the logarithm.",
+   "items": [
+    {
+     "what": "Why energy has a minus sign",
+     "why": "The first step of the derivation declares potential energy negative, and that confuses more than anything else in the section. It's not about physics, but about integration. Potential energy is the work accumulated from a reference point to the given point, i.e., the integral of force over the path; and the integral leaves an arbitrary constant — the freedom to choose where to set zero. In gravitation, it is convenient to place zero at infinity, and then the sign reads like a verdict: negative means \"sits in a pit, won't get out by itself,\" zero means \"just enough,\" positive means \"free.\" The entire fifth step relies on this reading of the sign, where three signs of energy give three different curves.",
+     "latex": "E_{\\text{p}}(r) = -\\int_{\\infty}^{r} \\left(-\\frac{GMm}{s^{2}}\\right) ds = -\\frac{GMm}{r}",
+     "kit": "integral"
+    },
+    {
+     "what": "Why the square root of two, not two",
+     "why": "In the fourth step, the escape condition differs from the circular orbit condition by exactly a factor of two in energy, but by only $\\sqrt{2}$ in speed. The reason is that speed enters energy as a square. If $E \\propto v^{2}$, then inversely $v \\propto \\sqrt{E}$: to double the energy, you multiply the speed not by 2, but by 1.414. The habit of translating \"how many times did the quantity grow\" into \"how many times did its power grow\" saves the whole calculation here — in the example, the second cosmic velocity is not recalculated, but simply the first is multiplied by the square root of two. And note that neither mass nor radius enters this ratio: they cancel, so $\\sqrt{2}$ is the same for Earth, the Moon, and a neutron star.",
+     "latex": "E \\propto v^{2} \\;\\Longrightarrow\\; v \\propto \\sqrt{E}, \\qquad \\frac{v_{\\text{II}}}{v_{\\text{I}}} = \\sqrt{2} \\approx 1.414",
+     "kit": "propto"
+    },
+    {
+     "what": "The logarithm in the rocket equation",
+     "why": "The exponential in this section lives not in the derivation, but in the history of the formula and in the third comprehension question: why does the rocket mass grow exponentially with the required speed, not proportionally? The answer is mathematical. The logarithm answers the question \"to what power to raise\" and appears whenever the increment of a quantity is proportional to the quantity itself: each next kilogram of fuel has to be accelerated together with everything not yet burned. Tsiolkovsky wrote it like this: the increment of speed equals the exhaust velocity times the logarithm of the mass ratio. The inverse reading of the same equation is the exponential: to add the same portion of speed, the initial mass is multiplied by the same number. Hence the orders of magnitude. With an exhaust of 4.5 km/s and a required 9 km/s, the mass ratio is $e^{2} \\approx 7.4$, meaning fuel is more than eighty percent of the initial mass; the next 4.5 km/s will cost not an addition, but another multiplication — by $e \\approx 2.7$, and the multiplication by 7.4 repeats only for the next 9 km/s. The analysis of the equation itself is relegated to the appendix, but the exponential is needed already here — without it, stages look like an improvement, not the only way out.",
+     "latex": "\\Delta v = u \\ln\\frac{m_0}{m_1} \\;\\Longleftrightarrow\\; \\frac{m_0}{m_1} = e^{\\Delta v / u}",
+     "kit": "exponent"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Órbitas y velocidades cósmicas",
@@ -1202,7 +1226,31 @@
     "hint": "La velocidad circular es la raíz de GM dividido por r. ¿Cómo cambia si se duplica r?",
     "tolAbs": 0.6
    }
-  ]
+  ],
+  "math": {
+   "title": "Matemáticas que se necesitaron aquí",
+   "lead": "Se necesitarán la integral con constante arbitraria, la raíz cuadrada como proporción y el logaritmo.",
+   "items": [
+    {
+     "what": "De dónde salió el signo menos en la energía",
+     "why": "El primer paso de la deducción declara que la energía potencial es negativa, y esto confunde más que cualquier otra cosa en el párrafo. No se trata de física, sino de integración. La energía potencial es el trabajo acumulado desde el punto de referencia hasta el punto dado, es decir, la integral de la fuerza a lo largo del camino; y la integral deja una constante arbitraria: la libertad de elegir dónde considerar el cero. En la gravitación, es conveniente poner el cero en el infinito, y entonces el signo se lee de inmediato como una sentencia: negativo significa \"está en un pozo, no saldrá por sí solo\", cero significa \"justo lo suficiente\", positivo significa \"libre\". De esta lectura del signo depende todo el quinto paso, donde los tres signos de la energía dan tres curvas diferentes.",
+     "latex": "E_{\\text{p}}(r) = -\\int_{\\infty}^{r} \\left(-\\frac{GMm}{s^{2}}\\right) ds = -\\frac{GMm}{r}",
+     "kit": "integral"
+    },
+    {
+     "what": "Por qué la raíz de dos y no el dos",
+     "why": "En el cuarto paso, la condición de escape difiere de la condición de órbita circular exactamente en el doble de energía, pero en velocidad solo en $\\sqrt{2}$ veces. La razón es que la velocidad entra en la energía al cuadrado. Si $E \\propto v^{2}$, entonces inversamente $v \\propto \\sqrt{E}$: para duplicar la energía, la velocidad se multiplica no por 2, sino por 1,414. El hábito de traducir \"cuántas veces creció la magnitud\" a \"cuántas veces creció su potencia\" ahorra aquí todo el cálculo: en el ejemplo, la segunda velocidad cósmica no se calcula de nuevo, sino que simplemente se multiplica la primera por la raíz de dos. Y nótese que en esta relación no entran ni la masa ni el radio: se cancelaron, por lo que $\\sqrt{2}$ es igual para la Tierra, la Luna y una estrella de neutrones.",
+     "latex": "E \\propto v^{2} \\;\\Longrightarrow\\; v \\propto \\sqrt{E}, \\qquad \\frac{v_{\\text{II}}}{v_{\\text{I}}} = \\sqrt{2} \\approx 1{,}414",
+     "kit": "propto"
+    },
+    {
+     "what": "El logaritmo en la fórmula del cohete",
+     "why": "La exponencial en este párrafo no vive en la deducción, sino en la historia de la fórmula y en la tercera pregunta de comprensión: por qué la masa del cohete crece exponencialmente con la velocidad requerida, y no proporcionalmente. La respuesta es matemática. El logaritmo responde a la pregunta \"¿a qué potencia elevar?\" y aparece cada vez que el incremento de una magnitud es proporcional a la propia magnitud: cada kilogramo adicional de combustible hay que acelerarlo junto con todo lo que aún no se ha quemado. Tsiolkovsky lo escribió así: el incremento de velocidad es igual a la velocidad de escape de los gases multiplicada por el logaritmo de la relación de masas. La lectura inversa de la misma expresión es la exponencial: para añadir la misma porción de velocidad, la masa inicial se multiplica por el mismo número. De ahí salen inmediatamente los órdenes de magnitud. Con una velocidad de escape de 4,5 km/s y una necesaria de 9 km/s, la relación de masas es $e^{2} \\approx 7{,}4$, es decir, el combustible constituye más del ochenta por ciento de la masa inicial; los siguientes 4,5 km/s costarán no una adición, sino otra multiplicación: por $e \\approx 2{,}7$, y la multiplicación por 7,4 se repetirá solo en los siguientes 9 km/s. El análisis de la ecuación en sí se ha trasladado al apéndice, pero la exponencial ya se necesita aquí: sin ella, las etapas parecen una mejora, no la única salida.",
+     "latex": "\\Delta v = u \\ln\\frac{m_0}{m_1} \\;\\Longleftrightarrow\\; \\frac{m_0}{m_1} = e^{\\Delta v / u}",
+     "kit": "exponent"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "المدارات والسرعات الكونية",
@@ -1216,30 +1264,67 @@
   "formula": {
    "name": "طاقة المدار والسرعات الكونية",
    "latex": "E = \\frac{mv^{2}}{2} - \\frac{GMm}{r} = -\\frac{GMm}{2a}",
-   "alsoKnown": "تكامل الطاقة · معادلة القوى الحية (vis viva)",
+   "alsoKnown": "تكامل الطاقة · معادلة القوة الحية (vis viva)",
    "authors": [
     {
      "who": "إسحاق نيوتن",
      "year": "1687",
-     "what": "رسم المدفع الشهير على الجبل، موضحًا أن الحركة المدارية والسقوط هما نفس الشيء. شرح الرسم الفكرة أفضل مما كانت ستفعله صيغ ذلك الزمان."
+     "what": "رسم مدفعًا على قمة جبل، موضحًا أن الحركة المدارية والسقوط هما نفس الشيء. الرسم أوضح الفكرة أفضل مما كانت ستفعله معادلات ذلك الزمن"
     },
     {
      "who": "يوهان برنولي",
      "year": "1710",
-     "what": "حصل على العلاقة التي تربط السرعة بالمسافة وحجم المدار. لا تزال تسمى معادلة القوى الحية — نسبة للاسم القديم للطاقة الحركية الذي أدخله لايبنتس."
+     "what": "اشتق العلاقة التي تربط السرعة بالمسافة وحجم المدار. ولا تزال تُعرف بمعادلة القوة الحية — الاسم القديم للطاقة الحركية الذي أدخله لايبنتز"
     },
     {
      "who": "كونستانتين تسيولكوفسكي",
      "year": "1903",
-     "what": "اشتق معادلة حركة الصاروخ وكان أول من حسب السرعة اللازمة للوصول إلى المدار. عمل مدرسًا في المدرسة في كالوغا وكان شبه أصم منذ الطفولة."
+     "what": "اشتق معادلة حركة الصاروخ وكان أول من حسب السرعة اللازمة للوصول إلى المدار. عمل مدرسًا في مدرسة في كالوغا وكان شبه أصم منذ الطفولة"
     },
     {
-     "who": "والتر هومان",
+     "who": "فالتر هومان",
      "year": "1925",
-     "what": "وجد الطريقة الأكثر اقتصادية للانتقال بين المدارات الدائرية: تشغيل المحرك مرتين وقطع ناقص بينهما. لا تزال جميع المحطات بين الكواكب تطير على مساره حتى اليوم."
+     "what": "وجد الطريقة الأكثر اقتصادية للانتقال بين المدارات الدائرية: تشغيلان للمحرك وقطع ناقص بينهما. لا تزال جميع المسابير بين الكواكب تتبع مساره حتى اليوم"
     }
    ],
-   "story": "قصة السرعة الكونية الأولى مفيدة بشكل خاص، حيث تُقدم أحيانًا كإنجاز تقني. في الواقع، لم تكن الصعوبة أبدًا في السرعة بذاتها: 7,9 كم/ث هي أسرع بعشرين مرة فقط من الرصاصة. الصعوبة تكمن في أنه يجب تسريع الوقود مع الصاروخ، وبالتالي تزداد الكتلة أضعافًا مضاعفة مع السرعة المطلوبة. اشتق تسيولكوفسكي هذا في عام 1903 وأظهر أن صاروخًا أحادي المرحلة بالوقود آنذاك مستحيل من حيث المبدأ. من هنا ولدت فكرة المراحل: التخلص من الخزانات الفارغة لتجنب تسريعها أكثر. كل علم الفضاء نشأ من الصراع مع دالة أسية واحدة."
+   "story": "قصة السرعة الكونية الأولى مفيدة بشكل خاص، والتي تُقدم أحيانًا كإنجاز تقني. في الحقيقة، لم تكن الصعوبة أبدًا في السرعة بحد ذاتها: 7.9 كم/ثانية هي فقط أسرع بعشرين مرة من رصاصة. الصعوبة هي أن الوقود يجب أن يتسارع مع الصاروخ، وبالتالي فإن الكتلة تنمو بشكل أسي مع السرعة المطلوبة. اشتق تسيولكوفسكي هذا في عام 1903 وأظهر أن صاروخًا أحادي المرحلة يعمل بالوقود آنذاك مستحيل من حيث المبدأ. ومن هنا وُلدت فكرة المراحل: التخلص من الخزانات الفارغة حتى لا نضطر لتسريعها أكثر. نشأ كل علم الفضاء من الصراع مع دالة أسية واحدة.",
+   "symbols": [
+    {
+     "sym": "E",
+     "latex": "E",
+     "what": "الطاقة الميكانيكية الكلية",
+     "unit": "J",
+     "note": "سالبة للمدارات المغلقة: الجسم في بئر ولن يخرج بدون إضافة طاقة"
+    },
+    {
+     "sym": "a",
+     "latex": "a",
+     "what": "نصف المحور الأكبر",
+     "unit": "m",
+     "note": "يُحدد بالطاقة فقط؛ شكل المدار يمكن أن يكون أي شيء"
+    },
+    {
+     "sym": "v1",
+     "latex": "v_{\\text{I}}",
+     "what": "السرعة الكونية الأولى",
+     "unit": "m/s",
+     "note": "$\\sqrt{GM/R}$ — الحد الأدنى لمدار دائري عند السطح"
+    },
+    {
+     "sym": "v2",
+     "latex": "v_{\\text{II}}",
+     "what": "السرعة الكونية الثانية (سرعة الإفلات)",
+     "unit": "m/s",
+     "note": "$\\sqrt{2GM/R}$ — أكبر من الأولى بمقدار $\\sqrt{2}$ بالضبط، دائمًا ولأي جسم"
+    },
+    {
+     "sym": "L",
+     "latex": "L",
+     "what": "الزخم الزاوي",
+     "unit": "kg·m²/s",
+     "note": "مع الطاقة يحدد المدار بشكل فريد: الطاقة تعطي الحجم، والزخم يعطي الاستطالة"
+    }
+   ]
   },
   "symbols": [
    {
@@ -1578,7 +1663,31 @@
     "hint": "السرعة المدارية هي جذر GM مقسوماً على r. كيف تتغير إذا تضاعفت r؟",
     "tolAbs": 0.6
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات المطلوبة هنا",
+   "lead": "سنحتاج إلى تكامل مع ثابت اختياري، وجذر تربيعي كنسبة، ولوغاريتم.",
+   "items": [
+    {
+     "what": "من أين جاءت الإشارة السالبة للطاقة",
+     "why": "الخطوة الأولى في الاشتقاق تعلن أن طاقة الوضع سالبة، وهذا يربك أكثر من أي شيء آخر في هذا القسم. الأمر لا يتعلق بالفيزياء، بل بالتكامل. طاقة الوضع هي الشغل المُكتسب من نقطة مرجعية إلى نقطة معينة، أي تكامل القوة على المسار؛ والتكامل يترك ثابتًا اختياريًا — حرية اختيار مكان الصفر. في الجاذبية، من المناسب وضع الصفر عند اللانهاية، وعندها تُقرأ الإشارة كحكم: السالب يعني «في بئر ولن يخرج بنفسه»، والصفر يعني «يكفي بالضبط»، والموجب يعني «حر». على قراءة الإشارة هذه يعتمد القسم الخامس بأكمله، حيث تعطي إشارات الطاقة الثلاث منحنيات مختلفة.",
+     "latex": "E_{\\text{pot}}(r) = -\\int_{\\infty}^{r} \\left(-\\frac{GMm}{s^{2}}\\right) ds = -\\frac{GMm}{r}",
+     "kit": "integral"
+    },
+    {
+     "what": "لماذا جذر اثنين وليس اثنين",
+     "why": "في الخطوة الرابعة، شرط الإفلات يختلف عن شرط المدار الدائري بالضبط بمعامل اثنين في الطاقة، لكن في السرعة يختلف بمعامل $\\sqrt{2}$ فقط. السبب هو أن السرعة تدخل في الطاقة مربعة. إذا كان $E \\propto v^{2}$، فعكسيًا $v \\propto \\sqrt{E}$: لمضاعفة الطاقة، تُضرب السرعة ليس في 2 بل في 1.414. عادة تحويل «كم مرة زادت الكمية» إلى «كم مرة زادت قوتها» توفر هنا الحساب كله — في المثال، السرعة الكونية الثانية لا تُحسب من جديد، بل تُضرب الأولى في جذر اثنين. ولاحظ أن هذه النسبة لا تتضمن الكتلة ولا نصف القطر: لقد اختصرا، لذلك $\\sqrt{2}$ هو نفسه للأرض والقمر والنجم النيوتروني.",
+     "latex": "E \\propto v^{2} \\;\\Longrightarrow\\; v \\propto \\sqrt{E}, \\qquad \\frac{v_{\\text{II}}}{v_{\\text{I}}} = \\sqrt{2} \\approx 1{,}414",
+     "kit": "propto"
+    },
+    {
+     "what": "اللوغاريتم في معادلة الصاروخ",
+     "why": "الأُس في هذا القسم لا يظهر في الاشتقاق، بل في تاريخ المعادلة وفي سؤال الفهم الثالث: لماذا تزداد كتلة الصاروخ أُسِّيًا مع السرعة المطلوبة، وليس تناسبيًا. الجواب رياضي. اللوغاريتم يجيب على سؤال «إلى أي قوة نرفع» ويظهر كلما كان النمو متناسبًا مع الكمية نفسها: كل كيلوغرام وقود تالٍ يجب تسريعه مع كل ما لم يُحرق بعد. كتب تسيولكوفسكي هذا هكذا: زيادة السرعة تساوي سرعة اندفاع الغازات مضروبة في لوغاريتم نسبة الكتل. القراءة العكسية لنفس المعادلة هي الأُس: لإضافة نفس القدر من السرعة، تُضرب الكتلة الابتدائية في نفس الرقم. من هنا تأتي المقاييس فورًا. عند اندفاع 4.5 كم/ث وسرعة مطلوبة 9 كم/ث، نسبة الكتل تساوي $e^{2} \\approx 7.4$، أي أن الوقود يشكل أكثر من ثمانين بالمئة من الكتلة الابتدائية؛ الـ 4.5 كم/ث التالية ستكلف ليس إضافة بل ضربًا آخر — في $e \\approx 2.7$، والضرب في 7.4 سيتكرر فقط عند الـ 9 كم/ث التالية. تحليل المعادلة نفسها موجود في الملحق، لكن الأُس مطلوب هنا بالفعل — بدونه تبدو المراحل تحسينًا وليس الحل الوحيد.",
+     "latex": "\\Delta v = u \\ln\\frac{m_0}{m_1} \\;\\Longleftrightarrow\\; \\frac{m_0}{m_1} = e^{\\Delta v / u}",
+     "kit": "exponent"
+    }
+   ]
+  }
  },
  "tags": [
   "pulsar",

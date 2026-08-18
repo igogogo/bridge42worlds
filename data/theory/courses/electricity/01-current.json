@@ -826,7 +826,31 @@
     "hint": "Power is the product of voltage and current. What needs to be done to find current?",
     "tolAbs": 1
    }
-  ]
+  ],
+  "math": {
+   "title": "The math you'll need here",
+   "lead": "Three tricks: how to calculate flow through a cross-section, what to do with a constant force that doesn't accelerate, and why the exponent decides everything.",
+   "items": [
+    {
+     "what": "How density and speed give flow",
+     "why": "In the first step of the derivation, we have $I = neSu$, and this is not a formula to memorize but a universal way to calculate flow. Take a cross-section of the wire $S$ and mark off a segment of length $u$ from it: this is exactly how far charges travel in one second. All charges inside the cylinder of volume $Su$ will cross the section; their number is $nSu$, and the charge carried is $enSu$. The same trick is used to calculate water flow in a pipe, the flow of cars through an intersection, and the number of molecules hitting a wall: density times area times speed. Check the dimensions — the units combine to give amperes by themselves, and this is the best check that the factors are placed correctly.",
+     "latex": "I = \\underbrace{n}_{1/\\text{m}^{3}} \\cdot \\underbrace{e}_{\\text{C}} \\cdot \\underbrace{S\\,u}_{\\text{m}^{3}/\\text{s}} \\;=\\; \\text{C}/\\text{s} = \\text{A}",
+     "kit": "flux"
+    },
+    {
+     "what": "The force is constant, but the speed is still constant",
+     "why": "The second step of the derivation looks like a violation of Newton's laws: the field pushes the electron with a constant force $eE$, so it must accelerate indefinitely. It does accelerate, but not for long. The velocity graph of a single electron is a sawtooth: a segment of uniform acceleration, then a collision resets the gained speed, and everything starts over. At the break point, the derivative does not exist at all, so we work not with instantaneous values but with the average over many teeth. Such an average does not grow with time: it is set by the height of the tooth, i.e., the free-flight time — the rarer the collisions, the higher the drift. Here you need to be careful with the factor. If all flights lasted exactly $\\tau$, the speed on each tooth would grow from zero to $a\\tau$ linearly, and the average would be half the peak: $eE\\tau/2m$. In the derivation step, there is no factor of 2, and this is not a typo: free-flight times are not equal but exponentially distributed, and for such a distribution, the average time since the last collision equals $\\tau$ itself, not half of it. The sawtooth is a picture for intuition; the Drude formula is the result of careful averaging; they differ by exactly a factor of 2, and it's better to know where. The trick itself — averaging fast chaos into a slow trend — will be useful everywhere friction balances a force.",
+     "latex": "a = \\frac{eE}{m} = \\text{const}, \\qquad \\langle u\\rangle_{\\text{sawtooth}} = \\frac{a\\tau}{2}, \\qquad u_{\\text{Drude}} = a\\tau = \\frac{eE\\tau}{m}",
+     "kit": "derivative"
+    },
+    {
+     "what": "First power versus square",
+     "why": "In the sixth step of the derivation, two expressions for power collide: the transmitted $P = UI$ and the lost $P = I^{2}R$. The current enters the first to the first power, and the second to the second power, and this decides the entire architecture of power engineering. Fix the transmitted power and raise the voltage tenfold: the current drops tenfold, and the losses drop a hundredfold, because the square turns ten into a hundred. The rule is general: when two quantities depend on one factor with different exponents, you should push on the one with the higher power. The same reading applies to $R = \\rho L/S$: doubling the wire length doubles the resistance, while doubling the diameter reduces it by a factor of four, since area goes as the square.",
+     "latex": "P_{\\text{trans}} \\propto I, \\qquad P_{\\text{loss}} \\propto I^{2} \\;\\Longrightarrow\\; I \\downarrow 10 \\;\\Rightarrow\\; P_{\\text{loss}} \\downarrow 100",
+     "kit": "propto"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Corriente y resistencia",
@@ -1204,7 +1228,31 @@
     "hint": "La potencia es el producto del voltaje por la corriente. ¿Qué hay que hacer para encontrar la corriente?",
     "tolAbs": 1
    }
-  ]
+  ],
+  "math": {
+   "title": "Matemáticas que se necesitaron aquí",
+   "lead": "Tres trucos: cómo se calcula el flujo a través de una sección, qué hacer con una fuerza constante que no acelera, y por qué el exponente lo decide todo.",
+   "items": [
+    {
+     "what": "Cómo el flujo surge de la densidad y la velocidad",
+     "why": "En el primer paso de la derivación está $I = neSu$, y no es una fórmula para memorizar, sino una forma universal de calcular flujos. Tome la sección del cable $S$ y marque desde ella un segmento de longitud $u$: exactamente esa distancia recorren las cargas en un segundo. Todos los que están dentro del cilindro de volumen $Su$ cruzarán la sección; su número es $nSu$, y la carga transportada es $enSu$. El mismo truco se usa para calcular el caudal de agua en una tubería, el flujo de autos en un cruce y el número de moléculas que golpean una pared: densidad multiplicada por área y por velocidad. Verifique las dimensiones: las unidades se combinan en amperios por sí solas, y esa es la mejor comprobación de que los factores están bien colocados.",
+     "latex": "I = \\underbrace{n}_{1/\\text{m}^{3}} \\cdot \\underbrace{e}_{\\text{C}} \\cdot \\underbrace{S\\,u}_{\\text{m}^{3}/\\text{s}} \\;=\\; \\text{C}/\\text{s} = \\text{A}",
+     "kit": "flux"
+    },
+    {
+     "what": "La fuerza es constante, pero la velocidad también lo es",
+     "why": "El segundo paso de la derivación parece violar las leyes de Newton: el campo empuja al electrón con una fuerza constante $eE$, por lo que debería acelerar sin fin. Acelera, pero no por mucho tiempo. La gráfica de la velocidad de un electrón individual es una sierra: un tramo de aceleración uniforme, luego una colisión que anula lo ganado, y todo comienza de nuevo. En el punto de quiebre la derivada no existe en absoluto, por lo que no se usan valores instantáneos, sino el promedio sobre muchos dientes. Ese promedio no crece con el tiempo: lo fija la altura del diente, es decir, el tiempo de vuelo libre; cuanto menos frecuentes son las colisiones, mayor es la deriva. Aquí hay que prestar atención al factor. Si todos los recorridos duraran exactamente $\\tau$, la velocidad en cada diente crecería linealmente de cero a $a\\tau$, y el promedio sería la mitad del pico: $eE\\tau/2m$. En el paso de la derivación no hay un dos, y no es un error: los tiempos de vuelo libre no son iguales, sino que están distribuidos exponencialmente, y en esa distribución el tiempo promedio transcurrido desde la última colisión es igual a $\\tau$ mismo, no a su mitad. La sierra es una imagen para la intuición; la fórmula de Drude es el resultado de un promedio cuidadoso; difieren exactamente en un factor de dos, y es mejor saber dónde. El truco en sí —promediar el caos rápido hasta obtener una tendencia lenta— servirá en todas partes donde la fricción equilibra una fuerza.",
+     "latex": "a = \\frac{eE}{m} = \\text{const}, \\qquad \\langle u\\rangle_{\\text{sierra}} = \\frac{a\\tau}{2}, \\qquad u_{\\text{Drude}} = a\\tau = \\frac{eE\\tau}{m}",
+     "kit": "derivative"
+    },
+    {
+     "what": "Primera potencia contra cuadrado",
+     "why": "En el sexto paso de la derivación chocan dos expresiones para la potencia: la transmitida $P = UI$ y la perdida $P = I^{2}R$. La corriente entra en la primera con exponente uno, en la segunda con exponente dos, y esto decide toda la arquitectura de la energía. Fijemos la potencia transmitida y subamos el voltaje diez veces: la corriente cae diez veces, y las pérdidas caen cien veces, porque el cuadrado convierte diez en cien. La regla es general: cuando dos cantidades dependen de un mismo factor con diferentes exponentes, hay que presionar sobre el que entra con mayor potencia. Así se lee también $R = \\rho L/S$: si duplicas la longitud del cable, duplicas la resistencia; si duplicas el diámetro, la reduces a la cuarta parte, porque el área va como el cuadrado.",
+     "latex": "P_{\\text{transmitida}} \\propto I, \\qquad P_{\\text{pérdidas}} \\propto I^{2} \\;\\Longrightarrow\\; I \\downarrow 10 \\;\\Rightarrow\\; P_{\\text{pérdidas}} \\downarrow 100",
+     "kit": "propto"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "التيار والمقاومة",
@@ -1582,7 +1630,31 @@
     "hint": "القدرة هي حاصل ضرب الجهد في التيار. ما الذي يجب فعله لإيجاد التيار؟",
     "tolAbs": 1
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات اللازمة هنا",
+   "lead": "ثلاث حيل: كيف نحسب التدفق عبر مقطع، وماذا نفعل مع قوة ثابتة لا تسرع، ولماذا الأس يحسم كل شيء.",
+   "items": [
+    {
+     "what": "كيف ينتج التدفق من الكثافة والسرعة",
+     "why": "في الخطوة الأولى من الاشتقاق نجد $I = neSu$، وهذه ليست معادلة يجب حفظها، بل طريقة عامة لحساب التدفق. خذ مقطعًا من السلك مساحته $S$ وضع عليه قطعة بطول $u$: هذا بالضبط ما تقطعه الشحنات في ثانية. كل من يوجد داخل الأسطوانة ذات الحجم $Su$ سيعبر المقطع؛ عددهم $nSu$، والشحنة المنقولة $enSu$. بنفس الطريقة نحسب تدفق الماء في أنبوب، وتدفق السيارات عبر تقاطع، وعدد الجزيئات التي تصطدم بالجدار: الكثافة مضروبة في المساحة والسرعة. تحقق من الأبعاد — الوحدات تتجمع لتكوين الأمبير تلقائيًا، وهذا أفضل تحقق من صحة ترتيب العوامل.",
+     "latex": "I = \\underbrace{n}_{1/\\text{م}^{3}} \\cdot \\underbrace{e}_{\\text{كولوم}} \\cdot \\underbrace{S\\,u}_{\\text{م}^{3}/\\text{ث}} \\;=\\; \\text{كولوم}/\\text{ث} = \\text{أمبير}",
+     "kit": "flux"
+    },
+    {
+     "what": "القوة ثابتة، لكن السرعة تظل ثابتة",
+     "why": "الخطوة الثانية في الاشتقاق تبدو وكأنها تنتهك قوانين نيوتن: الحقل يدفع الإلكترون بقوة ثابتة $eE$، لذا يجب أن يتسارع بلا نهاية. إنه يتسارع، لكن ليس لوقت طويل. مخطط سرعة إلكترون فردي هو سن المنشار: فترة تسارع منتظم، ثم تصادم يلغي ما اكتسبه، ويبدأ كل شيء من جديد. عند نقطة الانكسار لا وجود للمشتقة إطلاقًا، لذا لا نستخدم القيم اللحظية، بل المتوسط عبر العديد من الأسنان. هذا المتوسط لا يزداد مع الزمن: ارتفاع السن يحدده، أي زمن الطيران الحر — كلما كانت التصادمات أقل، كان الانجراف أعلى. هنا يجب الانتباه إلى العامل. إذا كانت جميع المسافات الحرة تساوي تمامًا $\\tau$، فإن السرعة على كل سن تنمو من صفر إلى $a\\tau$ خطيًا، والمتوسط سيكون نصف القمة: $eE\\tau/2m$. في خطوة الاشتقاق لا يوجد اثنان، وهذا ليس خطأ مطبعي: أزمنة الطيران الحر ليست متساوية، بل موزعة أسياً، وفي هذا التوزيع متوسط الزمن المنقضي منذ آخر تصادم يساوي $\\tau$ نفسه، وليس نصفه. سن المنشار صورة للحدس، ومعادلة درودي نتيجة متوسط دقيق؛ يختلفان بمقدار النصف بالضبط، ومن الأفضل معرفة أين. نفس الحيلة — متوسط الفوضى السريعة إلى اتجاه بطيء — ستكون مفيدة في كل مكان يوازن فيه الاحتكاك قوة.",
+     "latex": "a = \\frac{eE}{m} = \\text{ثابت}, \\qquad \\langle u\\rangle_{\\text{سن المنشار}} = \\frac{a\\tau}{2}, \\qquad u_{\\text{درودي}} = a\\tau = \\frac{eE\\tau}{m}",
+     "kit": "derivative"
+    },
+    {
+     "what": "الأس الأول مقابل الأس الثاني",
+     "why": "في الخطوة السادسة من الاشتقاق، تتصادم تعبيران للقدرة: المنقولة $P = UI$ والمفقودة $P = I^{2}R$. التيار يدخل الأول بأس واحد، والثاني بأس اثنين، وهذا يحسم بنية الطاقة الكهربائية كلها. ثبت القدرة المنقولة وارفع الجهد عشرة أضعاف: التيار ينخفض عشرة أضعاف، والخسائر مئة ضعف، لأن المربع يحول العشرة إلى مئة. القاعدة عامة: عندما تعتمد كميتان على نفس العامل بأسس مختلفة، اضغط على الذي يدخل بأس أكبر. هكذا نقرأ أيضًا $R = \\rho L/S$: مضاعفة طول السلك تضاعف المقاومة، بينما مضاعفة القطر تقللها أربع مرات، لأن المساحة تتناسب مع المربع.",
+     "latex": "P_{\\text{المنقولة}} \\propto I, \\qquad P_{\\text{الخسائر}} \\propto I^{2} \\;\\Longrightarrow\\; I \\downarrow 10 \\;\\Rightarrow\\; P_{\\text{الخسائر}} \\downarrow 100",
+     "kit": "propto"
+    }
+   ]
+  }
  },
  "laws": [
   "ohms_law"

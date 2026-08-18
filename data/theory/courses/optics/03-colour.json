@@ -456,24 +456,24 @@
   ],
   "standNote": "Switch the stand to two-wave mode — this models what happens with two slits. By changing the frequency ratio, you see how waves of different lengths add up. The main takeaway from the stand: the shorter the wavelength, the more frequently the maxima and minima alternate. Hence the whole section — short waves distinguish fine details, long waves do not; short waves scatter strongly, long waves scatter weakly.",
   "formula": {
-   "name": "Rayleigh Scattering and Resolution Limit",
+   "name": "Rayleigh scattering and the resolution limit",
    "latex": "I \\propto \\frac{1}{\\lambda^{4}}, \\qquad d_{\\min} \\approx \\frac{\\lambda}{2n\\sin\\theta}",
-   "alsoKnown": "Fourth power law · Abbe criterion",
+   "alsoKnown": "Inverse fourth power law · Abbe criterion",
    "authors": [
     {
      "who": "Isaac Newton",
      "year": "1704",
-     "what": "split white light with a prism and, more importantly, recombined it with a second prism. He proved that colors are not created in the glass but are already present in white light — contrary to the two-thousand-year tradition of considering color as a corruption of whiteness."
+     "what": "split white light with a prism and, more importantly, recombined it with a second prism. He proved that colors are not born in the glass but are already present in white light, contrary to the two-thousand-year tradition of considering color as a corruption of whiteness."
     },
     {
      "who": "John William Strutt (Lord Rayleigh)",
      "year": "1871",
-     "what": "explained the blueness of the sky by obtaining the scattering dependence on the fourth power of frequency. The derivation was made almost entirely from dimensional considerations — without solving the equations of electrodynamics."
+     "what": "explained the blueness of the sky, obtaining the dependence of scattering on the fourth power of frequency. The derivation was made almost entirely from dimensional considerations, without solving the equations of electrodynamics."
     },
     {
      "who": "Ernst Abbe",
      "year": "1873",
-     "what": "established the resolution limit of the microscope: seeing details smaller than about half a wavelength is fundamentally impossible. Before him, opticians believed the problem was the quality of glass polishing."
+     "what": "established the resolution limit of the microscope: seeing details smaller than about half the wavelength is fundamentally impossible. Before him, opticians believed that the quality of glass polishing was the issue."
     },
     {
      "who": "Augustin Fresnel",
@@ -483,10 +483,47 @@
     {
      "who": "Stefan Hell",
      "year": "1994",
-     "what": "came up with how to bypass the Abbe limit using the nonlinear response of molecules. Nobel Prize 2014; today microscopes see details of twenty nanometers — ten times finer than what was considered impossible."
+     "what": "came up with a way to bypass the Abbe limit using the nonlinear response of molecules. Nobel Prize in 2014; today microscopes see details as small as twenty nanometers — ten times smaller than what was considered impossible."
     }
    ],
-   "story": "Newton's prism experiment is usually described incompletely, but the most important part is in the second half. People could split light with a prism before Newton; the prevailing explanation was that glass spoils white light, coloring it more strongly the longer the path inside. Newton performed a crucial experiment: he isolated one color from the spectrum with a narrow slit and passed it through a second prism — the color did not change, no further spoiling occurred. Then he recombined the entire spectrum with a second prism and obtained white light. Therefore, colors are not created by glass but are present in white light from the beginning. This was an example of how to do a crucial experiment: not confirming one's own idea but cutting off another's."
+   "story": "Newton's prism experiment is usually presented incompletely, and the most important part is in the second half. Splitting light with a prism was possible before Newton; the prevailing explanation was that glass spoils white light, coloring it more strongly the longer the path inside. Newton performed a decisive experiment: he isolated one color from the spectrum with a narrow slit and passed it through a second prism — the color did not change, no further spoiling occurred. Then he recombined the entire spectrum with a second prism and obtained white light. Thus, colors are not created by glass but are present in white light from the beginning. This was an example of how a decisive experiment is conducted: not one that confirms one's own idea, but one that eliminates another's.",
+   "symbols": [
+    {
+     "sym": "I",
+     "latex": "I",
+     "what": "intensity of scattered light",
+     "unit": "W/m²",
+     "note": "inversely proportional to the fourth power of the wavelength"
+    },
+    {
+     "sym": "lambda",
+     "latex": "\\lambda",
+     "what": "wavelength",
+     "unit": "m",
+     "note": "for visible light from 400 to 700 nm — a difference of almost twice, and in the fourth power already sixfold"
+    },
+    {
+     "sym": "d",
+     "latex": "d_{\\min}",
+     "what": "resolution limit",
+     "unit": "m",
+     "note": "smallest distinguishable distance between details"
+    },
+    {
+     "sym": "theta",
+     "latex": "\\theta",
+     "what": "aperture angle of the objective",
+     "unit": "°",
+     "note": "the wider the objective collects light, the better the resolution"
+    },
+    {
+     "sym": "NA",
+     "latex": "\\text{NA}",
+     "what": "numerical aperture",
+     "unit": "—",
+     "note": "$n\\sin\\theta$; for the best objectives with oil immersion about 1.4"
+    }
+   ]
   },
   "symbols": [
    {
@@ -817,7 +854,31 @@
     "hint": "Find the ratio of wavelengths and raise it to the fourth power. 1.5 to the fourth is about five.",
     "tolAbs": 1.5
    }
-  ]
+  ],
+  "math": {
+   "title": "The math needed here",
+   "lead": "Here we need dimensional analysis, power laws, and order-of-magnitude estimates.",
+   "items": [
+    {
+     "what": "Dimensions instead of equations",
+     "why": "The first three steps of the derivation obtain Rayleigh's law without solving a single equation of electrodynamics. The trick is this: we write down an honest list of quantities on which the answer can possibly depend — the volume of the particle, the distance to it, the wavelength — and require that the units match. The amplitude must decay as one over distance, otherwise energy would not be conserved. The volume brings meters cubed, the distance takes away one meter, and for the remainder to become dimensionless, the wavelength squared must appear in the denominator. No other exponent can be chosen. Thus the first two steps give only the amplitude; the fourth power appears in the third step, where the amplitude is squared: intensity is the square of the amplitude, and $\\lambda^{2}$ in the denominator becomes $\\lambda^{4}$. The method does not give the numerical factor in front of the expression, but it uniquely determines the power to which each quantity enters — and it is precisely the power that decides everything here.",
+     "latex": "A \\propto \\frac{V}{r\\,\\lambda^{2}} \\;\\Longrightarrow\\; I \\propto A^{2} \\propto \\frac{V^{2}}{r^{2}\\lambda^{4}}",
+     "kit": "dimension"
+    },
+    {
+     "what": "Power law: the ratio goes into the exponent",
+     "why": "In the fourth step of the derivation, the ratio of wavelengths 700 to 450 is only 1.56, yet the scattering differs almost sixfold. The reason lies in the nature of a power law: it is the ratio of quantities that is raised to the fourth power, not their difference. Hence the working rule for reading formulas — look not only at what depends on what, but also to what power: the higher the exponent, the more confidently a modest difference in causes turns into a striking difference in effects. For small changes there is a convenient special case: the relative change in the result is approximately four times the relative change in wavelength; a shift of one percent gives four percent. But at the edges of the visible range, where wavelengths differ by a factor of one and a half, this linear estimate already fails, and the ratio must be honestly raised to the fourth.",
+     "latex": "\\frac{I_1}{I_2}=\\left(\\frac{\\lambda_2}{\\lambda_1}\\right)^{4}, \\qquad \\frac{\\Delta I}{I}\\approx 4\\,\\frac{\\Delta\\lambda}{\\lambda}\\;\\text{— only for small shifts}",
+     "kit": "propto"
+    },
+    {
+     "what": "Orders of magnitude instead of exact numbers",
+     "why": "The seventh step of the derivation places side by side 0.2 microns for light and 0.05 nanometers for the electron, and the example with numbers — a bacterium at a thousand nanometers, a virus at a hundred, and a DNA molecule at two. Exact values are not needed here; what is needed is the answer to the question 'by how many times', and it is counted in powers of ten: $2\\cdot 10^{-7}$ versus $5\\cdot 10^{-11}$ — the exponents differ by four, the coefficients give a correction, and the total is roughly four thousand times. Such counting immediately answers the main question of the section: the limit of the optical microscope lies between the size of a bacterium and the size of a virus, so one is visible and the other is not. The habit of first estimating the order of magnitude and only then calculating exactly saves both time and errors.",
+     "latex": "\\frac{d_{\\text{light}}}{d_{\\text{el}}} \\sim \\frac{2\\cdot 10^{-7}}{5\\cdot 10^{-11}} \\approx 4\\cdot 10^{3}",
+     "kit": "order"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Color y difracción",
@@ -1190,7 +1251,31 @@
     "hint": "Encuentre la relación de longitudes de onda y elévela a la cuarta potencia. Uno y medio a la cuarta es aproximadamente cinco.",
     "tolAbs": 1.5
    }
-  ]
+  ],
+  "math": {
+   "title": "Las matemáticas que aquí se necesitaron",
+   "lead": "Aquí se necesitarán el análisis dimensional, la ley de potencias y el cálculo por órdenes de magnitud.",
+   "items": [
+    {
+     "what": "Dimensiones en lugar de ecuaciones",
+     "why": "Los primeros tres pasos de la derivación obtienen la ley de Rayleigh sin resolver ninguna ecuación de electrodinámica. El truco es este: escribimos una lista honesta de las magnitudes de las que la respuesta podría depender — el volumen de la partícula, la distancia a ella, la longitud de onda — y exigimos que las unidades de medida coincidan. La amplitud debe decrecer como uno sobre la distancia, de lo contrario la energía no se conserva. El volumen aporta metros cúbicos, la distancia quita un metro, y para que el resto sea adimensional, en el denominador debe aparecer la longitud de onda al cuadrado. No se puede elegir otro exponente. Así, los primeros dos pasos dan solo la amplitud; la cuarta potencia aparece en el tercer paso, donde la amplitud se eleva al cuadrado: la intensidad es el cuadrado de la amplitud, y $\\lambda^{2}$ en el denominador se convierte en $\\lambda^{4}$. El método no da el factor numérico que multiplica la expresión, pero especifica de manera inequívoca en qué grado entra cada magnitud — y es precisamente el grado lo que aquí lo decide todo.",
+     "latex": "A \\propto \\frac{V}{r\\,\\lambda^{2}} \\;\\Longrightarrow\\; I \\propto A^{2} \\propto \\frac{V^{2}}{r^{2}\\lambda^{4}}",
+     "kit": "dimension"
+    },
+    {
+     "what": "Ley de potencias: en el exponente va la razón",
+     "why": "En el cuarto paso de la derivación, la razón de longitudes de onda de 700 a 450 es solo 1.56, pero la dispersión difiere casi seis veces. La razón está en la estructura de la ley de potencias: se eleva a la cuarta potencia precisamente la razón de las magnitudes, no su diferencia. De ahí la regla práctica para leer fórmulas: fíjate no solo en de qué depende, sino también en en qué grado: cuanto mayor es el exponente, con más seguridad una modesta diferencia de causas se convierte en una llamativa diferencia de efectos. Para cambios pequeños hay un caso particular útil: el cambio relativo del resultado es aproximadamente cuatro veces mayor que el cambio relativo de la longitud de onda; un desplazamiento del uno por ciento da un cuatro por ciento. Pero en los extremos del rango visible, donde las longitudes de onda difieren en un factor de uno y medio, esta aproximación lineal ya falla, y la razón hay que elevarla honestamente a la cuarta.",
+     "latex": "\\frac{I_1}{I_2}=\\left(\\frac{\\lambda_2}{\\lambda_1}\\right)^{4}, \\qquad \\frac{\\Delta I}{I}\\approx 4\\,\\frac{\\Delta\\lambda}{\\lambda}\\;\\text{— solo para desplazamientos pequeños}",
+     "kit": "propto"
+    },
+    {
+     "what": "Órdenes de magnitud en lugar de números exactos",
+     "why": "El séptimo paso de la derivación coloca lado a lado 0.2 micras para la luz y 0.05 nanómetros para el electrón, y el ejemplo con números: una bacteria de mil nanómetros, un virus de cien y una molécula de ADN de dos. Los valores exactos no son necesarios aquí, lo que se necesita es la respuesta a la pregunta «¿cuántas veces?», y se calcula con potencias de diez: $2\\cdot 10^{-7}$ contra $5\\cdot 10^{-11}$ — los exponentes difieren en cuatro, los coeficientes dan una corrección, total aproximadamente cuatro mil veces. Este cálculo responde de inmediato a la pregunta principal del párrafo: el límite del microscopio óptico se encuentra entre el tamaño de una bacteria y el de un virus, por lo que uno se ve y el otro no. El hábito de estimar primero el orden y solo luego calcular con precisión ahorra tiempo y errores.",
+     "latex": "\\frac{d_{\\text{luz}}}{d_{\\text{el}}} \\sim \\frac{2\\cdot 10^{-7}}{5\\cdot 10^{-11}} \\approx 4\\cdot 10^{3}",
+     "kit": "order"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "اللون والحيود",
@@ -1202,37 +1287,74 @@
   ],
   "standNote": "حوِّل المنصة إلى وضع الموجتين - هذا نموذج لما يحدث عند شقين. بتغيير نسبة الترددات، ترى كيف تتراكب الموجات ذات الأطوال المختلفة. الشيء الرئيسي الذي ينبغي أن تأخذه من المنصة: كلما قصر طول الموجة، تكررت القيم العظمى والصغرى أكثر. ومن هنا تأتي الفقرة بأكملها - الموجة القصيرة تميز التفاصيل الصغيرة، والطويلة لا تميزها؛ القصيرة تتشتت بقوة، والطويلة تتشتت بضعف.",
   "formula": {
-   "name": "تشتت رايلي وحد التحليل",
+   "name": "تبعثر رايلي وحد الدقة",
    "latex": "I \\propto \\frac{1}{\\lambda^{4}}, \\qquad d_{\\min} \\approx \\frac{\\lambda}{2n\\sin\\theta}",
    "alsoKnown": "قانون القوة الرابعة · معيار آبي",
    "authors": [
     {
      "who": "إسحاق نيوتن",
      "year": "1704",
-     "what": "حلل الضوء الأبيض بمنشور، والأهم أنه أعاد تجميعه بمنشور ثانٍ. أثبت أن الألوان لا تتولد في الزجاج، بل موجودة أصلاً في الضوء الأبيض - خلافاً لتقليد دام ألفي عام يعتبر اللون فساداً للبياض."
+     "what": "حلل الضوء الأبيض بمنشور، والأهم من ذلك، أعاد تجميعه بمنشور ثانٍ. أثبت أن الألوان لا تولد في الزجاج، بل موجودة بالفعل في الضوء الأبيض، خلافًا لتقليد دام ألفي عام يعتبر اللون فسادًا للبياض."
     },
     {
      "who": "جون ويليام ستروت (اللورد رايلي)",
      "year": "1871",
-     "what": "فسر زرقة السماء بحصوله على علاقة التشتت مع القوة الرابعة للتردد. وقد تم الاستنتاج بالكامل تقريباً من اعتبارات الأبعاد - بدون حل معادلات الديناميكا الكهربائية."
+     "what": "فسر زرقة السماء، وحصل على اعتماد التبعثر على القوة الرابعة للتردد. الاستنتاج تم تقريبًا بالكامل من اعتبارات الأبعاد - دون حل معادلات الديناميكا الكهربائية."
     },
     {
      "who": "إرنست آبي",
      "year": "1873",
-     "what": "وضع حد تحليل المجهر: من المستحيل مبدئياً رؤية تفاصيل أصغر من نصف طول الموجة تقريباً. قبله، كان علماء البصريات يعتقدون أن الأمر يتعلق بجودة صقل الزجاج."
+     "what": "حدد حد دقة المجهر: من المستحيل مبدئيًا رؤية تفاصيل أصغر من نصف طول الموجة تقريبًا. قبله، كان خبراء البصريات يعتقدون أن الأمر يتعلق بجودة صقل الزجاج."
     },
     {
-     "who": "أوغستين فريسنل",
+     "who": "أوغستان فريسنل",
      "year": "1818",
-     "what": "بنى نظرية كمية للحيود، موضحاً لماذا يصل الضوء خلف العائق. صيغه سمحت بحساب النمط، وليس فقط التنبؤ بوجوده."
+     "what": "بنى نظرية كمية للحيود، موضحًا لماذا يصل الضوء إلى ما بعد العائق. معادلاته سمحت بحساب النمط، وليس فقط التنبؤ بوجوده."
     },
     {
      "who": "شتيفان هيل",
      "year": "1994",
-     "what": "ابتكر طريقة لتجاوز حد آبي باستخدام الاستجابة غير الخطية للجزيئات. جائزة نوبل 2014؛ اليوم ترى المجاهر تفاصيل بعشرين نانومتراً - أصغر بعشر مرات مما كان يعتقد أنه مستحيل."
+     "what": "ابتكر طريقة لتجاوز حد آبي باستخدام الاستجابة غير الخطية للجزيئات. جائزة نوبل 2014؛ اليوم المجاهر ترى تفاصيل بعشرين نانومتر - أصغر بعشر مرات مما كان يعتبر مستحيلًا."
     }
    ],
-   "story": "عادة ما تُروى تجربة نيوتن بالمنشور بشكل ناقص، والأهم هو الجزء الثاني. قبل نيوتن، كان تحليل الضوء بالمنشور معروفاً، وكان التفسير السائد أن الزجاج يفسد الضوء الأبيض، فيلونه كلما زاد المسار داخله. أجرى نيوتن التجربة الحاسمة: عزل لوناً واحداً من الطيف بشق ضيق وأمرره عبر منشور ثانٍ - لم يتغير اللون، ولم يحدث أي فساد إضافي. ثم جمع الطيف كاملاً بمنشور ثانٍ فحصل على ضوء أبيض. إذن، الألوان لا تُخلق بالزجاج، بل موجودة في الأبيض أصلاً. كانت هذه نموذجاً لكيفية إجراء تجربة حاسمة: لا لتأكيد فكرته، بل لقطع فكرة الآخرين."
+   "story": "عادةً ما تُروى تجربة نيوتن بالمنشور بشكل ناقص، والأهم فيها هو الجزء الثاني. فمن قبل نيوتن، كان تحليل الضوء بالمنشور معروفًا؛ وكان التفسير السائد أن الزجاج يفسد الضوء الأبيض، فيلونه أكثر كلما طال المسار داخله. أجرى نيوتن التجربة الحاسمة: عزل لونًا واحدًا من الطيف بشق ضيق ومرره عبر منشور ثانٍ - لم يتغير اللون، ولم يحدث أي فساد إضافي. ثم جمع الطيف كله بمنشور ثانٍ وحصل على ضوء أبيض. إذن، الألوان لا تُخلق بالزجاج، بل موجودة في الأبيض أصلًا. كان هذا مثالًا على كيفية إجراء تجربة حاسمة: لا لتأكيد فكرته، بل لقطع فكرة الآخرين.",
+   "symbols": [
+    {
+     "sym": "I",
+     "latex": "I",
+     "what": "شدة الضوء المتبعثر",
+     "unit": "W/m²",
+     "note": "تتناسب عكسيًا مع القوة الرابعة لطول الموجة"
+    },
+    {
+     "sym": "lambda",
+     "latex": "\\lambda",
+     "what": "طول الموجة",
+     "unit": "m",
+     "note": "للضوء المرئي من 400 إلى 700 نانومتر - الفرق تقريبًا الضعف، وفي القوة الرابعة يصبح ستة أضعاف"
+    },
+    {
+     "sym": "d",
+     "latex": "d_{\\min}",
+     "what": "حد الدقة",
+     "unit": "m",
+     "note": "أصغر مسافة يمكن تمييزها بين التفاصيل"
+    },
+    {
+     "sym": "theta",
+     "latex": "\\theta",
+     "what": "زاوية فتحة العدسة",
+     "unit": "°",
+     "note": "كلما كانت العدسة تجمع الضوء بشكل أوسع، كان الدقة أفضل"
+    },
+    {
+     "sym": "NA",
+     "latex": "\\text{NA}",
+     "what": "الفتحة العددية",
+     "unit": "—",
+     "note": "$n\\sin\\theta$؛ لأفضل العدسات مع الغمر بالزيت حوالي 1.4"
+    }
+   ]
   },
   "symbols": [
    {
@@ -1566,7 +1688,31 @@
     "hint": "أوجد نسبة طولي الموجة وارفعها إلى القوة الرابعة. واحد ونصف مرفوع للرابعة يساوي تقريباً خمسة.",
     "tolAbs": 1.5
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "هنا ستكون هناك حاجة إلى تحليل الأبعاد، والقانون الأسّي، والحساب حسب رتب المقدار.",
+   "items": [
+    {
+     "what": "الأبعاد بدلاً من المعادلات",
+     "why": "الخطوات الثلاث الأولى من الاشتقاق تحصل على قانون رايلي دون حل أي معادلة من معادلات الديناميكا الكهربائية. الطريقة هي: نكتب قائمة صادقة بالكميات التي قد يعتمد عليها الجواب بشكل عام — حجم الجسيم، المسافة إليه، الطول الموجي — ونطلب أن تتطابق وحدات القياس. يجب أن تتناقص السعة بمقدار واحد على المسافة، وإلا لن يُحفظ الطاقة. الحجم يجلب مترًا مكعبًا، والمسافة تأخذ مترًا واحدًا، ولكي يصبح الباقي بلا أبعاد، يجب أن يظهر الطول الموجي مربعًا في المقام. لا يمكن اختيار أس آخر. هكذا تعطي الخطوتان الأوليان السعة فقط؛ أما القوة الرابعة فتظهر في الخطوة الثالثة، حيث تُربَّع السعة: الشدة هي مربع السعة، و $\\lambda^{2}$ في المقام يصبح $\\lambda^{4}$. لا تعطي الطريقة معاملًا عدديًا أمام التعبير، لكنها تحدد بشكل قاطع في أي قوة تدخل كل كمية — والقوة هي التي تحسم كل شيء هنا.",
+     "latex": "A \\propto \\frac{V}{r\\,\\lambda^{2}} \\;\\Longrightarrow\\; I \\propto A^{2} \\propto \\frac{V^{2}}{r^{2}\\lambda^{4}}",
+     "kit": "dimension"
+    },
+    {
+     "what": "القانون الأسّي: في الأس تدخل النسبة",
+     "why": "في الخطوة الرابعة من الاشتقاق، نسبة الأطوال الموجية 700 إلى 450 تساوي 1.56 فقط، بينما يختلف التشتت بنحو ستة أضعاف. السبب في بنية الاعتماد الأسي: يُرفع إلى القوة الرابعة نسبة الكميات وليس فرقها. من هنا قاعدة عملية لقراءة الصيغ — انظر ليس فقط إلى ما تعتمد عليه، بل أيضًا إلى بأي قوة: كلما كان الأس أعلى، كلما تحول الفرق المتواضع في الأسباب بثقة إلى فرق مذهل في النتائج. للتغيرات الصغيرة هناك حالة خاصة مريحة: التغير النسبي في النتيجة أكبر بنحو أربع مرات من التغير النسبي في الطول الموجي، أي أن انزياحًا بنسبة واحد بالمئة يعطي أربعة بالمئة. لكن عند أطراف النطاق المرئي، حيث تختلف الأطوال الموجية بمقدار مرة ونصف، فإن هذا التقدير الخطي يكذب بالفعل، ويجب رفع النسبة بأمانة إلى القوة الرابعة.",
+     "latex": "\\frac{I_1}{I_2}=\\left(\\frac{\\lambda_2}{\\lambda_1}\\right)^{4}, \\qquad \\frac{\\Delta I}{I}\\approx 4\\,\\frac{\\Delta\\lambda}{\\lambda}\\;\\text{— فقط عند الإزاحات الصغيرة}",
+     "kit": "propto"
+    },
+    {
+     "what": "رتب المقدار بدلاً من الأرقام الدقيقة",
+     "why": "الخطوة السابعة من الاشتقاق تضع جنبًا إلى جنب 0.2 ميكرون للضوء و0.05 نانومتر للإلكترون، ومثال بالأرقام — بكتيريا بألف نانومتر، وفيروس بمئة، وجزيء DNA باثنين. القيم الدقيقة ليست مطلوبة هنا، بل المطلوب إجابة على سؤال «بكم مرة»، ويُحسب بأسس العشرة: $2\\cdot 10^{-7}$ مقابل $5\\cdot 10^{-11}$ — يختلف الأسّان بأربعة، والمعاملات تعطي تصحيحًا، والمجموع حوالي أربعة آلاف مرة. هذا الحساب يجيب فورًا على السؤال الرئيسي للفقرة: حد المجهر الضوئي يقع بين حجم البكتيريا وحجم الفيروس، لذلك تُرى واحدة ولا يُرى الآخر. عادة تقدير الرتبة أولاً ثم الحساب الدقيق لاحقًا توفر الوقت والأخطاء.",
+     "latex": "\\frac{d_{\\text{ضوء}}}{d_{\\text{إلكترون}}} \\sim \\frac{2\\cdot 10^{-7}}{5\\cdot 10^{-11}} \\approx 4\\cdot 10^{3}",
+     "kit": "order"
+    }
+   ]
+  }
  },
  "tags": [
   "virus",

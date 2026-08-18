@@ -819,7 +819,31 @@
     "hint": "Each question with a 'yes or no' answer halves the remaining options. How many times must you halve a thousand to get one?",
     "tolAbs": 1
    }
-  ]
+  ],
+  "math": {
+   "title": "The math you need here",
+   "lead": "It all comes down to the logarithm: first to the choice of its base, then to a weighted sum, then to an integral from which the logarithm emerges.",
+   "items": [
+    {
+     "what": "Why a bit is a logarithm base two",
+     "why": "One question with a yes or no answer splits the set of possibilities in half. To find one option out of eight, you need three questions; out of sixteen, four: the number of questions is $\\log_2$ of the number of options. Hence the unit of measurement. In the first step of the derivation, this gives $H = \\log_2 W$ where Boltzmann wrote $S = k_B\\ln W$: the quantity is the same, only the bases of the logarithms differ. The conversion between them is a constant factor, because $\\log_2 x = \\ln x / \\ln 2$. That's where $\\ln 2 \\approx 0.693$ comes from in the Landauer formula and why it can't be removed: erasing a bit reduces the number of memory states exactly by half, and the natural logarithm of two is the price of that \"halving\" in continuous units.",
+     "latex": "S = k_B \\ln 2 \\cdot H, \\qquad \\log_2 x = \\frac{\\ln x}{\\ln 2}",
+     "kit": "exponent"
+    },
+    {
+     "what": "A weighted sum is an average",
+     "why": "Shannon's formula looks intimidating until you recognize a familiar structure. The quantity $-\\log_2 p_i$ is the surprise of a single outcome: the rarer it is, the more binary questions are needed to specify it. And $\\sum_i p_i(\\ldots)$ is an ordinary average, where each contribution is weighted by its probability, just like the average energy of molecules in the previous topic. So $H$ is the average surprise per outcome. The first step of the derivation checks this on a limiting case: plug in $p_i = 1/W$, factor out the identical term, the sum of probabilities gives one, and you're left with $\\log_2 W$. Boltzmann turns out to be a special case of Shannon: the one where all outcomes are equally likely.",
+     "latex": "H = -\\sum_i p_i \\log_2 p_i \\;\\xrightarrow{\\;p_i = 1/W\\;}\\; H = \\log_2 W",
+     "kit": "probability"
+    },
+    {
+     "what": "The integral from which the logarithm emerges",
+     "why": "In the second step of the derivation, the work of the piston is written as $A = \\int_{V/2}^{V} P\\,dV$. The integral is needed here because the pressure is not constant: the piston moves, the volume grows, the recoil of a single molecule weakens, and you can't multiply force by distance in one step. You have to sum the contributions $P\\,dV$ at each small step. For a gas of one molecule, $P = k_B T / V$, and under the integral you get $dV/V$ — the only integrand that yields a logarithm rather than a power. The limits differ by a factor of two, so the answer turns out to be $k_B T \\ln 2$. The same $\\ln 2$ appears in the cost of erasing a bit from the fifth step, and the coincidence is not accidental: in both cases, the number of available states changes exactly by a factor of two.",
+     "latex": "A = \\int_{V/2}^{V} \\frac{k_B T}{V}\\,dV = k_B T \\ln 2",
+     "kit": "integral"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Entropía e información",
@@ -1266,6 +1290,30 @@
      "note": "disminución de la incertidumbre: cuánta ignorancia eliminó la respuesta obtenida"
     }
    ]
+  },
+  "math": {
+   "title": "Las matemáticas que aquí se necesitaron",
+   "lead": "Todo se reduce al logaritmo: primero a la elección de su base, luego a la suma con pesos, y después a la integral de la que surge el logaritmo.",
+   "items": [
+    {
+     "what": "Por qué el bit es un logaritmo en base dos",
+     "why": "Una pregunta con respuesta «sí» o «no» divide el conjunto de opciones por la mitad. Para encontrar una opción entre ocho, se necesitan tres preguntas; entre dieciséis, cuatro: el número de preguntas es $\\log_2$ del número de opciones. De ahí proviene la unidad de medida. En el primer paso de la derivación, esto da $H = \\log_2 W$ donde Boltzmann escribía $S = k_B\\ln W$: la magnitud es la misma, solo difieren las bases del logaritmo. La conversión entre ellas es un factor constante, porque $\\log_2 x = \\ln x / \\ln 2$. De ahí proviene el $\\ln 2 \\approx 0{,}693$ en la fórmula de Landauer y por qué no se puede eliminar: borrar un bit reduce el número de estados de memoria exactamente a la mitad, y el logaritmo natural de dos es precisamente el precio de ese «a la mitad» en unidades continuas.",
+     "latex": "S = k_B \\ln 2 \\cdot H, \\qquad \\log_2 x = \\frac{\\ln x}{\\ln 2}",
+     "kit": "exponent"
+    },
+    {
+     "what": "La suma con pesos es un promedio",
+     "why": "La fórmula de Shannon parece intimidante hasta que se distingue en ella una construcción familiar. La cantidad $-\\log_2 p_i$ es la sorpresa de un resultado individual: cuanto más raro es, más preguntas binarias se necesitan para señalarlo. Y $\\sum_i p_i(\\ldots)$ es un promedio ordinario, donde cada contribución se pondera con su probabilidad, igual que la energía media de las moléculas en el tema anterior. Por lo tanto, $H$ es la sorpresa media por resultado. El primer paso de la derivación verifica esto en un caso límite: sustituya $p_i = 1/W$, saque el factor común fuera del paréntesis — la suma de probabilidades da uno, y queda $\\log_2 W$. Boltzmann resulta ser un caso particular de Shannon: aquel donde todos los resultados son igualmente probables.",
+     "latex": "H = -\\sum_i p_i \\log_2 p_i \\;\\xrightarrow{\\;p_i = 1/W\\;}\\; H = \\log_2 W",
+     "kit": "probability"
+    },
+    {
+     "what": "La integral de la que surge el logaritmo",
+     "why": "En el segundo paso de la derivación, el trabajo del pistón se escribe como $A = \\int_{V/2}^{V} P\\,dV$. La integral es necesaria aquí porque la presión no es constante: el pistón avanza, el volumen aumenta, el empuje de una sola molécula se debilita, y no se puede multiplicar la fuerza por la distancia de una sola vez. Hay que sumar las contribuciones $P\\,dV$ en cada pequeño paso. Para un gas de una sola molécula, $P = k_B T / V$, y bajo la integral queda $dV/V$ — la única expresión integrando que da no una potencia, sino un logaritmo. Los límites difieren en un factor de dos, por lo que la respuesta resulta ser $k_B T \\ln 2$. El mismo $\\ln 2$ aparece en el costo de borrar un bit del quinto paso, y la coincidencia no es casual: en ambos casos, el número de estados disponibles cambia exactamente en un factor de dos.",
+     "latex": "A = \\int_{V/2}^{V} \\frac{k_B T}{V}\\,dV = k_B T \\ln 2",
+     "kit": "integral"
+    }
+   ]
   }
  },
  "ar": {
@@ -1639,7 +1687,31 @@
     "hint": "كل سؤال بنعم أو لا يقسم الخيارات المتبقية إلى نصفين. كم مرة يجب قسمة الألف إلى نصفين ليتبقى واحد؟",
     "tolAbs": 1
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "كل شيء يختزل إلى اللوغاريتم: أولاً إلى اختيار قاعدته، ثم إلى المجموع الموزون، ثم إلى التكامل الذي يخرج منه اللوغاريتم.",
+   "items": [
+    {
+     "what": "لماذا البت هو لوغاريتم للأساس اثنين",
+     "why": "سؤال واحد بإجابة «نعم» أو «لا» يقسم مجموعة الاحتمالات إلى نصفين. للعثور على احتمال واحد من ثمانية، نحتاج إلى ثلاثة أسئلة، ومن ستة عشر — أربعة: عدد الأسئلة هو $\\log_2$ لعدد الاحتمالات. ومن هنا تأتي وحدة القياس. في الخطوة الأولى من الاشتقاق، يعطينا هذا $H = \\log_2 W$ حيث كتب بولتزمان $S = k_B\\ln W$: الكمية هي نفسها، فقط اختلفت قواعد اللوغاريتم. التحويل بينهما هو عامل ثابت، لأن $\\log_2 x = \\ln x / \\ln 2$. من هنا يأتي $\\ln 2 \\approx 0{,}693$ في صيغة لانداوير، ولماذا لا يمكن إزالته من هناك: مسح بت يقلل عدد حالات الذاكرة إلى النصف بالضبط، واللوغاريتم الطبيعي للاثنين هو ثمن هذا «النصف» في الوحدات المستمرة.",
+     "latex": "S = k_B \\ln 2 \\cdot H, \\qquad \\log_2 x = \\frac{\\ln x}{\\ln 2}",
+     "kit": "exponent"
+    },
+    {
+     "what": "المجموع الموزون هو متوسط",
+     "why": "تبدو صيغة شانون مخيفة حتى تكتشف فيها بنية مألوفة. الكمية $-\\log_2 p_i$ هي مفاجأة النتيجة الفردية: كلما كانت أكثر ندرة، زاد عدد الأسئلة الثنائية اللازمة لتحديدها. و $\\sum_i p_i(\\ldots)$ هو متوسط عادي، حيث يُؤخذ كل مساهمة بوزن احتماليته، تمامًا مثل متوسط طاقة الجزيئات في الموضوع السابق. إذن، $H$ هو متوسط المفاجأة لكل نتيجة. الخطوة الأولى من الاشتقاق تختبر هذا في الحالة الحدية: عوّض $p_i = 1/W$، أخرج الحد الثابت خارج القوس — مجموع الاحتمالات يعطي واحدًا، ويتبقى $\\log_2 W$. يتبين أن بولتزمان هو حالة خاصة من شانون: تلك التي تكون فيها جميع النتائج متساوية الاحتمال.",
+     "latex": "H = -\\sum_i p_i \\log_2 p_i \\;\\xrightarrow{\\;p_i = 1/W\\;}\\; H = \\log_2 W",
+     "kit": "probability"
+    },
+    {
+     "what": "التكامل الذي يخرج منه اللوغاريتم",
+     "why": "في الخطوة الثانية من الاشتقاق، يُكتب عمل المكبس كـ $A = \\int_{V/2}^{V} P\\,dV$. التكامل هنا ضروري لأن الضغط ليس ثابتًا: المكبس يتحرك، الحجم يزداد، ارتداد الجزيء الواحد يضعف، ولا يمكن ضرب القوة في المسافة بفعل واحد. يجب جمع المساهمات $P\\,dV$ في كل خطوة صغيرة. لغاز من جزيء واحد، $P = k_B T / V$، ويبقى تحت التكامل $dV/V$ — التعبير الوحيد الذي يعطي لوغاريتمًا وليس قوة. الحدود تختلف بمعامل اثنين، لذا تكون الإجابة $k_B T \\ln 2$. نفس $\\ln 2$ موجود في تكلفة مسح بت من الخطوة الخامسة، والصدفة ليست مصادفة: في كلتا الحالتين، عدد الحالات المتاحة يتغير بمقدار النصف بالضبط.",
+     "latex": "A = \\int_{V/2}^{V} \\frac{k_B T}{V}\\,dV = k_B T \\ln 2",
+     "kit": "integral"
+    }
+   ]
+  }
  },
  "tags": [
   "entropy",

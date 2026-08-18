@@ -815,7 +815,30 @@
     "hint": "احسب طاقات كلا المستويين باستخدام الصيغة −13.6/n² وخذ الفرق.",
     "tolAbs": 1
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "نظام واحد من معادلتين، سلوك واحد للتربيع العكسي، وفحص واحد للوحدات حيثما يظهر رقم جاهز في النص.",
+   "items": [
+    {
+     "what": "كيف تختفي السرعة من معادلتين",
+     "why": "الخطوتان الأوليتان تعطيان شرطين على نفس المدار: الشرط الكمي $mvr = n\\hbar$ والشرط الميكانيكي $ke^{2}/r^{2} = mv^{2}/r$. كل منهما على حدة لا يحدد نصف القطر: أي $r$ يصلح إذا اخترنا $v$ مناسبًا. الخطوة الثالثة تحل النظام، ويتم ذلك بحذف المتغير. من المعادلة الأولى $v = n\\hbar/(mr)$؛ بالتعويض في الثانية نحصل على $ke^{2}/r^{2} = n^{2}\\hbar^{2}/(mr^{3})$، تُختصر السرعة ويبقى نصف قطر واحد. من هنا يأتي الجواب الجاهز $r_n = n^{2}a_0$، المكتوب دون حسابات وسيطة. القاعدة عامة: شرطان مستقلان على كميتين مجهولتين يتركان مجموعة محدودة من الحلول. الانفصال (الكمية) ظهر هنا تحديدًا، ليس لأن المدارات قليلة، بل لأن $n$ عدد صحيح.",
+     "latex": "v = \\frac{n\\hbar}{mr} \\;\\Longrightarrow\\; \\frac{ke^{2}}{r^{2}} = \\frac{n^{2}\\hbar^{2}}{mr^{3}} \\;\\Longrightarrow\\; r_n = n^{2}\\frac{\\hbar^{2}}{kme^{2}}"
+    },
+    {
+     "what": "لماذا تتقارب المستويات نحو الأعلى",
+     "why": "في الخطوة الرابعة، الطاقة تتناسب مع $-1/n^{2}$، وتتبع كل صورة الخطوط من هذه القوة الواحدة. احسب المسافات بين المستويات المتجاورة: بين الأول والثاني هي $13{,}6\\,(1 - 1/4) = 10{,}2$ إلكترون فولت، بين التاسع والعاشر $13{,}6\\,(1/81 - 1/100) \\approx 0{,}03$ إلكترون فولت، أي أقل بثلاثمائة مرة. التربيع العكسي يتناقص بسرعة بحيث يتسع عدد لا نهائي من المستويات في فترة طاقة محدودة. من هنا يأتي سلوك المتسلسلات في الخطوة الخامسة: مع زيادة $m$، يميل الحد $1/m^{2}$ إلى الصفر، ويصل القوس إلى $1/n^{2}$، ولا تتباعد الخطوط بل تتقارب نحو حد المتسلسلة. بالنسبة لسلسلة ليمان، هذا الحد يساوي 13.6 إلكترون فولت، أي طاقة التأين.",
+     "latex": "\\frac{1}{n^{2}} - \\frac{1}{m^{2}} \\;\\longrightarrow\\; \\frac{1}{n^{2}} \\quad (m \\to \\infty)",
+     "kit": "propto"
+    },
+    {
+     "what": "من أين جاء الرقم 1240",
+     "why": "في المثال، يتم الحصول على الطول الموجي بقسمة 1240 على الطاقة بالإلكترون فولت، ويبدو الرقم وكأنه من لا شيء. إنها ليست قيمة جدولية، بل حاصل ضرب ثابتين، معاد كتابته بوحدات ملائمة: $\\lambda = hc/E$، حيث $hc = 1{,}986\\cdot10^{-25}$ جول·متر. اقسم على الإلكترون فولت $1{,}602\\cdot10^{-19}$ جول وحول الأمتار إلى نانومترات — ستحصل على 1240 إلكترون فولت·نانومتر. فحص الوحدات هنا هو كل المحتوى: اقسم على الطاقة بالإلكترون فولت، تحصل على نانومترات؛ اقسم على الطول الموجي بالنانومتر، تحصل على إلكترون فولت. نفس الفحص يعمل في الخطوة السادسة، حيث تم تجميع ثابت ريدبيرج من خمسة ثوابت: إلى الأربعة $k$, $m$, $e$, $\\hbar$، التي تعطي في الخطوة الرابعة 13.6 إلكترون فولت، يُضاف سرعة الضوء — وهي تحول الطاقة إلى متر مقلوب. التركيبة $k^{2}me^{4}/(4\\pi c\\hbar^{3})$ يجب أن تنتج مترًا مقلوبًا، وإذا لم تنتج، فالخطأ حدث قبل التعويض بالأرقام.",
+     "latex": "\\lambda = \\frac{hc}{E}, \\qquad hc \\approx 1240\\ \\text{إلكترون فولت}\\cdot\\text{نانومتر}",
+     "kit": "dimension"
+    }
+   ]
+  }
  },
  "en": {
   "title": "Spectra",
@@ -1188,7 +1211,30 @@
     "hint": "Calculate the energies of both levels using the formula −13.6/n² and take the difference.",
     "tolAbs": 1
    }
-  ]
+  ],
+  "math": {
+   "title": "The Math Needed Here",
+   "lead": "One system of two equations, one inverse-square behavior, and one unit check wherever a ready-made number appears in the text.",
+   "items": [
+    {
+     "what": "How velocity disappears from two equations",
+     "why": "The first two steps give two conditions on the same orbit: the quantum condition $mvr = n\\hbar$ and the mechanical condition $ke^{2}/r^{2} = mv^{2}/r$. Individually, neither fixes the radius: any $r$ works if you choose a suitable $v$. The third step solves the system by eliminating a variable. From the first equation, $v = n\\hbar/(mr)$; substituting into the second gives $ke^{2}/r^{2} = n^{2}\\hbar^{2}/(mr^{3})$, the velocity cancels, and only one radius remains. This is where the ready answer $r_n = n^{2}a_0$ comes from, written without intermediate steps. The general rule: two independent conditions on two unknown quantities leave a finite set of solutions. Discreteness appears exactly here, not because there are few orbits, but because $n$ is an integer.",
+     "latex": "v = \\frac{n\\hbar}{mr} \\;\\Longrightarrow\\; \\frac{ke^{2}}{r^{2}} = \\frac{n^{2}\\hbar^{2}}{mr^{3}} \\;\\Longrightarrow\\; r_n = n^{2}\\frac{\\hbar^{2}}{kme^{2}}"
+    },
+    {
+     "what": "Why levels bunch up at the top",
+     "why": "In the fourth step, the energy goes as $-1/n^{2}$, and the whole picture of lines follows from this single power. Calculate the distances between neighboring levels: between the first and second it is $13.6\\,(1 - 1/4) = 10.2$ eV, between the ninth and tenth $13.6\\,(1/81 - 1/100) \\approx 0.03$ eV, that is, three hundred times smaller. The inverse square decreases so fast that an infinite number of levels fits into a finite energy range. This is why the series behave as they do in the fifth step: as $m$ grows, the term $1/m^{2}$ tends to zero, the bracket approaches $1/n^{2}$, and the lines do not spread out but bunch up toward the series limit. For the Lyman series, this limit is 13.6 eV, the ionization energy.",
+     "latex": "\\frac{1}{n^{2}} - \\frac{1}{m^{2}} \\;\\longrightarrow\\; \\frac{1}{n^{2}} \\quad (m \\to \\infty)",
+     "kit": "propto"
+    },
+    {
+     "what": "Where the number 1240 comes from",
+     "why": "In the example, the wavelength is obtained by dividing 1240 by the energy in electronvolts, and the number looks like it came out of thin air. It is not a tabulated value but a product of two constants, rewritten in convenient units: $\\lambda = hc/E$, where $hc = 1.986\\cdot10^{-25}$ J·m. Divide by the electronvolt $1.602\\cdot10^{-19}$ J and express meters in nanometers — you get 1240 eV·nm. The unit check here is the whole point: divide by the energy in eV, you get nanometers; divide by the wavelength in nm, you get eV. The same check works in the sixth step, where the Rydberg constant is assembled from five constants: to the quartet $k$, $m$, $e$, $\\hbar$, which gives 13.6 eV in the fourth step, the speed of light is added — it converts energy into inverse meters. The combination $k^{2}me^{4}/(4\\pi c\\hbar^{3})$ must come out in inverse meters, and if it does not, the error was made before substituting numbers.",
+     "latex": "\\lambda = \\frac{hc}{E}, \\qquad hc \\approx 1240\\ \\text{eV}\\cdot\\text{nm}",
+     "kit": "dimension"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Espectros",
@@ -1560,7 +1606,30 @@
     "hint": "Calcule las energías de ambos niveles usando la fórmula −13,6/n² y tome la diferencia.",
     "tolAbs": 1
    }
-  ]
+  ],
+  "math": {
+   "title": "Matemáticas que se necesitaron aquí",
+   "lead": "Un sistema de dos ecuaciones, un comportamiento de inverso del cuadrado y una verificación de unidades donde aparece un número ya calculado en el texto.",
+   "items": [
+    {
+     "what": "Cómo desaparece la velocidad de dos ecuaciones",
+     "why": "Los dos primeros pasos dan dos condiciones sobre la misma órbita: la cuántica $mvr = n\\hbar$ y la mecánica $ke^{2}/r^{2} = mv^{2}/r$. Por separado, ninguna de ellas fija el radio: cualquier $r$ sirve si se elige una $v$ adecuada. El tercer paso resuelve el sistema, y se hace eliminando la variable. De la primera ecuación, $v = n\\hbar/(mr)$; al sustituir en la segunda se obtiene $ke^{2}/r^{2} = n^{2}\\hbar^{2}/(mr^{3})$, la velocidad se cancela y queda un solo radio. De ahí sale la respuesta final $r_n = n^{2}a_0$, escrita sin los pasos intermedios. La regla es general: dos condiciones independientes sobre dos cantidades desconocidas dejan un conjunto finito de soluciones. La discreción aparece precisamente aquí, no porque haya pocas órbitas, sino porque $n$ es entero.",
+     "latex": "v = \\frac{n\\hbar}{mr} \\;\\Longrightarrow\\; \\frac{ke^{2}}{r^{2}} = \\frac{n^{2}\\hbar^{2}}{mr^{3}} \\;\\Longrightarrow\\; r_n = n^{2}\\frac{\\hbar^{2}}{kme^{2}}"
+    },
+    {
+     "what": "Por qué los niveles se aprietan hacia arriba",
+     "why": "En el cuarto paso, la energía va como $-1/n^{2}$, y todo el panorama de líneas se deduce de esa única potencia. Calcule las distancias entre niveles vecinos: entre el primero y el segundo es $13{,}6\\,(1 - 1/4) = 10{,}2$ eV, entre el noveno y el décimo es $13{,}6\\,(1/81 - 1/100) \\approx 0{,}03$ eV, es decir, trescientas veces menor. El inverso del cuadrado decrece tan rápido que un número infinito de niveles cabe en un intervalo finito de energías. De ahí viene el comportamiento de las series en el quinto paso: al crecer $m$, el término $1/m^{2}$ tiende a cero, el paréntesis se acerca a $1/n^{2}$, y las líneas no se separan, sino que se aprietan hacia el límite de la serie. Para la serie de Lyman, ese límite es 13,6 eV, es decir, la energía de ionización.",
+     "latex": "\\frac{1}{n^{2}} - \\frac{1}{m^{2}} \\;\\longrightarrow\\; \\frac{1}{n^{2}} \\quad (m \\to \\infty)",
+     "kit": "propto"
+    },
+    {
+     "what": "De dónde sale el número 1240",
+     "why": "En el ejemplo, la longitud de onda se obtiene dividiendo 1240 entre la energía en electronvoltios, y el número parece sacado de la nada. No es un valor tabulado, sino el producto de dos constantes, reescrito en unidades convenientes: $\\lambda = hc/E$, donde $hc = 1{,}986\\cdot10^{-25}$ J·m. Divida por el electronvoltio $1{,}602\\cdot10^{-19}$ J y exprese los metros en nanómetros: se obtiene 1240 eV·nm. La etiqueta de las unidades aquí es todo el contenido: divide por la energía en eV, obtienes nanómetros; divide por la longitud de onda en nm, obtienes eV. Esa misma verificación funciona en el sexto paso, donde la constante de Rydberg ya está compuesta por cinco constantes: a la cuaterna $k$, $m$, $e$, $\\hbar$, que en el cuarto paso da 13,6 eV, se le añade la velocidad de la luz, que es la que convierte la energía en metros inversos. La combinación $k^{2}me^{4}/(4\\pi c\\hbar^{3})$ debe dar metros inversos, y si no lo hace, el error se cometió antes de sustituir los números.",
+     "latex": "\\lambda = \\frac{hc}{E}, \\qquad hc \\approx 1240\\ \\text{eV}\\cdot\\text{nm}",
+     "kit": "dimension"
+    }
+   ]
+  }
  },
  "tags": [
   "hydrogen",

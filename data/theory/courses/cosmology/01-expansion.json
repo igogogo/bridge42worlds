@@ -651,7 +651,98 @@
     "tolAbs": 30,
     "hint": "With H₀ = 70, every 70 km/s of velocity corresponds to one megaparsec of distance. How many times does 70 fit into 14,000?"
    }
-  ]
+  ],
+  "derivation": {
+   "title": "Where the linear relation comes from",
+   "lead": "Let's go from \"everything stretches equally\" to the formula. The only assumption along the way is that the expansion is homogeneous: the same fractional increase everywhere.",
+   "steps": [
+    {
+     "text": "Let's describe the expansion with a single number. Suppose each pair of galaxies has a constant \"coordinate\" separation $\\chi$ — their label on the rubber band — and the physical distance is obtained by multiplying by the scale factor $a(t)$, which is common to the whole universe. The stretching is then the same everywhere: there is no preferred point in the description.",
+     "latex": "d(t) = a(t)\\,\\chi",
+     "figure": "rubberband",
+     "figCaption": "Labels on the rubber band stay at their numbers, the distance between them grows with a(t)"
+    },
+    {
+     "text": "The recession velocity is the time derivative of the distance. Differentiate and note that $\\chi$ is constant: the galaxy does not crawl along the rubber band but stays at its label.",
+     "latex": "v = \\dot d = \\dot a\\,\\chi = \\frac{\\dot a}{a}\\,(a\\chi) = \\frac{\\dot a}{a}\\,d",
+     "figure": "hubblelaw",
+     "figCaption": "The velocity turns out to be proportional to distance: the factor ȧ/a is the same for all"
+    },
+    {
+     "text": "The factor $\\dot a / a$ is the Hubble constant. Constant only in space: at a given moment it is the same for all galaxies, but it changes with time. Hence the subscript zero: the value today.",
+     "latex": "H(t) = \\frac{\\dot a}{a}, \\qquad v = H_0\\, d \\;\\; \\text{at the present time}",
+     "figure": "hubbleconst",
+     "figCaption": "H is the ratio of the growth rate to the current size, the same for all pairs of galaxies"
+    },
+    {
+     "text": "Now light. A wave emitted from a galaxy is stretched by space exactly as many times as the distance has grown during its travel. This is the redshift — not the motion of the source, but the history of expansion recorded in the wavelength.",
+     "latex": "\\frac{\\lambda_{\\text{obs}}}{\\lambda_{\\text{emit}}} = \\frac{a_{\\text{obs}}}{a_{\\text{emit}}} = 1 + z",
+     "figure": "redshiftwave",
+     "figCaption": "A wave in transit: the longer the light travels, the more stretched its crest"
+    },
+    {
+     "text": "Let's check the only place where we took something on faith: why the wave stretches exactly as $a$. Two adjacent crests are two labels on the same comoving grid: the second crest follows the first with a constant lag, so the coordinate separation $\\Delta\\chi$ between them does not change during the travel. The wavelength is the physical distance between crests, and any physical distance equals the coordinate separation multiplied by $a$. Hence the stretching of the wave and the stretching of distances between galaxies are literally the same factor.",
+     "latex": "\\lambda(t) = a(t)\\,\\Delta\\chi, \\quad \\Delta\\chi = \\text{const} \\;\\Longrightarrow\\; \\frac{\\lambda_{\\text{obs}}}{\\lambda_{\\text{emit}}} = \\frac{a_{\\text{obs}}}{a_{\\text{emit}}}",
+     "figure": "twocrests",
+     "figCaption": "Crests sit on their grid nodes: the labels are the same, the scale grows — and with it the wavelength"
+    },
+    {
+     "text": "Now about how $z$ is obtained in practice. The observed wavelength is shown by the instrument, the laboratory one we know from terrestrial experience — but how to tell which line is which if the whole spectrum has shifted? The saving grace is that the factor $(1+z)$ is the same for all lines at once: the pattern of the series is not distorted, it shifts as a whole, and matching it to the observed one can be done with a single value of $z$. Therefore the redshift is determined not from one line but from the whole set, and the agreement of numbers computed from different lines serves as a check that the cause is indeed the expansion.",
+     "latex": "1+z=\\frac{\\lambda_{\\text{obs}}(\\mathrm{H}\\alpha)}{\\lambda_{\\text{emit}}(\\mathrm{H}\\alpha)}=\\frac{702{,}2}{656{,}3}=\\frac{\\lambda_{\\text{obs}}(\\mathrm{H}\\beta)}{\\lambda_{\\text{emit}}(\\mathrm{H}\\beta)}=\\frac{520{,}1}{486{,}1}=1{,}070",
+     "figure": "specshift",
+     "figCaption": "Laboratory spectrum and observed one: the pattern is the same, each line multiplied by the same (1+z)"
+    },
+    {
+     "text": "Let's relate $z$ to distance: for a nearby galaxy the light has traveled briefly, and over a short interval the scale factor is taken to first order in the Taylor series — substituting into $1+z = a_0/a$ gives $z \\approx H_0 d/c$, exactly the Doppler fraction $v/c$, but derived from expansion, not from the motion of the source. The agreement holds up to the neglected terms of order $z^2$: initially the relative error grows proportionally to $z$, and then faster. At $z = 0.1$ it is about two percent, at $z = 0.2$ about five, at $z = 0.5$ already about fifteen. At $z \\approx 1$ a correction does not help: the discrepancy reaches tens of percent, and the very word \"distance\" splits into several different quantities — comoving, luminosity, angular diameter — which differ by factors of $(1+z)$. Hence the clear boundary of applicability of the Doppler approximation: roughly up to $z = 0.1$.",
+     "latex": "a(t) \\approx a_0\\bigl[1 + H_0\\,(t - t_0)\\bigr] \\;\\Longrightarrow\\; z \\approx \\frac{H_0\\,d}{c} = \\frac{v}{c} \\quad (z \\ll 1)",
+     "figure": "ztangent",
+     "figCaption": "As long as we look not too far, the curve a(t) is indistinguishable from its tangent; the larger z, the more they diverge, and so does the formula"
+    },
+    {
+     "text": "Let's put together what we have found into a chain used in practice: measured a line in the spectrum — got $z$; using the formula from the previous step converted it into velocity; divided by $H_0$ — got distance. This is how the map of the nearby universe is built, and its depth is limited exactly by the boundary we just found: beyond it the last link cannot be used, there the distance is calculated from the whole history of $a(t)$, not from a single fraction.",
+     "latex": "d \\approx \\frac{c\\,z}{H_0} \\qquad (z \\ll 1)",
+     "figure": "zladder",
+     "figCaption": "Working chain: a line in the spectrum gives z, from z the velocity, from the velocity the distance"
+    }
+   ],
+   "plate": "v = H_0 d, \\qquad 1 + z = \\lambda_{\\text{obs}} / \\lambda_{\\text{emit}}",
+   "plateCap": "On the left — what cannot be measured directly: velocity and distance. On the right — what is read from the spectrum with a ruler. The law relates one to the other.",
+   "note": "Note what is absent from the derivation: the observer's position. The formula came out the same for any galaxy, and this is not luck but a consequence of homogeneity. If the expansion had a center, the linear relation would not hold."
+  },
+  "constants": {
+   "title": "Constants: where they came from and what they mean",
+   "lead": "Three numbers without which nothing can be calculated in this topic, and one discrepancy that is being debated right now.",
+   "items": [
+    {
+     "sym": "H₀",
+     "name": "Hubble constant",
+     "why": "Two measurement methods give different answers, and this is not scatter but a persistent discrepancy. From the cosmic microwave background — that is, from the early Universe with a model of its subsequent history — it comes out to $67.4$. From nearby galaxies directly, via Cepheids and supernovae, it is $73.0$. The uncertainties of both measurements are about one percent, and the difference between them is eight percent. This is called the Hubble tension; in this course we take the round number $70$.",
+     "value": "67.4 or 73.0 km/(s·Mpc)",
+     "latex": "H_0"
+    },
+    {
+     "sym": "c",
+     "name": "speed of light",
+     "why": "Converts redshift into velocity. Since 1983 it is not a measured quantity but a definition: the meter is defined through the second and through $c$, so the speed of light has no uncertainty.",
+     "value": "299,792.458 km/s",
+     "latex": "c"
+    },
+    {
+     "sym": "1 Mpc",
+     "name": "megaparsec",
+     "why": "The working unit for intergalactic distances. The Hubble constant is measured through it, so in its units the megaparsec appears in the denominator.",
+     "value": "3.26 million light-years = 3.086·10²² m",
+     "latex": "1\\,\\text{Mpc}"
+    },
+    {
+     "sym": "λ(Hα)",
+     "name": "hydrogen line Hα",
+     "why": "The transition of an electron in a hydrogen atom between the third and second levels. It serves as a ruler for the entire Universe precisely because it does not depend on anything: a hydrogen atom in a distant galaxy is structured the same as in a laboratory.",
+     "value": "656.28 nm",
+     "latex": "\\lambda(H_\\alpha)"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Expansión y corrimiento al rojo",
@@ -917,7 +1008,98 @@
     "tolAbs": 30,
     "hint": "Con H₀ = 70, cada 70 km/s de velocidad corresponden a un megapársec de distancia. ¿Cuántas veces cabe 70 en 14 000?"
    }
-  ]
+  ],
+  "derivation": {
+   "title": "De dónde surge la relación lineal",
+   "lead": "Pasaremos de «todo se estira por igual» a la fórmula. La única suposición en el camino es que la expansión es homogénea: la misma fracción de aumento en todas partes.",
+   "steps": [
+    {
+     "text": "Describamos la expansión con un solo número. Supongamos que cada par de galaxias tiene una diferencia «coordenada» constante $\\chi$ — su número en la banda elástica — y la distancia física se obtiene multiplicando por el factor de escala $a(t)$, común para todo el universo. La expansión es entonces la misma en todas partes: no hay un punto privilegiado en la descripción.",
+     "latex": "d(t) = a(t)\\,\\chi",
+     "figure": "rubberband",
+     "figCaption": "Las marcas en la banda elástica permanecen en sus números, la distancia entre ellas crece junto con a(t)"
+    },
+    {
+     "text": "La velocidad de recesión es la derivada de la distancia respecto al tiempo. Derivamos y notamos que $\\chi$ es constante: la galaxia no se arrastra por la banda, sino que permanece en su marca.",
+     "latex": "v = \\dot d = \\dot a\\,\\chi = \\frac{\\dot a}{a}\\,(a\\chi) = \\frac{\\dot a}{a}\\,d",
+     "figure": "hubblelaw",
+     "figCaption": "La velocidad resulta proporcional a la distancia: el factor ȧ/a es el mismo para todas"
+    },
+    {
+     "text": "El factor $\\dot a / a$ es la constante de Hubble. Constante solo en el espacio: en un mismo instante es la misma para todas las galaxias, pero cambia con el tiempo. Por eso tiene un subíndice cero: el valor actual.",
+     "latex": "H(t) = \\frac{\\dot a}{a}, \\qquad v = H_0\\, d \\;\\; \\text{en la actualidad}",
+     "figure": "hubbleconst",
+     "figCaption": "H es la relación entre la tasa de crecimiento y el tamaño actual, igual para todos los pares de galaxias"
+    },
+    {
+     "text": "Ahora la luz. Una onda que sale de una galaxia se estira junto con el espacio exactamente en la misma proporción en que ha crecido la distancia durante el tiempo de viaje. Esto es el corrimiento al rojo: no es un movimiento de la fuente, sino la historia de la expansión, registrada en la longitud de onda.",
+     "latex": "\\frac{\\lambda_{\\text{obs}}}{\\lambda_{\\text{emit}}} = \\frac{a_{\\text{obs}}}{a_{\\text{emit}}} = 1 + z",
+     "figure": "redshiftwave",
+     "figCaption": "Onda en camino: cuanto más tarda la luz, más estirada está su cresta"
+    },
+    {
+     "text": "Verifiquemos el único lugar donde hemos creído algo sin demostración: por qué la onda se estira exactamente como $a$. Dos crestas adyacentes son dos marcas en la misma red comóvil: la segunda cresta sigue la estela de la primera con un retraso constante, por lo que la diferencia coordenada entre ellas $\\Delta\\chi$ no cambia durante el viaje. La longitud de onda es la distancia física entre crestas, y toda distancia física es igual a la diferencia coordenada multiplicada por $a$. Por lo tanto, el estiramiento de la onda y el estiramiento de las distancias entre galaxias son literalmente el mismo factor.",
+     "latex": "\\lambda(t) = a(t)\\,\\Delta\\chi, \\quad \\Delta\\chi = \\text{const} \\;\\Longrightarrow\\; \\frac{\\lambda_{\\text{obs}}}{\\lambda_{\\text{emit}}} = \\frac{a_{\\text{obs}}}{a_{\\text{emit}}}",
+     "figure": "twocrests",
+     "figCaption": "Las crestas están en sus nodos de la red: los números son los mismos, la escala crece — y con ella la longitud de onda"
+    },
+    {
+     "text": "Ahora, de dónde se obtiene $z$ en la práctica. La longitud de onda observada la muestra el instrumento, la de laboratorio la conocemos por la experiencia terrestre — pero ¿cómo saber qué línea es cuál si todo el espectro se ha desplazado? Ayuda el hecho de que el factor $(1+z)$ es el mismo para todas las líneas a la vez: el patrón de la serie no se distorsiona, se desplaza en su conjunto, y se puede hacer coincidir con el observado con un único valor de $z$. Por eso el corrimiento al rojo se determina no por una sola línea, sino por todo el conjunto, y la coincidencia de los números calculados a partir de diferentes líneas sirve como verificación de que se trata efectivamente de la expansión.",
+     "latex": "1+z=\\frac{\\lambda_{\\text{obs}}(\\mathrm{H}\\alpha)}{\\lambda_{\\text{emit}}(\\mathrm{H}\\alpha)}=\\frac{702{,}2}{656{,}3}=\\frac{\\lambda_{\\text{obs}}(\\mathrm{H}\\beta)}{\\lambda_{\\text{emit}}(\\mathrm{H}\\beta)}=\\frac{520{,}1}{486{,}1}=1{,}070",
+     "figure": "specshift",
+     "figCaption": "Espectro de laboratorio y observado: el patrón es el mismo, cada línea multiplicada por el mismo (1+z)"
+    },
+    {
+     "text": "Relacionemos $z$ con la distancia: para una galaxia cercana, la luz ha viajado poco tiempo, y en un intervalo corto el factor de escala se toma por el primer término de la serie de Taylor — la sustitución en $1+z = a_0/a$ da $z \\approx H_0 d/c$, exactamente la fracción Doppler $v/c$, pero derivada de la expansión, no del movimiento de la fuente. La coincidencia se sostiene por los términos despreciados de orden $z^2$: al principio el error relativo crece proporcionalmente a $z$, y luego más rápido. Para $z = 0{,}1$ es alrededor del dos por ciento, para $z = 0{,}2$ alrededor del cinco, para $z = 0{,}5$ ya alrededor del quince. Para $z \\approx 1$ la corrección no ayuda: la discrepancia llega a decenas por ciento, y la propia palabra «distancia» se descompone en varias magnitudes diferentes — comóvil, por luminosidad, por tamaño angular — que difieren por factores $(1+z)$. De ahí el límite claro de aplicabilidad de la aproximación Doppler: aproximadamente hasta $z = 0{,}1$.",
+     "latex": "a(t) \\approx a_0\\bigl[1 + H_0\\,(t - t_0)\\bigr] \\;\\Longrightarrow\\; z \\approx \\frac{H_0\\,d}{c} = \\frac{v}{c} \\quad (z \\ll 1)",
+     "figure": "ztangent",
+     "figCaption": "Mientras miramos no muy lejos, la curva a(t) es indistinguible de su tangente; cuanto mayor es z, más divergen tanto ellas como la fórmula"
+    },
+    {
+     "text": "Juntemos lo encontrado en una cadena que se usa en la práctica: medimos una línea en el espectro — obtenemos $z$; por la fórmula del paso anterior lo convertimos en velocidad; dividimos por $H_0$ — obtenemos la distancia. Así se construye el mapa del universo cercano, y su profundidad se topa exactamente con el límite que acabamos de encontrar: más allá, el último eslabón no se puede usar, allí la distancia se calcula a partir de toda la historia de $a(t)$, no de una sola fracción.",
+     "latex": "d \\approx \\frac{c\\,z}{H_0} \\qquad (z \\ll 1)",
+     "figure": "zladder",
+     "figCaption": "Cadena de trabajo: la línea en el espectro da z, de z la velocidad, de la velocidad la distancia"
+    }
+   ],
+   "plate": "v = H_0 d, \\qquad 1 + z = \\lambda_{\\text{obs}} / \\lambda_{\\text{emit}}",
+   "plateCap": "A la izquierda — lo que no se puede medir directamente: velocidad y distancia. A la derecha — lo que se lee del espectro con una regla. La ley relaciona una cosa con la otra.",
+   "note": "Observe lo que no está en la derivación: la posición del observador. La fórmula resultó ser la misma para cualquier galaxia, y esto no es una suerte, sino una consecuencia de la homogeneidad. Si la expansión tuviera un centro, la relación lineal no habría resultado."
+  },
+  "constants": {
+   "title": "Constantes: de dónde vienen y qué significan",
+   "lead": "Tres números sin los cuales no se puede calcular nada en este tema, y una discrepancia que provoca debate en este momento.",
+   "items": [
+    {
+     "sym": "H₀",
+     "name": "constante de Hubble",
+     "why": "Dos métodos de medición dan respuestas diferentes, y esto no es dispersión, sino una discrepancia persistente. Según la radiación cósmica de fondo —es decir, del universo temprano con un modelo de su historia posterior— resulta ser $67{,}4$. Según las galaxias cercanas directamente, mediante cefeidas y supernovas, es $73{,}0$. Las incertidumbres de ambas mediciones son de alrededor del uno por ciento, y la diferencia entre ellas es del ocho por ciento. Esto es lo que se llama la tensión de Hubble; en el curso tomamos un valor redondo de $70$.",
+     "value": "67,4 o 73,0 km/(s·Mpc)",
+     "latex": "H_0"
+    },
+    {
+     "sym": "c",
+     "name": "velocidad de la luz",
+     "why": "Convierte el corrimiento al rojo en velocidad. Desde 1983 no es una cantidad medida, sino una definición: el metro se define a partir del segundo y de $c$, por lo que la velocidad de la luz no tiene incertidumbre.",
+     "value": "299 792,458 km/s",
+     "latex": "c"
+    },
+    {
+     "sym": "1 Mpc",
+     "name": "megapársec",
+     "why": "Es la unidad de trabajo para distancias intergalácticas. A través de ella se mide también la constante de Hubble, por lo que en sus unidades el megapársec aparece en el denominador.",
+     "value": "3,26 millones de años luz = 3,086·10²² m",
+     "latex": "1\\,\\text{Mpc}"
+    },
+    {
+     "sym": "λ(Hα)",
+     "name": "línea de hidrógeno Hα",
+     "why": "Es la transición del electrón en el átomo de hidrógeno entre el tercer y el segundo nivel. Sirve como regla para todo el universo precisamente porque no depende de nada: el átomo de hidrógeno en una galaxia lejana es igual que en el laboratorio.",
+     "value": "656,28 nm",
+     "latex": "\\lambda(H_\\alpha)"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "التمدد والانزياح الأحمر",
@@ -1183,6 +1365,97 @@
     "tolAbs": 30,
     "hint": "عند H₀ = 70، كل 70 كم/ث من السرعة تعطي مسافة قدرها ميغابارسيك واحد. كم مرة يتكرر 70 في 14000؟"
    }
-  ]
+  ],
+  "derivation": {
+   "title": "من أين يأتي الارتباط الخطي",
+   "lead": "سنتدرج من \"كل شيء يتمدد بنفس الطريقة\" إلى الصيغة. الافتراض الوحيد على طول الطريق هو أن التمدد منتظم: نفس نسبة الزيادة في كل مكان.",
+   "steps": [
+    {
+     "text": "سنصف التمدد برقم واحد. لنفترض أن لكل زوج من المجرات فرق \"إحداثي\" ثابت $\\chi$ — رقمها على الشريط المطاطي — والمسافة الفيزيائية تُحصل بضربها في عامل القياس الكوني المشترك $a(t)$. التمدد عندها متطابق في كل مكان: لا توجد نقطة مميزة في الوصف.",
+     "latex": "d(t) = a(t)\\,\\chi",
+     "figure": "rubberband",
+     "figCaption": "العلامات على الشريط المطاطي تبقى على أرقامها، والمسافة بينها تزداد مع a(t)"
+    },
+    {
+     "text": "سرعة التباعد هي مشتقة المسافة بالنسبة للزمن. نشتق ونلاحظ أن $\\chi$ ثابتة: المجرة لا تزحف على الشريط المطاطي، بل تقف على علامتها.",
+     "latex": "v = \\dot d = \\dot a\\,\\chi = \\frac{\\dot a}{a}\\,(a\\chi) = \\frac{\\dot a}{a}\\,d",
+     "figure": "hubblelaw",
+     "figCaption": "السرعة تتناسب مع المسافة: العامل ȧ/a واحد للجميع"
+    },
+    {
+     "text": "العامل $\\dot a / a$ هو ثابت هابل. ثابت فقط في المكان: في نفس اللحظة هو نفسه لجميع المجرات، لكنه يتغير مع الزمن. لذلك له مؤشر صفر: القيمة اليوم.",
+     "latex": "H(t) = \\frac{\\dot a}{a}, \\qquad v = H_0\\, d \\;\\; \\text{في عصرنا}",
+     "figure": "hubbleconst",
+     "figCaption": "H هو نسبة معدل النمو إلى الحجم الحالي، وهو نفسه لجميع أزواج المجرات"
+    },
+    {
+     "text": "الآن الضوء. الموجة الخارجة من المجرة تتمد مع الفضاء بنفس النسبة التي نما بها المسافة أثناء زمن الرحلة. هذا هو الانزياح الأحمر — ليس حركة المصدر، بل تاريخ التمدد المسجل في الطول الموجي.",
+     "latex": "\\frac{\\lambda_{\\text{obs}}}{\\lambda_{\\text{emit}}} = \\frac{a_{\\text{obs}}}{a_{\\text{emit}}} = 1 + z",
+     "figure": "redshiftwave",
+     "figCaption": "موجة في الطريق: كلما طال زمن الضوء، زاد تمدد قمته"
+    },
+    {
+     "text": "لنتحقق من الموضع الوحيد الذي صدقنا فيه بالكلمة: لماذا تتمدد الموجة تمامًا مثل $a$. قمتان متجاورتان هما علامتان على نفس الشبكة المرافقة: القمة الثانية تتبع أثر الأولى بتأخر ثابت، لذا الفرق الإحداثي بينهما $\\Delta\\chi$ لا يتغير أثناء الرحلة. الطول الموجي هو المسافة الفيزيائية بين القمتين، وكل مسافة فيزيائية تساوي الفرق الإحداثي مضروبًا في $a$. إذن، تمدد الموجة وتمدد المسافات بين المجرات هما حرفيًا نفس العامل.",
+     "latex": "\\lambda(t) = a(t)\\,\\Delta\\chi, \\quad \\Delta\\chi = \\text{ثابت} \\;\\Longrightarrow\\; \\frac{\\lambda_{\\text{obs}}}{\\lambda_{\\text{emit}}} = \\frac{a_{\\text{obs}}}{a_{\\text{emit}}}",
+     "figure": "twocrests",
+     "figCaption": "القمم تقف على عقدها في الشبكة: الأرقام نفسها، المقياس يكبر — ومعه الطول الموجي"
+    },
+    {
+     "text": "الآن عن كيفية الحصول على $z$ عمليًا. الطول الموجي المرصود يظهره الجهاز، والطول الموجي المخبري نعرفه من التجارب الأرضية — ولكن كيف نعرف أي خط هو أي خط إذا انزاح الطيف كله؟ ما ينقذنا هو أن العامل $(1+z)$ واحد لجميع الخطوط دفعة واحدة: نمط السلسلة لا يتشوه، بل ينزاح ككل، ويمكن مطابقته مع المرصود بقيمة واحدة فقط لـ $z$. لذلك يُحدد الانزياح الأحمر ليس من خط واحد بل من المجموعة كلها، وتطابق الأرقام المحسوبة من خطوط مختلفة يعد تحققًا من أن الأمر بالفعل هو التمدد.",
+     "latex": "1+z=\\frac{\\lambda_{\\text{obs}}(\\mathrm{H}\\alpha)}{\\lambda_{\\text{emit}}(\\mathrm{H}\\alpha)}=\\frac{702{,}2}{656{,}3}=\\frac{\\lambda_{\\text{obs}}(\\mathrm{H}\\beta)}{\\lambda_{\\text{emit}}(\\mathrm{H}\\beta)}=\\frac{520{,}1}{486{,}1}=1{,}070",
+     "figure": "specshift",
+     "figCaption": "الطيف المخبري والمرصود: النمط نفسه، كل خط مضروب في نفس (1+z)"
+    },
+    {
+     "text": "نربط $z$ بالمسافة: بالنسبة لمجرة قريبة، الضوء لم يقطع زمنًا طويلاً، وفي المقطع القصير يؤخذ عامل القياس بالحد الأول من متسلسلة تايلور — بالتعويض في $1+z = a_0/a$ نحصل على $z \\approx H_0 d/c$، تمامًا كسر دوبلر $v/c$، لكنه مشتق من التمدد وليس من حركة المصدر. هذا التطابق يعتمد على الحدود المهملة من رتبة $z^2$: في البداية الخطأ النسبي يزداد تناسبًا مع $z$، ثم أسرع. عند $z = 0{,}1$ حوالي اثنين بالمئة، عند $z = 0{,}2$ حوالي خمسة، عند $z = 0{,}5$ حوالي خمسة عشر. عند $z \\approx 1$ لا ينفع تصحيح: الاختلاف يصل إلى عشرات بالمئة، وكلمة «مسافة» نفسها تنقسم إلى عدة كميات مختلفة — مسافة مرافقة، مسافة لمعانية، مسافة قطر زاوي — تختلف بعوامل $(1+z)$. من هنا حد واضح لصلاحية تقريب دوبلر: حتى $z = 0{,}1$ تقريبًا.",
+     "latex": "a(t) \\approx a_0\\bigl[1 + H_0\\,(t - t_0)\\bigr] \\;\\Longrightarrow\\; z \\approx \\frac{H_0\\,d}{c} = \\frac{v}{c} \\quad (z \\ll 1)",
+     "figure": "ztangent",
+     "figCaption": "طالما ننظر قريبًا، منحنى a(t) لا يمكن تمييزه عن المماس؛ كلما زاد z، زاد الاختلاف بينهما وبين الصيغة"
+    },
+    {
+     "text": "نجمع ما وجدناه في سلسلة تُستخدم عمليًا: قاس خطًا في الطيف — حصلت على $z$؛ بصيغة الخطوة السابقة حولته إلى سرعة؛ قسمته على $H_0$ — حصلت على المسافة. هكذا بُنيت خريطة الكون القريب، وعمقها يرتطم بالحد الذي وجدناه للتو: بعده لا يمكن استخدام الحلقة الأخيرة، هناك تُحسب المسافة من كامل تاريخ $a(t)$ وليس من كسر واحد.",
+     "latex": "d \\approx \\frac{c\\,z}{H_0} \\qquad (z \\ll 1)",
+     "figure": "zladder",
+     "figCaption": "السلسلة العملية: خط في الطيف يعطي z، من z السرعة، من السرعة المسافة"
+    }
+   ],
+   "plate": "v = H_0 d, \\qquad 1 + z = \\lambda_{\\text{obs}} / \\lambda_{\\text{emit}}",
+   "plateCap": "على اليسار — ما لا يمكن قياسه مباشرة: السرعة والمسافة. على اليمين — ما يُقرأ من الطيف بمسطرة. القانون يربط أحدهما بالآخر.",
+   "note": "لاحظ ما ليس في الاشتقاق: موقع الراصد. الصيغة خرجت متطابقة لأي مجرة، وهذا ليس صدفة بل نتيجة للتجانس. لو كان للتمدد مركز، لما خرج ارتباط خطي."
+  },
+  "constants": {
+   "title": "الثوابت: من أين أتت وماذا تعني",
+   "lead": "ثلاثة أرقام بدونها لا يمكن حساب أي شيء في هذا الموضوع، وخلاف واحد يسبب الجدل الآن.",
+   "items": [
+    {
+     "sym": "H₀",
+     "name": "ثابت هابل",
+     "why": "طريقتان للقياس تعطيان إجابتين مختلفتين، وهذا ليس تبعثرًا بل اختلافًا ثابتًا. من إشعاع الخلفية الكونية الميكروي - أي من الكون المبكر مع نموذج تاريخه اللاحق - نحصل على $67{,}4$. ومن المجرات القريبة مباشرة، عبر القيفاويات والمستعرات العظمى، نحصل على $73{,}0$. أخطاء القياسين حوالي واحد بالمائة، والفرق بينهما ثمانية بالمائة. وهذا ما يسمى توتر هابل؛ في الدورة نأخذ القيمة التقريبية $70$.",
+     "value": "67,4 أو 73,0 كم/(ث·م.ف.ع)",
+     "latex": "H_0"
+    },
+    {
+     "sym": "c",
+     "name": "سرعة الضوء",
+     "why": "تحول الانزياح الأحمر إلى سرعة. منذ عام 1983، لم تعد كمية مقاسة بل تعريف: المتر محدد من خلال الثانية ومن خلال $c$، لذلك لا يوجد خطأ في سرعة الضوء.",
+     "value": "299 792,458 كم/ث",
+     "latex": "c"
+    },
+    {
+     "sym": "1 م.ف.ع",
+     "name": "ميغا فرسخ فلكي",
+     "why": "وحدة عمل للمسافات بين المجرات. من خلالها يُقاس ثابت هابل أيضًا، لذلك في وحداته يقف الميغا فرسخ في المقام.",
+     "value": "3,26 مليون سنة ضوئية = 3,086·10²² م",
+     "latex": "1\\,\\text{م.ف.ع}"
+    },
+    {
+     "sym": "λ(Hα)",
+     "name": "خط الهيدروجين Hα",
+     "why": "انتقال الإلكترون في ذرة الهيدروجين بين المستويين الثالث والثاني. يصلح كمسطرة للكون كله لأنه لا يعتمد على أي شيء: ذرة الهيدروجين في مجرة بعيدة مبنية بنفس الطريقة كما في المختبر.",
+     "value": "656,28 نانومتر",
+     "latex": "\\lambda(H_\\alpha)"
+    }
+   ]
+  }
  }
 }

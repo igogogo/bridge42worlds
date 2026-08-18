@@ -456,24 +456,24 @@
   ],
   "standNote": "Move the mass number across the full range and watch the curve below. On the left, it rises steeply — fusion there yields a lot of energy, which is why hydrogen burns. At iron, it has a maximum and a flat top: nothing to do with it. On the right, a gentle decline — fission gives significantly less per nucleon, but there are many heavy nuclei and they are technically easier to split. Notice the label under the nucleus: it tells you which side of the curve you are on and what is beneficial to do with that nucleus.",
   "formula": {
-   "name": "Energy Yield of a Nuclear Reaction",
-   "latex": "Q = \\left[\\left(\\frac{B}{A}\\right)_{\\text{con}} - \\left(\\frac{B}{A}\\right)_{\\text{init}}\\right] A",
-   "alsoKnown": "Binding Energy Curve · Condition for Energy Release",
+   "name": "Energy yield of a nuclear reaction",
+   "latex": "Q = \\left[\\left(\\frac{B}{A}\\right)_{\\text{fin}} - \\left(\\frac{B}{A}\\right)_{\\text{init}}\\right] A",
+   "alsoKnown": "Binding energy curve · condition for energy release",
    "authors": [
     {
      "who": "Arthur Eddington",
      "year": "1920",
-     "what": "hypothesized that stars shine by converting hydrogen into helium. To those who objected that the Sun's temperature was insufficient, he replied: look for a hotter place. He turned out to be right — the missing piece was explained by tunneling."
+     "what": "suggested that stars shine by converting hydrogen into helium. To those who objected that the Sun's temperature was insufficient, he replied: find a hotter place. He turned out to be right — tunneling explained the missing part."
     },
     {
      "who": "Otto Hahn and Fritz Strassmann",
      "year": "1938",
-     "what": "detected barium after irradiating uranium with neutrons — meaning the nucleus had split in two. Trained as chemists, they hesitated to interpret the result physically and turned to a former colleague."
+     "what": "discovered barium after irradiating uranium with neutrons — that is, the nucleus split in half. Being chemists by training, they did not dare to interpret the result physically and turned to a former colleague."
     },
     {
      "who": "Lise Meitner and Otto Frisch",
      "year": "1939",
-     "what": "explained fission and calculated the energy using Einstein's formula, obtaining 200 MeV per nucleus. They discussed this during a walk in a snowy forest during Christmas vacation; Meitner was in exile after fleeing Germany."
+     "what": "explained fission and calculated the energy using Einstein's formula, obtaining 200 MeV per nucleus. They discussed this during a walk in a snowy forest during Christmas holidays; Meitner was in exile after fleeing Germany."
     },
     {
      "who": "Hans Bethe",
@@ -483,10 +483,47 @@
     {
      "who": "Igor Kurchatov",
      "year": "1946",
-     "what": "launched the first Soviet reactor F-1, still operating today as an exhibit. In the same 1939 as in the West, Soviet physicists Flerov and Petrzhak discovered spontaneous fission of uranium."
+     "what": "launched the first Soviet reactor F-1, which still operates today as an exhibit. In the same 1939 as in the West, Soviet physicists Flyorov and Petrzhak discovered spontaneous fission of uranium."
     }
    ],
-   "story": "Lise Meitner learned of Hahn's result by letter while in forced exile in Sweden: as a Jew, she had to flee Germany, leaving behind the laboratory where she had worked for thirty years. Hahn wrote that uranium after neutron irradiation yields barium and asked for an explanation of how that could happen. During a Christmas walk with her nephew Frisch, she sat on a fallen tree and calculated: if the uranium nucleus splits in half, the mass defect gives about 200 megaelectronvolts. The numbers matched. They sent the paper from Sweden, but the 1944 Nobel Prize was awarded to Hahn alone. Meitner refused to participate in the bomb project, saying she wanted nothing to do with that weapon. Element 109 was named meitnerium."
+   "story": "Lise Meitner learned of Hahn's result by letter while in forced exile in Sweden: as a Jew, she had to flee Germany, leaving behind the laboratory where she had worked for thirty years. Hahn wrote that uranium after neutron irradiation gives barium and asked her to explain how that was possible. On a Christmas walk with her nephew Frisch, she sat on a fallen tree and calculated: if the uranium nucleus splits in half, the mass defect gives about 200 megaelectronvolts. The numbers matched. They sent the paper from Sweden, but the 1944 Nobel Prize went to Hahn alone. Meitner refused to participate in the bomb project, saying she would have nothing to do with that weapon. Element 109 was named meitnerium.",
+   "symbols": [
+    {
+     "sym": "Q2",
+     "latex": "Q",
+     "what": "energy yield of the reaction",
+     "unit": "MeV",
+     "note": "positive if products are more tightly bound than reactants"
+    },
+    {
+     "sym": "k_eff",
+     "latex": "k",
+     "what": "multiplication factor",
+     "unit": "—",
+     "note": "how many new fissions one causes; at $k=1$ the reactor is stable, at $k>1$ it runs away"
+    },
+    {
+     "sym": "sigma",
+     "latex": "\\sigma",
+     "what": "reaction cross section",
+     "unit": "barn",
+     "note": "a measure of probability; a barn equals $10^{-28}$ m² — roughly the cross-sectional area of a nucleus"
+    },
+    {
+     "sym": "Tign",
+     "latex": "T_{\\text{ign}}",
+     "what": "ignition temperature for fusion",
+     "unit": "K",
+     "note": "about $10^{8}$ K for deuterium with tritium — ten times higher than in the Sun's core"
+    },
+    {
+     "sym": "Lawson",
+     "latex": "n\\tau",
+     "what": "Lawson criterion",
+     "unit": "s/m³",
+     "note": "product of plasma density and confinement time; below the threshold the reactor does not pay off"
+    }
+   ]
   },
   "symbols": [
    {
@@ -816,7 +853,31 @@
     "hint": "Calculate the number of nuclei in a kilogram via Avogadro's number, multiply by 200 MeV in joules, and divide by the heat of combustion of coal.",
     "tolAbs": 1
    }
-  ]
+  ],
+  "math": {
+   "title": "The math you'll need here",
+   "lead": "Three skills: telling 'per nucleon' from 'per reaction', reading the slope of a graph, and keeping track of powers of ten.",
+   "items": [
+    {
+     "what": "'Per nucleon' and 'per reaction' are different quantities",
+     "why": "In the yield formula, two quantities of different natures stand side by side, and confusing them is the main pitfall of this section. The specific binding energy $B/A$ is divided by the number of nucleons: it does not grow with the size of the nucleus and exists to compare nuclei of different masses on a common scale. The yield $Q$ is the energy of one whole event, and it is obtained by multiplying the specific difference back by the number of participating nucleons. The second and fourth steps do exactly this: in fission, the gain is $0.9$ MeV per nucleon, but there are 235 nucleons, so it comes to 200 MeV; in the fusion of four protons, the gain is almost 7 MeV per nucleon, but there are only four nucleons, so it comes to 26.7. Hence two statements that seem contradictory but are both true: fusion is more profitable per mass of fuel, fission per single event.",
+     "latex": "Q = \\Delta\\!\\left(\\frac{B}{A}\\right)\\cdot A",
+     "kit": "dimension"
+    },
+    {
+     "what": "The slope of a curve instead of a formula",
+     "why": "The stand asks you to track the mass number and watch the curve below—this is reading the derivative directly from the graph. The difference in heights decides whether a reaction is favorable at all, and the steepness tells how much: the left branch rises steeply, so hydrogen fusion gives almost 7 MeV per nucleon, while the gentle right slope leaves fission about $0.9$. At iron, the derivative becomes zero, and here the general property of a maximum works: near it, the function changes not in the first order but in the second. Therefore, the peak looks flat—for a dozen units of $A$ on either side, the specific binding energy hardly changes, and in the region from iron to nickel, there is no gain from either fission or fusion. The zero of the derivative is not an abstraction here: it is the end of the road for stellar nucleosynthesis from the seventh step.",
+     "latex": "\\frac{d(B/A)}{dA} > 0 \\;\\text{left},\\qquad = 0 \\;\\text{at iron},\\qquad < 0 \\;\\text{right}",
+     "kit": "derivative"
+    },
+    {
+     "what": "From one nucleus to a kilogram",
+     "why": "The example goes from 200 MeV per nucleus to $8\\cdot10^{13}$ joules per kilogram in four lines, and all the work in them is keeping track of exponents. Number of nuclei: $10^{3}/235$ moles, multiplied by $6.0\\cdot10^{23}$, gives $2.6\\cdot10^{24}$. Energy per fission: $2\\cdot10^{8}$ eV times $1.6\\cdot10^{-19}$ J gives $3.2\\cdot10^{-11}$. When multiplying, exponents add: $24 - 11 = 13$, and the mantissas give eight. The check goes in reverse: dividing by $c^{2} = 9\\cdot10^{16}$ returns $9\\cdot10^{-4}$ kilograms, that is, less than a gram. A habit that saves both time and errors: keep the exponent separate from the mantissa. The exponent determines what we are talking about—a wagon or a train; the mantissa only refines whether it is three thousand tons or eight.",
+     "latex": "\\frac{10^{3}}{235}\\cdot 6.0\\cdot10^{23} \\;\\times\\; 3.2\\cdot10^{-11} \\approx 8.2\\cdot10^{13}\\ \\text{J}",
+     "kit": "order"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Fisión y fusión",
@@ -1188,7 +1249,31 @@
     "hint": "Calcula el número de núcleos en un kilogramo usando el número de Avogadro, multiplica por 200 MeV en julios y divide por el calor de combustión del carbón.",
     "tolAbs": 1
    }
-  ]
+  ],
+  "math": {
+   "title": "Las matemáticas que hicieron falta aquí",
+   "lead": "Tres habilidades: distinguir «por nucleón» de «por reacción», leer la pendiente de una gráfica y contar en potencias de diez.",
+   "items": [
+    {
+     "what": "«Por nucleón» y «por reacción» son magnitudes distintas",
+     "why": "En la fórmula del balance aparecen dos magnitudes de distinta naturaleza, y confundirlas es la principal trampa de esta sección. La energía de enlace por nucleón $B/A$ está dividida por el número de nucleones: no crece con el tamaño del núcleo y existe para comparar núcleos de distinta masa en una escala común. El balance $Q$ es la energía de un solo evento en su totalidad, y se obtiene multiplicando la diferencia específica de nuevo por el número de nucleones participantes. El segundo y cuarto pasos hacen exactamente esto: en la fisión, la ganancia es de $0{,}9$ MeV por nucleón, pero hay 235 nucleones, y resultan 200 MeV; en la fusión de cuatro protones, la ganancia es de casi 7 MeV por nucleón, pero solo hay cuatro nucleones, y resultan 26,7. De ahí dos afirmaciones que parecen contradictorias pero ambas son ciertas: la fusión es más ventajosa por masa de combustible, la fisión por evento.",
+     "latex": "Q = \\Delta\\!\\left(\\frac{B}{A}\\right)\\cdot A",
+     "kit": "dimension"
+    },
+    {
+     "what": "La pendiente de la curva en lugar de la fórmula",
+     "why": "El panel pide llevar el número másico y observar la curva de abajo: eso es leer la derivada directamente de la gráfica. La diferencia de alturas decide si la reacción es favorable en absoluto, y la pendiente indica cuánto: la rama izquierda sube empinada, por eso la fusión de hidrógeno da casi 7 MeV por nucleón, mientras que la suave pendiente descendente de la derecha deja a la fisión unos $0{,}9$. En el hierro la derivada se anula, y aquí funciona una propiedad general del máximo: cerca de él, la función cambia no en primer orden, sino en segundo. Por eso la cima se ve plana: en una decena de unidades de $A$ a cada lado, la energía de enlace por nucleón apenas cambia, y en la región del hierro al níquel no hay ganancia ni por fisión ni por fusión. El cero de la derivada no es una abstracción: es el final del camino de la síntesis estelar del séptimo paso.",
+     "latex": "\\frac{d(B/A)}{dA} > 0 \\;\\text{izquierda},\\qquad = 0 \\;\\text{en el hierro},\\qquad < 0 \\;\\text{derecha}",
+     "kit": "derivative"
+    },
+    {
+     "what": "De un núcleo a un kilogramo",
+     "why": "El ejemplo recorre el camino de 200 MeV por núcleo hasta $8\\cdot10^{13}$ julios por kilogramo en cuatro líneas, y todo el trabajo en ellas es llevar la cuenta de los exponentes. Número de núcleos: $10^{3}/235$ moles, multiplicados por $6{,}0\\cdot10^{23}$, dan $2{,}6\\cdot10^{24}$. Energía de una fisión: $2\\cdot10^{8}$ eV por $1{,}6\\cdot10^{-19}$ J dan $3{,}2\\cdot10^{-11}$. Al multiplicar, los exponentes se suman: $24 - 11 = 13$, y las mantisas dan un ocho. La comprobación va en sentido inverso: dividir por $c^{2} = 9\\cdot10^{16}$ devuelve $9\\cdot10^{-4}$ kilogramos, es decir, menos de un gramo. Un hábito que ahorra tiempo y errores: llevar el exponente por separado de la mantisa. El exponente responde de qué se trata en general: de un vagón o de un tren; la mantisa solo precisa si son tres mil toneladas u ocho.",
+     "latex": "\\frac{10^{3}}{235}\\cdot 6{,}0\\cdot10^{23} \\;\\times\\; 3{,}2\\cdot10^{-11} \\approx 8{,}2\\cdot10^{13}\\ \\text{J}",
+     "kit": "order"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "الانشطار والاندماج",
@@ -1200,37 +1285,74 @@
   ],
   "standNote": "حرّك العدد الكتلي عبر النطاق كله وراقب المنحنى في الأسفل. على اليسار، يرتفع بحدة — الاندماج هناك ينتج طاقة كبيرة، ولهذا يحترق الهيدروجين. عند الحديد، ذروة وقمة مسطحة: لا شيء يمكن فعله به. على اليمين، انخفاض تدريجي — الانشطار يعطي طاقة أقل بكثير لكل نوكليون، لكن الأنوية الثقيلة كثيرة وانشطارها أسهل تقنياً. لاحظ التسمية تحت النواة: فهي تخبرك في أي جانب من المنحنى أنت وماذا يفيد فعله بهذه النواة.",
   "formula": {
-   "name": "الناتج الطاقي للتفاعل النووي",
-   "latex": "Q = \\left[\\left(\\frac{B}{A}\\right)_{\\text{نهائي}} - \\left(\\frac{B}{A}\\right)_{\\text{بداية}}\\right] A",
-   "alsoKnown": "منحنى طاقة الارتباط · شرط إطلاق الطاقة",
+   "name": "الطاقة الناتجة عن التفاعل النووي",
+   "latex": "Q = \\left[\\left(\\frac{B}{A}\\right)_{\\text{кон}} - \\left(\\frac{B}{A}\\right)_{\\text{нач}}\\right] A",
+   "alsoKnown": "منحنى طاقة الربط · شرط إطلاق الطاقة",
    "authors": [
     {
      "who": "آرثر إدينغتون",
      "year": "1920",
-     "what": "افترض أن النجوم تضيء عبر تحويل الهيدروجين إلى هيليوم. لمن عارضوا بأن حرارة الشمس غير كافية، أجاب: ابحثوا عن مكان أكثر حرارة. تبين أنه محق — النقص فسره النفق الكمومي"
+     "what": "افترض أن النجوم تتوهج بتحويل الهيدروجين إلى هيليوم. وللمعترضين بأن حرارة الشمس غير كافية، أجاب: ابحثوا عن مكان أكثر حرارة. كان محقًا — النفق الكمومي فسر النقص."
     },
     {
      "who": "أوتو هان وفريتز شتراسمان",
      "year": "1938",
-     "what": "اكتشفا الباريوم بعد تشعيع اليورانيوم بالنيوترونات — أي أن النواة انشطرت إلى نصفين. كيميائيان بالتكوين، لم يجرؤا على تفسير النتيجة فيزيائياً ولجآ إلى زميلة سابقة"
+     "what": "اكتشفا الباريوم بعد تشعيع اليورانيوم بالنيوترونات — أي أن النواة انشطرت إلى نصفين. وهما كيميائيان بالتدريب، لم يجرؤا على تفسير النتيجة فيزيائيًا ولجآ إلى زميلتهما السابقة."
     },
     {
      "who": "ليزا مايتنر وأوتو فريش",
      "year": "1939",
-     "what": "شرحا الانشطار وحسبا الطاقة باستخدام معادلة أينشتاين، وحصلا على 200 MeV لكل نواة. ناقشا ذلك أثناء نزهة في غابة ثلجية خلال عطلة عيد الميلاد؛ كانت مايتنر في المنفى بعد هروبها من ألمانيا"
+     "what": "فسرا الانشطار وحسبا الطاقة باستخدام معادلة أينشتاين، فحصلا على 200 ميغا إلكترون فولت للنواة. ناقشا ذلك أثناء نزهة في غابة ثلجية خلال عطلة عيد الميلاد؛ كانت مايتنر في المنفى بعد فرارها من ألمانيا."
     },
     {
      "who": "هانز بيته",
      "year": "1939",
-     "what": "حسب سلاسل التفاعلات التي تضيء بها النجوم وأوضح لماذا تحترق الشمس مليارات السنين وليس آلافاً. جائزة نوبل بعد ثمانية وثلاثين عاماً"
+     "what": "حسب سلاسل التفاعلات التي تضيء النجوم وفسر لماذا تحترق الشمس لمليارات السنين وليس لآلاف. جائزة نوبل بعد ثمانية وثلاثين عامًا."
     },
     {
-     "who": "إيغور كورتشاتوف",
+     "who": "إيغور كورشاتوف",
      "year": "1946",
-     "what": "أطلق أول مفاعل سوفيتي F-1، والذي يعمل حتى اليوم كمعروض. في نفس العام 1939، كما في الغرب، اكتشف الفيزيائيان السوفيتيان فليروف وبيترجاك الانشطار التلقائي لليورانيوم"
+     "what": "شغل أول مفاعل سوفيتي F-1، الذي لا يزال يعمل حتى اليوم كمعرض. في نفس عام 1939، كما في الغرب، اكتشف الفيزيائيان السوفييت فليروف وبيترجاك الانشطار التلقائي لليورانيوم."
     }
    ],
-   "story": "عرفت ليزا مايتنر بنتيجة هان عبر رسالة، وهي في المنفى القسري في السويد: كيهودية، اضطرت للفرار من ألمانيا تاركة مختبرها الذي عملت فيه ثلاثين عاماً. كتب هان أن اليورانيوم بعد تشعيعه بالنيوترونات يعطي الباريوم، وطلب تفسيراً لكيفية حدوث ذلك. في نزهة عيد الميلاد مع ابن أختها فريش، جلست على شجرة مقطوعة وحسبت: إذا انشطرت نواة اليورانيوم إلى نصفين، فإن عيب الكتلة يعطي حوالي 200 ميغا إلكترون فولت. تطابقت الأرقام. أرسلا المقال من السويد، لكن جائزة نوبل لعام 1944 حصل عليها هان وحده. رفضت مايتنر المشاركة في مشروع صنع القنبلة، قائلة إنها لن يكون لها أي علاقة بهذا السلاح. العنصر 109 سمي مايتنريوم."
+   "story": "علمت ليزا مايتنر بنتيجة هان عبر رسالة بينما كانت في المنفى الاضطراري في السويد: كونها يهودية، اضطرت للفرار من ألمانيا تاركة مختبرها حيث عملت ثلاثين عامًا. كتب هان أن اليورانيوم بعد تشعيعه بالنيوترونات يعطي الباريوم، وطلب تفسيرًا لكيفية حدوث ذلك. أثناء نزهة عيد الميلاد مع ابن أخيها فريش، جلست على جذع شجرة ساقط وحسبت: إذا انشطرت نواة اليورانيوم إلى نصفين، فإن نقص الكتلة يعطي حوالي 200 ميغا إلكترون فولت. تطابقت الأرقام. أرسلا المقال من السويد، لكن جائزة نوبل لعام 1944 حصل عليها هان وحده. رفضت مايتنر المشاركة في مشروع القنبلة، قائلة إنها لا تريد أن يكون لها أي علاقة بهذا السلاح. العنصر 109 سمي مايتنريوم.",
+   "symbols": [
+    {
+     "sym": "Q2",
+     "latex": "Q",
+     "what": "энергетический выход реакции",
+     "unit": "МэВ",
+     "note": "положителен, если продукты связаны прочнее исходных"
+    },
+    {
+     "sym": "k_eff",
+     "latex": "k",
+     "what": "коэффициент размножения",
+     "unit": "—",
+     "note": "сколько новых делений вызывает одно; при $k=1$ реактор устойчив, при $k>1$ идёт разгон"
+    },
+    {
+     "sym": "sigma",
+     "latex": "\\sigma",
+     "what": "сечение реакции",
+     "unit": "барн",
+     "note": "мера вероятности; барн равен $10^{-28}$ м² — примерно площадь сечения ядра"
+    },
+    {
+     "sym": "Tign",
+     "latex": "T_{\\text{заж}}",
+     "what": "температура зажигания синтеза",
+     "unit": "К",
+     "note": "около $10^{8}$ К для дейтерия с тритием — вдесятеро выше, чем в центре Солнца"
+    },
+    {
+     "sym": "Lawson",
+     "latex": "n\\tau",
+     "what": "критерий Лоусона",
+     "unit": "с/м³",
+     "note": "произведение плотности плазмы на время удержания; ниже порога реактор не окупается"
+    }
+   ]
   },
   "symbols": [
    {
@@ -1560,7 +1682,31 @@
     "hint": "احسب عدد النوى في كيلوغرام باستخدام عدد أفوجادرو، واضرب في 200 MeV بالجول، واقسم على حرارة احتراق الفحم.",
     "tolAbs": 1
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "ثلاث مهارات: التمييز بين «لكل نوية» و«لكل تفاعل»، وقراءة ميل المنحنى، وإجراء الحسابات باستخدام قوى العشرة.",
+   "items": [
+    {
+     "what": "«لكل نوية» و«لكل تفاعل» كميتان مختلفتان",
+     "why": "في معادلة الناتج توجد كميتان مختلفتان في الطبيعة، والخلط بينهما هو الفخ الرئيسي في هذا القسم. طاقة الارتباط النوعية $B/A$ مقسومة على عدد النويات: فهي لا تزداد مع حجم النواة، وهي موجودة لمقارنة النوى ذات الكتل المختلفة على مقياس موحد. الناتج $Q$ هو طاقة حدث واحد بالكامل، ويُحصل عليه بضرب الفرق النوعي مرة أخرى في عدد النويات المشاركة. الخطوتان الثانية والرابعة تفعلان هذا بالضبط: عند الانشطار، الربح $0{,}9$ ميجا إلكترون فولت لكل نوية، لكن عدد النويات 235، فيكون الناتج 200 ميجا إلكترون فولت؛ عند اندماج أربعة بروتونات، الربح حوالي 7 ميجا إلكترون فولت لكل نوية، لكن عدد النويات أربعة فقط، فيكون الناتج 26.7. من هنا تأتي عبارتان تبدوان متناقضتين لكن كلتاهما صحيحة: الاندماج أكثر ربحية لكل كتلة وقود، والانشطار أكثر ربحية لكل حدث.",
+     "latex": "Q = \\Delta\\!\\left(\\frac{B}{A}\\right)\\cdot A",
+     "kit": "dimension"
+    },
+    {
+     "what": "ميل المنحنى بدلاً من الصيغة",
+     "why": "يطلب الموقع تتبع العدد الكتلي ومراقبة المنحنى في الأسفل — وهذا هو قراءة المشتقة مباشرة من الرسم البياني. فرق الارتفاع يحدد ما إذا كان التفاعل مفيدًا أم لا، والميل يحدد مدى الفائدة: الفرع الأيسر يرتفع بحدة، ولهذا اندماج الهيدروجين يعطي حوالي 7 ميجا إلكترون فولت لكل نوية، بينما الانحدار الأيمن اللطيف يترك للانشطار حوالي $0{,}9$. عند الحديد، تصبح المشتقة صفرًا، وهنا تعمل الخاصية العامة للحد الأقصى: بالقرب منه، تتغير الدالة ليس في الرتبة الأولى بل في الرتبة الثانية. لذلك تبدو القمة مسطحة — على مدى عشر وحدات من $A$ في كلا الاتجاهين، طاقة الارتباط النوعية لا تتغير تقريبًا، وفي المنطقة من الحديد إلى النيكل لا يوجد ربح لا من الانشطار ولا من الاندماج. صفر المشتقة هنا ليس تجريدًا: إنه نهاية مسار الاندماج النجمي من الخطوة السابعة.",
+     "latex": "\\frac{d(B/A)}{dA} > 0 \\;\\text{يسارًا},\\qquad = 0 \\;\\text{عند الحديد},\\qquad < 0 \\;\\text{يمينًا}",
+     "kit": "derivative"
+    },
+    {
+     "what": "من نواة واحدة إلى كيلوغرام",
+     "why": "المثال ينتقل من 200 ميجا إلكترون فولت لنواة واحدة إلى $8\\cdot10^{13}$ جول لكل كيلوغرام في أربعة أسطر، وكل العمل فيها هو تتبع الأسس. عدد النوى: $10^{3}/235$ مول، مضروبًا في $6{,}0\\cdot10^{23}$، يعطي $2{,}6\\cdot10^{24}$. طاقة انشطار واحد: $2\\cdot10^{8}$ إلكترون فولت مضروبًا في $1{,}6\\cdot10^{-19}$ جول يعطي $3{,}2\\cdot10^{-11}$. عند الضرب، تُجمع الأسس: $24 - 11 = 13$، والجزء العشري يعطي ثمانية. التحقق يتم بالعكس: القسمة على $c^{2} = 9\\cdot10^{16}$ تعيد $9\\cdot10^{-4}$ كيلوغرام، أي أقل من غرام. عادة توفر الوقت وتقلل الأخطاء: تتبع الأس بشكل منفصل عن الجزء العشري. الأس يحدد ما نتحدث عنه — عربة أم قطار؛ الجزء العشري يوضح فقط: ثلاثة آلاف طن أم ثمانية.",
+     "latex": "\\frac{10^{3}}{235}\\cdot 6{,}0\\cdot10^{23} \\;\\times\\; 3{,}2\\cdot10^{-11} \\approx 8{,}2\\cdot10^{13}\\ \\text{جول}",
+     "kit": "order"
+    }
+   ]
+  }
  },
  "tags": [
   "hydrogen",

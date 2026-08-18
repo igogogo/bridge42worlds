@@ -817,7 +817,30 @@
     "hint": "Apparent depth is true depth divided by refractive index. Water's index is about 4/3.",
     "tolAbs": 0.3
    }
-  ]
+  ],
+  "math": {
+   "title": "The Math Needed Here",
+   "lead": "Here we need the derivative as a way to catch a minimum, the range of the sine, and the ability to add reciprocals.",
+   "items": [
+    {
+     "what": "How the derivative finds the fastest path",
+     "why": "In the third step of the derivation, time is written as a function of a single number: where exactly the ray crosses the boundary. The task then becomes purely mathematical—find the position of the transition point that minimizes time. The general trick: at a minimum, the tangent to the graph is horizontal, so the derivative is zero. The fourth step does exactly that. Importantly, the fractions that arise during differentiation are not abstract: $x/\\sqrt{a^{2}+x^{2}}$ is the opposite leg divided by the hypotenuse, i.e., the sine of the angle of incidence. Thus, Snell's law falls out of the derivative by itself, without any additional assumption. The caveat in the note about stationarity refers to the same condition: a zero derivative marks a minimum, a maximum, or an inflection point, and which case it is, is decided by the physics of the problem.",
+     "latex": "\\frac{dt}{dx}=0 \\;\\Longleftrightarrow\\; \\frac{\\sin\\alpha_1}{v_1}=\\frac{\\sin\\alpha_2}{v_2}",
+     "kit": "derivative"
+    },
+    {
+     "what": "Sine is bounded by one",
+     "why": "In the sixth step of the derivation, we solve the equation $\\sin\\alpha_2 = (n_1/n_2)\\sin\\alpha_1$. The sine of any angle does not exceed one, and this is not a convention but a direct consequence of the definition: a leg cannot be longer than the hypotenuse. Therefore, when light goes from a denser medium to a less dense one and the right-hand side exceeds one, the equation has no solutions at all. The math does not break—it tells a physical fact: the refracted ray does not exist, all light reflects back. The critical angle at which the right-hand side first equals one is found by the inverse function: $\\alpha_{\\text{crit}} = \\arcsin(n_2/n_1)$, for water this is $\\arcsin(1/1.33) \\approx 48.8^\\circ$. A useful habit: if a formula requires the impossible, ask what phenomenon it describes, rather than looking for an error in the calculation.",
+     "latex": "\\sin\\alpha_2 = \\frac{n_1}{n_2}\\sin\\alpha_1 > 1 \\;\\Longrightarrow\\; \\text{no solution: total reflection}"
+    },
+    {
+     "what": "Not distances but their reciprocals are added",
+     "why": "The thin lens formula in the last step of the derivation adds not the distances themselves but their reciprocals. This changes the entire behavior. The reciprocal is smaller the larger the original, so a distant object contributes almost zero, and the image sits exactly at the focus. Conversely, an object placed at the focus gives $1/d' = 0$, meaning the image goes to infinity, and the rays emerge as a parallel beam. Solving the formula for $f$ reveals a general property: the focal length is the product of the distances divided by their sum, and therefore it is always smaller than the smaller of the two. The same trick appears in parallel resistances. Both limiting cases, infinity and focus, are handy as checks for any lens problem.",
+     "latex": "\\frac{1}{f}=\\frac{1}{d}+\\frac{1}{d'} \\;\\Longleftrightarrow\\; f=\\frac{d\\,d'}{d+d'}",
+     "kit": "propto"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Reflexión y refracción",
@@ -1190,7 +1213,30 @@
     "hint": "La profundidad aparente es la profundidad real dividida por el índice de refracción. El índice del agua es aproximadamente 4/3.",
     "tolAbs": 0.3
    }
-  ]
+  ],
+  "math": {
+   "title": "Matemáticas que se necesitaron aquí",
+   "lead": "Aquí se necesitarán la derivada como forma de encontrar el mínimo, el rango del seno y la habilidad de sumar inversos.",
+   "items": [
+    {
+     "what": "Cómo la derivada encuentra el camino más rápido",
+     "why": "En el tercer paso de la deducción, el tiempo se escribe como función de un único número: dónde exactamente el rayo cruza la frontera. A partir de ahí, el problema es puramente matemático: encontrar la posición del punto de transición en la que el tiempo es mínimo. El método es general: en el punto de mínimo, la tangente a la gráfica es horizontal, por lo que la derivada se anula. El cuarto paso hace exactamente eso. Es importante que las fracciones que surgen al derivar no son abstractas: $x/\\sqrt{a^{2}+x^{2}}$ es el cateto opuesto dividido por la hipotenusa, es decir, el seno del ángulo de incidencia. Por eso, la ley de Snell surge de la derivada por sí sola, sin ninguna suposición adicional. La observación en la nota sobre la estacionariedad se refiere a la misma condición: la derivada cero marca tanto el mínimo como el máximo y el punto de inflexión, y qué caso es, lo decide la física del problema.",
+     "latex": "\\frac{dt}{dx}=0 \\;\\Longleftrightarrow\\; \\frac{\\sin\\alpha_1}{v_1}=\\frac{\\sin\\alpha_2}{v_2}",
+     "kit": "derivative"
+    },
+    {
+     "what": "El seno choca con uno",
+     "why": "En el sexto paso de la deducción resolvemos la ecuación $\\sin\\alpha_2 = (n_1/n_2)\\sin\\alpha_1$. El seno de cualquier ángulo no supera uno, y esto no es una convención, sino una consecuencia directa de la definición: un cateto no puede ser más largo que la hipotenusa. Por lo tanto, cuando la luz pasa de un medio más denso a uno menos denso y el lado derecho supera uno, la ecuación no tiene solución alguna. Las matemáticas no se rompen aquí: nos informan de un hecho físico: el rayo refractado no existe, toda la luz se refleja de vuelta. El ángulo límite, en el que el lado derecho es igual a uno por primera vez, se encuentra con la función inversa: $\\alpha_{\\text{cr}} = \\arcsin(n_2/n_1)$, para el agua es $\\arcsin(1/1{,}33) \\approx 48{,}8^\\circ$. Es un hábito útil: si una fórmula exige algo imposible, pregúntate qué fenómeno está describiendo, en lugar de buscar un error en el cálculo.",
+     "latex": "\\sin\\alpha_2 = \\frac{n_1}{n_2}\\sin\\alpha_1 > 1 \\;\\Longrightarrow\\; \\text{no hay solución: reflexión total}"
+    },
+    {
+     "what": "No se suman las distancias, sino sus inversos",
+     "why": "La fórmula de la lente delgada en el último paso de la deducción no suma las distancias en sí, sino sus inversos. Esto cambia todo el comportamiento. El inverso es tanto menor cuanto mayor es la distancia original, por lo que un objeto lejano aporta casi cero, y la imagen se sitúa exactamente en el foco. Por el contrario, un objeto colocado en el foco da $1/d' = 0$, es decir, la imagen se va al infinito y los rayos salen en un haz paralelo. Despejando la fórmula para $f$, se ve también una propiedad general: la distancia focal es el producto de las distancias dividido por su suma, y por lo tanto siempre es menor que la menor de ellas. El mismo truco aparece en la conexión en paralelo de resistencias. Ambos casos límite, el infinito y el foco, son útiles como comprobación en cualquier problema de lentes.",
+     "latex": "\\frac{1}{f}=\\frac{1}{d}+\\frac{1}{d'} \\;\\Longleftrightarrow\\; f=\\frac{d\\,d'}{d+d'}",
+     "kit": "propto"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "الانعكاس والانكسار",
@@ -1563,7 +1609,30 @@
     "hint": "العمق الظاهري هو العمق الحقيقي مقسوماً على معامل الانكسار. معامل انكسار الماء تقريباً 4/3.",
     "tolAbs": 0.3
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "هنا سنحتاج إلى المشتقة كطريقة لإيجاد الحد الأدنى، ونطاق دالة الجيب، والقدرة على جمع القيم العكسية.",
+   "items": [
+    {
+     "what": "كيف تجد المشتقة المسار الأسرع",
+     "why": "في الخطوة الثالثة من الاشتقاق، يُكتب الزمن كدالة لعدد واحد فقط: أين يعبر الشعاع الحدود بالضبط. بعد ذلك، تصبح المسألة رياضية بحتة — إيجاد موضع نقطة العبور الذي يجعل الزمن أصغر ما يمكن. الأسلوب عام: عند نقطة الحد الأدنى، يكون المماس للمنحنى أفقيًا، وبالتالي تكون المشتقة صفرًا. الخطوة الرابعة تفعل ذلك تمامًا. من المهم أن الكسور الناتجة عن التفاضل ليست مجردة: $x/\\sqrt{a^{2}+x^{2}}$ هو الضلع المقابل مقسومًا على الوتر، أي جيب زاوية السقوط. لذلك، ينتج قانون سنيل من المشتقة تلقائيًا، دون أي افتراض إضافي. الملاحظة في تعليق الاشتقاق حول الثبات تشير إلى نفس الشرط: المشتقة الصفرية تميز كلاً من الحد الأدنى والحد الأقصى ونقطة الانقلاب، وأي حالة هي التي يحددها فيزياء المسألة.",
+     "latex": "\\frac{dt}{dx}=0 \\;\\Longleftrightarrow\\; \\frac{\\sin\\alpha_1}{v_1}=\\frac{\\sin\\alpha_2}{v_2}",
+     "kit": "derivative"
+    },
+    {
+     "what": "الجيب يصطدم بالواحد",
+     "why": "في الخطوة السادسة من الاشتقاق، نحل المعادلة $\\sin\\alpha_2 = (n_1/n_2)\\sin\\alpha_1$. جيب أي زاوية لا يتجاوز الواحد، وهذا ليس مجرد اتفاق، بل نتيجة مباشرة للتعريف: الضلع لا يمكن أن يكون أطول من الوتر. لذلك، عندما ينتقل الضوء من وسط كثيف إلى وسط أقل كثافة ويتجاوز الطرف الأيمن الواحد، لا يكون للمعادلة حلول إطلاقًا. الرياضيات هنا لا تنهار — بل تخبرنا بحقيقة فيزيائية: لا يوجد شعاع منكسر، بل ينعكس كل الضوء مرة أخرى. الزاوية الحرجة، التي عندها يساوي الطرف الأيمن الواحد لأول مرة، تُوجد بالدالة العكسية: $\\alpha_{\\text{crit}} = \\arcsin(n_2/n_1)$، وبالنسبة للماء تكون $\\arcsin(1/1.33) \\approx 48.8^\\circ$. عادة مفيدة: إذا تطلبت الصيغة مستحيلًا، اسأل عن الظاهرة التي تصفها، بدلاً من البحث عن خطأ في الحساب.",
+     "latex": "\\sin\\alpha_2 = \\frac{n_1}{n_2}\\sin\\alpha_1 > 1 \\;\\Longrightarrow\\; \\text{لا يوجد حل: انعكاس كلي}"
+    },
+    {
+     "what": "لا تُجمع المسافات بل مقلوباتها",
+     "why": "صيغة العدسة الرقيقة في الخطوة الأخيرة من الاشتقاق لا تجمع المسافات نفسها، بل قيمها العكسية. هذا يغير السلوك بالكامل. القيمة العكسية تكون أصغر كلما كان الأصل أكبر، لذلك الجسم البعيد يساهم بقيمة تقارب الصفر، وتقع الصورة تمامًا في البؤرة. على العكس، الجسم الموضوع في البؤرة يعطي $1/d' = 0$، أي أن الصورة تذهب إلى اللانهاية، وتخرج الأشعة كحزمة متوازية. بحل الصيغة بالنسبة إلى $f$، نرى خاصية عامة: البعد البؤري هو حاصل ضرب المسافتين مقسومًا على مجموعهما، وبالتالي فهو دائمًا أصغر من أصغرهما. نفس الأسلوب يظهر في التوصيل على التوازي للمقاومات. كلتا الحالتين الحديتين، اللانهاية والبؤرة، مفيدتان كفحص لأي مسألة على العدسات.",
+     "latex": "\\frac{1}{f}=\\frac{1}{d}+\\frac{1}{d'} \\;\\Longleftrightarrow\\; f=\\frac{d\\,d'}{d+d'}",
+     "kit": "propto"
+    }
+   ]
+  }
  },
  "tags": [
   "speed_of_light"

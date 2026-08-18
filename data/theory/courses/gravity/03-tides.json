@@ -790,7 +790,31 @@
     "hint": "If a quantity is proportional to one divided by the cube of distance, what happens when distance doubles?",
     "tolAbs": 1
    }
-  ]
+  ],
+  "math": {
+   "title": "The Math Needed Here",
+   "lead": "We need the expansion of nearly equal quantities, the derivative as a measure of steepness, and vector subtraction.",
+   "items": [
+    {
+     "what": "Difference of nearly equal quantities",
+     "why": "In step five, there is a difference of two very close numbers: attraction at distance $d-R$ minus attraction at distance $d$. Calculating both separately and subtracting is not possible—the desired difference would be lost in rounding. Instead, we factor out a common factor and use the expansion $(1+x)^{n} \\approx 1 + nx$, valid for small $x$. Here $x = R/d$, and for the Earth and Moon this is about one sixtieth. What is discarded is not infinitesimal: the next term in the expansion is about $1.5\\,x$ relative to the retained term, giving a correction of about two and a half percent. For a formula explaining the mechanism, this is more than enough, but the accuracy is exactly that. This technique is worth remembering apart from tides: whenever a physical effect is the difference of two nearly equal quantities, it is calculated not by subtraction but by the first term of an expansion.",
+     "latex": "\\frac{1}{(d-R)^{2}} = \\frac{1}{d^{2}}\\left(1-\\frac{R}{d}\\right)^{-2} \\approx \\frac{1}{d^{2}}\\left(1 + \\frac{2R}{d}\\right)",
+     "kit": "taylor"
+    },
+    {
+     "what": "The cube appears from the derivative",
+     "why": "The result of step five contains distance cubed, although the original law only knows the square. The reason is that tidal force is not the attraction itself, but the rate of change of attraction with distance, i.e., the derivative. For a power function, the derivative lowers the exponent by one and simultaneously brings it out as a factor: $(x^{n})' = n\\,x^{n-1}$. The exponent $-2$ becomes $-3$, from $1/d^{2}$ we get $-2/d^{3}$—the power in the denominator increases from square to cube, and the two in the numerator of the tidal formula is that very factor. The direction is easy to confuse here: the derivative lowers the exponent, integration raises it, $\\int x^{n}\\,dx = x^{n+1}/(n+1)$. Therefore, the derivative takes $1/d^{2}$ to the cube, while the integral of the same expression goes back to the first power. This directly implies the numerical check of step seven: tidal action decreases with distance faster than attraction, and the nearby Moon surpasses the Sun by a factor of $2.2$. How much the Moon lags behind the Sun in ordinary attraction is calculated in the example with numbers: there the first line of the solution gives 178 times.",
+     "latex": "\\frac{d}{dx}\\,x^{-2} = -2x^{-3} \\;\\Longrightarrow\\; \\Delta g \\approx R \\cdot \\frac{2GM}{d^{3}}",
+     "kit": "derivative"
+    },
+    {
+     "what": "Tidal force is a difference of vectors",
+     "why": "In step four, the tidal force is defined as the field at a given point minus the field at the center of the body. This subtraction is vectorial, and that is why there are two bulges, not one. For the near point, the difference points toward the Moon: the attraction there is stronger than average. For the far point, the same difference points away from the Moon: the attraction there is weaker than average, and the remainder points outward. No centrifugal force is needed for the second bulge—this is what the note to the derivation says. One must add and subtract arrows, not numbers: the length of the difference of two nearly equal vectors can be tiny, and its direction can be anything.",
+     "latex": "\\vec{F}_{\\text{tidal}}(\\vec{r}) = m\\left[\\vec{g}(\\vec{r}_0 + \\vec{r}) - \\vec{g}(\\vec{r}_0)\\right]",
+     "kit": "vector"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Las mareas y la ingravidez",
@@ -1147,7 +1171,31 @@
     "hint": "Si una magnitud es proporcional a uno dividido por el cubo de la distancia, ¿qué ocurre al duplicar la distancia?",
     "tolAbs": 1
    }
-  ]
+  ],
+  "math": {
+   "title": "Matemáticas que se necesitaron aquí",
+   "lead": "Se necesitará la expansión de cantidades casi iguales, la derivada como medida de la pendiente y la resta de vectores.",
+   "items": [
+    {
+     "what": "Diferencia de cantidades casi iguales",
+     "why": "En el quinto paso se tiene la diferencia de dos números muy cercanos: la atracción a distancia $d-R$ menos la atracción a distancia $d$. Calcular ambos por separado y restar no es posible: la diferencia buscada se pierde en el redondeo. En su lugar, se factoriza un factor común y se usa la expansión $(1+x)^{n} \\approx 1 + nx$, válida para $x$ pequeño. Aquí $x = R/d$, y para la Tierra y la Luna es alrededor de una sexagésima parte. Lo que se desprecia no es infinitesimal: el siguiente término de la expansión se relaciona con el retenido como $1{,}5\\,x$, es decir, da una corrección de alrededor del dos y medio por ciento. Para una fórmula que explica el mecanismo, esto es más que suficiente, pero su precisión es exactamente esa. Vale la pena recordar este truco aparte de las mareas: cada vez que un efecto físico es la diferencia de dos cantidades casi iguales, se calcula no restando, sino con el primer término de la expansión.",
+     "latex": "\\frac{1}{(d-R)^{2}} = \\frac{1}{d^{2}}\\left(1-\\frac{R}{d}\\right)^{-2} \\approx \\frac{1}{d^{2}}\\left(1 + \\frac{2R}{d}\\right)",
+     "kit": "taylor"
+    },
+    {
+     "what": "El cubo aparece a partir de la derivada",
+     "why": "El resultado del quinto paso contiene la distancia al cubo, aunque la ley original solo conoce el cuadrado. La razón es que la fuerza de marea no es la atracción en sí, sino la rapidez de su cambio con la distancia, es decir, la derivada. Para una función potencia, la derivada reduce el exponente en uno y simultáneamente lo saca como factor: $(x^{n})' = n\\,x^{n-1}$. El exponente $-2$ pasa a $-3$, de $1/d^{2}$ se obtiene $-2/d^{3}$: el grado en el denominador crece de cuadrado a cubo, y el dos en el numerador de la fórmula de marea es ese exponente extraído. Aquí es fácil confundir la dirección: la derivada reduce el exponente, la integración lo aumenta, $\\int x^{n}\\,dx = x^{n+1}/(n+1)$. Por lo tanto, la derivada lleva $1/d^{2}$ al cubo, mientras que la integral de la misma expresión lo lleva de vuelta a la primera potencia. De aquí se sigue directamente la verificación numérica del séptimo paso: el efecto de marea disminuye con la distancia más rápido que la atracción, y la Luna cercana supera al Sol en el doble: la relación $2{,}2$. Cuánto cede la Luna al Sol en atracción ordinaria lo calcula el ejemplo con números: allí la primera línea de la solución da 178 veces.",
+     "latex": "\\frac{d}{dx}\\,x^{-2} = -2x^{-3} \\;\\Longrightarrow\\; \\Delta g \\approx R \\cdot \\frac{2GM}{d^{3}}",
+     "kit": "derivative"
+    },
+    {
+     "what": "La fuerza de marea es una diferencia de vectores",
+     "why": "En el cuarto paso, la fuerza de marea se define como el campo en un punto dado menos el campo en el centro del cuerpo. La resta aquí es vectorial, y es precisamente por eso que hay dos protuberancias, no una. Para el punto cercano, la diferencia apunta hacia la Luna: la atracción allí es más fuerte que el promedio. Para el punto lejano, la misma diferencia apunta en dirección opuesta a la Luna: la atracción allí es más débil que el promedio, y el resto apunta hacia afuera. No se necesita ninguna fuerza centrífuga para la segunda protuberancia, como se señala en la nota a la derivación. Hay que sumar y restar flechas, no números: la longitud de la diferencia de dos vectores casi iguales puede ser diminuta, pero su dirección puede ser cualquiera.",
+     "latex": "\\vec{F}_{\\text{marea}}(\\vec{r}) = m\\left[\\vec{g}(\\vec{r}_0 + \\vec{r}) - \\vec{g}(\\vec{r}_0)\\right]",
+     "kit": "vector"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "المد والجزر وانعدام الوزن",
@@ -1504,7 +1552,31 @@
     "hint": "إذا كانت الكمية متناسبة مع واحد على مكعب المسافة، ماذا يحدث عند مضاعفة المسافة؟",
     "tolAbs": 1
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "ستكون هناك حاجة إلى تحليل الكميات المتقاربة، والمشتقة كمقياس للانحدار، وطرح المتجهات.",
+   "items": [
+    {
+     "what": "الفرق بين كميتين متقاربتين",
+     "why": "في الخطوة الخامسة يوجد فرق بين رقمين متقاربين جدًا: الجذب على مسافة $d-R$ ناقص الجذب على مسافة $d$. لا يمكن حساب كل منهما على حدة ثم طرحهما، لأن الفرق المطلوب سيغرق في التقريب. بدلاً من ذلك، يتم إخراج العامل المشترك واستخدام التحليل $(1+x)^{n} \\approx 1 + nx$، الصحيح عندما يكون $x$ صغيرًا. هنا $x = R/d$، وبالنسبة للأرض والقمر هذا حوالي واحد على ستين. ما يتم إهماله ليس متناهيًا في الصغر: الحد التالي في التحليل يتناسب مع الحد المحتفظ به بمقدار $1.5\\,x$، أي يعطي تصحيحًا حوالي اثنين ونصف في المئة. بالنسبة لصيغة تشرح الآلية، هذا كافٍ بزيادة، لكن الدقة هي بالضبط هذه. من الجدير تذكر هذه الطريقة بشكل منفصل عن المد والجزر: كلما كان التأثير الفيزيائي هو الفرق بين كميتين متقاربتين، لا يُحسب بالطرح بل بالحد الأول من التحليل.",
+     "latex": "\\frac{1}{(d-R)^{2}} = \\frac{1}{d^{2}}\\left(1-\\frac{R}{d}\\right)^{-2} \\approx \\frac{1}{d^{2}}\\left(1 + \\frac{2R}{d}\\right)",
+     "kit": "taylor"
+    },
+    {
+     "what": "المكعب يظهر من المشتقة",
+     "why": "نتيجة الخطوة الخامسة تحتوي على المسافة مرفوعة إلى مكعب، على الرغم من أن القانون الأصلي يعرف المربع فقط. السبب هو أن قوة المد والجزر ليست الجذب نفسه، بل معدل تغيره مع المسافة، أي المشتقة. بالنسبة للدالة الأسية، المشتقة تخفض الأس بمقدار واحد وفي نفس الوقت تخرجه كمعامل: $(x^{n})' = n\\,x^{n-1}$. الأس $-2$ يتحول إلى $-3$، ومن $1/d^{2}$ نحصل على $-2/d^{3}$ — الأس في المقام يزداد من المربع إلى المكعب، والاثنان في بسط صيغة المد والجزر هو ذلك الأس المُخرج. من السهل الخلط هنا: المشتقة تخفض الأس، والتكامل يرفعه، $\\int x^{n}\\,dx = x^{n+1}/(n+1)$. لذلك المشتقة تحول $1/d^{2}$ إلى مكعب، بينما التكامل لنفس التعبير يعيده إلى الأس الأول. من هنا يتبع مباشرة التحقق العددي للخطوة السابعة: تأثير المد والجزر يتناقص مع المسافة أسرع من الجذب، والقمر القريب يتفوق على الشمس بمرتين — النسبة $2.2$. أما مقدار تفوق القمر على الشمس في الجذب العادي، فيحسبه المثال بالأرقام: هناك السطر الأول من الحل يعطي 178 مرة.",
+     "latex": "\\frac{d}{dx}\\,x^{-2} = -2x^{-3} \\;\\Longrightarrow\\; \\Delta g \\approx R \\cdot \\frac{2GM}{d^{3}}",
+     "kit": "derivative"
+    },
+    {
+     "what": "قوة المد والجزر هي فرق متجهات",
+     "why": "في الخطوة الرابعة، تُعرَّف قوة المد والجزر على أنها المجال عند نقطة معينة ناقص المجال عند مركز الجسم. الطرح هنا متجهي، ولهذا السبب يوجد حدبتان وليس واحدة. عند النقطة القريبة، الفرق موجه نحو القمر: الجذب هناك أقوى من المتوسط. عند النقطة البعيدة، نفس الفرق موجه بعيدًا عن القمر: الجذب هناك أضعف من المتوسط، والباقي يشير إلى الخارج. لا حاجة لأي قوة طاردة مركزية للحدبة الثانية — وهذا ما تشير إليه الملاحظة على الاشتقاق. يجب جمع وطرح الأسهم، وليس الأرقام: طول الفرق بين متجهين متقاربين قد يكون ضئيلًا، لكن اتجاهه يمكن أن يكون أي شيء.",
+     "latex": "\\vec{F}_{\\text{tid}}(\\vec{r}) = m\\left[\\vec{g}(\\vec{r}_0 + \\vec{r}) - \\vec{g}(\\vec{r}_0)\\right]",
+     "kit": "vector"
+    }
+   ]
+  }
  },
  "tags": [
   "sun",

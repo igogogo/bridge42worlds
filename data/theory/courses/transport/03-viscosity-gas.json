@@ -462,5 +462,1290 @@
     "tolFactor": 1.5
    }
   ]
+ },
+ "en": {
+  "title": "Gas viscosity: momentum transfer",
+  "subtitle": "Section 3 · Why gas viscosity is independent of pressure",
+  "intro": [
+   "The first two sections of this topic transported things through a gas that are easy to imagine: first the molecules themselves, then energy. One quantity remains—momentum. It is transported in the same way, but it looks completely different: not as the spreading of a spot or the equalization of temperatures, but as a force with which one layer of gas slows down its neighbor. This force is called viscosity, and it contains nothing but the mechanism we have already analyzed: a molecule flew out of its layer and carried its momentum with it.",
+   "The macroscopic side of the matter is already familiar from the topic on fluids and gases in motion. There, viscosity η entered Newton's law for shear stress, Poiseuille's formula, and the Reynolds number—entered as a property of a substance that is taken from a table without asking where it comes from. Here, we will calculate that table. From the mean free path and the thermal speed—two quantities already on the sliders of the stand—we will get a ready number, and we can compare it with the measured value right in this section.",
+   "The answer will be strange twice. First, gas viscosity does not depend on pressure: pump half the air out of a room, and the remaining air will slow things down just the same. Second, when heated, it increases, whereas for any liquid it decreases. The first result so displeased the author of the calculation himself that he set up an experiment at home, hoping to refute it. The experiment confirmed the calculation—and at the same time refuted the model of molecules from which the calculation was made."
+  ],
+  "standNote": "The stand for this topic is one for all three sections, and here it works no worse than in the first. The sliders set the mean free path λ and the thermal speed ⟨v⟩—the same two numbers from which viscosity will now be assembled. In the window, the stand shows the diffusion coefficient D = λ⟨v⟩/3; viscosity is obtained from it by multiplying by density: η = ρD. Set λ = 70 nm and ⟨v⟩ = 450 m/s—this is air at room temperature. The stand will show D about 1.05·10⁻⁵ m²/s; multiply by the air density 1.2 kg/m³ and get η ≈ 1.3·10⁻⁵ Pa·s. The tabulated value is 1.81·10⁻⁵—a miss by a factor of one and a half, and at the end of the section we will analyze where it comes from. Now the main experiment on the stand. Compress the gas sevenfold: the mean free path will drop from 70 nm to 10 nm, and D will drop by the same factor. It seems that viscosity has collapsed. But the density during compression increased exactly sevenfold, and η = ρD is a product in which one factor fell and the other rose. Viscosity did not change. There is no density on the stand; you have to keep it in mind, and that is why it is worth doing this slowly, with the slider, watching the number D.",
+  "formula": {
+   "name": "Gas viscosity by kinetic theory",
+   "latex": "\\eta = \\tfrac{1}{3}\\,\\rho\\,\\bar v\\,\\lambda = \\frac{m\\,\\bar v}{3\\sqrt{2}\\,\\sigma}",
+   "alsoKnown": "The independence of gas viscosity from pressure is called Maxwell's law. Together with D = ⅓λ⟨v⟩ and κ = ⅓ρc⟨v⟩λ, this formula forms the trio of transport coefficients.",
+   "authors": [
+    {
+     "who": "Rudolf Clausius",
+     "year": "1858",
+     "what": "introduced the concept of mean free path — the distance a molecule travels between collisions; without it, kinetic theory could not say anything quantitative at all"
+    },
+    {
+     "who": "James Clerk Maxwell",
+     "year": "1860",
+     "what": "derived that gas viscosity does not depend on its density, and himself found the result implausible"
+    },
+    {
+     "who": "James Clerk Maxwell and Katherine Maxwell",
+     "year": "1866",
+     "what": "conducted an experiment with oscillating glass discs in an evacuated vessel and confirmed the independence from pressure; also measured the increase of viscosity with temperature"
+    },
+    {
+     "who": "Johann Loschmidt",
+     "year": "1865",
+     "what": "turned the formula around: from measured viscosity he obtained the mean free path, and from that — the first ever estimate of molecular size"
+    },
+    {
+     "who": "William Sutherland",
+     "year": "1893",
+     "what": "proposed a correction explaining why viscosity grows faster than the square root of temperature: the collision cross-section itself depends on energy"
+    },
+    {
+     "who": "Sydney Chapman and David Enskog",
+     "year": "1916–1917",
+     "what": "independently built a rigorous theory of transport in gases and obtained exact numerical factors instead of estimates"
+    }
+   ],
+   "story": "In 1859, Maxwell, then a professor in Aberdeen, read Clausius's work on the mean free path and set out to bring kinetic theory to numbers. In his paper 'Illustrations of the Dynamical Theory of Gases' he obtained a result he himself called implausible: gas viscosity should not depend on its density. Maxwell honestly noted that the only experiment he knew of seemed not to confirm this — and left the question open for six years. He decided to test it himself, now in London. The setup: three horizontal glass discs on a torsion suspension, oscillating between fixed discs inside an evacuated bell jar. Air viscosity was measured by the damping of the oscillations. The difficulty was not the vacuum but the temperature: to separate the effects of pressure and heating, the room had to be kept at a given temperature for hours, from cool to one in which it is hard for a person to stay. Katherine Maxwell took charge of the stove and boilers; in letters that summer, Maxwell described the home laboratory as a place where he was condemned to heat. The 1866 result: viscosity did not change when pressure varied by several tens of times. But the second result turned out to be more important than the first. Viscosity grew with temperature faster than his own theory predicted: not as the square root of T, but roughly as T itself. The model of molecules as billiard balls could not produce this. Maxwell replaced it with a model of particles repelling each other with a force decreasing as the fifth power of distance — for such a law, the transport equations are solved exactly, and 'Maxwellian molecules' still serve as a textbook example. The irony is that later measurements over a wide range gave an exponent of about 0.76 — between the square root and unity — meaning that the measurement that gave birth to the model was itself not quite accurate. The model, nevertheless, outlived it.",
+   "symbols": [
+    {
+     "sym": "η",
+     "latex": "\\eta",
+     "what": "dynamic viscosity of the gas",
+     "unit": "Pa·s",
+     "note": "the same quantity as in Newton's law τ = η·dv/dy from the topic on flows; here we do not take it from a table but calculate it"
+    },
+    {
+     "sym": "ρ",
+     "latex": "\\rho",
+     "what": "gas density",
+     "unit": "kg/m³",
+     "note": "which is also nm — the number density of molecules times the mass of one; in the formula it stands for 'how many carriers per cubic meter'"
+    },
+    {
+     "sym": "⟨v⟩",
+     "latex": "\\bar v",
+     "what": "mean thermal speed of molecules",
+     "unit": "m/s",
+     "note": "specifically the mean, not the root-mean-square: for air at 20 °C it is 463 m/s versus 502 m/s — an eight percent difference, and they should not be confused"
+    },
+    {
+     "sym": "λ",
+     "latex": "\\lambda",
+     "what": "mean free path",
+     "unit": "m",
+     "note": "how far a molecule carries foreign momentum before giving it up in a collision; for air at atmospheric pressure it is 68 nm"
+    },
+    {
+     "sym": "m",
+     "latex": "m",
+     "what": "mass of one molecule",
+     "unit": "kg",
+     "note": "for air, 4.8·10⁻²⁶ kg — molar mass 29 g/mol divided by Avogadro's number"
+    },
+    {
+     "sym": "σ",
+     "latex": "\\sigma",
+     "what": "collision cross-section",
+     "unit": "m²",
+     "note": "the target area one must hit to collide: σ = πd², where d is the effective diameter of the molecule"
+    },
+    {
+     "sym": "n",
+     "latex": "n",
+     "what": "number density of molecules",
+     "unit": "1/m³",
+     "note": "the main character of step five: it enters ρ and λ with opposite exponents and therefore cancels out of the answer"
+    },
+    {
+     "sym": "Pr",
+     "latex": "\\Pr",
+     "what": "Prandtl number",
+     "unit": "dimensionless",
+     "note": "the ratio of kinematic viscosity to thermal diffusivity: what spreads through the gas faster — momentum or heat"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Rigorous derivation",
+   "lead": "We will need only two things, both already familiar: the definition of force as momentum transferred per second, and the mean free path. We will not postulate any separate \"law of friction\" — it will emerge by itself, and that is the main content of the derivation.",
+   "steps": [
+    {
+     "text": "Take a gas between two plates: the bottom one is stationary, the top one moves along itself. The steady flow consists of layers, each with its own average velocity u(y). Let us immediately separate two motions that occur simultaneously in the gas. Thermal motion is chaotic, equal in all directions, and very fast: hundreds of meters per second. The drift is ordered, directed along the plates, and small: centimeters per second. A molecule flies almost as in a stationary gas, but each carries a tiny addition of momentum along the flow, equal to m·u(y). This addition is precisely what all subsequent calculations will focus on.",
+     "latex": "v \\approx \\bar v \\gg u(y), \\qquad p_x = m\\,u(y)",
+     "figure": "gasshear",
+     "figCaption": "Drift is a fine adjustment on top of chaos: the arrows of thermal motion are orders of magnitude longer"
+    },
+    {
+     "text": "Inside the gas, draw an imaginary area A parallel to the plates, and count how many molecules cross it per second. The count is exactly the same as in the first section of the topic: we take the simplest model of chaos, in which molecules are divided equally among the six directions of the axes, and we get one-sixth upward and one-sixth downward. A caveat that was not needed in the first section but is needed here: an honest averaging over directions gives not one-sixth but one-fourth. We take one-sixth for transparency; the analysis is in the first inset and in the appendix.",
+     "latex": "\\Phi = \\tfrac{1}{6}\\, n\\, \\bar v \\quad \\text{molecules per square meter per second, in each direction}",
+     "figure": "sixways",
+     "figCaption": "Four directions go along the area and carry nothing through it; only two work"
+    },
+    {
+     "text": "Now the key question: what momentum does each molecule bring? Not the one it had initially, but the one it acquired in its last collision. A molecule crossing the area from top to bottom, on average, last collided at λ above — there it acquired the drift addition of its layer. Thus, downward it carries m·u(y+λ). The counterflow carries upward m·u(y−λ). A molecule remembers not the place where we caught it, but where it last agreed on velocity with someone.",
+     "latex": "p_{\\downarrow} = m\\,u(y+\\lambda), \\qquad p_{\\uparrow} = m\\,u(y-\\lambda)",
+     "figure": "momentumcarry",
+     "figCaption": "Through the same area flow two counter-streams of molecules, but their cargoes are different"
+    },
+    {
+     "text": "Now assemble. The number of molecules in both directions is the same — matter does not flow anywhere, the gas does not deplete from above or below. But momentum flows, because what is brought from above and below differs. Expand the difference in small λ: even terms cancel exactly upon subtraction, and the doubled derivative remains. The resulting momentum flux per unit area is precisely the shear stress. Comparing it with Newton's law, we read off the coefficient.",
+     "latex": "\\tau = \\tfrac{1}{6} n \\bar v\\, m\\left[u(y+\\lambda)-u(y-\\lambda)\\right] = \\tfrac{1}{3}\\, n m\\, \\bar v \\lambda\\, \\frac{du}{dy} \\;\\Longrightarrow\\; \\eta = \\tfrac{1}{3}\\rho\\,\\bar v\\,\\lambda",
+     "figure": "etaassemble",
+     "figCaption": "Friction between layers is not postulated but derived: it is simply the momentum flux across the flow"
+    },
+    {
+     "text": "The formula is already ready, but the most interesting part begins when we substitute the mean free path into it. It is known from the first section: λ = 1/(√2·nσ). Density is also expressed in terms of concentration: ρ = nm. Substituting both — and the concentration disappears. This is not an algebraic coincidence but a physical statement: dilute the gas by half, and the carriers of momentum become half as many, but each will carry its cargo twice as deep into the neighboring layer. The decrease in number is exactly compensated by the increase in range.",
+     "latex": "\\eta = \\tfrac{1}{3}\\, nm\\, \\bar v \\cdot \\frac{1}{\\sqrt{2}\\, n \\sigma} = \\frac{m\\,\\bar v}{3\\sqrt{2}\\,\\sigma}",
+     "figure": "pcancel",
+     "figCaption": "On the left, many short runs; on the right, few long ones; the product is the same"
+    },
+    {
+     "text": "So what then controls the viscosity of a gas? Only temperature and the type of molecules. Substitute the average velocity from the Maxwell distribution and we get an explicit dependence. Viscosity grows as the square root of absolute temperature — that is, when heated, a gas becomes THICKER. For a liquid, it is the opposite, and not just slightly: there viscosity drops exponentially, because the mechanism is completely different — molecules must squeeze past neighbors through an energy barrier. Maxwell's experiment gave an even steeper growth than the root, almost linear; today's measurements give an exponent of about 0.76. The reason for the deviation is that the cross-section σ is not constant; the analysis is in the appendix.",
+     "latex": "\\bar v = \\sqrt{\\frac{8kT}{\\pi m}} \\;\\Longrightarrow\\; \\eta = \\frac{2}{3\\sigma}\\sqrt{\\frac{m k T}{\\pi}} \\;\\propto\\; \\sqrt{T}",
+     "figure": "etatemp",
+     "figCaption": "The two curves diverge in opposite directions because different mechanisms lie behind them"
+    },
+    {
+     "text": "Now let us look back at the entire topic at once. Nowhere in the derivation was there anything specifically about momentum. We counted how many molecules cross the area and multiplied by what each carries. Replace the cargo — and you get the two previous sections. If the cargo is the tagged molecule itself, we get diffusion. If it is thermal energy — thermal conductivity. If it is momentum along the flow — viscosity. The factor ⅓λ⟨v⟩ is the same in all three cases, because the carrier is the same.",
+     "latex": "J_G = -\\tfrac{1}{3}\\bar v \\lambda\\, \\frac{d(nG)}{dy}; \\qquad D = \\tfrac{1}{3}\\bar v\\lambda, \\quad \\kappa = \\tfrac{1}{3}\\rho c_V \\bar v\\lambda, \\quad \\eta = \\tfrac{1}{3}\\rho \\bar v\\lambda",
+     "figure": "threetransports",
+     "figCaption": "The three coefficients differ only in how much cargo there is per cubic meter of gas"
+    },
+    {
+     "text": "The common factor has a testable consequence. Divide viscosity by density — we get kinematic viscosity ν; divide thermal conductivity by ρc_p — we get thermal diffusivity a; the diffusion coefficient D is already ready. All three are now measured in square meters per second, so their ratios are pure numbers. The Prandtl number compares the spreading of momentum with the spreading of heat; the Schmidt number — with the spreading of an impurity. Our crude theory promises Sc = 1 and Pr = c_p/c_V = γ, i.e., 1.4 for air. Measurement gives Sc about 0.8 and Pr = 0.71: for the Prandtl number, the miss is exactly a factor of two, and this is the largest error in the section. It is fixed by a single correction. Fast molecules both cross the area more often and carry more translational energy — this correlation enhances thermal conductivity, but does not apply to the rotational energy of molecules. Accounting for the difference, Eucken obtained Pr = 4γ/(9γ−5): 0.74 for diatomic gases and 0.67 for monatomic ones — and this matches experiment. The main point survives: the ratios come out on the order of unity, not on the order of a hundred, so all three phenomena are indeed caused by a single carrier.",
+     "latex": "\\Pr = \\frac{\\nu}{a} = \\frac{\\eta\\, c_p}{\\kappa}, \\qquad \\mathrm{Sc} = \\frac{\\nu}{D}, \\qquad \\Pr_{\\text{Eucken}} = \\frac{4\\gamma}{9\\gamma - 5}",
+     "figure": "prandtlbar",
+     "figCaption": "For gases, the Prandtl number hugs 0.7 regardless of the type; for liquids, the spread is six orders of magnitude"
+    }
+   ],
+   "plate": "\\eta = \\tfrac{1}{3}\\,\\rho\\,\\bar v\\,\\lambda",
+   "plateCap": "Three factors: how many carriers per cubic meter, how fast they scurry, how far they carry the cargo. Change the cargo — you get diffusion or thermal conductivity, and the factor ⅓λ⟨v⟩ remains the same. All the oddity of gas viscosity is hidden in the fact that when pressure changes, density and mean free path pull in opposite directions and cancel each other out.",
+   "note": "Let us list the assumptions — they are also the boundaries of the formula. First: one-sixth of the flux in each direction and the distance of the last collision exactly λ — both estimates are rough. The exact theory gives a factor of 0.499 instead of ⅓, so our answer is underestimated by about a factor of one and a half. The structure is completely correct: the dependencies on ρ, ⟨v⟩, and λ are rigorous; the error sits only in the number in front of them. Second: the collision cross-section σ was assumed constant, as for billiard balls. Real molecules are soft and attract each other, so the measured temperature dependence is steeper than the root — see the appendix. Third, and most important: everywhere it was assumed that a molecule manages to collide with another molecule before reaching the wall, i.e., λ is much smaller than both the size of the vessel and the distance over which the velocity noticeably changes. As soon as this ceases to be true, viscosity ceases to be a property of the substance and begins to depend on geometry and pressure. Fourth: the gas is rarefied in the sense that collisions are pairwise; at pressures of tens of atmospheres, a density dependence appears that is completely absent from our formula. Fifth: the drift is much smaller than the thermal velocity — otherwise it is no longer a shear of layers but a different problem."
+  },
+  "math": {
+   "title": "The Math Needed Here",
+   "lead": "Three places where a formal trick does substantive work, not just dresses up a ready answer.",
+   "items": [
+    {
+     "what": "Averaging over directions: where the sixth part came from and why the fourth is correct",
+     "why": "In the second step of the derivation, we divided the molecules into six equal beams along the axes. This is not a physical statement about the gas, but a way to bypass the integral, and it's worth understanding which one. An honest calculation looks like this. The direction of velocity is equally probable in all directions, i.e., uniformly distributed over the sphere—but uniformly over the AREA of the sphere, not over the tilt angle: the weight of a direction is given by the belt sin θ dθ, and there are simply more tilted directions than those close to the axis. Through a patch, a molecule transfers a contribution proportional to the projection of velocity, i.e., cos θ, and the average must be taken over the hemisphere, because the other half flies in the opposite direction. The average cosine over the hemisphere turns out to be exactly ½, and the flux comes out to ¼n⟨v⟩ instead of our sixth part. The rule worth doing this once in your life for: when averaging over directions in three dimensions, you cannot split molecules into several equal beams—the weight is set by the solid angle. The six-beam model is good because it gives the correct structure of the formula, and bad because it gives the wrong factor in front of it.",
+     "latex": "\\langle \\cos\\theta\\rangle_{+} = \\frac{\\int_{0}^{\\pi/2}\\cos\\theta\\,\\sin\\theta\\,d\\theta}{\\int_{0}^{\\pi/2}\\sin\\theta\\,d\\theta} = \\frac{1}{2} \\;\\Longrightarrow\\; \\Phi = \\tfrac{1}{4}\\, n\\,\\bar v",
+     "kit": "probability"
+    },
+    {
+     "what": "How to check what cancels and what only seems to",
+     "why": "In the fifth step, the concentration disappears from the answer, and this should be checked not by eye but by the exponents. Let's write out the dependence of each factor on n: density ρ = nm gives the first power, mean free path λ = 1/(√2·nσ) gives minus first, and average speed does not depend on concentration at all. The sum of exponents is zero, so the product does not depend on n. The trick is general and useful: before rejoicing at a cancellation, you must make sure that none of the remaining factors hides the same variable inside itself. Here the dangerous candidate is precisely ⟨v⟩—but it is determined by temperature and molecular mass, and does not remember concentration, so it survives. The reverse also works: if ⟨v⟩ depended on density, the whole effect would vanish, and with it the entire section.",
+     "latex": "\\rho \\propto n^{1}, \\quad \\lambda \\propto n^{-1}, \\quad \\bar v \\propto n^{0} \\;\\Longrightarrow\\; \\eta \\propto n^{0}",
+     "kit": "propto"
+    },
+    {
+     "what": "Why the ratio of two transport coefficients is an honest number",
+     "why": "In the eighth step, we divide viscosity by thermal diffusivity and declare the result meaningful. Dividing physical quantities by each other is not always meaningful; here it is, and this is checked by units. Kinematic viscosity ν = η/ρ, thermal diffusivity a = κ/(ρc_p), and diffusion coefficient D—all three are measured in square meters per second. The coincidence of dimensions is not accidental: each answers the same question—what area does the spreading cover per second—but different things spread. Therefore, their ratios turn out to be pure numbers that can be compared between substances and between laboratories without any conversion. The check is simple and strict: if the ratio still has a dimension, you divided the wrong thing by the wrong thing.",
+     "latex": "[\\nu] = [a] = [D] = \\frac{\\text{m}^{2}}{\\text{s}} \\;\\Longrightarrow\\; \\Pr = \\frac{\\nu}{a}, \\;\\; \\mathrm{Sc} = \\frac{\\nu}{D} \\;\\; \\text{dimensionless}",
+     "kit": "dimension"
+    }
+   ]
+  },
+  "example": {
+   "title": "Example with numbers",
+   "lead": "Let's calculate the viscosity of air from scratch and honestly compare it with the measured value. Along the way, we'll check the main claim of the section where it can be checked against a reference: at an altitude of ten kilometers.",
+   "given": "Air at 20 °C and atmospheric pressure: density ρ = 1.20 kg/m³, mean free path λ = 68 nm, molar mass M = 29 g/mol. Find the viscosity and compare with the tabulated value 1.81·10⁻⁵ Pa·s. Then estimate the viscosity at an altitude of 10 km, where the pressure is four times lower and the temperature is 223 K.",
+   "law": "⟨v⟩ = √(8RT/πM), then η = ⅓·ρ·⟨v⟩·λ",
+   "solution": [
+    {
+     "text": "Mean thermal speed. We take the formula from the Maxwell distribution and keep track of which speed is needed: the mean ⟨v⟩ participates in transport, not the root-mean-square speed — they differ by eight percent, and substituting the wrong one gives a systematic error.",
+     "latex": "\\bar v = \\sqrt{\\frac{8RT}{\\pi M}} = \\sqrt{\\frac{8 \\cdot 8{,}314 \\cdot 293}{\\pi \\cdot 0{,}029}} \\approx 463\\ \\text{m/s}"
+    },
+    {
+     "text": "Substitute into the viscosity formula. It is convenient to calculate piece by piece: one third of 1.20 is 0.40; multiply by 463 — about 185; and finally multiply by 68 nanometers.",
+     "latex": "\\eta = \\tfrac{1}{3}\\rho\\,\\bar v\\,\\lambda = 0{,}40 \\cdot 463 \\cdot 68 \\cdot 10^{-9} \\approx 1{,}26\\cdot10^{-5}\\ \\text{Pa}\\cdot\\text{s}"
+    },
+    {
+     "text": "Compare with the table. We got 1.26 versus the measured 1.81 — a miss of about one and a half times. This is not a calculation error: the two geometric corrections that come to mind first cancel each other out and do not change the third. The miss is caused by correlation — fast molecules travel farther and cross the area more often, so the mean product is greater than the product of the means. The rigorous Chapman–Enskog theory gives a factor of 0.499 instead of ⅓, and with it the answer matches the measurement.",
+     "latex": "\\frac{1{,}81}{1{,}26} \\approx 1{,}44, \\qquad 0{,}499\\,\\rho\\,\\bar v\\,\\lambda \\approx 1{,}9\\cdot10^{-5}\\ \\text{Pa}\\cdot\\text{s}"
+    },
+    {
+     "text": "Altitude 10 km — a check of the main claim. The density there is three times lower (0.41 versus 1.225 kg/m³), but the mean free path is correspondingly larger, so the product ρλ does not change at all. Only the temperature remains: 223 K instead of 293, and the mean speed drops as the square root of their ratio.",
+     "latex": "\\eta(223) = \\eta(293)\\sqrt{\\frac{223}{293}} = 1{,}81\\cdot10^{-5} \\cdot 0{,}87 \\approx 1{,}58\\cdot10^{-5}\\ \\text{Pa}\\cdot\\text{s}"
+    }
+   ],
+   "answer": "η ≈ 1.3·10⁻⁵ Pa·s versus the tabulated 1.81·10⁻⁵: the rough formula underestimates by a factor of one and a half, but it correctly captures the dependencies on ρ, ⟨v⟩, and λ. At an altitude of 10 km, our prediction is 1.58·10⁻⁵ Pa·s, while the reference gives 1.46·10⁻⁵.",
+   "check": "Is this reasonable? Let's check three things. First: is a miss of one and a half times a lot or a little? For a formula in which no parameter was fitted, and the input data were the molecular size and temperature, this is very little. It is also telling that the miss is constant: if you calibrate the factor against one measurement, all other predictions — by temperature, by gas type, by pressure — will land exactly. The error is in the number, not in the structure. Second: at altitude, our prediction is overestimated by eight percent. The square-root law turned out to be too shallow — real viscosity falls with cooling more steeply than it promises, because the exponent for air is about 0.76, not 0.5. The analysis is in the appendix, along with the formula that gives 1.46·10⁻⁵ exactly. Third, and more important than the first two: the air at ten kilometers is three times rarefied, but the viscosity dropped by only twenty percent — and that entirely due to the cold, not the rarefaction. This is precisely what the section claims. Incidentally, this leads to a practical conclusion for aviation: the Reynolds number at altitude falls almost exclusively because of the density in the numerator, not because of the viscosity in the denominator."
+  },
+  "constants": {
+   "title": "Constants of this section",
+   "lead": "Four numbers for air at room temperature. The first two are the input to the formula, the third is its check, the fourth is the summary of the entire topic in one number.",
+   "items": [
+    {
+     "sym": "λ",
+     "latex": "\\lambda_{\\text{air}}",
+     "name": "Mean free path in air (20 °C, 1 atm)",
+     "value": "68",
+     "unit": "nm",
+     "why": "The distance a molecule travels between collisions, and at the same time the depth to which it carries someone else's momentum. It is proportional to temperature and inversely proportional to pressure, so it varies over a wide range: in a vacuum chamber it is meters, at an altitude of a hundred kilometers it is centimeters, and in a catalyst pore it does not travel nanometers at all. Everything said in this section rests on the condition that 'λ is much smaller than the dimensions of the vessel'.",
+     "mnemo": "Keep in mind a chain of three lengths: 0.36 nm — the molecule itself, 3.4 nm — the average distance between molecules, 68 nm — the mean free path. Each step is about ten and twenty times. The molecule has plenty of space, but not so much that it doesn't collide billions of times per second."
+    },
+    {
+     "sym": "⟨v⟩",
+     "latex": "\\bar v_{\\text{air}}",
+     "name": "Average thermal speed of air molecules at 20 °C",
+     "value": "463",
+     "unit": "m / s",
+     "why": "The transport coefficients include the average speed, not the root-mean-square speed of 502 m/s or the most probable speed of 410 m/s. All three are derived from the same Maxwell distribution and differ by a few percent, but you must substitute the one that appears in the derivation. It depends only on temperature and molar mass: for hydrogen at the same temperature it is four times larger, for xenon it is half.",
+     "mnemo": "The speed of sound in air is 343 m/s — only 1.35 times less. And this is not a coincidence: sound is carried by the same molecules with the same thermal motion, so it cannot outrun them in principle."
+    },
+    {
+     "sym": "η",
+     "latex": "\\eta_{\\text{air}}",
+     "name": "Dynamic viscosity of air at 20 °C",
+     "value": "1.81 · 10⁻⁵",
+     "unit": "Pa · s",
+     "why": "The number we compared our calculation with. The main thing about it is not the value itself, but the direction of change: at 0 °C the viscosity of air is 1.72·10⁻⁵, at 100 °C it is already 2.17·10⁻⁵ — an increase of a quarter. Water over the same interval becomes six times more fluid. Two substances, one temperature scale, opposite signs — and this is the best argument that the mechanisms are different.",
+     "mnemo": "Eighteen micropascal-seconds. Water has a thousand — exactly fifty-five times more. Easy to remember and useful: in problems on blowing and on pipes, these two numbers are needed constantly."
+    },
+    {
+     "sym": "Pr",
+     "latex": "\\Pr_{\\text{air}}",
+     "name": "Prandtl number for air",
+     "value": "0.71",
+     "unit": "dimensionless",
+     "why": "The summary of the entire topic in one number: momentum and heat spread through the gas almost equally fast, because they are carried by the same carrier. Remarkably, this number is almost independent of the type of gas: for hydrogen it is 0.70, for xenon 0.68, although the masses of their molecules differ by a factor of sixty-five. Liquids have no such constancy — from 0.025 for mercury to tens of thousands for glycerin.",
+     "mnemo": "Zero point seven — and for the lightest gas and the heaviest. A number that does not remember what the gas is made of, because it remembers only the mechanism."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "How this relates to the rest of the course",
+   "lead": "This section closes the topic from within and connects with two neighboring ones — with molecular physics behind and with hydrodynamics ahead.",
+   "items": [
+    {
+     "h": "The first two sections of this topic",
+     "text": "The trio of coefficients has closed: diffusion transfers particles, thermal conductivity transfers energy, viscosity transfers momentum, and all three have the same factor ⅓λ⟨v⟩. This gives a way to check yourself that did not exist when the phenomenon was alone. Measure two of the three coefficients, divide — and you get a number that the theory predicts in advance. If it is of order one, the mechanism is guessed; if it is of order a hundred, you have missed something."
+    },
+    {
+     "h": "Liquids and gases in motion",
+     "text": "There, viscosity entered Newton's law, Poiseuille's formula, and the Reynolds number as a tabulated property of the substance. Now it is calculated, and along the way the paradox from that section is explained: kinematically, air is fifteen times more viscous than water. The reason is directly visible from the formula — for a gas, η is small, but ρ is even smaller, and the ratio η/ρ = ⅓λ⟨v⟩ for a rarefied medium turns out to be larger. Also, it is clear why for a gas the kinematic viscosity depends on pressure, but the dynamic viscosity does not: in ν, the density stands separately and no longer cancels."
+    },
+    {
+     "h": "Molecules and temperature",
+     "text": "The average speed is taken from the Maxwell distribution, the mean free path from the collision cross-section; the same apparatus that gave the equation of state. But there is also a fundamental difference worth noting. An ideal gas in equilibrium has no gradients, and there is nothing to transfer. Transport phenomena are the first, weakest deviation from equilibrium, and the entire kinetic theory of transport lives in this narrow band: the deviation already exists, but it is still linear."
+    },
+    {
+     "h": "Vacuum and microtechnology",
+     "text": "As soon as the mean free path grows to the size of the gap, viscosity ceases to be a property of the substance. Hence the design of the thermos, the calculation of vacuum systems, the behavior of microelectromechanical mirrors with micron gaps, and the aerodynamics of a descent vehicle at an altitude of a hundred kilometers. The criterion is the same — the Knudsen number, the ratio of λ to the characteristic size."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Fun fact: try it with your own hands",
+   "lead": "You can't catch gas viscosity in the kitchen: air is too thin, and its viscosity is too small. But the second half of the statement—how a liquid behaves when heated—is easy to observe. The opposite sign is precisely the main result of this section.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "kitchen experiment",
+     "h": "Water and oil, cold and warm",
+     "text": "You'll need two cocktail straws of the same diameter, water, and vegetable oil. The straw is essential: through a wide opening, liquid flows due to inertia, and viscosity hardly matters, but in a narrow channel Poiseuille's law applies, and the flow time is directly proportional to viscosity. Pour 20 ml of each liquid into identical cups, put half in the refrigerator and half in warm water (about 40 °C), and let them sit for an hour to equilibrate. Then let each flow out through the straw and time it. Question in advance: for which liquid will heating change the time more—water or oil?",
+     "answer": "Oil, and by a large margin. Water at 5 °C has a viscosity of 1.52 mPa·s, at 40 °C—0.65 mPa·s, so the flow time changes roughly twofold. Oil over the same interval goes from about 150 mPa·s to 30 mPa·s—a fivefold change. From these numbers, you can extract the barrier energy using the Arrhenius formula: for water it comes out to about 17 kJ per mole, for oil about 33. The long molecules of oil are more entangled with each other, and squeezing past neighbors is harder—hence the higher temperature sensitivity. Now mentally repeat the same experiment with air. Heating from 5 to 40 °C increases its viscosity by about nine percent: air becomes THICKER. You can't feel this in any kitchen container, but in calculations of radiator airflow or in the aerodynamics of hot exhaust, that's exactly the sign you need."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "kitchen experiment",
+     "h": "Ball in honey, cold and heated",
+     "text": "In the section on flows, we compared a ball in honey with a ball in water; here we change the liquid, not the temperature. Take two identical clear jars of liquid honey, put one in the refrigerator and the other in warm water no hotter than 40 degrees (above that, honey spoils). Let them sit for an hour, measure the temperature of both. Mark two lines 10 cm below the surface with a marker, and drop an identical metal ball into each—a bearing ball about 4 mm in diameter works. Time the fall between the marks. Question: how many times faster will the ball go in warm honey—twice, five times, or twenty times?",
+     "answer": "About twenty to thirty times, and this is the most convincing result of all the kitchen experiments in this section. According to Stokes' law, the speed is inversely proportional to viscosity, so the time is directly proportional to it. Honey at 10 °C has a viscosity of about 40 Pa·s, at 40 °C—about 1.5. Heating by just thirty degrees, yet the difference is almost thirtyfold: that's the exponential in action; a power law cannot do that. Calculate the barrier energy using Arrhenius—you'll get about 85 kJ per mole, roughly equivalent to four hydrogen bonds. That's how much a sugar molecule needs to break to squeeze past its neighbors. Compare with a gas: to increase air viscosity thirtyfold, you'd have to heat it to several hundred thousand kelvins, and even then it would turn into plasma first. One experiment, two opposite physics."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradox",
+     "h": "Helium is seven times lighter than air—and more viscous",
+     "text": "The molar mass of helium is 4 versus 29 for air. The molecule is light, flies faster than all others, and seeps through any crack first—you'd think it should have the weakest braking. However, the measured viscosity of helium at room temperature is 1.96·10⁻⁵ Pa·s versus 1.81·10⁻⁵ for air: helium is more viscous. How does this fit with the formula?",
+     "answer": "It fits right into it. In the expression η = 2√(mkT/π)/(3σ), mass and cross-section pull in opposite directions, and for helium, the cross-section wins. The lightness gives a factor √(4/29) ≈ 0.37—helium should be 2.7 times LESS viscous. But the helium atom is also small: its effective diameter is 0.22 nm versus 0.37 nm for air molecules, so the cross-section σ = πd² is smaller by a factor of (0.22/0.37)² ≈ 0.35, and it's in the denominator. The result: 0.37 / 0.35 ≈ 1.05—helium turns out to be about five percent more viscous than air; the reference gives eight. This estimate can't be more precise: the effective diameters of molecules are themselves known to within a few percent, and they enter squared. Test yourself on argon: it's heavier than air (√(40/29) = 1.17), but the diameter is almost the same, and the viscosity comes out to 2.1·10⁻⁵ versus the tabulated 2.2·10⁻⁵. Separately, it's worth distinguishing two reputations of helium. Through a hole the size of a molecule or through a thick layer of rubber, helium indeed escapes faster than anything: there, it's not viscosity but thermal speed and atomic size that matter. But through a long channel where flow is viscous, helium under the same pressure difference goes slightly SLOWER than air. A balloon deflates not because helium is fluid, but because it seeps through the rubber."
+    },
+    {
+     "icon": "estimate",
+     "kind": "estimate",
+     "h": "Molecular size from viscosity—Loschmidt's path",
+     "text": "The formula can be turned backwards. Measured viscosity gives the mean free path, the mean free path gives the collision cross-section, and the cross-section gives the molecular diameter. Try to go through the chain yourself: η = 1.81·10⁻⁵ Pa·s, ρ = 1.2 kg/m³, ⟨v⟩ = 463 m/s, concentration n = p/kT = 2.5·10²⁵ m⁻³.",
+     "answer": "λ = 3η/(ρ⟨v⟩) ≈ 9.8·10⁻⁸ m; σ = 1/(√2·nλ) ≈ 2.9·10⁻¹⁹ m²; d = √(σ/π) ≈ 3.0·10⁻¹⁰ m, i.e., 0.3 nanometers. The reference value for nitrogen is 0.37 nm. The miss is smaller than the uncertainty in the viscosity itself—and that's no coincidence: the diameter is extracted from it under a square root, so an error in the factor ⅓ is halved in the exponent. Exactly this chain was followed by Josef Loschmidt in 1865, adding a second equation—the density of liquid air, which gives the number of molecules times the cube of the diameter. From two equations, he found both the size and the concentration: about one nanometer and roughly 1.8·10¹⁸ molecules per cubic centimeter. The diameter was overestimated threefold, the concentration underestimated fifteenfold—the first ever estimate of atomic size missed by only an order of magnitude, even though half the physicists of that time didn't believe atoms existed at all."
+    },
+    {
+     "icon": "edge",
+     "kind": "applicability limit",
+     "h": "Unity for gases, six orders of magnitude for liquids",
+     "text": "The Prandtl number for any gas is about 0.7 and almost independent of the species. For liquids, it ranges from 0.025 for mercury to tens of thousands for glycerin. Where does such a chasm between the two states of matter come from?",
+     "answer": "Because in a gas, all three transfers are carried by the same carrier—a freely flying molecule—and in each coefficient, the same factor ⅓λ⟨v⟩ appears. Their ratio is bound to be a number of order unity, and it is. In a dense liquid, the carriers are different. Momentum is transferred through direct interaction between neighbors, heat too, but in a liquid metal, the main heat carrier becomes the conduction electrons; we discussed them in the second section, where we derived the Lorenz number. Electrons have nothing to do with viscosity. Hence mercury: heat travels much faster than momentum. Glycerin has the opposite skew—viscosity is huge, but thermal conductivity is ordinary. The practical conclusion for an engineer is harsh: correlation formulas for heat transfer obtained with air cannot be transferred to liquid sodium in a reactor—there, it's different physics, not a different value of a coefficient. And an honest caveat: a general theory of transport in dense liquids, comparable in rigor to the kinetic theory of gases, has not been constructed to this day. For gases, we calculate coefficients from first principles; for liquids, we measure and fit."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "What we glossed over and how it is fixed",
+   "blocks": [
+    {
+     "h": "The factor ⅓: where the 1.5-fold miss came from",
+     "text": "There were three simplifications, and the first two are not errors in the same direction but a pair that cancels out. First: we assumed that molecules fly strictly along the axes and got a flux of ⅙n⟨v⟩ in each direction; an honest calculation over angles gives ¼n⟨v⟩ — 1.5 times more. Second: the distance from which a molecule brings foreign momentum we took to be λ, but it arrives at an angle, and the projection of this distance onto the normal is on average ⅔λ — that many times less. One and a half times two-thirds gives one: a careful angular calculation returns exactly our third, and the miss remains unexplained. The third, subtlest simplification explains it: fast molecules both travel farther and cross the area more often, so averaging the product as the product of averages is not allowed — this correlation again works to increase. The rigorous solution of the Boltzmann equation for hard spheres, obtained by Chapman and Enskog independently during World War I, gives a closed formula. Numerically it corresponds to a factor of 0.499 instead of our third, that is, exactly the discrepancy we measured in air.",
+     "latex": "\\eta = \\frac{5}{16 d^{2}}\\sqrt{\\frac{m k T}{\\pi}} = 0{,}499\\,\\rho\\,\\bar v\\,\\lambda"
+    },
+    {
+     "h": "Sutherland's formula: why not a square root",
+     "text": "Our dependence η ∝ √T came from a single assumption — that the collision cross-section σ is constant, like billiard balls. Real molecules attract each other on approach, and the trajectory of a slow molecule bends more: it grazes a neighbor even when geometrically it would have passed by. Therefore, the effective cross-section is larger than the geometric one, and the colder the gas, the larger. With heating, attraction loses importance, σ decreases, and viscosity grows faster than the square root. In 1893, Sutherland reduced this correction to a single constant S with the dimension of temperature — essentially, the depth of attraction in degrees. For air, S ≈ 111 K. The formula holds for air from cryogenic temperatures to one and a half thousand kelvins with accuracy within a few percent: at 0 °C it gives 1.72·10⁻⁵, at 20 °C — 1.81·10⁻⁵, at 100 °C — 2.17·10⁻⁵, and at an altitude of ten kilometers those same 1.46·10⁻⁵ that our square root did not give. The effective exponent comes out to about 0.76 — between the square root and unity. Maxwell in his narrow range measured exactly unity and built a model of molecules repelling as the fifth power of distance; the model turned out to be more durable than the measurement that gave birth to it.",
+     "latex": "\\eta(T) = \\eta_0 \\left(\\frac{T}{T_0}\\right)^{3/2} \\frac{T_0 + S}{T + S}, \\qquad S_{\\text{air}} \\approx 111\\ \\text{K}"
+    },
+    {
+     "h": "Knudsen number: four regimes instead of one",
+     "text": "Everything stated is valid as long as a molecule collides with other molecules more often than with walls. The measure is the ratio of the mean free path to the characteristic size. At Kn less than 0.01, the gas behaves as a continuous medium: everything we derived holds, and the no-slip condition applies at the wall. From 0.01 to 0.1, the slip regime occurs: the gas near the wall already slips, and the no-slip condition must be corrected by a correction proportional to λ. From 0.1 to 10, the transition regime is the most inconvenient: neither kinetic theory in our form nor continuum equations work, and direct simulation of collisions by the Monte Carlo method is used. Above 10, the free-molecular regime sets in: molecules fly from wall to wall, the concept of viscosity as a property of matter loses meaning, and momentum transfer becomes directly proportional to pressure. For thermal conductivity, this same transition was discussed in the second section using the thermos example; for viscosity, it is important in other places. Microelectromechanical mirrors with gaps of a micron: at atmospheric pressure, Kn there is about 0.07 — already the slip regime, and damping is calculated with a correction. Vacuum systems where viscous flow changes to molecular and the formulas for pump calculations change entirely. Descent of a spacecraft from orbit: at an altitude of one hundred kilometers, λ is measured in centimeters, at one hundred fifty — in meters, and familiar aerodynamics does not work there at all. Finally, thin lubricant films and catalyst pores, where the gap is comparable to the mean free path even at ordinary pressure.",
+     "latex": "\\mathrm{Kn} = \\frac{\\lambda}{L}"
+    },
+    {
+     "text": "The general conclusion from the three corrections is the same, and it is worth keeping in mind separately from the formulas. The kinetic theory of gases is remarkable not for its accuracy but for predicting the STRUCTURE of dependencies without fitting a single parameter: how viscosity depends on pressure (not at all), on temperature (increases), on the mass of the molecule and its size. It gives numerical factors with an accuracy of up to 1.5 times, and they are refined either by rigorous theory or by a single measurement. This is the typical order of things in physics: first the mechanism and power laws, then the coefficients."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "Gas viscosity is the transfer of momentum across the flow by molecules flying between collisions, not a separate friction force. The coefficient is assembled from three factors: η = ⅓ρ⟨v⟩λ. This leads to two non-obvious consequences: gas viscosity does not depend on pressure, because density cancels with the mean free path, and it increases with heating roughly as √T — whereas for liquids it falls exponentially. The same λ and ⟨v⟩ give the diffusion coefficient and thermal conductivity: three transport phenomena — one picture with different cargo.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "Three factors instead of a table",
+     "text": "η = ⅓ρ⟨v⟩λ: how many carriers per cubic meter, how fast they dart, how far they carry someone else's momentum"
+    },
+    {
+     "icon": "fact",
+     "title": "Pressure is irrelevant",
+     "text": "Pump out half — half as many carriers, but each goes twice as far. The product ρλ does not depend on concentration"
+    },
+    {
+     "icon": "scale",
+     "title": "Gas thickens, liquid thins",
+     "text": "√T versus exp(E/kT). These are different mechanisms, not different coefficients in one formula"
+    },
+    {
+     "icon": "edge",
+     "title": "Everything hinges on smallness of λ",
+     "text": "As soon as the mean free path grows to the gap size, viscosity ceases to be a property of the substance and remembers pressure"
+    }
+   ],
+   "where": [
+    "Vacuum technology: viscous flow gives way to molecular flow when λ grows to the tube diameter",
+    "High-altitude aerodynamics: air at 10 km is three times rarer, but viscosity is almost the same — Re drops due to density",
+    "Heat transfer calculations: Pr ≈ 0.7 for any gas, so formulas obtained on air transfer to other gases",
+    "Orbital reentry and micromechanics: the Knudsen number decides whether the concept of viscosity is applicable at all"
+   ],
+   "watchOut": "Three errors are more common than others. The first is transferring kitchen intuition to gas: “hotter means thinner” is true for liquids and false for gases, the mechanisms are different and the sign is opposite. The second is considering the factor ⅓ exact: it underestimates the answer by about one and a half times, and if the task requires a number, not a structure, you need to take tabulated η or Sutherland's formula. The third, most dangerous, is applying η where the mean free path is comparable to the gap size: in vacuum technology, in microchannels, and at high altitudes, viscosity ceases to be a property of the substance and begins to depend on geometry."
+  },
+  "quiz": [
+   {
+    "id": "tv1",
+    "type": "mcq",
+    "q": "Half of the air was pumped out of a vessel, the temperature was not changed. What happened to the viscosity of the remaining gas?",
+    "options": [
+     "It did not change",
+     "It dropped by half: there are half as many carrier molecules",
+     "It doubled: molecules have more room to fly",
+     "It dropped by four: collisions are rarer and density is lower"
+    ],
+    "answer": 0,
+    "why": "In the formula η = ⅓ρ⟨v⟩λ, the density dropped by half, but the mean free path λ = 1/(√2·nσ) doubled: there are fewer carriers, but each one carries momentum twice as deep into the neighboring layer. The product ρλ does not depend on concentration at all, and the average speed is determined only by temperature. It was precisely this conclusion that Maxwell found incredible in 1860 and six years later verified by experiment with oscillating glass disks — the viscosity remained constant over the entire accessible range of pressures. One caveat: this holds as long as λ is much smaller than the vessel dimensions; in deep vacuum, a dependence on pressure appears, and that is a different regime, discussed in the appendix.",
+    "hint": "Write down how each factor in η = ⅓ρ⟨v⟩λ depends on the molecular concentration n, and add up the exponents."
+   },
+   {
+    "id": "tv2",
+    "type": "mcq",
+    "q": "Why does the viscosity of a gas increase with heating, while the viscosity of a liquid decreases?",
+    "options": [
+     "In a gas, momentum is carried by freely flying molecules, and their thermal speed increases with temperature; in a liquid, molecules are packed closely, and heating makes it easier for them to squeeze past neighbors",
+     "In a gas, density increases with heating, while in a liquid it decreases",
+     "In a gas, the mean free path increases with heating, while in a liquid it decreases",
+     "These are different quantities: for a gas, viscosity is measured by the damping of oscillations, and for a liquid by the flow rate through a tube"
+    ],
+    "answer": 0,
+    "why": "The different sign comes not from different coefficients, but from different mechanisms. In a gas, the carrier of momentum is a flying molecule, and viscosity inherits the temperature dependence of its speed: ⟨v⟩ ∝ √T, so η also increases. In a liquid, there is no free path at all; molecules are in contact, and the shear of layers requires a molecule to squeeze past its neighbors through an energy barrier; the probability of this obeys a Boltzmann factor, so viscosity decreases exponentially with heating. The second option is simply factually wrong: when heated in an open vessel, density decreases for both. The third substitutes the mechanism with a consequence — at constant density, λ does not depend on temperature at all, and for a liquid this quantity is undefined. The fourth is factually wrong: both measurement methods give the same quantity, and this is what ensures the consistency of tables.",
+    "hint": "Ask yourself what exactly carries momentum in each of the two cases — and what changes with heating for the carrier."
+   },
+   {
+    "id": "tv3",
+    "type": "free",
+    "q": "In your own words: why are the diffusion coefficient, thermal conductivity, and viscosity of a gas expressed through the same product λ·⟨v⟩?",
+    "keywords": [
+     "transfer",
+     "path",
+     "collision",
+     "molecules",
+     "gradient",
+     "carrier",
+     "momentum",
+     "energy"
+    ],
+    "needed": 2,
+    "why": "Because in all three cases the same mechanism works: a molecule flies from collision to collision and carries with it what it possessed at the place of the last collision. Only the cargo changes — the molecule itself as a tag gives diffusion, its thermal energy gives thermal conductivity, its momentum along the flow gives viscosity. Therefore, each coefficient contains the factor ⅓λ⟨v⟩ — essentially, 'what area the carrier covers per second' — and the coefficients differ only in how much cargo per cubic meter: unity for the number of particles, ρc for energy, ρ for momentum. From this follows a testable prediction: the ratios of the coefficients are numbers of order unity, and for gases Pr and Sc indeed lie around 0.7–1.",
+    "hint": "Analyze what is common and what differs in all three phenomena. The mechanism is the same — but what exactly does the molecule carry with it across the layer boundary?"
+   },
+   {
+    "id": "tv4",
+    "type": "estimate",
+    "q": "Estimate the mean free path of air molecules at a pressure of 10⁻³ atmospheres and room temperature. At atmospheric pressure it is 68 nm. Answer in micrometers.",
+    "answer": 68,
+    "unit": "μm",
+    "why": "The mean free path λ = 1/(√2·nσ) is inversely proportional to concentration, and concentration at constant temperature is proportional to pressure. Thus λ ∝ 1/p: a thousandfold decrease in pressure increases the path exactly a thousandfold, from 68 nm to 68 μm. A common-sense estimate: 68 micrometers is already the thickness of a human hair, so in a channel a tenth of a millimeter wide, gas at such pressure would cease to be a continuous medium, and the concept of viscosity could not be applied. Hence the vacuum engineer's practical rule: as long as the path is smaller than the pipe diameter, gas is pumped in viscous flow, but once it exceeds it, it becomes molecular flow, and calculations must use different formulas.",
+    "hint": "Molecular concentration at constant temperature is proportional to pressure, and mean free path is inversely proportional to concentration. By what factor did the pressure drop?",
+    "tolFactor": 1.5
+   }
+  ]
+ },
+ "es": {
+  "formula": {
+   "name": "Viscosidad del gas según la teoría cinética",
+   "latex": "\\eta = \\tfrac{1}{3}\\,\\rho\\,\\bar v\\,\\lambda = \\frac{m\\,\\bar v}{3\\sqrt{2}\\,\\sigma}",
+   "alsoKnown": "La independencia de la viscosidad del gas respecto a la presión se denomina ley de Maxwell. Junto con D = ⅓λ⟨v⟩ y κ = ⅓ρc⟨v⟩λ, esta fórmula forma el trío de coeficientes de transporte.",
+   "authors": [
+    {
+     "who": "Rudolf Clausius",
+     "year": "1858",
+     "what": "introdujo el concepto de camino libre medio: la distancia que recorre una molécula entre colisiones; sin él, en la teoría cinética no se podía decir nada cuantitativo."
+    },
+    {
+     "who": "James Clerk Maxwell",
+     "year": "1860",
+     "what": "dedujo que la viscosidad de un gas no depende de su densidad, y él mismo consideró el resultado poco plausible."
+    },
+    {
+     "who": "James Clerk Maxwell y Katherine Maxwell",
+     "year": "1866",
+     "what": "realizaron un experimento con discos de vidrio oscilantes en un recipiente evacuado y confirmaron la independencia de la presión; además, midieron el aumento de la viscosidad con la temperatura."
+    },
+    {
+     "who": "Joseph Loschmidt",
+     "year": "1865",
+     "what": "invirtió la fórmula: a partir de la viscosidad medida obtuvo el camino libre medio, y de ahí la primera estimación histórica del tamaño de las moléculas."
+    },
+    {
+     "who": "William Sutherland",
+     "year": "1893",
+     "what": "propuso una corrección que explica por qué la viscosidad crece más rápido que la raíz cuadrada de la temperatura: la sección eficaz de colisión depende de la energía."
+    },
+    {
+     "who": "Sydney Chapman y David Enskog",
+     "year": "1916–1917",
+     "what": "construyeron de forma independiente una teoría rigurosa del transporte en gases y obtuvieron factores numéricos exactos en lugar de estimaciones."
+    }
+   ],
+   "story": "En 1859, Maxwell, entonces profesor en Aberdeen, leyó el trabajo de Clausius sobre el camino libre medio y se propuso llevar la teoría cinética a números. En su obra 'Explicaciones sobre la teoría dinámica de los gases' obtuvo un resultado que él mismo calificó de poco plausible: la viscosidad de un gas no debería depender de su densidad. Maxwell admitió honestamente que el único experimento que conocía parecía no confirmarlo, y dejó la cuestión abierta durante seis años. Decidió comprobarlo él mismo, ya en Londres. El montaje: tres discos de vidrio horizontales suspendidos por un hilo de torsión, oscilando entre discos fijos dentro de una campana evacuada. La viscosidad del aire se medía por la amortiguación de las oscilaciones. La dificultad no era el vacío, sino la temperatura: para separar el efecto de la presión y el calentamiento, había que mantener la habitación a una temperatura fija durante horas, desde fresca hasta una en la que es difícil estar. Katherine Maxwell se encargaba de la estufa y las calderas; en las cartas de ese verano, Maxwell describía el laboratorio doméstico como un lugar donde estaba condenado al calor. El resultado de 1866: la viscosidad no cambiaba al variar la presión en varias decenas de veces. Pero el segundo resultado resultó más importante que el primero. La viscosidad aumentaba con la temperatura más rápido de lo que predecía su propia teoría: no como la raíz de T, sino aproximadamente como T. El modelo de moléculas como bolas de billar no podía explicar eso. Maxwell lo reemplazó por un modelo de partículas que se repelen con una fuerza que disminuye como la quinta potencia de la distancia; para esa ley, las ecuaciones de transporte se resuelven exactamente, y las 'moléculas de Maxwell' siguen siendo un ejemplo didáctico. La ironía es que mediciones posteriores en un amplio rango dieron un exponente de aproximadamente 0,76, entre la raíz y la unidad, es decir, la medición que dio origen al modelo no era del todo precisa. Sin embargo, el modelo sobrevivió a su creador.",
+   "symbols": [
+    {
+     "sym": "η",
+     "latex": "\\eta",
+     "what": "viscosidad dinámica del gas",
+     "unit": "Pa·s",
+     "note": "la misma magnitud que en la ley de Newton τ = η·dv/dy del tema de flujos; aquí no la tomamos de una tabla, sino que la calculamos."
+    },
+    {
+     "sym": "ρ",
+     "latex": "\\rho",
+     "what": "densidad del gas",
+     "unit": "kg/m³",
+     "note": "también es nm: concentración de moléculas multiplicada por la masa de una; en la fórmula representa 'cuántos portadores hay en un metro cúbico'."
+    },
+    {
+     "sym": "⟨v⟩",
+     "latex": "\\bar v",
+     "what": "velocidad térmica media de las moléculas",
+     "unit": "m/s",
+     "note": "es la media, no la cuadrática media: para el aire a 20 °C es 463 m/s frente a 502 m/s; la diferencia es del ocho por ciento, y no conviene confundirlas."
+    },
+    {
+     "sym": "λ",
+     "latex": "\\lambda",
+     "what": "camino libre medio",
+     "unit": "m",
+     "note": "cuán lejos transporta una molécula el impulso ajeno antes de cederlo en una colisión; para el aire a presión atmosférica es 68 nm."
+    },
+    {
+     "sym": "m",
+     "latex": "m",
+     "what": "masa de una molécula",
+     "unit": "kg",
+     "note": "para el aire, 4,8·10⁻²⁶ kg: la masa molar de 29 g/mol dividida por el número de Avogadro."
+    },
+    {
+     "sym": "σ",
+     "latex": "\\sigma",
+     "what": "sección eficaz de colisión",
+     "unit": "m²",
+     "note": "el área del blanco que hay que acertar para que ocurra una colisión: σ = πd², donde d es el diámetro efectivo de la molécula."
+    },
+    {
+     "sym": "n",
+     "latex": "n",
+     "what": "concentración de moléculas",
+     "unit": "1/m³",
+     "note": "el protagonista del quinto paso: aparece en ρ y en λ con exponentes opuestos y por eso desaparece de la respuesta."
+    },
+    {
+     "sym": "Pr",
+     "latex": "\\Pr",
+     "what": "número de Prandtl",
+     "unit": "adimensional",
+     "note": "relación entre la viscosidad cinemática y la difusividad térmica: qué se extiende más rápido por el gas, ¿el impulso o el calor?"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Derivación rigurosa",
+   "lead": "Solo necesitaremos dos cosas, ambas ya conocidas: la definición de fuerza como el impulso transferido por segundo y el camino libre medio. No postularemos ninguna \"ley de fricción\" separada; surgirá por sí sola, y ese es el contenido principal de la derivación.",
+   "steps": [
+    {
+     "text": "Tomemos un gas entre dos placas: la inferior está fija, la superior se mueve a lo largo de sí misma. El flujo estacionario consiste en capas, cada una con su velocidad media u(y). Separemos de inmediato los dos movimientos que ocurren simultáneamente en el gas. El movimiento térmico es caótico, igual en todas direcciones y muy rápido: cientos de metros por segundo. La deriva es ordenada, dirigida a lo largo de las placas y pequeña: centímetros por segundo. La molécula vuela casi igual que en un gas en reposo, pero cada una lleva una pequeña adición de impulso a lo largo del flujo, igual a m·u(y). Esta adición será el objeto de todo el cálculo posterior.",
+     "latex": "v \\approx \\bar v \\gg u(y), \\qquad p_x = m\\,u(y)",
+     "figure": "gasshear",
+     "figCaption": "La deriva es un ajuste fino sobre el caos: las flechas del movimiento térmico son órdenes de magnitud más largas"
+    },
+    {
+     "text": "Dibujemos una superficie imaginaria A dentro del gas, paralela a las placas, y contemos cuántas moléculas la cruzan por segundo. El cálculo es exactamente el mismo que en el primer párrafo del tema: tomamos el modelo más simple de caos, en el que las moléculas se dividen por igual entre las seis direcciones de los ejes, y obtenemos una sexta parte hacia arriba y una sexta parte hacia abajo. Una salvedad que no fue necesaria en el primer párrafo, pero aquí sí: el promedio honesto sobre las direcciones da no un sexto, sino un cuarto. Tomamos un sexto por transparencia; el análisis está en el primer recuadro y en el apéndice.",
+     "latex": "\\Phi = \\tfrac{1}{6}\\, n\\, \\bar v \\quad \\text{moléculas por metro cuadrado por segundo, en cada dirección}",
+     "figure": "sixways",
+     "figCaption": "Cuatro direcciones van a lo largo de la superficie y no transportan nada a través de ella; solo dos funcionan"
+    },
+    {
+     "text": "Ahora la pregunta clave: ¿qué impulso trae cada molécula? No el que tenía originalmente, sino el que recibió en la última colisión. Una molécula que cruza la superficie de arriba hacia abajo, en promedio, chocó por última vez a una distancia λ por encima; allí adquirió la adición de deriva de su capa. Por lo tanto, lleva hacia abajo m·u(y+λ). La que viene en sentido contrario lleva hacia arriba m·u(y−λ). La molécula no recuerda el lugar donde la encontramos, sino donde acordó su velocidad por última vez con alguien.",
+     "latex": "p_{\\downarrow} = m\\,u(y+\\lambda), \\qquad p_{\\uparrow} = m\\,u(y-\\lambda)",
+     "figure": "momentumcarry",
+     "figCaption": "A través de la misma superficie pasan dos flujos opuestos de moléculas, pero sus cargas son diferentes"
+    },
+    {
+     "text": "Juntemos todo. El número de moléculas en ambas direcciones es el mismo: la materia no fluye, el gas no disminuye ni arriba ni abajo. Pero el impulso fluye, porque lo que se trae desde arriba y desde abajo difiere. Desarrollamos la diferencia en potencias de λ pequeño: los términos pares se cancelan exactamente al restar, y queda la derivada duplicada. El flujo de impulso por unidad de área resultante es el esfuerzo cortante. Comparándolo con la ley de Newton, leemos el coeficiente.",
+     "latex": "\\tau = \\tfrac{1}{6} n \\bar v\\, m\\left[u(y+\\lambda)-u(y-\\lambda)\\right] = \\tfrac{1}{3}\\, n m\\, \\bar v \\lambda\\, \\frac{du}{dy} \\;\\Longrightarrow\\; \\eta = \\tfrac{1}{3}\\rho\\,\\bar v\\,\\lambda",
+     "figure": "etaassemble",
+     "figCaption": "La fricción entre capas no se postula, sino que se obtiene: es simplemente el flujo de impulso a través del flujo"
+    },
+    {
+     "text": "La fórmula ya está lista, pero lo más interesante comienza cuando sustituimos en ella el camino libre medio. Se conoce del primer párrafo: λ = 1/(√2·nσ). La densidad también se expresa mediante la concentración: ρ = nm. Sustituimos ambas y la concentración desaparece. Esto no es un accidente algebraico, sino una afirmación física: enrarezca el gas a la mitad, y los portadores de impulso serán la mitad, pero cada uno llevará su carga el doble de profundo en la capa vecina. La disminución en número se compensa exactamente con el aumento en distancia.",
+     "latex": "\\eta = \\tfrac{1}{3}\\, nm\\, \\bar v \\cdot \\frac{1}{\\sqrt{2}\\, n \\sigma} = \\frac{m\\,\\bar v}{3\\sqrt{2}\\,\\sigma}",
+     "figure": "pcancel",
+     "figCaption": "A la izquierda, muchos recorridos cortos; a la derecha, pocos largos; el producto es el mismo"
+    },
+    {
+     "text": "Entonces, ¿qué controla la viscosidad del gas? Solo la temperatura y el tipo de moléculas. Sustituimos la velocidad media de la distribución de Maxwell y obtenemos la dependencia explícita. La viscosidad crece como la raíz cuadrada de la temperatura absoluta, es decir, al calentar el gas se vuelve MÁS denso. En un líquido ocurre lo contrario, y no solo un poco: allí la viscosidad cae exponencialmente, porque el mecanismo es completamente diferente: las moléculas deben abrirse paso entre sus vecinas a través de una barrera de energía. El experimento de Maxwell dio un crecimiento incluso más pronunciado que la raíz, casi lineal; las mediciones actuales dan un exponente de aproximadamente 0,76. La razón de la desviación es que la sección eficaz σ no es constante; el análisis está en el apéndice.",
+     "latex": "\\bar v = \\sqrt{\\frac{8kT}{\\pi m}} \\;\\Longrightarrow\\; \\eta = \\frac{2}{3\\sigma}\\sqrt{\\frac{m k T}{\\pi}} \\;\\propto\\; \\sqrt{T}",
+     "figure": "etatemp",
+     "figCaption": "Las dos curvas divergen en direcciones opuestas porque detrás de ellas hay mecanismos diferentes"
+    },
+    {
+     "text": "Ahora miremos todo el tema de una vez. En la derivación no hubo nada específicamente de impulso. Contamos cuántas moléculas cruzan la superficie y multiplicamos por lo que cada una lleva. Reemplace la carga y obtendrá los dos párrafos anteriores. Si la carga es la propia molécula marcada, resulta la difusión. Si es la energía térmica, la conductividad térmica. Si es el impulso a lo largo del flujo, la viscosidad. El factor ⅓λ⟨v⟩ es el mismo en los tres casos, porque el portador es el mismo.",
+     "latex": "J_G = -\\tfrac{1}{3}\\bar v \\lambda\\, \\frac{d(nG)}{dy}; \\qquad D = \\tfrac{1}{3}\\bar v\\lambda, \\quad \\kappa = \\tfrac{1}{3}\\rho c_V \\bar v\\lambda, \\quad \\eta = \\tfrac{1}{3}\\rho \\bar v\\lambda",
+     "figure": "threetransports",
+     "figCaption": "Los tres coeficientes difieren solo en cuánta carga hay por metro cúbico de gas"
+    },
+    {
+     "text": "El factor común tiene una consecuencia comprobable. Dividimos la viscosidad por la densidad: obtenemos la viscosidad cinemática ν; dividimos la conductividad térmica por ρc_p: obtenemos la difusividad térmica a; el coeficiente de difusión D ya está listo. Los tres se miden ahora en metros cuadrados por segundo, por lo que sus relaciones son números puros. El número de Prandtl compara la propagación del impulso con la propagación del calor; el número de Schmidt, con la propagación de una impureza. Nuestra teoría aproximada promete Sc = 1 y Pr = c_p/c_V = γ, es decir, 1,4 para el aire. La medición da Sc ≈ 0,8 y Pr = 0,71: en el número de Prandtl fallamos exactamente por un factor de dos, y este es el mayor error del párrafo. Se corrige con una sola enmienda. Las moléculas rápidas cruzan la superficie con más frecuencia y transportan más energía traslacional; esta correlación refuerza la conductividad térmica, pero no se aplica a la energía rotacional de la molécula. Teniendo en cuenta esta diferencia, Eucken obtuvo Pr = 4γ/(9γ−5): 0,74 para gases diatómicos y 0,67 para monoatómicos, y esto coincide con el experimento. Lo principal se ha conservado: las relaciones resultaron del orden de la unidad, no del orden de cien, lo que significa que los tres fenómenos son realmente producidos por un solo portador.",
+     "latex": "\\Pr = \\frac{\\nu}{a} = \\frac{\\eta\\, c_p}{\\kappa}, \\qquad \\mathrm{Sc} = \\frac{\\nu}{D}, \\qquad \\Pr_{\\text{Eucken}} = \\frac{4\\gamma}{9\\gamma - 5}",
+     "figure": "prandtlbar",
+     "figCaption": "En los gases, el número de Prandtl se acerca a 0,7 independientemente de la especie; en los líquidos, la dispersión es de seis órdenes de magnitud"
+    }
+   ],
+   "plate": "\\eta = \\tfrac{1}{3}\\,\\rho\\,\\bar v\\,\\lambda",
+   "plateCap": "Tres factores: cuántos portadores hay por metro cúbico, qué tan rápido se mueven, qué tan lejos llevan la carga. Cambie la carga y obtendrá difusión o conductividad térmica, mientras que el factor ⅓λ⟨v⟩ permanece igual. Toda la rareza de la viscosidad del gas está oculta en que al cambiar la presión, la densidad y el camino libre medio tiran en direcciones opuestas y se cancelan mutuamente.",
+   "note": "Enumeremos las suposiciones, que también son los límites de la fórmula. Primera: la sexta parte del flujo en cada dirección y la distancia de la última colisión exactamente λ son estimaciones aproximadas. La teoría exacta da un factor de 0,499 en lugar de ⅓, es decir, nuestra respuesta está subestimada aproximadamente en un factor de 1,5. La estructura es completamente correcta: las dependencias de ρ, ⟨v⟩ y λ son estrictas; el error está solo en el número que las precede. Segunda: la sección eficaz de colisión σ se consideró constante, como en bolas de billar. Las moléculas reales son blandas y se atraen, por lo que la dependencia medida con la temperatura es más pronunciada que la raíz; sobre esto trata el apéndice. Tercera, y más importante: en todas partes se supuso que la molécula tiene tiempo de chocar con otra molécula antes de llegar a la pared, es decir, λ es mucho menor que las dimensiones del recipiente y que la distancia en la que la velocidad cambia notablemente. Tan pronto como esto deja de ser cierto, la viscosidad deja de ser una propiedad de la sustancia y comienza a depender de la geometría y de la presión. Cuarta: el gas está enrarecido en el sentido de que las colisiones son pareadas; a presiones de decenas de atmósferas aparece una dependencia de la densidad que no está en nuestra fórmula. Quinta: la deriva es mucho menor que la velocidad térmica; de lo contrario, ya no es un deslizamiento de capas, sino otro problema."
+  },
+  "math": {
+   "title": "Matemáticas que aquí se necesitaron",
+   "lead": "Tres lugares donde un truco formal hace un trabajo sustancial, y no solo decora una respuesta ya lista.",
+   "items": [
+    {
+     "what": "Promedio sobre direcciones: de dónde salió la sexta parte y por qué es correcta la cuarta",
+     "why": "En el segundo paso de la derivación dividimos las moléculas en seis haces iguales a lo largo de los ejes. Esto no es una afirmación física sobre el gas, sino una manera de evitar la integral, y vale la pena entender cuál es exactamente. El cálculo honesto se ve así. La dirección de la velocidad es igualmente probable en todas las direcciones, es decir, está distribuida uniformemente sobre la esfera, pero uniformemente sobre el ÁREA de la esfera, no sobre el ángulo de inclinación: el peso de una dirección está dado por la franja sin θ dθ, y hay simplemente más direcciones inclinadas que cercanas al eje. A través de una superficie, una molécula transporta una contribución proporcional a la proyección de la velocidad, es decir, cos θ, y hay que promediar sobre el hemisferio, porque la otra mitad vuela en la otra dirección. El promedio del coseno sobre el hemisferio resulta ser exactamente ½, y el flujo sale ¼n⟨v⟩ en lugar de nuestra sexta parte. La regla por la cual vale la pena hacer esto una vez en la vida: al promediar sobre direcciones en tres dimensiones, no se pueden descomponer las moléculas en varios haces iguales: el peso está dado por el ángulo sólido. El modelo de seis haces es bueno porque da la estructura correcta de la fórmula, y es malo porque da un factor incorrecto delante de ella.",
+     "latex": "\\langle \\cos\\theta\\rangle_{+} = \\frac{\\int_{0}^{\\pi/2}\\cos\\theta\\,\\sin\\theta\\,d\\theta}{\\int_{0}^{\\pi/2}\\sin\\theta\\,d\\theta} = \\frac{1}{2} \\;\\Longrightarrow\\; \\Phi = \\tfrac{1}{4}\\, n\\,\\bar v",
+     "kit": "probability"
+    },
+    {
+     "what": "Cómo comprobar qué se cancela y qué solo lo parece",
+     "why": "En el quinto paso, la concentración desaparece de la respuesta, y esto no debe comprobarse a simple vista, sino mediante los exponentes. Escribamos la dependencia de cada factor respecto a n: la densidad ρ = nm da la primera potencia, el recorrido libre medio λ = 1/(√2·nσ) da la menos primera, la velocidad media no depende de la concentración en absoluto. La suma de los exponentes es cero, por lo tanto el producto no depende de n. El truco es general y útil: antes de alegrarse por la cancelación, hay que asegurarse de que ninguno de los factores restantes esconda la misma variable dentro de sí. Aquí el candidato peligroso es precisamente ⟨v⟩, pero está determinada por la temperatura y la masa de la molécula, y no recuerda la concentración, por lo que sobrevive. En sentido inverso también funciona: si ⟨v⟩ dependiera de la densidad, todo el efecto desaparecería, y con él todo el párrafo.",
+     "latex": "\\rho \\propto n^{1}, \\quad \\lambda \\propto n^{-1}, \\quad \\bar v \\propto n^{0} \\;\\Longrightarrow\\; \\eta \\propto n^{0}",
+     "kit": "propto"
+    },
+    {
+     "what": "Por qué la relación de dos coeficientes de transporte es un número honesto",
+     "why": "En el octavo paso dividimos la viscosidad por la difusividad térmica y declaramos que el resultado tiene sentido. Dividir magnitudes físicas entre sí no siempre tiene sentido; aquí lo tiene, y se comprueba con las unidades. La viscosidad cinemática ν = η/ρ, la difusividad térmica a = κ/(ρc_p) y el coeficiente de difusión D se miden todas en metros cuadrados por segundo. La coincidencia de dimensiones no es casual: cada una responde a la misma pregunta: qué área alcanza a cubrir la dispersión en un segundo, solo que se dispersa algo diferente. Por eso sus relaciones resultan ser números puros, que se pueden comparar entre sustancias y entre laboratorios sin ningún tipo de conversión. La comprobación es simple y estricta: si a la relación le queda una dimensión, has dividido lo que no era.",
+     "latex": "[\\nu] = [a] = [D] = \\frac{\\text{m}^{2}}{\\text{s}} \\;\\Longrightarrow\\; \\Pr = \\frac{\\nu}{a}, \\;\\; \\mathrm{Sc} = \\frac{\\nu}{D} \\;\\; \\text{sin dimensiones}",
+     "kit": "dimension"
+    }
+   ]
+  },
+  "example": {
+   "title": "Ejemplo con números",
+   "lead": "Calcularemos la viscosidad del aire desde cero y la compararemos honestamente con la medida. De paso, comprobaremos la afirmación principal del párrafo donde se puede verificar con un libro de referencia: a una altitud de diez kilómetros.",
+   "given": "Aire a 20 °C y presión atmosférica: densidad ρ = 1,20 kg/m³, recorrido libre medio λ = 68 nm, masa molar M = 29 g/mol. Encontrar la viscosidad y compararla con el valor tabulado de 1,81·10⁻⁵ Pa·s. Luego estimar la viscosidad a 10 km de altitud, donde la presión es cuatro veces menor y la temperatura es 223 K.",
+   "law": "⟨v⟩ = √(8RT/πM), luego η = ⅓·ρ·⟨v⟩·λ",
+   "solution": [
+    {
+     "text": "Velocidad térmica media. Tomamos la fórmula de la distribución de Maxwell y prestamos atención a qué velocidad se necesita exactamente: en el transporte participa la velocidad media ⟨v⟩, no la velocidad cuadrática media — difieren en un ocho por ciento, y sustituir la incorrecta introduce un error sistemático.",
+     "latex": "\\bar v = \\sqrt{\\frac{8RT}{\\pi M}} = \\sqrt{\\frac{8 \\cdot 8{,}314 \\cdot 293}{\\pi \\cdot 0{,}029}} \\approx 463\\ \\text{m/s}"
+    },
+    {
+     "text": "Sustituimos en la fórmula de la viscosidad. Es conveniente calcular por partes: un tercio de 1,20 es 0,40; multiplicar por 463 da aproximadamente 185; y finalmente multiplicar por 68 nanómetros.",
+     "latex": "\\eta = \\tfrac{1}{3}\\rho\\,\\bar v\\,\\lambda = 0{,}40 \\cdot 463 \\cdot 68 \\cdot 10^{-9} \\approx 1{,}26\\cdot10^{-5}\\ \\text{Pa}\\cdot\\text{s}"
+    },
+    {
+     "text": "Comparamos con la tabla. Obtuvimos 1,26 frente a los 1,81 medidos: un error de aproximadamente una vez y media. Esto no es un error de cálculo: dos correcciones geométricas que parecen obvias se cancelan mutuamente y no cambian el tercio. El error proviene de la correlación: las moléculas rápidas viajan más lejos y cruzan la superficie con más frecuencia, por lo que el producto promedio es mayor que el producto de los promedios. La teoría rigurosa de Chapman y Enskog da un factor de 0,499 en lugar de ⅓, y con él la respuesta coincide con la medición.",
+     "latex": "\\frac{1{,}81}{1{,}26} \\approx 1{,}44, \\qquad 0{,}499\\,\\rho\\,\\bar v\\,\\lambda \\approx 1{,}9\\cdot10^{-5}\\ \\text{Pa}\\cdot\\text{s}"
+    },
+    {
+     "text": "Altitud de 10 km: verificación de la afirmación principal. La densidad allí es tres veces menor (0,41 frente a 1,225 kg/m³), pero el recorrido libre medio es el mismo número de veces mayor, por lo que el producto ρλ no cambia en absoluto. Solo queda la temperatura: 223 K en lugar de 293, y la velocidad media disminuye como la raíz cuadrada de su relación.",
+     "latex": "\\eta(223) = \\eta(293)\\sqrt{\\frac{223}{293}} = 1{,}81\\cdot10^{-5} \\cdot 0{,}87 \\approx 1{,}58\\cdot10^{-5}\\ \\text{Pa}\\cdot\\text{s}"
+    }
+   ],
+   "answer": "η ≈ 1,3·10⁻⁵ Pa·s frente a los 1,81·10⁻⁵ tabulados: la fórmula aproximada subestima en una vez y media, pero acierta en las dependencias de ρ, ⟨v⟩ y λ. A 10 km de altitud, nuestra predicción es 1,58·10⁻⁵ Pa·s, mientras que el libro de referencia da 1,46·10⁻⁵.",
+   "check": "¿Es razonable esto? Verifiquemos tres cosas. Primera: el error de una vez y media, ¿es mucho o poco? Para una fórmula en la que no se ajustó ningún parámetro y cuyos datos de partida fueron el tamaño de la molécula y la temperatura, es muy poco. También es revelador que el error sea constante: si se calibra el factor con una medición, todas las demás predicciones —por temperatura, por tipo de gas, por presión— coincidirán exactamente. El error está en el número, no en la estructura. Segunda: a gran altitud, nuestra predicción es un ocho por ciento mayor. La ley de la raíz cuadrada resultó ser demasiado suave: la viscosidad real disminuye al enfriarse más de lo que promete, porque el exponente para el aire es aproximadamente 0,76, no 0,5. El análisis está en el apéndice, junto con la fórmula que da 1,46·10⁻⁵ exactamente. Tercera, y más importante que las dos anteriores: el aire a diez kilómetros está tres veces más enrarecido, pero la viscosidad solo ha disminuido un veinte por ciento — y eso enteramente debido al frío, no a la rarefacción. Esto es precisamente lo que afirma el párrafo. Por cierto, de aquí se sigue una conclusión práctica para la aviación: el número de Reynolds a gran altitud disminuye casi exclusivamente debido a la densidad en el numerador, no a la viscosidad en el denominador."
+  },
+  "constants": {
+   "title": "Constantes de esta sección",
+   "lead": "Cuatro números para el aire a temperatura ambiente. Los dos primeros son la entrada de la fórmula, el tercero es su verificación, el cuarto es el resultado de todo el tema en un solo número.",
+   "items": [
+    {
+     "sym": "λ",
+     "latex": "\\lambda_{\\text{aire}}",
+     "name": "Camino libre medio en el aire (20 °C, 1 atm)",
+     "value": "68",
+     "unit": "nm",
+     "why": "La distancia que recorre una molécula entre colisiones y, al mismo tiempo, la profundidad a la que transporta el impulso ajeno. Es proporcional a la temperatura e inversamente proporcional a la presión, por lo que varía en un rango muy amplio: en una cámara de vacío son metros, a cien kilómetros de altura son centímetros, en el poro de un catalizador no se recorren nanómetros en absoluto. Todo lo dicho en esta sección se basa en la condición de que λ sea mucho menor que las dimensiones del recipiente.",
+     "mnemo": "Mantén en mente una cadena de tres longitudes: 0,36 nm — la propia molécula, 3,4 nm — la distancia media entre moléculas, 68 nm — el camino libre medio. Cada paso es aproximadamente diez y veinte veces mayor. La molécula tiene espacio, pero no tanto como para no colisionar miles de millones de veces por segundo."
+    },
+    {
+     "sym": "⟨v⟩",
+     "latex": "\\bar v_{\\text{aire}}",
+     "name": "Velocidad térmica media de las moléculas de aire a 20 °C",
+     "value": "463",
+     "unit": "m / s",
+     "why": "En los coeficientes de transporte se utiliza la velocidad media, no la velocidad cuadrática media de 502 m/s ni la más probable de 410 m/s. Las tres se obtienen de la misma distribución de Maxwell y difieren en porcentajes, pero hay que sustituir la que aparece en la derivación. Depende solo de la temperatura y de la masa molar: para el hidrógeno a la misma temperatura es cuatro veces mayor, para el xenón es la mitad.",
+     "mnemo": "La velocidad del sonido en el aire es 343 m/s — solo 1,35 veces menor. Y no es una coincidencia: el sonido lo transportan las mismas moléculas con el mismo movimiento térmico, por lo que no pueden superarlo en principio."
+    },
+    {
+     "sym": "η",
+     "latex": "\\eta_{\\text{aire}}",
+     "name": "Viscosidad dinámica del aire a 20 °C",
+     "value": "1,81 · 10⁻⁵",
+     "unit": "Pa · s",
+     "why": "El número con el que contrastamos el cálculo. Lo importante no es su valor en sí, sino la dirección del cambio: a 0 °C la viscosidad del aire es 1,72·10⁻⁵, a 100 °C ya es 2,17·10⁻⁵ — un aumento de una cuarta parte. El agua en el mismo intervalo se vuelve seis veces más fluida. Dos sustancias, una misma escala de temperaturas, signos opuestos — y este es el mejor argumento de que los mecanismos son diferentes.",
+     "mnemo": "Dieciocho micropascales por segundo. El agua tiene mil — exactamente cincuenta y cinco veces más. Es fácil de recordar y útil: en problemas de flujo sobre superficies y en tuberías, estos dos números se necesitan constantemente."
+    },
+    {
+     "sym": "Pr",
+     "latex": "\\Pr_{\\text{aire}}",
+     "name": "Número de Prandtl para el aire",
+     "value": "0,71",
+     "unit": "adimensional",
+     "why": "El resultado de todo el tema en un solo número: el impulso y el calor se difunden en el gas casi con la misma rapidez, porque los transporta el mismo portador. Es notable que este número casi no dependa del tipo de gas: para el hidrógeno es 0,70, para el xenón 0,68, aunque las masas de sus moléculas difieren en sesenta y cinco veces. En los líquidos no existe tal constancia — desde 0,025 para el mercurio hasta decenas de miles para la glicerina.",
+     "mnemo": "Cero coma siete — tanto para el gas más ligero como para el más pesado. Un número que no recuerda de qué está hecho el gas, porque solo recuerda el mecanismo."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Cómo se relaciona con el resto del curso",
+   "lead": "Esta sección cierra el tema desde dentro y se conecta con dos vecinas: con la física molecular que queda atrás y con la hidrodinámica que viene adelante.",
+   "items": [
+    {
+     "h": "Las dos primeras secciones de este tema",
+     "text": "La tríada de coeficientes se ha cerrado: la difusión transporta partículas, la conductividad térmica transporta energía, la viscosidad transporta impulso, y en las tres aparece el mismo factor ⅓λ⟨v⟩. Esto proporciona un método de autocomprobación que no existía cuando el fenómeno era uno solo. Mide dos de los tres coeficientes, divídelos — y obtienes un número que la teoría predice de antemano. Si es del orden de la unidad, el mecanismo es el correcto; si es del orden de cien, has pasado algo por alto."
+    },
+    {
+     "h": "Líquidos y gases en movimiento",
+     "text": "Allí la viscosidad entraba en la ley de Newton, en la fórmula de Poiseuille y en el número de Reynolds como una propiedad tabulada de la sustancia. Ahora está calculada y, de paso, se explica la paradoja de esa sección: cinemáticamente, el aire es quince veces más viscoso que el agua. La razón se ve directamente en la fórmula: para un gas, η es pequeña, pero ρ es aún más pequeña, y la relación η/ρ = ⅓λ⟨v⟩ para un medio enrarecido resulta mayor. También queda claro por qué para un gas la viscosidad cinemática depende de la presión y la dinámica no: en ν la densidad está separada y ya no se simplifica."
+    },
+    {
+     "h": "Moléculas y temperatura",
+     "text": "La velocidad media se toma de la distribución de Maxwell, el camino libre medio de la sección eficaz de colisión; el mismo aparato que dio la ecuación de estado. Pero también hay una diferencia fundamental que vale la pena señalar. Un gas ideal en equilibrio no tiene gradientes y no hay nada que transportar. Los fenómenos de transporte son la primera, la más débil desviación del equilibrio, y toda la teoría cinética del transporte vive precisamente en esta estrecha franja: la desviación ya existe, pero aún es lineal."
+    },
+    {
+     "h": "Tecnología de vacío y microtecnología",
+     "text": "Cuando el camino libre medio crece hasta las dimensiones del espacio, la viscosidad deja de ser una propiedad de la sustancia. De ahí el diseño del termo, el cálculo de sistemas de vacío, el comportamiento de los espejos microelectromecánicos con espacios de micras y la aerodinámica de una nave de reentrada a cien kilómetros de altitud. El criterio es el mismo: el número de Knudsen, la relación entre λ y la dimensión característica."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Curiosidad: compruébelo con sus manos",
+   "lead": "La viscosidad de un gas no se puede captar en la cocina: el aire es demasiado fluido y su viscosidad demasiado pequeña. Pero la segunda mitad de la afirmación se capta perfectamente: cómo se comporta un líquido al calentarse. Precisamente la oposición de signos es el resultado principal de esta sección.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "experimento de cocina",
+     "h": "Agua y aceite, fríos y tibios",
+     "text": "Necesitarás dos pajitas para cóctel del mismo diámetro, agua y aceite vegetal. La pajita es imprescindible: por una boca ancha el líquido fluye por inercia y la viscosidad casi no influye, pero en un canal estrecho funciona la fórmula de Poiseuille y el tiempo de vaciado es directamente proporcional a la viscosidad. Vierta 20 ml de cada líquido en vasos idénticos, ponga la mitad en el refrigerador y la mitad en agua tibia (unos 40 °C), déjelos reposar una hora para que se iguale la temperatura. Luego deje que cada uno fluya a través de la pajita y mida el tiempo. Pregunta de antemano: ¿en cuál líquido el calentamiento cambiará más el tiempo, en el agua o en el aceite?",
+     "answer": "En el aceite, y con gran diferencia. El agua a 5 °C tiene una viscosidad de 1,52 mPa·s, a 40 °C de 0,65 mPa·s, es decir, el tiempo de vaciado cambia aproximadamente al doble. El aceite en el mismo intervalo pasa de unos 150 mPa·s a 30 mPa·s, es decir, cinco veces. De estos números se puede extraer la energía de barrera mediante la fórmula de Arrhenius: para el agua resulta unos 17 kJ por mol, para el aceite unos 33. Las moléculas largas del aceite están más enganchadas entre sí y les resulta más difícil pasar entre las vecinas, por eso la sensibilidad a la temperatura es mayor. Ahora imagine mentalmente repetir el mismo experimento con aire. Calentar de 5 a 40 °C aumentará su viscosidad aproximadamente un nueve por ciento: el aire se volverá MÁS DENSO. En ningún recipiente de cocina se puede notar, pero en el cálculo de la refrigeración de un radiador o en la aerodinámica de un escape caliente, ese es exactamente el signo que hay que poner."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "experimento de cocina",
+     "h": "Bola en miel, fría y caliente",
+     "text": "En el tema de los flujos, la bola en miel se comparó con la bola en agua; aquí cambiamos no el líquido, sino la temperatura. Tome dos frascos transparentes idénticos de miel líquida, ponga uno en el refrigerador y el otro en agua tibia no más de 40 grados (por encima la miel se estropea). Déjelos reposar una hora, mida la temperatura de ambos. Marque dos marcas con un rotulador a 10 cm por debajo de la superficie y deje caer en cada uno una bola metálica idéntica (sirve una bola de rodamiento de unos 4 mm de diámetro). Mida el tiempo entre las marcas. Pregunta: ¿cuántas veces más rápido caerá la bola en la miel tibia: dos veces, cinco o veinte?",
+     "answer": "Unas veinte o treinta veces, y es el resultado más convincente de todos los experimentos de cocina del tema. Según la fórmula de Stokes, la velocidad es inversamente proporcional a la viscosidad, por lo tanto el tiempo es directamente proporcional a ella. La miel a 10 °C tiene una viscosidad del orden de 40 Pa·s, a 40 °C del orden de uno y medio. Solo treinta grados de calentamiento y una diferencia de casi treinta veces: esto es la exponencial en acción, una ley de potencias no puede dar eso. Calcule la energía de barrera según Arrhenius: saldrá unos 85 kJ por mol, aproximadamente como cuatro enlaces de hidrógeno. Eso es lo que necesita romper una molécula de azúcar para pasar entre sus vecinas. Compárelo con un gas: para que la viscosidad del aire aumente treinta veces, habría que calentarlo a varios cientos de miles de kelvins, y además antes se convertiría en plasma. Un experimento, dos físicas opuestas."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoja",
+     "h": "El helio es siete veces más ligero que el aire y más viscoso que él",
+     "text": "La masa molar del helio es 4 frente a 29 del aire. La molécula es ligera, vuela más rápido que todas, se filtra primero por cualquier rendija: parecería que debería frenar menos que todas. Sin embargo, la viscosidad medida del helio a temperatura ambiente es 1,96·10⁻⁵ Pa·s frente a 1,81·10⁻⁵ del aire: el helio es más viscoso. ¿Cómo se concilia esto con la fórmula?",
+     "answer": "Se concilia directamente en ella. En la expresión η = 2√(mkT/π)/(3σ) la masa y la sección tiran en direcciones opuestas, y en el helio gana la sección. La ligereza da un factor √(4/29) ≈ 0,37: el helio debería ser 2,7 veces MENOS viscoso. Pero el átomo de helio también es pequeño: su diámetro efectivo es 0,22 nm frente a 0,37 nm de las moléculas de aire, por lo tanto la sección σ = πd² es menor en (0,22/0,37)² ≈ 0,35 veces, y está en el denominador. Resultado: 0,37 / 0,35 ≈ 1,05: el helio resulta ser un cinco por ciento más viscoso que el aire, el manual da ocho. Más precisa no puede ser esta estimación: los diámetros efectivos de las moléculas se conocen con una precisión de unos pocos por ciento, y entran al cuadrado. Compruébelo con el argón: es más pesado que el aire (√(40/29) = 1,17), y su diámetro es casi el mismo, y la viscosidad resulta 2,1·10⁻⁵ frente a los 2,2·10⁻⁵ tabulados. Por separado conviene separar dos reputaciones del helio. A través de un orificio del tamaño de una molécula o a través de un espesor de goma, el helio realmente se escapa más rápido que todos: allí no actúa la viscosidad, sino la velocidad térmica y el tamaño del átomo. Pero por un canal largo, donde el flujo es viscoso, el helio con la misma diferencia de presión avanza un poco MÁS LENTO que el aire. El globo se desinfla no porque el helio sea fluido, sino porque se filtra a través de la goma."
+    },
+    {
+     "icon": "estimate",
+     "kind": "estimación",
+     "h": "Tamaño de la molécula a partir de la viscosidad: el camino de Loschmidt",
+     "text": "La fórmula se puede dar la vuelta. La viscosidad medida da el recorrido libre medio, el recorrido libre da la sección de colisión, la sección da el diámetro de la molécula. Intente recorrer la cadena usted mismo: η = 1,81·10⁻⁵ Pa·s, ρ = 1,2 kg/m³, ⟨v⟩ = 463 m/s, concentración n = p/kT = 2,5·10²⁵ m⁻³.",
+     "answer": "λ = 3η/(ρ⟨v⟩) ≈ 9,8·10⁻⁸ m; σ = 1/(√2·nλ) ≈ 2,9·10⁻¹⁹ m²; d = √(σ/π) ≈ 3,0·10⁻¹⁰ m, es decir, 0,3 nanómetros. El valor de referencia para el nitrógeno es 0,37 nm. El error es menor que en la propia viscosidad, y no es casualidad: el diámetro se extrae de ella bajo la raíz, por lo que el error en el factor ⅓ se debilita a la mitad en el exponente. Exactamente esta cadena la recorrió Josef Loschmidt en 1865, añadiendo una segunda ecuación: la densidad del aire líquido, que da el número de moléculas multiplicado por el cubo del diámetro. De las dos ecuaciones encontró tanto el tamaño como la concentración: alrededor de un nanómetro y aproximadamente 1,8·10¹⁸ moléculas por centímetro cúbico. El diámetro está sobreestimado tres veces, la concentración subestimada quince veces: la primera estimación de la historia del tamaño del átomo falló solo por un orden de magnitud, y eso que la mitad de los físicos de entonces ni siquiera consideraban que los átomos existieran."
+    },
+    {
+     "icon": "edge",
+     "kind": "límite de aplicabilidad",
+     "h": "Unidad en gases, seis órdenes de magnitud en líquidos",
+     "text": "El número de Prandtl de cualquier gas es alrededor de 0,7 y casi no depende de la especie. En líquidos, desde 0,025 en mercurio hasta decenas de miles en glicerina. ¿De dónde viene tal abismo entre los dos estados de agregación?",
+     "answer": "De que en un gas los tres transportes los realiza el mismo portador: la molécula que vuela libremente, y en cada coeficiente aparece el mismo factor ⅓λ⟨v⟩. Su relación debe ser un número del orden de la unidad, y lo es. En un líquido denso los portadores son diferentes. El impulso se transmite mediante la interacción directa de los vecinos, el calor también, pero en un metal líquido el principal portador de calor son los electrones de conducción; de ellos se habló en el segundo párrafo, donde de esto se obtuvo el número de Lorentz. Los electrones no tienen nada que ver con la viscosidad. De ahí el mercurio: el calor se propaga en él mucho más rápido que el impulso. En la glicerina hay una desviación inversa: la viscosidad es enorme y la conductividad térmica normal. La conclusión práctica para el ingeniero es dura: las fórmulas de criterio de transferencia de calor obtenidas en aire no se pueden trasladar al sodio líquido en un reactor: allí hay otra física, no otro valor del coeficiente. Y una advertencia honesta: no se ha construido hasta ahora una teoría general del transporte en líquidos densos comparable en rigor a la teoría cinética de los gases. En gases calculamos los coeficientes desde primeros principios, en líquidos medimos y ajustamos."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "Qué simplificamos y cómo se corrige",
+   "blocks": [
+    {
+     "h": "El factor ⅓: de dónde salió el error de factor uno y medio",
+     "text": "Hubo tres simplificaciones, y las dos primeras no son errores en la misma dirección, sino un par que se cancela. Primera: supusimos que las moléculas vuelan estrictamente a lo largo de los ejes, y obtuvimos un flujo de ⅙n⟨v⟩ en cada dirección; un cálculo honesto por ángulos da ¼n⟨v⟩, un factor de uno y medio mayor. Segunda: la distancia desde la cual una molécula trae impulso ajeno la tomamos igual a λ, pero llega en ángulo, y la proyección de esa distancia sobre la normal es en promedio ⅔λ, un factor igual de menor. Uno y medio por dos tercios da uno: un cálculo cuidadoso por ángulos devuelve exactamente nuestro tercio, y el error sigue sin explicarse. Lo explica la tercera, la más sutil: las moléculas rápidas vuelan más lejos y cruzan la superficie con más frecuencia, por lo que no se puede promediar el producto como producto de promedios: esta correlación vuelve a aumentar el resultado. La solución rigurosa de la ecuación de Boltzmann para esferas duras, obtenida por Chapman y Enskog de forma independiente en plena Primera Guerra Mundial, da una fórmula cerrada. Numéricamente corresponde a un factor de 0,499 en lugar de nuestro tercio, es decir, exactamente la discrepancia que medimos en el aire.",
+     "latex": "\\eta = \\frac{5}{16 d^{2}}\\sqrt{\\frac{m k T}{\\pi}} = 0{,}499\\,\\rho\\,\\bar v\\,\\lambda"
+    },
+    {
+     "h": "La fórmula de Sutherland: por qué no es una raíz",
+     "text": "Nuestra dependencia η ∝ √T surgió de una única suposición: que la sección eficaz de colisión σ es constante, como en bolas de billar. Las moléculas reales se atraen entre sí al acercarse, y la trayectoria de una molécula lenta se curva más: golpea a su vecina incluso cuando geométricamente habría pasado de largo. Por tanto, la sección eficaz es mayor que la geométrica, y tanto más cuanto más frío es el gas. Con el calentamiento, la atracción pierde importancia, σ disminuye, y la viscosidad crece más rápido que la raíz. Sutherland en 1893 redujo esta corrección a una sola constante S con dimensiones de temperatura, en esencia, a la profundidad de la atracción en grados. Para el aire, S ≈ 111 K. La fórmula mantiene el aire desde temperaturas criogénicas hasta mil quinientos kelvin con precisión de unos pocos por ciento: a 0 °C da 1,72·10⁻⁵, a 20 °C da 1,81·10⁻⁵, a 100 °C da 2,17·10⁻⁵, y a diez kilómetros de altitud, esos 1,46·10⁻⁵ que nuestra raíz no daba. El exponente efectivo resulta ser alrededor de 0,76, entre la raíz y la unidad. Maxwell en su estrecho rango midió exactamente la unidad y construyó un modelo de moléculas que se repelen como la quinta potencia de la distancia; el modelo resultó más duradero que la medición que lo originó.",
+     "latex": "\\eta(T) = \\eta_0 \\left(\\frac{T}{T_0}\\right)^{3/2} \\frac{T_0 + S}{T + S}, \\qquad S_{\\text{aire}} \\approx 111\\ \\text{K}"
+    },
+    {
+     "h": "El número de Knudsen: cuatro regímenes en lugar de uno",
+     "text": "Todo lo expuesto es válido mientras la molécula colisione con otras moléculas más a menudo que con las paredes. La medida es la relación entre el recorrido libre medio y el tamaño característico. Cuando Kn es menor que 0,01, el gas se comporta como un medio continuo: todo lo que derivamos es válido, y en la pared se cumple la condición de no deslizamiento. De 0,01 a 0,1 tenemos el régimen de deslizamiento: el gas ya resbala en la pared, y la condición de no deslizamiento debe corregirse con una corrección proporcional a λ. De 0,1 a 10, el régimen de transición, el más incómodo: ni la teoría cinética en nuestra forma ni las ecuaciones del medio continuo funcionan, y se calcula mediante simulación directa de colisiones con el método de Monte Carlo. Por encima de 10, llega el régimen de flujo molecular libre: las moléculas vuelan de pared a pared, el concepto de viscosidad como propiedad del material pierde sentido, y la transferencia de impulso se vuelve directamente proporcional a la presión. Para la conductividad térmica, esta misma transición se analizó en la segunda sección con el ejemplo del termo; para la viscosidad, es importante en otros lugares. Los espejos microelectromecánicos con separaciones de una micra: a presión atmosférica, Kn es alrededor de 0,07, ya en régimen de deslizamiento, y el amortiguamiento se calcula con la corrección. Los sistemas de vacío, donde el flujo viscoso se convierte en molecular y las fórmulas para calcular las bombas cambian por completo. El descenso de una nave desde la órbita: a cien kilómetros de altitud, λ se mide en centímetros; a ciento cincuenta, en metros, y la aerodinámica habitual no funciona en absoluto. Finalmente, las películas delgadas de lubricante y los poros de los catalizadores, donde la separación es comparable al recorrido libre ya a presión ordinaria.",
+     "latex": "\\mathrm{Kn} = \\frac{\\lambda}{L}"
+    },
+    {
+     "text": "La conclusión general de las tres correcciones es la misma, y conviene tenerla presente aparte de las fórmulas. La teoría cinética de los gases no destaca por su precisión, sino porque predice la ESTRUCTURA de las dependencias sin ajustar ningún parámetro: cómo depende la viscosidad de la presión (no depende), de la temperatura (aumenta), de la masa de la molécula y de su tamaño. Los factores numéricos los da con una precisión de hasta un factor de uno y medio, y se refinan mediante teoría rigurosa o con una única medición. Este es el orden típico de las cosas en física: primero el mecanismo y los exponentes, luego los coeficientes."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "La viscosidad de un gas es la transferencia de impulso a través del flujo por moléculas que vuelan entre colisiones, no una fuerza de fricción separada. El coeficiente se compone de tres factores: η = ⅓ρ⟨v⟩λ. De aquí se derivan dos consecuencias no obvias: la viscosidad del gas no depende de la presión, porque la densidad se cancela con el camino libre medio, y aumenta con el calentamiento aproximadamente como √T, mientras que en un líquido cae exponencialmente. Las mismas λ y ⟨v⟩ dan el coeficiente de difusión y la conductividad térmica: tres fenómenos de transporte, una misma imagen con diferente carga.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "Tres factores en lugar de una tabla",
+     "text": "η = ⅓ρ⟨v⟩λ: cuántos portadores hay en un metro cúbico, qué tan rápido se mueven, qué tan lejos llevan el impulso ajeno"
+    },
+    {
+     "icon": "fact",
+     "title": "La presión no tiene nada que ver",
+     "text": "Si se extrae la mitad del gas, hay la mitad de portadores, pero cada uno recorre el doble. El producto ρλ no depende de la concentración"
+    },
+    {
+     "icon": "scale",
+     "title": "El gas se espesa, el líquido se adelgaza",
+     "text": "√T contra exp(E/kT). Son mecanismos diferentes, no coeficientes diferentes en una misma fórmula"
+    },
+    {
+     "icon": "edge",
+     "title": "Todo depende de que λ sea pequeño",
+     "text": "En cuanto el recorrido libre crece hasta el tamaño del espacio, la viscosidad deja de ser una propiedad del material y recuerda la presión"
+    }
+   ],
+   "where": [
+    "Tecnología de vacío: el flujo viscoso se vuelve molecular cuando λ alcanza el diámetro del tubo",
+    "Aerodinámica a gran altitud: el aire a 10 km está tres veces más enrarecido, pero la viscosidad es casi la misma: Re cae debido a la densidad",
+    "Cálculos de transferencia de calor: Pr ≈ 0,7 para cualquier gas, por lo que las fórmulas obtenidas con aire se aplican a otros gases",
+    "Descenso orbital y micromecánica: el número de Knudsen determina si el concepto de viscosidad es aplicable"
+   ],
+   "watchOut": "Tres errores son más comunes que otros. El primero es transferir al gas la intuición cotidiana: «caliente significa más fluido» es cierto para líquidos y falso para gases; los mecanismos son diferentes y el signo es opuesto. El segundo es considerar el factor ⅓ como exacto: subestima la respuesta aproximadamente una vez y media, y si la tarea requiere un número, no una estructura, se debe usar la η tabulada o la fórmula de Sutherland. El tercero, el más peligroso, es aplicar η donde el camino libre medio es comparable al tamaño del espacio: en tecnología de vacío, en microcanales y a grandes altitudes, la viscosidad deja de ser una propiedad del material y comienza a depender de la geometría."
+  },
+  "quiz": [
+   {
+    "id": "tv1",
+    "type": "mcq",
+    "q": "Se extrajo la mitad del aire de un recipiente, sin cambiar la temperatura. ¿Qué ocurrió con la viscosidad del gas restante?",
+    "options": [
+     "No cambió",
+     "Cayó a la mitad: hay la mitad de moléculas portadoras",
+     "Aumentó al doble: las moléculas tienen más espacio para volar",
+     "Cayó a la cuarta parte: colisiones menos frecuentes y menor densidad"
+    ],
+    "answer": 0,
+    "why": "En la fórmula η = ⅓ρ⟨v⟩λ, la densidad cae a la mitad, pero el camino libre medio λ = 1/(√2·nσ) aumenta al doble: hay menos portadores, pero cada uno lleva el impulso el doble de profundo en la capa vecina. El producto ρλ no depende de la concentración, y la velocidad media solo depende de la temperatura. Precisamente este resultado Maxwell lo consideró increíble en 1860 y seis años después lo verificó con un experimento de discos de vidrio oscilantes: la viscosidad se mantuvo constante en todo el rango de presiones accesible. Una salvedad: así será mientras λ sea mucho menor que las dimensiones del recipiente; en vacío profundo aparece la dependencia de la presión, y eso es otro régimen, tratado en el apéndice.",
+    "hint": "Escriba cómo depende cada factor en η = ⅓ρ⟨v⟩λ de la concentración de moléculas n, y sume los exponentes."
+   },
+   {
+    "id": "tv2",
+    "type": "mcq",
+    "q": "¿Por qué al calentar, la viscosidad de un gas aumenta y la de un líquido disminuye?",
+    "options": [
+     "En un gas, el impulso lo transportan moléculas que vuelan libremente, y su velocidad térmica aumenta con la temperatura; en un líquido, las moléculas están empaquetadas, y el calentamiento les facilita pasar entre vecinas",
+     "En un gas, al calentar, la densidad aumenta, y en un líquido disminuye",
+     "En un gas, al calentar, el camino libre medio aumenta, y en un líquido disminuye",
+     "Son magnitudes diferentes: en un gas la viscosidad se mide por la amortiguación de oscilaciones, y en un líquido por el flujo a través de un tubo"
+    ],
+    "answer": 0,
+    "why": "El signo diferente no proviene de coeficientes distintos, sino de mecanismos distintos. En un gas, el portador de impulso es una molécula que vuela, y la viscosidad hereda la dependencia de su velocidad con la temperatura: ⟨v⟩ ∝ √T, por lo tanto η aumenta. En un líquido no hay camino libre medio, las moléculas están en contacto, y el deslizamiento de capas requiere que una molécula pase entre vecinas superando una barrera de energía; la probabilidad de esto sigue un factor de Boltzmann, por lo que la viscosidad cae exponencialmente con el calentamiento. La segunda opción es incorrecta simplemente por los hechos: al calentar en un recipiente abierto, la densidad cae en ambos. La tercera sustituye el mecanismo por la consecuencia: a densidad constante, λ no depende de la temperatura, y en un líquido esa magnitud no está definida. La cuarta es incorrecta de hecho: ambos métodos de medición dan la misma magnitud, y en eso se basa la coherencia de las tablas.",
+    "hint": "Pregúntese qué transporta el impulso en cada caso, y qué cambia con el calentamiento en el portador."
+   },
+   {
+    "id": "tv3",
+    "type": "free",
+    "q": "Con sus palabras: ¿por qué el coeficiente de difusión, la conductividad térmica y la viscosidad de un gas se expresan mediante el mismo producto λ·⟨v⟩?",
+    "keywords": [
+     "transporte",
+     "camino",
+     "colisión",
+     "moléculas",
+     "gradiente",
+     "portador",
+     "impulso",
+     "energía"
+    ],
+    "needed": 2,
+    "why": "Porque en los tres casos funciona el mismo mecanismo: una molécula vuela de colisión en colisión y lleva consigo lo que poseía en el lugar de la última colisión. Solo cambia la carga: la propia molécula marcada da la difusión, su energía térmica da la conductividad térmica, su impulso a lo largo del flujo da la viscosidad. Por eso en cada coeficiente aparece el factor ⅓λ⟨v⟩ — en esencia, 'qué área cubre el portador por segundo' — y los coeficientes se diferencian solo en cuánta carga hay por metro cúbico: unidad para el número de partículas, ρc para la energía, ρ para el impulso. De aquí se sigue una predicción comprobable: las relaciones entre coeficientes son números del orden de la unidad, y en gases Pr y Sc efectivamente están alrededor de 0,7–1.",
+    "hint": "Analice qué hay de común y qué difiere en los tres fenómenos. El mecanismo es el mismo: ¿qué lleva la molécula a través del límite de la capa?"
+   },
+   {
+    "id": "tv4",
+    "type": "estimate",
+    "q": "Estime el camino libre medio de las moléculas de aire a una presión de 10⁻³ atmósferas y temperatura ambiente. A presión atmosférica es de 68 nm. Respuesta en micrómetros.",
+    "answer": 68,
+    "unit": "μm",
+    "why": "El camino libre medio λ = 1/(√2·nσ) es inversamente proporcional a la concentración, y la concentración a temperatura constante es proporcional a la presión. Por lo tanto, λ ∝ 1/p: bajar la presión mil veces aumenta el camino exactamente mil veces, de 68 nm a 68 μm. Una estimación de sentido común: 68 micrómetros es ya el grosor de un cabello humano, es decir, en un canal de una décima de milímetro de ancho, el gas a esa presión dejaría de ser un medio continuo, y el concepto de viscosidad no se le podría aplicar. De ahí la regla práctica del especialista en vacío: mientras el camino sea menor que el diámetro del tubo, el gas se evacúa en régimen viscoso, pero cuando lo supera, es molecular, y hay que calcular con otras fórmulas.",
+    "hint": "La concentración de moléculas a temperatura constante es proporcional a la presión, y el camino libre medio es inversamente proporcional a la concentración. ¿En cuánto disminuyó la presión?",
+    "tolFactor": 1.5
+   }
+  ]
+ },
+ "ar": {
+  "title": "لزوجة الغاز: نقل كمية التحرك",
+  "subtitle": "الفقرة 3 · لماذا لا تعتمد لزوجة الغاز على الضغط",
+  "intro": [
+   "في الفقرتين الأوليين من هذا الموضوع، قمنا بنقل أشياء يسهل تخيلها عبر الغاز: أولاً الجزيئات نفسها، ثم الطاقة. بقيت كمية ثالثة — كمية التحرك. تُنقل بنفس الطريقة تمامًا، لكنها تبدو مختلفة تمامًا: ليس من خلال انتشار بقعة أو معادلة درجات الحرارة، بل من خلال قوة يعمل بها طبقة غاز على إبطاء الطبقة المجاورة. تسمى هذه القوة اللزوجة، ولا يوجد فيها سوى الآلية التي تم تحليلها بالفعل: جزيء يغادر طبقته ويحمل معه كمية تحركه.",
+   "الجانب العياني معروف بالفعل من موضوع السوائل والغازات المتحركة. هناك، دخلت اللزوجة η في قانون نيوتن لإجهاد القص، وفي معادلة بويزويل، وفي رقم رينولدز — كخاصية للمادة تُؤخذ من الجدول دون سؤال عن مصدرها. هنا سنحسب هذا الجدول. من متوسط المسار الحر والسرعة الحرارية — وهما كميتان موجودتان بالفعل على منزلقات المنصة — سنحصل على رقم جاهز، ويمكن مقارنته بالقياس مباشرة في هذه الفقرة.",
+   "ستكون الإجابة غريبة مرتين. أولاً، لزوجة الغاز لا تعتمد على الضغط: قم بتفريغ نصف الهواء من الغرفة، وسيظل الباقي يبطئ بنفس الطريقة تمامًا. ثانيًا، عند التسخين تزداد، بينما تقل عند أي سائل. الأول لم يعجب مؤلف الحساب نفسه لدرجة أنه أجرى تجربة في منزله، على أمل دحضها. أكدت التجربة الحساب — وفي الوقت نفسه دحضت نموذج الجزيئات الذي بُني عليه الحساب."
+  ],
+  "standNote": "المنصة لهذا الموضوع واحدة لجميع الفقرات الثلاث، وهنا تعمل بشكل جيد كما في الأولى. تحدد المنزلقات متوسط المسار الحر λ والسرعة الحرارية ⟨v⟩ — وهما الرقمان اللذان ستُبنى منهما اللزوجة الآن. في النافذة، تعرض المنصة معامل الانتشار D = λ⟨v⟩/3؛ تُحسب اللزوجة منه بضربه في الكثافة: η = ρD. اضبط λ = 70 نانومتر و ⟨v⟩ = 450 م/ث — هذا هو الهواء عند درجة حرارة الغرفة. ستعرض المنصة D حوالي 1.05 × 10⁻⁵ م²/ث؛ اضربه في كثافة الهواء 1.2 كجم/م³ وستحصل على η ≈ 1.3 × 10⁻⁵ باسكال·ثانية. القيمة الجدولية هي 1.81 × 10⁻⁵ — خطأ بمقدار مرة ونصف، وفي نهاية الفقرة سنحلل مصدره. الآن التجربة الرئيسية على المنصة. اضغط الغاز سبع مرات: سينخفض متوسط المسار الحر من 70 نانومتر إلى 10 نانومتر، وسينخفض D بنفس المقدار. يبدو أن اللزوجة قد انهارت. لكن الكثافة زادت سبع مرات بالضبط عند الضغط، و η = ρD — حاصل ضرب انخفض فيه أحد العاملين بينما زاد الآخر. لم تتغير اللزوجة. لا توجد كثافة على المنصة، يجب أن تبقى في رأسك، ولهذا السبب يستحق القيام بذلك ببطء، باستخدام المنزلق، مع متابعة الرقم D.",
+  "formula": {
+   "name": "لزوجة الغاز حسب النظرية الحركية",
+   "latex": "\\eta = \\tfrac{1}{3}\\,\\rho\\,\\bar v\\,\\lambda = \\frac{m\\,\\bar v}{3\\sqrt{2}\\,\\sigma}",
+   "alsoKnown": "استقلال لزوجة الغاز عن الضغط يُعرف بقانون ماكسويل. مع D = ⅓λ⟨v⟩ و κ = ⅓ρc⟨v⟩λ تشكل هذه الصيغة ثلاثية معاملات النقل",
+   "authors": [
+    {
+     "who": "رودولف كلوزيوس",
+     "year": "1858",
+     "what": "قدم مفهوم متوسط المسار الحر – المسافة التي يقطعها الجزيء بين التصادمات؛ وبدونه لم يكن من الممكن قول أي شيء كمي في النظرية الحركية"
+    },
+    {
+     "who": "جيمس كليرك ماكسويل",
+     "year": "1860",
+     "what": "استنتج أن لزوجة الغاز لا تعتمد على كثافته، واعتبر النتيجة بنفسه غير معقولة"
+    },
+    {
+     "who": "جيمس كليرك ماكسويل وكاثرين ماكسويل",
+     "year": "1866",
+     "what": "أجروا تجربة بأقراص زجاجية متأرجحة في وعاء مفرغ وأكدوا الاستقلال عن الضغط؛ كما قاسوا زيادة اللزوجة مع درجة الحرارة"
+    },
+    {
+     "who": "جوزيف لوشميت",
+     "year": "1865",
+     "what": "قلب الصيغة رأسًا على عقب: من اللزوجة المقاسة حصل على متوسط المسار الحر، ومنه حصل على أول تقدير في التاريخ لحجم الجزيء"
+    },
+    {
+     "who": "ويليام ساذرلاند",
+     "year": "1893",
+     "what": "اقترح تصحيحًا يفسر لماذا تزداد اللزوجة بشكل أسرع من الجذر التربيعي لدرجة الحرارة: مقطع التصادم نفسه يعتمد على الطاقة"
+    },
+    {
+     "who": "سيدني تشابمان وديفيد إنسكوج",
+     "year": "1916–1917",
+     "what": "بنيا بشكل مستقل نظرية صارمة للنقل في الغازات وحصلا على عوامل عددية دقيقة بدل التقديرات"
+    }
+   ],
+   "story": "في عام 1859، قرأ ماكسويل، الذي كان أستاذًا في أبردين آنذاك، عمل كلوزيوس حول متوسط المسار الحر وشرع في تطوير النظرية الحركية حتى الأرقام. في عمله «شروحات حول النظرية الحركية للغازات» حصل على نتيجة وصفها بنفسه بأنها غير معقولة: لزوجة الغاز يجب ألا تعتمد على كثافته. اعترف ماكسويل بصدق أن التجربة الوحيدة المعروفة لديه لا تبدو مؤكدة لهذا، وترك السؤال مفتوحًا لمدة ست سنوات. قرر أن يتحقق بنفسه، في لندن. كانت المعدات: ثلاثة أقراص زجاجية أفقية معلقة بتعليق الالتواء، تتأرجح بين أقراص ثابتة داخل جرس مفرغ. تم قياس لزوجة الهواء من خلال توهين التذبذبات. لم تكن الصعوبة في الفراغ بل في درجة الحرارة: لفصل تأثير الضغط والتسخين، كان لا بد من إبقاء الغرفة عند درجة حرارة معينة لساعات، من الباردة إلى تلك التي يصعب على الإنسان تحملها. تولت كاثرين ماكسويل أمر الموقد والغلايات؛ في رسائل ذلك الصيف وصف ماكسويل المختبر المنزلي كمكان حُكم عليه بالحرارة. نتيجة عام 1866: لم تتغير اللزوجة عند تغير الضغط عدة عشرات من المرات. لكن النتيجة الثانية كانت أهم من الأولى. زادت اللزوجة مع درجة الحرارة أسرع مما توقعته نظريته: ليس كجذر T، بل تقريبًا مثل T نفسها. نموذج الجزيئات ككرات بلياردو لم يستطع تفسير ذلك. استبدله ماكسويل بنموذج جسيمات تتنافر بقوة تتناقص مع القوة الخامسة للمسافة – لمثل هذا القانون يمكن حل معادلات النقل بدقة، و«جزيئات ماكسويل» لا تزال تستخدم كمثال تعليمي. المفارقة أن القياسات اللاحقة في نطاق واسع أعطت أسًا حوالي 0.76 – بين الجذر والواحد – أي أن القياس الذي أنتج النموذج لم يكن دقيقًا تمامًا. ومع ذلك، فقد نجا النموذج.",
+   "symbols": [
+    {
+     "sym": "η",
+     "latex": "\\eta",
+     "what": "اللزوجة الديناميكية للغاز",
+     "unit": "Pa·s",
+     "note": "نفس الكمية الموجودة في قانون نيوتن τ = η·dv/dy من موضوع التدفقات؛ هنا لا نأخذها من جدول بل نحسبها"
+    },
+    {
+     "sym": "ρ",
+     "latex": "\\rho",
+     "what": "كثافة الغاز",
+     "unit": "kg/m³",
+     "note": "هي أيضًا nm – تركيز الجزيئات مضروبًا في كتلة الجزيء الواحد؛ في الصيغة تعني «كم عدد الحاملات في المتر المكعب»"
+    },
+    {
+     "sym": "⟨v⟩",
+     "latex": "\\bar v",
+     "what": "متوسط السرعة الحرارية للجزيئات",
+     "unit": "m/s",
+     "note": "المتوسط وليس الجذر التربيعي المتوسط: للهواء عند 20 درجة مئوية هو 463 م/ث مقابل 502 م/ث – فرق ثمانية بالمئة، ولا ينبغي الخلط بينهما"
+    },
+    {
+     "sym": "λ",
+     "latex": "\\lambda",
+     "what": "متوسط المسار الحر",
+     "unit": "m",
+     "note": "إلى أي مدى يحمل الجزيء زخمًا غريبًا قبل أن يسلمه في تصادم؛ للهواء عند الضغط الجوي 68 نانومتر"
+    },
+    {
+     "sym": "m",
+     "latex": "m",
+     "what": "كتلة الجزيء الواحد",
+     "unit": "kg",
+     "note": "للهواء 4.8×10⁻²⁶ كجم – الكتلة المولية 29 جم/مول مقسومة على عدد أفوجادرو"
+    },
+    {
+     "sym": "σ",
+     "latex": "\\sigma",
+     "what": "مقطع التصادم",
+     "unit": "m²",
+     "note": "مساحة الهدف التي يجب إصابتها للتصادم: σ = πd²، حيث d هو القطر الفعال للجزيء"
+    },
+    {
+     "sym": "n",
+     "latex": "n",
+     "what": "تركيز الجزيئات",
+     "unit": "1/m³",
+     "note": "البطل الرئيسي للخطوة الخامسة: يدخل في ρ و λ بأسس متعاكسة وبالتالي يختفي من الإجابة"
+    },
+    {
+     "sym": "Pr",
+     "latex": "\\Pr",
+     "what": "عدد براندتل",
+     "unit": "بلا أبعاد",
+     "note": "نسبة اللزوجة الحركية إلى الانتشار الحراري: ما ينتشر في الغاز أسرع – الزخم أم الحرارة"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "الاشتقاق الدقيق",
+   "lead": "سنحتاج فقط إلى شيئين، كلاهما مألوفان بالفعل: تعريف القوة على أنها الدفع المنقول في الثانية، ومتوسط المسار الحر. لن نفترض أي «قانون احتكاك» منفصل — سيظهر من تلقاء نفسه، وهذا هو المحتوى الرئيسي للاشتقاق.",
+   "steps": [
+    {
+     "text": "لنأخذ غازًا بين لوحين: اللوح السفلي ثابت، والعلوي يتحرك على طول نفسه. التدفق المستقر هو طبقات، لكل منها سرعته المتوسطة u(y). سنفصل فورًا بين حركتين تحدثان في الغاز في نفس الوقت. الحركة الحرارية عشوائية، ومتساوية في جميع الاتجاهات، وسريعة جدًا: مئات الأمتار في الثانية. الانجراف منتظم، وموجه على طول اللوحين، وصغير: سنتيمترات في الثانية. يطير الجزيء تقريبًا كما في غاز ساكن، لكن كل جزيء يحمل إضافة صغيرة من الزخم على طول التدفق، تساوي m·u(y). هذه الإضافة هي موضوع كل الحسابات التالية.",
+     "latex": "v \\approx \\bar v \\gg u(y), \\qquad p_x = m\\,u(y)",
+     "figure": "gasshear",
+     "figCaption": "الانجراف هو ضبط دقيق فوق الفوضى: أسهم الحركة الحرارية أطول بمراتب"
+    },
+    {
+     "text": "دعونا نرسم سطحًا تخيليًا A داخل الغاز، موازيًا للوحين، ونحسب عدد الجزيئات التي تعبره في الثانية. الحساب هو نفسه تمامًا كما في الفقرة الأولى من الموضوع: نأخذ أبسط نموذج للفوضى، حيث يتم تقسيم الجزيئات بالتساوي بين الاتجاهات الستة للمحاور، ونحصل على سدس لأعلى وسدس لأسفل. ملاحظة لم تكن مطلوبة في الفقرة الأولى، وستكون مطلوبة هنا: المتوسط الصادق على الاتجاهات يعطي ليس سدسًا بل ربعًا. نأخذ السدس من أجل الوضوح، والتحليل في الملحق الأول وفي الملحق.",
+     "latex": "\\Phi = \\tfrac{1}{6}\\, n\\, \\bar v \\quad \\text{جزيء لكل متر مربع في الثانية، في كل اتجاه}",
+     "figure": "sixways",
+     "figCaption": "أربعة اتجاهات تسير على طول السطح ولا تنقل شيئًا عبره؛ فقط اتجاهان يعملان"
+    },
+    {
+     "text": "الآن السؤال الرئيسي: ما الزخم الذي يحمله كل جزيء؟ ليس الذي كان لديه في البداية، بل الذي اكتسبه في آخر تصادم. الجزيء الذي يعبر السطح من أعلى إلى أسفل، في المتوسط، اصطدم آخر مرة عند مسافة λ أعلاه — هناك اكتسب إضافة الانجراف لطبقته. إذن، يحمل لأسفل m·u(y+λ). والجزيء المقابل يحمل لأعلى m·u(y−λ). الجزيء لا يتذكر المكان الذي وجدناه فيه، بل المكان الذي اتفق فيه آخر مرة مع شخص آخر على السرعة.",
+     "latex": "p_{\\downarrow} = m\\,u(y+\\lambda), \\qquad p_{\\uparrow} = m\\,u(y-\\lambda)",
+     "figure": "momentumcarry",
+     "figCaption": "عبر نفس السطح يمر تدفقان متعاكسان من الجزيئات، لكن حمولاتهما مختلفة"
+    },
+    {
+     "text": "نجمع. عدد الجزيئات في كلا الاتجاهين متساوٍ — المادة لا تتدفق، الغاز لا ينقص من الأعلى ولا من الأسفل. لكن الزخم يتدفق، لأن ما يُحضر من الأعلى يختلف عن ما يُحضر من الأسفل. نفك الفرق بالنسبة إلى λ الصغيرة: الحدود الزوجية تلغي تمامًا عند الطرح، ويبقى ضعف المشتقة. تدفق الزخم الناتج لكل وحدة مساحة هو إجهاد القص. بمقارنته بقانون نيوتن، نقرأ المعامل.",
+     "latex": "\\tau = \\tfrac{1}{6} n \\bar v\\, m\\left[u(y+\\lambda)-u(y-\\lambda)\\right] = \\tfrac{1}{3}\\, n m\\, \\bar v \\lambda\\, \\frac{du}{dy} \\;\\Longrightarrow\\; \\eta = \\tfrac{1}{3}\\rho\\,\\bar v\\,\\lambda",
+     "figure": "etaassemble",
+     "figCaption": "الاحتكاك بين الطبقات لم يُفترض، بل حُصل عليه: إنه ببساطة تدفق الزخم عبر التدفق"
+    },
+    {
+     "text": "الصيغة جاهزة بالفعل، لكن الأكثر إثارة للاهتمام يبدأ عندما نعوض فيها متوسط المسار الحر. إنه معروف من الفقرة الأولى: λ = 1/(√2·nσ). الكثافة أيضًا تُعبر عنها بالتركيز: ρ = nm. نعوض كلاهما — ويختفي التركيز. هذه ليست مصادفة جبرية، بل بيان فيزيائي: خفف الغاز إلى النصف، وسيصبح عدد حاملي الزخم نصف العدد، لكن كل واحد سيحمل حمولته إلى ضعف العمق في الطبقة المجاورة. النقص في العدد يعوض تمامًا بالزيادة في المدى.",
+     "latex": "\\eta = \\tfrac{1}{3}\\, nm\\, \\bar v \\cdot \\frac{1}{\\sqrt{2}\\, n \\sigma} = \\frac{m\\,\\bar v}{3\\sqrt{2}\\,\\sigma}",
+     "figure": "pcancel",
+     "figCaption": "على اليسار: قفزات قصيرة كثيرة، وعلى اليمين: قفزات طويلة قليلة؛ حاصل الضرب هو نفسه"
+    },
+    {
+     "text": "إذن ما الذي يتحكم في لزوجة الغاز؟ فقط درجة الحرارة ونوع الجزيئات. نعوض متوسط السرعة من توزيع ماكسويل ونحصل على الاعتماد الصريح. اللزوجة تزداد كجذر درجة الحرارة المطلقة — أي عند التسخين يصبح الغاز أكثر كثافة (أعلى لزوجة). مع السائل الأمر عكس ذلك تمامًا، وليس قليلًا: هناك اللزوجة تنخفض أضعافيًا، لأن الآلية مختلفة تمامًا — يجب على الجزيئات أن تشق طريقها عبر جيرانها عبر حاجز طاقة. تجربة ماكسويل أعطت نموًا أكثر حدة من الجذر، تقريبًا خطي؛ قياسات اليوم تعطي أسًا حوالي 0.76. سبب الانحراف هو أن المقطع σ ليس ثابتًا؛ التحليل في الملحق.",
+     "latex": "\\bar v = \\sqrt{\\frac{8kT}{\\pi m}} \\;\\Longrightarrow\\; \\eta = \\frac{2}{3\\sigma}\\sqrt{\\frac{m k T}{\\pi}} \\;\\propto\\; \\sqrt{T}",
+     "figure": "etatemp",
+     "figCaption": "المنحنيان يتباعدان في اتجاهين مختلفين، لأن خلفهما آليتين مختلفتين"
+    },
+    {
+     "text": "الآن دعونا ننظر إلى الموضوع بأكمله في وقت واحد. في الاشتقاق لم يكن هناك أي شيء خاص بالزخم. كنا نحسب عدد الجزيئات التي تعبر السطح، ونضرب في ما يحمله كل منها. استبدل الحمولة — وستحصل على الفقرتين السابقتين. إذا كانت الحمولة هي الجزيء المميز نفسه، نحصل على الانتشار. إذا كانت الطاقة الحرارية — التوصيل الحراري. إذا كان الزخم على طول التدفق — اللزوجة. العامل ⅓λ⟨v⟩ هو نفسه في الحالات الثلاث، لأن الناقل هو نفسه.",
+     "latex": "J_G = -\\tfrac{1}{3}\\bar v \\lambda\\, \\frac{d(nG)}{dy}; \\qquad D = \\tfrac{1}{3}\\bar v\\lambda, \\quad \\kappa = \\tfrac{1}{3}\\rho c_V \\bar v\\lambda, \\quad \\eta = \\tfrac{1}{3}\\rho \\bar v\\lambda",
+     "figure": "threetransports",
+     "figCaption": "المعاملات الثلاثة تختلف فقط في مقدار الحمولة لكل متر مكعب من الغاز"
+    },
+    {
+     "text": "للعامل المشترك نتيجة قابلة للاختبار. نقسم اللزوجة على الكثافة — نحصل على اللزوجة الحركية ν؛ نقسم التوصيل الحراري على ρc_p — نحصل على الانتشارية الحرارية a؛ معامل الانتشار D جاهز بالفعل. الآن الثلاثة تُقاس بالمتر المربع في الثانية، وبالتالي نسبها أعداد خالصة. رقم براندتل يقارن انتشار الزخم بانتشار الحرارة، ورقم شميت يقارن بانتشار الشوائب. نظريتنا التقريبية تعد بـ Sc = 1 و Pr = c_p/c_V = γ، أي 1.4 للهواء. القياس يعطي Sc حوالي 0.8 و Pr = 0.71: بالنسبة لرقم براندتل الخطأ هو الضعف بالضبط، وهذا هو أكبر خطأ في الفقرة. يُصلح بتصحيح واحد. الجزيئات السريعة تعبر السطح أكثر، وتحمل طاقة انتقالية أكثر — هذا الارتباط يعزز التوصيل الحراري، لكنه لا ينطبق على الطاقة الدورانية للجزيء. مع مراعاة الفرق، حصل أيكن على Pr = 4γ/(9γ−5): 0.74 للغازات ثنائية الذرة و 0.67 للأحادية الذرة — وهذا يتطابق مع التجربة. المهم بقي: النسب خرجت من رتبة الواحد، وليس من رتبة المئة، مما يعني أن الظواهر الثلاثة يفعلها ناقل واحد.",
+     "latex": "\\Pr = \\frac{\\nu}{a} = \\frac{\\eta\\, c_p}{\\kappa}, \\qquad \\mathrm{Sc} = \\frac{\\nu}{D}, \\qquad \\Pr_{\\text{أيكن}} = \\frac{4\\gamma}{9\\gamma - 5}",
+     "figure": "prandtlbar",
+     "figCaption": "في الغازات، رقم براندتل يقترب من 0.7 بغض النظر عن النوع؛ في السوائل، الانتشار عبر ستة مراتب"
+    }
+   ],
+   "plate": "\\eta = \\tfrac{1}{3}\\,\\rho\\,\\bar v\\,\\lambda",
+   "plateCap": "ثلاثة عوامل: كم عدد الناقلات في المتر المكعب، ومدى سرعة تحركها، ومدى بعد ما تحمله. غيّر الحمولة — ستحصل على الانتشار أو التوصيل الحراري، وسيبقى العامل ⅓λ⟨v⟩ كما هو. كل غرابة لزوجة الغاز مخفية في أنه عند تغير الضغط، الكثافة ومتوسط المسار الحر تسحبان في اتجاهين متعاكسين وتلغي كل منهما الأخرى.",
+   "note": "دعونا نعدد الافتراضات — وهي أيضًا حدود الصيغة. أولاً: سدس التدفق في كل اتجاه، ومسافة آخر تصادم تساوي λ تمامًا — كلا التقديرين تقريبيان. النظرية الدقيقة تعطي بدل ⅓ معامل 0.499، أي أن إجابتنا أقل بحوالي مرة ونصف. البنية صحيحة تمامًا: الاعتماد على ρ و ⟨v⟩ و λ دقيق، الخطأ فقط في الرقم أمامها. ثانيًا: المقطع التصادمي σ اعتُبر ثابتًا، مثل كرات البلياردو. الجزيئات الحقيقية ناعمة وتتجاذب، لذلك الاعتماد المقاس على درجة الحرارة أكثر حدة من الجذر — حول هذا في الملحق. ثالثًا، والأهم: افترضنا في كل مكان أن الجزيء ينجح في الاصطدام بجزيء آخر قبل أن يصل إلى الجدار، أي أن λ أصغر بكثير من أبعاد الوعاء ومن المسافة التي تتغير فيها السرعة بشكل ملحوظ. بمجرد أن يتوقف هذا عن الصحة، تتوقف اللزوجة عن كونها خاصية للمادة وتبدأ في الاعتماد على الهندسة والضغط. رابعًا: الغاز مخلخل بمعنى أن التصادمات ثنائية؛ عند ضغوط تصل إلى عشرات الأجواء يظهر اعتماد على الكثافة، وهو غير موجود في صيغتنا إطلاقًا. خامسًا: الانجراف أصغر بكثير من السرعة الحرارية — وإلا فهذه ليست إزاحة طبقات، بل مسألة أخرى."
+  },
+  "math": {
+   "title": "الرياضيات التي نحتاجها هنا",
+   "lead": "ثلاثة مواضع حيث يقوم أسلوب رسمي بعمل جوهري، وليس مجرد تزيين لإجابة جاهزة.",
+   "items": [
+    {
+     "what": "التوسيط على الاتجاهات: من أين جاء السدس ولماذا الربع صحيح",
+     "why": "في الخطوة الثانية من الاشتقاق، قسّمنا الجزيئات إلى ست حزم متساوية على طول المحاور. هذا ليس ادعاءً فيزيائيًا عن الغاز، بل طريقة لتجنب التكامل، ومن الجدير فهم أي تكامل بالضبط. العدّ الصادق يبدو هكذا. اتجاه السرعة متساوي الاحتمال في جميع الجهات، أي موزع بالتساوي على الكرة — لكن بالتساوي على مساحة الكرة، وليس على زاوية الميل: وزن الاتجاه يُعطى بالحزام sin θ dθ، والاتجاهات المائلة أكثر ببساطة من القريبة من المحور. عبر السطح، ينقل الجزيء مساهمة تتناسب مع إسقاط السرعة، أي cos θ، ويجب التوسيط على نصف الكرة، لأن النصف الآخر يطير في الاتجاه الآخر. متوسط جيب التمام على نصف الكرة هو بالضبط ½، والتدفق يخرج ¼n⟨v⟩ بدلاً من السدس. القاعدة التي تستحق القيام بها مرة واحدة في العمر: عند التوسيط على الاتجاهات في ثلاثة أبعاد، لا يمكن تقسيم الجزيئات إلى عدة حزم متساوية — الوزن يُعطى بالزاوية الصلبة. نموذج الحزم الست جيد لأنه يعطي البنية الصحيحة للصيغة، وسيئ لأنه يعطي معاملًا خاطئًا أمامها.",
+     "latex": "\\langle \\cos\\theta\\rangle_{+} = \\frac{\\int_{0}^{\\pi/2}\\cos\\theta\\,\\sin\\theta\\,d\\theta}{\\int_{0}^{\\pi/2}\\sin\\theta\\,d\\theta} = \\frac{1}{2} \\;\\Longrightarrow\\; \\Phi = \\tfrac{1}{4}\\, n\\,\\bar v",
+     "kit": "probability"
+    },
+    {
+     "what": "كيف تتحقق مما يُختصر وما يبدو فقط",
+     "why": "في الخطوة الخامسة، يختفي التركيز من الإجابة، ويجب التحقق من ذلك ليس بالعين، بل بأسس القوى. لنكتب اعتماد كل عامل على n: الكثافة ρ = nm تعطي القوة الأولى، وطول المسار λ = 1/(√2·nσ) يعطي سالب الأولى، ومتوسط السرعة لا يعتمد على التركيز إطلاقًا. مجموع الأسس صفر، لذا لا يعتمد الناتج على n. الأسلوب عام ومفيد: قبل أن نبتهج بالاختصار، يجب التأكد من أن أيًا من العوامل المتبقية لا يخفي نفس المتغير داخله. هنا المرشح الخطير هو ⟨v⟩ — لكنها محددة بدرجة الحرارة وكتلة الجزيء، ولا تتذكر التركيز، ولذا بقيت. والعكس صحيح أيضًا: إذا كانت ⟨v⟩ تعتمد على الكثافة، لاختفى التأثير كله، ومعه الفقرة بأكملها.",
+     "latex": "\\rho \\propto n^{1}, \\quad \\lambda \\propto n^{-1}, \\quad \\bar v \\propto n^{0} \\;\\Longrightarrow\\; \\eta \\propto n^{0}",
+     "kit": "propto"
+    },
+    {
+     "what": "لماذا نسبة معاملي النقل عدد نقي",
+     "why": "في الخطوة الثامنة، نقسم اللزوجة على الانتشار الحراري ونعلن النتيجة ذات معنى. قسمة الكميات الفيزيائية على بعضها ليست دائمًا ذات معنى؛ هنا ذات معنى، ويُتحقق منها بالوحدات. اللزوجة الحركية ν = η/ρ، والانتشار الحراري a = κ/(ρc_p)، ومعامل الانتشار D — كلها تُقاس بالمتر المربع في الثانية. تطابق الأبعاد ليس مصادفة: كل منها يجيب على نفس السؤال — ما المساحة التي يغطيها الانتشار في الثانية — فقط ينتشر شيء مختلف. لذلك تكون نسبها أعدادًا نقية يمكن مقارنتها بين المواد وبين المختبرات دون أي تحويل. الفحص بسيط وصارم: إذا بقيت أبعاد في النسبة، فقد قسمت شيئًا على شيء خاطئ.",
+     "latex": "[\\nu] = [a] = [D] = \\frac{\\text{م}^{2}}{\\text{ث}} \\;\\Longrightarrow\\; \\Pr = \\frac{\\nu}{a}, \\;\\; \\mathrm{Sc} = \\frac{\\nu}{D} \\;\\; \\text{بلا أبعاد}",
+     "kit": "dimension"
+    }
+   ]
+  },
+  "example": {
+   "title": "مثال بالأرقام",
+   "lead": "سوف نحسب لزوجة الهواء من الصفر ونقارنها بصدق مع القيمة المقاسة. وسنختبر أيضًا العبارة الرئيسية للفقرة حيث يمكن اختبارها بالرجوع إلى كتاب مرجعي: على ارتفاع عشرة كيلومترات.",
+   "given": "الهواء عند 20 درجة مئوية والضغط الجوي: الكثافة ρ = 1.20 كجم/م³، متوسط المسار الحر λ = 68 نانومتر، الكتلة المولية M = 29 جم/مول. المطلوب إيجاد اللزوجة ومقارنتها بالقيمة الجدولية 1.81×10⁻⁵ باسكال·ثانية. ثم تقدير اللزوجة على ارتفاع 10 كم، حيث الضغط أقل بمقدار الربع، ودرجة الحرارة 223 كلفن.",
+   "law": "⟨v⟩ = √(8RT/πM)، ثم η = ⅓·ρ·⟨v⟩·λ",
+   "solution": [
+    {
+     "text": "متوسط السرعة الحرارية. نأخذ الصيغة من توزيع ماكسويل وننتبه إلى أي سرعة نحتاجها بالضبط: في النقل يشارك المتوسط ⟨v⟩، وليس جذر متوسط المربعات - فهما يختلفان بنسبة ثمانية بالمائة، وتعويض السرعة الخاطئة يعطي خطأً منهجيًا.",
+     "latex": "\\bar v = \\sqrt{\\frac{8RT}{\\pi M}} = \\sqrt{\\frac{8 \\cdot 8{,}314 \\cdot 293}{\\pi \\cdot 0{,}029}} \\approx 463\\ \\text{م/ث}"
+    },
+    {
+     "text": "نعوض في صيغة اللزوجة. من السهل الحساب على أجزاء: ثلث 1.20 هو 0.40؛ اضربه في 463 لتحصل على حوالي 185؛ وأخيرًا اضربه في 68 نانومتر.",
+     "latex": "\\eta = \\tfrac{1}{3}\\rho\\,\\bar v\\,\\lambda = 0{,}40 \\cdot 463 \\cdot 68 \\cdot 10^{-9} \\approx 1{,}26\\cdot10^{-5}\\ \\text{باسكال}\\cdot\\text{ثانية}"
+    },
+    {
+     "text": "نقارن مع الجدول. حصلنا على 1.26 مقابل 1.81 المقاسة - خطأ بمقدار مرة ونصف تقريبًا. هذا ليس خطأ حسابيًا: التصحيحان الهندسيان اللذان يتبادران إلى الذهن أولاً يلغي كل منهما الآخر ولا يغيران الثلث. الخطأ سببه الارتباط - الجزيئات السريعة تطير أبعد وتعبر السطح أكثر، لذا فإن متوسط حاصل الضرب أكبر من حاصل ضرب المتوسطات. تعطي نظرية تشابمان وإنسكوج الصارمة عامل 0.499 بدلاً من ⅓، وبه يصبح الجواب مطابقًا للقياس.",
+     "latex": "\\frac{1{,}81}{1{,}26} \\approx 1{,}44, \\qquad 0{,}499\\,\\rho\\,\\bar v\\,\\lambda \\approx 1{,}9\\cdot10^{-5}\\ \\text{باسكال}\\cdot\\text{ثانية}"
+    },
+    {
+     "text": "ارتفاع 10 كم - اختبار للعبارة الرئيسية. الكثافة هناك أقل بثلاث مرات (0.41 مقابل 1.225 كجم/م³)، لكن متوسط المسار الحر أكبر بنفس العدد من المرات، لذا فإن حاصل الضرب ρλ لم يتغير إطلاقًا. يبقى فقط درجة الحرارة: 223 كلفن بدلاً من 293، ومتوسط السرعة ينخفض كجذر النسبة بينهما.",
+     "latex": "\\eta(223) = \\eta(293)\\sqrt{\\frac{223}{293}} = 1{,}81\\cdot10^{-5} \\cdot 0{,}87 \\approx 1{,}58\\cdot10^{-5}\\ \\text{باسكال}\\cdot\\text{ثانية}"
+    }
+   ],
+   "answer": "η ≈ 1.3×10⁻⁵ باسكال·ثانية مقابل القيمة الجدولية 1.81×10⁻⁵: الصيغة التقريبية تقلل بمقدار مرة ونصف، لكنها تخمن الاعتماد على ρ و⟨v⟩ وλ بشكل صحيح. على ارتفاع 10 كم توقعنا هو 1.58×10⁻⁵ باسكال·ثانية، بينما يعطي الكتاب المرجعي 1.46×10⁻⁵.",
+   "check": "هل هذا معقول؟ دعونا نتحقق من ثلاثة أشياء. الأول: خطأ بمقدار مرة ونصف - كثير أم قليل؟ بالنسبة لصيغة لم يتم فيها ضبط أي معامل، وكانت البيانات الأولية هي حجم الجزيء ودرجة الحرارة، هذا قليل جدًا. ومن الدلالة أيضًا أن الخطأ ثابت: إذا قمنا بمعايرة العامل بقياس واحد، فإن جميع التنبؤات الأخرى - حسب درجة الحرارة، ونوع الغاز، والضغط - ستكون دقيقة. الخطأ يكمن في الرقم، وليس في البنية. الثاني: على الارتفاع، توقعنا مبالغ فيه بنسبة ثمانية بالمائة. قانون الجذر تبين أنه مسطح جدًا - اللزوجة الحقيقية تنخفض عند التبريد أكثر مما يعد به، لأن الأس للهواء حوالي 0.76 وليس 0.5. التحليل في الملحق، وهناك أيضًا الصيغة التي تعطي 1.46×10⁻⁵ بالضبط. الثالث، وهو الأهم من الأولين: الهواء على ارتفاع عشرة كيلومترات مخلخل ثلاث مرات، لكن اللزوجة انخفضت بنسبة عشرين بالمائة فقط - وكل ذلك بسبب البرد، وليس بسبب التخلخل. هذا هو بالضبط ما تقوله الفقرة. بالمناسبة، من هنا يتبع استنتاج عملي للطيران: عدد رينولدز على الارتفاع ينخفض بشكل شبه حصري بسبب الكثافة في البسط، وليس بسبب اللزوجة في المقام."
+  },
+  "constants": {
+   "title": "ثوابت هذا القسم",
+   "lead": "أربعة أرقام للهواء عند درجة حرارة الغرفة. الأولان هما مدخلات الصيغة، والثالث هو التحقق منها، والرابع هو خلاصة الموضوع بأكمله في رقم واحد.",
+   "items": [
+    {
+     "sym": "λ",
+     "latex": "\\lambda_{\\text{هواء}}",
+     "name": "متوسط المسار الحر في الهواء (20 درجة مئوية، 1 ضغط جوي)",
+     "value": "68",
+     "unit": "نانومتر",
+     "why": "المسافة التي يقطعها الجزيء بين التصادمات، وفي نفس الوقت العمق الذي يحمل فيه زخم جزيء آخر. يتناسب طردياً مع درجة الحرارة وعكسياً مع الضغط، لذلك يتغير ضمن نطاق واسع جداً: في حجرة التفريغ يكون بالأمتار، وعلى ارتفاع مئة كيلومتر بالسنتيمترات، وفي مسام المحفز لا يقطع حتى النانومترات. كل ما قيل في هذا القسم يعتمد على شرط أن λ أصغر بكثير من أبعاد الوعاء.",
+     "mnemo": "احفظ سلسلة من ثلاثة أطوال: 0.36 نانومتر هو الجزيء نفسه، 3.4 نانومتر هو متوسط المسافة بين الجزيئات، و68 نانومتر هو المسار الحر. كل خطوة أكبر بعشر مرات تقريباً من السابقة. الجزيء لديه مساحة واسعة، لكن ليس لدرجة تمنعه من التصادم مليارات المرات في الثانية."
+    },
+    {
+     "sym": "⟨v⟩",
+     "latex": "\\bar v_{\\text{هواء}}",
+     "name": "متوسط السرعة الحرارية لجزيئات الهواء عند 20 درجة مئوية",
+     "value": "463",
+     "unit": "م/ث",
+     "why": "في معاملات النقل تدخل السرعة المتوسطة، وليس جذر متوسط مربع السرعة 502 م/ث ولا السرعة الأكثر احتمالاً 410 م/ث. الثلاثة مشتقة من توزيع ماكسويل وتختلف بنسب قليلة، لكن يجب استخدام تلك التي تظهر في الاشتقاق. تعتمد فقط على درجة الحرارة والكتلة المولية: بالنسبة للهيدروجين عند نفس درجة الحرارة تكون أكبر بأربع مرات، وبالنسبة للزينون أصغر بمرتين.",
+     "mnemo": "سرعة الصوت في الهواء 343 م/ث — أقل بمقدار 1.35 مرة فقط. وهذا ليس مصادفة: الصوت ينقله نفس الجزيئات بنفس الحركة الحرارية، لذلك لا يمكنه تجاوزها من حيث المبدأ."
+    },
+    {
+     "sym": "η",
+     "latex": "\\eta_{\\text{هواء}}",
+     "name": "اللزوجة الديناميكية للهواء عند 20 درجة مئوية",
+     "value": "1.81 · 10⁻⁵",
+     "unit": "باسكال · ثانية",
+     "why": "الرقم الذي قارنا به حساباتنا. المهم فيه ليس القيمة نفسها بل اتجاه التغير: عند 0 درجة مئوية تكون لزوجة الهواء 1.72·10⁻⁵، وعند 100 درجة مئوية تصبح 2.17·10⁻⁵ — أي زيادة بمقدار الربع. الماء خلال نفس الفترة يصبح أرق بست مرات. مادتان، مقياس حرارة واحد، إشارتان متعاكستان — وهذا أفضل دليل على أن الآليات مختلفة.",
+     "mnemo": "ثمانية عشر ميكروباسكال-ثانية. الماء لديه ألف — أي أكبر بخمسة وخمسين مرة بالضبط. من السهل تذكره ومفيد: في مسائل التبريد والأنابيب تحتاج هذين الرقمين باستمرار."
+    },
+    {
+     "sym": "Pr",
+     "latex": "\\Pr_{\\text{هواء}}",
+     "name": "عدد براندتل للهواء",
+     "value": "0.71",
+     "unit": "بلا أبعاد",
+     "why": "خلاصة الموضوع بأكمله في رقم واحد: الزخم والحرارة ينتشران في الغاز بنفس السرعة تقريباً، لأن نفس الناقل ينقلهما. من الرائع أن هذا الرقم لا يعتمد تقريباً على نوع الغاز: للهيدروجين 0.70، وللزينون 0.68، على الرغم من أن كتل جزيئاتهما تختلف بستة وستين مرة. بالنسبة للسوائل لا يوجد مثل هذا الثبات — من 0.025 للزئبق إلى عشرات الآلاف للجلسرين.",
+     "mnemo": "صفر فاصلة سبعة — لكل من أخف غاز وأثقله. رقم لا يتذكر مما يتكون الغاز، لأنه يتذكر الآلية فقط."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "كيف يرتبط هذا ببقية الدورة",
+   "lead": "يختتم هذا القسم الموضوع من الداخل ويتصل بقسمين مجاورين — بالفيزياء الجزيئية من الخلف وبالديناميكا المائية من الأمام.",
+   "items": [
+    {
+     "h": "القسمان الأولان من هذا الموضوع",
+     "text": "اكتملت ثلاثية المعاملات: الانتشار ينقل الجسيمات، والتوصيل الحراري ينقل الطاقة، واللزوجة تنقل الزخم، وفي الثلاثة جميعاً يوجد عامل مشترك ⅓λ⟨v⟩. وهذا يعطينا طريقة للتحقق من أنفسنا لم تكن متاحة عندما كانت الظاهرة واحدة. قس معاملين من الثلاثة، واقسمهما — وستحصل على رقم تتنبأ به النظرية مسبقاً. إذا كان من رتبة الواحد، فالآلية صحيحة؛ وإذا كان من رتبة المئة، فقد أغفلت شيئاً ما."
+    },
+    {
+     "h": "السوائل والغازات في الحركة",
+     "text": "هناك دخلت اللزوجة في قانون نيوتن، وفي صيغة بويزويل، وفي عدد رينولدز كخاصية جدولية للمادة. الآن تم حسابها، وعلى طول الطريق تم تفسير المفارقة من ذلك القسم: حركياً، الهواء أكثر لزوجة من الماء بخمس عشرة مرة. السبب واضح مباشرة من الصيغة — η للغاز صغيرة، لكن ρ أصغر بكثير، والنسبة η/ρ = ⅓λ⟨v⟩ للوسط المخلخل تكون أكبر. وفي نفس الوقت نفهم لماذا تعتمد اللزوجة الحركية للغاز على الضغط بينما الديناميكية لا تعتمد: في ν الكثافة منفصلة ولا تُختصر."
+    },
+    {
+     "h": "الجزيئات ودرجة الحرارة",
+     "text": "السرعة المتوسطة مأخوذة من توزيع ماكسويل، والمسار الحر من مقطع التصادم؛ نفس الأدوات التي أعطت معادلة الحالة. لكن هناك فرق جوهري يستحق الذكر. الغاز المثالي في حالة التوازن لا يحتوي على أي تدرجات، ولا يوجد ما ينقل. ظواهر النقل هي أول وأضعف انحراف عن التوازن، وكل النظرية الحركية للنقل تعيش في هذا النطاق الضيق: الانحراف موجود بالفعل، لكنه لا يزال خطياً."
+    },
+    {
+     "h": "تقنية التفريغ والميكروتقنية",
+     "text": "بمجرد أن ينمو المسار الحر ليصل إلى أبعاد الفجوة، تتوقف اللزوجة عن كونها خاصية للمادة. من هنا يأتي تصميم الترمس، وحساب أنظمة التفريغ، وسلوك المرايا الكهروميكانيكية الدقيقة بفجوات ميكرومترية، والديناميكا الهوائية للمركبات الهابطة على ارتفاع مئة كيلومتر. المعيار واحد — عدد كنودسن، نسبة λ إلى البعد المميز."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "مثير للاهتمام: تحقق بنفسك",
+   "lead": "لزوجة الغاز لا يمكن ملاحظتها في المطبخ: الهواء سائل جدًا ولزوجته صغيرة جدًا. لكن يمكن ملاحظة النصف الثاني من العبارة جيدًا - كيف تتصرف السوائل عند التسخين. إن عكس الإشارة هو النتيجة الرئيسية لهذا القسم.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "تجربة في المطبخ",
+     "h": "الماء والزيت، بارد وساخن",
+     "text": "ستحتاج إلى شفاطتين بنفس القطر، وماء وزيت نباتي. الشفاطة ضرورية: من خلال فوهة واسعة، يتدفق السائل بسبب القصور الذاتي، واللزوجة لا تكاد تذكر، بينما في قناة ضيقة تعمل معادلة بويزويل ويكون زمن التدفق متناسبًا طرديًا مع اللزوجة. اسكب 20 مل من كل سائل في أكواب متطابقة، ضع نصفها في الثلاجة والنصف الآخر في ماء دافئ (حوالي 40 درجة مئوية)، واتركها لمدة ساعة لتتساوى درجات الحرارة. ثم دع كل سائل يتدفق عبر الشفاطة وقس الوقت. السؤال مسبقًا: أي سائل سيتغير زمن تدفقه أكثر عند التسخين - الماء أم الزيت؟",
+     "answer": "الزيت، وبفارق كبير. الماء عند 5 درجات مئوية له لزوجة 1.52 مللي باسكال·ثانية، وعند 40 درجة مئوية - 0.65 مللي باسكال·ثانية، أي أن زمن التدفق يتغير تقريبًا مرتين. الزيت في نفس الفترة ينتقل من حوالي 150 مللي باسكال·ثانية إلى 30 مللي باسكال·ثانية - أي خمس مرات. من هذه الأرقام يمكن استخراج طاقة الحاجز باستخدام معادلة أرهينيوس: للماء حوالي 17 كيلوجول لكل مول، وللزيت حوالي 33. جزيئات الزيت الطويلة مرتبطة ببعضها البعض بقوة أكبر، ومن الصعب عليها المرور بجانب جيرانها - لذلك تكون حساسيتها لدرجة الحرارة أعلى. الآن تخيل تكرار نفس التجربة مع الهواء. التسخين من 5 إلى 40 درجة مئوية سيزيد لزوجته بحوالي تسعة بالمائة: سيصبح الهواء أكثر كثافة. لا يمكن الشعور بذلك في أي وعاء مطبخ، ولكن في حسابات تبريد المبرد أو في الديناميكا الهوائية للعادم الساخن، هذه هي الإشارة التي يجب وضعها بالضبط."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "تجربة في المطبخ",
+     "h": "كرة في العسل، بارد وساخن",
+     "text": "في موضوع التدفقات، قارننا كرة في العسل بكرة في الماء؛ هنا نغير السائل، بل درجة الحرارة. خذ برطمانين شفافين متطابقين من العسل السائل، ضع أحدهما في الثلاجة والآخر في ماء دافئ لا تزيد حرارته عن 40 درجة (فوق ذلك يفسد العسل). اتركهما لمدة ساعة، وقس درجة حرارة كل منهما. ضع علامتين بقلم على مسافة 10 سم تحت السطح، وأسقط في كل برطمان كرة معدنية متطابقة - كرة من محمل بقطر حوالي 4 مم. قس الوقت بين العلامتين. السؤال: كم مرة أسرع ستكون الكرة في العسل الدافئ - مرتين أم خمس مرات أم عشرين مرة؟",
+     "answer": "حوالي عشرين إلى ثلاثين مرة، وهذه هي النتيجة الأكثر إقناعًا بين جميع تجارب المطبخ في هذا الموضوع. وفقًا لمعادلة ستوكس، السرعة تتناسب عكسيًا مع اللزوجة، وبالتالي الزمن يتناسب طرديًا معها. العسل عند 10 درجات مئوية له لزوجة حوالي 40 باسكال·ثانية، وعند 40 درجة مئوية حوالي 1.5. التسخين بمقدار ثلاثين درجة فقط، والفرق حوالي ثلاثين مرة: هذا هو الأس في العمل، والقانون الأسي لا يمكن أن يعطي ذلك. احسب طاقة الحاجز باستخدام أرهينيوس - ستحصل على حوالي 85 كيلوجول لكل مول، أي ما يعادل حوالي أربع روابط هيدروجينية. هذا ما تحتاجه جزيئات السكر لكسرها لتمر بجانب جيرانها. قارن مع الغاز: لجعل لزوجة الهواء تزيد ثلاثين مرة، يجب تسخينه إلى عدة مئات الآلاف من الكلفن، وحتى ذلك الحين سيتحول إلى بلازما قبل ذلك. تجربة واحدة، فيزياءان متعاكستان."
+    },
+    {
+     "icon": "paradox",
+     "kind": "مفارقة",
+     "h": "الهيليوم أخف من الهواء سبع مرات - وأكثر لزوجة منه",
+     "text": "الكتلة المولية للهيليوم 4 مقابل 29 للهواء. الجزيء خفيف، يطير أسرع من الجميع، ويتسرب عبر أي شق أولاً - يبدو أنه يجب أن يكون أقل مقاومة للحركة. ومع ذلك، اللزوجة المقاسة للهيليوم عند درجة حرارة الغرفة هي 1.96·10⁻⁵ باسكال·ثانية مقابل 1.81·10⁻⁵ للهواء: الهيليوم أكثر لزوجة. كيف يتوافق هذا مع الصيغة؟",
+     "answer": "يتوافق مباشرة معها. في التعبير η = 2√(mkT/π)/(3σ)، الكتلة والمقطع تسحبان في اتجاهين متعاكسين، وفي الهيليوم يفوز المقطع. الخفة تعطي عامل √(4/29) ≈ 0.37 - يجب أن يكون الهيليوم أقل لزوجة بمقدار 2.7 مرة. لكن ذرة الهيليوم صغيرة أيضًا: قطرها الفعال 0.22 نانومتر مقابل 0.37 نانومتر لجزيئات الهواء، وبالتالي المقطع σ = πd² أصغر بمقدار (0.22/0.37)² ≈ 0.35 مرة، وهو في المقام. النتيجة: 0.37 / 0.35 ≈ 1.05 - الهيليوم أكثر لزوجة من الهواء بحوالي خمسة بالمائة، والكتاب المرجعي يعطي ثمانية. لا يمكن أن يكون هذا التقدير أكثر دقة: الأقطار الفعالة للجزيئات معروفة بدقة تصل إلى نسبة مئوية، وهي تدخل في التربيع. اختبر نفسك على الأرجون: إنه أثقل من الهواء (√(40/29) = 1.17)، والقطر تقريبًا نفسه، واللزوجة تخرج 2.1·10⁻⁵ مقابل 2.2·10⁻⁵ في الجداول. من الجدير أيضًا توضيح سمعتي الهيليوم. من خلال ثقب بحجم جزيء أو عبر سمك المطاط، يهرب الهيليوم بالفعل أسرع من الجميع: هناك لا تعمل اللزوجة، بل السرعة الحرارية وحجم الذرة. وعلى طول قناة طويلة حيث التدفق لزج، يتدفق الهيليوم تحت نفس فرق الضغط أبطأ قليلاً من الهواء. البالون يفرغ ليس لأن الهيليوم سائل، ولكن لأنه يتسرب عبر المطاط."
+    },
+    {
+     "icon": "estimate",
+     "kind": "تقدير",
+     "h": "حجم الجزيء من اللزوجة - طريقة لوشميت",
+     "text": "يمكن قلب الصيغة رأسًا على عقب. اللزوجة المقاسة تعطي متوسط المسار الحر، ومتوسط المسار الحر يعطي مقطع التصادم، ومقطع التصادم يعطي قطر الجزيء. حاول اجتياز السلسلة بنفسك: η = 1.81·10⁻⁵ باسكال·ثانية، ρ = 1.2 كجم/م³، ⟨v⟩ = 463 م/ث، التركيز n = p/kT = 2.5·10²⁵ م⁻³.",
+     "answer": "λ = 3η/(ρ⟨v⟩) ≈ 9.8·10⁻⁸ م؛ σ = 1/(√2·nλ) ≈ 2.9·10⁻¹⁹ م²؛ d = √(σ/π) ≈ 3.0·10⁻¹⁰ م، أي 0.3 نانومتر. القيمة المرجعية للنيتروجين هي 0.37 نانومتر. الخطأ أقل من الخطأ في اللزوجة نفسها - وهذا ليس مصادفة: القطر يُستخرج منها تحت الجذر، لذا فإن الخطأ في العامل ⅓ يضعف إلى النصف في الأس. هذه السلسلة بالضبط اتبعها جوزيف لوشميت في عام 1865، مضيفًا معادلة ثانية - كثافة الهواء السائل، التي تعطي عدد الجزيئات مضروبًا في مكعب القطر. من معادلتين وجد الحجم والتركيز: حوالي نانومتر واحد وحوالي 1.8·10¹⁸ جزيء في السنتيمتر المكعب. القطر مبالغ فيه ثلاث مرات، والتركيز أقل بخمس عشرة مرة - أول تقدير لحجم الذرة في التاريخ أخطأ بترتيب واحد فقط، بينما نصف الفيزيائيين في ذلك الوقت لم يعتبروا الذرات موجودة أصلًا."
+    },
+    {
+     "icon": "edge",
+     "kind": "حدود التطبيق",
+     "h": "وحدة للغازات، وستة أوامر للسوائل",
+     "text": "عدد براندتل لأي غاز حوالي 0.7 ولا يعتمد تقريبًا على النوع. للسوائل - من 0.025 للزئبق إلى عشرات الآلاف للجلسرين. من أين هذه الفجوة بين حالتي المادة؟",
+     "answer": "لأنه في الغاز، جميع عمليات النقل الثلاث يقوم بها نفس الناقل - الجزيء الطائر بحرية - وفي كل معامل يوجد نفس العامل ⅓λ⟨v⟩. نسبتها يجب أن تكون عددًا من رتبة الوحدة، وهي كذلك. في السائل الكثيف، الناقلات مختلفة. يُنقل الزخم من خلال التفاعل المباشر بين الجيران، والحرارة أيضًا، ولكن في المعدن السائل، الناقل الرئيسي للحرارة هو إلكترونات التوصيل؛ وقد تحدثنا عنها في القسم الثاني، حيث حصلنا على عدد لورنتز. الإلكترونات لا علاقة لها باللزوجة إطلاقًا. من هنا الزئبق: الحرارة تنتقل فيه أسرع بكثير من الزخم. في الجلسرين، الميل معاكس - اللزوجة هائلة، والتوصيل الحراري عادي. الاستنتاج العملي للمهندس صارم: الصيغ المعيارية لانتقال الحرارة المأخوذة من الهواء لا يمكن نقلها إلى الصوديوم السائل في المفاعل - هناك فيزياء مختلفة، وليس قيمة معامل مختلفة. وملاحظة صادقة: نظرية عامة للنقل في السوائل الكثيفة، مماثلة في الدقة للنظرية الحركية للغازات، لم تُبنَ حتى الآن. بالنسبة للغازات، نحسب المعاملات من المبادئ الأولى؛ للسوائل - نقيس ونلائم."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "ما الذي أهملناه وكيف يتم إصلاحه",
+   "blocks": [
+    {
+     "h": "العامل ⅓: من أين جاء الخطأ بمقدار مرة ونصف",
+     "text": "كان هناك ثلاثة تبسيطات، وأولهما ليسا خطأين في اتجاه واحد، بل زوج يتلاشى. الأول: افترضنا أن الجزيئات تتحرك بدقة على طول المحاور، وحصلنا على تدفق ⅙n⟨v⟩ في كل اتجاه؛ الحساب الصادق بالزوايا يعطي ¼n⟨v⟩ — أي أكثر بمقدار مرة ونصف. الثاني: المسافة التي يجلب منها الجزيء زخمًا غريبًا، أخذناها مساوية λ، لكنه يأتي بزاوية، وإسقاط هذه المسافة على العمودي يساوي في المتوسط ⅔λ — أي أقل بنفس المقدار. مرة ونصف في ثلثين تعطي واحدًا: الحساب الدقيق بالزوايا يعيد بالضبط ثلثنا، ويبقى الخطأ غير مفسر. يفسره الثالث، وهو الأدق: الجزيئات السريعة تطير أبعد وتقطع السطح أكثر، لذا لا يمكن حساب متوسط حاصل الضرب كحاصل ضرب المتوسطات — هذا الارتباط يعمل مرة أخرى على الزيادة. الحل الصارم لمعادلة بولتزمان للكرات الصلبة، الذي حصل عليه تشابمان وإن إسكوج بشكل مستقل في خضم الحرب العالمية الأولى، يعطي صيغة مغلقة. عدديًا تقابل العامل 0.499 بدلاً من ثلثنا، أي بالضبط ذلك الانحراف الذي قسناه في الهواء.",
+     "latex": "\\eta = \\frac{5}{16 d^{2}}\\sqrt{\\frac{m k T}{\\pi}} = 0{,}499\\,\\rho\\,\\bar v\\,\\lambda"
+    },
+    {
+     "h": "صيغة ساذرلاند: لماذا ليس الجذر",
+     "text": "اعتمادنا η ∝ √T جاء من افتراض واحد فقط — أن مقطع التصادم σ ثابت، كما في كرات البلياردو. الجزيئات الحقيقية تتجاذب مع بعضها عند الاقتراب، ومسار الجزيء البطيء ينحني بقوة أكبر: فهو يصطدم بجاره حتى عندما كان سيمر هندسيًا بجانبه. لذا، المقطع الفعال أكبر من المقطع الهندسي، ويزداد كلما كان الغاز أبرد. مع التسخين، يفقد التجاذب أهميته، وينخفض σ، وتزداد اللزوجة أسرع من الجذر. في عام 1893، اختصر ساذرلاند هذا التصحيح إلى ثابت واحد S ببعد درجة الحرارة — في الأساس، عمق التجاذب بالدرجات. للهواء S ≈ 111 ك. تحافظ الصيغة على الهواء من درجات حرارة Cryogenic حتى ألف وخمسمائة كلفن بدقة تصل إلى نسب مئوية: عند 0 °C تعطي 1.72·10⁻⁵، وعند 20 °C — 1.81·10⁻⁵، وعند 100 °C — 2.17·10⁻⁵، وعلى ارتفاع عشرة كيلومترات تلك القيمة 1.46·10⁻⁵ التي لم يعطها جذرنا. الأس الفعال يخرج حوالي 0.76 — بين الجذر والواحد. ماكسويل في مداه الضيق قاس بالضبط واحدًا وبنى تحته نموذجًا للجزيئات تتنافر كالقوة الخامسة للمسافة؛ النموذج تبين أنه أطول عمرًا من القياس الذي ولّده.",
+     "latex": "\\eta(T) = \\eta_0 \\left(\\frac{T}{T_0}\\right)^{3/2} \\frac{T_0 + S}{T + S}, \\qquad S_{\\text{هواء}} \\approx 111\\ \\text{ك}"
+    },
+    {
+     "h": "رقم كنودسن: أربعة أنظمة بدلاً من واحد",
+     "text": "كل ما سبق صحيح طالما أن الجزيء يصطدم بجزيئات أخرى أكثر من اصطدامه بالجدران. المقياس هو نسبة متوسط المسار الحر إلى الحجم المميز. عندما يكون Kn أقل من 0.01، يتصرف الغاز كوسط مستمر: كل ما اشتققناه صحيح، ويُطبق شرط عدم الانزلاق على الجدار. من 0.01 إلى 0.1، نكون في نظام الانزلاق: الغاز عند الجدار ينزلق بالفعل، ويجب تعديل شرط عدم الانزلاق بتصحيح يتناسب مع λ. من 0.1 إلى 10 — النظام الانتقالي، وهو الأكثر إزعاجًا: لا النظرية الحركية في صورتنا ولا معادلات الوسط المستمر تعمل، ويُحسب بمحاكاة مباشرة للتصادمات بطريقة مونت كارلو. فوق 10، يبدأ النظام الجزيئي الحر: الجزيئات تطير من جدار إلى جدار، ومفهوم اللزوجة كخاصية للمادة يفقد معناه، ويصبح نقل الزخم متناسبًا طرديًا مع الضغط. بالنسبة للتوصيل الحراري، نوقش هذا الانتقال نفسه في الفقرة الثانية بمثال الترمس؛ أما بالنسبة للزوجة فهو مهم في أماكن أخرى. مرايا كهروميكانيكية دقيقة بفجوات ميكرونية: عند الضغط الجوي، Kn حوالي 0.07 — بالفعل نظام انزلاق، ويُحسب التخميد مع تصحيح. أنظمة التفريغ حيث يتغير التدفق اللزج إلى جزيئي وتتغير صيغ حساب المضخات تمامًا. هبوط مركبة من المدار: على ارتفاع مائة كيلومتر، λ تقاس بالسنتيمترات، وعلى مائة وخمسين — بالأمتار، والديناميكا الهوائية المألوفة لا تعمل هناك إطلاقًا. أخيرًا، أغشية التشحيم الرقيقة ومسام المحفزات، حيث تكون الفجوة مماثلة للمسار الحر حتى عند الضغط العادي.",
+     "latex": "\\mathrm{Kn} = \\frac{\\lambda}{L}"
+    },
+    {
+     "text": "الاستنتاج العام من التصحيحات الثلاثة هو نفسه، ويستحق أن يُحفظ منفصلاً عن الصيغ. النظرية الحركية للغازات ليست رائعة لدقتها، بل لأنها تتنبأ ببنية الاعتمادات دون ملاءمة أي معامل: كيف تعتمد اللزوجة على الضغط (لا تعتمد)، وعلى درجة الحرارة (تزداد)، وعلى كتلة الجزيء وحجمه. المعاملات العددية تعطيها بدقة تصل إلى مرة ونصف، وتُحسَّن إما بنظرية صارمة أو بقياس واحد فقط. هذا هو الترتيب النموذجي للأمور في الفيزياء: أولاً الآلية والأسس، ثم المعاملات."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "لزوجة الغاز هي نقل كمية التحرك عبر التيار بواسطة الجزيئات التي تطير بين التصادمات، وليست قوة احتكاك منفصلة. يُجمع المعامل من ثلاثة عوامل: η = ⅓ρ⟨v⟩λ. ومن هنا نتيجتان غير بديهيتين: لزوجة الغاز لا تعتمد على الضغط، لأن الكثافة تُختصر مع متوسط المسار الحر، وتزداد عند التسخين تقريبًا مثل √T — بينما تنخفض في السائل بشكل أسي. نفس λ و ⟨v⟩ يعطيان معامل الانتشار والتوصيل الحراري: ثلاث ظواهر نقل — صورة واحدة بحمولات مختلفة.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "ثلاثة عوامل بدلاً من جدول",
+     "text": "η = ⅓ρ⟨v⟩λ: كم عدد الحاملات في المتر المكعب، وكم سرعتها في التحرك، وكم تبعد في نقل كمية التحرك الأجنبية"
+    },
+    {
+     "icon": "fact",
+     "title": "الضغط لا علاقة له",
+     "text": "إذا فرغنا الهواء إلى النصف، يقل عدد الحاملات إلى النصف، لكن كل واحدة تذهب ضعف المسافة. حاصل الضرب ρλ لا يعتمد على التركيز"
+    },
+    {
+     "icon": "scale",
+     "title": "الغاز يثخن، والسائل يرق",
+     "text": "√T مقابل exp(E/kT). هذه آليات مختلفة، وليست معاملات مختلفة في صيغة واحدة"
+    },
+    {
+     "icon": "edge",
+     "title": "كل شيء يعتمد على صغر λ",
+     "text": "بمجرد أن يصل المسار الحر إلى حجم الفجوة، تتوقف اللزوجة عن كونها خاصية للمادة وتتذكر الضغط"
+    }
+   ],
+   "where": [
+    "تقنية التفريغ: التدفق اللزج يتحول إلى جزيئي عندما يصل λ إلى قطر الأنبوب",
+    "الديناميكا الهوائية على الارتفاع: الهواء على ارتفاع 10 كم مخلخل ثلاث مرات، لكن اللزوجة تقريبًا نفسها — ينخفض رقم رينولدز بسبب الكثافة",
+    "حسابات انتقال الحرارة: Pr ≈ 0.7 لأي غاز، لذلك الصيغ المأخوذة على الهواء تُنقل إلى غازات أخرى",
+    "النزول من المدار والميكانيكا الدقيقة: رقم كنودسن يحدد ما إذا كان مفهوم اللزوجة قابلًا للتطبيق أصلًا"
+   ],
+   "watchOut": "ثلاثة أخطاء تحدث أكثر من غيرها. الأول: نقل الحدس اليومي إلى الغاز: «الساخن يعني أرق» صحيح للسائل وغير صحيح للغاز، الآليات مختلفة والإشارة معاكسة. الثاني: اعتبار العامل ⅓ دقيقًا: إنه يقلل الإجابة بحوالي مرة ونصف، وإذا كانت المهمة تتطلب رقمًا وليس بنية، يجب أخذ η من الجداول أو صيغة ساذرلاند. الثالث، الأخطر: استخدام η حيث يكون متوسط المسار الحر مقارنًا بحجم الفجوة: في تقنية التفريغ، وفي القنوات الدقيقة، وعلى الارتفاعات العالية، تتوقف اللزوجة عن كونها خاصية للمادة وتبدأ في الاعتماد على الهندسة."
+  },
+  "quiz": [
+   {
+    "id": "tv1",
+    "type": "mcq",
+    "q": "تم ضخ نصف الهواء من الوعاء دون تغيير درجة الحرارة. ماذا حدث للزوجة الغاز المتبقي؟",
+    "options": [
+     "لم تتغير",
+     "انخفضت إلى النصف: عدد جزيئات الناقل أصبح نصف العدد",
+     "زادت إلى الضعف: أصبح لدى الجزيئات مساحة أكبر للطيران",
+     "انخفضت إلى الربع: تصادمات أقل وكثافة أقل"
+    ],
+    "answer": 0,
+    "why": "في الصيغة η = ⅓ρ⟨v⟩λ، انخفضت الكثافة إلى النصف، لكن متوسط المسار الحر λ = 1/(√2·nσ) زاد إلى الضعف: عدد الناقلات قل، لكن كل واحدة تحمل الزخم إلى ضعف العمق في الطبقة المجاورة. حاصل الضرب ρλ لا يعتمد على التركيز إطلاقاً، ومتوسط السرعة يتحدد فقط بدرجة الحرارة. هذا الاستنتاج بالضبط اعتبره ماكسويل غير قابل للتصديق في عام 1860، وبعد ست سنوات تحقق منه بتجربة باستخدام أقراص زجاجية متأرجحة — ظلت اللزوجة ثابتة في كامل نطاق الضغوط المتاحة. تحفظ واحد: سيكون الأمر كذلك طالما λ أصغر بكثير من أبعاد الوعاء؛ في الفراغ العميق يظهر الاعتماد على الضغط، وهذه منطقة أخرى تم تحليلها في الملحق.",
+    "hint": "اكتب كيف يعتمد كل عامل في η = ⅓ρ⟨v⟩λ على تركيز الجزيئات n، واجمع الأسس."
+   },
+   {
+    "id": "tv2",
+    "type": "mcq",
+    "q": "لماذا تزداد لزوجة الغاز عند التسخين بينما تقل لزوجة السائل؟",
+    "options": [
+     "في الغاز، تحمل الجزيئات الحرة الزخم، وتزداد سرعتها الحرارية مع درجة الحرارة؛ وفي السائل، تكون الجزيئات متراصة، والتسخين يسهل عليها الانزلاق بين الجيران",
+     "في الغاز، تزداد الكثافة عند التسخين، بينما تقل في السائل",
+     "في الغاز، يزداد متوسط المسار الحر عند التسخين، بينما يقل في السائل",
+     "هذه كميات مختلفة: لزوجة الغاز تقاس بتخميد الاهتزازات، ولزوجة السائل بمعدل التدفق عبر أنبوب"
+    ],
+    "answer": 0,
+    "why": "العلامة المختلفة لا تأتي من معاملات مختلفة، بل من آليات مختلفة. في الغاز، حامل الزخم هو الجزيء الطائر، واللزوجة ترث الاعتماد على درجة الحرارة لسرعته: ⟨v⟩ ∝ √T، وبالتالي تزداد η. في السائل، لا يوجد مسار حر إطلاقاً، الجزيئات متلامسة، وإزاحة الطبقات تتطلب أن ينزلق الجزيء بين جيرانه عبر حاجز طاقة؛ احتمال ذلك يخضع لعامل بولتزمان، لذلك تقل اللزوجة مع التسخين بشكل أسي. الخيار الثاني غير صحيح واقعياً: عند التسخين في وعاء مفتوح، تقل الكثافة في كليهما. الخيار الثالث يستبدل الآلية بالنتيجة — عند كثافة ثابتة، لا يعتمد λ على درجة الحرارة إطلاقاً، وفي السائل هذه الكمية غير محددة. الخيار الرابع غير صحيح واقعياً: كلا طريقتي القياس تعطيان نفس الكمية، وهذا هو أساس اتساق الجداول.",
+    "hint": "اسأل نفسك: ما الذي ينقل الزخم بالضبط في كل حالة — وما الذي يتغير عند التسخين بالنسبة للناقل؟"
+   },
+   {
+    "id": "tv3",
+    "type": "free",
+    "q": "بكلماتك الخاصة: لماذا يتم التعبير عن معامل الانتشار والتوصيل الحراري ولزوجة الغاز من خلال نفس حاصل الضرب λ·⟨v⟩؟",
+    "keywords": [
+     "نقل",
+     "مسار",
+     "تصادم",
+     "جزيئات",
+     "تدرج",
+     "ناقل",
+     "زخم",
+     "طاقة"
+    ],
+    "needed": 2,
+    "why": "لأنه في جميع الحالات الثلاث تعمل نفس الآلية: يطير الجزيء من تصادم إلى تصادم ويحمل معه ما كان يملكه في مكان آخر تصادم. يتغير فقط الحمولة — الجزيء المميز نفسه يعطي الانتشار، وطاقته الحرارية تعطي التوصيل الحراري، وزخمه على طول التدفق يعطي اللزوجة. لذلك في كل معامل يوجد العامل ⅓λ⟨v⟩ — في الأساس، 'ما المساحة التي يغطيها الناقل في الثانية' — وتختلف المعاملات فقط في كمية الحمولة لكل متر مكعب: الوحدة لعدد الجزيئات، ρc للطاقة، ρ للزخم. من هنا يتبع مباشرة تنبؤ قابل للاختبار: نسب المعاملات هي أعداد من رتبة الوحدة، وبالفعل بالنسبة للغازات فإن Pr و Sc تقع حوالي 0.7–1.",
+    "hint": "حلل ما هو مشترك بين الظواهر الثلاث وما هو مختلف. الآلية واحدة — ولكن ما الذي يحمله الجزيء عبر حدود الطبقة؟"
+   },
+   {
+    "id": "tv4",
+    "type": "estimate",
+    "q": "قدر متوسط المسار الحر لجزيئات الهواء عند ضغط 10⁻³ ضغط جوي ودرجة حرارة الغرفة. عند الضغط الجوي يساوي 68 نانومتر. أجب بالميكرومتر.",
+    "answer": 68,
+    "unit": "ميكرومتر",
+    "why": "المسار الحر λ = 1/(√2·nσ) يتناسب عكسياً مع التركيز، والتركيز عند درجة حرارة ثابتة يتناسب مع الضغط. إذن λ ∝ 1/p: خفض الضغط بمقدار ألف مرة يزيد المسار الحر ألف مرة بالضبط، من 68 نانومتر إلى 68 ميكرومتر. تقدير بالحس السليم: 68 ميكرومتر هو بالفعل سمك شعرة الإنسان، أي في قناة عرضها عُشر المليمتر، عند هذا الضغط سيتوقف الغاز عن كونه وسطاً مستمراً، ولا يمكن تطبيق مفهوم اللزوجة عليه. ومن هنا القاعدة العملية لخبراء الفراغ: طالما أن المسار الحر أصغر من قطر الأنبوب، يتدفق الغاز بتدفق لزج، وبمجرد أن يتجاوزه، يصبح التدفق جزيئياً، ويجب الحساب بصيغ أخرى.",
+    "hint": "التركيز الجزيئي عند درجة حرارة ثابتة يتناسب مع الضغط، والمسار الحر يتناسب عكسياً مع التركيز. بكم انخفض الضغط؟",
+    "tolFactor": 1.5
+   }
+  ]
  }
 }

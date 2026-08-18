@@ -466,5 +466,1310 @@
     "tolAbs": 1.5
    }
   ]
+ },
+ "en": {
+  "title": "Boltzmann distribution and barometric formula",
+  "subtitle": "Section 2 · The factor exp(−E/kT) and the scale height of a uniform atmosphere",
+  "intro": [
+   "The air at high altitudes is rarefied — anyone who has climbed mountains or flown in an airplane knows this. But why is there any air at all up there? Gravity pulls every molecule downward, and if it were the only force at work, all the air would lie on the ground in a layer a few meters thick. It does not lie there because molecules are not at rest: thermal motion scatters them upward just as persistently as gravity pulls them down. The atmosphere is a draw between two tendencies, and this draw has a precise formula.",
+   "The formula turns out to be an exponential, and its exponent contains the ratio of two energies: the potential energy of a molecule, mgh, and the thermal energy, kT. This ratio is not a peculiarity of the atmosphere. Wherever an energy E appears, the fraction of particles that have acquired this energy contains the same factor exp(−E/kT). Height above the ground, speed, molecular rotation, chemical bond stretching, reaction barrier energy — in all cases the factor is the same.",
+   "Here is what we will do. First, we will honestly derive the barometric formula from mechanics: take a thin layer of air and require that it does not fall. Then we will see what exactly in this derivation was related to gravity — and it will turn out that almost nothing. And at the end, we will test the general factor on a problem where there is no height at all: why is the heat capacity of air less than promised by the equipartition theorem, and what does it mean that 'vibrational degrees of freedom are frozen'."
+  ],
+  "standNote": "The stand in front of you shows the distribution of molecules by speed from the first section, and it is also the best measuring instrument for what we are about to discuss. The Boltzmann factor is hidden here in the tail: the fraction of molecules faster than a threshold falls approximately as exp(−mv²/2kT), because kinetic energy is also energy. Do three things. First: set the threshold to 1000 m/s at 300 K and remember the fraction of fast ones. Second: raise the temperature twofold, to 600 K — the fraction will increase not twofold but almost fifteenfold, because T is in the exponent, not as a multiplier in front of it. Third: return to 300 K and vary the molar mass. Hydrogen (2 g/mol) and carbon dioxide (44 g/mol) at the same temperature give tails that differ by many orders of magnitude — and this is a ready answer to the question of why the Earth retained nitrogen and oxygen but lost hydrogen and helium. The barometric formula we are about to derive is arranged exactly the same way: in the exponent, it is simply mgh instead of mv²/2.",
+  "formula": {
+   "name": "Boltzmann distribution and barometric formula",
+   "latex": "n \\propto e^{-E/k_BT}, \\qquad p(h) = p_0\\,e^{-mgh/k_BT}",
+   "alsoKnown": "The first is the Boltzmann factor, a general law of state occupancy by energy. The second is the barometric formula, a special case for a uniform gravitational field.",
+   "authors": [
+    {
+     "who": "Blaise Pascal",
+     "year": "1648",
+     "what": "conducted an experiment proving that air has weight: his relative Florin Périer carried a Torricelli tube up the Puy-de-Dôme mountain, and the mercury column dropped by about eight centimeters."
+    },
+    {
+     "who": "Edmond Halley",
+     "year": "1686",
+     "what": "derived an exponential law of pressure decrease with altitude, based on Boyle's law — the first calculation of the form 'at such and such altitude, so much', a century and a half before any theory of molecules."
+    },
+    {
+     "who": "Ludwig Boltzmann",
+     "year": "1868–1877",
+     "what": "showed that the factor exp(−E/kT) applies not just to gravity but to any energy, and linked the probability of a state to the number of ways to realize it."
+    },
+    {
+     "who": "Jean Perrin",
+     "year": "1908",
+     "what": "verified the law under a microscope using a suspension of visible particles and computed Avogadro's number from it — evidence after which arguing about the reality of molecules became pointless."
+    }
+   ],
+   "story": "Boltzmann obtained his factor by counting the number of ways to distribute energy among molecules, and spent most of his life defending the approach: a significant portion of physicists and chemists of his time considered molecules a convenient fiction rather than reality. The decisive test came from an unexpected direction. Jean Perrin realized that the law doesn't require a gas: under gravity and thermal jostling, any suspension should stratify, provided the particles are small enough. He ground gum mastic resin, selected nearly uniform spheres by centrifugation, placed a drop under a microscope, and began counting particles at different depths of focus. The result was the same exponential — except the scale height was not eight kilometers but a few tens of micrometers: an 'atmosphere in a drop'. From the rate of decrease, Perrin computed Avogadro's number and obtained about 7·10²³ — the correct order of magnitude and the correct first digit. Boltzmann did not live to see this verification by two years.",
+   "symbols": [
+    {
+     "sym": "p",
+     "latex": "p",
+     "what": "pressure at height h",
+     "unit": "Pa",
+     "note": "at constant temperature, molecular concentration is proportional to it, so both quantities decrease with height in the same way"
+    },
+    {
+     "sym": "p₀",
+     "latex": "p_0",
+     "what": "pressure at the reference level",
+     "unit": "Pa",
+     "note": "the zero of height is chosen arbitrarily: the formula relates two levels to each other, not an absolute scale"
+    },
+    {
+     "sym": "E",
+     "latex": "E",
+     "what": "energy of the state whose occupancy is in question",
+     "unit": "J",
+     "note": "in the barometric case, this is mgh; in the general law, it is energy of any origin, measured from the same zero for all states"
+    },
+    {
+     "sym": "m",
+     "latex": "m",
+     "what": "mass of a single molecule",
+     "unit": "kg",
+     "note": "specifically one molecule, not a mole: for air, 4.8·10⁻²⁶ kg. Substituting molar mass into the formula with k is the most common mistake in this topic"
+    },
+    {
+     "sym": "k_B",
+     "latex": "k_B",
+     "what": "Boltzmann constant",
+     "unit": "J/K",
+     "const": "k_B",
+     "note": "converts temperature to energy; in formulas it almost always appears in the product kT, which at 300 K equals 4.14·10⁻²¹ J"
+    },
+    {
+     "sym": "T",
+     "latex": "T",
+     "what": "absolute temperature",
+     "unit": "K",
+     "note": "in our model, it is the same throughout the air column — this is the strongest and most vulnerable assumption of the derivation"
+    },
+    {
+     "sym": "g",
+     "latex": "g",
+     "what": "acceleration due to gravity",
+     "unit": "m/s²",
+     "const": "g",
+     "note": "we treat it as constant: over ten kilometers, it decreases by only a third of a percent, which is negligible for our accuracy"
+    },
+    {
+     "sym": "H",
+     "latex": "H",
+     "what": "scale height",
+     "unit": "m",
+     "note": "H = kT/(mg): the height over which pressure drops by a factor of e ≈ 2.72. With it, the formula reads more compactly: p = p₀·e^(−h/H)"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Rigorous Derivation",
+   "lead": "We will need three things, all of which are already known: the equilibrium condition from mechanics, the ideal gas equation of state from thermodynamics, and the ability to solve the simplest differential equation. There will be nothing specifically 'atmospheric' in the derivation — we will simply require that the air does not fall.",
+   "steps": [
+    {
+     "text": "Take a thin layer in the air column at height h: base area A, thickness Δh. The layer does not move anywhere, so the sum of forces on it is zero. There are exactly three forces. From below, the air pushes the layer upward with force p(h)·A. From above, the air presses down with force p(h+Δh)·A. And the layer's own weight ρ·A·Δh·g pulls it down. The lateral forces are mutually balanced and do not enter the vertical balance.",
+     "latex": "p(h)\\,A \\;=\\; p(h+\\Delta h)\\,A \\;+\\; \\rho\\,A\\,\\Delta h\\,g",
+     "figure": "barolayer",
+     "figCaption": "The layer hangs because it is pushed from below more strongly than pressed from above: the pressure difference exactly carries its weight"
+    },
+    {
+     "text": "Cancel the area A, collect the pressures on the left, and divide by Δh. We get a difference quotient — the pressure increment per unit height. The layer thickness was chosen arbitrarily and did not remain anywhere in the equality, so the limit as Δh → 0 is taken without reservations: the relation holds for any layer, and therefore for an infinitely thin one.",
+     "latex": "\\frac{p(h+\\Delta h) - p(h)}{\\Delta h} = -\\rho g \\;\\Longrightarrow\\; \\frac{dp}{dh} = -\\rho g",
+     "figure": "baroslope",
+     "figCaption": "The layer thickness dropped out of the answer — meaning the equality survives the passage to the limit"
+    },
+    {
+     "text": "So far this is pure hydrostatics: the same equation describes water in a lake. The difference appears here. For a liquid, ρ is constant, but for a gas, the density itself depends on pressure, and the equation of state connects them. Rewrite pV = NkT in terms of density, substituting N/V = ρ/m, where m is the mass of ONE molecule. And here is the first serious assumption: we consider the temperature T to be the same at all heights. The atmosphere is declared isothermal; we will return to this, more than once.",
+     "latex": "p = \\frac{N}{V}k_BT = \\frac{\\rho}{m}\\,k_BT \\;\\Longrightarrow\\; \\rho = \\frac{m\\,p}{k_BT}",
+     "figure": "barodensity",
+     "figCaption": "At a single temperature, gas density is proportional to pressure: rarer impacts — rarer the molecules themselves"
+    },
+    {
+     "text": "Substitute the density into the equilibrium condition. We get a relation of a special kind: the rate of pressure decrease is proportional to the pressure itself. Physically, this is clear — the weight of a layer is greater the denser the gas in it, and it is denser where the pressure is higher. Mathematically, this is the very equation whose solution is always an exponential.",
+     "latex": "\\frac{dp}{dh} = -\\frac{mg}{k_BT}\\,p",
+     "figure": "baroode",
+     "figCaption": "The slope of the curve at each point is proportional to its height at that same point — only an exponential can do that"
+    },
+    {
+     "text": "Separate the variables: everything with pressure to the left, everything with height to the right. On the left we get dp/p, whose integral is the natural logarithm. Integrate from the reference level to height h.",
+     "latex": "\\int_{p_0}^{p}\\frac{dp}{p} \\;=\\; -\\frac{mg}{k_BT}\\int_{0}^{h}dh \\;\\Longrightarrow\\; \\ln\\frac{p}{p_0} = -\\frac{mgh}{k_BT}",
+     "figure": "barointeg",
+     "figCaption": "Each part depends only on its own variable — after this, both are integrated separately"
+    },
+    {
+     "text": "Exponentiate both sides — the barometric formula is ready. And since at constant temperature pressure is proportional to concentration, the number of molecules per cubic meter decreases in exactly the same way. Note the nature of the dependence: pressure does not fall linearly and does not vanish at some specific height. Each next kilometer takes away the same FRACTION of what remains.",
+     "latex": "p(h) = p_0\\,e^{-mgh/k_BT}, \\qquad n(h) = n_0\\,e^{-mgh/k_BT}",
+     "figure": "baroexp",
+     "figCaption": "The exponential does not end: the atmosphere has no 'upper boundary', only a height at which it ceases to be noticed"
+    },
+    {
+     "text": "Let us read the result physically. In the exponent is the ratio of two energies: mgh is the potential energy of a molecule at height h, kT is its thermal energy. The height at which these two energies become comparable is the natural scale of the problem; at that height the pressure drops by a factor of e ≈ 2.72. It is called the scale height: that is how tall the column would be if the density remained at its surface value throughout.",
+     "latex": "H = \\frac{k_BT}{mg} = \\frac{RT}{Mg}, \\qquad p(h) = p_0\\,e^{-h/H}",
+     "figure": "baroscale",
+     "figCaption": "Each gas has its own scale height, inversely proportional to the molecular mass: hydrogen is stretched out, carbon dioxide is pressed down"
+    },
+    {
+     "text": "Now the main thing — the very reason for all the calculations. Look at where in the derivation gravity specifically participated. In exactly one place: we wrote the weight of the layer as ρgAΔh. Everything else — equilibrium and the equation of state — knows nothing about the nature of energy. Replacing mgh with energy of any origin, we obtain the general Boltzmann law: the ratio of populations of two states is determined by the difference in their energies divided by kT. This is rigorously proved not here, but in statistical mechanics; a sketch of the proof is in the appendix, and it is shorter than it seems.",
+     "latex": "\\frac{n_2}{n_1} = e^{-(E_2 - E_1)/k_BT}",
+     "figure": "boltzlevels",
+     "figCaption": "Levels are populated the rarer the higher they lie; the only measure of rarity is the quantity kT"
+    }
+   ],
+   "plate": "p(h) = p_0\\,e^{-mgh/k_BT}, \\qquad \\frac{n_2}{n_1} = e^{-\\Delta E/k_BT}",
+   "plateCap": "On the left is a special case that can be checked with a barometer on a staircase. On the right is the general law from which the speed of chemical reactions, the spectra of stars, and the heat capacity of air follow. The difference between them is only in where the energy E came from.",
+   "note": "Let us list the assumptions — this list is the boundary of the formula. First and foremost: the temperature is the same for the entire column. The real troposphere cools by about 6.5 degrees per kilometer, because it is constantly mixed by convection, and a rising parcel of air expands and cools almost without heat exchange. An isothermal atmosphere does not exist in nature; our formula is an estimate valid within a few kilometers if we substitute the average temperature of the layer. Second: g is constant. At ten kilometers it is less by a third of a percent — this can be neglected, but for the exosphere it is no longer possible, and what follows from this is discussed in the fun section. Third: air is considered a single gas with a molecular mass of 4.8·10⁻²⁶ kg. Strictly speaking, nitrogen, oxygen, and argon have different scale heights, and according to the formula the composition of air must change with height — but it does not. Fourth, implicit and most deceptive: the air is motionless. Weather is precisely what happens when equilibrium is disturbed, and it is always disturbed."
+  },
+  "math": {
+   "title": "The Math Needed Here",
+   "lead": "The derivation is short, and all three tricky spots are consecutive — from step four to step seven.",
+   "items": [
+    {
+     "what": "An equation where the derivative is proportional to the function itself",
+     "why": "In step four of the derivation we got dp/dh = −(mg/kT)·p. This is not a formula for p, but a condition on it: the derivative at each point must be proportional to the value at that same point. Exactly one family of functions satisfies this condition — exponentials — and this is verified by direct substitution: the derivative of e^(kx) is k·e^(kx), i.e., the original function multiplied by a constant. Uniqueness is also proved briefly: if there are two solutions, their ratio has a derivative of zero, meaning the ratio is constant. Hence the rule for the whole course: as soon as the rate of change of a quantity is proportional to the quantity itself, the answer is an exponential, and all that remains is to find the exponent. Radioactive decay, capacitor discharge, cooling of a cup, and our atmosphere — all are the same equation with different letters.",
+     "latex": "\\frac{df}{dx} = k\\,f \\;\\Longleftrightarrow\\; f(x) = f(0)\\,e^{kx}",
+     "kit": "diffeq"
+    },
+    {
+     "what": "Separation of variables and where the logarithm comes from",
+     "why": "In step five we divide both sides by p and multiply by dh, so that pressure remains on the left and height moves to the right. The trick looks like a loose handling of dp and dh, but it is legitimate: formally it is a change of variable in a definite integral, and this notation is just shorthand. On the left we get the integral of dp/p, which equals ln p — not by convention, but because the derivative of the logarithm is 1/p. The logarithm here is not decoration: it appears whenever ratios of quantities matter, not their differences. For the same reason, the magnitude scale, decibels, and the pH scale are logarithmic: in all cases, nature responds to multiplication, not addition.",
+     "latex": "\\int\\frac{dp}{p} = \\ln p + C, \\qquad \\ln\\frac{p}{p_0} = \\ln p - \\ln p_0",
+     "kit": "separation"
+    },
+    {
+     "what": "The exponent must be dimensionless",
+     "why": "In steps six and seven, the exponent contains mgh/kT. Let's check the units: mgh is kilograms times meters per second squared times meters, i.e., joules; kT is also joules. The ratio is dimensionless, and it could not be otherwise: raising e to the power of 'three joules' is as meaningless as raising it to the power of 'three meters'. Hence the practical trick for reading any formula of the form exp(−A/B) — immediately find what is being compared with what. Here, the cost of lifting is compared with thermal energy. If A is much less than B, the exponential is close to one and the effect is almost absent; if A is much greater than B, it collapses and the state is practically empty. All the content of the Boltzmann factor fits into this single observation.",
+     "latex": "\\left[\\frac{mgh}{k_BT}\\right] = \\frac{\\text{kg}\\cdot(\\text{m}/\\text{s}^{2})\\cdot\\text{m}}{(\\text{J}/\\text{K})\\cdot\\text{K}} = \\frac{\\text{J}}{\\text{J}} = 1",
+     "kit": "dimension"
+    }
+   ]
+  },
+  "example": {
+   "title": "A Numerical Example",
+   "lead": "Let's calculate what climbers carry oxygen cylinders for.",
+   "given": "Estimate the pressure at the summit of Everest (h = 8848 m) using the barometric formula. Take the average column temperature as 250 K, the molar mass of air M = 29 g/mol, g = 9.81 m/s², and sea-level pressure p₀ = 101 kPa. Also find how much oxygen remains there.",
+   "law": "p(h) = p₀·e^(−h/H), where H = RT/(Mg) is the scale height",
+   "solution": [
+    {
+     "text": "Calculate the scale height. It is more convenient in molar form: kT/(mg) and RT/(Mg) are the same expression, multiplied above and below by Avogadro's number. This way we don't have to recall the mass of a single molecule.",
+     "latex": "H = \\frac{RT}{Mg} = \\frac{8{,}314\\cdot250}{0{,}029\\cdot9{,}81} \\approx \\frac{2079}{0{,}2845} \\approx 7{,}3\\cdot10^{3}\\ \\text{m}"
+    },
+    {
+     "text": "How many scale heights is that? Divide the height of Everest by H and get the exponent — a dimensionless number, as it should be.",
+     "latex": "\\frac{h}{H} = \\frac{8848}{7300} \\approx 1{,}21"
+    },
+    {
+     "text": "Raise e to minus this power. Mentally: e⁻¹ ≈ 0.37, and our exponent is slightly more than one, so the result is slightly less — about 0.30.",
+     "latex": "\\frac{p}{p_0} = e^{-1{,}21} \\approx 0{,}30 \\;\\Longrightarrow\\; p \\approx 0{,}30\\cdot101 \\approx 30\\ \\text{kPa}"
+    },
+    {
+     "text": "Now oxygen. Its fraction in air does not change with altitude and remains the same 21 percent — the air is mixed by winds. Therefore, the partial pressure of oxygen drops exactly as many times as the total pressure.",
+     "latex": "p_{\\text{O}_2} = 0{,}21\\cdot30 \\approx 6{,}3\\ \\text{kPa} \\quad\\text{instead of}\\quad 0{,}21\\cdot101 \\approx 21\\ \\text{kPa}"
+    }
+   ],
+   "answer": "H ≈ 7.3 km, p ≈ 30 kPa — less than a third of the surface pressure. The partial pressure of oxygen is about 6 kPa instead of 21 kPa at sea level.",
+   "check": "The measured pressure at the summit of Everest is about 34 kPa. Our estimate is underestimated by about ten percent, and this is exactly the error to be expected: the atmosphere is not isothermal; the warm lower layer 'inflates' the column and holds more air aloft than a calculation with a single average temperature. Note the nature of the error: it is not random but systematic and always in one direction. For a one-line formula, ten percent is a good result. The physiological conclusion does not change with the correction: six kilopascals of oxygen is below the threshold at which a person can remain conscious for long, and the 'death zone' above 8000 meters is named so not for beauty. And note what is NOT in the explanation. The oxygen up there has not gone anywhere and has not turned into anything; its fraction in the air is the same. The air itself is rarefied."
+  },
+  "constants": {
+   "title": "Constants of this section",
+   "lead": "One fundamental constant, one derived number worth remembering alongside it, and two scales that set the answers throughout the topic.",
+   "items": [
+    {
+     "sym": "k_B",
+     "latex": "k_B",
+     "name": "Boltzmann constant",
+     "value": "1.380 649 · 10⁻²³",
+     "unit": "J / K",
+     "why": "The only constant in the Boltzmann factor and the only bridge between temperature and energy. Since 2019, its value has been fixed exactly, and through it the kelvin is defined: temperature has ceased to be an independent quantity and has become a way to measure energy. In the formulas of this section, it always appears in the product kT — by itself, k is almost never needed.",
+     "mnemo": "k = R / N_A. If you remember 8.31 and 6.02, you don't need to memorize the Boltzmann constant: 8.31 / 6.02 ≈ 1.38, and the exponent −23 comes from Avogadro's number."
+    },
+    {
+     "sym": "k_BT",
+     "latex": "k_BT\\big|_{300\\,\\text{K}}",
+     "name": "Thermal energy at room temperature",
+     "value": "4.14 · 10⁻²¹ J = 25.9 meV",
+     "unit": "J (or eV)",
+     "why": "The most useful number in all of statistical physics: a yardstick against which any energy is compared. In electronvolts, it is roughly one fortieth, and by this measure you can immediately see what is frozen and what is alive. A hydrogen bond is about 0.2 eV, eight times larger than kT, so water at room temperature is liquid, not gas. The band gap of silicon is 1.1 eV, forty times larger, so pure silicon barely conducts. The vibrational quantum of a nitrogen molecule is 0.29 eV, eleven times larger, and vibrations are silent.",
+     "mnemo": "\"One fortieth of an electronvolt.\" For a quick mental estimate: kT in electronvolts equals the temperature divided by 11,600."
+    },
+    {
+     "sym": "H",
+     "latex": "H = \\dfrac{RT}{Mg}",
+     "name": "Scale height of Earth's atmosphere",
+     "value": "8.4",
+     "unit": "km (at 15 °C)",
+     "why": "Not a fundamental constant, but a characteristic scale of the problem; still worth remembering alongside constants: at this height, pressure drops by a factor of e. This gives quick estimates without any formula. Pressure halves at 5.8 kilometers — that's H·ln2, and below this height lies half of the entire atmospheric mass. At ten kilometers, where airplanes fly, about 30 percent remains. The value is proportional to temperature, so in winter the atmosphere slightly \"contracts,\" and in summer it \"expands.\"",
+     "mnemo": "Eight kilometers is roughly Everest. The coincidence says a simple thing: the highest mountain on Earth is comparable to the scale of its atmosphere, so at the top the pressure is already three times lower."
+    },
+    {
+     "sym": "θ_{vib}",
+     "latex": "\\theta_{\\text{vib}}(\\text{N}_2)",
+     "name": "Characteristic vibrational temperature of nitrogen molecule",
+     "value": "3390",
+     "unit": "K",
+     "why": "The temperature at which thermal energy is exactly enough for one quantum of vibration of the N—N bond: kθ = ħω. At 300 K, the ratio θ/T is 11.3, and the Boltzmann factor gives exp(−11.3) ≈ 1.2·10⁻⁵ — roughly one molecule in eighty thousand vibrates. Therefore, the vibrational degree of freedom does not participate in the heat capacity of air: the equipartition theorem promises it kT, but quantum mechanics does not accept this payment in small change. For comparison, the characteristic rotational temperature of the same nitrogen is 2.9 K, so rotations are fully excited and contribute to heat capacity.",
+     "mnemo": "One rule: a degree of freedom works if its quantum is smaller than kT. Rotation of nitrogen — 2.9 K, always works; vibration — 3390 K, at room temperature almost never works."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "How this connects to the rest of the course",
+   "lead": "One factor travels from chapter to chapter, changing only the meaning of the letter E.",
+   "items": [
+    {
+     "h": "Thermodynamics: heat capacity and frozen degrees of freedom",
+     "text": "The equipartition theorem promises each degree of freedom ½kT and predicts for a diatomic gas C_V = 7/2·R: three translational halves, two rotational, and two vibrational. Measurements give 5/2·R. The discrepancy is explained exactly by the Boltzmann factor: the vibrational level lies 11 kT above the ground state and is populated once in eighty thousand. Heat the air to a thousand kelvin — the heat capacity will creep up, because exp(−3390/1000) is already 3.4 percent. Classical physics does not err in counting here; it errs in the premise: energy cannot be issued in arbitrarily small portions."
+    },
+    {
+     "h": "Maxwell: why speed and energy distributions yield different curves",
+     "text": "The distribution from the first section is the same factor with E = mv²/2. But the speed curve has a hump, while exp(−E/kT) decreases monotonically, and this confuses almost everyone. There is no contradiction: the speed distribution has a second factor, v², which counts not the probability of a state but the number of states — the number of directions grows with the sphere of radius v. Details in the appendix; the conclusion is short: in any distribution there are two parts, the Boltzmann factor and the number of states, and they must not be confused."
+    },
+    {
+     "h": "Chemistry and biology: Arrhenius law",
+     "text": "For a reaction to proceed, molecules must overcome an energy barrier E_a, and the fraction of those with enough energy is the same exp(−E_a/kT). Hence the kitchen rule 'ten degrees — twice as fast': with a typical barrier of about 50 kJ/mol, raising from 20 to 30 °C gives a factor of almost exactly two. Hence also the refrigerator: cooling by twenty degrees slows spoilage by more than fourfold, although the average speed of molecules drops by only three and a half percent. It is not the average speed that works, but the tail of the distribution."
+    },
+    {
+     "h": "Astrophysics: atmospheric escape and stellar spectra",
+     "text": "A planet loses gas if the tail of the distribution contains enough molecules faster than the escape velocity. This fraction contains exp(−mv²/2kT), so light gases escape while heavy ones remain: Earth retained nitrogen and oxygen, but not hydrogen and helium, while the Moon retained nothing. In stellar atmospheres, the same factor determines what fraction of atoms are in excited states, and from this depends which lines are visible in the spectrum. Stellar spectral classes are primarily a temperature scale read through level populations."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Fun: Try It with Your Own Hands",
+   "lead": "The two experiments below require either a trip to the mountains or a syringe and hot tap water—and they both demonstrate the same exponential.",
+   "items": [
+    {
+     "icon": "flask",
+     "kind": "kitchen experiment",
+     "h": "An atmosphere of millet",
+     "text": "Pour a tablespoon of millet or semolina into a clear jar so that the bottom is covered with a single layer, close the lid, and shake it vertically, frequently and with short strokes, like a salt shaker. While you shake, the grains jump: dense near the bottom, sparser higher up, and there is no sharp boundary anywhere. Shake harder—the 'atmosphere' rises higher. Stop—everything settles. Question: why is the picture exactly like this, and not 'all at the bottom' or 'evenly distributed throughout the jar'?",
+     "answer": "Because this is exactly the problem we solved: there is gravity pulling down, and there is random motion scattering upward. The ratio of the two energies sets the height at which the density drops by a factor of e: for air it is kT/mg ≈ 8.4 km, for a grain of mass a milligram it is millimeters, because the mass is larger by twenty orders of magnitude. Your hand plays the role of temperature: shake harder—the 'gas' is hotter and the atmosphere is higher. The analogy is only qualitatively honest: the grains lose energy upon collisions, so this 'gas' lives only while it is being shaken—but that is precisely what makes visible what in air must be calculated."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "observation on the road",
+     "h": "A bag of chips on an airplane",
+     "text": "Take any hermetically sealed bag—chips, nuts, dried fruit—on an airplane. On the ground it is soft, but at altitude it puffs up tight. The same thing will happen if you bring such a bag from the city to the mountains at an altitude of about two and a half kilometers. Estimate in advance in two ways: how much it should expand and why it does not burst.",
+     "answer": "The cabin pressure is not maintained at the outside pressure but at roughly the pressure at an altitude of 2400 meters. By the barometric formula with H = 8.4 km, this is e^(−2400/8400) ≈ 0.75 of the ground pressure, i.e., about 75 kilopascals—and the measured cabin figure is exactly that. The air inside the bag does not have time to cool or heat noticeably, so Boyle's law, pV = const, applies: the volume will increase by a factor of 101/75 ≈ 1.35, by a third. You can check the estimate with a tape measure: volume grows as the cube of size, so the bag's circumference should increase by about ten percent. The bag does not burst for two reasons: the film stretches, and the pressure difference is only 26 kilopascals—a quarter of an atmosphere. The same calculation explains the reverse case: a bottle tightly sealed during a flight is crushed on the ground because it returns to denser air."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "kitchen experiment",
+     "h": "Water that boils at ninety degrees",
+     "text": "In the mountains, water boils cooler: at three kilometers—at 90 °C, at five—at about 83, at the top of Everest—around 70. If you find yourself in the mountains, check with a kitchen thermometer: the kettle makes noise, steam rises, but the thermometer stubbornly stays below one hundred. At home, the same effect shows in a minute. Fill a syringe without a needle with hot tap water—about sixty degrees, not boiling—leave some air inside, tightly plug the nozzle with your finger, and sharply pull the plunger toward you. What will happen to the water?",
+     "answer": "It will boil—at sixty degrees, right in your hands. This is not bubbles of dissolved air: they would appear once and float up, but here steam will grow as long as you hold the plunger, and disappear as soon as you release it. Boiling begins not at some 'own' temperature, but when the saturated vapor pressure equals the external pressure. Lower the external pressure—shift the boiling point down; in the mountains, the barometric formula does exactly that for you. And the saturated vapor pressure itself is again the Boltzmann factor: the fraction of molecules with enough energy to escape the liquid goes as exp(−L/RT), where L is the molar heat of vaporization. Hence a practical consequence for high-altitude cooking: at 90 degrees, a soft-boiled egg takes longer, and a truly hard-boiled egg will never cook—the rate of protein denaturation drops according to Arrhenius, i.e., by the same factor. Therefore, in the mountains, a pressure cooker is used: it raises the pressure and brings the boiling point back up."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradox",
+     "h": "Why oxygen does not lie on the bottom",
+     "text": "Each gas has its own scale height: H = kT/(mg), and it is inversely proportional to the molecular mass. For hydrogen it is 120 kilometers, for nitrogen 8.7, for carbon dioxide 5.5. Therefore, at ten kilometers the mixture must noticeably separate: nitrogen will remain a third of its ground value, and carbon dioxide only a sixth, and the fraction of oxygen in the air should decrease with altitude. Measurements say the opposite: the composition of air is constant up to a hundred kilometers to within fractions of a percent. Is the formula wrong?",
+     "answer": "The formula is correct, but it describes equilibrium—the state the mixture will reach if left undisturbed long enough. No one leaves the atmosphere undisturbed. Diffusive separation on a scale of kilometers takes thousands of years, while wind and convection mix the troposphere in days: the slow process simply does not have time to do anything. This explanation has a beautiful check. Above a hundred kilometers, the air is so rarefied that mixing weakens and diffusion finally wins; the boundary is called the turbopause. Above it, the composition indeed separates by mass, as the formula promises: first atomic oxygen dominates, then helium, and at the very top hydrogen. The lesson is general and important for the whole course: before applying an equilibrium formula, ask whether the system has time to reach equilibrium."
+    },
+    {
+     "icon": "fact",
+     "kind": "fun fact",
+     "h": "An atmosphere in a drop of water",
+     "text": "In 1908, Jean Perrin decided to test the Boltzmann law under a microscope. He ground gum arabic resin and used a centrifuge to select nearly identical spheres—about a quarter of a micrometer in size. Each such particle in suspension experiences the same two forces as an air molecule: gravity pulls down (minus the Archimedes force, so the weight of the particle minus the weight of displaced water goes into the formula), and the jostling of neighboring molecules scatters them upward. Therefore, the same exponential should result—except the particle is many times more massive than a molecule, so the entire 'atmosphere' fits within a few tens of micrometers. Perrin counted particles in the field of view, refocusing the microscope at different depths. The exponential appeared, and from its decay rate he calculated Avogadro's number: about 7·10²³—the right order of magnitude and the right first digit. This became one of the decisive arguments that molecules really exist; Perrin received the Nobel Prize in 1926."
+    },
+    {
+     "icon": "edge",
+     "kind": "limit of applicability",
+     "h": "A static atmosphere does not exist at all",
+     "text": "In the formula we derived, there is a hidden inconsistency, and it is meaningful. We assumed g is constant, but in reality it falls as 1/r². Do the derivation honestly, with the potential −GMm/r—and the exponential at infinity will tend not to zero but to a finite nonzero concentration. A nonzero density in infinite space implies infinite mass, which cannot be. Conclusion: an isothermal atmosphere extending to infinity and in strict equilibrium is impossible in principle. The real atmosphere is not in such equilibrium—it slowly flows outward. Molecules from the fast tail of the distribution exceed the escape velocity and leave forever; this is called Jeans escape. Earth loses about three kilograms of hydrogen per second; over the planet's entire history, this amounts to a few tenths of a percent of the hydrogen in the oceans—a trifle for Earth, but on Venus the same mechanism, with a hotter upper atmosphere, carried away all the water. Nitrogen and oxygen are not threatened: for them, the same Boltzmann factor gives a fraction of sufficiently fast molecules on the order of e⁻²⁰⁰, i.e., zero on any conceivable timescale."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "Where the exponential itself comes from — and what we have not proved",
+   "blocks": [
+    {
+     "h": "What is proved and what is guessed",
+     "text": "We derived the barometric formula rigorously: from the equilibrium of a layer and the equation of state. The general law n ∝ exp(−E/kT) we did not derive but guessed by analogy — we noticed that gravity entered the derivation only through the weight of the layer and assumed that the energy could be anything. This is a reasonable guess, but not a proof, and it is honest to say so directly. The real proof is given by statistical mechanics through counting microstates. However, most of the way can be covered right now, almost without calculations."
+    },
+    {
+     "h": "Energies add, probabilities multiply — this is almost enough",
+     "text": "Let a system be in contact with a large thermostat at temperature T, and let the probability of finding it in a state with energy E be f(E). Take two independent subsystems. Their energies add, and the probabilities of independent events multiply — so the function f must turn addition into multiplication. Such a functional equation for a continuous function has a unique solution, and it is the exponential. The minus sign comes from the requirement that the total probability does not diverge: a growing exponential cannot be normalized. One unknown remains — the constant β in the exponent.",
+     "latex": "f(E_1 + E_2) = f(E_1)\\,f(E_2) \\;\\Longrightarrow\\; f(E) = C\\,e^{-\\beta E}"
+    },
+    {
+     "h": "Why β equals 1/kT",
+     "text": "The exponent β cannot depend on the structure of the system itself — only on the thermostat. Take two different bodies in contact with the same reservoir: if they had different β, energy would flow from one to the other without stopping and equilibrium would never be reached. Thus, β is a common characteristic of thermal contact, that is, a function of temperature alone. Which function it is can be determined on any convenient example, and the ideal gas is the most convenient: substituting the kinetic energy into exp(−βE) and calculating the average energy of a molecule gives ⟨E⟩ = 3/(2β). Comparison with the already known ⟨E⟩ = 3kT/2 from the first section of thermodynamics yields β = 1/kT. The circle is closed: the temperature defined through the average kinetic energy turned out to be the same temperature that appears in the exponent of the distribution.",
+     "latex": "\\beta = \\frac{1}{k_BT}"
+    },
+    {
+     "h": "By speeds or by energies — these are different curves",
+     "text": "The Boltzmann factor decreases monotonically with energy, while the Maxwell speed distribution has a hump. The key is that the probability of a state and the probability of a value are different things. Landing in a specific state with energy E is exp(−E/kT). But there are many states with speed near v, and their number grows as the area of a sphere of radius v, that is, as v². The product of a decreasing exponential and an increasing power gives the hump. For the same reason, the energy distribution looks different: there the factor is not v² but √E. Check with numbers: the most probable speed corresponds to energy kT, and the most probable energy is kT/2 — these are different points of the same distribution. The mistake \"since speed v is the most frequent, the energy at it is also the most frequent\" occurs regularly, and it is all because the number of states was forgotten.",
+     "latex": "f(v)\\,dv \\propto \\underbrace{v^{2}}_{\\text{number of states}}\\;\\underbrace{e^{-mv^{2}/2k_BT}}_{\\text{Boltzmann factor}}\\,dv, \\qquad f(E)\\,dE \\propto \\sqrt{E}\\;e^{-E/k_BT}\\,dE"
+    },
+    {
+     "h": "The real atmosphere: where the isothermal model breaks down",
+     "text": "The troposphere — the lower eleven kilometers — is not isothermal and is close not to thermal equilibrium but to adiabatic mixing: the air in it continuously rises and falls, and a rising parcel expands and cools almost without heat exchange. Hence the observed gradient of about 6.5 degrees per kilometer. Therefore, the standard atmosphere uses not an exponential but a power-law dependence: if temperature drops linearly, T = T₀ − L·h, then pressure goes as (1 − L·h/T₀) to the power Mg/(RL) ≈ 5.26. Above the tropopause, in the lower stratosphere, temperature stays constant for a while — there the exponential works well — and then rises because ozone absorbs ultraviolet. The honest result: our formula is not a \"first-order approximation\" but a reasonable estimate with an error of about ten percent over the troposphere scale, if you substitute the average temperature of the layer. It is sufficient for rough estimates; the aviation altimeter uses exactly the power-law formula, and not by chance.",
+     "latex": "p(h) = p_0\\left(1 - \\frac{L\\,h}{T_0}\\right)^{\\!Mg/RL}, \\qquad L \\approx 6{,}5\\ \\text{K/km}"
+    }
+   ]
+  },
+  "memo": {
+   "essence": "The fraction of particles that get energy E contains the factor exp(−E/kT): the more expensive the state compared to thermal energy, the rarer it is. The atmosphere is the simplest example: rising to height h costs mgh, so pressure drops exponentially with a characteristic scale H = kT/(mg) ≈ 8.4 km.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "Boltzmann factor",
+     "text": "n ∝ exp(−E/kT). The nature of energy does not matter: height, speed, molecular rotation, reaction barrier — everything is counted the same way"
+    },
+    {
+     "icon": "scale",
+     "title": "Scale height",
+     "text": "H = kT/(mg) = RT/(Mg). At this height, pressure drops by a factor of e; by half — at H·ln2 ≈ 5.8 km, below this height is half the mass of the atmosphere"
+    },
+    {
+     "icon": "edge",
+     "title": "Frozen means rare",
+     "text": "Nitrogen vibration costs 3390 K. At 300 K, one molecule in eighty thousand is excited, and vibrations do not enter the heat capacity"
+    },
+    {
+     "icon": "fact",
+     "title": "Exponential and number of states",
+     "text": "Distribution = Boltzmann factor × number of states. The hump in the Maxwell curve is given by the second factor v², not the exponential"
+    }
+   ],
+   "where": [
+    "Aircraft altimeter: altitude is calculated from pressure, so the pilot is given the ground value before landing",
+    "Arrhenius law: reaction rate and product shelf life go as exp(−E_a/RT)",
+    "Oxygen equipment: above 3500 meters, the partial pressure of oxygen already requires correction",
+    "Semiconductors: the number of carriers in pure silicon goes as exp(−E_g/2kT) — hence the increase in current upon heating",
+    "Atmospheric escape: the Moon and Mercury did not retain gas, the Earth lost hydrogen and helium"
+   ],
+   "watchOut": "Three mistakes that are made most often. The first is to substitute the molar mass into kT/(mg) instead of the mass of one molecule: the molar form looks different, RT/(Mg), and they cannot be confused. The second is to decide that heavy gases should collect at the bottom: the formula describes equilibrium, and the wind-mixed troposphere does not reach equilibrium. The third is to forget that the derivation assumed a single temperature for the entire column: the real troposphere cools by 6.5 degrees per kilometer, and precise calculations are carried out using the power-law formula of the standard atmosphere, not the exponential."
+  },
+  "quiz": [
+   {
+    "id": "b1",
+    "type": "mcq",
+    "q": "Why does a person lack oxygen at the summit of Everest?",
+    "options": [
+     "The total air pressure there is three times lower, and the oxygen fraction in the mixture is the same — so the partial pressure of oxygen is also three times lower",
+     "Oxygen is heavier than nitrogen and therefore settles downward: at the top its fraction in the air is noticeably smaller",
+     "At high altitude it is very cold, and some oxygen freezes out of the air",
+     "Oxygen is consumed by breathing and combustion below and does not have time to rise to the top"
+    ],
+    "answer": 0,
+    "why": "The composition of air is constant up to about a hundred kilometers: the troposphere is mixed by wind faster than gases can separate by mass. With altitude, it is not the fraction of oxygen that changes, but the density of the air itself. The barometric formula at 8848 meters gives about a third of the surface pressure, so there is about three times less oxygen in each breath: about 6 kilopascals instead of 21.",
+    "hint": "Separation of gases by mass is an equilibrium phenomenon, and equilibrium requires time. Ask yourself which is faster: diffusion over kilometers or wind. And then — what actually changes with altitude: the fraction of oxygen or the density of air?"
+   },
+   {
+    "id": "b2",
+    "type": "mcq",
+    "q": "Why do vibrations of atoms in a nitrogen molecule not contribute to the heat capacity of air at room temperature?",
+    "options": [
+     "The vibrational quantum is eleven times larger than kT, so by the Boltzmann factor only one molecule in tens of thousands is excited",
+     "The bond between nitrogen atoms is too rigid, and the molecule cannot vibrate at all",
+     "Vibrations exist, but they do not store energy: it immediately goes to neighboring molecules",
+     "The equipartition theorem does not apply to diatomic gases"
+    ],
+    "answer": 0,
+    "why": "The characteristic vibrational temperature of nitrogen is 3390 K, meaning the quantum is 11.3 times larger than kT at 300 K. The factor exp(−11.3) gives about 1.2·10⁻⁵: only one molecule in eighty thousand vibrates, and this contribution does not enter the average energy of the gas. The molecule can vibrate — at 1000 K about three percent are excited, and the heat capacity begins to rise. The issue is not the rigidity of the bond per se, but the ratio of the quantum to the thermal energy: for rotations of the same nitrogen, the characteristic temperature is 2.9 K, so they are fully excited and contribute to the heat capacity.",
+    "hint": "A degree of freedom works if its quantum is smaller than kT. Compare 3390 K with 300 K and see what the Boltzmann factor gives for such a ratio."
+   },
+   {
+    "id": "b3",
+    "type": "free",
+    "q": "In your own words: why is the exponent in the exponential exactly the ratio E/kT, and not the difference E − kT?",
+    "keywords": [
+     "dimensionless",
+     "ratio",
+     "compare",
+     "units",
+     "scale",
+     "measure",
+     "division",
+     "how many times"
+    ],
+    "needed": 2,
+    "why": "Because the exponent must be dimensionless. The difference of two energies is still energy, in joules, and raising e to the power of 'three joules' is as meaningless as raising it to the power of 'three meters'; it is division that makes the expression dimensionless. Behind the formality lies physics: kT is the natural measure of energy at a given temperature, and the only meaningful question is 'how many times more expensive is the state than this measure', not 'by how many joules'. Hence the general trick for reading any formula of the form exp(−A/B): immediately find what is compared with what.",
+    "hint": "Check the units of the exponent. What happens if you raise the number e to a power measured in joules?"
+   },
+   {
+    "id": "b4",
+    "type": "estimate",
+    "q": "The scale height of Earth's atmosphere is 8.4 kilometers. At what altitude is the pressure half the surface pressure? Answer in kilometers.",
+    "answer": 5.8,
+    "unit": "km",
+    "why": "The condition p/p₀ = 1/2 means e^(−h/H) = 1/2, so h = H·ln2 = 8.4 · 0.693 ≈ 5.8 kilometers. It is useful to remember: below this altitude lies half of the entire mass of the atmosphere. And note that the answer is not half of 8.4: the exponential decreases by a factor of e ≈ 2.72 every 8.4 kilometers, and it drops by half noticeably earlier.",
+    "hint": "Write the condition p/p₀ = 1/2 using the exponential and take the natural logarithm of both sides. The natural logarithm of 2 is approximately 0.69.",
+    "tolAbs": 1.5
+   }
+  ]
+ },
+ "es": {
+  "formula": {
+   "name": "Distribución de Boltzmann y fórmula barométrica",
+   "latex": "n \\propto e^{-E/k_BT}, \\qquad p(h) = p_0\\,e^{-mgh/k_BT}",
+   "alsoKnown": "La primera es el factor de Boltzmann, la ley general de ocupación de estados según la energía. La segunda es la fórmula barométrica, un caso particular de la primera para un campo gravitatorio uniforme",
+   "authors": [
+    {
+     "who": "Blaise Pascal",
+     "year": "1648",
+     "what": "realizó un experimento que demostró que el aire tiene peso: su cuñado Florin Périer subió un tubo de Torricelli a la montaña Puy-de-Dôme, y la columna de mercurio descendió unos ocho centímetros"
+    },
+    {
+     "who": "Edmond Halley",
+     "year": "1686",
+     "what": "obtuvo la ley exponencial de disminución de la presión con la altura, basándose en la ley de Boyle, — el primer cálculo del tipo «a tal altura, tal valor», un siglo y medio antes de cualquier teoría molecular"
+    },
+    {
+     "who": "Ludwig Boltzmann",
+     "year": "1868—1877",
+     "what": "demostró que el factor exp(−E/kT) no se refiere solo a la gravedad, sino a cualquier energía, y relacionó la probabilidad de un estado con el número de formas de realizarlo"
+    },
+    {
+     "who": "Jean Perrin",
+     "year": "1908",
+     "what": "verificó la ley bajo el microscopio con suspensiones de partículas visibles y calculó a partir de ella el número de Avogadro — una prueba que dejó de tener sentido discutir sobre la realidad de las moléculas"
+    }
+   ],
+   "story": "Boltzmann obtuvo su factor contando el número de formas de repartir la energía entre las moléculas, y pasó casi toda su vida defendiendo este enfoque: una parte notable de los físicos y químicos de su época consideraba que las moléculas eran una invención conveniente, no una realidad. La prueba decisiva llegó desde un lado inesperado. Jean Perrin se dio cuenta de que la ley no requiere en absoluto un gas: bajo la gravedad y los golpes térmicos, cualquier suspensión debería estratificarse, siempre que las partículas sean lo suficientemente pequeñas. Trituró resina de goma guta, seleccionó con una centrífuga esferas casi del mismo tamaño, colocó una gota bajo el microscopio y se puso a contar partículas a diferentes profundidades de enfoque. Obtuvo la misma exponente — solo que la altura de la atmósfera homogénea no era de ocho kilómetros, sino de unas pocas decenas de micrómetros: una «atmósfera en una gota». A partir de la tasa de disminución, Perrin calculó el número de Avogadro y obtuvo alrededor de 7·10²³ — el orden correcto y la primera cifra correcta. Boltzmann no vivió para ver esta prueba por dos años.",
+   "symbols": [
+    {
+     "sym": "p",
+     "latex": "p",
+     "what": "presión a la altura h",
+     "unit": "Pa",
+     "note": "a temperatura constante, la concentración de moléculas es proporcional a ella, por lo que ambas magnitudes disminuyen con la altura de la misma manera"
+    },
+    {
+     "sym": "p₀",
+     "latex": "p_0",
+     "what": "presión en el nivel de referencia",
+     "unit": "Pa",
+     "note": "el cero de altura se elige arbitrariamente: la fórmula relaciona dos niveles entre sí, no define una escala absoluta"
+    },
+    {
+     "sym": "E",
+     "latex": "E",
+     "what": "energía del estado cuya ocupación se considera",
+     "unit": "J",
+     "note": "en el caso barométrico es mgh; en la ley general, es la energía de cualquier origen, medida desde el mismo cero para todos los estados"
+    },
+    {
+     "sym": "m",
+     "latex": "m",
+     "what": "masa de una molécula",
+     "unit": "kg",
+     "note": "de una sola, no de un mol: para el aire es 4,8·10⁻²⁶ kg. Sustituir la masa molar en la fórmula con k es el error más común en este tema"
+    },
+    {
+     "sym": "k_B",
+     "latex": "k_B",
+     "what": "constante de Boltzmann",
+     "unit": "J/K",
+     "const": "k_B",
+     "note": "convierte la temperatura en energía; en las fórmulas casi siempre aparece en el producto kT, que a 300 K es igual a 4,14·10⁻²¹ J"
+    },
+    {
+     "sym": "T",
+     "latex": "T",
+     "what": "temperatura absoluta",
+     "unit": "K",
+     "note": "en nuestro modelo es la misma para toda la columna de aire — esta es la suposición más fuerte y más vulnerable de la deducción"
+    },
+    {
+     "sym": "g",
+     "latex": "g",
+     "what": "aceleración de la gravedad",
+     "unit": "m/s²",
+     "const": "g",
+     "note": "la consideramos constante: a diez kilómetros de altura es solo un tercio de porcentaje menor, y para nuestra precisión esto es insignificante"
+    },
+    {
+     "sym": "H",
+     "latex": "H",
+     "what": "altura de la atmósfera homogénea (escala de altura)",
+     "unit": "m",
+     "note": "H = kT/(mg): la altura a la que la presión cae en un factor e ≈ 2,72. Con ella, la fórmula se lee más corta: p = p₀·e^(−h/H)"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Derivación rigurosa",
+   "lead": "Se necesitan tres cosas, y las tres ya son conocidas: la condición de equilibrio de la mecánica, la ecuación de estado del gas ideal de la termodinámica y la habilidad de resolver la ecuación diferencial más simple. No habrá nada específicamente \"atmosférico\" en la derivación: simplemente exigiremos que el aire no caiga.",
+   "steps": [
+    {
+     "text": "Tomemos una capa delgada en la columna de aire a una altura h: área de la base A, espesor Δh. La capa no se mueve, por lo tanto la suma de fuerzas sobre ella es cero. Hay exactamente tres fuerzas. Desde abajo, el aire empuja la capa hacia arriba con una fuerza p(h)·A. Desde arriba, el aire presiona hacia abajo con una fuerza p(h+Δh)·A. Y hacia abajo tira el peso propio de la capa ρ·A·Δh·g. Las fuerzas laterales se equilibran mutuamente y no entran en el balance vertical.",
+     "latex": "p(h)\\,A \\;=\\; p(h+\\Delta h)\\,A \\;+\\; \\rho\\,A\\,\\Delta h\\,g",
+     "figure": "barolayer",
+     "figCaption": "La capa cuelga porque desde abajo empujan más fuerte que desde arriba: la diferencia de presiones soporta exactamente su peso"
+    },
+    {
+     "text": "Cancelamos el área A, juntamos las presiones a la izquierda y dividimos por Δh. Obtenemos un cociente de diferencias: el incremento de presión por unidad de altura. El espesor de la capa se eligió arbitrariamente y no permanece en la igualdad, por lo tanto el límite cuando Δh → 0 se toma sin objeciones: la relación es válida para cualquier capa y, por lo tanto, también para una infinitamente delgada.",
+     "latex": "\\frac{p(h+\\Delta h) - p(h)}{\\Delta h} = -\\rho g \\;\\Longrightarrow\\; \\frac{dp}{dh} = -\\rho g",
+     "figure": "baroslope",
+     "figCaption": "El espesor de la capa desapareció de la respuesta, lo que significa que la igualdad sobrevive al paso al límite"
+    },
+    {
+     "text": "Por ahora, esto es hidrostática pura: la misma ecuación describe el agua en un lago. La diferencia aparece aquí. En un líquido, ρ es constante, pero en un gas la densidad depende de la presión misma, y la ecuación de estado las relaciona. Reescribimos pV = NkT en términos de densidad, sustituyendo N/V = ρ/m, donde m es la masa de UNA molécula. Y aquí está la primera suposición seria: consideramos que la temperatura T es la misma en todas las alturas. La atmósfera se declara isotérmica; volveremos a esto, y más de una vez.",
+     "latex": "p = \\frac{N}{V}k_BT = \\frac{\\rho}{m}\\,k_BT \\;\\Longrightarrow\\; \\rho = \\frac{m\\,p}{k_BT}",
+     "figure": "barodensity",
+     "figCaption": "A una misma temperatura, la densidad del gas es proporcional a la presión: menos impactos, menos moléculas"
+    },
+    {
+     "text": "Sustituimos la densidad en la condición de equilibrio. Obtenemos una relación de un tipo especial: la tasa de disminución de la presión es proporcional a la presión misma. Físicamente, esto es comprensible: el peso de la capa es mayor cuanto más denso es el gas, y es más denso donde la presión es mayor. Matemáticamente, es esa ecuación cuya solución es siempre una exponencial.",
+     "latex": "\\frac{dp}{dh} = -\\frac{mg}{k_BT}\\,p",
+     "figure": "baroode",
+     "figCaption": "La pendiente de la curva en cada punto es proporcional a su altura en ese mismo punto: solo la exponencial sabe hacer eso"
+    },
+    {
+     "text": "Separamos variables: todo lo que tiene presión a la izquierda, todo lo que tiene altura a la derecha. A la izquierda quedará dp/p, cuya integral es el logaritmo natural. Integramos desde el nivel de referencia hasta la altura h.",
+     "latex": "\\int_{p_0}^{p}\\frac{dp}{p} \\;=\\; -\\frac{mg}{k_BT}\\int_{0}^{h}dh \\;\\Longrightarrow\\; \\ln\\frac{p}{p_0} = -\\frac{mgh}{k_BT}",
+     "figure": "barointeg",
+     "figCaption": "Cada parte depende solo de su propia variable; después de esto, ambas se integran por separado"
+    },
+    {
+     "text": "Potenciamos ambos lados: la fórmula barométrica está lista. Y como a temperatura constante la presión es proporcional a la concentración, el número de moléculas por metro cúbico disminuye de la misma manera. Observe la naturaleza de la dependencia: la presión no cae linealmente ni se anula a una altura determinada. Cada kilómetro siguiente quita la misma FRACCIÓN de lo que queda.",
+     "latex": "p(h) = p_0\\,e^{-mgh/k_BT}, \\qquad n(h) = n_0\\,e^{-mgh/k_BT}",
+     "figure": "baroexp",
+     "figCaption": "La exponencial no termina: la atmósfera no tiene \"límite superior\", solo hay una altura en la que deja de notarse"
+    },
+    {
+     "text": "Leamos el resultado físicamente. En el exponente está la relación de dos energías: mgh es la energía potencial de una molécula a la altura h, kT es su energía térmica. La altura en la que estas dos energías se igualan es la escala natural del problema; en ella, la presión cae en un factor e ≈ 2,72. Se llama altura de la atmósfera homogénea: sería la altura de la columna si la densidad permaneciera igual a la del nivel del suelo en toda la altura.",
+     "latex": "H = \\frac{k_BT}{mg} = \\frac{RT}{Mg}, \\qquad p(h) = p_0\\,e^{-h/H}",
+     "figure": "baroscale",
+     "figCaption": "Cada gas tiene su propia escala de alturas, inversamente proporcional a la masa de la molécula: el hidrógeno está estirado, el dióxido de carbono está pegado al suelo"
+    },
+    {
+     "text": "Ahora lo principal: aquello para lo que se calculó todo. Mire dónde en la derivación participó la gravedad específicamente. Exactamente en un lugar: escribimos el peso de la capa como ρgAΔh. Todo lo demás (el equilibrio y la ecuación de estado) no sabe nada sobre la naturaleza de la energía. Reemplazando mgh por energía de cualquier origen, obtenemos la ley general de Boltzmann: la relación de ocupaciones de dos estados está determinada por la diferencia de sus energías, dividida por kT. Esto no se demuestra estrictamente aquí, sino en mecánica estadística; un esbozo de la demostración está en el apéndice, y es más corto de lo que parece.",
+     "latex": "\\frac{n_2}{n_1} = e^{-(E_2 - E_1)/k_BT}",
+     "figure": "boltzlevels",
+     "figCaption": "Los niveles están menos ocupados cuanto más arriba están; la única medida de rareza es la magnitud kT"
+    }
+   ],
+   "plate": "p(h) = p_0\\,e^{-mgh/k_BT}, \\qquad \\frac{n_2}{n_1} = e^{-\\Delta E/k_BT}",
+   "plateCap": "A la izquierda, un caso particular que se puede comprobar con un barómetro en una escalera. A la derecha, la ley general de la que se derivan la velocidad de las reacciones químicas, los espectros de las estrellas y la capacidad calorífica del aire. La diferencia entre ellas es solo de dónde proviene la energía E.",
+   "note": "Enumeremos las suposiciones: esta lista es el límite de la fórmula. Primera y principal: la temperatura es la misma en toda la columna. La troposfera real se enfría aproximadamente 6,5 grados por kilómetro, porque la convección la mezcla continuamente, y la porción de aire que asciende se expande y se enfría casi sin intercambio de calor. No existe una atmósfera isotérmica en la naturaleza; nuestra fórmula es una estimación válida dentro de unos pocos kilómetros, si se sustituye la temperatura media de la capa. Segunda: g es constante. A diez kilómetros, es menor en un tercio de porcentaje; esto se puede despreciar, pero para la exosfera ya no, y lo que se sigue de esto se analiza en la sección de entretenimiento. Tercera: el aire se considera un solo gas con una masa molecular de 4,8·10⁻²⁶ kg. Estrictamente hablando, el nitrógeno, el oxígeno y el argón tienen diferentes escalas de alturas, y según la fórmula, la composición del aire debería cambiar con la altura, pero no cambia. Cuarta, implícita y la más engañosa: el aire está inmóvil. El clima es precisamente lo que sucede cuando el equilibrio se rompe, y siempre está roto."
+  },
+  "math": {
+   "title": "Matemáticas que se necesitaron aquí",
+   "lead": "La derivación es corta, y los tres puntos peligrosos están seguidos, del cuarto al séptimo paso.",
+   "items": [
+    {
+     "what": "Ecuación en la que la derivada es proporcional a la propia función",
+     "why": "En el cuarto paso de la derivación obtuvimos dp/dh = −(mg/kT)·p. Esto no es una fórmula para p, sino una condición sobre ella: la derivada en cada punto debe ser proporcional al valor en ese mismo punto. Esta condición la satisface exactamente una familia de funciones: las exponenciales, y de ello se convence uno con una comprobación directa: la derivada de e^(kx) es k·e^(kx), es decir, la función original multiplicada por una constante. La unicidad también se demuestra brevemente: si hay dos soluciones, la derivada de su cociente es cero, por lo tanto el cociente es constante. De aquí sale una regla para todo el curso: tan pronto como la velocidad de cambio de una magnitud es proporcional a la propia magnitud, la respuesta es una exponencial, y solo queda encontrar el exponente. La desintegración radiactiva, la descarga de un condensador, el enfriamiento de una taza y nuestra atmósfera son la misma ecuación con diferentes letras.",
+     "latex": "\\frac{df}{dx} = k\\,f \\;\\Longleftrightarrow\\; f(x) = f(0)\\,e^{kx}",
+     "kit": "diffeq"
+    },
+    {
+     "what": "Separación de variables y de dónde sale el logaritmo",
+     "why": "En el quinto paso dividimos ambos lados por p y multiplicamos por dh, para que la presión quede a la izquierda y la altura pase a la derecha. El truco parece un manejo libre de dp y dh, pero es legítimo: formalmente es un cambio de variable en una integral definida, y esta notación es solo una abreviatura. A la izquierda obtenemos la integral de dp/p, que es igual a ln p, no por convención, sino porque la derivada del logaritmo es 1/p. El logaritmo aquí no es un adorno: aparece siempre que importan las relaciones entre magnitudes, no sus diferencias. Por la misma razón son logarítmicas la escala de magnitudes estelares, los decibelios y la escala de acidez: en todos los casos, la naturaleza responde a la multiplicación, no a la suma.",
+     "latex": "\\int\\frac{dp}{p} = \\ln p + C, \\qquad \\ln\\frac{p}{p_0} = \\ln p - \\ln p_0",
+     "kit": "separation"
+    },
+    {
+     "what": "El exponente de la exponencial debe ser adimensional",
+     "why": "En los pasos sexto y séptimo, en el exponente apareció mgh/kT. Comprobemos las unidades: mgh son kilogramos multiplicados por metros por segundo al cuadrado y por metros, es decir, julios; kT también son julios. La relación es adimensional, y no podía ser de otra manera: elevar e a la potencia 'tres julios' es tan absurdo como elevarla a 'tres metros'. De aquí sale un truco práctico para leer cualquier fórmula del tipo exp(−A/B): busque de inmediato qué se compara con qué. Aquí se comparan el coste de la subida y la energía térmica. Si A es mucho menor que B, la exponencial está cerca de uno y el efecto es casi nulo; si A es mucho mayor que B, se desploma y el estado está prácticamente vacío. Todo el contenido del factor de Boltzmann cabe en esta única observación.",
+     "latex": "\\left[\\frac{mgh}{k_BT}\\right] = \\frac{\\text{kg}\\cdot(\\text{m}/\\text{s}^{2})\\cdot\\text{m}}{(\\text{J}/\\text{K})\\cdot\\text{K}} = \\frac{\\text{J}}{\\text{J}} = 1",
+     "kit": "dimension"
+    }
+   ]
+  },
+  "example": {
+   "title": "Ejemplo con números",
+   "lead": "Calculemos aquello por lo que los alpinistas llevan bombonas de oxígeno.",
+   "given": "Estimar la presión en la cima del Everest (h = 8848 m) mediante la fórmula barométrica. Tomar la temperatura media de la columna como 250 K, la masa molar del aire M = 29 g/mol, g = 9,81 m/s², la presión al nivel del mar p₀ = 101 kPa. Hallar también cuánto oxígeno queda allí.",
+   "law": "p(h) = p₀·e^(−h/H), donde H = RT/(Mg) es la altura de la atmósfera homogénea",
+   "solution": [
+    {
+     "text": "Calculamos la escala de alturas. Es más cómodo en forma molar: kT/(mg) y RT/(Mg) son la misma expresión, multiplicada arriba y abajo por el número de Avogadro. Así no hay que recordar la masa de una molécula.",
+     "latex": "H = \\frac{RT}{Mg} = \\frac{8{,}314\\cdot250}{0{,}029\\cdot9{,}81} \\approx \\frac{2079}{0{,}2845} \\approx 7{,}3\\cdot10^{3}\\ \\text{m}"
+    },
+    {
+     "text": "¿Cuántas escalas de altura son? Dividimos la altura del Everest por H y obtenemos el exponente: un número adimensional, como debe ser.",
+     "latex": "\\frac{h}{H} = \\frac{8848}{7300} \\approx 1{,}21"
+    },
+    {
+     "text": "Elevamos e a esa potencia negativa. Mentalmente: e⁻¹ ≈ 0,37, y nuestro exponente es un poco mayor que uno, así que el resultado es un poco menor, alrededor de 0,30.",
+     "latex": "\\frac{p}{p_0} = e^{-1{,}21} \\approx 0{,}30 \\;\\Longrightarrow\\; p \\approx 0{,}30\\cdot101 \\approx 30\\ \\text{kPa}"
+    },
+    {
+     "text": "Ahora el oxígeno. Su proporción en el aire no cambia con la altura y sigue siendo el mismo 21 por ciento: el aire está mezclado por el viento. Por tanto, la presión parcial del oxígeno cae exactamente en la misma proporción que la presión total.",
+     "latex": "p_{\\text{O}_2} = 0{,}21\\cdot30 \\approx 6{,}3\\ \\text{kPa} \\quad\\text{en lugar de}\\quad 0{,}21\\cdot101 \\approx 21\\ \\text{kPa}"
+    }
+   ],
+   "answer": "H ≈ 7,3 km, p ≈ 30 kPa: menos de un tercio de la presión al nivel del mar. La presión parcial del oxígeno es de unos 6 kPa en lugar de 21 kPa al nivel del mar.",
+   "check": "La presión medida en la cima del Everest es de unos 34 kPa. Nuestra estimación es inferior en aproximadamente un diez por ciento, y ese es exactamente el error que cabía esperar: la atmósfera no es isotérmica, la capa inferior cálida 'infla' la columna y mantiene arriba más aire del que da el cálculo con una sola temperatura media. Nótese el carácter del error: no es aleatorio, sino sistemático y siempre en la misma dirección. Para una fórmula de una línea, un diez por ciento es un buen resultado. La conclusión fisiológica no cambia con la corrección: seis kilopascales de oxígeno están por debajo del umbral en el que una persona puede mantener la conciencia durante mucho tiempo, y la 'zona de la muerte' por encima de los 8000 metros no se llama así por estética. Y observe lo que NO hay en la explicación. El oxígeno arriba no ha desaparecido ni se ha transformado en otra cosa; su proporción en el aire es la misma. Lo que está enrarecido es el propio aire."
+  },
+  "constants": {
+   "title": "Constantes de esta sección",
+   "lead": "Una constante fundamental, un número derivado que vale la pena recordar junto con ella, y dos escalas que determinan las respuestas en todo el tema.",
+   "items": [
+    {
+     "sym": "k_B",
+     "latex": "k_B",
+     "name": "Constante de Boltzmann",
+     "value": "1,380 649 · 10⁻²³",
+     "unit": "J / K",
+     "why": "Es la única constante en el factor de Boltzmann y el único puente entre temperatura y energía. Desde 2019, su valor está fijado con precisión, y a través de él se define el kelvin: la temperatura dejó de ser una magnitud independiente y se convirtió en una forma de medir energía. En las fórmulas de esta sección siempre aparece en el producto kT; por sí sola, k casi nunca se necesita.",
+     "mnemo": "k = R / N_A. Si recuerdas 8,31 y 6,02, no necesitas memorizar la constante de Boltzmann: 8,31 / 6,02 ≈ 1,38, y el exponente −23 proviene del número de Avogadro."
+    },
+    {
+     "sym": "k_BT",
+     "latex": "k_BT\\big|_{300\\,\\text{K}}",
+     "name": "Energía térmica a temperatura ambiente",
+     "value": "4,14 · 10⁻²¹ J = 25,9 meV",
+     "unit": "J (o eV)",
+     "why": "El número más útil de toda la física estadística: la medida con la que se compara cualquier energía. En electronvoltios es aproximadamente una cuadragésima parte, y con esa medida se ve de inmediato qué está congelado y qué está vivo. El enlace de hidrógeno es de unos 0,2 eV, ocho veces mayor que kT, por eso el agua a temperatura ambiente es líquida y no gas. La banda prohibida del silicio es de 1,1 eV, cuarenta veces mayor, por eso el silicio puro casi no conduce. El cuanto de vibración de la molécula de nitrógeno es de 0,29 eV, once veces mayor, y las vibraciones permanecen inactivas.",
+     "mnemo": "«Una cuadragésima de electronvoltio». Para un cálculo mental rápido: kT en electronvoltios es igual a la temperatura dividida por 11 600."
+    },
+    {
+     "sym": "H",
+     "latex": "H = \\dfrac{RT}{Mg}",
+     "name": "Altura de la atmósfera homogénea de la Tierra",
+     "value": "8,4",
+     "unit": "km (a 15 °C)",
+     "why": "No es una constante fundamental, sino una escala característica del problema, pero vale la pena recordarla junto con las constantes: a esta altura, la presión cae en un factor e. De aquí se obtienen estimaciones rápidas sin ninguna fórmula. La presión se reduce a la mitad a 5,8 kilómetros — esto es H·ln2, y por debajo de esta altura se encuentra la mitad de toda la masa de la atmósfera. A diez kilómetros, donde vuelan los aviones, queda alrededor del 30 por ciento. La magnitud es proporcional a la temperatura, por lo que en invierno la atmósfera se «contrae» ligeramente y en verano se «expande».",
+     "mnemo": "Ocho kilómetros es aproximadamente la altura del Everest. La coincidencia dice algo simple: la montaña más alta de la Tierra es comparable a la escala de su atmósfera, por lo que en la cima la presión ya es tres veces menor."
+    },
+    {
+     "sym": "θ_{vib}",
+     "latex": "\\theta_{\\text{vib}}(\\text{N}_2)",
+     "name": "Temperatura característica de vibración de la molécula de nitrógeno",
+     "value": "3390",
+     "unit": "K",
+     "why": "La temperatura a la que la energía térmica alcanza exactamente para un cuanto de vibración del enlace N—N: kθ = ħω. A 300 K, la relación θ/T es 11,3, y el factor de Boltzmann da exp(−11,3) ≈ 1,2·10⁻⁵ — vibra aproximadamente una molécula de cada ochenta mil. Por eso el grado de libertad vibracional no participa en la capacidad calorífica del aire: el teorema de equipartición le promete kT, pero la mecánica cuántica no acepta ese pago en monedas pequeñas. En comparación, la temperatura característica de rotación del mismo nitrógeno es de 2,9 K, por lo que las rotaciones están completamente excitadas y contribuyen a la capacidad calorífica.",
+     "mnemo": "La regla es una: un grado de libertad funciona si su cuanto es menor que kT. La rotación del nitrógeno — 2,9 K, funciona siempre; la vibración — 3390 K, a temperatura ambiente casi nunca funciona."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Cómo se relaciona con el resto del curso",
+   "lead": "Un solo factor viaja de capítulo en capítulo, cambiando solo el significado de la letra E.",
+   "items": [
+    {
+     "h": "Termodinámica: capacidad calorífica y grados de libertad congelados",
+     "text": "El teorema de equipartición promete ½kT por cada grado de libertad y predice para un gas diatómico C_V = 7/2·R: tres mitades traslacionales, dos rotacionales y dos vibracionales. Las mediciones dan 5/2·R. La discrepancia la explica exactamente el factor de Boltzmann: el nivel vibracional está 11 kT por encima del fundamental y está ocupado una vez por cada ochenta mil. Calienta el aire a mil kelvins — la capacidad calorífica comenzará a subir, porque exp(−3390/1000) ya es 3,4 por ciento. La física clásica no se equivoca en el cálculo, se equivoca en la premisa: la energía no se puede entregar en porciones arbitrariamente pequeñas."
+    },
+    {
+     "h": "Maxwell: por qué las curvas de velocidades y de energías son diferentes",
+     "text": "La distribución de la primera sección es el mismo factor con E = mv²/2. Pero la curva de velocidades tiene una joroba, mientras que exp(−E/kT) decrece monótonamente, y esto confunde a casi todos. No hay contradicción: la distribución de velocidades tiene un segundo factor, v², que no cuenta la probabilidad de un estado, sino el número de estados — hay más direcciones cuanto mayor es la esfera de radio v. Los detalles están en el apéndice; la conclusión es breve: en cualquier distribución hay dos partes, el factor de Boltzmann y el número de estados, y no deben confundirse."
+    },
+    {
+     "h": "Química y biología: ley de Arrhenius",
+     "text": "Para que una reacción ocurra, las moléculas deben superar una barrera de energía E_a, y la fracción de las que tienen suficiente energía es el mismo exp(−E_a/kT). De ahí la regla práctica «diez grados más, el doble de rápido»: con una barrera típica de unos 50 kJ/mol, subir de 20 a 30 °C da un factor de casi exactamente dos. De ahí también el refrigerador: enfriar veinte grados retarda el deterioro más de cuatro veces, aunque la velocidad media de las moléculas cae solo un tres y medio por ciento. Lo que funciona no es la velocidad media, sino la cola de la distribución."
+    },
+    {
+     "h": "Astrofísica: escape atmosférico y espectros estelares",
+     "text": "Un planeta pierde gas si en la cola de la distribución hay suficientes moléculas más rápidas que la velocidad de escape. Esa fracción contiene exp(−mv²/2kT), por lo que los gases ligeros se escapan y los pesados permanecen: la Tierra retuvo nitrógeno y oxígeno, pero no hidrógeno ni helio, y la Luna no retuvo nada. En las atmósferas estelares, el mismo factor determina qué fracción de átomos se encuentra en niveles excitados, y de eso depende qué líneas se ven en el espectro. Las clases espectrales de las estrellas son, ante todo, una escala de temperaturas leída a través de las poblaciones de niveles."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Curiosidades: compruébalo con tus manos",
+   "lead": "Los dos experimentos siguientes requieren o un viaje a la montaña, o una jeringuilla y agua caliente del grifo, y ambos muestran la misma exponencial.",
+   "items": [
+    {
+     "icon": "flask",
+     "kind": "experimento de cocina",
+     "h": "Atmósfera de mijo",
+     "text": "Echa en un tarro transparente una cucharada de mijo o sémola, de modo que el fondo quede cubierto con una capa, tápalo y agítalo verticalmente, con sacudidas frecuentes y cortas, como un salero. Mientras lo agitas, los granos saltan: cerca del fondo hay mucha densidad, más arriba menos, y no hay ningún límite definido. Si agitas más fuerte, la “atmósfera” sube más. Si te detienes, todo se asienta. Pregunta: ¿por qué la imagen es precisamente así y no “todo abajo” ni “uniforme en todo el tarro”?",
+     "answer": "Porque es exactamente el problema que hemos resuelto: hay gravedad que tira hacia abajo y movimiento desordenado que dispersa hacia arriba. La relación entre las dos energías determina la altura a la que la densidad cae en un factor e: para el aire es kT/mg ≈ 8,4 km, para un grano de masa de un miligramo son milímetros, porque la masa es veinte órdenes de magnitud mayor. Tu mano hace el papel de temperatura: si agitas más fuerte, el “gas” está más caliente y la atmósfera es más alta. La analogía es honesta solo cualitativamente: los granos pierden energía en los impactos, por lo que este “gas” solo vive mientras lo agitas, pero eso es precisamente lo que hace visible lo que en el aire hay que calcular."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "observación de viaje",
+     "h": "Bolsa de patatas fritas en un avión",
+     "text": "Lleva en el avión cualquier bolsa sellada herméticamente, de patatas fritas, frutos secos o galletas. En tierra está blanda, pero en altitud se hincha y queda tensa. Lo mismo ocurre si llevas una bolsa así desde la ciudad a la montaña, a unos dos kilómetros y medio de altitud. Estima de antemano de dos maneras: ¿cuánto debería hincharse y por qué no revienta?",
+     "answer": "La presión en la cabina no se mantiene igual que la exterior, sino aproximadamente como a 2400 metros de altitud. Según la fórmula barométrica con H = 8,4 km, esto es e^(−2400/8400) ≈ 0,75 de la presión en tierra, es decir, unos 75 kilopascales, y el valor medido en cabina es exactamente ese. El aire dentro de la bolsa no tiene tiempo de enfriarse o calentarse notablemente, por lo que se aplica la ley de Boyle, pV = const: el volumen aumentará en 101/75 ≈ 1,35 veces, un tercio. Puedes comprobar la estimación con una cinta métrica: el volumen crece como el cubo del tamaño, por lo que el perímetro de la bolsa debería aumentar aproximadamente un diez por ciento. La bolsa no revienta por dos razones: la película se estira y la diferencia de presión es solo de 26 kilopascales, un cuarto de la atmósfera. El mismo cálculo explica el caso contrario: una botella cerrada herméticamente en vuelo se aplasta en tierra porque vuelve a un aire más denso."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "experimento de cocina",
+     "h": "Agua que hierve a noventa grados",
+     "text": "En la montaña, el agua hierve a menor temperatura: a tres kilómetros, a 90 °C; a cinco, aproximadamente a 83; en la cima del Everest, alrededor de 70. Si estás en la montaña, compruébalo con un termómetro de cocina: el hervidor hace ruido, sale vapor, pero el termómetro se mantiene obstinadamente por debajo de cien. En casa, el mismo efecto se muestra en un minuto. Llena una jeringuilla sin aguja con agua caliente del grifo, a unos sesenta grados, no hirviendo, deja un poco de aire dentro, tapa bien la boquilla con el dedo y tira del émbolo bruscamente hacia ti. ¿Qué ocurrirá con el agua?",
+     "answer": "Hervirá, a sesenta grados, justo en tus manos. No son burbujas de aire disuelto: aparecerían una vez y subirían, pero aquí el vapor crecerá mientras mantengas el émbolo y desaparecerá en cuanto lo sueltes. La ebullición no comienza a una temperatura “propia”, sino cuando la presión de vapor saturado se iguala con la presión externa. Si reduces la presión externa, desplazas el punto de ebullición hacia abajo; en la montaña, la fórmula barométrica hace eso por ti. Y la presión de vapor saturado es, de nuevo, el factor de Boltzmann: la fracción de moléculas con energía suficiente para escapar del líquido va como exp(−L/RT), donde L es el calor de vaporización por mol. De ahí se deduce una consecuencia práctica para la cocina de alta montaña: a 90 grados, un huevo pasado por agua tarda más, y uno duro de verdad no se hace nunca, porque la velocidad de desnaturalización de las proteínas cae según Arrhenius, es decir, según el mismo factor. Por eso en la montaña se usa una olla a presión: aumenta la presión y devuelve la temperatura de ebullición a su valor normal."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoja",
+     "h": "Por qué el oxígeno no está en el fondo",
+     "text": "Cada gas tiene su propia altura de atmósfera homogénea: H = kT/(mg), que es inversamente proporcional a la masa de la molécula. Para el hidrógeno es 120 kilómetros, para el nitrógeno 8,7, para el dióxido de carbono 5,5. Por tanto, a diez kilómetros la mezcla debería separarse notablemente: quedaría un tercio del nitrógeno superficial, pero solo una sexta parte del dióxido de carbono, y la proporción de oxígeno en el aire debería disminuir con la altitud. Las mediciones dicen lo contrario: la composición del aire es constante hasta cien kilómetros con una precisión de fracciones de porcentaje. ¿Es incorrecta la fórmula?",
+     "answer": "La fórmula es correcta, pero describe el equilibrio, el estado al que llegaría la mezcla si se la dejara en reposo durante mucho tiempo. Nadie deja la atmósfera en reposo. La separación por difusión a escala de kilómetros tarda miles de años, mientras que el viento y la convección mezclan la troposfera en días: el proceso lento simplemente no tiene tiempo de hacer nada. Esta explicación tiene una comprobación hermosa. Por encima de cien kilómetros, el aire está tan enrarecido que la mezcla se debilita y la difusión finalmente vence; a esa frontera se la llama turbopausa. Por encima de ella, la composición se separa por masas, como promete la fórmula: primero predomina el oxígeno atómico, luego el helio, y en la parte superior el hidrógeno. La lección es general e importante para todo el curso: antes de aplicar una fórmula de equilibrio, pregúntate si el sistema tiene tiempo de alcanzar el equilibrio."
+    },
+    {
+     "icon": "fact",
+     "kind": "dato curioso",
+     "h": "Atmósfera en una gota de agua",
+     "text": "En 1908, Jean Perrin decidió comprobar la ley de Boltzmann bajo el microscopio. Trituró resina de gutapercha y seleccionó con una centrifugadora esferas casi del mismo tamaño, de aproximadamente un cuarto de micrómetro. Sobre cada una de estas partículas en suspensión actúan las mismas dos fuerzas que sobre una molécula de aire: la gravedad tira hacia abajo (menos el empuje de Arquímedes, por lo que en la fórmula se usa el peso de la partícula menos el peso del agua desplazada), y los choques de las moléculas vecinas las dispersan hacia arriba. Por tanto, debería obtenerse la misma exponencial, solo que la partícula es mucho más masiva que una molécula, por lo que toda la “atmósfera” cabe en unas pocas decenas de micrómetros. Perrin contó las partículas en el campo de visión, reenfocando el microscopio a diferentes profundidades. La exponencial apareció, y a partir de la velocidad de su disminución calculó el número de Avogadro: alrededor de 7·10²³, el orden de magnitud correcto y la primera cifra correcta. Esto se convirtió en una de las pruebas decisivas de que las moléculas existen realmente; Perrin recibió el Premio Nobel en 1926."
+    },
+    {
+     "icon": "edge",
+     "kind": "límite de aplicabilidad",
+     "h": "Una atmósfera estática no existe en absoluto",
+     "text": "En la fórmula que hemos derivado se esconde una inconsistencia, y es sustancial. Consideramos g constante, pero en realidad disminuye como 1/r². Si haces la derivación correctamente, con el potencial −GMm/r, la exponencial en el infinito no tiende a cero, sino a una concentración finita no nula. Una densidad no nula en un espacio infinito implica una masa infinita, lo cual es imposible. Conclusión: una atmósfera isoterma que se extiende hasta el infinito y está en equilibrio estricto es imposible en principio. La atmósfera real no está en equilibrio: fluye lentamente hacia afuera. Las moléculas de la cola rápida de la distribución superan la velocidad de escape y se van para siempre; esto se llama escape por evaporación de Jeans. La Tierra pierde unos tres kilogramos de hidrógeno por segundo; en toda la historia del planeta, eso suma unas pocas décimas de porcentaje del hidrógeno de los océanos, una nimiedad para la Tierra, pero en Venus el mismo mecanismo, con una atmósfera superior más caliente, se llevó el agua por completo. El nitrógeno y el oxígeno no corren ese riesgo: para ellos, el mismo factor de Boltzmann da una fracción de moléculas suficientemente rápidas del orden de e⁻²⁰⁰, es decir, cero en cualquier escala de tiempo imaginable."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "De dónde surge la propia exponencial — y qué no hemos demostrado",
+   "blocks": [
+    {
+     "h": "Qué está demostrado y qué es una conjetura",
+     "text": "La fórmula barométrica la derivamos rigurosamente: a partir del equilibrio de una capa y de la ecuación de estado. La ley general n ∝ exp(−E/kT) no la derivamos, sino que la adivinamos por analogía: notamos que la gravedad solo entraba en la derivación a través del peso de la capa, y supusimos que la energía podría ser cualquiera. Es una suposición razonable, pero no una demostración, y es más honesto decirlo directamente. La demostración real la da la mecánica estadística mediante el conteo de microestados. Sin embargo, gran parte del camino se puede recorrer ya, casi sin cálculos."
+    },
+    {
+     "h": "Las energías se suman, las probabilidades se multiplican — esto casi basta",
+     "text": "Supongamos que un sistema está en contacto con un gran termostato a temperatura T, y que la probabilidad de encontrarlo en un estado con energía E es f(E). Tomemos dos subsistemas independientes. Sus energías se suman, y las probabilidades de eventos independientes se multiplican — por lo tanto, la función f debe convertir la suma en multiplicación. Esta ecuación funcional para una función continua tiene una única solución, y es la exponencial. El signo menos surge del requisito de que la probabilidad total no diverja: una exponencial creciente no es normalizable. Queda una incógnita: la constante β en el exponente.",
+     "latex": "f(E_1 + E_2) = f(E_1)\\,f(E_2) \\;\\Longrightarrow\\; f(E) = C\\,e^{-\\beta E}"
+    },
+    {
+     "h": "Por qué β es igual a 1/kT",
+     "text": "El exponente β no puede depender del dispositivo del propio sistema — solo del termostato. Tome dos cuerpos diferentes en contacto con el mismo reservorio: si tuvieran β diferentes, la energía fluiría de uno a otro sin detenerse y el equilibrio nunca se alcanzaría. Por lo tanto, β es una característica común del contacto térmico, es decir, una función de la sola temperatura. Cuál es, se determina con cualquier ejemplo conveniente, y el más conveniente es el gas ideal: sustituyendo la energía cinética en exp(−βE) y calculando la energía promedio de una molécula, obtenemos ⟨E⟩ = 3/(2β). La comparación con el ya conocido ⟨E⟩ = 3kT/2 del primer párrafo de termodinámica da β = 1/kT. El círculo se cierra: la temperatura definida a través de la energía cinética promedio resultó ser la misma temperatura que aparece en el exponente de la distribución.",
+     "latex": "\\beta = \\frac{1}{k_BT}"
+    },
+    {
+     "h": "Por velocidades o por energías — son curvas diferentes",
+     "text": "El factor de Boltzmann disminuye monótonamente con la energía, mientras que la distribución de Maxwell por velocidades tiene una joroba. La clave está en que la probabilidad de un estado y la probabilidad de un valor son cosas diferentes. Caer en un estado con energía E es exp(−E/kT). Pero hay muchos estados con velocidad cercana a v, y su número crece como el área de una esfera de radio v, es decir, como v². El producto de una exponencial decreciente por una potencia creciente produce la joroba. Por la misma razón, la distribución por energías se ve diferente: allí el factor no es v², sino √E. Compruébelo con números: a la velocidad más probable le corresponde una energía kT, mientras que la energía más probable es kT/2 — son puntos diferentes de la misma distribución. El error de pensar \"si la velocidad v es la más frecuente, entonces la energía en esa velocidad es la más frecuente\" es común, y todo se debe a que se olvidan del número de estados.",
+     "latex": "f(v)\\,dv \\propto \\underbrace{v^{2}}_{\\text{número de estados}}\\;\\underbrace{e^{-mv^{2}/2k_BT}}_{\\text{factor de Boltzmann}}\\,dv, \\qquad f(E)\\,dE \\propto \\sqrt{E}\\;e^{-E/k_BT}\\,dE"
+    },
+    {
+     "h": "Atmósfera real: dónde falla el modelo isotérmico",
+     "text": "La troposfera — los once kilómetros inferiores — no es isotérmica y está cerca no del equilibrio térmico, sino de la mezcla adiabática: el aire en ella sube y baja continuamente, y una porción que asciende se expande y se enfría casi sin intercambio de calor. De ahí el gradiente observado de unos 6,5 grados por kilómetro. Por lo tanto, la atmósfera estándar no usa una exponencial, sino una dependencia de potencia: si la temperatura cae linealmente, T = T₀ − L·h, entonces la presión va como (1 − L·h/T₀) elevado a Mg/(RL) ≈ 5,26. Por encima de la tropopausa, en la estratosfera inferior, la temperatura se mantiene constante durante un tiempo — allí la exponencial funciona bien — y luego aumenta porque el ozono absorbe la radiación ultravioleta. El resultado honesto: nuestra fórmula no es una \"aproximación de primer orden\", sino una estimación razonable con un error de alrededor del diez por ciento en la escala de la troposfera, si se sustituye la temperatura promedio de la capa. Para cálculos aproximados es suficiente; en el altímetro de aviación se usa precisamente la fórmula de potencia, y no por casualidad.",
+     "latex": "p(h) = p_0\\left(1 - \\frac{L\\,h}{T_0}\\right)^{\\!Mg/RL}, \\qquad L \\approx 6{,}5\\ \\text{K/km}"
+    }
+   ]
+  },
+  "memo": {
+   "essence": "La fracción de partículas que reciben una energía E contiene el factor exp(−E/kT): cuanto más costoso es el estado en comparación con la energía térmica, menos frecuente es. La atmósfera es el ejemplo más simple: ascender a una altura h cuesta mgh, por lo que la presión cae exponencialmente con una escala característica H = kT/(mg) ≈ 8,4 km.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "Factor de Boltzmann",
+     "text": "n ∝ exp(−E/kT). La naturaleza de la energía no importa: altura, velocidad, rotación de una molécula, barrera de reacción — todo se calcula igual."
+    },
+    {
+     "icon": "scale",
+     "title": "Escala de altura",
+     "text": "H = kT/(mg) = RT/(Mg). En esta escala, la presión cae en un factor e; a la mitad — en H·ln2 ≈ 5,8 km, por debajo de esta altura se encuentra la mitad de la masa de la atmósfera."
+    },
+    {
+     "icon": "edge",
+     "title": "Congelado significa raro",
+     "text": "La vibración del nitrógeno cuesta 3390 K. A 300 K, una molécula de cada ochenta mil está excitada, y las vibraciones no contribuyen a la capacidad calorífica."
+    },
+    {
+     "icon": "fact",
+     "title": "Exponencial y número de estados",
+     "text": "La distribución = factor de Boltzmann × número de estados. La joroba de la curva de Maxwell la produce el segundo factor v², no la exponencial."
+    }
+   ],
+   "where": [
+    "Altímetro de avión: la altura se calcula a partir de la presión, por lo que antes del aterrizaje se comunica al piloto la presión a nivel del suelo.",
+    "Ley de Arrhenius: la velocidad de reacción y la vida útil de los productos siguen exp(−E_a/RT).",
+    "Equipo de oxígeno: por encima de 3500 metros, la presión parcial de oxígeno ya requiere corrección.",
+    "Semiconductores: el número de portadores en silicio puro sigue exp(−E_g/2kT) — de ahí el aumento de corriente al calentar.",
+    "Escape atmosférico: la Luna y Mercurio no retuvieron gas; la Tierra perdió hidrógeno y helio."
+   ],
+   "watchOut": "Tres errores que se cometen con más frecuencia. Primero: sustituir en kT/(mg) la masa molar en lugar de la masa de una molécula: la forma molar se ve diferente, RT/(Mg), y no se deben confundir. Segundo: pensar que los gases pesados deben acumularse abajo: la fórmula describe el equilibrio, pero la troposfera, mezclada por el viento, no alcanza el equilibrio. Tercero: olvidar que la derivación supuso una temperatura única para toda la columna: la troposfera real se enfría 6,5 grados por kilómetro, y los cálculos precisos se hacen con la fórmula de potencia de la atmósfera estándar, no con la exponencial."
+  },
+  "quiz": [
+   {
+    "id": "b1",
+    "type": "mcq",
+    "q": "¿Por qué en la cima del Everest una persona no tiene suficiente oxígeno?",
+    "options": [
+     "La presión total del aire allí es tres veces menor, y la fracción de oxígeno en la mezcla es la misma — por lo tanto, la presión parcial de oxígeno también es tres veces menor",
+     "El oxígeno es más pesado que el nitrógeno y por eso se asienta abajo: en la cima su fracción en el aire es notablemente menor",
+     "A esa altitud hace mucho frío y parte del oxígeno se congela del aire",
+     "El oxígeno se consume por la respiración y la combustión abajo y no tiene tiempo de subir"
+    ],
+    "answer": 0,
+    "why": "La composición del aire es constante hasta aproximadamente cien kilómetros: la troposfera es mezclada por el viento más rápido de lo que los gases pueden separarse por masas. Con la altitud no cambia la fracción de oxígeno, sino la densidad del aire mismo. La fórmula barométrica a 8848 metros da alrededor de un tercio de la presión a nivel del suelo, por lo tanto, el oxígeno en cada inhalación es aproximadamente tres veces menor: alrededor de 6 kilopascales en lugar de 21.",
+    "hint": "La separación de gases por masas es un fenómeno de equilibrio, y el equilibrio requiere tiempo. Pregúntate qué es más rápido: ¿la difusión a escala de kilómetros o el viento? Y luego, ¿qué cambia con la altitud: la fracción de oxígeno o la densidad del aire?"
+   },
+   {
+    "id": "b2",
+    "type": "mcq",
+    "q": "¿Por qué las vibraciones de los átomos en la molécula de nitrógeno no contribuyen a la capacidad calorífica del aire a temperatura ambiente?",
+    "options": [
+     "El cuanto de vibración es once veces mayor que kT, por lo tanto, según el factor de Boltzmann, solo una molécula de cada decenas de miles está excitada",
+     "El enlace entre los átomos de nitrógeno es demasiado rígido y la molécula no puede vibrar en absoluto",
+     "Las vibraciones existen, pero no almacenan energía: esta se va inmediatamente a las moléculas vecinas",
+     "El teorema de equipartición no es aplicable a gases diatómicos"
+    ],
+    "answer": 0,
+    "why": "La temperatura característica de vibración del nitrógeno es 3390 K, es decir, el cuanto es 11,3 veces mayor que kT a 300 K. El factor exp(−11,3) da aproximadamente 1,2·10⁻⁵: vibra una molécula de cada ochenta mil, y esta contribución no entra en la energía media del gas. La molécula puede vibrar — a 1000 K ya hay alrededor del tres por ciento de moléculas excitadas, y la capacidad calorífica comienza a aumentar. No se trata de la rigidez del enlace en sí, sino de la relación entre el cuanto y la energía térmica: para las rotaciones del mismo nitrógeno, la temperatura característica es 2,9 K, por lo que están completamente excitadas y contribuyen a la capacidad calorífica.",
+    "hint": "Un grado de libertad funciona si su cuanto es menor que kT. Compara 3390 K con 300 K y observa qué da el factor de Boltzmann para esa relación."
+   },
+   {
+    "id": "b3",
+    "type": "free",
+    "q": "Con tus palabras: ¿por qué en el exponente aparece precisamente la relación E/kT, y no la diferencia E − kT?",
+    "keywords": [
+     "adimensional",
+     "relación",
+     "comparación",
+     "unidades",
+     "escala",
+     "medida",
+     "división",
+     "cuántas veces"
+    ],
+    "needed": 2,
+    "why": "Porque el exponente debe ser adimensional. La diferencia de dos energías sigue siendo una energía, en julios, y elevar e a la potencia 'tres julios' es tan absurdo como elevarla a 'tres metros'; lo que hace adimensional a la expresión es precisamente la división. Detrás de la formalidad hay física: kT es la medida natural de energía a una temperatura dada, y la única pregunta significativa es '¿cuántas veces es más costoso el estado que esta medida?', no '¿en cuántos julios?'. De ahí el truco general para leer cualquier fórmula del tipo exp(−A/B): busca inmediatamente qué se compara con qué.",
+    "hint": "Verifica las unidades del exponente. ¿Qué obtienes si elevas el número e a una potencia medida en julios?"
+   },
+   {
+    "id": "b4",
+    "type": "estimate",
+    "q": "La altura de la atmósfera homogénea de la Tierra es de 8,4 kilómetros. ¿A qué altura la presión es la mitad que a nivel del suelo? Responde en kilómetros.",
+    "answer": 5.8,
+    "unit": "km",
+    "why": "La condición p/p₀ = 1/2 implica e^(−h/H) = 1/2, de donde h = H·ln2 = 8,4 · 0,693 ≈ 5,8 kilómetros. Es útil recordar: por debajo de esta altura se encuentra la mitad de toda la masa de la atmósfera. Y nota que la respuesta no es la mitad de 8,4: la exponencial disminuye en un factor e ≈ 2,72 veces por cada 8,4 kilómetros, y a la mitad cae notablemente antes.",
+    "hint": "Escribe la condición p/p₀ = 1/2 mediante la exponencial y toma logaritmos en ambos lados. El logaritmo natural de dos es aproximadamente 0,69.",
+    "tolAbs": 1.5
+   }
+  ],
+  "title": "Distribución de Boltzmann y fórmula barométrica",
+  "subtitle": "Párrafo 2 · Factor exp(−E/kT) y altura de la atmósfera homogénea",
+  "intro": [
+   "El aire en la cima está enrarecido; esto lo sabe cualquiera que haya subido a las montañas o volado en avión. Pero, ¿por qué está ahí? La gravedad atrae cada molécula hacia abajo, y si solo actuara ella, todo el aire yacería en el suelo en una capa de unos pocos metros. No yace, porque las moléculas no están en reposo: el movimiento térmico las dispersa hacia arriba tan persistentemente como la gravedad las tira hacia abajo. La atmósfera es un empate entre dos tendencias, y este empate tiene una fórmula exacta.",
+   "La fórmula resultará ser una exponencial, y en su exponente estará la relación de dos energías: la energía potencial de la molécula mgh y la energía térmica kT. Esta relación no es una peculiaridad de la atmósfera. Dondequiera que aparezca una energía E, la fracción de partículas que poseen esa energía contiene el mismo factor exp(−E/kT). Altura sobre el suelo, velocidad, rotación de una molécula, estiramiento de un enlace químico, energía de barrera de una reacción: en todos los casos el factor es el mismo.",
+   "Procederemos de la siguiente manera. Primero, derivaremos honestamente la fórmula barométrica a partir de la mecánica: tomaremos una capa delgada de aire y exigiremos que no caiga. Luego veremos qué en esta derivación estaba relacionado con la gravedad, y resultará que casi nada. Y al final comprobaremos el factor general en un problema donde no hay altura alguna: por qué la capacidad calorífica del aire es menor que la prometida por el teorema de equipartición y qué significa que 'los grados de libertad vibracionales están congelados'."
+  ],
+  "standNote": "El stand frente a usted es la distribución de velocidades de las moléculas del primer párrafo, y es también el mejor instrumento de medición para lo que vamos a tratar. El factor de Boltzmann está oculto aquí en la cola: la fracción de moléculas más rápidas que un umbral cae aproximadamente como exp(−mv²/2kT), porque la energía cinética también es energía. Haga tres cosas. Primero: establezca el umbral en 1000 m/s a 300 K y recuerde la fracción de rápidas. Segundo: aumente la temperatura al doble, a 600 K; la fracción no se duplicará, sino que aumentará casi quince veces, porque T está en el exponente de la exponencial, no como un factor multiplicativo. Tercero: vuelva a 300 K y cambie la masa molar. El hidrógeno (2 g/mol) y el dióxido de carbono (44 g/mol) a la misma temperatura dan colas que difieren en muchos órdenes de magnitud, y esto es una respuesta lista a la pregunta de por qué la Tierra retuvo nitrógeno y oxígeno, pero perdió hidrógeno y helio. La fórmula barométrica que vamos a derivar está estructurada exactamente igual: en el exponente simplemente está mgh en lugar de mv²/2."
+ },
+ "ar": {
+  "title": "توزيع بولتزمان والصيغة البارومترية",
+  "subtitle": "الفقرة 2 · العامل exp(−E/kT) وارتفاع الغلاف الجوي المتجانس",
+  "intro": [
+   "الهواء في الأعلى مخلخل — يعرف ذلك كل من صعد إلى الجبال أو سافر بالطائرة. لكن لماذا يوجد هناك أصلاً؟ الجاذبية تسحب كل جزيء إلى الأسفل، ولو عملت هي فقط، لكان كل الهواء ملقى على الأرض في طبقة سمكها بضعة أمتار. لكنه لا يبقى هناك، لأن الجزيئات ليست ساكنة: الحركة الحرارية تبعثرها إلى الأعلى بنفس الإصرار الذي تسحبها به الجاذبية إلى الأسفل. الغلاف الجوي هو تعادل بين اتجاهين، ولهذا التعادل صيغة دقيقة.",
+   "الصيغة ستكون دالة أسية، وفي أسها ستكون نسبة طاقتين: الطاقة الكامنة للجزيء mgh والطاقة الحرارية kT. هذه النسبة ليست خاصة بالغلاف الجوي. أينما وُجدت طاقة E، فإن نسبة الجزيئات التي تمتلك هذه الطاقة تحتوي على نفس العامل exp(−E/kT). الارتفاع عن الأرض، السرعة، دوران الجزيء، تمدد الرابطة الكيميائية، طاقة حاجز التفاعل — في كل الحالات العامل واحد.",
+   "سنفعل الآتي. أولاً، سنشتق الصيغة البارومترية بأمانة من الميكانيكا: نأخذ طبقة رقيقة من الهواء ونشترط ألا تسقط. ثم ننظر إلى ما كان في هذا الاشتقاق متعلقاً بالجاذبية — وسنجد أنه لا شيء تقريباً. وفي النهاية سنختبر العامل العام على مسألة لا يوجد فيها ارتفاع إطلاقاً: لماذا السعة الحرارية للهواء أقل مما وعدت به نظرية التوزيع المتساوي، وما معنى «درجات الحرية الاهتزازية مجمدة»."
+  ],
+  "standNote": "المنصة أمامك — توزيع الجزيئات حسب السرعات من الفقرة الأولى، وهو أيضاً أفضل جهاز قياس لما سنتحدث عنه. عامل بولتزمان مخفي هنا في الذيل: نسبة الجزيئات الأسرع من العتبة تنخفض تقريباً مثل exp(−mv²/2kT)، لأن الطاقة الحركية هي أيضاً طاقة. قم بثلاثة أشياء. أولاً: اضبط العتبة على 1000 م/ث عند 300 كلفن وتذكر نسبة السريعة. ثانياً: ارفع درجة الحرارة إلى الضعف، إلى 600 كلفن — سترتفع النسبة ليس إلى الضعف بل إلى خمسة عشر ضعفاً تقريباً، لأن T موجودة في أس الدالة الأسية وليست مضاعفاً أمامها. ثالثاً: أعد 300 كلفن وغيّر الكتلة المولية. الهيدروجين (2 غ/مول) وثاني أكسيد الكربون (44 غ/مول) عند نفس درجة الحرارة يعطيان ذيولاً تختلف بعدة مراتب من الحجم — وهذا جواب جاهز لسؤال لماذا احتفظت الأرض بالنيتروجين والأكسجين لكنها فقدت الهيدروجين والهيليوم. الصيغة البارومترية التي سنشتقها الآن مصممة بنفس الطريقة: في الأس فقط mgh بدلاً من mv²/2.",
+  "formula": {
+   "name": "توزيع بولتزمان والمعادلة البارومترية",
+   "latex": "n \\propto e^{-E/k_BT}, \\qquad p(h) = p_0\\,e^{-mgh/k_BT}",
+   "alsoKnown": "الأول هو معامل بولتزمان، وهو القانون العام لشغل الحالات حسب الطاقة. والثاني هو المعادلة البارومترية، وهي حالة خاصة منه لمجال جاذبية منتظم",
+   "authors": [
+    {
+     "who": "بليز باسكال",
+     "year": "1648",
+     "what": "أجرى تجربة أثبتت أن الهواء له وزن: حيث صعد قريبه فلوران بيرييه بأنبوب تورشيلي إلى جبل بوي دي دوم، فانخفض عمود الزئبق بحوالي ثمانية سنتيمترات"
+    },
+    {
+     "who": "إدموند هالي",
+     "year": "1686",
+     "what": "حصل على القانون الأسي لتناقص الضغط مع الارتفاع بالاعتماد على قانون بويل، وكان أول حساب من نوع \"عند كذا ارتفاع يكون الضغط كذا\"، وذلك قبل قرن ونصف من أي نظرية عن الجزيئات"
+    },
+    {
+     "who": "لودفيغ بولتزمان",
+     "year": "1868-1877",
+     "what": "أظهر أن المعامل exp(−E/kT) لا يخص الجاذبية فقط، بل ينطبق على أي طاقة، وربط احتمال الحالة بعدد الطرق التي يمكن تحقيقها بها"
+    },
+    {
+     "who": "جان بيرين",
+     "year": "1908",
+     "what": "تحقق من القانون تحت المجهر باستخدام معلق من جسيمات مرئية، واستنتج منه عدد أفوجادرو، وهي حجة جعلت الجدل حول حقيقة الجزيئات بلا معنى"
+    }
+   ],
+   "story": "حصل بولتزمان على معامله من خلال حساب عدد الطرق التي يمكن بها توزيع الطاقة بين الجزيئات، وكاد أن يقضي حياته كلها في الدفاع عن هذا النهج: جزء كبير من الفيزيائيين والكيميائيين في عصره اعتبروا الجزيئات خيالًا مريحًا وليس حقيقة. جاء الدليل الحاسم من جهة غير متوقعة. أدرك جان بيرين أن القانون لا يتطلب غازًا: تحت تأثير الجاذبية والاصطدامات الحرارية، يجب أن ينفصل أي معلق إلى طبقات، طالما كانت الجسيمات صغيرة بما يكفي. طحن صمغ الغمغوت، واختار بالطرد المركزي كريات متساوية الحجم تقريبًا، ووضع قطرة تحت المجهر وبدأ بعد الجسيمات على أعماق مختلفة من البؤرة. حصل على نفس الدالة الأسية، لكن ارتفاع الغلاف الجوي المتجانس لم يكن ثمانية كيلومترات، بل بضعة عشرات من الميكرومترات: \"غلاف جوي في قطرة\". من معدل التناقص حسب بيرين عدد أفوجادرو وحصل على حوالي 7·10²³، وهي القيمة الصحيحة من حيث الترتيب والرقم الأول. لم يعش بولتزمان ليرى هذا التحقق، فقد توفي قبله بعامين.",
+   "symbols": [
+    {
+     "sym": "p",
+     "latex": "p",
+     "what": "الضغط عند الارتفاع h",
+     "unit": "Pa",
+     "note": "عند درجة حرارة ثابتة، تركيز الجزيئات يتناسب معه، لذا كلاهما يتناقص مع الارتفاع بنفس الطريقة"
+    },
+    {
+     "sym": "p₀",
+     "latex": "p_0",
+     "what": "الضغط عند مستوى المرجع",
+     "unit": "Pa",
+     "note": "يتم اختيار نقطة الصفر للارتفاع بشكل تعسفي: الصيغة تربط بين مستويين، ولا تحدد مقياسًا مطلقًا"
+    },
+    {
+     "sym": "E",
+     "latex": "E",
+     "what": "طاقة الحالة التي نتحدث عن إشغالها",
+     "unit": "J",
+     "note": "في الحالة البارومترية هي mgh؛ في القانون العام هي طاقة من أي مصدر، تُقاس من نفس الصفر لجميع الحالات"
+    },
+    {
+     "sym": "m",
+     "latex": "m",
+     "what": "كتلة جزيء واحد",
+     "unit": "kg",
+     "note": "واحد فقط، وليس مولًا: للهواء 4.8·10⁻²⁶ كجم. استبدال الكتلة المولية في الصيغة مع k هو الخطأ الأكثر شيوعًا في هذا الموضوع"
+    },
+    {
+     "sym": "k_B",
+     "latex": "k_B",
+     "what": "ثابت بولتزمان",
+     "unit": "J/K",
+     "const": "k_B",
+     "note": "يحول درجة الحرارة إلى طاقة؛ في الصيغ يظهر دائمًا تقريبًا في المنتج kT، والذي عند 300 كلفن يساوي 4.14·10⁻²¹ جول"
+    },
+    {
+     "sym": "T",
+     "latex": "T",
+     "what": "درجة الحرارة المطلقة",
+     "unit": "K",
+     "note": "في نموذجنا، هي واحدة لعمود الهواء بأكمله، وهذا هو الافتراض الأقوى والأكثر هشاشة في الاشتقاق"
+    },
+    {
+     "sym": "g",
+     "latex": "g",
+     "what": "تسارع الجاذبية",
+     "unit": "m/s²",
+     "const": "g",
+     "note": "نعتبره ثابتًا: على ارتفاع عشرة كيلومترات، ينخفض بمقدار ثلث بالمائة فقط، وهذا لا يؤثر على دقتنا"
+    },
+    {
+     "sym": "H",
+     "latex": "H",
+     "what": "ارتفاع الغلاف الجوي المتجانس (مقياس الارتفاع)",
+     "unit": "m",
+     "note": "H = kT/(mg): الارتفاع الذي ينخفض عنده الضغط بمقدار e ≈ 2.72 مرة. معه تصبح الصيغة أقصر: p = p₀·e^(−h/H)"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "الاشتقاق الصارم",
+   "lead": "سنحتاج إلى ثلاثة أشياء، وكلها معروفة بالفعل: شرط التوازن من الميكانيكا، ومعادلة حالة الغاز المثالي من الديناميكا الحرارية، والقدرة على حل أبسط معادلة تفاضلية. لن يكون هناك أي شيء خاص بـ«الغلاف الجوي» في الاشتقاق — سنطلب فقط ألا يسقط الهواء.",
+   "steps": [
+    {
+     "text": "نأخذ طبقة رقيقة من عمود الهواء عند الارتفاع h: مساحة القاعدة A، والسمك Δh. الطبقة لا تتحرك في أي مكان، لذا فإن مجموع القوى المؤثرة عليها يساوي صفرًا. هناك ثلاث قوى بالضبط. من الأسفل، يدفع الهواء الطبقة لأعلى بقوة p(h)·A. من الأعلى، يضغط الهواء لأسفل بقوة p(h+Δh)·A. ويسحب وزن الطبقة نفسه لأسفل بقوة ρ·A·Δh·g. القوى الجانبية متوازنة ولا تدخل في التوازن الرأسي.",
+     "latex": "p(h)\\,A \\;=\\; p(h+\\Delta h)\\,A \\;+\\; \\rho\\,A\\,\\Delta h\\,g",
+     "figure": "barolayer",
+     "figCaption": "الطبقة معلقة لأنها مدعومة من الأسفل بقوة أكبر من الضغط من الأعلى: فرق الضغط يحمل وزنها بالضبط"
+    },
+    {
+     "text": "نختصر المساحة A، ونجمع الضغوط على اليسار ونقسم على Δh. نحصل على نسبة الفرق — زيادة الضغط لكل وحدة ارتفاع. تم اختيار سمك الطبقة بشكل تعسفي ولم يبقَ في المعادلة، لذا يمكن أخذ النهاية عندما Δh → 0 دون تحفظات: العلاقة صحيحة لأي طبقة، وبالتالي حتى لطبقة رقيقة بلا حدود.",
+     "latex": "\\frac{p(h+\\Delta h) - p(h)}{\\Delta h} = -\\rho g \\;\\Longrightarrow\\; \\frac{dp}{dh} = -\\rho g",
+     "figure": "baroslope",
+     "figCaption": "سمك الطبقة اختفى من الإجابة — لذا فإن المساواة تتحمل الانتقال إلى النهاية"
+    },
+    {
+     "text": "حتى الآن هذا هيدروستاتيكا نقية: نفس المعادلة تصف الماء في البحيرة. الفرق يظهر هنا. في السائل، ρ ثابتة، أما في الغاز فالكثافة تعتمد نفسها على الضغط، ومعادلة الحالة تربط بينهما. نعيد كتابة pV = NkT بدلالة الكثافة، بالتعويض بـ N/V = ρ/m، حيث m هي كتلة الجزيء الواحد. وهنا أول افتراض جوهري: نعتبر درجة الحرارة T ثابتة على جميع الارتفاعات. يُعلن أن الغلاف الجوي متساوي الحرارة؛ وسنعود إلى هذا أكثر من مرة.",
+     "latex": "p = \\frac{N}{V}k_BT = \\frac{\\rho}{m}\\,k_BT \\;\\Longrightarrow\\; \\rho = \\frac{m\\,p}{k_BT}",
+     "figure": "barodensity",
+     "figCaption": "عند درجة حرارة واحدة، تتناسب كثافة الغاز طرديًا مع الضغط: تصادمات أقل — جزيئات أقل أيضًا"
+    },
+    {
+     "text": "نعوض بالكثافة في شرط التوازن. نحصل على علاقة من نوع خاص: معدل انخفاض الضغط يتناسب مع الضغط نفسه. هذا مفهوم فيزيائيًا — وزن الطبقة أكبر كلما كان الغاز أكثر كثافة، والكثافة أعلى حيث الضغط أعلى. رياضيًا، هذه هي المعادلة التي يكون حلها دائمًا دالة أسية.",
+     "latex": "\\frac{dp}{dh} = -\\frac{mg}{k_BT}\\,p",
+     "figure": "baroode",
+     "figCaption": "ميل المنحنى عند كل نقطة يتناسب مع ارتفاعه عند تلك النقطة — فقط الدالة الأسية تفعل ذلك"
+    },
+    {
+     "text": "نفصل المتغيرات: كل ما يتعلق بالضغط على اليسار، وكل ما يتعلق بالارتفاع على اليمين. على اليسار سيكون لدينا dp/p، وتكاملها هو اللوغاريتم الطبيعي. نكامل من مستوى المرجع إلى الارتفاع h.",
+     "latex": "\\int_{p_0}^{p}\\frac{dp}{p} \\;=\\; -\\frac{mg}{k_BT}\\int_{0}^{h}dh \\;\\Longrightarrow\\; \\ln\\frac{p}{p_0} = -\\frac{mgh}{k_BT}",
+     "figure": "barointeg",
+     "figCaption": "كل جزء يعتمد فقط على متغيره — بعد ذلك يتم تكاملهما بشكل منفصل"
+    },
+    {
+     "text": "نرفع كلا الطرفين إلى القوة e — صيغة البارومترية جاهزة. وبما أنه عند درجة حرارة ثابتة يتناسب الضغط مع التركيز، فإن عدد الجزيئات في المتر المكعب يتناقص بنفس الطريقة. لاحظ طبيعة الاعتماد: الضغط لا ينخفض خطيًا ولا يصبح صفرًا عند ارتفاع معين. كل كيلومتر تالٍ يزيل نفس النسبة المئوية من المتبقي.",
+     "latex": "p(h) = p_0\\,e^{-mgh/k_BT}, \\qquad n(h) = n_0\\,e^{-mgh/k_BT}",
+     "figure": "baroexp",
+     "figCaption": "الدالة الأسية لا تنتهي: الغلاف الجوي ليس له «حد علوي»، هناك فقط ارتفاع يتوقف عنده عن كونه ملحوظًا"
+    },
+    {
+     "text": "نقرأ النتيجة فيزيائيًا. في الأس لدينا نسبة طاقتين: mgh — الطاقة الكامنة للجزيء عند الارتفاع h، وkT — طاقته الحرارية. الارتفاع الذي تتساوى عنده هاتان الطاقتان هو المقياس الطبيعي للمسألة؛ عنده ينخفض الضغط بمقدار e ≈ 2.72 مرة. يسمى ارتفاع الغلاف الجوي المتجانس: سيكون ارتفاع العمود إذا بقيت الكثافة على جميع الارتفاعات كما هي عند السطح.",
+     "latex": "H = \\frac{k_BT}{mg} = \\frac{RT}{Mg}, \\qquad p(h) = p_0\\,e^{-h/H}",
+     "figure": "baroscale",
+     "figCaption": "لكل غاز مقياس ارتفاع خاص به، يتناسب عكسيًا مع كتلة الجزيء: الهيدروجين منتشر، وثاني أكسيد الكربون مضغوط"
+    },
+    {
+     "text": "الآن الشيء الرئيسي — ما تم حسابه من أجله. انظر أين في الاشتقاق كانت الجاذبية هي المشاركة. في مكان واحد بالضبط: وزن الطبقة كتبناه كـ ρgAΔh. كل شيء آخر — التوازن ومعادلة الحالة — لا يعرف شيئًا عن طبيعة الطاقة. باستبدال mgh بطاقة من أي مصدر، نحصل على قانون بولتزمان العام: نسبة أعداد السكان في حالتين تحددها difference في طاقاتهما، مقسومة على kT. هذا يُثبت بدقة ليس هنا، بل في الميكانيكا الإحصائية؛ مسودة الإثبات في الملحق، وهي أقصر مما تبدو.",
+     "latex": "\\frac{n_2}{n_1} = e^{-(E_2 - E_1)/k_BT}",
+     "figure": "boltzlevels",
+     "figCaption": "المستويات أقل سكانًا كلما كانت أعلى؛ المقياس الوحيد للندرة هو مقدار kT"
+    }
+   ],
+   "plate": "p(h) = p_0\\,e^{-mgh/k_BT}, \\qquad \\frac{n_2}{n_1} = e^{-\\Delta E/k_BT}",
+   "plateCap": "على اليسار — حالة خاصة يمكن التحقق منها بالبارومتر على الدرج. على اليمين — القانون العام الذي تتبعه سرعة التفاعلات الكيميائية، وأطياف النجوم، والسعة الحرارية للهواء. الفرق بينهما فقط في مصدر الطاقة E.",
+   "note": "دعنا نذكر الافتراضات — هذه القائمة هي حدود الصيغة. الأول والأهم: درجة الحرارة ثابتة على العمود بأكمله. التروبوسفير الحقيقي يبرد بحوالي 6.5 درجة لكل كيلومتر، لأنه يتم خلطه باستمرار بالحمل الحراري، والجزء الصاعد من الهواء يتمدد ويبرد تقريبًا دون تبادل حراري. لا يوجد غلاف جوي متساوي الحرارة في الطبيعة؛ صيغتنا تقدير صالح لبضعة كيلومترات إذا عوضنا بمتوسط درجة حرارة الطبقة. الثاني: g ثابت. على عشرة كيلومترات، ينخفض بمقدار ثلث بالمائة — يمكن إهمال ذلك، أما بالنسبة للغلاف الخارجي فلا يمكن، وما يترتب على ذلك مشروح في القسم الترفيهي. الثالث: يعتبر الهواء غازًا واحدًا بكتلة جزيئية 4.8·10⁻²⁶ كجم. بالمعنى الدقيق، للنيتروجين والأكسجين والأرجون مقاييس ارتفاع مختلفة، ووفقًا للصيغة يجب أن يتغير تكوين الهواء مع الارتفاع — لكنه لا يتغير. الرابع، الضمني والأكثر خداعًا: الهواء ساكن. الطقس هو بالضبط ما يحدث عندما يكون التوازن مضطربًا، وهو مضطرب دائمًا."
+  },
+  "math": {
+   "title": "الرياضيات المطلوبة هنا",
+   "lead": "الاشتقاق قصير، وجميع النقاط الثلاث الخطيرة تأتي متتالية — من الخطوة الرابعة إلى السابعة.",
+   "items": [
+    {
+     "what": "معادلة يكون فيها المشتق متناسبًا مع الدالة نفسها",
+     "why": "في الخطوة الرابعة من الاشتقاق حصلنا على dp/dh = −(mg/kT)·p. هذه ليست صيغة لـ p، بل شرط عليها: المشتق عند كل نقطة يجب أن يكون متناسبًا مع القيمة عند نفس النقطة. هذا الشرط تحققه عائلة واحدة فقط من الدوال — الدوال الأسية، ويمكن التحقق من ذلك مباشرة: مشتقة e^(kx) هي k·e^(kx)، أي الدالة الأصلية مضروبة في ثابت. التفرد يُثبت أيضًا باختصار: إذا كان هناك حلان، فإن مشتقة النسبة بينهما تساوي صفرًا، وبالتالي النسبة ثابتة. ومن هنا قاعدة لكل المقرر: بمجرد أن يكون معدل تغير كمية ما متناسبًا مع الكمية نفسها، يكون الجواب دالة أسية، ويبقى فقط إيجاد الأس. الاضمحلال الإشعاعي، تفريغ المكثف، تبريد فنجان، وغلافنا الجوي — كلها نفس المعادلة بحروف مختلفة.",
+     "latex": "\\frac{df}{dx} = k\\,f \\;\\Longleftrightarrow\\; f(x) = f(0)\\,e^{kx}",
+     "kit": "diffeq"
+    },
+    {
+     "what": "فصل المتغيرات ومن أين يأتي اللوغاريتم",
+     "why": "في الخطوة الخامسة نقسم الطرفين على p ونضرب في dh، بحيث يبقى الضغط على اليسار، وينتقل الارتفاع إلى اليمين. تبدو هذه الطريقة تعاملًا حرًا مع dp وdh، لكنها مشروعة: رسميًا هذا تغيير متغير في تكامل محدد، وهذا التدوين مجرد اختصار. على اليسار نحصل على تكامل dp/p، وهو يساوي ln p — ليس باتفاق، بل لأن مشتقة اللوغاريتم تساوي 1/p. اللوغاريتم هنا ليس زخرفة: يظهر دائمًا عندما تكون النسب بين الكميات هي المهمة، وليس الفروق. ولهذا السبب تكون مقاييس القدر الظاهري، والديسيبل، ومقياس الحموضة لوغاريتمية: في كل هذه الحالات تستجيب الطبيعة للضرب، وليس للجمع.",
+     "latex": "\\int\\frac{dp}{p} = \\ln p + C, \\qquad \\ln\\frac{p}{p_0} = \\ln p - \\ln p_0",
+     "kit": "separation"
+    },
+    {
+     "what": "أس الدالة الأسية يجب أن يكون بلا أبعاد",
+     "why": "في الخطوتين السادسة والسابعة ظهر في الأس mgh/kT. دعنا نتحقق من الوحدات: mgh هي كيلوجرامات مضروبة في متر لكل ثانية مربعة وفي متر، أي جول؛ وkT هي أيضًا جول. النسبة بلا أبعاد، ولا يمكن أن يكون الأمر غير ذلك: رفع e إلى قوة «ثلاثة جول» لا معنى له تمامًا مثل رفعه إلى قوة «ثلاثة أمتار». ومن هنا أسلوب عملي لقراءة أي صيغة من الشكل exp(−A/B) — ابحث فورًا عن ما يُقارن بماذا. هنا تُقارن تكلفة الصعود مع الطاقة الحرارية. إذا كانت A أقل بكثير من B، تكون الدالة الأسية قريبة من الواحد ولا يوجد تأثير تقريبًا؛ إذا كانت A أكبر بكثير من B، تنهار الدالة ويكون الحالة فارغة عمليًا. كل محتوى عامل بولتزمان يتلخص في هذه الملاحظة الواحدة.",
+     "latex": "\\left[\\frac{mgh}{k_BT}\\right] = \\frac{\\text{kg}\\cdot(\\text{m}/\\text{s}^{2})\\cdot\\text{m}}{(\\text{J}/\\text{K})\\cdot\\text{K}} = \\frac{\\text{J}}{\\text{J}} = 1",
+     "kit": "dimension"
+    }
+   ]
+  },
+  "example": {
+   "title": "مثال بالأرقام",
+   "lead": "لنحسب ما يحمله متسلقو الجبال من أجله أسطوانات الأكسجين.",
+   "given": "قدّر الضغط على قمة إيفرست (h = 8848 م) باستخدام الصيغة البارومترية. خذ متوسط درجة حرارة العمود 250 كلفن، والكتلة المولية للهواء M = 29 غ/مول، و g = 9.81 م/ث²، والضغط عند سطح البحر p₀ = 101 كيلوباسكال. واحسب أيضًا كمية الأكسجين المتبقية هناك.",
+   "law": "p(h) = p₀·e^(−h/H)، حيث H = RT/(Mg) — ارتفاع الغلاف الجوي المتجانس",
+   "solution": [
+    {
+     "text": "نحسب مقياس الارتفاع. من الأسهل استخدام الصيغة المولية: kT/(mg) وRT/(Mg) هما نفس التعبير، مضروبين ومقسومين على عدد أفوجادرو. هكذا لا نضطر لتذكر كتلة الجزيء الواحد.",
+     "latex": "H = \\frac{RT}{Mg} = \\frac{8.314\\cdot250}{0.029\\cdot9.81} \\approx \\frac{2079}{0.2845} \\approx 7.3\\cdot10^{3}\\ \\text{m}"
+    },
+    {
+     "text": "كم مقياس ارتفاع هذا؟ نقسم ارتفاع إيفرست على H ونحصل على أس الدالة الأسية — عدد بلا أبعاد، كما ينبغي.",
+     "latex": "\\frac{h}{H} = \\frac{8848}{7300} \\approx 1.21"
+    },
+    {
+     "text": "نرفع e إلى قوة سالب هذا الأس. ذهنيًا: e⁻¹ ≈ 0.37، والأس لدينا أكبر قليلًا من واحد، لذا تكون النتيجة أقل قليلًا — حوالي 0.30.",
+     "latex": "\\frac{p}{p_0} = e^{-1.21} \\approx 0.30 \\;\\Longrightarrow\\; p \\approx 0.30\\cdot101 \\approx 30\\ \\text{kPa}"
+    },
+    {
+     "text": "الآن الأكسجين. نسبته في الهواء لا تتغير مع الارتفاع وتبقى 21 بالمائة — الهواء مختلط بالرياح. إذن، الضغط الجزئي للأكسجين ينخفض بنفس العامل الذي ينخفض به الضغط الكلي.",
+     "latex": "p_{\\text{O}_2} = 0.21\\cdot30 \\approx 6.3\\ \\text{kPa} \\quad\\text{بدلاً من}\\quad 0.21\\cdot101 \\approx 21\\ \\text{kPa}"
+    }
+   ],
+   "answer": "H ≈ 7.3 كم، p ≈ 30 كيلوباسكال — أقل من ثلث الضغط عند السطح. الضغط الجزئي للأكسجين حوالي 6 كيلوباسكال بدلاً من 21 كيلوباسكال عند سطح البحر.",
+   "check": "الضغط المقاس على قمة إيفرست حوالي 34 كيلوباسكال. تقديرنا أقل بحوالي عشرة بالمائة، وهذا هو الخطأ المتوقع تمامًا: الغلاف الجوي ليس متساوي الحرارة، فالطبقة السفلية الدافئة «تنفخ» العمود وتحتفظ بمزيد من الهواء في الأعلى مما يعطيه الحساب بمتوسط درجة حرارة واحدة. لاحظ طبيعة الخطأ: إنه ليس عشوائيًا بل منهجيًا ودائمًا في اتجاه واحد. بالنسبة لصيغة من سطر واحد، عشرة بالمائة نتيجة جيدة. الاستنتاج الفسيولوجي لا يتغير مع التصحيح: ستة كيلوباسكال من الأكسجين أقل من العتبة التي يستطيع الإنسان عندها الحفاظ على وعيه لفترة طويلة، و«منطقة الموت» فوق 8000 متر سُميت كذلك ليس من باب الجمال. ولاحظ ما هو غير موجود في التفسير. الأكسجين في الأعلى لم يختفِ ولم يتحول إلى شيء آخر، نسبته في الهواء هي نفسها. الهواء نفسه مخلخل."
+  },
+  "constants": {
+   "title": "ثوابت هذا القسم",
+   "lead": "ثابت أساسي واحد، ورقم مشتق واحد يستحق أن يُحفظ على قدم المساواة معه، ومقياسان يحددان الإجابات في جميع أنحاء الموضوع.",
+   "items": [
+    {
+     "sym": "k_B",
+     "latex": "k_B",
+     "name": "ثابت بولتزمان",
+     "value": "1,380 649 · 10⁻²³",
+     "unit": "J / K",
+     "why": "الثابت الوحيد في عامل بولتزمان والجسر الوحيد بين درجة الحرارة والطاقة. منذ عام 2019، تم تثبيت قيمته بدقة، ومن خلاله تم تعريف الكلفن: لم تعد درجة الحرارة كمية مستقلة بل أصبحت وسيلة لقياس الطاقة. في صيغ هذا القسم، يظهر دائمًا في المنتج kT — ونادرًا ما نحتاج إلى k بمفرده.",
+     "mnemo": "k = R / N_A. إذا كنت تتذكر 8.31 و 6.02، يمكنك ألا تحفظ ثابت بولتزمان: 8.31 / 6.02 ≈ 1.38، والأس −23 يأتي من عدد أفوجادرو."
+    },
+    {
+     "sym": "k_BT",
+     "latex": "k_BT\\big|_{300\\,\\text{K}}",
+     "name": "الطاقة الحرارية عند درجة حرارة الغرفة",
+     "value": "4,14 · 10⁻²¹ J = 25,9 meV",
+     "unit": "J (أو eV)",
+     "why": "أكثر الأرقام فائدة في الفيزياء الإحصائية بأكملها: وهو المقياس الذي تُقارن به أي طاقة. في الإلكترون فولت، يساوي تقريبًا واحدًا على أربعين، وبهذا المقياس يمكنك أن ترى فورًا ما هو مجمد وما هو حي. الرابطة الهيدروجينية حوالي 0.2 eV، أي ثمانية أضعاف kT، لذلك الماء سائل في درجة حرارة الغرفة وليس غازًا. فجوة النطاق في السيليكون هي 1.1 eV، أي أربعين ضعفًا، لذلك السيليكون النقي لا يوصل تقريبًا. كمية اهتزاز جزيء النيتروجين هي 0.29 eV، أي أحد عشر ضعفًا، والاهتزازات صامتة.",
+     "mnemo": "\"واحد على أربعين من الإلكترون فولت.\" لتقدير سريع في عقلك: kT في الإلكترون فولت يساوي درجة الحرارة مقسومة على 11,600."
+    },
+    {
+     "sym": "H",
+     "latex": "H = \\dfrac{RT}{Mg}",
+     "name": "ارتفاع الغلاف الجوي المتجانس للأرض",
+     "value": "8.4",
+     "unit": "km (عند 15 °C)",
+     "why": "ليس ثابتًا أساسيًا، بل مقياسًا مميزًا للمسألة، لكن يجدر تذكره على قدم المساواة مع الثوابت: عند هذا الارتفاع، ينخفض الضغط بمقدار e مرة. ومن هنا تأتي التقديرات السريعة دون أي معادلة. ينخفض الضغط إلى النصف عند 5.8 كيلومتر — وهذا هو H·ln2، وتحت هذا الارتفاع يقع نصف كتلة الغلاف الجوي. وعلى ارتفاع عشرة كيلومترات، حيث تحلق الطائرات، يتبقى حوالي 30 بالمائة. الكمية تتناسب مع درجة الحرارة، لذلك في الشتاء يتقلص الغلاف الجوي قليلاً، وفي الصيف يتمدد.",
+     "mnemo": "ثمانية كيلومترات تقريبًا هو ارتفاع إيفرست. الصدفة تقول شيئًا بسيطًا: أعلى جبل على الأرض مماثل لمقياس غلافها الجوي، لذلك في القمة يكون الضغط بالفعل أقل بثلاث مرات."
+    },
+    {
+     "sym": "θ_{vib}",
+     "latex": "\\theta_{\\text{vib}}(\\text{N}_2)",
+     "name": "درجة الحرارة المميزة لاهتزاز جزيء النيتروجين",
+     "value": "3390",
+     "unit": "K",
+     "why": "درجة الحرارة التي تكون عندها الطاقة الحرارية كافية بالضبط لكم واحد من اهتزاز الرابطة N—N: kθ = ħω. عند 300 K، النسبة θ/T تساوي 11.3، وعامل بولتزمان يعطي exp(−11.3) ≈ 1.2·10⁻⁵ — أي أن جزيءًا واحدًا تقريبًا من كل ثمانين ألفًا يهتز. لذلك، لا تشارك درجة الحرية الاهتزازية في السعة الحرارية للهواء: نظرية التوزيع المتساوي تعدها بـ kT، لكن ميكانيكا الكم لا تقبل هذا الدفع بعملة صغيرة. للمقارنة، درجة الحرارة المميزة لدوران نفس النيتروجين هي 2.9 K، لذلك تكون الدورانات مثارة بالكامل وتدخل في السعة الحرارية.",
+     "mnemo": "القاعدة واحدة: درجة الحرية تعمل إذا كان كمها أصغر من kT. دوران النيتروجين — 2.9 K، يعمل دائمًا؛ الاهتزاز — 3390 K، في درجة حرارة الغرفة لا يعمل تقريبًا أبدًا."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "كيف يرتبط هذا ببقية الدورة",
+   "lead": "عامل واحد ينتقل من فصل إلى فصل، ويغير فقط معنى الحرف E.",
+   "items": [
+    {
+     "h": "الديناميكا الحرارية: السعة الحرارية ودرجات الحرية المجمدة",
+     "text": "تنص نظرية التوزيع المتساوي على أن كل درجة حرية تحصل على ½kT وتتنبأ لغاز ثنائي الذرة بـ C_V = 7/2·R: ثلاثة أنصاف انتقالية، واثنان دورانيان، واثنان اهتزازيان. القياسات تعطي 5/2·R. الاختلاف يفسره عامل بولتزمان تمامًا: المستوى الاهتزازي يقع على ارتفاع 11 kT فوق المستوى الأساسي ومأهول مرة واحدة لكل ثمانين ألفًا. سخن الهواء إلى ألف كلفن — سترتفع السعة الحرارية، لأن exp(−3390/1000) هو بالفعل 3.4 بالمائة. الفيزياء الكلاسيكية لا تخطئ في العد، بل تخطئ في الفرضية: لا يمكن إعطاء الطاقة بكميات صغيرة بشكل تعسفي."
+    },
+    {
+     "h": "ماكسويل: لماذا نحصل على منحنيات مختلفة للسرعات والطاقات",
+     "text": "التوزيع من القسم الأول هو نفس العامل مع E = mv²/2. لكن منحنى السرعات له حدبة، بينما exp(−E/kT) يتناقص رتيبًا، وهذا يربك الجميع تقريبًا. لا يوجد تناقض: توزيع السرعات له عامل ثانٍ، v²، وهو لا يحسب احتمال الحالة، بل عدد الحالات — الاتجاهات أكثر كلما كبرت كرة نصف القطر v. التفاصيل في الملحق، والاستنتاج قصير: في أي توزيع هناك جزآن، عامل بولتزمان وعدد الحالات، ولا يجب الخلط بينهما."
+    },
+    {
+     "h": "الكيمياء والبيولوجيا: قانون أرهينيوس",
+     "text": "لكي يبدأ التفاعل، تحتاج الجزيئات إلى تجاوز حاجز الطاقة E_a، وجزء أولئك الذين لديهم طاقة كافية هو نفس exp(−E_a/kT). من هنا تأتي القاعدة العملية \"عشر درجات — ضعف السرعة\": مع حاجز نموذجي حوالي 50 كيلوجول/مول، الارتفاع من 20 إلى 30 درجة مئوية يعطي عاملًا يساوي تقريبًا اثنين تمامًا. ومن هنا أيضًا الثلاجة: التبريد بعشرين درجة يبطئ التلف بأكثر من أربع مرات، على الرغم من أن متوسط سرعة الجزيئات انخفض بنسبة ثلاثة ونصف بالمائة فقط. ما يعمل ليس السرعة المتوسطة، بل ذيل التوزيع."
+    },
+    {
+     "h": "الفيزياء الفلكية: هروب الأغلفة الجوية وأطياف النجوم",
+     "text": "يفقد الكوكب غازه إذا كان في ذيل التوزيع ما يكفي من الجزيئات الأسرع من سرعة الإفلات الثانية. هذا الجزء يحتوي على exp(−mv²/2kT)، لذلك الغازات الخفيفة تهرب بينما الثقيلة تبقى: الأرض احتفظت بالنيتروجين والأكسجين، لكن ليس بالهيدروجين والهيليوم، والقمر لم يحتفظ بأي شيء. في الأغلفة الجوية للنجوم، يحدد نفس العامل أي جزء من الذرات في مستويات مثارة، ومن هذا تعتمد الخطوط التي تظهر في الطيف. التصنيفات الطيفية للنجوم هي في المقام الأول مقياس لدرجة الحرارة، يُقرأ من خلال إشغال المستويات."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "مثير للاهتمام: تحقق بنفسك",
+   "lead": "التجربتان التاليتان تتطلبان إما رحلة إلى الجبال أو حقنة وماء ساخن من الصنبور — وكلاهما يُظهر نفس الدالة الأسية.",
+   "items": [
+    {
+     "icon": "flask",
+     "kind": "تجربة في المطبخ",
+     "h": "غلاف جوي من الدخن",
+     "text": "ضع ملعقة كبيرة من الدخن أو السميد في وعاء زجاجي شفاف بحيث يغطي القاع بطبقة واحدة، ثم أغلق الغطاء ورجّه عمودياً وبشكل متكرر وسريع مثل وعاء الملح. أثناء الرج، تقفز الحبيبات: تكون كثيفة بالقرب من القاع، وأقل كلما ارتفعنا، ولا توجد حدود حادة في أي مكان. إذا رججت بقوة أكبر، يرتفع \"الغلاف الجوي\" أعلى. إذا توقفت، يستقر كل شيء. السؤال: لماذا يكون المشهد هكذا تماماً، وليس \"الجميع في الأسفل\" أو \"موزعين بالتساوي في جميع أنحاء الوعاء\"؟",
+     "answer": "لأن هذه هي بالضبط المسألة التي حللناها: هناك جاذبية تسحب لأسفل، وحركة عشوائية تبعثر للأعلى. نسبة الطاقتين تحدد الارتفاع الذي تنخفض عنده الكثافة بمقدار e مرة: بالنسبة للهواء، kT/mg ≈ 8.4 كم، وبالنسبة لحبيبة كتلتها مليغرام واحد — مليمترات، لأن الكتلة أكبر بعشرين مرتبة من حيث الحجم. يدك تلعب دور درجة الحرارة: كلما رججت بقوة، كان \"الغاز\" أسخن والغلاف الجوي أعلى. التشبيه دقيق نوعياً فقط: الحبيبات تفقد الطاقة عند الاصطدامات، لذلك يعيش هذا \"الغاز\" فقط طالما يتم رجه — ولكن هذا بالضبط ما يجعل مرئياً ما يجب حسابه في الهواء."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "ملاحظة في الطريق",
+     "h": "كيس رقائق البطاطس في الطائرة",
+     "text": "خذ معك في الطائرة أي كيس محكم الإغلاق — رقائق البطاطس، المكسرات، الفواكه المجففة. على الأرض يكون طرياً، لكنه على الارتفاع ينتفخ ويصبح مشدوداً. نفس الشيء سيحدث إذا أحضرت مثل هذا الكيس من المدينة إلى الجبال على ارتفاع حوالي كيلومترين ونصف. قدّر مسبقاً بطريقتين: كم يجب أن ينتفخ، ولماذا لا ينفجر؟",
+     "answer": "الضغط في المقصورة لا يُحافظ عليه عند الضغط الخارجي، بل عند ضغط يعادل ارتفاع 2400 متر. وفقاً للمعادلة البارومترية مع H = 8.4 كم، هذا يعطي e^(−2400/8400) ≈ 0.75 من الضغط الأرضي، أي حوالي 75 كيلوباسكال — والرقم المقاس في المقصورة هو بالضبط هذا. الهواء داخل الكيس لا يبرد أو يسخن بشكل ملحوظ، لذلك يعمل قانون بويل، pV = const: سيزداد الحجم بنسبة 101/75 ≈ 1.35 مرة، أي بمقدار الثلث. يمكنك التحقق من التقدير بشريط قياس: الحجم يتناسب مع مكعب الحجم، لذا يجب أن يزيد محيط الكيس بحوالي عشرة بالمائة. لا ينفجر الكيس لسببين: الفيلم يتمدد، وفرق الضغط هو 26 كيلوباسكال فقط — ربع الغلاف الجوي. نفس الحساب يفسر الحالة المعاكسة: زجاجة مغلقة بإحكام أثناء الرحلة تُسحق على الأرض لأنها عادت إلى هواء أكثر كثافة."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "تجربة في المطبخ",
+     "h": "ماء يغلي عند تسعين درجة",
+     "text": "في الجبال، يغلي الماء عند درجة حرارة أقل: على ارتفاع ثلاثة كيلومترات — عند 90 درجة مئوية، وعلى خمسة كيلومترات — حوالي 83 درجة، وعلى قمة إيفرست — حوالي 70 درجة. إذا كنت في الجبال، تحقق بميزان حرارة المطبخ: الغلاية تصدر ضوضاء، والبخار يتصاعد، لكن ميزان الحرارة يصر على البقاء أقل من مائة. في المنزل، يمكن إظهار نفس التأثير في دقيقة واحدة. اسحب ماءً ساخناً من الصنبور في حقنة بدون إبرة — حوالي ستين درجة، وليس ماءً مغلياً — واترك بعض الهواء بداخلها، وأغلق الفوهة بإحكام بإصبعك، واسحب المكبس فجأة نحوك. ماذا سيحدث للماء؟",
+     "answer": "سيغلي — عند ستين درجة، مباشرة بين يديك. هذه ليست فقاعات هواء مذاب: كانت ستظهر مرة واحدة وتطفو، لكن هنا سيتشكل البخار طالما أمسكت المكبس، ويختفي بمجرد أن تتركه. يبدأ الغليان ليس عند درجة حرارة \"خاصة به\"، بل عندما يتساوى ضغط البخار المشبع مع الضغط الخارجي. خفضت الضغط الخارجي — تحركت نقطة الغليان للأسفل؛ في الجبال، تقوم المعادلة البارومترية بذلك نيابة عنك. وضغط البخار المشبع نفسه — هو مرة أخرى عامل بولتزمان: جزء الجزيئات التي لديها طاقة كافية للهروب من السائل يُعطى بـ exp(−L/RT)، حيث L هي حرارة التبخر لكل مول. من هنا يأتي الاستنتاج العملي لمطبخ المرتفعات: عند 90 درجة، تُسلق البيضة المسلوقة جيداً لفترة أطول، والبيضة المسلوقة جيداً حقاً لا تُسلق إطلاقاً — لأن معدل تمسخ البروتين ينخفض وفقاً لمعادلة أرينيوس، أي بنفس العامل. لذلك في الجبال يستخدمون طنجرة الضغط: فهي ترفع الضغط وتعيد درجة حرارة الغليان إلى وضعها الطبيعي."
+    },
+    {
+     "icon": "paradox",
+     "kind": "مفارقة",
+     "h": "لماذا لا يقع الأكسجين في القاع",
+     "text": "لكل غاز ارتفاعه الخاص في الغلاف الجوي المتجانس: H = kT/(mg)، وهو يتناسب عكسياً مع كتلة الجزيء. بالنسبة للهيدروجين، هذا 120 كيلومتراً، وللنيتروجين 8.7، ولثاني أكسيد الكربون 5.5. لذلك، على ارتفاع عشرة كيلومترات، يجب أن ينفصل الخليط بشكل ملحوظ: سيبقى من النيتروجين ثلث الكمية الأرضية، ومن ثاني أكسيد الكربون سدس فقط، ويجب أن تنخفض نسبة الأكسجين في الهواء مع الارتفاع. القياسات تقول العكس: تكوين الهواء ثابت حتى مائة كيلومتر بدقة تصل إلى أجزاء من المئة. هل المعادلة خاطئة؟",
+     "answer": "المعادلة صحيحة، لكنها تصف التوازن — الحالة التي سيصل إليها الخليط إذا تُرك دون إزعاج لفترة كافية. لا أحد يترك الغلاف الجوي دون إزعاج. الانفصال الانتشارى على نطاق كيلومترات يستغرق آلاف السنين، بينما الرياح والحمل الحراري يخلطان التروبوسفير في أيام: العملية البطيئة ببساطة لا يتوفر لها الوقت لفعل أي شيء. لهذا التفسير تحقق جميل. فوق مائة كيلومتر، يكون الهواء مخلخلاً لدرجة أن الاختلاط يضعف ويبدأ الانتشار أخيراً في الانتصار؛ ويسمى هذا الحد باسم توربوبوز. فوقه، ينفصل التركيب بالفعل حسب الكتل، كما تعد المعادلة: أولاً يسود الأكسجين الذري، ثم الهيليوم، وفي الأعلى الهيدروجين. الدرس عام ومهم طوال الدورة: قبل تطبيق معادلة التوازن، اسأل ما إذا كان النظام لديه الوقت للوصول إلى التوازن."
+    },
+    {
+     "icon": "fact",
+     "kind": "حقيقة مثيرة للاهتمام",
+     "h": "غلاف جوي في قطرة ماء",
+     "text": "في عام 1908، قرر جان بيرين اختبار قانون بولتزمان تحت المجهر. قام بطحن راتنج الصمغ العربي واختار بالطرد المركزي كرات متساوية الحجم تقريباً — حوالي ربع ميكرومتر. على كل جسيم من هذه الجسيمات في المعلق تعمل نفس القوتين اللتين تعملان على جزيء الهواء: الجاذبية تسحب لأسفل (بعد طرح قوة أرخميدس، لذلك في المعادلة نستخدم وزن الجسيم ناقص وزن الماء المزاح)، واصطدامات الجزيئات المجاورة تبعثره للأعلى. لذلك، يجب أن نحصل على نفس الدالة الأسية — فقط الجسيم أثقل بكثير من الجزيء، لذا فإن \"الغلاف الجوي\" بأكمله يتسع في بضعة عشرات من الميكرومترات. عد بيرين الجسيمات في مجال الرؤية، مع إعادة ضبط تركيز المجهر على أعماق مختلفة. حصل على الدالة الأسية، ومن معدل انخفاضها حسب عدد أفوجادرو: حوالي 7·10²³ — ترتيب الحجم صحيح والرقم الأول صحيح. كانت هذه واحدة من الحجج الحاسمة لصالح أن الجزيئات موجودة بالفعل؛ حصل بيرين على جائزة نوبل في عام 1926."
+    },
+    {
+     "icon": "edge",
+     "kind": "حدود التطبيق",
+     "h": "الغلاف الجوي الساكن غير موجود إطلاقاً",
+     "text": "في المعادلة التي اشتقيناها، هناك تناقض خفي، وهو مهم. اعتبرنا g ثابتاً، لكنه في الواقع يتناقص مثل 1/r². قم بالاشتقاق بدقة، مع الجهد −GMm/r — وسترى أن الدالة الأسية عند اللانهاية لا تقترب من الصفر، بل من تركيز ثابت غير صفري. الكثافة غير الصفرية في الفضاء اللانهائي تعني كتلة لا نهائية، وهو أمر مستحيل. الخلاصة: الغلاف الجوي متساوي الحرارة، الممتد إلى اللانهاية وفي توازن صارم، مستحيل من حيث المبدأ. الغلاف الجوي الحقيقي ليس في توازن — إنه يتدفق ببطء إلى الخارج. الجزيئات من الذيل السريع للتوزيع تتجاوز سرعة الإفلات الثانية وتغادر إلى الأبد؛ وهذا ما يسمى بالهروب الجينزي. تفقد الأرض حوالي ثلاثة كيلوغرامات من الهيدروجين في الثانية، وعلى مدى تاريخ الكوكب بأكمله يتراكم بضعة أعشار بالمائة من هيدروجين المحيطات — وهذا تافه بالنسبة للأرض، لكن على الزهرة نفس الآلية مع غلاف جوي علوي أكثر سخونة حملت الماء بالكامل. النيتروجين والأكسجين ليسا في خطر: بالنسبة لهما، نفس عامل بولتزمان يعطي جزءاً من الجزيئات السريعة بما فيه الكفاية بترتيب e⁻²⁰⁰، أي صفر على أي مقياس زمني يمكن تصوره."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "من أين يأتي الأس نفسه — وما لم نُثبته",
+   "blocks": [
+    {
+     "h": "ما هو مُثبت وما هو تخمين",
+     "text": "الصيغة البارومترية اشتقيناها بدقة: من توازن الطبقة ومعادلة الحالة. القانون العام n ∝ exp(−E/kT) لم نشتقه، بل خمّناه على غرار — لاحظنا أن الجاذبية دخلت في الاشتقاق فقط عبر وزن الطبقة، وافترضنا أن الطاقة يمكن أن تكون أي شيء. هذا تخمين معقول، لكنه ليس برهانًا، والأصدق أن نقول ذلك صراحة. البرهان الحقيقي تعطيه الميكانيكا الإحصائية عبر عدّ الحالات الدقيقة. ومع ذلك، يمكن قطع معظم الطريق الآن، تقريبًا بدون حسابات."
+    },
+    {
+     "h": "الطاقات تُجمع، والاحتمالات تُضرب — هذا يكاد يكون كافيًا",
+     "text": "لنفترض أن نظامًا يلامس مُنظِّمًا حراريًا كبيرًا عند درجة حرارة T، ولنفترض أن احتمال وجوده في حالة ذات طاقة E هو f(E). خذ نظامين فرعيين مستقلين. طاقاتهما تُجمع، واحتمالات الأحداث المستقلة تُضرب — إذن الدالة f يجب أن تحوّل الجمع إلى ضرب. هذه المعادلة الدالية لدالة متصلة لها حل وحيد، وهو الأس. علامة الناقص تأتي من اشتراط ألا يتباعد الاحتمال الكلي: فالأس المتزايد لا يمكن تطبيعه. يبقى مجهول واحد — الثابت β في الأس.",
+     "latex": "f(E_1 + E_2) = f(E_1)\\,f(E_2) \\;\\Longrightarrow\\; f(E) = C\\,e^{-\\beta E}"
+    },
+    {
+     "h": "لماذا β تساوي 1/kT",
+     "text": "الأس β لا يمكن أن يعتمد على بنية النظام نفسه — فقط على المُنظِّم الحراري. خذ جسمين مختلفين على اتصال بخزان واحد: لو كان لهما β مختلفان، لانتقلت الطاقة من أحدهما إلى الآخر دون توقف ولما تحقق التوازن أبدًا. إذن، β خاصية مشتركة للتلامس الحراري، أي دالة لدرجة الحرارة وحدها. وأي دالة هي، يُحدد على أي مثال مناسب، والأكثر ملاءمة هو الغاز المثالي: بتعويض الطاقة الحركية في exp(−βE) وحساب متوسط طاقة الجزيء، نحصل على ⟨E⟩ = 3/(2β). والمقارنة مع ⟨E⟩ = 3kT/2 المعروف من الفقرة الأولى في الديناميكا الحرارية تعطي β = 1/kT. اكتملت الدائرة: درجة الحرارة المعرّفة عبر متوسط الطاقة الحركية اتضح أنها نفس درجة الحرارة الموجودة في أس التوزيع.",
+     "latex": "\\beta = \\frac{1}{k_BT}"
+    },
+    {
+     "h": "حسب السرعات أو حسب الطاقات — منحنيان مختلفان",
+     "text": "عامل بولتزمان يتناقص رتيبًا مع الطاقة، بينما توزيع ماكسويل للسرعات له حدب. السر في أن احتمال حالة واحتمال قيمة شيئان مختلفان. الوصول إلى حالة محددة بطاقة E هو exp(−E/kT). لكن عدد الحالات ذات السرعة قرب v كبير، وينمو كمساحة كرة نصف قطرها v، أي كـ v². حاصل ضرب الأس المتناقص في القوة المتزايدة يعطي الحدب. ولهذا السبب نفسه، يبدو التوزيع حسب الطاقة مختلفًا: هناك العامل ليس v² بل √E. تحقق بالأرقام: السرعة الأكثر احتمالًا يقابلها طاقة kT، بينما الطاقة الأكثر احتمالًا هي kT/2 — هاتان نقطتان مختلفتان من التوزيع نفسه. الخطأ «بما أن السرعة v هي الأكثر شيوعًا، فالطاقة عندها هي الأكثر شيوعًا» يحدث كثيرًا، وسببه كله نسيان عدد الحالات.",
+     "latex": "f(v)\\,dv \\propto \\underbrace{v^{2}}_{\\text{عدد الحالات}}\\;\\underbrace{e^{-mv^{2}/2k_BT}}_{\\text{عامل بولتزمان}}\\,dv, \\qquad f(E)\\,dE \\propto \\sqrt{E}\\;e^{-E/k_BT}\\,dE"
+    },
+    {
+     "h": "الغلاف الجوي الحقيقي: أين ينهار النموذج متساوي الحرارة",
+     "text": "التروبوسفير — الطبقة السفلى البالغ ارتفاعها أحد عشر كيلومترًا — ليس متساوي الحرارة، وهو أقرب إلى الخلط الأديباتيكي منه إلى التوازن الحراري: الهواء فيه يصعد ويهبط باستمرار، والحزمة الصاعدة تتمدد وتبرد تقريبًا بدون تبادل حراري. ومن هنا يأتي التدرج الملحوظ حوالي 6.5 درجة لكل كيلومتر. لذلك يستخدم الغلاف الجوي القياسي ليس الأس، بل دالة قوة: إذا انخفضت درجة الحرارة خطيًا، T = T₀ − L·h، فإن الضغط يسير كـ (1 − L·h/T₀) مرفوعًا إلى الأس Mg/(RL) ≈ 5.26. فوق التروبوبوز، في الستراتوسفير السفلى، تظل درجة الحرارة ثابتة لبعض الوقت — هناك يعمل الأس جيدًا — ثم ترتفع لأن الأوزون يمتص الأشعة فوق البنفسجية. الخلاصة الصادقة: صيغتنا ليست «تقريبًا من الدرجة الأولى»، بل تقدير معقول بخطأ حوالي عشرة بالمائة على مقياس التروبوسفير، إذا عوّضنا متوسط درجة حرارة الطبقة. للتقديرات السريعة تكفي؛ وفي مقياس الارتفاع في الطيران تجلس الصيغة الأسية تحديدًا، وليس صدفة.",
+     "latex": "p(h) = p_0\\left(1 - \\frac{L\\,h}{T_0}\\right)^{\\!Mg/RL}, \\qquad L \\approx 6{,}5\\ \\text{K/km}"
+    }
+   ]
+  },
+  "memo": {
+   "essence": "جزء الجسيمات التي حصلت على طاقة E يحتوي على العامل exp(−E/kT): كلما كانت الحالة أغلى مقارنة بالطاقة الحرارية، كلما كانت نادرة. الغلاف الجوي هو أبسط مثال: الصعود إلى ارتفاع h يكلف mgh، لذلك ينخفض الضغط أسيًا بمقياس مميز H = kT/(mg) ≈ 8.4 كم.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "عامل بولتزمان",
+     "text": "n ∝ exp(−E/kT). طبيعة الطاقة غير مهمة: الارتفاع، السرعة، دوران الجزيء، حاجز التفاعل — كلها تُحسب بنفس الطريقة"
+    },
+    {
+     "icon": "scale",
+     "title": "مقياس الارتفاع",
+     "text": "H = kT/(mg) = RT/(Mg). عنده ينخفض الضغط بمقدار e مرة؛ إلى النصف عند H·ln2 ≈ 5.8 كم، تحت هذا الارتفاع يقع نصف كتلة الغلاف الجوي"
+    },
+    {
+     "icon": "edge",
+     "title": "متجمد — يعني نادر",
+     "text": "اهتزاز النيتروجين يكلف 3390 كلفن. عند 300 كلفن يُثار جزيء واحد من كل ثمانين ألفًا، ولا تدخل الاهتزازات في السعة الحرارية"
+    },
+    {
+     "icon": "fact",
+     "title": "الدالة الأسية وعدد الحالات",
+     "text": "التوزيع = عامل بولتزمان × عدد الحالات. الحدبة في منحنى ماكسويل تعطيها العوامل v²، وليس الدالة الأسية"
+    }
+   ],
+   "where": [
+    "مقياس الارتفاع في الطائرة: يُحسب الارتفاع من الضغط، لذلك يُخبر الطيار بالضغط الأرضي قبل الهبوط",
+    "قانون أرهينيوس: سرعة التفاعل ومدة صلاحية المنتجات تتبعان exp(−E_a/RT)",
+    "معدات الأكسجين: فوق 3500 متر يتطلب الضغط الجزئي للأكسجين تصحيحًا",
+    "أشباه الموصلات: عدد حاملات الشحنة في السيليكون النقي يتبع exp(−E_g/2kT) — ومن هنا زيادة التيار عند التسخين",
+    "هروب الأغلفة الجوية: القمر وعطارد لم يحتفظا بالغاز، الأرض فقدت الهيدروجين والهيليوم"
+   ],
+   "watchOut": "ثلاثة أخطاء يرتكبها الناس غالبًا. الأول: وضع الكتلة المولية في kT/(mg) بدلاً من كتلة الجزيء الواحد: الصيغة المولية تبدو مختلفة، RT/(Mg)، ولا يجوز الخلط بينهما. الثاني: الاعتقاد أن الغازات الثقيلة يجب أن تتجمع في الأسفل: الصيغة تصف التوازن، والتروبوسفير المختلط بالرياح لا يصل إلى التوازن. الثالث: نسيان أن الاشتقاق افترض درجة حرارة واحدة للعمود بأكمله: التروبوسفير الحقيقي يبرد بمقدار 6.5 درجة لكل كيلومتر، والحسابات الدقيقة تُجرى باستخدام صيغة القوة للغلاف الجوي القياسي، وليس بالدالة الأسية."
+  },
+  "quiz": [
+   {
+    "id": "b1",
+    "type": "mcq",
+    "q": "لماذا لا يكفي الأكسجين للإنسان على قمة إيفرست؟",
+    "options": [
+     "الضغط الكلي للهواء هناك أقل بثلاث مرات، ونسبة الأكسجين في الخليط هي نفسها — وبالتالي فإن الضغط الجزئي للأكسجين أقل بثلاث مرات أيضًا",
+     "الأكسجين أثقل من النيتروجين ولذلك يترسب في الأسفل: في الأعلى تكون نسبته في الهواء أقل بشكل ملحوظ",
+     "على الارتفاع يكون الجو باردًا جدًا، ويتجمد جزء من الأكسجين من الهواء",
+     "يُستهلك الأكسجين بالتنفس والاحتراق في الأسفل ولا يصل إلى الأعلى"
+    ],
+    "answer": 0,
+    "why": "تركيب الهواء ثابت تقريبًا حتى مئة كيلومتر: الرياح تخلط التروبوسفير أسرع مما تستطيع الغازات الانفصال حسب الكتلة. مع الارتفاع لا تتغير نسبة الأكسجين، بل كثافة الهواء نفسه. تعطي الصيغة البارومترية على ارتفاع 8848 مترًا حوالي ثلث الضغط الأرضي، وبالتالي الأكسجين في كل نفس أقل بثلاث مرات تقريبًا: حوالي 6 كيلوباسكال بدلاً من 21.",
+    "hint": "فصل الغازات حسب الكتلة هو ظاهرة توازنية، والتوازن يتطلب وقتًا. اسأل نفسك: ما الأسرع، الانتشار على نطاق كيلومترات أم الرياح؟ ثم: ما الذي يتغير مع الارتفاع، نسبة الأكسجين أم كثافة الهواء؟"
+   },
+   {
+    "id": "b2",
+    "type": "mcq",
+    "q": "لماذا لا تساهم اهتزازات الذرات في جزيء النيتروجين في السعة الحرارية للهواء عند درجة حرارة الغرفة؟",
+    "options": [
+     "كم الاهتزاز أكبر بإحدى عشرة مرة من kT، لذلك وفقًا لعامل بولتزمان، يكون جزيء واحد فقط من بين عشرات الآلاف مثارًا",
+     "الرابطة بين ذرتي النيتروجين صلبة جدًا، والجزيء لا يمكن أن يهتز إطلاقًا",
+     "الاهتزازات موجودة، لكنها لا تخزن طاقة: تنتقل فورًا إلى الجزيئات المجاورة",
+     "نظرية التوزيع المتساوي لا تنطبق على الغازات ثنائية الذرة"
+    ],
+    "answer": 0,
+    "why": "درجة الحرارة المميزة لاهتزازات النيتروجين هي 3390 كلفن، أي أن الكم أكبر بـ 11.3 مرة من kT عند 300 كلفن. يعطي العامل exp(−11.3) حوالي 1.2×10⁻⁵: يهتز جزيء واحد من بين ثمانين ألفًا، وهذا المساهمة لا تدخل في متوسط طاقة الغاز. يمكن للجزيء أن يهتز — عند 1000 كلفن يكون حوالي ثلاثة بالمائة مثارًا، وتبدأ السعة الحرارية في الزيادة. الأمر ليس في صلابة الرابطة بحد ذاتها، بل في نسبة الكم إلى الطاقة الحرارية: بالنسبة لدورانات النيتروجين نفسه، درجة الحرارة المميزة هي 2.9 كلفن، لذلك فهي مثارة تمامًا وتدخل في السعة الحرارية.",
+    "hint": "تعمل درجة الحرية إذا كان كمها أقل من kT. قارن 3390 كلفن مع 300 كلفن وانظر ماذا يعطي عامل بولتزمان لهذه النسبة."
+   },
+   {
+    "id": "b3",
+    "type": "free",
+    "q": "بكلماتك الخاصة: لماذا في الأس يوجد تحديدًا النسبة E/kT وليس الفرق E − kT؟",
+    "keywords": [
+     "بلا أبعاد",
+     "نسبة",
+     "مقارنة",
+     "وحدات",
+     "مقياس",
+     "قياس",
+     "قسمة",
+     "كم مرة"
+    ],
+    "needed": 2,
+    "why": "لأن الأس يجب أن يكون بلا أبعاد. الفرق بين طاقتين هو لا يزال طاقة، بالجول، ورفع e إلى قوة \"ثلاثة جول\" لا معنى له تمامًا مثل رفعه إلى قوة \"ثلاثة أمتار\"؛ ما يجعل التعبير بلا أبعاد هو القسمة. وراء الشكلية تكمن الفيزياء: kT هو مقياس طبيعي للطاقة عند درجة حرارة معينة، والسؤال الوحيد ذو المعنى هو \"كم مرة تكون الحالة أغلى من هذا المقياس\"، وليس \"بكم جول\". من هنا تأتي الحيلة العامة لقراءة أي صيغة من الشكل exp(−A/B): ابحث فورًا عن ما يُقارن بماذا.",
+    "hint": "تحقق من وحدات الأس. ماذا يحدث إذا رفعت العدد e إلى قوة تقاس بالجول؟"
+   },
+   {
+    "id": "b4",
+    "type": "estimate",
+    "q": "ارتفاع الغلاف الجوي المتجانس للأرض هو 8.4 كيلومتر. على أي ارتفاع يكون الضغط نصف الضغط الأرضي؟ الإجابة بالكيلومترات.",
+    "answer": 5.8,
+    "unit": "كم",
+    "why": "الشرط p/p₀ = 1/2 يعني e^(−h/H) = 1/2، ومنه h = H·ln2 = 8.4 · 0.693 ≈ 5.8 كيلومتر. من المفيد تذكر: تحت هذا الارتفاع يقع نصف كتلة الغلاف الجوي بأكمله. ولاحظ أن الإجابة ليست نصف 8.4: الدالة الأسية تتناقص بمقدار e ≈ 2.72 مرة كل 8.4 كيلومتر، وتنخفض إلى النصف قبل ذلك بكثير.",
+    "hint": "اكتب الشرط p/p₀ = 1/2 باستخدام الدالة الأسية وخذ اللوغاريتم من كلا الطرفين. اللوغاريتم الطبيعي للعدد 2 يساوي تقريبًا 0.69.",
+    "tolAbs": 1.5
+   }
+  ]
  }
 }

@@ -443,37 +443,74 @@
   ],
   "standNote": "At the exhibit — a mass on a spring. Notice two panels: on the left, the mass oscillates in time; on the right, a graph is constructed. By changing mass and stiffness, watch not the shape of the sine wave, but the pair of numbers: position and velocity. At any moment, they are sufficient to predict all subsequent motion — and this is a statement, not an observation. Check: two different moments with the same position but opposite velocity give completely different continuations.",
   "formula": {
-   "name": "Hamilton's Equations",
+   "name": "Hamilton's equations",
    "latex": "\\frac{dq}{dt} = \\frac{\\partial H}{\\partial p}, \\qquad \\frac{dp}{dt} = -\\frac{\\partial H}{\\partial q}",
    "alsoKnown": "Canonical equations · description in phase space",
    "authors": [
     {
      "who": "Joseph-Louis Lagrange",
      "year": "1788",
-     "what": "rewrote Newtonian mechanics so that it no longer depended on the choice of coordinates. He declared in the preface that his book would contain not a single diagram — mechanics became a branch of analysis."
+     "what": "rewrote Newton's mechanics so that it no longer depended on the choice of coordinates. Declared in the preface that his book would contain not a single diagram — mechanics became a branch of analysis."
     },
     {
      "who": "William Rowan Hamilton",
      "year": "1834",
-     "what": "took the idea to its conclusion: he replaced one second-order equation with two first-order ones and obtained a description where position and momentum are on equal footing. Later it turned out that this precise form carries over into quantum mechanics."
+     "what": "took the idea to its conclusion: replaced one second-order equation with two first-order ones and obtained a description where position and momentum are on equal footing. Later it turned out that this is precisely the form that carries over to quantum mechanics."
     },
     {
      "who": "Joseph Liouville",
      "year": "1838",
-     "what": "proved that the volume of a cloud of states in phase space does not change with time. The cloud may stretch into a thin thread, but the volume remains."
+     "what": "proved that the volume of a cloud of states in phase space does not change over time. The cloud may stretch into a thin thread, but the volume is preserved."
     },
     {
-     "who": "Josiah Willard Gibbs",
+     "who": "Willard Gibbs",
      "year": "1902",
-     "what": "transferred the technique to systems of billions of particles: if it is impossible to track a single point, one must track the density. Thus statistical mechanics was born."
+     "what": "transferred the approach to systems of billions of particles: if you cannot track a point, you must track the density. Thus statistical mechanics was born."
     },
     {
      "who": "Henri Poincaré",
      "year": "1890",
-     "what": "began studying not solutions but the shape of trajectories in phase space — and discovered that for the simple three-body system, they can be incredibly tangled. From this grew chaos theory."
+     "what": "began studying not solutions but the shape of trajectories in phase space — and discovered that for a simple three-body system they can be incredibly tangled. From this grew chaos theory."
     }
    ],
-   "story": "Hamilton derived his equations while working on optics, not mechanics: he noticed that the propagation of light and the motion of a particle are described by the same mathematics. The analogy seemed an elegant curiosity for nearly a hundred years. In 1926, Schrödinger took it seriously: if mechanics is a limiting case of some wave theory, just as geometric optics is a limiting case of wave optics, then one must write down that wave theory. Thus the Schrödinger equation emerged. The curiosity turned out to be the road to quantum mechanics."
+   "story": "Hamilton derived his equations while working on optics, not mechanics: he noticed that the propagation of light and the motion of a particle are described by the same mathematics. The analogy seemed an elegant curiosity for almost a hundred years. In 1926, Schrödinger took it seriously: if mechanics is a limiting case of some wave theory, just as geometrical optics is a limiting case of wave optics, then one must write down that wave theory. Thus the Schrödinger equation appeared. The curiosity turned out to be a road to quantum mechanics.",
+   "symbols": [
+    {
+     "sym": "q",
+     "latex": "q",
+     "what": "generalized coordinate",
+     "unit": "m (or rad)",
+     "note": "\"generalized\" means any quantity that specifies position: length, angle, volume"
+    },
+    {
+     "sym": "p",
+     "latex": "p",
+     "what": "generalized momentum",
+     "unit": "kg·m/s",
+     "note": "for ordinary motion this is $mv$; it is this, not velocity, that is the correct partner to the coordinate"
+    },
+    {
+     "sym": "H",
+     "latex": "H",
+     "what": "Hamiltonian — total energy in terms of $q$ and $p$",
+     "unit": "J",
+     "note": "for a conservative system $H = $ kinetic plus potential"
+    },
+    {
+     "sym": "Γ",
+     "latex": "\\Gamma",
+     "what": "phase space",
+     "unit": "—",
+     "note": "for a single particle it is six-dimensional: three coordinates and three momenta"
+    },
+    {
+     "sym": "V",
+     "latex": "V_{\\Gamma}",
+     "what": "volume in phase space",
+     "unit": "(J·s)^N",
+     "note": "a quantity whose logarithm is entropy"
+    }
+   ]
   },
   "symbols": [
    {
@@ -740,7 +777,81 @@
     "hint": "Simply divide the exponents: 10⁻¹ divided by 10⁻³⁴. Mantissas can be rounded to one.",
     "tolAbs": 1
    }
-  ]
+  ],
+  "derivation": {
+   "title": "Strict derivation: how memory is replaced by dimensionality",
+   "lead": "Let's go through it slowly — every step matters here. We start with the usual second law and arrive at the conclusion that motion is a line in state space.",
+   "steps": [
+    {
+     "text": "Newton's second law is a second-order equation in time. To solve it, you need two initial conditions, not one. Formally: knowing only $x(t)$, you cannot compute $x(t+dt)$; you also need $x(t-dt)$ to estimate the velocity. And that is memory of the past.",
+     "latex": "m\\frac{d^{2}x}{dt^{2}} = F(x)",
+     "figure": "secondlaw",
+     "figCaption": "A second-order equation requires knowing both position and velocity — a single instant is not enough."
+    },
+    {
+     "text": "We change the language of description. We declare the state to be not a coordinate but a pair. One second-order equation splits into two first-order equations — without memory.",
+     "latex": "\\text{state} = (x, v): \\qquad \\frac{dx}{dt} = v, \\qquad \\frac{dv}{dt} = \\frac{F(x)}{m}",
+     "figure": "axes",
+     "figCaption": "Two first-order equations instead of one second-order: order reduced, dimensionality increased."
+    },
+    {
+     "text": "Where the new variable came from. Velocity is not an artificial addition, but encapsulated history: the difference of two neighboring positions, compressed into a single number. Instead of storing the coordinate at two moments, we store the coordinate and its derivative at one.",
+     "latex": "v(t) = \\lim_{dt \\to 0} \\frac{x(t) - x(t-dt)}{dt}",
+     "figure": "secant",
+     "figCaption": "The derivative packs the immediate past into a number attached to the present."
+    },
+    {
+     "text": "The trick generalizes. A third-order equation will require a triple, a fourth-order a quadruple. Each successive derivative packs deeper and deeper past — just like the coefficients of a Taylor series store the behavior of a function in the neighborhood of a single point.",
+     "latex": "(x,\\,v,\\,a): \\quad \\frac{dx}{dt} = v, \\;\\; \\frac{dv}{dt} = a, \\;\\; \\frac{da}{dt} = \\ldots",
+     "figure": "tangent",
+     "figCaption": "Taylor series — the same idea: the whole history of a function is encoded in a set of numbers at one point."
+    },
+    {
+     "text": "Now the main consequence. Once the state became a point, motion became a line. For a mass on a spring, energy is the sum of kinetic and potential and does not change — and that is the equation of an ellipse in the position-momentum plane.",
+     "latex": "E = \\frac{p^{2}}{2m} + \\frac{kx^{2}}{2} = \\text{const} \\;\\Longrightarrow\\; \\frac{p^{2}}{2mE} + \\frac{x^{2}}{2E/k} = 1",
+     "figure": "energyswap",
+     "figCaption": "A closed curve in the phase plane is exactly the statement 'energy is conserved, motion is periodic'."
+    },
+    {
+     "text": "Add friction — and the ellipse becomes a spiral winding toward the origin. Notice: to understand this, we did not solve the equation. The shape of the trajectory answers the question about the fate of the system before any formula appears. It was from this observation that Poincaré began the qualitative theory of dynamical systems.",
+     "latex": "\\frac{dE}{dt} = -bv^{2} < 0 \\;\\Longrightarrow\\; \\text{inward spiral}",
+     "figure": "friction",
+     "figCaption": "Friction drives the trajectory inward: the qualitative answer is visible without any solution."
+    },
+    {
+     "text": "And the final step — toward statistics. For a single particle, phase space is six-dimensional. For a mole of gas, the number of dimensions is six times the number of particles — about $3.6 \\cdot 10^{24}$: tracking a point is impossible now and forever. Then physics abandons the point and moves to volume. Boltzmann entropy is the logarithm of the number of states, that is, literally the logarithm of the phase volume.",
+     "latex": "S = k_B \\ln W, \\qquad W \\sim V_{\\Gamma}",
+     "figure": "microcontact",
+     "figCaption": "When a point cannot be tracked, one tracks density. From here comes all of statistical physics."
+    }
+   ],
+   "plate": "Transition to phase space is replacing memory with dimensionality. The past is not discarded; it is encoded in additional coordinates of the present.",
+   "note": "The trick also works where memory is not reduced to a derivative. Example — hysteresis: wetting of a porous rock and subsequent drying follow different curves, and the same moisture content means different things. It is cured by adding a flag of the process direction to the state. The flag is the same encapsulated history as velocity for coordinate. Industrial reservoir models are built exactly this way; if an inexplicable dependence on history appears in them, it is a sure sign that some variable was forgotten to be included in the state."
+  },
+  "math": {
+   "title": "The Mathematics Needed Here",
+   "lead": "Three things: the order of a differential equation, the round derivative in Hamilton's formula, and a curve with time tucked into a parameter.",
+   "items": [
+    {
+     "what": "The order of the equation sets the dimension",
+     "why": "In the first step of the derivation, there is a second derivative: a second-order equation, so two initial conditions are needed. The rule is general — the order equals the number of numbers you must specify to make the solution unique, and this same number is the dimension of the state space. The second step uses exactly that: one second-order equation is exchanged for two first-order ones, and instead of a variable with memory, you get a pair without memory. The property that 'the future depends only on the present' is called Markovian; note that it arises not from new physics but from a change of description. Hence a working test for completeness of the state: is a single instantaneous snapshot enough to step forward without peeking into the past?",
+     "latex": "m\\ddot{x} = F(x) \\;\\Longleftrightarrow\\; \\begin{cases} \\dot{x} = v \\\\ \\dot{v} = F(x)/m \\end{cases}",
+     "kit": "diffeq"
+    },
+    {
+     "what": "A round derivative instead of a straight one",
+     "why": "The formula in this section is written with $\\partial H/\\partial p$ and $\\partial H/\\partial q$, and the round symbol here is not decoration. The Hamiltonian function depends on two variables at once, so the derivative must be specified: with respect to which one. The notation $\\partial H/\\partial p$ means 'change the momentum, keep the coordinate frozen.' For a mass on a spring, $H = p^{2}/2m + kq^{2}/2$, and both partial derivatives are taken as ordinary ones, if you temporarily treat the other letter as a number. You get $\\partial H/\\partial p = p/m$, i.e., velocity, and $\\partial H/\\partial q = kq$, i.e., the restoring force with a minus sign. The two Hamilton's equations turn out to be Newton's second law rewritten in symmetric variables.",
+     "latex": "\\frac{\\partial H}{\\partial p} = \\frac{p}{m} = \\dot{q}, \\qquad -\\frac{\\partial H}{\\partial q} = -kq = \\dot{p}",
+     "kit": "partial"
+    },
+    {
+     "what": "An ellipse with time tucked into an angle",
+     "why": "In the fifth step of the derivation, conservation of energy is written as the equation of an ellipse in the coordinate-momentum axes, and time is absent entirely. This is a parametric curve: time has not disappeared, it has become a parameter along the line — the same trick used to describe a circle via $x=\\cos t$, $y=\\sin t$. If you stretch the axes so that both energy terms look the same, the ellipse becomes a circle, motion along it becomes uniform rotation, and the phase of the oscillation becomes literally the polar angle. That is why the area in the example is calculated with the school formula $\\pi a b$. For a mole of gas, the same area becomes a volume in a space of dimension $6N \\approx 3.6\\cdot10^{24}$ — three coordinates and three momenta for each of the $6\\cdot10^{23}$ particles: you cannot compute it, but usually you need the logarithm, and the logarithm of a product is a sum — hence the additivity of entropy.",
+     "latex": "\\frac{x^{2}}{2E/k} + \\frac{p^{2}}{2mE} = 1, \\qquad S_{\\text{el}} = \\pi A\\,p_{\\max}",
+     "kit": "polar"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Espacio de estados",
@@ -759,30 +870,67 @@
     {
      "who": "Joseph-Louis Lagrange",
      "year": "1788",
-     "what": "reescribió la mecánica newtoniana de modo que dejó de depender de la elección de coordenadas. Declaró en el prólogo que no habría ningún dibujo en su libro — la mecánica se convirtió en una rama del análisis."
+     "what": "Reescribió la mecánica de Newton para que no dependiera de la elección de coordenadas. Declaró en el prefacio que en su libro no habría ni un solo diagrama: la mecánica se convirtió en una rama del análisis."
     },
     {
      "who": "William Rowan Hamilton",
      "year": "1834",
-     "what": "llevó la idea hasta el final: reemplazó una ecuación de segundo orden por dos de primer orden y obtuvo una descripción donde la posición y el momento son equivalentes. Más tarde se descubrió que esta forma es la que se traslada a la mecánica cuántica."
+     "what": "Llevó la idea hasta el final: reemplazó una ecuación de segundo orden por dos de primer orden y obtuvo una descripción donde la posición y el momento están en pie de igualdad. Más tarde resultó que esta forma es la que conduce a la mecánica cuántica."
     },
     {
      "who": "Joseph Liouville",
      "year": "1838",
-     "what": "demostró que el volumen de una nube de estados en el espacio de fases no cambia con el tiempo. La nube puede estirarse hasta convertirse en un hilo finísimo, pero el volumen se conserva."
+     "what": "Demostró que el volumen de una nube de estados en el espacio de fases no cambia con el tiempo. La nube puede estirarse hasta convertirse en un hilo finísimo, pero el volumen se conserva."
     },
     {
      "who": "Willard Gibbs",
      "year": "1902",
-     "what": "trasladó el truco a sistemas de miles de millones de partículas: si es imposible seguir un punto, hay que seguir la densidad. Así nació la mecánica estadística."
+     "what": "Trasladó el método a sistemas de miles de millones de partículas: si no se puede seguir un punto, hay que seguir la densidad. Así nació la mecánica estadística."
     },
     {
      "who": "Henri Poincaré",
      "year": "1890",
-     "what": "comenzó a estudiar no las soluciones, sino la forma de las trayectorias en el espacio de fases — y descubrió que en un sistema simple de tres cuerpos pueden ser increíblemente enredadas. De ahí surgió la teoría del caos."
+     "what": "Comenzó a estudiar no las soluciones, sino la forma de las trayectorias en el espacio de fases, y descubrió que en un sistema simple de tres cuerpos pueden ser increíblemente enredadas. De ahí surgió la teoría del caos."
     }
    ],
-   "story": "Hamilton dedujo sus ecuaciones mientras trabajaba en óptica, no en mecánica: notó que la propagación de la luz y el movimiento de una partícula se describen con las mismas matemáticas. La analogía pareció una elegante curiosidad durante casi cien años. En 1926, Schrödinger la tomó en serio: si la mecánica es un caso límite de alguna teoría ondulatoria, así como la óptica geométrica es un caso límite de la ondulatoria, entonces hay que escribir esa teoría ondulatoria. Así surgió la ecuación de Schrödinger. La curiosidad resultó ser el camino hacia la mecánica cuántica."
+   "story": "Hamilton derivó sus ecuaciones trabajando en óptica, no en mecánica: notó que la propagación de la luz y el movimiento de una partícula se describen con la misma matemática. La analogía pareció una curiosidad elegante durante casi cien años. En 1926, Schrödinger la tomó en serio: si la mecánica es un caso límite de alguna teoría ondulatoria, así como la óptica geométrica es un caso límite de la ondulatoria, entonces hay que escribir esa teoría ondulatoria. Así apareció la ecuación de Schrödinger. La curiosidad resultó ser el camino hacia la mecánica cuántica.",
+   "symbols": [
+    {
+     "sym": "q",
+     "latex": "q",
+     "what": "coordenada generalizada",
+     "unit": "m (o rad)",
+     "note": "«generalizada» significa cualquier magnitud que fija la posición: longitud, ángulo, volumen"
+    },
+    {
+     "sym": "p",
+     "latex": "p",
+     "what": "momento generalizado",
+     "unit": "kg·m/s",
+     "note": "para el movimiento ordinario es $mv$; es él, y no la velocidad, el compañero correcto de la coordenada"
+    },
+    {
+     "sym": "H",
+     "latex": "H",
+     "what": "función de Hamilton: energía total en función de $q$ y $p$",
+     "unit": "J",
+     "note": "para un sistema conservativo, $H =$ cinética más potencial"
+    },
+    {
+     "sym": "Γ",
+     "latex": "\\Gamma",
+     "what": "espacio de fases",
+     "unit": "—",
+     "note": "para una partícula es de seis dimensiones: tres coordenadas y tres momentos"
+    },
+    {
+     "sym": "V",
+     "latex": "V_{\\Gamma}",
+     "what": "volumen en el espacio de fases",
+     "unit": "(J·s)^N",
+     "note": "magnitud cuyo logaritmo es la entropía"
+    }
+   ]
   },
   "symbols": [
    {
@@ -1049,7 +1197,81 @@
     "hint": "Basta con dividir los exponentes: 10⁻¹ dividido entre 10⁻³⁴. Las mantisas se pueden redondear a uno.",
     "tolAbs": 1
    }
-  ]
+  ],
+  "derivation": {
+   "title": "Derivación rigurosa: cómo la memoria se reemplaza por la dimensionalidad",
+   "lead": "Lo analizaremos lentamente, aquí cada paso es importante. Comenzamos con la segunda ley ordinaria y llegamos a que el movimiento es una línea en el espacio de estados.",
+   "steps": [
+    {
+     "text": "La segunda ley de Newton es una ecuación de segundo orden en el tiempo. Para resolverla se necesitan dos condiciones iniciales, no una. Formalmente: conociendo solo $x(t)$, no se puede calcular $x(t+dt)$; también se necesita $x(t-dt)$ para estimar la velocidad. Y eso es memoria del pasado.",
+     "latex": "m\\frac{d^{2}x}{dt^{2}} = F(x)",
+     "figure": "secondlaw",
+     "figCaption": "Una ecuación de segundo orden requiere conocer tanto la posición como la velocidad: un solo instante no es suficiente."
+    },
+    {
+     "text": "Cambiamos el lenguaje de descripción. Declaramos que el estado no es la coordenada, sino un par. Una ecuación de segundo orden se divide en dos ecuaciones de primer orden, sin memoria.",
+     "latex": "\\text{estado} = (x, v): \\qquad \\frac{dx}{dt} = v, \\qquad \\frac{dv}{dt} = \\frac{F(x)}{m}",
+     "figure": "axes",
+     "figCaption": "Dos ecuaciones de primer orden en lugar de una de segundo: el orden se reduce, la dimensionalidad aumenta."
+    },
+    {
+     "text": "De dónde surge la nueva variable. La velocidad no es un añadido artificial, sino una historia encapsulada: la diferencia entre dos posiciones adyacentes, comprimida en un solo número. En lugar de almacenar la coordenada en dos instantes, almacenamos la coordenada y su derivada en un solo instante.",
+     "latex": "v(t) = \\lim_{dt \\to 0} \\frac{x(t) - x(t-dt)}{dt}",
+     "figure": "secant",
+     "figCaption": "La derivada empaqueta el pasado más cercano en un número asignado al presente."
+    },
+    {
+     "text": "El truco se generaliza. Una ecuación de tercer orden requerirá una terna, la de cuarto una cuaterna. Cada derivada sucesiva empaqueta un pasado más profundo, exactamente como los coeficientes de la serie de Taylor almacenan el comportamiento de la función en la vecindad de un punto.",
+     "latex": "(x,\\,v,\\,a): \\quad \\frac{dx}{dt} = v, \\;\\; \\frac{dv}{dt} = a, \\;\\; \\frac{da}{dt} = \\ldots",
+     "figure": "tangent",
+     "figCaption": "La serie de Taylor es la misma idea: toda la historia de la función está codificada en un conjunto de números en un punto."
+    },
+    {
+     "text": "Ahora la consecuencia principal. Una vez que el estado se convierte en un punto, el movimiento se convierte en una línea. Para una masa en un resorte, la energía es la suma de la cinética y la potencial y no cambia, y eso es la ecuación de una elipse en el plano coordenada-momento.",
+     "latex": "E = \\frac{p^{2}}{2m} + \\frac{kx^{2}}{2} = \\text{const} \\;\\Longrightarrow\\; \\frac{p^{2}}{2mE} + \\frac{x^{2}}{2E/k} = 1",
+     "figure": "energyswap",
+     "figCaption": "Una curva cerrada en el plano de fases es exactamente la afirmación de que la energía se conserva y el movimiento es periódico."
+    },
+    {
+     "text": "Añadamos fricción y la elipse se convertirá en una espiral que se enrolla hacia el origen. Obsérvese que para entender esto no hemos resuelto la ecuación. La forma de la trayectoria responde a la pregunta sobre el destino del sistema antes de que aparezca una fórmula. Fue con esta observación que Poincaré comenzó la teoría cualitativa de los sistemas dinámicos.",
+     "latex": "\\frac{dE}{dt} = -bv^{2} < 0 \\;\\Longrightarrow\\; \\text{espiral hacia adentro}",
+     "figure": "friction",
+     "figCaption": "La fricción lleva la trayectoria hacia adentro: la respuesta cualitativa se ve sin ninguna solución."
+    },
+    {
+     "text": "Y el último paso, hacia la estadística. Para una sola partícula, el espacio de fases es de seis dimensiones. Para un mol de gas, las dimensiones son seis veces el número de partículas, del orden de $3{,}6 \\cdot 10^{24}$: es imposible seguir un punto, ni ahora ni nunca. Entonces la física abandona el punto y pasa al volumen. La entropía de Boltzmann es el logaritmo del número de estados, es decir, literalmente el logaritmo del volumen de fases.",
+     "latex": "S = k_B \\ln W, \\qquad W \\sim V_{\\Gamma}",
+     "figure": "microcontact",
+     "figCaption": "Cuando no se puede seguir un punto, se sigue la densidad. De ahí toda la física estadística."
+    }
+   ],
+   "plate": "La transición al espacio de fases es el reemplazo de la memoria por la dimensionalidad. El pasado no se descarta, se codifica en coordenadas adicionales del presente.",
+   "note": "El truco también funciona donde la memoria no se reduce a una derivada. Un ejemplo es la histéresis: la humectación de una roca porosa y el secado inverso siguen curvas diferentes, y la misma humedad significa cosas distintas. Se soluciona añadiendo al estado una bandera que indique la dirección del proceso. La bandera es la misma historia encapsulada que la velocidad para la coordenada. Los modelos industriales de yacimientos están construidos exactamente así; si en ellos aparece una dependencia inexplicable de la historia, es una señal segura de que alguna variable se ha olvidado de incluir en el estado."
+  },
+  "math": {
+   "title": "Matemáticas que aquí se necesitaron",
+   "lead": "Tres cosas: el orden de la ecuación diferencial, la derivada redonda en la fórmula de Hamilton y la curva donde el tiempo se esconde en un parámetro.",
+   "items": [
+    {
+     "what": "El orden de la ecuación define la dimensión",
+     "why": "En el primer paso de la derivación aparece la segunda derivada: ecuación de segundo orden, por lo tanto se necesitan dos condiciones iniciales. La regla es general: el orden es igual al número de números que hay que fijar para que la solución sea única, y ese mismo número es la dimensión del espacio de estados. El segundo paso usa exactamente eso: una ecuación de segundo orden se convierte en dos de primer orden, y en lugar de una variable con memoria se obtiene un par sin memoria. La propiedad de que «el futuro depende solo del presente» se llama markoviana; nótese que surge no de una nueva física, sino de un cambio de descripción. De ahí la prueba práctica de completitud del estado: ¿basta una instantánea para avanzar sin mirar al pasado?",
+     "latex": "m\\ddot{x} = F(x) \\;\\Longleftrightarrow\\; \\begin{cases} \\dot{x} = v \\\\ \\dot{v} = F(x)/m \\end{cases}",
+     "kit": "diffeq"
+    },
+    {
+     "what": "Derivada redonda en lugar de recta",
+     "why": "La fórmula de este párrafo está escrita con $\\partial H/\\partial p$ y $\\partial H/\\partial q$, y el símbolo redondo no es un adorno. La función de Hamilton depende de dos variables a la vez, por lo que hay que precisar la derivada: ¿respecto a cuál? La notación $\\partial H/\\partial p$ significa «cambiamos el momento, mantenemos la coordenada congelada». Para una masa en un resorte, $H = p^{2}/2m + kq^{2}/2$, y ambas derivadas parciales se toman como ordinarias si temporalmente tratamos la otra letra como un número. Resulta $\\partial H/\\partial p = p/m$, es decir, la velocidad, y $\\partial H/\\partial q = kq$, es decir, la fuerza restauradora con signo menos. Las dos ecuaciones de Hamilton resultan ser la segunda ley de Newton reescrita en variables equivalentes.",
+     "latex": "\\frac{\\partial H}{\\partial p} = \\frac{p}{m} = \\dot{q}, \\qquad -\\frac{\\partial H}{\\partial q} = -kq = \\dot{p}",
+     "kit": "partial"
+    },
+    {
+     "what": "Elipse donde el tiempo se esconde en un ángulo",
+     "why": "En el quinto paso de la derivación, la conservación de la energía se escribe como la ecuación de una elipse en los ejes coordenada-momento, y el tiempo no aparece en absoluto. Es una curva paramétrica: el tiempo no ha desaparecido, se ha convertido en un parámetro a lo largo de la línea — el mismo truco con el que se describe una circunferencia mediante $x=\\cos t$, $y=\\sin t$. Si estiramos los ejes para que ambos términos de la energía se vean iguales, la elipse se convierte en un círculo, el movimiento a lo largo de él es una rotación uniforme, y la fase de la oscilación resulta ser literalmente el ángulo polar. Por eso el área en el ejemplo se calcula con la fórmula escolar $\\pi a b$. Para un mol de gas, esa misma área se convierte en volumen en un espacio de dimensión $6N \\approx 3{,}6\\cdot10^{24}$ — tres coordenadas y tres momentos por cada una de las $6\\cdot10^{23}$ partículas: no se puede calcular, pero normalmente se necesita el logaritmo, y el logaritmo de un producto es una suma — de ahí la aditividad de la entropía.",
+     "latex": "\\frac{x^{2}}{2E/k} + \\frac{p^{2}}{2mE} = 1, \\qquad S_{\\text{el}} = \\pi A\\,p_{\\max}",
+     "kit": "polar"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "فضاء الحالات",
@@ -1358,7 +1580,81 @@
     "hint": "يكفي قسمة الأسس: 10⁻¹ مقسومة على 10⁻³⁴. يمكن تقريب المانتيسا إلى الواحد.",
     "tolAbs": 1
    }
-  ]
+  ],
+  "derivation": {
+   "title": "اشتقاق صارم: كيف تُستبدل الذاكرة بالبعد",
+   "lead": "دعنا نأخذ الأمر ببطء — كل خطوة مهمة هنا. نبدأ بقانون نيوتن الثاني العادي ونصل إلى أن الحركة هي خط في فضاء الحالات.",
+   "steps": [
+    {
+     "text": "قانون نيوتن الثاني هو معادلة من الدرجة الثانية بالنسبة للزمن. لحلها، نحتاج إلى شرطين ابتدائيين، وليس شرطًا واحدًا. رسميًا: بمعرفة $x(t)$ فقط، لا يمكنك حساب $x(t+dt)$؛ تحتاج أيضًا إلى $x(t-dt)$ لتقدير السرعة. وهذا تذكر للماضي.",
+     "latex": "m\\frac{d^{2}x}{dt^{2}} = F(x)",
+     "figure": "secondlaw",
+     "figCaption": "معادلة من الدرجة الثانية تتطلب معرفة كل من الموضع والسرعة — لحظة واحدة لا تكفي."
+    },
+    {
+     "text": "نغير لغة الوصف. نعلن أن الحالة ليست إحداثيًا بل زوجًا. معادلة واحدة من الدرجة الثانية تتحلل إلى معادلتين من الدرجة الأولى — بدون ذاكرة.",
+     "latex": "\\text{الحالة} = (x, v): \\qquad \\frac{dx}{dt} = v, \\qquad \\frac{dv}{dt} = \\frac{F(x)}{m}",
+     "figure": "axes",
+     "figCaption": "معادلتان من الدرجة الأولى بدلاً من واحدة من الدرجة الثانية: الرتبة انخفضت، والبعد ارتفع."
+    },
+    {
+     "text": "من أين جاء المتغير الجديد. السرعة ليست إضافة مصطنعة، بل تاريخ مضغوط: الفرق بين موضعين متجاورين، مختزل في عدد واحد. بدلاً من تخزين الإحداثي في لحظتين، نخزن الإحداثي والمشتقة في لحظة واحدة.",
+     "latex": "v(t) = \\lim_{dt \\to 0} \\frac{x(t) - x(t-dt)}{dt}",
+     "figure": "secant",
+     "figCaption": "المشتقة تحزم أقرب الماضي في عدد يُنسب إلى الحاضر."
+    },
+    {
+     "text": "الطريقة تُعمم. معادلة من الدرجة الثالثة تتطلب ثلاثية، ومن الدرجة الرابعة رباعية. كل مشتقة تالية تحزم ماضيًا أعمق — تمامًا كما تخزن معاملات متسلسلة تايلور سلوك الدالة في جوار نقطة واحدة.",
+     "latex": "(x,\\,v,\\,a): \\quad \\frac{dx}{dt} = v, \\;\\; \\frac{dv}{dt} = a, \\;\\; \\frac{da}{dt} = \\ldots",
+     "figure": "tangent",
+     "figCaption": "متسلسلة تايلور — نفس الفكرة: كل تاريخ الدالة مشفر في مجموعة أعداد عند نقطة واحدة."
+    },
+    {
+     "text": "الآن النتيجة الرئيسية. بما أن الحالة أصبحت نقطة، أصبحت الحركة خطًا. لكتلة على نابض، تتكون الطاقة من حركية ووضعية ولا تتغير — وهذه معادلة قطع ناقص في مستوى الإحداثي-الزخم.",
+     "latex": "E = \\frac{p^{2}}{2m} + \\frac{kx^{2}}{2} = \\text{ثابت} \\;\\Longrightarrow\\; \\frac{p^{2}}{2mE} + \\frac{x^{2}}{2E/k} = 1",
+     "figure": "energyswap",
+     "figCaption": "منحنى مغلق في المستوى الطوري — هذا هو التأكيد على أن الطاقة محفوظة والحركة دورية."
+    },
+    {
+     "text": "أضف الاحتكاك — وسيتحول القطع الناقص إلى حلزوني يلتف نحو نقطة الأصل. لاحظ: لفهم هذا، لم نحل المعادلة. شكل المسار يجيب على سؤال مصير النظام قبل ظهور الصيغة. من هذه الملاحظة بدأ بوانكاريه النظرية النوعية للأنظمة الديناميكية.",
+     "latex": "\\frac{dE}{dt} = -bv^{2} < 0 \\;\\Longrightarrow\\; \\text{حلزوني إلى الداخل}",
+     "figure": "friction",
+     "figCaption": "الاحتكاك يوجه المسار إلى الداخل: الجواب النوعي واضح دون أي حل."
+    },
+    {
+     "text": "والخطوة الأخيرة — نحو الإحصاء. بالنسبة لجسيم واحد، فضاء الطور سداسي الأبعاد. بالنسبة لمول من الغاز، عدد الأبعاد أكبر بست مرات من عدد الجسيمات — حوالي $3{,}6 \\cdot 10^{24}$: تتبع نقطة مستحيل الآن وإلى الأبد. عندها تتخلى الفيزياء عن النقطة وتنتقل إلى الحجم. إنتروبيا بولتزمان هي لوغاريتم عدد الحالات، أي حرفيًا لوغاريتم حجم الطور.",
+     "latex": "S = k_B \\ln W, \\qquad W \\sim V_{\\Gamma}",
+     "figure": "microcontact",
+     "figCaption": "عندما يتعذر تتبع نقطة، نتابع الكثافة. من هنا تأتي الفيزياء الإحصائية بأكملها."
+    }
+   ],
+   "plate": "الانتقال إلى فضاء الطور هو استبدال الذاكرة بالبعد. الماضي لا يُطرح، بل يُرمّز في إحداثيات إضافية للحاضر.",
+   "note": "تعمل الطريقة أيضًا حيث لا تختزل الذاكرة إلى مشتقة. مثال — التخلفية: ترطيب الصخر المسامي وتجفيفه العكسي يسيران على منحنيات مختلفة، ونفس الرطوبة تعني شيئًا مختلفًا. العلاج هو إضافة علمة لاتجاه العملية إلى الحالة. العلمة هي نفسها التاريخ المضغوط، مثل السرعة بالنسبة للإحداثي. نماذج الخزان الصناعية مبنية بهذه الطريقة؛ إذا ظهر فيها اعتماد غير مفسر على التاريخ، فهذه علامة أكيدة على أن متغيرًا ما نُسي تضمينه في الحالة."
+  },
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "ثلاثة أمور: رتبة المعادلة التفاضلية، والمشتقة الدائرية في صيغة هاميلتون، والمنحنى الذي أُخفيت فيه الزمن كمعامل.",
+   "items": [
+    {
+     "what": "رتبة المعادلة تحدد البعد",
+     "why": "في الخطوة الأولى من الاشتقاق توجد مشتقة ثانية: معادلة من الرتبة الثانية، لذا نحتاج شرطين ابتدائيين. القاعدة عامة — الرتبة تساوي عدد الأرقام التي يجب تحديدها لجعل الحل فريدًا، وهذا العدد هو أيضًا بُعد فضاء الحالات. الخطوة الثانية تستخدم هذا بالضبط: معادلة واحدة من الرتبة الثانية تُستبدل بمعادلتين من الرتبة الأولى، وبدلاً من متغير مع ذاكرة نحصل على زوج بدون ذاكرة. الخاصية \"المستقبل يعتمد فقط على الحاضر\" تسمى خاصية ماركوف؛ لاحظ أنها نشأت ليس من فيزياء جديدة، بل من تغيير الوصف. ومن هنا يأتي اختبار عملي لاكتمال الحالة: هل تكفي لقطة لحظية واحدة للمضي قدمًا دون النظر إلى الماضي؟",
+     "latex": "m\\ddot{x} = F(x) \\;\\Longleftrightarrow\\; \\begin{cases} \\dot{x} = v \\\\ \\dot{v} = F(x)/m \\end{cases}",
+     "kit": "diffeq"
+    },
+    {
+     "what": "مشتقة دائرية بدلاً من مستقيمة",
+     "why": "صيغة هذا القسم مكتوبة عبر $\\partial H/\\partial p$ و $\\partial H/\\partial q$، والرمز الدائري هنا ليس للزينة. دالة هاميلتون تعتمد على متغيرين في آن واحد، لذا يجب توضيح المشتقة: بالنسبة لأيهما. الكتابة $\\partial H/\\partial p$ تعني \"نغير الزخم، ونبقي الإحداثي مجمدًا\". لكتلة على نابض $H = p^{2}/2m + kq^{2}/2$، وكلا المشتقتين الجزئيتين تؤخذان كالمعتاد إذا اعتبرنا الحرف الثاني مؤقتًا عددًا. نحصل على $\\partial H/\\partial p = p/m$، أي السرعة، و $\\partial H/\\partial q = kq$، أي القوة المعيدة بإشارة سالبة. معادلتا هاميلتون تتحولان إلى قانون نيوتن الثاني، معاد كتابته بمتغيرين متكافئين.",
+     "latex": "\\frac{\\partial H}{\\partial p} = \\frac{p}{m} = \\dot{q}, \\qquad -\\frac{\\partial H}{\\partial q} = -kq = \\dot{p}",
+     "kit": "partial"
+    },
+    {
+     "what": "قطع ناقص أُخفي فيه الزمن كزاوية",
+     "why": "في الخطوة الخامسة من الاشتقاق، يُكتب حفظ الطاقة كمعادلة قطع ناقص في محوري الإحداثي-الزخم، ولا يوجد فيه زمن إطلاقًا. هذا منحنى وسيطي: الزمن لم يختفِ، بل أصبح معاملًا على طول الخط — نفس الأسلوب الذي يُوصف به الدائرة عبر $x=\\cos t$, $y=\\sin t$. إذا مددنا المحاور بحيث يبدو الحدان في الطاقة متشابهين، يتحول القطع الناقص إلى دائرة، والحركة عليها تصبح دورانًا منتظمًا، وطور الاهتزاز يصبح حرفيًا الزاوية القطبية. لذلك تُحسب المساحة في المثال بالصيغة المدرسية $\\pi a b$. لمول من الغاز، نفس المساحة تصبح حجمًا في فضاء بُعده $6N \\approx 3{,}6\\cdot10^{24}$ — ثلاث إحداثيات وثلاثة زخوم لكل من الجزيئات $6\\cdot10^{23}$: لا يمكن حسابه، لكننا عادة نحتاج لوغاريتمه، ولوغاريتم الجداء هو مجموع — ومن هنا تأتي جمعية الإنتروبيا.",
+     "latex": "\\frac{x^{2}}{2E/k} + \\frac{p^{2}}{2mE} = 1, \\qquad S_{\\text{el}} = \\pi A\\,p_{\\max}",
+     "kit": "polar"
+    }
+   ]
+  }
  },
  "tags": [
   "entropy",

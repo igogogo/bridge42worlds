@@ -469,25 +469,62 @@
     {
      "who": "Hendrik Lorentz",
      "year": "1892",
-     "what": "derived the same formula from electrodynamics and introduced the concept of local time as an auxiliary mathematical quantity. He considered it a convenient trick, not real time"
+     "what": "derived the same formula from electrodynamics and introduced the concept of local time as an auxiliary mathematical quantity. He considered it a convenient device, not real time"
     },
     {
      "who": "Albert Einstein",
      "year": "1905",
-     "what": "explained that Lorentz's local time is the real time of a moving observer, and contraction is not a result of forces compressing the body but a property of length measurement in a moving system"
+     "what": "explained that Lorentz's local time is the real time of a moving observer, and contraction is not a result of compression of a body by forces, but a property of measuring length in a moving system"
     },
     {
      "who": "Bruno Rossi and David Hall",
      "year": "1941",
-     "what": "measured the muon flux at the top of Mount Washington and at its base. The difference in fluxes confirmed time dilation quantitatively — the first direct test using a natural source"
+     "what": "measured the flux of muons at the top of Mount Washington and at its foot. The difference in fluxes confirmed time dilation quantitatively — the first direct test on a natural source"
     },
     {
      "who": "Joseph Hafele and Richard Keating",
      "year": "1971",
-     "what": "carried atomic clocks around the world on commercial flights and obtained a discrepancy with ground clocks consistent with calculations. The cost of the experiment was eight thousand dollars, mostly for tickets"
+     "what": "carried atomic clocks around the world on commercial flights and obtained a discrepancy with ground clocks in agreement with the calculation. The cost of the experiment was eight thousand dollars, mostly for tickets"
     }
    ],
-   "story": "The Hafele–Keating experiment is remarkable for its ordinariness. The clocks flew as passengers; separate seats were bought for them, and on the flight manifest they were listed as 'Mr. Clock'. The calculation included two effects of opposite sign: slowing from speed and speeding up from weaker gravity at altitude — the second effect already belongs to general relativity. For the eastward flight, in the direction of Earth's rotation, the speed relative to the inertial frame was greater; for the westward flight it was smaller, so the results differed: eastward clocks lagged by 59 nanoseconds, westward clocks gained 273. Both numbers agreed with predictions within error. Since then the experiment has been repeated many times with increasing accuracy."
+   "story": "The Hafele-Keating experiment is remarkable for its ordinariness. The clocks flew as passengers, separate seats were bought for them, and in the flight log they were listed as \"Mr. Clock\". The calculation included two effects of opposite signs: slowing down due to speed and speeding up due to weaker gravity at altitude — the second effect belongs already to the general theory of relativity. When flying east, with the Earth's rotation, the speed relative to the stationary system is greater; when flying west, it is smaller, so the results came out different: flying east the clocks lagged by 59 nanoseconds, flying west they gained 273. Both numbers matched the prediction within the error. Since then, the experiment has been repeated many times with increasing precision.",
+   "symbols": [
+    {
+     "sym": "dt0",
+     "latex": "\\Delta t_0",
+     "what": "собственное время",
+     "unit": "с",
+     "note": "промежуток, измеренный часами, покоящимися относительно события; он всегда наименьший"
+    },
+    {
+     "sym": "dt",
+     "latex": "\\Delta t",
+     "what": "время в лабораторной системе",
+     "unit": "с",
+     "note": "то, что показывают часы наблюдателя, мимо которого движется объект"
+    },
+    {
+     "sym": "L0",
+     "latex": "L_0",
+     "what": "собственная длина",
+     "unit": "м",
+     "note": "длина, измеренная в системе, где предмет покоится; она всегда наибольшая"
+    },
+    {
+     "sym": "L",
+     "latex": "L",
+     "what": "длина в лабораторной системе",
+     "unit": "м",
+     "note": "сокращается только вдоль движения; поперечные размеры не меняются"
+    },
+    {
+     "sym": "gamma2",
+     "latex": "\\gamma",
+     "what": "лоренц-фактор",
+     "unit": "—",
+     "note": "одно число управляет обоими эффектами: время умножается на него, длина делится"
+    }
+   ]
   },
   "symbols": [
    {
@@ -819,7 +856,30 @@
     "hint": "Square 0.8, subtract from 1, and take the square root. You'll get a familiar number.",
     "tolAbs": 0.15
    }
-  ]
+  ],
+  "math": {
+   "title": "The math needed here",
+   "lead": "One substitution, a pair of reciprocal factors, and the ability to handle a very small relative correction.",
+   "items": [
+    {
+     "what": "Eliminating an extra quantity by substitution",
+     "why": "The length of a flying rod is measured by the time of flight, but the time is different for two observers, so there is nothing to compare directly. The derivation trick is: write the same quantity twice, in two frames, then relate the times themselves and substitute one into the other. In the second and third steps, $L = v\\,\\Delta t_{\\text{lab}}$ and $L_0 = v\\,\\Delta t_{\\text{rod}}$ appear, in the fourth the relation between times, and in the fifth the substitution removes both times at once, leaving a pure relation of lengths. One thing to watch: here the proper time is that of the observer, not the rod, because the encounters with the front and back ends occur at the same point for the observer.",
+     "latex": "L = v\\,\\Delta t_{\\text{lab}} = v\\,\\frac{\\Delta t_{\\text{rod}}}{\\gamma} = \\frac{L_0}{\\gamma}"
+    },
+    {
+     "what": "Reciprocal factors",
+     "why": "Time is multiplied by $\\gamma$, length is divided by it. These are one factor and its reciprocal, not two independent numbers, so the stand check must hold: no matter how you move the speed slider, the product of readings $\\Delta t\\cdot L$ does not change. It remains equal to $\\Delta t_0 L_0$ — what is set by the sliders of proper time and proper length; time stretches exactly as many times as length contracts, and in the product $\\gamma$ cancels. It is better not to memorize the formula but to recover it from the inequality. The Lorentz factor is always at least one. Proper time is the smallest possible, so any other time is obtained by multiplication. Proper length is the largest, so any other length is obtained by division. The question \"what should be larger here\" is more reliable than memory of whether $\\gamma$ is in the numerator or denominator.",
+     "latex": "\\Delta t = \\gamma\\,\\Delta t_0, \\qquad L = \\frac{L_0}{\\gamma}, \\qquad \\Delta t \\cdot L = \\Delta t_0 L_0",
+     "kit": "propto"
+    },
+    {
+     "what": "Small correction over a long interval",
+     "why": "In the satellite example, $\\gamma$ differs from unity in the eleventh digit, and a calculator will simply lose such a difference when subtracting. Therefore, one computes not $\\gamma$ itself but directly the difference $\\gamma - 1 \\approx v^{2}/2c^{2}$: at a speed of $3.9$ km/s, it is $8.5\\cdot 10^{-11}$. This is the relative correction, i.e., the fraction by which clocks diverge over any time. The absolute shift is obtained by multiplying by the duration: over a day of $86{,}400$ seconds, it accumulates to $7.3$ microseconds. This is how all work with small effects is done: the relative magnitude tells whether the effect is significant in essence, and the product with the problem's scale tells whether it is noticeable in practice.",
+     "latex": "\\Delta = (\\gamma-1)\\,T \\approx \\frac{v^{2}}{2c^{2}}\\,T",
+     "kit": "order"
+    }
+   ]
+  }
  },
  "es": {
   "title": "Tiempo y longitud",
@@ -1193,7 +1253,30 @@
     "hint": "Eleva 0,8 al cuadrado, réstalo de la unidad y saca la raíz cuadrada. Obtendrás un número familiar.",
     "tolAbs": 0.15
    }
-  ]
+  ],
+  "math": {
+   "title": "Matemáticas que aquí se necesitaron",
+   "lead": "Una sustitución, un par de factores mutuamente inversos y la habilidad de manejar una corrección relativa muy pequeña.",
+   "items": [
+    {
+     "what": "Eliminación de una cantidad extra mediante sustitución",
+     "why": "La longitud de una barra en vuelo se mide por el tiempo de tránsito, pero el tiempo es diferente para dos observadores, y no hay nada que comparar directamente. El método de derivación es: escribir la misma cantidad dos veces, en dos sistemas, luego relacionar los tiempos mismos y sustituir uno en el otro. En los pasos segundo y tercero aparecen $L = v\\,\\Delta t_{\\text{lab}}$ y $L_0 = v\\,\\Delta t_{\\text{barra}}$, en el cuarto la relación entre los tiempos, y en el quinto la sustitución elimina ambos tiempos a la vez, dejando una relación pura de longitudes. Hay que vigilar una cosa: aquí el tiempo propio es el del observador, no el de la barra, porque el encuentro con el extremo delantero y con el trasero ocurre en el mismo punto solo para él.",
+     "latex": "L = v\\,\\Delta t_{\\text{lab}} = v\\,\\frac{\\Delta t_{\\text{barra}}}{\\gamma} = \\frac{L_0}{\\gamma}"
+    },
+    {
+     "what": "Factores mutuamente inversos",
+     "why": "El tiempo se multiplica por $\\gamma$, la longitud se divide por él. Es un solo factor y su inverso, no dos números independientes, y por eso la comprobación en el simulador debe cumplirse: no importa cómo muevas el control de velocidad, el producto de las lecturas $\\Delta t\\cdot L$ no cambia. Permanece igual a $\\Delta t_0 L_0$ — lo que se ajusta con los controles de tiempo propio y longitud propia; el tiempo se dilata exactamente en la misma proporción en que la longitud se contrae, y en el producto $\\gamma$ se cancela. La fórmula no debe memorizarse, sino reconstruirse a partir de la desigualdad. El factor de Lorentz siempre es al menos uno. El tiempo propio es el menor posible, por lo que cualquier otro se obtiene multiplicando. La longitud propia es la mayor, por lo que cualquier otra se obtiene dividiendo. La pregunta «qué debería ser mayor aquí» es más fiable que recordar si $\\gamma$ está en el numerador o en el denominador.",
+     "latex": "\\Delta t = \\gamma\\,\\Delta t_0, \\qquad L = \\frac{L_0}{\\gamma}, \\qquad \\Delta t \\cdot L = \\Delta t_0 L_0",
+     "kit": "propto"
+    },
+    {
+     "what": "Pequeña corrección en un intervalo largo",
+     "why": "En el ejemplo del satélite, $\\gamma$ difiere de la unidad en el undécimo dígito, y una calculadora perdería esa diferencia al restar. Por eso no se calcula $\\gamma$ en sí, sino directamente la diferencia $\\gamma - 1 \\approx v^{2}/2c^{2}$: a una velocidad de $3{,}9$ km/s se obtiene $8{,}5\\cdot 10^{-11}$. Esta es la corrección relativa, es decir, la fracción en la que los relojes se desvían durante cualquier tiempo. El desplazamiento absoluto se obtiene multiplicando por la duración: en un día de $86\\,400$ segundos se acumulan $7{,}3$ microsegundos. Así funciona todo el trabajo con efectos pequeños: la magnitud relativa indica si el efecto es grande en esencia, y el producto por la escala del problema responde si es perceptible en la práctica.",
+     "latex": "\\Delta = (\\gamma-1)\\,T \\approx \\frac{v^{2}}{2c^{2}}\\,T",
+     "kit": "order"
+    }
+   ]
+  }
  },
  "ar": {
   "title": "الزمن والطول",
@@ -1567,7 +1650,30 @@
     "hint": "ارفع 0.8 للتربيع، اطرح من الواحد، ثم خذ الجذر التربيعي. ستحصل على رقم مألوف.",
     "tolAbs": 0.15
    }
-  ]
+  ],
+  "math": {
+   "title": "الرياضيات التي ستكون مطلوبة هنا",
+   "lead": "تعويض واحد، عاملان متعاكسان، والقدرة على التعامل مع تصحيح نسبي صغير جدًا.",
+   "items": [
+    {
+     "what": "حذف كمية زائدة بالتعويض",
+     "why": "يُقاس طول القضيب الطائر بزمن الطيران، لكن الزمن يختلف بين مراقبين، فلا يمكن المقارنة مباشرة. طريقة الاشتقاق: كتابة نفس الكمية مرتين، في نظامين، ثم ربط الزمنين ببعضهما والتعويض من أحدهما في الآخر. في الخطوتين الثانية والثالثة تظهر $L = v\\,\\Delta t_{\\text{مختبر}}$ و $L_0 = v\\,\\Delta t_{\\text{القضيب}}$، وفي الرابعة العلاقة بين الزمنين، وفي الخامسة يحذف التعويض كلا الزمنين معًا، تاركًا علاقة نقية بين الأطوال. يجب الانتباه إلى أن الزمن الذاتي هنا هو زمن المراقب، وليس القضيب، لأن لقاء الطرف الأمامي والخلفي يحدث في نقطة واحدة بالنسبة له.",
+     "latex": "L = v\\,\\Delta t_{\\text{مختبر}} = v\\,\\frac{\\Delta t_{\\text{القضيب}}}{\\gamma} = \\frac{L_0}{\\gamma}"
+    },
+    {
+     "what": "عاملان متعاكسان",
+     "why": "الزمن يُضرب في $\\gamma$، والطول يُقسم عليه. هذا عامل واحد ومعكوسه، وليس عددين مستقلين، لذا يجب أن يتحقق اختبار المنصة: مهما حركت منزلق السرعة، يبقى حاصل ضرب القراءتين $\\Delta t\\cdot L$ ثابتًا. يبقى مساويًا لـ $\\Delta t_0 L_0$ — ما تم ضبطه بمنزلقات الزمن الذاتي والطول الذاتي؛ الزمن يتمدد بنفس العامل الذي ينكمش به الطول، وفي حاصل الضرب يُختصر $\\gamma$. من الأفضل عدم حفظ الصيغة، بل استنتاجها من المتباينة. معامل لورنتز دائمًا أكبر أو يساوي واحدًا. الزمن الذاتي هو الأصغر ممكن، لذا أي زمن آخر يُحصل عليه بالضرب. الطول الذاتي هو الأكبر، لذا أي طول آخر يُحصل عليه بالقسمة. سؤال \"ما الذي يجب أن يكون أكبر هنا؟\" أكثر موثوقية من تذكر ما إذا كان $\\gamma$ في البسط أو المقام.",
+     "latex": "\\Delta t = \\gamma\\,\\Delta t_0, \\qquad L = \\frac{L_0}{\\gamma}, \\qquad \\Delta t \\cdot L = \\Delta t_0 L_0",
+     "kit": "propto"
+    },
+    {
+     "what": "تصحيح صغير على فترة طويلة",
+     "why": "في مثال القمر الصناعي، يختلف $\\gamma$ عن الواحد في الرقم الحادي عشر، والآلة الحاسبة ستفقد هذا الفرق عند الطرح. لذلك لا نحسب $\\gamma$ نفسه، بل الفرق مباشرة $\\gamma - 1 \\approx v^{2}/2c^{2}$: عند سرعة $3{,}9$ كم/ث نحصل على $8{,}5\\cdot 10^{-11}$. هذا هو التصحيح النسبي، أي الكسر الذي تختلف به الساعات خلال أي فترة زمنية. الإزاحة المطلقة تُحصل بضربها في المدة: خلال يوم من $86\\,400$ ثانية تتراكم $7{,}3$ ميكروثانية. هكذا يُدار العمل مع التأثيرات الصغيرة: الكمية النسبية تخبرنا ما إذا كان التأثير كبيرًا في جوهره، وحاصل ضربها في مقياس المسألة يخبرنا ما إذا كان ملحوظًا عمليًا.",
+     "latex": "\\Delta = (\\gamma-1)\\,T \\approx \\frac{v^{2}}{2c^{2}}\\,T",
+     "kit": "order"
+    }
+   ]
+  }
  },
  "tags": [
   "time_dilation",
