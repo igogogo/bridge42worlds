@@ -24,6 +24,28 @@ CYR = re.compile(r"[А-Яа-яЁё]")
 ROOTS = [Path("data/theory/courses"), Path("data/theory/lectures"), Path("data/theory")]
 
 
+def shape_broken(ru, tr):
+    """Правда ли перевод потерял форму оригинала.
+
+    Третий вид пробела, который не ловили ни «нет ключа», ни «есть кириллица»: ключ на месте,
+    кириллицы нет, а внутри пусто или список короче русского. Так бывает после пересборки русской
+    ветки — в путеводитель добавили законы, в тему параграф, — и на английской странице темы
+    оставался один параграф из трёх при полностью зелёной проверке. Разбор и починка россыпью:
+    tools/translation_holes.py.
+    """
+    if isinstance(ru, dict):
+        if not isinstance(tr, dict):
+            return True
+        return any(k not in tr or shape_broken(v, tr[k]) for k, v in ru.items())
+    if isinstance(ru, list):
+        if not isinstance(tr, list) or len(tr) < len(ru):
+            return True
+        return any(shape_broken(a, b) for a, b in zip(ru, tr))
+    if isinstance(ru, str):
+        return bool(ru.strip()) and isinstance(tr, str) and not tr.strip()
+    return False
+
+
 def branches(d):
     """Наборы языковых веток в файле.
 
@@ -343,7 +365,9 @@ def main():
                     gaps = list(br["ru"].keys())
                 else:
                     gaps = [k for k in br["ru"]
-                            if k not in br[l] or CYR.search(json.dumps(br[l][k], ensure_ascii=False))]
+                            if k not in br[l]
+                            or CYR.search(json.dumps(br[l][k], ensure_ascii=False))
+                            or shape_broken(br["ru"][k], br[l][k])]
                 if gaps:
                     missing[(owner, l)] = gaps
         if missing:
