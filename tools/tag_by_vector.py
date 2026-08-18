@@ -106,11 +106,33 @@ def _save_if_changed(path, data, indent=1):
     return True
 
 
+def registry():
+    """Единый реестр понятий — источник правды с 18 августа.
+
+    Тексты понятий он не хранит и не должен: описание пишется на языке, а реестр
+    один на все языки. Поэтому текст по-прежнему берётся из витрины (tags.json,
+    laws.json), а реестр решает, КАКИЕ понятия существуют и какого они вида.
+
+    Зачем это здесь. Разметка ставила идентификаторы из витрины, а витрина
+    генерируется и отстаёт: понятие, склеенное в реестре, в ней ещё двоится.
+    Без сверки с реестром разметка продолжала бы ставить исчезнувший идентификатор,
+    и починка справочника откатывалась бы следующим же ночным прогоном.
+    """
+    import json as _json
+    for base in (ROOT, MAIN_REPO):
+        p = base / "data" / "concepts.json"
+        if p.exists():
+            return _json.loads(p.read_text(encoding="utf-8")).get("concepts", {})
+    return {}
+
+
 def tag_texts():
     """Тег как ТЕКСТ: название + простое объяснение + практическое применение.
     Голого названия мало — «энтропия» и «фрактал» одним словом ничем не отличаются для
     сравнения смыслов. Описание даёт тегу собственное смысловое поле."""
     d = json.loads((SRC / "lang/ru/data/tags.json").read_text(encoding="utf-8"))
+    reg = registry()
+    dropped = 0
     ids, texts = [], []
     for tid, v in d.items():
         if not isinstance(v, dict):
@@ -120,8 +142,14 @@ def tag_texts():
         t = " ".join(p for p in parts if p)
         if len(t) < 40:
             continue
+        # Нет в реестре — значит понятие склеено или удалено. Ставить его нельзя.
+        if reg and tid not in reg:
+            dropped += 1
+            continue
         ids.append(tid)
         texts.append(t)
+    if dropped:
+        print(f"  из витрины отброшено {dropped} понятий, которых нет в реестре")
     return ids, texts, d
 
 
@@ -136,6 +164,8 @@ def law_texts():
     свой текст, и меряются они напрямую, без посредника-тега.
     """
     d = json.loads((SRC / "lang/ru/data/laws.json").read_text(encoding="utf-8"))
+    reg = registry()
+    dropped = 0
     ids, texts = [], []
     for lid, v in d.items():
         if not isinstance(v, dict):
@@ -145,6 +175,9 @@ def law_texts():
                  v.get("where_met", ""), v.get("practical_application", "")]
         s = " ".join(x for x in parts if x)
         if len(s) < 40:
+            continue
+        if reg and lid not in reg:
+            dropped += 1
             continue
         ids.append(lid)
         texts.append(s)

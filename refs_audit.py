@@ -75,12 +75,12 @@ def diff_text(prev, cur, holes):
         lines = ["📚 Сверка справочников — первый прогон, сравнивать не с чем."]
     else:
         lines = ["📚 Сверка справочников за неделю"]
-    for k in ("tag", "law", "sci"):
+    for k in ("concept", "sci"):
         c = (cur.get("kinds") or {}).get(k) or {}
         o = (prev.get("kinds") or {}).get(k) or {}
         if not c:
             continue
-        human = {"tag": "теги", "law": "законы", "sci": "учёные"}[k]
+        human = {"concept": "понятия", "sci": "учёные"}[k]
         dead_now = {x["id"] for x in c.get("dead", [])}
         dead_was = {x["id"] for x in o.get("dead", [])}
         dup_now = {(x["a"], x["b"]) for x in c.get("duplicates", [])}
@@ -104,6 +104,52 @@ def diff_text(prev, cur, holes):
     return "\n".join(lines)
 
 
+def law_gate(reg, pool, art_formulas, formula_tags):
+    """Кто годится в закон: формула плюс автор. И почему это правило пока не работает.
+
+    Волна 18 августа: «рост до 1000 законов идёт через сверку: кандидат-закон обязан
+    иметь формулу в статьях (formula_layer) и автора». Правило разумное, но прежде чем
+    им фильтровать, его надо проверить на том, что законом УЖЕ названо. Проверила два
+    прочтения, и провалились оба:
+
+      СО-ВСТРЕЧАЕМОСТЬ — формула нашлась хоть в одной статье понятия. Проходят 22 из 49
+      законов (45%), а в кандидаты лезут 311 понятий, включая `black_hole`, `hydrogen`
+      и `hubble_space_telescope`. Понятно почему: у популярного понятия сотни статей,
+      и формула рядом с ним найдётся всегда. Признак меряет популярность, а не закон.
+
+      ПРИПИСКА — формула помечена этим понятием. Проходят 0 законов из 49. Тоже понятно:
+      формулы размечены ТЕГАМИ, а законы тегами никогда не были — приписать формулу
+      закону в нынешнем слое просто нечем.
+
+    Вывод, который надо сказать прямо: правило в таком виде неисполнимо, и дело не в
+    строгости порога. Чтобы растить законы через формулы, слой формул должен сначала
+    научиться привязывать формулу к закону — то есть размечаться по ЕДИНОМУ реестру,
+    а не по старому словарю тегов. До этого фильтр роста давал бы либо список
+    популярных понятий, либо пустоту.
+
+    Функция считает оба числа и возвращает их: пока правило не исполнимо, полезен
+    сам замер, а не отбор.
+    """
+    laws = [k for k, v in reg.items() if v.get("kind") == "law"]
+    other = [k for k, v in reg.items()
+             if v.get("kind") != "law" and len(pool.get(k, ())) >= 5]
+
+    def by_cooc(k):
+        return (bool(reg[k].get("scientists"))
+                and any(a in art_formulas for a in pool.get(k, ())))
+
+    def by_attr(k):
+        return bool(reg[k].get("scientists")) and formula_tags.get(k, 0) > 0
+
+    return {
+        "laws": len(laws),
+        "cooc_pass": sum(1 for k in laws if by_cooc(k)),
+        "cooc_candidates": [k for k in other if by_cooc(k)],
+        "attr_pass": sum(1 for k in laws if by_attr(k)),
+        "attr_candidates": [k for k in other if by_attr(k)],
+    }
+
+
 def main():
     ap = argparse.ArgumentParser()
     # По умолчанию — в свою копию: результат коммитит тот, кто его получил.
@@ -121,11 +167,18 @@ def main():
     import vecstore
     import field_build as fb
 
-    tg = jl(MAIN / "data/tags-graph.json").get("graph", {})
-    lg = jl(MAIN / "data/laws-graph.json").get("graph", {})
+    # ЕДИНЫЙ РЕЕСТР с 18 августа: concepts.json — источник правды, а tags-graph
+    # и laws-graph стали генерируемыми витринами. Читать витрины больше нельзя:
+    # понятие, склеенное в реестре, в них двоится, и сверка нашла бы «дубль»,
+    # которого уже нет.
+    reg = jl(MAIN / "data/concepts.json").get("concepts", {})
     sc = jl(MAIN / f"lang/{args.lang}/data/scientists.json")
     idx = jl(MAIN / f"lang/{args.lang}/articles-index.json")
-    print(f"справочники: тегов {len(tg)} · законов {len(lg)} · учёных {len(sc)}")
+    kinds_in_reg = {}
+    for k, v in reg.items():
+        kinds_in_reg[v.get("kind", "?")] = kinds_in_reg.get(v.get("kind", "?"), 0) + 1
+    print(f"единый реестр: понятий {len(reg)} · видов {len(kinds_in_reg)} · "
+          f"учёных {len(sc)}")
 
     # Статья → сущности. Версии одной работы схлопываем: справочник живёт на уровне
     # работы, а не пересказа, иначе популярная и экспресс-версия считались бы дважды.
@@ -162,7 +215,11 @@ def main():
     X /= np.linalg.norm(X, axis=1, keepdims=True) + 1e-9
     pos = {a: k for k, a in enumerate(order)}
 
-    KINDS = (("tag", tg, "tags"), ("law", lg, "laws"), ("sci", sc, "sci"))
+    # Понятие несёт статья и полем tags, и полем laws — реестр их больше не различает,
+    # поэтому и пул собирается из обоих. Учёные остаются отдельным справочником:
+    # человек — не понятие, и в единую классификацию он не входит.
+    KINDS = (("concept", reg, ("tags", "laws")), ("sci", sc, ("sci",)))
+    pool_all = {}          # пул понятий переживает цикл: он нужен ниже, для законов
     result = {"built": "2026-08-15", "articles": len(have), "kinds": {}}
 
     for kind, book, field in KINDS:
@@ -171,9 +228,12 @@ def main():
         for aid, r in art.items():
             if aid not in pos:
                 continue
-            for e in r[field]:
-                if e in pool:
-                    pool[e].add(aid)
+            for f in field:
+                for e in r[f]:
+                    if e in pool:
+                        pool[e].add(aid)
+        if kind == "concept":
+            pool_all = pool
 
         names = [n for n in book]
         cent = np.zeros((len(names), X.shape[1]), dtype=np.float32)
@@ -350,16 +410,81 @@ def main():
         if share < args.cover:
             holes.append({"cluster": int(c), "articles": len(members),
                           "best_cover": best, "share": round(share, 2),
-                          "examples": members[:5]})
+                          "examples": members[:5],
+                          "_center": km.cluster_centers_[c]})
     holes.sort(key=lambda h: (-h["articles"], h["share"]))
+
+    # ВИД БУДУЩЕГО ПОНЯТИЯ. Волна 18 августа: «дыры кластеров теперь предлагают
+    # понятия С ВИДОМ». Вид предсказывается по центроиду кластера тем же
+    # разделителем, что обучен на 253 понятиях реестра с известным видом
+    # (concept_kind.py). Показываются ДВА кандидата, а не один: замер даёт 52%
+    # попадания с первого раза и 66% с двух, и выдавать один вид за ответ нечестно.
+    try:
+        from concept_kind import predict_kind
+        guess = predict_kind([h["_center"] for h in holes], top=2)
+        for h, g in zip(holes, guess):
+            h["kind_guess"] = [{"kind": k, "p": round(v, 2)} for k, v in g]
+    except Exception as ex:
+        print(f"  (вид не предсказан: {type(ex).__name__} — "
+              f"сначала python concept_kind.py)")
+    for h in holes:
+        h.pop("_center", None)
     print(f"  кластеров {args.holes} · непокрытых (лучший тег держит < "
           f"{args.cover * 100:.0f}%): {len(holes)}")
     for h in holes[:8]:
+        g = h.get("kind_guess") or []
+        vid = ", ".join(f"{x['kind']} {x['p']:.2f}" for x in g)
         print(f"    кластер {h['cluster']:>3} · статей {h['articles']:>3} · "
               f"лучший тег «{h['best_cover']}» держит {h['share'] * 100:.0f}%")
-    print("\n  Название новой сущности здесь НЕ придумывается: это работа модели,")
-    print("  и делать её надо строго по опоре из перечисленных работ. При $1.62")
-    print("  на счету шаг отложен — список кандидатов готов и ждёт.")
+        if vid:
+            print(f"        вид: {vid}")
+    print("")
+    print("  ВИД — подсказка, а не разметка: 52% попадания с первого раза")
+    print("  и 66% с двух (замер перекрёстной проверкой в concept_kind.py).")
+    print("  Кандидатов показывается два именно поэтому: выдавать один за ответ")
+    print("  было бы нечестно. НАЗВАНИЕ здесь не придумывается вовсе — это работа")
+    print("  модели, строго по опоре из перечисленных работ.")
+    # ЗАКОНЫ: годность к росту. Слой формул — самый строгий из наших признаков:
+    # формула либо есть в работе, либо её нет. Но привязать её к закону нынешний слой
+    # не умеет, и это показывает контроль на уже признанных законах.
+    fm = jl(MAIN / "data/formulas.json")
+    art_formulas, formula_tags = set(), {}
+    for rec in fm.values():
+        for a in (rec.get("articles") or []):
+            aid = fb._base_id(str(a.get("id") if isinstance(a, dict) else a))
+            if aid:
+                art_formulas.add(aid)
+        for t in (rec.get("tags") or []):
+            formula_tags[t] = formula_tags.get(t, 0) + 1
+    lg = law_gate(reg, pool_all, art_formulas, formula_tags)
+    print("")
+    print("=" * 78)
+    print("ЗАКОНЫ · правило «формула + автор» проверено на самих законах")
+    print("=" * 78)
+    print(f"  статей с формулами в слое: {len(art_formulas):,} · "
+          f"формул: {len(fm):,}")
+    print(f"  прочтение «формула где-то в статьях понятия»:")
+    print(f"    проходят {lg['cooc_pass']} из {lg['laws']} законов "
+          f"({lg['cooc_pass'] / max(1, lg['laws']) * 100:.0f}%), "
+          f"кандидатов {len(lg['cooc_candidates'])}")
+    print(f"  прочтение «формула приписана понятию»:")
+    print(f"    проходят {lg['attr_pass']} из {lg['laws']} законов "
+          f"({lg['attr_pass'] / max(1, lg['laws']) * 100:.0f}%), "
+          f"кандидатов {len(lg['attr_candidates'])}")
+    print("")
+    print("  ПРАВИЛО В ТАКОМ ВИДЕ НЕИСПОЛНИМО, и дело не в пороге. По со-встречаемости")
+    print("  оно пропускает популярные понятия (black_hole, hydrogen), по приписке —")
+    print("  не пропускает ни одного закона, потому что формулы размечены ТЕГАМИ,")
+    print("  а законы тегами никогда не были. Чтобы растить законы через формулы,")
+    print("  слой формул должен сначала размечаться по ЕДИНОМУ реестру.")
+    result["law_growth"] = lg
+    result["law_growth"]["note"] = (
+        "Правило «формула + автор» неисполнимо в нынешнем виде: формулы размечены "
+        "тегами, законы тегами не были. Сначала переразметка слоя формул по единому "
+        "реестру, потом фильтр роста.")
+    result["law_growth"]["cooc_candidates"] = lg["cooc_candidates"][:100]
+    result["law_growth"]["attr_candidates"] = lg["attr_candidates"][:100]
+
     result["holes"] = holes
 
     # СРАВНЕНИЕ С ПРОШЛЫМ ПРОГОНОМ. Волна 14 августа просила diff «добавлено / слито /
