@@ -37,6 +37,9 @@ import json
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from common import write_json_atomic  # noqa: E402
+
 ROOT = Path(__file__).resolve().parent.parent
 if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -140,11 +143,15 @@ def main():
         return 0
 
     out = ROOT / "data" / "concepts.json"
-    out.write_text(json.dumps({"_": "Единый реестр понятий. Источник правды с 2026-08-18; "
-                               "tags-graph и laws-graph — генерируемые витрины.",
-                               "review_pairs": review_pairs,
-                               "concepts": concepts},
-                              ensure_ascii=False, indent=1), encoding="utf-8")
+    # Атомарно. Этот файл объявлен источником правды и уезжает на сайт: страницы /tags/
+    # и /laws/ читают его через слой совместимости. Обычный write_text сначала обнуляет
+    # файл, потом наполняет — и выкладка, попавшая в этот промежуток, увезёт обрезок.
+    # Ровно так 14 августа обрезанный индекс погасил ленту на всех пяти языках; здесь
+    # тот же механизм погасил бы теги и законы.
+    write_json_atomic(out, {"_": "Единый реестр понятий. Источник правды с 2026-08-18; "
+                                 "tags-graph и laws-graph — генерируемые витрины.",
+                            "review_pairs": review_pairs,
+                            "concepts": concepts}, indent=1)
     print(f"✅ {out.relative_to(ROOT)}")
     return 0
 
