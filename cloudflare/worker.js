@@ -735,7 +735,10 @@ async function handleStats(request, env) {
          AND ref<>'' AND ref NOT LIKE '%bridge42worlds%'
         GROUP BY ref ORDER BY n DESC LIMIT 10`, since),
     // Возвраты: сколько устройств заходило больше чем в один день
-    q(`SELECT COUNT(*) returning FROM (SELECT uid FROM events WHERE dev=0 AND day>=? AND type='view'
+    // «returning» — зарезервированное слово SQLite (клауза RETURNING): голый алиас ронял
+    // запрос синтаксической ошибкой, q() молча глотал её, и панель месяц показывала
+    // «вернувшихся 0» при живых вернувшихся в базе. Алиас в кавычках — валиден.
+    q(`SELECT COUNT(*) "returning" FROM (SELECT uid FROM events WHERE dev=0 AND day>=? AND type='view'
         GROUP BY uid HAVING COUNT(DISTINCT day) > 1)`, since),
     q(`SELECT extra pct, COUNT(*) n FROM events WHERE dev=0 AND day>=? AND type='depth'
         GROUP BY extra ORDER BY pct`, since),
