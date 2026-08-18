@@ -2783,6 +2783,125 @@
         };
     }
 
+    /** Труба переменного сечения: неразрывность и Бернулли на одном стенде. */
+    function flowModel(data) {
+        var RHO = 1000;                                   // вода, кг/м³
+        var G = 9.81;
+
+        // Неразрывность: через любое сечение за секунду проходит одинаковый объём.
+        // Отсюда узкое место = быстрое течение, а Бернулли добавляет: быстрое = низкое давление.
+        function speeds(st) {
+            var A1 = Math.PI * Math.pow(st.d1 / 2000, 2);  // диаметр в мм → площадь в м²
+            var A2 = Math.PI * Math.pow(st.d2 / 2000, 2);
+            var Q = st.Q / 1000;                           // л/с → м³/с
+            return { A1: A1, A2: A2, v1: Q / A1, v2: Q / A2 };
+        }
+
+        return {
+            cfg: {
+                i18n: data.i18n,
+                params: data.params.map(function (p) { return { key: p.key, label: p.key, min: p.min, max: p.max, step: p.step, value: p.value, unit: p.unit }; }),
+                animate: function (t, st) { return { t: t, ph: (t * 0.7) % 1 }; },
+                derive: function (st, a) {
+                    var s = speeds(st);
+                    // Бернулли вдоль горизонтальной трубы: p + ρv²/2 = const
+                    var dp = RHO * (s.v2 * s.v2 - s.v1 * s.v1) / 2;      // насколько давление ПАДАЕТ в узком
+                    var p2raw = st.p1 * 1000 - dp;                       // кПа → Па
+                    // Ниже давления насыщенного пара жидкость вскипает, и уравнение Бернулли
+                    // перестаёт описывать происходящее: показывать «минус три атмосферы» —
+                    // значит учить несуществующей физике. Упираемся в предел и говорим об этом.
+                    var PVAP = 2340;
+                    var p2 = Math.max(PVAP, p2raw);
+                    return { v1: s.v1, v2: s.v2, dp: dp / 1000, p2: p2 / 1000,
+                             ratio: s.A1 / s.A2, ph: a.ph,
+                             cavitation: p2raw < PVAP,                   // ниже давления насыщенного пара воды
+                             head: dp / (RHO * G) };                     // тот же перепад в метрах столба
+                },
+                stage: {
+                    height: 280,
+                    draw: function (g, ctx) {
+                        var W = ctx.W, H = ctx.H, col = ctx.c, st = ctx.state, d = ctx.derived;
+                        var midY = 110, pad = 30;
+                        var h1 = Math.max(10, st.d1 * 0.9), h2 = Math.max(6, st.d2 * 0.9);
+                        var xA = pad + 40, xB = W * 0.42, xC = W * 0.58, xD = W - pad - 40;
+
+                        // — стенки трубы: широкая часть, сужение, узкая часть
+                        function wall(sign) {
+                            var y1 = midY + sign * h1 / 2, y2 = midY + sign * h2 / 2;
+                            KIT.polyline(g, [[pad, y1], [xB, y1], [xC, y2], [W - pad, y2]],
+                                         { color: col.border, width: 2 });
+                        }
+                        wall(-1); wall(1);
+
+                        // — частицы: в узком месте те же частицы идут гуще и быстрее
+                        var lanes = 5;
+                        for (var i = 0; i < 26; i++) {
+                            var f = ((i / 26) + d.ph) % 1;
+                            var x = pad + f * (W - pad * 2);
+                            var k = x < xB ? 0 : (x > xC ? 1 : (x - xB) / (xC - xB));
+                            var hh = h1 + (h2 - h1) * k;
+                            var lane = (i % lanes) / (lanes - 1) - 0.5;
+                            KIT.body(g, x, midY + lane * hh * 0.82, { shape: 'dot', size: 4, color: '#155E74' });
+                        }
+
+                        // — скорости стрелками: длина пропорциональна скорости
+                        KIT.arrow(g, xA, midY, Math.min(46, d.v1 * 14), 0, { color: '#155E74', width: 2, head: 5 });
+                        KIT.arrow(g, xD - 30, midY, Math.min(60, d.v2 * 14), 0, { color: '#9B2C2C', width: 2.4, head: 6 });
+                        KIT.text(g, d.v1.toFixed(2) + ' ' + ctx.T('unit_ms'), xA + 4, midY - h1 / 2 - 10,
+                                 { size: 10.5, color: '#155E74' });
+                        KIT.text(g, d.v2.toFixed(2) + ' ' + ctx.T('unit_ms'), xD - 26, midY - h2 / 2 - 10,
+                                 { size: 10.5, color: '#9B2C2C' });
+
+                        // — манометры: столбики показывают, где давление больше
+                        var base = H - 40;
+                        function gauge(x, val, color, label) {
+                            var hgt = Math.max(4, Math.min(90, val * 0.5));
+                            KIT.bar(g, x - 16, base, 32, 10, { split: 1, border: col.border });
+                            g.fillStyle = color;
+                            g.fillRect(x - 8, base - hgt, 16, hgt);
+                            KIT.text(g, Math.round(val) + ' ' + ctx.T('unit_kPa'), x, base + 20,
+                                     { size: 10.5, color: color, align: 'center' });
+                            KIT.text(g, label, x, base - hgt - 8, { size: 10, color: col.soft, align: 'center' });
+                        }
+                        gauge(xA, st.p1, '#155E74', ctx.T('wide'));
+                        gauge(xD - 10, d.p2, d.cavitation ? '#9B2C2C' : '#8F6417', ctx.T('narrow'));
+
+                        KIT.readout(g, [
+                            { text: ctx.T('title'), y: 18, size: 11.5, weight: '600', color: '#155E74' },
+                            { text: ctx.T('sameFlow') + ' ' + st.Q + ' ' + ctx.T('unit_ls'), y: 34, size: 10.5, color: col.soft },
+                            { text: d.cavitation ? ctx.T('cavitation') : ctx.T('dropIs') + ' ' + Math.abs(d.dp).toFixed(1) + ' ' + ctx.T('unit_kPa'),
+                              y: 50, size: 10.5, color: d.cavitation ? '#9B2C2C' : col.soft }
+                        ], { x: W - pad, align: 'right' });
+                    }
+                },
+                formula: function (st, d, T) {
+                    return '<span class="xf-op">' + T('continuity') + ': A₁v₁ = A₂v₂ → </span>' +
+                        '<span class="xf-res">' + d.v2.toFixed(2) + ' ' + T('unit_ms') + '</span>' +
+                        '<span class="xf-op"> · p + ρv²/2 = const → </span><span class="xf-var">' +
+                        d.p2.toFixed(1) + ' ' + T('unit_kPa') + '</span>' +
+                        '<br><i>' + T('sectionRatio') + ' ' + d.ratio.toFixed(1) + '× · ' +
+                        T('headIs') + ' ' + d.head.toFixed(2) + ' ' + T('unit_m') + '</i>';
+                },
+                plot: {
+                    height: 170,
+                    x: { label: 'xD2', min: 6, max: 40 },
+                    y: { label: 'yP', min: 0, max: function (s) { return Math.round(s.p1 * 1.1); } },
+                    samples: 90,
+                    curve: function (d2, s) {
+                        var A1 = Math.PI * Math.pow(s.d1 / 2000, 2), A2 = Math.PI * Math.pow(d2 / 2000, 2);
+                        var Q = s.Q / 1000, v1 = Q / A1, v2 = Q / A2;
+                        return Math.max(0, s.p1 - RHO * (v2 * v2 - v1 * v1) / 2 / 1000);
+                    },
+                    marker: function (s, a, d) { return { x: s.d2, y: Math.max(0, d.p2) }; }
+                }
+            },
+            extras: function (st, d, T) {
+                return '<b>v₁</b> ' + d.v1.toFixed(2) + ' &nbsp;·&nbsp; <b>v₂</b> ' + d.v2.toFixed(2) +
+                    ' ' + T('unit_ms') + ' &nbsp;·&nbsp; <b>Δp</b> ' + d.dp.toFixed(1) + ' ' + T('unit_kPa');
+            }
+        };
+    }
+
     var FACTORIES = { gas: gasModel, kettle: kettleModel, engine: engineModel,
                       motion: motionModel, newton: newtonModel, collision: collisionModel,
                       rotation: rotationModel, oscillator: oscillatorModel,
@@ -2790,7 +2909,7 @@
                       orbit: orbitModel, wave: waveModel, charge: chargeModel, magnet: magnetModel,
                       srt: srtModel, quantum: quantumModel, nucleus: nucleusModel,
                       action: actionModel, expansion: expansionModel, cmb: cmbModel,
-                      dark: darkModel };
+                      dark: darkModel, flow: flowModel };
     global.B42Models = {};
     Object.keys(FACTORIES).forEach(function (k) { global.B42Models[k] = withUnits(FACTORIES[k]); });
     global.B42Models._localizeUnits = localizeUnits;   // для проверок

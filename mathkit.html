@@ -50,6 +50,8 @@
   .m-row b{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
     display:block;margin-bottom:4px;font-weight:700}
   .m-where{color:var(--soft);font-size:13px}
+  .m-used a{color:var(--steel,#155E74);text-decoration:none;border-bottom:1px dashed currentColor}
+  .m-used a:hover{color:var(--brass,#8F6417)}
   .m-catch{border-inline-start:3px solid #b8860b;padding-inline-start:12px;
     background:rgba(184,134,11,.06);border-radius:0 8px 8px 0;padding-top:8px;padding-bottom:8px}
   .m-empty{padding:30px;text-align:center;color:var(--muted)}
@@ -147,6 +149,19 @@
           var w = el('div', 'm-row m-where');
           w.innerHTML = '<b>' + T.whereLabel + '</b>' + (loc.where || it.where);
           card.appendChild(w);
+        }
+        // Живые ссылки: где карточка действительно работает в курсе. Собираются из врезок
+        // самих параграфов (tools/mathkit_links.py), поэтому не расходятся с текстом.
+        if ((it.usedIn || []).length) {
+          var u = el('div', 'm-row m-used');
+          u.innerHTML = '<b>' + (B42_T('В курсе:') || 'В курсе:') + '</b> ';
+          it.usedIn.forEach(function (x, i) {
+            var a = el('a', 'm-used-link', x.title);
+            a.href = '/course.html?t=' + x.topic + '&p=' + x.lesson + '&lang=' + LANG;
+            if (i) u.appendChild(document.createTextNode(' · '));
+            u.appendChild(a);
+          });
+          card.appendChild(u);
         }
         if (loc.catch || it.catch) {
           var c = el('div', 'm-row m-catch');

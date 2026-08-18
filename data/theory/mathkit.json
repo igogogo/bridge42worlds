@@ -124,6 +124,48 @@
     "where": "Законы сохранения, физика частиц, кристаллография",
     "catch": "Симметрия может быть нарушена состоянием, оставаясь симметрией уравнений: карандаш падает в конкретную сторону, хотя все стороны равноправны.",
     "latex": "S \\rightarrow \\text{сохраняющаяся величина}"
+   },
+   "taylor": {
+    "name": "Ряд Тейлора и линейное приближение",
+    "means": "Любую гладкую функцию вблизи точки можно заменить многочленом: сначала значением, потом наклоном, потом кривизной. Физику почти всегда хватает первых двух слагаемых — это и есть «при малых x». Отсюда берутся все привычные приближения: sin x ≈ x для маятника, (1+x)ⁿ ≈ 1+nx для релятивистской энергии, e^x ≈ 1+x для слабого нагрева. Смысл не в экономии букв: разложение показывает, КАКОЙ величиной мы пренебрегли и когда пренебрегать перестанет быть можно.",
+    "where": "Малые колебания маятника, mv²/2 из релятивистской энергии, приливы, слабое поле",
+    "catch": "«Малый» — это не «маленький на глаз», а безразмерный: мал по сравнению с чем-то. Пока не назвали, с чем сравниваете, приближение не обосновано.",
+    "latex": "f(x) \\approx f(0) + f'(0)\\,x + \\tfrac{1}{2}f''(0)\\,x^{2}"
+   },
+   "polar": {
+    "name": "Полярные координаты",
+    "means": "Когда движение идёт вокруг центра, декартовы x и y мешают: обе меняются сложно. Заменяем их на расстояние r и угол φ — и задача распрямляется. Орбита планеты в полярных координатах записывается одной строкой, а закон площадей превращается в постоянство r²·dφ/dt. Правило простое: выбирайте координаты по симметрии задачи, а не по привычке.",
+    "where": "Законы Кеплера, орбиты, вращение, поле точечного заряда",
+    "catch": "Скорость в полярных координатах имеет две части: вдоль радиуса и поперёк него. Забыв вторую, вы теряете именно то, что удерживает тело на орбите.",
+    "latex": "x = r\\cos\\varphi, \\quad y = r\\sin\\varphi, \\qquad v^{2} = \\dot r^{2} + r^{2}\\dot\\varphi^{2}"
+   },
+   "combinatorics": {
+    "name": "Сколько есть способов",
+    "means": "Статистическая физика начинается с подсчёта: сколькими способами можно разложить молекулы по половинкам сосуда, электроны по уровням, монеты по решкам. Основной инструмент — число сочетаний C(N,k) = N!/(k!(N−k)!). Именно оно превращает «беспорядок» в точное число, а энтропию — из метафоры в логарифм этого числа.",
+    "where": "Микросостояния и энтропия, распределение молекул, спектр излучения",
+    "catch": "Факториал растёт чудовищно быстро, и считать его в лоб при N = 10²³ бессмысленно. Для больших чисел работают с логарифмом: ln N! ≈ N ln N − N.",
+    "latex": "C(N,k) = \\frac{N!}{k!\\,(N-k)!}, \\qquad \\ln N! \\approx N\\ln N - N"
+   },
+   "partial": {
+    "name": "Частная производная",
+    "means": "Если величина зависит от нескольких переменных, спрашивать «как быстро она меняется» бессмысленно, пока не сказано — при чём неизменном. Частная производная и есть ответ на уточнённый вопрос: меняем одно, остальное держим. В термодинамике это не формальность, а физика: давление по объёму при постоянной температуре и при постоянной энтропии — две разные величины, и именно поэтому изотерма и адиабата идут по-разному.",
+    "where": "Термодинамические процессы, волновое уравнение, поля",
+    "catch": "Обозначение с индексом снизу — не украшение: (∂P/∂V)_T и (∂P/∂V)_S различаются и численно, и по смыслу. Индекс говорит, что именно вы удерживали.",
+    "latex": "\\left(\\frac{\\partial P}{\\partial V}\\right)_{T} \\neq \\left(\\frac{\\partial P}{\\partial V}\\right)_{S}"
+   },
+   "rms": {
+    "name": "Среднее и среднеквадратичное",
+    "means": "У молекул газа средняя скорость по проекции равна нулю: столько же летит влево, сколько вправо. Значит, «средняя скорость» здесь ничего не описывает. Работает средний КВАДРАТ: он не уничтожается знаками и связан с энергией. Корень из него — среднеквадратичная скорость, та самая, что входит в связь температуры и движения.",
+    "where": "Температура и скорость молекул, шум, погрешность измерений",
+    "catch": "Среднеквадратичная скорость больше средней по модулю, а самая вероятная — меньше их обеих. Три разных числа для одного газа: важно, какое из них требует задача.",
+    "latex": "\\langle v_x \\rangle = 0, \\qquad v_{\\text{скв}} = \\sqrt{\\langle v^{2}\\rangle} = \\sqrt{\\frac{3kT}{m}}"
+   },
+   "separation": {
+    "name": "Разделение переменных",
+    "means": "Приём решения дифференциальных уравнений, где всё, что зависит от искомой величины, собирают по одну сторону, а всё, что от времени, — по другую, после чего обе части интегрируют. Так из «скорость убыли пропорциональна количеству» получается экспонента распада, а из «скорость роста пропорциональна размеру» — экспонента расширения. Метод решает большинство уравнений первого порядка, встречающихся в курсе.",
+    "where": "Закон радиоактивного распада, разряд конденсатора, остывание тела",
+    "catch": "Делить на искомую величину можно, только если она не равна нулю. Случай N = 0 нужно разбирать отдельно — и он же часто и есть равновесие задачи.",
+    "latex": "\\frac{dN}{N} = -\\lambda\\,dt \\;\\Longrightarrow\\; \\ln N = -\\lambda t + C"
    }
   }
  },
@@ -132,91 +174,573 @@
    "id": "dimension",
    "level": "base",
    "icon": "ruler",
-   "latex": "[v] = \\frac{[L]}{[T]} = \\text{м}/\\text{с}"
+   "latex": "[v] = \\frac{[L]}{[T]} = \\text{м}/\\text{с}",
+   "usedIn": [
+    {
+     "topic": "atom",
+     "lesson": "01-spectra",
+     "title": "Спектры"
+    },
+    {
+     "topic": "electrostatics",
+     "lesson": "02-field",
+     "title": "Поле"
+    },
+    {
+     "topic": "entropy",
+     "lesson": "02-arrow",
+     "title": "Стрела времени"
+    },
+    {
+     "topic": "language",
+     "lesson": "01-models",
+     "title": "Модель и её границы"
+    },
+    {
+     "topic": "language",
+     "lesson": "02-scale",
+     "title": "Размерность и порядок величины"
+    },
+    {
+     "topic": "nuclear",
+     "lesson": "03-energy",
+     "title": "Деление и синтез"
+    },
+    {
+     "topic": "optics",
+     "lesson": "01-light",
+     "title": "Что такое свет"
+    },
+    {
+     "topic": "optics",
+     "lesson": "03-colour",
+     "title": "Цвет и дифракция"
+    },
+    {
+     "topic": "relativity",
+     "lesson": "01-postulates",
+     "title": "Два постулата"
+    },
+    {
+     "topic": "relativity",
+     "lesson": "03-energy",
+     "title": "Масса и энергия"
+    }
+   ]
   },
   {
    "id": "order",
    "level": "base",
    "icon": "estimate",
-   "latex": "10^{3} \\cdot 10^{-5} = 10^{-2}"
+   "latex": "10^{3} \\cdot 10^{-5} = 10^{-2}",
+   "usedIn": [
+    {
+     "topic": "electricity",
+     "lesson": "02-magnetism",
+     "title": "Магнитное поле"
+    },
+    {
+     "topic": "electrostatics",
+     "lesson": "01-coulomb",
+     "title": "Заряд и закон Кулона"
+    },
+    {
+     "topic": "language",
+     "lesson": "01-models",
+     "title": "Модель и её границы"
+    },
+    {
+     "topic": "nuclear",
+     "lesson": "03-energy",
+     "title": "Деление и синтез"
+    },
+    {
+     "topic": "optics",
+     "lesson": "01-light",
+     "title": "Что такое свет"
+    },
+    {
+     "topic": "optics",
+     "lesson": "03-colour",
+     "title": "Цвет и дифракция"
+    },
+    {
+     "topic": "relativity",
+     "lesson": "02-time",
+     "title": "Время и длина"
+    }
+   ]
   },
   {
    "id": "propto",
    "level": "base",
    "icon": "scale",
-   "latex": "s \\propto v^{2}, \\qquad F \\propto \\frac{1}{r^{2}}"
+   "latex": "s \\propto v^{2}, \\qquad F \\propto \\frac{1}{r^{2}}",
+   "usedIn": [
+    {
+     "topic": "atom",
+     "lesson": "01-spectra",
+     "title": "Спектры"
+    },
+    {
+     "topic": "electricity",
+     "lesson": "01-current",
+     "title": "Ток и сопротивление"
+    },
+    {
+     "topic": "electricity",
+     "lesson": "02-magnetism",
+     "title": "Магнитное поле"
+    },
+    {
+     "topic": "electrostatics",
+     "lesson": "01-coulomb",
+     "title": "Заряд и закон Кулона"
+    },
+    {
+     "topic": "gravity",
+     "lesson": "01-kepler",
+     "title": "От Кеплера к Ньютону"
+    },
+    {
+     "topic": "gravity",
+     "lesson": "02-orbits",
+     "title": "Орбиты и космические скорости"
+    },
+    {
+     "topic": "language",
+     "lesson": "02-scale",
+     "title": "Размерность и порядок величины"
+    },
+    {
+     "topic": "nuclear",
+     "lesson": "01-nucleus",
+     "title": "Устройство ядра"
+    },
+    {
+     "topic": "optics",
+     "lesson": "02-refraction",
+     "title": "Отражение и преломление"
+    },
+    {
+     "topic": "optics",
+     "lesson": "03-colour",
+     "title": "Цвет и дифракция"
+    },
+    {
+     "topic": "quantum",
+     "lesson": "01-quanta",
+     "title": "Кванты"
+    },
+    {
+     "topic": "relativity",
+     "lesson": "02-time",
+     "title": "Время и длина"
+    }
+   ]
   },
   {
    "id": "derivative",
    "level": "calc",
    "icon": "clock",
-   "latex": "v = \\frac{dx}{dt}, \\qquad a = \\frac{dv}{dt}"
+   "latex": "v = \\frac{dx}{dt}, \\qquad a = \\frac{dv}{dt}",
+   "usedIn": [
+    {
+     "topic": "electricity",
+     "lesson": "01-current",
+     "title": "Ток и сопротивление"
+    },
+    {
+     "topic": "electricity",
+     "lesson": "03-induction",
+     "title": "Индукция"
+    },
+    {
+     "topic": "gravity",
+     "lesson": "03-tides",
+     "title": "Приливы и невесомость"
+    },
+    {
+     "topic": "nuclear",
+     "lesson": "03-energy",
+     "title": "Деление и синтез"
+    },
+    {
+     "topic": "optics",
+     "lesson": "02-refraction",
+     "title": "Отражение и преломление"
+    },
+    {
+     "topic": "quantum",
+     "lesson": "03-uncertainty",
+     "title": "Неопределённость"
+    },
+    {
+     "topic": "waves",
+     "lesson": "01-travelling",
+     "title": "Что такое волна"
+    }
+   ]
   },
   {
    "id": "integral",
    "level": "calc",
    "icon": "sigma",
-   "latex": "s = \\int v\\,dt, \\qquad A = \\int F\\,dx"
+   "latex": "s = \\int v\\,dt, \\qquad A = \\int F\\,dx",
+   "usedIn": [
+    {
+     "topic": "electrostatics",
+     "lesson": "03-potential",
+     "title": "Потенциал и энергия"
+    },
+    {
+     "topic": "entropy",
+     "lesson": "03-information",
+     "title": "Энтропия и информация"
+    },
+    {
+     "topic": "gravity",
+     "lesson": "02-orbits",
+     "title": "Орбиты и космические скорости"
+    },
+    {
+     "topic": "quantum",
+     "lesson": "01-quanta",
+     "title": "Кванты"
+    }
+   ]
   },
   {
    "id": "diffeq",
    "level": "calc",
    "icon": "formula",
-   "latex": "m\\ddot{x} = -kx \\;\\Longrightarrow\\; x(t) = A\\cos(\\omega t + \\varphi)"
+   "latex": "m\\ddot{x} = -kx \\;\\Longrightarrow\\; x(t) = A\\cos(\\omega t + \\varphi)",
+   "usedIn": [
+    {
+     "topic": "electricity",
+     "lesson": "03-induction",
+     "title": "Индукция"
+    },
+    {
+     "topic": "language",
+     "lesson": "03-phase",
+     "title": "Пространство состояний"
+    }
+   ]
   },
   {
    "id": "exponent",
    "level": "calc",
    "icon": "lamp",
-   "latex": "N(t) = N_0 e^{-\\lambda t}"
+   "latex": "N(t) = N_0 e^{-\\lambda t}",
+   "usedIn": [
+    {
+     "topic": "entropy",
+     "lesson": "02-arrow",
+     "title": "Стрела времени"
+    },
+    {
+     "topic": "gravity",
+     "lesson": "02-orbits",
+     "title": "Орбиты и космические скорости"
+    },
+    {
+     "topic": "nuclear",
+     "lesson": "02-decay",
+     "title": "Радиоактивность"
+    },
+    {
+     "topic": "oscillations",
+     "lesson": "03-resonance",
+     "title": "Затухание и резонанс"
+    },
+    {
+     "topic": "quantum",
+     "lesson": "01-quanta",
+     "title": "Кванты"
+    },
+    {
+     "topic": "waves",
+     "lesson": "02-standing",
+     "title": "Стоячие волны и звук"
+    }
+   ]
+  },
+  {
+   "id": "taylor",
+   "level": "calc",
+   "icon": "formula",
+   "latex": "f(x) \\approx f(0) + f'(0)\\,x + \\tfrac{1}{2}f''(0)\\,x^{2}",
+   "usedIn": [
+    {
+     "topic": "gravity",
+     "lesson": "03-tides",
+     "title": "Приливы и невесомость"
+    },
+    {
+     "topic": "language",
+     "lesson": "01-models",
+     "title": "Модель и её границы"
+    },
+    {
+     "topic": "oscillations",
+     "lesson": "03-resonance",
+     "title": "Затухание и резонанс"
+    },
+    {
+     "topic": "relativity",
+     "lesson": "01-postulates",
+     "title": "Два постулата"
+    },
+    {
+     "topic": "relativity",
+     "lesson": "03-energy",
+     "title": "Масса и энергия"
+    },
+    {
+     "topic": "waves",
+     "lesson": "03-interference",
+     "title": "Интерференция и Доплер"
+    }
+   ]
+  },
+  {
+   "id": "partial",
+   "level": "calc",
+   "icon": "hash",
+   "latex": "\\left(\\frac{\\partial P}{\\partial V}\\right)_{T} \\neq \\left(\\frac{\\partial P}{\\partial V}\\right)_{S}",
+   "usedIn": [
+    {
+     "topic": "language",
+     "lesson": "03-phase",
+     "title": "Пространство состояний"
+    },
+    {
+     "topic": "nuclear",
+     "lesson": "01-nucleus",
+     "title": "Устройство ядра"
+    },
+    {
+     "topic": "optics",
+     "lesson": "01-light",
+     "title": "Что такое свет"
+    }
+   ]
+  },
+  {
+   "id": "separation",
+   "level": "calc",
+   "icon": "sigma",
+   "latex": "\\frac{dN}{N} = -\\lambda\\,dt \\;\\Longrightarrow\\; \\ln N = -\\lambda t + C",
+   "usedIn": [
+    {
+     "topic": "atom",
+     "lesson": "02-orbitals",
+     "title": "Орбитали"
+    },
+    {
+     "topic": "nuclear",
+     "lesson": "02-decay",
+     "title": "Радиоактивность"
+    },
+    {
+     "topic": "waves",
+     "lesson": "02-standing",
+     "title": "Стоячие волны и звук"
+    }
+   ]
   },
   {
    "id": "vector",
    "level": "vector",
    "icon": "hash",
-   "latex": "\\vec{F} = F_x\\hat{x} + F_y\\hat{y} + F_z\\hat{z}"
+   "latex": "\\vec{F} = F_x\\hat{x} + F_y\\hat{y} + F_z\\hat{z}",
+   "usedIn": [
+    {
+     "topic": "electrostatics",
+     "lesson": "01-coulomb",
+     "title": "Заряд и закон Кулона"
+    },
+    {
+     "topic": "gravity",
+     "lesson": "03-tides",
+     "title": "Приливы и невесомость"
+    },
+    {
+     "topic": "oscillations",
+     "lesson": "03-resonance",
+     "title": "Затухание и резонанс"
+    },
+    {
+     "topic": "relativity",
+     "lesson": "01-postulates",
+     "title": "Два постулата"
+    }
+   ]
   },
   {
    "id": "dotcross",
    "level": "vector",
    "icon": "scale",
-   "latex": "A = \\vec{F}\\cdot\\vec{s}, \\qquad \\vec{M} = \\vec{r}\\times\\vec{F}"
+   "latex": "A = \\vec{F}\\cdot\\vec{s}, \\qquad \\vec{M} = \\vec{r}\\times\\vec{F}",
+   "usedIn": [
+    {
+     "topic": "electricity",
+     "lesson": "02-magnetism",
+     "title": "Магнитное поле"
+    },
+    {
+     "topic": "electrostatics",
+     "lesson": "03-potential",
+     "title": "Потенциал и энергия"
+    },
+    {
+     "topic": "gravity",
+     "lesson": "01-kepler",
+     "title": "От Кеплера к Ньютону"
+    }
+   ]
   },
   {
    "id": "field",
    "level": "vector",
    "icon": "lamp",
-   "latex": "\\vec{E}(\\vec{r}), \\qquad \\varphi(\\vec{r})"
+   "latex": "\\vec{E}(\\vec{r}), \\qquad \\varphi(\\vec{r})",
+   "usedIn": [
+    {
+     "topic": "electrostatics",
+     "lesson": "02-field",
+     "title": "Поле"
+    }
+   ]
   },
   {
    "id": "gradient",
    "level": "vector",
    "icon": "ruler",
-   "latex": "\\vec{F} = -\\nabla U"
+   "latex": "\\vec{F} = -\\nabla U",
+   "usedIn": [
+    {
+     "topic": "electrostatics",
+     "lesson": "03-potential",
+     "title": "Потенциал и энергия"
+    }
+   ]
   },
   {
    "id": "flux",
    "level": "vector",
    "icon": "sigma",
-   "latex": "\\oint \\vec{E}\\cdot d\\vec{S} = \\frac{q}{\\varepsilon_0}"
+   "latex": "\\oint \\vec{E}\\cdot d\\vec{S} = \\frac{q}{\\varepsilon_0}",
+   "usedIn": [
+    {
+     "topic": "electricity",
+     "lesson": "01-current",
+     "title": "Ток и сопротивление"
+    },
+    {
+     "topic": "electricity",
+     "lesson": "03-induction",
+     "title": "Индукция"
+    },
+    {
+     "topic": "electrostatics",
+     "lesson": "02-field",
+     "title": "Поле"
+    }
+   ]
+  },
+  {
+   "id": "polar",
+   "level": "vector",
+   "icon": "ruler",
+   "latex": "x = r\\cos\\varphi, \\quad y = r\\sin\\varphi, \\qquad v^{2} = \\dot r^{2} + r^{2}\\dot\\varphi^{2}",
+   "usedIn": [
+    {
+     "topic": "atom",
+     "lesson": "02-orbitals",
+     "title": "Орбитали"
+    },
+    {
+     "topic": "gravity",
+     "lesson": "01-kepler",
+     "title": "От Кеплера к Ньютону"
+    },
+    {
+     "topic": "language",
+     "lesson": "03-phase",
+     "title": "Пространство состояний"
+    },
+    {
+     "topic": "waves",
+     "lesson": "01-travelling",
+     "title": "Что такое волна"
+    }
+   ]
   },
   {
    "id": "complex",
    "level": "adv",
    "icon": "formula",
-   "latex": "e^{i\\omega t} = \\cos\\omega t + i\\sin\\omega t"
+   "latex": "e^{i\\omega t} = \\cos\\omega t + i\\sin\\omega t",
+   "usedIn": [
+    {
+     "topic": "quantum",
+     "lesson": "02-waves",
+     "title": "Волны материи"
+    }
+   ]
   },
   {
    "id": "fourier",
    "level": "adv",
    "icon": "sigma",
-   "latex": "f(t) = \\sum_n a_n \\cos(n\\omega t) + b_n \\sin(n\\omega t)"
+   "latex": "f(t) = \\sum_n a_n \\cos(n\\omega t) + b_n \\sin(n\\omega t)",
+   "usedIn": [
+    {
+     "topic": "quantum",
+     "lesson": "02-waves",
+     "title": "Волны материи"
+    },
+    {
+     "topic": "quantum",
+     "lesson": "03-uncertainty",
+     "title": "Неопределённость"
+    },
+    {
+     "topic": "waves",
+     "lesson": "01-travelling",
+     "title": "Что такое волна"
+    }
+   ]
   },
   {
    "id": "probability",
    "level": "adv",
    "icon": "estimate",
-   "latex": "\\langle E \\rangle = \\sum_i p_i E_i"
+   "latex": "\\langle E \\rangle = \\sum_i p_i E_i",
+   "usedIn": [
+    {
+     "topic": "entropy",
+     "lesson": "01-microstates",
+     "title": "Энтропия по Больцману"
+    },
+    {
+     "topic": "entropy",
+     "lesson": "03-information",
+     "title": "Энтропия и информация"
+    },
+    {
+     "topic": "nuclear",
+     "lesson": "02-decay",
+     "title": "Радиоактивность"
+    },
+    {
+     "topic": "quantum",
+     "lesson": "02-waves",
+     "title": "Волны материи"
+    }
+   ]
   },
   {
    "id": "matrix",
@@ -234,7 +758,75 @@
    "id": "symmetry",
    "level": "adv",
    "icon": "star",
-   "latex": "S \\rightarrow \\text{сохраняющаяся величина}"
+   "latex": "S \\rightarrow \\text{сохраняющаяся величина}",
+   "usedIn": [
+    {
+     "topic": "atom",
+     "lesson": "03-periodic",
+     "title": "Таблица Менделеева"
+    },
+    {
+     "topic": "entropy",
+     "lesson": "02-arrow",
+     "title": "Стрела времени"
+    },
+    {
+     "topic": "relativity",
+     "lesson": "03-energy",
+     "title": "Масса и энергия"
+    }
+   ]
+  },
+  {
+   "id": "combinatorics",
+   "level": "adv",
+   "icon": "estimate",
+   "latex": "C(N,k) = \\frac{N!}{k!\\,(N-k)!}, \\qquad \\ln N! \\approx N\\ln N - N",
+   "usedIn": [
+    {
+     "topic": "atom",
+     "lesson": "02-orbitals",
+     "title": "Орбитали"
+    },
+    {
+     "topic": "atom",
+     "lesson": "03-periodic",
+     "title": "Таблица Менделеева"
+    },
+    {
+     "topic": "entropy",
+     "lesson": "01-microstates",
+     "title": "Энтропия по Больцману"
+    },
+    {
+     "topic": "nuclear",
+     "lesson": "01-nucleus",
+     "title": "Устройство ядра"
+    }
+   ]
+  },
+  {
+   "id": "rms",
+   "level": "adv",
+   "icon": "estimate",
+   "latex": "\\langle v_x \\rangle = 0, \\qquad v_{\\text{скв}} = \\sqrt{\\langle v^{2}\\rangle} = \\sqrt{\\frac{3kT}{m}}",
+   "usedIn": [
+    {
+     "topic": "language",
+     "lesson": "02-scale",
+     "title": "Размерность и порядок величины"
+    },
+    {
+     "topic": "quantum",
+     "lesson": "03-uncertainty",
+     "title": "Неопределённость"
+    },
+    {
+     "topic": "waves",
+     "lesson": "03-interference",
+     "title": "Интерференция и Доплер"
+    }
+   ]
   }
  ],
  "en": {

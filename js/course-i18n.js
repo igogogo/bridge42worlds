@@ -130,6 +130,9 @@
             'Este material aún no está traducido a su idioma: se muestra el texto en ruso.',
             'لم تُترجم هذه المادة إلى لغتك بعد — يظهر النص الروسي.',
             'Ce contenu n’est pas encore traduit dans votre langue — le texte russe est affiché.'],
+        'развернуть в справочнике': ['open in the reference', 'ver en el compendio',
+            'افتح في المرجع', 'ouvrir dans l’aide-mémoire'],
+        'В курсе:': ['In the course:', 'En el curso:', 'في المقرر:', 'Dans le cours :'],
         'Вопросы': ['Questions', 'Preguntas', 'أسئلة', 'Questions'],
         // подписи шпаргалки: жили только в разметке memo.html и на всех языках были русскими
         'К параграфу': ['Back to the paragraph', 'Volver al párrafo', 'إلى الفقرة', 'Retour au paragraphe'],
