@@ -116,6 +116,10 @@
             'ساعدني على التقدير ذهنياً، خطوة بخطوة، دون أن تعطيني الرقم مباشرة: ',
             'Aide-moi à l’estimer de tête, étape par étape, sans donner le nombre tout de suite : '],
 
+        // разбор ответа в квизе: подводка к пояснению и промах в единицах ответа
+        'Как на самом деле:': ['How it actually works:', 'Cómo es en realidad:',
+            'كيف الأمر في الحقيقة:', 'Ce qu’il en est vraiment :'],
+        'вы промахнулись на': ['you were off by', 'te desviaste en', 'أخطأت بمقدار', 'vous vous êtes trompé de'],
         'Вопросы': ['Questions', 'Preguntas', 'أسئلة', 'Questions'],
         // подписи шпаргалки: жили только в разметке memo.html и на всех языках были русскими
         'К параграфу': ['Back to the paragraph', 'Volver al párrafo', 'إلى الفقرة', 'Retour au paragraphe'],

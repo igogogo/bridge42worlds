@@ -337,7 +337,8 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
 <script src="/js/explorable.js?v=c74a61999e"></script>
 <script src="/js/stage-kit.js?v=60398c6218"></script>
 <script src="/js/models.js?v=c30f059bd2"></script>
-<script src="/js/tutor.js?v=f19cb1f829"></script>
+<script src="/js/quiz-grade.js?v=1"></script>
+<script src="/js/tutor.js?v=f19cb1f830"></script>
 <script src="/js/figures-i18n.js?v=7a98279869"></script>
 <script src="/js/figures.js?v=d3cd4ac189"></script>
 <script>
@@ -408,10 +409,13 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
   function loadProgress() {
     try { return JSON.parse(localStorage.getItem(PKEY) || '{}'); } catch (e) { return {}; }
   }
-  function saveScore(lessonId, right, total) {
+  function saveScore(lessonId, right, total, answered) {
     try {
       var p = loadProgress();
-      p[lessonId] = { right: right, total: total, ts: Date.now() };
+      // `answered` — сколько вопросов читатель вообще тронул. Без него параграф считался
+      // пройденным после первого же ответа, и обзор темы писал «Пройдено параграфов: 1 из 3»,
+      // когда пройдена была одна треть одного параграфа.
+      p[lessonId] = { right: right, total: total, answered: answered != null ? answered : total, ts: Date.now() };
       localStorage.setItem(PKEY, JSON.stringify(p));
     } catch (e) {}
   }
@@ -550,7 +554,10 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
       var sc = prog[l.id];
       var badge = '';
       if (sc) {
-        doneCount++;
+        // Старые записи (без `answered`) считаем пройденными: они появились до этой правки,
+        // и терять чужой прогресс из-за нашей ошибки нечестно.
+        var full = sc.answered == null || sc.answered >= sc.total;
+        if (full) doneCount++;
         var pct = Math.round(100 * sc.right / sc.total);
         var color = pct >= 70 ? '#2e7d32' : (pct >= 40 ? '#b8860b' : 'var(--red)');
         // Звёзды за качество прохождения: три — безупречно, две — хорошо, одна — зачёт.
@@ -1043,7 +1050,7 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
         onAnswer: function (res) {
           var keys = Object.keys(res);
           var right = keys.filter(function (k) { return res[k].correct; }).length;
-          saveScore(lesson.id, right, L.quiz.length);
+          saveScore(lesson.id, right, L.quiz.length, keys.length);
           if (keys.length === L.quiz.length && !q.querySelector('.k-done')) {
             // Показываем итог СРАЗУ и с разбором: что усвоено, где промах, что перечитать.
             var pct = Math.round(100 * right / L.quiz.length);
@@ -1099,6 +1106,7 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
     estPlaceholder: 'Прикиньте в уме — важен порядок',
     estRight: 'Порядок верный!', estWrong: 'Мимо порядка.',
     estAnswer: 'Точное значение', estOff: 'вы промахнулись в',
+    estOffBy: 'вы промахнулись на', howItIs: 'Как на самом деле:',
     askMore: 'Спросить глубже', leadMe: 'Не понимаю — подведи к идее',
     seedDeeper: 'Объясни глубже, почему это так: ',
     seedStuck: 'Я ответил так: ', seedStuck2: 'Не понимаю, где ошибка. Вопрос: ',
