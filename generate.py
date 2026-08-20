@@ -9,6 +9,7 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta
 from pathlib import Path
 from string import Template
+from urllib.parse import quote
 from dotenv import load_dotenv
 from openai import OpenAI
 from pypdf import PdfReader
@@ -981,6 +982,99 @@ AW_FILES_NOTE = {
 }
 
 
+_PORTRAITS = None
+_MERGE_L10N = {
+    "ru": ("Здесь сведены работы, подписанные также как",
+           "Мы считаем это одним человеком: у работ есть общие соавторы. Если мы ошиблись —",
+           "напишите нам, и мы разделим страницы"),
+    "en": ("This page also includes work signed as",
+           "We treat these as one person: the papers share co-authors. If we got it wrong —",
+           "tell us and we will split the pages"),
+    "es": ("Aquí se reúnen trabajos firmados también como",
+           "Los consideramos una misma persona: los trabajos comparten coautores. Si nos equivocamos —",
+           "escríbanos y separaremos las páginas"),
+    "fr": ("Cette page réunit aussi des travaux signés",
+           "Nous les considérons comme une seule personne : les travaux partagent des co-auteurs. En cas d'erreur —",
+           "écrivez-nous et nous séparerons les pages"),
+    "ar": ("تجمع هذه الصفحة أيضًا أعمالًا موقعة باسم",
+           "نعدّها لشخص واحد لأن الأعمال تشترك في مؤلفين. إن كنا مخطئين —",
+           "راسلنا وسنفصل الصفحات"),
+}
+
+
+_PORTRAIT_L10N = {
+    "ru": ("Чем занимается", "работ у нас", "годы работ", "соавторов"),
+    "en": ("What they work on", "papers here", "years of work", "co-authors"),
+    "es": ("De qué se ocupa", "trabajos aquí", "años de trabajo", "coautores"),
+    "fr": ("Ses travaux", "travaux ici", "années de travail", "co-auteurs"),
+    "ar": ("مجال عمله", "أعمال لدينا", "سنوات العمل", "مؤلفون مشاركون"),
+}
+
+
+def author_portrait_html(name, lang):
+    """Портрет автора: абзац о занятиях, счётчики и столбики публикаций по годам.
+
+    Владелец 2026-08-19: «описание портфолио — чем занимается, годы активности, график
+    публикаций всех нами обработанных, небольшой дашбордик». Числа и столбики считает
+    tools/author_portraits.py по нашему архиву, модель пишет только абзац и только по
+    этим числам — придумать ей нечего.
+
+    График рисуем обычными div-столбиками, а не картинкой и не библиотекой: у страницы
+    автора нет своих скриптов, и тянуть ради десяти столбиков рисовалку значит платить
+    сотней килобайт за то, что делается вёрсткой.
+    """
+    global _PORTRAITS
+    if _PORTRAITS is None:
+        f = Path("data/author-portraits.json")
+        try:
+            _PORTRAITS = json.loads(f.read_text(encoding="utf-8")) if f.exists() else {}
+        except Exception:
+            _PORTRAITS = {}
+    e = _PORTRAITS.get(name)
+    if not e:
+        return ""
+    st = e.get("stats") or {}
+    text = (e.get("text") or {}).get(lang) or (e.get("text") or {}).get("en") or ""
+    head, w_papers, w_years, w_co = _PORTRAIT_L10N.get(lang, _PORTRAIT_L10N["en"])
+    by_year = st.get("by_year") or {}
+    bars = ""
+    if by_year:
+        top = max(by_year.values()) or 1
+        cells = []
+        for y in sorted(by_year):
+            n = by_year[y]
+            # Высота столбика в процентах: минимум 8%, чтобы год с одной работой
+            # не выглядел пустым местом.
+            h = max(8, round(n * 100 / top))
+            cells.append(
+                f'<div class="ap-bar" title="{attr_safe(y)}: {n}">'
+                f'<div class="ap-bar-fill" style="height:{h}%"></div>'
+                f'<span class="ap-bar-y">{safe(y[2:])}</span></div>')
+        bars = '<div class="ap-chart">' + "".join(cells) + "</div>"
+    # ДОПУЩЕНИЕ НА ВИДУ. Мы сводим несколько написаний имени в один портрет по общему
+    # соавтору — основание сильное, но не доказательство: однофамильцы в одной области
+    # существуют. Владелец 19 августа: «надо сделать допущения на странице, что мы имеем
+    # в виду вот такое, потому что там могут быть другие, и пусть автор сможет
+    # скорректировать: допустим, это не я — и тогда мы разделим». Молчаливое слияние
+    # приписывает человеку чужие работы, а страница автора — то место, где это заметят.
+    merged = [m for m in (st.get("merged_names") or []) if m != name]
+    merge_html = ""
+    if merged:
+        m_head, m_body, m_btn = _MERGE_L10N.get(lang, _MERGE_L10N["en"])
+        names_html = ", ".join(f"<b>{safe(m)}</b>" for m in merged)
+        subj = quote(f"Author identity - {name}")
+        merge_html = (
+            f'<p class="ap-merge">{safe(m_head)} {names_html}. {safe(m_body)} '
+            f'<a href="mailto:author@bridge42worlds.academy?subject={subj}">{safe(m_btn)}</a></p>')
+    nums = (f'<span><b>{st.get("papers", 0)}</b> {safe(w_papers)}</span>'
+            f'<span><b>{st.get("first_year", "")}\u2013{st.get("last_year", "")}</b> {safe(w_years)}</span>'
+            f'<span><b>{st.get("coauthors", 0)}</b> {safe(w_co)}</span>')
+    return ('<section class="author-portrait">'
+            f'<h2>{safe(head)}</h2>'
+            + (f'<p class="ap-text">{safe(text)}</p>' if text else "")
+            + f'<div class="ap-nums">{nums}</div>{bars}{merge_html}</section>')
+
+
 def author_work_files_html(article, lang):
     """Блок «забрать работу целиком» под кнопками уровней: HTML, PDF, архив.
 
@@ -1240,6 +1334,29 @@ _ANALYSIS_NOTE = {
 
 # Снятие с публикации для NC/ND-работ: текст в модалке «Я автор». Подтверждение — письмо
 # с институтского адреса; снятие делает человек после проверки, не автомат.
+# Письмо автора о разборе: заголовок темы уже несёт номер статьи, чтобы человеку
+# осталось только написать текст.
+_NOTE_TO_US = {
+    "ru": {"subj": "Замечание к разбору", "btn": "Дополнить или поправить разбор",
+           "body": "Вы автор работы и видите, что мы что-то упустили или поняли неточно? "
+                   "Напишите нам: тема письма уже содержит номер статьи. Мы прочитаем, "
+                   "учтём и поправим разбор."},
+    "en": {"subj": "Note on your paper's write-up", "btn": "Add to or correct our write-up",
+           "body": "Are you an author who sees something we missed or got wrong? Write to us — "
+                   "the subject line already carries the paper id. We read every note and "
+                   "correct the write-up."},
+    "es": {"subj": "Comentario sobre el análisis", "btn": "Completar o corregir el análisis",
+           "body": "¿Es autor y ve algo que omitimos o entendimos mal? Escríbanos: el asunto ya "
+                   "lleva el número del artículo. Leemos, tenemos en cuenta y corregimos."},
+    "fr": {"subj": "Remarque sur notre présentation", "btn": "Compléter ou corriger",
+           "body": "Vous êtes l'auteur et voyez une omission ou une erreur ? Écrivez-nous : "
+                   "l'objet contient déjà le numéro de l'article. Nous lisons et corrigeons."},
+    "ar": {"subj": "ملاحظة على العرض", "btn": "أضف أو صحّح عرضنا",
+           "body": "هل أنت المؤلف وترى ما فاتنا أو ما أسأنا فهمه؟ راسلنا: يحمل عنوان الرسالة "
+                   "رقم البحث. نقرأ كل ملاحظة ونصحّح العرض."},
+}
+
+
 _TAKEDOWN = {
     "ru": {"body": "Вы автор этой работы и не хотите, чтобы наш разбор был опубликован? "
                    "Напишите нам с рабочего или университетского адреса — после подтверждения "
@@ -1835,6 +1952,18 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
     # Признак «собственный разбор» (владелец 18.08: «ставим определённый признак и
     # объясняем, почему это легально»). У NC/ND-работ рядом с лицензией — плашка с
     # пояснением в подсказке: наш текст оригинален, авторский материал не воспроизводится.
+    # Дополнить или поправить разбор — у КАЖДОЙ статьи, независимо от лицензии
+    # (владелец 2026-08-19: «у автора есть возможность дополнить или прокомментировать
+    # разбор, отправив письмо: ссылка, письмо открылось, номер статьи уже в теме, дальше
+    # пусть пишут — мы обработаем и учтём»). Мы пересказываем чужую работу своими словами,
+    # и автор — единственный, кто видит, где пересказ разошёлся с сутью. Без обратной двери
+    # он может только молча закрыть страницу.
+    _n = _NOTE_TO_US.get(lang, _NOTE_TO_US["en"])
+    _subj = quote(f"{_n['subj']} {article.get('id', '')}")
+    author_note_html = (
+        f'<hr><p>{safe(_n["body"])}</p>'
+        f'<p><a class="author-note-link" href="mailto:author@bridge42worlds.academy'
+        f'?subject={_subj}">{safe(_n["btn"])}</a></p>')
     license_note_html, author_takedown_html = "", ""
     if article.get("license_class") == "analysis":
         note = _ANALYSIS_NOTE.get(lang, _ANALYSIS_NOTE["en"])
@@ -1914,7 +2043,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
         express_locked_js="true" if scipop.get("express_locked") else "false",
         license_label=safe(loc.get("license", "Original")),
         license_url=lic, license_name=lic_name, license_note_html=license_note_html,
-        author_takedown_html=author_takedown_html,
+        author_takedown_html=author_note_html + author_takedown_html,
         canonical_url=canonical_url, page_url=page_url, hreflang_links=hreflang_links,
         tags_side_html=tags_side_html, article_graph_html=article_graph_html,
         mosaic_html=mosaic_html, ai_cover_html=ai_cover_html,
@@ -2124,10 +2253,19 @@ def _display_tags(scipop):
     # потому что своего текста у работы всего три тысячи знаков. Прежние теги из промпта
     # там были точные: обработка сигналов, спектральный анализ.
     #
-    # Так что три тега и меньше — это не разметка, а шум. Берём прежние.
-    if len(vec) >= 4:
-        return vec
-    return [x for x in [scipop.get("main_tag", "")] + (scipop.get("extra_tags") or []) if x]
+    # Порог «меньше четырёх — не верим» писался, когда теги ещё приходили из промпта и
+    # было на что откатываться. С 18 августа промпт их не даёт вовсе (tags_in_prompt=false),
+    # и правило стало бить по своим: у статьи про гравитационные волны вектор нашёл один
+    # уверенный тег ligo, порог его отбросил, откат подставил единственное, что осталось
+    # в main_tag, — guided_mode_resonance из прошлой жизни статьи. В карточке оказался тег
+    # не про то, а верный был посчитан и выброшен.
+    #
+    # Теперь: есть расчёт вектора — показываем его, добавляя main_tag, если он не дубль.
+    # Откат на прежние поля остаётся только когда вектор не нашёл НИЧЕГО.
+    main = scipop.get("main_tag", "")
+    if vec:
+        return vec + ([main] if main and main not in vec else [])
+    return [x for x in [main] + (scipop.get("extra_tags") or []) if x]
 
 
 def _card_text(scipop, limit=420):
@@ -3705,7 +3843,9 @@ def update_all_authors():
                 + (f" — {topics}" if topics else "")
                 + ". Free to read at bridge42worlds."
             )
+            portrait_html = author_portrait_html(author_name, lang)
             _write_text_retry(Path(LANG_DIR) / lang / "authors" / f"{slug}.html", tpl_page.substitute(
+                author_portrait_html=portrait_html,
                 author_desc=attr_safe(author_desc),
                 author_url=f"{SITE_URL}/{LANG_DIR}/en/authors/{slug}.html",
                 lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang="en", asset_ver=asset_ver(),
@@ -5354,6 +5494,15 @@ def fetch_one_arxiv(aid):
     ns = {"atom": "http://www.w3.org/2005/Atom", "arxiv": "http://arxiv.org/schemas/atom"}
     e = root.find("atom:entry", ns)
     if e is None: return None
+    # На неизвестный id arXiv отвечает НЕ ошибкой, а обычной лентой с одной записью-заглушкой:
+    # там есть title «Error» и нет ни даты, ни авторов. Раньше мы шли по ней дальше и падали
+    # на .text у отсутствующего published, роняя ВЕСЬ прогон по списку (поймано 19 августа на
+    # старых идентификаторах вида 0108130: их надо писать с архивом — quant-ph/0108130).
+    # Одна кривая строка в списке не должна уносить остальные.
+    if e.find("atom:published", ns) is None or e.find("atom:id", ns) is None:
+        print(f"  ⏭️ {aid}: arXiv не знает такого идентификатора "
+              f"(для работ до 2007 года нужен архив в имени, например quant-ph/0108130)")
+        return None
     cats = list(dict.fromkeys(
         c.get("term") for c in e.findall("atom:category", ns) if c.get("term")))
     primary = e.find("arxiv:primary_category", ns)

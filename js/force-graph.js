@@ -82,7 +82,10 @@ window.createForceGraph = function (opts) {
     var MOBILE = window.matchMedia('(max-width: 640px)').matches;
     // Лимит узлов: телефон 50, десктоп 100 (юзер 2026-07-25 — «больше 100 нечитаемо»).
     // В ПОЛНОЭКРАННОМ режиме лимит снимается: там места хватает, показываем всё.
-    var CAP = MOBILE ? 50 : 100;
+    // Владелец 2026-08-19: «объектов мало отображается, надо увеличить». В карточке
+    // держим больше точек — 160 на десктопе рисуются без потери отзывчивости
+    // (замер укрупнения: тяжело становится за несколькими сотнями), на телефоне 70.
+    var CAP = MOBILE ? 70 : 160;
     function graphFull() { try { return localStorage.getItem('b42_graph_full') === '1'; } catch (e) { return false; } }
     function capNodes(nn, ll) {
         if (isFs || graphFull() || nn.length <= CAP) return { nodes: nn, links: ll, from: 0 };
@@ -310,8 +313,11 @@ window.createForceGraph = function (opts) {
         // «сквозь граф видна страница, смотрится круто»), НА МОБИЛЬНОМ — сплошной
         // (владелец 2026-07-30: на телефоне прозрачность выглядит непонятно);
         // кнопка ◑ переключает в обе стороны на любом устройстве.
-        var _touchFs = window.matchMedia && window.matchMedia('(hover: none)').matches;
-        if (v && !_touchFs) fsContainer.classList.add('graph-fs-transparent');
+        // Полноэкранный открываем НЕПРОЗРАЧНЫМ (владелец 2026-08-19). Прозрачный фон
+        // задумывался как красивый приём: сквозь граф видна страница. На деле в полный
+        // экран уходят ради того, чтобы РАЗГЛЯДЕТЬ связи, а текст статьи, просвечивающий
+        // между узлами, мешает ровно этому. Кнопка ◑ по-прежнему включает прозрачность
+        // тому, кто её захочет, — меняется только состояние по умолчанию.
         if (!v) { relocateControls(false); fsContainer.classList.remove('graph-fs-transparent'); }
         // Лимит узлов снимается только в полноэкранном (см. capNodes), но проверяется он при
         // ЗАГРУЗКЕ данных — а setFs звал restart(), который лишь переставляет уже отобранные
@@ -325,6 +331,19 @@ window.createForceGraph = function (opts) {
     function resize() {
         var r = cv.getBoundingClientRect(); W = r.width; H = r.height || 460;
         cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    // Холст должен пересчитываться на КАЖДОЕ изменение своего размера, а не только по
+    // событию окна: разворот на весь экран меняет размер холста, а окно при этом прежнее,
+    // window.resize не приходит вовсе. Пока этого не было, после разворота холст оставался
+    // в старых размерах: изображение мылило, а расчёт попадания мышью шёл по прежним
+    // границам — узел не удавалось схватить.
+    if (window.ResizeObserver) {
+        var _ro = new ResizeObserver(function () {
+            var r = cv.getBoundingClientRect();
+            if (Math.abs(r.width - W) > 1 || Math.abs(r.height - H) > 1) resize();
+        });
+        try { _ro.observe(cv); } catch (e) { /* холст ещё не в документе — переживём */ }
     }
 
     /* УКРУПНЕНИЕ ПО МАСШТАБУ. Выше нескольких сотен узлов рисовать каждый по отдельности
@@ -686,7 +705,18 @@ window.createForceGraph = function (opts) {
         for (var i = 0; i < nodes.length; i++) {
             var a = nodes[i], dim = hover >= 0 && i !== hover && !adj[hover][i], col = opts.color(a);
             ctx.globalAlpha = dim ? 0.22 : 1;
-            ctx.beginPath(); ctx.arc(a.x, a.y, a.r, 0, 7);
+            // Форма узла отличает вид сущности НЕ ЦВЕТОМ. Владелец 19.08: «точки учёных
+            // отделить от точек законов и тегов». Цветом их уже различают, но при сотне
+            // узлов на экране оттенок в четыре пикселя не читается, а форма читается
+            // сразу: учёный — квадрат, всё остальное — круг. Это работает и в чёрно-белой
+            // печати, и у тех, кто не различает цвета.
+            ctx.beginPath();
+            if (opts.square && opts.square(a)) {
+                var rr = a.r * 0.9;
+                ctx.rect(a.x - rr, a.y - rr, rr * 2, rr * 2);
+            } else {
+                ctx.arc(a.x, a.y, a.r, 0, 7);
+            }
             if (opts.hollow(a)) {
                 ctx.globalAlpha = dim ? 0.15 : 0.5; ctx.fillStyle = col; ctx.fill();
                 ctx.globalAlpha = dim ? 0.3 : 0.85; ctx.lineWidth = 1.3 / cam.k; ctx.strokeStyle = col; ctx.stroke(); ctx.lineWidth = 1 / cam.k;

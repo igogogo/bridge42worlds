@@ -174,8 +174,14 @@ document.addEventListener('DOMContentLoaded', function() {
         if (origAbs) {
             try {
                 renderMathInElement(origAbs, {
+                    // Обратный слэш в строке JavaScript надо удваивать: одиночный
+                    // движок молча съедает, и разделителем становится ЛЮБАЯ круглая
+                    // скобка. Авторендер хватал первый же кусок в скобках, отдавал его
+                    // KaTeX как формулу, а настоящие доллары внутри оставались текстом.
+                    // Отсюда «10^{19}» в долларах прямо в оригинальной аннотации
+                    // (владелец нашёл это поиском по знаку доллара, 19 августа).
                     delimiters: [
-                        { left: '\(', right: '\)', display: false },
+                        { left: '\\(', right: '\\)', display: false },
                         { left: S, right: S, display: false }
                     ],
                     throwOnError: false

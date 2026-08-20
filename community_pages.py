@@ -18,6 +18,7 @@ tools/submission.py на стадии publish. Приватное (почта, �
 """
 import html as H
 import json
+from urllib.parse import quote
 import sys
 from pathlib import Path
 from string import Template
@@ -68,6 +69,15 @@ def _works():
             continue
         out.append(w)
     return sorted(out, key=lambda w: w.get("received", ""), reverse=True)
+
+
+JOIN_SUBJECT = {
+    "ru": "Работа на разбор",
+    "en": "Paper for review",
+    "es": "Trabajo para analizar",
+    "fr": "Travail à analyser",
+    "ar": "عمل للمراجعة",
+}
 
 
 def _paras(text):
@@ -419,7 +429,14 @@ def build_index(lang):
         "lang": lang, "dir": "rtl" if lang in RTL else "ltr",
         "og_meta_html": "", "page_title": s.get("section_h1", "Авторские работы"),
         "works_html": "".join(cards),
-        "join_url": f"/lang/{lang}/community/",
+        # Кнопка «написать нам» вела на саму эту страницу — то есть никуда: человек,
+        # решившийся прислать работу, нажимал и оставался на месте (владелец 2026-08-19).
+        # Ведём в почту, куда смотрит mail_watch, и подставляем тему: по ней письмо
+        # опознаётся автоматом, а автору не надо гадать, что писать в заголовке.
+        # Правила оформления и промпт подготовки уходят ответом на это письмо — так
+        # и написано абзацем выше, поэтому отдельной страницы с процедурой не заводим.
+        "join_url": "mailto:article@bridge42worlds.academy?subject="
+                    + quote(JOIN_SUBJECT.get(lang, JOIN_SUBJECT["en"])),
     }
     out = tpl.safe_substitute({**s, **vals})
     d = ROOT / "lang" / lang / "community"

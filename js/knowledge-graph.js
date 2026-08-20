@@ -237,6 +237,7 @@
                 : n.kind === 'cat' ? KIND_COLORS.cat : KIND_COLORS.sci;
         },
         hollow: function (n) { return n.kind === 'tag'; },
+        square: function (n) { return n.kind === 'sci'; },
         labelAlways: function () { return true; },  // подписываем и теги (по умолчанию их немного — пресет «каркас»)
         href: function (n, lang) {
             if (n.kind === 'tag') return '/lang/' + lang + '/tags/' + encodeURIComponent(n.rawid) + '.html';

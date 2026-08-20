@@ -262,7 +262,11 @@ html[lang="ar"] .cal-dot { right: auto; left: -5px; }
     background: var(--bg) !important;  /* сплошной фон по умолчанию; тумблер ◑ делает прозрачным */
 }
 .graph-fs-active.graph-fs-transparent { background: transparent !important; }  /* сквозь граф видна страница */
-.graph-fs-active canvas { height: 100% !important; }
+/* Ширина обязана растягиваться вместе с высотой. Стояла одна height: 100% — и в
+   полноэкранном холст сохранял прежнюю ширину карточки: картинка съезжала влево,
+   растягивалась по вертикали (отсюда «нет чёткости»), а попадание мышью считалось
+   по старым границам — узел нельзя было схватить, курсор промахивался мимо. */
+.graph-fs-active canvas { width: 100% !important; height: 100% !important; display: block; }
 body.graph-fs-open { overflow: hidden; }
 /* В FS предупреждение «>100 узлов, откройте на весь экран» уже неактуально — прячем. */
 .graph-fs-active .graph-size-warning { display: none !important; }
@@ -3814,3 +3818,52 @@ body.graph-fs-open .graph-fs-active svg { touch-action: manipulation; }
 /* Наш код работы в строке-паспорте — на месте arXiv-номера у обычной статьи. */
 .aw-code { font-family: var(--mono); color: var(--ochre); cursor: help;
   border-bottom: 1px dotted color-mix(in srgb, var(--ochre) 55%, transparent); }
+
+/* Портрет автора: абзац о занятиях, счётчики и столбики публикаций по годам.
+   Столбики — обычная вёрстка, без рисовалок: странице автора не нужен скрипт ради
+   десяти прямоугольников. */
+.author-portrait { margin: 18px 0 22px; padding: 16px 18px; border: 1px solid var(--hair);
+  border-radius: 12px; background: var(--surface, transparent); }
+.author-portrait h2 { font-size: 15px; margin: 0 0 8px; font-weight: 600; }
+.ap-text { margin: 0 0 12px; line-height: 1.55; }
+.ap-nums { display: flex; flex-wrap: wrap; gap: 18px; font-size: 13px; color: var(--muted, #777); }
+.ap-nums b { color: var(--fg, inherit); font-size: 15px; }
+.ap-chart { display: flex; align-items: flex-end; gap: 3px; height: 64px; margin-top: 14px; }
+.ap-bar { flex: 1 1 0; min-width: 6px; height: 100%; display: flex; flex-direction: column;
+  justify-content: flex-end; align-items: center; gap: 3px; }
+.ap-bar-fill { width: 100%; background: var(--accent, #b8860b); border-radius: 2px 2px 0 0;
+  opacity: .75; transition: opacity .15s; }
+.ap-bar:hover .ap-bar-fill { opacity: 1; }
+.ap-bar-y { font-size: 9px; color: var(--muted, #777); font-family: var(--mono, monospace); }
+@media (max-width: 640px) { .ap-bar-y { display: none; } .ap-chart { height: 48px; } }
+
+/* ── Страница автора: соавторы, темы и законы — приписка, а не витрина ──────────
+   Крупные плашки в четыре колонки придуманы для страниц тега и закона, где их
+   десяток и каждая — самостоятельный вход. У автора их полсотни (15 соавторов +
+   20 тем + 20 законов), и одинаковые коробки в 38 пикселей высотой превращаются
+   в стену: имя «L. Sveshnikova» и слово «мюон» получают одну и ту же ячейку, а на
+   узком экране колонок остаётся две, отчего плашки раздуваются ещё сильнее
+   (владелец 2026-08-19: «плашки соавторов несоразмерно большие»).
+   Здесь они становятся пилюлями по ширине содержимого и текут строками. */
+.entity-body:has(.related-coauthors) .related-tags {
+  display: flex; flex-wrap: wrap; gap: 5px; align-items: baseline; }
+.entity-body:has(.related-coauthors) .related-tags strong { flex: 0 0 100%; }
+.entity-body:has(.related-coauthors) .related-tags a {
+  min-height: 0; padding: 3px 10px; border-radius: 999px; font-size: 11.5px;
+  justify-content: flex-start; text-align: left; white-space: nowrap; }
+
+/* Плашки тегов на карточке начинались правее текста: у .ent есть рамка и отступ 9px,
+   поэтому буква внутри пилюли стоит на 10px правее, чем первая буква описания и авторов —
+   колонка карточки визуально разъезжается (владелец 2026-08-19). Втягиваем ряд обратно
+   ровно на эту величину, как уже сделано для разделов (.card-cats). */
+/* Правка втягиванием была неверной: пилюля уезжала рамкой левее колонки текста.
+   Совместить И рамку, И букву внутри пилюли с текстом невозможно — что-то одно всё равно
+   торчит. Поэтому на карточке теги перестают быть пилюлями: рамка и заливка убраны,
+   остаются слова, и первая буква тега встаёт ровно под первой буквой описания и авторов.
+   На страницах тега и закона пилюли остаются — там они самостоятельные входы, а не
+   приписка к карточке. */
+.card-body .card-tags { margin-left: 0; }
+.card-body .card-tags .ent {
+  border: none; background: none; padding: 0; border-radius: 0;
+  margin: 0 12px 3px 0; }
+.card-body .card-tags .ent:hover { text-decoration: underline; }

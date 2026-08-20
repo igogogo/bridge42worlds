@@ -53,6 +53,7 @@
         radius: function (n) { return n.center ? 9 : 5; },
         color: function (n) { return n.kind === 'author' ? '#444' : TAG_COLOR; },
         hollow: function (n) { return n.kind === 'tag'; },
+        square: function (n) { return n.kind === 'sci'; },
         labelAlways: function () { return true; },
         href: function (n, lang) {
             if (n.kind === 'tag') return '/lang/' + lang + '/tags/' + encodeURIComponent(n.rawid) + '.html';
