@@ -210,7 +210,9 @@ ARXIV_CATEGORY_DESCRIPTIONS = {
     "cs.RO": "Robotics.",
 }
 
-TARGET_DATE = os.environ.get("DATE", (datetime.now(timezone.utc) - timedelta(days=1)).strftime("%Y-%m-%d"))
+# День по умолчанию — ПОЗАВЧЕРА, а не вчера: arXiv отдаёт день полностью лишь через
+# сутки после подачи, и вчерашняя выдача заведомо неполная (владелец 2026-08-19).
+TARGET_DATE = os.environ.get("DATE", (datetime.now(timezone.utc) - timedelta(days=2)).strftime("%Y-%m-%d"))
 HTML_ONLY = "--html-only" in sys.argv
 
 

@@ -4702,8 +4702,15 @@ def _build_article(a, date_str, inputs, force=False, express=False, known_licens
         if known_license is not None:
             oai_xml, lic_url = "", known_license
         else:
-            oai_xml = get_license(a["id"])
-            _, lic_url = is_allowed_license(oai_xml)
+            # Сначала свой индекс (713 тысяч работ), в сеть — только за тем, чего в нём
+            # нет. Владелец 19.08: «зачем нам лезть в архив, у нас же есть база». Это
+            # снимает по одному запросу с КАЖДОЙ статьи: именно они делали дневной прогон
+            # заложником доступности arXiv.
+            lic_url = local_license(a["id"])
+            oai_xml = ""
+            if lic_url is None:
+                oai_xml = get_license(a["id"])
+                _, lic_url = is_allowed_license(oai_xml)
         # Решение по классу лицензии (владелец 2026-08-18, после пропуска 2606.12457
         # «расширяем забор»): free — полный конвейер; analysis (NC-семейство) — берём,
         # но публикуем ТОЛЬКО собственный текст: авторские рисунки и подписи не

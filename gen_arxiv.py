@@ -28,7 +28,7 @@ BULK_DIR = Path("data/arxiv-bulk")
 FETCH_FAILURES = []
 
 
-def _get_with_retry(url, params=None, timeout=30, retries=3):
+def _get_with_retry(url, params=None, timeout=30, retries=5):
     """arXiv отдаёт то 429 (перегрузка), то просто зависший коннект без ответа — раньше
     ЛЮБАЯ из этих ошибок валила весь батч (напр. на 13-й день из 31 в диапазоне). Тот же
     нарастающий бэкофф, что и у common.chat() для LLM-вызовов."""
@@ -44,7 +44,21 @@ def _get_with_retry(url, params=None, timeout=30, retries=3):
         except requests.exceptions.RequestException as e:
             if attempt == retries:
                 raise
-            wait = [10, 30, 30][min(attempt - 1, 2)]
+            # Паузы длиннее прежних. Замер 19 августа: arXiv не отвечал дольше двух
+            # минут, а три попытки с паузами 10-30-30 укладывались как раз в это время
+            # и сдавались — дневной прогон встал, за сутки не вышло ни одной статьи.
+            # Теперь пять попыток и паузы до двух минут: суммарно около четырёх минут
+            # ожидания вместо полутора. Ждать дольше дешевле, чем терять день.
+            wait = [10, 30, 60, 120, 120][min(attempt - 1, 4)]
+            # Со второй попытки идём на зеркало: у arXiv два адреса выдачи, и падают
+            # они обычно не одновременно. Меняем в любую сторону — часть наших вызовов
+            # уже ходит на es.arxiv.org, и односторонняя замена им бы не помогла.
+            if attempt >= 2:
+                if "export.arxiv.org" in url:
+                    url = url.replace("export.arxiv.org", "es.arxiv.org")
+                elif "es.arxiv.org" in url:
+                    url = url.replace("es.arxiv.org", "export.arxiv.org")
+                print(f"  ↪ пробую другое зеркало: {url.split('/')[2]}")
             print(f"  ⚠️ arXiv connection error: {e} — retry {attempt}/{retries} через {wait}с")
             time.sleep(wait)
 
@@ -237,6 +251,43 @@ def license_class(lic_url):
     if any(a in u for a in ANALYSIS_ONLY):
         return "analysis"
     return "no"
+
+
+# Лицензии из НАШЕГО индекса, без обращений к arXiv.
+#
+# Владелец 2026-08-19: «зачем нам лезть в архив, у нас же есть база — потом заливаем,
+# потом вектор обновляем, потом ищем; нам API arXiv-то зачем». Он прав: data/arxiv-index.jsonl
+# содержит 713 256 записей вида id → лицензия, собранных из того же дампа. А конвейер
+# при этом спрашивал OAI-ручку по каждой статье отдельно: на пять тысяч статей в год это
+# пять тысяч запросов с трёхсекундной выдержкой, то есть четыре часа ожидания и столько же
+# поводов упасть по таймауту — ровно то, из-за чего 19 августа встал дневной прогон.
+#
+# Индекс читается один раз за процесс и держится в памяти: 700 тысяч коротких ключей.
+# Строки лицензий интернируются — их всего шесть разных на весь arXiv, и без этого
+# словарь весил бы втрое больше. К сети идём ТОЛЬКО за тем, чего в индексе нет:
+# за работами свежее последнего обновления дампа.
+_LIC_INDEX = None
+_LIC_PATH = Path("data/arxiv-index.jsonl")
+
+
+def local_license(arxiv_id):
+    """Лицензия из индекса. None — если такой работы в индексе нет (значит, свежая)."""
+    global _LIC_INDEX
+    if _LIC_INDEX is None:
+        _LIC_INDEX = {}
+        if _LIC_PATH.exists():
+            seen = {}
+            with _LIC_PATH.open(encoding="utf-8", errors="replace") as fh:
+                for line in fh:
+                    try:
+                        d = json.loads(line)
+                    except Exception:
+                        continue
+                    lic = d.get("l") or ""
+                    _LIC_INDEX[d.get("id", "")] = seen.setdefault(lic, lic)
+            print(f"  📇 индекс лицензий: {len(_LIC_INDEX)} работ (без обращений к arXiv)")
+    base = re.sub(r"v\d+$", "", arxiv_id or "")
+    return _LIC_INDEX.get(base)
 
 
 def get_license(arxiv_id):
