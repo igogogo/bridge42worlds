@@ -47,10 +47,12 @@ COUNCIL_OUT = ROOT / "data" / "council" / "from-comments.json"
 # как сайт ощущается. Копятся отдельно, по ним периодически собирается резюме.
 NOTES = ROOT / "data" / "comment-notes.jsonl"
 JOURNAL = ROOT / "data" / "comments-journal.json"
-# Закрытая страница для нас: обработка комментариев по дням, строками «день — что было».
-# Слаг случайный, как у техлиста: раздел не в меню и не в карте сайта, доступ по прямой
-# ссылке (владелец: «добавь отдельную нам вкладку»).
-PAGE = ROOT / "comments-kd83xu.html"
+# Страница ОТКРЫТАЯ и на всех языках (владелец 2026-08-24: «почему закрытый? всё
+# открыто, на всех языках»). Прозрачность — часть продукта: читатель видит, что его
+# отклик не падает в яму, а превращается в правку, вопрос совету или строку впечатления.
+# Переводы саммари храним рядом с журналом и не пересчитываем повторно.
+I18N = ROOT / "data" / "comments-journal-i18n.json"
+PAGE_LANGS = ("ru", "en", "es", "ar", "fr")
 DB_ID = os.environ.get("CLOUDFLARE_D1_ID", "")
 
 
@@ -166,44 +168,122 @@ def impression_summary(force=False):
     return text
 
 
-_KIND_RU = {"fix": ("правка статьи", "#2e7d32"), "council": ("вопрос совету", "#8e44ad"),
-            "note": ("впечатление", "#888")}
+_KIND_L10N = {
+    "fix": {"ru": "правка статьи", "en": "article fix", "es": "corrección",
+            "fr": "correction", "ar": "تصحيح المقال"},
+    "council": {"ru": "вопрос совету", "en": "council question", "es": "pregunta al consejo",
+                "fr": "question au conseil", "ar": "سؤال للمجلس"},
+    "note": {"ru": "впечатление", "en": "impression", "es": "impresión",
+             "fr": "impression", "ar": "انطباع"},
+}
+_KIND_COLOR = {"fix": "#2e7d32", "council": "#8e44ad", "note": "#888"}
+_PAGE_L10N = {
+    "ru": ("Комментарии читателей", "Что происходит с каждым откликом: правки уходят "
+           "в работу, общие вопросы — на голосование совета, впечатления копятся.",
+           "Впечатление читателей", "Пока пусто."),
+    "en": ("Reader comments", "What happens to every comment: fixes go to work, general "
+           "questions go to the council vote, impressions accumulate.",
+           "Readers' impression", "Nothing yet."),
+    "es": ("Comentarios de lectores", "Qué pasa con cada comentario: las correcciones van "
+           "al trabajo, las preguntas generales al consejo, las impresiones se acumulan.",
+           "Impresión de los lectores", "Nada aún."),
+    "fr": ("Commentaires des lecteurs", "Ce que devient chaque commentaire : les corrections "
+           "partent au travail, les questions générales au conseil, les impressions s'accumulent.",
+           "Impression des lecteurs", "Rien pour l'instant."),
+    "ar": ("تعليقات القراء", "ما يحدث لكل تعليق: التصحيحات تذهب للعمل، والأسئلة العامة "
+           "لتصويت المجلس، والانطباعات تتراكم.",
+           "انطباع القراء", "لا شيء بعد."),
+}
+
+
+def _translate_batch(texts, lang):
+    """Пачка переводов через общий переводчик статей. Ключи словаря вернутся как были."""
+    if lang == "ru" or not texts:
+        return {}
+    from gen_llm import translate_scipop
+    try:
+        got = translate_scipop(texts, lang)
+    except Exception:
+        return {}
+    return {k: str(v).strip() for k, v in (got or {}).items() if str(v or "").strip()}
+
+
+def _i18n_summaries(j):
+    """Переводы саммари журнала: только новые, пачкой на язык, с накоплением в файле."""
+    store = json.loads(I18N.read_text(encoding="utf-8")) if I18N.exists() else {}
+    all_rows = [(day, e) for day in j for e in j[day]]
+    for lang in PAGE_LANGS:
+        if lang == "ru":
+            continue
+        fresh = {e["src"]: e.get("summary", "") for _d, e in all_rows
+                 if e.get("summary") and lang not in store.get(e["src"], {})}
+        if not fresh:
+            continue
+        got = _translate_batch(fresh, lang)
+        for src, tr in got.items():
+            store.setdefault(src, {})[lang] = tr
+    write_json_atomic(I18N, store, indent=0)
+    return store
 
 
 def build_page():
-    """comments-kd83xu.html — наша закрытая вкладка: обработка комментариев по дням."""
+    """lang/{lang}/comments.html — открытый журнал обработки комментариев по дням."""
     j = json.loads(JOURNAL.read_text(encoding="utf-8")) if JOURNAL.exists() else {}
-    imp = impression_summary()
+    imp_ru = impression_summary()
+    store = _i18n_summaries(j)
+    imp_tr = _translate_batch({"imp": imp_ru}, "en") if False else {}
+    # Впечатление переводим тем же накопителем, ключ служебный.
+    imp_store = store.setdefault("_impression", {})
+    if imp_ru:
+        if imp_store.get("_ru_src") != imp_ru:
+            imp_store.clear()
+            imp_store["_ru_src"] = imp_ru
+        for lang in PAGE_LANGS:
+            if lang != "ru" and lang not in imp_store:
+                got = _translate_batch({"imp": imp_ru}, lang)
+                if got.get("imp"):
+                    imp_store[lang] = got["imp"]
+        write_json_atomic(I18N, store, indent=0)
     esc = lambda t: (str(t) or "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-    day_blocks = ""
-    for day in sorted(j, reverse=True):
-        rows = ""
-        for e in j[day]:
-            label, color = _KIND_RU.get(e.get("kind"), ("прочее", "#888"))
-            art = e.get("article") or ""
-            link = (f' · <a href="/lang/ru/index.html?q={art}" style="color:#4a7c9b">{esc(art)}</a>'
-                    if art else "")
-            rows += (f'<div style="padding:5px 0;border-bottom:1px solid #eee">'
-                     f'<span style="color:{color};font-size:12px;border:1px solid {color};'
-                     f'border-radius:999px;padding:1px 8px">{label}</span> '
-                     f'{esc(e.get("summary", ""))}{link}</div>')
-        day_blocks += f'<h2>{day}</h2>{rows}'
-    imp_html = (f'<div style="background:#f6f6f6;border-radius:10px;padding:14px 16px;'
-                f'margin:14px 0"><b>Впечатление читателей</b><p style="margin:8px 0 0">'
-                f'{esc(imp)}</p></div>' if imp else "")
-    html = f"""<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8">
+    for lang in PAGE_LANGS:
+        title, sub, imp_h, empty = _PAGE_L10N[lang]
+        rtl = ' dir="rtl"' if lang == "ar" else ""
+        day_blocks = ""
+        for day in sorted(j, reverse=True):
+            rows = ""
+            for e in j[day]:
+                kind = e.get("kind", "note")
+                label = _KIND_L10N.get(kind, _KIND_L10N["note"]).get(lang, kind)
+                color = _KIND_COLOR.get(kind, "#888")
+                summ = (store.get(e.get("src", ""), {}).get(lang)
+                        or e.get("summary", "")) if lang != "ru" else e.get("summary", "")
+                art = e.get("article") or ""
+                link = (f' · <a href="/lang/{lang}/index.html?q={art}" '
+                        f'style="color:#4a7c9b">{esc(art)}</a>' if art else "")
+                rows += (f'<div style="padding:5px 0;border-bottom:1px solid #eee">'
+                         f'<span style="color:{color};font-size:12px;border:1px solid {color};'
+                         f'border-radius:999px;padding:1px 8px">{esc(label)}</span> '
+                         f'{esc(summ)}{link}</div>')
+            day_blocks += f'<h2>{day}</h2>{rows}'
+        imp = imp_ru if lang == "ru" else imp_store.get(lang, "")
+        imp_html = (f'<div style="background:#f6f6f6;border-radius:10px;padding:14px 16px;'
+                    f'margin:14px 0"><b>{esc(imp_h)}</b><p style="margin:8px 0 0">'
+                    f'{esc(imp)}</p></div>' if imp else "")
+        html = f"""<!DOCTYPE html><html lang="{lang}"{rtl}><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="noindex, nofollow"><title>Комментарии — журнал</title>
+<title>{esc(title)} — bridge42worlds</title>
 <style>body{{font-family:system-ui,Arial,sans-serif;max-width:720px;margin:0 auto;
 padding:30px 18px;color:#2c2c2c}}h1{{font-size:20px}}h2{{font-size:14px;color:#555;
 margin:22px 0 6px}}</style></head><body>
-<h1>Обработка комментариев</h1>
-<p style="color:#888;font-size:13px">Закрытая страница. Обновляется автоматически шагом
-фабрики: правки уходят шлифовщику, вопросы — совету, впечатления копятся.</p>
-{imp_html}{day_blocks or "<p>Пока пусто.</p>"}
+<h1>{esc(title)}</h1>
+<p style="font-style:italic;color:#a08030;margin:2px 0 10px">Vox populi</p>
+<p style="color:#888;font-size:13px">{esc(sub)}</p>
+{imp_html}{day_blocks or f"<p>{esc(empty)}</p>"}
 </body></html>"""
-    PAGE.write_text(html, encoding="utf-8")
-    print(f"  📄 {PAGE.name} обновлена")
+        out = ROOT / "lang" / lang / "comments.html"
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(html, encoding="utf-8")
+    print(f"  📄 comments.html обновлена на {len(PAGE_LANGS)} языках")
 
 
 def main():
