@@ -98,6 +98,8 @@
               voteTitle: 'Vote', yes: 'for', no: 'against', abstain: 'abstain',
               why: 'Briefly why (optional)', voted: 'Vote counted. You may change it until the meeting closes.',
               results: 'Results', members: 'council members', err: 'Did not work. Please try again.',
+              draftWarn: '⚠ Your choices are saved only in this browser — press the button below, otherwise they will NOT be counted.',
+              sentMark: '✓ counted by the server',
               cabinet: 'Your participation', cabRead: ' articles read', cabProps: ' proposals',
               cabVotes: ' votes', cabSince: ' member since', cabMembers: ' members total',
               onAgenda: 'on agenda',
@@ -557,6 +559,7 @@
                 box.innerHTML = '<h4>' + esc(L.voteTitle) + ' · ' + esc(m.date || '') + '</h4>';
                 box.__ids = [];
                 var picked = {};
+                var sent = load('cl_sent_' + m.date, []);
                 function updatePicked() {
                     var el = box.querySelector('.cl-picked');
                     if (el) el.textContent = L.chosen + ': ' + Object.keys(picked).length +
@@ -623,6 +626,20 @@
                         '<div class="cl-msg cl-submit-msg"></div>';
                     box.appendChild(foot);
                     box.__foot = foot;
+                    // Выбор есть, подтверждения сервера нет — говорим прямо, а не молчим.
+                    if (Object.keys(picked).length && sent.length === 0) {
+                        var warn = document.createElement('div');
+                        warn.className = 'cl-msg cl-draft-warn';
+                        warn.style.color = '#b31b1b';
+                        warn.textContent = L.draftWarn;
+                        foot.insertBefore(warn, foot.firstChild);
+                    } else if (sent.length) {
+                        var okm = document.createElement('div');
+                        okm.className = 'cl-msg';
+                        okm.style.color = '#2e7d32';
+                        okm.textContent = L.sentMark + ' · ' + sent.length;
+                        foot.insertBefore(okm, foot.firstChild);
+                    }
                     foot.querySelector('.cl-submit').onclick = function () {
                         var ids = Object.keys(picked);
                         if (!ids.length) {
@@ -657,6 +674,17 @@
                                                 needMail ? L.needMail
                                               : wasFrozen ? L.frozenAnon
                                               : (bad ? L.err : L.submitted);
+                                            // «Мой голос» ≠ «голос учтён». Заседание 23.08:
+                                            // выбор жил в браузере, человек видел пометки и
+                                            // считал, что проголосовал, а сервер не получил
+                                            // ничего — кнопку отправки не нажали или ключ не
+                                            // был введён. Подтверждение храним ТОЛЬКО после
+                                            // ответа сервера ok и показываем отдельным знаком.
+                                            if (!bad && !needMail) {
+                                                store('cl_sent_' + m.date, ids);
+                                                var w = box.querySelector('.cl-draft-warn');
+                                                if (w) w.remove();
+                                            }
                                             if (needMail) {
                                                 var mi = host.querySelector('.cl-mail-in');
                                                 if (mi) { mi.focus(); mi.scrollIntoView({ block: 'center' }); }
