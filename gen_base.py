@@ -346,7 +346,7 @@ def load_tags_loc(lang):
 def gen_tags_side(tags, lang):
     loc = load_tags_loc(lang)
     return "\n".join(
-        f'<a href="/{LANG_DIR}/{lang}/tags/{t}.html" class="side-tag" data-tag="{attr_safe(t)}">{loc.get(t, {}).get("name", t)}</a>'
+        f'<a href="/{LANG_DIR}/{lang}/laws/{t}.html" class="side-tag" data-tag="{attr_safe(t)}">{loc.get(t, {}).get("name", t)}</a>'
         for t in tags if t
     )
 

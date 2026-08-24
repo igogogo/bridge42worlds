@@ -43,7 +43,11 @@ EDU_LIST = ROOT / "lang" / "ru" / "data" / "tags-list-educational.json"
 
 # Обратная сторона LAW_KIND из concepts_merge: витрина законов говорит по-русски.
 KIND_RU = {"law": "закон", "equation": "уравнение", "theorem": "теорема",
-           "principle": "принцип", "effect": "эффект", "invention": "изобретение"}
+           "principle": "принцип", "effect": "эффект", "invention": "изобретение",
+           # Виды, пришедшие из тегов, — тоже группы единого облака (одно облако, 24.08).
+           "concept": "понятие", "method": "метод", "object": "объект",
+           "instrument": "инструмент", "substance": "вещество", "math": "математика",
+           "phenomenon": "явление"}
 LAW_KINDS = set(KIND_RU)
 
 
@@ -79,14 +83,19 @@ def build_views(concepts):
             # менять форму записи — он только меняет источник.
             node["educational"] = cid in edu
             tags[cid] = node
-        if origin == "law":
-            laws[cid] = {
-                "type": KIND_RU.get(kind, "закон"),
-                "tags": list(c.get("tags_of_law", [])),
-                "scientists": list(c.get("scientists", [])),
-                "influenced_by": list(c.get("influenced_by", [])),
-                "related": list(c.get("related", [])),
-            }
+        # ОДНО ОБЛАКО (владелец 2026-08-24: «слив в одно облако окончательно, на сайте
+        # убрав отовсюду теги; в законах есть понятия, и этого достаточно»). Витрина
+        # законов из подмножества становится ПОЛНОЙ: каждая запись реестра — страница
+        # раздела «Понятия». Бывшие теги получают русский вид по своему kind, чтобы
+        # группировка на облаке работала для всех, а не только для шести законных видов.
+        laws[cid] = {
+            "type": KIND_RU.get(kind, "закон"),
+            "tags": list(c.get("tags_of_law", [])),
+            "scientists": list(c.get("scientists", [])),
+            "influenced_by": list(c.get("influenced_by", [])),
+            "related": list(c.get("related", [])),
+            "article_count": c.get("article_count", 0),
+        }
     return tags, laws
 
 

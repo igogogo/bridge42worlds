@@ -56,8 +56,7 @@
     var NAV_I18N = {
         about:      { ru: 'Гид',               en: 'Guide',           es: 'Guía',                 ar: 'الدليل',        fr: 'Guide' },
         main:       { ru: 'Главная',           en: 'Home',            es: 'Inicio',               ar: 'الرئيسية',      fr: 'Accueil' },
-        tags:       { ru: 'Теги',              en: 'Tags',            es: 'Etiquetas',            ar: 'الوسوم',        fr: 'Tags' },
-        laws:       { ru: 'Законы',            en: 'Laws',            es: 'Leyes',                ar: 'القوانين',      fr: 'Lois' },
+        laws:       { ru: 'Понятия',           en: 'Concepts',        es: 'Conceptos',            ar: 'المفاهيم',      fr: 'Concepts' },
         scientists: { ru: 'Учёные',            en: 'Scientists',      es: 'Científicos',          ar: 'العلماء',       fr: 'Scientifiques' },
         sections:   { ru: 'Разделы',           en: 'Sections',        es: 'Secciones',            ar: 'الأقسام',       fr: 'Sections' },
         authors:    { ru: 'Авторы',            en: 'Authors',         es: 'Autores',              ar: 'المؤلفون',      fr: 'Auteurs' },
@@ -102,7 +101,6 @@
         // читатель узнаёт его, а не разгадывает.
         ['learn', '/learn.html', 'mark'],
         ['main', '/lang/' + L + '/index.html'],
-        ['tags', '/lang/' + L + '/tags/'],
         ['laws', '/lang/' + L + '/laws/'],
         ['scientists', '/lang/' + L + '/scientists/'],
         ['sections', '/lang/' + L + '/sections/'],

@@ -1903,10 +1903,16 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
             f'data-scientist="{attr_safe(s)}">{safe(all_sci[s].get("name", s))}</a>' for s in side_sci_ids))
     tags_side_html = side_sci_html + tags_side_html
     if side_laws:
-        lbl = SIDE_LAWS_LABEL.get(lang, SIDE_LAWS_LABEL["en"])
-        tags_side_html += (f'<div class="side-laws-label">{safe(lbl)}</div>' + "".join(
+        # Одно облако (владелец 2026-08-24): законы идут В ТОТ ЖЕ ряд понятий, без своей
+        # подписи-заголовка. Стиль .side-law остаётся — закон в ряду отличим по виду,
+        # это полезная разница, а не вторая рубрика. Дубли по id не повторяем: понятие,
+        # пришедшее и вектором тегов, и вектором законов, — одна плашка.
+        shown = set(tags)
+        law_chips = "".join(
             f'<a href="/{LANG_DIR}/{lang}/laws/{attr_safe(lid)}.html" class="side-law" '
-            f'data-law="{attr_safe(lid)}">{safe(name)}</a>' for lid, name in side_laws))
+            f'data-law="{attr_safe(lid)}">{safe(name)}</a>'
+            for lid, name in side_laws if lid not in shown)
+        tags_side_html += law_chips
 
     page_file = VERSION_FILES[version]
     version_toggle_html = ""   # бегунок заменён иконочным переключателем (2026-07-28)
@@ -2767,25 +2773,68 @@ def generate_tag_page(tag_id, lang):
 
 
 def update_all_tags(lang):
-    generate_tags_cloud(lang)
+    """/tags/ — переадресации в единое облако /laws/.
+
+    Одно облако (владелец 2026-08-24: «слив окончательно, на сайте убрав отовсюду
+    теги»). Страницы тегов НЕ удаляются с адресов: на них живут внешние ссылки и
+    поисковый трафик, и 404 на месте работавшей страницы — потеря без выгоды. Вместо
+    витрины каждый адрес отдаёт мгновенную переадресацию на то же понятие в /laws/
+    плюс canonical — поисковик переклеивает вес сам.
+    """
     graph = json.loads(Path("data/tags-graph.json").read_text(encoding="utf-8"))
-    for tag_id in graph.get("graph", {}): generate_tag_page(tag_id, lang)
-    print(f"  🏷️ Tags updated for {lang}")
+    base = Path(LANG_DIR) / lang / "tags"
+    base.mkdir(parents=True, exist_ok=True)
+    tpl = ('<!DOCTYPE html><html lang="{lang}"><head><meta charset="UTF-8">'
+           '<meta http-equiv="refresh" content="0;url={to}">'
+           '<link rel="canonical" href="{site}{to}">'
+           '<title>→ {to}</title></head>'
+           '<body><a href="{to}">→</a></body></html>')
+    for tag_id in graph.get("graph", {}):
+        to = f"/{LANG_DIR}/{lang}/laws/{tag_id}.html"
+        _write_text_retry(base / f"{tag_id}.html",
+                          tpl.format(lang=lang, to=to, site=SITE_URL))
+    _write_text_retry(base / "index.html",
+                      tpl.format(lang=lang, to=f"/{LANG_DIR}/{lang}/laws/", site=SITE_URL))
+    print(f"  🏷️ Tags → redirects for {lang}")
 
 
 # ── Законы (закон/принцип/теорема/эффект) — слой поверх тегов, дом формул ──
 def load_laws_loc(lang):
+    """Карточки раздела «Понятия» (бывшие /laws/): законы + бывшие теги одним словарём.
+
+    Одно облако (владелец 2026-08-24: «слив в одно облако окончательно; в законах есть
+    понятия, и этого достаточно»). Витрина laws-graph теперь несёт все 536 понятий, но
+    полный справочник laws.json знает описания только 175 законов — описания остальных
+    живут в tags.json. Склеиваем здесь, в загрузчике: каждый читатель получает карточку
+    для любого понятия, не зная, из какого справочника она пришла. Закон при совпадении
+    id побеждает: у него формула и история, а не только аннотация.
+    """
     p = Path(f"lang/{lang}/data/laws.json")
     if not p.exists(): p = Path(f"lang/{DEFAULT_LANG}/data/laws.json")
-    return json.loads(p.read_text(encoding="utf-8")) if p.exists() else {}
+    laws = json.loads(p.read_text(encoding="utf-8")) if p.exists() else {}
+    graph = json.loads(Path("data/laws-graph.json").read_text(encoding="utf-8")).get("graph", {}) \
+        if Path("data/laws-graph.json").exists() else {}
+    tags = load_tags_loc(lang) if graph else {}
+    for cid in graph:
+        if cid in laws or cid not in tags:
+            continue
+        t = tags[cid]
+        laws[cid] = {
+            "name": t.get("name", cid),
+            "mini": t.get("mini", ""),
+            "description_popular": t.get("description_popular", "") or t.get("mini", ""),
+            "practical_application": t.get("practical_application", ""),
+            "tags": [], "from_tag": True,
+        }
+    return laws
 
 
 LAWS_LABELS = {
-    "ru": {"title": "Законы и принципы", "subtitle": "Фундаментальные законы науки. Формула — лишь отображение; суть в тексте.",
+    "ru": {"title": "Понятия", "subtitle": "Единое облако понятий: законы, методы, объекты и явления. У законов — формулы и история; суть всегда в тексте.",
            "history": "История открытия", "how": "Как работает", "problems": "Нюансы", "laws": "Законы:", "footer": "наука простыми словами",
            "search": "Найти закон...", "tags": "Связанные понятия", "related_laws": "Связанные законы", "articles": "Статьи по теме", "scientists": "Открыли:", "practical": "На практике",
            "influenced": "Оказали влияние:", "article_search": "Поиск статей...", "article_hint": "# тег · @ автор · ! учёный"},
-    "en": {"title": "Laws & Principles", "subtitle": "Fundamental laws of science. The formula is just a representation; the idea is in the text.",
+    "en": {"title": "Concepts", "subtitle": "One cloud of concepts: laws, methods, objects and phenomena. Laws carry formulas and history; the idea is always in the text.",
            "history": "Discovery", "how": "How it works", "problems": "Caveats", "laws": "Laws:", "footer": "science made simple",
            "search": "Find a law...", "tags": "Related concepts", "related_laws": "Related laws", "articles": "Related articles", "scientists": "Discovered by:", "practical": "In practice",
            "influenced": "Key influence:", "article_search": "Search articles...", "article_hint": "# tag · @ author · ! scientist"},
@@ -3104,9 +3153,12 @@ def generate_law_page(law_id, lang):
     seen = set()
     articles_html = ""
     law_article_count = 0
+    # Бывший тег статьи находит по СВОЕМУ id: у него нет списка «тематических тегов
+    # закона», он сам и есть тема, которой размечены статьи (одно облако, 24.08).
+    match_ids = set(law_tags) | ({law_id} if L.get("from_tag") else set())
     for a in index:
         if a.get("version") != "popular": continue
-        if not (set(a.get("tags", [])) & set(law_tags)): continue
+        if not (set(a.get("tags", [])) & match_ids): continue
         if a["id"] in seen: continue
         seen.add(a["id"])
         law_article_count += 1
