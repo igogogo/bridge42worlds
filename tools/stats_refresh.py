@@ -380,7 +380,11 @@ def main():
         f = ROOT / "logs" / "_stats_msg.txt"
         f.parent.mkdir(exist_ok=True)
         f.write_text(msg, encoding="utf-8")
-        subprocess.run([sys.executable, str(ROOT / "tools" / "status_tg.py"), "--file", str(f)],
+        # В канал НЕ шлём (владелец 2026-08-24: «очень много сообщений, дублируются»):
+        # витрина каждые 8 часов повторяла одно и то же и хоронила важное. Файл остаётся,
+        # утренний отчёт заберёт его; критичное уходит отдельным путём.
+        if os.environ.get("B42_STATS_TO_TG") == "1":
+            subprocess.run([sys.executable, str(ROOT / "tools" / "status_tg.py"), "--file", str(f)],
                        cwd=ROOT, timeout=120)
     return 1 if failed else 0
 

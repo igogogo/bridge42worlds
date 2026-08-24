@@ -915,10 +915,38 @@ function authorRowHTML(name, data) {
         '<span class="author-count">' + count + ' ' + UI.articlesWord + '</span></a>';
 }
 
+// Отложенный запуск: перебор 45 тысяч имён и сборка HTML на КАЖДОЕ нажатие клавиши
+// вешали страницу с первой буквы (владелец 2026-08-24: «как только букву вводишь —
+// подвисает»). Считаем только когда пользователь остановился на четверть секунды.
+var _authorsDebounce = null;
 function filterAuthors(query) {
+    clearTimeout(_authorsDebounce);
+    _authorsDebounce = setTimeout(function () { _filterAuthorsNow(query); }, 250);
+}
+
+var AUTHORS_RENDER_CAP = 300;
+
+function _filterAuthorsNow(query) {
     var container = document.getElementById('author-cloud');
     if (!container) return;
     var q = query.trim().toLowerCase();
+
+    // Поиск задан — ищем по ВСЕМ авторам, а не внутри открытой буквы (владелец:
+    // «если поиск задан — забываем про буквы, сыпем всех»). Буквы остаются способом
+    // листать без поиска.
+    if (q && !isAuthorsIndexPage()) {
+        if (_authorsDefaultHTML === null) _authorsDefaultHTML = container.innerHTML;
+        if (!Object.keys(authorsGraph).length) {
+            ensureAuthorsGraph().then(function () { _filterAuthorsNow(query); });
+            return;
+        }
+        renderAuthorSearch(container, q);
+        return;
+    }
+    if (!q && _authorsDefaultHTML !== null && !isAuthorsIndexPage()) {
+        container.innerHTML = _authorsDefaultHTML;
+        return;
+    }
 
     if (isAuthorsIndexPage()) {
         if (_authorsDefaultHTML === null) _authorsDefaultHTML = container.innerHTML;
@@ -927,12 +955,7 @@ function filterAuthors(query) {
             ensureAuthorsGraph().then(function() { filterAuthors(query); });
             return;
         }
-        var names = Object.keys(authorsGraph)
-            .filter(function(name) { return name.toLowerCase().includes(q); })
-            .sort(function(a, b) { return a.localeCompare(b); });
-        container.innerHTML = names.length
-            ? names.map(function(n) { return authorRowHTML(n, authorsGraph[n]); }).join('')
-            : '<p style="color:var(--soft);text-align:center;padding:40px">' + UI.noResults + '</p>';
+        renderAuthorSearch(container, q);
         return;
     }
 
@@ -948,6 +971,22 @@ function filterAuthors(query) {
         section.style.display = visible ? '' : 'none';
     });
 }
+function renderAuthorSearch(container, q) {
+    var names = Object.keys(authorsGraph)
+        .filter(function (name) { return name.toLowerCase().includes(q); })
+        .sort(function (a, b) { return a.localeCompare(b); });
+    // Отдаём первые три сотни: строить DOM на двадцать тысяч совпадений по букве «a» —
+    // это и была вторая половина подвисания. Уточнил запрос — список сузился.
+    var shown = names.slice(0, AUTHORS_RENDER_CAP);
+    var more = names.length - shown.length;
+    container.innerHTML = (shown.length
+        ? shown.map(function (n) { return authorRowHTML(n, authorsGraph[n]); }).join('')
+        : '<p style="color:var(--soft);text-align:center;padding:40px">' + UI.noResults + '</p>')
+        + (more > 0
+            ? '<p style="color:var(--soft);text-align:center;padding:14px">+' + more + '…</p>'
+            : '');
+}
+
 function filterScientists(query) { filterCloudItems('scientist-cloud', query); }
 window.filterAuthors = filterAuthors;
 window.filterScientists = filterScientists;

@@ -277,6 +277,35 @@ def totals():
     return {"articles": n_art, "concepts": n_con, "authors": n_auth}
 
 
+def week_block(day):
+    """Агрегат за неделю — по понедельникам (владелец 2026-08-24: «агрегацию
+    выполненного пишем за неделю, а не месяц, бюджет тоже на неделю по сервисам»).
+    Неделя — семь дней, кончая отчётным воскресеньем; отчёт за него приходит в пн 04:00."""
+    d0 = date.fromisoformat(day)
+    if d0.weekday() != 6:
+        return []
+    days = [(d0 - timedelta(days=i)).isoformat() for i in range(7)]
+    n_full = n_exp = 0
+    for dd in days:
+        a = articles(dd)
+        n_full += a["full"]
+        n_exp += a["express"]
+    w_total, w_agent = 0.0, Counter()
+    for dd in days:
+        t, ba = spend(dd)
+        w_total += t
+        for k, v in ba.items():
+            w_agent[k] += v
+    head = f"\n📅 <b>Неделя {days[-1]} — {days[0]}</b>"
+    body = (f"Статей: {n_full + n_exp} (полных {n_full}, экспрессов {n_exp}). "
+            f"Бюджет недели: ${w_total:.2f}.")
+    L = [head, body]
+    if w_agent:
+        L.append("По сервисам: " + " · ".join(
+            f"{k} ${v:.2f}" for k, v in w_agent.most_common(6) if v >= 0.01))
+    return L
+
+
 def build(day):
     a = articles(day)
     total, by_agent = spend(day)
@@ -336,6 +365,8 @@ def build(day):
         bad = [f"{n}: {s}" for n, s in svc if s.lower() not in ("готово", "ready", "running")]
         L.append(f"\n🔧 <b>Сервисы</b>: {len(svc)} задач в расписании"
                  + (f", требуют внимания: {', '.join(bad[:3])}" if bad else ", все в норме"))
+
+    L.extend(week_block(day))
 
     if open_q:
         L.append("\n❓ <b>Ждёт твоего решения</b>")

@@ -315,6 +315,12 @@ def plan(money):
     # 4. Заказы читателей — по кнопке «предложить наш разбор». Их немного, но они
     #    важнее плановой работы: человек ждёт ответа.
     steps.insert(0, {"key": "orders", "title": "заказы читателей", "n": 0, "cost": 0.0})
+    # ОСНОВА ИДЁТ ПЕРВОЙ. Владелец 2026-08-19: «сначала надо начинать с обновления базы
+    # и вектора, а потом всё остальное… это основа для нашей работы — полная база и вектор».
+    # Порядок не косметический: отбор статей, разметка вектором и проверка лицензий читают
+    # базу, и если она вчерашняя, вся дневная работа делается по вчерашним данным. Оба шага
+    # бесплатны для модели: скачивание снапшота и пересчёт индекса.
+    steps.insert(0, {"key": "base", "title": "обновить базу arXiv и индекс", "n": 0, "cost": 0.0})
 
     # 5. Бесплатные работы. Идут ВСЕГДА, даже когда на счету ноль — в этом и смысл:
     #    владелец 12 августа сказал «даже если доллар, всё равно ежедневно можно что-то
@@ -507,9 +513,15 @@ def report(done, bad, spent):
     try:
         msg = LOGS / "factory-report.txt"
         msg.write_text("\n".join(lines), encoding="utf-8")
-        subprocess.run([sys.executable, str(ROOT / "tools" / "status_tg.py"),
-                        "--file", str(msg)], cwd=ROOT, timeout=120,
-                       env={**os.environ, "PYTHONIOENCODING": "utf-8"})
+        # В канал — только когда случилось то, на что надо реагировать: сбой шага или
+        # кончающиеся деньги. Штатный «фабрика отработала» уходит в файл, откуда его
+        # берёт утренний отчёт (владелец 2026-08-24: «в канал идёт очень много сообщений»;
+        # правило — ежедневный полный отчёт в 4 утра, немедленно только критичное).
+        critical = any(("Споткнулись" in l) or ("🔴" in l) for l in lines)
+        if critical:
+            subprocess.run([sys.executable, str(ROOT / "tools" / "status_tg.py"),
+                            "--file", str(msg)], cwd=ROOT, timeout=120,
+                           env={**os.environ, "PYTHONIOENCODING": "utf-8"})
     except Exception as ex:
         print(f"⚠️ отчёт в канал не ушёл: {type(ex).__name__}")
 
@@ -577,6 +589,13 @@ def do_step(s):
         # только то, что изменилось с прошлой недели. --notify делает отправку
         # частью шага: отчёт, который надо запускать отдельно, не запускают.
         return run([sys.executable, "refs_audit.py", "--notify"], timeout=3600)
+    if k == "base":
+        rc = run([sys.executable, "tools/update_arxiv_dump.py"], timeout=10800)
+        # Индекс лицензий пересобираем ТОЛЬКО если снапшот обновился: проход по пяти
+        # гигабайтам стоит десять минут, и гонять его каждый день впустую незачем.
+        if rc == 0:
+            run([sys.executable, "arxiv_index_build.py"], timeout=3600)
+        return rc
     if k == "community":
         return run([sys.executable, "community_pages.py"], timeout=1800)
     if k == "authors_rec":

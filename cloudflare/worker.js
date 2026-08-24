@@ -681,6 +681,18 @@ async function handleEvents(request, env) {
   try { body = await request.json(); } catch { return Response.json({ error: "bad_json" }, { status: 400 }); }
   const evs = Array.isArray(body.events) ? body.events.slice(0, 20) : [];
   if (!evs.length) return Response.json({ ok: true, n: 0 });
+  // Боты — мимо статистики. 21 августа 2026 рой сканеров исполнил наш счётчик и записал
+  // 4014 «уникальных читателей» по одной странице на каждого: месячная сводка выросла
+  // в двадцать раз одним днём. Три признака, каждый дешёвый:
+  //  · заголовок клиента признаётся ботом сам (bot/crawler/spider/preview);
+  //  · верифицированный бот по метке Cloudflare (verifiedBotCategory есть только у них);
+  //  · нет заголовка Accept-Language — браузеры людей шлют его всегда, скрипты почти никогда.
+  // Отбрасываем молча с ok:true: сканеру незачем знать, что его не посчитали.
+  const ua = (request.headers.get("user-agent") || "").toLowerCase();
+  const isBot = /bot|crawler|spider|preview|scan|python-requests|curl|wget|headless/.test(ua)
+    || !!(request.cf && request.cf.verifiedBotCategory)
+    || !request.headers.get("accept-language");
+  if (isBot) return Response.json({ ok: true, n: 0 });
   try {
     await env.QUEUE.prepare(
       `CREATE TABLE IF NOT EXISTS events (
