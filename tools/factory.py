@@ -350,6 +350,12 @@ def plan(money):
         # (владелец нашёл 19.08). Фильтр по отзыву в коде был и работал правильно, просто
         # его некому было запустить. Ставим в общий прогон, как теги и подсветку.
         {"key": "community", "title": "раздел авторских работ", "n": 0, "cost": 0.0},
+        # Комментарии читателей (владелец 2026-08-24: «разбор нашим агентом, доработки
+        # шлифовщику, вопросы к совету — всё сразу в прод, автоматом»). Копейки: пара
+        # вызовов на комментарий, комментариев единицы в день. Правки копятся в
+        # data/comment-fixes.jsonl, кандидаты в повестку — в council/from-comments.json
+        # с сигналом в канал (формулировку до повестки вычитывает стратег).
+        {"key": "comments", "title": "разбор комментариев читателей", "n": 0, "cost": 0.01},
         {"key": "authors_rec", "title": "карточки авторов по дампу", "n": 0, "cost": 0.0},
         {"key": "tags_vec", "title": "теги и законы по смыслу (вектор)", "n": 0, "cost": 0.0},
         # Подсветка понятий в тексте — сразу ЗА разметкой вектором и до публикации: она
@@ -598,6 +604,8 @@ def do_step(s):
         return rc
     if k == "community":
         return run([sys.executable, "community_pages.py"], timeout=1800)
+    if k == "comments":
+        return run([sys.executable, "tools/comments_triage.py"], timeout=1800)
     if k == "authors_rec":
         return run([sys.executable, "tools/author_record.py", "--build"], timeout=3600)
     if k == "tags_vec":
