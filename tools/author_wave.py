@@ -127,7 +127,7 @@ def arxiv_works(name, limit=60):
         return []
     query = f'au:"{parts[-1]}_{parts[0][0]}"'
     try:
-        r = requests.get("http://export.arxiv.org/api/query", timeout=40, params={
+        r = requests.get("https://export.arxiv.org/api/query", timeout=40, params={
             "search_query": query, "max_results": limit,
             "sortBy": "submittedDate", "sortOrder": "descending"})
         root = ET.fromstring(r.text)

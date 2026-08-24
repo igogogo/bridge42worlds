@@ -143,7 +143,7 @@ def fetch_arxiv(date_str, category="astro-ph.*"):
     _pace()
     f = f"{date_str.replace('-', '')}0000"
     t = f"{date_str.replace('-', '')}2359"
-    url = "http://es.arxiv.org/api/query"
+    url = "https://es.arxiv.org/api/query"
     params = {
         "search_query": f"cat:{category} AND submittedDate:[{f} TO {t}]",
         "start": 0, "max_results": 200,
@@ -266,33 +266,67 @@ def license_class(lic_url):
 # Строки лицензий интернируются — их всего шесть разных на весь arXiv, и без этого
 # словарь весил бы втрое больше. К сети идём ТОЛЬКО за тем, чего в индексе нет:
 # за работами свежее последнего обновления дампа.
-_LIC_INDEX = None
+_LIC_DB = None
 _LIC_PATH = Path("data/arxiv-index.jsonl")
+_LIC_SQLITE = Path("data/arxiv-licenses.sqlite")
+
+
+def _lic_db():
+    """Лицензии в sqlite: 3,1 млн работ, поиск за микросекунды и почти без памяти.
+
+    Первая версия держала индекс словарём в памяти. На 713 тысячах записей это ещё
+    проходило, но полный индекс — 3 100 507 работ и 454 МБ текста: столько памяти
+    отнимать у процесса, который параллельно собирает сайт, нельзя. sqlite из стандартной
+    библиотеки решает это без единой зависимости: файл строится один раз за минуту,
+    дальше живёт рядом с индексом и обновляется вместе с ним.
+    """
+    global _LIC_DB
+    if _LIC_DB is not None:
+        return _LIC_DB
+    import sqlite3
+    fresh = (_LIC_SQLITE.exists() and _LIC_PATH.exists()
+             and _LIC_SQLITE.stat().st_mtime >= _LIC_PATH.stat().st_mtime)
+    if not fresh and _LIC_PATH.exists():
+        print("  📇 строю базу лицензий из индекса (один раз)...")
+        tmp = _LIC_SQLITE.with_suffix(".tmp")
+        tmp.unlink(missing_ok=True)
+        con = sqlite3.connect(tmp)
+        con.execute("CREATE TABLE lic (id TEXT PRIMARY KEY, l TEXT)")
+        rows, n = [], 0
+        with _LIC_PATH.open(encoding="utf-8", errors="replace") as fh:
+            for line in fh:
+                try:
+                    d = json.loads(line)
+                except Exception:
+                    continue
+                rows.append((d.get("id", ""), d.get("l") or ""))
+                if len(rows) >= 50000:
+                    con.executemany("INSERT OR REPLACE INTO lic VALUES (?,?)", rows)
+                    n += len(rows); rows = []
+        if rows:
+            con.executemany("INSERT OR REPLACE INTO lic VALUES (?,?)", rows)
+            n += len(rows)
+        con.commit(); con.close()
+        tmp.replace(_LIC_SQLITE)
+        print(f"  📇 база лицензий готова: {n} работ")
+    if _LIC_SQLITE.exists():
+        _LIC_DB = sqlite3.connect(f"file:{_LIC_SQLITE}?mode=ro", uri=True)
+    return _LIC_DB
 
 
 def local_license(arxiv_id):
-    """Лицензия из индекса. None — если такой работы в индексе нет (значит, свежая)."""
-    global _LIC_INDEX
-    if _LIC_INDEX is None:
-        _LIC_INDEX = {}
-        if _LIC_PATH.exists():
-            seen = {}
-            with _LIC_PATH.open(encoding="utf-8", errors="replace") as fh:
-                for line in fh:
-                    try:
-                        d = json.loads(line)
-                    except Exception:
-                        continue
-                    lic = d.get("l") or ""
-                    _LIC_INDEX[d.get("id", "")] = seen.setdefault(lic, lic)
-            print(f"  📇 индекс лицензий: {len(_LIC_INDEX)} работ (без обращений к arXiv)")
+    """Лицензия из нашей базы. None — если работы там нет (значит, свежее дампа)."""
+    db = _lic_db()
+    if db is None:
+        return None
     base = re.sub(r"v\d+$", "", arxiv_id or "")
-    return _LIC_INDEX.get(base)
+    row = db.execute("SELECT l FROM lic WHERE id = ?", (base,)).fetchone()
+    return row[0] if row else None
 
 
 def get_license(arxiv_id):
     try:
-        r = _get_with_retry("http://es.arxiv.org/oai2", params={
+        r = _get_with_retry("https://es.arxiv.org/oai2", params={
             "verb": "GetRecord", "identifier": f"oai:arXiv.org:{arxiv_id}", "metadataPrefix": "arXiv"
         }, timeout=10)
         return r.text

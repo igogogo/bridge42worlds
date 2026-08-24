@@ -2018,6 +2018,14 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
         og_image_html=article_og_image_html(date_str, article["id"]),
         clickbait_escaped=safe(scipop.get("title", "").replace("'", "\\'")),
         km_badge=km_badge_html(article, lang, date_str, version),
+        # Значок лицензии у НАЗВАНИЯ, рядом с прочими (владелец 2026-08-19: «не будет
+        # картинок — не наша проблема, просто честно пишем: работа под такой лицензией,
+        # поэтому вот так; и какой-то символ к названию, у нас уже есть символы»).
+        # Плашка у строки лицензии объясняет подробно, но её видно только если дочитать
+        # до выходных данных. Значок у заголовка виден сразу и на всех уровнях чтения —
+        # так же, как ✛ машины знаний.
+        lic_badge=(f'<span class="lic-badge" title="{attr_safe(_ANALYSIS_NOTE.get(lang, _ANALYSIS_NOTE["en"]))}">✎</span>'
+                   if article.get("license_class") == "analysis" else ""),
         refine_badge=(f'<span class="refine-badge" title="{safe({"ru": "Отшлифовано редактором", "en": "Polished by an editor", "es": "Pulido por un editor", "ar": "تم صقله بواسطة محرر", "fr": "Peaufiné par un éditeur", "zh": "编辑润色"}.get(lang, "Polished by an editor"))}">✦</span>' if article.get("refined") else ""),
         express_badge=(f'<span class="express-badge" title="{safe({"ru": "Экспресс-версия: по аннотации автора, без разбора полного текста статьи", "en": "Express version: based on the author\'s abstract, not the full paper text", "es": "Versión exprés: basada en el resumen del autor, no en el texto completo", "ar": "نسخة سريعة: بناءً على ملخص المؤلف، دون تحليل النص الكامل", "fr": "Version express : basée sur le résumé de l\'auteur", "zh": "速览版：基于作者摘要"}.get(lang, "Express version: based on the abstract"))}">{safe({"ru": "экспресс", "en": "express", "es": "exprés", "ar": "سريع", "fr": "express", "zh": "速览"}.get(lang, "express"))}</span>' if article.get("express") else ""),
         original_title=safe(article["title"]),
@@ -4741,7 +4749,7 @@ def _build_article(a, date_str, inputs, force=False, express=False, known_licens
         # atom.xml только сохраняется для истории, в контенте не участвует — при известной лицензии
         # не тратим на него отдельный запрос к arXiv (юзер 2026-07-24: брать из базы, меньше arXiv).
         atom_xml = "" if known_license is not None else _get_with_retry(
-            f"http://es.arxiv.org/api/query?id_list={a['id']}", timeout=30).text
+            f"https://es.arxiv.org/api/query?id_list={a['id']}", timeout=30).text
         if no_fetch:
             text, imgs, captions, refs = a.get("summary", ""), [], [], ""
             a["cited_arxiv"] = []
@@ -5491,7 +5499,7 @@ def delete_article(aid, rebuild=True):
 def fetch_one_arxiv(aid):
     """Метаданные одной статьи по arXiv id."""
     try:
-        r = _get_with_retry(f"http://es.arxiv.org/api/query?id_list={aid}", timeout=30)
+        r = _get_with_retry(f"https://es.arxiv.org/api/query?id_list={aid}", timeout=30)
     except requests.exceptions.RequestException:
         return None
     try:
@@ -5706,7 +5714,7 @@ def search_arxiv_author(name, from_date=None, to_date=None, max_results=200):
         f = from_date.replace("-", "") + "0000"
         t = to_date.replace("-", "") + "2359"
         q += f" AND submittedDate:[{f} TO {t}]"
-    r = _get_with_retry("http://es.arxiv.org/api/query", params={
+    r = _get_with_retry("https://es.arxiv.org/api/query", params={
         "search_query": q, "start": 0, "max_results": max_results,
         "sortBy": "submittedDate", "sortOrder": "descending"}, timeout=30)
     try:

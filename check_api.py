@@ -106,8 +106,8 @@ except Exception as e:
 # ── arXiv API ──
 check_section("📚 arXiv API")
 
-for name, url in [("es.arxiv.org", "http://es.arxiv.org/api/query?max_results=1"),
-                  ("export.arxiv.org", "http://export.arxiv.org/api/query?max_results=1")]:
+for name, url in [("es.arxiv.org", "https://es.arxiv.org/api/query?max_results=1"),
+                  ("export.arxiv.org", "https://export.arxiv.org/api/query?max_results=1")]:
     try:
         r = requests.get(url, timeout=10)
         if r.status_code == 200:
@@ -121,7 +121,7 @@ for name, url in [("es.arxiv.org", "http://es.arxiv.org/api/query?max_results=1"
 check_section("📜 arXiv OAI-PMH (лицензии)")
 
 try:
-    r = requests.get("http://export.arxiv.org/oai2", params={
+    r = requests.get("https://export.arxiv.org/oai2", params={
         "verb": "GetRecord",
         "identifier": "oai:arXiv.org:2606.30643",
         "metadataPrefix": "arXiv"

@@ -177,7 +177,7 @@ def find_arxiv_paper(topic):
     Домен arXiv намеренно es.arxiv.org — export не отвечал (см. грабли проекта)."""
     import xml.etree.ElementTree as ET
     q = f'all:"{topic}"' if " " in topic else f"all:{topic}"
-    r = requests.get("http://es.arxiv.org/api/query", timeout=40, params={
+    r = requests.get("https://es.arxiv.org/api/query", timeout=40, params={
         "search_query": q, "start": 0, "max_results": 5,
         "sortBy": "relevance", "sortOrder": "descending"})
     try:
