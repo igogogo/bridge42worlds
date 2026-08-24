@@ -4059,17 +4059,20 @@ def build_connectivity_report_html():
 
     def row(label, missing, total_n):
         if not missing:
-            return f'<p style="color:#2e7d32">✓ {label}: все {total_n} связаны</p>'
-        shown = ", ".join(missing[:15]) + (f' … +{len(missing) - 15} ещё' if len(missing) > 15 else '')
-        return f'<p style="color:#b31b1b">⚠️ {label}: {len(missing)}/{total_n} без связи — {shown}</p>'
+            return f'<p style="color:#2e7d32">✓ {label}: all {total_n} connected</p>'
+        shown = ", ".join(missing[:15]) + (f' … +{len(missing) - 15} more' if len(missing) > 15 else '')
+        return f'<p style="color:#b31b1b">⚠️ {label}: {len(missing)}/{total_n} unlinked — {shown}</p>'
 
+    # Дашборд одноязычный, английский (владелец 2026-08-24: «оставить одну версию,
+    # английскую, но чтобы всё чётко было»). Внутренняя терминология «теги/законы»
+    # снаружи уже не существует — на витрине это виды одного облака понятий.
     return (
-        row("Теги без закона", g["tags_no_law"], g["n_tags"])
-        + row("Теги без учёного", g["tags_no_sci"], g["n_tags"])
-        + row("Законы без тега", g["laws_no_tag"], g["n_laws"])
-        + row("Законы без учёного", g["laws_no_sci"], g["n_laws"])
-        + row("Учёные без тега", g["sci_no_tag"], g["n_sci"])
-        + row("Учёные без закона", g["sci_no_law"], g["n_sci"])
+        row("Concepts (former tags) without a law link", g["tags_no_law"], g["n_tags"])
+        + row("Concepts without a scientist", g["tags_no_sci"], g["n_tags"])
+        + row("Laws without a topic link", g["laws_no_tag"], g["n_laws"])
+        + row("Laws without a scientist", g["laws_no_sci"], g["n_laws"])
+        + row("Scientists without a topic", g["sci_no_tag"], g["n_sci"])
+        + row("Scientists without a law", g["sci_no_law"], g["n_sci"])
     )
 
 
@@ -4116,10 +4119,11 @@ def generate_status_page():
                 if f.is_dir() and not (f / "data.json").exists() and (
                         (f / "api").exists() or any(f.glob("*.jpg"))):
                     incomplete += 1
-    tags_n = len(json.loads(Path("data/tags-graph.json").read_text(encoding="utf-8")).get("graph", {})) \
-        if Path("data/tags-graph.json").exists() else 0
-    laws_n = len(json.loads(Path(f"lang/{DEFAULT_LANG}/data/laws.json").read_text(encoding="utf-8"))) \
-        if Path(f"lang/{DEFAULT_LANG}/data/laws.json").exists() else 0
+    # Одно облако (24.08): счётчик понятий берём из витрины laws-graph — она и есть
+    # полный реестр на сайте. Раздельные «теги» и «законы» на дашборде врали бы
+    # о структуре, которой больше нет.
+    concepts_n = len(json.loads(Path("data/laws-graph.json").read_text(encoding="utf-8")).get("graph", {})) \
+        if Path("data/laws-graph.json").exists() else 0
     sci_n = len(valid_scientist_ids())
     authors_n = len(json.loads(Path("data/authors-graph.json").read_text(encoding="utf-8"))) \
         if Path("data/authors-graph.json").exists() else 0
@@ -4140,8 +4144,8 @@ def generate_status_page():
         qdone = sum(1 for a in ready if a.get("id") in known_ids)
         qtotal = len(ready)
         qpct = round(100 * qdone / qtotal) if qtotal else 0
-        queue_html = (f'<h2>Очередь bulk-generate ({bulk_files[-1].name})</h2>'
-                      f'<div class="cards"><div class="card"><b>{qdone}/{qtotal}</b><span>готово · {qpct}%</span></div></div>'
+        queue_html = (f'<h2>Bulk-generate queue ({bulk_files[-1].name})</h2>'
+                      f'<div class="cards"><div class="card"><b>{qdone}/{qtotal}</b><span>done · {qpct}%</span></div></div>'
                       f'<div style="background:#eee;border-radius:6px;overflow:hidden;height:18px;margin:6px 0 14px">'
                       f'<div style="width:{qpct}%;height:100%;background:#4a7c9b"></div></div>')
 
@@ -4182,11 +4186,13 @@ def generate_status_page():
         f'<tr><td style="padding:3px 10px;color:#888">{ARXIV_CATEGORIES.get(c, c)}</td>'
         f'<td style="padding:3px 10px;width:220px">{bar(n, max_cat, "#8e44ad")}</td>'
         f'<td style="padding:3px 10px">{n}</td></tr>' for c, n in top_cats)
-    warn = f'<p style="color:#b31b1b">⚠️ Недопечённых папок: {incomplete}</p>' if incomplete else '<p style="color:#2e7d32">✓ Недопечённых нет</p>'
-    tier_donut = donut([("экспресс", express_n, "#e67e22"), ("полные", full_n, "#2e7d32")])
-    img_donut = donut([("из PDF", img_pdf_n, "#2e7d32"), ("AI", img_ai_n, "#4a7c9b"),
-                        ("ждёт бюджета", img_pending_n, "#e67e22"), ("нет вообще", img_none_n, "#b31b1b")])
+    warn = f'<p style="color:#b31b1b">⚠️ Half-baked folders: {incomplete}</p>' if incomplete else '<p style="color:#2e7d32">✓ No half-baked folders</p>'
+    tier_donut = donut([("express", express_n, "#e67e22"), ("full", full_n, "#2e7d32")])
+    img_donut = donut([("from PDF", img_pdf_n, "#2e7d32"), ("AI", img_ai_n, "#4a7c9b"),
+                        ("awaiting budget", img_pending_n, "#e67e22"), ("none", img_none_n, "#b31b1b")])
     connectivity_html = build_connectivity_report_html()
+    from datetime import timezone as _tz
+    updated = datetime.now(_tz.utc).strftime("%Y-%m-%d %H:%M")
     html = f'''<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Status — bridge42worlds</title>
 <style>body{{font-family:system-ui,Arial,sans-serif;max-width:760px;margin:0 auto;padding:30px 18px;color:#2c2c2c}}
@@ -4195,23 +4201,23 @@ h1{{font-size:22px}}h2{{font-size:15px;margin:24px 0 8px;color:#555}}
 .card{{flex:1;min-width:120px;background:#f6f6f6;border-radius:10px;padding:12px 14px}}
 .card b{{font-size:24px;display:block}}.card span{{color:#888;font-size:13px}}
 table{{border-collapse:collapse;font-size:13px;width:100%}}</style></head><body>
-<h1><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><line x1="6.5" y1="19" x2="6.5" y2="13"/><line x1="12" y1="19" x2="12" y2="8.5"/><line x1="17.5" y1="19" x2="17.5" y2="11"/><line x1="4" y1="19.5" x2="20" y2="19.5"/></svg> Состояние системы</h1>
+<h1><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><line x1="6.5" y1="19" x2="6.5" y2="13"/><line x1="12" y1="19" x2="12" y2="8.5"/><line x1="17.5" y1="19" x2="17.5" y2="11"/><line x1="4" y1="19.5" x2="20" y2="19.5"/></svg> System status</h1>
+<p style="color:#888;font-size:13px">Updated {updated} UTC · refreshed automatically by the daily pipeline</p>
 <div class="cards">
-<div class="card"><b>{total}</b><span>статей</span></div>
-<div class="card"><b>{authors_n}</b><span>авторов</span></div>
-<div class="card"><b>{sci_n}</b><span>учёных</span></div>
-<div class="card"><b>{tags_n}</b><span>тегов</span></div>
-<div class="card"><b>{laws_n}</b><span>законов</span></div>
-<div class="card"><b>{len(LANGUAGES)}</b><span>языков</span></div>
+<div class="card"><b>{total}</b><span>articles</span></div>
+<div class="card"><b>{authors_n}</b><span>authors</span></div>
+<div class="card"><b>{sci_n}</b><span>scientists</span></div>
+<div class="card"><b>{concepts_n}</b><span>concepts</span></div>
+<div class="card"><b>{len(LANGUAGES)}</b><span>languages</span></div>
 </div>
 {queue_html}
-<h2>Экспресс vs полные</h2>{tier_donut}
-<h2>Источник обложек (оценка расхода на AI: ${img_cost_est:.2f})</h2>{img_donut}
-<h2>Покрытие переводами</h2><table>{cov_rows}</table>
-<h2>По разделам arXiv (топ-15)</h2><table>{cat_rows}</table>
-<h2>Статьи по дням (последние 30)</h2><table>{day_rows}</table>
-<h2>Целостность</h2>{warn}
-<h2>Связность сущностей (тег↔закон↔учёный)</h2>{connectivity_html}
+<h2>Express vs full analyses</h2>{tier_donut}
+<h2>Cover source (est. AI spend: ${img_cost_est:.2f})</h2>{img_donut}
+<h2>Translation coverage</h2><table>{cov_rows}</table>
+<h2>By arXiv category (top 15)</h2><table>{cat_rows}</table>
+<h2>Articles per day (last 30)</h2><table>{day_rows}</table>
+<h2>Integrity</h2>{warn}
+<h2>Concept graph connectivity</h2>{connectivity_html}
 </body></html>'''
     _write_text_retry(Path("status.html"), html)
     print(f"  📊 status.html ({total} статей, {authors_n} авторов)")
