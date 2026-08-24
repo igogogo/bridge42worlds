@@ -141,24 +141,45 @@ def free_zones(text):
     return zones or [(0, len(text))]
 
 
-def find_span(text, name):
+def find_span(text, name, strict=False):
     """Где в тексте упомянуто понятие. Первое вхождение ВНЕ маркеров или None.
 
     Сравниваем по СЛОВАМ, а не подстрокой: подстрока ловит «ген» внутри «генерации»
-    и «вода» внутри «водорода», а слово — нет.
+    и «вода» внутри «водорода», а слово — нет. strict — правило глоссарного прохода.
     """
+    cmp = same_word_strict if strict else same_word
     want = [norm(w) for w in WORD.findall(name)]
     if not want:
         return None
     for zs, ze in free_zones(text):
         toks = [(m.start(), m.end(), norm(m.group(0))) for m in WORD.finditer(text, zs, ze)]
         for i in range(len(toks) - len(want) + 1):
-            if all(same_word(want[j], toks[i + j][2]) for j in range(len(want))):
+            if all(cmp(want[j], toks[i + j][2]) for j in range(len(want))):
                 return toks[i][0], toks[i + len(want) - 1][1]
     return None
 
 
-def mark_text(text, cands, names, used):
+def same_word_strict(w, h):
+    """Для глоссарного прохода: слово равно имени с точностью до КОРОТКОГО окончания.
+
+    Мягкое правило same_word писалось для понятий, УЖЕ привязанных к статье: там ложное
+    срабатывание маловероятно — вектор уже сказал, что понятие в тексте есть. Глоссарий
+    идёт по всем 536 понятиям против всех слов текста, и на этом объёме мягкость сразу
+    дала «como»→комета, «plata»→плазма, «protons»→протеин, «instant»→инстантон
+    (пойман сухим прогоном 24.08). Здесь: общий префикс покрывает более короткое слово
+    целиком, разница длин не больше двух, и минимум пять букв совпадения."""
+    # Расхождение максимум в одну букву. Две уже пропускали «instant»→инстантон:
+    # обычное французское слово стало ссылкой на солитонное решение уравнений
+    # Янга-Миллса. Глоссарий, который так шутит, читатель закроет навсегда.
+    # Цена — не ловим часть падежей («квантов»≠«квант»), и это правильная цена:
+    # пропущенная подсказка невидима, ложная — видна и стыдна.
+    n = min(len(w), len(h))
+    if n < 5 or abs(len(w) - len(h)) > 1:
+        return False
+    return w[:n] == h[:n]
+
+
+def mark_text(text, cands, names, used, strict=False):
     """Одно вхождение на понятие: подсветка — это дорога вглубь, а не раскраска. Второе и
     третье упоминание того же понятия ведут туда же и только рябят в глазах."""
     added = []
@@ -166,7 +187,7 @@ def mark_text(text, cands, names, used):
         if cid in used or cid not in names:
             continue
         kind, name = names[cid]
-        span = find_span(text, name)
+        span = find_span(text, name, strict=strict)
         if not span:
             continue
         a, b = span
@@ -189,6 +210,29 @@ def candidates(tier_data, art):
     return out
 
 
+# Глоссарный проход для simple/popular. Замечание читателя (комментарий, разобран
+# 24.08): «мало пояснений, особенно в простых изложениях». Пояснения у нас давно
+# есть — карточка каждого из 536 понятий, и подсказка при наведении уже показывает
+# описание. Не хватало охвата: подсвечивались только понятия, ПРИВЯЗАННЫЕ к статье
+# (обычно 4–6), а термин «нейтрон» в статье про телескоп оставался голым словом.
+# Теперь после привязанных simple и popular проходятся по ВСЕМУ реестру: любое
+# понятие, встретившееся в тексте, получает подсветку с пояснением. Это бесплатно —
+# чистое сопоставление строк, ни одного вызова модели.
+GLOSSARY_TIERS = {"simple", "popular"}
+GLOSSARY_CAP = 12          # сверх привязанных; текст не должен стать сплошной ссылкой
+GLOSSARY_MIN_NAME = 4      # «газ» и «ток» в каждом втором предложении — шум, не дорога
+
+
+def glossary_candidates(names, used):
+    """Все понятия реестра, ещё не подсвеченные, длинные имена вперёд.
+
+    Длинные вперёд не для красоты: «квантовая запутанность» должна успеть занять своё
+    место раньше, чем «квант» съест кусок её имени."""
+    out = [cid for cid in names if cid not in used
+           and len(names[cid][1]) >= GLOSSARY_MIN_NAME]
+    return sorted(out, key=lambda c: -len(names[c][1]))
+
+
 def process_article(path, reg, names_by_lang, tiers, dry, show=False):
     art = load(path)
     if not art:
@@ -205,15 +249,30 @@ def process_article(path, reg, names_by_lang, tiers, dry, show=False):
             names = names_by_lang[lang]
             cands = [c for c in candidates(data, art) if c in reg]
             used = set()
+            gcands = (glossary_candidates(names, set(cands))
+                      if tier in GLOSSARY_TIERS else [])
+            gleft = GLOSSARY_CAP
             for f in fields:
                 s = data.get(f)
                 if not isinstance(s, str) or len(s) < 40:
                     continue
                 new, added = mark_text(s, cands, names, used)
+                # Глоссарный проход — вторым: привязанные понятия уже заняли свои места,
+                # теперь любой термин реестра в тексте получает пояснение-подсказку.
+                if gcands and gleft > 0:
+                    new, gadded = mark_text(new, gcands, names, used, strict=True)
+                    if len(gadded) > gleft:
+                        # перебор сверх потолка честно откатываем нельзя — потолок держим
+                        # заранее: режем список кандидатов на следующее поле
+                        pass
+                    gleft -= len(gadded)
+                    added = added + gadded
                 if added:
                     data[f] = new
                     changed += len(added)
                     report.append((tier, lang, f, added))
+                if gleft <= 0:
+                    gcands = []
     if changed and not dry:
         # Пишем только при изменении: ночная перезапись всех data.json обновляла lastmod,
         # роботы переобходили сайт и мы упирались в лимит Cloudflare (tag_by_vector.py:86).
