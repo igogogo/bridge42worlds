@@ -105,21 +105,63 @@ def fetch_batches(ids, key):
     return out
 
 
+def _sur(k):
+    return k.split("|", 1)[0]
+
+
+def _ini(k):
+    return k.split("|", 1)[1] if "|" in k else ""
+
+
 def match_paper(rows_akeys, paper):
     """Сопоставление наших akey с авторами S2 внутри одной работы.
-    Возвращает {akey: authorId} только для ОДНОЗНАЧНЫХ пар."""
+    Возвращает {akey: authorId} только для ОДНОЗНАЧНЫХ пар.
+
+    Два яруса. Первый — точное равенство ключей, единственное в обе стороны.
+
+    Второй появился после дефекта, пойманного ведущей на Панове: S2 сплошь и рядом
+    хранит СОКРАЩЁННОЕ имя («A. Panov» там, где у нас «Alexander D. Panov»), и точное
+    равенство наказывало за полноту — panov|ad не сопоставлялся вовсе, хотя S2 работы
+    знает. Чем полнее автор назван у нас, тем вернее он оставался пустым.
+
+    Поэтому ярус совместимости: фамилия та же, а один набор инициалов — префикс
+    другого («a» совместимо с «ad»). Совместимость слабее равенства, и на wang|y она
+    склеивала бы лишнее, — применяется ТОЛЬКО когда фамилия встречается ровно один раз
+    среди ВСЕХ авторов работы с обеих сторон (не среди оставшихся — среди всех:
+    так второй Панов в той же работе выключает ярус целиком). Риск при этом нулевой:
+    один Панов у нас, один в S2 — это один человек, как бы коротко его ни записали."""
     if not paper:
         return {}
+    s2_pairs = [(key_from_display(a.get("name") or ""), a["authorId"])
+                for a in paper.get("authors") or [] if a.get("authorId")]
     s2 = defaultdict(list)                       # ключ имени → [authorId]
-    for a in paper.get("authors") or []:
-        if a.get("authorId"):
-            s2[key_from_display(a.get("name") or "")].append(a["authorId"])
+    for k, aid in s2_pairs:
+        s2[k].append(aid)
+
     res = {}
     for akey in rows_akeys:
         cands = s2.get(akey) or []
-        # единственность в обе стороны: один кандидат у нас И один authorId у S2
+        # ярус 1 — единственность в обе стороны: один кандидат у нас И один у S2
         if len(cands) == 1 and rows_akeys.count(akey) == 1:
             res[akey] = cands[0]
+
+    # ярус 2 — совместимость инициалов при единственной фамилии с обеих сторон
+    our_sur = defaultdict(int)
+    for k in rows_akeys:
+        our_sur[_sur(k)] += 1
+    s2_sur = defaultdict(list)
+    for k, aid in s2_pairs:
+        s2_sur[_sur(k)].append((k, aid))
+    for akey in rows_akeys:
+        if akey in res:
+            continue
+        sur = _sur(akey)
+        if our_sur[sur] != 1 or len(s2_sur.get(sur) or []) != 1:
+            continue
+        k2, aid = s2_sur[sur][0]
+        i1, i2 = _ini(akey), _ini(k2)
+        if i1.startswith(i2) or i2.startswith(i1):
+            res[akey] = aid
     return res
 
 
