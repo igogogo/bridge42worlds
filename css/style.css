@@ -3695,7 +3695,10 @@ body.graph-fs-open .graph-fs-active svg { touch-action: manipulation; }
 /* ── Панель совета ────────────────────────────────────────────────────────────
    Первый экран отвечает на три вопроса: что решается, подал ли я голос, что от меня
    ждут. Объяснений нет — они в inside.html и about. */
-.cp { max-width: 680px; }
+/* Ширина панели — общая ширина содержимого. Было 680: остаток от времён, когда
+   у статьи была боковая колонка. Рядом с соседними блоками на 748 это читалось
+   как съехавший блок, а не как задумка. */
+.cp { max-width: var(--w-wide); }
 .cp-head { font-family: var(--mono); font-size: 13px; color: var(--soft);
     border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; margin-bottom: 16px; }
 .cp h2 { font-size: 16px; margin: 26px 0 10px; }

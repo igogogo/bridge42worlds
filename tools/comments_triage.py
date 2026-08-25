@@ -272,12 +272,15 @@ def build_page():
         html = f"""<!DOCTYPE html><html lang="{lang}"{rtl}><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{esc(title)} — bridge42worlds</title>
-<style>body{{font-family:system-ui,Arial,sans-serif;max-width:720px;margin:0 auto;
-padding:30px 18px;color:#2c2c2c}}h1{{font-size:20px}}h2{{font-size:14px;color:#555;
-margin:22px 0 6px}}</style></head><body>
+<link rel="stylesheet" href="/css/tokens.css">
+<style>body{{font-family:var(--sans);max-width:var(--w-text);margin:0 auto;
+padding:var(--s-6) var(--s-4) var(--s-8);color:var(--text);background:var(--bg);
+line-height:1.62}}h1{{font-family:var(--serif);font-size:24px;color:var(--ink);
+margin:0 0 var(--s-2)}}h2{{font-family:var(--mono);font-size:13px;color:var(--soft);
+margin:var(--s-6) 0 var(--s-2);font-weight:400}}</style></head><body>
 <h1>{esc(title)}</h1>
-<p style="font-style:italic;color:#a08030;margin:2px 0 10px">Vox populi</p>
-<p style="color:#888;font-size:13px">{esc(sub)}</p>
+<p style="font-style:italic;color:var(--ochre);margin:2px 0 10px">Vox populi</p>
+<p style="color:var(--soft);font-size:13px">{esc(sub)}</p>
 {imp_html}{day_blocks or f"<p>{esc(empty)}</p>"}
 </body></html>"""
         out = ROOT / "lang" / lang / "comments.html"
