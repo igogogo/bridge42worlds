@@ -5536,8 +5536,21 @@ def rebuild_indexes():
     # Дата последней сборки — витрина «обновлено …» на дашборде/в статистике (юзер 2026-07-24).
     import datetime
     Path("data").mkdir(exist_ok=True)
+    # Рядом с датой кладём ЧИСЛА КОРПУСА. Строка статистики под шапкой печатает
+    # «N статей · … · N авторов», и раньше брала их из данных: статьи считала по
+    # индексу (14.6 МБ), авторов — по графу авторов (24.4 МБ). Двадцать четыре
+    # мегабайта связей ради одного числа в строке. Числа меняются раз в сборку,
+    # поэтому их место здесь — в файле на двести байт.
+    try:
+        n_authors = len(json.loads(Path("data/authors-graph.json").read_text(encoding="utf-8")))
+    except Exception:
+        n_authors = 0
+    n_express = sum(1 for b in buckets.values() for e in b["popular"] if e.get("express"))
     Path("data/build-info.json").write_text(
-        json.dumps({"built": datetime.date.today().isoformat()}, ensure_ascii=False), encoding="utf-8")
+        json.dumps({"built": datetime.date.today().isoformat(),
+                    "articles": total, "authors": n_authors,
+                    "express": n_express, "full": total - n_express},
+                   ensure_ascii=False), encoding="utf-8")
     # Снимок в памяти устарел — страницы, которые соберутся дальше в этом же прогоне,
     # должны видеть только что записанные индексы, а не то, что было до перезаписи.
     drop_index_cache()

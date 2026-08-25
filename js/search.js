@@ -463,12 +463,16 @@ window.B42Refs = Promise.all(
     // во всех трёх видах. На статье и на карте проекта ни того, ни другого нет,
     // а разбор стоил 10,5 и 2,5 МБ. Обе функции остаются вызываемыми по требованию:
     // @-подсказки и фильтр авторов дёргают ensureAuthorsGraph сами.
-    if (HAS_LIST) {
-        whenIdle(function () {
-            ensureAuthorsGraph();
-            ensureOtherVersions();
-        });
-    }
+    // ПРОГРЕВА БОЛЬШЕ НЕТ. Здесь стояло whenIdle(ensureAuthorsGraph, ensureOtherVersions) —
+    // «в простое подтянем, чтобы поиск не ждал». Замер 25 августа: это 24.4 МБ графа
+    // авторов и 29.7 МБ двух соседних уровней индекса, на КАЖДОЙ странице со списком,
+    // включая читателя, который просто листает ленту и ничего не ищет. Страница понятия
+    // весила 71 МБ, из них 69 — эти четыре файла.
+    //
+    // Ленивая загрузка, которую всегда вызывают сразу, — это обычная загрузка с лишним
+    // кодом. Обе функции остались вызываемыми: поиск дёргает ensureOtherVersions сам
+    // (doFullSearch), @-подсказки и фильтр авторов — ensureAuthorsGraph. Первый поиск
+    // подождёт; платить за это всем читателям не нужно.
     return { tagsLoc: tagsLoc, lawsData: lawsData, scientistsData: scientistsData };
 }).catch(function(e) {
     console.error('Background data load error:', e);
@@ -550,14 +554,23 @@ function renderSiteStats() {
     var el = document.getElementById('site-stats');
     if (!el) return;
     var L = STATS_LABELS2[lang] || STATS_LABELS2.en;
+    // Числа корпуса приходят из build-info.json (двести байт), а не считаются по данным.
+    // Раньше статьи считались перебором индекса, авторы — перебором графа авторов: строка
+    // под шапкой молчала, пока не доедут 39 МБ, и ради неё же они и качались.
+    var B = window.__buildInfo || {};
     var uniq = {}, express = 0;
     searchIndex.forEach(function(a){ if (!uniq[a.id]) { uniq[a.id] = 1; if (a.express) express++; } });
-    var nA = Object.keys(uniq).length, full = nA - express;
+    var nA = B.articles || Object.keys(uniq).length;
+    var full = nA - (B.express || express);
     var nL = Object.keys(window.lawsData || {}).length;
     var nT = Object.keys(window.tagsLoc || {}).length;
     var nSec = Object.keys(window.ARXIV_CAT_NAMES || {}).length;
     var nS = Object.keys(window.scientistsData || {}).length;
-    var nAu = Object.keys(window.authorsGraph || {}).length;
+    // Ноль здесь значил бы «авторов нет», а на самом деле значит «число ещё не
+    // приехало»: граф авторов мы больше не качаем (24.4 МБ ради одной цифры).
+    // Неизвестное не печатаем — позиция просто отсутствует, пока не станет известной.
+    var nAu = (window.__buildInfo && window.__buildInfo.authors)
+              || Object.keys(window.authorsGraph || {}).length || 0;
     var nLang = (document.querySelectorAll('#langs-bar a').length || 4);
     // «5 языка» — грамматическая ошибка на самом видном месте главной (владелец 2026-08-02).
     // Русскому нужны три формы: 1 язык, 2-4 языка, 5+ языков.
@@ -572,16 +585,31 @@ function renderSiteStats() {
         part(nA, L.articles),
         part(nL, L.laws), part(nT, L.tags), part(nSec, L.sections),
         part(nS, L.scientists), part(nAu, L.authors), part(nLang, langWord)
-    ];
+    ].filter(function (s) { return s.indexOf('<b>0</b>') !== 0; });
     el.innerHTML = bits.join(' · ');
-    if (!el.dataset.builtLoaded) {
-        el.dataset.builtLoaded = '1';
+    var B2 = window.__buildInfo;
+    if (B2 && B2.built) {
         var upd = {ru:'обновлено', en:'updated', es:'actualizado', ar:'حُدّث', fr:'mis à jour'}[lang] || 'updated';
-        fetch('/data/build-info.json').then(function(r){ return r.json(); }).then(function(b){
-            if (b && b.built) el.innerHTML += ' <span class="stats-built">/ ' + upd + ' ' + b.built + '</span>';
-        }).catch(function(){});
+        el.innerHTML += ' <span class="stats-built">/ ' + upd + ' ' + B2.built + '</span>';
     }
 }
+
+/* Числа корпуса и дата сборки — один запрос на двести байт, один раз за страницу.
+   Раньше он жил внутри renderSiteStats под флажком на элементе; чтобы перерисовать
+   строку с приехавшими числами, флажок приходилось снимать — и перерисовка запускала
+   загрузку заново, по кругу. Здесь этого не может случиться по устройству: функция
+   вызывается один раз, а рисование ничего не грузит. */
+(function loadBuildInfo() {
+    if (!document.getElementById('site-stats')) return;
+    fetch('/data/build-info.json')
+        .then(function (r) { return r.json(); })
+        .then(function (b) {
+            if (!b) return;
+            window.__buildInfo = b;
+            renderSiteStats();
+        })
+        .catch(function () {});
+})();
 
 function parseSearchQuery(query) {
     var filters = { tags: [], authors: [], scientists: [], text: '' };

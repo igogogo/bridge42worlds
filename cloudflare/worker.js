@@ -2252,6 +2252,17 @@ async function handleFeed(request, env) {
     where.push(cat.includes(".") ? "primary_category = ?" : "primary_category LIKE ?");
     args.push(cat.includes(".") ? cat : cat + "%");
   }
+  // День — для клика по календарю. Формат проверяем строго: в SQL уходит привязкой,
+  // но кривое значение всё равно должно отваливаться здесь, а не искаться впустую.
+  const day = (url.searchParams.get("date") || "").slice(0, 10);
+  if (/^\d{4}-\d{2}-\d{2}$/.test(day)) { where.push("date = ?"); args.push(day); }
+
+  // Глубина разбора: 1 — только экспрессы, 0 — только полные. Отсутствие параметра
+  // означает «всё», и это не то же самое, что express=0 — поэтому проверяем строку,
+  // а не приводим к числу (иначе "0" и "" сольются).
+  const ex = url.searchParams.get("express");
+  if (ex === "0" || ex === "1") { where.push("express = ?"); args.push(Number(ex)); }
+
   const w = where.join(" AND ");
   const order = sort === "new" ? "date DESC, id DESC"
     : sort === "old" ? "date ASC, id ASC"
@@ -2273,6 +2284,42 @@ async function handleFeed(request, env) {
     more: items.length === limit,
     ...(cnt ? { total: cnt.n } : {}),
   });
+  request.method === "GET" && (await cache.put(request, out.clone()));
+  return out;
+}
+
+/* Сводка корпуса: сколько статей в каждом дне и сколько всего.
+ *
+ * Одна группировка закрывает сразу четыре места, которые раньше держали на клиенте
+ * весь индекс: календарь (в каком дне сколько работ), строка статистики под шапкой,
+ * подписи фильтра «экспресс / полные / с разбором» и проверка «есть ли вообще что-то
+ * за этот день» перед запросом ленты.
+ *
+ * Дат в архиве 437 — ответ около десяти килобайт. Против 14,6 МБ индекса это и есть
+ * весь смысл затеи: клиенту нужны ЧИСЛА по дням, а он ради них качал все тексты.
+ */
+async function handleCorpus(request, env) {
+  if (!env.CARDS) return noCards();
+  const url = new URL(request.url);
+  const cache = caches.default;
+  const hit = await cache.match(request);
+  if (hit) return hit;
+
+  const { lang, version } = feedParams(url);
+  const rows = await env.CARDS.prepare(
+    `SELECT date, COUNT(*) n, SUM(express) ex, SUM(km) km
+       FROM cards WHERE lang = ? AND version = ?
+      GROUP BY date ORDER BY date`).bind(lang, version).all();
+
+  const days = {};
+  let total = 0, express = 0, km = 0;
+  for (const r of rows.results || []) {
+    // Клиенту отдаём тройку [всего, экспрессов, с разбором] вместо трёх объектов:
+    // на четырёхстах днях разница в весе ответа заметна, а читается так же.
+    days[r.date] = [r.n, r.ex || 0, r.km || 0];
+    total += r.n; express += r.ex || 0; km += r.km || 0;
+  }
+  const out = feedJson({ days, total, express, km, full: total - express });
   request.method === "GET" && (await cache.put(request, out.clone()));
   return out;
 }
@@ -2807,6 +2854,7 @@ export default {
     if (url.pathname === "/api/tutor") return withCors(await handleTutor(request, env));
     if (url.pathname === "/api/search") return withCors(await handleSearch(request, env));
     if (url.pathname === "/api/feed") return withCors(await feedGuard(request, env, handleFeed));
+    if (url.pathname === "/api/corpus") return withCors(await feedGuard(request, env, handleCorpus));
     if (url.pathname === "/api/author") return withCors(await feedGuard(request, env, handleAuthorFeed));
     if (url.pathname === "/api/author/claim") return withCors(await feedGuard(request, env, handleAuthorClaim));
     if (url.pathname === "/api/author/confirm") return feedGuard(request, env, handleAuthorConfirm);
