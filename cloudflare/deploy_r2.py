@@ -80,7 +80,12 @@ SKIP_DIR_NAMES = {"api"}
 # публикации. Адрес при этом угадывается — код работы идёт подряд (b42p-ГОД-NNN), так что
 # перебрать их мог кто угодно. Публиковать положено ТОЛЬКО собранные страницы под
 # lang/*/community/, куда мы сами кладём то, что решили показать.
-SKIP_PATH_PREFIXES = ("data/arxiv-bulk/", "data/arxiv-bulk", "data/bulk-select",
+# Контакты авторов — ВТОРОЙ замок, поверх .gitignore. Один список, от которого
+# зависит и git, и публикация, — это одна точка отказа: достаточно, чтобы кто-то
+# завёл файл и не вспомнил про строку, и персональные данные уезжают в открытый
+# доступ. Здесь тот же запрет записан отдельно и по существу.
+SKIP_PATH_PREFIXES = ("data/authors-contacts", "data/authors-outreach",
+                      "data/arxiv-bulk/", "data/arxiv-bulk", "data/bulk-select",
                       "data/prompts/", "data/arxiv-index", "data/submissions/",
                       "data/submissions")
 
