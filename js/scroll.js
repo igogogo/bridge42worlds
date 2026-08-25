@@ -130,6 +130,17 @@ async function initScroll() {
                             advanced: 'articles-index-advanced.json', mini: 'articles-index.json' };
         var sameTier = typeof window.effVersion === 'function'
             && window.effVersion() === (version === 'mini' ? 'popular' : version);
+        // ИНДЕКС ЗДЕСЬ БОЛЬШЕ НЕ КАЧАЕТСЯ САМ. Он нужен был двум блокам: «похожие»
+        // и кнопке «следующая». Оба теперь питаются ответом /api/side (7 КБ), который
+        // приходит в начале страницы. Качать 14.6 МБ ради того же — та же ошибка, что
+        // и на ленте, только на самой посещаемой странице сайта.
+        //
+        // Запасной путь цел: если облако промолчало, пул похожих пуст, и тогда — и
+        // только тогда — поднимаем индекс и ищем по тегам, как раньше.
+        if (window.__sidePool && window.__sidePool.length) {
+            updateNextButton(version);
+            return;
+        }
         try {
             if (sameTier && typeof window.ensureSearchIndex === 'function') {
                 articlesIndex = await window.ensureSearchIndex() || [];
@@ -203,6 +214,11 @@ function sideArgs() {
             if (d && d.related && d.related.length && box) {
                 drawRelated(box, d.related.map(function (a) { return { a: a }; }),
                             args[1], args[2]);
+                // Тем же ответом питаем кнопку «следующая статья». Раньше она ждала
+                // индекс на 14.6 МБ и до того молчала — читатель, долиставший быстро,
+                // видел кнопку без цели.
+                window.__sidePool = d.related.concat(d.cited || []);
+                updateNextButton(args[2]);
             } else {
                 legacyRelated();
             }
@@ -386,7 +402,21 @@ fetch('/data/cited-ours.json').then(function (r) { return r.json(); })
         renderCitedOurs.apply(null, args);
     }).catch(function () { _citedOurs = {}; });
 
+/* Следующая — первая непрочитанная из похожих. Похожие подобраны по СМЫСЛУ текстов,
+   а перебор ниже искал по совпадению тегов: две работы про «энтропию» бывают о разном,
+   и это правило уже записано выше по файлу — просто до кнопки не дошло. */
+function nextFromPool() {
+    var pool = window.__sidePool;
+    if (!pool || !pool.length) return null;
+    for (var i = 0; i < pool.length; i++) {
+        if (!viewedIds.has(pool[i].id)) return pool[i];
+    }
+    return null;
+}
+
 function findNextArticle(currentTags, mainTag) {
+    var fromPool = nextFromPool();
+    if (fromPool) return fromPool;
     var candidates = articlesIndex
         .filter(function(a) { return !viewedIds.has(a.id); })
         .map(function(a) {

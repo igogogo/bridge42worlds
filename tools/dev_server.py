@@ -154,7 +154,62 @@ def handle_find(q):
             "more": len(chunk) == limit, "total": len(hits)}
 
 
-ROUTES = {"/api/feed": handle_feed, "/api/corpus": handle_corpus, "/api/find": handle_find}
+@lru_cache(maxsize=1)
+def related_map():
+    p = ROOT / "data" / "related-vec.json"
+    if not p.exists():
+        return {}
+    try:
+        return json.loads(p.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+
+def handle_side(q):
+    """Обвязка статьи: похожие и «мы писали» одним ответом — как в воркере.
+
+    У воркера источник — таблица article_side, здесь — data/related-vec.json, из
+    которого она и залита. Форма ответа та же: готовые карточки, а не идентификаторы.
+    """
+    lang, version, _, _ = feed_params(q)
+    raw_id = ((q.get("id") or [""])[0])[:24]
+    # Идентификаторы живут в ДВУХ видах: старые без суффикса версии (0905.0049),
+    # новые с ним (2608.20327v1). Воркер спрашивает базу про оба; здесь то же самое,
+    # иначе половина архива молча остаётся без похожих.
+    bare = raw_id.split("v")[0]
+    m = related_map()
+    rel = m.get(raw_id) or m.get(bare) or m.get(bare + "v1") or []
+    ids = []
+    for r in rel[:12]:
+        # элементы бывают словарями {id, score} и голыми строками — та же ловушка,
+        # на которой однажды в базу легли обрывки «{'id': '17…»
+        ids.append(r.get("id") if isinstance(r, dict) else r)
+    want = set(ids) | {i.split("v")[0] for i in ids}
+    by = {}
+    for a in index_of(lang, version):
+        i = a.get("id")
+        if i in want or i.split("v")[0] in want:
+            by[i] = a
+            by[i.split("v")[0]] = a
+    seen, out = set(), []
+    for i in ids:
+        a = by.get(i) or by.get(i.split("v")[0])
+        if a and a["id"] not in seen:
+            seen.add(a["id"])
+            out.append(card(a))
+    return {"related": out, "cited": [], "frames": 0}
+
+
+ROUTES = {"/api/feed": handle_feed, "/api/corpus": handle_corpus,
+          "/api/find": handle_find, "/api/side": handle_side}
+
+
+class Server(ThreadingHTTPServer):
+    # Windows по умолчанию позволяет ВТОРОМУ процессу сесть на занятый порт, и тогда
+    # запросы разбираются между ними как повезёт. Обошлось это дорого: дважды я мерила
+    # страницу, которую отдавал старый процесс, и дважды искала ошибку не там.
+    # Пусть второй запуск падает громко.
+    allow_reuse_address = False
 
 
 class Handler(SimpleHTTPRequestHandler):
@@ -192,7 +247,11 @@ def main():
     ap = argparse.ArgumentParser(description="Локальный сайт с ручками облака")
     ap.add_argument("--port", type=int, default=8420)
     args = ap.parse_args()
-    srv = ThreadingHTTPServer(("", args.port), Handler)
+    try:
+        srv = Server(("", args.port), Handler)
+    except OSError as e:
+        print(f"порт {args.port} занят — сначала останови прежний сервер ({e})")
+        raise SystemExit(1)
     print(f"сайт с ручками: http://localhost:{args.port}")
     print("  /api/feed  /api/corpus  /api/find   (остальное — файлы)")
     try:
