@@ -173,6 +173,12 @@ def captions_for_lang(captions_field, lang):
     """captions в data.json — {"en": [...], "ru": [...], "es": [...]} (переведённые). Старые
     статьи (до этой фичи) хранят плоский английский список — тогда отдаём его как есть для
     любого языка (деградация без перевода, не крэш) до перегенерации/бэкфилла."""
+    # Гейт показа. Загрузка новых подписей уже выключена, но у 3 995 статей архива они
+    # лежат в data.json с прошлых прогонов — без этой проверки обрывки остались бы на
+    # страницах навсегда. Данные НЕ стираем: чинить regex проще, имея на руках то, что
+    # он выдавал, и включение обратно — это один ключ, а не повторная выкачка PDF.
+    if not config.get("pdf_captions"):
+        return []
     if isinstance(captions_field, dict):
         return captions_field.get(lang) or captions_field.get("en") or []
     return captions_field or []
@@ -4823,7 +4829,21 @@ def _build_article(a, date_str, inputs, force=False, express=False, known_licens
             else:
                 pdf = download_pdf(a["id"])
             text, imgs = parse_pdf(pdf)
-            captions = extract_captions(text)  # подписи ищем в полном тексте (в списке литературы их нет)
+            # Подписи к рисункам ВЫКЛЮЧЕНЫ (владелец 2026-08-25: «лучше пока совсем эти
+            # подписи убрать, пока мы не научимся хорошо подписывать»).
+            #
+            # Замер, из которого это следует: 18 143 подписи на 3 995 статей, из них 92% —
+            # обрывки фраз. Причина в extract_captions: regex берёт текст ДО КОНЦА СТРОКИ
+            # («до конца строки»), а в тексте, вынутом из PDF, подпись разложена на несколько
+            # строк. Получается «The pure nuclear and» или вовсе обрыв на переносе по
+            # слогам — «The magnetization ex-». Каждый такой обрывок мы ещё и переводили
+            # на четыре языка, то есть платили за перевод мусора.
+            #
+            # Гасим здесь, на загрузке, а не только на показе: пустой список сам собой
+            # отключает и перевод (оба места ниже проверяют `if captions`), и запись в
+            # data.json. Чинить regex будем отдельно и с проверкой — тогда и включим
+            # обратно одним ключом.
+            captions = extract_captions(text) if config.get("pdf_captions") else []
             body, refs = split_references(text)
             a["cited_arxiv"] = extract_ref_arxiv_ids(refs)  # на будущее: связь с релевантными работами
             text = re.sub(r'https?://\S+', '', body)  # тело без литературы и URL → экономия ~20% токенов в промте
@@ -6016,7 +6036,10 @@ def translate_article_lang(aid, target_lang, force=False):
         changed = True
 
     captions = data.get("captions") or {}
-    if target_lang != "en" and isinstance(captions, dict) and captions.get("en") and (force or not captions.get(target_lang)):
+    # config.pdf_captions выключен — старые подписи на новые языки не дотягиваем: это
+    # деньги за перевод обрывков, которые всё равно не будут показаны.
+    if (config.get("pdf_captions") and target_lang != "en" and isinstance(captions, dict)
+            and captions.get("en") and (force or not captions.get(target_lang))):
         captions[target_lang] = translate_captions(captions["en"], target_lang)
         data["captions"] = captions
         changed = True

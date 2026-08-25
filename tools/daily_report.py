@@ -196,6 +196,36 @@ def services():
     return out[:8]
 
 
+def cards_gap():
+    """Совпадает ли то, что на диске, с тем, что отдаёт сайт.
+
+    С 25 августа лента, страницы авторов и поиск словами читаются из D1, а не из
+    articles-index*.json. Значит появился новый способ сломаться молча: прогон отработал,
+    страницы собрались, а в базу ничего не уехало — и сайт бодро показывает вчерашний
+    архив, ничем не выдавая, что отстал. Ровно так база b42-cards простояла девятнадцать
+    дней с данными от 5 августа, и не хватился никто.
+
+    Поэтому сверка идёт в отчёт КАЖДОЕ утро, даже когда всё сошлось: строка «совпадает»
+    стоит дёшево, а её отсутствие однажды окажется единственным следом поломки.
+    Ошибку доступа к облаку не глушим — она тоже новость.
+    """
+    import json as _j
+    try:
+        disk = len(_j.loads((ROOT / "lang" / "ru" / "articles-index.json")
+                            .read_text(encoding="utf-8")))
+    except Exception:
+        return None
+    try:
+        import sys as _s
+        _s.path.insert(0, str(ROOT / "cloudflare"))
+        import cards_sync as cs
+        r = cs.q("SELECT COUNT(*) n, MAX(date) last FROM cards "
+                 "WHERE lang = 'ru' AND version = 'popular'")[0]
+        return {"disk": disk, "db": r["n"], "last": r["last"] or ""}
+    except Exception as e:
+        return {"disk": disk, "db": None, "err": f"{type(e).__name__}"}
+
+
 def pending():
     """Открытые вопросы из незавершёнки: только заголовки разделов, требующих решения."""
     p = ROOT / "НЕЗАВЕРШЁНКА.md"
@@ -313,6 +343,7 @@ def build(day):
     c = council()
     letters = mail(day)
     svc = services()
+    cg = cards_gap()
     open_q = pending()
 
     L = [f"📋 <b>Отчёт за {day}</b>"]
@@ -365,6 +396,18 @@ def build(day):
         bad = [f"{n}: {s}" for n, s in svc if s.lower() not in ("готово", "ready", "running")]
         L.append(f"\n🔧 <b>Сервисы</b>: {len(svc)} задач в расписании"
                  + (f", требуют внимания: {', '.join(bad[:3])}" if bad else ", все в норме"))
+
+    if cg:
+        if cg.get("db") is None:
+            L.append('\n' + f"🗂 <b>Облако</b>: база карточек не ответила ({cg.get(chr(39)+chr(101)+chr(114)+chr(114)+chr(39))}) — "
+                     f"лента и авторы могли остаться на старых данных")
+        elif cg["disk"] == cg["db"]:
+            L.append('\n' + f"🗂 <b>Облако</b>: карточек {cg['db']}, совпадает с диском, "
+                     f"последняя {cg['last']}")
+        else:
+            L.append('\n' + f"🗂 <b>Облако</b>: РАСХОЖДЕНИЕ — на диске {cg['disk']}, "
+                     f"в базе {cg['db']} (последняя {cg['last']}). "
+                     f"Починка: python cloudflare/cards_sync.py --apply")
 
     L.extend(week_block(day))
 

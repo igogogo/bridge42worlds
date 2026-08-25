@@ -1239,6 +1239,19 @@ p { margin-bottom: 16px; color: var(--text); text-align: left; }
 .card-img-wrap { float: left; width: 130px; aspect-ratio: 3 / 2; overflow: hidden; border-radius: 10px; background: var(--border); display: block; margin: 2px 16px 8px 0; }
 .card-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .25s ease; }
 .article-card:hover .card-img-wrap img { transform: scale(1.03); }
+
+/* Карусель миниатюр в ленте (js/carousel.js, владелец 2026-08-25: «динамики не хватает»).
+   Класс has-carousel ставит скрипт, и только тем карточкам, у которых кадры реально есть —
+   у остальных раскладка остаётся прежней до пикселя. Слоёв два: подмена src у одной
+   картинки даёт мигание на время загрузки, два слоя гасят его перекрытием.
+   Специфичность (0,2,1) выше, чем у общего `.card-img-wrap img` ниже по файлу, — поэтому
+   position:absolute не перебивается тамошним position:relative, где бы правило ни стояло. */
+.card-img-wrap.has-carousel { position: relative; }
+.card-img-wrap.has-carousel img {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    /* transform оставлен: наведение по-прежнему чуть приближает картинку */
+    transition: transform .25s ease, opacity .55s ease;
+}
 .card-body { display: block; }
 /* Мета-строка «eyebrow» над картинкой (js/search.js) — полная ширина, чтобы плавающая
    мини-картинка встала под ней вровень с заголовком. */
@@ -3867,3 +3880,10 @@ body.graph-fs-open .graph-fs-active svg { touch-action: manipulation; }
   border: none; background: none; padding: 0; border-radius: 0;
   margin: 0 12px 3px 0; }
 .card-body .card-tags .ent:hover { text-decoration: underline; }
+
+/* Значок «собственный разбор» у названия: работа под лицензией, не разрешающей
+   переработку, поэтому у неё нет авторских иллюстраций и подписей. Тот же вес, что
+   у значка машины знаний, но своим символом — читатель различает их с одного взгляда. */
+.lic-badge { font-size: .62em; vertical-align: super; color: var(--soft);
+  cursor: help; margin-left: 2px; }
+.lic-badge:hover { color: var(--link); }
