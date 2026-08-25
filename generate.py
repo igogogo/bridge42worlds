@@ -169,6 +169,19 @@ def make_thumbnails(folder, max_pdf=None, width=220):
     return n
 
 
+def _akey_of(name):
+    """Ключ автора «фамилия|инициалы» — ТЕМ ЖЕ кодом, что строит реестр авторов.
+
+    Своя копия правила здесь была бы третьей (реестр, синхронизация в D1, страница),
+    а расходятся такие копии молча: страница просит у базы ключ, которого там нет,
+    и автор видит пустой список вместо своих работ."""
+    try:
+        from tools.author_record import key_from_display
+        return key_from_display(name) or ""
+    except Exception:
+        return ""
+
+
 def captions_for_lang(captions_field, lang):
     """captions в data.json — {"en": [...], "ru": [...], "es": [...]} (переведённые). Старые
     статьи (до этой фичи) хранят плоский английский список — тогда отдаём его как есть для
@@ -3918,6 +3931,11 @@ def update_all_authors():
                 fav_title=safe(nav_fav_title(lang)),
                 version_toggle_html="",
                 author_slug=attr_safe(slug),
+                # Ключ автора для /api/author. Слуг страницы выводится из ОТОБРАЖАЕМОГО
+                # имени и годится только как адрес; ключ же — фамилия плюс все инициалы,
+                # и считает его тот самый код, что строит реестр авторов. Два разных
+                # ключа из одного имени развели бы страницу и базу.
+                author_akey=attr_safe(_akey_of(author_name)),
                 author_name=author_name, author_name_attr=attr_safe(author_name),
                 author_tags_attr=attr_safe(",".join(author_tags)),
                 graph_mini_label=safe(MINI_LABEL.get(lang, MINI_LABEL["en"])),

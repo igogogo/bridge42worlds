@@ -2277,8 +2277,25 @@ async function handleFeed(request, env) {
   return out;
 }
 
-/* Страница автора. Связь «автор — работа» лежит без языка и уровня (см. cards_sync):
-   один человек — один набор работ, а карточка к ним подбирается на лету. */
+/* Страница автора: работы, разложенные по РЕАЛЬНЫМ людям, а не по совпадению подписи.
+ *
+ * Наш ключ автора — фамилия плюс инициалы (panov|ad). Этого мало: проход по Semantic
+ * Scholar 25 августа показал, что 3 011 наших ключей — это несколько разных исследователей
+ * (zhang|y — семьдесят восемь человек, wang|y — семьдесят пять, panov|a — три). Смешивать
+ * их в один список нельзя: владелец на этот счёт высказался прямо — «лучше две страницы,
+ * чем одна с чужими работами».
+ *
+ * ПОЧЕМУ ОДНА СТРАНИЦА С ГРУППАМИ, А НЕ НЕСКОЛЬКО СТРАНИЦ. Довод стратега, и он читательский,
+ * а не технический: человек приходит сюда, кликнув ИМЯ под статьёй, — он ещё не знает, который
+ * из трёх Пановых ему нужен. Страница имени как развилка соответствует тому, что он кликнул.
+ * Требование «не смешивать» выполняют жёстко разделённые группы, а не разные адреса. У каждой
+ * группы свой якорь (#s2-37745877): для писем авторам нужна ссылка на ЕГО группу, и якорь это
+ * закрывает, не плодя синтетических адресов, которые человеку ничего не говорят.
+ *
+ * ГРУППА БЕЗ ИДЕНТИФИКАТОРА идёт ПОСЛЕДНЕЙ и говорит о НАШЕЙ неуверенности, а не о работах:
+ * S2 знает не всё, а внутри работы с двумя однофамильцами не разводит никого вовсе. Слово
+ * «не подтверждено» на странице не употребляется — оно читается как сомнение в самой работе.
+ */
 async function handleAuthorFeed(request, env) {
   if (!env.CARDS) return noCards();
   const url = new URL(request.url);
@@ -2292,39 +2309,86 @@ async function handleAuthorFeed(request, env) {
     return Response.json({ error: "bad_key" }, { status: 400 });
   }
   const db = env.CARDS;
-  const [rows, stat, bycat] = await Promise.all([
-    db.prepare(
+  // Листание ВНУТРИ группы: клиент просит продолжение конкретного человека. "none" —
+  // та самая последняя группа без идентификатора.
+  const s2 = (url.searchParams.get("s2") || "").slice(0, 24);
+  if (s2) {
+    const cond = s2 === "none" ? "COALESCE(a.person_id, a.s2_author_id) IS NULL" : "COALESCE(a.person_id, a.s2_author_id) = ?";
+    const args = s2 === "none" ? [akey, lang, version] : [akey, s2, lang, version];
+    const rows = await db.prepare(
       `SELECT ${FEED_COLS.split(", ").map((c) => "c." + c).join(", ")}
          FROM card_authors a JOIN cards c ON c.id = a.id
-        WHERE a.akey = ? AND c.lang = ? AND c.version = ?
+        WHERE a.akey = ? AND ${cond} AND c.lang = ? AND c.version = ?
         ORDER BY a.date DESC, c.id DESC LIMIT ? OFFSET ?`)
-      .bind(akey, lang, version, limit, offset).all(),
-    // Сводка считается только на первой странице — при прокрутке она не меняется.
-    page === 0 ? db.prepare(
-      `SELECT COUNT(*) total, SUM(c.express) express, SUM(c.km) km, MIN(c.date) first, MAX(c.date) last
-         FROM card_authors a JOIN cards c ON c.id = a.id
-        WHERE a.akey = ? AND c.lang = ? AND c.version = ?`)
-      .bind(akey, lang, version).first() : Promise.resolve(null),
-    page === 0 ? db.prepare(
-      `SELECT c.primary_category cat, COUNT(*) n
-         FROM card_authors a JOIN cards c ON c.id = a.id
-        WHERE a.akey = ? AND c.lang = ? AND c.version = ?
-        GROUP BY cat ORDER BY n DESC LIMIT 12`)
-      .bind(akey, lang, version).all() : Promise.resolve(null),
-  ]);
-  const items = (rows.results || []).map(feedRow);
+      .bind(...args, limit, offset).all();
+    const items = (rows.results || []).map(feedRow);
+    const out = feedJson({ items, page, limit, more: items.length === limit });
+    request.method === "GET" && (await cache.put(request, out.clone()));
+    return out;
+  }
+
+  // Первый заход: состав страницы целиком — сколько людей, у кого сколько работ, и первая
+  // порция карточек каждого. Считается ОДНИМ запросом на сводку плюс по запросу на группу:
+  // групп у подавляющего большинства ключей ровно одна, а рекордсмены вроде zhang|y режутся
+  // потолком ниже — семьдесят восемь заголовков на странице всё равно никто не прочтёт.
+  const summary = await db.prepare(
+    `SELECT COALESCE(a.person_id, a.s2_author_id) s2, MAX(a.s2_name) s2name, COUNT(*) total,
+            SUM(c.express) express, SUM(c.km) km, MIN(c.date) first, MAX(c.date) last
+       FROM card_authors a JOIN cards c ON c.id = a.id
+      WHERE a.akey = ? AND c.lang = ? AND c.version = ?
+      GROUP BY COALESCE(a.person_id, a.s2_author_id)
+      ORDER BY (COALESCE(a.person_id, a.s2_author_id) IS NULL) ASC, COUNT(*) DESC`)
+    .bind(akey, lang, version).all();
+
+  const rowsAll = summary.results || [];
+  const GROUP_CAP = 12;                     // столько групп показываем, остальное — числом
+  const shown = rowsAll.slice(0, GROUP_CAP);
+  const rest = rowsAll.slice(GROUP_CAP);
+
+  const groups = [];
+  for (const g of shown) {
+    const cond = g.s2 == null ? "COALESCE(a.person_id, a.s2_author_id) IS NULL" : "COALESCE(a.person_id, a.s2_author_id) = ?";
+    const args = g.s2 == null ? [akey, lang, version] : [akey, g.s2, lang, version];
+    const [rows, cats] = await Promise.all([
+      db.prepare(
+        `SELECT ${FEED_COLS.split(", ").map((c) => "c." + c).join(", ")}
+           FROM card_authors a JOIN cards c ON c.id = a.id
+          WHERE a.akey = ? AND ${cond} AND c.lang = ? AND c.version = ?
+          ORDER BY a.date DESC, c.id DESC LIMIT ?`)
+        .bind(...args, limit).all(),
+      db.prepare(
+        `SELECT c.primary_category cat, COUNT(*) n
+           FROM card_authors a JOIN cards c ON c.id = a.id
+          WHERE a.akey = ? AND ${cond} AND c.lang = ? AND c.version = ?
+          GROUP BY cat ORDER BY n DESC LIMIT 6`).bind(...args).all(),
+    ]);
+    const items = (rows.results || []).map(feedRow);
+    groups.push({
+      s2: g.s2 || null,
+      // Имя из записи S2 — заголовок группы: оно часто полнее нашего и именно им человек
+      // отличает своего Панова. Если поле ещё не заполнено (проход S2 идёт отдельно),
+      // клиент подставит наше отображаемое имя — страница не должна ждать чужой работы.
+      name: g.s2name || null,
+      total: g.total, express: g.express || 0,
+      full: (g.total || 0) - (g.express || 0),
+      km: g.km || 0, first: g.first || "", last: g.last || "",
+      sections: (cats.results || []).map((r) => ({ cat: r.cat, n: r.n })),
+      items, more: items.length === limit,
+    });
+  }
+
+  const sum = (f) => rowsAll.reduce((s, g) => s + (g[f] || 0), 0);
   const out = feedJson({
-    items, page, limit, more: items.length === limit,
-    ...(stat ? {
-      stats: {
-        total: stat.total || 0,
-        express: stat.express || 0,
-        full: (stat.total || 0) - (stat.express || 0),
-        km: stat.km || 0,
-        first: stat.first || "", last: stat.last || "",
-        sections: (bycat && bycat.results || []).map((r) => ({ cat: r.cat, n: r.n })),
-      },
-    } : {}),
+    groups,
+    people: rowsAll.filter((g) => g.s2 != null).length,
+    hiddenGroups: rest.length,
+    hiddenWorks: rest.reduce((s, g) => s + (g.total || 0), 0),
+    stats: {
+      total: sum("total"), express: sum("express"),
+      full: sum("total") - sum("express"), km: sum("km"),
+      first: rowsAll.reduce((a, g) => (!a || (g.first && g.first < a) ? g.first : a), ""),
+      last: rowsAll.reduce((a, g) => (g.last > a ? g.last : a), ""),
+    },
   });
   request.method === "GET" && (await cache.put(request, out.clone()));
   return out;
@@ -2381,6 +2445,216 @@ async function handleWordSearch(request, env) {
 }
 
 
+/* ─────────────── ЗАЯВКИ АВТОРОВ: пять действий, подтверждаемых письмом ───────────────
+ *
+ * Владелец 25 августа: у автора на его странице должно быть пять действий — «всё верно»,
+ * «не хватает моей статьи», «вон тот автор тоже я», «эта статья не моя», «уберите мою
+ * страницу». И условие: «только надо прислать письмо с аккредитованного адреса».
+ *
+ * ПОЧЕМУ АДРЕС СПРАШИВАЕМ, ХОТЯ ОН У НАС ЕСТЬ. Он есть — но на рабочей машине, не здесь.
+ * В облако адреса не уезжают решением того же дня (реестр контактов едва не утёк в открытый
+ * доступ, потому что deploy_r2 публикует всю папку data). Поэтому в D1 лежат только
+ * ОТПЕЧАТКИ адресов: восстановить из них адрес нельзя, сличить введённый — можно.
+ * Человек называет свою почту, мы сверяем отпечаток с тем, что стоит в его же статье, и
+ * шлём письмо на адрес, который он сам и назвал. Адреса у нас в облаке нет ни секунды —
+ * ровно то, что просил владелец: «почту не показываем».
+ *
+ * Побочно закрыта рассылочная пушка: чтобы вызвать письмо на чужой адрес, надо этот адрес
+ * уже знать. Кто знает — напишет и без нас.
+ *
+ * ЧЕГО ЗДЕСЬ НЕТ НАМЕРЕННО. Ответ не различает «адрес не тот» и «адреса у нас нет»: иначе
+ * перебором можно было бы выяснять, какой почтой подписана чужая статья. Несовпадение молча
+ * уходит в ручной разбор — человек получает честное «мы посмотрим глазами», а не подсказку.
+ */
+const CLAIM_ACTIONS = ["confirm", "add", "merge", "remove", "withdraw"];
+const CLAIM_TTL_DAYS = 7;
+const CLAIM_MAIL_PER_DAY = 1;      // писем на одного автора в сутки
+
+async function claimFingerprint(env, email) {
+  // Тот же отпечаток, что считает tools/author_claims.py: HMAC-SHA256 на SERVICE_KEY с
+  // приставкой. Приставка разделяет назначения — один секрет, разные пространства.
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    "raw", enc.encode(env.SERVICE_KEY || ""), { name: "HMAC", hash: "SHA-256" },
+    false, ["sign"]);
+  const sig = await crypto.subtle.sign("HMAC", key,
+    enc.encode("b42-author-email:" + email));
+  return [...new Uint8Array(sig)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+function claimEmail(e) {
+  // Та же чистка, что на машине: из PDF адрес приходит со знаком сноски спереди.
+  return String(e || "").trim().toLowerCase().replace(/^[0-9*†‡§¶,;]+/, "").slice(0, 200);
+}
+
+const CLAIM_TXT = {
+  ru: {
+    sent: "Мы отправили письмо для подтверждения на адрес, указанный в вашей работе. " +
+          "Перейдите по ссылке из письма — и просьба будет исполнена.",
+    manual: "Мы приняли просьбу и разберём её глазами: адрес, который вы назвали, не совпал " +
+            "с тем, что указан в работе. Так бывает, если вы сменили место работы.",
+    limit: "Письмо для этого автора уже отправлено сегодня. Проверьте почту, включая папку со спамом.",
+    done: "Готово. Спасибо — вы поправили не только свою страницу: по вашему подтверждению мы " +
+          "учимся отличать однофамильцев вернее.",
+    gone: "Ссылка уже использована или устарела. Начните заново со страницы автора.",
+  },
+  en: {
+    sent: "We have sent a confirmation letter to the address given in your paper. " +
+          "Follow the link in it and the request will be carried out.",
+    manual: "We have taken your request and will look at it by hand: the address you gave does " +
+            "not match the one in the paper. That happens when you change institution.",
+    limit: "A letter for this author has already been sent today. Please check your mail, spam included.",
+    done: "Done. Thank you — you have corrected more than your own page: your confirmation " +
+          "teaches us to tell namesakes apart.",
+    gone: "This link has already been used or has expired. Please start again from the author page.",
+  },
+};
+
+function claimTxt(lang) { return CLAIM_TXT[lang] || CLAIM_TXT.en; }
+
+/* Приём просьбы: сверяем адрес и отправляем письмо. */
+async function handleAuthorClaim(request, env) {
+  if (!env.CARDS) return noCards();
+  if (request.method !== "POST") {
+    return Response.json({ error: "method" }, { status: 405 });
+  }
+  let b = {};
+  try { b = await request.json(); } catch { return Response.json({ error: "bad_json" }, { status: 400 }); }
+
+  const akey = String(b.akey || "").slice(0, 80).toLowerCase();
+  const action = String(b.action || "");
+  const lang = ["ru", "en", "es", "ar", "fr"].includes(b.lang) ? b.lang : "en";
+  const T = claimTxt(lang === "ru" ? "ru" : "en");
+  if (!/^[a-zа-яё]+\|[a-zа-яё]+$/u.test(akey) || !CLAIM_ACTIONS.includes(action)) {
+    return Response.json({ error: "bad_request" }, { status: 400 });
+  }
+  const email = claimEmail(b.email);
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+    return Response.json({ error: "bad_email" }, { status: 400 });
+  }
+  const person = String(b.person || "").slice(0, 24);
+  const target = String(b.target || "").slice(0, 64);
+
+  const db = env.CARDS;
+  // Предохранитель от рассылочной пушки: одно письмо на автора в сутки. Кнопка шлёт письмо
+  // ЖИВОМУ человеку, найденному в его же статье, — без ограничения его можно засыпать
+  // письмами с нашего домена, и виноваты будем мы.
+  const recent = await db.prepare(
+    "SELECT COUNT(*) n FROM author_claims WHERE akey = ? AND state = 'sent' " +
+    "AND created > datetime('now', '-1 day')").bind(akey).first();
+  if (recent && recent.n >= CLAIM_MAIL_PER_DAY) {
+    return Response.json({ ok: true, state: "limit", message: T.limit });
+  }
+
+  const h = await claimFingerprint(env, email);
+  const known = await db.prepare(
+    "SELECT 1 ok FROM author_emails WHERE akey = ? AND h = ?").bind(akey, h).first();
+
+  const token = crypto.randomUUID().replace(/-/g, "");
+  if (!known) {
+    // Не совпало — в ручной разбор. Ответ НЕ говорит, что именно не совпало: иначе
+    // перебором можно выяснять чужие адреса.
+    await db.prepare(
+      "INSERT INTO author_claims (token, akey, person, action, target, state, created) " +
+      "VALUES (?, ?, ?, ?, ?, 'manual', datetime('now'))")
+      .bind(token, akey, person, action, target).run();
+    await tg(env, `👤 <b>Заявка автора без совпадения адреса</b>\n${akey} · ${action}` +
+                  (target ? ` · ${target}` : "") + "\nНужен разбор глазами.");
+    return Response.json({ ok: true, state: "manual", message: T.manual });
+  }
+
+  // Ссылка ведёт на ТОТ адрес, откуда пришла просьба, а не на прописанный в коде: иначе
+  // письмо со стенда зовёт на боевой сайт, и проверить механизм до выкладки невозможно.
+  // На проде это тот же bridge42worlds.academy — редирект на канонический хост стоит выше.
+  const origin = new URL(request.url).origin;
+  const link = `${origin}/api/author/confirm?t=${token}&lang=${lang}`;
+  const what = {
+    confirm: "подтвердить, что работы на странице ваши",
+    add: `добавить вашу работу ${target}`,
+    merge: "объединить две группы работ под одним человеком",
+    remove: `убрать работу ${target} из вашего списка`,
+    withdraw: "снять вашу страницу с сайта",
+  }[action];
+  const sent = await sendClaimEmail(env, email, what, link);
+  if (!sent.ok) return Response.json({ error: "mail_failed" }, { status: 502 });
+  // Запись ПОСЛЕ успешной отправки, а не до. Прогон 25 августа поймал обратный порядок:
+  // почта у стенда была не настроена, письмо не ушло — а заявка уже легла в базу и
+  // засчиталась в суточный предел. Человек получил бы «письмо уже отправлено сегодня»
+  // на пустом месте и ждал бы того, чего никто не посылал.
+  await db.prepare(
+    "INSERT INTO author_claims (token, akey, person, action, target, state, created) " +
+    "VALUES (?, ?, ?, ?, ?, 'sent', datetime('now'))")
+    .bind(token, akey, person, action, target).run();
+  return Response.json({ ok: true, state: "sent", message: T.sent });
+}
+
+async function sendClaimEmail(env, to, what, link) {
+  if (!env.RESEND_API_KEY) return { ok: false, error: "mail_not_configured" };
+  const r = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, "content-type": "application/json" },
+    body: JSON.stringify({
+      from: env.MAIL_FROM || "bridge42worlds <noreply@bridge42worlds.academy>",
+      to: [to],
+      subject: "Подтвердите просьбу — bridge42worlds",
+      text:
+        `Здравствуйте.\n\nНа bridge42worlds попросили ${what}.\n\n` +
+        `Если это вы — перейдите по ссылке, и мы всё сделаем:\n${link}\n\n` +
+        `Ссылка действует ${CLAIM_TTL_DAYS} дней и срабатывает один раз.\n` +
+        `Если это были не вы — просто не переходите по ней, ничего не произойдёт ` +
+        `и больше мы вас не побеспокоим.\n\n` +
+        `Мы пересказываем научные работы простым языком и бесплатно. ` +
+        `Ваш адрес мы не храним и никому не передаём.\n`,
+    }),
+  });
+  return r.ok ? { ok: true } : { ok: false, error: "mail_send_failed" };
+}
+
+/* Переход по ссылке из письма — здесь просьба и исполняется. */
+async function handleAuthorConfirm(request, env) {
+  if (!env.CARDS) return noCards();
+  const url = new URL(request.url);
+  const token = (url.searchParams.get("t") || "").slice(0, 40);
+  const lang = ["ru", "en"].includes(url.searchParams.get("lang"))
+    ? url.searchParams.get("lang") : "en";
+  const T = claimTxt(lang);
+  const page = (msg, ok) =>
+    new Response(
+      `<!doctype html><html lang="${lang}"><head><meta charset="utf-8">` +
+      `<meta name="viewport" content="width=device-width,initial-scale=1">` +
+      `<meta name="robots" content="noindex">` +
+      `<title>bridge42worlds</title><link rel="stylesheet" href="/css/style.css"></head>` +
+      `<body><div style="max-width:640px;margin:12vh auto;padding:0 20px">` +
+      `<p style="font-size:34px;margin:0 0 14px">${ok ? "✓" : "•"}</p>` +
+      `<p style="font-size:17px;line-height:1.65">${msg}</p>` +
+      `<p style="margin-top:26px"><a href="/">bridge42worlds</a></p></div></body></html>`,
+      { headers: { "content-type": "text/html; charset=utf-8", "x-robots-tag": "noindex" } });
+
+  if (!/^[0-9a-f]{32}$/.test(token)) return page(T.gone, false);
+  const db = env.CARDS;
+  const c = await db.prepare(
+    "SELECT * FROM author_claims WHERE token = ? AND state = 'sent' " +
+    `AND created > datetime('now', '-${CLAIM_TTL_DAYS} days')`).bind(token).first();
+  if (!c) return page(T.gone, false);
+
+  // Подтверждение — верхний ярус истины: оно сильнее и адреса, и Semantic Scholar.
+  // Применять его к данным будет отдельный проход; здесь мы ЗАПИСЫВАЕМ волю человека,
+  // а не перекраиваем таблицы на лету: живая правка под запросом читателя — способ
+  // получить полурасхождение, которого потом никто не объяснит.
+  const claim = c.action === "remove" ? "not_mine"
+    : c.action === "withdraw" ? "withdraw" : "mine";
+  await db.prepare(
+    "INSERT INTO author_confirms (akey, person, claim, target, source, created) " +
+    "VALUES (?, ?, ?, ?, 'page', datetime('now'))")
+    .bind(c.akey, c.person || null, claim, c.target || null).run();
+  await db.prepare("UPDATE author_claims SET state = 'applied', applied = datetime('now') " +
+                   "WHERE token = ?").bind(token).run();
+  await tg(env, `✅ <b>Автор подтвердил просьбу</b>\n${c.akey} · ${c.action}` +
+                (c.target ? ` · ${c.target}` : ""));
+  return page(T.done, true);
+}
+
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -2400,6 +2674,8 @@ export default {
     if (url.pathname === "/api/search") return withCors(await handleSearch(request, env));
     if (url.pathname === "/api/feed") return withCors(await feedGuard(request, env, handleFeed));
     if (url.pathname === "/api/author") return withCors(await feedGuard(request, env, handleAuthorFeed));
+    if (url.pathname === "/api/author/claim") return withCors(await feedGuard(request, env, handleAuthorClaim));
+    if (url.pathname === "/api/author/confirm") return feedGuard(request, env, handleAuthorConfirm);
     if (url.pathname === "/api/cards") return withCors(await feedGuard(request, env, handleCardsByIds));
     if (url.pathname === "/api/find") return withCors(await feedGuard(request, env, handleWordSearch));
     if (url.pathname === "/api/ask") return withCors(await handleAsk(request, env));

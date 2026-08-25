@@ -153,6 +153,10 @@ SCHEMA = [
     # s2_author_id; всё остальное держим раздельно. «Лучше две страницы, чем одна с чужими
     # работами» — слова владельца, доведённые до механики.
     "ALTER TABLE card_authors ADD COLUMN s2_author_id TEXT",
+    # Имя автора в записи S2. Нужно как ЗАГОЛОВОК группы на странице: у S2 имя часто
+    # полнее нашего («Alexander D. Panov» против «A. Panov»), и человеку, пришедшему
+    # по клику на имя, именно оно помогает понять, который из трёх однофамильцев его.
+    "ALTER TABLE card_authors ADD COLUMN s2_name TEXT",
     "CREATE INDEX IF NOT EXISTS card_authors_s2 ON card_authors(s2_author_id)",
     "CREATE INDEX IF NOT EXISTS card_authors_key ON card_authors(akey, date DESC)",
 ]
