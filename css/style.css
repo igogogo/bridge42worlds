@@ -4190,3 +4190,104 @@ html[lang="ar"] .article-card { flex-direction: row-reverse; }
     html[lang="ar"] .article-card { flex-direction: column; }
     .card-img-wrap { flex: none; width: 100%; aspect-ratio: 16 / 9; }
 }
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Проход 2 — страницы сущностей (2026-08-25)
+
+   Шапка сущности была набором строк без формы, и её ничто не отделяло от списка
+   работ ниже. Делаем карточку: выше — что это такое, ниже — что мы про это
+   написали. Ряды связанных сущностей внутрь карточки: они про первое, не про второе.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tag-header {
+    max-width: none;
+    margin-bottom: var(--s-5);
+    padding: var(--s-5);
+    background: var(--surface);
+    border: 1px solid var(--hair);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+}
+/* Обложка сущности — БАННЕР, а не портрет. Замер: при снятом ограничении ширины
+   квадратная картинка выросла до 471 px и заняла собой всю шапку, оттеснив вниз и
+   название, и статистику, и уровни. На странице понятия обложка — украшение;
+   содержание тут описание и работы. Пропорция 5:2 даёт ~280 px: картинку видно,
+   но она не спорит с текстом. */
+.tag-header .ai-cover {
+    aspect-ratio: 5 / 2; overflow: hidden; border-radius: var(--radius-sm);
+    margin-bottom: var(--s-4);
+}
+.tag-header .ai-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.tag-header h1 { font-size: 27px; margin-bottom: var(--s-2); }
+.tag-header .desc { font-size: 15px; margin-bottom: var(--s-3); max-width: var(--w-read); }
+.tag-header .fact { margin-bottom: var(--s-2); max-width: var(--w-read); }
+.tag-stats { margin-bottom: 0; font-family: var(--mono); font-size: 12.5px; }
+
+/* Тело сущности (ряды связанных) — продолжение шапки, а не отдельный остров:
+   тот же фон, общая рамка, без двойного контура между ними. */
+.entity-body {
+    max-width: none;
+    margin: calc(var(--s-5) * -1) 0 var(--s-5);
+    padding: var(--s-4) var(--s-5) var(--s-5);
+    background: var(--surface);
+    border: 1px solid var(--hair);
+    border-top: 0;
+    border-radius: 0 0 var(--radius) var(--radius);
+}
+/* Когда тело идёт сразу за шапкой, нижние углы шапки не скругляем — иначе между
+   ними появляется зазор в форме линзы. */
+.tag-header:has(+ .entity-body) { border-radius: var(--radius) var(--radius) 0 0; margin-bottom: 0; }
+
+.related-tags { display: flex; flex-wrap: wrap; gap: var(--s-2); margin: 0 0 var(--s-3); }
+.related-tags:last-child { margin-bottom: 0; }
+.related-tags:empty { display: none; }
+
+/* Кнопки внутри тела сущности — во всю его ширину: 620 остались от прежней
+   раскладки и создавали третий край внутри карточки. */
+.entity-body .actions { max-width: none; }
+
+/* Страницы сущностей были двухколоночными — тот же .entity-wrapper с боковой колонкой,
+   что и статья до этого прохода. Замер поймал: тело ужалось до 538 при странице 748,
+   остальное съедала колонка. Раскладка одна на весь сайт. */
+.entity-wrapper { display: block; }
+.entity-wrapper > .article-side {
+    position: static; width: auto; max-width: none;
+    display: flex; flex-wrap: wrap; gap: var(--s-2);
+    margin: var(--s-4) 0 0;
+}
+
+/* Остатки прежних ширин внутри сущности: цитата держала 620, факт — собственную меру.
+   Оба приводим к ширине чтения, как всю прозу на сайте. */
+.tag-header .quote,
+.tag-header .fact,
+.tag-header .section p { max-width: var(--w-read); }
+.tag-header .quote { margin-top: var(--s-3); }
+.tag-header .section { margin-bottom: var(--s-4); }
+.tag-header .section:last-child { margin-bottom: 0; }
+
+/* Чипы: форма, размер и поведение одни на все три породы; цвет остаётся разным,
+   потому что он несёт смысл — закон охра, учёный зелёный, тег циан. */
+.side-tag, .side-law, .side-sci, .law-chip,
+.related-tags a, .card-tags a {
+    display: inline-flex; align-items: center;
+    font-size: 12.5px; line-height: 1.4;
+    padding: var(--s-1) var(--s-3);
+    border-radius: 999px;
+    border: 1px solid var(--hair);
+    background: var(--bg);
+    text-decoration: none;
+    transition: border-color .15s ease, color .15s ease;
+}
+.side-tag:hover, .side-law:hover, .side-sci:hover, .law-chip:hover,
+.related-tags a:hover { border-color: currentColor; text-decoration: none; }
+.related-tags.related-laws a, .side-law, .law-chip { color: var(--law-color); }
+.related-tags.related-scientists a, .side-sci { color: var(--scientist-color); }
+.related-tags.related-coauthors a { color: var(--author-color); }
+
+@media (max-width: 620px) {
+    .tag-header { padding: var(--s-4); }
+    .entity-body { padding: var(--s-3) var(--s-4) var(--s-4); }
+    .tag-header h1 { font-size: 23px; }
+}
