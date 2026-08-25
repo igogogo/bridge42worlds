@@ -280,8 +280,12 @@ window.switchFeedLang = switchFeedLang;
 
 // Лёгкие справочники (tools/lite_refs.py): имя и описание для подсказки. Полные
 // файлы весят 4.5 МБ ради 368 названий и нужны СТРАНИЦЕ тега, а не ленте.
-var tagsPath = '/lang/' + lang + '/data/tags-lite.json';
-var scientistsPath = '/lang/' + lang + '/data/scientists-lite.json';
+/* Имена — то, без чего лента показывает cooper_pair вместо «куперовская пара».
+   56 КБ на три справочника. Описания для подсказок лежат отдельно и приезжают
+   по первому наведению, см. ensureTips ниже: 357 КБ, которые платит только тот,
+   кто действительно навёл. */
+var tagsPath = '/lang/' + lang + '/data/tags-names.json';
+var scientistsPath = '/lang/' + lang + '/data/scientists-names.json';
 
 function fetchIndex(version) {
     return fetch('/lang/' + lang + '/' + VERSION_INDEX_FILES[version])
@@ -429,7 +433,7 @@ window.B42Refs = Promise.all(
         fetch(scientistsPath).then(function(r) { return r.json(); }).catch(function() {
             return fetch('/lang/' + defaultLang + '/data/scientists-lite.json').then(function(r) { return r.json(); });
         }),
-        fetch('/lang/' + lang + '/data/laws-lite.json').then(function(r) { return r.json(); }).catch(function() { return {}; }),
+        fetch('/lang/' + lang + '/data/laws-names.json').then(function(r) { return r.json(); }).catch(function() { return {}; }),
         // Локализованный набор названий/описаний разделов, с откатом на английскую базу —
         // она же остаётся источником для lang=en и для категорий, перевода которых ещё нет.
         // Базовый файл — АНГЛИЙСКИЙ, отдельного -en не существует и не должно. Раньше его
@@ -1115,6 +1119,11 @@ function levelSwitchHTML(base) {
    Нужна, чтобы на карточке показывать ГЛАВНЫЕ теги статьи, а не первые попавшиеся. */
 var _tagFreq = null;
 function pickTop(tags, n) {
+    /* Частота тегов считалась перебором индекса. Индекс на ленте больше не грузится,
+       поэтому веса выходят нулевые и сортировка становится тождественной: теги
+       остаются в порядке генерации. Это ХУЖЕ прежнего (частый тег вёл в живой раздел,
+       редкий в пустой), но не сломано. Чинится числами из сводки — отложено до
+       окончания перестройки понятий, чтобы не считать частоты дважды. */
     if (!_tagFreq) {
         _tagFreq = {};
         (window.searchIndex || []).forEach(function (a) {
@@ -1957,7 +1966,17 @@ function openCloudFeed(query, head) {
 }
 
 function _openCloudFeed(query, head, c) {
-    return feedFromCloud(query, 0).then(function (j) {
+    /* Ждём ОБА ответа: карточки и справочник имён. Раньше ожидание индекса на 14.6 МБ
+       заведомо перекрывало загрузку справочников, и гонки не было видно. Теперь
+       карточки приходят за 20 КБ, имена за 56 КБ, и кто первый — как повезёт; пришли
+       первыми карточки — в ленте стоит cosmic_rays вместо «космические лучи», а плашка
+       помечена как «страницы нет», хотя страница есть.
+       Запросы уходят одновременно, поэтому ждём не сумму, а максимум из двух. */
+    return Promise.all([
+        feedFromCloud(query, 0),
+        (window.B42Refs || Promise.resolve(null)).catch(function () { return null; }),
+    ]).then(function (both) {
+        var j = both[0];
         feed.q = query; feed.page = 0; feed.more = !!j.more;
         feed.items = j.items; feed.shown = 0; feed.lastDay = null;
         feed.active = true; feed.total = (typeof j.total === 'number') ? j.total : null;
@@ -2045,6 +2064,7 @@ function getOrCreateTooltip() {
 }
 
 function scheduleHideTooltip() {
+    window.__tipFor = null;
     if (tooltipHideTimer) clearTimeout(tooltipHideTimer);
     tooltipHideTimer = setTimeout(function() {
         var tip = document.getElementById('entity-tooltip');
@@ -2054,8 +2074,40 @@ function scheduleHideTooltip() {
 
 // Описание тега/закона под ТЕКУЩУЮ выбранную версию (popular/simple/advanced) — раньше тултипы
 // всегда показывали advanced-уровень (тег) или popular (закон) независимо от переключателя.
-function descByVersion(obj) {
+/* Описания подсказок — ОТДЕЛЬНЫМ файлом и по требованию.
+
+   Раньше они лежали в тех же справочниках: три описания на запись (простое,
+   популярное, подробное) при одном показываемом. 357 КБ приезжали к каждому
+   читателю, включая тех, кто ни на что не навёл.
+
+   Теперь: первое наведение заказывает файл своего уровня, дальше всё мгновенно.
+   Уровней три, но читатель за сеанс обычно держится одного — заказывается один. */
+var _tips = {};          // уровень → {id: описание}
+var _tipsWait = {};
+
+function ensureTips(kind) {
     var v = effVersion();
+    var key = kind + ':' + v;
+    if (_tips[key]) return Promise.resolve(_tips[key]);
+    if (_tipsWait[key]) return _tipsWait[key];
+    _tipsWait[key] = fetch('/lang/' + lang + '/data/' + kind + '-tips-' + v + '.json')
+        .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+        .then(function (m) { _tips[key] = m || {}; return _tips[key]; })
+        .catch(function () { _tips[key] = {}; return _tips[key]; });
+    return _tipsWait[key];
+}
+window.ensureTips = ensureTips;
+
+/* Описание сущности под текущий уровень чтения. Порядок источников: уже приехавшие
+   подсказки → поля самой записи (полные справочники на страницах тега и закона всё
+   ещё их содержат) → пусто. */
+function descByVersion(obj, kind, id) {
+    var v = effVersion();
+    if (kind && id) {
+        var m = _tips[kind + ':' + v];
+        if (m && m[id]) return m[id];
+    }
+    if (!obj) return '';
     if (v === 'advanced') return obj.description || obj.description_simple || obj.description_popular || '';
     if (v === 'simple') return obj.description_simple || obj.description_popular || obj.description || '';
     return obj.description_popular || obj.description_simple || obj.description || '';
@@ -2124,6 +2176,20 @@ function initAllTooltips() {
 
     function showTipFor(el) {
             if (tooltipHideTimer) { clearTimeout(tooltipHideTimer); tooltipHideTimer = null; }
+            /* Описания лежат отдельным файлом и приезжают по первому наведению (ensureTips).
+               Ждать их здесь нельзя: подсказка, появляющаяся через полсекунды, — не
+               подсказка. Поэтому рисуем немедленно тем, что есть (имя всегда под рукой),
+               а когда файл приедет — повторяем показ, но ТОЛЬКО если курсор всё ещё на
+               той же плашке. Иначе читатель увидит, как подсказка оживает после того,
+               как он ушёл. Второе наведение и все следующие мгновенны. */
+            var _k = el.dataset.tag ? 'tags'
+                   : (el.dataset.law ? 'laws' : (el.dataset.scientist ? 'scientists' : null));
+            if (_k && !_tips[_k + ':' + effVersion()]) {
+                ensureTips(_k).then(function () {
+                    if (window.__tipFor === el) showTipFor(el);
+                });
+            }
+            window.__tipFor = el;
             var tip = getOrCreateTooltip();
 
             var content = '';
@@ -2138,17 +2204,17 @@ function initAllTooltips() {
             } else if (el.dataset.tag) {
                 var t = tagsLoc[el.dataset.tag];
                 content = t
-                    ? '<strong>' + t.name + '</strong> &mdash; <span class="tip-desc">' + tipCut(descByVersion(t)) + '</span> <a href="/lang/' + lang + '/tags/' + encodeURIComponent(el.dataset.tag) + '.html">' + UI.more + '</a>'
+                    ? '<strong>' + t.name + '</strong> &mdash; <span class="tip-desc">' + tipCut(descByVersion(t, 'tags', el.dataset.tag)) + '</span> <a href="/lang/' + lang + '/tags/' + encodeURIComponent(el.dataset.tag) + '.html">' + UI.more + '</a>'
                     : '<strong>' + (el.textContent || el.dataset.tag) + '</strong> <a href="/lang/' + lang + '/tags/' + encodeURIComponent(el.dataset.tag) + '.html">' + UI.more + '</a>';
             } else if (el.dataset.scientist) {
                 var s = scientistsData[el.dataset.scientist];
                 content = s
-                    ? '<strong>' + s.name + '</strong> (' + s.lifespan + ') &mdash; <span class="tip-desc">' + tipCut(s.description) + '</span> <a href="/lang/' + lang + '/scientists/' + authorSlug(el.dataset.scientist) + '.html">' + UI.more + '</a>'
+                    ? '<strong>' + s.name + '</strong> (' + s.lifespan + ') &mdash; <span class="tip-desc">' + tipCut(descByVersion(s, 'scientists', el.dataset.scientist)) + '</span> <a href="/lang/' + lang + '/scientists/' + authorSlug(el.dataset.scientist) + '.html">' + UI.more + '</a>'
                     : '<strong>' + el.dataset.scientist + '</strong> <a href="/lang/' + lang + '/scientists/' + authorSlug(el.dataset.scientist) + '.html">' + UI.profile + '</a>';
             } else if (el.dataset.law) {
                 var lw = lawsData[el.dataset.law];
                 content = lw
-                    ? '<strong>' + lw.name + '</strong>' + (lw.type ? ' &middot; ' + lw.type : '') + ' &mdash; <span class="tip-desc">' + tipCut(descByVersion(lw)) + '</span> <a href="/lang/' + lang + '/laws/' + encodeURIComponent(el.dataset.law) + '.html">' + UI.more + '</a>'
+                    ? '<strong>' + lw.name + '</strong>' + (lw.type ? ' &middot; ' + lw.type : '') + ' &mdash; <span class="tip-desc">' + tipCut(descByVersion(lw, 'laws', el.dataset.law)) + '</span> <a href="/lang/' + lang + '/laws/' + encodeURIComponent(el.dataset.law) + '.html">' + UI.more + '</a>'
                     : '<strong>' + (el.textContent || el.dataset.law) + '</strong> <a href="/lang/' + lang + '/laws/' + encodeURIComponent(el.dataset.law) + '.html">' + UI.more + '</a>';
             } else if (el.dataset.cat) {
                 var cd = el.dataset.catDesc || '';

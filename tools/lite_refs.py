@@ -80,6 +80,44 @@ def lite_sci(d):
 
 MAKERS = {"tags.json": lite_tags, "laws.json": lite_laws, "scientists.json": lite_sci}
 
+# ── Второй разрез: имена отдельно от подсказок ──────────────────────────────
+#
+# Замер 25 августа: в tags-lite.json имена весят 2.3%, три описания — 97.7%. Уровней
+# чтения три, показывается один; два лишних едут всегда. А имена нужны в ленте ВСЕГДА
+# (иначе вместо «куперовская пара» стоит cooper_pair), описания — только по наведению.
+#
+# Отсюда два файла вместо одного: имена (~10 КБ, грузятся всегда) и подсказки своего
+# уровня (~90 КБ, грузятся при первом наведении). Читатель, который ни на что не навёл,
+# не платит за описания вовсе.
+KEEP_ALWAYS = {"tags.json": (), "laws.json": ("type",), "scientists.json": ("lifespan",)}
+TIP_FIELD = {"popular": "description_popular", "simple": "description_simple",
+             "advanced": "description"}
+
+
+def names_of(lite, extra):
+    out = {}
+    for k, v in lite.items():
+        row = {"name": v.get("name", k)}
+        for f in extra:
+            if v.get(f):
+                row[f] = v[f]
+        out[k] = row
+    return out
+
+
+def tips_of(lite, field):
+    """Описание одного уровня. Если его нет — берём соседнее: пустая подсказка хуже
+    подсказки не того уровня, а у части записей заполнен только один вид."""
+    order = [field] + [f for f in ("description_popular", "description", "description_simple")
+                       if f != field]
+    out = {}
+    for k, v in lite.items():
+        for f in order:
+            if v.get(f):
+                out[k] = v[f]
+                break
+    return out
+
 
 def main():
     saved = 0
@@ -99,6 +137,21 @@ def main():
             was, now = src.stat().st_size, dst.stat().st_size
             saved += was - now
             print(f"  {lang}/{dst.name}: {was/1e6:.2f} → {now/1e6:.2f} МБ")
+
+            # имена — то, что грузится всегда
+            nm = src.with_name(name.replace(".json", "-names.json"))
+            nm.write_text(json.dumps(names_of(out, KEEP_ALWAYS[name]), ensure_ascii=False),
+                          encoding="utf-8")
+            # подсказки — по уровню чтения, грузятся при первом наведении
+            tip_sizes = []
+            for ver, field in TIP_FIELD.items():
+                tp = src.with_name(name.replace(".json", f"-tips-{ver}.json"))
+                tp.write_text(json.dumps(tips_of(out, field), ensure_ascii=False),
+                              encoding="utf-8")
+                tip_sizes.append(tp.stat().st_size)
+            print(f"      имена {nm.stat().st_size/1024:.0f} КБ · "
+                  f"подсказки {max(tip_sizes)/1024:.0f} КБ на уровень "
+                  f"(было {now/1024:.0f} КБ одним куском)")
     print(f"✅ экономия на одном заходе: {saved/1e6/len(LANGS):.1f} МБ "
           f"(суммарно по языкам {saved/1e6:.1f} МБ)")
     return 0
