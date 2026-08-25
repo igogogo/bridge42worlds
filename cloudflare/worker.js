@@ -2149,6 +2149,238 @@ async function handleTutor(request, env) {
   }
 }
 
+/* ─────────────────────────── СПИСКИ ИЗ D1 ───────────────────────────────────
+ *
+ * Лента, страницы авторов и поиск словами. До 25 августа всё это рисовал клиент из
+ * lang/<lang>/articles-index*.json — 3 717 КБ по сети на каждый заход, три уровня вместе
+ * 11 МБ, и растёт линейно: на 100 000 статей вышло бы 56 МБ. Одна страница отсюда весит
+ * 7 КБ и не растёт вообще. Решение владельца 2026-08-25.
+ *
+ * Вторая, не менее важная цель: уйти от пересборок. Пока списки лежали в статике, правка
+ * разметки означала перегенерацию 167 981 страницы. Здесь любое изменение — это заливка
+ * изменившихся строк в D1, а страницы не трогаются вовсе.
+ *
+ * Кэш. Ответы кладём в кэш края на пять минут: первая страница ленты меняется раз в сутки,
+ * а до базы при этом доходит ничтожная доля запросов. Ключ кэша — полный адрес со всеми
+ * параметрами, поэтому разные языки и уровни не путаются.
+ */
+const FEED_LANGS = ["ru", "en", "es", "ar", "fr"];
+const FEED_VERSIONS = ["popular", "simple", "advanced"];
+const FEED_MAX = 40;
+
+function feedParams(url) {
+  const g = (k, d) => url.searchParams.get(k) || d;
+  const lang = FEED_LANGS.includes(g("lang", "")) ? g("lang", "") : "ru";
+  const version = FEED_VERSIONS.includes(g("version", "")) ? g("version", "") : "popular";
+  const limit = Math.min(Math.max(parseInt(g("limit", "20"), 10) || 20, 1), FEED_MAX);
+  const page = Math.max(parseInt(g("page", "0"), 10) || 0, 0);
+  return { lang, version, limit, page, offset: page * limit };
+}
+
+/* Карточка наружу. Поля JSON лежат в базе строками — разбираем здесь, чтобы клиент
+   получал готовое и не занимался этим на каждой отрисовке. */
+function feedRow(r) {
+  const j = (s) => { try { return JSON.parse(s || "[]"); } catch { return []; } };
+  return {
+    id: r.id, date: r.date, url: r.url, title: r.title,
+    oneliner: r.oneliner, description: r.description,
+    authors: j(r.authors), tags: j(r.tags), laws: j(r.laws),
+    scientists: j(r.scientists), categories: j(r.categories),
+    primary_category: r.primary_category,
+    reading: r.reading, express: !!r.express, km: !!r.km,
+    image: r.image === "0" ? false : true,
+  };
+}
+
+function feedJson(data, seconds = 300) {
+  return new Response(JSON.stringify(data), {
+    headers: {
+      "content-type": "application/json; charset=utf-8",
+      "cache-control": `public, max-age=${seconds}`,
+    },
+  });
+}
+
+/* Обёртка над ручками списков.
+   Без неё сбой внутри превращается в голый «error code: 1101» без единого слова о причине:
+   первая же выкладка на стенд упала на отсутствующем столбце, и понять это по 500-ке было
+   нельзя. Текст ошибки наружу отдаём только на испытательном стенде (*.workers.dev): на
+   рабочем сайте внутренности базы читателю знать незачем. */
+async function feedGuard(request, env, fn) {
+  try {
+    return await fn(request, env);
+  } catch (e) {
+    const dev = new URL(request.url).hostname.endsWith(".workers.dev");
+    return Response.json(
+      { error: "feed_failed", ...(dev ? { detail: String(e && e.message || e).slice(0, 400) } : {}) },
+      { status: 500 });
+  }
+}
+
+function noCards() {
+  return Response.json({ error: "cards_unbound" }, { status: 503 });
+}
+
+/* Семя дня для порядка «вперемешку». Меняется в полночь UTC, внутри суток постоянно —
+   поэтому вторая страница продолжает первую, а не пересобирает порядок заново. */
+function mixSeed() {
+  return Math.floor(Date.now() / 86400000) * 7919 % 1000003;
+}
+
+const FEED_COLS =
+  "id, date, url, title, oneliner, description, authors, tags, laws, scientists," +
+  " categories, primary_category, reading, express, km, image";
+
+async function handleFeed(request, env) {
+  if (!env.CARDS) return noCards();
+  const url = new URL(request.url);
+  const cache = caches.default;
+  const hit = await cache.match(request);
+  if (hit) return hit;
+
+  const { lang, version, limit, page, offset } = feedParams(url);
+  const sort = ["new", "old", "mix"].includes(url.searchParams.get("sort"))
+    ? url.searchParams.get("sort") : "mix";
+  // Раздел приходит от клиента — в SQL уходит только привязкой, никогда склейкой строк.
+  const cat = (url.searchParams.get("cat") || "").slice(0, 40);
+
+  const where = ["lang = ?", "version = ?"];
+  const args = [lang, version];
+  if (cat) {
+    // Раздел может быть точным (astro-ph.HE) или группой (astro-ph) — по группе ищем
+    // префиксом, иначе фильтр «астрофизика» не находил бы ни одной статьи.
+    where.push(cat.includes(".") ? "primary_category = ?" : "primary_category LIKE ?");
+    args.push(cat.includes(".") ? cat : cat + "%");
+  }
+  const w = where.join(" AND ");
+  const order = sort === "new" ? "date DESC, id DESC"
+    : sort === "old" ? "date ASC, id ASC"
+    : `((mix + ${mixSeed()}) % 1000003) ASC, id ASC`;
+
+  const db = env.CARDS;
+  const [rows, cnt] = await Promise.all([
+    db.prepare(`SELECT ${FEED_COLS} FROM cards WHERE ${w} ORDER BY ${order} LIMIT ? OFFSET ?`)
+      .bind(...args, limit, offset).all(),
+    // Общее число просим только для первой страницы: COUNT по двум миллионам строк на
+    // каждом шаге прокрутки — это работа, за которую никто не поблагодарит.
+    page === 0
+      ? db.prepare(`SELECT COUNT(*) n FROM cards WHERE ${w}`).bind(...args).first()
+      : Promise.resolve(null),
+  ]);
+  const items = (rows.results || []).map(feedRow);
+  const out = feedJson({
+    items, page, limit,
+    more: items.length === limit,
+    ...(cnt ? { total: cnt.n } : {}),
+  });
+  request.method === "GET" && (await cache.put(request, out.clone()));
+  return out;
+}
+
+/* Страница автора. Связь «автор — работа» лежит без языка и уровня (см. cards_sync):
+   один человек — один набор работ, а карточка к ним подбирается на лету. */
+async function handleAuthorFeed(request, env) {
+  if (!env.CARDS) return noCards();
+  const url = new URL(request.url);
+  const cache = caches.default;
+  const hit = await cache.match(request);
+  if (hit) return hit;
+
+  const { lang, version, limit, page, offset } = feedParams(url);
+  const akey = (url.searchParams.get("key") || "").slice(0, 80).toLowerCase();
+  if (!/^[a-zа-яё]+\|[a-zа-яё]+$/u.test(akey)) {
+    return Response.json({ error: "bad_key" }, { status: 400 });
+  }
+  const db = env.CARDS;
+  const [rows, stat, bycat] = await Promise.all([
+    db.prepare(
+      `SELECT ${FEED_COLS.split(", ").map((c) => "c." + c).join(", ")}
+         FROM card_authors a JOIN cards c ON c.id = a.id
+        WHERE a.akey = ? AND c.lang = ? AND c.version = ?
+        ORDER BY a.date DESC, c.id DESC LIMIT ? OFFSET ?`)
+      .bind(akey, lang, version, limit, offset).all(),
+    // Сводка считается только на первой странице — при прокрутке она не меняется.
+    page === 0 ? db.prepare(
+      `SELECT COUNT(*) total, SUM(c.express) express, SUM(c.km) km, MIN(c.date) first, MAX(c.date) last
+         FROM card_authors a JOIN cards c ON c.id = a.id
+        WHERE a.akey = ? AND c.lang = ? AND c.version = ?`)
+      .bind(akey, lang, version).first() : Promise.resolve(null),
+    page === 0 ? db.prepare(
+      `SELECT c.primary_category cat, COUNT(*) n
+         FROM card_authors a JOIN cards c ON c.id = a.id
+        WHERE a.akey = ? AND c.lang = ? AND c.version = ?
+        GROUP BY cat ORDER BY n DESC LIMIT 12`)
+      .bind(akey, lang, version).all() : Promise.resolve(null),
+  ]);
+  const items = (rows.results || []).map(feedRow);
+  const out = feedJson({
+    items, page, limit, more: items.length === limit,
+    ...(stat ? {
+      stats: {
+        total: stat.total || 0,
+        express: stat.express || 0,
+        full: (stat.total || 0) - (stat.express || 0),
+        km: stat.km || 0,
+        first: stat.first || "", last: stat.last || "",
+        sections: (bycat && bycat.results || []).map((r) => ({ cat: r.cat, n: r.n })),
+      },
+    } : {}),
+  });
+  request.method === "GET" && (await cache.put(request, out.clone()));
+  return out;
+}
+
+/* Карточки по списку идентификаторов: избранное, «похожие», цитаты. Здесь клиент уже
+   знает, ЧТО показать, и ему нужен только текст карточек. */
+async function handleCardsByIds(request, env) {
+  if (!env.CARDS) return noCards();
+  const url = new URL(request.url);
+  const { lang, version } = feedParams(url);
+  const ids = (url.searchParams.get("ids") || "").split(",")
+    .map((s) => s.trim()).filter((s) => /^[0-9]{4}\.[0-9]{4,6}(v[0-9]{1,3})?$/.test(s))
+    .slice(0, FEED_MAX);
+  if (!ids.length) return Response.json({ items: [] });
+  const marks = ids.map(() => "?").join(",");
+  const rows = await env.CARDS.prepare(
+    `SELECT ${FEED_COLS} FROM cards WHERE lang = ? AND version = ? AND id IN (${marks})`)
+    .bind(lang, version, ...ids).all();
+  // Порядок возвращаем ТОТ, который просил клиент: у «похожих» он несёт смысл (сначала
+  // самое близкое), а SQL про это ничего не знает.
+  const by = new Map((rows.results || []).map((r) => [r.id, feedRow(r)]));
+  return feedJson({ items: ids.map((i) => by.get(i)).filter(Boolean) });
+}
+
+/* Поиск СЛОВАМИ. Отдельно от /api/search — тот ищет по смыслу через Vectorize и стоит
+   денег, поэтому у него суточный предел на адрес. Этот бесплатен и работает по нашему же
+   тексту карточек, полнотекстовым индексом SQLite. */
+async function handleWordSearch(request, env) {
+  if (!env.CARDS) return noCards();
+  const url = new URL(request.url);
+  const { lang, version, limit, page, offset } = feedParams(url);
+  const raw = (url.searchParams.get("q") || "").trim().slice(0, 120);
+  if (raw.length < 2) return Response.json({ items: [] });
+  // Запрос читателя в синтаксис FTS не пускаем: кавычки, звёздочки и NEAR там значат
+  // своё, и «C++» или «10^19» роняют разбор. Оставляем слова, каждое ищем как префикс.
+  const terms = raw.replace(/["'*(){}:^-]/g, " ").split(/\s+/)
+    .filter((w) => w.length > 1).slice(0, 8);
+  if (!terms.length) return Response.json({ items: [] });
+  const q = terms.map((w) => `"${w}"*`).join(" AND ");
+  let rows;
+  try {
+    rows = await env.CARDS.prepare(
+      `SELECT ${FEED_COLS.split(", ").map((c) => "c." + c).join(", ")}
+         FROM cards_fts f JOIN cards c ON c.id = f.id AND c.lang = f.lang AND c.version = f.version
+        WHERE cards_fts MATCH ? AND f.lang = ? AND f.version = ?
+        ORDER BY bm25(cards_fts) LIMIT ? OFFSET ?`)
+      .bind(q, lang, version, limit, offset).all();
+  } catch (e) {
+    return Response.json({ items: [], error: "bad_query" });
+  }
+  const items = (rows.results || []).map(feedRow);
+  return feedJson({ items, page, limit, more: items.length === limit }, 120);
+}
+
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -2166,6 +2398,10 @@ export default {
     if (url.pathname === "/api/tutor/issue") return withCors(await handleIssue(request, env));
     if (url.pathname === "/api/tutor") return withCors(await handleTutor(request, env));
     if (url.pathname === "/api/search") return withCors(await handleSearch(request, env));
+    if (url.pathname === "/api/feed") return withCors(await feedGuard(request, env, handleFeed));
+    if (url.pathname === "/api/author") return withCors(await feedGuard(request, env, handleAuthorFeed));
+    if (url.pathname === "/api/cards") return withCors(await feedGuard(request, env, handleCardsByIds));
+    if (url.pathname === "/api/find") return withCors(await feedGuard(request, env, handleWordSearch));
     if (url.pathname === "/api/ask") return withCors(await handleAsk(request, env));
     if (url.pathname === "/api/quota") return withCors(await handleQuota(request, env));
     if (url.pathname === "/api/auth/google") return handleGoogleStart(request, env);
