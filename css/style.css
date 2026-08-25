@@ -94,6 +94,8 @@ html[lang="ar"] .discoveries-list { padding-left: 0; padding-right: 20px; }
     /* Ширины колонок. Текст УЖЕ карточек: строка длиннее ~75 знаков заставляет
        глаз терять начало следующей, и длинные разборы дочитывают заметно хуже.
        Карточки листаются взглядом, им ширина не мешает. */
+    /* Ширина страницы = содержимое + поля. Содержимое живёт в --w-text (см. ниже,
+       там же историческое объяснение), поля 16+16 из body. */
     --w-page: 780px;   --w-read: 62ch;
     /* Лампа из набора для ::before врезки — рисунок один в один с B42Icons.lamp */
     --ic-lamp: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18h6'/%3E%3Cpath d='M10 21h4'/%3E%3Cpath d='M12 3a6 6 0 0 0-3.5 10.9c.6.4.9 1 .9 1.7v.4h5.2v-.4c0-.7.3-1.3.9-1.7A6 6 0 0 0 12 3z'/%3E%3C/svg%3E");
@@ -741,12 +743,12 @@ html[dir="rtl"] .calendar-panel, html[dir="rtl"] .search-panel { right: auto; le
 }
 .category-bar.collapsed { max-height: 3.9em; overflow: hidden; }
 .category-bar-more {
-    display: none; max-width: 680px; margin: 2px 0 0; padding: 0;
+    display: none; max-width: var(--w-wide); margin: 2px 0 0; padding: 0;
     background: none; border: none; color: var(--soft); font-size: 11px; cursor: pointer;
 }
 .category-bar-more:hover { color: var(--link); }
 .express-filter {
-    display: flex; align-items: center; gap: 5px; max-width: 680px; margin: 6px 0 0;
+    display: flex; align-items: center; gap: 5px; max-width: var(--w-wide); margin: 6px 0 0;
     font-size: 12px; color: var(--soft); cursor: pointer; user-select: none;
 }
 .express-filter input { cursor: pointer; }
@@ -821,7 +823,7 @@ html { scroll-behavior: smooth; }
    .hdr-icons (🔍/📅) на всю ширину body (900px), а не в рамках читаемой колонки (680px), из-за
    чего иконки визуально "улетали" далеко вправо от остального контента главной (юзер-фидбек
    2026-07-19: "иконки поиска и календаря улетели вправо"). */
-.langs-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; max-width: 680px; }
+.langs-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; max-width: var(--w-wide); }
 .langs { display: flex; flex-wrap: wrap; }
 /* Переключатель языков — главная кнопка нашего проекта: сайт существует ради того, что
    человек читает на своём языке. При этом он был самым мелким на странице: 10px и область
@@ -841,7 +843,7 @@ html { scroll-behavior: smooth; }
 /* ── Search ───────────────────── */
 /* max-width 680px — юзер-фидбек 2026-07-16: "поле поиска очень длинное", раньше тянулось
    во всю ширину body (868px) без ограничения, теперь совпадает с шапкой/категориями. */
-.search-row { max-width: 680px; margin-bottom: 8px; display: flex; gap: 6px; }
+.search-row { max-width: var(--w-wide); margin-bottom: 8px; display: flex; gap: 6px; }
 .search-row input {
     flex: 1; min-width: 0; padding: 8px 14px; font-size: 14px; font-family: inherit;
     border: 1px solid var(--border); border-radius: 4px; background: #fafafa; color: var(--text);
@@ -896,7 +898,7 @@ a.cat-badge:hover { color: var(--link); border-color: var(--link); }
 /* Табличный вид разделов (юзер-фидбек 2026-07-21): имя · код arXiv · число статей,
    сортировка по числу статей ↓ (уже в generate_sections_cloud). Код-колонка отличает
    math.MP от math-ph визуально, хотя оба показывают одно каноничное имя "Math Physics". */
-.sections-table { width: 100%; max-width: 680px; margin: 8px 0 30px; border-collapse: collapse; font-size: 14px; }
+.sections-table { width: 100%; max-width: var(--w-wide); margin: 8px 0 30px; border-collapse: collapse; font-size: 14px; }
 .sections-table th {
     text-align: left; font-size: 12px; font-weight: 600; color: var(--soft);
     padding: 6px 10px; border-bottom: 1px solid var(--border);
@@ -924,7 +926,7 @@ a.cat-badge:hover { color: var(--link); border-color: var(--link); }
 .tm-label { font-weight: 500; line-height: 1.15; word-break: break-word; }
 .tm-n { font-weight: 400; opacity: .82; }
 /* ── Структурный аккордеон (js/treeview.js) — ДЕФОЛТНЫЙ вид облака тегов/законов ── */
-#treeview { max-width: 680px; margin: 0 auto 24px; }
+#treeview { max-width: var(--w-wide); margin: 0 auto 24px; }
 .tv-group { border-bottom: 1px solid var(--border); }
 .tv-head { display: flex; align-items: center; gap: 10px; width: 100%; background: none; border: none;
     cursor: pointer; padding: 12px 4px; font-size: 15px; color: var(--text); text-align: start; font-family: inherit; }
@@ -980,7 +982,7 @@ a.cat-badge:hover { color: var(--link); border-color: var(--link); }
    .article-wrapper (~868px), текст внутри упирался в свои 620px и заканчивался на 250px раньше
    границы блока — правая колонка (посаженная по краю БЛОКА) визуально "уезжала" от текста. */
 .article-main {
-    flex: 1 1 0; min-width: 0; max-width: 680px;
+    flex: 1 1 0; min-width: 0; max-width: var(--w-wide);
     background: var(--bg);
     padding: 24px clamp(16px, 4vw, 40px) 24px 0;
 }
@@ -1575,7 +1577,7 @@ html[dir="rtl"] .feedback .fb-title-row { justify-content: flex-start; }
 /* Главная — тот же узкий список (юзер-фидбек 2026-07-15): без отдельной колонки-даты и
    разделительных линий список плотнее, а освободившаяся ширина уходит под перенос описания
    (тот же текст на ~25% уже колонке — оборачивается в больше строк, не обрезается сильнее). */
-#search-results:not(.entity-list) { max-width: 620px; }
+#search-results:not(.entity-list) { max-width: var(--w-text)   /* Проход 2: лента той же ширины, что всё остальное */; }
 
 /* ── Tag header ───────────────── */
 .tag-header { position: relative; margin-bottom: 30px; max-width: 620px; }
@@ -2174,7 +2176,7 @@ html[dir="rtl"] .bar-x { transform: rotate(45deg); }
 .an-card-link:hover .an-card-n { color: var(--link); }
 .an-card-d { font-size: 12.5px; line-height: 1.5; color: var(--muted); margin-top: 4px; }
 /* Сцена карты — по ширине колонки (не шире), как остальной контент */
-.an-stage { max-width: 680px; }
+.an-stage { max-width: var(--w-wide); }
 /* Кнопка «на весь экран» + контрол скорости полёта */
 .an-stage-ctl { position: absolute; top: 8px; right: 8px; display: flex; gap: 6px; z-index: 6; }
 .an-btn { width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center;
@@ -2235,7 +2237,13 @@ html[dir="rtl"] .cov-bar-tot, html[dir="rtl"] .cov-bar-take { left: auto; right:
 
 /* ═══ Единый стандарт шапки и ширины контента (юзер 2026-07-25: «иконки гуляют как хотят»,
    «ширина текста/контента и меню — стандарт везде, а то в карточках едет») ═══ */
-:root { --w-text: 620px; --w-wide: 680px; }
+:root {
+    /* Проход 2 (2026-08-25): 620/680 → 748. Ширина содержимого выведена из ширины
+       страницы (--w-page 780 минус поля 16+16), а не назначена отдельно. Разница
+       между «текстом» и «широким» исчезла вместе с боковой колонкой статьи —
+       отличаться широкому больше не от чего. */
+    --w-text: 748px; --w-wide: 748px;
+}
 /* Иконки правого кластера: один размер, одна высота, по центру, ровная строка */
 .header-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; row-gap: 4px; }
 .header-right .ico-svg { width: 17px; height: 17px; vertical-align: middle; }
@@ -4043,4 +4051,49 @@ body.article-page .meta-cats { margin-bottom: var(--s-3); }
 @media (max-width: 720px) {
     body.article-page { padding-left: var(--s-4); padding-right: var(--s-4); }
     body.article-page .article-side--flow { padding: var(--s-3) var(--s-4); }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Проход 2 — общая раскладка сайта (2026-08-25)
+
+   Было семь «главных ширин»: 640 (38 правил), 620 (31), 680 (15), 900 (10),
+   700, 560, 400. Стало две: --w-page для контейнеров, --w-read для прозы.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+body { max-width: var(--w-page); }
+
+/* Шапка, языки и полоса разделов — во всю колонку. Раньше они держали 620, из-за
+   чего правый край меню не совпадал с правым краем содержимого. */
+.top-bar,
+.langs-row,
+.category-bar,
+.site-stats { max-width: none; }
+
+/* Проза везде — по комфортной строке. Строка длиннее ~75 знаков заставляет глаз
+   терять начало следующей; это единственная причина ограничения, и она не зависит
+   от того, на какой мы странице. */
+.section-desc,
+.abstract-lead,
+.entity-desc,
+.about-lead { max-width: var(--w-read); }
+
+/* Обложка, граф и его подписи — во всю колонку: они рассматриваются, а не читаются. */
+.ai-cover,
+.mini-graph,
+.mini-graph-label,
+.mini-graph-filters { max-width: none; }
+
+/* Карточка ленты и элементы списков ширину не ограничивают: её задаёт
+   контейнер (--w-text). Раньше карточка несла собственные 620 и при
+   более широком контейнере оставляла справа пустую полосу. */
+.article-card, .entity-list > * { max-width: none; }
+
+/* Ритм списков и секций — по шкале, а не по шести разным значениям. */
+.entity-list .article-card { margin-bottom: var(--s-3); }
+.section { margin-bottom: var(--s-6); }
+.letter-section { margin-bottom: var(--s-5); }
+
+@media (max-width: 720px) {
+  body { padding-left: var(--s-4); padding-right: var(--s-4); }
 }
