@@ -196,6 +196,51 @@ def services():
     return out[:8]
 
 
+def r2_ops(day):
+    """Операции записи R2 за сутки — та строка, которой не хватало месяц.
+
+    Августовский счёт: $18 из $18.06 — это Class A Operations, 4.41 миллиона записей,
+    то есть ~17 полных заливок сайта. Расход воркеров и базы мерился, а запись R2 — нет:
+    смотрели на трафик чтения, а платной оказалась запись. Полная пересборка стоит
+    ~$1.30 живыми деньгами; эта строка делает цену видимой НА СЛЕДУЮЩЕЕ ЖЕ утро, а не
+    в счёте через месяц."""
+    import requests as _rq
+    import datetime as _dt
+    e = _env_map()
+    acc, tok = e.get("CLOUDFLARE_ACCOUNT_ID"), e.get("CLOUDFLARE_API_TOKEN")
+    if not (acc and tok):
+        return None
+    try:
+        d0 = _dt.datetime.strptime(day, "%Y-%m-%d")
+        q = ("query($a:String!,$s:Date!,$e:Date!){viewer{accounts(filter:{accountTag:$a}){"
+             "r2OperationsAdaptiveGroups(limit:10,filter:{date_geq:$s,date_leq:$e}){"
+             "sum{requests} dimensions{actionType}}}}}")
+        r = _rq.post("https://api.cloudflare.com/client/v4/graphql",
+                     headers={"Authorization": f"Bearer {tok}"},
+                     json={"query": q, "variables": {
+                         "a": acc, "s": day, "e": day}}, timeout=45).json()
+        rows = r["data"]["viewer"]["accounts"][0]["r2OperationsAdaptiveGroups"]
+        a_ops = sum(x["sum"]["requests"] for x in rows
+                    if x["dimensions"]["actionType"] in
+                    ("PutObject", "ListObjects", "CopyObject", "CompleteMultipartUpload",
+                     "CreateMultipartUpload", "UploadPart", "PutBucket", "ListBuckets",
+                     "PutBucketEncryption", "DeleteObject"))
+        return a_ops
+    except Exception:
+        return None
+
+
+def _env_map():
+    out = {}
+    p2 = ROOT / ".env"
+    if p2.exists():
+        for line in p2.read_text(encoding="utf-8").splitlines():
+            if "=" in line and not line.strip().startswith("#"):
+                k, v = line.split("=", 1)
+                out[k.strip()] = v.strip()
+    return out
+
+
 def cards_gap():
     """Совпадает ли то, что на диске, с тем, что отдаёт сайт.
 
@@ -344,6 +389,7 @@ def build(day):
     letters = mail(day)
     svc = services()
     cg = cards_gap()
+    r2w = r2_ops(day)
     open_q = pending()
 
     L = [f"📋 <b>Отчёт за {day}</b>"]
@@ -408,6 +454,12 @@ def build(day):
             L.append('\n' + f"🗂 <b>Облако</b>: РАСХОЖДЕНИЕ — на диске {cg['disk']}, "
                      f"в базе {cg['db']} (последняя {cg['last']}). "
                      f"Починка: python cloudflare/cards_sync.py --apply")
+
+    if r2w is not None:
+        # ~$5.27 за миллион записей сверх первого бесплатного миллиона в месяц
+        cost = max(0, r2w - 33000) * 4.5 / 1_000_000   # грубая дневная прикидка
+        L.append(f"\u2601 <b>Запись в R2</b>: {r2w:,} операций за день".replace(",", " ")
+                 + (f" (~${cost:.2f})" if cost >= 0.05 else ""))
 
     L.extend(week_block(day))
 

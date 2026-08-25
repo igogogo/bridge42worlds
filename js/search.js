@@ -1405,6 +1405,22 @@ function mountYoungLangNote(count) {
 }
 
 function showLatest() {
+    // Страница автора рисуется своим модулем (см. _authorLive). Проверка стоит ЗДЕСЬ, а не
+    // только в _defaultFeed: showLatest зовут ещё из четырёх мест напрямую — при смене
+    // уровня, при очистке поиска, при сбросе фильтров, — и каждое из них затирало бы
+    // разложенный по людям список.
+    if (_authorLive()) {
+        if (typeof window.B42AuthorLive === 'function') window.B42AuthorLive();
+        return;
+    }
+    // Страницы тега/учёного/раздела, перешедшие на живой список (js/entity-live.js),
+    // рисуются им же — по той же причине, что и автор: лента из индекса затёрла бы
+    // постраничный список вместе с кнопкой догрузки.
+    var _lb = document.getElementById('search-results');
+    if (_lb && _lb.dataset && _lb.dataset.live === '1') {
+        if (typeof window.B42EntityLive === 'function') window.B42EntityLive();
+        return;
+    }
     var arr = sortFeed(
         applyPageContext(searchIndex.filter(function(item) { return item.version === effVersion(); })),
         getSortMode()
@@ -1515,7 +1531,26 @@ function showFavorites() {
 }
 window.showFavorites = showFavorites;
 
-function _defaultFeed() { if (window.__favoritesPage) showFavorites(); else showLatest(); }
+/* Лента по умолчанию. На странице автора её рисует НЕ этот файл, а js/author-live.js:
+   там список приходит из D1 уже разложенным по разным людям с одинаковой подписью, чего
+   индекс не умеет в принципе.
+
+   Проверка нужна именно здесь, а не «кто успел». Первая версия полагалась на порядок:
+   живой модуль отвечает за 0.2 с, индекс качается дольше — казалось, что модуль всегда
+   первый. На проде вышло наоборот, и лента, дорисовавшись, стирала разложенный список
+   вместе с кнопками автора. Гонки не выигрывают, их убирают.
+
+   Признак — data-akey на контейнере: он есть только у страниц авторов и ставится тем же
+   шаблоном, что подключает модуль. */
+function _authorLive() {
+    var b = document.getElementById('search-results');
+    return !!(b && b.dataset && b.dataset.akey);
+}
+
+function _defaultFeed() {
+    if (_authorLive()) return;
+    if (window.__favoritesPage) showFavorites(); else showLatest();
+}
 
 function filterByCategory(cat) {
     hideSortControl();

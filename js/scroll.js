@@ -172,7 +172,48 @@ function urlForVersion(url, version) {
  * не пустовал.
  */
 var _relVec = null;
-fetch('/data/related-vec.json').then(function (r) { return r.json(); })
+
+/* Похожие из облака — ПЕРВЫЙ путь. Один запрос на 7 КБ отдаёт готовые карточки похожих
+   и цитируемых; старый путь ниже качал ради того же related-vec.json плюс ПОЛНЫЙ индекс
+   языка (3.7 МБ по сети) — самый дорогой блок на странице статьи. Старый путь оставлен
+   запасным: облако молчит — читатель видит ровно то, что видел до этого модуля. */
+function sideArgs() {
+    var args = window.__relatedArgs;
+    if (args) return args;
+    var el = document.querySelector('[data-article-id]');
+    var raw = el ? el.dataset.articleId : '';
+    var id = (raw.split('_')[0] || '');
+    if (!/^\d{4}\.\d{4,5}(v\d+)?$/.test(id)) return null;
+    var path = location.pathname;
+    var ver = path.indexOf('advanced.html') !== -1 ? 'advanced'
+            : (path.indexOf('simple.html') !== -1 ? 'simple'
+            : (path.indexOf('mini.html') !== -1 ? 'mini' : 'popular'));
+    return [id, getLang(), ver];
+}
+
+(function () {
+    var args = sideArgs();
+    if (!args || !document.getElementById('related')) return legacyRelated();
+    var v = args[2] === 'mini' ? 'popular' : args[2];
+    fetch('/api/side?id=' + encodeURIComponent(args[0]) +
+          '&lang=' + args[1] + '&version=' + v)
+        .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+        .then(function (d) {
+            var box = document.getElementById('related');
+            if (d && d.related && d.related.length && box) {
+                drawRelated(box, d.related.map(function (a) { return { a: a }; }),
+                            args[1], args[2]);
+            } else {
+                legacyRelated();
+            }
+        })
+        .catch(legacyRelated);
+})();
+
+function legacyRelated() {
+    if (window.__legacyRelStarted) return;
+    window.__legacyRelStarted = 1;
+    fetch('/data/related-vec.json').then(function (r) { return r.json(); })
     .then(function (m) {
         _relVec = m;
         // Рисуем блок САМИ, не дожидаясь ленивого загрузчика.
@@ -196,6 +237,7 @@ fetch('/data/related-vec.json').then(function (r) { return r.json(); })
         }
         renderRelated.apply(null, args);
     }).catch(function () { _relVec = {}; });
+}
 function relatedByMeaning(currentId) {
     if (!_relVec) return null;
     var near = _relVec[currentId];

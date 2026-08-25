@@ -3907,3 +3907,35 @@ body.graph-fs-open .graph-fs-active svg { touch-action: manipulation; }
     border-radius: 999px; cursor: pointer; transition: background .15s, border-color .15s; }
 .agroup-more:hover:not(:disabled) { border-color: var(--link); }
 .agroup-more:disabled { color: var(--muted); cursor: default; }
+
+
+/* Пять действий автора на его странице (js/author-live.js). Блок намеренно спокойный:
+   это не призыв, а дверь, в которую стучат редко и по делу. Отделён линией сверху,
+   чтобы не путался со списком работ. */
+.aclaim { margin-top: 44px; padding-top: 22px; border-top: 1px solid var(--border); }
+.aclaim h3 { font-size: 16px; margin: 0 0 6px; }
+.aclaim-lead { font-size: 13px; color: var(--soft); line-height: 1.65; max-width: 62ch; margin: 0 0 14px; }
+.aclaim-acts { display: flex; flex-wrap: wrap; gap: 8px; }
+.aclaim-btn { font: inherit; font-size: 13px; padding: 6px 14px; border-radius: 999px;
+    border: 1px solid var(--border); background: none; color: var(--ink); cursor: pointer;
+    transition: border-color .15s, background .15s; }
+.aclaim-btn:hover:not(:disabled) { border-color: var(--link); }
+.aclaim-btn.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.aclaim-btn:disabled { color: var(--muted); cursor: default; }
+/* «Уберите мою страницу» — последняя кнопка. Не прячем и не красим тревожно: право
+   человека на себя не должно выглядеть опасным действием. */
+.aclaim-btn:last-child { color: var(--soft); }
+.aclaim-form { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.aclaim-form input { font: inherit; font-size: 13px; padding: 7px 12px; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--bg); color: var(--ink); min-width: 240px; }
+.aclaim-form input[hidden] { display: none; }
+.aclaim-send { font: inherit; font-size: 13px; padding: 7px 18px; border-radius: 8px;
+    border: 1px solid var(--ink); background: var(--ink); color: var(--bg); cursor: pointer; }
+.aclaim-send:disabled { opacity: .6; cursor: default; }
+.aclaim-msg { font-size: 13px; line-height: 1.6; color: var(--soft); margin-top: 12px; max-width: 62ch; }
+
+/* Столбики публикаций по годам на страницах сущностей (js/entity-live.js). Обычные span,
+   не библиотека: ради четырнадцати прямоугольников рисовалку не возят. */
+.ebars { display: flex; align-items: flex-end; gap: 3px; height: 38px; margin: 8px 0 4px; }
+.ebar { width: 9px; background: var(--border); border-radius: 2px 2px 0 0; }
+.ebar:hover { background: var(--link); }

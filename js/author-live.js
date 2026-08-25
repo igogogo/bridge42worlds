@@ -206,6 +206,132 @@
         });
     }
 
+
+    /* ─── Пять действий автора ──────────────────────────────────────────────
+     *
+     * Владелец 25 августа: «подтвердить что всё отлично · добавить статью которой не
+     * хватает и где я автор · указать автора который тоже я · убрать статью, это не я ·
+     * убрать целиком мою страницу, я против… но только надо прислать письмо с
+     * аккредитованного адреса».
+     *
+     * Порядок кнопок не случаен: сначала то, что человек сделает чаще всего и с
+     * удовольствием (подтвердить), в конце — то, что он делает в раздражении (снять
+     * страницу). Прятать последнее нельзя: право человека на себя важнее нашей ленты,
+     * и если его спрятать, он напишет не нам, а куда-нибудь ещё.
+     *
+     * Адрес мы спрашиваем, хотя он у нас есть: в облаке лежат только отпечатки адресов,
+     * самих адресов там нет. Человеку об этом сказано прямо — иначе вопрос «зачем вы
+     * спрашиваете то, что и так знаете» останется без ответа и будет выглядеть подвохом.
+     */
+    var ACTIONS = {
+        ru: [
+            ['confirm',  'Всё верно, это мои работы',        ''],
+            ['add',      'Не хватает моей статьи',           'Номер arXiv, например 2412.00159'],
+            ['merge',    'Вон тот автор — тоже я',           'Номер группы или ссылка на неё'],
+            ['remove',   'Эта статья не моя',                'Номер arXiv статьи, которую убрать'],
+            ['withdraw', 'Уберите мою страницу',             '']
+        ],
+        en: [
+            ['confirm',  'Correct — these are my papers',    ''],
+            ['add',      'A paper of mine is missing',       'arXiv id, e.g. 2412.00159'],
+            ['merge',    'That author is me as well',        'Group id or a link to it'],
+            ['remove',   'This paper is not mine',           'arXiv id of the paper to remove'],
+            ['withdraw', 'Please take my page down',         '']
+        ]
+    };
+    var UI2 = {
+        ru: {
+            head: 'Это ваша страница?',
+            lead: 'Вы автор и что-то здесь не так — поправим. Действие подтверждается письмом: ' +
+                  'напишите адрес, которым подписана ваша работа. Самих адресов мы не храним, ' +
+                  'только их отпечатки, поэтому и спрашиваем.',
+            mail: 'Ваш адрес', send: 'Отправить', sending: 'Отправляю…',
+            need: 'Укажите адрес', needTarget: 'Заполните поле выше',
+            fail: 'Не получилось отправить. Попробуйте позже или напишите нам.'
+        },
+        en: {
+            head: 'Is this your page?',
+            lead: 'You are the author and something here is wrong — we will fix it. The action is ' +
+                  'confirmed by letter: give the address your paper is signed with. We do not keep ' +
+                  'addresses, only their fingerprints — that is why we ask.',
+            mail: 'Your address', send: 'Send', sending: 'Sending…',
+            need: 'Please give an address', needTarget: 'Fill the field above',
+            fail: 'Could not send. Try later or write to us.'
+        }
+    };
+
+    function claimsBlock() {
+        var l = (L === 'ru') ? 'ru' : 'en';
+        var t = UI2[l], acts = ACTIONS[l];
+        var html = '<section class="aclaim"><h3>' + esc(t.head) + '</h3>' +
+            '<p class="aclaim-lead">' + esc(t.lead) + '</p><div class="aclaim-acts">';
+        acts.forEach(function (a) {
+            html += '<button type="button" class="aclaim-btn" data-act="' + a[0] +
+                    '" data-ph="' + esc(a[2]) + '">' + esc(a[1]) + '</button>';
+        });
+        html += '</div><form class="aclaim-form" hidden>' +
+            '<input type="text" class="aclaim-target" hidden>' +
+            '<input type="email" class="aclaim-mail" placeholder="' + esc(t.mail) + '" required>' +
+            '<button type="submit" class="aclaim-send">' + esc(t.send) + '</button>' +
+            '</form><p class="aclaim-msg" hidden></p></section>';
+        return html;
+    }
+
+    function mountClaims(root, personId) {
+        var l = (L === 'ru') ? 'ru' : 'en';
+        var t = UI2[l];
+        var sec = root.querySelector('.aclaim');
+        if (!sec) return;
+        var form = sec.querySelector('.aclaim-form');
+        var target = sec.querySelector('.aclaim-target');
+        var mail = sec.querySelector('.aclaim-mail');
+        var msg = sec.querySelector('.aclaim-msg');
+        var cur = null;
+
+        sec.querySelectorAll('.aclaim-btn').forEach(function (b) {
+            b.addEventListener('click', function () {
+                sec.querySelectorAll('.aclaim-btn').forEach(function (x) {
+                    x.classList.toggle('on', x === b);
+                });
+                cur = b.dataset.act;
+                var ph = b.dataset.ph || '';
+                target.hidden = !ph;
+                target.placeholder = ph;
+                target.value = '';
+                form.hidden = false;
+                msg.hidden = true;
+                (ph ? target : mail).focus();
+            });
+        });
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (!cur) return;
+            if (!target.hidden && !target.value.trim()) {
+                msg.hidden = false; msg.textContent = t.needTarget; return;
+            }
+            var btn = form.querySelector('.aclaim-send');
+            btn.disabled = true; btn.textContent = t.sending;
+            fetch(API + '/api/author/claim', {
+                method: 'POST', headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({
+                    akey: AKEY, person: personId || '', action: cur,
+                    target: target.hidden ? '' : target.value.trim(),
+                    email: mail.value.trim(), lang: L
+                })
+            }).then(function (r) { return r.json(); }).then(function (d) {
+                msg.hidden = false;
+                msg.textContent = d && d.message ? d.message : t.fail;
+                if (d && d.ok) { form.hidden = true;
+                    sec.querySelectorAll('.aclaim-btn').forEach(function (x) { x.disabled = true; }); }
+                btn.disabled = false; btn.textContent = t.send;
+            }).catch(function () {
+                msg.hidden = false; msg.textContent = t.fail;
+                btn.disabled = false; btn.textContent = t.send;
+            });
+        });
+    }
+
     function render(d) {
         var many = d.groups.length > 1;
         var html = '';
@@ -218,8 +344,13 @@
             html += '<p class="agroup-intro">' +
                 esc(T.hidden.replace('{g}', d.hiddenGroups).replace('{w}', d.hiddenWorks)) + '</p>';
         }
+        // Кнопки автора — ПОСЛЕ списка: сначала человек видит работы, потом решает,
+        // всё ли с ними так. Обратный порядок предлагал бы жаловаться до того, как
+        // он посмотрел.
+        html += claimsBlock();
         box.innerHTML = html;
         [].forEach.call(box.querySelectorAll('.agroup'), mountMore);
+        mountClaims(box, (d.groups[0] && d.groups[0].s2) || '');
         if (typeof initAllTooltips === 'function') initAllTooltips();
         if (typeof initReveal === 'function') initReveal();
 
@@ -244,8 +375,18 @@
         }
     }
 
+    // Перерисовка по требованию: search.js зовёт её, когда читатель очистил поиск или
+    // переключил уровень сложности. Данные берём заново — уровень меняет тексты карточек.
+    var _last = null;
+    window.B42AuthorLive = function () {
+        if (_last) render(_last);
+        api('').then(function (d) { if (d && d.groups && d.groups.length) { _last = d; render(d); } })
+               .catch(function () {});
+    };
+
     if (!T) return;
     api('').then(function (d) {
+        _last = d;
         // Ответа нет — на странице остаётся список, вшитый при сборке. Пустая страница
         // была бы хуже устаревшей: автор, пришедший на своё имя, должен увидеть работы.
         if (d && d.groups && d.groups.length) render(d);

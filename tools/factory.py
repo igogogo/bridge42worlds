@@ -475,6 +475,12 @@ def main():
         # Заливается только разница по отпечатку строки, обычный день — десятки строк.
         rc = run([sys.executable, "cloudflare/cards_sync.py", "--apply"], timeout=5400)
         done.append(("cards", rc))
+        # Обвязка — связи тег/закон/учёный/раздел → работа, сводки сущностей, «бока»
+        # статей. Тот же принцип, что у карточек: сайт читает это из D1, значит после
+        # каждой пересборки индексов данные обязаны доехать до облака сами, а не когда
+        # вспомнят. Девятнадцать дней мёртвой b42-cards выучены.
+        rc = run([sys.executable, "cloudflare/frame_sync.py", "--apply"], timeout=5400)
+        done.append(("frame", rc))
         run([sys.executable, "tools/stats_refresh.py"], timeout=1800)
 
     STATE.parent.mkdir(exist_ok=True)
@@ -504,6 +510,7 @@ STEP_NAMES = {
     "refs": "сверка справочников",
     "publish": "пересборка и выкладка",
     "cards": "карточки в облако (лента и авторы)",
+    "frame": "обвязка в облако (теги, похожие, сводки)",
 }
 
 

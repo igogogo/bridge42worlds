@@ -2655,6 +2655,113 @@ async function handleAuthorConfirm(request, env) {
 }
 
 
+/* ─────────────── ОБЩАЯ ДИНАМИКА: списки сущностей и обвязка статьи ───────────────
+ *
+ * Владелец 25 августа: «всю динамику реализовать, потому что автор просто частный случай —
+ * так сразу решишь задачу в целом». Три ручки закрывают всё, что растёт вместе с архивом:
+ *
+ *   /api/list?kind=tag&key=black_holes&…   карточки, связанные с сущностью, страницами
+ *   /api/entity?kind=tag&key=black_holes   сводка сущности: числа, годы, разделы
+ *   /api/side?id=2608.19555                обвязка одной статьи: похожие, цитаты, кадры
+ *
+ * Kind «cat» — раздел arXiv; авторы живут своей ручкой /api/author, потому что у них есть
+ * личность (person_id), которой у тега быть не может.
+ *
+ * Данные кладёт cloudflare/frame_sync.py после каждой пересборки индексов — тем же шагом
+ * фабрики, что cards_sync. Ответы кэшируются на краю: связи меняются раз в сутки.
+ */
+const LINK_KINDS = ["tag", "law", "sci", "cat"];
+
+async function handleEntityList(request, env) {
+  if (!env.CARDS) return noCards();
+  const url = new URL(request.url);
+  const cache = caches.default;
+  const hit = await cache.match(request);
+  if (hit) return hit;
+
+  const { lang, version, limit, page, offset } = feedParams(url);
+  const kind = (url.searchParams.get("kind") || "").slice(0, 8);
+  const key = (url.searchParams.get("key") || "").slice(0, 80);
+  if (!LINK_KINDS.includes(kind) || !key) {
+    return Response.json({ error: "bad_request" }, { status: 400 });
+  }
+  const sort = url.searchParams.get("sort") === "old" ? "l.date ASC, c.id ASC"
+    : "l.date DESC, c.id DESC";
+  const rows = await env.CARDS.prepare(
+    `SELECT ${FEED_COLS.split(", ").map((c) => "c." + c).join(", ")}
+       FROM card_links l JOIN cards c ON c.id = l.id
+      WHERE l.kind = ? AND l.key = ? AND c.lang = ? AND c.version = ?
+      ORDER BY ${sort} LIMIT ? OFFSET ?`)
+    .bind(kind, key, lang, version, limit, offset).all();
+  const items = (rows.results || []).map(feedRow);
+  const out = feedJson({ items, page, limit, more: items.length === limit });
+  request.method === "GET" && (await cache.put(request, out.clone()));
+  return out;
+}
+
+async function handleEntityStats(request, env) {
+  if (!env.CARDS) return noCards();
+  const url = new URL(request.url);
+  const cache = caches.default;
+  const hit = await cache.match(request);
+  if (hit) return hit;
+
+  const kind = (url.searchParams.get("kind") || "").slice(0, 8);
+  const key = (url.searchParams.get("key") || "").slice(0, 80);
+  if (!LINK_KINDS.includes(kind) || !key) {
+    return Response.json({ error: "bad_request" }, { status: 400 });
+  }
+  const r = await env.CARDS.prepare(
+    "SELECT total, express, km, first, last, by_year, cats FROM entity_stats " +
+    "WHERE kind = ? AND key = ?").bind(kind, key).first();
+  if (!r) return feedJson({ found: false }, 600);
+  const j = (s) => { try { return JSON.parse(s || "{}"); } catch { return {}; } };
+  const out = feedJson({
+    found: true, total: r.total, express: r.express,
+    full: (r.total || 0) - (r.express || 0), km: r.km,
+    first: r.first || "", last: r.last || "",
+    byYear: j(r.by_year), cats: j(r.cats),
+  }, 600);
+  request.method === "GET" && (await cache.put(request, out.clone()));
+  return out;
+}
+
+async function handleArticleSide(request, env) {
+  if (!env.CARDS) return noCards();
+  const url = new URL(request.url);
+  const cache = caches.default;
+  const hit = await cache.match(request);
+  if (hit) return hit;
+
+  const { lang, version } = feedParams(url);
+  const id = (url.searchParams.get("id") || "").slice(0, 24).split("v")[0];
+  if (!/^[0-9]{4}\.[0-9]{4,6}$/.test(id) && !/^[a-z-]+\/[0-9]{7}$/.test(id)) {
+    return Response.json({ error: "bad_id" }, { status: 400 });
+  }
+  const r = await env.CARDS.prepare(
+    "SELECT related, cited, frames FROM article_side WHERE id = ? OR id = ? || 'v1'")
+    .bind(id, id).first();
+  if (!r) return feedJson({ related: [], cited: [], frames: 0 }, 600);
+  const j = (s) => { try { return JSON.parse(s || "[]"); } catch { return []; } };
+  // Карточки похожих отдаём сразу, тем же ответом: иначе клиенту нужен второй заход
+  // в /api/cards, а похожие — самый частый блок на странице статьи.
+  const rel = j(r.related), cit = j(r.cited);
+  const ids = [...new Set([...rel, ...cit])].slice(0, 24);
+  let by = new Map();
+  if (ids.length) {
+    const marks = ids.map(() => "?").join(",");
+    const rows = await env.CARDS.prepare(
+      `SELECT ${FEED_COLS} FROM cards WHERE lang = ? AND version = ? AND id IN (${marks})`)
+      .bind(lang, version, ...ids).all();
+    by = new Map((rows.results || []).map((x) => [x.id, feedRow(x)]));
+  }
+  const pick = (arr) => arr.map((i) => by.get(i)).filter(Boolean);
+  const out = feedJson({ related: pick(rel), cited: pick(cit), frames: r.frames || 0 }, 600);
+  request.method === "GET" && (await cache.put(request, out.clone()));
+  return out;
+}
+
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -2678,6 +2785,9 @@ export default {
     if (url.pathname === "/api/author/confirm") return feedGuard(request, env, handleAuthorConfirm);
     if (url.pathname === "/api/cards") return withCors(await feedGuard(request, env, handleCardsByIds));
     if (url.pathname === "/api/find") return withCors(await feedGuard(request, env, handleWordSearch));
+    if (url.pathname === "/api/list") return withCors(await feedGuard(request, env, handleEntityList));
+    if (url.pathname === "/api/entity") return withCors(await feedGuard(request, env, handleEntityStats));
+    if (url.pathname === "/api/side") return withCors(await feedGuard(request, env, handleArticleSide));
     if (url.pathname === "/api/ask") return withCors(await handleAsk(request, env));
     if (url.pathname === "/api/quota") return withCors(await handleQuota(request, env));
     if (url.pathname === "/api/auth/google") return handleGoogleStart(request, env);
