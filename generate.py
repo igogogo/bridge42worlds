@@ -869,6 +869,22 @@ def full_first(items):
     return full + [a for a in items if a.get("express")]
 
 
+# Сколько карточек вшивать в страницу сущности при сборке.
+#
+# Было — все. Страница Эйнштейна весила 9.4 МБ (707 карточек), суммарно справочники
+# русского языка занимали 368 МБ, и это на каждом из пяти языков. На телефоне такая
+# страница не открывается, а не «медленно открывается».
+#
+# Вшитый список нужен ровно для двух вещей: показать содержимое поисковику и остаться
+# читаемым, если облако не ответило (см. шапку js/entity-live.js). Ни одна из них не
+# требует семисот карточек: живой список приходит из D1 страницами по 20, то есть
+# читатель и раньше не видел всё сразу. Сорок — две такие страницы.
+#
+# СЧЁТЧИКИ НЕ ТРОГАЕМ: «работ по теме» считается по всему индексу, предел только на
+# печать. Иначе страница начнёт врать о размере темы.
+STATIC_CARDS_CAP = 40
+
+
 def entity_article_card(a, lang):
     """Карточка статьи в списках справочников (тег/закон/учёный/раздел/автор) — единый вид с
     лентой: миниатюра-обложка + название + короткий текст (юзер 2026-07-24: «список с картинками
@@ -2649,8 +2665,9 @@ def generate_tag_page(tag_id, lang):
     index = load_index(lang)
 
     articles_html = ""
-    for a in full_first([x for x in index
-                         if tag_id in x.get("tags", []) and x.get("version") == "popular"]):
+    tag_arts = full_first([x for x in index
+                           if tag_id in x.get("tags", []) and x.get("version") == "popular"])
+    for a in tag_arts[:STATIC_CARDS_CAP]:
         articles_html += entity_article_card(a, lang)
 
     related_html = " · ".join(
@@ -3185,9 +3202,8 @@ def generate_law_page(law_id, lang):
         if a["id"] in seen: continue
         seen.add(a["id"])
         law_article_count += 1
-        articles_html += (
-            entity_article_card(a, lang)
-        )
+        if law_article_count <= STATIC_CARDS_CAP:
+            articles_html += entity_article_card(a, lang)
 
     lraw = L.get("raw") or {}
     raw_pop = lraw.get("description_popular") or lraw.get("description_simple") or lraw.get("description", "")
@@ -3461,9 +3477,12 @@ def generate_scientist_page(sid, lang):
     ]
     index = load_index(lang)
     articles_html = ""
+    sci_n = 0
     for a in index:
         if sid in a.get("scientists", []) and a.get("version") == "popular":
-            articles_html += entity_article_card(a, lang)
+            sci_n += 1
+            if sci_n <= STATIC_CARDS_CAP:
+                articles_html += entity_article_card(a, lang)
     loc = {
         "en": {"related": "Related tags", "related_laws": "Related laws", "related_scientists": "Related scientists", "discoveries": "Key discoveries", "bio": "Biography", "quote": "Quote",
                "search": "Search...", "hint": "! scientist · # tag · @ author", "footer": "science made simple",
@@ -3640,9 +3659,8 @@ def generate_section_page(cat, lang, index=None):
         if cat not in (a.get("categories") or []): continue
         if a["id"] in seen: continue
         seen.add(a["id"]); count += 1
-        articles_html += (
-            entity_article_card(a, lang)
-        )
+        if count <= STATIC_CARDS_CAP:
+            articles_html += entity_article_card(a, lang)
     (Path(LANG_DIR) / lang / "sections").mkdir(parents=True, exist_ok=True)
     _write_text_retry(Path(LANG_DIR) / lang / "sections" / f"{section_slug(cat)}.html", tpl.substitute(
         lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang="en", asset_ver=asset_ver(),
@@ -3892,7 +3910,8 @@ def update_all_authors():
             slug = author_slug(author_name)
             articles_html = "".join(
                 entity_article_card(a, lang)
-                for a in (by_id.get(aid) for aid in data.get("articles", [])) if a
+                for a in [x for x in (by_id.get(aid) for aid in data.get("articles", []))
+                          if x][:STATIC_CARDS_CAP]
             )
             coauthors_html = " · ".join(
                 f'<a href="/{lbase}/authors/{author_slug(ca)}.html" data-author="{attr_safe(ca)}">{ca}</a>'
