@@ -2331,6 +2331,24 @@ async function handleAuthorFeed(request, env) {
   // порция карточек каждого. Считается ОДНИМ запросом на сводку плюс по запросу на группу:
   // групп у подавляющего большинства ключей ровно одна, а рекордсмены вроде zhang|y режутся
   // потолком ниже — семьдесят восемь заголовков на странице всё равно никто не прочтёт.
+  // Портфель автора в arXiv целиком — сколько работ у человека вообще, по годам.
+  // Наши разборы на его фоне и есть честная статистика: «22 работы в arXiv, мы
+  // пересказали 14». Серые столбики под голубыми на одной диаграмме.
+  const refs = await db.prepare(
+    "SELECT arxiv_total, first_year, last_year, by_year, ours_by_year " +
+    "FROM author_refs WHERE akey = ?").bind(akey).first();
+
+  // Разбивка НАШИХ работ по годам с типами — для вложенных сегментов диаграммы
+  // (владелец: «каждая колонка это все его статьи, а в ней разным цветом сколько
+  // экспресс, сколько полных, сколько разобранных — это же вложенные множества»).
+  // Одна группировка в базе дешевле, чем считать то же самое на клиенте, перебрав
+  // все страницы списка.
+  const oursDetail = await db.prepare(
+    `SELECT substr(c.date, 1, 4) y, COUNT(*) n, SUM(c.express) ex, SUM(c.km) km
+       FROM card_authors a JOIN cards c ON c.id = a.id
+      WHERE a.akey = ? AND c.lang = ? AND c.version = ?
+      GROUP BY y ORDER BY y`).bind(akey, lang, version).all();
+
   const summary = await db.prepare(
     `SELECT COALESCE(a.person_id, a.s2_author_id) s2, MAX(a.s2_name) s2name, COUNT(*) total,
             SUM(c.express) express, SUM(c.km) km, MIN(c.date) first, MAX(c.date) last
@@ -2378,8 +2396,17 @@ async function handleAuthorFeed(request, env) {
   }
 
   const sum = (f) => rowsAll.reduce((s, g) => s + (g[f] || 0), 0);
+  const jj = (s) => { try { return JSON.parse(s || "{}"); } catch { return {}; } };
   const out = feedJson({
     groups,
+    ...(refs ? { archive: {
+      total: refs.arxiv_total || 0,
+      first: refs.first_year || "", last: refs.last_year || "",
+      byYear: jj(refs.by_year), oursByYear: jj(refs.ours_by_year),
+      // [{y, n, ex, km}] — сегменты столбика: всего наших, из них экспресс, с разбором
+      oursDetail: (oursDetail.results || []).map((r) => ({
+        y: r.y, n: r.n, ex: r.ex || 0, km: r.km || 0 })),
+    } } : {}),
     people: rowsAll.filter((g) => g.s2 != null).length,
     hiddenGroups: rest.length,
     hiddenWorks: rest.reduce((s, g) => s + (g.total || 0), 0),

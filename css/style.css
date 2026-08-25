@@ -3970,16 +3970,6 @@ body.graph-fs-open .graph-fs-active svg { touch-action: manipulation; }
 .ebar { width: 9px; background: var(--border); border-radius: 2px 2px 0 0; }
 .ebar:hover { background: var(--link); }
 
-/* Диаграмма портфеля автора: серым все его работы в arXiv, голубым поверх — наши
-   пересказы (js/author-live.js). Пары столбиков, никакой библиотеки. */
-.arch-line { font-size: 13.5px; color: var(--soft); margin: 4px 0 8px; }
-.abars { display: flex; align-items: flex-end; gap: 4px; height: 46px; margin: 4px 0 2px; }
-.abar { display: flex; align-items: flex-end; gap: 1px; }
-.abar i { display: block; width: 7px; border-radius: 2px 2px 0 0; }
-.abar-all { background: var(--border); }
-.abar-ours { background: var(--link); opacity: .75; }
-.abars-legend { font-size: 11.5px; color: var(--muted); margin-bottom: 14px; }
-.aclaim-mailto { font-size: 13px; margin: 10px 0 0; }
 
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -4291,3 +4281,67 @@ html[lang="ar"] .article-card { flex-direction: row-reverse; }
     .entity-body { padding: var(--s-3) var(--s-4) var(--s-4); }
     .tag-header h1 { font-size: 23px; }
 }
+
+
+/* ═══ Проход 2 — облака-справочники (2026-08-25) ═══════════════════════════
+   Облако тегов/законов/учёных — не облако, а плотный справочник в три колонки:
+   535 понятий, у каждого число работ. Плотность здесь достоинство, менять её на
+   крупные чипы значило бы растянуть страницу вчетверо. Поэтому правки мелкие:
+   строку легче вести глазом, число уходит в моно и тише, заголовок группы
+   выровнен с остальными надзаголовками сайта. */
+
+/* Число колонок задано ЯВНО, а не выведено из column-width. Замер поймал: при
+   ширине колонки 232 и зазоре 40 в 748 px помещается 2.75 колонки, браузер округляет
+   вниз — справочник вырос с 5830 до 8473 px. Явное число не зависит от арифметики
+   и не ломается при следующей правке зазора. */
+.tag-cloud, .scientist-cloud {
+    columns: 3; column-gap: var(--s-6); padding: var(--s-5) 0 var(--s-1);
+}
+@media (max-width: 900px) { .tag-cloud, .scientist-cloud { columns: 2; } }
+
+.tag-item, .scientist-item, .law-item {
+    padding: var(--s-1) var(--s-2);
+    margin: 0 calc(var(--s-2) * -1);
+    border-radius: var(--radius-sm);
+    transition: background .12s ease, color .12s ease;
+}
+.tag-item:hover, .scientist-item:hover, .law-item:hover { background: var(--tag-bg); }
+
+.cloud-group-label {
+    font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: .12em;
+    color: var(--faint); margin: var(--s-5) 0 var(--s-2);
+}
+.cat-chip-n { font-family: var(--mono); font-size: 10.5px; color: var(--faint); }
+
+/* Точка-метка породы закона: уменьшена и отодвинута — в плотном списке она была
+   крупнее самой буквы и первой ловила взгляд, хотя несёт вспомогательный смысл. */
+.law-type-dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block;
+    margin-right: var(--s-2); vertical-align: middle; opacity: .75; }
+
+@media (max-width: 620px) {
+    .tag-cloud, .scientist-cloud { column-width: auto; columns: 1; }
+}
+
+
+/* ═══ Проход 2 — дашборд автора: вложенные множества (2026-08-25) ═══════════
+   Колонка — все работы автора в arXiv за год; внутри снизу вверх: с нашим разбором,
+   полные, экспрессы, и серым сверху — то, чего мы не пересказали. Вложение показывает
+   отношение «часть от целого» без подписи; две серии рядом читались бы как сравнение
+   двух независимых величин. */
+.arch-line { font-size: 13.5px; color: var(--soft); margin: 0 0 var(--s-3); }
+.abars { display: flex; align-items: flex-end; gap: 6px; height: 134px; margin: 0 0 var(--s-2); }
+.abar { display: flex; flex-direction: column; align-items: center; gap: var(--s-1); width: 14px; }
+.abar-stack { display: flex; flex-direction: column-reverse; width: 100%; }
+.abar-stack i { display: block; width: 100%; }
+.abar-km   { background: var(--ochre); border-radius: 0 0 3px 3px; }
+.abar-full { background: var(--scientist-color); }
+.abar-ex   { background: var(--cyan); opacity: .55; }
+.abar-rest { background: var(--tag-bg); border-radius: 3px 3px 0 0; }
+.abar-yr { font-family: var(--mono); font-size: 9.5px; color: var(--faint); font-style: normal; height: 11px; }
+.abar:hover .abar-stack i { filter: brightness(1.07); }
+.abars-legend { display: flex; gap: var(--s-4); flex-wrap: wrap; font-size: 11.5px;
+    color: var(--faint); margin-bottom: var(--s-5); }
+.lg { width: 9px; height: 9px; border-radius: 2px; display: inline-block; margin-right: 5px; }
+.lg-rest { background: var(--tag-bg); } .lg-ex { background: var(--cyan); opacity: .55; }
+.lg-full { background: var(--scientist-color); } .lg-km { background: var(--ochre); }
+.aclaim-mailto { font-size: 13px; margin: var(--s-3) 0 0; }

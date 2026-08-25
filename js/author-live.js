@@ -42,6 +42,10 @@
                     'из исследователей выше. Мы сверяемся с авторскими записями Semantic ' +
                     'Scholar; где они молчат — мы не угадываем.',
             hidden: 'Ещё {g} исследователей с этим именем, {w} работ — они не помещаются на страницу.',
+            arch: 'В arXiv {t} работ ({y}) · мы пересказали {o} ({p}%)',
+            arcOurs: 'у нас {n}', lgRest: 'не пересказано',
+            legend: 'серым — все работы автора в arXiv по годам, голубым — наши пересказы',
+            byMail: 'или просто напишите нам письмом — адрес и тема уже подставлены',
             mine: 'это тоже я', mineTip: 'Если это ваши работы и они разделены неверно — напишите нам'
         },
         en: {
@@ -53,9 +57,14 @@
                     'of the researchers above. We follow Semantic Scholar’s author records; ' +
                     'where they are silent, we do not guess.',
             hidden: '{g} more researchers share this name, with {w} papers — too many for one page.',
+            arch: '{t} papers on arXiv ({y}) · we retold {o} ({p}%)',
+            arcOurs: 'we retold {n}', lgRest: 'not retold yet',
+            legend: 'grey — all the author’s arXiv papers by year, blue — our retellings',
+            byMail: 'or simply write us a letter — address and subject are pre-filled',
             mine: 'this is me too', mineTip: 'If these are your papers and the split is wrong, write to us'
         },
         es: {
+            arcOurs: 'hemos contado {n}', lgRest: 'sin contar',
             works: ['trabajo', 'trabajos'], express: 'exprés', full: 'completos', km: 'con nuestras notas',
             sections: 'Áreas', more: 'Ver más', loading: 'Cargando…',
             people: 'Los trabajos con este nombre pertenecen a {n} investigadores distintos. ' +
@@ -67,6 +76,7 @@
             mine: 'yo también soy', mineTip: 'Si son sus trabajos y la división es incorrecta, escríbanos'
         },
         ar: {
+            arcOurs: 'لدينا {n}', lgRest: 'لم نروِ بعد',
             works: ['بحث', 'أبحاث'], express: 'موجزة', full: 'كاملة', km: 'مع ملاحظاتنا',
             sections: 'المجالات', more: 'عرض المزيد', loading: 'جارٍ التحميل…',
             people: 'الأبحاث تحت هذا الاسم تعود إلى {n} باحثين مختلفين. ' +
@@ -77,6 +87,7 @@
             mine: 'هذا أنا أيضًا', mineTip: 'إذا كانت هذه أبحاثك والتقسيم غير صحيح، راسلنا'
         },
         fr: {
+            arcOurs: 'nous en avons {n}', lgRest: 'non racontés',
             works: ['travail', 'travaux'], express: 'express', full: 'complets', km: 'avec nos notes',
             sections: 'Domaines', more: 'Voir plus', loading: 'Chargement…',
             people: 'Les travaux sous ce nom appartiennent à {n} chercheurs différents. ' +
@@ -269,7 +280,17 @@
             html += '<button type="button" class="aclaim-btn" data-act="' + a[0] +
                     '" data-ph="' + esc(a[2]) + '">' + esc(a[1]) + '</button>';
         });
-        html += '</div><form class="aclaim-form" hidden>' +
+        // Письмо с проставленным адресом и темой (владелец: «кнопка открывает почту,
+        // там всё уже проставлено, надо только что-то написать»). Автор пишет из СВОЕГО
+        // клиента — письмо приходит с его адреса, и это само по себе аккредитация,
+        // никакого токена не нужно. Работает и когда его адреса нет в нашей базе.
+        var mailSubj = 'Author page: ' + (NAME || AKEY) + ' — ' + location.pathname;
+        var mailBody = 'Page: https://bridge42worlds.academy' + location.pathname +
+            '%0AAuthor key: ' + encodeURIComponent(AKEY) +
+            '%0A%0AWhat is wrong / what to change:%0A';
+        html += '</div><p class="aclaim-mailto"><a href="mailto:author@bridge42worlds.academy' +
+            '?subject=' + encodeURIComponent(mailSubj) + '&body=' + mailBody + '">' +
+            esc(T.byMail) + '</a></p><form class="aclaim-form" hidden>' +
             '<input type="text" class="aclaim-target" hidden>' +
             '<input type="email" class="aclaim-mail" placeholder="' + esc(t.mail) + '" required>' +
             '<button type="submit" class="aclaim-send">' + esc(t.send) + '</button>' +
@@ -332,6 +353,68 @@
         });
     }
 
+    /* Диаграмма лет в две серии: серым весь arXiv-портфель автора, голубым поверх —
+       наши пересказы. Одна картинка отвечает на оба вопроса сразу: «сколько у него
+       вообще» и «какую долю мы разобрали». Обычные div-столбики, без библиотек. */
+    /* Диаграмма лет ВЛОЖЕННЫМИ множествами (утверждено владельцем на прототипе).
+       Колонка — все работы автора в arXiv за год. Внутри снизу вверх: с нашим разбором,
+       полные без разбора, экспрессы, и сверху серым — то, чего мы не пересказали.
+       Так одна картинка отвечает сразу на «сколько он написал» и «какую долю мы взяли».
+
+       Прежняя версия рисовала две серии рядом — серую и голубую. Рядом стоящие столбики
+       читаются как сравнение двух независимых величин, а здесь одна ВХОДИТ в другую;
+       вложение показывает это без подписи. */
+    function archChart(arch) {
+        var det = {};
+        (arch.oursDetail || []).forEach(function (r) { det[r.y] = r; });
+        var years = Object.keys(arch.byYear || {});
+        Object.keys(det).forEach(function (y) { if (years.indexOf(y) === -1) years.push(y); });
+        years.sort();
+        if (years.length < 2) return '';
+        years = years.slice(-26);
+        var mx = 1;
+        years.forEach(function (y) {
+            mx = Math.max(mx, arch.byYear[y] || 0, (det[y] || {}).n || 0);
+        });
+        var H = 116;
+        var bars = years.map(function (y) {
+            var all = arch.byYear[y] || 0;
+            var o = det[y] || { n: 0, ex: 0, km: 0 };
+            var km = o.km, ex = o.ex;
+            var fullNoKm = Math.max(0, (o.n - ex) - km);
+            var rest = Math.max(0, all - o.n);
+            var u = H / mx;
+            function seg(n, cls) {
+                return n ? '<i class="' + cls + '" style="height:' +
+                    Math.max(3, Math.round(n * u)) + 'px"></i>' : '';
+            }
+            // nWorks, а не хвост словаря: иначе «1 papers» и «1 работ» —
+            // мелочь, которую замечают все.
+            var tip = y + ': ' + nWorks(all);
+            if (o.n) tip += ' \u00b7 ' + T.arcOurs.replace('{n}', o.n);
+            var lab = (Number(y) % 5 === 0 || y === years[years.length - 1]) ? y.slice(2) : '';
+            return '<span class="abar" title="' + esc(tip) + '">' +
+                   '<span class="abar-stack">' + seg(rest, 'abar-rest') + seg(ex, 'abar-ex') +
+                   seg(fullNoKm, 'abar-full') + seg(km, 'abar-km') + '</span>' +
+                   '<i class="abar-yr">' + lab + '</i></span>';
+        }).join('');
+        return '<div class="abars">' + bars + '</div>' +
+               '<div class="abars-legend">' +
+               '<span><i class="lg lg-rest"></i>' + esc(T.lgRest) + '</span>' +
+               '<span><i class="lg lg-ex"></i>' + esc(T.express) + '</span>' +
+               '<span><i class="lg lg-full"></i>' + esc(T.full) + '</span>' +
+               '<span><i class="lg lg-km"></i>' + esc(T.km) + '</span></div>';
+    }
+
+    function archLine(arch, ours) {
+        var y = arch.first && arch.last && arch.first !== arch.last
+            ? arch.first + '–' + arch.last : (arch.first || '');
+        var pct = arch.total ? Math.round(ours * 100 / arch.total) : 0;
+        return '<p class="arch-line">' + esc(
+            T.arch.replace('{t}', arch.total).replace('{y}', y)
+                  .replace('{o}', ours).replace('{p}', pct)) + '</p>';
+    }
+
     function render(d) {
         var many = d.groups.length > 1;
         var html = '';
@@ -344,10 +427,16 @@
             html += '<p class="agroup-intro">' +
                 esc(T.hidden.replace('{g}', d.hiddenGroups).replace('{w}', d.hiddenWorks)) + '</p>';
         }
-        // Кнопки автора — ПОСЛЕ списка: сначала человек видит работы, потом решает,
-        // всё ли с ними так. Обратный порядок предлагал бы жаловаться до того, как
-        // он посмотрел.
-        html += claimsBlock();
+        // Кнопки автора — СВЕРХУ, под портретом и до списка (владелец 25.08: «кнопки
+        // должны быть под дашбордом, а не внизу — до конца прокрутки можно и не дойти»).
+        // Мой первый вариант ставил их после списка «сначала посмотри, потом жалуйся» —
+        // но у автора с полусотней работ до низа действительно никто не долистает.
+        // Портфель arXiv — над кнопками: сначала полная картина человека, потом действия.
+        var head = '';
+        if (d.archive && d.archive.total) {
+            head += archLine(d.archive, d.stats ? d.stats.total : 0) + archChart(d.archive);
+        }
+        html = head + claimsBlock() + html;
         box.innerHTML = html;
         [].forEach.call(box.querySelectorAll('.agroup'), mountMore);
         mountClaims(box, (d.groups[0] && d.groups[0].s2) || '');
