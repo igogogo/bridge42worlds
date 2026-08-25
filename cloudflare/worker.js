@@ -2252,10 +2252,15 @@ async function handleFeed(request, env) {
     where.push(cat.includes(".") ? "primary_category = ?" : "primary_category LIKE ?");
     args.push(cat.includes(".") ? cat : cat + "%");
   }
-  // День — для клика по календарю. Формат проверяем строго: в SQL уходит привязкой,
-  // но кривое значение всё равно должно отваливаться здесь, а не искаться впустую.
+  // Дата приходит ПРЕФИКСОМ: календарь трёхуровневый, и клик по году даёт «2026»,
+  // по месяцу «2026-08», по дню «2026-08-20». Форму проверяем строго — не ради
+  // защиты (значение уходит привязкой), а чтобы кривой ввод отваливался сразу,
+  // а не искался впустую по двум миллионам строк.
   const day = (url.searchParams.get("date") || "").slice(0, 10);
-  if (/^\d{4}-\d{2}-\d{2}$/.test(day)) { where.push("date = ?"); args.push(day); }
+  if (/^\d{4}(-\d{2}(-\d{2})?)?$/.test(day)) {
+    where.push(day.length === 10 ? "date = ?" : "date LIKE ?");
+    args.push(day.length === 10 ? day : day + "%");
+  }
 
   // Глубина разбора: 1 — только экспрессы, 0 — только полные. Отсутствие параметра
   // означает «всё», и это не то же самое, что express=0 — поэтому проверяем строку,
@@ -2306,10 +2311,24 @@ async function handleCorpus(request, env) {
   if (hit) return hit;
 
   const { lang, version } = feedParams(url);
-  const rows = await env.CARDS.prepare(
-    `SELECT date, COUNT(*) n, SUM(express) ex, SUM(km) km
-       FROM cards WHERE lang = ? AND version = ?
-      GROUP BY date ORDER BY date`).bind(lang, version).all();
+  // Разделы считаем через json_each: колонка categories хранит массив строкой, а полоса
+  // разделов над лентой показывает статью в КАЖДОМ её разделе, не только в главном.
+  // Взять primary_category было бы дешевле и неверно: у работы на стыке двух наук
+  // чип второй науки просто исчез бы.
+  const [rows, catRows] = await Promise.all([
+    env.CARDS.prepare(
+      `SELECT date, COUNT(*) n, SUM(express) ex, SUM(km) km
+         FROM cards WHERE lang = ? AND version = ?
+        GROUP BY date ORDER BY date`).bind(lang, version).all(),
+    env.CARDS.prepare(
+      `SELECT je.value cat, COUNT(*) n
+         FROM cards, json_each(cards.categories) je
+        WHERE lang = ? AND version = ?
+        GROUP BY cat ORDER BY n DESC`).bind(lang, version).all().catch(() => ({ results: [] })),
+  ]);
+
+  const cats = {};
+  for (const r of catRows.results || []) cats[r.cat] = r.n;
 
   const days = {};
   let total = 0, express = 0, km = 0;
@@ -2319,7 +2338,7 @@ async function handleCorpus(request, env) {
     days[r.date] = [r.n, r.ex || 0, r.km || 0];
     total += r.n; express += r.ex || 0; km += r.km || 0;
   }
-  const out = feedJson({ days, total, express, km, full: total - express });
+  const out = feedJson({ days, cats, total, express, km, full: total - express });
   request.method === "GET" && (await cache.put(request, out.clone()));
   return out;
 }

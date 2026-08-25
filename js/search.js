@@ -314,42 +314,49 @@ function fetchLatest(version) {
    Тултипы и строка статистики от индекса не зависят — им нужны справочники, они грузятся
    отдельной волной, поэтому ниже вызываются в обеих ветках. */
 var HAS_LIST = !!document.getElementById('search-results');
-var _fullIndexPromise = HAS_LIST ? fetchIndex(effVersion()) : Promise.resolve([]);
+/* ИНДЕКС БОЛЬШЕ НЕ КАЧАЕТСЯ САМ. Здесь стояло «есть список — грузим индекс», и это
+   было верно, пока список брать было неоткуда. Теперь лента приходит из облака
+   постранично, страницы сущностей и автора рисуются своими модулями, а календарь,
+   полоса разделов и фильтр глубины считаются по сводке /api/corpus (13 КБ).
+   Индекс остаётся запасным путём и источником для дашборда /archive — его поднимает
+   ensureSearchIndex по требованию. */
+var _fullIndexPromise = null;
 
-if (HAS_LIST && !window.__favoritesPage) {
-    fetchLatest(effVersion()).then(function(latest) {
-        if (searchIndex.length) return;   // полный уже успел прийти — latest не нужен
-        searchIndex = latest;
-        window.searchIndex = searchIndex;
-        var container = document.getElementById('search-results');
-        if (container && !document.querySelector('.search-box')?.value) _defaultFeed();
-    }).catch(function() {});
-}
+/* НАЧАЛЬНАЯ НАСТРОЙКА НИЧЕГО НЕ ЖДЁТ.
+   Здесь стоял `_fullIndexPromise.then(...)`: лента, календарь, полоса разделов,
+   подсказки и строка статистики заводились ПОСЛЕ загрузки индекса — то есть страница
+   стояла мёртвой, пока не доедут 14.6 МБ. Загрузка была ещё и двухступенчатой: сначала
+   latest на 150 КБ ради быстрой первой отрисовки, следом полный.
 
-_fullIndexPromise.then(function(primary) {
-    searchIndex = primary;   // полный индекс заменяет latest — лента, поиск, фильтры на полном наборе
-    window.searchIndex = searchIndex;
-    // Запоминаем отдельно: ensureOtherVersions склеивает три уровня и без этого при повторном
-    // вызове склеил бы уже склеенное — каждая статья размножилась бы в ленте.
-    window.__primaryIndex = primary;
-
+   Теперь лента приходит из облака пачками по двенадцать (~20 КБ), поэтому ни ступени,
+   ни ожидания не нужно: рисуем сразу, а сводку для панелей ждём отдельно — каждая
+   панель дорисуется, когда та придёт. */
+// Запуск ОТЛОЖЕН на микрозадачу, и это не украшение. Блок стоит в файле раньше, чем
+// объявляются словари подписей и часть функций; прежний код этого не замечал, потому
+// что висел в `.then()` загрузки индекса и по факту выполнялся после всего файла.
+// Убрав ожидание, я убрала и эту случайную отсрочку — страница падала на первой же
+// подписи. Promise.resolve().then даёт ровно прежний порядок: после того, как файл
+// дочитан, но до отрисовки.
+Promise.resolve().then(function initListPage() {
     if (HAS_LIST) {
         var container = document.getElementById('search-results');
-        if (container && !document.querySelector('.search-box')?.value) {
-            _defaultFeed();
-        }
+        if (container && !document.querySelector('.search-box')?.value) _defaultFeed();
         if (window.__favoritesPage) {
-            ['calendar-btn', 'calendar-panel', 'category-bar'].forEach(function(id) { var e = document.getElementById(id); if (e) e.style.display = 'none'; });
+            ['calendar-btn', 'calendar-panel', 'category-bar'].forEach(function(id) {
+                var e = document.getElementById(id); if (e) e.style.display = 'none';
+            });
         } else {
-            initCalendar();
-            initCategoryBar();
-            initExpressFilter();
+            // Панелям нужны только числа — ждём сводку, а не архив. Если её нет,
+            // строим по тому, что уже есть в памяти (после отката на индекс).
+            ensureCorpus().then(function () {
+                initCalendar();
+                initCategoryBar();
+                initExpressFilter();
+            });
         }
     }
     initAllTooltips();
     renderSiteStats();
-}).catch(function(e) {
-    console.error('Init error:', e);
 });
 
 function catFetch(base, lang) {
@@ -511,7 +518,7 @@ window.ensureOtherVersions = ensureOtherVersions;
 var _searchIndexPromise = null;
 function ensureSearchIndex() {
     if (_searchIndexPromise) return _searchIndexPromise;
-    _searchIndexPromise = HAS_LIST ? _fullIndexPromise : fetchIndex(effVersion()).then(function (primary) {
+    _searchIndexPromise = (_fullIndexPromise || fetchIndex(effVersion())).then(function (primary) {
         searchIndex = primary;
         window.searchIndex = searchIndex;
         window.__primaryIndex = primary;
@@ -1283,7 +1290,73 @@ function renderResults(items) {
 }
 
 // Лента: сортировка по дате (новые сверху), группировка по дням, подгрузка на скролле.
-var feed = { items: [], shown: 0, batch: 12, lastDay: null, active: false };
+var feed = { items: [], shown: 0, batch: 12, lastDay: null, active: false,
+             q: null, page: 0, more: false, busy: false, total: null };
+
+/* ЛЕНТА ИЗ ОБЛАКА. Адрес ручки: на сайте она своя же (пустая база), локально её
+   поднимает tools/dev_server.py. window.B42_API оставлен для случая, когда страницу
+   смотрят с файловой системы. */
+var API = (typeof window.B42_API === 'string' ? window.B42_API : '');
+
+/* Облако выключается САМО и навсегда для этой страницы после первой неудачи.
+   Пробовать снова на каждой прокрутке — значит на плохой сети показывать читателю
+   череду пустых догрузок вместо ленты. Один отказ, один откат, дальше индекс. */
+var cloudOff = false;
+
+/* Наш порядок зовётся random, ручкин — mix. Ручка неизвестное значение молча
+   приводит к mix, поэтому несовпадение работало «само» — и именно поэтому его надо
+   назвать вслух: завтра у ручки появится четвёртый порядок, и «само» перестанет. */
+function cloudSort(mode) { return mode === 'random' ? 'mix' : mode; }
+
+/* Запрос к облаку собирается В ОДНОМ МЕСТЕ. Дверей в ленту три — обычная, по разделу,
+   по дате, — и глобальный тумблер «скрыть экспресс» обязан применяться во всех. Пока
+   каждая дверь собирала запрос сама, забыть его в одной из трёх было делом времени.
+   Второй тумблер, «только с советами», в облако не ложится (поля advice в карточках
+   базы нет) — при нём лента идёт по индексу, см. cloudUsable. */
+function cloudQuery(extra) {
+    var q = { sort: cloudSort(getSortMode()) };
+    if (hideExpress) q.express = 0;
+    if (extra) Object.keys(extra).forEach(function (k) { q[k] = extra[k]; });
+    return q;
+}
+
+/* Можно ли открыть эту ленту из облака. Три «нет»: страница сущности (её рисует свой
+   модуль), избранное (источник — localStorage), включённый фильтр по советам. */
+function cloudUsable() {
+    return !isEntityPage && !window.__favoritesPage && !onlyAdvice && !cloudOff;
+}
+
+function feedFromCloud(query, page) {
+    var u = API + '/api/feed?lang=' + encodeURIComponent(lang) +
+            '&version=' + encodeURIComponent(effVersion()) +
+            '&limit=' + feed.batch + '&page=' + page +
+            '&sort=' + encodeURIComponent(query.sort || 'mix');
+    if (query.cat) u += '&cat=' + encodeURIComponent(query.cat);
+    if (query.date) u += '&date=' + encodeURIComponent(query.date);
+    if (query.express === 0 || query.express === 1) u += '&express=' + query.express;
+    return fetch(u).then(function (r) {
+        if (!r.ok) throw 0;
+        return r.json();
+    }).then(function (j) {
+        if (!j || !Array.isArray(j.items)) throw 0;
+        return j;
+    });
+}
+
+/* Сводка корпуса: числа по дням и по разделам. Одна загрузка на страницу, ~13 КБ.
+   Ради этих чисел раньше качался весь индекс — календарю нужны ДНИ, полосе разделов
+   НАЗВАНИЯ, фильтру глубины ДВА ЧИСЛА, а приезжали все тексты архива. */
+var _corpusPromise = null;
+function ensureCorpus() {
+    if (_corpusPromise) return _corpusPromise;
+    _corpusPromise = fetch(API + '/api/corpus?lang=' + encodeURIComponent(lang) +
+                           '&version=' + encodeURIComponent(effVersion()))
+        .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+        .then(function (c) { window.__corpus = c; return c; })
+        .catch(function () { return null; });
+    return _corpusPromise;
+}
+window.ensureCorpus = ensureCorpus;
 
 // На странице тега/закона/учёного/автора строка поиска не нужна, если у сущности вообще нет
 // статей — искать в пустом списке незачем. На главной (нет page-контекста) не трогаем.
@@ -1449,12 +1522,42 @@ function showLatest() {
         if (typeof window.B42EntityLive === 'function') window.B42EntityLive();
         return;
     }
+    mountSortControl();
+
+    // ЛЕНТА ГЛАВНОЙ — ИЗ ОБЛАКА. Двенадцать карточек это ~20 КБ; тот же экран из индекса
+    // стоил 14.6 МБ, потому что весь архив с текстами приезжал ради первой пачки.
+    // Условие: страница без контекста сущности (главная), не избранное, облако не отпало.
+    if (cloudUsable()) {
+        openCloudFeed(cloudQuery(), function () { return ''; })
+            .then(function (j) {
+                // Плашка «молодого языка» смотрит на РАЗМЕР РАЗДЕЛА, а не на длину пачки:
+                // двенадцать карточек приходят и во французском, где статей всего сорок.
+                mountYoungLangNote(typeof j.total === 'number' ? j.total : 99);
+            })
+            .catch(function () { cloudOff = true; showLatestFromIndex(); });
+        return;
+    }
+    showLatestFromIndex();
+}
+
+/* Прежняя лента — из индекса. Осталась запасным путём и единственным путём там, где
+   облако не при чём: избранное (источник localStorage) и страницы, куда лента попадает
+   с контекстом сущности. Индекс поднимается ПО ТРЕБОВАНИЮ: заранее его больше никто
+   не качает, иначе вся затея бессмысленна. */
+function showLatestFromIndex() {
+    var c0 = document.getElementById('search-results');
+    if (c0 && !searchIndex.length && typeof ensureSearchIndex === 'function') {
+        c0.innerHTML = '<p style="color:var(--soft);text-align:center;padding:40px">' +
+                       (UI.loading || '…') + '</p>';
+        ensureSearchIndex().then(function () { showLatestFromIndex(); });
+        return;
+    }
     var arr = sortFeed(
         applyPageContext(searchIndex.filter(function(item) { return item.version === effVersion(); })),
         getSortMode()
     );
-    mountSortControl();
     mountYoungLangNote(arr.length);
+    feed.q = null;
     feed.items = arr;
     feed.shown = 0; feed.lastDay = null; feed.active = true;
     var c = document.getElementById('search-results');
@@ -1610,6 +1713,23 @@ var CAL_LABELS = {
 
 function filterByDate(prefix, label) {
     hideSortControl();
+    var closePanel = function () {
+        var p = document.getElementById('calendar-panel');
+        if (p) p.classList.remove('open');
+        window.scrollTo({ top: 0 });
+    };
+    if (cloudUsable()) {
+        openCloudFeed(cloudQuery({ sort: 'new', date: prefix }), function (total) {
+            return '<div class="feed-day" style="cursor:pointer" onclick="showLatest()">← ' +
+                   (label || prefix) + (total != null ? ' (' + total + ')' : '') + '</div>';
+        }).then(closePanel).catch(function () { cloudOff = true; filterByDate(prefix, label); });
+        return;
+    }
+    if (!searchIndex.length && typeof ensureSearchIndex === 'function') {
+        ensureSearchIndex().then(function () { filterByDate(prefix, label); });
+        return;
+    }
+    feed.q = null;
     feed.items = applyPageContext(searchIndex.filter(function(item) {
         return item.version === effVersion() && (item.date || '').indexOf(prefix) === 0;
     })).sort(function(a, b) { return b.date.localeCompare(a.date); });
@@ -1630,13 +1750,27 @@ function initCalendar() {
     if (!panel || !btn) return;
     var L = CAL_LABELS[lang] || CAL_LABELS.en;
     btn.title = L.title;
+    // Дерево год → месяц → день строится из ЧИСЕЛ. Раньше их считали перебором всего
+    // индекса — 14.6 МБ текстов ради подписи «3» под датой. Сводка отдаёт готовые
+    // счётчики по дням; при её отсутствии считаем по индексу, но только если он уже
+    // загружен: качать архив ради календаря — та самая ошибка, от которой уходим.
     var tree = {};
-    searchIndex.filter(function(i) { return i.version === effVersion() && i.date; }).forEach(function(i) {
-        var y = i.date.slice(0, 4), m = i.date.slice(5, 7), d = i.date.slice(8, 10);
-        (tree[y] = tree[y] || { c: 0, m: {} }).c++;
-        (tree[y].m[m] = tree[y].m[m] || { c: 0, d: {} }).c++;
-        tree[y].m[m].d[d] = (tree[y].m[m].d[d] || 0) + 1;
-    });
+    function addDay(date, n) {
+        var y = date.slice(0, 4), m = date.slice(5, 7), d = date.slice(8, 10);
+        (tree[y] = tree[y] || { c: 0, m: {} }).c += n;
+        (tree[y].m[m] = tree[y].m[m] || { c: 0, d: {} }).c += n;
+        tree[y].m[m].d[d] = (tree[y].m[m].d[d] || 0) + n;
+    }
+    var _c = window.__corpus;
+    if (_c && _c.days) {
+        Object.keys(_c.days).forEach(function (date) {
+            if (date) addDay(date, _c.days[date][0]);
+        });
+    } else {
+        searchIndex.filter(function(i) { return i.version === effVersion() && i.date; })
+            .forEach(function(i) { addDay(i.date, 1); });
+    }
+    if (!Object.keys(tree).length) { panel.innerHTML = ''; return; }
     var html = '<div class="cal-all" data-all="1">' + L.all + '</div>';
     Object.keys(tree).sort().reverse().forEach(function(y) {
         html += '<div class="cal-year"><div class="cal-head cal-y">' + y + '<span class="cal-cnt">' + tree[y].c + '</span></div><div class="cal-sub" hidden>';
@@ -1673,10 +1807,15 @@ var selectedCats = {};
 function initCategoryBar() {
     var bar = document.getElementById('category-bar');
     if (!bar) return;
+    // Счётчики разделов — из сводки. Считались перебором индекса, хотя это те же числа.
     var counts = {};
-    searchIndex.filter(function(i) { return i.version === effVersion(); }).forEach(function(i) {
-        (i.categories || []).forEach(function(c) { counts[c] = (counts[c] || 0) + 1; });
-    });
+    if (window.__corpus && window.__corpus.cats) {
+        counts = window.__corpus.cats;
+    } else {
+        searchIndex.filter(function(i) { return i.version === effVersion(); }).forEach(function(i) {
+            (i.categories || []).forEach(function(c) { counts[c] = (counts[c] || 0) + 1; });
+        });
+    }
     var cats = Object.keys(counts).sort(function(a, b) { return counts[b] - counts[a]; });
     if (!cats.length) { bar.innerHTML = ''; return; }
     bar.innerHTML = cats.map(function(c) {
@@ -1739,6 +1878,24 @@ window.initCategoryBar = initCategoryBar;
 function applyCategoryFilter() {
     var sel = Object.keys(selectedCats);
     if (!sel.length) { showLatest(); return; }
+
+    // Один раздел спрашиваем у облака — это самый частый случай и он покрывается ручкой.
+    // Несколько разделов сразу («+» на чипе) ручка не умеет, и городить ей список
+    // не стоит: набор из пяти разделов выбирают редко, а индекс для этого уже есть.
+    if (sel.length === 1 && cloudUsable()) {
+        var one = sel[0];
+        openCloudFeed(cloudQuery({ sort: 'new', cat: one }),
+            function (total) {
+                return '<div class="feed-day">' + (ARXIV_CAT_NAMES[one] || one) +
+                       (total != null ? ' (' + total + ')' : '') + '</div>';
+            }).catch(function () { cloudOff = true; applyCategoryFilter(); });
+        return;
+    }
+    if (!searchIndex.length && typeof ensureSearchIndex === 'function') {
+        ensureSearchIndex().then(applyCategoryFilter);
+        return;
+    }
+    feed.q = null;
     feed.items = applyPageContext(searchIndex.filter(function(item) {
         return item.version === effVersion() && (item.categories || []).some(function(c) { return selectedCats[c]; });
     })).sort(function(a, b) { return b.date.localeCompare(a.date); });
@@ -1755,17 +1912,72 @@ window.applyCategoryFilter = applyCategoryFilter;
 function renderMoreFeed() {
     var c = document.getElementById('search-results');
     if (!c || !feed.active) return;
+
+    // Уже пришедшее рисуем сразу — пачка на экране не должна ждать сети.
     var slice = feed.items.slice(feed.shown, feed.shown + feed.batch);
-    var html = '';
-    slice.forEach(function(item) { html += cardHTML(item); });
-    c.insertAdjacentHTML('beforeend', html);
-    feed.shown += slice.length;
-    initAllTooltips();
-    initReveal();
+    if (slice.length) {
+        var html = '';
+        slice.forEach(function (item) { html += cardHTML(item); });
+        c.insertAdjacentHTML('beforeend', html);
+        feed.shown += slice.length;
+        initAllTooltips();
+        initReveal();
+        return;
+    }
+    // Кончилось — просим следующую страницу у облака. feed.q пуст на ленте по индексу
+    // и на страницах, которые рисуют свои модули: там догружать нечего.
+    if (!feed.q || !feed.more || feed.busy || cloudOff) return;
+    feed.busy = true;
+    feedFromCloud(feed.q, feed.page + 1).then(function (j) {
+        feed.busy = false;
+        feed.page += 1;
+        feed.more = !!j.more;
+        if (!j.items.length) return;
+        feed.items = feed.items.concat(j.items);
+        renderMoreFeed();
+    }).catch(function () {
+        // Отказ облака на середине ленты: дальше не дёргаем, уже показанное остаётся.
+        feed.busy = false; feed.more = false; cloudOff = true;
+    });
 }
 
+/* Открыть ленту запросом к облаку. Возвращает промис: вызывающий решает, что делать
+   при отказе — на первой странице это откат к индексу, дальше просто конец списка. */
+function openCloudFeed(query, head) {
+    var c = document.getElementById('search-results');
+    if (!c) return Promise.reject(0);
+    // Ленту открывают из двух мест — начальная настройка и сборка переключателя
+    // порядка. Оба срабатывают на первой отрисовке, и облако получало два одинаковых
+    // запроса подряд. Повтор того же запроса, пока прежний в пути, пропускаем.
+    var key = JSON.stringify(query) + '|' + effVersion() + '|' + lang;
+    if (feed._key === key && feed._pending) return feed._pending;
+    feed._key = key;
+    feed._pending = _openCloudFeed(query, head, c);
+    return feed._pending;
+}
+
+function _openCloudFeed(query, head, c) {
+    return feedFromCloud(query, 0).then(function (j) {
+        feed.q = query; feed.page = 0; feed.more = !!j.more;
+        feed.items = j.items; feed.shown = 0; feed.lastDay = null;
+        feed.active = true; feed.total = (typeof j.total === 'number') ? j.total : null;
+        c.innerHTML = (head ? head(feed.total) : '') +
+            (j.items.length ? '' :
+             '<p style="color:var(--soft);text-align:center;padding:40px">' + UI.noResults + '</p>');
+        renderMoreFeed();
+        updateSearchRowVisibility();
+        return j;
+    });
+}
+window.openCloudFeed = openCloudFeed;
+
 window.addEventListener('scroll', function() {
-    if (!feed.active || feed.shown >= feed.items.length) return;
+    if (!feed.active) return;
+    // Кончился массив — это конец ленты только для индекса. Для облака это повод
+    // спросить следующую страницу, поэтому условие теперь учитывает feed.more.
+    var hasLocal = feed.shown < feed.items.length;
+    var hasCloud = feed.q && feed.more && !feed.busy && !cloudOff;
+    if (!hasLocal && !hasCloud) return;
     if (window.scrollY + window.innerHeight > document.body.scrollHeight - 500) renderMoreFeed();
 });
 
