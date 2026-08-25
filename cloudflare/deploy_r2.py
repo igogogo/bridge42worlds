@@ -299,6 +299,17 @@ def _refuse_if_rules_unclear(keys):
 
 
 def main():
+    # Общий замок (tools/freeze.py): пока стоит, прогоны не начинаются.
+    try:
+        import sys as _s
+        from pathlib import Path as _P
+        _r = str(_P(__file__).resolve().parent.parent)
+        if _r not in _s.path:
+            _s.path.insert(0, _r)
+        from tools.freeze import guard as _frozen
+        _frozen("публикация на прод")
+    except ImportError:
+        pass
     _refuse_if_build_running()
     prune = "--prune" in sys.argv
     account = os.environ.get("CLOUDFLARE_ACCOUNT_ID") or os.environ.get("R2_ACCOUNT_ID")

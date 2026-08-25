@@ -235,6 +235,17 @@ def check_box(user, list_only=False, quiet=False):
 
 
 def main():
+    # Общий замок (tools/freeze.py): пока стоит, прогоны не начинаются.
+    try:
+        import sys as _s
+        from pathlib import Path as _P
+        _r = str(_P(__file__).resolve().parent.parent)
+        if _r not in _s.path:
+            _s.path.insert(0, _r)
+        from tools.freeze import guard as _frozen
+        _frozen("сторож почты")
+    except ImportError:
+        pass
     ap = argparse.ArgumentParser()
     ap.add_argument("--loop", action="store_true", help="крутиться постоянно")
     ap.add_argument("--every", type=int, default=120, help="период опроса в секундах")

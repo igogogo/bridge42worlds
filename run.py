@@ -830,6 +830,35 @@ def cmd_links(args):
     sys.exit(1 if broken else 0)
 
 
+def _post_generation(full=True):
+    """Шаги ПОСЛЕ генерации — те же, что делает фабрика перед публикацией.
+
+    Владелец 2026-08-19: «если делаешь что-то руками, придерживайся общих правил, почему ты
+    косяки упускаешь». Он прав. Ручной прогон run.py ids давал статью без векторной разметки,
+    без ссылок по тексту, без раздела машины знаний и без webp — и каждый раз это чинилось
+    задним числом, по одной находке владельца: то теги не те, то картинки битые, то разбора
+    нет. Фабрика все эти шаги делает; значит и ручной путь обязан, иначе слово
+    «сгенерировано» означает разное в зависимости от того, кто нажал кнопку.
+
+    Все шаги локальные и бесплатные, кроме рекомендаций: они зовут модель, поэтому идут
+    только для полных разборов.
+    """
+    import subprocess
+    _ensure_webp()
+    steps = [
+        ("разметка вектором", [sys.executable, "tools/tag_by_vector.py", "--apply"]),
+        ("понятия в тексте", [sys.executable, "tools/highlight_concepts.py"]),
+        ("формулы", [sys.executable, "tools/fix_inline_math.py"]),
+    ]
+    if full:
+        steps.append(("машина знаний", [sys.executable, "tools/recommend.py", "--all-full"]))
+    for title, cmd in steps:
+        print("\n> " + title)
+        rc = subprocess.run(cmd).returncode
+        if rc:
+            print("  WARN " + title + ": код %s — шаг не отработал, страницы выйдут без него" % rc)
+
+
 def cmd_ids(args):
     if args.refine:
         os.environ["REFINE"] = "1"
@@ -844,8 +873,10 @@ def cmd_ids(args):
     if not ids:
         print("❌ не указано ни одного id (позиционно или через --ids-file)")
         sys.exit(1)
-    generate.generate_ids(ids, force=args.force, express=getattr(args, 'express', False),
-                          allow_restricted=getattr(args, 'allow_restricted', False))
+    n = generate.generate_ids(ids, force=args.force, express=getattr(args, 'express', False),
+                              allow_restricted=getattr(args, 'allow_restricted', False))
+    if n and not getattr(args, "no_post", False):
+        _post_generation(full=not getattr(args, "express", False))
 
 
 def cmd_author(args):
@@ -1185,7 +1216,10 @@ def build_parser():
                    help="взять работу под CC BY-NC-ND / NC-SA / NC: публикуем ТОЛЬКО собственный "
                         "разбор и неизменную авторскую аннотацию со ссылкой, авторские рисунки "
                         "и подписи не берём")
-    s.set_defaults(func=cmd_ids, refine=False, express=False, allow_restricted=False)
+    s.add_argument("--no-post", action="store_true",
+                   help="не делать шаги после генерации (разметка, ссылки, формулы, разбор)")
+    s.set_defaults(func=cmd_ids, refine=False, express=False, allow_restricted=False,
+                   no_post=False)
 
     s = sub.add_parser("author", help="статьи автора за период (с превью-подтверждением)")
     s.add_argument("name", help='имя автора, формат "Family, Given"')
@@ -1201,6 +1235,15 @@ def build_parser():
 
 if __name__ == "__main__":
     args = build_parser().parse_args()
+    # Общий замок — ОДНА проверка на все команды. Ставится и снимается через
+    # tools/freeze.py; пока стоит, ни генерация, ни пересборка, ни публикация не
+    # начинаются. Проверка здесь, а не в каждой команде: команд два десятка, и
+    # забыть одну — вопрос времени.
+    try:
+        from tools.freeze import guard as _frozen
+        _frozen(f"run.py {getattr(args, 'cmd', '') or sys.argv[1] if len(sys.argv) > 1 else ''}")
+    except ImportError:
+        pass
     args.func(args)
     _build_derived_assets()
     _publish_to_r2()

@@ -273,6 +273,20 @@ HANDLERS = {"translate": do_translate, "article": do_article, "ask": do_ask}
 
 
 def run_once(dry=False):
+    # Общий замок (tools/freeze.py). Стоит В ПРОХОДЕ, а не при запуске: исполнитель —
+    # вечный цикл, он мог запуститься до замка и крутиться дальше. Проверка на каждом
+    # проходе останавливает и уже работающего.
+    try:
+        import sys as _s
+        from pathlib import Path as _P
+        _r = str(_P(__file__).resolve().parent.parent)
+        if _r not in _s.path:
+            _s.path.insert(0, _r)
+        from tools.freeze import frozen as _fz
+        if _fz():
+            return False
+    except ImportError:
+        pass
     # Сначала подбираем брошенное, потом берём новое: иначе зависший заказ так и лежит,
     # пока кто-нибудь не заметит его вручную — а заметит он его по жалобе читателя.
     revive_stuck()

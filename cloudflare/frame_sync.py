@@ -190,6 +190,17 @@ def push(rows, sql_head, cols_n, batch=90):
 
 
 def main():
+    # Общий замок (tools/freeze.py): пока стоит, прогоны не начинаются.
+    try:
+        import sys as _s
+        from pathlib import Path as _P
+        _r = str(_P(__file__).resolve().parent.parent)
+        if _r not in _s.path:
+            _s.path.insert(0, _r)
+        from tools.freeze import guard as _frozen
+        _frozen("заливка обвязки")
+    except ImportError:
+        pass
     ap = argparse.ArgumentParser()
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--apply", action="store_true")

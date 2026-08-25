@@ -159,6 +159,16 @@ SCHEMA = [
     "ALTER TABLE card_authors ADD COLUMN s2_name TEXT",
     "CREATE INDEX IF NOT EXISTS card_authors_s2 ON card_authors(s2_author_id)",
     "CREATE INDEX IF NOT EXISTS card_authors_key ON card_authors(akey, date DESC)",
+    # Портфель автора в arXiv целиком — из реестра по дампу (tools/author_record). Нужен
+    # странице автора для честной строки «столько-то работ в arXiv, из них у нас столько»
+    # и для серых столбиков под нашими на диаграмме лет.
+    """CREATE TABLE IF NOT EXISTS author_refs (
+         akey        TEXT PRIMARY KEY,
+         arxiv_total INTEGER,
+         first_year  TEXT, last_year TEXT,
+         by_year     TEXT,           -- {"1999": 2, ...}
+         ours_by_year TEXT
+       )""",
 ]
 
 
@@ -347,6 +357,37 @@ def drop(ids, lang, version):
 
 
 # ─────────────────────────────── авторы ─────────────────────────────────────
+def sync_author_refs(apply):
+    """Портфели авторов: только те ключи, что есть в card_authors, — остальным страница
+    не нужна. Разница по отпечатку не считается: строк ~15 тыс., полная перезаливка раз
+    в день дешевле бухгалтерии."""
+    p = ROOT / "data" / "author-records.json"
+    if not p.exists():
+        return 0
+    try:
+        recs = json.loads(p.read_text(encoding="utf-8"))
+    except Exception:
+        return 0
+    keys = {r["akey"] for r in q("SELECT DISTINCT akey FROM card_authors")}
+    rows = []
+    for k in keys:
+        r = recs.get(k)
+        if not r:
+            continue
+        rows.append((k, int(r.get("arxiv_total") or 0),
+                     str(r.get("first_year") or ""), str(r.get("last_year") or ""),
+                     json.dumps(r.get("arxiv_by_year") or {}, ensure_ascii=False),
+                     json.dumps(r.get("ours_by_year") or {}, ensure_ascii=False)))
+    if apply and rows:
+        for i in range(0, len(rows), 80):
+            part = rows[i:i + 80]
+            vals = ",".join("(" + ",".join(lit(v) for v in r) + ")" for r in part)
+            q("INSERT OR REPLACE INTO author_refs "
+              f"(akey, arxiv_total, first_year, last_year, by_year, ours_by_year) VALUES {vals}")
+        print(f"      портфелей авторов: {len(rows)}")
+    return len(rows)
+
+
 def sync_authors(apply):
     """Связь «автор — работа». Ключ считает тот же код, что строит страницы авторов
     (tools/author_record.key_from_display), иначе страница и лента разойдутся в том,
@@ -390,6 +431,17 @@ def sync_authors(apply):
 
 # ─────────────────────────────── главное ────────────────────────────────────
 def main():
+    # Общий замок (tools/freeze.py): пока стоит, прогоны не начинаются.
+    try:
+        import sys as _s
+        from pathlib import Path as _P
+        _r = str(_P(__file__).resolve().parent.parent)
+        if _r not in _s.path:
+            _s.path.insert(0, _r)
+        from tools.freeze import guard as _frozen
+        _frozen("заливка карточек")
+    except ImportError:
+        pass
     ap = argparse.ArgumentParser()
     ap.add_argument("--check", action="store_true", help="показать расхождение, не менять")
     ap.add_argument("--apply", action="store_true", help="залить разницу")
@@ -434,7 +486,9 @@ def main():
                    len(disk)])
 
     a_add, a_gone = sync_authors(args.apply)
+    n_refs = sync_author_refs(args.apply)
     print(f"\n  авторы: связей добавить {a_add}, убрать {a_gone}")
+    print(f"  портфелей arXiv: {n_refs}")
     print(f"\nитого: новых {total_new}, изменилось {total_upd}, лишних {total_del}"
           + ("" if args.apply else "  (ничего не менялось — это --check)"))
     return 0
