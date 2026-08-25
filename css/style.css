@@ -4097,3 +4097,96 @@ body { max-width: var(--w-page); }
 @media (max-width: 720px) {
   body { padding-left: var(--s-4); padding-right: var(--s-4); }
 }
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Проход 2 — карточка ленты (2026-08-25)
+
+   Карточка не была карточкой: ни фона, ни рамки, ни тени. Список читался как
+   сплошное полотно. Даём поверхность по брендовой системе и меняем float на flex —
+   вместе с float уходит клубок обходных правил вокруг обтекания.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.article-card {
+    display: flex; gap: var(--s-4); align-items: flex-start;
+    padding: var(--s-4);
+    margin-bottom: var(--s-3);
+    background: var(--surface);
+    border: 1px solid var(--hair);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+.article-card:hover {
+    border-color: rgba(46,138,160,.34);
+    box-shadow: var(--shadow);
+    transform: translateY(-1px);
+}
+/* Клерфикс больше не нужен: flex не обтекается. */
+.article-card::after { content: none; }
+
+/* Картинка — первая колонка. float снят: он обтекался построчно и требовал целого
+   набора обходных правил (см. объяснение у .card-desc выше по файлу). */
+.card-img-wrap {
+    float: none; flex: 0 0 130px; margin: 0;
+    border-radius: var(--radius-sm);
+}
+/* Базис НОЛЬ, а не auto. С auto колонка просит ширину своего содержимого, а после
+   переноса эйбрау на всю строку (см. выше) сумма «картинка + желаемая ширина текста»
+   превышала строку — и текст уезжал под картинку. Замер поймал: заголовок вставал на
+   185 вместо 331. */
+.card-body { flex: 1 1 0; min-width: 0; }
+
+/* Эйбрау (раздел·дата·источник) — ТРЕТИЙ элемент карточки, не считая картинки и текста,
+   и во flex он честно встаёт третьей колонкой: замер показал картинку на 436 и заголовок
+   в 318 px вместо 570. Он должен занимать всю строку сверху, поэтому карточка переносит
+   элементы, а эйбрау берёт полную ширину. */
+.article-card { flex-wrap: wrap; }
+.article-card .card-eyebrow { flex: 0 0 100%; width: 100%; margin-bottom: var(--s-1); }
+
+/* RTL: колонки разворачиваются сами, отдельного float:right не требуется. */
+html[lang="ar"] .card-img-wrap { float: none; margin: 0; }
+html[lang="ar"] .article-card { flex-direction: row-reverse; }
+
+/* Заголовок карточки — serif, как заголовки везде: в ленте он главный элемент,
+   а не подпись к картинке. */
+.card-title {
+    font-family: var(--serif); font-size: 17px; line-height: 1.32;
+    font-weight: 600; color: var(--ink); display: block;
+}
+.article-card:hover .card-title { color: var(--link); }
+/* Описание — три строки, обрезка средствами CSS.
+
+   Раньше это было НЕВОЗМОЖНО, и в файле выше стоит объяснение почему: line-clamp и
+   overflow создают новый контекст форматирования, а такой блок обтекал плавающую
+   картинку прямоугольником — поджимались даже строки НИЖЕ неё. Вместе с float причина
+   исчезла, и обрезка снова доступна.
+
+   Это лучше прежнего счётчика символов (card_cut, 300 знаков при сборке) сразу двумя
+   свойствами: строк ровно столько, сколько видно, при любой ширине колонки и любом
+   языке; и полный текст остаётся в разметке — его читает поисковик, а обрезка чисто
+   зрительная. Счётчик в генераторе не трогаем: он даёт запас на случай, когда строк
+   помещается больше. */
+.card-desc {
+    margin-bottom: var(--s-2);
+    display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3;
+    overflow: hidden;
+}
+
+/* Внутренний ритм карточки — по шкале. Замер до правки: карточка 333 px, из них
+   переключатель уровней 36, заголовок 22, описание 101, авторы 19, теги 14,
+   действия 40 — и между ними шесть разных зазоров, набранных по месту. */
+.article-card .lv-switch { margin: 0 0 var(--s-2); }
+.article-card .card-authors,
+.article-card .card-tags { margin: 0 0 var(--s-1); }
+.article-card .card-actions { margin-top: var(--s-2); }
+/* Строка действий не нуждается в собственной высоте: кнопки задают её сами. */
+.article-card .card-actions { min-height: 0; padding: 0; }
+
+@media (max-width: 620px) {
+    /* На телефоне картинка идёт полосой над текстом: 130 px рядом с текстом на 375
+       оставляют колонке 200 px, в которых заголовок ломается по два слова. */
+    .article-card { flex-direction: column; gap: var(--s-3); padding: var(--s-3); }
+    html[lang="ar"] .article-card { flex-direction: column; }
+    .card-img-wrap { flex: none; width: 100%; aspect-ratio: 16 / 9; }
+}
