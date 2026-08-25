@@ -27,6 +27,13 @@
     if (box.dataset.contextTag) { kind = 'tag'; key = box.dataset.contextTag; }
     else if (box.dataset.contextScientist) { kind = 'sci'; key = box.dataset.contextScientist; }
     else if (box.dataset.contextCategory) { kind = 'cat'; key = box.dataset.contextCategory; }
+    // Закон: контейнер размечен как data-context-tag с ОСНОВНЫМ тегом закона, и у части
+    // законов он пуст (закон родился не из тега). Идентификатор закона надёжнее взять из
+    // адреса — /laws/<id>.html, он и есть ключ в card_links kind='law'.
+    if ((!key || kind === null) && location.pathname.indexOf('/laws/') !== -1) {
+        var lm = location.pathname.match(/\/laws\/([^/]+)\.html/);
+        if (lm) { kind = 'law'; key = decodeURIComponent(lm[1]); }
+    }
     if (!kind || !key || box.dataset.akey) return;   // автор живёт своим модулем
 
     // Страница закона размечена как data-context-tag=основной тег закона — так же её
@@ -128,14 +135,30 @@
                         return '<span class="ebar" title="' + k + ': ' + s.byYear[k] + '"' +
                                ' style="height:' + h + 'px"></span>';
                     }).join('');
+                    // перерисовка не должна плодить второй ряд столбиков
+                    var old = document.querySelector('.ebars');
+                    if (old) old.remove();
                     top.insertAdjacentHTML('afterend',
                         '<div class="ebars" aria-hidden="true">' + bars + '</div>');
                 }
             }).catch(function () {});
     }
 
+    /* Страница /laws/ бывает двух пород: настоящий закон (hawking_radiation) и понятие —
+       бывший тег, влитый в облако законов при слиянии (black_hole). Внешне они одинаковы,
+       а в связях живут под разными видами. Спрашиваем как закон; пусто — спрашиваем как
+       тег. Один лишний запрос на 2 КБ у части страниц дешевле, чем таскать различие пород
+       через разметку. */
+    var lawFallback = (kind === 'law');
+
     function boot() {
         fetchPage(0).then(function (d) {
+            if ((!d || !d.items || !d.items.length) && lawFallback) {
+                lawFallback = false;
+                kind = 'tag';
+                boot();
+                return;
+            }
             // Облако молчит — страница остаётся такой, какой её собрала статика.
             if (!d || !d.items || !d.items.length) return;
             box.innerHTML = cards(d.items);
