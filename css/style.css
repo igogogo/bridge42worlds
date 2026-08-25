@@ -4136,7 +4136,9 @@ body { max-width: var(--w-page); }
 
 /* RTL: колонки разворачиваются сами, отдельного float:right не требуется. */
 html[lang="ar"] .card-img-wrap { float: none; margin: 0; }
-html[lang="ar"] .article-card { flex-direction: row-reverse; }
+/* Разворот НЕ нужен: при direction:rtl обычный row уже кладёт первый элемент
+   справа — ровно то, что раньше делал float:right. row-reverse поверх этого
+   разворачивал второй раз и возвращал латинский порядок. */
 
 /* Заголовок карточки — serif, как заголовки везде: в ленте он главный элемент,
    а не подпись к картинке. */
@@ -4177,7 +4179,6 @@ html[lang="ar"] .article-card { flex-direction: row-reverse; }
     /* На телефоне картинка идёт полосой над текстом: 130 px рядом с текстом на 375
        оставляют колонке 200 px, в которых заголовок ломается по два слова. */
     .article-card { flex-direction: column; gap: var(--s-3); padding: var(--s-3); }
-    html[lang="ar"] .article-card { flex-direction: column; }
     .card-img-wrap { flex: none; width: 100%; aspect-ratio: 16 / 9; }
 }
 
