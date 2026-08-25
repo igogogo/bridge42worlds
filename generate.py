@@ -1021,9 +1021,13 @@ _MERGE_L10N = {
 }
 
 
+# Заголовок портрета — про ОДНОГО человека. Английское «What they work on» владелец
+# поймал 25 августа: «кто такие они, он один». They как нейтральное единственное здесь
+# читается как множественное, потому что рядом стоят числа работ и соавторов, — и
+# страница начинает звучать про коллектив. Пишем от предмета, а не от лица.
 _PORTRAIT_L10N = {
     "ru": ("Чем занимается", "работ у нас", "годы работ", "соавторов"),
-    "en": ("What they work on", "papers here", "years of work", "co-authors"),
+    "en": ("Research focus", "papers here", "years of work", "co-authors"),
     "es": ("De qué se ocupa", "trabajos aquí", "años de trabajo", "coautores"),
     "fr": ("Ses travaux", "travaux ici", "années de travail", "co-auteurs"),
     "ar": ("مجال عمله", "أعمال لدينا", "سنوات العمل", "مؤلفون مشاركون"),

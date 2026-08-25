@@ -76,6 +76,25 @@ html[lang="ar"] .discoveries-list { padding-left: 0; padding-right: 20px; }
     --shadow: 0 20px 44px -26px rgba(15,22,38,.34);
     --shadow-sm: 0 10px 24px -18px rgba(15,22,38,.30);
     --radius: 16px; --radius-sm: 12px;
+
+    /* ── ШКАЛА ОТСТУПОВ (Проход 2, 2026-08-25) ────────────────────────────────
+       Замер перед вводом: в файле 29 РАЗНЫХ значений отступов на 1549 правил —
+       8, 6, 4, 10, 14, 2, 12, 3, 16, 5, 20, 18 и далее. Каждое ставилось на глаз
+       и по месту, поэтому одинаковые по смыслу зазоры различаются на пиксель-два,
+       и вёрстка «дышит неровно» — владелец 25.08: «верстка будет более стабильной
+       и чёткой, немного меньше расстояний везде, поплотнее, но сохраняем воздух».
+
+       Шкала кратна четырём и намеренно короткая: чем меньше выбор, тем ровнее
+       ритм. Новые правила берут ТОЛЬКО отсюда; старые переводим по мере того,
+       как трогаем компонент, а не разом — массовая замена сотен значений вслепую
+       ломает то, что сейчас случайно выглядит верно. */
+    --s-1: 4px;    --s-2: 8px;    --s-3: 12px;   --s-4: 16px;
+    --s-5: 20px;   --s-6: 28px;   --s-7: 40px;   --s-8: 56px;
+
+    /* Ширины колонок. Текст УЖЕ карточек: строка длиннее ~75 знаков заставляет
+       глаз терять начало следующей, и длинные разборы дочитывают заметно хуже.
+       Карточки листаются взглядом, им ширина не мешает. */
+    --w-page: 780px;   --w-read: 62ch;
     /* Лампа из набора для ::before врезки — рисунок один в один с B42Icons.lamp */
     --ic-lamp: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18h6'/%3E%3Cpath d='M10 21h4'/%3E%3Cpath d='M12 3a6 6 0 0 0-3.5 10.9c.6.4.9 1 .9 1.7v.4h5.2v-.4c0-.7.3-1.3.9-1.7A6 6 0 0 0 12 3z'/%3E%3C/svg%3E");
     /* Шрифты — системные, по design-system.md (совпадают с About/деком, без веб-шрифтов) */
@@ -855,13 +874,16 @@ h1 {
     font-size: 27px; color: var(--text); line-height: 1.3; margin-bottom: 8px;
 }
 /* Чуть меньше (юзер-фидбек 2026-07-15: "чуть меньше шрифт заголовка статьи"). */
-.article-title-top { max-width: 620px; margin-top: 2px; font-size: 24px; }
+.article-title-top { max-width: none;   /* Проход 2: заголовок во всю колонку */ margin-top: 2px; font-size: 24px; }
 
 /* ── Authors top ──────────────── */
 /* max-height+overflow — не display:none, весь текст остаётся в HTML и индексируется
    поисковиком как обычно; ограничение чисто визуальное (для коллабораций на сотни авторов). */
 .authors-top { font-size: 12px; line-height: 1.5; color: var(--soft); margin-bottom: 4px;
-    max-width: 620px; max-height: 4.5em; overflow-y: auto; }
+    /* 9em вместо 4.5em (владелец 25.08: «небольшая прокрутка там, где авторы»):
+       статья с семью-десятью именами помещается целиком, полоска остаётся только
+       у коллабораций на десятки и сотни имён — ради них ограничение и заводилось. */
+    max-width: 620px; max-height: 9em; overflow-y: auto; }
 
 /* ── Meta ─────────────────────── */
 .meta { font-size: 13px; color: var(--soft); margin-bottom: 10px; }
@@ -3912,7 +3934,7 @@ body.graph-fs-open .graph-fs-active svg { touch-action: manipulation; }
 /* Пять действий автора на его странице (js/author-live.js). Блок намеренно спокойный:
    это не призыв, а дверь, в которую стучат редко и по делу. Отделён линией сверху,
    чтобы не путался со списком работ. */
-.aclaim { margin-top: 44px; padding-top: 22px; border-top: 1px solid var(--border); }
+.aclaim { margin: 18px 0 30px; padding-bottom: 22px; border-bottom: 1px solid var(--border); }
 .aclaim h3 { font-size: 16px; margin: 0 0 6px; }
 .aclaim-lead { font-size: 13px; color: var(--soft); line-height: 1.65; max-width: 62ch; margin: 0 0 14px; }
 .aclaim-acts { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -3939,3 +3961,86 @@ body.graph-fs-open .graph-fs-active svg { touch-action: manipulation; }
 .ebars { display: flex; align-items: flex-end; gap: 3px; height: 38px; margin: 8px 0 4px; }
 .ebar { width: 9px; background: var(--border); border-radius: 2px 2px 0 0; }
 .ebar:hover { background: var(--link); }
+
+/* Диаграмма портфеля автора: серым все его работы в arXiv, голубым поверх — наши
+   пересказы (js/author-live.js). Пары столбиков, никакой библиотеки. */
+.arch-line { font-size: 13.5px; color: var(--soft); margin: 4px 0 8px; }
+.abars { display: flex; align-items: flex-end; gap: 4px; height: 46px; margin: 4px 0 2px; }
+.abar { display: flex; align-items: flex-end; gap: 1px; }
+.abar i { display: block; width: 7px; border-radius: 2px 2px 0 0; }
+.abar-all { background: var(--border); }
+.abar-ours { background: var(--link); opacity: .75; }
+.abars-legend { font-size: 11.5px; color: var(--muted); margin-bottom: 14px; }
+.aclaim-mailto { font-size: 13px; margin: 10px 0 0; }
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Проход 2 — одна колонка на всю страницу статьи (2026-08-25)
+
+   До этого на одной странице жили ЧЕТЫРЕ ширины: тело 900, контейнер статьи 680,
+   текст и карточки 620, шапка 620. Каждая заводилась своим решением в своё время —
+   и вместе они читались как сбитая центровка: видимый текст стоял слева от середины
+   экрана, а справа была колонка тегов.
+
+   Теперь ширина одна (--w-page), внутри неё текст держит комфортную строку
+   (--w-read). Боковая колонка переехала в поток карточкой.
+
+   Правила ниже сознательно перекрывают старые: старые не удалены, потому что на них
+   завязаны страницы, которые в этот проход не входят (обучение, сообщество, облака).
+   По мере перевода каждой из них старое правило уйдёт вместе с ней.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+body.article-page { max-width: var(--w-page); }
+
+body.article-page .top-bar,
+body.article-page .langs-row { max-width: none; }
+
+body.article-page .article-wrapper { display: block; }
+
+body.article-page .article-main {
+    max-width: none;
+    padding: var(--s-4) 0 var(--s-5);
+}
+
+/* Текст статьи — по комфортной строке; всё остальное во всю колонку. Раньше и то и
+   другое было зажато в 620, поэтому картинки и карточки выглядели уже страницы. */
+body.article-page .article-main > * { max-width: none; }
+body.article-page .article-main p,
+body.article-page .article-main ul,
+body.article-page .article-main ol,
+body.article-page .oneliner,
+body.article-page .original-title { max-width: var(--w-read); }
+
+/* Теги в потоке — карточкой, как на прототипе, а не колонкой сбоку. */
+body.article-page .article-side--flow {
+    position: static; width: auto; max-width: none;
+    margin: var(--s-6) 0 var(--s-5);
+    padding: var(--s-4) var(--s-5);
+    background: var(--surface);
+    border: 1px solid var(--hair);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    display: flex; flex-wrap: wrap; gap: var(--s-2);
+    align-items: flex-start;
+}
+body.article-page .article-side--flow > * { margin: 0; }
+
+/* Ритм секций: один шаг между крупными блоками вместо шести разных. */
+body.article-page .mosaic,
+body.article-page .related,
+body.article-page .cited-ours,
+body.article-page .actions-compact { margin: var(--s-6) 0 0; }
+/* Заголовок и врезки — во всю колонку. .article-title-top держал 620 ещё со времён
+   узкой раскладки; рядом с карточками на 748 он выглядел вторым, лишним краем. */
+body.article-page .article-title-top,
+body.article-page .title-row,
+body.article-page .callout,
+body.article-page .formula { max-width: none; }
+
+body.article-page .meta { margin-bottom: var(--s-2); }
+body.article-page .meta-cats { margin-bottom: var(--s-3); }
+
+@media (max-width: 720px) {
+    body.article-page { padding-left: var(--s-4); padding-right: var(--s-4); }
+    body.article-page .article-side--flow { padding: var(--s-3) var(--s-4); }
+}
