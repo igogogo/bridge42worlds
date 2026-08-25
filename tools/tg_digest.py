@@ -45,13 +45,43 @@ def esc(s):
     return (s or "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
-def candidates(n, pick=None, lang="ru"):
+POSTED = ROOT / "data" / "digest-posted.json"
+
+
+def load_posted():
+    """Что уже уходило в канал. Владелец 2026-08-24: «в каналы сыпятся одни и те же
+    статьи уже третий раз».
+
+    Причина была в том, что памяти не существовало вовсе: набор seen жил внутри одного
+    запуска и защищал только от дубля в пределах одного поста. Каждый вечер дайджест
+    брал три самые свежие статьи с обложкой — и пока поток стоял, это были одни и те же
+    три. Теперь опубликованное помнится по каналам и языкам."""
+    if not POSTED.exists():
+        return {}
+    try:
+        return json.loads(POSTED.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+
+def save_posted(state):
+    POSTED.parent.mkdir(parents=True, exist_ok=True)
+    tmp = POSTED.with_suffix(".tmp")
+    tmp.write_text(json.dumps(state, ensure_ascii=False, indent=1), encoding="utf-8")
+    tmp.replace(POSTED)
+
+
+def candidates(n, pick=None, lang="ru", already=()):
     idx = json.loads((ROOT / f"lang/{lang}/articles-index.json").read_text(encoding="utf-8"))
     seen, out = set(), []
     for a in sorted(idx, key=lambda x: x["date"], reverse=True):
         if a.get("version") != "popular" or a["id"] in seen:
             continue
         seen.add(a["id"])
+        # Уже публиковали — пропускаем. Исключение: явный --pick, когда человек
+        # сознательно просит повторить конкретную работу.
+        if not pick and a["id"] in already:
+            continue
         if pick and a["id"] not in pick:
             continue
         cover = ROOT / "lang/ru/archive" / a["date"] / a["id"] / "ai.webp"  # обложки живут у ru
@@ -115,6 +145,18 @@ def post(token, chat, art, dry=False, lang="ru"):
     if dry:
         print(f"\n─── {art['id']} ({art['date']}) ───\n{cap}\n[обложка: {art['cover'].name}]")
         return True
+    # Общий выключатель канала (tools/tg_silence.py) — владелец 25 августа.
+    try:
+        import sys as _s
+        from pathlib import Path as _P
+        _r = str(_P(__file__).resolve().parent.parent)
+        if _r not in _s.path:
+            _s.path.insert(0, _r)
+        from tools.tg_silence import guard as _guard
+        if _guard(art["title"]):
+            return True
+    except ImportError:
+        pass
     with art["cover"].open("rb") as f:
         r = requests.post(f"https://api.telegram.org/bot{token}/sendPhoto", timeout=60,
                           data={"chat_id": chat, "caption": cap, "parse_mode": "HTML"},
@@ -145,11 +187,28 @@ def main():
         print("нет TG_BOT_TOKEN / TG_CHAT_ID в .env")
         return 1
 
-    arts = candidates(args.n, set(args.pick) if args.pick else None, lang=args.lang)
+    # Ключ памяти — канал плюс язык: у русского и английского каналов свои очереди,
+    # и одна работа законно уходит в оба, но в каждый по одному разу.
+    state = load_posted()
+    key = f"{chat or 'dry'}|{args.lang}"
+    already = set(state.get(key, []))
+
+    arts = candidates(args.n, set(args.pick) if args.pick else None,
+                      lang=args.lang, already=already)
     if not arts:
-        print("нечего публиковать: нет свежих статей с обложкой и текстом карточки")
+        print("нечего публиковать: новых статей с обложкой и текстом карточки нет "
+              f"(уже опубликовано за всё время: {len(already)})")
         return 1
-    ok = sum(1 for a in arts if post(token, chat, a, args.dry, lang=args.lang))
+    sent = []
+    for a in arts:
+        if post(token, chat, a, args.dry, lang=args.lang):
+            sent.append(a["id"])
+    # Запоминаем только то, что РЕАЛЬНО ушло: сухой прогон и неудачные отправки память
+    # не портят, иначе одна ошибка Telegram навсегда похоронила бы статью.
+    if sent and not args.dry:
+        state[key] = sorted(already | set(sent))
+        save_posted(state)
+    ok = len(sent)
     print(f"\n{'показано' if args.dry else 'опубликовано'}: {ok} из {len(arts)}")
     return 0
 

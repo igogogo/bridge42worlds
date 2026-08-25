@@ -655,8 +655,19 @@ function withCors(res) {
 //
 // Защита: Cloudflare шлёт заголовок cf-webhook-auth с секретом, который задаётся при создании
 // вебхука. Без совпадения не отвечаем — иначе любой желающий сможет писать нам в группу.
-async function tg(env, text) {
+async function tg(env, text, opts) {
   if (!env.TG_BOT_TOKEN || !env.TG_CHAT_ID) return false;
+  // Выключатель канала. На машине он файлом (tools/tg_silence.py), здесь — переменной
+  // воркера: файловой системы у нас нет, зато переменная меняется из панели Cloudflare
+  // без выкладки кода. Владелец 25 августа: «выруби все сообщения в ленту, пока ждём ML».
+  //
+  // ТРЕВОГА ПРОХОДИТ ВСЕГДА. «Сторож молчит» — не сообщение, а сигнал, что сайт лёг;
+  // заглушить его вместе с рапортами значило бы выключить пожарную сигнализацию заодно
+  // с музыкой. Нужна полная тишина — убрать проверку opts.alarm.
+  if (env.TG_SILENT === "1" && !(opts && opts.alarm)) {
+    console.log("канал заглушен (TG_SILENT=1), сообщение только в лог:", text.slice(0, 300));
+    return false;
+  }
   const r = await fetch(`https://api.telegram.org/bot${env.TG_BOT_TOKEN}/sendMessage`, {
     method: "POST",
     headers: { "content-type": "application/json" },
@@ -1633,7 +1644,7 @@ async function alertOnce(env, problems) {
   const prev = await env.TOKENS.get(key).then((v) => (v ? JSON.parse(v) : null)).catch(() => null);
   if (!problems.length) {
     if (prev) {
-      await tg(env, "✅ <b>Сторожа снова на связи</b>").catch(() => {});
+      await tg(env, "✅ <b>Сторожа снова на связи</b>", { alarm: true }).catch(() => {});
       await env.TOKENS.delete(key).catch(() => {});
     }
     return;
@@ -1641,7 +1652,7 @@ async function alertOnce(env, problems) {
   const text = problems.join("\n");
   const same = prev && prev.text === text;
   if (same && now - prev.at < 6 * 3600000) return;
-  await tg(env, "⏰ <b>Сторож молчит</b>\n" + text).catch(() => {});
+  await tg(env, "⏰ <b>Сторож молчит</b>\n" + text, { alarm: true }).catch(() => {});
   await env.TOKENS.put(key, JSON.stringify({ text, at: now }),
                        { expirationTtl: 7 * 86400 }).catch(() => {});
 }

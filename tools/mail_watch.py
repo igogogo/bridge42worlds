@@ -75,6 +75,20 @@ def body_snippet(msg, limit=400):
 
 
 def tg(text):
+    # Общий выключатель канала (tools/tg_silence.py). Владелец 25 августа: «выруби
+    # все сообщения в ленту, пока ждём ML». Дело при этом продолжается — молчит
+    # только рапорт.
+    try:
+        import sys as _s
+        from pathlib import Path as _P
+        _r = str(_P(__file__).resolve().parent.parent)
+        if _r not in _s.path:
+            _s.path.insert(0, _r)
+        from tools.tg_silence import guard as _guard
+        if _guard(text):
+            return False
+    except ImportError:
+        pass
     e = env()
     token, chat = e.get("TG_BOT_TOKEN"), e.get("TG_CHAT_ID")
     if not (token and chat):

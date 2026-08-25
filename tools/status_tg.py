@@ -138,6 +138,18 @@ def main():
     else:
         print("нужен текст: status_tg.py \"...\" или --file путь")
         return 1
+    # Общий выключатель канала (tools/tg_silence.py) — владелец 25 августа.
+    try:
+        import sys as _s
+        from pathlib import Path as _P
+        _r = str(_P(__file__).resolve().parent.parent)
+        if _r not in _s.path:
+            _s.path.insert(0, _r)
+        from tools.tg_silence import guard as _guard
+        if _guard(text):
+            return 0
+    except ImportError:
+        pass
     _load_env()
     token, chat = os.environ.get("TG_BOT_TOKEN"), os.environ.get("TG_CHAT_ID")
     if not (token and chat):
