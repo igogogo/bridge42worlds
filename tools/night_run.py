@@ -48,6 +48,7 @@ import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))   # запуск как `python tools/night_run.py`: корень в path сам не попадает
 LOG = ROOT / "data" / "night-run.log"
 STATE = ROOT / "data" / "night-run-state.json"
 PY = sys.executable
