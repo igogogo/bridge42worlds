@@ -73,6 +73,7 @@ def main():
             json.dumps(out, ensure_ascii=False), encoding="utf-8")
     print("✓ словари клиенту")
     run("страницы понятий", [PY, "concepts_pages.py"])
+    run("страницы формул", [PY, "formulas_pages.py"])
     return 0
 
 
