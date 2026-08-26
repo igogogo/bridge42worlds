@@ -138,6 +138,9 @@ def parse_answer(raw):
             "group": str(it.get("group") or "other")[:80],
             "scope": "general" if it.get("scope") == "general" else "specific",
             "line": str(it.get("line") or "")[:220],
+            # дословные подстроки текста, где понятие названо — в любом падеже
+            # и парафразе; владелец 26.08: «пусть предварительно и разметит»
+            "mentions": [str(m)[:80] for m in (it.get("mentions") or [])[:3] if m],
         })
     return out
 
@@ -158,7 +161,25 @@ def save_harvest(rows):
             fh.write(json.dumps(r, ensure_ascii=False) + "\n")
 
 
+MENTIONS = ROOT / "data" / "concept-mentions.jsonl"
+
+
+def save_mentions(aid, cands):
+    """Якоря — отдельным журналом по статьям: у кандидата в копилке одна запись
+    на весь корпус, а упоминания у каждой статьи свои."""
+    rows = []
+    for c in cands:
+        ms = c.get("mentions") or []
+        if ms:
+            rows.append(json.dumps({"art": aid, "concept": c["name"], "m": ms},
+                                   ensure_ascii=False))
+    if rows:
+        with MENTIONS.open("a", encoding="utf-8") as fh:
+            fh.write(chr(10).join(rows) + chr(10))
+
+
 def ingest(aid, cands):
+    save_mentions(aid, cands)
     rows = load_harvest()
     added = grown = 0
     for c in cands:
