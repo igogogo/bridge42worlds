@@ -59,7 +59,10 @@ MATCH_T = 0.80        # с этого сходства кандидат = сущ
 DISTILL_T = 0.86      # с этого сходства два кандидата = один кандидат
 ARTICLES_MIN = 5      # столько статей — и кандидат дорос до понятия
 KINDS = ("concept method phenomenon object instrument law equation effect "
-         "principle theorem substance math process property theory").split()
+         "principle theorem substance math process property theory "
+         # особые классы (владелец 26.08): величина с единицами и эталоном,
+         # константа с числом — формула раскладывается в реестр целиком
+         "quantity constant unit").split()
 
 _ENV = {}
 

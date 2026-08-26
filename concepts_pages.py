@@ -41,19 +41,35 @@ KIND_LBL = {
     "ru": {"concept": "понятие", "object": "объект", "method": "метод", "instrument": "прибор",
            "substance": "вещество", "math": "математика", "phenomenon": "явление",
            "law": "закон", "equation": "уравнение", "effect": "эффект", "principle": "принцип",
-           "theorem": "теорема", "process": "процесс", "property": "свойство", "theory": "теория"},
+           "theorem": "теорема", "process": "процесс", "property": "свойство", "theory": "теория",
+           "quantity": "величина", "constant": "константа", "unit": "единица"},
     "es": {"concept": "concepto", "object": "objeto", "method": "método", "instrument": "instrumento",
            "substance": "sustancia", "math": "matemáticas", "phenomenon": "fenómeno",
            "law": "ley", "equation": "ecuación", "effect": "efecto", "principle": "principio",
-           "theorem": "teorema", "process": "proceso", "property": "propiedad", "theory": "teoría"},
+           "theorem": "teorema", "process": "proceso", "property": "propiedad", "theory": "teoría",
+           "quantity": "magnitud", "constant": "constante", "unit": "unidad"},
     "fr": {"concept": "concept", "object": "objet", "method": "méthode", "instrument": "instrument",
            "substance": "substance", "math": "mathématiques", "phenomenon": "phénomène",
            "law": "loi", "equation": "équation", "effect": "effet", "principle": "principe",
-           "theorem": "théorème", "process": "processus", "property": "propriété", "theory": "théorie"},
+           "theorem": "théorème", "process": "processus", "property": "propriété", "theory": "théorie",
+           "quantity": "grandeur", "constant": "constante", "unit": "unité"},
     "ar": {"concept": "مفهوم", "object": "جسم", "method": "طريقة", "instrument": "جهاز",
            "substance": "مادة", "math": "رياضيات", "phenomenon": "ظاهرة",
            "law": "قانون", "equation": "معادلة", "effect": "تأثير", "principle": "مبدأ",
-           "theorem": "مبرهنة", "process": "عملية", "property": "خاصية", "theory": "نظرية"},
+           "theorem": "مبرهنة", "process": "عملية", "property": "خاصية", "theory": "نظرية",
+           "quantity": "كمية", "constant": "ثابت", "unit": "وحدة"},
+}
+SEC = {
+    "ru": {"desc": "Описание", "history": "История", "how": "Как это работает",
+           "practical": "Где применяется", "fact": "Любопытный факт"},
+    "en": {"desc": "Description", "history": "History", "how": "How it works",
+           "practical": "In practice", "fact": "Fun fact"},
+    "es": {"desc": "Descripción", "history": "Historia", "how": "Cómo funciona",
+           "practical": "En la práctica", "fact": "Dato curioso"},
+    "ar": {"desc": "الوصف", "history": "التاريخ", "how": "كيف يعمل",
+           "practical": "في التطبيق", "fact": "حقيقة طريفة"},
+    "fr": {"desc": "Description", "history": "Histoire", "how": "Comment ça marche",
+           "practical": "En pratique", "fact": "Anecdote"},
 }
 T = {
     "ru": {"title": "Понятия", "sub": "Реестр понятий: {n} записей в {g} группах. Карточки новых понятий пока на английском — переводы в работе.",
@@ -116,7 +132,24 @@ def name_of(c, cid, lang):
     return c["names"].get(lang) or c["names"].get("en") or cid.replace("_", " ")
 
 
-def concept_page(cid, c, lang, live, by_id):
+def load_rich(lang):
+    """Старые справочники языка: полные описания 527 переживших понятий."""
+    rich = {}
+    for fname in ("tags.json", "laws.json"):
+        p = ROOT / "lang" / lang / "data" / fname
+        if not p.exists():
+            continue
+        try:
+            d = json.loads(p.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        for cid, v in d.items():
+            if isinstance(v, dict):
+                rich.setdefault(cid, v)
+    return rich
+
+
+def concept_page(cid, c, lang, live, by_id, rich=None):
     t = T[lang]
     name = name_of(c, cid, lang)
     kind = KIND_LBL.get(lang, {}).get(c["kind"], c["kind"])
@@ -148,6 +181,21 @@ def concept_page(cid, c, lang, live, by_id):
     out.append('</div>')
 
     body = []
+    # Полное описание — из старого справочника, на языке страницы. Это то самое
+    # «полноценное описание», которое было у понятий всегда; card_en сверху — опора
+    # вектора и определение-эпиграф, а читателю здесь — нормальный текст.
+    # старая запись из справочника ИЛИ новая развёрнутая (fullcards, поле full) —
+    # имена полей одинаковые, рендер один
+    r = (rich or {}).get(cid) or c.get("full") or {}
+    s = SEC.get(lang, SEC["en"])
+    for field, label in (("description_popular", s["desc"]), ("history", s["history"]),
+                         ("how_it_works", s["how"]),
+                         ("practical_application", s["practical"]),
+                         ("fun_fact_popular", s["fact"])):
+        txt = (r.get(field) or "").strip()
+        if txt:
+            body.append(f'<div class="section"><h2 style="font-size:16px;margin:14px 0 6px">'
+                        f'{label}</h2><p style="max-width:var(--w-read)">{H.escape(txt)}</p></div>')
     if c["related"]:
         chips = "".join(
             f'<a href="/lang/{lang}/concepts/{H.escape(r["id"])}.html">'
@@ -227,10 +275,11 @@ def build(langs):
                 continue
             by_id[a["id"]] = a
             by_id[a["id"].split("v")[0]] = a
+        rich = load_rich(lang)
         d = ROOT / "lang" / lang / "concepts"
         d.mkdir(parents=True, exist_ok=True)
         for cid, cv in live["concepts"].items():
-            (d / f"{cid}.html").write_text(concept_page(cid, cv, lang, live, by_id),
+            (d / f"{cid}.html").write_text(concept_page(cid, cv, lang, live, by_id, rich),
                                            encoding="utf-8")
             total += 1
         (d / "index.html").write_text(cloud_page(lang, live, by_id), encoding="utf-8")

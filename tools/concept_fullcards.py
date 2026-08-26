@@ -19,7 +19,7 @@
                и обновить матрицу b42-ml/data/concept-cards.f16 (бэкап рядом).
                После него переразметка: python tools/retag_hub.py --thr 0.50 --margin 0.12
 
-Смета --run: ~686 понятий × (~700 токенов вход + ~200 выход) ≈ $0.2-0.4.
+Смета --run: ~686 понятий × (~700 токенов вход + ~200 выход) ≈ $0.9-1.4 (развёрнутые записи, решение владельца 26.08).
 
 Результат копится в data/concept-fullcards.json ({id: текст}) и вливается в
 data/concepts-live.json полем card_full_en — страницы понятий показывают его
@@ -41,22 +41,31 @@ LIVE = ROOT / "data" / "concepts-live.json"
 sys.path.insert(0, str(ROOT))
 from tools.concept_harvest import env, embed  # noqa: E402 — тот же .env и тот же движок
 
-PER_CALL = 4          # понятий за один вызов модели
+PER_CALL = 3          # развёрнутые записи — простор важнее пачки
 MAX_TITLES = 12       # заголовков работ в опоре
 
-SYS = """You write full English cards for scientific concepts in a physics knowledge base.
+SYS = """You write full encyclopedia entries for scientific concepts in a physics
+knowledge base for curious adults. Register: popular science, slightly above casual —
+a motivated reader without a physics degree follows everything, a physicist finds
+nothing to object to.
 
 For each numbered concept you get its id, a one-sentence seed definition, and real
 article titles from our corpus where the concept is used.
 
-Write a card of 3-5 sentences: (1) what the concept IS — a precise definition;
-(2) how it works or is used; (3) how it shows up in current research, grounded in
-the given titles. Dictionary register: define, do not popularize, do not advertise.
-A physicist must find every sentence unobjectionable. Never invent properties the
-evidence does not show.
-
 Return a JSON array, one object per concept, same order:
-  {"n": <number>, "card": "<3-5 English sentences>"}
+{"n": <number>,
+ "description": "<2-3 paragraphs: what it is, why it matters, what it explains —
+                 the main text of the entry>",
+ "how_it_works": "<1-2 paragraphs: the mechanism, plainly>",
+ "history": "<1 short paragraph: who introduced it and when, if honestly known;
+             empty string if you are not sure — never invent>",
+ "practical_application": "<1-2 sentences: where it is used in technology or research>",
+ "fun_fact": "<1 surprising but TRUE sentence; empty string if none comes honestly>"}
+
+Rules:
+1. Ground research context in the given titles; never invent properties or history.
+2. No advertising, no "amazing/incredible", no rhetorical questions.
+3. Empty string is always better than an invented fact.
 Output ONLY the JSON array."""
 
 
@@ -103,7 +112,7 @@ def ask_batch(batch, key):
         "model": "deepseek-chat",
         "messages": [{"role": "system", "content": SYS},
                      {"role": "user", "content": "\n".join(lines)}],
-        "temperature": 0.3, "max_tokens": 1800,
+        "temperature": 0.3, "max_tokens": 4000,
     }).encode("utf-8")
     req = urllib.request.Request(
         "https://api.deepseek.com/chat/completions", data=body,
@@ -118,9 +127,19 @@ def ask_batch(batch, key):
     for it in got:
         try:
             n = int(it["n"])
-            card = str(it["card"]).strip()
-            if 1 <= n <= len(batch) and len(card) > 80:
-                out[batch[n - 1][0]] = card
+            if not (1 <= n <= len(batch)):
+                continue
+            rec = {
+                # имена полей — ТЕ ЖЕ, что в старых справочниках: страница рисует
+                # старые и новые записи одним кодом, без второй ветки
+                "description_popular": str(it.get("description", "")).strip()[:4000],
+                "how_it_works": str(it.get("how_it_works", "")).strip()[:2500],
+                "history": str(it.get("history", "")).strip()[:1500],
+                "practical_application": str(it.get("practical_application", "")).strip()[:600],
+                "fun_fact_popular": str(it.get("fun_fact", "")).strip()[:400],
+            }
+            if len(rec["description_popular"]) > 200:
+                out[batch[n - 1][0]] = rec
         except (KeyError, ValueError, TypeError):
             continue
     return out
@@ -158,9 +177,9 @@ def write_cards(limit=None, force_peak=False):
         print(f"  {len(done)} готово (+{len(got)})")
     # вливаем в живой справочник — страницы возьмут при перегенерации
     live_all = json.loads(LIVE.read_text(encoding="utf-8"))
-    for cid, card in done.items():
+    for cid, rec in done.items():
         if cid in live_all["concepts"]:
-            live_all["concepts"][cid]["card_full_en"] = card
+            live_all["concepts"][cid]["full"] = rec
     LIVE.write_text(json.dumps(live_all, ensure_ascii=False), encoding="utf-8")
     print(f"✅ полных карточек: {len(done)}; влиты в concepts-live.json")
     return 0
@@ -188,7 +207,8 @@ def revector():
         print(f"бэкап матрицы: {bak.name}")
     rows = [(i, cid) for i, cid in enumerate(cids) if cid in done]
     print(f"пересчитываю {len(rows)} векторов от полного текста…")
-    texts = [f"{cid.replace('_', ' ')}: {done[cid]}" for _, cid in rows]
+    texts = [f"{cid.replace('_', ' ')}: {done[cid]['description_popular'][:1500]}"
+             for _, cid in rows]
     vecs = embed(texts)
     for (i, _), v in zip(rows, vecs):
         a = np.asarray(v, dtype=np.float32)
