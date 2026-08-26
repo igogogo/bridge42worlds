@@ -82,6 +82,39 @@ def born_candidates(rows):
             and len(r["articles"]) >= BORN_MIN and r.get("vec")]
 
 
+def s2_alive(name):
+    """Валидация термина Семантик Сколаром перед рождением. ДОПОЛНЕНИЕ к нашим
+    правилам (5 статей, вектор, дистилляция), не замена: наш механизм решает
+    «дорос ли», Scholar отвечает на один вопрос — существует ли такой термин в
+    науке вообще. Живой термин даёт тысячи работ, склейка-фантом — единицы.
+
+    Мягкая: Scholar недоступен или лимит — рождаем как раньше, ночь не блокируем.
+    Пауза 1.1 с — их предел 1 запрос/сек на ключ, волнами не грузим (владелец)."""
+    import time
+    import urllib.request
+    import urllib.parse
+    try:
+        k = None
+        for line in (ROOT / ".env").read_text(encoding="utf-8").splitlines():
+            if line.startswith("SEMANTIC_SCHOLAR_KEY"):
+                k = line.split("=", 1)[1].strip()
+        if not k:
+            return True
+        q = urllib.parse.quote(name.replace("_", " "))
+        r = urllib.request.Request(
+            f"https://api.semanticscholar.org/graph/v1/paper/search?query={q}&limit=1&fields=title",
+            headers={"x-api-key": k})
+        with urllib.request.urlopen(r, timeout=30) as resp:
+            total = json.loads(resp.read().decode("utf-8")).get("total", 0)
+        time.sleep(1.1)
+        if total < 30:
+            print(f"   🔎 {name}: в Scholar всего {total} работ — фантом, не рождаем")
+            return False
+        return True
+    except Exception:
+        return True     # внешний сервис не должен уметь останавливать наш цикл
+
+
 def give_birth(rows, dry):
     """Кандидат становится понятием: дельта реестра + вектор в облако."""
     ready = born_candidates(rows)
@@ -99,6 +132,9 @@ def give_birth(rows, dry):
         if dry:
             print(f"   родилось бы: {name} ({len(r['articles'])} статей) — {r['line'][:60]}")
             born += 1
+            continue
+        if not s2_alive(name):
+            r["matched"] = "__s2_reject__"     # больше не кандидат; след остаётся виден
             continue
         grown[name] = {
             "kind": r["kind"], "group": r["group"], "scope": r["scope"],
