@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="ru" data-theme="">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Понятия · волна 5 — смотрим предложение</title>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<!-- Палитра и сетка — общие, из css/tokens.css (собран из css/style.css).
+     Страница самодостаточна по компонентам: она временная, смотровая, и не должна
+     ни ломаться от правок ленты, ни ломать их. -->
+<link rel="stylesheet" href="/css/tokens.css">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font-family: var(--sans); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  .page { max-width: var(--w-page); margin: 0 auto; padding: var(--s-6) var(--s-4) var(--s-8); }
+  a { color: var(--link); }
+
+  /* ── шапка ─────────────────────────────────────────────────────────────── */
+  .top { display: flex; align-items: center; flex-wrap: wrap; gap: var(--s-2) var(--s-4);
+         font-family: var(--mono); font-size: 13px; margin-bottom: var(--s-5); }
+  .top a { color: var(--muted); text-decoration: none; }
+  .top a:hover { color: var(--cyan); }
+  .logo { font-family: var(--serif); font-size: 17px; color: var(--ink); text-decoration: none; }
+  .flag { margin-inline-start: auto; font-family: var(--mono); font-size: 11.5px;
+          color: var(--ochre); border: 1px solid var(--ochre); border-radius: 999px;
+          padding: 2px var(--s-3); }
+
+  h1 { font-family: var(--serif); font-size: 30px; line-height: 1.2; margin: 0 0 var(--s-2); color: var(--ink); }
+  .lead { font-size: 16.5px; color: var(--soft); max-width: var(--w-read); margin: 0 0 var(--s-5); }
+
+  /* ── сводка волны ──────────────────────────────────────────────────────── */
+  .sums { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+          gap: var(--s-3); margin-bottom: var(--s-5); }
+  .sum { background: var(--surface); border: 1px solid var(--hair); border-radius: var(--radius-sm);
+         padding: var(--s-3) var(--s-4); }
+  .sum b { display: block; font-family: var(--mono); font-size: 21px; color: var(--ink); line-height: 1.25; }
+  .sum i { font-style: normal; font-size: 12.5px; color: var(--soft); }
+  .sum s { color: var(--muted); text-decoration: none; opacity: .7; }
+
+  /* ── управление ────────────────────────────────────────────────────────── */
+  .ctl { position: sticky; top: 0; z-index: 20; background: var(--bg);
+         padding: var(--s-3) 0; margin-bottom: var(--s-4);
+         border-bottom: 1px solid var(--hair); }
+  .row { display: flex; flex-wrap: wrap; gap: var(--s-2); align-items: center; }
+  .row + .row { margin-top: var(--s-2); }
+  input[type=search] { flex: 1 1 240px; min-width: 0; font: inherit; font-size: 15px;
+        padding: var(--s-2) var(--s-3); border: 1px solid var(--hair);
+        border-radius: var(--radius-sm); background: var(--surface); color: var(--ink); }
+  input[type=search]:focus { outline: none; border-color: var(--cyan); }
+  .chip { font-family: var(--mono); font-size: 12px; padding: 4px var(--s-3);
+          border: 1px solid var(--hair); border-radius: 999px; background: var(--surface);
+          color: var(--muted); cursor: pointer; min-height: var(--tap-md);
+          display: inline-flex; align-items: center; transition: color .15s, border-color .15s; }
+  .chip:hover { color: var(--cyan); border-color: var(--cyan); }
+  .chip.on { color: var(--ink); border-color: var(--cyan); background: var(--tag-bg); }
+  .count { font-family: var(--mono); font-size: 12.5px; color: var(--soft); margin-inline-start: auto; }
+
+  /* ── карточка понятия ──────────────────────────────────────────────────── */
+  .card { background: var(--surface); border: 1px solid var(--hair);
+          border-radius: var(--radius); box-shadow: var(--shadow-sm);
+          padding: var(--s-4) var(--s-5); margin-bottom: var(--s-3); }
+  .card h3 { font-family: var(--serif); font-size: 19px; margin: 0 0 var(--s-1);
+             color: var(--ink); font-weight: 600; }
+  .id { font-family: var(--mono); font-size: 11.5px; color: var(--muted); }
+  .card .en { font-size: 15.5px; margin: var(--s-2) 0 var(--s-3); max-width: var(--w-read); }
+  .meta { display: flex; flex-wrap: wrap; gap: var(--s-1) var(--s-3);
+          font-family: var(--mono); font-size: 11.5px; color: var(--soft); margin-bottom: var(--s-2); }
+  .kind { color: var(--cyan); }
+  .grew { color: var(--ochre); }
+
+  .part { margin-top: var(--s-3); }
+  .part > b { display: block; font-family: var(--mono); font-size: 11px;
+              text-transform: uppercase; letter-spacing: .06em; color: var(--muted);
+              margin-bottom: var(--s-1); }
+  .pills { display: flex; flex-wrap: wrap; gap: var(--s-1) var(--s-2); }
+  .pill { font-size: 12.5px; padding: 2px var(--s-2); border-radius: 999px;
+          border: 1px solid var(--hair); color: var(--muted); background: var(--bg);
+          cursor: pointer; }
+  .pill:hover { border-color: var(--cyan); color: var(--cyan); }
+  .pill em { font-style: normal; font-family: var(--mono); font-size: 10.5px; opacity: .65; }
+  .pill.sci { color: var(--scientist-color); }
+  .fx { font-family: var(--mono); font-size: 12.5px; color: var(--soft);
+        background: var(--bg); border: 1px solid var(--hair); border-radius: var(--radius-sm);
+        padding: var(--s-2) var(--s-3); margin-bottom: var(--s-1); overflow-x: auto; }
+  .fx b { color: var(--ochre); font-weight: 400; }
+
+  .empty { color: var(--soft); text-align: center; padding: var(--s-8) 0; }
+  .more { display: block; width: 100%; font: inherit; font-family: var(--mono); font-size: 13px;
+          padding: var(--s-3); margin-top: var(--s-3); cursor: pointer;
+          background: var(--surface); color: var(--muted);
+          border: 1px solid var(--hair); border-radius: var(--radius-sm); }
+  .more:hover { color: var(--cyan); border-color: var(--cyan); }
+
+  /* ── верхний уровень: группы ───────────────────────────────────────────── */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--s-3); }
+  .grp { background: var(--surface); border: 1px solid var(--hair); border-radius: var(--radius-sm);
+         padding: var(--s-3) var(--s-4); cursor: pointer; text-align: start;
+         font: inherit; color: var(--text); transition: border-color .15s, transform .15s; }
+  .grp:hover { border-color: var(--cyan); transform: translateY(-1px); }
+  .grp b { display: block; font-family: var(--serif); font-size: 15px; color: var(--ink);
+           margin-bottom: 2px; line-height: 1.3; }
+  .grp i { font-style: normal; font-family: var(--mono); font-size: 11.5px; color: var(--soft); }
+  .note { font-size: 13px; color: var(--soft); background: var(--surface);
+          border: 1px solid var(--hair); border-inline-start: 3px solid var(--ochre);
+          border-radius: var(--radius-sm); padding: var(--s-3) var(--s-4); margin: var(--s-4) 0; }
+  .note b { color: var(--ochre); }
+
+  @media (max-width: 620px) {
+    .page { padding: var(--s-4) var(--s-3) var(--s-7); }
+    h1 { font-size: 24px; }
+    .card { padding: var(--s-3) var(--s-4); }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="top">
+    <a class="logo" href="/lang/ru/index.html">bridge42worlds</a>
+    <a href="/lang/ru/tags/">нынешние понятия</a>
+    <a href="/lang/ru/laws/">законы</a>
+    <span class="flag">предложение · не применено</span>
+  </div>
+
+  <h1>Понятия после волны 5</h1>
+  <p class="lead">Это <b>предложение</b>, а не боевой реестр: на сайте по-прежнему прежние
+     536 понятий. Здесь можно посмотреть все новые карточки — они на английском, перевод
+     будет после того, как ты скажешь «годится». Карточка написана моделью по статьям,
+     в которых понятие встречается.</p>
+
+  <div class="sums" id="sums"></div>
+  <div id="warn"></div>
+
+  <div class="ctl">
+    <div class="row">
+      <input type="search" id="q" placeholder="искать по названию и карточке — например entropy, laser, neural" autocomplete="off">
+      <span class="count" id="count"></span>
+    </div>
+    <div class="row" id="kinds"></div>
+    <div class="row" id="views"></div>
+  </div>
+
+  <div id="body"></div>
+</div>
+
+<script>
+/* Смотровая страница предложения волны 5.
+
+   Данные — data/wave5-review.json, собранный tools/wave5_review.py из шести файлов
+   соседнего дерева b42-ml. Здесь только показ: страница ничего не меняет и никуда
+   не пишет, применение предложения — отдельное решение владельца.
+
+   Устройство намеренно простое и без зависимостей: это временная страница на время
+   решения, а не часть сайта. Когда предложение применят (или отклонят), её место
+   займут обычные страницы понятий. */
+(function () {
+  'use strict';
+  var D = null, PAGE = 40, shown = 0, list = [], mode = 'all', kind = '', grp = null;
+  var body = document.getElementById('body');
+
+  fetch('/data/wave5-review.json').then(function (r) { return r.json(); }).then(function (d) {
+    D = d;
+    drawSums();
+    buildKinds();
+    buildViews();
+    apply();
+  }).catch(function () {
+    body.innerHTML = '<p class="empty">Не нашёл data/wave5-review.json — собери его: ' +
+                     '<code>python tools/wave5_review.py</code></p>';
+  });
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function drawSums() {
+    var s = D.stats, el = document.getElementById('sums');
+    function box(n, was, label) {
+      return '<div class="sum"><b>' + n + (was ? ' <s>← ' + was + '</s>' : '') +
+             '</b><i>' + label + '</i></div>';
+    }
+    el.innerHTML =
+      box(s.concepts, s.was, 'понятий, у всех карточка') +
+      box(s.groups, '', 'групп верхнего уровня') +
+      box(s.links, '', 'связей с весом') +
+      box(s.density, s.density_before, 'понятий на статью') +
+      box(s.sci_pairs_after, s.sci_pairs_before, 'привязок учёных') +
+      box(s.formula_bases, '', 'основных формул, ' + s.formula_uses + ' применений');
+
+    var w = [];
+    if (!D.names_from_ml) {
+      w.push('<b>Имена групп не пришли.</b> В отчёте они процитированы, но в файле ' +
+             '<code>super_names</code> пуст — шаг именования отработал, а в файл не попал. ' +
+             'Здесь группы подписаны по трём самым крупным членам; это НАША временная подпись, ' +
+             'не решение ML. Починка дешёвая — повторить только шаг именования.');
+    }
+    if (s.empty_articles) {
+      w.push('<b>' + s.empty_articles + ' статей остались без единого понятия</b> ' +
+             '(из ' + s.articles + '). ML называет это честным результатом порога 0.50, ' +
+             'а не поломкой: у таких работ нет понятия, к которому они по смыслу близки.');
+    }
+    // Самое важное из проверки: узкие понятия расползлись по архиву — та же болезнь,
+    // что была у Эйнштейна на 55% статей, только этажом ниже.
+    var wide = Object.keys(D.concepts).filter(function (k) {
+      return D.concepts[k].n_new / s.articles > 0.05;
+    }).sort(function (a, b) { return D.concepts[b].n_new - D.concepts[a].n_new; });
+    if (wide.length) {
+      var ex = wide.slice(0, 3).map(function (k) {
+        return '<code>' + esc(k) + '</code> — ' + Math.round(100 * D.concepts[k].n_new / s.articles) + '%';
+      }).join(', ');
+      w.push('<b>' + wide.length + ' понятий стоят больше чем на 5% архива</b> — ' + ex + '. ' +
+             'Это узкие термины, они не могут описывать каждую шестую работу. Проверила на ' +
+             'примерах: <code>charge_density_waves</code> (физика твёрдого тела) стоит на статье ' +
+             'про солнечный ветер и про гравитационные волны. Та же болезнь, что была у Эйнштейна ' +
+             'на 55% статей, только этажом ниже. Причина найдена: отбор идёт по сырой близости, ' +
+             'без поправки на «хабность» — а она у нас есть в <code>tag_by_vector.py</code> и ' +
+             'написана ровно против этого. В <code>articles_retag.py</code> её нет ни разу. ' +
+             'Смотри вид «расплылись по архиву».');
+    }
+    w.push('<b>Учёные лежат отдельно.</b> В <code>concepts-v3.json</code> остались СТАРЫЕ ' +
+           'списки — у <code>entropy</code> там снова Эйнштейн и Аспе. Новые, обрезанные ' +
+           'до ' + s.sci_pairs_after + ', в отдельном файле. Применять реестр, не заменив ' +
+           'в нём учёных, значит вернуть разъезд, который волна и убирала.');
+    document.getElementById('warn').innerHTML =
+      w.map(function (t) { return '<div class="note">' + t + '</div>'; }).join('');
+  }
+
+  var KIND_RU = {
+    concept: 'понятие', object: 'объект', method: 'метод', instrument: 'прибор',
+    substance: 'вещество', math: 'математика', phenomenon: 'явление', law: 'закон',
+    equation: 'уравнение', effect: 'эффект', principle: 'принцип', theorem: 'теорема',
+    invention: 'изобретение', process: 'процесс', property: 'свойство', theory: 'теория',
+    problem: 'задача', experiment: 'опыт', structure: 'структура', debate: 'спор'
+  };
+
+  function buildKinds() {
+    var n = {};
+    Object.keys(D.concepts).forEach(function (k) {
+      var t = D.concepts[k].kind || '—'; n[t] = (n[t] || 0) + 1;
+    });
+    var order = Object.keys(n).sort(function (a, b) { return n[b] - n[a]; });
+    document.getElementById('kinds').innerHTML =
+      '<span class="chip on" data-kind="">все виды</span>' +
+      order.map(function (t) {
+        return '<span class="chip" data-kind="' + esc(t) + '">' +
+               esc(KIND_RU[t] || t) + ' <em style="opacity:.6">' + n[t] + '</em></span>';
+      }).join('');
+    document.getElementById('kinds').onclick = function (e) {
+      var c = e.target.closest('.chip'); if (!c) return;
+      kind = c.dataset.kind;
+      [].forEach.call(this.querySelectorAll('.chip'), function (x) { x.classList.toggle('on', x === c); });
+      apply();
+    };
+  }
+
+  function buildViews() {
+    document.getElementById('views').innerHTML =
+      '<span class="chip on" data-view="all">списком, самые частые сверху</span>' +
+      '<span class="chip" data-view="groups">по группам — верхний уровень</span>' +
+      '<span class="chip" data-view="grew">выросшие из расщепления</span>' +
+      '<span class="chip" data-view="wide">расплылись по архиву — проверить</span>' +
+      '<span class="chip" data-view="orphan">без учёных и формул</span>';
+    document.getElementById('views').onclick = function (e) {
+      var c = e.target.closest('.chip'); if (!c) return;
+      mode = c.dataset.view; grp = null;
+      [].forEach.call(this.querySelectorAll('.chip'), function (x) { x.classList.toggle('on', x === c); });
+      apply();
+    };
+  }
+
+  document.getElementById('q').oninput = function () { apply(); };
+
+  function apply() {
+    var q = document.getElementById('q').value.trim().toLowerCase();
+    var all = Object.keys(D.concepts);
+    list = all.filter(function (id) {
+      var c = D.concepts[id];
+      if (kind && c.kind !== kind) return false;
+      if (mode === 'grew' && (c.origin || '').indexOf('split') === -1) return false;
+      if (mode === 'orphan' && (c.sci.length || c.formulas.length)) return false;
+      // Шире 5% архива: узкое понятие столько работ описывать не может.
+      if (mode === 'wide' && c.n_new / D.stats.articles <= 0.05) return false;
+      if (grp !== null && c.supers.indexOf(grp) === -1) return false;
+      if (!q) return true;
+      return id.indexOf(q) !== -1 || (c.card || '').toLowerCase().indexOf(q) !== -1;
+    });
+    // Частые сверху: понятие, которым размечены две статьи, читателю почти не встретится.
+    list.sort(function (a, b) { return D.concepts[b].n_new - D.concepts[a].n_new; });
+
+    document.getElementById('count').textContent = list.length + ' из ' + all.length;
+    shown = 0; body.innerHTML = '';
+    if (mode === 'groups' && grp === null) return drawGroups();
+    if (!list.length) { body.innerHTML = '<p class="empty">ничего не нашлось</p>'; return; }
+    drawMore();
+  }
+
+  function drawGroups() {
+    var g = D.groups;
+    var ids = Object.keys(g).sort(function (a, b) { return g[b].n - g[a].n; });
+    body.innerHTML =
+      '<p class="lead">Пятьдесят групп верхнего уровня. Понятие может входить в несколько — ' +
+      'entropy живёт и в термодинамике, и в теории информации. Нажми на группу, чтобы ' +
+      'провалиться внутрь.</p><div class="grid">' +
+      ids.map(function (id) {
+        return '<button class="grp" data-g="' + id + '"><b>' + esc(g[id].label) +
+               '</b><i>' + g[id].n + ' понятий</i></button>';
+      }).join('') + '</div>';
+    body.querySelector('.grid').onclick = function (e) {
+      var b = e.target.closest('.grp'); if (!b) return;
+      grp = parseInt(b.dataset.g, 10);
+      apply();
+      window.scrollTo({ top: 0 });
+    };
+  }
+
+  function drawMore() {
+    var slice = list.slice(shown, shown + PAGE);
+    var html = slice.map(cardHTML).join('');
+    var old = body.querySelector('.more'); if (old) old.remove();
+    body.insertAdjacentHTML('beforeend', html);
+    shown += slice.length;
+    if (shown < list.length) {
+      body.insertAdjacentHTML('beforeend',
+        '<button class="more">показать ещё · осталось ' + (list.length - shown) + '</button>');
+      body.querySelector('.more').onclick = drawMore;
+    }
+  }
+
+  function cardHTML(id) {
+    var c = D.concepts[id];
+    var meta = [];
+    if (c.kind) meta.push('<span class="kind">' + esc(KIND_RU[c.kind] || c.kind) + '</span>');
+    var share = c.n_new / D.stats.articles;
+    meta.push('статей: <b>' + c.n_new + '</b>' +
+              (share > 0.05 ? ' <span class="grew">' + Math.round(share * 100) + '% архива</span>' : '') +
+              (c.n_old ? ' <s style="opacity:.6">← ' + c.n_old + '</s>' : ''));
+    if (c.domain) meta.push(esc(c.domain));
+    if ((c.origin || '').indexOf('split') === 0) {
+      meta.push('<span class="grew">выделено из ' + esc(c.origin.split(':')[1] || '') + '</span>');
+    } else if (c.origin) { meta.push('из ' + esc(c.origin)); }
+    if (c.sci_old && !c.sci.length) meta.push('было имён: ' + c.sci_old + ' → ни одного');
+
+    var parts = '';
+    if (c.rel.length) {
+      parts += '<div class="part"><b>рядом стоят</b><div class="pills">' +
+        c.rel.map(function (r) {
+          return '<span class="pill" data-go="' + esc(r.id) + '">' + esc(r.id.replace(/_/g, ' ')) +
+                 ' <em>' + r.w.toFixed(2) + '</em></span>';
+        }).join('') + '</div></div>';
+    }
+    if (c.sci.length) {
+      parts += '<div class="part"><b>кто здесь работал</b><div class="pills">' +
+        c.sci.map(function (s) {
+          return '<span class="pill sci">' + esc(s.name) + ' <em>' + s.n + '</em></span>';
+        }).join('') + '</div></div>';
+    }
+    if (c.formulas.length) {
+      parts += '<div class="part"><b>формулы</b>' +
+        c.formulas.map(function (f) {
+          return '<div class="fx"><b>' + esc(f.latex || f.name) + '</b>' +
+                 (f.card ? '<br>' + esc(f.card) : '') +
+                 ' <span style="opacity:.6">· применений ' + f.uses + '</span></div>';
+        }).join('') + '</div>';
+    }
+
+    return '<article class="card" id="c-' + esc(id) + '">' +
+      '<h3>' + esc(c.t) + '</h3>' +
+      '<div class="id">' + esc(id) + '</div>' +
+      '<p class="en">' + esc(c.card) + '</p>' +
+      '<div class="meta">' + meta.join(' · ') + '</div>' +
+      parts + '</article>';
+  }
+
+  // Клик по соседу — поиск по нему: так по графу можно ходить ногами, а не глазами.
+  body.addEventListener('click', function (e) {
+    var p = e.target.closest('.pill[data-go]'); if (!p) return;
+    document.getElementById('q').value = p.dataset.go;
+    grp = null; apply(); window.scrollTo({ top: 0 });
+  });
+})();
+</script>
+</body>
+</html>
