@@ -1,10 +1,20 @@
 You are indexing a physics paper for a knowledge graph.
 
+DEFINITION — what counts as a CONCEPT (apply strictly):
+A concept is a named, reusable unit of scientific knowledge that
+  (a) has an accepted name used by the field, not invented in this one paper;
+  (b) can be defined in one sentence independently of this paper;
+  (c) a curious reader would plausibly want explained.
+NOT a concept: paper-specific model names, one-off constructions, authors' ad-hoc
+composites. When in doubt ask: would a second, unrelated paper use this same name?
+If no — skip it.
+
 Below is a list of our top-level GROUPS and a closed list of KINDS. Extract every
-distinct concept, method, principle, phenomenon, instrument, law or equation that
-this paper actually uses or studies — both general and specific. Do NOT limit
-yourself to the groups: they only tell you how our graph is organized. If a concept
-fits no group, use "other".
+concept BY THE DEFINITION ABOVE that this paper actually uses or studies — both
+general and specific. Do NOT limit yourself to the groups: they only tell you how
+our graph is organized. If a concept fits no group, use "other". Repetition across
+papers is expected and fine: the same real concept SHOULD come out of every paper
+that uses it — downstream merging is our job, not yours.
 
 Rules:
 - name: short canonical English identifier, lowercase, words joined by underscores
