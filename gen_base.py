@@ -351,6 +351,39 @@ def gen_tags_side(tags, lang):
     )
 
 
+_CONCEPTS_LIVE = None
+
+
+def concepts_live():
+    """Справочник понятий волны 5 (data/concepts-live.json, кладёт wave5_apply).
+    Нет файла — предложение не применено, статьи рисуются по-старому."""
+    global _CONCEPTS_LIVE
+    if _CONCEPTS_LIVE is None:
+        p = Path("data/concepts-live.json")
+        try:
+            _CONCEPTS_LIVE = json.loads(p.read_text(encoding="utf-8"))["concepts"] if p.exists() else {}
+        except Exception:
+            _CONCEPTS_LIVE = {}
+    return _CONCEPTS_LIVE
+
+
+def gen_concepts_side(ids, lang):
+    """Плашки понятий по разметке v2 — ссылки в /concepts/, название переводом где
+    есть, иначе английским. Законы отдельным рядом при v2 не нужны: в реестре волны 5
+    закон — один из видов понятия, он уже в этом списке."""
+    live = concepts_live()
+    out = []
+    for cid in ids:
+        if not cid:
+            continue
+        c = live.get(cid) or {}
+        names = c.get("names") or {}
+        name = names.get(lang) or names.get("en") or cid.replace("_", " ")
+        out.append(f'<a href="/{LANG_DIR}/{lang}/concepts/{cid}.html" class="side-tag" '
+                   f'data-tag="{attr_safe(cid)}">{name}</a>')
+    return chr(10).join(out)
+
+
 def load_scientists_list():
     p = Path(f"lang/{DEFAULT_LANG}/data/scientists.json")
     return "\n".join(json.loads(p.read_text()).keys()) if p.exists() else ""

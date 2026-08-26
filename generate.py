@@ -1921,7 +1921,11 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
     ai_url = f'/{LANG_DIR}/{DEFAULT_LANG}/archive/{date_str}/{article["id"]}/ai.webp' if ai_jpg.exists() else None
     mosaic_html = gen_mosaic(images, article["id"], date_str, captions, cover_url=ai_url)
     ai_cover_html = ""
-    tags_side_html = gen_tags_side(tags, lang)
+    # Понятия волны 5: если применение прошло (wave5_apply записал concepts_v2),
+    # ряд плашек статьи строится по новой разметке — ссылки в /concepts/, законы уже
+    # внутри как вид понятия. Без применения — прежние теги, сайт не меняется.
+    _c2 = [x for x in (scipop.get("concepts_v2") or []) if x]
+    tags_side_html = gen_concepts_side(_c2, lang) if _c2 else gen_tags_side(tags, lang)
     # Заглушка непереведённой статьи умеет не только извиняться: очередь заказов уже принимает
     # kind=translate, поэтому читателю предлагаем перевести прямо сейчас. Блок пуст на переведённых
     # страницах — там предлагать нечего.
@@ -1946,8 +1950,10 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
         # подписи-заголовка. Стиль .side-law остаётся — закон в ряду отличим по виду,
         # это полезная разница, а не вторая рубрика. Дубли по id не повторяем: понятие,
         # пришедшее и вектором тегов, и вектором законов, — одна плашка.
-        shown = set(tags)
-        law_chips = "".join(
+        # При v2 законы отдельным рядом не добавляются: они уже в списке понятий,
+        # вторая плашка того же закона была бы дублем.
+        shown = set(tags) | set(_c2)
+        law_chips = "" if _c2 else "".join(
             f'<a href="/{LANG_DIR}/{lang}/laws/{attr_safe(lid)}.html" class="side-law" '
             f'data-law="{attr_safe(lid)}">{safe(name)}</a>'
             for lid, name in side_laws if lid not in shown)
