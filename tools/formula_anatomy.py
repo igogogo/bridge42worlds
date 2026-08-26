@@ -55,9 +55,13 @@ Return a JSON array, one object per formula, same order:
 {"n": <number>,
  "variables": [{"s": "<symbol>", "m": "<what it denotes, few words>",
                 "id": "<canonical_snake_case name of the physical QUANTITY it is:
-                       mass, energy, temperature...; empty if purely auxiliary>"}],
+                       mass, energy, temperature...; empty if purely auxiliary>",
+                "unit": "<SI unit, canonical snake_case: kilogram, joule, kelvin,
+                         metre_per_second; \"dimensionless\" when unitless>"}],
  "operators": [{"s": "<symbol>", "id": "<canonical_snake_case_name>"}],
- "constants": [{"s": "<symbol>", "id": "<canonical_snake_case_name>"}],
+ "constants": [{"s": "<symbol>", "id": "<canonical_snake_case_name>",
+                "value": "<numeric value with power of ten, e.g. 6.626e-34>",
+                "unit": "<SI unit, canonical snake_case>"}],
  "description": "<3-5 sentences: what the formula states and why it holds>",
  "applicability": "<2-4 sentences: where it applies and where it BREAKS DOWN —
                    assumptions, limits, regimes>"}
@@ -107,13 +111,16 @@ def ask_batch(batch, key):
                 continue
             rec = {
                 "variables": [{"s": str(v.get("s", ""))[:20], "m": str(v.get("m", ""))[:120],
-                               "id": re.sub(r"[^a-z0-9_]", "", str(v.get("id", "")).lower())}
+                               "id": re.sub(r"[^a-z0-9_]", "", str(v.get("id", "")).lower()),
+                               "unit": re.sub(r"[^a-z0-9_]", "", str(v.get("unit", "")).lower())[:40]}
                               for v in (it.get("variables") or []) if v.get("s")],
                 "operators": [{"s": str(v.get("s", ""))[:20],
                                "id": re.sub(r"[^a-z0-9_]", "", str(v.get("id", "")).lower())}
                               for v in (it.get("operators") or []) if v.get("s")],
                 "constants": [{"s": str(v.get("s", ""))[:20],
-                               "id": re.sub(r"[^a-z0-9_]", "", str(v.get("id", "")).lower())}
+                               "id": re.sub(r"[^a-z0-9_]", "", str(v.get("id", "")).lower()),
+                               "value": str(v.get("value", ""))[:40],
+                               "unit": re.sub(r"[^a-z0-9_]", "", str(v.get("unit", "")).lower())[:40]}
                               for v in (it.get("constants") or []) if v.get("s")],
                 "description": str(it.get("description", ""))[:1200],
                 "applicability": str(it.get("applicability", ""))[:800],
@@ -176,6 +183,12 @@ def link():
     for base_id, rec in done.items():
         for kind_key, kind in (("operators", "math"), ("constants", "constant"),
                                ("variables", "quantity")):
+            # единицы — отдельный класс: kilogram, joule... собираем из обоих полей
+            for o in rec.get(kind_key) or []:
+                u = o.get("unit")
+                if u and u != "dimensionless":
+                    want.setdefault(u, {"kind": "unit", "bases": []})
+                    want[u]["bases"].append(base_id)
             for o in rec.get(kind_key) or []:
                 if o.get("id"):
                     want.setdefault(o["id"], {"kind": kind, "bases": []})
@@ -199,7 +212,8 @@ def link():
             info["concept"] = None
             if wid not in rows:
                 grp = {"math": "mathematics", "constant": "physical constants",
-                       "quantity": "physical quantities"}[info["kind"]]
+                       "quantity": "physical quantities",
+                       "unit": "units of measurement"}[info["kind"]]
                 rows[wid] = {"name": wid, "kind": info["kind"], "group": grp,
                              "scope": "general",
                              "line": f"{wid.replace('_', ' ')} — from formula anatomy",

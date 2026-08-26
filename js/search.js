@@ -285,6 +285,14 @@ window.switchFeedLang = switchFeedLang;
    по первому наведению, см. ensureTips ниже: 357 КБ, которые платит только тот,
    кто действительно навёл. */
 var tagsPath = '/lang/' + lang + '/data/tags-names.json';
+/* Реестр понятий волны 5: 1222 имени. Проверяется ПЕРВЫМ при рисовании плашек:
+   понятие из него имеет страницу /concepts/ всегда — «карточки пока нет» больше
+   не показывается тем, у кого карточка есть. */
+var conceptsNames = {};
+var _conceptsNamesP = fetch('/lang/' + lang + '/data/concepts-names.json')
+    .then(function (r) { return r.ok ? r.json() : {}; })
+    .then(function (m) { conceptsNames = m || {}; return conceptsNames; })
+    .catch(function () { return {}; });
 var scientistsPath = '/lang/' + lang + '/data/scientists-names.json';
 
 function fetchIndex(version) {
@@ -1199,6 +1207,10 @@ function cardHTML(item) {
        Теги отбираем по ЧАСТОТЕ в корпусе, а не по порядку из генерации: у статьи их до 11,
        на карточке нужно 5 главных. Частый тег ведёт в живой раздел, редкий — в пустой. */
     var tagsHtml = pickTop(item.tags || [], 5).map(function(t) {
+        // Реестр волны 5 — первым: у понятия из него страница есть всегда.
+        if (conceptsNames[t]) {
+            return '<a class="ent ent-tag" href="/lang/' + lang + '/concepts/' + encodeURIComponent(t) + '.html" data-tag="' + t + '">' + (conceptsNames[t].name || t.replace(/_/g, ' ')) + '</a>';
+        }
         return tagsLoc[t]
             ? '<a class="ent ent-tag" href="/lang/' + lang + '/tags/' + encodeURIComponent(t) + '.html" data-tag="' + t + '">' + (tagsLoc[t].name || t.replace(/_/g, ' ')) + '</a>'
             : '<a class="ent ent-tag ent-nocard" href="/lang/' + lang + '/index.html?q=' + encodeURIComponent('#' + t) + '" title="' + esc(UI.noCard || '') + '">' + t.replace(/_/g, ' ') + '</a>';
@@ -1214,6 +1226,9 @@ function cardHTML(item) {
             : '<a class="ent ent-sci ent-nocard" href="/lang/' + lang + '/index.html?q=' + encodeURIComponent('!' + s) + '" title="' + esc(UI.noCard || '') + '">' + s + '</a>';
     }).join('');
     var lawHtml = lawsFor(item).slice(0, 2).map(function(l) {
+        if (conceptsNames[l]) {
+            return '<a class="ent ent-law" href="/lang/' + lang + '/concepts/' + encodeURIComponent(l) + '.html" data-law="' + l + '">' + (conceptsNames[l].name || l.replace(/_/g, ' ')) + '</a>';
+        }
         var ld = lawsData[l];
         return ld
             ? '<a class="ent ent-law" href="/lang/' + lang + '/laws/' + encodeURIComponent(l) + '.html" data-law="' + l + '">' + (ld.name || l.replace(/_/g, ' ')) + '</a>'
@@ -1975,6 +1990,7 @@ function _openCloudFeed(query, head, c) {
     return Promise.all([
         feedFromCloud(query, 0),
         (window.B42Refs || Promise.resolve(null)).catch(function () { return null; }),
+        _conceptsNamesP,
     ]).then(function (both) {
         var j = both[0];
         feed.q = query; feed.page = 0; feed.more = !!j.more;

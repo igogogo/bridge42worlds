@@ -460,6 +460,13 @@ def _backup_to_r2():
     Проверки бэкап не гоняют — по тому же правилу, что публикацию и индекс."""
     if _is_readonly_command() or os.environ.get("SKIP_R2_BACKUP"):
         return
+    # Дев-режим (.no-publish) гасит и бэкапы: владелец 26.08 «пока без бэкапов, без
+    # долларов — всё локально». Полная пересборка обновляет md5 у ВСЕХ переводов, и
+    # бэкап честно копирует ~80k файлов (~$0.36 операций) — при локальных итерациях
+    # это трата на каждую пробу. Снятие .no-publish возвращает и публикацию, и копию.
+    if (Path(__file__).resolve().parent / ".no-publish").exists():
+        print(chr(10) + "⏸️  резервная копия ПРОПУЩЕНА: файл .no-publish (дев-режим)")
+        return
     script = Path(__file__).resolve().parent / "cloudflare" / "backup_r2.py"
     if not script.exists():
         return

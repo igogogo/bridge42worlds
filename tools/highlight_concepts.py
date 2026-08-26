@@ -284,6 +284,45 @@ def process_article(path, reg, names_by_lang, tiers, dry, show=False):
     return changed, report
 
 
+LOCK = ROOT / "data" / ".highlight.lock"
+
+
+def take_lock():
+    """Один проход за раз. 24 августа две копии подсветки шли одновременно — ручная
+    и шаг фабрики — и писали одни и те же data.json. Обошлось, но это чистая гонка:
+    кто последний записал, того и текст. Замок снимается сам, если процесс умер."""
+    import os
+    if LOCK.exists():
+        try:
+            pid = int(LOCK.read_text(encoding="utf-8").split()[0])
+        except Exception:
+            pid = 0
+        alive = False
+        if pid:
+            try:
+                os.kill(pid, 0)
+                alive = True
+            except OSError:
+                alive = False
+            except Exception:
+                alive = True
+        if alive:
+            print(f"подсветка уже идёт (pid {pid}) — второй проход не запускаю")
+            return False
+        print("замок остался от умершего процесса — снимаю")
+    LOCK.parent.mkdir(parents=True, exist_ok=True)
+    LOCK.write_text(f"{os.getpid()} {__import__('time').strftime('%Y-%m-%d %H:%M')}",
+                    encoding="utf-8")
+    return True
+
+
+def drop_lock():
+    try:
+        LOCK.unlink(missing_ok=True)
+    except Exception:
+        pass
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--tiers", default="simple,popular",
@@ -294,6 +333,21 @@ def main():
     ap.add_argument("--show", action="store_true", help="показать каждое совпадение")
     args = ap.parse_args()
 
+    # Замок только для полного прохода: точечный (--ids) и сухой безопасны и могут
+    # понадобиться прямо во время большого прогона.
+    locked = False
+    if not args.dry and not args.ids:
+        if not take_lock():
+            return 0
+        locked = True
+    try:
+        return _run(args)
+    finally:
+        if locked:
+            drop_lock()
+
+
+def _run(args):
     reg = registry()
     if not reg:
         return 1

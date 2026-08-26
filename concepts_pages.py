@@ -259,7 +259,11 @@ def concept_page(cid, c, lang, live, by_id, rich=None):
                          ("fun_fact_popular", s["fact"])):
         txt = (r.get(field) or "").strip()
         if txt:
+            # literal-слэши той же болезни + настоящие переносы абзацев из полных
+            # записей (2-3 абзаца) — иначе они склеиваются в одну простыню
+            txt = txt.replace(chr(92) + "n", " ")
             linked = autolink(H.escape(txt), cid, lang, live)
+            linked = linked.replace(chr(10) + chr(10), "</p><p>").replace(chr(10), "<br>")
             body.append(f'<div class="section"><h2 style="font-size:16px;margin:14px 0 6px">'
                         f'{label}</h2><p style="max-width:var(--w-read)">{linked}</p></div>')
     if c["related"]:
