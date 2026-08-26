@@ -154,10 +154,12 @@ def main():
     run("a-link", [PY, "tools/formula_anatomy.py", "--link"])
     run("births2", [PY, "tools/concept_cycle.py", "--budget", "0"])
     run("fullcards", [PY, "tools/concept_fullcards.py", "--run", "--force-peak"])
-    run("names-ru", [PY, "tools/concept_names_translate.py"])
     run("revector", [PY, "tools/concept_fullcards.py", "--revector"])
     run("retag", [PY, "tools/retag_hub.py", "--thr", "0.50", "--margin", "0.12"], hard=True)
     run("apply", [PY, "tools/wave5_apply.py", "--apply"], hard=True)
+    # перевод — ПОСЛЕ apply: живой справочник к этому моменту включает рождённых
+    # этой же ночью, и они тоже получают русские имена
+    run("names-ru", [PY, "tools/concept_names_translate.py"])
     run("export", [PY, "-c",
                    "import json,sys;sys.path.insert(0,'.');"
                    "live=json.loads(open('data/concepts-live.json',encoding='utf-8').read())['concepts'];"
