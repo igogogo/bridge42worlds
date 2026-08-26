@@ -1852,7 +1852,10 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
 
     if version in SIMPLE_LIKE or scipop.get("express_locked"):
         if scipop.get("text"):
-            paragraphs = [p.strip() for p in re.split(r'\n\s*\n', scipop["text"]) if p.strip()]
+            # Слой 1 разметки: дословные якоря модели → ссылки (падежи и парафразы
+            # уже учтены в самих подстроках). До разбора маркеров.
+            _anch = apply_anchors(scipop["text"], article["id"], lang)
+            paragraphs = [p.strip() for p in re.split(r'\n\s*\n', _anch) if p.strip()]
             text_html = "".join(_render_paragraph(p, lang) for p in paragraphs)
         else:
             parts = [scipop.get(k, "") for k in ("context", "metaphor", "future")]
@@ -1873,7 +1876,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
         for sid, slabel in sections:
             content = scipop.get(sid, "")
             if content:
-                content = parse_markers(content, lang)
+                content = parse_markers(apply_anchors(content, article["id"], lang), lang)
                 nav_html += f'<li><a href="#{sid}">{slabel}</a></li>'
                 text_html += f'<section id="{sid}"><h2>{slabel}</h2><p>{content}</p></section>'
         nav_html += '<li class="article-nav-sep"></li>' + "".join(nav_extra_items) + '</ul></nav>'

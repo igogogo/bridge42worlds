@@ -161,6 +161,9 @@ def main():
     # перевод — ПОСЛЕ apply: живой справочник к этому моменту включает рождённых
     # этой же ночью, и они тоже получают русские имена
     run("names-ru", [PY, "tools/concept_names_translate.py"])
+    # русские якоря — владелец: «делай тоже сразу ночью»; после apply, чтобы список
+    # понятий каждой статьи был финальным
+    run("mentions-ru", [PY, "tools/mentions_ru.py"], timeout=21600)
     run("export", [PY, "-c",
                    "import json,sys;sys.path.insert(0,'.');"
                    "live=json.loads(open('data/concepts-live.json',encoding='utf-8').read())['concepts'];"

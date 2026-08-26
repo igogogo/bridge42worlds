@@ -371,6 +371,70 @@ def concepts_live():
     return _CONCEPTS_LIVE
 
 
+_MENTIONS_CACHE = None
+_ANCHOR_SKIP = re.compile(r"\[(?:tag|law|scientist|callout)[^\]]*\].*?\[/(?:tag|law|scientist|callout)\]|<a\b.*?</a>", re.S)
+
+
+def _mentions():
+    """Журнал якорей: (статья, язык) → [(понятие, подстрока), …]. Читается раз."""
+    global _MENTIONS_CACHE
+    if _MENTIONS_CACHE is None:
+        _MENTIONS_CACHE = {}
+        p = Path("data/concept-mentions.jsonl")
+        if p.exists():
+            for line in p.read_text(encoding="utf-8").splitlines():
+                if not line.strip():
+                    continue
+                try:
+                    r = json.loads(line)
+                except Exception:
+                    continue
+                key = (r.get("art"), r.get("lang") or "en")
+                for m in r.get("m") or []:
+                    _MENTIONS_CACHE.setdefault(key, []).append((r["concept"], m))
+    return _MENTIONS_CACHE
+
+
+def apply_anchors(text, aid, lang, cap=20):
+    """Слой 1 разметки текста: дословные якоря модели становятся ссылками.
+
+    Подстроки выписаны моделью в том падеже и парафразе, каким текст живёт
+    («пульсаров», «Тёмная материя, аннигилируя», «ГэВ») — поэтому поиск точный,
+    без морфологии. Первое вхождение на понятие; внутрь готовых маркеров и ссылок
+    не лезем — их зоны исключаются до поиска."""
+    if not text:
+        return text
+    ms = _mentions().get((aid, lang)) or _mentions().get((aid.split("v")[0], lang)) or []
+    if not ms:
+        return text
+    live = concepts_live()
+    # свободные зоны: всё, что не внутри маркера/ссылки
+    taken = [(m.start(), m.end()) for m in _ANCHOR_SKIP.finditer(text)]
+
+    def free(i, j):
+        return all(j <= a or i >= b for a, b in taken)
+
+    done = set()
+    n = 0
+    for cid, sub in sorted(ms, key=lambda t: -len(t[1])):
+        if n >= cap or cid in done or cid not in live or len(sub) < 3:
+            continue
+        i = text.find(sub)
+        while i != -1 and not free(i, i + len(sub)):
+            i = text.find(sub, i + 1)
+        if i == -1:
+            continue
+        link = (f'<a href="/{LANG_DIR}/{lang}/concepts/{cid}.html" class="text-tag" '
+                f'data-tag="{attr_safe(cid)}">{sub}</a>')
+        text = text[:i] + link + text[i + len(sub):]
+        shift = len(link) - len(sub)
+        taken = [(a + shift, b + shift) if a >= i else (a, b) for a, b in taken]
+        taken.append((i, i + len(link)))
+        done.add(cid)
+        n += 1
+    return text
+
+
 def gen_concepts_side(ids, lang):
     """Плашки понятий по разметке v2 — ссылки в /concepts/, название переводом где
     есть, иначе английским. Законы отдельным рядом при v2 не нужны: в реестре волны 5
