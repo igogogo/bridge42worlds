@@ -141,7 +141,11 @@ def give_birth(rows, dry):
             "card_en": r["line"], "articles": r["articles"],
             "born": datetime.now().date().isoformat(), "origin": "live-harvest",
         }
-        upsert_vector(name, r["vec"], r["kind"])
+        # В ОБЛАКО НИЧЕГО (владелец 26.08: «сначала всё локально проверю»):
+        # заливка вектора в Vectorize отключена до его слова. Локальной матрицы
+        # достаточно для всего локального цикла; облако получит все карточки разом
+        # массовой заливкой (tools/concepts_to_vectorize.py) при публикации.
+        # upsert_vector(name, r["vec"], r["kind"])
         append_to_matrix(name, r["vec"])
         r["born"] = True
         born += 1
