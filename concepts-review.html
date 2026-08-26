@@ -267,7 +267,10 @@
       '<span class="chip" data-view="groups">по группам — верхний уровень</span>' +
       '<span class="chip" data-view="grew">выросшие из расщепления</span>' +
       '<span class="chip" data-view="wide">расплылись по архиву — проверить</span>' +
-      '<span class="chip" data-view="orphan">без учёных и формул</span>';
+      '<span class="chip" data-view="orphan">без учёных и формул</span>' +
+      '<span class="chip" data-view="formulas">формулы · ' + (D.formulas || []).length + '</span>' +
+      '<span class="chip" data-view="articles">размеченные статьи</span>' +
+      '<span class="chip" data-view="map">граф групп</span>';
     document.getElementById('views').onclick = function (e) {
       var c = e.target.closest('.chip'); if (!c) return;
       mode = c.dataset.view; grp = null;
@@ -297,6 +300,9 @@
 
     document.getElementById('count').textContent = list.length + ' из ' + all.length;
     shown = 0; body.innerHTML = '';
+    if (mode === 'formulas') return drawFormulas(q);
+    if (mode === 'articles') return drawArticles(q);
+    if (mode === 'map') return drawMap();
     if (mode === 'groups' && grp === null) return drawGroups();
     if (!list.length) { body.innerHTML = '<p class="empty">ничего не нашлось</p>'; return; }
     drawMore();
@@ -332,6 +338,126 @@
         '<button class="more">показать ещё · осталось ' + (list.length - shown) + '</button>');
       body.querySelector('.more').onclick = drawMore;
     }
+  }
+
+  /* ── ФОРМУЛЫ: два яруса, как решено владельцем, — основная форма и применения ── */
+  var _fN = 0;
+  function drawFormulas(q) {
+    var fs = (D.formulas || []).filter(function (f) {
+      if (!q) return true;
+      return (f.id + ' ' + f.name + ' ' + f.card).toLowerCase().indexOf(q) !== -1;
+    }).sort(function (a, b) { return b.uses - a.uses; });
+    document.getElementById('count').textContent = fs.length + ' из ' + (D.formulas || []).length;
+    body.innerHTML = '<p class="lead">Основные формы: канонический закон, его карточка и ' +
+      'частные применения из статей. На сайте формула будет жить двумя ярусами: страница ' +
+      'понятия покажет форму, страница статьи — своё применение.</p>';
+    _fN = 0;
+    drawFormulasMore(fs);
+  }
+  function drawFormulasMore(fs) {
+    var old = body.querySelector('.more'); if (old) old.remove();
+    var html = fs.slice(_fN, _fN + PAGE).map(function (f) {
+      return '<article class="card">' +
+        '<h3>' + esc(f.name) + '</h3><div class="id">' + esc(f.id) + '</div>' +
+        (f.latex ? '<div class="fx" style="font-size:14px"><b>' + esc(f.latex) + '</b></div>' : '') +
+        '<p class="en">' + esc(f.card) + '</p>' +
+        '<div class="meta">применений: <b>' + f.uses + '</b></div>' +
+        (f.concepts.length ? '<div class="part"><b>понятия</b><div class="pills">' +
+          f.concepts.map(function (c) { return '<span class="pill" data-go="' + esc(c) + '">' +
+            esc(c.replace(/_/g, ' ')) + '</span>'; }).join('') + '</div></div>' : '') +
+        (f.apps.length ? '<div class="part"><b>применения в статьях</b>' +
+          f.apps.map(function (a) { return '<div class="fx">' + esc(a.latex) +
+            (a.art ? ' <span style="opacity:.55">· ' + esc(a.art) + '</span>' : '') + '</div>'; }).join('') +
+          '</div>' : '') +
+        '</article>';
+    }).join('');
+    body.insertAdjacentHTML('beforeend', html);
+    _fN += PAGE;
+    if (_fN < fs.length) {
+      body.insertAdjacentHTML('beforeend',
+        '<button class="more">показать ещё · осталось ' + (fs.length - _fN) + '</button>');
+      body.querySelector('.more').onclick = function () { drawFormulasMore(fs); };
+    }
+  }
+
+  /* ── РАЗМЕЧЕННЫЕ СТАТЬИ: заголовок + понятия v2, поиск тем же полем ── */
+  var _aN = 0;
+  function drawArticles(q) {
+    var as = (D.articles_view || []).filter(function (a) {
+      if (!q) return true;
+      return (a.t + ' ' + a.id + ' ' + a.c.join(' ')).toLowerCase().indexOf(q) !== -1;
+    });
+    document.getElementById('count').textContent = as.length + ' из ' + (D.articles_view || []).length;
+    body.innerHTML = '<p class="lead">Каждая статья и её понятия по переразметке v2 ' +
+      '(поправка на хабность, опора не меньше пяти). Свежие сверху. Статья без понятий — ' +
+      'очередь живого механизма, не брак.</p>';
+    _aN = 0;
+    drawArticlesMore(as);
+  }
+  function drawArticlesMore(as) {
+    var old = body.querySelector('.more'); if (old) old.remove();
+    var html = as.slice(_aN, _aN + PAGE).map(function (a) {
+      return '<article class="card" style="padding:var(--s-3) var(--s-4)">' +
+        '<h3 style="font-size:16px">' + esc(a.t) + '</h3>' +
+        '<div class="id">' + esc(a.id) + '</div>' +
+        (a.c.length ? '<div class="part"><div class="pills">' +
+          a.c.map(function (c) { return '<span class="pill" data-go="' + esc(c) + '">' +
+            esc(c.replace(/_/g, ' ')) + '</span>'; }).join('') + '</div></div>'
+          : '<div class="meta" style="margin-top:var(--s-2)">без понятий — очередь живого механизма</div>') +
+        '</article>';
+    }).join('');
+    body.insertAdjacentHTML('beforeend', html);
+    _aN += PAGE;
+    if (_aN < as.length) {
+      body.insertAdjacentHTML('beforeend',
+        '<button class="more">показать ещё · осталось ' + (as.length - _aN) + '</button>');
+      body.querySelector('.more').onclick = function () { drawArticlesMore(as); };
+    }
+  }
+
+  /* ── ГРАФ ГРУПП: круги-области, линии — общие понятия, клик — дрилл-даун.
+     Раскладка золотой спиралью, крупные в центре. Это смотровая, не продукт:
+     физика сил здесь была бы кодом ради кода. ── */
+  function drawMap() {
+    var g = D.groups, ids = Object.keys(g).sort(function (a, b) { return g[b].n - g[a].n; });
+    var W = Math.min(900, body.clientWidth || 740), H = 640, cx = W / 2, cy = H / 2;
+    var pos = {};
+    ids.forEach(function (id, i) {
+      var ang = i * 2.39996, rr = 34 + 26 * Math.sqrt(i);
+      pos[id] = { x: cx + rr * Math.cos(ang) * (W / 900), y: cy + rr * Math.sin(ang) * (H / 760),
+                  r: 10 + Math.sqrt(g[id].n) * 3.4 };
+    });
+    var lines = (D.group_links || []).slice(0, 70).map(function (e) {
+      var a = pos[e.a], b = pos[e.b];
+      if (!a || !b) return '';
+      return '<line x1="' + a.x.toFixed(0) + '" y1="' + a.y.toFixed(0) +
+             '" x2="' + b.x.toFixed(0) + '" y2="' + b.y.toFixed(0) +
+             '" stroke="var(--cyan)" stroke-opacity="' + Math.min(0.5, e.n / 20) +
+             '" stroke-width="' + Math.min(4, e.n / 3) + '"/>';
+    }).join('');
+    var nodes = ids.map(function (id) {
+      var p2 = pos[id];
+      var label = g[id].label.split(' · ')[0];
+      return '<g class="gnode" data-g="' + id + '" style="cursor:pointer">' +
+        '<circle cx="' + p2.x.toFixed(0) + '" cy="' + p2.y.toFixed(0) + '" r="' + p2.r.toFixed(0) +
+        '" fill="var(--cyan)" fill-opacity="0.13" stroke="var(--cyan)" stroke-opacity="0.55"/>' +
+        (p2.r > 20 ? '<text x="' + p2.x.toFixed(0) + '" y="' + p2.y.toFixed(0) +
+          '" text-anchor="middle" font-size="10" fill="var(--ink)">' +
+          esc(label.slice(0, 16)) + '</text>' +
+          '<text x="' + p2.x.toFixed(0) + '" y="' + (p2.y + 12).toFixed(0) +
+          '" text-anchor="middle" font-size="9" fill="var(--muted)">' + g[id].n + '</text>' : '') +
+        '</g>';
+    }).join('');
+    body.innerHTML = '<p class="lead">Пятьдесят групп: круг — группа, размер — число понятий, ' +
+      'линии — общие понятия (группы пересекаются: entropy живёт в нескольких). ' +
+      'Нажми на круг, чтобы провалиться в состав.</p>' +
+      '<div style="overflow-x:auto"><svg width="' + W + '" height="' + H + '" viewBox="0 0 ' +
+      W + ' ' + H + '">' + lines + nodes + '</svg></div>';
+    body.querySelector('svg').addEventListener('click', function (e) {
+      var n = e.target.closest('.gnode'); if (!n) return;
+      grp = parseInt(n.dataset.g, 10); mode = 'all';
+      apply(); window.scrollTo({ top: 0 });
+    });
   }
 
   function cardHTML(id) {

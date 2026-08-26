@@ -136,12 +136,59 @@ def build(ml):
             "label": " · ".join(title_of(b) for b in big),
         }
 
+    # ── формулы целиком: владелец 26.08 «хочу видеть все карточки, формулы,
+    # размеченные статьи, графы» — до публикации, локально ────────────────────
+    formulas_full = [{
+        "id": b["base_id"], "name": b.get("name") or b["base_id"],
+        "latex": b.get("latex", ""), "card": b.get("card", ""),
+        "uses": len(b.get("applications") or []),
+        "concepts": [c["concept"] for c in (b.get("concepts") or [])[:3]],
+        "apps": [{"art": ap.get("article") or ap.get("art") or "",
+                  "latex": (ap.get("record") or "")[:120]}
+                 for ap in (b.get("applications") or [])[:6]],
+    } for b in bases]
+
+    # ── размеченные статьи: заголовок + понятия по v2 ──────────────────────
+    titles = {}
+    try:
+        idx = json.loads((ROOT / "lang" / "ru" / "articles-index.json").read_text(encoding="utf-8"))
+        for a in idx:
+            t = a.get("title") or a["id"]
+            titles[a["id"]] = t
+            # суффикс версии гуляет в обе стороны: retag хранит 2608.13341,
+            # индекс — 2608.13341v1, и наоборот; кладём под обоими ключами
+            titles[a["id"].split("v")[0]] = t
+    except Exception:
+        pass
+    articles_view = []
+    for aid, cs_ in ((retag or {}).get("articles") or {}).items():
+        names = [c["concept"] if isinstance(c, dict) else c for c in cs_]
+        articles_view.append({
+            "id": aid,
+            "t": titles.get(aid) or titles.get(aid.split("v")[0]) or aid,
+            "c": names,
+        })
+    articles_view.sort(key=lambda a: a["id"], reverse=True)
+
+    # ── связи групп для графа: сколько общих понятий у каждой пары ─────────
+    from itertools import combinations
+    gsets = {gid: set(m) for gid, m in groups.items()}
+    group_links = []
+    for a, b in combinations(sorted(gsets), 2):
+        n = len(gsets[a] & gsets[b])
+        if n:
+            group_links.append({"a": a, "b": b, "n": n})
+    group_links.sort(key=lambda e: -e["n"])
+
     payload = {
         "built": (sup.get("built") or "")[:10],
         "source": "b42-ml / ml-wave5-concepts",
         "concepts": out_concepts,
         "groups": out_groups,
         "names_from_ml": bool(sup.get("super_names")),
+        "formulas": formulas_full,
+        "articles_view": articles_view,
+        "group_links": group_links[:120],
         "stats": {
             "concepts": len(out_concepts),
             "was": 536,
