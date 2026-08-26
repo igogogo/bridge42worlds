@@ -109,7 +109,7 @@ def head(lang, title):
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
-        onload="renderMathInElement(document.body, {{delimiters: [
+        onload="renderMathInElement(document.body, {{output: 'html', delimiters: [
           {{left: '$$', right: '$$', display: true}},
           {{left: '\\(', right: '\\)', display: false}}]}})"></script>
 <link rel="stylesheet" href="/css/style.css">

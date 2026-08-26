@@ -2505,9 +2505,9 @@ figcaption, .caption, .fig-caption, .mosaic-caption, .lightbox-caption {
 /* Скругление задаём пилюлей, а не числом: высота сегмента идёт по шкале касания и на
    телефоне вырастает с 26 до 44 — фиксированные 13 px переставали быть половиной высоты,
    и на мобильном сегмент читался прямоугольником рядом с круглыми кнопками (замер 375). */
-.lv-switch-card { display: inline-flex; gap: 2px; margin: 0 0 10px; max-width: none;
+.lv-switch-card, .article-card .lv-switch { display: inline-flex; gap: 2px; margin: 0 0 10px; max-width: none;
   flex-wrap: nowrap; padding: 2px; border-radius: 999px; background: var(--tag-bg, rgba(46,138,160,.08)); }
-.lv-switch-card .lv-btn { flex: none; min-height: 26px; padding: 0 11px; font-size: 11.5px;
+.lv-switch-card .lv-btn, .article-card .lv-switch .lv-btn { flex: none; min-height: 26px; padding: 0 11px; font-size: 11.5px;
   border-radius: 999px; border: none; background: transparent; color: var(--muted);
   gap: 6px; font-weight: 600; letter-spacing: .005em; }
 .lv-switch-card .lv-btn .vs-ic { width: 13px; height: 13px; }
@@ -4199,7 +4199,11 @@ html[lang="ar"] .card-img-wrap { float: none; margin: 0; }
 @media (max-width: 620px) {
     /* На телефоне картинка идёт полосой над текстом: 130 px рядом с текстом на 375
        оставляют колонке 200 px, в которых заголовок ломается по два слова. */
-    .article-card { flex-direction: column; gap: var(--s-3); padding: var(--s-3); }
+    /* stretch обязателен: align-items:flex-start из строчной раскладки в КОЛОНКЕ
+       действует на ширину — card-body переставал растягиваться и брал ширину
+       содержимого (406 при карточке 343: неразрывная формула KaTeX в описании). */
+    .article-card { flex-direction: column; gap: var(--s-3); padding: var(--s-3);
+                    align-items: stretch; }
     .card-img-wrap { flex: none; width: 100%; aspect-ratio: 16 / 9; }
 }
 
@@ -4367,3 +4371,32 @@ html[lang="ar"] .card-img-wrap { float: none; margin: 0; }
 .lg-rest { background: var(--tag-bg); } .lg-ex { background: var(--cyan); opacity: .55; }
 .lg-full { background: var(--scientist-color); } .lg-km { background: var(--ochre); }
 .aclaim-mailto { font-size: 13px; margin: var(--s-3) 0 0; }
+
+/* ═══ Проход 2 — мобильные заплатки смотра 26.08 ═══
+   Замер на 375 по всем типам: два перелива. Кнопка «следующая статья» с
+   white-space:nowrap упиралась в край (382 при 375): контейнер не отдавал ей
+   честную ширину. Переключатель уровней в серверной карточке справочника решён
+   выше — расширением правил .lv-switch-card, вторых значений нет. */
+.next-top, .next-divider { max-width: min(620px, 100%); }
+.next-btn { max-width: 100%; }
+/* Кнопка «следующая» живёт и в ряду языков (.langs-row). Как флекс-ребёнок она
+   не сжималась ниже содержимого (min-width:auto) и на 375 выпирала: в LTR вправо
+   до 382, в RTL — влево на −15. Симметрия сторон выдала общую причину. */
+.langs-row .next-btn { min-width: 0; flex: 0 1 auto; }
+/* Формула KaTeX в описании карточки не переносится (nowrap по устройству KaTeX)
+   и раздувала min-content всей карточки: колонка 343, формула 406 — страница ехала.
+   Канон один на весь сайт: широкое содержимое прокручивается в СВОЁМ контейнере,
+   а не возит страницу. Заголовку — перенос по словам на всякий случай. */
+.article-card .oneliner { overflow-x: auto; max-width: 100%; }
+.article-card .card-body, .article-card h3 { min-width: 0; }
+.article-card .card-body { max-width: 100%; }
+.article-card h3 { overflow-wrap: anywhere; }
+/* Сам KaTeX-блок — nowrap по устройству; потолок и прокрутка прямо на нём, чтобы
+   никакой каскадный сюрприз выше по дереву не дал ему растянуть колонку. */
+.article-card .katex, .article-card .katex-display {
+    max-width: 100%; overflow-x: auto; overflow-y: hidden; display: inline-block; }
+/* Шапка страниц понятий: js добавляет кнопку темы, и ряд (лого + 4 ссылки + кнопка)
+   на 375 выходил за окно на 8 px. Перенос, как везде на узких экранах. */
+@media (max-width: 620px) {
+    .top-bar { flex-wrap: wrap; row-gap: 4px; }
+}
