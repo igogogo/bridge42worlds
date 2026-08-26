@@ -42,6 +42,18 @@ KIND_LBL = {
            "substance": "вещество", "math": "математика", "phenomenon": "явление",
            "law": "закон", "equation": "уравнение", "effect": "эффект", "principle": "принцип",
            "theorem": "теорема", "process": "процесс", "property": "свойство", "theory": "теория"},
+    "es": {"concept": "concepto", "object": "objeto", "method": "método", "instrument": "instrumento",
+           "substance": "sustancia", "math": "matemáticas", "phenomenon": "fenómeno",
+           "law": "ley", "equation": "ecuación", "effect": "efecto", "principle": "principio",
+           "theorem": "teorema", "process": "proceso", "property": "propiedad", "theory": "teoría"},
+    "fr": {"concept": "concept", "object": "objet", "method": "méthode", "instrument": "instrument",
+           "substance": "substance", "math": "mathématiques", "phenomenon": "phénomène",
+           "law": "loi", "equation": "équation", "effect": "effet", "principle": "principe",
+           "theorem": "théorème", "process": "processus", "property": "propriété", "theory": "théorie"},
+    "ar": {"concept": "مفهوم", "object": "جسم", "method": "طريقة", "instrument": "جهاز",
+           "substance": "مادة", "math": "رياضيات", "phenomenon": "ظاهرة",
+           "law": "قانون", "equation": "معادلة", "effect": "تأثير", "principle": "مبدأ",
+           "theorem": "مبرهنة", "process": "عملية", "property": "خاصية", "theory": "نظرية"},
 }
 T = {
     "ru": {"title": "Понятия", "sub": "Реестр понятий: {n} записей в {g} группах. Карточки новых понятий пока на английском — переводы в работе.",
@@ -80,6 +92,10 @@ def head(lang, title):
 <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&family=Noto+Naskh+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {{delimiters: [
+          {{left: '$$', right: '$$', display: true}},
+          {{left: '\\(', right: '\\)', display: false}}]}})"></script>
 <link rel="stylesheet" href="/css/style.css">
 <link rel="icon" href="/favicon.ico" sizes="any">
 </head>
@@ -109,11 +125,26 @@ def concept_page(cid, c, lang, live, by_id):
 
     out = [head(lang, name)]
     out.append('<div class="tag-header">')
-    out.append(f'<div class="tag-title-row"><h1>{H.escape(name)}{note}</h1></div>')
-    out.append(f'<div class="tag-stats">{H.escape(kind)} · {len(c["articles"])} '
-               f'{t["articles"].lower()}</div>')
-    # карточка — по-английски до перевода, честно размечено lang
-    out.append(f'<p class="desc" lang="en">{H.escape(c["card_en"])}</p>')
+    # Класс понятия — бейджем ПЕРЕД названием: владелец 26.08 «у понятий был класс,
+    # метод, принцип и так далее — они остались?» Остались у всех 1222; бейдж делает
+    # это видимым, а не строкой мелкого шрифта.
+    out.append(f'<div class="tag-title-row">'
+               f'<span class="entity-kind" style="font-family:var(--mono);font-size:11.5px;'
+               f'color:var(--cyan);border:1px solid currentColor;border-radius:999px;'
+               f'padding:2px 10px;align-self:center">{H.escape(kind)}</span>'
+               f'<h1>{H.escape(name)}{note}</h1></div>')
+    # КАРТОЧКА понятия — выделенным определением, а не строчкой между служебных:
+    # это главный текст страницы, пока перевод не приехал — по-английски с пометкой.
+    out.append(f'<blockquote class="concept-card" lang="en" style="font-family:var(--serif);'
+               f'font-size:18px;line-height:1.55;margin:var(--s-3) 0;padding:var(--s-3) var(--s-4);'
+               f'border-inline-start:3px solid var(--cyan);background:var(--bg);'
+               f'border-radius:var(--radius-sm)">{H.escape(c["card_en"])}</blockquote>')
+    stats = [f'{len(c["articles"])} {t["articles"].lower()}']
+    if c["formulas"]:
+        stats.append(f'{len(c["formulas"])} {t["formulas"].lower()}')
+    if c["scientists"]:
+        stats.append(f'{len(c["scientists"])} {t["sci"].lower()}')
+    out.append(f'<div class="tag-stats">{" · ".join(stats)}</div>')
     out.append('</div>')
 
     body = []
