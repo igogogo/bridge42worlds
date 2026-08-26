@@ -64,6 +64,18 @@ def old_names():
 
 def build_live():
     v3 = load(ML / "data" / "concepts-v3.json")["concepts"]
+    # Рождённые живым циклом (data/concepts-grown.json) — полноправные члены реестра:
+    # без этого ночная добыча рожает понятия, а справочник их не видит — статьи
+    # размечены, страниц нет, ссылки в пустоту.
+    grown_p = ROOT / "data" / "concepts-grown.json"
+    if grown_p.exists():
+        for cid, g in load(grown_p).items():
+            v3.setdefault(cid, {
+                "kind": g.get("kind") or "concept",
+                "card_en": g.get("card_en") or "",
+                "origin": g.get("origin") or "live-harvest",
+                "related": [], "scientists": [], "article_count": 0,
+            })
     sup = load(ML / "data" / "concepts-super.json")
     sci = load(ML / "data" / "concept-scientists.json")["concepts"]
     bases = load(ML / "data" / "formulas-linked.json")["bases"]

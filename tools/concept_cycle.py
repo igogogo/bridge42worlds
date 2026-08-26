@@ -106,12 +106,33 @@ def give_birth(rows, dry):
             "born": datetime.now().date().isoformat(), "origin": "live-harvest",
         }
         upsert_vector(name, r["vec"], r["kind"])
+        append_to_matrix(name, r["vec"])
         r["born"] = True
         born += 1
         print(f"   🌱 {name} ({len(r['articles'])} статей)")
     if not dry and born:
         GROWN.write_text(json.dumps(grown, ensure_ascii=False, indent=1), encoding="utf-8")
     return born
+
+
+def append_to_matrix(name, vec):
+    """Новорождённый — в ЛОКАЛЬНУЮ матрицу карточек (b42-ml/concept-cards.f16/.ids).
+
+    Без этого дыра: понятие рождено, вектор в облаке, а переразметка (retag_hub)
+    читает локальную матрицу — и новорождённого в ней нет, статьи его не получат.
+    Матрица и список id дописываются в конец, согласованно."""
+    import numpy as np
+    ml = ROOT.parent / "b42-ml" / "data"
+    ids_p, vec_p = ml / "concept-cards.ids", ml / "concept-cards.f16"
+    ids = ids_p.read_text(encoding="utf-8").splitlines()
+    if name in ids:
+        return
+    V = np.fromfile(vec_p, dtype=np.float16).reshape(len(ids), -1)
+    a = np.asarray(vec, dtype=np.float32)
+    a /= np.linalg.norm(a) + 1e-9
+    V = np.vstack([V, a.astype(np.float16)])
+    V.tofile(vec_p)
+    ids_p.write_text(chr(10).join(ids + [name]) + chr(10), encoding="utf-8")
 
 
 def upsert_vector(name, vec, kind):

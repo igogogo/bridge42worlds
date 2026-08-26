@@ -9,13 +9,22 @@ fits no group, use "other".
 Rules:
 - name: short canonical English identifier, lowercase, words joined by underscores
   (like "tokamak", "plasma_confinement", "quasi_periodic_oscillation").
+- MANDATORY, never skip these when present in the paper:
+  * abbreviations and acronyms: instruments, missions, detectors, methods
+    (Fermi/LAT -> fermi_lat, JWST, LIGO, MCMC...) — kind "instrument" or "method";
+  * units of measurement the reader may not know (GeV -> gigaelectronvolt,
+    parsec, jansky...) — kind "unit";
+  * general scientific concepts a popular-science reader needs explained even if
+    they look basic to a physicist: annihilation, statistical_significance,
+    energy_bin, cross_section, upper_limit... — a popular text is popular
+    precisely because such things get explained.
 - kind: one value from KINDS.
 - group: one value from GROUPS, or "other".
 - scope: "general" if the concept is a broad field or umbrella term,
   "specific" if it names one particular method, object, effect or equation.
 - line: ONE sentence (max 25 words) defining the concept as it is used in this
   paper's field — a dictionary-style definition, not a summary of the paper.
-- Only concepts genuinely present in the paper. 5 to 15 items. No duplicates,
+- Only concepts genuinely present in the paper. 8 to 20 items. No duplicates,
   no near-synonyms of each other.
 
 Answer with a JSON array only, no prose:
