@@ -905,7 +905,18 @@ def entity_article_card(a, lang):
             f'{thumb}'
             f'<div class="card-body">{levels}'
             f'<h3><a href="{a["url"]}" title="{attr_safe(a["title"])}">{title}</a></h3>'
-            f'<div class="oneliner">{desc}</div></div></article>')
+            f'<div class="oneliner">{desc}</div>'
+            # Реакции и избранное — как в ленте. Владелец 26.08 про страницы понятий:
+            # «карточка в списке у нас была с лайками — функционал вернётся?» На карточках
+            # справочников его не было НИКОГДА (голый список); возвращаем сразу везде —
+            # блок общий, обрабатывает js/likes.js делегированием.
+            f'<div class="card-actions" data-article-id="{a["id"]}_{lang}_popular">'
+            f'<button class="react-btn sm" data-react="like">'
+            f'<span class="rc"></span>&#128077;</button>'
+            f'<button class="react-btn sm" data-react="dislike">'
+            f'<span class="rc"></span>&#128078;</button>'
+            f'<button class="fav-btn sm" data-fav="{a["id"]}"><span class="fav-ic">&#9734;</span></button>'
+            f'</div></div></article>')
 
 
 def build_actions_html(like_id, fav_id, lang, entity_type="article", inline_comment=False):

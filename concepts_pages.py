@@ -149,6 +149,71 @@ def load_rich(lang):
     return rich
 
 
+import re as _re
+
+
+def _stem(w):
+    """Основа слова тем же духом, что sameWord в js/site-search.js: не меньше
+    четырёх букв, окончание отбрасывается. Второй морфологии в проекте не заводим."""
+    w = w.lower()
+    return w[: max(4, len(w) - 2)] if len(w) > 5 else w
+
+
+def autolink(html_text, cid, lang, live):
+    """Первые вхождения названий соседних понятий в тексте → ссылки.
+
+    html_text уже экранирован (H.escape) — работаем по тексту, вставляем разметку.
+    Кандидаты: соседи по весу + одногруппники, отсортированы длиной названия вниз,
+    чтобы «квантовая запутанность» съедалась раньше «запутанности»."""
+    c = live["concepts"].get(cid) or {}
+    cands = []
+    seen = {cid}
+    for r in c.get("related", []):
+        if r["id"] not in seen:
+            seen.add(r["id"])
+            cands.append(r["id"])
+    for gid, members in live.get("groups", {}).items():
+        if cid in members:
+            for m in members:
+                if m not in seen:
+                    seen.add(m)
+                    cands.append(m)
+    pairs = []
+    for other in cands:
+        oc = live["concepts"].get(other)
+        if not oc:
+            continue
+        # Текст секции бывает английским (новые понятия до перевода), а сосед —
+        # старым с русским названием. Ищем ОБА названия: языка страницы и английское;
+        # на ссылку это не влияет, она всегда ведёт на страницу текущего языка.
+        variants = {oc["names"].get(lang), oc["names"].get("en"),
+                    other.replace("_", " ")}
+        for nm in variants:
+            if nm and len(nm) >= 4:
+                pairs.append((nm, other))
+    pairs.sort(key=lambda t: -len(t[0]))
+
+    used = set()
+    for nm, other in pairs:
+        if other in used:
+            continue
+        words = [w for w in _re.split(r"\s+", nm) if w]
+        # шаблон: основы всех слов названия подряд, каждая с любым окончанием
+        pat = r"\b" + r"\s+".join(_re.escape(_stem(w)) + r"[\w-]*" for w in words) + r""
+        m = _re.search(pat, html_text, _re.IGNORECASE)
+        if not m:
+            continue
+        # не внутрь уже поставленной ссылки
+        before = html_text[: m.start()]
+        if before.count("<a ") > before.count("</a>"):
+            continue
+        used.add(other)
+        html_text = (html_text[: m.start()]
+                     + f'<a href="/lang/{lang}/concepts/{other}.html">{m.group(0)}</a>'
+                     + html_text[m.end():])
+    return html_text
+
+
 def concept_page(cid, c, lang, live, by_id, rich=None):
     t = T[lang]
     name = name_of(c, cid, lang)
@@ -170,7 +235,7 @@ def concept_page(cid, c, lang, live, by_id, rich=None):
     # это главный текст страницы, пока перевод не приехал — по-английски с пометкой.
     out.append(f'<blockquote class="concept-card" lang="en" style="font-family:var(--serif);'
                f'font-size:18px;line-height:1.55;margin:var(--s-3) 0;padding:var(--s-3) var(--s-4);'
-               f'border-inline-start:3px solid var(--cyan);background:var(--bg);'
+               f'background:var(--bg);'
                f'border-radius:var(--radius-sm)">{H.escape(c["card_en"])}</blockquote>')
     stats = [f'{len(c["articles"])} {t["articles"].lower()}']
     if c["formulas"]:
@@ -194,8 +259,9 @@ def concept_page(cid, c, lang, live, by_id, rich=None):
                          ("fun_fact_popular", s["fact"])):
         txt = (r.get(field) or "").strip()
         if txt:
+            linked = autolink(H.escape(txt), cid, lang, live)
             body.append(f'<div class="section"><h2 style="font-size:16px;margin:14px 0 6px">'
-                        f'{label}</h2><p style="max-width:var(--w-read)">{H.escape(txt)}</p></div>')
+                        f'{label}</h2><p style="max-width:var(--w-read)">{linked}</p></div>')
     if c["related"]:
         chips = "".join(
             f'<a href="/lang/{lang}/concepts/{H.escape(r["id"])}.html">'
@@ -235,7 +301,8 @@ def concept_page(cid, c, lang, live, by_id, rich=None):
         out.append("".join(G.entity_article_card(a, lang) for a in arts[:CARDS_CAP]))
     else:
         out.append(f'<p style="color:var(--soft)">{t["none"]}</p>')
-    out.append('<script src="/js/icons.js"></script><script src="/js/search.js" defer></script>')
+    out.append('<script src="/js/icons.js"></script><script src="/js/search.js" defer></script>'
+               '<script src="/js/likes.js" defer></script>')
     out.append("</body></html>")
     return "".join(out)
 
