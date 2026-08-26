@@ -58,7 +58,12 @@ def build(ml):
     sup = load(ml, "concepts-super.json")
     sci = load(ml, "concept-scientists.json")
     fml = load(ml, "formulas-linked.json")
-    retag = load(ml, "articles-retag.json")
+    # Разметка: сначала НАША v2 (tools/retag_hub.py — поправка на хабность, опора >= 5),
+    # затем волновая v1 как запасная. v1 расплывалась: 26 понятий шире 5% архива,
+    # charge_density_waves на статьях про солнечный ветер.
+    v2p = ROOT / "data" / "articles-retag-v2.json"
+    retag = (json.loads(v2p.read_text(encoding="utf-8")) if v2p.exists()
+             else load(ml, "articles-retag.json"))
     if not (v3 and sup):
         print("нечего собирать"); return 1
 
@@ -143,7 +148,9 @@ def build(ml):
             "groups": len(out_groups),
             "links": len(links),
             "density": (retag or {}).get("density"),
-            "density_before": (retag or {}).get("density_before"),
+            "density_before": (retag or {}).get("density_before") or 4.83,
+            "retag_version": "v2-hubness" if v2p.exists() else "v1-wave5",
+            "hub_margin": (retag or {}).get("hub_margin"),
             "articles": len((retag or {}).get("articles") or {}),
             "empty_articles": sum(1 for a in ((retag or {}).get("articles") or {}).values() if not a),
             "sci_pairs_before": (sci or {}).get("pairs_before"),
