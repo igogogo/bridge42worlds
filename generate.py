@@ -4346,6 +4346,70 @@ def generate_status_page():
     # реестре 1222 — цифра врала о главном активе).
     concepts_n = 0
     wave5_html = ""
+    # ПОКРЫТИЕ МАШИНЫ ЗНАНИЙ (владелец 27.08): дашборд показывал только сколько
+    # статей разобрано, а важнее — что машина знаний с ними сделала: у скольких
+    # есть разметка понятиями, якоря в тексте, формулы, данные Scholar.
+    km_html = ""
+    marked = anchors_en = anchors_ru = with_fml = 0
+    concepts_sum = 0
+    try:
+        _mj = {}
+        mp = Path("data/concept-mentions.jsonl")
+        if mp.exists():
+            with mp.open(encoding="utf-8") as fh:
+                for line in fh:
+                    try:
+                        r = json.loads(line)
+                    except json.JSONDecodeError:
+                        continue
+                    art = r.get("art")
+                    if art:
+                        _mj.setdefault(art, set()).add(r.get("lang") or "en")
+        for data, _folder in iter_articles():
+            aid = data.get("id", "")
+            c2 = []
+            for lv in ("popular", "advanced", "simple"):
+                node = data.get(lv)
+                if isinstance(node, dict):
+                    ln = node.get(DEFAULT_LANG)
+                    if isinstance(ln, dict) and ln.get("concepts_v2"):
+                        c2 = ln["concepts_v2"]
+                        break
+            if c2:
+                marked += 1
+                concepts_sum += len(c2)
+            langs_seen = _mj.get(aid) or _mj.get(aid.split("v")[0]) or set()
+            if "en" in langs_seen:
+                anchors_en += 1
+            if "ru" in langs_seen:
+                anchors_ru += 1
+            if formulas_of_article(aid):
+                with_fml += 1
+    except Exception as e:      # дашборд не имеет права падать из-за метрики
+        print(f"  ⚠️ метрики машины знаний не собрались: {e}")
+    if marked:
+        s2n = len([1 for v in (json.loads(Path("data/s2/papers.json").read_text(encoding="utf-8"))
+                               if Path("data/s2/papers.json").exists() else {}).values() if v])
+        def bar(label, n, tot):
+            pct = round(n * 100 / max(1, tot))
+            return (f"<tr><td>{label}</td><td style='width:55%'>"
+                    f"<div style='background:#eee;border-radius:3px;height:12px'>"
+                    f"<div style='background:#0d7d8c;opacity:.5;height:12px;border-radius:3px;"
+                    f"width:{pct}%'></div></div></td>"
+                    f"<td style='text-align:right'>{n} · {pct}%</td></tr>")
+        km_html = (
+            "<h2>Knowledge machine coverage</h2>"
+            f"<div class='cards'>"
+            f"<div class='card'><b>{concepts_sum / max(1, marked):.1f}</b>"
+            f"<span>concepts per article</span></div>"
+            f"<div class='card'><b>{concepts_sum:,}</b><span>markup links</span></div>"
+            f"</div><table>"
+            + bar("Articles with concept markup", marked, total)
+            + bar("Articles with anchors in English text", anchors_en, total)
+            + bar("Articles with anchors in Russian text", anchors_ru, total)
+            + bar("Articles with formulas in the cloud", with_fml, total)
+            + bar("Articles known to Semantic Scholar", s2n, total)
+            + "</table>")
     if Path("data/concepts-live.json").exists():
         _lc = json.loads(Path("data/concepts-live.json").read_text(encoding="utf-8"))["concepts"]
         concepts_n = len(_lc)
@@ -4447,7 +4511,8 @@ h1{{font-size:22px}}h2{{font-size:15px;margin:24px 0 8px;color:#555}}
 .cards{{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0}}
 .card{{flex:1;min-width:120px;background:#f6f6f6;border-radius:10px;padding:12px 14px}}
 .card b{{font-size:24px;display:block}}.card span{{color:#888;font-size:13px}}
-table{{border-collapse:collapse;font-size:13px;width:100%}}</style></head><body>
+table{{border-collapse:collapse;font-size:13px;width:100%}}
+.ico-svg{{width:1em;height:1em;vertical-align:-.08em;opacity:.55}}</style></head><body>
 <h1><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><line x1="6.5" y1="19" x2="6.5" y2="13"/><line x1="12" y1="19" x2="12" y2="8.5"/><line x1="17.5" y1="19" x2="17.5" y2="11"/><line x1="4" y1="19.5" x2="20" y2="19.5"/></svg> System status</h1>
 <p style="color:#888;font-size:13px">Updated {updated} UTC · refreshed automatically by the daily pipeline</p>
 <div class="cards">
@@ -4464,6 +4529,7 @@ table{{border-collapse:collapse;font-size:13px;width:100%}}</style></head><body>
 <h2>By arXiv category (top 15)</h2><table>{cat_rows}</table>
 <h2>Articles per day (last 30)</h2><table>{day_rows}</table>
 {wave5_html}
+{km_html}
 <h2>Integrity</h2>{warn}
 <h2>Concept graph connectivity</h2>{connectivity_html}
 </body></html>'''

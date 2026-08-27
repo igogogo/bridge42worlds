@@ -4412,9 +4412,13 @@ html[lang="ar"] .card-img-wrap { float: none; margin: 0; }
     border-radius: 999px; transition: color .18s, border-color .18s, background .18s; }
 .ent-tab:hover { color: var(--link); border-color: var(--link); }
 .ent-tab.active { color: #fff; background: var(--link); border-color: var(--link); }
-.ent-tabs-on .ent-pane { display: none; }
-.ent-tabs-on .ent-pane.active { display: block; }
+/* Панели НЕ скрываются display:none — их прячет атрибут hidden="until-found"
+   (content-visibility:hidden). Тогда Ctrl+F находит текст внутри закрытой
+   вкладки, браузер шлёт beforematch, и скрипт раскрывает нужную. display:none
+   такой текст от поиска прячет насовсем — потому его здесь нет. */
 .ent-tabs-on .ent-pane-t { display: none; }
+.ent-tabs-on.ent-all .ent-pane-t { display: block; }   /* режим «всё сразу» */
+.ent-all-btn { margin-inline-start: auto; }
 
 /* Semantic Scholar на странице автора: цитирования · h-index · работы + аффилиация.
    Атрибуция «Data: Semantic Scholar» — условие их API. */
@@ -4440,3 +4444,8 @@ html[lang="ar"] .card-img-wrap { float: none; margin: 0; }
 .b42mini-note { font-family: var(--mono); font-size: 11px; margin: 0 0 14px; }
 .b42mini-note a { color: var(--muted); text-decoration: none; }
 .b42mini-note a:hover { color: var(--link); }
+
+/* Плашки связей на странице понятия — мельче: их бывает по двадцать, крупный
+   кегль превращал ряд в стену (владелец 27.08: «плашки-ссылки великоваты»). */
+.entity-body .related-tags a { font-size: 11.5px; padding: 2px 9px; }
+.entity-body .related-tags { gap: 4px; line-height: 1.7; }

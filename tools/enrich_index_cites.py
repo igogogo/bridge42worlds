@@ -29,7 +29,11 @@ def main():
     print(f"статей с цитированиями: {len(raw)} собрано, "
           f"{sum(1 for v in raw.values() if v and v.get('citationCount'))} ненулевых")
     touched = 0
-    for p in (ROOT / "lang").glob("*/articles-index*.json"):
+    # ВСЕ индексы, включая latest-* — их читает лента на главной (проверено
+    # глазами 27.08: цитируемость легла в index, а лента берёт latest и молчала)
+    files = (list((ROOT / "lang").glob("*/articles-index*.json"))
+             + list((ROOT / "lang").glob("*/articles-latest*.json")))
+    for p in files:
         try:
             idx = json.loads(p.read_text(encoding="utf-8"))
         except json.JSONDecodeError:

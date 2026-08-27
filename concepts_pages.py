@@ -280,9 +280,12 @@ def concept_page(cid, c, lang, live, by_id, rich=None):
     # вкладками»). Без JS видны все секции с заголовками; скрипт внизу страницы
     # превращает их в панель вкладок — деградация бесплатная.
     if len(panes) > 1:
+        all_lbl = {"ru": "всё сразу", "en": "all at once", "es": "todo",
+                   "ar": "الكل", "fr": "tout"}.get(lang, "all at once")
         tabs = "".join(f'<button class="ent-tab{" active" if i == 0 else ""}" '
                        f'data-pane="p{i}">{H.escape(lbl)}</button>'
                        for i, (lbl, _) in enumerate(panes))
+        tabs += f'<button class="ent-tab ent-all-btn" id="ent-all">{all_lbl}</button>'
         content = "".join(f'<div class="ent-pane" data-pane="p{i}">'
                           f'<h2 class="ent-pane-t" style="font-size:16px;margin:14px 0 6px">'
                           f'{H.escape(lbl)}</h2>{html}</div>'
@@ -374,17 +377,42 @@ def concept_page(cid, c, lang, live, by_id, rich=None):
                '<script src="/js/likes.js" defer></script>'
                '<script src="/js/b42-graph-core.js"></script>'
                '<script src="/js/b42-mini.js" defer></script>')
-    # Вкладки полной записи: включаются только при JS, иначе секции остаются простынёй
+    # Вкладки полной записи. Скрываем НЕ через display:none, а атрибутом
+    # hidden="until-found": браузер ищет текст и внутри скрытой панели, а найдя —
+    # шлёт beforematch, и мы раскрываем именно её (владелец 27.08: «вкладки —
+    # круто, но поиск же это не найдёт»). Плюс кнопка «всё сразу» — для тех, кто
+    # читает подряд, и для браузеров без поддержки until-found. Без JS панель
+    # вкладок скрыта и все секции видны простынёй, как раньше.
     out.append("""<script>(function(){
 var bar=document.querySelector('.ent-tabs');if(!bar)return;
+var panes=[].slice.call(document.querySelectorAll('.ent-pane'));
+if(!panes.length)return;
 document.body.classList.add('ent-tabs-on');
-bar.addEventListener('click',function(e){
-  var b=e.target.closest('.ent-tab');if(!b)return;
-  bar.querySelectorAll('.ent-tab').forEach(function(x){x.classList.toggle('active',x===b)});
-  document.querySelectorAll('.ent-pane').forEach(function(p){
-    p.classList.toggle('active',p.dataset.pane===b.dataset.pane)});
+function hide(p){try{p.hidden='until-found';}catch(e){p.hidden=true;}}
+function activate(id){
+  bar.querySelectorAll('.ent-tab').forEach(function(x){
+    if(x.id!=='ent-all')x.classList.toggle('active',x.dataset.pane===id);});
+  panes.forEach(function(p){if(p.dataset.pane===id)p.hidden=false;else hide(p);});
+}
+panes.forEach(function(p){
+  p.addEventListener('beforematch',function(){
+    document.body.classList.remove('ent-all');
+    activate(p.dataset.pane);});
 });
-var first=document.querySelector('.ent-pane');if(first)first.classList.add('active');
+bar.addEventListener('click',function(e){
+  var b=e.target.closest('.ent-tab');if(!b||b.id==='ent-all')return;
+  document.body.classList.remove('ent-all');
+  document.getElementById('ent-all').classList.remove('active');
+  activate(b.dataset.pane);
+});
+var all=document.getElementById('ent-all');
+if(all)all.addEventListener('click',function(){
+  var on=document.body.classList.toggle('ent-all');
+  all.classList.toggle('active',on);
+  if(on)panes.forEach(function(p){p.hidden=false;});
+  else{var a=bar.querySelector('.ent-tab.active');activate(a?a.dataset.pane:panes[0].dataset.pane);}
+});
+activate(panes[0].dataset.pane);
 })();</script>""")
     out.append("</body></html>")
     return "".join(out)
@@ -560,6 +588,7 @@ details[open].b42g-sec > summary.b42g-h::before {{ content:"▾ "; }}
   .b42g-side {{ position:static; width:auto; margin:8px; max-height:none; }}
 }}
 </style>
+<script src="/js/b42-graph-core.js"></script>
 <script src="/js/b42-graph.js" defer></script>
 </body></html>"""
 
