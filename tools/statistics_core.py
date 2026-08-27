@@ -149,6 +149,32 @@ CORE = {
 }
 
 
+# Те, кто уже носил класс statistics до появления раздела. Ядро их не называет,
+# поэтому части им надо назначить отдельно — иначе страница раздела кончается
+# свалкой «Прочее» на шестнадцать имён.
+EXTRA_PARTS = {
+    "linear_regression": "Оценивание и подгонка",
+    "spectral_fitting": "Оценивание и подгонка",
+    "gaussian_process_regression": "Оценивание и подгонка",
+    "neural_network_regression": "Многомерный анализ и обучение",
+    "chi_squared_test": "Проверка гипотез",
+    "five_sigma": "Проверка гипотез",
+    "goodness_of_fit": "Проверка гипотез",
+    "model_comparison": "Проверка гипотез",
+    "poisson_distribution": "Распределения",
+    "matched_filtering": "Сигналы и временные ряды",
+    "noise_subtraction": "Сигналы и временные ряды",
+    "spectral_line_measurement": "Сигналы и временные ряды",
+    "polarization_measurement": "Сигналы и временные ряды",
+    "outlier_rejection": "Неопределённости",
+    "binning": "Неопределённости",
+    "monte_carlo_sampling": "Моделирование и выборка",
+    "least_squares": "Оценивание и подгонка",
+    "uncertainty_quantification": "Неопределённости",
+    "bootstrap": "Ресемплинг и проверка",
+}
+
+
 def words(cid):
     return {w for w in cid.replace("-", "_").split("_") if w and w not in STOP}
 
@@ -193,6 +219,9 @@ def main():
 
     for cid in add:
         sections[cid] = add[cid]["section"]
+    for cid, part in EXTRA_PARTS.items():
+        if cid in live:
+            sections.setdefault(cid, part)
 
     print(f"ядро статистики: {sum(len(v) for v in CORE.values())} понятий")
     print(f"  добавится: {len(add)}")
