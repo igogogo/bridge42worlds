@@ -284,26 +284,36 @@ def distill():
         print("дистиллировать нечего"); return
     V = np.asarray([r["vec"] for _, r in keyed], dtype=np.float32)
     V /= np.linalg.norm(V, axis=1, keepdims=True) + 1e-9
-    S = V @ V.T
+    # Пары-кандидаты на слияние берём МАТРИЧНО, а не двойным питоновским циклом:
+    # на 26 тысячах кандидатов цикл — 340 млн итераций и часы, выборка по порогу —
+    # секунды. Порог редкий, пар выходит немного; считаем блоками, чтобы не строить
+    # полную матрицу 26k×26k разом.
+    pairs = []
+    B = 2000
+    for s0 in range(0, len(keyed), B):
+        S_blk = V[s0:s0 + B] @ V.T
+        ii, jj = np.where(S_blk >= DISTILL_T)
+        for bi, j in zip(ii, jj):
+            i = s0 + int(bi)
+            if i < int(j):
+                pairs.append((i, int(j)))
+    pairs.sort()
     gone = set()
     merged = 0
-    for i in range(len(keyed)):
-        if keyed[i][0] in gone:
+    for i, j in pairs:
+        if keyed[i][0] in gone or keyed[j][0] in gone:
             continue
-        for j in range(i + 1, len(keyed)):
-            if keyed[j][0] in gone or S[i, j] < DISTILL_T:
-                continue
-            a, b = keyed[i][1], keyed[j][1]
-            # имя остаётся у того, кто набрал больше статей
-            win, lose = (a, b) if len(a["articles"]) >= len(b["articles"]) else (b, a)
-            win["articles"] = sorted(set(win["articles"]) | set(lose["articles"]))
-            # Проигравший — АЛИАС, не мусор (владелец 27.08): запасная формулировка
-            # для вектора, расширение словаря якорей, защита от повторного рождения.
-            win.setdefault("aliases", []).append(
-                {"name": lose["name"], "line": lose.get("line", "")})
-            win["aliases"] = win["aliases"][:8]
-            gone.add(lose["name"])
-            merged += 1
+        a, b = keyed[i][1], keyed[j][1]
+        # имя остаётся у того, кто набрал больше статей
+        win, lose = (a, b) if len(a["articles"]) >= len(b["articles"]) else (b, a)
+        win["articles"] = sorted(set(win["articles"]) | set(lose["articles"]))
+        # Проигравший — АЛИАС, не мусор (владелец 27.08): запасная формулировка
+        # для вектора, расширение словаря якорей, защита от повторного рождения.
+        win.setdefault("aliases", []).append(
+            {"name": lose["name"], "line": lose.get("line", "")})
+        win["aliases"] = win["aliases"][:8]
+        gone.add(lose["name"])
+        merged += 1
     for k in gone:
         rows.pop(k, None)
     save_harvest(rows)
