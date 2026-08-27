@@ -30,6 +30,15 @@ load_dotenv()
 
 CONFIG = json.loads(Path("config.json").read_text(encoding="utf-8"))
 LANGUAGES = CONFIG.get("languages", ["ru"])
+# B42_LANGS=ru,en — собрать только эти языки, не трогая config.json (его читают и
+# другие процессы, а правка файла ради одного прогона переживёт этот прогон).
+# Нужно, когда полная пересборка на пяти языках занимает полдня, а к утру должны
+# быть готовы хотя бы главные два: остальные догоняются вторым заходом, где
+# отпечатки сборки сами покажут, что ru и en уже свежие.
+_langs_only = os.environ.get("B42_LANGS", "").strip()
+if _langs_only:
+    _keep = [x.strip() for x in _langs_only.split(",") if x.strip()]
+    LANGUAGES = [l for l in LANGUAGES if l in _keep] or LANGUAGES
 DEFAULT_LANG = CONFIG.get("default_lang", "ru")
 LANG_DIR = CONFIG.get("lang_dir", "lang")
 AGENTS = CONFIG.get("agents", {})

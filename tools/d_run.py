@@ -45,14 +45,18 @@ def state():
         return {"done": []}
 
 
-def run(step, cmd, timeout=6 * 3600, cwd=None):
+def run(step, cmd, timeout=6 * 3600, cwd=None, env=None):
     st = state()
     if step in st["done"]:
         log(f"· {step}: уже сделан")
         return True
     log(f"▶ {step}")
     try:
-        r = subprocess.run(cmd, cwd=cwd or ROOT, timeout=timeout)
+        e = None
+        if env:
+            import os
+            e = dict(os.environ, **env)
+        r = subprocess.run(cmd, cwd=cwd or ROOT, timeout=timeout, env=e)
         ok = r.returncode == 0
     except subprocess.TimeoutExpired:
         ok = False
@@ -232,7 +236,13 @@ def main():
     run("d-graph", [PY, "tools/concepts_graph_export.py"], timeout=1800)
     run("d-pages-c", [PY, "concepts_pages.py"], timeout=3600)
     run("d-pages-f", [PY, "formulas_pages.py"], timeout=3600)
-    run("d-html", [PY, "run.py", "html", "--force"], timeout=8 * 3600)
+    # Пересборка в два захода. Полный прогон на пяти языках занимает полдня, а к
+    # утру должны быть готовы русский и английский — на них владелец и смотрит
+    # («поблажка: пока два языка»). Второй заход идёт БЕЗ --force: отпечатки
+    # сборки уже помнят, что ru и en свежие, и он доделает только остальные три.
+    run("d-html", [PY, "run.py", "html", "--force"], timeout=8 * 3600,
+        env={"B42_LANGS": "ru,en"})
+    run("d-html-rest", [PY, "run.py", "html"], timeout=8 * 3600)
     run("d-authors", [PY, "-c",
         "import sys; sys.path.insert(0,'.'); import generate as G; "
         "G.update_all_authors()"], timeout=4 * 3600)
