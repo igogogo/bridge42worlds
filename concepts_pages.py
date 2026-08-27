@@ -767,11 +767,17 @@ def cloud_page(lang, live, by_id):
     for gid, members in groups:
         members = sorted(members, key=lambda m: -len(c.get(m, {}).get("articles", [])))
         top3 = " · ".join(name_of(c[m], m, lang) for m in members[:3] if m in c)
+        # Понятие без статей — тоже член группы. Фильтр по числу статей прятал с
+        # облака всё, что пришло не из текстов: константы и статистику целиком.
+        # Показываем их без счётчика — счётчик ноль ничего не сообщает, а место
+        # в группе сообщает.
         chips = "".join(
             f'<a href="/lang/{lang}/concepts/{H.escape(m)}.html">'
-            f'{H.escape(name_of(c[m], m, lang))} <em style="opacity:.55;font-size:10.5px">'
-            f'{len(c[m]["articles"])}</em></a>'
-            for m in members if m in c and c[m]["articles"])
+            f'{H.escape(name_of(c[m], m, lang))}'
+            + (f' <em style="opacity:.55;font-size:10.5px">{len(c[m]["articles"])}</em>'
+               if c[m]["articles"] else "")
+            + '</a>'
+            for m in members if m in c)
         out.append(f'<details style="margin-bottom:10px"><summary style="cursor:pointer;'
                    f'font-family:var(--serif);font-size:16px">{H.escape(top3)} '
                    f'<span style="font-family:var(--mono);font-size:12px;color:var(--soft)">'
