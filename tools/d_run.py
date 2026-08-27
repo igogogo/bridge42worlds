@@ -198,6 +198,11 @@ def main():
     # смысловой поиск — старые. Данные идут в те же новые таблицы и пространство
     # «concepts»; прод не задет.
     run("d-cloud-d1", [PY, "cloudflare/concepts_sync.py"], timeout=4 * 3600)
+    # Кадры графа — отдельный флаг и отдельный запуск. Без него в облаке остались
+    # бы кадры, посчитанные на вчерашнем реестре: страницы новые, а граф в
+    # динамике старый.
+    run("d-cloud-frames", [PY, "cloudflare/concepts_sync.py", "--frames"],
+        timeout=2 * 3600)
     run("d-cloud-vec", [PY, "tools/concepts_to_vectorize.py", "--apply"],
         timeout=2 * 3600)
     run("d-api", [PY, "cloudflare/checks/api_check.py"], timeout=1800)
