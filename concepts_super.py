@@ -166,8 +166,20 @@ def main():
     print("ШАГ 3 · СВЯЗИ С МОЩНОСТЬЮ")
     print("=" * 76)
     co = collections.Counter()
-    for a, r in art.items():
-        es = sorted(e for e in r["con"] if e in idx)
+    # Со-встречаемость — ИЗ ПУЛОВ, а не из старого корпуса art: пулы собраны из
+    # support (живой разметки v2), корпус art знает только понятия старого
+    # словаря — на реестре 3231 у двух тысяч новорождённых не было бы ни одной
+    # связи (волна 5, пересчёт 27.08). art остаётся источником только там, где
+    # пул пуст.
+    art_from_pool = collections.defaultdict(list)
+    for e, arts_ in pool.items():
+        if e in idx:
+            for a in arts_:
+                art_from_pool[a].append(e)
+    for a, es in art_from_pool.items():
+        es = sorted(set(es))
+        if len(es) > 60:
+            continue          # статья с 60+ понятиями — шум разметки, не свидетель
         for x in range(len(es)):
             for y in range(x + 1, len(es)):
                 co[(es[x], es[y])] += 1
