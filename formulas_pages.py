@@ -103,13 +103,16 @@ def sym_rows(an, lang, live, t):
         val = f' = {H.escape(c["value"])}' if c.get("value") else ""
         unit = c.get("unit") or ""
         unit_html = f' {H.escape(unit.replace("_", " "))}' if unit and unit != "dimensionless" else ""
+        desc = f' — {H.escape(c["m"])}' if c.get("m") else ""
         rows.append(f'<tr><td class="fx-s">{H.escape(c["s"])}</td>'
                     f'<td>{t["const"]}</td>'
-                    f'<td>{concept_link(c.get("id") or "", lang, live)}{val}{unit_html}</td></tr>')
+                    f'<td>{concept_link(c.get("id") or "", lang, live)}{val}{unit_html}'
+                    f'{desc}</td></tr>')
     for o in an.get("operators") or []:
+        desc = f' — {H.escape(o["m"])}' if o.get("m") else ""
         rows.append(f'<tr><td class="fx-s">{H.escape(o["s"])}</td>'
                     f'<td>{t["op"]}</td>'
-                    f'<td>{concept_link(o.get("id") or "", lang, live)}</td></tr>')
+                    f'<td>{concept_link(o.get("id") or "", lang, live)}{desc}</td></tr>')
     return rows
 
 
@@ -129,6 +132,12 @@ def formula_page(b, an, lang, live):
         body.append(f'<div class="section"><h2 style="font-size:16px;margin:14px 0 6px">'
                     f'{t["desc"]}</h2><p lang="en" style="max-width:var(--w-read)">'
                     f'{H.escape(an["description"])}</p></div>')
+    if an.get("history"):
+        hist_lbl = {"ru": "История", "en": "History", "es": "Historia",
+                    "ar": "التاريخ", "fr": "Histoire"}[lang]
+        body.append(f'<div class="section"><h2 style="font-size:16px;margin:14px 0 6px">'
+                    f'{hist_lbl}</h2><p lang="en" style="max-width:var(--w-read)">'
+                    f'{H.escape(an["history"])}</p></div>')
     if an.get("applicability"):
         body.append(f'<div class="section"><h2 style="font-size:16px;margin:14px 0 6px">'
                     f'{t["appl"]}</h2><p lang="en" style="max-width:var(--w-read)">'
@@ -175,8 +184,11 @@ def cloud(bases, lang, live):
                    f'{H.escape(b.get("name") or b["base_id"])}</a> '
                    f'<span style="font-family:var(--mono);font-size:12px;color:var(--soft)">'
                    f'· {uses}</span><br>'
-                   f'<span style="font-family:var(--mono);font-size:12.5px;color:var(--soft)">'
-                   f'{H.escape((b.get("latex") or "")[:90])}</span></div>')
+                   # Латех в облаке РЕНДЕРИТСЯ (владелец 27.08: «в списке формат не
+                   # латех»). Не режем: обрезанный латех ломает KaTeX; узкий рендер
+                   # прокручивается своим контейнером по канону сайта.
+                   f'<span style="display:inline-block;max-width:100%;overflow-x:auto">'
+                   f'\({H.escape(b.get("latex") or "")}\)</span></div>')
     out.append("</body></html>")
     return "".join(out)
 

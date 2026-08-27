@@ -58,11 +58,15 @@ Return a JSON array, one object per formula, same order:
                        mass, energy, temperature...; empty if purely auxiliary>",
                 "unit": "<SI unit, canonical snake_case: kilogram, joule, kelvin,
                          metre_per_second; \"dimensionless\" when unitless>"}],
- "operators": [{"s": "<symbol>", "id": "<canonical_snake_case_name>"}],
+ "operators": [{"s": "<symbol>", "id": "<canonical_snake_case_name>",
+                "m": "<what this operation does, few words>"}],
  "constants": [{"s": "<symbol>", "id": "<canonical_snake_case_name>",
+                "m": "<what this constant IS, one short sentence>",
                 "value": "<numeric value with power of ten, e.g. 6.626e-34>",
                 "unit": "<SI unit, canonical snake_case>"}],
  "description": "<3-5 sentences: what the formula states and why it holds>",
+ "history": "<1-2 sentences: who derived it and when, how it got its modern form;
+             empty string if not honestly known — never invent>",
  "applicability": "<2-4 sentences: where it applies and where it BREAKS DOWN —
                    assumptions, limits, regimes>"}
 
@@ -115,14 +119,17 @@ def ask_batch(batch, key):
                                "unit": re.sub(r"[^a-z0-9_]", "", str(v.get("unit", "")).lower())[:40]}
                               for v in (it.get("variables") or []) if v.get("s")],
                 "operators": [{"s": str(v.get("s", ""))[:20],
-                               "id": re.sub(r"[^a-z0-9_]", "", str(v.get("id", "")).lower())}
+                               "id": re.sub(r"[^a-z0-9_]", "", str(v.get("id", "")).lower()),
+                               "m": str(v.get("m", ""))[:120]}
                               for v in (it.get("operators") or []) if v.get("s")],
                 "constants": [{"s": str(v.get("s", ""))[:20],
                                "id": re.sub(r"[^a-z0-9_]", "", str(v.get("id", "")).lower()),
+                               "m": str(v.get("m", ""))[:200],
                                "value": str(v.get("value", ""))[:40],
                                "unit": re.sub(r"[^a-z0-9_]", "", str(v.get("unit", "")).lower())[:40]}
                               for v in (it.get("constants") or []) if v.get("s")],
                 "description": str(it.get("description", ""))[:1200],
+                "history": str(it.get("history", ""))[:600],
                 "applicability": str(it.get("applicability", ""))[:800],
             }
             if rec["description"] and rec["applicability"]:
