@@ -1060,21 +1060,13 @@ def langs_of(cid, live, cur):
     return out
 
 
-def write_redirects(live):
-    """es/ar/fr: каждая страница понятия ведёт на английскую."""
-    n = 0
-    for lang in REDIRECT_LANGS:
-        d = ROOT / "lang" / lang / "concepts"
-        d.mkdir(parents=True, exist_ok=True)
-        for cid in live["concepts"]:
-            (d / f"{cid}.html").write_text(
-                redirect_html(f"/lang/en/concepts/{cid}.html"), encoding="utf-8")
-            n += 1
-        (d / "index.html").write_text(
-            redirect_html("/lang/en/concepts/"), encoding="utf-8")
-        (d / "graph.html").write_text(
-            redirect_html("/lang/en/concepts/graph.html"), encoding="utf-8")
-    print(f"  редиректов es/ar/fr: {n}")
+"""Отдельной функции редиректов больше нет.
+
+Она лежала здесь мёртвой: обращалась к REDIRECT_LANGS, которой в этом файле не
+существует, — то есть упала бы NameError при первом же вызове, если бы её кто-то
+звал. Редиректы давно пишет сама build(): страница понятия без перевода на этот
+язык уводит на английскую, и то же теперь делают разделы.
+"""
 
 
 def build(langs):
@@ -1105,9 +1097,14 @@ def build(langs):
                 skipped += 1
         (d / "index.html").write_text(cloud_page(lang, live, by_id), encoding="utf-8")
         (d / "graph.html").write_text(graph_page(lang), encoding="utf-8")
+        # Разделы — на русском и английском; остальным редирект на английский,
+        # как и у самих понятий: показывать раздел с русскими подписями частей
+        # французу хуже, чем честно увести на язык, который у нас полон.
         for sec in ("statistics", "math", "constant"):
-            (d / f"{sec}.html").write_text(section_page(sec, lang, live),
-                                           encoding="utf-8")
+            (d / f"{sec}.html").write_text(
+                section_page(sec, lang, live) if lang in ALWAYS_LANGS
+                else redirect_html(f"/lang/en/concepts/{sec}.html"),
+                encoding="utf-8")
         print(f"  {lang}: {made} страниц + {skipped} редиректов + облако + граф + разделы")
     print(f"✅ раздел /concepts/: {total} страниц")
 
