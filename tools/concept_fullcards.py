@@ -30,6 +30,7 @@ import json
 import sys
 import time
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -183,17 +184,26 @@ def write_cards(limit=None, force_peak=False):
     if limit:
         todo = todo[:limit]
     print(f"понятий без полной карточки: {len(todo)}")
-    for s in range(0, len(todo), PER_CALL):
-        batch = todo[s:s + PER_CALL]
+    batches = [todo[s:s + PER_CALL] for s in range(0, len(todo), PER_CALL)]
+
+    def one(batch):
         try:
-            got = ask_batch(batch, key)
+            return ask_batch(batch, key)
         except Exception as e:
-            print(f"  сбой пачки {s}: {e} — пауза и дальше")
-            time.sleep(5)
-            continue
-        done.update(got)
-        OUT.write_text(json.dumps(done, ensure_ascii=False, indent=1), encoding="utf-8")
-        print(f"  {len(done)} готово (+{len(got)})")
+            print(f"  сбой пачки: {e}")
+            return {}
+
+    # Шесть пачек разом. Ночью 27.08 этот шаг писал две тысячи карточек четыре
+    # часа — по пятнадцать в минуту, и почти всё это время процесс ждал ответа.
+    # Копилка пишется из главного потока: она уже страдала от обрыва на записи,
+    # и класть в неё из нескольких потоков нельзя.
+    with ThreadPoolExecutor(max_workers=6) as ex:
+        for i, got in enumerate(ex.map(one, batches), 1):
+            done.update(got)
+            if i % 4 == 0 or i == len(batches):
+                OUT.write_text(json.dumps(done, ensure_ascii=False, indent=1),
+                               encoding="utf-8")
+                print(f"  {len(done)} готово", flush=True)
     # вливаем в живой справочник — страницы возьмут при перегенерации
     live_all = json.loads(LIVE.read_text(encoding="utf-8"))
     for cid, rec in done.items():
