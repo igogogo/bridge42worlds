@@ -36,7 +36,7 @@
                  и каждый новый раздел дописывали в оба, отчего шапка росла сама собой.
                  В шапке держим ПЯТЬ основных; остальное открывается кнопкой «ещё». -->
             <a href="/lang/$lang/index.html">main</a>
-            <a href="/lang/$lang/laws/">concepts</a>
+            <a href="/lang/$lang/concepts/">concepts</a>
             <a href="/lang/$lang/scientists/">scientists</a>
             <a href="/lang/$lang/sections/">sections</a>
             <a href="/learn.html" title="learn" class="nav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.5A2 2 0 0 1 6 5h5v14H6a2 2 0 0 0-2 1.5z"/><path d="M20 6.5A2 2 0 0 0 18 5h-5v14h5a2 2 0 0 1 2 1.5z"/></svg></a>
@@ -74,11 +74,11 @@ $author_portrait_html
 <div class="related-tags related-tag" aria-label="$tags_label">$author_tags_html</div>
 <div class="related-tags related-laws" aria-label="$laws_label">$author_laws_html</div>
 
-<!-- мини-граф автора убран по просьбе юзера (не до конца понятно как правильно строить/показывать) —
-     разметка/данные не удалены, просто закомментированы, чтобы быстро вернуть, когда решим как:
+<!-- Мини-граф автора вернулся 27.08 на движке волны 5: узлы — понятия его
+     работ, рёбра — их внутренние связи. Прежний убирали, потому что старый граф
+     тег/закон/учёный не давал внятной картины по автору. -->
 <div class="mini-graph-label"><svg class="ico-graph" viewBox="0 0 25 25" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7"><line x1="4.5" y1="7" x2="20.5" y2="5"/><line x1="5.5" y1="9" x2="12" y2="20"/><line x1="20" y1="7" x2="13.5" y2="20"/></g><g fill="currentColor"><circle cx="4.5" cy="7" r="2.9"/><circle cx="20.5" cy="5" r="2.9"/><circle cx="12.5" cy="21" r="2.9"/></g></svg> $graph_mini_label</div>
-<div class="mini-graph" data-author="$author_name_attr" data-tags="$author_tags_attr"><canvas id="minigraph"></canvas></div>
--->
+<div class="b42mini" data-ids="$mini_ids"></div>
 
 <div class="filters" id="active-filters"></div>
 </div>
@@ -96,5 +96,7 @@ $author_portrait_html
 <!-- force-graph.js/author-graph.js — мини-граф автора, см. комментарий выше в разметке -->
 
 <script src="/js/beta-banner.js" defer></script>
+<script src="/js/b42-graph-core.js"></script>
+<script src="/js/b42-mini.js" defer></script>
 </body>
 </html>

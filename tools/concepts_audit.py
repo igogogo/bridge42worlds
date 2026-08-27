@@ -160,6 +160,8 @@ h1 {{ font-size: 24px; margin: 26px 0 4px; }}
 h2 {{ font-size: 16px; margin: 30px 0 8px; }}
 .sub {{ color: var(--soft); font-size: 13px; margin-bottom: 8px; }}
 table {{ border-collapse: collapse; width: 100%; font-size: 13px; }}
+/* на телефоне таблицы прокручиваются сами, а не растягивают страницу */
+@media (max-width: 720px) {{ table {{ display: block; overflow-x: auto; }} }}
 td, th {{ padding: 3px 10px 3px 0; border-bottom: 1px solid var(--hairline);
   text-align: left; }}
 th {{ font-family: var(--mono); font-size: 10.5px; color: var(--soft);

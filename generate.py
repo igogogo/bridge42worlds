@@ -957,6 +957,67 @@ def formulas_of_article(aid):
     return _FML_BY_ART.get(aid) or _FML_BY_ART.get(aid.split("v")[0]) or []
 
 
+_LIVE_MINI = None
+
+
+def _live_mini():
+    """Живой реестр понятий для мини-графов сущностей — читаем один раз."""
+    global _LIVE_MINI
+    if _LIVE_MINI is None:
+        p = Path("data/concepts-live.json")
+        try:
+            _LIVE_MINI = json.loads(p.read_text(encoding="utf-8"))["concepts"]
+        except (OSError, KeyError, json.JSONDecodeError):
+            _LIVE_MINI = {}
+    return _LIVE_MINI
+
+
+def mini_ids_concept(cid, cap=12):
+    """Эго-набор понятия: оно само, соседи по весу, его формулы.
+    Для страниц тега и закона — их id совпадает с id понятия."""
+    live = _live_mini()
+    v = live.get(cid)
+    if not v:
+        return ""
+    ids = [cid] + [r["id"] for r in (v.get("related") or [])[:cap - 4]
+                   if r["id"] in live]
+    ids += [f'f:{f["id"]}' for f in (v.get("formulas") or [])[:3]]
+    return ",".join(dict.fromkeys(ids)) if len(ids) >= 3 else ""
+
+
+_SCI_CONCEPTS = None
+
+
+def mini_ids_scientist(name, cap=12):
+    """Понятия, с которыми связан учёный: обратный индекс live.scientists."""
+    global _SCI_CONCEPTS
+    live = _live_mini()
+    if _SCI_CONCEPTS is None:
+        _SCI_CONCEPTS = {}
+        for cid, v in live.items():
+            for s in v.get("scientists") or []:
+                _SCI_CONCEPTS.setdefault(s.get("name", ""), []).append(
+                    (s.get("n", 0), cid))
+        for k in _SCI_CONCEPTS:
+            _SCI_CONCEPTS[k].sort(reverse=True)
+    rows = _SCI_CONCEPTS.get(name) or []
+    ids = [cid for _, cid in rows[:cap]]
+    return ",".join(ids) if len(ids) >= 3 else ""
+
+
+def mini_ids_articles(aids, lang=None, cap=12):
+    """Понятия набора статей (автор, раздел): самые частые по разметке v2."""
+    live = _live_mini()
+    cnt = {}
+    for cid, v in live.items():
+        for a in v.get("articles") or []:
+            if a in aids:
+                cnt[cid] = cnt.get(cid, 0) + 1
+    top = sorted(cnt.items(), key=lambda kv: -kv[1])[:cap]
+    ids = [c for c, _ in top]
+    return ",".join(ids) if len(ids) >= 3 else ""
+
+
 def entity_article_card(a, lang):
     """Карточка статьи в списках справочников (тег/закон/учёный/раздел/автор) — единый вид с
     лентой: миниатюра-обложка + название + короткий текст (юзер 2026-07-24: «список с картинками
@@ -2961,6 +3022,7 @@ def generate_tag_page(tag_id, lang):
         related_tags_html=related_html, search_placeholder=safe(loc["search"]),
         search_hint=safe(loc["hint"]), graph_mini_label=safe(MINI_LABEL.get(lang, MINI_LABEL["en"])),
         mini_graph_filters_html=mini_graph_filters_html(lang, "tag"),
+        mini_ids=mini_ids_concept(tag_id),
         articles_list_html=articles_html or f'<p>{safe(loc["no_articles"])}</p>', footer_text=safe(loc["footer"])
     ), encoding="utf-8")
 
@@ -3399,6 +3461,7 @@ def generate_law_page(law_id, lang):
         related_laws_block=related_laws_block,
         graph_mini_label=safe(MINI_LABEL.get(lang, MINI_LABEL["en"])), law_id=attr_safe(law_id),
         mini_graph_filters_html=mini_graph_filters_html(lang, "law"),
+        mini_ids=mini_ids_concept(law_id),
         articles_label=safe(loc["articles"]), article_count=law_article_count,
         tag_stats_html=(f'<div class="tag-stats"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><line x1="6.5" y1="19" x2="6.5" y2="13"/><line x1="12" y1="19" x2="12" y2="8.5"/><line x1="17.5" y1="19" x2="17.5" y2="11"/><line x1="4" y1="19.5" x2="20" y2="19.5"/></svg> <a class="stat-jump" href="#article-list">{law_article_count} {safe(loc["articles"])}</a></div>'
                          if law_article_count else ""),
@@ -3725,6 +3788,7 @@ def generate_scientist_page(sid, lang):
         search_placeholder=safe(loc["search"]),
         search_hint=safe(loc["hint"]), graph_mini_label=safe(MINI_LABEL.get(lang, MINI_LABEL["en"])),
         mini_graph_filters_html=mini_graph_filters_html(lang, "sci"),
+        mini_ids=mini_ids_scientist(sid),
         articles_list_html=articles_html or f'<p>{safe(loc["no_articles"])}</p>', footer_text=safe(loc["footer"])
     ), encoding="utf-8")
 
@@ -4128,6 +4192,8 @@ def update_all_authors():
             _write_text_retry(Path(LANG_DIR) / lang / "authors" / f"{slug}.html", tpl_page.substitute(
                 author_portrait_html=portrait_html,
                 s2_html=s2_block(author_name),
+                # мини-граф автора: понятия его работ и их внутренние связи
+                mini_ids=mini_ids_articles(set(data.get("articles", []))),
                 author_desc=attr_safe(author_desc),
                 author_url=f"{SITE_URL}/{LANG_DIR}/en/authors/{slug}.html",
                 lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang="en", asset_ver=asset_ver(),

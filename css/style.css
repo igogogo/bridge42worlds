@@ -96,7 +96,10 @@ html[lang="ar"] .discoveries-list { padding-left: 0; padding-right: 20px; }
        Карточки листаются взглядом, им ширина не мешает. */
     /* Ширина страницы = содержимое + поля. Содержимое живёт в --w-text (см. ниже,
        там же историческое объяснение), поля 16+16 из body. */
-    --w-page: 780px;   --w-read: 62ch;
+    /* ОДНА колонка на весь сайт (владелец 27.08: «меню и текст должны быть
+       одной ширины»): 700 — читаемая строка ~74 знака при 16.5px, и при ней
+       шапка, лента, статья, понятие, автор кончаются на одной вертикали. */
+    --w-page: 700px;   --w-read: 62ch;
     /* Лампа из набора для ::before врезки — рисунок один в один с B42Icons.lamp */
     --ic-lamp: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18h6'/%3E%3Cpath d='M10 21h4'/%3E%3Cpath d='M12 3a6 6 0 0 0-3.5 10.9c.6.4.9 1 .9 1.7v.4h5.2v-.4c0-.7.3-1.3.9-1.7A6 6 0 0 0 12 3z'/%3E%3C/svg%3E");
     /* Шрифты — системные, по design-system.md (совпадают с About/деком, без веб-шрифтов) */
@@ -542,8 +545,14 @@ body {
    потому что на телефоне контент шире её 620px. z-index поднят до 90: у формул и
    раскрывашек статьи свои контексты наложения, 50 они местами перебивали. */
 .top-bar::before {
-    content: ""; position: absolute; left: -24px; right: -24px;
+    /* Полоса шире шапки нужна, чтобы на телефоне контент не просвечивал по краям.
+       Раньше она выпирала на 24px за края геометрией (left/right: -24px) и тянула
+       горизонтальную прокрутку всей страницы — 8px на 375px (замер 27.08; элемент
+       невидим для DOM-обхода, поэтому искали долго). Теперь та же полоса рисуется
+       тенью: box-shadow не участвует в раскладке и прокрутку не создаёт. */
+    content: ""; position: absolute; left: 0; right: 0;
     top: -24px; height: 24px; background: var(--bg);
+    box-shadow: 0 0 0 24px var(--bg);
 }
 .logo {
     font-family: 'Source Serif 4', 'Georgia', serif;
@@ -2242,7 +2251,9 @@ html[dir="rtl"] .cov-bar-tot, html[dir="rtl"] .cov-bar-take { left: auto; right:
        страницы (--w-page 780 минус поля 16+16), а не назначена отдельно. Разница
        между «текстом» и «широким» исчезла вместе с боковой колонкой статьи —
        отличаться широкому больше не от чего. */
-    --w-text: 748px; --w-wide: 748px;
+    /* 27.08: колонка сузилась до 700 — содержимое выводится из неё же
+       (700 минус поля 16+16 = 668), иначе внутренние блоки шире страницы. */
+    --w-text: 668px; --w-wide: 668px;
 }
 /* Иконки правого кластера: один размер, одна высота, по центру, ровная строка */
 .header-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; row-gap: 4px; }
@@ -4502,3 +4513,23 @@ body.entity-page .ent-pane p,
 body.entity-page .entity-body p { max-width: none; }
 /* Полноэкранный граф колонкой не ограничен — у него своя сцена. */
 body.graph-page { max-width: none; }
+
+/* ═══ Мобильная шапка: перенос вместо выпирания ═══
+   Замер 27.08 на 375px: .top-bar имела scrollWidth 352 при clientWidth 328 —
+   логотип, меню и кнопки не помещались в строку и толкали страницу на 8px
+   вправо. Переносим ряд и внутренние группы; ничего не режем. */
+@media (max-width: 620px) {
+    .top-bar { flex-wrap: wrap; row-gap: 6px; }
+    .top-bar .header-right { flex-wrap: wrap; min-width: 0; row-gap: 6px; }
+    .nav-links { flex-wrap: wrap; min-width: 0; }
+    .logo-wrap { min-width: 0; }
+    .logo-info { flex: none; }
+}
+
+/* Широкие таблицы (аудит, дашборд, разбор символов формулы) прокручиваются
+   сами, а не растягивают страницу. */
+.table-scroll, .entity-body table, .reco table { max-width: 100%; }
+@media (max-width: 720px) {
+    .entity-body table, main table, body > table { display: block;
+        overflow-x: auto; -webkit-overflow-scrolling: touch; }
+}

@@ -29,7 +29,7 @@
                  и каждый новый раздел дописывали в оба, отчего шапка росла сама собой.
                  В шапке держим ПЯТЬ основных; остальное открывается кнопкой «ещё». -->
             <a href="/lang/$lang/index.html">main</a>
-            <a href="/lang/$lang/laws/" class="active">concepts</a>
+            <a href="/lang/$lang/concepts/" class="active">concepts</a>
             <a href="/lang/$lang/scientists/">scientists</a>
             <a href="/lang/$lang/sections/">sections</a>
             <a href="/learn.html" title="learn" class="nav-ic"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.5A2 2 0 0 1 6 5h5v14H6a2 2 0 0 0-2 1.5z"/><path d="M20 6.5A2 2 0 0 0 18 5h-5v14h5a2 2 0 0 1 2 1.5z"/></svg></a>
@@ -84,7 +84,7 @@
 <div class="entity-wrapper">
 <div class="entity-body">
 <div class="mini-graph-config">$mini_graph_filters_html</div>
-<div class="mini-graph" data-node="l:$law_id"><canvas id="minigraph"></canvas></div>
+<div class="b42mini" data-ids="$mini_ids" data-focus="$law_id"></div>
 
 $actions_html
 $feedback_html
@@ -104,8 +104,8 @@ $feedback_html
 <script src="/js/site-search.js"></script>
 <script src="/js/waiting.js"></script>
 <script src="/js/search-ui.js"></script>
-<script src="/js/force-graph.js"></script>
-<script src="/js/mini-graph.js"></script>
+<script src="/js/b42-graph-core.js"></script>
+<script src="/js/b42-mini.js" defer></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     if (window.logPageView) logPageView('$law_id', 'law', '$lang');
