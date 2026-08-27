@@ -5813,10 +5813,24 @@ def rebuild_indexes():
     except Exception:
         n_authors = 0
     n_express = sum(1 for b in buckets.values() for e in b["popular"] if e.get("express"))
+    # Понятия и формулы — в ту же строку статистики вместо «законов» и «тегов»:
+    # снаружи такой терминологии больше нет, а числа врали (175 и 368 при живом
+    # реестре 3231 — владелец увидел 27.08).
+    try:
+        n_concepts = len(json.loads(
+            Path("data/concepts-live.json").read_text(encoding="utf-8"))["concepts"])
+    except Exception:
+        n_concepts = 0
+    try:
+        n_formulas = len(json.loads((Path("..") / "b42-ml" / "data" /
+                                     "formulas-linked.json").read_text(encoding="utf-8"))["bases"])
+    except Exception:
+        n_formulas = 0
     Path("data/build-info.json").write_text(
         json.dumps({"built": datetime.date.today().isoformat(),
                     "articles": total, "authors": n_authors,
-                    "express": n_express, "full": total - n_express},
+                    "express": n_express, "full": total - n_express,
+                    "concepts": n_concepts, "formulas": n_formulas},
                    ensure_ascii=False), encoding="utf-8")
     # Снимок в памяти устарел — страницы, которые соберутся дальше в этом же прогоне,
     # должны видеть только что записанные индексы, а не то, что было до перезаписи.

@@ -563,11 +563,11 @@ window.ensureAuthorsGraph = ensureAuthorsGraph;
 // Служебная строка-статистика: всё в ОДНУ строку через « / » (юзер 2026-07-24) — статьи (полные +
 // express), законы, теги, разделы, учёные, авторы, языки. Ключи-подписи локализованы.
 var STATS_LABELS2 = {
-    ru: {articles:'статей', full:'полных', express:'экспресс', laws:'законов', tags:'тегов', sections:'разделов', scientists:'учёных', authors:'авторов', langs:'языка'},
-    en: {articles:'articles', full:'full', express:'express', laws:'laws', tags:'tags', sections:'sections', scientists:'scientists', authors:'authors', langs:'languages'},
-    es: {articles:'artículos', full:'completos', express:'exprés', laws:'leyes', tags:'etiquetas', sections:'secciones', scientists:'científicos', authors:'autores', langs:'idiomas'},
-    ar: {articles:'مقالات', full:'كاملة', express:'سريعة', laws:'قوانين', tags:'وسوم', sections:'أقسام', scientists:'علماء', authors:'مؤلفين', langs:'لغات'},
-    fr: {articles:'articles', full:'complets', express:'express', laws:'lois', tags:'tags', sections:'sections', scientists:'scientifiques', authors:'auteurs', langs:'langues'}
+    ru: {articles:'статей', full:'полных', express:'экспресс', concepts:'понятий', formulas:'формул', sections:'разделов', scientists:'учёных', authors:'авторов', langs:'языка'},
+    en: {articles:'articles', full:'full', express:'express', concepts:'concepts', formulas:'formulas', sections:'sections', scientists:'scientists', authors:'authors', langs:'languages'},
+    es: {articles:'artículos', full:'completos', express:'exprés', concepts:'conceptos', formulas:'fórmulas', sections:'secciones', scientists:'científicos', authors:'autores', langs:'idiomas'},
+    ar: {articles:'مقالات', full:'كاملة', express:'سريعة', concepts:'مفاهيم', formulas:'صيغ', sections:'أقسام', scientists:'علماء', authors:'مؤلفين', langs:'لغات'},
+    fr: {articles:'articles', full:'complets', express:'express', concepts:'concepts', formulas:'formules', sections:'sections', scientists:'scientifiques', authors:'auteurs', langs:'langues'}
 };
 function renderSiteStats() {
     var el = document.getElementById('site-stats');
@@ -581,8 +581,12 @@ function renderSiteStats() {
     searchIndex.forEach(function(a){ if (!uniq[a.id]) { uniq[a.id] = 1; if (a.express) express++; } });
     var nA = B.articles || Object.keys(uniq).length;
     var full = nA - (B.express || express);
-    var nL = Object.keys(window.lawsData || {}).length;
-    var nT = Object.keys(window.tagsLoc || {}).length;
+    /* Раньше строка считала «законы» и «теги» по старым справочникам и врала:
+       175 и 368 при живом реестре в 3231 понятие (владелец увидел 27.08 —
+       снаружи такой терминологии больше нет). Теперь понятия и формулы из
+       build-info, который пишет сборка. */
+    var nC = B.concepts || Object.keys(window.conceptsNames || {}).length;
+    var nF = B.formulas || 0;
     var nSec = Object.keys(window.ARXIV_CAT_NAMES || {}).length;
     var nS = Object.keys(window.scientistsData || {}).length;
     // Ноль здесь значил бы «авторов нет», а на самом деле значит «число ещё не
@@ -602,7 +606,7 @@ function renderSiteStats() {
     function part(n, w){ return '<b>' + kfmt(n) + '</b> ' + w; }
     var bits = [
         part(nA, L.articles),
-        part(nL, L.laws), part(nT, L.tags), part(nSec, L.sections),
+        part(nC, L.concepts), part(nF, L.formulas), part(nSec, L.sections),
         part(nS, L.scientists), part(nAu, L.authors), part(nLang, langWord)
     ].filter(function (s) { return s.indexOf('<b>0</b>') !== 0; });
     el.innerHTML = bits.join(' · ');
