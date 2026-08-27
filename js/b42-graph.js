@@ -1,20 +1,25 @@
-/* b42-graph — приложение-граф понятий, собственный движок без библиотек.
+/* b42-graph v3 — полноэкранное приложение-граф понятий. Свой движок, ноль библиотек.
 
-   Владелец 27.08: «разные значки, дриллдаун, панель навигации, 3D» и следом:
-   «динамично: подсветка, объём, разные представления; группы и классы
-   включать/выключать; панелька справа; информация, переходы; чтобы мигало,
-   крутилось, вертелось — высший класс».
+   Владелец 27.08 (третий заход): «во весь экран; больше прозрачности; иконки —
+   цвето-штрихографика, не просто фигурки; рёбра — играть толщиной; дриллдаун —
+   фокус остаётся, а не смена картинки; больше плавности; больше статистики;
+   шрифты — когда много, выделять главные, мельче, информативней; путь
+   исследователя; распределение несимметричное, с натяжениями, чтобы видна
+   структура; больше объёмных видов и представлений; панель без наездов,
+   тултипы; главное — визуальность, лёгкость, прозрачность».
 
-   УСТРОЙСТВО
-   Кадры (никогда не всё облако): overview 50 групп → group (члены + мостики)
-   → ego (понятие + соседи). Мощность ребра = ЧИСЛО ОБЩИХ СТАТЕЙ.
-   Представления: force (живая физика) · ring (кольцо секторами) · sphere (3D).
-   Панель справа: режимы 2D/3D/⟳, представление, порог мощности, классы
-   (вкл/выкл по формам), группы (вкл/выкл), карточка выбранного с переходами.
-   Динамика: плавные переходы кадров (tween по id), пульс выбранного, искры
-   вдоль его рёбер, автовращение, туман глубины в 3D.
-
-   Пока статикой на клиенте — «потренируемся»; в динамике кадры отдаст воркер. */
+   ЧТО ВНУТРИ
+   · кадры: обзор 50 групп → группа → эго; ребро = ЧИСЛО ОБЩИХ СТАТЕЙ
+   · непрерывный фокус: узел, в который проваливаешься, не прыгает — соседи
+     рождаются из его точки, камера плавно доезжает
+   · классы: свой цвет + свой штрих (двойной контур, диагональ, точка, сетка…)
+   · рёбра: квадратичные дуги, толщина/яркость от мощности, подсветка потока
+   · подписи: приоритет size·degree, анти-коллизия, три яруса шрифта
+   · тултип у курсора; статистика кадра и путь исследователя в панели
+   · раскладка с натяжениями: сильное ребро короче, хабы расталкивают сильнее,
+     к центру почти не тянет — видна структура, не шар
+   · представления: силы · кольцо · сфера · галактика · слои (3D по классам)
+   · всё на бренд-токенах, темы, прозрачность и лёгкость */
 (function () {
 'use strict';
 
@@ -24,7 +29,7 @@ var ctx = canvas.getContext('2d');
 var LANG = document.documentElement.lang || 'en';
 var RU = LANG === 'ru';
 
-/* ── токены бренда: граф живёт в теме сайта ── */
+/* ── токены ── */
 function tokens() {
     var cs = getComputedStyle(document.documentElement);
     function v(n, fb) { return (cs.getPropertyValue(n) || fb).trim() || fb; }
@@ -39,36 +44,56 @@ var TK = tokens();
 new MutationObserver(function () { TK = tokens(); }).observe(
     document.documentElement, {attributes: true, attributeFilter: ['data-theme']});
 
-/* ── классы: форма + подпись ── */
+/* ── классы: цвет + штрихографика ── */
 var KINDS = [
     {k: 'law+', shapes: ['law', 'principle', 'theorem', 'equation'], sh: 'sq',
+     color: '#4a7ab5', hatch: 'double',
      ru: 'закон · принцип', en: 'law · principle'},
     {k: 'method+', shapes: ['method', 'process'], sh: 'di',
+     color: '#b8860b', hatch: 'diag',
      ru: 'метод · процесс', en: 'method · process'},
     {k: 'phen+', shapes: ['phenomenon', 'effect'], sh: 'tr',
+     color: '#0d7d8c', hatch: 'rays',
      ru: 'явление · эффект', en: 'phenomenon · effect'},
     {k: 'obj+', shapes: ['object', 'substance', 'structure'], sh: 'ring',
+     color: '#8a6db1', hatch: 'ring',
      ru: 'объект · вещество', en: 'object · substance'},
     {k: 'instr+', shapes: ['instrument', 'experiment'], sh: 'hex',
+     color: '#5f8d4e', hatch: 'dot',
      ru: 'прибор', en: 'instrument'},
-    {k: 'math', shapes: ['math'], sh: 'cross', ru: 'математика', en: 'math'},
+    {k: 'math', shapes: ['math'], sh: 'circle',
+     color: '#a05c65', hatch: 'grid',
+     ru: 'математика', en: 'math'},
     {k: 'units+', shapes: ['quantity', 'constant', 'unit', 'unit_system'],
-     sh: 'pent', ru: 'величины · единицы', en: 'quantities · units'},
-    {k: 'rest', shapes: [], sh: 'circle', ru: 'понятие', en: 'concept'},
+     sh: 'pent', color: '#767c85', hatch: 'horiz',
+     ru: 'величины · единицы', en: 'quantities · units'},
+    {k: 'rest', shapes: [], sh: 'circle', color: '#6b7f8c', hatch: 'none',
+     ru: 'понятие', en: 'concept'},
 ];
-var kindBucket = {};
+var kindBucket = {}, kindStyle = {};
 KINDS.forEach(function (K) {
+    kindStyle[K.k] = K;
     K.shapes.forEach(function (s) { kindBucket[s] = K.k; });
 });
 function bucketOf(kind) { return kindBucket[kind] || 'rest'; }
-function shapeOf(kind) {
-    var b = bucketOf(kind);
-    for (var i = 0; i < KINDS.length; i++) if (KINDS[i].k === b) return KINDS[i].sh;
-    return 'circle';
+function styleOf(kind, nd) {
+    if (kind !== '_group') return kindStyle[bucketOf(kind)];
+    return {sh: 'circle', color: (nd && nd.color) || TK.cyan, hatch: 'none'};
+}
+
+function groupColor(g) {
+    var cnt = {};
+    g.members.forEach(function (m) {
+        var b = bucketOf(G.nodes[m].kind);
+        cnt[b] = (cnt[b] || 0) + 1;
+    });
+    var best = 'rest', n = -1;
+    Object.keys(cnt).forEach(function (k) { if (cnt[k] > n) { n = cnt[k]; best = k; } });
+    return kindStyle[best].color;
 }
 
 /* ── данные ── */
-var G = null, adj = null;
+var G = null, adj = null, deg = null;
 fetch('/data/concepts-graph.json').then(function (r) { return r.json(); })
     .then(function (d) {
         G = d;
@@ -77,6 +102,7 @@ fetch('/data/concepts-graph.json').then(function (r) { return r.json(); })
             adj[e[0]].push([e[1], e[2]]);
             adj[e[1]].push([e[0], e[2]]);
         });
+        deg = adj.map(function (a) { return a.length; });
         buildPanel();
         showOverview();
     });
@@ -84,36 +110,41 @@ function nodeName(n) { return (RU && n.ru) ? n.ru : n.en; }
 function groupLabel(g) { return (RU && g.label_ru) ? g.label_ru : g.label_en; }
 
 /* ── состояние ── */
-var frame = {mode: 'overview', nodes: [], edges: [], raw: null};
+var frame = {mode: 'overview', nodes: [], edges: []};
 var view = {is3d: false, layout: 'force', spin: false, minW: 2,
-            zoom: 1, panX: 0, panY: 0, rotX: -0.35, rotY: 0.5};
+            zoom: 1, zoomT: 1, panX: 0, panY: 0, panTX: 0, panTY: 0,
+            rotX: -0.35, rotY: 0.5};
 var kindOn = {};
 KINDS.forEach(function (K) { kindOn[K.k] = true; });
-var groupOn = null;         // null = все; иначе Set индексов групп
-var trail = [];
+var groupOn = null;
+var trail = [], path = [];        // путь исследователя: посещённые эго
 var hoverI = -1, selI = -1;
 var sim = {vx: [], vy: [], vz: [], alive: 0};
-var sparks = [];            // искры по рёбрам выбранного
+var sparks = [];
 var T0 = performance.now();
 
-/* ── фильтры кадра ── */
 function nodeVisible(nd) {
     if (nd.kind !== '_group' && !kindOn[bucketOf(nd.kind)]) return false;
-    if (groupOn && nd.g !== undefined && nd.g !== null &&
-        nd.kind !== '_group' && !groupOn.has(nd.g)) return false;
+    if (groupOn && nd.kind !== '_group' &&
+        nd.g !== undefined && nd.g !== null && !groupOn.has(nd.g)) return false;
     return true;
 }
 
-/* ── сборка кадров (переход: старые позиции по id переезжают) ── */
-function setFrame(mode, nodes, edges) {
+/* ── кадры: фокус НЕ прыгает — новые узлы рождаются из точки фокуса ── */
+function setFrame(mode, nodes, edges, focusKey) {
     var prev = {};
-    frame.nodes.forEach(function (nd) {
-        prev[nd.key] = [nd.x, nd.y, nd.z];
-    });
-    frame = {mode: mode, nodes: nodes, edges: edges};
+    frame.nodes.forEach(function (nd) { prev[nd.key] = [nd.x, nd.y, nd.z]; });
+    var seed = focusKey && prev[focusKey] ? prev[focusKey] : null;
+    var wMax = 1;
+    edges.forEach(function (e) { if (e[2] > wMax) wMax = e[2]; });
+    frame = {mode: mode, nodes: nodes, edges: edges, wMax: wMax};
     hoverI = -1;
-    seedLayout(prev);
-    renderCrumbs(); renderInfo();
+    autoFit = true;
+    seedLayout(prev, seed);
+    /* камера плавно доезжает так, чтобы фокус оказался в центре */
+    if (seed) { view.panTX = -seed[0]; view.panTY = -seed[1]; }
+    else { view.panTX = 0; view.panTY = 0; }
+    renderCrumbs(); renderInfo(); renderStats(); renderPath();
 }
 
 function showOverview() {
@@ -121,7 +152,7 @@ function showOverview() {
         var n = 0;
         g.members.forEach(function (m) { n += G.nodes[m].n; });
         return {key: 'g' + i, gi: i, label: groupLabel(g), n: n, kind: '_group',
-                g: i, size: Math.max(10, Math.sqrt(n) * 1.1)};
+                g: i, color: groupColor(g), size: 7 + Math.log2(2 + n) * 2.3};
     });
     var gw = {};
     G.edges.forEach(function (e) {
@@ -130,13 +161,26 @@ function showOverview() {
         var k = Math.min(a, b) + ':' + Math.max(a, b);
         gw[k] = (gw[k] || 0) + e[2];
     });
-    var edges = [];
+    var per = {};
     Object.keys(gw).forEach(function (k) {
         var p = k.split(':');
-        if (gw[k] >= 4) edges.push([+p[0], +p[1], gw[k]]);
+        (per[+p[0]] = per[+p[0]] || []).push([gw[k], +p[1]]);
+        (per[+p[1]] = per[+p[1]] || []).push([gw[k], +p[0]]);
+    });
+    var keep = {};
+    Object.keys(per).forEach(function (a) {
+        per[a].sort(function (x, y) { return y[0] - x[0]; })
+            .slice(0, 4).forEach(function (t) {
+                var b = t[1];
+                keep[Math.min(a, b) + ':' + Math.max(a, b)] = t[0];
+            });
+    });
+    var edges = Object.keys(keep).map(function (k) {
+        var p = k.split(':');
+        return [+p[0], +p[1], keep[k]];
     });
     trail = [{mode: 'overview', label: RU ? 'Обзор' : 'Overview'}];
-    selI = -1;
+    selI = -1; sparks = [];
     setFrame('overview', nodes, edges);
 }
 
@@ -146,10 +190,9 @@ function frameFromIds(ids, centerFirst) {
     var nodes = ids.map(function (id, i) {
         var n = G.nodes[id];
         return {key: 'n' + id, ni: id, label: nodeName(n), n: n.n, kind: n.kind,
-                g: n.g, center: centerFirst && i === 0,
-                out: false,
-                size: Math.max(5, Math.sqrt(n.n) * 2.2) *
-                      (centerFirst && i === 0 ? 1.6 : 1)};
+                g: n.g, center: centerFirst && i === 0, out: false,
+                size: Math.max(4.5, Math.sqrt(n.n) * 2.1) *
+                      (centerFirst && i === 0 ? 1.5 : 1)};
     });
     var edges = [], seen = {};
     ids.forEach(function (id) {
@@ -160,10 +203,10 @@ function frameFromIds(ids, centerFirst) {
             if (!seen[k]) { seen[k] = 1; edges.push([a, b, p[1]]); }
         });
     });
-    return {nodes: nodes, edges: edges, pos: pos};
+    return {nodes: nodes, edges: edges};
 }
 
-function showGroup(gi, pushCrumb) {
+function showGroup(gi, pushCrumb, focusKey) {
     var g = G.groups[gi];
     var inSet = {};
     g.members.forEach(function (m) { inSet[m] = 1; });
@@ -184,8 +227,8 @@ function showGroup(gi, pushCrumb) {
         trail = trail.filter(function (c) { return c.mode === 'overview'; });
         trail.push({mode: 'group', arg: gi, label: groupLabel(g)});
     }
-    selI = -1;
-    setFrame('group', f.nodes, f.edges);
+    selI = -1; sparks = [];
+    setFrame('group', f.nodes, f.edges, focusKey || ('g' + gi));
 }
 
 function showEgo(ni, pushCrumb) {
@@ -197,86 +240,145 @@ function showEgo(ni, pushCrumb) {
         trail = trail.filter(function (c) { return c.mode !== 'ego'; });
         trail.push({mode: 'ego', arg: ni, label: nodeName(G.nodes[ni])});
     }
-    setFrame('ego', f.nodes, f.edges);
+    if (!path.length || path[path.length - 1] !== ni) path.push(ni);
+    if (path.length > 14) path.shift();
+    setFrame('ego', f.nodes, f.edges, 'n' + ni);
     selI = 0;
     igniteSparks();
     renderInfo();
 }
 
 /* ── раскладки ── */
-function seedLayout(prev) {
+function seedLayout(prev, seed) {
     var N = frame.nodes.length;
     for (var i = 0; i < N; i++) {
         var nd = frame.nodes[i];
         var p = prev && prev[nd.key];
         if (p) { nd.x = p[0]; nd.y = p[1]; nd.z = p[2]; }
-        else {
+        else if (seed) {
+            /* рождение из точки фокуса — дриллдаун без «смены картинки» */
+            var a0 = Math.random() * Math.PI * 2;
+            var r0 = 14 + Math.random() * 30;
+            nd.x = seed[0] + Math.cos(a0) * r0;
+            nd.y = seed[1] + Math.sin(a0) * r0;
+            nd.z = seed[2] + (view.is3d ? (Math.random() - 0.5) * r0 : 0);
+        } else {
             var a = (i / Math.max(1, N)) * Math.PI * 2 * 3.883;
             var r = 40 + 24 * Math.sqrt(i);
             nd.x = Math.cos(a) * r; nd.y = Math.sin(a) * r;
             nd.z = view.is3d ? (Math.random() - 0.5) * r : 0;
         }
-        nd.tx = null;         // цель tween для фиксированных раскладок
+        nd.tx = null;
     }
     sim.vx = new Array(N).fill(0);
     sim.vy = new Array(N).fill(0);
     sim.vz = new Array(N).fill(0);
-    sim.alive = 260;
+    sim.alive = 320;
     if (view.layout !== 'force') applyFixedLayout();
 }
 
-function applyFixedLayout() {
-    var vis = [];
-    frame.nodes.forEach(function (nd, i) { if (nodeVisible(nd)) vis.push(i); });
-    var N = vis.length || 1;
-    if (view.layout === 'ring') {
-        /* кольцо секторами: сортировка по группе, затем по классу — родня рядом */
-        var order = vis.slice().sort(function (a, b) {
-            var A = frame.nodes[a], B = frame.nodes[b];
-            return (A.g - B.g) || (bucketOf(A.kind) < bucketOf(B.kind) ? -1 : 1);
-        });
-        var R = 60 + N * 3.1;
-        order.forEach(function (idx, i) {
-            var a = (i / N) * Math.PI * 2 - Math.PI / 2;
-            var nd = frame.nodes[idx];
-            nd.tx = [Math.cos(a) * R, Math.sin(a) * R, 0];
-        });
-    } else if (view.layout === 'sphere') {
-        /* фибоначчиева сфера — «объём» */
-        var R2 = 60 + N * 1.9;
-        vis.forEach(function (idx, i) {
-            var y = 1 - (i / Math.max(1, N - 1)) * 2;
-            var rad = Math.sqrt(1 - y * y);
-            var th = 2.39996 * i;
-            var nd = frame.nodes[idx];
-            nd.tx = [Math.cos(th) * rad * R2, y * R2, Math.sin(th) * rad * R2];
-        });
-        if (!view.is3d) set3d(true);
-    }
-    sim.alive = 260;
+function visIdx() {
+    var out = [];
+    frame.nodes.forEach(function (nd, i) { if (nodeVisible(nd)) out.push(i); });
+    return out;
 }
 
+function applyFixedLayout() {
+    var vis = visIdx();
+    var N = vis.length || 1;
+    var i, nd;
+    if (view.layout === 'ring') {
+        var order = vis.slice().sort(function (a, b) {
+            var A = frame.nodes[a], B = frame.nodes[b];
+            return ((A.g || 0) - (B.g || 0)) ||
+                   (bucketOf(A.kind) < bucketOf(B.kind) ? -1 : 1);
+        });
+        var R = 60 + N * 3.1;
+        order.forEach(function (idx, j) {
+            var a = (j / N) * Math.PI * 2 - Math.PI / 2;
+            frame.nodes[idx].tx = [Math.cos(a) * R, Math.sin(a) * R, 0];
+        });
+    } else if (view.layout === 'sphere') {
+        var R2 = 60 + N * 1.9;
+        vis.forEach(function (idx, j) {
+            var y = 1 - (j / Math.max(1, N - 1)) * 2;
+            var rad = Math.sqrt(1 - y * y), th = 2.39996 * j;
+            frame.nodes[idx].tx =
+                [Math.cos(th) * rad * R2, y * R2, Math.sin(th) * rad * R2];
+        });
+        if (!view.is3d) set3d(true);
+    } else if (view.layout === 'galaxy') {
+        /* рукава по группам: каждая группа — свой рукав лог-спирали */
+        var byG = {};
+        vis.forEach(function (idx) {
+            var g = frame.nodes[idx].g || 0;
+            (byG[g] = byG[g] || []).push(idx);
+        });
+        var arms = Object.keys(byG);
+        arms.forEach(function (g, ai) {
+            var arm = byG[g];
+            arm.sort(function (a, b) { return frame.nodes[b].n - frame.nodes[a].n; });
+            var base = (ai / arms.length) * Math.PI * 2;
+            arm.forEach(function (idx, j) {
+                var t = j / Math.max(1, arm.length - 1);
+                var ang = base + t * 2.2;
+                var r = 34 + t * (70 + arm.length * 6);
+                frame.nodes[idx].tx =
+                    [Math.cos(ang) * r, Math.sin(ang) * r,
+                     view.is3d ? (Math.random() - 0.5) * 26 : 0];
+            });
+        });
+    } else if (view.layout === 'layers') {
+        /* этажи по классам в 3D — объёмный вид структуры */
+        if (!view.is3d) set3d(true);
+        var byK = {};
+        vis.forEach(function (idx) {
+            var b = bucketOf(frame.nodes[idx].kind);
+            (byK[b] = byK[b] || []).push(idx);
+        });
+        var ks = KINDS.map(function (K) { return K.k; })
+            .filter(function (k) { return byK[k]; });
+        ks.forEach(function (k, ki) {
+            var lvl = (ki - (ks.length - 1) / 2) * 62;
+            var arr = byK[k];
+            arr.forEach(function (idx, j) {
+                var a = (j / arr.length) * Math.PI * 2 * 3.883;
+                var r = 26 + 15 * Math.sqrt(j);
+                frame.nodes[idx].tx =
+                    [Math.cos(a) * r, lvl, Math.sin(a) * r];
+            });
+        });
+    }
+    sim.alive = 320;
+    autoFit = true;
+}
+
+/* натяжения: сильное ребро — коротко и жёстко; хабы расталкивают сильнее;
+   к центру почти не тянет — структура вытягивается, а не сворачивается в шар */
 function tick() {
     if (sim.alive <= 0) return;
     sim.alive--;
     var n = frame.nodes, N = n.length, i, j;
     if (view.layout !== 'force') {
-        /* tween к целям фиксированной раскладки */
         for (i = 0; i < N; i++) {
             if (!n[i].tx) continue;
-            n[i].x += (n[i].tx[0] - n[i].x) * 0.14;
-            n[i].y += (n[i].tx[1] - n[i].y) * 0.14;
-            n[i].z += (n[i].tx[2] - n[i].z) * 0.14;
+            n[i].x += (n[i].tx[0] - n[i].x) * 0.12;
+            n[i].y += (n[i].tx[1] - n[i].y) * 0.12;
+            n[i].z += (n[i].tx[2] - n[i].z) * 0.12;
         }
+        if (sim.alive % 24 === 0) fitView();
         return;
     }
-    var K = 1300;
     for (i = 0; i < N; i++) {
         if (!nodeVisible(n[i])) continue;
         for (j = i + 1; j < N; j++) {
             if (!nodeVisible(n[j])) continue;
             var dx = n[j].x - n[i].x, dy = n[j].y - n[i].y, dz = n[j].z - n[i].z;
             var d2 = dx * dx + dy * dy + dz * dz + 40;
+            /* хабы расталкивают сильнее, но с кэпом — иначе крупные группы
+               обзора разгоняли облако за экран (поймано глазами 27.08) */
+            var K = 620 * Math.sqrt(
+                Math.min(24, n[i].size + 2) * Math.min(24, n[j].size + 2)) * 0.22;
             var f = K / d2, d = Math.sqrt(d2);
             dx /= d; dy /= d; dz /= d;
             sim.vx[i] -= dx * f; sim.vy[i] -= dy * f; sim.vz[i] -= dz * f;
@@ -289,22 +391,61 @@ function tick() {
         if (!nodeVisible(n[a]) || !nodeVisible(n[b])) return;
         var dx = n[b].x - n[a].x, dy = n[b].y - n[a].y, dz = n[b].z - n[a].z;
         var d = Math.sqrt(dx * dx + dy * dy + dz * dz) + 0.01;
-        var target = 90 / Math.log(2 + e[2]);
-        var f = (d - target) * 0.00024 * d;
+        var wl = Math.log(1 + e[2]);
+        var target = 155 / (1 + wl * 0.42);        // мощное — заметно короче
+        if (frame.mode === 'overview') target = 150 + 60 / (1 + wl * 0.2);
+        var stiff = 0.00016 * (1 + wl * 0.5);      // и жёстче: натяжение видно
+        /* сила ограничена: на тяжёлых рёбрах обзора (веса — тысячи) f растёт
+           как d² и за два тика взрывала симуляцию в NaN (поймано 27.08) */
+        var f = (d - target) * stiff * Math.min(d, 240);
+        if (f > 10) f = 10; else if (f < -10) f = -10;
         dx /= d; dy /= d; dz /= d;
         sim.vx[a] += dx * f; sim.vy[a] += dy * f; sim.vz[a] += dz * f;
         sim.vx[b] -= dx * f; sim.vy[b] -= dy * f; sim.vz[b] -= dz * f;
     });
     for (i = 0; i < N; i++) {
-        sim.vx[i] = (sim.vx[i] - n[i].x * 0.003) * 0.85;
-        sim.vy[i] = (sim.vy[i] - n[i].y * 0.003) * 0.85;
-        sim.vz[i] = (sim.vz[i] - n[i].z * 0.003) * 0.85;
+        sim.vx[i] = (sim.vx[i] - n[i].x * 0.0012) * 0.86;
+        sim.vy[i] = (sim.vy[i] - n[i].y * 0.0012) * 0.86;
+        sim.vz[i] = (sim.vz[i] - n[i].z * 0.0012) * 0.86;
+        /* предельная скорость — вторая страховка устойчивости */
+        var sp = Math.sqrt(sim.vx[i] * sim.vx[i] + sim.vy[i] * sim.vy[i] +
+                           sim.vz[i] * sim.vz[i]);
+        if (sp > 26) {
+            var kk = 26 / sp;
+            sim.vx[i] *= kk; sim.vy[i] *= kk; sim.vz[i] *= kk;
+        }
         n[i].x += sim.vx[i]; n[i].y += sim.vy[i];
         if (view.is3d) n[i].z += sim.vz[i]; else n[i].z = 0;
     }
+    if (sim.alive % 24 === 0) fitView();
 }
 
-/* ── проекция ── */
+/* авто-вписывание: облако всегда в кадре, что бы физика ни устроила.
+   Мягко — целями zoomT/panT, камера сама доедет с ease. Пока пользователь
+   не трогал руками (drag/wheel сбрасывают авто до следующего кадра). */
+var autoFit = true;
+function fitView() {
+    if (!autoFit) return;
+    var W = canvas.width / devicePixelRatio, H = canvas.height / devicePixelRatio;
+    var vis = visIdx();
+    if (vis.length < 2) return;
+    var minX = 1e9, maxX = -1e9, minY = 1e9, maxY = -1e9;
+    vis.forEach(function (i) {
+        var nd = frame.nodes[i];
+        if (nd.x < minX) minX = nd.x;
+        if (nd.x > maxX) maxX = nd.x;
+        if (nd.y < minY) minY = nd.y;
+        if (nd.y > maxY) maxY = nd.y;
+    });
+    var spanX = Math.max(80, maxX - minX), spanY = Math.max(80, maxY - minY);
+    var pad = 120;
+    var z = Math.min((W - 300 - pad) / spanX, (H - pad) / spanY);
+    view.zoomT = Math.max(0.25, Math.min(2.2, z));
+    view.panTX = -(minX + maxX) / 2 - 130 / view.zoomT;   // панель справа — центр левее
+    view.panTY = -(minY + maxY) / 2 + 34 / view.zoomT;    // и ниже верхней панели
+}
+
+/* ── проекция и камера ── */
 function project(nd) {
     var x = nd.x, y = nd.y, z = nd.z;
     if (view.is3d) {
@@ -320,36 +461,98 @@ function project(nd) {
             H / 2 + (y + view.panY) * view.zoom];
 }
 
-/* ── формы ── */
-function drawShape(x, y, r, shape) {
+/* ── формы + штрихографика ── */
+function pathShape(x, y, r, sh) {
     ctx.beginPath();
     var i, a;
-    if (shape === 'sq') ctx.rect(x - r * 0.85, y - r * 0.85, r * 1.7, r * 1.7);
-    else if (shape === 'di') {
+    if (sh === 'sq') ctx.rect(x - r * 0.85, y - r * 0.85, r * 1.7, r * 1.7);
+    else if (sh === 'di') {
         ctx.moveTo(x, y - r); ctx.lineTo(x + r, y); ctx.lineTo(x, y + r);
         ctx.lineTo(x - r, y); ctx.closePath();
-    } else if (shape === 'tr') {
+    } else if (sh === 'tr') {
         ctx.moveTo(x, y - r); ctx.lineTo(x + r * 0.9, y + r * 0.7);
         ctx.lineTo(x - r * 0.9, y + r * 0.7); ctx.closePath();
-    } else if (shape === 'hex') {
+    } else if (sh === 'hex') {
         for (i = 0; i < 6; i++) {
             a = Math.PI / 3 * i - Math.PI / 6;
             ctx[i ? 'lineTo' : 'moveTo'](x + r * Math.cos(a), y + r * Math.sin(a));
         }
         ctx.closePath();
-    } else if (shape === 'pent') {
+    } else if (sh === 'pent') {
         for (i = 0; i < 5; i++) {
             a = Math.PI * 2 / 5 * i - Math.PI / 2;
             ctx[i ? 'lineTo' : 'moveTo'](x + r * Math.cos(a), y + r * Math.sin(a));
         }
         ctx.closePath();
-    } else if (shape === 'cross') {
-        var t = r * 0.38;
-        ctx.rect(x - t, y - r, t * 2, r * 2); ctx.rect(x - r, y - t, r * 2, t * 2);
     } else ctx.arc(x, y, r, 0, Math.PI * 2);
 }
 
-/* ── искры вдоль рёбер выбранного (динамика «чтобы бежало») ── */
+function drawNodeIcon(x, y, r, st, alpha, hot) {
+    var col = st.color;
+    /* мягкая цветная заливка — прозрачность и лёгкость */
+    pathShape(x, y, r, st.sh);
+    ctx.fillStyle = col;
+    ctx.globalAlpha = alpha * (hot ? 0.30 : 0.13);
+    ctx.fill();
+    /* штрих внутри формы */
+    if (st.hatch !== 'none' && r > 5) {
+        ctx.save();
+        pathShape(x, y, r, st.sh);
+        ctx.clip();
+        ctx.strokeStyle = col;
+        ctx.globalAlpha = alpha * 0.45;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        var s, k;
+        if (st.hatch === 'diag') {
+            for (s = -r * 2; s <= r * 2; s += 3.6) {
+                ctx.moveTo(x + s - r, y - r); ctx.lineTo(x + s + r, y + r);
+            }
+        } else if (st.hatch === 'horiz') {
+            for (s = -r; s <= r; s += 3.4) {
+                ctx.moveTo(x - r, y + s); ctx.lineTo(x + r, y + s);
+            }
+        } else if (st.hatch === 'grid') {
+            for (s = -r; s <= r; s += 3.8) {
+                ctx.moveTo(x - r, y + s); ctx.lineTo(x + r, y + s);
+                ctx.moveTo(x + s, y - r); ctx.lineTo(x + s, y + r);
+            }
+        } else if (st.hatch === 'rays') {
+            for (k = 0; k < 7; k++) {
+                var an = -Math.PI / 2 + (k - 3) * 0.28;
+                ctx.moveTo(x, y - r * 0.15);
+                ctx.lineTo(x + Math.cos(an + Math.PI / 2) * r * 1.4,
+                           y - r * 0.15 + Math.sin(an + Math.PI / 2) * r * 1.4);
+            }
+        } else if (st.hatch === 'ring') {
+            ctx.moveTo(x + r * 0.55, y);
+            ctx.arc(x, y, r * 0.55, 0, Math.PI * 2);
+        } else if (st.hatch === 'dot') {
+            ctx.moveTo(x + r * 0.22, y);
+            ctx.arc(x, y, r * 0.22, 0, Math.PI * 2);
+        }
+        ctx.stroke();
+        if (st.hatch === 'dot') {
+            ctx.fillStyle = col; ctx.globalAlpha = alpha * 0.7;
+            ctx.beginPath(); ctx.arc(x, y, r * 0.2, 0, Math.PI * 2); ctx.fill();
+        }
+        ctx.restore();
+    }
+    /* контур; double — двойной */
+    pathShape(x, y, r, st.sh);
+    ctx.strokeStyle = hot ? TK.cyan : col;
+    ctx.globalAlpha = alpha * (hot ? 1 : 0.85);
+    ctx.lineWidth = hot ? 2 : 1.25;
+    ctx.stroke();
+    if (st.hatch === 'double' && r > 5) {
+        pathShape(x, y, r * 0.72, st.sh);
+        ctx.globalAlpha = alpha * 0.5;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+    }
+}
+
+/* ── искры вдоль рёбер выбранного ── */
 function igniteSparks() {
     sparks = [];
     if (selI < 0) return;
@@ -361,7 +564,6 @@ function igniteSparks() {
     });
 }
 
-/* ── отрисовка ── */
 function neighborsOf(i) {
     var s = {};
     frame.edges.forEach(function (e) {
@@ -372,32 +574,48 @@ function neighborsOf(i) {
     return s;
 }
 
+/* дуга ребра: лёгкий изгиб перпендикуляром — воздух вместо паутины прямых */
+function edgePath(a, b) {
+    var mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2;
+    var dx = b[0] - a[0], dy = b[1] - a[1];
+    var d = Math.sqrt(dx * dx + dy * dy) + 0.01;
+    var k = Math.min(18, d * 0.09);
+    ctx.moveTo(a[0], a[1]);
+    ctx.quadraticCurveTo(mx - dy / d * k, my + dx / d * k, b[0], b[1]);
+}
+
+/* ── отрисовка ── */
 function draw() {
     var W = canvas.width / devicePixelRatio, H = canvas.height / devicePixelRatio;
     ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
     ctx.clearRect(0, 0, W, H);
     var n = frame.nodes;
     if (!n.length) return;
-    if (view.is3d && view.spin) view.rotY += 0.0035;
+    /* камера — всегда плавно */
+    view.zoom += (view.zoomT - view.zoom) * 0.12;
+    view.panX += (view.panTX - view.panX) * 0.10;
+    view.panY += (view.panTY - view.panY) * 0.10;
+    if (view.is3d && view.spin) view.rotY += 0.0032;
+
     var pts = n.map(project);
     var focusI = hoverI >= 0 ? hoverI : selI;
     var nbr = focusI >= 0 ? neighborsOf(focusI) : null;
     var now = performance.now();
 
-    /* рёбра */
+    /* рёбра: дуги, толщина и яркость — мощность */
     frame.edges.forEach(function (e) {
         if (e[2] < view.minW) return;
         if (!nodeVisible(n[e[0]]) || !nodeVisible(n[e[1]])) return;
         var a = pts[e[0]], b = pts[e[1]];
         var hot = focusI >= 0 && (e[0] === focusI || e[1] === focusI);
         var dim = focusI >= 0 && !hot;
-        var wgt = Math.min(1, Math.log(1 + e[2]) / Math.log(40));
-        ctx.strokeStyle = hot ? TK.cyan : TK.hair;
-        ctx.globalAlpha = dim ? 0.10 : (hot ? 0.95 : 0.35 + wgt * 0.5);
-        ctx.lineWidth = (0.6 + wgt * 3.4) * (hot ? 1.25 : 1);
-        if (n[e[0]].out || n[e[1]].out) ctx.setLineDash([4, 4]);
-        ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]);
-        ctx.stroke(); ctx.setLineDash([]);
+        var wgt = Math.log(1 + e[2]) / Math.log(1 + frame.wMax);
+        ctx.strokeStyle = hot ? TK.cyan : TK.muted;
+        ctx.globalAlpha = dim ? 0.05 : (hot ? 0.8 : 0.10 + wgt * 0.45);
+        ctx.lineWidth = (0.5 + wgt * 4.2) * (hot ? 1.25 : 1);
+        if (n[e[0]].out || n[e[1]].out) ctx.setLineDash([4, 5]);
+        ctx.beginPath(); edgePath(a, b); ctx.stroke();
+        ctx.setLineDash([]);
     });
     ctx.globalAlpha = 1;
 
@@ -408,54 +626,113 @@ function draw() {
         if (s.t > 1) s.t = 0;
         var a = pts[s.a], b = pts[s.b];
         var x = a[0] + (b[0] - a[0]) * s.t, y = a[1] + (b[1] - a[1]) * s.t;
-        ctx.beginPath(); ctx.arc(x, y, 2.2, 0, Math.PI * 2);
-        ctx.fillStyle = TK.ochre; ctx.globalAlpha = 0.9; ctx.fill();
+        ctx.beginPath(); ctx.arc(x, y, 2, 0, Math.PI * 2);
+        ctx.fillStyle = TK.ochre; ctx.globalAlpha = 0.85; ctx.fill();
     });
     ctx.globalAlpha = 1;
 
-    /* узлы (в 3D — дальние первыми) */
-    var order = [];
-    n.forEach(function (nd, i) { if (nodeVisible(nd)) order.push(i); });
+    /* узлы */
+    var order = visIdx();
     if (view.is3d) order.sort(function (a, b) { return n[a]._depth - n[b]._depth; });
     order.forEach(function (i) {
         var p = pts[i], nd = n[i];
-        var r = nd.size * view.zoom * (view.is3d ? nd._depth : 1);
+        var r = Math.max(3, nd.size * view.zoom * (view.is3d ? nd._depth : 1));
         var hot = i === hoverI || i === selI;
         var dim = focusI >= 0 && !hot && !(nbr && nbr[i]);
-        /* пульс выбранного — «чтобы мигало» */
         if (i === selI) {
             var ph = (now - T0) / 700;
-            var pr = Math.max(3, r) + 6 + Math.sin(ph) * 3.5;
-            ctx.beginPath(); ctx.arc(p[0], p[1], pr, 0, Math.PI * 2);
+            ctx.beginPath();
+            ctx.arc(p[0], p[1], r + 7 + Math.sin(ph) * 3.5, 0, Math.PI * 2);
             ctx.strokeStyle = TK.cyan;
-            ctx.globalAlpha = 0.5 + Math.sin(ph) * 0.25;
-            ctx.lineWidth = 1.6; ctx.stroke();
+            ctx.globalAlpha = 0.45 + Math.sin(ph) * 0.22;
+            ctx.lineWidth = 1.4; ctx.stroke();
         }
-        ctx.globalAlpha = dim ? 0.22 :
-            (view.is3d ? 0.35 + nd._depth * 0.65 : 1);
-        drawShape(p[0], p[1], Math.max(3, r), shapeOf(nd.kind === '_group' ? '' : nd.kind));
-        ctx.fillStyle = hot ? TK.cyan : TK.surface;
-        ctx.fill();
-        ctx.strokeStyle = hot ? TK.cyan : (nd.center ? TK.link :
-                          nd.out ? TK.soft : TK.muted);
-        ctx.lineWidth = hot || nd.center ? 2.2 : 1.1;
-        ctx.stroke();
-        if (hot || (nbr && nbr[i]) || r > 11 || view.zoom > 1.7 ||
-            frame.mode === 'overview') {
-            ctx.fillStyle = hot ? TK.cyan : (dim ? TK.soft : TK.text);
-            ctx.font = (hot ? '600 ' : '') + '11px ' + TK.mono;
-            ctx.textAlign = 'center';
-            var label = nd.label.length > 28 ? nd.label.slice(0, 26) + '…' : nd.label;
-            ctx.fillText(label, p[0], p[1] + Math.max(3, r) + 12);
-        }
+        var alpha = dim ? 0.20 : (view.is3d ? 0.35 + nd._depth * 0.65 : 1);
+        drawNodeIcon(p[0], p[1], r, styleOf(nd.kind, nd), alpha, hot);
     });
     ctx.globalAlpha = 1;
+
+    /* подписи: приоритет size·degree, три яруса, анти-коллизия */
+    var labels = [];
+    order.forEach(function (i) {
+        var nd = n[i], p = pts[i];
+        var r = Math.max(3, nd.size * view.zoom * (view.is3d ? nd._depth : 1));
+        var hot = i === hoverI || i === selI;
+        var near = nbr && nbr[i];
+        var pri = (hot ? 1e9 : 0) + (near ? 1e6 : 0) +
+                  nd.size * (1 + (nd.ni !== undefined ? deg[nd.ni] : 10) * 0.15);
+        var dim = focusI >= 0 && !hot && !near;
+        if (dim && !hot) return;
+        labels.push({i: i, x: p[0], y: p[1] + r + 11, pri: pri, hot: hot,
+                     big: hot || r > 12 || frame.mode === 'overview'});
+    });
+    labels.sort(function (a, b) { return b.pri - a.pri; });
+    var taken = [];
+    var maxLabels = frame.mode === 'overview' ? 50 : (view.zoom > 1.6 ? 70 : 26);
+    var shown = 0;
+    labels.forEach(function (L) {
+        if (shown >= maxLabels && !L.hot) return;
+        var nd = n[L.i];
+        var fs = L.hot ? 12.5 : (L.big ? 11 : 9.5);
+        ctx.font = (L.hot ? '600 ' : '') + fs + 'px ' + TK.mono;
+        var text = nd.label.length > 30 ? nd.label.slice(0, 28) + '…' : nd.label;
+        var w = ctx.measureText(text).width;
+        var box = [L.x - w / 2 - 2, L.y - fs, w + 4, fs + 4];
+        for (var t = 0; t < taken.length; t++) {
+            var B = taken[t];
+            if (box[0] < B[0] + B[2] && box[0] + box[2] > B[0] &&
+                box[1] < B[1] + B[3] && box[1] + box[3] > B[1]) return;
+        }
+        taken.push(box);
+        shown++;
+        ctx.fillStyle = L.hot ? TK.cyan : (L.big ? TK.text : TK.muted);
+        ctx.globalAlpha = L.hot ? 1 : (L.big ? 0.9 : 0.65);
+        ctx.textAlign = 'center';
+        ctx.fillText(text, L.x, L.y);
+    });
+    ctx.globalAlpha = 1;
+
+    /* тултип у курсора */
+    if (hoverI >= 0 && mouse.x !== undefined) {
+        var hd = n[hoverI];
+        var lines = [hd.label];
+        if (hd.kind === '_group') {
+            lines.push((RU ? 'группа · статей: ' : 'group · articles: ') + hd.n);
+            lines.push(RU ? 'клик — открыть' : 'click to open');
+        } else {
+            var gi2 = G.nodes[hd.ni];
+            lines.push(gi2.kind + ' · ' + gi2.n + (RU ? ' ст.' : ' art.') +
+                       ' · ' + deg[hd.ni] + (RU ? ' св.' : ' links'));
+        }
+        ctx.font = '11px ' + TK.mono;
+        var tw = 0;
+        lines.forEach(function (s) { tw = Math.max(tw, ctx.measureText(s).width); });
+        var tx = Math.min(mouse.x + 14, W - tw - 18), ty = mouse.y + 6;
+        ctx.globalAlpha = 0.92;
+        ctx.fillStyle = TK.surface;
+        ctx.strokeStyle = TK.hair;
+        ctx.beginPath();
+        ctx.roundRect(tx - 7, ty - 15, tw + 14, lines.length * 15 + 10, 6);
+        ctx.fill(); ctx.stroke();
+        ctx.globalAlpha = 1;
+        ctx.textAlign = 'start';
+        lines.forEach(function (s, li) {
+            ctx.fillStyle = li ? TK.soft : TK.text;
+            ctx.fillText(s, tx, ty + li * 15);
+        });
+    }
     frame._pts = pts;
 }
 
-function loop() { tick(); draw(); requestAnimationFrame(loop); }
+function loop() {
+    window.__loopN = (window.__loopN || 0) + 1;
+    try { tick(); draw(); }
+    catch (e) { window.__loopErr = String(e) + ' | ' + (e.stack || '').split(String.fromCharCode(10))[1]; }
+    requestAnimationFrame(loop);
+}
 
 /* ── взаимодействие ── */
+var mouse = {};
 function pick(mx, my) {
     if (!frame._pts) return -1;
     var best = -1, bd = 20 * 20;
@@ -473,21 +750,28 @@ canvas.addEventListener('mousedown', function (e) {
 });
 window.addEventListener('mouseup', function () { drag = null; });
 canvas.addEventListener('mousemove', function (e) {
+    mouse.x = e.offsetX; mouse.y = e.offsetY;
     if (drag) {
         var dx = e.offsetX - drag.x, dy = e.offsetY - drag.y;
         if (Math.abs(dx) + Math.abs(dy) > 3) drag.moved = true;
+        autoFit = false;
         if (view.is3d) { view.rotY += dx * 0.008; view.rotX += dy * 0.008; }
-        else { view.panX += dx / view.zoom; view.panY += dy / view.zoom; }
+        else {
+            view.panTX = view.panX = view.panX + dx / view.zoom;
+            view.panTY = view.panY = view.panY + dy / view.zoom;
+        }
         drag.x = e.offsetX; drag.y = e.offsetY;
         return;
     }
     var h = pick(e.offsetX, e.offsetY);
     if (h !== hoverI) { hoverI = h; canvas.style.cursor = h >= 0 ? 'pointer' : ''; }
 });
+canvas.addEventListener('mouseleave', function () { hoverI = -1; });
 canvas.addEventListener('wheel', function (e) {
     e.preventDefault();
-    view.zoom *= e.deltaY < 0 ? 1.12 : 0.89;
-    view.zoom = Math.max(0.25, Math.min(5, view.zoom));
+    autoFit = false;
+    view.zoomT *= e.deltaY < 0 ? 1.14 : 0.88;
+    view.zoomT = Math.max(0.25, Math.min(5, view.zoomT));
 }, {passive: false});
 canvas.addEventListener('click', function (e) {
     if (drag && drag.moved) return;
@@ -505,17 +789,14 @@ canvas.addEventListener('dblclick', function (e) {
     else showEgo(nd.ni);
 });
 
-/* ── панель справа ── */
+/* ── панель ── */
 function el(id) { return document.getElementById(id); }
 function set3d(on) {
     view.is3d = on;
-    var b = el('b42g-3d');
-    if (b) b.classList.toggle('active', on);
-    var b2 = el('b42g-2d');
-    if (b2) b2.classList.toggle('active', !on);
-    var sp = el('b42g-spin');
-    if (sp) sp.style.display = on ? '' : 'none';
-    sim.alive = Math.max(sim.alive, 120);
+    var b = el('b42g-3d'); if (b) b.classList.toggle('active', on);
+    var b2 = el('b42g-2d'); if (b2) b2.classList.toggle('active', !on);
+    var sp = el('b42g-spin'); if (sp) sp.style.display = on ? '' : 'none';
+    sim.alive = Math.max(sim.alive, 140);
 }
 
 function renderCrumbs() {
@@ -525,7 +806,8 @@ function renderCrumbs() {
     trail.forEach(function (t, i) {
         var a = document.createElement('button');
         a.className = 'b42g-crumb';
-        a.textContent = t.label.length > 30 ? t.label.slice(0, 28) + '…' : t.label;
+        a.textContent = t.label.length > 26 ? t.label.slice(0, 24) + '…' : t.label;
+        a.title = t.label;
         a.onclick = function () {
             trail = trail.slice(0, i + 1);
             if (t.mode === 'overview') showOverview();
@@ -545,9 +827,9 @@ function renderInfo() {
     var box = el('b42g-info');
     if (!box) return;
     if (selI < 0 || frame.mode === 'overview' || !frame.nodes[selI]) {
-        box.innerHTML = '<div class="b42g-dim" style="padding:6px 0">' +
-            (RU ? 'клик — выбрать · двойной клик — вглубь · колесо — зум'
-                : 'click — select · double-click — drill · wheel — zoom') + '</div>';
+        box.innerHTML = '<div class="b42g-dim">' +
+            (RU ? 'клик — выбрать · двойной — вглубь · колесо — зум'
+                : 'click — select · dbl-click — drill · wheel — zoom') + '</div>';
         return;
     }
     var nd = frame.nodes[selI], gn = G.nodes[nd.ni];
@@ -555,53 +837,102 @@ function renderInfo() {
         .slice(0, 8);
     var rows = neigh.map(function (p) {
         var m = G.nodes[p[0]];
-        return '<button class="b42g-jump" data-ni="' + p[0] + '">' +
-               nodeName(m) + ' <em>' + p[1] + '</em></button>';
+        return '<button class="b42g-jump" data-ni="' + p[0] + '" title="' +
+               nodeName(m) + '"><span>' + nodeName(m) + '</span><em>' +
+               p[1] + '</em></button>';
     }).join('');
     box.innerHTML =
         '<div class="b42g-sel"><b>' + nd.label + '</b> <span class="b42g-dim">' +
         gn.kind + '</span></div>' +
         '<div class="b42g-dim">' + gn.n + (RU ? ' статей · ' : ' articles · ') +
         adj[nd.ni].length + (RU ? ' связей' : ' links') + '</div>' +
-        '<div style="margin:5px 0 7px"><a href="/lang/' + LANG + '/concepts/' +
+        '<div style="margin:4px 0 7px"><a href="/lang/' + LANG + '/concepts/' +
         gn.id + '.html">' + (RU ? 'страница понятия →' : 'concept page →') +
         '</a></div>' +
         '<div class="b42g-dim" style="margin-bottom:3px">' +
-        (RU ? 'сильнейшие связи (общих статей):' : 'strongest links (shared articles):') +
-        '</div>' + rows;
+        (RU ? 'сильнейшие связи:' : 'strongest links:') + '</div>' + rows;
+    box.querySelectorAll('.b42g-jump').forEach(function (b) {
+        b.onclick = function () { showEgo(+b.dataset.ni); };
+    });
+}
+
+function renderStats() {
+    var box = el('b42g-stats');
+    if (!box) return;
+    var vis = visIdx();
+    var nEdges = 0, wSum = 0;
+    frame.edges.forEach(function (e) {
+        if (e[2] >= view.minW && nodeVisible(frame.nodes[e[0]]) &&
+            nodeVisible(frame.nodes[e[1]])) { nEdges++; wSum += e[2]; }
+    });
+    var byK = {};
+    vis.forEach(function (i) {
+        var b = frame.nodes[i].kind === '_group' ? null
+                : bucketOf(frame.nodes[i].kind);
+        if (b) byK[b] = (byK[b] || 0) + 1;
+    });
+    var maxK = 1;
+    Object.keys(byK).forEach(function (k) { maxK = Math.max(maxK, byK[k]); });
+    var bars = KINDS.filter(function (K) { return byK[K.k]; })
+        .map(function (K) {
+            var v = byK[K.k];
+            return '<div class="b42g-bar" title="' + (RU ? K.ru : K.en) + ': ' +
+                v + '"><i style="width:' + Math.round(v / maxK * 100) +
+                '%;background:' + K.color + '"></i><span>' + v + '</span></div>';
+        }).join('');
+    box.innerHTML =
+        '<div class="b42g-dim">' +
+        vis.length + (RU ? ' узлов · ' : ' nodes · ') +
+        nEdges + (RU ? ' рёбер · мощность ' : ' edges · power ') + wSum +
+        '</div>' + bars;
+}
+
+function renderPath() {
+    var box = el('b42g-path');
+    if (!box) return;
+    if (!path.length) {
+        box.innerHTML = '<div class="b42g-dim">' +
+            (RU ? 'пусто — начните с поиска или клика' : 'empty — search or click') +
+            '</div>';
+        return;
+    }
+    box.innerHTML = path.slice().reverse().map(function (ni) {
+        return '<button class="b42g-jump" data-ni="' + ni + '"><span>' +
+               nodeName(G.nodes[ni]) + '</span></button>';
+    }).join('');
     box.querySelectorAll('.b42g-jump').forEach(function (b) {
         b.onclick = function () { showEgo(+b.dataset.ni); };
     });
 }
 
 function buildPanel() {
-    /* классы */
     var kb = el('b42g-kinds');
     if (kb) {
         KINDS.forEach(function (K) {
             var lab = document.createElement('label');
             lab.className = 'b42g-check';
+            lab.title = RU ? K.ru : K.en;
             var cb = document.createElement('input');
             cb.type = 'checkbox'; cb.checked = true;
             cb.onchange = function () {
                 kindOn[K.k] = cb.checked;
                 if (view.layout !== 'force') applyFixedLayout();
-                sim.alive = Math.max(sim.alive, 80);
+                sim.alive = Math.max(sim.alive, 100);
+                renderStats();
             };
             lab.appendChild(cb);
             var sw = document.createElement('canvas');
-            sw.width = 16; sw.height = 16; sw.className = 'b42g-sw';
-            var c2 = sw.getContext('2d');
-            var keep = ctx; ctx = c2;
-            drawShape(8, 8, 5.5, K.sh);
-            c2.strokeStyle = TK.muted; c2.lineWidth = 1.3; c2.stroke();
+            sw.width = 18; sw.height = 18; sw.className = 'b42g-sw';
+            var keep = ctx; ctx = sw.getContext('2d');
+            drawNodeIcon(9, 9, 6, K, 1, false);
             ctx = keep;
             lab.appendChild(sw);
-            lab.appendChild(document.createTextNode(RU ? K.ru : K.en));
+            var sp = document.createElement('span');
+            sp.textContent = RU ? K.ru : K.en;
+            lab.appendChild(sp);
             kb.appendChild(lab);
         });
     }
-    /* группы */
     var gb = el('b42g-groups');
     if (gb) {
         var all = document.createElement('button');
@@ -610,12 +941,14 @@ function buildPanel() {
         all.onclick = function () {
             groupOn = null;
             gb.querySelectorAll('input').forEach(function (c) { c.checked = true; });
-            sim.alive = Math.max(sim.alive, 80);
+            sim.alive = Math.max(sim.alive, 100);
+            renderStats();
         };
         gb.appendChild(all);
         G.groups.forEach(function (g, i) {
             var lab = document.createElement('label');
             lab.className = 'b42g-check';
+            lab.title = groupLabel(g);
             var cb = document.createElement('input');
             cb.type = 'checkbox'; cb.checked = true;
             cb.onchange = function () {
@@ -625,18 +958,17 @@ function buildPanel() {
                 if (cb.checked) groupOn.add(i); else groupOn.delete(i);
                 if (groupOn.size === G.groups.length) groupOn = null;
                 if (view.layout !== 'force') applyFixedLayout();
-                sim.alive = Math.max(sim.alive, 80);
+                sim.alive = Math.max(sim.alive, 100);
+                renderStats();
             };
             lab.appendChild(cb);
             var t = document.createElement('span');
-            var L = groupLabel(g);
-            t.textContent = (L.length > 26 ? L.slice(0, 24) + '…' : L) +
-                            ' · ' + g.members.length;
+            t.className = 'b42g-ell';
+            t.textContent = groupLabel(g) + ' · ' + g.members.length;
             lab.appendChild(t);
             gb.appendChild(lab);
         });
     }
-    /* поиск */
     var inp = el('b42g-q'), dl = el('b42g-names');
     if (inp && dl) {
         G.nodes.forEach(function (n) {
@@ -654,10 +986,11 @@ function buildPanel() {
             }
         });
     }
-    /* режимы */
     var b2 = el('b42g-2d'), b3 = el('b42g-3d'), sp = el('b42g-spin');
-    if (b2) b2.onclick = function () { set3d(false); view.spin = false;
-        if (sp) sp.classList.remove('active'); };
+    if (b2) b2.onclick = function () {
+        set3d(false); view.spin = false;
+        if (sp) sp.classList.remove('active');
+    };
     if (b3) b3.onclick = function () { set3d(true); };
     if (sp) sp.onclick = function () {
         view.spin = !view.spin; sp.classList.toggle('active', view.spin);
@@ -668,7 +1001,7 @@ function buildPanel() {
             document.querySelectorAll('[data-layout]').forEach(function (x) {
                 x.classList.toggle('active', x === b);
             });
-            if (view.layout === 'force') { seedLayout(); }
+            if (view.layout === 'force') seedLayout();
             else applyFixedLayout();
         };
     });
@@ -678,21 +1011,31 @@ function buildPanel() {
         var l = el('b42g-wv');
         if (l) l.textContent = '≥' + view.minW;
         igniteSparks();
-        sim.alive = Math.max(sim.alive, 60);
+        sim.alive = Math.max(sim.alive, 80);
+        renderStats();
     });
     var home = el('b42g-home');
     if (home) home.onclick = showOverview;
     set3d(false);
 }
 
-/* ── размер ── */
+/* ── размер: весь экран ── */
 function resize() {
     var r = canvas.parentElement.getBoundingClientRect();
     canvas.width = Math.max(300, r.width) * devicePixelRatio;
-    canvas.height = Math.max(420, window.innerHeight - r.top - 24) * devicePixelRatio;
-    canvas.style.height = (canvas.height / devicePixelRatio) + 'px';
+    canvas.height = Math.max(300, r.height) * devicePixelRatio;
 }
 window.addEventListener('resize', resize);
 resize();
 loop();
+/* отладочное окно — смотреть состояние снаружи (глазами через консоль) */
+window.B42G = {frame: function () { return frame; }, view: view,
+               sim: sim, fit: fitView,
+               step: function (n) {           // синхронная прокрутка (тесты/фон)
+                   for (var i = 0; i < (n || 60); i++) tick();
+                   fitView();
+                   view.zoom = view.zoomT; view.panX = view.panTX;
+                   view.panY = view.panTY;
+                   draw();
+               }};
 })();

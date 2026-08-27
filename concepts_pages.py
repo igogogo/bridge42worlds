@@ -421,31 +421,32 @@ GRAPH_T = {
 
 
 def graph_page(lang):
-    """Приложение-граф: канвас на всю ширину + панель управления справа
-    (владелец 27.08: «панелька справа: 2D/3D, представления, классы и группы
-    вкл/выкл, информация, переходы — новое приложение, высший класс»)."""
+    """Полноэкранное приложение-граф (владелец 27.08, третий заход: «во весь
+    экран, прозрачность, панелька без наездов, тултипы, визуальность,
+    лёгкость»). Канвас подо всем экраном, панели плавают поверх на
+    полупрозрачном стекле (backdrop-blur)."""
     t = GRAPH_T.get(lang, GRAPH_T["en"])
     L = {"ru": {"mode": "Режим", "layout": "Представление", "force": "силы",
-                "ring": "кольцо", "sphere": "сфера", "spin": "вращение",
-                "kinds": "Классы", "groups": "Группы", "info": "Выбрано"},
+                "ring": "кольцо", "sphere": "сфера", "galaxy": "галактика",
+                "layers": "слои", "spin": "вращение",
+                "kinds": "Классы", "groups": "Группы", "info": "Выбрано",
+                "stats": "Кадр", "path": "Путь"},
          "en": {"mode": "Mode", "layout": "Layout", "force": "force",
-                "ring": "ring", "sphere": "sphere", "spin": "spin",
-                "kinds": "Kinds", "groups": "Groups", "info": "Selection"}}
+                "ring": "ring", "sphere": "sphere", "galaxy": "galaxy",
+                "layers": "layers", "spin": "spin",
+                "kinds": "Kinds", "groups": "Groups", "info": "Selection",
+                "stats": "Frame", "path": "Trail"}}
     l = L.get(lang, L["en"])
     return head(lang, t["title"]) + f"""
-<div class="b42g-app">
- <div class="b42g-main">
-  <div class="b42g-top">
-    <h1 style="margin:0;font-size:22px">{t["title"]}</h1>
-    <button id="b42g-home" class="b42g-mini">{t["home"]}</button>
-    <span id="b42g-crumbs"></span>
-    <input id="b42g-q" list="b42g-names" placeholder="{t["search"]}">
-    <datalist id="b42g-names"></datalist>
-  </div>
-  <div class="subtitle" style="margin:2px 0 8px;max-width:none">{t["sub"]}</div>
-  <div class="b42g-wrap"><canvas id="b42g"></canvas></div>
- </div>
- <aside class="b42g-side">
+<div class="b42g-stage"><canvas id="b42g"></canvas></div>
+<div class="b42g-top glass">
+  <b style="font-family:var(--serif);font-size:16px">{t["title"]}</b>
+  <button id="b42g-home" class="b42g-mini">{t["home"]}</button>
+  <span id="b42g-crumbs"></span>
+  <input id="b42g-q" list="b42g-names" placeholder="{t["search"]}">
+  <datalist id="b42g-names"></datalist>
+</div>
+<aside class="b42g-side glass">
   <div class="b42g-sec"><div class="b42g-h">{l["mode"]}</div>
     <button id="b42g-2d" class="b42g-mini active">2D</button>
     <button id="b42g-3d" class="b42g-mini">3D</button>
@@ -455,64 +456,85 @@ def graph_page(lang):
     <button data-layout="force" class="b42g-mini active">{l["force"]}</button>
     <button data-layout="ring" class="b42g-mini">{l["ring"]}</button>
     <button data-layout="sphere" class="b42g-mini">{l["sphere"]}</button>
+    <button data-layout="galaxy" class="b42g-mini">{l["galaxy"]}</button>
+    <button data-layout="layers" class="b42g-mini">{l["layers"]}</button>
   </div>
   <div class="b42g-sec"><div class="b42g-h">{t["w"]} <span id="b42g-wv">≥2</span></div>
     <input id="b42g-w" type="range" min="2" max="20" value="2" style="width:100%">
   </div>
+  <div class="b42g-sec"><div class="b42g-h">{l["stats"]}</div>
+    <div id="b42g-stats" class="b42g-info"></div>
+  </div>
   <div class="b42g-sec"><div class="b42g-h">{l["info"]}</div>
     <div id="b42g-info" class="b42g-info"></div>
+  </div>
+  <div class="b42g-sec"><div class="b42g-h">{l["path"]}</div>
+    <div id="b42g-path" class="b42g-info"></div>
   </div>
   <div class="b42g-sec"><div class="b42g-h">{l["kinds"]}</div>
     <div id="b42g-kinds"></div>
   </div>
-  <div class="b42g-sec"><div class="b42g-h">{l["groups"]}</div>
+  <div class="b42g-sec" style="margin-bottom:4px"><div class="b42g-h">{l["groups"]}</div>
     <div id="b42g-groups" class="b42g-groups"></div>
   </div>
- </aside>
-</div>
+</aside>
 <style>
-.b42g-app {{ display:flex; gap:18px; align-items:flex-start;
-  max-width:none; padding:0 18px 30px; }}
-.b42g-main {{ flex:1; min-width:0; }}
-.b42g-top {{ display:flex; flex-wrap:wrap; gap:10px; align-items:center;
-  font-family:var(--mono); font-size:12.5px; margin:8px 0 2px; }}
-.b42g-side {{ width:250px; flex:none; font-family:var(--mono); font-size:12px;
-  position:sticky; top:10px; max-height:calc(100vh - 20px); overflow-y:auto;
-  border:1px solid var(--hairline); border-radius:var(--radius-sm);
-  background:var(--surface); padding:12px 14px; }}
-.b42g-sec {{ margin-bottom:14px; }}
-.b42g-h {{ font-size:10.5px; text-transform:uppercase; letter-spacing:.08em;
-  color:var(--soft); margin-bottom:6px; }}
-.b42g-top input[list] {{ padding:5px 10px; border:1px solid var(--hairline);
-  border-radius:999px; background:var(--surface); color:var(--text);
-  font:inherit; min-width:170px; }}
-.b42g-mini {{ font:inherit; font-size:11.5px; padding:4px 11px; cursor:pointer;
+/* весь экран: канвас — сцена, всё остальное плавает поверх */
+html, body {{ height:100%; overflow:hidden; }}
+.top-bar {{ position:relative; z-index:5; }}
+.b42g-stage {{ position:fixed; inset:0; z-index:0; background:var(--bg); }}
+.b42g-stage canvas {{ display:block; width:100%; height:100%; }}
+.glass {{ background:color-mix(in srgb, var(--surface) 72%, transparent);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  border:1px solid var(--hairline); border-radius:var(--radius-sm); }}
+.b42g-top {{ position:fixed; top:54px; left:14px; right:296px; z-index:4;
+  display:flex; flex-wrap:wrap; gap:10px; align-items:center;
+  font-family:var(--mono); font-size:12px; padding:8px 14px; }}
+.b42g-side {{ position:fixed; top:54px; right:14px; bottom:14px; width:264px;
+  z-index:4; font-family:var(--mono); font-size:12px;
+  overflow-y:auto; padding:12px 14px; }}
+.b42g-sec {{ margin-bottom:13px; }}
+.b42g-h {{ font-size:10px; text-transform:uppercase; letter-spacing:.09em;
+  color:var(--soft); margin-bottom:5px; }}
+.b42g-top input[list] {{ padding:4px 10px; border:1px solid var(--hairline);
+  border-radius:999px; background:var(--bg); color:var(--text);
+  font:inherit; min-width:150px; flex:1; max-width:230px; }}
+.b42g-mini {{ font:inherit; font-size:11px; padding:3px 10px; cursor:pointer;
   color:var(--muted); background:var(--bg); border:1px solid var(--hairline);
-  border-radius:999px; margin:0 3px 4px 0; }}
+  border-radius:999px; margin:0 3px 4px 0; white-space:nowrap; }}
 .b42g-mini:hover {{ color:var(--link); border-color:var(--link); }}
 .b42g-mini.active {{ color:#fff; background:var(--link); border-color:var(--link); }}
 .b42g-crumb {{ font:inherit; border:none; background:none; color:var(--link);
-  cursor:pointer; padding:2px 2px; }}
+  cursor:pointer; padding:2px 1px; max-width:180px; overflow:hidden;
+  text-overflow:ellipsis; white-space:nowrap; }}
 .b42g-sep {{ color:var(--soft); margin:0 2px; }}
-.b42g-info {{ font-size:12px; line-height:1.5; }}
-.b42g-sel {{ font-size:13px; }}
+.b42g-info {{ font-size:11.5px; line-height:1.5; }}
+.b42g-sel {{ font-size:12.5px; overflow-wrap:anywhere; }}
 .b42g-dim {{ color:var(--soft); }}
-.b42g-wrap {{ border:1px solid var(--hairline); border-radius:var(--radius-sm);
-  background:var(--bg); overflow:hidden; }}
-.b42g-wrap canvas {{ display:block; width:100%; }}
-.b42g-check {{ display:flex; align-items:center; gap:6px; padding:2px 0;
-  cursor:pointer; color:var(--muted); }}
+.b42g-check {{ display:flex; align-items:center; gap:6px; padding:1px 0;
+  cursor:pointer; color:var(--muted); min-width:0; }}
 .b42g-check:hover {{ color:var(--text); }}
+.b42g-check span {{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }}
 .b42g-sw {{ flex:none; }}
-.b42g-groups {{ max-height:230px; overflow-y:auto; }}
-.b42g-jump {{ display:block; width:100%; text-align:start; font:inherit;
-  border:none; background:none; color:var(--link); cursor:pointer;
-  padding:2px 0; }}
-.b42g-jump em {{ color:var(--soft); font-style:normal; }}
+.b42g-ell {{ display:block; min-width:0; }}
+.b42g-groups {{ max-height:200px; overflow-y:auto; }}
+.b42g-jump {{ display:flex; justify-content:space-between; gap:8px; width:100%;
+  font:inherit; border:none; background:none; color:var(--link); cursor:pointer;
+  padding:1px 0; text-align:start; }}
+.b42g-jump span {{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }}
+.b42g-jump em {{ color:var(--soft); font-style:normal; flex:none; }}
 .b42g-jump:hover {{ color:var(--cyan); }}
+.b42g-bar {{ position:relative; height:13px; margin:2px 0; background:
+  color-mix(in srgb, var(--hairline) 45%, transparent); border-radius:3px;
+  overflow:hidden; }}
+.b42g-bar i {{ position:absolute; inset:0 auto 0 0; opacity:.5; }}
+.b42g-bar span {{ position:absolute; right:5px; top:0; font-size:9.5px;
+  color:var(--muted); line-height:13px; }}
 @media (max-width: 900px) {{
-  .b42g-app {{ flex-direction:column; }}
-  .b42g-side {{ width:100%; position:static; max-height:none; }}
+  html, body {{ overflow:auto; }}
+  .b42g-stage {{ position:relative; height:70vh; }}
+  .b42g-top {{ position:static; margin:8px; }}
+  .b42g-side {{ position:static; width:auto; margin:8px; max-height:none; }}
 }}
 </style>
 <script src="/js/b42-graph.js" defer></script>
