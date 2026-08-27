@@ -61,7 +61,21 @@ function groupColor(g) {
     return kindStyle[best].color;
 }
 
-/* ── данные ── */
+/* ── данные ──
+   Кадры берём У ВОРКЕРА, когда он доступен: облако отдаёт готовый кадр (обзор
+   50 групп — 12 КБ), а статический файл на 1.4 МБ качается целиком ради того
+   же самого. Правило дома: тело статично, обвязка динамична. Если воркер
+   молчит или мы смотрим локально — падаем на файл, и всё работает как прежде. */
+var API = (typeof window.B42_API === 'string' ? window.B42_API : '');
+var LIVE_FRAMES = false;          // умеет ли облако отдавать кадры
+
+function apiFrame(key) {
+    return fetch(API + '/api/graph?frame=' + encodeURIComponent(key) +
+                 '&lang=' + LANG)
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .catch(function () { return null; });
+}
+
 var G = null, adj = null, deg = null;
 fetch('/data/concepts-graph.json').then(function (r) { return r.json(); })
     .then(function (d) {
@@ -74,6 +88,13 @@ fetch('/data/concepts-graph.json').then(function (r) { return r.json(); })
         deg = adj.map(function (a) { return a.length; });
         buildPanel();
         showOverview();
+        /* Проба облака: один запрос обзора. Ответил — дальше кадры групп и эго
+           берём оттуда (свежие после каждой переразметки, без пересборки сайта). */
+        apiFrame('overview').then(function (f) {
+            LIVE_FRAMES = !!(f && f.nodes && f.nodes.length);
+            var b = document.getElementById('b42g-live');
+            if (b) b.textContent = LIVE_FRAMES ? 'облако' : 'файл';
+        });
     });
 function nodeName(n) { return (RU && n.ru) ? n.ru : n.en; }
 function groupLabel(g) { return (RU && g.label_ru) ? g.label_ru : g.label_en; }
@@ -225,6 +246,29 @@ function showAll() {
 }
 
 function showGroup(gi, pushCrumb, focusKey) {
+    if (LIVE_FRAMES) {
+        apiFrame('g:' + gi).then(function (f) {
+            if (!f || !f.nodes || !f.nodes.length) { showGroupLocal(gi, pushCrumb, focusKey); return; }
+            var nodes = f.nodes.map(function (n, i) {
+                return {key: 'n' + n.id, ni: G.byId !== undefined ? G.byId[n.id] : undefined,
+                        id: n.id, label: (RU && n.ru) ? n.ru : n.en, n: n.n || 0,
+                        kind: n.kind, cat: n.cat, card: n.card, out: !!n.out,
+                        size: 3.4 + 8.5 * Math.sqrt((n.n || 1) /
+                              Math.max(1, Math.max.apply(null, f.nodes.map(function (x) { return x.n || 1; }))))};
+            });
+            if (pushCrumb !== false) {
+                trail = trail.filter(function (c) { return c.mode === 'overview'; });
+                trail.push({mode: 'group', arg: gi, label: groupLabel(G.groups[gi])});
+            }
+            selI = -1; sparks = [];
+            setFrame('group', nodes, f.edges || [], focusKey || ('g' + gi));
+        });
+        return;
+    }
+    showGroupLocal(gi, pushCrumb, focusKey);
+}
+
+function showGroupLocal(gi, pushCrumb, focusKey) {
     var g = G.groups[gi];
     var inSet = {};
     g.members.forEach(function (m) { inSet[m] = 1; });

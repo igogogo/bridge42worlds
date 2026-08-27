@@ -2774,7 +2774,10 @@ async function handleAuthorConfirm(request, env) {
  * Данные кладёт cloudflare/frame_sync.py после каждой пересборки индексов — тем же шагом
  * фабрики, что cards_sync. Ответы кэшируются на краю: связи меняются раз в сутки.
  */
-const LINK_KINDS = ["tag", "law", "sci", "cat"];
+/* concept — разметка волны 5: связь понятие→статья лежит в своей таблице
+   (concept_arts), а не в card_links, потому что кладётся своим синком и
+   пересобирается целиком при каждой переразметке. */
+const LINK_KINDS = ["tag", "law", "sci", "cat", "concept"];
 
 /* ═══════════════════════════════════════════════════════════════════════════
    РЕЕСТР ЗНАНИЙ: понятия, формулы, кадры графа (27.08)
@@ -2949,14 +2952,23 @@ async function handleEntityList(request, env) {
   if (!LINK_KINDS.includes(kind) || !key) {
     return Response.json({ error: "bad_request" }, { status: 400 });
   }
-  const sort = url.searchParams.get("sort") === "old" ? "l.date ASC, c.id ASC"
-    : "l.date DESC, c.id DESC";
-  const rows = await env.CARDS.prepare(
-    `SELECT ${FEED_COLS.split(", ").map((c) => "c." + c).join(", ")}
-       FROM card_links l JOIN cards c ON c.id = l.id
-      WHERE l.kind = ? AND l.key = ? AND c.lang = ? AND c.version = ?
-      ORDER BY ${sort} LIMIT ? OFFSET ?`)
-    .bind(kind, key, lang, version, limit, offset).all();
+  const cols = FEED_COLS.split(", ").map((c) => "c." + c).join(", ");
+  const rows = kind === "concept"
+    ? await env.CARDS.prepare(
+        `SELECT ${cols}
+           FROM concept_arts a JOIN cards c ON c.id = a.id
+          WHERE a.cid = ? AND c.lang = ? AND c.version = ?
+          ORDER BY c.date ${url.searchParams.get("sort") === "old" ? "ASC" : "DESC"},
+                   c.id DESC LIMIT ? OFFSET ?`)
+        .bind(key, lang, version, limit, offset).all()
+    : await env.CARDS.prepare(
+        `SELECT ${cols}
+           FROM card_links l JOIN cards c ON c.id = l.id
+          WHERE l.kind = ? AND l.key = ? AND c.lang = ? AND c.version = ?
+          ORDER BY ${url.searchParams.get("sort") === "old"
+                      ? "l.date ASC, c.id ASC" : "l.date DESC, c.id DESC"}
+          LIMIT ? OFFSET ?`)
+        .bind(kind, key, lang, version, limit, offset).all();
   const items = (rows.results || []).map(feedRow);
   const out = feedJson({ items, page, limit, more: items.length === limit });
   request.method === "GET" && (await cache.put(request, out.clone()));

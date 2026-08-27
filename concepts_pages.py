@@ -572,7 +572,8 @@ def graph_page(lang):
   <div class="b42g-sec"><div class="b42g-h">{t["w"]} <span id="b42g-wv">≥2</span></div>
     <input id="b42g-w" type="range" min="2" max="20" value="2" style="width:100%">
   </div>
-  <div class="b42g-sec"><div class="b42g-h">{l["stats"]}</div>
+  <div class="b42g-sec"><div class="b42g-h">{l["stats"]}
+    <span id="b42g-live" class="b42g-dim" title="источник кадров">файл</span></div>
     <div id="b42g-stats" class="b42g-info"></div>
   </div>
   <div class="b42g-sec"><div class="b42g-h">{l["info"]}</div>
