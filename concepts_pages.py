@@ -635,10 +635,23 @@ def concept_page(cid, c, lang, live, by_id, rich=None, page_langs=None):
                            + (f' · <a href="/lang/{lang}/index.html?q={H.escape(a["art"])}">{H.escape(a["art"])}</a>' if a["art"] else "")
                            + '</div>'
                            for a in f["apps"][:4])
+            # Каким символом понятие входит в формулу. Для константы это главное:
+            # без пометки «здесь он стоит как e» список формул выглядит случайным
+            # набором, хотя это ровно те формулы, из которых константа и пришла.
+            role_lbl = {"constant": {"ru": "стоит константой", "en": "enters as a constant"},
+                        "variable": {"ru": "входит переменной", "en": "enters as a variable"},
+                        "operator": {"ru": "входит оператором", "en": "enters as an operator"}}
+            note = ""
+            if f.get("role"):
+                rl = role_lbl[f["role"]].get(lang) or role_lbl[f["role"]]["en"]
+                sym = f.get("symbol") or ""
+                note = (f'<div style="font-family:var(--mono);font-size:11.5px;'
+                        f'color:var(--muted);margin-top:3px">{H.escape(rl)}'
+                        + (f' · {H.escape(sym)}' if sym else "") + '</div>')
             rows.append(f'<div class="formula" style="margin-bottom:12px">'
                         f'<div style="font-family:var(--mono)">$${H.escape(f["latex"])}$$</div>'
                         f'<div style="font-size:13.5px;color:var(--soft)" lang="en">{H.escape(f["card"])}</div>'
-                        f'{apps}</div>')
+                        f'{note}{apps}</div>')
         body.append(f'<h2 style="font-size:16px;margin:14px 0 8px">{t["formulas"]}</h2>' + "".join(rows))
     # ДЕЙСТВИЯ И ОТКЛИК — те же функции, что у статьи и старых справочников
     # (владелец 27.08: «много функционала упущено — функционал тот же»).

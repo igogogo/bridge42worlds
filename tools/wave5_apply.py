@@ -103,6 +103,32 @@ def build_live():
                           "latex": (a.get("record") or "")[:160]}
                          for a in (b.get("applications") or [])[:8]],
             })
+    # СВЯЗЬ ЧЕРЕЗ СИМВОЛ. Выше собраны формулы, для которых понятие названо
+    # понятием формы. Но константа входит в формулу не так: элементарный заряд
+    # стоит в одиннадцати наших формулах символом e — и до сих пор на его
+    # странице не было ни одной. То же у величин: «температура» знает свои
+    # формулы, только если её вписали в понятия формы, а не в разбор символов.
+    # Ранг 100+ — эти формулы идут после тех, где понятие названо главным.
+    an_p = ROOT / "data" / "formula-anatomy.json"
+    if an_p.exists():
+        by_base = {b["base_id"]: b for b in bases}
+        for fid, rec in load(an_p).items():
+            b = by_base.get(fid)
+            if not b:
+                continue
+            for role, key in (("constant", "constants"), ("variable", "variables"),
+                              ("operator", "operators")):
+                for sym in (rec.get(key) or []):
+                    cid = (sym.get("id") or "").strip()
+                    if not cid or any(f["id"] == fid for f in fml.get(cid, ())):
+                        continue
+                    fml[cid].append({
+                        "id": fid, "name": b.get("name") or fid,
+                        "latex": b.get("latex", ""), "card": b.get("card", ""),
+                        "rank": 100 + {"constant": 0, "variable": 1, "operator": 2}[role],
+                        "role": role, "symbol": sym.get("s") or "",
+                        "apps": [],
+                    })
     for k in fml:
         fml[k].sort(key=lambda f: f["rank"])
 
