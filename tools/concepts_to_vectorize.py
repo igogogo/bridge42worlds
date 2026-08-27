@@ -60,7 +60,14 @@ def load_cards():
     sys.path.insert(0, str(ML))
     import concepts_super as cs
     cids, CV = cs.load_cards()
-    reg = json.loads((ML / "data" / "concepts-v3.json").read_text(encoding="utf-8"))["concepts"]
+    # Класс берём из ЖИВОГО реестра, а не из v3: v3 — вход прошлой волны, и
+    # родившихся после неё там нет вовсе. Константы и статистика уезжали бы в
+    # облако классом «понятие», и фильтр поиска по классу их не находил.
+    live = ROOT / "data" / "concepts-live.json"
+    if live.exists():
+        reg = json.loads(live.read_text(encoding="utf-8"))["concepts"]
+    else:
+        reg = json.loads((ML / "data" / "concepts-v3.json").read_text(encoding="utf-8"))["concepts"]
     return cids, CV, reg
 
 
