@@ -31,6 +31,7 @@
 """
 import argparse
 import json
+from concurrent.futures import ThreadPoolExecutor
 import re
 import sys
 import time
@@ -260,20 +261,28 @@ def run_systems(limit=None, force_peak=False):
     if limit:
         todo = todo[:limit]
     print(f"форм без разбора систем: {len(todo)}")
-    for s in range(0, len(todo), 5):
-        batch = todo[s:s + 5]
+    batches = [todo[s:s + 5] for s in range(0, len(todo), 5)]
+
+    def one(batch):
         try:
-            got = ask_systems(batch, key)
+            return ask_systems(batch, key)
         except Exception as e:
-            print(f"  сбой пачки {s}: {e} — пауза и дальше")
-            time.sleep(5)
-            continue
-        for bid, rows in got.items():
-            done[bid]["unit_systems"] = rows
-        OUT.write_text(json.dumps(done, ensure_ascii=False, indent=1), encoding="utf-8")
-        n_var = sum(1 for r in done.values() if r.get("unit_systems"))
-        print(f"  спрошено {sum(1 for r in done.values() if 'unit_systems' in r)}"
-              f" · с вариантами {n_var}")
+            print(f"  сбой пачки: {e}")
+            return {}
+
+    # Шесть пачек разом. Последовательно 642 формы — это 129 запросов подряд, и
+    # каждый тяжёлый: модель разбирает пять формул сразу. Запись — из главного
+    # потока, как и у переводов.
+    with ThreadPoolExecutor(max_workers=6) as ex:
+        for i, got in enumerate(ex.map(one, batches), 1):
+            for bid, rows in got.items():
+                done[bid]["unit_systems"] = rows
+            if i % 5 == 0 or i == len(batches):
+                OUT.write_text(json.dumps(done, ensure_ascii=False, indent=1),
+                               encoding="utf-8")
+                n_var = sum(1 for r in done.values() if r.get("unit_systems"))
+                print(f"  спрошено {sum(1 for r in done.values() if 'unit_systems' in r)}"
+                      f" · с вариантами {n_var}", flush=True)
     print("✅ системы единиц разобраны")
     return 0
 
