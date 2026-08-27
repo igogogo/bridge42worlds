@@ -44,7 +44,12 @@ BATCH_FIELDS = ("citationCount,influentialCitationCount,referenceCount,externalI
 AUTHOR_FIELDS = ("name,hIndex,paperCount,citationCount,affiliations,"
                  "homepage,externalIds")
 GRAPH_FIELDS = "externalIds,title,citationCount,year"
-PAUSE = 1.05          # их лимит: 1 запрос в секунду на ключ, на все ручки
+# Заявленный лимит — запрос в секунду на ключ, но в ночь 27.08 сбор встал на час
+# с нулём собранного: пачки шли ровно через 1.05 с и получали 429 подряд, а бэкоф
+# 10·2^n уводил процесс в сон на десять минут за пачку. Проверено вживую: тот же
+# запрос, повторённый через три секунды, проходит с первого раза. Значит счётчик
+# у них скользящий и секунды ему мало — платим тремя и идём без единого отказа.
+PAUSE = 3.0
 
 
 def key():
@@ -54,7 +59,7 @@ def key():
     raise SystemExit("нет SEMANTIC_SCHOLAR_KEY в .env")
 
 
-def req(url, payload=None, k=None, tries=6):
+def req(url, payload=None, k=None, tries=7):
     for attempt in range(tries):
         r = urllib.request.Request(url, headers={"x-api-key": k or key(),
                                                  "Content-Type": "application/json"},
@@ -64,9 +69,11 @@ def req(url, payload=None, k=None, tries=6):
                 return json.loads(resp.read().decode("utf-8"))
         except urllib.error.HTTPError as e:
             if e.code == 429 or e.code >= 500:
-                # 429 у них затяжной: обычный бэкоф (до 33с) выгорал все 6 попыток
-                # подряд и пачки «пустели» (прогон 27.08). Ждём минутами.
-                time.sleep(10 * 2 ** attempt if e.code == 429 else 2 ** attempt + 1)
+                # Бэкоф линейный, а не удвоением: 429 здесь означает «слишком
+                # часто», и лечится он парой лишних секунд. Удвоение же (10, 20,
+                # 40, 80…) на первой же серии отказов усыпляло сбор на десять
+                # минут за пачку — за час не собиралось ничего.
+                time.sleep((5 + 5 * attempt) if e.code == 429 else 2 ** attempt + 1)
                 continue
             if e.code == 404:
                 return None
