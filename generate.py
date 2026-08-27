@@ -983,17 +983,25 @@ def entity_article_card(a, lang):
                 f'</span></a>') if cat else ""
     reading = (f'<span class="card-read">{a["reading"]} {READING_MIN.get(lang, "min")}</span>'
                if a.get("reading") else "")
-    express = ('<span class="card-express-badge">express</span>'
+    # бейдж локализован, как в ленте: сервер писал латиницей «express»
+    # рядом с русским «экспресс» на той же странице (поймано на образце 27.08)
+    _exp = {"ru": "экспресс", "en": "express", "es": "exprés",
+            "ar": "سريع", "fr": "express"}.get(lang, "express")
+    express = (f'<span class="card-express-badge">{_exp}</span>'
                if a.get("express") else "")
     # Цитируемость Scholar в паспорте карточки — вес работы в поле, тем же рядом
     cites = (f'<span class="card-cites" title="Citations — Semantic Scholar">'
              f'{a["cites"]:,} cit</span>' if a.get("cites") else "")
     authors = ""
     if a.get("authors"):
-        links = " · ".join(
+        # до 20 имён с «+N» на остаток — ровно как в ленте (js/search.js);
+        # три имени давали карточку на строку ниже клиентской (образец 27.08)
+        au = a["authors"]
+        links = '<span class="sep">·</span>'.join(
             f'<a href="/{LANG_DIR}/en/authors/{attr_safe(author_slug(x))}.html">{safe(x)}</a>'
-            for x in a["authors"][:3])
-        more = " …" if len(a["authors"]) > 3 else ""
+            for x in au[:20])
+        more = (f' <span class="au-more-lite">+{len(au) - 20}</span>'
+                if len(au) > 20 else "")
         authors = f'<div class="card-authors">{links}{more}</div>'
     return (f'<article class="article-card">'
             f'<div class="card-eyebrow">{cat_html}'

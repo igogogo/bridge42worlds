@@ -95,7 +95,7 @@ var T0 = performance.now();
 var iconScale = 1;            // авто: чем плотнее кадр, тем мельче значки
 function calcIconScale() {
     var N = visIdx().length || 1;
-    iconScale = Math.max(0.38, Math.min(0.92, 6.2 / Math.sqrt(N)));
+    iconScale = Math.max(0.28, Math.min(0.68, 4.4 / Math.sqrt(N)));
 }
 
 function nodeVisible(nd) {
@@ -116,9 +116,16 @@ function setFrame(mode, nodes, edges, focusKey) {
     var prev = {};
     frame.nodes.forEach(function (nd) { prev[nd.key] = [nd.x, nd.y, nd.z]; });
     var seed = focusKey && prev[focusKey] ? prev[focusKey] : null;
-    var wMax = 1;
-    edges.forEach(function (e) { if (e[2] > wMax) wMax = e[2]; });
-    frame = {mode: mode, nodes: nodes, edges: edges, wMax: wMax};
+    /* КАЛИБРОВКА СВЯЗЕЙ ПО КАДРУ (владелец 27.08: «важные ярче, остальные
+       глуше»). Абсолютная шкала врёт: в одном кадре сильная связь — это 30
+       общих статей, в другом — 4. Берём медиану и верхний дециль самого кадра
+       и растягиваем контраст между ними; ниже медианы — почти невидимо. */
+    var ws = edges.map(function (e) { return e[2]; }).sort(function (a, b) { return a - b; });
+    var wMax = ws.length ? ws[ws.length - 1] : 1;
+    var wMid = ws.length ? ws[Math.floor(ws.length * 0.5)] : 1;
+    var wHi = ws.length ? ws[Math.floor(ws.length * 0.9)] : wMax;
+    frame = {mode: mode, nodes: nodes, edges: edges,
+             wMax: wMax, wMid: wMid, wHi: Math.max(wHi, wMid + 1)};
     hoverI = -1;
     autoFit = true;
     seedLayout(prev, seed);
@@ -130,11 +137,18 @@ function setFrame(mode, nodes, edges, focusKey) {
 }
 
 function showOverview() {
-    var nodes = G.groups.map(function (g, i) {
+    var raw = G.groups.map(function (g) {
         var n = 0;
         g.members.forEach(function (m) { n += G.nodes[m].n; });
-        return {key: 'g' + i, gi: i, label: groupLabel(g), n: n, kind: '_group',
-                g: i, color: groupColor(g), size: 7 + Math.log2(2 + n) * 2.3};
+        return n;
+    });
+    var mx = Math.max.apply(null, raw) || 1;
+    var nodes = G.groups.map(function (g, i) {
+        /* размер — доля от крупнейшей группы КАДРА: абсолютная шкала делала
+           шарики огромными, потому что сумма статей группы — тысячи */
+        return {key: 'g' + i, gi: i, label: groupLabel(g), n: raw[i], kind: '_group',
+                g: i, color: groupColor(g),
+                size: 5 + 11 * Math.sqrt(raw[i] / mx)};
     });
     var gw = {};
     G.edges.forEach(function (e) {
@@ -169,12 +183,14 @@ function showOverview() {
 function frameFromIds(ids, centerFirst) {
     var pos = {};
     ids.forEach(function (id, i) { pos[id] = i; });
+    var mx = 1;
+    ids.forEach(function (id) { if (G.nodes[id].n > mx) mx = G.nodes[id].n; });
     var nodes = ids.map(function (id, i) {
         var n = G.nodes[id];
         return {key: 'n' + id, ni: id, label: nodeName(n), n: n.n, kind: n.kind,
                 g: n.g, cat: n.cat, center: centerFirst && i === 0, out: false,
-                size: Math.max(4, Math.sqrt(n.n) * 1.8) *
-                      (centerFirst && i === 0 ? 1.45 : 1)};
+                size: (3.4 + 8.5 * Math.sqrt(n.n / mx)) *
+                      (centerFirst && i === 0 ? 1.5 : 1)};
     });
     var edges = [], seen = {};
     ids.forEach(function (id) {
@@ -564,7 +580,11 @@ function draw() {
         var a = pts[e[0]], b = pts[e[1]];
         var hot = focusI >= 0 && (e[0] === focusI || e[1] === focusI);
         var dim = focusI >= 0 && !hot;
-        var wgt = Math.log(1 + e[2]) / Math.log(1 + frame.wMax);
+        /* q: 0 — медианная связь кадра, 1 — уровень верхнего дециля */
+        var q = (Math.log(1 + e[2]) - Math.log(1 + frame.wMid)) /
+                (Math.log(1 + frame.wHi) - Math.log(1 + frame.wMid) + 1e-6);
+        q = q < 0 ? 0 : (q > 1 ? 1 : q);
+        var wgt = q;
         /* резиновость видна: растянутое сверх покоя ребро теплеет и тончает */
         var ddx = n[e[1]].x - n[e[0]].x, ddy = n[e[1]].y - n[e[0]].y,
             ddz = n[e[1]].z - n[e[0]].z;
@@ -572,11 +592,13 @@ function draw() {
         var stretch = Math.max(0, Math.min(1, (dl / restLen(e) - 1.35) / 1.8));
         ctx.strokeStyle = hot ? TK.cyan : (stretch > 0.05 ? TK.ochre : TK.muted);
         /* на кадре-тысячнике рёбра глушим вдвое — иначе войлок */
-        var crowd = frame.nodes.length > 800 ? 0.45 : 1;
-        ctx.globalAlpha = (dim ? 0.04 : (hot ? 0.75 : (0.07 + wgt * 0.34) * crowd)) *
+        var crowd = frame.nodes.length > 800 ? 0.5 : 1;
+        /* нелинейно: слабое гаснет, сильное звенит — контраст, а не серая сетка */
+        var pow15 = wgt * wgt * (0.4 + wgt * 0.6);
+        ctx.globalAlpha = (dim ? 0.035 : (hot ? 0.8 : (0.035 + pow15 * 0.62) * crowd)) *
                           (1 - stretch * 0.35);
         /* струны: тонкие, почти нитяные — мощность в яркости больше, чем в теле */
-        ctx.lineWidth = (0.35 + wgt * 1.9) * (hot ? 1.3 : 1) * (1 - stretch * 0.5);
+        ctx.lineWidth = (0.28 + pow15 * 2.6) * (hot ? 1.3 : 1) * (1 - stretch * 0.5);
         if (n[e[0]].out || n[e[1]].out) ctx.setLineDash([4, 5]);
         ctx.beginPath(); edgePath(a, b); ctx.stroke();
         ctx.setLineDash([]);

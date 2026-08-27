@@ -4449,3 +4449,21 @@ html[lang="ar"] .card-img-wrap { float: none; margin: 0; }
    кегль превращал ряд в стену (владелец 27.08: «плашки-ссылки великоваты»). */
 .entity-body .related-tags a { font-size: 11.5px; padding: 2px 9px; }
 .entity-body .related-tags { gap: 4px; line-height: 1.7; }
+
+/* ═══ Карточка: текст снова обтекает миниатюру ═══
+   Владелец 27.08: «текст подъезжал под картинку на карточке в списке — это
+   было круто». В проходе 2 (25.08) float заменили на flex ради простоты, и
+   вместе с обходными правилами ушло само обтекание: длинный текст стоял
+   колонкой справа, оставляя под картинкой пустоту. Возвращаем float —
+   поверхность, рамка и тень карточки остаются брендовыми. */
+.article-card { display: block; }
+.article-card::after { content: ""; display: table; clear: both; }
+.card-img-wrap { float: left; flex: none; width: 130px;
+    margin: 2px var(--s-4) 6px 0; }
+html[lang="ar"] .card-img-wrap { float: right; margin: 2px 0 6px var(--s-4); }
+.card-body { display: block; }
+.article-card .card-eyebrow { flex: none; width: auto; }
+@media (max-width: 620px) {
+    .card-img-wrap { float: none; width: 100%; margin: 0 0 12px; }
+    html[lang="ar"] .card-img-wrap { float: none; margin: 0 0 12px; }
+}
