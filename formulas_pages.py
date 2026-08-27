@@ -230,11 +230,14 @@ def formula_page(b, an, lang, live):
     _like = f"formula_{b['base_id']}_{lang}"
     body.append(G.build_actions_html(_like, b["base_id"], lang, "tag", inline_comment=True))
     body.append(G.build_feedback_html(_like, lang, "tag", inline_toggle=True))
-    out.append('<div class="entity-body">' + "".join(body) + '</div>')
+    out.append(f'<div class="entity-body" data-formula="{H.escape(b["base_id"])}">'
+               + "".join(body) + '</div>')
     out.append(site_chrome(lang)[1])
     out.append(site_chrome(lang)[2])
     out.append('<script src="/js/b42-graph-core.js"></script>'
-               '<script src="/js/b42-mini.js" defer></script>')
+               '<script src="/js/b42-mini.js" defer></script>'
+               '<script src="/js/b42-live.js"></script>'
+               '<script src="/js/formula-live.js" defer></script>')
     out.append("</body></html>")
     return "".join(out)
 
