@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Пайплайн производства — bridge42worlds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<style>
+/* ═══ Схема пайплайна. Каждый узел несёт data-step — будущая живость
+   (зелёный «прошло» / красный «упало» / пульс «идёт») подключится к
+   state-файлам шагов без переделки разметки. Пока статика. ═══ */
+body { max-width: 1060px; padding-bottom: 80px; }
+.pl-head { margin: 26px 0 6px; }
+.pl-head h1 { font-size: 26px; margin: 0 0 6px; }
+.pl-sub { color: var(--soft); font-size: 13.5px; max-width: 72ch; line-height: 1.55; }
+
+/* легенда исполнителей */
+.pl-legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 18px 0 8px;
+  font-family: var(--mono); font-size: 11.5px; color: var(--muted); }
+.pl-legend b { font-weight: 500; }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 3px;
+  vertical-align: -1px; margin-right: 5px; }
+
+/* цвета исполнителей */
+:root {
+  --ex-local: #6b7f8c;   /* локальный Python (VPS) */
+  --ex-ds: #b8860b;      /* DeepSeek — генерация, перевод, добыча */
+  --ex-vec: #0d7d8c;     /* bge-m3 / Vectorize — весь вектор */
+  --ex-cf: #c46a1f;      /* Cloudflare — R2, D1, Worker */
+  --ex-s2: #4a7ab5;      /* Semantic Scholar */
+  --ex-flux: #8a6db1;    /* FLUX — обложки */
+  --ex-claude: #a05c65;  /* Claude-агент: надзор и починка */
+}
+
+/* лента этапов */
+.stage { position: relative; margin: 0 0 0 130px; padding: 16px 18px 18px;
+  border: 1px solid var(--hairline); border-radius: var(--radius);
+  background: var(--surface); box-shadow: var(--shadow-sm); }
+.stage + .stage { margin-top: 34px; }
+.stage + .stage::before { content: ""; position: absolute; left: 50%; top: -35px;
+  width: 2px; height: 34px; background: var(--hairline); }
+.stage + .stage::after { content: ""; position: absolute; left: calc(50% - 5px);
+  top: -8px; border: 6px solid transparent; border-top-color: var(--muted);
+  opacity: .6; }
+.st-time { position: absolute; left: -130px; top: 14px; width: 110px;
+  text-align: right; font-family: var(--mono); font-size: 11px;
+  color: var(--cyan); line-height: 1.5; }
+.st-time small { display: block; color: var(--soft); }
+.st-name { font-family: var(--serif); font-size: 17px; margin: 0 0 2px; }
+.st-who { font-family: var(--mono); font-size: 10.5px; color: var(--soft);
+  margin-bottom: 10px; }
+.st-note { font-size: 12px; color: var(--soft); margin-top: 10px;
+  line-height: 1.5; max-width: 80ch; }
+
+/* узлы внутри этапа */
+.nodes { display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; }
+.node { position: relative; flex: 1 1 150px; min-width: 150px; max-width: 240px;
+  padding: 8px 11px 9px; border: 1px solid var(--hairline);
+  border-left: 3px solid var(--ex, var(--ex-local));
+  border-radius: var(--radius-sm); background: var(--bg); }
+.node b { display: block; font-size: 12.5px; font-weight: 600; margin-bottom: 2px; }
+.node span { display: block; font-size: 11px; color: var(--muted); line-height: 1.45; }
+.node em { display: block; font-family: var(--mono); font-style: normal;
+  font-size: 9.5px; color: var(--soft); margin-top: 5px; }
+/* будущая лампочка состояния */
+.node::after { content: ""; position: absolute; top: 8px; right: 8px;
+  width: 7px; height: 7px; border-radius: 50%; background: var(--hairline); }
+.chain { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.chain .arr { color: var(--soft); font-size: 14px; flex: none; }
+
+.branch { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+@media (max-width: 700px) {
+  .stage { margin-left: 0; }
+  .st-time { position: static; text-align: left; width: auto; margin-bottom: 8px; }
+  .branch { grid-template-columns: 1fr; }
+}
+
+/* низ: пилот и правила */
+.pl-foot { margin: 40px 0 0 130px; padding: 16px 18px;
+  border: 1px dashed var(--hairline); border-radius: var(--radius);
+  background: color-mix(in srgb, var(--surface) 55%, transparent); }
+@media (max-width: 700px) { .pl-foot { margin-left: 0; } }
+.pl-foot h2 { font-size: 15px; margin: 0 0 8px; }
+.pl-foot p, .pl-foot li { font-size: 12.5px; color: var(--muted); line-height: 1.55; }
+</style>
+</head>
+<body>
+
+<div class="pl-head">
+  <h1>Пайплайн производства</h1>
+  <div class="pl-sub">Один суточный цикл прода: откуда берём, чем генерим, как
+  насыщаем знаниями, размечаем и выкладываем. Каждый узел получит живую
+  лампочку — прошло · идёт · упало — когда поедем на этом конвейере;
+  пока схема статичная.</div>
+</div>
+
+<div class="pl-legend">
+  <span><i class="dot" style="background:var(--ex-local)"></i><b>Python на машине</b> — оркестр, сборка, файлы</span>
+  <span><i class="dot" style="background:var(--ex-ds)"></i><b>DeepSeek</b> — тексты: генерация · перевод · добыча понятий</span>
+  <span><i class="dot" style="background:var(--ex-vec)"></i><b>Вектор bge-m3</b> — смысл: разметка · похожие · сверки</span>
+  <span><i class="dot" style="background:var(--ex-s2)"></i><b>Semantic Scholar</b> — цитируемость · сито · авторы</span>
+  <span><i class="dot" style="background:var(--ex-flux)"></i><b>FLUX</b> — обложки</span>
+  <span><i class="dot" style="background:var(--ex-cf)"></i><b>Cloudflare</b> — R2 · D1 · Vectorize · Worker</span>
+  <span><i class="dot" style="background:var(--ex-claude)"></i><b>Claude-агент</b> — дозор, разбор сбоев, починка</span>
+</div>
+
+<!-- ═════════ I. ЗАБОР ═════════ -->
+<div class="stage" data-stage="fetch">
+  <div class="st-time">08:00<small>Кувейт · ежедневно</small></div>
+  <div class="st-name">Забор дня</div>
+  <div class="st-who">локальный Python · arXiv API</div>
+  <div class="chain">
+    <div class="node" data-step="arxiv-list" style="--ex:var(--ex-local)">
+      <b>arXiv: свежий список</b>
+      <span>новые работы по нашим разделам (физика, астро, квант, приборы, био)</span>
+      <em>arxiv_bulk · API arXiv</em>
+    </div>
+    <span class="arr">→</span>
+    <div class="node" data-step="select" style="--ex:var(--ex-local)">
+      <b>Отбор дня</b>
+      <span>~20–40 работ: баланс разделов, лицензии, вес (цитируемость — фактор отбора)</span>
+      <em>article_bulk_select · очередь bulk-select</em>
+    </div>
+    <span class="arr">→</span>
+    <div class="node" data-step="pdf" style="--ex:var(--ex-local)">
+      <b>PDF и кадры</b>
+      <span>текст статьи, картинки из PDF в мозаику</span>
+      <em>pdf → jpg/webp</em>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════ II. ГЕНЕРАЦИЯ ═════════ -->
+<div class="stage" data-stage="generate">
+  <div class="st-time">19:30–03:30<small>дешёвое окно DeepSeek</small></div>
+  <div class="st-name">Генерация разборов</div>
+  <div class="st-who">DeepSeek · русский — язык-источник</div>
+  <div class="branch">
+    <div class="node" data-step="express" style="--ex:var(--ex-ds)">
+      <b>Экспресс (~90% потока)</b>
+      <span>быстрый пересказ по авторской аннотации: заголовок, суть, «зачем читать». Дёшево, в тот же день</span>
+      <em>помечен бейджем «экспресс» на карточке</em>
+    </div>
+    <div class="node" data-step="full" style="--ex:var(--ex-ds)">
+      <b>Полный разбор (~10%)</b>
+      <span>три уровня — просто · популярно · подробно — плюс мини, глоссарий, формулы с выводами, факт, рекомендации автору</span>
+      <em>еженедельная волна полных + доводка refined</em>
+    </div>
+  </div>
+  <div class="st-note">Уровни — это лестница одного текста, не обрезки: простой
+  объясняет без терминов, подробный держит математику. Экспресс со временем
+  дорастает до полного, если тема живая.</div>
+</div>
+
+<!-- ═════════ III. ПЕРЕВОД ═════════ -->
+<div class="stage" data-stage="translate">
+  <div class="st-time">там же<small>вслед за генерацией</small></div>
+  <div class="st-name">Перевод</div>
+  <div class="st-who">DeepSeek · 5 языков</div>
+  <div class="chain">
+    <div class="node" data-step="tr-langs" style="--ex:var(--ex-ds)">
+      <b>ru → en · es · ar · fr</b>
+      <span>все уровни и служебные поля; термины по физическому словоупотреблению языка</span>
+      <em>шесть слоёв утечки языка под проверкой</em>
+    </div>
+    <span class="arr">→</span>
+    <div class="node" data-step="tr-guard" style="--ex:var(--ex-local)">
+      <b>Страж языка</b>
+      <span>непереведённое не маскируется: честная заглушка с кнопкой «перевести сейчас»</span>
+      <em>payload_in_source_lang · заглушки</em>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════ IV. ОБЛОЖКИ ═════════ -->
+<div class="stage" data-stage="covers">
+  <div class="st-time">ночью<small>после текстов</small></div>
+  <div class="st-name">Обложки</div>
+  <div class="st-who">FLUX (DeepInfra) · PDF-кадры</div>
+  <div class="chain">
+    <div class="node" data-step="cover-pdf" style="--ex:var(--ex-local)">
+      <b>Кадр из PDF</b>
+      <span>лучший рисунок статьи, если он есть — «золото», настоящая наука</span>
+    </div>
+    <span class="arr">→</span>
+    <div class="node" data-step="cover-ai" style="--ex:var(--ex-flux)">
+      <b>AI-обложка</b>
+      <span>когда кадра нет: schnell в поток, pro — витринным статьям</span>
+      <em>covers_full · поле image_model</em>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════ V. ВЕКТОР ═════════ -->
+<div class="stage" data-stage="vector">
+  <div class="st-time">ночью<small>каждой новой статье</small></div>
+  <div class="st-name">Вектор — смысловой слой</div>
+  <div class="st-who">bge-m3 (Workers AI) · кросс-язычный: русский текст ↔ английская карточка</div>
+  <div class="chain">
+    <div class="node" data-step="embed" style="--ex:var(--ex-vec)">
+      <b>Эмбеддинг статьи</b>
+      <span>в облако (Vectorize — поиск и похожие) и в локальное поле 3 млн работ (валидации)</span>
+    </div>
+    <span class="arr">→</span>
+    <div class="node" data-step="retag" style="--ex:var(--ex-vec)">
+      <b>Разметка понятиями</b>
+      <span>сходство с карточками реестра, поправка на хабность, порог 0.50 + отрыв 0.12</span>
+      <em>retag_hub → concepts_v2</em>
+    </div>
+    <span class="arr">→</span>
+    <div class="node" data-step="sci-link" style="--ex:var(--ex-vec)">
+      <b>Учёные и похожие</b>
+      <span>привязка к учёным, соседние разборы для «похожих» и машины знаний</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════ VI. ЗНАНИЯ ═════════ -->
+<div class="stage" data-stage="knowledge">
+  <div class="st-time">ночью<small>конвейер знаний · инкрементально</small></div>
+  <div class="st-name">Насыщение знаниями</div>
+  <div class="st-who">DeepSeek + вектор + Scholar · только по новому, сделанное не повторяется</div>
+  <div class="chain" style="margin-bottom:8px">
+    <div class="node" data-step="s2" style="--ex:var(--ex-s2)">
+      <b>Semantic Scholar</b>
+      <span>цитируемость, граф ссылок, метрики авторов — по новым статьям</span>
+      <em>1 запрос/сек · атрибуция обязательна</em>
+    </div>
+    <span class="arr">→</span>
+    <div class="node" data-step="harvest" style="--ex:var(--ex-ds)">
+      <b>Добыча понятий</b>
+      <span>модель читает статью с определением понятия в промпте, отдаёт кандидатов + дословные якоря</span>
+      <em>concept_cycle · mentions в журнал</em>
+    </div>
+    <span class="arr">→</span>
+    <div class="node" data-step="sift" style="--ex:var(--ex-vec)">
+      <b>Сверка и дистилляция</b>
+      <span>вектором против реестра (0.80) и между собой (0.86); проигравший — алиас</span>
+    </div>
+    <span class="arr">→</span>
+    <div class="node" data-step="birth" style="--ex:var(--ex-s2)">
+      <b>Рождение</b>
+      <span>тройное сито: опора ≥5 статей + вектор + Scholar-проверка; вектор — в матрицу и облако</span>
+    </div>
+  </div>
+  <div class="chain">
+    <div class="node" data-step="anatomy" style="--ex:var(--ex-ds)">
+      <b>Формулы</b>
+      <span>анатомия новых форм: переменные · константы · операторы · применимость; системы единиц (СИ/СГС/планковская)</span>
+    </div>
+    <span class="arr">→</span>
+    <div class="node" data-step="cards" style="--ex:var(--ex-ds)">
+      <b>Карточки</b>
+      <span>полные записи новорождённым + русские переводы карточек и анатомий</span>
+    </div>
+    <span class="arr">→</span>
+    <div class="node" data-step="reapply" style="--ex:var(--ex-vec)">
+      <b>Переразметка</b>
+      <span>статьи переразмечаются на выросшем реестре, справочник пересобирается из хранилищ</span>
+      <em>retag → wave5_apply → live</em>
+    </div>
+    <span class="arr">→</span>
+    <div class="node" data-step="anchors" style="--ex:var(--ex-ds)">
+      <b>Якоря текстов</b>
+      <span>дословные вхождения понятий в русском и английском тексте — падежи, парафразы, аббревиатуры</span>
+      <em>mentions_ru · журнал якорей</em>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════ VII. РАЗМЕТКА ТЕКСТОВ ═════════ -->
+<div class="stage" data-stage="highlight">
+  <div class="st-time">ночью<small>после якорей</small></div>
+  <div class="st-name">Ссылки в текстах</div>
+  <div class="st-who">локальный Python · три слоя якорей</div>
+  <div class="chain">
+    <div class="node" data-step="hl-model" style="--ex:var(--ex-ds)">
+      <b>Слой 1 — модельные</b>
+      <span>дословные выражения из добычи: точное вхождение в текст</span>
+    </div>
+    <span class="arr">+</span>
+    <div class="node" data-step="hl-vec" style="--ex:var(--ex-vec)">
+      <b>Слой 2 — векторные</b>
+      <span>смысловое совпадение фразы с карточкой понятия</span>
+    </div>
+    <span class="arr">+</span>
+    <div class="node" data-step="hl-dict" style="--ex:var(--ex-local)">
+      <b>Слой 3 — словарные</b>
+      <span>имена понятий и алиасы по словарю, до 20 ссылок на текст</span>
+      <em>highlight_concepts · 8–15 ссылок на сложную статью</em>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════ VIII. СТРАНИЦЫ ═════════ -->
+<div class="stage" data-stage="build">
+  <div class="st-time">утром<small>только изменённое</small></div>
+  <div class="st-name">Страницы и данные</div>
+  <div class="st-who">локальный Python · тело статично, обвязка динамична</div>
+  <div class="chain">
+    <div class="node" data-step="pages" style="--ex:var(--ex-local)">
+      <b>Перегенерация</b>
+      <span>новые статьи + затронутые понятия, формулы, авторы; единая карточка, мини-графы</span>
+    </div>
+    <span class="arr">→</span>
+    <div class="node" data-step="data" style="--ex:var(--ex-local)">
+      <b>Данные</b>
+      <span>индексы (+цитируемость), словари клиенту, данные графа, датасет файн-тюнинга</span>
+    </div>
+    <span class="arr">→</span>
+    <div class="node" data-step="dash" style="--ex:var(--ex-local)">
+      <b>Дашборд</b>
+      <span>покрытие машины знаний, реестр, целостность — цифры дня</span>
+      <em>status.html · отчёт 04:00</em>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════ IX. ВЫКЛАДКА И ДОЗОР ═════════ -->
+<div class="stage" data-stage="deploy">
+  <div class="st-time">утром<small>финал цикла</small></div>
+  <div class="st-name">Выкладка и дозор</div>
+  <div class="st-who">Cloudflare · Claude-агент на подхвате</div>
+  <div class="chain">
+    <div class="node" data-step="r2" style="--ex:var(--ex-cf)">
+      <b>R2 — статика</b>
+      <span>только изменённые файлы; страницы, обложки, данные</span>
+    </div>
+    <span class="arr">+</span>
+    <div class="node" data-step="d1" style="--ex:var(--ex-cf)">
+      <b>D1 + Worker — динамика</b>
+      <span>лента, страница автора, поиск словами — живые списки без пересборки</span>
+      <em>b42-cards</em>
+    </div>
+    <span class="arr">+</span>
+    <div class="node" data-step="vz" style="--ex:var(--ex-cf)">
+      <b>Vectorize</b>
+      <span>векторы новых статей и понятий — смысловой поиск в проде</span>
+    </div>
+    <span class="arr">→</span>
+    <div class="node" data-step="watch" style="--ex:var(--ex-claude)">
+      <b>Дозор</b>
+      <span>сторож пиков и почты, ежедневный отчёт; сбой шага — разбор и починка агентом</span>
+      <em>b42_report 04:00 · tg-тревоги</em>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════ ПИЛОТ ═════════ -->
+<div class="pl-foot">
+  <h2>Пилот перед запуском: 10 статей сквозь весь конвейер</h2>
+  <p>Прежде чем катать полную пересборку и динамику — прогон на десяти статьях,
+  от забора до выкладки на dev-домен:</p>
+  <ul>
+    <li><b>5 старых</b> — полная переработка существующих разборов: переразметка,
+    якоря, страницы, карточки — проверяем, что конвейер не ломает готовое;</li>
+    <li><b>5 новых</b> — свежий забор с arXiv и генерация с нуля: экспресс и полные,
+    перевод, обложки, вектор, знания — проверяем, что конвейер рождает новое.</li>
+  </ul>
+  <p>Смотрим глазами каждую из десяти. Только после «да» — полный объём.</p>
+  <p style="margin-top:10px; color: var(--soft)">Правила конвейера: русский —
+  язык-источник · дешёвое окно для массовых прогонов · сделанное не повторяется
+  (все шаги со своим состоянием) · знания живут в хранилищах, справочник —
+  производная · публикация только по слову владельца.</p>
+</div>
+
+</body>
+</html>
