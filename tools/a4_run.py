@@ -79,6 +79,17 @@ def main():
     run("distill", [PY, "tools/concept_harvest.py", "--distill"], timeout=1800)
     run("births", [PY, "tools/concept_cycle.py", "--budget", "0"],
         timeout=4 * 3600)
+    # ПЕРЕКРЁСТНАЯ ВНУТРИГРУППОВАЯ ПРОВЕРКА (владелец 27.08: «внутри всё должно
+    # быть целостно; дорост изнутри даст ещё процентов 20»): группы называют
+    # недостающий скелет → сверка вектором → полевой добор опоры нашими
+    # статьями → обычное сито рождений (вектор + Scholar + ≥5 статей)
+    run("g-grow", [PY, "tools/group_integrity.py", "--grow"], timeout=3600)
+    run("match2", [PY, "tools/concept_harvest.py", "--match"], timeout=3600)
+    run("distill2", [PY, "tools/concept_harvest.py", "--distill"], timeout=1800)
+    run("f-support", [PY, "tools/group_integrity.py", "--support"], timeout=3600)
+    run("births-g", [PY, "tools/concept_cycle.py", "--budget", "0"],
+        timeout=4 * 3600)
+    run("g-audit", [PY, "tools/group_integrity.py", "--audit"], timeout=1800)
     # вход супера: реестр v4 из live+рождённых собирает wave5_apply.build_live —
     # сначала live с новыми рождениями, потом супер на нём, потом live ещё раз
     run("live-pre", [PY, "tools/wave5_apply.py", "--live-only"], timeout=1800)

@@ -159,9 +159,21 @@ def load_harvest():
 
 
 def save_harvest(rows):
-    with HARVEST.open("w", encoding="utf-8") as fh:
-        for r in sorted(rows.values(), key=lambda r: -len(r["articles"])):
-            fh.write(json.dumps(r, ensure_ascii=False) + "\n")
+    """АТОМАРНО: во временный файл и os.replace. Копилка с векторами весит
+    200 МБ; прямая перезапись, прерванная посреди (kill, антивирус, лок),
+    27.08 обрезала файл на 4 тысячи строк. Плюс ретрай на Windows-локи."""
+    tmp = HARVEST.with_suffix(".jsonl.tmp")
+    for attempt in range(5):
+        try:
+            with tmp.open("w", encoding="utf-8") as fh:
+                for r in sorted(rows.values(), key=lambda r: -len(r["articles"])):
+                    fh.write(json.dumps(r, ensure_ascii=False) + "\n")
+            os.replace(tmp, HARVEST)
+            return
+        except OSError:
+            if attempt == 4:
+                raise
+            time.sleep(1 + attempt * 2)
 
 
 MENTIONS = ROOT / "data" / "concept-mentions.jsonl"

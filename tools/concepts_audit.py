@@ -84,6 +84,22 @@ def main():
     merge.sort(key=lambda r: -r[2])
     homon.sort(key=lambda r: -r[2])
 
+    # ── степени связности: рёбра к узлам (владелец: «3–5 к одному в целом») ──
+    deg_c = Counter()
+    concept_idx = [i for i, nd in enumerate(graph["nodes"]) if nd["kind"] != "formula"]
+    for i in concept_idx:
+        deg_c[min(adjc[i], 13)] += 1
+    n_cn = len(concept_idx)
+    n_ce = sum(1 for a, b, w in graph["edges"]
+               if graph["nodes"][a]["kind"] != "formula"
+               and graph["nodes"][b]["kind"] != "formula")
+    ratio = n_ce / max(1, n_cn)
+    zero_link = sum(1 for i in concept_idx if not adjc[i])
+
+    # ── внутригрупповая целостность (group_integrity --audit) ──
+    gi_p = ROOT / "data" / "group-integrity.json"
+    gi = json.loads(gi_p.read_text(encoding="utf-8")) if gi_p.exists() else {}
+
     # ── покрытие статей ──
     per_art = Counter()
     for c, v in C.items():
@@ -196,6 +212,25 @@ th {{ font-family: var(--mono); font-size: 10.5px; color: var(--soft);
 {sec(f"Омонимы и «всегда вместе» — {len(homon)} пар",
      "<div class='sub'>Карточки ≥0.90, но пулы НЕ пересекаются — это РАЗНЫЕ понятия, "
      "не сливать.</div>" + pair_rows(homon, 12))}
+{sec(f"Связность: {n_ce:,} рёбер на {n_cn:,} понятий — {ratio:.1f} : 1",
+     f"<div class='sub'>Пропорция в отображаемом графе (топ-12 рёбер на узел, "
+     f"≥2 общих статей); полная ткань связей плотнее. Понятий с нулём связей "
+     f"в графе: <b>{zero_link}</b> — после векторного запасного слоя цель 0.</div>"
+     + bar_table(Counter({('свыше 12' if k == 13 else str(k)) + ' рёбер': v
+                          for k, v in deg_c.items()})))}
+{sec(f"Внутригрупповая целостность — {sum(1 for g in gi.values() if g.get('skeleton_holes'))} групп с дырами скелета",
+     ("<div class='sub'>Скелет области: law · math · statistics · method · constant. "
+      "Структурные сироты держат группы — их не трогаем.</div>"
+      + "<table><tr><th>группа</th><th>понятий</th><th>дыры скелета</th>"
+        "<th>связность внутри</th><th>структурные сироты</th></tr>"
+      + "".join(
+          f"<tr><td>{H.escape(g['label'][:42])}</td><td class='num'>{g['n']}</td>"
+          f"<td>{', '.join(g['skeleton_holes']) or '—'}</td>"
+          f"<td class='num'>{int(g['connected_share'] * 100)}%</td>"
+          f"<td class='num'>{len(g['structural_orphans'])}</td></tr>"
+          for g in sorted(gi.values(), key=lambda g: -len(g['skeleton_holes']))[:20])
+      + "</table>") if gi else
+     "<div class='sub'>отчёт групп ещё не собран (group_integrity --audit)</div>")}
 {sec("Покрытие статей разметкой",
      bar_table(Counter({k: depth[k] for k in ('<5', '5-9', '10-19', '20+')})))}
 

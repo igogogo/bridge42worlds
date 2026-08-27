@@ -98,6 +98,7 @@ def run(cap, prof="target"):
     todo = [a for a in pick_articles() if a not in asked][:cap]
     print(f"целевой прогон: {len(todo)} статей (спрошено ранее {len(asked)})")
     n_c = 0
+    batch = []
     for i, aid in enumerate(todo, 1):
         p = build_prompt(aid, prof)
         if not p:
@@ -125,12 +126,20 @@ def run(cap, prof="target"):
         # приносит лишнее вопреки промпту
         cands = [c for c in cands if c.get("kind") in kinds]
         if cands:
-            CH.ingest(aid, cands)
+            batch.append((aid, cands))
             n_c += len(cands)
         asked.add(aid)
-        if i % 25 == 0:
+        # копилка 200 МБ: пишем раз в 10 статей, не на каждую (батч-ingest);
+        # ingest сам мёржит по именам, журнал якорей пишется по-статейно внутри
+        if len(batch) >= 10:
+            for a2, c2 in batch:
+                CH.ingest(a2, c2)
+            batch = []
             save_state(prof, asked)
+        if i % 25 == 0:
             print(f"  {i}/{len(todo)} · кандидатов +{n_c}")
+    for a2, c2 in batch:
+        CH.ingest(a2, c2)
     save_state(prof, asked)
     print(f"✅ целевых кандидатов: +{n_c}; дальше обычные --match/--distill/рождения")
     return 0
