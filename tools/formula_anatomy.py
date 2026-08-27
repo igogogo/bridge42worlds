@@ -113,10 +113,14 @@ def ask_batch(batch, key):
             n = int(it["n"])
             if not (1 <= n <= len(batch)):
                 continue
+            # Единица режется на 80, а не на 40, как было до 27.08: «cubic_metre_
+            # _per_kilogram_per_second_squared» — 43 символа, и обрезка превращала
+            # её в «..._second_squa». Таких битых единиц накопилось 61 штука, и
+            # разобрать их в русскую запись уже нельзя — слова нет.
             rec = {
                 "variables": [{"s": str(v.get("s", ""))[:20], "m": str(v.get("m", ""))[:120],
                                "id": re.sub(r"[^a-z0-9_]", "", str(v.get("id", "")).lower()),
-                               "unit": re.sub(r"[^a-z0-9_]", "", str(v.get("unit", "")).lower())[:40]}
+                               "unit": re.sub(r"[^a-z0-9_]", "", str(v.get("unit", "")).lower())[:80]}
                               for v in (it.get("variables") or []) if v.get("s")],
                 "operators": [{"s": str(v.get("s", ""))[:20],
                                "id": re.sub(r"[^a-z0-9_]", "", str(v.get("id", "")).lower()),
@@ -126,7 +130,7 @@ def ask_batch(batch, key):
                                "id": re.sub(r"[^a-z0-9_]", "", str(v.get("id", "")).lower()),
                                "m": str(v.get("m", ""))[:200],
                                "value": str(v.get("value", ""))[:40],
-                               "unit": re.sub(r"[^a-z0-9_]", "", str(v.get("unit", "")).lower())[:40]}
+                               "unit": re.sub(r"[^a-z0-9_]", "", str(v.get("unit", "")).lower())[:80]}
                               for v in (it.get("constants") or []) if v.get("s")],
                 "description": str(it.get("description", ""))[:1200],
                 "history": str(it.get("history", ""))[:600],

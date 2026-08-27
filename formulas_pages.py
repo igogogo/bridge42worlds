@@ -31,7 +31,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 ML = ROOT.parent / "b42-ml"
 sys.path.insert(0, str(ROOT))
-from concepts_pages import head, name_of, KIND_LBL, site_chrome  # noqa: E402
+from concepts_pages import (head, name_of, KIND_LBL, site_chrome,  # noqa: E402
+                            UNIT_RU, unit_label)
 import generate as G   # noqa: E402 — действия и отклик теми же функциями
 
 # формулы — те же два языка, что и понятия; остальным редирект (см. concepts_pages)
@@ -77,9 +78,14 @@ def load_all():
     return bases, anatomy, live
 
 
-def concept_link(cid, lang, live, cls="side-tag"):
+def concept_link(cid, lang, live, cls="side-tag", unit=False):
     c = live["concepts"].get(cid)
     label = name_of(c, cid, lang) if c else cid.replace("_", " ")
+    # Единицу в таблице разбора подписываем сокращением («м/с», не «метр в
+    # секунду»): в строке символа читателю нужна размерность, а не название.
+    # Ссылка при этом остаётся — за названием он идёт на страницу единицы.
+    if unit and lang == "ru" and unit_label(cid, lang) != cid.replace("_", " "):
+        label = unit_label(cid, lang)
     if not c:
         return H.escape(label)
     return (f'<a href="/lang/{lang}/concepts/{H.escape(cid)}.html" class="{cls}">'
@@ -104,8 +110,9 @@ def sym_rows(an, lang, live, t):
         unit_html = ""
         if unit and unit != "dimensionless":
             unit_html = (" · " + t["unit_lbl"] + ": "
-                         + concept_link(unit, lang, live, "side-law")
-                         if live["concepts"].get(unit) else f" · {t['unit_lbl']}: {H.escape(unit.replace('_', ' '))}")
+                         + concept_link(unit, lang, live, "side-law", unit=True)
+                         if live["concepts"].get(unit)
+                         else f" · {t['unit_lbl']}: {H.escape(unit_label(unit, lang))}")
         target = (concept_link(v["id"], lang, live) if v.get("id") and live["concepts"].get(v["id"])
                   else H.escape((v.get("id") or "").replace("_", " ")))
         m = _ru_m(an, lang, "variables", i, v.get("m", ""))
@@ -115,7 +122,9 @@ def sym_rows(an, lang, live, t):
     for i, c in enumerate(an.get("constants") or []):
         val = f' = {H.escape(c["value"])}' if c.get("value") else ""
         unit = c.get("unit") or ""
-        unit_html = f' {H.escape(unit.replace("_", " "))}' if unit and unit != "dimensionless" else ""
+        # единица по-русски там, где для неё есть русская запись (словарь общий
+        # со страницей понятия — второй такой заводить незачем)
+        unit_html = f' {H.escape(unit_label(unit, lang))}' if unit_label(unit, lang) else ""
         m = _ru_m(an, lang, "constants", i, c.get("m", ""))
         desc = f' — {H.escape(m)}' if m else ""
         rows.append(f'<tr><td class="fx-s">{H.escape(c["s"])}</td>'

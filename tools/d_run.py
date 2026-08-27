@@ -98,6 +98,13 @@ def counts():
         out["из них с цифрами"] = sum(1 for v in m.values() if v.get("citations"))
     except Exception:
         pass
+    try:
+        live = json.loads((ROOT / "data/concepts-live.json").read_text(encoding="utf-8"))["concepts"]
+        cs = [v for v in live.values() if v.get("kind") == "constant"]
+        out["констант"] = len(cs)
+        out["из них со значением"] = sum(1 for v in cs if v.get("value"))
+    except Exception:
+        pass
     return out
 
 
@@ -142,6 +149,17 @@ def main():
             pass
         time.sleep(300)
     log("B+C завершены — полная пересборка")
+    # КОНСТАНТЫ ИЗ ФОРМУЛ — до пересборки, иначе страницы соберутся без них.
+    # Владелец 27.08: «константы могут в статьях не упоминаться, но об этом
+    # скажут наши формулы». Шаг идемпотентен: второй запуск ничего не добавит.
+    run("d-consts", [PY, "tools/constants_from_formulas.py", "--apply", "--codata"],
+        timeout=900)
+    run("d-units-fix", [PY, "tools/fix_truncated_units.py", "--apply"], timeout=900)
+    # реестр пересобрать ПОСЛЕ констант: значение и класс живут отдельными
+    # слоями, в live они попадают только сборкой
+    run("d-live", [PY, "tools/wave5_apply.py", "--live-only"], timeout=1800)
+    run("d-pages-c", [PY, "concepts_pages.py"], timeout=3600)
+    run("d-pages-f", [PY, "formulas_pages.py"], timeout=3600)
     run("d-html", [PY, "run.py", "html", "--force"], timeout=8 * 3600)
     run("d-authors", [PY, "-c",
         "import sys; sys.path.insert(0,'.'); import generate as G; "

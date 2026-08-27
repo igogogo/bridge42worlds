@@ -273,6 +273,187 @@ def autolink(html_text, cid, lang, live):
     return html_text
 
 
+VAL_LBL = {"ru": "Значение", "en": "Value", "es": "Valor",
+           "ar": "القيمة", "fr": "Valeur"}
+# Единицы по-русски: показывать «coulomb» русскому читателю на странице заряда —
+# та же полумера, что английская карточка. Список короткий намеренно: сюда
+# попадают только единицы, которые реально стоят при наших константах.
+UNIT_RU = {
+    "coulomb": "Кл", "joule_second": "Дж·с", "joule_per_kelvin": "Дж/К",
+    "per_mole": "1/моль", "kilogram": "кг", "metre": "м", "second": "с",
+    "metre_per_second": "м/с", "farad_per_metre": "Ф/м",
+    "henry_per_metre": "Гн/м", "joule_per_mole_kelvin": "Дж/(моль·К)",
+    "coulomb_per_mole": "Кл/моль", "per_metre": "1/м",
+    "joule_per_tesla": "Дж/Тл", "weber": "Вб", "siemens": "См", "ohm": "Ом",
+    "metre_kelvin": "м·К", "hertz": "Гц", "kelvin": "К", "pascal_second": "Па·с",
+    "newton_metre_squared_per_kilogram_squared": "Н·м²/кг²",
+    "newton_metre_squared_per_coulomb_squared": "Н·м²/Кл²",
+    "watt_per_square_metre_kelvin_to_the_fourth": "Вт/(м²·К⁴)",
+    "per_second": "1/с", "electronvolt": "эВ",
+    # базовые СИ — те, что стоят при переменных наших формул
+    "joule": "Дж", "newton": "Н", "pascal": "Па", "watt": "Вт", "volt": "В",
+    "ampere": "А", "tesla": "Тл", "mole": "моль", "candela": "кд",
+    "square_metre": "м²", "cubic_metre": "м³", "radian": "рад",
+    "steradian": "ср", "joule_per_cubic_metre": "Дж/м³",
+    "watt_per_square_metre": "Вт/м²", "volt_per_metre": "В/м",
+    "reciprocal_metre": "1/м", "per_second_squared": "1/с²",
+    "radian_per_metre": "рад/м", "siemens_per_metre": "См/м",
+    "square_metre_per_kilogram": "м²/кг",
+    "watt_per_metre_per_kelvin": "Вт/(м·К)",
+    "joule_per_cubic_metre_per_kelvin": "Дж/(м³·К)",
+    "kilogram_per_cubic_metre": "кг/м³",
+    "metre_per_second_squared": "м/с²", "newton_per_metre": "Н/м",
+    "joule_per_kilogram": "Дж/кг", "joule_per_mole": "Дж/моль",
+}
+
+
+# Основы единиц. Дальше их собирает разбор имени — словарём все 153 единицы,
+# что стоят при наших формулах, не покрыть, а новые приезжают с каждой добычей.
+UNIT_BASE = {
+    "metre": "м", "meter": "м", "second": "с", "kilogram": "кг", "gram": "г",
+    "kelvin": "К", "joule": "Дж", "watt": "Вт", "coulomb": "Кл",
+    "newton": "Н", "pascal": "Па", "mole": "моль", "ampere": "А",
+    "volt": "В", "tesla": "Тл", "hertz": "Гц", "radian": "рад",
+    "steradian": "ср", "siemens": "См", "ohm": "Ом", "farad": "Ф",
+    "henry": "Гн", "weber": "Вб", "candela": "кд", "bit": "бит",
+    "byte": "байт", "parsec": "пк", "megaparsec": "Мпк", "kiloparsec": "кпк",
+    "kilometre": "км", "centimetre": "см", "millimetre": "мм",
+    "micrometre": "мкм", "nanometre": "нм", "picometre": "пм",
+    "angstrom": "Å", "electronvolt": "эВ", "kiloelectronvolt": "кэВ",
+    "megaelectronvolt": "МэВ", "gigaelectronvolt": "ГэВ", "gev": "ГэВ",
+    "mev": "МэВ", "kev": "кэВ", "ev": "эВ", "tev": "ТэВ",
+    "year": "год", "day": "сут", "hour": "ч", "minute": "мин",
+    "millisecond": "мс", "microsecond": "мкс", "nanosecond": "нс",
+    "femtosecond": "фс", "picosecond": "пс", "gigahertz": "ГГц",
+    "megahertz": "МГц", "kilohertz": "кГц", "terahertz": "ТГц",
+    "atmosphere": "атм", "bar": "бар", "litre": "л", "gauss": "Гс",
+    "lightyear": "св. год", "astronomical": "а. е.", "solar": "M☉",
+    "dalton": "Да", "barn": "барн", "sievert": "Зв", "becquerel": "Бк",
+    "lumen": "лм", "lux": "лк", "degree": "°",
+}
+_POW = {"squared": "²", "square": "²", "cubed": "³", "cubic": "³",
+        "quartic": "⁴", "fourth": "⁴", "quadratic": "²"}
+# Единицы, у которых нет разбора: атомные, обиходные, обратные.
+UNIT_ODD = {"hartree": "Ha", "bohr": "a₀", "inverse_gev": "1/ГэВ",
+            "reciprocal_gev": "1/ГэВ", "cycle_per_metre": "цикл/м",
+            "cycle_per_second": "Гц", "metre_to_the_minus_2": "м⁻²",
+            "metre_to_the_minus_3_over_2": "м⁻³ᐟ²",
+            "per_metre_to_the_three_halves": "м⁻³ᐟ²",
+            "arcsecond": "″", "arcminute": "′", "percent": "%"}
+
+
+def unit_ru(uid):
+    """«joule_per_mole_kelvin» → «Дж/(моль·К)». Разбор, а не словарь.
+
+    Имя единицы у нас всегда собрано из английских слов: основа, степень
+    («squared», «cubic») и «per» как черта дроби. Значит его можно разобрать —
+    и тогда новая единица из ночной добычи получает русскую запись сама, без
+    правки кода. Чего разобрать не смог — отдаём как есть, лучше английское
+    слово, чем выдумка.
+    """
+    uid = (uid or "").strip().lower()
+    if uid in UNIT_ODD:
+        return UNIT_ODD[uid]
+    # «...kelvin_to_the_fourth» — степень словами. Сводим её к обычному суффиксу
+    # степени, чтобы она досталась ПОСЛЕДНЕЙ единице, а не всей дроби: у закона
+    # Стефана — Больцмана размерность Вт/(м²·К⁴), а не (Вт/м²·К)⁴.
+    for tail, plain in (("_to_the_fourth", "_quartic"), ("_to_the_third", "_cubed"),
+                        ("_to_the_second", "_squared")):
+        if uid.endswith(tail):
+            uid = uid[: -len(tail)] + plain
+    parts = [p for p in uid.split("_") if p]
+    if not parts:
+        return ""
+    num, den, cur = [], [], []
+    slot = num
+    i = 0
+    while i < len(parts):
+        w = parts[i].lower()
+        if w in ("per", "reciprocal"):
+            if w == "reciprocal" or not cur:
+                if slot is num and not num:
+                    num.append("1")
+            slot = den
+            i += 1
+            continue
+        if w in ("to", "the", "over", "of", "unit", "units"):
+            return ""                       # «metre_to_the_minus_3_over_2» — не наш случай
+        pw = ""
+        if w in _POW:                       # «cubic metre» — степень идёт впереди
+            pw = _POW[w]
+            i += 1
+            if i >= len(parts):
+                return ""
+            w = parts[i].lower()
+        base = UNIT_BASE.get(w) or UNIT_BASE.get(w.rstrip("s"))
+        if not base:
+            return ""
+        if i + 1 < len(parts) and parts[i + 1].lower() in _POW:
+            pw = _POW[parts[i + 1].lower()]
+            i += 1
+        slot.append(base + pw)
+        cur = slot
+        i += 1
+    if not num:
+        return ""
+    top = "·".join(num)
+    if not den:
+        return top
+    bot = "·".join(den)
+    return f"{top}/{bot}" if len(den) == 1 else f"{top}/({bot})"
+
+
+def unit_label(uid, lang):
+    """Подпись единицы на языке страницы — одна точка входа для всех страниц."""
+    uid = (uid or "").strip()
+    if not uid or uid == "dimensionless":
+        return ""
+    if lang == "ru":
+        return UNIT_RU.get(uid) or unit_ru(uid) or uid.replace("_", " ")
+    return uid.replace("_", " ")
+
+
+def _sci_latex(val):
+    """«1.602176634e-19» → «1{,}602176634 \\times 10^{-19}» для KaTeX."""
+    s = (val or "").strip()
+    m = _re.match(r"^(-?\d+(?:\.\d+)?)[eE]([-+]?\d+)$", s)
+    if not m:
+        return H.escape(s)
+    mant, exp = m.group(1), int(m.group(2))
+    return f"{mant} \\times 10^{{{exp}}}"
+
+
+def const_value_block(c, lang):
+    """Число константы — крупной строкой под определением.
+
+    Единица идёт РЯДОМ с формулой, обычным HTML, а не внутри KaTeX: в «Дж/(моль·К)»
+    стоит средняя точка, и KaTeX внутри \\text{} подставляет ей \\cdotp, которого
+    в её наборе нет — вся строка тогда краснеет ошибкой разбора. Заодно единица
+    остаётся текстом: её можно выделить, найти поиском и позже увести ссылкой на
+    понятие единицы.
+    """
+    unit = c.get("unit") or ""
+    if not unit or unit == "dimensionless":
+        unit_html = ""
+    else:
+        unit_html = (f'<span class="const-unit" style="font-family:var(--mono);'
+                     f'font-size:15px;color:var(--soft);margin-left:8px">'
+                     f'{H.escape(unit_label(unit, lang))}</span>')
+    sym = c.get("symbol") or ""
+    sym_tex = {"alpha": r"\alpha", "sigma": r"\sigma", "epsilon_0": r"\varepsilon_0",
+               "mu_0": r"\mu_0", "mu_B": r"\mu_B", "Phi_0": r"\Phi_0",
+               "R_infinity": r"R_\infty"}.get(sym, sym.replace("_", "_{") + ("}" if "_" in sym else ""))
+    lhs = f"{sym_tex} = " if sym else ""
+    return (f'<div class="const-value" style="margin:var(--s-3) 0;padding:var(--s-3) var(--s-4);'
+            f'border-left:3px solid var(--cyan);background:var(--surface);'
+            f'border-radius:var(--radius-sm)">'
+            f'<div style="font-family:var(--mono);font-size:11px;color:var(--muted);'
+            f'letter-spacing:.04em;text-transform:uppercase">{VAL_LBL.get(lang, "Value")}</div>'
+            f'<div style="margin:4px 0 0;display:flex;align-items:baseline;flex-wrap:wrap">'
+            f'<span class="formula" style="font-size:19px">'
+            f'\\({lhs}{_sci_latex(c["value"])}\\)</span>{unit_html}</div></div>')
+
+
 def concept_page(cid, c, lang, live, by_id, rich=None, page_langs=None):
     t = T[lang]
     name = name_of(c, cid, lang)
@@ -299,6 +480,12 @@ def concept_page(cid, c, lang, live, by_id, rich=None, page_langs=None):
                f'font-size:18px;line-height:1.55;margin:var(--s-3) 0;padding:var(--s-3) var(--s-4);'
                f'background:var(--bg);'
                f'border-radius:var(--radius-sm)">{H.escape(_card_tr or c["card_en"])}</blockquote>')
+    # ЗНАЧЕНИЕ КОНСТАНТЫ — крупно, сразу под определением. Константа и есть своё
+    # число: страница элементарного заряда без «1,602·10⁻¹⁹ Кл» не отвечает на
+    # единственный вопрос, с которым на неё приходят. Данные — из разбора формул
+    # и ядра СИ (tools/constants_from_formulas.py).
+    if c.get("value"):
+        out.append(const_value_block(c, lang))
     stats = [f'{len(c["articles"])} {t["articles"].lower()}']
     if c["formulas"]:
         stats.append(f'{len(c["formulas"])} {t["formulas"].lower()}')

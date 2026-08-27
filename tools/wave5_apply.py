@@ -168,6 +168,22 @@ def build_live():
         for cid, ru in load(nru).items():
             if cid in out and ru:
                 out[cid]["names"].setdefault("ru", ru)
+    # ЧИСЛО КОНСТАНТЫ. Значение и единица приходят из разбора формул и ядра СИ
+    # (tools/constants_from_formulas.py) — реестр v3 их не знает, а страница
+    # без числа бесполезна: константа и есть своё число.
+    for cid, g in (load(grown_p).items() if grown_p.exists() else ()):
+        if cid in out and g.get("value"):
+            out[cid].update({k: g[k] for k in ("value", "unit", "symbol")
+                             if g.get(k)})
+    # ПРАВКА КЛАССА. Отдельным слоем поверх v3: скорость света лежала там
+    # «понятием», хотя её называют константой 57 наших формул. Правим здесь,
+    # а не в v3, чтобы список правок был виден одним файлом и отменялся одной
+    # строкой.
+    kfix = ROOT / "data" / "concept-kind-fix.json"
+    if kfix.exists():
+        for cid, kind in load(kfix).items():
+            if cid in out and kind:
+                out[cid]["kind"] = kind
     meta = {
         "built": load(ML / "data" / "concepts-super.json").get("built", ""),
         "groups": {str(g): m for g, m in groups.items()},
