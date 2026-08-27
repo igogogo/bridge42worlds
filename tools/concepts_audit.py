@@ -42,7 +42,8 @@ def main():
 
     # ── классы ──
     kinds = Counter(v.get("kind", "?") for v in C.values())
-    LOW = {"math": 200, "law": 200, "constant": 60, "theorem": 80, "principle": 60}
+    LOW = {"math": 200, "law": 200, "constant": 60, "theorem": 80,
+           "principle": 60, "statistics": 150}
 
     # ── опора ──
     orphans = sorted([c for c, v in C.items() if not v.get("articles")],

@@ -34,6 +34,8 @@ var KINDS = [
     {k: 'units+', shapes: ['quantity', 'constant', 'unit', 'unit_system'],
      sh: 'pent', color: '#767c85', hatch: 'horiz',
      ru: 'величины · единицы', en: 'quantities · units'},
+    {k: 'stats', shapes: ['statistics'], sh: 'circle', color: '#4e8076',
+     hatch: 'scatter', ru: 'статистика', en: 'statistics'},
     {k: 'formula', shapes: ['formula'], sh: 'fx', color: '#8c6d3f',
      hatch: 'none', ru: 'формулы', en: 'formulas'},
     {k: 'rest', shapes: [], sh: 'circle', color: '#6b7f8c', hatch: 'none',
@@ -156,6 +158,15 @@ function drawNodeIcon(ctx, TK, x, y, r, st, alpha, hot, isGroup) {
         } else if (st.hatch === 'dot') {
             ctx.moveTo(x + r * 0.22, y);
             ctx.arc(x, y, r * 0.22, 0, Math.PI * 2);
+        } else if (st.hatch === 'scatter') {
+            /* статистика: россыпь точек, как скаттер-плот */
+            var pts = [[-0.45, -0.3], [0.1, -0.5], [0.45, -0.05],
+                       [-0.15, 0.15], [0.3, 0.45], [-0.5, 0.4]];
+            for (k = 0; k < pts.length; k++) {
+                ctx.moveTo(x + pts[k][0] * r + r * 0.12, y + pts[k][1] * r);
+                ctx.arc(x + pts[k][0] * r, y + pts[k][1] * r, r * 0.12,
+                        0, Math.PI * 2);
+            }
         }
         ctx.stroke();
         if (st.hatch === 'dot') {
