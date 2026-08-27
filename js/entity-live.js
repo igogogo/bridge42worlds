@@ -152,6 +152,7 @@
     var lawFallback = (kind === 'law');
 
     function boot() {
+        if (window.B42Live) B42Live.pending(box);
         fetchPage(0).then(function (d) {
             if ((!d || !d.items || !d.items.length) && lawFallback) {
                 lawFallback = false;
@@ -160,13 +161,17 @@
                 return;
             }
             // Облако молчит — страница остаётся такой, какой её собрала статика.
-            if (!d || !d.items || !d.items.length) return;
-            box.innerHTML = cards(d.items);
+            if (!d || !d.items || !d.items.length) {
+                if (window.B42Live) B42Live.fail(box);
+                return;
+            }
+            if (window.B42Live) B42Live.swap(box, cards(d.items));
+            else box.innerHTML = cards(d.items);
             if (d.more) mountMore();
             box.dataset.live = '1';
             if (typeof initAllTooltips === 'function') initAllTooltips();
             if (typeof initReveal === 'function') initReveal();
-        }).catch(function () {});
+        }).catch(function () { if (window.B42Live) B42Live.fail(box); });
         drawStats();
     }
 

@@ -437,7 +437,8 @@
             head += archLine(d.archive, d.stats ? d.stats.total : 0) + archChart(d.archive);
         }
         html = head + claimsBlock() + html;
-        box.innerHTML = html;
+        if (window.B42Live) B42Live.swap(box, html);
+        else box.innerHTML = html;
         [].forEach.call(box.querySelectorAll('.agroup'), mountMore);
         mountClaims(box, (d.groups[0] && d.groups[0].s2) || '');
         if (typeof initAllTooltips === 'function') initAllTooltips();

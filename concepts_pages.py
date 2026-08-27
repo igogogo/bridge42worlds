@@ -469,7 +469,10 @@ def cloud_page(lang, live, by_id):
                f' &nbsp;<a href="/lang/{lang}/concepts/graph.html" '
                f'style="font-family:var(--mono);font-size:12.5px">{gt["title"]} →</a></div>')
     groups = sorted(live["groups"].items(), key=lambda kv: -len(kv[1]))
-    out.append('<div id="search-results" class="entity-list" hidden></div>')
+    # Контейнер результатов поиска НЕ ставим: search.js, найдя пустой
+    # #search-results, наполняет его лентой статей — на облаке понятий
+    # это чужой список (замер 27.08: 12 карточек ниоткуда). Поиск здесь
+    # работает через site-search (переход на главную с запросом).
     for gid, members in groups:
         members = sorted(members, key=lambda m: -len(c.get(m, {}).get("articles", [])))
         top3 = " · ".join(name_of(c[m], m, lang) for m in members[:3] if m in c)

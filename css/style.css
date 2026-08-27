@@ -4533,3 +4533,34 @@ body.graph-page { max-width: none; }
     .entity-body table, main table, body > table { display: block;
         overflow-x: auto; -webkit-overflow-scrolling: touch; }
 }
+
+/* ═══ Динамика: подмена списков с воркера ═══
+   Лента, страница автора и страницы сущностей получают свежие списки из D1
+   через воркер. Пока ответ в пути, статика остаётся на месте (так и было
+   задумано), но подмена была мгновенной — читатель видел рывок. Здесь:
+   на время запроса лёгкое приглушение, после подмены — плавный вход.
+   Скелет нужен там, где статики нет вовсе (новая сущность). */
+.live-loading { opacity: .55; transition: opacity .18s ease; }
+.live-in > * { animation: b42-live-in .34s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes b42-live-in { from { opacity: 0; transform: translateY(5px); } }
+@media (prefers-reduced-motion: reduce) {
+    .live-in > * { animation: none; }
+    .live-loading { opacity: 1; }
+}
+.b42-skel { border: 1px solid var(--hairline); border-radius: var(--radius);
+    background: var(--surface); padding: var(--s-4); margin-bottom: var(--s-3);
+    display: grid; grid-template-columns: 130px 1fr; gap: var(--s-4); }
+.b42-skel i { display: block; border-radius: var(--radius-sm);
+    background: linear-gradient(90deg, var(--hairline) 25%,
+        color-mix(in srgb, var(--hairline) 45%, transparent) 50%,
+        var(--hairline) 75%);
+    background-size: 200% 100%; animation: b42-shimmer 1.3s linear infinite; }
+.b42-skel .sk-img { aspect-ratio: 3/2; }
+.b42-skel .sk-lines { display: flex; flex-direction: column; gap: 8px; }
+.b42-skel .sk-lines i:nth-child(1) { height: 15px; width: 72%; }
+.b42-skel .sk-lines i:nth-child(2) { height: 11px; width: 96%; }
+.b42-skel .sk-lines i:nth-child(3) { height: 11px; width: 88%; }
+.b42-skel .sk-lines i:nth-child(4) { height: 11px; width: 40%; }
+@keyframes b42-shimmer { to { background-position: -200% 0; } }
+@media (max-width: 620px) { .b42-skel { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .b42-skel i { animation: none; } }
