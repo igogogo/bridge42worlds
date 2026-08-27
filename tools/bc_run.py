@@ -120,6 +120,14 @@ def main():
     run("c-apply", [PY, "tools/wave5_apply.py", "--apply"], timeout=14400)
     run("c-names-ru", [PY, "tools/concept_names_translate.py"], timeout=7200)
     run("c-mentions-ru", [PY, "tools/mentions_ru.py"], timeout=21600)
+    # ВТОРОЙ ЗАХОД РОЖДЕНИЙ — после переразметки и якорей. Смысл: до этого у
+    # кандидата не было ТВЁРДОЙ опоры (статей, где он назван дословно), потому
+    # что якорей ещё не существовало. Переразметка и mentions их создают —
+    # и часть копилки честно дозревает. Это и есть живой рост: понятие
+    # появляется, когда у него в корпусе появился дом, а не по нашему желанию.
+    run("c-births3", [PY, "tools/concept_cycle.py", "--budget", "0"],
+        timeout=4 * 3600)
+    run("c-live2", [PY, "tools/wave5_apply.py", "--live-only"], timeout=1800)
     run("c-highlight", [PY, "tools/highlight_concepts.py",
                         "--tiers", "simple,popular,advanced"], timeout=28800)
     if "c-export" not in state()["done"]:
