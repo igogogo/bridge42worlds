@@ -4492,6 +4492,10 @@ def generate_status_page():
         _orph = sum(1 for v in _lc.values() if not v.get("articles"))
         _rel = sum(1 for v in _lc.values() if v.get("related"))
         _fml = sum(len(v.get("formulas") or []) for v in _lc.values())
+        _consts = sum(1 for v in _lc.values() if v.get("kind") == "constant")
+        _valued = sum(1 for v in _lc.values()
+                      if v.get("kind") == "constant" and v.get("value"))
+        _sec = sum(1 for v in _lc.values() if v.get("section"))
         _kinds = {}
         for v in _lc.values():
             _kinds[v.get("kind", "?")] = _kinds.get(v.get("kind", "?"), 0) + 1
@@ -4505,7 +4509,13 @@ def generate_status_page():
             f"<div class='card'><b>{_rel}</b><span>with neighbors</span></div>"
             f"<div class='card'><b>{_fml}</b><span>formula uses</span></div>"
             f"<div class='card'><b>{_orph}</b><span>orphans</span></div>"
-            f"</div><table>{_kind_rows}</table>")
+            # Константа без числа бесполезна, поэтому на дашборде видно обе цифры:
+            # сколько их всего и у скольких есть значение с единицей.
+            + (f"<div class='card'><b>{_valued}/{_consts}</b>"
+               f"<span>constants with value</span></div>" if _consts else "")
+            + (f"<div class='card'><b>{_sec}</b><span>in named sections</span></div>"
+               if _sec else "")
+            + f"</div><table>{_kind_rows}</table>")
     if not concepts_n:
         concepts_n = len(json.loads(Path("data/laws-graph.json").read_text(encoding="utf-8")).get("graph", {})) \
             if Path("data/laws-graph.json").exists() else 0
