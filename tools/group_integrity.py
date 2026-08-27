@@ -237,6 +237,11 @@ def support():
         arts = [have[i] for i in hits if sims[i] >= FIELD_T]
         if not arts:
             continue
+        # ПОЛЕВЫЕ статьи держим ОТДЕЛЬНО (field_arts) и лишь затем подмешиваем
+        # в общий вес: 27.08 прямое слияние в articles тут же дало 3033
+        # «готовых к рождению» — мягкая опора подменила подтверждение.
+        # Решает по-прежнему твёрдая опора (см. concept_cycle.born_candidates).
+        r["field_arts"] = sorted(set(r.get("field_arts") or []) | set(arts))
         merged = sorted(set(r.get("articles") or []) | set(arts))
         if len(merged) > len(r.get("articles") or []):
             r["articles"] = merged

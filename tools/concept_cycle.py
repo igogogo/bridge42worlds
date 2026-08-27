@@ -76,10 +76,59 @@ def fresh_articles(asked, limit):
     return out
 
 
+_HARD = None
+
+
+def hard_support():
+    """Сколько статей НАЗЫВАЮТ кандидата словами — журнал якорей добычи.
+
+    27.08: полевой добор опоры (group_integrity --support) подмешал в articles
+    статьи, близкие по смыслу карточке (cos ≥ 0.58). Это хороший сигнал, но не
+    подтверждение: порог рождения тут же выдал 3033 кандидата вместо сотен —
+    реестр раздулся бы вдвое мягкой опорой. Теперь поле помогает набрать вес,
+    а решает твёрдая опора: статьи, где модель нашла понятие дословно.
+    """
+    global _HARD
+    if _HARD is None:
+        from collections import defaultdict
+        _HARD = defaultdict(set)
+        p = ROOT / "data" / "concept-mentions.jsonl"
+        if p.exists():
+            with p.open(encoding="utf-8") as fh:
+                for line in fh:
+                    try:
+                        r = json.loads(line)
+                    except json.JSONDecodeError:
+                        continue
+                    if r.get("concept") and r.get("art"):
+                        _HARD[r["concept"]].add(r["art"])
+    return _HARD
+
+
 def born_candidates(rows):
-    return [r for r in rows.values()
-            if not r.get("matched") and not r.get("born")
-            and len(r["articles"]) >= BORN_MIN and r.get("vec")]
+    hard = hard_support()
+    out = []
+    for r in rows.values():
+        if r.get("matched") or r.get("born") or not r.get("vec"):
+            continue
+        if len(r["articles"]) < BORN_MIN:
+            continue
+        h = len(hard.get(r["name"]) or ())
+        # твёрдой опоры хватает само по себе; иначе — вес поля плюс хотя бы
+        # два дословных упоминания (кандидат из групп приходит без якорей,
+        # ему нужна поддержка поля и подтверждение хотя бы парой статей)
+        if h >= BORN_MIN or (h >= 2 and len(r["articles"]) >= BORN_MIN * 3):
+            out.append(r)
+        elif r.get("src") == "group" and len(r.get("field_arts") or
+                                             r.get("articles") or []) >= 10:
+            # Кандидат ОТ ГРУППЫ якорей не имеет по своей природе: его назвала
+            # не статья, а область, у которой не хватает скелета («в оптике нет
+            # ни одного закона»). Его подтверждают два других свидетеля: поле
+            # наших статей (десяток близких по смыслу) и Scholar, который тут же
+            # отсеет фантом. Владелец 27.08 просил именно эту прослойку —
+            # законы, математику, методы, которых разметка не вытащит никогда.
+            out.append(r)
+    return out
 
 
 def s2_alive(name):
