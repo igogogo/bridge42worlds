@@ -240,8 +240,22 @@ def match():
         vecs = embed([f"{r['name'].replace('_', ' ')}: {r['line']}" for r in todo])
         for r, v in zip(todo, vecs):
             r["vec"] = [round(x, 5) for x in v]
+    # имена и алиасы уже рождённых: совпадение с алиасом = старое понятие
+    alias_of = {}
+    grown_p = ROOT / "data" / "concepts-grown.json"
+    if grown_p.exists():
+        try:
+            for gid, g in json.loads(grown_p.read_text(encoding="utf-8")).items():
+                for al in g.get("aliases") or []:
+                    alias_of[al["name"]] = gid
+        except Exception:
+            pass
     n_match = 0
     for r in rows.values():
+        if r.get("matched") is None and r["name"] in alias_of:
+            r["matched"] = alias_of[r["name"]]
+            n_match += 1
+            continue
         if r.get("matched") is not None or not r.get("vec"):
             continue
         v = np.asarray(r["vec"], dtype=np.float32)
@@ -283,6 +297,11 @@ def distill():
             # имя остаётся у того, кто набрал больше статей
             win, lose = (a, b) if len(a["articles"]) >= len(b["articles"]) else (b, a)
             win["articles"] = sorted(set(win["articles"]) | set(lose["articles"]))
+            # Проигравший — АЛИАС, не мусор (владелец 27.08): запасная формулировка
+            # для вектора, расширение словаря якорей, защита от повторного рождения.
+            win.setdefault("aliases", []).append(
+                {"name": lose["name"], "line": lose.get("line", "")})
+            win["aliases"] = win["aliases"][:8]
             gone.add(lose["name"])
             merged += 1
     for k in gone:

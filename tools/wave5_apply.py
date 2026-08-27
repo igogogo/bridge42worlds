@@ -74,6 +74,7 @@ def build_live():
                 "kind": g.get("kind") or "concept",
                 "card_en": g.get("card_en") or "",
                 "origin": g.get("origin") or "live-harvest",
+                "aliases": g.get("aliases") or [],
                 "related": [], "scientists": [], "article_count": 0,
             })
     sup = load(ML / "data" / "concepts-super.json")
@@ -129,6 +130,7 @@ def build_live():
                            for s in (sci.get(cid) or [])[:6]],
             "formulas": fml.get(cid, [])[:6],
             "articles": support.get(cid, []),
+            "aliases": v.get("aliases") or [],
         }
     meta = {
         "built": load(ML / "data" / "concepts-super.json").get("built", ""),

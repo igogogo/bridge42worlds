@@ -139,6 +139,7 @@ def give_birth(rows, dry):
         grown[name] = {
             "kind": r["kind"], "group": r["group"], "scope": r["scope"],
             "card_en": r["line"], "articles": r["articles"],
+            "aliases": r.get("aliases") or [],
             "born": datetime.now().date().isoformat(), "origin": "live-harvest",
         }
         # В ОБЛАКО НИЧЕГО (владелец 26.08: «сначала всё локально проверю»):
