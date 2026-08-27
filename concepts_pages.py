@@ -886,6 +886,14 @@ def section_page(section, lang, live):
                 f'<a href="/lang/{lang}/concepts/{H.escape(m)}.html" '
                 f'style="font-family:var(--serif);font-size:16px">'
                 f'{H.escape(name_of(v, m, lang))}</a>'
+                # В списке констант число важнее описания: за ним и приходят.
+                # Показываем сразу за именем, единицу — рядом.
+                + (f' <span style="font-family:var(--mono);font-size:13px;'
+                   f'color:var(--cyan)">{H.escape(v["value"])}</span>'
+                   + (f' <span style="font-family:var(--mono);font-size:11.5px;'
+                      f'color:var(--soft)">{H.escape(unit_label(v.get("unit"), lang))}</span>'
+                      if unit_label(v.get("unit"), lang) else "")
+                   if v.get("value") else "")
                 + (f' <span style="font-family:var(--mono);font-size:11px;color:var(--soft)">'
                    f'{n}</span>' if n else "")
                 + f'<div style="font-size:13.5px;color:var(--soft);margin-top:2px" '
