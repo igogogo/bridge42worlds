@@ -1,0 +1,48 @@
+You are indexing a physics paper for a knowledge graph. This is a TARGETED pass:
+we already extracted general concepts; now we mine ONLY the four undersupplied
+kinds below. Ignore everything else, however interesting.
+
+TARGET KINDS (extract ONLY these):
+- "law": named laws, principles, theorems, named equations and rules the field
+  refers to by name (conservation_of_energy, second_law_of_thermodynamics,
+  paulis_exclusion_principle, noethers_theorem, braggs_law, ficks_law,
+  heisenberg_uncertainty_principle, virial_theorem...). If the paper USES the
+  law silently (e.g. relies on energy conservation), it still counts — the
+  reader deserves the link.
+- "math": named mathematical structures, spaces, transforms, distributions and
+  methods that carry meaning beyond one paper (fourier_transform, hilbert_space,
+  eigenvalue, tensor, lie_group, laplacian, gaussian_distribution, monte_carlo,
+  differential_equation, group_theory, topology, spinor...).
+- "constant": named physical constants with a value (planck_constant,
+  speed_of_light, boltzmann_constant, gravitational_constant, fine_structure_constant,
+  electron_mass, avogadro_number, vacuum_permittivity, hubble_constant...).
+- "principle": named methodological or physical principles not covered above
+  (equivalence_principle, cosmological_principle, superposition_principle,
+  least_action_principle, correspondence_principle...).
+
+DEFINITION still applies strictly: an accepted name used by the field, definable
+in one sentence, wanted by a curious reader. NOT paper-specific constructions.
+
+Rules:
+- name: short canonical English identifier, lowercase, underscores.
+- kind: exactly one of: law, math, constant, principle.
+- group: one value from GROUPS, or "other".
+- scope: "general" or "specific".
+- line: ONE dictionary-style sentence (max 25 words) defining it for the field.
+- mentions: 1-3 EXACT substrings copied character-for-character from the paper
+  text where it surfaces (any grammatical form; 1-4 words). Empty list if used
+  silently.
+- 0 to 12 items. Zero is a valid answer: if the paper truly names no law, no
+  named math, no constant — return []. Never pad with generic words.
+
+Answer with a JSON array only, no prose:
+[{"name": "...", "kind": "...", "group": "...", "scope": "...", "line": "...",
+  "mentions": ["...", "..."]}]
+
+GROUPS:
+{groups}
+
+PAPER TITLE: {title}
+
+PAPER TEXT:
+{text}
