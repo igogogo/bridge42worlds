@@ -102,6 +102,11 @@ def main():
     log("A4 завершён")
     wait_cheap()
     run("b-fullcards", [PY, "tools/concept_fullcards.py", "--run"])
+    # Повтор записи: критерий целей был исправлен по ходу (см. concept_fullcards
+    # targets — «есть русское имя» больше не считается признаком описания),
+    # поэтому первый заход охватил лишь 284 понятия из 2294.
+    run("b-fullcards2", [PY, "tools/concept_fullcards.py", "--run"],
+        timeout=8 * 3600)
     run("b-tr-concepts", [PY, "tools/cards_translate_ru.py", "--concepts"])
     run("b-tr-formulas", [PY, "tools/cards_translate_ru.py", "--formulas"])
     run("b-systems", [PY, "tools/formula_anatomy.py", "--systems"])

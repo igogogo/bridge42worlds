@@ -87,13 +87,32 @@ def targets():
             idx[a["id"].split("v")[0]] = a
     except Exception:
         pass
+    # У КОГО УЖЕ ЕСТЬ ТЕКСТ — из старых справочников: это и есть настоящий
+    # признак «описание не нужно». Раньше здесь стояло «есть русское имя»:
+    # прокси работал, пока русские имена были только у 529 переживших понятий.
+    # 27.08 переводчик дал имена всем 3231 — и шаг стал считать, что у всех
+    # уже есть описания, написав 284 карточки вместо 2800 и отрапортовав
+    # «готово». Прокси заменён на факт.
+    rich = set()
+    for fname in ("tags.json", "laws.json"):
+        p = ROOT / "lang" / "ru" / "data" / fname
+        if not p.exists():
+            continue
+        try:
+            d = json.loads(p.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            continue
+        for cid_, v in d.items():
+            if isinstance(v, dict) and (v.get("description_popular")
+                                        or v.get("how_it_works")):
+                rich.add(cid_)
+
     out = []
     for cid, c in live.items():
         if cid in done:
             continue
-        # полная карточка нужна тем, у кого нет старого богатого описания
-        if c.get("names", {}).get("ru"):
-            continue   # старое понятие: описание уже есть в справочниках
+        if cid in rich:
+            continue   # старое понятие: развёрнутый текст уже лежит в справочнике
         titles = []
         for aid in c.get("articles", [])[:MAX_TITLES]:
             a = idx.get(aid) or idx.get(aid.split("v")[0])
