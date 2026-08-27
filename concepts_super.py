@@ -194,6 +194,36 @@ def main():
         links.append({"a": a, "b": b, "n": n,
                       "w_cooc": round(w_co, 4), "w_vec": round(w_vec, 4),
                       "w": round(0.5 * w_co + 0.5 * max(0.0, w_vec), 4)})
+    # СИРОТ ПО СВЯЗЯМ БЫТЬ НЕ ДОЛЖНО (владелец 27.08: «сирота относительно
+    # статей оправдана; относительно связей внутри понятий — нет»). У кого
+    # со-встречаемость ≥3 не набралась — векторные связи по карточкам:
+    # топ-4 соседа с cos ≥ 0.55, вес только векторная половина.
+    linked = set()
+    for l in links:
+        linked.add(l["a"]); linked.add(l["b"])
+    lonely = [k for k in ids if k not in linked]
+    added_vec = 0
+    for k in lonely:
+        i = idx[k]
+        sims = V @ V[i]
+        order = np.argsort(-sims)
+        got = 0
+        for j in order:
+            j = int(j)
+            if j == i:
+                continue
+            if float(sims[j]) < 0.55:
+                break
+            links.append({"a": k, "b": ids[j], "n": 0,
+                          "w_cooc": 0.0, "w_vec": round(float(sims[j]), 4),
+                          "w": round(0.5 * float(sims[j]), 4)})
+            got += 1
+            added_vec += 1
+            if got >= 4:
+                break
+    if added_vec:
+        print(f"  + векторных связей одиноким: {added_vec} "
+              f"(было понятий без связей: {len(lonely)})")
     links.sort(key=lambda x: -x["w"])
     print(f"  связей с опорой ≥3 работ: {len(links):,}")
     print(f"  вес = половина со-встречаемости + половина сходства карточек")
