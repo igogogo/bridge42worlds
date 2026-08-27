@@ -431,11 +431,18 @@ def concept_page(cid, c, lang, live, by_id, rich=None, page_langs=None):
                f'<span style="font-family:var(--mono);font-size:13px;color:var(--soft)"> · '
                f'{len(arts)}</span></h2>')
     if arts:
+        # контейнер живой ленты: статика внутри — то, что видно сразу и без
+        # облака; воркер подменит её свежим списком (js/entity-live.js)
+        out.append(f'<div id="search-results" class="entity-list" '
+                   f'data-context-concept="{H.escape(cid)}">')
         out.append("".join(G.entity_article_card(a, lang) for a in arts[:CARDS_CAP]))
+        out.append('</div>')
     else:
         out.append(f'<p style="color:var(--soft)">{t["none"]}</p>')
     out.append(site_chrome(lang)[1])          # футер сайта
     out.append(site_chrome(lang)[2])          # лайки, иконки, поиск, «ещё»
+    out.append(f'<script src="{av("/js/b42-live.js")}"></script>'
+               f'<script src="{av("/js/entity-live.js")}" defer></script>')
     out.append('<script src="{av("/js/b42-graph-core.js")}"></script>'
                '<script src="{av("/js/b42-mini.js")}" defer></script>')
     # Вкладки полной записи. Скрываем НЕ через display:none, а атрибутом

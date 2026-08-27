@@ -24,12 +24,23 @@
     // Вид сущности — из той же разметки, которой пользуется search.js. Отдельного атрибута
     // не заводим: два источника правды разъезжаются, а этот уже проверен временем.
     var kind = null, key = null;
-    if (box.dataset.contextTag) { kind = 'tag'; key = box.dataset.contextTag; }
+    if (box.dataset.contextConcept) { kind = 'concept'; key = box.dataset.contextConcept; }
+    else if (box.dataset.contextTag) { kind = 'tag'; key = box.dataset.contextTag; }
     else if (box.dataset.contextScientist) { kind = 'sci'; key = box.dataset.contextScientist; }
     else if (box.dataset.contextCategory) { kind = 'cat'; key = box.dataset.contextCategory; }
     // Закон: контейнер размечен как data-context-tag с ОСНОВНЫМ тегом закона, и у части
     // законов он пуст (закон родился не из тега). Идентификатор закона надёжнее взять из
     // адреса — /laws/<id>.html, он и есть ключ в card_links kind='law'.
+    /* Понятие волны 5: адрес /concepts/<id>.html, ключ — сам id. Своя ветка,
+       а не подмена тега: у понятия связь со статьями живёт в concept_arts и
+       пересобирается при каждой переразметке (см. worker /api/list). */
+    if (!key && location.pathname.indexOf('/concepts/') !== -1) {
+        var cm = location.pathname.match(/\/concepts\/([^/]+)\.html/);
+        if (cm && cm[1] !== 'index' && cm[1] !== 'graph') {
+            kind = 'concept';
+            key = decodeURIComponent(cm[1]);
+        }
+    }
     if ((!key || kind === null) && location.pathname.indexOf('/laws/') !== -1) {
         var lm = location.pathname.match(/\/laws\/([^/]+)\.html/);
         if (lm) { kind = 'law'; key = decodeURIComponent(lm[1]); }

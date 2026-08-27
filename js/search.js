@@ -171,11 +171,23 @@ var pageContext = {
     tags: resultsEl && resultsEl.dataset.contextTag ? resultsEl.dataset.contextTag.split(',').filter(Boolean) : [],
     scientist: resultsEl ? (resultsEl.dataset.contextScientist || '') : '',
     author: resultsEl ? (resultsEl.dataset.contextAuthor || '') : '',
-    category: resultsEl ? (resultsEl.dataset.contextCategory || '') : ''  // страница раздела arXiv
+    category: resultsEl ? (resultsEl.dataset.contextCategory || '') : '',  // страница раздела arXiv
+    // Понятие волны 5. Без этой строки список на странице понятия наполнялся
+    // ОБЩЕЙ лентой: search.js видел пустой #search-results, не понимал контекста
+    // и рисовал туда свежие статьи — на «чёрной дыре» первой шла статья про
+    // материалы-хамелеоны (поймано 27.08 при переводе списков на воркер).
+    concept: resultsEl ? (resultsEl.dataset.contextConcept || '') : ''
 };
 pageContext.tag = pageContext.tags[0] || ''; // назад-совместимость: код, читающий одиночный tag (напр. filters.tags UI), видит первый
 
 function applyPageContext(results) {
+    if (pageContext.concept) {
+        var _c = pageContext.concept;
+        results = results.filter(function (item) {
+            return (item.tags || []).indexOf(_c) !== -1
+                || (item.laws || []).indexOf(_c) !== -1;
+        });
+    }
     if (pageContext.tags.length) {
         results = results.filter(function(item) {
             return pageContext.tags.some(function(t) { return (item.tags || []).indexOf(t) !== -1; });
