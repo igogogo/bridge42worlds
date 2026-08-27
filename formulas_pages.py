@@ -31,7 +31,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 ML = ROOT.parent / "b42-ml"
 sys.path.insert(0, str(ROOT))
-from concepts_pages import head, name_of, KIND_LBL  # noqa: E402 — шапка и словари те же
+from concepts_pages import head, name_of, KIND_LBL, site_chrome  # noqa: E402
+import generate as G   # noqa: E402 — действия и отклик теми же функциями
 
 LANGS = ("ru", "en", "es", "ar", "fr")
 
@@ -223,7 +224,13 @@ def formula_page(b, an, lang, live):
                         + chr(92) + f'({H.escape(rec)}' + chr(92) + f')</span>{link}</div>')
         body.append(f'<h2 style="font-size:16px;margin:14px 0 6px">{t["uses"]}</h2>'
                     + "".join(rows))
+    # действия/отклик/футер — как у понятия и статьи (единый функционал сайта)
+    _like = f"formula_{b['base_id']}_{lang}"
+    body.append(G.build_actions_html(_like, b["base_id"], lang, "tag", inline_comment=True))
+    body.append(G.build_feedback_html(_like, lang, "tag", inline_toggle=True))
     out.append('<div class="entity-body">' + "".join(body) + '</div>')
+    out.append(site_chrome(lang)[1])
+    out.append(site_chrome(lang)[2])
     out.append('<script src="/js/b42-graph-core.js"></script>'
                '<script src="/js/b42-mini.js" defer></script>')
     out.append("</body></html>")
@@ -265,6 +272,8 @@ def cloud(bases, lang, live):
                    f'<span style="font-family:var(--mono);font-size:12px;'
                    f'color:var(--soft)">· {len(bs)}</span></h2>')
         _emit_rows(out, bs, lang)
+    out.append(site_chrome(lang)[1])
+    out.append(site_chrome(lang)[2])
     out.append("</body></html>")
     return "".join(out)
 

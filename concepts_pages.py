@@ -99,6 +99,49 @@ T = {
 }
 
 
+_CHROME = {}
+
+
+def site_chrome(lang):
+    """Шапка сайта и футер — ВЫРЕЗАЮТСЯ ИЗ ЖИВОГО ШАБЛОНА templates/law.html,
+    а не рисуются здесь заново.
+
+    Владелец 27.08: «я вообще против этого меню, у нас было всё сразу… много
+    функционала упущено — дизайн может быть другим, но функционал тот же».
+    Своё меню из четырёх ссылок теряло поиск, избранное, учебник, языки,
+    кнопку «ещё» и футер. Копия разъехалась бы с сайтом на первой же правке
+    шапки — поэтому берём разметку оттуда, где она живёт."""
+    if lang in _CHROME:
+        return _CHROME[lang]
+    tpl = (ROOT / "templates" / "law.html").read_text(encoding="utf-8")
+    i = tpl.index('<div class="top-bar">')
+    j = tpl.index('<div class="langs" id="langs-bar"></div>') + len(
+        '<div class="langs" id="langs-bar"></div>')
+    bar = tpl[i:j]
+    UI = {"ru": ("Избранное", "Поиск статей…", "@ автор · # понятие · ! учёный"),
+          "en": ("Favorites", "Search articles…", "@ author · # concept · ! scientist"),
+          "es": ("Favoritos", "Buscar artículos…", "@ autor · # concepto · ! científico"),
+          "ar": ("المفضلة", "ابحث عن مقالات…", "@ مؤلف · # مفهوم · ! عالم"),
+          "fr": ("Favoris", "Rechercher…", "@ auteur · # concept · ! scientifique")}
+    fav, ph, hint = UI.get(lang, UI["en"])
+    bar = (bar.replace("$lang", lang)
+              .replace("$fav_title", H.escape(fav))
+              .replace("$search_placeholder", H.escape(ph))
+              .replace("$search_hint", H.escape(hint))
+              .replace("$law_version_toggle", ""))
+    # «concepts» в шапке ведёт в наш раздел, а не в старые /laws/
+    bar = bar.replace(f'/lang/{lang}/laws/', f'/lang/{lang}/concepts/')
+    foot = "<footer><p>bridge42worlds</p></footer>"
+    scripts = ('<script src="/js/likes.js"></script>'
+               '<script src="/js/icons.js"></script>'
+               '<script src="/js/search.js"></script>'
+               '<script src="/js/site-search.js"></script>'
+               '<script src="/js/search-ui.js"></script>'
+               '<script src="/js/sitenav.js" defer></script>')
+    _CHROME[lang] = (bar, foot, scripts)
+    return _CHROME[lang]
+
+
 def head(lang, title):
     d = "rtl" if lang == "ar" else "ltr"
     return f"""<!DOCTYPE html>
@@ -120,15 +163,7 @@ def head(lang, title):
 <link rel="icon" href="/favicon.ico" sizes="any">
 </head>
 <body>
-<div class="top-bar">
-  <a href="/lang/{lang}/index.html" class="logo">bridge42worlds</a>
-  <div class="header-right"><div class="nav-links">
-    <a href="/lang/{lang}/index.html">main</a>
-    <a href="/lang/{lang}/concepts/">concepts</a>
-    <a href="/lang/{lang}/scientists/">scientists</a>
-    <a href="/lang/{lang}/sections/">sections</a>
-  </div></div>
-</div>
+{site_chrome(lang)[0]}
 """
 
 
@@ -361,6 +396,12 @@ def concept_page(cid, c, lang, live, by_id, rich=None):
                         f'<div style="font-size:13.5px;color:var(--soft)" lang="en">{H.escape(f["card"])}</div>'
                         f'{apps}</div>')
         body.append(f'<h2 style="font-size:16px;margin:14px 0 8px">{t["formulas"]}</h2>' + "".join(rows))
+    # ДЕЙСТВИЯ И ОТКЛИК — те же функции, что у статьи и старых справочников
+    # (владелец 27.08: «много функционала упущено — функционал тот же»).
+    # Реакции, избранное, «поделиться», форма комментария; обрабатывает likes.js.
+    _like = f"concept_{cid}_{lang}"
+    body.append(G.build_actions_html(_like, cid, lang, "tag", inline_comment=True))
+    body.append(G.build_feedback_html(_like, lang, "tag", inline_toggle=True))
     if body:
         out.append('<div class="entity-body">' + "".join(body) + '</div>')
 
@@ -373,9 +414,9 @@ def concept_page(cid, c, lang, live, by_id, rich=None):
         out.append("".join(G.entity_article_card(a, lang) for a in arts[:CARDS_CAP]))
     else:
         out.append(f'<p style="color:var(--soft)">{t["none"]}</p>')
-    out.append('<script src="/js/icons.js"></script><script src="/js/search.js" defer></script>'
-               '<script src="/js/likes.js" defer></script>'
-               '<script src="/js/b42-graph-core.js"></script>'
+    out.append(site_chrome(lang)[1])          # футер сайта
+    out.append(site_chrome(lang)[2])          # лайки, иконки, поиск, «ещё»
+    out.append('<script src="/js/b42-graph-core.js"></script>'
                '<script src="/js/b42-mini.js" defer></script>')
     # Вкладки полной записи. Скрываем НЕ через display:none, а атрибутом
     # hidden="until-found": браузер ищет текст и внутри скрытой панели, а найдя —
@@ -428,6 +469,7 @@ def cloud_page(lang, live, by_id):
                f' &nbsp;<a href="/lang/{lang}/concepts/graph.html" '
                f'style="font-family:var(--mono);font-size:12.5px">{gt["title"]} →</a></div>')
     groups = sorted(live["groups"].items(), key=lambda kv: -len(kv[1]))
+    out.append('<div id="search-results" class="entity-list" hidden></div>')
     for gid, members in groups:
         members = sorted(members, key=lambda m: -len(c.get(m, {}).get("articles", [])))
         top3 = " · ".join(name_of(c[m], m, lang) for m in members[:3] if m in c)
@@ -441,6 +483,8 @@ def cloud_page(lang, live, by_id):
                    f'<span style="font-family:var(--mono);font-size:12px;color:var(--soft)">'
                    f'· {len(members)}</span></summary>'
                    f'<div class="related-tags" style="margin-top:8px">{chips}</div></details>')
+    out.append(site_chrome(lang)[1])
+    out.append(site_chrome(lang)[2])
     out.append("</body></html>")
     return "".join(out)
 
@@ -533,10 +577,10 @@ html, body {{ height:100%; overflow:hidden; }}
 .glass {{ background:color-mix(in srgb, var(--surface) 72%, transparent);
   backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
   border:1px solid var(--hairline); border-radius:var(--radius-sm); }}
-.b42g-top {{ position:fixed; top:54px; left:14px; right:296px; z-index:4;
+.b42g-top {{ position:fixed; top:var(--b42g-top,78px); left:14px; right:296px; z-index:4;
   display:flex; flex-wrap:wrap; gap:10px; align-items:center;
   font-family:var(--mono); font-size:12px; padding:8px 14px; }}
-.b42g-side {{ position:fixed; top:54px; right:14px; bottom:14px; width:264px;
+.b42g-side {{ position:fixed; top:var(--b42g-top,78px); right:14px; bottom:14px; width:264px;
   z-index:4; font-family:var(--mono); font-size:12px;
   overflow-y:auto; padding:12px 14px; }}
 .b42g-sec {{ margin-bottom:10px; }}
@@ -588,6 +632,7 @@ details[open].b42g-sec > summary.b42g-h::before {{ content:"▾ "; }}
   .b42g-side {{ position:static; width:auto; margin:8px; max-height:none; }}
 }}
 </style>
+{site_chrome(lang)[2]}
 <script src="/js/b42-graph-core.js"></script>
 <script src="/js/b42-graph.js" defer></script>
 </body></html>"""

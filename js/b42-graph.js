@@ -1197,6 +1197,13 @@ function buildPanel() {
 
 /* ── размер: весь экран ── */
 function resize() {
+    /* панели графа стоят под шапкой сайта — её высота меняется от языка и
+       ширины экрана, поэтому меряем, а не гадаем (наложение поймано 27.08) */
+    var tb = document.querySelector('.top-bar');
+    if (tb) {
+        document.documentElement.style.setProperty(
+            '--b42g-top', Math.round(tb.getBoundingClientRect().bottom + 10) + 'px');
+    }
     var r = canvas.parentElement.getBoundingClientRect();
     canvas.width = Math.max(300, r.width) * devicePixelRatio;
     canvas.height = Math.max(300, r.height) * devicePixelRatio;
