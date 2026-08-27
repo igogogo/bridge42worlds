@@ -4430,3 +4430,13 @@ html[lang="ar"] .card-img-wrap { float: none; margin: 0; }
 /* Цитируемость Scholar на карточке — в паспортной строке, тем же моно-ключом */
 .card-cites { font-family: var(--mono); font-size: 11px; color: var(--cyan);
     white-space: nowrap; }
+
+/* Мини-граф волны 5 (js/b42-mini.js) — на страницах статьи, понятия, формулы.
+   Мобильный: высоту и число узлов режет сам движок по ширине холста. */
+.b42mini { margin: 16px 0 4px; border: 1px solid var(--hairline);
+    border-radius: var(--radius-sm); background: var(--bg); overflow: hidden;
+    max-width: var(--w-page); }
+.b42mini-c { display: block; width: 100%; touch-action: pan-y; }
+.b42mini-note { font-family: var(--mono); font-size: 11px; margin: 0 0 14px; }
+.b42mini-note a { color: var(--muted); text-decoration: none; }
+.b42mini-note a:hover { color: var(--link); }

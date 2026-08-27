@@ -930,6 +930,33 @@ def card_chips(a, lang):
     return f'<div class="card-tags">{"".join(out)}</div>' if out else ""
 
 
+_FML_BY_ART = None
+
+
+def formulas_of_article(aid):
+    """Основные формы, применённые в статье, — из b42-ml/data/formulas-linked.json.
+    В самой статье у формулы нет base_id (только latex и смысл), связь живёт на
+    стороне облака формул; читаем один раз и держим в памяти."""
+    global _FML_BY_ART
+    if _FML_BY_ART is None:
+        _FML_BY_ART = {}
+        p = Path("..") / "b42-ml" / "data" / "formulas-linked.json"
+        try:
+            bases = json.loads(p.read_text(encoding="utf-8"))["bases"]
+        except (OSError, KeyError, json.JSONDecodeError):
+            bases = []
+        for b in bases:
+            for ap in b.get("applications") or []:
+                art = ap.get("article") or ap.get("art")
+                if art:
+                    _FML_BY_ART.setdefault(art, [])
+                    _FML_BY_ART.setdefault(art.split("v")[0], [])
+                    if b["base_id"] not in _FML_BY_ART[art]:
+                        _FML_BY_ART[art].append(b["base_id"])
+                        _FML_BY_ART[art.split("v")[0]].append(b["base_id"])
+    return _FML_BY_ART.get(aid) or _FML_BY_ART.get(aid.split("v")[0]) or []
+
+
 def entity_article_card(a, lang):
     """Карточка статьи в списках справочников (тег/закон/учёный/раздел/автор) — единый вид с
     лентой: миниатюра-обложка + название + короткий текст (юзер 2026-07-24: «список с картинками
@@ -1898,17 +1925,18 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
     # Законы/учёные — приоритет над тегами при обрезке до 8: тегов у статьи обычно больше
     # (юзер-фидбек 2026-07-17: "учёные вообще не отображаются") — при tags-first порядке 8+ тегов
     # съедали весь лимит ДО того, как в список попадал хоть один закон/учёный.
-    article_graph_ids = (
-        [f"l:{lid}" for lid, _ in side_laws] + [f"s:{s}" for s in side_sci_ids] + [f"t:{t}" for t in tags]
-    )[:8]
+    # МИНИ-ГРАФ статьи волны 5 (владелец 27.08: «старый заменить нашим простым
+    # вариантом — он просто показывает структуру с точки зрения статьи с учётом
+    # её внутренних связей первого уровня»). Узлы: понятия статьи из разметки v2
+    # плюс формулы, применённые в ней; рёбра рисует клиент — только между этими
+    # узлами, мощность = число общих статей. Старый граф тег/закон/учёный ушёл.
+    _mini_ids = [x for x in (scipop.get("concepts_v2") or []) if x][:14]
+    _mini_ids += [f"f:{b}" for b in formulas_of_article(article["id"])][:4]
     article_graph_html = ""
-    if len(article_graph_ids) >= 2:
-        # Метка «Связи в графе знаний» убрана (юзер 2026-07-23: «и так понятно»), контрол глубины
-        # теперь внутри фильтров справа. id-якорь для левого меню переехал на блок фильтров.
+    if len(_mini_ids) >= 2:
         article_graph_html = (
-            f'<div id="article-graph" class="mini-graph-config">{mini_graph_filters_html(lang, "article")}</div>'
-            f'<div class="mini-graph mini-graph--article" data-node="{attr_safe(",".join(article_graph_ids))}"><canvas id="minigraph"></canvas></div>'
-        )
+            f'<div id="article-graph" class="b42mini" '
+            f'data-ids="{attr_safe(",".join(_mini_ids))}"></div>')
 
     # Пункты левого меню-навигатора, актуальные на ЛЮБОМ режиме (не только advanced) —
     # разделы статьи (context/methods/...) добавляются ниже отдельно, только когда они есть.

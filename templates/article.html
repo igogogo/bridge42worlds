@@ -143,8 +143,12 @@ $nav_html
 <script src="/js/scroll.js"></script>
 <script src="/js/lightbox.js"></script>
 <script src="/js/gallery.js"></script>
-<script src="/js/force-graph.js"></script>
-<script src="/js/mini-graph.js"></script>
+<!-- Мини-граф статьи — наш движок волны 5 (27.08): узлы = понятия и формулы
+     статьи, рёбра = их внутренние связи первого уровня. Старая пара
+     force-graph.js + mini-graph.js (граф тег/закон/учёный) здесь больше не
+     нужна: разметка v2 живёт в /concepts/, вид общий с большим графом. -->
+<script src="/js/b42-graph-core.js"></script>
+<script src="/js/b42-mini.js" defer></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     if (window.logPageView) logPageView('$id', 'article', '$lang');

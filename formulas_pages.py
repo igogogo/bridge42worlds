@@ -199,6 +199,11 @@ def formula_page(b, an, lang, live):
                          f'$${H.escape(u["latex"])}$$</div>{note}</div>')
         body.append(f'<h2 style="font-size:16px;margin:14px 0 6px">'
                     f'{US_LBL.get(lang, US_LBL["en"])}</h2>' + "".join(srows))
+    # МИНИ-ГРАФ формулы: сама форма + понятия, которые она связывает
+    _mini = ["f:" + b["base_id"]] + [c["concept"] for c in (b.get("concepts") or [])[:8]]
+    if len(_mini) >= 3:
+        body.append(f'<div class="b42mini" data-ids="{H.escape(",".join(_mini))}" '
+                    f'data-focus="f:{H.escape(b["base_id"])}"></div>')
     if b.get("concepts"):
         chips = " ".join(concept_link(c["concept"], lang, live) for c in b["concepts"][:4])
         body.append(f'<div class="related-tags" style="margin-top:12px">'
@@ -219,6 +224,8 @@ def formula_page(b, an, lang, live):
         body.append(f'<h2 style="font-size:16px;margin:14px 0 6px">{t["uses"]}</h2>'
                     + "".join(rows))
     out.append('<div class="entity-body">' + "".join(body) + '</div>')
+    out.append('<script src="/js/b42-graph-core.js"></script>'
+               '<script src="/js/b42-mini.js" defer></script>')
     out.append("</body></html>")
     return "".join(out)
 

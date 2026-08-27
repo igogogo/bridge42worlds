@@ -320,6 +320,17 @@ def concept_page(cid, c, lang, live, by_id, rich=None):
             body.append(f'<div class="related-tags"><b style="font-family:var(--mono);'
                         f'font-size:11px;color:var(--muted)">'
                         f'{UNITS_LBL.get(lang, "Units")}:</b> {cells}</div>')
+    # МИНИ-ГРАФ понятия (27.08): само понятие + соседи первого уровня + его
+    # формулы. Тот же движок и вид, что у большого графа (js/b42-mini.js).
+    _mini = [cid] + [r["id"] for r in (c.get("related") or [])[:10]]
+    _mini += [f'f:{f["id"]}' for f in (c.get("formulas") or [])[:3]]
+    if len(_mini) >= 3:
+        GT = GRAPH_T.get(lang, GRAPH_T["en"])
+        body.append(
+            f'<div class="b42mini" data-ids="{H.escape(",".join(_mini))}" '
+            f'data-focus="{H.escape(cid)}"></div>'
+            f'<div class="b42mini-note"><a href="/lang/{lang}/concepts/graph.html">'
+            f'{GT["title"]} &rarr;</a></div>')
     if c["related"]:
         chips = "".join(
             f'<a href="/lang/{lang}/concepts/{H.escape(r["id"])}.html">'
@@ -360,7 +371,9 @@ def concept_page(cid, c, lang, live, by_id, rich=None):
     else:
         out.append(f'<p style="color:var(--soft)">{t["none"]}</p>')
     out.append('<script src="/js/icons.js"></script><script src="/js/search.js" defer></script>'
-               '<script src="/js/likes.js" defer></script>')
+               '<script src="/js/likes.js" defer></script>'
+               '<script src="/js/b42-graph-core.js"></script>'
+               '<script src="/js/b42-mini.js" defer></script>')
     # Вкладки полной записи: включаются только при JS, иначе секции остаются простынёй
     out.append("""<script>(function(){
 var bar=document.querySelector('.ent-tabs');if(!bar)return;
