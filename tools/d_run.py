@@ -149,6 +149,13 @@ def main():
     run("d-status", [PY, "-c",
         "import sys; sys.path.insert(0,'.'); import generate as G; "
         "G.generate_status_page()"], timeout=1800)
+    # ОБЛАКО ДОЛЖНО УВИДЕТЬ ВЫРОСШИЙ РЕЕСТР. Без этих двух шагов dev остался бы
+    # со вчерашними 3231 понятием: страницы новые, а живые списки, кадры графа и
+    # смысловой поиск — старые. Данные идут в те же новые таблицы и пространство
+    # «concepts»; прод не задет.
+    run("d-cloud-d1", [PY, "cloudflare/concepts_sync.py"], timeout=4 * 3600)
+    run("d-cloud-vec", [PY, "tools/concepts_to_vectorize.py", "--apply"],
+        timeout=2 * 3600)
     run("d-api", [PY, "cloudflare/checks/api_check.py"], timeout=1800)
     run("d-audit", [PY, "tools/concepts_audit.py"], timeout=1800)
     run("d-gaudit", [PY, "tools/group_integrity.py", "--audit"], timeout=1800)
