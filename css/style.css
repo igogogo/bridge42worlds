@@ -4467,3 +4467,30 @@ html[lang="ar"] .card-img-wrap { float: right; margin: 2px 0 6px var(--s-4); }
     .card-img-wrap { float: none; width: 100%; margin: 0 0 12px; }
     html[lang="ar"] .card-img-wrap { float: none; margin: 0 0 12px; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Проход 2d — ЕДИНАЯ ШИРИНА страницы статьи (владелец 27.08: «старая болезнь:
+   меню и текст должны быть одной ширины; всё поехало, структура слева исчезла»)
+
+   Было два края: колонка 780 (шапка, языки, граф, карточки) и проза 551
+   (--w-read) внутри неё — правые края не совпадали нигде. Теперь один край:
+   колонка статьи сужена до читаемой строки, и ВСЁ — шапка, текст, граф,
+   похожие — заканчивается на одной вертикали.
+   ═══════════════════════════════════════════════════════════════════════════ */
+body.article-page { max-width: 700px; }
+body.article-page .article-main p,
+body.article-page .article-main ul,
+body.article-page .article-main ol,
+body.article-page .oneliner,
+body.article-page .original-title { max-width: none; }
+
+/* Левая структура (оглавление). Порог 1280 прятал её на обычном ноутбуке —
+   владелец видел пустые поля и «исчезнувшую структуру». Колонка стала 700,
+   навигатору в 160 хватает места уже с 1080. */
+@media (min-width: 1080px) {
+    .article-nav { display: block; left: max(12px, calc(50vw - 546px)); }
+    html[lang="ar"] .article-nav { left: auto; right: max(12px, calc(50vw - 546px)); }
+}
+@media (max-width: 1079px) {
+    .article-nav { display: none; }
+}
