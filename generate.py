@@ -958,6 +958,9 @@ def entity_article_card(a, lang):
                if a.get("reading") else "")
     express = ('<span class="card-express-badge">express</span>'
                if a.get("express") else "")
+    # Цитируемость Scholar в паспорте карточки — вес работы в поле, тем же рядом
+    cites = (f'<span class="card-cites" title="Citations — Semantic Scholar">'
+             f'{a["cites"]:,} cit</span>' if a.get("cites") else "")
     authors = ""
     if a.get("authors"):
         links = " · ".join(
@@ -969,7 +972,7 @@ def entity_article_card(a, lang):
             f'<div class="card-eyebrow">{cat_html}'
             f'<span class="card-date">{a["date"]}</span>{reading}'
             f'<a class="card-src" href="https://arxiv.org/abs/{a["id"].split("v")[0]}" '
-            f'target="_blank" rel="noopener">arXiv:{a["id"].split("v")[0]}</a>{express}</div>'
+            f'target="_blank" rel="noopener">arXiv:{a["id"].split("v")[0]}</a>{cites}{express}</div>'
             f'{thumb}'
             # card-title/card-desc, НЕ h3/oneliner: у справочников был свой крупный
             # стиль — карточка выглядела иначе, чем та же статья в ленте. Теперь
@@ -2508,8 +2511,29 @@ def update_index(scipop, article, date_str, lang, version, abstract=""):
         # ни при какой правке шаблонов.
         "km": bool((article.get("recommend") or {}).get(lang)
                    or (article.get("recommend") or {}).get(DEFAULT_LANG)),
+        # Цитируемость Semantic Scholar (владелец 27.08: «это рейтинг, сортировка,
+        # фактор отбора — имплементируем везде»). Кэш s2_cites() читает данные
+        # один раз; нет записи — поля нет, карточка молчит.
+        **({"cites": s2_cites(article["id"])} if s2_cites(article["id"]) else {}),
     })
     write_json_atomic(ip, idx)
+
+
+_S2_CITES = None
+
+
+def s2_cites(aid):
+    """citationCount нашей статьи из собранного Scholar (data/s2/papers.json)."""
+    global _S2_CITES
+    if _S2_CITES is None:
+        p = Path("data/s2/papers.json")
+        try:
+            raw = json.loads(p.read_text(encoding="utf-8")) if p.exists() else {}
+        except json.JSONDecodeError:
+            raw = {}
+        _S2_CITES = {k: v.get("citationCount") for k, v in raw.items()
+                     if v and v.get("citationCount")}
+    return _S2_CITES.get(aid) or _S2_CITES.get(aid.split("v")[0])
 
 
 MAX_COAUTHORS = 30  # авторская страница показывает только первые 15 (см. generate_author_page) —

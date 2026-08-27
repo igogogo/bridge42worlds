@@ -132,6 +132,34 @@ def build_live():
             "articles": support.get(cid, []),
             "aliases": v.get("aliases") or [],
         }
+
+    # ПОБОЧНЫЕ ХРАНИЛИЩА — вливаются при КАЖДОЙ сборке live, иначе apply,
+    # переписывая live с нуля, терял бы полные записи (баг 27.08: fullcards в
+    # ночной цепочке идёт до apply — full исчезал из live к моменту pages).
+    # Каждое знание живёт в своём файле-хранилище; live — всегда производная.
+    fc = ROOT / "data" / "concept-fullcards.json"
+    if fc.exists():
+        for cid, rec in load(fc).items():
+            if cid in out:
+                out[cid]["full"] = rec
+    fci = ROOT / "data" / "concept-fullcards-i18n.json"
+    if fci.exists():
+        for cid, byl in load(fci).items():
+            if cid in out and isinstance(byl, dict):
+                out[cid]["full_i18n"] = byl
+    usl = ROOT / "data" / "unit-systems-links.json"
+    if usl.exists():
+        for cid, rec in load(usl).items():
+            if cid in out and isinstance(rec, dict):
+                out[cid].update({k: v for k, v in rec.items()
+                                 if k in ("systems", "si_definition",
+                                          "units_by_system")})
+    # имена, приехавшие с рождением (сид систем единиц кладёт en-название)
+    if grown_p.exists():
+        for cid, g in load(grown_p).items():
+            for l, nm in (g.get("names") or {}).items():
+                if cid in out:
+                    out[cid]["names"].setdefault(l, nm)
     meta = {
         "built": load(ML / "data" / "concepts-super.json").get("built", ""),
         "groups": {str(g): m for g, m in groups.items()},

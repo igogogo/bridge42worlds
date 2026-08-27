@@ -1274,6 +1274,8 @@ function cardHTML(item) {
             (item.date ? '<span class="card-date">' + item.date + '</span>' : '') +
             (item.reading ? '<span class="card-read">' + item.reading + ' ' + UI.min + '</span>' : '') +
             '<a class="card-src" href="https://arxiv.org/abs/' + item.id + '" target="_blank" rel="noopener">arXiv:' + item.id + '</a>' +
+            // Цитируемость Scholar (поле cites приходит из индекса; молчим, если нет)
+            (item.cites ? '<span class="card-cites" title="Citations — Semantic Scholar">' + item.cites.toLocaleString() + ' cit</span>' : '') +
             (item.express ? '<span class="card-express-badge" title="' + UI.expressTip + '">' + UI.express + '</span>' : '') +
         '</div>' : '';
     return '<article class="article-card">' +

@@ -55,14 +55,23 @@ def main():
     run("Scholar: новые статьи", [PY, "tools/s2_collect.py"], timeout=14400)
     run("добыча и рождения", [PY, "tools/concept_cycle.py", "--budget", "80"])
     run("анатомия новых формул", [PY, "tools/formula_anatomy.py", "--run"])
+    run("формы в системах единиц", [PY, "tools/formula_anatomy.py", "--systems"])
     run("связка формул с реестром", [PY, "tools/formula_anatomy.py", "--link"])
     run("рождения из формул", [PY, "tools/concept_cycle.py", "--budget", "0"])
+    run("единицы → системы", [PY, "tools/unit_systems_seed.py", "--link-units"])
     run("записи новорождённым", [PY, "tools/concept_fullcards.py", "--run"])
     run("перевекторизация", [PY, "tools/concept_fullcards.py", "--revector"])
     run("переразметка", [PY, "tools/retag_hub.py", "--thr", "0.50", "--margin", "0.12"])
     run("в данные", [PY, "tools/wave5_apply.py", "--apply"])
     run("русские названия", [PY, "tools/concept_names_translate.py"])
+    run("русские карточки понятий", [PY, "tools/cards_translate_ru.py", "--concepts"],
+        timeout=14400)
+    run("русские анатомии формул", [PY, "tools/cards_translate_ru.py", "--formulas"],
+        timeout=14400)
     run("русские якоря", [PY, "tools/mentions_ru.py"], timeout=14400)
+    run("Scholar → карта авторов", [PY, "tools/s2_author_map.py"], timeout=1800)
+    run("цитируемость в индексы", [PY, "tools/enrich_index_cites.py"], timeout=1800)
+    run("датасет файн-тюнинга", [PY, "tools/ft_dataset_export.py"], timeout=7200)
     # словари клиенту
     live = json.loads((ROOT / "data/concepts-live.json").read_text(encoding="utf-8"))["concepts"]
     for lang in ("ru", "en", "es", "ar", "fr"):

@@ -42,22 +42,26 @@ KIND_LBL = {
            "substance": "вещество", "math": "математика", "phenomenon": "явление",
            "law": "закон", "equation": "уравнение", "effect": "эффект", "principle": "принцип",
            "theorem": "теорема", "process": "процесс", "property": "свойство", "theory": "теория",
-           "quantity": "величина", "constant": "константа", "unit": "единица"},
+           "quantity": "величина", "constant": "константа", "unit": "единица",
+           "unit_system": "система единиц"},
     "es": {"concept": "concepto", "object": "objeto", "method": "método", "instrument": "instrumento",
            "substance": "sustancia", "math": "matemáticas", "phenomenon": "fenómeno",
            "law": "ley", "equation": "ecuación", "effect": "efecto", "principle": "principio",
            "theorem": "teorema", "process": "proceso", "property": "propiedad", "theory": "teoría",
-           "quantity": "magnitud", "constant": "constante", "unit": "unidad"},
+           "quantity": "magnitud", "constant": "constante", "unit": "unidad",
+           "unit_system": "sistema de unidades"},
     "fr": {"concept": "concept", "object": "objet", "method": "méthode", "instrument": "instrument",
            "substance": "substance", "math": "mathématiques", "phenomenon": "phénomène",
            "law": "loi", "equation": "équation", "effect": "effet", "principle": "principe",
            "theorem": "théorème", "process": "processus", "property": "propriété", "theory": "théorie",
-           "quantity": "grandeur", "constant": "constante", "unit": "unité"},
+           "quantity": "grandeur", "constant": "constante", "unit": "unité",
+           "unit_system": "système d'unités"},
     "ar": {"concept": "مفهوم", "object": "جسم", "method": "طريقة", "instrument": "جهاز",
            "substance": "مادة", "math": "رياضيات", "phenomenon": "ظاهرة",
            "law": "قانون", "equation": "معادلة", "effect": "تأثير", "principle": "مبدأ",
            "theorem": "مبرهنة", "process": "عملية", "property": "خاصية", "theory": "نظرية",
-           "quantity": "كمية", "constant": "ثابت", "unit": "وحدة"},
+           "quantity": "كمية", "constant": "ثابت", "unit": "وحدة",
+           "unit_system": "نظام وحدات"},
 }
 SEC = {
     "ru": {"desc": "Описание", "history": "История", "how": "Как это работает",
@@ -233,10 +237,13 @@ def concept_page(cid, c, lang, live, by_id, rich=None):
                f'<h1>{H.escape(name)}{note}</h1></div>')
     # КАРТОЧКА понятия — выделенным определением, а не строчкой между служебных:
     # это главный текст страницы, пока перевод не приехал — по-английски с пометкой.
-    out.append(f'<blockquote class="concept-card" lang="en" style="font-family:var(--serif);'
+    # Эпиграф — на языке страницы, когда перевод карточки уже есть (full_i18n)
+    _card_tr = ((c.get("full_i18n") or {}).get(lang) or {}).get("card")
+    _card_lang = lang if _card_tr else "en"
+    out.append(f'<blockquote class="concept-card" lang="{_card_lang}" style="font-family:var(--serif);'
                f'font-size:18px;line-height:1.55;margin:var(--s-3) 0;padding:var(--s-3) var(--s-4);'
                f'background:var(--bg);'
-               f'border-radius:var(--radius-sm)">{H.escape(c["card_en"])}</blockquote>')
+               f'border-radius:var(--radius-sm)">{H.escape(_card_tr or c["card_en"])}</blockquote>')
     stats = [f'{len(c["articles"])} {t["articles"].lower()}']
     if c["formulas"]:
         stats.append(f'{len(c["formulas"])} {t["formulas"].lower()}')
@@ -251,7 +258,10 @@ def concept_page(cid, c, lang, live, by_id, rich=None):
     # вектора и определение-эпиграф, а читателю здесь — нормальный текст.
     # старая запись из справочника ИЛИ новая развёрнутая (fullcards, поле full) —
     # имена полей одинаковые, рендер один
-    r = (rich or {}).get(cid) or c.get("full") or {}
+    # приоритет источника: старый справочник языка → перевод full_i18n[lang]
+    # (cards_translate_ru) → английская full-запись
+    r = ((rich or {}).get(cid) or (c.get("full_i18n") or {}).get(lang)
+         or c.get("full") or {})
     s = SEC.get(lang, SEC["en"])
     panes = []
     for field, label in (("description_popular", s["desc"]), ("history", s["history"]),
@@ -281,6 +291,35 @@ def concept_page(cid, c, lang, live, by_id, rich=None):
     elif panes:
         body.append(f'<div class="section"><h2 style="font-size:16px;margin:14px 0 6px">'
                     f'{panes[0][0]}</h2>{panes[0][1]}</div>')
+    # Системы единиц (владелец 27.08): у единицы — в каких системах живёт и как
+    # определяется в СИ; у величины — её единицы по системам. Данные кладёт
+    # tools/unit_systems_seed.py --link-units прямо в live.
+    SYS_NAME = {"si": "SI", "gaussian": "CGS", "planck": "Planck",
+                "natural": "natural", "atomic": "atomic"}
+    SYS_LBL = {"ru": "Системы", "en": "Systems", "es": "Sistemas",
+               "ar": "الأنظمة", "fr": "Systèmes"}
+    UNITS_LBL = {"ru": "Единицы по системам", "en": "Units by system",
+                 "es": "Unidades por sistema", "ar": "الوحدات حسب النظام",
+                 "fr": "Unités par système"}
+    if c.get("systems"):
+        chips = "".join(
+            f'<a href="/lang/{lang}/concepts/{s}_units.html">{SYS_NAME.get(s, s)}</a>'
+            for s in c["systems"])
+        sd = (f' <span style="color:var(--soft);font-size:13px" lang="en">'
+              f'{H.escape(c.get("si_definition") or "")}</span>'
+              if c.get("si_definition") else "")
+        body.append(f'<div class="related-tags"><b style="font-family:var(--mono);'
+                    f'font-size:11px;color:var(--muted)">'
+                    f'{SYS_LBL.get(lang, "Systems")}:</b> {chips}{sd}</div>')
+    if c.get("units_by_system"):
+        cells = " · ".join(
+            f'{SYS_NAME.get(s, s)}: <a href="/lang/{lang}/concepts/{H.escape(u)}.html">'
+            f'{H.escape(u.replace("_", " "))}</a>'
+            for s, u in c["units_by_system"].items() if u)
+        if cells:
+            body.append(f'<div class="related-tags"><b style="font-family:var(--mono);'
+                        f'font-size:11px;color:var(--muted)">'
+                        f'{UNITS_LBL.get(lang, "Units")}:</b> {cells}</div>')
     if c["related"]:
         chips = "".join(
             f'<a href="/lang/{lang}/concepts/{H.escape(r["id"])}.html">'

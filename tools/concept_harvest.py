@@ -61,8 +61,9 @@ ARTICLES_MIN = 5      # столько статей — и кандидат до
 KINDS = ("concept method phenomenon object instrument law equation effect "
          "principle theorem substance math process property theory "
          # особые классы (владелец 26.08): величина с единицами и эталоном,
-         # константа с числом — формула раскладывается в реестр целиком
-         "quantity constant unit").split()
+         # константа с числом — формула раскладывается в реестр целиком;
+         # unit_system (27.08) — СИ/СГС/планковская, сеются unit_systems_seed.py
+         "quantity constant unit unit_system").split()
 
 _ENV = {}
 

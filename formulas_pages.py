@@ -83,11 +83,20 @@ def concept_link(cid, lang, live, cls="side-tag"):
             f'{H.escape(label)}</a>')
 
 
+def _ru_m(an, lang, kind_key, i, fallback):
+    """m-поле символа на языке страницы: перевод из блока ru (cards_translate_ru)
+    по индексу, иначе английский оригинал."""
+    if lang != "ru":
+        return fallback
+    tr = (an.get("ru") or {}).get(kind_key) or []
+    return tr[i] if i < len(tr) and tr[i] else fallback
+
+
 def sym_rows(an, lang, live, t):
     """Таблица разбора: символ · что это · куда ведёт. Единицы — обязательны
     (владелец: «не забудь единицы измерений»)."""
     rows = []
-    for v in an.get("variables") or []:
+    for i, v in enumerate(an.get("variables") or []):
         unit = v.get("unit") or ""
         unit_html = ""
         if unit and unit != "dimensionless":
@@ -96,20 +105,23 @@ def sym_rows(an, lang, live, t):
                          if live["concepts"].get(unit) else f" · {t['unit_lbl']}: {H.escape(unit.replace('_', ' '))}")
         target = (concept_link(v["id"], lang, live) if v.get("id") and live["concepts"].get(v["id"])
                   else H.escape((v.get("id") or "").replace("_", " ")))
+        m = _ru_m(an, lang, "variables", i, v.get("m", ""))
         rows.append(f'<tr><td class="fx-s">{H.escape(v["s"])}</td>'
-                    f'<td>{t["var"]}</td><td>{H.escape(v.get("m", ""))}'
+                    f'<td>{t["var"]}</td><td>{H.escape(m)}'
                     f'{(" — " + target) if target else ""}{unit_html}</td></tr>')
-    for c in an.get("constants") or []:
+    for i, c in enumerate(an.get("constants") or []):
         val = f' = {H.escape(c["value"])}' if c.get("value") else ""
         unit = c.get("unit") or ""
         unit_html = f' {H.escape(unit.replace("_", " "))}' if unit and unit != "dimensionless" else ""
-        desc = f' — {H.escape(c["m"])}' if c.get("m") else ""
+        m = _ru_m(an, lang, "constants", i, c.get("m", ""))
+        desc = f' — {H.escape(m)}' if m else ""
         rows.append(f'<tr><td class="fx-s">{H.escape(c["s"])}</td>'
                     f'<td>{t["const"]}</td>'
                     f'<td>{concept_link(c.get("id") or "", lang, live)}{val}{unit_html}'
                     f'{desc}</td></tr>')
-    for o in an.get("operators") or []:
-        desc = f' — {H.escape(o["m"])}' if o.get("m") else ""
+    for i, o in enumerate(an.get("operators") or []):
+        m = _ru_m(an, lang, "operators", i, o.get("m", ""))
+        desc = f' — {H.escape(m)}' if m else ""
         rows.append(f'<tr><td class="fx-s">{H.escape(o["s"])}</td>'
                     f'<td>{t["op"]}</td>'
                     f'<td>{concept_link(o.get("id") or "", lang, live)}{desc}</td></tr>')
@@ -124,24 +136,35 @@ def formula_page(b, an, lang, live):
     out.append(f'<div class="tag-title-row"><h1>{H.escape(name)}</h1></div>')
     out.append(f'<div class="formula" style="font-size:20px;margin:12px 0">'
                f'$${H.escape(b.get("latex", ""))}$$</div>')
-    out.append(f'<p class="desc" lang="en">{H.escape(b.get("card", ""))}</p>')
+    _card_ru = (an.get("ru") or {}).get("card") if lang == "ru" else None
+    out.append(f'<p class="desc" lang="{"ru" if _card_ru else "en"}">'
+               f'{H.escape(_card_ru or b.get("card", ""))}</p>')
     out.append('</div>')
 
     body = []
+    # текст на языке страницы: русский из блока ru (cards_translate_ru), иначе en
+    _ru = an.get("ru") or {}
+    def _txt(field):
+        if lang == "ru" and _ru.get(field):
+            return _ru[field], "ru"
+        return an.get(field, ""), "en"
     if an.get("description"):
+        txt, tl = _txt("description")
         body.append(f'<div class="section"><h2 style="font-size:16px;margin:14px 0 6px">'
-                    f'{t["desc"]}</h2><p lang="en" style="max-width:var(--w-read)">'
-                    f'{H.escape(an["description"])}</p></div>')
+                    f'{t["desc"]}</h2><p lang="{tl}" style="max-width:var(--w-read)">'
+                    f'{H.escape(txt)}</p></div>')
     if an.get("history"):
         hist_lbl = {"ru": "История", "en": "History", "es": "Historia",
                     "ar": "التاريخ", "fr": "Histoire"}[lang]
+        txt, tl = _txt("history")
         body.append(f'<div class="section"><h2 style="font-size:16px;margin:14px 0 6px">'
-                    f'{hist_lbl}</h2><p lang="en" style="max-width:var(--w-read)">'
-                    f'{H.escape(an["history"])}</p></div>')
+                    f'{hist_lbl}</h2><p lang="{tl}" style="max-width:var(--w-read)">'
+                    f'{H.escape(txt)}</p></div>')
     if an.get("applicability"):
+        txt, tl = _txt("applicability")
         body.append(f'<div class="section"><h2 style="font-size:16px;margin:14px 0 6px">'
-                    f'{t["appl"]}</h2><p lang="en" style="max-width:var(--w-read)">'
-                    f'{H.escape(an["applicability"])}</p></div>')
+                    f'{t["appl"]}</h2><p lang="{tl}" style="max-width:var(--w-read)">'
+                    f'{H.escape(txt)}</p></div>')
     rows = sym_rows(an, lang, live, t)
     if rows:
         body.append(f'<h2 style="font-size:16px;margin:14px 0 6px">{t["sym"]}</h2>'
@@ -149,6 +172,33 @@ def formula_page(b, an, lang, live):
                     + "".join(rows) + '</table>'
                     + '<style>.fx-s{font-family:var(--mono);padding:3px 12px 3px 0}'
                       'td{padding:3px 12px 3px 0;border-bottom:1px solid var(--hair)}</style>')
+    # В других системах единиц (владелец 27.08: «формулы могут быть представлены
+    # в разных системах — надо доводить до ума»). Данные — formula_anatomy --systems;
+    # пустой список = проверено, форма всюду одна, блока нет.
+    if an.get("unit_systems"):
+        US_LBL = {"ru": "В других системах единиц", "en": "In other unit systems",
+                  "es": "En otros sistemas de unidades",
+                  "ar": "في أنظمة وحدات أخرى", "fr": "Dans d'autres systèmes d'unités"}
+        US_NAME = {"si": "SI", "gaussian": "Gaussian CGS", "planck": "Planck",
+                   "natural": "natural units", "atomic": "atomic units"}
+        srows = []
+        for i, u in enumerate(an["unit_systems"]):
+            sysid = {"si": "si_units", "gaussian": "gaussian_units",
+                     "planck": "planck_units", "natural": "natural_units",
+                     "atomic": "atomic_units"}.get(u["system"], "")
+            sn = US_NAME.get(u["system"], u["system"])
+            slink = (f'<a href="/lang/{lang}/concepts/{sysid}.html">{sn}</a>'
+                     if sysid else H.escape(sn))
+            nt = _ru_m(an, lang, "system_notes", i, u.get("note", ""))
+            ntl = "ru" if (lang == "ru" and nt != u.get("note", "")) else "en"
+            note = (f' <span style="color:var(--soft)" lang="{ntl}">— '
+                    f'{H.escape(nt)}</span>' if nt else "")
+            srows.append(f'<div style="margin:8px 0"><b style="font-family:var(--mono);'
+                         f'font-size:11.5px">{slink}</b>'
+                         f'<div class="formula" style="margin:4px 0">'
+                         f'$${H.escape(u["latex"])}$$</div>{note}</div>')
+        body.append(f'<h2 style="font-size:16px;margin:14px 0 6px">'
+                    f'{US_LBL.get(lang, US_LBL["en"])}</h2>' + "".join(srows))
     if b.get("concepts"):
         chips = " ".join(concept_link(c["concept"], lang, live) for c in b["concepts"][:4])
         body.append(f'<div class="related-tags" style="margin-top:12px">'
@@ -161,9 +211,11 @@ def formula_page(b, an, lang, live):
             art = a.get("article") or a.get("art") or ""
             link = (f' · <a href="/lang/{lang}/index.html?q={H.escape(art)}">{H.escape(art)}</a>'
                     if art else "")
-            rows.append(f'<div style="font-family:var(--mono);font-size:13px;'
+            rec = (a.get("record") or "")[:140]
+            rows.append(f'<div style="font-size:13px;'
                         f'color:var(--soft);margin:4px 0">'
-                        f'{H.escape((a.get("record") or "")[:140])}{link}</div>')
+                        f'<span style="display:inline-block;max-width:100%;overflow-x:auto">'
+                        + chr(92) + f'({H.escape(rec)}' + chr(92) + f')</span>{link}</div>')
         body.append(f'<h2 style="font-size:16px;margin:14px 0 6px">{t["uses"]}</h2>'
                     + "".join(rows))
     out.append('<div class="entity-body">' + "".join(body) + '</div>')
@@ -176,6 +228,41 @@ def cloud(bases, lang, live):
     out = [head(lang, t["title"])]
     out.append(f'<h1>{t["title"]}</h1>'
                f'<div class="subtitle">{t["sub"].format(n=len(bases))}</div>')
+    # Разделы (владелец 27.08: «список по разделам как-то»): форма наследует раздел
+    # от своего первого понятия — его группа верхнего уровня. Подпись раздела — три
+    # крупнейших члена группы, как в смотровой. Формы без привязки — в «прочее».
+    groups = live.get("groups") or {}
+    def section_of(b):
+        for c in (b.get("concepts") or []):
+            sup = (live["concepts"].get(c["concept"], {}) or {}).get("supers") or []
+            if sup:
+                return str(sup[0])
+        return None
+    def label_of(gid):
+        members = groups.get(gid) or []
+        big = sorted(members,
+                     key=lambda m: -len(live["concepts"].get(m, {}).get("articles", [])))[:3]
+        return " · ".join(name_of(live["concepts"][m], m, lang)
+                          for m in big if m in live["concepts"]) or gid
+    by_sec = {}
+    for b in bases:
+        by_sec.setdefault(section_of(b), []).append(b)
+    ordered = sorted(((g, bs) for g, bs in by_sec.items() if g is not None),
+                     key=lambda kv: -len(kv[1]))
+    if None in by_sec:
+        ordered.append((None, by_sec[None]))
+    other = {"ru": "Прочее", "en": "Other", "es": "Otros", "ar": "أخرى", "fr": "Autres"}[lang]
+    for gid, bs in ordered:
+        out.append(f'<h2 style="font-family:var(--serif);font-size:18px;'
+                   f'margin:26px 0 10px">{H.escape(label_of(gid) if gid else other)} '
+                   f'<span style="font-family:var(--mono);font-size:12px;'
+                   f'color:var(--soft)">· {len(bs)}</span></h2>')
+        _emit_rows(out, bs, lang)
+    out.append("</body></html>")
+    return "".join(out)
+
+
+def _emit_rows(out, bases, lang):
     for b in sorted(bases, key=lambda x: -len(x.get("applications") or [])):
         uses = len(b.get("applications") or [])
         out.append(f'<div style="margin-bottom:10px">'
@@ -188,9 +275,7 @@ def cloud(bases, lang, live):
                    # латех»). Не режем: обрезанный латех ломает KaTeX; узкий рендер
                    # прокручивается своим контейнером по канону сайта.
                    f'<span style="display:inline-block;max-width:100%;overflow-x:auto">'
-                   f'\({H.escape(b.get("latex") or "")}\)</span></div>')
-    out.append("</body></html>")
-    return "".join(out)
+                   rf'\({H.escape(b.get("latex") or "")}\)</span></div>')
 
 
 def build(langs):

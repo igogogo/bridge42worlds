@@ -172,6 +172,108 @@ def run(limit=None, force_peak=False):
     return 0
 
 
+SYS_SYSTEMS = """You know how physics formulas change between unit systems.
+
+For each numbered formula (id, LaTeX, meaning) decide: does its WRITTEN ALGEBRAIC
+FORM differ between unit systems — SI, Gaussian CGS, Planck/natural units
+(c=hbar=1), atomic units? Count only real changes of the formula itself: factors
+of 4*pi*epsilon_0, c, hbar, k_B appearing or vanishing. A mere change of numeric
+values of constants does NOT count.
+
+Return a JSON array, one object per formula, same order:
+{"n": <number>,
+ "systems": [{"system": "<si|gaussian|planck|natural|atomic>",
+              "latex": "<the formula AS WRITTEN in that system>",
+              "note": "<one short sentence: what changed and why>"}]}
+
+Rules:
+1. If the form is identical in all systems, return "systems": [].
+2. Include "si" ONLY when at least one other system differs (so the reader can
+   compare); the si latex must match the given one.
+3. Typical candidates: Coulomb's law, Maxwell equations, fine-structure constant,
+   magnetic field formulas, anything electromagnetic or with c, hbar, k_B.
+4. Never invent a variant you are not sure of — omit it.
+Output ONLY the JSON array."""
+
+
+def ask_systems(batch, key):
+    lines = []
+    for i, b in enumerate(batch, 1):
+        lines.append(f"{i}. id={b['base_id']}\n   latex: {b.get('latex', '')}\n"
+                     f"   meaning: {b.get('card', '')}")
+    body = json.dumps({
+        "model": "deepseek-chat",
+        "messages": [{"role": "system", "content": SYS_SYSTEMS},
+                     {"role": "user", "content": "\n".join(lines)}],
+        "temperature": 0.2, "max_tokens": 2000,
+    }).encode("utf-8")
+    req = urllib.request.Request(
+        "https://api.deepseek.com/chat/completions", data=body,
+        headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"})
+    with urllib.request.urlopen(req, timeout=240) as r:
+        d = json.loads(r.read().decode("utf-8"))
+    raw = d["choices"][0]["message"]["content"]
+    m = re.search(r"\[.*\]", raw, re.S)
+    got = json.loads(m.group(0)) if m else []
+    out = {}
+    ALLOWED = {"si", "gaussian", "planck", "natural", "atomic"}
+    for it in got:
+        try:
+            n = int(it["n"])
+            if not (1 <= n <= len(batch)):
+                continue
+            rows = [{"system": str(v.get("system", "")).lower(),
+                     "latex": str(v.get("latex", ""))[:400],
+                     "note": str(v.get("note", ""))[:200]}
+                    for v in (it.get("systems") or [])
+                    if str(v.get("system", "")).lower() in ALLOWED and v.get("latex")]
+            out[batch[n - 1]["base_id"]] = rows
+        except (KeyError, ValueError, TypeError):
+            continue
+    return out
+
+
+def run_systems(limit=None, force_peak=False):
+    """Владелец 27.08: «есть разные системы — СИ, планковская…; формулы могут быть
+    представлены в разных системах, надо доводить до ума». Отдельный проход по
+    готовым анатомиям: поле unit_systems ([] = спрошено, форма не меняется)."""
+    try:
+        from tools.freeze import guard
+        guard("формулы в системах единиц (DeepSeek)")
+    except ImportError:
+        pass
+    if limit is None and not cheap_window() and not force_peak:
+        print("ПИКОВЫЙ тариф DeepSeek — дешёвое окно 19:30–03:30 Кувейта; --force-peak обойдёт.")
+        return 1
+    key = env("DEEPSEEK_API_KEY")
+    done = json.loads(OUT.read_text(encoding="utf-8")) if OUT.exists() else {}
+    if not done:
+        print("анатомий нет — сначала --run")
+        return 1
+    by_id = {b["base_id"]: b for b in bases()}
+    todo = [by_id[bid] for bid, rec in done.items()
+            if bid in by_id and "unit_systems" not in rec]
+    if limit:
+        todo = todo[:limit]
+    print(f"форм без разбора систем: {len(todo)}")
+    for s in range(0, len(todo), 5):
+        batch = todo[s:s + 5]
+        try:
+            got = ask_systems(batch, key)
+        except Exception as e:
+            print(f"  сбой пачки {s}: {e} — пауза и дальше")
+            time.sleep(5)
+            continue
+        for bid, rows in got.items():
+            done[bid]["unit_systems"] = rows
+        OUT.write_text(json.dumps(done, ensure_ascii=False, indent=1), encoding="utf-8")
+        n_var = sum(1 for r in done.values() if r.get("unit_systems"))
+        print(f"  спрошено {sum(1 for r in done.values() if 'unit_systems' in r)}"
+              f" · с вариантами {n_var}")
+    print("✅ системы единиц разобраны")
+    return 0
+
+
 def link():
     """Операторы и константы → понятия реестра. Не нашлись — кандидаты в копилку
     живого механизма: оператор kind=math, константа kind=constant. Реестр растёт
@@ -247,9 +349,16 @@ def main():
     ap.add_argument("--run", action="store_true")
     ap.add_argument("--force-peak", action="store_true")
     ap.add_argument("--link", action="store_true")
+    ap.add_argument("--systems", action="store_true",
+                    help="формы в разных системах единиц (СИ/СГС/планковская…)")
+    ap.add_argument("--systems-sample", type=int, metavar="N")
     a = ap.parse_args()
     if a.link:
         return link()
+    if a.systems_sample:
+        return run_systems(limit=a.systems_sample, force_peak=True)
+    if a.systems:
+        return run_systems(force_peak=a.force_peak)
     if a.sample:
         return run(limit=a.sample, force_peak=True)
     if a.run:
