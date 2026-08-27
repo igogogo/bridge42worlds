@@ -500,7 +500,13 @@ def concept_page(cid, c, lang, live, by_id, rich=None, page_langs=None):
                f'<span class="entity-kind" style="font-family:var(--mono);font-size:11.5px;'
                f'color:var(--cyan);border:1px solid currentColor;border-radius:999px;'
                f'padding:2px 10px;align-self:center">{H.escape(kind)}</span>'
-               f'<h1>{H.escape(name)}{note}</h1></div>')
+               f'<h1>{H.escape(name)}</h1></div>')
+    # Пометка «перевод готовится» — СТРОКОЙ ПОД заголовком, а не внутри него:
+    # в одну строку с названием она читалась его частью («постоянная Ридберга
+    # перевод готовится»), и заголовок страницы выходил бессмысленным.
+    if note:
+        out.append(f'<div style="font-family:var(--mono);font-size:11.5px;'
+                   f'color:var(--muted);margin:-2px 0 6px">{note.strip()}</div>')
     # КАРТОЧКА понятия — выделенным определением, а не строчкой между служебных:
     # это главный текст страницы, пока перевод не приехал — по-английски с пометкой.
     # Эпиграф — на языке страницы, когда перевод карточки уже есть (full_i18n)
