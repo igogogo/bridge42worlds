@@ -22,6 +22,7 @@ import re
 import sys
 import time
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -102,24 +103,33 @@ def main():
     if a.limit:
         todo = todo[:a.limit]
     print(f"статей к якорению: {len(todo)}")
-    n_rows = 0
-    for n, (aid, cs, tx) in enumerate(todo, 1):
+    def one(item):
+        aid, cs, tx = item
         try:
-            rows = ask_one(aid, cs, tx, key)
+            return aid, ask_one(aid, cs, tx, key)
         except Exception as e:
             print(f"  {aid}: {e}")
-            time.sleep(4)
-            continue
-        if rows:
-            with MENTIONS.open("a", encoding="utf-8") as fh:
-                for r in rows:
-                    fh.write(json.dumps(r, ensure_ascii=False) + "\n")
-            n_rows += len(rows)
-        done.add(aid)
-        if n % 50 == 0:
-            st["done"] = sorted(done)
-            STATE.write_text(json.dumps(st, ensure_ascii=False), encoding="utf-8")
-            print(f"  {n}/{len(todo)} · якорей {n_rows}")
+            return aid, None
+
+    # Восемь статей разом. Дописывать в журнал якорей из нескольких потоков
+    # нельзя — строки перемешаются на полуслове, поэтому пишет главный поток по
+    # мере готовности. Статья, на которой запрос упал, в «сделано» не попадает и
+    # достанется следующему прогону.
+    n_rows = 0
+    with ThreadPoolExecutor(max_workers=8) as ex:
+        for n, (aid, rows) in enumerate(ex.map(one, todo), 1):
+            if rows is None:
+                continue
+            if rows:
+                with MENTIONS.open("a", encoding="utf-8") as fh:
+                    for r in rows:
+                        fh.write(json.dumps(r, ensure_ascii=False) + "\n")
+                n_rows += len(rows)
+            done.add(aid)
+            if n % 50 == 0:
+                st["done"] = sorted(done)
+                STATE.write_text(json.dumps(st, ensure_ascii=False), encoding="utf-8")
+                print(f"  {n}/{len(todo)} · якорей {n_rows}", flush=True)
     st["done"] = sorted(done)
     STATE.write_text(json.dumps(st, ensure_ascii=False), encoding="utf-8")
     print(f"✅ русских якорей: {n_rows}")
