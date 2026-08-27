@@ -230,6 +230,13 @@ def authors_pass(papers, k):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--status", action="store_true")
+    # Граф цитирований — пять часов работы, и на страницах его пока не видно:
+    # своей страницы у него нет, это материал для будущей аналитики. Разделяем,
+    # чтобы то, что видно (авторские цифры), не ждало того, что не видно.
+    ap.add_argument("--skip-graph", action="store_true",
+                    help="без графа цитирований — только статьи и авторы")
+    ap.add_argument("--only-graph", action="store_true",
+                    help="только граф цитирований (догнать отдельным прогоном)")
     a = ap.parse_args()
     OUT.mkdir(exist_ok=True)
     if a.status:
@@ -240,6 +247,11 @@ def main():
     k = key()
     ids = our_ids()
     log(f"наших статей: {len(ids)}")
+    if a.only_graph:
+        papers = json.loads(PAPERS.read_text(encoding="utf-8")) if PAPERS.exists() else {}
+        graph_pass(ids, papers, k)
+        log("✅ граф цитирований завершён")
+        return 0
     papers = batch_pass(ids, k)
     # Авторы ПЕРЕД графом цитирований. Оба прохода длинные, но на страницах видны
     # разные вещи: авторские цифры (h-индекс, цитируемость, место работы) стоят на
@@ -247,7 +259,8 @@ def main():
     # для будущей аналитики, который ждёт своей страницы. Порядок 27.08 был
     # обратный, и граф на пять часов отодвигал ровно то, что нужно к утру.
     authors_pass(papers, k)
-    graph_pass(ids, papers, k)
+    if not a.skip_graph:
+        graph_pass(ids, papers, k)
     log("✅ сбор Semantic Scholar завершён")
     return 0
 
