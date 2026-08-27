@@ -884,6 +884,51 @@ def full_first(items):
 # печать. Иначе страница начнёт врать о размере темы.
 STATIC_CARDS_CAP = 40
 
+# «N мин» на карточке — как в ленте (js/search.js локализует так же)
+READING_MIN = {"ru": "мин", "en": "min", "es": "min", "ar": "د", "fr": "min"}
+
+# Словари имён для плашек на серверных карточках — те же файлы, что грузит клиент
+# (concepts-names / tags-names / laws-names). Кэш на язык, чтобы не читать 40 раз.
+_CHIP_DICTS = {}
+
+
+def chip_dicts(lang):
+    if lang not in _CHIP_DICTS:
+        def _load(name):
+            f = Path(f"lang/{lang}/data/{name}.json")
+            try:
+                return json.loads(f.read_text(encoding="utf-8")) if f.exists() else {}
+            except json.JSONDecodeError:
+                return {}
+        _CHIP_DICTS[lang] = (_load("concepts-names"), _load("tags-names"),
+                             _load("laws-names"))
+    return _CHIP_DICTS[lang]
+
+
+def card_chips(a, lang):
+    """Плашки сущностей на карточке — ровно как в ленте (js/search.js cardHTML):
+    закон — квадрат, учёный — прямоугольник, тег — пилюля; реестр волны 5 первым."""
+    cn, tags_loc, laws_loc = chip_dicts(lang)
+    out = []
+    for law in (a.get("laws") or [])[:2]:
+        if law in cn:
+            out.append(f'<a class="ent ent-law" href="/{LANG_DIR}/{lang}/concepts/{attr_safe(law)}.html">'
+                       f'{safe(cn[law].get("name") or law.replace("_", " "))}</a>')
+        elif law in laws_loc:
+            out.append(f'<a class="ent ent-law" href="/{LANG_DIR}/{lang}/laws/{attr_safe(law)}.html">'
+                       f'{safe(laws_loc[law].get("name") or law.replace("_", " "))}</a>')
+    for s in (a.get("scientists") or [])[:3]:
+        out.append(f'<a class="ent ent-sci" href="/{LANG_DIR}/{lang}/scientists/{attr_safe(author_slug(s))}.html">'
+                   f'{safe(s)}</a>')
+    for t in (a.get("tags") or [])[:5]:
+        if t in cn:
+            out.append(f'<a class="ent ent-tag" href="/{LANG_DIR}/{lang}/concepts/{attr_safe(t)}.html">'
+                       f'{safe(cn[t].get("name") or t.replace("_", " "))}</a>')
+        elif t in tags_loc:
+            out.append(f'<a class="ent ent-tag" href="/{LANG_DIR}/{lang}/tags/{attr_safe(t)}.html">'
+                       f'{safe(tags_loc[t].get("name") or t.replace("_", " "))}</a>')
+    return f'<div class="card-tags">{"".join(out)}</div>' if out else ""
+
 
 def entity_article_card(a, lang):
     """Карточка статьи в списках справочников (тег/закон/учёный/раздел/автор) — единый вид с
@@ -900,12 +945,40 @@ def entity_article_card(a, lang):
     # Три уровня прямо на карточке — чтобы попадать сразу в нужную глубину, не открывая
     # статью и не переключаясь внутри. Заменили общий бегунок в шапке (юзер 2026-07-28).
     levels = level_switch_links(lang, "popular", a["date"], a["id"])
+    # ЕДИНАЯ карточка с лентой (владелец 27.08: «пусть будет одна, как у нас всё»).
+    # Серверная была обеднённой: дата и всё. Теперь тот же паспорт, что у клиентской:
+    # раздел · дата · время чтения · arXiv · бейдж экспресса — и АВТОРЫ («не забудь
+    # про авторов»). Иконку раздела дорисует js (B42Icons) по data-cat, как в ленте.
+    cat = (a.get("categories") or [None])[0] or a.get("primary_category") or ""
+    cat_html = (f'<a class="card-cat" href="/{LANG_DIR}/{lang}/sections/" '
+                f'data-cat="{attr_safe(cat)}"><span class="card-cat-t">'
+                f'{safe(cat_name(cat, lang))}'
+                f'</span></a>') if cat else ""
+    reading = (f'<span class="card-read">{a["reading"]} {READING_MIN.get(lang, "min")}</span>'
+               if a.get("reading") else "")
+    express = ('<span class="card-express-badge">express</span>'
+               if a.get("express") else "")
+    authors = ""
+    if a.get("authors"):
+        links = " · ".join(
+            f'<a href="/{LANG_DIR}/en/authors/{attr_safe(author_slug(x))}.html">{safe(x)}</a>'
+            for x in a["authors"][:3])
+        more = " …" if len(a["authors"]) > 3 else ""
+        authors = f'<div class="card-authors">{links}{more}</div>'
     return (f'<article class="article-card">'
-            f'<div class="card-eyebrow"><span class="card-date">{a["date"]}</span></div>'
+            f'<div class="card-eyebrow">{cat_html}'
+            f'<span class="card-date">{a["date"]}</span>{reading}'
+            f'<a class="card-src" href="https://arxiv.org/abs/{a["id"].split("v")[0]}" '
+            f'target="_blank" rel="noopener">arXiv:{a["id"].split("v")[0]}</a>{express}</div>'
             f'{thumb}'
+            # card-title/card-desc, НЕ h3/oneliner: у справочников был свой крупный
+            # стиль — карточка выглядела иначе, чем та же статья в ленте. Теперь
+            # классы клиентской cardHTML, CSS один (владелец 27.08: «пусть будет одна»).
             f'<div class="card-body">{levels}'
-            f'<h3><a href="{a["url"]}" title="{attr_safe(a["title"])}">{title}</a></h3>'
-            f'<div class="oneliner">{desc}</div>'
+            f'<a class="card-title" href="{a["url"]}" title="{attr_safe(a["title"])}">{title}</a>'
+            f'<div class="card-desc">{desc}</div>'
+            f'{authors}'
+            f'{card_chips(a, lang)}'
             # Реакции и избранное — как в ленте. Владелец 26.08 про страницы понятий:
             # «карточка в списке у нас была с лайками — функционал вернётся?» На карточках
             # справочников его не было НИКОГДА (голый список); возвращаем сразу везде —
@@ -3809,6 +3882,32 @@ def update_all_authors():
     ap = Path("data/authors-graph.json")
     graph = json.loads(ap.read_text(encoding="utf-8")) if ap.exists() else {}
 
+    # Semantic Scholar по авторам (владелец 27.08: «имплементируем везде… престиж
+    # для учёных»): h-index, суммарные цитирования, число работ, аффилиация.
+    # Карта строится офлайн из собранного (tools/s2_author_map.py); нет карты или
+    # автора в ней — блока просто нет, страница не меняется. Атрибуция обязательна
+    # по их условиям использования.
+    s2p = Path("data/s2/author-map.json")
+    s2_map = json.loads(s2p.read_text(encoding="utf-8")) if s2p.exists() else {}
+
+    def s2_block(name):
+        m = s2_map.get(name)
+        if not m or not any(m.get(k) for k in ("hIndex", "citations", "papers")):
+            return ""
+        parts = []
+        if m.get("citations") is not None:
+            parts.append(f'<b>{m["citations"]:,}</b> citations')
+        if m.get("hIndex") is not None:
+            parts.append(f'h-index <b>{m["hIndex"]}</b>')
+        if m.get("papers") is not None:
+            parts.append(f'<b>{m["papers"]:,}</b> papers')
+        aff = "; ".join(a for a in m.get("affiliations", []) if a)
+        aff_html = f'<span class="s2-aff">{safe(aff)}</span>' if aff else ""
+        link = f'https://www.semanticscholar.org/author/{m["id"]}'
+        return (f'<div class="s2-stats">{" · ".join(parts)}{aff_html}'
+                f'<a class="s2-attr" href="{link}" target="_blank" rel="noopener">'
+                f'Data: Semantic Scholar</a></div>')
+
     # id -> дата и id -> теги — из индекса ЯЗЫКА ПО УМОЛЧАНИЮ (тег-ID и даты языко-независимы).
     id_date, id_tags = {}, {}
     di = Path(LANG_DIR) / DEFAULT_LANG / "articles-index.json"
@@ -3968,6 +4067,7 @@ def update_all_authors():
             portrait_html = author_portrait_html(author_name, lang)
             _write_text_retry(Path(LANG_DIR) / lang / "authors" / f"{slug}.html", tpl_page.substitute(
                 author_portrait_html=portrait_html,
+                s2_html=s2_block(author_name),
                 author_desc=attr_safe(author_desc),
                 author_url=f"{SITE_URL}/{LANG_DIR}/en/authors/{slug}.html",
                 lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang="en", asset_ver=asset_ver(),
@@ -4189,8 +4289,36 @@ def generate_status_page():
     # Одно облако (24.08): счётчик понятий берём из витрины laws-graph — она и есть
     # полный реестр на сайте. Раздельные «теги» и «законы» на дашборде врали бы
     # о структуре, которой больше нет.
-    concepts_n = len(json.loads(Path("data/laws-graph.json").read_text(encoding="utf-8")).get("graph", {})) \
-        if Path("data/laws-graph.json").exists() else 0
+    # Волна 5 (27.08): источник правды — живой реестр concepts-live.json; laws-graph
+    # остаётся откатом, пока живого файла нет (владелец: дашборд показывал 536 при
+    # реестре 1222 — цифра врала о главном активе).
+    concepts_n = 0
+    wave5_html = ""
+    if Path("data/concepts-live.json").exists():
+        _lc = json.loads(Path("data/concepts-live.json").read_text(encoding="utf-8"))["concepts"]
+        concepts_n = len(_lc)
+        _full = sum(1 for v in _lc.values() if v.get("full"))
+        _ru = sum(1 for v in _lc.values() if (v.get("names") or {}).get("ru"))
+        _orph = sum(1 for v in _lc.values() if not v.get("articles"))
+        _rel = sum(1 for v in _lc.values() if v.get("related"))
+        _fml = sum(len(v.get("formulas") or []) for v in _lc.values())
+        _kinds = {}
+        for v in _lc.values():
+            _kinds[v.get("kind", "?")] = _kinds.get(v.get("kind", "?"), 0) + 1
+        _kind_rows = "".join(f"<tr><td>{k}</td><td style='text-align:right'>{n}</td></tr>"
+                             for k, n in sorted(_kinds.items(), key=lambda kv: -kv[1])[:12])
+        wave5_html = (
+            f"<h2>Concept registry (wave 5)</h2><div class='cards'>"
+            f"<div class='card'><b>{concepts_n}</b><span>concepts live</span></div>"
+            f"<div class='card'><b>{_full}</b><span>full cards</span></div>"
+            f"<div class='card'><b>{_ru}</b><span>ru names</span></div>"
+            f"<div class='card'><b>{_rel}</b><span>with neighbors</span></div>"
+            f"<div class='card'><b>{_fml}</b><span>formula uses</span></div>"
+            f"<div class='card'><b>{_orph}</b><span>orphans</span></div>"
+            f"</div><table>{_kind_rows}</table>")
+    if not concepts_n:
+        concepts_n = len(json.loads(Path("data/laws-graph.json").read_text(encoding="utf-8")).get("graph", {})) \
+            if Path("data/laws-graph.json").exists() else 0
     sci_n = len(valid_scientist_ids())
     authors_n = len(json.loads(Path("data/authors-graph.json").read_text(encoding="utf-8"))) \
         if Path("data/authors-graph.json").exists() else 0
@@ -4283,6 +4411,7 @@ table{{border-collapse:collapse;font-size:13px;width:100%}}</style></head><body>
 <h2>Translation coverage</h2><table>{cov_rows}</table>
 <h2>By arXiv category (top 15)</h2><table>{cat_rows}</table>
 <h2>Articles per day (last 30)</h2><table>{day_rows}</table>
+{wave5_html}
 <h2>Integrity</h2>{warn}
 <h2>Concept graph connectivity</h2>{connectivity_html}
 </body></html>'''

@@ -39,7 +39,9 @@ BATCH_FIELDS = ("citationCount,influentialCitationCount,referenceCount,externalI
                 "venue,publicationVenue,journal,year,publicationDate,publicationTypes,"
                 "isOpenAccess,openAccessPdf,fieldsOfStudy,s2FieldsOfStudy,tldr,abstract,"
                 "authors.name,authors.hIndex,authors.authorId")
-AUTHOR_FIELDS = ("name,aliases,hIndex,paperCount,citationCount,affiliations,"
+# БЕЗ aliases: author/batch его не знает и валит всю пачку HTTP 400
+# («Unrecognized or unsupported fields: [aliases]», проверено 27.08).
+AUTHOR_FIELDS = ("name,hIndex,paperCount,citationCount,affiliations,"
                  "homepage,externalIds")
 GRAPH_FIELDS = "externalIds,title,citationCount,year"
 PAUSE = 1.05          # их лимит: 1 запрос в секунду на ключ, на все ручки
@@ -62,9 +64,16 @@ def req(url, payload=None, k=None, tries=6):
                 return json.loads(resp.read().decode("utf-8"))
         except urllib.error.HTTPError as e:
             if e.code == 429 or e.code >= 500:
-                time.sleep(2 ** attempt + 1)
+                # 429 у них затяжной: обычный бэкоф (до 33с) выгорал все 6 попыток
+                # подряд и пачки «пустели» (прогон 27.08). Ждём минутами.
+                time.sleep(10 * 2 ** attempt if e.code == 429 else 2 ** attempt + 1)
                 continue
             if e.code == 404:
+                return None
+            if e.code == 400:
+                # детерминированный отказ (плохое поле/id) — повторять бессмысленно,
+                # но и валить весь прогон нельзя: лог и дальше
+                log(f"  ⚠️ 400 Bad Request: {e.read().decode()[:160]}")
                 return None
             raise
         except Exception:

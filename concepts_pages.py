@@ -111,7 +111,7 @@ def head(lang, title):
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
         onload="renderMathInElement(document.body, {{output: 'html', delimiters: [
           {{left: '$$', right: '$$', display: true}},
-          {{left: '\\(', right: '\\)', display: false}}]}})"></script>
+          {{left: '\\\\(', right: '\\\\)', display: false}}]}})"></script>
 <link rel="stylesheet" href="/css/style.css">
 <link rel="icon" href="/favicon.ico" sizes="any">
 </head>
@@ -253,6 +253,7 @@ def concept_page(cid, c, lang, live, by_id, rich=None):
     # имена полей одинаковые, рендер один
     r = (rich or {}).get(cid) or c.get("full") or {}
     s = SEC.get(lang, SEC["en"])
+    panes = []
     for field, label in (("description_popular", s["desc"]), ("history", s["history"]),
                          ("how_it_works", s["how"]),
                          ("practical_application", s["practical"]),
@@ -264,8 +265,22 @@ def concept_page(cid, c, lang, live, by_id, rich=None):
             txt = txt.replace(chr(92) + "n", " ")
             linked = autolink(H.escape(txt), cid, lang, live)
             linked = linked.replace(chr(10) + chr(10), "</p><p>").replace(chr(10), "<br>")
-            body.append(f'<div class="section"><h2 style="font-size:16px;margin:14px 0 6px">'
-                        f'{label}</h2><p style="max-width:var(--w-read)">{linked}</p></div>')
+            panes.append((label, f'<p style="max-width:var(--w-read)">{linked}</p>'))
+    # ВКЛАДКИ вместо простыни секций (владелец 27.08: «полная карточка тоже с
+    # вкладками»). Без JS видны все секции с заголовками; скрипт внизу страницы
+    # превращает их в панель вкладок — деградация бесплатная.
+    if len(panes) > 1:
+        tabs = "".join(f'<button class="ent-tab{" active" if i == 0 else ""}" '
+                       f'data-pane="p{i}">{H.escape(lbl)}</button>'
+                       for i, (lbl, _) in enumerate(panes))
+        content = "".join(f'<div class="ent-pane" data-pane="p{i}">'
+                          f'<h2 class="ent-pane-t" style="font-size:16px;margin:14px 0 6px">'
+                          f'{H.escape(lbl)}</h2>{html}</div>'
+                          for i, (lbl, html) in enumerate(panes))
+        body.append(f'<div class="ent-tabs" role="tablist">{tabs}</div>{content}')
+    elif panes:
+        body.append(f'<div class="section"><h2 style="font-size:16px;margin:14px 0 6px">'
+                    f'{panes[0][0]}</h2>{panes[0][1]}</div>')
     if c["related"]:
         chips = "".join(
             f'<a href="/lang/{lang}/concepts/{H.escape(r["id"])}.html">'
@@ -307,6 +322,18 @@ def concept_page(cid, c, lang, live, by_id, rich=None):
         out.append(f'<p style="color:var(--soft)">{t["none"]}</p>')
     out.append('<script src="/js/icons.js"></script><script src="/js/search.js" defer></script>'
                '<script src="/js/likes.js" defer></script>')
+    # Вкладки полной записи: включаются только при JS, иначе секции остаются простынёй
+    out.append("""<script>(function(){
+var bar=document.querySelector('.ent-tabs');if(!bar)return;
+document.body.classList.add('ent-tabs-on');
+bar.addEventListener('click',function(e){
+  var b=e.target.closest('.ent-tab');if(!b)return;
+  bar.querySelectorAll('.ent-tab').forEach(function(x){x.classList.toggle('active',x===b)});
+  document.querySelectorAll('.ent-pane').forEach(function(p){
+    p.classList.toggle('active',p.dataset.pane===b.dataset.pane)});
+});
+var first=document.querySelector('.ent-pane');if(first)first.classList.add('active');
+})();</script>""")
     out.append("</body></html>")
     return "".join(out)
 

@@ -4400,3 +4400,29 @@ html[lang="ar"] .card-img-wrap { float: none; margin: 0; }
 @media (max-width: 620px) {
     .top-bar { flex-wrap: wrap; row-gap: 4px; }
 }
+
+/* Вкладки полной записи понятия (владелец 27.08: «полная карточка тоже с вкладками»).
+   Без JS панель скрыта и секции идут простынёй с заголовками; js вешает
+   .ent-tabs-on на body — тогда панель видна, открыта одна секция. */
+.ent-tabs { display: none; }
+.ent-tabs-on .ent-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 4px;
+    max-width: var(--w-read); }
+.ent-tab { font-family: var(--mono); font-size: 12px; padding: 6px 13px; cursor: pointer;
+    color: var(--muted); background: var(--surface); border: 1px solid var(--hairline);
+    border-radius: 999px; transition: color .18s, border-color .18s, background .18s; }
+.ent-tab:hover { color: var(--link); border-color: var(--link); }
+.ent-tab.active { color: #fff; background: var(--link); border-color: var(--link); }
+.ent-tabs-on .ent-pane { display: none; }
+.ent-tabs-on .ent-pane.active { display: block; }
+.ent-tabs-on .ent-pane-t { display: none; }
+
+/* Semantic Scholar на странице автора: цитирования · h-index · работы + аффилиация.
+   Атрибуция «Data: Semantic Scholar» — условие их API. */
+.s2-stats { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline;
+    font-family: var(--mono); font-size: 12.5px; color: var(--muted);
+    max-width: var(--w-page); margin: 2px auto 10px; padding: 0 24px; }
+.s2-stats b { color: var(--cyan); font-weight: 600; }
+.s2-aff { color: var(--soft); font-family: var(--sans); }
+.s2-attr { color: var(--soft); font-size: 11px; text-decoration: none;
+    border-bottom: 1px dotted var(--hairline); }
+.s2-attr:hover { color: var(--link); }
