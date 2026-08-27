@@ -4014,23 +4014,35 @@ def update_all_authors():
     s2p = Path("data/s2/author-map.json")
     s2_map = json.loads(s2p.read_text(encoding="utf-8")) if s2p.exists() else {}
 
-    def s2_block(name):
+    # Подписи цифр Scholar — на языке страницы. Стояли по-английски на всех пяти:
+    # русский читатель видел «citations» и «papers» посреди русской страницы.
+    # h-index оставляем как есть — это имя показателя, а не слово.
+    S2_LBL = {
+        "ru": ("цитирований", "работ"), "en": ("citations", "papers"),
+        "es": ("citas", "trabajos"), "ar": ("استشهاد", "أعمال"),
+        "fr": ("citations", "travaux"), "zh": ("次引用", "篇论文"),
+    }
+
+    def s2_block(name, lang="en"):
         m = s2_map.get(name)
         if not m or not any(m.get(k) for k in ("hIndex", "citations", "papers")):
             return ""
+        cite_lbl, paper_lbl = S2_LBL.get(lang, S2_LBL["en"])
         parts = []
         if m.get("citations") is not None:
-            parts.append(f'<b>{m["citations"]:,}</b> citations')
+            parts.append(f'<b>{m["citations"]:,}</b> {cite_lbl}')
         if m.get("hIndex") is not None:
             parts.append(f'h-index <b>{m["hIndex"]}</b>')
         if m.get("papers") is not None:
-            parts.append(f'<b>{m["papers"]:,}</b> papers')
+            parts.append(f'<b>{m["papers"]:,}</b> {paper_lbl}')
         aff = "; ".join(a for a in m.get("affiliations", []) if a)
         aff_html = f'<span class="s2-aff">{safe(aff)}</span>' if aff else ""
         link = f'https://www.semanticscholar.org/author/{m["id"]}'
         return (f'<div class="s2-stats">{" · ".join(parts)}{aff_html}'
                 f'<a class="s2-attr" href="{link}" target="_blank" rel="noopener">'
-                f'Data: Semantic Scholar</a></div>')
+                f'{ {"ru": "Данные", "es": "Datos", "ar": "بيانات",
+                     "fr": "Données", "zh": "数据"}.get(lang, "Data") }: '
+                f'Semantic Scholar</a></div>')
 
     # id -> дата и id -> теги — из индекса ЯЗЫКА ПО УМОЛЧАНИЮ (тег-ID и даты языко-независимы).
     id_date, id_tags = {}, {}
@@ -4191,7 +4203,7 @@ def update_all_authors():
             portrait_html = author_portrait_html(author_name, lang)
             _write_text_retry(Path(LANG_DIR) / lang / "authors" / f"{slug}.html", tpl_page.substitute(
                 author_portrait_html=portrait_html,
-                s2_html=s2_block(author_name),
+                s2_html=s2_block(author_name, lang),
                 # мини-граф автора: понятия его работ и их внутренние связи
                 mini_ids=mini_ids_articles(set(data.get("articles", []))),
                 author_desc=attr_safe(author_desc),
