@@ -4494,3 +4494,11 @@ body.article-page .original-title { max-width: none; }
 @media (max-width: 1079px) {
     .article-nav { display: none; }
 }
+
+/* Единая ширина страниц понятий и формул — тот же стандарт, что у статьи:
+   колонка 700, один край у шапки, текста, вкладок, мини-графа и карточек. */
+body.entity-page { max-width: 700px; }
+body.entity-page .ent-pane p,
+body.entity-page .entity-body p { max-width: none; }
+/* Полноэкранный граф колонкой не ограничен — у него своя сцена. */
+body.graph-page { max-width: none; }

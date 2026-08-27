@@ -142,7 +142,7 @@ def site_chrome(lang):
     return _CHROME[lang]
 
 
-def head(lang, title):
+def head(lang, title, body_class="entity-page"):
     d = "rtl" if lang == "ar" else "ltr"
     return f"""<!DOCTYPE html>
 <html lang="{lang}" dir="{d}">
@@ -162,7 +162,7 @@ def head(lang, title):
 <link rel="stylesheet" href="/css/style.css">
 <link rel="icon" href="/favicon.ico" sizes="any">
 </head>
-<body>
+<body class="{body_class}">
 {site_chrome(lang)[0]}
 """
 
@@ -310,7 +310,7 @@ def concept_page(cid, c, lang, live, by_id, rich=None):
             txt = txt.replace(chr(92) + "n", " ")
             linked = autolink(H.escape(txt), cid, lang, live)
             linked = linked.replace(chr(10) + chr(10), "</p><p>").replace(chr(10), "<br>")
-            panes.append((label, f'<p style="max-width:var(--w-read)">{linked}</p>'))
+            panes.append((label, f'<p>{linked}</p>'))
     # ВКЛАДКИ вместо простыни секций (владелец 27.08: «полная карточка тоже с
     # вкладками»). Без JS видны все секции с заголовками; скрипт внизу страницы
     # превращает их в панель вкладок — деградация бесплатная.
@@ -522,7 +522,7 @@ def graph_page(lang):
                 "kinds": "Kinds", "groups": "Groups", "info": "Selection",
                 "stats": "Frame", "path": "Trail"}}
     l = L.get(lang, L["en"])
-    return head(lang, t["title"]) + f"""
+    return head(lang, t["title"], body_class="graph-page") + f"""
 <div class="b42g-stage"><canvas id="b42g"></canvas></div>
 <div class="b42g-top glass">
   <b style="font-family:var(--serif);font-size:16px">{t["title"]}</b>

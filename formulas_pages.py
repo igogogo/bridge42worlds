@@ -152,19 +152,19 @@ def formula_page(b, an, lang, live):
     if an.get("description"):
         txt, tl = _txt("description")
         body.append(f'<div class="section"><h2 style="font-size:16px;margin:14px 0 6px">'
-                    f'{t["desc"]}</h2><p lang="{tl}" style="max-width:var(--w-read)">'
+                    f'{t["desc"]}</h2><p lang="{tl}">'
                     f'{H.escape(txt)}</p></div>')
     if an.get("history"):
         hist_lbl = {"ru": "История", "en": "History", "es": "Historia",
                     "ar": "التاريخ", "fr": "Histoire"}[lang]
         txt, tl = _txt("history")
         body.append(f'<div class="section"><h2 style="font-size:16px;margin:14px 0 6px">'
-                    f'{hist_lbl}</h2><p lang="{tl}" style="max-width:var(--w-read)">'
+                    f'{hist_lbl}</h2><p lang="{tl}">'
                     f'{H.escape(txt)}</p></div>')
     if an.get("applicability"):
         txt, tl = _txt("applicability")
         body.append(f'<div class="section"><h2 style="font-size:16px;margin:14px 0 6px">'
-                    f'{t["appl"]}</h2><p lang="{tl}" style="max-width:var(--w-read)">'
+                    f'{t["appl"]}</h2><p lang="{tl}">'
                     f'{H.escape(txt)}</p></div>')
     rows = sym_rows(an, lang, live, t)
     if rows:
