@@ -63,7 +63,16 @@ def key():
     raise SystemExit("нет SEMANTIC_SCHOLAR_KEY в .env")
 
 
-def req(url, payload=None, k=None, tries=7):
+def req(url, payload=None, k=None, tries=7, heavy_tries=2):
+    """heavy_tries — сколько раз повторять ответ 5xx.
+
+    429 и 5xx лечатся по-разному. 429 значит «слишком часто» — подождать и
+    повторить тот же запрос правильно. 5xx на пакетной ручке значит «ответ
+    слишком тяжёлый», и повторять его бессмысленно: те же полтораста статей
+    снова не пролезут. Раньше на каждую такую пачку уходило семь попыток и две
+    с лишним минуты ожидания, прежде чем вызывающий догадывался её разделить.
+    """
+    heavy = 0
     for attempt in range(tries):
         r = urllib.request.Request(url, headers={"x-api-key": k or key(),
                                                  "Content-Type": "application/json"},
@@ -72,12 +81,18 @@ def req(url, payload=None, k=None, tries=7):
             with urllib.request.urlopen(r, timeout=60) as resp:
                 return json.loads(resp.read().decode("utf-8"))
         except urllib.error.HTTPError as e:
-            if e.code == 429 or e.code >= 500:
-                # Бэкоф линейный, а не удвоением: 429 здесь означает «слишком
-                # часто», и лечится он парой лишних секунд. Удвоение же (10, 20,
-                # 40, 80…) на первой же серии отказов усыпляло сбор на десять
-                # минут за пачку — за час не собиралось ничего.
-                time.sleep((5 + 5 * attempt) if e.code == 429 else 2 ** attempt + 1)
+            if e.code >= 500:
+                heavy += 1
+                if heavy >= heavy_tries:
+                    return None          # пусть вызывающий разделит пачку
+                time.sleep(2 ** heavy + 1)
+                continue
+            if e.code == 429:
+                # Бэкоф линейный, а не удвоением: 429 означает «слишком часто»
+                # и лечится парой лишних секунд. Удвоение же (10, 20, 40, 80…)
+                # на первой серии отказов усыпляло сбор на десять минут за пачку
+                # — за час не собиралось ничего.
+                time.sleep(5 + 5 * attempt)
                 continue
             if e.code == 404:
                 return None
