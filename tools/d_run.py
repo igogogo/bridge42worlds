@@ -45,14 +45,14 @@ def state():
         return {"done": []}
 
 
-def run(step, cmd, timeout=6 * 3600):
+def run(step, cmd, timeout=6 * 3600, cwd=None):
     st = state()
     if step in st["done"]:
         log(f"· {step}: уже сделан")
         return True
     log(f"▶ {step}")
     try:
-        r = subprocess.run(cmd, cwd=ROOT, timeout=timeout)
+        r = subprocess.run(cmd, cwd=cwd or ROOT, timeout=timeout)
         ok = r.returncode == 0
     except subprocess.TimeoutExpired:
         ok = False
@@ -158,6 +158,26 @@ def main():
     # реестр пересобрать ПОСЛЕ констант: значение и класс живут отдельными
     # слоями, в live они попадают только сборкой
     run("d-live", [PY, "tools/wave5_apply.py", "--live-only"], timeout=1800)
+    # СВЯЗНОСТЬ для тех, кто родился этой ночью. Константы и статистика пришли не
+    # из статей, а из формул и канона, поэтому групп и соседей у них нет ни одного:
+    # владелец 27.08 — «сирота относительно статьи оправдана, сирот не должно быть
+    # относительно связей внутри понятий». Супер считает и то и другое по карточкам,
+    # значит идти он должен ПОСЛЕ карточек и вектора, то есть здесь.
+    if "d-super" not in state()["done"]:
+        live = json.loads((ROOT / "data/concepts-live.json")
+                          .read_text(encoding="utf-8"))["concepts"]
+        reg = {cid: {"name": (v.get("names") or {}).get("en") or cid,
+                     "kind": v.get("kind") or "concept",
+                     "card_en": v.get("card_en") or "",
+                     "support": v.get("articles") or []}
+               for cid, v in live.items()}
+        (ROOT.parent / "b42-ml" / "data" / "concepts-v4.json").write_text(
+            json.dumps({"concepts": reg}, ensure_ascii=False), encoding="utf-8")
+        log(f"вход супера: {len(reg)} понятий")
+    run("d-super", [PY, "concepts_super.py", "--reg", "data/concepts-v4.json",
+                    "--name-supers"], timeout=3600, cwd=ROOT.parent / "b42-ml")
+    run("d-live2", [PY, "tools/wave5_apply.py", "--live-only"], timeout=1800)
+    run("d-graph", [PY, "tools/concepts_graph_export.py"], timeout=1800)
     run("d-pages-c", [PY, "concepts_pages.py"], timeout=3600)
     run("d-pages-f", [PY, "formulas_pages.py"], timeout=3600)
     run("d-html", [PY, "run.py", "html", "--force"], timeout=8 * 3600)
