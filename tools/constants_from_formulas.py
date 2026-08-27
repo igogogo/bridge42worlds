@@ -56,6 +56,27 @@ VAGUE = ("varies", "model-dependent", "material-dependent", "depends on",
 NUM = re.compile(r"^-?\d+(\.\d+)?([eE][-+]?\d+)?$")
 
 
+# Части раздела констант — чтобы страница не была списком из тридцати имён.
+PARTS = {
+    "Определяющие СИ": ("speed_of_light", "planck_constant", "elementary_charge",
+                        "boltzmann_constant", "avogadro_constant"),
+    "Электромагнетизм": ("vacuum_permittivity", "vacuum_permeability",
+                         "coulomb_constant", "magnetic_flux_quantum",
+                         "conductance_quantum", "von_klitzing_constant",
+                         "bohr_magneton", "faraday_constant"),
+    "Частицы и атом": ("electron_mass", "proton_mass", "neutron_mass",
+                       "atomic_mass_constant", "fine_structure_constant",
+                       "rydberg_constant", "bohr_radius",
+                       "classical_electron_radius", "electron_charge"),
+    "Тепло и излучение": ("gas_constant", "stefan_boltzmann_constant",
+                          "wien_displacement_constant"),
+    "Гравитация и планковские": ("gravitational_constant", "planck_mass",
+                                 "planck_length", "planck_time",
+                                 "reduced_planck_constant", "hubble_constant"),
+}
+PART_OF = {cid: part for part, ids in PARTS.items() for cid in ids}
+
+
 def load(p, d=None):
     try:
         return json.loads(p.read_text(encoding="utf-8"))
@@ -196,9 +217,9 @@ def main():
         if cur is None:
             born[cid] = {
                 "kind": "constant", "group": "other", "scope": "general",
-                "card_en": f'{d["desc"]} Value: {d["value"]}'
-                           + (f' {d["unit"].replace("_", " ")}'
-                              if d["unit"] and d["unit"] != "dimensionless" else ""),
+                # значение в карточку НЕ пишем: оно стоит отдельным блоком на
+                # странице, и в карточке было бы вторым, менее точным экземпляром
+                "card_en": d["desc"],
                 "value": d["value"], "unit": d["unit"], "symbol": d["sym"],
                 "articles": articles_of(d["formulas"]),
                 "origin": "formula-constant",
@@ -234,9 +255,7 @@ def main():
             if cur is None and cid not in born:
                 born[cid] = {
                     "kind": "constant", "group": "other", "scope": "general",
-                    "card_en": f"{desc} Value: {val}"
-                               + (f' {unit.replace("_", " ")}'
-                                  if unit != "dimensionless" else ""),
+                    "card_en": desc,
                     "value": val, "unit": unit, "symbol": sym,
                     "articles": [], "origin": "codata-core", "aliases": [],
                 }
@@ -269,6 +288,15 @@ def main():
         rec = g.get(cid) or {}
         rec.update(v)
         g[cid] = rec
+    # Части раздела констант — тем же файлом разделов, что и статистика.
+    sec_p = ROOT / "data" / "concept-sections.json"
+    sec = load(sec_p)
+    for cid in set(born) | set(valued) | set(fixed) | set(live):
+        if cid in born or (live.get(cid) or {}).get("kind") == "constant" \
+                or cid in fixed or cid in valued:
+            sec[cid] = {"section": "constant",
+                        "part": PART_OF.get(cid, "Из наших формул")}
+    sec_p.write_text(json.dumps(sec, ensure_ascii=False, indent=1), encoding="utf-8")
     GROWN.write_text(json.dumps(g, ensure_ascii=False), encoding="utf-8")
     kf = load(KINDFIX)
     for cid, f in fixed.items():

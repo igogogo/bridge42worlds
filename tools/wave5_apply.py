@@ -184,6 +184,15 @@ def build_live():
         for cid, kind in load(kfix).items():
             if cid in out and kind:
                 out[cid]["kind"] = kind
+    # РАЗДЕЛ поверх класса. Класс у понятия один, а принадлежность двойная:
+    # стандартное отклонение — и величина, и статистика. Раздел живёт отдельным
+    # полем, поэтому величина, попавшая в статистику, остаётся величиной.
+    secs = ROOT / "data" / "concept-sections.json"
+    if secs.exists():
+        for cid, rec in load(secs).items():
+            if cid in out and isinstance(rec, dict):
+                out[cid]["section"] = rec.get("section") or ""
+                out[cid]["section_part"] = rec.get("part") or ""
     meta = {
         "built": load(ML / "data" / "concepts-super.json").get("built", ""),
         "groups": {str(g): m for g, m in groups.items()},

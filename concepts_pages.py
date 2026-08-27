@@ -403,6 +403,36 @@ def unit_ru(uid):
     return f"{top}/{bot}" if len(den) == 1 else f"{top}/({bot})"
 
 
+RU_PLURAL = {
+    "статья": ("статья", "статьи", "статей"),
+    "формула": ("формула", "формулы", "формул"),
+    "учёный": ("учёный", "учёных", "учёных"),
+    "понятие": ("понятие", "понятия", "понятий"),
+    "метод": ("метод", "метода", "методов"),
+    "константа": ("константа", "константы", "констант"),
+}
+
+
+def count_ru(n, word):
+    """«1 статья», «2 статьи», «5 статей» — склонение по числу.
+
+    До этого счётчики печатались как «0 статьи по теме»: подпись бралась
+    готовой строкой и не знала о числе рядом. Русский так не работает, а
+    счётчик стоит на каждой странице понятия.
+    """
+    forms = RU_PLURAL.get(word)
+    if not forms:
+        return f"{n} {word}"
+    n100, n10 = abs(n) % 100, abs(n) % 10
+    if 11 <= n100 <= 14 or n10 == 0 or n10 >= 5:
+        f = forms[2]
+    elif n10 == 1:
+        f = forms[0]
+    else:
+        f = forms[1]
+    return f"{n} {f}"
+
+
 def unit_label(uid, lang):
     """Подпись единицы на языке страницы — одна точка входа для всех страниц."""
     uid = (uid or "").strip()
@@ -486,12 +516,19 @@ def concept_page(cid, c, lang, live, by_id, rich=None, page_langs=None):
     # и ядра СИ (tools/constants_from_formulas.py).
     if c.get("value"):
         out.append(const_value_block(c, lang))
-    stats = [f'{len(c["articles"])} {t["articles"].lower()}']
+    # Счётчики: нулевой не печатаем вовсе (у константы статей может не быть — она
+    # приходит из формулы), русские склоняем по числу.
+    def _cnt(n, ru_word, label):
+        return count_ru(n, ru_word) if lang == "ru" else f"{n} {label.lower()}"
+    stats = []
+    if c["articles"]:
+        stats.append(_cnt(len(c["articles"]), "статья", t["articles"]))
     if c["formulas"]:
-        stats.append(f'{len(c["formulas"])} {t["formulas"].lower()}')
+        stats.append(_cnt(len(c["formulas"]), "формула", t["formulas"]))
     if c["scientists"]:
-        stats.append(f'{len(c["scientists"])} {t["sci"].lower()}')
-    out.append(f'<div class="tag-stats">{" · ".join(stats)}</div>')
+        stats.append(_cnt(len(c["scientists"]), "учёный", t["sci"]))
+    if stats:
+        out.append(f'<div class="tag-stats">{" · ".join(stats)}</div>')
     out.append('</div>')
 
     body = []
@@ -682,6 +719,18 @@ def cloud_page(lang, live, by_id):
     out.append(f'<div class="subtitle">{t["sub"].format(n=len(c), g=len(live["groups"]))}'
                f' &nbsp;<a href="/lang/{lang}/concepts/graph.html" '
                f'style="font-family:var(--mono);font-size:12.5px">{gt["title"]} →</a></div>')
+    # РАЗДЕЛЫ — вход в облако не только через группы: статистика и математика
+    # собраны по смыслу, константы по классу. Владелец 27.08: «сделать как новый
+    # раздел кроме математики».
+    st = SEC_T.get(lang, SEC_T["en"])
+    secs = [(sec, st.get(sec, sec),
+             sum(1 for v in c.values()
+                 if v.get("section") == sec or v.get("kind") == sec))
+            for sec in ("statistics", "math", "constant")]
+    out.append('<div class="related-tags" style="margin:2px 0 18px">' + "".join(
+        f'<a href="/lang/{lang}/concepts/{sec}.html">{H.escape(lbl)} '
+        f'<em style="opacity:.55;font-size:10.5px">{n}</em></a>'
+        for sec, lbl, n in secs if n) + '</div>')
     groups = sorted(live["groups"].items(), key=lambda kv: -len(kv[1]))
     # Контейнер результатов поиска НЕ ставим: search.js, найдя пустой
     # #search-results, наполняет его лентой статей — на облаке понятий
@@ -700,6 +749,117 @@ def cloud_page(lang, live, by_id):
                    f'<span style="font-family:var(--mono);font-size:12px;color:var(--soft)">'
                    f'· {len(members)}</span></summary>'
                    f'<div class="related-tags" style="margin-top:8px">{chips}</div></details>')
+    out.append(site_chrome(lang)[1])
+    out.append(site_chrome(lang)[2])
+    out.append("</body></html>")
+    return "".join(out)
+
+
+SEC_T = {
+    "ru": {"statistics": "Статистика",
+           "sub": "Чем физика обрабатывает данные: {n} методов и приёмов — от подгонки "
+                  "и проверки гипотез до байесовской выборки и машинного обучения. "
+                  "В статьях их обычно не называют по имени, а делают; поэтому раздел "
+                  "собран как справочник, а не выужен из текстов.",
+           "back": "Все понятия", "of_kind": "класс"},
+    "en": {"statistics": "Statistics",
+           "sub": "How physics handles data: {n} methods and practices — fitting, "
+                  "hypothesis testing, Bayesian sampling, machine learning. Papers rarely "
+                  "name them, they just use them, so this section is built as a reference "
+                  "rather than mined from texts.",
+           "back": "All concepts", "of_kind": "class"},
+}
+SEC_T["ru"]["math"] = "Математика"
+SEC_T["en"]["math"] = "Mathematics"
+SEC_T["ru"]["constant"] = "Константы"
+SEC_T["en"]["constant"] = "Constants"
+# Подписи разделов, которые собираются по классу, а не по метке
+SEC_SUB = {
+    "math": {"ru": "Математический аппарат физики: {n} понятий — операторы, "
+                   "преобразования, уравнения и теоремы, которыми записаны законы.",
+             "en": "The mathematics physics is written in: {n} concepts — operators, "
+                   "transforms, equations and theorems behind the laws."},
+    "constant": {"ru": "Константы: {n} величин с числом и единицей. Значения — из "
+                       "разбора наших формул и определений СИ; константа может не "
+                       "встречаться в статьях дословно, но о ней говорит формула.",
+                 "en": "Constants: {n} values with number and unit, taken from our "
+                       "formula anatomy and the SI definitions."},
+}
+# Порядок частей раздела — от того, чем меряют, к тому, чем решают.
+SEC_ORDER = ["Определяющие СИ", "Электромагнетизм", "Частицы и атом",
+             "Тепло и излучение", "Гравитация и планковские", "Из наших формул",
+             "Оценивание и подгонка", "Неопределённости", "Проверка гипотез",
+             "Распределения", "Байесовский анализ", "Ресемплинг и проверка",
+             "Сигналы и временные ряды", "Многомерный анализ и обучение",
+             "Моделирование и выборка"]
+SEC_PART_EN = {
+    "Определяющие СИ": "Defining the SI",
+    "Электромагнетизм": "Electromagnetism",
+    "Частицы и атом": "Particles and the atom",
+    "Тепло и излучение": "Heat and radiation",
+    "Гравитация и планковские": "Gravity and Planck scale",
+    "Из наших формул": "From our formulas",
+    "Оценивание и подгонка": "Estimation and fitting",
+    "Неопределённости": "Uncertainties",
+    "Проверка гипотез": "Hypothesis testing",
+    "Распределения": "Distributions",
+    "Байесовский анализ": "Bayesian analysis",
+    "Ресемплинг и проверка": "Resampling and validation",
+    "Сигналы и временные ряды": "Signals and time series",
+    "Многомерный анализ и обучение": "Multivariate analysis and learning",
+    "Моделирование и выборка": "Simulation and sampling",
+}
+
+
+def section_page(section, lang, live):
+    """Страница раздела: понятия, собранные по смыслу, а не по классу.
+
+    Владелец 27.08: «добавил бы ещё раздел статистику… сделать как новый раздел
+    кроме математики». Раздел шире класса: сюда входит и стандартное отклонение
+    (величина), и метод наименьших квадратов (статистика) — принадлежность
+    разделу живёт отдельным полем, класс у понятия остаётся свой.
+    """
+    t = SEC_T.get(lang, SEC_T["en"])
+    c = live["concepts"]
+    members = {cid: v for cid, v in c.items()
+               if v.get("section") == section or v.get("kind") == section}
+    parts = {}
+    for cid, v in members.items():
+        parts.setdefault(v.get("section_part") or "", []).append(cid)
+    title = t.get(section, section)
+    sub = (SEC_SUB.get(section, {}).get(lang)
+           or SEC_SUB.get(section, {}).get("en") or t["sub"])
+    out = [head(lang, title)]
+    out.append(f'<h1>{H.escape(title)}</h1>')
+    out.append(f'<div class="subtitle">{sub.format(n=len(members))} '
+               f'&nbsp;<a href="/lang/{lang}/concepts/" '
+               f'style="font-family:var(--mono);font-size:12.5px">{t["back"]} →</a></div>')
+    order = [p for p in SEC_ORDER if p in parts] + \
+            [p for p in sorted(parts) if p and p not in SEC_ORDER] + \
+            ([""] if "" in parts else [])
+    for part in order:
+        ids = sorted(parts[part], key=lambda m: (-len(c[m].get("articles") or []),
+                                                 name_of(c[m], m, lang)))
+        label = (part if lang == "ru" else SEC_PART_EN.get(part, part)) or \
+                ({"ru": "Прочее", "en": "Other"}.get(lang, "Other"))
+        rows = []
+        for m in ids:
+            v = c[m]
+            card = ((v.get("full_i18n") or {}).get(lang) or {}).get("card") or v.get("card_en", "")
+            n = len(v.get("articles") or [])
+            rows.append(
+                f'<div style="padding:10px 0;border-bottom:1px solid var(--hair)">'
+                f'<a href="/lang/{lang}/concepts/{H.escape(m)}.html" '
+                f'style="font-family:var(--serif);font-size:16px">'
+                f'{H.escape(name_of(v, m, lang))}</a>'
+                + (f' <span style="font-family:var(--mono);font-size:11px;color:var(--soft)">'
+                   f'{n}</span>' if n else "")
+                + f'<div style="font-size:13.5px;color:var(--soft);margin-top:2px" '
+                  f'lang="{lang if ((v.get("full_i18n") or {}).get(lang) or {}).get("card") else "en"}">'
+                  f'{H.escape(card[:180])}</div></div>')
+        out.append(f'<h2 style="font-size:17px;margin:26px 0 6px">{H.escape(label)} '
+                   f'<span style="font-family:var(--mono);font-size:12px;color:var(--soft)">'
+                   f'· {len(ids)}</span></h2>' + "".join(rows))
     out.append(site_chrome(lang)[1])
     out.append(site_chrome(lang)[2])
     out.append("</body></html>")
@@ -945,7 +1105,10 @@ def build(langs):
                 skipped += 1
         (d / "index.html").write_text(cloud_page(lang, live, by_id), encoding="utf-8")
         (d / "graph.html").write_text(graph_page(lang), encoding="utf-8")
-        print(f"  {lang}: {made} страниц + {skipped} редиректов + облако + граф")
+        for sec in ("statistics", "math", "constant"):
+            (d / f"{sec}.html").write_text(section_page(sec, lang, live),
+                                           encoding="utf-8")
+        print(f"  {lang}: {made} страниц + {skipped} редиректов + облако + граф + разделы")
     print(f"✅ раздел /concepts/: {total} страниц")
 
 
