@@ -254,7 +254,15 @@ fetch('/config.json')
                     return '<a href="javascript:void(0)" data-l="' + l + '" onclick="switchFeedLang(\'' + l + '\')" class="' + (l === lang ? 'active' : '') + '">' + l.toUpperCase() + '</a>';
                 }).join(' ');
             } else {
-                bar.innerHTML = data.languages.map(function(l) {
+                /* Страница может существовать не на всех языках: раздел понятий
+                   и формул пока живёт на ru+en (владелец 27.08), остальным там
+                   отдаётся редирект. Такая страница объявляет свои языки в
+                   data-langs — переключатель показывает только их и не ведёт
+                   человека туда, где текста нет. */
+                var only = (document.body.dataset.langs || '').split(',').filter(Boolean);
+                var list = only.length ? data.languages.filter(function (l) {
+                    return only.indexOf(l) >= 0; }) : data.languages;
+                bar.innerHTML = list.map(function(l) {
                     return '<a href="/lang/' + l + pagePath + '" class="' + (l === lang ? 'active' : '') + '">' + l.toUpperCase() + '</a>';
                 }).join(' ');
             }

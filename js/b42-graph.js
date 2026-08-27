@@ -953,6 +953,96 @@ function demoTick() {
     }
 }
 
+/* ── ПАЛЕЦ (владелец 27.08: «мобильная версия, поведение графа»). До этого на
+   телефоне граф был картинкой: ни таскать, ни приближать, ни выбирать.
+   Один палец — тащить (в 3D вращать), два — щипок-зум, тап — выбрать,
+   двойной тап — вглубь. touch-action: none на холсте, иначе браузер забирает
+   жест себе и страница уезжает вместо графа. ── */
+canvas.style.touchAction = 'none';
+var touch = {mode: null, x: 0, y: 0, d0: 0, z0: 1, t: 0, lastTap: 0, moved: 0};
+
+function tDist(e) {
+    var a = e.touches[0], b = e.touches[1];
+    return Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+}
+function tLocal(e, i) {
+    var r = canvas.getBoundingClientRect(), t = e.touches[i] || e.changedTouches[i];
+    return [t.clientX - r.left, t.clientY - r.top];
+}
+
+canvas.addEventListener('touchstart', function (e) {
+    stopDemo();
+    touch.moved = 0;
+    if (e.touches.length === 2) {
+        touch.mode = 'pinch';
+        touch.d0 = tDist(e);
+        touch.z0 = view.zoomT;
+        autoFit = false;
+        return;
+    }
+    var p = tLocal(e, 0);
+    touch.x = p[0]; touch.y = p[1]; touch.t = Date.now();
+    mouse.x = p[0]; mouse.y = p[1];
+    var i = pick(p[0], p[1]);
+    if (i >= 0) {
+        touch.mode = 'node';
+        dragNode = i;
+        sim.alive = 1e9;
+        hoverI = i;              /* подсказка под пальцем — как наведение мышью */
+    } else {
+        touch.mode = 'pan';
+        autoFit = false;
+    }
+}, {passive: true});
+
+canvas.addEventListener('touchmove', function (e) {
+    if (!touch.mode) return;
+    if (touch.mode === 'pinch' && e.touches.length === 2) {
+        e.preventDefault();
+        var k = tDist(e) / (touch.d0 || 1);
+        view.zoomT = Math.max(0.25, Math.min(5, touch.z0 * k));
+        return;
+    }
+    var p = tLocal(e, 0);
+    var dx = p[0] - touch.x, dy = p[1] - touch.y;
+    touch.moved += Math.abs(dx) + Math.abs(dy);
+    e.preventDefault();
+    if (touch.mode === 'node' && dragNode >= 0) {
+        var nd = frame.nodes[dragNode];
+        if (view.is3d) {
+            nd.x += dx / view.zoom; nd.y += dy / view.zoom;
+        } else {
+            var w = screenToWorld(p[0], p[1]);
+            nd.x = w[0]; nd.y = w[1];
+        }
+        sim.vx[dragNode] = 0; sim.vy[dragNode] = 0; sim.vz[dragNode] = 0;
+    } else if (view.is3d) {
+        view.rotY += dx * 0.008; view.rotX += dy * 0.008;
+    } else {
+        view.panTX = view.panX = view.panX + dx / view.zoom;
+        view.panTY = view.panY = view.panY + dy / view.zoom;
+    }
+    touch.x = p[0]; touch.y = p[1];
+}, {passive: false});
+
+canvas.addEventListener('touchend', function (e) {
+    var wasNode = touch.mode === 'node';
+    if (dragNode >= 0) { dragNode = -1; sim.alive = 300; }
+    var quick = Date.now() - touch.t < 300 && touch.moved < 12;
+    touch.mode = null;
+    if (!quick) return;
+    var p = tLocal(e, 0);
+    var i = pick(p[0], p[1]);
+    var now = Date.now();
+    var dbl = now - touch.lastTap < 320;
+    touch.lastTap = now;
+    if (i < 0) { selI = -1; sparks = []; hoverI = -1; renderInfo(); return; }
+    var nd = frame.nodes[i];
+    if (frame.mode === 'overview') { showGroup(nd.gi); return; }
+    if (dbl) { showEgo(nd.ni); return; }
+    selI = i; hoverI = i; igniteSparks(); renderInfo();
+}, {passive: true});
+
 /* ── панель ── */
 function el(id) { return document.getElementById(id); }
 function set3d(on) {

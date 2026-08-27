@@ -31,7 +31,15 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 LIVE = ROOT / "data" / "concepts-live.json"
+# ЯЗЫКИ ПО НАЛИЧИЮ ПЕРЕВОДА (владелец 27.08: «по понятиям будет русский и
+# английский… но у части есть, у части нет — что есть, не удалять»).
+# ru и en — всегда: русский переведён у всех 3231, английский это язык
+# карточек. es/ar/fr — страница собирается ТОЛЬКО тем понятиям, у которых на
+# этом языке реально есть перевод (имя или текст старого справочника: таких
+# 529); остальным на этих языках отдаётся редирект на английскую версию,
+# чтобы ссылка была живой, а не 404.
 LANGS = ("ru", "en", "es", "ar", "fr")
+ALWAYS_LANGS = ("ru", "en")
 CARDS_CAP = 40
 
 sys.path.insert(0, str(ROOT))
@@ -132,17 +140,29 @@ def site_chrome(lang):
     # «concepts» в шапке ведёт в наш раздел, а не в старые /laws/
     bar = bar.replace(f'/lang/{lang}/laws/', f'/lang/{lang}/concepts/')
     foot = "<footer><p>bridge42worlds</p></footer>"
-    scripts = ('<script src="/js/likes.js"></script>'
-               '<script src="/js/icons.js"></script>'
-               '<script src="/js/search.js"></script>'
-               '<script src="/js/site-search.js"></script>'
-               '<script src="/js/search-ui.js"></script>'
-               '<script src="/js/sitenav.js" defer></script>')
+    scripts = (f'<script src="{av("/js/likes.js")}"></script>'
+               f'<script src="{av("/js/icons.js")}"></script>'
+               f'<script src="{av("/js/search.js")}"></script>'
+               f'<script src="{av("/js/site-search.js")}"></script>'
+               f'<script src="{av("/js/search-ui.js")}"></script>'
+               f'<script src="{av("/js/sitenav.js")}" defer></script>')
     _CHROME[lang] = (bar, foot, scripts)
     return _CHROME[lang]
 
 
-def head(lang, title, body_class="entity-page"):
+def av(path):
+    """Метка версии файла для адреса скрипта/стиля. Без неё браузер держит
+    старую копию: 27.08 страница графа грузила вчерашний b42-graph.js, и
+    тач-управление «не работало», хотя код был на месте. Остальной сайт давно
+    ходит с asset_ver — здесь его не было."""
+    f = ROOT / path.lstrip("/")
+    try:
+        return f"{path}?v={int(f.stat().st_mtime):x}"
+    except OSError:
+        return path
+
+
+def head(lang, title, body_class="entity-page", page_langs=None):
     d = "rtl" if lang == "ar" else "ltr"
     return f"""<!DOCTYPE html>
 <html lang="{lang}" dir="{d}">
@@ -159,10 +179,10 @@ def head(lang, title, body_class="entity-page"):
         onload="renderMathInElement(document.body, {{output: 'html', delimiters: [
           {{left: '$$', right: '$$', display: true}},
           {{left: '\\\\(', right: '\\\\)', display: false}}]}})"></script>
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="{av("/css/style.css")}">
 <link rel="icon" href="/favicon.ico" sizes="any">
 </head>
-<body class="{body_class}">
+<body class="{body_class}" data-langs="{','.join(page_langs or LANGS)}">
 {site_chrome(lang)[0]}
 """
 
@@ -253,14 +273,14 @@ def autolink(html_text, cid, lang, live):
     return html_text
 
 
-def concept_page(cid, c, lang, live, by_id, rich=None):
+def concept_page(cid, c, lang, live, by_id, rich=None, page_langs=None):
     t = T[lang]
     name = name_of(c, cid, lang)
     kind = KIND_LBL.get(lang, {}).get(c["kind"], c["kind"])
     foreign = lang != "en" and not c["names"].get(lang)
     note = f' <span class="tag-ver" style="font-size:11px">{t["en_note"]}</span>' if foreign and t["en_note"] else ""
 
-    out = [head(lang, name)]
+    out = [head(lang, name, page_langs=page_langs or list(ALWAYS_LANGS))]
     out.append('<div class="tag-header">')
     # Класс понятия — бейджем ПЕРЕД названием: владелец 26.08 «у понятий был класс,
     # метод, принцип и так далее — они остались?» Остались у всех 1222; бейдж делает
@@ -416,8 +436,8 @@ def concept_page(cid, c, lang, live, by_id, rich=None):
         out.append(f'<p style="color:var(--soft)">{t["none"]}</p>')
     out.append(site_chrome(lang)[1])          # футер сайта
     out.append(site_chrome(lang)[2])          # лайки, иконки, поиск, «ещё»
-    out.append('<script src="/js/b42-graph-core.js"></script>'
-               '<script src="/js/b42-mini.js" defer></script>')
+    out.append('<script src="{av("/js/b42-graph-core.js")}"></script>'
+               '<script src="{av("/js/b42-mini.js")}" defer></script>')
     # Вкладки полной записи. Скрываем НЕ через display:none, а атрибутом
     # hidden="until-found": браузер ищет текст и внутри скрытой панели, а найдя —
     # шлёт beforematch, и мы раскрываем именно её (владелец 27.08: «вкладки —
@@ -633,12 +653,73 @@ details[open].b42g-sec > summary.b42g-h::before {{ content:"▾ "; }}
   .b42g-stage {{ position:relative; height:70vh; }}
   .b42g-top {{ position:static; margin:8px; }}
   .b42g-side {{ position:static; width:auto; margin:8px; max-height:none; }}
+  /* палец, а не курсор: кнопки и галочки крупнее, холст не отдаёт жест странице */
+  .b42g-mini {{ font-size:12px; padding:7px 13px; }}
+  .b42g-check {{ padding:5px 0; font-size:12px; }}
+  .b42g-check input {{ width:18px; height:18px; }}
+  .b42g-stage canvas {{ touch-action:none; }}
+  .b42g-groups {{ max-height:none; }}
 }}
 </style>
 {site_chrome(lang)[2]}
-<script src="/js/b42-graph-core.js"></script>
-<script src="/js/b42-graph.js" defer></script>
+<script src="{av("/js/b42-graph-core.js")}"></script>
+<script src="{av("/js/b42-graph.js")}" defer></script>
 </body></html>"""
+
+
+def has_translation(cid, c, lang, rich):
+    """Есть ли на этом языке хоть что-то своё: имя или текст справочника."""
+    if lang in ALWAYS_LANGS:
+        return True
+    if (c.get("names") or {}).get(lang):
+        return True
+    r = (rich or {}).get(cid) or {}
+    return bool(r.get("description_popular") or r.get("history"))
+
+
+def redirect_html(to):
+    """Лёгкая страница-перенаправление (359 байт) — тем же приёмом, каким
+    старые /tags/ уводят в /laws/."""
+    return (f'<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">'
+            f'<meta http-equiv="refresh" content="0;url={to}">'
+            f'<link rel="canonical" href="{to}">'
+            f'<title>→ {to}</title></head><body>'
+            f'<a href="{to}">→</a></body></html>')
+
+
+_RICH_CACHE = {}
+
+
+def langs_of(cid, live, cur):
+    """Языки, на которых страница этого понятия реально существует —
+    переключатель показывает только их, чтобы не вести в редирект."""
+    c = live["concepts"][cid]
+    out = list(ALWAYS_LANGS)
+    for lang in LANGS:
+        if lang in out:
+            continue
+        if lang not in _RICH_CACHE:
+            _RICH_CACHE[lang] = load_rich(lang)
+        if has_translation(cid, c, lang, _RICH_CACHE[lang]):
+            out.append(lang)
+    return out
+
+
+def write_redirects(live):
+    """es/ar/fr: каждая страница понятия ведёт на английскую."""
+    n = 0
+    for lang in REDIRECT_LANGS:
+        d = ROOT / "lang" / lang / "concepts"
+        d.mkdir(parents=True, exist_ok=True)
+        for cid in live["concepts"]:
+            (d / f"{cid}.html").write_text(
+                redirect_html(f"/lang/en/concepts/{cid}.html"), encoding="utf-8")
+            n += 1
+        (d / "index.html").write_text(
+            redirect_html("/lang/en/concepts/"), encoding="utf-8")
+        (d / "graph.html").write_text(
+            redirect_html("/lang/en/concepts/graph.html"), encoding="utf-8")
+    print(f"  редиректов es/ar/fr: {n}")
 
 
 def build(langs):
@@ -655,13 +736,21 @@ def build(langs):
         rich = load_rich(lang)
         d = ROOT / "lang" / lang / "concepts"
         d.mkdir(parents=True, exist_ok=True)
+        made = skipped = 0
         for cid, cv in live["concepts"].items():
-            (d / f"{cid}.html").write_text(concept_page(cid, cv, lang, live, by_id, rich),
-                                           encoding="utf-8")
-            total += 1
+            if has_translation(cid, cv, lang, rich):
+                (d / f"{cid}.html").write_text(
+                    concept_page(cid, cv, lang, live, by_id, rich, langs_of(cid, live, lang)),
+                    encoding="utf-8")
+                made += 1
+                total += 1
+            else:
+                (d / f"{cid}.html").write_text(
+                    redirect_html(f"/lang/en/concepts/{cid}.html"), encoding="utf-8")
+                skipped += 1
         (d / "index.html").write_text(cloud_page(lang, live, by_id), encoding="utf-8")
         (d / "graph.html").write_text(graph_page(lang), encoding="utf-8")
-        print(f"  {lang}: {len(live['concepts'])} страниц + облако + граф")
+        print(f"  {lang}: {made} страниц + {skipped} редиректов + облако + граф")
     print(f"✅ раздел /concepts/: {total} страниц")
 
 

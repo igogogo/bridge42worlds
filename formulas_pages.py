@@ -34,7 +34,9 @@ sys.path.insert(0, str(ROOT))
 from concepts_pages import head, name_of, KIND_LBL, site_chrome  # noqa: E402
 import generate as G   # noqa: E402 — действия и отклик теми же функциями
 
-LANGS = ("ru", "en", "es", "ar", "fr")
+# формулы — те же два языка, что и понятия; остальным редирект (см. concepts_pages)
+LANGS = ("ru", "en")
+REDIRECT_LANGS = ("es", "ar", "fr")
 
 T = {
     "ru": {"title": "Формулы", "sub": "Основные формы: {n}. У каждой — разбор символов "
