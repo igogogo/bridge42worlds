@@ -174,8 +174,14 @@ def main():
         (ROOT.parent / "b42-ml" / "data" / "concepts-v4.json").write_text(
             json.dumps({"concepts": reg}, ensure_ascii=False), encoding="utf-8")
         log(f"вход супера: {len(reg)} понятий")
-    run("d-super", [PY, "concepts_super.py", "--reg", "data/concepts-v4.json",
-                    "--name-supers"], timeout=3600, cwd=ROOT.parent / "b42-ml")
+    # --embed обязателен. Без него супер берёт файл векторов от прошлого прогона,
+    # а в нём ровно те понятия, что были на момент векторизации: родившиеся этой
+    # ночью туда не попадут, и группы с соседями у них снова окажутся пустыми —
+    # то есть шаг отработает и не сделает того, ради чего стоит. Векторизация
+    # 3600 карточек через bge-m3 стоит доли цента.
+    run("d-super", [PY, "concepts_super.py", "--embed",
+                    "--reg", "data/concepts-v4.json", "--name-supers"],
+        timeout=3600, cwd=ROOT.parent / "b42-ml")
     run("d-live2", [PY, "tools/wave5_apply.py", "--live-only"], timeout=1800)
     run("d-graph", [PY, "tools/concepts_graph_export.py"], timeout=1800)
     run("d-pages-c", [PY, "concepts_pages.py"], timeout=3600)
