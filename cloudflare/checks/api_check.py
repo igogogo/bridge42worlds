@@ -85,6 +85,28 @@ CASES = [
                    f"{d.get('concept', {}).get('name')}")),
     ("несуществующее понятие", "/api/concept?id=nope_nope_nope",
      lambda d, L: (d.get("error") == "not_found", "честный 404")),
+    # Константа без числа в динамике — пустая страница вместо ответа, за которым
+    # на неё пришли. Проверяем именно значение с единицей, а не сам факт записи.
+    ("константа со значением", "/api/concept?id=elementary_charge&lang=ru",
+     lambda d, L: (bool((d.get("concept") or {}).get("value"))
+                   and bool((d.get("concept") or {}).get("unit")),
+                   f"{(d.get('concept') or {}).get('symbol')} = "
+                   f"{(d.get('concept') or {}).get('value')} "
+                   f"{(d.get('concept') or {}).get('unit')}")),
+    # Раздел шире класса: у стандартного отклонения класс «величина», раздел —
+    # статистика. Проверка ловит случай, когда фильтр сузился до класса.
+    # Требуем, чтобы КАЖДАЯ запись была из раздела. Мягкая проверка («вернулось
+    # больше десяти») проходила на воркере, который параметра section не знает
+    # вовсе: незнакомый параметр молча игнорируется, и в ответ приходит просто
+    # начало общего списка. Проверка, зелёная на неверном ответе, хуже её
+    # отсутствия.
+    ("фильтр по разделу", "/api/concepts?section=statistics&limit=20&lang=ru",
+     lambda d, L: (len(d.get("items") or []) > 10
+                   and all(x.get("section") == "statistics"
+                           or x.get("kind") == "statistics"
+                           for x in (d.get("items") or [])),
+                   f"{len(d.get('items') or [])} в разделе, классов "
+                   f"{len({x.get('kind') for x in (d.get('items') or [])})}")),
     ("кадр: обзор", "/api/graph?frame=overview",
      lambda d, L: (len(d.get("nodes") or []) == L.get("groups", 50) and
                    len(d.get("edges") or []) > 0,

@@ -264,6 +264,12 @@ def main():
         timeout=2 * 3600)
     run("d-cloud-vec", [PY, "tools/concepts_to_vectorize.py", "--apply"],
         timeout=2 * 3600)
+    # ВЫЛОЖИТЬ ВОРКЕР НА DEV. Без этого шага данные в D1 новые, а код, который их
+    # читает, — вчерашний: значение константы и фильтр по разделу лежат в базе и
+    # не доезжают до ответа. Ключ --dev выкладывает испытательный воркер: своё
+    # имя, без маршрутов на домен. Прод не задет — его выкладывает только владелец
+    # своим словом.
+    run("d-deploy-dev", [PY, "cloudflare/deploy_worker.py", "--dev"], timeout=1800)
     run("d-api", [PY, "cloudflare/checks/api_check.py"], timeout=1800)
     run("d-audit", [PY, "tools/concepts_audit.py"], timeout=1800)
     run("d-gaudit", [PY, "tools/group_integrity.py", "--audit"], timeout=1800)
