@@ -106,7 +106,12 @@ SCHEMA = [
          cat      TEXT,               -- главный раздел arXiv его статей
          full_en  TEXT,               -- полная запись (JSON: описание/история/…)
          full_ru  TEXT,               -- её перевод
-         systems  TEXT                -- системы единиц (для unit/quantity)
+         systems  TEXT,               -- системы единиц (для unit/quantity)
+         value    TEXT,               -- число константы: «1.602176634e-19»
+         unit     TEXT,               -- её единица: «coulomb»
+         symbol   TEXT,               -- её символ: «e»
+         section  TEXT,               -- раздел по смыслу: statistics | constant | …
+         part     TEXT                -- часть раздела: «Проверка гипотез»
        )""",
     "CREATE INDEX IF NOT EXISTS concepts_kind ON concepts(kind, n_arts DESC)",
     "CREATE INDEX IF NOT EXISTS concepts_arts ON concepts(n_arts DESC)",
@@ -137,9 +142,22 @@ SCHEMA = [
        )""",
 ]
 
+# Колонки, добавленные к уже существующей таблице. CREATE TABLE IF NOT EXISTS их
+# не добавит: таблица есть, и запрос просто ничего не делает — новые поля молча
+# не доезжают в облако. ALTER на существующую колонку отвечает «duplicate column»,
+# и это ожидаемый ответ при повторном прогоне, а не сбой.
+MIGRATIONS = [
+    "ALTER TABLE concepts ADD COLUMN value TEXT",
+    "ALTER TABLE concepts ADD COLUMN unit TEXT",
+    "ALTER TABLE concepts ADD COLUMN symbol TEXT",
+    "ALTER TABLE concepts ADD COLUMN section TEXT",
+    "ALTER TABLE concepts ADD COLUMN part TEXT",
+    "CREATE INDEX IF NOT EXISTS concepts_section ON concepts(section, n_arts DESC)",
+]
+
 
 def ensure_schema():
-    for sql in SCHEMA:
+    for sql in SCHEMA + MIGRATIONS:
         try:
             d1(sql)
         except RuntimeError as e:
@@ -273,10 +291,15 @@ def main():
                 v.get("full"), (v.get("full_i18n") or {}).get("ru"),
                 {k: v[k] for k in ("systems", "si_definition", "units_by_system")
                  if v.get(k)} or None,
+                # константа без числа в динамике — то же, что на статике: пустая
+                # страница вместо ответа, за которым на неё пришли
+                v.get("value"), v.get("unit"), v.get("symbol"),
+                v.get("section"), v.get("section_part"),
             ])
         push("concepts", ["id", "kind", "name_ru", "name_en", "card", "n_arts",
                           "n_links", "groups", "cat", "full_en", "full_ru",
-                          "systems"], rows, "понятия")
+                          "systems", "value", "unit", "symbol", "section",
+                          "part"], rows, "понятия")
 
         links = []
         for cid, v in C.items():

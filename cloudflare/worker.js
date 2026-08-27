@@ -2811,7 +2811,11 @@ const LINK_KINDS = ["tag", "law", "sci", "cat", "concept"];
    читателю, то самое расточительство, от которого ушли в ленте.
    ═══════════════════════════════════════════════════════════════════════════ */
 
-const CONCEPT_COLS = "id, kind, name_ru, name_en, card, n_arts, n_links, groups, cat";
+/* Значение и раздел идут в КАЖДОЙ выдаче понятия, не только в подробной: без
+   числа карточка константы в ленте ничем не отличается от любой другой, а по
+   разделу списки фильтруются. */
+const CONCEPT_COLS = "id, kind, name_ru, name_en, card, n_arts, n_links, groups, cat, "
+  + "value, unit, symbol, section, part";
 
 function conceptRow(r, lang) {
   return {
@@ -2819,6 +2823,8 @@ function conceptRow(r, lang) {
     name: (lang === "ru" && r.name_ru) || r.name_en || r.id.replace(/_/g, " "),
     card: r.card, n: r.n_arts, links: r.n_links,
     groups: r.groups ? JSON.parse(r.groups) : [], cat: r.cat,
+    value: r.value || null, unit: r.unit || null, symbol: r.symbol || null,
+    section: r.section || null, part: r.part || null,
   };
 }
 
@@ -2870,8 +2876,16 @@ async function handleConcepts(request, env) {
   const q = (url.searchParams.get("q") || "").slice(0, 60);
   const limit = Math.min(200, Math.max(1, +url.searchParams.get("limit") || 60));
   const page = Math.max(0, +url.searchParams.get("page") || 0);
+  const section = (url.searchParams.get("section") || "").slice(0, 16);
   const where = [], bind = [];
   if (kind) { where.push("kind = ?"); bind.push(kind); }
+  /* Раздел шире класса: у стандартного отклонения класс «величина», а раздел —
+     статистика. Поэтому фильтр по разделу берёт и тех, у кого класс совпал с
+     именем раздела: константы это класс, статистика это метка. */
+  if (section) {
+    where.push("(section = ? OR kind = ?)");
+    bind.push(section, section);
+  }
   if (q) {
     where.push("(name_ru LIKE ? OR name_en LIKE ? OR id LIKE ?)");
     bind.push("%" + q + "%", "%" + q + "%", "%" + q + "%");
