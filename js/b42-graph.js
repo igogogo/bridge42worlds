@@ -122,6 +122,11 @@ var hoverI = -1, selI = -1;
 var sim = {vx: [], vy: [], vz: [], alive: 0};
 var sparks = [];
 var T0 = performance.now();
+var iconScale = 1;            // авто: чем плотнее кадр, тем мельче значки
+function calcIconScale() {
+    var N = visIdx().length || 1;
+    iconScale = Math.max(0.5, Math.min(1.05, 7.5 / Math.sqrt(N)));
+}
 
 function nodeVisible(nd) {
     if (nd.kind !== '_group' && !kindOn[bucketOf(nd.kind)]) return false;
@@ -141,6 +146,7 @@ function setFrame(mode, nodes, edges, focusKey) {
     hoverI = -1;
     autoFit = true;
     seedLayout(prev, seed);
+    calcIconScale();
     /* камера плавно доезжает так, чтобы фокус оказался в центре */
     if (seed) { view.panTX = -seed[0]; view.panTY = -seed[1]; }
     else { view.panTX = 0; view.panTY = 0; }
@@ -353,6 +359,13 @@ function applyFixedLayout() {
     autoFit = true;
 }
 
+/* длина покоя ребра — одна и та же для пружины и для окраски натяжения */
+function restLen(e) {
+    var wl = Math.log(1 + e[2]);
+    if (frame.mode === 'overview') return 150 + 60 / (1 + wl * 0.2);
+    return 155 / (1 + wl * 0.42);
+}
+
 /* натяжения: сильное ребро — коротко и жёстко; хабы расталкивают сильнее;
    к центру почти не тянет — структура вытягивается, а не сворачивается в шар */
 function tick() {
@@ -392,8 +405,7 @@ function tick() {
         var dx = n[b].x - n[a].x, dy = n[b].y - n[a].y, dz = n[b].z - n[a].z;
         var d = Math.sqrt(dx * dx + dy * dy + dz * dz) + 0.01;
         var wl = Math.log(1 + e[2]);
-        var target = 155 / (1 + wl * 0.42);        // мощное — заметно короче
-        if (frame.mode === 'overview') target = 150 + 60 / (1 + wl * 0.2);
+        var target = restLen(e);
         var stiff = 0.00016 * (1 + wl * 0.5);      // и жёстче: натяжение видно
         /* сила ограничена: на тяжёлых рёбрах обзора (веса — тысячи) f растёт
            как d² и за два тика взрывала симуляцию в NaN (поймано 27.08) */
@@ -403,10 +415,12 @@ function tick() {
         sim.vx[a] += dx * f; sim.vy[a] += dy * f; sim.vz[a] += dz * f;
         sim.vx[b] -= dx * f; sim.vy[b] -= dy * f; sim.vz[b] -= dz * f;
     });
+    /* гравитация анизотропная: по X слабее (экран шире) — облако растягивается
+       по всей зоне, а не сжимается в точку по центру */
     for (i = 0; i < N; i++) {
-        sim.vx[i] = (sim.vx[i] - n[i].x * 0.0012) * 0.86;
-        sim.vy[i] = (sim.vy[i] - n[i].y * 0.0012) * 0.86;
-        sim.vz[i] = (sim.vz[i] - n[i].z * 0.0012) * 0.86;
+        sim.vx[i] = (sim.vx[i] - n[i].x * 0.0006) * 0.86;
+        sim.vy[i] = (sim.vy[i] - n[i].y * 0.0014) * 0.86;
+        sim.vz[i] = (sim.vz[i] - n[i].z * 0.0014) * 0.86;
         /* предельная скорость — вторая страховка устойчивости */
         var sp = Math.sqrt(sim.vx[i] * sim.vx[i] + sim.vy[i] * sim.vy[i] +
                            sim.vz[i] * sim.vz[i]);
@@ -414,10 +428,11 @@ function tick() {
             var kk = 26 / sp;
             sim.vx[i] *= kk; sim.vy[i] *= kk; sim.vz[i] *= kk;
         }
+        if (i === dragNode) continue;      // узел в руке — двигает мышь
         n[i].x += sim.vx[i]; n[i].y += sim.vy[i];
         if (view.is3d) n[i].z += sim.vz[i]; else n[i].z = 0;
     }
-    if (sim.alive % 24 === 0) fitView();
+    if (dragNode < 0 && sim.alive % 24 === 0) fitView();
 }
 
 /* авто-вписывание: облако всегда в кадре, что бы физика ни устроила.
@@ -487,8 +502,31 @@ function pathShape(x, y, r, sh) {
     } else ctx.arc(x, y, r, 0, Math.PI * 2);
 }
 
-function drawNodeIcon(x, y, r, st, alpha, hot) {
+function drawNodeIcon(x, y, r, st, alpha, hot, isGroup) {
     var col = st.color;
+    if (isGroup) {
+        /* группа — объёмный полупрозрачный шарик: свет сверху-слева */
+        var g = ctx.createRadialGradient(x - r * 0.35, y - r * 0.4,
+                                         r * 0.1, x, y, r);
+        g.addColorStop(0, col + '55');
+        g.addColorStop(0.65, col + '2e');
+        g.addColorStop(1, col + '0a');
+        ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fillStyle = g;
+        ctx.globalAlpha = alpha;
+        ctx.fill();
+        ctx.strokeStyle = hot ? TK.cyan : col;
+        ctx.globalAlpha = alpha * (hot ? 0.95 : 0.5);
+        ctx.lineWidth = hot ? 1.8 : 1;
+        ctx.stroke();
+        /* блик */
+        ctx.beginPath();
+        ctx.arc(x - r * 0.34, y - r * 0.4, r * 0.16, 0, Math.PI * 2);
+        ctx.fillStyle = '#ffffff';
+        ctx.globalAlpha = alpha * 0.35;
+        ctx.fill();
+        return;
+    }
     /* мягкая цветная заливка — прозрачность и лёгкость */
     pathShape(x, y, r, st.sh);
     ctx.fillStyle = col;
@@ -610,9 +648,15 @@ function draw() {
         var hot = focusI >= 0 && (e[0] === focusI || e[1] === focusI);
         var dim = focusI >= 0 && !hot;
         var wgt = Math.log(1 + e[2]) / Math.log(1 + frame.wMax);
-        ctx.strokeStyle = hot ? TK.cyan : TK.muted;
-        ctx.globalAlpha = dim ? 0.05 : (hot ? 0.8 : 0.10 + wgt * 0.45);
-        ctx.lineWidth = (0.5 + wgt * 4.2) * (hot ? 1.25 : 1);
+        /* резиновость видна: растянутое сверх покоя ребро теплеет и тончает */
+        var ddx = n[e[1]].x - n[e[0]].x, ddy = n[e[1]].y - n[e[0]].y,
+            ddz = n[e[1]].z - n[e[0]].z;
+        var dl = Math.sqrt(ddx * ddx + ddy * ddy + ddz * ddz);
+        var stretch = Math.max(0, Math.min(1, (dl / restLen(e) - 1.35) / 1.8));
+        ctx.strokeStyle = hot ? TK.cyan : (stretch > 0.05 ? TK.ochre : TK.muted);
+        ctx.globalAlpha = (dim ? 0.05 : (hot ? 0.8 : 0.10 + wgt * 0.45)) *
+                          (1 - stretch * 0.35);
+        ctx.lineWidth = (0.5 + wgt * 4.2) * (hot ? 1.25 : 1) * (1 - stretch * 0.55);
         if (n[e[0]].out || n[e[1]].out) ctx.setLineDash([4, 5]);
         ctx.beginPath(); edgePath(a, b); ctx.stroke();
         ctx.setLineDash([]);
@@ -636,7 +680,8 @@ function draw() {
     if (view.is3d) order.sort(function (a, b) { return n[a]._depth - n[b]._depth; });
     order.forEach(function (i) {
         var p = pts[i], nd = n[i];
-        var r = Math.max(3, nd.size * view.zoom * (view.is3d ? nd._depth : 1));
+        var r = Math.max(2.5, nd.size * iconScale * view.zoom *
+                              (view.is3d ? nd._depth : 1));
         var hot = i === hoverI || i === selI;
         var dim = focusI >= 0 && !hot && !(nbr && nbr[i]);
         if (i === selI) {
@@ -647,8 +692,11 @@ function draw() {
             ctx.globalAlpha = 0.45 + Math.sin(ph) * 0.22;
             ctx.lineWidth = 1.4; ctx.stroke();
         }
-        var alpha = dim ? 0.20 : (view.is3d ? 0.35 + nd._depth * 0.65 : 1);
-        drawNodeIcon(p[0], p[1], r, styleOf(nd.kind, nd), alpha, hot);
+        /* глубина в 3D: передние ярче и больше, задние тают */
+        var dp = view.is3d ? Math.max(0, Math.min(1, (nd._depth - 0.55) * 2.2)) : 1;
+        var alpha = (dim ? 0.20 : 1) * (view.is3d ? 0.12 + dp * 0.88 : 1);
+        drawNodeIcon(p[0], p[1], r, styleOf(nd.kind, nd), alpha, hot,
+                     nd.kind === '_group');
     });
     ctx.globalAlpha = 1;
 
@@ -656,15 +704,19 @@ function draw() {
     var labels = [];
     order.forEach(function (i) {
         var nd = n[i], p = pts[i];
-        var r = Math.max(3, nd.size * view.zoom * (view.is3d ? nd._depth : 1));
+        var r = Math.max(2.5, nd.size * iconScale * view.zoom *
+                              (view.is3d ? nd._depth : 1));
         var hot = i === hoverI || i === selI;
         var near = nbr && nbr[i];
-        var pri = (hot ? 1e9 : 0) + (near ? 1e6 : 0) +
-                  nd.size * (1 + (nd.ni !== undefined ? deg[nd.ni] : 10) * 0.15);
+        var dp = view.is3d ? Math.max(0, Math.min(1, (nd._depth - 0.55) * 2.2)) : 1;
+        var pri = ((hot ? 1e9 : 0) + (near ? 1e6 : 0) +
+                  nd.size * (1 + (nd.ni !== undefined ? deg[nd.ni] : 10) * 0.15)) *
+                  (0.15 + dp * 0.85);       // передние подписи важнее задних
         var dim = focusI >= 0 && !hot && !near;
         if (dim && !hot) return;
+        if (view.is3d && dp < 0.22 && !hot) return;   // дальний текст молчит
         labels.push({i: i, x: p[0], y: p[1] + r + 11, pri: pri, hot: hot,
-                     big: hot || r > 12 || frame.mode === 'overview'});
+                     dp: dp, big: hot || r > 12 || frame.mode === 'overview'});
     });
     labels.sort(function (a, b) { return b.pri - a.pri; });
     var taken = [];
@@ -686,7 +738,8 @@ function draw() {
         taken.push(box);
         shown++;
         ctx.fillStyle = L.hot ? TK.cyan : (L.big ? TK.text : TK.muted);
-        ctx.globalAlpha = L.hot ? 1 : (L.big ? 0.9 : 0.65);
+        ctx.globalAlpha = (L.hot ? 1 : (L.big ? 0.9 : 0.62)) *
+                          (view.is3d ? 0.25 + L.dp * 0.75 : 1);
         ctx.textAlign = 'center';
         ctx.fillText(text, L.x, L.y);
     });
@@ -726,7 +779,7 @@ function draw() {
 
 function loop() {
     window.__loopN = (window.__loopN || 0) + 1;
-    try { tick(); draw(); }
+    try { demoTick(); tick(); draw(); }
     catch (e) { window.__loopErr = String(e) + ' | ' + (e.stack || '').split(String.fromCharCode(10))[1]; }
     requestAnimationFrame(loop);
 }
@@ -739,18 +792,57 @@ function pick(mx, my) {
     frame._pts.forEach(function (p, i) {
         if (!nodeVisible(frame.nodes[i])) return;
         var dx = p[0] - mx, dy = p[1] - my, d = dx * dx + dy * dy;
-        var r = Math.max(8, frame.nodes[i].size * view.zoom);
+        var r = Math.max(8, frame.nodes[i].size * iconScale * view.zoom);
         if (d < Math.max(bd, r * r) && d < (r + 8) * (r + 8)) { best = i; bd = d; }
     });
     return best;
 }
-var drag = null;
+var drag = null, dragNode = -1;
+function screenToWorld(mx, my) {
+    var W = canvas.width / devicePixelRatio, H = canvas.height / devicePixelRatio;
+    return [(mx - W / 2) / view.zoom - view.panX,
+            (my - H / 2) / view.zoom - view.panY];
+}
 canvas.addEventListener('mousedown', function (e) {
+    var i = pick(e.offsetX, e.offsetY);
+    if (i >= 0) {
+        /* резиновое перетаскивание: узел за мышью, пружины тащат остальное */
+        dragNode = i;
+        stopDemo();
+        sim.alive = 1e9;                 // физика живёт, пока тянем
+        canvas.style.cursor = 'grabbing';
+        return;
+    }
     drag = {x: e.offsetX, y: e.offsetY, moved: false};
 });
-window.addEventListener('mouseup', function () { drag = null; });
+window.addEventListener('mouseup', function () {
+    drag = null;
+    if (dragNode >= 0) {
+        dragNode = -1;
+        sim.alive = 300;                 // дать всему доехать и уснуть
+        canvas.style.cursor = '';
+    }
+});
 canvas.addEventListener('mousemove', function (e) {
     mouse.x = e.offsetX; mouse.y = e.offsetY;
+    if (dragNode >= 0) {
+        var nd = frame.nodes[dragNode];
+        if (view.is3d) {
+            /* в 3D тянем в плоскости экрана: дельту разворачиваем обратно */
+            var dx2 = e.movementX / view.zoom, dy2 = e.movementY / view.zoom;
+            var cy = Math.cos(-view.rotY), sy = Math.sin(-view.rotY);
+            var cx = Math.cos(-view.rotX), sx = Math.sin(-view.rotX);
+            var y1 = dy2 * cx, z1 = -dy2 * sx;
+            nd.x += dx2 * cy + z1 * sy;
+            nd.y += y1;
+            nd.z += -dx2 * sy + z1 * cy;
+        } else {
+            var w = screenToWorld(e.offsetX, e.offsetY);
+            nd.x = w[0]; nd.y = w[1];
+        }
+        sim.vx[dragNode] = 0; sim.vy[dragNode] = 0; sim.vz[dragNode] = 0;
+        return;
+    }
     if (drag) {
         var dx = e.offsetX - drag.x, dy = e.offsetY - drag.y;
         if (Math.abs(dx) + Math.abs(dy) > 3) drag.moved = true;
@@ -769,11 +861,13 @@ canvas.addEventListener('mousemove', function (e) {
 canvas.addEventListener('mouseleave', function () { hoverI = -1; });
 canvas.addEventListener('wheel', function (e) {
     e.preventDefault();
+    stopDemo();
     autoFit = false;
     view.zoomT *= e.deltaY < 0 ? 1.14 : 0.88;
     view.zoomT = Math.max(0.25, Math.min(5, view.zoomT));
 }, {passive: false});
 canvas.addEventListener('click', function (e) {
+    stopDemo();
     if (drag && drag.moved) return;
     var i = pick(e.offsetX, e.offsetY);
     if (i < 0) { selI = -1; sparks = []; renderInfo(); return; }
@@ -788,6 +882,117 @@ canvas.addEventListener('dblclick', function (e) {
     if (frame.mode === 'overview') showGroup(nd.gi);
     else showEgo(nd.ni);
 });
+
+/* ── демо-автопилот (владелец: «я запустил — и он пошёл всё показывать сам:
+   крутит, подсвечивает, ездит; позиционный режим исследования») ── */
+var demo = {on: false, phase: 'idle', at: 0, visited: {}};
+function startDemo() {
+    demo.on = true;
+    demo.phase = 'start';
+    demo.at = performance.now();
+    demo.visited = {};
+    var b = el('b42g-demo');
+    if (b) b.classList.add('active');
+    sim.alive = Math.max(sim.alive, 400);
+}
+function stopDemo() {
+    if (!demo.on) return;
+    demo.on = false;
+    view.spin = false;
+    var b = el('b42g-demo');
+    if (b) b.classList.remove('active');
+    var sp = el('b42g-spin');
+    if (sp) sp.classList.remove('active');
+}
+function demoTick() {
+    if (!demo.on || !G) return;
+    var now = performance.now();
+    var dt = now - demo.at;
+    sim.alive = Math.max(sim.alive, 90);
+    switch (demo.phase) {
+    case 'start':
+        /* старт: от выбранной темы, либо с обзора */
+        if (selI >= 0 && frame.mode !== 'overview' && frame.nodes[selI].ni !== undefined) {
+            demo.phase = 'ego-look';
+        } else {
+            if (frame.mode !== 'overview') showOverview();
+            demo.phase = 'ov-pick';
+        }
+        demo.at = now;
+        break;
+    case 'ov-pick':                       // обзор: подсветить группу побольше
+        if (dt < 1400) break;
+        var cand = [];
+        frame.nodes.forEach(function (nd, i) {
+            if (!demo.visited['g' + nd.gi]) cand.push([nd.n, i]);
+        });
+        cand.sort(function (a, b) { return b[0] - a[0]; });
+        if (!cand.length) { demo.visited = {}; break; }
+        hoverI = cand[0][1];
+        demo.pick = cand[0][1];
+        demo.phase = 'ov-enter';
+        demo.at = now;
+        break;
+    case 'ov-enter':                      // …и войти в неё
+        if (dt < 1300) break;
+        var gi = frame.nodes[demo.pick].gi;
+        demo.visited['g' + gi] = 1;
+        showGroup(gi);
+        demo.phase = 'grp-pick';
+        demo.at = now;
+        break;
+    case 'grp-pick':                      // группа: осмотреться, выбрать хаб
+        if (dt < 2600) break;
+        var best = -1, bn = -1;
+        frame.nodes.forEach(function (nd, i) {
+            if (nd.out || nd.ni === undefined) return;
+            if (deg[nd.ni] > bn && !demo.visited['n' + nd.ni]) {
+                bn = deg[nd.ni]; best = i;
+            }
+        });
+        if (best < 0) { demo.phase = 'start'; demo.at = now; break; }
+        selI = best; igniteSparks(); renderInfo();
+        demo.phase = 'grp-enter';
+        demo.at = now;
+        break;
+    case 'grp-enter':                     // …и провалиться в эго
+        if (dt < 1600) break;
+        var ni = frame.nodes[selI].ni;
+        demo.visited['n' + ni] = 1;
+        showEgo(ni);
+        demo.phase = 'ego-look';
+        demo.at = now;
+        break;
+    case 'ego-look':                      // эго: покрутить и оглядеться
+        if (view.is3d) view.spin = true;
+        if (dt < 4200) break;
+        view.spin = false;
+        demo.phase = 'ego-next';
+        demo.at = now;
+        break;
+    case 'ego-next':                      // перелёт к сильнейшему непосещённому
+        if (dt < 700) break;
+        var cur = frame.nodes[0] && frame.nodes[0].ni;
+        var nxt = -1;
+        if (cur !== undefined) {
+            var ns = adj[cur].slice().sort(function (a, b) { return b[1] - a[1]; });
+            for (var k = 0; k < ns.length; k++) {
+                if (!demo.visited['n' + ns[k][0]]) { nxt = ns[k][0]; break; }
+            }
+        }
+        if (nxt < 0 || Object.keys(demo.visited).length % 7 === 6) {
+            demo.phase = 'start';         // время сменить тему — назад к обзору
+            selI = -1; sparks = [];
+            showOverview();
+        } else {
+            demo.visited['n' + nxt] = 1;
+            showEgo(nxt);
+            demo.phase = 'ego-look';
+        }
+        demo.at = now;
+        break;
+    }
+}
 
 /* ── панель ── */
 function el(id) { return document.getElementById(id); }
@@ -1015,7 +1220,11 @@ function buildPanel() {
         renderStats();
     });
     var home = el('b42g-home');
-    if (home) home.onclick = showOverview;
+    if (home) home.onclick = function () { stopDemo(); showOverview(); };
+    var dm = el('b42g-demo');
+    if (dm) dm.onclick = function () {
+        if (demo.on) stopDemo(); else startDemo();
+    };
     set3d(false);
 }
 
@@ -1031,6 +1240,8 @@ loop();
 /* отладочное окно — смотреть состояние снаружи (глазами через консоль) */
 window.B42G = {frame: function () { return frame; }, view: view,
                sim: sim, fit: fitView,
+               demo: function (on) { on ? startDemo() : stopDemo(); },
+               demoTick: demoTick,
                step: function (n) {           // синхронная прокрутка (тесты/фон)
                    for (var i = 0; i < (n || 60); i++) tick();
                    fitView();

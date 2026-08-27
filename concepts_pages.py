@@ -445,6 +445,7 @@ def graph_page(lang):
   <span id="b42g-crumbs"></span>
   <input id="b42g-q" list="b42g-names" placeholder="{t["search"]}">
   <datalist id="b42g-names"></datalist>
+  <button id="b42g-demo" class="b42g-mini" title="{"экскурсия: сам ведёт, подсвечивает, крутит" if lang == "ru" else "tour: drives, highlights, spins by itself"}">▶ {"демо" if lang == "ru" else "demo"}</button>
 </div>
 <aside class="b42g-side glass">
   <div class="b42g-sec"><div class="b42g-h">{l["mode"]}</div>
