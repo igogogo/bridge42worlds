@@ -249,6 +249,8 @@ def main():
     ap = argparse.ArgumentParser(description="Реестр знаний → D1")
     ap.add_argument("--schema", action="store_true")
     ap.add_argument("--frames", action="store_true")
+    ap.add_argument("--only", choices=["arts", "formulas", "concepts", "links"],
+                    help="залить одну таблицу (докатка после обрыва)")
     a = ap.parse_args()
 
     ensure_schema()
@@ -284,9 +286,12 @@ def main():
                 links.append([cid, f["id"], 1.0, "f"])
         push("concept_links", ["a", "b", "w", "kind"], links, "связи")
 
+        # кэп 60 статей на понятие: страница показывает 40 и листает постранично,
+        # а полные 200 дают 67 тысяч строк вместо 64 — лишние минуты заливки
+        # ради хвоста, которого никто не пролистает
         arts = []
         for cid, v in C.items():
-            for aid in (v.get("articles") or [])[:200]:
+            for aid in (v.get("articles") or [])[:60]:
                 arts.append([cid, aid, None])
         push("concept_arts", ["cid", "id", "date"], arts, "статьи понятий")
 
