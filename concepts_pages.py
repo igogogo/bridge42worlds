@@ -820,13 +820,20 @@ SEC_SUB = {
                        "formula anatomy and the SI definitions."},
 }
 # Порядок частей раздела — от того, чем меряют, к тому, чем решают.
-SEC_ORDER = ["Определяющие СИ", "Электромагнетизм", "Частицы и атом",
+SEC_ORDER = ["Анализ", "Алгебра и операторы", "Пространства и геометрия",
+             "Случайность", "Основания и вычисления",
+             "Определяющие СИ", "Электромагнетизм", "Частицы и атом",
              "Тепло и излучение", "Гравитация и планковские", "Из наших формул",
              "Оценивание и подгонка", "Неопределённости", "Проверка гипотез",
              "Распределения", "Байесовский анализ", "Ресемплинг и проверка",
              "Сигналы и временные ряды", "Многомерный анализ и обучение",
              "Моделирование и выборка"]
 SEC_PART_EN = {
+    "Анализ": "Analysis",
+    "Алгебра и операторы": "Algebra and operators",
+    "Пространства и геометрия": "Spaces and geometry",
+    "Случайность": "Randomness",
+    "Основания и вычисления": "Foundations and computation",
     "Определяющие СИ": "Defining the SI",
     "Электромагнетизм": "Electromagnetism",
     "Частицы и атом": "Particles and the atom",
@@ -845,6 +852,35 @@ SEC_PART_EN = {
 }
 
 
+# Части раздела математики. Здесь они живут в коде, а не в concept-sections.json,
+# потому что раздел математики собирается по КЛАССУ понятия, а метка раздела у
+# части из них уже занята статистикой: гауссово распределение — и математика, и
+# статистика, и переписывать одну принадлежность другой нельзя.
+MATH_PARTS = {
+    "Анализ": ("derivative", "partial_derivative", "second_derivative",
+               "time_derivative", "logarithmic_derivative", "integral", "limit",
+               "uniform_convergence", "exponential_function", "logarithm",
+               "natural_logarithm", "logarithm_base_10", "square_root",
+               "absolute_value", "sine", "cosine", "fourier_series", "summation",
+               "difference", "proportionality", "exponential_growth", "power_law"),
+    "Алгебра и операторы": ("group", "group_theory", "ring", "category", "lie_group",
+                            "elliptic_curve", "modular_form", "zeta_function",
+                            "tensor", "matrix_element", "dot_product",
+                            "product_operator", "commutator", "eigenvalue",
+                            "trace_operator", "integral_operator"),
+    "Пространства и геометрия": ("banach_space", "hilbert_space", "manifold",
+                                 "symplectic_geometry", "topology", "homotopy",
+                                 "differential_form", "knots", "fractal",
+                                 "decoherence_free_subspace"),
+    "Случайность": ("random_variable", "random_matrix", "markov_chain",
+                    "ensemble_average", "gaussian_distribution", "covariance_matrix",
+                    "maximum_likelihood"),
+    "Основания и вычисления": ("axiom_of_choice", "turing_machine",
+                               "functional_analysis", "hubbard_model"),
+}
+MATH_PART_OF = {c: p for p, ids in MATH_PARTS.items() for c in ids}
+
+
 def section_page(section, lang, live):
     """Страница раздела: понятия, собранные по смыслу, а не по классу.
 
@@ -859,7 +895,9 @@ def section_page(section, lang, live):
                if v.get("section") == section or v.get("kind") == section}
     parts = {}
     for cid, v in members.items():
-        parts.setdefault(v.get("section_part") or "", []).append(cid)
+        part = (MATH_PART_OF.get(cid, "") if section == "math"
+                else v.get("section_part") or "")
+        parts.setdefault(part, []).append(cid)
     title = t.get(section, section)
     sub = (SEC_SUB.get(section, {}).get(lang)
            or SEC_SUB.get(section, {}).get("en") or t["sub"])
