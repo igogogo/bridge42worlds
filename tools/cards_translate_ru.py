@@ -25,12 +25,19 @@ import re
 import sys
 import time
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 from tools.concept_harvest import env  # noqa: E402
 from tools.concept_fullcards import cheap_window  # noqa: E402
+from common import CONFIG  # noqa: E402
+
+# Потоки берём из той же настройки, что описание тегов, но не больше восьми: там
+# в одном запросе двадцать тегов, здесь — одна карточка, и пятнадцать мелких
+# запросов разом дают лишний риск отказа ради выигрыша, которого уже не видно.
+WORKERS = min(CONFIG.get("tags", {}).get("workers", 5), 8)
 
 LIVE = ROOT / "data" / "concepts-live.json"
 ANAT = ROOT / "data" / "formula-anatomy.json"
@@ -84,8 +91,9 @@ def concepts(force_peak=False):
     todo = [cid for cid, v in lc.items()
             if v.get("full") and "ru" not in (store.get(cid) or {})]
     print(f"понятий с full без ru: {len(todo)}")
-    n_done = 0
-    for cid in todo:
+
+    def one(cid):
+        """Одна карточка. Ошибка не валит прогон — вернём None и пойдём дальше."""
         v = lc[cid]
         src = {k: v["full"].get(k, "") for k in
                ("description_popular", "history", "how_it_works",
@@ -94,19 +102,28 @@ def concepts(force_peak=False):
         try:
             got = ask(src, key)
         except Exception as e:
-            print(f"  сбой {cid}: {e} — пауза и дальше")
-            time.sleep(5)
-            continue
+            print(f"  сбой {cid}: {e}")
+            return cid, None
         if not isinstance(got, dict) or not got.get("description_popular"):
-            print(f"  пустой ответ {cid} — пропуск")
-            continue
-        store.setdefault(cid, {})["ru"] = {
-            k: str(got.get(k, ""))[:4000] for k in src}
-        n_done += 1
-        if n_done % 10 == 0:
-            I18N.write_text(json.dumps(store, ensure_ascii=False, indent=1),
-                            encoding="utf-8")
-            print(f"  переведено {n_done}/{len(todo)}")
+            print(f"  пустой ответ {cid}")
+            return cid, None
+        return cid, {k: str(got.get(k, ""))[:4000] for k in src}
+
+    # Пять потоков — столько же, сколько у описания тегов (config: tags.workers),
+    # то есть проверенная доза для DeepSeek. Последовательно 2293 карточки шли бы
+    # почти четыре часа: по шесть секунд на карточку, и всё это время впустую
+    # ждётся ответ. Пишем в хранилище из ГЛАВНОГО потока, по мере готовности.
+    n_done = 0
+    with ThreadPoolExecutor(max_workers=WORKERS) as ex:
+        for cid, ru in ex.map(one, todo):
+            if not ru:
+                continue
+            store.setdefault(cid, {})["ru"] = ru
+            n_done += 1
+            if n_done % 25 == 0:
+                I18N.write_text(json.dumps(store, ensure_ascii=False, indent=1),
+                                encoding="utf-8")
+                print(f"  переведено {n_done}/{len(todo)}", flush=True)
     I18N.write_text(json.dumps(store, ensure_ascii=False, indent=1),
                     encoding="utf-8")
     # и в текущий live — чтобы страницы можно было гнать сразу, не дожидаясь apply
@@ -135,8 +152,7 @@ def formulas(force_peak=False):
         _bases = {}
     todo = [bid for bid, rec in done.items() if "ru" not in rec]
     print(f"анатомий без ru: {len(todo)}")
-    n_done = 0
-    for bid in todo:
+    def one(bid):
         rec = done[bid]
         src = {
             "description": rec.get("description", ""),
@@ -151,17 +167,16 @@ def formulas(force_peak=False):
         try:
             got = ask(src, key)
         except Exception as e:
-            print(f"  сбой {bid}: {e} — пауза и дальше")
-            time.sleep(5)
-            continue
+            print(f"  сбой {bid}: {e}")
+            return bid, None
         if not isinstance(got, dict) or not got.get("description"):
-            print(f"  пустой ответ {bid} — пропуск")
-            continue
+            print(f"  пустой ответ {bid}")
+            return bid, None
 
         def lst(k, n):
             v = got.get(k) or []
             return [str(x)[:300] for x in v][:n] if isinstance(v, list) else []
-        rec["ru"] = {
+        return bid, {
             "description": str(got.get("description", ""))[:1500],
             "history": str(got.get("history", ""))[:800],
             "applicability": str(got.get("applicability", ""))[:1000],
@@ -171,11 +186,20 @@ def formulas(force_peak=False):
             "operators": lst("operators", len(src["operators"])),
             "system_notes": lst("system_notes", len(src["system_notes"])),
         }
-        n_done += 1
-        if n_done % 10 == 0:
-            ANAT.write_text(json.dumps(done, ensure_ascii=False, indent=1),
-                            encoding="utf-8")
-            print(f"  переведено {n_done}/{len(todo)}")
+
+    # Те же потоки, что и у карточек понятий: перевод — это ожидание ответа,
+    # а не работа, и делать его последовательно значит просто дольше ждать.
+    n_done = 0
+    with ThreadPoolExecutor(max_workers=WORKERS) as ex:
+        for bid, ru in ex.map(one, todo):
+            if not ru:
+                continue
+            done[bid]["ru"] = ru
+            n_done += 1
+            if n_done % 25 == 0:
+                ANAT.write_text(json.dumps(done, ensure_ascii=False, indent=1),
+                                encoding="utf-8")
+                print(f"  переведено {n_done}/{len(todo)}", flush=True)
     ANAT.write_text(json.dumps(done, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"✅ русских анатомий: +{n_done}")
     return 0
