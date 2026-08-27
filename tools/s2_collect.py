@@ -34,9 +34,13 @@ PAPERS = OUT / "papers.json"
 STATE = OUT / "state.json"
 GRAPH = OUT / "graph"
 
-BATCH_FIELDS = ("citationCount,influentialCitationCount,externalIds,venue,"
-                "publicationVenue,year,publicationDate,isOpenAccess,openAccessPdf,"
-                "fieldsOfStudy,tldr,authors.name,authors.hIndex,authors.authorId")
+# Владелец 27.08: «всё, что там есть, надо собирать — потом используем».
+BATCH_FIELDS = ("citationCount,influentialCitationCount,referenceCount,externalIds,"
+                "venue,publicationVenue,journal,year,publicationDate,publicationTypes,"
+                "isOpenAccess,openAccessPdf,fieldsOfStudy,s2FieldsOfStudy,tldr,abstract,"
+                "authors.name,authors.hIndex,authors.authorId")
+AUTHOR_FIELDS = ("name,aliases,hIndex,paperCount,citationCount,affiliations,"
+                 "homepage,externalIds")
 GRAPH_FIELDS = "externalIds,title,citationCount,year"
 PAUSE = 1.05          # их лимит: 1 запрос в секунду на ключ, на все ручки
 
@@ -89,7 +93,9 @@ def log(m):
 
 def batch_pass(ids, k):
     papers = json.loads(PAPERS.read_text(encoding="utf-8")) if PAPERS.exists() else {}
-    todo = [i for i in ids if i not in papers]
+    # и перезапросить уже собранных без расширенных полей (сбор расширялся 27.08)
+    todo = [i for i in ids
+            if i not in papers or (papers[i] is not None and "abstract" not in papers[i])]
     log(f"пакетный проход: {len(todo)} статей")
     for s in range(0, len(todo), 500):
         chunk = todo[s:s + 500]
@@ -141,6 +147,30 @@ def graph_pass(ids, papers, k):
     save_state(st)
 
 
+def authors_pass(papers, k):
+    """Всё по НАШИМ авторам: суммарные цитирования, число работ, аффилиации,
+    псевдонимы. Пакетная ручка авторов — сотня за запрос."""
+    out_p = OUT / "authors.json"
+    authors = json.loads(out_p.read_text(encoding="utf-8")) if out_p.exists() else {}
+    ids = sorted({a["authorId"] for v in papers.values() if v
+                  for a in (v.get("authors") or []) if a.get("authorId")}
+                 - set(authors))
+    log(f"проход по авторам: {len(ids)} новых (всего известно {len(authors)})")
+    for s in range(0, len(ids), 100):
+        chunk = ids[s:s + 100]
+        d = req(f"https://api.semanticscholar.org/graph/v1/author/batch?fields={AUTHOR_FIELDS}",
+                {"ids": chunk}, k)
+        if d is None:
+            continue
+        for aid, rec in zip(chunk, d):
+            authors[aid] = rec
+        out_p.write_text(json.dumps(authors, ensure_ascii=False), encoding="utf-8")
+        if (s // 100) % 20 == 0:
+            log(f"  авторов {len(authors)}")
+        time.sleep(PAUSE)
+    log(f"✅ авторов собрано: {len(authors)}")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--status", action="store_true")
@@ -156,6 +186,7 @@ def main():
     log(f"наших статей: {len(ids)}")
     papers = batch_pass(ids, k)
     graph_pass(ids, papers, k)
+    authors_pass(papers, k)
     log("✅ сбор Semantic Scholar завершён")
     return 0
 
