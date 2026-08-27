@@ -2028,9 +2028,27 @@ async function handleSearch(request, env) {
     return Response.json({ error: "embedding_failed" }, { status: 502 });
   }
 
-  const found = await env.VECTORIZE.query(vector, {
-    topK: SEARCH_TOP_K, returnMetadata: "all", namespace: "ours",
-  });
+  /* Ищем в ДВУХ пространствах одним вектором: статьи (ours) и карточки понятий
+     (concepts, залиты 27.08). Кросс-язычность bge-m3 работает и там: запрос
+     по-русски находит английскую карточку. Понятия идут отдельным списком —
+     смешивать их со статьями в одной выдаче нельзя, это разные сущности:
+     статью читают, понятие объясняет. */
+  const [found, foundC] = await Promise.all([
+    env.VECTORIZE.query(vector, {
+      topK: SEARCH_TOP_K, returnMetadata: "all", namespace: "ours",
+    }),
+    env.VECTORIZE.query(vector, {
+      topK: 6, returnMetadata: "all", namespace: "concepts",
+    }).catch(() => ({ matches: [] })),
+  ]);
+  const concepts = (foundC.matches || [])
+    .filter((m) => m.score >= 0.45)
+    .map((m) => ({
+      id: String(m.id).replace(/^c:/, ""),
+      score: Math.round(m.score * 1000) / 1000,
+      name: m.metadata?.name || String(m.id).replace(/^c:/, "").replace(/_/g, " "),
+      kind: m.metadata?.kind || "concept",
+    }));
   const results = (found.matches || []).map((m) => ({
     id: m.id,
     score: Math.round(m.score * 1000) / 1000,
@@ -2047,7 +2065,7 @@ async function handleSearch(request, env) {
     await translateTitles(env, results, lang);
   }
 
-  const res = Response.json({ q, lang, results, dayLeft: spent.dayLeft });
+  const res = Response.json({ q, lang, results, concepts, dayLeft: spent.dayLeft });
   // Кэш на час: корпус меняется раз в сутки, а повторные запросы приходят пачками.
   res.headers.set("cache-control", "public, max-age=3600");
   await caches.default.put(cacheKey, res.clone());
