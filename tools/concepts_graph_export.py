@@ -64,6 +64,34 @@ def main():
             keep.add((min(a, b), max(a, b)))
     edges = [[a, b, w[(a, b)]] for a, b in sorted(keep)]
 
+    # СМЫСЛОВЫЕ РЁБРА для тех, у кого статей нет вовсе. Мощность ребра у нас —
+    # число общих статей, и это верно для понятий, добытых из статей. Но константа
+    # пришла из формулы, а статистический метод из канона предмета: статей у них
+    # ноль, значит ноль и рёбер — в графе они висят отдельными точками. Владелец
+    # 27.08: «сирота относительно статьи оправдана, сирот не должно быть
+    # относительно связей внутри понятий». Берём соседей из related (их считает
+    # супер по близости карточек), вес 1 — слабее любой статейной связи, чтобы
+    # калибровка кадра не приняла их за главные.
+    linked = {a for a, _b in keep} | {b for _a, b in keep}
+    added = 0
+    for cid, v in live.items():
+        i = idx[cid]
+        if i in linked or v.get("articles"):
+            continue
+        for r in (v.get("related") or [])[:4]:
+            j = idx.get(r["id"])
+            if j is None or j == i:
+                continue
+            pair = (min(i, j), max(i, j))
+            if pair in keep:
+                continue
+            keep.add(pair)
+            edges.append([pair[0], pair[1], 1])
+            added += 1
+    if added:
+        edges.sort(key=lambda e: (e[0], e[1]))
+        print(f"  смысловых рёбер для понятий без статей: {added}")
+
     # группы: членство из supers (первая группа понятия)
     gids = sorted(groups_raw, key=lambda g: -len(groups_raw[g]))
     gindex = {g: i for i, g in enumerate(gids)}
