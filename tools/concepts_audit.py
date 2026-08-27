@@ -31,7 +31,12 @@ def main():
     import numpy as np
     live = json.loads((ROOT / "data/concepts-live.json").read_text(encoding="utf-8"))
     C = live["concepts"]
-    graph = json.loads((ROOT / "data/concepts-graph.json").read_text(encoding="utf-8"))
+    # Снимка графа может не быть (первый запуск, свежая копия) — аудит обязан
+    # выжить: секции связности тогда просто пустые (поймано сквозным прогоном
+    # в песочнице 27.08, шаг 10 падал FileNotFoundError).
+    gp = ROOT / "data/concepts-graph.json"
+    graph = (json.loads(gp.read_text(encoding="utf-8")) if gp.exists()
+             else {"nodes": [], "edges": [], "groups": []})
     ids = (ML / "data/concept-cards.ids").read_text(encoding="utf-8").split()
     V = np.fromfile(ML / "data/concept-cards.f16", dtype=np.float16) \
         .reshape(len(ids), -1).astype(np.float32)
