@@ -232,6 +232,9 @@ def main():
     run("d-super", [PY, "concepts_super.py", "--embed",
                     "--reg", "data/concepts-v4.json", "--name-supers"],
         timeout=3600, cwd=ROOT.parent / "b42-ml")
+    # Соседи по смыслу для тех, кому супер их не дал: он считает связи по общим
+    # статьям, а у пришедших из формул и канона статей нет.
+    run("d-vecnb", [PY, "tools/vector_neighbors.py", "--apply"], timeout=1800)
     run("d-live2", [PY, "tools/wave5_apply.py", "--live-only"], timeout=1800)
     run("d-graph", [PY, "tools/concepts_graph_export.py"], timeout=1800)
     run("d-pages-c", [PY, "concepts_pages.py"], timeout=3600)

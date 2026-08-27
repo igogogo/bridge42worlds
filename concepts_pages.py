@@ -624,8 +624,17 @@ def concept_page(cid, c, lang, live, by_id, rich=None, page_langs=None):
             f'<a href="/lang/{lang}/concepts/{H.escape(r["id"])}.html">'
             f'{H.escape(name_of(live["concepts"].get(r["id"], {"names": {}}), r["id"], lang))}</a>'
             for r in c["related"])
+        # Связь по смыслу и связь по статьям — разные вещи, и подпись это
+        # говорит. «Рядом стоят» значит «встречаются в одних статьях»; у понятия
+        # без статей соседи найдены по близости определений, и выдавать одно за
+        # другое нельзя.
+        _lbl = t["related"]
+        if all(r.get("src") == "vec" for r in c["related"]):
+            _lbl = {"ru": "Близки по смыслу", "en": "Close in meaning",
+                    "es": "Cercanos por sentido", "ar": "قريبة في المعنى",
+                    "fr": "Proches par le sens"}.get(lang, "Close in meaning")
         body.append(f'<div class="related-tags"><b style="font-family:var(--mono);'
-                    f'font-size:11px;color:var(--muted)">{t["related"]}:</b> {chips}</div>')
+                    f'font-size:11px;color:var(--muted)">{_lbl}:</b> {chips}</div>')
     if c["scientists"]:
         chips = "".join(
             f'<a href="/lang/{lang}/scientists/{H.escape(s["name"].replace(" ", "_"))}.html">'
