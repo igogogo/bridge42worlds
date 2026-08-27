@@ -138,7 +138,7 @@ Answer with a JSON array only:
 [{"name": "...", "kind": "law|math|statistics|method|constant", "line": "..."}]"""
 
 
-def grow():
+def grow(limit=None):
     try:
         from tools.freeze import guard
         guard("дорост изнутри групп (DeepSeek)")
@@ -151,9 +151,14 @@ def grow():
         done = set(json.loads(GROW_STATE.read_text(encoding="utf-8"))["done"])
     rows = CH.load_harvest()
     n_new = 0
+    n_groups = 0
     for gid, members in sorted(groups.items()):
         if str(gid) in done:
             continue
+        if limit and n_groups >= limit:
+            print(f"  предел {limit} групп за прогон — стоп")
+            break
+        n_groups += 1
         members = [m for m in members if m in C]
         top = sorted(members, key=lambda m: -len(C[m].get("articles", [])))[:15]
         have = defaultdict(list)
@@ -249,11 +254,12 @@ def main():
     ap.add_argument("--audit", action="store_true")
     ap.add_argument("--grow", action="store_true")
     ap.add_argument("--support", action="store_true")
+    ap.add_argument("--limit", type=int, help="сколько групп за прогон (опыт)")
     a = ap.parse_args()
     if a.audit:
         return audit()
     if a.grow:
-        return grow()
+        return grow(a.limit)
     if a.support:
         return support()
     ap.print_help()
