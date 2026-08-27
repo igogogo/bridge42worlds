@@ -160,6 +160,14 @@ def build_live():
             for l, nm in (g.get("names") or {}).items():
                 if cid in out:
                     out[cid]["names"].setdefault(l, nm)
+    # русские имена из переводчика — ЕЩЁ ОДНО хранилище, которое пересборка
+    # обязана вливать сама (27.08: live-only пересборка уронила ru-имена
+    # с 3231 до 529 — переводчик писал их только в текущий live)
+    nru = ROOT / "data" / "concept-names-ru.json"
+    if nru.exists():
+        for cid, ru in load(nru).items():
+            if cid in out and ru:
+                out[cid]["names"].setdefault("ru", ru)
     meta = {
         "built": load(ML / "data" / "concepts-super.json").get("built", ""),
         "groups": {str(g): m for g, m in groups.items()},
@@ -215,6 +223,8 @@ def restore():
 def main():
     ap = argparse.ArgumentParser(description="Применение волны 5 к боевым данным")
     ap.add_argument("--apply", action="store_true")
+    ap.add_argument("--live-only", action="store_true",
+                    help="пересобрать только справочник live (группы/связи/хранилища), статьи не трогать")
     ap.add_argument("--restore", action="store_true")
     a = ap.parse_args()
     if a.restore:
@@ -229,6 +239,10 @@ def main():
     print(f"справочник: {len(c)} понятий · русское название у {with_name_ru} · "
           f"учёные у {with_sci} · формулы у {with_fml}")
 
+    if a.live_only:
+        LIVE.write_text(json.dumps(live, ensure_ascii=False), encoding="utf-8")
+        print(f"→ {LIVE.relative_to(ROOT)} ({LIVE.stat().st_size // 1024} КБ) — только справочник, статьи не тронуты")
+        return 0
     n = apply_articles(retag, dry=not a.apply)
     if a.apply:
         LIVE.write_text(json.dumps(live, ensure_ascii=False), encoding="utf-8")
