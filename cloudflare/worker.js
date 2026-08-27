@@ -2776,6 +2776,166 @@ async function handleAuthorConfirm(request, env) {
  */
 const LINK_KINDS = ["tag", "law", "sci", "cat"];
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   РЕЕСТР ЗНАНИЙ: понятия, формулы, кадры графа (27.08)
+
+   До этого воркер знал только старую модель — теги, законы, учёные. Волна 5
+   свела их в один реестр понятий с классами, и раздел жил чистой статикой:
+   ни живых списков, ни поиска по понятиям, ни кадров графа. Данные кладёт
+   cloudflare/concepts_sync.py в отдельные таблицы; старые не тронуты, поэтому
+   выкладка этого кода ничего не меняет для уже работающих страниц.
+
+   Кадры графа отдаём ГОТОВЫМИ (таблица graph_frames): считать их на лету —
+   это 28 тысяч рёбер на запрос, а отдавать файл целиком — 1.4 МБ каждому
+   читателю, то самое расточительство, от которого ушли в ленте.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+const CONCEPT_COLS = "id, kind, name_ru, name_en, card, n_arts, n_links, groups, cat";
+
+function conceptRow(r, lang) {
+  return {
+    id: r.id, kind: r.kind,
+    name: (lang === "ru" && r.name_ru) || r.name_en || r.id.replace(/_/g, " "),
+    card: r.card, n: r.n_arts, links: r.n_links,
+    groups: r.groups ? JSON.parse(r.groups) : [], cat: r.cat,
+  };
+}
+
+/* Одно понятие: карточка, полная запись на языке (с откатом на английскую —
+   владелец 27.08: «нет перевода — держи английский»), соседи и формулы. */
+async function handleConcept(request, env) {
+  if (!env.CARDS) return noCards();
+  const url = new URL(request.url);
+  const id = (url.searchParams.get("id") || "").slice(0, 80);
+  const lang = (url.searchParams.get("lang") || "ru").slice(0, 2);
+  if (!id) return Response.json({ error: "bad_request" }, { status: 400 });
+  const cache = caches.default;
+  const hit = await cache.match(request);
+  if (hit) return hit;
+
+  const row = await env.CARDS.prepare(
+    "SELECT " + CONCEPT_COLS + ", full_en, full_ru, systems FROM concepts WHERE id = ?")
+    .bind(id).first();
+  if (!row) return Response.json({ error: "not_found" }, { status: 404 });
+  const links = await env.CARDS.prepare(
+    "SELECT l.b AS id, l.w, l.kind AS lk, c.name_ru, c.name_en, c.kind AS ckind" +
+    "  FROM concept_links l LEFT JOIN concepts c ON c.id = l.b" +
+    " WHERE l.a = ? ORDER BY l.w DESC LIMIT 24").bind(id).all();
+  const full = (lang === "ru" && row.full_ru) ? row.full_ru : row.full_en;
+  const out = Response.json({
+    concept: Object.assign(conceptRow(row, lang), {
+      full: full ? JSON.parse(full) : null,
+      fullLang: (lang === "ru" && row.full_ru) ? "ru" : "en",
+      systems: row.systems ? JSON.parse(row.systems) : null,
+    }),
+    related: (links.results || []).filter(function (r) { return r.lk === "c"; })
+      .map(function (r) {
+        return { id: r.id, w: r.w, kind: r.ckind,
+          name: (lang === "ru" && r.name_ru) || r.name_en || r.id.replace(/_/g, " ") };
+      }),
+    formulas: (links.results || []).filter(function (r) { return r.lk === "f"; })
+      .map(function (r) { return { id: r.id }; }),
+  }, { headers: { "Cache-Control": "public, max-age=300" } });
+  request.method === "GET" && (await cache.put(request, out.clone()));
+  return out;
+}
+
+/* Облако понятий: список с фильтром по классу и поиском по имени. */
+async function handleConcepts(request, env) {
+  if (!env.CARDS) return noCards();
+  const url = new URL(request.url);
+  const lang = (url.searchParams.get("lang") || "ru").slice(0, 2);
+  const kind = (url.searchParams.get("kind") || "").slice(0, 16);
+  const q = (url.searchParams.get("q") || "").slice(0, 60);
+  const limit = Math.min(200, Math.max(1, +url.searchParams.get("limit") || 60));
+  const page = Math.max(0, +url.searchParams.get("page") || 0);
+  const where = [], bind = [];
+  if (kind) { where.push("kind = ?"); bind.push(kind); }
+  if (q) {
+    where.push("(name_ru LIKE ? OR name_en LIKE ? OR id LIKE ?)");
+    bind.push("%" + q + "%", "%" + q + "%", "%" + q + "%");
+  }
+  const sql = "SELECT " + CONCEPT_COLS + " FROM concepts" +
+    (where.length ? " WHERE " + where.join(" AND ") : "") +
+    " ORDER BY n_arts DESC LIMIT ? OFFSET ?";
+  const rows = await env.CARDS.prepare(sql).bind.apply(
+    env.CARDS.prepare(sql), bind.concat([limit, page * limit])).all();
+  const items = (rows.results || []).map(function (r) { return conceptRow(r, lang); });
+  return Response.json({ items: items, page: page, limit: limit,
+    more: items.length === limit },
+    { headers: { "Cache-Control": "public, max-age=300" } });
+}
+
+/* Формула: одна со всей анатомией или список по применяемости. */
+async function handleFormula(request, env) {
+  if (!env.CARDS) return noCards();
+  const url = new URL(request.url);
+  const id = (url.searchParams.get("id") || "").slice(0, 80);
+  if (!id) {
+    const limit = Math.min(200, Math.max(1, +url.searchParams.get("limit") || 60));
+    const page = Math.max(0, +url.searchParams.get("page") || 0);
+    const rows = await env.CARDS.prepare(
+      "SELECT id, name, latex, card, n_apps FROM formulas ORDER BY n_apps DESC LIMIT ? OFFSET ?")
+      .bind(limit, page * limit).all();
+    return Response.json({ items: rows.results || [], page: page, limit: limit },
+      { headers: { "Cache-Control": "public, max-age=600" } });
+  }
+  const row = await env.CARDS.prepare("SELECT * FROM formulas WHERE id = ?")
+    .bind(id).first();
+  if (!row) return Response.json({ error: "not_found" }, { status: 404 });
+  return Response.json({
+    formula: {
+      id: row.id, name: row.name, latex: row.latex, card: row.card, n: row.n_apps,
+      anatomy: row.anatomy ? JSON.parse(row.anatomy) : null,
+      systems: row.systems ? JSON.parse(row.systems) : null,
+    },
+  }, { headers: { "Cache-Control": "public, max-age=600" } });
+}
+
+/* Кадр графа: обзор и группы лежат готовыми, эго-кадр собирается по связям. */
+async function handleGraphFrame(request, env) {
+  if (!env.CARDS) return noCards();
+  const url = new URL(request.url);
+  const lang = (url.searchParams.get("lang") || "ru").slice(0, 2);
+  const key = (url.searchParams.get("frame") || "overview").slice(0, 90);
+  const cache = caches.default;
+  const hit = await cache.match(request);
+  if (hit) return hit;
+
+  let body;
+  if (key.indexOf("ego:") === 0) {
+    const id = key.slice(4);
+    const center = await env.CARDS.prepare(
+      "SELECT " + CONCEPT_COLS + " FROM concepts WHERE id = ?").bind(id).first();
+    if (!center) return Response.json({ error: "not_found" }, { status: 404 });
+    const links = await env.CARDS.prepare(
+      "SELECT l.b AS id, l.w, c.name_ru, c.name_en, c.kind, c.n_arts, c.card, c.cat" +
+      "  FROM concept_links l LEFT JOIN concepts c ON c.id = l.b" +
+      " WHERE l.a = ? ORDER BY l.w DESC LIMIT 40").bind(id).all();
+    const nodes = [{ id: center.id, ru: center.name_ru, en: center.name_en,
+                     kind: center.kind, n: center.n_arts, card: center.card,
+                     cat: center.cat, center: true }];
+    const edges = [];
+    (links.results || []).forEach(function (r, i) {
+      nodes.push({ id: r.id, ru: r.name_ru, en: r.name_en,
+                   kind: r.kind || "concept", n: r.n_arts || 0,
+                   card: r.card, cat: r.cat });
+      edges.push([0, i + 1, r.w]);
+    });
+    body = { nodes: nodes, edges: edges };
+  } else {
+    const row = await env.CARDS.prepare("SELECT data FROM graph_frames WHERE key = ?")
+      .bind(key).first();
+    if (!row) return Response.json({ error: "not_found" }, { status: 404 });
+    body = JSON.parse(row.data);
+  }
+  const out = Response.json(Object.assign({ frame: key, lang: lang }, body),
+    { headers: { "Cache-Control": "public, max-age=600" } });
+  request.method === "GET" && (await cache.put(request, out.clone()));
+  return out;
+}
+
+
 async function handleEntityList(request, env) {
   if (!env.CARDS) return noCards();
   const url = new URL(request.url);
@@ -2891,6 +3051,10 @@ export default {
     if (url.pathname === "/api/cards") return withCors(await feedGuard(request, env, handleCardsByIds));
     if (url.pathname === "/api/find") return withCors(await feedGuard(request, env, handleWordSearch));
     if (url.pathname === "/api/list") return withCors(await feedGuard(request, env, handleEntityList));
+    if (url.pathname === "/api/concept") return withCors(await feedGuard(request, env, handleConcept));
+    if (url.pathname === "/api/concepts") return withCors(await feedGuard(request, env, handleConcepts));
+    if (url.pathname === "/api/formula") return withCors(await feedGuard(request, env, handleFormula));
+    if (url.pathname === "/api/graph") return withCors(await feedGuard(request, env, handleGraphFrame));
     if (url.pathname === "/api/entity") return withCors(await feedGuard(request, env, handleEntityStats));
     if (url.pathname === "/api/side") return withCors(await feedGuard(request, env, handleArticleSide));
     if (url.pathname === "/api/ask") return withCors(await handleAsk(request, env));

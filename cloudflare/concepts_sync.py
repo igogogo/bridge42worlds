@@ -1,0 +1,316 @@
+# -*- coding: utf-8 -*-
+"""Реестр знаний в облако: понятия, формулы и кадры графа → D1 (b42-cards).
+
+Владелец 27.08: «делай воркер — понятия, формулы, граф — всё на dev». До этого
+воркер знал только старую модель (теги/законы/учёные): страницы понятий волны 5
+жили статикой, а живых списков, поиска по понятиям и кадров графа в облаке не
+было вовсе.
+
+ЧТО КЛАДЁМ (новые таблицы, старые не трогаются ни на строку — прод продолжает
+работать на своих):
+
+  concepts        карточка понятия: класс, имена ru/en, определение, счётчики,
+                  группы, полная запись (JSON), системы единиц
+  concept_links   взвешенные связи понятие↔понятие (соседи) и понятие↔формула
+  concept_arts    какие статьи держат понятие (для живого списка на странице)
+  formulas        основная форма: латех, карточка, анатомия (JSON), системы
+  graph_frames    ГОТОВЫЕ кадры графа: обзор и по группе — считать их на лету
+                  в воркере нельзя (28 тысяч рёбер), а отдавать 1.4 МБ файла
+                  каждому читателю — то же расточительство, от которого мы
+                  уходили в ленте
+
+Кадры считает та же логика, что рисует граф локально (tools/concepts_graph_export),
+поэтому вид в облаке и на диске совпадает по построению, а не по случайности.
+
+    python cloudflare/concepts_sync.py --schema      создать таблицы
+    python cloudflare/concepts_sync.py               залить всё
+    python cloudflare/concepts_sync.py --frames      только кадры графа
+"""
+import argparse
+import json
+import os
+import sys
+import time
+import urllib.request
+from collections import Counter, defaultdict
+from itertools import combinations
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
+DB = "b42-cards"
+BATCH = 40
+
+
+def env(k):
+    v = os.environ.get(k)
+    if v:
+        return v
+    p = ROOT / ".env"
+    if p.exists():
+        for line in p.read_text(encoding="utf-8").splitlines():
+            if line.startswith(k + "="):
+                return line.split("=", 1)[1].strip()
+    return None
+
+
+def d1(sql, tries=4):
+    """Запрос к D1 через REST. Тот же путь, каким ходит cards_sync."""
+    acc = env("CLOUDFLARE_ACCOUNT_ID") or env("R2_ACCOUNT_ID")
+    tok = env("CLOUDFLARE_API_TOKEN")
+    dbid = env("D1_CARDS_ID") or "f865c642-7478-4a52-930b-9b47f2b4a7fb"
+    url = (f"https://api.cloudflare.com/client/v4/accounts/{acc}"
+           f"/d1/database/{dbid}/query")
+    last = None
+    for i in range(tries):
+        req = urllib.request.Request(
+            url, data=json.dumps({"sql": sql}).encode("utf-8"),
+            headers={"Authorization": f"Bearer {tok}",
+                     "Content-Type": "application/json"})
+        try:
+            with urllib.request.urlopen(req, timeout=120) as r:
+                d = json.loads(r.read().decode("utf-8"))
+            if d.get("success"):
+                return d["result"]
+            last = json.dumps(d.get("errors"), ensure_ascii=False)[:300]
+        except Exception as e:
+            last = f"{type(e).__name__}: {e}"
+        time.sleep(2 * (i + 1))
+    raise RuntimeError(f"D1: {last}")
+
+
+def lit(v):
+    if v is None:
+        return "NULL"
+    if isinstance(v, bool):
+        return "1" if v else "0"
+    if isinstance(v, (int, float)):
+        return str(v)
+    if isinstance(v, (dict, list)):
+        v = json.dumps(v, ensure_ascii=False)
+    return "'" + str(v).replace("'", "''").replace("\x00", "") + "'"
+
+
+SCHEMA = [
+    """CREATE TABLE IF NOT EXISTS concepts (
+         id       TEXT PRIMARY KEY,   -- black_hole
+         kind     TEXT,               -- phenomenon | law | math | statistics | unit …
+         name_ru  TEXT, name_en TEXT,
+         card     TEXT,               -- определение одним предложением (эпиграф)
+         n_arts   INTEGER DEFAULT 0,  -- опора: сколько статей
+         n_links  INTEGER DEFAULT 0,  -- сколько связей
+         groups   TEXT,               -- [12, 30] — индексы групп
+         cat      TEXT,               -- главный раздел arXiv его статей
+         full_en  TEXT,               -- полная запись (JSON: описание/история/…)
+         full_ru  TEXT,               -- её перевод
+         systems  TEXT                -- системы единиц (для unit/quantity)
+       )""",
+    "CREATE INDEX IF NOT EXISTS concepts_kind ON concepts(kind, n_arts DESC)",
+    "CREATE INDEX IF NOT EXISTS concepts_arts ON concepts(n_arts DESC)",
+    """CREATE TABLE IF NOT EXISTS concept_links (
+         a TEXT NOT NULL, b TEXT NOT NULL,
+         w REAL,                      -- вес связи
+         kind TEXT,                   -- 'c' понятие↔понятие, 'f' понятие↔формула
+         PRIMARY KEY (a, b, kind)
+       )""",
+    "CREATE INDEX IF NOT EXISTS concept_links_a ON concept_links(a, w DESC)",
+    """CREATE TABLE IF NOT EXISTS concept_arts (
+         cid TEXT NOT NULL, id TEXT NOT NULL, date TEXT,
+         PRIMARY KEY (cid, id)
+       )""",
+    "CREATE INDEX IF NOT EXISTS concept_arts_cid ON concept_arts(cid, date DESC)",
+    """CREATE TABLE IF NOT EXISTS formulas (
+         id      TEXT PRIMARY KEY,
+         name    TEXT, latex TEXT, card TEXT,
+         n_apps  INTEGER DEFAULT 0,
+         anatomy TEXT,                -- переменные/константы/операторы/применимость
+         systems TEXT                 -- та же форма в СИ/СГС/планковской
+       )""",
+    "CREATE INDEX IF NOT EXISTS formulas_apps ON formulas(n_apps DESC)",
+    """CREATE TABLE IF NOT EXISTS graph_frames (
+         key  TEXT PRIMARY KEY,       -- 'overview' | 'g:12' | 'ego:black_hole'
+         data TEXT,                   -- готовый JSON кадра
+         n    INTEGER                 -- узлов в кадре
+       )""",
+]
+
+
+def ensure_schema():
+    for sql in SCHEMA:
+        try:
+            d1(sql)
+        except RuntimeError as e:
+            if "duplicate column" not in str(e).lower():
+                print(f"  ⚠️ {sql[:52]}… → {e}")
+    print("схема: таблицы на месте")
+
+
+def load():
+    live = json.loads((ROOT / "data/concepts-live.json").read_text(encoding="utf-8"))
+    graph = json.loads((ROOT / "data/concepts-graph.json").read_text(encoding="utf-8"))
+    an = {}
+    p = ROOT / "data/formula-anatomy.json"
+    if p.exists():
+        an = json.loads(p.read_text(encoding="utf-8"))
+    bases = json.loads((ROOT.parent / "b42-ml/data/formulas-linked.json")
+                       .read_text(encoding="utf-8"))["bases"]
+    return live, graph, an, bases
+
+
+def push(table, cols, rows, label):
+    """Пачками, как cards_sync: полсотни строк на запрос."""
+    n = 0
+    for i in range(0, len(rows), BATCH):
+        chunk = rows[i:i + BATCH]
+        vals = ",".join("(" + ",".join(lit(v) for v in r) + ")" for r in chunk)
+        d1(f"INSERT OR REPLACE INTO {table} ({','.join(cols)}) VALUES {vals}")
+        n += len(chunk)
+        if n % 400 == 0:
+            print(f"  {label}: {n}/{len(rows)}")
+    print(f"  ✓ {label}: {n}")
+
+
+def build_frames(live, graph):
+    """Кадры графа — тем же построением, что рисует локальный движок."""
+    nodes, edges = graph["nodes"], graph["edges"]
+    groups = graph.get("groups") or []
+    idx = {nd["id"]: i for i, nd in enumerate(nodes)}
+    adj = defaultdict(list)
+    for a, b, w in edges:
+        adj[a].append((b, w))
+        adj[b].append((a, w))
+
+    frames = []
+    # обзор: 50 групп, рёбра — суммарная мощность между группами (топ-4 на группу)
+    gw = Counter()
+    for a, b, w in edges:
+        ga, gb = nodes[a].get("g"), nodes[b].get("g")
+        if ga is None or gb is None or ga == gb:
+            continue
+        gw[(min(ga, gb), max(ga, gb))] += w
+    per = defaultdict(list)
+    for (a, b), w in gw.items():
+        per[a].append((w, b))
+        per[b].append((w, a))
+    keep = {}
+    for a, lst in per.items():
+        for w, b in sorted(lst, reverse=True)[:4]:
+            keep[(min(a, b), max(a, b))] = w
+    ov_nodes = []
+    for i, g in enumerate(groups):
+        n_arts = sum(nodes[m]["n"] for m in g["members"] if m < len(nodes))
+        ov_nodes.append({"gi": i, "label_ru": g.get("label_ru") or g.get("label_en"),
+                         "label_en": g.get("label_en"), "n": n_arts,
+                         "size": len(g["members"])})
+    frames.append(("overview", {"nodes": ov_nodes,
+                                "edges": [[a, b, w] for (a, b), w in keep.items()]},
+                   len(ov_nodes)))
+
+    # кадр каждой группы: члены + мостики наружу + её формулы
+    for gi, g in enumerate(groups):
+        mem = [m for m in g["members"] if m < len(nodes)]
+        inset = set(mem)
+        outside = {}
+        fml = {}
+        for m in mem:
+            for b, w in adj[m]:
+                if b in inset:
+                    continue
+                if nodes[b]["kind"] == "formula":
+                    fml[b] = max(fml.get(b, 0), w)
+                else:
+                    outside[b] = max(outside.get(b, 0), w)
+        ids = mem[:]
+        ids += [b for b, _ in sorted(outside.items(), key=lambda kv: -kv[1])[:12]]
+        ids += [b for b, _ in sorted(fml.items(), key=lambda kv: -kv[1])[:8]]
+        pos = {v: i for i, v in enumerate(ids)}
+        fn = [{"id": nodes[v]["id"], "ru": nodes[v].get("ru"), "en": nodes[v]["en"],
+               "kind": nodes[v]["kind"], "n": nodes[v]["n"],
+               "card": (nodes[v].get("card") or "")[:220],
+               "cat": nodes[v].get("cat"), "out": v not in inset}
+              for v in ids]
+        seen, fe = set(), []
+        for v in ids:
+            for b, w in adj[v]:
+                if b not in pos:
+                    continue
+                k = (min(pos[v], pos[b]), max(pos[v], pos[b]))
+                if k not in seen:
+                    seen.add(k)
+                    fe.append([k[0], k[1], w])
+        frames.append((f"g:{gi}", {"nodes": fn, "edges": fe}, len(fn)))
+    return frames
+
+
+def main():
+    ap = argparse.ArgumentParser(description="Реестр знаний → D1")
+    ap.add_argument("--schema", action="store_true")
+    ap.add_argument("--frames", action="store_true")
+    a = ap.parse_args()
+
+    ensure_schema()
+    if a.schema:
+        return 0
+
+    live, graph, an, bases = load()
+    C = live["concepts"]
+    gnode = {nd["id"]: nd for nd in graph["nodes"]}
+
+    if not a.frames:
+        rows = []
+        for cid, v in C.items():
+            g = gnode.get(cid) or {}
+            rows.append([
+                cid, v.get("kind") or "concept",
+                (v.get("names") or {}).get("ru"), (v.get("names") or {}).get("en"),
+                v.get("card_en") or "", len(v.get("articles") or []),
+                len(v.get("related") or []), v.get("supers") or [], g.get("cat"),
+                v.get("full"), (v.get("full_i18n") or {}).get("ru"),
+                {k: v[k] for k in ("systems", "si_definition", "units_by_system")
+                 if v.get(k)} or None,
+            ])
+        push("concepts", ["id", "kind", "name_ru", "name_en", "card", "n_arts",
+                          "n_links", "groups", "cat", "full_en", "full_ru",
+                          "systems"], rows, "понятия")
+
+        links = []
+        for cid, v in C.items():
+            for r in (v.get("related") or [])[:10]:
+                links.append([cid, r["id"], r["w"], "c"])
+            for f in (v.get("formulas") or [])[:6]:
+                links.append([cid, f["id"], 1.0, "f"])
+        push("concept_links", ["a", "b", "w", "kind"], links, "связи")
+
+        arts = []
+        for cid, v in C.items():
+            for aid in (v.get("articles") or [])[:200]:
+                arts.append([cid, aid, None])
+        push("concept_arts", ["cid", "id", "date"], arts, "статьи понятий")
+
+        frows = []
+        for b in bases:
+            rec = an.get(b["base_id"]) or {}
+            frows.append([b["base_id"], b.get("name") or b["base_id"],
+                          b.get("latex"), b.get("card"),
+                          len(b.get("applications") or []),
+                          {k: rec[k] for k in ("variables", "constants", "operators",
+                                               "description", "history",
+                                               "applicability", "ru")
+                           if rec.get(k)} or None,
+                          rec.get("unit_systems") or None])
+        push("formulas", ["id", "name", "latex", "card", "n_apps", "anatomy",
+                          "systems"], frows, "формулы")
+
+    frames = build_frames(live, graph)
+    push("graph_frames", ["key", "data", "n"],
+         [[k, d, n] for k, d, n in frames], "кадры графа")
+    print(f"✅ облако знает: {len(C)} понятий, {len(bases)} формул, "
+          f"{len(frames)} кадров графа")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
