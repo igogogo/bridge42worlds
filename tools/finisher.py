@@ -122,6 +122,7 @@ def main():
     run("author-map", [PY, "tools/s2_author_map.py"], timeout=1800)
     run("cites", [PY, "tools/enrich_index_cites.py"], timeout=1800)
     run("ft-dataset", [PY, "tools/ft_dataset_export.py"], timeout=7200)
+    run("graph-data", [PY, "tools/concepts_graph_export.py"], timeout=1800)
     run("pages-concepts", [PY, "concepts_pages.py"], timeout=7200)
     run("pages-formulas", [PY, "formulas_pages.py"], timeout=7200)
     run("authors-html", [PY, "-c",

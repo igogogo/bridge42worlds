@@ -382,7 +382,10 @@ def cloud_page(lang, live, by_id):
     c = live["concepts"]
     out = [head(lang, t["title"])]
     out.append(f'<h1>{t["title"]}</h1>')
-    out.append(f'<div class="subtitle">{t["sub"].format(n=len(c), g=len(live["groups"]))}</div>')
+    gt = GRAPH_T.get(lang, GRAPH_T["en"])
+    out.append(f'<div class="subtitle">{t["sub"].format(n=len(c), g=len(live["groups"]))}'
+               f' &nbsp;<a href="/lang/{lang}/concepts/graph.html" '
+               f'style="font-family:var(--mono);font-size:12.5px">{gt["title"]} →</a></div>')
     groups = sorted(live["groups"].items(), key=lambda kv: -len(kv[1]))
     for gid, members in groups:
         members = sorted(members, key=lambda m: -len(c.get(m, {}).get("articles", [])))
@@ -399,6 +402,121 @@ def cloud_page(lang, live, by_id):
                    f'<div class="related-tags" style="margin-top:8px">{chips}</div></details>')
     out.append("</body></html>")
     return "".join(out)
+
+
+GRAPH_T = {
+    "ru": {"title": "Граф понятий", "sub": "Кадры вместо всего облака: группы → группа → соседи понятия. Мощность ребра — сколько статей связывают два понятия.",
+           "search": "найти понятие…", "w": "мощность ребра", "home": "Обзор",
+           "legend": [("квадрат", "закон · принцип · теорема"), ("ромб", "метод · процесс"),
+                      ("треугольник", "явление · эффект"), ("шестиугольник", "прибор"),
+                      ("кольцо", "объект · вещество"), ("крест", "математика"),
+                      ("пятиугольник", "величина · единица · система"), ("круг", "понятие")]},
+    "en": {"title": "Concept graph", "sub": "Frames instead of the whole cloud: groups → one group → a concept's neighbors. Edge power = how many articles link two concepts.",
+           "search": "find a concept…", "w": "edge power", "home": "Overview",
+           "legend": [("square", "law · principle · theorem"), ("diamond", "method · process"),
+                      ("triangle", "phenomenon · effect"), ("hexagon", "instrument"),
+                      ("ring", "object · substance"), ("cross", "mathematics"),
+                      ("pentagon", "quantity · unit · system"), ("circle", "concept")]},
+}
+
+
+def graph_page(lang):
+    """Приложение-граф: канвас на всю ширину + панель управления справа
+    (владелец 27.08: «панелька справа: 2D/3D, представления, классы и группы
+    вкл/выкл, информация, переходы — новое приложение, высший класс»)."""
+    t = GRAPH_T.get(lang, GRAPH_T["en"])
+    L = {"ru": {"mode": "Режим", "layout": "Представление", "force": "силы",
+                "ring": "кольцо", "sphere": "сфера", "spin": "вращение",
+                "kinds": "Классы", "groups": "Группы", "info": "Выбрано"},
+         "en": {"mode": "Mode", "layout": "Layout", "force": "force",
+                "ring": "ring", "sphere": "sphere", "spin": "spin",
+                "kinds": "Kinds", "groups": "Groups", "info": "Selection"}}
+    l = L.get(lang, L["en"])
+    return head(lang, t["title"]) + f"""
+<div class="b42g-app">
+ <div class="b42g-main">
+  <div class="b42g-top">
+    <h1 style="margin:0;font-size:22px">{t["title"]}</h1>
+    <button id="b42g-home" class="b42g-mini">{t["home"]}</button>
+    <span id="b42g-crumbs"></span>
+    <input id="b42g-q" list="b42g-names" placeholder="{t["search"]}">
+    <datalist id="b42g-names"></datalist>
+  </div>
+  <div class="subtitle" style="margin:2px 0 8px;max-width:none">{t["sub"]}</div>
+  <div class="b42g-wrap"><canvas id="b42g"></canvas></div>
+ </div>
+ <aside class="b42g-side">
+  <div class="b42g-sec"><div class="b42g-h">{l["mode"]}</div>
+    <button id="b42g-2d" class="b42g-mini active">2D</button>
+    <button id="b42g-3d" class="b42g-mini">3D</button>
+    <button id="b42g-spin" class="b42g-mini" style="display:none">⟳ {l["spin"]}</button>
+  </div>
+  <div class="b42g-sec"><div class="b42g-h">{l["layout"]}</div>
+    <button data-layout="force" class="b42g-mini active">{l["force"]}</button>
+    <button data-layout="ring" class="b42g-mini">{l["ring"]}</button>
+    <button data-layout="sphere" class="b42g-mini">{l["sphere"]}</button>
+  </div>
+  <div class="b42g-sec"><div class="b42g-h">{t["w"]} <span id="b42g-wv">≥2</span></div>
+    <input id="b42g-w" type="range" min="2" max="20" value="2" style="width:100%">
+  </div>
+  <div class="b42g-sec"><div class="b42g-h">{l["info"]}</div>
+    <div id="b42g-info" class="b42g-info"></div>
+  </div>
+  <div class="b42g-sec"><div class="b42g-h">{l["kinds"]}</div>
+    <div id="b42g-kinds"></div>
+  </div>
+  <div class="b42g-sec"><div class="b42g-h">{l["groups"]}</div>
+    <div id="b42g-groups" class="b42g-groups"></div>
+  </div>
+ </aside>
+</div>
+<style>
+.b42g-app {{ display:flex; gap:18px; align-items:flex-start;
+  max-width:none; padding:0 18px 30px; }}
+.b42g-main {{ flex:1; min-width:0; }}
+.b42g-top {{ display:flex; flex-wrap:wrap; gap:10px; align-items:center;
+  font-family:var(--mono); font-size:12.5px; margin:8px 0 2px; }}
+.b42g-side {{ width:250px; flex:none; font-family:var(--mono); font-size:12px;
+  position:sticky; top:10px; max-height:calc(100vh - 20px); overflow-y:auto;
+  border:1px solid var(--hairline); border-radius:var(--radius-sm);
+  background:var(--surface); padding:12px 14px; }}
+.b42g-sec {{ margin-bottom:14px; }}
+.b42g-h {{ font-size:10.5px; text-transform:uppercase; letter-spacing:.08em;
+  color:var(--soft); margin-bottom:6px; }}
+.b42g-top input[list] {{ padding:5px 10px; border:1px solid var(--hairline);
+  border-radius:999px; background:var(--surface); color:var(--text);
+  font:inherit; min-width:170px; }}
+.b42g-mini {{ font:inherit; font-size:11.5px; padding:4px 11px; cursor:pointer;
+  color:var(--muted); background:var(--bg); border:1px solid var(--hairline);
+  border-radius:999px; margin:0 3px 4px 0; }}
+.b42g-mini:hover {{ color:var(--link); border-color:var(--link); }}
+.b42g-mini.active {{ color:#fff; background:var(--link); border-color:var(--link); }}
+.b42g-crumb {{ font:inherit; border:none; background:none; color:var(--link);
+  cursor:pointer; padding:2px 2px; }}
+.b42g-sep {{ color:var(--soft); margin:0 2px; }}
+.b42g-info {{ font-size:12px; line-height:1.5; }}
+.b42g-sel {{ font-size:13px; }}
+.b42g-dim {{ color:var(--soft); }}
+.b42g-wrap {{ border:1px solid var(--hairline); border-radius:var(--radius-sm);
+  background:var(--bg); overflow:hidden; }}
+.b42g-wrap canvas {{ display:block; width:100%; }}
+.b42g-check {{ display:flex; align-items:center; gap:6px; padding:2px 0;
+  cursor:pointer; color:var(--muted); }}
+.b42g-check:hover {{ color:var(--text); }}
+.b42g-sw {{ flex:none; }}
+.b42g-groups {{ max-height:230px; overflow-y:auto; }}
+.b42g-jump {{ display:block; width:100%; text-align:start; font:inherit;
+  border:none; background:none; color:var(--link); cursor:pointer;
+  padding:2px 0; }}
+.b42g-jump em {{ color:var(--soft); font-style:normal; }}
+.b42g-jump:hover {{ color:var(--cyan); }}
+@media (max-width: 900px) {{
+  .b42g-app {{ flex-direction:column; }}
+  .b42g-side {{ width:100%; position:static; max-height:none; }}
+}}
+</style>
+<script src="/js/b42-graph.js" defer></script>
+</body></html>"""
 
 
 def build(langs):
@@ -420,7 +538,8 @@ def build(langs):
                                            encoding="utf-8")
             total += 1
         (d / "index.html").write_text(cloud_page(lang, live, by_id), encoding="utf-8")
-        print(f"  {lang}: {len(live['concepts'])} страниц + облако")
+        (d / "graph.html").write_text(graph_page(lang), encoding="utf-8")
+        print(f"  {lang}: {len(live['concepts'])} страниц + облако + граф")
     print(f"✅ раздел /concepts/: {total} страниц")
 
 

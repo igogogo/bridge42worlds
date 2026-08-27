@@ -72,6 +72,7 @@ def main():
     run("Scholar → карта авторов", [PY, "tools/s2_author_map.py"], timeout=1800)
     run("цитируемость в индексы", [PY, "tools/enrich_index_cites.py"], timeout=1800)
     run("датасет файн-тюнинга", [PY, "tools/ft_dataset_export.py"], timeout=7200)
+    run("данные графа понятий", [PY, "tools/concepts_graph_export.py"], timeout=1800)
     # словари клиенту
     live = json.loads((ROOT / "data/concepts-live.json").read_text(encoding="utf-8"))["concepts"]
     for lang in ("ru", "en", "es", "ar", "fr"):
