@@ -66,6 +66,15 @@ def main():
     if not run("target", [PY, "tools/concept_harvest_target.py", "--run"],
                timeout=4 * 3600):
         log("добыча не завершилась — стоп"); return 1
+    # СТАТИСТИКА — отдельный раздел (владелец 27.08: «собрать эмпирически все
+    # статистические методы и приёмы физики, новый раздел кроме математики»)
+    if not run("stats", [PY, "tools/concept_harvest_target.py", "--run",
+                         "--profile", "stats"], timeout=4 * 3600):
+        log("стат-проход не завершился — стоп"); return 1
+    # формулы отдают опору константам/операторам: статьи применений форм
+    # (владелец 27.08: «константы могут в статьях не упоминаться — об этом
+    # скажут наши формулы»); повторный --link идемпотентен
+    run("flink", [PY, "tools/formula_anatomy.py", "--link"], timeout=3600)
     run("match", [PY, "tools/concept_harvest.py", "--match"], timeout=3600)
     run("distill", [PY, "tools/concept_harvest.py", "--distill"], timeout=1800)
     run("births", [PY, "tools/concept_cycle.py", "--budget", "0"],

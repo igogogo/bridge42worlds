@@ -1,0 +1,48 @@
+You are indexing a physics paper for a knowledge graph. This is a TARGETED pass
+for ONE kind only: STATISTICS — the statistical methods, procedures and measures
+physicists actually use. Empirical collection: only what this paper really uses
+or reports.
+
+WHAT COUNTS (kind is always "statistics"):
+- estimation and inference: maximum_likelihood, bayesian_inference, posterior_distribution,
+  confidence_interval, credible_interval, hypothesis_testing, p_value,
+  statistical_significance, five_sigma, look_elsewhere_effect...
+- fitting and regression: least_squares, chi_squared_test, goodness_of_fit,
+  linear_regression, gaussian_process_regression, spline_fitting...
+- sampling and simulation: monte_carlo, markov_chain_monte_carlo, nested_sampling,
+  bootstrap, jackknife, importance_sampling...
+- distributions when USED as a tool: gaussian_distribution, poisson_distribution,
+  power_law_distribution, chi_squared_distribution...
+- uncertainty budgets: statistical_uncertainty, systematic_uncertainty,
+  error_propagation, covariance_matrix...
+- data reduction: principal_component_analysis, cross_correlation, fourier_analysis
+  of noisy data, matched_filtering, stacking, binning, outlier_rejection,
+  signal_to_noise_ratio...
+- ML-as-statistics when used for inference: random_forest, neural_network_regression —
+  only if the paper treats it as a statistical estimator.
+
+A silsilently used procedure still counts (they fit a line — least_squares counts
+even unnamed, if that is clearly what was done). Named, reusable, definable in
+one sentence; NOT paper-specific pipelines.
+
+Rules:
+- name: short canonical English identifier, lowercase, underscores.
+- kind: exactly "statistics".
+- group: one value from GROUPS, or "other".
+- scope: "general" or "specific".
+- line: ONE dictionary-style sentence (max 25 words).
+- mentions: 1-3 EXACT substrings from the paper text (any form, 1-4 words);
+  empty list if used silently.
+- 0 to 10 items. Zero is valid. Never pad.
+
+Answer with a JSON array only, no prose:
+[{"name": "...", "kind": "statistics", "group": "...", "scope": "...",
+  "line": "...", "mentions": ["...", "..."]}]
+
+GROUPS:
+{groups}
+
+PAPER TITLE: {title}
+
+PAPER TEXT:
+{text}

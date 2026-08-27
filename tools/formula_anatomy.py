@@ -287,6 +287,16 @@ def link():
         print("анатомий нет — сначала --sample/--run")
         return 1
 
+    # опора кандидата из формул — СТАТЬИ ПРИМЕНЕНИЙ его форм (владелец 27.08:
+    # «константы могут в статьях не упоминаться, но об этом скажут наши
+    # формулы»): без этого формульный кандидат имел articles=[] и не проходил
+    # порог рождения никогда
+    arts_of_base = {}
+    for b in bases():
+        arts_of_base[b["base_id"]] = sorted({
+            (a.get("article") or a.get("art") or "").strip()
+            for a in (b.get("applications") or [])} - {""})
+
     # собираем уникальных кандидатов: id → (kind, где встречен)
     want = {}
     for base_id, rec in done.items():
@@ -319,6 +329,8 @@ def link():
             matched += 1
         else:
             info["concept"] = None
+            support = sorted({a for b in info["bases"]
+                              for a in arts_of_base.get(b, [])})
             if wid not in rows:
                 grp = {"math": "mathematics", "constant": "physical constants",
                        "quantity": "physical quantities",
@@ -326,9 +338,17 @@ def link():
                 rows[wid] = {"name": wid, "kind": info["kind"], "group": grp,
                              "scope": "general",
                              "line": f"{wid.replace('_', ' ')} — from formula anatomy",
-                             "articles": [], "matched": None,
+                             "articles": support, "matched": None,
                              "from_formulas": info["bases"][:20]}
                 born_cand += 1
+            else:
+                # кандидат уже в копилке — формулы добавляют ему опору
+                r0 = rows[wid]
+                r0["articles"] = sorted(set(r0.get("articles") or []) | set(support))
+                r0.setdefault("from_formulas", [])
+                for b in info["bases"][:20]:
+                    if b not in r0["from_formulas"]:
+                        r0["from_formulas"].append(b)
     save_harvest(rows)
     # прописываем связь в анатомию
     for base_id, rec in done.items():

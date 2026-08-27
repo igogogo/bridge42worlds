@@ -31,20 +31,31 @@ from tools import concept_harvest as CH  # noqa: E402 — общий движо�
 
 PROMPT = ROOT / "data" / "prompts" / "concept-extract-target.txt"
 STATE = ROOT / "data" / "harvest-target-state.json"
+# профили целевых проходов: law/math/... и отдельный статистический
+PROFILES = {
+    "target": {"prompt": "concept-extract-target.txt",
+               "state": "harvest-target-state.json",
+               "kinds": ("law", "math", "constant", "principle")},
+    "stats": {"prompt": "concept-extract-stats.txt",
+              "state": "harvest-stats-state.json",
+              "kinds": ("statistics",)},
+}
 HEAVY = ("gr-qc", "hep-th", "hep-ph", "quant-ph", "math-ph", "nucl-th",
          "cond-mat", "astro-ph")
 
 
-def state():
+def state(prof):
+    p = ROOT / "data" / PROFILES[prof]["state"]
     try:
-        return set(json.loads(STATE.read_text(encoding="utf-8"))["asked"])
+        return set(json.loads(p.read_text(encoding="utf-8"))["asked"])
     except Exception:
         return set()
 
 
-def save_state(asked):
-    STATE.write_text(json.dumps({"asked": sorted(asked)}, ensure_ascii=False),
-                     encoding="utf-8")
+def save_state(prof, asked):
+    (ROOT / "data" / PROFILES[prof]["state"]).write_text(
+        json.dumps({"asked": sorted(asked)}, ensure_ascii=False),
+        encoding="utf-8")
 
 
 def pick_articles():
@@ -64,29 +75,31 @@ def pick_articles():
     return full + heavy
 
 
-def build_prompt(aid):
+def build_prompt(aid, prof="target"):
     title, text = CH.article_text(aid)
     if not title:
         return None
-    return (PROMPT.read_text(encoding="utf-8")
+    ptxt = ROOT / "data" / "prompts" / PROFILES[prof]["prompt"]
+    return (ptxt.read_text(encoding="utf-8")
             .replace("{groups}", CH.groups_text())
             .replace("{title}", title)
             .replace("{text}", text))
 
 
-def run(cap):
+def run(cap, prof="target"):
     try:
         from tools.freeze import guard
         guard("целевое донасыщение (DeepSeek)")
     except ImportError:
         pass
     key = CH.env("DEEPSEEK_API_KEY")
-    asked = state()
+    kinds = PROFILES[prof]["kinds"]
+    asked = state(prof)
     todo = [a for a in pick_articles() if a not in asked][:cap]
     print(f"целевой прогон: {len(todo)} статей (спрошено ранее {len(asked)})")
     n_c = 0
     for i, aid in enumerate(todo, 1):
-        p = build_prompt(aid)
+        p = build_prompt(aid, prof)
         if not p:
             asked.add(aid)
             continue
@@ -110,16 +123,15 @@ def run(cap):
         cands = CH.parse_answer(raw)
         # целевой проход принимает только целевые классы — модель иногда
         # приносит лишнее вопреки промпту
-        cands = [c for c in cands
-                 if c.get("kind") in ("law", "math", "constant", "principle")]
+        cands = [c for c in cands if c.get("kind") in kinds]
         if cands:
             CH.ingest(aid, cands)
             n_c += len(cands)
         asked.add(aid)
         if i % 25 == 0:
-            save_state(asked)
+            save_state(prof, asked)
             print(f"  {i}/{len(todo)} · кандидатов +{n_c}")
-    save_state(asked)
+    save_state(prof, asked)
     print(f"✅ целевых кандидатов: +{n_c}; дальше обычные --match/--distill/рождения")
     return 0
 
@@ -129,17 +141,18 @@ def main():
     ap.add_argument("--plan", action="store_true")
     ap.add_argument("--run", action="store_true")
     ap.add_argument("--cap", type=int, default=1700)
+    ap.add_argument("--profile", default="target", choices=sorted(PROFILES))
     a = ap.parse_args()
     arts = pick_articles()
     if a.plan or not a.run:
-        asked = state()
+        asked = state(a.profile)
         todo = [x for x in arts if x not in asked]
         est = min(len(todo), a.cap)
         print(f"выборка: {len(arts)} статей (полные + экспрессы тяжёлых разделов)")
         print(f"не спрошено: {len(todo)} · в прогон пойдёт: {est}")
         print(f"смета: ~{est} × 1.4k ток ≈ ${est * 0.0006:.2f}–{est * 0.0011:.2f}")
         return 0
-    return run(a.cap)
+    return run(a.cap, a.profile)
 
 
 if __name__ == "__main__":

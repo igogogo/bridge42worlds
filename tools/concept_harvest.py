@@ -62,8 +62,10 @@ KINDS = ("concept method phenomenon object instrument law equation effect "
          "principle theorem substance math process property theory "
          # особые классы (владелец 26.08): величина с единицами и эталоном,
          # константа с числом — формула раскладывается в реестр целиком;
-         # unit_system (27.08) — СИ/СГС/планковская, сеются unit_systems_seed.py
-         "quantity constant unit unit_system").split()
+         # unit_system (27.08) — СИ/СГС/планковская, сеются unit_systems_seed.py;
+         # statistics (27.08, владелец: «отдельный раздел, кроме математики») —
+         # статистические методы и приёмы физики, собираются целевым проходом
+         "quantity constant unit unit_system statistics").split()
 
 _ENV = {}
 
