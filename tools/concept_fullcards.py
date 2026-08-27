@@ -27,6 +27,7 @@ data/concepts-live.json полем card_full_en — страницы понят�
 """
 import argparse
 import json
+import re
 import sys
 import time
 import urllib.request
@@ -123,6 +124,11 @@ def targets():
     return out, done, live
 
 
+_PREFIX = re.compile(
+    r"^(Why it matters|How it works|In practice|Fun fact|History|Description|"
+    r"Practical application)\s*[:—–-]\s*", re.I)
+
+
 def ask_batch(batch, key):
     lines = []
     for i, (cid, seed, titles) in enumerate(batch, 1):
@@ -149,14 +155,25 @@ def ask_batch(batch, key):
             n = int(it["n"])
             if not (1 <= n <= len(batch)):
                 continue
+
+            def clean(s, cap):
+                """Срезать заголовок раздела, если модель начала с него текст.
+
+                Иногда ответ приходит в виде «Why it matters: MLE — рабочая
+                лошадка…»: модель повторяет название поля из промпта первым же
+                словом. На странице это выглядит английским заголовком посреди
+                текста. Срезаем только с двоеточием или тире — «In practice, …»
+                это нормальное начало предложения, а не заголовок.
+                """
+                return _PREFIX.sub("", str(s or "").strip())[:cap]
             rec = {
                 # имена полей — ТЕ ЖЕ, что в старых справочниках: страница рисует
                 # старые и новые записи одним кодом, без второй ветки
-                "description_popular": str(it.get("description", "")).strip()[:4000],
-                "how_it_works": str(it.get("how_it_works", "")).strip()[:2500],
-                "history": str(it.get("history", "")).strip()[:1500],
-                "practical_application": str(it.get("practical_application", "")).strip()[:600],
-                "fun_fact_popular": str(it.get("fun_fact", "")).strip()[:400],
+                "description_popular": clean(it.get("description"), 4000),
+                "how_it_works": clean(it.get("how_it_works"), 2500),
+                "history": clean(it.get("history"), 1500),
+                "practical_application": clean(it.get("practical_application"), 600),
+                "fun_fact_popular": clean(it.get("fun_fact"), 400),
             }
             if len(rec["description_popular"]) > 200:
                 out[batch[n - 1][0]] = rec
