@@ -442,6 +442,7 @@ def graph_page(lang):
 <div class="b42g-top glass">
   <b style="font-family:var(--serif);font-size:16px">{t["title"]}</b>
   <button id="b42g-home" class="b42g-mini">{t["home"]}</button>
+  <button id="b42g-all" class="b42g-mini">{"всё облако" if lang == "ru" else "whole cloud"}</button>
   <span id="b42g-crumbs"></span>
   <input id="b42g-q" list="b42g-names" placeholder="{t["search"]}">
   <datalist id="b42g-names"></datalist>
@@ -469,15 +470,18 @@ def graph_page(lang):
   <div class="b42g-sec"><div class="b42g-h">{l["info"]}</div>
     <div id="b42g-info" class="b42g-info"></div>
   </div>
-  <div class="b42g-sec"><div class="b42g-h">{l["path"]}</div>
-    <div id="b42g-path" class="b42g-info"></div>
-  </div>
   <div class="b42g-sec"><div class="b42g-h">{l["kinds"]}</div>
-    <div id="b42g-kinds"></div>
+    <div id="b42g-kinds" class="b42g-kgrid"></div>
   </div>
-  <div class="b42g-sec" style="margin-bottom:4px"><div class="b42g-h">{l["groups"]}</div>
+  <details class="b42g-sec"><summary class="b42g-h">{"Разделы arXiv" if lang == "ru" else "arXiv sections"}</summary>
+    <div id="b42g-cats" class="b42g-groups"></div>
+  </details>
+  <details class="b42g-sec"><summary class="b42g-h">{l["groups"]}</summary>
     <div id="b42g-groups" class="b42g-groups"></div>
-  </div>
+  </details>
+  <details class="b42g-sec" style="margin-bottom:4px"><summary class="b42g-h">{l["path"]}</summary>
+    <div id="b42g-path" class="b42g-info"></div>
+  </details>
 </aside>
 <style>
 /* весь экран: канвас — сцена, всё остальное плавает поверх */
@@ -494,9 +498,14 @@ html, body {{ height:100%; overflow:hidden; }}
 .b42g-side {{ position:fixed; top:54px; right:14px; bottom:14px; width:264px;
   z-index:4; font-family:var(--mono); font-size:12px;
   overflow-y:auto; padding:12px 14px; }}
-.b42g-sec {{ margin-bottom:13px; }}
+.b42g-sec {{ margin-bottom:10px; }}
 .b42g-h {{ font-size:10px; text-transform:uppercase; letter-spacing:.09em;
-  color:var(--soft); margin-bottom:5px; }}
+  color:var(--soft); margin-bottom:4px; }}
+details.b42g-sec > summary.b42g-h {{ cursor:pointer; list-style:none; }}
+details.b42g-sec > summary.b42g-h::before {{ content:"▸ "; }}
+details[open].b42g-sec > summary.b42g-h::before {{ content:"▾ "; }}
+.b42g-kgrid {{ display:grid; grid-template-columns:1fr 1fr; gap:0 6px; }}
+.b42g-kgrid .b42g-check {{ font-size:10.5px; }}
 .b42g-top input[list] {{ padding:4px 10px; border:1px solid var(--hairline);
   border-radius:999px; background:var(--bg); color:var(--text);
   font:inherit; min-width:150px; flex:1; max-width:230px; }}

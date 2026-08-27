@@ -117,6 +117,7 @@ var view = {is3d: false, layout: 'force', spin: false, minW: 2,
 var kindOn = {};
 KINDS.forEach(function (K) { kindOn[K.k] = true; });
 var groupOn = null;
+var catOn = null;             // фильтр разделов arXiv (null = все)
 var trail = [], path = [];        // путь исследователя: посещённые эго
 var hoverI = -1, selI = -1;
 var sim = {vx: [], vy: [], vz: [], alive: 0};
@@ -125,13 +126,19 @@ var T0 = performance.now();
 var iconScale = 1;            // авто: чем плотнее кадр, тем мельче значки
 function calcIconScale() {
     var N = visIdx().length || 1;
-    iconScale = Math.max(0.5, Math.min(1.05, 7.5 / Math.sqrt(N)));
+    iconScale = Math.max(0.38, Math.min(0.92, 6.2 / Math.sqrt(N)));
 }
 
 function nodeVisible(nd) {
     if (nd.kind !== '_group' && !kindOn[bucketOf(nd.kind)]) return false;
-    if (groupOn && nd.kind !== '_group' &&
+    /* фильтр групп/разделов — только на широких кадрах (обзор, всё облако):
+       внутри группы и в эго кадр уже отобран смыслом; прятать там соседей —
+       тот самый баг «все галочки стоят, а после двойного клика фильтруется» */
+    var wide = frame.mode === 'overview' || frame.mode === 'all';
+    if (wide && groupOn && nd.kind !== '_group' &&
         nd.g !== undefined && nd.g !== null && !groupOn.has(nd.g)) return false;
+    if (wide && catOn && nd.kind !== '_group' && nd.cat && !catOn.has(nd.cat))
+        return false;
     return true;
 }
 
@@ -196,9 +203,9 @@ function frameFromIds(ids, centerFirst) {
     var nodes = ids.map(function (id, i) {
         var n = G.nodes[id];
         return {key: 'n' + id, ni: id, label: nodeName(n), n: n.n, kind: n.kind,
-                g: n.g, center: centerFirst && i === 0, out: false,
-                size: Math.max(4.5, Math.sqrt(n.n) * 2.1) *
-                      (centerFirst && i === 0 ? 1.5 : 1)};
+                g: n.g, cat: n.cat, center: centerFirst && i === 0, out: false,
+                size: Math.max(4, Math.sqrt(n.n) * 1.8) *
+                      (centerFirst && i === 0 ? 1.45 : 1)};
     });
     var edges = [], seen = {};
     ids.forEach(function (id) {
@@ -210,6 +217,26 @@ function frameFromIds(ids, centerFirst) {
         });
     });
     return {nodes: nodes, edges: edges};
+}
+
+function showAll() {
+    /* всё облако целиком (владелец: «хочу просто целиком смотреть») —
+       фильтры классов/групп/разделов работают, физика на сетке */
+    var ids = [];
+    for (var i = 0; i < G.nodes.length; i++) ids.push(i);
+    var f = frameFromIds(ids);
+    trail = [{mode: 'overview', label: RU ? 'Обзор' : 'Overview'},
+             {mode: 'all', label: RU ? 'всё облако' : 'whole cloud'}];
+    selI = -1; sparks = [];
+    setFrame('all', f.nodes, f.edges);
+    view.zoomT = 0.4;
+    /* на полном полотне слабые связи — каша: поднимаем порог, слайдер вслед */
+    if (view.minW < 3) {
+        view.minW = 3;
+        var wr = el('b42g-w'), wv = el('b42g-wv');
+        if (wr) wr.value = 3;
+        if (wv) wv.textContent = '≥3';
+    }
 }
 
 function showGroup(gi, pushCrumb, focusKey) {
@@ -382,21 +409,42 @@ function tick() {
         if (sim.alive % 24 === 0) fitView();
         return;
     }
-    for (i = 0; i < N; i++) {
-        if (!nodeVisible(n[i])) continue;
-        for (j = i + 1; j < N; j++) {
-            if (!nodeVisible(n[j])) continue;
-            var dx = n[j].x - n[i].x, dy = n[j].y - n[i].y, dz = n[j].z - n[i].z;
-            var d2 = dx * dx + dy * dy + dz * dz + 40;
-            /* хабы расталкивают сильнее, но с кэпом — иначе крупные группы
-               обзора разгоняли облако за экран (поймано глазами 27.08) */
-            var K = 620 * Math.sqrt(
-                Math.min(24, n[i].size + 2) * Math.min(24, n[j].size + 2)) * 0.22;
-            var f = K / d2, d = Math.sqrt(d2);
-            dx /= d; dy /= d; dz /= d;
-            sim.vx[i] -= dx * f; sim.vy[i] -= dy * f; sim.vz[i] -= dz * f;
-            sim.vx[j] += dx * f; sim.vy[j] += dy * f; sim.vz[j] += dz * f;
-        }
+    var vis = [];
+    for (i = 0; i < N; i++) if (nodeVisible(n[i])) vis.push(i);
+    function repel(i, j) {
+        var dx = n[j].x - n[i].x, dy = n[j].y - n[i].y, dz = n[j].z - n[i].z;
+        var d2 = dx * dx + dy * dy + dz * dz + 40;
+        /* хабы расталкивают сильнее, но с кэпом — иначе крупные группы
+           обзора разгоняли облако за экран (поймано глазами 27.08) */
+        var K = 620 * Math.sqrt(
+            Math.min(24, n[i].size + 2) * Math.min(24, n[j].size + 2)) * 0.22;
+        var f = K / d2, d = Math.sqrt(d2);
+        dx /= d; dy /= d; dz /= d;
+        sim.vx[i] -= dx * f; sim.vy[i] -= dy * f; sim.vz[i] -= dz * f;
+        sim.vx[j] += dx * f; sim.vy[j] += dy * f; sim.vz[j] += dz * f;
+    }
+    if (vis.length <= 320) {
+        for (var a1 = 0; a1 < vis.length; a1++)
+            for (var b1 = a1 + 1; b1 < vis.length; b1++)
+                repel(vis[a1], vis[b1]);
+    } else {
+        /* «всё облако»: отталкивание по сетке — только соседние ячейки,
+           O(n·k) вместо O(n²); дальнее поле держит слабая гравитация */
+        var CELL = 130, grid = {};
+        vis.forEach(function (i2) {
+            var key = Math.floor(n[i2].x / CELL) + ':' + Math.floor(n[i2].y / CELL);
+            (grid[key] = grid[key] || []).push(i2);
+        });
+        vis.forEach(function (i2) {
+            var gx = Math.floor(n[i2].x / CELL), gy = Math.floor(n[i2].y / CELL);
+            for (var ox = -1; ox <= 1; ox++)
+                for (var oy = -1; oy <= 1; oy++) {
+                    var cell = grid[(gx + ox) + ':' + (gy + oy)];
+                    if (!cell) continue;
+                    for (var c1 = 0; c1 < cell.length; c1++)
+                        if (cell[c1] > i2) repel(i2, cell[c1]);
+                }
+        });
     }
     frame.edges.forEach(function (e) {
         if (e[2] < view.minW) return;
@@ -417,10 +465,12 @@ function tick() {
     });
     /* гравитация анизотропная: по X слабее (экран шире) — облако растягивается
        по всей зоне, а не сжимается в точку по центру */
+    var totE = 0;
     for (i = 0; i < N; i++) {
-        sim.vx[i] = (sim.vx[i] - n[i].x * 0.0006) * 0.86;
-        sim.vy[i] = (sim.vy[i] - n[i].y * 0.0014) * 0.86;
-        sim.vz[i] = (sim.vz[i] - n[i].z * 0.0014) * 0.86;
+        sim.vx[i] = (sim.vx[i] - n[i].x * 0.00042) * 0.84;
+        sim.vy[i] = (sim.vy[i] - n[i].y * 0.0011) * 0.84;
+        sim.vz[i] = (sim.vz[i] - n[i].z * 0.0011) * 0.84;
+        totE += sim.vx[i] * sim.vx[i] + sim.vy[i] * sim.vy[i];
         /* предельная скорость — вторая страховка устойчивости */
         var sp = Math.sqrt(sim.vx[i] * sim.vx[i] + sim.vy[i] * sim.vy[i] +
                            sim.vz[i] * sim.vz[i]);
@@ -432,6 +482,9 @@ function tick() {
         n[i].x += sim.vx[i]; n[i].y += sim.vy[i];
         if (view.is3d) n[i].z += sim.vz[i]; else n[i].z = 0;
     }
+    /* уснуть, когда всё доехало — никакого дребезга на месте */
+    if (dragNode < 0 && totE / Math.max(1, N) < 0.02 && sim.alive < 1e8)
+        sim.alive = Math.min(sim.alive, 8);
     if (dragNode < 0 && sim.alive % 24 === 0) fitView();
 }
 
@@ -468,7 +521,7 @@ function project(nd) {
         var cx = Math.cos(view.rotX), sx = Math.sin(view.rotX);
         var x1 = x * cy + z * sy, z1 = -x * sy + z * cy;
         var y1 = y * cx + z1 * sx, z2 = -y * sx + z1 * cx;
-        var p = 900 / (900 + z2);
+        var p = 620 / (620 + z2);          // ближе фокус — заметнее перспектива
         x = x1 * p; y = y1 * p; nd._depth = p;
     } else nd._depth = 1;
     var W = canvas.width / devicePixelRatio, H = canvas.height / devicePixelRatio;
@@ -499,6 +552,12 @@ function pathShape(x, y, r, sh) {
             ctx[i ? 'lineTo' : 'moveTo'](x + r * Math.cos(a), y + r * Math.sin(a));
         }
         ctx.closePath();
+    } else if (sh === 'fx') {
+        /* формула: кружок со струной-синусоидой внутри */
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.moveTo(x - r * 0.62, y);
+        ctx.quadraticCurveTo(x - r * 0.3, y - r * 0.75, x, y);
+        ctx.quadraticCurveTo(x + r * 0.3, y + r * 0.75, x + r * 0.62, y);
     } else ctx.arc(x, y, r, 0, Math.PI * 2);
 }
 
@@ -617,7 +676,7 @@ function edgePath(a, b) {
     var mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2;
     var dx = b[0] - a[0], dy = b[1] - a[1];
     var d = Math.sqrt(dx * dx + dy * dy) + 0.01;
-    var k = Math.min(18, d * 0.09);
+    var k = Math.min(10, d * 0.05);
     ctx.moveTo(a[0], a[1]);
     ctx.quadraticCurveTo(mx - dy / d * k, my + dx / d * k, b[0], b[1]);
 }
@@ -654,9 +713,12 @@ function draw() {
         var dl = Math.sqrt(ddx * ddx + ddy * ddy + ddz * ddz);
         var stretch = Math.max(0, Math.min(1, (dl / restLen(e) - 1.35) / 1.8));
         ctx.strokeStyle = hot ? TK.cyan : (stretch > 0.05 ? TK.ochre : TK.muted);
-        ctx.globalAlpha = (dim ? 0.05 : (hot ? 0.8 : 0.10 + wgt * 0.45)) *
+        /* на кадре-тысячнике рёбра глушим вдвое — иначе войлок */
+        var crowd = frame.nodes.length > 800 ? 0.45 : 1;
+        ctx.globalAlpha = (dim ? 0.04 : (hot ? 0.75 : (0.07 + wgt * 0.34) * crowd)) *
                           (1 - stretch * 0.35);
-        ctx.lineWidth = (0.5 + wgt * 4.2) * (hot ? 1.25 : 1) * (1 - stretch * 0.55);
+        /* струны: тонкие, почти нитяные — мощность в яркости больше, чем в теле */
+        ctx.lineWidth = (0.35 + wgt * 1.9) * (hot ? 1.3 : 1) * (1 - stretch * 0.5);
         if (n[e[0]].out || n[e[1]].out) ctx.setLineDash([4, 5]);
         ctx.beginPath(); edgePath(a, b); ctx.stroke();
         ctx.setLineDash([]);
@@ -748,30 +810,47 @@ function draw() {
     /* тултип у курсора */
     if (hoverI >= 0 && mouse.x !== undefined) {
         var hd = n[hoverI];
-        var lines = [hd.label];
+        var lines = [hd.label], cardFrom = 2;
         if (hd.kind === '_group') {
             lines.push((RU ? 'группа · статей: ' : 'group · articles: ') + hd.n);
             lines.push(RU ? 'клик — открыть' : 'click to open');
+            cardFrom = 99;
         } else {
             var gi2 = G.nodes[hd.ni];
             lines.push(gi2.kind + ' · ' + gi2.n + (RU ? ' ст.' : ' art.') +
                        ' · ' + deg[hd.ni] + (RU ? ' св.' : ' links'));
+            /* карточка понятия прямо в тултипе — смотреть и учиться на месте */
+            if (gi2.card) {
+                ctx.font = '10.5px ' + TK.mono;
+                var words = gi2.card.split(' '), line = '';
+                for (var wi = 0; wi < words.length && lines.length < 7; wi++) {
+                    var test = line ? line + ' ' + words[wi] : words[wi];
+                    if (ctx.measureText(test).width > 250 && line) {
+                        lines.push(line); line = words[wi];
+                    } else line = test;
+                }
+                if (line && lines.length < 7) lines.push(line);
+                else if (lines.length >= 7) lines[6] += '…';
+            }
         }
         ctx.font = '11px ' + TK.mono;
         var tw = 0;
         lines.forEach(function (s) { tw = Math.max(tw, ctx.measureText(s).width); });
-        var tx = Math.min(mouse.x + 14, W - tw - 18), ty = mouse.y + 6;
-        ctx.globalAlpha = 0.92;
+        var th = lines.length * 14 + 10;
+        var tx = Math.min(mouse.x + 14, W - tw - 18);
+        var ty = Math.min(mouse.y + 6, H - th - 8);
+        ctx.globalAlpha = 0.94;
         ctx.fillStyle = TK.surface;
         ctx.strokeStyle = TK.hair;
         ctx.beginPath();
-        ctx.roundRect(tx - 7, ty - 15, tw + 14, lines.length * 15 + 10, 6);
+        ctx.roundRect(tx - 7, ty - 13, tw + 14, th, 6);
         ctx.fill(); ctx.stroke();
         ctx.globalAlpha = 1;
         ctx.textAlign = 'start';
         lines.forEach(function (s, li) {
-            ctx.fillStyle = li ? TK.soft : TK.text;
-            ctx.fillText(s, tx, ty + li * 15);
+            ctx.font = (li >= cardFrom ? '10.5px ' : (li ? '10.5px ' : '600 11px ')) + TK.mono;
+            ctx.fillStyle = li === 0 ? TK.text : (li < cardFrom ? TK.soft : TK.muted);
+            ctx.fillText(s, tx, ty + li * 14);
         });
     }
     frame._pts = pts;
@@ -1016,6 +1095,7 @@ function renderCrumbs() {
         a.onclick = function () {
             trail = trail.slice(0, i + 1);
             if (t.mode === 'overview') showOverview();
+            else if (t.mode === 'all') showAll();
             else if (t.mode === 'group') showGroup(t.arg, false);
             else showEgo(t.arg, false);
         };
@@ -1138,6 +1218,35 @@ function buildPanel() {
             kb.appendChild(lab);
         });
     }
+    /* разделы arXiv из данных — фильтр «через статьи» */
+    var cb2 = el('b42g-cats');
+    if (cb2) {
+        var cats = {};
+        G.nodes.forEach(function (nn) {
+            if (nn.cat) cats[nn.cat] = (cats[nn.cat] || 0) + 1;
+        });
+        Object.keys(cats).sort(function (a, b) { return cats[b] - cats[a]; })
+            .forEach(function (cname) {
+                var lab = document.createElement('label');
+                lab.className = 'b42g-check';
+                var cb = document.createElement('input');
+                cb.type = 'checkbox'; cb.checked = true;
+                cb.onchange = function () {
+                    if (catOn === null) catOn = new Set(Object.keys(cats));
+                    if (cb.checked) catOn.add(cname); else catOn.delete(cname);
+                    if (catOn.size === Object.keys(cats).length) catOn = null;
+                    sim.alive = Math.max(sim.alive, 100);
+                    renderStats();
+                };
+                lab.appendChild(cb);
+                var sp2 = document.createElement('span');
+                sp2.textContent = cname + ' · ' + cats[cname];
+                lab.appendChild(sp2);
+                cb2.appendChild(lab);
+            });
+    }
+    var allBtn = el('b42g-all');
+    if (allBtn) allBtn.onclick = function () { stopDemo(); showAll(); };
     var gb = el('b42g-groups');
     if (gb) {
         var all = document.createElement('button');

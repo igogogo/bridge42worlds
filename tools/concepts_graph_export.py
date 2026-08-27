@@ -84,6 +84,22 @@ def main():
                              or m.replace("_", " "))
         return " · ".join(names) or str(gid)
 
+    # раздел arXiv узла — по статьям (владелец 27.08: «через статьи смотреть
+    # на граф, фильтровать разделами») — верхнеуровневый архивный префикс
+    idx_p = ROOT / "lang" / "ru" / "articles-index.json"
+    art_cat = {}
+    if idx_p.exists():
+        for a in json.loads(idx_p.read_text(encoding="utf-8")):
+            c = (a.get("primary_category") or "").split(".")[0]
+            if c:
+                art_cat[a["id"]] = c
+                art_cat[a["id"].split("v")[0]] = c
+
+    def top_cat(v):
+        cnt = Counter(art_cat.get(a) for a in v.get("articles") or [])
+        cnt.pop(None, None)
+        return cnt.most_common(1)[0][0] if cnt else None
+
     nodes = []
     for cid in cids:
         v = live[cid]
@@ -94,7 +110,36 @@ def main():
             "kind": v.get("kind") or "concept",
             "g": group_of(cid),
             "n": len(v.get("articles") or []),
+            # карточка в тултип — «наведись и учись» (обрезка до предложения)
+            "card": (v.get("card_en") or "")[:220],
+            "cat": top_cat(v),
         })
+
+    # ФОРМУЛЫ — узлами (владелец: «формулы тут должны появиться, всё в блоке»):
+    # 642 основных формы, связь формула→понятие с весом = применениям
+    fml_p = ROOT.parent / "b42-ml" / "data" / "formulas-linked.json"
+    if fml_p.exists():
+        bases = json.loads(fml_p.read_text(encoding="utf-8"))["bases"]
+        for b in bases:
+            fi = len(nodes)
+            fname = b.get("name") or b["base_id"].replace("_", " ")
+            fcat, fg = None, None
+            for c in (b.get("concepts") or []):
+                if c["concept"] in idx:
+                    ci = idx[c["concept"]]
+                    fg = nodes[ci]["g"] if fg is None else fg
+                    fcat = nodes[ci]["cat"] if fcat is None else fcat
+            nodes.append({
+                "id": "f:" + b["base_id"], "en": fname, "ru": "",
+                "kind": "formula", "g": fg,
+                "n": len(b.get("applications") or []),
+                "card": (b.get("latex") or "")[:120],
+                "cat": fcat,
+            })
+            for c in (b.get("concepts") or [])[:4]:
+                if c["concept"] in idx:
+                    edges.append([idx[c["concept"]], fi,
+                                  1 + len(b.get("applications") or [])])
     groups = [{"id": g, "label_en": label(g, "en"), "label_ru": label(g, "ru"),
                "members": [idx[m] for m in groups_raw[g] if m in idx]}
               for g in gids]
