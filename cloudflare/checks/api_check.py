@@ -102,6 +102,12 @@ CASES = [
     ("одна формула", "/api/formula?id=thermal_conductivity_kinetic_theory",
      lambda d, L: (bool(d.get("formula", {}).get("latex")),
                    (d.get("formula", {}).get("latex") or "")[:38])),
+    ("список статей понятия", "/api/list?kind=concept&key=black_hole&lang=ru&version=popular&limit=3",
+     lambda d, L: (len(d.get("items") or []) == 3,
+                   (d.get("items") or [{}])[0].get("title", "")[:34])),
+    ("список ru vs en", "/api/list?kind=concept&key=black_hole&lang=en&version=popular&limit=2",
+     lambda d, L: (len(d.get("items") or []) > 0,
+                   (d.get("items") or [{}])[0].get("title", "")[:34])),
     # старое — не сломали ли
     ("СТАРОЕ: лента", "/api/feed?lang=ru&version=popular&limit=3",
      lambda d, L: (len(d.get("items") or []) == 3, "лента жива")),
