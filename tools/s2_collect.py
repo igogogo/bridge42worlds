@@ -50,6 +50,10 @@ GRAPH_FIELDS = "externalIds,title,citationCount,year"
 # запрос, повторённый через три секунды, проходит с первого раза. Значит счётчик
 # у них скользящий и секунды ему мало — платим тремя и идём без единого отказа.
 PAUSE = 3.0
+# Пачка в 500 статей с полными полями весит под два мегабайта, и их шлюз отвечает
+# на такой запрос 504. Двести проходят за тринадцать секунд — берём полтораста
+# с запасом; если и это не пролезет, ask_batch разделит пачку сам.
+BATCH_CHUNK = 150
 
 
 def key():
@@ -107,22 +111,43 @@ def log(m):
     print(f"[{time.strftime('%H:%M:%S')}] {m}", flush=True)
 
 
+def ask_batch(chunk, k, depth=0):
+    """Одна пачка. Не пролезла целиком — делим пополам, а не бросаем.
+
+    Пятьсот статей с полными полями — это мегабайты, и их шлюз отвечает на такой
+    запрос 504 Gateway Timeout. Раньше это лечилось повтором: тот же запрос уходил
+    снова и снова получал тот же таймаут, пока не кончались попытки, — и пачка на
+    пятьсот статей терялась целиком. Двести проходят за тринадцать секунд, поэтому
+    отказ теперь означает «спроси меньше».
+    """
+    d = req(f"https://api.semanticscholar.org/graph/v1/paper/batch?fields={BATCH_FIELDS}",
+            {"ids": [f"ARXIV:{i.split('v')[0]}" for i in chunk]}, k)
+    if d is not None:
+        return dict(zip(chunk, d))
+    if len(chunk) <= 25 or depth >= 4:
+        log(f"  пачка из {len(chunk)} не далась даже дроблением — пропускаю")
+        return {}
+    half = len(chunk) // 2
+    log(f"  пачка {len(chunk)} не прошла — делим на {half} и {len(chunk) - half}")
+    out = {}
+    for part in (chunk[:half], chunk[half:]):
+        time.sleep(PAUSE)
+        out.update(ask_batch(part, k, depth + 1))
+    return out
+
+
 def batch_pass(ids, k):
     papers = json.loads(PAPERS.read_text(encoding="utf-8")) if PAPERS.exists() else {}
     # и перезапросить уже собранных без расширенных полей (сбор расширялся 27.08)
     todo = [i for i in ids
             if i not in papers or (papers[i] is not None and "abstract" not in papers[i])]
-    log(f"пакетный проход: {len(todo)} статей")
-    for s in range(0, len(todo), 500):
-        chunk = todo[s:s + 500]
-        body = {"ids": [f"ARXIV:{i.split('v')[0]}" for i in chunk]}
-        d = req(f"https://api.semanticscholar.org/graph/v1/paper/batch?fields={BATCH_FIELDS}",
-                body, k)
-        if d is None:
-            log(f"  пачка {s}: пусто, пропускаю")
-            continue
-        for aid, rec in zip(chunk, d):
-            papers[aid] = rec          # None = S2 работу не знает; помним, чтобы не спрашивать
+    log(f"пакетный проход: {len(todo)} статей по {BATCH_CHUNK}")
+    for s in range(0, len(todo), BATCH_CHUNK):
+        chunk = todo[s:s + BATCH_CHUNK]
+        got = ask_batch(chunk, k)
+        for aid in chunk:
+            if aid in got:
+                papers[aid] = got[aid]   # None = S2 работу не знает; помним и не спрашиваем
         PAPERS.write_text(json.dumps(papers, ensure_ascii=False), encoding="utf-8")
         known = sum(1 for v in papers.values() if v)
         log(f"  собрано {len(papers)}/{len(ids)} (в S2 найдено {known})")
