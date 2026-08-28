@@ -2020,9 +2020,18 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
     _mini_ids += [f"f:{b}" for b in formulas_of_article(article["id"])][:4]
     article_graph_html = ""
     if len(_mini_ids) >= 2:
+        # Ссылка «весь граф» уносит НАБОР СТАТЬИ, а не бросает на обзор групп:
+        # человек смотрел окружение этой работы — оно и должно раскрыться во весь
+        # экран (владелец 28.08: «когда переходим в граф с карточки понятия или
+        # статьи, надо отталкиваться от того набора, который задан статьёй»).
+        _gurl = (f'/{LANG_DIR}/{lang}/concepts/graph.html?set='
+                 + attr_safe(",".join(_mini_ids)))
+        _glbl = {"ru": "Весь граф", "en": "Whole graph", "es": "Todo el grafo",
+                 "ar": "الرسم كاملاً", "fr": "Le graphe entier"}.get(lang, "Whole graph")
         article_graph_html = (
             f'<div id="article-graph" class="b42mini" '
-            f'data-ids="{attr_safe(",".join(_mini_ids))}"></div>')
+            f'data-ids="{attr_safe(",".join(_mini_ids))}"></div>'
+            f'<div class="b42mini-note"><a href="{_gurl}">{_glbl} &rarr;</a></div>')
 
     # Пункты левого меню-навигатора, актуальные на ЛЮБОМ режиме (не только advanced) —
     # разделы статьи (context/methods/...) добавляются ниже отдельно, только когда они есть.

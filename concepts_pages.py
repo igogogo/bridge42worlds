@@ -610,7 +610,10 @@ def concept_page(cid, c, lang, live, by_id, rich=None, page_langs=None):
         body.append(
             f'<div class="b42mini" data-ids="{H.escape(",".join(_mini))}" '
             f'data-focus="{H.escape(cid)}"></div>'
-            f'<div class="b42mini-note"><a href="/lang/{lang}/concepts/graph.html">'
+            # ссылка ведёт в граф С ФОКУСОМ на этом понятии: человек смотрел его
+            # окружение — оно и должно открыться, а не карта из пятидесяти кругов
+            f'<div class="b42mini-note">'
+            f'<a href="/lang/{lang}/concepts/graph.html?focus={H.escape(cid)}">'
             f'{GT["title"]} &rarr;</a></div>')
     if c["related"]:
         chips = "".join(
