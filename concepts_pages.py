@@ -915,10 +915,20 @@ def concept_page(cid, c, lang, live, by_id, rich=None, page_langs=None):
             # ничего о самой формуле. Владелец 28.08: «там, где формулы пишешь,
             # обязательно расшифровка всех переменных, операторов и констант и
             # значения констант там же, а то просто формула и всё».
-            sym = symbol_rows(anatomy().get(f["id"]), lang, live)
+            an = anatomy().get(f["id"]) or {}
+            sym = symbol_rows(an, lang, live)
+            # Подпись формулы — на языке страницы, если перевод есть. Реестр несёт
+            # английскую строку, а перевод лежит в анатомии (cards_translate_ru
+            # --formulas, все 642 сделаны) — и страница всё равно показывала
+            # английский: смотрели не туда.
+            cap = ((an.get(lang) or {}).get("card")
+                   or (an.get(lang) or {}).get("description")
+                   or f["card"])
+            cap_lang = lang if cap is not f["card"] else "en"
             rows.append(f'<div class="formula" style="margin-bottom:14px">'
                         f'<div style="font-family:var(--mono)">$${H.escape(f["latex"])}$$</div>'
-                        f'<div style="font-size:13.5px;color:var(--soft)" lang="en">{H.escape(f["card"])}</div>'
+                        f'<div style="font-size:13.5px;color:var(--soft)" '
+                        f'lang="{cap_lang}">{H.escape(cap)}</div>'
                         f'{sym}{apps}</div>')
         body.append(f'<h2 style="font-size:16px;margin:14px 0 8px">{t["formulas"]}</h2>' + "".join(rows))
     # ДЕЙСТВИЯ И ОТКЛИК — те же функции, что у статьи и старых справочников
