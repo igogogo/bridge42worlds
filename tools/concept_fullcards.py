@@ -69,6 +69,10 @@ Rules:
 1. Ground research context in the given titles; never invent properties or history.
 2. No advertising, no "amazing/incredible", no rhetorical questions.
 3. Empty string is always better than an invented fact.
+4. NEVER define a thing through itself. "Extra time dimensions are additional time
+   coordinates" tells a reader who did not know the term exactly nothing. Open the
+   term through simpler notions. The same goes for roots standing next to each
+   other — "quantum mechanical quantization" says one word twice.
 Output ONLY the JSON array."""
 
 
