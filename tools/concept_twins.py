@@ -274,14 +274,30 @@ def main():
 
     doc = json.loads(LIVE.read_text(encoding="utf-8"))
     live = doc["concepts"]
+    # Совпасть могут и русские имена, и английские — и то, и другое читатель видит
+    # на своей версии страницы. По-английски таких пар мало («hubble space telescope»
+    # у телескопа и у сокращённого «hubble»), но пропускать их незачем: разбирает
+    # их тот же судья.
     by = defaultdict(list)
     for cid, v in live.items():
         if v.get("merged_into"):
             continue
-        nm = (v.get("names") or {}).get("ru")
-        if nm:
-            by[nm].append(cid)
-    twins = [(nm, ids) for nm, ids in by.items() if len(ids) > 1]
+        names = v.get("names") or {}
+        for key in (names.get("ru"),
+                    (names.get("en") or cid.replace("_", " ")).strip().lower()):
+            if key:
+                by[key].append(cid)
+    seen_pairs = set()
+    twins = []
+    for nm, ids in by.items():
+        if len(ids) < 2:
+            continue
+        # одна и та же пара может прийти дважды — по русскому имени и по английскому
+        sig = tuple(sorted(ids))
+        if sig in seen_pairs:
+            continue
+        seen_pairs.add(sig)
+        twins.append((nm, ids))
     twins.sort(key=lambda t: -sum(len(live[c].get("articles") or []) for c in t[1]))
     if a.limit:
         twins = twins[:a.limit]
