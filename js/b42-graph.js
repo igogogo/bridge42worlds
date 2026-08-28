@@ -1180,7 +1180,34 @@ function renderCrumbs() {
 function renderInfo() {
     var box = el('b42g-info');
     if (!box) return;
-    if (selI < 0 || frame.mode === 'overview' || !frame.nodes[selI]) {
+    /* На обзоре под курсором — не узел, а ОБЛАСТЬ, и панель должна объяснять
+       именно её: название и строку «о чём это». Раньше здесь всегда висела
+       подсказка про клик и зум, а круги оставались молчаливыми — владелец 28.08:
+       «название группы мне ни о чём не говорит, а у нас с этого начинается граф
+       знаний». */
+    if (frame.mode === 'overview') {
+        var gi = -1;
+        if (hoverI >= 0 && frame.nodes[hoverI]) gi = frame.nodes[hoverI].gi;
+        else if (selI >= 0 && frame.nodes[selI]) gi = frame.nodes[selI].gi;
+        var gg = gi >= 0 ? G.groups[gi] : null;
+        if (gg) {
+            var note = (RU && gg.note_ru) ? gg.note_ru : (gg.note_en || '');
+            box.innerHTML =
+                '<div class="b42g-sel"><b>' + groupLabel(gg) + '</b></div>' +
+                '<div class="b42g-dim">' + gg.members.length +
+                (RU ? ' понятий' : ' concepts') + '</div>' +
+                (note ? '<div class="b42g-note">' + note + '</div>' : '') +
+                '<div class="b42g-dim">' +
+                (RU ? 'двойной клик — войти в область' : 'double-click to enter') +
+                '</div>';
+            return;
+        }
+        box.innerHTML = '<div class="b42g-dim">' +
+            (RU ? 'наведи на круг — что это за область · двойной клик — внутрь'
+                : 'hover a circle to see the area · double-click to enter') + '</div>';
+        return;
+    }
+    if (selI < 0 || !frame.nodes[selI]) {
         box.innerHTML = '<div class="b42g-dim">' +
             (RU ? 'клик — выбрать · двойной — вглубь · колесо — зум'
                 : 'click — select · dbl-click — drill · wheel — zoom') + '</div>';

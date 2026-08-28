@@ -127,6 +127,39 @@ def main():
         edges.sort(key=lambda e: (e[0], e[1]))
         print(f"  смысловых рёбер для понятий без статей: {added}")
 
+    # СВЯЗИ ПО ЗНАНИЮ (tools/link_weaving.py). Третий источник рядом со статьями
+    # и вектором: закон и его константа связаны не потому, что встретились в
+    # одной работе, а потому, что одна входит в другую. Владелец 28.08: «как ты
+    # установишь связь между законом и константой… это работа твоя как
+    # интеллекта, а не только что есть в статьях».
+    # Вес 1..3 — по силе связи; тип (part_of, case_of, follows…) едет четвёртым
+    # элементом ребра: клиент читает первые три и лишнего не замечает, а панель
+    # сможет показать, ЧЕМ связаны.
+    know = 0
+    kn_p = ROOT / "data" / "concept-links-knowledge.json"
+    if kn_p.exists():
+        try:
+            kn = json.loads(kn_p.read_text(encoding="utf-8"))
+        except Exception:
+            kn = {}
+        for cid, links in kn.items():
+            i = idx.get(cid)
+            if i is None:
+                continue
+            for lk in links:
+                j = idx.get(lk.get("to"))
+                if j is None or j == i:
+                    continue
+                pair = (min(i, j), max(i, j))
+                if pair in keep:
+                    continue
+                keep.add(pair)
+                edges.append([pair[0], pair[1], int(lk.get("w") or 2),
+                              lk.get("rel") or "same_area"])
+                know += 1
+        if know:
+            print(f"  связей по знанию: {know}")
+
     # группы: членство из supers (первая группа понятия)
     gids = sorted(groups_raw, key=lambda g: -len(groups_raw[g]))
     gindex = {g: i for i, g in enumerate(gids)}
@@ -135,7 +168,22 @@ def main():
         sups = live[cid].get("supers") or []
         return gindex.get(str(sups[0])) if sups else None
 
-    def label(gid, lang):
+    # НАЗВАНИЯ ГРУПП — человеческие, из data/group-names.json (tools/group_names.py).
+    # Раньше подписью служила склейка трёх участников — «течение жидкости ·
+    # гидродинамика · поверхностное натяжение». Это не название, а первые строки
+    # списка: по нему нельзя понять ни чем область занимается, ни чем отличается
+    # от соседней, а с обзора групп начинается весь граф знаний (владелец 28.08:
+    # «название группы мне ни о чём не говорит»). Склейка остаётся запасным
+    # вариантом — на случай, если группу ещё не назвали.
+    gnames = {}
+    gn_p = ROOT / "data" / "group-names.json"
+    if gn_p.exists():
+        try:
+            gnames = json.loads(gn_p.read_text(encoding="utf-8"))
+        except Exception:
+            gnames = {}
+
+    def members_label(gid, lang):
         members = sorted(groups_raw[gid],
                          key=lambda m: -len(live.get(m, {}).get("articles", [])))
         names = []
@@ -146,6 +194,14 @@ def main():
                              or (v.get("names") or {}).get("en")
                              or m.replace("_", " "))
         return " · ".join(names) or str(gid)
+
+    def label(gid, lang):
+        g = gnames.get(str(gid)) or {}
+        return g.get(f"name_{lang}") or g.get("name_en") or members_label(gid, lang)
+
+    def note(gid, lang):
+        g = gnames.get(str(gid)) or {}
+        return g.get(f"note_{lang}") or g.get("note_en") or ""
 
     # раздел arXiv узла — по статьям (владелец 27.08: «через статьи смотреть
     # на граф, фильтровать разделами») — верхнеуровневый архивный префикс
@@ -203,7 +259,10 @@ def main():
                 if c["concept"] in idx:
                     edges.append([idx[c["concept"]], fi,
                                   1 + len(b.get("applications") or [])])
+    # note_* — строка «о чём эта область»: панель графа показывает её под
+    # названием, чтобы круг на обзоре объяснял себя сам.
     groups = [{"id": g, "label_en": label(g, "en"), "label_ru": label(g, "ru"),
+               "note_en": note(g, "en"), "note_ru": note(g, "ru"),
                "members": [idx[m] for m in groups_raw[g] if m in idx]}
               for g in gids]
 
