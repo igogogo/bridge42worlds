@@ -833,10 +833,13 @@ def concept_page(cid, c, lang, live, by_id, rich=None, page_langs=None):
             # гравитация» — не по-русски, а падежи под семь отношений и пять
             # языков подгонять незачем. Стрелка читается как подпись связи и
             # заодно показывает направление, которое здесь существенно.
+            # В арабском строка идёт справа налево, и «вперёд» там — влево:
+            # стрелка вправо указывала бы назад, к тому, от чего связь идёт.
+            _arr = "&larr;" if lang == "ar" else "&rarr;"
             rows.append(f'<span style="white-space:nowrap">'
                         f'<span style="font-family:var(--mono);font-size:11px;'
                         f'color:var(--muted)">{H.escape(kt.get(lk.get("rel"), ""))} '
-                        f'&rarr;</span> '
+                        f'{_arr}</span> '
                         f'<a href="/lang/{lang}/concepts/{H.escape(to)}.html">'
                         f'{H.escape(nm)}</a></span>')
         if rows:
