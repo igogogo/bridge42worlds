@@ -82,8 +82,20 @@ def main():
     if not apply:
         print("\nсухой ход. записать: --apply")
         return 0
-    OUT.write_text(json.dumps(out, ensure_ascii=False), encoding="utf-8")
-    print(f"→ {OUT.name}: {len(out)} записей")
+    # ДОПОЛНЯЕМ, а не перезаписываем. Прогон видит только тех, кто одинок ПРЯМО
+    # СЕЙЧАС, и это зависит от того, когда его запустили: 28.08 он попал между
+    # пересчётом связности и сборкой реестра, нашёл пятерых — и затёр тысячу с
+    # лишним записей, посчитанных до того. Файл здесь — копилка, как и всюду в
+    # доме, а не снимок последнего прогона.
+    old = {}
+    if OUT.exists():
+        try:
+            old = json.loads(OUT.read_text(encoding="utf-8"))
+        except Exception:
+            old = {}
+    old.update(out)
+    OUT.write_text(json.dumps(old, ensure_ascii=False), encoding="utf-8")
+    print(f"→ {OUT.name}: +{len(out)} записей, всего {len(old)}")
     return 0
 
 
