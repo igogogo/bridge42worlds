@@ -22,6 +22,12 @@ python tools/days_state.py --days "$DAYS" --current html >/dev/null 2>&1
 # B42_ONLY_NEW: правка генератора не тянет за собой сорок тысяч страниц. Полная
 # пересборка — дело служебного прогона (tools/weekly_run.py), и она объявлена.
 B42_LANGS=ru,en B42_NO_PUBLISH=1 B42_ONLY_NEW=1 python run.py html
+# Карточки статей в облачную базу: страница статьи уезжает статикой в R2, а ЛЕНТА
+# собирается из D1. Без этого шага статья открывается по прямой ссылке, но в ленте
+# её нет — 28.08 так и вышло, и выглядело это как «динамика не работает».
+echo "═══ карточки в облако ═══"
+python cloudflare/cards_sync.py --apply
+
 echo "═══ выкладка ═══"
 python tools/days_state.py --days "$DAYS" --current publish >/dev/null 2>&1
 python run.py publish
