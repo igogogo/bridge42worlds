@@ -39,6 +39,7 @@ from common import write_json_atomic  # noqa: E402
 
 LIVE = ROOT / "data" / "concepts-live.json"
 KNOW = ROOT / "data" / "concept-links-knowledge.json"
+RETAG = ROOT / "data" / "articles-retag-v2.json"
 # По восемь групп в запросе модель отвечала на четыре и молча теряла остальные —
 # ответ обрывался, а не ошибался. Четыре умещаются целиком.
 PER_CALL = 4
@@ -175,7 +176,7 @@ def retarget(live):
     """
     m = {c: v["merged_into"] for c, v in live.items() if v.get("merged_into")}
     if not m:
-        return 0, 0
+        return 0, 0, 0
     n_rel = 0
     for cid, v in live.items():
         if v.get("merged_into"):
@@ -192,6 +193,33 @@ def retarget(live):
             rel.append(r)
             seen.add(tgt)
         v["related"] = rel
+
+    # Разметка статей: она ссылается на понятия по идентификатору, и после слияния
+    # 253 статьи вели плашкой на указатель. Переадресация это вытянет, но плашка
+    # должна вести прямо — лишний прыжок виден и человеку, и поисковику.
+    n_art = 0
+    if RETAG.exists():
+        try:
+            rt = json.loads(RETAG.read_text(encoding="utf-8"))
+        except Exception:
+            rt = None
+        if isinstance(rt, dict):
+            box = rt.get("articles") if isinstance(rt.get("articles"), dict) else rt
+            for aid, ids in box.items():
+                if not isinstance(ids, list):
+                    continue
+                new, seen_i = [], set()
+                for i in ids:
+                    t = m.get(i, i)
+                    if t in seen_i:
+                        n_art += 1
+                        continue
+                    if t != i:
+                        n_art += 1
+                    new.append(t)
+                    seen_i.add(t)
+                box[aid] = new
+            RETAG.write_text(json.dumps(rt, ensure_ascii=False), encoding="utf-8")
 
     n_kn = 0
     if KNOW.exists():
@@ -216,7 +244,7 @@ def retarget(live):
                 seen_l.add((tgt, lk.get("rel")))
         KNOW.write_text(json.dumps({k: v for k, v in out.items() if v},
                                    ensure_ascii=False, indent=1), encoding="utf-8")
-    return n_rel, n_kn
+    return n_rel, n_kn, n_art
 
 
 def merge(keep, drop, live):
@@ -326,9 +354,10 @@ def main():
         print("проба. применить: --apply")
         return 0
 
-    n_rel, n_kn = retarget(live)
-    if n_rel or n_kn:
-        print(f"связей переведено на победителей: {n_rel} у соседей, {n_kn} по знанию")
+    n_rel, n_kn, n_art = retarget(live)
+    if n_rel or n_kn or n_art:
+        print(f"переведено на победителей: {n_rel} у соседей, "
+              f"{n_kn} по знанию, {n_art} в разметке статей")
     write_json_atomic(LIVE, doc, indent=None)
     print(f"→ {LIVE.name} обновлён")
     return 0
