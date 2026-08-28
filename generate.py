@@ -4455,6 +4455,25 @@ def generate_status_page():
     km_html = ""
     marked = anchors_en = anchors_ru = with_fml = 0
     concepts_sum = 0
+    # Полные статьи без единой картинки: ни кадра из PDF, ни нарисованной обложки.
+    # Считаем по файлам, а не по флагу в индексе: флаг ставится при сборке и мог
+    # отстать от диска — а на дашборде нужна правда о том, что лежит сейчас.
+    full_total = full_nocover = 0
+    try:
+        for _p in Path(LANG_DIR, DEFAULT_LANG, "archive").glob("*/*/data.json"):
+            try:
+                _d = json.loads(_p.read_text(encoding="utf-8"))
+            except Exception:
+                continue
+            if _d.get("express"):
+                continue
+            full_total += 1
+            _dd = _p.parent
+            if not (list(_dd.glob("[0-9]*.webp")) or (_dd / "ai.webp").exists()
+                    or (_dd / "ai.jpg").exists()):
+                full_nocover += 1
+    except Exception:
+        pass
     try:
         _mj = {}
         mp = Path("data/concept-mentions.jsonl")
@@ -4512,6 +4531,12 @@ def generate_status_page():
             + bar("Articles with anchors in Russian text", anchors_ru, total)
             + bar("Articles with formulas in the cloud", with_fml, total)
             + bar("Articles known to Semantic Scholar", s2n, total)
+            # ПОЛНЫЕ СТАТЬИ БЕЗ ОБЛОЖКИ — строкой проблемы, а не молча. Владелец
+            # 28.08 наткнулся на такую статью глазами: значок машины знаний есть,
+            # а картинки нет. Экспрессы сюда не считаем — им дорогие обложки не
+            # рисуем намеренно (covers_full.py), это решение, а не пробел.
+            + bar("Full articles WITH cover (rest need covers_full.py)",
+                  full_total - full_nocover, full_total)
             + "</table>")
     if Path("data/concepts-live.json").exists():
         _lc = json.loads(Path("data/concepts-live.json").read_text(encoding="utf-8"))["concepts"]

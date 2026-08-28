@@ -97,37 +97,68 @@ function init(box, G) {
         nd.size = (nd.center ? 11 : 8) * scale;
     });
 
-    /* стартовая раскладка: фокус в центре, остальные кольцом */
+    /* стартовая раскладка: фокус в центре, остальные ЭЛЛИПСОМ по форме холста.
+       Кольцо давало круг, а холст широкий: круг вписывался по высоте, и справа
+       со слева оставались пустые поля (владелец 28.08: «по ширине не
+       используется место»). Эллипс сразу кладёт узлы туда, где место есть. */
     var R0 = 60;
     nodes.forEach(function (nd, i) {
         if (nd.center) { nd.x = 0; nd.y = 0; return; }
         var a = (i / nodes.length) * Math.PI * 2;
-        nd.x = Math.cos(a) * R0; nd.y = Math.sin(a) * R0;
+        nd.x = Math.cos(a) * R0 * 1.7; nd.y = Math.sin(a) * R0;
     });
 
     var hover = -1, alive = 260, mouse = {}, cam = {z: 1, px: 0, py: 0};
+    var dragNode = -1, dragMoved = false;
+
+    /* Простор: во сколько раз раскладка шире базовой. Раньше расстояния между
+       узлами были заданы в абсолютных единицах, а под ширину подгонялась только
+       камера — и упиралась в потолок увеличения. На широкой колонке граф
+       собирался кучкой в середине, а по бокам оставалось пустое поле (владелец
+       28.08: «по ширине не используется место»). Теперь при большей ширине
+       растут сами пружины, и граф расправляется, а не растягивается зумом. */
+    var spread = 1;
+    /* Насколько холст шире, чем высок (см. resize). */
+    var aniso = 1;
 
     function resize() {
         var w = box.clientWidth || 640;
-        var h = w < 420 ? 190 : (w < 700 ? 220 : 260);
+        /* высота от ширины, а не тремя ступеньками: на широкой колонке графу
+           нужно и по вертикали больше места, иначе он снова сплющится */
+        var h = Math.round(Math.max(190, Math.min(w * 0.52, 420)));
         canvas.width = w * devicePixelRatio;
         canvas.height = h * devicePixelRatio;
         canvas.style.width = w + 'px';
         canvas.style.height = h + 'px';
-        alive = Math.max(alive, 120);
+        spread = Math.max(1, Math.min(2.4, w / 430));
+        /* Берём отношение сторон целиком, а не его корень: с корнем облако
+           расправлялось лишь до 62% ширины при 78% высоты — форма всё ещё
+           не повторяла холст. Потолок 2.2 удерживает от полосы в один ряд. */
+        aniso = Math.max(1, Math.min(2.2, w / h));
+        alive = Math.max(alive, 160);
     }
     window.addEventListener('resize', resize);
+    /* Ширину меняет не только окно: колонка сужается сама — вкладки, раскрытые
+       блоки, боковая панель. ResizeObserver ловит это, слушатель окна — нет. */
+    if (window.ResizeObserver) {
+        var _ro = new ResizeObserver(function () { resize(); });
+        _ro.observe(box);
+    }
     resize();
 
     function tick() {
         if (alive <= 0) return;
         alive--;
         var i, j, N = nodes.length;
+        /* Отталкивание растёт как КВАДРАТ простора, натяжение — линейно: так
+           равновесие между ними наступает на большем расстоянии, и рисунок
+           расправляется ровно во столько раз, во сколько шире колонка. */
+        var rep = 2600 * spread * spread, len = 76 * spread;
         for (i = 0; i < N; i++) {
             for (j = i + 1; j < N; j++) {
                 var dx = nodes[j].x - nodes[i].x, dy = nodes[j].y - nodes[i].y;
                 var d2 = dx * dx + dy * dy + 30;
-                var f = 2600 / d2, d = Math.sqrt(d2);
+                var f = rep / d2, d = Math.sqrt(d2);
                 dx /= d; dy /= d;
                 nodes[i].vx -= dx * f; nodes[i].vy -= dy * f;
                 nodes[j].vx += dx * f; nodes[j].vy += dy * f;
@@ -137,8 +168,8 @@ function init(box, G) {
             var a = nodes[e[0]], b = nodes[e[1]];
             var dx = b.x - a.x, dy = b.y - a.y;
             var d = Math.sqrt(dx * dx + dy * dy) + 0.01;
-            var target = 76 / (1 + Math.log(1 + e[2]) * 0.4);
-            var f = (d - target) * 0.0012 * Math.min(d, 200);
+            var target = len / (1 + Math.log(1 + e[2]) * 0.4);
+            var f = (d - target) * 0.0012 * Math.min(d, 200 * spread);
             if (f > 6) f = 6; else if (f < -6) f = -6;
             dx /= d; dy /= d;
             a.vx += dx * f; a.vy += dy * f;
@@ -147,16 +178,27 @@ function init(box, G) {
         var tot = 0;
         for (i = 0; i < N; i++) {
             var nd = nodes[i];
-            /* фокус держим у центра — картинка «с точки зрения статьи/понятия» */
-            var pull = nd.center ? 0.06 : 0.0022;
-            nd.vx = (nd.vx - nd.x * pull) * 0.84;
-            nd.vy = (nd.vy - nd.y * pull) * 0.84;
+            if (i === dragNode) continue;      // узел в руке — его ведёт мышь
+            /* фокус держим у центра — картинка «с точки зрения статьи/понятия».
+               Возврат к центру слабеет с простором: иначе широкая колонка снова
+               стягивала бы всё в середину, сколько ни расталкивай. */
+            var pull = (nd.center ? 0.06 : 0.0022) / spread;
+            /* Возврат к центру РАЗНЫЙ по осям: вдоль широкой стороны холста он
+               слабее, поперёк — сильнее. Иначе облако растёт кругом и упирается
+               в высоту задолго до того, как займёт ширину: замер до правки —
+               81% высоты и 32% ширины. Форма облака теперь повторяет форму
+               места, которое ему дали. */
+            nd.vx = (nd.vx - nd.x * pull / aniso) * 0.84;
+            nd.vy = (nd.vy - nd.y * pull * aniso) * 0.84;
             var sp = Math.hypot(nd.vx, nd.vy);
             if (sp > 18) { nd.vx *= 18 / sp; nd.vy *= 18 / sp; }
             nd.x += nd.vx; nd.y += nd.vy;
             tot += sp;
         }
-        if (tot / N < 0.05) alive = Math.min(alive, 4);
+        /* Засыпаем, только когда рисунок и правда встал И его никто не держит.
+           Пока узел в руке, физика живёт — иначе соседи не поедут следом и
+           «резинки» не будет. */
+        if (dragNode < 0 && tot / N < 0.05) alive = Math.min(alive, 4);
         fit();
     }
 
@@ -172,7 +214,11 @@ function init(box, G) {
         var pad = w < 420 ? 74 : 62;    // поле под подписи снизу и по бокам
         var z = Math.min((w - pad) / Math.max(60, maxX - minX),
                          (h - pad) / Math.max(60, maxY - minY));
-        cam.z += (Math.max(0.3, Math.min(1.6, z)) - cam.z) * 0.12;
+        /* Потолок увеличения был 1.6 — на широкой колонке камера упиралась в
+           него и оставляла поля пустыми даже там, где рисунок мог заполнить всё.
+           Раскладка теперь расправляется сама, а потолок поднят на всякий
+           случай: маленькому графу из трёх узлов тоже незачем жаться. */
+        cam.z += (Math.max(0.3, Math.min(2.6, z)) - cam.z) * 0.12;
         cam.px += (-(minX + maxX) / 2 - cam.px) * 0.12;
         cam.py += (-(minY + maxY) / 2 - cam.py) * 0.12;
     }
@@ -284,13 +330,54 @@ function init(box, G) {
         });
         return best;
     }
+    /* Экран → мир: обратная к P(). Нужна перетаскиванию — узел должен оказаться
+       ровно под курсором при любом текущем увеличении. */
+    function toWorld(mx, my) {
+        var w = canvas.width / devicePixelRatio, h = canvas.height / devicePixelRatio;
+        return [(mx - w / 2) / cam.z - cam.px, (my - h / 2) / cam.z - cam.py];
+    }
+
+    /* РЕЗИНОВОЕ ПЕРЕТАСКИВАНИЕ — тот же приём, что в большом графе (b42-graph.js):
+       узел следует за рукой, пружины тащат соседей. Владелец 28.08: «этот
+       мини-граф не динамический, его нельзя тянуть — а может сделать его тоже
+       живым». Клик по узлу при этом сохраняется: переходом считаем только то
+       нажатие, которое не сдвинулось с места. */
+    canvas.addEventListener('mousedown', function (e) {
+        var i = pick(e.offsetX, e.offsetY);
+        if (i < 0) return;
+        dragNode = i;
+        dragMoved = false;
+        alive = 1e9;                       // физика живёт, пока держим
+        canvas.style.cursor = 'grabbing';
+        e.preventDefault();
+    });
+    window.addEventListener('mouseup', function () {
+        if (dragNode < 0) return;
+        dragNode = -1;
+        alive = 300;                       // дать соседям доехать и уснуть
+        canvas.style.cursor = '';
+    });
     canvas.addEventListener('mousemove', function (e) {
         mouse.x = e.offsetX; mouse.y = e.offsetY;
+        if (dragNode >= 0) {
+            var w = toWorld(e.offsetX, e.offsetY);
+            var nd = nodes[dragNode];
+            nd.x = w[0]; nd.y = w[1]; nd.vx = 0; nd.vy = 0;
+            dragMoved = true;
+            return;
+        }
         var h = pick(e.offsetX, e.offsetY);
-        if (h !== hover) { hover = h; canvas.style.cursor = h >= 0 ? 'pointer' : ''; }
+        if (h !== hover) {
+            hover = h;
+            canvas.style.cursor = h >= 0 ? 'grab' : '';
+            /* Наведение будит рисунок: подсветка соседей должна быть заметной,
+               а на замершем графе она выглядела мёртвой картинкой. */
+            if (h >= 0) alive = Math.max(alive, 40);
+        }
     });
     canvas.addEventListener('mouseleave', function () { hover = -1; });
     canvas.addEventListener('click', function (e) {
+        if (dragMoved) { dragMoved = false; return; }   // тянули, а не выбирали
         var i = pick(e.offsetX, e.offsetY);
         if (i < 0) return;
         var nd = nodes[i];
@@ -298,11 +385,32 @@ function init(box, G) {
             ? '/lang/' + LANG + '/formula/' + nd.id.slice(2) + '.html'
             : '/lang/' + LANG + '/concepts/' + nd.id + '.html';
     });
-    /* тап на телефоне: первый — показать подпись, второй — перейти */
+    /* Палец: тап показывает подпись, второй тап переходит, а протяжка тянет
+       узел — то же, что мышью. Слушатель НЕ passive: пока узел в руке, страницу
+       прокручивать нельзя, иначе рисунок уезжает вместе с ней. */
     canvas.addEventListener('touchstart', function (e) {
         var t = e.touches[0], r = canvas.getBoundingClientRect();
         mouse.x = t.clientX - r.left; mouse.y = t.clientY - r.top;
         hover = pick(mouse.x, mouse.y);
+        if (hover >= 0) {
+            dragNode = hover;
+            dragMoved = false;
+            alive = 1e9;
+        }
+    }, {passive: true});
+    canvas.addEventListener('touchmove', function (e) {
+        if (dragNode < 0) return;
+        var t = e.touches[0], r = canvas.getBoundingClientRect();
+        var w = toWorld(t.clientX - r.left, t.clientY - r.top);
+        var nd = nodes[dragNode];
+        nd.x = w[0]; nd.y = w[1]; nd.vx = 0; nd.vy = 0;
+        dragMoved = true;
+        e.preventDefault();
+    }, {passive: false});
+    canvas.addEventListener('touchend', function () {
+        if (dragNode < 0) return;
+        dragNode = -1;
+        alive = 300;
     }, {passive: true});
 
     loop();
