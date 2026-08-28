@@ -278,6 +278,42 @@ def autolink(html_text, cid, lang, live):
 
 VAL_LBL = {"ru": "Значение", "en": "Value", "es": "Valor",
            "ar": "القيمة", "fr": "Valeur"}
+AREA_LBL = {"ru": "Области", "en": "Areas", "es": "Áreas",
+            "ar": "المجالات", "fr": "Domaines"}
+
+_GNAMES = None
+_GINDEX = None
+
+
+def _group_index(live):
+    """Номер области в реестре → её место в графе.
+
+    Это две разные нумерации, и путать их — значит уводить человека в чужую
+    область. В реестре у группы свой номер (supers), а граф и облако D1 нумеруют
+    области ПО РАЗМЕРУ, позиционно: самая большая — нулевая. Соответствие строится
+    ровно тем же сортом, что в tools/concepts_graph_export.py.
+    """
+    global _GINDEX
+    if _GINDEX is None:
+        gids = sorted(live["groups"], key=lambda g: -len(live["groups"][g]))
+        _GINDEX = {str(g): i for i, g in enumerate(gids)}
+    return _GINDEX
+
+
+def _group_names():
+    """Человеческие названия областей — один источник на облако, страницу и граф.
+
+    Имена даёт tools/group_names.py по реальному составу области; читаем их лениво
+    и один раз за сборку: файл небольшой, но страниц восемь тысяч.
+    """
+    global _GNAMES
+    if _GNAMES is None:
+        p = ROOT / "data" / "group-names.json"
+        try:
+            _GNAMES = json.loads(p.read_text(encoding="utf-8")) if p.exists() else {}
+        except Exception:
+            _GNAMES = {}
+    return _GNAMES
 # Единицы по-русски: показывать «coulomb» русскому читателю на странице заряда —
 # та же полумера, что английская карточка. Список короткий намеренно: сюда
 # попадают только единицы, которые реально стоят при наших константах.
@@ -643,6 +679,25 @@ def concept_page(cid, c, lang, live, by_id, rich=None, page_langs=None):
         stats.append(_cnt(len(c["scientists"]), "учёный", t["sci"]))
     if stats:
         out.append(f'<div class="tag-stats">{" · ".join(stats)}</div>')
+    # Области, в которых понятие живёт. Раньше страница молчала о том, где предмет
+    # стоит на карте знания, и в граф человек попадал без представления, куда попал.
+    # Ссылка ведёт сразу в кадр этой области — не в общий обзор из пятидесяти кругов.
+    # Принадлежность бывает двойной и это не ошибка: турбулентность — и гидродинамика,
+    # и стохастические процессы.
+    _gn = _group_names()
+    _gi = _group_index(live)
+    areas = []
+    for gid in (c.get("supers") or [])[:3]:
+        g = _gn.get(str(gid)) or {}
+        nm = g.get(f"name_{lang}") or g.get("name_en")
+        idx = _gi.get(str(gid))
+        if nm and idx is not None:
+            areas.append(f'<a href="/lang/{lang}/concepts/graph.html?group={idx}">'
+                         f'{H.escape(nm)}</a>')
+    if areas:
+        out.append(f'<div class="related-tags" style="margin-top:6px">'
+                   f'<b style="font-family:var(--mono);font-size:11px;color:var(--muted)">'
+                   f'{AREA_LBL.get(lang, AREA_LBL["en"])}:</b> {" ".join(areas)}</div>')
     out.append('</div>')
 
     body = []
@@ -858,9 +913,20 @@ def cloud_page(lang, live, by_id):
     # #search-results, наполняет его лентой статей — на облаке понятий
     # это чужой список (замер 27.08: 12 карточек ниоткуда). Поиск здесь
     # работает через site-search (переход на главную с запросом).
+    # Названия областей — человеческие, те же, что в графе (data/group-names.json).
+    # Заголовком стояла склейка трёх участников: «течение жидкости · гидродинамика ·
+    # поверхностное натяжение». Это не название, а первые строки списка — по нему не
+    # понять ни чем область занимается, ни чем отличается от соседней (владелец 28.08:
+    # «статистика просто даёт что-то, а ты можешь дать понятное название»). Склейка
+    # остаётся запасной — на случай, если область ещё не назвали.
+    gnames = _group_names()
+
     for gid, members in groups:
         members = sorted(members, key=lambda m: -len(c.get(m, {}).get("articles", [])))
-        top3 = " · ".join(name_of(c[m], m, lang) for m in members[:3] if m in c)
+        _g = gnames.get(str(gid)) or {}
+        title = (_g.get(f"name_{lang}") or _g.get("name_en")
+                 or " · ".join(name_of(c[m], m, lang) for m in members[:3] if m in c))
+        note = _g.get(f"note_{lang}") or _g.get("note_en") or ""
         # Понятие без статей — тоже член группы. Фильтр по числу статей прятал с
         # облака всё, что пришло не из текстов: константы и статистику целиком.
         # Показываем их без счётчика — счётчик ноль ничего не сообщает, а место
@@ -872,10 +938,15 @@ def cloud_page(lang, live, by_id):
                if c[m]["articles"] else "")
             + '</a>'
             for m in members if m in c)
+        # Пояснение «о чём эта область» — под названием, серым: название говорит, что
+        # это, пояснение — чем занимается. Вместе они заменяют то, что раньше читатель
+        # должен был угадывать по трём первым участникам.
+        note_html = (f'<div style="font-size:13px;color:var(--soft);margin:4px 0 2px">'
+                     f'{H.escape(note)}</div>' if note else "")
         out.append(f'<details style="margin-bottom:10px"><summary style="cursor:pointer;'
-                   f'font-family:var(--serif);font-size:16px">{H.escape(top3)} '
+                   f'font-family:var(--serif);font-size:16px">{H.escape(title)} '
                    f'<span style="font-family:var(--mono);font-size:12px;color:var(--soft)">'
-                   f'· {len(members)}</span></summary>'
+                   f'· {len(members)}</span></summary>{note_html}'
                    f'<div class="related-tags" style="margin-top:8px">{chips}</div></details>')
     out.append(site_chrome(lang)[1])
     out.append(site_chrome(lang)[2])
