@@ -77,6 +77,19 @@ def main():
     except Exception:
         kn = {}
     kn_n = sum(len(v) for v in kn.values())
+
+    # ── имена-двойники ──
+    # Проверка по векторной близости карточек их не ловит: у двух понятий с одним
+    # именем карточки бывают разные, а читателю видно ровно имя. На странице LIGO
+    # это выглядело как заикание — «измеряет → эхо гравитационных волн» дважды, и
+    # ссылки вели на разные страницы с одинаковым заголовком.
+    by_name = defaultdict(list)
+    for c, v in C.items():
+        nm_ru = (v.get("names") or {}).get("ru")
+        if nm_ru:
+            by_name[nm_ru].append(c)
+    twins = sorted(((nm, ids) for nm, ids in by_name.items() if len(ids) > 1),
+                   key=lambda t: -len(t[1]))
     no_related = [c for c, v in C.items()
                   if not v.get("related") and v.get("articles") and c not in kn]
 
@@ -229,6 +242,13 @@ th {{ font-family: var(--mono); font-size: 10.5px; color: var(--soft);
      "узкие темы.</div>" + clist(no_related))}
 {sec(f"Изолированные в графе — {len(isolated)}",
      "<div class='sub'>Ни одного ребра с ≥2 общими статьями.</div>" + clist(isolated))}
+{sec(f"Имена-двойники — {len(twins)}",
+     ("<div class='sub'>Разные понятия с одним русским именем. Векторная проверка их "
+      "не видит — карточки могут быть разными, а читателю видно имя: два одинаковых "
+      "заголовка в облаке и повтор в связях. Решать по одному: слить, переименовать "
+      "или оставить (бывают настоящие омонимы).</div><table>"
+      + "".join(f"<tr><td>{H.escape(nm)}</td><td>{H.escape(', '.join(ids))}</td></tr>"
+                for nm, ids in twins[:60]) + "</table>"))}
 {sec(f"Кандидаты на слияние — {len(merge)} пар",
      "<div class='sub'>Карточки ≥0.90 И пулы статей пересекаются ≥0.30 — почти наверняка "
      "дубль; сливать с алиасом.</div>" + pair_rows(merge))}
@@ -272,7 +292,8 @@ constant ({kinds.get('constant', 0)}) — целевая добыча промп
     print(f"   классы-дыры: math {kinds.get('math', 0)}, law {kinds.get('law', 0)}, "
           f"constant {kinds.get('constant', 0)}")
     print(f"   сироты {n_orph} · без соседей {len(no_related)} · изолированные {len(isolated)}")
-    print(f"   слияния {len(merge)} пар · омонимы {len(homon)} пар")
+    print(f"   слияния {len(merge)} пар · омонимы {len(homon)} пар · "
+          f"имена-двойники {len(twins)}")
     return 0
 
 
