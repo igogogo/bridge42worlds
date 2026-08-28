@@ -827,6 +827,11 @@ def concept_page(cid, c, lang, live, by_id, rich=None, page_langs=None):
         seen_rows = set()
         for lk in know[:12]:
             to = lk.get("to")
+            # Слитое понятие как цель связи заменяем тем, в кого оно слилось:
+            # связь остаётся верной, а вести читателя через переадресацию незачем.
+            _m = (live["concepts"].get(to) or {}).get("merged_into")
+            if _m:
+                to = _m
             if to not in live["concepts"]:
                 continue          # понятие могли переименовать или слить
             nm = name_of(live["concepts"][to], to, lang)
@@ -877,7 +882,8 @@ def concept_page(cid, c, lang, live, by_id, rich=None, page_langs=None):
         chips = "".join(
             f'<a href="/lang/{lang}/concepts/{H.escape(r["id"])}.html">'
             f'{H.escape(name_of(live["concepts"][r["id"]], r["id"], lang))}</a>'
-            for r in c["related"] if r["id"] in live["concepts"])
+            for r in c["related"] if r["id"] in live["concepts"]
+            and not live["concepts"][r["id"]].get("merged_into"))
         # Связь по смыслу и связь по статьям — разные вещи, и подпись это
         # говорит. «Рядом стоят» значит «встречаются в одних статьях»; у понятия
         # без статей соседи найдены по близости определений, и выдавать одно за
@@ -1008,7 +1014,8 @@ def cloud_page(lang, live, by_id):
         members = sorted(members, key=lambda m: -len(c.get(m, {}).get("articles", [])))
         _g = gnames.get(str(gid)) or {}
         title = (_g.get(f"name_{lang}") or _g.get("name_en")
-                 or " · ".join(name_of(c[m], m, lang) for m in members[:3] if m in c))
+                 or " · ".join(name_of(c[m], m, lang) for m in members[:3]
+                                   if m in c and not c[m].get("merged_into")))
         note = _g.get(f"note_{lang}") or _g.get("note_en") or ""
         # Понятие без статей — тоже член группы. Фильтр по числу статей прятал с
         # облака всё, что пришло не из текстов: константы и статистику целиком.
@@ -1020,7 +1027,10 @@ def cloud_page(lang, live, by_id):
             + (f' <em style="opacity:.55;font-size:10.5px">{len(c[m]["articles"])}</em>'
                if c[m]["articles"] else "")
             + '</a>'
-            for m in members if m in c)
+            # Слитое понятие в облаке не показываем: его имя и место занял тот,
+            # в кого оно слилось, а вторая плашка с тем же названием — то самое
+            # заикание, ради которого слияние и делалось.
+            for m in members if m in c and not c[m].get("merged_into"))
         # Пояснение «о чём эта область» — под названием, серым: название говорит, что
         # это, пояснение — чем занимается. Вместе они заменяют то, что раньше читатель
         # должен был угадывать по трём первым участникам.
@@ -1413,6 +1423,16 @@ def build(langs):
         d.mkdir(parents=True, exist_ok=True)
         made = skipped = 0
         for cid, cv in live["concepts"].items():
+            # Слитое понятие (tools/concept_twins.py) страницы не имеет — ведёт к
+            # тому, во что слилось. Удалить его нельзя: на идентификатор ссылается
+            # разметка тысяч статей и внешние ссылки, и без переадресации всё это
+            # стало бы четырьмястами четырьмя.
+            if cv.get("merged_into"):
+                (d / f"{cid}.html").write_text(
+                    redirect_html(f"/lang/{lang}/concepts/{cv['merged_into']}.html"),
+                    encoding="utf-8")
+                skipped += 1
+                continue
             if has_translation(cid, cv, lang, rich):
                 (d / f"{cid}.html").write_text(
                     concept_page(cid, cv, lang, live, by_id, rich, langs_of(cid, live, lang)),
