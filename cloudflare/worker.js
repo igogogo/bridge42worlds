@@ -2849,9 +2849,15 @@ async function handleConcept(request, env) {
     "  FROM concept_links l LEFT JOIN concepts c ON c.id = l.b" +
     " WHERE l.a = ? ORDER BY l.w DESC LIMIT 24").bind(id).all();
   const full = (lang === "ru" && row.full_ru) ? row.full_ru : row.full_en;
+  const fullObj = full ? JSON.parse(full) : null;
+  /* Короткая карточка на языке страницы. В таблице лежит английская — она опора
+     вектора и общая для всех языков, — а русская живёт внутри полной записи.
+     Всплывающая подсказка по наведению берёт именно card, и на русской странице
+     читатель получал английское определение. */
+  const cardLang = (lang === "ru" && fullObj && fullObj.card) ? fullObj.card : null;
   const out = Response.json({
-    concept: Object.assign(conceptRow(row, lang), {
-      full: full ? JSON.parse(full) : null,
+    concept: Object.assign(conceptRow(row, lang), cardLang ? { card: cardLang } : {}, {
+      full: fullObj,
       fullLang: (lang === "ru" && row.full_ru) ? "ru" : "en",
       systems: row.systems ? JSON.parse(row.systems) : null,
     }),
