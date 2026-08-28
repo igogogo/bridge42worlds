@@ -280,6 +280,42 @@ VAL_LBL = {"ru": "Значение", "en": "Value", "es": "Valor",
            "ar": "القيمة", "fr": "Valeur"}
 AREA_LBL = {"ru": "Области", "en": "Areas", "es": "Áreas",
             "ar": "المجالات", "fr": "Domaines"}
+KNOW_LBL = {"ru": "Связи по существу", "en": "Stated relations",
+            "es": "Relaciones explícitas", "ar": "علاقات مصرّح بها",
+            "fr": "Relations énoncées"}
+# Отношение называем словом, а не значком: «входит в» читается сразу, part_of — нет.
+REL_T = {
+    "ru": {"part_of": "входит в", "case_of": "частный случай",
+           "follows": "следует из", "measures": "измеряет",
+           "describes": "описывает", "opposite": "противоположно",
+           "same_area": "одна область"},
+    "en": {"part_of": "part of", "case_of": "case of", "follows": "follows from",
+           "measures": "measures", "describes": "describes",
+           "opposite": "opposite to", "same_area": "same area"},
+    "es": {"part_of": "forma parte de", "case_of": "caso de",
+           "follows": "se deriva de", "measures": "mide", "describes": "describe",
+           "opposite": "opuesto a", "same_area": "misma área"},
+    "ar": {"part_of": "جزء من", "case_of": "حالة من", "follows": "ينبع من",
+           "measures": "يقيس", "describes": "يصف", "opposite": "عكس",
+           "same_area": "المجال نفسه"},
+    "fr": {"part_of": "fait partie de", "case_of": "cas de",
+           "follows": "découle de", "measures": "mesure", "describes": "décrit",
+           "opposite": "opposé à", "same_area": "même domaine"},
+}
+
+_KNOW = None
+
+
+def _knowledge_links():
+    """Связи, найденные знанием (tools/link_weaving.py) — читаем один раз за сборку."""
+    global _KNOW
+    if _KNOW is None:
+        p = ROOT / "data" / "concept-links-knowledge.json"
+        try:
+            _KNOW = json.loads(p.read_text(encoding="utf-8")) if p.exists() else {}
+        except Exception:
+            _KNOW = {}
+    return _KNOW
 
 _GNAMES = None
 _GINDEX = None
@@ -773,9 +809,45 @@ def concept_page(cid, c, lang, live, by_id, rich=None, page_langs=None):
             body.append(f'<div class="related-tags"><b style="font-family:var(--mono);'
                         f'font-size:11px;color:var(--muted)">'
                         f'{UNITS_LBL.get(lang, "Units")}:</b> {cells}</div>')
+    # СВЯЗИ ПО СУЩЕСТВУ — третий источник (владелец 28.08: «как ты установишь связь
+    # между законом и константой… это работа твоя как интеллекта, а не только что
+    # есть в статьях»). Статьи дают соседство, вектор — похожесть, а здесь названо
+    # само отношение: закон ВХОДИТ В область, прибор ИЗМЕРЯЕТ величину. До сих пор
+    # эти связи жили только в рёбрах графа — на странице их не было видно вовсе,
+    # хотя именно они объясняют, а не просто ставят рядом.
+    # «Одна область» отсюда убрана намеренно: это не объяснение, а то же соседство,
+    # которое ниже даёт ряд «рядом стоят» и выше — строка областей. Из трёх связей
+    # турбулентности все три были «одна область» — ряд повторял соседей другими
+    # словами. В графе такое ребро полезно, на странице — шум.
+    know = [k for k in (_knowledge_links().get(cid) or [])
+            if k.get("rel") != "same_area"]
+    if know:
+        kt = REL_T.get(lang, REL_T["en"])
+        rows = []
+        for lk in know[:12]:
+            to = lk.get("to")
+            if to not in live["concepts"]:
+                continue          # понятие могли переименовать или слить
+            nm = name_of(live["concepts"][to], to, lang)
+            # Отношение и понятие разделяет стрелка, а не пробел: «описывает
+            # гравитация» — не по-русски, а падежи под семь отношений и пять
+            # языков подгонять незачем. Стрелка читается как подпись связи и
+            # заодно показывает направление, которое здесь существенно.
+            rows.append(f'<span style="white-space:nowrap">'
+                        f'<span style="font-family:var(--mono);font-size:11px;'
+                        f'color:var(--muted)">{H.escape(kt.get(lk.get("rel"), ""))} '
+                        f'&rarr;</span> '
+                        f'<a href="/lang/{lang}/concepts/{H.escape(to)}.html">'
+                        f'{H.escape(nm)}</a></span>')
+        if rows:
+            body.append(f'<div class="related-tags" style="margin-top:10px">'
+                        f'<b style="font-family:var(--mono);font-size:11px;'
+                        f'color:var(--muted)">{KNOW_LBL.get(lang, KNOW_LBL["en"])}:</b> '
+                        + " · ".join(rows) + '</div>')
     # МИНИ-ГРАФ понятия (27.08): само понятие + соседи первого уровня + его
     # формулы. Тот же движок и вид, что у большого графа (js/b42-mini.js).
     _mini = [cid] + [r["id"] for r in (c.get("related") or [])[:10]]
+    _mini += [lk["to"] for lk in know[:6] if lk.get("to") in live["concepts"]]
     _mini += [f'f:{f["id"]}' for f in (c.get("formulas") or [])[:3]]
     if len(_mini) >= 3:
         GT = GRAPH_T.get(lang, GRAPH_T["en"])
