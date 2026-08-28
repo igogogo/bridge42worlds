@@ -170,11 +170,14 @@ def main():
     if "super" not in state()["done"]:
         live = json.loads((ROOT / "data/concepts-live.json")
                           .read_text(encoding="utf-8"))["concepts"]
+        # Слитые понятия супер не считает: у записи-указателя нет ни карточки, ни
+        # статей, и она попала бы в кластеризацию пустым узлом, оттягивая на себя
+        # место в области.
         reg = {cid: {"name": (v.get("names") or {}).get("en") or cid,
                      "kind": v.get("kind") or "concept",
                      "card_en": v.get("card_en") or "",
                      "support": v.get("articles") or []}
-               for cid, v in live.items()}
+               for cid, v in live.items() if not v.get("merged_into")}
         (ROOT.parent / "b42-ml" / "data" / "concepts-v4.json").write_text(
             json.dumps({"concepts": reg}, ensure_ascii=False), encoding="utf-8")
         log(f"вход супера: {len(reg)} понятий")

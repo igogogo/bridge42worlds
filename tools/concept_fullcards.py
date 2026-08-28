@@ -112,6 +112,10 @@ def targets():
 
     out = []
     for cid, c in live.items():
+        # Слитому понятию карточка не нужна: страница отдаёт переадресацию, а
+        # запрос к модели за текстом для указателя — деньги на ветер.
+        if c.get("merged_into"):
+            continue
         if cid in done:
             continue
         if cid in rich:
