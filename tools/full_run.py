@@ -141,6 +141,11 @@ def main():
     run("births", [PY, "tools/concept_cycle.py", "--budget", "0"], timeout=4 * 3600)
     run("g-grow", [PY, "tools/group_integrity.py", "--grow"], timeout=3600, soft=True)
     run("f-support", [PY, "tools/group_integrity.py", "--support"], timeout=3600, soft=True)
+    # Двойники родятся каждый прогон: понятие приходит из статьи под своим
+    # написанием и совпадает по-русски с уже живущим. Разбирает их модель-судья
+    # («один предмет или два»), поэтому шаг стоит сразу после рождений — пока
+    # двойник не оброс карточками, статьями и местом в облаке.
+    run("twins", [PY, "tools/concept_twins.py", "--apply"], timeout=3600, soft=True)
     run("consts", [PY, "tools/constants_from_formulas.py", "--apply", "--codata"],
         timeout=900, soft=True)
     run("units-fix", [PY, "tools/fix_truncated_units.py", "--apply"], timeout=900, soft=True)
