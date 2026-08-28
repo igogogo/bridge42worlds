@@ -4474,6 +4474,41 @@ html[lang="ar"] .card-img-wrap { float: none; margin: 0; }
 html[lang="ar"] .card-img-wrap { float: right; margin: 2px 0 6px var(--s-4); }
 .card-body { display: block; }
 .article-card .card-eyebrow { flex: none; width: auto; }
+/* Уровни чтения — в строке действий, прижаты к правому краю и мельче лайков
+   (владелец 28.08). Строка одна: слева реакции и звезда, справа три входа в
+   статью. Мельче — потому что это уже не главный элемент карточки, а сноска
+   к ней: главный — название. */
+.article-card .card-actions {
+    display: flex; align-items: center; gap: var(--s-2); flex-wrap: wrap;
+}
+.article-card .card-actions .lv-switch {
+    margin-left: auto; margin-bottom: 0; padding: 1px;
+}
+html[dir="rtl"] .article-card .card-actions .lv-switch {
+    margin-left: 0; margin-right: auto;
+}
+.article-card .card-actions .lv-btn {
+    min-height: 22px; padding: 0 8px; font-size: 10.5px; gap: 4px;
+}
+.article-card .card-actions .lv-btn .vs-ic { width: 12px; height: 12px; }
+/* На узком экране кнопки уходят строкой ниже и снова тянутся вправо, а не
+   ломают ряд действий пополам. */
+@media (max-width: 480px) {
+    .article-card .card-actions .lv-switch { margin-left: auto; margin-top: var(--s-1); }
+}
+
+/* Обрезку описания в три строки СНИМАЕМ — вместе с float она несовместима.
+   Про это в файле дважды стоит предупреждение (см. комментарии у .card-desc и у
+   заголовка карточки): -webkit-line-clamp вместе с overflow:hidden создаёт новый
+   контекст форматирования, и блок перестаёт обтекать плавающую картинку —
+   встаёт колонкой справа от неё, а под картинкой остаётся пустота. Правило
+   писалось для flex-раскладки, где оно было безопасно; float вернули 27.08, а
+   его снять забыли — владелец увидел ровно эту пустоту.
+   Длину описания и без него держит генератор (card_cut, 300 знаков). */
+.card-desc {
+    display: block; overflow: visible;
+    -webkit-line-clamp: none; -webkit-box-orient: initial;
+}
 @media (max-width: 620px) {
     .card-img-wrap { float: none; width: 100%; margin: 0 0 12px; }
     html[lang="ar"] .card-img-wrap { float: none; margin: 0 0 12px; }

@@ -561,24 +561,17 @@ def concept_page(cid, c, lang, live, by_id, rich=None, page_langs=None):
             linked = autolink(H.escape(txt), cid, lang, live)
             linked = linked.replace(chr(10) + chr(10), "</p><p>").replace(chr(10), "<br>")
             panes.append((label, f'<p>{linked}</p>'))
-    # ВКЛАДКИ вместо простыни секций (владелец 27.08: «полная карточка тоже с
-    # вкладками»). Без JS видны все секции с заголовками; скрипт внизу страницы
-    # превращает их в панель вкладок — деградация бесплатная.
-    if len(panes) > 1:
-        all_lbl = {"ru": "всё сразу", "en": "all at once", "es": "todo",
-                   "ar": "الكل", "fr": "tout"}.get(lang, "all at once")
-        tabs = "".join(f'<button class="ent-tab{" active" if i == 0 else ""}" '
-                       f'data-pane="p{i}">{H.escape(lbl)}</button>'
-                       for i, (lbl, _) in enumerate(panes))
-        tabs += f'<button class="ent-tab ent-all-btn" id="ent-all">{all_lbl}</button>'
-        content = "".join(f'<div class="ent-pane" data-pane="p{i}">'
-                          f'<h2 class="ent-pane-t" style="font-size:16px;margin:14px 0 6px">'
-                          f'{H.escape(lbl)}</h2>{html}</div>'
-                          for i, (lbl, html) in enumerate(panes))
-        body.append(f'<div class="ent-tabs" role="tablist">{tabs}</div>{content}')
-    elif panes:
+    # ВКЛАДОК НЕТ — разделы идут подряд, как на странице статьи (владелец 28.08:
+    # «у нас же не было вкладок, просто листаем и читаем всё по этим разделам —
+    # описание, история и так далее; для статьи мы это уже обсудили»).
+    #
+    # Вкладки прятали основное: замер на «чёрной дыре» — видно 336 знаков, скрыто
+    # 1503, то есть четыре пятых текста за кликом. Понятие читают, чтобы
+    # разобраться, а не чтобы искать нужную панель; к тому же на узкой колонке
+    # ряд кнопок разваливался на две строки и «всё сразу» висело отдельно.
+    for lbl, html in panes:
         body.append(f'<div class="section"><h2 style="font-size:16px;margin:14px 0 6px">'
-                    f'{panes[0][0]}</h2>{panes[0][1]}</div>')
+                    f'{H.escape(lbl)}</h2>{html}</div>')
     # Системы единиц (владелец 27.08): у единицы — в каких системах живёт и как
     # определяется в СИ; у величины — её единицы по системам. Данные кладёт
     # tools/unit_systems_seed.py --link-units прямо в live.
@@ -695,45 +688,16 @@ def concept_page(cid, c, lang, live, by_id, rich=None, page_langs=None):
     out.append(site_chrome(lang)[2])          # лайки, иконки, поиск, «ещё»
     out.append(f'<script src="{av("/js/b42-live.js")}"></script>'
                f'<script src="{av("/js/entity-live.js")}" defer></script>')
-    out.append('<script src="{av("/js/b42-graph-core.js")}"></script>'
-               '<script src="{av("/js/b42-mini.js")}" defer></script>')
-    # Вкладки полной записи. Скрываем НЕ через display:none, а атрибутом
-    # hidden="until-found": браузер ищет текст и внутри скрытой панели, а найдя —
-    # шлёт beforematch, и мы раскрываем именно её (владелец 27.08: «вкладки —
-    # круто, но поиск же это не найдёт»). Плюс кнопка «всё сразу» — для тех, кто
-    # читает подряд, и для браузеров без поддержки until-found. Без JS панель
-    # вкладок скрыта и все секции видны простынёй, как раньше.
-    out.append("""<script>(function(){
-var bar=document.querySelector('.ent-tabs');if(!bar)return;
-var panes=[].slice.call(document.querySelectorAll('.ent-pane'));
-if(!panes.length)return;
-document.body.classList.add('ent-tabs-on');
-function hide(p){try{p.hidden='until-found';}catch(e){p.hidden=true;}}
-function activate(id){
-  bar.querySelectorAll('.ent-tab').forEach(function(x){
-    if(x.id!=='ent-all')x.classList.toggle('active',x.dataset.pane===id);});
-  panes.forEach(function(p){if(p.dataset.pane===id)p.hidden=false;else hide(p);});
-}
-panes.forEach(function(p){
-  p.addEventListener('beforematch',function(){
-    document.body.classList.remove('ent-all');
-    activate(p.dataset.pane);});
-});
-bar.addEventListener('click',function(e){
-  var b=e.target.closest('.ent-tab');if(!b||b.id==='ent-all')return;
-  document.body.classList.remove('ent-all');
-  document.getElementById('ent-all').classList.remove('active');
-  activate(b.dataset.pane);
-});
-var all=document.getElementById('ent-all');
-if(all)all.addEventListener('click',function(){
-  var on=document.body.classList.toggle('ent-all');
-  all.classList.toggle('active',on);
-  if(on)panes.forEach(function(p){p.hidden=false;});
-  else{var a=bar.querySelector('.ent-tab.active');activate(a?a.dataset.pane:panes[0].dataset.pane);}
-});
-activate(panes[0].dataset.pane);
-})();</script>""")
+    # f-строка, а не обычная: без префикса подстановка не срабатывала, и в HTML
+    # уезжало буквальное «{av("/js/b42-mini.js")}». Браузер честно запрашивал файл
+    # с таким именем, получал 404 — и мини-граф на странице понятия не рисовался
+    # вообще, оставляя пустое место. Поймано 28.08 по списку загруженных скриптов.
+    out.append(f'<script src="{av("/js/b42-graph-core.js")}"></script>'
+               f'<script src="{av("/js/b42-mini.js")}" defer></script>')
+    # Скрипта вкладок больше нет. Он превращал разделы в панель и прятал под
+    # неё четыре пятых текста; владелец 28.08: «вкладки — это лишние действия
+    # и мусор в интерфейсе». Разделы идут подряд, как на странице статьи, и
+    # никакого JS для чтения не требуется.
     out.append("</body></html>")
     return "".join(out)
 

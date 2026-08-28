@@ -1268,6 +1268,8 @@ function cardHTML(item) {
         '<button class="react-btn sm' + (_myR === 'like' ? ' active' : '') + '" data-react="like" title="Нравится">' + b42ic('like', 17, '👍') + '<span class="rc"></span></button>' +
         '<button class="react-btn sm' + (_myR === 'dislike' ? ' active' : '') + '" data-react="dislike" title="Не нравится">' + b42ic('dislike', 17, '👎') + '<span class="rc"></span></button>' +
         '<button class="fav-btn sm' + (_favOn ? ' active' : '') + '" data-fav="' + item.id + '" title="В избранное"><span class="fav-ic">' + (_favOn ? '★' : '☆') + '</span></button>' +
+        // Три входа в статью — здесь же, правее реакций; CSS прижимает их к краю.
+        levelSwitchHTML(base) +
         '</div>';
     // Обложки лежат ОДИН раз, под ru (умысел: экономия гигабайтов). Ссылки — по языку
     // страницы, а картинки — всегда из ru-папки. Сборка пути по языку страницы давала
@@ -1309,7 +1311,9 @@ function cardHTML(item) {
             '<img src="' + img + '" data-fb="' + imgFb + '" loading="lazy" onerror="if(this.dataset.fb){this.src=this.dataset.fb;this.removeAttribute(\'data-fb\');}else{this.closest(\'.card-img-wrap\').style.display=\'none\';}" alt="">' +
         '</a>') : '') +
         '<div class="card-body">' +
-            levelSwitchHTML(base) +
+            // Уровни чтения НЕ здесь, а внизу, в строке действий (владелец 28.08:
+            // «сверху маячат над названием»). Первым в карточке должен читаться
+            // заголовок статьи, а не ряд кнопок.
             '<a class="card-title" href="' + url + '">' + item.title + '</a>' +
             // Значок машины знаний у названия. Ведёт СРАЗУ в раздел рекомендаций и всегда
             // в продвинутую версию — раздел живёт только там (владелец 11 августа: «плюсик
