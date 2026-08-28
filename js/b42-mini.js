@@ -347,6 +347,18 @@ function init(box, G) {
         });
         return best;
     }
+    /* Куда ведёт узел: у понятия своя страница, у формулы своя, у учёного своя.
+       Раньше адрес собирался в двух местах по-разному, и узел-учёный уводил бы
+       на несуществующее понятие «s:Albert Einstein». */
+    function pageOf(nd) {
+        if (nd.kind === 'formula') return '/lang/' + LANG + '/formula/' + nd.id.slice(2) + '.html';
+        if (nd.kind === 'scientist') {
+            var slug = nd.id.slice(2).replace(/[^A-Za-z0-9]+/g, '_').replace(/^_|_$/g, '');
+            return '/lang/en/scientists/' + slug + '.html';
+        }
+        return '/lang/' + LANG + '/concepts/' + nd.id + '.html';
+    }
+
     /* Экран → мир: обратная к P(). Нужна перетаскиванию — узел должен оказаться
        ровно под курсором при любом текущем увеличении. */
     function toWorld(mx, my) {
@@ -398,9 +410,7 @@ function init(box, G) {
         var i = pick(e.offsetX, e.offsetY);
         if (i < 0) return;
         var nd = nodes[i];
-        location.href = nd.kind === 'formula'
-            ? '/lang/' + LANG + '/formula/' + nd.id.slice(2) + '.html'
-            : '/lang/' + LANG + '/concepts/' + nd.id + '.html';
+        location.href = pageOf(nd);
     });
     /* Палец: тап показывает подпись, второй тап переходит, а протяжка тянет
        узел — то же, что мышью. Слушатель НЕ passive: пока узел в руке, страницу

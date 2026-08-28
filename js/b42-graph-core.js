@@ -38,6 +38,12 @@ var KINDS = [
      hatch: 'scatter', ru: 'статистика', en: 'statistics'},
     {k: 'formula', shapes: ['formula'], sh: 'fx', color: '#8c6d3f',
      hatch: 'none', ru: 'формулы', en: 'formulas'},
+    /* Учёные — отдельным классом и отдельной формой (владелец 28.08: «есть ли
+       опция включить учёных, иконка для них»). Форма «человек»: круг головы над
+       дугой плеч — единственная фигура в наборе, читаемая как имя, а не как
+       предмет. Выключается тем же переключателем, что и остальные классы. */
+    {k: 'sci', shapes: ['scientist'], sh: 'person', color: '#b5654a',
+     hatch: 'none', ru: 'учёные', en: 'scientists'},
     {k: 'rest', shapes: [], sh: 'circle', color: '#6b7f8c', hatch: 'none',
      ru: 'понятие', en: 'concept'},
 ];
@@ -65,7 +71,14 @@ function tokens() {
 function pathShape(ctx, x, y, r, sh) {
     ctx.beginPath();
     var i, a;
-    if (sh === 'sq') ctx.rect(x - r * 0.85, y - r * 0.85, r * 1.7, r * 1.7);
+    if (sh === 'person') {
+        /* голова и плечи: маленький круг сверху, дуга снизу */
+        ctx.arc(x, y - r * 0.42, r * 0.42, 0, Math.PI * 2);
+        ctx.moveTo(x - r * 0.85, y + r * 0.9);
+        ctx.arc(x, y + r * 0.9, r * 0.85, Math.PI, Math.PI * 2, false);
+        ctx.closePath();
+    }
+    else if (sh === 'sq') ctx.rect(x - r * 0.85, y - r * 0.85, r * 1.7, r * 1.7);
     else if (sh === 'di') {
         ctx.moveTo(x, y - r); ctx.lineTo(x + r, y); ctx.lineTo(x, y + r);
         ctx.lineTo(x - r, y); ctx.closePath();

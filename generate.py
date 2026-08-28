@@ -3127,7 +3127,15 @@ def update_all_tags(lang):
            '<title>→ {to}</title></head>'
            '<body><a href="{to}">→</a></body></html>')
     for tag_id in graph.get("graph", {}):
-        to = f"/{LANG_DIR}/{lang}/laws/{tag_id}.html"
+        # ВЕДЁМ СРАЗУ В ПОНЯТИЕ, а не в закон. 24 августа теги слили в /laws/, но
+        # с тех пор выросло облако понятий, и 526 из 536 законов имеют там
+        # двойника: тег отправлял на закон, закон повторял понятие — два крюка
+        # вместо одного. Владелец 28.08: «у нас больше нет такого как тег, всё
+        # понятия». Если понятия нет (десять случаев), остаётся прежний адрес.
+        _cid = tag_id if tag_id in _live_mini() else TAG_ALIAS.get(tag_id)
+        to = (f"/{LANG_DIR}/{lang}/concepts/{_cid}.html"
+              if _cid and _cid in _live_mini()
+              else f"/{LANG_DIR}/{lang}/laws/{tag_id}.html")
         _write_text_retry(base / f"{tag_id}.html",
                           tpl.format(lang=lang, to=to, site=SITE_URL))
     _write_text_retry(base / "index.html",

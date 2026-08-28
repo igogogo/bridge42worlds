@@ -108,6 +108,24 @@ fetch('/data/concepts-graph.json').then(function (r) { return r.json(); })
     });
 function nodeName(n) { return (RU && n.ru) ? n.ru : n.en; }
 
+/* Куда ведёт узел. Классов в графе три вида, и у каждого свой дом: понятие,
+   формула, учёный. Раньше панель всегда предлагала «страницу понятия» — для
+   формулы это был бы адрес несуществующей страницы, а для учёного тем более
+   (владелец 28.08 попросил показать учёных в графе). */
+function pageOf(n) {
+    if (n.kind === 'formula') return '/lang/' + LANG + '/formula/' + n.id.slice(2) + '.html';
+    if (n.kind === 'scientist') {
+        return '/lang/en/scientists/' +
+               n.id.slice(2).replace(/[^A-Za-z0-9]+/g, '_').replace(/^_|_$/g, '') + '.html';
+    }
+    return '/lang/' + LANG + '/concepts/' + n.id + '.html';
+}
+function pageLabel(n) {
+    if (n.kind === 'formula') return RU ? 'страница формулы →' : 'formula page →';
+    if (n.kind === 'scientist') return RU ? 'страница учёного →' : 'scientist page →';
+    return RU ? 'страница понятия →' : 'concept page →';
+}
+
 /* Открыть кадр по параметрам адреса. Возвращает true, если открыли. */
 function openFromUrl() {
     var q;
@@ -1227,9 +1245,8 @@ function renderInfo() {
         gn.kind + '</span></div>' +
         '<div class="b42g-dim">' + gn.n + (RU ? ' статей · ' : ' articles · ') +
         adj[nd.ni].length + (RU ? ' связей' : ' links') + '</div>' +
-        '<div style="margin:4px 0 7px"><a href="/lang/' + LANG + '/concepts/' +
-        gn.id + '.html">' + (RU ? 'страница понятия →' : 'concept page →') +
-        '</a></div>' +
+        '<div style="margin:4px 0 7px"><a href="' + pageOf(gn) + '">' +
+        pageLabel(gn) + '</a></div>' +
         '<div class="b42g-dim" style="margin-bottom:3px">' +
         (RU ? 'сильнейшие связи:' : 'strongest links:') + '</div>' + rows;
     box.querySelectorAll('.b42g-jump').forEach(function (b) {
