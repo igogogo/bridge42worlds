@@ -54,7 +54,10 @@ structure with every string value translated. Rules:
    (Fermi-LAT, LIGO) as they are; translate unit names (kilogram → килограмм).
 3. Scientist names → accepted Russian spelling (Einstein → Эйнштейн).
 4. Terminology must match Russian physics usage (momentum → импульс, NOT момент).
-5. Output ONLY the JSON, no commentary."""
+5. Do not let the Russian sentence repeat one root twice where the English did not:
+   «квантово-механическое квантование» says one word twice. If a literal rendering
+   produces such an echo, choose a synonym — the meaning matters, not the mirror.
+6. Output ONLY the JSON, no commentary."""
 
 
 def ask(payload, key, max_tokens=3000):

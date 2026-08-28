@@ -128,8 +128,13 @@ def candidates(live):
 
 def ask(batch, key):
     lines = []
-    for i, (cid, nm, en, ru, _why) in enumerate(batch, 1):
-        lines.append(f'{i}. {cid} (ru name: "{nm}")')
+    for i, (cid, nm, en, ru, why) in enumerate(batch, 1):
+        # Говорим, ЧТО именно насторожило грубый фильтр. Без этого модель читает
+        # карточку как обычный текст и отвечает «ok» даже там, где определение
+        # ходит по кругу: «дополнительные временные измерения — это дополнительные
+        # временные координаты» дважды прошло проверку, пока признак молчал.
+        hint = "repeats its own name" if "circle" in why else "same root twice"
+        lines.append(f'{i}. {cid} (ru name: "{nm}") — suspected: {hint}')
         lines.append(f'   EN: {en}')
         lines.append(f'   RU: {ru}')
     body = json.dumps({
