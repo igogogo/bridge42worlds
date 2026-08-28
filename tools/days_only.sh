@@ -19,7 +19,9 @@ for d in "${LIST[@]}"; do
 done
 echo "═══ сборка изменившегося ═══"
 python tools/days_state.py --days "$DAYS" --current html >/dev/null 2>&1
-B42_LANGS=ru,en B42_NO_PUBLISH=1 python run.py html
+# B42_ONLY_NEW: правка генератора не тянет за собой сорок тысяч страниц. Полная
+# пересборка — дело служебного прогона (tools/weekly_run.py), и она объявлена.
+B42_LANGS=ru,en B42_NO_PUBLISH=1 B42_ONLY_NEW=1 python run.py html
 echo "═══ выкладка ═══"
 python tools/days_state.py --days "$DAYS" --current publish >/dev/null 2>&1
 python run.py publish
