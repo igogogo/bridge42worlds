@@ -141,6 +141,28 @@ def candidates(cid, live, have, groups):
     return out[:CAND]
 
 
+def _loads_loose(raw):
+    """Разобрать ответ модели, даже если после JSON остался хвост.
+
+    json.loads требует, чтобы текст кончался вместе с объектом, — а модель
+    иногда дописывает вторую порцию или пояснение. raw_decode читает первый
+    цельный объект и молча оставляет остальное.
+    """
+    raw = (raw or "").strip()
+    if raw.startswith("```"):                      # ```json … ```
+        raw = raw.split("\n", 1)[-1].rsplit("```", 1)[0]
+    try:
+        return json.JSONDecoder().raw_decode(raw)[0]
+    except ValueError:
+        i = min((raw.find(ch) for ch in "[{" if raw.find(ch) >= 0), default=-1)
+        if i > 0:
+            try:
+                return json.JSONDecoder().raw_decode(raw[i:])[0]
+            except ValueError:
+                return None
+        return None
+
+
 def ask(batch, key):
     lines = []
     for i, (cid, card, cands) in enumerate(batch, 1):
@@ -159,7 +181,15 @@ def ask(batch, key):
         headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"})
     with urllib.request.urlopen(req, timeout=300) as r:
         raw = json.loads(r.read().decode("utf-8"))["choices"][0]["message"]["content"]
-    got = json.loads(raw)
+    # Ответ модели разбираем терпимо. Один ответ с лишним хвостом («Extra data»
+    # на седьмой строке) ронял весь проход — вместе с работой всех остальных
+    # пачек, потому что записываем мы в конце. Пачка — это шестая часть прогона,
+    # и терять из-за неё пять шестых нельзя. Берём первый цельный объект, а
+    # непонятную пачку пропускаем: связи ищутся снова на следующем круге.
+    got = _loads_loose(raw)
+    if got is None:
+        print("  пачка пропущена: ответ не разобрался")
+        return {}
     if isinstance(got, dict):
         for v in got.values():
             if isinstance(v, list):
@@ -246,8 +276,24 @@ def main():
     key = env("DEEPSEEK_API_KEY")
     bs = [batch_in[i:i + PER_CALL] for i in range(0, len(batch_in), PER_CALL)]
     got_all = {}
+
+    def safe(b):
+        """Сбой одной пачки не должен стоить прогона.
+
+        Разбор ответа терпим (см. _loads_loose), но остаётся сеть: обрыв,
+        таймаут, 5xx у поставщика. Раньше любое из этого поднималось наружу
+        через ex.map и убивало прогон целиком — записываем-то мы в конце.
+        Понятия непройденной пачки просто не попадут в «обойдено» и достанутся
+        следующему кругу.
+        """
+        try:
+            return ask(b, key)
+        except Exception as e:
+            print(f"  пачка пропущена: {type(e).__name__}: {str(e)[:80]}")
+            return {}
+
     with ThreadPoolExecutor(max_workers=WORKERS) as ex:
-        for got in ex.map(lambda b: ask(b, key), bs):
+        for got in ex.map(safe, bs):
             got_all.update(got or {})
 
     n_links = sum(len(v) for v in got_all.values())
