@@ -11,37 +11,16 @@
   "scientists": [],
   "examples_from_articles": [
    {
-    "id": "2607.15204",
-    "date": "2026-07-16",
+    "id": "2605.03807",
+    "date": "2026-05-05",
     "title": {
-     "ru": "Атмосферный палимпсест: сера как ключ к недрам экзопланет",
-     "en": "Atmospheric Palimpsest: Sulfur as the Key to Exoplanet Interiors",
-     "es": "El palimpsesto atmosférico: el azufre como clave del interior de los exoplanetas",
-     "ar": "طِلْمِسَات الغلاف الجوي: الكبريت مفتاحًا لأعماق الكواكب الخارجية"
+     "ru": "Почти ортогональные миры",
+     "en": "Almost Orthogonal Worlds",
+     "es": "Mundos casi ortogonales",
+     "ar": "عوالم شبه متعامدة",
+     "fr": "Des mondes presque orthogonaux"
     },
-    "why": "numerical_simulation"
-   },
-   {
-    "id": "2607.15144",
-    "date": "2026-07-16",
-    "title": {
-     "ru": "Ледяная прописка: большинство горячих юпитеров родом из холода",
-     "en": "Icy Origins: Most Hot Jupiters Come from the Cold",
-     "es": "Origen helado: la mayoría de los Júpiter calientes provienen del frío",
-     "ar": "نشأة جليدية: معظم كواكب المشتري الحارة من أصل بارد"
-    },
-    "why": "numerical_simulation"
-   },
-   {
-    "id": "2607.15028",
-    "date": "2026-07-16",
-    "title": {
-     "ru": "Как пыль Галактики ловит тепло невидимых чёрных дыр",
-     "en": "How Galactic Dust Traps Heat from Invisible Black Holes",
-     "es": "Cómo el polvo de la Galaxia atrapa el calor de agujeros negros invisibles",
-     "ar": "كيف يلتقط غبار المجرة حرارة الثقوب السوداء غير المرئية"
-    },
-    "why": "numerical_simulation"
+    "score": 0.607
    }
   ]
  },
@@ -1609,23 +1588,395 @@
    ]
   }
  },
- "tags": [
-  "asteroid",
-  "bacterium",
-  "speed_of_light"
- ],
- "examples_from_articles": [
-  {
-   "id": "2606.04379v1",
-   "why": "совпадение по теме: asteroid, speed_of_light"
+ "fr": {
+  "title": "Dimension et ordre de grandeur",
+  "subtitle": "Paragraphe 2 · Comment obtenir une réponse sans résoudre le problème",
+  "intro": [
+   "Combien d'accordeurs de piano travaillent à Chicago ? La question semble provocante : pas de manuel, pas d'Internet, et une réponse attendue en une minute. Pourtant, elle se résout — avec une précision suffisante pour toute décision pratique.",
+   "La méthode utilisée est appelée par les physiciens estimation par ordre de grandeur, et ce type de problème est appelé problème de Fermi. Ce n'est ni un tour de passe-passe ni une approximation par paresse. C'est une façon de comprendre de quelles échelles il s'agit — et elle est souvent plus importante que le calcul exact, car on ne peut faire un calcul exact que lorsqu'on comprend déjà ce que l'on calcule.",
+   "Le deuxième outil de ce paragraphe est encore plus puissant. Il s'avère que la forme d'une formule peut souvent être reconstruite à partir des seules unités de mesure, sans rien connaître de la physique en jeu. Cela semble impossible — mais c'est ainsi que Rayleigh a expliqué pourquoi le ciel est bleu, et que des physiciens militaires dans les années 1950 ont calculé la puissance d'une explosion secrète à partir de photographies dans un journal."
+  ],
+  "standNote": "Le stand est le même que dans le premier paragraphe, et c'est voulu. Réglez une vitesse initiale de 20 m/s et une accélération de −5 m/s². Avant de regarder le graphique, estimez mentalement : le freinage durera environ quatre secondes, la vitesse moyenne sera d'environ dix, donc la distance sera de l'ordre de quarante mètres. Maintenant, vérifiez. Savoir donner une réponse avant le calcul — c'est ce que ce paragraphe enseigne.",
+  "formula": {
+   "name": "Principe d'homogénéité dimensionnelle",
+   "latex": "[\\,\\text{partie gauche}\\,] = [\\,\\text{partie droite}\\,] \\qquad X = C \\cdot a^{\\alpha} b^{\\beta} c^{\\gamma}",
+   "alsoKnown": "Analyse dimensionnelle · Théorème Π de Buckingham",
+   "authors": [
+    {
+     "who": "Jean-Baptiste Fourier",
+     "year": "1822",
+     "what": "a le premier écrit qu'une équation physique doit être homogène en dimensions : on ne peut pas additionner des mètres et des secondes, et ce n'est pas une convention mais une propriété des grandeurs elles-mêmes"
+    },
+    {
+     "who": "John William Strutt (Lord Rayleigh)",
+     "year": "1871",
+     "what": "a transformé l'observation de Fourier en méthode. Il a montré que la diffusion de la lumière par de petites particules doit être inversement proportionnelle à la quatrième puissance de la longueur d'onde — d'où le ciel bleu et le coucher de soleil rouge, sans une seule équation d'électrodynamique"
+    },
+    {
+     "who": "Edgar Buckingham",
+     "year": "1914",
+     "what": "a démontré le théorème général : toute relation physique entre $n$ grandeurs avec $k$ dimensions indépendantes peut être réduite à une relation entre $n - k$ combinaisons sans dimension. C'est la justification rigoureuse de la méthode"
+    },
+    {
+     "who": "Enrico Fermi",
+     "year": "1945",
+     "what": "a porté l'estimation au rang d'art. Lors de l'essai à Alamogordo, il a jeté en l'air des morceaux de papier et, par la distance de leur déplacement due à l'onde de choc, a donné la puissance de l'explosion ; le résultat a coïncidé avec les instruments en ordre de grandeur"
+    }
+   ],
+   "story": "La démonstration la plus célèbre de la méthode a eu lieu en 1950. La puissance de la première explosion atomique restait secrète, mais le magazine Life a publié une série de photos de la boule de feu en expansion avec les indications de temps et d'échelle. Geoffrey Taylor en Angleterre a remarqué que le rayon de la boule ne pouvait dépendre que de l'énergie de l'explosion, de la densité de l'air et du temps — et à partir de ces trois grandeurs, la dimension de la longueur se construit d'une seule manière : $R \\sim (E t^2/\\rho)^{1/5}$. Il a tracé un graphique, mesuré la pente et publié la puissance dans la presse ouverte. En Amérique, cela a provoqué une agitation : un homme avait déclassifié le chiffre clé du projet à partir d'images dans un magazine, sans avoir accès à rien d'autre.",
+   "symbols": [
+    {
+     "sym": "L",
+     "latex": "\\mathsf{L}",
+     "what": "dimension de la longueur",
+     "unit": "m",
+     "note": "une des sept fondamentales ; tout le reste se construit à partir d'elles"
+    },
+    {
+     "sym": "M",
+     "latex": "\\mathsf{M}",
+     "what": "dimension de la masse",
+     "unit": "kg",
+     "note": "à ne pas confondre avec le poids : le poids a la dimension d'une force"
+    },
+    {
+     "sym": "T",
+     "latex": "\\mathsf{T}",
+     "what": "dimension du temps",
+     "unit": "s",
+     "note": "en mécanique, ces trois suffisent à tout"
+    },
+    {
+     "sym": "C",
+     "latex": "C",
+     "what": "facteur sans dimension",
+     "unit": "—",
+     "note": "la méthode ne le donne pas ; il est généralement entre 0,1 et 10, et donc l'estimation est correcte en ordre de grandeur"
+    },
+    {
+     "sym": "Pi",
+     "latex": "\\Pi",
+     "what": "combinaison sans dimension de grandeurs",
+     "unit": "—",
+     "note": "par exemple, le nombre de Reynolds ; c'est d'eux que dépend la physique"
+    }
+   ]
   },
-  {
-   "id": "2607.15183",
-   "why": "совпадение по теме: speed_of_light"
+  "derivation": {
+   "title": "Dérivation rigoureuse : une formule à partir des seules unités",
+   "lead": "Dérivons la période des petites oscillations d'un pendule sans écrire une seule équation du mouvement. Nous ne connaissons ni la deuxième loi de Newton, ni le sinus — seulement ce dont la période peut dépendre.",
+   "steps": [
+    {
+     "text": "Établissons la liste des grandeurs dont la période peut dépendre en principe. La longueur du fil, la masse du corps, l'accélération de la pesanteur. Il n'y a rien d'autre dans le problème — et c'est l'étape la plus cruciale de la méthode : si quelque chose d'essentiel est oublié, la réponse sera fausse.",
+     "latex": "T = f(\\ell,\\; m,\\; g)",
+     "figure": "axes",
+     "figCaption": "La méthode commence par une liste de grandeurs. Tout le reste est de la mécanique, mais la liste exige une compréhension physique."
+    },
+    {
+     "text": "Écrivons les dimensions de chaque grandeur en termes de dimensions fondamentales. La période est un temps. La longueur est une longueur. La masse est une masse. L'accélération est une longueur divisée par un temps au carré.",
+     "latex": "[T] = \\mathsf{T}, \\quad [\\ell] = \\mathsf{L}, \\quad [m] = \\mathsf{M}, \\quad [g] = \\mathsf{L}\\,\\mathsf{T}^{-2}",
+     "figure": "vline",
+     "figCaption": "Chaque grandeur physique est un produit de dimensions fondamentales élevées à certaines puissances."
+    },
+    {
+     "text": "Supposons que la réponse ait la forme d'un produit de puissances — ce n'est pas une restriction, mais une conséquence du théorème de Buckingham. Égalisons les dimensions des deux côtés.",
+     "latex": "\\mathsf{T} = \\mathsf{L}^{\\alpha} \\cdot \\mathsf{M}^{\\beta} \\cdot (\\mathsf{L}\\,\\mathsf{T}^{-2})^{\\gamma} = \\mathsf{L}^{\\alpha+\\gamma}\\,\\mathsf{M}^{\\beta}\\,\\mathsf{T}^{-2\\gamma}",
+     "figure": "forceprop",
+     "figCaption": "L'égalisation des dimensions transforme le problème physique en un petit système d'équations."
+    },
+    {
+     "text": "Les exposants des mêmes dimensions doivent coïncider. Nous obtenons trois équations — et remarquez la deuxième : la masse disparaît d'elle-même, la méthode nous l'annonce avant même que nous ayons eu le temps de nous étonner.",
+     "latex": "\\begin{cases} \\alpha + \\gamma = 0 \\\\ \\beta = 0 \\\\ -2\\gamma = 1 \\end{cases} \\;\\Longrightarrow\\; \\gamma = -\\tfrac{1}{2}, \\;\\; \\alpha = \\tfrac{1}{2}, \\;\\; \\beta = 0",
+     "figure": "massprop",
+     "figCaption": "L'exposant de la masse s'est avéré nul : la période du pendule ne dépend pas de la masse du corps."
+    },
+    {
+     "text": "Assemblons la réponse. La solution exacte de l'équation du mouvement donne le facteur $2\\pi \\approx 6{,}3$ — la méthode ne le donne pas et ne peut pas le donner. Mais la dépendance est entièrement obtenue : la période croît comme la racine carrée de la longueur et ne dépend pas de la masse.",
+     "latex": "T = C\\sqrt{\\frac{\\ell}{g}}, \\qquad \\text{exactement : } T = 2\\pi\\sqrt{\\frac{\\ell}{g}}",
+     "figure": "result",
+     "figCaption": "La méthode donne la forme de la formule ; le facteur sans dimension doit être obtenu autrement — par l'expérience ou par la solution complète."
+    },
+    {
+     "text": "Vérifions la prédiction sans rien résoudre. Pour doubler la période, il faut quadrupler la longueur. Le pendule battant la seconde — celui qui tictaque dans les horloges comtoises — doit avoir une longueur d'environ 25 cm pour une demi-période d'une seconde. C'est bien le cas : c'est une valeur classique de l'horlogerie, connue bien avant toute analyse dimensionnelle.",
+     "latex": "\\ell = \\frac{g}{\\pi^{2}} \\approx \\frac{9{,}8}{9{,}87} \\approx 0{,}99\\ \\text{m} \\;\\;(\\text{période } 2\\ \\text{s})",
+     "figure": "isochron",
+     "figCaption": "La vérification sur un fait connu est une étape obligatoire : la méthode est puissante, mais elle se trompe silencieusement si la liste des grandeurs est incomplète."
+    },
+    {
+     "text": "Et la limite de la méthode. Si une grandeur essentielle est omise de la liste, la réponse sera dimensionnellement impeccable et physiquement fausse. Pour un pendule à grande amplitude, un paramètre sans dimension apparaît — l'angle lui-même — et la période commence à en dépendre. L'analyse dimensionnelle est impuissante ici : l'angle est sans dimension, il n'impose aucune contrainte.",
+     "latex": "T = \\sqrt{\\frac{\\ell}{g}}\\; F(\\theta_0), \\qquad F(\\theta_0 \\to 0) = 2\\pi",
+     "figure": "curves",
+     "figCaption": "La méthode ne capture pas les paramètres sans dimension : leur dépendance doit être trouvée par la physique ou par l'expérience."
+    }
+   ],
+   "plate": "La dimension du membre de gauche est égale à la dimension du membre de droite — ce n'est pas une convention, mais une loi. Il en découle souvent la forme de la formule à un facteur numérique de l'ordre de l'unité près.",
+   "note": "Règle pratique pour tout le cours : après avoir terminé une dérivation, vérifiez la dimension des deux membres. Cela attrape la plupart des erreurs d'algèbre en cinq secondes et fonctionne même là où vous ne pouvez pas vérifier la réponse."
   },
-  {
-   "id": "2607.15129",
-   "why": "совпадение по теме: speed_of_light"
-  }
- ]
+  "math": {
+   "title": "Les mathématiques nécessaires ici",
+   "lead": "Il faudra les puissances et les logarithmes, mais pas comme technique de calcul, plutôt comme moyen de parler des ordres de grandeur.",
+   "items": [
+    {
+     "what": "Les dimensions se transforment en système d'équations",
+     "why": "Les troisième et quatrième étapes de la dérivation constituent tout le travail de la méthode. En écrivant $\\mathsf{T} = \\mathsf{L}^{\\alpha}\\mathsf{M}^{\\beta}(\\mathsf{L}\\mathsf{T}^{-2})^{\\gamma}$, on regroupe les mêmes lettres, et l'exigence « à gauche et à droite, la même dimension » se transforme en trois équations linéaires à trois inconnues. Il n'y a plus de physique, ensuite c'est de l'algèbre scolaire. L'important est ailleurs : il y a exactement autant d'équations que de dimensions fondamentales impliquées, et autant d'inconnues que de grandeurs dans la liste. Si les inconnues sont plus nombreuses, la solution n'est pas unique et la méthode donne non pas une formule mais une famille ; c'est alors qu'apparaissent les combinaisons sans dimension du théorème de Buckingham. De la même exigence découle une interdiction : sous un logarithme, une exponentielle ou un sinus, on ne trouve qu'une grandeur sans dimension.",
+     "latex": "\\mathsf{L}^{0}\\,\\mathsf{M}^{0}\\,\\mathsf{T}^{1} = \\mathsf{L}^{\\alpha+\\gamma}\\,\\mathsf{M}^{\\beta}\\,\\mathsf{T}^{-2\\gamma}",
+     "kit": "dimension"
+    },
+    {
+     "what": "Une droite en échelle logarithmique",
+     "why": "Une loi de puissance $y = Cx^{n}$ devient une droite après prise de logarithme des deux côtés : $\\lg y = \\lg C + n\\lg x$. La pente de cette droite est l'exposant, l'ordonnée à l'origine est le facteur. Ainsi, sur des axes gradués logarithmiquement, toute loi de puissance se redresse, et on mesure l'exposant à la règle. C'est ce que Taylor a fait avec les photos de presse de la boule de feu de l'histoire de ce paragraphe : il a porté le logarithme du rayon en fonction du logarithme du temps et a obtenu une pente de deux cinquièmes — exactement ce que demande $R \\sim (Et^{2}/\\rho)^{1/5}$, où l'énergie elle-même entre à la puissance un cinquième. L'inverse est plus utile que le direct : en voyant une droite sur un graphique logarithmique, vous savez déjà qu'il y a une loi de puissance derrière, et vous lisez l'exposant sans rien connaître du mécanisme.",
+     "latex": "\\lg y = \\lg C + n \\lg x, \\qquad R \\propto t^{2/5} \\;\\Longleftrightarrow\\; E \\propto \\frac{\\rho R^{5}}{t^{2}}",
+     "kit": "propto"
+    },
+    {
+     "what": "Pourquoi cinq approximations ne gâchent pas la réponse",
+     "why": "L'estimation se fait sur les exposants : lors d'une multiplication, ils s'additionnent, et les mantisses sont arrondies à un chiffre. Dans l'exemple des accordeurs, on multiplie ainsi cinq nombres, chacun pris au hasard — et si les erreurs s'accumulaient, la réponse serait inutile. Elles ne s'accumulent pas. Il est commode de regarder les logarithmes, où le produit devient une somme, et une erreur d'un facteur deux devient un terme d'environ $\\pm0{,}3$. Les termes sont indépendants et de signes variés, donc la somme typique croît non pas comme le nombre de facteurs, mais comme sa racine carrée : cinq facteurs avec une erreur d'un facteur deux chacun donnent une erreur finale d'environ $2^{\\sqrt{5}}$, soit moins d'un ordre de grandeur. C'est la même racine de $N$ qui régit la dispersion dans toute marche aléatoire.",
+     "latex": "\\sigma_{\\Sigma} = \\sqrt{N}\\,\\sigma_1, \\qquad 2^{\\sqrt{5}} \\approx 4{,}7",
+     "kit": "rms"
+    }
+   ]
+  },
+  "example": {
+   "title": "Exemple chiffré : les accordeurs de piano à Chicago",
+   "lead": "Un problème classique de Fermi. Aucun des nombres ci-dessous n'est une référence — tous sont des estimations. Voyez ce que cela donne.",
+   "given": "Estimer combien de personnes accordent professionnellement des pianos dans une ville d'environ trois millions d'habitants.",
+   "law": "Estimation par ordre de grandeur : décomposer l'inconnue en une chaîne de grandeurs, chacune pouvant être estimée, puis multiplier.",
+   "solution": [
+    {
+     "text": "Combien de ménages dans la ville. On compte en moyenne trois personnes par famille.",
+     "latex": "N_{\\text{ménages}} \\approx \\frac{3 \\cdot 10^{6}}{3} = 10^{6}"
+    },
+    {
+     "text": "Quelle fraction possède un piano. Supposons environ un sur trente — l'instrument est coûteux et encombrant.",
+     "latex": "N_{\\text{pianos}} \\approx \\frac{10^{6}}{30} \\approx 3 \\cdot 10^{4}"
+    },
+    {
+     "text": "À quelle fréquence est-il accordé. Une fois par an — une moyenne raisonnable entre les pianos délaissés et ceux de concert.",
+     "latex": "n_{\\text{accordages}} \\approx 3 \\cdot 10^{4}\\ \\text{par an}"
+    },
+    {
+     "text": "Combien d'accordages fait un artisan. L'accordage prend quelques heures, plus le déplacement ; disons quatre par jour, deux cents jours ouvrables par an.",
+     "latex": "n_{\\text{par artisan}} \\approx 4 \\cdot 200 = 800\\ \\text{par an}"
+    },
+    {
+     "text": "On divise l'un par l'autre.",
+     "latex": "N_{\\text{artisans}} \\approx \\frac{3 \\cdot 10^{4}}{800} \\approx 40"
+    }
+   ],
+   "answer": "De l'ordre de quelques dizaines de personnes. Les annuaires réels de Chicago donnent un ordre de grandeur similaire — de trente à cent, selon qui on considère comme professionnel.",
+   "check": "L'important n'est pas le nombre, mais ce que nous avons appris. La réponse n'est ni trois, ni trois mille — et c'est précisément la question qu'il faut généralement résoudre en pratique. Faut-il ouvrir un tel atelier, y aura-t-il assez de travail pour tous, faut-il une guilde séparée — toutes ces décisions dépendent de l'ordre de grandeur et pas du tout de savoir s'il y a quarante ou cinquante-cinq artisans."
+  },
+  "constants": {
+   "title": "Valeurs de ce paragraphe",
+   "lead": "Ici, ce ne sont pas tant des constantes que des nombres de référence qui seront utiles — ceux qu'il vaut la peine de garder en tête pour estimer sans manuel.",
+   "items": [
+    {
+     "sym": "g",
+     "latex": "g",
+     "dictKey": "g",
+     "name": "Accélération de la pesanteur",
+     "value": "9,81",
+     "unit": "m / s²",
+     "why": "Dans les estimations, on prend presque toujours 10 : erreur de 2 %, mais division mentale facile. De plus, $\\pi^2 \\approx 9{,}87$ est aussi proche de dix — coïncidence, mais pratique.",
+     "mnemo": "π² ≈ g ≈ 10 dans le système SI. C'est une conséquence de l'ancienne définition du mètre via le pendule à seconde, pas un hasard."
+    },
+    {
+     "sym": "c",
+     "latex": "c",
+     "dictKey": "c",
+     "name": "Vitesse de la lumière",
+     "value": "3 · 10⁸",
+     "unit": "m / s",
+     "why": "Valeur de référence pour toute estimation en électrodynamique et relativité. Tout ce qui est beaucoup plus lent est décrit par la physique classique.",
+     "mnemo": "La lumière fait 7,5 fois le tour de la Terre en une seconde et met 1,3 seconde pour venir de la Lune."
+    },
+    {
+     "sym": "N_A",
+     "latex": "N_A",
+     "dictKey": "N_A",
+     "name": "Nombre d'Avogadro",
+     "value": "6,0 · 10²³",
+     "unit": "1 / mol",
+     "why": "Le pont entre ce qui est visible et ce dont c'est fait. Toute estimation du type « combien de molécules » passe par lui.",
+     "mnemo": "Dans un verre d'eau, il y a à peu près autant de molécules que de verres d'eau dans tous les océans de la Terre."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Entraînement : cinq estimations à savoir faire de tête",
+   "lead": "Pas pour les réponses, mais pour la compétence. Essayez chacune par vous-même avant de lire l'analyse — cela prend moins d'une minute.",
+   "items": [
+    {
+     "h": "Combien de respirations faites-vous dans une vie",
+     "text": "Environ 15 respirations par minute, un million de minutes par an (vérifiez : 60 · 24 · 365 ≈ 5 · 10⁵), soixante-dix ans. On obtient environ 5 · 10⁸ — un demi-milliard de respirations."
+    },
+    {
+     "h": "Combien d'eau y a-t-il dans un corps humain",
+     "text": "Le corps est composé d'environ 60 % d'eau, la masse est d'environ 70 kg — donc environ 40 litres. Il s'ensuit immédiatement pourquoi une déshydratation de quelques litres est déjà dangereuse : c'est un pourcentage du tout."
+    },
+    {
+     "h": "De combien de fois un atome est-il plus petit qu'un humain",
+     "text": "Un atome fait environ 10⁻¹⁰ m, un humain environ 2 m — le rapport est d'environ 10¹⁰. C'est à peu près le même rapport qu'entre un humain et le diamètre du système solaire. Nous sommes exactement au milieu des échelles connues, et ce n'est pas une métaphore, mais de l'arithmétique."
+    },
+    {
+     "h": "L'énergie d'un seul éclair suffit-elle pour un appartement",
+     "text": "Un éclair transporte environ 10⁹ J, un appartement consomme environ 300 kWh par mois, soit environ 10⁹ J. Conclusion : un seul éclair suffirait pour un mois — et cela explique pourquoi l'idée de « stocker les éclairs » est économiquement désespérée vu leur rareté."
+    },
+    {
+     "h": "Combien de molécules d'air venez-vous d'inspirer",
+     "text": "Un demi-litre d'air dans des conditions normales représente environ 1/50 de mole, soit environ 10²² molécules. C'est plus que le nombre de respirations de toute l'humanité dans toute son histoire ; d'où la conséquence bien connue : dans chacune de vos respirations, il y a presque certainement des molécules qui ont été dans les poumons de n'importe quel être humain du passé."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Pour s'amuser : vérifiez par vous-même",
+   "lead": "Dans l'esprit de Perelman : une expérience qui ne nécessite pas de laboratoire, un paradoxe sur lequel réfléchir avant de lire la solution, et des faits qui se mémorisent tout seuls.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "expérience de cuisine",
+     "h": "Mesurez une molécule avec de l'huile de tournesol",
+     "text": "Saupoudrez une fine couche de talc ou de poivre moulu sur une large assiette remplie d'eau. Déposez une goutte d'huile végétale au centre — le film repousse la poudre et forme un cercle. Mesurez le diamètre du cercle avec une règle. Estimez le volume de la goutte en comptant combien de gouttes il y a dans une cuillère à café (généralement une centaine, une cuillère = 5 ml). Divisez ensuite le volume par l'aire du cercle — vous obtenez l'épaisseur du film.",
+     "answer": "Vous obtiendrez environ $10^{-9}$ mètre, c'est-à-dire un nanomètre. L'huile s'étale exactement jusqu'à une couche d'une molécule — pas plus loin. Vous avez mesuré la taille d'une molécule avec de la vaisselle de cuisine et une règle. C'est ainsi que Rayleigh en 1890 a obtenu la première estimation raisonnable des tailles moléculaires."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoxe",
+     "h": "Pourquoi on ne peut pas simplement agrandir une fourmi",
+     "text": "On dit qu'une fourmi soulève une charge cinquante fois plus lourde qu'elle, et on en conclut qu'une fourmi de la taille d'un humain serait incroyablement forte. Vérifiez ce raisonnement par l'analyse dimensionnelle avant de lire la suite.",
+     "answer": "La force d'un muscle croît comme sa section, c'est-à-dire comme le carré de la taille. La masse croît comme le volume, c'est-à-dire comme le cube. En agrandissant une fourmi mille fois, vous avez multiplié sa force par un million, mais son poids par un milliard — elle est devenue mille fois plus faible par rapport à son propre poids et ne pourrait même pas se tenir debout. C'est la règle de Galilée sur le carré et le cube ; elle explique aussi pourquoi l'éléphant a des pattes en forme de colonnes et la souris des pattes fines."
+    },
+    {
+     "icon": "fact",
+     "kind": "fait amusant",
+     "h": "Pourquoi un chat tombe mieux qu'un humain",
+     "text": "La résistance de l'air est proportionnelle à la surface, tandis que le poids est proportionnel au volume. Chez un petit animal, le rapport surface/masse est grand, donc la vitesse limite de chute est faible : une souris environ 15 km/h, un chat environ 100, un humain environ 200. D'où l'observation bien connue des vétérinaires : les chats tombés du septième étage ont en moyenne des blessures plus légères que ceux tombés du cinquième — ils ont le temps d'atteindre leur vitesse limite, de se détendre et de s'aplatir."
+    },
+    {
+     "icon": "mnemo",
+     "kind": "mnémonique",
+     "h": "Le nombre de secondes dans une année",
+     "text": "π · 10⁷ — environ 3,14 · 10⁷ secondes, alors que la valeur exacte est 3,156 · 10⁷. Erreur de un demi pour cent, et on s'en souvient pour toujours. C'est une pure coïncidence, aucune physique derrière, mais dans les estimations, cela fait gagner beaucoup de temps."
+    },
+    {
+     "icon": "estimate",
+     "kind": "estimation",
+     "h": "La règle des dix pour cent",
+     "text": "Dans les estimations, on peut sans risque considérer que $\\pi \\approx 3$, $\\sqrt{2} \\approx 1{,}4$, $\\sqrt{10} \\approx 3$, et qu'une année fait $3 \\cdot 10^{7}$ secondes. Chacun de ces arrondis donne une erreur de quelques pour cent, et ensemble ils ne changent presque jamais l'ordre de grandeur. Calculer de tête avec de tels nombres est deux fois plus rapide — et c'est la différence entre « j'ai estimé au vol » et « il a fallu s'asseoir à une table »."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "Annexe pour les curieux : d'où viennent les nombres sans dimension",
+   "lead": "Ne fait pas partie de la vérification. Pourquoi la physique parle en fin de compte non pas de mètres et de secondes, mais de nombres sans unités.",
+   "blocks": [
+    {
+     "h": "Les unités sont notre invention, la physique ne l'est pas",
+     "text": "Le mètre et la seconde sont inventés par les humains : on aurait pu les choisir autrement, et la nature ne le remarquerait pas. Par conséquent, toute affirmation sur la nature doit être formulée de manière à ne pas dépendre du choix des unités. D'où il découle que les véritables paramètres de contrôle de tout problème sont des combinaisons sans dimension."
+    },
+    {
+     "h": "Le nombre de Reynolds et pourquoi une mouche ne peut pas nager comme un humain",
+     "text": "Le rapport des forces d'inertie aux forces visqueuses $\\mathrm{Re} = \\rho v L / \\mu$ est la seule grandeur qui décide si l'écoulement est lisse ou turbulent. Pour un nageur, il est d'environ 10⁶, pour une bactérie, d'environ 10⁻⁵. Ce sont des mondes différents : la bactérie vit dans un milieu où l'inertie est totalement absente, et lorsqu'elle cesse de ramer, elle s'arrête en une fraction de diamètre. Nager par battements y est insensé — c'est pourquoi le flagelle tourne, et non bat."
+    },
+    {
+     "h": "La constante de structure fine",
+     "text": "Il existe des nombres sans dimension qui ne se dérivent de rien, mais qui sont simplement tels : par exemple $\\alpha \\approx 1/137$, qui fixe la force de l'interaction électromagnétique. Feynman l'appelait l'une des plus grandes énigmes de la physique : un nombre qu'aucun théoricien ne sait dériver, alors que toute la chimie et toute la vie dépendent du fait qu'il soit exactement tel."
+    },
+    {
+     "h": "Où cela mène",
+     "text": "La question « pourquoi les constantes fondamentales ont-elles précisément ces valeurs » reste ouverte et touche à la limite extrême de la physique moderne. Plus de détails dans la section « Questions ouvertes »."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "La dimension des membres de gauche et de droite d'une équation coïncide toujours ; de cela découle souvent la forme de la formule, et l'ordre de grandeur est estimé en multipliant des estimations grossières.",
+   "keyIdeas": [
+    {
+     "icon": "lamp",
+     "title": "L'égalisation des dimensions donne la dépendance",
+     "text": "L'égalisation des dimensions donne la dépendance à un facteur sans dimension près"
+    },
+    {
+     "icon": "formula",
+     "title": "La méthode ne capture pas les paramètres sans dimension",
+     "text": "là elle est silencieusement impuissante"
+    },
+    {
+     "icon": "estimate",
+     "title": "Estimation de Fermi",
+     "text": "décomposer l'inconnue en une chaîne de grandeurs estimables et les multiplier"
+    },
+    {
+     "icon": "estimate",
+     "title": "Les erreurs d'arrondi se compensent partiellement",
+     "text": "Les erreurs d'arrondi se compensent partiellement, donc les estimations grossières donnent le bon ordre de grandeur"
+    },
+    {
+     "icon": "scale",
+     "title": "Vérification dimensionnelle à la fin",
+     "text": "La vérification dimensionnelle à la fin du calcul attrape la plupart des erreurs d'algèbre"
+    }
+   ],
+   "where": "Vérification de toute formule dérivée ; évaluation de la faisabilité d'une idée avant les calculs ; lecture des dépendances en puissance sur un graphique logarithmique.",
+   "watchOut": "Le principal piège est une liste incomplète de grandeurs. La réponse sera dimensionnellement impeccable et physiquement fausse, et la méthode ne vous en avertira pas."
+  },
+  "quiz": [
+   {
+    "id": "s1",
+    "type": "mcq",
+    "q": "L'analyse dimensionnelle a donné pour la période d'un pendule $T = C\\sqrt{\\ell/g}$. Pourquoi n'y a-t-il pas de masse ?",
+    "options": [
+     "La masse s'est simplifiée dans les calculs par hasard",
+     "On a oublié d'inclure la masse dans la liste des grandeurs",
+     "L'exposant de la masse s'est avéré nul : à partir de $\\mathsf{M}$, il est impossible de former un temps en la combinant avec la longueur et l'accélération",
+     "La masse y est, mais sa contribution est négligeable"
+    ],
+    "answer": 2,
+    "why": "La masse était dans la liste, mais la dimension de la masse n'apparaît nulle part ailleurs — ni dans la période, ni dans la longueur, ni dans l'accélération. Par conséquent, son exposant doit être nul. La méthode nous a révélé un fait physique que nous n'avions pas introduit.",
+    "hint": "Regardez le système d'équations à la quatrième étape de la dérivation. D'où vient l'équation β = 0 et aurait-on pu l'obtenir autrement ?"
+   },
+   {
+    "id": "s2",
+    "type": "mcq",
+    "q": "Quelle est la principale faiblesse de l'analyse dimensionnelle ?",
+    "options": [
+     "Elle ne donne pas le facteur sans dimension et est impuissante si le problème contient un paramètre sans dimension",
+     "Elle ne fonctionne qu'en mécanique",
+     "Elle exige la connaissance des équations différentielles",
+     "Elle donne une réponse avec une erreur d'environ dix pour cent"
+    ],
+    "answer": 0,
+    "why": "Le facteur doit être obtenu à partir de la solution complète ou de l'expérience. Pire encore : une grandeur sans dimension — par exemple l'angle de déviation d'un pendule — n'impose aucune contrainte sur les dimensions, et la méthode ne la voit tout simplement pas.",
+    "hint": "Rappelez-vous la dernière étape de la dérivation : que devient la formule lorsque l'amplitude des oscillations cesse d'être petite ?"
+   },
+   {
+    "id": "s3",
+    "type": "free",
+    "q": "En vos propres mots : pourquoi l'estimation de Fermi donne-t-elle une réponse raisonnable, alors que chaque nombre y est approximatif ?",
+    "keywords": [
+     "erreurs",
+     "compensent",
+     "compensent partiellement",
+     "côtés différents",
+     "ordre de grandeur",
+     "en moyenne",
+     "racine",
+     "ne s'accumulent pas"
+    ],
+    "needed": 1,
+    "why": "Les erreurs d'estimation sont indépendantes et dirigées dans des directions différentes, donc elles se compensent partiellement : l'écart total croît approximativement comme la racine carrée du nombre de facteurs, et non comme leur produit. De plus, nous nous intéressons à l'ordre de grandeur — qui est robuste aux erreurs d'un facteur deux.",
+    "hint": "Imaginez que chacun des cinq facteurs soit surestimé ou sous-estimé d'un facteur deux, de manière aléatoire. Toutes les erreurs seront-elles dans le même sens ?"
+   },
+   {
+    "id": "s4",
+    "type": "estimate",
+    "q": "La vitesse des vagues en eau profonde ne peut dépendre que de la longueur d'onde et de l'accélération de la pesanteur. Quelle est alors la vitesse d'une vague de 100 mètres de long, en m/s ?",
+    "answer": 12.5,
+    "unit": "m/s",
+    "why": "À partir de λ et g, la dimension de la vitesse se construit d'une seule manière : v ~ √(gλ). En substituant, on obtient √(10 · 100) ≈ 30 m/s sans facteur, et la solution exacte donne v = √(gλ/2π) ≈ 12,5 m/s. D'où, entre autres, il découle que les longues vagues de la houle océanique dépassent les courtes et arrivent au rivage les premières — un jour avant la tempête elle-même.",
+    "hint": "À partir de m et de m/s², construisez une combinaison de dimension m/s. Quelles puissances doivent avoir la longueur d'onde et g ?",
+    "tolAbs": 5
+   }
+  ]
+ }
 }

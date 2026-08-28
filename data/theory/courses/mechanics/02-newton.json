@@ -18,37 +18,16 @@
   ],
   "examples_from_articles": [
    {
-    "id": "2607.14450",
-    "date": "2026-07-16",
+    "id": "2607.10247",
+    "date": "2026-07-11",
     "title": {
-     "ru": "Гравитация-невидимка: танец двойных звёзд бросает вызов Ньютону",
-     "en": "Invisible Gravity: The Dance of Double Stars Challenges Newton",
-     "es": "La gravedad invisible: la danza de las estrellas binarias desafía a Newton",
-     "ar": "الجاذبية الخفية: رقصة النجوم الثنائية تتحدى نيوتن"
+     "ru": "Гравитация смотрит по сторонам",
+     "en": "Gravity Looks Sideways",
+     "es": "La gravedad mira a los lados",
+     "ar": "الجاذبية تنظر حولها",
+     "fr": "La gravité regarde autour d'elle"
     },
-    "why": "gravity"
-   },
-   {
-    "id": "2607.13992",
-    "date": "2026-07-15",
-    "title": {
-     "ru": "Теневой театр чёрных дыр: одна тень, две пьесы",
-     "en": "The Shadow Theater of Black Holes: One Shadow, Two Plays",
-     "es": "Teatro de sombras de los agujeros negros: una sombra, dos obras",
-     "ar": "مسرح ظلال الثقوب السوداء: ظل واحد، مسرحيتان"
-    },
-    "why": "gravity"
-   },
-   {
-    "id": "2607.12745",
-    "date": "2026-07-14",
-    "title": {
-     "ru": "Вселенная-хамелеон: как гравитация учится скрываться",
-     "en": "The Chameleon Universe: How Gravity Learns to Hide",
-     "es": "El Universo camaleón: cómo la gravedad aprende a esconderse",
-     "ar": "الكون الحرباء: كيف تتعلم الجاذبية الاختباء"
-    },
-    "why": "gravity"
+    "score": 0.615
    }
   ]
  },
@@ -183,12 +162,14 @@
     {
      "what": "Векторное сложение сил",
      "why": "Силы складываются как векторы, а не как числа. Две силы по 3 Н дают равнодействующую от 0 до 6 Н — смотря под каким углом. Если они перпендикулярны, работает теорема Пифагора. Именно поэтому в задачах силы раскладывают по осям: вдоль каждой оси уже можно складывать обычные числа со знаками.",
-     "latex": "|\\vec{F}| = \\sqrt{F_x^{2} + F_y^{2}}, \\qquad \\vec{F} = \\vec{F_1} + \\vec{F_2}"
+     "latex": "|\\vec{F}| = \\sqrt{F_x^{2} + F_y^{2}}, \\qquad \\vec{F} = \\vec{F_1} + \\vec{F_2}",
+     "kit": "vector"
     },
     {
      "what": "Пропорциональность и как её проверять",
      "why": "Запись $a \\propto F$ означает, что отношение $a/F$ постоянно. Проверять это надо не на одной паре чисел, а на нескольких: если при удвоении силы ускорение удвоилось, а при утроении — утроилось, зависимость линейна. Такой ход рассуждений — от серии измерений к формуле — и есть экспериментальный метод в его чистом виде.",
-     "latex": "a \\propto F \\iff \\frac{a_1}{F_1} = \\frac{a_2}{F_2} = \\text{const}"
+     "latex": "a \\propto F \\iff \\frac{a_1}{F_1} = \\frac{a_2}{F_2} = \\text{const}",
+     "kit": "propto"
     }
    ]
   },
@@ -1471,25 +1452,358 @@
    ]
   }
  },
- "tags": [
-  "pulsar"
- ],
- "laws": [
-  "pythagorean_theorem",
-  "newtons_second_law"
- ],
- "examples_from_articles": [
-  {
-   "id": "2607.15129",
-   "why": "совпадение по теме: pulsar"
+ "fr": {
+  "title": "Les lois de Newton",
+  "subtitle": "Paragraphe 2 · La force comme cause du changement de mouvement",
+  "intro": [
+   "Dans le paragraphe précédent, nous avons appris à décrire le mouvement : où se trouve le corps, à quelle vitesse, avec quelle accélération. Mais nous ne nous sommes pas demandé pourquoi il se déplace de cette façon. Maintenant, demandons-le.",
+   "La réponse qui semble évidente est fausse. « Pour qu'un corps se déplace, il faut une force » — c'est ce que l'on pensait d'Aristote à Galilée, pendant près de deux mille ans. Et l'expérience le confirmait : arrêtez de pousser une charrette, et elle s'arrêtera.",
+   "L'erreur est que le frottement est toujours présent et qu'on ne le voit pas. Galilée a le premier eu l'idée de le supprimer mentalement — et il a compris : le mouvement n'exige pas de cause, une cause n'est nécessaire que pour son CHANGEMENT. Newton a élevé cette pensée au rang de loi et y a ajouté deux autres lois."
+  ],
+  "standNote": "Sur le stand — un chariot sur une surface. Définissez la masse et la force appliquée, activez le frottement et observez ce qui arrive à l'accélération. Observation clé : tant que la force agissante ne dépasse pas le frottement statique, le chariot reste immobile ; dès qu'elle le dépasse, la mise en vitesse commence, et elle est d'autant plus lente que la masse est grande.",
+  "formula": {
+   "name": "Deuxième loi de Newton",
+   "latex": "\\vec{F} = m\\vec{a} \\qquad \\text{ou} \\qquad \\vec{F} = \\frac{d\\vec{p}}{dt}",
+   "alsoKnown": "Équation fondamentale de la dynamique",
+   "authors": [
+    {
+     "who": "Galilée",
+     "year": "1638",
+     "what": "a formulé le principe d'inertie : un corps conserve son mouvement tant qu'on n'agit pas sur lui — c'est la future première loi"
+    },
+    {
+     "who": "Robert Hooke",
+     "year": "1679",
+     "what": "dans sa correspondance avec Newton, a émis l'hypothèse d'une loi de gravitation en carré inverse et a insisté sur le fait que le mouvement des planètes résulte de l'inertie et d'une attraction constante vers le Soleil — une idée qui est devenue la clé des Principia"
+    },
+    {
+     "who": "Isaac Newton",
+     "year": "1687",
+     "what": "dans les Principia Mathematica, a réduit la dynamique à trois lois et a énoncé la deuxième sous la forme « le changement de quantité de mouvement est proportionnel à la force appliquée »"
+    }
+   ],
+   "story": "Newton lui-même n'a pas écrit $F = ma$. Dans l'original, la deuxième loi est différente : le changement de quantité de mouvement est proportionnel à la force appliquée et se produit dans la direction de cette force. Autrement dit, dans la formulation originale, c'est la dérivée de l'impulsion qui intervient, et non le produit de la masse par l'accélération. La forme familière a été donnée par Euler un demi-siècle plus tard. La différence semble cosmétique, mais c'est précisément l'écriture originale qui survivra à la révolution relativiste : à des vitesses proches de celle de la lumière, $F = ma$ s'effondre, tandis que $F = dp/dt$ reste valable.",
+   "symbols": [
+    {
+     "sym": "F",
+     "latex": "\\vec{F}",
+     "what": "résultante de toutes les forces",
+     "unit": "N (newton)",
+     "note": "c'est bien la somme de TOUTES les forces, et non une seule d'entre elles — l'erreur la plus fréquente dans les exercices"
+    },
+    {
+     "sym": "m",
+     "latex": "m",
+     "what": "masse du corps",
+     "unit": "kg",
+     "note": "mesure de l'inertie : à quel point il est difficile de modifier la vitesse de ce corps"
+    },
+    {
+     "sym": "a",
+     "latex": "\\vec{a}",
+     "what": "accélération",
+     "unit": "m/s²",
+     "note": "dirigée dans le même sens que la résultante — toujours, sans exception"
+    },
+    {
+     "sym": "p",
+     "latex": "\\vec{p}",
+     "what": "quantité de mouvement, p = mv",
+     "unit": "kg·m/s",
+     "note": "quantité de mouvement ; c'est sous cette forme que la loi a été énoncée par Newton à l'origine"
+    }
+   ]
   },
-  {
-   "id": "2607.14054",
-   "why": "совпадение по теме: pulsar"
+  "derivation": {
+   "title": "Dérivation rigoureuse",
+   "lead": "Les trois lois ne sont pas trois affirmations indépendantes. La première définit où les autres s'appliquent ; la deuxième relie la force au mouvement ; la troisième dit que les forces sont toujours par paires. Examinons-les dans l'ordre.",
+   "steps": [
+    {
+     "text": "Première loi : un corps reste au repos ou en mouvement rectiligne uniforme tant qu'aucune force résultante n'agit sur lui. Ce n'est pas une conséquence de la deuxième loi, mais une affirmation sur l'existence de référentiels particuliers — les référentiels inertiels — dans lesquels les autres lois fonctionnent.",
+     "latex": "\\sum \\vec{F} = 0 \\;\\Longrightarrow\\; \\vec{v} = \\text{const}",
+     "figure": "inertia",
+     "figCaption": "Sans force, la vitesse ne change pas. Le mouvement n'a pas besoin de cause — c'est son changement qui en a besoin."
+    },
+    {
+     "text": "Vérifions expérimentalement de quoi dépend l'accélération. Appliquons différentes forces à un même corps : l'accélération augmente proportionnellement à la force. Donc $a \\propto F$.",
+     "latex": "a \\propto F \\quad (\\text{à } m = \\text{const})",
+     "figure": "forceprop",
+     "figCaption": "Une force deux fois plus grande donne une accélération deux fois plus grande."
+    },
+    {
+     "text": "Maintenant, appliquons la même force à des corps de masses différentes. L'accélération diminue en raison inverse de la masse. Un corps lourd résiste davantage au changement de vitesse — c'est cette propriété qu'on appelle inertie.",
+     "latex": "a \\propto \\frac{1}{m} \\quad (\\text{à } F = \\text{const})",
+     "figure": "massprop",
+     "figCaption": "Même force : un corps léger accélère vite, un corps lourd lentement."
+    },
+    {
+     "text": "En combinant les deux dépendances et en choisissant l'unité de force pour que le coefficient de proportionnalité devienne l'unité, on obtient la deuxième loi. C'est ainsi que le newton est défini : la force qui communique à une masse d'un kilogramme une accélération d'un mètre par seconde au carré.",
+     "latex": "\\vec{a} = \\frac{\\vec{F}}{m} \\;\\Longleftrightarrow\\; \\vec{F} = m\\vec{a}",
+     "figure": "secondlaw",
+     "figCaption": "L'accélération est directement proportionnelle à la force et inversement proportionnelle à la masse."
+    },
+    {
+     "text": "Parlons séparément du frottement — la force qui a égaré la physique pendant deux mille ans. Il n'est pas constant : tant que vous poussez faiblement, le frottement statique équilibre exactement votre force et augmente avec elle. Mais seulement jusqu'à une limite. Une fois le seuil dépassé, le corps se met en mouvement, et c'est alors le frottement de glissement qui agit, généralement un peu plus faible.",
+     "latex": "F_{\\text{fr.stat}} \\le \\mu_0 N, \\qquad F_{\\text{fr.gliss}} = \\mu N",
+     "figure": "friction",
+     "figCaption": "Le frottement statique s'adapte à la force appliquée — jusqu'au seuil de mise en mouvement."
+    },
+    {
+     "text": "Étonnamment, la force de frottement ne dépend presque pas de la surface de contact — seulement de la force de pression. La raison est que les surfaces ne se touchent pas sur toute leur étendue, mais par de rares micro-aspérités : si on augmente la surface, les aspérités répartissent la même charge, le contact total reste le même.",
+     "latex": "F_{\\text{fr}} = \\mu N \\quad (\\text{la surface n'intervient pas})",
+     "figure": "microcontact",
+     "figCaption": "Le contact réel se fait par de rares micro-aspérités, pas sur toute la surface visible."
+    },
+    {
+     "text": "Écrivons la même chose en termes de quantité de mouvement. Si la masse est constante, la dérivée de la quantité de mouvement donne $m\\,dv/dt = ma$ — la forme familière. Mais la forme originale est plus générale : elle reste valable quand la masse change, par exemple pour une fusée qui décolle en brûlant son carburant.",
+     "latex": "\\vec{F} = \\frac{d\\vec{p}}{dt} = \\frac{d(m\\vec{v})}{dt}",
+     "figure": "impulse",
+     "figCaption": "La force est le taux de variation de la quantité de mouvement — une formulation qui a survécu aux fusées et à la relativité."
+    },
+    {
+     "text": "Troisième loi : les forces naissent toujours par paires. Si le corps A agit sur B, alors B agit sur A avec la même intensité et en sens opposé. Le point crucial : ces forces s'appliquent à des corps DIFFÉRENTS, donc elles ne s'équilibrent pas et n'empêchent pas le mouvement.",
+     "latex": "\\vec{F}_{A\\to B} = -\\vec{F}_{B\\to A}",
+     "figure": "action",
+     "figCaption": "La paire de forces est égale en intensité et opposée en direction — mais appliquée à des corps différents."
+    },
+    {
+     "text": "De la troisième loi découle immédiatement un grand résultat : dans un système isolé, la quantité de mouvement totale ne change pas. Les forces internes s'annulent par paires, elles ne peuvent pas modifier la quantité de mouvement totale. C'est ce que nous verrons dans la section suivante.",
+     "latex": "\\frac{d}{dt}\\left(\\vec{p}_A + \\vec{p}_B\\right) = \\vec{F}_{B\\to A} + \\vec{F}_{A\\to B} = 0",
+     "figure": "momentum",
+     "figCaption": "Les forces internes s'annulent mutuellement — la quantité de mouvement totale du système est conservée."
+    }
+   ],
+   "plate": "\\vec{F} = m\\vec{a}",
+   "plateCap": "La force n'entretient pas le mouvement — elle le modifie. Toute la différence entre Aristote et Newton tient dans cette phrase.",
+   "note": "Les lois de Newton ne sont pas toujours valables. Elles cessent de s'appliquer aux vitesses proches de celle de la lumière (il faut la relativité), à l'échelle de l'atome (il faut la mécanique quantique) et dans les référentiels non inertiels — dans un manège en rotation ou dans un bus qui freine apparaissent des forces sans corps source. Ce n'est pas une erreur de Newton, mais des limites de validité, et les connaître est aussi important que les lois elles-mêmes.\n\nIl faut aussi parler de **Robert Hooke**. C'est lui qui, dans des lettres de 1679, a suggéré à Newton l'idée décisive : le mouvement d'une planète peut se décomposer en un mouvement inertiel tangentiel et une attraction constante vers le centre, et cette attraction diminue comme le carré de la distance. Hooke n'a pas pu le prouver mathématiquement — il lui manquait l'outillage. Newton l'a pu et l'a publié, mais a refusé de reconnaître la suggestion, et après la mort de Hooke, devenu président de la Royal Society, les mentions de son rival ont commencé à disparaître. La célèbre phrase de Newton « si j'ai vu plus loin, c'est en montant sur les épaules de géants » a été écrite dans une lettre précisément à Hooke — et beaucoup d'historiens la lisent non comme de la modestie, mais comme une pique envers un homme de petite taille et au dos voûté. La loi d'élasticité, que nous verrons dans le thème des oscillations, porte à juste titre le nom de Hooke : c'est la première loi quantitative de l'histoire sur la déformation des corps."
   },
-  {
-   "id": "2607.13930",
-   "why": "совпадение по теме: pulsar"
+  "math": {
+   "title": "Mathématiques nécessaires ici",
+   "items": [
+    {
+     "what": "Addition vectorielle des forces",
+     "why": "Les forces s'additionnent comme des vecteurs, et non comme des nombres. Deux forces de 3 N chacune donnent une résultante de 0 à 6 N — selon l'angle. Si elles sont perpendiculaires, le théorème de Pythagore s'applique. C'est pourquoi, dans les problèmes, on décompose les forces selon des axes : le long de chaque axe, on peut additionner des nombres ordinaires avec leurs signes.",
+     "latex": "|\\vec{F}| = \\sqrt{F_x^{2} + F_y^{2}}, \\qquad \\vec{F} = \\vec{F_1} + \\vec{F_2}"
+    },
+    {
+     "what": "Proportionnalité et comment la vérifier",
+     "why": "L'écriture $a \\propto F$ signifie que le rapport $a/F$ est constant. Il faut le vérifier non pas sur une seule paire de nombres, mais sur plusieurs : si en doublant la force l'accélération double, et en la triplant elle triple, la dépendance est linéaire. Ce raisonnement — d'une série de mesures à une formule — est la méthode expérimentale dans sa forme la plus pure.",
+     "latex": "a \\propto F \\iff \\frac{a_1}{F_1} = \\frac{a_2}{F_2} = \\text{const}"
+    }
+   ]
+  },
+  "example": {
+   "title": "Exemple chiffré",
+   "lead": "Un problème où presque tout le monde se trompe en oubliant le frottement.",
+   "given": "Sur une caisse de masse $20$ kg, on applique une force horizontale de $60$ N. Le coefficient de frottement avec le sol est $\\mu = 0{,}2$. Trouver l'accélération. Prendre $g = 10$ m/s².",
+   "law": "$\\vec{F}_{\\text{résultante}} = m\\vec{a}$, où la résultante est la somme de la force appliquée et de la force de frottement",
+   "solution": [
+    {
+     "text": "D'abord, on trouve la force de frottement. Elle est égale au produit du coefficient par la force de pression normale, qui ici est égale au poids.",
+     "latex": "F_{\\text{fr}} = \\mu m g = 0{,}2 \\cdot 20 \\cdot 10 = 40\\ \\text{N}"
+    },
+    {
+     "text": "La résultante est la différence entre la force appliquée et le frottement : elles sont de directions opposées.",
+     "latex": "F_{\\text{résultante}} = 60 - 40 = 20\\ \\text{N}"
+    },
+    {
+     "text": "Maintenant, la deuxième loi.",
+     "latex": "a = \\frac{F_{\\text{résultante}}}{m} = \\frac{20}{20} = 1\\ \\text{m/s}^2"
+    }
+   ],
+   "answer": "L'accélération est de $1$ m/s²",
+   "check": "Si on avait oublié le frottement, on aurait obtenu 3 m/s² — trois fois plus. Vérification par le bon sens : une caisse de 20 kg poussée avec une force de 60 N accélère mollement, un mètre par seconde par seconde. Cela semble plausible : en poussant une caisse lourde sur le sol, on ne l'accélère effectivement pas instantanément."
+  },
+  "constants": {
+   "title": "Grandeurs de ce paragraphe",
+   "lead": "Ici apparaît la première véritable unité nommée d'après une personne — et un coefficient qui n'est pas une constante de la nature.",
+   "items": [
+    {
+     "sym": "N",
+     "latex": "\\text{N}",
+     "name": "Newton — unité de force",
+     "value": "1 N = 1 kg·m/s²",
+     "unit": "kg · m / s²",
+     "why": "Ce n'est pas une constante fondamentale, mais une unité dérivée : la force qui communique à une masse d'un kilogramme une accélération d'un mètre par seconde au carré. Décomposez le newton en ses composantes — et vous obtenez la deuxième loi à l'état pur. Pour avoir une idée de l'échelle : le poids d'une pomme est d'environ 1 N.",
+     "mnemo": "L'unité contient la formule : kg·m/s² — c'est littéralement m·a."
+    },
+    {
+     "sym": "μ",
+     "latex": "\\mu",
+     "name": "Coefficient de frottement",
+     "value": "0,02 (glace) · 0,2 (bois) · 0,8 (caoutchouc)",
+     "unit": "sans dimension",
+     "why": "Ce n'est pas une constante de la nature, mais une caractéristique de la PAIRE de surfaces : acier sur glace, caoutchouc sur asphalte. Il est sans dimension car c'est un rapport de deux forces. Fait surprenant : en première approximation, il ne dépend pas de la surface de contact — cela a été établi par Coulomb lui-même.",
+     "mnemo": "Le caoutchouc sur asphalte sec est d'environ 0,8 — d'où le freinage maximal d'une voiture d'environ 8 m/s²."
+    },
+    {
+     "sym": "g",
+     "latex": "g",
+     "dictKey": "g",
+     "name": "Accélération de la pesanteur",
+     "value": "9,81",
+     "unit": "m / s²",
+     "why": "Ici, elle est nécessaire pour relier la masse au poids : $P = mg$. Il est important de ne pas confondre la masse (kilogrammes, mesure de l'inertie) et le poids (newtons, force d'attraction). Sur la Lune, votre masse est la même, mais votre poids est six fois moindre."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "La force ne maintient pas le mouvement, elle le modifie. L'accélération est directement proportionnelle à la force résultante et inversement proportionnelle à la masse, et les forces naissent toujours par paires, appliquées à des corps différents.",
+   "keyIdeas": [
+    {
+     "icon": "scale",
+     "title": "Première loi",
+     "text": "Sans force résultante, la vitesse ne change pas. Le mouvement n'exige pas de cause."
+    },
+    {
+     "icon": "clock",
+     "title": "Deuxième loi",
+     "text": "a = F/m. La force ne détermine pas la vitesse, mais sa variation."
+    },
+    {
+     "icon": "sigma",
+     "title": "Troisième loi",
+     "text": "Les forces sont appariées et appliquées à des corps différents — c'est pourquoi elles ne s'équilibrent pas."
+    },
+    {
+     "icon": "formula",
+     "title": "Limites",
+     "text": "Ne s'appliquent pas aux vitesses proches de celle de la lumière, à l'échelle atomique et dans les systèmes non inertiels."
+    }
+   ],
+   "where": [
+    "Ceinture de sécurité : lors d'un choc, le corps continue par inertie, la ceinture crée une force de freinage",
+    "Le recul du fusil — la troisième loi à l'état pur : la balle vers l'avant, la crosse vers l'arrière",
+    "La fusée ne vole pas en s'appuyant sur l'air, mais en éjectant de la masse vers l'arrière — dans le vide, elle fonctionne de la même manière",
+    "Un camion chargé freine plus longtemps qu'un camion vide : même force, plus grande masse, plus petite accélération"
+   ],
+   "watchOut": "Les forces d'action et de réaction ne s'équilibrent JAMAIS, car elles sont appliquées à des corps différents. Le cheval tire la charrette non pas en dépit de la troisième loi : sur la charrette agit la force du cheval, sur le cheval — celle de la charrette, et le mouvement est déterminé par les forces appliquées à chaque corps séparément."
+  },
+  "quiz": [
+   {
+    "id": "n1",
+    "type": "mcq",
+    "q": "Un cheval tire une charrette. Selon la troisième loi, la charrette tire le cheval avec la même force. Pourquoi alors le système se déplace-t-il ?",
+    "options": [
+     "La force du cheval est quand même un peu plus grande",
+     "Ces forces sont appliquées à des corps différents et ne s'équilibrent donc pas ; le mouvement de la charrette est déterminé par les forces agissant sur la charrette",
+     "La troisième loi ne fonctionne pas pour les êtres vivants",
+     "Le frottement rompt l'égalité des forces"
+    ],
+    "answer": 1,
+    "why": "Seules les forces appliquées à un MÊME corps peuvent s'équilibrer. Ici, une force est appliquée à la charrette, l'autre au cheval. La charrette avance parce que la force du cheval dépasse son frottement avec la route.",
+    "hint": "Posez la question plus précisément : quelles forces agissent exactement sur la charrette ? Et lesquelles sur le cheval ? Peut-on additionner des forces appliquées à des corps différents ?"
+   },
+   {
+    "id": "n2",
+    "type": "mcq",
+    "q": "Un astronaute dans l'espace ouvert lance une clé à molette. Que lui arrive-t-il ?",
+    "options": [
+     "Rien — en apesanteur, il n'y a pas de forces",
+     "Il reçoit une vitesse dans la direction opposée, d'autant plus petite que sa masse est grande",
+     "Il commence à tourner, mais reste sur place",
+     "Il vole dans la même direction que la clé"
+    ],
+    "answer": 1,
+    "why": "Troisième loi : en repoussant la clé, l'astronaute reçoit une force égale en grandeur dans la direction opposée. Selon la deuxième loi, son accélération est d'autant plus petite que sa masse est grande par rapport à celle de la clé. C'est le principe de la propulsion par réaction.",
+    "hint": "Si une force a agi sur la clé, que dit la troisième loi sur la force agissant sur l'astronaute ? Et la deuxième loi, que dit-elle sur son accélération si sa masse est grande ?"
+   },
+   {
+    "id": "n3",
+    "type": "free",
+    "q": "Avec vos propres mots : pourquoi a-t-on cru pendant deux mille ans qu'un mouvement nécessitait une force constante ? Quelle était l'erreur ?",
+    "keywords": [
+     "frottement",
+     "résistance",
+     "invisible",
+     "masque",
+     "arrête",
+     "gêne"
+    ],
+    "needed": 1,
+    "why": "Parce que dans l'expérience quotidienne, il y a toujours du frottement, et il est invisible. Arrêtez de pousser une charrette — elle s'arrête, mais pas parce que « le mouvement exige une force », mais parce que le frottement la freine. Galilée a mentalement supprimé le frottement et a vu la vérité.",
+    "hint": "Que se passe-t-il avec un traîneau sur la glace par rapport à un traîneau sur l'asphalte ? Quel obstacle invisible est présent dans toutes les expériences terrestres et comment fausse-t-il la conclusion ?"
+   },
+   {
+    "id": "n4",
+    "type": "estimate",
+    "q": "Une voiture de masse 1200 kg accélère avec une accélération de 3 m/s². Quelle force est exercée par le moteur, si on néglige le frottement et la résistance ? Réponse en kilonewtons.",
+    "answer": 3.6,
+    "unit": "kN",
+    "why": "F = ma = 1200 · 3 = 3600 N = 3,6 kN. De tête : 1200 multiplié par 3 donne 3600. Pour comparaison : le poids de la voiture elle-même est d'environ 12 kN, donc la traction représente environ un tiers du poids.",
+    "hint": "La formule est directe, sans piège. Multipliez la masse par l'accélération et convertissez les newtons en kilonewtons en divisant par mille.",
+    "tolAbs": 1.3
+   }
+  ],
+  "curiosities": {
+   "title": "Curiosités : à tester soi-même",
+   "lead": "Trois lois se vérifient avec une pile de pièces, un ballon de baudruche et votre propre poids dans un ascenseur.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "expérience de cuisine",
+     "h": "La pièce sous la pile",
+     "text": "Empilez cinq ou six pièces identiques. Prenez une règle ou un couteau et, d'un coup sec horizontal, faites sauter la pièce du bas. Puis recommencez, mais en déplaçant la règle lentement.",
+     "answer": "Avec un coup sec, la pièce du bas s'échappe et la pile retombe presque sans s'incliner. Avec un mouvement lent, toute la pile se déplace. La différence réside dans le temps d'application de la force : pour déplacer les pièces supérieures, le frottement doit avoir le temps de leur transmettre de l'impulsion, ce qui prend du temps. Un coup rapide ne laisse pas ce temps, et les pièces supérieures restent en place simplement parce que rien ne les a mises en mouvement — c'est la première loi à l'état pur."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoxe",
+     "h": "Le cheval et la charrette",
+     "text": "Si la charrette tire le cheval en arrière avec exactement la même force que le cheval tire la charrette en avant, les forces sont égales et opposées. Alors la somme est nulle, et le véhicule ne devrait pas démarrer. Pourtant, les charrettes roulent.",
+     "answer": "L'erreur est d'additionner des forces appliquées à des corps différents. Sur la charrette agissent la traction du cheval et le frottement avec le sol — c'est leur somme qui accélère la charrette. Sur le cheval agissent la tension du harnais vers l'arrière et la poussée des sabots sur le sol vers l'avant. On ne peut additionner que des forces appliquées à un même corps. La troisième loi ne dit rien sur le mouvement d'un corps isolé : elle concerne une paire, et c'est là sa force — elle implique la conservation de la quantité de mouvement."
+    },
+    {
+     "icon": "fact",
+     "kind": "fait amusant",
+     "h": "Le livre qui a changé la physique fut publié aux frais d'autrui",
+     "text": "Les 'Principes mathématiques de la philosophie naturelle' parurent en 1687 parce qu'Edmond Halley — celui-là même dont la comète porte le nom — en paya l'impression de ses propres deniers. La Royal Society avait alors dépensé son budget pour une 'Histoire des poissons' magnifiquement illustrée, qui se vendait mal. Halley devait à Newton la réponse à sa question : selon quelle courbe une planète se déplace-t-elle si la force décroît comme le carré de la distance ? Newton répondit immédiatement : 'selon une ellipse, je l'ai calculé' — mais il avait perdu le brouillon et dut tout reconstituer."
+    },
+    {
+     "icon": "mnemo",
+     "kind": "moyen mnémotechnique",
+     "h": "La force est la cause non du mouvement, mais du changement de mouvement",
+     "text": "L'expérience quotidienne suggère : dès qu'on cesse de pousser, ça s'arrête, donc pour se mouvoir il faut une force. Cela n'est vrai que parce qu'il y a toujours du frottement. Dans le vide, un corps se déplace éternellement, et une force n'est nécessaire que pour modifier sa vitesse : accélérer, freiner, tourner. Gardez à l'esprit la formulation par la quantité de mouvement, $\\vec{F}=d\\vec{p}/dt$ : la force est le taux de variation de la quantité de mouvement. Sous cette forme, la loi fonctionne même quand la masse n'est pas constante — par exemple pour une fusée."
+    },
+    {
+     "icon": "estimate",
+     "kind": "estimation",
+     "h": "Combien vous pesez dans un ascenseur",
+     "text": "L'accélération d'un ascenseur de passagers ordinaire est d'environ un mètre par seconde par seconde — environ un dixième de $g$. Ainsi, lors de l'accélération vers le haut, la balance sous vos pieds indiquera un dixième de plus : une personne de 70 kilogrammes 'alourdit' de sept. Au freinage, elle est d'autant plus légère. La sensation de chute dans le ventre apparaît précisément à ce dixième ; dans un avion en turbulence, elle peut être deux à trois fois plus forte."
+    },
+    {
+     "icon": "edge",
+     "kind": "limite de validité",
+     "h": "Où les lois de Newton sont fausses",
+     "text": "Première limite — le référentiel : dans un système en rotation ou accéléré, les corps accélèrent sans aucune force, et il faut introduire des forces d'inertie. Deuxième — la vitesse : à l'approche de la vitesse de la lumière, $\\vec{F}=m\\vec{a}$ cesse de fonctionner ; il faut la mécanique relativiste. Troisième — l'échelle : pour un électron dans un atome, la notion de trajectoire perd son sens ; c'est l'équation de Schrödinger qui règne. Newton reste exact dans l'intervalle, mais c'est précisément dans cet intervalle que vit toute la technologie."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Ce qui repose sur les lois de Newton",
+   "lead": "Presque toute l'ingénierie est la deuxième loi appliquée à une structure concrète.",
+   "items": [
+    {
+     "h": "Ceintures et airbags",
+     "text": "Lors d'un choc, ce n'est pas la vitesse en elle-même qui compte, mais son taux de variation : la force est égale à la variation de la quantité de mouvement divisée par le temps. L'airbag étale l'arrêt de quelques centièmes de seconde à quelques dixièmes — et réduit d'autant la force exercée sur la personne."
+    },
+    {
+     "h": "Propulsion par réaction",
+     "text": "Une fusée ne s'appuie pas sur l'air : elle éjecte de la masse vers l'arrière, et la troisième loi la pousse vers l'avant. C'est pourquoi le moteur fonctionne dans le vide, et la poussée se calcule à partir du débit de carburant et de la vitesse d'éjection."
+    },
+    {
+     "h": "Structures de construction",
+     "text": "Un bâtiment est immobile, donc la somme des forces en chaque nœud est nulle — c'est la première loi transformée en schéma de calcul. D'où l'épaisseur des poutres, la section des colonnes et la marge de sécurité."
+    },
+    {
+     "h": "Pesée en apesanteur",
+     "text": "En orbite, une balance est inutile, mais il faut mesurer la masse. On installe l'astronaute sur un dispositif à ressort, on le fait osciller, et on déduit la masse de la période d'oscillation — via la deuxième loi, et non via le poids."
+    },
+    {
+     "h": "Manœuvres des engins spatiaux",
+     "text": "Pour faire pivoter un satellite, on utilise des volants d'inertie : en faisant tourner une roue dans un sens, on fait tourner le corps dans l'autre. Aucun carburant n'est consommé — seul l'échange de quantité de mouvement à l'intérieur de l'engin est en jeu."
+    }
+   ]
   }
- ]
+ }
 }

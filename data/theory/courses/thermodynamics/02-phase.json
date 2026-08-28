@@ -17,37 +17,52 @@
   ],
   "examples_from_articles": [
    {
-    "id": "2606.14075",
-    "date": "2026-06-12",
+    "id": "2601.22247",
+    "date": "2026-01-29",
     "title": {
-     "ru": "Вода в тисках: два взгляда на таяние",
-     "en": "Water in a Vise: Two Views of Melting",
-     "es": "Agua en la pinza: dos miradas al deshielo",
-     "ar": "الماء في قبضة: نظرتان إلى الذوبان"
+     "ru": "Тепло вашего кофе — безмолвная торговля светом",
+     "en": "Your Coffee’s Warmth Is a Silent Light Trade",
+     "es": "El calor de tu café es un comercio silencioso de luz",
+     "ar": "دفء قهوتك — تبادل صامت للضوء",
+     "fr": "La chaleur de votre café est un échange silencieux de lumière"
     },
-    "why": "phase_transition, melting"
+    "score": 0.626
    },
    {
-    "id": "2604.10561",
-    "date": "2026-04-12",
+    "id": "2601.13678",
+    "date": "2026-01-20",
     "title": {
-     "ru": "Где алюминий перестаёт быть жидкостью",
-     "en": "Where Aluminum Stops Being a Liquid",
-     "es": "Donde el aluminio deja de ser líquido",
-     "ar": "حيث يفقد الألمنيوم سيولته"
+     "ru": "Земля может сама себя разогреть",
+     "en": "Earth Can Heat Itself Up",
+     "es": "La Tierra puede calentarse a sí misma",
+     "ar": "الأرض قد تُسخّن نفسها بنفسها",
+     "fr": "La Terre peut se réchauffer toute seule"
     },
-    "why": "phase_transition, latent_heat"
+    "score": 0.616
    },
    {
-    "id": "2605.31194",
-    "date": "2026-05-29",
+    "id": "2603.07128",
+    "date": "2026-03-07",
     "title": {
-     "ru": "Как дефекты запускают пузыри новой фазы",
-     "en": "How Defects Trigger Bubbles of a New Phase",
-     "es": "Cómo los defectos disparan burbujas de una nueva fase",
-     "ar": "كيف تطلق العيوب فقاعات الطور الجديد"
+     "ru": "Вода работает на разнице в один градус",
+     "en": "Water Works on a One-Degree Difference",
+     "es": "El agua trabaja con una diferencia de un grado",
+     "ar": "الماء يعمل بفارق درجة واحدة",
+     "fr": "L'eau travaille avec un écart d'un degré"
     },
-    "why": "phase_transition, nucleation"
+    "score": 0.607
+   },
+   {
+    "id": "2607.23484",
+    "date": "2026-07-26",
+    "title": {
+     "ru": "Два русла для электрического тока в актинидах",
+     "en": "Two Channels for Electric Current in Actinides",
+     "es": "Dos cauces para la corriente eléctrica en los actínidos",
+     "ar": "قناتان للتيار الكهربائي في الأكتينيدات",
+     "fr": "Deux lits pour le courant électrique dans les actinides"
+    },
+    "score": 0.606
    }
   ]
  },
@@ -135,12 +150,14 @@
     {
      "what": "Разделение переменных",
      "why": "Уравнение вида $dP/dT = f(P)\\,g(T)$ решается так: собираем всё, что зависит от $P$, слева, всё, что зависит от $T$, — справа, и интегрируем обе части независимо. Это стандартный приём для дифференциальных уравнений первого порядка, и он же используется при выводе адиабаты в следующем параграфе.",
-     "latex": "\\int\\frac{dP}{P} = \\int \\frac{L_{\\text{мол}}}{R}\\frac{dT}{T^{2}} \\;\\Rightarrow\\; \\ln P = -\\frac{L_{\\text{мол}}}{RT} + \\text{const}"
+     "latex": "\\int\\frac{dP}{P} = \\int \\frac{L_{\\text{мол}}}{R}\\frac{dT}{T^{2}} \\;\\Rightarrow\\; \\ln P = -\\frac{L_{\\text{мол}}}{RT} + \\text{const}",
+     "kit": "separation"
     },
     {
      "what": "Почему появился логарифм",
      "why": "Интеграл от $1/P$ по $dP$ равен натуральному логарифму — это единственная функция, производная которой равна $1/x$. Поэтому логарифмы неизбежно возникают всюду, где скорость изменения величины пропорциональна ей самой: в радиоактивном распаде, в росте популяций, в давлении насыщенного пара.",
-     "latex": "\\int \\frac{dx}{x} = \\ln|x| + C"
+     "latex": "\\int \\frac{dx}{x} = \\ln|x| + C",
+     "kit": "exponent"
     }
    ]
   },
@@ -1271,9 +1288,6 @@
    ]
   }
  },
- "laws": [
-  "law_of_conservation_of_energy"
- ],
  "fr": {
   "title": "Transitions de phase",
   "subtitle": "Paragraphe 2 · Chaleur latente et point d'ébullition",

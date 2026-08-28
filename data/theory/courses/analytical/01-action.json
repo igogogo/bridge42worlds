@@ -10,41 +10,6 @@
   ],
   "laws": [
    "law_of_conservation_of_energy"
-  ],
-  "examples_from_articles": [
-   {
-    "id": "2607.09468",
-    "date": "2026-07-10",
-    "title": {
-     "ru": "Тайный ветер нейтронных звёзд: как нейтроны подгоняют магнитные вихри",
-     "en": "The Hidden Wind of Neutron Stars: How Neutrons Propel Magnetic Vortices",
-     "es": "El viento secreto de las estrellas de neutrones: cómo los neutrones empujan los vórtices magnéticos",
-     "ar": "الريح الخفية للنجوم النيوترونية: كيف تدفع النيوترونات الدوامات المغناطيسية"
-    },
-    "why": "numerical_simulation, quantum_field"
-   },
-   {
-    "id": "2607.09432",
-    "date": "2026-07-10",
-    "title": {
-     "ru": "Ракетный эффект доменных стенок: асимметрия масс разгоняет вакуумы",
-     "en": "The Rocket Effect of Domain Walls: Mass Asymmetry Propels Vacuums",
-     "es": "Efecto cohete de las paredes de dominio: la asimetría de masas acelera los vacíos",
-     "ar": "تأثير الصاروخ في جدران المجال: عدم تناظر الكتل يُسرّع الفراغات"
-    },
-    "why": "numerical_simulation, quantum_field"
-   },
-   {
-    "id": "2607.08822",
-    "date": "2026-07-09",
-    "title": {
-     "ru": "Танец электронов на сомбреро: рождение дробных квантовых кристаллов",
-     "en": "Electron Dance on the Sombrero: Birth of Fractional Quantum Crystals",
-     "es": "Danza de electrones sobre el sombrero: el nacimiento de cristales cuánticos fraccionarios",
-     "ar": "رقصة الإلكترونات على السومبريرو: ولادة البلورات الكمومية الكسرية"
-    },
-    "why": "numerical_simulation, quantum_field"
-   }
   ]
  },
  "ru": {
@@ -173,15 +138,18 @@
    "items": [
     {
      "what": "Интеграл как накопление",
-     "why": "Знак $\\int$ здесь не «площадь под графиком», а именно накопление: мы идём по времени маленькими шагами, на каждом берём $(K-U)\\cdot dt$ и всё складываем. Стенд считает действие именно так — суммой по 240 шагам, а не готовой формулой. Поэтому число на экране получено тем же способом, каким его посчитал бы человек с калькулятором."
+     "why": "Знак $\\int$ здесь не «площадь под графиком», а именно накопление: мы идём по времени маленькими шагами, на каждом берём $(K-U)\\cdot dt$ и всё складываем. Стенд считает действие именно так — суммой по 240 шагам, а не готовой формулой. Поэтому число на экране получено тем же способом, каким его посчитал бы человек с калькулятором.",
+     "kit": "integral"
     },
     {
      "what": "Что такое «шевельнуть функцию»",
-     "why": "Обычная производная спрашивает: как изменится $y$, если чуть сдвинуть $x$. Здесь вопрос другой: как изменится число $S$, если чуть изменить всю функцию $y(t)$ сразу. Раздел математики, который этим занимается, называется вариационным исчислением, а маленькое изменение функции обозначают $\\delta$."
+     "why": "Обычная производная спрашивает: как изменится $y$, если чуть сдвинуть $x$. Здесь вопрос другой: как изменится число $S$, если чуть изменить всю функцию $y(t)$ сразу. Раздел математики, который этим занимается, называется вариационным исчислением, а маленькое изменение функции обозначают $\\delta$.",
+     "kit": "derivative"
     },
     {
      "what": "Почему концы закреплены",
-     "why": "Если отпустить концы, минимума не будет: всегда найдётся путь с меньшим действием. Закрепление концов — не техническая деталь, а часть постановки задачи: мы спрашиваем не «куда полетит тело», а «каким путём оно попадёт из этого состояния в то»."
+     "why": "Если отпустить концы, минимума не будет: всегда найдётся путь с меньшим действием. Закрепление концов — не техническая деталь, а часть постановки задачи: мы спрашиваем не «куда полетит тело», а «каким путём оно попадёт из этого состояния в то».",
+     "kit": "diffeq"
     }
    ]
   },
@@ -1404,5 +1372,344 @@
    "plateCap": "المسار الحقيقي هو الذي يأخذ فيه الفعل أصغر قيمة",
    "note": "بالمعنى الدقيق، الفعل ليس دائمًا أدنى ما يمكن: الشرط الصحيح هو أنه ثابت، أي لا يتغير في الترتيب الأول عند اهتزاز صغير. للمسائل العادية هذا هو الحد الأدنى، لكن توجد حالات تكون فيها النقطة الثابتة سرجًا. اسم «مبدأ الفعل الأصغر» ترسخ تاريخيًا قبل اكتشاف هذه الدقة."
   }
+ },
+ "fr": {
+  "title": "Principe de moindre action",
+  "subtitle": "Pourquoi, parmi une infinité de chemins, la nature n'en choisit qu'un seul",
+  "intro": [
+   "Lancez une balle en l'air et rattrapez-la au même point deux secondes plus tard. Entre le lancer et la réception, la balle aurait pu se déplacer de n'importe quelle façon : monter plus haut et retomber plus vite, faire un écart sur le côté, suivre un zigzag. Tous ces chemins relient les deux mêmes points en le même temps. Mais le chemin réel est unique.",
+   "L'étrangeté est que la balle semble connaître l'avenir. La deuxième loi de Newton résout le problème pas à pas : voici la force à l'instant présent, voici l'accélération à l'instant présent, voici où le corps se trouvera un instant plus tard. Le principe de moindre action dit autrement : prenez le chemin dans son ensemble, du début à la fin, calculez pour lui un nombre unique — et le chemin réel sera celui où ce nombre est minimal.",
+   "Les deux descriptions donnent la même réponse. Mais la seconde s'est avérée plus profonde : on en déduit non seulement la mécanique, mais aussi l'optique, l'électrodynamique et, plus tard, la mécanique quantique. Ce sujet porte sur ce qu'est ce nombre et pourquoi la nature l'économise."
+  ],
+  "standNote": "Déplacez le « écart » : le chemin d'essai s'écarte du chemin réel tout en restant attaché aux mêmes extrémités. Observez le nombre en bas et la courbe à droite — l'action augmente des deux côtés, et à zéro elle a un creux. Essayez de repérer le minimum à l'œil, puis vérifiez avec le graphique.",
+  "formula": {
+   "name": "Principe de moindre action",
+   "latex": "S = \\int_{t_1}^{t_2} (K - U)\\,dt \\;\\longrightarrow\\; \\min",
+   "alsoKnown": "Principe de Hamilton ; dans sa forme ancienne, principe de Maupertuis",
+   "authors": [
+    {
+     "who": "Pierre Maupertuis",
+     "year": "1744",
+     "what": "a supposé que la nature est économe et a introduit le concept d'action"
+    },
+    {
+     "who": "Leonhard Euler",
+     "year": "1744",
+     "what": "a donné au principe une forme mathématique"
+    },
+    {
+     "who": "Joseph Lagrange",
+     "year": "1788",
+     "what": "en a déduit les équations du mouvement sous une forme générale"
+    },
+    {
+     "who": "William Hamilton",
+     "year": "1834",
+     "what": "a formulé le principe sous la forme utilisée aujourd'hui"
+    }
+   ],
+   "story": "Maupertuis considérait l'économie de la nature comme une preuve de dessein intelligent et en débattait publiquement. La dispute fit scandale, mais le principe est resté — et s'est avéré plus juste que l'argument pour lequel il avait été inventé. La physique sait reprendre de bonnes idées à des explications erronées.",
+   "symbols": [
+    {
+     "sym": "S",
+     "latex": "S",
+     "what": "action — nombre attribué au chemin entier",
+     "unit": "J·s"
+    },
+    {
+     "sym": "K",
+     "latex": "K",
+     "what": "énergie cinétique à un instant donné",
+     "unit": "J"
+    },
+    {
+     "sym": "U",
+     "latex": "U",
+     "what": "énergie potentielle à un instant donné",
+     "unit": "J"
+    },
+    {
+     "sym": "t₁, t₂",
+     "latex": "t_1, t_2",
+     "what": "instants de début et de fin — ils sont fixés, tout comme les points",
+     "unit": "s"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "D'où vient le minimum",
+   "lead": "Suivons le raisonnement pas à pas : de « beaucoup de chemins » à « le vrai est celui où l'action ne change pas lors d'une petite variation » — jusqu'à l'équation explicite pour ce chemin.",
+   "steps": [
+    {
+     "text": "Fixons le début et la fin : le corps part du point $A$ à l'instant $t_1$ et arrive au point $B$ à l'instant $t_2$. Tout ce qui se trouve entre les deux n'est pas encore spécifié — il existe une infinité de chemins, et chacun est concevable.",
+     "latex": "y(t_1) = y_A, \\qquad y(t_2) = y_B",
+     "figure": "manypaths",
+     "figCaption": "Les extrémités sont fixées, le milieu est libre : toute courbe entre les points est candidate"
+    },
+    {
+     "text": "À chaque chemin, on associe un nombre. Pour cela, à chaque instant, on prend la différence entre l'énergie cinétique et l'énergie potentielle et on la somme sur tout le temps du mouvement. La somme de morceaux infiniment petits est une intégrale.",
+     "latex": "S = \\int_{t_1}^{t_2} \\big(K(t) - U(t)\\big)\\,dt",
+     "figure": "actionsum",
+     "figCaption": "L'action se construit par morceaux : à chaque étape, on prend la différence des énergies"
+    },
+    {
+     "text": "Comparons maintenant les chemins. Prenons le chemin vrai et déformons-le légèrement au milieu, sans toucher aux extrémités. Si l'action augmente dans les deux sens, nous sommes à un minimum. C'est exactement ce qui se passe : pour le mouvement réel, l'action est la plus petite.",
+     "latex": "\\delta S = 0 \\quad \\text{pour une petite variation du chemin}",
+     "figure": "actionmin",
+     "figCaption": "La courbe de l'action : le chemin vrai se trouve au fond, toute déviation dans un sens ou l'autre le fait monter"
+    },
+    {
+     "text": "« Déformer le chemin » n'est encore qu'une phrase, pas un calcul. Transformons-la en formule : prenons une fonction arbitraire $\\eta(t)$, nulle aux deux extrémités, et ajoutons-la au chemin vrai avec un petit facteur $\\varepsilon$. Le zéro aux extrémités n'est pas une décoration : sinon, le chemin d'essai ne partirait pas de $A$ ou manquerait $B$, et il n'y aurait rien à comparer. Mais maintenant, au lieu d'un ensemble infini de chemins, nous avons une famille paramétrée par un seul nombre $\\varepsilon$.",
+     "latex": "y_\\varepsilon(t) = y(t) + \\varepsilon\\,\\eta(t), \\qquad \\eta(t_1) = \\eta(t_2) = 0",
+     "figure": "actiontrial",
+     "figCaption": "La bosse η(t) est nulle aux extrémités, le facteur ε fixe sa hauteur : un paramètre au lieu d'une infinité de chemins"
+    },
+    {
+     "text": "En substituant le chemin d'essai dans l'action, on obtient non plus une fonctionnelle, mais une fonction ordinaire d'un nombre $S(\\varepsilon)$. On peut la développer autour de zéro : une constante, un terme linéaire, un terme quadratique, etc. Au chemin vrai correspond $\\varepsilon = 0$, et comme il y a un minimum, le terme linéaire doit être absent — si le coefficient de $\\varepsilon$ était non nul, il suffirait de prendre $\\varepsilon$ de signe opposé pour que l'action soit plus petite que sur le chemin vrai. Ce coefficient linéaire est ce qu'on appelle la variation $\\delta S$ : l'écriture $\\delta S = 0$ signifie exactement « le premier ordre est nul », et non « l'action ne change pas du tout ». Dans certains livres, $\\delta$ désigne non pas le coefficient, mais la petite variation elle-même, $\\delta S = \\varepsilon\\, dS/d\\varepsilon$ ; pour nous, cela ne change rien — zéro reste zéro pour tout $\\varepsilon$.",
+     "latex": "S(\\varepsilon) = S(0) + \\varepsilon\\,\\underbrace{\\left.\\frac{dS}{d\\varepsilon}\\right|_{\\varepsilon=0}}_{\\delta S} + O(\\varepsilon^{2}), \\qquad \\delta S = 0",
+     "figure": "actionorder",
+     "figCaption": "Une tangente inclinée en zéro donne toujours un chemin voisin moins cher que le vrai — donc au minimum, elle doit être horizontale"
+    },
+    {
+     "text": "Il reste à écrire ce coefficient. L'ajout $\\varepsilon\\eta$ modifie non seulement la coordonnée, mais aussi la vitesse : $y$ devient $y + \\varepsilon\\eta$, et $\\dot{y}$ devient $\\dot{y} + \\varepsilon\\dot{\\eta}$. À partir de là, la différence d'énergies sous l'intégrale s'appelle le lagrangien, $L = K - U$ ; il dépend des deux quantités, donc au premier ordre il reçoit deux corrections, chacune avec sa dérivée partielle — c'est la règle de dérivation en chaîne habituelle. En les rassemblant sous l'intégrale, on obtient la forme explicite de la variation.",
+     "latex": "\\delta S = \\int_{t_1}^{t_2}\\left(\\frac{\\partial L}{\\partial y}\\,\\eta + \\frac{\\partial L}{\\partial \\dot{y}}\\,\\dot{\\eta}\\right)dt",
+     "figure": "actionchain",
+     "figCaption": "Le déplacement du chemin modifie à la fois la coordonnée et la pente ; le lagrangien réagit aux deux — d'où exactement deux termes, et pas un de plus"
+    },
+    {
+     "text": "Le deuxième terme empêche de factoriser $\\eta$ : il contient non pas $\\eta$ elle-même, mais sa dérivée. Transférons la dérivée sur le facteur voisin par une intégration par parties — alors $\\eta$ devient un facteur commun, et le prix à payer est un terme de bord, sorti de l'intégrale. Mais ce terme est évalué exactement aux extrémités, où $\\eta$ est nulle par construction : le terme disparaît entièrement, et c'est précisément pour cela que les extrémités ont été fixées. L'intégrale restante doit s'annuler pour toute $\\eta$ — et si la parenthèse était non nulle quelque part, on pourrait y placer une bosse et briser l'égalité ; donc la parenthèse est nulle à chaque instant.",
+     "latex": "\\delta S = \\underbrace{\\left[\\frac{\\partial L}{\\partial \\dot{y}}\\,\\eta\\right]_{t_1}^{t_2}}_{=\\,0} + \\int_{t_1}^{t_2}\\left(\\frac{\\partial L}{\\partial y} - \\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{y}}\\right)\\eta\\,dt = 0",
+     "figure": "actionparts",
+     "figCaption": "La dérivée passe de la bosse au facteur impulsion ; les extrémités fixées éliminent le terme de bord, et le caractère arbitraire de la bosse élimine la parenthèse sous l'intégrale"
+    },
+    {
+     "text": "La parenthèse qui s'annule est précisément l'équation du mouvement recherchée — on l'appelle l'équation d'Euler-Lagrange. Vérifions qu'elle n'est pas étrangère : substituons le lagrangien mécanique $L = K - U$, où la partie cinétique ne dépend que de la vitesse et la partie potentielle que de la coordonnée : le premier terme donne $m\\ddot{y}$, le second donne la force. On obtient exactement la deuxième loi de Newton. Autrement dit, Newton n'est pas aboli : il en est une conséquence.",
+     "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{y}} - \\frac{\\partial L}{\\partial y} = 0 \\;\\Longrightarrow\\; m\\ddot{y} = -\\frac{\\partial U}{\\partial y}",
+     "figure": "eulerlagrange",
+     "figCaption": "D'une seule exigence naissent les équations du mouvement familières"
+    }
+   ],
+   "plate": "S = \\int (K - U)\\,dt \\longrightarrow \\min",
+   "plateCap": "Le chemin réel est celui où l'action prend la plus petite valeur",
+   "note": "À proprement parler, l'action n'est pas toujours minimale : la condition correcte est qu'elle soit stationnaire, c'est-à-dire qu'elle ne change pas au premier ordre lors d'une petite variation. Pour les problèmes ordinaires, c'est un minimum, mais il existe des cas où le point stationnaire est un point selle. Le nom de « principe de moindre action » s'est historiquement imposé avant que cette subtilité ne soit découverte."
+  },
+  "math": {
+   "title": "Les mathématiques nécessaires ici",
+   "lead": "Ici, pour la première fois, on ne cherche pas un nombre mais une fonction — et la dérivée habituelle ne convient pas pour cela.",
+   "items": [
+    {
+     "what": "L'intégrale comme accumulation",
+     "why": "Le signe $\\int$ n'est pas ici « l'aire sous la courbe », mais précisément une accumulation : on parcourt le temps par petits pas, à chaque pas on prend $(K-U)\\cdot dt$ et on additionne le tout. Le banc calcule l'action exactement de cette manière — par une somme sur 240 pas, et non par une formule toute faite. Ainsi, le nombre affiché à l'écran est obtenu de la même façon qu'un humain avec une calculatrice."
+    },
+    {
+     "what": "Ce que signifie « faire varier une fonction »",
+     "why": "La dérivée ordinaire demande : comment $y$ change-t-il si l'on décale légèrement $x$ ? Ici, la question est différente : comment le nombre $S$ change-t-il si l'on modifie légèrement toute la fonction $y(t)$ d'un coup ? La branche des mathématiques qui s'en occupe s'appelle le calcul des variations, et une petite modification de la fonction est notée $\\delta$."
+    },
+    {
+     "what": "Pourquoi les extrémités sont fixées",
+     "why": "Si l'on libère les extrémités, il n'y aura pas de minimum : on trouvera toujours un chemin avec une action plus petite. Fixer les extrémités n'est pas un détail technique, mais une partie de l'énoncé du problème : on ne demande pas « où ira le corps », mais « par quel chemin arrivera-t-il de cet état à cet autre »."
+    }
+   ]
+  },
+  "example": {
+   "title": "Exemple avec des nombres",
+   "lead": "Calculons combien coûte un chemin incorrect — pour le même lancer que sur le banc.",
+   "given": "Un corps de masse $m = 2$ kg est lancé vers le haut et revient au même point après $T = 2$ s. Le chemin test diffère du vrai par une bosse de hauteur $a = 1$ m au milieu.",
+   "law": "$S = \\int_0^T (K - U)\\,dt$, l'augmentation de l'action $\\Delta S = \\dfrac{m a^2 \\pi^2}{4T}$",
+   "solution": [
+    {
+     "text": "Substituons les nombres dans l'expression de l'augmentation.",
+     "latex": "\\Delta S = \\frac{2 \\cdot 1^2 \\cdot \\pi^2}{4 \\cdot 2}",
+     "num": ""
+    },
+    {
+     "text": "Calculons : $\\pi^2$ vaut environ $9{,}87$, divisons par $8$ et multiplions par $2$.",
+     "latex": "\\Delta S \\approx \\frac{2 \\cdot 9{,}87}{8} \\approx 2{,}5",
+     "num": ""
+    }
+   ],
+   "answer": "Une bosse d'un mètre de haut coûte environ $2{,}5$ J·s d'action supplémentaire. Le banc affiche le même nombre, mais il faut comparer avec un écart de exactement $1{,}00$ m : par défaut, il est réglé sur $1{,}2$ m, et l'augmentation est alors d'environ $3{,}6$ J·s. Le pas du curseur de $0{,}05$ m permet de régler l'unité exactement.",
+   "check": "Vérification par le bon sens : l'augmentation est proportionnelle au carré de l'écart, donc une bosse deux fois plus haute coûtera quatre fois plus cher. C'est précisément pour cela que la courbe de l'action sur le graphique est une parabole, et non une droite."
+  },
+  "constants": {
+   "title": "Grandeurs de ce paragraphe",
+   "lead": "Il n'y a ici aucune constante universelle : toutes les grandeurs appartiennent au problème concret. C'est une particularité importante du principe — il ne concerne pas les nombres de la nature, mais une méthode de raisonnement.",
+   "items": [
+    {
+     "sym": "S",
+     "latex": "S",
+     "name": "Action",
+     "value": "J·s",
+     "why": "la dimension d'une énergie multipliée par un temps — la même que celle de la constante de Planck, et cette coïncidence ne sera pas due au hasard en mécanique quantique"
+    },
+    {
+     "sym": "L",
+     "latex": "L = K - U",
+     "name": "Lagrangien",
+     "value": "J",
+     "why": "la quantité sous l'intégrale ; c'est elle, et non l'énergie, que la nature somme le long du chemin"
+    },
+    {
+     "sym": "g",
+     "latex": "g",
+     "name": "Accélération de la pesanteur",
+     "value": "9,81 m/s²",
+     "dictKey": "g",
+     "why": "la seule grandeur externe dans le problème du lancer"
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Où cela fonctionne",
+   "lead": "Le principe n'est pas resté une belle reformulation : c'est sous cette forme que la physique l'utilise encore aujourd'hui.",
+   "items": [
+    {
+     "h": "Optique",
+     "text": "La lumière suit le chemin de moindre temps — la loi de la réfraction se déduit d'ici en deux lignes, sans aucun rayon ni angle."
+    },
+    {
+     "h": "Mécanique quantique",
+     "text": "Feynman a réécrit la théorie quantique comme une somme sur tous les chemins à la fois : chaque chemin contribue, et le chemin classique l'emporte parce que, près de lui, les contributions s'additionnent au lieu de s'annuler."
+    },
+    {
+     "h": "Relativité",
+     "text": "Un corps dans un champ de gravitation se déplace le long d'une courbe où le temps propre est maximal. La formulation est différente, l'idée est la même : un extremum d'une grandeur attribuée au chemin entier."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Curiosités : à vérifier par vous-même",
+   "lead": "Le principe semble abstrait jusqu'à ce qu'on le voie dans un film de savon et dans ses propres pas.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "expérience de cuisine",
+     "h": "Le film de savon cherche le minimum tout seul",
+     "text": "Pliez un fil de fer en une boucle fermée et plongez-le dans une solution savonneuse. Le film se tend de manière à ce que sa surface soit la plus petite possible. Personne ne l'a calculée : la tension superficielle le fait toute seule. C'est exactement ainsi que la nature traite l'action : elle ne calcule pas, elle se retrouve au minimum."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoxe",
+     "h": "D'où la balle sait-elle où aller ?",
+     "text": "Si le chemin réel est déterminé par comparaison avec tous les autres, il s'ensuit que le corps doit savoir à l'avance où il se trouvera à la fin. Comment cela s'accorde-t-il avec la causalité ?",
+     "answer": "Il n'y a pas de clairvoyance : l'exigence de minimum est localement équivalente à l'équation du mouvement qui ne regarde que « ici et maintenant ». Les deux descriptions – l'une sur le chemin entier, l'autre pas à pas – donnent la même réponse. C'est comme la différence entre « le chemin est le plus court » et « à chaque intersection, tournez correctement »."
+    },
+    {
+     "icon": "fact",
+     "kind": "fait amusant",
+     "h": "Une dimension qui a fait mouche plus tard",
+     "text": "L'action se mesure en joules-secondes. La constante de Planck a exactement la même dimension. En mécanique classique, cela semblait une curiosité, mais en mécanique quantique, cela s'est avéré être la clé : l'action se mesure en unités de $\\hbar$, et lorsqu'elle est comparable à celle-ci, la description classique cesse de fonctionner."
+    },
+    {
+     "icon": "mnemo",
+     "kind": "mnémonique",
+     "h": "La nature paresseuse",
+     "text": "On peut le retenir ainsi : la nature est paresseuse, mais sa paresse est rusée – elle n'économise ni l'énergie ni le temps, mais la différence $K - U$ accumulée sur tout le chemin. Le paresseux ne choisit pas le chemin le plus court, mais celui qui est le moins pénible au total."
+    },
+    {
+     "icon": "estimate",
+     "kind": "estimation",
+     "h": "À quel point le minimum est petit",
+     "text": "Estimez mentalement : si l'écart est deux fois plus petit qu'un mètre, de combien l'action excédentaire diminue-t-elle ? La dépendance quadratique – donc quatre fois. Cela explique pourquoi, près du chemin réel, l'action change à peine : le fond est plat."
+    },
+    {
+     "icon": "edge",
+     "kind": "limite de validité",
+     "h": "Pas toujours un minimum",
+     "text": "Pour les longs chemins et pour le mouvement dans des champs fortement courbés, le point stationnaire peut être non pas un minimum mais un col. Le principe ne s'effondre pas pour autant – les équations du mouvement sont les mêmes – mais le nom doit être lu comme « principe de l'action stationnaire »."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "Pour les curieux : pourquoi $K - U$ et non la somme",
+   "blocks": [
+    {
+     "text": "Il serait naturel de supposer que la nature économise l'énergie totale $K + U$. Mais elle est conservée et donc identique sur tous les chemins – il n'y a rien à économiser. La différence, elle, se comporte autrement : elle distingue les chemins où le corps monte lentement de ceux où il franchit rapidement la hauteur. On peut le vérifier directement sur le banc : faites une déviation positive et une négative. L'énergie totale est organisée de manière similaire dans les deux cas, tandis que l'action croît de la même manière dans les deux directions – précisément parce qu'elle contient la différence."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "Parmi l'infinité de chemins entre deux points, la nature choisit celui où l'action – la différence accumulée entre l'énergie cinétique et potentielle le long du chemin – prend la plus petite valeur. La deuxième loi de Newton en découle, et non l'inverse.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "L'action est attribuée au chemin entier",
+     "text": "L'action est attribuée au chemin entier, et non à un instant : c'est l'intégrale $S=\\int(K-U)dt$"
+    },
+    {
+     "icon": "estimate",
+     "title": "Les extrémités sont fixées",
+     "text": "Les extrémités sont fixées : seuls les chemins reliant les mêmes événements sont comparés"
+    },
+    {
+     "icon": "edge",
+     "title": "La condition exacte est la stationnarité",
+     "text": "La condition exacte est la stationnarité de l'action, pas nécessairement un minimum"
+    },
+    {
+     "icon": "fact",
+     "title": "La dimension de l'action est J·s",
+     "text": "La dimension de l'action est J·s, la même que celle de la constante de Planck"
+    }
+   ],
+   "where": "Optique (loi de la réfraction), mécanique quantique (somme sur les chemins de Feynman), relativité (mouvement le long d'une extrémale du temps propre), problèmes d'ingénierie de commande optimale.",
+   "watchOut": "Une erreur fréquente est de croire que l'énergie est économisée. L'énergie totale est conservée et donc identique sur tous les chemins ; c'est la différence accumulée $K-U$ qui est économisée."
+  },
+  "quiz": [
+   {
+    "id": "a1",
+    "type": "mcq",
+    "q": "Pourquoi l'action fait-elle intervenir la différence $K - U$ et non la somme ?",
+    "options": [
+     "La somme est conservée et donc identique sur tous les chemins — on ne peut pas les distinguer par elle",
+     "C'est un choix historique, sans signification physique",
+     "La somme donne des valeurs négatives, alors que l'action doit être positive",
+     "La différence est plus simple à calculer"
+    ],
+    "answer": 0,
+    "why": "L'énergie totale est la même sur tous les chemins admissibles, donc la minimiser n'a pas de sens. La différence distingue les chemins et convient donc.",
+    "hint": "Demandez-vous en quoi les chemins admissibles diffèrent les uns des autres. L'énergie totale est la même sur tous — on ne peut donc pas les distinguer par elle. Que reste-t-il alors ?"
+   },
+   {
+    "id": "a2",
+    "type": "mcq",
+    "q": "On a doublé l'écart du chemin d'essai. Qu'est devenu l'excès d'action ?",
+    "options": [
+     "Il a doublé",
+     "Il a quadruplé",
+     "Il n'a pas changé",
+     "Il a diminué de moitié"
+    ],
+    "answer": 1,
+    "why": "Près du minimum, l'augmentation est quadratique en fonction de l'écart : un écart deux fois plus grand coûte quatre fois plus cher. Cela se voit aussi sur le graphique — c'est une parabole.",
+    "hint": "Regardez la courbe de l'action à droite du stand : est-ce une droite ou une parabole ? La réponse sur le doublement de l'écart se lit directement sur sa forme."
+   },
+   {
+    "id": "a3",
+    "type": "free",
+    "q": "En vos propres mots : comment le principe de moindre action s'accorde-t-il avec la causalité, si le corps semble savoir où il se trouvera à la fin ?",
+    "keywords": [
+     "équivalent",
+     "équation",
+     "locale",
+     "pas",
+     "ne sait pas",
+     "même chose"
+    ],
+    "why": "L'exigence du minimum est mathématiquement équivalente à une équation du mouvement locale, qui ne considère que l'instant présent. Ce sont deux descriptions d'une même chose, et non une prédiction de l'avenir.",
+    "hint": "Comparez deux descriptions d'un même mouvement. L'équation locale ne regarde que l'instant présent. Si les deux descriptions donnent la même trajectoire, le corps doit-il savoir quelque chose à l'avance ?",
+    "needed": 2
+   },
+   {
+    "id": "a4",
+    "type": "estimate",
+    "q": "Corps de masse 2 kg, temps de vol 2 s, écart 2 m. Estimez l'excès d'action en J·s.",
+    "answer": 9.9,
+    "unit": "J·s",
+    "why": "$\\Delta S = m a^2 \\pi^2 / (4T) = 2\\cdot4\\cdot9{,}87/8 \\approx 9{,}9$. Il suffit de se rappeler la quadratique : pour un écart deux fois plus grand que dans l'exemple, on obtient quatre fois plus que 2,5.",
+    "tolAbs": 2,
+    "hint": "L'augmentation de l'action dépend quadratiquement de l'écart. Dans l'exemple traité, l'écart était deux fois plus petit — de combien l'augmentation était-elle plus petite ?"
+   }
+  ]
  }
 }

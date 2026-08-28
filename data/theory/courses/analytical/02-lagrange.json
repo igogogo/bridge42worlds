@@ -14,37 +14,16 @@
   ],
   "examples_from_articles": [
    {
-    "id": "2607.14529",
-    "date": "2026-07-16",
+    "id": "2604.27575",
+    "date": "2026-04-30",
     "title": {
-     "ru": "Сильно смешанные миры: инфляция как космический коллайдер",
-     "en": "Strongly Mixed Worlds: Inflation as a Cosmic Collider",
-     "es": "Mundos fuertemente mezclados: la inflación como colisionador cósmico",
-     "ar": "عوالم مختلطة بقوة: التضخم كمصادم كوني"
+     "ru": "Энергия в гравитационном поле: почти как вода в трубе",
+     "en": "Energy in a Gravitational Field: Almost Like Water in a Pipe",
+     "es": "Energía en un campo gravitatorio: casi como el agua en una tubería",
+     "ar": "الطاقة في مجال الجاذبية: تقريبًا كالماء في أنبوب",
+     "fr": "L'énergie dans un champ gravitationnel : presque comme l'eau dans un tuyau"
     },
-    "why": "quantum_field, standard_model"
-   },
-   {
-    "id": "2607.11589",
-    "date": "2026-07-13",
-    "title": {
-     "ru": "Лазерный вихрь рождает аксионы: когда свет исчезает в воздухе",
-     "en": "Laser Vortex Spawns Axions: When Light Vanishes in Air",
-     "es": "El vórtice láser engendra axiones: cuando la luz desaparece en el aire",
-     "ar": "دوامة الليزر تُولّد الأكسيونات: عندما يختفي الضوء في الهواء"
-    },
-    "why": "quantum_field, standard_model"
-   },
-   {
-    "id": "2607.10607",
-    "date": "2026-07-12",
-    "title": {
-     "ru": "Космический колокол: единый пик рождает тёмную материю и гравитационные волны",
-     "en": "The Cosmic Bell: One Peak Gives Birth to Dark Matter and Gravitational Waves",
-     "es": "Campana cósmica: un único pico genera materia oscura y ondas gravitacionales",
-     "ar": "الجرس الكوني: ذروة واحدة تلد المادة المظلمة والموجات الثقالية"
-    },
-    "why": "quantum_field, standard_model"
+    "score": 0.645
    }
   ]
  },
@@ -164,15 +143,18 @@
    "items": [
     {
      "what": "Частная производная",
-     "why": "Значок $\\partial$ означает: меняем одну величину, остальные держим замороженными. $\\partial L/\\partial \\dot{q}$ — насколько изменится лагранжиан, если чуть подкрутить скорость, не трогая координату. Это не новая математика, а бухгалтерия: считаем вклад каждой переменной отдельно."
+     "why": "Значок $\\partial$ означает: меняем одну величину, остальные держим замороженными. $\\partial L/\\partial \\dot{q}$ — насколько изменится лагранжиан, если чуть подкрутить скорость, не трогая координату. Это не новая математика, а бухгалтерия: считаем вклад каждой переменной отдельно.",
+     "kit": "partial"
     },
     {
      "what": "Обобщённая координата",
-     "why": "Координатой не обязана быть длина. Для маятника удобнее угол, для газа — объём, для цепочки атомов — номер узла. Лагранжев подход тем и хорош, что не требует декартовых осей: возьмите ту величину, которой удобно описывать систему, и всё работает."
+     "why": "Координатой не обязана быть длина. Для маятника удобнее угол, для газа — объём, для цепочки атомов — номер узла. Лагранжев подход тем и хорош, что не требует декартовых осей: возьмите ту величину, которой удобно описывать систему, и всё работает.",
+     "kit": "vector"
     },
     {
      "what": "Ноль производной означает постоянство",
-     "why": "Вся выкладка держится на школьном факте: если производная функции по времени равна нулю, функция не меняется. Мы просто применили его к необычному объекту — к производной лагранжиана по скорости."
+     "why": "Вся выкладка держится на школьном факте: если производная функции по времени равна нулю, функция не меняется. Мы просто применили его к необычному объекту — к производной лагранжиана по скорости.",
+     "kit": "derivative"
     }
    ]
   },
@@ -1383,5 +1365,339 @@
    "plateCap": "تجانس الفضاء يعطي الزخم، تجانس الزمن يعطي الطاقة، الخواص (isotropy) يعطي عزم الزخم",
    "note": "تتطلب النظرية تناظرًا مستمرًا: يمكن جعل الإزاحة صغيرة بقدر ما نشاء. التناظرات المنفصلة — مثل الانعكاس المرآتي — لا تعطي كمية محفوظة بهذا المعنى، وإن كانت تفرض قيودًا قوية على الفيزياء."
   }
+ },
+ "fr": {
+  "title": "Lagrangien et symétries",
+  "subtitle": "D'où viennent réellement les lois de conservation",
+  "intro": [
+   "Les lois de conservation ressemblent à un cadeau : la quantité de mouvement se conserve, l'énergie se conserve, le moment cinétique se conserve. Pourquoi précisément ces trois grandeurs, et pas d'autres ? Dans le cours de lycée, il n'y a pas de réponse — on les vérifie simplement par l'expérience et on les apprend par cœur.",
+   "La réponse a été donnée par Emmy Noether en 1918, et elle s'est avérée étonnamment simple. Ce qui se conserve n'est pas ce que la nature préserve, mais ce qui ne remarque pas un décalage. Si le résultat d'une expérience ne dépend pas de l'endroit où vous la réalisez, la quantité de mouvement se conserve. Si cela dépend du moment, c'est l'énergie. Si cela dépend de la rotation du dispositif, c'est le moment cinétique.",
+   "Cela transforme la liste des lois en une seule idée : à chaque symétrie correspond une grandeur conservée. Et inversement — si quelque chose se conserve, cherchez la symétrie qui en est responsable."
+  ],
+  "standNote": "Sur le stand — collision de deux corps. Modifiez les masses et les vitesses et surveillez la ligne de la quantité de mouvement sous la scène : elle reste la même avant et après l'impact quels que soient les réglages. L'énergie, elle, peut se perdre. Demandez-vous pourquoi la quantité de mouvement mérite un tel privilège — la réponse sera dans la conclusion.",
+  "formula": {
+   "name": "Théorème de Noether",
+   "latex": "L = K - U, \\qquad \\frac{\\partial L}{\\partial q} = 0 \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial \\dot{q}} = \\text{const}",
+   "alsoKnown": "La symétrie engendre la loi de conservation",
+   "authors": [
+    {
+     "who": "Emmy Noether",
+     "year": "1918",
+     "what": "a démontré le lien général entre les symétries et les grandeurs conservées"
+    },
+    {
+     "who": "David Hilbert",
+     "year": "1915",
+     "what": "a posé le problème qui a conduit au théorème et a obtenu l'invitation de Noether à Göttingen"
+    }
+   ],
+   "story": "Noether n'avait pas le droit d'enseigner : les femmes n'étaient pas admises à l'université, et pendant les premières années, elle donnait des cours sous un nom d'emprunt. Hilbert objectait à ses collègues : « Ici, c'est une université, pas des bains publics ». Le théorème qu'elle a démontré est aujourd'hui à la base de toute la physique théorique — de la mécanique au modèle standard.",
+   "symbols": [
+    {
+     "sym": "L",
+     "latex": "L",
+     "what": "lagrangien, différence entre l'énergie cinétique et potentielle",
+     "unit": "J"
+    },
+    {
+     "sym": "q",
+     "latex": "q",
+     "what": "coordonnée généralisée — pas nécessairement une distance, un angle convient aussi",
+     "unit": "quelconque"
+    },
+    {
+     "sym": "q̇",
+     "latex": "\\dot{q}",
+     "what": "taux de variation de cette coordonnée",
+     "unit": "quelconque/s"
+    },
+    {
+     "sym": "∂L/∂q̇",
+     "latex": "\\partial L / \\partial \\dot{q}",
+     "what": "impulsion généralisée — ce qui se conserve",
+     "unit": "dépend de q"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Comment la symétrie devient conservation",
+   "lead": "Le même raisonnement se répète trois fois : on trouve une coordonnée dont le lagrangien ne dépend pas — et on obtient une quantité conservée. D'abord la translation dans l'espace, puis la rotation, et enfin un cas particulier : la translation dans le temps.",
+   "steps": [
+    {
+     "text": "Prenons l'équation que nous avons obtenue au paragraphe précédent à partir du principe de moindre action. Elle relie deux quantités : comment le lagrangien change lors d'un déplacement de la coordonnée et comment il change lors d'une variation de la vitesse.",
+     "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{q}} = \\frac{\\partial L}{\\partial q}",
+     "figure": "elstart",
+     "figCaption": "Équation du mouvement sous la forme à laquelle a conduit la variation de l'action"
+    },
+    {
+     "text": "Supposons maintenant que le système soit symétrique par rapport à la translation de la coordonnée : on déplace le dispositif d'un mètre — rien ne change. En langage mathématique, cela signifie que le lagrangien ne dépend pas du tout de $q$, c'est-à-dire que le membre de droite est nul.",
+     "latex": "\\frac{\\partial L}{\\partial q} = 0",
+     "figure": "noether",
+     "figCaption": "À chaque symétrie correspond une quantité conservée"
+    },
+    {
+     "text": "Il faut le vérifier, pas le croire sur parole. Une translation est le remplacement $q \\to q + \\varepsilon$ avec le même $\\varepsilon$ à tous les instants, et la vitesse ne change pas du tout lors d'un tel remplacement : la dérivée d'une constante est nulle. Donc toute la réponse du lagrangien passe par le premier argument et, pour un petit $\\varepsilon$, elle est égale à $\\varepsilon\\,\\partial L/\\partial q$. La symétrie exige que cette réponse soit nulle pour tout $\\varepsilon$ — ce qui n'est possible que si le facteur devant $\\varepsilon$ est lui-même nul.",
+     "latex": "\\frac{d}{dt}(q+\\varepsilon) = \\dot{q}, \\qquad L(q+\\varepsilon,\\dot{q}) - L(q,\\dot{q}) = \\varepsilon\\,\\frac{\\partial L}{\\partial q} + O(\\varepsilon^{2})",
+     "figure": "shiftinvar",
+     "figCaption": "La translation ne touche pas aux vitesses : les deux dispositifs se déplacent de la même manière, la différence ne porte que sur la position"
+    },
+    {
+     "text": "Mais si la dérivée temporelle de quelque chose est nulle, alors cette chose ne change pas au cours du temps. Nous avons obtenu une loi de conservation sans la postuler.",
+     "latex": "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{q}} = 0 \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial \\dot{q}} = \\text{const}",
+     "figure": "pconserve",
+     "figCaption": "La quantité conservée est l'impulsion généralisée"
+    },
+    {
+     "text": "Vérifions sur un cas simple. Pour un corps libre, le lagrangien est uniquement l'énergie cinétique. La dérivée par rapport à la vitesse donne l'impulsion habituelle : la conservation de l'impulsion s'est révélée être une conséquence de l'homogénéité de l'espace.",
+     "latex": "L = \\frac{m\\dot{x}^2}{2} \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial \\dot{x}} = m\\dot{x} = p",
+     "figure": "elastic",
+     "figCaption": "Collision : l'impulsion avant et après est la même, parce que l'espace est homogène"
+    },
+    {
+     "text": "Le corps libre est un cas dégénéré : rien n'agit sur lui, et il n'a pas de mérite à conserver son impulsion. Prenons deux corps en interaction : la coordonnée de chacun entre honnêtement dans le lagrangien par le potentiel, et séparément aucune dérivée $\\partial L/\\partial x_i$ n'est nulle. Mais il faut translater les deux à la fois — seulement alors la distance $x_2 - x_1$ reste la même et la translation passe inaperçue ; au lieu de deux zéros, on en obtient un seul, mais pour la somme. En additionnant les équations d'Euler-Lagrange pour les deux corps, on voit que c'est la somme des impulsions qui est constante — c'est ce que montre le banc d'essai lors de n'importe quel choc.",
+     "latex": "U = U(x_2 - x_1) \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial x_1} + \\frac{\\partial L}{\\partial x_2} = 0 \\;\\Longrightarrow\\; \\frac{d}{dt}\\bigl(p_1 + p_2\\bigr) = 0",
+     "figure": "shiftpair",
+     "figCaption": "On translate le système entier : la distance mutuelle reste la même — donc la somme des impulsions se conserve"
+    },
+    {
+     "text": "Prenons maintenant l'angle comme coordonnée. La position du point est donnée par la paire $(r, \\varphi)$ ; la vitesse se décompose en radiale $\\dot{r}$ et transversale $r\\dot{\\varphi}$, et l'énergie cinétique est la somme de leurs carrés. Si l'interaction ne dépend que de la distance à l'axe — comme pour une planète autour d'une étoile ou pour un patineur autour de la verticale — l'angle n'entre pas dans le lagrangien, et sa dérivée est nulle. L'impulsion généralisée correspondant à l'angle s'avère être le moment cinétique ; le facteur $r^{2}$ n'est pas une décoration — c'est lui qui fait accélérer le patineur lorsque les bras sont ramenés.",
+     "latex": "L = \\frac{m}{2}\\bigl(\\dot{r}^{2} + r^{2}\\dot{\\varphi}^{2}\\bigr) - U(r) \\;\\Longrightarrow\\; \\frac{\\partial L}{\\partial \\dot{\\varphi}} = m r^{2}\\dot{\\varphi} = I\\omega = \\text{const}",
+     "figure": "rotcoord",
+     "figCaption": "La rotation ne change que l'angle : le rayon et le potentiel restent les mêmes, donc $mr^2\\omega$ se conserve"
+    },
+    {
+     "text": "Le temps est un cas particulier : $t$ n'est pas une coordonnée, mais un paramètre, on ne peut pas le mettre à la place de $q$, et la dérivation doit être refaite. Supposons que le temps n'entre pas explicitement dans le lagrangien : une expérience commencée aujourd'hui et demain se déroule de la même manière. Dérivons $L$ par rapport au temps le long du mouvement et remplaçons dans le premier terme $\\partial L/\\partial q$ par l'équation d'Euler-Lagrange : tout le membre de droite se rassemble en une seule dérivée totale. Donc la différence $\\dot{q}\\,\\partial L/\\partial\\dot{q} - L$ est constante, et pour un système mécanique ordinaire elle est égale à $K + U$ — l'énergie totale habituelle.",
+     "latex": "\\frac{dL}{dt} = \\frac{\\partial L}{\\partial q}\\dot{q} + \\frac{\\partial L}{\\partial \\dot{q}}\\ddot{q} = \\frac{d}{dt}\\left(\\dot{q}\\,\\frac{\\partial L}{\\partial \\dot{q}}\\right) \\;\\Longrightarrow\\; E = \\dot{q}\\,\\frac{\\partial L}{\\partial \\dot{q}} - L = \\text{const}",
+     "figure": "timeshift",
+     "figCaption": "Homogénéité du temps : des expériences identiques à des instants différents donnent la conservation de l'énergie"
+    }
+   ],
+   "plate": "\\text{symétrie} \\;\\longrightarrow\\; \\text{loi de conservation}",
+   "plateCap": "L'homogénéité de l'espace donne l'impulsion, l'homogénéité du temps donne l'énergie, l'isotropie donne le moment cinétique",
+   "note": "Le théorème exige une symétrie continue : la translation peut être rendue arbitrairement petite. Les symétries discrètes — par exemple la réflexion miroir — ne donnent pas de quantité conservée en ce sens, bien qu'elles imposent de fortes contraintes à la physique."
+  },
+  "math": {
+   "title": "Mathématiques nécessaires ici",
+   "lead": "Une nouvelle notation et une idée familière dans un endroit inattendu.",
+   "items": [
+    {
+     "what": "Dérivée partielle",
+     "why": "Le symbole $\\partial$ signifie : on change une quantité, on garde les autres gelées. $\\partial L/\\partial \\dot{q}$ — de combien le lagrangien change si on ajuste légèrement la vitesse, sans toucher à la coordonnée. Ce n'est pas de nouvelles mathématiques, mais de la comptabilité : on calcule la contribution de chaque variable séparément."
+    },
+    {
+     "what": "Coordonnée généralisée",
+     "why": "Une coordonnée n'est pas obligée d'être une longueur. Pour un pendule, l'angle est plus pratique, pour un gaz, le volume, pour une chaîne d'atomes, le numéro du site. L'approche lagrangienne est justement bonne car elle n'exige pas d'axes cartésiens : prenez la quantité qui décrit le mieux le système, et tout fonctionne."
+    },
+    {
+     "what": "Zéro de la dérivée signifie constance",
+     "why": "Tout le calcul repose sur un fait scolaire : si la dérivée d'une fonction par rapport au temps est nulle, la fonction ne change pas. Nous l'appliquons simplement à un objet inhabituel — à la dérivée du lagrangien par rapport à la vitesse."
+    }
+   ]
+  },
+  "example": {
+   "title": "Exemple avec des nombres",
+   "lead": "Vérifions sur un banc d'essai : la quantité de mouvement est-elle conservée lors d'un choc inélastique, quand l'énergie est clairement perdue ?",
+   "given": "Un corps $m_1 = 4$ kg se déplace à la vitesse de $3$ m/s et se colle à un corps au repos $m_2 = 2$ kg.",
+   "law": "$p = m_1 v_1 + m_2 v_2 = \\text{const}$",
+   "solution": [
+    {
+     "text": "Quantité de mouvement avant le choc : seul le premier corps se déplace.",
+     "latex": "p = 4 \\cdot 3 + 2 \\cdot 0 = 12\\ \\text{kg·m/s}",
+     "num": ""
+    },
+    {
+     "text": "Après le choc, les corps se déplacent ensemble avec une masse totale de 6 kg.",
+     "latex": "u = \\frac{12}{6} = 2\\ \\text{m/s}",
+     "num": ""
+    },
+    {
+     "text": "Comparons les énergies avant et après.",
+     "latex": "K_1 = \\frac{4\\cdot 9}{2} = 18\\ \\text{J}, \\quad K_2 = \\frac{6 \\cdot 4}{2} = 12\\ \\text{J}",
+     "num": ""
+    }
+   ],
+   "answer": "La quantité de mouvement est entièrement conservée, l'énergie a chuté de 18 à 12 J — un tiers est parti en chaleur et en déformation.",
+   "check": "Vérification par le bon sens : pourquoi la quantité de mouvement a-t-elle eu de la chance ? Parce que l'homogénéité de l'espace lors du choc n'a pas disparu, alors que l'énergie mécanique s'est transformée en chaleur — c'est-à-dire en une autre forme, que nous ne suivons pas dans ce problème."
+  },
+  "constants": {
+   "title": "Grandeurs de ce paragraphe",
+   "lead": "Il n'y a ici aucune constante universelle : le théorème de Noether parle de la structure des lois, pas de nombres.",
+   "items": [
+    {
+     "sym": "L",
+     "latex": "L = K - U",
+     "name": "Lagrangien",
+     "value": "J",
+     "why": "fonction à partir de laquelle tout le mouvement du système est dérivé"
+    },
+    {
+     "sym": "p",
+     "latex": "p = \\partial L/\\partial \\dot{x}",
+     "name": "Quantité de mouvement généralisée",
+     "value": "kg·m/s",
+     "why": "pour un corps libre, elle coïncide avec la quantité de mouvement ordinaire $mv$, pour la rotation — avec le moment cinétique"
+    },
+    {
+     "sym": "q",
+     "latex": "q",
+     "name": "Coordonnée généralisée",
+     "value": "quelconque",
+     "why": "longueur, angle, volume — ce qui est le plus pratique pour décrire le système"
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Où cela s'applique",
+   "lead": "Le théorème de Noether n'est pas une décoration de cours, mais un outil de travail de la physique moderne.",
+   "items": [
+    {
+     "h": "Physique des particules",
+     "text": "La conservation de la charge électrique découle d'une symétrie impossible à voir à l'œil nu : elle concerne la phase de la fonction d'onde. La charge se conserve parce que le monde ne remarque pas le déplacement de cette phase."
+    },
+    {
+     "h": "Cosmologie",
+     "text": "L'Univers en expansion n'est pas symétrique par rapport à une translation dans le temps — et l'énergie, à proprement parler, ne s'y conserve pas. Ce n'est pas un paradoxe, mais une conséquence directe du théorème."
+    },
+    {
+     "h": "Ingénierie",
+     "text": "Si un problème présente une symétrie, cherchez une quantité conservée : elle réduira le calcul d'un ordre de grandeur. C'est ainsi qu'on calcule les orbites des satellites et les vibrations des structures."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Amusant : vérifiez par vous-même",
+   "lead": "La symétrie se ressent plus facilement avec le corps qu'on ne la démontre sur le papier.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "expérience de cuisine",
+     "h": "La chaise tournante sans chaise",
+     "text": "Asseyez-vous sur une chaise de bureau, poussez et faites tourner avec les bras étendus, puis ramenez-les contre la poitrine. La vitesse de rotation augmente sensiblement. Le moment cinétique est conservé — parce que autour de l'axe vertical, le monde est identique dans toutes les directions. Sécurité : tenez-vous au siège, ne laissez pas pendre les jambes."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoxe",
+     "h": "L'énergie qui ne se conserve pas",
+     "text": "On nous a toujours dit que l'énergie se conserve toujours. Mais dans l'Univers en expansion, c'est faux. Où est le piège ?",
+     "answer": "Il n'y a pas de piège : la conservation de l'énergie découle de l'homogénéité du temps. L'Univers en expansion change avec le temps, la symétrie est brisée — et la conclusion ne s'applique pas. Les photons du rayonnement fossile rougissent, perdant de l'énergie, et elle ne « va » nulle part : la loi ne s'applique tout simplement pas."
+    },
+    {
+     "icon": "fact",
+     "kind": "fait intéressant",
+     "h": "Le théorème qu'on a failli perdre",
+     "text": "Le travail de Noether est paru dans un recueil discret, et les physiciens ne l'ont apprécié que des décennies plus tard. Einstein, après l'avoir lu, écrivit à Hilbert qu'il était étonné par la profondeur ; mais le théorème n'est entré dans les manuels qu'après la mort de l'auteur."
+    },
+    {
+     "icon": "mnemo",
+     "kind": "mnémonique",
+     "h": "Où, quand, vers où",
+     "text": "Trois symétries se retiennent avec trois questions. Peu importe OÙ — la quantité de mouvement est conservée. Peu importe QUAND — l'énergie. Peu importe VERS OÙ c'est tourné — le moment cinétique."
+    },
+    {
+     "icon": "estimate",
+     "kind": "estimation",
+     "h": "De combien le patineur accélère sa rotation",
+     "text": "Estimez : un patineur ramène ses bras et réduit son moment d'inertie d'un facteur trois. De combien la vitesse angulaire augmente-t-elle ? La réponse — également d'un facteur trois, car le produit est conservé. Et l'énergie de rotation augmente alors aussi d'un facteur trois — elle est fournie par le travail des muscles."
+    },
+    {
+     "icon": "edge",
+     "kind": "limite de validité",
+     "h": "Seulement les symétries continues",
+     "text": "Le théorème fonctionne pour les symétries que l'on peut activer progressivement. La réflexion miroir ne le permet pas — elle est soit là, soit pas. Par conséquent, la parité ne donne pas de quantité conservée au sens de Noether, bien que sa violation dans les interactions faibles soit devenue une découverte du siècle."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "Pour les curieux : pourquoi une coordonnée peut être un angle",
+   "blocks": [
+    {
+     "text": "Si l'on prend $q$ comme l'angle de rotation, alors $\\partial L/\\partial \\dot{\\varphi}$ s'avère être le moment cinétique — cette même grandeur qui augmente chez le patineur. Aucune nouvelle formule n'a été nécessaire : on a substitué une autre coordonnée, on a obtenu une autre loi de conservation. C'est cette universalité qui fait du formalisme lagrangien le langage de la physique moderne : il n'est pas lié à une géométrie particulière du problème."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "À chaque symétrie continue correspond une grandeur conservée. L'homogénéité de l'espace donne l'impulsion, l'homogénéité du temps donne l'énergie, l'isotropie donne le moment cinétique. Les lois de conservation ne sont pas postulées, mais dérivées.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "Si le lagrangien ne dépend pas de la coordonnée",
+     "text": "Si le lagrangien ne dépend pas de la coordonnée, l'impulsion généralisée correspondante est conservée"
+    },
+    {
+     "icon": "fact",
+     "title": "Trois symétries — trois lois",
+     "text": "Trois symétries — trois lois : où, quand, dans quelle direction"
+    },
+    {
+     "icon": "edge",
+     "title": "Il faut une symétrie continue",
+     "text": "Il faut une symétrie continue : la réflexion miroir ne donne pas de grandeur conservée"
+    },
+    {
+     "icon": "estimate",
+     "title": "La coordonnée peut être un angle",
+     "text": "La coordonnée peut être un angle — alors le moment cinétique est conservé"
+    }
+   ],
+   "where": "Physique des particules (conservation de la charge issue de la symétrie de phase), cosmologie (l'énergie n'est pas conservée dans un univers en expansion), calcul des orbites et des oscillations, tout problème présentant une symétrie.",
+   "watchOut": "Une erreur fréquente est de considérer la conservation de l'énergie comme une loi absolue. Elle découle de l'indépendance des lois par rapport au temps ; là où cette indépendance est violée, la dérivation ne s'applique pas."
+  },
+  "quiz": [
+   {
+    "id": "n1",
+    "type": "mcq",
+    "q": "De quelle symétrie découle la conservation de l'impulsion ?",
+    "options": [
+     "De l'homogénéité de l'espace : l'expérience donne le même résultat où qu'on la place",
+     "De l'homogénéité du temps",
+     "De l'isotropie de l'espace",
+     "De la symétrie miroir"
+    ],
+    "answer": 0,
+    "why": "L'indépendance du lagrangien par rapport à la coordonnée signifie l'homogénéité de l'espace, et c'est elle qui donne la conservation de l'impulsion.",
+    "hint": "Le théorème de Noether relie symétrie et conservation. Déplacez mentalement tout le dispositif d'un mètre sur le côté : qu'est-ce qui ne change pas lors d'un tel déplacement ?"
+   },
+   {
+    "id": "n2",
+    "type": "mcq",
+    "q": "Lors d'un choc inélastique, l'énergie est perdue, mais pas l'impulsion. Pourquoi ?",
+    "options": [
+     "L'impulsion est une grandeur vectorielle, alors que l'énergie est scalaire",
+     "L'homogénéité de l'espace est conservée lors du choc, tandis que l'énergie mécanique se transforme en chaleur",
+     "L'impulsion est toujours conservée, c'est plus fondamental que l'énergie",
+     "L'énergie est aussi conservée, simplement nous la calculons mal"
+    ],
+    "answer": 1,
+    "why": "L'énergie totale est effectivement conservée, mais une partie se transforme en chaleur — une forme que nous ne suivons pas dans le problème. L'impulsion, elle, reste entièrement mécanique.",
+    "hint": "L'impulsion est conservée parce que la force externe totale est nulle. Et l'énergie — où peut-elle bien aller à l'intérieur des corps eux-mêmes, si rien ne s'échappe à l'extérieur ?"
+   },
+   {
+    "id": "n3",
+    "type": "free",
+    "q": "En vos propres termes : que signifie la phrase « le lagrangien ne dépend pas de la coordonnée » et pourquoi en découle-t-il quelque chose ?",
+    "keywords": [
+     "déplacement",
+     "ne change",
+     "symétrie",
+     "homogène",
+     "dérivée",
+     "zéro",
+     "conservation"
+    ],
+    "why": "Cela signifie qu'un déplacement du système ne change rien. Alors le membre droit de l'équation du mouvement s'annule, et la grandeur sous la dérivée temporelle reste constante.",
+    "hint": "Si la coordonnée n'apparaît pas dans le lagrangien, la dérivée par rapport à cette coordonnée est nulle. Substituez cela dans l'équation d'Euler-Lagrange : qu'est-ce qui doit alors rester constant dans le temps ?",
+    "needed": 2
+   },
+   {
+    "id": "n4",
+    "type": "estimate",
+    "q": "Un patineur a réduit son moment d'inertie de 4 à 1 kg·m². La vitesse angulaire était de 2 rad/s. Estimez la nouvelle vitesse en rad/s.",
+    "answer": 8,
+    "unit": "rad/s",
+    "why": "Le moment cinétique $I\\omega$ est conservé : $4\\cdot2 = 1\\cdot\\omega$, donc $\\omega = 8$ rad/s.",
+    "tolAbs": 1.5,
+    "hint": "Le produit Iω est conservé. Le moment d'inertie a été réduit d'un facteur quatre — qu'est-ce que cela implique pour la vitesse angulaire ?"
+   }
+  ]
  }
 }

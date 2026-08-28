@@ -3,7 +3,70 @@
  "schema": "b42.course/2",
  "kind": "course",
  "order": 3,
- "entities": {},
+ "entities": {
+  "examples_from_articles": [
+   {
+    "id": "2607.10247",
+    "date": "2026-07-11",
+    "title": {
+     "ru": "Гравитация смотрит по сторонам",
+     "en": "Gravity Looks Sideways",
+     "es": "La gravedad mira a los lados",
+     "ar": "الجاذبية تنظر حولها",
+     "fr": "La gravité regarde autour d'elle"
+    },
+    "score": 0.641
+   },
+   {
+    "id": "2601.00313",
+    "date": "2026-01-01",
+    "title": {
+     "ru": "Как лист бумаги решает, морщиться или складываться",
+     "en": "How a Sheet of Paper Decides to Wrinkle or Fold",
+     "es": "Cómo decide una lámina de papel arrugarse o plegarse",
+     "ar": "كيف تقرر ورقةٌ أن تتجعد أو تنطوي",
+     "fr": "Comment une feuille de papier décide de se froisser ou de se plier"
+    },
+    "score": 0.625
+   },
+   {
+    "id": "2601.05976v3",
+    "date": "2026-01-09",
+    "title": {
+     "ru": "Стремительный вальс гигантов: как планеты-гиганты сохранили быстрое вращение",
+     "en": "How Giant Planets Kept Their Rapid Spin",
+     "es": "Cómo los planetas gigantes conservaron su giro veloz",
+     "ar": "كيف حافظت الكواكب العملاقة على دورانها السريع",
+     "fr": "Comment les planètes géantes ont conservé leur rotation rapide"
+    },
+    "score": 0.606
+   },
+   {
+    "id": "2604.01692",
+    "date": "2026-04-02",
+    "title": {
+     "ru": "Сердечко, которое не тонет",
+     "en": "The Heart That Won't Sink",
+     "es": "Un corazoncito que no se hunde",
+     "ar": "قلب لا يغرق",
+     "fr": "Un cœur qui ne coule pas"
+    },
+    "score": 0.605
+   },
+   {
+    "id": "2601.13971",
+    "date": "2026-01-20",
+    "title": {
+     "ru": "Падающая тарелка без сверхкомпьютера",
+     "en": "A Falling Plate Without a Supercomputer",
+     "es": "Un plato que cae sin supercomputadora",
+     "ar": "لوحة ساقطة بدون حاسوب فائق",
+     "fr": "Une assiette qui tombe sans supercalculateur"
+    },
+    "score": 0.6
+   }
+  ]
+ },
  "lessons": [
   {
    "id": "01-inertia",
@@ -347,6 +410,87 @@
     "title": "النظام الدوار: القوة الطاردة المركزية وكوريوليس",
     "sub": "قوى ليس لها مصدر، وماذا تفعل بالطقس والرصاصة",
     "law": "F = 2m[v×ω] · معامل كوريوليس",
+    "model": "rigid"
+   }
+  ]
+ },
+ "fr": {
+  "title": "Corps solide",
+  "subtitle": "Rotation, gyroscope et Terre en rotation",
+  "lead": "Jusqu'à présent, le corps dans le cours était un point : il avait une masse et pas de dimensions. Ici, les dimensions apparaissent — et on découvre immédiatement que la masse seule ne suffit pas. Deux corps de même poids tournent différemment, dévalent une pente à des vitesses différentes et résistent différemment à la rotation, car ce qui compte n'est pas la quantité de matière, mais où elle se trouve. De ce seul fait découle tout le sujet : le moment d'inertie, le comportement étrange de la toupie et les forces qui apparaissent simplement parce que nous nous tenons sur une planète en rotation.",
+  "why": {
+   "title": "Pourquoi le savoir",
+   "text": [
+    "La rotation est le mouvement le plus fréquent autour de nous, et c'est le seul que la mécanique scolaire décrit à moitié. Roue, rotor, hélice, tambour de machine à laver, planète, galaxie : partout, ce n'est pas F = ma qui s'applique, mais son équivalent rotationnel M = Iε. Il découle de la même deuxième loi, mais se comporte différemment, et la moitié des « paradoxes » techniques — du rotor de queue d'hélicoptère au gyroscope disparu du téléphone — ne sont qu'une incompréhension du fait que le moment cinétique est un vecteur.",
+    "Le gyroscope est un cas rare où la bonne réponse semble impossible. La toupie, qui devrait depuis longtemps tomber, tourne au contraire calmement sur le côté ; l'intuition est ici inutile, et une formule à trois facteurs donne à la fois la direction, la vitesse, et explique pourquoi une toupie fatiguée tombe à la fin, et non au début. La même formule calcule la précession de l'axe terrestre avec une période de vingt-six mille ans — et c'est un cas où l'on peut vérifier la même ligne sur un jouet d'enfant et sur la datation archéologique.",
+    "Et enfin, le référentiel en rotation. Nous y vivons toute notre vie, donc ses effets semblent être des propriétés de la nature : les cyclones tournent dans un sens, un projectile à vingt kilomètres dévie de soixante mètres sur le côté, le pendule de Foucault fait un tour complet en une journée. Ici aussi — une analyse honnête du mythe le plus populaire sur l'entonnoir dans l'évier : le nombre qui montre combien de fois cet effet est plus faible que la forme de l'évier lui-même."
+   ]
+  },
+  "map": {
+   "title": "Ce que vous étudierez",
+   "lead": "Le sujet va du corps solide au référentiel : d'abord nous apprenons à calculer la rotation, puis nous la considérons comme un vecteur, et enfin nous nous asseyons nous-mêmes sur une plateforme en rotation et nous comprenons ce que l'on voit de là.",
+   "outcome": "Après avoir terminé le sujet, vous serez capable de calculer le moment d'inertie pour des corps simples sans mémoriser les coefficients, de prédire quel corps dévalera la pente en premier, d'expliquer la précession de la toupie et d'estimer sa vitesse, ainsi que d'évaluer où la force de Coriolis est significative et où on peut la négliger — selon le nombre de Rossby, et non selon une impression."
+  },
+  "prereq": {
+   "title": "Ce qu'il faut savoir à l'avance",
+   "items": [
+    "Mécanique : deuxième loi de Newton, travail et énergie cinétique, conservation de la quantité de mouvement. Nous ne postulons pas l'équation de rotation, mais nous la dérivons du travail d'un moment de force.",
+    "Oscillations et rotation : relation entre vitesse linéaire et angulaire, accélération centripète et notion de force d'inertie. Tout cela est traité dans le sujet « Oscillations », ici c'est pris comme acquis.",
+    "Mathématiques : dérivée, vecteur et produit vectoriel. Ce dernier est nécessaire exactement à deux endroits — pour le moment de force et pour le terme de Coriolis ; dans les deux cas, un encadré expliquant le sens de l'opération est fourni."
+   ],
+   "note": "Le tenseur d'inertie et les axes principaux sont mentionnés dans le sujet, mais pas analysés : pour tout ce qui est calculé ici, la rotation autour d'un axe fixe suffit. Les axes libres et l'effet Djanibekov sont mentionnés comme une direction vers laquelle cette route mène plus loin."
+  },
+  "history": {
+   "title": "Qui l'a créé",
+   "people": [
+    {
+     "name": "Christiaan Huygens",
+     "years": "1629–1695",
+     "what": "A introduit la notion de moment d'inertie en travaillant sur les horloges à pendule : pour prédire la période d'un pendule physique, il avait besoin d'une grandeur dépendant de la distribution de la masse, et non de sa quantité."
+    },
+    {
+     "name": "Leonhard Euler",
+     "years": "1707–1783",
+     "what": "A écrit les équations de rotation d'un corps solide sous forme générale et a introduit les axes principaux d'inertie. C'est chez lui que la rotation est devenue un chapitre distinct de la mécanique, et non une application au mouvement d'un point."
+    },
+    {
+     "name": "Jakob Steiner",
+     "years": "1796–1863",
+     "what": "A donné le théorème de transport d'axe, qui évite l'intégration : le moment d'inertie par rapport à un axe quelconque se calcule à partir du moment par rapport à un axe parallèle passant par le centre de masse."
+    },
+    {
+     "name": "Gaspard-Gustave Coriolis",
+     "years": "1792–1843",
+     "what": "En analysant le travail des machines dans les parties en rotation, il a dérivé une accélération supplémentaire, nommée plus tard en son honneur. Lui-même écrivait sur les machines-outils et les roues hydrauliques, pas sur la météo : la météorologie est venue à sa formule plus tard."
+    },
+    {
+     "name": "Léon Foucault",
+     "years": "1819–1868",
+     "what": "A suspendu au Panthéon un pendule de 67 mètres de long et a montré la rotation de la Terre directement, sans astronomie. Il a également construit le premier gyroscope et lui a donné son nom."
+    }
+   ]
+  },
+  "open": "le mouvement d'une toupie asymétrique se réduit à des quadratures, mais il n'en a pas de représentation visuelle",
+  "lessons": [
+   {
+    "id": "01-inertia",
+    "title": "Moment d'inertie et équation de rotation",
+    "sub": "pourquoi la masse n'est pas une mesure de l'inertie en rotation, et d'où vient Steiner",
+    "law": "M = Iε · théorème de Steiner",
+    "model": "rigid"
+   },
+   {
+    "id": "02-gyroscope",
+    "title": "Moment cinétique et gyroscope",
+    "sub": "pourquoi la toupie ne tombe pas, mais dévie sur le côté",
+    "law": "dL/dt = M · vitesse de précession",
+    "model": "rigid"
+   },
+   {
+    "id": "03-coriolis",
+    "title": "Référentiel en rotation : force centrifuge et Coriolis",
+    "sub": "les forces sans source, et ce qu'elles font à la météo et à la balle",
+    "law": "F = 2m[v×ω] · paramètre de Coriolis",
     "model": "rigid"
    }
   ]

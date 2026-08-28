@@ -25,6 +25,68 @@
    "Joseph Fourier",
    "James Clerk Maxwell",
    "Rudolf Clausius"
+  ],
+  "examples_from_articles": [
+   {
+    "id": "2601.13226",
+    "date": "2026-01-19",
+    "title": {
+     "ru": "Лёгкие атомы застревают в густом газе",
+     "en": "Light Atoms Get Stuck in a Dense Gas",
+     "es": "Los átomos ligeros se quedan atrapados en un gas denso",
+     "ar": "الذرات الخفيفة تعلق في الغاز الكثيف",
+     "fr": "Des atomes légers restent piégés dans un gaz dense"
+    },
+    "score": 0.634
+   },
+   {
+    "id": "2601.01293",
+    "date": "2026-01-03",
+    "title": {
+     "ru": "Как парящие пилоты обманывают ветер",
+     "en": "How Soaring Pilots Outsmart the Wind",
+     "es": "Cómo los pilotos en vuelo planeado engañan al viento",
+     "ar": "كيف يخدع الطيارون الشراعيون الريح",
+     "fr": "Comment les pilotes en vol plané trompent le vent"
+    },
+    "score": 0.631
+   },
+   {
+    "id": "2602.24019",
+    "date": "2026-02-27",
+    "title": {
+     "ru": "Застывающий лёд и расширяющийся космос: от пруда до тёмной энергии",
+     "en": "Freezing Ice and Expanding Space",
+     "es": "Hielo que se congela y cosmos en expansión",
+     "ar": "الجليد المتجمد والكون المتوسع",
+     "fr": "La glace qui gèle et l'espace qui s'étend"
+    },
+    "score": 0.626
+   },
+   {
+    "id": "2603.27484",
+    "date": "2026-03-29",
+    "title": {
+     "ru": "Как увидеть потоки внутри живой клетки",
+     "en": "Seeing the Flow Inside a Living Cell",
+     "es": "Cómo ver los flujos dentro de una célula viva",
+     "ar": "كيف ترى التدفقات داخل الخلية الحية",
+     "fr": "Comment voir les flux à l'intérieur d'une cellule vivante"
+    },
+    "score": 0.624
+   },
+   {
+    "id": "2603.13918",
+    "date": "2026-03-14",
+    "title": {
+     "ru": "Поры в мембране: три ключа к точному расчёту",
+     "en": "Pores in the Membrane: Three Keys to Accurate Calculation",
+     "es": "Poros en la membrana: tres claves para un cálculo preciso",
+     "ar": "مسام الغشاء: ثلاثة مفاتيح لحساب دقيق",
+     "fr": "Des pores dans la membrane : trois clés pour un calcul précis"
+    },
+    "score": 0.621
+   }
   ]
  },
  "lessons": [
@@ -410,6 +472,97 @@
     "title": "لزوجة الغاز: نقل الزخم",
     "sub": "لماذا لا تعتمد لزوجة الغاز على الضغط، وتزداد بالتسخين",
     "law": "الصيغة الحركية للزوجة · قانون ماكسويل",
+    "model": "transport"
+   }
+  ]
+ },
+ "fr": {
+  "title": "Phénomènes de transport",
+  "subtitle": "Diffusion, conduction thermique et viscosité : un même tableau en trois volets",
+  "lead": "L'encre se disperse dans l'eau immobile, la cuillère chauffe dans le thé chaud, les couches d'air se freinent mutuellement. Trois phénomènes semblent être trois chapitres différents, mais ils relèvent du même calcul. Tracez un plan imaginaire dans un gaz et observez ce que les molécules en vol transportent à travers lui. Comptez les molécules elles-mêmes : vous obtenez la diffusion. Comptez l'énergie : la conduction thermique. Comptez l'impulsion le long de l'écoulement : la viscosité. Le mécanisme est unique : le porteur parcourt un libre parcours, arrive dans un lieu étranger et y apporte ce qu'il possédait dans le sien. D'où trois lois de même forme, trois coefficients construits à partir des mêmes $\\lambda$ et $\\bar v$, et une frontière commune au-delà de laquelle ils cessent tous de fonctionner.",
+  "why": {
+   "title": "Pourquoi savoir cela",
+   "text": [
+    "Ce sujet économise la mémoire de la manière la plus honnête : au lieu de trois ensembles de formules, il ne reste qu'une seule méthode. La loi de Fick, la loi de Fourier et la loi de Newton pour la contrainte tangentielle se dérivent successivement par le même comptage des intersections du plan, et ne diffèrent que par la grandeur que la molécule transporte. Au passage, on rembourse une dette des sujets précédents : la viscosité, qui dans le sujet sur les liquides était tirée d'un tableau comme propriété de la matière, est ici calculée à partir du libre parcours moyen et de la vitesse thermique — et le nombre calculé peut être comparé à la mesure directement dans le paragraphe.",
+    "La densité appliquée est ici élevée, et presque tout est du domaine courant. L'isolant d'un mur et le double vitrage se calculent comme une chaîne de résistances, et un pont thermique comme une branche parallèle. Le temps de cuisson d'un steak et le temps de salage d'un morceau évoluent comme le carré de l'épaisseur, et non comme l'épaisseur. L'oxygène parcourt les derniers microns jusqu'au sang par diffusion, et c'est précisément pourquoi un tissu sans capillaires ne peut pas dépasser un millimètre d'épaisseur. Pâte thermique, thermos, radiateur de processeur, séchage, séparation isotopique et calcul d'une installation sous vide : tout cela relève de trois formules de ce sujet, appliquées à différentes charges.",
+    "Et le sujet montre immédiatement où il s'arrête. Tout le tableau repose sur le libre parcours moyen — la distance qu'une molécule parcourt sans heurter personne. Cette notion n'a de sens que lorsque le parcours est bien plus grand que la molécule elle-même et bien plus petit que le récipient. Dans un gaz raréfié, c'est le cas ; dans un tube à vide et à dix kilomètres d'altitude, ce n'est déjà plus le cas ; et dans un liquide, cela n'a pas lieu du tout : là, la molécule ne vole pas, mais piétine dans la cage de ses voisins. Connaître cette frontière est plus important que de connaître les formules elles-mêmes, et dans le troisième paragraphe, elle est nommée — le nombre de Knudsen."
+   ]
+  },
+  "map": {
+   "title": "Ce que vous allez apprendre",
+   "lead": "Les paragraphes vont par ordre croissant d'abstraction de ce qui est transporté. D'abord, on transporte la matière elle-même à travers le plan — cela se voit à l'œil. Ensuite, l'énergie — il faut déjà la calculer. Ensuite, l'impulsion — et le résultat ressemble non pas à une dispersion, mais à une force. La dérivation se répète trois fois presque mot pour mot, et c'est là tout l'intérêt de l'ordre.",
+   "outcome": "Après avoir étudié ce sujet, vous serez capable de dériver l'une quelconque des trois lois de transport par le même comptage des intersections ; d'estimer le temps de diffusion en fonction de l'épaisseur de la couche et de comprendre pourquoi l'odeur dans une pièce est propagée par un courant d'air et non par la diffusion ; de calculer les pertes thermiques d'un mur comme une chaîne de résistances et de distinguer $\\kappa$ de la diffusivité thermique ; d'expliquer pourquoi la viscosité d'un gaz ne dépend pas de la pression et augmente avec la température, alors que celle d'un liquide diminue ; et de dire à l'avance si ces formules sont applicables — en calculant le nombre de Knudsen."
+  },
+  "prereq": {
+   "title": "Ce qu'il faut savoir à l'avance",
+   "items": [
+    "Thermodynamique et théorie cinétique moléculaire : concentration, vitesse thermique moyenne, section efficace de collision et libre parcours moyen. Les trois coefficients de transport ne sont construits qu'à partir de ces grandeurs et ne contiennent rien de plus — ce sujet n'introduit pas une once de nouvelle physique.",
+    "Physique statistique : la distribution de Maxwell, d'où vient $\\bar v$, et la loi de la marche aléatoire $\\langle x^{2}\\rangle = 2Dt$. Sans la seconde, la racine carrée du temps dans le premier paragraphe devra être acceptée par foi, alors que c'est elle qui rend la diffusion inutile dans une pièce et irréprochable dans une cellule.",
+    "Liquides et gaz en mouvement : la viscosité comme coefficient dans la loi de Newton pour la contrainte tangentielle, la formule de Poiseuille, le nombre de Reynolds. Là, $\\eta$ était une propriété tabulée ; le troisième paragraphe la calcule et explique au passage pourquoi l'air raréfié en altitude freine presque autant que l'air dense en bas."
+   ],
+   "note": "En mathématiques, il suffit de la dérivée et du développement d'une fonction au voisinage d'un point jusqu'au premier ordre — cette technique est appliquée de la même manière dans les trois dérivations et est détaillée dans les encadrés. L'analyse vectorielle n'est pas nécessaire : le gradient est partout unidimensionnel, $dn/dx$ et $dT/dx$, et l'écriture tridimensionnelle avec $\\nabla$ est donnée à titre de référence."
+  },
+  "history": {
+   "title": "Qui l'a créée",
+   "people": [
+    {
+     "name": "Joseph Fourier",
+     "years": "1768–1830",
+     "what": "Dans la « Théorie analytique de la chaleur » de 1822, il a écrit la loi de la conduction thermique sous forme différentielle, en a dérivé l'équation de la chaleur et, pour la résoudre, a inventé les séries trigonométriques. Lagrange et Laplace ont objecté que ces séries étaient une méthode non rigoureuse, et l'ouvrage est resté non accepté pendant une quinzaine d'années ; aujourd'hui, la moitié des mathématiques appliquées repose dessus."
+    },
+    {
+     "name": "Rudolf Clausius",
+     "years": "1822–1888",
+     "what": "En 1858, il a introduit le libre parcours moyen, directement en réponse à une objection contre la théorie cinétique : si les molécules volent à des centaines de mètres par seconde, pourquoi l'odeur ne se propage-t-elle pas instantanément dans la pièce ? La réponse est que la molécule ne vole pas, mais trébuche des milliards de fois par seconde. Sans cette grandeur, on ne peut rien dire de quantitatif dans la théorie du transport."
+    },
+    {
+     "name": "Adolf Fick",
+     "years": "1829–1901",
+     "what": "Médecin et physiologiste, il a en 1855 transposé à la matière ce que Fourier avait fait pour la chaleur : il a écrit le flux comme proportionnel au gradient de concentration et a vérifié la loi par une expérience avec du sel dans un tube. On lui doit aussi la première lentille de contact et une méthode pour déterminer le débit cardiaque — la physiologie n'était pas un passe-temps, mais une source de problèmes."
+    },
+    {
+     "name": "James Clerk Maxwell et Katherine Maxwell",
+     "years": "1860–1866",
+     "what": "Maxwell a déduit que la viscosité d'un gaz ne devrait pas dépendre de sa densité, et il a lui-même trouvé ce résultat invraisemblable. Il a fallu vérifier à la maison : le couple a monté une expérience avec des disques de verre oscillants dans un récipient sous vide — Katherine maintenait la température de l'air de la pièce à la valeur requise — et ils ont obtenu la confirmation du calcul, tout en mesurant l'augmentation de la viscosité avec la température."
+    },
+    {
+     "name": "Johann Loschmidt",
+     "years": "1821–1895",
+     "what": "En 1865, il a inversé la formule : il a pris la viscosité mesurée, en a extrait le libre parcours moyen, et de là, la première estimation de la taille des molécules et du nombre de molécules dans un centimètre cube de gaz. Il a surestimé le diamètre d'un facteur trois et sous-estimé le nombre de molécules d'un facteur quinze, mais c'était le premier chiffre là où avant lui il n'y avait qu'un raisonnement."
+    },
+    {
+     "name": "Gustav Wiedemann, Rudolf Franz et Ludvig Lorenz",
+     "years": "1853–1872",
+     "what": "Wiedemann et Franz ont mesuré la conductivité thermique et la conductivité électrique d'une quinzaine de métaux et ont remarqué que leur rapport à une température donnée est à peu près le même pour tous. Lorenz a montré que ce rapport augmente proportionnellement à la température absolue. L'explication — que dans un métal, la chaleur et le courant sont portés par les mêmes électrons — n'est venue qu'avec la théorie électronique."
+    },
+    {
+     "name": "Sydney Chapman et David Enskog",
+     "years": "1916–1917",
+     "what": "Indépendamment l'un de l'autre, ils ont construit une théorie rigoureuse du transport dans un gaz dilué et ont obtenu des facteurs numériques exacts au lieu du tiers approximatif. Les estimations du raisonnement simplifié sous-estiment les coefficients d'environ un facteur un et demi à deux ; elles donnent cependant correctement la structure des formules, et c'est pourquoi il faut d'abord étudier le raisonnement simple."
+    }
+   ]
+  },
+  "open": "le transport dans les gaz denses et les liquides : tout le tableau du sujet repose sur le libre parcours moyen, et dans un liquide, il n'existe tout simplement pas — la molécule ne vole pas entre les collisions, mais piétine dans une cage de voisins et n'en change que rarement. Il n'existe pas de formules du même niveau de rigueur pour les liquides : la viscosité, la conductivité thermique et la diffusion y sont calculées par des modèles semi-empiriques ajustés à l'expérience, et la théorie exacte de Chapman-Enskog pour les gaz dilués donne déjà une erreur notable aux densités ordinaires.",
+  "lessons": [
+   {
+    "id": "01-diffusion",
+    "title": "Diffusion : transport de matière",
+    "sub": "pourquoi l'étalement se fait comme la racine du temps",
+    "law": "Loi de Fick",
+    "model": "transport"
+   },
+   {
+    "id": "02-conduction",
+    "title": "Conduction thermique : transport d'énergie",
+    "sub": "comment l'énergie traverse une substance qui ne s'écoule pas elle-même",
+    "law": "Loi de Fourier",
+    "model": "transport"
+   },
+   {
+    "id": "03-viscosity-gas",
+    "title": "Viscosité d'un gaz : transport de quantité de mouvement",
+    "sub": "pourquoi la viscosité d'un gaz ne dépend pas de la pression et augmente avec la température",
+    "law": "Formule cinétique de la viscosité · loi de Maxwell",
     "model": "transport"
    }
   ]

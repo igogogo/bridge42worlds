@@ -23,6 +23,68 @@
    "Leonhard Euler",
    "Isaac Newton",
    "George Gabriel Stokes"
+  ],
+  "examples_from_articles": [
+   {
+    "id": "2601.13971",
+    "date": "2026-01-20",
+    "title": {
+     "ru": "Падающая тарелка без сверхкомпьютера",
+     "en": "A Falling Plate Without a Supercomputer",
+     "es": "Un plato que cae sin supercomputadora",
+     "ar": "لوحة ساقطة بدون حاسوب فائق",
+     "fr": "Une assiette qui tombe sans supercalculateur"
+    },
+    "score": 0.69
+   },
+   {
+    "id": "2512.03240",
+    "date": "2025-12-02",
+    "title": {
+     "ru": "Гидродинамика в пористых средах: как новые уравнения описывают течение мёда сквозь губку",
+     "en": "How Honey Flows Through a Sponge: New Equations",
+     "es": "Cómo la miel fluye a través de una esponja: nuevas ecuaciones",
+     "ar": "كيف يتدفق العسل عبر الإسفنج: معادلات جديدة",
+     "fr": "Comment le miel s'écoule à travers une éponge : de nouvelles équations"
+    },
+    "score": 0.681
+   },
+   {
+    "id": "2603.17793",
+    "date": "2026-03-18",
+    "title": {
+     "ru": "Вода под давлением: почему она течёт быстрее",
+     "en": "Water Under Pressure: Why It Flows Faster",
+     "es": "Agua a presión: por qué fluye más rápido",
+     "ar": "الماء تحت الضغط: لماذا يتدفق أسرع",
+     "fr": "L'eau sous pression : pourquoi elle s'écoule plus vite"
+    },
+    "score": 0.649
+   },
+   {
+    "id": "2601.15045",
+    "date": "2026-01-21",
+    "title": {
+     "ru": "Пузырьки в ловушке льда",
+     "en": "Bubbles Trapped in Ice",
+     "es": "Burbujas atrapadas en el hielo",
+     "ar": "فقاعات في مصيدة الجليد",
+     "fr": "Des bulles prisonnières de la glace"
+    },
+    "score": 0.641
+   },
+   {
+    "id": "2602.12320",
+    "date": "2026-02-12",
+    "title": {
+     "ru": "Квантовая частица бросает вызов закону трения: феномен бездиссипативного движения в одномерной системе",
+     "en": "Quantum Particle Defies Friction: Frictionless Motion in a One-Dimensional System",
+     "es": "Una partícula cuántica desafía la ley de fricción: el fenómeno del movimiento sin disipación en un sistema unidimensional",
+     "ar": "جسيم كمومي يتحدى قانون الاحتكاك: ظاهرة الحركة بدون تبديد في نظام أحادي البعد",
+     "fr": "Une particule quantique défie la loi de frottement : le phénomène du mouvement sans dissipation dans un système unidimensionnel"
+    },
+    "score": 0.639
+   }
   ]
  },
  "lessons": [
@@ -388,6 +450,92 @@
     "title": "اللزوجة والمقاومة",
     "sub": "كيف يبطئ السائل نفسه وأين ينتهي التدفق المتوقع",
     "law": "بوازوي · ستوكس · رقم رينولدز",
+    "model": "flow"
+   }
+  ]
+ },
+ "fr": {
+  "title": "Fluides et gaz en mouvement",
+  "subtitle": "Milieu continu : pression, écoulement, viscosité",
+  "lead": "On décrit les liquides et les gaz avec le même formalisme car, pour la mécanique, ce qui importe n'est pas l'état d'agrégation mais une propriété : le milieu ne résiste pas au cisaillement. Appliquez une force le long d'une couche, elle se déplace et ne s'arrête que lorsque les forces tangentielles disparaissent. De ce seul fait découle tout le reste : la pression en profondeur, l'accélération dans un rétrécissement, le freinage visqueux et, enfin, la rupture de l'écoulement régulier en turbulence.",
+  "why": {
+   "title": "Pourquoi le savoir",
+   "text": [
+    "C'est le premier sujet du cours où l'on remplace le point matériel par un milieu continu – et on découvre qu'il n'a pas fallu inventer de nouvelles lois. La deuxième loi de Newton et la conservation de l'énergie s'appliquent à un morceau d'eau imaginaire exactement comme elles s'appliquaient à un bloc sur une table. La seule différence est qu'il faut choisir ce morceau avec soin, et toute la compétence du sujet réside dans ce choix : une colonne allant de la surface à une profondeur donne la formule de la pression, un tube de courant entre deux sections donne l'équation de Bernoulli, une couche cylindrique à l'intérieur d'un tuyau donne le profil de vitesse.",
+    "La densité d'applications pratiques est ici plus élevée que dans presque tous les autres sujets. Les freins d'une voiture, un château d'eau, le tirant d'eau d'un navire, un tensiomètre, une perfusion, une seringue, l'aile d'un avion, une conduite d'eau et un vaisseau rétréci par une plaque – tout cela se calcule avec trois formules que nous allons dériver. Aucune d'elles ne nécessite plus qu'une dérivée, et toutes les trois se vérifient avec un verre d'eau et une bouteille en plastique.",
+    "Et c'est ici qu'on voit honnêtement où la physique classique bute sur un mur. Les équations d'un fluide visqueux sont écrites depuis le milieu du XIXe siècle, personne ne les conteste, mais nous ne savons pas les résoudre en général – et il n'est même pas prouvé qu'une solution lisse existe toujours. Le seuil au-delà duquel un écoulement régulier se désagrège en tourbillons est encore déterminé expérimentalement. Un sujet qui commence par une baignoire se termine par une question ouverte, pour laquelle un prix d'un million de dollars est offert."
+   ]
+  },
+  "map": {
+   "title": "Ce que vous allez apprendre",
+   "lead": "Le sujet progresse du simple au complexe dans un sens physique direct : d'abord le fluide est immobile, puis il se déplace sans pertes, puis avec pertes. Chaque paragraphe suivant lève une simplification du précédent.",
+   "outcome": "Après avoir terminé ce sujet, vous saurez calculer la pression et la force de poussée à n'importe quelle profondeur, expliquer pourquoi la pression diminue dans un rétrécissement au lieu d'augmenter, estimer le débit dans un tuyau avec la formule de Poiseuille – et, surtout, dire à l'avance si cette formule est applicable en calculant le nombre de Reynolds."
+  },
+  "prereq": {
+   "title": "Ce qu'il faut savoir à l'avance",
+   "items": [
+    "Mécanique : deuxième loi de Newton, travail d'une force et énergie cinétique. L'équation de Bernoulli est le théorème de l'énergie cinétique appliqué à un morceau de fluide, et rien de plus n'est nécessaire pour la dériver.",
+    "Thermodynamique : la masse volumique comme masse par unité de volume et une idée de la structure moléculaire de la matière. Nous dériverons la viscosité comme un transfert de quantité de mouvement par le mouvement thermique – le même mécanisme qui donne la conduction thermique et la diffusion.",
+    "Mathématiques : la dérivée comme taux de variation et l'intégrale définie la plus simple. L'écriture $dp/dz = -\\rho g$ apparaîtra dès le premier paragraphe, et l'intégration sur la section d'un tuyau au troisième."
+   ],
+   "note": "L'analyse vectorielle n'est pas obligatoire. Le théorème du gradient n'apparaît qu'une seule fois, dans le bloc mathématique du premier paragraphe, et à côté se trouve une dérivation du même résultat sans intégrales – celle qu'Archimède lui-même a imaginée."
+  },
+  "history": {
+   "title": "Qui l'a créée",
+   "people": [
+    {
+     "name": "Archimède",
+     "years": "vers 287–212 av. J.-C.",
+     "what": "Dans son traité « Des corps flottants », il a prouvé qu'un corps immergé perd exactement le poids du fluide déplacé et a analysé les conditions de flottabilité stable. C'est le seul résultat antique du cours qui soit encore utilisé aujourd'hui sans aucune correction."
+    },
+    {
+     "name": "Blaise Pascal",
+     "years": "1623–1662",
+     "what": "Dans son « Traité de l'équilibre des liqueurs », il a formulé que la pression ajoutée se transmet sans perte à tous les points et a décrit la presse hydraulique un siècle et demi avant qu'elle ne soit construite. Il a également mené à bien la vérification de l'hypothèse de Torricelli : un baromètre porté au sommet du Puy-de-Dôme a montré une colonne plus courte de huit centimètres – donc c'est le poids de l'air qui la maintient, et non une « horreur du vide »."
+    },
+    {
+     "name": "Daniel Bernoulli",
+     "years": "1700–1782",
+     "what": "Dans son « Hydrodynamique » de 1738, il a relié la vitesse d'écoulement à la pression en raisonnant sur la « force vive » – c'est ainsi qu'on appelait alors l'énergie cinétique. Le livre lui a coûté sa relation avec son père : Johann Bernoulli a publié sa propre « Hydraulique », en datant la page de titre six ans avant la publication de son fils. Ils ne se sont jamais réconciliés."
+    },
+    {
+     "name": "Leonhard Euler",
+     "years": "1707–1783",
+     "what": "Il a écrit les équations du mouvement d'un fluide parfait sous la forme qui nous est parvenue et a obtenu la relation de Bernoulli comme une conséquence de ces équations, et non comme un raisonnement sur la force vive. C'est lui qui a introduit le terme de pression comme un membre distinct. Après cela, il ne restait plus qu'à ajouter la viscosité."
+    },
+    {
+     "name": "Gotthilf Hagen et Jean-Louis Poiseuille",
+     "years": "1839–1846",
+     "what": "Indépendamment l'un de l'autre, ils ont mesuré le débit dans des tubes minces : l'ingénieur s'occupait de la distribution d'eau, le médecin voulait comprendre la circulation sanguine et a inventé pour cela le manomètre à mercure pour la pression artérielle. Tous deux ont découvert la quatrième puissance du rayon, et tous deux n'ont pas pu expliquer d'où elle venait – la dérivation à partir des équations d'un fluide visqueux a été donnée par Stokes et ses contemporains seulement dans les années 1850."
+    },
+    {
+     "name": "Osborne Reynolds",
+     "years": "1842–1912",
+     "what": "Il a injecté un filet de colorant dans un écoulement d'eau dans un tube en verre et a vu le point où le filet régulier se désagrège en tourbillons. Par une analyse dimensionnelle, il a obtenu un nombre sans dimension comparant l'inertie à la viscosité et a montré que la transition est déterminée par ce nombre, et non par la vitesse ou le diamètre séparément. Le nombre lui-même est dérivé, mais le seuil d'environ 2300 reste mesuré – il l'est encore aujourd'hui."
+    }
+   ]
+  },
+  "open": "Existe-t-il des solutions lisses des équations de Navier-Stokes pour toute condition initiale ? – un million de dollars sont promis pour la réponse.",
+  "lessons": [
+   {
+    "id": "01-hydrostatics",
+    "title": "Pression dans un liquide au repos",
+    "sub": "pourquoi la pression ne dépend que de la profondeur et d'où vient la force d'Archimède",
+    "law": "Loi de Pascal · loi d'Archimède",
+    "model": "flow"
+   },
+   {
+    "id": "02-bernoulli",
+    "title": "Écoulement : continuité et Bernoulli",
+    "sub": "pourquoi la pression est plus faible dans un passage étroit, et non plus élevée",
+    "law": "Équation de Bernoulli",
+    "model": "flow"
+   },
+   {
+    "id": "03-viscosity",
+    "title": "Viscosité et résistance",
+    "sub": "comment un liquide se freine lui-même et où s'arrête l'écoulement prévisible",
+    "law": "Poiseuille · Stokes · nombre de Reynolds",
     "model": "flow"
    }
   ]

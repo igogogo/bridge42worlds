@@ -1,367 +1,447 @@
 {
-  "id": "mechanics",
-  "schema": "b42.course/2",
-  "kind": "overview",
-  "order": 1,
-  "entities": {
-    "laws": [
-      "newtons_first_law",
-      "newtons_second_law",
-      "newtons_third_law",
-      "law_of_conservation_of_momentum",
-      "law_of_conservation_of_energy"
-    ],
-    "tags": [
-      "hamiltonian_mechanics",
-      "potential_energy",
-      "angular_momentum"
-    ],
-    "scientists": [
-      "Isaac Newton",
-      "Galileo Galilei"
-    ]
+ "id": "mechanics",
+ "schema": "b42.course/2",
+ "kind": "overview",
+ "order": 1,
+ "entities": {
+  "laws": [
+   "newtons_first_law",
+   "newtons_second_law",
+   "newtons_third_law",
+   "law_of_conservation_of_momentum",
+   "law_of_conservation_of_energy"
+  ],
+  "tags": [
+   "hamiltonian_mechanics",
+   "potential_energy",
+   "angular_momentum"
+  ],
+  "scientists": [
+   "Isaac Newton",
+   "Galileo Galilei"
+  ]
+ },
+ "lessons": [
+  {
+   "id": "01-kinematics",
+   "title": "Материальная точка",
+   "sub": "Как описать движение, не зная его причин",
+   "law": "Кинематика",
+   "model": "motion"
+  },
+  {
+   "id": "02-newton",
+   "title": "Законы Ньютона",
+   "sub": "Сила как причина изменения движения",
+   "law": "Три закона Ньютона",
+   "model": "newton"
+  },
+  {
+   "id": "03-conservation",
+   "title": "Законы сохранения",
+   "sub": "Импульс и энергия — что не меняется никогда",
+   "law": "Сохранение импульса и энергии",
+   "model": "collision"
+  }
+ ],
+ "ru": {
+  "title": "Механика",
+  "subtitle": "Наука о движении — и язык, на котором говорит вся остальная физика",
+  "lead": "С механики начинается физика, и не только исторически. Понятия, которые здесь вводятся — скорость, сила, энергия, импульс — потом всплывут в термодинамике, в электричестве, в квантовой теории. Это обзорная глава: без формул, только смысл и карта пути.",
+  "why": {
+   "title": "Зачем это знать",
+   "text": [
+    "Механика отвечает на вопрос, который кажется простым, пока не задумаешься всерьёз: почему тела движутся именно так, а не иначе? Почему брошенный камень летит по дуге, а не по прямой? Почему пассажира кидает вперёд при торможении, хотя его никто не толкал? Почему фигуристка крутится быстрее, прижав руки?",
+    "До Галилея на это отвечали неверно почти две тысячи лет. Считалось, что для движения нужна постоянно действующая сила: телега едет, пока лошадь тянет. Это согласуется с опытом настолько хорошо, что ошибку не замечали двадцать веков. Понадобился мысленный эксперимент, чтобы увидеть: трение маскирует истину.",
+    "Когда Ньютон записал три закона и добавил к ним тяготение, произошло небывалое: одни и те же уравнения описали и падение яблока, и движение Луны. Земное и небесное оказались одним. С этого момента физика перестала быть собранием наблюдений и стала наукой, которая предсказывает."
+   ]
+  },
+  "history": {
+   "title": "Кто её создал",
+   "people": [
+    {
+     "name": "Галилео Галилей",
+     "years": "1564–1642",
+     "what": "Первым понял, что равномерное движение не требует силы, — вопреки очевидности и вопреки Аристотелю. Изучал падение тел, установил, что скорость падения не зависит от массы. Ввёл в физику измерение и мысленный эксперимент как метод."
+    },
+    {
+     "name": "Исаак Ньютон",
+     "years": "1643–1727",
+     "what": "Свёл механику в три закона и добавил закон всемирного тяготения. В «Математических началах натуральной философии» (1687) показал, что движение планет и падение тел подчиняются одному закону. Попутно создал математический аппарат — дифференциальное исчисление."
+    },
+    {
+     "name": "Роберт Гук",
+     "years": "1635–1703",
+     "what": "Фигура, которую история задвинула незаслуженно. Открыл закон упругости, носящий его имя, — первый количественный закон о деформации, без которого не было бы ни теории колебаний, ни сопротивления материалов. Ввёл в биологию слово «клетка». И, что важнее всего для этой темы, за годы до «Начал» высказал догадку, что притяжение убывает обратно пропорционально квадрату расстояния, — и в письмах прямо подсказал эту мысль Ньютону. Доказать её математически он не сумел; это сделал Ньютон, после чего отказался признать вклад Гука и вычеркнул упоминания о нём. Прижизненного портрета Гука не сохранилось — по одной из версий, не без участия Ньютона, возглавившего Королевское общество после его смерти."
+    },
+    {
+     "name": "Готфрид Лейбниц",
+     "years": "1646–1716",
+     "what": "Независимо от Ньютона создал исчисление и ввёл понятие «живой силы» — предшественника кинетической энергии. Спор о приоритете отравил обоим последние годы, хотя правы оказались оба."
+    },
+    {
+     "name": "Эмми Нётер",
+     "years": "1882–1935",
+     "what": "Двести лет спустя доказала теорему, объяснившую, откуда вообще берутся законы сохранения: каждый из них следует из симметрии. Сохранение энергии — из однородности времени, импульса — из однородности пространства. Это один из глубочайших результатов в физике."
+    }
+   ]
+  },
+  "map": {
+   "title": "Что вы изучите",
+   "lead": "Тема разбита на три параграфа, идущих строго по нарастающей: сначала научимся описывать движение, потом объясним его причины, потом найдём то, что при любом движении остаётся неизменным.",
+   "outcome": "Пройдя все три, вы будете понимать, как связаны скорость, ускорение и траектория; почему сила меняет не положение, а скорость; и почему импульс с энергией сохраняются, даже когда всё остальное меняется до неузнаваемости."
+  },
+  "prereq": {
+   "title": "Что нужно знать заранее",
+   "items": [
+    "Школьная алгебра: пропорции, степени, решение простых уравнений.",
+    "Понятие вектора хотя бы на уровне «величина плюс направление» — остальное разберём по ходу.",
+    "Производная желательна, но не обязательна: в первом параграфе мы объясним её физический смысл с нуля, на примере скорости."
+   ],
+   "note": "Это первая тема курса — она ничего не предполагает, кроме школьной математики. Всё остальное вводится здесь и дальше используется во всех темах."
   },
   "lessons": [
+   {
+    "id": "01-kinematics",
+    "title": "Материальная точка",
+    "sub": "Как описать движение, не зная его причин",
+    "law": "Кинематика",
+    "model": "motion"
+   },
+   {
+    "id": "02-newton",
+    "title": "Законы Ньютона",
+    "sub": "Сила как причина изменения движения",
+    "law": "Три закона Ньютона",
+    "model": "newton"
+   },
+   {
+    "id": "03-conservation",
+    "title": "Законы сохранения",
+    "sub": "Импульс и энергия — что не меняется никогда",
+    "law": "Сохранение импульса и энергии",
+    "model": "collision"
+   }
+  ]
+ },
+ "en": {
+  "title": "Mechanics",
+  "subtitle": "The science of motion — and the language spoken by all other physics",
+  "lead": "Physics begins with mechanics, and not only historically. The concepts introduced here — velocity, force, energy, momentum — will later surface in thermodynamics, in electricity, in quantum theory. This is an overview chapter: without formulas, only meaning and a roadmap.",
+  "why": {
+   "title": "Why you should know this",
+   "text": [
+    "Mechanics answers a question that seems simple until you think about it seriously: why do bodies move the way they do? Why does a thrown stone fly in an arc and not in a straight line? Why is a passenger thrown forward when braking, even though no one pushed them? Why does a figure skater spin faster by pulling their arms in?",
+    "Before Galileo, this was answered incorrectly for almost two thousand years. It was believed that motion requires a constantly acting force: a cart moves as long as a horse pulls. This agrees with experience so well that the error went unnoticed for twenty centuries. A thought experiment was needed to see that friction masks the truth.",
+    "When Newton wrote down three laws and added gravity to them, something unprecedented happened: the same equations described both the fall of an apple and the motion of the Moon. Earthly and celestial turned out to be one. From that moment, physics ceased to be a collection of observations and became a science that predicts."
+   ]
+  },
+  "history": {
+   "title": "Who created it",
+   "people": [
     {
-      "id": "01-kinematics",
-      "title": "Материальная точка",
-      "sub": "Как описать движение, не зная его причин",
-      "law": "Кинематика",
-      "model": "motion"
+     "name": "Galileo Galilei",
+     "years": "1564–1642",
+     "what": "First to understand that uniform motion does not require force — contrary to common sense and to Aristotle. Studied falling bodies, established that their speed does not depend on mass. Introduced measurement and thought experiment as methods in physics."
     },
     {
-      "id": "02-newton",
-      "title": "Законы Ньютона",
-      "sub": "Сила как причина изменения движения",
-      "law": "Три закона Ньютона",
-      "model": "newton"
+     "name": "Isaac Newton",
+     "years": "1643–1727",
+     "what": "Reduced mechanics to three laws and added the law of universal gravitation. In 'Mathematical Principles of Natural Philosophy' (1687) he showed that planetary motion and falling bodies obey the same law. Along the way, he created the mathematical apparatus — differential calculus."
     },
     {
-      "id": "03-conservation",
-      "title": "Законы сохранения",
-      "sub": "Импульс и энергия — что не меняется никогда",
-      "law": "Сохранение импульса и энергии",
-      "model": "collision"
+     "name": "Robert Hooke",
+     "years": "1635–1703",
+     "what": "A figure history has unjustly sidelined. He discovered the law of elasticity that bears his name — the first quantitative law of deformation, without which there would be neither theory of oscillations nor strength of materials. He introduced the word 'cell' into biology. And, most importantly for this topic, years before the 'Principia' he suggested that attraction diminishes inversely proportional to the square of the distance — and directly hinted at this idea in letters to Newton. He could not prove it mathematically; Newton did, after which he refused to acknowledge Hooke's contribution and erased mentions of him. No lifetime portrait of Hooke survives — according to one version, not without the involvement of Newton, who became president of the Royal Society after Hooke's death."
+    },
+    {
+     "name": "Gottfried Leibniz",
+     "years": "1646–1716",
+     "what": "Independently of Newton, he created calculus and introduced the concept of 'living force' — the predecessor of kinetic energy. The priority dispute poisoned both their later years, though both were right."
+    },
+    {
+     "name": "Emmy Noether",
+     "years": "1882–1935",
+     "what": "Two hundred years later, she proved a theorem explaining where conservation laws come from: each follows from a symmetry. Conservation of energy from time homogeneity, conservation of momentum from space homogeneity. This is one of the deepest results in physics."
     }
-  ],
-  "ru": {
-    "title": "Механика",
-    "subtitle": "Наука о движении — и язык, на котором говорит вся остальная физика",
-    "lead": "С механики начинается физика, и не только исторически. Понятия, которые здесь вводятся — скорость, сила, энергия, импульс — потом всплывут в термодинамике, в электричестве, в квантовой теории. Это обзорная глава: без формул, только смысл и карта пути.",
-    "why": {
-      "title": "Зачем это знать",
-      "text": [
-        "Механика отвечает на вопрос, который кажется простым, пока не задумаешься всерьёз: почему тела движутся именно так, а не иначе? Почему брошенный камень летит по дуге, а не по прямой? Почему пассажира кидает вперёд при торможении, хотя его никто не толкал? Почему фигуристка крутится быстрее, прижав руки?",
-        "До Галилея на это отвечали неверно почти две тысячи лет. Считалось, что для движения нужна постоянно действующая сила: телега едет, пока лошадь тянет. Это согласуется с опытом настолько хорошо, что ошибку не замечали двадцать веков. Понадобился мысленный эксперимент, чтобы увидеть: трение маскирует истину.",
-        "Когда Ньютон записал три закона и добавил к ним тяготение, произошло небывалое: одни и те же уравнения описали и падение яблока, и движение Луны. Земное и небесное оказались одним. С этого момента физика перестала быть собранием наблюдений и стала наукой, которая предсказывает."
-      ]
-    },
-    "history": {
-      "title": "Кто её создал",
-      "people": [
-        {
-          "name": "Галилео Галилей",
-          "years": "1564–1642",
-          "what": "Первым понял, что равномерное движение не требует силы, — вопреки очевидности и вопреки Аристотелю. Изучал падение тел, установил, что скорость падения не зависит от массы. Ввёл в физику измерение и мысленный эксперимент как метод."
-        },
-        {
-          "name": "Исаак Ньютон",
-          "years": "1643–1727",
-          "what": "Свёл механику в три закона и добавил закон всемирного тяготения. В «Математических началах натуральной философии» (1687) показал, что движение планет и падение тел подчиняются одному закону. Попутно создал математический аппарат — дифференциальное исчисление."
-        },
-        {
-          "name": "Роберт Гук",
-          "years": "1635–1703",
-          "what": "Фигура, которую история задвинула незаслуженно. Открыл закон упругости, носящий его имя, — первый количественный закон о деформации, без которого не было бы ни теории колебаний, ни сопротивления материалов. Ввёл в биологию слово «клетка». И, что важнее всего для этой темы, за годы до «Начал» высказал догадку, что притяжение убывает обратно пропорционально квадрату расстояния, — и в письмах прямо подсказал эту мысль Ньютону. Доказать её математически он не сумел; это сделал Ньютон, после чего отказался признать вклад Гука и вычеркнул упоминания о нём. Прижизненного портрета Гука не сохранилось — по одной из версий, не без участия Ньютона, возглавившего Королевское общество после его смерти."
-        },
-        {
-          "name": "Готфрид Лейбниц",
-          "years": "1646–1716",
-          "what": "Независимо от Ньютона создал исчисление и ввёл понятие «живой силы» — предшественника кинетической энергии. Спор о приоритете отравил обоим последние годы, хотя правы оказались оба."
-        },
-        {
-          "name": "Эмми Нётер",
-          "years": "1882–1935",
-          "what": "Двести лет спустя доказала теорему, объяснившую, откуда вообще берутся законы сохранения: каждый из них следует из симметрии. Сохранение энергии — из однородности времени, импульса — из однородности пространства. Это один из глубочайших результатов в физике."
-        }
-      ]
-    },
-    "map": {
-      "title": "Что вы изучите",
-      "lead": "Тема разбита на три параграфа, идущих строго по нарастающей: сначала научимся описывать движение, потом объясним его причины, потом найдём то, что при любом движении остаётся неизменным.",
-      "outcome": "Пройдя все три, вы будете понимать, как связаны скорость, ускорение и траектория; почему сила меняет не положение, а скорость; и почему импульс с энергией сохраняются, даже когда всё остальное меняется до неузнаваемости."
-    },
-    "prereq": {
-      "title": "Что нужно знать заранее",
-      "items": [
-        "Школьная алгебра: пропорции, степени, решение простых уравнений.",
-        "Понятие вектора хотя бы на уровне «величина плюс направление» — остальное разберём по ходу.",
-        "Производная желательна, но не обязательна: в первом параграфе мы объясним её физический смысл с нуля, на примере скорости."
-      ],
-      "note": "Это первая тема курса — она ничего не предполагает, кроме школьной математики. Всё остальное вводится здесь и дальше используется во всех темах."
-    },
-    "lessons": [
-      {
-        "id": "01-kinematics",
-        "title": "Материальная точка",
-        "sub": "Как описать движение, не зная его причин",
-        "law": "Кинематика",
-        "model": "motion"
-      },
-      {
-        "id": "02-newton",
-        "title": "Законы Ньютона",
-        "sub": "Сила как причина изменения движения",
-        "law": "Три закона Ньютона",
-        "model": "newton"
-      },
-      {
-        "id": "03-conservation",
-        "title": "Законы сохранения",
-        "sub": "Импульс и энергия — что не меняется никогда",
-        "law": "Сохранение импульса и энергии",
-        "model": "collision"
-      }
-    ]
+   ]
   },
-  "en": {
-    "title": "Mechanics",
-    "subtitle": "The science of motion — and the language spoken by all other physics",
-    "lead": "Physics begins with mechanics, and not only historically. The concepts introduced here — velocity, force, energy, momentum — will later surface in thermodynamics, in electricity, in quantum theory. This is an overview chapter: without formulas, only meaning and a roadmap.",
-    "why": {
-      "title": "Why you should know this",
-      "text": [
-        "Mechanics answers a question that seems simple until you think about it seriously: why do bodies move the way they do? Why does a thrown stone fly in an arc and not in a straight line? Why is a passenger thrown forward when braking, even though no one pushed them? Why does a figure skater spin faster by pulling their arms in?",
-        "Before Galileo, this was answered incorrectly for almost two thousand years. It was believed that motion requires a constantly acting force: a cart moves as long as a horse pulls. This agrees with experience so well that the error went unnoticed for twenty centuries. A thought experiment was needed to see that friction masks the truth.",
-        "When Newton wrote down three laws and added gravity to them, something unprecedented happened: the same equations described both the fall of an apple and the motion of the Moon. Earthly and celestial turned out to be one. From that moment, physics ceased to be a collection of observations and became a science that predicts."
-      ]
-    },
-    "history": {
-      "title": "Who created it",
-      "people": [
-        {
-          "name": "Galileo Galilei",
-          "years": "1564–1642",
-          "what": "First to understand that uniform motion does not require force — contrary to common sense and to Aristotle. Studied falling bodies, established that their speed does not depend on mass. Introduced measurement and thought experiment as methods in physics."
-        },
-        {
-          "name": "Isaac Newton",
-          "years": "1643–1727",
-          "what": "Reduced mechanics to three laws and added the law of universal gravitation. In 'Mathematical Principles of Natural Philosophy' (1687) he showed that planetary motion and falling bodies obey the same law. Along the way, he created the mathematical apparatus — differential calculus."
-        },
-        {
-          "name": "Robert Hooke",
-          "years": "1635–1703",
-          "what": "A figure history has unjustly sidelined. He discovered the law of elasticity that bears his name — the first quantitative law of deformation, without which there would be neither theory of oscillations nor strength of materials. He introduced the word 'cell' into biology. And, most importantly for this topic, years before the 'Principia' he suggested that attraction diminishes inversely proportional to the square of the distance — and directly hinted at this idea in letters to Newton. He could not prove it mathematically; Newton did, after which he refused to acknowledge Hooke's contribution and erased mentions of him. No lifetime portrait of Hooke survives — according to one version, not without the involvement of Newton, who became president of the Royal Society after Hooke's death."
-        },
-        {
-          "name": "Gottfried Leibniz",
-          "years": "1646–1716",
-          "what": "Independently of Newton, he created calculus and introduced the concept of 'living force' — the predecessor of kinetic energy. The priority dispute poisoned both their later years, though both were right."
-        },
-        {
-          "name": "Emmy Noether",
-          "years": "1882–1935",
-          "what": "Two hundred years later, she proved a theorem explaining where conservation laws come from: each follows from a symmetry. Conservation of energy from time homogeneity, conservation of momentum from space homogeneity. This is one of the deepest results in physics."
-        }
-      ]
-    },
-    "map": {
-      "title": "What you will learn",
-      "lead": "The topic is divided into three sections, becoming progressively more complex: first we learn to describe motion, then explain its causes, then find what remains unchanged in any motion.",
-      "outcome": "After completing all three, you will understand how velocity, acceleration, and trajectory are related; why force changes not position but velocity; and why momentum and energy are conserved even when everything else changes beyond recognition."
-    },
-    "prereq": {
-      "title": "What you need to know beforehand",
-      "items": [
-        "School algebra: proportions, powers, solving simple equations.",
-        "The concept of a vector at least at the level 'magnitude plus direction' — we will cover the rest as we go.",
-        "Derivatives are desirable but not required: in the first section we will explain their physical meaning from scratch, using velocity as an example."
-      ],
-      "note": "This is the first topic of the course — it assumes nothing beyond school mathematics. Everything else is introduced here and used in all subsequent topics."
-    },
-    "lessons": [
-      {
-        "id": "01-kinematics",
-        "title": "Material Point",
-        "sub": "Section 1 · How to describe motion without knowing its causes",
-        "law": "Kinematics",
-        "model": "motion"
-      },
-      {
-        "id": "02-newton",
-        "title": "Newton's Laws",
-        "sub": "Section 2 · Force as the Cause of Change in Motion",
-        "law": "Newton's three laws",
-        "model": "newton"
-      },
-      {
-        "id": "03-conservation",
-        "title": "Conservation Laws",
-        "sub": "Section 3 · Momentum and Energy — What Never Changes",
-        "law": "Conservation of momentum and energy",
-        "model": "collision"
-      }
-    ]
+  "map": {
+   "title": "What you will learn",
+   "lead": "The topic is divided into three sections, becoming progressively more complex: first we learn to describe motion, then explain its causes, then find what remains unchanged in any motion.",
+   "outcome": "After completing all three, you will understand how velocity, acceleration, and trajectory are related; why force changes not position but velocity; and why momentum and energy are conserved even when everything else changes beyond recognition."
   },
-  "es": {
-    "title": "Mecánica",
-    "subtitle": "La ciencia del movimiento — y el lenguaje que habla el resto de la física",
-    "lead": "Con la mecánica comienza la física, y no solo históricamente. Los conceptos que aquí se introducen — velocidad, fuerza, energía, momento lineal — aparecerán después en termodinámica, electricidad y teoría cuántica. Este es un capítulo de visión general: sin fórmulas, solo el significado y un mapa del camino.",
-    "why": {
-      "title": "Para qué saber esto",
-      "text": [
-        "La mecánica responde a una pregunta que parece simple hasta que uno reflexiona seriamente: ¿por qué los cuerpos se mueven exactamente así y no de otra manera? ¿Por qué una piedra lanzada vuela en un arco y no en línea recta? ¿Por qué un pasajero es lanzado hacia adelante al frenar, aunque nadie lo haya empujado? ¿Por qué una patinadora gira más rápido cuando junta los brazos?",
-        "Antes de Galileo, esto se respondía incorrectamente durante casi dos mil años. Se creía que para el movimiento se necesitaba una fuerza actuante constante: un carro avanza mientras el caballo tira. Esto concuerda tan bien con la experiencia que el error pasó inadvertido durante veinte siglos. Fue necesario un experimento mental para ver que la fricción oculta la verdad.",
-        "Cuando Newton escribió las tres leyes y les añadió la gravitación, ocurrió algo sin precedentes: las mismas ecuaciones describían la caída de una manzana y el movimiento de la Luna. Lo terrenal y lo celeste resultaron ser una sola cosa. Desde ese momento, la física dejó de ser una colección de observaciones y se convirtió en una ciencia que predice."
-      ]
-    },
-    "history": {
-      "title": "Quiénes la crearon",
-      "people": [
-        {
-          "name": "Galileo Galilei",
-          "years": "1564–1642",
-          "what": "Fue el primero en comprender que el movimiento uniforme no requiere fuerza, en contra de la evidencia y de Aristóteles. Estudió la caída de los cuerpos y estableció que la velocidad de caída no depende de la masa. Introdujo en la física la medición y el experimento mental como método."
-        },
-        {
-          "name": "Isaac Newton",
-          "years": "1643–1727",
-          "what": "Redujo la mecánica a tres leyes y añadió la ley de la gravitación universal. En los «Principios matemáticos de la filosofía natural» (1687) demostró que el movimiento de los planetas y la caída de los cuerpos obedecen a la misma ley. De paso, creó el aparato matemático — el cálculo diferencial."
-        },
-        {
-          "name": "Robert Hooke",
-          "years": "1635–1703",
-          "what": "Figura que la historia ha relegado injustamente. Descubrió la ley de elasticidad que lleva su nombre — la primera ley cuantitativa sobre la deformación, sin la cual no existirían ni la teoría de oscilaciones ni la resistencia de materiales. Introdujo en biología la palabra «célula». Y, lo más importante para este tema, años antes de los «Principia» sugirió que la atracción disminuye en proporción inversa al cuadrado de la distancia — y en cartas insinuó directamente esta idea a Newton. No pudo demostrarla matemáticamente; lo hizo Newton, quien luego se negó a reconocer la contribución de Hooke y eliminó las menciones a él. No se conserva un retrato de Hooke en vida — según una versión, no sin la intervención de Newton, quien presidió la Royal Society tras su muerte."
-        },
-        {
-          "name": "Gottfried Leibniz",
-          "years": "1646–1716",
-          "what": "Independientemente de Newton creó el cálculo e introdujo el concepto de «fuerza viva» — precursor de la energía cinética. La disputa sobre la prioridad amargó los últimos años de ambos, aunque ambos tenían razón."
-        },
-        {
-          "name": "Emmy Noether",
-          "years": "1882–1935",
-          "what": "Doscientos años después demostró un teorema que explicaba de dónde provienen las leyes de conservación: cada una se deriva de una simetría. La conservación de la energía, de la homogeneidad del tiempo; la del momento lineal, de la homogeneidad del espacio. Es uno de los resultados más profundos de la física."
-        }
-      ]
-    },
-    "map": {
-      "title": "Lo que estudiarás",
-      "lead": "El tema está dividido en tres secciones que siguen estrictamente un orden creciente: primero aprenderemos a describir el movimiento, luego explicaremos sus causas, y finalmente encontraremos aquello que permanece invariable en cualquier movimiento.",
-      "outcome": "Al completar las tres, comprenderás cómo se relacionan velocidad, aceleración y trayectoria; por qué la fuerza cambia no la posición sino la velocidad; y por qué el momento lineal y la energía se conservan, incluso cuando todo lo demás cambia hasta hacerse irreconocible."
-    },
-    "prereq": {
-      "title": "Qué necesitas saber de antemano",
-      "items": [
-        "Álgebra escolar: proporciones, potencias, resolución de ecuaciones simples.",
-        "Concepto de vector al menos a nivel de «magnitud más dirección» — lo demás lo iremos viendo.",
-        "La derivada es deseable pero no obligatoria: en la primera sección explicaremos su significado físico desde cero, con el ejemplo de la velocidad."
-      ],
-      "note": "Este es el primer tema del curso — no presupone nada más que matemáticas escolares. Todo lo demás se introduce aquí y se usará en todos los temas siguientes."
-    },
-    "lessons": [
-      {
-        "id": "01-kinematics",
-        "title": "Punto material",
-        "sub": "Párrafo 1 · Cómo describir el movimiento sin conocer sus causas",
-        "law": "Cinemática",
-        "model": "motion"
-      },
-      {
-        "id": "02-newton",
-        "title": "Leyes de Newton",
-        "sub": "Párrafo 2 · La fuerza como causa del cambio de movimiento",
-        "law": "Tres leyes de Newton",
-        "model": "newton"
-      },
-      {
-        "id": "03-conservation",
-        "title": "Leyes de conservación",
-        "sub": "Párrafo 3 · Momento y energía: lo que nunca cambia",
-        "law": "Conservación del momento y la energía",
-        "model": "collision"
-      }
-    ]
+  "prereq": {
+   "title": "What you need to know beforehand",
+   "items": [
+    "School algebra: proportions, powers, solving simple equations.",
+    "The concept of a vector at least at the level 'magnitude plus direction' — we will cover the rest as we go.",
+    "Derivatives are desirable but not required: in the first section we will explain their physical meaning from scratch, using velocity as an example."
+   ],
+   "note": "This is the first topic of the course — it assumes nothing beyond school mathematics. Everything else is introduced here and used in all subsequent topics."
   },
-  "ar": {
-    "title": "الميكانيكا",
-    "subtitle": "علم الحركة — واللغة التي تتحدث بها بقية الفيزياء",
-    "lead": "تبدأ الفيزياء بالميكانيكا، وليس فقط تاريخياً. المفاهيم التي تُقدم هنا — السرعة، القوة، الطاقة، الزخم — ستظهر لاحقاً في الديناميكا الحرارية، والكهرباء، ونظرية الكم. هذا فصل تمهيدي: بدون صيغ، فقط المعنى وخريطة الطريق.",
-    "why": {
-      "title": "لماذا يجب معرفتها",
-      "text": [
-        "تجيب الميكانيكا على سؤال يبدو بسيطاً حتى تفكر فيه بجدية: لماذا تتحرك الأجسام بهذه الطريقة وليس غيرها؟ لماذا يطير الحجر المقذوف في مسار منحنٍ وليس خطاً مستقيماً؟ لماذا يُدفع الراكب إلى الأمام عند الكبح على الرغم من عدم دفع أحد له؟ لماذا تدور المتزلجة أسرع عندما تضم ذراعيها؟",
-        "قبل جاليليو، كانت الإجابة خاطئة لما يقرب من ألفي عام. كان يُعتقد أن الحركة تتطلب قوة مستمرة: العربة تتحرك طالما أن الحصان يسحبها. هذا يتوافق مع التجربة لدرجة أن الخطأ لم يُلاحظ لعشرين قرناً. تطلبت تجربة فكرية لرؤية أن الاحتكاك يخفي الحقيقة.",
-        "عندما صاغ نيوتن قوانينه الثلاثة وأضاف إليها الجاذبية، حدث أمر غير مسبوق: نفس المعادلات وصفت سقوط تفاحة وحركة القمر. الأرضي والسماوي أصبحا شيئاً واحداً. منذ تلك اللحظة، توقفت الفيزياء عن كونها مجموعة من الملاحظات وأصبحت علماً يتنبأ."
-      ]
+  "lessons": [
+   {
+    "id": "01-kinematics",
+    "title": "Material Point",
+    "sub": "Section 1 · How to describe motion without knowing its causes",
+    "law": "Kinematics",
+    "model": "motion"
+   },
+   {
+    "id": "02-newton",
+    "title": "Newton's Laws",
+    "sub": "Section 2 · Force as the Cause of Change in Motion",
+    "law": "Newton's three laws",
+    "model": "newton"
+   },
+   {
+    "id": "03-conservation",
+    "title": "Conservation Laws",
+    "sub": "Section 3 · Momentum and Energy — What Never Changes",
+    "law": "Conservation of momentum and energy",
+    "model": "collision"
+   }
+  ]
+ },
+ "es": {
+  "title": "Mecánica",
+  "subtitle": "La ciencia del movimiento — y el lenguaje que habla el resto de la física",
+  "lead": "Con la mecánica comienza la física, y no solo históricamente. Los conceptos que aquí se introducen — velocidad, fuerza, energía, momento lineal — aparecerán después en termodinámica, electricidad y teoría cuántica. Este es un capítulo de visión general: sin fórmulas, solo el significado y un mapa del camino.",
+  "why": {
+   "title": "Para qué saber esto",
+   "text": [
+    "La mecánica responde a una pregunta que parece simple hasta que uno reflexiona seriamente: ¿por qué los cuerpos se mueven exactamente así y no de otra manera? ¿Por qué una piedra lanzada vuela en un arco y no en línea recta? ¿Por qué un pasajero es lanzado hacia adelante al frenar, aunque nadie lo haya empujado? ¿Por qué una patinadora gira más rápido cuando junta los brazos?",
+    "Antes de Galileo, esto se respondía incorrectamente durante casi dos mil años. Se creía que para el movimiento se necesitaba una fuerza actuante constante: un carro avanza mientras el caballo tira. Esto concuerda tan bien con la experiencia que el error pasó inadvertido durante veinte siglos. Fue necesario un experimento mental para ver que la fricción oculta la verdad.",
+    "Cuando Newton escribió las tres leyes y les añadió la gravitación, ocurrió algo sin precedentes: las mismas ecuaciones describían la caída de una manzana y el movimiento de la Luna. Lo terrenal y lo celeste resultaron ser una sola cosa. Desde ese momento, la física dejó de ser una colección de observaciones y se convirtió en una ciencia que predice."
+   ]
+  },
+  "history": {
+   "title": "Quiénes la crearon",
+   "people": [
+    {
+     "name": "Galileo Galilei",
+     "years": "1564–1642",
+     "what": "Fue el primero en comprender que el movimiento uniforme no requiere fuerza, en contra de la evidencia y de Aristóteles. Estudió la caída de los cuerpos y estableció que la velocidad de caída no depende de la masa. Introdujo en la física la medición y el experimento mental como método."
     },
-    "history": {
-      "title": "من صنعها",
-      "people": [
-        {
-          "name": "جاليليو جاليلي",
-          "years": "1564–1642",
-          "what": "أول من أدرك أن الحركة المنتظمة لا تتطلب قوة — خلافاً للبديهة وأرسطو. درس سقوط الأجسام، وأثبت أن سرعة السقوط لا تعتمد على الكتلة. أدخل القياس والتجربة الفكرية كمنهج في الفيزياء."
-        },
-        {
-          "name": "إسحاق نيوتن",
-          "years": "1643–1727",
-          "what": "لخص الميكانيكا في ثلاثة قوانين وأضاف قانون الجذب العام. في كتابه 'المبادئ الرياضية للفلسفة الطبيعية' (1687) أظهر أن حركة الكواكب وسقوط الأجسام تخضع لنفس القانون. وعلى طول الطريق، ابتكر الأداة الرياضية — التفاضل والتكامل."
-        },
-        {
-          "name": "روبرت هوك",
-          "years": "1635–1703",
-          "what": "شخصية ظلمها التاريخ. اكتشف قانون المرونة الذي يحمل اسمه — أول قانون كمي عن التشوه، وبدونه لم تكن لتوجد نظرية الاهتزازات ولا مقاومة المواد. أدخل كلمة 'خلية' في علم الأحياء. والأهم لهذا الموضوع، قبل سنوات من 'المبادئ'، طرح فرضية أن الجذب يتناسب عكسياً مع مربع المسافة — وأوحى بذلك مباشرة لنيوتن في رسائله. لكنه لم يستطع إثباتها رياضياً؛ فعل ذلك نيوتن، ثم رفض الاعتراف بفضل هوك وشطب أي ذكر له. لم يبقَ أي صورة لهوك أثناء حياته — وفقاً لإحدى الروايات، لم يخلُ ذلك من تدخل نيوتن الذي ترأس الجمعية الملكية بعد وفاته."
-        },
-        {
-          "name": "غوتفريد لايبنتس",
-          "years": "1646–1716",
-          "what": "بشكل مستقل عن نيوتن، طور التفاضل والتكامل وأدخل مفهوم 'القوة الحية' — سلف الطاقة الحركية. النزاع حول الأسبقية سمم السنوات الأخيرة لكليهما، على الرغم من أن كليهما كان محقاً."
-        },
-        {
-          "name": "إيمي نويثر",
-          "years": "1882–1935",
-          "what": "بعد مئتي عام، أثبتت نظرية شرحت من أين تأتي قوانين الحفظ: كل منها يتبع من التناظر. حفظ الطاقة من تجانس الزمن، وحفظ الزخم من تجانس المكان. هذه واحدة من أعمق النتائج في الفيزياء."
-        }
-      ]
+    {
+     "name": "Isaac Newton",
+     "years": "1643–1727",
+     "what": "Redujo la mecánica a tres leyes y añadió la ley de la gravitación universal. En los «Principios matemáticos de la filosofía natural» (1687) demostró que el movimiento de los planetas y la caída de los cuerpos obedecen a la misma ley. De paso, creó el aparato matemático — el cálculo diferencial."
     },
-    "map": {
-      "title": "ماذا ستتعلم",
-      "lead": "الموضوع مقسم إلى ثلاث فقرات تتصاعد بالتدريج: أولاً سنتعلم وصف الحركة، ثم نشرح أسبابها، ثم نجد ما يبقى ثابتاً في أي حركة.",
-      "outcome": "بعد إتمام الثلاث، ستفهم كيف ترتبط السرعة والتسارع والمسار؛ ولماذا تغير القوة السرعة وليس الموضع؛ ولماذا يحفظ الزخم والطاقة حتى عندما يتغير كل شيء آخر بشكل لا يمكن التعرف عليه."
+    {
+     "name": "Robert Hooke",
+     "years": "1635–1703",
+     "what": "Figura que la historia ha relegado injustamente. Descubrió la ley de elasticidad que lleva su nombre — la primera ley cuantitativa sobre la deformación, sin la cual no existirían ni la teoría de oscilaciones ni la resistencia de materiales. Introdujo en biología la palabra «célula». Y, lo más importante para este tema, años antes de los «Principia» sugirió que la atracción disminuye en proporción inversa al cuadrado de la distancia — y en cartas insinuó directamente esta idea a Newton. No pudo demostrarla matemáticamente; lo hizo Newton, quien luego se negó a reconocer la contribución de Hooke y eliminó las menciones a él. No se conserva un retrato de Hooke en vida — según una versión, no sin la intervención de Newton, quien presidió la Royal Society tras su muerte."
     },
-    "prereq": {
-      "title": "ما يجب معرفته مسبقاً",
-      "items": [
-        "الجبر المدرسي: النسب، الأسس، حل المعادلات البسيطة.",
-        "مفهوم المتجه على الأقل بمستوى 'مقدار زائد اتجاه' — الباقي سنشرحه أثناء السير.",
-        "المشتق مفضل لكنه ليس ضرورياً: في الفقرة الأولى سنشرح معناه الفيزيائي من الصفر، باستخدام السرعة كمثال."
-      ],
-      "note": "هذا هو الموضوع الأول في الدورة — لا يفترض شيئاً سوى الرياضيات المدرسية. كل شيء آخر يُقدم هنا ويُستخدم لاحقاً في جميع المواضيع."
+    {
+     "name": "Gottfried Leibniz",
+     "years": "1646–1716",
+     "what": "Independientemente de Newton creó el cálculo e introdujo el concepto de «fuerza viva» — precursor de la energía cinética. La disputa sobre la prioridad amargó los últimos años de ambos, aunque ambos tenían razón."
     },
-    "lessons": [
-      {
-        "id": "01-kinematics",
-        "title": "نقطة مادية",
-        "sub": "الفقرة 1 · كيف نصف الحركة دون معرفة أسبابها",
-        "law": "الكينماتيكا",
-        "model": "motion"
-      },
-      {
-        "id": "02-newton",
-        "title": "قوانين نيوتن",
-        "sub": "فقرة 2 · القوة كسبب لتغير الحركة",
-        "law": "قوانين نيوتن الثلاثة",
-        "model": "newton"
-      },
-      {
-        "id": "03-conservation",
-        "title": "قوانين الحفظ",
-        "sub": "الفقرة 3 · الزخم والطاقة — ما لا يتغير أبدًا",
-        "law": "حفظ الزخم والطاقة",
-        "model": "collision"
-      }
-    ]
-  }
+    {
+     "name": "Emmy Noether",
+     "years": "1882–1935",
+     "what": "Doscientos años después demostró un teorema que explicaba de dónde provienen las leyes de conservación: cada una se deriva de una simetría. La conservación de la energía, de la homogeneidad del tiempo; la del momento lineal, de la homogeneidad del espacio. Es uno de los resultados más profundos de la física."
+    }
+   ]
+  },
+  "map": {
+   "title": "Lo que estudiarás",
+   "lead": "El tema está dividido en tres secciones que siguen estrictamente un orden creciente: primero aprenderemos a describir el movimiento, luego explicaremos sus causas, y finalmente encontraremos aquello que permanece invariable en cualquier movimiento.",
+   "outcome": "Al completar las tres, comprenderás cómo se relacionan velocidad, aceleración y trayectoria; por qué la fuerza cambia no la posición sino la velocidad; y por qué el momento lineal y la energía se conservan, incluso cuando todo lo demás cambia hasta hacerse irreconocible."
+  },
+  "prereq": {
+   "title": "Qué necesitas saber de antemano",
+   "items": [
+    "Álgebra escolar: proporciones, potencias, resolución de ecuaciones simples.",
+    "Concepto de vector al menos a nivel de «magnitud más dirección» — lo demás lo iremos viendo.",
+    "La derivada es deseable pero no obligatoria: en la primera sección explicaremos su significado físico desde cero, con el ejemplo de la velocidad."
+   ],
+   "note": "Este es el primer tema del curso — no presupone nada más que matemáticas escolares. Todo lo demás se introduce aquí y se usará en todos los temas siguientes."
+  },
+  "lessons": [
+   {
+    "id": "01-kinematics",
+    "title": "Punto material",
+    "sub": "Párrafo 1 · Cómo describir el movimiento sin conocer sus causas",
+    "law": "Cinemática",
+    "model": "motion"
+   },
+   {
+    "id": "02-newton",
+    "title": "Leyes de Newton",
+    "sub": "Párrafo 2 · La fuerza como causa del cambio de movimiento",
+    "law": "Tres leyes de Newton",
+    "model": "newton"
+   },
+   {
+    "id": "03-conservation",
+    "title": "Leyes de conservación",
+    "sub": "Párrafo 3 · Momento y energía: lo que nunca cambia",
+    "law": "Conservación del momento y la energía",
+    "model": "collision"
+   }
+  ]
+ },
+ "ar": {
+  "title": "الميكانيكا",
+  "subtitle": "علم الحركة — واللغة التي تتحدث بها بقية الفيزياء",
+  "lead": "تبدأ الفيزياء بالميكانيكا، وليس فقط تاريخياً. المفاهيم التي تُقدم هنا — السرعة، القوة، الطاقة، الزخم — ستظهر لاحقاً في الديناميكا الحرارية، والكهرباء، ونظرية الكم. هذا فصل تمهيدي: بدون صيغ، فقط المعنى وخريطة الطريق.",
+  "why": {
+   "title": "لماذا يجب معرفتها",
+   "text": [
+    "تجيب الميكانيكا على سؤال يبدو بسيطاً حتى تفكر فيه بجدية: لماذا تتحرك الأجسام بهذه الطريقة وليس غيرها؟ لماذا يطير الحجر المقذوف في مسار منحنٍ وليس خطاً مستقيماً؟ لماذا يُدفع الراكب إلى الأمام عند الكبح على الرغم من عدم دفع أحد له؟ لماذا تدور المتزلجة أسرع عندما تضم ذراعيها؟",
+    "قبل جاليليو، كانت الإجابة خاطئة لما يقرب من ألفي عام. كان يُعتقد أن الحركة تتطلب قوة مستمرة: العربة تتحرك طالما أن الحصان يسحبها. هذا يتوافق مع التجربة لدرجة أن الخطأ لم يُلاحظ لعشرين قرناً. تطلبت تجربة فكرية لرؤية أن الاحتكاك يخفي الحقيقة.",
+    "عندما صاغ نيوتن قوانينه الثلاثة وأضاف إليها الجاذبية، حدث أمر غير مسبوق: نفس المعادلات وصفت سقوط تفاحة وحركة القمر. الأرضي والسماوي أصبحا شيئاً واحداً. منذ تلك اللحظة، توقفت الفيزياء عن كونها مجموعة من الملاحظات وأصبحت علماً يتنبأ."
+   ]
+  },
+  "history": {
+   "title": "من صنعها",
+   "people": [
+    {
+     "name": "جاليليو جاليلي",
+     "years": "1564–1642",
+     "what": "أول من أدرك أن الحركة المنتظمة لا تتطلب قوة — خلافاً للبديهة وأرسطو. درس سقوط الأجسام، وأثبت أن سرعة السقوط لا تعتمد على الكتلة. أدخل القياس والتجربة الفكرية كمنهج في الفيزياء."
+    },
+    {
+     "name": "إسحاق نيوتن",
+     "years": "1643–1727",
+     "what": "لخص الميكانيكا في ثلاثة قوانين وأضاف قانون الجذب العام. في كتابه 'المبادئ الرياضية للفلسفة الطبيعية' (1687) أظهر أن حركة الكواكب وسقوط الأجسام تخضع لنفس القانون. وعلى طول الطريق، ابتكر الأداة الرياضية — التفاضل والتكامل."
+    },
+    {
+     "name": "روبرت هوك",
+     "years": "1635–1703",
+     "what": "شخصية ظلمها التاريخ. اكتشف قانون المرونة الذي يحمل اسمه — أول قانون كمي عن التشوه، وبدونه لم تكن لتوجد نظرية الاهتزازات ولا مقاومة المواد. أدخل كلمة 'خلية' في علم الأحياء. والأهم لهذا الموضوع، قبل سنوات من 'المبادئ'، طرح فرضية أن الجذب يتناسب عكسياً مع مربع المسافة — وأوحى بذلك مباشرة لنيوتن في رسائله. لكنه لم يستطع إثباتها رياضياً؛ فعل ذلك نيوتن، ثم رفض الاعتراف بفضل هوك وشطب أي ذكر له. لم يبقَ أي صورة لهوك أثناء حياته — وفقاً لإحدى الروايات، لم يخلُ ذلك من تدخل نيوتن الذي ترأس الجمعية الملكية بعد وفاته."
+    },
+    {
+     "name": "غوتفريد لايبنتس",
+     "years": "1646–1716",
+     "what": "بشكل مستقل عن نيوتن، طور التفاضل والتكامل وأدخل مفهوم 'القوة الحية' — سلف الطاقة الحركية. النزاع حول الأسبقية سمم السنوات الأخيرة لكليهما، على الرغم من أن كليهما كان محقاً."
+    },
+    {
+     "name": "إيمي نويثر",
+     "years": "1882–1935",
+     "what": "بعد مئتي عام، أثبتت نظرية شرحت من أين تأتي قوانين الحفظ: كل منها يتبع من التناظر. حفظ الطاقة من تجانس الزمن، وحفظ الزخم من تجانس المكان. هذه واحدة من أعمق النتائج في الفيزياء."
+    }
+   ]
+  },
+  "map": {
+   "title": "ماذا ستتعلم",
+   "lead": "الموضوع مقسم إلى ثلاث فقرات تتصاعد بالتدريج: أولاً سنتعلم وصف الحركة، ثم نشرح أسبابها، ثم نجد ما يبقى ثابتاً في أي حركة.",
+   "outcome": "بعد إتمام الثلاث، ستفهم كيف ترتبط السرعة والتسارع والمسار؛ ولماذا تغير القوة السرعة وليس الموضع؛ ولماذا يحفظ الزخم والطاقة حتى عندما يتغير كل شيء آخر بشكل لا يمكن التعرف عليه."
+  },
+  "prereq": {
+   "title": "ما يجب معرفته مسبقاً",
+   "items": [
+    "الجبر المدرسي: النسب، الأسس، حل المعادلات البسيطة.",
+    "مفهوم المتجه على الأقل بمستوى 'مقدار زائد اتجاه' — الباقي سنشرحه أثناء السير.",
+    "المشتق مفضل لكنه ليس ضرورياً: في الفقرة الأولى سنشرح معناه الفيزيائي من الصفر، باستخدام السرعة كمثال."
+   ],
+   "note": "هذا هو الموضوع الأول في الدورة — لا يفترض شيئاً سوى الرياضيات المدرسية. كل شيء آخر يُقدم هنا ويُستخدم لاحقاً في جميع المواضيع."
+  },
+  "lessons": [
+   {
+    "id": "01-kinematics",
+    "title": "نقطة مادية",
+    "sub": "الفقرة 1 · كيف نصف الحركة دون معرفة أسبابها",
+    "law": "الكينماتيكا",
+    "model": "motion"
+   },
+   {
+    "id": "02-newton",
+    "title": "قوانين نيوتن",
+    "sub": "فقرة 2 · القوة كسبب لتغير الحركة",
+    "law": "قوانين نيوتن الثلاثة",
+    "model": "newton"
+   },
+   {
+    "id": "03-conservation",
+    "title": "قوانين الحفظ",
+    "sub": "الفقرة 3 · الزخم والطاقة — ما لا يتغير أبدًا",
+    "law": "حفظ الزخم والطاقة",
+    "model": "collision"
+   }
+  ]
+ },
+ "fr": {
+  "title": "Mécanique",
+  "subtitle": "La science du mouvement — et la langue que parle toute la physique",
+  "lead": "La physique commence avec la mécanique, et pas seulement historiquement. Les concepts introduits ici — vitesse, force, énergie, quantité de mouvement — réapparaîtront en thermodynamique, en électricité, en théorie quantique. Ceci est un chapitre de survol : sans formules, seulement le sens et une carte du chemin.",
+  "why": {
+   "title": "Pourquoi le savoir",
+   "text": [
+    "La mécanique répond à une question qui semble simple jusqu'à ce qu'on y réfléchisse sérieusement : pourquoi les corps se déplacent-ils ainsi et pas autrement ? Pourquoi une pierre lancée suit-elle un arc et non une ligne droite ? Pourquoi un passager est-il projeté vers l'avant lors d'un freinage, alors que personne ne l'a poussé ? Pourquoi une patineuse tourne-t-elle plus vite en ramenant ses bras ?",
+    "Avant Galilée, on répondait à cela de manière incorrecte pendant près de deux mille ans. On croyait que pour le mouvement, une force agissant constamment était nécessaire : une charrette avance tant que le cheval tire. Cela concorde si bien avec l'expérience que l'erreur n'a pas été remarquée pendant vingt siècles. Il a fallu une expérience de pensée pour voir que le frottement masque la vérité.",
+    "Quand Newton a énoncé ses trois lois et y a ajouté la gravitation, quelque chose d'inédit s'est produit : les mêmes équations décrivaient à la fois la chute d'une pomme et le mouvement de la Lune. Le terrestre et le céleste se sont révélés être une seule et même chose. À partir de ce moment, la physique a cessé d'être un recueil d'observations et est devenue une science qui prédit."
+   ]
+  },
+  "history": {
+   "title": "Qui l'a créée",
+   "people": [
+    {
+     "name": "Galilée",
+     "years": "1564–1642",
+     "what": "Le premier à comprendre que le mouvement uniforme ne nécessite pas de force — contrairement à l'évidence et à Aristote. Il a étudié la chute des corps, établissant que la vitesse de chute ne dépend pas de la masse. Il a introduit en physique la mesure et l'expérience de pensée comme méthode."
+    },
+    {
+     "name": "Isaac Newton",
+     "years": "1643–1727",
+     "what": "Il a réduit la mécanique à trois lois et ajouté la loi de la gravitation universelle. Dans les « Principes mathématiques de la philosophie naturelle » (1687), il a montré que le mouvement des planètes et la chute des corps obéissent à la même loi. Au passage, il a créé l'outil mathématique — le calcul différentiel."
+    },
+    {
+     "name": "Robert Hooke",
+     "years": "1635–1703",
+     "what": "Une figure que l'histoire a injustement reléguée. Il a découvert la loi d'élasticité qui porte son nom — la première loi quantitative sur la déformation, sans laquelle il n'y aurait ni théorie des oscillations, ni résistance des matériaux. Il a introduit le mot « cellule » en biologie. Et, plus important pour ce sujet, des années avant les « Principes », il a émis l'hypothèse que l'attraction diminue en raison inverse du carré de la distance — et dans des lettres, il a directement suggéré cette idée à Newton. Il n'a pas pu la prouver mathématiquement ; c'est Newton qui l'a fait, puis a refusé de reconnaître la contribution de Hooke et a effacé les mentions de lui. Aucun portrait de Hooke de son vivant n'a survécu — selon une version, non sans l'implication de Newton, qui a présidé la Royal Society après sa mort."
+    },
+    {
+     "name": "Gottfried Leibniz",
+     "years": "1646–1716",
+     "what": "Indépendamment de Newton, il a créé le calcul et introduit le concept de « force vive » — précurseur de l'énergie cinétique. La dispute de priorité a empoisonné les dernières années des deux, bien qu'ils aient tous deux eu raison."
+    },
+    {
+     "name": "Emmy Noether",
+     "years": "1882–1935",
+     "what": "Deux cents ans plus tard, elle a prouvé un théorème expliquant d'où viennent les lois de conservation : chacune découle d'une symétrie. La conservation de l'énergie — de l'homogénéité du temps, celle de la quantité de mouvement — de l'homogénéité de l'espace. C'est l'un des résultats les plus profonds de la physique."
+    }
+   ]
+  },
+  "map": {
+   "title": "Ce que vous étudierez",
+   "lead": "Le sujet est divisé en trois paragraphes, allant strictement en crescendo : d'abord nous apprendrons à décrire le mouvement, puis nous expliquerons ses causes, enfin nous trouverons ce qui reste inchangé lors de tout mouvement.",
+   "outcome": "Après avoir parcouru les trois, vous comprendrez comment la vitesse, l'accélération et la trajectoire sont liées ; pourquoi la force change non pas la position, mais la vitesse ; et pourquoi la quantité de mouvement et l'énergie se conservent, même lorsque tout le reste change au point d'être méconnaissable."
+  },
+  "prereq": {
+   "title": "Ce qu'il faut savoir à l'avance",
+   "items": [
+    "Algèbre scolaire : proportions, puissances, résolution d'équations simples.",
+    "La notion de vecteur au moins au niveau « grandeur plus direction » — le reste sera expliqué en cours de route.",
+    "La dérivée est souhaitable mais pas obligatoire : dans le premier paragraphe, nous expliquerons son sens physique à partir de zéro, avec l'exemple de la vitesse."
+   ],
+   "note": "C'est le premier sujet du cours — il ne présuppose rien d'autre que les mathématiques scolaires. Tout le reste est introduit ici et sera utilisé dans tous les sujets suivants."
+  },
+  "lessons": [
+   {
+    "id": "01-kinematics",
+    "title": "Point matériel",
+    "sub": "Comment décrire le mouvement sans connaître ses causes",
+    "law": "Cinématique",
+    "model": "motion"
+   },
+   {
+    "id": "02-newton",
+    "title": "Les lois de Newton",
+    "sub": "La force comme cause du changement de mouvement",
+    "law": "Les trois lois de Newton",
+    "model": "newton"
+   },
+   {
+    "id": "03-conservation",
+    "title": "Lois de conservation",
+    "sub": "Quantité de mouvement et énergie — ce qui ne change jamais",
+    "law": "Conservation de la quantité de mouvement et de l'énergie",
+    "model": "collision"
+   }
+  ]
+ }
 }

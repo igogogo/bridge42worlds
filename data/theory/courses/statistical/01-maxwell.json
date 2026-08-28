@@ -20,37 +20,28 @@
   ],
   "examples_from_articles": [
    {
-    "id": "2608.05328v1",
-    "date": "2026-08-05",
+    "id": "2604.04659",
+    "date": "2026-04-06",
     "title": {
-     "ru": "Звёздные весы: как квантовая геометрия меняет судьбу белых карликов",
-     "en": "Stellar Scales: How Quantum Geometry Reshapes the Fate of White Dwarfs",
-     "es": "La balanza estelar: cómo la geometría cuántica altera el destino de las enanas blancas",
-     "ar": "ميزان النجوم: كيف تعيد الهندسة الكمومية تشكيل مصير الأقزام البيضاء"
+     "ru": "Почему кривые распределения повсюду",
+     "en": "Why Power Laws Are Everywhere",
+     "es": "Por qué las curvas de distribución están por todas partes",
+     "ar": "لماذا تنتشر المنحنيات التوزيعية في كل مكان",
+     "fr": "Pourquoi les courbes de distribution sont partout"
     },
-    "why": "helium, hydrogen"
+    "score": 0.609
    },
    {
-    "id": "2607.25542",
-    "date": "2026-07-28",
+    "id": "2601.03344v2",
+    "date": "2026-01-06",
     "title": {
-     "ru": "Три слоя облаков Юпитера",
-     "en": "Three Cloud Layers of Jupiter",
-     "es": "Tres capas de nubes en Júpiter",
-     "ar": "ثلاث طبقات من غيوم المشتري"
+     "ru": "Ветер для быстрых: как турбулентность нагревает солнечную корону",
+     "en": "Wind for the swift: how turbulence heats the solar corona",
+     "es": "Viento para los rápidos: cómo la turbulencia calienta la corona solar",
+     "ar": "رياح للسرعة: كيف تسخّن الاضطرابات الهالة الشمسية",
+     "fr": "Vent pour les rapides : comment la turbulence chauffe la couronne solaire"
     },
-    "why": "helium, hydrogen"
-   },
-   {
-    "id": "2607.20635v1",
-    "date": "2026-07-22",
-    "title": {
-     "ru": "Симфония нуклеосинтеза: как внезапный темп спас дейтерий",
-     "en": "Symphony of Nucleosynthesis: How a Sudden Tempo Saved Deuterium",
-     "es": "Sinfonía de la nucleosíntesis: cómo un ritmo repentino salvó al deuterio",
-     "ar": "سيمفونية التخليق النووي: كيف أنقذ إيقاع مفاجئ الديوتيريوم"
-    },
-    "why": "helium, hydrogen"
+    "score": 0.603
    }
   ]
  },
@@ -1650,6 +1641,406 @@
     "unit": "م/ث",
     "why": "v_rms = √(3RT/M) = √(3 · 8.314 · 300 / 0.004) = √(1.87×10⁶) ≈ 1370 م/ث. تحقق عبر الهواء: الهيليوم أخف من الهواء بمقدار 7.25 مرة، لذا سرعاته أكبر بمقدار √7.25 ≈ 2.7 مرة، و508 · 2.7 ≈ 1370 — متطابق. لهذا يهرب الهيليوم من البالون المطاطي خلال يوم، ولم تستطع الأرض الاحتفاظ به في غلافها الجوي: ذيله يصل إلى سرعة الإفلات.",
     "hint": "احسب بالصيغة المولارية: v_rms = √(3RT/M)، حيث M بالكيلوجرام لكل مول. قرّب R إلى ثمانية — إذن 3 · 8 · 300 = 7200، ويبقى القسمة على 0.004 وأخذ الجذر.",
+    "tolAbs": 150
+   }
+  ]
+ },
+ "fr": {
+  "title": "Distribution des vitesses des molécules",
+  "subtitle": "Paragraphe 1 · Distribution de Maxwell et sa queue",
+  "intro": [
+   "Dans le sujet sur le gaz parfait, nous avons appelé la température une mesure de l'énergie cinétique moyenne des molécules. Le mot « moyenne » est alors passé inaperçu, mais il fait beaucoup de travail : seule une grandeur qui est dispersée peut avoir une moyenne. Revenons à la même boîte avec des billes qui s'entrechoquent et posons une autre question. Pas « quelle est la vitesse des molécules », mais « combien de molécules volent à environ trois cents mètres par seconde, combien à environ cinq cents et combien à environ mille cinq cents ».",
+   "La réponse « toutes identiques » est impossible, et cela se voit en mécanique. Les molécules entrent en collision des milliards de fois par seconde ; l'une reçoit un choc oblique et s'arrête presque, une autre est poussée deux fois de suite et s'envole trois fois plus vite que ses voisines. Il n'existe pas de mécanisme qui égaliserait les vitesses — mais un mécanisme qui les disperse constamment sur toutes les valeurs fonctionne sans arrêt. Ainsi, à une température donnée, le gaz contient simultanément des molécules de toutes vitesses, et la température ne fixe pas la vitesse, mais la forme de la dispersion.",
+   "Cette forme, nous allons maintenant la dériver. Elle se révélera être le produit de deux facteurs qui tirent dans des directions opposées : la géométrie pure rend les vitesses élevées plus avantageuses, le facteur de Boltzmann les rend moins avantageuses, et la bosse apparaît là où ils s'équilibrent. Ensuite commence la partie la plus pratique du sujet — l'extrémité droite lointaine de la courbe. Des fractions de pourcent des molécules décident si l'eau s'évapore d'une tasse, si une planète retient son atmosphère et si une réaction chimique se produit."
+  ],
+  "standNote": "Il vaut la peine de faire tourner le simulateur à la main avant la dérivation — cela rendra plus clair ce que nous dérivons exactement. Le curseur T règle la température, M — la masse molaire du gaz (2 — hydrogène, 4 — hélium, 29 — air, 44 — dioxyde de carbone), et le troisième curseur fixe le seuil de vitesse : la queue colorée en rouge à droite du seuil est précisément la réponse à la question principale du sujet — quelle fraction des molécules vole plus vite. Les trois marques verticales sur la courbe sont la vitesse la plus probable, la vitesse moyenne et la vitesse quadratique moyenne ; la première chose à vérifier est qu'elles ne coïncident à aucune température, mais que leur rapport ne change pas du tout. Augmentez T : la courbe se déplace vers la droite et s'élargit, mais l'aire sous elle reste la même — les molécules n'ont pas augmenté, elles se sont redistribuées. Changez de gaz à température constante : l'hydrogène vole plus vite que le dioxyde de carbone exactement dans le rapport des racines carrées des masses molaires, c'est-à-dire environ 4,7. Et maintenant, l'expérience principale de ce simulateur. Réglez l'air M = 29, T = 300 et le seuil à 1000 m/s — le simulateur affichera 0,877 %. Élevez la température à 400 K : la fraction deviendra 3,3 %. La vitesse moyenne a augmenté de quinze pour cent, et la queue — presque quadruplé. Cette disproportion est précisément le contenu de la seconde moitié du paragraphe.",
+  "formula": {
+   "name": "Distribution de Maxwell en module de vitesse",
+   "latex": "f(v) = 4\\pi\\left(\\frac{m}{2\\pi k_B T}\\right)^{3/2} v^{2}\\,e^{-\\,m v^{2}/2k_B T}",
+   "alsoKnown": "Distribution de Maxwell-Boltzmann ; dans l'écriture molaire, le rapport m/k_B est remplacé par M/R",
+   "authors": [
+    {
+     "who": "James Clerk Maxwell",
+     "year": "1860",
+     "what": "a obtenu la distribution à partir de considérations de symétrie — de l'indépendance des trois projections de la vitesse et de l'équivalence des directions, avant même l'apparition de la mécanique statistique"
+    },
+    {
+     "who": "Ludwig Boltzmann",
+     "year": "1868-1872",
+     "what": "a généralisé le résultat à un champ de forces arbitraire, en introduisant le facteur exp(−E/kT), et a prouvé que la distribution de Maxwell est la seule que les collisions ne détruisent pas"
+    },
+    {
+     "who": "Otto Stern",
+     "year": "1920",
+     "what": "a mesuré pour la première fois les vitesses des molécules directement : un faisceau d'atomes d'argent issu d'un appareil rotatif a enregistré la distribution directement sur un récepteur"
+    }
+   ],
+   "story": "Maxwell avait vingt-neuf ans et la physique statistique n'existait pas encore — il écrivit l'article « Illustrations of the Dynamical Theory of Gases », dans lequel le gaz était décrit pour la première fois non pas comme un milieu continu avec une pression, mais comme un ensemble de particules avec des vitesses aléatoires. La dérivation ne lui prit que quelques lignes et reposait sur une seule hypothèse : les trois projections de la vitesse sont indépendantes l'une de l'autre. Maxwell lui-même considérait cette hypothèse comme fragile et, sept ans plus tard, il revint au problème par l'autre bout — il exigea que la distribution ne change pas lors des collisions. La réponse fut la même. Boltzmann, en 1872, clôtura définitivement la question en montrant par le théorème H que toute autre distribution est détruite par les collisions, tandis que celle-ci ne l'est pas. Vérifier la formule par une mesure directe ne fut possible que soixante ans après son apparition.",
+   "symbols": [
+    {
+     "sym": "f(v)",
+     "latex": "f(v)",
+     "what": "densité de distribution en module de vitesse",
+     "unit": "s/m",
+     "note": "pas une probabilité, mais une densité : seul le produit f(v)·dv a un sens — la fraction de molécules dans un intervalle de vitesses de largeur dv"
+    },
+    {
+     "sym": "v",
+     "latex": "v",
+     "what": "module de la vitesse de la molécule",
+     "unit": "m/s",
+     "note": "précisément le module, pas la projection ; la distribution en projection est très différente — voir l'annexe"
+    },
+    {
+     "sym": "m",
+     "latex": "m",
+     "what": "masse d'une molécule",
+     "unit": "kg",
+     "note": "m = M/N_A ; en pratique, l'écriture molaire est plus commode, où m est remplacé par M et k_B par R"
+    },
+    {
+     "sym": "M",
+     "latex": "M",
+     "what": "masse molaire du gaz",
+     "unit": "kg/mol",
+     "note": "le deuxième curseur du simulateur, mais là elle est en grammes par mole : 2 — hydrogène, 4 — hélium, 29 — air, 44 — dioxyde de carbone"
+    },
+    {
+     "sym": "k_B",
+     "latex": "k_B",
+     "what": "constante de Boltzmann",
+     "unit": "J/K",
+     "const": "k_B",
+     "note": "ici elle fixe l'échelle d'énergie : toute la courbe ne dépend que du rapport mv²/2 à k_BT"
+    },
+    {
+     "sym": "T",
+     "latex": "T",
+     "what": "température absolue",
+     "unit": "K",
+     "note": "UNIQUEMENT en kelvins : la vitesse varie comme la racine de T, et la substitution des degrés Celsius casse même le signe de la dérivée"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Dérivation rigoureuse",
+   "lead": "Nous aurons besoin de trois choses : l'isotropie du chaos, le facteur de Boltzmann et le volume d'une coquille sphérique. Nous avons déjà discuté de la première dans le sujet sur le gaz parfait, la seconde sera dérivée en cours de route à partir d'une seule exigence, la troisième est de la pure géométrie. Rien de plus ne sera nécessaire.",
+   "steps": [
+    {
+     "text": "Commençons par poser la question de manière à ce qu'elle ait une réponse. « La vitesse d'une molécule » est une grandeur que le gaz ne possède pas : chaque molécule a la sienne, qui change à chaque collision. En revanche, la fraction de molécules dont la vitesse est comprise entre v et v + dv est stable : elle ne change pas avec le temps tant que le gaz est en équilibre. C'est cette fraction que nous allons chercher. Notons-la f(v)dv ; la fonction f est appelée densité de distribution, et trouver sa forme est l'objet de tout ce paragraphe.",
+     "latex": "\\frac{dN}{N} = f(v)\\,dv, \\qquad \\int_0^{\\infty} f(v)\\,dv = 1",
+     "figure": "mxspread",
+     "figCaption": "Les molécules d'un même gaz à une même température se déplacent à des vitesses différentes : ce qui est stable, ce n'est pas la vitesse, mais la fraction de molécules dans un intervalle"
+    },
+    {
+     "text": "Il est plus commode de calculer non pas directement le module, mais dans l'espace des vitesses. Portons sur les trois axes les projections vₓ, v_y, v_z — chaque molécule devient alors un point, et tout le gaz un nuage de N points. Le module de la vitesse est devenu la distance à l'origine, et la question « combien de molécules ont une vitesse proche de v » devient une question sur la densité de points dans le nuage. Notons cette densité φ.",
+     "latex": "\\frac{dN}{N} = \\varphi(\\vec v)\\,d^{3}v, \\qquad d^{3}v = dv_x\\,dv_y\\,dv_z",
+     "figure": "mxvspace",
+     "figCaption": "Chaque molécule est un point de l'espace des vitesses, le gaz est un nuage de points, et le module de la vitesse est la distance du point à l'origine"
+    },
+    {
+     "text": "Le nuage est isotrope. Ce n'est pas une hypothèse de commodité, mais une conséquence directe du fait qu'un gaz au repos ne s'écoule nulle part : l'affirmation « le long de l'axe x, il y a plus de molécules rapides que le long de y » impliquerait l'existence d'un flux. Puisqu'il n'y a pas de directions privilégiées, la densité φ ne dépend que de la distance à l'origine, c'est-à-dire du module de la vitesse, et pas du tout de la direction dans laquelle la molécule se déplace.",
+     "latex": "\\varphi(\\vec v) = \\varphi(v), \\qquad v = \\sqrt{v_x^{2}+v_y^{2}+v_z^{2}}",
+     "figure": "mxisotropy",
+     "figCaption": "Les points sur une même sphère sont équivalents : la densité du nuage se révèle n'être fonction que du module"
+    },
+    {
+     "text": "Qu'est-ce qui détermine la dépendance de φ par rapport au module ? L'énergie. Une molécule située dans une partie éloignée du nuage porte une grande énergie cinétique, et cette énergie, il faut la prendre quelque part — chez les voisins du gaz. La probabilité de trouver une molécule dans un état d'énergie ε décroît exponentiellement, et ce n'est pas un postulat. Prenez deux parties indépendantes du système : leurs énergies s'additionnent, et leurs probabilités se multiplient. La seule fonction qui transforme une somme en produit est l'exponentielle. Le signe dans l'exposant est négatif, sinon la probabilité totale divergerait. Le coefficient de l'énergie sera noté β pour l'instant et sera déterminé à la toute fin de la dérivation.",
+     "latex": "p(\\varepsilon_1+\\varepsilon_2) = p(\\varepsilon_1)\\,p(\\varepsilon_2) \\;\\Longrightarrow\\; p(\\varepsilon) \\propto e^{-\\beta\\varepsilon}, \\qquad \\varphi(v) = C\\,e^{-\\beta m v^{2}/2}",
+     "figure": "mxboltz",
+     "figCaption": "Le facteur de Boltzmann : la probabilité décroît exponentiellement précisément parce que les énergies s'additionnent et les probabilités se multiplient"
+    },
+    {
+     "text": "Passons maintenant du vecteur au module — et c'est ici qu'apparaît le facteur principal de ce paragraphe. Tous les points dont le module de vitesse est compris entre v et v + dv se trouvent dans une fine coquille sphérique de rayon v. Le volume de la coquille est l'aire de la sphère multipliée par l'épaisseur : 4πv²dv. La densité à l'intérieur de la coquille est partout la même, donc la fraction de molécules dans la coquille est égale à la densité multipliée par le volume. Le facteur v² est de la pure géométrie : un grand module a simplement plus de directions. Il en découle immédiatement ce qui surprend au premier coup d'œil sur la courbe : il n'y a pratiquement pas de molécules de vitesse nulle, car une coquille de rayon nul a un volume nul.",
+     "latex": "f(v)\\,dv = \\varphi(v)\\cdot 4\\pi v^{2}\\,dv \\;\\Longrightarrow\\; f(v) = 4\\pi C\\,v^{2}e^{-\\beta m v^{2}/2}",
+     "figure": "mxshell",
+     "figCaption": "Coquille sphérique de rayon v et d'épaisseur dv : son volume croît comme v², et c'est la seule source du facteur v² dans la formule"
+    },
+    {
+     "text": "La constante C est déterminée par l'exigence que toutes les fractions additionnées donnent un. L'intégrale nécessaire se calcule en différenciant la gaussienne par rapport au paramètre — cette astuce est détaillée dans l'encadré. On voit aussi la structure de la courbe : à gauche, la géométrie l'étouffe, car v² est petit ; à droite, l'exponentielle, car l'énergie est grande ; le maximum se trouve là où les deux facteurs s'équilibrent.",
+     "latex": "\\int_0^{\\infty} v^{2}e^{-a v^{2}}dv = \\frac{1}{4}\\sqrt{\\frac{\\pi}{a^{3}}}, \\;\\; a \\equiv \\frac{\\beta m}{2} \\;\\Longrightarrow\\; f(v) = 4\\pi\\left(\\frac{a}{\\pi}\\right)^{3/2}v^{2}e^{-a v^{2}}",
+     "figure": "mxproduct",
+     "figCaption": "Le v² croissant et l'exponentielle décroissante donnent une bosse : à gauche, c'est la géométrie qui étouffe ; à droite, le facteur de Boltzmann"
+    },
+    {
+     "text": "Trois vitesses caractéristiques. La plus probable est celle où la courbe est maximale : on annule la dérivée. La moyenne est le premier moment de la distribution, la quadratique moyenne est la racine du deuxième moment. Toutes trois se calculent par la même méthode et ne diffèrent que par la puissance de v sous l'intégrale. Les nombres sont différents, et ce n'est pas une faute de frappe : la courbe est asymétrique, la longue traîne droite tire la moyenne au-dessus du maximum, et l'élévation au carré alourdit encore la contribution de la traîne — c'est pourquoi la vitesse quadratique moyenne est la plus grande des trois.",
+     "latex": "v_{\\text{ver}} = \\frac{1}{\\sqrt a}, \\;\\; \\langle v\\rangle = \\frac{2}{\\sqrt{\\pi a}}, \\;\\; v_{\\text{skv}} = \\sqrt{\\frac{3}{2a}} \\;\\Longrightarrow\\; 1 : \\sqrt{\\tfrac{4}{\\pi}} : \\sqrt{\\tfrac{3}{2}} = 1 : 1{,}128 : 1{,}225",
+     "figure": "mxthree",
+     "figCaption": "Le maximum, la moyenne et la racine de la moyenne quadratique — trois points différents d'une même courbe asymétrique"
+    },
+    {
+     "text": "Il reste à déterminer β. Nous avons maintenant la moyenne quadratique de la vitesse : ⟨v²⟩ = 3/(2a) = 3/(βm). D'autre part, du sujet sur le gaz parfait, nous savons que l'énergie cinétique moyenne d'une molécule est égale à 3k_BT/2. En égalant, nous obtenons β = 1/k_BT — ce coefficient même qui était laissé indéterminé à la quatrième étape. La boucle est bouclée : la définition de la température par l'énergie moyenne et le facteur de Boltzmann sont cohérents entre eux, et aucun ajustement indépendant n'a été nécessaire. En substituant a = m/2k_BT, nous obtenons la forme finale de la distribution, et avec elle la fraction de molécules plus rapides qu'un seuil arbitraire u — cette fameuse traîne que le banc calcule.",
+     "latex": "\\tfrac{1}{2}m\\langle v^{2}\\rangle = \\tfrac{3}{2}k_B T \\;\\Rightarrow\\; \\beta = \\frac{1}{k_B T}, \\qquad \\Phi(v>u) = \\operatorname{erfc}(x) + \\frac{2}{\\sqrt\\pi}\\,x\\,e^{-x^{2}}, \\;\\; x = \\frac{u}{v_{\\text{ver}}}",
+     "figure": "mxtail",
+     "figCaption": "Le chauffage ne déplace presque pas le milieu de la courbe, mais la fraction au-delà d'un seuil éloigné change considérablement"
+    }
+   ],
+   "plate": "f(v) = 4\\pi\\left(\\frac{m}{2\\pi k_B T}\\right)^{3/2} v^{2}\\,e^{-m v^{2}/2k_B T}",
+   "plateCap": "Deux facteurs et rien de plus. Le facteur v² — géométrie de l'espace des vitesses : plus le module est grand, plus il y a de façons d'être aussi rapide. L'exponentielle — la redevance de Boltzmann pour l'énergie : plus le module est grand, plus cela réussit rarement. La bosse est le résultat de leur dispute, et son bord droit décide dans la nature plus que tout le reste du graphique.",
+   "note": "Énumérons ce que nous avons supposé — ce sont les limites de la formule. Premièrement : le gaz est en équilibre. La courbe n'est pas un instantané, mais un état stable vers lequel les collisions amènent le gaz en quelques nanosecondes ; juste derrière le front d'une onde de choc, la distribution est différente, et là la formule ne s'applique pas. Deuxièmement : la mécanique classique. Nous avons permis à la molécule toute énergie et avons considéré les molécules comme discernables, ce qui n'est vrai que tant que la longueur d'onde de de Broglie est bien inférieure à la distance entre les particules. Pour les électrons de conduction dans un métal, la condition est grossièrement violée, et c'est la distribution de Fermi qui s'applique, pas celle de Maxwell. Troisièmement : les vitesses sont bien inférieures à celle de la lumière, sinon l'énergie cinétique cesse d'être mv²/2 et la distribution se transforme en distribution de Maxwell-Jüttner. Mais ce que nous n'avons PAS supposé, et il vaut la peine de le noter séparément : nous n'avons nulle part utilisé le fait que le gaz est parfait. Le facteur de Boltzmann se factorise en un produit d'une partie dépendant des vitesses et d'une partie dépendant des coordonnées, donc la distribution des vitesses est la même dans un gaz raréfié, dans un gaz dense, dans un liquide et dans un solide. Les molécules d'eau dans un verre sont distribuées en vitesses exactement comme les molécules de vapeur au-dessus : ce sont les énergies potentielles qui diffèrent, pas les énergies cinétiques. C'est sur cela que repose la moitié du paragraphe d'aujourd'hui — l'évaporation s'explique non pas par le fait que dans le liquide les vitesses sont « différentes », mais par le fait que dans le liquide il y a un seuil."
+  },
+  "math": {
+   "title": "Les mathématiques nécessaires ici",
+   "lead": "Trois endroits où le calcul peut être fait automatiquement et où l'on peut se tromper.",
+   "items": [
+    {
+     "what": "La densité de probabilité n'est pas une probabilité",
+     "why": "Dans la première étape du calcul, nous avons écrit f(v)dv, et non f(v), et ce n'est pas du pédantisme. La probabilité de rencontrer une molécule exactement à la vitesse 412,7 m/s est nulle : il n'y a pas de coïncidences exactes dans un ensemble continu de valeurs. Seule la question « quelle fraction tombe dans l'intervalle » a un sens, et la réponse est proportionnelle à la largeur de l'intervalle. D'où les unités de f elle-même : puisque le produit f·dv est sans dimension et que dv se mesure en mètres par seconde, f se mesure en secondes par mètre. La vérification des unités évite ici l'erreur typique : substituer la vitesse dans la formule et appeler le résultat une probabilité. On obtient une densité, qu'il faut encore multiplier par l'intervalle.",
+     "latex": "P(v_1 < v < v_2) = \\int_{v_1}^{v_2} f(v)\\,dv, \\qquad [\\,f\\,] = \\text{s}/\\text{m}",
+     "kit": "probability"
+    },
+    {
+     "what": "La couche sphérique : d'où vient 4πv²dv",
+     "why": "C'est l'endroit le plus crucial du calcul — la cinquième étape. Nous passons de la densité dans l'espace tridimensionnel des vitesses à la distribution selon un seul nombre, le module. Une telle transition exige toujours de se demander : combien de « place » revient à une valeur donnée du module ? La réponse est donnée par le volume d'une fine coquille sphérique — l'aire 4πv², multipliée par l'épaisseur dv. La même astuce se retrouve dans l'atome d'hydrogène : la densité de probabilité de trouver l'électron est maximale juste au noyau, tandis que la densité radiale, qui inclut le facteur r², est maximale au rayon de Bohr, et c'est exactement la même géométrie. Dans un monde bidimensionnel, le facteur serait 2πv, dans un monde unidimensionnel, il serait égal à un, et il n'y aurait pas de creux de la courbe à zéro.",
+     "latex": "d^{3}v \\;\\to\\; 4\\pi v^{2}\\,dv",
+     "kit": "polar"
+    },
+    {
+     "what": "Intégrales avec exp(−av²) : dérivation par rapport au paramètre",
+     "why": "Aux sixième et septième étapes, la même intégrale avec différentes puissances de v a été nécessaire trois fois — pour la normalisation, pour la moyenne et pour la moyenne quadratique. Il n'est pas nécessaire de la recalculer à chaque fois : il suffit de connaître l'intégrale gaussienne de base et de savoir la dériver par rapport au paramètre a. Chaque dérivation fait descendre un facteur −v², c'est-à-dire qu'elle augmente la puissance de deux — ainsi, à partir d'un résultat connu, on obtient tous les autres. Au passage, on comprend d'où vient constamment la racine de π dans les réponses : elle provient de l'intégrale de base et de nulle part ailleurs, donc dans le rapport des trois vitesses, elle se simplifie partiellement, et partiellement elle reste sous la forme √(4/π).",
+     "latex": "\\int_0^{\\infty} e^{-a v^{2}}dv = \\frac{1}{2}\\sqrt{\\frac{\\pi}{a}} \\;\\xrightarrow{\\;-\\,d/da\\;}\\; \\int_0^{\\infty} v^{2}e^{-a v^{2}}dv = \\frac{1}{4}\\sqrt{\\frac{\\pi}{a^{3}}}",
+     "kit": "integral"
+    }
+   ]
+  },
+  "example": {
+   "title": "Exemple chiffré",
+   "lead": "Calculons exactement la configuration qui est affichée par défaut sur le stand — vous pourrez ensuite vérifier chaque nombre avec l'écran.",
+   "given": "Air : masse molaire M = 29 g/mol, température T = 300 K. Trouver les trois vitesses caractéristiques et la fraction de molécules volant plus vite que 1000 m/s.",
+   "law": "v_ver = √(2RT/M) en notation molaire ; les deux autres vitesses via le rapport universel 1 : 1,128 : 1,225 ; la fraction au-delà du seuil — Φ(v>u) = erfc(x) + (2/√π)·x·e^(−x²), où x = u / v_ver",
+   "solution": [
+    {
+     "text": "Vitesse la plus probable. Convertissons la masse molaire en kilogrammes par mole : 29 g/mol = 0,029 kg/mol. La notation molaire est ici plus pratique que la notation massique — diviser mentalement par la masse d'une molécule est désagréable, alors que par 0,029, c'est tout à fait faisable.",
+     "latex": "v_{\\text{ver}} = \\sqrt{\\frac{2RT}{M}} = \\sqrt{\\frac{2\\cdot 8{,}314\\cdot 300}{0{,}029}} = \\sqrt{1{,}72\\cdot10^{5}} \\approx 415\\ \\text{m/s}"
+    },
+    {
+     "text": "Les deux autres vitesses n'ont pas besoin d'être recalculées : le rapport est universel et ne dépend ni du gaz ni de la température.",
+     "latex": "\\langle v\\rangle = 1{,}128\\cdot 415 \\approx 468\\ \\text{m/s}, \\qquad v_{\\text{skv}} = 1{,}225\\cdot 415 \\approx 508\\ \\text{m/s}"
+    },
+    {
+     "text": "Convertissons le seuil sous forme adimensionnelle — en unités de la vitesse la plus probable. Sinon, on ne peut pas calculer la queue : mille mètres par seconde en soi ne disent rien, ce qui compte, c'est de combien de fois cela dépasse la vitesse typique pour ce gaz.",
+     "latex": "x = \\frac{1000}{415} = 2{,}41, \\qquad x^{2} = 5{,}81, \\qquad e^{-x^{2}} = 3{,}0\\cdot10^{-3}"
+    },
+    {
+     "text": "Assemblons la fraction. Le premier terme est nettement plus petit que le second, mais il ne faut pas le négliger — il contribue à environ sept pour cent de la réponse.",
+     "latex": "\\Phi = \\underbrace{6{,}5\\cdot10^{-4}}_{\\operatorname{erfc}(x)} + \\underbrace{1{,}128\\cdot 2{,}41\\cdot 3{,}0\\cdot10^{-3}}_{8{,}1\\cdot10^{-3}} \\approx 8{,}8\\cdot10^{-3}"
+    }
+   ],
+   "answer": "v_ver ≈ 415 m/s, ⟨v⟩ ≈ 468 m/s, v_skv ≈ 508 m/s. Environ 0,88 % des molécules volent plus vite que 1000 m/s — environ une sur cent quatorze. Réglez sur le stand T = 300, M = 29, seuil 1000 et vérifiez : il affichera 0,881 % — il calcule l'aire sous la courbe avec quatre cents bandes, et le dernier chiffre varie précisément à cause de cela.",
+   "check": "Est-ce raisonnable ? La première vérification est élégante. La vitesse du son dans l'air à cette température est de 347 m/s, soit 0,68 de la vitesse quadratique moyenne des molécules. Ce n'est pas une coïncidence : le son est porté par les mêmes molécules, et le rapport exact est égal à la racine de γ/3, où γ = 1,4 pour un gaz diatomique. La perturbation ne peut pas se propager notablement plus vite que ses porteurs, donc l'ordre de grandeur de la vitesse du son doit coïncider avec celui des molécules. La deuxième vérification est édifiante. La fraction de 0,88 % semble négligeable, jusqu'à ce qu'on se rappelle combien de molécules se trouvent dans un centimètre cube d'air — 2,4·10¹⁹. Par conséquent, plus de mille mètres par seconde, il y a environ 2·10¹⁷ molécules dans chaque centimètre cube de la pièce. La queue de la distribution est « peu » en proportions et « énormément » en nombre, et c'est là toute sa force."
+  },
+  "constants": {
+   "title": "Constantes de ce paragraphe",
+   "lead": "Les deux premières fixent l'échelle d'énergie, la troisième concerne un gaz spécifique, la quatrième n'a pas d'unités et est donc la plus fiable.",
+   "items": [
+    {
+     "sym": "k_B",
+     "latex": "k_B",
+     "name": "Constante de Boltzmann",
+     "value": "1,380 649 · 10⁻²³",
+     "unit": "J / K",
+     "why": "Dans le sujet précédent, elle servait de taux de change entre température et énergie. Ici, son rôle est différent, visible directement dans la formule : le produit k_BT fixe la LARGEUR de la distribution. Toute la courbe ne dépend que du rapport sans dimension mv²/2 sur k_BT, donc deux gaz différents à deux températures différentes donnent la même courbe si ce rapport coïncide. À 300 K, la valeur de k_BT est de 4,14·10⁻²¹ J — c'est l'énergie caractéristique de la température ambiante.",
+     "mnemo": "k_BT à température ambiante est d'environ 1/40 d'électronvolt. Le nombre 1/40 vaut la peine d'être retenu : on l'utilise pour estimer tout, des semi-conducteurs à la biochimie."
+    },
+    {
+     "sym": "R",
+     "latex": "R",
+     "name": "Constante universelle des gaz parfaits",
+     "value": "8,314 462",
+     "unit": "J / (mol · K)",
+     "why": "C'est la même constante de Boltzmann multipliée par le nombre d'Avogadro. Dans les exercices de ce sujet, elle est plus pratique : la masse molaire est donnée en grammes par mole, pas en kilogrammes par molécule, donc il vaut mieux garder les formules en notation molaire — v_eff = √(3RT/M). Une erreur d'un facteur N_A lors de la conversion dans un sens ou dans l'autre donne une erreur de douze ordres de grandeur et est donc généralement immédiatement visible.",
+     "mnemo": "Pour des estimations, prenez R ≈ 8. Alors 3RT à température ambiante est d'environ 7200, et la racine de 7200/M donne directement la vitesse quadratique moyenne en mètres par seconde."
+    },
+    {
+     "sym": "M",
+     "latex": "M_{\\text{air}}",
+     "name": "Masse molaire de l'air",
+     "value": "28,96",
+     "unit": "g / mol",
+     "why": "L'air n'est pas un gaz unique, mais un mélange : 78 % d'azote avec une masse de 28, 21 % d'oxygène avec une masse de 32 et environ un pour cent d'argon avec une masse de 40. La moyenne pondérée donne 28,96, et dans les exercices on écrit simplement 29. Plus important encore, et cela découle directement de la dérivation : dans un mélange, les molécules légères et lourdes ont la MÊME énergie cinétique moyenne, et donc des vitesses différentes — d'autant plus que les racines des masses diffèrent. Ainsi, dans le même air, l'hélium vole 2,6 fois plus vite que l'azote, et c'est pourquoi la Terre a perdu les gaz légers, conservant les lourds.",
+     "mnemo": "Azote 28, oxygène 32, l'air est entre les deux, plus proche de l'azote — 29. Gaz carbonique 44, vapeur d'eau 18 : la vapeur est plus légère que l'air, c'est pourquoi l'air humide s'élève."
+    },
+    {
+     "sym": "1 : 1,128 : 1,225",
+     "latex": "1 : \\sqrt{4/\\pi} : \\sqrt{3/2}",
+     "name": "Rapport des trois vitesses caractéristiques",
+     "value": "1 : 1,128 : 1,225",
+     "unit": "sans dimension",
+     "why": "Ce sont les seuls nombres de ce paragraphe qui ne mesurent rien. Ils proviennent des mathématiques pures — des intégrales gaussiennes — et sont donc identiques pour tout gaz à toute température, de l'hydrogène dans un nuage interstellaire aux vapeurs de mercure dans une lampe. Cela en fait le meilleur test de calcul : si votre vitesse moyenne est supérieure à la vitesse quadratique moyenne, l'erreur est dans l'arithmétique, pas dans la physique. L'écart entre les nombres extrêmes n'est que de 22 %, donc dans les estimations grossières, on peut ne pas distinguer les trois vitesses — mais dans une formule, il faut utiliser celle que la formule exige.",
+     "mnemo": "L'ordre est facile à retenir : plus la quantité est sensible à la queue, plus elle est grande. Le maximum ne voit pas la queue du tout, la moyenne la sent, le carré moyen l'alourdit."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Comment cela se relie au reste du cours",
+   "lead": "La courbe de Maxwell n'est pas une formule isolée, mais un billet d'entrée : presque tout ce qui est calculé ensuite sur les gaz, les réactions et les étoiles en tire soit le milieu, soit la queue.",
+   "items": [
+    {
+     "h": "Thermodynamique : d'où vient la température",
+     "text": "Dans la huitième étape, nous avons égalé le carré moyen de la vitesse à 3k_BT/m — c'est-à-dire que nous avons utilisé la définition de la température du sujet sur le gaz parfait pour trouver le coefficient dans le facteur de Boltzmann. Il faut le comprendre honnêtement : ce n'est pas une preuve, mais un raccord. La définition de la température par l'énergie cinétique moyenne et le facteur exponentiel ne sont pas deux affirmations indépendantes, mais deux faces d'une même chose, et notre dérivation a montré qu'elles sont cohérentes."
+    },
+    {
+     "h": "Phénomènes de transport : diffusion, viscosité, conductivité thermique",
+     "text": "Le paragraphe suivant du sujet est construit directement sur la vitesse moyenne. Le flux de molécules sur une paroi est n⟨v⟩/4 — d'où l'évaporation, le pompage du vide et le fonctionnement du détecteur de fuites. Et avec le libre parcours moyen, ⟨v⟩ donne les trois coefficients de transport d'un coup : la diffusion transporte la masse, la viscosité l'impulsion, la conductivité thermique l'énergie, et dans les trois figure le même produit λ⟨v⟩."
+    },
+    {
+     "h": "Chimie : le facteur d'Arrhenius",
+     "text": "La vitesse d'une réaction varie comme exp(−E_a/RT) — c'est la fraction de molécules au-dessus du seuil d'énergie, mais écrite en termes d'énergie plutôt que de vitesse. D'où la règle scolaire « plus dix degrés — deux fois plus vite » : avec une énergie d'activation de 50 kJ/mol, le passage de 300 à 310 K change l'exposant de 0,65, et l'exponentielle donne un facteur de 1,9. La règle ne fonctionne pas toujours, mais seulement pour cette énergie d'activation — avec une énergie deux fois plus grande, un chauffage de dix degrés accélère la réaction presque quatre fois."
+    },
+    {
+     "h": "Statistique quantique : où Maxwell s'arrête",
+     "text": "La dérivation supposait implicitement que les particules sont discernables et que toute énergie est accessible. Lorsque la longueur d'onde de de Broglie devient comparable à la distance entre les particules, ces deux hypothèses s'effondrent, et les distributions de Fermi-Dirac et de Bose-Einstein prennent le relais. L'exemple le plus proche n'est pas au laboratoire, mais dans un fil : les électrons dans le cuivre à température ambiante ont une vitesse d'environ 1,5·10⁶ m/s au lieu des 10⁵ maxwelliennes, et ne remarquent presque pas la chaleur."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Curiosités : à tester vous-même",
+   "lead": "Les deux expériences ci-dessous nécessitent deux assiettes et une tasse de thé. Elles mesurent toutes deux la même chose : à quel point la queue de la distribution réagit à la température.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "expérience de cuisine",
+     "h": "Deux assiettes d'eau",
+     "text": "Prenez deux assiettes creuses identiques et versez 30 millilitres d'eau dans chacune. Laissez l'une sur la table, placez l'autre sur quelque chose de chaud — sur le couvercle d'une casserole d'eau chaude, sur un radiateur, sur un rebord de fenêtre ensoleillé. Il est important que les deux soient dans les mêmes conditions de courant d'air : il faut comparer la température, pas l'exposition au vent. Au bout d'une heure, versez le reste dans un verre doseur et comparez. Il n'y aura pas d'ébullition — l'eau dans les deux assiettes restera nettement en dessous de cent degrés.",
+     "answer": "L'assiette chaude perdra environ trois fois plus. Pour s'échapper de la surface, une molécule doit surmonter l'attraction de ses voisines — environ 40 kilojoules par mole, et c'est un seuil. L'énergie moyenne ne suffit jamais : à température ambiante, RT ne vaut que 2,4 kilojoules par mole, soit dix-sept fois moins que le seuil. Seules les molécules de la queue lointaine s'évaporent, et la fraction de la queue au-delà du seuil suit exp(−L/RT). Prenez 20 et 40 degrés Celsius, soit 293 et 313 kelvins : l'exposant change de 1,07, l'exponentielle donne un facteur 2,9. La pression de vapeur saturante tabulée passe de 2,34 à 7,38 kilopascals, soit un facteur 3,2 — un accord excellent pour une estimation en une ligne. Remarquez sur quoi repose toute l'arithmétique : la température a augmenté de sept pour cent, et l'évaporation a triplé. C'est ainsi que fonctionne la queue. Et une réserve honnête : la vitesse d'évaporation n'est pas strictement proportionnelle à la pression de vapeur saturante ; elle dépend aussi de la rapidité avec laquelle la vapeur déjà évaporée est emportée. Placez un ventilateur à côté de l'assiette froide, et elle dépassera l'assiette chaude sans devenir plus chaude d'un degré. C'est pourquoi le linge sèche au vent et pourquoi l'expérience exige une exposition au vent identique."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "expérience de cuisine",
+     "h": "L'odeur de la tasse de thé",
+     "text": "Infusez du thé et versez-le dans deux tasses. Laissez l'une refroidir pendant environ quinze minutes. Puis sentez les deux à la même distance — à une vingtaine de centimètres, en une seule inspiration courte au-dessus de chacune. La différence est immédiatement perceptible, bien que le thé dans les tasses soit le même. La seconde moitié de l'expérience teste autre chose : couvrez la tasse chaude avec une soucoupe pendant une minute, retirez la soucoupe et sentez à nouveau, et chronométrez combien de temps il faut à l'odeur pour atteindre une personne à l'autre bout de la cuisine.",
+     "answer": "La tasse chaude sent beaucoup plus fort, et la raison est la même que pour les assiettes : les molécules odorantes s'échappent dans l'air depuis la queue de la distribution, et la queue réagit à la température de manière disproportionnée. La différence entre le thé fraîchement infusé et le thé refroidi est d'environ trente degrés, moins de dix pour cent sur l'échelle de Kelvin, et la concentration de molécules aromatiques au-dessus de la tasse change de plusieurs fois. La soucoupe montre l'autre aspect : sous elle, la vapeur s'accumule jusqu'à ce que le départ et le retour s'équilibrent — c'est la saturation, et la soucoupe retirée libère l'accumulation d'un coup. Le chronométrage révèle une incohérence qui mérite d'être notée. Les molécules dans l'air se déplacent à des centaines de mètres par seconde — les molécules odorantes sont plus lentes, car plus lourdes, mais toujours de l'ordre de deux à trois cents. Une telle molécule devrait traverser une cuisine de trois mètres de large en un centième de seconde. En réalité, l'odeur met des dizaines de secondes à arriver, et dans l'air immobile, des minutes. Entre deux collisions, une molécule ne parcourt qu'environ soixante-dix nanomètres et change de direction des milliards de fois par seconde ; le trajet n'est pas rectiligne mais une marche aléatoire, et la distance parcourue croît non pas proportionnellement au temps, mais comme sa racine carrée. La vitesse réelle de propagation de l'odeur n'est pas déterminée par la diffusion, mais par la convection : l'air chaud au-dessus de la tasse s'élève et transporte les molécules par un flux."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoxe",
+     "h": "Il n'existe pas de molécules immobiles",
+     "text": "Le facteur de Boltzmann affirme : plus l'énergie est faible, plus l'état est probable. L'état le plus probable selon lui est le repos, l'énergie nulle. Mais la courbe de distribution s'annule à zéro : il n'y a pratiquement pas de molécules immobiles. Où est l'erreur dans le raisonnement ?",
+     "answer": "Il n'y a pas d'erreur, car ce sont des réponses à deux questions différentes. Le facteur de Boltzmann concerne un ÉTAT SPÉCIFIQUE — un vecteur vitesse donné. Et il a raison : la probabilité de trouver une molécule avec le vecteur exactement (0, 0, 0) est effectivement plus élevée qu'avec le vecteur (400, 0, 0). La courbe f(v) concerne le module, c'est-à-dire toutes les directions ayant ce module. Le nombre de directions augmente avec le module : leur « nombre » est l'aire de la sphère 4πv², et à v = 0, elle est nulle. Être lent est avantageux, mais il n'y a presque pas de façons d'être lent. Ce même conflit entre géométrie et énergie se reproduira deux fois. Dans l'atome d'hydrogène, la densité de probabilité pour l'électron est maximale au noyau même, tandis que la densité radiale, qui inclut le facteur r², est maximale au rayon de Bohr. Et dans la distribution selon la projection de la vitesse : si l'on demande non pas le module mais seulement vₓ, le maximum se trouve exactement à zéro, car pour la projection il n'y a pas de facteur géométrique. Trois réponses différentes à trois questions différentes sur le même gaz."
+    },
+    {
+     "icon": "estimate",
+     "kind": "estimation",
+     "h": "L'évaporation refroidit parce que les plus rapides s'en vont",
+     "text": "Pourquoi la peau mouillée gèle au vent, pourquoi la soupe refroidit plus vite si l'on souffle dessus, et pourquoi une serviette mouillée par temps chaud est plus froide que l'air ambiant ? La réponse n'est pas « l'eau est froide », mais « les plus rapides s'en vont ».",
+     "answer": "Seules les molécules de la queue lointaine s'échappent du liquide — celles dont l'énergie dépasse le seuil. Chaque molécule qui part emporte plus que l'énergie moyenne, donc celles qui restent s'appauvrissent en moyenne : le liquide refroidit de lui-même, sans aucun contact avec quelque chose de froid. Estimons le coût. L'évaporation d'un gramme d'eau absorbe 2260 joules, et chauffer un gramme d'eau d'un degré coûte 4,2 joules. Ainsi, l'évaporation de seulement un pour cent de l'eau refroidit le reste d'environ cinq degrés et demi. D'où la transpiration : par temps chaud, un humain évapore environ un demi-litre de sueur par heure et dissipe ainsi environ trois cents watts — trois fois plus que toute sa production de chaleur au repos. D'où aussi le psychromètre : deux thermomètres identiques, l'un avec une enveloppe humide ; la différence de leurs lectures est directement liée à l'humidité de l'air, car l'humidité détermine la facilité avec laquelle la queue partie ne revient pas."
+    },
+    {
+     "icon": "edge",
+     "kind": "limite de validité",
+     "h": "Où Maxwell s'arrête",
+     "text": "La formule est dérivée en supposant que les molécules sont discernables et que toute énergie leur est accessible. Ces deux hypothèses ont une limite, et elle n'est pas exotique — elle est dans chaque fil électrique sous la main.",
+     "answer": "Les électrons de conduction dans un morceau de cuivre sont aussi un gaz, mais de particules obéissant au principe de Pauli : deux électrons ne peuvent pas occuper le même état. Le remplissage se fait du bas vers le haut, et à température ambiante, la grande majorité des électrons sont profondément sous le niveau de Fermi, où ils n'ont tout simplement nulle part où aller. Maxwell leur donnerait une vitesse quadratique moyenne d'environ cent mille mètres par seconde ; la vitesse réelle des électrons au niveau de Fermi dans le cuivre est d'un million et demi, et elle dépend presque pas de la température, et resterait la même au zéro absolu. C'est précisément pour cela que la capacité thermique mesurée des métaux s'est avérée des dizaines de fois plus petite que la prédiction classique — cette divergence a tourmenté la physique pendant un demi-siècle et ne s'est résolue qu'avec la statistique quantique. La deuxième limite est froide. Lorsque la longueur d'onde de de Broglie devient comparable à la distance entre les particules, distinguer les particules devient impossible même en principe ; pour l'hélium-4, cela se produit autour de deux kelvins, là commence la superfluidité, et la distribution n'est plus celle de Maxwell, mais celle de Bose-Einstein. L'air ordinaire n'atteint pas sa limite quantique : il gèle bien avant."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "Une autre voie vers la formule, sa mesure et trois distributions que l'on confond",
+   "blocks": [
+    {
+     "h": "Maxwell l'a dérivé autrement — à partir d'une seule symétrie",
+     "text": "En 1860, le facteur de Boltzmann n'existait pas encore, et Maxwell raisonnait différemment. Supposons que la distribution pour chaque composante de la vitesse soit la même et que les trois composantes soient statistiquement indépendantes : connaître vₓ ne dit rien sur v_y. Alors la densité dans l'espace des vitesses est le produit de trois fonctions identiques. D'autre part, par isotropie, elle ne dépend que de la somme des carrés des composantes. Une fonction dont le produit sur trois arguments est égal à une fonction de la somme de leurs carrés est unique — c'est l'exponentielle d'un carré. L'exponentielle découle de la seule symétrie, sans aucune thermodynamique. Maxwell lui-même considérait l'hypothèse d'indépendance des composantes comme fragile ; en 1867, il revint au problème par un autre côté, en exigeant que la distribution ne change pas lors des collisions, et obtint la même réponse. Boltzmann, en 1872, montra par le théorème H que cette distribution est la seule que les collisions ne détruisent pas. Trois chemins indépendants vers un même point — c'est un signe habituel que le résultat n'est pas dû au hasard.",
+     "latex": "F(v_x)F(v_y)F(v_z) = \\varphi\\!\\left(v_x^{2}+v_y^{2}+v_z^{2}\\right) \\;\\Longrightarrow\\; F(u) \\propto e^{-\\alpha u^{2}}"
+    },
+    {
+     "h": "Comment la distribution a été mesurée — et pourquoi elle est différente dans un faisceau",
+     "text": "La mesure directe est apparue soixante ans après la dérivation. En 1920, Otto Stern a émis dans le vide un faisceau d'atomes d'argent provenant d'un four chauffé et l'a fait passer à travers un appareil rotatif : pendant que l'atome vole de la fente au détecteur, l'appareil a le temps de tourner, et le point d'impact est d'autant moins déplacé que l'atome est rapide. La trace étalée sur le détecteur est précisément la distribution des vitesses, enregistrée directement sur le métal. La précision de la première expérience était modeste — Stern a obtenu la vitesse moyenne. Une vérification convaincante de la forme même de la courbe a été faite par Miller et Kusch en 1955 : un sélecteur constitué d'un tambour rotatif avec des fentes hélicoïdales ne laisse passer que les atomes dans un intervalle étroit de vitesses, et en changeant la fréquence de rotation, on déplace l'intervalle sur toute l'échelle. L'accord avec la formule était de l'ordre du pour cent. Ces expériences comportent une subtilité qui ferait rater une comparaison naïve avec f(v). De l'ouverture ne sortent pas des molécules de gaz « moyennes » : les plus rapides atteignent plus souvent le trou, et le flux à travers celui-ci porte un facteur supplémentaire v. La distribution dans le faisceau varie comme v³·exp(−mv²/2k_BT), et non comme v², et le maximum du faisceau est décalé vers la droite — il tombe exactement sur la vitesse quadratique moyenne du gaz à l'intérieur du four. Miller et Kusch en tenaient compte explicitement.",
+     "latex": "f_{\\text{faisceau}}(v) \\propto v\\,f(v) \\propto v^{3} e^{-m v^{2}/2k_B T}, \\qquad v_{\\max}^{\\text{faisceau}} = \\sqrt{\\frac{3k_BT}{m}} = v_{\\text{rms}}"
+    },
+    {
+     "h": "Trois distributions — trois questions différentes",
+     "text": "La même physique s'écrit de trois manières, et les confondre est l'erreur la plus fréquente dans les exercices sur ce sujet. Pour une composante de la vitesse, la distribution est gaussienne et maximale en zéro : la composante n'a pas de facteur géométrique, et il y a effectivement plus de molécules avec vₓ ≈ 0 — parmi elles, toutes celles qui volent perpendiculairement à l'axe x avec une vitesse quelconque. Pour le module de la vitesse — c'est la courbe que nous avons dérivée : le facteur v² la plaque vers zéro à l'origine et décale le maximum vers v_probable. Pour l'énergie — une troisième courbe, qui s'obtient de la deuxième par CHANGEMENT DE VARIABLE, et non par substitution de ε = mv²/2 dans f(v) toute prête. Le changement doit entraîner un facteur dv/dε, et finalement, au lieu de v², il reste une racine de ε. Le maximum de la distribution en énergie se situe à k_BT/2, alors que l'énergie correspondant à la vitesse la plus probable est égale à k_BT — le double. Deux maxima différents pour un même gaz : « le plus probable » dépend de la variable par rapport à laquelle on pose la question.",
+     "latex": "f(v_x) \\propto e^{-mv_x^{2}/2k_BT}, \\qquad f(v)\\propto v^{2}e^{-mv^{2}/2k_BT}, \\qquad f(\\varepsilon)\\propto \\sqrt{\\varepsilon}\\;e^{-\\varepsilon/k_BT}"
+    }
+   ]
+  },
+  "memo": {
+   "essence": "Un gaz à une température donnée n'a pas une seule vitesse — il a une courbe. Sa forme f(v) ∝ v²·exp(−mv²/2k_BT) résulte de deux facteurs : la géométrie de l'espace des vitesses donne le v² croissant, le facteur de Boltzmann donne l'exponentielle décroissante. Les trois vitesses caractéristiques diffèrent parce que la courbe est asymétrique, et sont dans le rapport 1 : 1,128 : 1,225. Et presque tout ce qui est intéressant dans la nature est déterminé non pas par le milieu de la courbe, mais par sa queue droite.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "Le facteur v² — c'est la géométrie",
+     "text": "Le volume d'une couche sphérique dans l'espace des vitesses croît comme v². C'est pourquoi il n'y a pratiquement pas de molécules de vitesse nulle : la couche de rayon nul est vide."
+    },
+    {
+     "icon": "scale",
+     "title": "L'exponentielle — c'est le prix de l'énergie",
+     "text": "Là où les énergies s'additionnent, les probabilités se multiplient. Seule l'exponentielle transforme une somme en produit — d'où le facteur exp(−ε/k_BT)."
+    },
+    {
+     "icon": "sigma",
+     "title": "Trois vitesses, un seul rapport",
+     "text": "1 : 1,128 : 1,225 = 1 : √(4/π) : √(3/2). Les nombres sont sans dimension, donc identiques pour tout gaz à toute température."
+    },
+    {
+     "icon": "edge",
+     "title": "Tout est décidé par la queue",
+     "text": "Un échauffement de sept pour cent déplace la vitesse moyenne de trois pour cent, mais la fraction au-delà d'un seuil éloigné — triple. L'évaporation, la fuite atmosphérique et la chimie vivent précisément là."
+    }
+   ],
+   "where": [
+    "Évaporation et séchage : seules les molécules de la queue s'échappent, donc le taux d'évaporation croît avec la température bien plus vite que la température elle-même.",
+    "Atmosphères planétaires : la Terre a retenu l'azote et l'oxygène, mais a perdu l'hydrogène et l'hélium — leur queue atteint la vitesse de libération.",
+    "Chimie : le facteur d'Arrhenius exp(−E_a/RT) est précisément la fraction de molécules au-delà du seuil d'énergie.",
+    "Fusion nucléaire : au centre du Soleil, la réaction se produit à l'extrême bord de la queue, car l'énergie moyenne des protons est insuffisante pour franchir la barrière coulombienne, presque mille fois trop élevée."
+   ],
+   "watchOut": "Trois erreurs fréquentes. La première — considérer f(v) comme une probabilité : c'est une densité, la probabilité n'est donnée que par le produit f(v)dv sur un intervalle. La deuxième — confondre la distribution du module avec la distribution de la projection : pour le module, le maximum est à v_ver ; pour la projection, il est exactement à zéro, et les deux images sont correctes, elles répondent simplement à des questions différentes. La troisième et la plus coûteuse — estimer la queue à partir de la vitesse moyenne. La fraction au-delà du seuil suit une exponentielle du CARRÉ du rapport, donc « un peu au-dessus de la moyenne » et « deux fois la moyenne » diffèrent non pas par un facteur, mais par des ordres de grandeur."
+  },
+  "quiz": [
+   {
+    "id": "s1",
+    "type": "mcq",
+    "q": "D'où vient le facteur v² dans la distribution et pourquoi, à cause de lui, y a-t-il pratiquement pas de molécules avec une vitesse nulle ?",
+    "options": [
+     "v² est le volume d'une couche sphérique dans l'espace des vitesses : plus le module est grand, plus il y a de directions avec ce module, et quand v → 0 la couche se réduit à un point",
+     "v² est l'énergie cinétique de la molécule, et elle entre dans la probabilité de façon linéaire",
+     "v² apparaît lors de la moyenne sur les trois axes — c'est le même facteur qui donnait 1/3 dans le sujet sur le gaz parfait",
+     "v² est une correction empirique, ajustée pour correspondre au résultat de l'expérience de Stern"
+    ],
+    "answer": 0,
+    "why": "Le facteur est purement géométrique. Toutes les molécules avec un module de vitesse entre v et v + dv se trouvent dans une couche sphérique dont le volume est égal à la surface de la sphère 4πv² multipliée par l'épaisseur dv. Être lent est énergétiquement favorable selon Boltzmann, mais il n'y a presque pas de façons d'être lent — la couche de rayon nul est vide. Notez que dans un monde bidimensionnel, le facteur serait 2πv, et dans un monde unidimensionnel il disparaîtrait complètement, et il n'y aurait plus d'affaissement de la courbe à zéro.",
+    "hint": "Regardez la cinquième étape de la dérivation. Nous passions de la densité de points dans l'espace tridimensionnel des vitesses à la distribution selon un seul nombre — le module. Demandez-vous : combien de place dans cet espace correspond à une valeur donnée du module ?"
+   },
+   {
+    "id": "s2",
+    "type": "mcq",
+    "q": "Pourquoi la vitesse la plus probable, la vitesse moyenne et la vitesse quadratique moyenne d'un même gaz sont-elles trois nombres différents ?",
+    "options": [
+     "La courbe de distribution n'est pas symétrique : la longue traîne à droite tire la moyenne au-dessus du maximum, et l'élévation au carré alourdit encore plus la contribution de la traîne",
+     "Elles sont mesurées avec différents instruments, et les instruments donnent différentes erreurs systématiques",
+     "Elles se rapportent à différents composants du mélange gazeux — léger, moyen et lourd",
+     "La plus probable est calculée sur le module de la vitesse, tandis que les deux autres sont calculées sur les projections sur les axes"
+    ],
+    "answer": 0,
+    "why": "Pour une courbe symétrique, les trois coïncideraient. Le maximum ne remarque pas la traîne, la moyenne la ressent, et la moyenne du carré donne aux vitesses lointaines un poids qui croît comme v² — donc la vitesse quadratique moyenne est toujours la plus grande. Le rapport 1 : 1,128 : 1,225 provient d'intégrales gaussiennes et ne dépend ni du gaz ni de la température : c'est purement mathématique, pas une propriété de la matière.",
+    "hint": "Prenez n'importe quelle température sur le panneau et regardez les trois marqueurs : ils vont toujours dans le même ordre et avec le même rapport. Demandez-vous pour quelle forme de courbe le maximum, la moyenne et la racine de la moyenne des carrés coïncideraient."
+   },
+   {
+    "id": "s3",
+    "type": "free",
+    "q": "En vos propres mots : pourquoi pour l'évaporation, la fuite atmosphérique et la réaction chimique, ce n'est pas la vitesse moyenne qui compte, mais la traîne de la distribution ?",
+    "keywords": [
+     "traîne",
+     "seuil",
+     "rapide",
+     "exponentielle",
+     "proportion",
+     "sensible",
+     "température",
+     "énergie"
+    ],
+    "needed": 2,
+    "why": "Dans les trois cas, il y a un seuil, et il se situe bien au-dessus de l'énergie moyenne : une molécule d'eau a besoin d'environ 40 kJ/mol pour quitter la surface, alors que RT n'est que de 2,4 kJ/mol. La molécule moyenne ne peut jamais rien faire de tout cela — seules celles qui se trouvent dans la traîne lointaine agissent. Et la proportion de la traîne au-delà du seuil suit une exponentielle du carré du rapport des vitesses, donc elle est extrêmement sensible à la température : chauffer l'eau de sept pour cent sur l'échelle de Kelvin triple l'évaporation, alors que la vitesse moyenne n'augmente que de trois pour cent.",
+    "hint": "Comparez deux nombres : l'énergie typique d'une molécule à température ambiante et l'énergie nécessaire pour se détacher de la surface du liquide. De combien de fois diffèrent-ils — et qu'est-ce que cela dit sur quelle partie de la courbe est responsable du processus ?"
+   },
+   {
+    "id": "s4",
+    "type": "estimate",
+    "q": "Estimez la vitesse quadratique moyenne des atomes d'hélium (M = 4 g/mol) à 300 K. Réponse en mètres par seconde.",
+    "answer": 1368,
+    "unit": "m/s",
+    "why": "v_quad = √(3RT/M) = √(3 · 8,314 · 300 / 0,004) = √(1,87·10⁶) ≈ 1370 m/s. Vérification avec l'air : l'hélium est 7,25 fois plus léger que l'air, donc ses vitesses sont plus grandes d'un facteur √7,25 ≈ 2,7, et 508 · 2,7 ≈ 1370 — cela concorde. C'est pourquoi l'hélium d'un ballon s'échappe à travers le caoutchouc en une journée, et la Terre n'a pas pu le retenir dans son atmosphère : sa traîne atteint la vitesse de libération.",
+    "hint": "Calculez en notation molaire : v_quad = √(3RT/M), où M est en kilogrammes par mole. Arrondissez R à huit — alors 3 · 8 · 300 = 7200, et il reste à diviser par 0,004 et à prendre la racine.",
     "tolAbs": 150
    }
   ]

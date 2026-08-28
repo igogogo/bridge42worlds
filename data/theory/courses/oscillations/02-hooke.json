@@ -17,37 +17,52 @@
   ],
   "examples_from_articles": [
    {
-    "id": "2607.14868",
-    "date": "2026-07-16",
+    "id": "2607.00037",
+    "date": "2026-06-28",
     "title": {
-     "ru": "Спин из изгиба: как кривизна закручивает звук",
-     "en": "Spin from Bend: How Curvature Twists Sound",
-     "es": "El giro de la flexión: cómo la curvatura retuerce el sonido",
-     "ar": "الغزل من التقوس: كيف يمنح الانحناء الصوت زخمًا زاويًا"
+     "ru": "Призраки у горизонта: как чёрные дыры шепчут звуком",
+     "en": "Ghosts at the Horizon: How Black Holes Whisper with Sound",
+     "es": "Fantasmas en el horizonte: cómo los agujeros negros susurran con sonido",
+     "ar": "أشباح عند الأفق: كيف تهمس الثقوب السوداء بالصوت",
+     "fr": "Des fantômes à l'horizon : quand les trous noirs murmurent en sons"
     },
-    "why": "gravitational_waves, interferometry"
+    "score": 0.62
    },
    {
-    "id": "2607.13930",
-    "date": "2026-07-15",
+    "id": "2605.15632",
+    "date": "2026-05-15",
     "title": {
-     "ru": "Симфония нейтронной звезды: ИИ-агент играет партитуру плотной материи",
-     "en": "Symphony of a Neutron Star: AI Agent Plays the Score of Dense Matter",
-     "es": "Sinfonía de la estrella de neutrones: un agente de IA toca la partitura de la materia densa",
-     "ar": "سيمفونية النجم النيوتروني: وكيل الذكاء الاصطناعي يعزف نوتة المادة الكثيفة"
+     "ru": "Свет развернули во времени",
+     "en": "Light Flipped in Time",
+     "es": "La luz se refleja en el tiempo",
+     "ar": "الضوء ينعكس عبر الزمن",
+     "fr": "La lumière renversée dans le temps"
     },
-    "why": "gravitational_waves, interferometry"
+    "score": 0.616
    },
    {
-    "id": "2607.12722",
-    "date": "2026-07-14",
+    "id": "2606.08528",
+    "date": "2026-06-07",
     "title": {
-     "ru": "Слушая звёзды: ИИ-дешифровщик мгновенно восстанавливает уравнение состояния нейтронных звёзд",
-     "en": "Listening to the Stars: AI Decoder Instantly Reconstructs the Neutron Star Equation of State",
-     "es": "Escuchando las estrellas: un descifrador de IA restaura instantáneamente la ecuación de estado de las estrellas de neutrones",
-     "ar": "بالإنصات إلى النجوم: مفكك تشفير ذكي يعيد بناء معادلة حالة النجوم النيوترونية فوراً"
+     "ru": "Квантовые узлы из траекторий частиц",
+     "en": "Quantum Knots from Particle Trajectories",
+     "es": "Nudos cuánticos a partir de trayectorias de partículas",
+     "ar": "عُقد كمية من مسارات الجسيمات",
+     "fr": "Nœuds quantiques tissés par les trajectoires des particules"
     },
-    "why": "gravitational_waves, interferometry"
+    "score": 0.613
+   },
+   {
+    "id": "2604.11132",
+    "date": "2026-04-13",
+    "title": {
+     "ru": "Шарики, которые катятся против поля",
+     "en": "Balls That Roll Against the Field",
+     "es": "Bolitas que ruedan contra el campo",
+     "ar": "كرات تتدحرج عكس اتجاه المجال",
+     "fr": "Des billes qui roulent à contre-courant"
+    },
+    "score": 0.608
    }
   ]
  },
@@ -184,17 +199,20 @@
     {
      "what": "Что такое дифференциальное уравнение",
      "why": "Обычное уравнение спрашивает «какое число подходит», дифференциальное — «какая функция подходит». Запись $\\ddot{x} = -\\omega^2 x$ означает: найдите такую зависимость координаты от времени, чтобы её вторая производная в каждый момент равнялась самой функции с минусом. Почти вся фундаментальная физика — от Ньютона до Шрёдингера — записана именно на этом языке: законы задают не траектории, а правила, которым траектории подчиняются.",
-     "latex": "\\ddot{x} + \\omega^{2}x = 0"
+     "latex": "\\ddot{x} + \\omega^{2}x = 0",
+     "kit": "diffeq"
     },
     {
      "what": "Производные синуса и косинуса — по кругу",
      "why": "Дифференцирование сдвигает гармонику на четверть периода: синус переходит в косинус, косинус — в минус синус, и через четыре шага цикл замыкается. Через картину вращения это очевидно: скорость точки на окружности перпендикулярна радиусу, то есть опережает его на 90 градусов. Производная — это поворот фазы.",
-     "latex": "\\sin \\to \\cos \\to -\\sin \\to -\\cos \\to \\sin"
+     "latex": "\\sin \\to \\cos \\to -\\sin \\to -\\cos \\to \\sin",
+     "kit": "derivative"
     },
     {
      "what": "Разложение Тейлора вблизи минимума",
      "why": "Любую гладкую функцию около точки можно приблизить многочленом. В минимуме первая производная равна нулю, поэтому первым значимым членом оказывается квадратичный. Это одно из самых используемых приближений в физике: оно превращает произвольную сложную яму в параболу, а произвольную устойчивую систему — в осциллятор.",
-     "latex": "U(x_0 + \\delta) \\approx U(x_0) + \\tfrac{1}{2}U''(x_0)\\,\\delta^{2}"
+     "latex": "U(x_0 + \\delta) \\approx U(x_0) + \\tfrac{1}{2}U''(x_0)\\,\\delta^{2}",
+     "kit": "taylor"
     }
    ]
   },
@@ -1543,25 +1561,366 @@
    ]
   }
  },
- "tags": [
-  "pulsar"
- ],
- "laws": [
-  "hookes_law",
-  "newtons_second_law"
- ],
- "examples_from_articles": [
-  {
-   "id": "2607.15129",
-   "why": "совпадение по теме: pulsar"
+ "fr": {
+  "title": "Loi de Hooke et oscillateur",
+  "subtitle": "Paragraphe 2 · L'oscillation comme projection d'une rotation",
+  "intro": [
+   "En 1676, Robert Hooke publia une ligne étrange : ceiiinosssttuv. C'était une anagramme — un moyen de revendiquer une découverte sans la révéler, tant que le travail n'était pas terminé. Deux ans plus tard, il en donna la clé : ut tensio, sic vis — « telle est l'extension, telle est la force ».",
+   "Derrière ce latin se cache la première loi quantitative de l'histoire sur la déformation : étirez un ressort deux fois plus fort — il répondra par une force deux fois plus grande. Une simple proportion, mais d'elle sont nées la résistance des matériaux, la sismologie, la théorie des liaisons moléculaires — et toute la physique des oscillations.",
+   "Car il suffit de relier la loi de Hooke à la deuxième loi de Newton pour obtenir une équation dont la solution est un sinus. Et le sinus lui-même, comme nous l'avons vu au paragraphe précédent, est l'ombre d'une rotation. Ici, ces fils se rejoignent."
+  ],
+  "standNote": "Sur le stand, une masse sur un ressort et à côté, une roue fantôme en rotation. Ajustez-les pour que les mouvements coïncident : l'ombre d'un point sur la roue suit exactement la masse. C'est l'essentiel à retenir de ce paragraphe. Modifiez la masse et la raideur : la période en dépend — et ne dépend pas de l'amplitude. Lancez plus fort — la masse parcourra une plus grande distance, mais en même temps.",
+  "formula": {
+   "name": "Loi de Hooke et équation de l'oscillateur harmonique",
+   "latex": "F = -kx \\qquad \\Longrightarrow \\qquad x(t) = A\\cos(\\omega t + \\varphi_0),\\;\\; \\omega = \\sqrt{\\tfrac{k}{m}}",
+   "alsoKnown": "Ut tensio, sic vis — telle est l'extension, telle est la force",
+   "authors": [
+    {
+     "who": "Robert Hooke",
+     "year": "1676",
+     "what": "a découvert la proportionnalité entre la force élastique et la déformation ; l'a publiée sous forme d'anagramme, révélée en 1678"
+    },
+    {
+     "who": "Galilée",
+     "year": "1602",
+     "what": "a remarqué l'isochronisme du pendule — l'indépendance de la période des petites oscillations par rapport à l'amplitude — en mesurant le temps avec son propre pouls"
+    },
+    {
+     "who": "Leonhard Euler",
+     "year": "1739",
+     "what": "a le premier résolu systématiquement l'équation des oscillations harmoniques et y a introduit la notation habituelle avec des sinus et des cosinus"
+    }
+   ],
+   "story": "Le signe moins dans la loi de Hooke est le signe le plus important de ce sujet. Il indique que la force est toujours dirigée contre le déplacement : si on tire vers la droite, elle tire vers la gauche ; si on comprime, elle pousse vers l'extérieur. La force ne pousse pas le corps, elle le ramène. C'est ce signe moins qui transforme une loi statique sur les ressorts en moteur d'oscillation perpétuelle : le corps dépasse la position d'équilibre par inertie, la force s'inverse, et tout recommence. Retirez le signe moins — et au lieu d'une oscillation, vous obtenez une explosion : une force croissant avec le déplacement accélérerait le corps sans fin.",
+   "symbols": [
+    {
+     "sym": "F",
+     "latex": "F",
+     "what": "force élastique",
+     "unit": "N",
+     "note": "restauratrice : toujours vers la position d'équilibre, d'où le signe moins"
+    },
+    {
+     "sym": "k",
+     "latex": "k",
+     "what": "raideur du ressort",
+     "unit": "N/m",
+     "note": "combien de newtons par mètre d'étirement ; propriété d'un ressort particulier"
+    },
+    {
+     "sym": "x",
+     "latex": "x",
+     "what": "déplacement par rapport à l'équilibre",
+     "unit": "m",
+     "note": "mesuré à partir du point où la force est nulle"
+    },
+    {
+     "sym": "A",
+     "latex": "A",
+     "what": "amplitude",
+     "unit": "m",
+     "note": "écart maximal ; déterminé par l'impulsion initiale, pas par les propriétés du système"
+    },
+    {
+     "sym": "ω",
+     "latex": "\\omega",
+     "what": "fréquence cyclique",
+     "unit": "rad/s",
+     "note": "le même oméga que pour la rotation — et ce n'est pas une coïncidence"
+    },
+    {
+     "sym": "φ₀",
+     "latex": "\\varphi_0",
+     "what": "phase initiale",
+     "unit": "rad",
+     "note": "d'où le mouvement démarre sur la « roue » à t = 0"
+    }
+   ]
   },
-  {
-   "id": "2607.14054",
-   "why": "совпадение по теме: pulsar"
+  "derivation": {
+   "title": "Dérivation rigoureuse",
+   "lead": "Combinons la loi de Hooke avec la deuxième loi de Newton et résolvons honnêtement ce qui en résulte. En chemin, nous rencontrerons la première équation différentielle du cours — et nous verrons que nous l'avons déjà résolue, sans le savoir.",
+   "steps": [
+    {
+     "text": "Substituons la force élastique dans la deuxième loi de Newton. On obtient une équation où l'inconnue n'est pas une valeur mais une fonction entière $x(t)$ : elle relie la position du corps à sa propre accélération.",
+     "latex": "ma = -kx \\;\\;\\Longrightarrow\\;\\; \\ddot{x} = -\\frac{k}{m}\\,x",
+     "figure": "springlaw",
+     "figCaption": "L'accélération est proportionnelle au déplacement et dirigée contre lui — voilà toute l'équation."
+    },
+    {
+     "text": "Lisons-la avec des mots : l'accélération est proportionnelle au déplacement avec un signe négatif. Il faut une fonction qui, lorsqu'on la dérive deux fois, se reproduit elle-même avec un signe moins. Il n'existe que deux telles fonctions : le sinus et le cosinus.",
+     "latex": "(\\cos\\omega t)'' = -\\omega^{2}\\cos\\omega t",
+     "figure": "sinederiv",
+     "figCaption": "Le cosinus, après double dérivation, revient à lui-même avec un signe moins — c'est lui la solution."
+    },
+    {
+     "text": "Substituons la solution d'essai $x = A\\cos\\omega t$ dans l'équation et voyons à quelle fréquence elle fonctionne. L'amplitude se simplifie — l'équation se moque de l'intensité de l'impulsion. La fréquence, elle, doit être strictement déterminée.",
+     "latex": "-A\\omega^{2}\\cos\\omega t = -\\frac{k}{m}A\\cos\\omega t \\;\\Longrightarrow\\; \\omega = \\sqrt{\\frac{k}{m}}",
+     "figure": "matchfreq",
+     "figCaption": "La fréquence est déterminée par le système, l'amplitude par l'impulsion initiale. Ce sont des choses différentes."
+    },
+    {
+     "text": "D'où la période. Elle croît avec la masse (un corps lourd oscille plus lentement) et décroît avec la raideur (un ressort raide rappelle plus brusquement). Et — étonnamment — l'amplitude n'y figure pas : les grandes et les petites oscillations prennent le même temps. C'est cet isochronisme que Galilée a remarqué en prenant son pouls.",
+     "latex": "T = \\frac{2\\pi}{\\omega} = 2\\pi\\sqrt{\\frac{m}{k}}",
+     "figure": "isochron",
+     "figCaption": "Un chemin plus long est parcouru plus vite, un chemin court plus lentement ; le temps est le même."
+    },
+    {
+     "text": "Maintenant, l'identification cruciale. Prenons un point qui tourne uniformément sur un cercle de rayon $A$ avec une vitesse angulaire $\\omega$. Sa projection sur un axe est exactement $A\\cos\\omega t$. Une oscillation harmonique est une rotation uniforme vue de côté. La phase est l'angle sur la roue invisible.",
+     "latex": "x_{\\text{osc}}(t) = A\\cos\\omega t = \\text{projection de la rotation du rayon } A",
+     "figure": "shadow",
+     "figCaption": "L'ombre d'un point sur une roue en rotation se déplace exactement comme la masse sur le ressort."
+    },
+    {
+     "text": "Vérifions l'énergie. L'énergie cinétique et l'énergie potentielle se transfèrent mutuellement : aux points extrêmes, toute l'énergie est dans le ressort ; au centre, toute dans le mouvement. La somme est constante, comme il se doit selon le principe de conservation.",
+     "latex": "E = \\frac{mv^{2}}{2} + \\frac{kx^{2}}{2} = \\frac{kA^{2}}{2} = \\text{const}",
+     "figure": "energyswap",
+     "figCaption": "L'énergie ne se perd pas, elle se transfère entre le mouvement et la déformation deux fois par période."
+    },
+    {
+     "text": "Et la dernière étape — pourquoi tout cela est universel. Tout puits de potentiel au voisinage de son minimum se développe en série de Taylor : la constante n'a pas d'effet, le terme linéaire est nul au minimum, et le premier terme qui compte est quadratique. Or une énergie quadratique, c'est exactement un ressort. Les petites oscillations de tout système sont harmoniques non par coïncidence, mais par théorème.",
+     "latex": "U(x) \\approx U_0 + \\frac{1}{2}U''(x_0)\\,x^{2} \\;\\;\\Longrightarrow\\;\\; k_{\\text{eff}} = U''(x_0)",
+     "figure": "anywell",
+     "figCaption": "Le fond de tout puits lisse est une parabole. C'est pourquoi un ressort est caché dans chaque système stable."
+    }
+   ],
+   "plate": "\\omega = \\sqrt{\\dfrac{k}{m}} \\qquad T = 2\\pi\\sqrt{\\dfrac{m}{k}}",
+   "plateCap": "La fréquence est dictée par le système lui-même — la masse et la raideur. L'amplitude, par celui qui a donné l'impulsion. La séparation de ces rôles rend l'oscillateur prévisible.",
+   "note": "La formule est valable pour les petites oscillations. Pour un pendule réel, à de grands angles, la période commence à dépendre de l'amplitude — la loi de Hooke n'est qu'une approximation près du point le plus bas. La limite de « petitesse » est propre à chaque système : un ressort est honnêtement linéaire jusqu'à environ dix pour cent de déformation, un pendule jusqu'à des angles d'une dizaine de degrés, et une liaison interatomique jusqu'à des fractions d'angström. Au-delà commence la physique non linéaire, où le sinus cesse d'être la réponse."
   },
-  {
-   "id": "2607.13930",
-   "why": "совпадение по теме: pulsar"
+  "math": {
+   "title": "Les mathématiques nécessaires ici",
+   "items": [
+    {
+     "what": "Ce qu'est une équation différentielle",
+     "why": "Une équation ordinaire demande « quel nombre convient », une équation différentielle demande « quelle fonction convient ». L'écriture $\\ddot{x} = -\\omega^2 x$ signifie : trouvez une dépendance de la coordonnée en fonction du temps telle que sa dérivée seconde soit à chaque instant égale à la fonction elle-même avec un signe moins. Presque toute la physique fondamentale — de Newton à Schrödinger — est écrite dans ce langage : les lois ne définissent pas des trajectoires, mais des règles auxquelles les trajectoires obéissent.",
+     "latex": "\\ddot{x} + \\omega^{2}x = 0"
+    },
+    {
+     "what": "Les dérivées du sinus et du cosinus — en boucle",
+     "why": "La dérivation décale l'harmonique d'un quart de période : le sinus devient cosinus, le cosinus devient moins sinus, et après quatre étapes le cycle se referme. Avec l'image de la rotation, c'est évident : la vitesse d'un point sur un cercle est perpendiculaire au rayon, donc en avance de 90 degrés. La dérivée est une rotation de phase.",
+     "latex": "\\sin \\to \\cos \\to -\\sin \\to -\\cos \\to \\sin"
+    },
+    {
+     "what": "Le développement de Taylor au voisinage d'un minimum",
+     "why": "Toute fonction lisse peut être approchée par un polynôme au voisinage d'un point. Au minimum, la dérivée première est nulle, donc le premier terme significatif est quadratique. C'est l'une des approximations les plus utilisées en physique : elle transforme un puits arbitraire et complexe en parabole, et tout système stable en oscillateur.",
+     "latex": "U(x_0 + \\delta) \\approx U(x_0) + \\tfrac{1}{2}U''(x_0)\\,\\delta^{2}"
+    }
+   ]
+  },
+  "example": {
+   "title": "Exemple avec des nombres",
+   "lead": "Vérifions la formule de la période sur une suspension de voiture — un oscillateur sur lequel vous roulez tous les jours.",
+   "given": "Sur un ressort de suspension, on a une masse de $400$ kg. La raideur du ressort est $k = 25\\,000$ N/m. Trouver la période et la fréquence des oscillations propres de la carrosserie.",
+   "law": "$T = 2\\pi\\sqrt{m/k}$",
+   "solution": [
+    {
+     "text": "On calcule le rapport sous la racine.",
+     "latex": "\\frac{m}{k} = \\frac{400}{25\\,000} = 0{,}016\\ \\text{s}^2"
+    },
+    {
+     "text": "Sa racine carrée.",
+     "latex": "\\sqrt{0{,}016} \\approx 0{,}126\\ \\text{s}"
+    },
+    {
+     "text": "On multiplie par $2\\pi$.",
+     "latex": "T = 6{,}28 \\cdot 0{,}126 \\approx 0{,}8\\ \\text{s}"
+    }
+   ],
+   "answer": "La période est d'environ $0{,}8$ s, la fréquence est d'environ $1{,}25$ Hz",
+   "check": "C'est plausible : en passant sur une bosse, la voiture se balance environ une fois par seconde — c'est facile à vérifier en appuyant sur l'aile et en la relâchant. La fréquence d'environ un hertz n'est pas un hasard : elle est proche du rythme de la marche, et le corps la supporte le plus confortablement. Des ressorts plus raides donnent des secousses, des ressorts plus souples donnent le mal des transports."
+  },
+  "constants": {
+   "title": "Grandeurs de ce paragraphe",
+   "lead": "Ces trois grandeurs sont ici des propriétés d'un système particulier, et non des constantes universelles. Il est d'autant plus important de comprendre qui contrôle quoi.",
+   "items": [
+    {
+     "sym": "k",
+     "latex": "k",
+     "name": "Raideur",
+     "value": "10–100 (expanseur) · 20 000–60 000 (suspension)",
+     "unit": "N / m",
+     "why": "Force par unité de déformation. La dimension se lit comme une définition : des newtons par mètre. Pour des ressorts en série, les raideurs s'additionnent comme les résistances en parallèle — par leurs inverses.",
+     "mnemo": "Un ressort raide — grand k — oscillations rapides. k est au numérateur sous la racine de la fréquence."
+    },
+    {
+     "sym": "ω",
+     "latex": "\\omega",
+     "name": "Fréquence propre",
+     "value": "ω = √(k/m)",
+     "unit": "rad / s",
+     "why": "La fréquence à laquelle le système oscille, livré à lui-même. Elle ne dépend que de la constitution du système. Dans le paragraphe suivant, elle deviendra le personnage principal : c'est sur elle qu'une force extérieure doit tomber pour provoquer la résonance.",
+     "mnemo": "La même lettre que la vitesse angulaire de rotation, parce que c'est littéralement elle, pour une roue invisible."
+    },
+    {
+     "sym": "T",
+     "latex": "T",
+     "name": "Période des oscillations",
+     "value": "T = 2π√(m/k)",
+     "unit": "s",
+     "why": "Le temps d'un cycle complet. La masse est sous la racine au numérateur : une masse lourde oscille lentement. L'amplitude n'apparaît pas dans la formule — c'est en cela que consiste l'isochronisme.",
+     "mnemo": "Vérification dimensionnelle : racine de kg/(N/m) = racine de s² = secondes. Ça colle."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "Une force de rappel proportionnelle au déplacement engendre une oscillation de fréquence √(k/m), indépendante de l'amplitude. L'oscillation elle-même est la projection d'une rotation uniforme, et le ressort est caché dans tout système stable, car le fond de tout puits lisse est une parabole.",
+   "keyIdeas": [
+    {
+     "icon": "scale",
+     "title": "Le moins décide",
+     "text": "F = −kx : la force s'oppose au déplacement. Sans le moins, ce serait une explosion ; avec le moins, un retour éternel."
+    },
+    {
+     "icon": "clock",
+     "title": "Fréquence propre, amplitude étrangère",
+     "text": "ω est fixé par le système (k et m), l'amplitude par l'impulsion initiale. Ils sont indépendants."
+    },
+    {
+     "icon": "sigma",
+     "title": "Ombre d'une roue",
+     "text": "L'oscillation est la projection d'une rotation. La phase est un angle sur une roue invisible."
+    },
+    {
+     "icon": "formula",
+     "title": "Universalité",
+     "text": "Près d'un minimum, toute énergie est quadratique, donc les petites oscillations sont toujours harmoniques."
+    }
+   ],
+   "where": [
+    "Suspension de voiture : oscillateur à environ un hertz, réglé sur le rythme de la marche",
+    "Montres à quartz : le cristal oscille 32 768 fois par seconde, divisant le temps avec une précision de quelques secondes par mois",
+    "Molécules — des masses sur des ressorts de liaison ; leurs fréquences sont visibles dans les spectres infrarouges",
+    "Haut-parleur et microphone : la membrane oscillante convertit le courant en son et vice versa"
+   ],
+   "watchOut": "La fréquence ne dépend pas de l'amplitude, mais l'énergie en dépend, et de façon quadratique : E = kA²/2. Si on pousse deux fois plus fort, l'énergie est quatre fois plus grande, mais la période est la même. Confondre « plus fort » et « plus vite » est une erreur typique dans ce sujet."
+  },
+  "quiz": [
+   {
+    "id": "h1",
+    "type": "mcq",
+    "q": "On a balancé la masse accrochée au ressort deux fois plus fort — l'amplitude est passée de 2 à 4 cm. Qu'est-il arrivé à la période ?",
+    "options": [
+     "Elle a doublé : le chemin est plus long",
+     "Elle n'a pas changé : la période ne dépend que de la masse et de la raideur",
+     "Elle a diminué de moitié : la force est plus grande",
+     "Elle a augmenté d'un facteur racine de deux"
+    ],
+    "answer": 1,
+    "why": "Dans la formule T = 2π√(m/k), il n'y a pas d'amplitude. Avec une plus grande amplitude, le corps parcourt un plus grand chemin, mais il se déplace aussi plus vite — les effets se compensent exactement. C'est l'isochronisme, découvert par Galilée.",
+    "hint": "Écrivez la formule de la période et regardez simplement quelles lettres y figurent. Y a-t-il l'amplitude ?"
+   },
+   {
+    "id": "h2",
+    "type": "mcq",
+    "q": "Pourquoi y a-t-il un signe moins dans la loi de Hooke ?",
+    "options": [
+     "C'est une convention sur l'orientation de l'axe, cela ne change pas la physique",
+     "Il montre que la force est dirigée contre le déplacement — c'est précisément ce qui fait de la masse-ressort un oscillateur",
+     "Parce que le ressort se comprime toujours",
+     "Pour que l'énergie soit positive"
+    ],
+    "answer": 1,
+    "why": "Le moins signifie le caractère de rappel de la force : on écarte, elle ramène. Une force positive, croissant avec le déplacement, accélérerait le corps loin de l'équilibre sans s'arrêter — on aurait une instabilité, pas une oscillation.",
+    "hint": "Remplacez mentalement le moins par un plus et suivez le destin du corps légèrement écarté de l'équilibre. Reviendra-t-il ?"
+   },
+   {
+    "id": "h3",
+    "type": "free",
+    "q": "En vos propres mots : en quel sens l'oscillation de la masse sur le ressort est-elle une rotation ? Qu'est-ce qui joue le rôle de l'angle ?",
+    "keywords": [
+     "projection",
+     "ombre",
+     "roue",
+     "cercle",
+     "phase",
+     "angle",
+     "de côté"
+    ],
+    "needed": 1,
+    "why": "L'oscillation harmonique est la projection d'une rotation uniforme sur une droite : l'ombre d'un point tournant sur un cercle de rayon A se déplace exactement comme la masse. Le rôle de l'angle est joué par la phase ωt + φ₀ — la position sur la roue invisible.",
+    "hint": "Imaginez un point sur la jante d'une roue qui tourne et son ombre sur un mur avec un éclairage latéral. Comment se déplace l'ombre ? Et qu'y a-t-il sous le cosinus dans la formule de l'oscillation ?"
+   },
+   {
+    "id": "h4",
+    "type": "estimate",
+    "q": "Une masse de 1 kg est suspendue à un ressort de raideur 100 N/m. Estimez la période des oscillations en secondes.",
+    "answer": 0.63,
+    "unit": "s",
+    "why": "T = 2π√(m/k) = 6,28·√(1/100) = 6,28·0,1 ≈ 0,63 s. De tête : la racine carrée d'un centième est un dixième, il reste à multiplier par un peu plus de six.",
+    "hint": "Le rapport m/k est ici un nombre rond, dont on prend la racine instantanément. Il reste à multiplier par 2π ≈ 6,3.",
+    "tolFactor": 1.5
+   }
+  ],
+  "curiosities": {
+   "title": "Curiosités : à tester soi-même",
+   "lead": "Un élastique de bureau remplace le ressort, et l'isochronisme se vérifie avec un trousseau de clés.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "expérience de cuisine",
+     "h": "L'élastique comme dynamomètre",
+     "text": "Suspendez un élastique de bureau et accrochez-y des objets identiques — par exemple des sachets de thé ou des pièces dans un petit sac. Après chaque ajout, mesurez la longueur avec une règle. Tracez la courbe de l'allongement en fonction du nombre de charges.",
+     "answer": "Au début, les points s'alignent sur une droite : l'allongement est proportionnel à la charge, c'est la loi de Hooke, et la pente de la droite donne la raideur $k$. Mais à partir d'une certaine charge, la droite s'incurve — l'élastique s'étire de plus en plus facilement. Vous avez trouvé la limite de validité par vous-même. Au-delà, le matériau ne revient plus à sa longueur initiale : retirez la charge et constatez que l'élastique est resté plus long qu'avant."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoxe",
+     "h": "La période ne dépend pas de l'amplitude",
+     "text": "Balancez un trousseau de clés au bout d'une ficelle, d'abord légèrement, puis fortement. Chronométrez vingt oscillations dans les deux cas. L'amplitude diffère de plusieurs fois, mais la période est presque la même. Un plus grand chemin ne devrait-il pas prendre plus de temps ?",
+     "answer": "Si, mais avec une plus grande amplitude, la vitesse est proportionnellement plus grande — la force de rappel augmente avec le déplacement. Ces deux effets se compensent exactement, et la période s'avère indépendante de l'amplitude. Cette propriété s'appelle l'isochronisme, et Galilée l'a remarquée en observant le balancement d'une lampe dans la cathédrale de Pise. C'est sur elle que reposent toutes les horloges mécaniques. Précision : pour un pendule, l'isochronisme n'est valable que pour les petits angles — à soixante degrés d'amplitude, la période est déjà sept pour cent plus grande."
+    },
+    {
+     "icon": "fact",
+     "kind": "fait amusant",
+     "h": "Le ressort spiral a résolu le problème de la longitude",
+     "text": "Tant que les horloges utilisaient un pendule, elles ne fonctionnaient qu'à terre : le roulis perturbait la marche, et un navire ne pouvait pas déterminer sa longitude — pour cela, il faut connaître précisément l'heure du port de départ. Le remplacement du pendule par un balancier avec un ressort spiral, auquel Hooke a contribué, a rendu la marche indépendante de l'inclinaison et des secousses. Le problème a été définitivement résolu par John Harrison, dont le chronomètre de marine, lors d'un voyage de 81 jours en 1761, n'a dérivé que de cinq secondes. Une oscillation à période constante s'est littéralement avérée être un instrument de navigation."
+    },
+    {
+     "icon": "mnemo",
+     "kind": "mnémonique",
+     "h": "Le signe moins dans la loi de Hooke, c'est tout l'intérêt",
+     "text": "Dans l'expression $F=-kx$, l'essentiel n'est pas $k$, mais le signe : la force est toujours opposée au déplacement, c'est-à-dire qu'elle ramène le corps vers la position d'équilibre. C'est à cause de ce signe moins que la solution est oscillante et non divergente. La fréquence $\\omega=\\sqrt{k/m}$ se lit ainsi : plus le ressort est raide, plus les oscillations sont rapides ; plus la masse est lourde, plus elles sont lentes. Quadrupler la masse divise la fréquence par deux, à cause de la racine carrée."
+    },
+    {
+     "icon": "estimate",
+     "kind": "estimation",
+     "h": "La période à vue d'œil",
+     "text": "Une masse d'un kilogramme sur un ressort de raideur 40 newtons par mètre donne $\\omega=\\sqrt{40/1}\\approx6{,}3$ radians par seconde, soit une période d'environ une seconde. Vérifier la raideur est simple : si sous une masse d'un kilogramme le ressort s'allonge d'un quart de mètre, alors $k=mg/x \\approx 10/0{,}25=40$. Ainsi, avec une seule mesure à la règle, on prédit la période des oscillations."
+    },
+    {
+     "icon": "edge",
+     "kind": "limite de validité",
+     "h": "La linéarité s'arrête",
+     "text": "La loi de Hooke est une première approximation, valable pour les petites déformations. Au-delà de la limite d'élasticité, le matériau se déforme plastiquement et ne reprend pas sa forme initiale, puis il se rompt. D'un autre côté, l'approximation est étonnamment universelle : presque tout puits d'énergie potentielle ressemble à une parabole près de son minimum, c'est pourquoi les vibrations des atomes dans un cristal et les liaisons moléculaires sont décrites par la même formule — tant que l'amplitude est petite."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Ce qui repose sur l'oscillateur",
+   "lead": "L'oscillation harmonique est le modèle le plus réutilisé de la physique : il apparaît partout où il y a un retour à l'équilibre.",
+   "items": [
+    {
+     "h": "Mesure du temps",
+     "text": "Des horloges à pendule aux horloges à quartz : le cristal de quartz est un oscillateur, mais ses oscillations sont électriques et se produisent à la fréquence de 32 768 hertz. En divisant cette fréquence par deux quinze fois, on obtient exactement une seconde."
+    },
+    {
+     "h": "Suspension et protection contre les vibrations",
+     "text": "Un ressort avec un amortisseur est un oscillateur amorti. Le défi du concepteur est de choisir l'amortissement pour que l'oscillation s'éteigne en une période, sinon la voiture sera secouée, et un amortissement trop fort rendra la conduite cahoteuse."
+    },
+    {
+     "h": "Sismographes",
+     "text": "L'instrument enregistre le déplacement d'une masse sur un ressort par rapport au boîtier. On fait en sorte que la fréquence propre soit nettement inférieure à la fréquence des ondes sismiques, afin que la masse reste presque immobile pendant que le sol bouge sous elle."
+    },
+    {
+     "h": "Instruments de musique",
+     "text": "La hauteur du son d'une corde est déterminée par la tension et la masse — par la même formule que la fréquence d'une masse sur un ressort. Accorder un instrument, c'est ajuster $\\sqrt{k/m}$ à la main."
+    },
+    {
+     "h": "Capacité thermique des solides",
+     "text": "Un atome dans un cristal se trouve dans un puits dont le fond est parabolique — c'est donc un oscillateur. C'est de cette image qu'Einstein et Debye ont déduit pourquoi la capacité thermique diminue lors du refroidissement : les oscillations sont quantifiées, et à basse température, il n'y a tout simplement pas assez d'énergie pour les exciter."
+    }
+   ]
   }
- ]
+ }
 }

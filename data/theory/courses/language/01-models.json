@@ -14,37 +14,28 @@
   ],
   "examples_from_articles": [
    {
-    "id": "2608.14455v1",
-    "date": "2026-08-14",
+    "id": "2603.23233",
+    "date": "2026-03-24",
     "title": {
-     "ru": "Погода против климата: как отличить шум от сигнала",
-     "en": "Weather vs. Climate: How to Tell Noise from Signal",
-     "es": "El tiempo frente al clima: cómo distinguir el ruido de la señal",
-     "ar": "الطقس مقابل المناخ: كيف نميز الضجيج عن الإشارة"
+     "ru": "Парадокс заключённого: как классическая вероятность спотыкается о сомнение",
+     "en": "The Prisoner's Paradox: The Old Bicycle of Classical Probability",
+     "es": "La paradoja del prisionero: la vieja bicicleta de la probabilidad clásica",
+     "ar": "مفارقة السجين: الدراجة القديمة للاحتمالية الكلاسيكية",
+     "fr": "Le paradoxe du prisonnier : le vieux vélo de la probabilité classique"
     },
-    "why": "model_limits, signal_and_noise"
+    "score": 0.617
    },
    {
-    "id": "2607.19912",
-    "date": "2026-07-01",
+    "id": "2606.15905",
+    "date": "2026-06-14",
     "title": {
-     "ru": "Цифровая тень трактора: точная копия в движении",
-     "en": "A Tractor’s Digital Shadow: An Exact Copy in Motion",
-     "es": "La sombra digital del tractor: una copia exacta en movimiento",
-     "ar": "الظل الرقمي للجرار: نسخة طبق الأصل في حركة مستمرة"
+     "ru": "Шесть правил для живой системы",
+     "en": "Six Rules for a Living System",
+     "es": "Seis reglas para un sistema vivo",
+     "ar": "ست قواعد لنظام حي",
+     "fr": "Six règles pour un système vivant"
     },
-    "why": "model_and_reality, digital_twin"
-   },
-   {
-    "id": "2607.11344",
-    "date": "2026-07-13",
-    "title": {
-     "ru": "Укрощение хаоса: как алгоритмы предвидят будущее",
-     "en": "Taming Chaos: How Algorithms Predict the Future",
-     "es": "Domando el caos: cómo los algoritmos predicen el futuro",
-     "ar": "ترويض الفوضى: كيف تستشرف الخوارزميات المستقبل"
-    },
-    "why": "model_limits, predictability"
+    "score": 0.601
    }
   ]
  },
@@ -1512,7 +1503,369 @@
    ]
   }
  },
- "laws": [
-  "hookes_law"
- ]
+ "fr": {
+  "title": "Le modèle et ses limites",
+  "subtitle": "Paragraphe 1 · Pourquoi le point matériel n'est pas une simplification, mais un outil",
+  "intro": [
+   "Imaginez qu'on vous demande de calculer en combien de secondes une pierre atteindra le sol depuis une hauteur de dix mètres. Vous savez presque certainement quoi faire. Maintenant, remarquez ce que vous n'avez pas demandé : de quoi est faite la pierre, quelle est sa forme, tourne-t-elle, quelle est l'humidité aujourd'hui, où exactement sur Terre se déroule l'expérience.",
+   "Vous avez écarté tout cela non par négligence, mais tout à fait à juste titre. Vous avez construit un modèle : un corps sans dimensions, sans forme et sans structure interne, soumis à une seule force constante. Un tel objet n'existe pas dans la nature. Mais la réponse sera correcte à quelques pour cent près — et c'est bien plus utile qu'une réponse exacte que personne ne peut obtenir.",
+   "Tout ce paragraphe est consacré à une idée : la physique ne travaille pas directement avec la nature, mais avec des modèles de la nature. Et la compétence la plus précieuse n'est pas de résoudre un problème dans un modèle, mais de voir où le modèle s'arrête."
+  ],
+  "standNote": "Sur le stand — mouvement d'un corps avec accélération constante. Remarquez ce qui n'y figure pas : le corps n'a ni taille, ni rotation, ni résistance de l'air. C'est exactement un point matériel. Faites varier la vitesse initiale et l'accélération et observez le graphique : la parabole est parfaitement lisse. Dans une expérience réelle, elle ne le sera pas — et nous verrons plus loin à quel point.",
+  "formula": {
+   "name": "Principe de modélisation",
+   "latex": "\\text{Phénomène} \\;\\longrightarrow\\; \\text{modèle} \\;\\longrightarrow\\; \\text{prédiction} \\;\\longrightarrow\\; \\text{expérience}",
+   "alsoKnown": "La méthode scientifique dans sa forme physique",
+   "authors": [
+    {
+     "who": "Galilée",
+     "year": "1638",
+     "what": "le premier à avoir consciemment écarté l'inessentiel : en étudiant la chute, il a exclu la résistance de l'air, la forme et la composition du corps. Cela a été considéré comme une falsification — car une plume tombe différemment d'une pierre. Il a répondu qu'il fallait d'abord comprendre l'essentiel"
+    },
+    {
+     "who": "Isaac Newton",
+     "year": "1687",
+     "what": "a poussé la méthode à sa limite : les planètes dans ses calculs sont des points, alors que la Terre a un diamètre de 12 700 km. Il a strictement démontré qu'une sphère attire comme un point en son centre — c'est-à-dire qu'il a justifié pourquoi la simplification est légitime ici"
+    },
+    {
+     "who": "Albert Einstein",
+     "year": "1933",
+     "what": "a formulé la limite de la méthode elle-même : la description doit être aussi simple que possible, mais pas plus simple. Un modèle qui a écarté l'essentiel ne simplifie pas le problème, il le remplace"
+    }
+   ],
+   "story": "Galilée avait un opposant dont l'objection mérite d'être rappelée : dans le monde réel, une plume et une pierre tombent différemment, donc la loi est fausse. Le débat ne s'est résolu que cinquante ans après la mort de Galilée, lorsqu'on a appris à faire le vide : dans un tube sans air, la plume et la pièce tombent effectivement de la même manière. En 1971, le commandant d'Apollo 15 a répété l'expérience sur la Lune, où le vide est gratuit — un marteau et une plume de faucon ont touché le sol simultanément. Le modèle s'est avéré non pas une approximation de la vérité, mais une description exacte de la partie du phénomène qu'il prétendait décrire.",
+   "symbols": [
+    {
+     "sym": "modèle",
+     "latex": "M",
+     "what": "description simplifiée d'un phénomène",
+     "unit": "—",
+     "note": "est défini par la liste de ce dont on a négligé : c'est son passeport"
+    },
+    {
+     "sym": "domaine",
+     "latex": "D",
+     "what": "conditions dans lesquelles le modèle est valable",
+     "unit": "—",
+     "note": "sans indication du domaine, le modèle n'a pas de sens : « toujours vrai » n'existe pas"
+    },
+    {
+     "sym": "précision",
+     "latex": "\\varepsilon",
+     "what": "écart entre la prédiction et l'expérience",
+     "unit": "%",
+     "note": "n'est pas une erreur, mais une mesure de la petitesse de ce qui a été négligé"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Comment construire un modèle : analyse d'un cas concret",
+   "lead": "Prenons une pierre qui tombe et suivons chaque décision que nous prenons silencieusement. Ce n'est pas la dérivation d'une formule, mais la dérivation de la formule du problème elle-même – ce qui reste généralement dans les coulisses.",
+   "steps": [
+    {
+     "text": "Première décision : considérer le corps comme un point. C'est légitime lorsque la taille du corps est bien inférieure aux distances en question. Une pierre de 10 cm sur un trajet de 10 m donne une erreur d'environ un pour cent – acceptable. La même pierre, pour décrire son impact sur le sol, ne peut plus être considérée comme un point : là, tout le sens réside dans la déformation, c'est-à-dire dans la taille.",
+     "latex": "\\ell_{\\text{corps}} \\ll L_{\\text{problème}}",
+     "figure": "frame",
+     "figCaption": "Le corps est remplacé par un point lorsque sa propre taille est négligeable à l'échelle considérée."
+    },
+    {
+     "text": "Deuxième décision : considérer la force de gravité comme constante. En réalité, elle diminue avec l'altitude. Évaluons de combien : sur dix mètres, le changement relatif est de deux distances au centre de la Terre, soit environ trois dix-millionièmes. C'est des milliers de fois plus petit que n'importe quelle erreur de mesure – nous négligeons consciemment, pas par ignorance.",
+     "latex": "\\frac{\\Delta g}{g} \\approx \\frac{2h}{R_{\\oplus}} = \\frac{2 \\cdot 10}{6{,}4 \\cdot 10^{6}} \\approx 3 \\cdot 10^{-6}",
+     "figure": "forceprop",
+     "figCaption": "La force de gravité diminue avec l'altitude, mais à l'échelle scolaire, le changement se perd dans le bruit."
+    },
+    {
+     "text": "Troisième décision : négliger la résistance de l'air. Ici, il faut être prudent, car elle croît comme le carré de la vitesse et, à une certaine vitesse, elle devient comparable au poids. Pour un corps dense et compact sur une distance de dix mètres, la correction est de quelques pour cent. Pour une feuille de papier – des centaines. La même négligence est légitime dans un cas et destructrice dans un autre.",
+     "latex": "F_{\\text{résistance}} \\sim \\tfrac{1}{2}\\rho C S v^{2}, \\qquad \\frac{F_{\\text{résistance}}}{mg} \\ll 1 \\;?",
+     "figure": "friction",
+     "figCaption": "La résistance du milieu croît avec le carré de la vitesse – la légitimité de la négligence dépend de la distance sur laquelle le corps a eu le temps d'accélérer."
+    },
+    {
+     "text": "Ce n'est qu'après ces trois décisions explicites que nous avons le droit d'écrire la formule habituelle. Elle ne décrit pas la chute d'une pierre. Elle décrit précisément la chute d'un point matériel dans un champ uniforme sans milieu – et à quel point cela ressemble à une pierre, nous venons de l'évaluer.",
+     "latex": "h = \\frac{gt^{2}}{2}, \\qquad t = \\sqrt{\\frac{2h}{g}} \\approx 1{,}4\\ \\text{s}",
+     "figure": "parabola",
+     "figCaption": "La formule de la chute libre est une affirmation exacte sur le modèle, pas une approximation sur la pierre."
+    },
+    {
+     "text": "L'étape clé, généralement omise : la vérification par rétroaction. Nous avons supposé que la vitesse est faible – maintenant, il faut s'assurer que la solution obtenue ne contredit pas cette hypothèse. La vitesse à la fin de la chute est d'environ 14 m/s, la résistance de l'air pour une pierre à cette vitesse est effectivement faible. Le modèle est auto-cohérent. Si on avait obtenu 140 m/s, il aurait fallu revenir en arrière et tout refaire.",
+     "latex": "v = gt \\approx 14\\ \\text{m/s} \\;\\Rightarrow\\; \\text{hypothèse confirmée}",
+     "figure": "result",
+     "figCaption": "La solution doit vérifier ses propres hypothèses – sinon le modèle peut s'avérer intérieurement contradictoire."
+    },
+    {
+     "text": "Et enfin : chaque modèle a un successeur. Le point matériel ne résiste pas à la rotation – apparaît le solide rigide avec son moment d'inertie. La mécanique newtonienne ne résiste pas aux vitesses proches de celle de la lumière – apparaît la théorie de la relativité. Aucun des anciens modèles n'est pour autant aboli : il reste valide dans son domaine, et la nouvelle théorie doit s'y réduire.",
+     "latex": "v \\ll c \\;\\Longrightarrow\\; \\text{relativité restreinte} \\to \\text{mécanique newtonienne}",
+     "figure": "curves",
+     "figCaption": "La nouvelle théorie n'abolit pas l'ancienne, mais la contient comme cas limite. Cette exigence est appelée principe de correspondance."
+    }
+   ],
+   "plate": "Un modèle, c'est le phénomène plus la liste de ce dont on a négligé, plus une estimation de la légitimité de cette négligence. Sans la troisième partie, le modèle devient une conjecture.",
+   "note": "D'où une règle pratique pour tout le cours : dès que vous rencontrez une formule, demandez-vous immédiatement ce qu'elle suppose. Le gaz parfait – que les molécules ne s'attirent pas. La loi de Hooke – que la déformation est petite. La formule du rendement de Carnot – que le processus est infiniment lent. La réponse à cette question est généralement le contenu du sujet."
+  },
+  "math": {
+   "title": "Les mathématiques nécessaires ici",
+   "lead": "Tout le paragraphe repose sur une seule opération : diviser ce qui est négligé par ce qui est conservé et observer l'ordre de grandeur du quotient.",
+   "items": [
+    {
+     "what": "Négliger, c'est diviser",
+     "why": "Dans la deuxième étape du raisonnement, on ne se demande pas si la correction à la force de gravité est petite en elle-même. On la divise par la force de gravité elle-même et on obtient $3\\cdot10^{-6}$. Dans la troisième étape, on divise la force de traînée par le poids, dans l'exemple de la bille, $0{,}02$ N par $0{,}33$ N. À chaque fois, le résultat est un nombre sans unité, et ce n'est pas un hasard mais une nécessité : « petit » n'a de sens que par rapport à une grandeur de même dimension. L'affirmation « la résistance de l'air est faible » est vide en soi : une force d'un centième de newton est négligeable pour une pierre et décisive pour un grain de poussière. D'où la règle pour tout le cours : le critère de validité d'un modèle s'écrit comme un rapport, et non comme une différence, et se compare à l'unité.",
+     "latex": "\\frac{\\Delta g}{g} \\approx 3\\cdot 10^{-6} \\ll 1, \\qquad \\frac{F_{\\text{traînée}}}{mg} \\approx 0{,}06 \\ll 1",
+     "kit": "dimension"
+    },
+    {
+     "what": "D'où vient le facteur 2 dans l'estimation",
+     "why": "L'expression exacte de la force de gravité à une altitude donnée est $g(h) = g_0 R^2/(R+h)^2$, et il n'y a aucun facteur 2 devant $h/R$. Il apparaît lors de la linéarisation : pour $x$ petit, toute puissance est remplacée par une droite, $(1+x)^n \\approx 1 + nx$, et ici $x = h/R$ et $n = -2$. L'exposant est devenu le facteur – celui-là même qui apparaît dans la deuxième étape du raisonnement. Vérifiez avec vos doigts : $1{,}02^3$ donne 1,0612 sur une calculatrice, l'approximation donne 1,06, l'écart est au quatrième chiffre. L'utilité de la méthode n'est pas d'économiser de l'arithmétique. L'exposant indique directement de combien de fois la réponse est plus sensible à la petite quantité que celle-ci elle-même – c'est-à-dire qu'il indique à l'avance ce qui cassera le modèle lorsqu'il cessera d'être petit.",
+     "latex": "(1+x)^{n} \\approx 1 + nx \\;\\; (|x| \\ll 1) \\;\\Longrightarrow\\; \\frac{g(h)}{g_0} = \\Big(1+\\frac{h}{R}\\Big)^{-2} \\approx 1 - \\frac{2h}{R}",
+     "kit": "taylor"
+    },
+    {
+     "what": "Un ou deux chiffres significatifs et pourquoi cela suffit",
+     "why": "Dans l'exemple, aucun nombre n'est donné avec plus de deux chiffres significatifs, et beaucoup n'en ont qu'un : le coefficient de forme $0{,}5$, la surface $3\\cdot10^{-4}$ m², la force de traînée $0{,}02$ N. Deux chiffres pour la masse volumique de l'air $1{,}2$ kg/m³, pour celle de l'acier $7800$ kg/m³ et pour le poids de la bille $0{,}33$ N – plus de précision n'était nécessaire nulle part. Ce n'est pas de la négligence, mais une adéquation à la question. Il faut répondre « oui ou non », et la réponse est 6 % – loin de 60 % et de 0,6 %. Tant que le rapport est éloigné de l'unité d'au moins un ordre de grandeur, affiner les mantisses ne changera pas la conclusion ; il vaut la peine de calculer sérieusement seulement lorsque l'estimation amène dangereusement près de l'unité. Pour une feuille de papier de même masse, la surface est des centaines de fois plus grande, le rapport se déplace de deux ordres de grandeur et dépasse l'unité – la conclusion devient opposée, et pour cela encore, aucun chiffre précis n'a été nécessaire.",
+     "latex": "\\frac{F_{\\text{traînée}}}{mg} \\sim 10^{-2}\\ (\\text{bille}) \\qquad \\frac{F_{\\text{traînée}}}{mg} \\ge 1\\ (\\text{feuille})",
+     "kit": "order"
+    }
+   ]
+  },
+  "example": {
+   "title": "Exemple chiffré : quand la négligence cesse de fonctionner",
+   "lead": "Le problème ne porte pas sur une formule, mais sur une décision concernant la formule. Il n'y a presque rien à calculer – seul l'ordre des opérations compte.",
+   "given": "Une bille d'acier de diamètre $2$ cm tombe d'une hauteur de $10$ m. Déterminer si le modèle de chute libre est applicable ici – et ce qui changerait pour une feuille de papier de même masse.",
+   "law": "Critère de validité de la négligence : $F_{\\text{traînée}} / mg \\ll 1$, où $F_{\\text{traînée}} \\approx \\tfrac{1}{2}\\rho C S v^{2}$",
+   "solution": [
+    {
+     "text": "Estimons la vitesse en fin de chute – c'est là que la traînée est maximale, et si on doit vérifier, c'est au pire endroit.",
+     "latex": "v = \\sqrt{2gh} = \\sqrt{2 \\cdot 10 \\cdot 10} \\approx 14\\ \\text{m/s}"
+    },
+    {
+     "text": "La section de la bille et les paramètres de l'air. Le coefficient de forme pour une sphère est proche de la moitié.",
+     "latex": "S = \\pi r^{2} \\approx 3 \\cdot 10^{-4}\\ \\text{m}^{2}, \\quad \\rho \\approx 1{,}2\\ \\text{kg/m}^3, \\quad C \\approx 0{,}5"
+    },
+    {
+     "text": "La force de traînée à cette vitesse.",
+     "latex": "F \\approx \\tfrac{1}{2} \\cdot 0{,}5 \\cdot 1{,}2 \\cdot 3\\cdot 10^{-4} \\cdot 14^{2} \\approx 0{,}02\\ \\text{N}"
+    },
+    {
+     "text": "Le poids de la bille : l'acier a une masse volumique de $7800$ kg/m³ et un volume d'environ $4 \\cdot 10^{-6}$ m³.",
+     "latex": "m \\approx 0{,}033\\ \\text{kg}, \\qquad mg \\approx 0{,}33\\ \\text{N}"
+    },
+    {
+     "text": "On compare – et on obtient la réponse à la question initiale.",
+     "latex": "\\frac{F_{\\text{traînée}}}{mg} \\approx \\frac{0{,}02}{0{,}33} \\approx 6\\ \\%"
+    }
+   ],
+   "answer": "Pour la bille, le modèle est valable : l'erreur est de l'ordre de quelques pour cent. Pour une feuille de papier de même masse, la surface est des centaines de fois plus grande, le rapport dépassera l'unité bien avant la fin de la chute – là, le modèle est inapplicable en principe.",
+   "check": "Vérification par le bon sens : une feuille de papier, en tombant, atteint presque immédiatement une vitesse constante et commence à planer. Il n'y a pas de parabole. Ce qui est remarquable, c'est que le modèle nous a prévenus de cela lui-même, avant même l'expérience – par une simple division sur un bout de papier. C'est précisément pour cela qu'on l'apprécie."
+  },
+  "constants": {
+   "title": "Valeurs de ce paragraphe",
+   "lead": "Ici, ce ne sont pas les nombres eux-mêmes qui comptent, mais le fait que chacun d'eux participe à l'estimation — nous divisons l'un par l'autre et décidons si la négligence est légitime.",
+   "items": [
+    {
+     "sym": "g",
+     "latex": "g",
+     "dictKey": "g",
+     "name": "Accélération de la pesanteur",
+     "value": "9,81",
+     "unit": "m / s²",
+     "why": "Identique pour tous les corps, si l'on néglige le milieu. C'est précisément cette affirmation de Galilée qui fut le premier modèle consciemment construit en physique.",
+     "mnemo": "Dans les estimations, on prend 10 — une erreur de 2 %, mais cela se divise de tête."
+    },
+    {
+     "sym": "R",
+     "latex": "R_{\\oplus}",
+     "name": "Rayon de la Terre",
+     "value": "6,4 · 10⁶",
+     "unit": "m",
+     "why": "Nécessaire non pas en soi, mais pour estimer à quel point la gravité est constante : le rapport entre la hauteur de montée et ce nombre est précisément la mesure de la non-constance.",
+     "mnemo": "La circonférence de la Terre est d'environ 40 000 km — le mètre a d'ailleurs été défini comme un quarante-millionième de cette longueur. On obtient le rayon en divisant par 2π."
+    },
+    {
+     "sym": "rho",
+     "latex": "\\rho_{\\text{air}}",
+     "name": "Masse volumique de l'air",
+     "value": "1,2",
+     "unit": "kg / m³",
+     "why": "Intervient dans la force de traînée. C'est précisément cette valeur qui détermine si la négligence du milieu est une correction de quelques pour cent ou une erreur d'un facteur plusieurs.",
+     "mnemo": "Environ 800 fois plus léger que l'eau. L'air dans une pièce de 5 × 4 × 3 m pèse environ 70 kg — comme un adulte."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Passeport d'applicabilité : tout le cours sur une page",
+   "lead": "Il est utile de voir immédiatement que ce paragraphe n'est pas une introduction, mais un outil de travail. Chaque formule que vous rencontrerez plus loin a exactement le même passeport : ce qui est supposé et quand cela cesse d'être vrai.",
+   "items": [
+    {
+     "h": "Point matériel",
+     "text": "Suppose que la taille du corps est négligeable. Cesse de fonctionner là où la rotation ou la déformation est importante : toupie, impact, roulement. Le successeur est le solide rigide avec son moment d'inertie."
+    },
+    {
+     "h": "Gaz parfait",
+     "text": "Suppose que les molécules ne s'attirent pas et n'ont pas de volume. Cesse de fonctionner près de la condensation et à hautes pressions. Le successeur est l'équation de Van der Waals."
+    },
+    {
+     "h": "Loi de Hooke",
+     "text": "Suppose une petite déformation. Cesse de fonctionner au-delà de la limite d'élasticité : le ressort ne revient plus. Le successeur est la théorie de la plasticité."
+    },
+    {
+     "h": "Cycle de Carnot",
+     "text": "Suppose un processus infiniment lent. Cesse de fonctionner pour toute machine réelle fonctionnant à vitesse finie — c'est pourquoi le rendement maximal est inaccessible en pratique."
+    },
+    {
+     "h": "Mécanique newtonienne",
+     "text": "Suppose $v \\ll c$ et des échelles bien supérieures à la taille atomique. Cesse de fonctionner deux fois : à la vitesse de la lumière et à la taille de l'atome. Les successeurs sont la relativité et la mécanique quantique."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "Appendice pour les curieux : pourquoi les modèles fonctionnent-ils ?",
+   "lead": "Cette section ne fait pas partie de l'évaluation. Elle porte sur une question à laquelle la physique n'a honnêtement pas de réponse.",
+   "blocks": [
+    {
+     "h": "Rien n'obligeait le monde à être compréhensible",
+     "text": "Pour calculer l'orbite d'une planète, il suffit de connaître sa masse. Ni sa composition, ni sa forme, ni son histoire, ni même la pluie qui tombe à sa surface ne sont nécessaires. C'est une circonstance remarquable, et elle n'a rien d'évident : il est facile d'imaginer un univers où chaque détail influence tout, et où aucun modèle ne fonctionne plus d'une seconde."
+    },
+    {
+     "h": "Séparation des échelles",
+     "text": "Cela tient en partie au fait que les phénomènes de tailles différentes s'influencent peu. Un ingénieur de ponts n'a pas besoin de la mécanique quantique, et un physicien de l'atome n'a pas besoin de la composition de la croûte terrestre. Grâce à cela, le savoir peut se construire par étages, sans attendre une théorie finale du tout. Mais pourquoi la séparation des échelles existe-t-elle ? C'est à nouveau une question sans réponse."
+    },
+    {
+     "h": "L'irrésistible efficacité des mathématiques",
+     "text": "Eugene Wigner a écrit un article à ce sujet en 1960, cité sans cesse depuis, et il a admis n'avoir aucune explication. Des structures mathématiques, inventées pour des raisons internes de beauté, se révèlent des décennies plus tard être exactement ce dont la physique a besoin. Ce fut le cas de la géométrie non euclidienne avant la relativité, et de la théorie des groupes avant la physique des particules."
+    },
+    {
+     "h": "Ici, la physique s'arrête",
+     "text": "Nous profitons du fait que le monde se laisse comprendre, mais nous ne savons pas pourquoi il se laisse comprendre. C'est l'un de ces bords où il est plus honnête de dire les choses directement que de les masquer par une belle phrase. Pour en savoir plus, voir la section « Questions ouvertes »."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "La physique ne décrit pas la nature, mais des modèles de la nature ; chaque modèle a un domaine de validité, et celui-ci est plus important que la formule elle-même.",
+   "keyIdeas": [
+    {
+     "icon": "estimate",
+     "title": "Modèle = phénomène +",
+     "text": "Modèle = phénomène + liste de ce qui est négligé + estimation de la légitimité de cette négligence"
+    },
+    {
+     "icon": "ruler",
+     "title": "La négligence est légitime lorsque le rapport",
+     "text": "La négligence est légitime lorsque le rapport entre ce qui est négligé et ce qui est conservé est bien inférieur à un"
+    },
+    {
+     "icon": "sigma",
+     "title": "Toute solution doit vérifier ses propres hypothèses",
+     "text": "Toute solution doit vérifier ses propres hypothèses"
+    },
+    {
+     "icon": "edge",
+     "title": "La nouvelle théorie contient l'ancienne",
+     "text": "La nouvelle théorie contient l'ancienne comme cas limite — principe de correspondance"
+    }
+   ],
+   "where": "Chaque formule du cours : gaz parfait, loi de Hooke, cycle de Carnot, mécanique newtonienne — toutes ont un passeport de validité.",
+   "watchOut": "L'erreur la plus fréquente est d'appliquer une formule en dehors de son domaine de validité et d'obtenir une réponse fausse avec assurance. La formule ne vous préviendra pas : elle calculera tout ce que vous lui donnerez."
+  },
+  "quiz": [
+   {
+    "id": "m1",
+    "type": "mcq",
+    "q": "Pourquoi, lors du calcul de l'orbite de la Terre autour du Soleil, est-il permis de considérer la Terre comme un point ?",
+    "options": [
+     "Parce que c'est plus simple à calculer, et qu'une grande précision n'est pas nécessaire en astronomie",
+     "Parce que sa taille est bien plus petite que le rayon de l'orbite, et de plus Newton a strictement démontré qu'une sphère attire comme un point en son centre",
+     "Parce que la forme d'un corps n'affecte jamais son mouvement",
+     "Parce que la Terre est très petite à l'échelle cosmique"
+    ],
+    "answer": 1,
+    "why": "Deux arguments jouent à la fois : l'argument d'échelle — 12 700 km contre 150 millions — et l'argument strict — le théorème de Newton sur l'attraction d'une sphère. La simplicité du calcul n'est jamais en soi une justification : la commodité ne rend pas un modèle correct.",
+    "hint": "Demandez-vous en quoi une simplification diffère d'une simplification justifiée. Que faut-il prouver pour avoir le droit de remplacer une sphère par un point, et pas seulement pour des raisons de commodité ?"
+   },
+   {
+    "id": "m2",
+    "type": "mcq",
+    "q": "La théorie de la relativité a montré que la mécanique de Newton est incorrecte aux vitesses proches de celle de la lumière. Qu'est-ce que cela signifie pour la mécanique de Newton ?",
+    "options": [
+     "Il faut la considérer comme réfutée et ne plus l'appliquer",
+     "Elle était correcte autrefois, mais les conditions dans l'Univers ont changé depuis",
+     "Elle reste entièrement valable dans son domaine — aux vitesses bien inférieures à celle de la lumière, où la théorie de la relativité se réduit à elle",
+     "Cela signifie que la théorie de la relativité sera elle aussi un jour entièrement incorrecte"
+    ],
+    "answer": 2,
+    "why": "C'est le principe de correspondance : une nouvelle théorie doit se réduire à l'ancienne là où l'ancienne est vérifiée par l'expérience. Les formules de Newton continuent de mettre des fusées en orbite et de calculer des ponts. Étendre le domaine n'est pas réfuter.",
+    "hint": "Pensez à ce qui arriverait à l'ingénierie si chaque nouvelle théorie annulait la précédente. Pourquoi cela ne se produit-il pas ?"
+   },
+   {
+    "id": "m3",
+    "type": "free",
+    "q": "En vos propres mots : comment vérifier s'il est légitime, dans un problème donné, de négliger la résistance de l'air — sans faire d'expérience et sans résoudre entièrement l'équation du mouvement ?",
+    "keywords": [
+     "rapport",
+     "compar",
+     "résistance",
+     "poids",
+     "inférieur",
+     "estim",
+     "ordre",
+     "divis"
+    ],
+    "needed": 2,
+    "why": "Il faut estimer la force de résistance à la vitesse caractéristique du problème et la diviser par le poids. Si le rapport est bien inférieur à un, la négligence est légitime, et vous savez même approximativement quelle erreur vous introduisez. L'estimation prend une minute et se fait avant la résolution, pas après.",
+    "hint": "Négliger quelque chose, c'est affirmer que c'est petit. Petit par rapport à quoi, précisément, dans ce problème ?"
+   },
+   {
+    "id": "m4",
+    "type": "estimate",
+    "q": "De quel pourcentage l'accélération de la pesanteur change-t-elle au sommet de l'Everest (altitude d'environ 9 km) par rapport au niveau de la mer ?",
+    "answer": 0.3,
+    "unit": "%",
+    "why": "La variation relative est égale à 2h/R = 2 · 9000 / 6,4·10⁶ ≈ 0,003, soit environ trois dixièmes de pour cent. C'est moins que la différence entre le pôle et l'équateur due à la rotation de la Terre — et cela explique pourquoi dans les exercices scolaires on considère g comme constant sans hésiter.",
+    "hint": "Utilisez l'approximation du bloc de mathématiques : pour x petit, (1+x)ⁿ ≈ 1 + nx. La force de gravité décroît comme le carré de la distance au centre de la Terre — quel facteur donne l'exposant −2 ?",
+    "tolAbs": 0.15
+   }
+  ],
+  "curiosities": {
+   "title": "Curiosités : à vérifier par vous-même",
+   "lead": "La limite du modèle se voit là où ce qui a été négligé devient soudain l'essentiel.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "expérience de cuisine",
+     "h": "Feuille et boule de papier",
+     "text": "Prenez deux feuilles de papier identiques. Froissez l'une en une boule compacte, laissez l'autre plate. Levez les deux à bout de bras et lâchez-les en même temps.",
+     "answer": "La boule tombe nettement plus vite, bien que les masses soient égales au milligramme près. Cela signifie que ce n'est pas la masse qui compte : c'est la surface qui diffère, et avec elle la résistance de l'air. Le modèle « le corps tombe comme un point » néglige la forme – et pour la boule, c'est acceptable, mais pas pour la feuille. Déchirez maintenant la feuille plate en deux et lâchez la moitié : elle tombe aussi lentement que la feuille entière. La masse a diminué de moitié, le comportement n'a pas changé – c'est le signe que le paramètre déterminant n'est pas encore trouvé."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoxe",
+     "h": "La Terre, douze mille kilomètres de diamètre – un point",
+     "text": "En calculant le mouvement de la Lune, Newton considérait la Terre comme un point où toute sa masse était concentrée. La Terre est pourtant infiniment plus grande que la distance à sa propre surface, et seulement trente fois son diamètre jusqu'à la Lune. Pourquoi cette audace a-t-elle fonctionné ?",
+     "answer": "Ce n'est pas de l'audace, c'est un théorème. Newton a démontré qu'une sphère à densité symétriquement répartie attire les corps extérieurs exactement comme un point de même masse situé en son centre. La démonstration lui a coûté beaucoup d'efforts et, selon une version, a retardé la publication des « Principia » de plusieurs années. L'important pour nous : le modèle « point » ici n'est pas une approximation, mais une affirmation exacte – mais seulement à l'extérieur de la sphère et seulement avec symétrie. À l'intérieur de la Terre, c'est différent : seule la partie de la masse plus proche du centre attire."
+    },
+    {
+     "icon": "fact",
+     "kind": "fait amusant",
+     "h": "Puissance d'une explosion estimée par des bouts de papier",
+     "text": "Le 16 juillet 1945, lors du premier essai nucléaire, Enrico Fermi se tenait à dix kilomètres de l'épicentre. Quand l'onde de choc est arrivée, il a lâché une poignée de petits papiers et a noté de combien ils avaient été déplacés – environ deux mètres et demi. De ce déplacement, il a immédiatement donné la puissance : environ dix kilotonnes. Les mesures précises des instruments, traitées sur des semaines, ont donné environ vingt. Une erreur d'un facteur deux – alors qu'il s'agit d'une grandeur que personne n'avait mesurée avant ce jour. L'estimation ne remplace pas le calcul, mais elle indique l'ordre de grandeur de la réponse que vous devriez obtenir."
+    },
+    {
+     "icon": "mnemo",
+     "kind": "mnémonique",
+     "h": "Un modèle, c'est la liste de ce que vous avez négligé",
+     "text": "Quand vous vous demandez « quel est mon modèle », ne répondez pas « point matériel », mais énumérez : taille, rotation, déformation, résistance de l'air, rotation de la Terre – tout cela a été négligé. Une telle liste montre immédiatement où le modèle se brisera : il suffit de faire une expérience où ce qui a été négligé devient l'essentiel. Le physicien ne se distingue pas par le nombre de formules qu'il connaît, mais par le fait qu'il se souvient de ce qu'il a jeté."
+    },
+    {
+     "icon": "estimate",
+     "kind": "estimation",
+     "h": "Vérification par les dimensions – en cinq secondes",
+     "text": "Vérifiez toute formule obtenue par les unités. Vous cherchez le temps de chute depuis une hauteur $h$ et vous obtenez $t=\\sqrt{2h/g}$ : à droite, des mètres divisés par des mètres par seconde au carré – il reste des secondes au carré, la racine donne des secondes. Ça colle. Si vous vous étiez trompé et aviez écrit $t=\\sqrt{2hg}$, les unités donneraient des mètres par seconde – une vitesse au lieu d'un temps, et l'erreur est visible sans aucun calcul. Les dimensions ne prouvent pas que la formule est correcte, mais elles attraperont une formule incorrecte dans la plupart des cas."
+    },
+    {
+     "icon": "edge",
+     "kind": "limite de validité",
+     "h": "Où le point cesse de fonctionner",
+     "text": "Le point matériel est impuissant là où l'essence du phénomène réside dans la forme et la rotation. Le patineur qui ramène ses bras tourne plus vite – un point ne sait pas faire cela, il n'a pas de moment d'inertie. Le chat qui retombe sur ses pattes sans appui – grâce à la redistribution des parties du corps. La capsule qui entre dans l'atmosphère sous un angle strictement choisi – chaque détail du bouclier thermique compte. Dans ces trois cas, il faut une autre approximation : le solide rigide, le système de corps, le milieu continu."
+    }
+   ]
+  }
+ }
 }

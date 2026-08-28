@@ -1,84 +1,98 @@
 {
-  "id": "motion",
-  "model": "motion",
-  "schema": "b42.model/1",
-  "constants": {
-    "tmax": 8
+ "id": "motion",
+ "model": "motion",
+ "schema": "b42.model/1",
+ "constants": {
+  "tmax": 8
+ },
+ "params": [
+  {
+   "key": "v0",
+   "min": -20,
+   "max": 20,
+   "step": 1,
+   "value": 12,
+   "unit": "unit_ms"
   },
-  "params": [
-    {
-      "key": "v0",
-      "min": -20,
-      "max": 20,
-      "step": 1,
-      "value": 12,
-      "unit": "unit_ms"
-    },
-    {
-      "key": "a",
-      "min": -5,
-      "max": 5,
-      "step": 0.5,
-      "value": -2,
-      "unit": "unit_ms2"
-    }
-  ],
-  "i18n": {
-    "ru": {
-      "v0": "начальная скорость",
-      "a": "ускорение",
-      "unit_ms": "м/с",
-      "unit_ms2": "м/с²",
-      "reset": "сброс",
-      "xTime": "время, с",
-      "yCoord": "координата, м",
-      "speedup": "векторы сонаправлены — тело разгоняется",
-      "slowdown": "векторы противоположны — тело тормозит",
-      "turn": "мгновение разворота: скорость ноль, ускорение осталось",
-      "stopAt": "разворот на",
-      "pathAt": "координата через 8 с"
-    },
-    "en": {
-      "v0": "initial velocity",
-      "a": "acceleration",
-      "unit_ms": "m/s",
-      "unit_ms2": "m/s²",
-      "reset": "reset",
-      "xTime": "time, s",
-      "yCoord": "position, m",
-      "speedup": "vectors aligned — the body speeds up",
-      "slowdown": "vectors opposed — the body slows down",
-      "turn": "the turning instant: velocity zero, acceleration unchanged",
-      "stopAt": "turns at",
-      "pathAt": "position after 8 s"
-    },
-    "es": {
-      "v0": "velocidad inicial",
-      "a": "aceleración",
-      "unit_ms": "m/s",
-      "unit_ms2": "m/s²",
-      "reset": "reiniciar",
-      "xTime": "tiempo, s",
-      "yCoord": "posición, m",
-      "speedup": "vectores alineados — el cuerpo acelera",
-      "slowdown": "vectores opuestos — el cuerpo frena",
-      "turn": "instante de giro: velocidad cero, aceleración sin cambio",
-      "stopAt": "gira en",
-      "pathAt": "posición tras 8 s"
-    },
-    "ar": {
-      "v0": "السرعة الابتدائية",
-      "a": "التسارع",
-      "unit_ms": "m/s",
-      "unit_ms2": "m/s²",
-      "reset": "إعادة ضبط",
-      "xTime": "الزمن، s",
-      "yCoord": "الموضع، m",
-      "speedup": "المتجهات متوافقة — الجسم يسرع",
-      "slowdown": "المتجهات متعاكسة — الجسم يتباطأ",
-      "turn": "لحظة الإنعطاف: السرعة صفر، التسارع ثابت",
-      "stopAt": "ينعطف عند",
-      "pathAt": "الموضع بعد 8 s"
-    }
+  {
+   "key": "a",
+   "min": -5,
+   "max": 5,
+   "step": 0.5,
+   "value": -2,
+   "unit": "unit_ms2"
   }
+ ],
+ "i18n": {
+  "ru": {
+   "v0": "начальная скорость",
+   "a": "ускорение",
+   "unit_ms": "м/с",
+   "unit_ms2": "м/с²",
+   "reset": "сброс",
+   "xTime": "время, с",
+   "yCoord": "координата, м",
+   "speedup": "векторы сонаправлены — тело разгоняется",
+   "slowdown": "векторы противоположны — тело тормозит",
+   "turn": "мгновение разворота: скорость ноль, ускорение осталось",
+   "stopAt": "разворот на",
+   "pathAt": "координата через 8 с"
+  },
+  "en": {
+   "v0": "initial velocity",
+   "a": "acceleration",
+   "unit_ms": "m/s",
+   "unit_ms2": "m/s²",
+   "reset": "reset",
+   "xTime": "time, s",
+   "yCoord": "position, m",
+   "speedup": "vectors aligned — the body speeds up",
+   "slowdown": "vectors opposed — the body slows down",
+   "turn": "the turning instant: velocity zero, acceleration unchanged",
+   "stopAt": "turns at",
+   "pathAt": "position after 8 s"
+  },
+  "es": {
+   "v0": "velocidad inicial",
+   "a": "aceleración",
+   "unit_ms": "m/s",
+   "unit_ms2": "m/s²",
+   "reset": "reiniciar",
+   "xTime": "tiempo, s",
+   "yCoord": "posición, m",
+   "speedup": "vectores alineados — el cuerpo acelera",
+   "slowdown": "vectores opuestos — el cuerpo frena",
+   "turn": "instante de giro: velocidad cero, aceleración sin cambio",
+   "stopAt": "gira en",
+   "pathAt": "posición tras 8 s"
+  },
+  "ar": {
+   "v0": "السرعة الابتدائية",
+   "a": "التسارع",
+   "unit_ms": "m/s",
+   "unit_ms2": "m/s²",
+   "reset": "إعادة ضبط",
+   "xTime": "الزمن، s",
+   "yCoord": "الموضع، m",
+   "speedup": "المتجهات متوافقة — الجسم يسرع",
+   "slowdown": "المتجهات متعاكسة — الجسم يتباطأ",
+   "turn": "لحظة الإنعطاف: السرعة صفر، التسارع ثابت",
+   "stopAt": "ينعطف عند",
+   "pathAt": "الموضع بعد 8 s"
+  },
+  "fr": {
+   "v0": "vitesse initiale",
+   "a": "accélération",
+   "unit_ms": "m/s",
+   "unit_ms2": "m/s²",
+   "reset": "réinitialiser",
+   "xTime": "temps, s",
+   "yCoord": "coordonnée, m",
+   "speedup": "vecteurs dans le même sens — le corps accélère",
+   "slowdown": "vecteurs opposés — le corps freine",
+   "turn": "instant du demi-tour : vitesse nulle, accélération conservée",
+   "stopAt": "demi-tour à",
+   "pathAt": "coordonnée après 8 s"
+  }
+ }
 }

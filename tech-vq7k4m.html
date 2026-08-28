@@ -162,6 +162,19 @@ a { color:var(--cyan); }
   <td class="c-ask">
       <input type="text" class="note" data-item="k3" data-kind="комментарий"
              placeholder="комментарий / блокер"></td>
+</tr><tr data-item="k4">
+  <td class="c-name"><span class="tip" tabindex="0">Единая классификация понятий
+      <span class="tipbox">Решение владельца 18.08: «одна классификация — универсально… слить везде, переразметить по тексту и по ссылкам, нарастить до 1000 законов». Реестр data/concepts.json: 535 понятий, 13 видов вместо двух параллельных таксономий (у тегов level по-английски, у законов type по-русски — одно и то же в двух ящиках). Граф собирается из реестра одним построителем; витрины /tags/ и /laws/ генерируются слоем совместимости, URL не меняются. В графе — галочки по видам, сгруппированные в каркас / методы / объекты / понятия.</span></span></td>
+  <td class="c-cost">бесплатно (локально)</td>
+  <td class="c-dep">реестр собран (concepts_merge)</td>
+  <td class="c-sprint">18.08: построитель графа, фильтры по видам, слой совместимости, валидация разметки по реестру</td>
+  <td class="c-status"><i style="background:#b8860b"></i>в работе</td>
+  <td class="c-prio"><select data-item="k4" data-kind="приоритет">
+      <option selected>высокий</option><option>средний</option><option>низкий</option>
+      </select></td>
+  <td class="c-ask">
+      <input type="text" class="note" data-item="k4" data-kind="комментарий"
+             placeholder="комментарий / блокер"></td>
 </tr></tbody>
   </table>
 </section>
@@ -544,7 +557,7 @@ a { color:var(--cyan); }
   <button id="send">Отправить ответы</button>
   <span class="msg" id="msg">Галочки, приоритеты и комментарии уйдут одним пакетом.</span>
 </div>
-<script src="/js/vendor-mermaid.min.js?v=eb352e3ce1"></script>
+<script src="/js/vendor-mermaid.min.js?v=d45bbdfb73"></script>
 <script>
 mermaid.initialize({ startOnLoad: true, theme: 'dark', securityLevel: 'strict' });
 document.getElementById('send').onclick = function () {

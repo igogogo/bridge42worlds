@@ -19,37 +19,52 @@
   ],
   "examples_from_articles": [
    {
-    "id": "2603.01672",
-    "date": "2026-03-02",
+    "id": "2601.00198",
+    "date": "2026-01-01",
     "title": {
-     "ru": "Термометр из сверхпроводника: холод, который можно потрогать",
-     "en": "A Superconductor Thermometer: Touchable Cold",
-     "es": "Termómetro superconductor: el frío que se puede tocar",
-     "ar": "مقياس حرارة من موصل فائق: برودة يمكن لمسها"
+     "ru": "Тепло течёт вспять",
+     "en": "Heat Flows Backward",
+     "es": "El calor fluye hacia atrás",
+     "ar": "الحرارة تتدفق عكس الاتجاه",
+     "fr": "La chaleur s'écoule à rebours"
     },
-    "why": "semiconductor, temperature, thermal_conductivity"
+    "score": 0.656
    },
    {
-    "id": "2602.13827",
-    "date": "2026-02-14",
+    "id": "2604.01908",
+    "date": "2026-04-02",
     "title": {
-     "ru": "Как охладить горячие чипы",
-     "en": "How to Cool Hot Chips",
-     "es": "Cómo enfriar chips calientes",
-     "ar": "كيف تبرّد الرقاقات الساخنة"
+     "ru": "Тепло сворачивает вбок под магнитом",
+     "en": "Heat bends sideways under a magnet",
+     "es": "El calor se desvía de lado bajo un imán",
+     "ar": "الحرارة تنحرف جانبياً تحت تأثير المغناطيس",
+     "fr": "La chaleur dévie sous l'effet d'un aimant"
     },
-    "why": "semiconductor, temperature, thermal_conductivity"
+    "score": 0.651
    },
    {
-    "id": "2608.09611v1",
-    "date": "2026-08-10",
+    "id": "2604.12943",
+    "date": "2026-04-14",
     "title": {
-     "ru": "Сверхпроводящий мост из платины и германия",
-     "en": "A Superconducting Bridge of Platinum and Germanium",
-     "es": "Un puente superconductor de platino y germanio",
-     "ar": "جسر فائق التوصيل من البلاتين والجرمانيوم"
+     "ru": "Электроны-спринтеры ломают правило",
+     "en": "Electron sprinters break the rule",
+     "es": "Electrones velocistas rompen la regla",
+     "ar": "إلكترونات العدّاءة تكسر القاعدة",
+     "fr": "Des électrons sprinteurs enfreignent la règle"
     },
-    "why": "semiconductor, thermal_conductivity"
+    "score": 0.642
+   },
+   {
+    "id": "2508.11554",
+    "date": "2025-08-15",
+    "title": {
+     "ru": "Скорость против термодинамики: как релятивистское движение обходит предел Карно",
+     "en": "Speed vs. Thermodynamics: How Relativistic Motion Bypasses the Carnot Limit",
+     "es": "La velocidad elude las leyes de los motores térmicos",
+     "ar": "السرعة ضد الديناميكا الحرارية: كيف يتجاوز الحركة النسبية حد كارنو",
+     "fr": "La vitesse défie les lois des moteurs thermiques"
+    },
+    "score": 0.61
    }
   ]
  },
@@ -1753,6 +1768,432 @@
     "unit": "واط/م²",
     "why": "q = κ·ΔT/L = 0.035 · 20 / 0.05 = 14 واط/م². في العقل: أولاً التدرج — 20 كلفن على 0.05 متر، أي 400 ك/م؛ نضرب في 0.035 ونحصل على أربعة عشر. تحقق من المنطق السليم: سقف غرفة 4×5 أمتار، معزول بنفس الطريقة، سيفقد 14·20 = 280 واط — ثلاث مصابيح متوهجة، وهو أمر معقول لمنزل معزول.",
     "hint": "أولاً احسب التدرج: كم كلفن لكل متر من السماكة. ثم اضرب في κ. حوّل السماكة إلى أمتار.",
+    "tolAbs": 3
+   }
+  ]
+ },
+ "fr": {
+  "title": "Conduction thermique : transfert d'énergie",
+  "subtitle": "Paragraphe 2 · Loi de Fourier et pourquoi les métaux refroidissent",
+  "intro": [
+   "Traçons un plan imaginaire dans un gaz immobile et calculons ce qui le traverse. Les molécules le traversent continuellement et aussi souvent dans les deux sens : le gaz ne s'écoule pas, la composition est la même partout, les nombres de traversées sont équilibrés jusqu'au dernier chiffre. On pourrait croire que rien n'est transféré.",
+   "Mais supposons que le gaz soit plus chaud à gauche. Les molécules venant de gauche volent un peu plus vite et transportent un peu plus d'énergie que celles qui partent en sens inverse. Le bilan des particules est toujours équilibré, mais celui de l'énergie ne l'est pas. C'est cela, la conduction thermique : le transfert d'énergie sans transfert de matière, sans aucun écoulement et sans rayonnement.",
+   "À partir de cette image, nous dériverons la loi de Fourier et obtiendrons le coefficient de conductivité thermique du gaz lui-même — en fonction du libre parcours moyen, de la vitesse thermique et de la capacité thermique. Ensuite, nous verrons pourquoi pour le cuivre il est quinze mille fois plus grand que pour l'air, et pourquoi la lutte pour une maison chaude se mène contre trois mécanismes à la fois, et non un seul."
+  ],
+  "standNote": "Le stand illustre la diffusion d'une tache dans un gaz immobile : les curseurs règlent le libre parcours moyen λ, la vitesse thermique v et le temps écoulé. Observez deux choses. La première est évidente : la largeur de la tache croît non pas proportionnellement au temps, mais comme sa racine carrée — attendre quatre fois plus longtemps donne une tache deux fois plus large. La seconde — c'est pour elle que le stand est dans ce paragraphe. À l'intérieur, il calcule une combinaison : D ≈ v·λ/3. Exactement la même combinaison apparaîtra à la fin de la dérivation comme la diffusivité thermique χ = κ/(ρc_p) : la chaleur se propage dans un gaz immobile par la même marche aléatoire qu'une impureté, sauf que ce n'est pas une particule qui se déplace, mais son énergie. Réglez λ = 68 nm et v = 470 m/s — c'est l'air à température ambiante — et vous obtiendrez environ 1·10⁻⁵ m²/s ; la diffusivité thermique mesurée de l'air est de 2,2·10⁻⁵. Nous avons perdu un facteur de l'ordre de deux, et ci-dessous nous disons honnêtement où.",
+  "formula": {
+   "name": "Loi de Fourier",
+   "latex": "q = -\\kappa\\,\\frac{dT}{dx}",
+   "alsoKnown": "Loi de la conduction thermique. En trois dimensions, elle s'écrit q = −κ∇T : le flux est dirigé strictement contre le gradient, c'est-à-dire vers la décroissance de la température.",
+   "authors": [
+    {
+     "who": "Jean-Baptiste Biot",
+     "year": "1804",
+     "what": "a mené des expériences avec une barre métallique en refroidissement et a le premier relié le flux de chaleur à la différence de température, mais s'est arrêté à une relation empirique et n'est pas allé jusqu'à la forme différentielle."
+    },
+    {
+     "who": "Joseph Fourier",
+     "year": "1822",
+     "what": "dans la « Théorie analytique de la chaleur », a écrit la loi sous forme différentielle, en a dérivé l'équation de la chaleur et a créé les séries trigonométriques pour la résoudre."
+    },
+    {
+     "who": "Gustav Wiedemann et Rudolf Franz",
+     "year": "1853",
+     "what": "ont mesuré la conductivité thermique et la conductivité électrique d'une quinzaine de métaux et ont remarqué que leur rapport, à une température donnée, est à peu près le même pour tous."
+    },
+    {
+     "who": "Ludwig Lorenz",
+     "year": "1872",
+     "what": "a montré que ce rapport croît proportionnellement à la température absolue ; la constante de la loi porte son nom."
+    }
+   ],
+   "story": "Fourier a participé à la campagne d'Égypte de Napoléon et a été préfet du département de l'Isère, et il écrivait sa théorie de la chaleur le soir. Le mémoire de 1807 fut rejeté par la commission de l'Académie : Lagrange ne croyait pas qu'une fonction arbitraire puisse être décomposée en somme de sinus, et il cherchait la petite bête — Fourier n'avait effectivement pas de preuve rigoureuse. Le prix de 1811 fut décerné, mais avec une réserve publique sur le manque de rigueur, et le livre ne parut qu'en 1822. Ensuite, ce qui se produisit, personne ne l'attendait : l'outil a survécu à la tâche. Les séries de Fourier sont apparues dans ce livre comme un moyen de résoudre l'équation de la chaleur, et aujourd'hui, quiconque travaille avec des signaux, du son ou des images les connaît — alors que l'équation elle-même est bien moins souvent mémorisée.",
+   "symbols": [
+    {
+     "sym": "q",
+     "latex": "q",
+     "what": "densité de flux thermique",
+     "unit": "W/m²",
+     "note": "combien d'énergie traverse un mètre carré par seconde ; c'est un vecteur, il a une direction"
+    },
+    {
+     "sym": "κ",
+     "latex": "\\kappa",
+     "what": "coefficient de conductivité thermique",
+     "unit": "W/(m·K)",
+     "note": "propriété de la matière, et non d'un échantillon ; dans les ouvrages de référence, elle est aussi notée λ, ce qui prête à confusion avec le libre parcours — ici λ est déjà utilisé"
+    },
+    {
+     "sym": "dT/dx",
+     "latex": "\\frac{dT}{dx}",
+     "what": "gradient de température",
+     "unit": "K/m",
+     "note": "pente du profil de température, et non différence de température ; dans un mur de 5 cm avec un écart de 20 K, elle vaut 400 K/m"
+    },
+    {
+     "sym": "n",
+     "latex": "n",
+     "what": "concentration des porteurs",
+     "unit": "m⁻³",
+     "note": "molécules dans un gaz, électrons de conduction dans un métal ; pour l'air dans des conditions normales 2,5·10²⁵ m⁻³"
+    },
+    {
+     "sym": "v̄",
+     "latex": "\\bar v",
+     "what": "vitesse moyenne du porteur",
+     "unit": "m/s",
+     "note": "pour les molécules d'air environ 470 m/s et augmente comme la racine de la température ; pour les électrons dans un métal, c'est la vitesse de Fermi, et elle ne dépend pas de la température"
+    },
+    {
+     "sym": "λ",
+     "latex": "\\lambda",
+     "what": "libre parcours moyen",
+     "unit": "m",
+     "note": "chemin entre deux collisions ; pour l'air à pression atmosphérique 68 nm, et elle est inversement proportionnelle à la densité"
+    },
+    {
+     "sym": "c",
+     "latex": "c",
+     "what": "capacité thermique d'un porteur",
+     "unit": "J/K",
+     "note": "de combien augmente son énergie moyenne lors d'un chauffage d'un kelvin ; pour une molécule c'est (i/2)k_B, où i est le nombre de degrés de liberté. Ne pas confondre avec la capacité thermique massique c_p : celle-ci est rapportée à un kilogramme de matière, et non à une particule"
+    },
+    {
+     "sym": "c_p",
+     "latex": "c_p",
+     "what": "capacité thermique massique de la matière",
+     "unit": "J/(kg·K)",
+     "note": "capacité thermique d'un kilogramme, et non d'un porteur : pour l'air 1005, pour l'acier 500, pour le bois 1700. Grâce à elle, on calcule la diffusivité thermique χ = κ/(ρc_p) et l'effusivité thermique b = √(κρc_p). Avec la capacité thermique du porteur, elle est liée par la masse : c = m·c_V, et c_p pour un gaz est supérieur à c_V de R/M ; pour les solides, cette différence est inférieure à un pour cent"
+    },
+    {
+     "sym": "R",
+     "latex": "R",
+     "what": "résistance thermique d'une couche",
+     "unit": "m²·K/W",
+     "note": "égal à L/κ ; pour des couches en série, les résistances s'additionnent comme pour des résistances dans un circuit"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Dérivation rigoureuse",
+   "lead": "Il ne faut que ce qu'on a déjà : le comptage des traversées de plan de la théorie cinétique, le développement d'une fonction au voisinage d'un point et la définition de la capacité thermique. Nous ne postulons pas de « loi de conduction thermique » séparée — elle apparaît d'elle-même, avec l'expression de κ.",
+   "steps": [
+    {
+     "text": "Traçons un plan perpendiculaire à l'axe x. La théorie cinétique dit combien de molécules traversent une surface unitaire par seconde dans un sens : le quart du produit de la concentration par la vitesse moyenne. Le facteur ¼, et non ½, parce que les molécules volent sous tous les angles et que seule la projection de la vitesse sur la normale compte. Tant que la température est uniforme, les flux opposés transportent autant d'énergie, et au total rien n'est transféré.",
+     "latex": "\\Phi = \\tfrac{1}{4}\\,n\\,\\bar v \\quad \\text{dans chaque sens}",
+     "figure": "condplane",
+     "figCaption": "Deux flux moléculaires égaux et opposés traversent la surface. Ce qui est transféré n'est pas le nombre de particules, mais la différence des énergies qu'elles apportent."
+    },
+    {
+     "text": "Supposons maintenant que la température dépende de x. Une molécule qui traverse le plan ne se souvient pas de l'endroit où elle se trouve, mais de celui où elle a subi sa dernière collision — c'est-à-dire à environ une longueur de libre parcours λ de là. Elle porte donc une énergie correspondant à la température de là-bas, pas d'ici. Les molécules opposées apportent de l'énergie de deux points distants de 2λ.",
+     "latex": "\\varepsilon_{\\rightarrow} = \\varepsilon\\bigl(T(x-\\lambda)\\bigr), \\qquad \\varepsilon_{\\leftarrow} = \\varepsilon\\bigl(T(x+\\lambda)\\bigr)",
+     "figure": "condlast",
+     "figCaption": "Une molécule porte la mémoire de sa dernière collision : son énergie correspond à la température en un point situé à λ à gauche ou à droite du plan."
+    },
+    {
+     "text": "Sur l'échelle de λ, le profil de température peut être considéré comme une ligne droite : le libre parcours dans l'air est de quelques dizaines de nanomètres, alors que la température varie sensiblement sur des millimètres ou des mètres. Développons T au voisinage de x et ne gardons que le terme du premier ordre en λ. Le terme suivant contient la dérivée seconde et un facteur λ², qui entre dans les deux contributions opposées avec le même signe — il disparaîtra lors de la soustraction.",
+     "latex": "T(x \\mp \\lambda) \\approx T(x) \\mp \\lambda\\,\\frac{dT}{dx}",
+     "figure": "condtaylor",
+     "figCaption": "Sur un segment de deux libres parcours, la courbe T(x) est indiscernable de sa tangente — c'est ce qui permet de ne garder qu'une dérivée."
+    },
+    {
+     "text": "L'énergie transportée par une molécule dépend de son nombre de degrés de liberté : trois pour un gaz monoatomique, cinq pour un gaz diatomique à température ambiante. Pour ne pas les recompter à chaque fois, introduisons la capacité thermique d'une molécule c — par définition, c'est l'augmentation de son énergie moyenne lorsqu'on la chauffe d'un kelvin : des joules par kelvin par molécule, et non par kilogramme comme pour le c_p des tables. Alors la différence d'énergie des flux opposés s'exprime directement en fonction du gradient, et le signe moins apparaît tout seul, par la soustraction.",
+     "latex": "\\varepsilon_{\\rightarrow} - \\varepsilon_{\\leftarrow} = c\\,\\bigl[T(x-\\lambda) - T(x+\\lambda)\\bigr] = -\\,2\\,c\\,\\lambda\\,\\frac{dT}{dx}",
+     "figure": "condenergy",
+     "figCaption": "Capacité thermique d'une molécule c = (i/2)k_B : trois degrés de liberté pour un gaz monoatomique, cinq pour un gaz diatomique à température ambiante."
+    },
+    {
+     "text": "La densité de flux thermique est l'énergie traversant une surface unitaire par seconde. Multiplions le nombre de traversées dans un sens par la différence d'énergie. On obtient un facteur ½ ; une moyenne soignée sur les angles le remplace par ⅓, car une molécule qui vole en biais vient d'un point dont la coordonnée x est à moins de λ. Disons-le honnêtement : notre dérivation ne donne pas ce facteur, elle ne fait que l'estimer.",
+     "latex": "q = \\tfrac{1}{4} n \\bar v \\cdot \\Bigl(-2 c \\lambda \\frac{dT}{dx}\\Bigr) = -\\tfrac{1}{2}\\,n \\bar v \\lambda c\\,\\frac{dT}{dx} \\;\\longrightarrow\\; -\\tfrac{1}{3}\\,n \\bar v \\lambda c\\,\\frac{dT}{dx}",
+     "figure": "condflux",
+     "figCaption": "Le flux d'énergie est proportionnel au gradient de température et dirigé contre lui. C'est la loi de Fourier, obtenue et non postulée."
+    },
+    {
+     "text": "En comparant avec la loi de Fourier, on lit le coefficient de conductivité thermique — et on obtient immédiatement une conséquence inattendue. Le libre parcours moyen est inversement proportionnel à la concentration : plus le gaz est dense, plus les collisions sont fréquentes. Par conséquent, le produit nλ ne dépend pas du tout de la concentration, et κ non plus. La conductivité thermique d'un gaz ne dépend pas de la pression. Maxwell a obtenu le même résultat pour la viscosité en 1860, l'a jugé incroyable et l'a vérifié expérimentalement en 1866 avec sa femme Katherine : la viscosité de l'air restait effectivement constante. La conductivité thermique se comporte de la même manière et pour la même raison.",
+     "latex": "\\kappa = \\tfrac{1}{3}\\,n\\,\\bar v\\,\\lambda\\,c, \\qquad \\lambda = \\frac{1}{\\sqrt{2}\\,n\\sigma_{\\text{c}}} \\;\\Longrightarrow\\; \\kappa = \\frac{\\bar v\\,c}{3\\sqrt{2}\\,\\sigma_{\\text{c}}}",
+     "figure": "condkappa",
+     "figCaption": "La concentration se simplifie : deux fois moins de porteurs, mais un libre parcours deux fois plus long pour chacun."
+    },
+    {
+     "text": "Voyons ce que cette loi donne pour une paroi. En régime stationnaire, la température en chaque point ne change plus — donc l'énergie ne s'accumule nulle part : autant de chaleur entre dans une couche mince, autant en sort. Le flux est le même dans toutes les sections ; si κ est constante, le gradient est constant, et la température décroît linéairement. Ensuite, la paroi se comporte comme une résistance : le flux est égal à la différence de température divisée par la résistance thermique L/κ, et les résistances des couches s'additionnent.",
+     "latex": "\\frac{dq}{dx} = 0 \\;\\Longrightarrow\\; \\frac{d^{2}T}{dx^{2}} = 0 \\;\\Longrightarrow\\; q = \\frac{T_1 - T_2}{R}, \\qquad R = \\sum_i \\frac{L_i}{\\kappa_i}",
+     "figure": "condwall",
+     "figCaption": "Le profil stationnaire est une ligne brisée : chaque couche a sa propre pente, mais le flux à travers toutes les couches est le même."
+    },
+    {
+     "text": "La formule κ = ⅓·n·v̄·λ·c est écrite pour un gaz, mais elle ne concerne pas que le gaz : elle vaut pour tout porteur qui vole, entre en collision et transporte de l'énergie. Dans un diélectrique, ce sont les vibrations du réseau ; dans un métal, les électrons de conduction, et la répartition entre les trois facteurs est curieuse. Le nombre d'électrons dans le cuivre est énorme, mais la contribution de chacun à la capacité thermique est négligeable : seuls ceux qui se trouvent près de la surface de Fermi peuvent être excités, une fraction de l'ordre de T/T_F ≈ 0,004 — dans le produit n·c, le métal ne gagne que d'un facteur vingt environ. C'est la vitesse qui décide : un électron au niveau de Fermi se déplace à 1,6·10⁶ m/s, trois mille cinq cents fois plus vite qu'une molécule d'air, et ce indépendamment de la température du métal. Le libre parcours est d'environ 39 nm, un peu plus court que celui des molécules. Multiplions : on obtient environ quarante-cinq mille fois, alors que le rapport mesuré est de quinze mille, et toute la différence est exactement celle que nous avons déjà reconnue pour le gaz. Et puisque la charge et l'énergie sont transportées par les mêmes électrons, la conductivité thermique et la conductivité électrique doivent être liées : leur rapport est précisément la loi de Wiedemann-Franz. Pour obtenir la bonne constante dans cette loi, il faut les valeurs quantiques de c et de v̄ ; les valeurs classiques ne conviennent pas.",
+     "latex": "\\frac{\\kappa}{\\sigma T} = L = \\frac{\\pi^{2}}{3}\\left(\\frac{k_B}{e}\\right)^{2} = 2{,}44\\cdot10^{-8}\\ \\frac{\\text{W}\\cdot\\Omega}{\\text{K}^{2}}",
+     "figure": "condmetal",
+     "figCaption": "Dans un diélectrique, l'énergie est transportée par les vibrations du réseau ; dans un métal, par les électrons. Les mêmes trois facteurs, mais la vitesse est des milliers de fois plus grande."
+    }
+   ],
+   "plate": "q = -\\kappa\\,\\frac{dT}{dx}",
+   "plateCap": "À gauche : combien de watts traversent un mètre carré. À droite : à quel point la température chute. Le coefficient entre les deux est entièrement déterminé par qui transporte l'énergie et à quelle vitesse : molécules, vibrations du réseau ou électrons.",
+   "note": "Énumérons ce que nous avons supposé en cours de route — ce sont les limites de la formule. Premièrement : λ est très petit devant l'échelle sur laquelle la température varie. Dans un gaz raréfié, dans les pores d'un aérogel, en nanoélectronique, cela n'est pas vrai ; alors le porteur traverse de la paroi à la paroi sans aucune collision, le flux cesse de dépendre de la distance, et la loi de Fourier ne fonctionne plus du tout. La mesure en est le nombre de Knudsen λ/L. Deuxièmement : le gaz est immobile. Dès que des courants de convection apparaissent, la convection dépasse la conduction thermique d'un ordre de grandeur ; c'est pourquoi un isolant n'est pas une « couche d'air », mais un moyen d'empêcher l'air de circuler. Troisièmement : le rayonnement n'apparaît nulle part dans la dérivation, alors qu'à température ambiante il fournit un flux du même ordre que la conduction. Quatrièmement : κ a été supposée constante. Pour les gaz, elle augmente approximativement comme la racine carrée de la température ; pour les métaux purs à basse température, elle passe par un maximum — et alors le profil dans la paroi cesse d'être une ligne droite, tout en restant monotone. Cinquièmement, le plus subtil, et cela explique le facteur perdu : nous avons supposé la concentration identique à gauche et à droite, alors qu'à pression constante un gaz chaud est plus raréfié, et nous n'avons pas distingué les molécules rapides des lentes, alors que les rapides traversent le plan plus souvent et transportent plus d'énergie. Les deux corrections vont dans le même sens, et un calcul exact (théorie de Chapman-Enskog) restitue le facteur manquant : pour l'air, notre estimation donne 0,009 contre 0,026 mesuré — trois fois plus bas. L'ordre de grandeur est capturé, le facteur non, et c'est exactement la précision à laquelle peut prétendre une dérivation où la moyenne angulaire est faite à vue."
+  },
+  "math": {
+   "title": "Les mathématiques nécessaires ici",
+   "lead": "La dérivation est courte, mais il y a trois endroits où l'on peut facilement se tromper par automatisme : la troncature de la série, le signe et la lecture de l'équation différentielle la plus simple.",
+   "items": [
+    {
+     "what": "Développement en série : pourquoi un seul terme a suffi",
+     "why": "À la troisième étape de la dérivation, nous avons remplacé T(x∓λ) par T(x) ∓ λ·dT/dx. Ce sont les deux premiers termes de la série de Taylor, et toute la question est de savoir si la partie négligée est grande. Le terme suivant contient la dérivée seconde et le facteur λ²/2 — mais λ y est au carré, donc dans les deux contributions opposées il entre avec le MÊME signe et disparaît sans laisser de trace lors de la soustraction. Le premier terme correctif qui survit est du troisième ordre en λ. Par conséquent, l'erreur relative n'est pas de l'ordre de λ/L, mais de l'ordre de (λ/L)², où L est l'échelle de variation de la température. Pour l'air dans le mur, cela donne (10⁻⁷/10⁻¹)² = 10⁻¹². Cette approximation est l'une des plus fiables de toute la physique, et elle ne déçoit pas par sa précision, mais par le fait que λ cesse parfois d'être petit.",
+     "latex": "T(x\\mp\\lambda) = T \\mp \\lambda T' + \\tfrac{\\lambda^{2}}{2}T'' \\mp \\dots \\;\\Longrightarrow\\; T(x-\\lambda)-T(x+\\lambda) = -2\\lambda T' + O(\\lambda^{3})",
+     "kit": "taylor"
+    },
+    {
+     "what": "Gradient et signe moins",
+     "why": "Le moins dans la loi de Fourier n'est pas une décoration ni une convention sur l'orientation de l'axe. La dérivée dT/dx est la pente du profil : si la température diminue vers la droite, la pente est négative. Le flux va justement vers la droite, c'est-à-dire qu'il est positif. Pour que l'égalité soit vérifiée avec κ positif, le moins est nécessaire. Vérifiez à la quatrième étape de la dérivation : nous ne l'avons inséré nulle part, il est sorti tout seul de la soustraction des énergies opposées. En trois dimensions, la dérivée devient le gradient — un vecteur qui pointe dans la direction de la CROISSANCE de la température et qui est perpendiculaire à l'isotherme ; le flux est dirigé strictement contre lui. D'où deux conséquences immédiates : le long d'une isotherme, il n'y a pas de flux de conduction, et dans un matériau isotrope, le flux ne peut pas aller « en biais » par rapport au gradient.",
+     "latex": "\\vec q = -\\kappa\\,\\nabla T, \\qquad \\nabla T = \\left(\\frac{\\partial T}{\\partial x},\\ \\frac{\\partial T}{\\partial y},\\ \\frac{\\partial T}{\\partial z}\\right)",
+     "kit": "gradient"
+    },
+    {
+     "what": "L'équation différentielle la plus simple : la dérivée seconde est nulle",
+     "why": "À la septième étape, de « le flux est le même dans toutes les sections » on obtient d²T/dx² = 0. Il n'est pas nécessaire de résoudre une telle équation, il suffit de la lire : si la dérivée seconde est nulle partout, alors la première est constante, et une fonction à dérivée constante est une droite. Ses deux constantes inconnues — c'est exactement le nombre de conditions aux limites que donne le problème : les températures sur les deux surfaces du mur. Remarquez ce qui se casse lorsque κ commence à dépendre de la température : l'équation devient d/dx(κ(T)·dT/dx) = 0, c'est le produit qui reste constant, et non la pente elle-même, et le profil se courbe — alors que le flux reste le même dans toutes les sections, car cela découle de la stationnarité, et non de la constance de κ.",
+     "latex": "\\frac{d^{2}T}{dx^{2}} = 0 \\;\\Longleftrightarrow\\; \\frac{dT}{dx} = \\text{const} \\;\\Longleftrightarrow\\; T(x) = T_1 + \\frac{T_2 - T_1}{L}\\,x",
+     "kit": "diffeq"
+    }
+   ]
+  },
+  "example": {
+   "title": "Exemple chiffré",
+   "lead": "Calculons un mur — d'abord nu, puis avec un isolant. Au passage, nous nous familiariserons avec la résistance thermique : grâce à elle, le calcul est plus rapide et les erreurs sont moins probables.",
+   "given": "Mur en briques d'épaisseur 0,38 m, κ = 0,7 W/(m·K), surface 20 m². Dans la pièce, +20 °C, dehors −10 °C. Trouver le flux thermique. Ensuite, on ajoute à l'extérieur 10 cm de laine minérale avec κ = 0,04 W/(m·K) — de combien de fois le flux diminuera-t-il ?",
+   "law": "q = ΔT / R, où R = L/κ — résistance thermique de la couche ; pour des couches en série, les résistances s'additionnent",
+   "solution": [
+    {
+     "text": "Résistance thermique de la brique. Les unités de R se lisent littéralement : c'est la différence de kelvins nécessaire pour faire passer un watt à travers un mètre carré.",
+     "latex": "R_{\\text{brique}} = \\frac{L}{\\kappa} = \\frac{0{,}38}{0{,}7} \\approx 0{,}54\\ \\frac{\\text{m}^{2}\\cdot\\text{K}}{\\text{W}}"
+    },
+    {
+     "text": "Flux à travers le mur nu. La différence de température est ici la même en kelvins et en degrés Celsius : la formule ne contient que la différence, et les échelles sont décalées l'une par rapport à l'autre, non étirées.",
+     "latex": "q = \\frac{30}{0{,}54} \\approx 55\\ \\frac{\\text{W}}{\\text{m}^{2}}, \\qquad Q = 55 \\cdot 20 \\approx 1{,}1\\ \\text{kW}"
+    },
+    {
+     "text": "Ajout de la laine. Sa couche est presque quatre fois plus mince que celle de la brique, mais son κ est dix-sept fois plus petit — la résistance est presque cinq fois plus grande que celle de la brique.",
+     "latex": "R_{\\text{laine}} = \\frac{0{,}10}{0{,}04} = 2{,}5, \\qquad R_{\\Sigma} = 0{,}54 + 2{,}5 \\approx 3{,}04\\ \\frac{\\text{m}^{2}\\cdot\\text{K}}{\\text{W}}"
+    },
+    {
+     "text": "Nouveau flux. La différence est la même, la résistance a augmenté de 5,6 fois — le flux a diminué d'autant.",
+     "latex": "q = \\frac{30}{3{,}04} \\approx 9{,}9\\ \\frac{\\text{W}}{\\text{m}^{2}}, \\qquad Q \\approx 197\\ \\text{W}"
+    }
+   ],
+   "answer": "Le mur nu laisse passer 55 W/m², soit 1,1 kW sur toute la surface. Dix centimètres de laine réduisent le flux à 9,9 W/m², soit environ 197 W — 5,6 fois moins.",
+   "check": "Est-ce raisonnable ? 1,1 kW — c'est une bouilloire électrique qui fonctionne sans interruption pour un seul mur ; pour une brique non isolée avec un écart de trente degrés, c'est plausible, ces maisons sont vraiment énergivores. Il est utile de voir où se trouve maintenant la résistance : quatre-vingt-deux pour cent proviennent de la laine et dix-huit de la brique. D'où la règle pratique pour toute chaîne de résistances en série : le résultat est déterminé par le maillon le plus grand, et il faut ajouter là où c'est actuellement mince. Doubler l'épaisseur de la brique signifierait augmenter R de 3,04 à 3,59 et réduire le flux de quinze pour cent ; une deuxième couche de laine de même épaisseur donnerait 5,54 et réduirait presque de moitié. Et une réserve honnête : un mur réel perd aussi de la chaleur à travers les couches limites d'air près des deux surfaces, et à travers les fissures, les pentes et la dalle de balcon, il y a un flux séparé, souvent plus important. Le calcul basé sur la seule conductivité thermique donne une limite inférieure des pertes, pas les pertes elles-mêmes."
+  },
+  "constants": {
+   "title": "Constantes de ce paragraphe",
+   "lead": "Quatre nombres autour desquels tourne tout le sujet : deux valeurs extrêmes de κ, la constante reliant la chaleur à l'électricité, et celle qui est responsable du troisième mécanisme de transfert.",
+   "items": [
+    {
+     "sym": "κ_air",
+     "latex": "\\kappa_{\\text{air}}",
+     "name": "Conductivité thermique de l'air à 20 °C",
+     "value": "0,026",
+     "unit": "W / (m · K)",
+     "why": "L'une des valeurs les plus basses parmi les substances disponibles : seuls le vide et quelques gaz lourds sont en dessous. Tout l'isolation domestique est construite autour de ce nombre. Le duvet, le coton, le polystyrène et la laine ne conduisent pas mieux la chaleur que l'air — leur rôle est de maintenir l'air immobile. Notez ce qui manque dans ce nombre : la pression. Elle ne change presque pas tant que le gaz n'est pas raréfié à des fractions de pascal.",
+     "mnemo": "La série se retient par ordres de grandeur : l'air — les centièmes, l'eau — six dixièmes, l'acier inoxydable — une quinzaine, le cuivre — quatre cents. Chaque pas est d'environ un ordre et demi."
+    },
+    {
+     "sym": "κ_Cu",
+     "latex": "\\kappa_{\\text{Cu}}",
+     "name": "Conductivité thermique du cuivre à 20 °C",
+     "value": "401",
+     "unit": "W / (m · K)",
+     "why": "Quinze mille fois plus que l'air, et six cent soixante fois plus que l'eau. Presque tout cela est le travail des électrons de conduction ; la contribution des vibrations du réseau dans le cuivre pur ne dépasse pas deux pour cent. L'argent a un peu plus, 429, l'aluminium 237, et l'acier inoxydable seulement 15 : les éléments d'alliage dispersent les électrons, et avec la conductivité thermique, la conductivité électrique chute exactement dans la même proportion.",
+     "mnemo": "Argent, cuivre, or, aluminium — le même ordre que dans la liste des meilleurs conducteurs de courant. Ce n'est pas une coïncidence, mais la loi de Wiedemann-Franz."
+    },
+    {
+     "sym": "L",
+     "latex": "L",
+     "name": "Nombre de Lorentz",
+     "value": "2,44 · 10⁻⁸",
+     "unit": "W · Ω / K²",
+     "why": "Ce n'est pas un paramètre ajustable, mais une combinaison de deux constantes fondamentales : (π²/3)·(k_B/e)². Son sens est que pour un métal, on ne peut pas fixer indépendamment la conductivité thermique et la conductivité électrique — leur rapport à une température donnée est fixé par la nature, car les deux sont assurés par les mêmes électrons. Vérification sur le cuivre : 2,44·10⁻⁸ · 5,96·10⁷ · 293 ≈ 426 W/(m·K) contre 401 mesurés, une erreur de six pour cent. À température ambiante et au-dessus, la loi fonctionne bien, mais dans la région 20–100 K, elle dévie d'un facteur deux : là, la diffusion sur les vibrations du réseau fait perdre de l'énergie à l'électron sans presque changer la direction de son mouvement — pour le courant, c'est presque sans effet, mais pour le transfert de chaleur, c'est destructeur.",
+     "mnemo": "Dans le nombre de Lorentz, il n'y a aucune propriété d'un métal particulier : seulement k_B et e, c'est-à-dire ce qui mesure la température et ce qui mesure la charge."
+    },
+    {
+     "sym": "σ",
+     "latex": "\\sigma",
+     "name": "Constante de Stefan-Boltzmann",
+     "value": "5,670 374 · 10⁻⁸",
+     "unit": "W / (m² · K⁴)",
+     "why": "Elle sera nécessaire dans l'annexe où nous comparons les trois mécanismes de transfert. Le flux de rayonnement d'une surface noire croît comme la quatrième puissance de la température absolue : à 293 K, il est de 418 W/m². Entre deux surfaces, on calcule la différence des puissances quatrièmes, et pour un écart de 30 K, cela donne environ 120 W/m² — plus que la conduction à travers un espace d'air de seize millimètres. C'est pourquoi on applique un revêtement à faible émissivité sur les vitres : il n'isole pas, il désactive le troisième mécanisme.",
+     "mnemo": "5,67 — « cinq, six, sept » à la suite. La seule constante du cours où la température est à la puissance quatre, et cela se voit directement dans la dimension."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Comment cela se relie au reste du cours",
+   "lead": "La conductivité thermique n'est pas un sujet isolé, mais l'un des trois termes d'une même famille : à travers un plan, on peut transférer un nombre de particules, une impulsion ou de l'énergie — le tableau est le même pour les trois.",
+   "items": [
+    {
+     "h": "Diffusion",
+     "text": "Le même comptage des traversées, le même facteur ⅓, le même libre parcours moyen — seulement, à travers le plan, ce n'est pas de l'énergie qui est transférée, mais un nombre de particules. La loi de Fick j = −D·dn/dx et la loi de Fourier q = −κ·dT/dx sont construites de la même manière, non par analogie, mais parce qu'elles sont dérivées d'une même image. Pour un gaz, D et χ = κ/(ρc_p) sont numériquement proches : les deux valent environ v̄λ/3."
+    },
+    {
+     "h": "Viscosité",
+     "text": "Le troisième terme de la famille : les molécules qui traversent le plan transportent aussi de l'impulsion, et on obtient η ≈ ⅓·ρ·v̄·λ. De là découle une relation entre les trois coefficients que l'on peut vérifier : le rapport η·c_V/κ est donné par la théorie élémentaire comme égal à un, et dans le nombre de Prandtl, c'est la capacité thermique à pression constante qui apparaît, donc la même théorie promet Pr = γ ≈ 1,4 — mais l'expérience pour l'air donne 0,71. L'écart a la même origine que le facteur perdu dans κ, et la théorie exacte le comble."
+    },
+    {
+     "h": "Électricité",
+     "text": "La loi d'Ohm sous forme différentielle j = −σ·dφ/dx a la même construction : le flux est proportionnel au gradient du potentiel. D'où la méthode pratique de l'ingénieur — considérer l'isolation thermique comme un circuit électrique, en additionnant les résistances en série et en parallèle les ponts thermiques. Pour les métaux, la similitude cesse d'être formelle : la loi de Wiedemann-Franz relie les deux conductivités numériquement, car le porteur est commun."
+    },
+    {
+     "h": "Deuxième principe",
+     "text": "La conduction thermique est irréversible : la chaleur ne va que vers les températures décroissantes, et le signe moins dans la loi de Fourier l'exprime. Le processus inverse sans dépense de travail n'existe pas — c'est l'une des formulations du deuxième principe. Dans une paroi, de l'entropie est continuellement produite : le flux q, passant de T₁ à T₂, emporte q/T₁ du côté chaud et apporte q/T₂ du côté froid, et la différence est l'entropie produite."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Curiosités : à tester soi-même",
+   "lead": "Les deux expériences ci-dessous prennent une minute chacune et ne nécessitent qu'une cuisine. Elles montrent toutes deux que la sensation de « froid » n'est pas ce qu'elle paraît.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "expérience de cuisine",
+     "h": "Deux cuillères dans l'eau chaude",
+     "text": "Plongez dans une tasse d'eau bouillante une cuillère en acier et une cuillère en bois (une spatule en plastique convient aussi) de sorte que des parties égales soient dans l'eau. Attendez trente secondes puis touchez les manches. Décidez à l'avance non seulement laquelle sera chaude, mais aussi de combien de centimètres le long du manche en acier la chaleur se propagera visiblement en trente secondes.",
+     "answer": "Le manche en acier deviendra chaud, celui en bois restera à température ambiante. Mais le plus intéressant est l'estimation de la profondeur de pénétration de la chaleur, et elle ne se fait pas via κ. La chaleur se propage le long de la tige selon la même loi en racine carrée que la marque sur le banc : profondeur ≈ √(χt), où χ = κ/(ρc_p) est la diffusivité thermique. Pour l'acier inoxydable, κ = 15, ρ = 7900, c_p = 500, donc χ = 3,8·10⁻⁶ m²/s, et en trente secondes √(3,8·10⁻⁶ · 30) ≈ 1,1 cm ; avec un facteur de l'ordre de deux, donné par la solution exacte, cela fait deux à trois centimètres, ce qui se sent au doigt. Pour le bois, χ = 0,15/(500·1700) = 1,8·10⁻⁷, vingt fois plus petit, et la profondeur est quatre à cinq fois plus petite, soit avec le même facteur quatre à cinq millimètres. Le manche de la cuillère en bois est chauffé en trente secondes non par conduction, mais par la vapeur. Le point clé de cette expérience est le suivant : ce qui compte n'est pas κ en soi, mais κ divisé par la capacité thermique volumique. Une substance qui conduit bien mais stocke beaucoup de chaleur se réchauffe lentement."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "expérience de cuisine",
+     "h": "Le carrelage est plus froid que le tapis à la même température",
+     "text": "Posez un thermomètre d'ambiance sur le carrelage pendant une minute, puis sur le tapis ou une planche de bois à côté : il indiquera pratiquement la même chose. Maintenant, tenez-vous pieds nus d'abord sur le tapis, puis sur le carrelage. La différence se ressent comme plusieurs degrés. Qui ment : le thermomètre ou les pieds ?",
+     "answer": "Personne. La peau ne ressent pas la température du sol, mais la sienne propre au point de contact – et elle s'établit presque instantanément quelque part entre 33 degrés de la peau et 20 degrés du sol. Où exactement, ce n'est pas la conductivité thermique qui le décide, mais l'effusivité thermique b = √(κρc_p) : la rapidité avec laquelle le matériau peut extraire la chaleur. La température de contact est la moyenne des deux températures, pondérée par ces b. Pour la peau, b ≈ 1500 (elle est proche de l'eau), pour le carrelage en céramique à peu près la même, environ 1600, pour un tapis en laine seulement environ 120. En substituant : sur le carrelage, le contact s'établit à 26 degrés, sur le tapis à 32. Six degrés de différence, exactement ce que ressent le pied. Le même calcul explique pourquoi les rampes métalliques brûlent en hiver, mais pas celles en bois, et pourquoi on peut saisir une seconde une feuille d'aluminium sortant du four, mais pas une plaque de cuisson : la feuille a la même température et le même κ, mais presque pas d'épaisseur – la réserve de chaleur ne suffit même pas à chauffer le doigt."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoxe",
+     "h": "On a retiré la moitié de l'air – et rien",
+     "text": "On a retiré la moitié de l'air de l'espace entre les vitres d'un double vitrage, sans toucher à la température. De combien la conductivité thermique de l'espace va-t-elle diminuer ?",
+     "answer": "Pas du tout, à la précision de mesure près. Il y a deux fois moins de molécules, mais chacune parcourt maintenant deux fois plus de distance entre les collisions et apporte de l'énergie d'un point deux fois plus éloigné – donc plus chaud. Le produit nλ, qui intervient dans κ, n'a pas changé. L'extraction ne commence à agir que lorsque λ atteint la taille de l'espace et que la molécule vole d'une vitre à l'autre sans collision : alors il y a simplement peu de porteurs, et le flux diminue proportionnellement à la pression. Pour un espace d'un centimètre, λ = 68 nm doit augmenter de cent cinquante mille fois, c'est-à-dire que la pression doit être abaissée à environ un pascal – un cent millième d'atmosphère. Un double vitrage ne tient pas cela, mais un thermos le tient, et c'est pourquoi il fonctionne. D'où aussi la réponse à la question de savoir pourquoi on injecte de l'argon dans un double vitrage : non pas pour raréfier, mais parce que κ de l'argon est de 0,017 contre 0,026 pour l'air – une molécule lourde vole plus lentement."
+    },
+    {
+     "icon": "fact",
+     "kind": "fait curieux",
+     "h": "Fourier, les séries et la première question sur le climat",
+     "text": "La « Théorie analytique de la chaleur » a une troisième retombée, outre la loi et les séries. En 1824, Fourier s'est posé une question que personne n'avait posée avant lui : pourquoi la Terre est-elle plus chaude qu'elle ne devrait l'être par le seul chauffage solaire ? Il a estimé l'apport d'énergie du Soleil, l'a comparé à la perte et a constaté un déficit. Il a proposé l'explication suivante : l'atmosphère laisse passer le rayonnement entrant plus librement qu'elle ne retient le rayonnement sortant – et il a comparé cela à une boîte sous un couvercle de verre des expériences de Saussure. Il a deviné le mécanisme dans les grandes lignes et s'est trompé dans les détails – le rôle des gaz spécifiques a été clarifié plus tard par Tyndall et Arrhenius –, mais c'est à ce travail que l'on fait remonter la formulation même de la question du bilan thermique de la planète."
+    },
+    {
+     "icon": "edge",
+     "kind": "limite de validité",
+     "h": "Quand la « conductivité thermique d'un matériau » cesse d'être une propriété du matériau",
+     "text": "La loi de Fourier suppose implicitement que le porteur subit de nombreuses collisions sur son chemin. Dans le silicium à température ambiante, le libre parcours moyen des vibrations du réseau est de quelques centaines de nanomètres, et dans un transistor avec une grille de quelques dizaines de nanomètres, la condition est violée : la chaleur se propage balistiquement, d'une frontière à l'autre. La valeur de κ dépend alors de la taille de l'échantillon, c'est-à-dire qu'elle cesse d'être une propriété de la substance, et dans les calculs thermiques des puces électroniques, c'est l'une des principales difficultés. L'exemple inverse dans le même domaine est l'aérogel : ses pores sont plus petits que le libre parcours moyen de l'air, la molécule n'a pas la place d'accélérer avant une collision, et κ de l'aérogel est d'environ 0,013 – deux fois plus faible que celui de l'air dont il est principalement rempli. La mesure de tout cela est le nombre de Knudsen, le rapport du libre parcours à la taille : tant qu'il est très inférieur à un, la loi de Fourier est valable ; lorsqu'il est de l'ordre de un, un autre calcul est nécessaire."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "Isolation : trois mécanismes à la fois",
+   "blocks": [
+    {
+     "h": "Ce qui chauffe, ce n'est pas le duvet, c'est l'air",
+     "text": "Un isolant ne fonctionne presque jamais par sa propre conductivité thermique — celle de ses fibres est pire que celle de l'air. Il fonctionne en rendant l'air immobile. Prenez les chiffres : air 0,026, duvet 0,025, polystyrène expansé 0,035, laine minérale 0,040. Tous se serrent autour de la même valeur et aucun ne bat sérieusement l'air — parce qu'ils sont tous essentiellement de l'air, jusqu'à 98 % de leur volume, et le squelette solide ne fait qu'empêcher l'air de circuler. D'où deux conséquences pratiques, toutes deux vérifiables sur soi-même. Une doudoune compressée ne chauffe pas : l'air est chassé, il ne reste que le duvet. Un isolant mouillé ne chauffe pas : l'air a été remplacé par de l'eau avec κ = 0,6, soit vingt-trois fois plus."
+    },
+    {
+     "h": "Convection : pourquoi l'interstice ne doit pas être large",
+     "text": "Une couche d'air immobile est d'autant meilleure qu'elle est épaisse : la résistance R = L/κ augmente linéairement avec l'épaisseur. Mais à partir d'un certain moment, l'air cesse d'être immobile. Près de la vitre chaude, il se réchauffe, s'allège et monte ; près de la vitre froide, il redescend — une circulation s'établit, et elle transporte la chaleur bien plus vite que la conduction. Le seuil est donné par le nombre de Rayleigh, qui croît comme le cube de l'épaisseur, alors que le bénéfice n'est que linéaire ; pour un interstice d'air vertical avec les écarts de température domestiques, le seuil se situe vers 15–20 millimètres. C'est pourquoi les vitrages isolants sont faits avec un interstice de 16 mm, et non de 50 : plus large, la convection s'installe, et tout le gain d'épaisseur est perdu. Pour la même raison, un double vitrage à deux chambres avec deux interstices étroits est meilleur qu'un simple vitrage avec un seul interstice large.",
+     "latex": "R = \\frac{L}{\\kappa}\\ \\text{croît comme } L, \\qquad \\mathrm{Ra} = \\frac{g\\beta\\,\\Delta T\\,L^{3}}{\\nu\\chi}\\ \\text{croît comme } L^{3}"
+    },
+    {
+     "h": "Rayonnement : le mécanisme oublié",
+     "text": "Le troisième canal ne nécessite pas de matière du tout, et dans la vie courante il n'est pas négligeable. Une surface noire absolue à 293 K rayonnerait 418 W/m², une surface ordinaire environ dix pour cent de moins. Entre deux vitres d'un vitrage isolant à +20 et −10 °C, l'échange net par rayonnement est d'environ 120 W/m². Pour comparaison, la conduction à travers le même interstice de 16 mm donne 0,026·30/0,016 ≈ 49 W/m². Autrement dit, dans un vitrage isolant ordinaire, le rayonnement transporte deux fois plus de chaleur que la conduction — et l'épaisseur de l'interstice n'y peut rien. On y remédie par un miroir : un revêtement faiblement émissif réduit l'émissivité du verre de 0,9 à 0,04, et l'échange tombe à environ 6 W/m², soit vingt fois moins. C'est pourquoi le verre à couche faiblement émissive (i-verre) apporte un gain plus important que toute augmentation raisonnable de l'interstice, et c'est aussi pourquoi l'ampoule intérieure d'un thermos est argentée.",
+     "latex": "q_{\\text{ray}} = \\frac{\\sigma\\,\\bigl(T_1^{4}-T_2^{4}\\bigr)}{\\dfrac{1}{\\varepsilon_1}+\\dfrac{1}{\\varepsilon_2}-1}"
+    },
+    {
+     "h": "Thermos et ponts thermiques",
+     "text": "Le vase de Dewar de 1892 est un manuel sur ce sujet en un seul objet. Le vide entre les parois élimine les deux premiers mécanismes d'un coup : il n'y a presque pas de molécules, rien à transporter. L'argenture élimine le troisième. Reste ce que ni le vide ni le miroir n'éliminent : le col et le point de soudure où les parois se rejoignent — le pont thermique. Dans un bon thermos, c'est là que se trouve l'essentiel des pertes, et on le combat en allongeant le chemin et en amincissant la jonction, pas en améliorant le vide. Dans une maison, la logique est la même. Une dalle de balcon qui traverse de part en part un mur isolé déprécie plusieurs mètres carrés d'isolant autour d'elle ; les fixations métalliques qui maintiennent l'isolant en place mangent des pourcentages de sa résistance ; un tableau de fenêtre non isolé annule les performances d'une bonne fenêtre. L'isolation thermique se calcule au point faible, pas à la couche moyenne — comme un circuit où une mauvaise dérivation est branchée en parallèle avec une bonne résistance."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "Les molécules traversent un plan imaginaire également dans les deux sens, mais celles qui viennent du côté chaud transportent plus d'énergie. D'où la loi de Fourier q = −κ·dT/dx et le coefficient lui-même : κ = ⅓·n·v̄·λ·c. Ce sont les porteurs d'énergie qui déterminent κ : les molécules donnent des centièmes de watt par mètre-kelvin, les électrons dans les métaux des centaines.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "Loi de Fourier",
+     "text": "Le flux est proportionnel au gradient de température et dirigé en sens inverse. Le signe moins n'est pas une convention : il est apparu naturellement, par la soustraction des flux opposés."
+    },
+    {
+     "icon": "scale",
+     "title": "κ = ⅓·n·v̄·λ·c",
+     "text": "Quatre facteurs : combien de porteurs, à quelle vitesse ils se déplacent, jusqu'où ils vont sans collision, et combien d'énergie ils transportent par kelvin."
+    },
+    {
+     "icon": "fact",
+     "title": "Le gaz ne ressent pas la pression",
+     "text": "n diminue, λ augmente, le produit reste constant. La pompe à vide n'aide que lorsque λ atteint la taille de l'interstice — environ un pascal."
+    },
+    {
+     "icon": "edge",
+     "title": "Dans les métaux, le porteur est différent",
+     "text": "La vitesse de Fermi est de 1,6·10⁶ m/s contre 470 m/s pour les molécules. D'où la loi de Wiedemann-Franz : κ/(σT) = 2,44·10⁻⁸ W·Ω/K²."
+    }
+   ],
+   "where": [
+    "Mur et vitrage isolant : les résistances thermiques des couches s'additionnent comme des résistances électriques, et les ponts thermiques sont branchés en parallèle.",
+    "Radiateur de processeur : la base en cuivre étale la zone chaude, les ailettes cèdent la chaleur à l'air.",
+    "Pâte thermique : elle est moins bonne que le métal, mais bien meilleure que l'air qui resterait sinon dans le micro-interstice.",
+    "Steak et pâte : le temps de chauffage varie comme le carré de l'épaisseur, donc deux fois plus épais — quatre fois plus long."
+   ],
+   "watchOut": "Trois erreurs fréquentes. La première : confondre κ avec la diffusivité thermique χ = κ/(ρc_p) : c'est κ qui détermine combien de watts traversent un mur, et χ qui détermine la vitesse à laquelle le mur ou la cuillère se réchauffe. La deuxième : croire que l'isolant chauffe par lui-même : il ne fait que maintenir l'air immobile, et s'il est compressé ou mouillé, il ne fonctionne plus. La troisième : oublier le rayonnement : à température ambiante, à travers un interstice d'air, il transporte plus de chaleur que la conduction, et on ne peut pas y remédier en augmentant l'interstice."
+  },
+  "quiz": [
+   {
+    "id": "tc1",
+    "type": "mcq",
+    "q": "De l'espace entre les vitres, on a retiré la moitié de l'air, la température reste la même. Comment la conductivité thermique du gaz dans l'espace change-t-elle ?",
+    "options": [
+     "Elle ne change pratiquement pas : la concentration a diminué de moitié, mais le libre parcours moyen a doublé",
+     "Elle diminuera de moitié : il y a deux fois moins de porteurs",
+     "Elle doublera : les molécules ont plus d'espace pour voler",
+     "Elle diminuera d'un facteur quatre : moins de traversées du plan et moins de collisions"
+    ],
+    "answer": 0,
+    "why": "Dans la formule κ = ⅓·n·v̄·λ·c, la concentration et le libre parcours moyen entrent en produit, et λ est inversement proportionnel à n. Le produit nλ est déterminé uniquement par la section efficace de collision et ne dépend pas de la pression. L'option « elle diminuera de moitié : il y a deux fois moins de porteurs » semble convaincante et c'est précisément pour cela qu'elle est dangereuse : elle compte les porteurs et oublie que chacun transporte désormais de l'énergie depuis un point plus lointain, donc plus chaud. Le pompage ne commence à aider que lorsque λ devient comparable à la largeur de l'espace ; pour un espace d'un centimètre, cela correspond à une pression d'environ un pascal.",
+    "hint": "Écrivez κ = ⅓·n·v̄·λ·c et remplacez λ par 1/(√2·n·σ). Que reste-t-il de la concentration ?"
+   },
+   {
+    "id": "tc2",
+    "type": "mcq",
+    "q": "Le thermomètre indique que le carrelage et le tapis en laine dans la pièce ont la même température de 20 °C. Pourquoi le carrelage semble-t-il nettement plus froid au pied nu ?",
+    "options": [
+     "Le carrelage extrait la chaleur de la peau plus rapidement, donc la température au point de contact s'établit plus bas",
+     "Le carrelage est en réalité plus froid, mais le thermomètre n'est pas assez sensible",
+     "Le carrelage a une capacité thermique plus élevée, donc il absorbe globalement plus de chaleur",
+     "Le tapis se réchauffe au contact du pied, mais pas le carrelage"
+    ],
+    "answer": 0,
+    "why": "La peau ressent sa propre température au point de contact, et non la température du sol. La température de contact est la moyenne des deux températures, pondérée par l'effusivité thermique b = √(κρc_p). Pour la peau, b ≈ 1500, pour le carrelage environ 1600, pour le tapis environ 120 : sur le carrelage, la température de contact s'établit à environ 26 °C, sur le tapis à environ 32 °C. L'option concernant la plus grande capacité thermique du carrelage se trompe en considérant l'énergie totale absorbée, alors que la sensation est déterminée par la température de contact, qui s'établit en une fraction de seconde. L'option où le carrelage est « en réalité plus froid » se vérifie directement : posez le même thermomètre sur le carrelage et sur le tapis et attendez — il indiquera la même chose.",
+    "hint": "La sensation n'est pas donnée par la température du sol, mais par la température de la peau au point de contact. De quoi dépend le fait qu'elle se rapproche des 33 degrés de la peau ou des 20 degrés du sol ?"
+   },
+   {
+    "id": "tc3",
+    "type": "free",
+    "q": "En vos propres termes : pourquoi le cuivre conduit-il la chaleur quinze mille fois mieux que l'air, alors que la formule κ = ⅓·n·v̄·λ·c est la même pour les deux ?",
+    "keywords": [
+     "électron",
+     "fermi",
+     "vitesse",
+     "porteur",
+     "libre",
+     "conduction",
+     "métal",
+     "rapide"
+    ],
+    "needed": 2,
+    "why": "Parce que dans un métal, l'énergie est transportée par les électrons de conduction, et non par les molécules, et dans les mêmes facteurs, leurs nombres sont différents. Les électrons sont nombreux, mais la capacité thermique de chacun est négligeable : seuls ceux qui se trouvent près du niveau de Fermi peuvent être excités, une fraction de l'ordre de T/T_F ≈ 0,004 — dans le produit n·c, le métal gagne environ vingt fois. Ce qui fait la différence, c'est la vitesse : un électron au niveau de Fermi se déplace à 1,6·10⁶ m/s, soit trois mille cinq cents fois plus vite qu'une molécule d'air. Le libre parcours moyen est même un peu plus court, environ 39 nm. Multipliez les trois facteurs — et vous obtenez les milliers de fois requis. Au passage, on comprend pourquoi dans les métaux la conductivité thermique et la conductivité électrique sont liées par la loi de Wiedemann-Franz : ce sont les mêmes particules qui font le travail.",
+    "hint": "Demandez-vous QUI transporte l'énergie dans le métal, et substituez ses nombres dans les trois mêmes facteurs : combien de porteurs, à quelle vitesse ils se déplacent, sur quelle distance sans collision."
+   },
+   {
+    "id": "tc4",
+    "type": "estimate",
+    "q": "Une couche de polystyrène expansé de 5 cm d'épaisseur, κ = 0,035 W/(m·K). D'un côté +20 °C, de l'autre 0 °C. Quelle est la densité de flux thermique en watts par mètre carré ?",
+    "answer": 14,
+    "unit": "W/m²",
+    "why": "q = κ·ΔT/L = 0,035 · 20 / 0,05 = 14 W/m². De tête : d'abord le gradient — 20 kelvins sur 0,05 mètre, soit 400 K/m ; multipliez par 0,035 et vous obtenez quatorze. Vérification par le bon sens : un plafond de 4×5 mètres, isolé de la même manière, perdrait 14·20 = 280 W — trois ampoules à incandescence, ce qui est plausible pour une maison isolée.",
+    "hint": "Calculez d'abord le gradient : combien de kelvins par mètre d'épaisseur. Puis multipliez par κ. Convertissez l'épaisseur en mètres.",
     "tolAbs": 3
    }
   ]

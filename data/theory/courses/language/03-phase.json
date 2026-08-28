@@ -16,37 +16,52 @@
   ],
   "examples_from_articles": [
    {
-    "id": "2602.07660",
-    "date": "2026-02-07",
+    "id": "2511.14547",
+    "date": "2025-11-18",
     "title": {
-     "ru": "Как отличить хаос от порядка по следу частицы",
-     "en": "How to Tell Chaos from Order by a Particle's Trail",
-     "es": "Cómo distinguir el caos del orden por la huella de una partícula",
-     "ar": "كيف تميّز الفوضى عن النظام من أثر الجسيم"
+     "ru": "Температура как регулятор размерности в квантовых системах",
+     "en": "Temperature Changes the Number of Dimensions in Quantum Systems",
+     "es": "La temperatura cambia el número de dimensiones en los sistemas cuánticos",
+     "ar": "درجة الحرارة كمنظِّم للأبعاد في الأنظمة الكمومية",
+     "fr": "La température change le nombre de dimensions dans les systèmes quantiques"
     },
-    "why": "phase_space, trajectory"
+    "score": 0.672
    },
    {
-    "id": "2605.27635",
-    "date": "2026-05-26",
+    "id": "2506.03455v1",
+    "date": "2025-06-03",
     "title": {
-     "ru": "Как измерить хаос в системе, не зная её правил",
-     "en": "How to Measure Chaos in a System Without Knowing Its Rules",
-     "es": "Cómo medir el caos en un sistema sin conocer sus reglas",
-     "ar": "كيف تقيس الفوضى في نظام دون معرفة قوانينه"
+     "ru": "Оптомеханическая память: как лазер обучает зеркальце помнить",
+     "en": "Teaching a Tiny Mirror to Remember: Lessons from a Laser Teacher",
+     "es": "Cómo enseñar a un espejito a recordar: lecciones de un maestro láser",
+     "ar": "ذاكرة بصرية ميكانيكية: كيف يعلّم الليزر مرآة صغيرة أن تتذكر",
+     "fr": "Comment apprendre à un miroir à se souvenir : les leçons d'un professeur laser"
     },
-    "why": "phase_space, dynamical_systems"
+    "score": 0.636
    },
    {
-    "id": "2607.26174v1",
-    "date": "2026-07-28",
+    "id": "2503.08296",
+    "date": "2025-03-11",
     "title": {
-     "ru": "Тёмная сторона маятника",
-     "en": "The Dark Side of the Pendulum",
-     "es": "El lado oscuro del péndulo",
-     "ar": "الجانب المظلم للبندول"
+     "ru": "Квантовые измерения: скрытые пути эволюции",
+     "en": "Quantum Measurements: Hidden Paths of Evolution",
+     "es": "Mediciones cuánticas: los caminos ocultos de la evolución",
+     "ar": "القياسات الكمومية: المسارات الخفية للتطور",
+     "fr": "Mesures quantiques : les voies cachées de l'évolution"
     },
-    "why": "phase_space, pendulum"
+    "score": 0.634
+   },
+   {
+    "id": "2512.14377",
+    "date": "2025-12-16",
+    "title": {
+     "ru": "Управление реальностью без осознания: протокол реальностного руления",
+     "en": "How to Swap Your Reality Without Knowing",
+     "es": "Cómo cambiar tu realidad sin saberlo",
+     "ar": "كيف تتبدل واقعك دون أن تدري",
+     "fr": "Comment changer de réalité sans le savoir"
+    },
+    "score": 0.629
    }
   ]
  },
@@ -1656,30 +1671,387 @@
    ]
   }
  },
- "tags": [
-  "entropy",
-  "pulsar",
-  "machine_learning",
-  "information_theory",
-  "chaos_theory"
- ],
- "laws": [
-  "newtons_second_law",
-  "liouville_theorem",
-  "schrdinger_equation"
- ],
- "examples_from_articles": [
-  {
-   "id": "2607.02613",
-   "why": "совпадение по теме: information_theory, machine_learning"
+ "fr": {
+  "title": "Espace des états",
+  "subtitle": "Paragraphe 3 · Comment la mémoire devient une dimension",
+  "intro": [
+   "Un corps se trouve à un point de coordonnée trois mètres. Que se passera-t-il dans une seconde ? Impossible de répondre — non pas parce que les données sur les forces manquent, mais parce que la question est mal posée. Le corps peut être immobile, ou traverser ce point à trois cents mètres par seconde. Le présent semble identique, le futur complètement différent.",
+   "Il en découle une chose désagréable : pour prédire le mouvement, il faut se souvenir du passé. La vitesse ne se voit pas en un instant — elle s'obtient en comparant deux instants voisins. Résoudre des équations avec mémoire est difficile, et la physique a trouvé une solution de contournement qui s'est avérée plus importante que le problème lui-même.",
+   "La voie est la suivante : ne pas contester la réalité, mais changer le langage de description. Déclarer que l'état n'est pas la coordonnée, mais une paire — coordonnée et vitesse. Alors la mémoire disparaît : connaissant la paire actuelle, on peut calculer la suivante, et le passé n'est plus nécessaire. Nous avons abaissé l'ordre en augmentant la dimensionnalité. Cette astuce se retrouvera plus tard en thermodynamique, en statistique et en mécanique quantique — et à chaque fois elle semblera nouvelle, tout en restant la même."
+  ],
+  "standNote": "Sur le stand — une masse sur un ressort. Remarquez les deux panneaux : à gauche, le corps oscille dans le temps ; à droite, un graphique se construit. En changeant la masse et la raideur, ne regardez pas la forme de la sinusoïde, mais la paire de nombres : position et vitesse. À tout moment, ils suffisent pour prédire tout le mouvement ultérieur — et c'est une affirmation, pas une observation. Vérifiez : deux instants différents avec la même position mais des vitesses opposées donnent une suite complètement différente.",
+  "formula": {
+   "name": "Équations de Hamilton",
+   "latex": "\\frac{dq}{dt} = \\frac{\\partial H}{\\partial p}, \\qquad \\frac{dp}{dt} = -\\frac{\\partial H}{\\partial q}",
+   "alsoKnown": "Équations canoniques · description dans l'espace des phases",
+   "authors": [
+    {
+     "who": "Joseph-Louis Lagrange",
+     "year": "1788",
+     "what": "a réécrit la mécanique de Newton pour qu'elle ne dépende plus du choix des coordonnées. Il a déclaré dans la préface que son livre ne contiendrait aucun schéma — la mécanique est devenue une branche de l'analyse."
+    },
+    {
+     "who": "William Rowan Hamilton",
+     "year": "1834",
+     "what": "a mené l'idée à son terme : il a remplacé une équation du second ordre par deux équations du premier ordre et a obtenu une description où position et impulsion sont sur un pied d'égalité. Plus tard, il s'est avéré que c'est précisément cette forme qui passe en mécanique quantique."
+    },
+    {
+     "who": "Joseph Liouville",
+     "year": "1838",
+     "what": "a prouvé que le volume d'un nuage d'états dans l'espace des phases ne change pas au cours du temps. Le nuage peut s'étirer en un fil très fin, mais le volume est conservé."
+    },
+    {
+     "who": "Willard Gibbs",
+     "year": "1902",
+     "what": "a transposé l'astuce à des systèmes de milliards de particules : s'il est impossible de suivre un point, il faut suivre la densité. Ainsi est née la mécanique statistique."
+    },
+    {
+     "who": "Henri Poincaré",
+     "year": "1890",
+     "what": "a commencé à étudier non pas les solutions, mais la forme des trajectoires dans l'espace des phases — et a découvert que pour un simple système de trois corps, elles peuvent être incroyablement enchevêtrées. De là est née la théorie du chaos."
+    }
+   ],
+   "story": "Hamilton a dérivé ses équations en s'occupant d'optique, pas de mécanique : il a remarqué que la propagation de la lumière et le mouvement d'une particule sont décrits par la même mathématique. L'analogie a semblé une élégante curiosité pendant près de cent ans. En 1926, Schrödinger l'a prise au sérieux : si la mécanique est un cas limite d'une certaine théorie ondulatoire, comme l'optique géométrique est un cas limite de l'optique ondulatoire, alors il faut écrire cette théorie ondulatoire. C'est ainsi qu'est apparue l'équation de Schrödinger. La curiosité s'est avérée être une voie vers la mécanique quantique.",
+   "symbols": [
+    {
+     "sym": "q",
+     "latex": "q",
+     "what": "coordonnée généralisée",
+     "unit": "m (ou rad)",
+     "note": "«généralisée» signifie toute grandeur qui fixe la position : longueur, angle, volume"
+    },
+    {
+     "sym": "p",
+     "latex": "p",
+     "what": "impulsion généralisée",
+     "unit": "kg·m/s",
+     "note": "pour un mouvement ordinaire c'est $mv$ ; c'est lui, et non la vitesse, qui est le partenaire correct de la coordonnée"
+    },
+    {
+     "sym": "H",
+     "latex": "H",
+     "what": "fonction de Hamilton — énergie totale en fonction de $q$ et $p$",
+     "unit": "J",
+     "note": "pour un système conservatif $H = $ énergie cinétique plus potentielle"
+    },
+    {
+     "sym": "G",
+     "latex": "\\Gamma",
+     "what": "espace des phases",
+     "unit": "—",
+     "note": "pour une particule, il est à six dimensions : trois coordonnées et trois impulsions"
+    },
+    {
+     "sym": "V",
+     "latex": "V_{\\Gamma}",
+     "what": "volume dans l'espace des phases",
+     "unit": "(J·s)^N",
+     "note": "grandeur dont le logarithme est l'entropie"
+    }
+   ]
   },
-  {
-   "id": "2607.01046",
-   "why": "совпадение по теме: information_theory, machine_learning"
+  "derivation": {
+   "title": "Dérivation rigoureuse : comment la mémoire est remplacée par la dimensionnalité",
+   "lead": "Décomposons lentement — chaque étape compte ici. Nous partons de la deuxième loi ordinaire et aboutissons au fait que le mouvement est une ligne dans l'espace des états.",
+   "steps": [
+    {
+     "text": "La deuxième loi de Newton est une équation du second ordre en temps. Pour la résoudre, il faut deux conditions initiales, pas une. Formellement : connaissant seulement $x(t)$, vous ne pouvez pas calculer $x(t+dt)$ ; il faut aussi $x(t-dt)$ pour estimer la vitesse. C'est une mémoire du passé.",
+     "latex": "m\\frac{d^{2}x}{dt^{2}} = F(x)",
+     "figure": "secondlaw",
+     "figCaption": "Une équation du second ordre exige de connaître à la fois la position et la vitesse — un seul instant ne suffit pas."
+    },
+    {
+     "text": "Changeons de langage de description. Nous déclarons que l'état n'est pas une coordonnée, mais une paire. Une équation du second ordre se décompose en deux équations du premier ordre — sans mémoire.",
+     "latex": "\\text{état} = (x, v): \\qquad \\frac{dx}{dt} = v, \\qquad \\frac{dv}{dt} = \\frac{F(x)}{m}",
+     "figure": "axes",
+     "figCaption": "Deux équations du premier ordre au lieu d'une du second : l'ordre est réduit, la dimensionnalité est augmentée."
+    },
+    {
+     "text": "D'où vient la nouvelle variable. La vitesse n'est pas un ajout artificiel, mais une histoire encapsulée : la différence de deux positions voisines, compressée en un seul nombre. Au lieu de stocker la coordonnée à deux instants, nous stockons la coordonnée et sa dérivée à un instant.",
+     "latex": "v(t) = \\lim_{dt \\to 0} \\frac{x(t) - x(t-dt)}{dt}",
+     "figure": "secant",
+     "figCaption": "La dérivée encapsule le passé immédiat dans un nombre attribué au présent."
+    },
+    {
+     "text": "L'astuce se généralise. Une équation du troisième ordre nécessitera un triplet, du quatrième — un quadruplet. Chaque dérivée successive encapsule un passé de plus en plus profond — exactement comme les coefficients de la série de Taylor stockent le comportement de la fonction au voisinage d'un point.",
+     "latex": "(x,\\,v,\\,a): \\quad \\frac{dx}{dt} = v, \\;\\; \\frac{dv}{dt} = a, \\;\\; \\frac{da}{dt} = \\ldots",
+     "figure": "tangent",
+     "figCaption": "La série de Taylor — la même idée : toute l'histoire de la fonction est codée par un ensemble de nombres en un point."
+    },
+    {
+     "text": "Maintenant, la conséquence principale. Puisque l'état est devenu un point, le mouvement est devenu une ligne. Pour une masse sur un ressort, l'énergie est la somme de l'énergie cinétique et potentielle et ne change pas — c'est l'équation d'une ellipse dans le plan position-impulsion.",
+     "latex": "E = \\frac{p^{2}}{2m} + \\frac{kx^{2}}{2} = \\text{const} \\;\\Longrightarrow\\; \\frac{p^{2}}{2mE} + \\frac{x^{2}}{2E/k} = 1",
+     "figure": "energyswap",
+     "figCaption": "Une courbe fermée dans le plan des phases — c'est précisément l'affirmation « l'énergie est conservée, le mouvement est périodique »."
+    },
+    {
+     "text": "Ajoutons le frottement — et l'ellipse se transforme en spirale qui s'enroule vers l'origine. Remarquez : pour comprendre cela, nous n'avons pas résolu l'équation. La forme de la trajectoire répond à la question sur le sort du système avant même qu'une formule n'apparaisse. C'est de cette observation que Poincaré a commencé la théorie qualitative des systèmes dynamiques.",
+     "latex": "\\frac{dE}{dt} = -bv^{2} < 0 \\;\\Longrightarrow\\; \\text{spirale vers l'intérieur}",
+     "figure": "friction",
+     "figCaption": "Le frottement fait rentrer la trajectoire vers l'intérieur : la réponse qualitative est visible sans aucune résolution."
+    },
+    {
+     "text": "Et la dernière étape — vers la statistique. Pour une seule particule, l'espace des phases est à six dimensions. Pour une mole de gaz, il y a six fois plus de dimensions que de particules — de l'ordre de $3{,}6 \\cdot 10^{24}$ : suivre un point est impossible, ni maintenant ni jamais. Alors la physique abandonne le point et passe au volume. L'entropie de Boltzmann est le logarithme du nombre d'états, c'est-à-dire littéralement le logarithme du volume de l'espace des phases.",
+     "latex": "S = k_B \\ln W, \\qquad W \\sim V_{\\Gamma}",
+     "figure": "microcontact",
+     "figCaption": "Quand on ne peut pas suivre un point, on suit la densité. D'où toute la physique statistique."
+    }
+   ],
+   "plate": "Le passage à l'espace des phases est un remplacement de la mémoire par la dimensionnalité. Le passé n'est pas rejeté, il est codé dans des coordonnées supplémentaires du présent.",
+   "note": "L'astuce fonctionne aussi là où la mémoire ne se réduit pas à une dérivée. Exemple : l'hystérésis — le mouillage d'une roche poreuse et son séchage inverse suivent des courbes différentes, et la même humidité signifie des choses différentes. On y remédie en ajoutant à l'état un indicateur de la direction du processus. L'indicateur est la même histoire encapsulée que la vitesse pour la coordonnée. Les modèles industriels de réservoir sont précisément construits ainsi ; si une dépendance inexplicable à l'historique y apparaît, c'est un signe certain qu'une variable a été oubliée dans l'état."
   },
-  {
-   "id": "2607.00151",
-   "why": "совпадение по теме: information_theory, machine_learning"
-  }
- ]
+  "math": {
+   "title": "Les mathématiques nécessaires ici",
+   "lead": "Trois choses : l'ordre d'une équation différentielle, la dérivée ronde dans la formule de Hamilton, et une courbe où le temps est caché dans un paramètre.",
+   "items": [
+    {
+     "what": "L'ordre de l'équation détermine la dimension",
+     "why": "Dans la première étape de la dérivation, on voit une dérivée seconde : c'est une équation du second ordre, donc il faut deux conditions initiales. La règle est générale : l'ordre est égal au nombre de nombres à spécifier pour que la solution soit unique, et ce même nombre est la dimension de l'espace des états. La deuxième étape utilise exactement cela : une équation du second ordre est remplacée par deux équations du premier ordre, et au lieu d'une variable avec mémoire, on obtient une paire sans mémoire. La propriété « le futur ne dépend que du présent » est appelée markovienne ; notez qu'elle n'est pas issue d'une nouvelle physique, mais d'un changement de description. D'où un test pratique de complétude de l'état : suffit-il d'une seule photo instantanée pour avancer sans regarder le passé ?",
+     "latex": "m\\ddot{x} = F(x) \\;\\Longleftrightarrow\\; \\begin{cases} \\dot{x} = v \\\\ \\dot{v} = F(x)/m \\end{cases}",
+     "kit": "diffeq"
+    },
+    {
+     "what": "La dérivée ronde au lieu de la droite",
+     "why": "La formule de ce paragraphe est écrite avec $\\partial H/\\partial p$ et $\\partial H/\\partial q$, et le symbole rond n'est pas une décoration. La fonction de Hamilton dépend de deux variables, donc il faut préciser la dérivée : par rapport à laquelle. L'écriture $\\partial H/\\partial p$ signifie « on fait varier l'impulsion, on maintient la coordonnée gelée ». Pour une masse sur un ressort, $H = p^{2}/2m + kq^{2}/2$, et les deux dérivées partielles se calculent comme des dérivées ordinaires, en considérant l'autre lettre comme une constante. On obtient $\\partial H/\\partial p = p/m$, c'est-à-dire la vitesse, et $\\partial H/\\partial q = kq$, c'est-à-dire la force de rappel avec un signe moins. Les deux équations de Hamilton se révèlent être la deuxième loi de Newton réécrite dans des variables symétriques.",
+     "latex": "\\frac{\\partial H}{\\partial p} = \\frac{p}{m} = \\dot{q}, \\qquad -\\frac{\\partial H}{\\partial q} = -kq = \\dot{p}",
+     "kit": "partial"
+    },
+    {
+     "what": "Une ellipse dont le temps est caché dans un angle",
+     "why": "Dans la cinquième étape de la dérivation, la conservation de l'énergie est écrite comme une équation d'ellipse dans les axes coordonnée-impulsion, et le temps n'y apparaît pas du tout. C'est une courbe paramétrique : le temps n'a pas disparu, il est devenu un paramètre le long de la ligne — le même procédé que pour décrire un cercle par $x=\\cos t$, $y=\\sin t$. Si on étire les axes pour que les deux termes de l'énergie aient la même apparence, l'ellipse devient un cercle, le mouvement le long de celui-ci devient une rotation uniforme, et la phase de l'oscillation devient littéralement l'angle polaire. C'est pourquoi l'aire dans l'exemple est calculée avec la formule scolaire $\\pi a b$. Pour une mole de gaz, la même aire devient un volume dans un espace de dimension $6N \\approx 3{,}6\\cdot10^{24}$ — trois coordonnées et trois impulsions pour chacune des $6\\cdot10^{23}$ particules : on ne peut pas le calculer, mais on a généralement besoin du logarithme, et le logarithme d'un produit est une somme — d'où l'additivité de l'entropie.",
+     "latex": "\\frac{x^{2}}{2E/k} + \\frac{p^{2}}{2mE} = 1, \\qquad S_{\\text{ell}} = \\pi A\\,p_{\\max}",
+     "kit": "polar"
+    }
+   ]
+  },
+  "example": {
+   "title": "Exemple chiffré : l'aire de l'ellipse et d'où vient la constante de Planck en quantique",
+   "lead": "Calculons l'aire de la trajectoire dans l'espace des phases pour une masse ordinaire sur un ressort. La réponse sera étonnamment riche de sens.",
+   "given": "Une masse $m = 2$ kg sur un ressort de raideur $k = 30$ N/m oscille avec une amplitude $A = 6$ cm. Trouver l'aire balayée par sa trajectoire dans le plan des phases $(x, p)$.",
+   "law": "La trajectoire est une ellipse de demi-axes $A$ et $p_{\\max} = m\\omega A$ ; l'aire d'une ellipse est $\\pi ab$.",
+   "solution": [
+    {
+     "text": "La fréquence angulaire des oscillations.",
+     "latex": "\\omega = \\sqrt{\\frac{k}{m}} = \\sqrt{\\frac{30}{2}} \\approx 3{,}87\\ \\text{s}^{-1}"
+    },
+    {
+     "text": "L'impulsion maximale — au moment du passage par la position d'équilibre.",
+     "latex": "p_{\\max} = m\\omega A = 2 \\cdot 3{,}87 \\cdot 0{,}06 \\approx 0{,}46\\ \\text{kg}\\cdot\\text{m/s}"
+    },
+    {
+     "text": "L'aire de l'ellipse de demi-axes $A$ et $p_{\\max}$.",
+     "latex": "S = \\pi A p_{\\max} \\approx 3{,}14 \\cdot 0{,}06 \\cdot 0{,}46 \\approx 0{,}087\\ \\text{J}\\cdot\\text{s}"
+    },
+    {
+     "text": "Il est utile de remarquer le lien avec l'énergie et la période — il n'est pas fortuit.",
+     "latex": "S = \\frac{2\\pi E}{\\omega} = E \\cdot T, \\qquad E = \\frac{kA^{2}}{2} = 0{,}054\\ \\text{J}"
+    }
+   ],
+   "answer": "L'aire est d'environ $0{,}087$ J·s. La dimension est l'énergie multipliée par le temps, c'est-à-dire une action.",
+   "check": "Et maintenant, le but de l'exemple. La constante de Planck a exactement cette dimension et vaut $6{,}6 \\cdot 10^{-34}$ J·s. Notre ellipse est $10^{32}$ fois plus grande — voilà pourquoi les effets quantiques ne sont pas observables pour une masse sur un ressort. De plus, l'ancienne théorie des quanta affirmait directement : seules sont autorisées les orbites dont l'aire dans l'espace des phases est un multiple de la constante de Planck. La quantification est née comme une condition sur l'aire dans l'espace des phases — celui-là même que nous avons construit dans ce paragraphe par le désir de se débarrasser de la mémoire."
+  },
+  "constants": {
+   "title": "Constantes de ce paragraphe",
+   "lead": "Deux suffisent — et la seconde explique pourquoi la méthode de la mécanique s'est avérée nécessaire aux statistiques.",
+   "items": [
+    {
+     "sym": "h",
+     "latex": "h",
+     "dictKey": "h",
+     "name": "Constante de Planck",
+     "value": "6,63 · 10⁻³⁴",
+     "unit": "J · s",
+     "why": "Elle a la dimension d'une action — la même que l'aire dans le plan des phases. Ce n'est pas une coïncidence : la constante de Planck définit la plus petite cellule discernable de l'espace des phases, en dessous de laquelle parler d'un point de l'état n'a pas de sens.",
+     "mnemo": "L'ordre de grandeur 10⁻³⁴ — c'est à peu près le rapport entre la taille d'un homme et celle d'un noyau atomique. Le quantum d'action est aussi éloigné de notre échelle."
+    },
+    {
+     "sym": "k_B",
+     "latex": "k_B",
+     "dictKey": "k_B",
+     "name": "Constante de Boltzmann",
+     "value": "1,38 · 10⁻²³",
+     "unit": "J / K",
+     "why": "Elle convertit le logarithme du volume de l'espace des phases en entropie : $S = k_B \\ln W$. En substance, c'est le prix d'un bit d'information, exprimé dans des unités familières.",
+     "mnemo": "La formule $S = k \\ln W$ est gravée sur la tombe de Boltzmann à Vienne — il n'a pas vécu assez pour voir la reconnaissance de son idée."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Un seul geste — cinq endroits différents du cours",
+   "lead": "Il vaut la peine de voir à l'avance où exactement ce paragraphe fera écho. Chaque fois, il semblera qu'un nouveau concept est introduit, alors que c'est le même qui est introduit.",
+   "items": [
+    {
+     "h": "Mécanique",
+     "text": "Le plan de phase du pendule : une courbe fermée signifie la périodicité, une spirale — l'amortissement, une trajectoire divergente — l'instabilité. Le destin du système se lit dans la forme."
+    },
+    {
+     "h": "Thermodynamique",
+     "text": "Le diagramme pression-volume est le même espace des états, mais pour le gaz dans son ensemble. Le cycle de Carnot y est une courbe fermée, et l'aire à l'intérieur du cycle est égale au travail par tour."
+    },
+    {
+     "h": "Physique statistique",
+     "text": "L'entropie est le logarithme du volume de la région accessible. Le deuxième principe devient presque évident : le système va là où il y a plus d'espace, parce qu'il y a plus d'états."
+    },
+    {
+     "h": "Théorie de l'information",
+     "text": "La formule de Shannon coïncide avec la formule de Boltzmann à une constante et à la base du logarithme près. L'ignorance de l'état et la quantité d'information pour le spécifier sont une seule grandeur, calculée de deux côtés."
+    },
+    {
+     "h": "Physique quantique",
+     "text": "La relation d'incertitude interdit un point dans l'espace des phases : l'état occupe une cellule d'aire au moins égale à la constante de Planck. Le point classique apparaît comme un cas limite où la cellule est infiniment petite."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Amusant : vérifiez par vous-même",
+   "lead": "L'espace des phases semble une abstraction jusqu'à ce qu'on le voie sur la table de cuisine.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "expérience de cuisine",
+     "h": "Dessinez la trajectoire de phase d'un pendule",
+     "text": "Accrochez des clés ou un écrou à un fil — vous obtenez un pendule d'environ un demi-mètre. Écartez-le et lâchez-le. Prenez une feuille de papier et marquez des points : horizontalement l'écart par rapport à l'équilibre, à vue d'œil, verticalement la vitesse du mouvement — aux points extrêmes zéro, au milieu le maximum. Huit à dix points suffisent pour une période.",
+     "answer": "Les points se placeront sur un ovale fermé, parcouru dans le sens des aiguilles d'une montre. Continuez à observer pendant quelques minutes — l'ovale commencera à se resserrer lentement vers le centre : c'est le frottement de l'air qui transforme l'ellipse en spirale. Vous avez dessiné le portrait de phase d'un oscillateur amorti, sans rien calculer."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoxe",
+     "h": "Une goutte d'encre et le théorème de Liouville",
+     "text": "Versez une goutte d'encre dans un verre d'eau et remuez. Au bout d'une minute, la couleur est uniforme — le désordre a visiblement augmenté. Mais le théorème de Liouville affirme que le volume du nuage d'états dans l'espace des phases ne change pas du tout. Comment cela s'accorde-t-il ?",
+     "answer": "Le volume se conserve, mais pas la forme. La goutte s'étire en un fil très mince qui enlace tout le verre, tout en restant de même volume. Nous ne sommes tout simplement pas capables de discerner un fil aussi fin et nous voyons une grisaille uniforme. L'entropie augmente non pas parce que l'information a disparu, mais parce qu'elle s'est étalée sur des échelles inaccessibles à l'observation. C'est l'un des endroits les plus profonds de toute la physique."
+    },
+    {
+     "icon": "fact",
+     "kind": "fait amusant",
+     "h": "Pourquoi les prévisions météo s'arrêtent à deux semaines",
+     "text": "Ce n'est pas une question de puissance des ordinateurs. Dans l'atmosphère, des états initiaux proches divergent exponentiellement dans l'espace des phases : une imprécision au quatrième chiffre devient, après deux semaines, de l'ordre de grandeur de la prévision elle-même. Pour gagner une semaine supplémentaire, il faut augmenter la précision des mesures d'environ un facteur dix — et ainsi de suite à chaque fois. C'est une limite de la géométrie du flux, pas de la technique."
+    },
+    {
+     "icon": "mnemo",
+     "kind": "mnémonique",
+     "h": "L'ordre de l'équation = la dimension de l'état",
+     "text": "Règle en une ligne : autant de conditions initiales exige l'équation, autant de dimensions a l'espace des états. La deuxième loi de Newton en exige deux — un plan. L'équation de la chaleur exige un champ de températures — et prédit donc l'avenir à partir d'une seule image du présent."
+    },
+    {
+     "icon": "edge",
+     "kind": "limite de validité",
+     "h": "Où le point cesse d'exister",
+     "text": "Toute la construction repose sur le fait que l'état est un point. En mécanique quantique, cela n'existe plus : la relation d'incertitude interdit d'avoir simultanément une coordonnée et une impulsion précises. L'état occupe une cellule d'aire finie de l'ordre de la constante de Planck. L'astuce survit — mais le point devient une tache floue, et cela change tout."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "Appendice pour les curieux : la même astuce hors de la physique",
+   "lead": "Ne fait pas partie de l'évaluation. À propos du fait que l'idée de « remplacer la mémoire par la dimension » a été redécouverte indépendamment dans plusieurs domaines.",
+   "blocks": [
+    {
+     "h": "Ingénierie : l'espace d'état en théorie du contrôle",
+     "text": "Le pilote automatique, le stabilisateur d'image et le régulateur de température sont décrits par un vecteur d'état et une matrice de transition — c'est-à-dire les équations de Hamilton sous une autre forme. Le filtre de Kalman, sans lequel la navigation par satellite ne fonctionne pas, est littéralement une estimation de la position d'un point dans l'espace d'état à partir de mesures bruitées."
+    },
+    {
+     "h": "Apprentissage automatique : l'état caché",
+     "text": "Un réseau récurrent, en traitant du texte, ne stocke pas tout l'historique lu — il maintient un vecteur compressé à partir duquel on peut continuer. Les ingénieurs sont arrivés à l'idée de Hamilton indépendamment et presque dans les mêmes termes : élargir l'état pour se débarrasser de la mémoire."
+    },
+    {
+     "h": "Géologie : modélisation du réservoir",
+     "text": "L'état d'une cellule du réservoir — pression, saturations par phases, température, drapeaux de régime. Tant que le vecteur est complet, le système est markovien et se calcule en avant pas à pas. L'hystérésis de la pression capillaire se traite en ajoutant un drapeau « imbibition ou drainage » — exactement la même astuce que celle par laquelle la vitesse complète la coordonnée."
+    },
+    {
+     "h": "Et une question sans réponse",
+     "text": "Pourquoi la nature permet-elle en général une description de l'état en dimension finie — on ne le sait pas. En théorie quantique des champs, l'état est formellement de dimension infinie, et le fait qu'on puisse quand même calculer reste un sujet d'étonnement particulier. Plus de détails dans la section « Questions ouvertes »."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "L'état d'un système est un point dans un espace dont la dimension est égale à l'ordre de l'équation du mouvement ; alors le mouvement est une ligne, et la mémoire n'est pas nécessaire.",
+   "keyIdeas": [
+    {
+     "icon": "estimate",
+     "title": "Remplacer la mémoire par la dimension",
+     "text": "une équation du second ordre = deux équations du premier ordre"
+    },
+    {
+     "icon": "history",
+     "title": "Nouvelle variable",
+     "text": "l'histoire encapsulée, la dérivée compressée"
+    },
+    {
+     "icon": "sigma",
+     "title": "La forme de la trajectoire répond à",
+     "text": "La forme de la trajectoire répond à la question du destin du système avant toute résolution"
+    },
+    {
+     "icon": "ruler",
+     "title": "Variables cachées (drapeau de direction)",
+     "text": "Les variables cachées (drapeau de direction) guérissent la mémoire non réductible à une dérivée"
+    },
+    {
+     "icon": "scale",
+     "title": "Pour des milliards de particules, on suit",
+     "text": "Pour des milliards de particules, on ne suit pas un point, mais un volume ; son logarithme est précisément l'entropie"
+    }
+   ],
+   "where": "Le plan de phase du pendule, le diagramme PV du gaz, l'entropie de Boltzmann, la cellule de Planck en mécanique quantique, le vecteur d'état en théorie du contrôle.",
+   "watchOut": "Si le modèle montre une dépendance inexplicable à l'histoire, il s'agit presque toujours non pas de physique, mais d'une liste incomplète de variables d'état."
+  },
+  "quiz": [
+   {
+    "id": "p1",
+    "type": "mcq",
+    "q": "Pourquoi la coordonnée $x$ ne suffit-elle pas pour considérer l'état comme déterminé ?",
+    "options": [
+     "Parce que la coordonnée est mesurée avec imprécision",
+     "Parce que l'équation du mouvement est du second ordre et exige deux conditions initiales : le même point peut être traversé avec des vitesses différentes",
+     "Parce que la coordonnée dépend du choix du référentiel",
+     "Parce que le corps a toujours une taille et n'est pas un point"
+    ],
+    "answer": 1,
+    "why": "La dimension de l'espace des états est égale à l'ordre de l'équation. La deuxième loi de Newton est du second ordre, donc deux nombres sont nécessaires. La précision de la mesure et le choix du référentiel n'ont rien à voir ici : même avec une mesure idéale d'une seule coordonnée, l'avenir n'est pas déterminé.",
+    "hint": "Imaginez deux corps au même point : l'un au repos, l'autre passant. Leur présent diffère-t-il ? Et leur avenir ?"
+   },
+   {
+    "id": "p2",
+    "type": "mcq",
+    "q": "La trajectoire de phase d'un système est une spirale qui s'enroule vers l'origine. Qu'est-ce que cela signifie physiquement ?",
+    "options": [
+     "Le système se déplace en cercle avec une énergie constante",
+     "Le système est instable et se disperse",
+     "Le système perd de l'énergie et parvient au repos — par exemple, à cause du frottement",
+     "Le système se déplace de manière chaotique"
+    ],
+    "answer": 2,
+    "why": "La distance à l'origine dans le plan de phase est liée à l'énergie : plus on est proche du centre, plus l'écart et la vitesse sont petits. S'enrouler vers l'intérieur signifie une diminution de l'énergie. Une courbe fermée correspondrait à la conservation de l'énergie.",
+    "hint": "Qu'y a-t-il à l'origine du plan de phase — quelle position et quelle vitesse ?"
+   },
+   {
+    "id": "p3",
+    "type": "free",
+    "q": "En vos propres termes : quel est le sens de la phrase « le passage à l'espace des phases remplace la mémoire par la dimension » ?",
+    "keywords": [
+     "vitesse",
+     "dérivée",
+     "passé",
+     "histoire",
+     "coordonnée",
+     "deux nombres",
+     "paire",
+     "état",
+     "pas besoin de se souvenir"
+    ],
+    "needed": 2,
+    "why": "Pour prédire à partir d'une seule coordonnée, il faut se souvenir de ses valeurs précédentes. En ajoutant la vitesse — c'est-à-dire l'information sur le passé proche compressée en un nombre — on obtient une description où l'avenir ne dépend que du présent. Le passé n'est pas rejeté, il est codé dans la coordonnée supplémentaire.",
+    "hint": "D'où vient la vitesse si vous n'avez qu'une séquence de positions ? Que stocke-t-elle ?"
+   },
+   {
+    "id": "p4",
+    "type": "estimate",
+    "q": "Une masse sur un ressort balaie dans le plan de phase une ellipse d'aire d'environ 0,09 J·s. De combien de fois cela dépasse-t-il la constante de Planck (6,6 · 10⁻³⁴ J·s) ? Donnez l'ordre de grandeur.",
+    "answer": 32,
+    "unit": "ordre (puissance de dix)",
+    "why": "0,09 / 6,6·10⁻³⁴ ≈ 1,4·10³², soit de l'ordre de 10³². C'est précisément pourquoi la quantification de l'action est imperceptible pour une masse macroscopique : les échelons sont si petits par rapport à la grandeur elle-même que l'énergie semble continue.",
+    "hint": "Il suffit de diviser les puissances : 10⁻¹ divisé par 10⁻³⁴. Les mantisses peuvent être arrondies à l'unité.",
+    "tolAbs": 1
+   }
+  ]
+ }
 }

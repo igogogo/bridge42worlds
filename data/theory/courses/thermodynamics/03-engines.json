@@ -19,37 +19,52 @@
   ],
   "examples_from_articles": [
    {
-    "id": "2510.12017",
-    "date": "2025-10-13",
+    "id": "2603.07128",
+    "date": "2026-03-07",
     "title": {
-     "ru": "Когерентное излучение атомов как основа сверхэффективного теплового двигателя",
-     "en": "Glowing Atoms Create a Nearly Perfect Engine",
-     "es": "Átomos brillantes crean un motor casi perfecto",
-     "ar": "الذرات المتوهجة تصنع محركاً شبه مثالي"
+     "ru": "Вода работает на разнице в один градус",
+     "en": "Water Works on a One-Degree Difference",
+     "es": "El agua trabaja con una diferencia de un grado",
+     "ar": "الماء يعمل بفارق درجة واحدة",
+     "fr": "L'eau travaille avec un écart d'un degré"
     },
-    "why": "heat_engine, efficiency"
+    "score": 0.702
    },
    {
-    "id": "2410.15776",
-    "date": "2024-10-21",
+    "id": "2508.11554",
+    "date": "2025-08-15",
     "title": {
-     "ru": "Магнитное охлаждение: холодильник без фреона и компрессора",
-     "en": "A Magnetic Fridge with No Freon and No Compressor",
-     "es": "Refrigerador magnético sin freón ni compresor",
-     "ar": "ثلاجة مغناطيسية بدون فريون أو ضاغط"
+     "ru": "Скорость против термодинамики: как релятивистское движение обходит предел Карно",
+     "en": "Speed vs. Thermodynamics: How Relativistic Motion Bypasses the Carnot Limit",
+     "es": "La velocidad elude las leyes de los motores térmicos",
+     "ar": "السرعة ضد الديناميكا الحرارية: كيف يتجاوز الحركة النسبية حد كارنو",
+     "fr": "La vitesse défie les lois des moteurs thermiques"
     },
-    "why": "refrigeration, thermodynamic_cycle"
+    "score": 0.663
    },
    {
-    "id": "2607.19730v1",
-    "date": "2026-07-22",
+    "id": "2601.00198",
+    "date": "2026-01-01",
     "title": {
-     "ru": "Солнечный тепловой насос: почему экватор крутится быстрее полюсов",
-     "en": "Solar Heat Pump: Why the Equator Spins Faster Than the Poles",
-     "es": "Bomba térmica solar: por qué el ecuador gira más rápido que los polos",
-     "ar": "مضخة حرارية شمسية: لماذا يدور خط الاستواء أسرع من القطبين"
+     "ru": "Тепло течёт вспять",
+     "en": "Heat Flows Backward",
+     "es": "El calor fluye hacia atrás",
+     "ar": "الحرارة تتدفق عكس الاتجاه",
+     "fr": "La chaleur s'écoule à rebours"
     },
-    "why": "heat_pump, convection"
+    "score": 0.656
+   },
+   {
+    "id": "2607.08713",
+    "date": "2026-07-09",
+    "title": {
+     "ru": "Квантовый двигатель против запрета Карно: мощность и КПД без компромисса",
+     "en": "Quantum Engine vs. Carnot's Barrier: Power and Efficiency Without Compromise",
+     "es": "Motor cuántico vs. el límite de Carnot: potencia y eficiencia sin concesiones",
+     "ar": "محرك كمي يتحدى قيد كارنو: قدرة وكفاءة بلا تنازلات",
+     "fr": "Moteur quantique contre l'interdit de Carnot : puissance et rendement sans compromis"
+    },
+    "score": 0.651
    }
   ]
  },
@@ -142,17 +157,20 @@
     {
      "what": "Соотношение Майера",
      "why": "Теплоёмкость при постоянном давлении больше, чем при постоянном объёме, ровно на газовую постоянную. Причина проста: при постоянном давлении газ не только нагревается, но и расширяется, совершая работу против внешней среды, — и за это приходится доплачивать энергией. Именно поэтому $\\gamma$ всегда больше единицы.",
-     "latex": "C_P - C_V = R"
+     "latex": "C_P - C_V = R",
+     "kit": "dimension"
     },
     {
      "what": "Откуда берётся значение $\\gamma$",
      "why": "Теплоёмкость определяется числом степеней свободы молекулы: $C_V = \\tfrac{i}{2}R$. У одноатомного газа только три поступательных степени, у двухатомного добавляются две вращательных. Это тот редкий случай, когда константа выводится из геометрии молекулы, а не измеряется.",
-     "latex": "\\gamma = \\frac{i+2}{i}: \\quad i=3 \\Rightarrow \\gamma = \\tfrac{5}{3} \\approx 1{,}67; \\quad i=5 \\Rightarrow \\gamma = \\tfrac{7}{5} = 1{,}4"
+     "latex": "\\gamma = \\frac{i+2}{i}: \\quad i=3 \\Rightarrow \\gamma = \\tfrac{5}{3} \\approx 1{,}67; \\quad i=5 \\Rightarrow \\gamma = \\tfrac{7}{5} = 1{,}4",
+     "kit": "order"
     },
     {
      "what": "Работа как площадь под кривой",
      "why": "Элементарная работа равна $P\\,dV$, поэтому полная работа есть интеграл давления по объёму — то есть буквально площадь под кривой процесса на диаграмме. Для замкнутого цикла это площадь внутри петли. Утверждение «площадь равна работе» — не метафора, а определение интеграла.",
-     "latex": "W = \\int_{V_1}^{V_2} P\\,dV, \\qquad W_{\\text{цикл}} = \\oint P\\,dV"
+     "latex": "W = \\int_{V_1}^{V_2} P\\,dV, \\qquad W_{\\text{цикл}} = \\oint P\\,dV",
+     "kit": "integral"
     }
    ]
   },
@@ -1365,10 +1383,6 @@
    ]
   }
  },
- "laws": [
-  "law_of_conservation_of_energy",
-  "carnot_theorem"
- ],
  "fr": {
   "title": "Principes de la thermodynamique",
   "subtitle": "Paragraphe 3 · Processus, cycles et machines thermiques",

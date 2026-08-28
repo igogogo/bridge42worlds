@@ -19,37 +19,16 @@
   ],
   "examples_from_articles": [
    {
-    "id": "2603.07128",
-    "date": "2026-03-07",
+    "id": "2512.03240",
+    "date": "2025-12-02",
     "title": {
-     "ru": "Вода работает на разнице в один градус",
-     "en": "Water Works on a One-Degree Difference",
-     "es": "El agua trabaja con una diferencia de un grado",
-     "ar": "الماء يعمل بفارق درجة واحدة"
+     "ru": "Гидродинамика в пористых средах: как новые уравнения описывают течение мёда сквозь губку",
+     "en": "How Honey Flows Through a Sponge: New Equations",
+     "es": "Cómo la miel fluye a través de una esponja: nuevas ecuaciones",
+     "ar": "كيف يتدفق العسل عبر الإسفنج: معادلات جديدة",
+     "fr": "Comment le miel s'écoule à travers une éponge : de nouvelles équations"
     },
-    "why": "computational_fluid_dynamics, temperature, viscosity"
-   },
-   {
-    "id": "2605.08906",
-    "date": "2026-05-09",
-    "title": {
-     "ru": "Как упругость жидкости меняет ловушку для частиц",
-     "en": "How Liquid Elasticity Reshapes the Particle Trap",
-     "es": "Cómo la elasticidad del fluido cambia la trampa para partículas",
-     "ar": "كيف تغيّر مرونة السائل مصيدة الجسيمات"
-    },
-    "why": "computational_fluid_dynamics, viscosity"
-   },
-   {
-    "id": "2604.19458",
-    "date": "2026-04-21",
-    "title": {
-     "ru": "Турбулентность как слоёный пирог",
-     "en": "Turbulence as a Layered Cake",
-     "es": "La turbulencia como un pastel en capas",
-     "ar": "الاضطراب ككعكة طبقات"
-    },
-    "why": "computational_fluid_dynamics, viscosity"
+    "score": 0.601
    }
   ]
  },
@@ -1832,5 +1811,450 @@
     "tolFactor": 1.5
    }
   ]
+ },
+ "fr": {
+  "formula": {
+   "name": "Viscosité d'un gaz selon la théorie cinétique",
+   "latex": "\\eta = \\tfrac{1}{3}\\,\\rho\\,\\bar v\\,\\lambda = \\frac{m\\,\\bar v}{3\\sqrt{2}\\,\\sigma}",
+   "alsoKnown": "L'indépendance de la viscosité d'un gaz par rapport à la pression est appelée loi de Maxwell. Avec D = ⅓λ⟨v⟩ et κ = ⅓ρc_V⟨v⟩λ, cette formule forme le triplet des coefficients de transport",
+   "authors": [
+    {
+     "who": "Rudolf Clausius",
+     "year": "1858",
+     "what": "a introduit le concept de libre parcours moyen — la distance parcourue par une molécule entre deux collisions ; sans cela, la théorie cinétique ne pouvait rien dire de quantitatif"
+    },
+    {
+     "who": "James Clerk Maxwell",
+     "year": "1860",
+     "what": "a démontré que la viscosité d'un gaz ne dépend pas de sa densité, et a lui-même jugé ce résultat invraisemblable"
+    },
+    {
+     "who": "James Clerk Maxwell et Katherine Maxwell",
+     "year": "1866",
+     "what": "ont mené une expérience avec des disques de verre oscillants dans une enceinte évacuée et ont confirmé l'indépendance par rapport à la pression ; ils ont également mesuré l'augmentation de la viscosité avec la température"
+    },
+    {
+     "who": "Johann Josef Loschmidt",
+     "year": "1865",
+     "what": "a inversé la formule : à partir de la viscosité mesurée, il a obtenu le libre parcours moyen, et de là, la première estimation de la taille d'une molécule"
+    },
+    {
+     "who": "William Sutherland",
+     "year": "1893",
+     "what": "a proposé une correction expliquant pourquoi la viscosité augmente plus vite que la racine carrée de la température : la section efficace de collision dépend elle-même de l'énergie"
+    },
+    {
+     "who": "Sydney Chapman et David Enskog",
+     "year": "1916-1917",
+     "what": "ont indépendamment construit une théorie rigoureuse du transport dans les gaz et ont obtenu des facteurs numériques exacts au lieu d'estimations"
+    }
+   ],
+   "story": "En 1859, Maxwell, alors professeur à Aberdeen, lut le travail de Clausius sur le libre parcours moyen et entreprit de pousser la théorie cinétique jusqu'aux nombres. Dans son ouvrage « Explications sur la théorie dynamique des gaz », il obtint un résultat qu'il qualifia lui-même d'invraisemblable : la viscosité d'un gaz ne devrait pas dépendre de sa densité. Maxwell admit honnêtement que la seule expérience connue de lui ne semblait pas confirmer cela — et laissa la question ouverte pendant six ans. Il décida de la vérifier lui-même, une fois à Londres. Le dispositif : trois disques de verre horizontaux suspendus à un fil de torsion, oscillant entre des disques fixes à l'intérieur d'une cloche évacuée. La viscosité de l'air était mesurée par l'amortissement des oscillations. La difficulté ne résidait pas dans le vide, mais dans la température : pour séparer l'influence de la pression et celle du chauffage, il fallait maintenir la pièce à une température donnée pendant des heures, allant du frais à une chaleur difficilement supportable. Katherine Maxwell s'occupait du poêle et des chaudières ; dans les lettres de cet été-là, Maxwell décrivait le laboratoire domestique comme un endroit où il était condamné à la chaleur. Le résultat de 1866 : la viscosité ne changeait pas lorsque la pression variait de plusieurs dizaines de fois. Mais le second résultat s'avéra plus important que le premier. La viscosité augmentait avec la température plus rapidement que ne le prédisait sa propre théorie : non pas comme la racine carrée de T, mais approximativement comme T elle-même. Le modèle des molécules-boules-de-billard ne pouvait pas rendre compte de cela. Maxwell le remplaça par un modèle de particules se repoussant avec une force décroissant comme la cinquième puissance de la distance — pour une telle loi, les équations de transport se résolvent exactement, et les « molécules de Maxwell » servent encore aujourd'hui d'exemple pédagogique. L'ironie, c'est que des mesures ultérieures sur une large gamme ont donné un exposant d'environ 0,76 — entre la racine et l'unité —, ce qui signifie que la mesure qui a engendré le modèle n'était pas tout à fait précise. Le modèle a néanmoins survécu.",
+   "symbols": [
+    {
+     "sym": "η",
+     "latex": "\\eta",
+     "what": "viscosité dynamique du gaz",
+     "unit": "Pa·s",
+     "note": "la même grandeur que dans la loi de Newton τ = η·dv/dy du chapitre sur les écoulements ; ici, nous ne la prenons pas dans un tableau, nous la calculons"
+    },
+    {
+     "sym": "ρ",
+     "latex": "\\rho",
+     "what": "masse volumique du gaz",
+     "unit": "kg/m³",
+     "note": "c'est aussi nm — la concentration de molécules multipliée par la masse d'une molécule ; dans la formule, elle représente « combien de porteurs par mètre cube »"
+    },
+    {
+     "sym": "⟨v⟩",
+     "latex": "\\bar v",
+     "what": "vitesse thermique moyenne des molécules",
+     "unit": "m/s",
+     "note": "bien la moyenne, et non la vitesse quadratique moyenne : pour l'air à 20 °C, elle vaut 463 m/s contre 502 m/s — une différence de huit pour cent, à ne pas confondre"
+    },
+    {
+     "sym": "λ",
+     "latex": "\\lambda",
+     "what": "libre parcours moyen",
+     "unit": "m",
+     "note": "la distance sur laquelle une molécule transporte une impulsion étrangère avant de la céder lors d'une collision ; pour l'air à la pression atmosphérique, 68 nm"
+    },
+    {
+     "sym": "m",
+     "latex": "m",
+     "what": "masse d'une molécule",
+     "unit": "kg",
+     "note": "pour l'air, 4,8·10⁻²⁶ kg — la masse molaire de 29 g/mol divisée par le nombre d'Avogadro"
+    },
+    {
+     "sym": "σ",
+     "latex": "\\sigma",
+     "what": "section efficace de collision",
+     "unit": "m²",
+     "note": "l'aire de la cible qu'il faut atteindre pour entrer en collision : σ = πd², où d est le diamètre efficace de la molécule"
+    },
+    {
+     "sym": "n",
+     "latex": "n",
+     "what": "concentration de molécules",
+     "unit": "1/m³",
+     "note": "le protagoniste de la cinquième étape : elle apparaît dans ρ et dans λ avec des exposants opposés et disparaît donc de la réponse"
+    },
+    {
+     "sym": "c_V",
+     "latex": "c_V",
+     "what": "capacité thermique massique à volume constant",
+     "unit": "J/(kg·K)",
+     "note": "rapportée à un kilogramme de gaz, et non à une molécule : la capacité thermique d'un porteur c du chapitre sur la conduction thermique a d'autres unités, J/K, et elles sont liées par la masse de la molécule, c = m·c_V"
+    },
+    {
+     "sym": "c_p",
+     "latex": "c_p",
+     "what": "capacité thermique massique à pression constante",
+     "unit": "J/(kg·K)",
+     "note": "elle apparaît dans le nombre de Prandtl Pr = ηc_p/κ et dans la diffusivité thermique a = κ/(ρc_p) ; pour un gaz, c_p est supérieur à c_V de R/M, et leur rapport c_p/c_V est l'indice adiabatique γ, égal à 1,4 pour l'air"
+    },
+    {
+     "sym": "Pr",
+     "latex": "\\Pr",
+     "what": "nombre de Prandtl",
+     "unit": "sans dimension",
+     "note": "le rapport de la viscosité cinématique à la diffusivité thermique : ce qui se propage plus vite dans le gaz — l'impulsion ou la chaleur"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Dérivation rigoureuse",
+   "lead": "Nous n'aurons besoin que de deux choses, toutes deux déjà familières : la définition de la force comme impulsion transmise par seconde et le libre parcours moyen. Nous ne postulerons aucune « loi de frottement » séparée — elle découlera d'elle-même, et c'est là l'essentiel de la dérivation.",
+   "steps": [
+    {
+     "text": "Prenons un gaz entre deux plaques : celle du bas est immobile, celle du haut se déplace le long d'elle-même. L'écoulement établi est constitué de couches, chacune avec sa vitesse moyenne u(y). Séparons immédiatement les deux mouvements qui se déroulent simultanément dans le gaz. Le mouvement thermique est chaotique, identique dans toutes les directions et très rapide : des centaines de mètres par seconde. La dérive est ordonnée, dirigée le long des plaques et faible : des centimètres par seconde. Une molécule vole presque comme dans un gaz au repos, mais chacune porte un petit supplément d'impulsion le long de l'écoulement, égal à m·u(y). C'est précisément ce supplément qui sera l'objet de tout le calcul qui suit.",
+     "latex": "v \\approx \\bar v \\gg u(y), \\qquad p_x = m\\,u(y)",
+     "figure": "gasshear",
+     "figCaption": "La dérive est un réglage fin sur le chaos : les flèches du mouvement thermique sont des ordres de grandeur plus longues"
+    },
+    {
+     "text": "Traçons à l'intérieur du gaz une surface imaginaire A, parallèle aux plaques, et comptons combien de molécules la traversent par seconde. Le calcul est exactement le même que dans le premier paragraphe du sujet : on prend le modèle le plus simple du chaos, dans lequel les molécules sont réparties également entre les six directions des axes, et on obtient un sixième vers le haut et un sixième vers le bas. Une réserve, qui n'était pas nécessaire dans le premier paragraphe mais le sera ici : une moyenne honnête sur les directions donne non pas un sixième, mais un quart. Nous prenons un sixième pour la clarté, l'analyse est dans le premier encadré et dans l'annexe.",
+     "latex": "\\Phi = \\tfrac{1}{6}\\, n\\, \\bar v \\quad \\text{molécules par mètre carré par seconde, dans chaque direction}",
+     "figure": "sixways",
+     "figCaption": "Quatre directions sont le long de la surface et ne transportent rien à travers elle ; seules deux travaillent"
+    },
+    {
+     "text": "Maintenant, la question clé : quelle impulsion chaque molécule apporte-t-elle ? Pas celle qu'elle avait initialement, mais celle qu'elle a reçue lors de la dernière collision. Une molécule traversant la surface de haut en bas a, en moyenne, subi sa dernière collision à une distance λ au-dessus — c'est là qu'elle a acquis le supplément de dérive de sa couche. Donc, vers le bas, elle porte m·u(y+λ). Celle qui va vers le haut porte m·u(y−λ). Une molécule ne se souvient pas de l'endroit où nous l'avons trouvée, mais de celui où elle a pour la dernière fois « négocié » sa vitesse avec quelqu'un.",
+     "latex": "p_{\\downarrow} = m\\,u(y+\\lambda), \\qquad p_{\\uparrow} = m\\,u(y-\\lambda)",
+     "figure": "momentumcarry",
+     "figCaption": "À travers une même surface passent deux flux de molécules opposés, mais leurs charges sont différentes"
+    },
+    {
+     "text": "Assemblons. Le nombre de molécules dans les deux directions est le même — la matière ne s'écoule nulle part, le gaz ne diminue ni en haut ni en bas. Mais l'impulsion s'écoule, car ce qui est apporté d'en haut et d'en bas diffère. Développons la différence pour petit λ : les termes pairs s'annulent exactement par soustraction, et il reste la dérivée doublée. Le flux d'impulsion par unité de surface ainsi obtenu est précisément la contrainte de cisaillement. En le comparant à la loi de Newton, on lit le coefficient.",
+     "latex": "\\tau = \\tfrac{1}{6} n \\bar v\\, m\\left[u(y+\\lambda)-u(y-\\lambda)\\right] = \\tfrac{1}{3}\\, n m\\, \\bar v \\lambda\\, \\frac{du}{dy} \\;\\Longrightarrow\\; \\eta = \\tfrac{1}{3}\\rho\\,\\bar v\\,\\lambda",
+     "figure": "etaassemble",
+     "figCaption": "Le frottement entre les couches n'est pas postulé mais obtenu : c'est simplement un flux d'impulsion à travers l'écoulement"
+    },
+    {
+     "text": "La formule est déjà prête, mais le plus intéressant commence lorsque nous y substituons le libre parcours moyen. Il est connu depuis le premier paragraphe : λ = 1/(√2·nσ). La densité s'exprime aussi en fonction de la concentration : ρ = nm. Substituons les deux — et la concentration disparaît. Ce n'est pas un hasard algébrique, mais une affirmation physique : raréfiez le gaz de moitié, et les porteurs d'impulsion seront deux fois moins nombreux, mais chacun portera sa charge deux fois plus profondément dans la couche voisine. La diminution du nombre est exactement compensée par l'augmentation de la portée.",
+     "latex": "\\eta = \\tfrac{1}{3}\\, nm\\, \\bar v \\cdot \\frac{1}{\\sqrt{2}\\, n \\sigma} = \\frac{m\\,\\bar v}{3\\sqrt{2}\\,\\sigma}",
+     "figure": "pcancel",
+     "figCaption": "À gauche, beaucoup de courtes traversées ; à droite, peu de longues ; le produit est le même"
+    },
+    {
+     "text": "Qu'est-ce qui contrôle alors la viscosité d'un gaz ? Seulement la température et le type de molécules. Substituons la vitesse moyenne de la distribution de Maxwell et nous obtenons une dépendance explicite. La viscosité croît comme la racine carrée de la température absolue — c'est-à-dire que lorsqu'on chauffe, le gaz devient PLUS VISQUEUX. Pour un liquide, c'est tout le contraire, et pas un peu : la viscosité y chute exponentiellement, car le mécanisme est complètement différent — les molécules doivent se faufiler entre leurs voisines en franchissant une barrière d'énergie. L'expérience de Maxwell a donné une croissance encore plus raide que la racine, presque linéaire ; les mesures actuelles donnent un exposant d'environ 0,76. La raison de cet écart est que la section efficace σ n'est pas constante ; l'analyse est dans l'annexe.",
+     "latex": "\\bar v = \\sqrt{\\frac{8kT}{\\pi m}} \\;\\Longrightarrow\\; \\eta = \\frac{2}{3\\sigma}\\sqrt{\\frac{m k T}{\\pi}} \\;\\propto\\; \\sqrt{T}",
+     "figure": "etatemp",
+     "figCaption": "Les deux courbes divergent dans des directions opposées, car des mécanismes différents se cachent derrière elles"
+    },
+    {
+     "text": "Maintenant, revenons sur tout le sujet d'un coup. Dans la dérivation, il n'y avait rien de spécifiquement lié à l'impulsion. Nous comptions combien de molécules traversent la surface et multiplions par ce que chacune porte. Remplacez la charge — et vous obtenez les deux paragraphes précédents. Si la charge est la molécule marquée elle-même, on obtient la diffusion. Si c'est l'énergie thermique — la conductivité thermique. Si c'est l'impulsion le long de l'écoulement — la viscosité. Le facteur ⅓λ⟨v⟩ est le même dans les trois cas, car le porteur est le même.",
+     "latex": "J_G = -\\tfrac{1}{3}\\bar v \\lambda\\, \\frac{d(nG)}{dy}; \\qquad D = \\tfrac{1}{3}\\bar v\\lambda, \\quad \\kappa = \\tfrac{1}{3}\\rho c_V \\bar v\\lambda, \\quad \\eta = \\tfrac{1}{3}\\rho \\bar v\\lambda",
+     "figure": "threetransports",
+     "figCaption": "Les trois coefficients ne diffèrent que par la quantité de charge par mètre cube de gaz"
+    },
+    {
+     "text": "Le facteur commun a une conséquence vérifiable. Divisons la viscosité par la densité — nous obtenons la viscosité cinématique ν ; divisons la conductivité thermique par ρc_p — nous obtenons la diffusivité thermique a ; le coefficient de diffusion D est déjà prêt. Tous les trois se mesurent maintenant en mètres carrés par seconde, et leurs rapports sont donc des nombres purs. Le nombre de Prandtl compare la diffusion de l'impulsion à celle de la chaleur, le nombre de Schmidt à celle d'une impureté. Notre théorie grossière promet Sc = 1 et Pr = c_p/c_V = γ, soit 1,4 pour l'air. La mesure donne Sc ≈ 0,8 et Pr = 0,71 : pour le nombre de Prandtl, l'erreur est exactement d'un facteur deux, et c'est la plus grande erreur du paragraphe. Elle se corrige avec une seule correction. Les molécules rapides traversent la surface plus souvent et transportent plus d'énergie de translation — cette corrélation renforce la conductivité thermique, mais ne s'applique pas à l'énergie de rotation des molécules. En tenant compte de cette différence, Eucken a obtenu Pr = 4γ/(9γ−5) : 0,74 pour les gaz diatomiques et 0,67 pour les gaz monoatomiques — et cela coïncide avec l'expérience. L'essentiel est préservé : les rapports sont de l'ordre de l'unité, et non de l'ordre de cent, donc les trois phénomènes sont bien dus au même porteur.",
+     "latex": "\\Pr = \\frac{\\nu}{a} = \\frac{\\eta\\, c_p}{\\kappa}, \\qquad \\mathrm{Sc} = \\frac{\\nu}{D}, \\qquad \\Pr_{\\text{Eucken}} = \\frac{4\\gamma}{9\\gamma - 5}",
+     "figure": "prandtlbar",
+     "figCaption": "Pour les gaz, le nombre de Prandtl se resserre autour de 0,7 quel que soit le type ; pour les liquides, l'étalement est de six ordres de grandeur"
+    }
+   ],
+   "plate": "\\eta = \\tfrac{1}{3}\\,\\rho\\,\\bar v\\,\\lambda",
+   "plateCap": "Trois facteurs : combien de porteurs par mètre cube, à quelle vitesse ils s'agitent, jusqu'où ils transportent leur charge. Changez la charge — vous obtenez la diffusion ou la conductivité thermique, et le facteur ⅓λ⟨v⟩ reste le même. Toute l'étrangeté de la viscosité des gaz tient dans le fait que lorsque la pression change, la densité et le libre parcours moyen tirent dans des directions opposées et s'annulent mutuellement.",
+   "note": "Énumérons les hypothèses — elles sont aussi les limites de la formule. Premièrement : un sixième du flux dans chaque direction et une distance de dernière collision exactement λ — ces deux estimations sont grossières. La théorie exacte donne un facteur de 0,499 au lieu de ⅓, c'est-à-dire que notre réponse est sous-estimée d'environ un facteur un et demi. La structure est néanmoins entièrement correcte : les dépendances en ρ, ⟨v⟩ et λ sont strictes, l'erreur ne réside que dans le nombre devant elles. Deuxièmement : la section efficace de collision σ a été considérée comme constante, comme pour des boules de billard. Les vraies molécules sont molles et s'attirent, donc la dépendance mesurée en température est plus raide que la racine — voir l'annexe. Troisièmement, et c'est le plus important : on a supposé partout que la molécule a le temps de heurter une autre molécule avant d'atteindre la paroi, c'est-à-dire que λ est bien plus petit que les dimensions du récipient et que la distance sur laquelle la vitesse change notablement. Dès que cela cesse d'être vrai, la viscosité cesse d'être une propriété de la matière et commence à dépendre de la géométrie et de la pression. Quatrièmement : le gaz est raréfié en ce sens que les collisions sont binaires ; à des pressions de plusieurs dizaines d'atmosphères, une dépendance à la densité apparaît, absente de notre formule. Cinquièmement : la dérive est bien plus petite que la vitesse thermique — sinon ce n'est plus un cisaillement de couches, mais un autre problème."
+  },
+  "math": {
+   "title": "Les mathématiques nécessaires ici",
+   "lead": "Trois endroits où une astuce formelle fait un travail de fond, et ne se contente pas de mettre en forme une réponse toute prête.",
+   "items": [
+    {
+     "what": "Moyenne sur les directions : d'où vient le sixième et pourquoi le quart est correct",
+     "why": "Dans la deuxième étape du raisonnement, nous avons divisé les molécules en six faisceaux égaux le long des axes. Ce n'est pas une affirmation physique sur le gaz, mais une façon de contourner l'intégrale, et il faut comprendre laquelle. Le calcul honnête est le suivant. La direction de la vitesse est équiprobable dans toutes les directions, c'est-à-dire uniformément répartie sur la sphère — mais uniformément sur la SURFACE de la sphère, pas sur l'angle d'inclinaison : le poids d'une direction est donné par la zone sin θ dθ, et il y a simplement plus de directions inclinées que de directions proches de l'axe. À travers une surface, une molécule transporte une contribution proportionnelle à la projection de la vitesse, c'est-à-dire cos θ, et il faut faire la moyenne sur l'hémisphère, car l'autre moitié vole dans l'autre sens. La moyenne du cosinus sur l'hémisphère s'avère être exactement ½, et le flux sort à ¼n⟨v⟩ au lieu de notre sixième. La règle pour laquelle cela vaut la peine de le faire une fois dans sa vie : en faisant la moyenne sur les directions en trois dimensions, on ne peut pas décomposer les molécules en plusieurs faisceaux égaux — le poids est donné par l'angle solide. Le modèle à six faisceaux est bon parce qu'il donne la structure correcte de la formule, et mauvais parce qu'il donne un facteur incorrect devant elle.",
+     "latex": "\\langle \\cos\\theta\\rangle_{+} = \\frac{\\int_{0}^{\\pi/2}\\cos\\theta\\,\\sin\\theta\\,d\\theta}{\\int_{0}^{\\pi/2}\\sin\\theta\\,d\\theta} = \\frac{1}{2} \\;\\Longrightarrow\\; \\Phi = \\tfrac{1}{4}\\, n\\,\\bar v",
+     "kit": "probability"
+    },
+    {
+     "what": "Comment vérifier ce qui se simplifie et ce qui ne fait que sembler",
+     "why": "Dans la cinquième étape, la concentration disparaît de la réponse, et il faut le vérifier non pas à vue d'œil, mais par les exposants. Écrivons la dépendance de chaque facteur en n : la densité ρ = nm donne la première puissance, le libre parcours moyen λ = 1/(√2·nσ) donne la puissance moins un, la vitesse moyenne ne dépend pas du tout de la concentration. La somme des exposants est nulle, donc le produit ne dépend pas de n. L'astuce est générale et utile : avant de se réjouir d'une simplification, il faut s'assurer qu'aucun des facteurs restants ne cache la même variable à l'intérieur. Ici, le candidat dangereux est justement ⟨v⟩ — mais elle est déterminée par la température et la masse de la molécule, et ne se souvient pas de la concentration, et donc elle survit. Dans l'autre sens, cela fonctionne aussi : si ⟨v⟩ dépendait de la densité, tout l'effet disparaîtrait, et avec lui tout le paragraphe.",
+     "latex": "\\rho \\propto n^{1}, \\quad \\lambda \\propto n^{-1}, \\quad \\bar v \\propto n^{0} \\;\\Longrightarrow\\; \\eta \\propto n^{0}",
+     "kit": "propto"
+    },
+    {
+     "what": "Pourquoi le rapport de deux coefficients de transfert est un nombre sans dimension",
+     "why": "Dans la huitième étape, nous divisons la viscosité par la diffusivité thermique et déclarons le résultat significatif. Diviser des grandeurs physiques l'une par l'autre n'est pas toujours significatif ; ici, cela l'est, et cela se vérifie par les unités. La viscosité cinématique ν = η/ρ, la diffusivité thermique a = κ/(ρc_p) et le coefficient de diffusion D — tous trois se mesurent en mètres carrés par seconde. La coïncidence des dimensions n'est pas fortuite : chacun répond à la même question — quelle surface l'étalement parvient-il à couvrir en une seconde —, mais c'est quelque chose de différent qui s'étale. Par conséquent, leurs rapports sont des nombres purs que l'on peut comparer entre substances et entre laboratoires sans aucune conversion. La vérification est simple et stricte : si le rapport a une dimension, vous avez divisé ce qu'il ne fallait pas.",
+     "latex": "[\\nu] = [a] = [D] = \\frac{\\text{m}^{2}}{\\text{s}} \\;\\Longrightarrow\\; \\Pr = \\frac{\\nu}{a}, \\;\\; \\mathrm{Sc} = \\frac{\\nu}{D} \\;\\; \\text{sans dimension}",
+     "kit": "dimension"
+    }
+   ]
+  },
+  "example": {
+   "title": "Exemple avec des nombres",
+   "lead": "Calculons la viscosité de l'air à partir de zéro et comparons-la honnêtement à la valeur mesurée. Au passage, vérifions l'affirmation principale du paragraphe là où on peut la vérifier avec un manuel : à dix kilomètres d'altitude.",
+   "given": "Air à 20 °C et pression atmosphérique : masse volumique ρ = 1,20 kg/m³, libre parcours moyen λ = 68 nm, masse molaire M = 29 g/mol. Trouver la viscosité et la comparer à la valeur tabulée de 1,81·10⁻⁵ Pa·s. Ensuite, estimer la viscosité à 10 km d'altitude, où la pression est quatre fois plus faible et la température est de 223 K.",
+   "law": "⟨v⟩ = √(8RT/πM), puis η = ⅓·ρ·⟨v⟩·λ",
+   "solution": [
+    {
+     "text": "Vitesse thermique moyenne. On prend la formule de la distribution de Maxwell et on fait attention à la vitesse exacte nécessaire : c'est la moyenne ⟨v⟩ qui intervient dans le transport, pas la vitesse quadratique moyenne — elles diffèrent de huit pour cent, et substituer la mauvaise donne une erreur systématique.",
+     "latex": "\\bar v = \\sqrt{\\frac{8RT}{\\pi M}} = \\sqrt{\\frac{8 \\cdot 8{,}314 \\cdot 293}{\\pi \\cdot 0{,}029}} \\approx 463\\ \\text{m/s}"
+    },
+    {
+     "text": "On substitue dans la formule de la viscosité. Il est pratique de calculer par morceaux : un tiers de 1,20 donne 0,40 ; multiplier par 463 donne environ 185 ; et enfin multiplier par 68 nanomètres.",
+     "latex": "\\eta = \\tfrac{1}{3}\\rho\\,\\bar v\\,\\lambda = 0{,}40 \\cdot 463 \\cdot 68 \\cdot 10^{-9} \\approx 1{,}26\\cdot10^{-5}\\ \\text{Pa}\\cdot\\text{s}"
+    },
+    {
+     "text": "Comparons avec le tableau. On obtient 1,26 contre 1,81 mesuré — une erreur d'environ un facteur et demi. Ce n'est pas une erreur de calcul : deux corrections géométriques qui viennent naturellement à l'esprit s'annulent mutuellement et ne changent pas le tiers. L'erreur vient de la corrélation — les molécules rapides vont plus loin et traversent plus souvent la surface, donc le produit moyen est plus grand que le produit des moyennes. La théorie stricte de Chapman et Enskog donne un facteur de 0,499 au lieu de ⅓, et avec cela la réponse tombe sur la mesure.",
+     "latex": "\\frac{1{,}81}{1{,}26} \\approx 1{,}44, \\qquad 0{,}499\\,\\rho\\,\\bar v\\,\\lambda \\approx 1{,}9\\cdot10^{-5}\\ \\text{Pa}\\cdot\\text{s}"
+    },
+    {
+     "text": "Altitude de 10 km — vérification de l'affirmation principale. La masse volumique y est trois fois plus faible (0,41 contre 1,225 kg/m³), mais le libre parcours moyen est d'autant plus grand, donc le produit ρλ ne change pas du tout. Il ne reste que la température : 223 K au lieu de 293, et la vitesse moyenne diminue comme la racine carrée de leur rapport.",
+     "latex": "\\eta(223) = \\eta(293)\\sqrt{\\frac{223}{293}} = 1{,}81\\cdot10^{-5} \\cdot 0{,}87 \\approx 1{,}58\\cdot10^{-5}\\ \\text{Pa}\\cdot\\text{s}"
+    }
+   ],
+   "answer": "η ≈ 1,3·10⁻⁵ Pa·s contre 1,81·10⁻⁵ tabulé : la formule grossière sous-estime d'un facteur et demi, mais elle devine correctement les dépendances en ρ, ⟨v⟩ et λ. À 10 km d'altitude, notre prédiction est de 1,58·10⁻⁵ Pa·s, le manuel donne 1,46·10⁻⁵.",
+   "check": "Est-ce raisonnable ? Vérifions trois choses. Premièrement : l'erreur d'un facteur et demi — est-ce beaucoup ou peu ? Pour une formule où aucun paramètre n'a été ajusté, et où les données initiales étaient la taille des molécules et la température, c'est très peu. Il est également révélateur que l'erreur soit constante : si on calibre le facteur sur une mesure, toutes les autres prédictions — en fonction de la température, du type de gaz, de la pression — tomberont juste. L'erreur réside dans le nombre, pas dans la structure. Deuxièmement : à l'altitude, notre prédiction est surestimée de huit pour cent. La loi de la racine carrée s'est avérée trop plate — la viscosité réelle diminue plus fortement lors du refroidissement que ce qu'elle promet, car l'exposant pour l'air est d'environ 0,76, et non 0,5. L'analyse est en annexe, avec la formule qui donne exactement 1,46·10⁻⁵. Troisièmement, et c'est plus important que les deux premières : l'air à dix kilomètres est trois fois plus raréfié, mais la viscosité n'a diminué que d'environ vingt pour cent — et cela entièrement à cause du froid, pas de la raréfaction. C'est précisément ce qu'affirme le paragraphe. D'ailleurs, il en découle une conclusion pratique pour l'aviation : le nombre de Reynolds à haute altitude diminue presque exclusivement à cause de la masse volumique au numérateur, et non de la viscosité au dénominateur."
+  },
+  "constants": {
+   "title": "Constantes de ce paragraphe",
+   "lead": "Quatre nombres pour l'air à température ambiante. Les deux premiers sont les entrées de la formule, le troisième est sa vérification, le quatrième est le résultat de tout le sujet en un seul nombre.",
+   "items": [
+    {
+     "sym": "λ",
+     "latex": "\\lambda_{\\text{air}}",
+     "name": "Libre parcours moyen dans l'air (20 °C, 1 atm)",
+     "value": "68",
+     "unit": "nm",
+     "why": "La distance qu'une molécule parcourt entre les collisions, et en même temps la profondeur sur laquelle elle emporte l'impulsion d'autrui. Elle est proportionnelle à la température et inversement proportionnelle à la pression, donc elle varie dans des limites très larges : dans une chambre à vide, ce sont des mètres ; à cent kilomètres d'altitude, des centimètres ; dans un pore de catalyseur, les nanomètres ne sont même pas parcourus. Tout ce qui est dit dans ce paragraphe repose sur la condition « λ est bien plus petit que les dimensions du récipient ».",
+     "mnemo": "Gardez en tête une chaîne de trois longueurs : 0,36 nm — la molécule elle-même, 3,4 nm — la distance moyenne entre les molécules, 68 nm — le libre parcours. Chaque étape est environ dix et vingt fois plus grande. La molécule a de l'espace, mais pas au point de ne pas entrer en collision des milliards de fois par seconde."
+    },
+    {
+     "sym": "⟨v⟩",
+     "latex": "\\bar v_{\\text{air}}",
+     "name": "Vitesse thermique moyenne des molécules d'air à 20 °C",
+     "value": "463",
+     "unit": "m / s",
+     "why": "Dans les coefficients de transport, c'est la vitesse moyenne qui intervient, et non la vitesse quadratique moyenne de 502 m/s ni la vitesse la plus probable de 410 m/s. Les trois proviennent de la même distribution de Maxwell et diffèrent de quelques pour cent, mais il faut substituer celle qui figure dans la dérivation. Elle ne dépend que de la température et de la masse molaire : pour l'hydrogène à la même température, elle est quatre fois plus grande ; pour le xénon, deux fois plus petite.",
+     "mnemo": "La vitesse du son dans l'air est de 343 m/s — seulement 1,35 fois plus petite. Et ce n'est pas une coïncidence : le son est porté par les mêmes molécules, par le même mouvement thermique, donc il ne peut en aucun cas les dépasser."
+    },
+    {
+     "sym": "η",
+     "latex": "\\eta_{\\text{air}}",
+     "name": "Viscosité dynamique de l'air à 20 °C",
+     "value": "1,81 · 10⁻⁵",
+     "unit": "Pa · s",
+     "why": "Le nombre avec lequel nous avons vérifié le calcul. L'important n'est pas la valeur elle-même, mais le sens de variation : à 0 °C, la viscosité de l'air est de 1,72·10⁻⁵ ; à 100 °C, elle est déjà de 2,17·10⁻⁵ — une augmentation d'un quart. L'eau, sur le même intervalle, devient six fois plus fluide. Deux substances, une même échelle de température, des signes opposés — et c'est le meilleur argument en faveur de mécanismes différents.",
+     "mnemo": "Dix-huit micropascal-secondes. Pour l'eau, c'est mille — exactement cinquante-cinq fois plus. Facile à retenir et utile : dans les problèmes de soufflage et de tuyaux, ces deux nombres sont constamment nécessaires."
+    },
+    {
+     "sym": "Pr",
+     "latex": "\\Pr_{\\text{air}}",
+     "name": "Nombre de Prandtl pour l'air",
+     "value": "0,71",
+     "unit": "sans dimension",
+     "why": "Le résultat de tout le sujet en un seul nombre : l'impulsion et la chaleur se diffusent dans le gaz presque aussi vite, car elles sont transportées par le même porteur. Il est remarquable que ce nombre ne dépende presque pas du type de gaz : pour l'hydrogène, il est de 0,70 ; pour le xénon, de 0,68, alors que leurs masses moléculaires diffèrent d'un facteur soixante-cinq. Pour les liquides, une telle constance n'existe pas — de 0,025 pour le mercure à des dizaines de milliers pour la glycérine.",
+     "mnemo": "Zéro virgule sept — et pour le gaz le plus léger, et pour le plus lourd. Un nombre qui ne se souvient pas de la composition du gaz, car il ne se souvient que du mécanisme."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Comment cela se relie au reste du cours",
+   "lead": "Ce paragraphe clôt le sujet de l'intérieur et s'articule avec deux voisins — la physique moléculaire derrière et l'hydrodynamique devant.",
+   "items": [
+    {
+     "h": "Les deux premiers paragraphes de ce thème",
+     "text": "Le triplet de coefficients s'est refermé : la diffusion transporte les particules, la conductivité thermique l'énergie, la viscosité l'impulsion, et dans les trois figure le même facteur ⅓λ⟨v⟩. Cela donne un moyen de se vérifier soi-même, qui n'existait pas tant que le phénomène était unique. Mesurez deux des trois coefficients, divisez-les — et vous obtenez un nombre que la théorie prédit à l'avance. S'il est de l'ordre de l'unité, le mécanisme est deviné ; s'il est de l'ordre de la centaine, vous avez oublié quelque chose."
+    },
+    {
+     "h": "Liquides et gaz en mouvement",
+     "text": "Là, la viscosité entrait dans la loi de Newton, dans la formule de Poiseuille et dans le nombre de Reynolds comme propriété tabulée de la matière. Maintenant, elle est calculée, et au passage s'explique le paradoxe de ce paragraphe : cinématiquement, l'air est quinze fois plus visqueux que l'eau. La raison est visible directement dans la formule — pour un gaz, η est petit, mais ρ est encore plus petit, et le rapport η/ρ = ⅓λ⟨v⟩ pour un milieu raréfié s'avère plus grand. Du coup, on comprend pourquoi pour un gaz la viscosité cinématique dépend de la pression, mais pas la viscosité dynamique : dans ν, la densité est séparée et ne se simplifie plus."
+    },
+    {
+     "h": "Molécules et température",
+     "text": "La vitesse moyenne est tirée de la distribution de Maxwell, le libre parcours de la section efficace de collision ; le même appareil que celui qui a donné l'équation d'état. Mais il y a aussi une différence fondamentale qu'il convient de noter. Un gaz parfait en équilibre n'a aucun gradient, et il n'y a rien à transporter. Les phénomènes de transport sont le premier, le plus faible écart à l'équilibre, et toute la théorie cinétique du transport vit précisément dans cette bande étroite : l'écart existe déjà, mais il est encore linéaire."
+    },
+    {
+     "h": "Technique du vide et microtechnique",
+     "text": "Dès que le libre parcours atteint les dimensions de l'entrefer, la viscosité cesse d'être une propriété de la matière. D'où la conception du thermos, le calcul des systèmes à vide, le comportement des miroirs microélectromécaniques avec des entrefers de quelques microns, et l'aérodynamique d'une capsule de retour à cent kilomètres d'altitude. Le critère est le même — le nombre de Knudsen, rapport de λ à la dimension caractéristique."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Curiosités : à vérifier par vous-même",
+   "lead": "La viscosité d'un gaz ne se mesure pas dans une cuisine : l'air est trop fluide et sa viscosité trop faible. En revanche, on peut très bien observer la seconde partie de l'affirmation — le comportement d'un liquide lorsqu'on le chauffe. C'est précisément le signe opposé qui constitue le résultat principal de ce paragraphe.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "expérience de cuisine",
+     "h": "Eau et huile, froides et chaudes",
+     "text": "Il vous faut deux pailles à cocktail de même diamètre, de l'eau et de l'huile végétale. La paille est indispensable : à travers un large goulot, le liquide s'écoule sous l'effet de l'inertie, et la viscosité n'a presque aucun rôle ; en revanche, dans un canal étroit, la formule de Poiseuille s'applique et le temps d'écoulement est directement proportionnel à la viscosité. Versez 20 ml de chaque liquide dans des verres identiques, placez la moitié au réfrigérateur et l'autre moitié dans de l'eau tiède (environ 40 °C), laissez reposer une heure pour que la température s'homogénéise. Ensuite, laissez chaque liquide s'écouler à travers la paille et chronométrez. Question préalable : pour quel liquide le chauffage modifiera-t-il le temps le plus fortement — l'eau ou l'huile ?",
+     "answer": "Pour l'huile, et de loin. L'eau à 5 °C a une viscosité de 1,52 mPa·s, à 40 °C — 0,65 mPa·s, donc le temps d'écoulement change environ d'un facteur deux. L'huile, sur le même intervalle, passe d'environ 150 mPa·s à 30 mPa·s — un facteur cinq. De ces nombres, on peut extraire l'énergie de barrière par la formule d'Arrhenius : pour l'eau, on obtient environ 17 kJ par mole, pour l'huile environ 33. Les longues molécules de l'huile sont plus fortement enchevêtrées les unes avec les autres, et il leur est plus difficile de se faufiler entre leurs voisines — d'où une sensibilité à la température plus élevée. Maintenant, refaites mentalement la même expérience avec de l'air. Le chauffer de 5 à 40 °C augmentera sa viscosité d'environ neuf pour cent : l'air deviendra PLUS DENSE. On ne peut pas le ressentir dans un récipient de cuisine, mais dans le calcul du refroidissement d'un radiateur ou dans l'aérodynamique d'un échappement chaud, c'est exactement le signe qu'il faut utiliser."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "expérience de cuisine",
+     "h": "Bille dans du miel, froid et réchauffé",
+     "text": "Dans le thème sur les écoulements, on comparait une bille dans du miel à une bille dans l'eau ; ici, on change non pas le liquide, mais la température. Prenez deux bocaux transparents identiques de miel liquide, placez l'un au réfrigérateur, l'autre dans de l'eau tiède ne dépassant pas 40 degrés (au-delà, le miel se détériore). Laissez reposer une heure, mesurez la température des deux. Marquez deux repères à 10 cm sous la surface et laissez tomber dans chacun une bille métallique identique — une bille de roulement d'environ 4 mm de diamètre convient. Chronométrez le temps entre les repères. Question : de combien de fois la bille ira-t-elle plus vite dans le miel tiède — deux fois, cinq fois ou vingt fois ?",
+     "answer": "Environ vingt à trente fois, et c'est le résultat le plus convaincant de toutes les expériences de cuisine de ce thème. Selon la formule de Stokes, la vitesse est inversement proportionnelle à la viscosité, donc le temps lui est directement proportionnel. Le miel à 10 °C a une viscosité de l'ordre de 40 Pa·s, à 40 °C de l'ordre de un et demi. Un échauffement de seulement trente degrés, et une différence de presque trente fois : c'est l'exponentielle en action, une loi de puissance ne peut pas produire cela. Calculez l'énergie de barrière par Arrhenius — vous obtiendrez environ 85 kJ par mole, soit à peu près quatre liaisons hydrogène. C'est ce qu'une molécule de sucre doit rompre pour se faufiler entre ses voisines. Comparez avec un gaz : pour que la viscosité de l'air augmente de trente fois, il faudrait le chauffer à plusieurs centaines de milliers de kelvins, et encore, il se transformerait en plasma avant. Une seule expérience, deux physiques opposées."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoxe",
+     "h": "L'hélium est sept fois plus léger que l'air — et plus visqueux",
+     "text": "La masse molaire de l'hélium est de 4 contre 29 pour l'air. La molécule est légère, vole plus vite que toutes, s'infiltre la première à travers la moindre fissure — on pourrait penser qu'elle devrait freiner le moins. Cependant, la viscosité mesurée de l'hélium à température ambiante est de 1,96·10⁻⁵ Pa·s contre 1,81·10⁻⁵ pour l'air : l'hélium est plus visqueux. Comment cela s'accorde-t-il avec la formule ?",
+     "answer": "Cela s'accorde directement avec elle. Dans l'expression η = 2√(mkT/π)/(3σ), la masse et la section efficace tirent dans des directions opposées, et pour l'hélium, c'est la section qui l'emporte. La légèreté donne un facteur √(4/29) ≈ 0,37 — l'hélium devrait être MOINS visqueux de 2,7 fois. Mais l'atome d'hélium est aussi petit : son diamètre efficace est de 0,22 nm contre 0,37 nm pour les molécules d'air, donc la section σ = πd² est plus petite d'un facteur (0,22/0,37)² ≈ 0,35, et elle est au dénominateur. Résultat : 0,37 / 0,35 ≈ 1,05 — l'hélium sort plus visqueux que l'air d'environ cinq pour cent, le manuel donne huit. Cette estimation ne peut pas être plus précise : les diamètres efficaces des molécules sont eux-mêmes connus à quelques pour cent près, et ils entrent au carré. Vérifiez avec l'argon : il est plus lourd que l'air (√(40/29) = 1,17), mais son diamètre est presque le même, et la viscosité ressort à 2,1·10⁻⁵ contre 2,2·10⁻⁵ dans les tables. Il faut aussi dissiper deux réputations de l'hélium. À travers un orifice de la taille d'une molécule ou à travers une épaisseur de caoutchouc, l'hélium s'échappe effectivement plus vite que tout : ce qui agit là, ce n'est pas la viscosité, mais la vitesse thermique et la taille de l'atome. En revanche, dans un long canal où l'écoulement est visqueux, l'hélium sous la même différence de pression s'écoule un peu PLUS LENTEMENT que l'air. Un ballon se dégonfle non pas parce que l'hélium est fluide, mais parce qu'il s'infiltre à travers le caoutchouc."
+    },
+    {
+     "icon": "estimate",
+     "kind": "estimation",
+     "h": "Taille d'une molécule à partir de la viscosité — le chemin de Loschmidt",
+     "text": "On peut retourner la formule. La viscosité mesurée donne le libre parcours moyen, le libre parcours donne la section efficace de collision, la section donne le diamètre de la molécule. Essayez de suivre la chaîne vous-même : η = 1,81·10⁻⁵ Pa·s, ρ = 1,2 kg/m³, ⟨v⟩ = 463 m/s, concentration n = p/kT = 2,5·10²⁵ m⁻³.",
+     "answer": "λ = 3η/(ρ⟨v⟩) ≈ 9,8·10⁻⁸ m ; σ = 1/(√2·nλ) ≈ 2,9·10⁻¹⁹ m² ; d = √(σ/π) ≈ 3,0·10⁻¹⁰ m, soit 0,3 nanomètre. La valeur de référence pour l'azote est de 0,37 nm. L'erreur est plus petite que celle de la viscosité elle-même — et ce n'est pas un hasard : le diamètre est extrait de la viscosité par une racine carrée, donc une erreur sur le facteur ⅓ est atténuée de moitié en exposant. C'est exactement cette chaîne que Joseph Loschmidt a parcourue en 1865, en ajoutant une seconde équation — la densité de l'air liquide, qui donne le nombre de molécules multiplié par le cube du diamètre. À partir de deux équations, il a trouvé à la fois la taille et la concentration : environ un nanomètre et environ 1,8·10¹⁸ molécules par centimètre cube. Le diamètre est surestimé d'un facteur trois, la concentration sous-estimée d'un facteur quinze — la première estimation de la taille d'un atome de l'histoire s'est trompée d'un ordre de grandeur, alors que la moitié des physiciens de l'époque ne croyaient même pas à l'existence des atomes."
+    },
+    {
+     "icon": "edge",
+     "kind": "limite de validité",
+     "h": "Un pour les gaz, six ordres de grandeur pour les liquides",
+     "text": "Le nombre de Prandtl de tout gaz est d'environ 0,7 et ne dépend presque pas de la nature du gaz. Pour les liquides, il varie de 0,025 pour le mercure à des dizaines de milliers pour la glycérine. D'où vient un tel fossé entre les deux états de la matière ?",
+     "answer": "Cela vient du fait que dans un gaz, les trois transferts sont assurés par le même porteur — une molécule en vol libre — et chaque coefficient contient le même facteur ⅓λ⟨v⟩. Leur rapport doit être un nombre de l'ordre de l'unité, et c'est bien le cas. Dans un liquide dense, les porteurs sont différents. La quantité de mouvement est transférée par interaction directe entre voisins, la chaleur aussi, mais dans un métal liquide, le principal porteur de chaleur devient les électrons de conduction ; il en a été question dans le deuxième paragraphe, où cela a donné le nombre de Lorenz. Les électrons n'ont aucun rapport avec la viscosité. D'où le mercure : la chaleur y circule beaucoup plus vite que la quantité de mouvement. Pour la glycérine, c'est l'inverse — la viscosité est énorme, mais la conductivité thermique est ordinaire. La conclusion pratique pour l'ingénieur est sans appel : les formules de transfert de chaleur obtenues pour l'air ne peuvent pas être transposées au sodium liquide dans un réacteur — c'est une autre physique, pas une autre valeur du coefficient. Et une réserve honnête : une théorie générale des transferts dans les liquides denses, comparable en rigueur à la théorie cinétique des gaz, n'a pas encore été construite. Pour les gaz, nous calculons les coefficients à partir des premiers principes ; pour les liquides, nous mesurons et ajustons."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "Ce que nous avons simplifié et comment on le corrige",
+   "blocks": [
+    {
+     "h": "Le facteur ⅓ : d'où vient l'écart d'un facteur un et demi",
+     "text": "Il y a eu trois simplifications, et les deux premières ne sont pas des erreurs dans le même sens, mais une paire qui s'annule. Premièrement : nous avons supposé que les molécules se déplacent strictement le long des axes, et nous avons obtenu un flux de ⅙n⟨v⟩ dans chaque direction ; un calcul honnête sur les angles donne ¼n⟨v⟩ — soit un facteur un et demi de plus. Deuxièmement : la distance à partir de laquelle une molécule apporte une impulsion étrangère, nous l'avons prise égale à λ, mais elle arrive sous un angle, et la projection de cette distance sur la normale est en moyenne ⅔λ — soit autant de moins. Un et demi fois deux tiers donne un : un calcul soigneux sur les angles ramène exactement à notre tiers, et l'écart reste inexpliqué. C'est la troisième, la plus subtile, qui l'explique : les molécules rapides vont plus loin et traversent la surface plus souvent, donc on ne peut pas moyenner le produit comme un produit de moyennes — cette corrélation joue à nouveau en faveur d'une augmentation. La solution rigoureuse de l'équation de Boltzmann pour des sphères dures, obtenue par Chapman et Enskog indépendamment l'un de l'autre au plus fort de la Première Guerre mondiale, donne une formule fermée. Numériquement, elle correspond à un facteur de 0,499 au lieu de notre tiers, c'est-à-dire exactement l'écart que nous avons mesuré sur l'air.",
+     "latex": "\\eta = \\frac{5}{16 d^{2}}\\sqrt{\\frac{m k T}{\\pi}} = 0{,}499\\,\\rho\\,\\bar v\\,\\lambda"
+    },
+    {
+     "h": "La formule de Sutherland : pourquoi pas une racine",
+     "text": "Notre dépendance η ∝ √T est issue d'une seule hypothèse : que la section efficace de collision σ est constante, comme pour des boules de billard. Les vraies molécules s'attirent mutuellement à l'approche, et la trajectoire d'une molécule lente est plus courbée : elle accroche sa voisine même si, géométriquement, elle serait passée à côté. Par conséquent, la section efficace effective est plus grande que la section géométrique, et d'autant plus que le gaz est froid. Avec le chauffage, l'attraction perd de son importance, σ diminue, et la viscosité croît plus vite que la racine. Sutherland en 1893 a réduit cette correction à une constante S ayant la dimension d'une température — en substance, à la profondeur de l'attraction en degrés. Pour l'air, S ≈ 111 K. La formule tient pour l'air depuis les températures cryogéniques jusqu'à mille cinq cents kelvins avec une précision de quelques pour cent : à 0 °C elle donne 1,72·10⁻⁵, à 20 °C — 1,81·10⁻⁵, à 100 °C — 2,17·10⁻⁵, et à dix kilomètres d'altitude ces fameux 1,46·10⁻⁵ que notre racine ne donnait pas. L'exposant effectif ressort à environ 0,76 — entre la racine et un. Maxwell, dans sa plage étroite, a mesuré exactement un et a construit sous cette hypothèse un modèle de molécules se repoussant comme la cinquième puissance de la distance ; le modèle s'est avéré plus durable que la mesure qui l'avait engendré.",
+     "latex": "\\eta(T) = \\eta_0 \\left(\\frac{T}{T_0}\\right)^{3/2} \\frac{T_0 + S}{T + S}, \\qquad S_{\\text{air}} \\approx 111\\ \\text{K}"
+    },
+    {
+     "h": "Le nombre de Knudsen : quatre régimes au lieu d'un",
+     "text": "Tout ce qui précède est valable tant que la molécule entre en collision avec d'autres molécules plus souvent qu'avec les parois. La mesure est le rapport du libre parcours moyen à la dimension caractéristique. Pour Kn inférieur à 0,01, le gaz se comporte comme un milieu continu : tout ce que nous avons dérivé est valable, et la condition de non-glissement est satisfaite à la paroi. De 0,01 à 0,1, on a le régime de glissement : le gaz glisse déjà à la paroi, et la condition de non-glissement doit être corrigée par un terme proportionnel à λ. De 0,1 à 10, c'est le régime transitoire, le plus délicat : ni la théorie cinétique sous notre forme, ni les équations du milieu continu ne fonctionnent, et on calcule par simulation directe des collisions par la méthode de Monte-Carlo. Au-dessus de 10, on atteint le régime moléculaire libre : les molécules volent de paroi en paroi, la notion de viscosité comme propriété du matériau perd son sens, et le transfert d'impulsion devient directement proportionnel à la pression. Pour la conductivité thermique, cette même transition a été examinée au deuxième paragraphe avec l'exemple du thermos ; pour la viscosité, elle est importante ailleurs. Les miroirs microélectromécaniques avec des espaces de l'ordre du micron : à pression atmosphérique, Kn y est d'environ 0,07 — déjà le régime de glissement, et l'amortissement est calculé avec une correction. Les systèmes à vide, où l'écoulement visqueux cède la place à l'écoulement moléculaire et où les formules de calcul des pompes changent complètement. La descente d'un engin depuis l'orbite : à cent kilomètres d'altitude, λ se mesure en centimètres, à cent cinquante — en mètres, et l'aérodynamique habituelle n'y fonctionne plus du tout. Enfin, les films minces de lubrifiant et les pores des catalyseurs, où l'espace est comparable au libre parcours déjà à pression normale.",
+     "latex": "\\mathrm{Kn} = \\frac{\\lambda}{L}"
+    },
+    {
+     "text": "La conclusion générale des trois corrections est la même, et il vaut la peine de la garder à l'esprit séparément des formules. La théorie cinétique des gaz est remarquable non par sa précision, mais par le fait qu'elle prédit la STRUCTURE des dépendances sans ajuster aucun paramètre : comment la viscosité dépend de la pression (pas du tout), de la température (elle augmente), de la masse moléculaire et de la taille de la molécule. Elle donne les facteurs numériques avec une précision d'un facteur un et demi, et on les affine soit par une théorie rigoureuse, soit par une seule mesure. C'est l'ordre des choses typique en physique : d'abord le mécanisme et les exposants, ensuite les coefficients."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "La viscosité d'un gaz est le transfert de quantité de mouvement à travers l'écoulement par les molécules se déplaçant entre les collisions, et non une force de frottement distincte. Le coefficient se compose de trois facteurs : η = ⅓ρ⟨v⟩λ. D'où deux conséquences non évidentes : la viscosité d'un gaz ne dépend pas de la pression, car la densité se compense avec le libre parcours moyen, et elle augmente avec la température approximativement comme √T — alors que pour un liquide elle diminue exponentiellement. Les mêmes λ et ⟨v⟩ donnent le coefficient de diffusion et la conductivité thermique : trois phénomènes de transport — une seule image avec des charges différentes.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "Trois facteurs au lieu d'un tableau",
+     "text": "η = ⅓ρ⟨v⟩λ : combien de porteurs par mètre cube, à quelle vitesse ils se déplacent, jusqu'où ils transportent la quantité de mouvement d'autrui"
+    },
+    {
+     "icon": "fact",
+     "title": "La pression n'a rien à voir",
+     "text": "On pompe la moitié — deux fois moins de porteurs, mais chacun va deux fois plus loin. Le produit ρλ ne dépend pas de la concentration"
+    },
+    {
+     "icon": "scale",
+     "title": "Le gaz s'épaissit, le liquide se fluidifie",
+     "text": "√T contre exp(E/kT). Ce sont des mécanismes différents, pas des coefficients différents dans une même formule"
+    },
+    {
+     "icon": "edge",
+     "title": "Tout repose sur la petitesse de λ",
+     "text": "Dès que le libre parcours atteint la taille de l'espace, la viscosité cesse d'être une propriété du matériau et se souvient de la pression"
+    }
+   ],
+   "where": [
+    "Technique du vide : l'écoulement visqueux cède la place à l'écoulement moléculaire lorsque λ atteint le diamètre du tube",
+    "Aérodynamique en altitude : l'air à 10 km est trois fois plus raréfié, mais la viscosité est presque la même — Re diminue à cause de la densité",
+    "Calculs d'échange de chaleur : Pr ≈ 0,7 pour tout gaz, donc les formules obtenues avec l'air se transfèrent à d'autres gaz",
+    "Descente orbitale et micromécanique : le nombre de Knudsen décide si le concept de viscosité est applicable"
+   ],
+   "watchOut": "Trois erreurs sont plus fréquentes que les autres. La première — transposer au gaz l'intuition de cuisine : « chaud signifie plus fluide » est vrai pour un liquide et faux pour un gaz, les mécanismes sont différents et le signe est opposé. La deuxième — considérer le facteur ⅓ comme exact : il sous-estime la réponse d'environ une fois et demie, et si le problème exige un nombre, pas une structure, il faut prendre la valeur tabulée de η ou la formule de Sutherland. La troisième, la plus dangereuse — appliquer η là où le libre parcours moyen est comparable à la taille de l'espace : dans la technique du vide, dans les microcanaux et à haute altitude, la viscosité cesse d'être une propriété du matériau et commence à dépendre de la géométrie."
+  },
+  "quiz": [
+   {
+    "id": "tv1",
+    "type": "mcq",
+    "q": "On a retiré la moitié de l'air d'un récipient, sans changer la température. Qu'advient-il de la viscosité du gaz restant ?",
+    "options": [
+     "Elle n'a pas changé",
+     "Elle a diminué de moitié : il y a deux fois moins de molécules porteuses",
+     "Elle a doublé : les molécules ont plus d'espace pour voler",
+     "Elle a diminué d'un facteur quatre : collisions plus rares et densité plus faible"
+    ],
+    "answer": 0,
+    "why": "Dans la formule η = ⅓ρ⟨v⟩λ, la densité a diminué de moitié, mais le libre parcours moyen λ = 1/(√2·nσ) a doublé : il y a moins de porteurs, mais chacun transporte l'impulsion deux fois plus loin dans la couche voisine. Le produit ρλ ne dépend pas du tout de la concentration, et la vitesse moyenne n'est déterminée que par la température. C'est exactement cette conclusion que Maxwell a jugée incroyable en 1860 et qu'il a vérifiée six ans plus tard par une expérience avec des disques de verre oscillants — la viscosité est restée constante dans toute la gamme de pressions accessible. Une réserve : cela est vrai tant que λ est bien inférieur aux dimensions du récipient ; dans un vide poussé, une dépendance à la pression apparaît, et c'est un autre régime, traité en annexe.",
+    "hint": "Écrivez comment chaque facteur dans η = ⅓ρ⟨v⟩λ dépend de la concentration n, et additionnez les exposants."
+   },
+   {
+    "id": "tv2",
+    "type": "mcq",
+    "q": "Pourquoi la viscosité d'un gaz augmente-t-elle avec la température, alors que celle d'un liquide diminue ?",
+    "options": [
+     "Dans un gaz, l'impulsion est transportée par des molécules en vol libre, et leur vitesse thermique augmente avec la température ; dans un liquide, les molécules sont en contact étroit, et le chauffage facilite leur passage entre les voisines",
+     "Dans un gaz, la densité augmente avec la température, alors qu'elle diminue dans un liquide",
+     "Pour un gaz, le libre parcours moyen augmente avec la température, alors qu'il diminue pour un liquide",
+     "Ce sont des grandeurs différentes : pour un gaz, on mesure la viscosité par l'amortissement des oscillations, et pour un liquide par le débit à travers un tube"
+    ],
+    "answer": 0,
+    "why": "Le signe différent ne vient pas de coefficients différents, mais de mécanismes différents. Dans un gaz, le porteur d'impulsion est une molécule en vol, et la viscosité hérite de la dépendance en température de sa vitesse : ⟨v⟩ ∝ √T, donc η augmente. Dans un liquide, il n'y a pas de libre parcours moyen ; les molécules sont en contact, et le cisaillement des couches exige qu'une molécule se faufile entre ses voisines en franchissant une barrière d'énergie ; la probabilité de cela suit un facteur de Boltzmann, donc la viscosité diminue exponentiellement avec la température. L'option sur l'augmentation de la densité avec la température est simplement fausse : dans un récipient ouvert, la densité diminue pour les deux. L'option sur le libre parcours moyen confond le mécanisme avec la conséquence — à densité constante, λ ne dépend pas de la température, et pour un liquide cette grandeur n'est pas définie. L'option qui déclare que la viscosité d'un gaz et celle d'un liquide sont des grandeurs différentes est factuellement fausse : les deux méthodes de mesure donnent la même grandeur, et c'est sur cela que repose la cohérence des tables.",
+    "hint": "Demandez-vous ce qui transporte l'impulsion dans chaque cas — et ce qui change avec la température pour ce transporteur."
+   },
+   {
+    "id": "tv3",
+    "type": "free",
+    "q": "En vos propres termes : pourquoi le coefficient de diffusion, la conductivité thermique et la viscosité d'un gaz s'expriment-ils tous par le même produit λ·⟨v⟩ ?",
+    "keywords": [
+     "transport",
+     "libre parcours",
+     "collision",
+     "molécules",
+     "gradient",
+     "porteur",
+     "impulsion",
+     "énergie"
+    ],
+    "needed": 2,
+    "why": "Parce que dans les trois cas, le même mécanisme est à l'œuvre : une molécule vole de collision en collision et emporte avec elle ce qu'elle possédait au lieu de sa dernière collision. Seule la charge change — la molécule elle-même marquée donne la diffusion, son énergie thermique donne la conductivité thermique, son impulsion le long de l'écoulement donne la viscosité. C'est pourquoi chaque coefficient contient le facteur ⅓λ⟨v⟩ — en substance, « quelle surface le porteur couvre par seconde » — et les coefficients ne diffèrent que par la quantité de charge par mètre cube : l'unité pour le nombre de particules, ρc_V pour l'énergie, ρ pour l'impulsion. De là découle immédiatement une prédiction vérifiable : les rapports des coefficients sont des nombres de l'ordre de l'unité, et pour les gaz, Pr et Sc sont effectivement autour de 0,7–1.",
+    "hint": "Analysez ce qui est commun et ce qui diffère dans les trois phénomènes. Le mécanisme est le même — mais qu'est-ce que la molécule emporte à travers la frontière de la couche ?"
+   },
+   {
+    "id": "tv4",
+    "type": "estimate",
+    "q": "Estimez le libre parcours moyen des molécules d'air à une pression de 10⁻³ atmosphère et à température ambiante. À pression atmosphérique, il est de 68 nm. Réponse en micromètres.",
+    "answer": 68,
+    "unit": "µm",
+    "why": "Le libre parcours λ = 1/(√2·nσ) est inversement proportionnel à la concentration, et la concentration à température constante est proportionnelle à la pression. Donc λ ∝ 1/p : une diminution de pression d'un facteur mille augmente le parcours d'exactement un facteur mille, de 68 nm à 68 µm. Une estimation par bon sens : 68 micromètres, c'est déjà l'épaisseur d'un cheveu humain, donc dans un canal d'un dixième de millimètre de large, le gaz à cette pression cesserait d'être un milieu continu, et le concept de viscosité ne s'y appliquerait pas. D'où la règle pratique du spécialiste du vide : tant que le parcours est inférieur au diamètre du tube, le gaz est pompé en écoulement visqueux, et dès qu'il le dépasse, en écoulement moléculaire, et il faut calculer avec d'autres formules.",
+    "hint": "La concentration des molécules à température constante est proportionnelle à la pression, et le libre parcours est inversement proportionnel à la concentration. De quel facteur la pression a-t-elle diminué ?",
+    "tolFactor": 1.5
+   }
+  ],
+  "title": "Viscosité d'un gaz : transfert de quantité de mouvement",
+  "subtitle": "Paragraphe 3 · Pourquoi la viscosité d'un gaz ne dépend pas de la pression",
+  "intro": [
+   "Les deux premiers paragraphes du sujet transportaient à travers le gaz des choses faciles à imaginer : d'abord les molécules elles-mêmes, puis l'énergie. Reste une troisième grandeur — la quantité de mouvement. Elle se transporte de la même manière, mais se manifeste tout autrement : non pas par l'étalement d'une tache ni par l'égalisation des températures, mais par une force avec laquelle une couche de gaz freine la couche voisine. Cette force s'appelle la viscosité, et elle ne contient rien d'autre que le mécanisme déjà analysé : une molécule a quitté sa couche et a emporté sa quantité de mouvement avec elle.",
+   "Le côté macroscopique est déjà connu du sujet sur les liquides et les gaz en mouvement. Là, la viscosité η figurait dans la loi de Newton pour la contrainte tangentielle, dans la formule de Poiseuille et dans le nombre de Reynolds — elle y figurait comme une propriété de la matière que l'on prend dans un tableau sans se demander d'où elle vient. Ici, nous allons calculer ce tableau. À partir du libre parcours moyen et de la vitesse thermique — deux grandeurs déjà réglées sur les curseurs du stand — on obtiendra un nombre tout prêt, et on pourra le comparer à la valeur mesurée directement dans ce paragraphe.",
+   "La réponse sera étrange à deux égards. D'abord, la viscosité d'un gaz ne dépend pas de la pression : retirez la moitié de l'air d'une pièce, et le reste freinera exactement de la même manière. Ensuite, elle augmente avec la température, alors que pour tout liquide elle diminue. La première de ces propriétés déplut tellement à l'auteur du calcul qu'il fit l'expérience chez lui, espérant la réfuter. L'expérience confirma le calcul — et du même coup réfuta le modèle de molécules dont le calcul était issu."
+  ],
+  "standNote": "Le stand de cette leçon est commun aux trois paragraphes, et ici il fonctionne aussi bien que dans le premier. Les curseurs règlent le libre parcours moyen λ et la vitesse thermique ⟨v⟩ — les deux mêmes nombres à partir desquels la viscosité va maintenant être construite. Dans la fenêtre, le stand affiche le coefficient de diffusion D = λ⟨v⟩/3 ; la viscosité s'en déduit en multipliant par la densité : η = ρD. Réglez λ = 70 nm et ⟨v⟩ = 450 m/s — c'est l'air à température ambiante. Le stand affichera D d'environ 1,05·10⁻⁵ m²/s ; multipliez par la densité de l'air, 1,2 kg/m³, et vous obtenez η ≈ 1,3·10⁻⁵ Pa·s. La valeur tabulée est 1,81·10⁻⁵ — une erreur d'un facteur un et demi, et à la fin du paragraphe nous verrons d'où elle vient. Maintenant, l'expérience principale sur le stand. Comprimez le gaz sept fois : le libre parcours moyen chute de 70 nm à 10 nm, et D diminue du même facteur. On pourrait penser que la viscosité s'effondre. Mais la densité, lors de la compression, augmente exactement sept fois, et η = ρD est un produit dans lequel un facteur diminue tandis que l'autre augmente. La viscosité ne change pas. La densité n'est pas affichée sur le stand, il faut la garder en tête, et c'est précisément pour cela qu'il vaut la peine de faire cette expérience lentement, avec le curseur, en surveillant la valeur de D."
  }
 }

@@ -3,7 +3,34 @@
  "schema": "b42.course/2",
  "kind": "course",
  "order": 11,
- "entities": {},
+ "entities": {
+  "examples_from_articles": [
+   {
+    "id": "2604.10207",
+    "date": "2026-04-11",
+    "title": {
+     "ru": "Давление разводит псевдощель и сверхпроводимость",
+     "en": "Pressure Drives Pseudogap and Superconductivity Apart",
+     "es": "La presión separa el pseudogap y la superconductividad",
+     "ar": "الضغط يفصل بين فجوة الشبه-فجوة والموصلية الفائقة",
+     "fr": "La pression sépare le pseudogap et la supraconductivité"
+    },
+    "score": 0.615
+   },
+   {
+    "id": "2603.27767",
+    "date": "2026-03-29",
+    "title": {
+     "ru": "Почему вода тяжелеет при 4 градусах",
+     "en": "Why Water Gets Heavier at 4 Degrees",
+     "es": "Por qué el agua se vuelve más pesada a 4 grados",
+     "ar": "لماذا يزداد وزن الماء عند 4 درجات؟",
+     "fr": "Pourquoi l'eau devient plus lourde à 4 degrés"
+    },
+    "score": 0.613
+   }
+  ]
+ },
  "lessons": [
   {
    "id": "01-vanderwaals",
@@ -347,6 +374,87 @@
     "title": "السعات الحرارية Cv و Cp: أين تذهب الحرارة",
     "sub": "علاقة ماير، درجات الحرية، والكم البارز من النظرية الكلاسيكية",
     "law": "Cp − Cv = R · معامل أدياباتي",
+    "model": "realgas"
+   }
+  ]
+ },
+ "fr": {
+  "title": "Gaz réel et surface",
+  "subtitle": "Van der Waals, tension, capacités thermiques",
+  "lead": "Le gaz parfait était un mensonge commode : des molécules sans taille qui ne se remarquent pas. Le mensonge a fonctionné tant que le gaz était raréfié — mais dès qu'on le comprime ou le refroidit, il s'effondre : le gaz se liquéfie, ce que le gaz parfait ne sait pas faire du tout. Ce thème rend aux molécules ce qu'on leur avait retiré : leur propre volume et l'attraction entre voisins. De là naissent l'équation du gaz réel, le film à la surface de l'eau et la différence entre deux capacités thermiques, où la mécanique quantique apparaît de manière inattendue.",
+  "why": {
+   "title": "Pourquoi le savoir",
+   "text": [
+    "Tout ce qu'on appelle « gaz en bouteille » et « liquide » dans la vie courante vit justement là où le gaz parfait ne fonctionne plus. L'air liquéfié, le dioxyde de carbone dans un extincteur, le propane dans une bouteille, l'eau dans la chaudière d'une centrale électrique — leur état est calculé avec une équation à deux corrections, et les deux corrections ont un sens moléculaire direct, et non un sens d'ajustement.",
+    "La tension superficielle est la seconde moitié du thème et, sans doute, le phénomène le plus sous-estimé du cours. Elle fait monter l'eau dans une serviette en papier et dans le sol, rassemble les gouttes en sphères, maintient le gerris sur l'eau, brise le jet en gouttes dans un pulvérisateur et décide si la peinture mouille la surface ou se rassemble en flaques. La formule de Laplace tient en une ligne, mais explique tout ce qui précède.",
+    "Enfin, les deux capacités thermiques. La différence entre elles est exactement le travail de dilatation, et elle donne une relation universelle à partir de laquelle on déduit ensuite la vitesse du son. Et le nombre de degrés de liberté, qui entre dans cette formule, s'avère « incorrect » à température ambiante : une partie des mouvements de la molécule est simplement gelée. La physique classique ne peut pas l'expliquer — et c'est ici, dans le thème le plus quotidien du cours, qu'on voit pour la première fois qu'on ne peut pas se passer du quantum."
+   ]
+  },
+  "map": {
+   "title": "Ce que vous étudierez",
+   "lead": "Le thème retire une à une les simplifications du gaz parfait : d'abord on rend aux molécules leur volume et leur attraction, puis on regarde ce qui se passe à la frontière de la matière, et enfin on calcule où va la chaleur fournie.",
+   "outcome": "Après avoir suivi ce thème, vous pourrez expliquer pourquoi un gaz au-dessus de la température critique ne se liquéfie sous aucune pression, calculer la pression à l'intérieur d'une goutte et la hauteur de montée dans un capillaire, dériver la relation de Mayer et, à partir de l'indice adiabatique, déterminer combien de degrés de liberté d'une molécule sont actifs à une température donnée."
+  },
+  "prereq": {
+   "title": "Ce qu'il faut savoir à l'avance",
+   "items": [
+    "Thermodynamique : équation d'état du gaz parfait, premier principe, travail lors de la détente. Les trois corrections de ce thème sont une superstructure sur ces bases, pas un remplacement.",
+    "Physique statistique : distribution des vitesses des molécules et notion que la température est une mesure de l'énergie moyenne du mouvement. Le gel des degrés de liberté s'explique précisément dans ce langage.",
+    "Mathématiques : dérivée et condition d'inflexion (première et seconde dérivées nulles) — c'est ainsi qu'on trouve le point critique ; et l'intégrale la plus simple pour le travail de détente."
+   ],
+   "note": "L'équation de Van der Waals n'est pas ici la seule vraie, mais la première honnête : elle explique qualitativement la liquéfaction et le point critique, mais se trompe quantitativement — le coefficient critique donne 0,375 contre 0,23–0,30 mesurés. Cela est dit explicitement dans l'annexe du premier paragraphe."
+  },
+  "history": {
+   "title": "Qui l'a créée",
+   "people": [
+    {
+     "name": "Thomas Andrews",
+     "years": "1813–1885",
+     "what": "A mesuré les isothermes du dioxyde de carbone et découvert le point critique : au-dessus de 31 degrés, la frontière entre liquide et gaz disparaît, quelle que soit la pression. C'était un défi expérimental auquel Van der Waals a répondu."
+    },
+    {
+     "name": "Johannes Diderik van der Waals",
+     "years": "1837–1923",
+     "what": "Dans sa thèse de 1873, il a ajouté deux corrections à l'équation du gaz parfait — pour le volume propre des molécules et pour leur attraction mutuelle — et a obtenu une équation décrivant à la fois le gaz, le liquide et la transition entre eux. Prix Nobel 1910."
+    },
+    {
+     "name": "Pierre-Simon Laplace",
+     "years": "1749–1827",
+     "what": "A dérivé la formule du saut de pression sur une surface courbe : plus le rayon est petit, plus le film comprime ce qui est à l'intérieur. De là découle aussi la hauteur de montée capillaire."
+    },
+    {
+     "name": "Julius Robert Mayer",
+     "years": "1814–1878",
+     "what": "À partir de la différence entre deux capacités thermiques de l'air, il a calculé l'équivalent mécanique de la chaleur — avant que Joule ne le mesure directement. La relation Cp − Cv = R porte son nom."
+    },
+    {
+     "name": "James Dewar",
+     "years": "1842–1923",
+     "what": "A liquéfié l'hydrogène et inventé le récipient à double paroi argentée qui se trouve aujourd'hui dans chaque cuisine sous le nom de thermos. Le côté pratique du point critique a commencé avec lui."
+    }
+   ]
+  },
+  "open": "les équations d'état des liquides denses sont encore ajustées, non dérivées",
+  "lessons": [
+   {
+    "id": "01-vanderwaals",
+    "title": "Van der Waals : le gaz qui se souvient de lui-même",
+    "sub": "deux corrections au gaz parfait et pourquoi au-dessus de la température critique il n'y a pas de liquéfaction",
+    "law": "Équation de Van der Waals · point critique",
+    "model": "realgas"
+   },
+   {
+    "id": "02-surface",
+    "title": "Tension superficielle et capillaires",
+    "sub": "pourquoi la surface se comporte comme un film et jusqu'où elle fait monter l'eau",
+    "law": "Formule de Laplace · montée capillaire",
+    "model": "realgas"
+   },
+   {
+    "id": "03-heatcap",
+    "title": "Capacités thermiques Cv et Cp : où va la chaleur",
+    "sub": "relation de Mayer, degrés de liberté et le quantum qui dépasse de la théorie classique",
+    "law": "Cp − Cv = R · indice adiabatique",
     "model": "realgas"
    }
   ]

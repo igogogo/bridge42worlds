@@ -13,41 +13,6 @@
   ],
   "scientists": [
    "Isaac Newton"
-  ],
-  "examples_from_articles": [
-   {
-    "id": "2608.05698v1",
-    "date": "2026-08-06",
-    "title": {
-     "ru": "Как свет закручивает спин электрона",
-     "en": "How Light Twists an Electron's Spin",
-     "es": "Cómo la luz hace girar el espín del electrón",
-     "ar": "كيف يلف الضوءُ لفَّ الإلكترون"
-    },
-    "why": "angular_momentum"
-   },
-   {
-    "id": "2607.08673",
-    "date": "2026-07-09",
-    "title": {
-     "ru": "Как облака перекраивают океанские вихри",
-     "en": "How Clouds Reshape Oceanic Vortices",
-     "es": "Cómo las nubes reconfiguran los remolinos oceánicos",
-     "ar": "كيف تعيد السحب تشكيل دوامات المحيط"
-    },
-    "why": "turbulence"
-   },
-   {
-    "id": "2607.06780",
-    "date": "2026-07-07",
-    "title": {
-     "ru": "Вода танцует: в тайном ритме водородных связей",
-     "en": "Water dances: the hidden rhythm of hydrogen bonds",
-     "es": "El agua danza: el ritmo secreto de los puentes de hidrógeno",
-     "ar": "رقصة الماء: في الإيقاع الخفي للروابط الهيدروجينية"
-    },
-    "why": "turbulence"
-   }
   ]
  },
  "ru": {
@@ -1761,5 +1726,433 @@
     "hint": "الفترة تساوي اليوم النجمي مقسومًا على جيب خط العرض. جيب 60 درجة هو 0.87، لذا يجب أن يكون الجواب أكبر قليلاً من اليوم."
    }
   ]
+ },
+ "fr": {
+  "formula": {
+   "name": "Accélération dans un système en rotation : terme centrifuge et force de Coriolis",
+   "latex": "\\vec a_{\\text{fixe}} = \\vec a_{\\text{rel}} + 2\\,\\vec\\omega\\times\\vec v_{\\text{rel}} + \\vec\\omega\\times(\\vec\\omega\\times\\vec r) \\qquad \\vec F_{\\text{cor}} = 2m\\,[\\vec v_{\\text{rel}}\\times\\vec\\omega]",
+   "alsoKnown": "Théorème de Coriolis sur la composition des accélérations ; accélération centrifuge composée (c'est ainsi que Coriolis lui-même l'appelait). En météorologie, le même terme s'écrit avec le paramètre de Coriolis f = 2Ω·sin φ",
+   "authors": [
+    {
+     "who": "Christiaan Huygens",
+     "year": "1659 (théorèmes sans démonstrations — 1673, texte complet — 1703)",
+     "what": "dans son ouvrage « De la force centrifuge », il a le premier calculé avec quelle force un corps en rotation tire sur une corde, et a obtenu une dépendance au carré de la vitesse et inversement au rayon — c'est le futur troisième terme de notre formule"
+    },
+    {
+     "who": "Pierre-Simon Laplace",
+     "year": "1778",
+     "what": "dans ses équations des marées, il a déjà écrit un terme proportionnel à la vitesse du courant et au sinus de la latitude, mais ne l'a pas isolé comme un phénomène général distinct"
+    },
+    {
+     "who": "Gaspard-Gustave de Coriolis",
+     "year": "1835",
+     "what": "dans son article « Sur les équations du mouvement relatif des systèmes de corps », il a obtenu le terme manquant sous forme générale et l'a appelé accélération centrifuge composée ; il ne pensait pas alors à la planète, mais aux machines — roues hydrauliques et engrenages, où des pièces se déplacent à l'intérieur de parties en rotation"
+    },
+    {
+     "who": "Léon Foucault",
+     "year": "1851",
+     "what": "a suspendu un pendule et montré la rotation du plan d'oscillation — la première preuve directe, de laboratoire, de la rotation de la Terre, ne nécessitant aucune observation astronomique"
+    },
+    {
+     "who": "William Ferrel",
+     "year": "1856",
+     "what": "a transposé tout cela à l'atmosphère et expliqué pourquoi le vent ne souffle pas perpendiculairement aux isobares, mais le long de celles-ci, et pourquoi les cyclones tournent dans des sens opposés dans les deux hémisphères"
+    }
+   ],
+   "story": "Le nom sur la formule est celui d'un ingénieur. Coriolis enseignait la mécanique à l'École Polytechnique et s'occupait de la théorie des machines — sa véritable gloire est ailleurs : c'est lui qui a introduit en physique le mot « travail » au sens actuel, comme force multipliée par le chemin. Le problème d'où est issu le terme supplémentaire était d'atelier : comment calculer le mouvement d'une pièce qui se déplace le long d'un rayon d'une roue en rotation. Ni météo, ni océans, ni Terre dans l'article de 1835 — rien de tout cela. C'est Ferrel qui a amené ce terme en météorologie vingt ans plus tard, et l'expression même « force de Coriolis » n'est entrée en usage que vers les années 1920, dans l'école scandinave de prévision météorologique. Il est amusant aussi que les premiers à avoir obtenu une réponse pratique ne furent pas des physiciens, mais des marins : le Néerlandais Buys-Ballot a formulé en 1857 une règle qui fonctionne encore aujourd'hui sans aucune formule — placez-vous dos au vent dans l'hémisphère nord, et la zone de basse pression se trouvera à votre gauche.",
+   "symbols": [
+    {
+     "sym": "ω",
+     "latex": "\\vec\\omega",
+     "what": "vitesse angulaire du système en rotation",
+     "unit": "rad/s",
+     "note": "vecteur le long de l'axe de rotation selon la règle de la main droite ; dans ce paragraphe, nous le considérons constant"
+    },
+    {
+     "sym": "v_rel",
+     "latex": "\\vec v_{\\text{rel}}",
+     "what": "vitesse du corps mesurée dans le système en rotation",
+     "unit": "m/s",
+     "note": "c'est exactement ce que voit un observateur sur un manège, et non ce que voit un observateur au sol"
+    },
+    {
+     "sym": "a_rel",
+     "latex": "\\vec a_{\\text{rel}}",
+     "what": "accélération du corps dans le système en rotation",
+     "unit": "m/s²",
+     "note": "c'est à elle qu'est égale la somme des forces réelles plus deux ajouts — c'est tout le sens de la dérivation"
+    },
+    {
+     "sym": "r⊥",
+     "latex": "\\vec r_{\\perp}",
+     "what": "composante du rayon vecteur perpendiculaire à l'axe",
+     "unit": "m",
+     "note": "distance à l'AXE, et non au centre : au pôle elle est nulle, à l'équateur — le rayon de la Terre"
+    },
+    {
+     "sym": "τ, n",
+     "latex": "\\vec\\tau,\\ \\vec n",
+     "what": "vecteurs unitaires tangent et normal de la trajectoire",
+     "unit": "sans dimension",
+     "note": "τ pointe vers l'avant du mouvement, n — vers l'intérieur du virage, perpendiculairement à τ"
+    },
+    {
+     "sym": "ρ",
+     "latex": "\\rho",
+     "what": "rayon de courbure de la trajectoire",
+     "unit": "m",
+     "note": "rayon du cercle qui, en un point donné, épouse le plus étroitement la courbe ; pour une droite, il est infini"
+    },
+    {
+     "sym": "f",
+     "latex": "f",
+     "what": "paramètre de Coriolis",
+     "unit": "s⁻¹",
+     "note": "f = 2Ω·sin φ — ce que devient 2ω pour un mouvement horizontal à la surface de la Terre ; nul à l'équateur"
+    },
+    {
+     "sym": "Ro",
+     "latex": "\\mathrm{Ro}",
+     "what": "nombre de Rossby",
+     "unit": "sans dimension",
+     "note": "Ro = v/(fL) — combien de fois l'inertie propre du flux est plus forte que la force de Coriolis ; toute la mesure de l'importance de l'effet en un seul nombre"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Dérivation rigoureuse",
+   "lead": "Il ne faut que deux choses : la définition de la dérivée d'un vecteur et la définition du produit vectoriel. Ni tenseurs, ni matrices de rotation — seulement la géométrie du déplacement pendant le temps $dt$. Ce qu'est la force d'inertie et pourquoi elle n'a pas de source, nous le considérons comme déjà connu du thème « Oscillations et rotation » ; ici nous ne l'introduisons pas à nouveau, mais nous l'obtenons sous une forme générale.",
+   "steps": [
+    {
+     "text": "Commençons par la géométrie, sans aucune rotation de référentiels. La vitesse est toujours tangente à la trajectoire, on peut donc l'écrire comme la longueur multipliée par le vecteur tangent unitaire : $\\vec v = v\\,\\vec\\tau$. On différencie ce produit — et on obtient exactement deux termes. Le premier est responsable du fait que le corps va plus vite ou plus lentement. Le second — du fait que le vecteur $\\vec\\tau$ lui-même tourne. Un vecteur unitaire ne peut pas changer de longueur, donc sa dérivée lui est perpendiculaire et pointe vers l'intérieur du virage ; sa magnitude est égale à la vitesse divisée par le rayon de courbure, c'est-à-dire $v/\\rho$. En résumé : toute accélération se décompose en « plus vite-moins vite » le long du mouvement et « plus courbé-plus plat » en travers.",
+     "latex": "\\vec v = v\\,\\vec\\tau, \\qquad \\frac{d\\vec\\tau}{dt} = \\frac{v}{\\rho}\\,\\vec n \\;\\Longrightarrow\\; \\vec a = \\underbrace{\\frac{dv}{dt}}_{\\text{longitudinal}}\\vec\\tau + \\underbrace{\\frac{v^{2}}{\\rho}}_{\\text{transversal}}\\vec n",
+     "figure": "riginormal",
+     "figCaption": "L'accélération se décompose toujours en deux parties : le long du mouvement elle change la grandeur de la vitesse, en travers — sa direction"
+    },
+    {
+     "text": "Maintenant le lemme principal, d'où découlera tout le reste. Prenons un vecteur $\\vec A$, fixe dans le référentiel en rotation — disons, dessiné à la craie sur un manège. Pour un observateur au sol, il change pourtant : pendant le temps $dt$, tout le manège tourne d'un angle $\\omega\\,dt$, et l'extrémité du vecteur parcourt un cercle de rayon $|\\vec A|\\sin\\alpha$, où $\\alpha$ est l'angle entre $\\vec A$ et l'axe. La longueur du déplacement est égale au rayon de ce cercle multiplié par l'angle de rotation, et la direction est perpendiculaire à la fois à l'axe et au vecteur lui-même. Ces trois propriétés — la grandeur $|\\vec A|\\,\\omega\\sin\\alpha$, la perpendicularité aux deux, le trièdre direct — sont précisément la définition du produit vectoriel $\\vec\\omega\\times\\vec A$. Si le vecteur change en plus dans le référentiel en rotation, les deux causes s'additionnent.",
+     "latex": "|d\\vec A| = |\\vec A|\\sin\\alpha\\cdot\\omega\\,dt \\;\\Longrightarrow\\; \\left(\\frac{d\\vec A}{dt}\\right)_{\\text{fixe}} = \\left(\\frac{d\\vec A}{dt}\\right)_{\\text{rot}} + \\vec\\omega\\times\\vec A",
+     "figure": "rigilemma",
+     "figCaption": "L'extrémité d'un vecteur au repos sur le manège décrit un cercle de rayon |A|·sin α — c'est de là que vient le produit vectoriel ω×A"
+    },
+    {
+     "text": "Appliquons le lemme au rayon vecteur du corps. À gauche se trouve la vitesse vue par un observateur fixe, à droite — la vitesse vue par l'observateur sur le manège, plus une correction. Le sens de la correction est simple et mérite d'être explicité : $\\vec\\omega\\times\\vec r$ est la vitesse de ce point du manège que le corps survole à cet instant. On l'appelle vitesse d'entraînement. Le corps « hérite » en quelque sorte du mouvement du sol sous lui : s'il restait immobile sur le manège, toute sa vitesse pour l'observateur terrestre serait uniquement cette vitesse d'entraînement.",
+     "latex": "\\vec v_{\\text{fixe}} = \\vec v_{\\text{rel}} + \\vec\\omega\\times\\vec r, \\qquad |\\vec\\omega\\times\\vec r| = \\omega\\,r_{\\perp}",
+     "figure": "rigirel",
+     "figCaption": "La vitesse pour l'observateur terrestre = vitesse relative au manège + vitesse du point du sol au-dessus duquel le corps se trouve actuellement"
+    },
+    {
+     "text": "Maintenant appliquons le lemme une DEUXIÈME fois — non plus au rayon vecteur, mais à la vitesse elle-même de l'étape précédente. Le lemme est valable pour tout vecteur, pas seulement pour $\\vec r$ ; c'est son principal avantage. La règle de substitution est facile à retenir comme un opérateur : pour prendre la dérivée fixe, il faut prendre la dérivée rotative et ajouter $\\vec\\omega\\times$. On l'applique à la somme $\\vec v_{\\text{rel}} + \\vec\\omega\\times\\vec r$, en considérant $\\vec\\omega$ constante, et on rassemble les termes. Il y en a trois, et l'un d'eux est doublé — cela mérite qu'on s'y attarde.",
+     "latex": "\\vec a_{\\text{fixe}} = \\left(\\frac{d}{dt}\\right)_{\\text{rot}}\\!\\!\\bigl(\\vec v_{\\text{rel}} + \\vec\\omega\\times\\vec r\\bigr) + \\vec\\omega\\times\\bigl(\\vec v_{\\text{rel}} + \\vec\\omega\\times\\vec r\\bigr) = \\vec a_{\\text{rel}} + 2\\,\\vec\\omega\\times\\vec v_{\\text{rel}} + \\vec\\omega\\times(\\vec\\omega\\times\\vec r)",
+     "figure": "rigitwice",
+     "figCaption": "Le lemme est appliqué deux fois — au rayon vecteur et à la vitesse ; parmi les quatre termes, deux sont identiques et donnent le facteur deux"
+    },
+    {
+     "text": "D'où vient le facteur deux — ce n'est pas une question arithmétique, mais physique, et la réponse est belle : deux mécanismes complètement différents donnent la même contribution. Le premier : le vecteur vitesse relative est simplement retourné avec le sol. Pendant le temps $dt$, le sol a tourné de $\\omega\\,dt$, et avec lui la flèche de vitesse — un incrément $\\omega v\\,dt$ transversal au mouvement. Le second : le corps s'est déplacé radialement, et la vitesse d'entraînement $\\omega r_{\\perp}$ dépend du rayon. En se déplaçant vers l'extérieur de $v\\,dt$, le corps doit accélérer sur le cercle de $\\omega\\,v\\,dt$ de plus, sinon il resterait en arrière du sol. Deux calculs différents, deux réponses identiques — et donc le facteur est exactement 2, ni 1 ni 3. Vérifiez sur le cas limite : si le corps se déplace parallèlement à l'axe de rotation, sa vitesse n'a nulle part où tourner, ni le rayon ne change — et la force de Coriolis s'annule, comme le montre le produit vectoriel.",
+     "latex": "\\underbrace{\\omega v\\,dt}_{\\text{le vecteur } \\vec v_{\\text{rel}} \\text{ a tourné}} + \\underbrace{\\omega v\\,dt}_{\\text{la vitesse d'entraînement } \\omega r_{\\perp} \\text{ a augmenté}} = 2\\,\\omega v\\,dt \\;\\Longrightarrow\\; \\vec a_{\\text{cor}} = 2\\,\\vec\\omega\\times\\vec v_{\\text{rel}}",
+     "figure": "rigicor",
+     "figCaption": "Deux mécanismes, la même contribution ω·v·dt : à gauche le vecteur vitesse tourne, à droite la vitesse du sol lui-même sous le corps augmente"
+    },
+    {
+     "text": "Il reste à écrire la deuxième loi de Newton telle que l'observateur sur le manège veut la voir. Il ne peut mesurer que $\\vec a_{\\text{rel}}$, donc les termes supplémentaires doivent être déplacés à droite, en changeant de signe. Le double produit vectoriel se développe par l'identité $\\vec\\omega\\times(\\vec\\omega\\times\\vec r) = \\vec\\omega(\\vec\\omega\\cdot\\vec r) - \\omega^{2}\\vec r = -\\omega^{2}\\vec r_{\\perp}$, c'est-à-dire qu'après le transfert il donne un terme dirigé de l'AXE vers l'extérieur et croissant comme $\\omega^{2}$ — c'est la force centrifuge. Et le deuxième terme après le transfert s'écrit commodément en échangeant l'ordre des facteurs : $-2m\\,\\vec\\omega\\times\\vec v = 2m\\,[\\vec v\\times\\vec\\omega]$. Regardez-le attentivement. Il est perpendiculaire à la vitesse — toujours, quel que soit le mouvement. Donc son produit scalaire avec la vitesse est nul, donc il ne travaille pas et ne peut ni accélérer ni freiner le corps. Il ne sait faire qu'une seule chose : tourner.",
+     "latex": "m\\,\\vec a_{\\text{rel}} = \\vec F + \\underbrace{m\\,\\omega^{2}\\vec r_{\\perp}}_{\\text{centrifuge, vers l'extérieur}} + \\underbrace{2m\\,[\\vec v_{\\text{rel}}\\times\\vec\\omega]}_{\\text{de Coriolis, }\\perp\\vec v} , \\qquad \\vec F_{\\text{cor}}\\cdot\\vec v_{\\text{rel}} = 0",
+     "figure": "rigicfug",
+     "figCaption": "Deux ajouts de nature différente : la force centrifuge dépend de la position et tire de l'axe, la force de Coriolis dépend de la vitesse et lui est perpendiculaire"
+    },
+    {
+     "text": "Passons à la Terre. Le vecteur $\\vec\\Omega$ est le long de l'axe terrestre, et ce qui nous intéresse c'est le mouvement horizontal à la surface — train, vent, projectile. Décomposons $\\vec\\Omega$ à la latitude $\\varphi$ en une composante verticale $\\Omega\\sin\\varphi$ et une composante horizontale $\\Omega\\cos\\varphi$, dirigée vers le nord. Seule la partie verticale peut faire tourner la vitesse dans le plan horizontal : la partie horizontale donne une force verticale, et elle est entièrement absorbée par le poids. D'où le paramètre de Coriolis $f = 2\\Omega\\sin\\varphi$ : l'accélération horizontale est égale à $f v$ et est toujours dirigée à droite du mouvement dans l'hémisphère nord et à gauche dans l'hémisphère sud, quelle que soit la direction où vous allez. À l'équateur, le sinus est nul et il n'y a aucune déviation horizontale. Le pendule de Foucault — c'est le même facteur : son plan d'oscillation tourne à la vitesse $\\Omega\\sin\\varphi$, c'est-à-dire qu'un tour complet prend un jour sidéral divisé par le sinus de la latitude.",
+     "latex": "f = 2\\Omega\\sin\\varphi, \\qquad T_{\\text{Foucault}} = \\frac{23{,}934\\ \\text{h}}{\\sin\\varphi}: \\quad \\text{Paris } 31{,}8\\ \\text{h }(11{,}3^\\circ/\\text{h}), \\quad \\text{Saint-Pétersbourg } 27{,}7\\ \\text{h}, \\quad \\text{El-Koweït } 48{,}8\\ \\text{h}",
+     "figure": "rigifouc",
+     "figCaption": "À la latitude φ, seule la composante verticale Ω·sin φ agit : c'est elle qui dévie les mouvements horizontaux vers la droite dans l'hémisphère nord"
+    },
+    {
+     "text": "La dernière question est la plus pratique : quand la force de Coriolis est-elle importante, et quand peut-on l'oublier ? Comparons deux accélérations : l'accélération propre, liée à la courbure de l'écoulement sur sa taille caractéristique $L$, c'est-à-dire de l'ordre de $v^{2}/L$, et l'accélération de Coriolis $f v$. Leur rapport est le nombre de Rossby $\\mathrm{Ro} = v/(fL)$. Un petit Ro signifie que Coriolis domine : pour un cyclone de mille kilomètres avec un vent de 10 m/s, on obtient 0,097, et donc le vent ne va pas à travers les isobares, vers la basse pression, mais presque le long d'elles. Un grand Ro signifie qu'elle se noie dans le reste : pour un entonnoir dans un évier de 20 centimètres de large avec une vitesse de 0,3 m/s, on obtient $1{,}5\\cdot10^{4}$ — quatre ordres de grandeur. Entre les deux se trouve l'artillerie : pour un obus à 20 kilomètres, Ro est d'environ 160, la déviation n'est que de 61 mètres sur toute la portée — mais la cible est déjà manquée, et on introduit la correction dans les tables de tir.",
+     "latex": "\\mathrm{Ro} = \\frac{v}{fL}: \\qquad \\text{cyclone } 0{,}097 \\;\\ll\\; \\text{obus } 1{,}6\\cdot10^{2} \\;\\ll\\; \\text{évier } 1{,}5\\cdot10^{4}",
+     "figure": "rigirossby",
+     "figCaption": "Un seul nombre sans dimension remet tout à sa place : plus Ro est petit, plus Coriolis gouverne le mouvement"
+    }
+   ],
+   "plate": "m\\,\\vec a_{\\text{rel}} = \\vec F + m\\,\\omega^{2}\\vec r_{\\perp} + 2m\\,[\\vec v_{\\text{rel}}\\times\\vec\\omega]",
+   "plateCap": "À gauche — ce que l'observateur sur le manège mesure avec une règle et un chronomètre. À droite — la force réelle, qui a une source, et deux ajouts qui n'ont pas de source. Le premier ne dépend que de OÙ se trouve le corps, le second — seulement de VERS OÙ et à quelle vitesse il se déplace. On ne peut pas les supprimer, mais ils ne sont pas superflus : c'est le prix à payer pour le droit de considérer le sol en rotation comme immobile.",
+   "note": "Trois réserves, chacune ressortant ensuite dans les problèmes. Première : nous avons supposé $\\vec\\omega$ constante. Si le manège accélère ou freine, un terme supplémentaire apparaît dans le membre de droite, $-m\\,\\dfrac{d\\vec\\omega}{dt}\\times\\vec r$ — on l'appelle force d'Euler, et elle est analysée en détail dans l'annexe. Pour la Terre, elle est négligeable : le jour s'allonge d'environ deux millisecondes par siècle. Deuxième : notre corps est un point. Un vrai corps étendu dans un référentiel en rotation subit en plus une différence de ces forces à ses extrémités, et s'il tourne lui-même, le moment d'inertie et les effets gyroscopiques entrent en jeu — tout cela est dans les deux premiers paragraphes du thème, et nous ne le traînons pas ici. Troisième, et c'est la plus sournoise : le terme centrifuge sur Terre est déjà compté pour vous. Lorsque vous pesez quelque chose sur une balance de cuisine, vous ne mesurez pas la force de gravitation, mais sa somme avec la force centrifuge, car la balance tourne avec la planète. Le $g = 9{,}80665$ m/s² standard est déjà le résultat de cette addition. Ajouter la force centrifuge au poids séparément — c'est la compter deux fois."
+  },
+  "math": {
+   "title": "Les mathématiques qu'il fallait ici",
+   "lead": "Trois thèmes : comment le même deux apparaît par un tout autre chemin, ce que le produit vectoriel sait et ne sait pas faire, et pourquoi la dérive croît comme le carré du temps.",
+   "items": [
+    {
+     "what": "Coordonnées polaires : troisième dérivation du même deux",
+     "why": "On peut obtenir notre formule sans même parler de référentiels. Écrivons la position d'un point dans le plan via la distance $r$ et l'angle $\\theta$, dérivons deux fois et rassemblons soigneusement les termes. Dans la partie radiale apparaît $-r\\dot\\theta^{2}$ — c'est le terme centrifuge, ce fameux $\\omega^{2}r$ avec le signe « vers le centre ». Dans la partie angulaire apparaît $2\\dot r\\dot\\theta$ — c'est Coriolis. Et le deux y naît pour une raison purement formelle : la vitesse angulaire entre dans l'expression comme produit $r\\dot\\theta$, et la dérivée d'un produit donne deux termes, $\\dot r\\dot\\theta$ et $r\\ddot\\theta$ ; après réduction à l'orthoradiale, le premier apparaît deux fois. Il est utile de voir le même facteur obtenu de trois manières différentes — par la géométrie du déplacement, par l'analyse des deux mécanismes et par la règle de dérivation d'un produit. La coïncidence de trois chemins indépendants est la vérification la plus fiable qui soit.",
+     "latex": "\\vec r = r\\,\\hat r \\;\\Longrightarrow\\; \\vec a = \\bigl(\\ddot r - r\\dot\\theta^{2}\\bigr)\\hat r + \\bigl(r\\ddot\\theta + 2\\dot r\\dot\\theta\\bigr)\\hat\\theta",
+     "kit": "polar"
+    },
+    {
+     "what": "Produit vectoriel : pourquoi la force ne travaille pas",
+     "why": "Tout le comportement du terme de Coriolis se lit directement dans les propriétés du symbole $\\times$. Premièrement : le résultat est perpendiculaire aux deux facteurs, donc $\\vec F_{\\text{cor}}\\perp\\vec v$, donc la puissance $\\vec F\\cdot\\vec v$ est strictement nulle — la force n'ajoute ni n'enlève d'énergie, elle ne fait que courber la trajectoire. Deuxièmement : la grandeur vaut $2m\\,\\omega v\\sin\\alpha$, où $\\alpha$ est l'angle entre la vitesse et l'axe ; un mouvement le long de l'axe donne zéro, un mouvement transversal donne le maximum. Mais ne confondez pas ce sinus avec celui de la latitude : $\\alpha$ est l'angle entre la vitesse et l'axe, $\\varphi$ est la latitude, et ils ne coïncident que pour un mouvement le long d'un méridien. Le facteur $\\sin\\varphi$ dans le paramètre de Coriolis est obtenu autrement — par projection de $\\vec\\Omega$ lui-même sur la verticale locale, et c'est une étape distincte de la dérivation. Pour un train allant vers l'est, la force de Coriolis totale vaut entièrement $2m\\Omega v$ ; mais la composante horizontale n'en est qu'une fraction $\\sin\\varphi$, et la verticale est absorbée par le poids. Troisièmement : le développement du double produit transforme le mystérieux $\\vec\\omega\\times(\\vec\\omega\\times\\vec r)$ en un compréhensible « moins oméga carré fois la distance à l'axe » — et explique au passage pourquoi la formule utilise précisément $r_{\\perp}$, et non le vecteur rayon complet. Au pôle, la distance à l'axe est nulle, et il n'y a aucune force centrifuge.",
+     "latex": "\\vec\\omega\\times(\\vec\\omega\\times\\vec r) = \\vec\\omega\\,(\\vec\\omega\\cdot\\vec r) - \\vec r\\,\\omega^{2} = -\\,\\omega^{2}\\,\\vec r_{\\perp}, \\qquad |\\vec\\omega\\times\\vec v| = \\omega v\\sin\\alpha",
+     "kit": "dotcross"
+    },
+    {
+     "what": "Développement selon un petit paramètre : d'où vient le carré du temps",
+     "why": "Dans le lemme, nous avons remplacé $\\sin(\\omega\\,dt)$ par $\\omega\\,dt$, et $\\cos(\\omega\\,dt)$ par un ; le terme négligé est d'ordre $dt^{2}$ et disparaît à la limite — c'est une procédure habituelle. Mais ce qui est plus intéressant, c'est un autre endroit. En calculant la dérive du projectile, nous prenons $d = \\tfrac12 a t^{2}$, comme si l'accélération de Coriolis était constante. En réalité, elle tourne avec la vitesse, et la trajectoire exacte dans le plan horizontal n'est pas une parabole, mais un arc de cercle de rayon $v/f$, qu'on appelle cercle d'inertie. Développons son écart par rapport à la droite en série selon le petit angle $ft$ — et le premier terme se trouve être exactement notre formule. Pour un projectile avec un temps de vol de 55 s à la latitude de 50°, l'angle $ft$ vaut $6{,}1\\cdot10^{-3}$, et la correction relative $(ft)^{2}/12$ est de trois millionièmes. L'approximation n'est pas seulement bonne, elle est excessivement bonne.",
+     "latex": "x = R\\bigl(1-\\cos ft\\bigr), \\; R = \\frac{v}{f} \\;\\Longrightarrow\\; x = \\tfrac12 f v t^{2}\\Bigl[1 - \\tfrac{(ft)^{2}}{12} + \\dots\\Bigr]",
+     "kit": "taylor"
+    }
+   ]
+  },
+  "example": {
+   "title": "Exemple avec des nombres",
+   "lead": "Calculons ce que les artilleurs inscrivent dans leurs tables de tir comme une ligne séparée : de combien la Terre a le temps de tourner sous un obus en vol.",
+   "given": "Latitude $\\varphi = 50^\\circ$ nord. Portée $R = 20$ km, temps de vol $t = 55$ s. Vitesse angulaire de la Terre $\\Omega = 7{,}2921\\cdot10^{-5}$ rad/s. Trouver la dérive latérale. Puis le même calcul pour le « Canon de Paris » de 1918 : portée 120 km, temps de vol 176 s, latitude de la position 49,6°.",
+   "law": "L'accélération horizontale est $a = f\\,v$, où $f = 2\\Omega\\sin\\varphi$ ; la dérive pendant le temps de vol est $d = \\tfrac12 a t^{2} = \\tfrac12 f R t$, vers la droite par rapport à la direction du tir.",
+   "solution": [
+    {
+     "text": "Le paramètre de Coriolis à cette latitude. En passant, regardons son inverse : $2\\pi/f$ est la période du cercle d'inertie, 15,6 heures. Tout ce qui se passe plus vite, Coriolis ne fait que le pousser légèrement.",
+     "latex": "f = 2\\cdot7{,}2921\\cdot10^{-5}\\cdot\\sin 50^\\circ = 1{,}4584\\cdot10^{-4}\\cdot0{,}766 = 1{,}117\\cdot10^{-4}\\ \\text{s}^{-1}"
+    },
+    {
+     "text": "La vitesse horizontale moyenne et l'accélération elle-même. Le nombre est ridicule — 240 fois plus petit que $g$ ; à l'œil, on ne le remarquerait pas même en une seconde de vol.",
+     "latex": "v = \\frac{20\\,000}{55} = 364\\ \\frac{\\text{m}}{\\text{s}}, \\qquad a = f v = 1{,}117\\cdot10^{-4}\\cdot364 = 0{,}0406\\ \\frac{\\text{m}}{\\text{s}^{2}} = \\frac{g}{241}"
+    },
+    {
+     "text": "Mais le temps joue au carré, et 55 secondes transforment une accélération ridicule en une distance tout à fait sérieuse.",
+     "latex": "d = \\tfrac12\\,a\\,t^{2} = 0{,}5\\cdot0{,}0406\\cdot55^{2} = 0{,}5\\cdot0{,}0406\\cdot3025 \\approx 61\\ \\text{m}"
+    },
+    {
+     "text": "Le « Canon de Paris ». La portée a été multipliée par 6, mais le temps de vol seulement par 3,2, car l'obus a parcouru la majeure partie du trajet dans la stratosphère raréfiée à une vitesse énorme. La dérive est proportionnelle au produit de la portée par le temps, donc elle a été multipliée par environ 19.",
+     "latex": "d = \\tfrac12\\,f\\,R\\,t = 0{,}5\\cdot1{,}111\\cdot10^{-4}\\cdot120\\,000\\cdot176 \\approx 1{,}17\\ \\text{km}"
+    }
+   ],
+   "answer": "Soixante et un mètres vers la droite à une portée de 20 km et près de 1,2 kilomètre à une portée de 120 km. En mesure angulaire, c'est du même ordre : 61 m sur 20 km correspondent à 3,1 milliradians, soit environ dix minutes d'arc.",
+   "check": "Est-ce raisonnable ? Comparons avec la précision du canon lui-même : la dispersion des obus à 20 km est de plusieurs dizaines de mètres sur le front, donc la dérive de Coriolis est à peu près égale à la largeur de l'ellipse de dispersion. Par conséquent, la correction doit être prise en compte — mais elle ne domine pas, elle se situe au même niveau que les corrections pour le vent, la température de la charge et l'usure du canon. On connaît bien l'histoire de la bataille des îles Falkland en 1914 : les navires britanniques auraient tiré à côté parce que les tables avaient été établies pour l'hémisphère nord, alors que la bataille se déroulait dans l'hémisphère sud, où la dérive se fait vers la gauche — et l'erreur était doublée. L'histoire est belle, mais documentairement faible : aucune confirmation dans les rapports, et les tirs manqués à cette distance s'expliquent plus convaincamment par la fumée, le roulis et le travail des télémètres. Une formulation prudente serait : le changement de signe lors de la traversée de l'équateur est un fait, mais l'anecdote spécifique relève plutôt du folklore. Et encore une réserve honnête sur le calcul lui-même : nous n'avons pris en compte que la vitesse horizontale. L'obus a aussi une vitesse verticale, qui, avec la composante horizontale de $\\Omega\\cos\\varphi$, donne un terme supplémentaire vers l'est, dépendant de l'azimut de tir ; sur une trajectoire symétrique, il s'annule en grande partie, mais dans les tables réelles, on le calcule numériquement, pas avec une formule en une ligne."
+  },
+  "constants": {
+   "title": "Constantes de ce paragraphe",
+   "lead": "Quatre nombres. Le premier détermine tout le reste, le deuxième explique pourquoi il en est ainsi, le troisième est l'outil de travail du météorologue, le quatrième montre à quel point le terme centrifuge est petit sous nos pieds.",
+   "items": [
+    {
+     "sym": "Ω⊕",
+     "latex": "\\Omega_{\\oplus}",
+     "name": "Vitesse angulaire de rotation de la Terre",
+     "value": "7,292 115 · 10⁻⁵",
+     "unit": "rad/s",
+     "why": "Elle se calcule sur le jour sidéral, et non sur le jour solaire : $2\\pi/86\\,164$, et non $2\\pi/86\\,400$. Cette valeur diminue lentement — le frottement des marées sur le fond des mers peu profondes freine la planète d'environ 2 ms par siècle ; c'est aussi la raison des secondes intercalaires que l'on insère de temps à autre dans le temps civil : elles ajustent l'échelle atomique uniforme à la planète qui tourne de manière irrégulière. Les marées ne sont pas la seule cause de l'irrégularité : la rotation est également perturbée par la redistribution des masses à l'intérieur de la Terre, ce qui a même légèrement accéléré la planète ces dernières années. Pour tous les calculs de ce paragraphe, on peut considérer Ω comme constant.",
+     "mnemo": "Plus facile à retenir en degrés : la Terre tourne de 15° par heure, soit exactement un fuseau horaire. D'où le « 7,3 fois dix puissance moins cinq » obtenu en divisant 15° par 3600 s. Mais 15° par heure correspond au jour solaire ; pour le jour sidéral, on obtient 15,04° par heure, et la mnémonique sous-estime $\\Omega$ de trois dixièmes de pour cent."
+    },
+    {
+     "sym": "T_{s}",
+     "latex": "T_{\\text{s}}",
+     "name": "Jour sidéral",
+     "value": "86 164,1",
+     "unit": "s (23 h 56 min 4 s)",
+     "why": "Une rotation complète par rapport aux étoiles, et non par rapport au Soleil. La différence de 236 secondes s'accumule parce qu'en un an, la Terre fait le tour du Soleil et effectue ainsi une rotation de plus par rapport aux étoiles que par rapport au Soleil : 366,25 contre 365,25. C'est le jour sidéral qui entre dans la période du pendule de Foucault — au pôle, elle lui est exactement égale, et non au jour terrestre.",
+     "mnemo": "Plus court que le jour ordinaire de près de quatre minutes. D'où le fait que les étoiles se lèvent chaque soir quatre minutes plus tôt, et que les constellations parcourent un cercle complet en un an."
+    },
+    {
+     "sym": "f(45°)",
+     "latex": "f_{45}",
+     "name": "Paramètre de Coriolis à la latitude 45°",
+     "value": "1,031 · 10⁻⁴",
+     "unit": "s⁻¹",
+     "why": "Le nombre de travail de toute la météorologie et l'océanographie dynamiques : l'accélération horizontale est égale à $f v$, le rayon du cercle d'inertie à $v/f$, le vent géostrophique à $(1/\\rho f)\\,dp/dx$. Aux latitudes moyennes, on le prend presque toujours arrondi à $10^{-4}$ — l'erreur est alors d'environ trois pour cent. L'inverse $2\\pi/f$ est la période du cercle d'inertie, soit 16,9 heures à 45°.",
+     "mnemo": "Arrondi à $10^{-4}$ à nos latitudes. Et une paire utile : la période d'inertie est égale à 11,97 h / sin φ, et la période du pendule de Foucault est exactement le double, 23,93 h / sin φ."
+    },
+    {
+     "sym": "ω²R",
+     "latex": "\\Omega^{2}R_{\\text{équiv}}",
+     "name": "Accélération centrifuge à l'équateur",
+     "value": "0,0339",
+     "unit": "m/s²",
+     "why": "Seulement 0,35 pour cent de $g$ — c'est-à-dire que la rotation de la planète ne nous empêche presque pas de nous tenir debout. Mais ce petit ajout, sur des milliards d'années, a fait de la Terre non pas une sphère : le rayon équatorial est supérieur de 21 kilomètres au rayon polaire. Et c'est aussi elle qui dévie le fil à plomb de la direction du centre de la planète : le maximum se produit à la latitude 45° et atteint environ 5,9 minutes d'arc.",
+     "mnemo": "Un tiers de pour cent de g — et cela a suffi pour couper les pôles et coller vingt et un kilomètres à l'équateur."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Comment cela se relie au reste du cours",
+   "lead": "La formule est courte, mais elle se trouve à un carrefour : en arrière, elle regarde vers le thème de la rotation, de côté, vers la gravité et les fluides, en avant, vers les instruments qui mesurent la rotation sans aucune pièce mobile.",
+   "items": [
+    {
+     "h": "Rotation et référentiels",
+     "text": "Le thème « Oscillations et rotation » a introduit l'idée même de force d'inertie : elle n'a pas de source ni de partenaire selon la troisième loi, mais dans son propre référentiel, elle agit tout à fait réellement. C'est là qu'on a dérivé $a = v^{2}/R$. Maintenant, on voit que c'est un cas particulier de la première étape de notre dérivation : posez $dv/dt = 0$ et $\\rho = R$ — il ne reste que la partie normale. Et le terme centrifuge $\\omega^{2}r_{\\perp}$ est la même chose, écrite de l'autre côté du signe égal."
+    },
+    {
+     "h": "Marées : ce qu'il ne faut PAS faire",
+     "text": "L'explication la plus populaire de la seconde marée — « du côté opposé à la Lune, une force centrifuge agit » — est tentante précisément parce que nous venons de dériver ce terme. Elle donne la bonne réponse pour une mauvaise raison, et le paragraphe « Marées » du thème « Gravité » analyse cette substitution en détail. En bref : la marée est créée par la DIFFÉRENCE d'attraction sur le volume de la Terre, et elle existe indépendamment du référentiel dans lequel vous calculez. Vous pouvez utiliser la formule dérivée partout, sauf ici."
+    },
+    {
+     "h": "Météo et océan",
+     "text": "Le petit nombre de Rossby des grands mouvements signifie que la différence de pression est équilibrée non pas par l'inertie, mais par Coriolis : l'air se déplace presque le long des isobares, et non à travers. Estimation sur une carte typique : une différence d'un hectopascal sur cent kilomètres donne $v = (1/\\rho f)\\,dp/dx = 10^{-3}/(1{,}2\\cdot1{,}03\\cdot10^{-4}) \\approx 8$ m/s — exactement le vent indiqué sur le bulletin. D'où viennent aussi les alizés : l'air qui s'écoule des latitudes trentenaires vers l'équateur est dévié vers la droite et arrive à l'équateur non pas du nord, mais du nord-est. Nous n'écrivons pas ici les équations du mouvement des fluides — c'est le thème « Fluides »."
+    },
+    {
+     "h": "Instruments qui mesurent la rotation",
+     "text": "Le gyroscope du deuxième paragraphe du thème maintient la direction de son axe et ressent donc la rotation de la base. Mais il existe aussi une méthode sans aucune pièce mobile : envoyez deux rayons lumineux dans un anneau en sens opposés, et dans un référentiel en rotation, leurs temps de parcours différeront — c'est l'effet Sagnac, sur lequel reposent les gyroscopes laser et à fibre optique des avions. Il n'y a aucune mécanique là-dedans, et on mesure le même $\\vec\\Omega$ qui figure dans toutes les formules de ce paragraphe."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Curiosités : à tester vous-même",
+   "lead": "Deux expériences de cuisine, chacune de trois minutes. La première montre la force de Coriolis à l'état pur et en grand, la seconde montre qu'elle est absente dans l'évier.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "expérience de cuisine",
+     "h": "Une courbe sur une assiette en rotation",
+     "text": "Placez une feuille de papier sur une assiette plate ou sur un couvercle de casserole — tout ce qui tourne facilement sur la table. Prenez une règle et appuyez-la sur la TABLE, pas sur l'assiette, de sorte qu'elle aille du centre de la feuille vers le bord. Faites tourner l'assiette à la main à environ un tour par trois secondes et, sans l'arrêter, tracez un trait avec un feutre le long de la règle, du centre vers l'extérieur — tranquillement, en une demi-seconde. Arrêtez l'assiette et regardez la trace. Devinez à l'avance : de combien va-t-elle dévier de la règle ?",
+     "answer": "Sur la feuille, on voit une courbe nette qui part sur le côté d'environ huit à dix centimètres, soit presque toute la longueur du trait tracé. Calculons. Un tour en trois secondes donne $\\omega \\approx 2$ rad/s. Le feutre a parcouru 10 cm en une demi-seconde, donc $v = 0{,}2$ m/s. L'accélération de Coriolis est $a = 2\\omega v = 0{,}8$ m/s², et en une demi-seconde elle produit $\\tfrac12 a t^{2} = 0{,}5\\cdot0{,}8\\cdot0{,}25 = 0{,}1$ m, soit dix centimètres. On obtient la même réponse sans aucune force : l'extrémité du trait se trouve à un rayon de 10 cm, et l'assiette a tourné d'un angle $\\omega t = 1$ radian en une demi-seconde, donc le point de la feuille s'est déplacé de $r\\cdot\\omega t = 10$ cm. Mais ce n'est pas une vérification indépendante, c'est la même expression écrite deux fois : $\\tfrac12(2\\omega v)t^{2} = \\omega\\,(vt)\\,t = r\\cdot\\omega t$. Et ces deux écritures ne sont que le premier terme du développement en fonction de l'angle de rotation, or notre angle est $\\omega t = 1$ radian, on ne peut pas le considérer comme petit. La réponse exacte est donnée par la rotation elle-même : l'extrémité du trait s'écarte de la règle droite de $r\\sin\\omega t = 10\\cdot0{,}84 = 8{,}4$ cm. Donc la formule $\\tfrac12 a t^{2}$ surestime ici d'environ un cinquième — et il est plus honnête de retenir cela que la dizaine ronde. L'essentiel de l'expérience est le suivant : le feutre a suivi strictement la règle droite, personne ne l'a poussé latéralement, et pourtant la trace est courbe. La force de Coriolis est précisément le prix que paie l'observateur qui décide de considérer l'assiette en rotation comme immobile. Essayez maintenant l'inverse — tenez la règle sur l'assiette et déplacez le feutre le long d'elle : sur le papier, la ligne sera droite, mais si vous filmiez cela d'en haut, elle apparaîtrait courbe à l'écran."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "expérience de cuisine",
+     "h": "L'évier : l'expérience témoin",
+     "text": "Bouchez l'évier, remplissez-le d'eau et laissez-le reposer pendant une vingtaine de minutes, sans y toucher. Retirez délicatement le bouchon, sans faire de remous, et observez dans quel sens le tourbillon se forme. Notez-le. Remplissez à nouveau, tournez légèrement l'eau avec la paume dans le sens des aiguilles d'une montre, attendez une minute que le mouvement visible s'estompe, puis retirez le bouchon. Répétez avec une rotation dans le sens inverse. La question est simple : qu'est-ce qui détermine le sens ?",
+     "answer": "Le sens du tourbillon reproduit la rotation que vous avez imprimée avec la main — même celle qui n'est plus visible à l'œil. C'est la réponse. Calculons avec quoi Coriolis est en concurrence. À la latitude 45°, la composante verticale de la rotation terrestre est $\\Omega\\sin\\varphi = 5{,}2\\cdot10^{-5}$ rad/s — un tour en 34 heures. La rotation résiduelle de l'eau après le remplissage de l'évier depuis le robinet atteint facilement $10^{-2}$ rad/s, soit deux cents fois plus, et elle persiste des dizaines de minutes car la viscosité l'atténue lentement. Le nombre de Rossby confirme la même chose d'une autre manière : $\\mathrm{Ro} = v/(fL) = 0{,}3/(1{,}03\\cdot10^{-4}\\cdot0{,}2) \\approx 1{,}5\\cdot10^{4}$ — Coriolis est plus faible que l'inertie propre de l'écoulement de près de quinze mille fois. Ajoutez la forme asymétrique de la cuve, l'inclinaison du fond et la position exacte du drain. Mais l'honnêteté exige de dire aussi le contraire : on peut tout de même observer Coriolis dans un drain, si l'on s'en donne la peine. En 1962, Ascher Shapiro à Boston a pris un réservoir circulaire de 1,8 mètre de diamètre, a laissé l'eau reposer pendant une journée sous un couvercle et a ouvert le drain très lentement — le tourbillon s'est formé dans le sens antihoraire, comme il se doit dans l'hémisphère nord. En 1965, la même expérience a été répétée à Sydney et a donné une rotation dans le sens horaire. L'effet est donc réel, mais dans une cuisine il se noie dans un bruit des milliers de fois plus fort."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoxe",
+     "h": "La force qui ne travaille pas mais fait toute la météo",
+     "text": "Nous avons prouvé que la force de Coriolis est perpendiculaire à la vitesse et que sa puissance est donc nulle : elle ne peut ni accélérer ni ralentir l'air. D'où viennent alors les ouragans, qui libèrent en une journée plus d'énergie que toutes les centrales électriques du monde n'en produisent en même temps ?",
+     "answer": "Le travail est fait non pas par Coriolis, mais par la différence de pression — et en fin de compte par le Soleil, qui crée cette différence par un chauffage inégal. Coriolis n'ajoute pas un joule au mouvement, il empêche seulement l'air d'atteindre le centre de basse pression. Sans lui, l'air affluerait radialement vers la zone de basse pression, égaliserait la différence en quelques heures et tout s'arrêterait là. Avec lui, le flux entrant se courbe et rate le centre, commence à tourner autour, la différence de pression se maintient, et le système vit des semaines, continuant à se nourrir de la chaleur de l'océan. La règle se traduit par une analogie domestique : le volant ne donne pas une goutte d'essence à la voiture, mais sans lui on ne va pas loin. D'ailleurs, pourquoi l'ouragan finit-il par aspirer l'air vers l'intérieur au lieu de tourner éternellement ? Près de la surface, le frottement visqueux ralentit légèrement le vent, la force de Coriolis diminue proportionnellement à la vitesse, l'équilibre est rompu, et la différence de pression attire l'air vers l'intérieur en spirale. C'est cette couche limite près du sol qui alimente la machine en air humide et chaud."
+    },
+    {
+     "icon": "fact",
+     "kind": "fait amusant",
+     "h": "La loi de Baer : la rive droite est plus escarpée",
+     "text": "L'académicien Karl Baer a remarqué en 1857 que les rivières de l'hémisphère nord coulant dans le sens méridional ont systématiquement une rive droite plus abrupte et plus escarpée que la rive gauche — la Volga, le Dniepr, l'Ob. Il a donné une explication par Coriolis : l'eau est poussée vers la droite et sape la rive droite. Dans quelle mesure cela est-il plausible numériquement ?",
+     "answer": "Faisons une estimation avec un train, où les chiffres sont plus fiables que dans une rivière. Un convoi de 500 tonnes roule à 200 km/h (55,6 m/s) à la latitude 55°, où $f = 1{,}19\\cdot10^{-4}$ s⁻¹. La force latérale est $F = m f v = 5\\cdot10^{5}\\cdot1{,}19\\cdot10^{-4}\\cdot55{,}6 \\approx 3{,}3$ kN — par rapport au poids de 4,9 méganewtons, cela représente sept centièmes de pour cent. Pour un trajet, c'est négligeable. Mais la force est toujours dans le même sens, et les rails durent des décennies ; sur les lignes à voie unique de l'époque tsariste, l'usure du rail droit a effectivement été constatée. Pour les rivières, c'est plus compliqué, et la réponse honnête est « partiellement ». L'accélération de Coriolis dans une rivière de plaine avec une vitesse de 1 m/s est $f v \\approx 1{,}2\\cdot10^{-4}$ m/s², tandis que l'accélération dans un méandre de rayon deux cents mètres à la même vitesse est $v^{2}/R = 5\\cdot10^{-3}$ m/s², soit quarante fois plus. Par conséquent, les méandres façonnent les berges bien plus fortement. Mais les méandres n'ont pas de côté préférentiel, ils courbent le lit tantôt à gauche, tantôt à droite, et en moyenne donnent zéro, tandis que Coriolis produit un petit déplacement, mais unilatéral, qui s'accumule sur de longues sections et des temps géologiques. L'hydrologie moderne considère la loi de Baer comme un effet réel mais faible, facilement dominé par tout le reste dans un méandre particulier."
+    },
+    {
+     "icon": "edge",
+     "kind": "limite de validité",
+     "h": "Cercles d'inertie : un mouvement sans cause du tout",
+     "text": "Supprimons toutes les forces sauf Coriolis. Alors le corps doit se déplacer de telle sorte que l'accélération soit constante en magnitude et toujours perpendiculaire à la vitesse — c'est précisément un mouvement circulaire. Son rayon est $v/f$, et sa période $2\\pi/f$ ne dépend ni de la vitesse ni du rayon.",
+     "answer": "Ces cercles sont réellement observés dans l'océan. Une bouée dérivante trace souvent des boucles au lieu d'une ligne droite : à une vitesse de 0,2 m/s à la latitude 55°, le rayon est $v/f = 0{,}2/(1{,}19\\cdot10^{-4}) \\approx 1{,}7$ km, et la période est de 14,6 heures, exactement ce que montrent les enregistrements de bouées dérivantes. Dans l'hémisphère nord, les boucles sont toujours vers la droite, dans l'hémisphère sud vers la gauche. Il est utile de comprendre que ce mouvement n'a aucune cause : ni vent, ni courant, ni pente. C'est de l'inertie pure, vue depuis un système en rotation — dans un système fixe, la bouée va simplement en ligne droite, et les boucles sont dessinées par la Terre qui tourne en dessous. Et c'est là que la formule se brise. Premièrement, à l'équateur, $f$ s'annule, le rayon du cercle devient infini, et toute la construction perd son sens : il faut un traitement séparé. Deuxièmement, si $\\mathrm{Ro}$ est de l'ordre de l'unité, aucun des deux termes n'est dominant, et il faut résoudre l'équation complète — c'est l'échelle des tornades et des brises de mer, quelques kilomètres. Troisièmement, une bouée réelle ressent le frottement, et ses boucles ne sont pas fermées mais s'étalent en spirale."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "Ce que nous avons simplifié",
+   "blocks": [
+    {
+     "h": "La constante ω et le terme négligé",
+     "text": "Toute la dérivation est faite en supposant que la rotation est uniforme. Si ce n'est pas le cas, le lemme donne un terme supplémentaire, et une quatrième force apparaît dans le membre de droite de la deuxième loi : la force d'Euler. Elle est dirigée tangentiellement, ne dépend ni de la vitesse du corps ni de sa position radiale, mais de la rapidité avec laquelle la rotation elle-même change. On la remarque le plus facilement sur un manège qui vient d'être mis en marche : le passager est tiré vers l'arrière dans le sens du mouvement, bien qu'il soit assis immobile. Pour la Terre, le terme d'Euler est négligeable — le jour s'allonge d'environ 2 millisecondes par siècle, soit $d\\Omega/dt \\sim 10^{-22}$ s⁻². En revanche, dans les machines pour lesquelles Coriolis a écrit son article, il est tout à fait perceptible : toute accélération ou décélération d'une pièce en rotation apporte sa contribution.",
+     "latex": "m\\,\\vec a_{\\text{rel}} = \\vec F + m\\,\\omega^{2}\\vec r_{\\perp} + 2m\\,[\\vec v_{\\text{rel}}\\times\\vec\\omega] - m\\,\\frac{d\\vec\\omega}{dt}\\times\\vec r"
+    },
+    {
+     "h": "Le fil à plomb dévie deux fois plus que ne le prédit notre formule",
+     "text": "La force centrifuge dévie le fil à plomb de la direction du centre de la planète : sa composante horizontale est égale à $\\Omega^{2}R\\sin\\varphi\\cos\\varphi$, et à la latitude de 45° elle donne un angle de $1{,}73\\cdot10^{-3}$ radian, soit 5,9 minutes d'arc. Le nombre est calculé honnêtement, mais le fil à plomb réel à cette latitude est dévié du rayon géocentrique d'environ 11,5 minutes — soit deux fois plus. L'écart n'est pas une erreur de calcul, mais une conséquence de ce que nous avons négligé : la Terre n'est pas une sphère. Le renflement équatorial de 21 kilomètres attire lui-même, et sa contribution à la déviation s'avère comparable à celle de la force centrifuge directe. Une boucle amusante : le renflement est créé par la même force centrifuge, mais il agit par la gravitation, et non par la cinématique. D'où une conclusion pratique pour la géodésie : il ne faut pas confondre la latitude mesurée par le fil à plomb (géodésique) et celle mesurée depuis le centre de la planète (géocentrique) ; aux latitudes moyennes, elles diffèrent de près de douze minutes d'arc."
+    },
+    {
+     "h": "Le pendule de Foucault tourne deux fois plus lentement que le cercle inertiel",
+     "text": "Dans notre dérivation, un corps soumis uniquement à la force de Coriolis décrit des cercles à la fréquence $f = 2\\Omega\\sin\\varphi$. Le plan du pendule de Foucault, lui, tourne deux fois plus lentement, à la vitesse $\\Omega\\sin\\varphi$. Il n'y a pas de contradiction, et cela vaut la peine de comprendre pourquoi. L'oscillation du pendule est la somme de deux mouvements circulaires, l'un vers la gauche et l'autre vers la droite, de même amplitude. La force de Coriolis accélère l'un de $f/2$ et ralentit l'autre d'exactement la même quantité. La somme de deux cercles de fréquences légèrement différentes est toujours un segment, mais qui tourne lentement, et sa vitesse de rotation est égale à la demi-différence des fréquences, soit $f/2 = \\Omega\\sin\\varphi$. Il y a aussi une subtilité pratique, pour laquelle Foucault ne poussait pas la masse avec la main, mais brûlait le fil de retenue : la moindre composante latérale au lancement transforme le segment en une ellipse étroite, et une ellipse précesse d'elle-même, à cause de la non-linéarité de la suspension, et cette précession parasite peut être du même ordre que la précession utile. C'est pourquoi, dans les musées, on lance les pendules strictement depuis l'état de repos.",
+     "latex": "\\dot\\theta_{\\text{Foucault}} = \\Omega\\sin\\varphi = \\frac{f}{2}, \\qquad T_{\\text{Foucault}} = 2\\,T_{\\text{inert}}"
+    },
+    {
+     "h": "Le corps est un point, le milieu est idéal",
+     "text": "Deux simplifications à la frontière avec les paragraphes voisins. Premièrement, nous avons considéré le corps comme un point, donc ni le moment d'inertie, ni le moment cinétique, ni les effets gyroscopiques n'entrent ici — ils sont traités dans les deux premiers paragraphes du thème, et pour un corps étendu en rotation dans un système en rotation, le tableau est nettement plus riche. Deuxièmement, nous n'avons pas de viscosité. Dans l'atmosphère réelle, près du sol, le frottement freine le vent, la force de Coriolis s'affaiblit avec la vitesse, et l'équilibre avec le gradient de pression est rompu — l'air entre dans le cyclone en biais par rapport aux isobares, et la direction du vent tourne progressivement avec l'altitude, formant ce qu'on appelle la spirale d'Ekman. C'est cette couche de surface, d'environ un kilomètre d'épaisseur, qui assure l'afflux d'air vers le centre d'un ouragan. Nous n'écrivons pas ici les équations du mouvement d'un fluide visqueux — c'est un sujet distinct."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "Un observateur dans un système en rotation voit les mêmes mouvements, mais doit ajouter deux forces sans source dans l'équation. L'une dépend de la position : $m\\omega^{2}r_{\\perp}$, vers l'extérieur de l'axe. L'autre dépend de la vitesse : $2m[\\vec v\\times\\vec\\omega]$, toujours perpendiculaire au mouvement, donc ne travaillant pas et ne pouvant que dévier. Les deux sont obtenues par la géométrie du déplacement pendant $dt$, les deux sont le prix à payer pour le droit de considérer le sol en rotation comme immobile.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "Lemme de la base rotative",
+     "text": "$(d\\vec A/dt)_{\\text{fixe}} = (d\\vec A/dt)_{\\text{rot}} + \\vec\\omega\\times\\vec A$ — appliqué deux fois, à $\\vec r$ et à $\\vec v$, et donne tout"
+    },
+    {
+     "icon": "scale",
+     "title": "Le deux n'est pas un hasard",
+     "text": "La rotation du vecteur vitesse et l'augmentation de la vitesse d'entraînement donnent chacun $\\omega v\\,dt$ — deux mécanismes différents, la même contribution"
+    },
+    {
+     "icon": "fact",
+     "title": "Ne fait que dévier",
+     "text": "$\\vec F_{\\text{cor}}\\perp\\vec v$ toujours, donc la puissance est nulle : cette force n'ajoute ni n'enlève d'énergie"
+    },
+    {
+     "icon": "edge",
+     "title": "Mesure de l'importance — le nombre de Rossby",
+     "text": "$\\mathrm{Ro} = v/(fL)$ : pour un cyclone 0,097 et Coriolis domine, pour un évier $1{,}5\\cdot10^{4}$ et on ne le voit pas"
+    }
+   ],
+   "where": [
+    "Météo : le vent suit les isobares, pas les traverse ; un cyclone dans l'hémisphère nord tourne dans le sens inverse des aiguilles d'une montre, dans l'hémisphère sud dans le sens des aiguilles",
+    "Alizés : l'air qui descend des latitudes trentenaires vers l'équateur y arrive du nord-est, pas du nord",
+    "Artillerie : la dérive de 61 m sur 20 km est dans les tables de tir au même titre que les corrections pour le vent et la température de la charge",
+    "Pendule de Foucault : une rotation complète du plan d'oscillation en 23,93 h / sin φ — 31,8 h à Paris, 48,8 h à El Koweït",
+    "Océan : les bouées dérivantes tracent des boucles inertielles d'un rayon de l'ordre du kilomètre avec une période de 11,97 h / sin φ"
+   ],
+   "watchOut": "Trois pièges. Le premier — confondre la distance à l'AXE avec la distance au centre : dans le terme centrifuge, il y a $r_{\\perp}$, et au pôle il est nul, même si le rayon de la Terre n'a pas disparu. Le deuxième — ajouter la force centrifuge au poids : le $g$ standard la contient déjà, car la balance tourne avec la planète, et une deuxième addition est un double comptage. Le troisième — expliquer les marées et le tourbillon dans l'évier par la force centrifuge : dans le premier cas, c'est la bonne réponse pour la mauvaise raison, dans le second, l'effet est des milliers de fois plus faible que ce qui détermine réellement la direction."
+  },
+  "quiz": [
+   {
+    "id": "rc1",
+    "type": "mcq",
+    "q": "Un projectile est tiré plein sud depuis un point à 50° de latitude nord. De quel côté sera-t-il dévié par la force de Coriolis ?",
+    "options": [
+     "Vers l'ouest : dans l'hémisphère nord, la déviation est toujours vers la droite de la direction du mouvement, et à droite du sud se trouve l'ouest",
+     "Vers l'est : la Terre tourne vers l'est et entraîne le projectile avec elle",
+     "Nulle part : lors d'un mouvement le long d'un méridien, la déviation s'annule",
+     "Vers le sud, c'est-à-dire que le projectile ira simplement plus loin : la force est dirigée le long de la vitesse"
+    ],
+    "answer": 0,
+    "why": "La force de Coriolis horizontale est égale à $m f v$ et est perpendiculaire à la vitesse, déviant vers la droite dans l'hémisphère nord — quelle que soit la direction du tir. En regardant vers le sud, en tournant à droite, on obtient l'ouest. La réponse « vers l'est » confond deux choses différentes : l'entraînement par la rotation est déjà inclus dans la vitesse d'entraînement et, dans un référentiel fixe, donne un vol rectiligne, tandis que la déviation est précisément ce qui reste en plus. La réponse « nulle part » se vérifie directement par la formule : ce qui s'annule n'est pas le mouvement méridional, mais le mouvement le long de l'axe de rotation, et à la latitude de 50°, la vitesse horizontale ne coïncide pas avec l'axe. La réponse « la force est dirigée le long de la vitesse » contredit la propriété fondamentale : $\\vec F_{\\text{cor}}\\perp\\vec v$, et donc le long de la vitesse cette force ne fait rien du tout.",
+    "hint": "La force est perpendiculaire à la vitesse et dans l'hémisphère nord dévie vers la droite. Tenez-vous face au sud et montrez votre main droite — où avez-vous pointé ?"
+   },
+   {
+    "id": "rc2",
+    "type": "mcq",
+    "q": "La force de Coriolis est perpendiculaire à la vitesse pour tout mouvement. Quelle conséquence en est correcte ?",
+    "options": [
+     "Elle ne travaille pas : elle ne peut pas modifier l'énergie cinétique d'un corps dans un référentiel en rotation",
+     "Elle n'affecte pas la trajectoire, mais seulement les lectures des instruments",
+     "Elle est nulle pour un corps au repos dans le référentiel en rotation, et donc ne participe à aucun problème",
+     "Elle est toujours plus petite que la force centrifuge, car les forces perpendiculaires sont plus faibles que les forces longitudinales"
+    ],
+    "answer": 0,
+    "why": "La puissance d'une force est le produit scalaire $\\vec F\\cdot\\vec v$, et pour des vecteurs perpendiculaires il est nul. Donc la force de Coriolis ne change que la direction de la vitesse et ne peut ni accélérer ni freiner le corps. La réponse sur les seules lectures des instruments est grossièrement fausse : la trajectoire se courbe justement, l'arc sur une feuille en rotation en est la preuve directe. La réponse sur le corps au repos est à moitié vraie et donc dangereuse : oui, pour un corps au repos la force est nulle (dans la formule il y a $\\vec v_{\\text{rel}}$), mais ce sont précisément les corps en mouvement qui constituent tout le sujet — vent, projectile, bouée. La réponse « les forces perpendiculaires sont plus faibles que les forces longitudinales » est pure invention : le rapport du terme de Coriolis à l'accélération centrifuge du flux lui-même, $v^{2}/L$, est le nombre de Rossby, et dans un cyclone le terme de Coriolis est d'un ordre de grandeur plus grand.",
+    "hint": "La puissance d'une force est égale à $\\vec F\\cdot\\vec v$. Que vaut le produit scalaire de deux vecteurs perpendiculaires ?"
+   },
+   {
+    "id": "rc3",
+    "type": "free",
+    "q": "Avec vos propres mots : d'où vient le facteur deux dans la formule F = 2m[v×ω] ? Nommez deux mécanismes, chacun donnant ω·v·dt.",
+    "keywords": [
+     "rotation",
+     "vecteur vitesse",
+     "entraînement",
+     "rayon",
+     "deux",
+     "mécanisme",
+     "contribution",
+     "courbure",
+     "pôle"
+    ],
+    "needed": 2,
+    "why": "Premier mécanisme : le vecteur vitesse relative tourne avec le sol. Pendant le temps $dt$, tout le système a tourné d'un angle $\\omega\\,dt$, la flèche de vitesse a tourné avec lui, et l'incrément perpendiculaire au mouvement est $\\omega v\\,dt$. Deuxième mécanisme : le corps s'est déplacé radialement, et la vitesse du sol elle-même augmente avec le rayon comme $\\omega r_{\\perp}$. En se déplaçant vers l'extérieur de $v\\,dt$, le corps doit rattraper le sol, en accélérant le long de la circonférence de $\\omega v\\,dt$ — sinon il restera en arrière. Deux calculs différents donnent la même réponse, donc le facteur est exactement 2. On peut aussi obtenir ce même deux par une troisième voie, à partir de la dérivée du produit $r\\dot\\theta$ en coordonnées polaires — et la coïncidence de trois dérivations indépendantes est la meilleure vérification du résultat.",
+    "hint": "L'un est lié au fait que le vecteur vitesse lui-même tourne. Le second — au fait que la vitesse du sol dépend de la distance à l'axe, et que le corps modifie cette distance."
+   },
+   {
+    "id": "rc4",
+    "type": "estimate",
+    "q": "Un pendule de Foucault est suspendu à la latitude de 60°. En combien d'heures le plan de ses oscillations fera-t-il un tour complet ? Considérez le jour sidéral égal à 23,93 heures. Réponse en heures.",
+    "answer": 27.6,
+    "unit": "h",
+    "why": "Le plan d'oscillation tourne à la vitesse $\\Omega\\sin\\varphi$, donc la période est $T = 23{,}93/\\sin\\varphi$. Le sinus de soixante degrés est $\\sqrt{3}/2 = 0{,}866$, donc $T = 23{,}93/0{,}866 = 27{,}6$ heures, soit environ 13 degrés par heure. Vérification par les cas limites : au pôle, le sinus est égal à un et la période est exactement le jour sidéral — le pendule oscille dans un plan fixe, et la Terre tourne en dessous ; à l'équateur, le sinus est nul, la période est infinie, il n'y a aucune rotation. Soixante degrés est la latitude de Saint-Pétersbourg, et le pendule de la cathédrale Saint-Isaac, qui a fonctionné de 1931 à 1986, tournait effectivement d'environ 13 degrés par heure.",
+    "tolAbs": 3,
+    "hint": "La période est égale au jour sidéral divisé par le sinus de la latitude. Le sinus de soixante degrés est 0,87, donc la réponse doit être un peu plus d'un jour."
+   }
+  ],
+  "title": "Système en rotation : force centrifuge et force de Coriolis",
+  "subtitle": "Paragraphe 3 · D'où viennent les forces sans source",
+  "intro": [
+   "Posez une assiette sur la table, mettez une feuille de papier dessus et faites-la tourner. Prenez une règle, appuyez-la sur la table — pas sur l'assiette, sur la table — et tracez avec un feutre une ligne droite le long de la règle à travers la feuille qui tourne. Retirez la feuille : il y a un arc. La règle était droite, la main allait droit, la table ne bougeait pas, et la trace est courbe. Personne n'a poussé la feuille latéralement, et pourtant elle a enregistré une rotation.",
+   "C'est tout le paragraphe en une expérience. L'observateur lié à la feuille qui tourne voit un mouvement en arc et doit en nommer la cause : puisque la trajectoire se courbe, il y a une force. Il ne pourra pas en trouver la source — il n'y a ni corde, ni aimant, ni corps voisin qui exerce cette force. Ce qu'est une force d'inertie et pourquoi elle n'est pas moins légitime qu'une force ordinaire, nous l'avons déjà vu dans le thème « Oscillations et rotation » ; ici, nous ne le répéterons pas, mais nous allons directement calculer — nous obtiendrons tous les termes qui apparaissent dans un système en rotation, et pas un de plus.",
+   "Le corps dans ce paragraphe est un point. Ni le moment d'inertie, ni le moment cinétique, dont nous avons traité dans les deux premiers paragraphes du thème, ne nous seront nécessaires : il ne s'agit pas de la rotation du corps, mais de la rotation du regard sur le corps. En chemin, il faudra introduire une chose qui n'a pas encore été vue dans le cours — la décomposition tangentielle-normale de l'accélération. C'est par là que nous commencerons."
+  ],
+  "standNote": "Au stand, le thème a trois modes ; vous avez besoin du troisième, « Démolition ». La plateforme de rayon 0,5 m tourne, une bille est lancée depuis le centre, et le stand trace son vol avec deux traces : une ligne droite dans le système fixe et une courbe dans le système lié à la plateforme. Les deux traces décrivent le même mouvement, la différence réside seulement dans celui qui observe. Réglez la vitesse angulaire à 2,0 rad/s et la vitesse de la bille à 2,0 m/s — ce sont les valeurs que nous analyserons dans le texte. Le stand indiquera l'accélération de Coriolis $a = 2\\omega v = 8$ m/s², et la bille, parcourant tout le rayon en un quart de seconde, déviera latéralement de 0,25 m — soit la moitié du rayon de la plateforme. Notez deux choses. Premièrement : la trace droite reste droite, quoi que vous fassiez avec le curseur $\\omega$, — dans le système fixe, aucune force n'agit et n'a agi. Deuxièmement : réglez $\\omega = 0$, et la courbe se redressera, tandis que le nombre de Rossby sur l'écran s'envolera vers l'infini. C'est précisément l'expérience de cuisine tirée de « Physique amusante », sauf qu'ici, au lieu d'une plateforme, il y a une assiette, et au lieu d'une bille, un feutre."
  }
 }

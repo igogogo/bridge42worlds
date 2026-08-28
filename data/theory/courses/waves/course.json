@@ -1,409 +1,563 @@
 {
-  "id": "waves",
-  "schema": "b42.course/2",
-  "kind": "overview",
-  "order": 4,
-  "entities": {
-    "laws": [
-      "hookes_law"
-    ],
-    "tags": [
-      "harmonic_oscillator",
-      "interference"
-    ],
-    "scientists": [
-      "Christiaan Huygens"
-    ]
+ "id": "waves",
+ "schema": "b42.course/2",
+ "kind": "overview",
+ "order": 4,
+ "entities": {
+  "laws": [
+   "hookes_law"
+  ],
+  "tags": [
+   "harmonic_oscillator",
+   "interference"
+  ],
+  "scientists": [
+   "Christiaan Huygens"
+  ],
+  "examples_from_articles": [
+   {
+    "id": "2605.15632",
+    "date": "2026-05-15",
+    "title": {
+     "ru": "Свет развернули во времени",
+     "en": "Light Flipped in Time",
+     "es": "La luz se refleja en el tiempo",
+     "ar": "الضوء ينعكس عبر الزمن",
+     "fr": "La lumière renversée dans le temps"
+    },
+    "score": 0.673
+   },
+   {
+    "id": "2606.14583",
+    "date": "2026-06-12",
+    "title": {
+     "ru": "Волны, которые помнят, где лево",
+     "en": "Waves That Remember Left from Right",
+     "es": "Ondas que recuerdan dónde está la izquierda",
+     "ar": "أمواج تتذكر أين اليسار",
+     "fr": "Des vagues qui se souviennent de la gauche"
+    },
+    "score": 0.627
+   },
+   {
+    "id": "2605.07879v1",
+    "date": "2026-05-08",
+    "title": {
+     "ru": "Гравитационная память: как пространство-время хранит следы космических катастроф",
+     "en": "Gravitational Memory: A Key to Testing Gravity",
+     "es": "Memoria gravitacional: clave para poner a prueba la gravedad",
+     "ar": "الذاكرة الثقالية: كيف يحفظ الزمكان آثار الكوارث الكونية",
+     "fr": "Mémoire gravitationnelle : la clé pour tester la gravité"
+    },
+    "score": 0.612
+   },
+   {
+    "id": "2603.14195",
+    "date": "2026-03-15",
+    "title": {
+     "ru": "Жидкость-хамелеон: когда рябь идёт против течения",
+     "en": "Chameleon Fluid: When Ripples Go Against the Flow",
+     "es": "Líquido camaleón: cuando las ondas van contra la corriente",
+     "ar": "سائل الحرباء: عندما تسير التموجات عكس التيار",
+     "fr": "Le liquide caméléon : quand les ondulations vont à contre-courant"
+    },
+    "score": 0.606
+   },
+   {
+    "id": "2607.24930",
+    "date": "2026-07-27",
+    "title": {
+     "ru": "Гравитационные волны превращаются в свет",
+     "en": "Gravitational Waves Turn into Light",
+     "es": "Las ondas gravitacionales se convierten en luz",
+     "ar": "تحوّل الموجات الثقالية إلى ضوء",
+     "fr": "Les ondes gravitationnelles se transforment en lumière"
+    },
+    "score": 0.604
+   }
+  ]
+ },
+ "lessons": [
+  {
+   "id": "01-travelling",
+   "title": "Что такое волна",
+   "sub": "Движется возмущение, а не вещество",
+   "law": "v = λf",
+   "model": "wave"
+  },
+  {
+   "id": "02-standing",
+   "title": "Стоячие волны и звук",
+   "sub": "Почему у струны есть ноты, а не любые частоты",
+   "law": "Условие стоячей волны",
+   "model": "wave"
+  },
+  {
+   "id": "03-interference",
+   "title": "Интерференция и Доплер",
+   "sub": "Когда волны складываются и когда гасят друг друга",
+   "law": "Принцип суперпозиции",
+   "model": "wave"
+  }
+ ],
+ "ru": {
+  "title": "Волны",
+  "subtitle": "Как колебание отправляется в путь",
+  "lead": "Тема, после которой становится видно, что звук, свет, рябь на воде и электрон в атоме описываются одним и тем же аппаратом. Волны — самый переиспользуемый инструмент физики.",
+  "why": {
+   "title": "Зачем это знать",
+   "text": [
+    "Начнём с наблюдения, которое стоит осмыслить. Бросьте камень в пруд — круги побегут к берегу. Положите на воду щепку: она будет качаться вверх-вниз, оставаясь на месте. Волна ушла, а вода никуда не уехала. Значит, движется не вещество, а форма — возмущение, передающееся от соседа к соседу.",
+    "Как только это осознано, открывается странная вещь. Раз волна есть способ передачи, а не само вещество, то одни и те же правила должны работать для любой среды. И действительно: формула, связывающая длину волны, частоту и скорость, одинакова для звука в воздухе, ряби на воде, колебаний струны, радиосигнала и рентгеновского луча. Меняются только числа.",
+    "Дальше становится ещё интереснее. Волны умеют то, чего не умеют частицы: складываться так, что получается ноль. Две волны, встретившись, могут погасить друг друга — и это свойство позже станет главным доводом в споре о природе света, а потом обнаружится у электронов, чего не ждал никто.",
+    "Практическая сторона огромна. Музыкальные инструменты, УЗИ, эхолот, сейсморазведка, оптоволокно, шумоподавляющие наушники, радар — всё это приложения одного набора идей. И почти любая современная технология измерения — тоже: чтобы что-то узнать на расстоянии, нужно послать волну и посмотреть, что вернулось."
+   ]
+  },
+  "history": {
+   "title": "Кто её создал",
+   "people": [
+    {
+     "name": "Пифагор",
+     "years": "≈570–495 до н. э.",
+     "what": "Обнаружил, что приятные слуху созвучия получаются, когда длины струн относятся как небольшие целые числа: два к одному даёт октаву, три к двум — квинту. Это первый в истории случай, когда физическое явление было описано числом, — и, по сути, начало математической физики."
+    },
+    {
+     "name": "Христиан Гюйгенс",
+     "years": "1629–1695",
+     "what": "Предложил принцип, объясняющий распространение волн: каждая точка фронта сама становится источником вторичной волны. Отсюда выводятся отражение, преломление и огибание препятствий. Отстаивал волновую природу света против Ньютона — и оказался прав, хотя признания ждал сто лет."
+    },
+    {
+     "name": "Томас Юнг",
+     "years": "1773–1829",
+     "what": "Поставил опыт с двумя щелями и получил полосы там, где по корпускулярной теории должно было быть равномерное освещение. Свет, складываясь со светом, давал темноту — объяснить это частицами невозможно. Современники встретили работу насмешками: авторитет Ньютона был слишком велик."
+    },
+    {
+     "name": "Жозеф Фурье",
+     "years": "1768–1830",
+     "what": "Доказал, что любое периодическое колебание раскладывается в сумму простых синусов. Это превратило волновую теорию в универсальный инструмент: сложный сигнал можно изучать по частям. Вся современная обработка звука и изображений стоит на этом."
+    },
+    {
+     "name": "Кристиан Доплер",
+     "years": "1803–1853",
+     "what": "Предсказал изменение частоты при движении источника. Проверили это в 1845 году поразительным способом: посадили трубачей в открытый вагон и заставили играть одну ноту, пока на перроне музыканты определяли на слух высоту звука. Эффект подтвердился."
+    }
+   ]
+  },
+  "map": {
+   "title": "Что вы изучите",
+   "lead": "Три параграфа: сначала бегущая волна и её азбука, затем стоячая — и появление дискретных нот из непрерывной среды, затем сложение волн и эффект Доплера. Стенд один, с тремя режимами.",
+   "outcome": "Пройдя все три, вы будете понимать, почему в волне ничего не переносится, кроме энергии и формы; откуда у струны берутся ноты и почему они образуют ряд; как две волны могут дать темноту; и почему меняется тон сирены проезжающей машины."
+  },
+  "prereq": {
+   "title": "Что нужно знать заранее",
+   "items": [
+    "Колебания: что такое период, частота и амплитуда. Тема о колебаниях и вращении, параграф о законе Гука.",
+    "Синус как функция времени — не формально, а как форма колебания.",
+    "Сложение величин со знаком: две волны складываются алгебраически, и минус на минус здесь имеет физический смысл."
+   ],
+   "note": "Главная трудность темы — привыкнуть, что у волны две независимые геометрии сразу: во времени (период) и в пространстве (длина волны). Их постоянно путают. Стенд специально показывает обе: длину волны стрелкой на сцене, период — на графике под ней."
+  },
+  "closing": {
+   "title": "И главное",
+   "text": [
+    "Волновой аппарат оказался настолько удачным, что пережил все смены физических теорий. Им описывают звук, свет, рябь, землетрясения, а с 1926 года — и материю: электрон в атоме есть стоячая волна, и его дискретные уровни возникают ровно по той же причине, по которой у струны дискретные ноты.",
+    "И тем не менее в теме остаётся старейший нерешённый вопрос классической физики. Турбулентность — то, что происходит с водой в быстром потоке или с воздухом за крылом, — не поддаётся описанию до сих пор, хотя уравнения известны почти двести лет."
+   ],
+   "link": {
+    "href": "/frontier.html#computability",
+    "text": "Открытые вопросы: где кончается вычислимое"
+   }
   },
   "lessons": [
+   {
+    "id": "01-travelling",
+    "title": "Что такое волна",
+    "sub": "Движется возмущение, а не вещество",
+    "law": "v = λf",
+    "model": "wave"
+   },
+   {
+    "id": "02-standing",
+    "title": "Стоячие волны и звук",
+    "sub": "Почему у струны есть ноты, а не любые частоты",
+    "law": "Условие стоячей волны",
+    "model": "wave"
+   },
+   {
+    "id": "03-interference",
+    "title": "Интерференция и Доплер",
+    "sub": "Когда волны складываются и когда гасят друг друга",
+    "law": "Принцип суперпозиции",
+    "model": "wave"
+   }
+  ]
+ },
+ "en": {
+  "title": "Waves",
+  "subtitle": "How a Vibration Sets Off",
+  "lead": "The topic after which it becomes apparent that sound, light, ripples on water, and the electron in an atom are all described by the same apparatus. Waves are the most reused tool in physics.",
+  "why": {
+   "title": "Why You Need to Know This",
+   "text": [
+    "Let's start with an observation worth thinking about. Throw a stone into a pond — circles run to the shore. Put a splinter on the water: it will bob up and down, staying in place. The wave has gone, but the water hasn't moved anywhere. So it's not matter that moves, but a shape — a disturbance transmitted from neighbor to neighbor.",
+    "Once this is realized, a strange thing becomes clear. Since a wave is a mode of transmission, not the matter itself, the same rules should work for any medium. And indeed: the formula linking wavelength, frequency, and speed is the same for sound in air, ripples on water, string vibrations, radio signals, and X-rays. Only the numbers change.",
+    "It gets even more interesting. Waves can do something particles cannot: they can add up to produce zero. Two waves meeting can cancel each other out — and this property will later become the main argument in the debate about the nature of light, and then is found in electrons, something no one expected.",
+    "The practical side is enormous. Musical instruments, ultrasound, sonar, seismic exploration, fiber optics, noise-canceling headphones, radar — all are applications of the same set of ideas. And almost any modern measurement technology: to learn something at a distance, send a wave and see what returns."
+   ]
+  },
+  "history": {
+   "title": "Who Created It",
+   "people": [
     {
-      "id": "01-travelling",
-      "title": "Что такое волна",
-      "sub": "Движется возмущение, а не вещество",
-      "law": "v = λf",
-      "model": "wave"
+     "name": "Pythagoras",
+     "years": "c. 570–495 BCE",
+     "what": "He discovered that pleasing consonances occur when string lengths are in ratios of small whole numbers: 2:1 gives an octave, 3:2 a fifth. This is the first case in history where a physical phenomenon was described by a number — and, in essence, the beginning of mathematical physics."
     },
     {
-      "id": "02-standing",
-      "title": "Стоячие волны и звук",
-      "sub": "Почему у струны есть ноты, а не любые частоты",
-      "law": "Условие стоячей волны",
-      "model": "wave"
+     "name": "Christiaan Huygens",
+     "years": "1629–1695",
+     "what": "He proposed a principle explaining wave propagation: every point on a wavefront itself becomes a source of secondary waves. From this, reflection, refraction, and diffraction are derived. He championed the wave nature of light against Newton — and was right, though recognition took a hundred years."
     },
     {
-      "id": "03-interference",
-      "title": "Интерференция и Доплер",
-      "sub": "Когда волны складываются и когда гасят друг друга",
-      "law": "Принцип суперпозиции",
-      "model": "wave"
+     "name": "Thomas Young",
+     "years": "1773–1829",
+     "what": "He performed the double-slit experiment and obtained fringes where, according to particle theory, there should have been uniform illumination. Light adding to light produced darkness — impossible to explain with particles. Contemporaries mocked his work; Newton's authority was too great."
+    },
+    {
+     "name": "Joseph Fourier",
+     "years": "1768–1830",
+     "what": "He proved that any periodic oscillation can be decomposed into a sum of simple sines. This turned wave theory into a universal tool: a complex signal can be studied in parts. All modern sound and image processing rests on this."
+    },
+    {
+     "name": "Christian Doppler",
+     "years": "1803–1853",
+     "what": "He predicted the change in frequency with motion of the source. This was verified in 1845 in a remarkable way: trumpeters were placed in an open train car and told to play a single note, while musicians on the platform determined the pitch by ear. The effect was confirmed."
     }
-  ],
-  "ru": {
-    "title": "Волны",
-    "subtitle": "Как колебание отправляется в путь",
-    "lead": "Тема, после которой становится видно, что звук, свет, рябь на воде и электрон в атоме описываются одним и тем же аппаратом. Волны — самый переиспользуемый инструмент физики.",
-    "why": {
-      "title": "Зачем это знать",
-      "text": [
-        "Начнём с наблюдения, которое стоит осмыслить. Бросьте камень в пруд — круги побегут к берегу. Положите на воду щепку: она будет качаться вверх-вниз, оставаясь на месте. Волна ушла, а вода никуда не уехала. Значит, движется не вещество, а форма — возмущение, передающееся от соседа к соседу.",
-        "Как только это осознано, открывается странная вещь. Раз волна есть способ передачи, а не само вещество, то одни и те же правила должны работать для любой среды. И действительно: формула, связывающая длину волны, частоту и скорость, одинакова для звука в воздухе, ряби на воде, колебаний струны, радиосигнала и рентгеновского луча. Меняются только числа.",
-        "Дальше становится ещё интереснее. Волны умеют то, чего не умеют частицы: складываться так, что получается ноль. Две волны, встретившись, могут погасить друг друга — и это свойство позже станет главным доводом в споре о природе света, а потом обнаружится у электронов, чего не ждал никто.",
-        "Практическая сторона огромна. Музыкальные инструменты, УЗИ, эхолот, сейсморазведка, оптоволокно, шумоподавляющие наушники, радар — всё это приложения одного набора идей. И почти любая современная технология измерения — тоже: чтобы что-то узнать на расстоянии, нужно послать волну и посмотреть, что вернулось."
-      ]
-    },
-    "history": {
-      "title": "Кто её создал",
-      "people": [
-        {
-          "name": "Пифагор",
-          "years": "≈570–495 до н. э.",
-          "what": "Обнаружил, что приятные слуху созвучия получаются, когда длины струн относятся как небольшие целые числа: два к одному даёт октаву, три к двум — квинту. Это первый в истории случай, когда физическое явление было описано числом, — и, по сути, начало математической физики."
-        },
-        {
-          "name": "Христиан Гюйгенс",
-          "years": "1629–1695",
-          "what": "Предложил принцип, объясняющий распространение волн: каждая точка фронта сама становится источником вторичной волны. Отсюда выводятся отражение, преломление и огибание препятствий. Отстаивал волновую природу света против Ньютона — и оказался прав, хотя признания ждал сто лет."
-        },
-        {
-          "name": "Томас Юнг",
-          "years": "1773–1829",
-          "what": "Поставил опыт с двумя щелями и получил полосы там, где по корпускулярной теории должно было быть равномерное освещение. Свет, складываясь со светом, давал темноту — объяснить это частицами невозможно. Современники встретили работу насмешками: авторитет Ньютона был слишком велик."
-        },
-        {
-          "name": "Жозеф Фурье",
-          "years": "1768–1830",
-          "what": "Доказал, что любое периодическое колебание раскладывается в сумму простых синусов. Это превратило волновую теорию в универсальный инструмент: сложный сигнал можно изучать по частям. Вся современная обработка звука и изображений стоит на этом."
-        },
-        {
-          "name": "Кристиан Доплер",
-          "years": "1803–1853",
-          "what": "Предсказал изменение частоты при движении источника. Проверили это в 1845 году поразительным способом: посадили трубачей в открытый вагон и заставили играть одну ноту, пока на перроне музыканты определяли на слух высоту звука. Эффект подтвердился."
-        }
-      ]
-    },
-    "map": {
-      "title": "Что вы изучите",
-      "lead": "Три параграфа: сначала бегущая волна и её азбука, затем стоячая — и появление дискретных нот из непрерывной среды, затем сложение волн и эффект Доплера. Стенд один, с тремя режимами.",
-      "outcome": "Пройдя все три, вы будете понимать, почему в волне ничего не переносится, кроме энергии и формы; откуда у струны берутся ноты и почему они образуют ряд; как две волны могут дать темноту; и почему меняется тон сирены проезжающей машины."
-    },
-    "prereq": {
-      "title": "Что нужно знать заранее",
-      "items": [
-        "Колебания: что такое период, частота и амплитуда. Тема о колебаниях и вращении, параграф о законе Гука.",
-        "Синус как функция времени — не формально, а как форма колебания.",
-        "Сложение величин со знаком: две волны складываются алгебраически, и минус на минус здесь имеет физический смысл."
-      ],
-      "note": "Главная трудность темы — привыкнуть, что у волны две независимые геометрии сразу: во времени (период) и в пространстве (длина волны). Их постоянно путают. Стенд специально показывает обе: длину волны стрелкой на сцене, период — на графике под ней."
-    },
-    "closing": {
-      "title": "И главное",
-      "text": [
-        "Волновой аппарат оказался настолько удачным, что пережил все смены физических теорий. Им описывают звук, свет, рябь, землетрясения, а с 1926 года — и материю: электрон в атоме есть стоячая волна, и его дискретные уровни возникают ровно по той же причине, по которой у струны дискретные ноты.",
-        "И тем не менее в теме остаётся старейший нерешённый вопрос классической физики. Турбулентность — то, что происходит с водой в быстром потоке или с воздухом за крылом, — не поддаётся описанию до сих пор, хотя уравнения известны почти двести лет."
-      ],
-      "link": {
-        "href": "/frontier.html#computability",
-        "text": "Открытые вопросы: где кончается вычислимое"
-      }
-    },
-    "lessons": [
-      {
-        "id": "01-travelling",
-        "title": "Что такое волна",
-        "sub": "Движется возмущение, а не вещество",
-        "law": "v = λf",
-        "model": "wave"
-      },
-      {
-        "id": "02-standing",
-        "title": "Стоячие волны и звук",
-        "sub": "Почему у струны есть ноты, а не любые частоты",
-        "law": "Условие стоячей волны",
-        "model": "wave"
-      },
-      {
-        "id": "03-interference",
-        "title": "Интерференция и Доплер",
-        "sub": "Когда волны складываются и когда гасят друг друга",
-        "law": "Принцип суперпозиции",
-        "model": "wave"
-      }
-    ]
+   ]
   },
-  "en": {
-    "title": "Waves",
-    "subtitle": "How a Vibration Sets Off",
-    "lead": "The topic after which it becomes apparent that sound, light, ripples on water, and the electron in an atom are all described by the same apparatus. Waves are the most reused tool in physics.",
-    "why": {
-      "title": "Why You Need to Know This",
-      "text": [
-        "Let's start with an observation worth thinking about. Throw a stone into a pond — circles run to the shore. Put a splinter on the water: it will bob up and down, staying in place. The wave has gone, but the water hasn't moved anywhere. So it's not matter that moves, but a shape — a disturbance transmitted from neighbor to neighbor.",
-        "Once this is realized, a strange thing becomes clear. Since a wave is a mode of transmission, not the matter itself, the same rules should work for any medium. And indeed: the formula linking wavelength, frequency, and speed is the same for sound in air, ripples on water, string vibrations, radio signals, and X-rays. Only the numbers change.",
-        "It gets even more interesting. Waves can do something particles cannot: they can add up to produce zero. Two waves meeting can cancel each other out — and this property will later become the main argument in the debate about the nature of light, and then is found in electrons, something no one expected.",
-        "The practical side is enormous. Musical instruments, ultrasound, sonar, seismic exploration, fiber optics, noise-canceling headphones, radar — all are applications of the same set of ideas. And almost any modern measurement technology: to learn something at a distance, send a wave and see what returns."
-      ]
-    },
-    "history": {
-      "title": "Who Created It",
-      "people": [
-        {
-          "name": "Pythagoras",
-          "years": "c. 570–495 BCE",
-          "what": "He discovered that pleasing consonances occur when string lengths are in ratios of small whole numbers: 2:1 gives an octave, 3:2 a fifth. This is the first case in history where a physical phenomenon was described by a number — and, in essence, the beginning of mathematical physics."
-        },
-        {
-          "name": "Christiaan Huygens",
-          "years": "1629–1695",
-          "what": "He proposed a principle explaining wave propagation: every point on a wavefront itself becomes a source of secondary waves. From this, reflection, refraction, and diffraction are derived. He championed the wave nature of light against Newton — and was right, though recognition took a hundred years."
-        },
-        {
-          "name": "Thomas Young",
-          "years": "1773–1829",
-          "what": "He performed the double-slit experiment and obtained fringes where, according to particle theory, there should have been uniform illumination. Light adding to light produced darkness — impossible to explain with particles. Contemporaries mocked his work; Newton's authority was too great."
-        },
-        {
-          "name": "Joseph Fourier",
-          "years": "1768–1830",
-          "what": "He proved that any periodic oscillation can be decomposed into a sum of simple sines. This turned wave theory into a universal tool: a complex signal can be studied in parts. All modern sound and image processing rests on this."
-        },
-        {
-          "name": "Christian Doppler",
-          "years": "1803–1853",
-          "what": "He predicted the change in frequency with motion of the source. This was verified in 1845 in a remarkable way: trumpeters were placed in an open train car and told to play a single note, while musicians on the platform determined the pitch by ear. The effect was confirmed."
-        }
-      ]
-    },
-    "map": {
-      "title": "What You Will Learn",
-      "lead": "Three sections: first, a traveling wave and its basics; then a standing wave — and the emergence of discrete notes from a continuous medium; then wave superposition and the Doppler effect. One interactive exhibit with three modes.",
-      "outcome": "After all three, you will understand why a wave carries nothing except energy and shape; where the notes of a string come from and why they form a series; how two waves can produce darkness; and why the pitch of a passing siren changes."
-    },
-    "prereq": {
-      "title": "What You Should Know Beforehand",
-      "items": [
-        "Oscillations: what period, frequency, and amplitude are. Topic on oscillations and rotation, section on Hooke's law.",
-        "Sine as a function of time — not formally, but as the shape of an oscillation.",
-        "Addition of signed quantities: two waves add algebraically, and a negative times a negative has a physical meaning here."
-      ],
-      "note": "The main difficulty of the topic is getting used to the fact that a wave has two independent geometries simultaneously: in time (period) and in space (wavelength). They are often confused. The exhibit shows both: wavelength with an arrow on the stage, period on a graph beneath it."
-    },
-    "closing": {
-      "title": "And the Main Point",
-      "text": [
-        "The wave apparatus turned out to be so successful that it survived all changes in physical theories. It describes sound, light, ripples, earthquakes, and since 1926, matter: the electron in an atom is a standing wave, and its discrete levels arise for exactly the same reason that a string has discrete notes.",
-        "And yet, the topic still contains the oldest unsolved problem of classical physics. Turbulence — what happens to water in a fast flow or air behind a wing — has defied description to this day, even though the equations have been known for almost two hundred years."
-      ],
-      "link": {
-        "href": "/frontier.html#computability",
-        "text": "Open questions: where the computable ends"
-      }
-    },
-    "lessons": [
-      {
-        "id": "01-travelling",
-        "title": "What is a wave",
-        "sub": "Section 1 · The disturbance moves, not the substance",
-        "law": "v = λf",
-        "model": "wave"
-      },
-      {
-        "id": "02-standing",
-        "title": "Standing Waves and Sound",
-        "sub": "Section 2 · Why a string has notes and not any frequencies",
-        "law": "Standing wave condition",
-        "model": "wave"
-      },
-      {
-        "id": "03-interference",
-        "title": "Interference and Doppler",
-        "sub": "Section 3 · When waves add and when they cancel each other out",
-        "law": "Superposition principle",
-        "model": "wave"
-      }
-    ]
+  "map": {
+   "title": "What You Will Learn",
+   "lead": "Three sections: first, a traveling wave and its basics; then a standing wave — and the emergence of discrete notes from a continuous medium; then wave superposition and the Doppler effect. One interactive exhibit with three modes.",
+   "outcome": "After all three, you will understand why a wave carries nothing except energy and shape; where the notes of a string come from and why they form a series; how two waves can produce darkness; and why the pitch of a passing siren changes."
   },
-  "es": {
-    "title": "Ondas",
-    "subtitle": "Cómo la oscilación se pone en marcha",
-    "lead": "Tema tras el cual se hace evidente que el sonido, la luz, las ondas en el agua y el electrón en el átomo se describen con el mismo aparato. Las ondas son la herramienta más reutilizada de la física.",
-    "why": {
-      "title": "Por qué saber esto",
-      "text": [
-        "Empecemos con una observación que vale la pena considerar. Lance una piedra a un estanque: los círculos correrán hacia la orilla. Coloque una astilla en el agua: se moverá arriba y abajo, quedándose en el mismo sitio. La onda se ha ido, pero el agua no se ha movido. Entonces, no se mueve la materia, sino la forma: una perturbación que se transmite de vecino a vecino.",
-        "Una vez que se comprende esto, se revela algo extraño. Dado que la onda es un modo de transmisión y no la materia misma, las mismas reglas deberían funcionar para cualquier medio. Y efectivamente: la fórmula que relaciona la longitud de onda, la frecuencia y la velocidad es la misma para el sonido en el aire, las ondas en el agua, las vibraciones de una cuerda, una señal de radio y un rayo X. Solo cambian los números.",
-        "Luego se vuelve aún más interesante. Las ondas pueden hacer lo que las partículas no pueden: sumarse de manera que den cero. Dos ondas que se encuentran pueden anularse mutuamente — y esta propiedad luego se convertirá en el argumento principal en el debate sobre la naturaleza de la luz, y más tarde se descubrirá en los electrones, algo que nadie esperaba.",
-        "El lado práctico es enorme. Instrumentos musicales, ecografías, ecosondas, prospección sísmica, fibra óptica, auriculares con cancelación de ruido, radar — todo son aplicaciones de un mismo conjunto de ideas. Y casi cualquier tecnología de medición moderna también: para conocer algo a distancia, hay que enviar una onda y ver qué regresa."
-      ]
-    },
-    "history": {
-      "title": "Quién la creó",
-      "people": [
-        {
-          "name": "Pitágoras",
-          "years": "≈570–495 a. C.",
-          "what": "Descubrió que las consonancias agradables al oído se producen cuando las longitudes de las cuerdas están en relación de números enteros pequeños: dos a uno da una octava, tres a dos una quinta. Este es el primer caso en la historia en que un fenómeno físico fue descrito con números — y, en esencia, el inicio de la física matemática."
-        },
-        {
-          "name": "Christiaan Huygens",
-          "years": "1629–1695",
-          "what": "Propuso el principio que explica la propagación de las ondas: cada punto del frente se convierte en una fuente de ondas secundarias. De aquí se derivan la reflexión, la refracción y la difracción alrededor de obstáculos. Defendió la naturaleza ondulatoria de la luz contra Newton — y resultó tener razón, aunque el reconocimiento tardó cien años."
-        },
-        {
-          "name": "Thomas Young",
-          "years": "1773–1829",
-          "what": "Realizó el experimento de la doble rendija y obtuvo franjas donde, según la teoría corpuscular, debería haber iluminación uniforme. La luz sumándose a la luz producía oscuridad — imposible de explicar con partículas. Sus contemporáneos recibieron el trabajo con burlas: la autoridad de Newton era demasiado grande."
-        },
-        {
-          "name": "Joseph Fourier",
-          "years": "1768–1830",
-          "what": "Demostró que cualquier oscilación periódica se descompone en una suma de senos simples. Esto convirtió la teoría ondulatoria en una herramienta universal: una señal compleja se puede estudiar por partes. Todo el procesamiento moderno de audio e imágenes se basa en esto."
-        },
-        {
-          "name": "Christian Doppler",
-          "years": "1803–1853",
-          "what": "Predijo el cambio de frecuencia cuando la fuente está en movimiento. Lo comprobaron en 1845 de una manera sorprendente: colocaron trompetistas en un vagón abierto y les hicieron tocar una nota, mientras en el andén los músicos determinaban de oído la altura del sonido. El efecto se confirmó."
-        }
-      ]
-    },
-    "map": {
-      "title": "Qué aprenderá",
-      "lead": "Tres secciones: primero la onda viajera y su abecedario, luego la onda estacionaria — y la aparición de notas discretas a partir de un medio continuo, luego la superposición de ondas y el efecto Doppler. Un único módulo interactivo, con tres modos.",
-      "outcome": "Al completar las tres, entenderá por qué en una onda no se transporta nada excepto energía y forma; de dónde vienen las notas de una cuerda y por qué forman una serie; cómo dos ondas pueden producir oscuridad; y por qué cambia el tono de la sirena de un coche que pasa."
-    },
-    "prereq": {
-      "title": "Qué necesita saber de antemano",
-      "items": [
-        "Oscilaciones: qué son el periodo, la frecuencia y la amplitud. Tema sobre oscilaciones y rotación, sección sobre la ley de Hooke.",
-        "El seno como función del tiempo — no formalmente, sino como forma de oscilación.",
-        "Suma de cantidades con signo: dos ondas se suman algebraicamente, y aquí menos por menos tiene un significado físico."
-      ],
-      "note": "La principal dificultad del tema es acostumbrarse a que la onda tiene dos geometrías independientes a la vez: en el tiempo (periodo) y en el espacio (longitud de onda). Se confunden constantemente. El módulo muestra ambas: la longitud de onda con una flecha en la escena, el periodo en el gráfico debajo."
-    },
-    "closing": {
-      "title": "Y lo principal",
-      "text": [
-        "El aparato ondulatorio resultó tan exitoso que sobrevivió a todos los cambios de las teorías físicas. Con él se describen el sonido, la luz, las ondas, los terremotos, y desde 1926 también la materia: el electrón en el átomo es una onda estacionaria, y sus niveles discretos surgen exactamente por la misma razón por la que una cuerda tiene notas discretas.",
-        "Y sin embargo, en el tema queda la pregunta no resuelta más antigua de la física clásica. La turbulencia — lo que ocurre con el agua en una corriente rápida o con el aire detrás de un ala — aún no se deja describir, aunque las ecuaciones se conocen desde hace casi doscientos años."
-      ],
-      "link": {
-        "href": "/frontier.html#computability",
-        "text": "Preguntas abiertas: dónde termina lo computable"
-      }
-    },
-    "lessons": [
-      {
-        "id": "01-travelling",
-        "title": "Qué es una onda",
-        "sub": "Sección 1 · Se mueve la perturbación, no la materia",
-        "law": "v = λf",
-        "model": "wave"
-      },
-      {
-        "id": "02-standing",
-        "title": "Ondas estacionarias y sonido",
-        "sub": "Párrafo 2 · Por qué la cuerda tiene notas y no cualquier frecuencia",
-        "law": "Condición de onda estacionaria",
-        "model": "wave"
-      },
-      {
-        "id": "03-interference",
-        "title": "Interferencia y Doppler",
-        "sub": "Párrafo 3 · Cuando las ondas se suman y cuando se anulan mutuamente",
-        "law": "Principio de superposición",
-        "model": "wave"
-      }
-    ]
+  "prereq": {
+   "title": "What You Should Know Beforehand",
+   "items": [
+    "Oscillations: what period, frequency, and amplitude are. Topic on oscillations and rotation, section on Hooke's law.",
+    "Sine as a function of time — not formally, but as the shape of an oscillation.",
+    "Addition of signed quantities: two waves add algebraically, and a negative times a negative has a physical meaning here."
+   ],
+   "note": "The main difficulty of the topic is getting used to the fact that a wave has two independent geometries simultaneously: in time (period) and in space (wavelength). They are often confused. The exhibit shows both: wavelength with an arrow on the stage, period on a graph beneath it."
   },
-  "ar": {
-    "title": "الموجات",
-    "subtitle": "كيف ينطلق الاهتزاز في رحلته",
-    "lead": "موضوع تَظهر بعدَه أن الصوت والضوء وتموجات الماء والإلكترون في الذرة توصف بنفس الإطار. الموجات هي الأداة الأكثر تداولاً في الفيزياء.",
-    "why": {
-      "title": "لماذا يجب معرفة هذا",
-      "text": [
-        "لنبدأ بملاحظة تستحق التفكير: ألق حجراً في بركة — ستنطلق دوائر نحو الشاطئ. ضع قطعة خشب صغيرة على الماء: ستتأرجح لأعلى ولأسفل وتبقى في مكانها. الموجة ذهبت والماء لم يذهب إلى أي مكان. إذاً، لا تتحرك المادة، بل الشكل — اضطراب ينتقل من جار إلى جار.",
-        "بمجرد إدراك هذا، يتكشف شيء غريب. بما أن الموجة هي وسيلة نقل وليست المادة نفسها، فيجب أن تعمل نفس القواعد لأي وسط. وبالفعل: الصيغة التي تربط طول الموجة والتردد والسرعة هي نفسها للصوت في الهواء، تموجات الماء، اهتزازات الوتر، إشارة الراديو وشعة إكس. فقط الأرقام تتغير.",
-        "ثم يصبح الأمر أكثر إثارة. الموجات تستطيع ما لا تستطيعه الجسيمات: التركيب بحيث ينتج صفر. موجتان تلتقيان يمكنهما إلغاء بعضهما — وهذه الخاصية ستصبح لاحقاً الحجة الرئيسية في الجدال حول طبيعة الضوء، ثم ستكتشف لدى الإلكترونات، وهو ما لم يتوقعه أحد.",
-        "الجانب العملي هائل. الآلات الموسيقية، الموجات فوق الصوتية، مسبار الصدى، التنقيب الزلزالي، الألياف البصرية، سماعات إلغاء الضوضاء، الرادار — كلها تطبيقات لمجموعة واحدة من الأفكار. وأي تقنية قياس حديثة تقريباً كذلك: لمعرفة شيء عن بعد، يجب إرسال موجة ورؤية ما عاد."
-      ]
+  "closing": {
+   "title": "And the Main Point",
+   "text": [
+    "The wave apparatus turned out to be so successful that it survived all changes in physical theories. It describes sound, light, ripples, earthquakes, and since 1926, matter: the electron in an atom is a standing wave, and its discrete levels arise for exactly the same reason that a string has discrete notes.",
+    "And yet, the topic still contains the oldest unsolved problem of classical physics. Turbulence — what happens to water in a fast flow or air behind a wing — has defied description to this day, even though the equations have been known for almost two hundred years."
+   ],
+   "link": {
+    "href": "/frontier.html#computability",
+    "text": "Open questions: where the computable ends"
+   }
+  },
+  "lessons": [
+   {
+    "id": "01-travelling",
+    "title": "What is a wave",
+    "sub": "Section 1 · The disturbance moves, not the substance",
+    "law": "v = λf",
+    "model": "wave"
+   },
+   {
+    "id": "02-standing",
+    "title": "Standing Waves and Sound",
+    "sub": "Section 2 · Why a string has notes and not any frequencies",
+    "law": "Standing wave condition",
+    "model": "wave"
+   },
+   {
+    "id": "03-interference",
+    "title": "Interference and Doppler",
+    "sub": "Section 3 · When waves add and when they cancel each other out",
+    "law": "Superposition principle",
+    "model": "wave"
+   }
+  ]
+ },
+ "es": {
+  "title": "Ondas",
+  "subtitle": "Cómo la oscilación se pone en marcha",
+  "lead": "Tema tras el cual se hace evidente que el sonido, la luz, las ondas en el agua y el electrón en el átomo se describen con el mismo aparato. Las ondas son la herramienta más reutilizada de la física.",
+  "why": {
+   "title": "Por qué saber esto",
+   "text": [
+    "Empecemos con una observación que vale la pena considerar. Lance una piedra a un estanque: los círculos correrán hacia la orilla. Coloque una astilla en el agua: se moverá arriba y abajo, quedándose en el mismo sitio. La onda se ha ido, pero el agua no se ha movido. Entonces, no se mueve la materia, sino la forma: una perturbación que se transmite de vecino a vecino.",
+    "Una vez que se comprende esto, se revela algo extraño. Dado que la onda es un modo de transmisión y no la materia misma, las mismas reglas deberían funcionar para cualquier medio. Y efectivamente: la fórmula que relaciona la longitud de onda, la frecuencia y la velocidad es la misma para el sonido en el aire, las ondas en el agua, las vibraciones de una cuerda, una señal de radio y un rayo X. Solo cambian los números.",
+    "Luego se vuelve aún más interesante. Las ondas pueden hacer lo que las partículas no pueden: sumarse de manera que den cero. Dos ondas que se encuentran pueden anularse mutuamente — y esta propiedad luego se convertirá en el argumento principal en el debate sobre la naturaleza de la luz, y más tarde se descubrirá en los electrones, algo que nadie esperaba.",
+    "El lado práctico es enorme. Instrumentos musicales, ecografías, ecosondas, prospección sísmica, fibra óptica, auriculares con cancelación de ruido, radar — todo son aplicaciones de un mismo conjunto de ideas. Y casi cualquier tecnología de medición moderna también: para conocer algo a distancia, hay que enviar una onda y ver qué regresa."
+   ]
+  },
+  "history": {
+   "title": "Quién la creó",
+   "people": [
+    {
+     "name": "Pitágoras",
+     "years": "≈570–495 a. C.",
+     "what": "Descubrió que las consonancias agradables al oído se producen cuando las longitudes de las cuerdas están en relación de números enteros pequeños: dos a uno da una octava, tres a dos una quinta. Este es el primer caso en la historia en que un fenómeno físico fue descrito con números — y, en esencia, el inicio de la física matemática."
     },
-    "history": {
-      "title": "من هم روادها",
-      "people": [
-        {
-          "name": "فيثاغورس",
-          "years": "≈570–495 ق.م.",
-          "what": "اكتشف أن التناغمات الموسيقية الممتعة للأذن تنشأ عندما تكون أطوال الأوتار بنسب أعداد صحيحة صغيرة: اثنان إلى واحد يعطي الأوكتاف، ثلاثة إلى اثنين يعطي الخُماس. هذه هي أول حالة في التاريخ يُوصف فيها ظاهرة فيزيائية بعدد، وهي في جوهرها بداية الفيزياء الرياضية."
-        },
-        {
-          "name": "كريستيان هويجنز",
-          "years": "1629–1695",
-          "what": "اقترح مبدأً يفسر انتشار الموجات: كل نقطة في المقدمة تصبح نفسها مصدراً لموجة ثانوية. من هنا يُستنتج الانعكاس والانكسار والانعراج حول العوائق. دافع عن الطبيعة الموجية للضوء ضد نيوتن — وكان محقاً، رغم أن الاعتراف انتظر مئة عام."
-        },
-        {
-          "name": "توماس يونغ",
-          "years": "1773–1829",
-          "what": "أجرى تجربة الشقين المزدوجين وحصل على أهداب حيث كان ينبغي، وفق النظرية الجسيمية، أن تكون الإضاءة منتظمة. الضوء يضاف إلى الضوء أنتج ظلاماً — لا يمكن تفسير ذلك بالجسيمات. استقبل المعاصرون العمل بالسخرية: كانت سلطة نيوتن كبيرة جداً."
-        },
-        {
-          "name": "جوزيف فورييه",
-          "years": "1768–1830",
-          "what": "أثبت أن أي اهتزاز دوري يمكن تحليله إلى مجموع من الموجات الجيبية البسيطة. هذا حوَّل النظرية الموجية إلى أداة عالمية: يمكن دراسة الإشارات المعقدة جزءاً جزءاً. كل معالجة الصوت والصور الحديثة تقوم على هذا."
-        },
-        {
-          "name": "كريستيان دوبلر",
-          "years": "1803–1853",
-          "what": "تنبأ بتغير التردد عند حركة المصدر. تم التحقق من ذلك في عام 1845 بطريقة مذهلة: وضعوا عازفي بوق في عربة مفتوحة وأجبروهم على عزف نوتة واحدة بينما حدد الموسيقيون على الرصيف درجة الصوت بالسمع. تم تأكيد التأثير."
-        }
-      ]
+    {
+     "name": "Christiaan Huygens",
+     "years": "1629–1695",
+     "what": "Propuso el principio que explica la propagación de las ondas: cada punto del frente se convierte en una fuente de ondas secundarias. De aquí se derivan la reflexión, la refracción y la difracción alrededor de obstáculos. Defendió la naturaleza ondulatoria de la luz contra Newton — y resultó tener razón, aunque el reconocimiento tardó cien años."
     },
-    "map": {
-      "title": "ما ستتعلمه",
-      "lead": "ثلاثة أقسام: أولاً الموجة المتحركة وأبجدياتها، ثم الموجة المستقرة — وظهور النغمات المنفصلة من وسط متصل، ثم جمع الموجات وتأثير دوبلر. منصة واحدة بثلاثة أنماط.",
-      "outcome": "بعد اجتياز الأقسام الثلاثة، ستفهم لماذا لا ينقل الموج شيئاً سوى الطاقة والشكل؛ من أين تأتي النغمات من الوتر ولماذا تشكل سلسلة؛ كيف يمكن لموجتين أن تنتجا ظلاماً؛ ولماذا يتغير صوت صفارة سيارة مارّة."
+    {
+     "name": "Thomas Young",
+     "years": "1773–1829",
+     "what": "Realizó el experimento de la doble rendija y obtuvo franjas donde, según la teoría corpuscular, debería haber iluminación uniforme. La luz sumándose a la luz producía oscuridad — imposible de explicar con partículas. Sus contemporáneos recibieron el trabajo con burlas: la autoridad de Newton era demasiado grande."
     },
-    "prereq": {
-      "title": "ما يجب معرفته مسبقاً",
-      "items": [
-        "الاهتزازات: ما هي الدورة والتردد والسعة. موضوع الاهتزازات والدوران، فقرة عن قانون هوك.",
-        "الجيب كدالة للزمن — ليس بشكل رسمي، بل كشكل الاهتزاز.",
-        "جمع الكميات بإشارة: موجتان تُجمعان جبرياً، والناقص مع الناقص هنا له معنى فيزيائي."
-      ],
-      "note": "الصعوبة الرئيسية في الموضوع هي التعود على أن للموجة هندستين مستقلتين في آن واحد: في الزمن (الدورة) وفي المكان (طول الموجة). يتم الخلط بينهما باستمرار. تعرض المنصة كليهما عمداً: طول الموجة بسهم على المسرح، والدورة في رسم بياني تحته."
+    {
+     "name": "Joseph Fourier",
+     "years": "1768–1830",
+     "what": "Demostró que cualquier oscilación periódica se descompone en una suma de senos simples. Esto convirtió la teoría ondulatoria en una herramienta universal: una señal compleja se puede estudiar por partes. Todo el procesamiento moderno de audio e imágenes se basa en esto."
     },
-    "closing": {
-      "title": "والأهم",
-      "text": [
-        "لقد أثبت إطار الموجات نجاحه لدرجة أنه تجاوز كل التغييرات في النظريات الفيزيائية. به يوصف الصوت والضوء والتموجات والزلازل، ومنذ عام 1926 — المادة أيضاً: الإلكترون في الذرة هو موجة مستقرة، ومستوياته المنفصلة تنشأ لنفس السبب الذي تنشأ به النغمات المنفصلة للوتر.",
-        "ومع ذلك، يبقى في الموضوع أقدم سؤال غير محلول في الفيزياء الكلاسيكية. الاضطراب (التوربولانس) — ما يحدث للماء في تيار سريع أو للهواء خلف الجناح — لا يزال غير قابل للوصف حتى الآن، رغم أن المعادلات معروفة منذ ما يقرب من مائتي عام."
-      ],
-      "link": {
-        "href": "/frontier.html#computability",
-        "text": "أسئلة مفتوحة: أين تنتهي الحوسبة"
-      }
+    {
+     "name": "Christian Doppler",
+     "years": "1803–1853",
+     "what": "Predijo el cambio de frecuencia cuando la fuente está en movimiento. Lo comprobaron en 1845 de una manera sorprendente: colocaron trompetistas en un vagón abierto y les hicieron tocar una nota, mientras en el andén los músicos determinaban de oído la altura del sonido. El efecto se confirmó."
+    }
+   ]
+  },
+  "map": {
+   "title": "Qué aprenderá",
+   "lead": "Tres secciones: primero la onda viajera y su abecedario, luego la onda estacionaria — y la aparición de notas discretas a partir de un medio continuo, luego la superposición de ondas y el efecto Doppler. Un único módulo interactivo, con tres modos.",
+   "outcome": "Al completar las tres, entenderá por qué en una onda no se transporta nada excepto energía y forma; de dónde vienen las notas de una cuerda y por qué forman una serie; cómo dos ondas pueden producir oscuridad; y por qué cambia el tono de la sirena de un coche que pasa."
+  },
+  "prereq": {
+   "title": "Qué necesita saber de antemano",
+   "items": [
+    "Oscilaciones: qué son el periodo, la frecuencia y la amplitud. Tema sobre oscilaciones y rotación, sección sobre la ley de Hooke.",
+    "El seno como función del tiempo — no formalmente, sino como forma de oscilación.",
+    "Suma de cantidades con signo: dos ondas se suman algebraicamente, y aquí menos por menos tiene un significado físico."
+   ],
+   "note": "La principal dificultad del tema es acostumbrarse a que la onda tiene dos geometrías independientes a la vez: en el tiempo (periodo) y en el espacio (longitud de onda). Se confunden constantemente. El módulo muestra ambas: la longitud de onda con una flecha en la escena, el periodo en el gráfico debajo."
+  },
+  "closing": {
+   "title": "Y lo principal",
+   "text": [
+    "El aparato ondulatorio resultó tan exitoso que sobrevivió a todos los cambios de las teorías físicas. Con él se describen el sonido, la luz, las ondas, los terremotos, y desde 1926 también la materia: el electrón en el átomo es una onda estacionaria, y sus niveles discretos surgen exactamente por la misma razón por la que una cuerda tiene notas discretas.",
+    "Y sin embargo, en el tema queda la pregunta no resuelta más antigua de la física clásica. La turbulencia — lo que ocurre con el agua en una corriente rápida o con el aire detrás de un ala — aún no se deja describir, aunque las ecuaciones se conocen desde hace casi doscientos años."
+   ],
+   "link": {
+    "href": "/frontier.html#computability",
+    "text": "Preguntas abiertas: dónde termina lo computable"
+   }
+  },
+  "lessons": [
+   {
+    "id": "01-travelling",
+    "title": "Qué es una onda",
+    "sub": "Sección 1 · Se mueve la perturbación, no la materia",
+    "law": "v = λf",
+    "model": "wave"
+   },
+   {
+    "id": "02-standing",
+    "title": "Ondas estacionarias y sonido",
+    "sub": "Párrafo 2 · Por qué la cuerda tiene notas y no cualquier frecuencia",
+    "law": "Condición de onda estacionaria",
+    "model": "wave"
+   },
+   {
+    "id": "03-interference",
+    "title": "Interferencia y Doppler",
+    "sub": "Párrafo 3 · Cuando las ondas se suman y cuando se anulan mutuamente",
+    "law": "Principio de superposición",
+    "model": "wave"
+   }
+  ]
+ },
+ "ar": {
+  "title": "الموجات",
+  "subtitle": "كيف ينطلق الاهتزاز في رحلته",
+  "lead": "موضوع تَظهر بعدَه أن الصوت والضوء وتموجات الماء والإلكترون في الذرة توصف بنفس الإطار. الموجات هي الأداة الأكثر تداولاً في الفيزياء.",
+  "why": {
+   "title": "لماذا يجب معرفة هذا",
+   "text": [
+    "لنبدأ بملاحظة تستحق التفكير: ألق حجراً في بركة — ستنطلق دوائر نحو الشاطئ. ضع قطعة خشب صغيرة على الماء: ستتأرجح لأعلى ولأسفل وتبقى في مكانها. الموجة ذهبت والماء لم يذهب إلى أي مكان. إذاً، لا تتحرك المادة، بل الشكل — اضطراب ينتقل من جار إلى جار.",
+    "بمجرد إدراك هذا، يتكشف شيء غريب. بما أن الموجة هي وسيلة نقل وليست المادة نفسها، فيجب أن تعمل نفس القواعد لأي وسط. وبالفعل: الصيغة التي تربط طول الموجة والتردد والسرعة هي نفسها للصوت في الهواء، تموجات الماء، اهتزازات الوتر، إشارة الراديو وشعة إكس. فقط الأرقام تتغير.",
+    "ثم يصبح الأمر أكثر إثارة. الموجات تستطيع ما لا تستطيعه الجسيمات: التركيب بحيث ينتج صفر. موجتان تلتقيان يمكنهما إلغاء بعضهما — وهذه الخاصية ستصبح لاحقاً الحجة الرئيسية في الجدال حول طبيعة الضوء، ثم ستكتشف لدى الإلكترونات، وهو ما لم يتوقعه أحد.",
+    "الجانب العملي هائل. الآلات الموسيقية، الموجات فوق الصوتية، مسبار الصدى، التنقيب الزلزالي، الألياف البصرية، سماعات إلغاء الضوضاء، الرادار — كلها تطبيقات لمجموعة واحدة من الأفكار. وأي تقنية قياس حديثة تقريباً كذلك: لمعرفة شيء عن بعد، يجب إرسال موجة ورؤية ما عاد."
+   ]
+  },
+  "history": {
+   "title": "من هم روادها",
+   "people": [
+    {
+     "name": "فيثاغورس",
+     "years": "≈570–495 ق.م.",
+     "what": "اكتشف أن التناغمات الموسيقية الممتعة للأذن تنشأ عندما تكون أطوال الأوتار بنسب أعداد صحيحة صغيرة: اثنان إلى واحد يعطي الأوكتاف، ثلاثة إلى اثنين يعطي الخُماس. هذه هي أول حالة في التاريخ يُوصف فيها ظاهرة فيزيائية بعدد، وهي في جوهرها بداية الفيزياء الرياضية."
     },
-    "lessons": [
-      {
-        "id": "01-travelling",
-        "title": "ما هي الموجة",
-        "sub": "الفقرة 1 · يتحرك الاضطراب وليس المادة",
-        "law": "v = λf",
-        "model": "wave"
-      },
-      {
-        "id": "02-standing",
-        "title": "الموجات المستقرة والصوت",
-        "sub": "الفقرة 2 · لماذا للأوتار نغمات محددة وليس أي ترددات",
-        "law": "شرط الموجة المستقرة",
-        "model": "wave"
-      },
-      {
-        "id": "03-interference",
-        "title": "التداخل ودوبلر",
-        "sub": "الفقرة 3 · عندما تتراكم الموجات وعندما تلغي بعضها البعض",
-        "law": "مبدأ التراكب",
-        "model": "wave"
-      }
-    ]
-  }
+    {
+     "name": "كريستيان هويجنز",
+     "years": "1629–1695",
+     "what": "اقترح مبدأً يفسر انتشار الموجات: كل نقطة في المقدمة تصبح نفسها مصدراً لموجة ثانوية. من هنا يُستنتج الانعكاس والانكسار والانعراج حول العوائق. دافع عن الطبيعة الموجية للضوء ضد نيوتن — وكان محقاً، رغم أن الاعتراف انتظر مئة عام."
+    },
+    {
+     "name": "توماس يونغ",
+     "years": "1773–1829",
+     "what": "أجرى تجربة الشقين المزدوجين وحصل على أهداب حيث كان ينبغي، وفق النظرية الجسيمية، أن تكون الإضاءة منتظمة. الضوء يضاف إلى الضوء أنتج ظلاماً — لا يمكن تفسير ذلك بالجسيمات. استقبل المعاصرون العمل بالسخرية: كانت سلطة نيوتن كبيرة جداً."
+    },
+    {
+     "name": "جوزيف فورييه",
+     "years": "1768–1830",
+     "what": "أثبت أن أي اهتزاز دوري يمكن تحليله إلى مجموع من الموجات الجيبية البسيطة. هذا حوَّل النظرية الموجية إلى أداة عالمية: يمكن دراسة الإشارات المعقدة جزءاً جزءاً. كل معالجة الصوت والصور الحديثة تقوم على هذا."
+    },
+    {
+     "name": "كريستيان دوبلر",
+     "years": "1803–1853",
+     "what": "تنبأ بتغير التردد عند حركة المصدر. تم التحقق من ذلك في عام 1845 بطريقة مذهلة: وضعوا عازفي بوق في عربة مفتوحة وأجبروهم على عزف نوتة واحدة بينما حدد الموسيقيون على الرصيف درجة الصوت بالسمع. تم تأكيد التأثير."
+    }
+   ]
+  },
+  "map": {
+   "title": "ما ستتعلمه",
+   "lead": "ثلاثة أقسام: أولاً الموجة المتحركة وأبجدياتها، ثم الموجة المستقرة — وظهور النغمات المنفصلة من وسط متصل، ثم جمع الموجات وتأثير دوبلر. منصة واحدة بثلاثة أنماط.",
+   "outcome": "بعد اجتياز الأقسام الثلاثة، ستفهم لماذا لا ينقل الموج شيئاً سوى الطاقة والشكل؛ من أين تأتي النغمات من الوتر ولماذا تشكل سلسلة؛ كيف يمكن لموجتين أن تنتجا ظلاماً؛ ولماذا يتغير صوت صفارة سيارة مارّة."
+  },
+  "prereq": {
+   "title": "ما يجب معرفته مسبقاً",
+   "items": [
+    "الاهتزازات: ما هي الدورة والتردد والسعة. موضوع الاهتزازات والدوران، فقرة عن قانون هوك.",
+    "الجيب كدالة للزمن — ليس بشكل رسمي، بل كشكل الاهتزاز.",
+    "جمع الكميات بإشارة: موجتان تُجمعان جبرياً، والناقص مع الناقص هنا له معنى فيزيائي."
+   ],
+   "note": "الصعوبة الرئيسية في الموضوع هي التعود على أن للموجة هندستين مستقلتين في آن واحد: في الزمن (الدورة) وفي المكان (طول الموجة). يتم الخلط بينهما باستمرار. تعرض المنصة كليهما عمداً: طول الموجة بسهم على المسرح، والدورة في رسم بياني تحته."
+  },
+  "closing": {
+   "title": "والأهم",
+   "text": [
+    "لقد أثبت إطار الموجات نجاحه لدرجة أنه تجاوز كل التغييرات في النظريات الفيزيائية. به يوصف الصوت والضوء والتموجات والزلازل، ومنذ عام 1926 — المادة أيضاً: الإلكترون في الذرة هو موجة مستقرة، ومستوياته المنفصلة تنشأ لنفس السبب الذي تنشأ به النغمات المنفصلة للوتر.",
+    "ومع ذلك، يبقى في الموضوع أقدم سؤال غير محلول في الفيزياء الكلاسيكية. الاضطراب (التوربولانس) — ما يحدث للماء في تيار سريع أو للهواء خلف الجناح — لا يزال غير قابل للوصف حتى الآن، رغم أن المعادلات معروفة منذ ما يقرب من مائتي عام."
+   ],
+   "link": {
+    "href": "/frontier.html#computability",
+    "text": "أسئلة مفتوحة: أين تنتهي الحوسبة"
+   }
+  },
+  "lessons": [
+   {
+    "id": "01-travelling",
+    "title": "ما هي الموجة",
+    "sub": "الفقرة 1 · يتحرك الاضطراب وليس المادة",
+    "law": "v = λf",
+    "model": "wave"
+   },
+   {
+    "id": "02-standing",
+    "title": "الموجات المستقرة والصوت",
+    "sub": "الفقرة 2 · لماذا للأوتار نغمات محددة وليس أي ترددات",
+    "law": "شرط الموجة المستقرة",
+    "model": "wave"
+   },
+   {
+    "id": "03-interference",
+    "title": "التداخل ودوبلر",
+    "sub": "الفقرة 3 · عندما تتراكم الموجات وعندما تلغي بعضها البعض",
+    "law": "مبدأ التراكب",
+    "model": "wave"
+   }
+  ]
+ },
+ "fr": {
+  "title": "Ondes",
+  "subtitle": "Comment une oscillation se met en route",
+  "lead": "Un sujet après lequel on voit que le son, la lumière, les rides sur l'eau et l'électron dans l'atome sont décrits par le même appareil mathématique. Les ondes sont l'outil le plus réutilisé de la physique.",
+  "why": {
+   "title": "Pourquoi le savoir",
+   "text": [
+    "Commençons par une observation qui mérite réflexion. Jetez une pierre dans un étang — des cercles courront vers la rive. Posez une brindille sur l'eau : elle montera et descendra, restant sur place. L'onde est partie, mais l'eau n'est allée nulle part. Donc, ce qui se déplace n'est pas la matière, mais la forme — une perturbation qui se transmet de proche en proche.",
+    "Une fois cela compris, une chose étrange se révèle. Puisque l'onde est un mode de transmission, et non la matière elle-même, les mêmes règles devraient s'appliquer à tout milieu. Et en effet : la formule reliant la longueur d'onde, la fréquence et la vitesse est la même pour le son dans l'air, les rides sur l'eau, les vibrations d'une corde, un signal radio et un rayon X. Seuls les nombres changent.",
+    "Ensuite, cela devient encore plus intéressant. Les ondes savent faire ce que les particules ne savent pas : se superposer de manière à donner zéro. Deux ondes qui se rencontrent peuvent s'annuler mutuellement — et cette propriété deviendra plus tard l'argument principal dans le débat sur la nature de la lumière, puis se révélera pour les électrons, ce que personne n'attendait.",
+    "Le côté pratique est immense. Instruments de musique, échographie, sonar, prospection sismique, fibre optique, casques à réduction de bruit, radar — tout cela est l'application d'un même ensemble d'idées. Et presque toute technologie de mesure moderne aussi : pour savoir quelque chose à distance, il faut envoyer une onde et regarder ce qui revient."
+   ]
+  },
+  "history": {
+   "title": "Qui l'a créée",
+   "people": [
+    {
+     "name": "Pythagore",
+     "years": "≈570–495 av. J.-C.",
+     "what": "A découvert que les consonances agréables à l'oreille sont obtenues lorsque les longueurs des cordes sont dans des rapports de petits nombres entiers : deux pour un donne l'octave, trois pour deux la quinte. C'est le premier cas de l'histoire où un phénomène physique a été décrit par un nombre — et, en substance, le début de la physique mathématique."
+    },
+    {
+     "name": "Christiaan Huygens",
+     "years": "1629–1695",
+     "what": "A proposé un principe expliquant la propagation des ondes : chaque point du front d'onde devient lui-même une source d'ondes secondaires. On en déduit la réflexion, la réfraction et la diffraction. Il a défendu la nature ondulatoire de la lumière contre Newton — et il avait raison, bien que la reconnaissance ait mis cent ans à venir."
+    },
+    {
+     "name": "Thomas Young",
+     "years": "1773–1829",
+     "what": "A réalisé l'expérience des deux fentes et obtenu des franges là où, selon la théorie corpusculaire, on aurait dû avoir un éclairement uniforme. La lumière, en s'ajoutant à la lumière, produisait de l'obscurité — impossible à expliquer par des particules. Ses contemporains accueillirent son travail avec moquerie : l'autorité de Newton était trop grande."
+    },
+    {
+     "name": "Joseph Fourier",
+     "years": "1768–1830",
+     "what": "A démontré que toute oscillation périodique peut être décomposée en une somme de sinusoïdes simples. Cela a transformé la théorie des ondes en un outil universel : un signal complexe peut être étudié par parties. Tout le traitement moderne du son et des images repose sur cela."
+    },
+    {
+     "name": "Christian Doppler",
+     "years": "1803–1853",
+     "what": "A prédit le changement de fréquence lorsque la source est en mouvement. On l'a vérifié en 1845 d'une manière étonnante : on a placé des trompettistes dans un wagon ouvert et on leur a fait jouer une note, pendant que sur le quai des musiciens déterminaient à l'oreille la hauteur du son. L'effet a été confirmé."
+    }
+   ]
+  },
+  "map": {
+   "title": "Ce que vous étudierez",
+   "lead": "Trois paragraphes : d'abord l'onde progressive et son alphabet, puis l'onde stationnaire — et l'apparition de notes discrètes à partir d'un milieu continu, puis la superposition des ondes et l'effet Doppler. Un seul support, avec trois modes.",
+   "outcome": "Après avoir parcouru les trois, vous comprendrez pourquoi, dans une onde, rien n'est transporté sauf l'énergie et la forme ; d'où viennent les notes d'une corde et pourquoi elles forment une série ; comment deux ondes peuvent produire l'obscurité ; et pourquoi la tonalité de la sirène d'une voiture qui passe change."
+  },
+  "prereq": {
+   "title": "Ce qu'il faut savoir à l'avance",
+   "items": [
+    "Oscillations : ce que sont la période, la fréquence et l'amplitude. Thème sur les oscillations et la rotation, paragraphe sur la loi de Hooke.",
+    "Le sinus comme fonction du temps — pas formellement, mais comme forme d'oscillation.",
+    "Addition de grandeurs avec signe : deux ondes s'additionnent algébriquement, et moins par moins a ici un sens physique."
+   ],
+   "note": "La principale difficulté du thème est de s'habituer au fait qu'une onde a deux géométries indépendantes à la fois : dans le temps (période) et dans l'espace (longueur d'onde). On les confond constamment. Le support montre spécialement les deux : la longueur d'onde par une flèche sur la scène, la période sur le graphique en dessous."
+  },
+  "closing": {
+   "title": "Et l'essentiel",
+   "text": [
+    "L'appareil mathématique des ondes s'est avéré si efficace qu'il a survécu à tous les changements de théories physiques. Il décrit le son, la lumière, les rides, les tremblements de terre, et depuis 1926 — la matière : l'électron dans l'atome est une onde stationnaire, et ses niveaux discrets apparaissent exactement pour la même raison que les notes discrètes d'une corde.",
+    "Et pourtant, le thème contient la plus ancienne question non résolue de la physique classique. La turbulence — ce qui se passe avec l'eau dans un courant rapide ou avec l'air derrière une aile — résiste encore à la description, bien que les équations soient connues depuis près de deux cents ans."
+   ],
+   "link": {
+    "href": "/frontier.html#computability",
+    "text": "Questions ouvertes : où s'arrête le calculable"
+   }
+  },
+  "lessons": [
+   {
+    "id": "01-travelling",
+    "title": "Qu'est-ce qu'une onde",
+    "sub": "C'est la perturbation qui se déplace, pas la matière",
+    "law": "v = λf",
+    "model": "wave"
+   },
+   {
+    "id": "02-standing",
+    "title": "Ondes stationnaires et son",
+    "sub": "Pourquoi une corde a des notes et pas n'importe quelles fréquences",
+    "law": "Condition d'onde stationnaire",
+    "model": "wave"
+   },
+   {
+    "id": "03-interference",
+    "title": "Interférence et Doppler",
+    "sub": "Quand les ondes s'additionnent et quand elles s'annulent",
+    "law": "Principe de superposition",
+    "model": "wave"
+   }
+  ]
+ }
 }

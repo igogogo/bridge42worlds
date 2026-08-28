@@ -552,5 +552,143 @@
     "وأخيرًا، لا تضمن الطريقة إجابة: المسائل القابلة للحل بدقة قليلة، ويُحسب كل شيء تقريبًا بشكل تقريبي. لكنها تضمن أنك ستعرف من أين تبدأ — وهذا هو أصعب جزء في مسألة غير مألوفة."
    ]
   }
+ },
+ "fr": {
+  "title": "La méthode de la physique théorique",
+  "subtitle": "Leçon 1 · Modèle, équation, solution — une seule recette pour tout le cours",
+  "lead": "Après avoir parcouru quatorze thèmes, il est facile de penser que la physique est un ensemble de formules différentes pour différents cas. En réalité, nous avons fait la même chose tout ce temps, seulement avec des objets différents. Décortiquons cette action.",
+  "blocks": [
+   {
+    "h": "Une recette répétée quatorze fois",
+    "kicker": "ce qui se cachait derrière le contenu",
+    "text": [
+     "Landau et Lifchitz ont écrit un cours de physique théorique en dix volumes, et ce qui frappe n'est pas le volume mais l'uniformité. Mécanique, théorie des champs, mécanique quantique, hydrodynamique, physique des milieux continus — partout le même ordre d'actions. Le sujet change, la méthode ne change pas.",
+     "Voici l'ordre. Premièrement : choisir un modèle — décider ce qui est essentiel dans le problème et ce dont on peut négliger. Deuxièmement : écrire une équation reliant la grandeur à la rapidité de son changement. Troisièmement : résoudre cette équation, c'est-à-dire trouver comment la grandeur dépend du temps ou de la coordonnée. Quatrièmement : vérifier la solution dans des cas limites et la confronter à l'expérience.",
+     "Tout ce que nous avons examiné s'inscrit dans ces quatre étapes. La différence réside uniquement dans la grandeur qui figure dans l'équation et dans ce qui contrôle son changement."
+    ],
+    "image": {
+     "h": "Image : recette et ingrédients",
+     "text": [
+      "Imaginez que vous ayez une seule recette — disons, une cuisson à l'étouffée. Les ingrédients changent à chaque fois : viande, légumes, poisson. Les actions sont les mêmes : couper, faire revenir, mouiller, laisser mijoter.",
+      "La physique théorique est organisée de la même manière. La recette : modèle → équation → solution → vérification. Les ingrédients : pendule, gaz, champ, électron, noyau. Celui qui n'a appris que les plats recommence à chaque fois. Celui qui a compris la recette aborde tout nouvel ingrédient avec assurance."
+     ]
+    }
+   },
+   {
+    "h": "Qu'est-ce qu'une équation différentielle",
+    "kicker": "le concept le plus important de toute la physique théorique",
+    "text": [
+     "Une équation ordinaire demande : à quoi est égal un nombre ? Une équation différentielle demande autrement : quelle fonction se comporte de cette façon ? C'est le passage de la recherche d'un nombre à la recherche d'une loi de comportement.",
+     "Prenons l'exemple le plus simple. L'affirmation « la vitesse de croissance de l'argent sur un compte est proportionnelle à la somme disponible » est déjà une équation différentielle. Elle s'écrit $dN/dt = kN$, où $dN/dt$ désigne la rapidité de changement. La résoudre signifie trouver comment la somme dépend du temps. La réponse sera une exponentielle.",
+     "Remarquez la structure : à gauche se trouve la vitesse de changement de la grandeur, à droite ce dont cette vitesse dépend. L'équation ne dit pas à quoi la grandeur est égale ; elle dit où elle se dirige à chaque instant. Ensuite, la solution trace le chemin pas à pas."
+    ],
+    "eq": "$\\frac{dN}{dt} = kN \\;\\Longrightarrow\\; N(t) = N_0 e^{kt}$",
+    "after": [
+     "L'ordre d'une équation est la dérivée la plus élevée qu'elle contient. Du premier ordre signifie que pour une réponse univoque, une condition initiale est nécessaire : d'où l'on part. Du second — deux : d'où l'on part et à quelle vitesse. C'est de là que vient l'espace des états dans le sujet d'introduction : sa dimension est égale à l'ordre de l'équation."
+    ],
+    "image": {
+     "h": "Image : carte des pentes et chemin",
+     "text": [
+      "Imaginez un terrain vallonné où à chaque point est dessinée une flèche — où roulerait une balle. C'est cela une équation différentielle : une règle qui donne une direction en chaque point.",
+      "La solution est une trajectoire concrète de la balle. Placez-la à un endroit — elle roulera ainsi, à un autre — autrement. L'équation est unique, les solutions sont infinies, et c'est la condition initiale qui choisit entre elles. Voilà pourquoi dans les problèmes on demande toujours où se trouvait le corps à l'instant initial : sans cela, il y a des flèches, mais pas de chemin."
+     ]
+    }
+   },
+   {
+    "h": "Comment on les résout en réalité",
+    "kicker": "quatre techniques qui couvrent presque tout",
+    "text": [
+     "La première technique est la séparation des variables. Si l'on parvient à rassembler tout ce qui dépend de la grandeur cherchée à gauche, et tout ce qui dépend du temps à droite, le problème se réduit au calcul de deux intégrales. C'est ainsi que se résolvent la loi de la désintégration radioactive, le refroidissement d'un corps et la décharge d'un condensateur — ils sont tous du même type.",
+     "La deuxième est de deviner la solution d'après la forme de l'équation. Si la dérivée ramène la même fonction, la réponse est une exponentielle. Si la dérivée seconde ramène la fonction avec un signe moins, la réponse est un sinus : c'est ainsi que se résout l'équation des oscillations, et c'est pourquoi le sinus se rencontre partout, du pendule au puits quantique.",
+     "La troisième est le développement en solutions simples. Une action complexe est décomposée en une somme de sinus, on trouve la réponse à chacun séparément, puis on les additionne. C'est la méthode de Fourier, et elle fonctionne tant que le système est linéaire.",
+     "La quatrième est la résolution numérique. On divise le temps en petits pas et à chaque pas on avance le long de la flèche. C'est ainsi que calculent tous les bancs d'essai de ce cours : orbite d'une planète, collision de boules, particule dans un champ magnétique. Une solution exacte peut ne pas exister du tout, mais une solution numérique existe toujours."
+    ],
+    "note": "Il est important de comprendre que les problèmes exactement résolubles en physique sont extrêmement rares. Le problème à deux corps se résout, celui à trois — déjà non. L'atome d'hydrogène se résout, l'hélium — non. Pratiquement toute la physique théorique moderne est l'art des approximations : trouver un petit paramètre, développer selon lui, garder les premiers termes. C'est pourquoi dans le sujet d'introduction nous avons accordé tant d'attention à l'estimation de la petitesse."
+   },
+   {
+    "h": "Le même type d'équation — dans chaque section",
+    "kicker": "ici le cours se rassemble en une image unifiée",
+    "text": [
+     "Et maintenant, l'observation principale de toute la leçon. Il y a beaucoup d'équations en physique, mais par essence il n'y en a que quelques types, et chacun se répète de section en section.",
+     "Le premier type : la vitesse de changement est proportionnelle à la grandeur elle-même. La réponse est une exponentielle. C'est ainsi que fonctionnent la désintégration radioactive, le refroidissement du thé, la décharge d'un condensateur, l'amortissement des oscillations, l'absorption de la lumière dans un milieu, la multiplication des neutrons dans un réacteur. Six phénomènes différents et une seule équation.",
+     "Le deuxième type : la dérivée seconde est proportionnelle à la grandeur avec un signe moins. La réponse est un sinus. C'est ainsi que fonctionnent le pendule, la masse sur un ressort, le circuit oscillant, l'onde sonore, l'onde lumineuse, l'électron dans l'atome. Nous les avons tous étudiés séparément, mais l'équation était une.",
+     "Le troisième type : la vitesse de changement est proportionnelle à la courbure de la distribution. La réponse est l'étalement. C'est ainsi que fonctionnent la conduction thermique, la diffusion, la propagation d'une impureté, l'infiltration de pression dans un réservoir. Tout ce qui se répand avec le temps obéit à une seule équation.",
+     "Le quatrième type : la dérivée seconde par rapport au temps est proportionnelle à la dérivée seconde par rapport à la coordonnée. La réponse est une onde progressive. Corde, son, lumière, ondes sismiques, ondes gravitationnelles — une seule écriture."
+    ],
+    "image": {
+     "h": "Image : quatre mélodies sur différents instruments",
+     "text": [
+      "En écoutant un orchestre, une oreille inexpérimentée entend un chaos de nombreux sons. Une oreille expérimentée reconnaît : voici le thème principal aux violons, voici le même aux violoncelles une octave plus bas, voici une interprétation par la flûte.",
+      "Avec les équations, c'est la même chose. Exponentielle, sinus, étalement, onde — quatre thèmes. Les sections de la physique sont différents instruments. Celui qui a appris à reconnaître le thème entend dans un nouveau problème quelque chose de familier et comprend ce qu'il faut attendre de la réponse, avant même de commencer à calculer."
+     ]
+    },
+    "after": [
+     "De là découle un conseil pratique utilisé par les professionnels. Face à un problème inconnu, ne vous précipitez pas pour chercher une formule — écrivez d'abord ce qui dépend de quoi, et regardez à quel type familier cela ressemble. Dans neuf cas sur dix, vous reconnaîtrez l'un des quatre et saurez immédiatement si c'est une exponentielle, un sinus ou un étalement."
+    ]
+   },
+   {
+    "h": "La physique se développe en spirale",
+    "kicker": "une régularité visible seulement de loin",
+    "text": [
+     "En parcourant le cours, il est difficile de ne pas remarquer : les mêmes débats se répètent, mais à un nouveau niveau. La lumière est-elle une onde ou une particule ? Huygens dit onde, Newton dit particule, Young prouve l'onde, Einstein ramène la particule, et finalement il s'avère que les deux sont vrais, et la question était mal posée.",
+     "Cela arrive constamment. D'abord une affirmation. Puis sa négation, souvent convaincante. Ensuite — non pas la victoire d'un camp, mais le passage à un niveau où les deux s'avèrent être des cas particuliers de quelque chose de plus général. Et au nouveau niveau, le débat recommence, mais à propos d'autre chose.",
+     "La mécanique de Newton affirmait le temps absolu. La théorie de la relativité l'a nié. Le résultat n'est pas que Newton se trompait : sa mécanique est restée valable comme cas limite, et le temps absolu s'est avéré une bonne approximation à faibles vitesses. L'ancien n'est pas rejeté, mais inclus dans le nouveau avec indication des limites.",
+     "Il en va de même pour la continuité et la discrétion. La matière était considérée comme continue — les atomistes ont objecté — les atomes ont gagné, et la matière est devenue discrète. Ensuite, il s'est avéré que les particules discrètes sont décrites par des fonctions d'onde continues. Puis — que les champs aussi se quantifient. Le débat entre le continu et le discret dure depuis trois millénaires et à chaque fois atteint un nouveau tour."
+    ],
+    "image": {
+     "h": "Image : escalier en colimaçon",
+     "text": [
+      "En montant un escalier en colimaçon, vous vous retrouvez régulièrement au-dessus du même point du sol qu'auparavant. Il semble que vous tourniez en rond.",
+      "Mais vous êtes plus haut. La vue par la fenêtre est la même et en même temps différente : on voit plus loin, et l'on comprend ce qui n'était pas visible à l'étage inférieur.",
+      "La physique se déplace de la même manière. La question « de quoi est faite la matière » a été posée par Démocrite, Dalton, Rutherford, Gell-Mann — une question, quatre étages. Chaque réponse était vraie pour son étage et est devenue une approximation au suivant."
+     ]
+    },
+    "after": [
+     "D'où une conclusion pratique pour celui qui apprend. Il ne faut pas percevoir une nouvelle théorie comme une vérité définitive, mais il ne faut pas non plus penser que puisque tout change, on ne peut rien savoir. Le troisième est vrai : chaque théorie décrit précisément son cercle de phénomènes et indique où il s'arrête. Le savoir s'accumule, il n'est pas annulé.",
+     "Et encore. Les endroits les plus productifs en physique sont ceux où la contradiction est aiguë. La catastrophe ultraviolette, l'incompatibilité de Maxwell avec Galilée, le paradoxe de l'information — tous semblaient être des incohérences ennuyeuses, mais se sont révélés être des entrées vers l'étage suivant. Une contradiction en physique n'est pas une erreur, mais un indicateur."
+    ],
+    "open": [
+     "Il faut être honnête : l'idée même que le développement se fait en spirale est une manière de voir, pas une loi de la nature. Elle décrit bien le passé et ne prédit rien à l'avance : on ne sait pas si la contradiction actuelle entre la mécanique quantique et la gravité se résoudra par une synthèse, comme auparavant, ou exigera quelque chose dont nous n'avons pas encore de nom.",
+     "Certains physiciens considèrent ces généralisations comme inutiles et conseillent simplement de calculer. D'autres pensent que comprendre les régularités du développement de la science aide à choisir sur quoi travailler. Le débat entre eux dure depuis longtemps et ne finira probablement pas."
+    ]
+   },
+   {
+    "h": "Landau et son minimum théorique",
+    "kicker": "comment on enseignait cela",
+    "text": [
+     "Lev Landau a conçu un système de formation des théoriciens qu'il appelait le minimum théorique. C'était un examen en neuf sections, qu'il fallait passer personnellement devant lui. En trente ans, quarante-trois personnes l'ont réussi — alors que des centaines ont tenté.",
+     "Il est remarquable que dans le minimum théorique il n'y avait presque pas de faits. On vérifiait la capacité à calculer des intégrales, à résoudre des équations et, surtout, à estimer : ce qui est essentiel ici, ce que l'on peut écarter, quel ordre de grandeur on attend pour la réponse. Landau pensait que la physique ne peut pas être apprise, on ne peut que savoir s'en servir.",
+     "Le cours en dix volumes, écrit par lui avec Evgueni Lifchitz, est organisé selon le même principe. On racontait une blague sur ce duo : dans le cours il n'y a pas un mot de Landau et pas une pensée de Lifchitz ; elle est injuste envers les deux, mais rend bien la répartition des rôles : la conception et la méthode appartenaient à Landau, l'exposition à Lifchitz."
+    ],
+    "quote": {
+     "text": "La méthode est plus importante que la découverte, car une méthode de recherche correcte conduira à de nouvelles découvertes encore plus précieuses.",
+     "who": "Lev Landau"
+    },
+    "after": [
+     "Il faut aussi parler du destin. En 1938, Landau fut arrêté pour activité antisoviétique ; il passa un an en prison et fut libéré grâce à une lettre personnelle de Piotr Kapitsa à Staline, dans laquelle Kapitsa le prenait sous caution. Vingt-quatre ans plus tard, Landau fut victime d'un très grave accident de voiture, après lequel il ne put plus travailler. Le prix Nobel de 1962 pour la théorie de la superfluidité lui fut remis à l'hôpital."
+    ]
+   },
+   {
+    "h": "Pourquoi comprendre la méthode, pas seulement les résultats",
+    "kicker": "conclusion pratique",
+    "text": [
+     "Les formules vieillissent et sont affinées, la méthode non. La mécanique de Newton a été corrigée par la théorie de la relativité, mais la démarche est restée la même : choisir un modèle, écrire une équation, résoudre, vérifier les limites. La mécanique quantique a remplacé les trajectoires par des fonctions d'onde, mais l'ordre des actions est resté entièrement le même.",
+     "Deuxièmement. La méthode se transpose hors de la physique. L'équation de croissance exponentielle décrit de la même manière la désintégration des noyaux, la multiplication des bactéries, la propagation d'une épidémie et les intérêts composés. L'équation de diffusion décrit à la fois la propagation de la chaleur et l'étalement d'un prix sur le marché. Celui qui a maîtrisé la technique en physique la reconnaît dans un domaine étranger à demi-mot.",
+     "Et troisièmement, le plus important pour celui qui apprend. La méthode donne la possibilité d'aborder un problème que l'on n'a jamais vu. Pour un problème inconnu, on ne peut pas se souvenir d'une formule, mais on peut toujours se demander « qu'est-ce qui change ici et de quoi dépend la vitesse de ce changement »."
+    ],
+    "now": [
+     "Aujourd'hui, aux quatre techniques classiques s'ajoute une cinquième — l'apprentissage automatique. Les réseaux de neurones trouvent des solutions d'équations là où les méthodes numériques butent sur la dimensionnalité : dans les problèmes à plusieurs corps, en physique des plasmas, dans la prédiction de la structure des protéines. Ce n'est pas un remplacement de la méthode, mais une nouvelle façon d'exécuter la troisième étape.",
+     "Le débat sur la question de savoir si cela compte comme une compréhension est ouvert. Le réseau donne une réponse, mais pas une explication, et la physique traditionnellement valorise précisément l'explication. Comment concilier l'un avec l'autre, personne ne le sait encore."
+    ]
+   }
+  ],
+  "closing": {
+   "title": "Ce qu'il faut retenir de cette leçon",
+   "text": [
+    "La physique n'est pas un ensemble de formules, mais une méthode qui se répète : choisir un modèle, écrire l'équation du taux de variation, la résoudre, vérifier les limites de validité. Tout le contenu du cours est l'application de cette méthode à différents objets.",
+    "Les équations sont en réalité peu nombreuses. L'exponentielle, le sinus, la diffusion et l'onde couvrent la grande majorité des problèmes que vous rencontrerez. Reconnaître le type d'équation est plus important que de mémoriser des solutions particulières.",
+    "Et enfin, la méthode ne garantit pas la réponse : il y a peu de problèmes exactement solubles, et presque tout se calcule de manière approchée. Mais elle garantit que vous saurez par où commencer — et c'est ce qu'il y a de plus difficile dans un problème inconnu."
+   ]
+  }
  }
 }

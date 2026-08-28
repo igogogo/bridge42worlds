@@ -19,37 +19,16 @@
   ],
   "examples_from_articles": [
    {
-    "id": "2607.13930",
-    "date": "2026-07-15",
+    "id": "2607.17223",
+    "date": "2026-07-19",
     "title": {
-     "ru": "Симфония нейтронной звезды: ИИ-агент играет партитуру плотной материи",
-     "en": "Symphony of a Neutron Star: AI Agent Plays the Score of Dense Matter",
-     "es": "Sinfonía de la estrella de neutrones: un agente de IA toca la partitura de la materia densa",
-     "ar": "سيمفونية النجم النيوتروني: وكيل الذكاء الاصطناعي يعزف نوتة المادة الكثيفة"
+     "ru": "Почему вращающаяся чёрная дыра не терпит постоянства",
+     "en": "Why a Rotating Black Hole Can't Stand Still",
+     "es": "Por qué un agujero negro en rotación no tolera la constancia",
+     "ar": "لماذا لا يحتمل الثقب الأسود الدوّار الثبات",
+     "fr": "Pourquoi un trou noir en rotation ne supporte pas la constance"
     },
-    "why": "neutron_star, pulsar"
-   },
-   {
-    "id": "2607.12722",
-    "date": "2026-07-14",
-    "title": {
-     "ru": "Слушая звёзды: ИИ-дешифровщик мгновенно восстанавливает уравнение состояния нейтронных звёзд",
-     "en": "Listening to the Stars: AI Decoder Instantly Reconstructs the Neutron Star Equation of State",
-     "es": "Escuchando las estrellas: un descifrador de IA restaura instantáneamente la ecuación de estado de las estrellas de neutrones",
-     "ar": "بالإنصات إلى النجوم: مفكك تشفير ذكي يعيد بناء معادلة حالة النجوم النيوترونية فوراً"
-    },
-    "why": "neutron_star, pulsar"
-   },
-   {
-    "id": "2607.09468",
-    "date": "2026-07-10",
-    "title": {
-     "ru": "Тайный ветер нейтронных звёзд: как нейтроны подгоняют магнитные вихри",
-     "en": "The Hidden Wind of Neutron Stars: How Neutrons Propel Magnetic Vortices",
-     "es": "El viento secreto de las estrellas de neutrones: cómo los neutrones empujan los vórtices magnéticos",
-     "ar": "الريح الخفية للنجوم النيوترونية: كيف تدفع النيوترونات الدوامات المغناطيسية"
-    },
-    "why": "neutron_star, pulsar"
+    "score": 0.607
    }
   ]
  },
@@ -179,7 +158,8 @@
     {
      "what": "Радиан — почему угол измеряют длиной",
      "why": "Радиан есть угол, при котором длина дуги равна радиусу. Такое определение кажется странным, пока не заметишь: только в радианах работают простые формулы $s = R\\varphi$ и $v = \\omega R$, и только в радианах производная синуса равна косинусу без лишних множителей. Градусы — историческая условность вавилонян; радиан — естественная мера, встроенная в саму геометрию круга.",
-     "latex": "\\varphi\\,[\\text{рад}] = \\frac{s}{R}, \\qquad 2\\pi\\ \\text{рад} = 360^\\circ"
+     "latex": "\\varphi\\,[\\text{рад}] = \\frac{s}{R}, \\qquad 2\\pi\\ \\text{рад} = 360^\\circ",
+     "kit": "polar"
     },
     {
      "what": "Подобие треугольников как физический инструмент",
@@ -1499,7 +1479,364 @@
    ]
   }
  },
- "laws": [
-  "equivalence_principle"
- ]
+ "fr": {
+  "title": "Rotation et référentiels",
+  "subtitle": "Paragraphe 1 · Pourquoi des forces sans source apparaissent dans un monde en rotation",
+  "intro": [
+   "Commençons par une question qui semble enfantine, mais qui touche aux fondements de la physique. Vous êtes dans un bus, il freine brusquement — vous êtes projeté vers l'avant. Quelle force vous a poussé ?",
+   "La réponse est déconcertante : aucune. Personne ne vous a poussé. Vous avez simplement continué à vous déplacer par inertie, tandis que le bus ralentissait sous vous. Mais la sensation de force est bien réelle, le corps la ressent, les instruments la mesurent. Que faire d'une force que l'on ressent mais qui n'a pas de source ?",
+   "C'est ici que la physique fait un pas, plus important que bien des formules : elle reconnaît que la description dépend du point de vue. Il existe des référentiels où les lois de Newton s'appliquent à l'état pur — on les appelle inertiels. Et il y a tous les autres, où l'on doit introduire des forces fictives pour que les lois s'accordent. En comprenant cela, nous comprendrons aussi la rotation — et nous y découvrirons une oscillation."
+  ],
+  "standNote": "Sur le stand — un corps sur un disque en rotation. À gauche, vous voyez la scène vue par un observateur immobile : le corps se déplace en cercle, et la corde le tire vers le centre. À droite — la même scène vue par un observateur assis sur le disque : le corps est au repos, et pour l'expliquer, il faut ajouter une force centrifuge dirigée vers l'extérieur. Un même mouvement, deux descriptions. Notez le graphique en bas : la projection de la rotation sur un axe est exactement un sinus — c'est un pont vers le paragraphe suivant.",
+  "formula": {
+   "name": "Accélération centripète",
+   "latex": "a_{\\text{c}} = \\frac{v^{2}}{R} = \\omega^{2} R",
+   "alsoKnown": "Accélération lors d'un mouvement circulaire uniforme",
+   "authors": [
+    {
+     "who": "Christiaan Huygens",
+     "year": "1659",
+     "what": "le premier à avoir dérivé l'expression de la force centrifuge pour un mouvement circulaire — 28 ans avant les Principia de Newton, dans un ouvrage sur les horloges à pendule"
+    },
+    {
+     "who": "Isaac Newton",
+     "year": "1687",
+     "what": "a intégré le mouvement circulaire dans la dynamique générale et a montré que la Lune « tombe » sur la Terre pour la même raison qu'une pomme"
+    },
+    {
+     "who": "Gaspard-Gustave Coriolis",
+     "year": "1835",
+     "what": "a décrit la deuxième force d'inertie qui apparaît lors d'un mouvement à l'intérieur d'un système en rotation — elle explique l'enroulement des cyclones et la déviation des projectiles"
+    }
+   ],
+   "story": "Huygens a obtenu la loi de la force centrifuge en travaillant sur les horloges : il devait comprendre comment se comporte une masse sur une tige en rotation. Il a dérivé le résultat en 1659, mais ne l'a publié qu'en 1673 — et encore, sous forme de théorèmes sans démonstrations. Newton est arrivé au même résultat indépendamment, et c'est précisément l'unification du mouvement circulaire avec la loi de la gravitation qui lui a permis de faire le pas décisif : montrer que la Lune est un projectile qui tombe sur la Terre, mais qui la rate parce qu'il se déplace trop vite latéralement.",
+   "symbols": [
+    {
+     "sym": "ac",
+     "latex": "a_{\\text{c}}",
+     "what": "accélération centripète",
+     "unit": "m/s²",
+     "note": "dirigée vers le centre du cercle ; elle ne change pas la grandeur de la vitesse, mais sa direction"
+    },
+    {
+     "sym": "v",
+     "latex": "v",
+     "what": "vitesse linéaire",
+     "unit": "m/s",
+     "note": "constante en module lors d'une rotation uniforme, mais le vecteur tourne en permanence"
+    },
+    {
+     "sym": "R",
+     "latex": "R",
+     "what": "rayon du cercle",
+     "unit": "m",
+     "note": "plus le virage est serré, plus l'accélération requise est grande"
+    },
+    {
+     "sym": "ω",
+     "latex": "\\omega",
+     "what": "vitesse angulaire",
+     "unit": "rad/s",
+     "note": "nombre de radians parcourus par le rayon par seconde ; liée à la vitesse linéaire par v = ωR"
+    },
+    {
+     "sym": "T",
+     "latex": "T",
+     "what": "période de révolution",
+     "unit": "s",
+     "note": "temps d'un tour complet ; ω = 2π/T"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Dérivation rigoureuse",
+   "lead": "D'abord, nous allons comprendre pourquoi une rotation uniforme nécessite une accélération, puis nous obtiendrons sa valeur géométriquement, et enfin nous nous pencherons sur les forces qui « n'existent pas ».",
+   "steps": [
+    {
+     "text": "Le principal malentendu : lors d'une rotation uniforme, la vitesse est constante en grandeur, mais PAS constante en tant que vecteur — elle tourne continuellement. Or, l'accélération est par définition le taux de variation du vecteur vitesse. Il y a donc bien une accélération, même si le compteur de vitesse affiche la même valeur.",
+     "latex": "|\\vec{v}| = \\text{const}, \\quad \\text{mais} \\quad \\vec{v} \\neq \\text{const} \\;\\Longrightarrow\\; \\vec{a} \\neq 0",
+     "figure": "circmotion",
+     "figCaption": "La vitesse est tangente et tourne continuellement — c'est cela, l'accélération."
+    },
+    {
+     "text": "Trouvons sa valeur. Pendant un temps court, le corps parcourt un arc d'angle $\\Delta\\varphi$, et le vecteur vitesse tourne exactement du même angle. Le triangle construit sur les vecteurs vitesse est semblable au triangle construit sur les rayons — d'où la proportion.",
+     "latex": "\\frac{|\\Delta \\vec{v}|}{v} = \\frac{|\\Delta \\vec{r}|}{R} = \\Delta\\varphi",
+     "figure": "vectriangle",
+     "figCaption": "Le triangle des vitesses est semblable au triangle des déplacements — la clé de toute la dérivation."
+    },
+    {
+     "text": "Nous divisons le changement de vitesse par le temps et passons à la limite. En tenant compte du fait que le déplacement pendant le temps $\\Delta t$ est égal à $v\\,\\Delta t$, nous obtenons l'accélération recherchée. Elle est dirigée vers le centre — c'est pourquoi on l'appelle centripète.",
+     "latex": "a = \\frac{|\\Delta\\vec{v}|}{\\Delta t} = \\frac{v\\,|\\Delta\\vec{r}|}{R\\,\\Delta t} = \\frac{v^{2}}{R}",
+     "figure": "centripetal",
+     "figCaption": "L'accélération pointe strictement vers le centre, perpendiculairement à la vitesse."
+    },
+    {
+     "text": "Avec la vitesse angulaire, l'expression devient encore plus simple. En substituant $v = \\omega R$, on voit que l'accélération croît comme le carré de la fréquence de rotation — c'est pourquoi une centrifugeuse rapide développe des surcharges énormes avec un rayon modeste.",
+     "latex": "a_{\\text{c}} = \\frac{(\\omega R)^{2}}{R} = \\omega^{2} R",
+     "figure": "omega",
+     "figCaption": "Doublez la fréquence de rotation — l'accélération quadruple."
+    },
+    {
+     "text": "Maintenant, une étape philosophiquement importante. Un observateur au sol explique le mouvement simplement : il y a la force de tension de la corde, elle crée l'accélération centripète, les lois de Newton sont vérifiées. Un tel référentiel est dit inertiel — dans celui-ci, un corps sans force se déplace uniformément et en ligne droite.",
+     "latex": "\\text{Référentiel inertiel :} \\quad \\sum \\vec{F} = m\\vec{a} \\;\\; \\text{est vérifiée telle quelle}",
+     "figure": "inertialframe",
+     "figCaption": "Observateur inertiel : il y a une force réelle, il y a une accélération, tout concorde."
+    },
+    {
+     "text": "Mais un observateur assis sur le disque lui-même voit autre chose : le corps devant lui est immobile. Mais la corde est tendue ! Il y a une force, mais pas d'accélération — la deuxième loi est violée. Pour la sauver, il faut ajouter à l'équation une autre force, dirigée vers l'extérieur. C'est la force centrifuge (ou force d'inertie centrifuge).",
+     "latex": "\\text{Référentiel non inertiel :} \\quad \\vec{T} + \\vec{F}_{\\text{cf}} = 0, \\qquad F_{\\text{cf}} = m\\omega^{2}R",
+     "figure": "rotframe",
+     "figCaption": "L'observateur en rotation est obligé d'introduire une force sans source."
+    },
+    {
+     "text": "La force d'inertie n'a pas de corps source et pas de partenaire selon la troisième loi — elle n'existe qu'à cause du choix du référentiel. Cela ne signifie pas qu'elle est « irréelle » : dans son référentiel, elle agit tout à fait réellement, déforme les corps et projette l'eau dans le tambour d'une machine à laver. Elle est simplement le prix à payer pour la commodité de la description.",
+     "latex": "\\vec{F}_{\\text{in}} = -m\\vec{a}_{\\text{référentiel}}",
+     "figure": "fictitious",
+     "figCaption": "La force d'inertie est proportionnelle à l'accélération du référentiel lui-même et dirigée en sens inverse."
+    }
+   ],
+   "plate": "a_{\\text{c}} = \\dfrac{v^{2}}{R} = \\omega^{2} R",
+   "plateCap": "La rotation uniforme est une chute continue vers le centre qui le rate toujours. C'est ainsi que la Lune orbite autour de la Terre.",
+   "note": "De là, il n'y a qu'un pas vers une idée profonde. Assis dans une cabine fermée, vous ne pouvez pas distinguer la gravité de la force d'inertie d'une cabine en accélération : toutes deux vous pressent contre le sol et sont proportionnelles à la masse. Einstein a élevé cette impossibilité au rang de principe d'équivalence et a construit dessus la relativité générale, où la gravitation a cessé d'être une force pour devenir une courbure de l'espace-temps. La question « quelle force m'a poussé dans le bus » mène, si l'on tire suffisamment sur le fil, directement aux trous noirs."
+  },
+  "math": {
+   "title": "Les mathématiques nécessaires ici",
+   "items": [
+    {
+     "what": "Le radian — pourquoi on mesure un angle par une longueur",
+     "why": "Le radian est l'angle pour lequel la longueur de l'arc est égale au rayon. Cette définition semble étrange jusqu'à ce qu'on remarque : ce n'est qu'en radians que les formules simples $s = R\\varphi$ et $v = \\omega R$ fonctionnent, et ce n'est qu'en radians que la dérivée du sinus est égale au cosinus sans facteurs supplémentaires. Les degrés sont une convention historique des Babyloniens ; le radian est une mesure naturelle, intégrée à la géométrie même du cercle.",
+     "latex": "\\varphi\\,[\\text{rad}] = \\frac{s}{R}, \\qquad 2\\pi\\ \\text{rad} = 360^\\circ"
+    },
+    {
+     "what": "La similitude des triangles comme outil physique",
+     "why": "Dans la dérivation, nous avons égalé les rapports des côtés de deux triangles — celui des vecteurs vitesse et celui des rayons. C'est une démarche typique de la physique classique : remplacer un calcul difficile par une similitude géométrique. Newton, dans les Principia, prouvait presque tout de cette manière, sans analyse — ses preuves géométriques sont aujourd'hui plus difficiles à lire que les calculs modernes.",
+     "latex": "\\frac{\\Delta v}{v} = \\frac{\\Delta r}{R}"
+    },
+    {
+     "what": "La projection d'une rotation — déjà un sinus",
+     "why": "Si un point parcourt uniformément un cercle de rayon $A$ avec une vitesse angulaire $\\omega$, alors sa coordonnée le long d'un axe varie comme $A\\cos\\omega t$. Autrement dit, une rotation uniforme projetée sur une droite donne exactement une oscillation harmonique. Nous y reviendrons dans le paragraphe suivant — et nous verrons que ce n'est pas une analogie, mais une identité.",
+     "latex": "x(t) = A\\cos\\omega t, \\qquad y(t) = A\\sin\\omega t"
+    }
+   ]
+  },
+  "example": {
+   "title": "Exemple avec des nombres",
+   "lead": "Estimons la surcharge dans une centrifugeuse — et comprenons du même coup pourquoi on entraîne les cosmonautes de cette façon.",
+   "given": "La cabine d'une centrifugeuse tourne sur une trajectoire circulaire de rayon $8$ m, effectuant un tour complet en $4$ secondes. Trouver l'accélération centripète et la comparer à $g = 10$ m/s².",
+   "law": "$a_{\\text{cent}} = \\omega^{2}R$, où $\\omega = 2\\pi/T$",
+   "solution": [
+    {
+     "text": "On trouve la vitesse angulaire : un tour complet correspond à $2\\pi$ radians.",
+     "latex": "\\omega = \\frac{2\\pi}{T} = \\frac{6{,}28}{4} \\approx 1{,}57\\ \\text{rad/s}"
+    },
+    {
+     "text": "On remplace dans la formule de l'accélération.",
+     "latex": "a = \\omega^{2}R = 1{,}57^{2} \\cdot 8 \\approx 2{,}47 \\cdot 8"
+    },
+    {
+     "text": "On calcule et on convertit en unités de g.",
+     "latex": "a \\approx 19{,}7\\ \\text{m/s}^2 \\approx 2\\,g"
+    }
+   ],
+   "answer": "L'accélération est d'environ $20$ m/s², soit une surcharge d'environ $2g$",
+   "check": "C'est plausible : lors d'une telle rotation, une personne se sent deux fois plus lourde. Remarquez comment l'effet augmente fortement avec la fréquence : en réduisant la période de moitié, à 2 secondes, on obtient déjà $8g$ — la limite pour un pilote entraîné. Le carré dans la formule agit ici sans pitié."
+  },
+  "constants": {
+   "title": "Grandeurs de ce paragraphe",
+   "lead": "Ici apparaissent les grandeurs angulaires — un second langage pour décrire le mouvement, indispensable aussi bien pour les oscillations que pour les ondes et la mécanique quantique.",
+   "items": [
+    {
+     "sym": "ω",
+     "latex": "\\omega",
+     "name": "Vitesse angulaire",
+     "value": "ω = 2π/T",
+     "unit": "rad / s",
+     "why": "Combien de radians de rotation par seconde. Grâce à elle, toutes les formules de rotation deviennent plus simples, et le lien avec les oscillations devient évident : la même lettre désigne la fréquence angulaire des oscillations, et ce n'est pas une coïncidence.",
+     "mnemo": "Un tour complet correspond à 2π radians, donc dans la formule apparaît toujours 6,28 divisé par la période."
+    },
+    {
+     "sym": "T",
+     "latex": "T",
+     "name": "Période de révolution",
+     "value": "T = 2π/ω",
+     "unit": "s",
+     "why": "Le temps d'un tour complet ou d'une oscillation complète. Son inverse est la fréquence, mesurée en hertz : combien de tours par seconde."
+    },
+    {
+     "sym": "rad",
+     "latex": "\\text{rad}",
+     "name": "Radian",
+     "value": "1 rad ≈ 57,3°",
+     "unit": "sans dimension",
+     "why": "Formellement sans dimension, car c'est le rapport de la longueur de l'arc au rayon — des mètres divisés par des mètres. C'est pourquoi on peut « perdre » les radians dans les dimensions : rad/s et s⁻¹ ont la même dimension, bien que le sens soit différent.",
+     "mnemo": "Un cercle complet — 2π ≈ 6,28 radians. Un radian vaut un peu moins de 60 degrés."
+    },
+    {
+     "sym": "g",
+     "latex": "g",
+     "dictKey": "g",
+     "name": "Accélération de la pesanteur",
+     "value": "9,81",
+     "unit": "m / s²",
+     "why": "Ici, elle est utilisée comme unité de surcharge : l'accélération d'une centrifugeuse est habituellement exprimée en fractions de g, car c'est à elle que l'organisme compare la charge."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "Une rotation uniforme exige une accélération, car le vecteur vitesse change continuellement de direction. Dans un référentiel inertiel, cela s'explique par une force réelle ; dans un référentiel en rotation, on doit ajouter une force d'inertie — elle n'a pas de source, mais dans ce référentiel elle est bien réelle.",
+   "keyIdeas": [
+    {
+     "icon": "scale",
+     "title": "La vitesse est un vecteur",
+     "text": "Lors d'une rotation uniforme, sa norme est constante, mais sa direction change. Il y a donc accélération."
+    },
+    {
+     "icon": "clock",
+     "title": "Vers le centre",
+     "text": "a_c = v²/R = ω²R, dirigée strictement vers le centre, perpendiculairement à la vitesse."
+    },
+    {
+     "icon": "sigma",
+     "title": "Deux référentiels",
+     "text": "Inertiel : F = ma s'applique tel quel. Non inertiel : il faut des forces d'inertie pour que les équations soient cohérentes."
+    },
+    {
+     "icon": "formula",
+     "title": "Pont vers les oscillations",
+     "text": "La projection d'une rotation uniforme sur une droite est exactement un sinus. Ce n'est pas une analogie, mais une identité."
+    }
+   ],
+   "where": [
+    "Centrifugeuse d'une machine à laver : l'eau part en ligne droite, tandis que le linge est retenu par le tambour",
+    "L'inclinaison de la chaussée dans un virage — pour qu'une partie de la force de réaction devienne centripète",
+    "Les cyclones s'enroulent à cause de la force de Coriolis : dans l'hémisphère nord, dans le sens inverse des aiguilles d'une montre",
+    "Un satellite en orbite — une chute libre qui ne cesse de manquer la Terre"
+   ],
+   "watchOut": "La force centrifuge n'agit pas sur un corps dans un référentiel inertiel. La corde tire la pierre uniquement vers le centre ; rien ne tire vers l'extérieur. La sensation d'« être projeté » vient du fait que vous êtes vous-même dans un référentiel en rotation. L'erreur « une force centrifuge agit sur le corps » est la plus fréquente dans ce sujet."
+  },
+  "quiz": [
+   {
+    "id": "r1",
+    "type": "mcq",
+    "q": "On fait tourner une pierre au bout d'une corde. Au moment où la corde se rompt, où la pierre va-t-elle voler ?",
+    "options": [
+     "Le long du rayon vers l'extérieur, loin du centre",
+     "Le long de la tangente au cercle — là où la vitesse était dirigée",
+     "En spirale, en s'éloignant progressivement",
+     "D'abord vers l'extérieur, puis le long de la tangente"
+    ],
+    "answer": 1,
+    "why": "Dès que la force disparaît, la première loi s'applique : le corps se déplace en ligne droite avec la vitesse qu'il avait. Lors de la rotation, la vitesse est dirigée le long de la tangente — c'est là que la pierre volera. Il n'y avait aucune force « vers l'extérieur » dans un référentiel inertiel.",
+    "hint": "Que dit la première loi à propos d'un corps sur lequel les forces cessent d'agir ? Et où était dirigée la vitesse de la pierre au dernier moment avant la rupture — le long du rayon ou transversalement ?"
+   },
+   {
+    "id": "r2",
+    "type": "mcq",
+    "q": "En quoi la force d'inertie diffère-t-elle fondamentalement d'une force ordinaire ?",
+    "options": [
+     "Elle est plus faible et peut donc être négligée",
+     "Elle n'a pas de corps source et pas de paire selon la troisième loi — elle naît du choix du référentiel",
+     "Elle n'agit que sur les corps en rotation",
+     "Elle ne produit pas d'accélération"
+    ],
+    "answer": 1,
+    "why": "Une force ordinaire est toujours l'action d'un corps sur un autre, et elle a un partenaire selon la troisième loi. La force d'inertie n'a ni source ni partenaire : elle apparaît dans les équations uniquement parce que nous décrivons le mouvement depuis un référentiel accéléré.",
+    "hint": "Posez une question simple à propos de la force centrifuge : quel corps concret la crée ? Et sur quel corps agit la force de réaction selon la troisième loi ?"
+   },
+   {
+    "id": "r3",
+    "type": "free",
+    "q": "En vos propres termes : pourquoi, lors d'un mouvement uniforme sur un cercle, y a-t-il une accélération alors que la vitesse ne change pas en grandeur ?",
+    "keywords": [
+     "dirigé",
+     "vecteur",
+     "tourne",
+     "non seulement la grandeur"
+    ],
+    "needed": 1,
+    "why": "Parce que l'accélération est le taux de variation du vecteur vitesse, et le vecteur change non seulement quand sa longueur change, mais aussi quand il tourne. Lors de la rotation, la longueur est constante, mais la direction change continuellement — d'où l'accélération dirigée vers le centre.",
+    "hint": "Rappelez-vous que la vitesse est une grandeur vectorielle. Combien de caractéristiques d'un vecteur peuvent changer ? La constance de l'une d'elles suffit-elle pour que le vecteur reste inchangé ?"
+   },
+   {
+    "id": "r4",
+    "type": "estimate",
+    "q": "Un manège de rayon 5 m fait un tour en 6 secondes. Quelle est l'accélération centripète en m/s² ?",
+    "answer": 5.5,
+    "unit": "m/s²",
+    "why": "ω = 2π/6 ≈ 1,05 rad/s ; a = ω²R = 1,1 · 5 ≈ 5,5 m/s². C'est environ la moitié de g — c'est précisément la charge perceptible mais sûre pour laquelle les attractions sont conçues.",
+    "hint": "D'abord la vitesse angulaire : 2π divisé par la période, cela donne un peu plus de un. Ensuite, élevez au carré et multipliez par le rayon.",
+    "tolAbs": 1.4
+   }
+  ],
+  "curiosities": {
+   "title": "Curiosité : testez par vous-même",
+   "lead": "La force centrifuge n'existe pas — mais le seau d'eau au-dessus de la tête ne le sait pas.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "expérience de cuisine",
+     "h": "Un seau d'eau au-dessus de la tête",
+     "text": "Remplissez un petit seau d'eau au tiers, prenez-le par l'anse et faites-le tourner dans un plan vertical — de sorte qu'au point le plus haut, le seau soit à l'envers. Faites cela dans la cour. Ensuite, essayez la même chose lentement.",
+     "answer": "Lors d'une rotation rapide, l'eau ne se renverse pas ; lors d'une rotation lente, elle vous éclabousse. Le seuil se calcule : l'eau reste si, au point le plus haut, l'accélération centripète requise est au moins égale à $g$, c'est-à-dire $v^2/R \\ge g$, d'où $v \\ge \\sqrt{gR}$. Pour un bras avec un seau, le rayon est d'environ un mètre — il faut un peu plus de trois mètres par seconde. L'eau n'est « pressée » par rien : elle tombe simplement le long de sa trajectoire, et le seau tombe avec elle, se retrouvant toujours en dessous."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoxe",
+     "h": "Une force qui n'existe pas, mais qui se ressent",
+     "text": "Dans un virage, vous êtes plaqué contre la portière — la sensation est nette et mesurable. Pourtant, la physique affirme que la force centrifuge n'existe pas. Qu'est-ce qui pousse alors sur votre épaule ?",
+     "answer": "Dans un référentiel fixe, tout est simple : vous vous déplacez en ligne droite par inertie, et la portière tourne et vient vers vous. La seule force réelle est sa pression, dirigée vers le centre du virage. La force centrifuge n'apparaît que dans un référentiel en rotation, où vous vous considérez immobile : pour expliquer l'équilibre, il faut ajouter une force qui n'a ni source ni paire selon la troisième loi. Ces forces sont appelées forces d'inertie ; elles sont pratiques pour les calculs et tout à fait réelles dans leurs effets, mais elles n'existent que dans le référentiel choisi."
+    },
+    {
+     "icon": "fact",
+     "kind": "fait amusant",
+     "h": "Le pendule qui a prouvé la rotation de la Terre",
+     "text": "En 1851, Léon Foucault a suspendu sous le dôme du Panthéon de Paris une masse de 28 kilogrammes à un fil de 67 mètres de long. Le plan d'oscillation tournait lentement — d'environ onze degrés par heure. Le pendule n'a aucune raison de tourner : c'est le sol qui tournait, avec le bâtiment et la ville. Pour la première fois, la rotation de la Terre a été vue directement, à l'intérieur, sans observations astronomiques. Au pôle, un tour complet prendrait exactement un jour ; à l'équateur, il n'y a aucune rotation ; entre les deux, la période augmente comme l'inverse du sinus de la latitude."
+    },
+    {
+     "icon": "mnemo",
+     "kind": "mnémonique",
+     "h": "L'accélération regarde là où vous tournez",
+     "text": "Lors d'un mouvement circulaire uniforme, la vitesse ne change pas en grandeur, mais change en direction — donc il y a une accélération, et elle est dirigée strictement vers le centre. D'où son nom : centripète, c'est-à-dire qui tend vers le centre. Pour mémoriser la grandeur, la double écriture $v^2/R=\\omega^2R$ aide : la première est pratique quand on connaît la vitesse, la seconde quand on connaît la fréquence de rotation."
+    },
+    {
+     "icon": "estimate",
+     "kind": "estimation",
+     "h": "Combien vous êtes plus léger à l'équateur",
+     "text": "La vitesse de rotation de la Terre à l'équateur est d'environ 465 mètres par seconde, le rayon est de 6378 kilomètres. L'accélération centripète est $v^2/R \\approx 0{,}034$ mètre par seconde au carré — environ trois millièmes de $g$. Ainsi, une personne de 70 kilogrammes pèse à l'équateur environ 240 grammes de moins qu'au pôle, et ce sans tenir compte de l'aplatissement de la planète. Les fusées sont lancées près de l'équateur précisément parce que la rotation de la planète donne un supplément gratuit de vitesse."
+    },
+    {
+     "icon": "edge",
+     "kind": "limite de validité",
+     "h": "Uniquement pour une rotation uniforme",
+     "text": "La formule $a=v^2/R$ ne décrit que la partie de l'accélération qui est responsable du changement de direction. Si la vitesse change aussi en grandeur — une voiture qui accélère dans une courbe — une composante tangentielle s'ajoute, et l'accélération totale est leur somme vectorielle. Et pour un mouvement le long d'une courbe quelconque, la formule utilise non pas le rayon de la trajectoire entier, mais le rayon du cercle osculateur en ce point."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Où le virage est utilisé",
+   "lead": "Tout ce qui précède repose sur un seul fait : pour se déplacer le long d'une courbe, il faut une accélération vers le centre.",
+   "items": [
+    {
+     "h": "Virages des routes et des pistes",
+     "text": "La chaussée est inclinée vers l'intérieur du virage afin que la composante de la force de gravité prenne en charge une partie de l'effort de direction. L'angle est calculé en fonction de la vitesse de conception ; sur les circuits, il atteint trente degrés ou plus."
+    },
+    {
+     "h": "Centrifugeuses",
+     "text": "La séparation du sang en plasma et cellules, l'enrichissement de l'uranium, l'essorage dans une machine à laver — partout on utilise le fait que lors de la rotation, les particules plus denses s'éloignent de l'axe. Une centrifugeuse de laboratoire produit des accélérations de plusieurs milliers de $g$."
+    },
+    {
+     "h": "Orbites",
+     "text": "Un satellite ne tombe pas uniquement parce que sa vitesse est telle que l'accélération centripète requise est exactement égale à l'accélération de la pesanteur à cette altitude. D'où la première vitesse cosmique — environ 7,9 kilomètres par seconde."
+    },
+    {
+     "h": "Accélérateurs de particules",
+     "text": "Dans un accélérateur circulaire, le champ magnétique dévie le faisceau, fournissant exactement l'accélération vers le centre nécessaire à une énergie donnée. Plus l'énergie est élevée, plus le rayon est grand — d'où l'anneau de vingt-sept kilomètres du Grand collisionneur de hadrons."
+    },
+    {
+     "h": "Météo",
+     "text": "La force de Coriolis — le deuxième effet d'un système en rotation — fait tourner les cyclones dans le sens inverse des aiguilles d'une montre dans l'hémisphère nord et dans le sens des aiguilles d'une montre dans l'hémisphère sud. Elle dévie également les courants océaniques et les obus d'artillerie à longue portée."
+    }
+   ]
+  }
+ }
 }

@@ -15,41 +15,6 @@
   "scientists": [
    "Galileo Galilei",
    "Isaac Newton"
-  ],
-  "examples_from_articles": [
-   {
-    "id": "2607.14450",
-    "date": "2026-07-16",
-    "title": {
-     "ru": "Гравитация-невидимка: танец двойных звёзд бросает вызов Ньютону",
-     "en": "Invisible Gravity: The Dance of Double Stars Challenges Newton",
-     "es": "La gravedad invisible: la danza de las estrellas binarias desafía a Newton",
-     "ar": "الجاذبية الخفية: رقصة النجوم الثنائية تتحدى نيوتن"
-    },
-    "why": "gravity"
-   },
-   {
-    "id": "2607.13992",
-    "date": "2026-07-15",
-    "title": {
-     "ru": "Теневой театр чёрных дыр: одна тень, две пьесы",
-     "en": "The Shadow Theater of Black Holes: One Shadow, Two Plays",
-     "es": "Teatro de sombras de los agujeros negros: una sombra, dos obras",
-     "ar": "مسرح ظلال الثقوب السوداء: ظل واحد، مسرحيتان"
-    },
-    "why": "gravity"
-   },
-   {
-    "id": "2607.12745",
-    "date": "2026-07-14",
-    "title": {
-     "ru": "Вселенная-хамелеон: как гравитация учится скрываться",
-     "en": "The Chameleon Universe: How Gravity Learns to Hide",
-     "es": "El Universo camaleón: cómo la gravedad aprende a esconderse",
-     "ar": "الكون الحرباء: كيف تتعلم الجاذبية الاختباء"
-    },
-    "why": "gravity"
-   }
   ]
  },
  "ru": {
@@ -173,17 +138,20 @@
     {
      "what": "Что такое производная — по-физически",
      "why": "Производная есть мера скорости изменения. Математик скажет «предел отношения приращений», физик — «насколько быстро величина меняется прямо сейчас». Это одно и то же. Ключевая мысль: чтобы узнать мгновенное значение, мы берём всё меньший промежуток и смотрим, к чему стремится результат. Тот же приём даст нам силу тока (скорость изменения заряда), мощность (скорость изменения энергии) и скорость реакции в химии.",
-     "latex": "\\frac{df}{dt} = \\lim_{\\Delta t\\to 0}\\frac{f(t+\\Delta t)-f(t)}{\\Delta t}"
+     "latex": "\\frac{df}{dt} = \\lim_{\\Delta t\\to 0}\\frac{f(t+\\Delta t)-f(t)}{\\Delta t}",
+     "kit": "derivative"
     },
     {
      "what": "Почему интеграл — это площадь",
      "why": "Разобьём время на крошечные кусочки. За каждый кусочек $\\Delta t$ тело проходит примерно $v\\,\\Delta t$ — это площадь узкого прямоугольника под графиком. Сложим все прямоугольники, устремим их ширину к нулю — получим точную площадь и точный путь. Интеграл и есть такая сумма бесконечного числа бесконечно малых вкладов.",
-     "latex": "\\int_0^{t} v\\,dt = \\lim \\sum v_i \\,\\Delta t_i"
+     "latex": "\\int_0^{t} v\\,dt = \\lim \\sum v_i \\,\\Delta t_i",
+     "kit": "integral"
     },
     {
      "what": "Векторы: почему знак важнее, чем кажется",
      "why": "Скорость и ускорение — векторы. На прямой это сводится к знаку, но знак решает всё: если $v$ и $a$ разных знаков, тело тормозит; если одинаковых — разгоняется. Именно поэтому подброшенный вверх мяч имеет нулевую скорость в верхней точке, но ускорение там по-прежнему $9{,}8$ м/с², направленное вниз.",
-     "latex": "\\vec{v}\\uparrow\\uparrow\\vec{a} \\Rightarrow \\text{разгон}; \\qquad \\vec{v}\\uparrow\\downarrow\\vec{a} \\Rightarrow \\text{торможение}"
+     "latex": "\\vec{v}\\uparrow\\uparrow\\vec{a} \\Rightarrow \\text{разгон}; \\qquad \\vec{v}\\uparrow\\downarrow\\vec{a} \\Rightarrow \\text{торможение}",
+     "kit": "vector"
     }
    ]
   },
@@ -1425,6 +1393,341 @@
     {
      "h": "رسوميات الحاسوب",
      "text": "محركات الفيزياء في الألعاب والأفلام تعيد حساب مواقع آلاف الأجسام ستين مرة في الثانية باستخدام نفس الصيغ، ولكن بخطوات زمنية. واقعية سقوط الأجسام على الشاشة هي كينماتيكا مدمجة بشكل صحيح."
+    }
+   ]
+  }
+ },
+ "fr": {
+  "title": "Point matériel",
+  "subtitle": "Paragraphe 1 · Comment décrire le mouvement sans en connaître les causes",
+  "intro": [
+   "Commençons par une astuce qui semble être de la triche, mais qui constitue en réalité l'essence de la méthode physique. Pour décrire le vol d'une balle, nous déclarerons que la balle est un point. Sans taille, sans rotation, sans coutures sur le cuir — juste un point qui a une masse et une position.",
+   "Ce n'est ni de la paresse ni une simplification pour simplifier. C'est un choix conscient de ce qui est essentiel dans ce problème. Pour le vol d'une balle à travers un terrain, son diamètre n'a pas d'importance — ce qui compte, c'est la trajectoire du centre. Mais pour un tir au but où la balle est frappée avec effet, la taille et la rotation deviennent primordiales, et alors le point ne convient plus.",
+   "Savoir choisir la bonne idéalisation est la moitié du travail d'un physicien. Nous commencerons par la plus simple : le corps est un point, et tout ce que nous savons de lui, c'est où il se trouve et à quelle vitesse il se déplace."
+  ],
+  "standNote": "Faites tourner le support avant de lire la conclusion. Définissez la vitesse initiale et l'accélération, observez les vecteurs : vert pour la vitesse, rouge pour l'accélération. Notez l'essentiel : lorsque les vecteurs pointent dans des directions opposées, le corps d'abord ralentit, s'arrête — puis repart en arrière, alors que l'accélération n'a pas changé pendant tout ce temps.",
+  "formula": {
+   "name": "Équation du mouvement uniformément accéléré",
+   "latex": "x(t) = x_0 + v_0 t + \\frac{a t^{2}}{2}",
+   "alsoKnown": "Équation cinématique du mouvement à accélération constante",
+   "authors": [
+    {
+     "who": "Galilée",
+     "year": "1638",
+     "what": "a établi que lors de la chute libre, la distance parcourue croît proportionnellement au carré du temps — contrairement à la croyance que la vitesse de chute dépend de la masse"
+    },
+    {
+     "who": "Isaac Newton et Gottfried Leibniz",
+     "year": "années 1670",
+     "what": "ont créé indépendamment le calcul infinitésimal, transformant la description verbale de Galilée en une équation précise"
+    }
+   ],
+   "story": "Galilée ne disposait ni de montres précises ni de calcul infinitésimal. Il faisait rouler des billes le long d'une gouttière inclinée, ralentissant la chute pour avoir le temps de mesurer — avec des horloges à eau, et selon certains témoignages, en fredonnant une mélodie comme métronome. Et il découvrit une chose étonnante : pendant la première unité de temps, la bille parcourt une unité de distance, pendant la deuxième — trois, pendant la troisième — cinq. Des nombres impairs. Et leur somme donne exactement des carrés : 1, 4, 9. Ainsi est née la dépendance quadratique.",
+   "symbols": [
+    {
+     "sym": "x(t)",
+     "latex": "x(t)",
+     "what": "coordonnée à l'instant t",
+     "unit": "m",
+     "note": "c'est bien la coordonnée, pas la distance parcourue : lors d'un mouvement en arrière, elle diminue"
+    },
+    {
+     "sym": "x₀",
+     "latex": "x_0",
+     "what": "coordonnée initiale",
+     "unit": "m",
+     "note": "là où le corps se trouvait à l'instant t = 0 ; souvent on la prend égale à zéro"
+    },
+    {
+     "sym": "v₀",
+     "latex": "v_0",
+     "what": "vitesse initiale",
+     "unit": "m/s",
+     "note": "grandeur vectorielle : le signe indique la direction le long de l'axe"
+    },
+    {
+     "sym": "a",
+     "latex": "a",
+     "what": "accélération",
+     "unit": "m/s²",
+     "note": "constante dans cette formule ; si l'accélération varie, il faut un autre outil"
+    },
+    {
+     "sym": "t",
+     "latex": "t",
+     "what": "temps écoulé depuis l'origine",
+     "unit": "s",
+     "note": "toujours positif ou nul, mesuré à partir du moment choisi"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Dérivation rigoureuse",
+   "lead": "Nous n'aurons besoin que de deux définitions — la vitesse et l'accélération — et d'une idée géométrique : le chemin est l'aire sous la courbe de la vitesse.",
+   "steps": [
+    {
+     "text": "D'abord, convenons de ce que signifie « position ». En soi, cela n'a pas de sens : il faut un corps de référence, des axes et une horloge. Un passager est immobile par rapport au wagon et se précipite par rapport au quai — les deux affirmations sont vraies simultanément. C'est ce qu'on appelle un référentiel.",
+     "latex": "x = x(t) \\quad \\text{dans le référentiel choisi}",
+     "figure": "frame",
+     "figCaption": "Un même mouvement, deux observateurs, deux réponses différentes — et les deux sont correctes."
+    },
+    {
+     "text": "La vitesse moyenne est le déplacement divisé par le temps. Mais elle ne dit pas grand-chose : en traversant une ville à la vitesse moyenne de 30 km/h, vous avez pu être coincé dans un embouteillage puis foncer sur une avenue. Il faut la vitesse à un instant donné.",
+     "latex": "v_{\\text{moy}} = \\frac{\\Delta x}{\\Delta t}",
+     "figure": "secant",
+     "figCaption": "La vitesse moyenne est la pente de la sécante reliant deux points sur la courbe de la position."
+    },
+    {
+     "text": "Réduisons l'intervalle $\\Delta t$. La sécante pivote et, à la limite, devient tangente. La pente de cette tangente est la vitesse instantanée. Ici, la dérivée n'apparaît pas comme une formalité d'un cours de mathématiques, mais comme le seul moyen de répondre à la question « à quelle vitesse le corps se déplace-t-il en ce moment précis ».",
+     "latex": "v = \\lim_{\\Delta t \\to 0} \\frac{\\Delta x}{\\Delta t} = \\frac{dx}{dt}",
+     "figure": "tangent",
+     "figCaption": "La limite des sécantes est la tangente. Sa pente est la vitesse à cet instant."
+    },
+    {
+     "text": "L'accélération est définie exactement de la même manière, mais un cran au-dessus : c'est le taux de variation de la vitesse. D'où sa dimension étrange — mètre par seconde au carré : à chaque seconde, la vitesse change de tant de mètres par seconde.",
+     "latex": "a = \\frac{dv}{dt} = \\frac{d^{2}x}{dt^{2}}",
+     "figure": "accel",
+     "figCaption": "L'accélération ne dit pas si le corps va vite, mais si sa vitesse change rapidement."
+    },
+    {
+     "text": "Supposons que l'accélération soit constante. Alors la vitesse augmente uniformément : à la vitesse initiale s'ajoute $a$ à chaque seconde. C'est la première des équations de la cinématique, et elle s'obtient par intégration directe de la définition de l'accélération.",
+     "latex": "v(t) = v_0 + a t",
+     "figure": "vline",
+     "figCaption": "Avec une accélération constante, la courbe de la vitesse est une droite de pente a."
+    },
+    {
+     "text": "Maintenant, l'étape géométrique clé. Le déplacement est l'intégrale de la vitesse par rapport au temps, c'est-à-dire l'aire sous la courbe $v(t)$. Et cette figure est un trapèze : un rectangle de hauteur $v_0$ plus un triangle de côtés $t$ et $at$. Additionnons les aires et nous obtenons la réponse.",
+     "latex": "\\Delta x = \\int_0^t v\\,dt = \\underbrace{v_0 t}_{\\text{rectangle}} + \\underbrace{\\tfrac{1}{2}\\,t\\cdot at}_{\\text{triangle}}",
+     "figure": "area",
+     "figCaption": "Le chemin est l'aire sous la courbe de la vitesse. Le trapèze se décompose en un rectangle et un triangle."
+    },
+    {
+     "text": "En ajoutant la position initiale, nous obtenons l'équation finale. Remarquez la structure : le terme en $t$ correspond au mouvement uniforme, le terme en $t^2$ à l'accélération. C'est ce carré qui rend la trajectoire parabolique.",
+     "latex": "x(t) = x_0 + v_0 t + \\frac{a t^{2}}{2}",
+     "figure": "parabola",
+     "figCaption": "La courbe de la position est une parabole. Sa courbure est déterminée par l'accélération."
+    }
+   ],
+   "plate": "x(t) = x_0 + v_0 t + \\dfrac{a t^{2}}{2}",
+   "plateCap": "Trois termes, trois contributions : où vous étiez, comment vous vous déplaciez, comment vous accélériez. Tout le reste en cinématique du mouvement uniformément accéléré se dérive d'ici.",
+   "note": "La formule n'est valable que pour une accélération constante. Dès que $a$ commence à varier — lors d'un mouvement avec résistance de l'air, lors d'oscillations d'un ressort, lors d'un vol vers une planète lointaine — elle cesse de fonctionner, et il faut résoudre une équation différentielle. Nous y reviendrons dans le thème des oscillations."
+  },
+  "math": {
+   "title": "Les mathématiques nécessaires ici",
+   "items": [
+    {
+     "what": "Qu'est-ce qu'une dérivée — physiquement",
+     "why": "La dérivée est une mesure du taux de variation. Un mathématicien dira « la limite du rapport des accroissements », un physicien dira « à quelle vitesse la grandeur change en ce moment ». C'est la même chose. L'idée clé : pour connaître la valeur instantanée, on prend un intervalle de plus en plus petit et on regarde vers quoi tend le résultat. La même technique nous donnera l'intensité du courant (taux de variation de la charge), la puissance (taux de variation de l'énergie) et la vitesse d'une réaction chimique.",
+     "latex": "\\frac{df}{dt} = \\lim_{\\Delta t\\to 0}\\frac{f(t+\\Delta t)-f(t)}{\\Delta t}"
+    },
+    {
+     "what": "Pourquoi l'intégrale est une aire",
+     "why": "Divisons le temps en petits morceaux. Pendant chaque petit intervalle $\\Delta t$, le corps parcourt environ $v\\,\\Delta t$ — c'est l'aire d'un rectangle étroit sous la courbe. Additionnons tous les rectangles, faisons tendre leur largeur vers zéro — nous obtenons l'aire exacte et le chemin exact. L'intégrale est une telle somme d'une infinité de contributions infinitésimales.",
+     "latex": "\\int_0^{t} v\\,dt = \\lim \\sum v_i \\,\\Delta t_i"
+    },
+    {
+     "what": "Vecteurs : pourquoi le signe est plus important qu'il n'y paraît",
+     "why": "La vitesse et l'accélération sont des vecteurs. Sur une ligne, cela se réduit au signe, mais le signe décide de tout : si $v$ et $a$ sont de signes opposés, le corps freine ; s'ils sont de même signe, il accélère. C'est pourquoi une balle lancée vers le haut a une vitesse nulle au point le plus haut, mais son accélération y est toujours de $9{,}8$ m/s², dirigée vers le bas.",
+     "latex": "\\vec{v}\\uparrow\\uparrow\\vec{a} \\Rightarrow \\text{accélération}; \\qquad \\vec{v}\\uparrow\\downarrow\\vec{a} \\Rightarrow \\text{décélération}"
+    }
+   ]
+  },
+  "example": {
+   "title": "Exemple avec des nombres",
+   "lead": "Le problème classique du freinage — celui qui se cache derrière les règles de la circulation.",
+   "given": "Une voiture roule à une vitesse de $20$ m/s (soit $72$ km/h) et freine avec une accélération de $5$ m/s². Trouver la distance de freinage.",
+   "law": "$v(t) = v_0 + at$ et $x(t) = v_0 t + at^2/2$, où $a = -5$ m/s² (signe moins : accélération opposée au mouvement)",
+   "solution": [
+    {
+     "text": "Trouvons d'abord le temps jusqu'à l'arrêt complet : la vitesse doit devenir nulle.",
+     "latex": "0 = 20 - 5t \\;\\Rightarrow\\; t = 4\\ \\text{s}"
+    },
+    {
+     "text": "Substituons ce temps dans l'équation de la coordonnée.",
+     "latex": "x = 20\\cdot 4 - \\frac{5\\cdot 4^{2}}{2} = 80 - 40"
+    },
+    {
+     "text": "Nous obtenons la distance de freinage.",
+     "latex": "x = 40\\ \\text{m}"
+    }
+   ],
+   "answer": "La distance de freinage est de $40$ mètres",
+   "check": "Il faut retenir non pas le nombre, mais la dépendance : la distance est proportionnelle au carré de la vitesse. Deux fois plus vite — quatre fois plus loin. À $40$ m/s, la même voiture parcourra déjà $160$ mètres, et non $80$. C'est cette relation qui explique l'augmentation brutale de la gravité des accidents avec la vitesse — et elle découle directement du terme en $t^2$ dans notre formule."
+  },
+  "constants": {
+   "title": "Grandeurs de ce paragraphe",
+   "lead": "Il n'y a presque pas de constantes ici — la cinématique décrit tout mouvement. La seule référence à notre planète apparaît lorsqu'il s'agit de la chute.",
+   "items": [
+    {
+     "sym": "g",
+     "latex": "g",
+     "dictKey": "g",
+     "name": "Accélération de la pesanteur",
+     "value": "9,81",
+     "unit": "m / s²",
+     "why": "L'accélération avec laquelle tout corps tombe à la surface de la Terre — indépendamment de sa masse, si l'on néglige la résistance de l'air. C'est cette découverte de Galilée qui contredisait une tradition vieille de deux mille ans.",
+     "mnemo": "Dans les exercices, on prend presque toujours 10 m/s² — une erreur d'environ 2%, mais cela se calcule de tête."
+    },
+    {
+     "sym": "v",
+     "latex": "v",
+     "name": "Vitesse",
+     "value": "dérivée de la coordonnée",
+     "unit": "m / s",
+     "why": "La dimension se lit directement comme une définition : des mètres (déplacement) par seconde (temps). Chaque fois que vous voyez une fraction dans les unités, cherchez-y du sens — il y a presque toujours une définition cachée de la grandeur."
+    },
+    {
+     "sym": "a",
+     "latex": "a",
+     "name": "Accélération",
+     "value": "dérivée de la vitesse",
+     "unit": "m / s²",
+     "why": "Le mètre par seconde au carré se lit ainsi : « de combien de mètres par seconde la vitesse change à chaque seconde ». La seconde est élevée au carré parce que la division par le temps a eu lieu deux fois."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "Le point matériel est un choix conscient de l'essentiel. La vitesse est la dérivée de la coordonnée, l'accélération est la dérivée de la vitesse, et la distance est l'aire sous la courbe de la vitesse. Toute l'équation du mouvement uniformément accéléré découle de ces trois affirmations.",
+   "keyIdeas": [
+    {
+     "icon": "scale",
+     "title": "Idéalisation",
+     "text": "On réduit le corps à un point lorsque sa taille et sa rotation ne sont pas essentielles pour le problème."
+    },
+    {
+     "icon": "clock",
+     "title": "Dérivée",
+     "text": "La vitesse instantanée est la pente de la tangente à la courbe de la coordonnée, et non le rapport de la distance totale au temps."
+    },
+    {
+     "icon": "sigma",
+     "title": "Distance comme aire",
+     "text": "Le déplacement est égal à l'aire sous la courbe de la vitesse. C'est de là que vient le terme en carré du temps."
+    },
+    {
+     "icon": "formula",
+     "title": "Le signe décide",
+     "text": "La vitesse et l'accélération sont dirigées dans des directions opposées — le corps freine, même si l'accélération est constante."
+    }
+   ],
+   "where": [
+    "La distance de freinage croît comme le carré de la vitesse : deux fois plus vite — quatre fois plus loin",
+    "L'accélération d'une voiture « de 0 à 100 en 6 secondes » — c'est une accélération d'environ 4,6 m/s²",
+    "Au point le plus haut d'une balle lancée vers le haut, la vitesse est nulle, mais l'accélération reste de 9,8 m/s²",
+    "Ascenseur : vous ressentez non pas la vitesse, mais l'accélération — en mouvement uniforme, aucune sensation"
+   ],
+   "watchOut": "La distance et le déplacement ne sont pas la même chose. En faisant un tour de stade, vous parcourez 400 mètres de distance, mais votre déplacement est nul. Dans la formule, c'est bien la coordonnée qui figure, donc lors d'un mouvement en arrière, elle diminue."
+  },
+  "quiz": [
+   {
+    "id": "k1",
+    "type": "mcq",
+    "q": "Une balle est lancée verticalement vers le haut. Que se passe-t-il au point le plus haut de sa trajectoire ?",
+    "options": [
+     "La vitesse et l'accélération sont toutes deux nulles",
+     "La vitesse est nulle, l'accélération est toujours de 9,8 m/s² vers le bas",
+     "La vitesse est maximale, l'accélération est nulle",
+     "L'accélération change de signe"
+    ],
+    "answer": 1,
+    "why": "La vitesse passe par zéro — le corps reste un instant suspendu. Mais l'accélération est due à la gravité, qui n'a pas disparu : elle reste dirigée vers le bas et égale à g pendant tout le vol.",
+    "hint": "Demandez-vous : qu'est-ce qui crée l'accélération dans ce problème ? Cette cause disparaît-elle lorsque la balle s'arrête un instant ?"
+   },
+   {
+    "id": "k2",
+    "type": "free",
+    "q": "En vos propres mots : pourquoi un référentiel est-il nécessaire pour décrire le mouvement ? Donnez un exemple où deux observateurs donnent des réponses différentes mais également correctes.",
+    "keywords": [
+     "relatif",
+     "observateur",
+     "référentiel",
+     "référence",
+     "wagon",
+     "train",
+     "terre"
+    ],
+    "needed": 1,
+    "why": "La position et la vitesse n'existent pas en soi — seulement par rapport à quelque chose. Le passager d'un train est immobile par rapport au wagon et se déplace à 100 km/h par rapport au quai. Les deux descriptions sont correctes, il n'y a pas de contradiction : ce sont des référentiels différents.",
+    "hint": "Imaginez que vous êtes dans un train et que vous laissez tomber vos clés. Comment décrivez-vous leur mouvement, vous — et comment le fait une personne sur le quai ? Qui a raison ?"
+   },
+   {
+    "id": "k3",
+    "type": "estimate",
+    "q": "Une voiture accélère de l'arrêt à 100 km/h en 8 secondes. Quelle est son accélération moyenne en m/s² ?",
+    "answer": 3.5,
+    "unit": "m/s²",
+    "why": "100 km/h équivaut à environ 28 m/s (on divise par 3,6). L'accélération est égale à la variation de vitesse divisée par le temps : 28/8 ≈ 3,5 m/s². Pour comparaison : la chute libre donne 9,8 — presque trois fois plus.",
+    "hint": "Convertissez d'abord les kilomètres par heure en mètres par seconde — divisez par 3,6. Puis rappelez-vous la définition de l'accélération : variation de vitesse par unité de temps.",
+    "tolAbs": 1.4
+   }
+  ],
+  "curiosities": {
+   "title": "Curiosités : à tester vous-même",
+   "lead": "La cinématique se mesure avec une règle : elle décrit où se trouve un corps et quand, sans s'occuper du pourquoi.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "expérience de cuisine",
+     "h": "Une règle comme chronomètre",
+     "text": "Demandez à quelqu'un de tenir une règle verticalement par son extrémité supérieure. Placez vos doigts près du zéro, sans toucher. Votre partenaire lâche la règle sans prévenir — attrapez-la le plus vite possible. Notez la graduation où vous l'avez attrapée.",
+     "answer": "La distance parcourue se convertit en temps via $t=\\sqrt{2h/g}$. Vingt centimètres donnent environ 0,20 seconde, trente centimètres environ 0,25. C'est votre temps de réaction, mesuré sans aucun instrument : la règle elle-même sert de chronomètre, car une chute avec une accélération connue relie de manière unique la distance au temps. On en déduit aussi la distance de freinage : en 0,2 seconde de réaction, une voiture à 60 km/h parcourt plus de trois mètres avant même de commencer à freiner."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoxe",
+     "h": "Deux pièces, un seul son",
+     "text": "Posez une pièce sur le bord d'une table. Tenez-en une autre à la même hauteur, à côté. D'une pichenette, lancez la première horizontalement — loin devant — et lâchez simultanément la seconde verticalement. La première parcourt un mètre sur le côté, la seconde tombe à la verticale. Laquelle touche le sol en premier ?",
+     "answer": "Les deux en même temps, vous n'entendrez qu'un seul bruit. Le mouvement horizontal n'affecte en rien le mouvement vertical : verticalement, les deux pièces tombent avec la même accélération depuis la même hauteur. C'est ce qu'on appelle l'indépendance des mouvements, et c'est pourquoi un mouvement complexe se décompose en mouvements simples selon les axes. Une balle tirée horizontalement et une balle simplement lâchée au même instant toucheront le sol ensemble — à condition que le sol soit plat et que la résistance de l'air soit négligeable."
+    },
+    {
+     "icon": "fact",
+     "kind": "fait amusant",
+     "h": "Galilée a ralenti la gravité",
+     "text": "Au début du XVIIe siècle, il n'existait aucun moyen de mesurer la chute libre : un corps parcourt deux mètres en deux tiers de seconde, et aucune horloge n'avait cette précision. Galilée contourna le problème en faisant rouler une bille sur un plan incliné : la même loi, mais avec une accélération réduite d'autant que la pente est faible. Il mesurait le temps par le poids de l'eau s'écoulant d'un récipient par un mince orifice. Il obtint ainsi le résultat clé : la distance croît comme le carré du temps, et non proportionnellement au temps comme on le pensait avant lui. Cette méthode est restée en physique pour toujours — si un phénomène est trop rapide, trouvez un moyen de le ralentir sans en changer la nature."
+    },
+    {
+     "icon": "mnemo",
+     "kind": "mnémonique",
+     "h": "La vitesse est la pente du graphique, l'accélération est la pente de la pente",
+     "text": "Sur un graphique « position en fonction du temps », la vitesse est la raideur de la courbe : un segment horizontal signifie qu'on est immobile, plus la ligne est raide, plus on va vite. Prenez la raideur une nouvelle fois, maintenant sur le graphique de la vitesse, et vous obtenez l'accélération. On voit aussi immédiatement l'inverse : l'aire sous la courbe de vitesse est la distance parcourue. Ces deux opérations, « pente » et « aire », relient les trois grandeurs et évitent d'apprendre des formules par cœur."
+    },
+    {
+     "icon": "estimate",
+     "kind": "estimation",
+     "h": "Deux fois plus vite, quatre fois plus loin",
+     "text": "La distance de freinage à décélération constante est $v^2/2a$ — la vitesse intervient au carré. Ainsi, passer de 50 à 100 km/h allonge la distance de freinage non pas d'un facteur deux, mais d'un facteur quatre : d'environ quinze mètres à soixante, plus la distance parcourue pendant le temps de réaction. C'est ce carré, et non un simple doublement, qui justifie les limitations de vitesse en ville, et c'est l'un des rares cas où une formule scolaire calcule directement la probabilité de survie."
+    },
+    {
+     "icon": "edge",
+     "kind": "limite de validité",
+     "h": "La formule exige une accélération constante",
+     "text": "L'expression $x=x_0+v_0t+at^2/2$ n'est valable que si l'accélération ne change pas. Un parachutiste après l'ouverture de la voile tombe presque à vitesse constante : la résistance de l'air augmente avec la vitesse et équilibre le poids. Une fusée accélère de plus en plus à mesure que le carburant se consume, car la masse diminue. Dans les deux cas, il faut utiliser non pas cette formule, mais l'équation du mouvement, résolue numériquement."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Ce qu'apporte la cinématique",
+   "lead": "Décrire le mouvement sans ses causes semble être une demi-mesure — mais c'est précisément ce qui sous-tend la navigation et la sécurité.",
+   "items": [
+    {
+     "h": "Navigation par satellite",
+     "text": "Le récepteur dans votre téléphone ne mesure pas la distance avec une règle : il compare les temps d'arrivée des signaux de plusieurs satellites et résout un problème de cinématique. Une erreur d'une nanoseconde donne une erreur de trente centimètres, c'est pourquoi les calculs incluent aussi des corrections de la relativité."
+    },
+    {
+     "h": "Sécurité routière",
+     "text": "La relation quadratique entre la vitesse et la distance de freinage détermine le marquage au sol, les distances de sécurité et les vitesses limites. S'y ajoute le temps de réaction — cette grandeur que l'on mesure avec une règle qui tombe."
+    },
+    {
+     "h": "Sport et biomécanique",
+     "text": "La trajectoire d'un saut, l'angle de sortie du javelot, le point d'impulsion optimal se calculent comme le mouvement d'un point avec une vitesse initiale donnée. Les entraîneurs analysent les vidéos image par image, obtenant la vitesse comme pente et l'accélération comme pente de la pente."
+    },
+    {
+     "h": "Astronomie et balistique",
+     "text": "Prédire la position d'une planète des années à l'avance et calculer la trajectoire d'une sonde vers Mars sont des problèmes de même nature : on connaît les conditions initiales et la loi de variation de l'accélération, et l'on cherche la position à un instant donné."
+    },
+    {
+     "h": "Infographie",
+     "text": "Les moteurs physiques des jeux et du cinéma recalculent la position de milliers d'objets soixante fois par seconde avec les mêmes formules, mais par pas de temps. Le réalisme de la chute des objets à l'écran, c'est de la cinématique correctement intégrée."
     }
    ]
   }

@@ -1,410 +1,564 @@
 {
-  "id": "entropy",
-  "schema": "b42.course/2",
-  "kind": "overview",
-  "order": 6,
-  "entities": {
-    "laws": [
-      "second_law_of_thermodynamics",
-      "boltzmann_distribution"
-    ],
-    "tags": [
-      "entropy",
-      "temperature"
-    ],
-    "scientists": [
-      "Ludwig Boltzmann"
-    ]
+ "id": "entropy",
+ "schema": "b42.course/2",
+ "kind": "overview",
+ "order": 6,
+ "entities": {
+  "laws": [
+   "second_law_of_thermodynamics",
+   "boltzmann_distribution"
+  ],
+  "tags": [
+   "entropy",
+   "temperature"
+  ],
+  "scientists": [
+   "Ludwig Boltzmann"
+  ],
+  "examples_from_articles": [
+   {
+    "id": "2508.14312",
+    "date": "2025-08-19",
+    "title": {
+     "ru": "Время не исчезнет, когда погаснут звёзды",
+     "en": "Time won't disappear when the stars go out",
+     "es": "El tiempo no desaparecerá cuando las estrellas se apaguen",
+     "ar": "الزمنُ باقٍ بعد انطفاء النجوم",
+     "fr": "Le temps ne disparaîtra pas quand les étoiles s'éteindront"
+    },
+    "score": 0.675
+   },
+   {
+    "id": "2512.03380",
+    "date": "2025-12-03",
+    "title": {
+     "ru": "Время — односторонняя магистраль: энтропия как регулировщик",
+     "en": "Time is not a river, but a one-way street",
+     "es": "El tiempo no es un río, sino una calle de sentido único",
+     "ar": "الزمن ليس نهرًا، بل شارع ذو اتجاه واحد",
+     "fr": "Le temps n'est pas un fleuve, mais une rue à sens unique"
+    },
+    "score": 0.664
+   },
+   {
+    "id": "2605.30405",
+    "date": "2026-05-28",
+    "title": {
+     "ru": "Вселенная как точный механизм: устранение парадокса «мозгов Больцмана»",
+     "en": "Universe as a Precise Mechanism: No 'Boltzmann Brains'",
+     "es": "El universo como un mecanismo preciso: sin «cerebros de Boltzmann»",
+     "ar": "الكون كآلية دقيقة: بدون «أدمغة بولتزمان»",
+     "fr": "L'Univers comme une horloge parfaite : pas de « cerveaux de Boltzmann »"
+    },
+    "score": 0.635
+   },
+   {
+    "id": "2608.00297v1",
+    "date": "2026-07-31",
+    "title": {
+     "ru": "Вселенная не стремится к максимуму энтропии",
+     "en": "The Universe Isn't Chasing Entropy Records",
+     "es": "El universo no persigue récords de entropía",
+     "ar": "الكون لا يسعى لتحقيق أرقام قياسية في الإنتروبيا",
+     "fr": "L'Univers ne court pas après les records d'entropie"
+    },
+    "score": 0.623
+   },
+   {
+    "id": "2603.10344",
+    "date": "2026-03-11",
+    "title": {
+     "ru": "Как квантовый компьютер различил стрелу времени",
+     "en": "How a Quantum Computer Spotted the Arrow of Time",
+     "es": "Cómo un ordenador cuántico distinguió la flecha del tiempo",
+     "ar": "كيف ميّز الحاسوب الكمومي سهم الزمن",
+     "fr": "Comment un ordinateur quantique a distingué le passé du futur"
+    },
+    "score": 0.614
+   }
+  ]
+ },
+ "lessons": [
+  {
+   "id": "01-microstates",
+   "title": "Энтропия по Больцману",
+   "sub": "Почему беспорядок — это про счёт, а не про неряшливость",
+   "law": "S = k ln W",
+   "model": "entropy"
+  },
+  {
+   "id": "02-arrow",
+   "title": "Стрела времени",
+   "sub": "Единственный закон, знающий разницу прошлого и будущего",
+   "law": "Второе начало",
+   "model": "entropy"
+  },
+  {
+   "id": "03-information",
+   "title": "Энтропия и информация",
+   "sub": "Демон Максвелла и цена одного бита",
+   "law": "Принцип Ландауэра",
+   "model": "entropy"
+  }
+ ],
+ "ru": {
+  "title": "Энтропия и стрела времени",
+  "subtitle": "Самая глубокая тема курса — и единственная, которая упирается в нерешённый вопрос",
+  "lead": "Эту тему стоило бы поставить в конце, но она нужна раньше: без неё непонятно, почему мир необратим. Здесь сходятся термодинамика, теория вероятностей, теория информации и космология — и обнаруживается, что говорят они об одном.",
+  "why": {
+   "title": "Зачем это знать",
+   "text": [
+    "Начнём с наблюдения, к которому все привыкли настолько, что перестали удивляться. Разбитая чашка не собирается обратно. Остывший чай не разогревается за счёт остывания комнаты. Запах расходится по квартире и не возвращается во флакон. Яйцо не разболтается обратно в желток и белок.",
+    "А теперь то, из-за чего это стало проблемой. Все фундаментальные законы, описывающие движение молекул, симметричны относительно обращения времени. Снимите столкновение двух молекул на плёнку и пустите задом наперёд — увидите столь же законное столкновение, ни один закон не нарушен. Откуда же берётся направление, которого нет в законах?",
+    "Ответ Больцмана изящен и почти очевиден задним числом: дело не в запрете, а в счёте. Состояний, которые мы называем беспорядком, несравнимо больше, чем тех, что мы называем порядком. Система идёт туда, где вариантов больше, — не потому, что обратное запрещено, а потому, что оно невероятно.",
+    "И тут же открывается яма, в которую физика не может выбраться до сих пор. Если энтропия растёт со временем, значит вчера она была меньше, позавчера ещё меньше, а в момент рождения Вселенной — невероятно, необъяснимо мала. Никакой закон этого не требует. Стрела времени, которую вы ощущаете каждую секунду, упирается не в физику здесь и сейчас, а в начальное условие всего мироздания."
+   ]
+  },
+  "history": {
+   "title": "Кто её создал",
+   "people": [
+    {
+     "name": "Рудольф Клаузиус",
+     "years": "1822–1888",
+     "what": "Ввёл само понятие и придумал слово, взяв греческое «превращение» и сознательно сделав его похожим на «энергию». Сформулировал два начала термодинамики в виде, который цитируют до сих пор: энергия мира постоянна, энтропия мира стремится к максимуму."
+    },
+    {
+     "name": "Людвиг Больцман",
+     "years": "1844–1906",
+     "what": "Объяснил энтропию через подсчёт микросостояний и связал термодинамику со статистикой. Современники встретили идею враждебно: атомы тогда считали удобной выдумкой, а не реальностью. Больцман покончил с собой в 1906 году, за несколько лет до того, как опыты Перрена окончательно доказали существование молекул. Формула $S = k\\ln W$ высечена на его надгробии в Вене."
+    },
+    {
+     "name": "Джеймс Клерк Максвелл",
+     "years": "1831–1879",
+     "what": "Придумал мысленный эксперимент с демоном, который сортирует молекулы и якобы нарушает второе начало. Загадка продержалась почти столетие и в итоге привела к неожиданному ответу: чтобы сортировать, демон должен помнить, а память приходится стирать — и вот за это платят теплом."
+    },
+    {
+     "name": "Клод Шеннон",
+     "years": "1916–2001",
+     "what": "Определяя количество информации, получил формулу, совпадающую с формулой Больцмана. По легенде, назвать величину энтропией ему посоветовал фон Нейман — с доводом, что в спорах это будет давать преимущество, поскольку никто толком не знает, что такое энтропия."
+    },
+    {
+     "name": "Рольф Ландауэр",
+     "years": "1927–1999",
+     "what": "Доказал, что вычисление само по себе может быть бесплатным, а вот стирание бита обязано выделить тепло не меньше $k_B T \\ln 2$. Так информация окончательно стала физической величиной, а демон Максвелла — закрытым вопросом."
+    }
+   ]
+  },
+  "map": {
+   "title": "Что вы изучите",
+   "lead": "Три параграфа идут от счёта к времени и от времени к информации. Стенд один и тот же во всех трёх — ящик с частицами, — но каждый раз вы будете смотреть на него иначе.",
+   "outcome": "Пройдя все три, вы будете понимать, почему беспорядок побеждает без всякого запрета на обратное; почему у времени есть направление, хотя у законов его нет; и почему стирание информации нагревает процессор, а мысль о вечном двигателе на демоне не работает."
+  },
+  "prereq": {
+   "title": "Что нужно знать заранее",
+   "items": [
+    "Термодинамику на уровне первых двух параграфов темы 5: что такое температура и теплота.",
+    "Логарифм: достаточно знать, что логарифм произведения есть сумма логарифмов. Именно из этого следует, что энтропия складывается.",
+    "Представление о вероятности как о доле благоприятных исходов. Комбинаторику разберём по ходу."
+   ],
+   "note": "Математики здесь меньше, чем кажется. Главная трудность темы не в аппарате, а в том, чтобы отучиться понимать энтропию как «беспорядок» в бытовом смысле и начать понимать её как счёт вариантов."
+  },
+  "closing": {
+   "title": "И главное",
+   "text": [
+    "Эта тема — единственная в курсе, которая заканчивается не выводом, а открытым вопросом. Мы умеем считать энтропию, предсказывать её рост и строить на этом холодильники и линии связи. Но почему Вселенная началась из состояния столь невероятно упорядоченного, никто не знает.",
+    "Роджер Пенроуз оценил вероятность такого начала числом, которое невозможно записать обычными цифрами. Это не философское затруднение, а честная нерешённая задача — и, возможно, ключ сразу к нескольким другим."
+   ],
+   "link": {
+    "href": "/frontier.html#entropy",
+    "text": "Открытые вопросы: почему энтропия растёт"
+   }
   },
   "lessons": [
+   {
+    "id": "01-microstates",
+    "title": "Энтропия по Больцману",
+    "sub": "Почему беспорядок — это про счёт, а не про неряшливость",
+    "law": "S = k ln W",
+    "model": "entropy"
+   },
+   {
+    "id": "02-arrow",
+    "title": "Стрела времени",
+    "sub": "Единственный закон, знающий разницу прошлого и будущего",
+    "law": "Второе начало",
+    "model": "entropy"
+   },
+   {
+    "id": "03-information",
+    "title": "Энтропия и информация",
+    "sub": "Демон Максвелла и цена одного бита",
+    "law": "Принцип Ландауэра",
+    "model": "entropy"
+   }
+  ]
+ },
+ "en": {
+  "title": "Entropy and the Arrow of Time",
+  "subtitle": "The deepest topic in the course—and the only one that touches on an unsolved question",
+  "lead": "This topic should have been placed at the end, but it is needed earlier: without it, it's unclear why the world is irreversible. Here thermodynamics, probability theory, information theory, and cosmology converge—and it turns out they are all talking about the same thing.",
+  "why": {
+   "title": "Why It Matters",
+   "text": [
+    "Let's start with an observation everyone is so used to that they no longer wonder. A broken cup does not reassemble itself. Cooled tea does not reheat at the expense of the room cooling down. A scent spreads through the apartment and does not return to the bottle. An egg does not unscramble back into yolk and white.",
+    "And now the reason this became a problem. All fundamental laws describing molecular motion are symmetric under time reversal. Film a collision of two molecules and run it backward—you'll see an equally valid collision, no law violated. So where does the direction come from, if it is not in the laws?",
+    "Boltzmann's answer is elegant and almost obvious in hindsight: it's not about prohibition, but about counting. There are incomparably more states that we call disorder than those we call order. The system goes where there are more possibilities—not because the reverse is forbidden, but because it is improbable.",
+    "And at once a pit opens up from which physics has yet to escape. If entropy increases with time, then yesterday it was smaller, the day before even smaller, and at the moment of the Universe's birth—incredibly, inexplicably small. No law demands this. The arrow of time you feel every second points not to physics here and now, but to the initial condition of the entire cosmos."
+   ]
+  },
+  "history": {
+   "title": "Who Created It",
+   "people": [
     {
-      "id": "01-microstates",
-      "title": "Энтропия по Больцману",
-      "sub": "Почему беспорядок — это про счёт, а не про неряшливость",
-      "law": "S = k ln W",
-      "model": "entropy"
+     "name": "Rudolf Clausius",
+     "years": "1822–1888",
+     "what": "Introduced the concept itself and coined the term, taking the Greek word for 'transformation' and deliberately making it resemble 'energy'. Formulated the two laws of thermodynamics in the form still quoted today: the energy of the world is constant, the entropy of the world tends to a maximum."
     },
     {
-      "id": "02-arrow",
-      "title": "Стрела времени",
-      "sub": "Единственный закон, знающий разницу прошлого и будущего",
-      "law": "Второе начало",
-      "model": "entropy"
+     "name": "Ludwig Boltzmann",
+     "years": "1844–1906",
+     "what": "Explained entropy via counting microstates and connected thermodynamics to statistics. Contemporaries received the idea hostilely: atoms were then considered a convenient fiction rather than reality. Boltzmann took his own life in 1906, a few years before Perrin's experiments definitively proved the existence of molecules. The formula $S = k\\ln W$ is engraved on his tombstone in Vienna."
     },
     {
-      "id": "03-information",
-      "title": "Энтропия и информация",
-      "sub": "Демон Максвелла и цена одного бита",
-      "law": "Принцип Ландауэра",
-      "model": "entropy"
+     "name": "James Clerk Maxwell",
+     "years": "1831–1879",
+     "what": "Conceived a thought experiment with a demon that sorts molecules and supposedly violates the second law. The puzzle lasted nearly a century and ultimately led to an unexpected answer: to sort, the demon must remember, and memory must be erased—and that costs heat."
+    },
+    {
+     "name": "Claude Shannon",
+     "years": "1916–2001",
+     "what": "In defining the amount of information, he obtained a formula coinciding with Boltzmann's formula. According to legend, von Neumann advised him to call the quantity entropy—arguing that it would give an advantage in debates since nobody really knows what entropy is."
+    },
+    {
+     "name": "Rolf Landauer",
+     "years": "1927–1999",
+     "what": "Proved that computation itself can be free, but erasing a bit must dissipate at least $k_B T \\ln 2$ of heat. Thus information finally became a physical quantity, and Maxwell's demon became a closed question."
     }
-  ],
-  "ru": {
-    "title": "Энтропия и стрела времени",
-    "subtitle": "Самая глубокая тема курса — и единственная, которая упирается в нерешённый вопрос",
-    "lead": "Эту тему стоило бы поставить в конце, но она нужна раньше: без неё непонятно, почему мир необратим. Здесь сходятся термодинамика, теория вероятностей, теория информации и космология — и обнаруживается, что говорят они об одном.",
-    "why": {
-      "title": "Зачем это знать",
-      "text": [
-        "Начнём с наблюдения, к которому все привыкли настолько, что перестали удивляться. Разбитая чашка не собирается обратно. Остывший чай не разогревается за счёт остывания комнаты. Запах расходится по квартире и не возвращается во флакон. Яйцо не разболтается обратно в желток и белок.",
-        "А теперь то, из-за чего это стало проблемой. Все фундаментальные законы, описывающие движение молекул, симметричны относительно обращения времени. Снимите столкновение двух молекул на плёнку и пустите задом наперёд — увидите столь же законное столкновение, ни один закон не нарушен. Откуда же берётся направление, которого нет в законах?",
-        "Ответ Больцмана изящен и почти очевиден задним числом: дело не в запрете, а в счёте. Состояний, которые мы называем беспорядком, несравнимо больше, чем тех, что мы называем порядком. Система идёт туда, где вариантов больше, — не потому, что обратное запрещено, а потому, что оно невероятно.",
-        "И тут же открывается яма, в которую физика не может выбраться до сих пор. Если энтропия растёт со временем, значит вчера она была меньше, позавчера ещё меньше, а в момент рождения Вселенной — невероятно, необъяснимо мала. Никакой закон этого не требует. Стрела времени, которую вы ощущаете каждую секунду, упирается не в физику здесь и сейчас, а в начальное условие всего мироздания."
-      ]
-    },
-    "history": {
-      "title": "Кто её создал",
-      "people": [
-        {
-          "name": "Рудольф Клаузиус",
-          "years": "1822–1888",
-          "what": "Ввёл само понятие и придумал слово, взяв греческое «превращение» и сознательно сделав его похожим на «энергию». Сформулировал два начала термодинамики в виде, который цитируют до сих пор: энергия мира постоянна, энтропия мира стремится к максимуму."
-        },
-        {
-          "name": "Людвиг Больцман",
-          "years": "1844–1906",
-          "what": "Объяснил энтропию через подсчёт микросостояний и связал термодинамику со статистикой. Современники встретили идею враждебно: атомы тогда считали удобной выдумкой, а не реальностью. Больцман покончил с собой в 1906 году, за несколько лет до того, как опыты Перрена окончательно доказали существование молекул. Формула $S = k\\ln W$ высечена на его надгробии в Вене."
-        },
-        {
-          "name": "Джеймс Клерк Максвелл",
-          "years": "1831–1879",
-          "what": "Придумал мысленный эксперимент с демоном, который сортирует молекулы и якобы нарушает второе начало. Загадка продержалась почти столетие и в итоге привела к неожиданному ответу: чтобы сортировать, демон должен помнить, а память приходится стирать — и вот за это платят теплом."
-        },
-        {
-          "name": "Клод Шеннон",
-          "years": "1916–2001",
-          "what": "Определяя количество информации, получил формулу, совпадающую с формулой Больцмана. По легенде, назвать величину энтропией ему посоветовал фон Нейман — с доводом, что в спорах это будет давать преимущество, поскольку никто толком не знает, что такое энтропия."
-        },
-        {
-          "name": "Рольф Ландауэр",
-          "years": "1927–1999",
-          "what": "Доказал, что вычисление само по себе может быть бесплатным, а вот стирание бита обязано выделить тепло не меньше $k_B T \\ln 2$. Так информация окончательно стала физической величиной, а демон Максвелла — закрытым вопросом."
-        }
-      ]
-    },
-    "map": {
-      "title": "Что вы изучите",
-      "lead": "Три параграфа идут от счёта к времени и от времени к информации. Стенд один и тот же во всех трёх — ящик с частицами, — но каждый раз вы будете смотреть на него иначе.",
-      "outcome": "Пройдя все три, вы будете понимать, почему беспорядок побеждает без всякого запрета на обратное; почему у времени есть направление, хотя у законов его нет; и почему стирание информации нагревает процессор, а мысль о вечном двигателе на демоне не работает."
-    },
-    "prereq": {
-      "title": "Что нужно знать заранее",
-      "items": [
-        "Термодинамику на уровне первых двух параграфов темы 5: что такое температура и теплота.",
-        "Логарифм: достаточно знать, что логарифм произведения есть сумма логарифмов. Именно из этого следует, что энтропия складывается.",
-        "Представление о вероятности как о доле благоприятных исходов. Комбинаторику разберём по ходу."
-      ],
-      "note": "Математики здесь меньше, чем кажется. Главная трудность темы не в аппарате, а в том, чтобы отучиться понимать энтропию как «беспорядок» в бытовом смысле и начать понимать её как счёт вариантов."
-    },
-    "closing": {
-      "title": "И главное",
-      "text": [
-        "Эта тема — единственная в курсе, которая заканчивается не выводом, а открытым вопросом. Мы умеем считать энтропию, предсказывать её рост и строить на этом холодильники и линии связи. Но почему Вселенная началась из состояния столь невероятно упорядоченного, никто не знает.",
-        "Роджер Пенроуз оценил вероятность такого начала числом, которое невозможно записать обычными цифрами. Это не философское затруднение, а честная нерешённая задача — и, возможно, ключ сразу к нескольким другим."
-      ],
-      "link": {
-        "href": "/frontier.html#entropy",
-        "text": "Открытые вопросы: почему энтропия растёт"
-      }
-    },
-    "lessons": [
-      {
-        "id": "01-microstates",
-        "title": "Энтропия по Больцману",
-        "sub": "Почему беспорядок — это про счёт, а не про неряшливость",
-        "law": "S = k ln W",
-        "model": "entropy"
-      },
-      {
-        "id": "02-arrow",
-        "title": "Стрела времени",
-        "sub": "Единственный закон, знающий разницу прошлого и будущего",
-        "law": "Второе начало",
-        "model": "entropy"
-      },
-      {
-        "id": "03-information",
-        "title": "Энтропия и информация",
-        "sub": "Демон Максвелла и цена одного бита",
-        "law": "Принцип Ландауэра",
-        "model": "entropy"
-      }
-    ]
+   ]
   },
-  "en": {
-    "title": "Entropy and the Arrow of Time",
-    "subtitle": "The deepest topic in the course—and the only one that touches on an unsolved question",
-    "lead": "This topic should have been placed at the end, but it is needed earlier: without it, it's unclear why the world is irreversible. Here thermodynamics, probability theory, information theory, and cosmology converge—and it turns out they are all talking about the same thing.",
-    "why": {
-      "title": "Why It Matters",
-      "text": [
-        "Let's start with an observation everyone is so used to that they no longer wonder. A broken cup does not reassemble itself. Cooled tea does not reheat at the expense of the room cooling down. A scent spreads through the apartment and does not return to the bottle. An egg does not unscramble back into yolk and white.",
-        "And now the reason this became a problem. All fundamental laws describing molecular motion are symmetric under time reversal. Film a collision of two molecules and run it backward—you'll see an equally valid collision, no law violated. So where does the direction come from, if it is not in the laws?",
-        "Boltzmann's answer is elegant and almost obvious in hindsight: it's not about prohibition, but about counting. There are incomparably more states that we call disorder than those we call order. The system goes where there are more possibilities—not because the reverse is forbidden, but because it is improbable.",
-        "And at once a pit opens up from which physics has yet to escape. If entropy increases with time, then yesterday it was smaller, the day before even smaller, and at the moment of the Universe's birth—incredibly, inexplicably small. No law demands this. The arrow of time you feel every second points not to physics here and now, but to the initial condition of the entire cosmos."
-      ]
-    },
-    "history": {
-      "title": "Who Created It",
-      "people": [
-        {
-          "name": "Rudolf Clausius",
-          "years": "1822–1888",
-          "what": "Introduced the concept itself and coined the term, taking the Greek word for 'transformation' and deliberately making it resemble 'energy'. Formulated the two laws of thermodynamics in the form still quoted today: the energy of the world is constant, the entropy of the world tends to a maximum."
-        },
-        {
-          "name": "Ludwig Boltzmann",
-          "years": "1844–1906",
-          "what": "Explained entropy via counting microstates and connected thermodynamics to statistics. Contemporaries received the idea hostilely: atoms were then considered a convenient fiction rather than reality. Boltzmann took his own life in 1906, a few years before Perrin's experiments definitively proved the existence of molecules. The formula $S = k\\ln W$ is engraved on his tombstone in Vienna."
-        },
-        {
-          "name": "James Clerk Maxwell",
-          "years": "1831–1879",
-          "what": "Conceived a thought experiment with a demon that sorts molecules and supposedly violates the second law. The puzzle lasted nearly a century and ultimately led to an unexpected answer: to sort, the demon must remember, and memory must be erased—and that costs heat."
-        },
-        {
-          "name": "Claude Shannon",
-          "years": "1916–2001",
-          "what": "In defining the amount of information, he obtained a formula coinciding with Boltzmann's formula. According to legend, von Neumann advised him to call the quantity entropy—arguing that it would give an advantage in debates since nobody really knows what entropy is."
-        },
-        {
-          "name": "Rolf Landauer",
-          "years": "1927–1999",
-          "what": "Proved that computation itself can be free, but erasing a bit must dissipate at least $k_B T \\ln 2$ of heat. Thus information finally became a physical quantity, and Maxwell's demon became a closed question."
-        }
-      ]
-    },
-    "map": {
-      "title": "What You Will Learn",
-      "lead": "Three sections take you from counting to time, and from time to information. The setup is the same in all three—a box of particles—but each time you will look at it differently.",
-      "outcome": "After all three, you will understand why disorder wins without any prohibition on the reverse; why time has a direction even though the laws do not; and why erasing information heats up a processor, and the idea of a perpetual motion machine based on a demon does not work."
-    },
-    "prereq": {
-      "title": "Prerequisites",
-      "items": [
-        "Thermodynamics at the level of the first two sections of Topic 5: what temperature and heat are.",
-        "Logarithm: enough to know that the logarithm of a product is the sum of logarithms. From this follows that entropy is additive.",
-        "An understanding of probability as the fraction of favorable outcomes. We will cover combinatorics along the way."
-      ],
-      "note": "There is less mathematics here than it seems. The main difficulty of the topic is not the formalism, but unlearning the everyday idea of entropy as 'disorder' and beginning to see it as counting possibilities."
-    },
-    "closing": {
-      "title": "And Finally",
-      "text": [
-        "This topic is the only one in the course that ends not with a conclusion but with an open question. We can calculate entropy, predict its increase, and build refrigerators and communication lines on that basis. But why the Universe began in such an incredibly ordered state, no one knows.",
-        "Roger Penrose estimated the probability of such a beginning as a number that cannot be written in ordinary digits. This is not a philosophical difficulty but a genuine unsolved problem—and possibly the key to several others at once."
-      ],
-      "link": {
-        "href": "/frontier.html#entropy",
-        "text": "Open Questions: Why Entropy Increases"
-      }
-    },
-    "lessons": [
-      {
-        "id": "01-microstates",
-        "title": "Boltzmann's Entropy",
-        "sub": "Section 1 · Why disorder is about counting, not about messiness",
-        "law": "S = k ln W",
-        "model": "entropy"
-      },
-      {
-        "id": "02-arrow",
-        "title": "Arrow of Time",
-        "sub": "Paragraph 2 · The only law that knows the difference between past and future",
-        "law": "Second law",
-        "model": "entropy"
-      },
-      {
-        "id": "03-information",
-        "title": "Entropy and Information",
-        "sub": "Section 3 · Maxwell's Demon and the Price of One Bit",
-        "law": "Landauer's principle",
-        "model": "entropy"
-      }
-    ]
+  "map": {
+   "title": "What You Will Learn",
+   "lead": "Three sections take you from counting to time, and from time to information. The setup is the same in all three—a box of particles—but each time you will look at it differently.",
+   "outcome": "After all three, you will understand why disorder wins without any prohibition on the reverse; why time has a direction even though the laws do not; and why erasing information heats up a processor, and the idea of a perpetual motion machine based on a demon does not work."
   },
-  "es": {
-    "title": "Entropía y la flecha del tiempo",
-    "subtitle": "El tema más profundo del curso — y el único que topa con una pregunta sin resolver",
-    "lead": "Este tema debería ponerse al final, pero se necesita antes: sin él no se entiende por qué el mundo es irreversible. Aquí convergen la termodinámica, la teoría de probabilidades, la teoría de la información y la cosmología — y se descubre que todas hablan de lo mismo.",
-    "why": {
-      "title": "Por qué saber esto",
-      "text": [
-        "Empecemos con una observación a la que todos están tan acostumbrados que dejaron de sorprenderse. Una taza rota no se vuelve a armar. Un té frío no se recalienta a costa de enfriar la habitación. El olor se extiende por el departamento y no regresa al frasco. Un huevo no se desmezcla de nuevo en yema y clara.",
-        "Y ahora lo que convirtió esto en un problema. Todas las leyes fundamentales que describen el movimiento de las moléculas son simétricas respecto a la inversión del tiempo. Graba en video la colisión de dos moléculas y ponlo al revés: verás una colisión igualmente legal, ninguna ley se viola. ¿De dónde surge entonces la dirección que no está en las leyes?",
-        "La respuesta de Boltzmann es elegante y casi obvia en retrospectiva: no es una cuestión de prohibición, sino de conteo. Los estados que llamamos desorden son incomparablemente más numerosos que los que llamamos orden. El sistema va hacia donde hay más opciones, no porque lo contrario esté prohibido, sino porque es improbable.",
-        "Y de inmediato se abre un abismo del que la física aún no ha podido salir. Si la entropía crece con el tiempo, entonces ayer era menor, anteayer aún menor, y en el momento del nacimiento del Universo — increíblemente, inexplicablemente pequeña. Ninguna ley exige esto. La flecha del tiempo que sientes cada segundo no se apoya en la física del aquí y ahora, sino en la condición inicial de todo el cosmos."
-      ]
-    },
-    "history": {
-      "title": "Quién la creó",
-      "people": [
-        {
-          "name": "Rudolf Clausius",
-          "years": "1822–1888",
-          "what": "Introdujo el concepto mismo y acuñó la palabra, tomando el griego «transformación» y haciéndola deliberadamente similar a «energía». Formuló las dos leyes de la termodinámica en la forma que se cita hasta hoy: la energía del mundo es constante, la entropía del mundo tiende al máximo."
-        },
-        {
-          "name": "Ludwig Boltzmann",
-          "years": "1844–1906",
-          "what": "Explicó la entropía mediante el conteo de microestados y vinculó la termodinámica con la estadística. Sus contemporáneos recibieron la idea con hostilidad: los átomos se consideraban entonces una ficción conveniente, no una realidad. Boltzmann se suicidó en 1906, pocos años antes de que los experimentos de Perrin demostraran definitivamente la existencia de las moléculas. La fórmula $S = k\\ln W$ está grabada en su lápida en Viena."
-        },
-        {
-          "name": "James Clerk Maxwell",
-          "years": "1831–1879",
-          "what": "Ideó el experimento mental del demonio que clasifica moléculas y aparentemente viola la segunda ley. El enigma duró casi un siglo y finalmente condujo a una respuesta inesperada: para clasificar, el demonio debe recordar, y la memoria debe borrarse — y por eso se paga con calor."
-        },
-        {
-          "name": "Claude Shannon",
-          "years": "1916–2001",
-          "what": "Al definir la cantidad de información, obtuvo una fórmula que coincide con la de Boltzmann. Según la leyenda, von Neumann le sugirió llamar a la magnitud entropía, argumentando que en las discusiones eso daría ventaja, ya que nadie sabe realmente qué es la entropía."
-        },
-        {
-          "name": "Rolf Landauer",
-          "years": "1927–1999",
-          "what": "Demostró que el cálculo en sí mismo puede ser gratuito, pero el borrado de un bit debe disipar al menos $k_B T \\ln 2$ de calor. Así, la información se convirtió definitivamente en una magnitud física, y el demonio de Maxwell quedó como un asunto cerrado."
-        }
-      ]
-    },
-    "map": {
-      "title": "Qué aprenderás",
-      "lead": "Tres párrafos van del conteo al tiempo y del tiempo a la información. El escenario es el mismo en los tres — una caja con partículas — pero cada vez lo mirarás de otra manera.",
-      "outcome": "Al completar los tres, entenderás por qué el desorden triunfa sin ninguna prohibición de lo contrario; por qué el tiempo tiene una dirección aunque las leyes no la tengan; y por qué el borrado de información calienta el procesador y la idea de un motor perpetuo basado en el demonio no funciona."
-    },
-    "prereq": {
-      "title": "Qué necesitas saber de antemano",
-      "items": [
-        "Termodinámica al nivel de los dos primeros párrafos del tema 5: qué son la temperatura y el calor.",
-        "Logaritmo: basta saber que el logaritmo de un producto es la suma de los logaritmos. De ahí se sigue que la entropía es aditiva.",
-        "Noción de probabilidad como fracción de casos favorables. La combinatoria la iremos viendo sobre la marcha."
-      ],
-      "note": "Hay menos matemáticas de lo que parece. La principal dificultad del tema no está en el aparato, sino en dejar de entender la entropía como «desorden» en el sentido cotidiano y empezar a entenderla como un conteo de opciones."
-    },
-    "closing": {
-      "title": "Y lo principal",
-      "text": [
-        "Este tema es el único del curso que no termina con una conclusión, sino con una pregunta abierta. Sabemos calcular la entropía, predecir su crecimiento y construir sobre ello refrigeradores y líneas de comunicación. Pero por qué el Universo comenzó desde un estado tan increíblemente ordenado, nadie lo sabe.",
-        "Roger Penrose estimó la probabilidad de tal comienzo con un número que no se puede escribir con dígitos ordinarios. No es una dificultad filosófica, sino un problema genuinamente no resuelto — y quizás la clave para varios otros."
-      ],
-      "link": {
-        "href": "/frontier.html#entropy",
-        "text": "Preguntas abiertas: por qué crece la entropía"
-      }
-    },
-    "lessons": [
-      {
-        "id": "01-microstates",
-        "title": "Entropía según Boltzmann",
-        "sub": "Sección 1 · Por qué el desorden es cuestión de contar, no de desaliño",
-        "law": "S = k ln W",
-        "model": "entropy"
-      },
-      {
-        "id": "02-arrow",
-        "title": "La flecha del tiempo",
-        "sub": "Párrafo 2 · La única ley que conoce la diferencia entre pasado y futuro",
-        "law": "Segundo principio",
-        "model": "entropy"
-      },
-      {
-        "id": "03-information",
-        "title": "Entropía e información",
-        "sub": "Párrafo 3 · El demonio de Maxwell y el precio de un bit",
-        "law": "Principio de Landauer",
-        "model": "entropy"
-      }
-    ]
+  "prereq": {
+   "title": "Prerequisites",
+   "items": [
+    "Thermodynamics at the level of the first two sections of Topic 5: what temperature and heat are.",
+    "Logarithm: enough to know that the logarithm of a product is the sum of logarithms. From this follows that entropy is additive.",
+    "An understanding of probability as the fraction of favorable outcomes. We will cover combinatorics along the way."
+   ],
+   "note": "There is less mathematics here than it seems. The main difficulty of the topic is not the formalism, but unlearning the everyday idea of entropy as 'disorder' and beginning to see it as counting possibilities."
   },
-  "ar": {
-    "title": "الإنتروبيا وسهم الزمن",
-    "subtitle": "أعمق موضوع في الدورة — والوحيد الذي يصطدم بسؤال غير محلول",
-    "lead": "كان ينبغي وضع هذا الموضوع في النهاية، لكنه مطلوب في وقت سابق: بدونه لا يُفهم لماذا العالم لا رجعة فيه. هنا تلتقي الديناميكا الحرارية، نظرية الاحتمالات، نظرية المعلومات وعلم الكون — ويُكتشف أنهم يتحدثون عن شيء واحد.",
-    "why": {
-      "title": "لماذا تعرف هذا",
-      "text": [
-        "لنبدأ بملاحظة اعتاد عليها الجميع لدرجة أنهم توقفوا عن الدهشة. الكأس المكسور لا يعود متجمعًا. الشاي البارد لا يسخن من تبريد الغرفة. الرائحة تنتشر في الشقة ولا تعود إلى الزجاجة. البيضة لا تعود إلى صفار وبياض.",
-        "والآن ما جعل هذا مشكلة. جميع القوانين الأساسية التي تصف حركة الجزيئات متناظرة بالنسبة لعكس الزمن. صور تصادم جزيئين على فيلم وشغله بالعكس — سترى تصادمًا قانونيًا بنفس القدر، لا قانون يُخرق. من أين يأتي الاتجاه الذي ليس في القوانين؟",
-        "إجابة بولتزمان أنيقة وتكاد تكون واضحة بعد فوات الأوان: الأمر ليس حظرًا بل عدًّا. الحالات التي نسميها فوضى لا تُقارن بالتي نسميها نظامًا. النظام يذهب حيث الخيارات أكثر — ليس لأن العكس ممنوع، بل لأنه غير مرجح.",
-        "وفورًا ينفتح حفرة لم تستطع الفيزياء الخروج منها حتى الآن. إذا كانت الإنتروبيا تزداد مع الزمن، فهي كانت أقل أمس، وأقل قبل أمس، وفي لحظة ولادة الكون — صغيرة بشكل لا يصدق ولا يمكن تفسيره. لا قانون يفرض ذلك. سهم الزمن الذي تشعر به كل ثانية لا يرتكز على الفيزياء هنا والآن، بل على الشرط الأولي للكون بأكمله."
-      ]
+  "closing": {
+   "title": "And Finally",
+   "text": [
+    "This topic is the only one in the course that ends not with a conclusion but with an open question. We can calculate entropy, predict its increase, and build refrigerators and communication lines on that basis. But why the Universe began in such an incredibly ordered state, no one knows.",
+    "Roger Penrose estimated the probability of such a beginning as a number that cannot be written in ordinary digits. This is not a philosophical difficulty but a genuine unsolved problem—and possibly the key to several others at once."
+   ],
+   "link": {
+    "href": "/frontier.html#entropy",
+    "text": "Open Questions: Why Entropy Increases"
+   }
+  },
+  "lessons": [
+   {
+    "id": "01-microstates",
+    "title": "Boltzmann's Entropy",
+    "sub": "Section 1 · Why disorder is about counting, not about messiness",
+    "law": "S = k ln W",
+    "model": "entropy"
+   },
+   {
+    "id": "02-arrow",
+    "title": "Arrow of Time",
+    "sub": "Paragraph 2 · The only law that knows the difference between past and future",
+    "law": "Second law",
+    "model": "entropy"
+   },
+   {
+    "id": "03-information",
+    "title": "Entropy and Information",
+    "sub": "Section 3 · Maxwell's Demon and the Price of One Bit",
+    "law": "Landauer's principle",
+    "model": "entropy"
+   }
+  ]
+ },
+ "es": {
+  "title": "Entropía y la flecha del tiempo",
+  "subtitle": "El tema más profundo del curso — y el único que topa con una pregunta sin resolver",
+  "lead": "Este tema debería ponerse al final, pero se necesita antes: sin él no se entiende por qué el mundo es irreversible. Aquí convergen la termodinámica, la teoría de probabilidades, la teoría de la información y la cosmología — y se descubre que todas hablan de lo mismo.",
+  "why": {
+   "title": "Por qué saber esto",
+   "text": [
+    "Empecemos con una observación a la que todos están tan acostumbrados que dejaron de sorprenderse. Una taza rota no se vuelve a armar. Un té frío no se recalienta a costa de enfriar la habitación. El olor se extiende por el departamento y no regresa al frasco. Un huevo no se desmezcla de nuevo en yema y clara.",
+    "Y ahora lo que convirtió esto en un problema. Todas las leyes fundamentales que describen el movimiento de las moléculas son simétricas respecto a la inversión del tiempo. Graba en video la colisión de dos moléculas y ponlo al revés: verás una colisión igualmente legal, ninguna ley se viola. ¿De dónde surge entonces la dirección que no está en las leyes?",
+    "La respuesta de Boltzmann es elegante y casi obvia en retrospectiva: no es una cuestión de prohibición, sino de conteo. Los estados que llamamos desorden son incomparablemente más numerosos que los que llamamos orden. El sistema va hacia donde hay más opciones, no porque lo contrario esté prohibido, sino porque es improbable.",
+    "Y de inmediato se abre un abismo del que la física aún no ha podido salir. Si la entropía crece con el tiempo, entonces ayer era menor, anteayer aún menor, y en el momento del nacimiento del Universo — increíblemente, inexplicablemente pequeña. Ninguna ley exige esto. La flecha del tiempo que sientes cada segundo no se apoya en la física del aquí y ahora, sino en la condición inicial de todo el cosmos."
+   ]
+  },
+  "history": {
+   "title": "Quién la creó",
+   "people": [
+    {
+     "name": "Rudolf Clausius",
+     "years": "1822–1888",
+     "what": "Introdujo el concepto mismo y acuñó la palabra, tomando el griego «transformación» y haciéndola deliberadamente similar a «energía». Formuló las dos leyes de la termodinámica en la forma que se cita hasta hoy: la energía del mundo es constante, la entropía del mundo tiende al máximo."
     },
-    "history": {
-      "title": "من صنعها",
-      "people": [
-        {
-          "name": "رودولف كلاوزيوس",
-          "years": "1822–1888",
-          "what": "أدخل المفهوم نفسه واخترع الكلمة، آخذًا الكلمة اليونانية «تحول» وجاعلاً إياها مشابهة لـ«طاقة» عمدًا. صاغ القانونين الأول والثاني للديناميكا الحرارية بالصيغة التي تُستشهد بها حتى الآن: طاقة الكون ثابتة، إنتروبيا الكون تتجه نحو الحد الأقصى."
-        },
-        {
-          "name": "لودفيغ بولتزمان",
-          "years": "1844–1906",
-          "what": "شرح الإنتروبيا عبر عد الحالات الدقيقة وربط الديناميكا الحرارية بالإحصاء. استقبل المعاصرون الفكرة بعداء: كانت الذرات تُعتبر اختراعًا ملائمًا وليس حقيقة. انتحر بولتزمان في 1906، قبل بضع سنوات من تجارب بيرين التي أثبتت وجود الجزيئات نهائيًا. الصيغة $S = k\\ln W$ محفورة على شاهد قبره في فيينا."
-        },
-        {
-          "name": "جيمس كليرك ماكسويل",
-          "years": "1831–1879",
-          "what": "اخترع تجربة فكرية مع شيطان يفرز الجزيئات ويزعم أنه يخرق القانون الثاني. استمر اللغز قرابة قرن وأدى في النهاية إلى إجابة غير متوقعة: لكي يفرز، يجب على الشيطان أن يتذكر، والذاكرة يجب أن تُمحى — ولهذا يُدفع بالحرارة."
-        },
-        {
-          "name": "كلود شانون",
-          "years": "1916–2001",
-          "what": "عند تعريف كمية المعلومات، حصل على صيغة تطابق صيغة بولتزمان. وفقًا للأسطورة، نصحه فون نيومان بتسمية الكمية إنتروبيا بحجة أنها ستعطيه أفضلية في الجدالات لأن لا أحد يعرف حقًا ما هي الإنتروبيا."
-        },
-        {
-          "name": "رولف لانداور",
-          "years": "1927–1999",
-          "what": "أثبت أن الحساب نفسه يمكن أن يكون مجانيًا، لكن محو بت واحد يجب أن يطلق حرارة لا تقل عن $k_B T \\ln 2$. هكذا أصبحت المعلومات أخيرًا كمية فيزيائية، وشيطان ماكسويل أصبح مسألة مغلقة."
-        }
-      ]
+    {
+     "name": "Ludwig Boltzmann",
+     "years": "1844–1906",
+     "what": "Explicó la entropía mediante el conteo de microestados y vinculó la termodinámica con la estadística. Sus contemporáneos recibieron la idea con hostilidad: los átomos se consideraban entonces una ficción conveniente, no una realidad. Boltzmann se suicidó en 1906, pocos años antes de que los experimentos de Perrin demostraran definitivamente la existencia de las moléculas. La fórmula $S = k\\ln W$ está grabada en su lápida en Viena."
     },
-    "map": {
-      "title": "ماذا ستتعلم",
-      "lead": "ثلاث فقرات تنتقل من العد إلى الزمن ومن الزمن إلى المعلومات. المنصة واحدة في الثلاثة — صندوق به جسيمات — لكن في كل مرة ستنظر إليه بشكل مختلف.",
-      "outcome": "بعد إتمام الثلاثة، ستفهم لماذا تنتصر الفوضى دون أي حظر للعكس؛ لماذا للزمن اتجاه رغم أن القوانين ليس لها اتجاه؛ ولماذا محو المعلومات يسخن المعالج، وفكرة الآلة الدائمة بالشيطان لا تعمل."
+    {
+     "name": "James Clerk Maxwell",
+     "years": "1831–1879",
+     "what": "Ideó el experimento mental del demonio que clasifica moléculas y aparentemente viola la segunda ley. El enigma duró casi un siglo y finalmente condujo a una respuesta inesperada: para clasificar, el demonio debe recordar, y la memoria debe borrarse — y por eso se paga con calor."
     },
-    "prereq": {
-      "title": "ما تحتاج معرفته مسبقًا",
-      "items": [
-        "الديناميكا الحرارية بمستوى أول فقرتين من الموضوع 5: ما هي درجة الحرارة والحرارة.",
-        "اللوغاريتم: يكفي معرفة أن لوغاريتم حاصل الضرب هو مجموع اللوغاريتمات. ومن هذا يتبع أن الإنتروبيا تجمع.",
-        "فكرة الاحتمال كحصة من النتائج المواتية. سنتناول التوافقيات أثناء ذلك."
-      ],
-      "note": "الرياضيات هنا أقل مما يبدو. الصعوبة الرئيسية للموضوع ليست في الأدوات، بل في فطم نفسك عن فهم الإنتروبيا كـ«فوضى» بالمعنى اليومي والبدء في فهمها كعد للخيارات."
+    {
+     "name": "Claude Shannon",
+     "years": "1916–2001",
+     "what": "Al definir la cantidad de información, obtuvo una fórmula que coincide con la de Boltzmann. Según la leyenda, von Neumann le sugirió llamar a la magnitud entropía, argumentando que en las discusiones eso daría ventaja, ya que nadie sabe realmente qué es la entropía."
     },
-    "closing": {
-      "title": "والأهم",
-      "text": [
-        "هذا الموضوع هو الوحيد في الدورة الذي لا ينتهي باستنتاج بل بسؤال مفتوح. نحن نعرف كيف نحسب الإنتروبيا ونتنبأ بازديادها ونبني عليها الثلاجات وخطوط الاتصال. لكن لماذا بدأ الكون من حالة منظمة بشكل لا يصدق، لا أحد يعلم.",
-        "روجر بنروز قدّر احتمال هذه البداية برقم لا يمكن كتابته بأرقام عادية. هذه ليست معضلة فلسفية، بل مسألة غير محلولة بأمانة — وربما مفتاح لعدة مسائل أخرى."
-      ],
-      "link": {
-        "href": "/frontier.html#entropy",
-        "text": "أسئلة مفتوحة: لماذا تزداد الإنتروبيا"
-      }
+    {
+     "name": "Rolf Landauer",
+     "years": "1927–1999",
+     "what": "Demostró que el cálculo en sí mismo puede ser gratuito, pero el borrado de un bit debe disipar al menos $k_B T \\ln 2$ de calor. Así, la información se convirtió definitivamente en una magnitud física, y el demonio de Maxwell quedó como un asunto cerrado."
+    }
+   ]
+  },
+  "map": {
+   "title": "Qué aprenderás",
+   "lead": "Tres párrafos van del conteo al tiempo y del tiempo a la información. El escenario es el mismo en los tres — una caja con partículas — pero cada vez lo mirarás de otra manera.",
+   "outcome": "Al completar los tres, entenderás por qué el desorden triunfa sin ninguna prohibición de lo contrario; por qué el tiempo tiene una dirección aunque las leyes no la tengan; y por qué el borrado de información calienta el procesador y la idea de un motor perpetuo basado en el demonio no funciona."
+  },
+  "prereq": {
+   "title": "Qué necesitas saber de antemano",
+   "items": [
+    "Termodinámica al nivel de los dos primeros párrafos del tema 5: qué son la temperatura y el calor.",
+    "Logaritmo: basta saber que el logaritmo de un producto es la suma de los logaritmos. De ahí se sigue que la entropía es aditiva.",
+    "Noción de probabilidad como fracción de casos favorables. La combinatoria la iremos viendo sobre la marcha."
+   ],
+   "note": "Hay menos matemáticas de lo que parece. La principal dificultad del tema no está en el aparato, sino en dejar de entender la entropía como «desorden» en el sentido cotidiano y empezar a entenderla como un conteo de opciones."
+  },
+  "closing": {
+   "title": "Y lo principal",
+   "text": [
+    "Este tema es el único del curso que no termina con una conclusión, sino con una pregunta abierta. Sabemos calcular la entropía, predecir su crecimiento y construir sobre ello refrigeradores y líneas de comunicación. Pero por qué el Universo comenzó desde un estado tan increíblemente ordenado, nadie lo sabe.",
+    "Roger Penrose estimó la probabilidad de tal comienzo con un número que no se puede escribir con dígitos ordinarios. No es una dificultad filosófica, sino un problema genuinamente no resuelto — y quizás la clave para varios otros."
+   ],
+   "link": {
+    "href": "/frontier.html#entropy",
+    "text": "Preguntas abiertas: por qué crece la entropía"
+   }
+  },
+  "lessons": [
+   {
+    "id": "01-microstates",
+    "title": "Entropía según Boltzmann",
+    "sub": "Sección 1 · Por qué el desorden es cuestión de contar, no de desaliño",
+    "law": "S = k ln W",
+    "model": "entropy"
+   },
+   {
+    "id": "02-arrow",
+    "title": "La flecha del tiempo",
+    "sub": "Párrafo 2 · La única ley que conoce la diferencia entre pasado y futuro",
+    "law": "Segundo principio",
+    "model": "entropy"
+   },
+   {
+    "id": "03-information",
+    "title": "Entropía e información",
+    "sub": "Párrafo 3 · El demonio de Maxwell y el precio de un bit",
+    "law": "Principio de Landauer",
+    "model": "entropy"
+   }
+  ]
+ },
+ "ar": {
+  "title": "الإنتروبيا وسهم الزمن",
+  "subtitle": "أعمق موضوع في الدورة — والوحيد الذي يصطدم بسؤال غير محلول",
+  "lead": "كان ينبغي وضع هذا الموضوع في النهاية، لكنه مطلوب في وقت سابق: بدونه لا يُفهم لماذا العالم لا رجعة فيه. هنا تلتقي الديناميكا الحرارية، نظرية الاحتمالات، نظرية المعلومات وعلم الكون — ويُكتشف أنهم يتحدثون عن شيء واحد.",
+  "why": {
+   "title": "لماذا تعرف هذا",
+   "text": [
+    "لنبدأ بملاحظة اعتاد عليها الجميع لدرجة أنهم توقفوا عن الدهشة. الكأس المكسور لا يعود متجمعًا. الشاي البارد لا يسخن من تبريد الغرفة. الرائحة تنتشر في الشقة ولا تعود إلى الزجاجة. البيضة لا تعود إلى صفار وبياض.",
+    "والآن ما جعل هذا مشكلة. جميع القوانين الأساسية التي تصف حركة الجزيئات متناظرة بالنسبة لعكس الزمن. صور تصادم جزيئين على فيلم وشغله بالعكس — سترى تصادمًا قانونيًا بنفس القدر، لا قانون يُخرق. من أين يأتي الاتجاه الذي ليس في القوانين؟",
+    "إجابة بولتزمان أنيقة وتكاد تكون واضحة بعد فوات الأوان: الأمر ليس حظرًا بل عدًّا. الحالات التي نسميها فوضى لا تُقارن بالتي نسميها نظامًا. النظام يذهب حيث الخيارات أكثر — ليس لأن العكس ممنوع، بل لأنه غير مرجح.",
+    "وفورًا ينفتح حفرة لم تستطع الفيزياء الخروج منها حتى الآن. إذا كانت الإنتروبيا تزداد مع الزمن، فهي كانت أقل أمس، وأقل قبل أمس، وفي لحظة ولادة الكون — صغيرة بشكل لا يصدق ولا يمكن تفسيره. لا قانون يفرض ذلك. سهم الزمن الذي تشعر به كل ثانية لا يرتكز على الفيزياء هنا والآن، بل على الشرط الأولي للكون بأكمله."
+   ]
+  },
+  "history": {
+   "title": "من صنعها",
+   "people": [
+    {
+     "name": "رودولف كلاوزيوس",
+     "years": "1822–1888",
+     "what": "أدخل المفهوم نفسه واخترع الكلمة، آخذًا الكلمة اليونانية «تحول» وجاعلاً إياها مشابهة لـ«طاقة» عمدًا. صاغ القانونين الأول والثاني للديناميكا الحرارية بالصيغة التي تُستشهد بها حتى الآن: طاقة الكون ثابتة، إنتروبيا الكون تتجه نحو الحد الأقصى."
     },
-    "lessons": [
-      {
-        "id": "01-microstates",
-        "title": "إنتروبيا بولتزمان",
-        "sub": "الفقرة 1 · لماذا الفوضى تتعلق بالعد، وليس بالإهمال",
-        "law": "S = k ln W",
-        "model": "entropy"
-      },
-      {
-        "id": "02-arrow",
-        "title": "سهم الزمن",
-        "sub": "الفقرة 2 · القانون الوحيد الذي يعرف الفرق بين الماضي والمستقبل",
-        "law": "القانون الثاني",
-        "model": "entropy"
-      },
-      {
-        "id": "03-information",
-        "title": "الإنتروبيا والمعلومات",
-        "sub": "الفقرة 3 · شيطان ماكسويل وثمن البت الواحد",
-        "law": "مبدأ لانداوير",
-        "model": "entropy"
-      }
-    ]
-  }
+    {
+     "name": "لودفيغ بولتزمان",
+     "years": "1844–1906",
+     "what": "شرح الإنتروبيا عبر عد الحالات الدقيقة وربط الديناميكا الحرارية بالإحصاء. استقبل المعاصرون الفكرة بعداء: كانت الذرات تُعتبر اختراعًا ملائمًا وليس حقيقة. انتحر بولتزمان في 1906، قبل بضع سنوات من تجارب بيرين التي أثبتت وجود الجزيئات نهائيًا. الصيغة $S = k\\ln W$ محفورة على شاهد قبره في فيينا."
+    },
+    {
+     "name": "جيمس كليرك ماكسويل",
+     "years": "1831–1879",
+     "what": "اخترع تجربة فكرية مع شيطان يفرز الجزيئات ويزعم أنه يخرق القانون الثاني. استمر اللغز قرابة قرن وأدى في النهاية إلى إجابة غير متوقعة: لكي يفرز، يجب على الشيطان أن يتذكر، والذاكرة يجب أن تُمحى — ولهذا يُدفع بالحرارة."
+    },
+    {
+     "name": "كلود شانون",
+     "years": "1916–2001",
+     "what": "عند تعريف كمية المعلومات، حصل على صيغة تطابق صيغة بولتزمان. وفقًا للأسطورة، نصحه فون نيومان بتسمية الكمية إنتروبيا بحجة أنها ستعطيه أفضلية في الجدالات لأن لا أحد يعرف حقًا ما هي الإنتروبيا."
+    },
+    {
+     "name": "رولف لانداور",
+     "years": "1927–1999",
+     "what": "أثبت أن الحساب نفسه يمكن أن يكون مجانيًا، لكن محو بت واحد يجب أن يطلق حرارة لا تقل عن $k_B T \\ln 2$. هكذا أصبحت المعلومات أخيرًا كمية فيزيائية، وشيطان ماكسويل أصبح مسألة مغلقة."
+    }
+   ]
+  },
+  "map": {
+   "title": "ماذا ستتعلم",
+   "lead": "ثلاث فقرات تنتقل من العد إلى الزمن ومن الزمن إلى المعلومات. المنصة واحدة في الثلاثة — صندوق به جسيمات — لكن في كل مرة ستنظر إليه بشكل مختلف.",
+   "outcome": "بعد إتمام الثلاثة، ستفهم لماذا تنتصر الفوضى دون أي حظر للعكس؛ لماذا للزمن اتجاه رغم أن القوانين ليس لها اتجاه؛ ولماذا محو المعلومات يسخن المعالج، وفكرة الآلة الدائمة بالشيطان لا تعمل."
+  },
+  "prereq": {
+   "title": "ما تحتاج معرفته مسبقًا",
+   "items": [
+    "الديناميكا الحرارية بمستوى أول فقرتين من الموضوع 5: ما هي درجة الحرارة والحرارة.",
+    "اللوغاريتم: يكفي معرفة أن لوغاريتم حاصل الضرب هو مجموع اللوغاريتمات. ومن هذا يتبع أن الإنتروبيا تجمع.",
+    "فكرة الاحتمال كحصة من النتائج المواتية. سنتناول التوافقيات أثناء ذلك."
+   ],
+   "note": "الرياضيات هنا أقل مما يبدو. الصعوبة الرئيسية للموضوع ليست في الأدوات، بل في فطم نفسك عن فهم الإنتروبيا كـ«فوضى» بالمعنى اليومي والبدء في فهمها كعد للخيارات."
+  },
+  "closing": {
+   "title": "والأهم",
+   "text": [
+    "هذا الموضوع هو الوحيد في الدورة الذي لا ينتهي باستنتاج بل بسؤال مفتوح. نحن نعرف كيف نحسب الإنتروبيا ونتنبأ بازديادها ونبني عليها الثلاجات وخطوط الاتصال. لكن لماذا بدأ الكون من حالة منظمة بشكل لا يصدق، لا أحد يعلم.",
+    "روجر بنروز قدّر احتمال هذه البداية برقم لا يمكن كتابته بأرقام عادية. هذه ليست معضلة فلسفية، بل مسألة غير محلولة بأمانة — وربما مفتاح لعدة مسائل أخرى."
+   ],
+   "link": {
+    "href": "/frontier.html#entropy",
+    "text": "أسئلة مفتوحة: لماذا تزداد الإنتروبيا"
+   }
+  },
+  "lessons": [
+   {
+    "id": "01-microstates",
+    "title": "إنتروبيا بولتزمان",
+    "sub": "الفقرة 1 · لماذا الفوضى تتعلق بالعد، وليس بالإهمال",
+    "law": "S = k ln W",
+    "model": "entropy"
+   },
+   {
+    "id": "02-arrow",
+    "title": "سهم الزمن",
+    "sub": "الفقرة 2 · القانون الوحيد الذي يعرف الفرق بين الماضي والمستقبل",
+    "law": "القانون الثاني",
+    "model": "entropy"
+   },
+   {
+    "id": "03-information",
+    "title": "الإنتروبيا والمعلومات",
+    "sub": "الفقرة 3 · شيطان ماكسويل وثمن البت الواحد",
+    "law": "مبدأ لانداوير",
+    "model": "entropy"
+   }
+  ]
+ },
+ "fr": {
+  "title": "Entropie et flèche du temps",
+  "subtitle": "Le sujet le plus profond du cours — et le seul qui bute sur une question non résolue",
+  "lead": "Ce sujet mériterait d'être placé à la fin, mais il est nécessaire plus tôt : sans lui, on ne comprend pas pourquoi le monde est irréversible. Ici convergent la thermodynamique, la théorie des probabilités, la théorie de l'information et la cosmologie — et on découvre qu'elles parlent toutes de la même chose.",
+  "why": {
+   "title": "Pourquoi le savoir",
+   "text": [
+    "Commençons par une observation à laquelle tout le monde est tellement habitué qu'on a cessé de s'en étonner. Une tasse cassée ne se recolle pas toute seule. Un thé refroidi ne se réchauffe pas aux dépens du refroidissement de la pièce. Une odeur se répand dans l'appartement et ne retourne pas dans le flacon. Un œuf ne se sépare pas à nouveau en jaune et en blanc.",
+    "Et voici ce qui en fait un problème. Toutes les lois fondamentales qui décrivent le mouvement des molécules sont symétriques par rapport au renversement du temps. Filmez la collision de deux molécules et passez le film à l'envers : vous verrez une collision tout aussi légitime, aucune loi n'est violée. D'où vient alors cette direction qui n'est pas dans les lois ?",
+    "La réponse de Boltzmann est élégante et presque évidente rétrospectivement : il ne s'agit pas d'une interdiction, mais d'un décompte. Les états que nous appelons désordre sont incomparablement plus nombreux que ceux que nous appelons ordre. Le système va là où il y a plus de possibilités — non parce que l'inverse est interdit, mais parce qu'il est improbable.",
+    "Et aussitôt s'ouvre un gouffre dont la physique ne parvient toujours pas à sortir. Si l'entropie augmente avec le temps, alors hier elle était plus faible, avant-hier encore plus faible, et au moment de la naissance de l'Univers — incroyablement, inexplicablement faible. Aucune loi ne l'exige. La flèche du temps que vous ressentez à chaque seconde ne tient pas à la physique d'ici et maintenant, mais à la condition initiale de tout l'univers."
+   ]
+  },
+  "history": {
+   "title": "Qui l'a créée",
+   "people": [
+    {
+     "name": "Rudolf Clausius",
+     "years": "1822–1888",
+     "what": "A introduit le concept lui-même et a inventé le mot, en prenant le grec « transformation » et en le faisant délibérément ressembler à « énergie ». Il a formulé les deux principes de la thermodynamique sous la forme que l'on cite encore aujourd'hui : l'énergie du monde est constante, l'entropie du monde tend vers un maximum."
+    },
+    {
+     "name": "Ludwig Boltzmann",
+     "years": "1844–1906",
+     "what": "A expliqué l'entropie par le dénombrement des micro-états et a relié la thermodynamique aux statistiques. Ses contemporains ont accueilli l'idée avec hostilité : les atomes étaient alors considérés comme une invention commode, pas comme une réalité. Boltzmann s'est suicidé en 1906, quelques années avant que les expériences de Perrin ne prouvent définitivement l'existence des molécules. La formule $S = k\\ln W$ est gravée sur sa tombe à Vienne."
+    },
+    {
+     "name": "James Clerk Maxwell",
+     "years": "1831–1879",
+     "what": "A imaginé l'expérience de pensée du démon qui trie les molécules et semble violer le deuxième principe. L'énigme a tenu près d'un siècle et a finalement conduit à une réponse inattendue : pour trier, le démon doit se souvenir, et la mémoire doit être effacée — et c'est pour cela que l'on paie en chaleur."
+    },
+    {
+     "name": "Claude Shannon",
+     "years": "1916–2001",
+     "what": "En définissant la quantité d'information, il a obtenu une formule coïncidant avec celle de Boltzmann. Selon la légende, c'est von Neumann qui lui aurait conseillé d'appeler cette grandeur entropie, avec l'argument que cela donnerait un avantage dans les débats, car personne ne sait vraiment ce qu'est l'entropie."
+    },
+    {
+     "name": "Rolf Landauer",
+     "years": "1927–1999",
+     "what": "A prouvé que le calcul lui-même peut être gratuit, mais que l'effacement d'un bit doit nécessairement libérer une chaleur d'au moins $k_B T \\ln 2$. Ainsi, l'information est devenue définitivement une grandeur physique, et le démon de Maxwell une question close."
+    }
+   ]
+  },
+  "map": {
+   "title": "Ce que vous étudierez",
+   "lead": "Trois paragraphes vont du décompte au temps, et du temps à l'information. Le support est le même dans les trois — une boîte avec des particules — mais à chaque fois vous le regarderez autrement.",
+   "outcome": "Après avoir parcouru les trois, vous comprendrez pourquoi le désordre triomphe sans aucune interdiction de l'inverse ; pourquoi le temps a une direction alors que les lois n'en ont pas ; et pourquoi l'effacement de l'information chauffe le processeur, et pourquoi l'idée d'un mouvement perpétuel avec un démon ne fonctionne pas."
+  },
+  "prereq": {
+   "title": "Ce qu'il faut savoir à l'avance",
+   "items": [
+    "La thermodynamique au niveau des deux premiers paragraphes du thème 5 : ce que sont la température et la chaleur.",
+    "Le logarithme : il suffit de savoir que le logarithme d'un produit est la somme des logarithmes. C'est de là que découle le fait que l'entropie est additive.",
+    "Une représentation de la probabilité comme fraction de cas favorables. La combinatoire sera vue au fur et à mesure."
+   ],
+   "note": "Il y a moins de mathématiques qu'il n'y paraît. La principale difficulté du sujet n'est pas dans l'appareil, mais dans le fait de désapprendre à comprendre l'entropie comme « désordre » au sens courant et de commencer à la comprendre comme un décompte de possibilités."
+  },
+  "closing": {
+   "title": "Et surtout",
+   "text": [
+    "Ce sujet est le seul du cours qui ne se termine pas par une conclusion, mais par une question ouverte. Nous savons calculer l'entropie, prédire sa croissance et construire là-dessus des réfrigérateurs et des lignes de communication. Mais pourquoi l'Univers a commencé dans un état si incroyablement ordonné, personne ne le sait.",
+    "Roger Penrose a estimé la probabilité d'un tel commencement par un nombre qu'il est impossible d'écrire avec des chiffres ordinaires. Ce n'est pas une difficulté philosophique, mais un problème honnête non résolu — et peut-être la clé de plusieurs autres."
+   ],
+   "link": {
+    "href": "/frontier.html#entropy",
+    "text": "Questions ouvertes : pourquoi l'entropie augmente"
+   }
+  },
+  "lessons": [
+   {
+    "id": "01-microstates",
+    "title": "Entropie selon Boltzmann",
+    "sub": "Pourquoi le désordre est une question de décompte, pas de négligence",
+    "law": "S = k ln W",
+    "model": "entropy"
+   },
+   {
+    "id": "02-arrow",
+    "title": "La flèche du temps",
+    "sub": "La seule loi qui connaît la différence entre passé et futur",
+    "law": "Deuxième principe",
+    "model": "entropy"
+   },
+   {
+    "id": "03-information",
+    "title": "Entropie et information",
+    "sub": "Le démon de Maxwell et le prix d'un bit",
+    "law": "Principe de Landauer",
+    "model": "entropy"
+   }
+  ]
+ }
 }

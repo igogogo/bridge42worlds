@@ -17,37 +17,52 @@
   ],
   "examples_from_articles": [
    {
-    "id": "2608.00846v1",
-    "date": "2026-08-01",
+    "id": "2601.04662",
+    "date": "2026-01-08",
     "title": {
-     "ru": "Как клетка выбирает путь: взгляд сквозь шум",
-     "en": "How a Cell Chooses Its Path: A View Through the Noise",
-     "es": "Cómo elige su camino una célula: una mirada a través del ruido",
-     "ar": "كيف تختار الخلية طريقها: نظرة عبر الضجيج"
+     "ru": "Как пара частиц отскакивает от стены",
+     "en": "How a Pair of Particles Bounces Off a Wall",
+     "es": "Cómo rebota un par de partículas contra la pared",
+     "ar": "كيف ترتد زوج من الجسيمات عن الجدار",
+     "fr": "Comment une paire de particules rebondit contre un mur"
     },
-    "why": "apparent_diffusion_coefficient, cell"
+    "score": 0.619
    },
    {
-    "id": "2605.02615",
-    "date": "2026-05-04",
+    "id": "2607.09401",
+    "date": "2026-07-10",
     "title": {
-     "ru": "Клетки опухоли раскрывают карты",
-     "en": "Tumor Cells Reveal Their Maps",
-     "es": "Las células tumorales revelan sus mapas",
-     "ar": "خلايا الورم تكشف أوراقها"
+     "ru": "Когда стенки сосуда искажают картину",
+     "en": "When Vessel Walls Distort the Picture",
+     "es": "Cuando las paredes del vaso distorsionan la imagen",
+     "ar": "عندما تشوّه جدران الأوعية الصورة",
+     "fr": "Quand les parois des vaisseaux faussent l'image"
     },
-    "why": "apparent_diffusion_coefficient, cell"
+    "score": 0.617
    },
    {
-    "id": "2603.05548",
-    "date": "2026-03-05",
+    "id": "2604.15478",
+    "date": "2026-04-16",
     "title": {
-     "ru": "Клетки разжижаются, не меняя формы",
-     "en": "Cells liquefy without changing shape",
-     "es": "Las células se vuelven fluidas sin cambiar de forma",
-     "ar": "الخلايا تصبح أكثر سيولة دون تغيير شكلها"
+     "ru": "Ткань как лабиринт: почему излучение FLASH действует неравномерно",
+     "en": "Tissue as a Maze: Why FLASH Radiation Acts Unevenly",
+     "es": "El tejido como laberinto: por qué la radiación FLASH actúa de manera desigual",
+     "ar": "النسيج كمتاهة: لماذا يعمل إشعاع FLASH بشكل غير متساوٍ",
+     "fr": "Le tissu comme un labyrinthe : pourquoi l'irradiation FLASH agit de manière inégale"
     },
-    "why": "apparent_diffusion_coefficient, cell"
+    "score": 0.615
+   },
+   {
+    "id": "2603.13918",
+    "date": "2026-03-14",
+    "title": {
+     "ru": "Поры в мембране: три ключа к точному расчёту",
+     "en": "Pores in the Membrane: Three Keys to Accurate Calculation",
+     "es": "Poros en la membrana: tres claves para un cálculo preciso",
+     "ar": "مسام الغشاء: ثلاثة مفاتيح لحساب دقيق",
+     "fr": "Des pores dans la membrane : trois clés pour un calcul précis"
+    },
+    "score": 0.613
    }
   ]
  },
@@ -1663,6 +1678,410 @@
     "unit": "ث",
     "why": "t = x²/(2D) = (0.01)² / (2·10⁻⁵) = 10⁻⁴ / (2·10⁻⁵) = 5 ثوانٍ. ذهنيًا: مربع السنتيمتر بالمتر هو 10⁻⁴، ضعف D هو 2·10⁻⁵، نقسم فنحصل على 5. من المفيد تذكر هذا المرجع: السنتيمتر في الهواء — ثوانٍ، المتر — ساعات.",
     "hint": "أولاً حول السنتيمتر إلى أمتار وقم بتربيعه — هذا هو المكان الأكثر شيوعًا للخطأ. ثم اقسم على 2D.",
+    "tolFactor": 2
+   }
+  ]
+ },
+ "fr": {
+  "title": "Diffusion : le transport de la matière",
+  "subtitle": "Paragraphe 1 · La loi de Fick et pourquoi l'étalement suit la racine carrée du temps",
+  "intro": [
+   "Déposez une goutte d'encre dans un verre d'eau immobile et ne le touchez pas. Le contour de la goutte se brouillera tout seul, sans aucun mélange, et au bout d'une journée, la couleur se sera répandue dans tout le verre. Personne n'a poussé quoi que ce soit : les molécules s'agitent simplement, et là où elles étaient plus denses, elles deviennent avec le temps moins nombreuses. C'est la diffusion, et il faut l'expliquer sans introduire de « force » particulière qui pousserait la matière du dense vers le rare.",
+   "Cette force n'existe pas. La molécule ne sait pas où la concentration est plus élevée et n'a pas de direction préférentielle : elle vole là où la dernière collision l'a envoyée. Le flux directionnel apparaît pour une raison purement comptable. À travers tout plan imaginaire, les molécules volent dans les deux sens, et dans chaque sens — environ un sixième de celles qui sont à proximité. Mais à gauche, il y a plus de ces « celles qui sont à proximité » qu'à droite. Par conséquent, il y a plus de traversées de gauche à droite, et la différence entre les deux flux opposés est le flux de matière.",
+   "À partir de cette image, nous obtiendrons la loi de Fick et, du même coup, l'expression du coefficient de diffusion en fonction du libre parcours moyen et de la vitesse thermique. Puis nous tomberons sur un fait désagréable : l'étalement ne se fait pas proportionnellement au temps, mais comme sa racine carrée. D'où une double conclusion qui vaut tout le paragraphe : sur des distances de l'ordre du mètre, la diffusion est désespérément lente — c'est le courant d'air qui répand l'odeur dans la pièce, pas elle —, mais sur des distances de l'ordre du micron, elle est instantanée, et c'est sur elle que reposent les poumons et la cellule."
+  ],
+  "standNote": "Il vaut la peine de faire tourner le stand jusqu'à la conclusion. Le curseur λ est le libre parcours moyen (dans l'air dans des conditions normales, il est de 68 nanomètres), le curseur v est la vitesse thermique des molécules (pour l'azote, environ 470 m/s), le curseur « temps écoulé » fait avancer l'horloge. Regardez deux choses à la fois : le nuage de la marque avec sa frontière en pointillés et le graphique de la largeur. Le graphique n'est pas une droite, mais une racine : pour que la tache devienne deux fois plus large, il faut quatre fois plus de temps. Déplacez le temps de 20 secondes à 80 et vérifiez de vos yeux. Ensuite, regardez la ligne « pour s'éloigner d'un mètre, il faut » — elle recalcule la même chose en heures et en jours, et c'est ce nombre qui explique pourquoi l'odeur se fait sentir dans la pièce plus tôt que ne le prédit la diffusion. Et remarquez le compteur de collisions : pendant les mêmes 20 secondes, il en accumule plus de cent milliards, alors que la molécule n'a avancé que de quelques centimètres.",
+  "formula": {
+   "name": "Loi de Fick",
+   "latex": "j = -D\\,\\frac{dn}{dx}, \\qquad D \\approx \\tfrac{1}{3}\\lambda\\bar v",
+   "alsoKnown": "Première loi de Fick. Avec la conservation de la matière, elle donne la deuxième loi de Fick — l'équation de la diffusion",
+   "authors": [
+    {
+     "who": "Robert Brown",
+     "year": "1827",
+     "what": "a observé au microscope l'agitation incessante de particules de pollen dans l'eau et a constaté qu'elle n'était pas liée à la vie : les mêmes danses étaient exhibées par des grains de minéral restés dans la terre pendant des millions d'années"
+    },
+    {
+     "who": "Adolf Fick",
+     "year": "1855",
+     "what": "a transposé à la matière ce que Fourier avait fait pour la chaleur : il a écrit le flux comme proportionnel au gradient de concentration et a vérifié la loi par une expérience avec du sel dans un tube"
+    },
+    {
+     "who": "Albert Einstein",
+     "year": "1905",
+     "what": "a expliqué le mouvement brownien comme le résultat des chocs des molécules et a montré que le carré moyen du déplacement croît proportionnellement au temps, et non au carré du temps, comme dans un mouvement uniforme"
+    },
+    {
+     "who": "Jean Perrin",
+     "year": "1908",
+     "what": "a mesuré les déplacements de particules browniennes au microscope, les a substitués dans la formule d'Einstein et a obtenu le nombre d'Avogadro — après cela, il n'y avait plus rien à discuter quant à l'existence des molécules"
+    }
+   ],
+   "story": "Fick avait vingt-six ans et il n'était pas physicien mais médecin-physiologiste : il s'intéressait au transport de substances à travers les membranes dans l'organisme vivant. Il n'a pas dérivé sa loi du mouvement des molécules — il a pris une forme toute prête par analogie avec la loi de Fourier pour la chaleur et la loi d'Ohm pour le courant, où le flux est aussi proportionnel à la différence. L'analogie s'est avérée correcte, mais elle ne disait rien sur la valeur du coefficient D ni de quoi il dépend ; c'est la théorie cinétique qui l'a fournie, et c'est précisément elle que nous allons étudier maintenant. Il est curieux de voir comment l'histoire de la diffusion s'est terminée : un demi-siècle plus tard, la mesure du mouvement brownien — la même diffusion, mais visible au microscope — a clos la question de la réalité des atomes, sur laquelle physiciens et chimistes s'étaient disputés tout au long du XIXe siècle. D'ailleurs, Fick est aussi connu pour une deuxième invention : la première lentille de contact est également de lui.",
+   "symbols": [
+    {
+     "sym": "j",
+     "latex": "j",
+     "what": "densité de flux de particules",
+     "unit": "1/(m²·s)",
+     "note": "combien de particules traversent un mètre carré par seconde ; une grandeur signée — positive signifie un flux dans le sens de x croissant"
+    },
+    {
+     "sym": "n",
+     "latex": "n(x)",
+     "what": "concentration de particules",
+     "unit": "1/m³",
+     "note": "nombre de particules par mètre cube en un point donné ; c'est elle, et non la masse, qui intervient dans la loi sous cette forme"
+    },
+    {
+     "sym": "dn/dx",
+     "latex": "\\dfrac{dn}{dx}",
+     "what": "gradient de concentration",
+     "unit": "1/m⁴",
+     "note": "à quelle vitesse la concentration change avec la coordonnée ; là où le gradient est nul, il n'y a pas de flux, quel que soit le nombre de particules"
+    },
+    {
+     "sym": "D",
+     "latex": "D",
+     "what": "coefficient de diffusion",
+     "unit": "m²/s",
+     "note": "une unité d'aspect étrange — mètres carrés par seconde — n'est pas due au hasard : elle indique immédiatement que la distance dans ce problème est liée non pas au temps, mais à sa racine"
+    },
+    {
+     "sym": "λ",
+     "latex": "\\lambda",
+     "what": "libre parcours moyen",
+     "unit": "m",
+     "note": "distance moyenne parcourue par une molécule entre deux collisions ; dans l'air dans des conditions normales, c'est 68 nanomètres"
+    },
+    {
+     "sym": "v̄",
+     "latex": "\\bar v",
+     "what": "vitesse thermique moyenne des molécules",
+     "unit": "m/s",
+     "note": "environ 470 m/s pour l'azote à température ambiante ; augmente comme la racine de la température absolue"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Dérivation rigoureuse",
+   "lead": "Nous n'aurons besoin que de ce qui existe déjà dans la théorie cinétique moléculaire : mouvement désordonné, vitesse moyenne et libre parcours moyen. Nous n'introduisons aucune nouvelle physique — nous calculons simplement avec soin combien de molécules traversent un plan imaginaire de gauche à droite et de droite à gauche.",
+   "steps": [
+    {
+     "text": "Supposons que la concentration varie le long de l'axe x : plus dense à gauche, moins dense à droite. Traçons dans le gaz un plan imaginaire d'aire unité. Il n'y a pas de paroi, les molécules le traversent librement dans les deux sens, et le flux total est la différence de deux flux opposés. Soulignons d'emblée : aucune molécule ne « connaît » le gradient et n'a de direction préférée. L'asymétrie n'apparaîtra que dans le nombre de traversées.",
+     "latex": "j = j_{+} - j_{-}",
+     "figure": "diffplane",
+     "figCaption": "À travers le plan imaginaire, les molécules volent dans les deux sens ; le flux de matière est la différence de deux flux opposés"
+    },
+    {
+     "text": "Combien de molécules traversent une surface unité par seconde dans un sens ? Prenons le modèle le plus grossier : supposons que les molécules se déplacent le long de trois axes dans six directions, et que chaque direction reçoive un sixième du nombre total. Alors, en une seconde, la surface sera traversée par toutes celles qui volent dans la bonne direction et se trouvent à une distance au plus v̄ — c'est-à-dire un sixième de n·v̄.",
+     "latex": "j_{+} = \\tfrac{1}{6}\\,n\\,\\bar v",
+     "figure": "diffsix",
+     "figCaption": "Six directions, un sixième pour chacune : un modèle grossier, mais suffisant pour estimer l'ordre de grandeur"
+    },
+    {
+     "text": "Maintenant, la question clé : quelle valeur de n faut-il utiliser ? Pas celle du plan lui-même. Une molécule qui traverse le plan vole en ligne droite depuis son dernier choc, qui a eu lieu en moyenne à une distance λ. Elle apporte donc la concentration de cet endroit : celle venant de gauche apporte n(x − λ), celle venant de droite apporte n(x + λ). C'est ce mécanisme de mémoire qui crée le transport.",
+     "latex": "j_{+} = \\tfrac{1}{6}\\,\\bar v\\, n(x-\\lambda), \\qquad j_{-} = \\tfrac{1}{6}\\,\\bar v\\, n(x+\\lambda)",
+     "figure": "difflast",
+     "figCaption": "Une molécule arrive au plan depuis son dernier choc et apporte la concentration d'une distance λ"
+    },
+    {
+     "text": "Le libre parcours moyen dans l'air est de quelques dizaines de nanomètres, alors que la concentration varie sensiblement sur des échelles de millimètres ou de mètres. Sur un segment de longueur λ, la courbe n(x) est pratiquement indiscernable de sa tangente, donc les deux valeurs peuvent être exprimées à l'aide de la dérivée au point x. C'est la seule approximation de toute la dérivation, et elle est très bonne.",
+     "latex": "n(x \\mp \\lambda) \\approx n(x) \\mp \\lambda\\,\\frac{dn}{dx}",
+     "figure": "difflinear",
+     "figCaption": "Sur la longueur du libre parcours moyen, la concentration varie presque linéairement — d'où le remplacement de la courbe par sa tangente"
+    },
+    {
+     "text": "Soustrayons les flux opposés. Les termes en n(x) sont identiques et s'annulent — c'est important : la concentration elle-même ne crée pas de flux, seule son inhomogénéité en crée. Il reste le terme double avec la dérivée, et le sixième devient un tiers.",
+     "latex": "j = \\tfrac{1}{6}\\bar v\\Bigl[n - \\lambda\\tfrac{dn}{dx}\\Bigr] - \\tfrac{1}{6}\\bar v\\Bigl[n + \\lambda\\tfrac{dn}{dx}\\Bigr] = -\\tfrac{1}{3}\\lambda\\bar v\\,\\frac{dn}{dx}",
+     "figure": "fickflux",
+     "figCaption": "Résultat : le flux est proportionnel au gradient et dirigé contre lui, et le facteur devant le gradient est précisément D"
+    },
+    {
+     "text": "En comparant avec la loi de Fick, on lit le coefficient de diffusion : D = λv̄/3. Le signe moins dans la loi n'est pas une convention, mais le résultat de la soustraction : la dérivée est positive là où la concentration augmente vers la droite, tandis que le flux va vers la gauche. Cette expression montre aussi de quoi D dépend. Le libre parcours moyen est inversement proportionnel à la concentration de molécules et à la section efficace de collision σ (une aire de l'ordre du carré de la taille d'une molécule), et la concentration est donnée par l'équation d'état : n = p/kT. La vitesse thermique croît comme la racine carrée de la température. En substituant les deux facteurs, on obtient la dépendance aux conditions — elle est non triviale : le chauffage aide doublement, et la compression nuit exactement dans la mesure de la compression.",
+     "latex": "D = \\tfrac{1}{3}\\lambda\\bar v, \\quad \\lambda = \\frac{kT}{\\sqrt{2}\\,\\sigma p}, \\quad \\bar v \\propto \\sqrt{T} \\;\\Longrightarrow\\; D \\propto \\frac{T^{3/2}}{p}",
+     "figure": "difftp",
+     "figCaption": "Le coefficient est composé de λ et v̄, et à travers eux dépend des conditions : il croît comme la température à la puissance trois demis et décroît inversement à la pression"
+    },
+    {
+     "text": "La loi de Fick donne le flux, mais nous voulons savoir comment la concentration varie. Prenons une couche mince d'épaisseur Δx : par seconde, j(x) y entre et j(x + Δx) en sort. La différence s'accumule à l'intérieur — c'est simplement la conservation du nombre de particules. En substituant la loi de Fick, on obtient l'équation de diffusion.",
+     "latex": "\\frac{\\partial n}{\\partial t} = -\\frac{\\partial j}{\\partial x} = D\\,\\frac{\\partial^{2} n}{\\partial x^{2}}",
+     "figure": "diffbox",
+     "figCaption": "Ce qui entre moins ce qui sort — ce qui s'accumule : la conservation de la matière transforme la loi de Fick en équation de diffusion"
+    },
+    {
+     "text": "Nous ne résoudrons pas cette équation, mais l'essentiel se lit dans ses dimensions. À gauche, une dérivée par rapport au temps ; à droite, deux par rapport à la coordonnée. Par conséquent, le temps et le carré de la distance entrent ensemble dans le problème. D'où l'unique relation possible entre eux — et c'est précisément elle qui rend la diffusion lente aux grandes échelles et rapide aux petites.",
+     "latex": "x_{\\text{moy}} \\sim \\sqrt{2Dt} \\;\\Longleftrightarrow\\; t \\sim \\frac{x^{2}}{2D}",
+     "figure": "diffsqrt",
+     "figCaption": "La largeur de la tache croît comme la racine carrée du temps : quatre fois plus longtemps — seulement deux fois plus large"
+    }
+   ],
+   "plate": "j = -D\\,\\frac{dn}{dx}, \\qquad D = \\tfrac{1}{3}\\lambda\\bar v, \\qquad x \\sim \\sqrt{2Dt}",
+   "plateCap": "Trois lignes sur le même thème. La première dit que le flux va contre le gradient. La deuxième, que le coefficient est composé du libre parcours moyen et de la vitesse thermique, c'est-à-dire de la pure mécanique du chaos. La troisième, le prix de ce chaos : la distance croît comme la racine carrée du temps, et non proportionnellement à lui.",
+   "note": "Énumérons ce que nous avons supposé — ce sont les limites de la formule. Premièrement : les molécules sont nombreuses et se heurtent plus souvent entre elles qu'avec les parois, c'est-à-dire que λ est bien plus petit que la taille du récipient. Dans un gaz raréfié ou dans un pore de quelques dizaines de nanomètres, cela n'est pas vrai, et un autre régime s'applique — le régime de Knudsen, où la molécule vole de paroi en paroi. Deuxièmement : la concentration varie lentement sur la longueur λ ; sur un front d'onde de choc, ce n'est pas le cas. Troisièmement : l'impureté est diluée et n'entraîne pas le gaz principal — sinon, un écoulement global s'ajoute à la diffusion, et j doit être calculé par rapport à lui. Quatrièmement, et il est important de s'en souvenir en permanence : la diffusion n'annule ni ne dépasse la convection. Si le milieu a un mouvement quelconque, il transporte presque toujours la matière des ordres de grandeur plus vite. Enfin, le facteur. Notre modèle à six directions a donné 1/3 ; une théorie cinétique rigoureuse donne 3π/16 ≈ 0,59, soit presque le double. L'ordre de grandeur est correct, le coefficient exact ne l'est pas, et il est plus honnête de le dire tout de suite que de prétendre qu'une image grossière donne une réponse exacte."
+  },
+  "math": {
+   "title": "Mathématiques nécessaires ici",
+   "lead": "Trois endroits dans la dérivation où l'on trébuche le plus souvent.",
+   "items": [
+    {
+     "what": "Linéarisation : comment n(x ∓ λ) donne une dérivée",
+     "why": "À la quatrième étape, nous avons remplacé la valeur de la fonction en un point voisin par la valeur au point lui-même plus une correction. C'est le premier terme de la série de Taylor, et il ne fonctionne pas toujours, mais seulement tant que le décalage est petit par rapport à l'échelle sur laquelle la fonction change sensiblement. Ici, le décalage est de 68 nanomètres, et la concentration change sur des millimètres — le rapport est de l'ordre de dix mille, donc le terme suivant négligé (qui contient λ² et la dérivée seconde) est plus petit que le terme conservé d'environ ce même facteur. Il faut vérifier cette condition à chaque fois que vous écrivez « approximativement égal » : sans elle, la linéarisation n'est pas une approximation, mais une erreur.",
+     "latex": "f(x+h) = f(x) + h f'(x) + \\tfrac{1}{2}h^{2} f''(x) + \\dots",
+     "kit": "taylor"
+    },
+    {
+     "what": "Pourquoi il y a un signe moins dans la loi de Fick",
+     "why": "À la cinquième étape, nous avons soustrait les flux opposés, et le signe moins est apparu de lui-même — mais sa signification mérite d'être explicitée. La dérivée dn/dx est positive là où la concentration augmente lorsqu'on se déplace vers la droite. Le flux va alors vers la gauche, c'est-à-dire dans le sens de la diminution, et sa projection sur l'axe x est négative. Le signe moins dans la formule signifie exactement cela : le flux est dirigé contre le gradient. En trois dimensions, la dérivée devient un vecteur gradient, pointant dans la direction de la croissance la plus rapide, et l'écriture est la même — avec le même signe moins. Vous retrouverez ce même signe moins dans la loi de Fourier pour la chaleur et dans la loi d'Ohm sous forme différentielle : dans les trois cas, la nature lisse l'inhomogénéité, elle ne l'amplifie pas.",
+     "latex": "\\vec j = -D\\,\\nabla n",
+     "kit": "gradient"
+    },
+    {
+     "what": "D'où vient la racine : addition de pas aléatoires",
+     "why": "À la huitième étape, nous avons écrit que le déplacement croît comme la racine carrée du temps, et c'est l'endroit le plus contre-intuitif du sujet. Supposons qu'une molécule fasse N pas de longueur λ, chacun vers la droite ou vers la gauche au hasard. Le déplacement moyen est nul — les pas sont symétriques. Mais ce qui nous intéresse n'est pas la moyenne, mais la moyenne quadratique : dans celle-ci, le carré de la somme se déplie en N carrés des pas individuels plus les produits croisés, et ceux-ci, étant aléatoires en signe et indépendants, donnent en moyenne zéro. Il reste N·λ², donc la racine de la moyenne quadratique du déplacement est λ√N. Le nombre de pas est proportionnel au temps, donc la distance varie comme la racine carrée du temps. C'est pourquoi cent pas n'éloignent que de dix longueurs de parcours, et non de cent.",
+     "latex": "\\langle x^{2}\\rangle = \\Bigl\\langle \\bigl(\\textstyle\\sum_i \\lambda_i\\bigr)^{2}\\Bigr\\rangle = N\\lambda^{2} \\;\\Rightarrow\\; x_{\\text{moy}} = \\lambda\\sqrt{N}",
+     "kit": "rms"
+    }
+   ]
+  },
+  "example": {
+   "title": "Exemple chiffré",
+   "lead": "Calculons le coefficient de diffusion pour l'air et, immédiatement après, trois temps qui remettent tout en place.",
+   "given": "Air à 20 °C et pression atmosphérique : libre parcours moyen λ = 68 nm, vitesse thermique moyenne des molécules d'azote v̄ = 470 m/s. Trouver D. Estimer le temps pour qu'une marque s'étale sur 1 cm et sur 1 m. Pour comparaison : l'oxygène traverse la paroi alvéolaire d'épaisseur environ 1 μm, où D = 2·10⁻⁹ m²/s (diffusion dans l'eau).",
+   "law": "D = λv̄/3, puis t = x²/(2D)",
+   "solution": [
+    {
+     "text": "Coefficient de diffusion. On multiplie et on divise par trois ; attention aux nanomètres — c'est 10⁻⁹ mètre.",
+     "latex": "D = \\frac{\\lambda \\bar v}{3} = \\frac{68\\cdot10^{-9}\\cdot 470}{3} \\approx 1{,}1\\cdot10^{-5}\\ \\text{m}^{2}/\\text{s}"
+    },
+    {
+     "text": "Comparons avec la valeur mesurée. Pour l'oxygène dans l'azote, les tables donnent 2,0·10⁻⁵ m²/s — notre estimation est deux fois plus petite. C'est exactement le facteur par lequel notre coefficient 1/3 diffère du coefficient exact 3π/16 ≈ 0,59, donc l'écart n'est pas accidentel et s'explique.",
+     "latex": "\\frac{3\\pi}{16}\\lambda\\bar v \\approx 1{,}9\\cdot10^{-5}\\ \\text{m}^{2}/\\text{s} \\;\\;\\text{contre mesuré}\\;\\; 2{,}0\\cdot10^{-5}"
+    },
+    {
+     "text": "Centimètre. On substitue x = 0,01 m dans t = x²/(2D).",
+     "latex": "t = \\frac{(0{,}01)^{2}}{2\\cdot 1{,}1\\cdot10^{-5}} \\approx 4{,}5\\ \\text{s}"
+    },
+    {
+     "text": "Mètre et paroi alvéolaire. La distance a été multipliée par cent — le temps est multiplié par dix mille. Et sur un micron, la même équation donne une fraction de milliseconde, bien que dans l'eau D soit quatre ordres de grandeur plus petit que dans l'air.",
+     "latex": "t_{1\\,\\text{m}} = \\frac{1}{2{,}2\\cdot10^{-5}} \\approx 4{,}5\\cdot10^{4}\\ \\text{s} \\approx 13\\ \\text{h}, \\qquad t_{1\\,\\text{μm}} = \\frac{(10^{-6})^{2}}{2\\cdot 2\\cdot10^{-9}} = 2{,}5\\cdot10^{-4}\\ \\text{s}"
+    }
+   ],
+   "answer": "D ≈ 1,1·10⁻⁵ m²/s (valeur mesurée 2,0·10⁻⁵ — notre modèle grossier sous-estime d'un facteur deux). Centimètre — environ 5 secondes, mètre — environ 13 heures, paroi alvéolaire — quart de milliseconde.",
+   "check": "Est-ce raisonnable ? Vérifions par le bon sens des deux côtés. Treize heures pour un mètre — une absurdité évidente au vu de l'expérience quotidienne : on sent le parfum de la pièce voisine en une minute. Donc, la diffusion n'y est pour rien, c'est la convection qui agit, et ce n'est pas un échec du calcul, mais son principal résultat. Quart de milliseconde pour un micron — c'est aussi vérifiable : une inspiration dure environ deux secondes, soit une marge de près de dix mille fois, et les poumons pourraient être bien moins performants. Le point clé est le carré. Prenez un même milieu : d'un micron à un mètre, la distance croît d'un facteur un million, et le temps d'un facteur un trillion. Dans notre paire, s'ajoute aussi le changement de milieu, et non en faveur du micron : dans l'eau, le coefficient de diffusion est quatre ordres de grandeur plus petit que dans l'air — et pourtant le micron l'emporte sur le mètre avec une marge colossale. C'est ce carré qui rend la diffusion à la fois inutile dans une pièce et irréprochable dans une cellule."
+  },
+  "constants": {
+   "title": "Constantes de ce paragraphe",
+   "lead": "Quatre nombres à partir desquels se construit toute estimation de la diffusion. Les deux derniers méritent d'être retenus en couple : leur différence de quatre ordres de grandeur est précisément la différence entre un gaz et un liquide.",
+   "items": [
+    {
+     "sym": "λ",
+     "latex": "\\lambda_{\\text{air}}",
+     "name": "Libre parcours moyen dans l'air",
+     "value": "68·10⁻⁹",
+     "unit": "m",
+     "why": "À 20 °C et à la pression atmosphérique. Cette grandeur est l'inverse du produit de la concentration et de la section efficace de la molécule : λ = kT/(√2·σ·p). Comparez-la à la taille de la molécule elle-même, environ 0,3 nanomètre : la molécule parcourt librement environ deux cents fois son propre diamètre. C'est pourquoi un gaz peut être considéré comme raréfié et ses molécules comme des points, tant qu'il s'agit de collisions.",
+     "mnemo": "68 nanomètres, c'est environ deux cents diamètres de molécule et environ sept fois moins que la longueur d'onde de la lumière bleue. La lumière traverse l'air, mais une molécule a déjà dévié sur un tel trajet."
+    },
+    {
+     "sym": "v̄",
+     "latex": "\\bar v_{\\text{N}_2}",
+     "name": "Vitesse thermique moyenne de l'azote",
+     "value": "470",
+     "unit": "m / s",
+     "why": "À 20 °C, selon la formule v̄ = √(8RT/πM). Ce n'est pas une constante, mais une grandeur mesurable : elle croît comme la racine carrée de la température absolue et décroît comme la racine carrée de la masse molaire. Pour l'hydrogène à la même température, elle est presque quatre fois plus grande — d'où sa mobilité de diffusion record, qui lui permet de s'infiltrer à travers ce qui retient tout autre gaz.",
+     "mnemo": "La vitesse des molécules de l'air et la vitesse du son dans l'air sont du même ordre de grandeur (470 et 343 m/s), et ce n'est pas une coïncidence : le son est transmis par ces mêmes molécules."
+    },
+    {
+     "sym": "D_air",
+     "latex": "D_{\\text{air}}",
+     "name": "Coefficient de diffusion de l'oxygène dans l'air",
+     "value": "2,0·10⁻⁵",
+     "unit": "m² / s",
+     "why": "Valeur mesurée à 20 °C et à la pression atmosphérique. Pour la plupart des gaz courants les uns dans les autres, on obtient la même chose à un facteur deux près — 10⁻⁵ m²/s est l'échelle caractéristique de la diffusion gazeuse. Dépendance aux conditions : D croît comme T à la puissance 3/2 et décroît inversement proportionnellement à la pression.",
+     "mnemo": "Gardez en tête un temps de référence : un centimètre dans l'air, c'est des secondes ; un mètre, des heures. Tout le reste s'obtient par un calcul utilisant le carré."
+    },
+    {
+     "sym": "D_eau",
+     "latex": "D_{\\text{eau}}",
+     "name": "Coefficient de diffusion de l'oxygène dans l'eau",
+     "value": "2,0·10⁻⁹",
+     "unit": "m² / s",
+     "why": "Exactement quatre ordres de grandeur plus petit que dans un gaz — dans un liquide, la molécule n'a pas la place de prendre de l'élan, elle touche constamment ses voisines, et la notion de libre parcours moyen perd son sens. Les grosses molécules diffusent encore plus lentement : pour le sucre dans l'eau, D vaut environ 5·10⁻¹⁰, car le coefficient décroît inversement proportionnellement à la taille de la particule. C'est ce nombre qui impose la taille limite d'une cellule vivante.",
+     "mnemo": "Un micron, un gaz le parcourt en quelques dizaines de nanosecondes ; l'eau, en un quart de milliseconde. Le rapport 10⁴ se retient comme « quatre zéros entre l'air et l'eau »."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Liens avec le reste du cours",
+   "lead": "La diffusion n'est pas un chapitre à part, mais le premier des trois transferts qui partagent le même mécanisme et la même formule de la forme « un tiers λ v̄ ».",
+   "items": [
+    {
+     "h": "Théorie cinétique des gaz",
+     "text": "Tout ce que nous avons utilisé vient de là : la vitesse thermique à partir de la définition de la température via l'énergie cinétique moyenne, le libre parcours moyen à partir de la concentration et de la section efficace de la molécule. Il n'y a aucune physique nouvelle dans la diffusion — il y a un calcul soigneux des traversées d'un plan, exactement comme pour la pression."
+    },
+    {
+     "h": "Conduction thermique et viscosité",
+     "text": "Remplacez dans le raisonnement « nombre de particules » par « énergie » — vous obtenez la loi de Fourier et le coefficient de conduction thermique. Remplacez par « impulsion le long de l'écoulement » — vous obtenez la viscosité. Les deux coefficients font apparaître le même facteur λv̄/3, simplement multiplié par ce qui est transporté. D'où une conséquence utile : pour les gaz, ces trois coefficients sont liés, et en mesurant l'un, on peut prédire les autres."
+    },
+    {
+     "h": "Deuxième principe de la thermodynamique",
+     "text": "La diffusion est irréversible : l'encre se répand dans le verre, mais ne se rassemble jamais en une goutte, bien que la mécanique de chaque collision soit réversible dans le temps. La raison n'est pas dans la dynamique, mais dans le dénombrement des états — les configurations étalées sont incomparablement plus nombreuses que les configurations rassemblées. L'équation de diffusion le montre : elle contient une dérivée première par rapport au temps, donc le remplacement de t par −t ne la laisse pas invariante, contrairement à l'équation des ondes."
+    },
+    {
+     "h": "Mouvement brownien et statistiques",
+     "text": "La diffusion et le mouvement brownien sont un seul phénomène à deux échelles, relié par la formule d'Einstein D = kT/(6πηr). C'est d'ailleurs de là qu'est venue la preuve expérimentale de l'existence des atomes et l'une des premières mesures fiables du nombre d'Avogadro. La même racine carrée du temps décrit les marches aléatoires en général — du transport de polluants dans les eaux souterraines aux modèles de prix en mathématiques financières."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Curiosités : à tester vous-même",
+   "lead": "Les deux expériences ci-dessous testent la conclusion principale du sujet sous deux angles : la première montre à quel point la diffusion est lente, la seconde que dans une pièce, ce n'est pas elle qui agit.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "expérience de cuisine",
+     "h": "Un sachet de thé dans de l'eau immobile",
+     "text": "Versez de l'eau froide du robinet dans un verre transparent, laissez reposer une dizaine de minutes pour que le mouvement s'apaise. Plongez délicatement le sachet de thé sans le remuer, puis ne touchez plus au verre. À côté, placez un second verre identique et remuez le sachet avec une cuillère. Chronométrez le temps nécessaire pour que toute l'eau se colore dans l'un et l'autre. Estimez à l'avance : une tasse de rayon 4 centimètres, coefficient de diffusion des molécules de thé dans l'eau d'environ 5·10⁻¹⁰ m²/s.",
+     "answer": "Le calcul donne t = x²/(2D) = 0,04² / (2·5·10⁻¹⁰) = 1,6·10⁶ secondes, soit environ dix-huit jours. Le verre remué se colore en quelques secondes — un écart d'un million de fois. Mais le verre immobile n'attendra pas non plus dix-huit jours, et c'est là le plus intéressant de l'expérience : en une heure ou deux, il sera entièrement coloré. Donc, ce n'est pas la diffusion qui agit. Regardez le verre immobile en transparence — de fines traînées sombres descendent du sachet : l'eau contenant le thé dissous est plus dense que l'eau pure et descend, déclenchant une convection. Une eau absolument immobile n'existe pas dans une cuisine : il suffit d'une différence de température de quelques fractions de degré. Pour observer la diffusion pure, il faut une fine couche de gel ou un capillaire, où la convection est supprimée. D'où la conclusion à retenir : si un liquide est agité ne serait-ce qu'un peu, la diffusion n'a aucune importance sur des distances supérieures à quelques fractions de millimètre."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "expérience de cuisine",
+     "h": "Une odeur à travers la pièce",
+     "text": "Prenez quelque chose de parfumé et sans danger — un pot de café moulu ouvert, de la vanilline, un citron coupé. Placez-le dans un coin de la pièce, placez-vous dans le coin opposé, à environ quatre mètres, et chronométrez le temps jusqu'à la première perception de l'odeur. Fermez fenêtres et portes pour éviter les courants d'air évidents. Estimez à l'avance ce que prédit la diffusion : D pour les vapeurs dans l'air est d'environ 10⁻⁵ m²/s.",
+     "answer": "La diffusion prédit t = x²/(2D) = 16 / (2·10⁻⁵) = 8·10⁵ secondes, soit plus de neuf jours. En réalité, l'odeur arrive en quelques secondes ou dizaines de secondes — un écart de plusieurs dizaines de milliers de fois. C'est la convection qui la transporte : l'air dans une pièce n'est jamais immobile, les radiateurs, les fenêtres, les ampoules et vous-même créez des courants de quelques centimètres par seconde, ce qui suffit pour parcourir quatre mètres en une minute. Vérifiez-le de manière contrôlée : placez la source d'odeur sur un radiateur ou à côté d'une tasse de thé chaud — le courant ascendant accélérera nettement l'arrivée, et la différence sera visible sans chronomètre. Deuxième étape de vérification : agitez la main près de la source — l'arrivée de l'odeur s'accélérera encore plusieurs fois, bien que le coefficient de diffusion, bien sûr, n'ait pas changé d'un iota. Dans cette histoire, la diffusion ne fait que le dernier pas — elle amène les molécules du courant d'air aux récepteurs du nez, soit quelques fractions de millimètre."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoxe",
+     "h": "Pourquoi il n'y a pas d'insectes de la taille d'un chat",
+     "text": "Les insectes n'ont ni poumons ni sang qui transporte l'oxygène : l'air va aux tissus par un système de tubes, les trachées, et le dernier segment du trajet, l'oxygène le parcourt par diffusion. Qu'est-ce qui empêche un tel animal de grandir jusqu'à la taille d'un chat, si le matériau des trachées semble le permettre ?",
+     "answer": "C'est le carré dans la formule qui l'empêche. Le besoin en oxygène croît comme le volume, c'est-à-dire comme le cube de la taille, tandis que l'apport par diffusion est nettement plus lent : le temps d'acheminement sur une profondeur L varie en L², donc si la taille double, le tissu au milieu attend quatre fois plus longtemps, alors que son appétit a doublé. Déjà à l'échelle du centimètre, l'équilibre est difficile à atteindre, et les grands insectes sont obligés de faire circuler l'air dans leurs trachées par des muscles — c'est-à-dire de remplacer la diffusion par la convection, comme nous le faisons avec nos poumons. Une confirmation indirecte vient de la paléontologie : au Carbonifère, quand la teneur en oxygène de l'atmosphère atteignait 30 à 35 % au lieu des 21 % actuels, volaient des libellules avec une envergure allant jusqu'à 70 centimètres. Plus d'oxygène — plus fort gradient de concentration — plus grand flux pour un même D. Dès que la teneur a baissé, les géants ont disparu. Le même carré explique aussi une autre limitation : un tissu sans capillaires ne vit par diffusion que jusqu'à une profondeur d'environ un millimètre, c'est pourquoi chez tout organisme de grande taille, la distance d'une cellule au vaisseau le plus proche est de cet ordre."
+    },
+    {
+     "icon": "fact",
+     "kind": "fait amusant",
+     "h": "Comment l'agitation du pollen a clos le débat sur les atomes",
+     "text": "En 1827, le botaniste Robert Brown observait du pollen au microscope et vit que les particules les plus fines à l'intérieur tremblaient sans cesse. La première idée fut celle de la vie, mais Brown la vérifia honnêtement : la même agitation se manifesta avec des grains de minéraux et des fragments d'un morceau de pierre du Sphinx égyptien, où rien de vivant n'avait existé depuis des milliers d'années. L'explication ne vint que 78 ans plus tard : Einstein, en 1905, montra que la particule est poussée par les chocs des molécules d'eau et — plus important — prédit une quantité mesurable, le déplacement quadratique moyen, croissant proportionnellement au temps. Jean Perrin, en 1908-1909, nota patiemment les positions des particules à intervalles réguliers, les inséra dans la formule et obtint le nombre d'Avogadro. À cette époque, les atomes étaient une hypothèse de travail que de grands scientifiques contestaient sérieusement — Ostwald, Mach. Après les travaux de Perrin, il n'y avait plus rien à contester : les molécules avaient pu être comptées en observant l'agitation d'une particule visible au microscope. Il reçut le prix Nobel en 1926."
+    },
+    {
+     "icon": "edge",
+     "kind": "limite de validité",
+     "h": "Quand une molécule cesse de heurter ses semblables",
+     "text": "Toute notre conclusion repose sur le fait qu'une molécule heurte d'autres molécules plus souvent que les parois du récipient. Le rapport du libre parcours moyen à la taille du canal est appelé nombre de Knudsen, et dès qu'il cesse d'être petit, le tableau change complètement. Dans un pore de 20 nanomètres de diamètre — et de tels pores sont typiques des catalyseurs et des membranes — la molécule vole de paroi en paroi sans rencontrer personne, et le coefficient de diffusion est alors déterminé non plus par λ, mais par la taille du pore. Le même régime s'installe dans un vide poussé : à une pression de 10⁻⁶ atmosphère, le libre parcours moyen atteint plusieurs centimètres, et dans une chambre à vide, la notion de diffusion au sens où nous l'entendons ne fonctionne tout simplement pas — les molécules volent en ligne droite de paroi en paroi. La conséquence pratique est partout : c'est ainsi qu'on conçoit les pompes à vide, qu'on calcule l'écoulement des gaz en microélectronique, et c'est ainsi qu'on a jadis séparé les isotopes de l'uranium en faisant passer de l'hexafluorure à travers des barrières poreuses — l'isotope léger passe un peu plus souvent, car sa vitesse thermique est un peu plus élevée."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "La diffusion dans le vivant : pourquoi les cellules sont petites et les poumons énormes",
+   "blocks": [
+    {
+     "h": "La limite de taille imposée par le carré",
+     "text": "Prenons un morceau de tissu qui ne reçoit de l'oxygène que par diffusion depuis sa surface. La consommation croît comme le volume, c'est-à-dire comme le cube de la taille L. Le temps nécessaire à l'oxygène pour atteindre le centre croît comme L². Mettez les deux ensemble, et il devient clair que la réserve s'épuise plus vite que le renfort n'arrive, et ce très rapidement. Numériquement : pour L = 1 mm, le temps de livraison dans le tissu est t = L²/(2D) = 10⁻⁶/(4·10⁻⁹) ≈ 250 secondes, soit environ quatre minutes. La cellule consomme sa réserve locale d'oxygène en quelques secondes. D'où vient ce fameux millimètre — l'épaisseur maximale d'un organisme vivant par pure diffusion. Les vers plats sont exactement comme cela : plats non par fantaisie, mais parce qu'un ver rond de même volume étoufferait en son propre centre.",
+     "latex": "t = \\frac{L^{2}}{2D} \\quad\\text{contre}\\quad \\text{consommation} \\propto L^{3}"
+    },
+    {
+     "h": "Comment les poumons contournent cette limite",
+     "text": "Les poumons sont conçus comme une solution à exactement ce problème, et ils le résolvent par deux moyens à la fois. Le premier : réduire la distance. L'épaisseur de la barrière entre l'air et le sang est d'environ un micron, et selon notre formule, l'oxygène la traverse en un quart de milliseconde, alors que le globule rouge s'attarde dans le capillaire environ 0,75 seconde. La marge est de trois mille fois, et ce n'est pas un luxe : à l'effort, le sang circule plus vite, et en cas de maladie, la barrière s'épaissit. Le deuxième moyen : augmenter la surface, car le flux lui est proportionnel. Il y a environ trois cents millions d'alvéoles, avec une surface totale d'environ soixante-dix mètres carrés pour un volume pulmonaire de quelques litres. Tout le reste — de la trachée aux bronchioles — n'est pas de la diffusion, mais de la convection : l'air y est propulsé par les muscles, car sur des distances de dizaines de centimètres, la diffusion est désespérément lente."
+    },
+    {
+     "h": "À l'intérieur de la cellule, la diffusion est rapide — mais pas partout",
+     "text": "À l'échelle d'une cellule de dix microns, une petite molécule va d'un bord à l'autre en quelques fractions de seconde, et aucun système de transport n'est nécessaire : le mélange se fait tout seul. C'est précisément pourquoi les cellules ont généralement cette taille — c'est l'échelle à laquelle la diffusion gagne encore. Mais dès qu'on passe à un neurone, le tableau s'effondre : pour un axone d'un mètre de long, le temps de diffusion est de l'ordre du milliard de secondes, soit des dizaines d'années. La cellule est donc obligée d'inventer sa propre convection — le long des microtubules, des protéines motrices, kinésine et dynéine, transportent littéralement les cargaisons par pas. Le même carré qui interdit la diffusion dans une pièce l'interdit aussi le long d'un long neurone."
+    },
+    {
+     "h": "Comment vérifier le raisonnement sur la taille",
+     "text": "Toute affirmation du type « cela fonctionne par diffusion » se vérifie par une simple substitution : prenez la distance caractéristique, divisez son carré par 2D et comparez avec le temps imparti au processus. Si le résultat est bien inférieur — oui, la diffusion suffit, aucune pompe n'est nécessaire. S'il est comparable ou supérieur — quelque part dans le système, il y a forcément un mélange, un flux ou un transport actif, et il vaut la peine de le chercher, plutôt que de tout attribuer à la diffusion. Cette estimation rapide permet de vérifier aussi bien les poumons, une batterie à transport ionique, une pile à combustible que la préparation d'une saumure : pourquoi la viande dans la marinade doit reposer une journée, alors qu'une fine tranche est salée en quelques minutes — c'est le même carré."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "Le flux de matière est proportionnel au gradient de concentration et dirigé contre lui : j = −D·dn/dx. Le coefficient de diffusion est issu de la pure mécanique du chaos, D ≈ λv̄/3, et dans l'air vaut environ 10⁻⁵ m²/s. La conséquence principale est que la distance croît comme la racine carrée du temps : t ≈ x²/2D. De là, la diffusion est inutile dans une pièce et irréprochable dans une cellule.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "Flux contre le gradient",
+     "text": "j = −D·dn/dx. Aucune force ne pousse la matière : il y a plus de molécules à gauche, donc plus de traversées de gauche à droite"
+    },
+    {
+     "icon": "scale",
+     "title": "D à partir de λ et v̄",
+     "text": "D ≈ λv̄/3 — seulement le libre parcours moyen et la vitesse thermique. Le facteur exact est 3π/16 ≈ 0,59, notre estimation est deux fois trop faible"
+    },
+    {
+     "icon": "clock",
+     "title": "Racine carrée du temps",
+     "text": "x ≈ √(2Dt), donc t ≈ x²/(2D). Quatre fois plus longtemps — seulement deux fois plus loin ; cent fois plus loin — dix mille fois plus longtemps"
+    },
+    {
+     "icon": "edge",
+     "title": "Dépendance aux conditions",
+     "text": "D croît comme la température à la puissance trois demis et décroît inversement à la pression : chauffez deux fois — il augmente presque trois fois ; comprimez deux fois — il diminue de moitié"
+    }
+   ],
+   "where": [
+    "Poumons : la barrière d'un micron d'épaisseur est traversée par l'oxygène en 0,25 ms, le globule rouge reste dans le capillaire 0,75 s",
+    "La limite de taille d'un tissu sans capillaires est d'environ un millimètre, au-delà il faut du sang",
+    "Séchage, salage, marinade : le temps varie comme le carré de l'épaisseur du morceau, pas comme l'épaisseur",
+    "Dopage des semi-conducteurs et cémentation de l'acier : l'impureté est introduite dans le cristal par diffusion à haute température",
+    "Séparation des isotopes par des cloisons poreuses : le plus léger passe plus souvent parce qu'il est plus rapide"
+   ],
+   "watchOut": "Trois erreurs fréquentes. La première — croire qu'une distance deux fois plus grande nécessite deux fois plus de temps : elle en nécessite quatre fois plus. La deuxième — expliquer par la diffusion ce que fait en réalité la convection : dans une pièce, dans un verre, dans un tuyau, c'est presque toujours le mélange qui agit, et la diffusion ne répond que des derniers fractions de millimètre. La troisième — penser que la matière « tend » du dense vers le rare : une molécule individuelle n'a pas de direction préférée, et le flux naît simplement de l'excédent du nombre de traversées."
+  },
+  "quiz": [
+   {
+    "id": "d1",
+    "type": "mcq",
+    "q": "Une goutte d'encre s'étale en une tache de 1 mm de large en 10 secondes. Quelle sera la largeur de la tache après 40 secondes depuis le début ?",
+    "options": [
+     "2 mm",
+     "4 mm",
+     "1,4 mm",
+     "8 mm"
+    ],
+    "answer": 0,
+    "why": "La largeur croît comme la racine carrée du temps : x ≈ √(2Dt). Le temps a été multiplié par quatre, donc la largeur est multipliée par √4 = 2, soit 2 mm. L'option « 4 mm » correspondrait à une croissance linéaire, ce qui n'est pas le cas ici ; « 1,4 mm » est la racine de deux, la réponse pour un doublement du temps, pas un quadruplement.",
+    "hint": "Écrivez la dépendance de la largeur en fonction du temps. Si le temps est multiplié par 4, par quoi est multipliée la racine carrée du temps ?"
+   },
+   {
+    "id": "d2",
+    "type": "mcq",
+    "q": "La pression d'un gaz est réduite de moitié à température constante. Que devient le coefficient de diffusion ?",
+    "options": [
+     "Il ne change pas : D est une propriété de la substance elle-même",
+     "Il diminue de moitié : il y a moins de molécules, il n'y a rien à transporter",
+     "Il double : le libre parcours moyen est deux fois plus grand, et la vitesse est la même",
+     "Il quadruple"
+    ],
+    "answer": 2,
+    "why": "D = λv̄/3. La vitesse thermique ne dépend que de la température et ne change pas. Le libre parcours moyen est inversement proportionnel à la concentration, et celle-ci, à température constante, est proportionnelle à la pression — donc λ double, et avec lui D. L'option « diminue de moitié » confond le flux avec le coefficient : le flux de particules diminue effectivement, car la concentration elle-même diminue, mais le coefficient, lui, augmente.",
+    "hint": "Décomposez D en deux facteurs et demandez-vous pour chacun : que fait une baisse de pression à température constante ?"
+   },
+   {
+    "id": "d3",
+    "type": "free",
+    "q": "En vos propres mots : pourquoi la diffusion est-elle désespérément lente à l'échelle d'une pièce, mais instantanée à l'échelle d'une cellule — alors que le coefficient D est le même ?",
+    "keywords": [
+     "carré",
+     "racine",
+     "distance",
+     "échelle",
+     "micron",
+     "diminue",
+     "petit"
+    ],
+    "needed": 2,
+    "why": "Parce que le temps varie comme le carré de la distance : t ≈ x²/(2D). Réduire la distance d'un facteur un million (d'un mètre à un micron) réduit le temps d'un facteur un trillion. Le coefficient, lui, ne change pas — seul change ce dans quoi il entre. C'est précisément pour cela que la même diffusion ne parcourt pas un mètre d'air en 13 heures, mais traverse une paroi alvéolaire d'un micron en un quart de milliseconde — même si dans l'eau le coefficient est des milliers de fois plus petit.",
+    "hint": "Exprimez le temps en fonction de la distance et de D. À quelle puissance la distance entre-t-elle dans cette formule — et qu'est-ce que cela fait lorsqu'on passe d'un mètre à un micron ?"
+   },
+   {
+    "id": "d4",
+    "type": "estimate",
+    "q": "En combien de secondes une tache dans l'air s'étale-t-elle sur 1 centimètre par la seule diffusion ? Prenez D = 1·10⁻⁵ m²/s.",
+    "answer": 5,
+    "unit": "s",
+    "why": "t = x²/(2D) = (0,01)² / (2·10⁻⁵) = 10⁻⁴ / (2·10⁻⁵) = 5 secondes. De tête : le carré du centimètre en mètres est 10⁻⁴, le double de D est 2·10⁻⁵, on divise et on obtient 5. Il est utile de retenir ce repère : un centimètre dans l'air — des secondes, un mètre — des heures.",
+    "hint": "Convertissez d'abord le centimètre en mètres et élevez au carré — c'est l'erreur la plus fréquente. Puis divisez par 2D.",
     "tolFactor": 2
    }
   ]

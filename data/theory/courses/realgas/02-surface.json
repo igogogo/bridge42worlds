@@ -15,37 +15,28 @@
   "scientists": [],
   "examples_from_articles": [
    {
-    "id": "2603.17793",
-    "date": "2026-03-18",
+    "id": "2601.00345",
+    "date": "2026-01-01",
     "title": {
-     "ru": "Вода под давлением: почему она течёт быстрее",
-     "en": "Water Under Pressure: Why It Flows Faster",
-     "es": "Agua a presión: por qué fluye más rápido",
-     "ar": "الماء تحت الضغط: لماذا يتدفق أسرع"
+     "ru": "Капли, которые держатся на волоске",
+     "en": "Drops That Hang by a Hair",
+     "es": "Gotas que se aferran a un pelo",
+     "ar": "قطرات تثبت على شعرة",
+     "fr": "Des gouttes qui tiennent à un cheveu"
     },
-    "why": "superfluidity, viscosity, water"
+    "score": 0.611
    },
    {
-    "id": "2608.08571v1",
-    "date": "2026-08-09",
+    "id": "2603.14195",
+    "date": "2026-03-15",
     "title": {
-     "ru": "Почему биологическое узнавание не ломается, а плавно переключается",
-     "en": "Why biological recognition doesn't snap but smoothly switches",
-     "es": "Por qué el reconocimiento biológico no se rompe, sino que cambia suavemente",
-     "ar": "لماذا لا ينكسر التعرف البيولوجي، بل يتحول بسلاسة"
+     "ru": "Жидкость-хамелеон: когда рябь идёт против течения",
+     "en": "Chameleon Fluid: When Ripples Go Against the Flow",
+     "es": "Líquido camaleón: cuando las ondas van contra la corriente",
+     "ar": "سائل الحرباء: عندما تسير التموجات عكس التيار",
+     "fr": "Le liquide caméléon : quand les ondulations vont à contre-courant"
     },
-    "why": "viscosity, water"
-   },
-   {
-    "id": "2607.09416",
-    "date": "2026-07-10",
-    "title": {
-     "ru": "Как вода выбирает путь в почве",
-     "en": "How Water Chooses Its Path Through Soil",
-     "es": "Cómo el agua elige su camino en el suelo",
-     "ar": "كيف تختار الماء طريقها في التربة"
-    },
-    "why": "viscosity, water"
+    "score": 0.603
    }
   ]
  },
@@ -1778,6 +1769,439 @@
     "why": "$\\Delta p = 2\\sigma/R = 2\\cdot0.073/(5\\cdot10^{-6}) = 2.9\\cdot10^{4}$ باسكال، أي 29 كيلوباسكال. في الذهن: 0.146 مقسومة على خمسة ميكرونات — هذا 0.146 مضروباً في 2·10⁵، حوالي ثلاثين كيلوباسكال. التحقق بالمنطق السليم: ما يقرب من ثلث الضغط الجوي داخل قطرة لا يمكن حتى رؤيتها بالعين — وهذا متواضع، ففي قطرة بحجم ميكرون الضغط أكبر بخمس مرات. الخطأ الأكثر شيوعاً هنا هو استخدام $4\\sigma/R$: الرقم 4 يظهر فقط في غشاء ذي سطحين، بينما القطرة لها سطح واحد. الخطأ الثاني من حيث الشيوع هو نسيان تحويل الميكرونات إلى أمتار.",
     "tolAbs": 6,
     "hint": "معادلة لابلاس للقطرة، وليس لفقاعة الصابون. وحوّل نصف القطر إلى أمتار: 5 ميكرومتر = 5·10⁻⁶ م."
+   }
+  ]
+ },
+ "fr": {
+  "title": "Tension superficielle et capillaires",
+  "subtitle": "Paragraphe 2 · Formule de Laplace et hauteur de montée dans un tube",
+  "intro": [
+   "Posez une aiguille à coudre sur l'eau — délicatement, à plat. Elle restera à la surface, bien que l'acier soit huit fois plus dense que l'eau et que, selon la loi d'Archimède, elle devrait couler. Saupoudrez du poivre moulu sur l'eau — il reste aussi à la surface. Passez votre doigt sur la surface d'un verre rempli : on sent comme une pellicule qu'il faut percer.",
+   "Il n'y a pas de pellicule — l'eau est la même à la surface et en profondeur. Ce qui manque à la surface, ce sont les voisines. Les molécules du liquide s'attirent mutuellement — c'est cette même force que nous avons résumée dans la correction $a/V^2$ de l'équation de van der Waals au premier paragraphe. À l'intérieur du liquide, les attractions sur une molécule sont équilibrées de tous les côtés. À la frontière avec l'air, la moitié supérieure des partenaires est tout simplement absente, et il apparaît à la fois une force dirigée vers l'intérieur et une énergie que la molécule interne n'avait pas. Cette énergie est proportionnelle non pas au volume du liquide, mais à la surface de sa frontière — c'est de là que vient tout le reste.",
+   "Nous allons maintenant calculer ce coût, en l'estimant à partir de la chaleur de vaporisation, et nous verrons où l'estimation manque la cible. Ensuite, nous convertirons l'énergie en force et nous constaterons que les joules par mètre carré et les newtons par mètre sont le même nombre. Nous dériverons la formule de Laplace pour une goutte et pour une bulle de savon, la condition de Young pour l'angle de contact et la formule de la montée dans un tube. Et à la fin, nous demanderons à la formule si un arbre peut élever l'eau par les seuls capillaires jusqu'à cent mètres. La réponse sera négative, et ce sera le point le plus intéressant du paragraphe."
+  ],
+  "standNote": "Le stand de ce paragraphe est commun au thème : il trace les isothermes de van der Waals, le dôme de coexistence des phases et le point critique. Prenez-en une chose. Réglez la température réduite $T/T_c$ à 0,80 et regardez le dôme : en dessous, le liquide et la vapeur coexistent, et entre eux il y a une frontière — celle pour laquelle nous allons payer au mètre carré. Maintenant, déplacez lentement le curseur vers 1,00. Le dôme se rétrécit, la différence de densité entre le liquide et la vapeur s'amenuise, et exactement au point critique, le dôme se referme en un point et la frontière disparaît complètement. Avec elle disparaît aussi l'objet de ce paragraphe : la tension superficielle de l'eau passe de 0,076 N/m à zéro degré à 0,059 à cent degrés et s'annule au point critique. Il n'y a plus rien à payer pour la surface, car la surface n'existe plus. En déplaçant un seul curseur, vous voyez littéralement $\\sigma$ s'éteindre.",
+  "formula": {
+   "name": "Formule de Laplace et loi de l'ascension capillaire",
+   "latex": "\\Delta p = \\frac{2\\sigma}{R}, \\qquad h = \\frac{2\\sigma\\cos\\theta}{\\rho g r}",
+   "alsoKnown": "Formule de Laplace pour le saut de pression sur une surface courbe (pour une bulle de savon avec deux surfaces, le coefficient est doublé : 4σ/R) ; la formule de l'ascension capillaire est connue sous le nom de loi de Jurin. La forme générale de Laplace pour une surface de forme arbitraire : Δp = σ(1/R₁ + 1/R₂)",
+   "authors": [
+    {
+     "who": "Francis Hauksbee",
+     "year": "1709",
+     "what": "a réalisé les premières expériences quantitatives avec des tubes étroits et a montré que la hauteur de l'ascension dépend du diamètre du tube, et non de l'épaisseur de ses parois — c'est donc la surface qui agit, et non la masse du verre"
+    },
+    {
+     "who": "James Jurin",
+     "year": "1718",
+     "what": "a mesuré l'ascension dans des tubes de différents diamètres et a formulé la proportionnalité inverse de la hauteur au rayon ; la règle porte son nom"
+    },
+    {
+     "who": "Thomas Young",
+     "year": "1805",
+     "what": "a introduit l'idée de la tension de surface comme une force réelle et a obtenu la condition d'équilibre des trois tensions sur la ligne de contact — c'est-à-dire l'angle de contact"
+    },
+    {
+     "who": "Pierre-Simon Laplace",
+     "year": "1805",
+     "what": "dans un supplément à la « Mécanique céleste », a prouvé que le saut de pression à la frontière est égal à la tension multipliée par la somme des deux courbures principales, et a réduit toute la capillarité à une seule formule"
+    },
+    {
+     "who": "Josiah Willard Gibbs",
+     "year": "1878",
+     "what": "a construit la thermodynamique des surfaces : σ est l'énergie libre excédentaire par unité de surface, et il en découle que les impuretés s'accumulent à la frontière et réduisent la tension"
+    }
+   ],
+   "story": "Le tournant le plus inattendu de cette histoire s'est produit dans une cuisine. Dans les années 1880, Agnes Pockels tenait le ménage dans la maison de ses parents à Brunswick ; l'université était fermée aux femmes, elle connaissait la physique par les manuels de son frère. Ayant remarqué que l'eau propre et l'eau savonneuse dans une bassine se comportent différemment, elle a assemblé un appareil avec ce qu'elle avait sous la main : une cuvette en fer-blanc, un bouton sur un fil comme élément sensible d'une balance, et une bande d'étain avec laquelle elle pouvait isoler une partie de la surface et en changer la superficie. Avec cela, elle mesurait la tension et observait comment elle diminuait quand une goutte d'huile tombait sur l'eau. Il n'y avait nulle part où publier ses résultats, et en 1891 elle écrivit à Lord Rayleigh — celui-ci traduisit la lettre et l'envoya à Nature avec une note disant que le travail méritait d'être publié intégralement. La cuvette de Pockels est l'ancêtre direct de la cuve de Langmuir, sur laquelle on a ensuite construit des monocouches moléculaires et obtenu des prix Nobel.\n\nLe deuxième tournant est plus discret. En 1901, Einstein, âgé de vingt-deux ans, publia son premier article — justement sur la capillarité : il essayait d'extraire la loi de l'attraction intermoléculaire à partir des valeurs de σ pour différents liquides. Plus tard, il qualifia ce travail de futile, et il avait raison sur le fond — l'hypothèse ne se confirma pas. Mais le choix même du sujet en dit long. La tension superficielle était alors le moyen le plus court d'atteindre numériquement les molécules que personne n'avait encore vues : tu mesures une force avec une balance de cuisine — tu obtiens l'énergie de liaison entre les particules.",
+   "symbols": [
+    {
+     "sym": "σ",
+     "latex": "\\sigma",
+     "what": "tension superficielle (ou énergie de surface)",
+     "unit": "N/m, ou J/m²",
+     "note": "une même grandeur avec deux unités : J/m² = N·m/m² = N/m. Pour l'eau à 20 °C, elle vaut 0,0728"
+    },
+    {
+     "sym": "Δp",
+     "latex": "\\Delta p",
+     "what": "saut de pression sur une surface courbe",
+     "unit": "Pa",
+     "note": "la pression est toujours plus élevée du côté où la surface est convexe ; pour une surface plane, il n'y a pas de saut du tout"
+    },
+    {
+     "sym": "R",
+     "latex": "R",
+     "what": "rayon de courbure de la surface",
+     "unit": "m",
+     "note": "pour une goutte et une bulle, c'est leur propre rayon ; pour un ménisque dans un tube, c'est le rayon du segment sphérique, et non le rayon du tube"
+    },
+    {
+     "sym": "r",
+     "latex": "r",
+     "what": "rayon du tube capillaire ou du pore",
+     "unit": "m",
+     "note": "c'est bien le rayon, et non le diamètre : substituer le diamètre donne une réponse deux fois trop petite et passe inaperçu, car l'ordre de grandeur est conservé"
+    },
+    {
+     "sym": "θ",
+     "latex": "\\theta",
+     "what": "angle de contact",
+     "unit": "degrés",
+     "note": "mesuré à l'intérieur du liquide à partir de la surface solide ; θ < 90° — le liquide mouille et monte, θ > 90° — il ne mouille pas et descend"
+    },
+    {
+     "sym": "h",
+     "latex": "h",
+     "what": "hauteur de l'ascension capillaire",
+     "unit": "m",
+     "note": "mesurée depuis le niveau libre du liquide dans un récipient large jusqu'au point le plus bas du ménisque"
+    },
+    {
+     "sym": "ρ",
+     "latex": "\\rho",
+     "what": "masse volumique du liquide",
+     "unit": "kg/m³",
+     "note": "strictement parlant, la différence des masses volumiques du liquide et du gaz déplacé, mais pour l'eau et l'air, la correction est inférieure à un millième"
+    },
+    {
+     "sym": "g",
+     "latex": "g",
+     "what": "accélération de la pesanteur",
+     "unit": "m/s²",
+     "const": "g",
+     "note": "n'intervient que dans la formule de l'ascension ; dans la formule de Laplace, la pesanteur n'intervient pas du tout, et c'est pourquoi en apesanteur une goutte est exactement sphérique"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Dérivation rigoureuse",
+   "lead": "Il ne faut qu'une seule affirmation physique, et elle vient déjà du premier paragraphe : les molécules d'un liquide s'attirent. Tout le reste est un bilan d'énergie, un bilan de forces et l'équilibre des forces sur une coupe imaginaire. Ni la formule de Laplace ni la loi de Jurin ne seront déclarées toutes prêtes : toutes deux sortiront de l'équilibre.",
+   "steps": [
+    {
+     "text": "Prenons une molécule au plus profond du liquide. Ses voisines l'entourent de tous les côtés, chacune tire vers elle, et la somme des attractions est nulle — non pas parce qu'il n'y a pas de forces, mais parce qu'elles s'équilibrent. Maintenant, élevons la même molécule à la frontière avec l'air. Au-dessus, il n'y a pratiquement pas de voisines : la densité de la vapeur saturante à température ambiante est des dizaines de milliers de fois plus faible que celle du liquide. La moitié des partenaires a disparu, l'attraction du dessous reste — une force résultante apparaît, dirigée vers l'intérieur, et une énergie apparaît, que la molécule interne n'avait pas. Remarquez à quoi cette dépense est proportionnelle : non pas au volume du liquide, mais au nombre de molécules qui se trouvent à la frontière, c'est-à-dire à la surface de la frontière. La grandeur de la dépense par mètre carré est appelée tension superficielle. Une remarque, qui sera utile à l'étape suivante : à température constante, on ne paie pas avec l'énergie totale, mais avec l'énergie libre — la partie de cette énergie que l'on peut récupérer par un travail. L'énergie libre de la frontière par unité de surface, c'est ce que Gibbs a appelé la tension ; dans la formule ci-dessous, $F_{\\text{surf}}$ est précisément cela, et non une force (la force apparaîtra à la troisième étape).",
+     "latex": "F_{\\text{surf}} = \\sigma A, \\qquad \\sigma = \\left(\\frac{\\partial F}{\\partial A}\\right)_{T,\\,V}, \\qquad [\\sigma] = \\frac{\\text{J}}{\\text{m}^{2}}",
+     "figure": "realneigh",
+     "figCaption": "À l'intérieur du liquide, les attractions des voisines s'équilibrent ; pour une molécule à la frontière, la moitié supérieure des voisines manque — il reste une force vers l'intérieur et une énergie proportionnelle à la surface"
+    },
+    {
+     "text": "Estimons la dépense par un nombre, sans presque rien savoir du liquide. Évaporer une mole d'eau coûte environ 44 kilojoules — c'est le travail contre l'attraction de TOUTES les voisines à la fois, soit 7,3·10⁻²⁰ joule par molécule. Combien de molécules tient-on sur un mètre carré de surface ? La concentration dans l'eau liquide est $n = \\rho N_A/M = 3{,}3\\cdot10^{28}$ m⁻³, et la densité superficielle est $n$ à la puissance deux tiers : 1,04·10¹⁹ par mètre carré. Une molécule à la frontière ne perd pas tous ses voisins, mais une partie ; prenons pour l'estimation un quart. On multiplie et on obtient 0,19 J/m². La valeur mesurée est 0,073. Nous avons surestimé de 2,6 fois, et une partie de l'écart est de la comptabilité. Nous avons calculé l'énergie de liaison, alors que la σ mesurée est l'énergie libre ; l'énergie totale de la surface de l'eau est plus grande, environ 0,117 J/m² à 20 °C, parce que la nouvelle frontière naît en prenant de la chaleur à l'environnement. Contre elle, l'erreur n'est plus de 2,6 fois, mais de 1,6. Le reste, c'est de la physique : un calcul inverse montre que le facteur devant la chaleur de vaporisation n'est pas un quart, mais environ un sixième. La raison est caractéristique de l'eau : une molécule à la surface réoriente ses liaisons hydrogène latéralement, vers ses voisines de la même couche, au lieu de simplement les perdre. L'estimation a honnêtement capté l'ordre de grandeur et a honnêtement manqué le facteur — on ne pouvait pas attendre plus d'un calcul à la louche.",
+     "latex": "\\sigma \\sim \\frac{1}{4}\\cdot\\frac{\\Delta H_{\\text{vap}}}{N_A}\\cdot n^{2/3} = \\frac{1}{4}\\cdot 7{,}3\\cdot10^{-20}\\cdot 1{,}04\\cdot10^{19} = 0{,}19\\ \\frac{\\text{J}}{\\text{m}^{2}} \\quad\\text{contre } 0{,}073\\text{ mesuré}",
+     "figure": "realarea",
+     "figCaption": "L'estimation à partir de la chaleur de vaporisation donne 0,19 J/m² contre 0,073 mesuré : l'ordre de grandeur est capté, le facteur ne l'est pas"
+    },
+    {
+     "text": "Maintenant, convertissons l'énergie en force. Prenons un cadre en forme de U avec une barre mobile de longueur $L$ et tendons-y un film de savon. Pour tirer la barre de $\\Delta x$, il faut fournir un travail $F\\,\\Delta x$ — et tout ce travail va dans la nouvelle surface. L'aire du cadre a augmenté de $L\\,\\Delta x$, mais le film a deux faces, externe et interne, donc la nouvelle surface créée est deux fois plus grande. En égalisant, on obtient $F = 2\\sigma L$. D'où le double sens de σ : à gauche, elle était en joules par mètre carré, à droite elle se retrouve en newtons par mètre, et c'est la même grandeur, parce que J/m² = N·m/m² = N/m. Ce ne sont pas deux propriétés différentes, mais une seule écriture dans deux unités. Remarquez aussi ce qui n'est pas dans la réponse : $\\Delta x$. La force ne croît pas avec l'étirement — le film n'est pas un ressort. Le caoutchouc résiste de plus en plus à l'étirement parce que ses liaisons s'étirent ; dans un film de savon, les liaisons ne s'étirent pas, de nouvelles molécules viennent simplement à la surface depuis le volume.",
+     "latex": "F\\,\\Delta x = \\sigma\\,\\Delta A = \\sigma\\cdot 2L\\,\\Delta x \\;\\Longrightarrow\\; F = 2\\sigma L, \\qquad \\frac{\\text{J}}{\\text{m}^{2}} = \\frac{\\text{N}\\cdot\\text{m}}{\\text{m}^{2}} = \\frac{\\text{N}}{\\text{m}}",
+     "figure": "realframe",
+     "figCaption": "Cadre avec barre mobile : le travail contre la tension est égal à l'énergie de la nouvelle surface, et σ se lit directement en newtons par mètre"
+    },
+    {
+     "text": "Une surface plane se contracte le long d'elle-même et n'exerce aucune pression. Une surface courbe, elle, exerce une pression : en se contractant, elle comprime ce qui se trouve en dessous. Calculons de combien. Coupons mentalement une goutte de rayon $R$ par un plan passant par le centre et examinons l'équilibre d'une moitié. À travers la coupe, deux forces agissent sur elle. La première est la tension le long de la ligne de coupe : la longueur de la circonférence $2\\pi R$, multipliée par σ, tire la moitié vers son homologue. La seconde est la pression excessive à l'intérieur, agissant sur l'aire du cercle $\\pi R^2$ et écartant les moitiés. En égalisant — et le rayon à la première puissance se simplifie contre le carré, laissant une dépendance inverse. Plus la goutte est petite, plus elle est comprimée : une goutte de brouillard de rayon 1 micromètre maintient à l'intérieur un excès de 146 kilopascals, presque une atmosphère et demie en plus de la pression extérieure.",
+     "latex": "\\Delta p\\cdot \\pi R^{2} = \\sigma\\cdot 2\\pi R \\;\\Longrightarrow\\; \\Delta p = \\frac{2\\sigma}{R}; \\qquad R = 1\\ \\text{μm} : \\;\\; \\Delta p = \\frac{2\\cdot 0{,}0728}{10^{-6}} = 1{,}46\\cdot10^{5}\\ \\text{Pa}",
+     "figure": "realdrop",
+     "figCaption": "Demi-sphère en équilibre : la tension le long de la circonférence de coupe 2πRσ contre la pression excessive agissant sur l'aire πR²"
+    },
+    {
+     "text": "Pour une bulle de savon, le film est mince, mais il a deux surfaces — externe et interne — et chacune tire à sa manière. La même coupe donne une force de contraction deux fois plus grande, et le coefficient double : $\\Delta p = 4\\sigma/R$. Les nombres deviennent amusants. Une bulle de rayon 2 centimètres avec σ de la solution savonneuse de 0,025 N/m maintient à l'intérieur un excès de 5 pascals — c'est un demi-millimètre de colonne d'eau, un vingt-millième d'atmosphère. Mais de là découle une chose que l'on peut vérifier avec les mains. Enfilez deux bulles gonflées sur les extrémités d'un tube avec un robinet au milieu et ouvrez le robinet : la petite se dégonflera dans la grande. L'intuition suggère le contraire — « les pressions vont s'égaliser, les bulles deviendront identiques » — mais dans la formule, la pression est inversement proportionnelle au rayon, et pour la petite, elle est PLUS GRANDE. L'air va de là où la pression est plus élevée ; la petite diminue, sa pression augmente encore plus, et le processus s'accélère de lui-même. Exactement ainsi se comporteraient les alvéoles dans les poumons — les petites s'effondreraient dans les grandes — si ce n'était le surfactant, qui réduit σ d'autant plus que l'alvéole est comprimée, et inverse ainsi le signe de la rétroaction.",
+     "latex": "\\Delta p = \\frac{4\\sigma}{R}; \\qquad R = 2\\ \\text{cm},\\;\\; \\sigma = 0{,}025\\ \\text{N/m} : \\;\\; \\Delta p = \\frac{4\\cdot 0{,}025}{0{,}02} = 5\\ \\text{Pa} \\approx 0{,}5\\ \\text{mm CE}",
+     "figure": "realbubble",
+     "figCaption": "Le film a deux surfaces, donc le coefficient double ; la pression est inversement proportionnelle au rayon, et c'est pourquoi la plus petite bulle se dégonfle dans la plus grande"
+    },
+    {
+     "text": "Jusqu'ici, le liquide ne bordait que du gaz. Posons-le sur un solide — maintenant il y a trois frontières : solide–gaz, solide–liquide et liquide–gaz, et chacune a sa propre tension. Là où les trois se rencontrent, il y a une ligne de contact, et sur elle, trois tensions tirent dans trois directions. La ligne ne peut se déplacer que le long de la surface du solide, donc l'équilibre est déterminé par la projection horizontale : $\\sigma_{\\text{sg}}$ tire la ligne vers le côté sec, $\\sigma_{\\text{sl}}$ vers le côté mouillé, et la tension du liquide lui-même tire le long de la tangente à sa surface, donnant une projection $\\sigma\\cos\\theta$. En égalisant, on obtient la condition de Young. Elle se lit simplement : s'il est moins coûteux pour le solide de border le liquide que le gaz, le numérateur est positif, l'angle est aigu, le liquide s'étale. Pour du verre propre avec de l'eau, le numérateur est presque égal à σ, et θ est proche de zéro : la goutte s'étale en une flaque. Sur la paraffine, θ = 105° — l'eau se rassemble en perles. Pour le mercure sur verre, 140° : il ne mouille presque rien. D'où la forme du ménisque : pour un liquide mouillant, les bords montent le long de la paroi et la surface se creuse vers le bas ; pour un liquide non mouillant, c'est l'inverse.",
+     "latex": "\\sigma_{\\text{sg}} = \\sigma_{\\text{sl}} + \\sigma\\cos\\theta \\;\\Longrightarrow\\; \\cos\\theta = \\frac{\\sigma_{\\text{sg}} - \\sigma_{\\text{sl}}}{\\sigma}",
+     "figure": "realwet",
+     "figCaption": "Trois tensions sur la ligne de contact ; leur équilibre horizontal détermine l'angle de contact, et avec lui la forme du ménisque"
+    },
+    {
+     "text": "Assemblons tout. Un tube étroit, un liquide mouillant, le ménisque est monté et a tiré la colonne avec lui. Qu'est-ce qui tient cette colonne ? La tension le long de la ligne de contact — une circonférence de longueur $2\\pi r$ ; vers le haut tire la projection verticale $\\sigma\\cos\\theta$. Vers le bas tire le poids de la colonne soulevée $\\rho g\\,\\pi r^{2} h$. En égalisant — et de nouveau le rayon à la première puissance se simplifie contre le carré : plus le tube est étroit, plus la montée est haute, parce que le périmètre décroît comme $r$, et la masse comme $r^{2}$. Le même résultat s'obtient aussi à partir de la formule de Laplace, si l'on remarque que le ménisque dans un tube de rayon $r$ avec un angle θ est un morceau de sphère de rayon $R = r/\\cos\\theta$ : le saut $2\\sigma\\cos\\theta/r$ équilibre $\\rho g h$. Les nombres : pour l'eau sur du verre propre, un tube de rayon 0,1 mm donne 14,8 cm, un rayon de 0,5 mm — déjà seulement 3 cm. Le mercure avec son $\\cos 140^\\circ = -0{,}77$ inverse le signe : dans un tube de rayon 1 mm, il DESCEND de 5,6 mm. C'est pourquoi le canal d'un baromètre à mercure est fait large et on introduit une correction de dépression capillaire.",
+     "latex": "\\rho g\\,\\pi r^{2} h = \\sigma\\cos\\theta\\cdot 2\\pi r \\;\\Longrightarrow\\; h = \\frac{2\\sigma\\cos\\theta}{\\rho g r}; \\qquad r = 0{,}1\\ \\text{mm} : \\;\\; h = \\frac{2\\cdot 0{,}0728}{1000\\cdot 9{,}81\\cdot 10^{-4}} = 0{,}148\\ \\text{m}",
+     "figure": "realcap",
+     "figCaption": "Le poids de la colonne contre la tension sur le périmètre : le périmètre décroît comme r, le poids comme r², donc avec le rétrécissement du tube, la montée augmente"
+    },
+    {
+     "text": "Inversons la formule et demandons-lui ce pour quoi tout le paragraphe a été écrit. Quel doit être le tube pour soulever l'eau au sommet d'un arbre centenaire — à cent mètres ? Réponse : un rayon de 0,15 micron, soit un cent-cinquante-millième de millimètre. Les vaisseaux conducteurs et les trachéides de l'arbre sont deux ordres de grandeur plus larges : un rayon typique d'environ 10 microns, et un tel tube soulève l'eau d'un mètre et demi — moins que la hauteur d'un groseillier. La conclusion est dure et sans équivoque : les capillaires du tronc ne soulèvent pas l'eau, ils la conduisent seulement. Le travail est fait par les nanopores dans les parois cellulaires de la feuille : leur rayon est de l'ordre de 10 nanomètres, et le ménisque dans un tel pore est capable de maintenir une différence $2\\sigma/r \\approx 15$ MPa — cent cinquante atmosphères, avec une marge colossale. L'évaporation par les stomates tire continuellement l'eau, les ménisques dans les pores s'incurvent plus profondément, et toute la colonne dans le tronc se trouve étirée : la pression y est non seulement inférieure à la pression atmosphérique, mais négative, dans le tronc d'un séquoia environ −2 MPa. L'eau dans l'arbre n'est pas poussée par le bas, mais pend aux ménisques de la feuille — et c'est le même σ qui la tient.",
+     "latex": "r = \\frac{2\\sigma}{\\rho g h} = \\frac{2\\cdot 0{,}0728}{1000\\cdot 9{,}81\\cdot 100} = 1{,}5\\cdot10^{-7}\\ \\text{m} ; \\qquad r_{\\text{vaisseau}} \\approx 10\\ \\text{μm} \\;\\Longrightarrow\\; h \\approx 1{,}5\\ \\text{m}",
+     "figure": "realtree",
+     "figCaption": "Cent mètres exigent des pores de rayon 0,15 μm ; les vaisseaux du tronc sont cent fois plus larges et donnent un mètre et demi — la colonne est tenue par les nanopores de la feuille"
+    }
+   ],
+   "plate": "\\Delta p = \\frac{2\\sigma}{R} \\qquad h = \\frac{2\\sigma\\cos\\theta}{\\rho g r}",
+   "plateCap": "À gauche — le coût de la courbure : plus la surface est incurvée, plus elle comprime ce qui se trouve en dessous. À droite — le même saut de pression, mais équilibré par le poids de la colonne soulevée. La seconde s'obtient de la première par une simple substitution : le ménisque dans un tube de rayon $r$ avec un angle de contact θ est un morceau de sphère de rayon $R = r/\\cos\\theta$.",
+   "note": "Énumérons ce que nous avons supposé en chemin — ce sont les limites des formules. Premièrement : la surface a été considérée comme une sphère. Pour une goutte libre, c'est vrai (en apesanteur — exactement, sur Terre — tant que la goutte est plus petite que la longueur capillaire de 2,7 mm), et pour un ménisque dans un tube, c'est vrai seulement tant que le tube est étroit ; dans un tube large, la formule de Jurin surestime fortement la réponse. Deuxièmement : l'angle de contact a été considéré comme une constante du matériau. En réalité, il a un hystérésis de plusieurs dizaines de degrés et une forte dépendance à la rugosité — voir l'annexe. Troisièmement : σ a été considérée comme constante. Elle dépend de la température (pour l'eau, elle diminue de 0,076 à 0 °C à 0,059 à 100 °C) et de manière catastrophique — des impuretés : une seule goutte de détergent suffit pour la faire chuter de deux à trois fois. Quatrièmement : nous n'avons pas pris en compte le poids du liquide lui-même dans le ménisque au-dessus de son point le plus bas. Ce poids est tenu par la même tension, donc la colonne ne monte pas plus haut, mais plus bas que le calcul — d'environ $r/3$ : pour un tube de 0,1 mm, c'est deux centièmes de pour cent, pour un tube d'un millimètre, déjà environ deux pour cent. Cinquièmement : la gravité n'entrait pas du tout dans la formule de Laplace, c'est-à-dire que la goutte était considérée comme petite ; une grosse goutte sur une table s'aplatit, et sa courbure en haut et sur les côtés est différente. Et sixièmement, le plus important pour la pratique : partout on a supposé l'équilibre. La formule de Jurin donne la hauteur finale de montée, mais ne dit rien sur le temps : plus le capillaire est étroit, plus il soulève haut et plus il le fait lentement, parce que la résistance visqueuse croît comme $r^{-4}$. C'est déjà le sujet de la viscosité et de l'écoulement dans les tubes."
+  },
+  "math": {
+   "title": "Les mathématiques nécessaires ici",
+   "lead": "Trois thèmes, tous trois sur la façon d'obtenir une réponse sans résoudre d'équations : la lecture des dimensions, l'estimation par ordre de grandeur et la force comme dérivée de l'énergie.",
+   "items": [
+    {
+     "what": "Le joule par mètre carré et le newton par mètre sont une seule et même unité",
+     "why": "L'affirmation « l'énergie de surface et la tension superficielle sont la même chose » peut être vérifiée sans penser à la physique du tout : il suffit de simplifier les mètres. Le joule est un newton-mètre, donc J/m² = N·m/m² = N/m, et il n'y a pas de choix ici. La même astuce protège contre une erreur dans la formule de montée. Substituez les unités dans $2\\sigma\\cos\\theta/(\\rho g r)$ : le cosinus est sans dimension, au dénominateur kg/m³ · m/s² · m = kg/(m·s²) = Pa, au numérateur N/m, et N/m divisé par N/m² donne un mètre. La hauteur est obtenue en mètres — la formule n'est pas fausse. Si quelqu'un avait écrit par erreur $r^2$ au dénominateur, l'analyse dimensionnelle l'aurait immédiatement révélé.",
+     "latex": "[\\sigma] = \\frac{\\text{J}}{\\text{m}^{2}} = \\frac{\\text{N}\\cdot\\text{m}}{\\text{m}^{2}} = \\frac{\\text{N}}{\\text{m}}, \\qquad \\frac{[\\sigma]}{[\\rho][g][r]} = \\frac{\\text{N}/\\text{m}}{\\text{Pa}} = \\frac{\\text{N}/\\text{m}}{\\text{N}/\\text{m}^{2}} = \\text{m}",
+     "kit": "dimension"
+    },
+    {
+     "what": "Estimation par ordre de grandeur et longueur capillaire",
+     "why": "Dans la deuxième étape du raisonnement, nous avons obtenu σ à partir de la chaleur de vaporisation et nous avons manqué de 2,6 fois. C'est un résultat normal d'une estimation par ordre de grandeur : elle répond à la question « centièmes ou dixièmes », pas « 0,073 ou 0,075 ». La même astuce donne aussi l'échelle principale de tout le sujet. Demandons à quelle taille la gravité se compare à la tension : la pression de la colonne $\\rho g L$ contre la pression de Laplace $\\sigma/L$. En égalisant, on obtient la longueur capillaire $\\lambda_c = \\sqrt{\\sigma/\\rho g}$, pour l'eau 2,7 mm. En dessous, la tension domine : la goutte est une sphère, l'insecte marche sur l'eau, l'eau ne s'écoule pas de la gaze. Au-dessus, la gravité domine : la goutte s'aplatit, la flaque s'étale. Le rapport sans dimension $\\mathrm{Bo} = \\rho g L^{2}/\\sigma$ (nombre de Bond) est simplement le carré de la taille en longueurs capillaires, et on voit immédiatement qui domine.",
+     "latex": "\\rho g L \\sim \\frac{\\sigma}{L} \\;\\Longrightarrow\\; \\lambda_c = \\sqrt{\\frac{\\sigma}{\\rho g}} = \\sqrt{\\frac{0{,}0728}{1000\\cdot 9{,}81}} = 2{,}7\\ \\text{mm}, \\qquad \\mathrm{Bo} = \\frac{\\rho g L^{2}}{\\sigma} = \\left(\\frac{L}{\\lambda_c}\\right)^{2}",
+     "kit": "order"
+    },
+    {
+     "what": "La force comme dérivée de l'énergie",
+     "why": "Nous avons dérivé la formule de Laplace par un bilan des forces sur une coupe. Il y a une deuxième voie, plus courte et plus fiable : égaliser le travail de la pression à l'augmentation de l'énergie de surface lors d'une expansion imaginaire de la goutte de $dR$. L'énergie de surface $E = \\sigma\\cdot 4\\pi R^{2}$, sa dérivée $8\\pi\\sigma R$ ; le travail de la pression $\\Delta p\\cdot 4\\pi R^{2}\\,dR$. En égalisant, on obtient $2\\sigma/R$ en une ligne. La valeur de cette méthode est qu'elle ne nécessite pas de deviner quelles forces sont appliquées où : il suffit de calculer l'énergie en fonction d'un paramètre et de dériver. Vérifiez sur une bulle de savon : il y a deux surfaces, $E = 2\\sigma\\cdot4\\pi R^{2}$, la dérivée est double — et le coefficient double honnêtement à $4\\sigma/R$, sans aucune nouvelle physique. La même méthode pour une surface de forme arbitraire donne la forme générale de la formule de Laplace avec deux rayons principaux.",
+     "latex": "dE = \\sigma\\,d\\!\\left(4\\pi R^{2}\\right) = 8\\pi\\sigma R\\,dR, \\quad \\delta A = \\Delta p\\cdot 4\\pi R^{2}dR \\;\\Longrightarrow\\; \\Delta p = \\frac{2\\sigma}{R}; \\qquad \\Delta p = \\sigma\\left(\\frac{1}{R_1}+\\frac{1}{R_2}\\right)",
+     "kit": "derivative"
+    }
+   ]
+  },
+  "example": {
+   "title": "Exemple avec des nombres",
+   "lead": "Calculons ce que coûte une surface quand il y en a beaucoup : transformons un verre d'eau en brouillard et observons l'énergie, la surface et la pression à l'intérieur des gouttes.",
+   "given": "Un verre d'eau de volume $V = 200$ ml a été pulvérisé en brouillard composé de gouttes identiques de rayon $R = 1$ µm. La tension superficielle de l'eau est $\\sigma = 0{,}0728$ N/m, la masse volumique est de 1000 kg/m³, la capacité thermique massique est de 4,18 kJ/(kg·K), la chaleur latente de vaporisation est de 2,26 MJ/kg. Trouver le nombre de gouttes, leur surface totale, l'énergie dépensée pour la créer et la pression excessive à l'intérieur d'une goutte.",
+   "law": "Le volume et la surface totale d'un ensemble de sphères identiques sont liés par $A = 3V/R$ ; le travail contre la tension est égal à $\\sigma\\,\\Delta A$ ; la pression excessive à l'intérieur d'une goutte est donnée par la formule de Laplace $\\Delta p = 2\\sigma/R$.",
+   "solution": [
+    {
+     "text": "Combien de gouttes ont été obtenues. Le volume d'une goutte est de quatre tiers de pi r au cube ; avec un rayon d'un micron, cela représente un peu plus de quatre attolitres.",
+     "latex": "N = \\frac{V}{\\frac{4}{3}\\pi R^{3}} = \\frac{2\\cdot10^{-4}}{4{,}19\\cdot10^{-18}} = 4{,}8\\cdot10^{13}"
+    },
+    {
+     "text": "Surface totale. Il n'est pas nécessaire de passer par $N$ : le rapport de la surface au volume d'une sphère est égal à $3/R$, et le nombre de gouttes se simplifie de lui-même.",
+     "latex": "A = N\\cdot 4\\pi R^{2} = \\frac{3V}{R} = \\frac{3\\cdot 2\\cdot10^{-4}}{10^{-6}} = 600\\ \\text{m}^{2}"
+    },
+    {
+     "text": "Travail contre la tension. La surface initiale de l'eau dans le verre (environ 0,004 m²) peut être négligée : elle est cent cinquante mille fois plus petite que la nouvelle.",
+     "latex": "W = \\sigma\\,(A - A_0) \\approx \\sigma A = 0{,}0728\\cdot 600 = 43{,}7\\ \\text{J}"
+    },
+    {
+     "text": "Pression à l'intérieur de la goutte. Formule de Laplace, rayon en mètres.",
+     "latex": "\\Delta p = \\frac{2\\sigma}{R} = \\frac{2\\cdot 0{,}0728}{10^{-6}} = 1{,}46\\cdot10^{5}\\ \\text{Pa} = 1{,}44\\ \\text{atm}"
+    }
+   ],
+   "answer": "Environ 4,8·10¹³ gouttes, surface totale de 600 m² — c'est six ares de jardin potager, repliés dans un verre d'eau. La création de cette surface a coûté 44 joules. À l'intérieur de chaque goutte, la pression est supérieure de 146 kPa à la pression extérieure — un excès de près d'une atmosphère et demie.",
+   "check": "Quarante-quatre joules — c'est beaucoup ou peu ? Chauffer les mêmes 200 grammes d'eau d'un seul degré coûte 836 joules, soit dix-neuf fois plus : toute l'énergie de surface du brouillard équivaut à chauffer l'eau de 0,05 degré. Et vaporiser cette eau coûte 452 kilojoules — dix mille fois plus que de créer la surface. D'où la règle à retenir : l'énergie de surface n'est presque jamais visible dans le bilan énergétique, mais elle est parfaitement visible dans les FORCES et les PRESSIONS. Une atmosphère et demie supplémentaire dans une goutte invisible à l'œil nu est une grandeur dont tiennent compte aussi bien les météorologues que les concepteurs d'injecteurs. Deuxième vérification, inverse : la surface a été multipliée par 156 000, et l'évaporation se fait depuis la surface — c'est pourquoi l'eau pulvérisée s'évapore incomparablement plus vite que l'eau versée, et c'est sur cela que reposent les humidificateurs d'air, les injecteurs de carburant et le séchage par pulvérisation. Et si dans votre calcul la surface est de l'ordre de quelques mètres carrés, cherchez les microns perdus : 1 µm = 10⁻⁶ m, et non 10⁻³."
+  },
+  "constants": {
+   "title": "Constantes de ce paragraphe",
+   "lead": "Quatre nombres. Trois d'entre eux sont des tensions de liquides spécifiques, le quatrième n'est ni une propriété de l'appareil ni une propriété de l'expérience, mais une échelle qui divise le monde en « petit » et « grand ».",
+   "items": [
+    {
+     "sym": "σ_eau",
+     "latex": "\\sigma_{\\text{H}_2\\text{O}}",
+     "name": "Tension superficielle de l'eau",
+     "value": "0,0728 à 20 °C (0,0756 à 0 °C, 0,0589 à 100 °C)",
+     "unit": "N/m, également J/m²",
+     "why": "Valeur anormalement élevée pour un liquide léger : pour la plupart des liquides organiques, elle est de 0,02–0,03, soit trois à quatre fois moins. La cause en est la liaison hydrogène : la molécule d'eau ne tient pas seulement à ses voisines par une faible attraction, comme au §1, mais aussi par un pont directionnel via l'hydrogène. Avec la température, la tension diminue presque linéairement et s'annule au point critique : là, la frontière liquide-vapeur disparaît, et il n'y a plus rien à payer.",
+     "mnemo": "Retenez « sept centièmes de newton par mètre » — alors deux chiffres se calculent de tête : une goutte de rayon 1 mm retient à l'intérieur un surplus d'une centaine et demie de pascals, et un tube de rayon 0,1 mm soulève l'eau d'environ 15 centimètres."
+    },
+    {
+     "sym": "σ_savon",
+     "latex": "\\sigma_{\\text{savon}}",
+     "name": "Tension d'une solution savonneuse",
+     "value": "0,025 (solution pour bulles) — 0,035 (concentration domestique)",
+     "unit": "N/m",
+     "why": "Le savon ne « rend pas l'eau glissante » — il réduit sa tension de deux à trois fois. La molécule de tensioactif est biface : une extrémité aime l'eau, l'autre l'évite, de sorte qu'une telle molécule se place d'elle-même à la surface, queue dehors, et remplace la surface aqueuse coûteuse par une surface bon marché. D'où tout cela : le tissu est mouillé à travers au lieu de retenir l'eau en film dans les pores ; la graisse se détache de la vaisselle ; un trombone coule dans l'eau à cause d'une goutte de détergent. Et de là aussi le fait que l'eau pure ne peut pas mousser, alors que l'eau savonneuse le peut.",
+     "mnemo": "Deux à trois fois moins que pour l'eau pure. Le rapport se voit à la cuisine sans instruments : d'une pipette d'eau savonneuse sort environ 2,4 fois plus de gouttes que d'eau pure pour le même millilitre."
+    },
+    {
+     "sym": "σ_mercure",
+     "latex": "\\sigma_{\\text{Hg}}",
+     "name": "Tension superficielle du mercure",
+     "value": "0,485 à 20 °C, angle de contact sur verre d'environ 140°",
+     "unit": "N/m",
+     "why": "Six fois et demie plus grande que celle de l'eau : à la surface du métal liquide, ce sont les liaisons métalliques qui se rompent, et elles sont bien plus solides que les liaisons hydrogène. Avec le non-mouillage du verre, cela donne deux images familières : le mercure se rassemble en billes sur toute surface, et dans un tube étroit il ne monte pas, mais descend. Les barométristes connaissent cela comme dépression capillaire et introduisent une correction tabulée.",
+     "mnemo": "Un demi-newton par mètre. Pourtant, la longueur capillaire du mercure est de 1,9 mm — MOINS que celle de l'eau, bien que σ soit six fois plus grande : la densité est 13,6 fois plus élevée, et la gravité l'emporte plus tôt."
+    },
+    {
+     "sym": "λ_c",
+     "latex": "\\lambda_c",
+     "name": "Longueur capillaire de l'eau",
+     "value": "2,7",
+     "unit": "mm",
+     "why": "Ce n'est pas une constante de l'appareil, mais une échelle propre au liquide : la taille à laquelle le poids se compare à la tension, $\\lambda_c = \\sqrt{\\sigma/\\rho g}$. Tout ce qui est plus petit vit dans le monde de la tension — la goutte est exactement une sphère, le gerris ne coule pas, l'eau reste suspendue dans la gaze. Tout ce qui est plus grand vit dans le monde de la gravité — la goutte s'aplatit, la flaque s'étale, la colonne s'effondre. De là aussi la limite de taille des gouttes de pluie : plus grosses que quelques millimètres, elles ne tiennent pas et se brisent sous l'air qui les frappe.",
+     "mnemo": "Deux à trois millimètres — c'est la taille d'une goutte qui se détache d'un robinet. Souvenez-vous de cette goutte : elle se trouve exactement à la frontière des deux mondes."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Comment cela se relie au reste du cours",
+   "lead": "La tension superficielle n'est pas un sujet isolé, mais le revers de la même attraction intermoléculaire qui, au §1, expliquait l'écart du gaz réel par rapport au gaz parfait.",
+   "items": [
+    {
+     "h": "Premier paragraphe : la même force, une autre comptabilité",
+     "text": "Au §1, l'attraction des molécules est devenue la correction $a/V^{2}$ — un déficit de pression à la paroi parce que la molécule est tirée en arrière par ses semblables. Ici, la même attraction est comptée non pas par la pression, mais par l'énergie de la frontière. Le pont entre les paragraphes est visible sur le banc : σ de l'eau diminue de 0,076 N/m à 0 °C à 0,059 à 100 °C et s'annule exactement au point critique, dont nous avons obtenu les coordonnées au §1. La cause est la même : là disparaît la différence entre liquide et vapeur, et avec elle la frontière elle-même. Pas de frontière, rien à payer."
+    },
+    {
+     "h": "Hydrostatique : le gerris et la gaze sur le verre",
+     "text": "Dans le thème de la pression dans un liquide au repos, nous avons fait deux fois référence à la tension sans la calculer : le gerris se maintient à la surface, et l'eau ne s'écoule pas à travers la gaze recouvrant un verre retourné. Maintenant, cela se calcule. Une maille de filet de rayon $r$ retient une différence de pression allant jusqu'à $2\\sigma/r$ ; pour retenir une colonne de 12 cm, soit 1,2 kPa, il faut un rayon d'environ 0,12 mm. La gaze a une maille justement de ces dixièmes de millimètre, donc l'expérience fonctionne — mais à la limite, et avec un filet grossier, cela ne marche plus."
+    },
+    {
+     "h": "Viscosité : le capillaire soulève, mais freine aussi",
+     "text": "La formule de Jurin donne la hauteur finale et ne dit rien sur le temps. Or, le temps est déterminé par la viscosité : la résistance à l'écoulement dans un tube croît comme $r^{-4}$ — c'est la loi de Poiseuille du thème des écoulements visqueux. On obtient une fourchette, familière à quiconque a choisi des essuie-tout : les pores larges absorbent vite, mais pas haut ; les pores étroits — haut, mais lentement. Pour la même raison, la montée de l'eau dans une maçonnerie en briques devrait formellement atteindre une dizaine de mètres, mais en réalité s'arrête autour d'un mètre : l'évaporation de la paroi emporte l'eau plus vite que les pores étroits ne la font monter."
+    },
+    {
+     "h": "Transitions de phase : pourquoi l'ébullition doit commencer",
+     "text": "Le germe d'une nouvelle phase — une bulle dans le liquide ou une gouttelette dans la vapeur — est d'abord petit, donc sa surface est chère par rapport au gain en volume. D'où le liquide surchauffé qui ne bout pas sans centres de nucléation, et la vapeur sursaturée qui ne se condense pas sans noyaux de condensation. L'aspect quantitatif en est la formule de Kelvin en annexe : au-dessus d'une petite goutte, la pression de vapeur saturante est plus élevée qu'au-dessus d'une surface plane, et c'est pourquoi les petites gouttes s'évaporent au profit des grosses."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Curiosités : à tester soi-même",
+   "lead": "La tension superficielle est un rare sujet où l'expérience domestique n'est pas une illustration mais une mesure : avec un compte-gouttes de cuisine, on mesure σ sérieusement, avec une précision de l'ordre de dix pour cent.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "expérience de cuisine",
+     "h": "Le trombone qui flotte et la goutte de produit qui le coule",
+     "text": "Versez de l'eau dans une assiette. Déchirez un morceau de serviette en papier, posez-le sur l'eau, puis placez dessus un trombone ou une aiguille à coudre. Au bout d'une demi-minute, la serviette est mouillée et coule, mais le trombone reste à la surface. Regardez de côté : autour de lui, la surface est creusée d'une petite dépression. Maintenant, versez une goutte de liquide vaisselle sur le bord opposé de l'assiette – et ne clignez pas des yeux.",
+     "answer": "Le trombone ne flotte pas selon Archimède : l'acier est 7,8 fois plus dense que l'eau, et le volume déplacé ne suffit pas. Ce qui le maintient, c'est la courbure de la surface – plus précisément, la tension le long des deux lignes de contact sur les côtés. Calculons la limite. Le poids d'une aiguille cylindrique de longueur $L$ et de diamètre $d$ est $\\rho_{\\text{acier}}\\,g\\,\\pi d^{2}L/4$, et la tension des deux côtés fournit au plus $2\\sigma L$. La longueur s'élimine, et on obtient $d_{\\max} = \\sqrt{8\\sigma/(\\pi\\rho_{\\text{acier}} g)} = 1{,}56$ mm. Une aiguille à coudre ordinaire a un diamètre de 0,6–0,8 mm, soit une marge de sécurité quadruple en masse – c'est pourquoi elle flotte sans problème. En revanche, avec un clou de 3 mm, l'expérience échoue même avec la plus grande précaution, et c'est une prédiction de la formule, pas une question d'habileté.\n\nMaintenant, la goutte de produit. Le nouvel équilibre donne $d_{\\max} = 1{,}0$ mm – la limite a chuté d'un facteur un et demi, et d'après cette arithmétique, une aiguille fine devrait tenir. Elle coule instantanément pour une autre raison : le savon s'étale à la surface, créant un gradient de σ, et ce gradient de tension entraîne la surface loin de la goutte (c'est l'effet Marangoni). Le trombone est littéralement arraché de sa dépression, et la molécule de tensioactif qui arrive modifie aussi l'angle de contact. L'expérience vaut la peine d'être faite dans l'autre sens : versez le produit À L'AVANCE, mélangez, et essayez de poser un trombone sur la solution savonneuse déjà à l'équilibre – une aiguille fine se posera, bien que nettement moins facilement."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "expérience de cuisine",
+     "h": "Compter les gouttes : mesurez σ avec un compte-gouttes de cuisine",
+     "text": "Prenez un compte-gouttes ou une seringue sans aiguille. Remplissez d'eau propre et laissez tomber goutte à goutte exactement 5 millilitres dans un verre doseur, en comptant les gouttes. Rincez, remplissez avec de l'eau additionnée d'une goutte de liquide vaisselle et répétez – les mêmes 5 millilitres, le même embout, le même rythme. Comparez les nombres de gouttes.",
+     "answer": "La goutte se détache quand son poids égale la tension qui la retient sur la circonférence de l'embout : $mg = 2\\pi r\\sigma$. C'est la loi de Tate, et c'est le principe du stalagmomètre, l'instrument avec lequel on mesurait σ il y a cent ans. Pour un embout de rayon 1 mm et de l'eau pure, on obtient $m = 2\\pi\\cdot10^{-3}\\cdot0{,}0728/9{,}81 = 47$ mg, soit environ 21 gouttes par millilitre.\n\nMais ce qui est intéressant, ce n'est pas la valeur absolue, c'est le rapport. Le rayon de l'embout et $g$ sont les mêmes dans les deux séries, donc le nombre de gouttes pour un volume donné est inversement proportionnel à σ : $N_{\\text{savon}}/N_{\\text{eau}} = \\sigma_{\\text{eau}}/\\sigma_{\\text{savon}} \\approx 0{,}073/0{,}030 = 2{,}4$. Là où l'eau pure a donné cent gouttes, l'eau savonneuse en donne environ deux cent quarante. Une réserve honnête, sans laquelle l'accord avec la cuisine serait truqué : la loi de Tate surestime la masse d'une goutte d'environ un facteur un et demi, car une partie du liquide reste accrochée à l'embout lors de la rupture – c'est la correction de Harkins et Brown. Avec elle, nos 47 mg deviennent 31, soit 32 gouttes par millilitre, alors que la cuisine en donne 20 à 25. L'accord se fait quand même, mais par un autre chemin : la goutte pend sur le BORD EXTERNE de l'embout, et celui-ci, pour un compte-gouttes de pharmacie, ne fait pas un millimètre mais un et demi. Un millimètre et demi donne un poids idéal de 70 mg, avec la correction 47 mg – les fameuses 21 gouttes par millilitre. C'est pourquoi la valeur absolue de σ se mesure si grossièrement, alors que le rapport est tout à fait correct : la correction est presque identique pour les deux liquides et s'élimine dans le rapport."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoxe",
+     "h": "On construit un château avec du sable humide, pas avec du sable sec ni détrempé",
+     "text": "Le sable sec s'effrite. Le sable sous l'eau s'effrite aussi. Mais le sable humide tient une paroi verticale et une tour d'un demi-mètre de haut. L'eau n'est pas de la colle et ne colle rien – d'où vient cette solidité et pourquoi disparaît-elle dès qu'on ajoute trop d'eau ?",
+     "answer": "Entre les grains de sable voisins, l'humidité forme de minuscules ponts liquides à surface concave. Une surface concave, selon la formule de Laplace, signifie une pression réduite à l'intérieur du pont, et cette dépression attire les grains les uns vers les autres. Estimons la force. Un grain de rayon 100 µm, un col du pont de rayon de courbure d'environ 10 µm : la dépression $2\\sigma/r \\approx 15$ kPa, et la force d'attraction est de l'ordre de $\\pi r_{\\text{grain}}\\sigma \\approx 2\\cdot10^{-5}$ N. Le poids du grain lui-même, avec une densité de 2650 kg/m³, est d'environ $1\\cdot10^{-7}$ N. La force capillaire est deux cents fois plus grande que le poids, et c'est pourquoi la tour tient.\n\nMaintenant, le reste s'explique. Dans le sable sec, il n'y a pas de ponts – rien pour tenir. Dans le sable détrempé, il n'y en a pas non plus : l'eau est continue, il ne reste pas de ponts concaves, et toute la structure s'effrite à nouveau. La solidité n'existe que dans une plage étroite d'humidité, généralement de un à quelques pour cent en masse, et c'est exactement ce que chacun a constaté sur la plage par expérience. La même physique fait des grumeaux dans la farine, fait coller le sel dans la salière et fait tenir la poussière sur un chiffon humide."
+    },
+    {
+     "icon": "fact",
+     "kind": "fait amusant",
+     "h": "Une cuillère d'huile sur un étang et la première mesure de la taille d'une molécule",
+     "text": "En 1774, Benjamin Franklin versa une cuillère à café d'huile d'olive sur un étang à Clapham, à Londres, et décrivit avec plaisir comment les rides s'étaient instantanément apaisées sur une surface d'environ un demi-acre. Il s'arrêta là. Plus d'un siècle plus tard, Lord Rayleigh prit ses chiffres et divisa simplement le volume par la surface.",
+     "answer": "Une cuillère à café, c'est 5 millilitres, soit 5·10⁻⁶ m³. Un demi-acre, c'est environ 2000 m². On divise : l'épaisseur du film est de 2,5·10⁻⁹ mètre, deux nanomètres et demi. Aucune physique, à part la division du volume par la surface, n'est nécessaire – et le résultat est stupéfiant : l'huile s'est étalée jusqu'à l'épaisseur d'UNE seule molécule et a refusé d'aller plus loin. La longueur d'une molécule d'acide oléique est en effet d'environ deux nanomètres. C'est ainsi que la taille d'une molécule a été mesurée pour la première fois, avec un étang comme instrument.\n\nCette ligne a été poursuivie par Agnes Pockels, déjà mentionnée : sa cuve permettait de comprimer une monocouche avec une barrière et de suivre le moment où la tension commençait à chuter – c'est-à-dire quand les molécules se touchaient. Irving Langmuir a transformé son appareil de cuisine en instrument de laboratoire, a obtenu le prix Nobel de 1932 pour ses travaux sur les monocouches, et aujourd'hui la cuve de Langmuir-Blodgett se trouve dans les laboratoires où l'on cultive des films d'une épaisseur d'une molécule."
+    },
+    {
+     "icon": "edge",
+     "kind": "limite de validité",
+     "h": "La feuille de lotus et l'angle de contact qui n'existe pas",
+     "text": "La condition de Young donne un nombre θ pour une paire donnée « liquide – solide ». Sur une surface réelle, ce nombre n'existe pas : une goutte sur une vitre inclinée ne roule pas tant que l'inclinaison est faible, et son bord avant forme un angle différent de son bord arrière – la différence peut atteindre plusieurs dizaines de degrés.",
+     "answer": "Young supposait une surface parfaitement lisse et chimiquement homogène. La vraie surface est rugueuse, et sur chaque aspérité, la ligne de contact s'accroche. D'où l'hystérésis de l'angle de contact : l'angle d'avancée est plus grand que l'angle de recul, et la goutte tient sur une pente tant que la différence des projections ne dépasse pas la force de gravité qui l'entraîne. De plus, la rugosité AMPLIFIE la propriété initiale de la surface, elle ne l'atténue pas : selon la formule de Wenzel, le cosinus est multiplié par un facteur de rugosité, de sorte que ce qui est mouillable devient encore plus mouillable, et ce qui est non mouillable devient encore plus non mouillable.\n\nLa feuille de lotus pousse cela à l'extrême. Sa surface est couverte de bosses cireuses de quelques microns, surmontées d'une structure encore plus fine ; l'eau ne s'enfonce pas entre les bosses, mais repose sur leurs sommets, sur des coussins d'air. C'est le régime de Cassie, et l'angle de contact effectif atteint 160° : la goutte est presque une sphère, elle roule au moindre penchant et emporte la poussière avec elle. Les revêtements hydrofuges industriels reproduisent exactement cette géométrie, pas la chimie – et c'est pourquoi ils cessent de fonctionner dès qu'un tensioactif (c'est-à-dire un produit vaisselle ordinaire) remplit les poches d'air."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "Ce que nous avons simplifié",
+   "blocks": [
+    {
+     "h": "Le ménisque n'est pas une demi-sphère, et la formule de Jurin n'est pas exacte",
+     "text": "Nous avons supposé que le ménisque dans le tube est un segment de sphère de rayon $R = r/\\cos\\theta$. Cela est vrai tant que le tube est beaucoup plus étroit que la longueur capillaire : alors la gravité n'a pas le temps de déformer la forme. Lorsque $r$ est comparable à 2,7 mm, le ménisque est sensiblement aplati, et la formule surestime la réponse. Exemple pratique : pour le mercure dans un tube de rayon 5 mm, notre formule donne une dépression de 1,1 mm, alors que les tables barométriques donnent des fractions de millimètre, car un ménisque de cette largeur ne peut physiquement pas devenir un segment sphérique avec un angle de 140°. C'est précisément pour cela que, dans les baromètres à mercure de précision, le canal est fait d'une largeur de 8 à 10 mm : là, la correction est faible et bien tabulée. La deuxième correction, plus modeste, agit dans le même sens : le poids du liquide dans le ménisque au-dessus de son point le plus bas est supporté par la même tension, et la colonne s'élève moins haut que prévu d'environ $r/3$.",
+     "latex": "R_{\\text{men}} = \\frac{r}{\\cos\\theta} \\;\\Longrightarrow\\; \\Delta p = \\frac{2\\sigma\\cos\\theta}{r} = \\rho g h, \\qquad h_{\\text{exact}} \\approx \\frac{2\\sigma\\cos\\theta}{\\rho g r} - \\frac{r}{3}"
+    },
+    {
+     "h": "L'angle de contact n'est pas une constante du matériau",
+     "text": "Dans les tables, on lit « eau sur verre — 0°, sur paraffine — 105° », comme s'il s'agissait d'une propriété du couple de matériaux. Sur une surface parfaitement lisse et chimiquement homogène, ce serait le cas. La surface réelle est rugueuse et contaminée, et au lieu d'un angle unique, on a tout un intervalle : l'angle d'avancée (le bord avance) est plus grand que l'angle de recul (le bord recule), la différence — l'hystérésis — atteint 20 à 50°. La rugosité intervient selon la formule de Wenzel, et si le liquide repose sur les sommets des aspérités, en s'appuyant sur l'air, selon la formule de Cassie. La conclusion pratique est simple : le calcul de l'ascension capillaire avec un θ tabulé donne un nombre avec une précision de l'ordre de quelques dizaines de pour cent, et il n'est fiable que pour un couple totalement mouillant, où $\\cos\\theta$ est déjà presque égal à un.",
+     "latex": "\\cos\\theta^{*} = r_{\\text{rug}}\\cos\\theta \\;\\;(\\text{Wenzel}), \\qquad \\cos\\theta^{*} = f\\cos\\theta - (1-f) \\;\\;(\\text{Cassie})"
+    },
+    {
+     "h": "σ dépend des impuretés, et son gradient met le liquide en mouvement",
+     "text": "La tension superficielle est la plus capricieuse des constantes de ce cours. Quelques centièmes de pour cent d'un agent tensioactif suffisent à la faire chuter d'un facteur un et demi, et quelques dixièmes, d'un facteur deux, car une telle molécule migre spontanément vers la surface et s'y concentre ; quantitativement, cela est décrit par l'équation d'adsorption de Gibbs. C'est pourquoi les mesures de σ exigent une propreté presque maniaque — Agnes Pockels lavait sa cuve pendant des heures — et c'est aussi pourquoi aucune expérience de ce paragraphe ne réussira dans une vaisselle où l'on a récemment lavé des matières grasses. Mais la variabilité de σ a aussi sa propre physique : si la tension diffère en différents points de la surface, la surface s'écoule des zones de faible σ vers les zones de forte σ, entraînant le liquide avec elle. C'est l'effet Marangoni. Saupoudrez du poivre moulu sur de l'eau et déposez une goutte de détergent au centre : le poivre se disperse vers les bords — non pas « repoussé », mais emporté avec la surface. C'est lui qui coule le trombone dans la première expérience, et c'est lui qui fait circuler les grains d'épices dans une casserole chauffée par le bas, où le gradient de σ est créé non par une impureté, mais par la température."
+    },
+    {
+     "h": "Formule de Kelvin : au-dessus d'une petite goutte, la vapeur est plus dense",
+     "text": "Nous avons considéré que la courbure de la surface ne modifie que la mécanique. Elle modifie aussi la thermodynamique : une molécule sur une surface convexe a encore moins de voisines que sur une surface plane, et il lui est plus facile de s'échapper. La pression de vapeur saturante au-dessus d'une goutte est donc plus élevée qu'au-dessus d'une surface plane, et d'autant plus que la goutte est petite. Les chiffres : pour une goutte de rayon 1 μm, l'excès est de 0,11 %, et pour 10 nm, il est déjà de 11 %. Deux conséquences en découlent. Premièrement, dans un air parfaitement pur, le brouillard ne se forme pas même en cas de sursaturation notable — un embryon minuscule s'évapore immédiatement, et il faut des noyaux de condensation, c'est-à-dire des particules de poussière et des particules de sel. Deuxièmement, dans un nuage, les grosses gouttes croissent aux dépens des petites, car il est plus difficile aux petites de retenir leur vapeur — c'est ainsi qu'une goutte de pluie se forme à partir du brouillard. Elle se dérive de l'égalité des potentiels chimiques du liquide et de la vapeur, dans laquelle on ajoute le saut de pression de Laplace ; son plus proche parent est l'équation de Clausius-Clapeyron du sujet des transitions de phase. Ici, nous ne prenons que le résultat.",
+     "latex": "\\ln\\frac{p(r)}{p_\\infty} = \\frac{2\\sigma V_m}{r\\,RT}; \\qquad r = 1\\ \\text{μm} : +0{,}11\\,\\%, \\qquad r = 10\\ \\text{nm} : +11\\,\\%"
+    }
+   ]
+  },
+  "memo": {
+   "essence": "Une molécule à la frontière manque de la moitié de ses voisines, et pour chaque mètre carré de frontière, le liquide paie une énergie σ. Cette même σ, réécrite en newtons par mètre, est la force de tension — c'est un seul nombre dans deux unités. Une surface courbée comprime ce qui se trouve en dessous de $\\Delta p = 2\\sigma/R$ (pour un film à deux surfaces — $4\\sigma/R$), et ce même saut élève le liquide dans un tube étroit à $h = 2\\sigma\\cos\\theta/(\\rho g r)$.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "J/m² = N/m",
+     "text": "L'énergie de surface et la tension superficielle sont une seule grandeur dans deux unités ; un cadre avec une barre mobile convertit l'une en l'autre en une seule ligne."
+    },
+    {
+     "icon": "scale",
+     "title": "Inversement proportionnel au rayon",
+     "text": "$\\Delta p = 2\\sigma/R$ : plus la goutte est petite, plus elle est comprimée. Dans une goutte micrométrique, la pression interne est supérieure d'une atmosphère et demie."
+    },
+    {
+     "icon": "fact",
+     "title": "Le cosinus décide du signe",
+     "text": "$\\theta < 90^\\circ$ — le liquide monte, $\\theta > 90^\\circ$ — il descend. L'eau dans le verre monte, le mercure dans le même verre descend."
+    },
+    {
+     "icon": "edge",
+     "title": "Longueur capillaire 2,7 mm",
+     "text": "La frontière entre deux mondes : en dessous, la tension domine (la goutte est une sphère), au-dessus, la gravité domine (la goutte est une galette)."
+    }
+   ],
+   "where": [
+    "Injecteurs et pulvérisation : 200 ml d'eau en gouttes micrométriques donnent 600 m² de surface et s'évaporent donc incomparablement plus vite que l'eau versée.",
+    "Détergents : les tensioactifs réduisent σ de deux à trois fois, et l'eau pénètre enfin dans les pores du tissu au lieu de s'y accrocher en film.",
+    "Poumons : le surfactant réduit la tension d'autant plus que l'alvéole est petite, et empêche les petites alvéoles de s'affaisser en grandes.",
+    "Mèche, buvard, essuie-tout, maçonnerie de briques : les pores étroits élèvent plus haut, mais aspirent plus lentement.",
+    "Baromètre à mercure : la dépression capillaire dans un canal étroit exige une correction de table, c'est pourquoi le canal est fait large.",
+    "Château de sable mouillé : les ponts d'eau entre les grains de sable les resserrent avec une force équivalente à deux cents fois le poids d'un grain."
+   ],
+   "watchOut": "Trois pièges. Le premier — confondre $2\\sigma/R$ et $4\\sigma/R$ : le quatre n'apparaît que là où le film a deux surfaces, c'est-à-dire pour une bulle de savon ; pour une goutte et pour un ménisque, la surface est unique. Le deuxième — substituer le diamètre au rayon dans la formule de montée : la réponse est sous-estimée exactement de moitié et semble plausible car l'ordre de grandeur est conservé. Le troisième, fondamental — croire que les capillaires élèvent l'eau dans les arbres : ils la conduisent, c'est l'évaporation à travers les nanopores des feuilles qui l'élève, et l'eau dans le tronc n'est pas comprimée mais étirée."
+  },
+  "quiz": [
+   {
+    "id": "sf1",
+    "type": "mcq",
+    "q": "Deux bulles de savon, une grosse et une petite, sont gonflées aux extrémités d'un tube avec un robinet fermé au milieu. On ouvre le robinet. Que se passe-t-il ?",
+    "options": [
+     "Les bulles échangent de l'air et deviennent de taille égale",
+     "La petite se dégonfle et la grosse se gonfle encore plus",
+     "La grosse se dégonfle dans la petite : elle a une plus grande surface et plus d'énergie stockée",
+     "Rien ne change : le film est tendu de la même manière, donc il exerce la même pression"
+    ],
+    "answer": 1,
+    "why": "La pression à l'intérieur d'une bulle est $\\Delta p = 4\\sigma/R$, inversement proportionnelle au rayon, donc elle est PLUS GRANDE pour la petite bulle. L'air va de là où la pression est plus élevée ; la petite bulle diminue, sa pression augmente encore plus, et le processus s'accélère de lui-même — il n'y a pas d'équilibre intermédiaire. La réponse « la grosse se dégonfle dans la petite » confond pression et énergie : l'énergie de surface totale de la grosse bulle est effectivement plus grande, mais c'est la différence de pression qui pilote l'écoulement, pas le réservoir d'énergie. La réponse sur le film également tendu est l'erreur la plus fréquente : la tension est effectivement la même pour les deux, mais ce n'est pas la tension qui agit, c'est la courbure. C'est ainsi que se comporteraient les alvéoles pulmonaires sans le surfactant qui réduit σ précisément lorsqu'elles sont comprimées.",
+    "hint": "Écrivez $\\Delta p = 4\\sigma/R$ pour les deux bulles et comparez. Qui a la pression la plus élevée : celui qui a le plus petit $R$ ou celui qui a le plus grand ?"
+   },
+   {
+    "id": "sf2",
+    "type": "mcq",
+    "q": "L'eau est montée dans un tube capillaire à 15 cm et s'est arrêtée. On remplace ce tube par un tube identique mais court : son extrémité supérieure est maintenant à seulement 5 cm au-dessus du niveau de l'eau dans le récipient. Que se passe-t-il ?",
+    "options": [
+     "L'eau s'écoulera en continu par l'extrémité — on obtiendra une fontaine perpétuelle",
+     "L'eau montera jusqu'à l'extrémité et s'arrêtera, et le ménisque deviendra plus plat",
+     "L'eau ne montera que de 5 cm, mais le ménisque conservera sa courbure précédente, et une partie du tube restera sèche",
+     "L'eau ne montera pas du tout : un tube court ne peut pas créer la dépression nécessaire"
+    ],
+    "answer": 1,
+    "why": "La montée s'arrête lorsque le saut de pression de Laplace $2\\sigma\\cos\\theta/r$ équilibre le poids de la colonne $\\rho g h$. Si le tube est plus court que la hauteur d'équilibre, la colonne bute contre l'extrémité, mais l'équilibre doit toujours être satisfait — et le système ajuste le seul paramètre libre, la courbure du ménisque : il s'aplatit juste assez pour que le saut devienne égal à $\\rho g \\cdot 5$ cm, c'est-à-dire trois fois plus petit qu'avant. Sur le bord de l'extrémité, la ligne de contact est ancrée et peut maintenir n'importe quel angle dans une large plage — c'est ce qu'on appelle l'ancrage sur un bord. La réponse sur la fontaine perpétuelle violerait la conservation de l'énergie : pour qu'une goutte se détache et s'écoule, il faut créer une nouvelle surface, ce qui coûte exactement l'énergie libérée par la montée. La réponse sur la courbure conservée ne tient pas car la courbure du ménisque et la hauteur de la colonne sont liées rigidement : on ne peut pas conserver la courbure et ne pas atteindre l'extrémité à la fois.",
+    "hint": "Dans la formule $h = 2\\sigma\\cos\\theta/(\\rho g r)$, le rayon du tube et σ n'ont pas changé, mais $h$ a été artificiellement réduit d'un facteur trois. Quelle quantité dans la formule reste libre ?"
+   },
+   {
+    "id": "sf3",
+    "type": "free",
+    "q": "En vos propres termes : pourquoi un grand arbre ne peut-il pas faire monter l'eau uniquement par les capillaires du tronc, et qu'est-ce qui la fait monter alors sur cent mètres ?",
+    "keywords": [
+     "rayon",
+     "étroit",
+     "large",
+     "vaisseau",
+     "nanopore",
+     "feuille",
+     "évaporation",
+     "négative",
+     "étiré",
+     "ménisque",
+     "0,15"
+    ],
+    "needed": 2,
+    "why": "La hauteur de montée est inversement proportionnelle au rayon : $h = 2\\sigma\\cos\\theta/(\\rho g r)$. Pour faire monter l'eau sur 100 mètres, il faut un tube de rayon 0,15 micron. Les vaisseaux et trachéides du tronc sont environ cent fois plus larges — rayon de l'ordre de 10 microns — et un tel tube ne donne qu'un mètre et demi au maximum. Donc les capillaires du tronc ne font pas monter l'eau, ils la conduisent seulement. Ce qui la fait monter, c'est l'évaporation par les stomates des feuilles : les ménisques dans les nanopores des parois cellulaires (rayon d'environ 10 nm) peuvent maintenir une différence de pression d'environ 15 MPa et tirent l'eau vers le haut, comme un piston. La colonne n'est pas comprimée mais étirée — la pression dans le tronc d'un séquoia est négative, de l'ordre de −2 MPa. L'eau dans l'arbre est suspendue aux ménisques des feuilles, pas poussée par le bas.",
+    "hint": "Retournez la formule de la montée et trouvez quel rayon est nécessaire pour cent mètres. Comparez ensuite avec la largeur réelle des vaisseaux de l'arbre — et réfléchissez à l'endroit où l'arbre a des pores des ordres de grandeur plus petits."
+   },
+   {
+    "id": "sf4",
+    "type": "estimate",
+    "q": "Estimez la pression excessive à l'intérieur d'une gouttelette de brouillard de rayon 5 μm. La tension superficielle de l'eau est de 0,073 N/m. Réponse en kilopascals.",
+    "answer": 29,
+    "unit": "kPa",
+    "why": "$\\Delta p = 2\\sigma/R = 2\\cdot0{,}073/(5\\cdot10^{-6}) = 2{,}9\\cdot10^{4}$ Pa, soit 29 kPa. De tête : 0,146 divisé par cinq microns — c'est 0,146 multiplié par 2·10⁵, environ trois dizaines de kilopascals. Vérification par le bon sens : presque un tiers d'atmosphère à l'intérieur d'une goutte qu'on ne peut même pas voir — et c'est encore modeste, pour une goutte micronique la pression est cinq fois plus grande. L'erreur la plus fréquente ici est de prendre $4\\sigma/R$ : le facteur 4 n'existe que pour un film à deux surfaces, alors qu'une goutte n'a qu'une seule surface. La deuxième erreur fréquente est d'oublier de convertir les microns en mètres.",
+    "tolAbs": 6,
+    "hint": "La formule de Laplace pour une goutte, pas pour une bulle de savon. Et convertissez le rayon en mètres : 5 μm = 5·10⁻⁶ m."
    }
   ]
  }

@@ -472,5 +472,123 @@
     "والحد: نظرية النطاقات تعمل طالما يمكن اعتبار الإلكترونات مستقلة. حيثما تتفاعل بشدة، لا توجد نظرية عامة حتى الآن — وهناك تكمن الموصلية الفائقة عند درجات حرارة عالية."
    ]
   }
+ },
+ "fr": {
+  "title": "Semi-conducteurs",
+  "subtitle": "Leçon 5 · Comment la théorie des bandes donne naissance à toute l'électronique",
+  "lead": "La résistivité du cuivre et celle du verre de quartz diffèrent de vingt-quatre ordres de grandeur. Aucune autre grandeur physique des substances ordinaires ne varie dans de telles proportions. La physique classique ne peut pas l'expliquer du tout — et l'explication s'est révélée être la porte d'entrée de l'ère électronique.",
+  "blocks": [
+   {
+    "h": "D'où viennent les bandes",
+    "kicker": "niveaux atomiques dans un cristal",
+    "text": [
+     "Pour un atome isolé, les niveaux électroniques sont discrets — c'est ce qui est expliqué dans le sujet sur l'atome. Rapprochez deux atomes : leurs fonctions d'onde se chevauchent, et chaque niveau se divise en deux. Trois atomes donnent trois sous-niveaux, dix en donnent dix.",
+     "Prenons maintenant un cristal contenant $10^{23}$ atomes. Le niveau se divise en $10^{23}$ sous-niveaux, si proches les uns des autres qu'ils fusionnent en une bande continue — la zone. La largeur de la zone reste finie, de l'ordre de l'électron-volt, et les intervalles entre les zones sont conservés.",
+     "On obtient ainsi une image : des zones autorisées, séparées par des intervalles interdits. Les électrons remplissent les états autorisés de bas en haut, selon le même principe de Pauli que dans l'atome. Et c'est ici qu'apparaît la principale différence entre les substances."
+    ],
+    "image": {
+     "h": "Image : étages et escaliers",
+     "text": [
+      "Imaginez un immeuble à plusieurs étages, où chaque étage a une salle, et entre les étages, un escalier. La salle est la zone autorisée, la volée d'escalier sans portes est la zone interdite.",
+      "Si la salle est à moitié remplie de personnes, elles peuvent se déplacer librement à l'intérieur : il suffit de faire un pas de côté. C'est un métal — les électrons changent facilement d'état et conduisent le courant.",
+      "Si la salle est pleine à craquer, il n'y a pas de place pour bouger : pour se déplacer, il faut monter à l'étage supérieur, mais il y a un long escalier. C'est un isolant.",
+      "Et si l'escalier est court, certaines personnes montent toutes seules, grâce à l'agitation thermique. C'est un semi-conducteur — et toute l'électronique est née de ce cas intermédiaire."
+     ]
+    },
+    "eq": "$n \\propto e^{-E_g / 2k_BT}$"
+   },
+   {
+    "h": "Un peu de mathématiques qui explique tout",
+    "kicker": "une seule exponentielle pour toute la section",
+    "text": [
+     "Le nombre d'électrons qui parviennent à franchir la bande interdite est déterminé par la distribution de Boltzmann — celle-là même qui a été étudiée en thermodynamique. La probabilité d'acquérir l'énergie $E_g$ grâce à l'agitation thermique décroît exponentiellement.",
+     "Remplaçons par les valeurs numériques. À température ambiante, $k_BT \\approx 0{,}026$ eV. Pour le diamant, la largeur de bande est de 5,5 eV, le rapport dans l'exposant est d'environ cent — l'exponentielle donne $10^{-46}$, et il n'y a aucun électron libre. Pour le silicium, 1,12 eV, l'exposant est d'environ vingt, et il y a environ $10^{10}$ porteurs par centimètre cube. Pour un métal, il n'y a pas de bande interdite, les porteurs sont au nombre de $10^{23}$.",
+     "D'où découle immédiatement la propriété principale du semi-conducteur, qui le distingue du métal : lorsqu'on le chauffe, sa résistance diminue, et non l'inverse. Dans un métal, le nombre de porteurs est constant et ce sont les vibrations du réseau qui gênent ; dans un semi-conducteur, le nombre de porteurs croît exponentiellement, et cette croissance domine tout le reste.",
+     "Et d'où découle aussi l'aspect pratique : la sensibilité aux moindres influences. Une exponentielle avec un grand exposant réagit fortement aux variations — un échauffement de dix degrés double la conductivité. C'est sur cela que reposent les thermistances, les photodétecteurs et la moitié de la technologie des capteurs."
+    ],
+    "note": "Remarquez que nous rencontrons pour la deuxième fois dans ce cours une exponentielle avec le rapport énergie/kT dans l'exposant : d'abord dans la distribution de Boltzmann, puis dans l'effet tunnel, et maintenant ici. C'est la construction la plus fréquente dans toute la physique de la matière, et elle apparaît toujours pour la même raison : la probabilité d'acquérir aléatoirement une énergie bien supérieure à l'énergie thermique décroît exponentiellement."
+   },
+   {
+    "h": "Impuretés : comment contrôler la conductivité",
+    "kicker": "le dopage en une ligne",
+    "text": [
+     "Le silicium pur présente peu d'intérêt. Toute la technologie est née de l'ajout d'impuretés — le dopage — en quantités infimes : un atome d'impureté pour un million d'atomes de silicium.",
+     "Le silicium a quatre électrons de valence, tous engagés dans des liaisons avec ses voisins. Ajoutons du phosphore, qui en a cinq : quatre iront dans les liaisons, et le cinquième sera en excès et presque libre. Un tel semi-conducteur est appelé électronique, ou de type n.",
+     "Ajoutons du bore avec trois électrons : une liaison manquera d'un électron, il restera une lacune. Un électron voisin peut sauter dans cette lacune, laissant la lacune à sa place — et il en résulte qu'un trou se déplace à travers le cristal, se comportant comme une charge positive. C'est un semi-conducteur à trous, ou de type p.",
+     "En modifiant la concentration d'impuretés, on change la conductivité de plusieurs ordres de grandeur. Et surtout, il existe maintenant deux types de matériaux différents, et toute l'électronique repose sur ce qui se passe à la frontière entre eux."
+    ],
+    "image": {
+     "h": "Image : la place vide dans la salle de cinéma",
+     "text": [
+      "Dans une rangée remplie, une place est libre. Le spectateur de gauche s'y déplace — maintenant sa place est libre. Le suivant fait de même.",
+      "De l'extérieur, il semble qu'une place vide se déplace le long de la rangée, dans la direction opposée au mouvement des personnes.",
+      "Le trou dans un semi-conducteur est exactement cela. Les électrons se déplacent, mais il est plus pratique de décrire le mouvement de la lacune : elle se comporte comme une particule indépendante avec une charge positive. Cette astuce est si pratique qu'on attribue au trou une masse et une mobilité, et tous les calculs sont effectués en le traitant comme une particule réelle."
+     ]
+    }
+   },
+   {
+    "h": "La jonction p-n : la brique principale de l'électronique",
+    "kicker": "pourquoi le courant ne passe que dans un seul sens",
+    "text": [
+     "Connectez un morceau de type n avec un morceau de type p. À la frontière, la diffusion commence : les électrons en excès à gauche se déplacent vers la droite, les trous à droite vers la gauche. En se rencontrant, ils se recombinent, et une région dépourvue de porteurs libres se forme près de la frontière.",
+     "Mais les électrons partis ont laissé derrière eux des ions d'impureté positifs immobiles, et les trous partis, des ions négatifs. Un champ électrique apparaît, dirigé de manière à entraver la diffusion ultérieure. Un équilibre s'établit : la diffusion est exactement compensée par le champ. Ce champ crée une barrière d'environ 0,7 volt pour le silicium.",
+     "Appliquons maintenant une tension externe. Avec le plus sur la région p, la barrière diminue, la diffusion reprend, le courant circule librement. Avec le plus sur la région n, la barrière augmente, la zone de déplétion s'élargit, le courant cesse pratiquement.",
+     "Voilà tout le diable. La conduction unidirectionnelle découle de cette image simple : la diffusion contre le champ, et la tension externe soit aide la première, soit renforce le second."
+    ],
+    "eq": "$I = I_0\\left(e^{\\,eU/k_BT} - 1\\right)$",
+    "after": [
+     "Remarquez qu'ici aussi apparaît la même exponentielle avec le rapport énergie/kT. D'où la raideur de la caractéristique courant-tension de la diode : à température ambiante, une augmentation de tension de 60 millivolts augmente le courant d'un facteur dix. Cette non-linéarité rend la diode utile."
+    ]
+   },
+   {
+    "h": "Le transistor et pourquoi il a tout changé",
+    "kicker": "l'amplification à partir de rien",
+    "text": [
+     "Le transistor à effet de champ est constitué ainsi : un canal en semi-conducteur, dans lequel circule le courant, et une électrode de commande, la grille, séparée du canal par une fine couche d'isolant. La tension sur la grille crée un champ qui attire ou repousse les porteurs dans le canal, modifiant sa conductivité.",
+     "Le point clé ici est que le courant ne circule pratiquement pas à travers la grille — elle est séparée par un isolant. La commande ne coûte donc presque rien en puissance, tandis que le courant commandé peut être important. C'est cela l'amplification : un signal faible commande un signal fort.",
+     "De l'amplification découle tout le reste. En connectant des transistors, on obtient des éléments logiques : si les deux entrées sont sous tension, un signal apparaît à la sortie. À partir des éléments logiques, on construit des additionneurs, et à partir des additionneurs, un processeur. Une puce moderne contient des dizaines de milliards de transistors, chacun mesurant quelques nanomètres.",
+     "Le premier transistor, en 1947, avait la taille d'une paume, était fait de germanium et d'une bande de feuille d'or. De lui au processeur actuel, moins de quatre-vingts ans se sont écoulés — et pendant tout ce temps, le même principe physique, expliqué ci-dessus, a fonctionné."
+    ],
+    "open": [
+     "La miniaturisation se heurte à la physique. Lorsque la taille de la grille atteint quelques nanomètres, les électrons commencent à passer par effet tunnel à travers l'isolant — cet effet tunnel étudié dans le sujet sur la mécanique quantique — et le transistor ne se bloque plus. Ce n'est pas une difficulté d'ingénierie, mais une limite fondamentale.",
+     "Il n'y a pas de consensus sur la voie à suivre. On discute de l'empilement tridimensionnel, du passage à d'autres matériaux, de la spintronique, du calcul optique et quantique. Chaque approche a ses partisans et de sérieuses objections, et personne ne peut prédire laquelle l'emportera."
+    ]
+   },
+   {
+    "h": "LED et panneau solaire",
+    "kicker": "deux processus en sens opposés",
+    "text": [
+     "La LED est la même jonction p-n, fonctionnant en polarisation directe. Les électrons et les trous se rencontrent dans la région de la jonction et se recombinent, et l'énergie libérée part sous forme de quantum de lumière. L'énergie du quantum est égale à la largeur de la bande interdite — la couleur est donc déterminée par le choix du matériau, et non par un filtre.",
+     "D'où l'histoire de la LED bleue. Les rouges et les vertes ont été fabriquées dans les années 1960, mais la bleue nécessitait un matériau à large bande interdite, qu'on n'a pas réussi à faire pousser suffisamment pur pendant trente ans. Shuji Nakamura y est parvenu avec le nitrure de gallium, travaillant presque seul dans une petite entreprise japonaise. Le prix Nobel 2014 — et c'est précisément avec la LED bleue que l'éclairage blanc est devenu possible, car le blanc est obtenu à partir du bleu avec un luminophore.",
+     "Le panneau solaire est la même jonction, mais en sens inverse. Un quantum de lumière crée une paire électron-trou, le champ intégré de la jonction les sépare dans des directions opposées, et une tension apparaît aux contacts. D'où la limite d'efficacité : les quanta d'énergie inférieure à la largeur de bande ne fonctionnent pas du tout, et l'excès d'énergie des quanta de haute énergie se dissipe en chaleur. Pour une seule jonction, le plafond théorique est d'environ 33 pour cent, et il est presque atteint depuis longtemps."
+    ]
+   },
+   {
+    "h": "Ce que la théorie des bandes n'explique pas",
+    "kicker": "limites honnêtes",
+    "text": [
+     "La théorie des bandes suppose que chaque électron se déplace indépendamment dans le champ moyen des autres. Cette approximation est excellente pour le silicium et le germanium — et c'est pourquoi toute l'électronique au silicium est calculée de manière fiable.",
+     "Mais là où les électrons interagissent fortement entre eux, elle s'effondre. Les oxydes de métaux de transition, qui selon la théorie des bandes devraient être des métaux, se révèlent être des isolants. Les supraconducteurs à haute température ne sont pas du tout décrits. C'est le domaine des systèmes fortement corrélés, et il n'existe pas de théorie générale pour eux.",
+     "La situation est instructive : la physique du solide calcule une puce avec des milliards d'éléments et ne peut pas prédire si un simple composé de deux éléments conduira le courant. C'est l'approximation, et non l'ignorance d'une substance particulière, qui limite ici."
+    ],
+    "open": [
+     "Les systèmes électroniques fortement corrélés sont l'un des principaux problèmes non résolus de la physique de la matière. Les méthodes numériques se heurtent au fait que le nombre d'états croît exponentiellement avec le nombre de particules : un calcul exact pour une centaine d'électrons en interaction est impossible sur n'importe quel ordinateur.",
+     "C'est pourquoi l'un des principaux espoirs repose sur les calculateurs quantiques : le problème de la modélisation d'un système quantique se prête naturellement à un dispositif quantique. Dans quelle mesure cet espoir se réalisera, c'est un sujet de débat."
+    ],
+    "now": [
+     "Les nœuds technologiques ont atteint quelques nanomètres, et la miniaturisation supplémentaire se heurte à l'effet tunnel. L'industrie est passée aux structures tridimensionnelles : on empile les transistors en étages plutôt que de les réduire.",
+     "On explore des matériaux bidimensionnels d'un atome d'épaisseur, la spintronique, où l'information est portée non par la charge mais par le spin, et les circuits neuromorphiques, qui imitent la structure du tissu nerveux. Aucune de ces directions n'a encore remplacé le silicium, et le débat sur ce qui va suivre est bien ouvert."
+    ]
+   }
+  ],
+  "closing": {
+   "title": "Ce qu'il faut retenir de cette leçon",
+   "text": [
+    "Les niveaux discrets de l'atome, en se rapprochant dans un cristal, se transforment en bandes. Une bande à moitié remplie donne un métal, complètement remplie avec un large gap donne un isolant, et avec un gap étroit donne un semi-conducteur.",
+    "Tout le comportement d'un semi-conducteur est déterminé par une seule exponentielle : le nombre d'électrons qui parviennent à franchir le gap grâce à la chaleur. D'où la diminution de la résistance avec la température, et la sensibilité aiguë à toute influence.",
+    "La jonction p-n donne une conductivité unidirectionnelle à partir de l'équilibre entre la diffusion et le champ intégré. On en tire la diode, le transistor, la LED et la cellule solaire — quatre dispositifs à partir d'une seule image.",
+    "Et une limite : la théorie des bandes fonctionne tant que l'on peut considérer les électrons comme indépendants. Là où ils interagissent fortement, il n'existe toujours pas de théorie générale — et c'est précisément là que se trouve la supraconductivité à haute température."
+   ]
+  }
  }
 }

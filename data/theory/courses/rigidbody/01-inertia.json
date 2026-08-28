@@ -14,41 +14,6 @@
   "scientists": [
    "Isaac Newton",
    "Christiaan Huygens"
-  ],
-  "examples_from_articles": [
-   {
-    "id": "2608.14502v1",
-    "date": "2026-08-14",
-    "title": {
-     "ru": "Горный хребет вместо одной вершины",
-     "en": "A Mountain Range Instead of a Single Peak",
-     "es": "Una cordillera en lugar de un solo pico",
-     "ar": "سلسلة جبال بدل قمة واحدة"
-    },
-    "why": "temperature"
-   },
-   {
-    "id": "2608.12137v1",
-    "date": "2026-08-12",
-    "title": {
-     "ru": "Тепловой градусник для Солнца: как измерить жар звезды",
-     "en": "A Thermal Thermometer for the Sun",
-     "es": "Un termómetro térmico para el Sol",
-     "ar": "مقياس حرارة شمسي: كيف نقيس حرارة النجم"
-    },
-    "why": "temperature"
-   },
-   {
-    "id": "2608.10819v1",
-    "date": "2026-08-11",
-    "title": {
-     "ru": "Солнечный ветер: почему протоны и альфа-частицы греются по-разному?",
-     "en": "Solar Wind: Why Protons and Alpha Particles Heat Differently",
-     "es": "Viento solar: por qué los protones y las partículas alfa se calientan de manera diferente",
-     "ar": "الرياح الشمسية: لماذا تسخن البروتونات وجسيمات ألفا بشكل مختلف؟"
-    },
-    "why": "temperature"
-   }
   ]
  },
  "ru": {
@@ -1742,5 +1707,428 @@
     "hint": "خطوتان. أولاً عزم القصور الذاتي للقرص I = ½mR² - لا تنسَ أن R مربع. ثم ε = M/I."
    }
   ]
+ },
+ "fr": {
+  "formula": {
+   "name": "Équation de rotation d'un corps rigide et moment d'inertie",
+   "latex": "M = I\\varepsilon, \\qquad I = \\sum_i m_i r_i^2",
+   "alsoKnown": "Deuxième loi de Newton pour la rotation ; moment d'inertie par rapport à un axe. Règle de conversion pour un axe parallèle — théorème de Huygens-Steiner : I = I_c + md²",
+   "authors": [
+    {
+     "who": "Christiaan Huygens",
+     "year": "1673",
+     "what": "dans « Horologium oscillatorium », a résolu le problème du centre d'oscillation d'un pendule composé — c'est-à-dire qu'il a le premier calculé la quantité que l'on appellera plus tard moment d'inertie — et a prouvé l'interchangeabilité du point de suspension et du centre d'oscillation"
+    },
+    {
+     "who": "Isaac Newton",
+     "year": "1687",
+     "what": "dans « Principia », a donné la deuxième loi F = ma pour un point ; l'équation de rotation s'obtient en additionnant cette loi pour tous les points du corps, mais Newton lui-même n'a pas traité la rotation d'un corps rigide en général"
+    },
+    {
+     "who": "Leonhard Euler",
+     "year": "1765",
+     "what": "dans « Théorie du mouvement des corps solides », a introduit le terme même de « moment d'inertie », a écrit les équations de rotation et le concept d'axes principaux — la rotation des corps rigides est devenue une science à part entière"
+    },
+    {
+     "who": "Jakob Steiner",
+     "year": "1840",
+     "what": "a donné au théorème des axes parallèles sa formulation actuelle ; en substance, le résultat était déjà contenu chez Huygens, et c'est pourquoi on l'appelle à juste titre théorème de Huygens-Steiner"
+    }
+   ],
+   "story": "En 1646, Marin Mersenne proposa au jeune Huygens, âgé de dix-sept ans, un problème sur lequel Descartes et Roberval avaient déjà buté : où se trouve, dans un pendule composé — non pas une masse au bout d'un fil, mais un corps oscillant — le point qui oscille comme un pendule simple de même longueur ? Le problème semblait géométrique, mais il s'agissait en réalité de la distribution de la masse, et Huygens s'y attela pendant près de trente ans. Il ne publia sa réponse qu'en 1673, dans la quatrième partie de « Horologium oscillatorium », et dans cette réponse se trouve déjà notre somme $\\sum m_i r_i^2$ — mais sans nom. C'est Euler qui lui donnera un nom près d'un siècle plus tard. Au passage, Huygens prouva une chose qui semble fortuite et ne l'est pas : si l'on suspend le corps par le centre d'oscillation trouvé, la période ne change pas, et l'ancien point de suspension devient le nouveau centre d'oscillation. Un siècle et demi plus tard, Henry Kater utilisa cette interchangeabilité pour construire un pendule réversible (1817) et mesura l'accélération de la pesanteur avec une précision d'environ un cent-millième ; le monde n'a pas connu de meilleur gravimètre pendant une bonne centaine d'années. Tout cela est issu d'une seule somme, que nous allons obtenir en deux étapes.",
+   "symbols": [
+    {
+     "sym": "ω",
+     "latex": "\\omega",
+     "what": "vitesse angulaire",
+     "unit": "rad/s",
+     "note": "la même pour tous les points du corps — c'est en cela que consiste la définition d'un corps rigide"
+    },
+    {
+     "sym": "ε",
+     "latex": "\\varepsilon",
+     "what": "accélération angulaire",
+     "unit": "rad/s²",
+     "note": "dérivée de la vitesse angulaire, dω/dt ; joue pour la rotation le rôle de l'accélération ordinaire"
+    },
+    {
+     "sym": "I",
+     "latex": "I",
+     "what": "moment d'inertie par rapport à l'axe",
+     "unit": "kg·m²",
+     "note": "propriété non pas du corps, mais du couple « corps et axe » : une même roue a trois I différents pour trois axes différents"
+    },
+    {
+     "sym": "M",
+     "latex": "M",
+     "what": "moment de force par rapport à l'axe",
+     "unit": "N·m",
+     "note": "force multipliée par le bras de levier ; la dimension coïncide avec le joule, mais ce n'est pas de l'énergie — on écrit l'unité précisément N·m"
+    },
+    {
+     "sym": "r_i",
+     "latex": "r_i",
+     "what": "distance du point du corps à l'axe",
+     "unit": "m",
+     "note": "précisément à l'axe, et non au centre du corps — l'erreur la plus fréquente lors de la substitution"
+    },
+    {
+     "sym": "k",
+     "latex": "k",
+     "what": "coefficient de forme",
+     "unit": "sans dimension",
+     "note": "I = k·mR² ; il est égal au carré moyen de la distance à l'axe en fractions de R² et ne dépasse jamais un"
+    },
+    {
+     "sym": "d",
+     "latex": "d",
+     "what": "distance entre les axes parallèles",
+     "unit": "m",
+     "note": "entre dans la correction md² au carré, donc le déplacement de l'axe coûte cher rapidement"
+    },
+    {
+     "sym": "E_{rot}",
+     "latex": "E_{\\text{rot}}",
+     "what": "énergie cinétique de rotation",
+     "unit": "J",
+     "note": "½Iω² — c'est le même ½mv², mais avec d'autres lettres ; c'est de là que nous tirerons le moment d'inertie"
+    }
+   ]
+  },
+  "derivation": {
+   "title": "Dérivation rigoureuse",
+   "lead": "Il ne faut que trois choses, et elles sont déjà là : la définition d'un corps rigide, l'énergie cinétique d'un point ½mv², et les lois de Newton — la deuxième et la troisième. Ni le moment d'inertie, ni l'équation de rotation ne sont postulés — les deux apparaîtront en chemin.",
+   "steps": [
+    {
+     "text": "Un corps rigide est un corps dont les distances entre deux points quelconques ne changent pas. De cela seul découle l'essentiel : lors d'une rotation autour d'un axe fixe, tous les points tournent du même angle pendant le même temps. S'il en était autrement, les points se sépareraient et la distance entre eux changerait. Donc, la vitesse angulaire $\\omega = d\\varphi/dt$ est commune à tout le corps, un seul nombre pour des milliards d'atomes. En revanche, chaque point a sa propre vitesse linéaire : plus on est loin de l'axe, plus la circonférence décrite est longue et plus le point se déplace vite. Et tout de suite, un détail sur lequel on bute souvent : $r$ est la distance à l'AXE, pas au centre du corps. Pour un long arbre, un point à l'extrémité et un point au milieu ont le même $r$ s'ils sont tous deux sur le même rayon.",
+     "latex": "\\omega = \\frac{d\\varphi}{dt}\\ \\text{— une pour tout le corps}, \\qquad v_i = \\omega\\, r_i",
+     "figure": "rigiomega",
+     "figCaption": "L'angle de rotation est le même pour tous les points, la vitesse est propre à chacun : v = ω·r. La distance est mesurée à l'axe, pas au centre du corps."
+    },
+    {
+     "text": "Maintenant, additionnons l'énergie cinétique de tous les points du corps. Chacun contribue par $\\tfrac12 m_i v_i^2$, et au lieu de $v_i$ nous pouvons écrire $\\omega r_i$. Ensuite se produit ce pour quoi tout cela a été entrepris : $\\omega$ est identique dans tous les termes, donc $\\omega^2$ se factorise hors de la somme, et à l'intérieur reste une combinaison des seules masses des points et de leurs distances à l'axe. Il n'y a aucun mouvement là-dedans — c'est une propriété pure du corps et de l'axe choisi, on peut la calculer une fois pour toutes et l'utiliser ensuite. Cette combinaison est appelée moment d'inertie. Comparez les deux expressions de l'énergie : pour le mouvement de translation ½mv², pour la rotation ½Iω². Elles coïncident à la lettre, ce qui indique clairement que $I$ joue pour la rotation le rôle de la masse. L'unité se lit à partir de la définition : kilogramme multiplié par mètre carré.",
+     "latex": "E = \\sum_i \\tfrac{1}{2} m_i v_i^2 = \\sum_i \\tfrac{1}{2} m_i (\\omega r_i)^2 = \\tfrac{1}{2}\\Bigl(\\underbrace{\\sum_i m_i r_i^2}_{I}\\Bigr)\\omega^2, \\qquad [\\,I\\,] = \\text{kg}\\cdot\\text{m}^2",
+     "figure": "rigisum",
+     "figCaption": "ω se factorise hors de la somme car elle est unique pour tout le corps. Il reste Σm r² — une grandeur sans mouvement : seulement le corps et l'axe."
+    },
+    {
+     "text": "La mesure de la force pour la rotation n'est pas non plus désignée par décret, mais choisie par le travail. Soit une force $\\vec F$ appliquée à un point du corps à une distance $r$ de l'axe. Décomposons-la en deux composantes : le long du rayon et perpendiculairement à celui-ci. La composante radiale tire le point vers l'axe ou l'en éloigne, mais le point, en tournant, se déplace strictement perpendiculairement au rayon — donc cette composante n'effectue aucun travail et n'influence en rien la rotation. Reste la composante tangentielle. Lors d'une petite rotation $d\\varphi$, le point parcourt un chemin $r\\,d\\varphi$, et le travail est égal à $F_t\\, r\\, d\\varphi$. Regardez quelle combinaison se place en facteur de $d\\varphi$ : le produit de la force par la distance à l'axe. C'est ce qu'on appelle le moment de la force. En notation vectorielle, c'est le module du produit vectoriel $\\vec r \\times \\vec F$, c'est-à-dire la force multipliée par le bras de levier — la longueur de la perpendiculaire abaissée de l'axe sur la ligne d'action de la force. D'ailleurs, c'est de là que vient la poignée de porte placée loin des charnières.",
+     "latex": "dA = F_t\\, r\\, d\\varphi \\equiv M\\, d\\varphi, \\qquad M = F_t\\, r = |\\vec r \\times \\vec F| = F\\,r\\sin\\alpha, \\qquad [\\,M\\,] = \\text{N}\\cdot\\text{m}",
+     "figure": "rigitorque",
+     "figCaption": "Seule la composante tangentielle fait tourner. Le travail pour une rotation de dφ est F_t·r·dφ, et le facteur de dφ est précisément le moment de la force."
+    },
+    {
+     "text": "Avant d'écrire l'équation, il faut se débarrasser des forces internes, et elles sont innombrables dans le corps : chaque atome tient à ses voisins. La troisième loi de Newton dit que les forces entre deux points sont égales en magnitude et opposées en direction — mais cela ne suffit pas. Il faut encore un détail que l'on mentionne souvent à voix basse : les forces d'interaction entre les points d'un corps rigide ont une ligne d'action commune, elles sont dirigées le long de la droite reliant ces points. Alors la somme de leurs moments par rapport à un axe quelconque se réduit au produit vectoriel de la différence des rayons vecteurs par la force, et la différence des rayons vecteurs est le long de la même droite que la force. Le produit vectoriel de vecteurs parallèles est nul. Par conséquent, les moments internes s'annulent strictement par paires — tous, sans exception — et seules les forces externes entrent dans l'équation.",
+     "latex": "\\vec M_{12} + \\vec M_{21} = \\vec r_1 \\times \\vec F_{12} + \\vec r_2 \\times \\vec F_{21} = (\\vec r_1 - \\vec r_2) \\times \\vec F_{12} = 0",
+     "figure": "rigiinner",
+     "figCaption": "Les forces internes sont sur la même ligne que le segment reliant les points, donc leurs moments s'annulent par paires. Il ne reste que les forces externes."
+    },
+    {
+     "text": "Assemblons. Les moments externes effectuent un travail $M\\,d\\varphi$ pour une rotation de $d\\varphi$, et tout ce travail va dans l'énergie cinétique de rotation : le corps est rigide, il n'y a rien à déformer, et les forces internes, comme nous venons de le montrer, ont annulé leur contribution. Nous égalisons et différencions. Le moment d'inertie est constant pour un axe fixe — le corps ne change pas de forme, les points ne se déplacent pas — donc $d(\\tfrac12 I\\omega^2) = I\\omega\\,d\\omega$. Nous substituons $d\\varphi = \\omega\\,dt$, et $\\omega$ se simplifie des deux côtés. Il reste l'équation que l'on présente habituellement toute prête, comme une loi distincte. Nous n'avons introduit aucun nouvel axiome : nous avons seulement additionné la deuxième loi de Newton et la définition du travail point par point. La correspondance est littérale : la masse devient le moment d'inertie, la force devient le moment de la force, l'accélération devient l'accélération angulaire.",
+     "latex": "M\\,d\\varphi = d\\Bigl(\\tfrac{1}{2} I \\omega^2\\Bigr) = I\\omega\\, d\\omega, \\quad d\\varphi = \\omega\\, dt \\;\\Longrightarrow\\; M = I\\,\\frac{d\\omega}{dt} = I\\varepsilon",
+     "figure": "rigieps",
+     "figCaption": "Trois paires de correspondances : m ↔ I, F ↔ M, a ↔ ε. L'équation de rotation est la même deuxième loi, réécrite en grandeurs angulaires."
+    },
+    {
+     "text": "Calculer le moment d'inertie est plus simple là où il n'y a rien à calculer. Pour un anneau — un cerceau mince, une roue de vélo, un volant à jante massive — tous les points sont à la même distance $R$ de l'axe, donc $r^2$ se factorise entièrement hors de la somme et il ne reste que la masse : $I = mR^2$. C'est le maximum : pour des $m$ et $R$ donnés, on ne peut pas faire plus, la matière ne peut pas être plus loin que $R$. Pour un disque, la masse est répartie du centre au bord, et la somme devient une intégrale sur des anneaux minces. Pour une sphère pleine, de la même manière, on obtient $\\tfrac25 mR^2$, pour une tige mince tournant autour de son milieu perpendiculairement à elle-même — $\\tfrac1{12} mL^2$. Un mot sur la lettre : dans la notation $I = kmR^2$, $R$ désigne à chaque fois la taille caractéristique qui figure dans la formule elle-même — pour l'anneau, le disque et la sphère, c'est le rayon, et pour la tige, toute sa longueur $L$. Et maintenant, l'essentiel : ces fractions ne doivent pas être apprises par cœur. Divisez $I$ par $mR^2$, et vous verrez que le coefficient est exactement le carré moyen de la distance des points à l'axe, exprimé en fractions de $R^2$. Pour l'anneau, tous les points sont à $R$, le carré moyen est $R^2$, le coefficient est un. Pour le disque, c'est un demi, pour la sphère deux cinquièmes, pour la tige un douzième — et ce dernier nombre, d'ailleurs, est familier à quiconque a calculé la variance d'une distribution uniforme sur un segment. C'est la même grandeur.",
+     "latex": "I = k\\,mR^2,\\quad k = \\frac{\\langle r^2\\rangle}{R^2}; \\qquad I_{\\text{disque}} = \\int_0^R r^2\\,\\frac{2m}{R^2}\\,r\\,dr = \\tfrac{1}{2}mR^2, \\qquad I_{\\text{tige}} = \\int_{-L/2}^{L/2} x^2\\,\\frac{m}{L}\\,dx = \\tfrac{1}{12}mL^2",
+     "figure": "rigishapes",
+     "figCaption": "Anneau 1, disque ½, sphère ⅖, tige 1/12. Le coefficient est le carré moyen de la distance à l'axe en unités de R², et il n'est pas nécessaire de l'apprendre par cœur."
+    },
+    {
+     "text": "Le moment d'inertie n'appartient pas au corps, mais à la paire « corps et axe » : déplacez l'axe — et le nombre change. De combien exactement, il ne faudra pas recalculer. Soit un premier axe passant par le centre de masse, et un point du corps à une distance $\\vec r$ de cet axe, dans le plan perpendiculaire à l'axe. Traçons un deuxième axe parallèle au premier et désignons par $\\vec d$ le vecteur allant du nouvel axe au centre de masse. Alors la distance du point au nouvel axe est $|\\vec r + \\vec d\\,|$, et la somme inclura le carré de ce module. En développant, on obtient trois termes. Le premier est le moment d'inertie par rapport à l'axe passant par le centre de masse. Le troisième est égal à $md^2$ : le vecteur $\\vec d$ est le même pour tous les points, et la somme des masses est la masse du corps. Le deuxième contient $\\sum m_i \\vec r_i$, et cette somme est nulle simplement par définition du centre de masse — le centre de masse est précisément le point par rapport auquel la somme pondérée des rayons vecteurs s'annule. Le terme du milieu disparaît, il reste le théorème de Huygens-Steiner. Vérifions sur une tige : autour du milieu $\\tfrac1{12}mL^2$ ; déplaçons l'axe à l'extrémité, $d = L/2$, l'ajout $mL^2/4$, ensemble $\\tfrac1{12} + \\tfrac14 = \\tfrac13$ — exactement la valeur tabulée pour une tige tournant autour de son extrémité. Et une autre conséquence se lit directement dans la formule : $md^2$ n'est jamais négatif, donc parmi tous les axes parallèles, le moment d'inertie est minimal pour celui qui passe par le centre de masse.",
+     "latex": "I = \\sum_i m_i \\bigl|\\vec r_i + \\vec d\\,\\bigr|^2 = \\underbrace{\\sum_i m_i r_i^2}_{I_c} \\;+\\; 2\\,\\vec d\\cdot\\underbrace{\\sum_i m_i \\vec r_i}_{=\\;0} \\;+\\; d^2\\underbrace{\\sum_i m_i}_{m} \\;=\\; I_c + md^2",
+     "figure": "rigistein",
+     "figCaption": "Le terme du milieu disparaît : Σm·r = 0 — c'est la définition du centre de masse. Il reste I = I_c + md², et le moment d'inertie est toujours minimal par rapport à un axe passant par le centre de masse."
+    },
+    {
+     "text": "Vérifions tout d'un coup sur un roulement. Un corps roule d'une hauteur $h$ sans glisser ; par conséquent, le point de contact est immobile à chaque instant, la force de frottement statique n'effectue aucun travail, et l'énergie totale est conservée. En haut, il y avait l'énergie potentielle $mgh$, en bas — la somme de l'énergie de translation $\\tfrac12 mv^2$ et de rotation $\\tfrac12 I\\omega^2$. La relation entre elles est donnée par la condition de roulement : en un tour, le corps parcourt une circonférence, d'où $v = \\omega R$. Nous substituons $I = kmR^2$ — et regardez ce qui se passe. La masse est un facteur dans les trois termes et se simplifie. Le rayon entre dans le moment d'inertie au carré, et la condition de roulement apporte $R^2$ au dénominateur — ils s'annulent mutuellement. Dans la réponse, il reste la hauteur et un nombre sans dimension. L'anneau, avec $k = 1$, cède exactement la moitié de son énergie à la rotation et arrive en bas $\\sqrt2$ fois plus lentement qu'un corps glissant sans frottement ; la sphère avec $k = 2/5$ cède moins d'un tiers et arrive la première. Aucun « plus lourd va plus vite » ni « plus grand va plus vite » ne fonctionne ici : la course est décidée par la forme et uniquement par la forme.",
+     "latex": "mgh = \\tfrac{1}{2}mv^2 + \\tfrac{1}{2}I\\omega^2, \\quad I = kmR^2,\\ \\ \\omega = \\frac{v}{R} \\;\\Longrightarrow\\; mgh = \\tfrac{1}{2}mv^2(1+k) \\;\\Longrightarrow\\; v = \\sqrt{\\frac{2gh}{1+k}}",
+     "figure": "rigiroll",
+     "figCaption": "D'une hauteur de 1 m : sphère 3,74 m/s, disque 3,62, anneau 3,13. Ni la masse ni le rayon n'entrent dans la réponse — seul le coefficient de forme compte."
+    }
+   ],
+   "plate": "M = I\\varepsilon \\qquad I = \\sum_i m_i r_i^2 = k\\,mR^2 \\qquad I = I_c + md^2",
+   "plateCap": "À gauche — la deuxième loi de Newton réécrite pour la rotation : le moment au lieu de la force, le moment d'inertie au lieu de la masse, l'accélération angulaire au lieu de l'accélération linéaire. Au milieu — de quoi est fait le moment d'inertie : la masse multipliée par le carré de la distance à l'axe, et un coefficient de forme sans dimension. À droite — la règle de conversion pour un axe parallèle. Trois lignes, et tout le paragraphe est là.",
+   "note": "Notons où la dérivation s'est silencieusement restreinte. Premièrement : notre axe est fixe et ne bouge pas. Tant que c'est le cas, le moment d'inertie est un nombre unique, et $M$ et $\\varepsilon$ pointent dans la même direction. Pour un corps en vol libre, ce n'est pas vrai : la grandeur qui relie le moment à la rotation se révèle être un tableau de neuf nombres, et un seul nombre ne suffit plus. Nous la nommerons dans l'annexe et la transmettrons au paragraphe suivant. Deuxièmement : $I$ a été considéré constant parce que le corps est rigide ; si le corps change de forme, un deuxième terme apparaîtra dans la dérivée, mais les corps déformables ne sont pas du tout considérés ici. Troisièmement : dans l'étape sur le roulement, l'énergie est conservée, c'est-à-dire que le frottement de roulement et la résistance de l'air sont négligés. Pour une bille d'acier sur une planche lisse, cela est justifié à quelques pour cent près, pour une balle molle sur un tapis, non. Quatrièmement, purement arithmétique : nous avons remplacé la somme $\\sum m_i r_i^2$ par une intégrale, c'est-à-dire que nous avons considéré la matière comme continue. Pour un corps de $10^{23}$ atomes, cette approximation est plus précise que toute mesure, et il faut y penser seulement dans des problèmes avec deux masses ponctuelles sur une tige sans masse — là, la somme est finie et l'intégrale n'est pas nécessaire."
+  },
+  "math": {
+   "title": "Les mathématiques nécessaires ici",
+   "lead": "Trois thèmes : comment une somme sur des points devient une intégrale, pourquoi les deux produits de vecteurs sont nécessaires dans une même démonstration, et pourquoi l'analyse dimensionnelle détecte ici deux erreurs différentes.",
+   "items": [
+    {
+     "what": "De la somme à l'intégrale : comment calculer I pour un corps continu",
+     "why": "La définition $I = \\sum m_i r_i^2$ suppose littéralement une énumération de points, et il y a $10^{23}$ points dans un corps. Le passage à l'intégrale est un simple remplacement d'une somme sur de petits éléments par une intégrale sur la masse : $\\sum m_i r_i^2 \\to \\int r^2\\,dm$. Toute l'astuce réside en un point : il faut choisir l'élément de telle sorte que TOUS ses points soient à la même distance de l'axe, sinon on ne sait pas quel $r$ utiliser. Pour un disque, cet élément est un anneau mince de rayon $r$ et d'épaisseur $dr$ ; son aire est $2\\pi r\\,dr$, et sa masse, pour une densité surfacique $m/(\\pi R^2)$, est $(2m/R^2)\\,r\\,dr$. Pour une tige, l'élément est un segment $dx$ de masse $(m/L)\\,dx$. L'erreur la plus fréquente ici est de prendre une bande rectangulaire pour le disque : les distances de ses points à l'axe sont différentes, et l'intégrale sera incorrecte. Et remarquez une belle coïncidence : l'intégrale pour la tige est exactement la variance d'une distribution uniforme sur un segment, $L^2/12$. Le moment d'inertie d'un corps homogène est précisément le carré moyen de la distance, multiplié par la masse.",
+     "latex": "\\sum_i m_i r_i^2 \\;\\longrightarrow\\; \\int r^2\\,dm, \\qquad dm_{\\text{anneau}} = \\frac{2m}{R^2}\\,r\\,dr \\;\\Longrightarrow\\; I = \\int_0^R \\frac{2m}{R^2}\\,r^3\\,dr = \\frac{1}{2}mR^2",
+     "kit": "integral"
+    },
+    {
+     "what": "Les deux produits de vecteurs, et chacun à sa place",
+     "why": "Dans ce paragraphe, les deux opérations sont apparues, chacune exploitant sa propriété. Le produit vectoriel a donné la définition du moment : $|\\vec r \\times \\vec F| = rF\\sin\\alpha$, où le sinus élimine automatiquement la composante radiale de la force — celle qui ne fait rien tourner. Et il a aussi réglé d'un coup la question des forces internes : le produit vectoriel de vecteurs parallèles est nul, et les forces entre les points d'un corps rigide sont précisément parallèles au segment reliant ces points. Le produit scalaire est apparu dans le théorème des axes parallèles, lors du développement du carré du module d'une somme : $|\\vec r + \\vec d\\,|^2 = r^2 + 2\\,\\vec r\\cdot\\vec d + d^2$. Le terme croisé est linéaire en $\\vec r$, et donc sa somme sur les points se réduit à $\\vec d \\cdot \\sum m_i \\vec r_i$ — et cela est nul. Remarquez la différence de nature : le produit scalaire donne un nombre, le produit vectoriel donne un vecteur (et c'est précisément pourquoi le moment a une direction, dont il sera question au paragraphe suivant).",
+     "latex": "|\\vec a\\times\\vec b| = ab\\sin\\alpha,\\quad \\vec a\\parallel\\vec b \\Rightarrow \\vec a\\times\\vec b = 0; \\qquad |\\vec r+\\vec d\\,|^2 = (\\vec r+\\vec d\\,)\\cdot(\\vec r+\\vec d\\,) = r^2 + 2\\,\\vec r\\cdot\\vec d + d^2",
+     "kit": "dotcross"
+    },
+    {
+     "what": "Analyse dimensionnelle : pourquoi le newton-mètre et le joule ne sont pas la même chose",
+     "why": "La première vérification est simple. Le moment d'inertie se mesure en kg·m², l'accélération angulaire en s⁻² (le radian est sans dimension), leur produit donne kg·m²·s⁻², ce qui est précisément le newton-mètre. L'équation $M = I\\varepsilon$ résiste à l'analyse dimensionnelle. La deuxième vérification concerne le roulement : sous la racine, on a une accélération multipliée par une longueur, soit m²/s², la racine donne m/s — une vitesse, comme il se doit ; $k$ est sans dimension et ne peut rien gâcher. Et maintenant, le piège que l'analyse dimensionnelle ne détecte PAS : le newton-mètre et le joule ont la même dimension, mais le moment d'une force et l'énergie sont des grandeurs différentes, on ne peut pas les additionner. La raison est le radian : le travail est égal au moment multiplié par l'angle, et l'angle en radians est sans dimension, donc invisible dans l'analyse dimensionnelle. C'est pourquoi on écrit le moment en N·m et l'énergie en J, bien que formellement ce soit la même combinaison d'unités. La règle est simple : l'analyse dimensionnelle peut réfuter une formule, mais elle ne peut pas la confirmer.",
+     "latex": "[\\,I\\varepsilon\\,] = \\text{kg}\\cdot\\text{m}^2\\cdot\\text{s}^{-2} = \\text{N}\\cdot\\text{m} = [\\,M\\,]; \\qquad \\left[\\sqrt{\\frac{2gh}{1+k}}\\,\\right] = \\sqrt{\\frac{\\text{m}}{\\text{s}^2}\\cdot\\text{m}} = \\frac{\\text{m}}{\\text{s}}",
+     "kit": "dimension"
+    }
+   ]
+  },
+  "example": {
+   "title": "Exemple avec des nombres",
+   "lead": "Faisons tourner une roue de vélo — celle qui est sur le support par défaut — et vérifions la réponse par trois méthodes indépendantes.",
+   "given": "Roue arrière de vélo : rayon de la jante R = 0,35 m, masse de la jante avec le pneu m = 2,0 kg. Presque toute la masse est sur la jante, donc on considère la roue comme un anneau mince. Un moment constant M = 3,5 N·m est appliqué à la jante — par exemple, une force de 10 N tirant une corde enroulée autour de la jante. On néglige les rayons, le moyeu et le frottement des roulements. Trouver le moment d'inertie, l'accélération angulaire, la vitesse angulaire et le nombre de tours après 2 secondes. Et séparément — ce qui change si la même masse est répartie sur un disque.",
+   "law": "I = k·mR², où k = 1 pour un anneau et ½ pour un disque ; ε = M/I ; avec ε constant, la vitesse angulaire croît comme ω = εt, et l'angle comme φ = ½εt².",
+   "solution": [
+    {
+     "text": "Moment d'inertie. Pour un anneau, toute la masse est au rayon R, donc il n'y a rien à intégrer : r² sort entièrement de la somme, et il reste la masse.",
+     "latex": "I = mR^2 = 2{,}0 \\cdot 0{,}35^2 = 2{,}0 \\cdot 0{,}1225 = 0{,}245\\ \\text{kg}\\cdot\\text{m}^2"
+    },
+    {
+     "text": "Accélération angulaire. On divise le moment par le moment d'inertie — exactement comme on divise la force par la masse.",
+     "latex": "\\varepsilon = \\frac{M}{I} = \\frac{3{,}5}{0{,}245} = 14{,}29\\ \\frac{\\text{rad}}{\\text{s}^2}"
+    },
+    {
+     "text": "Après deux secondes. La vitesse angulaire croît linéairement, l'angle quadratiquement ; pour convertir les radians en tours, on divise par 2π = 6,283.",
+     "latex": "\\omega = \\varepsilon t = 14{,}29 \\cdot 2 = 28{,}6\\ \\frac{\\text{rad}}{\\text{s}}, \\qquad \\varphi = \\tfrac{1}{2}\\varepsilon t^2 = 28{,}6\\ \\text{rad} = \\frac{28{,}6}{6{,}283} = 4{,}55\\ \\text{tours}"
+    },
+    {
+     "text": "La même question pour un disque de même masse et de même rayon. Le moment d'inertie est deux fois plus petit, donc l'accélération angulaire est deux fois plus grande, et l'angle parcouru dans le même temps est deux fois plus grand.",
+     "latex": "I_{\\text{disque}} = \\tfrac{1}{2}mR^2 = 0{,}1225\\ \\text{kg}\\cdot\\text{m}^2, \\qquad \\varepsilon = \\frac{3{,}5}{0{,}1225} = 28{,}6\\ \\frac{\\text{rad}}{\\text{s}^2}, \\qquad \\omega(2\\,\\text{s}) = 57{,}1\\ \\frac{\\text{rad}}{\\text{s}} \\;\\;(9{,}1\\ \\text{tours})"
+    }
+   ],
+   "answer": "Anneau : I = 0,245 kg·m², ε = 14,3 rad/s², après deux secondes 28,6 rad/s et 4,55 tours. Disque de même masse et même rayon : moment d'inertie deux fois plus petit, accélération deux fois plus grande, 57,1 rad/s et 9,1 tours. La masse est identique, la taille est identique — toute la différence réside dans l'endroit où se trouve la matière.",
+   "check": "Trois vérifications, et chacune attrape une erreur différente. La première est énergétique, la plus stricte. Le travail du moment appliqué est égal à M·φ = 3,5 · 28,6 = 100 J ; l'énergie cinétique de rotation est égale à ½Iω² = ½ · 0,245 · 28,6² = 100 J. Cela concorde jusqu'au dernier chiffre, et il ne pouvait pas en être autrement : l'équation M = Iε découle précisément de l'égalité entre travail et énergie. Si ces deux nombres divergent chez vous, c'est une erreur d'arithmétique, pas de physique. La deuxième vérification est celle du bon sens. 28,6 rad/s correspond à 4,55 tours par seconde, soit 273 tours par minute ; avec une circonférence de 2πR = 2,20 m, la roue roulerait à une vitesse de 10 m/s, soit exactement 36 km/h. C'est plausible : un vélo accélère effectivement à une telle vitesse en quelques secondes, et une force de 10 N sur la jante équivaut à un paquet de lait d'un litre suspendu, une valeur tout à fait humaine. La troisième est un piège arithmétique. 0,35² = 0,1225, et non 0,0125 ni 1,225 ; si vous obtenez I = 0,0245 ou 2,45, c'est ici qu'un facteur dix a été perdu ou ajouté. Et une remarque honnête pour finir : une vraie roue n'est pas un anneau. Le moyeu pèse lourd et se trouve près de l'axe, les rayons sont également répartis sur le rayon, donc le coefficient de forme réel est plus proche de 0,75 que de 1 — l'arithmétique de cette correction est détaillée en annexe."
+  },
+  "constants": {
+   "title": "Constantes de ce paragraphe",
+   "lead": "Un nombre ici n'est pas mesuré du tout, mais découle de la géométrie ; le second convertit les tours en radians ; le troisième vient de la mécanique terrestre ; le quatrième nous renseigne sur l'intérieur des planètes.",
+   "items": [
+    {
+     "sym": "k",
+     "latex": "k",
+     "name": "Coefficients de forme",
+     "value": "1 · ½ · ⅖ · ⅓ · 1/12",
+     "unit": "sans dimension",
+     "why": "Un cerceau (anneau mince) — 1 ; un disque plein ou un cylindre — ½ ; une sphère pleine — ⅖ ; une sphère à paroi mince — ⅔ ; une tige autour de son extrémité — ⅓, autour de son milieu — 1/12. Chacun de ces nombres est le carré moyen de la distance à l'axe, exprimé en fractions de R², et aucun d'eux ne peut dépasser l'unité : au-delà de R, la matière n'a tout simplement pas où aller. Pour un tube à paroi épaisse de rayon intérieur r, le coefficient est ½(1 + r²/R²) et varie continûment de ½ pour un cylindre plein à 1 pour un anneau mince. Aucun de ces nombres n'est mesuré — ils sont tous calculés, et donc absolument exacts, contrairement aux propriétés de la matière.",
+     "mnemo": "Plus la masse est proche de l'axe, plus k est petit. La série se retrouve en regardant le corps : cerceau 1 → disque ½ → sphère ⅖ → tige autour du milieu 1/12. Rien à mémoriser, il suffit de se demander où se trouve la matière."
+    },
+    {
+     "sym": "2π",
+     "latex": "2\\pi",
+     "name": "Radian, tour et tours par minute",
+     "value": "2π = 6,2832 rad par tour ; 1 tr/min = 0,10472 rad/s",
+     "unit": "rad",
+     "why": "L'angle en radians est le rapport de la longueur de l'arc au rayon, c'est-à-dire un mètre sur un mètre. Par conséquent, le radian est sans dimension, et c'est pourquoi dans les formules de rotation aucun facteur de conversion n'apparaît : v = ωR, a = ω²R et φ = ½εt² ne fonctionnent qu'en radians et se cassent si on y met des degrés. Côté pratique : les régimes moteurs et volants d'inertie sont toujours donnés en tr/min, alors que les formules utilisent des rad/s. Le facteur de conversion est 2π/60 = 0,10472, l'inverse est 9,549.",
+     "mnemo": "De tr/min en rad/s — divisez par 9,55 (c'est 60/2π). 3000 tr/min donnent 314 rad/s, et dans le nombre 314 on reconnaît immédiatement π. Inversement — multipliez par 9,55."
+    },
+    {
+     "sym": "g",
+     "latex": "g",
+     "name": "Accélération de la pesanteur",
+     "value": "9,80665 (pour les estimations 9,81)",
+     "unit": "m/s²",
+     "const": "g",
+     "why": "Dans ce paragraphe, g n'apparaît qu'à un seul endroit — dans la descente d'une pente, où il figure dans la combinaison 2gh/(1+k). Ni dans le moment d'inertie, ni dans l'équation de rotation il n'apparaît du tout, et cela vaut la peine d'en prendre conscience séparément : faire tourner un volant d'inertie en apesanteur n'est pas plus facile que sur Terre, car l'inertie n'a rien à voir avec la gravité. En revanche, dans le pendule physique, g réapparaît — et c'est précisément pourquoi on le mesure avec le pendule de Kater.",
+     "mnemo": "√(2gh) — vitesse de chute libre d'une hauteur h : pour h = 1 m, cela donne 4,43 m/s. Tout corps roulant arrivera plus lentement d'un facteur √(1+k) : le cerceau 1,41 fois, la sphère 1,18."
+    },
+    {
+     "sym": "I⊕",
+     "latex": "I_\\oplus",
+     "name": "Moment d'inertie de la Terre",
+     "value": "0,3307 · M⊕R⊕² = 8,02 · 10³⁷",
+     "unit": "kg·m²",
+     "why": "Le coefficient de forme de la Terre est de 0,3307, alors que pour une sphère homogène il serait de 0,4. La différence n'est pas cosmétique : elle indique directement que la matière se densifie vers le centre — le noyau de fer est plus de trois fois plus dense que le manteau. Le moment d'inertie d'une planète se mesure par le mouvement de son axe et par les orbites des satellites artificiels, puis on vérifie les modèles de structure interne — c'est l'un des rares moyens de connaître l'intérieur sans y regarder. Pour la Lune, il est de 0,394, presque une sphère homogène avec un minuscule noyau ; pour Mars, 0,364 ; pour Saturne, environ 0,22 — la matière est plus concentrée vers le centre que pour tout autre corps du système solaire.",
+     "mnemo": "0,4 — c'est « réparti uniformément ». Moins de 0,4 — « plus dense vers le centre », plus — « la masse est reportée vers l'extérieur » (pour une sphère creuse, ce serait 0,67). Un seul nombre, et on voit déjà si la planète a un noyau lourd."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Comment cela se relie au reste du cours",
+   "lead": "Le moment d'inertie se trouve à un carrefour : à sa gauche, la cinématique de rotation et la conservation de l'énergie ; à sa droite, le gyroscope, les référentiels en rotation et la mécanique analytique.",
+   "items": [
+    {
+     "h": "Rotation et référentiels",
+     "text": "Tout ce que nous avons utilisé ici de la cinématique — la vitesse angulaire, la relation v = ωR, l'accélération centripète ω²R — est dérivé dans le thème « Oscillations et rotation », dans le paragraphe sur la rotation et les référentiels. Là, on explique aussi pourquoi un observateur sur un disque en rotation doit introduire une force sans source. Ici, nous avons pris ces résultats tels quels et y avons ajouté exactement une chose : la masse répartie dans le corps."
+    },
+    {
+     "h": "Lois de conservation",
+     "text": "La huitième étape de la dérivation repose entièrement sur la conservation de l'énergie, et sans le thème « Lois de conservation », il n'y aurait rien à écrire. De là vient aussi l'habitude de chercher une grandeur qui ne change pas au cours du mouvement — ici, c'est le zéro dans le terme central. Le concept de centre de masse lui-même a été introduit ici, à la septième étape, non pas comme un point commode, mais comme une définition : le centre de masse est le point par rapport auquel Σm·r est nul. C'est cette égalité qui a annulé le terme central dans le théorème de Steiner. Sans centre de masse, le théorème des axes parallèles n'existerait tout simplement pas."
+    },
+    {
+     "h": "Oscillations : pendule physique",
+     "text": "Suspendez n'importe quel corps par un point situé au-dessus du centre de masse et écartez-le — la période sera T = 2π√(I/(mgd)), où I est le moment d'inertie par rapport à l'axe de suspension, et d la distance de l'axe au centre de masse. Ces deux grandeurs sont exactement celles de ce paragraphe. Pour une tige homogène de longueur 1 m, suspendue par son extrémité, I = mL²/3 et d = L/2, d'où T = 2π√(2L/3g) = 1,64 s — nettement plus rapide que les 2,01 s d'une masse ponctuelle au bout d'un fil de même longueur. C'est exactement ce problème que Huygens a résolu, et c'est de là que sont nées les horloges à pendule."
+    },
+    {
+     "h": "Et ensuite",
+     "text": "Le paragraphe suivant du thème reprendra le même produit Iω, mais le considérera comme un vecteur — et expliquera le gyroscope et la toupie. Le troisième s'intéressera aux référentiels en rotation. Et en mécanique analytique, la même grandeur réapparaîtra sous un autre nom : si l'on prend comme coordonnée l'angle de rotation, le moment d'inertie se retrouve à la place de la masse dans l'expression de l'énergie cinétique — une « masse généralisée » pour une coordonnée généralisée."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Curiosités : à vérifier vous-même",
+   "lead": "Les deux expériences ci-dessous nécessitent deux bouteilles d'eau, un congélateur et deux œufs. Toutes deux montrent la même chose : le moment d'inertie dépend de la question de savoir si la matière se déplace avec le corps.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "expérience de cuisine",
+     "h": "Course de deux bouteilles : eau contre glace",
+     "text": "Prenez deux bouteilles en plastique identiques. Remplissez les deux d'eau aux neuf dixièmes environ — ne les remplissez pas à ras bord : lors de la congélation, l'eau se dilate de neuf pour cent, et une bouteille pleine et fermée gonflerait ou éclaterait. Vissez les bouchons sans serrer. Le soir, placez une bouteille debout au congélateur — on ne peut pas la coucher sur le côté avec un bouchon non serré, elle fuirait —, l'autre reste dans la pièce. Le matin, faites une pente : n'importe quelle planche plate d'environ 1,2 m de long — une planche à repasser ou une étagère retirée convient —, un bord surélevé d'une quinzaine de centimètres. Lancez les deux bouteilles en même temps et, avant de les lâcher, décidez laquelle arrivera en premier.",
+     "answer": "La bouteille liquide arrive en premier, et avec une avance confortable. L'eau à l'intérieur de la bouteille qui roule ne tourne presque pas : les parois glissent sur elle, la viscosité de l'eau est faible, et le temps est d'une seconde et demie. Seule l'enveloppe en plastique tourne, et elle pèse environ trente grammes contre un demi-kilogramme pour le contenu, donc le coefficient de forme effectif de la bouteille liquide est d'environ 0,05. Pour la bouteille congelée, le contenu est devenu partie du solide, et c'est un cylindre plein, k = ½. Calculons les accélérations : a = g·sinθ/(1+k), avec sinθ = 0,125, cela donne 1,17 m/s² contre 0,82. La bouteille liquide parcourt ses 1,2 mètre en 1,43 s, la bouteille de glace en 1,71 s ; lorsque la liquide franchit la ligne d'arrivée, la glacée est en retard d'environ 35 centimètres. L'écart est visible sans chronomètre. Et tout de suite, une expérience de contrôle contre l'explication « la glace est plus légère » : posez les bouteilles sur une balance. La masse est identique, l'eau n'a pas disparu. Ce qui décide de la course, ce n'est pas le poids, mais la question de savoir si le contenu tourne avec la bouteille. Une remarque honnête : sur une pente très longue, l'eau s'engage progressivement dans la rotation, et l'écart commencera à se réduire — l'effet ne vit que parce que la pente est courte."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "expérience de cuisine",
+     "h": "Œuf cru contre œuf dur",
+     "text": "Faites cuire un œuf dur, laissez l'autre cru et marquez-le au crayon pour ne pas les confondre. Faites tourner les deux à plat sur une assiette lisse — avec la même pichenette. Décidez à l'avance de deux choses : lequel tournera le plus vite et lequel vivra le plus longtemps.",
+     "answer": "L'œuf dur est un véritable solide : le contenu accélère avec la coquille, toute l'énergie fournie va dans la rotation de l'ensemble, et l'œuf tourne vite et longtemps. L'œuf cru tourne à peine : les doigts accélèrent presque uniquement la coquille, tandis que le blanc et le jaune restent en place — la même chose qu'avec la bouteille d'eau. Ensuite, le frottement visqueux entre la coquille et le contenu freine la coquille, et l'œuf cru s'arrête après quelques secondes. Mais le plus intéressant, c'est la deuxième étape de l'expérience, celle pour laquelle elle est faite. Faites tourner l'œuf cru, touchez-le du doigt et relâchez immédiatement. L'œuf dur s'arrêtera net après un tel contact. L'œuf cru repartira : vous avez arrêté la coquille, mais le liquide à l'intérieur a quand même un peu tourné à ce moment-là et maintenant il remet la coquille en rotation. C'est une preuve directe, vérifiable à la main, que le moment d'inertie concerne où et comment la matière se déplace, et pas seulement sa quantité. Et remarquez : le test culinaire habituel « cru ou dur » est une expérience de mécanique des solides réalisée dans une cuisine, inventée bien avant que cette mécanique ne soit formalisée."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoxe",
+     "h": "Plein ou creux — comment distinguer sans ouvrir",
+     "text": "Vous avez deux sphères devant vous. Extérieurement, elles sont indiscernables, le diamètre est identique, et sur une balance elles affichent la même masse. L'une est pleine, coulée dans un alliage léger ; l'autre est creuse, avec une paroi mince en métal lourd. Ni la règle ni la balance ne résolvent le problème. Comment les distinguer en trente secondes, sans rien couper ?",
+     "answer": "Faites-les rouler toutes les deux depuis la même hauteur sur une planche inclinée. Pour la sphère pleine, k = ⅖ ; pour la sphère creuse, k = ⅔. Avec h = 1 m, les vitesses en bas sont de 3,74 et 3,43 m/s — un écart de neuf pour cent, visible à l'œil nu sur une planche d'un mètre, et sur une planche de deux mètres, il devient flagrant. La raison est visible directement dans la formule : pour la sphère creuse, la masse est répartie vers la surface, le carré moyen de la distance à l'axe est plus grand, et une plus grande fraction de l'énergie est consacrée à la rotation : k/(1+k) donne 40 pour cent contre 29. Et il faut donner les nombres honnêtement : le coefficient ⅔ est valable pour une paroi vraiment mince. Pour une sphère avec une paroi d'un dixième du rayon, k est déjà de 0,60, la vitesse en bas est de 3,50 m/s, et l'écart se réduit de neuf pour cent à sept — notable, mais moins généreux. La même technique, mais dans une version industrielle, est utilisée pour vérifier l'homogénéité des pièces coulées. Et la même technique, mais à l'échelle de la planète, permet de juger de son intérieur : le coefficient de 0,3307 pour la Terre indique un noyau lourd, et celui de 0,394 pour la Lune — une sphère presque homogène. Personne n'a regardé à l'intérieur de la pièce coulée, ni à l'intérieur de la Lune."
+    },
+    {
+     "icon": "fact",
+     "kind": "fait curieux",
+     "h": "Volant d'inertie : comment stocker de l'énergie dans la rotation",
+     "text": "L'énergie de rotation est égale à ½Iω², et la vitesse angulaire entre au carré, tandis que la masse entre linéairement. Il est donc plus avantageux de faire tourner plus vite que d'alourdir. Calculons : un disque d'acier de masse 100 kg et de rayon 0,5 m a I = ½·100·0,25 = 12,5 kg·m². À 10 000 tours par minute, cela donne ω = 1047 rad/s et E = ½·12,5·1047² = 6,9 MJ, soit 1,9 kWh. Vérifions la rupture : à la périphérie d'un tel disque, la vitesse est ωR = 524 m/s, et l'acier se rompt à peu près à cette vitesse, donc notre volant est idéal. Un vrai volant en acier de ce rayon tourne deux fois moins vite et stocke quatre fois moins, 1,7 MJ. Pour comparaison : la même centaine de kilogrammes soulevée de dix mètres (le toit d'un immeuble de trois étages) stocke 9,8 kJ — sept cents fois moins.",
+     "answer": "De là vient toute l'histoire des volants d'inertie — du tour de potier en pierre et du volant de la machine à vapeur de Watt aux accumulateurs que l'on installe aujourd'hui dans les dépôts de tramway et de métro pour récupérer l'énergie de freinage. Il est intéressant de noter que la limite ne vient pas de la masse ni de la puissance du moteur, mais de la résistance de la jante : c'est le matériau lui-même qui retient un point de la jante de s'envoler, et la vitesse circonférentielle maximale est déterminée par le rapport résistance/densité. L'acier fixe cette limite assez bas, c'est pourquoi les volants modernes ne sont pas coulés mais enroulés en fibre de carbone : elle est presque cinq fois plus légère que l'acier et pourtant plus résistante à la rupture dans le sens des fibres, et la vitesse limite varie comme la racine carrée du rapport résistance/densité — selon ce rapport, la fibre de carbone bat l'acier d'environ trois fois. De plus, un volant enroulé ne produit pas de gros éclats lors de sa rupture, ce qui n'est pas une considération négligeable pour un dispositif qui stocke des mégajoules."
+    },
+    {
+     "icon": "edge",
+     "kind": "limite de validité",
+     "h": "Quand le roulement cesse d'être du roulement",
+     "text": "La formule v = √(2gh/(1+k)) est dérivée en supposant que le corps roule sans glisser : le point de contact est immobile à chaque instant, et le frottement statique ne travaille pas. Cette hypothèse n'est pas gratuite, et elle ne tient pas toujours.",
+     "answer": "Pour que le corps roule et ne patine pas, le frottement statique doit réussir à le faire tourner. La force requise est mg·sinθ·k/(1+k), la force disponible est μmg·cosθ, et de là vient la condition de roulement : tg θ ≤ μ(1+k)/k. Avec μ = 0,3 : un cerceau commencera à glisser dès 31 degrés, tandis qu'une sphère tiendra jusqu'à 46. La raison est visible directement dans la formule : plus k est grand, plus la fraction d'énergie à injecter dans la rotation est grande, et plus le frottement doit travailler. Au-delà du seuil, une partie de l'énergie est dissipée en chaleur, et notre formule donne une réponse surestimée. La deuxième dette silencieuse est le frottement de roulement, que nous avons complètement négligé. Il est des ordres de grandeur plus faible que le frottement de glissement (pour une bille d'acier sur de l'acier, le coefficient est d'environ 0,001 ; pour un pneu de vélo sur l'asphalte, environ 0,004), donc sur une planche d'un mètre, on peut l'ignorer sans risque, mais sur une longue descente, il devient prépondérant. D'où la règle pratique : notre réponse est une borne supérieure de la vitesse, à laquelle un corps réel se rapproche d'autant plus que le corps lui-même et la surface en dessous sont durs."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "Ce que nous avons simplifié",
+   "blocks": [
+    {
+     "h": "Un nombre au lieu d'un tableau de neuf : le tenseur d'inertie",
+     "text": "Tant que l'axe est fixe, le moment d'inertie est un nombre unique, et le moment de force et l'accélération angulaire pointent dans la même direction. Un corps libre n'a pas d'axe : il peut être quelconque et changer avec le temps. Alors la grandeur qui décrit l'inertie en rotation n'est plus un nombre mais un tableau de neuf nombres — le tenseur d'inertie. La bonne nouvelle est que pour tout corps, il existe trois axes mutuellement perpendiculaires, appelés axes principaux, autour desquels tout redevient simple : un nombre pour chacun. Nos formules I = kmR² sont précisément les moments principaux des corps symétriques. Tout ce qui ne se décrit pas par un seul nombre commence au paragraphe suivant ; ici, il suffit de retenir que le moment d'inertie sans indication d'axe n'a pas de sens.",
+     "latex": "I_{\\alpha\\beta} = \\sum_i m_i\\bigl(r_i^2\\,\\delta_{\\alpha\\beta} - x_{i\\alpha}x_{i\\beta}\\bigr)"
+    },
+    {
+     "h": "Roulement sans glissement — une hypothèse, pas un fait",
+     "text": "À l'étape huit, nous avons écrit v = ωR et déclaré que le frottement statique ne travaille pas. La première est une condition de roulement, et elle ne tient que tant que le frottement est suffisant ; le seuil est donné par l'inégalité ci-dessous. La seconde est strictement vraie : le point de contact est au repos au moment du contact, et une force appliquée à un point au repos ne travaille pas — mais c'est précisément pourquoi le frottement statique ne dissipe pas d'énergie, il la redistribue seulement entre la translation et la rotation. Ce qui est négligé, c'est le frottement de roulement : il est lié à la déformation du corps et du support et consomme de l'énergie. Son ordre de grandeur est de deux à trois ordres de grandeur plus faible que celui du glissement, et sur une pente de cuisine, on peut le négliger sans remords.",
+     "latex": "F_{\\text{fr}} = mg\\sin\\theta\\,\\frac{k}{1+k} \\le \\mu\\, mg\\cos\\theta \\;\\Longrightarrow\\; \\tan\\theta \\le \\mu\\,\\frac{1+k}{k}"
+    },
+    {
+     "h": "Une vraie roue n'est pas un anneau",
+     "text": "Dans l'exemple, nous avons modélisé une roue de vélo comme un anneau mince et obtenu k = 1. Vérifions à quel point c'est approximatif. La jante avec le pneu et la chambre à air pèsent environ 1,5 kg au même rayon de 0,35 m, et c'est effectivement un anneau. Trente-deux rayons de 5 grammes chacun donnent 0,16 kg, mais ils sont répartis le long du rayon comme des tiges, et leur contribution se calcule avec un coefficient de ⅓. Le moyeu pèse 0,4 kg et se trouve près de l'axe, sa contribution est pratiquement nulle. Additionnons : I = 1,5·0,35² + 0,16·⅓·0,35² = 0,184 + 0,007 = 0,190 kg·m² pour une masse totale de 2,06 kg, d'où k = 0,190/(2,06·0,1225) = 0,75. Autrement dit, une vraie roue est d'un quart « plus légère à lancer » qu'un anneau idéal de même masse, et c'est presque entièrement la faute du moyeu. Le même calcul explique pourquoi, dans le cyclisme, on fait tant attention à la masse de la jante et presque pas à celle du moyeu : un gramme sur la jante coûte plus cher qu'un gramme près de l'axe, d'autant plus que le carré de la distance est grand."
+    },
+    {
+     "h": "Roulement idéal et moment constant",
+     "text": "Dans l'exemple de la roue, le moment de 3,5 N·m était le seul — nous avons simplement ignoré le frottement dans les roulements. Évaluons si c'est légitime. Une roue de vélo lancée à 28,6 rad/s, laissée au repos, s'arrête en quelques minutes. Le moment de freinage est donc de l'ordre de I·ω/t = 0,245·28,6/120 ≈ 0,06 N·m — presque soixante fois plus petit que le moment d'accélération. Pour le calcul de l'accélération, on peut et on doit le négliger ; pour le calcul de la décélération, en aucun cas, car il devient le seul. Il en va de même pour la constance du moment : une corde enroulée autour de la jante tire avec une force constante, mais un muscle ou un moteur électrique non, et alors ε cesse d'être constant, et les formules ω = εt et φ = ½εt² doivent être remplacées par des intégrales."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "La mesure de l'inertie en rotation n'est pas la masse, mais la somme $\\sum m_i r_i^2$ : ce qui compte, ce n'est pas seulement la quantité de matière, mais aussi sa distance à l'axe. Cette somme apparaît naturellement lorsqu'on additionne l'énergie cinétique de chaque point du corps, et avec elle apparaît la deuxième loi de Newton pour la rotation $M = I\\varepsilon$. Tout le reste — les coefficients de forme, le théorème des axes parallèles, la course des corps sur une pente — découle de ces deux lignes.",
+   "keyIdeas": [
+    {
+     "icon": "formula",
+     "title": "M = Iε",
+     "text": "C'est la même deuxième loi de Newton : le moment remplace la force, le moment d'inertie remplace la masse, l'accélération angulaire remplace l'accélération linéaire. Elle n'est pas postulée, mais déduite en sommant sur les points."
+    },
+    {
+     "icon": "scale",
+     "title": "I = k·mR²",
+     "text": "Le coefficient k est le carré moyen de la distance à l'axe en fractions de R² : anneau 1, disque ½, sphère ⅖, tige 1/12. Il ne peut jamais être supérieur à 1."
+    },
+    {
+     "icon": "fact",
+     "title": "I = I_c + md²",
+     "text": "Le théorème de Huygens-Steiner découle de l'égalité Σm·r = 0, c'est-à-dire de la définition même du centre de masse. Par conséquent, l'axe passant par le centre de masse est toujours le plus « léger »."
+    },
+    {
+     "icon": "edge",
+     "title": "La course est décidée par la forme",
+     "text": "v = √(2gh/(1+k)) : ni la masse ni le rayon n'entrent dans la réponse. L'anneau arrive toujours dernier — qu'il soit pour enfant ou pour tracteur."
+    }
+   ],
+   "where": [
+    "Volant d'inertie : l'énergie ½Iω², donc on fait la jante lourde et on la fait tourner à des milliers de tours — la vitesse entre au carré.",
+    "Roues : on apprécie les « roues légères » non pas pour leur masse en soi, mais parce qu'on déplace la masse de la jante vers l'axe.",
+    "Poignée de porte et clé à molette : le moment est la force multipliée par le bras de levier, donc on place la poignée au bord opposé aux charnières.",
+    "Pendule physique et horloge à pendule de Huygens ; pendule de Kater, avec lequel on a mesuré g pendant cent ans.",
+    "Planétologie : le coefficient mesuré de 0,3307 pour la Terre et de 0,394 pour la Lune est une preuve directe de ce qu'ils contiennent."
+   ],
+   "watchOut": "Trois pièges. Le premier : considérer r comme la distance au centre du corps, et non à l'axe ; pour une tige tournant autour de son extrémité au lieu de son centre, cela fait une différence d'un facteur quatre. Le deuxième : penser que le moment d'inertie appartient au corps ; il appartient à la paire « corps et axe », et une même roue a trois I différents pour trois axes différents. Le troisième : confondre le newton-mètre avec le joule : leur dimension est la même, mais le moment de force n'est pas une énergie, c'est une énergie par radian, et on ne peut pas les additionner."
+  },
+  "quiz": [
+   {
+    "id": "ri1",
+    "type": "mcq",
+    "q": "Deux cerceaux descendent la même colline sans glisser. Le premier est un cerceau d'enfant, masse 1 kg, rayon 10 cm. Le second est un bandage de roue de tracteur, masse 200 kg, rayon 80 cm. Qui arrivera en bas en premier ?",
+    "options": [
+     "Ils arrivent en même temps : ni la masse ni le rayon n'entrent dans la réponse",
+     "Le lourd : il a une plus grande réserve d'énergie potentielle",
+     "Le léger : il est plus facile à faire tourner",
+     "Le grand : à même vitesse angulaire, il a une plus grande vitesse linéaire"
+    ],
+    "answer": 0,
+    "why": "Dans l'équation mgh = ½mv² + ½kmR²ω², la masse est un facteur dans les trois termes et se simplifie entièrement. Le rayon entre dans le moment d'inertie au carré, et la condition de roulement ω = v/R apporte R² au dénominateur — ils s'annulent mutuellement. Il reste v = √(2gh/(1+k)), où des propriétés du corps ne subsiste qu'un seul coefficient de forme sans dimension. Les deux corps sont des cerceaux, k = 1 pour les deux, donc la vitesse est la même : pour h = 1 m, elle est de 3,13 m/s. La réponse sur la plus grande énergie du lourd se base sur une observation juste : l'énergie est effectivement plus grande — mais la masse à accélérer avec cette énergie est plus grande exactement dans la même proportion. La réponse sur la grande roue confond la vitesse du centre avec la vitesse angulaire : la grande roue tourne effectivement plus lentement, mais elle se déplace à la même vitesse.",
+    "hint": "Écrivez la conservation de l'énergie pour le roulement, remplacez I = kmR² et ω = v/R, et regardez quelles lettres survivent après simplification."
+   },
+   {
+    "id": "ri2",
+    "type": "mcq",
+    "q": "On fait tourner une tige homogène autour d'un axe perpendiculaire. De combien de fois le moment d'inertie par rapport à un axe passant par l'extrémité est-il plus grand que par rapport à l'axe passant par le milieu ?",
+    "options": [
+     "4 fois",
+     "2 fois",
+     "3 fois",
+     "12 fois"
+    ],
+    "answer": 0,
+    "why": "Par rapport au milieu, I = mL²/12. L'axe passant par l'extrémité est à une distance d = L/2 du centre de masse, et le théorème de Huygens-Steiner ajoute md² = mL²/4, soit 3mL²/12. Ensemble, cela donne 4mL²/12 = mL²/3 — exactement quatre fois plus. La réponse tentante « 2 fois » vient de l'idée que le bras de levier a simplement doublé ; mais la distance entre au carré dans le moment d'inertie, et c'est le carré de la longueur qui s'ajoute, pas la longueur elle-même. On peut vérifier avec le simulateur du paragraphe : placez une tige de 0,40 m et déplacez le curseur de l'axe jusqu'à 0,20 m.",
+    "hint": "Utilisez le théorème des axes parallèles et remplacez d = L/2. N'oubliez pas qu'il implique d², pas d."
+   },
+   {
+    "id": "ri3",
+    "type": "free",
+    "q": "En vos propres termes : pourquoi dans la réponse pour le roulement v = √(2gh/(1+k)) n'y a-t-il ni la masse du corps ni son rayon — alors que l'un et l'autre figuraient explicitement dans l'équation de l'énergie ?",
+    "keywords": [
+     "simplif",
+     "facteur",
+     "carré",
+     "forme",
+     "part",
+     "proportion",
+     "sans dimension",
+     "identique"
+    ],
+    "needed": 2,
+    "why": "La masse est un facteur dans les trois termes de l'équation mgh = ½mv² + ½kmR²ω² et se simplifie donc entièrement. Le rayon disparaît plus subtilement : il entre dans le moment d'inertie au carré, et la condition de roulement ω = v/R apporte R² au dénominateur, et ils s'annulent. Après simplification, il ne reste du corps qu'un nombre sans dimension k, et son sens est transparent : k/(1+k) est la part de l'énergie stockée qui va dans la rotation, et non dans le mouvement vers l'avant. Pour un cerceau, c'est la moitié ; pour un disque, un tiers ; pour une sphère, vingt-neuf pour cent. La réponse n'est pas déterminée par « combien de matière », mais par « quelle part de l'énergie le corps doit consacrer à la mise en rotation ».",
+    "hint": "Écrivez les trois termes de l'équation de l'énergie, remplacez I = kmR² et ω = v/R, et regardez quelles lettres figurent dans chaque terme."
+   },
+   {
+    "id": "ri4",
+    "type": "estimate",
+    "q": "Un volant est un disque plein en acier de masse 8,0 kg et de rayon 0,20 m. On lui applique un couple constant de 2,0 N·m. Quelle accélération angulaire obtiendra-t-il ? Réponse en rad/s².",
+    "answer": 12.5,
+    "unit": "rad/s²",
+    "tolAbs": 2,
+    "why": "D'abord le moment d'inertie : pour un disque, k = ½, donc I = ½ · 8,0 · 0,20² = ½ · 8,0 · 0,04 = 0,16 kg·m². Ensuite, comme pour la deuxième loi de Newton : ε = M/I = 2,0/0,16 = 12,5 rad/s². Vérification par le bon sens : en trois secondes, le volant atteint 37,5 rad/s, soit 358 tours par minute, et emmagasine ½ · 0,16 · 37,5² = 113 J. Deux erreurs fréquentes : oublier le facteur ½ et obtenir 6,25, ou élever au carré le diamètre au lieu du rayon et obtenir 3,1.",
+    "hint": "Deux étapes. D'abord le moment d'inertie du disque I = ½mR² — n'oubliez pas que R est au carré. Ensuite ε = M/I."
+   }
+  ],
+  "title": "Moment d'inertie et équation de rotation",
+  "subtitle": "Paragraphe 1 · Pourquoi la masse ne suffit pas pour la rotation et d'où viennent les coefficients 1, ½, ⅖",
+  "intro": [
+   "Poussez un chariot vide, puis un chariot chargé : la différence est évidente, et la masse en est la mesure. Maintenant, essayez autre chose. Prenez un haltère ou un rouleau à pâtisserie par le milieu et faites-le tourner autour d'un axe vertical ; puis prenez-le par l'extrémité et faites-le tourner de la même manière. La matière est la même, au gramme près, mais la résistance à la mise en rotation est complètement différente. Donc, pour la rotation, la masse ne convient pas comme mesure de l'inertie : il faut une grandeur qui se souvienne non seulement de la quantité de matière, mais aussi de l'endroit où elle se trouve.",
+   "Cette grandeur s'appelle le moment d'inertie. Nous n'allons pas le déclarer. Il apparaîtra de lui-même, si l'on additionne soigneusement une fois l'énergie cinétique de tous les points du corps : la combinaison $\\sum m_i r_i^2$ sortira du signe somme, et elle ne pourra pas aller ailleurs. De la même addition découleront également la deuxième loi de Newton pour la rotation $M = I\\varepsilon$, la règle de conversion pour un axe déplacé, et les coefficients 1, ½, ⅖, 1/12, qu'on propose habituellement d'apprendre par cœur — mais il n'est pas nécessaire de les apprendre, car chacun est simplement le carré moyen de la distance à l'axe.",
+   "Nous testerons la théorie avec une pente. Nous lâcherons d'une même hauteur un cerceau, un disque et une sphère, et nous prédirons à la fois l'ordre d'arrivée et l'écart de vitesse. Le plus surprenant dans la réponse, c'est ce qui n'y figure pas : ni la masse, ni le rayon. Une lourde roue de tracteur et un cerceau d'enfant arrivent en bas en même temps, et la course est décidée par un seul nombre sans dimension."
+  ],
+  "standNote": "Le stand de ce paragraphe est en mode « Accélération », et il fait exactement ce que nous allons démontrer : il calcule le moment d'inertie à partir de la masse et de la forme, ajoute la correction pour le déplacement de l'axe, et transforme le moment de force en accélération angulaire. Commencez par ce qui est affiché par défaut : un cerceau de masse 2,0 kg, de rayon 0,35 m, et un moment de 3,5 N·m. Le stand affichera $I = 0{,}245$ kg·m², $\\varepsilon = 14{,}3$ rad/s², et en deux secondes la roue atteindra 28,6 rad/s — soit quatre tours et demi. Maintenant, changez la forme de cerceau à disque et ne touchez plus à rien : le moment d'inertie diminuera exactement de moitié, et l'accélération angulaire augmentera exactement du double. La masse est la même, le rayon est le même — seul l'endroit où se trouve la matière a changé, et cela a suffi. Troisièmement, ce pour quoi le stand a été créé : placez une tige, une longueur de 0,40 m, et déplacez le curseur de décalage de l'axe $d$ jusqu'à 0,20 m, c'est-à-dire déplacez l'axe jusqu'à l'extrémité de la tige. Le moment d'inertie propre donne $\\tfrac{1}{12}mR^2$, l'ajout $md^2$ donne encore $\\tfrac{1}{4}mR^2$, ensemble cela fait exactement $\\tfrac{1}{3}mR^2$. C'est le théorème de Huygens-Steiner, que nous démontrerons à la septième étape ; ici, il se vérifie d'un simple mouvement du curseur."
  }
 }

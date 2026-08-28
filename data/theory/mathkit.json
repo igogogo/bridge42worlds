@@ -1554,5 +1554,173 @@
     "latex": "\\frac{dN}{N} = -\\lambda\\,dt \\;\\Longrightarrow\\; \\ln N = -\\lambda t + C"
    }
   }
+ },
+ "fr": {
+  "title": "Les maths à portée de main",
+  "subtitle": "Les outils et concepts qui sous-tendent la physique — avec leur sens physique, pas une définition de manuel",
+  "lead": "Les mathématiques en physique ne sont ni une décoration ni une épreuve de force : c'est une façon de dire précisément ce qu'on expliquerait autrement en un paragraphe, et encore, de manière imprécise. Vous trouverez ici les outils rencontrés dans le cours, chacun accompagné de trois choses : à quoi il ressemble, ce qu'il signifie physiquement, et où vous l'avez déjà vu. L'ordre va de ce dont vous avez besoin dès le premier paragraphe à ce qui sera utile en théorie des champs.",
+  "meansLabel": "sens physique",
+  "whereLabel": "où dans le cours",
+  "catchLabel": "ce qui fait trébucher",
+  "levels": {
+   "base": "Les bases",
+   "calc": "Changement et accumulation",
+   "vector": "Direction et champ",
+   "adv": "Le langage de la physique moderne"
+  },
+  "items": {
+   "dimension": {
+    "name": "Dimension",
+    "means": "Chaque grandeur vit dans ses propres unités, et on ne peut pas additionner des choses différentes — comme on ne peut pas additionner des mètres et des secondes. La vérification des dimensions attrape la plupart des erreurs en quelques secondes et parfois suggère directement la forme de la formule : si la réponse doit être un temps, et qu'on a sous la main une longueur et une accélération, la seule combinaison est la racine de leur rapport.",
+    "where": "Langage de la physique · paragraphe 1 ; utilisé dans chaque calcul du cours",
+    "catch": "L'argument d'un sinus, d'un logarithme ou d'une exponentielle doit être sans dimension. Si des mètres se retrouvent sous un sinus, c'est qu'un facteur a été perdu quelque part.",
+    "latex": "[v] = \\frac{[L]}{[T]} = \\text{m}/\\text{s}"
+   },
+   "order": {
+    "name": "Ordre de grandeur",
+    "means": "Une réponse « environ cent mille » est souvent plus précieuse que « 104 271,8 » : elle vérifie la mise en équation elle-même. Une estimation de tête montre si le résultat est raisonnable, avant de passer une heure sur un calcul soigné.",
+    "where": "Estimations dans chaque paragraphe ; estimation de Fermi dans la section sur les modèles",
+    "catch": "Une erreur d'un ordre de grandeur n'est pas une broutille : c'est la différence entre un radiateur tiède et un incendie."
+   },
+   "propto": {
+    "name": "Proportionnalité et puissance",
+    "means": "L'exposant indique à quelle vitesse la réponse rattrape la cause. Le carré signifie : on double, on obtient le quadruple. L'inverse du carré — on double la distance, on obtient quatre fois moins. La plupart des lois physiques se reconnaissent précisément à leur exposant.",
+    "where": "Distance de freinage, loi de Coulomb, gravitation universelle, intensité lumineuse",
+    "catch": "La proportionnalité est valable toutes choses égales par ailleurs. Si la masse change en même temps que $v$, le rapport est différent."
+   },
+   "derivative": {
+    "name": "Dérivée",
+    "means": "Taux de variation : à quelle vitesse une grandeur change à l'instant présent, et non en moyenne sur une heure. Sur un graphique, c'est la pente de la courbe en un point. Toute la dynamique s'écrit avec des dérivées, car les lois de la nature ne disent pas « où est le corps », mais « comment il change d'état ».",
+    "where": "Cinématique, lois de Newton, équations des oscillations",
+    "catch": "La dérivée n'est pas une « petite variation », mais la limite d'un rapport. En un point anguleux du graphe, elle n'existe pas : lors d'un saut de vitesse, l'accélération est infinie, et c'est le signe d'une idéalisation."
+   },
+   "integral": {
+    "name": "Intégrale",
+    "means": "Accumulation : on somme une multitude de petites contributions. L'aire sous la courbe de la vitesse est la distance parcourue, l'aire sous la courbe de la force en fonction du déplacement est le travail effectué. L'intégrale et la dérivée sont des opérations réciproques, donc à partir d'une description du mouvement on peut toujours retrouver l'autre.",
+    "where": "Travail et énergie, chaleur en thermodynamique, flux de champ",
+    "catch": "La constante d'intégration, ce sont les conditions initiales. Si on l'oublie, on perd l'endroit où le corps se trouvait au départ."
+   },
+   "diffeq": {
+    "name": "Équation différentielle",
+    "means": "Une loi de la nature est presque toujours écrite comme une relation entre une grandeur et son propre taux de variation. Résoudre l'équation, c'est obtenir toute l'histoire du mouvement à partir d'une règle locale. Une même équation décrit une masse sur un ressort, les oscillations du courant dans un circuit et les petites oscillations d'un pendule : la physique est différente, les mathématiques sont les mêmes.",
+    "where": "Oscillateur, désintégration radioactive, refroidissement d'un corps, circuit oscillant",
+    "catch": "La solution n'est pas unique sans conditions initiales : l'équation définit une famille de trajectoires, et les conditions en choisissent une."
+   },
+   "exponent": {
+    "name": "Exponentielle",
+    "means": "Elle apparaît chaque fois que le taux de variation est proportionnel à la grandeur elle-même. D'où la constance de la demi-vie : pendant un même intervalle de temps, c'est la même fraction qui disparaît, et non la même quantité. C'est ainsi que refroidit le thé et que se décharge un condensateur.",
+    "where": "Désintégration radioactive, refroidissement, décharge d'un condensateur, formule barométrique",
+    "catch": "La croissance exponentielle dans la nature se heurte toujours à une limite. Le modèle est valable tant que la ressource n'est pas épuisée."
+   },
+   "vector": {
+    "name": "Vecteur et projections",
+    "means": "Une grandeur avec une direction. L'astuce principale : décomposer selon les axes et travailler ensuite avec chaque axe indépendamment — c'est pourquoi le mouvement horizontal n'affecte pas la chute verticale. Le choix d'axes commodes résout souvent le problème plus vite que n'importe quel calcul.",
+    "where": "Plan incliné, mouvement circulaire, addition de forces",
+    "catch": "On ne peut additionner les projections que dans un même système d'axes. Un changement de référentiel change les nombres, mais pas le vecteur lui-même."
+   },
+   "dotcross": {
+    "name": "Produit scalaire et produit vectoriel",
+    "means": "Le produit scalaire répond à la question « à quel point dans le même sens » : le travail est égal à la force multipliée par la distance et par le cosinus de l'angle — une force perpendiculaire au mouvement ne travaille pas. Le produit vectoriel répond « à quel point perpendiculaire » et donne une nouvelle direction : c'est ainsi qu'apparaissent le moment d'une force et la force de Lorentz.",
+    "where": "Travail, moment d'une force, force magnétique, flux à travers une surface",
+    "catch": "Le produit vectoriel n'est pas commutatif : l'échange des facteurs change le signe, c'est-à-dire la direction opposée."
+   },
+   "field": {
+    "name": "Champ",
+    "means": "Une grandeur définie en chaque point de l'espace. L'idée de Faraday : ce n'est pas « une charge agit sur une charge à travers le vide », mais « une charge crée un champ, le champ agit sur une charge ». Cela s'est avéré être non pas une image commode, mais une réalité physique — le champ porte lui-même de l'énergie et de l'impulsion, et existe même lorsque la source a disparu.",
+    "where": "Électrostatique, magnétisme, gravitation, ondes",
+    "catch": "Les lignes de champ ne sont pas des trajectoires : une charge ne se déplace le long d'une ligne que si elle part du repos et que la ligne est droite."
+   },
+   "gradient": {
+    "name": "Gradient",
+    "means": "Il indique la direction de la croissance la plus rapide d'une grandeur et sa raideur. La force est dirigée à l'opposé du gradient de l'énergie — c'est-à-dire là où l'énergie décroît le plus vite. D'où la règle intuitive : un corps roule le long de la pente du puits de potentiel.",
+    "where": "Énergie potentielle, potentiel électrique, conduction thermique",
+    "catch": "Le signe moins dans la formule est obligatoire : sans lui, le corps roulerait vers le haut."
+   },
+   "flux": {
+    "name": "Flux et divergence",
+    "means": "Le flux compte combien de champ traverse une surface, la divergence indique s'il y a une source à l'intérieur. Le théorème de Gauss dit littéralement : le champ qui sort d'une enveloppe fermée est proportionnel à la charge qu'elle contient. Les problèmes à symétrie se résolvent par cette méthode en une ligne au lieu d'une page d'intégrales.",
+    "where": "Électrostatique, magnétisme, équations de Maxwell",
+    "catch": "Le théorème est toujours vrai, mais il n'est utile qu'en présence de symétrie : sinon, on ne peut pas sortir le champ de l'intégrale."
+   },
+   "complex": {
+    "name": "Nombres complexes",
+    "means": "Un moyen de stocker l'amplitude et la phase dans un seul nombre. Une oscillation devient une rotation dans le plan, l'addition d'oscillations devient une addition de vecteurs, et la dérivation devient une multiplication par $i\\omega$. En mécanique quantique, la complexité cesse d'être un artifice et devient une partie de la description de l'état.",
+    "where": "Courant alternatif, ondes, équation de Schrödinger",
+    "catch": "Dans un problème classique, seule la partie réelle a un sens physique ; en quantique, la phase est observable par l'interférence."
+   },
+   "fourier": {
+    "name": "Décomposition de Fourier",
+    "means": "Tout signal complexe se décompose en harmoniques simples. Ce n'est pas un tour de passe-passe mathématique, c'est de la physique : une corde vibre réellement comme un ensemble d'ondes stationnaires, et l'oreille décompose réellement le son en fréquences. Le spectre, ce sont précisément les coefficients de la décomposition.",
+    "where": "Ondes, spectres, timbre du son, traitement du signal",
+    "catch": "Plus l'impulsion est courte, plus son spectre est large. Ce n'est pas une propriété de l'instrument, mais une identité mathématique — et la racine de la relation d'incertitude."
+   },
+   "probability": {
+    "name": "Probabilité et statistiques",
+    "means": "Quand le nombre de particules est de l'ordre du nombre d'Avogadro, suivre chacune d'elles est inutile et superflu : les grandeurs mesurables sont des moyennes. La température est l'énergie moyenne, la pression est le flux moyen d'impulsion. Les fluctuations diminuent comme la racine du nombre de particules, c'est pourquoi le monde macroscopique semble déterministe.",
+    "where": "Physique moléculaire, entropie, mécanique quantique",
+    "catch": "La moyenne n'est pas nécessairement une valeur typique : pour une distribution fortement asymétrique, la moyenne peut ne jamais se produire."
+   },
+   "matrix": {
+    "name": "Matrices et opérateurs",
+    "means": "Une matrice est une règle de transformation d'un vecteur en un autre : rotation, étirement, transformation de Lorentz. Les vecteurs propres d'une telle règle sont les directions qu'elle ne dévie pas, mais qu'elle ne fait que mettre à l'échelle. En mécanique quantique, les valeurs propres d'un opérateur sont précisément les résultats possibles d'une mesure.",
+    "where": "Transformations de Lorentz, tenseur d'inertie, mécanique quantique",
+    "catch": "L'ordre des facteurs est important. La non-commutativité des opérateurs n'est pas un détail technique, mais la source de la relation d'incertitude."
+   },
+   "tensor": {
+    "name": "Tenseurs",
+    "means": "Toute relation entre vecteurs ne se réduit pas à une multiplication par un nombre. Tirez sur un cristal anisotrope — il se déforme non pas strictement le long de la force appliquée. Un tenseur décrit une telle relation : il prend une direction et renvoie une direction, et ses composantes changent lors d'une rotation des axes de manière cohérente, de sorte que la grandeur physique elle-même ne dépend pas du choix des axes. C'est précisément cette propriété qui fait des tenseurs le langage de la relativité : une équation écrite sous forme tensorielle est valable dans tous les référentiels à la fois.",
+    "where": "Tenseur d'inertie, contraintes dans un milieu, relativité générale",
+    "catch": "Un tenseur n'est pas un « tableau de nombres », mais une règle de transformation de ces nombres. Un ensemble de composantes sans loi de transformation n'est pas un tenseur."
+   },
+   "symmetry": {
+    "name": "Symétrie et groupes",
+    "means": "La symétrie est une transformation après laquelle rien n'a changé. L'ensemble de ces transformations forme un groupe, et sa structure dicte quelles particules et interactions sont possibles. D'après le théorème de Noether, chaque symétrie continue donne une loi de conservation : la translation dans le temps — l'énergie, la translation dans l'espace — l'impulsion, la rotation — le moment cinétique.",
+    "where": "Lois de conservation, physique des particules, cristallographie",
+    "catch": "La symétrie peut être brisée par l'état, tout en restant une symétrie des équations : un crayon tombe dans une direction particulière, bien que toutes les directions soient équivalentes.",
+    "latex": "S \\rightarrow \\text{grandeur conservée}"
+   },
+   "taylor": {
+    "name": "Série de Taylor et approximation linéaire",
+    "means": "Toute fonction lisse près d'un point peut être remplacée par un polynôme : d'abord la valeur, puis la pente, puis la courbure. En physique, on se contente presque toujours des deux premiers termes — c'est ce qu'on appelle « pour $x$ petit ». De là viennent toutes les approximations habituelles : $\\sin x \\approx x$ pour le pendule, $(1+x)^n \\approx 1+nx$ pour l'énergie relativiste, $e^x \\approx 1+x$ pour un faible échauffement. Le sens n'est pas d'économiser des lettres : le développement montre QUELLE grandeur on a négligée et quand il ne sera plus possible de la négliger.",
+    "where": "Petites oscillations du pendule, $mv^2/2$ à partir de l'énergie relativiste, marées, champ faible",
+    "catch": "« Petit » ne veut pas dire « petit à vue d'œil », mais sans dimension : petit par rapport à quelque chose. Tant qu'on n'a pas dit par rapport à quoi, l'approximation n'est pas justifiée.",
+    "latex": "f(x) \\approx f(0) + f'(0)\\,x + \\tfrac{1}{2}f''(0)\\,x^{2}"
+   },
+   "polar": {
+    "name": "Coordonnées polaires",
+    "means": "Quand le mouvement se fait autour d'un centre, les coordonnées cartésiennes $x$ et $y$ gênent : toutes deux varient de manière compliquée. On les remplace par la distance $r$ et l'angle $\\varphi$ — et le problème se redresse. L'orbite d'une planète en coordonnées polaires s'écrit en une seule ligne, et la loi des aires devient la constance de $r^2\\,d\\varphi/dt$. La règle est simple : choisissez les coordonnées selon la symétrie du problème, pas par habitude.",
+    "where": "Lois de Kepler, orbites, rotation, champ d'une charge ponctuelle",
+    "catch": "La vitesse en coordonnées polaires a deux composantes : le long du rayon et perpendiculairement à celui-ci. Si on oublie la seconde, on perd précisément ce qui maintient le corps sur son orbite.",
+    "latex": "x = r\\cos\\varphi, \\quad y = r\\sin\\varphi, \\qquad v^{2} = \\dot r^{2} + r^{2}\\dot\\varphi^{2}"
+   },
+   "combinatorics": {
+    "name": "Combien de façons",
+    "means": "La physique statistique commence par un dénombrement : de combien de façons peut-on répartir les molécules entre les deux moitiés d'un récipient, les électrons entre les niveaux, les pièces entre pile et face. L'outil principal est le nombre de combinaisons $C(N,k) = N!/(k!(N-k)!)$. C'est lui qui transforme le « désordre » en un nombre précis, et l'entropie — d'une métaphore en logarithme de ce nombre.",
+    "where": "Micro-états et entropie, distribution des molécules, spectre du rayonnement",
+    "catch": "La factorielle croît terriblement vite, et la calculer de front pour $N = 10^{23}$ n'a pas de sens. Pour les grands nombres, on travaille avec le logarithme : $\\ln N! \\approx N\\ln N - N$.",
+    "latex": "C(N,k) = \\frac{N!}{k!\\,(N-k)!}, \\qquad \\ln N! \\approx N\\ln N - N"
+   },
+   "partial": {
+    "name": "Dérivée partielle",
+    "means": "Si une grandeur dépend de plusieurs variables, demander « à quelle vitesse elle change » n'a pas de sens tant qu'on n'a pas précisé — par rapport à quoi, en maintenant quoi constant. La dérivée partielle est précisément la réponse à cette question affinée : on fait varier une seule variable, on maintient les autres. En thermodynamique, ce n'est pas une formalité, mais de la physique : la pression en fonction du volume à température constante et à entropie constante sont deux grandeurs différentes, et c'est pourquoi l'isotherme et l'adiabatique suivent des chemins différents.",
+    "where": "Processus thermodynamiques, équation d'onde, champs",
+    "catch": "La notation avec l'indice en bas n'est pas une décoration : $(\\partial P/\\partial V)_T$ et $(\\partial P/\\partial V)_S$ diffèrent à la fois numériquement et par leur sens. L'indice indique ce que vous avez maintenu constant.",
+    "latex": "\\left(\\frac{\\partial P}{\\partial V}\\right)_{T} \\neq \\left(\\frac{\\partial P}{\\partial V}\\right)_{S}"
+   },
+   "rms": {
+    "name": "Moyenne et moyenne quadratique",
+    "means": "Pour les molécules d'un gaz, la vitesse moyenne selon une projection est nulle : il y en a autant qui vont à gauche qu'à droite. Donc, « vitesse moyenne » ici ne décrit rien. Ce qui fonctionne, c'est le carré MOYEN : il n'est pas annulé par les signes et il est lié à l'énergie. Sa racine est la vitesse quadratique moyenne, celle qui intervient dans la relation entre température et mouvement.",
+    "where": "Température et vitesse des molécules, bruit, incertitude de mesure",
+    "catch": "La vitesse quadratique moyenne est plus grande que la vitesse moyenne en valeur absolue, et la vitesse la plus probable est plus petite que toutes les deux. Trois nombres différents pour un même gaz : il est important de savoir lequel le problème exige.",
+    "latex": "\\langle v_x \\rangle = 0, \\qquad v_{\\text{rms}} = \\sqrt{\\langle v^{2}\\rangle} = \\sqrt{\\frac{3kT}{m}}"
+   },
+   "separation": {
+    "name": "Séparation des variables",
+    "means": "Une méthode de résolution des équations différentielles où tout ce qui dépend de la grandeur cherchée est regroupé d'un côté, et tout ce qui dépend du temps de l'autre, puis on intègre les deux côtés. Ainsi, de « la vitesse de décroissance est proportionnelle à la quantité » on obtient l'exponentielle de la désintégration, et de « la vitesse de croissance est proportionnelle à la taille » — l'exponentielle de l'expansion. La méthode résout la plupart des équations du premier ordre rencontrées dans le cours.",
+    "where": "Loi de désintégration radioactive, décharge d'un condensateur, refroidissement d'un corps",
+    "catch": "On ne peut diviser par la grandeur cherchée que si elle n'est pas nulle. Le cas $N = 0$ doit être traité séparément — et c'est souvent précisément l'équilibre du problème.",
+    "latex": "\\frac{dN}{N} = -\\lambda\\,dt \\;\\Longrightarrow\\; \\ln N = -\\lambda t + C"
+   }
+  }
  }
 }

@@ -17,37 +17,52 @@
   ],
   "examples_from_articles": [
    {
-    "id": "2607.08713",
-    "date": "2026-07-09",
+    "id": "2602.06560",
+    "date": "2026-02-06",
     "title": {
-     "ru": "Квантовый двигатель против запрета Карно: мощность и КПД без компромисса",
-     "en": "Quantum Engine vs. Carnot's Barrier: Power and Efficiency Without Compromise",
-     "es": "Motor cuántico vs. el límite de Carnot: potencia y eficiencia sin concesiones",
-     "ar": "محرك كمي يتحدى قيد كارنو: قدرة وكفاءة بلا تنازلات"
+     "ru": "Трение против предела Ландауэра",
+     "en": "Friction Against Landauer's Limit",
+     "es": "Fricción contra el límite de Landauer",
+     "ar": "الاحتكاك يتحدى حد لانداور",
+     "fr": "Friction contre la limite de Landauer"
     },
-    "why": "entropy, quantum_information"
+    "score": 0.777
    },
    {
-    "id": "2607.08708",
-    "date": "2026-07-09",
+    "id": "2605.17196",
+    "date": "2026-05-16",
     "title": {
-     "ru": "Почему квантовый алгоритм QAOA не справился со стеклянным хаосом",
-     "en": "Why the QAOA Quantum Algorithm Failed Against Spin Glass Chaos",
-     "es": "Por qué el algoritmo cuántico QAOA no pudo con el caos vítreo",
-     "ar": "لماذا لم تفلح خوارزمية QAOA الكمومية في مواجهة الفوضى الزجاجية"
+     "ru": "Демон Максвелла и квантовый страж тепла",
+     "en": "Maxwell's Demon and the Quantum Guardian of Heat",
+     "es": "El demonio de Maxwell y el guardián cuántico del calor",
+     "ar": "شيطان ماكسويل وحارس الحرارة الكمومي",
+     "fr": "Le démon de Maxwell et le gardien quantique de la chaleur"
     },
-    "why": "entropy, quantum_information"
+    "score": 0.682
    },
    {
-    "id": "2607.03545",
-    "date": "2026-07-03",
+    "id": "2608.05795v1",
+    "date": "2026-08-06",
     "title": {
-     "ru": "Клеточный оркестр: как гены учатся играть в такт с хаосом",
-     "en": "The Cellular Orchestra: How Genes Learn to Play in Tune with Chaos",
-     "es": "La orquesta celular: cómo los genes aprenden a tocar al ritmo del caos",
-     "ar": "الأوركسترا الخلوية: كيف تتعلم الجينات العزف بتناغم مع الفوضى"
+     "ru": "Третий закон термодинамики для чёрной дыры",
+     "en": "The Third Law for a Black Hole",
+     "es": "La tercera ley para un agujero negro",
+     "ar": "القانون الثالث للديناميكا الحرارية للثقب الأسود",
+     "fr": "La troisième loi pour un trou noir"
     },
-    "why": "entropy, quantum_information"
+    "score": 0.664
+   },
+   {
+    "id": "2605.14924",
+    "date": "2026-05-14",
+    "title": {
+     "ru": "Демон Максвелла в квантовом коде",
+     "en": "Maxwell's Demon in a Quantum Code",
+     "es": "El demonio de Maxwell en el código cuántico",
+     "ar": "شيطان ماكسويل في الشيفرة الكمومية",
+     "fr": "Le démon de Maxwell dans le code quantique"
+    },
+    "score": 0.652
    }
   ]
  },
@@ -1713,26 +1728,401 @@
    ]
   }
  },
- "tags": [
-  "entropy",
-  "black_hole"
- ],
- "laws": [
-  "landauers_principle",
-  "holographic_principle"
- ],
- "examples_from_articles": [
-  {
-   "id": "2607.14291",
-   "why": "совпадение по теме: black_hole, entropy"
+ "fr": {
+  "title": "Entropie et information",
+  "subtitle": "Paragraphe 3 · Le démon de Maxwell et le prix d'un bit",
+  "intro": [
+   "En 1867, Maxwell imagina une créature qui devait détruire le deuxième principe de la thermodynamique. Elle se tient près d'une porte entre deux moitiés d'un récipient, laisse passer les molécules rapides d'un côté, les lentes de l'autre, et crée sans aucun coût une différence de température. Ensuite — une machine thermique, du travail à partir de rien, un mouvement perpétuel.",
+   "L'énigme a tenu près d'un siècle. On a essayé de la résoudre en critiquant les yeux du démon, sa porte, le frottement des charnières — mais à chaque fois, il s'est avéré que les coûts pouvaient être rendus arbitrairement petits. La réponse a été trouvée ailleurs : le démon doit se souvenir de quelle molécule est allée où. Or la mémoire est finie, et tôt ou tard, il faut l'effacer.",
+   "De cela est née l'affirmation qui semble aujourd'hui évidente, mais qui semblait alors sauvage : l'information est physique. Un bit a un prix thermodynamique, il a été mesuré dans des expériences, et les ingénieurs qui conçoivent des processeurs le rencontrent. Par la même occasion, il s'est avéré que la formule de Shannon et celle de Boltzmann sont la même expression."
+  ],
+  "standNote": "La même boîte. Mais maintenant, regardez le deuxième nombre sous la formule — l'entropie en bits. Il répond à la question : combien de réponses binaires « oui ou non » faut-il pour désigner une configuration spécifique parmi toutes celles qui donnent la même apparence extérieure. Avec cent particules et une division égale, on obtient environ quatre-vingt-seize bits — douze octets. C'est exactement la quantité d'information perdue lorsque nous cessons de distinguer les particules individuelles et disons simplement « également ».",
+  "formula": {
+   "name": "Principe de Landauer",
+   "latex": "Q_{\\min} = k_B T \\ln 2 \\qquad \\text{pour chaque bit effacé}",
+   "alsoKnown": "Limite thermodynamique du calcul · lien entre Shannon et Boltzmann",
+   "authors": [
+    {
+     "who": "James Clerk Maxwell",
+     "year": "1867",
+     "what": "a imaginé le démon dans une lettre à un ami, le nommant « être fini » — le mot démon s'est collé plus tard grâce à Kelvin. Maxwell ne voulait pas réfuter le deuxième principe, il voulait montrer sa nature statistique"
+    },
+    {
+     "who": "Leó Szilárd",
+     "year": "1929",
+     "what": "a réduit le problème à une seule molécule et a montré que la mesure de position donne exactement $k_B T \\ln 2$ de travail extractible. Pour la première fois, l'information était évaluée en joules"
+    },
+    {
+     "who": "Claude Shannon",
+     "year": "1948",
+     "what": "a défini la quantité d'information à travers la même formule que Boltzmann — l'entropie. Il a choisi la base logarithmique binaire, d'où le bit ; il considérait la similitude avec la thermodynamique comme purement formelle"
+    },
+    {
+     "who": "Rolf Landauer",
+     "year": "1961",
+     "what": "a trouvé la vraie réponse : il faut payer non pas pour la mesure, mais pour l'effacement. Une opération logiquement irréversible doit libérer de la chaleur, car elle réduit le nombre d'états possibles de la mémoire"
+    },
+    {
+     "who": "Charles Bennett",
+     "year": "1982",
+     "what": "a bouclé le raisonnement : il a montré que le démon peut mesurer et calculer gratuitement, mais ne peut pas libérer la mémoire gratuitement — et donc, dans le cycle complet, le deuxième principe est exactement respecté"
+    }
+   ],
+   "story": "Le destin de l'analogie elle-même est remarquable. Lorsque Shannon a dérivé la formule de la quantité d'information, il ne savait pas comment la nommer. Selon le récit de Shannon lui-même, von Neumann lui a conseillé : appelez-la entropie — d'abord, votre fonction est déjà utilisée en mécanique statistique sous ce nom, et ensuite, personne ne comprend vraiment ce qu'est l'entropie, donc dans les débats, vous aurez toujours l'avantage. Le conseil a été donné à moitié en plaisantant, mais il s'est avéré prophétique : treize ans plus tard, Landauer a montré que la coïncidence des noms n'était pas une coïncidence du tout.",
+   "symbols": [
+    {
+     "sym": "Q",
+     "latex": "Q_{\\min}",
+     "what": "chaleur minimale dissipée",
+     "unit": "J",
+     "note": "c'est le minimum : les circuits réels gaspillent des millions de fois plus"
+    },
+    {
+     "sym": "T",
+     "latex": "T",
+     "what": "température du milieu",
+     "unit": "K",
+     "note": "le coût du bit augmente avec la température — c'est pourquoi les calculs à froid sont moins chers"
+    },
+    {
+     "sym": "ln2",
+     "latex": "\\ln 2",
+     "what": "passage des bits aux unités naturelles",
+     "unit": "—",
+     "note": "l'effacement d'un bit réduit le nombre d'états de moitié, d'où le logarithme de deux"
+    },
+    {
+     "sym": "H",
+     "latex": "H",
+     "what": "entropie de Shannon",
+     "unit": "bit",
+     "note": "$H = -\\sum p_i \\log_2 p_i$ ; la même formule que celle de Boltzmann, mais avec un logarithme binaire"
+    },
+    {
+     "sym": "I",
+     "latex": "I",
+     "what": "quantité d'information",
+     "unit": "bit",
+     "note": "diminution de l'incertitude : combien d'ignorance a été levée par la réponse obtenue"
+    }
+   ]
   },
-  {
-   "id": "2607.14023",
-   "why": "совпадение по теме: black_hole, entropy"
+  "derivation": {
+   "title": "Dérivation rigoureuse : pourquoi le démon perd finalement",
+   "lead": "Suivons tout le cycle sans rien omettre — et découvrons où se cache exactement le coût.",
+   "steps": [
+    {
+     "text": "Commençons par les formules. Boltzmann compte les micro-états avec des probabilités égales, Shannon avec des probabilités arbitraires. Si tous les $W$ états sont équiprobables, la formule de Shannon se réduit à celle de Boltzmann, ne différant que par la base du logarithme et un facteur.",
+     "latex": "S = k_B\\ln W, \\qquad H = -\\sum_i p_i \\log_2 p_i \\;\\;\\xrightarrow{\\;p_i = 1/W\\;}\\;\\; H = \\log_2 W",
+     "figure": "microcontact",
+     "figCaption": "La même grandeur dans différentes unités : $S = k_B \\ln 2 \\cdot H$."
+    },
+    {
+     "text": "Prenons la machine de Szilard — un démon extrêmement simplifié. Dans un récipient se trouve une molécule. Le démon regarde dans quelle moitié elle se trouve et insère un piston du bon côté. La molécule, en heurtant le piston, le pousse — le gaz constitué d'une seule particule effectue une détente isotherme.",
+     "latex": "A = \\int_{V/2}^{V} P\\,dV = k_B T \\ln 2 \\approx 2{,}9 \\cdot 10^{-21}\\ \\text{J à } 300\\ \\text{K}",
+     "figure": "cylinder",
+     "figCaption": "Une molécule, un bit d'information sur sa position — et exactement $k_BT\\ln 2$ de travail."
+    },
+    {
+     "text": "Le travail est obtenu, la chaleur est prélevée du milieu — le second principe semble violé à première vue. Mais le cycle n'est pas terminé : pour recommencer, il faut ramener le système à son état initial. Tout est revenu, sauf une chose — dans la mémoire du démon reste une trace : la molécule était-elle à gauche ou à droite.",
+     "latex": "\\text{cycle fermé pour le gaz et le piston, mais } \\text{mémoire} : \\;\\varnothing \\to 1\\ \\text{bit}",
+     "figure": "cycle",
+     "figCaption": "La non-fermeture du cycle est cachée non pas dans la machine, mais dans la mémoire de l'observateur."
+    },
+    {
+     "text": "C'est ici que se trouve la réponse de Landauer. On peut mesurer à coût arbitrairement faible, et calculer aussi, si on le fait de manière réversible. Mais effacer un bit est impossible : l'opération réduit deux états distincts de la mémoire à un seul, c'est-à-dire qu'elle diminue le nombre de micro-états de moitié.",
+     "latex": "W_{\\text{mémoire}} : 2 \\to 1 \\;\\Longrightarrow\\; \\Delta S_{\\text{mémoire}} = -k_B\\ln 2",
+     "figure": "elastic",
+     "figCaption": "L'effacement est logiquement irréversible : à partir de l'état final, on ne peut pas reconstituer l'état initial."
+    },
+    {
+     "text": "L'entropie de la mémoire a diminué, donc elle doit augmenter ailleurs — sinon le second principe serait réellement violé. Elle ne peut augmenter que dans l'environnement, et c'est pourquoi l'effacement doit nécessairement libérer de la chaleur.",
+     "latex": "Q_{\\min} = T\\,|\\Delta S| = k_B T \\ln 2",
+     "figure": "firstlaw",
+     "figCaption": "Le coût est payé non pas pour la connaissance, mais pour l'oubli. C'est le principe de Landauer."
+    },
+    {
+     "text": "Faisons le bilan du cycle. Le travail extrait est exactement égal au coût minimal de l'effacement de la mémoire. Le démon ne gagne ni ne perd — le second principe est respecté à la limite de l'égalité.",
+     "latex": "A_{\\text{obtenu}} = k_B T\\ln 2 = Q_{\\text{pour l'effacement}} \\;\\Longrightarrow\\; \\Delta S_{\\text{total}} \\geq 0",
+     "figure": "result",
+     "figCaption": "Un démon idéal travaille exactement à l'équilibre. Tout démon réel travaille à perte."
+    },
+    {
+     "text": "Et une conséquence qui préoccupe les ingénieurs. Chaque effacement d'un bit dans un processeur libère au minimum $k_BT\\ln 2$. En multipliant par le nombre d'opérations d'une puce moderne, on obtient une limite vers laquelle la technologie se rapproche progressivement par le bas.",
+     "latex": "P_{\\min} = k_B T \\ln 2 \\cdot f \\cdot N_{\\text{bits}}",
+     "figure": "heating",
+     "figCaption": "Le chauffage d'un processeur a un plancher thermodynamique, et il ne peut pas être évité par une meilleure technologie."
+    }
+   ],
+   "plate": "L'information est physique. Mesurer et calculer peut être gratuit, mais effacer ne l'est pas : chaque bit oublié doit libérer $k_B T \\ln 2$ de chaleur.",
+   "note": "Une précision importante concernant le démon. La réponse de Landauer et Bennett n'interdit pas au démon de fonctionner — elle lui interdit de fonctionner en cycle indéfiniment. Tant que la mémoire est suffisante, le démon crée régulièrement une différence de température, et il n'y a aucune violation : il utilise simplement la mémoire vierge comme carburant. La mémoire non remplie s'avère être une ressource aussi précieuse qu'une batterie chargée — et c'est peut-être la conséquence la plus inattendue de toute cette histoire."
   },
-  {
-   "id": "2607.13701",
-   "why": "совпадение по теме: black_hole, entropy"
-  }
- ]
+  "math": {
+   "title": "Les mathématiques nécessaires ici",
+   "lead": "Tout se réduit au logarithme : d'abord au choix de sa base, puis à une somme pondérée, puis à une intégrale d'où le logarithme émerge.",
+   "items": [
+    {
+     "what": "Pourquoi le bit est un logarithme en base deux",
+     "why": "Une question avec une réponse « oui » ou « non » divise l'ensemble des possibilités en deux. Pour trouver une possibilité parmi huit, il faut trois questions ; parmi seize, il en faut quatre : le nombre de questions est $\\log_2$ du nombre de possibilités. D'où l'unité de mesure. Dans la première étape du raisonnement, cela donne $H = \\log_2 W$ là où Boltzmann écrivait $S = k_B\\ln W$ : c'est la même grandeur, seules les bases des logarithmes diffèrent. La conversion entre elles est un facteur constant, car $\\log_2 x = \\ln x / \\ln 2$. C'est de là que vient $\\ln 2 \\approx 0{,}693$ dans la formule de Landauer, et pourquoi on ne peut pas l'en retirer : effacer un bit réduit le nombre d'états de la mémoire exactement de moitié, et le logarithme naturel de deux est précisément le coût de ce « de moitié » en unités continues.",
+     "latex": "S = k_B \\ln 2 \\cdot H, \\qquad \\log_2 x = \\frac{\\ln x}{\\ln 2}",
+     "kit": "exponent"
+    },
+    {
+     "what": "La somme pondérée est une moyenne",
+     "why": "La formule de Shannon semble intimidante jusqu'à ce qu'on y reconnaisse une construction familière. La quantité $-\\log_2 p_i$ est la surprise d'un résultat particulier : plus il est rare, plus il faut de questions binaires pour le désigner. Et $\\sum_i p_i(\\ldots)$ est une moyenne ordinaire, où chaque contribution est pondérée par sa probabilité, exactement comme l'énergie moyenne des molécules dans le sujet précédent. Ainsi, $H$ est la surprise moyenne par résultat. La première étape du raisonnement vérifie cela dans un cas limite : substituez $p_i = 1/W$, factorisez le terme identique — la somme des probabilités donne un, et il reste $\\log_2 W$. Boltzmann apparaît comme un cas particulier de Shannon : celui où tous les résultats sont équiprobables.",
+     "latex": "H = -\\sum_i p_i \\log_2 p_i \\;\\xrightarrow{\\;p_i = 1/W\\;}\\; H = \\log_2 W",
+     "kit": "probability"
+    },
+    {
+     "what": "L'intégrale d'où sort le logarithme",
+     "why": "Dans la deuxième étape du raisonnement, le travail du piston est écrit comme $A = \\int_{V/2}^{V} P\\,dV$. L'intégrale est nécessaire ici parce que la pression n'est pas constante : le piston se déplace, le volume augmente, la contribution d'une seule molécule s'affaiblit, et on ne peut pas multiplier la force par la distance en une seule opération. Il faut additionner les contributions $P\\,dV$ à chaque petit pas. Pour un gaz d'une seule molécule, $P = k_B T / V$, et sous l'intégrale reste $dV/V$ — la seule expression sous l'intégrale qui donne non pas une puissance, mais un logarithme. Les bornes diffèrent d'un facteur deux, donc la réponse est bien $k_B T \\ln 2$. Ce même $\\ln 2$ apparaît dans le coût d'effacement d'un bit à la cinquième étape, et la coïncidence n'est pas fortuite : dans les deux cas, le nombre d'états accessibles change exactement d'un facteur deux.",
+     "latex": "A = \\int_{V/2}^{V} \\frac{k_B T}{V}\\,dV = k_B T \\ln 2",
+     "kit": "integral"
+    }
+   ]
+  },
+  "example": {
+   "title": "Exemple chiffré : combien de chaleur un processeur doit-il dissiper",
+   "lead": "Calculons le plancher thermodynamique des calculs et comparons-le à ce qui se trouve sur votre bureau.",
+   "given": "Un processeur avec une fréquence d'horloge de 3 GHz, qui bascule environ $10^{9}$ éléments logiques, chacun effaçant un bit par cycle. Température de 300 K. Trouver la puissance dissipée minimale et la comparer à la puissance réelle.",
+   "law": "$P_{\\min} = k_B T \\ln 2 \\cdot f \\cdot N$",
+   "solution": [
+    {
+     "text": "Coût d'un bit à température ambiante.",
+     "latex": "k_B T \\ln 2 = 1{,}38\\cdot 10^{-23} \\cdot 300 \\cdot 0{,}693 \\approx 2{,}9 \\cdot 10^{-21}\\ \\text{J}"
+    },
+    {
+     "text": "Nombre d'effacements par seconde.",
+     "latex": "f \\cdot N = 3\\cdot 10^{9} \\cdot 10^{9} = 3 \\cdot 10^{18}\\ \\text{bit/s}"
+    },
+    {
+     "text": "Puissance minimale.",
+     "latex": "P_{\\min} \\approx 2{,}9\\cdot 10^{-21} \\cdot 3\\cdot 10^{18} \\approx 8{,}7 \\cdot 10^{-3}\\ \\text{W}"
+    },
+    {
+     "text": "Dissipation thermique réelle d'un tel processeur.",
+     "latex": "P_{\\text{réel}} \\approx 100\\ \\text{W} \\;\\Longrightarrow\\; \\frac{P_{\\text{réel}}}{P_{\\min}} \\approx 10^{4}"
+    }
+   ],
+   "answer": "Le minimum thermodynamique est d'environ neuf milliwatts, contre cent watts réels — une marge d'environ dix mille fois.",
+   "check": "Vérification par le bon sens et aussi une prédiction. Une marge de quatre ordres de grandeur semble énorme, mais l'efficacité énergétique des calculs a historiquement augmenté d'environ un facteur dix par décennie. Si le rythme se maintient, la limite de Landauer deviendra perceptible vers le milieu du siècle — et c'est le seul obstacle à la miniaturisation qui ne peut être contourné par une meilleure technologie, car il découle de la deuxième loi. On ne peut le contourner que d'une seule manière : calculer de manière réversible, c'est-à-dire ne pas effacer les résultats intermédiaires. De tels circuits sont construits et fonctionnent, mais on paie par la complexité et la vitesse."
+  },
+  "constants": {
+   "title": "Grandeurs de ce paragraphe",
+   "lead": "Trois nombres qui fixent le taux d'échange entre information et chaleur.",
+   "items": [
+    {
+     "sym": "kTln2",
+     "latex": "k_B T \\ln 2",
+     "name": "Coût d'effacement d'un bit à 300 K",
+     "value": "2,9 · 10⁻²¹",
+     "unit": "J",
+     "why": "Limite thermodynamique du calcul. Mesurée pour la première fois en 2012 dans une expérience avec une particule colloïdale dans un piège optique — la théorie a été confirmée.",
+     "mnemo": "C'est environ 1/60 d'électronvolt — nettement moins que l'énergie thermique d'une molécule, mais cela se multiplie par des milliards d'opérations par seconde."
+    },
+    {
+     "sym": "k_B",
+     "latex": "k_B",
+     "dictKey": "k_B",
+     "name": "Constante de Boltzmann",
+     "value": "1,381 · 10⁻²³",
+     "unit": "J / K",
+     "why": "Convertit l'entropie d'un dénombrement sans dimension d'états en joules par kelvin. C'est elle qui fait de l'information une grandeur physique, et non une abstraction.",
+     "mnemo": "$S = k_B\\ln W$ et $H = -\\sum p\\log_2 p$ — une même formule dans deux systèmes d'unités. Taux d'échange : 1 bit = $k_B\\ln 2$."
+    },
+    {
+     "sym": "ln2",
+     "latex": "\\ln 2",
+     "name": "Logarithme naturel de deux",
+     "value": "0,693",
+     "unit": "—",
+     "why": "Apparaît partout où le nombre d'états change d'un facteur deux : effacement d'un bit, expansion d'un gaz d'un facteur deux, période de demi-vie.",
+     "mnemo": "La règle de soixante-dix en finance — c'est le même ln 2 : un doublement avec une croissance de p pour cent se produit en 70/p périodes."
+    }
+   ]
+  },
+  "synthesis": {
+   "title": "Où l'information devient physique",
+   "lead": "Après Landauer, la liste ne cesse de s'allonger, et elle dépasse largement le cadre de l'informatique.",
+   "items": [
+    {
+     "h": "Compression de données",
+     "text": "La limite de compression d'un fichier est égale à son entropie de Shannon — on ne peut pas faire plus court, et c'est prouvé. Un archiveur qui promet de compresser n'importe quel fichier est impossible pour la même raison qu'une machine à mouvement perpétuel."
+    },
+    {
+     "h": "Cryptographie",
+     "text": "Un chiffre absolument sûr exige une clé au moins aussi longue que le message — car sinon l'entropie de la clé ne suffit pas à cacher l'entropie du texte. C'est Shannon qui l'a prouvé, et on ne peut pas contourner."
+    },
+    {
+     "h": "Machines moléculaires",
+     "text": "Les moteurs cellulaires fonctionnent à l'échelle de quelques $k_BT$ et se tiennent donc à la frontière où les fluctuations sont significatives. Certains d'entre eux, par leur conception, ressemblent littéralement au démon de Maxwell — ils utilisent l'information sur leur état pour redresser le mouvement thermique."
+    },
+    {
+     "h": "Trous noirs",
+     "text": "Leur entropie est proportionnelle à la surface de l'horizon et se mesure en bits : pour un trou noir de masse stellaire, elle est de l'ordre de $10^{78}$ bits. La question de savoir si l'information qui y est inscrite est perdue lors de l'évaporation a été débattue par les physiciens pendant quarante ans et n'est pas complètement close."
+    },
+    {
+     "h": "Calcul quantique",
+     "text": "Un qubit porte plus qu'un bit, et la réversibilité n'y est pas un luxe mais un principe : les opérations quantiques sont réversibles par nature, et la limite de Landauer s'y applique donc différemment. L'effacement est néanmoins nécessaire — lors de la mesure."
+    }
+   ]
+  },
+  "curiosities": {
+   "title": "Amusant : testez par vous-même",
+   "lead": "L'information semble abstraite jusqu'à ce qu'on essaie de la mesurer.",
+   "items": [
+    {
+     "icon": "kitchen",
+     "kind": "expérience de cuisine",
+     "h": "Devinez un nombre en sept questions",
+     "text": "Demandez à quelqu'un de penser à un nombre entre 1 et 100 et devinez-le avec des questions par « oui » ou « non ». Comptez les questions. Répétez ensuite avec une plage allant jusqu'à 1000.",
+     "answer": "Jusqu'à cent, sept questions suffisent ; jusqu'à mille, dix, si à chaque fois vous divisez la plage restante en deux. C'est exactement $\\log_2 100 \\approx 6{,}6$ et $\\log_2 1000 \\approx 10$. Vous avez mesuré l'entropie du problème en bits — et vérifié au passage pourquoi le nombre de questions ne croît pas proportionnellement à la plage, mais comme son logarithme. Toute autre stratégie est pire, et c'est aussi un théorème."
+    },
+    {
+     "icon": "kitchen",
+     "kind": "expérience de cuisine",
+     "h": "Compressez un texte vous-même",
+     "text": "Prenez n'importe quel fichier texte et archivez-le. Notez de combien il a diminué. Prenez ensuite un fichier de données aléatoires — par exemple une photo au format jpeg ou une archive déjà compressée — et recommencez.",
+     "answer": "Un texte ordinaire se compresse environ trois à quatre fois, tandis qu'un jpeg ou une archive ne se compresse presque pas, parfois même il augmente de quelques octets. La raison est que le texte contient beaucoup de redondance : après « explic », il y a presque certainement « ation », et cette prédictibilité réduit l'entropie. Dans les données compressées, la redondance est déjà épuisée, l'entropie est proche du maximum — il n'y a plus rien à compresser. Le texte russe, selon les estimations de Shannon pour les langues naturelles, porte environ un bit par lettre au lieu des cinq théoriques."
+    },
+    {
+     "icon": "paradox",
+     "kind": "paradoxe",
+     "h": "Le démon qui ne mesure rien",
+     "text": "Il semble que ce qui perd le démon, c'est la mesure — car c'est elle qui obtient l'information. Mais Landauer et Bennett affirment que mesurer peut être gratuit. Alors, qu'est-ce qui rend le démon impossible exactement ?",
+     "answer": "L'oubli. La mesure peut être effectuée de manière réversible, en copiant l'état de la molécule dans une cellule mémoire vierge — rien n'est perdu et il n'y a rien à payer. Le problème survient quand la mémoire vierge s'épuise et qu'il faut effacer les anciennes données : cette opération est irréversible, et elle coûte $k_BT\\ln 2$ par bit. D'où l'inattendu : le démon n'a pas besoin d'énergie, mais de mémoire vide. C'est son carburant."
+    },
+    {
+     "icon": "fact",
+     "kind": "fait amusant",
+     "h": "La limite de Landauer a été mesurée",
+     "text": "En 2012, un groupe à Lyon a réalisé une expérience : une particule colloïdale dans un piège optique à deux puits a été forcée à « oublier » dans quel puits elle se trouvait, et la chaleur dégagée a été mesurée avec précision. Le résultat a coïncidé avec $k_BT\\ln 2$ à quelques pour cent près. L'affirmation qui a commencé comme une expérience de pensée du XIXe siècle est devenue un fait de laboratoire du XXIe."
+    },
+    {
+     "icon": "mnemo",
+     "kind": "mnémonique",
+     "h": "On ne paie pas pour savoir, mais pour oublier",
+     "text": "Apprendre — gratuit. Calculer — gratuit, si c'est réversible. Oublier — $k_BT\\ln 2$ par bit. C'est la seule phrase à retenir de tout le paragraphe : elle explique à la fois le démon, l'échauffement du processeur et pourquoi on étudie les calculs réversibles."
+    },
+    {
+     "icon": "edge",
+     "kind": "limite de validité",
+     "h": "Ce que cette limite n'interdit pas",
+     "text": "Elle n'interdit pas de calculer à volonté à moindre coût — si on n'efface pas. La logique réversible, où chaque étape peut être défaite, est en principe gratuite, et de tels circuits sont construits. Elle n'interdit pas non plus au démon de fonctionner un temps fini. La deuxième loi limite un cycle, pas une action isolée — et c'est dans cette distinction que réside toute l'histoire."
+    }
+   ]
+  },
+  "appendix": {
+   "title": "Annexe pour les curieux : combien d'informations tient dans une région de l'espace",
+   "lead": "Ne fait pas partie de la vérification. À propos de la façon dont le comptage des bits a conduit la physique à l'hypothèse la plus audacieuse des dernières décennies.",
+   "blocks": [
+    {
+     "h": "Entropie d'un trou noir",
+     "text": "Bekenstein et Hawking ont obtenu un résultat étrange : l'entropie d'un trou noir est proportionnelle à l'aire de son horizon, et non à son volume. Pour tout corps ordinaire, l'entropie augmente avec le volume — en doublant le contenu, on double aussi le nombre d'états. Ici, le doublement se produit lors de la croissance de la surface."
+    },
+    {
+     "h": "Limite holographique",
+     "text": "Il en découle une limite : la quantité d'informations que l'on peut cacher dans une région de l'espace est bornée par l'aire de sa frontière divisée par quatre aires de Planck. Pour une pièce, cela donne de l'ordre de $10^{70}$ bits — inaccessiblement grand, mais fini. Tenter d'en mettre davantage conduirait à la formation d'un trou noir."
+    },
+    {
+     "h": "Principe holographique",
+     "text": "De cette observation est née une hypothèse : peut-être que toute la physique à l'intérieur d'un volume est équivalente à la physique sur sa frontière, avec un nombre de dimensions inférieur. Comme si le contenu d'une pièce était entièrement codé sur ses murs. Pour certains espaces modèles, cela est prouvé rigoureusement ; pour notre Univers, on ne sait pas."
+    },
+    {
+     "h": "Paradoxe de la perte d'information",
+     "text": "Si un trou noir s'évapore, où va l'information sur ce qui y est tombé ? La mécanique quantique exige qu'elle soit conservée, la gravitation qu'elle disparaisse. Hawking a défendu la disparition pendant trente ans, puis a publiquement admis sa défaite dans la controverse, mais il n'y a toujours pas de solution définitive. Plus de détails dans la section « Questions ouvertes »."
+    }
+   ]
+  },
+  "memo": {
+   "essence": "L'information est une grandeur physique : l'entropie de Shannon et l'entropie de Boltzmann sont la même chose dans des unités différentes, et l'effacement d'un bit doit libérer $k_B T\\ln 2$ de chaleur.",
+   "keyIdeas": [
+    {
+     "icon": "lamp",
+     "title": "$S = k_B\\ln 2 \\cdot H$",
+     "text": "le bit et le joule par kelvin sont liés par un taux de change exact"
+    },
+    {
+     "icon": "ruler",
+     "title": "Le démon de Maxwell ne perd pas",
+     "text": "Le démon de Maxwell ne perd pas sur la mesure, mais sur l'effacement de la mémoire"
+    },
+    {
+     "icon": "sigma",
+     "title": "Principe de Landauer",
+     "text": "une opération logiquement irréversible est thermodynamiquement irréversible"
+    },
+    {
+     "icon": "ruler",
+     "title": "Mémoire propre",
+     "text": "une ressource aussi précieuse que le carburant"
+    },
+    {
+     "icon": "edge",
+     "title": "Limite de calcul $k_BT\\ln 2$",
+     "text": "La limite de calcul $k_BT\\ln 2$ par bit ne peut être contournée que par une logique réversible"
+    }
+   ],
+   "where": "Limite de compression des données, robustesse des chiffrements, dissipation thermique des processeurs, machines moléculaires de la cellule, entropie des trous noirs.",
+   "watchOut": "Ne confondez pas mesure et effacement. La première peut être gratuite, la seconde non ; toute l'histoire du démon repose exactement sur cette distinction."
+  },
+  "quiz": [
+   {
+    "id": "i1",
+    "type": "mcq",
+    "q": "Où exactement le démon de Maxwell viole-t-il l'équilibre, si la mesure peut être gratuite ?",
+    "options": [
+     "Dans l'ouverture de la porte : cela coûte du travail",
+     "Dans l'observation des molécules : pour voir, il faut de la lumière",
+     "Dans l'effacement de la mémoire : cette opération est irréversible et doit libérer $k_B T\\ln 2$ par bit",
+     "Il ne viole rien, le deuxième principe est effectivement faux"
+    ],
+    "answer": 2,
+    "why": "La porte peut être rendue aussi légère que l'on veut, et la mesure peut être réversible, en copiant l'état dans une cellule propre. Il ne reste qu'une seule chose non fermée : l'enregistrement accumulé. Pour répéter le cycle, il faut effacer la mémoire, et c'est pour cela que l'on paie en chaleur.",
+    "hint": "Demandez-vous ce qui, à la fin du cycle, n'est pas revenu à son état initial. Le gaz est revenu, le piston est revenu, qu'est-ce qui est resté modifié ?"
+   },
+   {
+    "id": "i2",
+    "type": "mcq",
+    "q": "Pourquoi l'entropie de Shannon et l'entropie de Boltzmann sont-elles considérées comme une seule et même grandeur ?",
+    "options": [
+     "Ce n'est qu'une ressemblance superficielle des formules, sans signification physique",
+     "Pour des états équiprobables, les formules coïncident à une constante et à la base du logarithme près, et le lien est confirmé par le principe de Landauer",
+     "Shannon a dérivé sa formule de la thermodynamique",
+     "Toutes deux décrivent le désordre au sens courant"
+    ],
+    "answer": 1,
+    "why": "La coïncidence mathématique en soi n'est pas un argument — Shannon lui-même ne la considérait pas comme significative. Elle est devenue physique après Landauer, qui a montré qu'une opération informationnelle doit payer en chaleur réelle au taux exact de $k_B\\ln 2$ par bit.",
+    "hint": "Qu'est-ce qui a transformé une ressemblance formelle en une affirmation physique ? Quelle expérience peut-on faire pour le vérifier ?"
+   },
+   {
+    "id": "i3",
+    "type": "free",
+    "q": "En vos propres termes : pourquoi un archiveur ne peut-il pas compresser un fichier déjà compressé, et quel est le lien avec l'entropie ?",
+    "keywords": [
+     "redondance",
+     "entropie",
+     "prévisible",
+     "aléatoire",
+     "maximale",
+     "régularité",
+     "répétition",
+     "limite"
+    ],
+    "needed": 2,
+    "why": "La compression fonctionne grâce à la redondance : si le symbole suivant est prévisible, on peut ne pas l'écrire entièrement. Les données déjà compressées semblent presque aléatoires, leur entropie est proche du maximum, il n'y a rien à prévoir — rien à compresser. La limite de compression est exactement l'entropie de Shannon du contenu, et c'est un théorème prouvé, pas une propriété d'un programme particulier.",
+    "hint": "Pensez à ce qui rend la compression possible en général. Qu'est-ce que l'archiveur trouve dans un texte ordinaire et qu'il ne trouvera pas dans un ensemble aléatoire d'octets ?"
+   },
+   {
+    "id": "i4",
+    "type": "estimate",
+    "q": "Combien de bits d'information faut-il pour désigner un nombre précis entre 1 et 1000 ?",
+    "answer": 10,
+    "unit": "bits",
+    "why": "log₂1000 ≈ 9,97, c'est-à-dire dix questions binaires. On le vérifie en divisant l'intervalle en deux : 1000 → 500 → 250 → 125 → 63 → 32 → 16 → 8 → 4 → 2 → 1, exactement dix étapes. Il est utile de se souvenir que 2¹⁰ = 1024 ≈ 10³ — d'où le kilooctet, qui en réalité vaut 1024 octets.",
+    "hint": "Chaque question avec réponse « oui ou non » divise les options restantes par deux. Combien de fois faut-il diviser mille par deux pour qu'il n'en reste qu'une ?",
+    "tolAbs": 1
+   }
+  ]
+ }
 }
