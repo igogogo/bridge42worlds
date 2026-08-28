@@ -27,7 +27,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 LIVE = ROOT / "data" / "concepts-live.json"
-OUT = ROOT / "data" / "concept-names-ru.json"
+# Язык перевода — параметр, а не константа: имена нужны и испанской, и арабской,
+# и французской странице. Копилка своя на каждый язык, иначе они затрут друг друга.
+LANG_NAME = {"ru": "Russian", "es": "Spanish", "ar": "Arabic", "fr": "French"}
+TARGET = "ru"
+
+
+def out_path():
+    return ROOT / "data" / f"concept-names-{TARGET}.json"
 
 sys.path.insert(0, str(ROOT))
 from common import write_json_atomic  # noqa: E402
@@ -38,7 +45,7 @@ PER_CALL = 40
 SYS = """You translate physics concept names into Russian for a science website.
 
 For each numbered item you get an id and its English name. Return a JSON array:
-  {"n": <number>, "ru": "<Russian name, nominative case, lowercase unless a proper
+  {"n": <number>, "%LANG%": "<name in the target language, nominative case, lowercase unless a proper
                          noun; the standard Russian physics term, not a calque>"}
 
 Examples: x_rays -> рентгеновские лучи; dark_matter -> тёмная материя;
@@ -48,19 +55,22 @@ Output ONLY the JSON array."""
 
 def targets():
     live = json.loads(LIVE.read_text(encoding="utf-8"))
-    done = json.loads(OUT.read_text(encoding="utf-8")) if OUT.exists() else {}
+    done = json.loads(out_path().read_text(encoding="utf-8")) if out_path().exists() else {}
     todo = [(cid, (c.get("names") or {}).get("en") or cid.replace("_", " "))
             for cid, c in live["concepts"].items()
-            if not (c.get("names") or {}).get("ru") and cid not in done]
+            if not (c.get("names") or {}).get(TARGET) and cid not in done]
     return todo, done, live
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--plan", action="store_true")
+    ap.add_argument("--lang", default="ru", choices=sorted(LANG_NAME))
     a = ap.parse_args()
+    global TARGET
+    TARGET = a.lang
     todo, done, live = targets()
-    print(f"без русского названия: {len(todo)} · уже переведено: {len(done)}")
+    print(f"[{TARGET}] без названия: {len(todo)} · уже переведено: {len(done)}")
     if a.plan:
         return 0
     try:
@@ -76,7 +86,9 @@ def main():
         lines = [f"{i}. id={cid} en={en}" for i, (cid, en) in enumerate(batch, 1)]
         body = json.dumps({
             "model": "deepseek-chat",
-            "messages": [{"role": "system", "content": SYS},
+            "messages": [{"role": "system", "content":
+                          SYS.replace("Russian", LANG_NAME.get(TARGET, TARGET))
+                             .replace("%LANG%", TARGET)},
                          {"role": "user", "content": "\n".join(lines)}],
             "temperature": 0.2, "max_tokens": 2000,
         }).encode("utf-8")
@@ -91,7 +103,7 @@ def main():
             for it in (json.loads(m.group(0)) if m else []):
                 try:
                     n = int(it["n"])
-                    ru = str(it["ru"]).strip()
+                    ru = str(it.get(TARGET) or it.get("ru") or "").strip()
                     if 1 <= n <= len(batch) and ru:
                         done[batch[n - 1][0]] = ru
                 except (KeyError, ValueError, TypeError):
@@ -100,13 +112,13 @@ def main():
             print(f"  сбой пачки {s}: {e}")
             time.sleep(4)
             continue
-        OUT.write_text(json.dumps(done, ensure_ascii=False, indent=1), encoding="utf-8")
+        out_path().write_text(json.dumps(done, ensure_ascii=False, indent=1), encoding="utf-8")
         print(f"  переведено {len(done)}")
     # влить в живой справочник — names.ru; страницы и словари возьмут при перегенерации
     for cid, ru in done.items():
         c = live["concepts"].get(cid)
         if c is not None:
-            c.setdefault("names", {})["ru"] = ru
+            c.setdefault("names", {})[TARGET] = ru
     write_json_atomic(LIVE, live, indent=None)
     print(f"✅ русских названий: {len(done)}; влиты в concepts-live.json")
     return 0

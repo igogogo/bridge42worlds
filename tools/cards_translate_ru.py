@@ -45,6 +45,26 @@ ANAT = ROOT / "data" / "formula-anatomy.json"
 # build_live (wave5_apply) вливает это хранилище при каждой сборке.
 I18N = ROOT / "data" / "concept-fullcards-i18n.json"
 
+# Язык перевода. Инструмент писался под русский и оброс им в именах, но задача у
+# него одна для любого языка: перевести карточки и полные записи с английского.
+# Владелец 28.08 просил догнать испанский, арабский и французский — переписывать
+# ради этого второй такой же инструмент значило бы повторить все его болезни.
+LANG_NAME = {"ru": "Russian", "es": "Spanish", "ar": "Arabic", "fr": "French"}
+TARGET = "ru"
+
+
+def sys_prompt(lang):
+    name = LANG_NAME.get(lang, lang)
+    extra = {
+        "ru": "«чуть сильнее популярного»",
+        "es": "divulgación científica, un punto por encima de lo casual",
+        "ar": "تبسيط علمي أعلى قليلاً من المستوى العادي",
+        "fr": "vulgarisation scientifique, un cran au-dessus du registre courant",
+    }.get(lang, "popular science")
+    return SYS_T.replace("Russian", name).replace(
+        "«чуть сильнее популярного»", extra)
+
+
 SYS_T = """You are a translator for a Russian popular-science knowledge base.
 
 Translate the given JSON values from English to Russian. Return the SAME JSON
@@ -63,7 +83,7 @@ structure with every string value translated. Rules:
 def ask(payload, key, max_tokens=3000):
     body = json.dumps({
         "model": "deepseek-chat",
-        "messages": [{"role": "system", "content": SYS_T},
+        "messages": [{"role": "system", "content": sys_prompt(TARGET)},
                      {"role": "user", "content": json.dumps(payload, ensure_ascii=False)}],
         "temperature": 0.2, "max_tokens": max_tokens,
     }).encode("utf-8")
@@ -97,12 +117,13 @@ def concepts(force_peak=False):
     # страница встречала читателя английским определением-эпиграфом.
     todo = [cid for cid, v in lc.items()
             if not v.get("merged_into") and v.get("full")
-            and "ru" not in (store.get(cid) or {})]
+            and TARGET not in (store.get(cid) or {})]
     card_only = [cid for cid, v in lc.items()
                  if not v.get("merged_into") and not v.get("full")
                  and (v.get("card_en") or "").strip()
-                 and not ((v.get("full_i18n") or {}).get("ru") or {}).get("card")]
-    print(f"понятий с full без ru: {len(todo)} · только карточка без ru: {len(card_only)}")
+                 and not ((v.get("full_i18n") or {}).get(TARGET) or {}).get("card")]
+    print(f"[{TARGET}] понятий с full без перевода: {len(todo)} · "
+          f"только карточка: {len(card_only)}")
 
     def one(cid):
         """Одна карточка. Ошибка не валит прогон — вернём None и пойдём дальше."""
@@ -130,7 +151,7 @@ def concepts(force_peak=False):
         for cid, ru in ex.map(one, todo):
             if not ru:
                 continue
-            store.setdefault(cid, {})["ru"] = ru
+            store.setdefault(cid, {})[TARGET] = ru
             n_done += 1
             if n_done % 25 == 0:
                 I18N.write_text(json.dumps(store, ensure_ascii=False, indent=1),
@@ -156,11 +177,11 @@ def concepts(force_peak=False):
             for cid, ru_card in ex.map(one_card, card_only):
                 if not ru_card:
                     continue
-                lc[cid].setdefault("full_i18n", {}).setdefault("ru", {})["card"] = ru_card
+                lc[cid].setdefault("full_i18n", {}).setdefault(TARGET, {})["card"] = ru_card
                 n_card += 1
                 if n_card % 50 == 0:
                     print(f"  карточек переведено {n_card}/{len(card_only)}", flush=True)
-        print(f"✅ коротких карточек на русском: +{n_card}")
+        print(f"✅ коротких карточек [{TARGET}]: +{n_card}")
 
     # и в текущий live — чтобы страницы можно было гнать сразу, не дожидаясь apply
     for cid, byl in store.items():
@@ -176,7 +197,7 @@ def concepts(force_peak=False):
                 cur[lng] = val
         lc[cid]["full_i18n"] = cur
     write_json_atomic(LIVE, doc, indent=None)
-    print(f"✅ русских карточек понятий: +{n_done} (хранилище {I18N.name})")
+    print(f"✅ карточек понятий [{TARGET}]: +{n_done} (хранилище {I18N.name})")
     return 0
 
 
@@ -255,7 +276,11 @@ def main():
     ap.add_argument("--concepts", action="store_true")
     ap.add_argument("--formulas", action="store_true")
     ap.add_argument("--force-peak", action="store_true")
+    ap.add_argument("--lang", default="ru", choices=sorted(LANG_NAME),
+                    help="язык перевода (по умолчанию русский)")
     a = ap.parse_args()
+    global TARGET
+    TARGET = a.lang
     if a.concepts:
         return concepts(force_peak=a.force_peak)
     if a.formulas:
