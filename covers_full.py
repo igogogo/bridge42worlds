@@ -33,12 +33,18 @@ def targets():
             d = json.loads(data_file.read_text(encoding="utf-8"))
         except Exception:
             continue
-        if d.get("express"):
-            continue                      # экспресс — второй эшелон, не трогаем
+        if d.get("express") and not INCLUDE_EXPRESS:
+            continue                      # экспресс — второй эшелон, не трогаем по умолчанию
         if d.get("image_model") == HQ:
             continue                      # уже нарисовано в высоком качестве
         out.append((data_file, d))
     return sorted(out, key=lambda t: str(t[0]))
+
+
+# Экспрессы берём только по явному указанию: в ленте их карточка выглядит наравне с полной,
+# и когда собираешь страницу конкретного учёного, половина работ без картинки — это дыра
+# на витрине. Массово же рисовать экспрессам дорогие обложки незачем.
+INCLUDE_EXPRESS = False
 
 
 def to_webp(jpg: Path):
@@ -91,9 +97,23 @@ def main():
     ap.add_argument("--dry", action="store_true")
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--workers", type=int, default=6)
+    # Точечно по автору: обложки дорогие, и чаще всего нужны не «все подряд», а конкретный
+    # набор — работы одного учёного к его странице, свежая волна, разбор для встречи.
+    ap.add_argument("--author", help="только статьи этого автора (подстрока имени)")
+    ap.add_argument("--ids", nargs="*", help="только эти arXiv id")
     a = ap.parse_args()
 
     items = targets()
+    global INCLUDE_EXPRESS
+    if a.author or a.ids:
+        INCLUDE_EXPRESS = True
+        items = targets()
+    if a.author:
+        items = [(f, d) for f, d in items
+                 if any(a.author.lower() in str(x).lower() for x in (d.get("authors") or []))]
+    if a.ids:
+        want = set(a.ids)
+        items = [(f, d) for f, d in items if d.get("id") in want]
     if a.limit:
         items = items[:a.limit]
     print(f"Полных статей без FLUX-2-pro: {len(items)}")

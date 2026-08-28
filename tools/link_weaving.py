@@ -105,7 +105,12 @@ def load():
     if GRAPH.exists():
         g = json.loads(GRAPH.read_text(encoding="utf-8"))
         ids = [n["id"] for n in g["nodes"]]
-        for a, b, _w in g["edges"]:
+        # Ребро подросло: с 28.08 четвёртым элементом идёт источник связи (статьи,
+        # вектор, знание), и жёсткая тройка здесь роняла весь шаг. Берём первые три
+        # позиции и не загадываем, сколько их будет завтра — этому шагу нужны только
+        # концы ребра, чтобы не спрашивать модель про уже известную связь.
+        for e in g["edges"]:
+            a, b = e[0], e[1]
             if a < len(ids) and b < len(ids):
                 have.add((min(ids[a], ids[b]), max(ids[a], ids[b])))
     return live, have

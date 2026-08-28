@@ -13,7 +13,15 @@ import json
 import sys
 from pathlib import Path
 
-SNAPSHOT = Path(r"C:/Users/nadez/Downloads/arxiv-metadata-oai-snapshot.json")
+# Снапшот ищем там же, где его кладёт update_arxiv_dump: сначала Downloads, потом кэш
+# kagglehub. Жёсткий путь в Downloads означал «нет снапшота» для файла, который лежит
+# на диске — просто в другом месте.
+_CANDIDATES = [
+    Path(r"C:/Users/nadez/Downloads/arxiv-metadata-oai-snapshot.json"),
+    Path.home() / ".cache/kagglehub/datasets/Cornell-University/arxiv/versions/294"
+    / "arxiv-metadata-oai-snapshot.json",
+]
+SNAPSHOT = next((c for c in _CANDIDATES if c.exists()), _CANDIDATES[0])
 OUT = Path("data/arxiv-index.jsonl")
 
 
