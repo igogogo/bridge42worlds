@@ -77,9 +77,16 @@ def main():
     a = ap.parse_args()
 
     cids, CV, reg = load_cards()
+    # Слитые понятия (tools/concept_twins.py) в поиск не идут: их карточка ещё лежит
+    # в локальной матрице, но предмета за ней больше нет — поиск по смыслу привёл бы
+    # читателя к записи-указателю. Уже залитые удаляем из индекса ниже.
+    gone = [c for c in cids if (reg.get(c) or {}).get("merged_into")]
+    keep = [i for i, c in enumerate(cids) if not (reg.get(c) or {}).get("merged_into")]
     print(f"карточек {len(cids)} × {CV.shape[1]} измерений "
           f"= {len(cids) * CV.shape[1] / 1e6:.2f} млн · пространство «{NAMESPACE}» "
           f"в индексе {INDEX}")
+    if gone:
+        print(f"слитых понятий, которые не поедут: {len(gone)}")
     if not a.apply:
         print("сверка — ничего не заливается; --apply зальёт (под общим замком)")
         return 0
@@ -96,8 +103,22 @@ def main():
     headers = {"Authorization": f"Bearer {tok}"}
     sess = requests.Session()
     sent = 0
-    for s in range(0, len(cids), UPSERT_BATCH):
-        chunk = range(s, min(s + UPSERT_BATCH, len(cids)))
+    # Сначала убираем из индекса слитых: если оставить, поиск продолжит их находить
+    # — upsert чужие записи не трогает.
+    if gone:
+        for s in range(0, len(gone), UPSERT_BATCH):
+            ids = [f"c:{c}" for c in gone[s:s + UPSERT_BATCH]]
+            r = sess.post(f"{base}/vectorize/v2/indexes/{INDEX}/delete_by_ids",
+                          headers={**headers, "Content-Type": "application/json"},
+                          json={"ids": ids}, timeout=120)
+            if r.status_code >= 400:
+                print(f"  ⚠ удаление не прошло ({r.status_code}): {r.text[:120]}")
+                break
+        else:
+            print(f"удалено из индекса: {len(gone)}")
+
+    for s in range(0, len(keep), UPSERT_BATCH):
+        chunk = keep[s:s + UPSERT_BATCH]
         # NDJSON, как того требует upsert; метаданные держим крошечными — kind
         # пригодится фильтру («только методы»), больше ничего вектору знать не надо.
         lines = []
