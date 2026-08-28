@@ -44,7 +44,12 @@ LANGS = ("ru", "en", "es", "ar", "fr")
 FILES = ([f"lang/{l}/{n}" for l in LANGS
           for n in ("articles-index.json", "articles-index-simple.json",
                     "articles-index-advanced.json", "articles-latest.json")]
-         + ["data/knowledge-graph.json"])
+         # Граф понятий — второй такой файл: страница /concepts/graph.html берёт
+         # кадры из облака, но при недоступности D1 падает на этот файл, и порванным
+         # он даст пустое полотно с кодом 200 — ровно та поломка, ради которой
+         # проверка написана. Прежний knowledge-graph остаётся: на него ещё смотрят
+         # старые страницы.
+         + ["data/knowledge-graph.json", "data/concepts-graph.json"])
 UA = {"User-Agent": "b42-verify-publish"}
 
 
