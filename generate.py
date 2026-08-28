@@ -494,7 +494,7 @@ def parse_markers(text, lang):
         if not tid:
             return label
         label = fix_label(label, load_tags_loc(lang).get(tid, {}).get("name"))
-        return f'<a href="/{LANG_DIR}/{lang}/tags/{tid}.html" class="text-tag" data-tag="{tid}">{label}</a>'
+        return f'<a href="{entity_href(tid, lang)}" class="text-tag" data-tag="{tid}">{label}</a>'
 
     def scientist_link(m):
         name, label = m.group(1).strip(), m.group(2)
@@ -925,7 +925,7 @@ def card_chips(a, lang):
             out.append(f'<a class="ent ent-tag" href="/{LANG_DIR}/{lang}/concepts/{attr_safe(t)}.html">'
                        f'{safe(cn[t].get("name") or t.replace("_", " "))}</a>')
         elif t in tags_loc:
-            out.append(f'<a class="ent ent-tag" href="/{LANG_DIR}/{lang}/tags/{attr_safe(t)}.html">'
+            out.append(f'<a class="ent ent-tag" href="{entity_href(t, lang)}">'
                        f'{safe(tags_loc[t].get("name") or t.replace("_", " "))}</a>')
     return f'<div class="card-tags">{"".join(out)}</div>' if out else ""
 
@@ -970,6 +970,23 @@ def _live_mini():
         except (OSError, KeyError, json.JSONDecodeError):
             _LIVE_MINI = {}
     return _LIVE_MINI
+
+
+def entity_href(tid, lang):
+    """Адрес сущности: страница ПОНЯТИЯ, если оно есть в реестре, иначе тег.
+
+    Владелец 28.08: «у нас больше нет такого как тег, всё понятия, и везде теги
+    не нужны, чтобы не путать». Так и вышло: из 365 страниц тегов 357 имеют
+    двойника-понятие — у «квантовой запутанности» есть и то и другое, а ссылки
+    из текста статьи вели на тег, минуя полноценную страницу понятия с
+    определением, разделами, формулами и мини-графом.
+
+    Восемь тегов без понятия (decoherence, neutrino_oscillation и ещё шесть)
+    пока остаются тегами: удалять живую страницу, не заведя замены, значит
+    оставить ссылку в пустоту.
+    """
+    return (f"/{LANG_DIR}/{lang}/concepts/{tid}.html" if tid in _live_mini()
+            else f"/{LANG_DIR}/{lang}/tags/{tid}.html")
 
 
 def mini_ids_concept(cid, cap=12):
@@ -2852,7 +2869,7 @@ def generate_tags_cloud(lang):
         cnt = tag_counts.get(tag_id, 0)
         count_html = f'<span class="cat-chip-n">{cnt}</span>' if cnt else ""
         cls = f"tag-item {extra_cls}".strip()
-        return (f'<a href="/{LANG_DIR}/{lang}/tags/{tag_id}.html" class="{cls}" data-tag="{tag_id}">'
+        return (f'<a href="{entity_href(tag_id, lang)}" class="{cls}" data-tag="{tag_id}">'
                 f'<span>{name}</span>{count_html}</a>\n')
 
     # Группировка по разделу науки (domain) — компактные колоночные списки; образовательные теги
@@ -2896,6 +2913,21 @@ def generate_tags_cloud(lang):
 
 
 def generate_tag_page(tag_id, lang):
+    # СТРАНИЦА-ДВОЙНИК НЕ НУЖНА. Если у тега есть понятие с тем же именем, вся
+    # страница тега — обеднённая копия: у понятия есть определение, разделы,
+    # формулы, соседи и мини-граф, а у тега только список статей. Держать обе
+    # значит делить один предмет надвое и путать читателя (владелец 28.08).
+    # Оставляем редирект, а не удаляем файл: на страницы тегов ведут внешние
+    # ссылки и выдача поисковиков, им нужен адрес, который никуда не пропал.
+    if tag_id in _live_mini():
+        _write_text_retry(
+            Path(LANG_DIR) / lang / "tags" / f"{tag_id}.html",
+            '<!doctype html><meta charset="utf-8">'
+            f'<meta http-equiv="refresh" content="0; url=/{LANG_DIR}/{lang}/concepts/{tag_id}.html">'
+            f'<link rel="canonical" href="/{LANG_DIR}/{lang}/concepts/{tag_id}.html">'
+            f'<title>{tag_id}</title>'
+            f'<a href="/{LANG_DIR}/{lang}/concepts/{tag_id}.html">/{LANG_DIR}/{lang}/concepts/{tag_id}.html</a>')
+        return
     tpl = load_template("tag")
     if not tpl.template: return
     tags_loc = load_tags_loc(lang)
@@ -2911,7 +2943,7 @@ def generate_tag_page(tag_id, lang):
         articles_html += entity_article_card(a, lang)
 
     related_html = " · ".join(
-        f'<a href="/{LANG_DIR}/{lang}/tags/{rt}.html" data-tag="{attr_safe(rt)}">{tags_loc.get(rt, {}).get("name", rt)}</a>'
+        f'<a href="{entity_href(rt, lang)}" data-tag="{attr_safe(rt)}">{tags_loc.get(rt, {}).get("name", rt)}</a>'
         for rt in tag_graph.get("related", [])[:8]
     )
     formulas_html = render_formulas(tag_data.get("formulas", []))
