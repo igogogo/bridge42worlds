@@ -1231,14 +1231,18 @@ function cardHTML(item) {
        Теги отбираем по ЧАСТОТЕ в корпусе, а не по порядку из генерации: у статьи их до 11,
        на карточке нужно 5 главных. Частый тег ведёт в живой раздел, редкий — в пустой. */
     var tagsHtml = pickTop(item.tags || [], 5).map(function(t) {
-        // Реестр волны 5 — первым: у понятия из него страница есть всегда.
+        // Показываем ТОЛЬКО то, у чего есть своя страница. Владелец 28.08 нашёл
+        // на карточке «molecular dynamics» с подписью «карточки пока нет»:
+        // «это откуда, нам не надо — всё, что есть, то есть; чего нет, потом,
+        // как появляется, добавляем». Заглушка обещала содержание, которого нет,
+        // и уводила в поиск вместо объяснения.
         if (conceptsNames[t]) {
             return '<a class="ent ent-tag" href="/lang/' + lang + '/concepts/' + encodeURIComponent(t) + '.html" data-tag="' + t + '">' + (conceptsNames[t].name || t.replace(/_/g, ' ')) + '</a>';
         }
         return tagsLoc[t]
             ? '<a class="ent ent-tag" href="/lang/' + lang + '/tags/' + encodeURIComponent(t) + '.html" data-tag="' + t + '">' + (tagsLoc[t].name || t.replace(/_/g, ' ')) + '</a>'
-            : '<a class="ent ent-tag ent-nocard" href="/lang/' + lang + '/index.html?q=' + encodeURIComponent('#' + t) + '" title="' + esc(UI.noCard || '') + '">' + t.replace(/_/g, ' ') + '</a>';
-    }).join('');
+            : '';
+    }).filter(Boolean).join('');
     var sciHtml = (item.scientists || []).slice(0, 3).map(function(s) {
         var sd = scientistsData[s];
         // Карточка есть не у каждого имени: замер 13 августа — в статьях упоминаются 345
@@ -1247,7 +1251,7 @@ function cardHTML(item) {
         // на список статей, где о нём говорится, а не в пустоту.
         return sd
             ? '<a class="ent ent-sci" href="/lang/' + lang + '/scientists/' + authorSlug(s) + '.html" data-scientist="' + s + '">' + (sd.name || s) + '</a>'
-            : '<a class="ent ent-sci ent-nocard" href="/lang/' + lang + '/index.html?q=' + encodeURIComponent('!' + s) + '" title="' + esc(UI.noCard || '') + '">' + s + '</a>';
+            : '';
     }).join('');
     var lawHtml = lawsFor(item).slice(0, 2).map(function(l) {
         if (conceptsNames[l]) {
@@ -1256,7 +1260,7 @@ function cardHTML(item) {
         var ld = lawsData[l];
         return ld
             ? '<a class="ent ent-law" href="/lang/' + lang + '/laws/' + encodeURIComponent(l) + '.html" data-law="' + l + '">' + (ld.name || l.replace(/_/g, ' ')) + '</a>'
-            : '<span class="ent ent-law ent-nocard" title="' + esc(UI.noCard || '') + '">' + l.replace(/_/g, ' ') + '</span>';
+            : '';
     }).join('');
     tagsHtml = lawHtml + sciHtml + tagsHtml;
     // Реакции + избранное прямо в карточке (клики — через делегирование в likes.js; подсветка — на этапе сборки)

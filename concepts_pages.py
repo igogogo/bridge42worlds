@@ -140,7 +140,10 @@ def site_chrome(lang):
     # «concepts» в шапке ведёт в наш раздел, а не в старые /laws/
     bar = bar.replace(f'/lang/{lang}/laws/', f'/lang/{lang}/concepts/')
     foot = "<footer><p>bridge42worlds</p></footer>"
-    scripts = (f'<script src="{av("/js/likes.js")}"></script>'
+    # b42-card — всплывающая карточка понятия: клик по подсвеченному слову
+    # показывает определение прямо в тексте, с кнопками «подробно» и «закрыть».
+    scripts = (f'<script src="{av("/js/b42-card.js")}" defer></script>'
+               f'<script src="{av("/js/likes.js")}"></script>'
                f'<script src="{av("/js/icons.js")}"></script>'
                f'<script src="{av("/js/search.js")}"></script>'
                f'<script src="{av("/js/site-search.js")}"></script>'
@@ -433,6 +436,108 @@ def count_ru(n, word):
     return f"{n} {f}"
 
 
+_ANATOMY = None
+
+
+def anatomy():
+    """Разбор формул — читаем один раз: он нужен и странице формулы, и понятия."""
+    global _ANATOMY
+    if _ANATOMY is None:
+        p = ROOT / "data" / "formula-anatomy.json"
+        try:
+            _ANATOMY = json.loads(p.read_text(encoding="utf-8"))
+        except Exception:
+            _ANATOMY = {}
+    return _ANATOMY
+
+
+SYM_T = {
+    "ru": {"var": "переменная", "const": "константа", "op": "оператор",
+           "head": "Что в формуле"},
+    "en": {"var": "variable", "const": "constant", "op": "operator",
+           "head": "What is in the formula"},
+    "es": {"var": "variable", "const": "constante", "op": "operador",
+           "head": "Qué hay en la fórmula"},
+    "ar": {"var": "متغير", "const": "ثابت", "op": "مؤثر",
+           "head": "ما في الصيغة"},
+    "fr": {"var": "variable", "const": "constante", "op": "opérateur",
+           "head": "Ce qu'il y a dans la formule"},
+}
+
+
+def symbol_rows(rec, lang, live, link=None):
+    """Разбор формулы: КАЖДЫЙ символ с расшифровкой, единицей и значением.
+
+    Владелец 28.08: «там, где формулы пишешь, мы же говорили — обязательно
+    расшифровка всех переменных, операторов и констант в формуле и значения
+    констант там же, а то просто формула и всё».
+
+    Одна функция на два места: страницу формулы и страницу понятия. Раньше
+    разбор был только на первой, а на второй под формулой стояла служебная
+    пометка вроде «стоит константой · e» — она говорила, чем понятие входит в
+    формулу, и не говорила ничего о самой формуле.
+
+    link — как делать ссылку на понятие (у страниц формул своя функция с
+    классами); без неё ссылка строится обычным путём.
+    """
+    if not rec:
+        return ""
+    T_ = SYM_T.get(lang, SYM_T["en"])
+    concepts = live["concepts"] if "concepts" in live else live
+
+    def name_link(cid, fallback=""):
+        if not cid:
+            return H.escape(fallback)
+        v = concepts.get(cid)
+        if not v:
+            return H.escape(fallback or cid.replace("_", " "))
+        nm = name_of(v, cid, lang)
+        if link:
+            return link(cid, lang, {"concepts": concepts})
+        return (f'<a href="/lang/{lang}/concepts/{H.escape(cid)}.html">'
+                f'{H.escape(nm)}</a>')
+
+    rows = []
+    ru = rec.get("ru") or {}
+
+    def m_of(key, i, fallback):
+        tr = ru.get(key) or []
+        return tr[i] if lang == "ru" and i < len(tr) and tr[i] else fallback
+
+    for i, v in enumerate(rec.get("variables") or []):
+        unit = unit_label(v.get("unit"), lang)
+        rows.append((v.get("s", ""), T_["var"],
+                     H.escape(m_of("variables", i, v.get("m", ""))),
+                     name_link(v.get("id")), "", unit))
+    for i, cst in enumerate(rec.get("constants") or []):
+        unit = unit_label(cst.get("unit"), lang)
+        val = cst.get("value") or ""
+        # значение берём из реестра, если оно там точнее (СИ), иначе из формулы
+        cv = (concepts.get(cst.get("id") or "") or {}).get("value")
+        rows.append((cst.get("s", ""), T_["const"],
+                     H.escape(m_of("constants", i, cst.get("m", ""))),
+                     name_link(cst.get("id")), H.escape(cv or val), unit))
+    for i, o in enumerate(rec.get("operators") or []):
+        rows.append((o.get("s", ""), T_["op"],
+                     H.escape(m_of("operators", i, o.get("m", ""))),
+                     name_link(o.get("id")), "", ""))
+    if not rows:
+        return ""
+    tr = []
+    for sym, kind, mean, target, val, unit in rows:
+        right = mean
+        if target:
+            right += (" — " if right else "") + target
+        if val:
+            right += f' <span class="fx-val">= {val}</span>'
+        if unit:
+            right += f' <span class="fx-unit">{H.escape(unit)}</span>'
+        tr.append(f'<tr><td class="fx-s">{H.escape(sym)}</td>'
+                  f'<td class="fx-k">{kind}</td><td>{right}</td></tr>')
+    return (f'<div class="fx-sym"><div class="fx-sym-h">{T_["head"]}</div>'
+            f'<table>{"".join(tr)}</table></div>')
+
+
 def unit_label(uid, lang):
     """Подпись единицы на языке страницы — одна точка входа для всех страниц."""
     uid = (uid or "").strip()
@@ -474,8 +579,11 @@ def const_value_block(c, lang):
                "mu_0": r"\mu_0", "mu_B": r"\mu_B", "Phi_0": r"\Phi_0",
                "R_infinity": r"R_\infty"}.get(sym, sym.replace("_", "_{") + ("}" if "_" in sym else ""))
     lhs = f"{sym_tex} = " if sym else ""
+    # Без цветной полосы слева: владелец 28.08 — «никаких рамок слева на плашке,
+    # это прям совсем везде не используй». Плашку держат поверхность и волосяная
+    # рамка, как у остальных карточек дома.
     return (f'<div class="const-value" style="margin:var(--s-3) 0;padding:var(--s-3) var(--s-4);'
-            f'border-left:3px solid var(--cyan);background:var(--surface);'
+            f'background:var(--surface);border:1px solid var(--hair);'
             f'border-radius:var(--radius-sm)">'
             f'<div style="font-family:var(--mono);font-size:11px;color:var(--muted);'
             f'letter-spacing:.04em;text-transform:uppercase">{VAL_LBL.get(lang, "Value")}</div>'
@@ -646,23 +754,16 @@ def concept_page(cid, c, lang, live, by_id, rich=None, page_langs=None):
                            + (f' · <a href="/lang/{lang}/index.html?q={H.escape(a["art"])}">{H.escape(a["art"])}</a>' if a["art"] else "")
                            + '</div>'
                            for a in f["apps"][:4])
-            # Каким символом понятие входит в формулу. Для константы это главное:
-            # без пометки «здесь он стоит как e» список формул выглядит случайным
-            # набором, хотя это ровно те формулы, из которых константа и пришла.
-            role_lbl = {"constant": {"ru": "стоит константой", "en": "enters as a constant"},
-                        "variable": {"ru": "входит переменной", "en": "enters as a variable"},
-                        "operator": {"ru": "входит оператором", "en": "enters as an operator"}}
-            note = ""
-            if f.get("role"):
-                rl = role_lbl[f["role"]].get(lang) or role_lbl[f["role"]]["en"]
-                sym = f.get("symbol") or ""
-                note = (f'<div style="font-family:var(--mono);font-size:11.5px;'
-                        f'color:var(--muted);margin-top:3px">{H.escape(rl)}'
-                        + (f' · {H.escape(sym)}' if sym else "") + '</div>')
-            rows.append(f'<div class="formula" style="margin-bottom:12px">'
+            # РАЗБОР ФОРМУЛЫ, а не служебная пометка. Раньше здесь стояло «стоит
+            # константой · e» — сообщение о том, чем понятие входит в формулу, и
+            # ничего о самой формуле. Владелец 28.08: «там, где формулы пишешь,
+            # обязательно расшифровка всех переменных, операторов и констант и
+            # значения констант там же, а то просто формула и всё».
+            sym = symbol_rows(anatomy().get(f["id"]), lang, live)
+            rows.append(f'<div class="formula" style="margin-bottom:14px">'
                         f'<div style="font-family:var(--mono)">$${H.escape(f["latex"])}$$</div>'
                         f'<div style="font-size:13.5px;color:var(--soft)" lang="en">{H.escape(f["card"])}</div>'
-                        f'{note}{apps}</div>')
+                        f'{sym}{apps}</div>')
         body.append(f'<h2 style="font-size:16px;margin:14px 0 8px">{t["formulas"]}</h2>' + "".join(rows))
     # ДЕЙСТВИЯ И ОТКЛИК — те же функции, что у статьи и старых справочников
     # (владелец 27.08: «много функционала упущено — функционал тот же»).

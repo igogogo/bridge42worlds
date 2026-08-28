@@ -1484,7 +1484,11 @@ _KM = {
            "links": "Работы рядом в нашем архиве", "near": "близость",
            "dense": "Вокруг этой работы в архиве плотно: {nn} рядом, ближайший {top}. Тему уже ходят — и есть с чем сверяться.",
            "sparse": "Вокруг этой работы в архиве пусто: ближайший разбор всего на {top}, при обычных 0.64. Похоже, рядом почти не бурили.",
-           "mid": "Ближайшая работа архива — {top} по смысловой близости, рядом {nn}. Обычный для нашего корпуса уровень."},
+           # Счётчика соседей в этой фразе нет намеренно: в средней полосе
+           # плотность нередко ноль, и выходило «ближайшая 0.63, рядом 0
+           # разборов» — фраза, спорящая сама с собой (владелец 28.08:
+           # «что такое 0 разборов, из этого текста непонятно, лучше убрать»).
+           "mid": "Ближайшая работа архива — {top} по смысловой близости. Обычный для нашего корпуса уровень."},
     "en": {"h": "The knowledge machine's view", "nav": "Knowledge machine",
            "note": "This section is addressed to the author of the paper and their "
                    "colleagues. Neighbouring works were found by meaning-based search "
@@ -1496,7 +1500,7 @@ _KM = {
            "links": "Nearby works in our archive", "near": "similarity",
            "dense": "The archive is crowded around this work: {nn} nearby, closest at {top}. This ground is well walked — and there is plenty to compare against.",
            "sparse": "The archive is sparse around this work: the closest review is only {top}, against a usual 0.64. It looks like few have drilled nearby.",
-           "mid": "The closest work in the archive sits at {top} by meaning, with {nn} nearby — the usual level for our corpus."},
+           "mid": "The closest work in the archive sits at {top} by meaning — the usual level for our corpus."},
     "es": {"h": "La mirada de la máquina del conocimiento", "nav": "Máquina del conocimiento",
            "note": "Esta sección está dirigida al autor del trabajo y a sus colegas. Los "
                    "trabajos vecinos los encontró la búsqueda por significado en nuestro "
@@ -1508,7 +1512,7 @@ _KM = {
            "links": "Trabajos cercanos en nuestro archivo", "near": "cercanía",
            "dense": "El archivo está poblado alrededor de este trabajo: {nn} cercanos, el más próximo a {top}. Es terreno transitado, y hay con qué contrastar.",
            "sparse": "El archivo está vacío alrededor de este trabajo: el análisis más cercano queda en {top}, frente a un 0.64 habitual. Parece que aquí al lado casi nadie ha perforado.",
-           "mid": "El trabajo más cercano del archivo está a {top} por significado, con {nn} alrededor: el nivel habitual de nuestro corpus."},
+           "mid": "El trabajo más cercano del archivo está a {top} por significado: el nivel habitual de nuestro corpus."},
     "fr": {"h": "Le regard de la machine du savoir", "nav": "Machine du savoir",
            "note": "Cette section s'adresse à l'auteur du travail et à ses collègues. Les "
                    "travaux voisins ont été trouvés par une recherche sémantique dans notre "
@@ -1520,7 +1524,7 @@ _KM = {
            "links": "Travaux voisins dans notre archive", "near": "proximité",
            "dense": "L'archive est dense autour de ce travail : {nn} voisines, la plus proche à {top}. Le terrain est fréquenté, et il y a de quoi se comparer.",
            "sparse": "L'archive est vide autour de ce travail : l'analyse la plus proche n'est qu'à {top}, contre 0,64 d'ordinaire. Il semble qu'on ait peu foré à côté.",
-           "mid": "Le travail le plus proche de l'archive se situe à {top} par le sens, avec {nn} autour — le niveau habituel de notre corpus."},
+           "mid": "Le travail le plus proche de l'archive se situe à {top} par le sens — le niveau habituel de notre corpus."},
     "ar": {"h": "نظرة آلة المعرفة", "nav": "آلة المعرفة",
            "note": "هذا القسم موجَّه إلى مؤلف العمل وزملائه. الأعمال المجاورة عثر عليها بحثٌ "
                    "دلالي في أرشيفنا، لا بتطابق الكلمات. نحن لا نقيّم العمل: نعرض الحقل من "
@@ -1531,7 +1535,7 @@ _KM = {
            "links": "أعمال قريبة في أرشيفنا", "near": "التقارب",
            "dense": "الأرشيف مزدحم حول هذا العمل: {nn} قريبة، أقربها عند {top}. أرض مطروقة، وفيها ما يُقاس عليه.",
            "sparse": "الأرشيف خالٍ حول هذا العمل: أقرب تحليل عند {top} فقط، مقابل 0.64 المعتادة. يبدو أن الحفر بجواره كان نادرًا.",
-           "mid": "أقرب عمل في الأرشيف يقع عند {top} من حيث المعنى، وحوله {nn} — وهو المستوى المعتاد في مجموعتنا."},
+           "mid": "أقرب عمل في الأرشيف يقع عند {top} من حيث المعنى — وهو المستوى المعتاد في مجموعتنا."},
     "zh": {"h": "知识机器的视角", "nav": "知识机器",
            "note": "本节写给论文作者及其同行。相邻工作由我们档案库的语义检索找出，而非词面匹配。"
                    "我们不做评审，只呈现它周围的领域。",
@@ -1541,7 +1545,7 @@ _KM = {
            "links": "档案库中相邻的工作", "near": "相似度",
            "dense": "这项工作周围很密集：附近有 {nn}，最近的为 {top}。这片地方常有人走，也有得对照。",
            "sparse": "这项工作周围很空：最近的解读只有 {top}，而通常是 0.64。看来旁边少有人钻探。",
-           "mid": "档案库中最近的工作按语义为 {top}，周围有 {nn}——是我们语料的常见水平。"},
+           "mid": "档案库中最近的工作按语义为 {top}——是我们语料的常见水平。"},
 }
 
 
