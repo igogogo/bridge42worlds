@@ -49,6 +49,9 @@ STATE = ROOT / "data" / "full-state.json"
 RUNS = ROOT / "data" / "pipeline-runs.json"
 RUNS_KEEP = 30
 STEPS_DIR = ROOT / "data" / "pipeline-steps"
+# Режим прогона. Обычный — точечный: только новое. Полный (--full) добирает
+# недельные шаги, которые обходят весь корпус.
+FULL = False
 
 
 def summarize(out, keep=3):
@@ -115,7 +118,36 @@ def journal(st):
     RUNS.write_text(json.dumps(runs, ensure_ascii=False, indent=1), encoding="utf-8")
 
 
-def run(step, cmd, timeout=8 * 3600, cwd=None, env=None, soft=False):
+# ЧТО ДЕЛАЕМ КАЖДЫЙ ДЕНЬ, А ЧТО РАЗ В НЕДЕЛЮ.
+#
+# Владелец 28.08: «обычный прогон это должно быть просто и быстро, точечно и
+# аккуратно; полный пересчёт или догон — откладываем на недельные вещи».
+#
+# Граница проходит по одному признаку: касается ли шаг ТОЛЬКО НОВОГО или обходит
+# весь корпус. Добыча понятий из свежих статей — точечная работа, её место в
+# ежедневном прогоне. Переразметка всех шести с половиной тысяч статей, обход
+# реестра за связями, подсветка терминов по всему архиву — работа по всему,
+# и она не становится нужнее оттого, что вышло двадцать новых статей.
+#
+# Недельные шаги не пропадают: они идут раз в неделю целиком, и там им не жалко
+# ни часа. А ежедневный прогон обязан укладываться в минуты, иначе им перестанут
+# пользоваться — и это худшее, что может случиться с конвейером.
+WEEKLY_ONLY = {
+    "g-grow",       # дорост областей: модель обходит все 50 областей
+    "f-support",    # опора формул по всему реестру
+    "retag",        # переразметка ВСЕГО архива вектором
+    "super",        # кластеризация всего реестра заново
+    "vecnb",        # соседи по вектору для всех понятий
+    "gnames",       # имена всех областей заново
+    "weave",        # связи знанием: обход реестра запросами к модели
+    "mentions-ru",  # упоминания по всему архиву
+    "highlight",    # подсветка терминов во всех статьях, три уровня
+    "tr-formulas",  # перевод анатомий формул — все 642
+    "gaudit",       # аудит областей
+}
+
+
+def run(step, cmd, timeout=8 * 3600, cwd=None, env=None, soft=False, weekly=False):
     """soft — шаг, неудача которого не должна валить прогон (например, обложки:
     без картинки статья всё равно статья).
 
@@ -127,6 +159,9 @@ def run(step, cmd, timeout=8 * 3600, cwd=None, env=None, soft=False):
     st = state()
     if step in st["done"]:
         log(f"· {step}: уже сделан")
+        return True
+    if (weekly or step in WEEKLY_ONLY) and not FULL:
+        log(f"· {step}: недельный шаг, в обычном прогоне пропущен")
         return True
     log(f"▶ {step}")
     started = time.strftime("%H:%M:%S")
@@ -188,6 +223,22 @@ def run(step, cmd, timeout=8 * 3600, cwd=None, env=None, soft=False):
     return ok or soft
 
 
+def prepare_super_input():
+    """Собрать вход для кластеризации: супер живёт в соседнем дереве и ест свой
+    формат реестра. Слитые понятия не берём — узел-пустышка оттянул бы на себя
+    место в области."""
+    live = json.loads((ROOT / "data/concepts-live.json")
+                      .read_text(encoding="utf-8"))["concepts"]
+    reg = {cid: {"name": (v.get("names") or {}).get("en") or cid,
+                 "kind": v.get("kind") or "concept",
+                 "card_en": v.get("card_en") or "",
+                 "support": v.get("articles") or []}
+           for cid, v in live.items() if not v.get("merged_into")}
+    (ROOT.parent / "b42-ml" / "data" / "concepts-v4.json").write_text(
+        json.dumps({"concepts": reg}, ensure_ascii=False), encoding="utf-8")
+    log(f"вход супера: {len(reg)} понятий")
+
+
 def missing_days(limit_days=10):
     """Дни между последним в архиве и вчерашним — то, что конвейер пропустил."""
     arch = ROOT / "lang" / "ru" / "archive"
@@ -209,11 +260,16 @@ def main():
     ap.add_argument("--catch-up", action="store_true", help="все пропущенные дни")
     ap.add_argument("--limit", type=int, default=20, help="статей в день")
     ap.add_argument("--no-publish", action="store_true", help="собрать, но не выпускать")
+    ap.add_argument("--full", action="store_true",
+                    help="недельный прогон: добрать шаги по всему корпусу "
+                         "(переразметка, суперпонятия, связи знанием, подсветка)")
     a = ap.parse_args()
 
+    global FULL
+    FULL = a.full
     days = ([d.strip() for d in a.days.split(",") if d.strip()] if a.days
             else missing_days() if a.catch_up else [])
-    log("═══ ПОЛНЫЙ ПРОГОН КОНВЕЙЕРА ═══")
+    log("═══ ПРОГОН КОНВЕЙЕРА: " + ("НЕДЕЛЬНЫЙ (всё)" if FULL else "обычный (точечный)") + " ═══")
     log(f"дни: {', '.join(days) if days else 'нет — только насыщение и сборка'}")
 
     # План объявляем ДО работы: схема конвейера показывает не только пройденное и
@@ -292,20 +348,8 @@ def main():
     # Супер считает группы и соседей по карточкам, поэтому идёт ПОСЛЕ карточек;
     # --embed обязателен, иначе он возьмёт вектора прошлого прогона, где новых
     # понятий нет, и отработает вхолостую.
-    if "super" not in state()["done"]:
-        live = json.loads((ROOT / "data/concepts-live.json")
-                          .read_text(encoding="utf-8"))["concepts"]
-        # Слитые понятия супер не считает: у записи-указателя нет ни карточки, ни
-        # статей, и она попала бы в кластеризацию пустым узлом, оттягивая на себя
-        # место в области.
-        reg = {cid: {"name": (v.get("names") or {}).get("en") or cid,
-                     "kind": v.get("kind") or "concept",
-                     "card_en": v.get("card_en") or "",
-                     "support": v.get("articles") or []}
-               for cid, v in live.items() if not v.get("merged_into")}
-        (ROOT.parent / "b42-ml" / "data" / "concepts-v4.json").write_text(
-            json.dumps({"concepts": reg}, ensure_ascii=False), encoding="utf-8")
-        log(f"вход супера: {len(reg)} понятий")
+    if FULL and "super" not in state()["done"]:
+        prepare_super_input()
     run("super", [PY, "concepts_super.py", "--embed",
                   "--reg", "data/concepts-v4.json", "--name-supers"],
         timeout=2 * 3600, cwd=ROOT.parent / "b42-ml", soft=True)
@@ -333,7 +377,12 @@ def main():
     env = {"B42_LANGS": "ru,en"}
     if a.no_publish:
         env["B42_NO_PUBLISH"] = "1"
-    run("html", [PY, "run.py", "html", "--force"], timeout=8 * 3600, env=env)
+    # Пересобираем ТОЛЬКО изменившееся. Полная пересборка сорока тысяч страниц —
+    # полтора часа, и в обычном прогоне она не нужна: новые статьи и затронутые
+    # страницы отпечатки находят сами. Полный проход остаётся недельным (--full),
+    # там он и уместен: после переразметки всего архива меняются все страницы.
+    run("html", [PY, "run.py", "html"] + (["--force"] if FULL else []),
+        timeout=8 * 3600, env=env)
     run("authors", [PY, "-c", "import sys; sys.path.insert(0,'.'); "
                     "import generate as G; G.update_all_authors()"], timeout=4 * 3600)
     run("status", [PY, "-c", "import sys; sys.path.insert(0,'.'); "
