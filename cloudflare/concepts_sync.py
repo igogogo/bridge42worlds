@@ -43,6 +43,10 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
 
 DB = "b42-cards"
 BATCH = 40
+# Потолок длины одного SQL-запроса к D1. Замер 28.08: сорок строк с полными
+# карточками и переводами дают около двухсот килобайт — это уже 400 в ответ.
+# Шестьдесят тысяч символов проходят с запасом.
+SQL_BUDGET = 60000
 
 
 def env(k):
@@ -161,6 +165,11 @@ def ensure_schema():
         try:
             d1(sql)
         except RuntimeError as e:
+            # ALTER на уже существующую колонку D1 отдаёт голый 400 без текста —
+            # распознать по сообщению нельзя, поэтому про миграции молчим: они
+            # и задуманы как «добавить, если ещё нет».
+            if sql.startswith("ALTER TABLE"):
+                continue
             if "duplicate column" not in str(e).lower():
                 print(f"  ⚠️ {sql[:52]}… → {e}")
     print("схема: таблицы на месте")
@@ -179,15 +188,32 @@ def load():
 
 
 def push(table, cols, rows, label):
-    """Пачками, как cards_sync: полсотни строк на запрос."""
-    n = 0
-    for i in range(0, len(rows), BATCH):
-        chunk = rows[i:i + BATCH]
-        vals = ",".join("(" + ",".join(lit(v) for v in r) + ")" for r in chunk)
-        d1(f"INSERT OR REPLACE INTO {table} ({','.join(cols)}) VALUES {vals}")
+    """Пачками ПО ОБЪЁМУ, а не по числу строк.
+
+    Считать строками можно, пока строки одинаковые. Здесь они разные: у понятия
+    с полной записью и русским переводом одна строка весит под пять килобайт, а
+    у понятия без карточки — сотню байт. Сорок таких тяжёлых строк дают запрос
+    на двести килобайт, и D1 отвечает 400 — ночью 28.08 на этом встала вся
+    заливка реестра, когда полных карточек стало 3077 вместо 980.
+
+    Поэтому пачку набираем по длине готового SQL и держим под лимитом; число
+    строк в ней плавает само.
+    """
+    n, i = 0, 0
+    while i < len(rows):
+        chunk, size = [], 0
+        while i < len(rows) and len(chunk) < BATCH:
+            piece = "(" + ",".join(lit(v) for v in rows[i]) + ")"
+            if chunk and size + len(piece) > SQL_BUDGET:
+                break
+            chunk.append(piece)
+            size += len(piece) + 1
+            i += 1
+        d1(f"INSERT OR REPLACE INTO {table} ({','.join(cols)}) VALUES "
+           + ",".join(chunk))
         n += len(chunk)
-        if n % 400 == 0:
-            print(f"  {label}: {n}/{len(rows)}")
+        if n % 400 < len(chunk):
+            print(f"  {label}: {n}/{len(rows)}", flush=True)
     print(f"  ✓ {label}: {n}")
 
 
@@ -197,14 +223,14 @@ def build_frames(live, graph):
     groups = graph.get("groups") or []
     idx = {nd["id"]: i for i, nd in enumerate(nodes)}
     adj = defaultdict(list)
-    for a, b, w in edges:
+    for a, b, w in ((e[0], e[1], e[2]) for e in edges):
         adj[a].append((b, w))
         adj[b].append((a, w))
 
     frames = []
     # обзор: 50 групп, рёбра — суммарная мощность между группами (топ-4 на группу)
     gw = Counter()
-    for a, b, w in edges:
+    for a, b, w in ((e[0], e[1], e[2]) for e in edges):
         ga, gb = nodes[a].get("g"), nodes[b].get("g")
         if ga is None or gb is None or ga == gb:
             continue

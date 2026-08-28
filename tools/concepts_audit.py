@@ -58,7 +58,9 @@ def main():
     # ── связность графа (снимок свежий, понятия без формул) ──
     idx_g = {nd["id"]: i for i, nd in enumerate(graph["nodes"])}
     adjc = defaultdict(int)
-    for a, b, w in graph["edges"]:
+    # ребро может нести четвёртый элемент — тип связи по знанию
+    for _e in graph["edges"]:
+        a, b, w = _e[0], _e[1], _e[2]
         adjc[a] += 1
         adjc[b] += 1
     isolated = [nd["id"] for i, nd in enumerate(graph["nodes"])
@@ -95,7 +97,7 @@ def main():
     for i in concept_idx:
         deg_c[min(adjc[i], 13)] += 1
     n_cn = len(concept_idx)
-    n_ce = sum(1 for a, b, w in graph["edges"]
+    n_ce = sum(1 for a, b, w in ((e[0], e[1], e[2]) for e in graph["edges"])
                if graph["nodes"][a]["kind"] != "formula"
                and graph["nodes"][b]["kind"] != "formula")
     ratio = n_ce / max(1, n_cn)
