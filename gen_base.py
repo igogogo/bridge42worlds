@@ -427,6 +427,11 @@ def apply_anchors(text, aid, lang, cap=20):
     done = set()
     n = 0
     for cid, sub in sorted(ms, key=lambda t: -len(t[1])):
+        # Слитое понятие ведёт к победителю: подсвеченное слово в тексте — это
+        # обещание объяснения, и оно не должно упираться в переадресацию.
+        _m = (live.get(cid) or {}).get("merged_into")
+        if _m:
+            cid = _m
         if n >= cap or cid in done or cid not in live or len(sub) < 3:
             continue
         i = text.find(sub)
