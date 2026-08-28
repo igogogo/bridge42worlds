@@ -202,6 +202,16 @@ def fix_directions(got, live):
             #   цель — общее понятие или метод: отношения «описывает» здесь нет
             #     вовсе, но соседство есть — понижаем до «одной области», а не
             #     выбрасываем найденное.
+            # «Измеряет» — работа метода или прибора. Стрелка в их сторону всегда
+            # обратная: LIGO измеряет эхо гравитационных волн, а не наоборот;
+            # транзитный метод измеряет атмосферы горячих юпитеров, не они его.
+            if (lk.get("rel") == "measures"
+                    and w.get("kind") in ("method", "instrument")
+                    and v.get("kind") not in ("method", "instrument")):
+                out.setdefault(to, []).append(
+                    {"to": cid, "rel": "measures", "w": lk.get("w", 2)})
+                n += 1
+                continue
             if lk.get("rel") == "describes" and v.get("kind") in _NOT_DESCRIBERS:
                 if w.get("kind") in _DESCRIBERS:
                     out.setdefault(to, []).append(
@@ -225,6 +235,16 @@ def fix_directions(got, live):
             keep.append(lk)
         if keep:
             out.setdefault(cid, []).extend(keep)
+    # После переворотов появляются дубли: две связи, смотревшие в одну сторону,
+    # схлопываются в одну («LIGO измеряет эхо гравитационных волн» дважды).
+    # Оставляем по одной на пару (куда, какое отношение), с наибольшей силой.
+    for cid, links in out.items():
+        best = {}
+        for l in links:
+            k = (l["to"], l["rel"])
+            if k not in best or (l.get("w") or 0) > (best[k].get("w") or 0):
+                best[k] = l
+        out[cid] = list(best.values())
     return out, n
 
 
