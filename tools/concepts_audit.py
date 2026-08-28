@@ -30,7 +30,13 @@ OUT = ROOT / "concepts-audit.html"
 def main():
     import numpy as np
     live = json.loads((ROOT / "data/concepts-live.json").read_text(encoding="utf-8"))
-    C = live["concepts"]
+    # Слитые понятия (tools/concept_twins.py) — записи-указатели, а не понятия. Без
+    # этого фильтра аудит считал их живыми и врал сразу в трёх местах: девятнадцать
+    # указателей записывались в сироты (статей у них нет по определению) и в
+    # имена-двойники (имя-то осталось прежним) — то есть слияние на глазах
+    # ухудшало отчёт вместо того, чтобы его чинить.
+    n_merged = sum(1 for v in live["concepts"].values() if v.get("merged_into"))
+    C = {c: v for c, v in live["concepts"].items() if not v.get("merged_into")}
     # Снимка графа может не быть (первый запуск, свежая копия) — аудит обязан
     # выжить: секции связности тогда просто пустые (поймано сквозным прогоном
     # в песочнице 27.08, шаг 10 падал FileNotFoundError).
@@ -225,7 +231,7 @@ th {{ font-family: var(--mono); font-size: 10.5px; color: var(--soft);
 <a href="/concepts-review.html">смотровая</a></div>
 
 <div class="cards">
-<div class="card"><b>{len(C)}</b><span>понятий в реестре</span></div>
+<div class="card"><b>{len(C)}</b><span>понятий в реестре{f" · {n_merged} слито" if n_merged else ""}</span></div>
 <div class="card"><b>{sum(1 for v in C.values() if v.get('supers'))}</b><span>в группах (50 именованных)</span></div>
 <div class="card"><b>{sum(1 for v in C.values() if v.get('related'))}</b><span>с соседями по весу</span></div>
 <div class="card"><b>{kn_n:,}</b><span>связей по знанию у {len(kn)}</span></div>
