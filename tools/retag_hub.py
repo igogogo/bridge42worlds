@@ -96,6 +96,21 @@ def load_all():
         X[i] = M[rowof[a]]
     X /= np.linalg.norm(X, axis=1, keepdims=True) + 1e-9
     cids, CV = cs.load_cards()
+    # Слитые понятия из разметки исключаем: их карточка ещё лежит в матрице, и
+    # вектор с радостью назначит статье запись-указатель — ту самую, от которой
+    # слияние и уводило. Проверять надо здесь, а не после: переразметка идёт по
+    # всему архиву, и вычищать её потом дороже, чем не пустить сюда.
+    live_p = Path(__file__).resolve().parent.parent / "data" / "concepts-live.json"
+    try:
+        import json as _json
+        reg = _json.loads(live_p.read_text(encoding="utf-8"))["concepts"]
+        keep = [i for i, c in enumerate(cids) if not (reg.get(c) or {}).get("merged_into")]
+        if len(keep) != len(cids):
+            print(f"  слитых понятий вне разметки: {len(cids) - len(keep)}")
+            cids = [cids[i] for i in keep]
+            CV = CV[keep]
+    except Exception:
+        pass
     return np, have, X, cids, CV
 
 
