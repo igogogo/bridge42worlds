@@ -918,6 +918,13 @@ def card_chips(a, lang):
             out.append(f'<a class="ent ent-law" href="{entity_href(law, lang)}">'
                        f'{safe(laws_loc[law].get("name") or law.replace("_", " "))}</a>')
     for s in (a.get("scientists") or [])[:3]:
+        # ТОЛЬКО ТЕ, У КОГО ЕСТЬ СТРАНИЦА. В реестре учёных 201 имя, а в статьях
+        # упоминаются сотни: остальные вели прямиком в 404 — проверка перед
+        # выкладкой 28.08 нашла 188 таких ссылок на выборке из полусотни страниц.
+        # Раньше их прикрывала заглушка «карточки пока нет», которую владелец
+        # справедливо убрал; значит имя без страницы просто не показываем.
+        if s not in valid_scientist_ids():
+            continue
         out.append(f'<a class="ent ent-sci" href="/{LANG_DIR}/{lang}/scientists/{attr_safe(author_slug(s))}.html">'
                    f'{safe(s)}</a>')
     for t in (a.get("tags") or [])[:5]:
