@@ -91,9 +91,18 @@ def concepts(force_peak=False):
     doc = json.loads(LIVE.read_text(encoding="utf-8"))
     lc = doc["concepts"]
     store = json.loads(I18N.read_text(encoding="utf-8")) if I18N.exists() else {}
+    # Полные записи — и отдельно короткие карточки без полной записи. Вторых
+    # оказалось 415, и среди них энтропия: у понятия есть старое описание из
+    # справочника, но нет поля full, поэтому переводчик его не видел — и русская
+    # страница встречала читателя английским определением-эпиграфом.
     todo = [cid for cid, v in lc.items()
-            if v.get("full") and "ru" not in (store.get(cid) or {})]
-    print(f"понятий с full без ru: {len(todo)}")
+            if not v.get("merged_into") and v.get("full")
+            and "ru" not in (store.get(cid) or {})]
+    card_only = [cid for cid, v in lc.items()
+                 if not v.get("merged_into") and not v.get("full")
+                 and (v.get("card_en") or "").strip()
+                 and not ((v.get("full_i18n") or {}).get("ru") or {}).get("card")]
+    print(f"понятий с full без ru: {len(todo)} · только карточка без ru: {len(card_only)}")
 
     def one(cid):
         """Одна карточка. Ошибка не валит прогон — вернём None и пойдём дальше."""
@@ -129,10 +138,43 @@ def concepts(force_peak=False):
                 print(f"  переведено {n_done}/{len(todo)}", flush=True)
     I18N.write_text(json.dumps(store, ensure_ascii=False, indent=1),
                     encoding="utf-8")
+
+    # Короткие карточки — отдельным заходом: у них нет полной записи, переводить
+    # нужно одну строку, и просить за неё пять полей значило бы выдумывать текст.
+    def one_card(cid):
+        try:
+            got = ask({"card": lc[cid].get("card_en") or ""}, key)
+        except Exception as e:
+            print(f"  сбой карточки {cid}: {e}")
+            return cid, None
+        c = (got or {}).get("card") if isinstance(got, dict) else None
+        return cid, (str(c)[:1000] if c else None)
+
+    n_card = 0
+    if card_only:
+        with ThreadPoolExecutor(max_workers=WORKERS) as ex:
+            for cid, ru_card in ex.map(one_card, card_only):
+                if not ru_card:
+                    continue
+                lc[cid].setdefault("full_i18n", {}).setdefault("ru", {})["card"] = ru_card
+                n_card += 1
+                if n_card % 50 == 0:
+                    print(f"  карточек переведено {n_card}/{len(card_only)}", flush=True)
+        print(f"✅ коротких карточек на русском: +{n_card}")
+
     # и в текущий live — чтобы страницы можно было гнать сразу, не дожидаясь apply
     for cid, byl in store.items():
-        if cid in lc:
-            lc[cid]["full_i18n"] = byl
+        if cid not in lc:
+            continue
+        # Сливаем, а не заменяем: в full_i18n уже могут лежать короткие карточки,
+        # переведённые заходом выше, и целая подстановка стёрла бы их.
+        cur = lc[cid].get("full_i18n") or {}
+        for lng, val in byl.items():
+            if isinstance(val, dict) and isinstance(cur.get(lng), dict):
+                cur[lng] = {**cur[lng], **val}
+            else:
+                cur[lng] = val
+        lc[cid]["full_i18n"] = cur
     write_json_atomic(LIVE, doc, indent=None)
     print(f"✅ русских карточек понятий: +{n_done} (хранилище {I18N.name})")
     return 0
