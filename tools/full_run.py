@@ -143,15 +143,26 @@ def run(step, cmd, timeout=8 * 3600, cwd=None, env=None, soft=False):
         # узлов, 42335 рёбер». Без них лампочка говорит «прошло» и молчит о том,
         # ЧТО прошло. Полный вывод кладём в файл шага, короткий итог — в журнал.
         e = dict(e or os.environ, PYTHONIOENCODING="utf-8")
-        r = subprocess.run(cmd, cwd=cwd or ROOT, timeout=timeout, env=e,
-                           capture_output=True, text=True,
-                           encoding="utf-8", errors="replace")
-        ok = r.returncode == 0
-        out = (r.stdout or "") + (("\n" + r.stderr) if r.stderr else "")
         STEPS_DIR.mkdir(parents=True, exist_ok=True)
-        (STEPS_DIR / f"{step}.log").write_text(out, encoding="utf-8")
-        for line in out.splitlines():
-            print(line, flush=True)
+        # Читаем ПОСТРОЧНО, а не собираем к концу. Шаг дня идёт полчаса, и если
+        # его вывод копится до последней строки, всё это время в логе тишина: ни
+        # понять, где конвейер, ни увидеть, что он встал. Пишем в файл шага по
+        # мере поступления и тут же повторяем в общий вывод.
+        lines = []
+        with (STEPS_DIR / f"{step}.log").open("w", encoding="utf-8") as f:
+            proc = subprocess.Popen(cmd, cwd=cwd or ROOT, env=e,
+                                    stdout=subprocess.PIPE,
+                                    stderr=subprocess.STDOUT, text=True,
+                                    encoding="utf-8", errors="replace", bufsize=1)
+            for line in proc.stdout:
+                line = line.rstrip()
+                lines.append(line)
+                print(line, flush=True)
+                f.write(line + "\n")
+                f.flush()
+            proc.wait(timeout=timeout)
+        ok = proc.returncode == 0
+        out = "\n".join(lines)
     except subprocess.TimeoutExpired:
         ok = False
         log(f"  ⏱ {step}: превышено время ({timeout // 60} мин)")
