@@ -51,7 +51,10 @@ def local_counts():
     out = {}
     try:
         live = json.loads((ROOT / "data/concepts-live.json").read_text(encoding="utf-8"))
-        out["concepts"] = len(live["concepts"])
+        # Считаем живые понятия, без записей-указателей: слитые в облако не едут,
+        # и сверять с ними — значит каждый раз видеть расхождение на ровном месте.
+        out["concepts"] = sum(1 for v in live["concepts"].values()
+                              if not v.get("merged_into"))
         out["groups"] = len(live.get("groups") or {})
     except Exception:
         pass
