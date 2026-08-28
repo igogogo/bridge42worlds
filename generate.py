@@ -972,6 +972,23 @@ def _live_mini():
     return _LIVE_MINI
 
 
+# Тег и понятие разошлись НАПИСАНИЕМ, а не смыслом. Владелец 28.08: «поищи им
+# соответствие в облаке понятий — должна же быть декогеренция как понятие, и
+# нейтринные осцилляции». Так и есть: расходятся числом (единственное против
+# множественного), приставкой или потерянным дефисом. За каждым таким тегом
+# стоят живые статьи — 133 у активных ядер галактик, 100 у осцилляций нейтрино,
+# — и вести их в обеднённую копию вместо полного понятия незачем.
+TAG_ALIAS = {
+    "active_galactic_nucleus": "active_galactic_nuclei",
+    "cosmic_reionization": "reionization",
+    "decoherence": "quantum_decoherence",
+    "differential_equation": "differential_equations",
+    "markov_chains": "markov_chain",
+    "neutrino_oscillation": "neutrino_oscillations",
+    "wave_particle_duality": "waveparticle_duality",
+}
+
+
 def entity_href(tid, lang):
     """Адрес сущности: страница ПОНЯТИЯ, если оно есть в реестре, иначе тег.
 
@@ -985,8 +1002,10 @@ def entity_href(tid, lang):
     пока остаются тегами: удалять живую страницу, не заведя замены, значит
     оставить ссылку в пустоту.
     """
-    return (f"/{LANG_DIR}/{lang}/concepts/{tid}.html" if tid in _live_mini()
-            else f"/{LANG_DIR}/{lang}/tags/{tid}.html")
+    cid = tid if tid in _live_mini() else TAG_ALIAS.get(tid)
+    if cid and cid in _live_mini():
+        return f"/{LANG_DIR}/{lang}/concepts/{cid}.html"
+    return f"/{LANG_DIR}/{lang}/tags/{tid}.html"
 
 
 def mini_ids_concept(cid, cap=12):
@@ -2923,14 +2942,15 @@ def generate_tag_page(tag_id, lang):
     # значит делить один предмет надвое и путать читателя (владелец 28.08).
     # Оставляем редирект, а не удаляем файл: на страницы тегов ведут внешние
     # ссылки и выдача поисковиков, им нужен адрес, который никуда не пропал.
-    if tag_id in _live_mini():
+    _alias = tag_id if tag_id in _live_mini() else TAG_ALIAS.get(tag_id)
+    if _alias and _alias in _live_mini():
         _write_text_retry(
             Path(LANG_DIR) / lang / "tags" / f"{tag_id}.html",
             '<!doctype html><meta charset="utf-8">'
-            f'<meta http-equiv="refresh" content="0; url=/{LANG_DIR}/{lang}/concepts/{tag_id}.html">'
-            f'<link rel="canonical" href="/{LANG_DIR}/{lang}/concepts/{tag_id}.html">'
+            f'<meta http-equiv="refresh" content="0; url=/{LANG_DIR}/{lang}/concepts/{_alias}.html">'
+            f'<link rel="canonical" href="/{LANG_DIR}/{lang}/concepts/{_alias}.html">'
             f'<title>{tag_id}</title>'
-            f'<a href="/{LANG_DIR}/{lang}/concepts/{tag_id}.html">/{LANG_DIR}/{lang}/concepts/{tag_id}.html</a>')
+            f'<a href="/{LANG_DIR}/{lang}/concepts/{_alias}.html">/{LANG_DIR}/{lang}/concepts/{_alias}.html</a>')
         return
     tpl = load_template("tag")
     if not tpl.template: return
