@@ -223,6 +223,7 @@ def main():
 
     # ── VII. ПРОВЕРКА ────────────────────────────────────────────────────────
     run("api", [PY, "cloudflare/checks/api_check.py"], timeout=1800, soft=True)
+    run("pages", [PY, "cloudflare/checks/pages_check.py"], timeout=1800, soft=True)
     run("audit", [PY, "tools/concepts_audit.py"], timeout=1800, soft=True)
     run("gaudit", [PY, "tools/group_integrity.py", "--audit"], timeout=1800, soft=True)
     run("links", [PY, "tools/link_check.py"], timeout=1800, soft=True)
