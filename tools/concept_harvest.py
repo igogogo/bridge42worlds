@@ -248,6 +248,12 @@ def match():
     sys.path.insert(0, str(ML))
     import concepts_super as cs
     cids, CV = cs.load_cards()
+    try:
+        _live = json.loads((ROOT / "data" / "concepts-live.json").read_text(encoding="utf-8"))
+        _merged = {c: v["merged_into"] for c, v in _live["concepts"].items()
+                   if v.get("merged_into")}
+    except Exception:
+        _merged = {}
 
     rows = load_harvest()
     todo = [r for r in rows.values() if r.get("matched") is None and not r.get("vec")]
@@ -278,7 +284,10 @@ def match():
         sims = CV @ v
         j = int(sims.argmax())
         if float(sims[j]) >= MATCH_T:
-            r["matched"] = cids[j]
+            # Совпасть можно и со слитым понятием: карточка его ещё в матрице.
+            # Записываем победителя — кандидат «уже есть» именно в его лице,
+            # иначе копилка будет ссылаться на запись-указатель.
+            r["matched"] = _merged.get(cids[j], cids[j])
             r["matched_sim"] = round(float(sims[j]), 3)
             n_match += 1
     save_harvest(rows)
