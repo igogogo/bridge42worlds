@@ -39,8 +39,12 @@ TOP_SEMANTIC = 4
 
 def main():
     doc = json.loads(LIVE.read_text(encoding="utf-8"))
-    live = doc["concepts"]
-    groups_raw = doc.get("groups") or {}
+    # Слитые понятия (tools/concept_twins.py) — записи-указатели без статей и
+    # связей. В графе они стали бы узлами-сиротами: кружок с именем, от которого
+    # не идёт ни одного ребра, потому что всё забрал победитель.
+    live = {c: v for c, v in doc["concepts"].items() if not v.get("merged_into")}
+    groups_raw = {g: [m for m in ms if m in live]
+                  for g, ms in (doc.get("groups") or {}).items()}
 
     cids = sorted(live)
     idx = {c: i for i, c in enumerate(cids)}

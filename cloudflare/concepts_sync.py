@@ -347,6 +347,12 @@ def main():
     C = live["concepts"]
     gnode = {nd["id"]: nd for nd in graph["nodes"]}
 
+    # Слитые понятия (tools/concept_twins.py) в облако не льём: это записи-указатели
+    # без статей, связей и карточки. В D1 они дали бы пустые строки в поиске и в
+    # облаке — предмет, у которого всё забрал победитель. Страница на них отвечает
+    # переадресацией, и этого достаточно.
+    C = {cid: v for cid, v in C.items() if not v.get("merged_into")}
+
     if not a.frames:
         rows = []
         for cid, v in C.items():
