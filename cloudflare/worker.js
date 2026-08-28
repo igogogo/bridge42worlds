@@ -2958,6 +2958,61 @@ async function handleGraphFrame(request, env) {
       edges.push([0, i + 1, r.w]);
     });
     body = { nodes: nodes, edges: edges };
+  } else if (key === "overview") {
+    /* ОБЗОР СОБИРАЕТСЯ ЗАПРОСОМ, а не берётся готовым. Раньше он лежал в
+       graph_frames и требовал пересчёта после каждой правки реестра — отдельным
+       шагом ночной цепочки (владелец 28.08: «а разве это не динамика, зачем их
+       обновлять?»). Таблицы областей маленькие: полсотни строк паспортов и
+       полторы сотни связей, — так что запрос дешевле, чем хранить его ответ. */
+    const gs = await env.CARDS.prepare(
+      "SELECT gid, label_ru, label_en, note_ru, note_en, n_con, n_arts" +
+      "  FROM graph_groups ORDER BY n_arts DESC").all();
+    const gl = await env.CARDS.prepare(
+      "SELECT a, b, w FROM graph_group_links ORDER BY w DESC LIMIT 300").all();
+    const pos = {};
+    const nodes = (gs.results || []).map(function (g, i) {
+      pos[g.gid] = i;
+      return { id: "g" + g.gid, gi: g.gid, kind: "_group",
+               ru: g.label_ru, en: g.label_en,
+               note_ru: g.note_ru, note_en: g.note_en,
+               n: g.n_arts, members: g.n_con };
+    });
+    const edges = [];
+    (gl.results || []).forEach(function (r) {
+      if (pos[r.a] === undefined || pos[r.b] === undefined) return;
+      edges.push([pos[r.a], pos[r.b], r.w]);
+    });
+    body = { nodes: nodes, edges: edges };
+  } else if (key.indexOf("g:") === 0) {
+    /* КАДР ОБЛАСТИ — тем же способом, что эго: члены области и связи, у которых
+       ОБА конца внутри неё. Ограничиваем двумя сотнями сильнейших понятий: в
+       крупнейшей области их триста, и рисовать все — та же каша, от которой мы
+       уходили, отказавшись показывать облако целиком. */
+    const gid = parseInt(key.slice(2), 10);
+    if (isNaN(gid)) return Response.json({ error: "bad_request" }, { status: 400 });
+    const mem = await env.CARDS.prepare(
+      "SELECT c.id, c.name_ru, c.name_en, c.kind, c.n_arts, c.card, c.cat" +
+      "  FROM concept_groups g JOIN concepts c ON c.id = g.cid" +
+      " WHERE g.gid = ? ORDER BY c.n_arts DESC LIMIT 200").bind(gid).all();
+    const rows = mem.results || [];
+    if (!rows.length) return Response.json({ error: "not_found" }, { status: 404 });
+    const pos = {};
+    const nodes = rows.map(function (r, i) {
+      pos[r.id] = i;
+      return { id: r.id, ru: r.name_ru, en: r.name_en, kind: r.kind || "concept",
+               n: r.n_arts || 0, card: r.card, cat: r.cat };
+    });
+    const ids = rows.map(function (r) { return "'" + String(r.id).replace(/'/g, "''") + "'"; });
+    const lk = await env.CARDS.prepare(
+      "SELECT a, b, w FROM concept_links WHERE kind = 'c'" +
+      "   AND a IN (" + ids.join(",") + ") AND b IN (" + ids.join(",") + ")" +
+      " ORDER BY w DESC LIMIT 1200").all();
+    const edges = [];
+    (lk.results || []).forEach(function (r) {
+      if (pos[r.a] === undefined || pos[r.b] === undefined) return;
+      edges.push([pos[r.a], pos[r.b], r.w]);
+    });
+    body = { nodes: nodes, edges: edges };
   } else {
     const row = await env.CARDS.prepare("SELECT data FROM graph_frames WHERE key = ?")
       .bind(key).first();

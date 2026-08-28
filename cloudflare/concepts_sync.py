@@ -144,6 +144,30 @@ SCHEMA = [
          data TEXT,                   -- готовый JSON кадра
          n    INTEGER                 -- узлов в кадре
        )""",
+    # ── ГРАФ БЕЗ ГОТОВЫХ КАДРОВ ───────────────────────────────────────────────
+    # Кадр группы и обзор лежали в graph_frames готовыми JSON-ами, и их
+    # приходилось пересчитывать после каждой правки реестра — отдельным шагом
+    # ночной цепочки, о который легко споткнуться (владелец 28.08: «а разве это
+    # не динамика, зачем их обновлять?»). Здесь три маленькие таблицы, из
+    # которых воркер собирает любой кадр запросом, как уже собирает эго-кадр.
+    """CREATE TABLE IF NOT EXISTS concept_groups (
+         gid INTEGER NOT NULL, cid TEXT NOT NULL,
+         PRIMARY KEY (gid, cid)
+       )""",
+    "CREATE INDEX IF NOT EXISTS concept_groups_g ON concept_groups(gid)",
+    "CREATE INDEX IF NOT EXISTS concept_groups_c ON concept_groups(cid)",
+    """CREATE TABLE IF NOT EXISTS graph_groups (
+         gid      INTEGER PRIMARY KEY,
+         label_ru TEXT, label_en TEXT,
+         note_ru  TEXT, note_en  TEXT,   -- «о чём эта область»
+         n_con    INTEGER DEFAULT 0,     -- сколько понятий
+         n_arts   INTEGER DEFAULT 0      -- сумма статей — размер круга на обзоре
+       )""",
+    """CREATE TABLE IF NOT EXISTS graph_group_links (
+         a INTEGER NOT NULL, b INTEGER NOT NULL,
+         w INTEGER,                      -- сколько связей между областями
+         PRIMARY KEY (a, b)
+       )""",
 ]
 
 # Колонки, добавленные к уже существующей таблице. CREATE TABLE IF NOT EXISTS их
@@ -187,7 +211,22 @@ def load():
     return live, graph, an, bases
 
 
+# Какие таблицы лить. Флаг --only объявлялся, но нигде не проверялся: докатка
+# после обрыва честно перезаливала всё с начала (поймано 28.08, когда нужно было
+# добавить только таблицы областей).
+ONLY = None
+ONLY_TABLES = {
+    "concepts": {"concepts"},
+    "links": {"concept_links"},
+    "arts": {"concept_arts"},
+    "formulas": {"formulas"},
+    "groups": {"concept_groups", "graph_groups", "graph_group_links"},
+}
+
+
 def push(table, cols, rows, label):
+    if ONLY and table not in ONLY_TABLES.get(ONLY, set()):
+        return
     """Пачками ПО ОБЪЁМУ, а не по числу строк.
 
     Считать строками можно, пока строки одинаковые. Здесь они разные: у понятия
@@ -293,9 +332,12 @@ def main():
     ap = argparse.ArgumentParser(description="Реестр знаний → D1")
     ap.add_argument("--schema", action="store_true")
     ap.add_argument("--frames", action="store_true")
-    ap.add_argument("--only", choices=["arts", "formulas", "concepts", "links"],
+    ap.add_argument("--only",
+                    choices=["arts", "formulas", "concepts", "links", "groups"],
                     help="залить одну таблицу (докатка после обрыва)")
     a = ap.parse_args()
+    global ONLY
+    ONLY = a.only
 
     ensure_schema()
     if a.schema:
@@ -343,6 +385,39 @@ def main():
             for aid in (v.get("articles") or [])[:60]:
                 arts.append([cid, aid, None])
         push("concept_arts", ["cid", "id", "date"], arts, "статьи понятий")
+
+        # ГРУППЫ ТАБЛИЦАМИ, А НЕ ГОТОВЫМИ КАДРАМИ. Членство, паспорт области и
+        # связи между областями — три маленькие таблицы (3.6 тысячи строк, 50 и
+        # около полутора сотен), из которых воркер соберёт и обзор, и кадр
+        # группы прямо в запросе. Пересчитывать кадры после каждой правки
+        # реестра больше не нужно: данные обновились — кадр обновился.
+        gm, gmeta, glinks = [], [], {}
+        gnodes = graph.get("groups") or []
+        node_group = {}
+        for gi, g in enumerate(gnodes):
+            n_arts = 0
+            for m in g.get("members") or []:
+                cid = graph["nodes"][m]["id"] if m < len(graph["nodes"]) else None
+                if not cid:
+                    continue
+                gm.append([gi, cid])
+                node_group.setdefault(m, gi)
+                n_arts += graph["nodes"][m].get("n") or 0
+            gmeta.append([gi, g.get("label_ru"), g.get("label_en"),
+                          g.get("note_ru"), g.get("note_en"),
+                          len(g.get("members") or []), n_arts])
+        # связи между областями: сколько рёбер идёт из одной в другую
+        for e in graph["edges"]:
+            ga, gb = node_group.get(e[0]), node_group.get(e[1])
+            if ga is None or gb is None or ga == gb:
+                continue
+            k = (min(ga, gb), max(ga, gb))
+            glinks[k] = glinks.get(k, 0) + 1
+        push("concept_groups", ["gid", "cid"], gm, "членство в областях")
+        push("graph_groups", ["gid", "label_ru", "label_en", "note_ru", "note_en",
+                              "n_con", "n_arts"], gmeta, "паспорта областей")
+        push("graph_group_links", ["a", "b", "w"],
+             [[a, b, w] for (a, b), w in glinks.items()], "связи областей")
 
         frows = []
         for b in bases:
