@@ -163,6 +163,62 @@ def join(xs, ys, skip=()):
     return out
 
 
+def retarget(live):
+    """Перевести все связи со слитых понятий на победителей.
+
+    Слияние оставляет проигравшего указателем, и связи, которые вели на него,
+    формально работают — через переадресацию. Но это ложная целость: в графе
+    появляется узел-пустышка без статей, в облаке D1 — строка, ведущая в никуда,
+    а читатель на странице проходит лишний прыжок. Поэтому после слияний
+    проходим по соседям и по связям знания и заменяем адрес на победителя,
+    выбрасывая ставшие самоссылками и дубли.
+    """
+    m = {c: v["merged_into"] for c, v in live.items() if v.get("merged_into")}
+    if not m:
+        return 0, 0
+    n_rel = 0
+    for cid, v in live.items():
+        if v.get("merged_into"):
+            continue
+        rel, seen = [], set()
+        for r in (v.get("related") or []):
+            tgt = m.get(r.get("id"), r.get("id"))
+            if tgt == cid or tgt in seen:
+                n_rel += 1
+                continue
+            if tgt != r.get("id"):
+                r = dict(r, id=tgt)
+                n_rel += 1
+            rel.append(r)
+            seen.add(tgt)
+        v["related"] = rel
+
+    n_kn = 0
+    if KNOW.exists():
+        try:
+            kn = json.loads(KNOW.read_text(encoding="utf-8"))
+        except Exception:
+            kn = {}
+        out = {}
+        for cid, links in kn.items():
+            src = m.get(cid, cid)
+            if live.get(src, {}).get("merged_into"):
+                continue
+            keep_l, seen_l = out.setdefault(src, []), set()
+            for lk in links:
+                tgt = m.get(lk.get("to"), lk.get("to"))
+                if tgt == src or (tgt, lk.get("rel")) in seen_l:
+                    n_kn += 1
+                    continue
+                if tgt != lk.get("to") or src != cid:
+                    n_kn += 1
+                keep_l.append(dict(lk, to=tgt))
+                seen_l.add((tgt, lk.get("rel")))
+        KNOW.write_text(json.dumps({k: v for k, v in out.items() if v},
+                                   ensure_ascii=False, indent=1), encoding="utf-8")
+    return n_rel, n_kn
+
+
 def merge(keep, drop, live):
     """Перенести всё из drop в keep; drop оставить переадресацией."""
     a, b = live[keep], live[drop]
@@ -269,6 +325,10 @@ def main():
     if not a.apply:
         print("проба. применить: --apply")
         return 0
+
+    n_rel, n_kn = retarget(live)
+    if n_rel or n_kn:
+        print(f"связей переведено на победителей: {n_rel} у соседей, {n_kn} по знанию")
     write_json_atomic(LIVE, doc, indent=None)
     print(f"→ {LIVE.name} обновлён")
     return 0
