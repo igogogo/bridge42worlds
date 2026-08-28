@@ -451,6 +451,7 @@ def gen_concepts_side(ids, lang):
     закон — один из видов понятия, он уже в этом списке."""
     live = concepts_live()
     out = []
+    seen_ids = set()      # после подмены слитых два id могут сойтись в один
     for cid in ids:
         if not cid:
             continue
@@ -459,8 +460,17 @@ def gen_concepts_side(ids, lang):
         # Проверка 28.08 поймала три таких на статьях; ставим плашку только на то,
         # у чего есть карточка.
         c = live.get(cid)
+        # Слитое понятие (tools/concept_twins.py) подменяем победителем: разметку
+        # мы переводим при слиянии, но она живёт и в старых карточках статей, и в
+        # ручных правках — плашка должна вести к предмету, а не к указателю.
+        if c and c.get("merged_into"):
+            cid = c["merged_into"]
+            c = live.get(cid)
         if not c:
             continue
+        if cid in seen_ids:
+            continue
+        seen_ids.add(cid)
         names = c.get("names") or {}
         name = names.get(lang) or names.get("en") or cid.replace("_", " ")
         out.append(f'<a href="/{LANG_DIR}/{lang}/concepts/{cid}.html" class="side-tag" '
