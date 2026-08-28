@@ -690,10 +690,21 @@ def concept_page(cid, c, lang, live, by_id, rich=None, page_langs=None):
     UNITS_LBL = {"ru": "Единицы по системам", "en": "Units by system",
                  "es": "Unidades por sistema", "ar": "الوحدات حسب النظام",
                  "fr": "Unités par système"}
+    # Ссылка только на то, что реально есть в реестре: у планковской температуры
+    # имя в данных единиц есть, а карточки нет — и ссылка уходила в 404. Правило
+    # владельца 28.08: «всё, что есть, то есть; чего нет — добавляем, как появится».
+    # Нет карточки — остаётся просто текст, как у учёных вне реестра.
+    def clink(cid, label=None):
+        label = label if label is not None else cid.replace("_", " ")
+        if cid not in live["concepts"]:
+            return H.escape(label)
+        return (f'<a href="/lang/{lang}/concepts/{H.escape(cid)}.html">'
+                f'{H.escape(label)}</a>')
+
     if c.get("systems"):
         chips = "".join(
             f'<a href="/lang/{lang}/concepts/{s}_units.html">{SYS_NAME.get(s, s)}</a>'
-            for s in c["systems"])
+            for s in c["systems"] if f"{s}_units" in live["concepts"])
         sd = (f' <span style="color:var(--soft);font-size:13px" lang="en">'
               f'{H.escape(c.get("si_definition") or "")}</span>'
               if c.get("si_definition") else "")
@@ -701,10 +712,8 @@ def concept_page(cid, c, lang, live, by_id, rich=None, page_langs=None):
                     f'font-size:11px;color:var(--muted)">'
                     f'{SYS_LBL.get(lang, "Systems")}:</b> {chips}{sd}</div>')
     if c.get("units_by_system"):
-        cells = " · ".join(
-            f'{SYS_NAME.get(s, s)}: <a href="/lang/{lang}/concepts/{H.escape(u)}.html">'
-            f'{H.escape(u.replace("_", " "))}</a>'
-            for s, u in c["units_by_system"].items() if u)
+        cells = " · ".join(f'{SYS_NAME.get(s, s)}: {clink(u)}'
+                           for s, u in c["units_by_system"].items() if u)
         if cells:
             body.append(f'<div class="related-tags"><b style="font-family:var(--mono);'
                         f'font-size:11px;color:var(--muted)">'
@@ -724,10 +733,13 @@ def concept_page(cid, c, lang, live, by_id, rich=None, page_langs=None):
             f'<a href="/lang/{lang}/concepts/graph.html?focus={H.escape(cid)}">'
             f'{GT["title"]} &rarr;</a></div>')
     if c["related"]:
+        # Соседа без карточки не показываем вовсе: в отличие от единицы измерения,
+        # где имя системы несёт смысл и без ссылки, «рядом стоит» имя, которое
+        # некуда открыть, — обещание без содержания.
         chips = "".join(
             f'<a href="/lang/{lang}/concepts/{H.escape(r["id"])}.html">'
-            f'{H.escape(name_of(live["concepts"].get(r["id"], {"names": {}}), r["id"], lang))}</a>'
-            for r in c["related"])
+            f'{H.escape(name_of(live["concepts"][r["id"]], r["id"], lang))}</a>'
+            for r in c["related"] if r["id"] in live["concepts"])
         # Связь по смыслу и связь по статьям — разные вещи, и подпись это
         # говорит. «Рядом стоят» значит «встречаются в одних статьях»; у понятия
         # без статей соседи найдены по близости определений, и выдавать одно за

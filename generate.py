@@ -1113,7 +1113,7 @@ def entity_article_card(a, lang):
     if a.get("authors"):
         # до 20 имён с «+N» на остаток — ровно как в ленте (js/search.js);
         # три имени давали карточку на строку ниже клиентской (образец 27.08)
-        au = a["authors"]
+        au = [x for x in a["authors"] if is_real_author(x)]
         links = '<span class="sep">·</span>'.join(
             f'<a href="/{LANG_DIR}/en/authors/{attr_safe(author_slug(x))}.html">{safe(x)}</a>'
             for x in au[:20])
@@ -2003,7 +2003,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
     authors = article.get("authors", [])
     authors_html = ", ".join(
         (f'<a href="/{LANG_DIR}/en/authors/{attr_safe(author_slug(a))}.html" class="text-author-link" data-author="{attr_safe(a)}">{safe(a)}</a>'
-         if any(c.isalpha() for c in a) else safe(a))  # мусорное "имя" (парсинг-артефакт без букв) — без ссылки, страницы для него нет
+         if is_real_author(a) else safe(a))  # мусорное "имя" (парсинг-артефакт без букв) — без ссылки, страницы для него нет
         for a in authors
     )
     # Законы — ПРЯМО ИЗ ВЕКТОРА, а не через общий тег.
@@ -3303,7 +3303,12 @@ MINI_LABEL = {"ru": "Связи в графе знаний", "en": "Links in the
 GRAPH_NAV_LABEL = {"ru": "Граф", "en": "Graph", "es": "Grafo", "zh": "关系图", "fr": "Graphe", "ar": "الشبكة"}
 
 SIDE_LAWS_LABEL = {"ru": "Законы", "en": "Laws", "es": "Leyes", "zh": "定律", "fr": "Lois", "ar": "قوانين"}
-SIDE_TAGS_LABEL = {"ru": "Теги", "en": "Tags", "es": "Etiquetas", "zh": "标签", "fr": "Tags", "ar": "الوسوم"}
+# Слова «тег» на сайте больше нет (владелец 27.08: «у нас больше нет такого как тег,
+# все понятия»). Колонка справа перечисляет ровно понятия — и называется так же, как
+# раздел, куда ведёт. Меню, облако и страницы переименованы раньше; подпись колонки
+# оставалась последним местом, где старое слово смотрело читателю в глаза.
+SIDE_TAGS_LABEL = {"ru": "Понятия", "en": "Concepts", "es": "Conceptos", "zh": "概念",
+                   "fr": "Notions", "ar": "المفاهيم"}
 SIDE_SCI_LABEL = {"ru": "Учёные", "en": "Scientists", "es": "Científicos", "zh": "科学家", "fr": "Scientifiques", "ar": "العلماء"}
 
 
@@ -4105,32 +4110,32 @@ def update_all_authors():
         "en": {"title": "Authors", "subtitle": "Researchers publishing on arXiv.", "find": "Find authors...",
                "search": "Search articles...", "hint": "@ author · # tag · ! scientist",
                "coauthors": "Co-authors", "no_articles": "No articles yet", "footer": "science made simple",
-               "articles": "articles", "coauthors_word": "co-authors", "tags": "Tags", "laws": "Laws",
+               "articles": "articles", "coauthors_word": "co-authors", "tags": "Concepts", "laws": "Laws",
                "default_hint": 'Showing authors starting with "{letter}" — search above covers everyone.'},
         "ru": {"title": "Авторы", "subtitle": "Исследователи, публикующиеся в arXiv.", "find": "Найти авторов...",
                "search": "Поиск статей...", "hint": "@ автор · # тег · ! учёный",
                "coauthors": "Соавторы", "no_articles": "Пока нет статей", "footer": "наука простыми словами",
-               "articles": "статей", "coauthors_word": "соавторов", "tags": "Теги", "laws": "Законы",
+               "articles": "статей", "coauthors_word": "соавторов", "tags": "Понятия", "laws": "Законы",
                "default_hint": 'Показаны авторы на «{letter}» — поиск выше ищет среди всех.'},
         "es": {"title": "Autores", "subtitle": "Investigadores que publican en arXiv.", "find": "Buscar autores...",
                "search": "Buscar artículos...", "hint": "@ autor · # etiqueta · ! científico",
                "coauthors": "Coautores", "no_articles": "Aún no hay artículos", "footer": "la ciencia simplificada",
-               "articles": "artículos", "coauthors_word": "coautores", "tags": "Etiquetas", "laws": "Leyes",
+               "articles": "artículos", "coauthors_word": "coautores", "tags": "Conceptos", "laws": "Leyes",
                "default_hint": 'Autores que empiezan por «{letter}» — la búsqueda de arriba cubre a todos.'},
         "ar": {"title": "المؤلفون", "subtitle": "باحثون ينشرون على arXiv.", "find": "ابحث عن مؤلفين...",
                "search": "ابحث عن مقالات...", "hint": "@ مؤلف · # وسم · ! عالم",
                "coauthors": "مؤلفون مشاركون", "no_articles": "لا مقالات بعد", "footer": "العلم ببساطة",
-               "articles": "مقالات", "coauthors_word": "مؤلفين مشاركين", "tags": "الوسوم", "laws": "القوانين",
+               "articles": "مقالات", "coauthors_word": "مؤلفين مشاركين", "tags": "المفاهيم", "laws": "القوانين",
                "default_hint": 'عرض المؤلفين الذين تبدأ أسماؤهم بـ «{letter}» — البحث أعلاه يغطي الجميع.'},
         "zh": {"title": "作者", "subtitle": "在 arXiv 上发表论文的研究人员。", "find": "查找作者...",
                "search": "搜索文章...", "hint": "@ 作者 · # 标签 · ! 科学家",
                "coauthors": "合著者", "no_articles": "暂无文章", "footer": "让科学变简单",
-               "articles": "篇文章", "coauthors_word": "位合著者", "tags": "标签", "laws": "定律",
+               "articles": "篇文章", "coauthors_word": "位合著者", "tags": "概念", "laws": "定律",
                "default_hint": '显示以「{letter}」开头的作者 — 上方搜索涵盖所有作者。'},
         "fr": {"title": "Auteurs", "subtitle": "Chercheurs publiant sur arXiv.", "find": "Rechercher des auteurs...",
                "search": "Rechercher des articles...", "hint": "@ auteur · # tag · ! scientifique",
                "coauthors": "Co-auteurs", "no_articles": "Pas encore d'articles", "footer": "la science simplifiée",
-               "articles": "articles", "coauthors_word": "co-auteurs", "tags": "Tags", "laws": "Lois",
+               "articles": "articles", "coauthors_word": "co-auteurs", "tags": "Notions", "laws": "Lois",
                "default_hint": 'Auteurs commençant par « {letter} » — la recherche ci-dessus couvre tout le monde.'},
     }
     LAST = {"ru": "последняя", "en": "latest", "es": "último", "ar": "الأحدث", "zh": "最新", "fr": "dernière"}
@@ -4303,7 +4308,7 @@ def update_all_authors():
             )
             coauthors_html = " · ".join(
                 f'<a href="/{lbase}/authors/{author_slug(ca)}.html" data-author="{attr_safe(ca)}">{ca}</a>'
-                for ca in data.get("coauthors", [])[:15]
+                for ca in data.get("coauthors", [])[:15] if is_real_author(ca)
             )
             author_tags = []
             for aid in data.get("articles", []):
@@ -4311,9 +4316,12 @@ def update_all_authors():
                     if t not in author_tags:
                         author_tags.append(t)
             author_tags_set = set(author_tags)
+            # Только теги, у которых есть своя страница: в разметке статей встречаются
+            # имена вне реестра (plasma_physics, quantum_computing — 28.08), и ссылка
+            # на такое имя ведёт в 404 прямо со страницы человека.
             author_tags_html = " · ".join(
                 f'<a href="/{lbase}/tags/{attr_safe(t)}.html" data-tag="{attr_safe(t)}">{safe(tags_loc.get(t, {}).get("name", t))}</a>'
-                for t in author_tags[:20]
+                for t in author_tags[:20] if t in valid_tag_ids()
             )
             author_law_ids = [lid for lid, L in laws_loc.items() if set(L.get("tags", [])) & author_tags_set]
             author_laws_html = " · ".join(

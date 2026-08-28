@@ -241,6 +241,16 @@ def author_slug(name):
     return re.sub(r'[:<>"|?*]', "-", slug)
 
 
+def is_real_author(name):
+    """Человек ли это (или коллаборация), или мусор разбора списка авторов.
+
+    Тогда, в июле, ":" заплатали на уровне имени файла — падало на записи. Но из
+    списков он никуда не делся: страница M. Martinelli 28.08 показывала соавтора
+    ":" со ссылкой на /authors/-.html. Признак простой — в имени нет ни одной буквы.
+    """
+    return bool(name) and bool(re.search(r"[^\W\d_]", name, re.UNICODE))
+
+
 def page_dir(lang):
     return "rtl" if lang in RTL_LANGS else "ltr"
 
@@ -444,7 +454,13 @@ def gen_concepts_side(ids, lang):
     for cid in ids:
         if not cid:
             continue
-        c = live.get(cid) or {}
+        # Разметка живёт своей жизнью и знает имена, которых в реестре нет (понятие
+        # переименовали, слили, не родили вовсе) — плашка на такое имя ведёт в 404.
+        # Проверка 28.08 поймала три таких на статьях; ставим плашку только на то,
+        # у чего есть карточка.
+        c = live.get(cid)
+        if not c:
+            continue
         names = c.get("names") or {}
         name = names.get(lang) or names.get("en") or cid.replace("_", " ")
         out.append(f'<a href="/{LANG_DIR}/{lang}/concepts/{cid}.html" class="side-tag" '
