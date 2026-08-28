@@ -358,11 +358,36 @@ def load_tags_loc(lang):
 
 
 def gen_tags_side(tags, lang):
+    """Плашки по СТАРОЙ разметке — для статей, которых не коснулась волна 5.
+
+    Ссылка шла прямо в /laws/{id} и не спрашивала, есть ли там страница: у статей
+    августа так нашлись пять адресов в никуда (optical_tweezers, earthquake_swarm,
+    organic_transistor…). Теперь адрес выбирается по факту: понятие, если оно есть
+    в реестре, иначе тег; чего нет нигде — не показываем вовсе, как и на новой
+    разметке. Заодно подставляется имя вместо идентификатора: на той статье плашка
+    так и называлась «optical_tweezers».
+    """
     loc = load_tags_loc(lang)
-    return "\n".join(
-        f'<a href="/{LANG_DIR}/{lang}/laws/{t}.html" class="side-tag" data-tag="{attr_safe(t)}">{loc.get(t, {}).get("name", t)}</a>'
-        for t in tags if t
-    )
+    live = concepts_live()
+    out = []
+    for t in tags:
+        if not t:
+            continue
+        c = live.get(t)
+        if c and c.get("merged_into"):
+            t, c = c["merged_into"], live.get(c["merged_into"])
+        name = loc.get(t, {}).get("name") or t.replace("_", " ")
+        if c:
+            href = f"/{LANG_DIR}/{lang}/concepts/{t}.html"
+            names = c.get("names") or {}
+            name = names.get(lang) or names.get("en") or name
+        elif t in loc:
+            href = f"/{LANG_DIR}/{lang}/laws/{t}.html"
+        else:
+            continue          # ни понятия, ни тега — вести некуда
+        out.append(f'<a href="{href}" class="side-tag" '
+                   f'data-tag="{attr_safe(t)}">{name}</a>')
+    return "\n".join(out)
 
 
 _CONCEPTS_LIVE = None
