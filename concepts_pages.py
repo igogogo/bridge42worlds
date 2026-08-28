@@ -774,7 +774,21 @@ def concept_page(cid, c, lang, live, by_id, rich=None, page_langs=None):
     if body:
         out.append('<div class="entity-body">' + "".join(body) + '</div>')
 
-    arts = [by_id[a] for a in c["articles"] if a in by_id]
+    # СТАТЬИ ИЗ ТРЁХ ИСТОЧНИКОВ, а не только из разметки понятиями. Она строгая
+    # (порог сходства плюс отрыв), и у «квантовой запутанности» ею отмечено 14
+    # работ, тогда как старым тегом — 246. При сведении тегов и законов в понятия
+    # (28.08) страница понятия становится единственной, и обеднять её нельзя:
+    # статья, помеченная тегом «квантовая запутанность», про неё и есть.
+    ids = list(c["articles"])
+    seen_a = set(ids)
+    for a in by_id.values():
+        aid = a.get("id")
+        if not aid or aid in seen_a:
+            continue
+        if cid in (a.get("tags") or []) or cid in (a.get("laws") or []):
+            seen_a.add(aid)
+            ids.append(aid)
+    arts = [by_id[a] for a in ids if a in by_id]
     arts.sort(key=lambda a: a.get("date") or "", reverse=True)
     out.append(f'<h2 class="section-title">{t["articles"]}'
                f'<span style="font-family:var(--mono);font-size:13px;color:var(--soft)"> · '

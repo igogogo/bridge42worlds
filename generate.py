@@ -513,7 +513,7 @@ def parse_markers(text, lang):
         if not lid:
             return label
         label = fix_label(label, load_laws_loc(lang).get(lid, {}).get("name"))
-        return f'<a href="/{LANG_DIR}/{lang}/laws/{lid}.html" class="text-law" data-law="{lid}">{label}</a>'
+        return f'<a href="{entity_href(lid, lang)}" class="text-law" data-law="{lid}">{label}</a>'
 
     text = re.sub(r'\[tag:([^\]]+)\](.*?)\[/tag\]', tag_link, text)
     text = re.sub(r'\[scientist:([^\]]+)\](.*?)\[/scientist\]', scientist_link, text)
@@ -915,7 +915,7 @@ def card_chips(a, lang):
             out.append(f'<a class="ent ent-law" href="/{LANG_DIR}/{lang}/concepts/{attr_safe(law)}.html">'
                        f'{safe(cn[law].get("name") or law.replace("_", " "))}</a>')
         elif law in laws_loc:
-            out.append(f'<a class="ent ent-law" href="/{LANG_DIR}/{lang}/laws/{attr_safe(law)}.html">'
+            out.append(f'<a class="ent ent-law" href="{entity_href(law, lang)}">'
                        f'{safe(laws_loc[law].get("name") or law.replace("_", " "))}</a>')
     for s in (a.get("scientists") or [])[:3]:
         out.append(f'<a class="ent ent-sci" href="/{LANG_DIR}/{lang}/scientists/{attr_safe(author_slug(s))}.html">'
@@ -986,6 +986,9 @@ TAG_ALIAS = {
     "markov_chains": "markov_chain",
     "neutrino_oscillation": "neutrino_oscillations",
     "wave_particle_duality": "waveparticle_duality",
+    # завели понятиями при сведении законов (28.08): в /laws/ они были, в реестре
+    # понятий — нет, а без замены редирект вёл бы в пустоту
+    "aharonovbohm_effect": "aharonov_bohm_effect",
 }
 
 
@@ -2207,7 +2210,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
         # вторая плашка того же закона была бы дублем.
         shown = set(tags) | set(_c2)
         law_chips = "" if _c2 else "".join(
-            f'<a href="/{LANG_DIR}/{lang}/laws/{attr_safe(lid)}.html" class="side-law" '
+            f'<a href={entity_href(lid, lang)} class="side-law" '
             f'data-law="{attr_safe(lid)}">{safe(name)}</a>'
             for lid, name in side_laws if lid not in shown)
         tags_side_html += law_chips
@@ -3055,7 +3058,7 @@ def generate_tag_page(tag_id, lang):
         f'<a href="/{LANG_DIR}/{lang}/tags/{attr_safe(rt)}.html" class="side-tag" data-tag="{attr_safe(rt)}">'
         f'{safe(tags_loc.get(rt, {}).get("name", rt))}</a>' for rt in tag_graph.get("related", [])[:8]]
     side_law_chips = [
-        f'<a href="/{LANG_DIR}/{lang}/laws/{attr_safe(lid)}.html" class="side-law" data-law="{attr_safe(lid)}">'
+        f'<a href={entity_href(lid, lang)} class="side-law" data-law="{attr_safe(lid)}">'
         f'{safe(L.get("name", lid))}</a>'
         for lid, L in _laws_loc.items() if tag_id in (L.get("tags") or [])][:6]
     side_sci_chips = [
@@ -3354,7 +3357,7 @@ def laws_for_tag(tag_id, lang):
     loc = LAWS_LABELS.get(lang, LAWS_LABELS["en"])
     related = [(lid, L) for lid, L in laws.items() if tag_id in (L.get("tags") or [])]
     links = [
-        f'<a href="/{LANG_DIR}/{lang}/laws/{attr_safe(lid)}.html" class="law-chip" data-law="{attr_safe(lid)}">{safe(L.get("name", lid))}</a>'
+        f'<a href="{entity_href(lid, lang)}" class="law-chip" data-law="{attr_safe(lid)}">{safe(L.get("name", lid))}</a>'
         for lid, L in related[:14]]
     return related_row(loc["laws"].rstrip(":"), links, "laws")
 
@@ -3392,7 +3395,7 @@ def generate_laws_cloud(lang):
         cnt = law_counts.get(lid, 0)
         count_html = f'<span class="cat-chip-n">{cnt}</span>' if cnt else ""
         return (
-            f'<a href="/{LANG_DIR}/{lang}/laws/{attr_safe(lid)}.html" class="tag-item law-item" data-law="{attr_safe(lid)}">'
+            f'<a href="{entity_href(lid, lang)}" class="tag-item law-item" data-law="{attr_safe(lid)}">'
             f'<span><span class="law-type-dot" style="background:{color}"></span>{safe(L.get("name", lid))}</span>{count_html}</a>\n'
         )
 
@@ -3408,7 +3411,7 @@ def generate_laws_cloud(lang):
     for t, lids in by_type.items():
         children = sorted(
             ({"name": laws[lid].get("name", lid), "count": law_counts.get(lid, 0),
-              "url": f"/{LANG_DIR}/{lang}/laws/{attr_safe(lid)}.html"} for lid in lids),
+              "url": entity_href(lid, lang)} for lid in lids),
             key=lambda c: -c["count"])
         color = law_color(lids[0])
         tm_groups.append({"key": t, "label": law_type_label(t, lang), "count": sum(c["count"] for c in children) or len(children),
@@ -3431,7 +3434,31 @@ def generate_laws_cloud(lang):
 
 
 def generate_law_page(law_id, lang):
-    """Отдельная страница закона (как страница тега): описание ×3, формулы, история, связи, статьи по теме."""
+    """Отдельная страница закона (как страница тега): описание ×3, формулы, история, связи, статьи по теме.
+
+    ОБЛАКО ЗАКОНОВ СВЕДЕНО В ПОНЯТИЯ (владелец 28.08: «давай сводим законы в
+    понятия, до прода»). Своего содержания у него не осталось: из 536 страниц 526
+    имели двойника-понятие, формул на странице закона ноль — они давно живут у
+    понятий и в собственном облаке /formula/, а классы «закон, принцип, теорема,
+    уравнение» есть прямо в реестре, их там 160.
+
+    Страницы не удаляем: на них ведут внешние ссылки и поисковая выдача, и 404 на
+    месте работавшего адреса — потеря без выгоды. Отдаём переадресацию с
+    canonical, поисковик переклеит вес сам. Десять адресов без двойника разобраны
+    отдельно: восемь свелись картой написаний, двум (эффект Ааронова — Бома,
+    закон сохранения импульса) заведены понятия.
+    """
+    _cid = law_id if law_id in _live_mini() else TAG_ALIAS.get(law_id)
+    if _cid and _cid in _live_mini():
+        to = f"/{LANG_DIR}/{lang}/concepts/{_cid}.html"
+        _write_text_retry(
+            Path(LANG_DIR) / lang / "laws" / f"{law_id}.html",
+            f'<!DOCTYPE html><html lang="{lang}"><head><meta charset="UTF-8">'
+            f'<meta http-equiv="refresh" content="0;url={to}">'
+            f'<link rel="canonical" href="{SITE_URL}{to}">'
+            f'<title>&rarr; {to}</title></head>'
+            f'<body><a href="{to}">{to}</a></body></html>')
+        return
     tpl = load_template("law")
     if not tpl.template: return
     laws = load_laws_loc(lang)
@@ -3461,7 +3488,7 @@ def generate_law_page(law_id, lang):
     influenced_section_html = related_row(loc["influenced"].rstrip(":"), influenced_links)
     related_laws = [rl for rl in (L.get("related_laws") or []) if rl in laws]
     related_laws_links = [
-        f'<a href="/{LANG_DIR}/{lang}/laws/{attr_safe(rl)}.html" class="law-chip" data-law="{attr_safe(rl)}">{safe(laws[rl].get("name", rl))}</a>'
+        f'<a href={entity_href(rl, lang)} class="law-chip" data-law="{attr_safe(rl)}">{safe(laws[rl].get("name", rl))}</a>'
         for rl in related_laws]
     related_laws_block = related_row(loc["related_laws"], related_laws_links)
 
@@ -3475,7 +3502,7 @@ def generate_law_page(law_id, lang):
         f'<a href="/{LANG_DIR}/{lang}/tags/{attr_safe(t)}.html" class="side-tag" data-tag="{attr_safe(t)}">'
         f'{safe(tags_loc.get(t, {}).get("name", t))}</a>' for t in law_tags[:8] if t in valid_tag_ids()]
     side_law_chips = [
-        f'<a href="/{LANG_DIR}/{lang}/laws/{attr_safe(rl)}.html" class="side-law" data-law="{attr_safe(rl)}">'
+        f'<a href={entity_href(rl, lang)} class="side-law" data-law="{attr_safe(rl)}">'
         f'{safe(laws[rl].get("name", rl))}</a>' for rl in related_laws[:6]]
     entity_side_html = (
         # «Открыли» — роль (кто открыл именно этот закон), а не «связанные учёные»:
@@ -3566,7 +3593,16 @@ def update_all_laws(lang):
     laws = load_laws_loc(lang)
     if not laws:
         return
-    generate_laws_cloud(lang)
+    # Облако законов тоже сведено: его витрина повторяла облако понятий, где те
+    # же законы стоят классом среди прочих. Адрес остаётся живым переадресацией.
+    to = f"/{LANG_DIR}/{lang}/concepts/"
+    _write_text_retry(
+        Path(LANG_DIR) / lang / "laws" / "index.html",
+        f'<!DOCTYPE html><html lang="{lang}"><head><meta charset="UTF-8">'
+        f'<meta http-equiv="refresh" content="0;url={to}">'
+        f'<link rel="canonical" href="{SITE_URL}{to}">'
+        f'<title>&rarr; {to}</title></head>'
+        f'<body><a href="{to}">{to}</a></body></html>')
     for law_id in laws:
         generate_law_page(law_id, lang)
     print(f"  ⚖️ Laws updated for {lang} ({len(laws)} pages)")
@@ -3777,7 +3813,7 @@ def generate_scientist_page(sid, lang):
     if not lp.exists(): lp = Path(f"lang/{DEFAULT_LANG}/data/laws.json")
     laws_data = json.loads(lp.read_text(encoding="utf-8")) if lp.exists() else {}
     related_laws_links = [
-        f'<a href="/{LANG_DIR}/{lang}/laws/{attr_safe(lid)}.html" class="law-chip" data-law="{attr_safe(lid)}">{safe(ld.get("name", lid))}</a>'
+        f'<a href={entity_href(lid, lang)} class="law-chip" data-law="{attr_safe(lid)}">{safe(ld.get("name", lid))}</a>'
         for lid, ld in laws_data.items()
         if sid in ld.get("scientists", []) or sid in ld.get("influenced_by", [])
     ]
@@ -3833,7 +3869,7 @@ def generate_scientist_page(sid, lang):
         f'<a href="/{LANG_DIR}/{lang}/tags/{attr_safe(t)}.html" class="side-tag" data-tag="{attr_safe(t)}">'
         f'{safe(tags_loc.get(t, {}).get("name", t))}</a>' for t in data.get("related_tags", [])[:8]]
     side_law_chips = [
-        f'<a href="/{LANG_DIR}/{lang}/laws/{attr_safe(lid)}.html" class="side-law" data-law="{attr_safe(lid)}">'
+        f'<a href={entity_href(lid, lang)} class="side-law" data-law="{attr_safe(lid)}">'
         f'{safe(ld.get("name", lid))}</a>'
         for lid, ld in laws_data.items() if sid in ld.get("scientists", []) or sid in ld.get("influenced_by", [])][:6]
     side_sci_chips = [
@@ -4274,7 +4310,7 @@ def update_all_authors():
             )
             author_law_ids = [lid for lid, L in laws_loc.items() if set(L.get("tags", [])) & author_tags_set]
             author_laws_html = " · ".join(
-                f'<a href="/{lbase}/laws/{attr_safe(lid)}.html" class="law-chip" data-law="{attr_safe(lid)}">{safe(laws_loc[lid].get("name", lid))}</a>'
+                f'<a href={entity_href(lid, lang)} class="law-chip" data-law="{attr_safe(lid)}">{safe(laws_loc[lid].get("name", lid))}</a>'
                 for lid in author_law_ids[:20]
             )
             # Описание для выдачи: сколько работ и о чём. Без него поисковик собирает сниппет
