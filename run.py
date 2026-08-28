@@ -116,9 +116,13 @@ def cmd_daily(args):
     if args.refine:
         os.environ["REFINE"] = "1"
     import generate
-    made = generate.process_day(args.date or _yesterday(), force=args.force,
+    _day = args.date or _yesterday()
+    made = generate.process_day(_day, force=args.force,
                                 express=args.express, category=args.category, limit=args.limit)
-    _ensure_webp()   # без этого шага свежие статьи выходят без картинок (возврат QA 2026-07-30)
+    # Смотрим только папки этого дня: картинки других дней давно сконвертированы,
+    # и обходить их заново незачем (без этого шага свежие статьи выходят без
+    # картинок — возврат QA 2026-07-30).
+    _ensure_webp(only=[f"lang/{l}/archive/{_day}" for l in ("ru", "en", "es", "ar", "fr")])
     # -1 = периметр не дал НИ ОДНОГО кандидата. Возвращаем неудачу наружу: планировщик
     # пишет код в logs/daily-history.log, и «rc=1» там видно сразу, а «rc=0» трое суток
     # подряд означало «всё хорошо» при стоящей ленте.
@@ -784,12 +788,19 @@ def cmd_graph(args):
     _run_chain([["build_knowledge_graph.py"]])
 
 
-def _ensure_webp():
+def _ensure_webp(only=None):
     """Догоняем .webp для новых картинок (генератор пишет .jpg, сайт отдаёт .webp).
-    Пропускает уже сконвертированное — дёшево. Вшито после регенера, чтобы у свежих статей
-    гарантированно были картинки (webp-миграция 2026-07-25)."""
+
+    only — папки, где смотреть. Дневной прогон называет свой день: обход всех
+    восьмидесяти четырёх тысяч картинок ради десятка новых занимает минуты, и на
+    догоне нескольких дней это повторялось на каждом (замер 28.08). Без only —
+    весь сайт, как раньше: так зовут разовые команды и служебный прогон.
+    """
+    cmd = ["webp_convert.py"]
+    if only:
+        cmd += ["--only"] + list(only)
     try:
-        _run_chain([["webp_convert.py"]])
+        _run_chain([cmd])
     except SystemExit:
         print("⚠️ конвертация webp не удалась — новые картинки могут не отобразиться")
 

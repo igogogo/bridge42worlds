@@ -21,9 +21,23 @@ QUALITY = 88
 ROOTS = ["lang"]
 
 
+def roots():
+    """Где искать. По умолчанию весь сайт, но обход 84 тысяч картинок ради десятка
+    новых — минуты на пустом месте, и так на каждом дне догона (замер 28.08).
+    С --only можно назвать конкретные папки: обычный прогон зовёт по дню.
+
+        python webp_convert.py --only lang/ru/archive/2026-08-24
+    """
+    if "--only" in sys.argv:
+        i = sys.argv.index("--only")
+        got = [a for a in sys.argv[i + 1:] if not a.startswith("--")]
+        return got or ROOTS
+    return ROOTS
+
+
 def targets():
     out = []
-    for r in ROOTS:
+    for r in roots():
         for p in Path(r).rglob("*.jpg"):
             w = p.with_suffix(".webp")
             # Не только «webp нет», но и «jpg свежее webp»: regen с 2026-07-31 пишет ПОВЕРХ
@@ -48,7 +62,7 @@ def convert(src):
 
 def main():
     todo = targets()
-    total_jpg = sum(1 for r in ROOTS for _ in Path(r).rglob("*.jpg"))
+    total_jpg = sum(1 for r in roots() for _ in Path(r).rglob("*.jpg"))
     print(f"всего .jpg: {total_jpg:,} | к конвертации: {len(todo):,}", flush=True)
     if "--check" in sys.argv or not todo:
         return
@@ -59,8 +73,8 @@ def main():
             done += ok
             if done % 2000 == 0:
                 print(f"  … {done:,}/{len(todo):,}", flush=True)
-    jb = sum(p.stat().st_size for r in ROOTS for p in Path(r).rglob("*.jpg"))
-    wb = sum(p.stat().st_size for r in ROOTS for p in Path(r).rglob("*.webp"))
+    jb = sum(p.stat().st_size for r in roots() for p in Path(r).rglob("*.jpg"))
+    wb = sum(p.stat().st_size for r in roots() for p in Path(r).rglob("*.webp"))
     print(f"✅ готово: {done:,} файлов | jpg {jb/1024**3:.2f} ГБ → webp {wb/1024**3:.2f} ГБ", flush=True)
 
 
