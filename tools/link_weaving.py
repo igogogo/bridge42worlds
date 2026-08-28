@@ -141,6 +141,44 @@ def candidates(cid, live, have, groups):
     return out[:CAND]
 
 
+# Куда «входить» нельзя: величина, константа и математический объект не вмещают
+# в себя закон — это они входят в него. Промпт об этом предупреждает прямо, и всё
+# же на полном обходе реестра модель перевернула девяносто две связи: «уравнение
+# Шрёдингера входит в импульс», «второй закон Ньютона входит в силу».
+_INTO_BAD = {"quantity", "constant", "math"}
+
+
+def fix_directions(got, live):
+    """Перевернуть связи, у которых направление заведомо не то.
+
+    Пары модель находит верно — путается только в том, что во что входит. Поэтому
+    переворачиваем, а не выбрасываем: «импульс входит в уравнение Шрёдингера» —
+    правильное и полезное утверждение, добытое тем же запросом.
+
+    Признак перевёрнутого part_of: слева предмет с формулой (закон, уравнение,
+    теорема — у него есть formulas или kind law/math), справа величина, константа
+    или математический объект. Формула СОСТОИТ из величин, а не наоборот.
+    """
+    n = 0
+    out = {}
+    for cid, links in got.items():
+        keep = []
+        for lk in links:
+            to = lk.get("to")
+            v, w = live.get(cid) or {}, live.get(to) or {}
+            has_formula = bool(v.get("formulas")) or v.get("kind") in ("law", "math")
+            if (lk.get("rel") == "part_of" and has_formula
+                    and w.get("kind") in _INTO_BAD):
+                out.setdefault(to, []).append(
+                    {"to": cid, "rel": "part_of", "w": lk.get("w", 2)})
+                n += 1
+                continue
+            keep.append(lk)
+        if keep:
+            out.setdefault(cid, []).extend(keep)
+    return out, n
+
+
 def _loads_loose(raw):
     """Разобрать ответ модели, даже если после JSON остался хвост.
 
@@ -297,6 +335,9 @@ def main():
             got_all.update(got or {})
 
     n_links = sum(len(v) for v in got_all.values())
+    got_all, n_flip = fix_directions(got_all, live)
+    if n_flip:
+        print(f"направление исправлено у {n_flip} связей")
     print(f"найдено связей: {n_links} у {len(got_all)} понятий\n")
     for cid, links in list(got_all.items())[:14]:
         nm = (live[cid].get("names") or {}).get("ru") or cid
