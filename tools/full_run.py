@@ -42,6 +42,12 @@ sys.path.insert(0, str(ROOT))
 PY = sys.executable
 LOG = ROOT / "data" / "full-run.log"
 STATE = ROOT / "data" / "full-state.json"
+# Журнал прогонов — то, что читает схема конвейера (/pipeline.html): не только
+# «где мы сейчас», но и история. Владелец 28.08: «зашёл и историю увидел, и
+# проблемы, и текущее состояние, и что запланировано». Один файл, по записи на
+# прогон, последние тридцать.
+RUNS = ROOT / "data" / "pipeline-runs.json"
+RUNS_KEEP = 30
 
 
 def log(m):
@@ -60,16 +66,55 @@ def state():
 
 def save(st):
     STATE.write_text(json.dumps(st, ensure_ascii=False, indent=1), encoding="utf-8")
+    journal(st)
+
+
+def journal(st):
+    """Дописать текущий прогон в журнал: шаги, время каждого, ошибки, план.
+
+    Пишется на каждом шаге, а не в конце: если прогон оборвётся, журнал всё равно
+    покажет, до чего дошли и на чём встали — ровно то, ради чего он и заведён.
+    """
+    try:
+        runs = json.loads(RUNS.read_text(encoding="utf-8")) if RUNS.exists() else []
+    except Exception:
+        runs = []
+    rid = st.get("run_id")
+    rec = None
+    for r in runs:
+        if r.get("id") == rid:
+            rec = r
+            break
+    if rec is None:
+        rec = {"id": rid, "started": st.get("started"), "days": st.get("days") or []}
+        runs.append(rec)
+    rec["done"] = list(st.get("done") or [])
+    rec["failed"] = list(st.get("failed") or [])
+    rec["current"] = st.get("current")
+    rec["at"] = st.get("at")
+    rec["secs"] = dict(st.get("secs") or {})
+    rec["plan"] = list(st.get("plan") or [])
+    runs = runs[-RUNS_KEEP:]
+    RUNS.write_text(json.dumps(runs, ensure_ascii=False, indent=1), encoding="utf-8")
 
 
 def run(step, cmd, timeout=8 * 3600, cwd=None, env=None, soft=False):
     """soft — шаг, неудача которого не должна валить прогон (например, обложки:
-    без картинки статья всё равно статья)."""
+    без картинки статья всё равно статья).
+
+    Состояние пишется НЕ только для продолжения с места обрыва: схема конвейера
+    (/pipeline.html) читает этот же файл и красит узлы — что прошло, что идёт
+    сейчас, что упало. Разметка под это была готова с самого начала, не хватало
+    только состояния.
+    """
     st = state()
     if step in st["done"]:
         log(f"· {step}: уже сделан")
         return True
     log(f"▶ {step}")
+    st["current"] = step
+    st["at"] = time.strftime("%Y-%m-%d %H:%M")
+    save(st)
     t0 = time.time()
     try:
         e = dict(os.environ, **env) if env else None
@@ -80,12 +125,18 @@ def run(step, cmd, timeout=8 * 3600, cwd=None, env=None, soft=False):
         log(f"  ⏱ {step}: превышено время ({timeout // 60} мин)")
     dt = int(time.time() - t0)
     log(("✓ " if ok else "✗ ") + f"{step} ({dt // 60} мин {dt % 60} с)")
+    st = state()
+    st["current"] = None
+    st["at"] = time.strftime("%Y-%m-%d %H:%M")
+    st.setdefault("secs", {})[step] = dt
     if ok:
-        st = state()
         st["done"].append(step)
-        save(st)
-    elif not soft:
-        log(f"  ШАГ НЕ УДАЛСЯ: {step}. Прогон остановлен — разбираться здесь.")
+        st.get("failed", []) and step in st["failed"] and st["failed"].remove(step)
+    else:
+        st.setdefault("failed", []).append(step)
+        if not soft:
+            log(f"  ШАГ НЕ УДАЛСЯ: {step}. Прогон остановлен — разбираться здесь.")
+    save(st)
     return ok or soft
 
 
@@ -116,6 +167,24 @@ def main():
             else missing_days() if a.catch_up else [])
     log("═══ ПОЛНЫЙ ПРОГОН КОНВЕЙЕРА ═══")
     log(f"дни: {', '.join(days) if days else 'нет — только насыщение и сборка'}")
+
+    # План объявляем ДО работы: схема конвейера показывает не только пройденное и
+    # текущее, но и то, что ещё предстоит. Без этого «запланировано» пришлось бы
+    # угадывать по списку шагов, зашитому в страницу, — и она разъехалась бы с
+    # цепочкой при первой же правке.
+    st = state()
+    if not st.get("run_id"):
+        st["run_id"] = time.strftime("%Y-%m-%d %H:%M")
+        st["started"] = st["run_id"]
+    st["days"] = days
+    st["plan"] = ([f"day-{d}" for d in days] + [
+        "harvest", "anatomy", "flink", "match", "distill", "births", "g-grow",
+        "f-support", "twins", "consts", "units-fix", "live-1", "cards", "tr-cards",
+        "tr-formulas", "names-ru", "retag", "apply", "super", "live-2", "vecnb",
+        "live-3", "gnames", "weave", "live-4", "graph", "mentions-ru", "highlight",
+        "pages-c", "pages-f", "html", "authors", "status", "cloud-d1", "cloud-vec",
+        "cards-sync", "deploy", "api", "pages", "audit", "gaudit", "links"])
+    save(st)
 
     # ── I. ЗАБОР И РАЗБОР ────────────────────────────────────────────────────
     # Каждый день отдельным шагом: если оборвётся на третьем, первые два не
@@ -213,6 +282,7 @@ def main():
                     "import generate as G; G.update_all_authors()"], timeout=4 * 3600)
     run("status", [PY, "-c", "import sys; sys.path.insert(0,'.'); "
                    "import generate as G; G.generate_status_page()"], timeout=1800)
+    run("pipeline-page", [PY, "tools/pipeline_page.py"], timeout=600, soft=True)
 
     # ── VI. ОБЛАКО ───────────────────────────────────────────────────────────
     run("cloud-d1", [PY, "cloudflare/concepts_sync.py"], timeout=4 * 3600)

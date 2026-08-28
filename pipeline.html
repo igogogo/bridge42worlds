@@ -3,393 +3,222 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Пайплайн производства — bridge42worlds</title>
+<title>Конвейер — bridge42worlds</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css?v=804ecb3567">
+<link rel="stylesheet" href="/css/style.css">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <style>
-/* ═══ Схема пайплайна. Каждый узел несёт data-step — будущая живость
-   (зелёный «прошло» / красный «упало» / пульс «идёт») подключится к
-   state-файлам шагов без переделки разметки. Пока статика. ═══ */
-body { max-width: 1060px; padding-bottom: 80px; }
-.pl-head { margin: 26px 0 6px; }
-.pl-head h1 { font-size: 26px; margin: 0 0 6px; }
-.pl-sub { color: var(--soft); font-size: 13.5px; max-width: 72ch; line-height: 1.55; }
+:root { --ok: #1f9d76; --run: #c8892a; --fail: #c0392b; --wait: #b9b2a6; }
+body { max-width: 1100px; padding-bottom: 70px; }
+.pp-head h1 { font-size: 25px; margin: 24px 0 4px; }
+.pp-sub { color: var(--soft); font-size: 13.5px; max-width: 74ch; line-height: 1.55; }
+.pp-bar { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center;
+    margin: 16px 0 6px; font-family: var(--mono); font-size: 12px; }
+.pp-bar select { font-family: var(--mono); font-size: 12px; padding: 4px 8px;
+    border: 1px solid var(--hairline); border-radius: 6px; background: var(--bg);
+    color: var(--fg); }
+.pp-now { color: var(--muted); }
+.pp-now b { color: var(--run); font-weight: 500; }
+.pp-legend { display: flex; gap: 14px; flex-wrap: wrap; margin-left: auto;
+    color: var(--muted); }
+.pp-legend i { width: 8px; height: 8px; border-radius: 50%; display: inline-block;
+    margin-right: 5px; vertical-align: 1px; }
 
-/* легенда исполнителей */
-.pl-legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 18px 0 8px;
-  font-family: var(--mono); font-size: 11.5px; color: var(--muted); }
-.pl-legend b { font-weight: 500; }
-.dot { display: inline-block; width: 10px; height: 10px; border-radius: 3px;
-  vertical-align: -1px; margin-right: 5px; }
+/* Поток: фазы идут строками, шаги внутри — лампочками в ряд. Так весь цикл
+   виден целиком, без прокрутки на сорок узлов. */
+.pp-flow { margin: 14px 0 0; }
+.pp-phase { display: grid; grid-template-columns: 190px 1fr; gap: 12px;
+    padding: 9px 0; border-top: 1px solid var(--hairline); align-items: start; }
+.pp-phase:last-child { border-bottom: 1px solid var(--hairline); }
+.pp-pname { font-family: var(--serif); font-size: 14.5px; line-height: 1.3; }
+.pp-pdesc { color: var(--soft); font-size: 11.5px; line-height: 1.4; margin-top: 2px; }
+.pp-steps { display: flex; flex-wrap: wrap; gap: 6px; }
+.pp-step { display: flex; align-items: center; gap: 6px; padding: 4px 9px 4px 7px;
+    border: 1px solid var(--hairline); border-radius: 999px; font-size: 11.5px;
+    background: var(--bg); cursor: default; transition: border-color .15s, transform .15s; }
+.pp-step:hover { border-color: var(--muted); transform: translateY(-1px); }
+.pp-lamp { width: 8px; height: 8px; border-radius: 50%; background: var(--wait);
+    flex: none; }
+.pp-step[data-s="done"] .pp-lamp { background: var(--ok); }
+.pp-step[data-s="fail"] .pp-lamp { background: var(--fail); }
+.pp-step[data-s="run"]  .pp-lamp { background: var(--run);
+    animation: pp-pulse 1.2s ease-in-out infinite; }
+.pp-step[data-s="fail"] { border-color: var(--fail); }
+.pp-step[data-s="run"]  { border-color: var(--run); }
+.pp-secs { color: var(--muted); font-family: var(--mono); font-size: 10.5px; }
+@keyframes pp-pulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
 
-/* цвета исполнителей */
-:root {
-  --ex-local: #6b7f8c;   /* локальный Python (VPS) */
-  --ex-ds: #b8860b;      /* DeepSeek — генерация, перевод, добыча */
-  --ex-vec: #0d7d8c;     /* bge-m3 / Vectorize — весь вектор */
-  --ex-cf: #c46a1f;      /* Cloudflare — R2, D1, Worker */
-  --ex-s2: #4a7ab5;      /* Semantic Scholar */
-  --ex-flux: #8a6db1;    /* FLUX — обложки */
-  --ex-claude: #a05c65;  /* Claude-агент: надзор и починка */
+.pp-fails { margin: 18px 0 0; border: 1px solid var(--fail); border-radius: 8px;
+    padding: 10px 13px; font-size: 12.5px; }
+.pp-fails h3 { margin: 0 0 6px; font-size: 13px; color: var(--fail); }
+.pp-fails li { margin: 3px 0; }
+.pp-hint { margin: 16px 0 0; font-size: 12px; color: var(--soft); line-height: 1.5; }
+.pp-empty { margin: 22px 0; padding: 14px; border: 1px dashed var(--hairline);
+    border-radius: 8px; color: var(--soft); font-size: 13px; }
+.pp-tip { max-width: 320px; }
+@media (max-width: 720px) {
+  .pp-phase { grid-template-columns: 1fr; gap: 4px; }
+  .pp-legend { margin-left: 0; }
 }
-
-/* лента этапов */
-.stage { position: relative; margin: 0 0 0 130px; padding: 16px 18px 18px;
-  border: 1px solid var(--hairline); border-radius: var(--radius);
-  background: var(--surface); box-shadow: var(--shadow-sm); }
-.stage + .stage { margin-top: 34px; }
-.stage + .stage::before { content: ""; position: absolute; left: 50%; top: -35px;
-  width: 2px; height: 34px; background: var(--hairline); }
-.stage + .stage::after { content: ""; position: absolute; left: calc(50% - 5px);
-  top: -8px; border: 6px solid transparent; border-top-color: var(--muted);
-  opacity: .6; }
-.st-time { position: absolute; left: -130px; top: 14px; width: 110px;
-  text-align: right; font-family: var(--mono); font-size: 11px;
-  color: var(--cyan); line-height: 1.5; }
-.st-time small { display: block; color: var(--soft); }
-.st-name { font-family: var(--serif); font-size: 17px; margin: 0 0 2px; }
-.st-who { font-family: var(--mono); font-size: 10.5px; color: var(--soft);
-  margin-bottom: 10px; }
-.st-note { font-size: 12px; color: var(--soft); margin-top: 10px;
-  line-height: 1.5; max-width: 80ch; }
-
-/* узлы внутри этапа */
-.nodes { display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; }
-.node { position: relative; flex: 1 1 150px; min-width: 150px; max-width: 240px;
-  padding: 8px 11px 9px; border: 1px solid var(--hairline);
-  border-left: 3px solid var(--ex, var(--ex-local));
-  border-radius: var(--radius-sm); background: var(--bg); }
-.node b { display: block; font-size: 12.5px; font-weight: 600; margin-bottom: 2px; }
-.node span { display: block; font-size: 11px; color: var(--muted); line-height: 1.45; }
-.node em { display: block; font-family: var(--mono); font-style: normal;
-  font-size: 9.5px; color: var(--soft); margin-top: 5px; }
-/* будущая лампочка состояния */
-.node::after { content: ""; position: absolute; top: 8px; right: 8px;
-  width: 7px; height: 7px; border-radius: 50%; background: var(--hairline); }
-.chain { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-.chain .arr { color: var(--soft); font-size: 14px; flex: none; }
-
-.branch { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-@media (max-width: 700px) {
-  .stage { margin-left: 0; }
-  .st-time { position: static; text-align: left; width: auto; margin-bottom: 8px; }
-  .branch { grid-template-columns: 1fr; }
-}
-
-/* низ: пилот и правила */
-.pl-foot { margin: 40px 0 0 130px; padding: 16px 18px;
-  border: 1px dashed var(--hairline); border-radius: var(--radius);
-  background: color-mix(in srgb, var(--surface) 55%, transparent); }
-@media (max-width: 700px) { .pl-foot { margin-left: 0; } }
-.pl-foot h2 { font-size: 15px; margin: 0 0 8px; }
-.pl-foot p, .pl-foot li { font-size: 12.5px; color: var(--muted); line-height: 1.55; }
 </style>
 </head>
 <body>
 
-<div class="pl-head">
-  <h1>Пайплайн производства</h1>
-  <div class="pl-sub">Один суточный цикл прода: откуда берём, чем генерим, как
-  насыщаем знаниями, размечаем и выкладываем. Каждый узел получит живую
-  лампочку — прошло · идёт · упало — когда поедем на этом конвейере;
-  пока схема статичная.</div>
+<div class="pp-head">
+  <h1>Конвейер</h1>
+  <div class="pp-sub">Полный цикл производства: от свежих работ с arXiv до
+  выложенного сайта. Лампочка у каждого шага показывает, что прошло, что идёт
+  сейчас и что не удалось; список прогонов слева переключает историю.</div>
 </div>
 
-<div class="pl-legend">
-  <span><i class="dot" style="background:var(--ex-local)"></i><b>Python на машине</b> — оркестр, сборка, файлы</span>
-  <span><i class="dot" style="background:var(--ex-ds)"></i><b>DeepSeek</b> — тексты: генерация · перевод · добыча понятий</span>
-  <span><i class="dot" style="background:var(--ex-vec)"></i><b>Вектор bge-m3</b> — смысл: разметка · похожие · сверки</span>
-  <span><i class="dot" style="background:var(--ex-s2)"></i><b>Semantic Scholar</b> — цитируемость · сито · авторы</span>
-  <span><i class="dot" style="background:var(--ex-flux)"></i><b>FLUX</b> — обложки</span>
-  <span><i class="dot" style="background:var(--ex-cf)"></i><b>Cloudflare</b> — R2 · D1 · Vectorize · Worker</span>
-  <span><i class="dot" style="background:var(--ex-claude)"></i><b>Claude-агент</b> — дозор, разбор сбоев, починка</span>
+<div class="pp-bar" id="pp-live" style="display:none">
+  <label>Прогон: <select id="pp-run"></select></label>
+  <span class="pp-now" id="pp-now"></span>
+  <span class="pp-legend">
+    <span><i style="background:var(--ok)"></i>прошло</span>
+    <span><i style="background:var(--run)"></i>идёт</span>
+    <span><i style="background:var(--fail)"></i>сбой</span>
+    <span><i style="background:var(--wait)"></i>впереди</span>
+  </span>
 </div>
 
-<!-- ═════════ I. ЗАБОР ═════════ -->
-<div class="stage" data-stage="fetch">
-  <div class="st-time">08:00<small>Кувейт · ежедневно</small></div>
-  <div class="st-name">Забор дня</div>
-  <div class="st-who">локальный Python · arXiv API</div>
-  <div class="chain">
-    <div class="node" data-step="arxiv-list" style="--ex:var(--ex-local)">
-      <b>arXiv: свежий список</b>
-      <span>новые работы по нашим разделам (физика, астро, квант, приборы, био)</span>
-      <em>arxiv_bulk · API arXiv</em>
-    </div>
-    <span class="arr">→</span>
-    <div class="node" data-step="select" style="--ex:var(--ex-local)">
-      <b>Отбор дня</b>
-      <span>~20–40 работ: баланс разделов, лицензии, вес (цитируемость — фактор отбора)</span>
-      <em>article_bulk_select · очередь bulk-select</em>
-    </div>
-    <span class="arr">→</span>
-    <div class="node" data-step="pdf" style="--ex:var(--ex-local)">
-      <b>PDF и кадры</b>
-      <span>текст статьи, картинки из PDF в мозаику</span>
-      <em>pdf → jpg/webp</em>
-    </div>
-  </div>
+<div class="pp-empty" id="pp-empty" style="display:none">
+  Журнала прогонов ещё нет. Он появится после первого запуска
+  <code>tools/full_run.py</code> — страница читает <code>data/pipeline-runs.json</code>
+  и ничего не выдумывает, пока файла нет.
 </div>
 
-<!-- ═════════ II. ГЕНЕРАЦИЯ ═════════ -->
-<div class="stage" data-stage="generate">
-  <div class="st-time">19:30–03:30<small>дешёвое окно DeepSeek</small></div>
-  <div class="st-name">Генерация разборов</div>
-  <div class="st-who">DeepSeek · русский — язык-источник</div>
-  <div class="branch">
-    <div class="node" data-step="express" style="--ex:var(--ex-ds)">
-      <b>Экспресс (~90% потока)</b>
-      <span>быстрый пересказ по авторской аннотации: заголовок, суть, «зачем читать». Дёшево, в тот же день</span>
-      <em>помечен бейджем «экспресс» на карточке</em>
-    </div>
-    <div class="node" data-step="full" style="--ex:var(--ex-ds)">
-      <b>Полный разбор (~10%)</b>
-      <span>три уровня — просто · популярно · подробно — плюс мини, глоссарий, формулы с выводами, факт, рекомендации автору</span>
-      <em>еженедельная волна полных + доводка refined</em>
-    </div>
-  </div>
-  <div class="st-note">Уровни — это лестница одного текста, не обрезки: простой
-  объясняет без терминов, подробный держит математику. Экспресс со временем
-  дорастает до полного, если тема живая.</div>
-</div>
+<div class="pp-flow" id="pp-flow"></div>
+<div class="pp-fails" id="pp-fails" style="display:none"></div>
 
-<!-- ═════════ III. ПЕРЕВОД ═════════ -->
-<div class="stage" data-stage="translate">
-  <div class="st-time">там же<small>вслед за генерацией</small></div>
-  <div class="st-name">Перевод</div>
-  <div class="st-who">DeepSeek · 5 языков</div>
-  <div class="chain">
-    <div class="node" data-step="tr-langs" style="--ex:var(--ex-ds)">
-      <b>ru → en · es · ar · fr</b>
-      <span>все уровни и служебные поля; термины по физическому словоупотреблению языка</span>
-      <em>шесть слоёв утечки языка под проверкой</em>
-    </div>
-    <span class="arr">→</span>
-    <div class="node" data-step="tr-guard" style="--ex:var(--ex-local)">
-      <b>Страж языка</b>
-      <span>непереведённое не маскируется: честная заглушка с кнопкой «перевести сейчас»</span>
-      <em>payload_in_source_lang · заглушки</em>
-    </div>
-  </div>
-</div>
+<div class="pp-hint">Наведите на шаг — покажет, что он делает. Время рядом с
+именем — сколько шаг занял в этом прогоне. Пока конвейер работает, страница
+обновляется сама.</div>
 
-<!-- ═════════ IV. ОБЛОЖКИ ═════════ -->
-<div class="stage" data-stage="covers">
-  <div class="st-time">ночью<small>после текстов</small></div>
-  <div class="st-name">Обложки</div>
-  <div class="st-who">FLUX (DeepInfra) · PDF-кадры</div>
-  <div class="chain">
-    <div class="node" data-step="cover-pdf" style="--ex:var(--ex-local)">
-      <b>Кадр из PDF</b>
-      <span>лучший рисунок статьи, если он есть — «золото», настоящая наука</span>
-    </div>
-    <span class="arr">→</span>
-    <div class="node" data-step="cover-ai" style="--ex:var(--ex-flux)">
-      <b>AI-обложка</b>
-      <span>когда кадра нет: schnell в поток, pro — витринным статьям</span>
-      <em>covers_full · поле image_model</em>
-    </div>
-  </div>
-</div>
+<script>
+(function () {
+  var PHASES = [["Забор и разбор", "день с arXiv: отбор, тексты, обложки, переводы", ["day"]], ["Насыщение", "новые понятия из текстов, формулы, рождения, чистка", ["harvest", "anatomy", "flink", "match", "distill", "births", "g-grow", "f-support", "twins", "consts", "units-fix"]], ["Записи", "карточки, переводы, имена, переразметка", ["live-1", "cards", "tr-cards", "tr-formulas", "names-ru", "retag", "apply"]], ["Связность", "суперпонятия, соседи, области, связи знанием, граф", ["super", "live-2", "vecnb", "live-3", "gnames", "weave", "live-4", "graph", "mentions-ru", "highlight"]], ["Сборка", "страницы понятий и формул, весь сайт, авторы, дашборд", ["pages-c", "pages-f", "html", "authors", "status"]], ["Облако", "D1, векторы, карточки статей, выкладка воркера", ["cloud-d1", "cloud-vec", "cards-sync", "deploy"]], ["Проверка", "эндпоинты, страницы, аудиты, связность ссылок", ["api", "pages", "audit", "gaudit", "links"]]], EXPLAIN = {"harvest": "harvest", "match": "sift", "distill": "sift", "births": "birth", "consts": "consts", "g-grow": "stats", "f-support": "stats", "anatomy": "anatomy", "flink": "anatomy", "super": "super2", "live-2": "super2", "cards": "cards", "tr-cards": "cards", "retag": "retag", "apply": "reapply", "live-3": "reapply", "mentions-ru": "anchors", "highlight": "hl-model", "weave": "hl-vec", "gnames": "hl-dict", "pages-c": "pages", "pages-f": "pages", "html": "pages", "graph": "data", "status": "dash", "authors": "dash", "cloud-d1": "d1", "cloud-vec": "vz", "deploy": "r2", "api": "watch", "pages": "watch", "links": "watch"}, SHORT = {"harvest": "Добыча понятий", "anatomy": "Анатомия формул", "flink": "Привязка формул", "match": "Сверка кандидатов", "distill": "Дистилляция", "births": "Рождение понятий", "g-grow": "Дорост областей", "f-support": "Опора формул", "twins": "Двойники", "consts": "Константы из формул", "units-fix": "Единицы", "live-1": "В реестр ①", "live-2": "В реестр ②", "live-3": "В реестр ③", "live-4": "В реестр ④", "cards": "Полные карточки", "tr-cards": "Перевод карточек", "tr-formulas": "Перевод формул", "names-ru": "Имена по-русски", "retag": "Переразметка статей", "apply": "Применение разметки", "super": "Суперпонятия", "vecnb": "Соседи вектором", "gnames": "Имена областей", "weave": "Связи знанием", "graph": "Экспорт графа", "mentions-ru": "Упоминания", "highlight": "Подсветка терминов", "pages-c": "Страницы понятий", "pages-f": "Страницы формул", "html": "Сборка сайта", "authors": "Страницы авторов", "status": "Дашборд", "cloud-d1": "Заливка D1", "cloud-vec": "Векторы в облако", "cards-sync": "Карточки статей в D1", "deploy": "Выкладка воркера", "api": "Проверка API", "pages": "Проверка страниц", "audit": "Аудит понятий", "gaudit": "Аудит областей", "links": "Проверка ссылок"}, NODES = {"arxiv-list": {"t": "arXiv: свежий список", "d": "новые работы по нашим разделам (физика, астро, квант, приборы, био)", "n": "arxiv_bulk · API arXiv"}, "select": {"t": "Отбор дня", "d": "~20–40 работ: баланс разделов, лицензии, вес (цитируемость — фактор отбора)", "n": "article_bulk_select · очередь bulk-select"}, "pdf": {"t": "PDF и кадры", "d": "текст статьи, картинки из PDF в мозаику", "n": "pdf → jpg/webp"}, "express": {"t": "Экспресс (~90% потока)", "d": "быстрый пересказ по авторской аннотации: заголовок, суть, «зачем читать». Дёшево, в тот же день", "n": "помечен бейджем «экспресс» на карточке"}, "tr-langs": {"t": "ru → en · es · ar · fr", "d": "все уровни и служебные поля; термины по физическому словоупотреблению языка", "n": "шесть слоёв утечки языка под проверкой"}, "tr-guard": {"t": "Страж языка", "d": "непереведённое не маскируется: честная заглушка с кнопкой «перевести сейчас»", "n": "payload_in_source_lang · заглушки"}, "cover-pdf": {"t": "Кадр из PDF", "d": "лучший рисунок статьи, если он есть — «золото», настоящая наука", "n": ""}, "cover-ai": {"t": "AI-обложка", "d": "когда кадра нет: schnell в поток, pro — витринным статьям", "n": "covers_full · поле image_model"}, "embed": {"t": "Эмбеддинг статьи", "d": "в облако (Vectorize — поиск и похожие) и в локальное поле 3 млн работ (валидации)", "n": ""}, "retag": {"t": "Разметка понятиями", "d": "сходство с карточками реестра, поправка на хабность, порог 0.50 + отрыв 0.12", "n": "retag_hub → concepts_v2"}, "sci-link": {"t": "Учёные и похожие", "d": "привязка к учёным, соседние разборы для «похожих» и машины знаний", "n": ""}, "s2": {"t": "Semantic Scholar", "d": "цитируемость, граф ссылок, метрики авторов — по новым статьям", "n": "1 запрос/сек · атрибуция обязательна"}, "harvest": {"t": "Добыча понятий", "d": "модель читает статью с определением понятия в промпте, отдаёт кандидатов + дословные якоря", "n": "concept_cycle · mentions в журнал"}, "sift": {"t": "Сверка и дистилляция", "d": "вектором против реестра (0.80) и между собой (0.86); проигравший — алиас", "n": ""}, "birth": {"t": "Рождение", "d": "тройное сито: опора ≥5 статей + вектор + Scholar-проверка; вектор — в матрицу и облако", "n": ""}, "consts": {"t": "Константы из формул", "d": "элементарный заряд стоит в 11 наших формулах и не назван дословно ни в одной статье — сито упоминаний его не пропустит. Опора здесь — разбор формулы: имя с числовым значением. «varies», «slope», «coefficient» — отказ, это ручки моделей", "n": "constants_from_formulas · ядро СИ поверх"}, "stats": {"t": "Раздел статистики", "d": "статистику в статьях не называют, её делают: «подогнали спектр» вместо метода наименьших квадратов. Из 275 кандидатов опору в 5 статей имеют семь — значит источник канон предмета, а не тексты", "n": "statistics_core · 81 понятие, 9 частей"}, "super2": {"t": "Место в графе", "d": "рождённым не из статей нужны группа и соседи, иначе они видны на своей странице и невидимы в графе. Считает супер по карточкам — значит после карточек и вектора", "n": "concepts_super · сирота по статьям можно, по связям нельзя"}, "anatomy": {"t": "Формулы", "d": "анатомия новых форм: переменные · константы · операторы · применимость; системы единиц (СИ/СГС/планковская)", "n": ""}, "cards": {"t": "Карточки", "d": "полные записи новорождённым + русские переводы карточек и анатомий", "n": ""}, "reapply": {"t": "Переразметка", "d": "статьи переразмечаются на выросшем реестре, справочник пересобирается из хранилищ", "n": "retag → wave5_apply → live"}, "anchors": {"t": "Якоря текстов", "d": "дословные вхождения понятий в русском и английском тексте — падежи, парафразы, аббревиатуры", "n": "mentions_ru · журнал якорей"}, "hl-model": {"t": "Слой 1 — модельные", "d": "дословные выражения из добычи: точное вхождение в текст", "n": ""}, "hl-vec": {"t": "Слой 2 — векторные", "d": "смысловое совпадение фразы с карточкой понятия", "n": ""}, "hl-dict": {"t": "Слой 3 — словарные", "d": "имена понятий и алиасы по словарю, до 20 ссылок на текст", "n": "highlight_concepts · 8–15 ссылок на сложную статью"}, "pages": {"t": "Перегенерация", "d": "новые статьи + затронутые понятия, формулы, авторы; единая карточка, мини-графы", "n": ""}, "data": {"t": "Данные", "d": "индексы (+цитируемость), словари клиенту, данные графа, датасет файн-тюнинга", "n": ""}, "dash": {"t": "Дашборд", "d": "покрытие машины знаний, реестр, целостность — цифры дня", "n": "status.html · отчёт 04:00"}, "r2": {"t": "R2 — статика", "d": "только изменённые файлы; страницы, обложки, данные", "n": ""}, "d1": {"t": "D1 + Worker — динамика", "d": "лента, автор, поиск, СПИСКИ ПОНЯТИЙ, кадры графа, анатомия формул — живое без пересборки", "n": "b42-cards · 27 эндпоинтов · 16 проверок из 16"}, "vz": {"t": "Vectorize", "d": "векторы статей и понятий — смысловой поиск находит и то и другое", "n": "27.08: 3231 карточка понятий залита"}, "watch": {"t": "Дозор", "d": "сторож пиков и почты, ежедневный отчёт; сбой шага — разбор и починка агентом", "n": "b42_report 04:00 · tg-тревоги"}};
+  var runs = [], cur = null;
 
-<!-- ═════════ V. ВЕКТОР ═════════ -->
-<div class="stage" data-stage="vector">
-  <div class="st-time">ночью<small>каждой новой статье</small></div>
-  <div class="st-name">Вектор — смысловой слой</div>
-  <div class="st-who">bge-m3 (Workers AI) · кросс-язычный: русский текст ↔ английская карточка</div>
-  <div class="chain">
-    <div class="node" data-step="embed" style="--ex:var(--ex-vec)">
-      <b>Эмбеддинг статьи</b>
-      <span>в облако (Vectorize — поиск и похожие) и в локальное поле 3 млн работ (валидации)</span>
-    </div>
-    <span class="arr">→</span>
-    <div class="node" data-step="retag" style="--ex:var(--ex-vec)">
-      <b>Разметка понятиями</b>
-      <span>сходство с карточками реестра, поправка на хабность, порог 0.50 + отрыв 0.12</span>
-      <em>retag_hub → concepts_v2</em>
-    </div>
-    <span class="arr">→</span>
-    <div class="node" data-step="sci-link" style="--ex:var(--ex-vec)">
-      <b>Учёные и похожие</b>
-      <span>привязка к учёным, соседние разборы для «похожих» и машины знаний</span>
-    </div>
-  </div>
-</div>
+  function label(step) {
+    if (step.indexOf("day-") === 0) return step.slice(4);
+    if (SHORT[step]) return SHORT[step];
+    var n = NODES[EXPLAIN[step] || step];
+    return n ? n.t : step;
+  }
+  function tip(step) {
+    var n = NODES[EXPLAIN[step] || step];
+    if (step.indexOf("day-") === 0) return "Забор и разбор дня " + step.slice(4);
+    return n ? (n.t + " — " + n.d + (n.n ? " · " + n.n : "")) : step;
+  }
+  function secs(s) {
+    if (!s) return "";
+    return s < 60 ? s + "с" : Math.round(s / 60) + "м";
+  }
 
-<!-- ═════════ VI. ЗНАНИЯ ═════════ -->
-<div class="stage" data-stage="knowledge">
-  <div class="st-time">ночью<small>конвейер знаний · инкрементально</small></div>
-  <div class="st-name">Насыщение знаниями</div>
-  <div class="st-who">DeepSeek + вектор + Scholar · только по новому, сделанное не повторяется</div>
-  <div class="chain" style="margin-bottom:8px">
-    <div class="node" data-step="s2" style="--ex:var(--ex-s2)">
-      <b>Semantic Scholar</b>
-      <span>цитируемость, граф ссылок, метрики авторов — по новым статьям</span>
-      <em>1 запрос/сек · атрибуция обязательна</em>
-    </div>
-    <span class="arr">→</span>
-    <div class="node" data-step="harvest" style="--ex:var(--ex-ds)">
-      <b>Добыча понятий</b>
-      <span>модель читает статью с определением понятия в промпте, отдаёт кандидатов + дословные якоря</span>
-      <em>concept_cycle · mentions в журнал</em>
-    </div>
-    <span class="arr">→</span>
-    <div class="node" data-step="sift" style="--ex:var(--ex-vec)">
-      <b>Сверка и дистилляция</b>
-      <span>вектором против реестра (0.80) и между собой (0.86); проигравший — алиас</span>
-    </div>
-    <span class="arr">→</span>
-    <div class="node" data-step="birth" style="--ex:var(--ex-s2)">
-      <b>Рождение</b>
-      <span>тройное сито: опора ≥5 статей + вектор + Scholar-проверка; вектор — в матрицу и облако</span>
-    </div>
-  </div>
-  <!-- Второй путь рождения. Он не проходит через статьи вовсе, и это не
-       исключение из правила, а другое правило: есть знание, которое физика
-       применяет, не называя. -->
-  <div class="chain">
-    <div class="node" data-step="consts" style="--ex:var(--ex-local)">
-      <b>Константы из формул</b>
-      <span>элементарный заряд стоит в 11 наших формулах и не назван дословно ни в одной статье — сито упоминаний его не пропустит. Опора здесь — разбор формулы: имя с числовым значением. «varies», «slope», «coefficient» — отказ, это ручки моделей</span>
-      <em>constants_from_formulas · ядро СИ поверх</em>
-    </div>
-    <span class="arr">→</span>
-    <div class="node" data-step="stats" style="--ex:var(--ex-local)">
-      <b>Раздел статистики</b>
-      <span>статистику в статьях не называют, её делают: «подогнали спектр» вместо метода наименьших квадратов. Из 275 кандидатов опору в 5 статей имеют семь — значит источник канон предмета, а не тексты</span>
-      <em>statistics_core · 81 понятие, 9 частей</em>
-    </div>
-    <span class="arr">→</span>
-    <div class="node" data-step="super2" style="--ex:var(--ex-vec)">
-      <b>Место в графе</b>
-      <span>рождённым не из статей нужны группа и соседи, иначе они видны на своей странице и невидимы в графе. Считает супер по карточкам — значит после карточек и вектора</span>
-      <em>concepts_super · сирота по статьям можно, по связям нельзя</em>
-    </div>
-  </div>
-  <div class="chain">
-    <div class="node" data-step="anatomy" style="--ex:var(--ex-ds)">
-      <b>Формулы</b>
-      <span>анатомия новых форм: переменные · константы · операторы · применимость; системы единиц (СИ/СГС/планковская)</span>
-    </div>
-    <span class="arr">→</span>
-    <div class="node" data-step="cards" style="--ex:var(--ex-ds)">
-      <b>Карточки</b>
-      <span>полные записи новорождённым + русские переводы карточек и анатомий</span>
-    </div>
-    <span class="arr">→</span>
-    <div class="node" data-step="reapply" style="--ex:var(--ex-vec)">
-      <b>Переразметка</b>
-      <span>статьи переразмечаются на выросшем реестре, справочник пересобирается из хранилищ</span>
-      <em>retag → wave5_apply → live</em>
-    </div>
-    <span class="arr">→</span>
-    <div class="node" data-step="anchors" style="--ex:var(--ex-ds)">
-      <b>Якоря текстов</b>
-      <span>дословные вхождения понятий в русском и английском тексте — падежи, парафразы, аббревиатуры</span>
-      <em>mentions_ru · журнал якорей</em>
-    </div>
-  </div>
-</div>
+  function stateOf(run, step) {
+    if ((run.failed || []).indexOf(step) >= 0) return "fail";
+    if (run.current === step) return "run";
+    if ((run.done || []).indexOf(step) >= 0) return "done";
+    return "wait";
+  }
 
-<!-- ═════════ VII. РАЗМЕТКА ТЕКСТОВ ═════════ -->
-<div class="stage" data-stage="highlight">
-  <div class="st-time">ночью<small>после якорей</small></div>
-  <div class="st-name">Ссылки в текстах</div>
-  <div class="st-who">локальный Python · три слоя якорей</div>
-  <div class="chain">
-    <div class="node" data-step="hl-model" style="--ex:var(--ex-ds)">
-      <b>Слой 1 — модельные</b>
-      <span>дословные выражения из добычи: точное вхождение в текст</span>
-    </div>
-    <span class="arr">+</span>
-    <div class="node" data-step="hl-vec" style="--ex:var(--ex-vec)">
-      <b>Слой 2 — векторные</b>
-      <span>смысловое совпадение фразы с карточкой понятия</span>
-    </div>
-    <span class="arr">+</span>
-    <div class="node" data-step="hl-dict" style="--ex:var(--ex-local)">
-      <b>Слой 3 — словарные</b>
-      <span>имена понятий и алиасы по словарю, до 20 ссылок на текст</span>
-      <em>highlight_concepts · 8–15 ссылок на сложную статью</em>
-    </div>
-  </div>
-</div>
+  function draw(run) {
+    var flow = document.getElementById("pp-flow");
+    flow.innerHTML = "";
+    /* Шаги берём из журнала, а не из страницы: цепочка живёт своей жизнью, и
+       зашитый список разъехался бы с ней при первой правке. */
+    var all = (run.plan || []).slice();
+    (run.done || []).concat(run.failed || []).forEach(function (s) {
+      if (all.indexOf(s) < 0) all.push(s);
+    });
+    var placed = {};
+    PHASES.forEach(function (ph) {
+      var mine = all.filter(function (s) {
+        return ph[2].some(function (k) { return s === k || (k === "day" && s.indexOf("day-") === 0); });
+      });
+      mine.forEach(function (s) { placed[s] = 1; });
+      if (!mine.length) return;
+      flow.appendChild(phaseEl(ph[0], ph[1], mine, run));
+    });
+    var rest = all.filter(function (s) { return !placed[s]; });
+    if (rest.length) flow.appendChild(phaseEl("Прочее", "шаги вне известных фаз", rest, run));
 
-<!-- ═════════ VIII. СТРАНИЦЫ ═════════ -->
-<div class="stage" data-stage="build">
-  <div class="st-time">утром<small>только изменённое</small></div>
-  <div class="st-name">Страницы и данные</div>
-  <div class="st-who">локальный Python · тело статично, обвязка динамична</div>
-  <div class="chain">
-    <div class="node" data-step="pages" style="--ex:var(--ex-local)">
-      <b>Перегенерация</b>
-      <span>новые статьи + затронутые понятия, формулы, авторы; единая карточка, мини-графы</span>
-    </div>
-    <span class="arr">→</span>
-    <div class="node" data-step="data" style="--ex:var(--ex-local)">
-      <b>Данные</b>
-      <span>индексы (+цитируемость), словари клиенту, данные графа, датасет файн-тюнинга</span>
-    </div>
-    <span class="arr">→</span>
-    <div class="node" data-step="dash" style="--ex:var(--ex-local)">
-      <b>Дашборд</b>
-      <span>покрытие машины знаний, реестр, целостность — цифры дня</span>
-      <em>status.html · отчёт 04:00</em>
-    </div>
-  </div>
-</div>
+    var fails = (run.failed || []);
+    var box = document.getElementById("pp-fails");
+    box.innerHTML = "";
+    box.style.display = fails.length ? "" : "none";
+    if (fails.length) {
+      var h = document.createElement("h3");
+      h.textContent = "Не удалось — " + fails.length;
+      box.appendChild(h);
+      var ul = document.createElement("ul");
+      fails.forEach(function (s) {
+        var li = document.createElement("li");
+        li.textContent = label(s) + " (" + s + ")" + (run.secs && run.secs[s] ? " · " + secs(run.secs[s]) : "");
+        ul.appendChild(li);
+      });
+      box.appendChild(ul);
+    }
 
-<!-- ═════════ IX. ВЫКЛАДКА И ДОЗОР ═════════ -->
-<div class="stage" data-stage="deploy">
-  <div class="st-time">утром<small>финал цикла</small></div>
-  <div class="st-name">Выкладка и дозор</div>
-  <div class="st-who">Cloudflare · Claude-агент на подхвате</div>
-  <div class="chain">
-    <div class="node" data-step="r2" style="--ex:var(--ex-cf)">
-      <b>R2 — статика</b>
-      <span>только изменённые файлы; страницы, обложки, данные</span>
-    </div>
-    <span class="arr">+</span>
-    <div class="node" data-step="d1" style="--ex:var(--ex-cf)">
-      <b>D1 + Worker — динамика</b>
-      <span>лента, автор, поиск, СПИСКИ ПОНЯТИЙ, кадры графа, анатомия формул —
-      живое без пересборки</span>
-      <em>b42-cards · 27 эндпоинтов · 16 проверок из 16</em>
-    </div>
-    <span class="arr">+</span>
-    <div class="node" data-step="vz" style="--ex:var(--ex-cf)">
-      <b>Vectorize</b>
-      <span>векторы статей и понятий — смысловой поиск находит и то и другое</span>
-      <em>27.08: 3231 карточка понятий залита</em>
-    </div>
-    <span class="arr">→</span>
-    <div class="node" data-step="watch" style="--ex:var(--ex-claude)">
-      <b>Дозор</b>
-      <span>сторож пиков и почты, ежедневный отчёт; сбой шага — разбор и починка агентом</span>
-      <em>b42_report 04:00 · tg-тревоги</em>
-    </div>
-  </div>
-</div>
+    var left = all.filter(function (s) { return stateOf(run, s) === "wait"; }).length;
+    var now = document.getElementById("pp-now");
+    now.innerHTML = run.current
+      ? "идёт: <b>" + label(run.current) + "</b> · пройдено " + (run.done || []).length
+        + " из " + all.length + " · осталось " + left
+      : "прогон завершён · пройдено " + (run.done || []).length + " из " + all.length
+        + (fails.length ? " · с ошибками" : "");
+  }
 
-<!-- ═════════ ПИЛОТ ═════════ -->
-<div class="pl-foot">
-  <h2>Пилот перед запуском: 10 статей сквозь весь конвейер</h2>
-  <p>Прежде чем катать полную пересборку и динамику — прогон на десяти статьях,
-  от забора до выкладки на dev-домен:</p>
-  <ul>
-    <li><b>5 старых</b> — полная переработка существующих разборов: переразметка,
-    якоря, страницы, карточки — проверяем, что конвейер не ломает готовое;</li>
-    <li><b>5 новых</b> — свежий забор с arXiv и генерация с нуля: экспресс и полные,
-    перевод, обложки, вектор, знания — проверяем, что конвейер рождает новое.</li>
-  </ul>
-  <p>Смотрим глазами каждую из десяти. Только после «да» — полный объём.</p>
-  <p style="margin-top:10px; color: var(--soft)">Правила конвейера: русский —
-  язык-источник · дешёвое окно для массовых прогонов · сделанное не повторяется
-  (все шаги со своим состоянием) · знания живут в хранилищах, справочник —
-  производная · публикация только по слову владельца.</p>
-</div>
+  function phaseEl(name, desc, steps, run) {
+    var row = document.createElement("div");
+    row.className = "pp-phase";
+    var left = document.createElement("div");
+    left.innerHTML = '<div class="pp-pname">' + name + '</div><div class="pp-pdesc">' + desc + '</div>';
+    var right = document.createElement("div");
+    right.className = "pp-steps";
+    steps.forEach(function (s) {
+      var el = document.createElement("span");
+      el.className = "pp-step";
+      el.dataset.s = stateOf(run, s);
+      el.title = tip(s);
+      var sec = run.secs && run.secs[s] ? '<span class="pp-secs">' + secs(run.secs[s]) + '</span>' : "";
+      el.innerHTML = '<i class="pp-lamp"></i>' + label(s) + sec;
+      right.appendChild(el);
+    });
+    row.appendChild(left);
+    row.appendChild(right);
+    return row;
+  }
 
+  fetch("/data/pipeline-runs.json", {cache: "no-store"}).then(function (r) {
+    return r.ok ? r.json() : null;
+  }).then(function (data) {
+    if (!data || !data.length) {
+      document.getElementById("pp-empty").style.display = "";
+      return;
+    }
+    runs = data.slice().reverse();
+    var sel = document.getElementById("pp-run");
+    runs.forEach(function (r, i) {
+      var o = document.createElement("option");
+      o.value = i;
+      o.textContent = (r.started || r.id || "прогон")
+        + (r.days && r.days.length ? " · дни " + r.days[0] + "…" + r.days[r.days.length - 1] : "")
+        + ((r.failed || []).length ? " · сбои" : "");
+      sel.appendChild(o);
+    });
+    sel.onchange = function () { draw(runs[+sel.value]); };
+    document.getElementById("pp-live").style.display = "";
+    draw(runs[0]);
+    /* Пока прогон идёт, страница обновляет себя сама: смотреть на неподвижную
+       картинку работающего конвейера — то же, что не иметь её вовсе. */
+    if (runs[0].current) setTimeout(function () { location.reload(); }, 20000);
+  }).catch(function () {
+    document.getElementById("pp-empty").style.display = "";
+  });
+})();
+</script>
 </body>
 </html>
