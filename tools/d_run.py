@@ -253,7 +253,6 @@ def main():
     # сборки уже помнят, что ru и en свежие, и он доделает только остальные три.
     run("d-html", [PY, "run.py", "html", "--force"], timeout=8 * 3600,
         env={"B42_LANGS": "ru,en"})
-    run("d-html-rest", [PY, "run.py", "html"], timeout=8 * 3600)
     run("d-authors", [PY, "-c",
         "import sys; sys.path.insert(0,'.'); import generate as G; "
         "G.update_all_authors()"], timeout=4 * 3600)
@@ -293,11 +292,16 @@ def main():
     # отчёта значит отдать владельцу пустое утро.
     report()
     log("═══ D ЗАВЕРШЁН — сайт собран, отчёт готов ═══")
+    # ДОЛГИЙ ХВОСТ — после отчёта. Три оставшихся языка это ещё часа три, а
+    # подсветка архива два с половиной: вместе они отодвинули бы за утро всё, что
+    # владельцу нужно увидеть — страницы на его двух языках, авторские цифры и
+    # обновлённое облако. Поэтому сначала готов сайт, потом догоняет остальное.
+    run("d-html-rest", [PY, "run.py", "html"], timeout=8 * 3600)
     run("d-highlight-rest", [PY, "tools/highlight_concepts.py",
                              "--tiers", "simple,popular,advanced"],
         timeout=6 * 3600)
     report()
-    log("═══ подсветка хвоста догнала — отчёт обновлён ═══")
+    log("═══ хвост догнал: остальные языки и подсветка архива ═══")
     return 0
 
 
