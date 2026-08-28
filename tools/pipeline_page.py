@@ -88,6 +88,12 @@ SHORT = {
 }
 
 CSS = """
+/* СТАТУС ЧИТАЕТСЯ БЕЗ ЦВЕТА. Владелец 28.08: «я дальтоник, для меня лучше
+   квадратики, в них надписи и статус значком или штриховкой». Поэтому каждый
+   шаг — прямоугольник с именем, а состояние отличается ЗНАКОМ и РИСУНКОМ рамки:
+   сплошная с галочкой — прошло; штриховка по диагонали с восклицанием — сбой;
+   пунктир с двойной стрелкой и пульсом — идёт; светлая точечная с точкой —
+   впереди. Цвет остаётся, но он вторая подсказка, а не единственная. */
 :root { --ok: #1f9d76; --run: #c8892a; --fail: #c0392b; --wait: #b9b2a6; }
 body { max-width: 1100px; padding-bottom: 70px; }
 .pp-head h1 { font-size: 25px; margin: 24px 0 4px; }
@@ -98,54 +104,72 @@ body { max-width: 1100px; padding-bottom: 70px; }
     border: 1px solid var(--hairline); border-radius: 6px; background: var(--bg);
     color: var(--fg); }
 .pp-now { color: var(--muted); }
-.pp-now b { color: var(--run); font-weight: 500; }
-.pp-legend { display: flex; gap: 14px; flex-wrap: wrap; margin-left: auto;
+.pp-now b { color: var(--fg); font-weight: 600; }
+.pp-legend { display: flex; gap: 12px; flex-wrap: wrap; margin-left: auto;
     color: var(--muted); }
-.pp-legend i { width: 8px; height: 8px; border-radius: 50%; display: inline-block;
-    margin-right: 5px; vertical-align: 1px; }
+.pp-legend span { display: inline-flex; align-items: center; gap: 5px; }
+.pp-legend i { width: 16px; height: 16px; display: inline-grid; place-items: center;
+    font-size: 10px; font-style: normal; border-radius: 3px; }
 
-/* Поток: фазы идут строками, шаги внутри — лампочками в ряд. Так весь цикл
-   виден целиком, без прокрутки на сорок узлов. */
 .pp-flow { margin: 14px 0 0; }
-.pp-phase { display: grid; grid-template-columns: 190px 1fr; gap: 12px;
-    padding: 9px 0; border-top: 1px solid var(--hairline); align-items: start; }
+.pp-phase { display: grid; grid-template-columns: 175px 1fr; gap: 12px;
+    padding: 10px 0; border-top: 1px solid var(--hairline); align-items: start; }
 .pp-phase:last-child { border-bottom: 1px solid var(--hairline); }
 .pp-pname { font-family: var(--serif); font-size: 14.5px; line-height: 1.3; }
 .pp-pdesc { color: var(--soft); font-size: 11.5px; line-height: 1.4; margin-top: 2px; }
-.pp-steps { display: flex; flex-wrap: wrap; gap: 6px; }
-.pp-step { display: flex; align-items: center; gap: 6px; padding: 4px 9px 4px 7px;
-    border: 1px solid var(--hairline); border-radius: 999px; font-size: 11.5px;
-    background: var(--bg); cursor: default; transition: border-color .15s, transform .15s; }
-.pp-step:hover { border-color: var(--muted); transform: translateY(-1px); }
-.pp-lamp { width: 8px; height: 8px; border-radius: 50%; background: var(--wait);
-    flex: none; }
-.pp-step[data-s="done"] .pp-lamp { background: var(--ok); }
-.pp-step[data-s="fail"] .pp-lamp { background: var(--fail); }
-.pp-step[data-s="run"]  .pp-lamp { background: var(--run);
-    animation: pp-pulse 1.2s ease-in-out infinite; }
-.pp-step[data-s="fail"] { border-color: var(--fail); }
-.pp-step[data-s="run"]  { border-color: var(--run); }
-.pp-secs { color: var(--muted); font-family: var(--mono); font-size: 10.5px; }
-@keyframes pp-pulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+.pp-steps { display: flex; flex-wrap: wrap; gap: 7px; }
 
-.pp-fails { margin: 18px 0 0; border: 1px solid var(--fail); border-radius: 8px;
-    padding: 10px 13px; font-size: 12.5px; }
-.pp-fails h3 { margin: 0 0 6px; font-size: 13px; color: var(--fail); }
-.pp-fails li { margin: 3px 0; }
+/* Квадратик шага: имя, знак статуса, под ними — время и итог. */
+.pp-step { position: relative; min-width: 132px; max-width: 208px; flex: 0 1 auto;
+    border: 1.5px solid var(--hairline); border-radius: 5px; padding: 6px 9px 6px 24px;
+    background: var(--bg); font-size: 11.5px; line-height: 1.35; }
+.pp-mark { position: absolute; left: 6px; top: 6px; width: 13px; height: 13px;
+    display: grid; place-items: center; font-size: 10px; font-weight: 700;
+    border-radius: 2px; font-family: var(--mono); }
+.pp-name { display: block; font-weight: 500; }
+.pp-meta { display: block; font-family: var(--mono); font-size: 10px;
+    color: var(--muted); margin-top: 2px; }
+.pp-out { display: block; font-size: 10.5px; color: var(--soft); margin-top: 3px;
+    line-height: 1.35; }
+
+.pp-step[data-s="done"] { border-style: solid; border-color: var(--ok); }
+.pp-step[data-s="done"] .pp-mark { border: 1.5px solid var(--ok); color: var(--ok); }
+.pp-step[data-s="fail"] { border-style: solid; border-color: var(--fail);
+    background-image: repeating-linear-gradient(45deg,
+        rgba(192,57,43,.10) 0 6px, transparent 6px 12px); }
+.pp-step[data-s="fail"] .pp-mark { border: 1.5px solid var(--fail); color: var(--fail); }
+.pp-step[data-s="run"] { border-style: dashed; border-color: var(--run);
+    animation: pp-pulse 1.3s ease-in-out infinite; }
+.pp-step[data-s="run"] .pp-mark { border: 1.5px solid var(--run); color: var(--run); }
+.pp-step[data-s="wait"] { border-style: dotted; border-color: var(--wait); opacity: .72; }
+.pp-step[data-s="wait"] .pp-mark { border: 1.5px dotted var(--wait); color: var(--wait); }
+@keyframes pp-pulse { 0%,100% { opacity: 1; } 50% { opacity: .55; } }
+
+.pp-fails { margin: 18px 0 0; border: 1.5px solid var(--fail); border-radius: 8px;
+    padding: 10px 13px; font-size: 12.5px;
+    background-image: repeating-linear-gradient(45deg,
+        rgba(192,57,43,.07) 0 7px, transparent 7px 14px); }
+.pp-fails h3 { margin: 0 0 6px; font-size: 13px; }
+.pp-fails li { margin: 4px 0; }
+.pp-fails code { font-size: 11px; color: var(--muted); }
 .pp-hint { margin: 16px 0 0; font-size: 12px; color: var(--soft); line-height: 1.5; }
 .pp-empty { margin: 22px 0; padding: 14px; border: 1px dashed var(--hairline);
     border-radius: 8px; color: var(--soft); font-size: 13px; }
-.pp-tip { max-width: 320px; }
 @media (max-width: 720px) {
   .pp-phase { grid-template-columns: 1fr; gap: 4px; }
   .pp-legend { margin-left: 0; }
+  .pp-step { min-width: 0; flex: 1 1 100%; max-width: none; }
 }
 """
 
 JS = """
 (function () {
   var PHASES = %PHASES%, EXPLAIN = %EXPLAIN%, SHORT = %SHORT%, NODES = %NODES%;
-  var runs = [], cur = null;
+  /* Знак статуса — не цвет, а символ: его видно в любом зрении и в чёрно-белой
+     распечатке. */
+  var MARK = {done: "✓", fail: "!", run: "▶", wait: "·"};
+  var WORD = {done: "прошло", fail: "сбой", run: "идёт", wait: "впереди"};
+  var runs = [];
 
   function label(step) {
     if (step.indexOf("day-") === 0) return step.slice(4);
@@ -153,16 +177,19 @@ JS = """
     var n = NODES[EXPLAIN[step] || step];
     return n ? n.t : step;
   }
-  function tip(step) {
+  function tip(step, st) {
     var n = NODES[EXPLAIN[step] || step];
-    if (step.indexOf("day-") === 0) return "Забор и разбор дня " + step.slice(4);
-    return n ? (n.t + " — " + n.d + (n.n ? " · " + n.n : "")) : step;
+    var base = step.indexOf("day-") === 0
+      ? "Забор и разбор дня " + step.slice(4)
+      : (n ? (n.t + " — " + n.d + (n.n ? " · " + n.n : "")) : step);
+    var extra = st && st.out && st.out.length ? String.fromCharCode(10, 10)
+      + st.out.join(String.fromCharCode(10)) : "";
+    return base + String.fromCharCode(10) + "(" + step + ")" + extra;
   }
   function secs(s) {
-    if (!s) return "";
-    return s < 60 ? s + "с" : Math.round(s / 60) + "м";
+    if (s === undefined || s === null) return "";
+    return s < 60 ? s + " с" : Math.floor(s / 60) + " м " + (s % 60) + " с";
   }
-
   function stateOf(run, step) {
     if ((run.failed || []).indexOf(step) >= 0) return "fail";
     if (run.current === step) return "run";
@@ -170,11 +197,45 @@ JS = """
     return "wait";
   }
 
+  function stepEl(step, run) {
+    var s = stateOf(run, step);
+    var info = (run.steps || {})[step] || {};
+    var el = document.createElement("div");
+    el.className = "pp-step";
+    el.dataset.s = s;
+    el.title = tip(step, info);
+    var meta = [];
+    if (info.started) meta.push(info.started + (info.finished ? "–" + info.finished : "…"));
+    var t = info.secs !== undefined ? info.secs : (run.secs || {})[step];
+    if (t !== undefined) meta.push(secs(t));
+    if (!meta.length) meta.push(WORD[s]);
+    /* Итог шага — то, чем он сам отчитался: числа, ради которых он и запускался. */
+    var out = (info.out || []).slice(-2).join(" · ");
+    el.innerHTML =
+      '<i class="pp-mark">' + MARK[s] + '</i>' +
+      '<b class="pp-name">' + label(step) + '</b>' +
+      '<span class="pp-meta">' + meta.join(" · ") + '</span>' +
+      (out ? '<span class="pp-out">' + out.replace(/[<>&]/g, "") + '</span>' : "");
+    return el;
+  }
+
+  function phaseEl(name, desc, steps, run) {
+    var row = document.createElement("div");
+    row.className = "pp-phase";
+    var left = document.createElement("div");
+    left.innerHTML = '<div class="pp-pname">' + name + '</div>' +
+                     '<div class="pp-pdesc">' + desc + '</div>';
+    var right = document.createElement("div");
+    right.className = "pp-steps";
+    steps.forEach(function (s) { right.appendChild(stepEl(s, run)); });
+    row.appendChild(left);
+    row.appendChild(right);
+    return row;
+  }
+
   function draw(run) {
     var flow = document.getElementById("pp-flow");
     flow.innerHTML = "";
-    /* Шаги берём из журнала, а не из страницы: цепочка живёт своей жизнью, и
-       зашитый список разъехался бы с ней при первой правке. */
     var all = (run.plan || []).slice();
     (run.done || []).concat(run.failed || []).forEach(function (s) {
       if (all.indexOf(s) < 0) all.push(s);
@@ -182,60 +243,44 @@ JS = """
     var placed = {};
     PHASES.forEach(function (ph) {
       var mine = all.filter(function (s) {
-        return ph[2].some(function (k) { return s === k || (k === "day" && s.indexOf("day-") === 0); });
+        return ph[2].some(function (k) {
+          return s === k || (k === "day" && s.indexOf("day-") === 0);
+        });
       });
       mine.forEach(function (s) { placed[s] = 1; });
-      if (!mine.length) return;
-      flow.appendChild(phaseEl(ph[0], ph[1], mine, run));
+      if (mine.length) flow.appendChild(phaseEl(ph[0], ph[1], mine, run));
     });
     var rest = all.filter(function (s) { return !placed[s]; });
     if (rest.length) flow.appendChild(phaseEl("Прочее", "шаги вне известных фаз", rest, run));
 
-    var fails = (run.failed || []);
+    var fails = run.failed || [];
     var box = document.getElementById("pp-fails");
     box.innerHTML = "";
     box.style.display = fails.length ? "" : "none";
     if (fails.length) {
       var h = document.createElement("h3");
-      h.textContent = "Не удалось — " + fails.length;
+      h.textContent = "! Не удалось — " + fails.length;
       box.appendChild(h);
       var ul = document.createElement("ul");
       fails.forEach(function (s) {
+        var info = (run.steps || {})[s] || {};
         var li = document.createElement("li");
-        li.textContent = label(s) + " (" + s + ")" + (run.secs && run.secs[s] ? " · " + secs(run.secs[s]) : "");
+        li.innerHTML = "<b>" + label(s) + "</b> <code>" + s + "</code>" +
+          (info.started ? " · " + info.started + (info.finished ? "–" + info.finished : "") : "") +
+          (info.secs !== undefined ? " · " + secs(info.secs) : "") +
+          (info.out && info.out.length ? "<br><span class='pp-out'>" +
+            info.out.join(" · ").replace(/[<>&]/g, "") + "</span>" : "");
         ul.appendChild(li);
       });
       box.appendChild(ul);
     }
 
     var left = all.filter(function (s) { return stateOf(run, s) === "wait"; }).length;
-    var now = document.getElementById("pp-now");
-    now.innerHTML = run.current
-      ? "идёт: <b>" + label(run.current) + "</b> · пройдено " + (run.done || []).length
-        + " из " + all.length + " · осталось " + left
-      : "прогон завершён · пройдено " + (run.done || []).length + " из " + all.length
-        + (fails.length ? " · с ошибками" : "");
-  }
-
-  function phaseEl(name, desc, steps, run) {
-    var row = document.createElement("div");
-    row.className = "pp-phase";
-    var left = document.createElement("div");
-    left.innerHTML = '<div class="pp-pname">' + name + '</div><div class="pp-pdesc">' + desc + '</div>';
-    var right = document.createElement("div");
-    right.className = "pp-steps";
-    steps.forEach(function (s) {
-      var el = document.createElement("span");
-      el.className = "pp-step";
-      el.dataset.s = stateOf(run, s);
-      el.title = tip(s);
-      var sec = run.secs && run.secs[s] ? '<span class="pp-secs">' + secs(run.secs[s]) + '</span>' : "";
-      el.innerHTML = '<i class="pp-lamp"></i>' + label(s) + sec;
-      right.appendChild(el);
-    });
-    row.appendChild(left);
-    row.appendChild(right);
-    return row;
+    document.getElementById("pp-now").innerHTML = run.current
+      ? "идёт: <b>" + label(run.current) + "</b> · пройдено " + (run.done || []).length +
+        " из " + all.length + " · осталось " + left
+      : "завершён · пройдено " + (run.done || []).length + " из " + all.length +
+        (fails.length ? " · сбоев " + fails.length : "");
   }
 
   fetch("/data/pipeline-runs.json", {cache: "no-store"}).then(function (r) {
@@ -250,23 +295,20 @@ JS = """
     runs.forEach(function (r, i) {
       var o = document.createElement("option");
       o.value = i;
-      o.textContent = (r.started || r.id || "прогон")
-        + (r.days && r.days.length ? " · дни " + r.days[0] + "…" + r.days[r.days.length - 1] : "")
-        + ((r.failed || []).length ? " · сбои" : "");
+      o.textContent = (r.started || r.id || "прогон") +
+        (r.days && r.days.length ? " · дни " + r.days[0] + "…" + r.days[r.days.length - 1] : "") +
+        ((r.failed || []).length ? " · сбоев " + r.failed.length : "");
       sel.appendChild(o);
     });
     sel.onchange = function () { draw(runs[+sel.value]); };
     document.getElementById("pp-live").style.display = "";
     draw(runs[0]);
-    /* Пока прогон идёт, страница обновляет себя сама: смотреть на неподвижную
-       картинку работающего конвейера — то же, что не иметь её вовсе. */
     if (runs[0].current) setTimeout(function () { location.reload(); }, 20000);
   }).catch(function () {
     document.getElementById("pp-empty").style.display = "";
   });
 })();
 """
-
 
 def main():
     nodes = json.loads(NODES.read_text(encoding="utf-8")) if NODES.exists() else {}
@@ -299,10 +341,10 @@ def main():
   <label>Прогон: <select id="pp-run"></select></label>
   <span class="pp-now" id="pp-now"></span>
   <span class="pp-legend">
-    <span><i style="background:var(--ok)"></i>прошло</span>
-    <span><i style="background:var(--run)"></i>идёт</span>
-    <span><i style="background:var(--fail)"></i>сбой</span>
-    <span><i style="background:var(--wait)"></i>впереди</span>
+    <span><i style="border:1.5px solid var(--ok);color:var(--ok)">&#10003;</i>прошло</span>
+    <span><i style="border:1.5px dashed var(--run);color:var(--run)">&#9654;</i>идёт</span>
+    <span><i style="border:1.5px solid var(--fail);color:var(--fail)">!</i>сбой</span>
+    <span><i style="border:1.5px dotted var(--wait);color:var(--wait)">&middot;</i>впереди</span>
   </span>
 </div>
 
@@ -315,9 +357,11 @@ def main():
 <div class="pp-flow" id="pp-flow"></div>
 <div class="pp-fails" id="pp-fails" style="display:none"></div>
 
-<div class="pp-hint">Наведите на шаг — покажет, что он делает. Время рядом с
-именем — сколько шаг занял в этом прогоне. Пока конвейер работает, страница
-обновляется сама.</div>
+<div class="pp-hint">Статус читается знаком и рамкой, не цветом: галочка и
+сплошная — прошло, стрелка и пунктир — идёт, восклицание и штриховка — сбой,
+точка и точечная рамка — впереди. Под именем шага стоит время начала и окончания,
+дальше — то, чем шаг отчитался. Наведите на квадрат: покажет, что он делает, и
+полный итог. Пока конвейер работает, страница обновляется сама.</div>
 
 <script>{js}</script>
 </body>

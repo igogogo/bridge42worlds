@@ -48,6 +48,22 @@ STATE = ROOT / "data" / "full-state.json"
 # прогон, последние тридцать.
 RUNS = ROOT / "data" / "pipeline-runs.json"
 RUNS_KEEP = 30
+STEPS_DIR = ROOT / "data" / "pipeline-steps"
+
+
+def summarize(out, keep=3):
+    """Итог шага: строки, в которых он сам отчитался о сделанном.
+
+    Шаги договорились об одном: важное помечают галочкой или стрелкой в файл.
+    Берём последние такие строки — они и есть результат («понятий 3589», «граф:
+    4447 узлов»). Ничего не нашли — берём последнюю непустую: пусть будет хоть
+    что-то, чем пустая лампочка.
+    """
+    lines = [ln.strip() for ln in (out or "").splitlines() if ln.strip()]
+    marked = [ln for ln in lines
+              if ln.startswith(("✅", "✓", "→", "⚠")) or " · " in ln]
+    picked = (marked or lines)[-keep:]
+    return [ln[:160] for ln in picked]
 
 
 def log(m):
@@ -93,6 +109,7 @@ def journal(st):
     rec["current"] = st.get("current")
     rec["at"] = st.get("at")
     rec["secs"] = dict(st.get("secs") or {})
+    rec["steps"] = dict(st.get("steps") or {})
     rec["plan"] = list(st.get("plan") or [])
     runs = runs[-RUNS_KEEP:]
     RUNS.write_text(json.dumps(runs, ensure_ascii=False, indent=1), encoding="utf-8")
@@ -112,23 +129,43 @@ def run(step, cmd, timeout=8 * 3600, cwd=None, env=None, soft=False):
         log(f"· {step}: уже сделан")
         return True
     log(f"▶ {step}")
+    started = time.strftime("%H:%M:%S")
     st["current"] = step
     st["at"] = time.strftime("%Y-%m-%d %H:%M")
+    st.setdefault("steps", {})[step] = {"started": started}
     save(st)
     t0 = time.time()
+    out = ""
     try:
         e = dict(os.environ, **env) if env else None
-        r = subprocess.run(cmd, cwd=cwd or ROOT, timeout=timeout, env=e)
+        # Вывод шага ЛОВИМ, а не отпускаем в пустоту: в нём и лежат числа, ради
+        # которых шаг запускался — «раздел /concepts/: 3589 страниц», «граф: 4447
+        # узлов, 42335 рёбер». Без них лампочка говорит «прошло» и молчит о том,
+        # ЧТО прошло. Полный вывод кладём в файл шага, короткий итог — в журнал.
+        e = dict(e or os.environ, PYTHONIOENCODING="utf-8")
+        r = subprocess.run(cmd, cwd=cwd or ROOT, timeout=timeout, env=e,
+                           capture_output=True, text=True,
+                           encoding="utf-8", errors="replace")
         ok = r.returncode == 0
+        out = (r.stdout or "") + (("\n" + r.stderr) if r.stderr else "")
+        STEPS_DIR.mkdir(parents=True, exist_ok=True)
+        (STEPS_DIR / f"{step}.log").write_text(out, encoding="utf-8")
+        for line in out.splitlines():
+            print(line, flush=True)
     except subprocess.TimeoutExpired:
         ok = False
         log(f"  ⏱ {step}: превышено время ({timeout // 60} мин)")
     dt = int(time.time() - t0)
+    finished = time.strftime("%H:%M:%S")
     log(("✓ " if ok else "✗ ") + f"{step} ({dt // 60} мин {dt % 60} с)")
     st = state()
     st["current"] = None
     st["at"] = time.strftime("%Y-%m-%d %H:%M")
     st.setdefault("secs", {})[step] = dt
+    st.setdefault("steps", {})[step] = {
+        "started": started, "finished": finished, "secs": dt, "ok": ok,
+        "out": summarize(out),
+    }
     if ok:
         st["done"].append(step)
         st.get("failed", []) and step in st["failed"] and st["failed"].remove(step)
