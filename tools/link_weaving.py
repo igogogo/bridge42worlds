@@ -35,6 +35,7 @@
 """
 import argparse
 import json
+import re
 import sys
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
@@ -159,6 +160,19 @@ def fix_directions(got, live):
     теорема — у него есть formulas или kind law/math), справа величина, константа
     или математический объект. Формула СОСТОИТ из величин, а не наоборот.
     """
+    def en(cid):
+        v = live.get(cid) or {}
+        return ((v.get("names") or {}).get("en") or cid.replace("_", " ")).lower()
+
+    def narrower(a, b):
+        """Имя a целиком входит в имя b как слова — значит b УЖЕ, а не шире.
+
+        «кубит» и «сверхпроводящий кубит»: второе — вид первого, и «кубит —
+        частный случай сверхпроводящего кубита» перевёрнуто. Сравниваем по
+        границам слов, иначе «ион» найдётся внутри «региона».
+        """
+        return bool(re.search(r"(^|\s)" + re.escape(a) + r"(\s|$)", b)) and a != b
+
     n = 0
     out = {}
     for cid, links in got.items():
@@ -167,6 +181,12 @@ def fix_directions(got, live):
             to = lk.get("to")
             v, w = live.get(cid) or {}, live.get(to) or {}
             has_formula = bool(v.get("formulas")) or v.get("kind") in ("law", "math")
+            # «частный случай» в сторону более узкого имени — тоже переворот
+            if lk.get("rel") == "case_of" and narrower(en(cid), en(to)):
+                out.setdefault(to, []).append(
+                    {"to": cid, "rel": "case_of", "w": lk.get("w", 2)})
+                n += 1
+                continue
             if (lk.get("rel") == "part_of" and has_formula
                     and w.get("kind") in _INTO_BAD):
                 out.setdefault(to, []).append(
