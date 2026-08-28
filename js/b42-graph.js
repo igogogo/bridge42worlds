@@ -87,7 +87,17 @@ fetch('/data/concepts-graph.json').then(function (r) { return r.json(); })
         });
         deg = adj.map(function (a) { return a.length; });
         buildPanel();
-        showOverview();
+        /* ВХОД ПО ССЫЛКЕ. Граф всегда открывался обзором групп, и переход с
+           карточки понятия или статьи терял то, ради чего человек шёл: он хотел
+           посмотреть окружение конкретного понятия, а попадал на карту из
+           пятидесяти кругов и должен был искать своё заново. Владелец 28.08:
+           «непонятно, как пойти смотреть на граф без групп… когда переходим с
+           карточки понятия или статьи, надо отталкиваться от того набора,
+           который задан статьёй».
+             ?focus=black_hole      — эго-кадр понятия: оно и его соседи
+             ?set=id1,id2,id3       — кадр из заданного набора (понятия статьи)
+           Не нашли — тихо показываем обзор, как раньше. */
+        if (!openFromUrl()) showOverview();
         /* Проба облака: один запрос обзора. Ответил — дальше кадры групп и эго
            берём оттуда (свежие после каждой переразметки, без пересборки сайта). */
         apiFrame('overview').then(function (f) {
@@ -97,6 +107,51 @@ fetch('/data/concepts-graph.json').then(function (r) { return r.json(); })
         });
     });
 function nodeName(n) { return (RU && n.ru) ? n.ru : n.en; }
+
+/* Открыть кадр по параметрам адреса. Возвращает true, если открыли. */
+function openFromUrl() {
+    var q;
+    try { q = new URLSearchParams(location.search); } catch (e) { return false; }
+    var set = (q.get('set') || '').split(',').filter(Boolean);
+    if (set.length > 1) {
+        var idxs = [];
+        set.forEach(function (id) {
+            var i = G.byId ? G.byId[id] : undefined;
+            if (i === undefined) i = idOf(id);
+            if (i >= 0 && idxs.indexOf(i) < 0) idxs.push(i);
+        });
+        if (idxs.length > 1) { showSet(idxs, q.get('focus') || set[0]); return true; }
+    }
+    var f = q.get('focus') || q.get('c') || '';
+    if (f) {
+        var ni = idOf(f);
+        if (ni >= 0) { showEgo(ni); return true; }
+    }
+    return false;
+}
+
+/* Индекс узла по строковому идентификатору понятия или формулы (f:...). */
+function idOf(id) {
+    if (!G || !G.nodes) return -1;
+    for (var i = 0; i < G.nodes.length; i++) if (G.nodes[i].id === id) return i;
+    return -1;
+}
+
+/* Кадр из готового набора — «то, что задано статьёй»: сами понятия статьи и
+   связи между ними, без чужих соседей. Ровно то же, что показывает мини-граф
+   на карточке, только во весь экран и с панелью. */
+function showSet(idxs, focusId) {
+    var f = frameFromIds(idxs, true);
+    var fi = -1;
+    for (var i = 0; i < idxs.length; i++) if (G.nodes[idxs[i]].id === focusId) fi = i;
+    trail = [{mode: 'overview', arg: null, label: RU ? 'Обзор' : 'Overview'}];
+    trail.push({mode: 'set', arg: idxs,
+                label: (RU ? 'набор статьи · ' : 'article set · ') + idxs.length});
+    setFrame('set', f.nodes, f.edges, 'set' + idxs.length);
+    selI = fi >= 0 ? fi : 0;
+    igniteSparks();
+    renderInfo();
+}
 function groupLabel(g) { return (RU && g.label_ru) ? g.label_ru : g.label_en; }
 
 /* ── состояние ── */

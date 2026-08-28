@@ -88,6 +88,23 @@ function init(box, G) {
             if (!seen[k]) { seen[k] = 1; edges.push([a, b, p[1]]); }
         });
     });
+    /* СТРАХОВКА: узел в кадре без единой линии — это ошибка рисунка, а не факт.
+       Мы взяли его в кадр потому, что он сосед фокуса; значит связь есть, просто
+       в общем графе она не сохранилась (рёбра там режутся до топ-12 на узел, и
+       слабая связь хаба вылетает). Владелец 28.08: «слияние чёрных дыр не связано
+       с чёрной дырой, болтается сиротой». Дотягиваем такой узел до фокуса
+       минимальным весом — линия тонкая, но она честная. */
+    var focusPos = -1;
+    nodes.forEach(function (nd, i) { if (nd.center) focusPos = i; });
+    if (focusPos >= 0) {
+        var touched = {};
+        edges.forEach(function (e) { touched[e[0]] = 1; touched[e[1]] = 1; });
+        nodes.forEach(function (nd, i) {
+            if (i === focusPos || touched[i]) return;
+            edges.push([focusPos, i, 1]);
+        });
+    }
+
     var wMax = 1;
     edges.forEach(function (e) { if (e[2] > wMax) wMax = e[2]; });
 
