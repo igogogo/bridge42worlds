@@ -32,7 +32,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 from tools.concept_harvest import env  # noqa: E402
 from tools.concept_fullcards import cheap_window  # noqa: E402
-from common import CONFIG  # noqa: E402
+from common import CONFIG  # noqa: E402, write_json_atomic
 
 # Потоки берём из той же настройки, что описание тегов, но не больше восьми: там
 # в одном запросе двадцать тегов, здесь — одна карточка, и пятнадцать мелких
@@ -130,7 +130,7 @@ def concepts(force_peak=False):
     for cid, byl in store.items():
         if cid in lc:
             lc[cid]["full_i18n"] = byl
-    LIVE.write_text(json.dumps(doc, ensure_ascii=False), encoding="utf-8")
+    write_json_atomic(LIVE, doc, indent=None)
     print(f"✅ русских карточек понятий: +{n_done} (хранилище {I18N.name})")
     return 0
 

@@ -30,6 +30,7 @@ LIVE = ROOT / "data" / "concepts-live.json"
 OUT = ROOT / "data" / "concept-names-ru.json"
 
 sys.path.insert(0, str(ROOT))
+from common import write_json_atomic  # noqa: E402
 from tools.concept_harvest import env  # noqa: E402
 
 PER_CALL = 40
@@ -106,7 +107,7 @@ def main():
         c = live["concepts"].get(cid)
         if c is not None:
             c.setdefault("names", {})["ru"] = ru
-    LIVE.write_text(json.dumps(live, ensure_ascii=False), encoding="utf-8")
+    write_json_atomic(LIVE, live, indent=None)
     print(f"✅ русских названий: {len(done)}; влиты в concepts-live.json")
     return 0
 

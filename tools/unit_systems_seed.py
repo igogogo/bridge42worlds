@@ -29,6 +29,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
+from common import write_json_atomic  # noqa: E402
 from tools.concept_harvest import env, embed  # noqa: E402
 from tools.concept_cycle import append_to_matrix  # noqa: E402
 from tools.concept_fullcards import cheap_window  # noqa: E402
@@ -194,7 +195,7 @@ def link_units(force_peak=False):
     for cid, rec in done.items():
         if cid in live_doc["concepts"]:
             live_doc["concepts"][cid].update(rec)
-    LIVE.write_text(json.dumps(live_doc, ensure_ascii=False), encoding="utf-8")
+    write_json_atomic(LIVE, live_doc, indent=None)
     print(f"✅ привязки в live: {len(done)}")
     return 0
 

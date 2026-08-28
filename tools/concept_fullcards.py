@@ -41,6 +41,7 @@ OUT = ROOT / "data" / "concept-fullcards.json"
 LIVE = ROOT / "data" / "concepts-live.json"
 
 sys.path.insert(0, str(ROOT))
+from common import write_json_atomic  # noqa: E402
 from tools.concept_harvest import env, embed  # noqa: E402 — тот же .env и тот же движок
 
 PER_CALL = 3          # развёрнутые записи — простор важнее пачки
@@ -226,7 +227,7 @@ def write_cards(limit=None, force_peak=False):
     for cid, rec in done.items():
         if cid in live_all["concepts"]:
             live_all["concepts"][cid]["full"] = rec
-    LIVE.write_text(json.dumps(live_all, ensure_ascii=False), encoding="utf-8")
+    write_json_atomic(LIVE, live_all, indent=None)
     print(f"✅ полных карточек: {len(done)}; влиты в concepts-live.json")
     return 0
 

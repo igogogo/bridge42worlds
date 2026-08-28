@@ -33,6 +33,8 @@ from collections import defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+from common import write_json_atomic  # noqa: E402
 ML = ROOT.parent / "b42-ml"
 RETAG = ROOT / "data" / "articles-retag-v2.json"
 LIVE = ROOT / "data" / "concepts-live.json"
@@ -301,12 +303,12 @@ def main():
           f"учёные у {with_sci} · формулы у {with_fml}")
 
     if a.live_only:
-        LIVE.write_text(json.dumps(live, ensure_ascii=False), encoding="utf-8")
+        write_json_atomic(LIVE, live, indent=None)
         print(f"→ {LIVE.relative_to(ROOT)} ({LIVE.stat().st_size // 1024} КБ) — только справочник, статьи не тронуты")
         return 0
     n = apply_articles(retag, dry=not a.apply)
     if a.apply:
-        LIVE.write_text(json.dumps(live, ensure_ascii=False), encoding="utf-8")
+        write_json_atomic(LIVE, live, indent=None)
         print(f"→ {LIVE.relative_to(ROOT)} ({LIVE.stat().st_size // 1024} КБ)")
         print(f"разметка v2 записана в {n} статей")
     else:
