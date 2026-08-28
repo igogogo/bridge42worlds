@@ -213,6 +213,17 @@ class Server(ThreadingHTTPServer):
 
 
 class Handler(SimpleHTTPRequestHandler):
+    def end_headers(self):
+        """Локально ничего не кэшируем.
+
+        28.08: правка меню в js/search.js была на месте, а браузер полчаса
+        показывал старое — и выглядело это как «правка не сделана». На проде
+        свежесть держат заголовки воркера (пять минут), но при разработке даже
+        пять минут превращают проверку в гадание.
+        """
+        self.send_header("Cache-Control", "no-store, must-revalidate")
+        super().end_headers()
+
     def __init__(self, *a, **kw):
         super().__init__(*a, directory=str(ROOT), **kw)
 
