@@ -65,7 +65,20 @@ def main():
         adjc[b] += 1
     isolated = [nd["id"] for i, nd in enumerate(graph["nodes"])
                 if nd["kind"] != "formula" and not adjc[i] and nd["n"] > 0]
-    no_related = [c for c, v in C.items() if not v.get("related") and v.get("articles")]
+    # Связи по знанию — третий источник (tools/link_weaving.py), и он живёт своим
+    # файлом, а не полем related. Без него аудит показывает связность хуже, чем
+    # она есть: у понятия может не быть ни одного соседа «по весу» и при этом
+    # стоять сказанное отношение — «входит в», «описывает». Такое понятие не
+    # одиноко, и записывать его в список на дорост — значит гнать модель второй
+    # раз за тем, что уже найдено.
+    kn_p = ROOT / "data" / "concept-links-knowledge.json"
+    try:
+        kn = json.loads(kn_p.read_text(encoding="utf-8")) if kn_p.exists() else {}
+    except Exception:
+        kn = {}
+    kn_n = sum(len(v) for v in kn.values())
+    no_related = [c for c, v in C.items()
+                  if not v.get("related") and v.get("articles") and c not in kn]
 
     # ── слияния и омонимы: пары карточек ≥0.90 ──
     pool = {c: set(v.get("articles") or []) for c, v in C.items()}
@@ -202,6 +215,7 @@ th {{ font-family: var(--mono); font-size: 10.5px; color: var(--soft);
 <div class="card"><b>{len(C)}</b><span>понятий в реестре</span></div>
 <div class="card"><b>{sum(1 for v in C.values() if v.get('supers'))}</b><span>в группах (50 именованных)</span></div>
 <div class="card"><b>{sum(1 for v in C.values() if v.get('related'))}</b><span>с соседями по весу</span></div>
+<div class="card"><b>{kn_n:,}</b><span>связей по знанию у {len(kn)}</span></div>
 <div class="card"><b>{len(graph['edges']):,}</b><span>рёбер в графе</span></div>
 <div class="card"><b>{n_arts}</b><span>статей с разметкой</span></div>
 </div>
