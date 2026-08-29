@@ -45,6 +45,7 @@
 import argparse
 import concurrent.futures as cf
 import json
+import re
 import pathlib
 import sys
 import time
@@ -162,12 +163,72 @@ def docs(month, cats=None, only=None):
     return out
 
 
+def _abstract(rec, folder):
+    """Английская аннотация статьи, где бы она ни лежала.
+
+    Поле abstract бывает строкой, а бывает словарём по языкам — и у части работ
+    в нём только русский перевод. Подстановка словаря в строку давала «{'ru': ...}»
+    и текст длиной больше порога, то есть вектор строился по мусору; а у двух
+    статей за 24–25 августа его не выходило вовсе. Оригинал всегда лежит рядом,
+    в ответе arXiv: берём его первым, словарь и строку — как запасной путь.
+    """
+    for name in ("arxiv-atom.xml", "arxiv-oai.xml"):
+        f = folder / name
+        if not f.exists():
+            continue
+        try:
+            x = f.read_text(encoding="utf-8")
+        except Exception:
+            continue
+        m = re.search(r"<(?:summary|abstract)[^>]*>(.*?)</(?:summary|abstract)>", x, re.S)
+        if m and len(m.group(1).strip()) > 60:
+            return re.sub(r"<[^>]+>", " ", m.group(1))
+    ab = rec.get("abstract")
+    if isinstance(ab, dict):
+        return ab.get("en") or next((v for v in ab.values() if isinstance(v, str)), "")
+    return ab or ""
+
+
+def texts_from_ours(month, have):
+    """Тексты СВЕЖИХ статей — из наших папок, когда дампа для них ещё нет.
+
+    Дамп arXiv выгружается с задержкой: работы последних дней в нём отсутствуют,
+    и режим «наши» их не находит — он берёт наши идентификаторы, а тексты тянет
+    из дампа. Итог 29.08: у статей за 22–25 августа не было вектора, а без него
+    разметка понятиями честно отвечает «статьи нет в корпусе» — и свежая статья
+    выходит без единого понятия. Ровно то, что увидел владелец.
+
+    Заголовок и аннотация лежат в наших data.json — там же, где всё остальное.
+    Берём их и строим вектор, не дожидаясь месячной выгрузки.
+    """
+    root = MAIN / "lang" / "ru" / "archive"
+    out = []
+    for d in sorted(root.glob("*/*/data.json")):
+        aid = _base_id(d.parent.name)
+        if not aid or f"arx:{aid}" in have:
+            continue
+        if id_month(aid) != month:
+            continue
+        try:
+            r = json.loads(d.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        t = " ".join(f"{r.get('original_title', '')}. {_abstract(r, d.parent)}".split())
+        if len(t) < 60:
+            continue
+        out.append((f"arx:{aid}", t[:MAX_CHARS]))
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--check", action="store_true", help="посчитать объём, ничего не тратить")
     ap.add_argument("--months", help="например 2024,2025 — только эти годы")
     ap.add_argument("--max-cost", type=float, default=12.0,
                     help="потолок расходов на прогон, доллары")
+    ap.add_argument("--redo", metavar="IDS",
+                    help="пересчитать эти работы заново (номера через запятую), "
+                         "даже если вектор для них уже есть")
     ap.add_argument("--ours", action="store_true",
                     help="добрать в поле работы, о которых написаны НАШИ статьи — "
                          "любого раздела и года")
@@ -263,6 +324,16 @@ def build(args, cats, only, ms):
     vecstore.repair(OUT)
     done = set(vecstore.done_ids(OUT))
     print(f"уже посчитано: {len(done):,}")
+    # Пересчёт названных работ. Вектор строится один раз и живёт вечно — но если
+    # он построен по неверному тексту, вечным становится и брак. Так вышло 29.08:
+    # у свежих статей аннотация лежала словарём по языкам, в текст попадала запись
+    # словаря целиком, и поле хранило смесь скобок с русским переводом вместо
+    # английского оригинала. Файл только дописывается, поэтому «пересчёт» —
+    # это новая запись в хвосте с тем же номером: читатели берут последнюю.
+    if args.redo:
+        redo = {f"arx:{_base_id(x)}" for x in args.redo.split(",") if x.strip()}
+        done -= redo
+        print(f"пересчитываем заново: {len(redo)}")
 
     key = load_env(MAIN).get("DEEPINFRA_API_KEY", "")
     if not key:
@@ -279,7 +350,14 @@ def build(args, cats, only, ms):
         # в одном файле. Последний случай `done` из .ids не поймал бы: на момент
         # чтения файла обеих записей ещё нет ни в одном списке.
         todo, seen = [], set()
-        for i, t in docs(m, cats, only):
+        # Сначала дамп, затем НАШИ статьи этого месяца, которых в дампе ещё нет:
+        # выгрузка arXiv отстаёт на недели, а вектор свежей статье нужен сегодня —
+        # без него разметка понятиями её не видит (29.08).
+        source = list(docs(m, cats, only))
+        if only is not None:
+            have = {i for i, _ in source} | done
+            source += texts_from_ours(m, have)
+        for i, t in source:
             if i in done or i in seen:
                 continue
             seen.add(i)
