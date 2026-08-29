@@ -100,6 +100,13 @@ html[lang="ar"] .discoveries-list { padding-left: 0; padding-right: 20px; }
        одной ширины»): 700 — читаемая строка ~74 знака при 16.5px, и при ней
        шапка, лента, статья, понятие, автор кончаются на одной вертикали. */
     --w-page: 700px;   --w-read: 62ch;
+    /* Колонка СТАТЬИ — своя, и она уже общей. Владелец 29.08: «для настольной
+       надо держать в угле глаза, ещё сократить процентов на 20». Было 620 —
+       семьдесят знаков в строке; 500 дают около пятидесяти шести, это внутри
+       спокойного диапазона. Сужается КОЛОНКА ЦЕЛИКОМ, вместе с обложкой:
+       сузить одну прозу значило бы снова развести правый край. На телефоне
+       ограничение не срабатывает — там ширина экрана и так меньше. */
+    --w-article: 500px;
     /* Лампа из набора для ::before врезки — рисунок один в один с B42Icons.lamp */
     --ic-lamp: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18h6'/%3E%3Cpath d='M10 21h4'/%3E%3Cpath d='M12 3a6 6 0 0 0-3.5 10.9c.6.4.9 1 .9 1.7v.4h5.2v-.4c0-.7.3-1.3.9-1.7A6 6 0 0 0 12 3z'/%3E%3C/svg%3E");
     /* Шрифты — системные, по design-system.md (совпадают с About/деком, без веб-шрифтов) */
@@ -4039,10 +4046,10 @@ body.graph-fs-open .graph-fs-active svg { touch-action: manipulation; }
    колонка стала шире, текст пустили во всю ширину, а обложка осталась 620 — и
    страница поехала (владелец 29.08: «текст возвращаем в ширину картинки вместе
    с шапкой»). Одна ширина на всё: обложка, текст, шапка, строка языков. */
-body.article-page { max-width: calc(620px + var(--s-4) * 2); }
+body.article-page { max-width: calc(var(--w-article) + var(--s-4) * 2); }
 
 body.article-page .top-bar,
-body.article-page .langs-row { max-width: 620px; }
+body.article-page .langs-row { max-width: var(--w-article); }
 
 body.article-page .article-wrapper { display: block; }
 
@@ -4054,12 +4061,12 @@ body.article-page .article-main {
 /* Одна ширина на всё содержимое статьи — 620, как у обложки и шапки. Тот же
    набор правил повторяет блок «прохода 2d» ниже; он идёт позже и решает,
    здесь то же значение, чтобы файл не спорил сам с собой при чтении. */
-body.article-page .article-main > * { max-width: 620px; }
+body.article-page .article-main > * { max-width: var(--w-article); }
 body.article-page .article-main p,
 body.article-page .article-main ul,
 body.article-page .article-main ol,
 body.article-page .oneliner,
-body.article-page .original-title { max-width: 620px; }
+body.article-page .original-title { max-width: var(--w-article); }
 
 /* Теги в потоке — карточкой, как на прототипе, а не колонкой сбоку. */
 body.article-page .article-side--flow {
@@ -4558,7 +4565,7 @@ html[dir="rtl"] .article-card .card-actions .lv-switch {
    Если 620 всё ещё длинновато для глаза (это 70 знаков в строке), сужать
    надо КОЛОНКУ ЦЕЛИКОМ, вместе с картинкой, а не одну прозу внутри неё —
    иначе правый край снова разъедется. */
-body.article-page { max-width: calc(620px + var(--s-4) * 2); }
+body.article-page { max-width: calc(var(--w-article) + var(--s-4) * 2); }
 body.article-page .article-main p,
 body.article-page .article-main ul,
 body.article-page .article-main ol,
@@ -4567,7 +4574,12 @@ body.article-page .article-main h3,
 body.article-page .article-main blockquote,
 body.article-page .oneliner,
 body.article-page .original-title,
-body.article-page .title-row { max-width: 620px; margin-left: 0; margin-right: 0; }
+body.article-page .title-row { max-width: var(--w-article); margin-left: 0; margin-right: 0; }
+
+/* Обложка и галерея — по той же колонке: сужаем вместе со всем, не отдельно. */
+body.article-page .gallery,
+body.article-page .ai-cover,
+body.article-page .mosaic { max-width: var(--w-article); }
 
 /* Зазор между обложкой и первым абзацем: был ноль, текст лип к картинке. */
 body.article-page .article-main .mosaic,
@@ -4576,9 +4588,17 @@ body.article-page .article-main .gallery { margin-bottom: var(--s-6); }
 /* Левая структура (оглавление). Порог 1280 прятал её на обычном ноутбуке —
    владелец видел пустые поля и «исчезнувшую структуру». Колонка стала 700,
    навигатору в 160 хватает места уже с 1080. */
+/* Отступ считается от края колонки: половина колонки + зазор + ширина навигатора.
+   Число было прибито к прежним 700; после сужения оно бы отъехало от текста. */
 @media (min-width: 1080px) {
-    .article-nav { display: block; left: max(12px, calc(50vw - 546px)); }
-    html[lang="ar"] .article-nav { left: auto; right: max(12px, calc(50vw - 546px)); }
+    .article-nav {
+        display: block;
+        left: max(12px, calc(50vw - var(--w-article) / 2 - var(--s-4) - 24px - 160px));
+    }
+    html[lang="ar"] .article-nav {
+        left: auto;
+        right: max(12px, calc(50vw - var(--w-article) / 2 - var(--s-4) - 24px - 160px));
+    }
 }
 @media (max-width: 1079px) {
     .article-nav { display: none; }

@@ -927,7 +927,17 @@ def _translation_system(target_language, src=None):
             f"Every text value in your JSON answer MUST be written in {target_language} only. "
             f"Cyrillic characters are FORBIDDEN in the output (exception: content inside "
             f"[tag:...]/[scientist:...] marker IDs and latex fields, which are copied verbatim). "
-            f"Do not add, drop or alter any numbers, markers or latex.")
+            f"Do not add, drop or alter any numbers, markers or latex. "
+            # Тире переносилось из русского как есть, и английский текст оказывался
+            # усыпан «astrophysics—from». В русском тире — рядовой знак, в английском
+            # плотное длинное тире читается как машинная подпись (владелец 29.08:
+            # «люди это воспринимают как то, что сделал ИИ»). Правило стоит и здесь,
+            # и в article-translate.txt: системная роль сильнее, а prompt объясняет,
+            # чем именно заменять.
+            f"NEVER put an em dash tight between words (like 'astrophysics—from'): "
+            f"recast it as a colon, a pair of commas, parentheses or a linking word, "
+            f"choosing by meaning and varying the choice. Numeric ranges such as "
+            f"'300-800 GeV' keep their dash.")
 
 
 def _translation_contract(src):
