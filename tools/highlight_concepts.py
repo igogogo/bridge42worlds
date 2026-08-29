@@ -57,6 +57,8 @@ ENDING_CHARS = set("аеиоуыэюяйьъхмвст" + "aeiouy" + "snrxtm" + 
 
 WORD = re.compile(r"[^\W\d_]+", re.UNICODE)
 MARKER = re.compile(r"\[(tag|law|scientist):[^\]]+\].*?\[/\1\]", re.S)
+# Маркер целиком, но с разобранными частями: вид, идентификатор, подпись.
+MARKER_FULL = re.compile(r"\[(tag|law|scientist):([^\]]+)\](.*?)\[/\1\]", re.S)
 
 
 def norm(s):
@@ -178,22 +180,58 @@ def free_zones(text):
     return zones or [(0, len(text))]
 
 
+def tokens_of(text):
+    """Слова текста ВНЕ маркеров: [(начало, конец, нормализованное)] и множество
+    пятибуквенных зачинов. Разбирается ОДИН РАЗ на текст.
+
+    Раньше разбор жил внутри find_span, то есть повторялся на каждое понятие. Пока
+    словарь был 536 понятий, это терпелось. Когда он стал 3 609, проход по архиву
+    вырос до девятнадцати часов: текст токенизировался 3 609 раз подряд, и так
+    сорок пять раз на статью (три уровня × пять языков × три поля).
+
+    Множество зачинов — это и есть указатель. same_word_strict требует совпадения
+    минимум пяти первых букв, значит первые пять — необходимое условие совпадения.
+    Проверить его — один поиск в множестве; не прошло, и полное сравнение не нужно.
+    Смысл разметки от этого не меняется: решает по-прежнему полное сравнение.
+    """
+    zones, pref = [], set()
+    for zs, ze in free_zones(text):
+        toks = [(m.start(), m.end(), norm(m.group(0)))
+                for m in WORD.finditer(text, zs, ze)]
+        if toks:
+            zones.append(toks)
+            pref.update(t[2][:5] for t in toks)
+    return zones, pref
+
+
+def span_in(zones, want, cmp):
+    """Первое место, где подряд идущие слова совпали с именем понятия.
+
+    Ищем ВНУТРИ каждой свободной зоны отдельно, а не по сплошному списку слов.
+    Разница не теоретическая: имя из двух слов иначе сложилось бы из последнего
+    слова перед чужим маркером и первого слова после него — и новый маркер лёг бы
+    поверх старого. На тридцати статьях сверки это дало одно расхождение из
+    тридцати, и оно было именно таким.
+    """
+    n = len(want)
+    for toks in zones:
+        for i in range(len(toks) - n + 1):
+            if all(cmp(want[j], toks[i + j][2]) for j in range(n)):
+                return toks[i][0], toks[i + n - 1][1]
+    return None
+
+
 def find_span(text, name, strict=False):
     """Где в тексте упомянуто понятие. Первое вхождение ВНЕ маркеров или None.
 
     Сравниваем по СЛОВАМ, а не подстрокой: подстрока ловит «ген» внутри «генерации»
     и «вода» внутри «водорода», а слово — нет. strict — правило глоссарного прохода.
     """
-    cmp = same_word_strict if strict else same_word
     want = [norm(w) for w in WORD.findall(name)]
     if not want:
         return None
-    for zs, ze in free_zones(text):
-        toks = [(m.start(), m.end(), norm(m.group(0))) for m in WORD.finditer(text, zs, ze)]
-        for i in range(len(toks) - len(want) + 1):
-            if all(cmp(want[j], toks[i + j][2]) for j in range(len(want))):
-                return toks[i][0], toks[i + len(want) - 1][1]
-    return None
+    toks, _ = tokens_of(text)
+    return span_in(toks, want, same_word_strict if strict else same_word)
 
 
 def same_word_strict(w, h):
@@ -216,15 +254,57 @@ def same_word_strict(w, h):
     return w[:n] == h[:n]
 
 
+def dedupe(text):
+    """Одно понятие — один маркер на текст. Возвращает (текст, множество id, снято).
+
+    Правило «одно вхождение на понятие» держалось на памяти ОДНОГО прогона: список
+    уже размеченного начинался пустым. При повторном проходе — а служебный прогон
+    это именно повтор — понятие, размеченное вчера, снова считалось неразмеченным
+    и получало второй маркер на другом упоминании. Замер после повторной подсветки
+    дня 26 августа: 145 лишних маркеров, у «туманности» по три штуки в одном тексте.
+
+    Здесь лишние снимаются (подпись остаётся текстом, ссылка уходит), а первый
+    маркер каждого понятия остаётся на месте и попадает в память прохода.
+    """
+    seen, removed = set(), 0
+
+    def one(m):
+        nonlocal removed
+        kind, cid, frag = m.group(1), m.group(2), m.group(3)
+        if cid in seen:
+            removed += 1
+            return frag
+        seen.add(cid)
+        return m.group(0)
+
+    return MARKER_FULL.sub(one, text), seen, removed
+
+
 def mark_text(text, cands, names, used, strict=False):
     """Одно вхождение на понятие: подсветка — это дорога вглубь, а не раскраска. Второе и
-    третье упоминание того же понятия ведут туда же и только рябят в глазах."""
+    третье упоминание того же понятия ведут туда же и только рябят в глазах.
+
+    Текст разбирается на слова один раз и пересобирается только после ВСТАВКИ —
+    её видит следующее понятие, потому что внутрь чужого маркера лезть нельзя.
+    Вставок на поле не больше двадцати (GLOSSARY_CAP), а понятий три с половиной
+    тысячи, так что разборов стало на два порядка меньше."""
+    cmp = same_word_strict if strict else same_word
     added = []
+    toks, pref = None, None
     for cid in cands:
         if cid in used or cid not in names:
             continue
         kind, name = names[cid]
-        span = find_span(text, name, strict=strict)
+        want = [norm(w) for w in WORD.findall(name)]
+        if not want:
+            continue
+        if toks is None:
+            toks, pref = tokens_of(text)
+        # Указатель: у строгого сравнения первые пять букв обязаны совпасть, значит
+        # понятие, чьего зачина в тексте нет, можно отбросить одним поиском.
+        if strict and want[0][:5] not in pref:
+            continue
+        span = span_in(toks, want, cmp)
         if not span:
             continue
         a, b = span
@@ -232,6 +312,7 @@ def mark_text(text, cands, names, used, strict=False):
         text = text[:a] + "[" + kind + ":" + cid + "]" + frag + "[/" + kind + "]" + text[b:]
         used.add(cid)
         added.append((cid, frag))
+        toks = None                       # текст изменился — разберём заново
     return text, added
 
 
@@ -309,10 +390,22 @@ def process_article(path, reg, names_by_lang, tiers, dry, show=False):
                 continue
             names = names_by_lang[lang]
             cands = [c for c in candidates(data, art) if c in reg]
+            # Память прохода начинаем НЕ с пустого места: то, что размечено раньше,
+            # уже размечено. Иначе повторный проход ставит понятию второй маркер.
             used = set()
+            for f in fields:
+                s = data.get(f)
+                if isinstance(s, str) and "[" in s:
+                    s, seen, cut = dedupe(s)
+                    if cut:
+                        data[f] = s
+                        changed += 1
+                    used |= seen
             gcands = (glossary_candidates(names, set(cands))
                       if tier in GLOSSARY_TIERS else [])
-            gleft = GLOSSARY_CAP
+            # Свободных мест столько, сколько осталось от потолка: иначе каждый
+            # повторный проход добавлял бы ещё двадцать поверх вчерашних.
+            gleft = max(0, GLOSSARY_CAP - len(used - set(cands)))
             for f in fields:
                 s = data.get(f)
                 if not isinstance(s, str) or len(s) < 40:
