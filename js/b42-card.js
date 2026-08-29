@@ -23,7 +23,8 @@
 var LANG = document.documentElement.lang || 'en';
 var RU = LANG === 'ru';
 var API = (window.B42_API || '').replace(/\/$/, '');
-var cache = {}, box = null, cur = null, pinned = false;
+var cache = {}, rels = {}, box = null, cur = null, pinned = false;
+var lastX = 0, lastY = 0;
 
 var T = {
     more:   RU ? 'Подробно' : 'Details',
@@ -32,8 +33,38 @@ var T = {
     links:  RU ? 'связей' : 'links',
     wait:   RU ? 'смотрю…' : 'loading…',
     none:   RU ? 'Карточки пока нет' : 'No card yet',
-    graph:  RU ? 'В графе' : 'In graph'
+    graph:  RU ? 'В графе' : 'In graph',
+    fact:   RU ? 'Кстати' : 'By the way',
+    wider:  RU ? 'Шире' : 'Broader',
+    deeper: RU ? 'Глубже' : 'Deeper'
 };
+
+/* УРОВЕНЬ ЧТЕНИЯ НАСЛЕДУЕТСЯ. Владелец 29.08: «если я открываю карточку понятия
+   с популярной или простой версии, она должна вести на популярное понятие».
+   Читаешь популярное изложение, наводишь на слово — и получаешь учебник: голос
+   сбивается ровно там, где читателю нужнее всего помощь.
+
+   Уровень страницы уже знает effVersion() из search.js: он подключён на всех
+   типах страниц, спрашивать больше нечего. Простое и популярное берут
+   description_popular и живой факт, подробное — формальное определение, как и
+   было: его читатель пришёл за точностью. */
+function level() {
+    try {
+        return (typeof window.effVersion === 'function' ? window.effVersion() : 'popular');
+    } catch (e) {
+        return 'popular';
+    }
+}
+
+/* Карточка — не статья: длинный текст в ней не читают, его проматывают. Режем по
+   границе предложения, а не по буквам: обрубок на полуслове выглядит поломкой. */
+function brief(t, cap) {
+    t = String(t || '').trim();
+    if (t.length <= cap) return t;
+    var cut = t.slice(0, cap);
+    var stop = Math.max(cut.lastIndexOf('. '), cut.lastIndexOf('! '), cut.lastIndexOf('? '));
+    return stop > cap * 0.5 ? cut.slice(0, stop + 1) : cut.replace(/\s+\S*$/, '') + '…';
+}
 
 var KIND_RU = {
     concept: 'понятие', law: 'закон', principle: 'принцип', theorem: 'теорема',
@@ -81,12 +112,50 @@ function niceValue(v) {
     return esc(m[1].replace('.', ',')) + '·10' + sup;
 }
 
-function render(d, id) {
+/* КУДА ДВИГАТЬСЯ ДАЛЬШЕ. Владелец 29.08: «карточка понятия всегда показывает,
+   куда двигаться дальше, и, перемещаясь по ссылкам, мы познаём предмет».
+
+   Направление берём из числа статей у соседа, без всякой модели: понятие, которое
+   встречается ЧАЩЕ, почти всегда шире и проще — на нём стоит начинать; которое
+   реже — уже и глубже. Это не закон природы, а надёжная примета, и её видно
+   проверкой: «чёрная дыра» встречается чаще «энтропии Вальда».
+
+   Сосед открывается КАРТОЧКОЙ, а не переходом: читатель остаётся в тексте статьи
+   и идёт по понятиям, пока не решит уйти совсем — для этого есть «Подробно». */
+function ways(d, rel) {
+    if (!rel || !rel.length) return '';
+    var own = d.n || 0, wide = [], deep = [];
+    for (var i = 0; i < rel.length; i++) {
+        var r = rel[i];
+        if (!r || !r.id || !r.name) continue;
+        ((r.n || 0) >= own ? wide : deep).push(r);
+        if (wide.length >= 3 && deep.length >= 3) break;
+    }
+    function row(label, list) {
+        if (!list.length) return '';
+        return '<div class="b42card-way"><span>' + label + '</span>' +
+            list.slice(0, 3).map(function (r) {
+                return '<button type="button" class="b42card-next" data-id="' +
+                    esc(r.id) + '">' + esc(r.name) + '</button>';
+            }).join('') + '</div>';
+    }
+    return row(T.wider, wide) + row(T.deeper, deep);
+}
+
+
+function render(d, id, rel) {
     var name = (RU && d.name) ? d.name : (d.name || id.replace(/_/g, ' '));
     var href = '/lang/' + LANG + '/concepts/' + encodeURIComponent(id) + '.html';
     var stats = [];
     if (d.n) stats.push(d.n + ' ' + T.arts);
     if (d.links) stats.push(d.links + ' ' + T.links);
+    /* Текст по уровню чтения. Популярного описания нет у 512 понятий из 3 589 —
+       там честно остаётся формальное, а не пустое место. */
+    var full = d.full || {};
+    var pop = level() !== 'advanced' && full.description_popular;
+    var body = pop ? brief(full.description_popular, 300) : (d.card || T.none);
+    var fact = pop ? brief(full.fun_fact_popular || '', 200) : '';
+
     return '' +
         '<div class="b42card-h">' +
             '<span class="b42card-kind">' + esc(kindLabel(d.kind)) + '</span>' +
@@ -95,7 +164,10 @@ function render(d, id) {
         (d.value ? '<div class="b42card-val">' + niceValue(d.value) +
                    (d.unit ? ' <em>' + esc(d.unit.replace(/_/g, ' ')) + '</em>' : '') +
                    '</div>' : '') +
-        '<div class="b42card-t">' + esc(d.card || T.none) + '</div>' +
+        '<div class="b42card-t">' + esc(body) + '</div>' +
+        (fact ? '<div class="b42card-fact"><span>' + T.fact + '</span> ' +
+                esc(fact) + '</div>' : '') +
+        ways(d, rel) +
         (stats.length ? '<div class="b42card-n">' + stats.join(' · ') + '</div>' : '') +
         '<div class="b42card-a">' +
             '<a class="b42card-go" href="' + href + '">' + T.more + '</a>' +
@@ -118,20 +190,30 @@ function place(x, y) {
     b.style.top = Math.round(top + (window.scrollY || 0)) + 'px';
 }
 
-function fill(id, data) {
+function fill(id, data, rel) {
     var b = el();
-    b.innerHTML = render(data || {}, id);
+    b.innerHTML = render(data || {}, id, rel);
     b.querySelector('.b42card-x').addEventListener('click', hide);
+    /* Переход к соседу — та же карточка на том же месте. Позицию помним: если
+       пересчитывать её от кнопки, карточка убегает вниз с каждым шагом. */
+    var next = b.querySelectorAll('.b42card-next');
+    for (var i = 0; i < next.length; i++) {
+        next[i].addEventListener('click', function (e) {
+            e.stopPropagation();
+            show(this.getAttribute('data-id'), lastX, lastY);
+        });
+    }
 }
 
 function show(id, x, y, seed) {
     if (!id) return;
     cur = id;
     pinned = true;
+    lastX = x; lastY = y;
     var b = el();
     b.classList.add('on');
     if (cache[id]) {
-        fill(id, cache[id]);
+        fill(id, cache[id], rels[id]);
         place(x, y);
         return;
     }
@@ -151,8 +233,9 @@ function show(id, x, y, seed) {
         .then(function (d) {
             if (!d || !d.concept) return;
             cache[id] = d.concept;
+            rels[id] = d.related || [];
             if (cur === id && b.classList.contains('on')) {
-                fill(id, d.concept);
+                fill(id, d.concept, rels[id]);
                 place(x, y);
             }
         })

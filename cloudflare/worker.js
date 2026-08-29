@@ -2845,7 +2845,11 @@ async function handleConcept(request, env) {
     .bind(id).first();
   if (!row) return Response.json({ error: "not_found" }, { status: 404 });
   const links = await env.CARDS.prepare(
-    "SELECT l.b AS id, l.w, l.kind AS lk, c.name_ru, c.name_en, c.kind AS ckind" +
+    /* n_arts у СОСЕДА нужен карточке: по числу статей она делит соседей на
+     «шире» и «глубже» — понятие, что встречается чаще, почти всегда шире.
+     Столбец уже в этой же таблице, лишнего запроса не появляется. */
+    "SELECT l.b AS id, l.w, l.kind AS lk, c.name_ru, c.name_en, c.kind AS ckind,"
+    + " c.n_arts" +
     "  FROM concept_links l LEFT JOIN concepts c ON c.id = l.b" +
     " WHERE l.a = ? ORDER BY l.w DESC LIMIT 24").bind(id).all();
   const full = (lang === "ru" && row.full_ru) ? row.full_ru : row.full_en;
@@ -2863,7 +2867,7 @@ async function handleConcept(request, env) {
     }),
     related: (links.results || []).filter(function (r) { return r.lk === "c"; })
       .map(function (r) {
-        return { id: r.id, w: r.w, kind: r.ckind,
+        return { id: r.id, w: r.w, kind: r.ckind, n: r.n_arts || 0,
           name: (lang === "ru" && r.name_ru) || r.name_en || r.id.replace(/_/g, " ") };
       }),
     formulas: (links.results || []).filter(function (r) { return r.lk === "f"; })
