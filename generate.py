@@ -318,6 +318,42 @@ def valid_tag_ids():
     return _VALID_TAGS
 
 
+_VALID_ENT = None
+
+
+def valid_entity_ids():
+    """Что вообще можно связать ссылкой ИЗ ТЕКСТА статьи: тег, закон или понятие.
+
+    «Есть ли такая страница» и «есть ли страница ТЕГА» — разные вопросы, а
+    спрашивали один. Подсветка ставит в текст понятия из живого реестра, а
+    разрешение брали из старого графа тегов: понятие без тега-двойника молча
+    теряло ссылку и оставалось простым словом. Свежие статьи 29.08 вышли ровно
+    такими — размеченными, с понятиями в карточке, но без единой ссылки в тексте.
+    Куда вести, решает entity_href; здесь решается только, вести ли вообще.
+    """
+    global _VALID_ENT
+    if _VALID_ENT is None:
+        _VALID_ENT = set(valid_tag_ids()) | set(valid_law_ids()) | set(_live_mini())
+    return _VALID_ENT
+
+
+def _resolve_entity(tid):
+    """Канонический id сущности для ссылки из текста, либо None."""
+    ok = valid_entity_ids()
+    cid = tid if tid in ok else None
+    if not cid:
+        alt = re.sub(r"[\s-]+", "_", tid.lower())
+        cid = alt if alt in ok else None
+    if not cid:
+        return None
+    # Слитый двойник ведёт на победителя, а не на запись-указатель: страница у
+    # неё есть, но это редирект, и ссылка из текста делала бы лишний прыжок.
+    rec = _live_mini().get(cid)
+    if rec and rec.get("merged_into") and rec["merged_into"] in _live_mini():
+        cid = rec["merged_into"]
+    return cid
+
+
 def valid_scientist_ids():
     global _VALID_SCI
     if _VALID_SCI is None:
@@ -488,9 +524,7 @@ def parse_markers(text, lang):
 
     def tag_link(m):
         tid, label = m.group(1).strip(), m.group(2)
-        if tid not in valid_tag_ids():
-            alt = re.sub(r"[\s-]+", "_", tid.lower())
-            tid = alt if alt in valid_tag_ids() else None
+        tid = _resolve_entity(tid)
         if not tid:
             return label
         label = fix_label(label, load_tags_loc(lang).get(tid, {}).get("name"))
@@ -507,9 +541,7 @@ def parse_markers(text, lang):
     def law_link(m):
         # Модель иногда метит закон вне нашего реестра — тогда оставляем обычный текст, без битой ссылки.
         lid, label = m.group(1).strip(), m.group(2)
-        if lid not in valid_law_ids():
-            alt = re.sub(r"[\s-]+", "_", lid.lower())
-            lid = alt if alt in valid_law_ids() else None
+        lid = _resolve_entity(lid)
         if not lid:
             return label
         label = fix_label(label, load_laws_loc(lang).get(lid, {}).get("name"))
@@ -5144,6 +5176,11 @@ def regenerate_all_html(only=None, force=False):
     count = 0
     fps = {} if (force or only) else _load_fingerprints()
     fresh, skipped = dict(fps), 0
+    # Чьи страницы авторов придётся переписать. Владелец 28.08: «а почему надо
+    # авторов пересобирать всех?» — вопрос по делу: в графе 46 832 человека, а от
+    # точечной пересборки меняются страницы авторов ровно тех статей, что собраны.
+    # Остальные сорок шесть тысяч перезаписывались бы тем же содержимым.
+    touched_authors = set()
     for data, folder in iter_articles():
         date_str = data.get("date", folder.parent.name)
         if only and not ({date_str, data.get("id"), folder.parent.name} & only):
@@ -5159,6 +5196,7 @@ def regenerate_all_html(only=None, force=False):
                 skipped += 1
                 continue
         fresh[aid] = fp
+        touched_authors |= {a for a in (data.get("authors") or []) if isinstance(a, str)}
         # только контентные картинки 0.jpg..N-1.jpg (ai.jpg — обложка, не в мозаике)
         images = sorted([p for p in folder.glob("*.jpg") if p.stem.isdigit()],
                         key=lambda p: int(p.stem))
@@ -5265,7 +5303,12 @@ def regenerate_all_html(only=None, force=False):
     # молча не получают страниц — битые ссылки вида /authors/Имя_Фамилия.html (юзер-фидбек
     # 2026-07-19: обнаружен на реальном примере, Tucker Manton — автор статьи, но не в графе).
     rebuild_author_graph()
-    update_all_authors()
+    # Точечная сборка — точечная запись авторов. Признак точечности не «указан ли
+    # список статей», а «осталось ли что-то несобранным»: обычный дневной прогон
+    # идёт без списка, по отпечаткам, и авторов у него меняют те же единицы статей.
+    # Полная пересборка (--force или когда собрано всё) переписывает всех.
+    partial = bool(only) or (skipped and not force)
+    update_all_authors(only=sorted(touched_authors) if partial else None)
     generate_sitemaps()
     generate_llms_txt()
     generate_feeds()

@@ -286,6 +286,9 @@ def restore():
 def main():
     ap = argparse.ArgumentParser(description="Применение волны 5 к боевым данным")
     ap.add_argument("--apply", action="store_true")
+    ap.add_argument("--articles-only", action="store_true",
+                    help="дописать разметку в статьи, справочник не перезаписывать — "
+                         "для точечного добавления свежих статей")
     ap.add_argument("--live-only", action="store_true",
                     help="пересобрать только справочник live (группы/связи/хранилища), статьи не трогать")
     ap.add_argument("--restore", action="store_true")
@@ -308,8 +311,13 @@ def main():
         return 0
     n = apply_articles(retag, dry=not a.apply)
     if a.apply:
-        write_json_atomic(LIVE, live, indent=None)
-        print(f"→ {LIVE.relative_to(ROOT)} ({LIVE.stat().st_size // 1024} КБ)")
+        # Справочник перезаписываем не всегда. Он собирается заново из исходников,
+        # и над живым файлом уже поработали слияния двойников, правка направлений
+        # связей и переводы названий — для дня, который принёс два десятка статей,
+        # это цена без нужды. Статьям нужна только их разметка.
+        if not a.articles_only:
+            write_json_atomic(LIVE, live, indent=None)
+            print(f"→ {LIVE.relative_to(ROOT)} ({LIVE.stat().st_size // 1024} КБ)")
         print(f"разметка v2 записана в {n} статей")
     else:
         print(f"будет записано в {n} статей; --apply применит")

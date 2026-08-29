@@ -214,23 +214,46 @@ def build(args):
 
 
 def live(args):
-    """Одна статья как «новая»: сколько связей даёт разметка и что делать, если мало."""
+    """Статьи как «новые»: сколько связей даёт разметка и что делать, если мало."""
     np, have, X, cids, CV = load_all()
-    aid = args.live
-    if aid not in have:
-        print(f"статьи {aid} нет в корпусе"); return 1
-    i = have.index(aid)
     S = X @ CV.T
     hub = S.mean(axis=0)
     CC = CV @ CV.T
-    picked = rank_article(np, S[i], hub, CC, word_sets(cids), args.thr, args.margin)
-    print(f"{aid}: связей {len(picked)}")
-    for x in picked:
-        print(f"   {S[i][x]:.3f}  сверх фона {S[i][x]-hub[x]:+.3f}  {cids[x]}")
-    if len(picked) < LIVE_MIN:
-        print(f"\nсвязей меньше {LIVE_MIN} — статья говорит о том, чего в реестре нет.")
-        print("живой механизм: взять missing_tags этой статьи из data/gap-suggestions.jsonl")
-        print("и дописать в data/concept-candidates.jsonl; кандидат с 5+ статьями дорос.")
+    words = word_sets(cids)
+    out = {}
+    # Список через запятую: день приносит два десятка статей сразу, а поле и
+    # матрица сходства грузятся секунды — незачем платить за них двадцать раз.
+    for aid in [a.strip() for a in args.live.split(",") if a.strip()]:
+        # Папка статьи зовётся с версией (2608.21711v1), а корпус и поле — без неё:
+        # версия у работы меняется, предмет остаётся тот же. Раньше это значило, что
+        # передать сюда имя папки нельзя, и попытка разметить свежую статью честно
+        # отвечала «нет в корпусе» — 29.08 на этом встала разметка целого дня.
+        if aid not in have:
+            base = aid.split("v")[0] if "v" in aid.rsplit("/", 1)[-1] else aid
+            if base in have:
+                aid = base
+        if aid not in have:
+            print(f"статьи {aid} нет в корпусе"); continue
+        i = have.index(aid)
+        picked = rank_article(np, S[i], hub, CC, words, args.thr, args.margin)
+        print(f"{aid}: связей {len(picked)}")
+        for x in picked:
+            print(f"   {S[i][x]:.3f}  сверх фона {S[i][x]-hub[x]:+.3f}  {cids[x]}")
+        if len(picked) < LIVE_MIN:
+            print(f"связей меньше {LIVE_MIN} — статья говорит о том, чего в реестре нет.")
+            print("живой механизм: взять missing_tags этой статьи из data/gap-suggestions.jsonl")
+            print("и дописать в data/concept-candidates.jsonl; кандидат с 5+ статьями дорос.")
+        if picked:
+            out[aid] = [cids[x] for x in picked]
+
+    if getattr(args, "apply", False) and out:
+        try:
+            doc = json.loads(OUT.read_text(encoding="utf-8")) if OUT.exists() else {}
+        except Exception:
+            doc = {}
+        doc.setdefault("articles", {}).update(out)
+        OUT.write_text(json.dumps(doc, ensure_ascii=False), encoding="utf-8")
+        print(f"записано: {len(out)} статей в {OUT.name}")
     return 0
 
 
@@ -239,7 +262,10 @@ def main():
     ap.add_argument("--tune", action="store_true", help="таблица порогов, ничего не пишет")
     ap.add_argument("--thr", type=float, default=THR)
     ap.add_argument("--margin", type=float, default=MARGIN)
-    ap.add_argument("--live", metavar="ID", help="прогнать одну статью как новую")
+    ap.add_argument("--live", metavar="ID",
+                    help="прогнать статьи как новые (id через запятую)")
+    ap.add_argument("--apply", action="store_true",
+                    help="с --live: дописать результат в общую разметку")
     args = ap.parse_args()
     return live(args) if args.live else build(args)
 

@@ -536,7 +536,12 @@ body {
     flex-wrap: wrap;
     gap: 8px;
     position: sticky; top: 0; z-index: 90;
-    background: var(--bg); padding: 8px 0; margin-top: -8px;
+    background: var(--bg); padding: 8px 0;
+    /* Отрицательного отступа здесь больше нет. Он подтягивал липкую строку на
+       восемь пикселей вверх, и пока высота совпадала с расчётной, это работало.
+       Стоило строке стать выше — при другом масштабе браузера или крупном шрифте
+       — верх содержимого уезжал за кромку прилипания: логотип цел, а кнопки
+       справа срезаны наполовину (владелец 29.08, со снимком). */
 }
 /* Щель над липкой шапкой. Владелец 18 августа, мобильная статья: «меню не до конца
    вверх уезжает, а статья появляется фоном сверху». Причина: у контейнера страницы
@@ -1127,12 +1132,22 @@ section h2 { font-size: 15px; font-weight: 600; color: var(--text); margin-botto
 .mosaic { position: relative; margin-bottom: 20px; }
 /* ── Галерея статьи (js/gallery.js): главное изображение + лента превью снизу ── */
 .gallery { max-width: 620px; margin: 0; }
+/* ПОДЛОЖКИ НЕТ. Сцена держала жёсткие 3:2 и красила поля бежевым; обложка
+   с иным соотношением (2378×1727 — это 1,38) вписывалась в короб по contain,
+   и по бокам оставалась цветная плита в двадцать пять пикселей. Владелец
+   29.08: «что там за подложка у картинок болтается — её убрать». */
 .gallery-stage {
     position: relative; aspect-ratio: 3 / 2; border-radius: 12px; overflow: hidden;
-    background: var(--tag-bg);
+    background: none;
 }
+/* Одна картинка — короб не нужен вовсе: высоту задаёт сама картинка, и она
+   занимает ВСЮ ширину колонки, без полей по бокам. Короб остаётся там, где
+   кадров несколько: он держит высоту, чтобы страница не прыгала при листании. */
+.gallery[data-count="1"] .gallery-stage { aspect-ratio: auto; }
+.gallery[data-count="1"] .gallery-main,
+.gallery[data-count="1"] .gallery-main-img { height: auto; }
 .gallery-main { display: block; width: 100%; height: 100%; cursor: zoom-in; }
-/* contain, а не cover — научные рисунки нельзя обрезать; поля заполняет фон .gallery-stage. */
+/* contain, а не cover — научные рисунки нельзя обрезать. */
 .gallery-main-img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .gallery-caption {
     position: absolute; left: 0; right: 0; bottom: 0; margin: 0;
@@ -4020,10 +4035,14 @@ body.graph-fs-open .graph-fs-active svg { touch-action: manipulation; }
    По мере перевода каждой из них старое правило уйдёт вместе с ней.
    ═══════════════════════════════════════════════════════════════════════════ */
 
-body.article-page { max-width: var(--w-page); }
+/* Ширина статьи — по картинке (620), и шапка с ней заодно. Проход 2 развёл их:
+   колонка стала шире, текст пустили во всю ширину, а обложка осталась 620 — и
+   страница поехала (владелец 29.08: «текст возвращаем в ширину картинки вместе
+   с шапкой»). Одна ширина на всё: обложка, текст, шапка, строка языков. */
+body.article-page { max-width: calc(620px + var(--s-4) * 2); }
 
 body.article-page .top-bar,
-body.article-page .langs-row { max-width: none; }
+body.article-page .langs-row { max-width: 620px; }
 
 body.article-page .article-wrapper { display: block; }
 
@@ -4032,14 +4051,15 @@ body.article-page .article-main {
     padding: var(--s-4) 0 var(--s-5);
 }
 
-/* Текст статьи — по комфортной строке; всё остальное во всю колонку. Раньше и то и
-   другое было зажато в 620, поэтому картинки и карточки выглядели уже страницы. */
-body.article-page .article-main > * { max-width: none; }
+/* Одна ширина на всё содержимое статьи — 620, как у обложки и шапки. Тот же
+   набор правил повторяет блок «прохода 2d» ниже; он идёт позже и решает,
+   здесь то же значение, чтобы файл не спорил сам с собой при чтении. */
+body.article-page .article-main > * { max-width: 620px; }
 body.article-page .article-main p,
 body.article-page .article-main ul,
 body.article-page .article-main ol,
 body.article-page .oneliner,
-body.article-page .original-title { max-width: var(--w-read); }
+body.article-page .original-title { max-width: 620px; }
 
 /* Теги в потоке — карточкой, как на прототипе, а не колонкой сбоку. */
 body.article-page .article-side--flow {
@@ -4523,12 +4543,35 @@ html[dir="rtl"] .article-card .card-actions .lv-switch {
    колонка статьи сужена до читаемой строки, и ВСЁ — шапка, текст, граф,
    похожие — заканчивается на одной вертикали.
    ═══════════════════════════════════════════════════════════════════════════ */
-body.article-page { max-width: 700px; }
+/* Этот блок идёт ПОЗЖЕ и потому решает. Правку 29.08 я сделал выше по файлу —
+   и она не подействовала: колонка осталась 700, а проза шла во всю ширину.
+
+   ОДНА ШИРИНА НА ВСЁ — 620. Владелец 29.08: «текст надо сузить по картинке,
+   не картинку раздувать», «все элементы страницы должны быть выровнены по
+   ширине». Было 668 у прозы против 620 у обложки — правый край гулял, и
+   строка в 75 знаков читалась тяжело. Теперь один край у обложки, шапки,
+   заголовка, прозы, карточки понятий и похожих статей.
+
+   «Отступить от картинки» — по вертикали: текст стоял вплотную к нижней
+   кромке обложки, зазор был ровно ноль. Мера — ниже.
+
+   Если 620 всё ещё длинновато для глаза (это 70 знаков в строке), сужать
+   надо КОЛОНКУ ЦЕЛИКОМ, вместе с картинкой, а не одну прозу внутри неё —
+   иначе правый край снова разъедется. */
+body.article-page { max-width: calc(620px + var(--s-4) * 2); }
 body.article-page .article-main p,
 body.article-page .article-main ul,
 body.article-page .article-main ol,
+body.article-page .article-main h2,
+body.article-page .article-main h3,
+body.article-page .article-main blockquote,
 body.article-page .oneliner,
-body.article-page .original-title { max-width: none; }
+body.article-page .original-title,
+body.article-page .title-row { max-width: 620px; margin-left: 0; margin-right: 0; }
+
+/* Зазор между обложкой и первым абзацем: был ноль, текст лип к картинке. */
+body.article-page .article-main .mosaic,
+body.article-page .article-main .gallery { margin-bottom: var(--s-6); }
 
 /* Левая структура (оглавление). Порог 1280 прятал её на обычном ноутбуке —
    владелец видел пустые поля и «исчезнувшую структуру». Колонка стала 700,
