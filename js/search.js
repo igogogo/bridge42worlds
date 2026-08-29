@@ -2179,6 +2179,19 @@ function initAllTooltips() {
         if (el.dataset.tooltipInit) return;
         el.dataset.tooltipInit = '1';
 
+        /* ДВА ОКНА НА ОДНО НАВЕДЕНИЕ. Понятие в тексте — это <a class="text-tag"
+           data-tag="gravity">, и оно попадает и в этот отбор по [data-tag], и в отбор
+           b42-card.js ('a.ent, a.text-tag, a.side-tag'). Наводишь на слово — вылезают
+           обе подсказки разом: наша строка и карточка (владелец 29.08: «опять два
+           тултипа от него»). Заметить это программно трудно: здесь слушается
+           mouseenter, который не всплывает, поэтому в проверках событием он молчал.
+           Уступаем карточке — она новее и богаче, владелец 28.08 просил именно её:
+           «тултип не строкой, а аккуратной карточкой». Плашки, от которых карточка
+           отказывается (ent-nocard, ent-sci), остаются за нами. */
+        if (el.closest && el.closest('a.ent, a.text-tag, a.side-tag')
+            && !el.classList.contains('ent-nocard')
+            && !el.classList.contains('ent-sci')) return;
+
         if (TOUCH) {
             // У авторов тултип не нужен (владелец): обычная ссылка, один тап — переход.
             if (el.dataset.author) return;
