@@ -9,6 +9,7 @@ import time
 import re
 import json
 import sys
+import threading
 import requests
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -266,7 +267,14 @@ def license_class(lic_url):
 # Строки лицензий интернируются — их всего шесть разных на весь arXiv, и без этого
 # словарь весил бы втрое больше. К сети идём ТОЛЬКО за тем, чего в индексе нет:
 # за работами свежее последнего обновления дампа.
-_LIC_DB = None
+# Соединение — СВОЁ У КАЖДОГО ПОТОКА. sqlite не даёт пользоваться объектом из
+# чужого потока, и одно соединение на процесс валило разбор лицензий, как только
+# статьи дня пошли пачкой: «SQLite objects created in a thread can only be used
+# in that same thread» (29.08, прогон за 26 августа). Ошибка глушилась выше по
+# стеку, и работа просто оставалась без лицензии из базы — то есть уезжала
+# спрашивать её у arXiv по сети, хотя ответ лежал на диске.
+_LIC_TL = threading.local()
+_LIC_BUILD = threading.Lock()
 _LIC_PATH = Path("data/arxiv-index.jsonl")
 _LIC_SQLITE = Path("data/arxiv-licenses.sqlite")
 
@@ -280,38 +288,40 @@ def _lic_db():
     библиотеки решает это без единой зависимости: файл строится один раз за минуту,
     дальше живёт рядом с индексом и обновляется вместе с ним.
     """
-    global _LIC_DB
-    if _LIC_DB is not None:
-        return _LIC_DB
+    db = getattr(_LIC_TL, "db", None)
+    if db is not None:
+        return db
     import sqlite3
-    fresh = (_LIC_SQLITE.exists() and _LIC_PATH.exists()
-             and _LIC_SQLITE.stat().st_mtime >= _LIC_PATH.stat().st_mtime)
-    if not fresh and _LIC_PATH.exists():
-        print("  📇 строю базу лицензий из индекса (один раз)...")
-        tmp = _LIC_SQLITE.with_suffix(".tmp")
-        tmp.unlink(missing_ok=True)
-        con = sqlite3.connect(tmp)
-        con.execute("CREATE TABLE lic (id TEXT PRIMARY KEY, l TEXT)")
-        rows, n = [], 0
-        with _LIC_PATH.open(encoding="utf-8", errors="replace") as fh:
-            for line in fh:
-                try:
-                    d = json.loads(line)
-                except Exception:
-                    continue
-                rows.append((d.get("id", ""), d.get("l") or ""))
-                if len(rows) >= 50000:
-                    con.executemany("INSERT OR REPLACE INTO lic VALUES (?,?)", rows)
-                    n += len(rows); rows = []
-        if rows:
-            con.executemany("INSERT OR REPLACE INTO lic VALUES (?,?)", rows)
-            n += len(rows)
-        con.commit(); con.close()
-        tmp.replace(_LIC_SQLITE)
-        print(f"  📇 база лицензий готова: {n} работ")
+    # Строит базу ОДИН поток: остальные ждут на замке и застают готовый файл.
+    with _LIC_BUILD:
+        fresh = (_LIC_SQLITE.exists() and _LIC_PATH.exists()
+                 and _LIC_SQLITE.stat().st_mtime >= _LIC_PATH.stat().st_mtime)
+        if not fresh and _LIC_PATH.exists():
+            print("  📇 строю базу лицензий из индекса (один раз)...")
+            tmp = _LIC_SQLITE.with_suffix(".tmp")
+            tmp.unlink(missing_ok=True)
+            con = sqlite3.connect(tmp)
+            con.execute("CREATE TABLE lic (id TEXT PRIMARY KEY, l TEXT)")
+            rows, n = [], 0
+            with _LIC_PATH.open(encoding="utf-8", errors="replace") as fh:
+                for line in fh:
+                    try:
+                        d = json.loads(line)
+                    except Exception:
+                        continue
+                    rows.append((d.get("id", ""), d.get("l") or ""))
+                    if len(rows) >= 50000:
+                        con.executemany("INSERT OR REPLACE INTO lic VALUES (?,?)", rows)
+                        n += len(rows); rows = []
+            if rows:
+                con.executemany("INSERT OR REPLACE INTO lic VALUES (?,?)", rows)
+                n += len(rows)
+            con.commit(); con.close()
+            tmp.replace(_LIC_SQLITE)
+            print(f"  📇 база лицензий готова: {n} работ")
     if _LIC_SQLITE.exists():
-        _LIC_DB = sqlite3.connect(f"file:{_LIC_SQLITE}?mode=ro", uri=True)
-    return _LIC_DB
+        _LIC_TL.db = sqlite3.connect(f"file:{_LIC_SQLITE}?mode=ro", uri=True)
+    return getattr(_LIC_TL, "db", None)
 
 
 def local_license(arxiv_id):
