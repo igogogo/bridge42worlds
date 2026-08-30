@@ -1,0 +1,230 @@
+{
+ "topic": "квантовая запутанность и её измерение",
+ "slug": "квантовая-запутанность-и-её-измерение",
+ "built": "2026-08-30",
+ "note": "В области квантовой запутанности активно развиваются как теоретические методы оценки и измерения, так и экспериментальные подходы, но практическая реализация точных измерений всё ещё сталкивается с ограничениями.",
+ "drill": {
+  "found": 12,
+  "nearest": 0.639,
+  "band": "mid",
+  "near": 0,
+  "full": 1,
+  "model": "bge-m3"
+ },
+ "ideas": [
+  {
+   "title": "Стенд для оценки точности измерения запутанности с учётом неидеальности детекторов",
+   "what": "Собрать экспериментальную установку для генерации двухкубитных запутанных состояний (например, на основе спонтанного параметрического рассеяния) и провести серию измерений для оценки точности определения запутанности при конечной статистике и неидеальных детекторах. Сравнить экспериментальные результаты с теоретическими пределами из квантовой теории оценивания.",
+   "why": "Практическая характеризация запутанности важна для квантовых технологий, а систематическое сравнение с теоретическими границами точности поможет улучшить протоколы верификации.",
+   "methods": [
+    "Использовать метод квантовой томографии состояния с последующим вычислением меры запутанности (например, concurrence) и оценкой её погрешности через фишеровскую информацию, как в работе 0907.4117.",
+    "Применить технику оценки ошибки и возмущения из работы 1106.2526 для анализа влияния неидеальности измерений на точность определения запутанности.",
+    "Собрать оптическую схему с генерацией пар фотонов в состоянии Белла и измерением корреляций в различных базисах, варьируя параметры детекторов (тёмновой счёт, эффективность).",
+    "Провести статистический анализ: многократно повторить измерения при разных временах накопления и сравнить разброс оценок с предсказаниями квантовой границы точности."
+   ],
+   "origin": "В работе 0907.4117 представлен экспериментально реализуемый метод оценки запутанности на квантовом пределе точности, но не рассматривается влияние конкретных неидеальностей детекторов. Работа 1106.2526 даёт теоретическую основу для учёта ошибок и возмущений при измерении, однако экспериментальная проверка совместного применения этих подходов отсутствует.",
+   "first_step": "Собрать простейшую схему генерации поляризационно-запутанных фотонов на нелинейном кристалле и провести калибровку детекторов, измерив их эффективность и тёмновой счёт.",
+   "needs": "Оптический стол, лазер, нелинейный кристалл (например, BBO), однофотонные детекторы, электроника совпадений, навыки работы с оптикой и статистической обработкой данных.",
+   "risks": "Основная трудность — достижение достаточной яркости источника запутанных пар и стабильности установки для получения статистически значимых результатов; возможны систематические ошибки из-за несовершенства поляризационной оптики.",
+   "scale": "диплом",
+   "based_on": [
+    "0907.4117",
+    "1106.2526"
+   ]
+  },
+  {
+   "title": "Численная проверка временной запутанности в спиновых цепочках",
+   "what": "Реализовать численный расчёт меры временной запутанности для одномерной спиновой системы после квенча (резкого изменения параметров гамильтониана) и исследовать её динамику. Сравнить поведение временной запутанности с известными характеристиками, такими как рост энтропии запутанности и распространение корреляций.",
+   "why": "Временная запутанность — новый инструмент для анализа квантовой динамики, но её свойства для конкретных моделей изучены слабо; результаты могут быть полезны для понимания квантового хаоса и термализации.",
+   "methods": [
+    "Использовать метод точной диагонализации для небольших цепочек спинов (до 12-14 узлов) и вычислять временную запутанность согласно определению из работы 2603.20765.",
+    "Применить технику тензорных сетей (например, TEBD) для моделирования более длинных цепочек и проверки масштабирования.",
+    "Построить графики зависимости временной запутанности от времени для различных параметров квенча и сравнить с поведением пространственной запутанности.",
+    "Проверить, проявляется ли затухание и осцилляции временной запутанности, аналогичные описанным в работе 2603.20765."
+   ],
+   "origin": "Работа 2603.20765 предлагает концепцию временной запутанности и показывает её поведение в простых моделях, но систематического исследования для широкого класса спиновых систем не проводилось. Отсутствует сравнение с хорошо изученными мерами пространственной запутанности, что могло бы выявить универсальные закономерности.",
+   "first_step": "Написать программу для точной диагонализации цепочки из 6 спинов с гамильтонианом Изинга в поперечном поле и вычислить временную запутанность после внезапного изменения поля.",
+   "needs": "Компьютер с достаточной памятью, знание численных методов (Python/Julia), библиотеки линейной алгебры, возможно, доступ к кластеру для больших систем.",
+   "risks": "Численная сложность экспоненциально растёт с размером системы, поэтому результаты для малых систем могут не отражать термодинамический предел; определение временной запутанности может требовать аккуратного выбора базиса.",
+   "scale": "семестр",
+   "based_on": [
+    "2603.20765"
+   ]
+  },
+  {
+   "title": "Геометрическая мера запутанности для многочастичных состояний: вычисление и приложения к фазовым переходам",
+   "what": "Разработать эффективные численные алгоритмы для вычисления геометрической меры запутанности (расстояния до ближайшего сепарабельного состояния) для многочастичных систем и применить их для анализа квантовых фазовых переходов в спиновых моделях. Исследовать, как геометрическая мера ведёт себя вблизи критических точек.",
+   "why": "Геометрическая мера запутанности даёт интуитивно понятную количественную характеристику, но её вычисление для больших систем затруднено; автоматизация и применение к реалистичным моделям помогут в изучении квантовых фазовых переходов.",
+   "methods": [
+    "Использовать определение геометрической меры из работы 0905.2467 как расстояние до множества сепарабельных состояний, вычисляемое через максимизацию перекрытия с произведением одночастичных состояний.",
+    "Применить вариационные методы (например, метод мнимого времени с ограничением на сепарабельность) для нахождения ближайшего сепарабельного состояния.",
+    "Реализовать вычисление для матричных произведений состояний (MPS) с помощью оптимизации по локальным тензорам.",
+    "Применить к модели Изинга с поперечным полем и модели Гейзенберга, построить зависимость меры от параметра и найти особенности в критической точке."
+   ],
+   "origin": "Работа 0905.2467 вводит геометрическую меру и приводит аналитические результаты для некоторых классов состояний, но для многочастичных систем общего вида вычисление остаётся вычислительно сложным. Не хватает практических алгоритмов, пригодных для исследования фазовых переходов в реалистичных моделях.",
+   "first_step": "Написать код для вычисления геометрической меры для чистого состояния двух кубитов аналитически и сравнить с известной формулой concurrence, затем обобщить на три кубита с помощью численной оптимизации.",
+   "needs": "Знание квантовой информации и численной оптимизации, компьютер, возможно, использование библиотек для тензорных сетей (например, ITensor).",
+   "risks": "Оптимизация может застревать в локальных минимумах, давая неверные значения меры; для больших систем вычислительные затраты могут быть prohibitive.",
+   "scale": "диплом",
+   "based_on": [
+    "0905.2467"
+   ]
+  },
+  {
+   "title": "Экспериментальная проверка соотношений неопределённости для ошибки и возмущения в квантовых измерениях",
+   "what": "Построить оптическую установку для реализации слабых и сильных измерений поляризации фотонов и проверить универсальные соотношения между ошибкой измерения и возмущением состояния из работы 1106.2526. Измерить ошибку и возмущение для различных сил измерения и сравнить с теоретическими границами.",
+   "why": "Соотношения ошибка-возмущение являются фундаментальными для квантовых измерений, но их экспериментальная проверка в общем виде остаётся сложной; результаты могут прояснить пределы точности измерений.",
+   "methods": [
+    "Использовать формализм квантовой теории оценивания из 1106.2526 для определения ошибки и возмущения через среднеквадратичные отклонения оценок.",
+    "Реализовать схему измерения поляризации с переменной силой взаимодействия (например, с помощью частичного поляризационного светоделителя) и томографии состояния до и после.",
+    "Провести серию измерений для различных наблюдаемых и сил измерения, построить графики зависимости произведения ошибки и возмущения от параметров.",
+    "Сравнить экспериментальные данные с предсказаниями нижней границы, включая достижимую границу из работы."
+   ],
+   "origin": "Работа 1106.2526 теоретически выводит границы для произведения ошибки и возмущения, но экспериментальная проверка для произвольных состояний и наблюдаемых не проводилась. Существующие эксперименты часто ограничены частными случаями, поэтому нужна более общая проверка.",
+   "first_step": "Собрать схему для приготовления произвольного поляризационного состояния одиночных фотонов с помощью поляризаторов и волновых пластинок, затем реализовать измерительное устройство с регулируемой силой.",
+   "needs": "Источник одиночных фотонов (ослабленный лазер), поляризационная оптика, однофотонные детекторы, электроника для совпадений, навыки квантовой томографии.",
+   "risks": "Сложность точного контроля силы измерения и компенсации систематических ошибок; статистические флуктуации могут маскировать тонкие эффекты.",
+   "scale": "годы",
+   "based_on": [
+    "1106.2526"
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "id": "2505.00777v1",
+   "date": "2025-05-01",
+   "full": true,
+   "titles": {
+    "ru": "Квантовое измерение как деформация восприятия: сфера Блоха и рождение категорий",
+    "en": "Quantum Measurement as a Deformation of Perception: The Bloch Sphere and the Birth of Categories",
+    "es": "La medición cuántica como deformación de la percepción: la esfera de Bloch y el nacimiento de categorías",
+    "ar": "القياس الكمي كتشويه للإدراك: كرة بلوخ ونشأة الفئات",
+    "fr": "La mesure quantique comme déformation de la perception : la sphère de Bloch et la naissance des catégories"
+   },
+   "score": 0.518,
+   "url": "/lang/{lang}/archive/2025-05-01/2505.00777v1/",
+   "abstract": "Когда вы долго смотрите на серый цвет, он вдруг начинает казаться то светлее, то темнее — наш мозг сам «дорисовывает» картинку. Учёные обнаружили, что похожий механизм искажения работает и в квантовом мире, где частицы тоже «воспринимают» состояния. Исследователи построили математическую модель и показали, что квантовое измерение сжимает одни различия и раздувает другие, как это делает человеческое восприятие. Это открытие намекает на то, что странности квантовой физики и работа нашего сознания могут иметь общие корни."
+  },
+  {
+   "id": "2603.20765",
+   "date": "2026-03-21",
+   "full": false,
+   "titles": {
+    "ru": "Время запутывается, как нитки",
+    "en": "Time Gets Entangled Like Threads",
+    "es": "El tiempo se enreda como hilos",
+    "ar": "الزمن يتشابك مثل الخيوط",
+    "fr": "Le temps s'emmêle comme des fils"
+   },
+   "score": 0.507,
+   "url": "/lang/{lang}/archive/2026-03-21/2603.20765/",
+   "abstract": "Обычно запутанность измеряют между двумя точками пространства. Здесь же предложен способ измерить её между двумя моментами времени для одной и той же системы. Оказалось, что временная запутанность ведёт себя как эхо после резкого встряхивания системы — она колеблется и затухает. Такой подход помогает увидеть скрытые свойства теории, например, какие частицы в ней могут рождаться."
+  },
+  {
+   "id": "2607.21734",
+   "date": "2026-07-23",
+   "full": false,
+   "titles": {
+    "ru": "Сложность запутывается на полпути",
+    "en": "Complexity Gets Tangled Midway",
+    "es": "La complejidad se enreda a mitad de camino",
+    "ar": "التعقيد ينقلب في منتصف الطريق",
+    "fr": "La complexité bascule à mi-chemin"
+   },
+   "score": 0.497,
+   "url": "/lang/{lang}/archive/2026-07-23/2607.21734/",
+   "abstract": "Учёные показали, что сложность части случайной квантовой системы испытывает резкий переход, когда её размер превышает половину от общего. Это похоже на фазовый переход: до середины сложность определяется спектром энергий, а после — конкретным базисом состояний. Такой же переход найден для сложности излучения чёрной дыры, что помогает разрешить парадокс сложности, аналогичный информационному парадоксу. Работа связывает квантовую теорию информации и голографию чёрных дыр."
+  },
+  {
+   "id": "1106.2526",
+   "full": false,
+   "field": true,
+   "score": 0.639,
+   "titles": {
+    "ru": "Quantum Estimation Theory of Error and Disturbance in Quantum   Measurement"
+   },
+   "abstract": "We formulate the error and disturbance in quantum measurement by invoking quantum estimation theory. The disturbance formulated here characterizes the non-unitary state change caused by the measurement. We prove that the product of the error and disturbance is bounded from below by the commutator of the observables. We also find the attainable bound of the product."
+  },
+  {
+   "id": "0907.4117",
+   "full": false,
+   "field": true,
+   "score": 0.636,
+   "titles": {
+    "ru": "Experimental estimation of entanglement at the quantum limit"
+   },
+   "abstract": "Entanglement is the central resource of quantum information processing and the precise characterization of entangled states is a crucial issue for the development of quantum technologies. This leads to the necessity of a precise, experimental feasible measure of entanglement. Nevertheless, such measurements are limited both from experimental uncertainties and intrinsic quantum bounds. Here we present an experiment where the amount of entanglement of a family of two-qubit mixed photon states is estimated with the ultimate precision allowed by quantum mechanics."
+  },
+  {
+   "id": "1809.07249",
+   "full": false,
+   "field": true,
+   "score": 0.633,
+   "titles": {
+    "ru": "The Measure Aspect of Quantum Uncertainty, of Entanglement, and the   Associated Entropies"
+   },
+   "abstract": "Indeterminacy associated with probing of a quantum state is commonly expressed through spectral distances (metric) featured in the outcomes of repeated experiments. Here we express it as an effective amount (measure) of distinct outcomes instead. The resulting $\\mu$-uncertainties are described by the effective number theory [1] whose central result, the existence of a minimal amount, leads to a well-defined notion of intrinsic irremovable uncertainty. We derive $\\mu$-uncertainty formulas for arbitrary set of commuting operators, including the cases with continuous spectra. The associated entro"
+  },
+  {
+   "id": "0905.2467",
+   "full": false,
+   "field": true,
+   "score": 0.63,
+   "titles": {
+    "ru": "Quantum entanglement: geometric quantification and applications to   multi-partite states and quantum phase transitions"
+   },
+   "abstract": "The degree to which a pure quantum state is entangled can be characterized by the distance or angle to the nearest unentangled state. This geometric measure of entanglement is explored for bi-partite and multi-partite pure and mixed states. It is determined analytically for arbitrary two-qubit mixed states, generalized Werner, and isotropic states, and is also applied to certain multi-partite mixed states, including two distinct multi-partite bound entangled states. Moreover, the ground-state entanglement of the XY model in a transverse field is calculated and shown to exhibit singular behavio"
+  },
+  {
+   "id": "1109.5661",
+   "full": false,
+   "field": true,
+   "score": 0.628,
+   "titles": {
+    "ru": "Quantum measurement bounds beyond the uncertainty relations"
+   },
+   "abstract": "We give a bound to the precision in the estimation of a parameter in terms of the expectation value of an observable. It is an extension of the Cramer-Rao inequality and of the Heisenberg uncertainty relation, where the estimation precision is typically bounded in terms of the variance of an observable."
+  },
+  {
+   "id": "quant-ph/0111141",
+   "full": false,
+   "field": true,
+   "score": 0.623,
+   "titles": {
+    "ru": "Reconsideration of quantum measurements"
+   },
+   "abstract": "The usual conjectures of quantum measurements approaches, inspired from the traditional interpretation of Heisenberg's (\"uncertainty\") relations, are proved as being incorrect. A group of reconsidered conjectures and a corresponding new approach are set forth. The quantum measurements, regarded experimentally as statistical samplings, are described theoretically by means of linear integral transforms of quantum probability density and current, from intrinsic into recorded readings. Accordingly, the quantum observables appear as random variables, valuable, in both readings, through probabilisti"
+  },
+  {
+   "id": "1605.07818",
+   "full": false,
+   "field": true,
+   "score": 0.621,
+   "titles": {
+    "ru": "Quantum Coherence and Intrinsic Randomness"
+   },
+   "abstract": "The peculiar uncertainty or randomness of quantum measurements stems from coherence, whose information-theoretic characterization is currently under investigation. Under the resource theory of coherence, it is interesting to investigate interpretations of coherence measures and the interplay with other quantum properties, such as quantum correlations and intrinsic randomness. Coherence can be viewed as the resource for the intrinsic randomness in the measurement outcomes of a state in the computational basis. We observed in our previous work that the coherence of formation, which measures the "
+  },
+  {
+   "id": "quant-ph/0110103",
+   "full": false,
+   "field": true,
+   "score": 0.62,
+   "titles": {
+    "ru": "Quantum entanglement and geometry of determinantal varieties"
+   },
+   "abstract": "Quantum entanglement was first recognized as a feature of quantum mechanics in the famous paper of Einstein, Podolsky and Rosen [18]. Recently it has been realized that quantum entanglement is a key ingredient in quantum computation, quantum communication and quantum cryptography ([16],[17],[6]). In this paper, we introduce algebraic sets, which are determinantal varieties in the complex projective spaces or the products of complex projective spaces, for the mixed states in bipartite or multipartite quantum systems as their invariants under local unitary transformations. These invariants are n"
+  },
+  {
+   "id": "1404.7520",
+   "full": false,
+   "field": true,
+   "score": 0.618,
+   "titles": {
+    "ru": "Quantum Measurement Complexity"
+   },
+   "abstract": "This paper explores the problem of quantum measurement complexity. In computability theory, the complexity of a problem is determined by how long it takes an effective algorithm to solve it. This complexity may be compared to the difficulty for a hypothetical oracle machine, the output of which may be verified by a computable function but cannot be simulated on a physical machine. We define a quantum oracle machine for measurements as one that can determine the state by examining a single copy. The complexity of measurement for a realizable machine will then be respect to the number of copies "
+  }
+ ]
+}

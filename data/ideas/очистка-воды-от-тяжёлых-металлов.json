@@ -1,0 +1,197 @@
+{
+ "topic": "очистка воды от тяжёлых металлов",
+ "slug": "очистка-воды-от-тяжёлых-металлов",
+ "built": "2026-08-30",
+ "note": "В области очистки воды от тяжёлых металлов наблюдается сдвиг от классической сорбции к электрохимическим и осадительным методам, но многие лабораторные результаты ещё не доведены до практических проточных систем.",
+ "drill": {
+  "found": 12,
+  "nearest": 0.589,
+  "band": "sparse",
+  "near": 0,
+  "full": 0,
+  "model": "bge-m3"
+ },
+ "ideas": [
+  {
+   "title": "Собрать стенд для сравнения сорбентов на основе углеродных нанотрубок и β-циклодекстрина по улавливанию свинца",
+   "what": "Собрать лабораторный стенд с проточной ячейкой, в которую помещаются модифицированные электроды или сорбционные мембраны, и провести серию экспериментов по удалению ионов Pb²⁺ из модельных растворов. Сравнить эффективность разных составов композитов MWCNT/β-CD, меняя соотношение компонентов и условия нанесения.",
+   "why": "Это даст практическую основу для выбора дешёвого и чувствительного материала для очистки воды от свинца, а также позволит отработать методику электрохимического мониторинга концентрации.",
+   "methods": [
+    "Приготовить композитные электроды/мембраны из многостенных углеродных нанотрубок (MWCNT) и β-циклодекстрина (β-CD) по методике, описанной в работе 1811.09654, с вариацией массового соотношения и способа нанесения (капельное покрытие, электроосаждение).",
+    "Использовать электрохимические методы (циклическая вольтамперометрия, дифференциальная импульсная вольтамперометрия) для количественного определения Pb²⁺ в растворе до и после сорбции.",
+    "Собрать проточную ячейку с фиксированным объёмом и скоростью потока, чтобы оценить динамическую сорбционную ёмкость материалов.",
+    "Провести регенерацию сорбента в слабокислой среде и проверить стабильность характеристик после нескольких циклов."
+   ],
+   "origin": "В работе 1811.09654 показано, что композит MWCNT/β-CD может использоваться как электрохимический сенсор на свинец, но не исследована его сорбционная способность в проточных условиях и возможность регенерации. С другой стороны, работа 1908.01184 демонстрирует принципы дизайна наноматериалов для селективного захвата ионов, но не даёт готового протокола для свинца. Не хватает связки: как из сенсорного материала сделать рабочий сорбент и как его проверить в динамике.",
+   "first_step": "Приготовить три-четыре состава композита MWCNT/β-CD, нанести их на графитовые или стеклоуглеродные подложки и снять калибровочные кривые для Pb²⁺ методом дифференциальной импульсной вольтамперометрии.",
+   "needs": "Химическая посуда, реактивы (MWCNT, β-CD, соли свинца), потенциостат, электроды, проточная ячейка (можно собрать из оргстекла), дистиллированная вода. Навыки электрохимических измерений и работы с наноматериалами. Бюджет на расходники — порядка 50–100 тыс. рублей.",
+   "risks": "Плохая адгезия композита к подложке или невоспроизводимость нанесения могут привести к большому разбросу данных. Также возможна низкая сорбционная ёмкость из-за малой площади поверхности в проточной ячейке.",
+   "scale": "семестр",
+   "based_on": [
+    "1811.09654",
+    "1908.01184"
+   ]
+  },
+  {
+   "title": "Разработать и испытать проточный модуль ударного электродиализа для удаления ионов свинца и кадмия из сточных вод",
+   "what": "Спроектировать и собрать ячейку ударного электродиализа (shock ED) с пористой средой и ионоселективной мембраной, адаптированную для селективного удаления двухвалентных катионов тяжёлых металлов. Провести серию экспериментов с модельными растворами, варьируя напряжение, скорость потока и концентрацию.",
+   "why": "Ударный электродиализ обещает быть энергоэффективным и безреагентным методом очистки, но его поведение с многозарядными ионами изучено слабо. Результаты могут быть полезны для очистки промышленных стоков.",
+   "methods": [
+    "Взять за основу конструкцию ячейки из работы 1402.0058 (пористый материал, мембрана, электроды) и модифицировать геометрию для работы с двухвалентными катионами.",
+    "Провести вольт-амперные характеристики и хронологические измерения концентраций Pb²⁺ и Cd²⁺ на выходе при разных режимах.",
+    "Использовать ионную хроматографию или атомно-абсорбционную спектроскопию для точного определения концентраций металлов.",
+    "Сравнить энергопотребление на единицу удалённого металла с традиционным электродиализом и сорбцией."
+   ],
+   "origin": "В работе 1402.0058 показано, что shock ED эффективен для обессоливания и деионизации, но эксперименты проводились в основном с одновалентными ионами (Na⁺, Cl⁻). Работа 1811.09654 подтверждает, что свинец можно детектировать электрохимически в реальном времени, что удобно для мониторинга процесса. Не хватает данных о том, как shock ED справляется с селективным отделением тяжёлых металлов от фоновых солей и какие параметры оптимальны.",
+   "first_step": "Собрать простейшую ячейку shock ED по описанию из 1402.0058, используя доступные пористые материалы (например, стеклянные фритты) и катионообменную мембрану, и проверить её работу на растворе NaCl, чтобы воспроизвести результаты.",
+   "needs": "Материалы для ячейки (пористые стекла, мембраны Nafion), источник постоянного тока с регулировкой напряжения, перистальтический насос, аналитическое оборудование (ионный хроматограф или ААС). Навыки электрохимии и гидродинамики. Стоимость сборки стенда — от 100 тыс. рублей.",
+   "risks": "Возможно, что при высоких концентрациях тяжёлых металлов произойдёт осаждение гидроксидов на мембране или в порах, что быстро забьёт ячейку. Также селективность может оказаться недостаточной для практического применения.",
+   "scale": "диплом",
+   "based_on": [
+    "1402.0058",
+    "1811.09654"
+   ]
+  },
+  {
+   "title": "Пилотная установка для иммобилизации мышьяка(III) из грунтовых вод методом осаждения туэлита на месте",
+   "what": "Спроектировать и испытать проточный реактор, в котором As(III) окисляется и осаждается в виде туэлита (минерала на основе железа и мышьяка) с использованием доступных реагентов. Провести полевые испытания на скважине с повышенным содержанием мышьяка.",
+   "why": "Мышьяк(III) чрезвычайно токсичен и плохо удаляется обычными методами. Предлагаемый метод обещает быть дешёвым и пригодным для сельских районов, где нет сложной инфраструктуры.",
+   "methods": [
+    "Воспроизвести лабораторный синтез туэлита по методике из работы 1605.05666, оптимизировав условия (pH, соотношение Fe/As, температура).",
+    "Разработать проточный реактор с перемешиванием, в который дозируются соли железа и окислитель (например, перманганат калия) для превращения As(III) в As(V) и последующего осаждения.",
+    "Провести серию экспериментов на модельных растворах с концентрациями As(III), характерными для грунтовых вод (50–500 мкг/л), измеряя остаточную концентрацию.",
+    "Испытать установку на реальной скважине, оценив производительность и стабильность осадка."
+   ],
+   "origin": "В работе 1605.05666 показана принципиальная возможность осаждения мышьяка в виде туэлита из модельных растворов, но только в лабораторных статических условиях. Не хватает масштабирования: как организовать непрерывный процесс, какие реагенты использовать в полевых условиях, и какова будет эффективность на реальной воде с конкурирующими ионами.",
+   "first_step": "Повторить синтез туэлита в колбе, как описано в 1605.05666, и измерить остаточную концентрацию мышьяка, чтобы убедиться в воспроизводимости метода.",
+   "needs": "Химические реактивы (соли железа, окислители, стандартные растворы мышьяка), аналитическое оборудование для определения мышьяка (атомно-абсорбционный спектрометр с гидридной приставкой или ICP-MS), доступ к скважине с повышенным содержанием As. Навыки химической технологии и полевых испытаний. Бюджет на пилотную установку — от 300 тыс. рублей.",
+   "risks": "В реальной воде могут присутствовать фосфаты и силикаты, конкурирующие за адсорбционные центры, что снизит эффективность осаждения. Также возможно, что осадок туэлита будет недостаточно стабилен и мышьяк начнёт выщелачиваться.",
+   "scale": "годы",
+   "based_on": [
+    "1605.05666"
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "id": "2405.09524",
+   "full": false,
+   "field": true,
+   "score": 0.589,
+   "titles": {
+    "ru": "Water Purification Via Plasma"
+   },
+   "abstract": "Water purification via plasma is considered a healthy, effective alternative to traditional water purification systems due to the lack of harmful chemical additives that traditional purification systems use. A reactor capable of eliminating bacteria colonies from contaminated water using plasma discharge was designed and tested. Materials and reactor parameters are discussed in this paper. It was confirmed that glow discharge plasma in water creates oxidants, eliminating bacteria colonies."
+  },
+  {
+   "id": "1706.05482",
+   "full": false,
+   "field": true,
+   "score": 0.583,
+   "titles": {
+    "ru": "Nitrate removal from water using electrostatic regeneration of   functionalized adsorbent"
+   },
+   "abstract": "Nitrate is an important pollutant in drinking water worldwide, and a number of methods exist for the removal of nitrate from water including ion exchange and reverse osmosis. However, these approaches suffer from a variety of disadvantages including requirements for supply and disposal of brine used for regeneration in ion exchange and low water recovery ratio for reverse osmosis. Here, we demonstrate the use of high surface area activated carbon electrodes functionalized with moieties having high affinity for adsorption of nitrate from aqueous solution, such as those used in ion exchange. Ads"
+  },
+  {
+   "id": "2403.07163",
+   "full": false,
+   "field": true,
+   "score": 0.583,
+   "titles": {
+    "ru": "Water Isotope Separation using Deep Learning and a Catalytically Active   Ultrathin Membrane"
+   },
+   "abstract": "Water isotope separation, specifically separating heavy from light water, is a socially significant issue due to the usage of heavy water in applications such as nuclear magnetic resonance, nuclear power, and spectroscopy. Separation of heavy water from light water is difficult due to very similar physical and chemical properties between the isotopes. We show that a catalytically active ultrathin membrane (e.g., a nanopore in MoS2) can enable chemical exchange processes and physicochemical mechanisms that lead to efficient separation of deuterium from hydrogen, quantified as the D2O and deuter"
+  },
+  {
+   "id": "2408.09056",
+   "full": false,
+   "field": true,
+   "score": 0.58,
+   "titles": {
+    "ru": "Isotope-Selective Strong Field Ionization of Semi-Heavy Water"
+   },
+   "abstract": "Semi-heavy water (HOD) is one of the simplest molecules in which the bonds are labelled by isotope. We demonstrate that a pair of intense few-femtosecond infrared laser pulses can be used to selectively tunnel ionize along one of the two bonds. The first pulse doubly ionizes HOD, inducing rapid bond stretching and unbending. Femtoseconds later, the second pulse arrives and further ionization is selectively enhanced along the OH bond. These conclusions arise from 3D time-resolved measurements of H$^+$, D$^+$, and O$^+$ momenta following triple ionization."
+  },
+  {
+   "id": "1907.07573",
+   "full": false,
+   "field": true,
+   "score": 0.579,
+   "titles": {
+    "ru": "AquaSight: Automatic Water Impurity Detection Utilizing Convolutional   Neural Networks"
+   },
+   "abstract": "According to the United Nations World Water Assessment Programme, every day, 2 million tons of sewage and industrial and agricultural waste are discharged into the worlds water. In order to address this pervasive issue of increasing water pollution, while ensuring that the global population has an efficient, accurate, and low cost method to assess whether the water they drink is contaminated, we propose AquaSight, a novel mobile application that utilizes deep learning methods, specifically Convolutional Neural Networks, for automated water impurity detection. After comprehensive training with "
+  },
+  {
+   "id": "1811.09654",
+   "full": false,
+   "field": true,
+   "score": 0.579,
+   "titles": {
+    "ru": "Electrochemical Sensing of Lead in Drinking Water Using MWCNTs and   \\b{eta}-Cyclodextrin"
+   },
+   "abstract": "Heavy metal pollution is a severe environmental problem affecting many water resources. The non-biodegradable nature of the heavy metals such as lead (Pb) causes severe human health issues, so their cost-effective, sensitive and rapid detection is needed. In this work, we describe a simple, facile and low cost modifications of multiwalled carbon nanotubes (MWCNT) and \\b{eta}-cyclodextrin (\\b{eta}CD) through non-covalent/physical (Phys) and a covalent Steglich esterification (SE) approaches. The Phys modification approach resulted Pb detection with a limit-of-detection (LoD) of 0.9 ppb, while t"
+  },
+  {
+   "id": "1605.05666",
+   "full": false,
+   "field": true,
+   "score": 0.578,
+   "titles": {
+    "ru": "Efficient artificial mineralization route to decontaminate Arsenic(III)   polluted water -the Tooeleite Way"
+   },
+   "abstract": "Increasing exposure to arsenic (As) contaminated ground water is a great threat to humanity. Suitable technology for As immobilization and removal from water, especially for As(III) than As(V), is not available yet. However, it is known that As(III) is more toxic than As(V) and most groundwater aquifers, particularly the Gangetic basin in India, is alarmingly contaminated with it. In search of a viable solution here, we took a cue from the natural mineralization of Tooeleite, a mineral containing Fe(III) and As(III)ions, grown under acidic condition, in presence of SO42- ions. Complying to thi"
+  },
+  {
+   "id": "1402.0058",
+   "full": false,
+   "field": true,
+   "score": 0.576,
+   "titles": {
+    "ru": "Water Purification by Shock Electrodialysis: Deionization, Filtration,   Separation, and Disinfection"
+   },
+   "abstract": "The development of energy and infrastructure efficient water purification systems are among the most critical engineering challenges facing our society. Water purification is often a multi-step process involving filtration, desalination, and disinfection of a feedstream. Shock electrodialysis (shock ED) is a newly developed technique for water desalination, leveraging the formation of ion concentration polarization (ICP) zones and deionization shock waves in microscale pores near to an ion selective element. While shock ED has been demonstrated as an effective water desalination tool, we here "
+  },
+  {
+   "id": "1908.01184",
+   "full": false,
+   "field": true,
+   "score": 0.576,
+   "titles": {
+    "ru": "Designing an Optimal Ion Adsorber at the Nanoscale: The Unusual   Nucleation of AgNP/Co$^{2+}$ -- Ni$^{2+}$ Binary Mixtures"
+   },
+   "abstract": "Selective removal of heavy metals from water is a complex topic. We present a theoretical computational approach, supported by experimental evidences, to design a functionalized nanomaterial that is able to selectively capture metallic ions from water in a self-assembling process. A theoretical model is used to map an experimental mixture of Ag nanoparticles and either Co$^{2+}$ or Ni$^{2+}$ onto an additive highly asymmetric attractive Lennard Jones binary mixture. Extensive NVT (constant number of particles, volume, and temperature) Monte Carlo simulations are performed to derive a set of pa"
+  },
+  {
+   "id": "0704.2571",
+   "full": false,
+   "field": true,
+   "score": 0.575,
+   "titles": {
+    "ru": "Extraction of Freshwater and Energy from Atmosphere"
+   },
+   "abstract": "Author offers and researches a new, cheap method for the extraction of freshwater from the Earth atmosphere. The suggected method is fundamentally dictinct from all existing methods that extract freshwater from air. All other industrial methods extract water from a saline water source (in most cases from seawater). This new method may be used at any point in the Earth except Polar Zones. It does not require long-distance freshwater transportation. If seawater is not utilized for increasing its productivity, this inexpensive new method is very environment-friendly. The author method has two wor"
+  },
+  {
+   "id": "2211.14708",
+   "full": false,
+   "field": true,
+   "score": 0.574,
+   "titles": {
+    "ru": "Identifying Chemicals Through Dimensionality Reduction"
+   },
+   "abstract": "Civilizations have tried to make drinking water safe to consume for thousands of years. The process of determining water contaminants has evolved with the complexity of the contaminants due to pesticides and heavy metals. The routine procedure to determine water safety is to use targeted analysis which searches for specific substances from some known list; however, we do not explicitly know which substances should be on this list. Before experimentally determining which substances are contaminants, how do we answer the sampling problem of identifying all the substances in the water? Here, we p"
+  },
+  {
+   "id": "1405.1338",
+   "full": false,
+   "field": true,
+   "score": 0.572,
+   "titles": {
+    "ru": "Mathematical Modeling on Open Limestone Channel"
+   },
+   "abstract": "Acid mine drainage (AMD) is the outflow of acidic water from metal mines or coal mines. When exposed to air and water, metal sulfides from the deposits of the mines are oxidized and produce acid, metal ions and sulfate, which lower the pH value of the water. An open limestone channel (OLC) is a passive and low cost way to neutralize AMD. The dissolution of calcium into the water increases the pH value of the solution. A differential equation model is numerically solved to predict the variation of concentration of each species in the OLC solution. The diffusion of Calcium due to iron precipitat"
+  }
+ ]
+}

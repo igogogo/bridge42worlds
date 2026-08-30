@@ -1,0 +1,248 @@
+{
+ "topic": "метаматериалы и управление светом",
+ "slug": "метаматериалы-и-управление-светом",
+ "built": "2026-08-30",
+ "note": "Сейчас активно развиваются перестраиваемые метаматериалы с управлением светом, теплом и сверхпроводимостью, но многие эффекты ещё не доведены до практических устройств.",
+ "drill": {
+  "found": 12,
+  "nearest": 0.665,
+  "band": "mid",
+  "near": 4,
+  "full": 0,
+  "model": "bge-m3"
+ },
+ "ideas": [
+  {
+   "title": "Собрать перестраиваемый жидкокристаллический метаповерхностный модулятор для управления нелинейным преобразованием частоты",
+   "what": "Создать прототип ультратонкой метаповерхности с жидкими кристаллами, управляемой светом, для настройки нелинейного преобразования частоты и распределения энергии по направлениям. Воспроизвести ключевой результат работы 2604.03830 в упрощённом виде, добавив управление поляризацией.",
+   "why": "Такой модулятор может стать основой программируемых фотонных схем для обработки сигналов, где требуется перестраиваемая нелинейность без громоздкой оптики.",
+   "methods": [
+    "Изготовить метаповерхность на основе плазмонных наноантенн, покрытых слоем жидкого кристалла, используя литографию и методы нанесения тонких плёнок.",
+    "Организовать оптическую схему накачки и зондирования: импульсный лазер для возбуждения нелинейного отклика, спектрометр для регистрации преобразованных частот.",
+    "Управлять ориентацией жидкого кристалла внешним светом (фотоиндуцированная переориентация) и измерять изменения нелинейного сигнала при разных состояниях.",
+    "Сравнить экспериментальные данные с расчётом методом конечных разностей во временной области (FDTD) для оценки эффективности преобразования."
+   ],
+   "origin": "В работе 2604.03830 показано, что жидкие кристаллы на метаповерхности позволяют управлять нелинейными свойствами светом, но не исследовано влияние поляризации управляющего света и не предложена простая схема для практического использования. Мы предлагаем воспроизвести эффект и добавить поляризационный контроль, которого в исходной работе нет.",
+   "first_step": "Рассчитать и смоделировать в FDTD простую метаповерхность (например, массив золотых наностержней) с жидкокристаллическим слоем, чтобы определить геометрию для нелинейного отклика на нужной длине волны.",
+   "needs": "Доступ к установкам электронно-лучевой литографии, источникам фемтосекундных импульсов, спектрометру с высоким разрешением, навыки работы с FDTD-симуляторами (Lumerical, MEEP).",
+   "risks": "Сложность точного воспроизведения нелинейного отклика из-за чувствительности к качеству поверхности и ориентации жидких кристаллов; возможна деградация образца при высоких интенсивностях.",
+   "scale": "диплом",
+   "based_on": [
+    "2604.03830"
+   ]
+  },
+  {
+   "title": "Проверить оптическое управление сверхпроводимостью YBCO для создания перестраиваемых метаматериалов",
+   "what": "Использовать лазерное выжигание кислорода в плёнках YBCO для локального изменения сверхпроводящих свойств и создать на этой основе перестраиваемый метаматериал для управления терагерцовым излучением.",
+   "why": "Локальное управление сверхпроводимостью позволит создавать элементы с изменяемой проводимостью для метаматериалов, работающих в терагерцовом диапазоне, что актуально для спектроскопии и связи.",
+   "methods": [
+    "Нанести тонкие плёнки YBCO методом импульсного лазерного осаждения на подложку.",
+    "С помощью сфокусированного лазера локально изменять содержание кислорода, контролируя температуру перехода и плотность носителей, как в работе 2601.09513.",
+    "Изготовить массив таких участков, образующих метаматериал (например, разрезные кольца), и измерить его терагерцовый отклик методом терагерцовой спектроскопии с временным разрешением.",
+    "Сравнить с моделированием метаматериала с пространственно неоднородной проводимостью."
+   ],
+   "origin": "Работа 2601.09513 демонстрирует плавную настройку сверхпроводимости YBCO лазером, но не использует это для создания метаматериалов. В то же время метаматериалы для терагерцового диапазона часто требуют перестройки, которую можно обеспечить таким способом. Мы предлагаем объединить эти идеи.",
+   "first_step": "Получить или изготовить плёнку YBCO и провести калибровку лазерного воздействия: измерить зависимость температуры перехода от мощности и времени облучения.",
+   "needs": "Установка импульсного лазерного осаждения, лазер с контролируемой мощностью, криостат для измерения сверхпроводящих свойств, терагерцовый спектрометр.",
+   "risks": "Сложность точного контроля пространственного распределения кислорода; возможная нестабильность свойств во времени из-за диффузии кислорода.",
+   "scale": "годы",
+   "based_on": [
+    "2601.09513"
+   ]
+  },
+  {
+   "title": "Разработать метод оптической записи тепловых каналов на основе гиперболических фононных поляритонов",
+   "what": "Воспроизвести и расширить метод из работы 2603.10900: с помощью лазерных узоров на плёнке оксида молибдена создавать дорожки для гиперболических фононных поляритонов и исследовать их теплопроводящие свойства.",
+   "why": "Управление теплом на наномасштабе важно для охлаждения электроники и создания тепловых диодов, а предложенный метод потенциально дешевле и проще традиционных.",
+   "methods": [
+    "Изготовить тонкие плёнки оксида молибдена (MoO3) методом эксфолиации или химического осаждения.",
+    "С помощью лазера нанести узоры, контролируя их геометрию (ширину, период) и параметры лазерного излучения.",
+    "Измерить распространение тепла с помощью сканирующей тепловой микроскопии или термоотражения, чтобы подтвердить направленный перенос вдоль узоров.",
+    "Сравнить с теоретическими расчётами дисперсии гиперболических фононных поляритонов."
+   ],
+   "origin": "В работе 2603.10900 показан способ создания тепловых дорожек светом, но не исследованы пределы разрешения и влияние параметров узора на эффективность теплопереноса. Мы предлагаем систематически изучить эти аспекты, чтобы понять практическую применимость метода.",
+   "first_step": "Получить плёнку MoO3 и воспроизвести лазерное нанесение узора, затем провести базовую характеризацию структуры (атомно-силовая микроскопия, рамановская спектроскопия).",
+   "needs": "Лазерная установка с точным позиционированием, сканирующий тепловой микроскоп или система термоотражения, оборудование для нанесения плёнок.",
+   "risks": "Трудность измерения тепловых потоков на наномасштабе с достаточной точностью; возможное повреждение плёнки при лазерной обработке.",
+   "scale": "диплом",
+   "based_on": [
+    "2603.10900"
+   ]
+  },
+  {
+   "title": "Создать оптический пинцет на основе метаповерхности для манипуляции наночастицами",
+   "what": "Разработать и изготовить метаповерхность, которая фокусирует свет в субволновое пятно для оптического захвата и манипуляции наночастицами, используя подходы из работы 2204.02750.",
+   "why": "Метаповерхностные пинцеты могут быть компактнее и дешевле традиционных, что полезно для биологических исследований и нанотехнологий.",
+   "methods": [
+    "Спроектировать метаповерхность (например, на основе диэлектрических наностолбиков) для создания оптической ловушки с заданным профилем интенсивности.",
+    "Изготовить образец методами литографии и травления.",
+    "Собрать оптическую схему для захвата полистироловых или кремниевых наночастиц и наблюдения их движения.",
+    "Измерить жёсткость ловушки, анализируя броуновское движение захваченной частицы."
+   ],
+   "origin": "Работа 2204.02750 обобщает принципы метаматериальных пинцетов, но конкретные реализации часто требуют сложной настройки. Мы предлагаем создать простую метаповерхность и проверить её эффективность для частиц разного размера и материала.",
+   "first_step": "Численно рассчитать метаповерхность для фокусировки света с длиной волны 1064 нм в пятно диаметром менее 500 нм.",
+   "needs": "Оборудование для литографии, лазер, микроскоп с камерой, программное обеспечение для моделирования (FDTD, COMSOL).",
+   "risks": "Низкая эффективность захвата из-за потерь в метаповерхности; сложность точного позиционирования частиц.",
+   "scale": "семестр",
+   "based_on": [
+    "2204.02750"
+   ]
+  },
+  {
+   "title": "Исследовать сверхсильную связь в квантовых электродинамических метаматериалах для управления оптическим откликом",
+   "what": "Теоретически и экспериментально исследовать метаматериал, состоящий из резонаторов, сильно связанных с квантовыми излучателями, чтобы выяснить, как сверхсильная связь изменяет коллективный оптический отклик.",
+   "why": "Сверхсильная связь может привести к новым эффектам, таким как изменение химических реакций или транспортных свойств, что перспективно для квантовых технологий.",
+   "methods": [
+    "Построить модель массива мета-атомов, каждый из которых содержит квантовый излучатель (например, квантовую точку) в резонаторе, используя подходы из работы 2209.02656.",
+    "Рассчитать коллективные моды системы и их дисперсию при разной силе связи.",
+    "Для экспериментальной проверки изготовить образец с квантовыми точками в фотонном резонаторе и измерить спектры отражения/пропускания.",
+    "Сравнить экспериментальные спектры с теоретическими предсказаниями."
+   ],
+   "origin": "Работа 2209.02656 рассматривает сверхсильную связь в метаматериалах, но фокусируется на теоретическом описании одиночных элементов. Мы предлагаем изучить коллективные эффекты в массиве, что может выявить новые моды и нелинейности.",
+   "first_step": "Выбрать конкретную систему (например, квантовые точки в плазмонных нанорезонаторах) и рассчитать её спектр при изменении силы связи.",
+   "needs": "Навыки квантовой оптики и численного моделирования (Python, QuTiP), для эксперимента — оборудование для синтеза квантовых точек и наноструктур, спектрометр.",
+   "risks": "Сложность достижения сверхсильной связи в эксперименте; теоретические модели могут не учитывать неоднородности.",
+   "scale": "годы",
+   "based_on": [
+    "2209.02656"
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "id": "2604.03830",
+   "date": "2026-04-04",
+   "full": false,
+   "titles": {
+    "ru": "Жидкие кристаллы учат свет менять правила",
+    "en": "Liquid Crystals Teach Light to Change the Rules",
+    "es": "Los cristales líquidos enseñan a la luz a cambiar las reglas",
+    "ar": "البلورات السائلة تعلّم الضوء تغيير القواعد",
+    "fr": "Les cristaux liquides apprennent à la lumière à changer les règles"
+   },
+   "score": 0.529,
+   "url": "/lang/{lang}/archive/2026-04-04/2604.03830/",
+   "abstract": "Учёные создали ультратонкую метаповерхность, где жидкие кристаллы управляются светом и меняют нелинейные свойства. Это позволяет настраивать преобразование частоты света и распределение энергии по направлениям. Такой подход открывает путь к программируемым фотонным схемам для обработки сигналов и вычислений."
+  },
+  {
+   "id": "2601.09513",
+   "date": "2026-01-14",
+   "full": false,
+   "titles": {
+    "ru": "Лазерный луч управляет сверхпроводимостью",
+    "en": "Laser Beam Controls Superconductivity",
+    "es": "Un rayo láser controla la superconductividad",
+    "ar": "شعاع ليزر يتحكم في الموصلية الفائقة",
+    "fr": "Un faisceau laser pilote la supraconductivité"
+   },
+   "score": 0.467,
+   "url": "/lang/{lang}/archive/2026-01-14/2601.09513/",
+   "abstract": "Учёные нашли способ управлять сверхпроводимостью плёнок из оксида иттрия-бария-меди (YBCO), выжигая кислород лазером. Меняя мощность луча, можно плавно регулировать температуру перехода в сверхпроводящее состояние и плотность носителей заряда. Это открывает путь к созданию сложных наноструктур для электроники."
+  },
+  {
+   "id": "2603.10900",
+   "date": "2026-03-11",
+   "full": false,
+   "titles": {
+    "ru": "Свет лепит дорожки для тепла в наномире",
+    "en": "Light Carves Pathways for Heat in the Nanoworld",
+    "es": "La luz dibuja caminos para el calor en el nanomundo",
+    "ar": "الضوء يرسم مسارات للحرارة في العالم النانوي",
+    "fr": "La lumière trace des voies pour la chaleur dans le nanomonde"
+   },
+   "score": 0.465,
+   "url": "/lang/{lang}/archive/2026-03-11/2603.10900/",
+   "abstract": "Учёные научились управлять движением тепла на расстояниях в десятки нанометров с помощью света. Они наносят на тонкую плёнку кристалла оксида молибдена узоры лазером, и эти узоры становятся дорожками для особых волн — гиперболических фононных поляритонов. Такие волны переносят тепло строго в заданном направлении, почти не рассеиваясь. Раньше для этого требовались сложные и дорогие металлические структуры, а теперь всё можно перерисовать за секунды. Метод ускорит создание микроскопических оптических и тепловых устройств."
+  },
+  {
+   "id": "2507.06809",
+   "full": false,
+   "field": true,
+   "score": 0.665,
+   "titles": {
+    "ru": "Ultrafast All-optical control of Multiple Light Degrees of Freedom through Mode-mixing in a Graphene Nanoribbon Metamaterial"
+   },
+   "abstract": "The evolution of optical technologies necessitates advanced solutions for selective and dynamic manipulation of light's degrees of freedom, including amplitude, phase, polarization, wavelength, and angular momentum. Metamaterials can offer such control through the interplay between the intrinsic material and geometrical properties of nanostructures or extrinsically through excitation and detection symmetry breaking, leading to customizable performance. However, achieving dynamic control over multiple light degrees of freedom remains a challenge. To address existing limitations, we present a no"
+  },
+  {
+   "id": "2204.02750",
+   "full": false,
+   "field": true,
+   "score": 0.66,
+   "titles": {
+    "ru": "Optical manipulation with metamaterial structures"
+   },
+   "abstract": "Optical tweezers employing forces produced by light underpin important manipulation tools in many areas of applied and biological physics. Conventional optical tweezers are based on refractive optics, and they require excessive auxiliary optical elements to reshape both amplitude and phase, as well as wavevector and angular momentum of light, and thus impose limitations to the overall cost and integration of optical systems. Metamaterials provide both electric and optically induced magnetic response in subwavelength optical structures, and they are highly beneficial to achieve unprecedented co"
+  },
+  {
+   "id": "2209.02656",
+   "full": false,
+   "field": true,
+   "score": 0.653,
+   "titles": {
+    "ru": "Quantum Electrodynamical Metamaterials"
+   },
+   "abstract": "Recent experiments have revealed ultrastrong coupling between light and matter as a promising avenue for modifying material properties, such as electrical transport, chemical reaction rates, and even superconductivity. Here, we explore (ultra)strong coupling as a means for manipulating the optical response of metamaterials based on ensembles of constituent units individually in the ultrastrong coupling regime. We develop a framework based on linear response for quantum electrodynamical systems to study how light-matter coupling affects the optical response. We begin by applying this framework "
+  },
+  {
+   "id": "2206.04390",
+   "full": false,
+   "field": true,
+   "score": 0.65,
+   "titles": {
+    "ru": "Designing Metasurfaces to Manipulate Antenna Radiation"
+   },
+   "abstract": "Designer manipulation of light at the nanoscale is key to several next-generation technologies, from sensing to optical computing. One way to manipulate light is to design a material structured at the sub-wavelength scale, a metamaterial, to have some desired scattering effect. Metamaterials typically have a very large number of geometric parameters that can be tuned, making the design process difficult. Existing design paradigms either neglect degrees of freedom or rely on numerically expensive full-wave simulations. In this work, we derive a simple semi-analytic method for designing metamate"
+  },
+  {
+   "id": "1010.1854",
+   "full": false,
+   "field": true,
+   "score": 0.649,
+   "titles": {
+    "ru": "Coherent control of nanoscale light localization in metamaterial:   creating and positioning a sub-wavelength energy hot-spot"
+   },
+   "abstract": "Precise control and manipulation of optical fields on a nanoscale is one of the most important and challenging problems in \"nanophotonics\". Since optical wavelength is on a much larger microscale, it is impossible to employ conventional focusing for that purpose. We show the strong optically-induced interactions between discrete meta-molecules in a metamaterial system and coherent monochromatic continuous light beam with a spatially-tailored phase profile can be used to prepare a sub-wavelength scale energy localization. Well isolated energy hot-spots as small as $\\lambda/10$ can be created an"
+  },
+  {
+   "id": "2112.13750",
+   "full": false,
+   "field": true,
+   "score": 0.645,
+   "titles": {
+    "ru": "3-D Metamaterials: Trends on Applied Designs, Computational Methods and   Fabrication Techniques"
+   },
+   "abstract": "Metamaterials are artificially engineered devices that go beyond the properties of conventional materials in nature. Metamaterials allow the creation of negative refractive indexes, light trapping with epsilon-near-zero compounds, bandgap selection, superconductivity phenomena, non-Hermitian responses and, more generally, to manipulate the propagation of electromagnetic and acoustic waves. In the past, low computational resources and the lack of proper manufacturing techniques have limited the attention to 1-D and 2-D metamaterials. However, the true potential of metamaterials will be ultimate"
+  },
+  {
+   "id": "1312.2937",
+   "full": false,
+   "field": true,
+   "score": 0.643,
+   "titles": {
+    "ru": "A multi-stable switchable metamaterial"
+   },
+   "abstract": "The field of metamaterial research revolves around the idea of creating artificial media that interact with light in a way unknown from naturally occurring materials. This is commonly achieved by creating sub-wavelength lattices of electronic or plasmonic structures, so-called meta-atoms, that determine the interaction between light and metamaterial. One of the ultimate goals for these tailored media is the ability to control their properties in-situ which has led to a whole new branch of tunable and switchable metamaterials. Many of the present realizations rely on introducing microelectromec"
+  },
+  {
+   "id": "2112.11609",
+   "full": false,
+   "field": true,
+   "score": 0.643,
+   "titles": {
+    "ru": "Optical Control of Nanomechanical Eigenfrequencies and Brownian Motion   in Metamaterials"
+   },
+   "abstract": "Nanomechanical photonic metamaterials provide a wealth of active switching, nonlinear and enhanced light-matter interaction functionalities by coupling optically and mechanically resonant subsystems. Thermal (Brownian) motion of the nanostructural components of such metamaterials leads to fluctuations in optical properties, which may manifest as noise, but which also present opportunity to characterize performance and thereby optimize design at the level of individual nanomechanical elements. We show that Brownian motion in an all-dielectric metamaterial ensemble of silicon-on-silicon-nitride "
+  },
+  {
+   "id": "2108.01007",
+   "full": false,
+   "field": true,
+   "score": 0.643,
+   "titles": {
+    "ru": "Temporal metamaterials with gain and loss"
+   },
+   "abstract": "Manipulation of wave-matter interactions in systems with loss and gain have opened new mechanisms to control wave propagation at will. Metamaterials and metasurfaces having spatially inhomogeneous loss and gain have been studied in the past few years by exploiting parity-time (PT) symmetry concepts inspired from quantum-physics. In this work we theoretically study the control of light-matter interactions in spatially unbounded metamaterials having a time-modulated permittivity whose imaginary part is temporally modulated to induce loss and gain, while the real part stays unchanged. We show bot"
+  }
+ ]
+}

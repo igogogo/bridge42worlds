@@ -1,0 +1,213 @@
+{
+ "topic": "топологические состояния вещества",
+ "slug": "топологические-состояния-вещества",
+ "built": "2026-08-30",
+ "note": "",
+ "drill": {
+  "found": 12,
+  "nearest": 0.638,
+  "band": "mid",
+  "near": 0,
+  "full": 0,
+  "model": "bge-m3"
+ },
+ "ideas": [
+  {
+   "title": "Собрать установку для проверки краевой памяти в цепочке Китаева на холодных атомах",
+   "what": "Реализовать одномерную цепочку фермионных атомов в оптической решётке, воспроизводящую модель Китаева, и измерить, как информация о начальном состоянии сохраняется на краях при локальных возмущениях.",
+   "why": "Работа [2605.00770] предсказывает, что в топологической фазе чувствительность к возмущениям не затухает благодаря краевым модам. Экспериментальная проверка на атомах даст прямой контроль параметров и позволит проверить устойчивость эффекта к неидеальностям.",
+   "methods": [
+    "Создать оптическую решётку с периодом, обеспечивающим нужную дисперсию, и загрузить в неё ультрахолодные фермионные атомы (например, 6Li).",
+    "Настроить туннельные связи и внешние поля так, чтобы гамильтониан соответствовал цепочке Китаева с p-волновым спариванием, как описано в [2605.00770].",
+    "Инициализировать локальное возмущение (например, изменить фазу на одном узле) и измерять динамику заселённостей краевых узлов с помощью квантового газового микроскопа.",
+    "Сравнить времена релаксации чувствительности в топологической и тривиальной фазах, варьируя параметры."
+   ],
+   "origin": "Работа [2605.00770] теоретически показывает, что в цепочке Китаева краевые майорановские моды защищают квантовую информацию от декогеренции, но экспериментальной реализации на холодных атомах пока нет. В [2603.20763] продемонстрированы методы работы с атомами в цепочках ловушек и контроля их взаимодействия с окружением, что можно адаптировать для этой задачи.",
+   "first_step": "Рассчитать параметры оптической решётки для достижения топологической фазы (соотношение туннелирования, спаривания и химического потенциала) и собрать вакуумную камеру с ловушкой для фермионных атомов.",
+   "needs": "Ультрахолодные фермионные атомы, оптическая решётка, лазерная система для создания p-волнового спаривания (например, через резонанс Фешбаха), квантовый газовый микроскоп или система детектирования отдельных атомов, навыки в атомной физике и квантовой оптике.",
+   "risks": "Сложность стабилизации p-волнового спаривания в оптической решётке; нестабильности могут разрушить топологическую фазу до проведения измерений.",
+   "scale": "годы",
+   "based_on": [
+    "2605.00770",
+    "2603.20763"
+   ]
+  },
+  {
+   "title": "Численно проверить топологический параметр порядка для смешанных состояний в малых системах",
+   "what": "Написать код для точной диагонализации малых спиновых или фермионных систем с диссипацией и вычислить предложенный в [2603.24031] целочисленный параметр порядка при различных уровнях декогеренции.",
+   "why": "Параметр порядка из [2603.24031] обобщает топологическую классификацию на смешанные состояния, но его поведение в конкретных моделях с конечным размером и реальными шумами не изучено. Это поможет оценить применимость для квантовых симуляторов.",
+   "methods": [
+    "Реализовать точную диагонализацию гамильтониана модели (например, спиновая цепочка с взаимодействием, допускающая топологическую фазу) с добавлением линдбладовских операторов диссипации.",
+    "Вычислить параметр порядка по формуле из [2603.24031], используя стационарное состояние или динамику.",
+    "Проанализировать, как параметр меняется при увеличении силы диссипации и размеров системы, и найти критические точки.",
+    "Сравнить с известными предельными случаями чистых состояний."
+   ],
+   "origin": "В [2603.24031] предложен параметр порядка, который должен принимать целые значения и резко меняться при топологическом переходе в смешанных состояниях, но его вычисление для конкретных моделей не проведено. В [2605.00770] показана важность топологической защиты в реалистичных условиях, что мотивирует проверку на малых системах, доступных численно.",
+   "first_step": "Выбрать простейшую модель (например, цепочку Китаева с диссипацией) и написать скрипт для точной диагонализации гамильтониана 4-6 узлов с последующим расчётом параметра порядка.",
+   "needs": "Компьютер с достаточной памятью для точной диагонализации (до 10-12 узлов), знание квантовой механики и численных методов, библиотеки линейной алгебры (Python/Julia).",
+   "risks": "Параметр порядка может оказаться чувствительным к конечным размерам и требовать экстраполяции, что усложнит интерпретацию.",
+   "scale": "семестр",
+   "based_on": [
+    "2603.24031",
+    "2605.00770"
+   ]
+  },
+  {
+   "title": "Поиск гибридных топологических состояний в тонких плёнках элементарных материалов",
+   "what": "Провести угловую фотоэмиссионную спектроскопию (ARPES) на тонких плёнках или сколах элементарных материалов (например, висмута) и сопоставить наблюдаемые поверхностные состояния с предсказаниями для гибридных топологических фаз.",
+   "why": "В [2401.04845] сообщается об обнаружении гибридного топологического состояния в элементном твёрдом теле, сочетающего разные топологические инварианты. Поиск подобных состояний в других материалах может выявить новые кандидаты для приложений.",
+   "methods": [
+    "Выбрать элементарный материал с сильным спин-орбитальным взаимодействием (например, Bi, Sb) и подготовить чистую поверхность сколом в сверхвысоком вакууме.",
+    "Провести ARPES-измерения с высоким разрешением по энергии и импульсу, чтобы картировать дисперсию поверхностных состояний.",
+    "Сравнить полученные спектры с расчётами зонной структуры (DFT) и определить топологические инварианты (числа Черна, Z2) по наличию и характеру состояний.",
+    "Проверить, наблюдается ли сосуществование нескольких топологических фаз, как в [2401.04845]."
+   ],
+   "origin": "Работа [2401.04845] демонстрирует гибридное топологическое состояние в одном элементе, но остаётся открытым вопрос, насколько это общее явление. Работа [1302.1059] даёт критерии для поиска топологических изоляторов среди малозонных полупроводников, что можно применить к элементарным материалам.",
+   "first_step": "Выбрать материал и провести DFT-расчёт его зонной структуры, чтобы предсказать наличие топологических поверхностных состояний, затем подготовить образец для ARPES.",
+   "needs": "Доступ к установке ARPES с разрешением лучше 10 мэВ, сверхвысоковакуумная камера для скола, навыки DFT-расчётов (VASP, Quantum ESPRESSO), образцы высокой чистоты.",
+   "risks": "Поверхностные состояния могут быть неотличимы от тривиальных из-за дефектов или недостаточного разрешения, что приведёт к ложным выводам.",
+   "scale": "диплом",
+   "based_on": [
+    "2401.04845",
+    "1302.1059"
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "id": "2603.20763",
+   "date": "2026-03-21",
+   "full": false,
+   "titles": {
+    "ru": "Атомы выживают только на периферии",
+    "en": "Atoms Only Live on the Edge",
+    "es": "Los átomos solo viven en el borde",
+    "ar": "الذرات لا توجد إلا على الأطراف",
+    "fr": "Les atomes ne vivent qu'en bordure"
+   },
+   "score": 0.481,
+   "url": "/lang/{lang}/archive/2026-03-21/2603.20763/",
+   "abstract": "Квантовый эксперимент показывает, как атомы в цепочке ловушек взаимодействуют с конденсатом Бозе-Эйнштейна. Лазерные импульсы возбуждают атомы, но после обмена энергией выживают лишь крайние из них. Причина — направленный поток неупорядоченности, оставляющий стабильными только границы. Это открытие может стать основой для квантовой памяти, где информация сама записывается на периферию."
+  },
+  {
+   "id": "2603.24031",
+   "date": "2026-03-25",
+   "full": false,
+   "titles": {
+    "ru": "Квантовые каналы раскрывают топологию смешанных состояний",
+    "en": "Quantum Channels Reveal Topology of Mixed States",
+    "es": "Los canales cuánticos revelan la topología de los estados mixtos",
+    "ar": "القنوات الكمومية تكشف طوبولوجيا الحالات المختلطة",
+    "fr": "Les canaux quantiques révèlent la topologie des états mixtes"
+   },
+   "score": 0.47,
+   "url": "/lang/{lang}/archive/2026-03-25/2603.24031/",
+   "abstract": "Учёные расширили понятие топологических фаз на смешанные состояния — системы, где квантовая информация частично утрачена, как в реальном мире. Они предложили параметр порядка, который принимает только целые значения и резко меняется при переходе между фазами. Это позволяет классифицировать фазы даже без чёткой картины чистых состояний. Результат обобщает известную теорему Либа-Шульца-Маттиса. Работа открывает путь к пониманию топологии в открытых квантовых системах."
+  },
+  {
+   "id": "2605.00770",
+   "date": "2026-05-01",
+   "full": false,
+   "titles": {
+    "ru": "Топология хранит память",
+    "en": "Topology Holds Memory",
+    "es": "La topología guarda la memoria",
+    "ar": "الطوبولوجيا تحفظ الذاكرة",
+    "fr": "La topologie garde la mémoire"
+   },
+   "score": 0.468,
+   "url": "/lang/{lang}/archive/2026-05-01/2605.00770/",
+   "abstract": "В квантовом мире информация обычно расползается, как чернила в воде, и точные измерения становятся невозможны. Но в особой топологической фазе — как в цепочке Китаева — этого не происходит. Два безмассовых возбуждения, словно разлученные близнецы, живут на противоположных концах цепочки и не дают чувствительности исчезнуть. Это открытие показывает, как форма системы защищает информацию от хаоса, и обещает сверхстабильные квантовые сенсоры."
+  },
+  {
+   "id": "1907.02625",
+   "full": false,
+   "field": true,
+   "score": 0.638,
+   "titles": {
+    "ru": "Topological states"
+   },
+   "abstract": "Topological phases are characterised by a topological invariant that remains unchanged by deformations in the Hamiltonian. Materials exhibiting topological phases include topological insulators, superconductors exhibiting strong spin-orbit coupling, transition metal dichalcogenides, which can be made atomically thin and have direct band gaps, as well as high mobility Weyl and Dirac semimetals. Devices harnessing topological electron states include topological (spin) transistors, spin-orbit torque devices, non-linear electrical and optical systems, and topological quantum bits."
+  },
+  {
+   "id": "1604.06055",
+   "full": false,
+   "field": true,
+   "score": 0.626,
+   "titles": {
+    "ru": "Topological Varma superfluid in optical lattices"
+   },
+   "abstract": "Topological states of matter are peculiar quantum phases showing different edge and bulk transport properties connected by the bulk-boundary correspondence. While non-interacting fermionic topological insulators are well established by now and have been classified according to a ten-fold scheme, the possible realisation of topological states for bosons has not been much explored yet. Furthermore, the role of interactions is far from being understood. Here, we show that a topological state of matter exclusively driven by interactions may occur in the p-band of a Lieb optical lattice filled with"
+  },
+  {
+   "id": "2401.04845",
+   "full": false,
+   "field": true,
+   "score": 0.624,
+   "titles": {
+    "ru": "Discovery of a hybrid topological quantum state in an elemental solid"
+   },
+   "abstract": "Topology and interactions are foundational concepts in the modern understanding of quantum matter. Their nexus yields three significant research directions: competition between distinct interactions, as in the multiple intertwined phases, interplay between interactions and topology that drives the phenomena in twisted layered materials and topological magnets, and the coalescence of multiple topological orders to generate distinct novel phases. The first two examples have grown into major areas of research, while the last example remains mostly untouched, mainly because of the lack of a materi"
+  },
+  {
+   "id": "2401.04845",
+   "full": false,
+   "field": true,
+   "score": 0.624,
+   "titles": {
+    "ru": "Discovery of a hybrid topological quantum state in an elemental solid"
+   },
+   "abstract": "Topology and interactions are foundational concepts in the modern understanding of quantum matter. Their nexus yields three significant research directions: competition between distinct interactions, as in the multiple intertwined phases, interplay between interactions and topology that drives the phenomena in twisted layered materials and topological magnets, and the coalescence of multiple topological orders to generate distinct novel phases. The first two examples have grown into major areas of research, while the last example remains mostly untouched, mainly because of the lack of a materi"
+  },
+  {
+   "id": "1907.03779",
+   "full": false,
+   "field": true,
+   "score": 0.622,
+   "titles": {
+    "ru": "Topological orders of monopoles and hedgehogs: From electronic and   magnetic spin-orbit coupling to quarks"
+   },
+   "abstract": "Topological states of matter are, generally, quantum liquids of conserved topological defects. We establish this by constructing and analyzing topological field theories which describe the dynamics of field singularities using gauge fields. Homotopy groups are utilized to identify topologically protected singularities, and the conservation of their protected number is captured by a topological action term that unambiguously obtains from the given set of symmetries. Stable phases of these theories include quantum liquids with emergent massless Abelian and non-Abelian gauge fields, as well as to"
+  },
+  {
+   "id": "1610.03911",
+   "full": false,
+   "field": true,
+   "score": 0.619,
+   "titles": {
+    "ru": "Zoo of quantum-topological phases of matter"
+   },
+   "abstract": "What are topological phases of matter? First, they are phases of matter at zero temperature. Second, they have a non-zero energy gap for the excitations above the ground state. Third, they are disordered liquids that seem have no feature. But those disordered liquids actually can have rich patterns of many-body entanglement representing new kinds of order. This paper will give a simple introduction and a brief survey of topological phases of matter. We will first discuss topological phases that have topological order (ie with long range entanglement). Then we will cover topological phases that"
+  },
+  {
+   "id": "1302.1059",
+   "full": false,
+   "field": true,
+   "score": 0.613,
+   "titles": {
+    "ru": "Crystal Structure and Chemistry of Topological Insulators"
+   },
+   "abstract": "Topological surface states, a new kind of electronic state of matter, have recently been observed on the cleaved surfaces of crystals of a handful of small band gap semiconductors. The underlying chemical factors that enable these states are crystal symmetry, the presence of strong spin orbit coupling, and an inversion of the energies of the bulk electronic states that normally contribute to the valence and conduction bands. The goals of this review are to briefly introduce the physics of topological insulators to a chemical audience and to describe the chemistry, defect chemistry, and crystal"
+  },
+  {
+   "id": "cond-mat/0307511",
+   "full": false,
+   "field": true,
+   "score": 0.612,
+   "titles": {
+    "ru": "A Class of $P,T$-Invariant Topological Phases of Interacting Electrons"
+   },
+   "abstract": "We describe a class of parity- and time-reversal-invariant topological states of matter which can arise in correlated electron systems in 2+1-dimensions. These states are characterized by particle-like excitations exhibiting exotic braiding statistics. $P$ and $T$ invariance are maintained by a `doubling' of the low-energy degrees of freedom which occurs naturally without doubling the underlying microscopic degrees of freedom. The simplest examples have been the subject of considerable interest as proposed mechanisms for high-$T_c$ superconductivity. One is the `doubled' version (i.e. two oppo"
+  },
+  {
+   "id": "1208.3888",
+   "full": false,
+   "field": true,
+   "score": 0.611,
+   "titles": {
+    "ru": "Different scenarios of topological phase transitions in homogeneous   neutron matter"
+   },
+   "abstract": "We study different scenarios of topological phase transitions in the vicinity of the \\pi^0 condensation point in neutron matter. The transitions occur between the Fermi-liquid state and a topologically different one with two sheets of the Fermi surface. Two possibilities of a rearrangement of quasiparticle degrees of freedom are shown: the first-order topological phase transition and the second-order one. The order of the phase transition is found to be strongly dependent on the value of the critical wave vector of the soft \\pi^0 mode. The thermodynamics of the system is also studied. It is sh"
+  }
+ ]
+}

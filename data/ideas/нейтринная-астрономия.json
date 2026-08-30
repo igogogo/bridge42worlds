@@ -1,0 +1,228 @@
+{
+ "topic": "нейтринная астрономия",
+ "slug": "нейтринная-астрономия",
+ "built": "2026-08-30",
+ "note": "Нейтринная астрономия сейчас переживает переход от первых детекторов к телескопам нового поколения с чувствительностью ко всему небу, и есть много неиспользованных возможностей для анализа данных и моделирования.",
+ "drill": {
+  "found": 12,
+  "nearest": 0.619,
+  "band": "mid",
+  "near": 0,
+  "full": 3,
+  "model": "bge-m3"
+ },
+ "ideas": [
+  {
+   "title": "Сравнение чувствительности нейтринных телескопов к точечным источникам",
+   "what": "Написать симуляцию отклика детекторов IceCube, Baikal-GVD и KM3NeT на нейтрино от точечных источников с разными спектрами и сравнить их эффективные площади и угловое разрешение.",
+   "why": "Позволит оценить, какие источники лучше видны каждым телескопом, и спланировать совместные наблюдения.",
+   "methods": [
+    "Использовать открытые эффективные площади и функции рассеяния точки из публикаций коллабораций.",
+    "Сгенерировать события от гипотетических источников (например, с спектром E^-2) методом Монте-Карло.",
+    "Рассчитать ожидаемую значимость обнаружения за заданное время наблюдения для разных склонений источника."
+   ],
+   "origin": "В работах 2011.09209 и 0904.4011 описаны характеристики Baikal-GVD и средиземноморских телескопов, но нет прямого количественного сравнения их чувствительности к точечным источникам. Это сравнение полезно для выбора оптимального инструмента под конкретную задачу.",
+   "first_step": "Скачать таблицы эффективных площадей IceCube и Baikal-GVD из открытых статей и написать скрипт для расчёта ожидаемого числа событий от источника с заданным потоком.",
+   "needs": "Компьютер, знание Python или C++, доступ к открытым данным (эффективные площади и угловое разрешение).",
+   "risks": "Эффективные площади могут быть приведены для разных условий отбора, их сравнение потребует аккуратной нормировки.",
+   "scale": "семестр",
+   "based_on": [
+    "2011.09209",
+    "0904.4011"
+   ]
+  },
+  {
+   "title": "Поиск корреляций между нейтрино IceCube и гамма-всплесками с учётом эксцентриситета родительских систем",
+   "what": "Проанализировать архивные данные IceCube по нейтрино высоких энергий и каталог гамма-всплесков, проверив, есть ли избыток совпадений во времени и направлении, особенно для всплесков, которые могут происходить в системах с вытянутыми орбитами.",
+   "why": "Если нейтрино рождаются в двойных системах с эксцентриситетом, это может проявиться в особенностях временных корреляций, что даст новую информацию о прародителях.",
+   "methods": [
+    "Взять публичные данные IceCube по трековым событиям (через IceCube Data Archive).",
+    "Использовать каталог гамма-всплесков (например, Fermi GBM) и рассчитать ожидаемое число случайных совпадений.",
+    "Построить статистику совпадений в зависимости от временной задержки и углового расстояния, сравнить с фоном."
+   ],
+   "origin": "Работа 2607.16136v2 показывает, что эксцентриситет двойных систем влияет на параметры гравитационных волн, но не рассматривает связь с нейтринным излучением. Если нейтрино производятся в таких же системах, корреляции могут быть усилены.",
+   "first_step": "Скачать список нейтринных событий IceCube (публичный) и каталог гамма-всплесков, написать код для поиска совпадений в пределах временного окна ±1000 секунд и угла 5 градусов.",
+   "needs": "Доступ к данным IceCube (публичный архив), навыки статистического анализа, знание Python.",
+   "risks": "Статистика может быть недостаточной из-за редкости нейтрино высоких энергий и неопределённости направлений.",
+   "scale": "диплом",
+   "based_on": [
+    "2607.16136v2",
+    "1801.01551"
+   ]
+  },
+  {
+   "title": "Моделирование непрозрачности нейтронной звезды для антинейтрино в условиях тёмной материи",
+   "what": "Добавить в существующие модели нейтронных звёзд с тёмной материей расчёт сечения взаимодействия антинейтрино с веществом и оценить, как присутствие тёмной компоненты меняет поток антинейтрино, выходящих из звезды.",
+   "why": "Может дать наблюдательные признаки тёмной материи в нейтронных звёздах через будущие детекторы нейтрино от сверхновых.",
+   "methods": [
+    "Взять уравнение состояния из работ 2607.03840 или 2607.03840v1 для гибридных звёзд.",
+    "Рассчитать сечения нейтральных токов антинейтрино на нуклонах и лептонах с учётом плотности и состава.",
+    "Решить уравнение переноса нейтрино в приближении диффузии для получения потока на поверхности."
+   ],
+   "origin": "Работы 2607.03840 и 2607.03840v1 дают структуру нейтронных звёзд с тёмной материей, но не рассматривают нейтринную непрозрачность. Статья 2311.09986 вычисляет непрозрачность для обычных звёзд, но без тёмной компоненты. Объединение этих подходов может выявить новые эффекты.",
+   "first_step": "Выбрать одну из моделей из 2607.03840 (лёгкая или тяжёлая тёмная материя) и рассчитать профиль плотности обычной материи, затем вычислить сечение антинейтрино на нуклонах при этих плотностях.",
+   "needs": "Знание ядерной физики и численных методов, доступ к вычислительным ресурсам (можно начать с простых скриптов).",
+   "risks": "Сложность самосогласованного учёта тёмной материи и нейтринного переноса; может потребоваться упрощение.",
+   "scale": "диплом",
+   "based_on": [
+    "2607.03840",
+    "2311.09986"
+   ]
+  },
+  {
+   "title": "Оценка фона атмосферных мюонов для нейтринного телескопа на Северном полюсе в диапазоне 20 ГэВ",
+   "what": "Рассчитать ожидаемый поток атмосферных мюонов, проходящих через Землю, и оценить, насколько предложенный в работе 1101.1991 метод «прозрачной Земли» позволяет выделить астрофизические нейтрино на фоне атмосферных.",
+   "why": "Если метод работает, это откроет новое окно для нейтринной астрономии при энергиях около 20 ГэВ, где сейчас трудно отделить сигнал от фона.",
+   "methods": [
+    "Использовать симуляции прохождения мюонов через вещество (например, с помощью Geant4 или таблиц пробегов).",
+    "Рассчитать поток атмосферных мюонов, достигающих детектора под большими зенитными углами, с учётом поглощения в Земле.",
+    "Оценить остаточный фон от мюонов, рождённых в нейтринных взаимодействиях, и сравнить с ожидаемым сигналом от астрофизических источников."
+   ],
+   "origin": "Работа 1101.1991 предлагает использовать вертикальные мюоны с энергией 24 ГэВ как почти бесфоновый канал, но не даёт детального расчёта фона. Проверка этого предложения с современными симуляциями важна для оценки реализуемости.",
+   "first_step": "Найти сечения взаимодействия нейтрино и мюонов в веществе и написать простую программу для расчёта вероятности прохождения мюона через Землю.",
+   "needs": "Доступ к таблицам сечений (PDG), навыки программирования, возможно, использование Geant4.",
+   "risks": "Остаточный фон от атмосферных нейтрино может оказаться выше ожидаемого, что сделает метод неэффективным.",
+   "scale": "семестр",
+   "based_on": [
+    "1101.1991"
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "id": "2607.03840",
+   "date": "2026-07-04",
+   "full": true,
+   "titles": {
+    "ru": "Тёмные кукловоды нейтронных звёзд: агностический детектив",
+    "en": "Dark Puppeteers of Neutron Stars: An Agnostic Detective Story",
+    "es": "Los titiriteros oscuros de las estrellas de neutrones: un detective agnóstico",
+    "ar": "النجوم النيوترونية ومحركو الدمى المظلمون: قصة بوليسية لاأدرية",
+    "fr": "Les marionnettistes invisibles des étoiles à neutrons : une enquête agnostique"
+   },
+   "score": 0.508,
+   "url": "/lang/{lang}/archive/2026-07-04/2607.03840/",
+   "abstract": "Представьте звезду-гиганта, внутри которой прячется невидимый «квартирант» — тёмная материя. Учёные рассчитали, как такой гость меняет форму и размер звезды, сравнив лёгкие и тяжёлые его версии. Оказалось, что лёгкая тёмная материя создаёт вокруг звезды пушистое облако и делает её более «податливой», а тяжёлая сжимается в плотное ядро, делая звезду жёстче. Теперь по тому, как звезда деформируется, можно заметить следы этой невидимой субстанции и узнать её свойства."
+  },
+  {
+   "id": "2607.03840v1",
+   "date": "2026-07-04",
+   "full": true,
+   "titles": {
+    "ru": "Тёмное ядро или жемчужный слой: метаморфозы нейтронных звёзд",
+    "en": "Dark Core or Pearlescent Layer: Metamorphoses of Neutron Stars",
+    "es": "Núcleo oscuro o capa perlada: metamorfosis de las estrellas de neutrones",
+    "ar": "نواة مظلمة أم طبقة لؤلؤية: تحولات النجوم النيوترونية",
+    "fr": "Cœur sombre ou couche de nacre : les métamorphoses des étoiles à neutrons"
+   },
+   "score": 0.504,
+   "url": "/lang/{lang}/archive/2026-07-04/2607.03840v1/",
+   "abstract": "Представьте нейтронную звезду как огромный космический шар, внутрь которого случайно попала тёмная материя — невидимая субстанция, заполняющая галактики. Учёные рассчитали, как поведут себя такие гибридные звёзды, и обнаружили, что всё зависит от веса невидимых частиц. Лёгкие частицы создают вокруг звезды пушистую оболочку, а тяжёлые — спрессовываются в плотное ядро. Это свойство можно заметить по тому, как звезда деформируется под действием приливных сил, что даёт нам новый способ искать следы тёмной материи в космосе."
+  },
+  {
+   "id": "2607.16136v2",
+   "date": "2026-07-17",
+   "full": true,
+   "titles": {
+    "ru": "Эксцентриситет — увеличительное стекло гравитационных волн",
+    "en": "Eccentricity: a magnifying glass for gravitational waves",
+    "es": "La excentricidad: lupa de las ondas gravitacionales",
+    "ar": "الانحراف المركزي — عدسة مكبرة للموجات الثقالية",
+    "fr": "L'excentricité — la loupe des ondes gravitationnelles"
+   },
+   "score": 0.499,
+   "url": "/lang/{lang}/archive/2026-07-17/2607.16136v2/",
+   "abstract": "Двойные звёздные пары обычно похожи на идеально вычерченные окружности. Но гравитационные волны от одной далёкой катастрофы показали, что орбита может быть вытянутой, как у кометы. Учёные проверили, как такая вытянутость меняет наши измерения, и обнаружили неожиданный бонус: данные о таких столкновениях становятся точнее. Благодаря этому мы можем лучше различать, где именно родилась пара — в тесном танце или в хаотичной толпе звёзд, а также увидеть, как часто они переворачиваются в полёте. Это приближает нас к пониманию того, как устроена эволюция самых тяжёлых объектов Вселенной."
+  },
+  {
+   "id": "2011.09209",
+   "full": false,
+   "field": true,
+   "score": 0.619,
+   "titles": {
+    "ru": "High-energy neutrino astronomy and the Baikal-GVD neutrino telescope"
+   },
+   "abstract": "Neutrino astronomy offers a novel view of the non-thermal Universe and is complementary to other astronomical disciplines. The field has seen rapid progress in recent years, including the first detection of astrophysical neutrinos in the TeV-PeV energy range by IceCube and the first identified extragalactic neutrino source (TXS 0506+056). Further discoveries are aimed for with new cubic-kilometer telescopes in the Northern Hemisphere: Baikal-GVD, in Lake Baikal, and KM3NeT-ARCA, in the Mediterranean sea. The construction of Baikal-GVD proceeds as planned; the detector currently includes over 2"
+  },
+  {
+   "id": "astro-ph/9605014",
+   "full": false,
+   "field": true,
+   "score": 0.613,
+   "titles": {
+    "ru": "The Case for a Kilometer-Scale High-Energy Neutrino Detector: 1996"
+   },
+   "abstract": "The objective of neutrino astronomy, born with the identification of thermonuclear fusion in the sun and the particle processes controlling the fate of a nearby supernova, is to build instruments which reach throughout and far beyond our Galaxy and make measurements relevant to cosmology, astrophysics, cosmic-ray and particle physics. These telescopes will push astronomy to wavelengths smaller than $10^{-14}$~cm by mapping the sky in high-energy neutrinos instead of high-energy photons to which the Universe is partially opaque. While a variety of collaborations are pioneering complementary met"
+  },
+  {
+   "id": "astro-ph/9610057",
+   "full": false,
+   "field": true,
+   "score": 0.612,
+   "titles": {
+    "ru": "Neutrino Astronomy: A New Window to the Universe"
+   },
+   "abstract": "Neutrino astronomy offers the prospect to be able to look into the interior of compact astrophysical objects which may be the sources of cosmic radiation. This paper describes the results on neutrino observations from the sun and the supernova SN1987A along with an outlook on neutrino astronomy beyond the TeV scale."
+  },
+  {
+   "id": "1801.01551",
+   "full": false,
+   "field": true,
+   "score": 0.606,
+   "titles": {
+    "ru": "Neutrino Astronomy 2017"
+   },
+   "abstract": "This overview of neutrino astronomy emphasizes observation of astrophysical neutrinos by IceCube and interesting limits on Galactic neutrinos from IceCube and ANTARES."
+  },
+  {
+   "id": "1101.1991",
+   "full": false,
+   "field": true,
+   "score": 0.606,
+   "titles": {
+    "ru": "A 20 GeVs transparent neutrino astronomy from the North Pole?"
+   },
+   "abstract": "Muon neutrino astronomy is drown within a polluted atmospheric neutrino noise. However at 24 GeV energy atmospheric muon neutrinos, while rising vertically along the terrestrial diameter, should disappear (or be severely depleted) while converting into tau flavor: any rarest vertical 12 GeV muon track at South Pole Deep Core volume, pointing back to North Pole, might be tracing mostly a noise-free astrophysical signal. The corresponding Deep Core 6-7-8-9 channels trigger maybe point in those directions and inside that energy range without much background. Deep Core detector at South Pole, may "
+  },
+  {
+   "id": "2311.09986",
+   "full": false,
+   "field": true,
+   "score": 0.606,
+   "titles": {
+    "ru": "Antineutrino Opacity in Neutron Stars in the Models Constrained by   Recent Terrestrial Experiments and Astrophysical Observations"
+   },
+   "abstract": "In the present paper, we investigate neutral current (NC) antineutrino scattering with the constituents of neutron star (NS) matter at zero temperature. The modeling of standard matter in NS is constructed within the framework of both extended relativistic mean-field (E-RMF) and nonrelativistic Korea-IBS-Daegu-SKKU energy density functional (KIDS-EDF) models. In the E-RMF model, we use a new parameter, G3(M), which was constrained by the recent PREX II experiment measurement of neutron distribution in $^{208}\\rm{Pb}$, while the KIDS-EDF models are constrained by terrestrial experiments, gravit"
+  },
+  {
+   "id": "0904.4011",
+   "full": false,
+   "field": true,
+   "score": 0.606,
+   "titles": {
+    "ru": "Neutrino Telescopes in the Mediterranean Sea"
+   },
+   "abstract": "The observation of high energy extraterrestrial neutrinos can be an invaluable source of information about the most energetic phenomena in the Universe. Neutrinos can shed light on the processes that accelerate charge particles in an incredibly wide range of energies both within and outside our Galaxy. They can also help to investigate the nature of the dark matter that pervades the Universe. The unique properties of the neutrino make it peerless as a cosmic messenger, enabling the study of dense and distant astrophysical objects at high energy. The experimental challenge, however, is enormous"
+  },
+  {
+   "id": "astro-ph/0601012",
+   "full": false,
+   "field": true,
+   "score": 0.605,
+   "titles": {
+    "ru": "Neutrino Telescopy in the Mediterranean Sea"
+   },
+   "abstract": "The observation of high-energy extraterrestrial neutrinos is one of the most promising future options to increase our knowledge on non-thermal processes in the universe. Neutrinos are e.g. unavoidably produced in environments where high-energy hadrons collide; in particular this almost certainly must be true in the astrophysical accelerators of cosmic rays, which thus could be identified unambiguously by sky observations in \"neutrino light\". On the one hand, neutrinos are ideal messengers for astrophysical observations since they are not deflected by electromagnetic fields and interact so weak"
+  },
+  {
+   "id": "astro-ph/0505459",
+   "full": false,
+   "field": true,
+   "score": 0.604,
+   "titles": {
+    "ru": "Neutrino Astronomy beyond and beneath the Horizons"
+   },
+   "abstract": "The Earth's Shadow to Cosmic Rays offer a windows to Tau Neutrino Astronomy at the Horizon edges. Inclined and Horizontal C.R. Showers (70^o-90^o zenith angle) produce secondary (gamma,e) mostly suppressed by high column atmosphere depth. The shower Cherenkov photons are diluted and filtered by air opacity, but secondary penetrating, muon pairs and their decay into electron pairs, revive additional Cerenkov flash lights. Most largest GeVs gamma telescopes may detect such UHECR horizontal showers. Arrival angle and column depth, shower shape, timing may inform on the altitude interaction and on"
+  }
+ ]
+}

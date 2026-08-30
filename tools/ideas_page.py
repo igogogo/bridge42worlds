@@ -145,10 +145,12 @@ JS = """
   /* Запись хранит русский в корне, остальные языки — в ветке lang. Нет перевода —
      показываем русский: полупустая страница хуже, чем страница на другом языке. */
   function pick(rec) {
-    if (LANG === "ru") return {ideas: rec.ideas || [], note: rec.note || ""};
+    if (LANG === "ru") {
+      return {ideas: rec.ideas || [], note: rec.note || "", topic: rec.topic};
+    }
     var l = (rec.lang || {})[LANG];
-    return l ? {ideas: l.ideas || [], note: l.note || ""}
-             : {ideas: rec.ideas || [], note: rec.note || ""};
+    return l ? {ideas: l.ideas || [], note: l.note || "", topic: l.topic || rec.topic}
+             : {ideas: rec.ideas || [], note: rec.note || "", topic: rec.topic};
   }
   function srcEl(id, sources) {
     var s = (sources || []).filter(function (x) { return x.id === id; })[0] || {};
@@ -183,12 +185,12 @@ JS = """
   }
   function draw(rec) {
     var got = pick(rec);
-    box.innerHTML = '<section class="id-topic"><h2>' + esc(rec.topic) + "</h2>" +
+    box.innerHTML = '<section class="id-topic"><h2>' + esc(got.topic || rec.topic) + "</h2>" +
       (got.note ? '<p class="id-tnote">' + esc(got.note) + "</p>" : "") +
       '<div class="id-list">' +
       got.ideas.map(function (x) { return card(x, rec.sources); }).join("") +
       "</div></section>";
-    document.title = rec.topic + " — " + D.title;
+    document.title = (got.topic || rec.topic) + " — " + D.title;
   }
   fetch("/data/ideas/index.json", {cache: "no-store"}).then(function (r) {
     return r.ok ? r.json() : null;

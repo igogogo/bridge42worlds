@@ -1,0 +1,237 @@
+{
+ "topic": "опреснение морской воды",
+ "slug": "опреснение-морской-воды",
+ "built": "2026-08-30",
+ "note": "В области опреснения морской воды активно исследуются новые мембранные материалы и методы снижения энергопотребления, но разрыв между молекулярным моделированием и практическими испытаниями остаётся значительным.",
+ "drill": {
+  "found": 12,
+  "nearest": 0.579,
+  "band": "sparse",
+  "near": 0,
+  "full": 0,
+  "model": "bge-m3"
+ },
+ "ideas": [
+  {
+   "title": "Собрать стенд для сравнения мембран в реальных условиях опреснения",
+   "what": "Спроектировать и собрать лабораторный стенд для испытания мембран обратного осмоса и новых нанопористых материалов (графин, g-C2N, MoS2) на реальной морской воде. Провести серию измерений проницаемости и селективности для разных мембран при одинаковых условиях.",
+   "why": "Симуляции предсказывают выдающиеся характеристики новых 2D-мембран, но экспериментальных проверок мало. Такой стенд позволит быстро отсеивать неперспективные материалы и даст данные для калибровки моделей.",
+   "methods": [
+    "Изготовить мембраны по методикам из работ: графин (1309.0322), g-C2N (1512.07101), MoS2 (2310.05729) или использовать коммерческие аналоги.",
+    "Собрать проточную ячейку с контролем давления, температуры и расхода; измерять поток воды и концентрацию солей на входе/выходе.",
+    "Провести измерения на синтетической морской воде (по стандарту ASTM D1141) и на реальной пробе из моря.",
+    "Сравнить экспериментальные данные с результатами молекулярно-динамических расчётов из работ."
+   ],
+   "origin": "В работах 1309.0322, 1512.07101 и 2310.05729 проведены молекулярно-динамические симуляции, показывающие высокую проницаемость и полное отсечение солей для новых 2D-материалов, но экспериментальных подтверждений нет. Отсутствует единая методика испытаний, позволяющая сравнивать разные мембраны в одинаковых условиях на реальной морской воде.",
+   "first_step": "Спроектировать проточную ячейку, подобрать насос, датчики давления и кондуктометр; заказать или изготовить один тип мембраны (например, на основе оксида графена как более доступный аналог) и провести пробный запуск на дистиллированной воде.",
+   "needs": "Оборудование: насос высокого давления (до 60 бар), проточная ячейка, датчики давления и расхода, кондуктометр, источник синтетической морской воды. Навыки: проектирование гидравлических систем, работа с измерительной аппаратурой, базовые знания по мембранным процессам. Бюджет: примерно 200–300 тыс. руб. на комплектующие.",
+   "risks": "Сложность изготовления бездефектных 2D-мембран с воспроизводимыми характеристиками; реальная морская вода содержит органику и взвеси, быстро загрязняющие мембрану, что усложнит интерпретацию.",
+   "scale": "семестр",
+   "based_on": [
+    "1309.0322",
+    "1512.07101",
+    "2310.05729"
+   ]
+  },
+  {
+   "title": "Разработать недорогую систему получения пресной воды из атмосферы для прибрежных районов",
+   "what": "Спроектировать и построить пилотную установку для конденсации воды из влажного воздуха, использующую естественные перепады температур (например, морскую воду как холодный резервуар) или солнечную энергию. Испытать её в реальных условиях на побережье.",
+   "why": "В прибрежных зонах с высокой влажностью, но ограниченным доступом к пресной воде, такая система может стать альтернативой опреснению. Потенциально дешевле и проще в обслуживании.",
+   "methods": [
+    "Изучить предложенный в работе 0704.2571 метод извлечения воды из атмосферы и адаптировать его к условиям прибрежного климата.",
+    "Рассчитать тепловой баланс и массоперенос для выбранной схемы (конденсация на охлаждаемой поверхности, сорбционные материалы).",
+    "Собрать прототип с использованием доступных материалов (металлические листы, пластиковые трубы, вентиляторы) и датчиков температуры/влажности.",
+    "Провести серию испытаний при разных погодных условиях, измерить суточный выход воды и энергозатраты."
+   ],
+   "origin": "Работа 0704.2571 предлагает дешёвый метод извлечения воды из атмосферы, но не рассматривает специфику прибрежных зон, где высокая влажность и доступна холодная морская вода. Не хватает экспериментальной проверки и оптимизации для таких условий.",
+   "first_step": "Собрать простейший конденсатор: металлический лист, охлаждаемый морской водой, с канавками для сбора конденсата; измерить выход воды за ночь.",
+   "needs": "Материалы для прототипа (листовой металл, трубы, изоляция), датчики температуры и влажности, доступ к морской воде, место на побережье. Навыки: основы теплотехники, умение работать руками. Бюджет: 50–100 тыс. руб.",
+   "risks": "Выход воды может оказаться слишком мал в реальных условиях (зависит от точки росы и скорости ветра), что сделает систему нерентабельной.",
+   "scale": "семестр",
+   "based_on": [
+    "0704.2571"
+   ]
+  },
+  {
+   "title": "Создать прототип подводного дрона для мониторинга загрязнений вблизи опреснительных станций",
+   "what": "Разработать автономный подводный аппарат с камерой и системой компьютерного зрения для обнаружения и классификации морского мусора и потенциальных загрязнителей в районе водозаборов опреснительных установок. Обучить модель детекции на синтетических и реальных данных.",
+   "why": "Загрязнение водозаборов (мусор, нефтяные плёнки) снижает эффективность опреснения и повреждает мембраны. Автономный мониторинг позволит своевременно очищать акваторию и планировать обслуживание станций.",
+   "methods": [
+    "Использовать архитектуру YOLO с прунингом, как в работе 2501.16571, адаптировав её для подводных условий.",
+    "Собрать подводный носитель на базе открытых проектов (например, BlueROV) с камерой и освещением.",
+    "Сгенерировать синтетический датасет подводных изображений с мусором, применить методы удаления дымки из работы 1807.04169 для улучшения качества.",
+    "Обучить модель на комбинированном датасете и развернуть на бортовом компьютере (Jetson Nano или аналог)."
+   ],
+   "origin": "В 2501.16571 показана эффективная детекция морского мусора с помощью урезанной YOLO, но без учёта подводных искажений. Работа 1807.04169 предлагает метод улучшения подводных изображений, который может повысить точность детекции. Не хватает интегрированного решения для мониторинга вблизи опреснительных станций.",
+   "first_step": "Установить и протестировать модель YOLO на публичном датасете подводного мусора (например, TrashCan), оценить точность и скорость на целевом железе.",
+   "needs": "Подводный дрон или компоненты для его сборки, камера, бортовой компьютер, доступ к акватории для тестов. Навыки: программирование на Python, опыт с нейросетями, базовые навыки конструирования. Бюджет: 100–300 тыс. руб. в зависимости от готовности дрона.",
+   "risks": "Сложность получения качественных подводных изображений в мутной воде; модель может плохо обобщаться на реальные условия, потребуется много данных для дообучения.",
+   "scale": "диплом",
+   "based_on": [
+    "2501.16571",
+    "1807.04169"
+   ]
+  },
+  {
+   "title": "Разработать метод экспресс-анализа урана и плутония в морской воде для контроля опреснённой воды",
+   "what": "Адаптировать и упростить радиохимическую методику выделения урана и плутония из морской воды для рутинного контроля безопасности опреснённой воды. Создать портативный протокол, пригодный для использования в полевых условиях или на станциях опреснения.",
+   "why": "Опреснённая вода должна соответствовать нормативам по радионуклидам, но существующие методы требуют сложного оборудования (AMS) и много времени. Упрощённый метод позволит быстро проверять воду на содержание долгоживущих изотопов.",
+   "methods": [
+    "Взять за основу процедуру из работы 2501.09723 (последовательная экстракция U, Np, Pu из малых объёмов) и оптимизировать её для ещё меньших объёмов (1–2 л).",
+    "Заменить AMS-измерение на более доступный метод, например, альфа-спектрометрию или масс-спектрометрию с индуктивно-связанной плазмой (ICP-MS), если чувствительность достаточна.",
+    "Проверить выходы и чистоту выделения с помощью добавок трассеров (242Pu, 236U).",
+    "Провести сравнительные измерения реальных проб морской воды и опреснённой воды."
+   ],
+   "origin": "Работы 2501.10123 и 2501.09723 предлагают надёжные, но сложные методики для анализа актинидов в морской воде с использованием AMS. Для практики опреснения нужен более простой и быстрый метод, который можно реализовать в обычной радиохимической лаборатории.",
+   "first_step": "Воспроизвести методику из 2501.09723 в лабораторных условиях с использованием стандартных растворов и оценить выходы на каждом этапе.",
+   "needs": "Радиохимическая лаборатория с вытяжным шкафом, ионообменные смолы (TEVA, UTEVA), стандартные растворы радионуклидов, доступ к альфа-спектрометру или ICP-MS. Навыки: радиохимия, работа с источниками ионизирующего излучения. Бюджет: 200–500 тыс. руб. на реактивы и анализы.",
+   "risks": "Чувствительность альфа-спектрометрии может оказаться недостаточной для низких концентраций в опреснённой воде; потребуется длительное накопление или переход на более дорогой метод.",
+   "scale": "диплом",
+   "based_on": [
+    "2501.09723",
+    "2501.10123"
+   ]
+  },
+  {
+   "title": "Создать цифровой двойник мембранного опреснителя для оптимизации режимов очистки",
+   "what": "Разработать программную модель процесса фильтрации с учётом загрязнения мембраны и циклов обратной промывки на основе данных лабораторных экспериментов и моделирования. Использовать её для подбора оптимальных параметров работы реальной опреснительной установки.",
+   "why": "Загрязнение мембран – главная причина роста энергопотребления и затрат на замену. Цифровой двойник позволит прогнозировать падение производительности и планировать промывки, экономя ресурсы.",
+   "methods": [
+    "Использовать модель мембранной фильтрации из работы 2508.18262 (Монте-Карло симуляции 2D flat-sheet) как основу.",
+    "Дополнить модель учётом реальной геометрии мембранного модуля и гидродинамики (например, с помощью CFD или упрощённых моделей сопротивления).",
+    "Собрать экспериментальные данные по засорению мембраны на лабораторном стенде (можно использовать стенд из первой идеи) для калибровки модели.",
+    "Реализовать алгоритм оптимизации (например, генетический алгоритм) для выбора расписания промывок."
+   ],
+   "origin": "Работа 2508.18262 даёт стохастическую модель засорения мембраны, но не рассматривает оптимизацию режимов промывки в контексте полной опреснительной установки. Не хватает интеграции модели с реальными данными и применения для управления.",
+   "first_step": "Воспроизвести модель из 2508.18262 на Python, проверить её поведение на простых случаях и сравнить с опубликованными результатами.",
+   "needs": "Компьютер с достаточной производительностью, доступ к экспериментальным данным (можно сгенерировать самостоятельно на простом стенде), навыки численного моделирования и программирования (Python, C++). Бюджет: минимальный, если использовать личный компьютер.",
+   "risks": "Модель может оказаться слишком упрощённой для реальных условий, потребуется значительная доработка; калибровка по ограниченным данным может дать ненадёжные прогнозы.",
+   "scale": "годы",
+   "based_on": [
+    "2508.18262"
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "id": "2501.10123",
+   "full": false,
+   "field": true,
+   "score": 0.579,
+   "titles": {
+    "ru": "Isolation of $^{236}$U and $^{239,240}$Pu from seawater samples and its   determination by Accelerator Mass Spectrometry"
+   },
+   "abstract": "In this work we present and evaluate a radiochemical procedure optimised for the analysis of $^{236}$U and $^{239,240}$Pu in seawater samples by Accelerator Mass Spectrometry (AMS). The method is based on Fe(OH)$_3$ co-precipitation of actinides and uses TEVA and UTEVA extraction chromatography resins in a simplified way for the final U and Pu purification. In order to improve the performance of the method, the radiochemical yields are analysed in 1 to 10 L seawater volumes using alpha spectrometry (AS) and Inductively Coupled Plasma Mass Spectrometry (ICP-MS). Robust 80% plutonium recoveries "
+  },
+  {
+   "id": "1309.0322",
+   "full": false,
+   "field": true,
+   "score": 0.57,
+   "titles": {
+    "ru": "Exceptionally Fast Water Desalination at Complete Salt Rejection by   Pristine Graphyne Monolayers"
+   },
+   "abstract": "Desalination that produces clean freshwater from seawater holds the promise to solve the global water shortage for drinking, agriculture and industry. However, conventional desalination technologies such as reverse osmosis and thermal distillation involve large amounts of energy consumption, and the semipermeable membranes widely used in reverse osmosis face the challenge to provide a high throughput at high salt rejection. Here we find by comprehensive molecular dynamics simulations and first principles modeling that, pristine graphyne, one of the graphene like one-atom-thick carbon allotrope"
+  },
+  {
+   "id": "1512.07101",
+   "full": false,
+   "field": true,
+   "score": 0.565,
+   "titles": {
+    "ru": "Nanoporous Carbon Nitride: A High Efficient Filter for Seawater   Desalination"
+   },
+   "abstract": "The low efficiency of commercially-used reverse osmosis (RO) membranes has been the main obstacle in seawater desalination application. Here, we report the auspicious performance, through molecular dynamics simulations, of a seawater desalination filter based on the recently-synthesized graphene-like carbon nitride (g-C2N) [Nat. Commun., 2015, 6, 6486]. Taking advantage of the inherent nanopores and excellent mechanical properties of g-C2N filter, highly efficient seawater desalination can be achieved by modulating the nanopores under tensile strain. The water permeability can be improved by t"
+  },
+  {
+   "id": "2310.05729",
+   "full": false,
+   "field": true,
+   "score": 0.562,
+   "titles": {
+    "ru": "Desalination Performance of Nano porous Mos$_2$ Membrane on Different   Salts of Saline Water: A Molecular Dynamics Study"
+   },
+   "abstract": "The freshwater crisis is a growing concern and a pressing problem for the world because of the increasing population, civilization, and rapid industrial growth. The water treatment facilities are able to supply less than 1% of the total water demand. Water desalination can be a potential solution to deal with this alarming issue. Researchers have been exploring for quite some time to find novel nano-enhanced membranes and manufacturing techniques to increase the efficiency of the desalination process. Graphene and graphene modified membranes showed huge potential as desalination membranes for "
+  },
+  {
+   "id": "0704.2571",
+   "full": false,
+   "field": true,
+   "score": 0.561,
+   "titles": {
+    "ru": "Extraction of Freshwater and Energy from Atmosphere"
+   },
+   "abstract": "Author offers and researches a new, cheap method for the extraction of freshwater from the Earth atmosphere. The suggected method is fundamentally dictinct from all existing methods that extract freshwater from air. All other industrial methods extract water from a saline water source (in most cases from seawater). This new method may be used at any point in the Earth except Polar Zones. It does not require long-distance freshwater transportation. If seawater is not utilized for increasing its productivity, this inexpensive new method is very environment-friendly. The author method has two wor"
+  },
+  {
+   "id": "2501.09723",
+   "full": false,
+   "field": true,
+   "score": 0.557,
+   "titles": {
+    "ru": "Simple and fast method for the analysis of $^{236}$U, $^{237}$Np,   $^{239}$Pu and $^{240}$Pu from seawater samples by Accelerator Mass   Spectrometry"
+   },
+   "abstract": "A simple and fast radiochemical procedure for the sequential extraction of U, Np and Pu from small-volume seawater samples ($<10$ L) is presented. The method has been developed and optimized for the final determination of $^{236}$U, $^{237}$Np, $^{239}$Pu and $^{240}$Pu by Accelerator Mass Spectrometry (AMS). It is based on the use of $^{242}$Pu as tracer for both Np and Pu isotopes. Samples are pre-concentrated by Fe(OH)$_2$ co-precipitation. TEVA and UTEVA resins are used in a very simplified way for the final purification of the Pu+Np and U fractions, respectively. The radiochemical yields "
+  },
+  {
+   "id": "1807.04169",
+   "full": false,
+   "field": true,
+   "score": 0.555,
+   "titles": {
+    "ru": "Underwater Image Haze Removal and Color Correction with an   Underwater-ready Dark Channel Prior"
+   },
+   "abstract": "Underwater images suffer from extremely unfavourable conditions. Light is heavily attenuated and scattered. Attenuation creates change in hue, scattering causes so called veiling light. General state of the art methods for enhancing image quality are either unreliable or cannot be easily used in underwater operations. On the other hand there is a well known method for haze removal in air, called Dark Channel Prior. Even though there are known adaptations of this method to underwater applications, they do not always work correctly. This work elaborates and improves upon the initial concept pres"
+  },
+  {
+   "id": "2404.19586",
+   "full": false,
+   "field": true,
+   "score": 0.546,
+   "titles": {
+    "ru": "AI techniques for near real-time monitoring of contaminants in coastal   waters on board future Phisat-2 mission"
+   },
+   "abstract": "Differently from conventional procedures, the proposed solution advocates for a groundbreaking paradigm in water quality monitoring through the integration of satellite Remote Sensing (RS) data, Artificial Intelligence (AI) techniques, and onboard processing. The objective is to offer nearly real-time detection of contaminants in coastal waters addressing a significant gap in the existing literature. Moreover, the expected outcomes include substantial advancements in environmental monitoring, public health protection, and resource conservation. The specific focus of our study is on the estimat"
+  },
+  {
+   "id": "2206.10325",
+   "full": false,
+   "field": true,
+   "score": 0.546,
+   "titles": {
+    "ru": "A single liquid chromatography procedure to concentrate, separate and   collect size-selected polyynes produced by pulsed laser ablation in water"
+   },
+   "abstract": "Polyynes are linear carbon chains characterized by alternated single and triple bonds and terminated by hydrogen or other terminal substituents. They can be synthesized by pulsed laser ablation in liquid (PLAL) as a scalable, cost-effective, and fast physical technique. Water can be employed as a solvent for PLAL to avoid toxicity problems and to reduce costs compared to organic solvents. However, in this case, the production yield of polyynes reached is extremely low and prevents further characterization and implementation in new functional materials. In this work, we synthesized polyynes by "
+  },
+  {
+   "id": "2501.16571",
+   "full": false,
+   "field": true,
+   "score": 0.545,
+   "titles": {
+    "ru": "Efficient Object Detection of Marine Debris using Pruned YOLO Model"
+   },
+   "abstract": "Marine debris poses significant harm to marine life due to substances like microplastics, polychlorinated biphenyls, and pesticides, which damage habitats and poison organisms. Human-based solutions, such as diving, are increasingly ineffective in addressing this issue. Autonomous underwater vehicles (AUVs) are being developed for efficient sea garbage collection, with the choice of object detection architecture being critical. This research employs the YOLOv4 model for real-time detection of marine debris using the Trash-ICRA 19 dataset, consisting of 7683 images at 480x320 pixels. Various mo"
+  },
+  {
+   "id": "1606.07128",
+   "full": false,
+   "field": true,
+   "score": 0.543,
+   "titles": {
+    "ru": "Manganese in the West Atlantic Ocean in context of the first global   ocean circulation model of manganese"
+   },
+   "abstract": "Dissolved manganese (Mn) is a biologically essential element, and its oxidised form is involved in the removal of trace elements from ocean waters. Recently, a large number of highly accurate Mn measurements have been obtained in the Atlantic, Indian and Arctic Oceans as part of the GEOTRACES programme. The goal of this study is to combine these new observations with state-of-the-art modelling to give new insights into the main sources and redistribution of Mn throughout the ocean. To this end, we simulate the distribution of dissolved Mn using a global-scale circulation model. This first mode"
+  },
+  {
+   "id": "2508.18262",
+   "full": false,
+   "field": true,
+   "score": 0.54,
+   "titles": {
+    "ru": "Monte Carlo simulations of 2D flat-sheet membrane filters for constant-pressure water purification"
+   },
+   "abstract": "Membrane filtration is widely used in water treatment to remove foulants from contaminated water. Foulant build-up on the membrane occludes the area open for fluid flow, which impairs the efficiency of the filtration operation by decreasing the flux through the membrane. Backwashing is a strategy to restore the membrane, wherein clean water is processed backward through the membrane to dislodge attached foulants. We develop a Monte Carlo model to simulate constant-pressure forward filtration and backwashing through dead-end, flat-sheet membranes, with membrane fouling dominated by intermediate"
+  }
+ ]
+}

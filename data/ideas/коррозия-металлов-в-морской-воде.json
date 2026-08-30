@@ -1,0 +1,197 @@
+{
+ "topic": "коррозия металлов в морской воде",
+ "slug": "коррозия-металлов-в-морской-воде",
+ "built": "2026-08-30",
+ "note": "В области коррозии в морской воде активно развиваются методы мониторинга и моделирования, но многие работы сосредоточены на отдельных аспектах без учёта комплексного воздействия среды.",
+ "drill": {
+  "found": 12,
+  "nearest": 0.564,
+  "band": "sparse",
+  "near": 0,
+  "full": 0,
+  "model": "bge-m3"
+ },
+ "ideas": [
+  {
+   "title": "Собрать стенд для измерения скорости коррозии стали в проточной морской воде с контролем pH и кислорода",
+   "what": "Собрать лабораторную установку с проточной ячейкой, датчиками pH, растворённого кислорода и температуры, и провести серию измерений скорости коррозии углеродистой стали в искусственной морской воде при разных скоростях потока.",
+   "why": "Данные о влиянии гидродинамики на коррозию в морской воде нужны для прогноза срока службы конструкций в прибрежной зоне, где поток переменный.",
+   "methods": [
+    "Электрохимические измерения (поляризационное сопротивление, Tafel-анализ) с помощью потенциостата.",
+    "Гравиметрия: взвешивание образцов до и после экспозиции с удалением продуктов коррозии.",
+    "Контроль параметров среды: pH-метр, оксиметр, расходомер.",
+    "Методика ускоренных испытаний: варьирование скорости потока от 0 до 1 м/с."
+   ],
+   "origin": "В работе [2504.08794] подчёркнута важность локальных условий для коррозии, а в [physics/0509117] показано влияние растворённого кислорода на коррозию железа. Однако в этих работах не рассматривается влияние гидродинамики на скорость коррозии в морской воде, хотя на практике поток существенно меняет доставку кислорода к поверхности.",
+   "first_step": "Собрать проточную ячейку из оргстекла, подключить насос и датчики, проверить стабильность параметров на дистиллированной воде.",
+   "needs": "Потенциостат, электроды, проточная ячейка, насос, датчики pH и кислорода, химикаты для приготовления морской воды, доступ к мастерской для изготовления ячейки.",
+   "risks": "Сложность поддержания стабильной концентрации кислорода при изменении потока; возможна неравномерная коррозия, что усложнит интерпретацию электрохимических данных.",
+   "scale": "семестр",
+   "based_on": [
+    "2504.08794",
+    "physics/0509117"
+   ]
+  },
+  {
+   "title": "Разработать модель локальной коррозии арматуры в бетоне морских конструкций с учётом катодной защиты",
+   "what": "Разработать численную модель коррозии стальной арматуры в бетоне, находящемся в морской воде, с учётом распределения катодных и анодных зон и влияния катодной защиты.",
+   "why": "Такая модель позволит прогнозировать эффективность катодной защиты и оптимизировать её параметры для продления срока службы железобетонных конструкций в морской среде.",
+   "methods": [
+    "Использовать подход из работы [2504.08794] для расчёта локальных токов коррозии в бетоне.",
+    "Расширить модель, включив влияние хлоридов из морской воды на пассивацию стали.",
+    "Провести валидацию на литературных данных по коррозии арматуры в морском бетоне.",
+    "Реализовать модель в среде COMSOL Multiphysics или аналогичной."
+   ],
+   "origin": "Работа [2504.08794] предлагает метод расчёта коррозионных токов в бетоне, но не учитывает специфику морской воды (высокая концентрация хлоридов, возможная катодная защита). В то же время [physics/0509117] показывает важность кислорода, но в других условиях. Объединение этих подходов может дать более реалистичную картину.",
+   "first_step": "Воспроизвести модель из [2504.08794] для простого случая и сравнить с опубликованными результатами.",
+   "needs": "Навыки численного моделирования, доступ к COMSOL или аналогичному ПО, литературные данные для валидации.",
+   "risks": "Недостаток экспериментальных данных для калибровки модели; сложность учёта всех факторов (влажность, карбонизация, хлориды).",
+   "scale": "диплом",
+   "based_on": [
+    "2504.08794",
+    "physics/0509117"
+   ]
+  },
+  {
+   "title": "Исследовать коррозию алюминиевых сплавов в морской воде с применением ультрафиолетовой плазмоники для мониторинга",
+   "what": "Создать экспериментальную установку для изучения коррозии алюминиевых сплавов в морской воде с использованием плазмонных наноструктур для усиления спектроскопических сигналов продуктов коррозии.",
+   "why": "Раннее обнаружение коррозии алюминия важно для морской авиации и судостроения, а плазмонные сенсоры могут дать высокую чувствительность.",
+   "methods": [
+    "Изготовить алюминиевые наноструктуры с помощью электронно-лучевой литографии или наносферной литографии.",
+    "Провести коррозионные испытания в искусственной морской воде, контролируя pH и хлорид-ионы.",
+    "Использовать УФ-видимую спектроскопию для мониторинга изменений плазмонного резонанса.",
+    "Сравнить с результатами для образцов без наноструктур."
+   ],
+   "origin": "Работа [1907.11003] показывает, что алюминий подвержен фотокоррозии в УФ-диапазоне, что ограничивает его применение в плазмонике. Однако не изучено, как алюминиевые наноструктуры ведут себя в морской воде, где коррозия ускоряется хлоридами. Это может быть использовано для создания сенсоров коррозии.",
+   "first_step": "Провести литературный обзор по коррозии алюминия в хлоридных средах и выбрать сплав и методику изготовления наноструктур.",
+   "needs": "Оборудование для нанолитографии, спектрометр с УФ-диапазоном, химикаты, потенциостат.",
+   "risks": "Сложность изготовления воспроизводимых наноструктур; быстрая деградация алюминия в морской воде может сделать измерения трудными.",
+   "scale": "годы",
+   "based_on": [
+    "1907.11003"
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "id": "2403.01336",
+   "full": false,
+   "field": true,
+   "score": 0.564,
+   "titles": {
+    "ru": "Europa's structural conditions for the existence of subsurface ocean and   the absence of metallic core-driven magnetic field"
+   },
+   "abstract": "Europa's interior is expected to be divided into the metallic core, rocky mantle and hydrosphere based on the moment of inertia factor estimated from gravity field measurements. Specifically, the thickness of the outermost water layer is 120-170 km, and the radius of the metallic core is 0.12-0.43 times the surface radius. No systematic study of Europa's internal evolution has been conducted to estimate the current state of the subsurface ocean and to explain the absence of a core dynamo field within such uncertainty for internal structure and material properties. Herein, I performed a numeric"
+  },
+  {
+   "id": "2110.01701",
+   "full": false,
+   "field": true,
+   "score": 0.563,
+   "titles": {
+    "ru": "Multiscale Mechanical Consequences of Ocean Acidification for Cold-Water   Corals"
+   },
+   "abstract": "Ocean acidification is a threat to deep-sea corals and could lead to dramatic and rapid loss of the reef framework habitat they build. Weakening of structurally critical parts of the coral reef framework can lead to physical habitat collapse on an ecosystem scale, reducing the potential for biodiversity support. The mechanism underpinning crumbling and collapse of corals can be described via a combination of laboratory-scale experiments and mathematical and computational models. We synthesise data from electron back-scatter diffraction, micro-computed tomography, and micromechanical experiment"
+  },
+  {
+   "id": "1402.3174",
+   "full": false,
+   "field": true,
+   "score": 0.561,
+   "titles": {
+    "ru": "Modeling of Degradation Processes in Historical Mortars"
+   },
+   "abstract": "The aim of presented paper is modeling of degradation processes in historical mortars exposed to moisture impact during freezing. Internal damage caused by ice crystallization in pores is one of the most important factors limiting the service life of historical structures. Coupling the transport processes with the mechanical part will allow us to address the impact of moisture on the durability, strength and stiffness of mortars. This should be accomplished with the help of a complex thermo-hygro-mechanical model representing one of the prime objectives of this work. The proposed formulation i"
+  },
+  {
+   "id": "1907.11003",
+   "full": false,
+   "field": true,
+   "score": 0.559,
+   "titles": {
+    "ru": "Preventing Aluminum Photocorrosion for Ultraviolet Plasmonics"
+   },
+   "abstract": "Ultraviolet (UV) plasmonics aims at combining the strong absorption bands of molecules in the UV range with the intense electromagnetic fields of plasmonic nanostructures to promote surface-enhanced spectroscopy and catalysis. Currently, aluminum is the most widely used metal for UV plasmonics, and is generally assumed to be remarkably stable thanks to its natural alumina layer passivating the metal surface. However, we find here that under 266 nm UV illumination, aluminum can undergo a dramatic photocorrosion in water within a few tens of seconds and even at low average UV powers. This alumin"
+  },
+  {
+   "id": "1506.01790",
+   "full": false,
+   "field": true,
+   "score": 0.558,
+   "titles": {
+    "ru": "Degradation of metallic surfaces under space conditions, with particular   emphasis on hydrogen recombination processes"
+   },
+   "abstract": "The widespread use of metallic structures in space technology brings risk of degradation which occurs under space conditions. New types of materials dedicated for space applications, that have been developed in the last decade, are in majority not well tested for different space mission scenarios. Very little is known how material degradation may affect the stability and functionality of space vehicles and devices during long term space missions. Our aim is to predict how the solar wind and electromagnetic radiation degrade metallic structures. Therefore both experimental and theoretical studi"
+  },
+  {
+   "id": "1803.07343",
+   "full": false,
+   "field": true,
+   "score": 0.556,
+   "titles": {
+    "ru": "Laser Ablation of Gold into Water: near Critical Point Phenomena and   Hydrodynamic Instability"
+   },
+   "abstract": "Laser ablation of gold irradiated through the transparent water is studied. We follow dynamics of gold expansion into the water along very long (up to 200 ns) time interval. This is significant because namely at these late times pressure at a contact boundary between gold (Au) and water decreases down to the saturation pressure of gold. Thus the saturation pressure begins to influence dynamics near the contact. The inertia of displaced water decelerates the contact. In the reference frame connected with the contact, the deceleration is equivalent to the free fall acceleration in a gravity fiel"
+  },
+  {
+   "id": "1810.08604",
+   "full": false,
+   "field": true,
+   "score": 0.556,
+   "titles": {
+    "ru": "Corrosion of Si, C, and SiC in molten salt"
+   },
+   "abstract": "Corrosion of Si, C, and SiC in fluoride salt has been studied by ab initio molecular dynamics. The standard dissolution potential for Si is found to be smaller (easier to corrode) than that of C. The dissolved Si attracts F- ions and forms SiF62-, whereas the dissolved C species forms neutral CF4 molecules. A swapping mechanism is identified for the initial corrosion stage, where Si first comes to the surface and then is dissolved, leaving behind chain- and ring-like C structures. A strategy to suppress SiC corrosion is also discussed based on Be doping, including avoiding Be2C formation."
+  },
+  {
+   "id": "2508.12431",
+   "full": false,
+   "field": true,
+   "score": 0.554,
+   "titles": {
+    "ru": "Physics-Informed Electrochemical Model of Cathodic Corrosion in Alkaline Media"
+   },
+   "abstract": "Electrochemical corrosion significantly reduces the durability of electrodes in water electrolyzers, adversely affecting hydrogen (H$_2$) production and cell efficiency. Current theoretical models inadequately assess corrosion behaviors in alkaline water electrolyzers. To address this, we developed a physics-informed electrochemical corrosion model evaluating the corrosion characteristics of cathodes in alkaline systems, accounting for factors such as exchange current density ($J_0$), redox potential ($E_0$), Gibbs free energy of hydrogen adsorption ($\\Delta G_{\\rm H}$), electrolyte concentrat"
+  },
+  {
+   "id": "physics/0509117",
+   "full": false,
+   "field": true,
+   "score": 0.554,
+   "titles": {
+    "ru": "Origin of the hydrogen involved in iron corrosion under irradiation"
+   },
+   "abstract": "In the perspective of long term geological storage, high level nuclear wastes will be overpacked in low carbon steel containers. In that context, we have studied the influence of oxygen dissolved in water on iron corrosion. Therefore, leaching experiments were performed in desaerated D$\\_2$O and in aerated H$\\_2$O and a kinetic study of iron corrosion under proton irradiation was lead in aqueous media with two different dissolved oxygen concentrations. The leaching experiments underline the major role of dissolved oxygen in oxydoreduction reactions which take place as far as iron is in contact"
+  },
+  {
+   "id": "2504.08794",
+   "full": false,
+   "field": true,
+   "score": 0.551,
+   "titles": {
+    "ru": "Corrosion of metal reinforcements within concrete and localisation of   supporting reactions under natural conditions"
+   },
+   "abstract": "Corrosion in concrete prevents in-situ observation, necessitating models to provide insight into the local reaction currents. We present a computational method for predicting corrosion rates of reinforcements within concrete under natural conditions, i.e. requiring the corrosion current to be supported by equal cathodic currents. In contrast to typical corrosion models, where these two counteracting currents are required to be co-located, we allow these currents to be separated such that pitting corrosion can be supported by cathodic reactions over a much larger area. Pitting corrosion is inve"
+  },
+  {
+   "id": "2510.13545",
+   "full": false,
+   "field": true,
+   "score": 0.547,
+   "titles": {
+    "ru": "Unraveling the Corrosion Mechanism of Boro-Alumino-Phospho-Silicate Glass: Advanced Insights from Solid-State NMR Spectroscopy"
+   },
+   "abstract": "Corrosion mechanism of minerals and glass is a critical study domain in geology and materials science, vital for comprehending material durability under various environmental conditions. Despite decades of extensive study, a core aspect of these mechanisms - specifically, the formation of amorphous alteration layers upon exposure to aqueous environments - remains controversial. In this study, the corrosion behavior of a boro-alumino-phospho-silicate glass (BAPS) was investigated using advanced solid-state nuclear magnetic resonance (SSNMR) and SEM techniques. The results reveal a uniform nanos"
+  },
+  {
+   "id": "1005.5554",
+   "full": false,
+   "field": true,
+   "score": 0.544,
+   "titles": {
+    "ru": "On the Corrosion Resistance of Porous Electroplated Zinc Coatings in   Different Corrosive Media"
+   },
+   "abstract": "The corrosion resistance of an electroplated (EP) Zn coating whose surface was chemically etched to produce surface defects (pores) is investigated in this work. Impedance and DC polarisation measururements were employed to study the behaviour of such coating in various corrosive media (NaCl, NaOH and rain water). Four different faradaic relaxation processes were clearly revealed in different NaCl concentrations (from 0.1M to 1M). In the most concentrated solutions at least three relaxation processes at low frequencies (LF) appeared and were related to zinc deposition and dissolution. At lower"
+  }
+ ]
+}

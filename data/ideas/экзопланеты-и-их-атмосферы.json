@@ -1,0 +1,204 @@
+{
+ "topic": "экзопланеты и их атмосферы",
+ "slug": "экзопланеты-и-их-атмосферы",
+ "built": "2026-08-30",
+ "note": "Сейчас активно развиваются методы характеризации атмосфер экзопланет, от наблюдений транзитов до моделирования убегающих оболочек, но многие вопросы о влиянии звёздной активности и магнитных полей остаются открытыми.",
+ "drill": {
+  "found": 12,
+  "nearest": 0.647,
+  "band": "mid",
+  "near": 0,
+  "full": 0,
+  "model": "bge-m3"
+ },
+ "ideas": [
+  {
+   "title": "Поиск вариаций в транзитах экзопланет из-за звёздных вспышек",
+   "what": "Собрать кривые блеска транзитов горячих юпитеров из архивов Kepler/K2 и TESS, выделить случаи, когда во время транзита происходила вспышка на звезде, и оценить, как вспышка меняет измеряемую глубину транзита и форму кривой.",
+   "why": "Если эффект заметен, это даст новый способ оценивать свойства верхних атмосфер планет и корректировать систематику в измерениях радиусов.",
+   "methods": [
+    "Скачать кривые блеска из архива MAST, отобрать транзиты с одновременными вспышками по каталогам вспышечной активности.",
+    "Построить модели транзита без вспышки и с добавлением вспышечного события, сравнить остатки.",
+    "Оценить статистическую значимость отклонений для разных планет и параметров вспышек."
+   ],
+   "origin": "В работе 1507.03966 обсуждаются трудности характеризации атмосфер из-за шумов и звёздной активности, но систематического исследования влияния вспышек именно во время транзита на измеряемые параметры не хватает.",
+   "first_step": "Выбрать 2–3 горячих юпитера с большим числом транзитов в архиве, найти случаи вспышек во время транзита и построить разностные кривые.",
+   "needs": "Навыки Python, доступ к архивам MAST, время на обработку данных.",
+   "risks": "Эффект может оказаться слишком мал на фоне шумов, а вспышки во время транзита редки.",
+   "scale": "семестр",
+   "based_on": [
+    "1507.03966",
+    "1701.00493"
+   ]
+  },
+  {
+   "title": "Моделирование убегающей атмосферы горячего юпитера с учётом магнитного поля звезды",
+   "what": "Численно смоделировать истечение водородной атмосферы горячего юпитера под действием УФ-излучения звезды, добавив в модель магнитное поле звезды и проверив, как оно меняет форму и скорость убегающего потока.",
+   "why": "Магнитное поле может объяснить наблюдаемые асимметрии в линиях поглощения (например, у HD 209458b), которые не воспроизводятся чисто гидродинамическими моделями.",
+   "methods": [
+    "Взять открытый код для моделирования планетных атмосфер (например, PLUTO или ATES) и адаптировать его под задачу.",
+    "Добавить внешнее магнитное поле дипольного типа и проследить за изменением траекторий ионизованных частиц.",
+    "Сравнить синтетические профили линии Лайман-альфа с наблюдениями из работ 1201.4637 и 0902.3938."
+   ],
+   "origin": "В работах 1201.4637 и 0902.3938 описаны наблюдения убегающих атмосфер и базовые гидродинамические модели, но магнитные эффекты там почти не учитываются, хотя они могут быть важны для объяснения наблюдаемых скоростей.",
+   "first_step": "Установить и запустить существующую модель (например, из статьи по ATES) для HD 209458b, воспроизвести известный результат, затем начать добавлять магнитное поле.",
+   "needs": "Опыт численного моделирования, доступ к вычислительным ресурсам (кластер или мощный ПК), знание физики плазмы.",
+   "risks": "Учёт магнитного поля сильно усложняет модель и требует аккуратной настройки граничных условий; результат может оказаться неустойчивым.",
+   "scale": "диплом",
+   "based_on": [
+    "1201.4637",
+    "0902.3938"
+   ]
+  },
+  {
+   "title": "Долговременный мониторинг атмосферы транснептунового объекта 2002 XV93 методом покрытий",
+   "what": "Организовать наблюдательную кампанию по регистрации покрытий звёзд объектом 2002 XV93 на нескольких телескопах, чтобы получить новые кривые блеска и уточнить параметры его атмосферы.",
+   "why": "Атмосфера этого объекта была открыта недавно, и дополнительные наблюдения помогут понять её стабильность, сезонные изменения и связь с активностью поверхности.",
+   "methods": [
+    "Использовать предсказания покрытий от проекта Lucky Star и координировать наблюдения на телескопах с быстрыми камерами.",
+    "Обрабатывать кривые блеска методом из работы 2605.02243: фитировать модель атмосферы с учётом рефракции.",
+    "Сравнивать полученные профили давления и температуры с предыдущими измерениями."
+   ],
+   "origin": "Работа 2605.02243 сообщает об открытии атмосферы у 2002 XV93, но основана на одном покрытии. Для проверки воспроизводимости и изучения изменчивости нужны повторные наблюдения, которых пока нет.",
+   "first_step": "Связаться с коллегами, занимающимися покрытиями ТНО, и получить доступ к расписанию ближайших событий; подготовить заявку на наблюдательное время.",
+   "needs": "Доступ к телескопу с быстрой ПЗС-камерой (или участие в коллаборации), навыки обработки фотометрических данных.",
+   "risks": "Покрытия редки и требуют точного предсказания; погода может сорвать наблюдения.",
+   "scale": "годы",
+   "based_on": [
+    "2605.02243"
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "id": "2605.02243",
+   "date": "2026-05-04",
+   "full": false,
+   "titles": {
+    "ru": "Атмосфера у транснептунового объекта (612533) 2002 XV93: открытие методом покрытия звезды",
+    "en": "Atmosphere found on a small icy body beyond Neptune",
+    "es": "Más allá de Neptuno, encuentran atmósfera en un pequeño cuerpo helado",
+    "ar": "غلاف جوي حول الجسم العابر لنبتون (612533) 2002 XV93: اكتشاف بطريقة احتجاب النجم",
+    "fr": "Une atmosphère découverte autour d'un petit corps glacé au-delà de Neptune"
+   },
+   "score": 0.499,
+   "url": "/lang/{lang}/archive/2026-05-04/2605.02243/",
+   "abstract": "За орбитой Нептуна у объекта 2002 XV93 обнаружена разреженная атмосфера из азота и метана. Открытие сделано методом покрытия звезды: свет не только померк, но и изменил оттенок, выдав газовую оболочку. Давление у поверхности в миллионы раз ниже земного, а удерживают её, вероятно, криовулканы или ударные выбросы. Это единственный известный транснептуновый объект с атмосферой — даже более крупные Эрида и Макемаке её лишены."
+  },
+  {
+   "id": "2605.14077",
+   "date": "2026-05-13",
+   "full": false,
+   "titles": {
+    "ru": "Радиоэхо мёртвых звёзд: как услышать планету у пульсара",
+    "en": "How to Hear a Planet Near a Dead Star",
+    "es": "Cómo escuchar un planeta cerca de una estrella muerta",
+    "ar": "كيف تسمع كوكباً يدور حول نجم ميت",
+    "fr": "Comment entendre une planète autour d'une étoile morte"
+   },
+   "score": 0.489,
+   "url": "/lang/{lang}/archive/2026-05-13/2605.14077/",
+   "abstract": "Нейтронные звёзды-пульсары испускают не только периодичные импульсы, но и непрерывный звёздный ветер. Планета, попавшая в этот поток, возмущает его подобно камню в ручье, порождая радиоволны. Компьютерное моделирование подтверждает: такое «радиоэхо» можно засечь у известного пульсара PSR J0636+5129 b, что открывает путь к поиску экзопланет в экстремальных условиях."
+  },
+  {
+   "id": "1701.00493",
+   "full": false,
+   "field": true,
+   "score": 0.647,
+   "titles": {
+    "ru": "Illusion and Reality in the Atmospheres of Exoplanets"
+   },
+   "abstract": "The atmospheres of exoplanets reveal all their properties beyond mass, radius, and orbit. Based on bulk densities, we know that exoplanets larger than 1.5 Earth radii must have gaseous envelopes, hence atmospheres. We discuss contemporary techniques for characterization of exoplanetary atmospheres. The measurements are difficult, because - even in current favorable cases - the signals can be as small as 0.001-percent of the host star's flux. Consequently, some early results have been illusory, and not confirmed by subsequent investigations. Prominent illusions to date include polarized scatter"
+  },
+  {
+   "id": "1201.4637",
+   "full": false,
+   "field": true,
+   "score": 0.647,
+   "titles": {
+    "ru": "Evaporation of extrasolar planets"
+   },
+   "abstract": "This article presents a review on the observations and theoretical modeling of the evaporation of extrasolar planets. The observations and the resulting constraints on the upper atmosphere (thermosphere and exosphere) of the \"hot-Jupiters\". are described. The early observations of the first discovered transiting extrasolar planet, HD209458b, allowed the discovery that this planet has an extended atmosphere of escaping hydrogen. Subsequent observations showed the presence of oxygen and carbon at very high altitude. These observations give unique constraints on the escape rate and mechanism in t"
+  },
+  {
+   "id": "1012.2157",
+   "full": false,
+   "field": true,
+   "score": 0.646,
+   "titles": {
+    "ru": "Exoplanet atmospheres: a brand-new and rapidly expanding research field"
+   },
+   "abstract": "The field of exoplanets is quickly expanding from just the detection of new planets and the measurement of their most basic parameters, such as mass, radius and orbital configuration, to the first measurements of their atmospheric characteristics, such as temperature, chemical composition, albedo, dynamics and structure. Here I will overview some of the main findings on exoplanet atmospheres until September 2010, first from space and just in the past two years also from the ground."
+  },
+  {
+   "id": "0902.3938",
+   "full": false,
+   "field": true,
+   "score": 0.645,
+   "titles": {
+    "ru": "Thermosphere and exosphere of Hot-Jupiters"
+   },
+   "abstract": "Here we describe the observations and the resulting constraints on the upper atmosphere (thermosphere and exosphere) of the \"Hot-Jupiters\". In particular, observations and theoretical modeling of Hot-Jupiter evaporation are described. The observations allowed the discovery that the planet orbiting HD209458 has an extended atmosphere of escaping hydrogen and showed the presence of oxygen and carbon at very high altitude. These observations give unique constraints on the escape rate and mechanism in the atmosphere of these planets. The most recent Lyman-alpha HST observations of HD189733b allows"
+  },
+  {
+   "id": "2108.08387",
+   "full": false,
+   "field": true,
+   "score": 0.644,
+   "titles": {
+    "ru": "The air over there: exploring exoplanet atmospheres"
+   },
+   "abstract": "Atmospheric compositions for rocky exoplanets will depend strongly on the bulk planetary composition and the orbital position of the planet. Non-traditional gases may be present in the atmospheres of exceptionally hot planets. Atmospheres of more clement planets will depend on the abundances of volatiles acquired during planet formation and atmospheric removal processes, including escape, condensation, and reaction with the surface. While the observations of exoplanet atmospheres to date has focused on giant planets, a series of new space and ground-based observatories over the coming decade w"
+  },
+  {
+   "id": "1507.03966",
+   "full": false,
+   "field": true,
+   "score": 0.642,
+   "titles": {
+    "ru": "Observations of Exoplanet Atmospheres"
+   },
+   "abstract": "Detailed characterization of an extrasolar planet's atmosphere provides the best hope for distinguishing the makeup of its outer layers, and the only hope for understanding the interplay between initial composition, chemistry, dynamics & circulation, and disequilibrium processes. In recent years, some areas have seen rapid progress while developments in others have come more slowly and/or have been hotly contested. This article gives an observer's perspective on the current understanding of extrasolar planet atmospheres prior to the considerable advances expected from the next generation of ob"
+  },
+  {
+   "id": "2006.13384",
+   "full": false,
+   "field": true,
+   "score": 0.641,
+   "titles": {
+    "ru": "Atmospheric Regimes and Trends on Exoplanets and Brown Dwarfs"
+   },
+   "abstract": "A planetary atmosphere is the outer gas layer of a planet. Besides its scientific significance among the first and most accessible planetary layers observed from space, it is closely connected with planetary formation and evolution, surface and interior processes, and habitability of planets. Current theories of the planetary atmosphere were primarily obtained through the studies of eight large planets, Pluto and three large moons (Io, Titan, and Triton) in the Solar System. Outside the Solar System, more than four thousand extra-solar planets (exoplanets) and two thousand brown dwarfs have be"
+  },
+  {
+   "id": "2312.05672",
+   "full": false,
+   "field": true,
+   "score": 0.638,
+   "titles": {
+    "ru": "Dynamics and Clouds in Planetary Atmospheres from Telescopic   Observations"
+   },
+   "abstract": "This review presents an insight into our current knowledge of the atmospheres of the planets Venus, Mars, Jupiter, Saturn, Uranus and Neptune, the satellite Titan, and those of exoplanets. It deals with the thermal structure, aerosol properties (hazes and clouds, dust in the case of Mars), chemical composition, global winds and selected dynamical phenomena in these objects. Our understanding of atmospheres is greatly benefitting from the discovery in the last three decades of thousands of exoplanets. The exoplanet properties span a broad range of conditions, and it is fair to expect as much va"
+  },
+  {
+   "id": "1903.09173",
+   "full": false,
+   "field": true,
+   "score": 0.635,
+   "titles": {
+    "ru": "Characterizing the Atmospheres of Irradiated Exoplanets at High Spectral   Resolution"
+   },
+   "abstract": "The best-characterized exoplanets to date are planets on close-in transiting orbits around their host stars. The high level of irradiation and transiting geometry of these objects make them ideal targets for atmospheric investigations. However, the modest apertures of many current telescopes allow mostly low resolution spectra to be observed for transiting planets, failing to extract key physical and chemical properties of their atmospheres. Ground-based 30-meter class telescopes will set the stage for a substantial leap in our understanding of exoplanet atmospheres. We outline a two-pronged s"
+  },
+  {
+   "id": "1409.6821",
+   "full": false,
+   "field": true,
+   "score": 0.634,
+   "titles": {
+    "ru": "The Dawes Review 3: The Atmospheres of Extrasolar Planets and Brown   Dwarfs"
+   },
+   "abstract": "The last few years has seen a dramatic increase in the number of exoplanets known and in the range of methods for characterising their atmospheric properties. At the same time, new discoveries of increasingly cooler brown dwarfs have pushed down their temperature range which now extends down to Y-dwarfs of <300 K. Modelling of these atmospheres has required the development of new techniques to deal with the molecular chemistry and clouds in these objects. The atmospheres of brown dwarfs are relatively well understood, but some problems remain, in particular the behavior of clouds at the L/T tr"
+  }
+ ]
+}

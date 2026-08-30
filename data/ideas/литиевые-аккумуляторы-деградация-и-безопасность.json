@@ -1,0 +1,238 @@
+{
+ "topic": "литиевые аккумуляторы: деградация и безопасность",
+ "slug": "литиевые-аккумуляторы-деградация-и-безопасность",
+ "built": "2026-08-30",
+ "note": "В области активно развиваются методы диагностики деградации и динамического управления безопасностью, но экспериментальная проверка связей между режимами старения и отказами остаётся узким местом.",
+ "drill": {
+  "found": 12,
+  "nearest": 0.63,
+  "band": "mid",
+  "near": 0,
+  "full": 0,
+  "model": "bge-m3"
+ },
+ "ideas": [
+  {
+   "title": "Стенд для измерения эволюции теплового разгона при старении ячеек",
+   "what": "Собрать установку для контролируемого теплового разгона (thermal runaway) на ускоренно состаренных ячейках и сравнить пороговые температуры и тепловыделение с новыми ячейками.",
+   "why": "Стандартные испытания безопасности проводят на свежих ячейках, но деградация меняет внутреннее сопротивление и состав электролита, что может снижать порог разгона. Результаты помогут производителям задавать динамические пределы безопасности.",
+   "methods": [
+    "Ускоренное циклическое старение ячеек при повышенной температуре и токе до разных степеней потери ёмкости (например, 10%, 20%, 30%).",
+    "Измерение внутреннего сопротивления и дифференциальной ёмкости (dQ/dV) до и после старения для оценки режимов деградации, как в работе 2405.10857.",
+    "Проведение тестов на тепловой разгон в адиабатическом калориметре (ARC) с регистрацией температуры и скорости саморазогрева.",
+    "Сравнение пороговых температур начала экзотермических реакций и максимальной температуры разгона между свежими и состаренными ячейками."
+   ],
+   "origin": "Работа 2408.16604 показывает, что поведение отказа эволюционирует по мере деградации, но не даёт экспериментальных данных о тепловом разгоне. Работа 2405.10857 предлагает методы оценки режимов деградации без вскрытия ячейки. Никто не связал эти режимы с изменением характеристик теплового разгона.",
+   "first_step": "Выбрать тип ячеек (например, цилиндрические 18650) и составить протокол ускоренного старения, затем провести старение первой партии до 10% потери ёмкости.",
+   "needs": "Адиабатический калориметр (ARC) или самодельный аналог с хорошей теплоизоляцией, климатическая камера, циклер для батарей, доступ к ячейкам одного производителя. Навыки электрохимии и работы с высокотоковым оборудованием.",
+   "risks": "Тепловой разгон непредсказуем и опасен, требуется строгое соблюдение протоколов безопасности. Состаривание может не дать значимого изменения порога разгона из-за доминирования других механизмов.",
+   "scale": "диплом",
+   "based_on": [
+    "2408.16604",
+    "2405.10857"
+   ]
+  },
+  {
+   "title": "Оптоволоконный мониторинг деформации для раннего обнаружения вздутия",
+   "what": "Разработать и протестировать систему на основе оптоволоконных датчиков (FBG) для непрерывного измерения деформации корпуса литий-ионной ячейки в процессе циклирования и оценить корреляцию с потерей ёмкости и внутренним давлением.",
+   "why": "Вздутие ячейки — ранний признак газовыделения и потенциальной опасности. Оптоволокно позволяет измерять деформацию in situ без вскрытия ячейки и может быть интегрировано в BMS для предиктивного обслуживания.",
+   "methods": [
+    "Наклейка оптоволоконных решёток Брэгга (FBG) на поверхность ячейки и калибровка отклика на известные деформации.",
+    "Циклирование ячейки с одновременной записью сигналов FBG, напряжения, тока и температуры.",
+    "Анализ дифференциальной ёмкости (dQ/dV) для определения режимов деградации, как в работе 2503.14327.",
+    "Построение корреляционных моделей между деформацией, газовыделением и потерей ёмкости."
+   ],
+   "origin": "Работа 2503.14327 демонстрирует использование внешнего оптоволоконного зондирования для мониторинга деградации, но не связывает деформацию с конкретными механизмами газовыделения. Работа 2604.26545 моделирует старение Si-Gr анодов, где объёмные изменения особенно велики. Совмещение этих подходов может дать ранний индикатор опасного вздутия.",
+   "first_step": "Собрать простую оптическую схему с FBG-датчиком и проверить её чувствительность на пустой банке при изменении внутреннего давления.",
+   "needs": "Оптоволоконные датчики (FBG), интеррогатор, циклирующее оборудование, ячейки с известной склонностью к газовыделению (например, с кремниевым анодом). Навыки оптоэлектроники и обработки сигналов.",
+   "risks": "Наклейка датчика может изменить тепловой режим ячейки. Корреляция между деформацией и внутренним давлением нелинейна и зависит от конструкции корпуса.",
+   "scale": "семестр",
+   "based_on": [
+    "2503.14327",
+    "2604.26545"
+   ]
+  },
+  {
+   "title": "Динамические пределы тока на основе оценки режимов деградации в реальном времени",
+   "what": "Реализовать алгоритм, который по данным напряжения, тока и температуры оценивает текущий доминирующий режим деградации (потеря лития, потеря активного материала анода и т.п.) и на основе этого корректирует допустимые токи заряда/разряда.",
+   "why": "Современные BMS используют статические пределы, которые либо излишне консервативны, либо не предотвращают ускоренную деградацию. Динамические пределы могут продлить срок службы и повысить безопасность без перепроектирования.",
+   "methods": [
+    "Использовать электрохимическую модель (например, single particle model с расширениями) для симуляции отклика ячейки при различных режимах деградации, как в 2405.10857.",
+    "Реализовать оценку параметров модели (объёмные доли активных материалов, количество лития) с помощью фильтра Калмана или методов оптимизации.",
+    "Определить эвристические правила: при обнаружении потери активного материала анода снижать ток заряда на X% и т.д.",
+    "Проверить алгоритм на данных циклирования реальных ячеек и сравнить срок службы с контрольной группой со статическими пределами."
+   ],
+   "origin": "Работа 2405.10857 показывает, как оценивать режимы деградации без вскрытия ячейки, но не предлагает, как использовать эту информацию для управления. Работа 2408.16604 обсуждает динамическое управление безопасностью, но не даёт конкретных алгоритмов. Связка этих идей может дать практический метод адаптивного управления.",
+   "first_step": "Выбрать простую электрохимическую модель и реализовать симуляцию деградации с изменением параметров, затем проверить идентифицируемость этих параметров по синтетическим данным.",
+   "needs": "Доступ к вычислительным ресурсам (Python/Matlab), данные циклирования ячеек (можно из открытых наборов, например, от Sandia или Oxford). Навыки моделирования и оценки состояния.",
+   "risks": "Оценка режимов деградации может быть недостаточно точной в реальном времени из-за шума и неидентифицируемости. Динамические пределы могут привести к нежелательному снижению производительности.",
+   "scale": "диплом",
+   "based_on": [
+    "2405.10857",
+    "2408.16604"
+   ]
+  },
+  {
+   "title": "Сравнение деградации LATP в Li-O2 батареях при разных условиях влажности",
+   "what": "Провести систематическое экспериментальное исследование деградации твёрдого электролита LATP в литий-кислородных батареях при контролируемой влажности и проанализировать продукты разложения.",
+   "why": "Li-O2 батареи обещают высокую плотность энергии, но деградация электролита ограничивает срок службы. Понимание роли влажности поможет выбрать рабочие условия и защитные покрытия.",
+   "methods": [
+    "Изготовить ячейки с LATP электролитом и литиевым анодом, как в работе 2508.08654.",
+    "Циклировать ячейки при разных уровнях относительной влажности (например, 0%, 10%, 30%).",
+    "После циклирования провести посмертный анализ: XRD, XPS, SEM/EDX для определения фазового состава и морфологии поверхности.",
+    "Сопоставить степень деградации (потерю ёмкости, изменение импеданса) с количеством выщелоченных ионов (PO4, Al)."
+   ],
+   "origin": "Работа 2508.08654 выявила выщелачивание ионов из LATP в высокощелочной среде Li-O2 батарей, но не изучала влияние влажности систематически. Работа 2604.10630 рассматривает стабильность лития со стеклянной солью, что может быть альтернативой. Не хватает данных о том, как влажность ускоряет или замедляет деградацию LATP.",
+   "first_step": "Собрать герметичную ячейку с контролируемой атмосферой и провести циклирование LATP электролита в контакте с литием при двух уровнях влажности.",
+   "needs": "Перчаточный бокс, потенциостат, оборудование для характеризации (XRD, XPS, SEM), химикаты для синтеза LATP. Навыки электрохимии и материаловедения.",
+   "risks": "Li-O2 батареи крайне чувствительны к примесям, трудно поддерживать стабильную влажность. Деградация может быть вызвана не только влажностью, но и другими факторами.",
+   "scale": "годы",
+   "based_on": [
+    "2508.08654",
+    "2604.10630"
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "id": "2601.16544",
+   "date": "2026-01-23",
+   "full": false,
+   "titles": {
+    "ru": "Сепаратор-ловушка для серных батарей",
+    "en": "A Trap Separator for Sulfur Batteries",
+    "es": "Separador-trampa para baterías de azufre",
+    "ar": "فاصل-مصيدة لبطاريات الكبريت",
+    "fr": "Un séparateur-piège pour les batteries au soufre"
+   },
+   "score": 0.5,
+   "url": "/lang/{lang}/archive/2026-01-23/2601.16544/"
+  },
+  {
+   "id": "2604.24075",
+   "date": "2026-04-27",
+   "full": false,
+   "titles": {
+    "ru": "Дышащий контакт и память разрушения",
+    "en": "Breathing Contact and the Memory of Decay",
+    "es": "Contacto que respira y memoria de la destrucción",
+    "ar": "تنفس التلامس وذاكرة التحلل",
+    "fr": "Un contact qui respire et une mémoire de la dégradation"
+   },
+   "score": 0.49,
+   "url": "/lang/{lang}/archive/2026-04-27/2604.24075/"
+  },
+  {
+   "id": "2604.10630",
+   "date": "2026-04-12",
+   "full": false,
+   "titles": {
+    "ru": "Литий и стеклянная соль: спокойный союз",
+    "en": "Lithium and Glassy Salt: A Calm Union",
+    "es": "Litio y sal de vidrio: una unión tranquila",
+    "ar": "الليثيوم والملح الزجاجي: اتحاد هادئ",
+    "fr": "Lithium et sel de verre : une union sereine"
+   },
+   "score": 0.486,
+   "url": "/lang/{lang}/archive/2026-04-12/2604.10630/"
+  },
+  {
+   "id": "2604.01324",
+   "date": "2026-04-01",
+   "full": false,
+   "titles": {
+    "ru": "Рецепт с двумя частицами для корректного лития",
+    "en": "A Two-Particle Recipe for the Right Lithium",
+    "es": "Dos partículas para la receta correcta del litio",
+    "ar": "وصفة الجسيمين لليثيوم الصحيح",
+    "fr": "Une recette à deux particules pour un lithium correct"
+   },
+   "score": 0.476,
+   "url": "/lang/{lang}/archive/2026-04-01/2604.01324/"
+  },
+  {
+   "id": "2510.22905",
+   "date": "2025-10-27",
+   "full": false,
+   "titles": {
+    "ru": "Брейдинг ридберговских атомов как защита квантовых батарей от декогеренции",
+    "en": "How to Braid Atoms to Save a Quantum Battery",
+    "es": "Cómo trenzar átomos en una trenza para salvar la batería cuántica",
+    "ar": "تضفير الذرات الرايدبرجية كحماية للبطاريات الكمومية من فك الترابط",
+    "fr": "Tresser des atomes en natte pour sauver la batterie quantique"
+   },
+   "score": 0.46,
+   "url": "/lang/{lang}/archive/2025-10-27/2510.22905/"
+  },
+  {
+   "id": "2408.16604",
+   "full": false,
+   "field": true,
+   "score": 0.63,
+   "titles": {
+    "ru": "Mapping safety transitions as batteries degrade: A model-based analysis   towards full-lifespan battery safety management"
+   },
+   "abstract": "Battery safety is important, yet safety limits are normally static and do not evolve as batteries degrade. Consequently, many battery systems are overengineered to meet increasingly stringent safety demands. In this work we show that failure behaviour evolves over time as batteries degrade, and discuss the challenges and opportunities to manage battery safety dynamically throughout its lifetime. We introduce the first framework for capturing how the likelihood and severity of battery failures change over time based upon the concepts of safety zones and their boundaries. Through the development"
+  },
+  {
+   "id": "2508.08654",
+   "full": false,
+   "field": true,
+   "score": 0.624,
+   "titles": {
+    "ru": "Investigating the Degradation of LATP Solid Electrolyte in High Alkaline Li-$O_2$ Batteries"
+   },
+   "abstract": "In this study, we address the challenge of electrolyte degradation in all-solid-state humidified Li-$O_2$ batteries, which offer high theoretical energy density and potential cost advantages over conventional lithium-ion batteries. Combining STEM-EELS, and XPS characterizations with DFT calculations, we reveal the leaching of $(PO_4)^{3+}$ and $Al^{3+}$ ions from the $Li_{1.3}Al_{0.3}Ti_{1.7}(PO_4)_3$ (LATP) solid electrolyte upon battery discharge, caused by the highly alkaline environment. Upon charging, the leached ions precipitate as $Li_3PO_4$ and $AlPO_4$, which accumulate on the LATP su"
+  },
+  {
+   "id": "2604.26545",
+   "full": false,
+   "field": true,
+   "score": 0.62,
+   "titles": {
+    "ru": "Physics-based modeling of cyclic and calendar aging of LIBs with Si-Gr composite anodes"
+   },
+   "abstract": "Higher energy density and longer lifetime are the requirements for next-generation lithium-ion batteries. A promising anode material is silicon, which offers high specific capacity, but its significant volume change during lithiation and delithiation enormously reduces battery lifetime. A physical understanding of the processes degrading the battery is key to mitigate this effect and advance in the field. We develop a physics-based model to describe degradation during battery cycling under various protocols and storage conditions, with varying check-up (CU) frequencies. The model can disentang"
+  },
+  {
+   "id": "2405.10857",
+   "full": false,
+   "field": true,
+   "score": 0.609,
+   "titles": {
+    "ru": "Diagnosing and Decoupling the Degradation Mechanisms in Lithium Ion   Cells: An Estimation Approach"
+   },
+   "abstract": "Understanding battery degradation in electric vehicles (EVs) under real-world conditions remains a critical yet under-explored area of research. Central to this investigation is the challenge of estimating the specific degradation modes in aged cells with no available information on usage history, bypassing the conventional yet invasive method of tear-down tests. Using an electrochemical model, this study pioneers a methodology to decouple and isolate the aging mechanisms in batteries sourced from EVs with varying mileages. A robust correlation is established between the model parameters and d"
+  },
+  {
+   "id": "2503.14327",
+   "full": false,
+   "field": true,
+   "score": 0.606,
+   "titles": {
+    "ru": "Multi-Parameter Analysis of Li-ion Battery Degradation: Integrating   Optical Fiber Sensing with Differential State of Health Metrics"
+   },
+   "abstract": "The reliability and safety of Lithium-ion batteries (LiBs) are of great concern in the energy storage industry. Nevertheless, the real-time monitoring of their degradation remains challenging due to limited quantitative metrics available during cycling. This study addresses this limitation by employing a novel approach that combines external optical fiber sensing with advanced data analysis techniques to comprehensively assess battery health. We engineered a non-invasive optical sensing platform using tandem pairs of polymeric and silica-based fiber Bragg grating (FBG) sensors affixed to the e"
+  },
+  {
+   "id": "2504.13956",
+   "full": false,
+   "field": true,
+   "score": 0.598,
+   "titles": {
+    "ru": "Prognosis Of Lithium-Ion Battery Health with Hybrid EKF-CNN+LSTM Model   Using Differential Capacity"
+   },
+   "abstract": "Battery degradation is a major challenge in electric vehicles (EV) and energy storage systems (ESS). However, most degradation investigations focus mainly on estimating the state of charge (SOC), which fails to accurately interpret the cells' internal degradation mechanisms. Differential capacity analysis (DCA) focuses on the rate of change of cell voltage about the change in cell capacity, under various charge/discharge rates. This paper developed a battery cell degradation testing model that used two types of lithium-ions (Li-ion) battery cells, namely lithium nickel cobalt aluminium oxides "
+  },
+  {
+   "id": "2007.01937",
+   "full": false,
+   "field": true,
+   "score": 0.598,
+   "titles": {
+    "ru": "Analysis of Lithium-ion Battery Cells Degradation Based on Different   Manufacturers"
+   },
+   "abstract": "Lithium-ion batteries are recognised as a key technology to power electric vehicles and integrate grid-connected renewable energy resources. The economic viability of these applications is affected by the battery degradation during its lifetime. This study presents an extensive experimental degradation data for lithium-ion battery cells from three different manufactures (Sony, BYD and Samsung). The Sony and BYD cells are of LFP chemistry while the Samsung cell is of NMC. The capacity fade and resistance increase of the battery cells are quantified due to calendar and cycle aging. The charge le"
+  }
+ ]
+}

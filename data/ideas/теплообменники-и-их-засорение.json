@@ -1,0 +1,208 @@
+{
+ "topic": "теплообменники и их засорение",
+ "slug": "теплообменники-и-их-засорение",
+ "built": "2026-08-30",
+ "note": "В области теплообменников и засорения наблюдается рост интереса к онлайн-мониторингу и прогнозированию отложений, но в архиве пока нет прямых работ по этой теме.",
+ "drill": {
+  "found": 12,
+  "nearest": 0.587,
+  "band": "sparse",
+  "near": 0,
+  "full": 0,
+  "model": "bge-m3"
+ },
+ "ideas": [
+  {
+   "title": "Стенд для измерения влияния засорения на теплопередачу в пластинчатом теплообменнике",
+   "what": "Собрать лабораторный стенд с пластинчатым теплообменником, контуром горячей и холодной воды, датчиками температур и расходов. Постепенно добавлять в воду загрязнитель (например, взвесь оксида железа или карбоната кальция) и через равные промежутки времени измерять коэффициент теплопередачи и перепад давления.",
+   "why": "Полученные данные позволят оценить, насколько быстро падает эффективность теплообменника при разных типах загрязнений. Это пригодится инженерам для планирования очистки и расчёта запаса поверхности.",
+   "methods": [
+    "Спроектировать и собрать гидравлический контур с насосами, ротаметрами, термопарами и дифференциальным манометром.",
+    "Использовать метод теплового баланса: измерять расходы и температуры на входе/выходе обоих контуров, вычислять тепловой поток и коэффициент теплопередачи (U) по формуле Q = U·A·ΔT_lm.",
+    "Проводить регулярные измерения U и ΔP при фиксированных расходах после добавления порций загрязнителя, фиксируя динамику засорения.",
+    "Сравнить экспериментальные кривые с моделями засорения (линейный, асимптотический рост слоя) из литературы."
+   ],
+   "origin": "В архиве нет работ по теплообменникам, но есть исследования механизмов отравления катализаторов и электродов (например, 2606.25992 о влиянии аммиака на топливные элементы). Методика количественной оценки деградации характеристик при накоплении примесей может быть адаптирована для теплового засорения. Не хватает простых экспериментальных данных о кинетике засорения в теплообменниках, которые могли бы стать основой для калибровки моделей.",
+   "first_step": "Найти доступный пластинчатый теплообменник (например, от старого бойлера) и собрать простейший контур с насосом, расходомером и термометрами. Провести тестовый прогон на чистой воде, убедиться в стабильности измерений.",
+   "needs": "Лабораторный стенд: теплообменник, насосы, расходомеры, термопары, манометры, бак для загрязнённой воды, химикаты (суспензии). Навыки гидравлики, теплотехники, работы с измерительным оборудованием. Бюджет: от 50 до 200 тысяч рублей в зависимости от доступности оборудования.",
+   "risks": "Загрязнение может происходить неравномерно и непредсказуемо, что затруднит воспроизводимость. Возможно, потребуется длительное время для заметного падения теплопередачи, если концентрация загрязнителя мала.",
+   "scale": "семестр",
+   "based_on": [
+    "2606.25992"
+   ]
+  },
+  {
+   "title": "Модель роста отложений в теплообменнике на основе клеточных автоматов",
+   "what": "Разработать вычислительную модель осаждения частиц на поверхности теплообмена с учётом гидродинамики, адгезии и отрыва частиц. Реализовать модель на Python или MATLAB, верифицировать на литературных экспериментальных данных.",
+   "why": "Модель позволит предсказывать скорость засорения при изменении скорости потока, размера частиц и материала поверхности. Инженеры смогут использовать её для оптимизации режимов работы теплообменников.",
+   "methods": [
+    "Изучить существующие модели засорения (Kern-Seaton, Ebert-Panchal) и выбрать подходящую основу.",
+    "Реализовать двумерную или трёхмерную сетку, на которой частицы движутся с потоком, прилипают к стенке с вероятностью, зависящей от локальных условий, и могут отрываться под действием сдвигового напряжения.",
+    "Связать рост слоя отложений с изменением локального термического сопротивления и гидравлического сопротивления.",
+    "Сравнить результаты с опубликованными экспериментальными данными по засорению (например, из статей по теплообменникам с охлаждающей водой)."
+   ],
+   "origin": "В архиве есть работы по квантовым системам с беспорядком и примесями (2603.04717, 2601.06927), где рассматривается влияние дефектов на транспортные свойства. Хотя физика другая, идея моделирования накопления дефектов и их влияния на перенос может быть перенесена на классический случай засорения. Не хватает простых, но физически обоснованных моделей, которые можно быстро прогнать для разных условий без сложного CFD.",
+   "first_step": "Написать код для расчёта траекторий частиц в простом канале с заданным профилем скорости. Добавить правило прилипания частиц к стенке и проверить, как меняется толщина слоя отложений со временем.",
+   "needs": "Компьютер с Python/MATLAB, знание численных методов, доступ к литературе по моделям засорения. Возможно использование открытых CFD-пакетов (OpenFOAM) для более точной гидродинамики.",
+   "risks": "Упрощённая модель может плохо соответствовать реальности из-за сложности физики адгезии и отрыва. Потребуется тщательная калибровка параметров по экспериментам, которых в открытом доступе может быть недостаточно.",
+   "scale": "диплом",
+   "based_on": [
+    "2603.04717",
+    "2601.06927"
+   ]
+  },
+  {
+   "title": "Разработка датчика засорения на основе измерения теплового импеданса",
+   "what": "Создать прототип датчика, который оценивает толщину отложений на стенке теплообменника путём измерения локального теплового импеданса. Датчик представляет собой тонкоплёночный нагреватель и термопару, нанесённые на подложку, устанавливаемую заподлицо со стенкой.",
+   "why": "Такой датчик позволит в реальном времени контролировать засорение без разборки теплообменника, что снизит затраты на обслуживание и предотвратит аварийные остановки.",
+   "methods": [
+    "Спроектировать датчик: выбрать материал подложки, геометрию нагревателя, расположение термопары.",
+    "Изготовить прототип с помощью доступных технологий (печать проводящими чернилами, напыление, использование готовых тонкоплёночных нагревателей).",
+    "Откалибровать датчик: нанести слои известной толщины (например, лак или эпоксидная смола) и измерить изменение теплового отклика.",
+    "Провести испытания на лабораторном стенде с контролируемым засорением, сравнить показания датчика с прямыми измерениями толщины слоя."
+   ],
+   "origin": "В работе 2606.25992 исследуется отравление топливных элементов аммиаком, где ключевую роль играет транспорт примесей и их влияние на характеристики. Аналогично, в теплообменнике отложения меняют локальное термическое сопротивление. Идея измерения этого сопротивления как индикатора засорения не нова, но не хватает простых и дешёвых датчиков для промышленного применения.",
+   "first_step": "Собрать простейший измерительный узел: приклеить тонкоплёночный резистор к металлической пластине, установить термопару рядом, подать импульс мощности и записать кривую остывания. Сравнить отклик с чистой и загрязнённой поверхностью.",
+   "needs": "Оборудование для изготовления и калибровки датчиков (печь, напылительная установка или доступ к прототипированию), электроника для управления нагревом и сбора данных (Arduino, LabVIEW), лабораторный стенд с теплообменником. Навыки в теплофизике, электронике, программировании.",
+   "risks": "Чувствительность датчика может оказаться недостаточной для тонких слоёв отложений. Также возможны проблемы с адгезией датчика к стенке и его долговечностью в агрессивной среде.",
+   "scale": "годы",
+   "based_on": [
+    "2606.25992"
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "id": "2603.07182",
+   "date": "2026-03-07",
+   "full": false,
+   "titles": {
+    "ru": "Туннельный диод без туннелирования",
+    "en": "Tunnel diode without tunneling",
+    "es": "Diodo túnel sin tunelización",
+    "ar": "ديود نفق بلا نفق كمومي",
+    "fr": "Une diode tunnel sans effet tunnel"
+   },
+   "score": 0.468,
+   "url": "/lang/{lang}/archive/2026-03-07/2603.07182/"
+  },
+  {
+   "id": "2603.04717",
+   "date": "2026-03-05",
+   "full": false,
+   "titles": {
+    "ru": "Беспорядок, который рождает изолятор",
+    "en": "The Disorder That Gives Birth to an Insulator",
+    "es": "El desorden que engendra un aislante",
+    "ar": "الفوضى التي تولّد العازل",
+    "fr": "Le désordre qui engendre l'isolant"
+   },
+   "score": 0.454,
+   "url": "/lang/{lang}/archive/2026-03-05/2603.04717/"
+  },
+  {
+   "id": "2601.06927",
+   "date": "2026-01-11",
+   "full": false,
+   "titles": {
+    "ru": "Ловушки на границе: как дефекты мешают квантовым чипам",
+    "en": "Traps at the Interface: How Defects Mess with Quantum Chips",
+    "es": "Trampas en la frontera: cómo los defectos alteran los chips cuánticos",
+    "ar": "فخاخ على الحدود: كيف تعيق العيوب رقاقات الكم",
+    "fr": "Pièges à la frontière : comment les défauts perturbent les puces quantiques"
+   },
+   "score": 0.453,
+   "url": "/lang/{lang}/archive/2026-01-11/2601.06927/"
+  },
+  {
+   "id": "2606.25992",
+   "full": false,
+   "field": true,
+   "score": 0.587,
+   "titles": {
+    "ru": "Poisoning effect of ammonia on the performance and transport process of proton exchange membrane fuel cells"
+   },
+   "abstract": "Ammonia is a high-density hydrogen energy carrier and can be decomposed to produce hydrogen for use in fuel cells. However, a significant challenge in ammonia-decomposition-based fuel cell applications is the unavoidable presence of trace ammonia impurity, which can poison the fuel cell, but the poisoning mechanism remains unclear. To address this, a three-dimensional numerical model of proton exchange membrane (PEM) fuel cells with ammonia impurities is established to explore the transport process and underlying poisoning mechanism. The influences of key factors, including ammonia concentrati"
+  },
+  {
+   "id": "2408.01281",
+   "full": false,
+   "field": true,
+   "score": 0.583,
+   "titles": {
+    "ru": "Thermodynamic uncertainty relations in superconducting junctions"
+   },
+   "abstract": "Quantum conductors attached to metallic reservoirs have been demonstrated to overcome the thermodynamic uncertainty relation (TUR), a trade-off relation between the amount of dissipation and the absence of charge and heat current fluctuations. Here, we report large TUR violations when superconducting reservoirs replace metallic ones. The coexistence of different transport processes, namely (multiple) Andreev reflection, where electrons and their retro-reflected holes create Cooper pairs, in addition to the normal quasiparticle transport is identified as the source for such TUR breakdowns. The "
+  },
+  {
+   "id": "1609.05163",
+   "full": false,
+   "field": true,
+   "score": 0.581,
+   "titles": {
+    "ru": "Quantum Thermal Rectification to design thermal diodes and transistors"
+   },
+   "abstract": "We study in this article how heat can be exchanged between two level systems (TLS) each of them being coupled to a thermal reservoir. Calculation are performed solving a master equation for the density matrix using the Born markov-approximation. We analyse the conditions for which a thermal diode and a thermal transistor can be obtained as well as their optimization."
+  },
+  {
+   "id": "cond-mat/0507641",
+   "full": false,
+   "field": true,
+   "score": 0.58,
+   "titles": {
+    "ru": "Impurity controlled Superconductivity/Spin Density Wave interplay in the   organic superconductor : (TMTSF)\\_2ClO\\_4"
+   },
+   "abstract": "The study of the anion ordered (TMTSF)\\_2ClO\\_4\\_(1-x)ReO\\_4\\_x, solid solution in the limit of a low ReO\\_4- substitution level (0<=x<=17%) has revealed a new and interesting phase diagram. Superconductivity is drastically suppressed as the effect of ReO\\_4- non magnetic point defects increases following the digamma behaviour for usual superconductors in the presence of paramagnetic impurities. Then, no long range order can be stabilized above 0.1K in a narrow window of substitution. Finally, an insulating SDW ground state in ReO\\_4- -rich samples is rapidly stabilized with the decrease of th"
+  },
+  {
+   "id": "1109.0261",
+   "full": false,
+   "field": true,
+   "score": 0.578,
+   "titles": {
+    "ru": "Influence of energy exchange of electrons and ions on the   long-wavelength thermal instability in magnetized astrophysical objects"
+   },
+   "abstract": "We investigate thermal instability in an electron-ion magnetized plasma relevant to galaxy clusters, solar corona, and other two-component astrophysical objects. We apply the multicomponent plasma approach when the dynamics of all the species are considered separately through electric field perturbations. General expressions for perturbations obtained in this paper can be applied for a wide range of multicomponent astrophysical and laboratory plasmas also containing the neutrals, dust grains, and other species. We assume that background temperatures of electrons and ions are different and incl"
+  },
+  {
+   "id": "2501.11629",
+   "full": false,
+   "field": true,
+   "score": 0.577,
+   "titles": {
+    "ru": "Quantum transistors for heat flux in and out of working substance parts: harmonic vs transmon and Kerr environs"
+   },
+   "abstract": "Quantum thermal transistors have been widely studied in the context of three-qubit systems, where each qubit interacts separately with a Markovian harmonic bath. Markovianity is an assumption that is imposed on a system if the environment loses its memory within short while, while non-Markovianity is a general feature, inherently present in a large fraction of realistic scenarios. Instead of Markovian environments, here we propose a transistor in which the interaction between the working substance and an environment comprising of an infinite chain of qutrits is based on periodic collisions. We"
+  },
+  {
+   "id": "cond-mat/0102108",
+   "full": false,
+   "field": true,
+   "score": 0.577,
+   "titles": {
+    "ru": "Electron-Phonon Interactions Cause HTSC"
+   },
+   "abstract": "What is the microscopic interaction responsible for high temperature superconductivity (HTSC)? Here data on temporal relaxation of Tc and the room temperature conductivity in YBa2Cu3O(6+x) after abrupt alteration by light pulses or pressure changes are analyzed. The analysis proves, independently of microscopic details, that only electron-phonon interactions can cause HTSC in the cuprates; all other interactions are excluded by experiment."
+  },
+  {
+   "id": "1306.0840",
+   "full": false,
+   "field": true,
+   "score": 0.576,
+   "titles": {
+    "ru": "Strongly-Correlated Thermoelectric Transport beyond Linear Response"
+   },
+   "abstract": "We investigate nonlinear thermoelectric transport through quantum impurity systems with strong on-site interactions. We show that the steady-state transport through interacting quantum impurities in contact with electron reservoirs at significantly different temperatures can be captured by an effective-equilibrium density matrix, expressed compactly in terms of the Lippmann-Schwinger operators of the system. In addition, the reservoirs can be maintained at arbitrary chemical potentials. The interplay between the temperature gradient and bias voltage gives rise to a non-trivial breaking of part"
+  },
+  {
+   "id": "1307.3065",
+   "full": false,
+   "field": true,
+   "score": 0.575,
+   "titles": {
+    "ru": "Comment on \"Effective thermal conductivity in thermoelectric materials\""
+   },
+   "abstract": "In a recent article, Baranowski et al. [J. Appl. Phys. 113, 204904 (2013)] proposed a model that allegedly facilitates optimization of thermoelectric generators operation as these latter are in contact with hot and cold temperature baths through finite conductance heat exchangers. In this Comment, we argue that the results and analyses presented by these authors are misleading since their model is incomplete and rests on an inappropriate assumption derived from thermoelectric compatibility theory."
+  }
+ ]
+}

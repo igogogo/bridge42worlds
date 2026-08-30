@@ -1,0 +1,219 @@
+{
+ "topic": "хранение водорода в твёрдых материалах",
+ "slug": "хранение-водорода-в-твёрдых-материалах",
+ "built": "2026-08-30",
+ "note": "Сейчас активно ищут материалы с умеренной термодинамикой и быстрой кинетикой, комбинируя эксперимент и расчёты.",
+ "drill": {
+  "found": 12,
+  "nearest": 0.624,
+  "band": "mid",
+  "near": 0,
+  "full": 0,
+  "model": "bge-m3"
+ },
+ "ideas": [
+  {
+   "title": "Собрать ячейку для измерения давления водорода при десорбции из порошка",
+   "what": "Спроектировать и собрать простую ячейку для измерения давления выделяющегося водорода при нагреве небольшого количества гидрида. Использовать доступные датчики давления и температуры, записывать кривые десорбции.",
+   "why": "Позволит быстро проверять материалы на кинетику выделения водорода без дорогого оборудования. Пригодится любой группе, начинающей работу с гидридами.",
+   "methods": [
+    "Использовать схему Сивертса из работы 2602.22807: порошок в герметичном объёме, нагрев с контролем температуры, измерение давления.",
+    "Калибровать объём ячейки инертным газом, как описано в 2602.22807.",
+    "Сравнить полученные кривые с литературными данными для MgH2, чтобы проверить точность."
+   ],
+   "origin": "В 2602.22807 описан порошок, который сам себя взбивает, но без деталей измерительной установки. В 2603.14139 собрана база данных по материалам, но нет описания простых методик измерения. Не хватает дешёвого способа проверить кинетику в лаборатории.",
+   "first_step": "Собрать герметичный контейнер из нержавейки с термопарой и датчиком давления, подключить к Arduino.",
+   "needs": "Датчик давления до 10 бар, термопара, герметичный контейнер, нагревательный элемент, Arduino, небольшое количество MgH2.",
+   "risks": "Утечки водорода исказят измерения; нужна тщательная герметизация.",
+   "scale": "семестр",
+   "based_on": [
+    "2602.22807",
+    "2603.14139"
+   ]
+  },
+  {
+   "title": "Проверить влияние легирования алюминием на обратимость гидрида магния",
+   "what": "Приготовить образцы MgH2 с добавками алюминия (например, 5, 10, 15 ат.%) механохимическим способом. Измерить PCT-кривые и кинетику сорбции/десорбции при разных температурах.",
+   "why": "Алюминий может снизить термодинамическую стабильность MgH2, приблизив условия к практическим. Результаты помогут выбрать состав для дальнейших исследований.",
+   "methods": [
+    "Механохимический синтез в шаровой мельнице, как в 2603.17479.",
+    "Измерение PCT-кривых на установке Сивертса, описанной в 2602.22807.",
+    "Рентгенофазовый анализ для контроля фазового состава."
+   ],
+   "origin": "В 2603.17479 исследовано взаимодействие алюминия с водородом в сплавах, но не с MgH2. В 2301.05009 показано, что деформация улучшает кинетику магния, но влияние добавок алюминия не изучено. Не хватает систематических данных по составам Mg-Al-H.",
+   "first_step": "Смешать порошки MgH2 и Al в шаровой мельнице, измерить PCT при 300°C.",
+   "needs": "Шаровая мельница, установка Сивертса, дифрактометр, исходные порошки.",
+   "risks": "Образование интерметаллидов может ухудшить кинетику; потребуется оптимизация времени помола.",
+   "scale": "диплом",
+   "based_on": [
+    "2603.17479",
+    "2301.05009"
+   ]
+  },
+  {
+   "title": "Рассчитать энергию связи водорода в высокоэнтропийных гидридах с помощью DFT",
+   "what": "Провести первопринципные расчёты для ряда высокоэнтропийных сплавов (например, TiZrHfNbTa) с водородом. Оценить энергии образования гидридов и предсказать составы с оптимальной термодинамикой для хранения при комнатной температуре.",
+   "why": "Позволит отобрать перспективные составы для экспериментальной проверки, сократив время и ресурсы. Результаты могут быть использованы для дизайна новых материалов.",
+   "methods": [
+    "Использовать метод специальных квазислучайных структур (SQS) для моделирования неупорядоченных сплавов, как в 2301.02811.",
+    "Расчёты в рамках DFT с функционалом PBE, учёт энергии нулевых колебаний.",
+    "Построить карты энергий связи в зависимости от состава."
+   ],
+   "origin": "В 2301.02811 показано, что высокоэнтропийные гидриды могут работать при комнатной температуре, но исследовано ограниченное число составов. В 1102.0849 дан обзор DFT для пористых материалов, но не для металлических гидридов. Не хватает систематического скрининга составов.",
+   "first_step": "Выбрать несколько составов из 2301.02811, воспроизвести расчёты для проверки методики.",
+   "needs": "Доступ к вычислительному кластеру, программные пакеты VASP или Quantum ESPRESSO, опыт DFT-расчётов.",
+   "risks": "Высокая вычислительная стоимость для больших ячеек; точность зависит от учёта конфигурационного беспорядка.",
+   "scale": "годы",
+   "based_on": [
+    "2301.02811",
+    "1102.0849"
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "id": "2602.22807",
+   "date": "2026-02-26",
+   "full": false,
+   "titles": {
+    "ru": "Порошок, который сам себя взбивает",
+    "en": "A Powder That Whips Itself into Shape",
+    "es": "Un polvo que se bate solo",
+    "ar": "مسحوق يخفق نفسه بنفسه",
+    "fr": "Une poudre qui se fouette toute seule"
+   },
+   "score": 0.507,
+   "url": "/lang/{lang}/archive/2026-02-26/2602.22807/"
+  },
+  {
+   "id": "2603.14139",
+   "date": "2026-03-14",
+   "full": false,
+   "titles": {
+    "ru": "Водород под контролем: база данных для новых материалов",
+    "en": "Hydrogen Under Control: A Database for New Materials",
+    "es": "Hidrógeno bajo control: una base de datos para nuevos materiales",
+    "ar": "الهيدروجين تحت السيطرة: قاعدة بيانات للمواد الجديدة",
+    "fr": "Hydrogène sous contrôle : une base de données pour de nouveaux matériaux"
+   },
+   "score": 0.47,
+   "url": "/lang/{lang}/archive/2026-03-14/2603.14139/"
+  },
+  {
+   "id": "2604.07110",
+   "date": "2026-04-08",
+   "full": false,
+   "titles": {
+    "ru": "Углеродные нанотрубки с кальцием: новый способ удержания водорода",
+    "en": "Carbon nanotubes with calcium trap hydrogen",
+    "es": "Nanotubos de carbono con calcio retienen hidrógeno",
+    "ar": "أنابيب الكربون النانوية مع الكالسيوم تحتجز الهيدروجين",
+    "fr": "Des nanotubes de carbone dopés au calcium retiennent l'hydrogène"
+   },
+   "score": 0.463,
+   "url": "/lang/{lang}/archive/2026-04-08/2604.07110/"
+  },
+  {
+   "id": "2603.17479",
+   "date": "2026-03-18",
+   "full": false,
+   "titles": {
+    "ru": "Алюминий против водорода: кто победит в сплаве",
+    "en": "Aluminum vs. Hydrogen: Who Wins in the Alloy?",
+    "es": "Aluminio contra hidrógeno: ¿quién gana en la aleación?",
+    "ar": "الألومنيوم ضد الهيدروجين: من سيفوز في السبيكة؟",
+    "fr": "Aluminium contre hydrogène : qui l'emportera dans l'alliage ?"
+   },
+   "score": 0.463,
+   "url": "/lang/{lang}/archive/2026-03-18/2603.17479/"
+  },
+  {
+   "id": "2602.13584",
+   "date": "2026-02-14",
+   "full": false,
+   "titles": {
+    "ru": "Кухонный рецепт сверхпроводимости",
+    "en": "A Kitchen Recipe for Superconductivity",
+    "es": "Receta de cocina para la superconductividad",
+    "ar": "وصفة مطبخية للموصلية الفائقة",
+    "fr": "Recette de cuisine pour la supraconductivité"
+   },
+   "score": 0.455,
+   "url": "/lang/{lang}/archive/2026-02-14/2602.13584/"
+  },
+  {
+   "id": "2608.09611v1",
+   "date": "2026-08-10",
+   "full": false,
+   "titles": {
+    "ru": "Сверхпроводящий мост из платины и германия",
+    "en": "A Superconducting Bridge of Platinum and Germanium",
+    "es": "Un puente superconductor de platino y germanio",
+    "ar": "جسر فائق التوصيل من البلاتين والجرمانيوم",
+    "fr": "Un pont supraconducteur en platine et germanium"
+   },
+   "score": 0.452,
+   "url": "/lang/{lang}/archive/2026-08-10/2608.09611v1/"
+  },
+  {
+   "id": "1003.0492",
+   "full": false,
+   "field": true,
+   "score": 0.624,
+   "titles": {
+    "ru": "Prediction Of A Multi-Center Bonded Solid Boron Hydride for Hydrogen   Storage"
+   },
+   "abstract": "An ideal material for on-board hydrogen storage must release hydrogen at practical temperature and pressure and also regenerate efficiently under similarly gentle conditions. Therefore, thermodynamically, the hydride material must lie within a narrow range near the hydrogenation/dehydrogenation phase boundary. Materials involving only conventional bonding mechanisms are unlikely to meet these requirements. In contrast, materials containing certain frustrated bonding are designed to be on the verge of frustration-induced phase transition, and they may be better suited for hydrogen storage. Here"
+  },
+  {
+   "id": "2301.02811",
+   "full": false,
+   "field": true,
+   "score": 0.608,
+   "titles": {
+    "ru": "High-Entropy Hydrides for Fast and Reversible Hydrogen Storage at Room   Temperature: Binding-Energy Engineering via First-Principles Calculations and   Experiments"
+   },
+   "abstract": "Despite high interest in compact and safe storage of hydrogen in the solid-state hydride form, the design of alloys that can reversibly and quickly store hydrogen at room temperature under pressures close to atmospheric pressure is a long-lasting challenge. In this study, first-principles calculations are combined with experiments to develop high-entropy alloys (HEAs) for room-temperature hydrogen storage. TixZr2-xCrMnFeNi (x = 0.4-1.6) alloys with the Laves phase structure and low hydrogen binding energies of -0.1 to -0.15 eV are designed and synthesized. The HEAs reversibly store hydrogen in"
+  },
+  {
+   "id": "2604.09226",
+   "full": false,
+   "field": true,
+   "score": 0.599,
+   "titles": {
+    "ru": "Balancing Thermodynamics, Kinetics, and Reversibility in Ti-Doped MgB2H8: A First-Principles Assessment of a Practical Solid-State Hydrogen Storage Material"
+   },
+   "abstract": "Hydrogen storage remains a key challenge for the development of a sustainable hydrogen energy system, where materials must satisfy requirements on storage capacity, thermodynamics, kinetics, and reversibility. Complex borohydrides are attractive due to their high hydrogen density, but their practical use is limited by slow hydrogen diffusion and unfavorable desorption thermodynamics. In this work, we present a first-principles study of pristine and Ti-doped MgB2H8 as a solid-state hydrogen storage material. Density functional theory calculations show that pristine MgB2H8 has a high gravimetric"
+  },
+  {
+   "id": "2107.13450",
+   "full": false,
+   "field": true,
+   "score": 0.596,
+   "titles": {
+    "ru": "Carbon and Boron Nitride nanostructures for Hydrogen storage   applications through a theoretical perspective"
+   },
+   "abstract": "The recent progress in the field of hydrogen storage in carbon and boron nitride nanostructures has been summarized. Carbon and boron nitride nanostructures are considered advantageous in this prospect due to their lightweight and high surface area. Demerits of pristine structures to hold hydrogen molecules for mobile applications have been highlighted by many researchers. In such cases, weak van der Waals interaction comes into account, hence, the hydrogen molecules are weakly bonded with the host materials and hence weak adsorption energy and low hydrogen molecules uptake. So, to tune the ad"
+  },
+  {
+   "id": "2301.05009",
+   "full": false,
+   "field": true,
+   "score": 0.595,
+   "titles": {
+    "ru": "Impact of Severe Plastic Deformation on Kinetics and Thermodynamics of   Hydrogen Storage in Magnesium and Its Alloys"
+   },
+   "abstract": "Magnesium and its alloys are the most investigated materials for solid-state hydrogen storage in the form of metal hydrides, but there are still unresolved problems with the kinetics and thermodynamics of hydrogenation and dehydrogenation of this group of materials. Severe plastic deformation (SPD) methods, such as equal-channel angular pressing (ECAP), high-pressure torsion (HPT), intensive rolling and fast forging, have been widely used to enhance the activation, air resistance, and hydrogenation/dehydrogenation kinetics of Mg-based hydrogen storage materials by introducing ultrafine/nanosca"
+  },
+  {
+   "id": "1102.0849",
+   "full": false,
+   "field": true,
+   "score": 0.595,
+   "titles": {
+    "ru": "DFT Perspective of Hydrogen Storage on Porous Materials"
+   },
+   "abstract": "In this chapter, the physisorption of hydrogen molecules in porous materials as possible hydrogen storage systems has been reviewed. Owing to the weak interaction between H2 molecules and the adsorbent, high storage capacities are typically reached only at cryogenic temperature. Different classes of porous materials possessing different structure and composition have been designed for hydrogen storage applications using computational methods and especially with the aid of DFT methods. The adsorption energies for hydrogen in different porous materials have been increases by the doping of light "
+  }
+ ]
+}

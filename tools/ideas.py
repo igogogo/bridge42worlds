@@ -348,7 +348,9 @@ def translate(out):
     """Перевод набора идей ОБЩИМ переводчиком статей — своего здесь заводить нельзя."""
     from gen_llm import translate_scipop
 
-    flat = {"note": out.get("note", "")}
+    # Имя темы переводим вместе с содержимым: иначе араб видит арабские идеи под
+    # русским заголовком и русские кнопки тем — половину страницы на чужом языке.
+    flat = {"note": out.get("note", ""), "topic": out.get("topic", "")}
     for i, x in enumerate(out["ideas"]):
         for k in ("title", "what", "why", "origin", "first_step", "needs", "risks", "scale"):
             if x.get(k):
@@ -369,7 +371,9 @@ def translate(out):
             item["methods"] = [str(tr.get(f"m_{i}_{j}") or m).strip()
                                for j, m in enumerate(x.get("methods") or [])]
             ideas.append(item)
-        got[lang] = {"note": str(tr.get("note") or "").strip(), "ideas": ideas}
+        got[lang] = {"note": str(tr.get("note") or "").strip(),
+                     "topic": str(tr.get("topic") or "").strip(),
+                     "ideas": ideas}
     out["lang"] = got
     return out
 

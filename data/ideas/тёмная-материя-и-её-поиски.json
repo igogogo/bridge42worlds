@@ -1,0 +1,238 @@
+{
+ "topic": "тёмная материя и её поиски",
+ "slug": "тёмная-материя-и-её-поиски",
+ "built": "2026-08-30",
+ "note": "Поиски тёмной материи смещаются в сторону сверхтяжёлых частиц и нетрадиционных каналов, где обычные WIMP-модели уже сильно ограничены.",
+ "drill": {
+  "found": 12,
+  "nearest": 0.618,
+  "band": "mid",
+  "near": 0,
+  "full": 0,
+  "model": "bge-m3"
+ },
+ "ideas": [
+  {
+   "title": "Собрать компактный датчик для поиска аксионов на основе СКВИД-магнитометра",
+   "what": "Собрать лабораторный прототип детектора аксионов, использующий сверхпроводящий квантовый интерферометр (СКВИД) для регистрации сверхслабых магнитных полей, возникающих при взаимодействии аксионов с веществом. Проверить его работу на известных сигналах и подготовить к измерениям в условиях низкого фона.",
+   "why": "Позволит получить чувствительный инструмент для поиска аксионов в лабораторных условиях без необходимости строить крупный ускоритель, что может быть полезно для проверки моделей с лёгкими аксионами.",
+   "methods": [
+    "Использовать схему из работы 2601.04576v1: магнитный детектор на основе СКВИДа для регистрации аксион-индуцированных сигналов.",
+    "Собрать криогенную систему с охлаждением до температур жидкого гелия для снижения теплового шума.",
+    "Откалибровать детектор с помощью известных магнитных полей и провести тестовые измерения с экранированием от внешних помех."
+   ],
+   "origin": "В работе 2601.04576v1 описан эксперимент с крошечным магнитным детектором, который установил жёсткие ограничения на взаимодействие аксионов, но авторы планируют охладить прибор для повышения чувствительности. Не хватает подробного описания реализации такого охлаждаемого детектора в лабораторных условиях, доступного для воспроизведения небольшой группой.",
+   "first_step": "Изучить конструкцию детектора из работы 2601.04576v1 и закупить базовые компоненты: СКВИД-сенсор, криостат, магнитное экранирование.",
+   "needs": "СКВИД-магнитометр, криостат с жидким гелием, магнитное экранирование, навыки работы с криогенной техникой и слабыми сигналами.",
+   "risks": "Высокая стоимость криогенного оборудования и сложность подавления внешних магнитных помех могут сделать проект невыполнимым для небольшой лаборатории.",
+   "scale": "диплом",
+   "based_on": [
+    "2601.04576v1"
+   ]
+  },
+  {
+   "title": "Проверить связь между нейтринным сигналом и реликтовым излучением по данным IceCube и Planck",
+   "what": "Сопоставить данные нейтринного телескопа IceCube о потоках высокоэнергичных нейтрино с картами реликтового излучения Planck, чтобы поискать корреляции, предсказываемые моделями аннигиляции тёмной материи в нейтрино.",
+   "why": "Если тёмная материя аннигилирует в нейтрино, это должно оставить след и в реликтовом излучении, и в нейтринных телескопах. Совместный анализ повысит чувствительность поиска и поможет ограничить модели.",
+   "methods": [
+    "Взять публичные данные IceCube по диффузному нейтринному потоку и карты анизотропии реликтового излучения Planck.",
+    "Рассчитать ожидаемый вклад от аннигиляции тёмной материи в нейтрино для разных каналов и масс, используя подход из работы 2606.07106.",
+    "Выполнить статистический анализ корреляций между нейтринными событиями и флуктуациями реликтового излучения на небе."
+   ],
+   "origin": "Работа 2606.07106 предлагает метод поиска тёмной материи через влияние аннигиляции в нейтрино на реликтовое излучение, но не проводит сравнение с реальными данными нейтринных телескопов. С другой стороны, есть данные IceCube, которые можно использовать для проверки этого метода. Не хватает конкретного анализа, объединяющего оба набора данных.",
+   "first_step": "Скачать публичные данные IceCube и Planck, ознакомиться с форматами и инструментами для работы с астрофизическими картами (например, HEALPix).",
+   "needs": "Доступ к данным IceCube и Planck, знание статистических методов анализа астрофизических данных, навыки программирования на Python или C++.",
+   "risks": "Сигнал от тёмной материи может быть слишком слабым по сравнению с астрофизическими фонами, и корреляции не будут обнаружены.",
+   "scale": "семестр",
+   "based_on": [
+    "2606.07106"
+   ]
+  },
+  {
+   "title": "Смоделировать отклик детектора на сверхтяжёлую тёмную материю с многократным рассеянием",
+   "what": "Разработать симуляцию прохождения частиц сверхтяжёлой тёмной материи (массой больше ТэВ) через вещество детектора, учитывая многократное рассеяние, и оценить чувствительность существующих и планируемых детекторов к таким частицам.",
+   "why": "Сверхтяжёлая тёмная материя остаётся малоизученной областью, и понимание сигнатур многократного рассеяния поможет оптимизировать поиски на будущих экспериментах.",
+   "methods": [
+    "Использовать обзор 2602.23708 для определения теоретических моделей и ожидаемых сечений взаимодействия сверхтяжёлой тёмной материи.",
+    "Написать код на Geant4 или подобном инструменте для моделирования траекторий частиц с многократным рассеянием в детекторах типа жидкоксеноновых.",
+    "Рассчитать ожидаемые сигналы для различных масс и сечений, сравнить с текущими ограничениями."
+   ],
+   "origin": "В обзоре 2602.23708 описаны теоретические модели и методы поиска сверхтяжёлой тёмной материи, включая многократное рассеяние, но нет готовой симуляции, которую можно было бы использовать для оценки чувствительности конкретных детекторов. Не хватает практической реализации этих идей в виде программного инструмента.",
+   "first_step": "Изучить раздел обзора 2602.23708 о многократном рассеянии и выбрать простую модель взаимодействия для начала симуляции.",
+   "needs": "Доступ к Geant4 или аналогичному программному обеспечению, вычислительные ресурсы, знание физики элементарных частиц и программирования на C++.",
+   "risks": "Сложность точного моделирования редких событий и необходимость учёта многих фонов могут затянуть проект.",
+   "scale": "годы",
+   "based_on": [
+    "2602.23708"
+   ]
+  },
+  {
+   "title": "Поиск сигналов тёмной материи в данных ANTARES с использованием моделей секвестрированной тёмной материи",
+   "what": "Проанализировать архивные данные нейтринного телескопа ANTARES на предмет сигналов от аннигиляции секвестрированной тёмной материи в направлении Галактического центра, используя методы, описанные в работе 2203.06029.",
+   "why": "Секвестрированные модели позволяют обойти ограничения на массу тёмной материи и могут дать наблюдаемый сигнал в нейтринных телескопах, а данные ANTARES уже собраны и доступны для анализа.",
+   "methods": [
+    "Взять публичные данные ANTARES или воспроизвести анализ из работы 2203.06029 с использованием их методологии.",
+    "Применить модели секвестрированной тёмной материи для расчёта ожидаемого нейтринного потока от Галактического центра.",
+    "Провести статистический анализ для поиска избытка событий над фоном."
+   ],
+   "origin": "Работа 2203.06029 уже провела поиск секвестрированной тёмной материи в данных ANTARES, но, возможно, не все модели и диапазоны масс были исследованы. Не хватает расширения анализа на другие модели или более новые данные.",
+   "first_step": "Изучить статью 2203.06029 и определить, какие данные и программное обеспечение использовались, затем запросить доступ к данным ANTARES.",
+   "needs": "Доступ к данным ANTARES, знание методов анализа нейтринных телескопов, навыки программирования.",
+   "risks": "Данные ANTARES могут быть не полностью публичными, и потребуется сотрудничество с коллаборацией.",
+   "scale": "диплом",
+   "based_on": [
+    "2203.06029"
+   ]
+  },
+  {
+   "title": "Сравнить чувствительность прямых и непрямых методов поиска тёмной материи для конкретных моделей",
+   "what": "Провести количественное сравнение ограничений на параметры тёмной материи, полученных из прямых детекторов (например, XENON1T) и непрямых наблюдений (гамма-излучение от Галактического центра), для набора моделей WIMP.",
+   "why": "Такое сравнение поможет выявить, какие модели лучше ограничиваются тем или иным методом, и направить будущие эксперименты в наиболее перспективные области.",
+   "methods": [
+    "Собрать опубликованные ограничения из прямых экспериментов (XENON1T, LUX) и непрямых наблюдений (Fermi-LAT, H.E.S.S.) из литературы.",
+    "Для выбранных моделей (например, синглетный фермион, векторный WIMP) пересчитать ограничения в общее пространство параметров.",
+    "Построить графики сравнения чувствительности и определить области, где один метод превосходит другой."
+   ],
+   "origin": "В работе 1507.03800 дан обзор прямых и непрямых методов, но нет систематического сравнения их чувствительности для конкретных моделей. Не хватает количественного анализа, который позволил бы выбрать оптимальную стратегию поиска.",
+   "first_step": "Выбрать несколько моделей тёмной материи и найти в литературе соответствующие ограничения от прямых и непрямых экспериментов.",
+   "needs": "Доступ к научным статьям, навыки анализа данных и построения графиков (Python, ROOT).",
+   "risks": "Ограничения могут быть представлены в разных предположениях, что затруднит прямое сравнение.",
+   "scale": "семестр",
+   "based_on": [
+    "1507.03800"
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "id": "2606.07106",
+   "date": "2026-06-05",
+   "full": false,
+   "titles": {
+    "ru": "Невидимые частицы оставляют след в древнем свете",
+    "en": "Invisible Particles Leave Their Mark on Ancient Light",
+    "es": "Partículas invisibles dejan huella en la luz más antigua",
+    "ar": "جسيمات غير مرئية تترك أثرًا في الضوء القديم",
+    "fr": "Des particules invisibles laissent une trace dans la lumière ancienne"
+   },
+   "score": 0.5,
+   "url": "/lang/{lang}/archive/2026-06-05/2606.07106/",
+   "abstract": "Авторы работы предлагают новый способ поиска тёмной материи. Если её частицы сталкиваются и превращаются в нейтрино, это должно повлиять на реликтовое излучение — остывший свет Большого взрыва. По слабым изменениям в этом излучении можно узнать, сколько дополнительных нейтрино появилось и как изменился их энергетический рисунок. Такой подход связывает данные с нейтринных телескопов и наблюдения космического фона, помогая отличить сигнал тёмной материи от других источников."
+  },
+  {
+   "id": "2601.04576v1",
+   "date": "2026-01-08",
+   "full": false,
+   "titles": {
+    "ru": "Ловушка для невидимых аксионов: магнитный детектор",
+    "en": "A Trap for Invisible Axions: A Magnetic Detector",
+    "es": "Trampa para axiones invisibles: detector magnético",
+    "ar": "مصيدة للأكسيونات غير المرئية: كاشف مغناطيسي",
+    "fr": "Piège à axions invisibles : un détecteur magnétique"
+   },
+   "score": 0.494,
+   "url": "/lang/{lang}/archive/2026-01-08/2601.04576v1/",
+   "abstract": "Тёмная материя остаётся неуловимой, но физики не сдаются. В новом эксперименте крошечный магнитный «компас» искал следы аксионов — частиц-кандидатов на роль тёмной материи. Прибор не зафиксировал ни одного толчка, зато позволил установить рекордно жёсткие ограничения на их взаимодействие с веществом. Теперь детектор планируют охладить, чтобы заглянуть ещё глубже в мир невидимого."
+  },
+  {
+   "id": "1701.03046",
+   "full": false,
+   "field": true,
+   "score": 0.618,
+   "titles": {
+    "ru": "Search for Dark Matter with top quarks"
+   },
+   "abstract": "This proceeding presents searches for Dark Matter particles produced in association with top quarks at the LHC. The searches are performed by the ATLAS and CMS collaborations and various models and topologies are investigated. They are exploiting tt and single top experimental signatures by searching for an excess of missing transverse energy. No signs of Dark Matter particles haven been observed and limits on the models are set."
+  },
+  {
+   "id": "2602.23708",
+   "full": false,
+   "field": true,
+   "score": 0.611,
+   "titles": {
+    "ru": "Very Heavy and Composite Dark Matter: Theory and Experimental Searches"
+   },
+   "abstract": "Dark matter much heavier than the weak scale remains a comparatively unexplored frontier. This review surveys theoretical and experimental developments on very heavy dark matter, including composite and dissipative formation mechanisms, multiscatter detection, and astrophysical searches."
+  },
+  {
+   "id": "2203.06029",
+   "full": false,
+   "field": true,
+   "score": 0.61,
+   "titles": {
+    "ru": "Search for secluded dark matter towards the Galactic Centre with the   ANTARES neutrino telescope"
+   },
+   "abstract": "Searches for dark matter (DM) have not provided any solid evidence for the existence of weakly interacting massive particles in the GeV-TeV mass range. Coincidentally, the scale of new physics is being pushed by collider searches well beyond the TeV domain. This situation strongly motivates the exploration of DM masses much larger than a TeV. Secluded scenarios contain a natural way around the unitarity bound on the DM mass, via the early matter domination induced by the mediator of its interactions with the Standard Model. High-energy neutrinos constitute one of the very few direct accesses t"
+  },
+  {
+   "id": "hep-ph/9503292",
+   "full": false,
+   "field": true,
+   "score": 0.61,
+   "titles": {
+    "ru": "Sources and Distributions of Dark Matter"
+   },
+   "abstract": "In the first section, I will try to convey a sense of the variety of observational inputs that tell us about the existence and the spatial distribution of dark matter in the universe. In the second section, I will briefly review the four main dark matter candidates, taking note of each candidate's status in the world of particle physics, its production in the early universe, its effect upon large scale structure formation and the means by which it may be detected. Section 3 concerns the energy spectrum of (cold) dark matter particles on earth as may be observed some day in a direct detection e"
+  },
+  {
+   "id": "1512.07376",
+   "full": false,
+   "field": true,
+   "score": 0.609,
+   "titles": {
+    "ru": "Dark Matter Searches at the Large Hadron Collider"
+   },
+   "abstract": "Dark Matter is a hypothetical particle proposed to explain the missing matter expected from the cosmological observation. The motivation of Dark Matter is overwhelming however as it is mainly deduced from its gravitational interaction, for it does little to pinpoint what Dark Matter really is. In WIMPs Miracle, weakly interactive massive particle being the Dark Matter candidate is correctly producing the current thermal relic density at weak scale, implying the possibility of producing and detecting it in Large Hadron Collider. Assuming WIMPs being the maverick particle within collider, it is "
+  },
+  {
+   "id": "1404.2591",
+   "full": false,
+   "field": true,
+   "score": 0.608,
+   "titles": {
+    "ru": "Broaden the search for dark matter"
+   },
+   "abstract": "Bold strategies are needed to identify most of the elusive particles that should make up most of the Universe's mass"
+  },
+  {
+   "id": "1409.4479",
+   "full": false,
+   "field": true,
+   "score": 0.603,
+   "titles": {
+    "ru": "Searches for Leptoquarks, Extra Dimensions, and Dark Matter"
+   },
+   "abstract": "We present results from several searches for various exotic physics phenomena like large extra dimensions, leptoquarks, and dark matter, in proton-proton collisions at $\\sqrt{s}$ = 7 and 8 TeV delivered by the LHC and collected with the CMS detector. Many different final states are analyzed using data collected in 2011 and 2012 corresponding to an integrated luminosity up to 5.0 fb$^{-1}$ and 19.7 fb$^{-1}$. No sign of physics beyond the standard model has been observed so far and the results are used to set new limits on various new physics model parameters."
+  },
+  {
+   "id": "1507.03800",
+   "full": false,
+   "field": true,
+   "score": 0.603,
+   "titles": {
+    "ru": "Indirect and direct search for dark matter"
+   },
+   "abstract": "The majority of the matter in the universe is still unidentified and under investigation by both direct and indirect means. Many experiments searching for the recoil of dark-matter particles off target nuclei in underground laboratories have established increasingly strong constraints on the mass and scattering cross sections of weakly interacting particles, and some have even seen hints at a possible signal. Other experiments search for a possible mixing of photons with light scalar or pseudo-scalar particles that could also constitute dark matter. Furthermore, annihilation or decay of dark m"
+  },
+  {
+   "id": "astro-ph/9302003",
+   "full": false,
+   "field": true,
+   "score": 0.601,
+   "titles": {
+    "ru": "Dark Matter: Theoretical Perspectives"
+   },
+   "abstract": "Talk presented at NAS Special Colloquium on Physical Cosmology"
+  },
+  {
+   "id": "1608.08453",
+   "full": false,
+   "field": true,
+   "score": 0.6,
+   "titles": {
+    "ru": "Dark matter search in the inner galactic center halo with H.E.S.S"
+   },
+   "abstract": "The presence of dark matter in the universe is nowadays supported by a substantial set of astronomical and cosmological observations. A large amount of dark matter is expected in the Galactic Center (GC) region. Thanks also to its proximity, it is one of the best targets to look for dark matter particle self-annihilation into very high energy gamma-rays. We perform a search for annihilating dark matter in the central 300 parsecs around the GC with the H.E.S.S. array of ground-based Cherenkov telescopes. Using the full H.E.S.S.- I dataset (2004-2014) of GC observations, new constraints are deri"
+  }
+ ]
+}

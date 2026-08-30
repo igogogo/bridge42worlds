@@ -1,0 +1,236 @@
+{
+ "topic": "охлаждение фотоэлектрических модулей в жарком климате",
+ "slug": "охлаждение-фотоэлектрических-модулей-в-жарком-климате",
+ "built": "2026-08-30",
+ "note": "В архиве пока мало работ по практическому охлаждению фотоэлектрических модулей, но есть хорошая теоретическая база в неразобранных статьях.",
+ "drill": {
+  "found": 12,
+  "nearest": 0.651,
+  "band": "mid",
+  "near": 1,
+  "full": 0,
+  "model": "bge-m3"
+ },
+ "ideas": [
+  {
+   "title": "Стенд для измерения влияния пыли на нагрев и отдачу панели",
+   "what": "Собрать стенд из двух одинаковых панелей, одна из которых регулярно запыляется, и мерить температуру, напряжение и ток в течение нескольких недель в жарком климате.",
+   "why": "Запылённость — частый фактор в жарких регионах, но её вклад в перегрев и потерю мощности редко меряют отдельно от загрязнения. Данные пригодятся для планирования очистки и оценки реальной эффективности.",
+   "methods": [
+    "Взять методику из работы 1701.01678 по измерению температуры панели и расчёту теплового баланса, но применить её к запылённой панели.",
+    "Раз в день снимать показания датчиков температуры (термопары или ИК-пирометр) и электрические характеристики (мультиметр, нагрузка).",
+    "Контролировать уровень запылённости: взвешивать осаждённую пыль на эталонной пластинке рядом с панелью.",
+    "Сравнивать температуру и мощность чистой и запылённой панелей при одинаковой солнечной радиации."
+   ],
+   "origin": "В 1701.01678 разобраны механизмы нагрева фотоэлектрических модулей и предложены методы расчёта теплового баланса, но влияние пыли на эти механизмы не рассматривалось. В архиве нет работ, где бы запылённость связывалась с перегревом, хотя на практике это важный фактор в жарком климате.",
+   "first_step": "Купить две небольшие солнечные панели, термопары и простой регистратор данных; установить их рядом и начать ежедневные замеры температуры и мощности.",
+   "needs": "Две одинаковые панели, термопары или ИК-термометр, мультиметр, регистратор данных, пыль (можно использовать местную, но нужен контроль количества), место с прямым солнцем.",
+   "risks": "Сложно контролировать количество и состав пыли, а также отделить её влияние от других погодных факторов. Потребуется длительный период наблюдений и аккуратная статистика.",
+   "scale": "семестр",
+   "based_on": [
+    "1701.01678"
+   ]
+  },
+  {
+   "title": "Пассивное радиационное охлаждение для фотоэлектрических панелей: проверка плёнки на практике",
+   "what": "Наклеить на тыльную сторону солнечной панели плёнку с высоким коэффициентом излучения в атмосферном окне прозрачности (8–13 мкм) и измерить, насколько снижается температура и растёт мощность по сравнению с обычной панелью.",
+   "why": "Радиационное охлаждение может снижать температуру панели без затрат энергии, но готовых решений для фотоэлектрики мало. Если плёнка окажется эффективной, это дёшево и масштабируемо.",
+   "methods": [
+    "Взять за основу подход из 1701.01678: там описано, как рассчитать радиационное охлаждение для панели и какие материалы подходят.",
+    "Выбрать или изготовить плёнку с высокой излучательной способностью в диапазоне 8–13 мкм (например, на основе полимеров с добавками).",
+    "Собрать две панели: одну с плёнкой, другую без, и в течение нескольких недель измерять температуру и электрические характеристики.",
+    "Рассчитать фактическую мощность излучения по измеренной температуре и сравнить с теоретической из работы."
+   ],
+   "origin": "В 1701.01678 подробно разобрано радиационное охлаждение фотоэлектрических модулей и даны формулы для расчёта, но нет экспериментальной проверки на реальных панелях с доступными материалами. В архиве нет работ, где бы такой эксперимент был проведён.",
+   "first_step": "Найти или заказать плёнку с высоким излучением в ИК-диапазоне (например, полиэтилен с добавками), наклеить на тыльную сторону панели и начать замеры температуры.",
+   "needs": "Две панели, плёнка с нужными оптическими свойствами (можно заказать или сделать самостоятельно), термопары, пиранометр для измерения солнечной радиации, регистратор данных.",
+   "risks": "Плёнка может отслаиваться или деградировать под солнцем, а её излучательная способность может оказаться ниже расчётной. Возможно, эффект будет мал на фоне конвекции.",
+   "scale": "диплом",
+   "based_on": [
+    "1701.01678"
+   ]
+  },
+  {
+   "title": "Гибридная система охлаждения: радиационное охлаждение плюс принудительная конвекция для тонких кремниевых панелей",
+   "what": "Разработать и испытать комбинированную систему охлаждения для тонких кристаллических кремниевых панелей: пассивное радиационное покрытие на тыльной стороне плюс управляемый вентилятор, включающийся при превышении пороговой температуры.",
+   "why": "Тонкие панели более чувствительны к нагреву, и простое пассивное охлаждение может не справляться в пиковые часы. Гибридный подход может дать больший выигрыш при умеренных затратах энергии.",
+   "methods": [
+    "Использовать модель теплового баланса из 1701.01678 для расчёта вклада радиационного охлаждения и конвекции.",
+    "Взять конструкцию тонкой панели из 2209.15138, где показано, как гибкость помогает отводить тепло, и адаптировать её для крепления вентилятора.",
+    "Собрать прототип с датчиками температуры и управлением вентилятором по порогу.",
+    "Провести серию измерений при разной солнечной радиации и скорости ветра, сравнить с чисто пассивным охлаждением."
+   ],
+   "origin": "В 1701.01678 показано, что радиационное охлаждение эффективно, но его может быть недостаточно при высоких температурах. В 2209.15138 предложена гибкая конструкция тонких панелей, улучшающая теплоотвод, но не рассмотрено добавление активного элемента. Никто не проверял, как сочетание этих подходов работает на практике.",
+   "first_step": "Рассчитать по формулам из 1701.01678, какой поток тепла может отвести радиационное покрытие и сколько добавит вентилятор; затем собрать макет с одной тонкой панелью и вентилятором.",
+   "needs": "Тонкая кремниевая панель (можно гибкую), радиационное покрытие, вентилятор с управлением, датчики температуры, микроконтроллер (Arduino), источник питания для вентилятора.",
+   "risks": "Энергопотребление вентилятора может съесть выигрыш в мощности панели. Кроме того, тонкие панели хрупкие, и монтаж вентилятора может повредить их.",
+   "scale": "годы",
+   "based_on": [
+    "1701.01678",
+    "2209.15138"
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "id": "2605.00587",
+   "date": "2026-05-01",
+   "full": false,
+   "titles": {
+    "ru": "Как усмирить нагрев наночастиц",
+    "en": "Taming Nanoparticle Heat",
+    "es": "Cómo domar el calentamiento de las nanopartículas",
+    "ar": "كيف نُخمد سخونة الجسيمات النانوية؟",
+    "fr": "Comment calmer l'échauffement des nanoparticules"
+   },
+   "score": 0.492,
+   "url": "/lang/{lang}/archive/2026-05-01/2605.00587/"
+  },
+  {
+   "id": "2602.07328",
+   "date": "2026-02-07",
+   "full": false,
+   "titles": {
+    "ru": "Прохладная плёнка для любой поверхности",
+    "en": "A Cool Film for Any Surface",
+    "es": "Una película fresca para cualquier superficie",
+    "ar": "غشاء بارد لأي سطح",
+    "fr": "Un film frais pour toutes les surfaces"
+   },
+   "score": 0.49,
+   "url": "/lang/{lang}/archive/2026-02-07/2602.07328/"
+  },
+  {
+   "id": "2509.08411",
+   "date": "2025-09-10",
+   "full": false,
+   "titles": {
+    "ru": "Топологическая физика при комнатной температуре с помощью света",
+    "en": "Topological Physics at Room Temperature Using Light",
+    "es": "Física topológica a temperatura ambiente con ayuda de la luz",
+    "ar": "فيزياء طوبولوجية في درجة حرارة الغرفة باستخدام الضوء",
+    "fr": "La physique topologique à température ambiante grâce à la lumière"
+   },
+   "score": 0.49,
+   "url": "/lang/{lang}/archive/2025-09-10/2509.08411/"
+  },
+  {
+   "id": "2606.21813",
+   "date": "2026-06-20",
+   "full": false,
+   "titles": {
+    "ru": "Квантовый холодильник: охлаждение резким толчком",
+    "en": "Quantum Refrigerator: Cooling by a Sudden Jolt",
+    "es": "Refrigerador cuántico: enfriamiento por un golpe repentino",
+    "ar": "الثلاجة الكمومية: التبريد بدفعة حادة",
+    "fr": "Réfrigérateur quantique : le froid par une secousse brutale"
+   },
+   "score": 0.489,
+   "url": "/lang/{lang}/archive/2026-06-20/2606.21813/"
+  },
+  {
+   "id": "2603.03461",
+   "date": "2026-03-03",
+   "full": false,
+   "titles": {
+    "ru": "Калибровка без термостата",
+    "en": "Calibration Without a Thermostat",
+    "es": "Calibración sin termostato",
+    "ar": "معايرة بلا منظم حرارة",
+    "fr": "Calibrage sans thermostat"
+   },
+   "score": 0.488,
+   "url": "/lang/{lang}/archive/2026-03-03/2603.03461/"
+  },
+  {
+   "id": "2601.11879",
+   "date": "2026-01-17",
+   "full": false,
+   "titles": {
+    "ru": "Квантовый кубик, которому не нужен холод",
+    "en": "A Quantum Die That Doesn't Need the Cold",
+    "es": "Un cubito cuántico que no necesita frío",
+    "ar": "نرد كمومي لا يحتاج إلى البرد",
+    "fr": "Un dé quantique qui n'a pas besoin de froid"
+   },
+   "score": 0.478,
+   "url": "/lang/{lang}/archive/2026-01-17/2601.11879/"
+  },
+  {
+   "id": "2602.20789",
+   "date": "2026-02-24",
+   "full": false,
+   "titles": {
+    "ru": "Почему у красных карликов меньше шансов на фотосинтез с выделением кислорода",
+    "en": "Why Red Dwarfs Have Fewer Chances for Photosynthesis",
+    "es": "Por qué las enanas rojas tienen menos posibilidades de fotosíntesis",
+    "ar": "لماذا تقل فرص التمثيل الضوئي حول الأقزام الحمراء",
+    "fr": "Pourquoi les naines rouges ont moins de chances pour la photosynthèse"
+   },
+   "score": 0.462,
+   "url": "/lang/{lang}/archive/2026-02-24/2602.20789/"
+  },
+  {
+   "id": "2603.01672",
+   "date": "2026-03-02",
+   "full": false,
+   "titles": {
+    "ru": "Термометр из сверхпроводника: холод, который можно потрогать",
+    "en": "A Superconductor Thermometer: Touchable Cold",
+    "es": "Termómetro superconductor: el frío que se puede tocar",
+    "ar": "مقياس حرارة من موصل فائق: برودة يمكن لمسها",
+    "fr": "Un thermomètre supraconducteur : le froid qu'on peut toucher"
+   },
+   "score": 0.459,
+   "url": "/lang/{lang}/archive/2026-03-02/2603.01672/"
+  },
+  {
+   "id": "2601.22247",
+   "date": "2026-01-29",
+   "full": false,
+   "titles": {
+    "ru": "Тепло вашего кофе — безмолвная торговля светом",
+    "en": "Your Coffee’s Warmth Is a Silent Light Trade",
+    "es": "El calor de tu café es un comercio silencioso de luz",
+    "ar": "دفء قهوتك — تبادل صامت للضوء",
+    "fr": "La chaleur de votre café est un échange silencieux de lumière"
+   },
+   "score": 0.457,
+   "url": "/lang/{lang}/archive/2026-01-29/2601.22247/"
+  },
+  {
+   "id": "2604.02843",
+   "date": "2026-04-03",
+   "full": false,
+   "titles": {
+    "ru": "Квантовый дуализм в сверхпроводнике: тайна двух щелей",
+    "en": "The Mystery of Two Gaps in a New Superconductor",
+    "es": "El misterio de las dos rendijas en un nuevo superconductor",
+    "ar": "لغز الفجوتين في موصل فائق جديد",
+    "fr": "Le mystère des deux fentes dans un nouveau supraconducteur"
+   },
+   "score": 0.456,
+   "url": "/lang/{lang}/archive/2026-04-03/2604.02843/"
+  },
+  {
+   "id": "1701.01678",
+   "full": false,
+   "field": true,
+   "score": 0.651,
+   "titles": {
+    "ru": "An Optics-Based Approach to Thermal Management of Photovoltaics:   Selective-Spectral and Radiative Cooling"
+   },
+   "abstract": "For commercial one-sun solar modules, up to 80% of the incoming sunlight may be dissipated as heat, potentially raising the temperature 20 C - 30 C higher than the ambient. In the long term, extreme self-heating erodes efficiency and shortens lifetime, thereby dramatically reducing the total energy output. Therefore, it is critically important to develop effective and practical (and preferably passive) cooling methods to reduce operating temperature of PV modules. In this paper, we explore two fundamental (but often overlooked) origins of PV self-heating, namely, sub-bandgap absorption and imp"
+  },
+  {
+   "id": "2209.15138",
+   "full": false,
+   "field": true,
+   "score": 0.638,
+   "titles": {
+    "ru": "Flexibility-assisted heat removal in thin crystalline silicon solar   cells"
+   },
+   "abstract": "Thin crystalline silicon solar photovoltaics holds great potential for reducing the module price by material saving and increasing the efficiency by reduced bulk recombination loss. However, the module efficiency decreases rather sensitively as the module temperature rises under sunlight. Effective, inexpensive approach to cooling modules would accelerate large-scale market adoption of thin crystalline silicon photovoltaics. For effective cooling, we exploit high flexibility of single-crystalline thin silicon films to create wavy solar cells. These wavy cells possess larger surface area than c"
+  }
+ ]
+}

@@ -1,0 +1,252 @@
+{
+ "topic": "космический микроволновый фон",
+ "slug": "космический-микроволновый-фон",
+ "built": "2026-08-30",
+ "note": "Современные исследования реликтового излучения сосредоточены на точных измерениях поляризации и поиске следов инфляции, но остаются возможности для практических и аналитических проектов с использованием архивных данных.",
+ "drill": {
+  "found": 12,
+  "nearest": 0.609,
+  "band": "sparse",
+  "near": 0,
+  "full": 1,
+  "model": "bge-m3"
+ },
+ "ideas": [
+  {
+   "title": "Собрать радиометр для наблюдения реликтового излучения на частоте 18,6 ГГц",
+   "what": "Спроектировать и собрать небольшой радиометр на частоту 18,6 ГГц, аналогичный использованному в работе [2603.00584], для наблюдения реликтового излучения. Провести калибровку и тестовые наблюдения неба.",
+   "why": "Позволит получить практический опыт создания аппаратуры для наблюдения реликтового излучения, а также может быть использован для образовательных целей и любительских наблюдений.",
+   "methods": [
+    "Изучить описание радиометра в работе [2603.00584] и аналогичных публикациях.",
+    "Собрать приёмник на основе доступных компонентов (например, спутниковый конвертер) с полосой около 18,6 ГГц.",
+    "Провести калибровку по известным источникам (Солнце, Луна) и измерить шумовую температуру системы.",
+    "Провести наблюдения участков неба и сравнить с ожидаемым уровнем сигнала."
+   ],
+   "origin": "В работе [2603.00584] описан наземный радиотелескоп, наблюдавший реликтовое излучение на частоте 18,6 ГГц, но детали аппаратуры не раскрыты. Существуют любительские проекты радиометров, но они редко нацелены на реликтовое излучение.",
+   "first_step": "Найти и изучить схемы радиометров на 18 ГГц, оценить необходимый бюджет и доступность компонентов.",
+   "needs": "Радиолюбительские навыки, доступ к компонентам СВЧ (спутниковый конвертер, малошумящий усилитель), измерительные приборы (мультиметр, осциллограф), бюджет порядка 100-200 тыс. руб.",
+   "risks": "Сложность достижения достаточной чувствительности для детектирования реликтового излучения из-за атмосферных помех и нестабильности аппаратуры.",
+   "scale": "семестр",
+   "based_on": [
+    "2603.00584"
+   ]
+  },
+  {
+   "title": "Моделирование влияния скоплений галактик на реликтовое излучение",
+   "what": "Разработать численную модель для расчёта эффекта Сюняева-Зельдовича (thermal SZ) для скоплений галактик и сравнить с наблюдениями, включая данные из работы [2603.00584].",
+   "why": "Позволит лучше понять физику горячего газа в скоплениях и систематические эффекты при наблюдениях с Земли.",
+   "methods": [
+    "Изучить теорию эффекта Сюняева-Зельдовича и методы моделирования распределения газа в скоплениях.",
+    "Использовать открытые данные о скоплениях (например, из каталогов Planck или ROSAT) для построения моделей.",
+    "Написать код для расчёта ожидаемого сигнала на частоте 18,6 ГГц и сравнить с наблюдениями из [2603.00584].",
+    "Оценить влияние неопределённостей в параметрах скопления."
+   ],
+   "origin": "Работа [2603.00584] сообщает о наблюдении тени от скопления MACS J1752+4440, но не приводит детального сравнения с моделями. Существуют общедоступные данные о скоплениях, которые можно использовать для проверки.",
+   "first_step": "Скачать данные о скоплении MACS J1752+4440 из открытых источников и воспроизвести простую модель SZ-эффекта.",
+   "needs": "Навыки программирования (Python, C++), доступ к литературе по SZ-эффекту, компьютер с достаточной производительностью.",
+   "risks": "Сложность точного моделирования распределения газа; возможные систематические расхождения с наблюдениями.",
+   "scale": "диплом",
+   "based_on": [
+    "2603.00584",
+    "1208.0298"
+   ]
+  },
+  {
+   "title": "Поиск следов тяжёлых частиц в данных реликтового излучения",
+   "what": "Применить методы анализа из работы [2607.18369v1] к открытым данным экспериментов Planck или будущих миссий для поиска нестандартных сигналов от гипотетических тяжёлых частиц в ранней Вселенной.",
+   "why": "Может дать новые ограничения на физику за пределами Стандартной модели, используя существующие данные.",
+   "methods": [
+    "Изучить методику из работы [2607.18369v1] по анализу полной картины анизотропии.",
+    "Скачать открытые данные Planck (карты температуры и поляризации).",
+    "Реализовать алгоритм поиска сигналов, связанных с сильным смешиванием частиц.",
+    "Провести анализ и сравнить с результатами [2607.18369v1]."
+   ],
+   "origin": "В работе [2607.18369v1] предложен новый подход к поиску следов тяжёлых частиц, но авторы использовали ограниченный набор моделей. Применение к другим данным или расширение моделей может выявить новые эффекты.",
+   "first_step": "Получить доступ к данным Planck и ознакомиться с программными инструментами для их анализа (например, HEALPix).",
+   "needs": "Навыки анализа данных, программирование на Python, доступ к вычислительным ресурсам, знание космологии.",
+   "risks": "Высокая сложность анализа, возможные систематические эффекты, конкуренция с профессиональными группами.",
+   "scale": "годы",
+   "based_on": [
+    "2607.18369v1",
+    "astro-ph/0603144"
+   ]
+  },
+  {
+   "title": "Разделение источников сверхнизкочастотных гравитационных волн по данным пульсаров",
+   "what": "Реализовать и применить метод из работы [2607.07477] для анализа данных массивов пульсарного тайминга (PTA) с целью разделения вкладов от двойных сверхмассивных чёрных дыр и космологических источников.",
+   "why": "Поможет ответить на ключевой вопрос о происхождении недавно обнаруженного фона гравитационных волн.",
+   "methods": [
+    "Изучить метод, предложенный в [2607.07477], основанный на отклонениях в сигнале пульсаров.",
+    "Получить открытые данные PTA (например, NANOGrav, EPTA).",
+    "Реализовать алгоритм на Python или C++.",
+    "Применить к данным и оценить статистическую значимость разделения."
+   ],
+   "origin": "Работа [2607.07477] предлагает метод, но не применяет его к реальным данным. Существуют открытые наборы данных PTA, которые можно использовать для проверки.",
+   "first_step": "Скачать данные NANOGrav 15-летнего набора и ознакомиться с форматом.",
+   "needs": "Продвинутые навыки статистического анализа и программирования, доступ к компьютерному кластеру, понимание гравитационных волн.",
+   "risks": "Сложность реализации метода, возможная недостаточная чувствительность текущих данных.",
+   "scale": "годы",
+   "based_on": [
+    "2607.07477",
+    "astro-ph/0603144"
+   ]
+  },
+  {
+   "title": "Создание карты реликтового излучения вокруг северного полюса мира по архивным данным",
+   "what": "Воспроизвести и улучшить карту реликтового излучения из работы [astro-ph/9608018], используя современные методы обработки данных и, возможно, дополнительные данные.",
+   "why": "Позволит освоить методы обработки данных экспериментов по реликтовому излучению и получить опыт работы с реальными данными.",
+   "methods": [
+    "Скачать данные эксперимента Saskatoon из открытых архивов.",
+    "Изучить методику Wiener filtering, использованную в [astro-ph/9608018].",
+    "Применить современные алгоритмы (например, на основе машинного обучения) для улучшения карты.",
+    "Сравнить с оригинальной картой и современными данными Planck."
+   ],
+   "origin": "Работа [astro-ph/9608018] содержит карту, но с низким отношением сигнал/шум. Современные методы могут улучшить её качество и послужить учебным примером.",
+   "first_step": "Найти архивные данные эксперимента Saskatoon и ознакомиться с их форматом.",
+   "needs": "Навыки программирования (Python), знание методов обработки сигналов, доступ к данным.",
+   "risks": "Данные могут быть неполными или трудно интерпретируемыми; улучшение может быть незначительным.",
+   "scale": "семестр",
+   "based_on": [
+    "astro-ph/9608018",
+    "astro-ph/9703054"
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "id": "2603.00584",
+   "date": "2026-02-28",
+   "full": false,
+   "titles": {
+    "ru": "Радиотелескоп нащупал тень от скопления галактик",
+    "en": "Radio Telescope Spots Shadow Cast by Galaxy Cluster",
+    "es": "Un radiotelescopio capta la sombra de un cúmulo de galaxias",
+    "ar": "تلسكوب راديوي يلتقط ظل تجمع مجرات",
+    "fr": "Un radiotélescope capte l'ombre d'un amas de galaxies"
+   },
+   "score": 0.485,
+   "url": "/lang/{lang}/archive/2026-02-28/2603.00584/",
+   "abstract": "Учёные навели радиотелескоп на скопление галактик MACS J1752+4440 и заметили, что в его центре реликтовое излучение слегка тускнеет. Это происходит потому, что горячий газ в скоплении рассеивает фотоны реликтового излучения. Такой эффект уже видели с космических аппаратов, но теперь его поймали с Земли на частоте 18,6 ГГц. Новые данные помогут точнее измерять, как газ распределён в скоплениях, а значит, лучше понимать, как устроена наша Вселенная."
+  },
+  {
+   "id": "2607.18369v1",
+   "date": "2026-07-20",
+   "full": true,
+   "titles": {
+    "ru": "Вселенский коллайдер: поиск невидимых частиц в эхе Большого взрыва",
+    "en": "Cosmic Collider: The Search for Invisible Particles in the Echo of the Big Bang",
+    "es": "El colisionador cósmico: la búsqueda de partículas invisibles en el eco del Big Bang",
+    "ar": "المصادم الكوني: البحث عن جسيمات غير مرئية في صدى الانفجار العظيم",
+    "fr": "Le collisionneur cosmique : traquer les particules invisibles dans l'écho du Big Bang"
+   },
+   "score": 0.469,
+   "url": "/lang/{lang}/archive/2026-07-20/2607.18369v1/",
+   "abstract": "Представьте, что вы слушаете эхо Большого взрыва — в нём могут прятаться следы частиц, которых уже нет. Учёные впервые проанализировали всю картину целиком, а не по кусочкам, проверив, как гипотетические тяжёлые частицы могли оставить рябь в древнем излучении. Оказалось, что привычное предположение о слабом взаимодействии этих частиц не сходится с данными телескопов. Зато сильное смешивание, которое раньше не изучали, даёт чёткие ограничения: никаких значимых отклонений не найдено, а значит, новых законов физики пока не видно."
+  },
+  {
+   "id": "2607.07477",
+   "date": "2026-07-08",
+   "full": false,
+   "titles": {
+    "ru": "Космические часы и шёпот гравитации",
+    "en": "Cosmic Clocks and the Whisper of Gravity",
+    "es": "Relojes cósmicos y el susurro de la gravedad",
+    "ar": "ساعات كونية وهمس الجاذبية",
+    "fr": "Horloges cosmiques et murmure de la gravité"
+   },
+   "score": 0.451,
+   "url": "/lang/{lang}/archive/2026-07-08/2607.07477/",
+   "abstract": "Астрономы зарегистрировали сверхнизкочастотные гравитационные волны, пронизывающие космос. Их источник пока неясен: это может быть множество двойных сверхмассивных чёрных дыр или следы событий ранней Вселенной. Новая работа предлагает метод, который по едва заметным отклонениям в сигнале пульсаров поможет надёжно разделить эти две возможности и даже изучить свойства невидимых чёрных дыр."
+  },
+  {
+   "id": "astro-ph/9608018",
+   "full": false,
+   "field": true,
+   "score": 0.609,
+   "titles": {
+    "ru": "A high-resolution map of the cosmic microwave background around the   north celestial pole"
+   },
+   "abstract": "We present a Wiener filtered map of the Cosmic Microwave Background (CMB) fluctuations in a disk with 15 degree diameter, centered at the North Celestial Pole. The map is based on the 1993-1995 data from the Saskatoon (SK) experiment, with an angular resolution around 1 degree in the frequency range 27.6-44.1 GHz. The signal-to-noise ratio in the map is of order two, and some individual hot and cold spots are significant at the 5 sigma level. The spatial features are found to be consistent from year to year, reenforcing the conclusion that the SK results are not dominated by residual atmospher"
+  },
+  {
+   "id": "1208.0298",
+   "full": false,
+   "field": true,
+   "score": 0.607,
+   "titles": {
+    "ru": "The cosmic microwave background: observing directly the early universe"
+   },
+   "abstract": "The Cosmic Microwave Background (CMB) is a relict of the early universe. Its perfect 2.725K blackbody spectrum demonstrates that the universe underwent a hot, ionized early phase; its anisotropy (about 80 \\mu K rms) provides strong evidence for the presence of photon-matter oscillations in the primeval plasma, shaping the initial phase of the formation of structures; its polarization state (about 3 \\mu K rms), and in particular its rotational component (less than 0.1 \\mu K rms) might allow to study the inflation process in the very early universe, and the physics of extremely high energies, im"
+  },
+  {
+   "id": "astro-ph/9703054",
+   "full": false,
+   "field": true,
+   "score": 0.604,
+   "titles": {
+    "ru": "On Observing The Cosmic Microwave Background"
+   },
+   "abstract": "The cosmic microwave background (CMB) comprises the oldest photons in the universe and is arguably our most direct cosmological observable. All precise and accurate measurements of its attributes serve to distinguish between cosmological models. Detector technology and observing techniques have advanced to the point where fluctuations in the CMB of order a few microkelvin are measured almost routinely. In these lecture notes, we review recent measurements of both the absolute temperature and the anisotropy of the CMB and discuss the relation between the data and the general theoretical framewo"
+  },
+  {
+   "id": "astro-ph/9408036",
+   "full": false,
+   "field": true,
+   "score": 0.604,
+   "titles": {
+    "ru": "Observations of the Cosmic Microwave Background"
+   },
+   "abstract": "The properties of the cosmic microwave background radiation provide unique constraints on cosmological models, i.e. on the content, history, and evolution of the Universe. I discuss the latest measurements of the spectral and spatial properties of the cosmic microwave background radiation. Recent measurements from NASA's Cosmic Background Explorer (COBE) satellite, and from balloon-borne and ground-based platforms, are summarized and their cosmological implications are discussed."
+  },
+  {
+   "id": "astro-ph/0603144",
+   "full": false,
+   "field": true,
+   "score": 0.604,
+   "titles": {
+    "ru": "A new cosmic microwave background constraint to primordial gravitational   waves"
+   },
+   "abstract": "Primordial gravitational waves (GWs) with frequencies > 10^{-15} Hz contribute to the radiation density of the Universe at the time of decoupling of the cosmic microwave background (CMB). The effects of this GW background on the CMB and matter power spectra are identical to those due to massless neutrinos, unless the initial density-perturbation amplitude for the gravitational-wave gas is non-adiabatic, as may occur if such GWs are produced during inflation or some post-inflation phase transition. In either case, current observations provide a constraint to the GW amplitude that competes with "
+  },
+  {
+   "id": "astro-ph/0310089",
+   "full": false,
+   "field": true,
+   "score": 0.601,
+   "titles": {
+    "ru": "Current Status and Perspectives of Cosmic Microwave Background   Observations"
+   },
+   "abstract": "Measurements of the cosmic microwave background (CMB) radiation provide a unique opportunity for a direct study of the primordial cosmic plasma at redshift z ~1000. The angular power spectra of temperature and polarisation fluctuations are powerful observational objectives as they encode information on fundamental cosmological parameters and on the physics of the early universe. A large number of increasingly ambitious balloon-borne and ground-based experiments have been carried out following the first detection of CMB anisotropies by COBE-DMR, probing the angular power spectrum up to high mul"
+  },
+  {
+   "id": "astro-ph/9805123",
+   "full": false,
+   "field": true,
+   "score": 0.594,
+   "titles": {
+    "ru": "The Cosmic Microwave Background Spectrum:an Analysis of Observations"
+   },
+   "abstract": "This work presents a detailed analysis of Cosmic Microwave Background (CMB) radiation intensity observations. The CMB is a relic of the Big Bang and its study greatly enhances our knowledge of cosmology. This work has led to new values for the best fit temperature $2.7356 \\pm 0.0038$ K (95% CL) and the speed of our solar system relative to the CMB, and limits on the spectral distortion parameters: $\\mu$, $y$, and $Y_{ff}$. These in turn lead to tighter constraints on the thermal history and allowed energy release in the early universe and possible cosmological processes. These limits are appro"
+  },
+  {
+   "id": "astro-ph/0110457",
+   "full": false,
+   "field": true,
+   "score": 0.592,
+   "titles": {
+    "ru": "Galactic Foregrounds in OVRO and UCSB South Pole 1994 Cosmic Microwave   Background Anisotropy Data"
+   },
+   "abstract": "We study Galactic emission foreground contamination of the OVRO and UCSB South Pole 1994 cosmic microwave background (CMB) anisotropy data by cross-correlating with templates of infrared dust emission and new high resolution $H_{\\alpha}$ data. $H_{\\alpha}$ data provide rough upper limits on the level of free-free emission in the data sets. The cross-correlation analysis does not contradict a two component foreground emission hypothesis, with the two dust-correlated components being free-free emission and spinning dust emission."
+  },
+  {
+   "id": "astro-ph/0210165",
+   "full": false,
+   "field": true,
+   "score": 0.591,
+   "titles": {
+    "ru": "Aspects of the Cosmic Microwave Background Dipole"
+   },
+   "abstract": "Cosmic microwave background (CMB) experiments generally infer a temperature fluctuation from a measured intensity fluctuation through the first term in the Taylor expansion of the Planck function, the relation between the intensity in a given frequency and the temperature. However, with the forthcoming Planck satellite, and perhaps even with the Microwave Anisotropy Probe, the CMB-dipole amplitude will be large enough to warrant inclusion of the next higher order term. To quadratic order in the dipole amplitude, there is an intensity quadrupole induced by the dipole with a frequency dependence"
+  }
+ ]
+}

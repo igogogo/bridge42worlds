@@ -1,0 +1,237 @@
+{
+ "topic": "машинное обучение в физике частиц",
+ "slug": "машинное-обучение-в-физике-частиц",
+ "built": "2026-08-30",
+ "note": "В области машинного обучения для физики частиц сейчас активно развиваются методы ускорения вычислений и повышения точности, но не хватает стандартизации и интерпретируемости.",
+ "drill": {
+  "found": 12,
+  "nearest": 0.666,
+  "band": "mid",
+  "near": 3,
+  "full": 2,
+  "model": "bge-m3"
+ },
+ "ideas": [
+  {
+   "title": "Быстрая оценка параметров гравитационной линзы по четырём изображениям с помощью нейросети",
+   "what": "Собрать и обучить нейросеть, которая по координатам и яркостям четырёх изображений квазара оценивает параметры гравитационной линзы (массу, эллиптичность, внешний сдвиг). Сравнить точность и скорость с традиционным методом максимального правдоподобия.",
+   "why": "Ускоряет анализ линз для больших обзоров (например, LSST), где нужно обрабатывать тысячи систем. Может быть полезно для быстрого отбора кандидатов в линзы.",
+   "methods": [
+    "Сгенерировать синтетические данные: использовать модель линзы (например, SIE + внешний сдвиг) для создания множества конфигураций изображений с реалистичными ошибками.",
+    "Обучить нейросеть (например, полносвязную или свёрточную) на парах (входные параметры изображений — выходные параметры линзы).",
+    "Оценить точность на тестовых данных и сравнить с оценками по методу максимального правдоподобия, используя, например, код из работы 2607.22812.",
+    "Проверить устойчивость к шуму и систематическим ошибкам, добавив реалистичные неопределённости координат и яркостей."
+   ],
+   "origin": "Работа 2607.22812 уже демонстрирует, что нейросеть может быстро подбирать параметры по четырём точкам, но в ней не исследовалось влияние реалистичных ошибок и не сравнивалась точность с традиционными методами на одинаковых данных. Не хватает оценки применимости в реальных условиях обзоров.",
+   "first_step": "Сгенерировать набор из 10 000 синтетических линз с известными параметрами и соответствующими им изображениями, используя простую модель SIE + сдвиг.",
+   "needs": "Компьютер с GPU для обучения, знание Python и библиотек PyTorch/TensorFlow, базовое понимание гравитационного линзирования.",
+   "risks": "Нейросеть может плохо обобщаться на конфигурации, сильно отличающиеся от обучающих, если не включить достаточное разнообразие; точность может уступать традиционным методам при малом числе изображений.",
+   "scale": "семестр",
+   "based_on": [
+    "2607.22812v1"
+   ]
+  },
+  {
+   "title": "Ускорение реконструкции партонных кинематик в столкновениях адронов с помощью нейросети",
+   "what": "Разработать нейросетевой метод для восстановления партонных импульсов в процессе рождения адрона и прямого фотона на коллайдере. Обучить на данных, сгенерированных с учётом NLO QCD поправок, и сравнить с традиционными методами.",
+   "why": "Прямое восстановление партонной кинематики важно для изучения структуры адронов и повышения точности расчётов; нейросети могут ускорить анализ и улучшить разрешение.",
+   "methods": [
+    "Использовать генератор событий (например, Pythia или Sherpa) для моделирования процесса pp -> h + photon на NLO, как в работе 2112.05043.",
+    "Построить нейросеть, которая по измеренным величинам (импульс адрона, фотона, недостающая энергия) предсказывает партонные переменные (x1, x2, переданный импульс).",
+    "Обучить на большом наборе событий и оценить точность восстановления, сравнив с аналитическим или итеративным методом.",
+    "Проверить устойчивость к эффектам детектора, добавив смазывание импульсов и эффективность регистрации."
+   ],
+   "origin": "В работе 2112.05043 реконструкция партонной кинематики выполняется традиционными методами, которые могут быть вычислительно затратны и не полностью использовать информацию. Нейросетевой подход не был опробован в этом контексте, хотя в 2602.03728 обсуждается перспективность ML в феноменологии LHC.",
+   "first_step": "Сгенерировать 100 000 событий pp -> h + photon с помощью генератора, поддерживающего NLO, и сохранить партонные и адронные переменные.",
+   "needs": "Доступ к генераторам событий (MadGraph5_aMC@NLO, Pythia), вычислительные ресурсы для генерации и обучения, знание физики коллайдеров и ML.",
+   "risks": "Сложность генерации большого набора событий с NLO точностью; нейросеть может плохо справляться с редкими кинематическими областями.",
+   "scale": "диплом",
+   "based_on": [
+    "2112.05043",
+    "2602.03728"
+   ]
+  },
+  {
+   "title": "Интерпретируемое машинное обучение для идентификации тяжелых резонансов на LHC",
+   "what": "Применить методы интерпретируемости (например, SHAP, LIME) к моделям машинного обучения, используемым для идентификации тяжелых частиц (W/Z/Higgs, топ-кварков) в экспериментах на LHC. Выяснить, какие признаки важны для классификации, и сравнить с физическими ожиданиями.",
+   "why": "Повышение доверия к ML-моделям в физике высоких энергий и возможность обнаружения новых физических закономерностей; важно для практического применения в CMS/ATLAS.",
+   "methods": [
+    "Взять обученную модель из работы 2004.08262 (или воспроизвести её на открытых данных) для классификации адронных распадов тяжелых частиц.",
+    "Применить методы интерпретации (SHAP, Integrated Gradients) к обученной модели на представительной выборке событий.",
+    "Проанализировать важность признаков: коррелируют ли они с известными физическими переменными (масса, подструктура струи)?",
+    "Проверить устойчивость интерпретаций при изменении архитектуры модели и гиперпараметров."
+   ],
+   "origin": "Работа 2004.08262 показывает высокую эффективность ML-идентификации, но не объясняет, на каких признаках основаны решения. В обзоре 2605.18689 подчёркивается важность объяснимости ML в физике, но для коллайдерных приложений таких исследований мало.",
+   "first_step": "Загрузить открытые данные или воспроизвести обучение модели (например, простой нейросети) для различения сигнала и фона, затем вычислить SHAP-значения для первых 1000 событий.",
+   "needs": "Доступ к открытым данным LHC (например, CERN Open Data) или симулированным наборам, знание Python и библиотек ML и интерпретируемости (shap, lime), понимание физики струй.",
+   "risks": "Интерпретации могут быть нестабильными или вводить в заблуждение; требуется тщательная валидация с физиками-экспертами.",
+   "scale": "диплом",
+   "based_on": [
+    "2004.08262",
+    "2605.18689"
+   ]
+  },
+  {
+   "title": "Создание открытого бенчмарка для ML в физике частиц на основе синтетических данных",
+   "what": "Разработать набор стандартизированных задач и метрик для оценки ML-моделей в физике частиц, включая классификацию событий, регрессию параметров и генеративное моделирование. Предоставить открытый код и данные для воспроизводимых сравнений.",
+   "why": "Ускоряет разработку и сравнение новых ML-методов в физике частиц, обеспечивает единую точку отсчёта для исследователей.",
+   "methods": [
+    "Выбрать несколько ключевых задач из обзора 2602.03728 (например, реконструкция партонных распределений, классификация струй).",
+    "Сгенерировать синтетические наборы данных с известными распределениями, используя быстрые симуляции или генераторы.",
+    "Определить метрики (точность, AUC, калибровка, скорость) и базовые модели (логистическая регрессия, случайный лес, простая нейросеть).",
+    "Опубликовать бенчмарк с документацией и примерами использования, возможно, в виде пакета Python."
+   ],
+   "origin": "В обзорах 2602.03728 и 1807.02876 отмечается отсутствие стандартизированных бенчмарков, что затрудняет сравнение методов. Отдельные работы используют разные наборы данных и метрики, поэтому не хватает общей платформы для оценки прогресса.",
+   "first_step": "Выбрать одну задачу (например, классификацию струй) и создать минимальный набор данных с известной истиной, затем реализовать базовую модель и метрики.",
+   "needs": "Опыт в ML и физике частиц, вычислительные ресурсы для генерации данных, знание Python и систем контроля версий.",
+   "risks": "Поддержание бенчмарка требует долгосрочных усилий и согласования с сообществом; данные могут быстро устареть.",
+   "scale": "годы",
+   "based_on": [
+    "2602.03728",
+    "1807.02876"
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "id": "2607.22812v1",
+   "date": "2026-07-24",
+   "full": true,
+   "titles": {
+    "ru": "Нейросеть-скульптор: как по четырём точкам прочесть гравитационную линзу",
+    "en": "Neural Network Sculptor: Reading a Gravitational Lens from Four Points",
+    "es": "Escultor de redes neuronales: cómo leer una lente gravitacional a partir de cuatro puntos",
+    "ar": "شبكة عصبية نحّاتة: كيف تقرأ عدسة ثقالية من أربع نقاط",
+    "fr": "Sculpteur neuronal : comment interpréter une lentille gravitationnelle à partir de quatre points"
+   },
+   "score": 0.571,
+   "url": "/lang/{lang}/archive/2026-07-24/2607.22812v1/",
+   "abstract": "Вы когда-нибудь пытались угадать вес торта по одному фото? Астрономы решают похожую задачу: по четырём точкам-изображениям далёкого квазара нужно понять, сколько весит галактика-линза. Учёные обучили нейросеть на тысячах синтетических примеров, и она мгновенно подбирает нужные параметры. Оказалось, что такой подход сокращает часы вычислений до нескольких минут. Теперь мы можем быстрее изучать чёрные дыры и находить новые объекты в будущих обзорах неба."
+  },
+  {
+   "id": "2606.25742",
+   "date": "2026-06-24",
+   "full": true,
+   "titles": {
+    "ru": "Нейросеть-настройщик: как пять квантовых расчётов открывают путь к холодильникам без фреона",
+    "en": "The neural network tuner: how five quantum calculations open the door to Freon-free fridges",
+    "es": "Red neuronal afinadora: cómo cinco cálculos cuánticos abren el camino hacia refrigeradores sin freón",
+    "ar": "الشبكة العصبية المولفة: كيف تفتح خمس حسابات كمومية الطريق إلى ثلاجات بدون فريون",
+    "fr": "L'accordeur de réseaux de neurones : comment cinq calculs quantiques ouvrent la voie à des réfrigérateurs sans fréon"
+   },
+   "score": 0.502,
+   "url": "/lang/{lang}/archive/2026-06-24/2606.25742/",
+   "abstract": "Представьте, что вы учите иностранца готовить борщ по трём фотографиям, а он после этого готовит лучше, чем по тысяче рецептов. Учёные выяснили, как обучить компьютер предсказывать поведение молекул, используя всего пять примеров вместо огромных массивов данных. Оказалось, что готовая «база знаний» из других задач работает хуже, чем дообучение на маленькой выборке именно под конкретный материал. Это открытие делает дешёвые и экологичные твёрдотельные холодильники на шаг ближе к вашему дому."
+  },
+  {
+   "id": "2601.01185",
+   "date": "2026-01-03",
+   "full": false,
+   "titles": {
+    "ru": "Автопилот для цифровых материалов",
+    "en": "Autopilot for Digital Materials",
+    "es": "Autopiloto para materiales digitales",
+    "ar": "طيار آلي للمواد الرقمية",
+    "fr": "Un pilote automatique pour les matériaux numériques"
+   },
+   "score": 0.499,
+   "url": "/lang/{lang}/archive/2026-01-03/2601.01185/",
+   "abstract": "Учёные создали программу AutoPot, которая автоматически строит и хранит обучающие наборы для компьютерных моделей материалов. Она сама выбирает нужные конфигурации атомов и запускает расчёты, обучая модель предсказывать свойства веществ с точностью квантовой механики. Это экономит время и силы исследователей, позволяя быстрее разрабатывать новые материалы."
+  },
+  {
+   "id": "2510.05963",
+   "date": "2025-10-07",
+   "full": false,
+   "titles": {
+    "ru": "Облачные специи: как нейросеть улучшает климатические модели",
+    "en": "Cloud Spices: How a Neural Network Improves Climate",
+    "es": "Especias nubosas: cómo una red neuronal mejora el clima",
+    "ar": "توابل السحب: كيف تحسّن الشبكات العصبية النماذج المناخية",
+    "fr": "Épices nuageuses : comment un réseau de neurones affine le climat"
+   },
+   "score": 0.497,
+   "url": "/lang/{lang}/archive/2025-10-07/2510.05963/",
+   "abstract": "Климатические модели часто упускают влияние облаков из-за крупного масштаба ячеек. Учёные обучили нейросеть на детальных расчётах, чтобы предсказывать облачную часть солнечного тепла, сохранив физику для безоблачного неба. Ошибки уменьшились в 4–10 раз. Нейросеть не видит облака напрямую, но улавливает их скрытое влияние на глобальный климат."
+  },
+  {
+   "id": "2205.08057",
+   "full": false,
+   "field": true,
+   "score": 0.666,
+   "titles": {
+    "ru": "Machine-learning-accelerated Bose-Einstein condensation"
+   },
+   "abstract": "Machine learning is emerging as a technology that can enhance physics experiment execution and data analysis. Here, we apply machine learning to accelerate the production of a Bose-Einstein condensate (BEC) of $^{87}\\mathrm{Rb}$ atoms by Bayesian optimization of up to 55 control parameters. This approach enables us to prepare BECs of $2.8 \\times 10^3$ optically trapped $^{87}\\mathrm{Rb}$ atoms from a room-temperature gas in 575 ms. The algorithm achieves the fast BEC preparation by applying highly efficient Raman cooling to near quantum degeneracy, followed by a brief final evaporation. We ant"
+  },
+  {
+   "id": "2112.05043",
+   "full": false,
+   "field": true,
+   "score": 0.654,
+   "titles": {
+    "ru": "Reconstructing partonic kinematics at colliders with Machine Learning"
+   },
+   "abstract": "In the context of high-energy physics, a reliable description of the parton-level kinematics plays a crucial role for understanding the internal structure of hadrons and improving the precision of the calculations. Here, we study the production of one hadron and a direct photon, including up to Next-to-Leading Order Quantum Chromodynamics and Leading-Order Quantum Electrodynamics corrections. Using a code based on Monte-Carlo integration, we simulate the collisions and analyze the events to determine the correlations among measurable and partonic quantities. Then, we use these results to feed "
+  },
+  {
+   "id": "2602.03728",
+   "full": false,
+   "field": true,
+   "score": 0.654,
+   "titles": {
+    "ru": "Modern Machine Learning and Particle Physics Phenomenology at the LHC"
+   },
+   "abstract": "Modern machine learning is driving a paradigm shift in particle physics phenomenology at the Large Hadron Collider. This short review examines the transformative role of machine learning across the entire theoretical prediction pipeline, from parton-level calculations to full simulations. We discuss applications to scattering amplitude computations, phase space integration, Parton Distribution Function determination, and parameter extraction. Some critical frontiers for the field including uncertainty quantification, the role of symmetries, and interpretability are highlighted."
+  },
+  {
+   "id": "2004.08262",
+   "full": false,
+   "field": true,
+   "score": 0.638,
+   "titles": {
+    "ru": "Identification of heavy, energetic, hadronically decaying particles   using machine-learning techniques"
+   },
+   "abstract": "Machine-learning (ML) techniques are explored to identify and classify hadronic decays of highly Lorentz-boosted W/Z/Higgs bosons and top quarks. Techniques without ML have also been evaluated and are included for comparison. The identification performances of a variety of algorithms are characterized in simulated events and directly compared with data. The algorithms are validated using proton-proton collision data at $\\sqrt{s} =$ 13 TeV, corresponding to an integrated luminosity of 35.9 fb$^{-1}$. Systematic uncertainties are assessed by comparing the results obtained using simulation and co"
+  },
+  {
+   "id": "2605.18689",
+   "full": false,
+   "field": true,
+   "score": 0.638,
+   "titles": {
+    "ru": "Can machine learning for quantum-gas experiments be explainable?"
+   },
+   "abstract": "Virtually all aspects of many-body atomic physics are challenging: experiments are technically demanding, datasets have become enormous, and the memory and CPU requirements for classical simulation of generic quantum systems often scale exponentially with system size. Machine learning (ML) methods are already assisting in each of these areas and are poised to become transformative. Here, we focus on two specific applications of ML to cold-atom-based quantum simulators. These devices generally generate data in the form of images; we first showcase denoising of raw images and then identify solit"
+  },
+  {
+   "id": "2204.13724",
+   "full": false,
+   "field": true,
+   "score": 0.629,
+   "titles": {
+    "ru": "Predicting magnetic edge behaviour in graphene using neural networks"
+   },
+   "abstract": "Magnetic moments near zigzag edges in graphene allow complex nanostructures with customised spin properties to be realised. However, computational costs restrict theoretical investigations to small or perfectly periodic structures. Here we demonstrate that a machine-learning approach, using only geometric input, can accurately estimate magnetic moment profiles, allowing arbitrarily large and disordered systems to be quickly simulated. Excellent agreement is found with mean-field Hubbard calculations, and important electronic, magnetic and transport properties are reproduced using the estimated"
+  },
+  {
+   "id": "1807.02876",
+   "full": false,
+   "field": true,
+   "score": 0.629,
+   "titles": {
+    "ru": "Machine Learning in High Energy Physics Community White Paper"
+   },
+   "abstract": "Machine learning has been applied to several problems in particle physics research, beginning with applications to high-level physics analysis in the 1990s and 2000s, followed by an explosion of applications in particle and event identification and reconstruction in the 2010s. In this document we discuss promising future research and development areas for machine learning in particle physics. We detail a roadmap for their implementation, software and hardware resource requirements, collaborative initiatives with the data science community, academia and industry, and training the particle physi"
+  },
+  {
+   "id": "2306.16764",
+   "full": false,
+   "field": true,
+   "score": 0.628,
+   "titles": {
+    "ru": "Reinforcement Learning in Ultracold Atom Experiments"
+   },
+   "abstract": "Cold atom traps are at the heart of many quantum applications in science and technology. The preparation and control of atomic clouds involves complex optimization processes, that could be supported and accelerated by machine learning. In this work, we introduce reinforcement learning to cold atom experiments and demonstrate a flexible and adaptive approach to control a magneto-optical trap. Instead of following a set of predetermined rules to accomplish a specific task, the objectives are defined by a reward function. This approach not only optimizes the cooling of atoms just as an experiment"
+  }
+ ]
+}

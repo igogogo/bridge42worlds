@@ -1,0 +1,235 @@
+{
+ "topic": "опреснение с использованием солнечной энергии",
+ "slug": "опреснение-с-использованием-солнечной-энергии",
+ "built": "2026-08-30",
+ "note": "В области солнечного опреснения активно развиваются материалы для фототермического испарения, но систематических работ по долговременной стабильности и интеграции с другими функциями пока мало.",
+ "drill": {
+  "found": 12,
+  "nearest": 0.597,
+  "band": "sparse",
+  "near": 0,
+  "full": 0,
+  "model": "bge-m3"
+ },
+ "ideas": [
+  {
+   "title": "Стенд для ускоренного старения материалов солнечных опреснителей под концентрированным светом",
+   "what": "Собрать установку, которая облучает образцы материалов для солнечных опреснителей (поглотители, гидрофильные покрытия) концентрированным солнечным светом с независимым контролем температуры и атмосферы. Провести серию испытаний на деградацию и сравнить с результатами, полученными при обычном солнечном облучении.",
+   "why": "Позволит быстро оценивать долговечность новых материалов для опреснительных систем без длительных натурных испытаний. Пригодится исследовательским группам и производителям солнечных опреснителей.",
+   "methods": [
+    "Использовать подход из работы 1409.5962: концентрация солнечного света линзой или зеркалом, контроль температуры образца с помощью охлаждаемой подложки и ИК-термометра.",
+    "Измерять спектральное отражение/поглощение образцов до и после облучения для количественной оценки деградации.",
+    "Проводить облучение при разных интенсивностях (1x, 5x, 10x) и температурах (например, 25°C и 60°C) для построения модели ускоренного старения."
+   ],
+   "origin": "В работе 1409.5962 показана методика ускоренного старения органических фотоэлектрических материалов с раздельным контролем температуры и интенсивности. Для материалов солнечных опреснителей (например, плазмонных поглотителей из 1809.05184 или фототермических покрытий) такой методики нет, хотя их деградация под солнцем критична для практики.",
+   "first_step": "Собрать простейший концентратор (линза Френеля) и закрепить образец на термоэлектрическом модуле Пельтье для контроля температуры. Проверить, удаётся ли поддерживать заданную температуру при изменении интенсивности.",
+   "needs": "Линза Френеля или параболическое зеркало, термоэлектрический модуль, источник питания, ИК-термометр или термопара, спектрофотометр (или доступ к нему), образцы материалов.",
+   "risks": "Сложность точного контроля температуры при высокой концентрации; неравномерность облучения может исказить результаты.",
+   "scale": "семестр",
+   "based_on": [
+    "1409.5962",
+    "1809.05184"
+   ]
+  },
+  {
+   "title": "Полевой тест фототермического зонтика для испарения рассола с оценкой солеотложения",
+   "what": "Изготовить устройство типа \"фототермический зонтик\" по мотивам работы 1905.10394 и испытать его на реальном рассоле (например, морская вода или сточные воды) в полевых условиях. Измерить скорость испарения, накопление солей на поверхности и эффективность с течением времени.",
+   "why": "Проверка работоспособности концепции вне лаборатории и выявление проблем, связанных с солеотложением, которые часто недооцениваются. Результаты будут полезны для разработчиков систем zero liquid discharge.",
+   "methods": [
+    "Собрать зонтик: пористый материал, пропитанный фототермическим веществом (например, сажа или коммерческий поглотитель), размещённый над поверхностью воды.",
+    "Проводить ежедневные измерения массы испарившейся воды и массы соли, накопившейся на поверхности, в течение нескольких недель.",
+    "Сравнить скорость испарения с контрольным поддоном без зонтика для оценки выигрыша."
+   ],
+   "origin": "Работа 1905.10394 предлагает конструкцию фототермического зонтика для повышения испарения в прудах-испарителях, но не приводит данных о долговременной работе в реальных условиях с высокосолёной водой. В литературе по солнечным опреснителям (например, 1806.02896) солеотложение упоминается как проблема, но систематических полевых данных мало.",
+   "first_step": "Изготовить прототип зонтика из подручных материалов (например, хлопковая ткань, покрытая сажей) и провести первые суточные замеры испарения в ёмкости с солёной водой на открытом воздухе.",
+   "needs": "Материалы для зонтика (ткань, фототермическое покрытие), ёмкости, весы с точностью до грамма, метеостанция (или данные о солнечной радиации, температуре, ветре), доступ к месту на открытом воздухе.",
+   "risks": "Солеотложение может быстро снизить эффективность; погодные условия могут сильно варьироваться, что затруднит сравнение.",
+   "scale": "диплом",
+   "based_on": [
+    "1905.10394",
+    "1806.02896"
+   ]
+  },
+  {
+   "title": "Гибридная система концентрированного фотоэлектричества и солнечной дистилляции с разделением спектра",
+   "what": "Спроектировать и испытать маломасштабную систему, которая использует дисперсионный элемент (призматическая линза Френеля) для разделения солнечного спектра: видимая часть идёт на фотоэлементы, а инфракрасная — на нагрев воды для опреснения. Оценить общий КПД использования солнечной энергии.",
+   "why": "Позволяет более полно использовать солнечный спектр: фотоэлементы работают в оптимальном диапазоне, а тепло не тратится впустую, а идёт на опреснение. Может повысить общую эффективность солнечных энергоустановок.",
+   "methods": [
+    "Использовать призматическую линзу Френеля, как в работе 1508.00210, для пространственного разделения спектральных полос.",
+    "Подобрать фотоэлементы с шириной запрещённой зоны, соответствующей выделенной видимой части спектра.",
+    "Направить инфракрасную часть на приёмник тепла, соединённый с простым солнечным дистиллятором (например, наклонная пластина с конденсацией).",
+    "Измерить электрическую мощность фотоэлементов и количество дистиллята, рассчитать общий энергетический баланс."
+   ],
+   "origin": "В работе 1508.00210 продемонстрирован дешёвый дисперсионный элемент для спектрального разделения, но только для фотоэлектрического преобразования. Работы по солнечному опреснению (например, 1804.10736) используют весь спектр для нагрева, что неэффективно для электричества. Гибридное использование спектра могло бы дать выигрыш, но не реализовано.",
+   "first_step": "Приобрести или изготовить призматическую линзу Френеля и проверить разделение спектра на простом экране, измерив распределение интенсивности по длинам волн с помощью спектрометра.",
+   "needs": "Призматическая линза Френеля, фотоэлементы (кремниевые или другие), материалы для теплоприёмника и дистиллятора, спектрометр (или фотодиоды с фильтрами), мультиметр, источник солнечного света (натурный или имитатор).",
+   "risks": "Сложность точной юстировки оптической системы; потери на отражение и рассеяние могут снизить общую эффективность; стоимость фотоэлементов с нестандартной шириной запрещённой зоны.",
+   "scale": "диплом",
+   "based_on": [
+    "1508.00210",
+    "1804.10736"
+   ]
+  },
+  {
+   "title": "Численное моделирование плазмонного поглотителя для солнечного опреснителя с оптимизацией под реальный спектр",
+   "what": "Создать компьютерную модель плазмонного наноструктурированного поглотителя (например, на основе металлических наночастиц) и оптимизировать его геометрию для максимального поглощения в солнечном спектре и минимального теплового излучения при рабочих температурах опреснителя.",
+   "why": "Позволит разработать более эффективные поглотители для солнечных испарителей без дорогостоящего экспериментального перебора. Результаты могут быть использованы при создании новых материалов.",
+   "methods": [
+    "Использовать метод объёмных интегральных уравнений (как в работе 1809.05334) для расчёта поглощения в периодических структурах с металлическими наночастицами.",
+    "Варьировать размер, форму и период наночастиц, а также материалы (Au, Ag, Al) для достижения высокого поглощения в диапазоне 300–2500 нм.",
+    "Рассчитать тепловое излучение при температурах 50–100°C и минимизировать его, сохраняя высокое солнечное поглощение.",
+    "Сравнить с экспериментальными данными из работы 1809.05184 для валидации модели."
+   ],
+   "origin": "Работа 1809.05334 предлагает эффективный численный метод для моделирования плазмонных солнечных элементов с периодическими структурами, но не применяет его к задачам солнечного нагрева воды. В работе 1809.05184 экспериментально получен плазмонный поглотитель, но без систематической оптимизации под спектр и рабочие температуры опреснителя.",
+   "first_step": "Воспроизвести результаты моделирования из статьи 1809.05334 для простой периодической структуры (например, массив серебряных наносфер), используя открытый код (например, на Python или MATLAB).",
+   "needs": "Доступ к вычислительным ресурсам (персональный компьютер достаточен для начала), знание численных методов или готовых библиотек (например, MEEP, COMSOL), базовые навыки программирования.",
+   "risks": "Вычислительная сложность может возрасти при увеличении размера структуры; точность модели зависит от корректного учёта дисперсии материалов.",
+   "scale": "диплом",
+   "based_on": [
+    "1809.05334",
+    "1809.05184"
+   ]
+  },
+  {
+   "title": "Разработка губчатого солнечного испарителя с функцией удаления ртути для очистки сточных вод",
+   "what": "Изготовить композитную губку на основе полиуретана, покрытую MoS2/C, как в работе 1806.02896, и проверить её способность одновременно испарять воду и удалять ионы ртути из раствора. Оценить скорость испарения и эффективность очистки.",
+   "why": "Комбинированные материалы, которые и испаряют воду, и удаляют тяжёлые металлы, перспективны для очистки промышленных стоков. Практическая реализация и оптимизация состава могут сделать технологию доступной.",
+   "methods": [
+    "Синтезировать MoS2/C композит по методике из работы 1806.02896 (гидротермальный синтез или пропитка с последующей карбонизацией).",
+    "Нанести композит на полиуретановую губку методом погружения.",
+    "Испытать губку в установке солнечного испарения: измерить скорость испарения чистой воды и раствора с ионами ртути, а также концентрацию ртути до и после.",
+    "Провести несколько циклов для оценки стабильности."
+   ],
+   "origin": "Работа 1806.02896 демонстрирует концепцию губки с MoS2/C для одновременного испарения и удаления ртути, но не даёт деталей по масштабированию и долговременной стабильности. В литературе по солнечным испарителям часто отсутствуют данные по удалению конкретных загрязнителей в динамике.",
+   "first_step": "Повторить синтез MoS2/C по описанию из статьи и нанести на небольшую губку, затем измерить скорость испарения в лабораторной установке с имитацией солнечного света.",
+   "needs": "Химические реактивы для синтеза MoS2/C, полиуретановые губки, лабораторная посуда, источник света (солнечный имитатор или галогенная лампа), весы, спектрофотометр для анализа ртути (или доступ к аналитической лаборатории).",
+   "risks": "Синтез может потребовать точного соблюдения условий; работа с ртутью требует мер безопасности; эффективность может оказаться ниже заявленной в статье.",
+   "scale": "семестр",
+   "based_on": [
+    "1806.02896"
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "id": "1409.5962",
+   "full": false,
+   "field": true,
+   "score": 0.597,
+   "titles": {
+    "ru": "Concentrated sunlight for accelerated stability testing of organic   photovoltaic materials: Towards decoupling light intensity and temperature"
+   },
+   "abstract": "We have demonstrated OPV accelerated degradation studies using concentrated sunlight, where the atmosphere, temperature and illumination intensity were independently controlled. Testing various schemes for controlling the sample temperature under concentrated sunlight showed that heating of P3HT:PCBM was caused by photons at the absorbed wavelength range and dissipation of excess photon energy, and not necessarily by IR photon absorption. Sunlight chopping was found to be an effective method for independent temperature control under illumination by concentrated sunlight. The first accelerated "
+  },
+  {
+   "id": "1905.10394",
+   "full": false,
+   "field": true,
+   "score": 0.596,
+   "titles": {
+    "ru": "Enhanced solar evaporation using a photo-thermal umbrella: towards zero   liquid discharge wastewater management"
+   },
+   "abstract": "Rising water demands and depleting freshwater resources have brought desalination and wastewater treatment technologies to the forefront. For sustainable water management, there is a global push towards Zero Liquid Discharge (ZLD) with the goal to maximize water recovery for reuse, and to produce solid waste that lowers the environmental impact of wastewater disposal. Evaporation ponds harvest solar energy as heat for ZLD, but require large land areas due to low evaporation rates. Here, we demonstrate a passive and non-contact approach to enhance evaporation by more than 100% using a photo-the"
+  },
+  {
+   "id": "1806.02896",
+   "full": false,
+   "field": true,
+   "score": 0.588,
+   "titles": {
+    "ru": "MoS2/C @ Polyurethane Composite Sponges for Synergistic High-Rate Solar   Steaming and Mercury Removal"
+   },
+   "abstract": "Solar steam generation, a sustainable water-purification technology, holds substantial promises in resolving the global issue of shortage of drinkable water. Here, we report the design, fabrication, and performance of an innovative three-dimensional (3-D) solar steamer, offering synergistic high-rate steaming and heavy metal removal functions. The device is made of synthesized carbon-molybdenum-disulfide microbeads electrostatically assembled on a 3-D polyurethane sponge. The mesoporous composite sponge also serves as a freestanding water reservoir that avoids one-side contact to bulk water, e"
+  },
+  {
+   "id": "1804.10736",
+   "full": false,
+   "field": true,
+   "score": 0.581,
+   "titles": {
+    "ru": "Accelerating vapor condensation with daytime radiative cooling"
+   },
+   "abstract": "Vapor condensation plays a crucial role in solar water-purification technologies. Conventional condensers in solar water-purification systems do not provide sufficient cooling power for vapor condensation, limiting the water production rate to $0.4 L m^{-2} hour^{-1}$. On the other hand, radiative dew condensation, a technique used by existing radiative dew condensers, only works at nighttime and is incompatible with solar water-purification technologies. Here, we develop daytime radiative condensers that reflect almost all solar radiation, and can thus create dew water even in direct sunlight"
+  },
+  {
+   "id": "1809.05184",
+   "full": false,
+   "field": true,
+   "score": 0.577,
+   "titles": {
+    "ru": "Scalable, \"Dip-and-dry\" Fabrication of a Wide-Angle Plasmonic Selective   Absorber for High-efficiency Solar-Thermal Energy Conversion"
+   },
+   "abstract": "A galvanic displacement reaction-based, room-temperature \"dip-and-dry\" technique is demonstrated for fabricating selectively solar-absorbing plasmonic nanostructure-coated foils (PNFs). The technique, which allows for facile tuning of the PNFs' spectral reflectance to suit different radiative and thermal environments, yields PNFs which exhibit excellent, wide-angle solar absorptance (0.96 at 15{\\deg}, to 0.97 at 35{\\deg}, to 0.79 at 80{\\deg}) and low hemispherical thermal emittance (0.10) without the aid of antireflection coatings. The thermal emittance is on par with those of notable selectiv"
+  },
+  {
+   "id": "1508.00210",
+   "full": false,
+   "field": true,
+   "score": 0.576,
+   "titles": {
+    "ru": "Demonstration of a novel dispersive spectral splitting optical element   for cost- effective photovoltaic conversion"
+   },
+   "abstract": "In this letter we report the preliminary validation of a low-cost paradigm for photovoltaic power generation that utilizes a prismatic Fresnel-like lens to simultaneously concentrate and separate sunlight into continuous laterally spaced spectral bands, which are then fed into spectrally matched single-junction photovoltaic cells. A prismatic lens was designed using geometric optics and the dispersive properties of the employed material, and its performance was simulated with a ray- tracing software. After device optimization, it was fabricated by injection molding, suitable for large-scale ma"
+  },
+  {
+   "id": "1103.0360",
+   "full": false,
+   "field": true,
+   "score": 0.575,
+   "titles": {
+    "ru": "Plasmon Enhanced Solar-to-Fuel Energy Conversion"
+   },
+   "abstract": "Future generations of photoelectrodes for solar fuel generation must employ inexpensive, earth-abundant absorber materials in order to provide a large-scale source of clean energy. These materials tend to have poor electrical transport properties and exhibit carrier diffusion lengths which are significantly shorter than the absorption depth of light. As a result, many photo-excited carriers are generated too far from a reactive surface, and recombine instead of participating in solar-to-fuel-conversion. We demonstrate that plasmonic resonances in metallic nanostructures and multi-layer interfe"
+  },
+  {
+   "id": "1809.05334",
+   "full": false,
+   "field": true,
+   "score": 0.575,
+   "titles": {
+    "ru": "Efficient Volumetric Method of Moments for Modeling Plasmonic Thin-Film Solar Cells with Periodic Structures"
+   },
+   "abstract": "Metallic nanoparticles (NPs) support localized surface plasmon resonances (LSPRs), which enable to concentrate sunlight at the active layer of solar cells. However, full-wave modeling of the plasmonic solar cells faces great challenges in terms of huge computational workload and bad matrix condition. It is tremendously difficult to accurately and efficiently simulate near-field multiple scattering effects from plasmonic NPs embedded into solar cells. In this work, a preconditioned volume integral equation (VIE) is proposed to model plasmonic organic solar cells (OSCs). The diagonal block preco"
+  },
+  {
+   "id": "2512.15638",
+   "full": false,
+   "field": true,
+   "score": 0.574,
+   "titles": {
+    "ru": "Understanding the effect of drying time in process-structure-performance relationships for PM6-Y6 organic solar cells"
+   },
+   "abstract": "Making solution-cast organic solar cells industrially available generally comes at the cost of significant performance losses compared to device prototypes manufactured under laboratory conditions. Adjusting solvent evaporation kinetics is postulated to recover efficiency. Yet, a comprehensive characterization of their effect, independently of other property-defining parameters, is lacking. Thus, the present objective is to isolate the influence of the solvent drying rate on solution-deposited organic active layer nanomorphologies and performances. To this end, a specially designed gas quenchi"
+  },
+  {
+   "id": "1705.07963",
+   "full": false,
+   "field": true,
+   "score": 0.574,
+   "titles": {
+    "ru": "Dipole-field-assisted charge extraction in metal-perovskite-metal   back-contact solar cells"
+   },
+   "abstract": "Hybrid organic-inorganic halide perovskites are low-cost solution-processable solar cell materials with photovoltaic properties that rival those of crystalline silicon. The perovskite films are typically sandwiched between thin layers of hole and electron transport materials, which efficiently extract photogenerated charges. This affords high-energy conversion efficiencies but results in significant performance and fabrication challenges. Herein we present a simple charge transport layer-free perovskite solar cell (PSC), comprising only a perovskite layer with two interdigitated gold back-cont"
+  },
+  {
+   "id": "2012.14473",
+   "full": false,
+   "field": true,
+   "score": 0.574,
+   "titles": {
+    "ru": "Hybrid System for Solar Energy Conversion with Nano-Structured   Electrodes"
+   },
+   "abstract": "Solar energy is clean and renewable but has a low flux density. The lack of a continuous and reliable power supply reduces their average daily output. Since the infrared part is not utilized to produce electricity, conventional photovoltaic cells use only about half of the solar spectrum. Direct radiation flux is also necessary for solar Stirling engine to work efficiently. The hybrid system can largely overcome these problems. The design combines the photovoltaic and energy storage-integrated Stirling engine or thermal field emission technologies in the same concentrating solar power system, "
+  },
+  {
+   "id": "2007.14342",
+   "full": false,
+   "field": true,
+   "score": 0.573,
+   "titles": {
+    "ru": "Harvesting Energy from Sun, Outer Space, and Soil"
+   },
+   "abstract": "While solar power systems have offered a wide variety of electricity generation approaches including photovoltaics, solar thermal power systems, and solar thermoelectric generators, the ability of generating electricity at both the daytime and nighttime with no necessity of energy storage still remains challenging. Here, we propose and verify a strategy of harvesting solar energy by solar heating during the daytime and harnessing the coldness of the outer space through radiative cooling to produce electricity at night using a commercial thermoelectric module. It enables electricity generation "
+  }
+ ]
+}

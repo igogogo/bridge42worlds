@@ -1,0 +1,196 @@
+{
+ "topic": "пыль и загрязнение солнечных панелей",
+ "slug": "пыль-и-загрязнение-солнечных-панелей",
+ "built": "2026-08-30",
+ "note": "В области пыли и загрязнения солнечных панелей активно развиваются два направления: автоматизированная очистка и диагностика загрязнения по изображениям, но количественных данных о потерях мощности в зависимости от условий загрязнения всё ещё не хватает.",
+ "drill": {
+  "found": 12,
+  "nearest": 0.604,
+  "band": "sparse",
+  "near": 0,
+  "full": 0,
+  "model": "bge-m3"
+ },
+ "ideas": [
+  {
+   "title": "Сравнение методов обнаружения пыли на солнечных панелях по тепловым и визуальным изображениям",
+   "what": "Собрать небольшой набор изображений запылённых и чистых панелей с помощью тепловизора и обычной камеры, обучить на них несколько простых моделей детекции пыли и сравнить их точность.",
+   "why": "Позволит выбрать наиболее надёжный и дешёвый способ мониторинга загрязнения для небольших солнечных установок, где нет бюджета на сложные системы.",
+   "methods": [
+    "Использовать подход из работы 2511.18514: там описана унифицированная платформа на основе глубокого обучения для диагностики пыли и неисправностей по тепловым и визуальным изображениям. Взять оттуда идею комбинирования двух типов изображений.",
+    "Собрать датасет: сделать снимки одной и той же панели при разном уровне искусственного загрязнения (пыль, песок) с помощью ИК-камеры и обычной цифровой камеры.",
+    "Обучить простые классификаторы (например, SVM на признаках или лёгкую CNN) отдельно для тепловых, отдельно для визуальных изображений и для их комбинации.",
+    "Оценить точность, полноту и F1-меру на отложенной выборке, сравнить модели и сделать вывод о практической применимости."
+   ],
+   "origin": "В работе 2511.18514 заявлена платформа для диагностики пыли и неисправностей с использованием двух типов изображений, но не приведено детального сравнения, какой тип данных более информативен для задачи именно обнаружения пыли. Нет данных о том, насколько дешёвая камера уступает тепловизору. Это сравнение может дать практическую рекомендацию для малых установок.",
+   "first_step": "Найти доступную солнечную панель (например, на крыше учебного корпуса) и сделать по 20–30 снимков чистой и запылённой поверхности обычной камерой и тепловизором (можно арендовать).",
+   "needs": "Доступ к солнечной панели, обычная цифровая камера, тепловизионная камера (можно арендовать), компьютер с GPU или хотя бы CPU для обучения лёгких моделей, навыки Python и основ машинного обучения.",
+   "risks": "Главный риск — малое количество данных для обучения глубоких моделей; возможно, придётся ограничиться классическими методами или использовать аугментацию. Также тепловизор может быть дорог в аренде.",
+   "scale": "семестр",
+   "based_on": [
+    "2511.18514"
+   ]
+  },
+  {
+   "title": "Стенд для измерения влияния пыли на выходную мощность панели в зависимости от угла наклона",
+   "what": "Собрать лабораторный стенд с солнечной панелью, источником света, дозатором пыли и измерителем ВАХ, чтобы количественно оценить потери мощности при разных углах наклона панели и разной массе пыли на единицу площади.",
+   "why": "Такие данные полезны проектировщикам солнечных станций для выбора оптимального угла установки панелей в запылённых регионах и планирования графика очистки.",
+   "methods": [
+    "Взять за основу методику из работы 2511.04837: там описаны механизмы защиты и очистки панелей, и упоминается влияние пыли на эффективность. Использовать их подход к созданию контролируемого загрязнения.",
+    "Собрать стенд: панель на регулируемом кронштейне, лампа с известным спектром и интенсивностью, распылитель пыли с весами для точного дозирования.",
+    "Измерять вольт-амперную характеристику панели при разных углах (0°, 30°, 45°, 60°) и разных поверхностных плотностях пыли (например, 0, 5, 10, 20 г/м²).",
+    "Построить графики зависимости мощности от угла и загрязнения, вычислить коэффициент потерь."
+   ],
+   "origin": "В работе 2511.04837 рассматриваются конструкции очистки и защитные материалы, но не приводятся систематические данные о том, как потери мощности зависят от угла наклона при одинаковом загрязнении. Обычно считается, что наклон помогает самоочищению, но количественных данных для разных типов пыли мало. Наш стенд позволит получить такие данные для конкретного типа пыли.",
+   "first_step": "Собрать простейший стенд: одна небольшая солнечная панель, галогенная лампа, мультиметр и электронная нагрузка. Проверить, что ВАХ панели стабильно воспроизводится.",
+   "needs": "Небольшая солнечная панель (10–50 Вт), регулируемый кронштейн, источник света с постоянной интенсивностью (например, галогенная лампа с блоком питания), пыль (можно использовать стандартную тестовую пыль ISO 12103-1), весы, электронная нагрузка или набор резисторов, люксметр.",
+   "risks": "Сложность точного дозирования пыли и равномерного нанесения; нестабильность источника света может вносить ошибки. Результаты могут зависеть от типа пыли, поэтому обобщать нужно осторожно.",
+   "scale": "диплом",
+   "based_on": [
+    "2511.04837"
+   ]
+  },
+  {
+   "title": "Разработка и испытание автономного робота-уборщика для солнечных панелей с вакуумным захватом",
+   "what": "Спроектировать и собрать прототип автономного робота, который перемещается по наклонной поверхности солнечной панели и очищает её с помощью вакуумного всасывания и щёток, с системой управления на основе простых датчиков.",
+   "why": "Автоматическая очистка без участия человека снижает эксплуатационные расходы на больших солнечных фермах, особенно в пустынных регионах.",
+   "methods": [
+    "Использовать стратегию управления из работы 1412.0591: там описан автономный робот-пылесос для солнечных панелей с алгоритмом движения по поверхности. Адаптировать этот алгоритм для своего прототипа.",
+    "Собрать механическую платформу: лёгкая рама, колёса или гусеницы, вакуумный насос, щётки, контейнер для пыли.",
+    "Реализовать систему управления на микроконтроллере (Arduino или STM32) с датчиками края панели и наклона.",
+    "Провести испытания на наклонной поверхности, имитирующей панель, измерить качество очистки (по прозрачности стекла или по выходной мощности панели) и энергопотребление робота."
+   ],
+   "origin": "В работе 1412.0591 предложена стратегия управления автономным вакуумным очистителем, но нет деталей о механической реализации и энергоэффективности. В работе 2511.04837 сравниваются разные механизмы очистки, включая щётки, но не рассматривается вакуумный метод. Объединение этих подходов может дать работоспособный прототип с лучшими характеристиками.",
+   "first_step": "Собрать простую тележку с колёсами, которая может ездить по наклонной плоскости, и проверить, что она не соскальзывает. Затем добавить вакуумный насос и щётку.",
+   "needs": "Навыки механики и электроники, доступ к 3D-принтеру или мастерской, микроконтроллер, моторы, вакуумный насос малой мощности, аккумулятор, датчики. Бюджет на компоненты может составить несколько сотен долларов.",
+   "risks": "Основная сложность — обеспечить достаточное сцепление с поверхностью и одновременно лёгкость конструкции, чтобы робот не повредил панель. Вакуумный захват может потреблять много энергии, что снизит автономность.",
+   "scale": "годы",
+   "based_on": [
+    "1412.0591",
+    "2511.04837"
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "id": "2511.18514",
+   "full": false,
+   "field": true,
+   "score": 0.604,
+   "titles": {
+    "ru": "Unified Deep Learning Platform for Dust and Fault Diagnosis in Solar Panels Using Thermal and Visual Imaging"
+   },
+   "abstract": "Solar energy is one of the most abundant and tapped sources of renewable energies with enormous future potential. Solar panel output can vary widely with factors like intensity, temperature, dirt, debris and so on affecting it. We have implemented a model on detecting dust and fault on solar panels. These two applications are centralized as a single-platform and can be utilized for routine-maintenance and any other checks. These are checked against various parameters such as power output, sinusoidal wave (I-V component of solar cell), voltage across each solar cell and others. Firstly, we filt"
+  },
+  {
+   "id": "2511.04837",
+   "full": false,
+   "field": true,
+   "score": 0.577,
+   "titles": {
+    "ru": "Design Exploration for Protection and Cleaning of Solar Panels with Case Studies for Space Missions"
+   },
+   "abstract": "Solar energy is used for many mission-critical applications including space exploration, sensor systems to monitor wildfires, etc. Their operation can be limited or even terminated if solar panels are covered with dust or hit by space debris. To address this issue, we designed panel cleaning mechanisms and tested protective materials. For cleaning mechanisms, we designed and compared a wiper system and a rail system. For protective materials, we found through collision tests that polycarbonate was very promising, though the most important factor was layering a soft material between the panel's"
+  },
+  {
+   "id": "1412.0591",
+   "full": false,
+   "field": true,
+   "score": 0.571,
+   "titles": {
+    "ru": "A Control Strategy for an Autonomous Robotic Vacuum Cleaner for Solar   Panels"
+   },
+   "abstract": "Accumulation of dust on the surface of solar panels reduces the amount of radiation reaching it. This leads to loss in generated electric power and formation of hotspots which would permanently damage the solar panel. This project aims at developing an autonomous vacuum cleaning method which can be used on a regular basis to maximize the lifetime and efficiency of a solar panel. This system is implemented using two subsystems namely a Robotic Vacuum Cleaner and a Docking Station. The Robotic Vacuum Cleaner uses a two stage cleaning process to remove the dust from the solar panel. It is designe"
+  },
+  {
+   "id": "1706.06864",
+   "full": false,
+   "field": true,
+   "score": 0.567,
+   "titles": {
+    "ru": "Investigation of the Relationship Between the Air Pollution and Solar   Activity"
+   },
+   "abstract": "How did the Sun affect the air pollution on the Earth? There are few papers about this question. This work investigates the relationship between the air pollution and solar activity by using the geophysical and environmental data during the period of 2000-2016. It is quite certain that the solar activity may impact on the air pollution, but the relationship is very weak and indirect. The Pearson correlation, Spearman rank correlation, Kendalls rank correlation, and conditional probability were adopted to analyze the air pollution index (API), air quality index (AQI), sunspot number (SSN), radi"
+  },
+  {
+   "id": "1712.08117",
+   "full": false,
+   "field": true,
+   "score": 0.562,
+   "titles": {
+    "ru": "Influence of moisture on the operation of a mono-crystalline based   silicon photovoltaic cell: A numerical study using SCAPS 1 D"
+   },
+   "abstract": "Moisture in the form of humidity has a significant impact on the operation of photovoltaic (PV) cells and panels. Moisture is often diffuse through the encapsulant film (Ethylene Vynil Acetate (EVA), PVB, PVF, PMMA) or the breathable back-sheet. Moisture is known to accelerate the degradation and reduce the performance of a PV while operating in a wet environment. SCAPS 1 D is widely used to simulate and estimate the operation of PV. In this work, we showed the effect of moisture on the operation and performance of a PV, made from monocrystalline silicon. Namely, the influence of defects and i"
+  },
+  {
+   "id": "1307.7327",
+   "full": false,
+   "field": true,
+   "score": 0.559,
+   "titles": {
+    "ru": "Solar Sail: Materials and Space Environmental Effects"
+   },
+   "abstract": "Theoretical aspects of a solar sail material degradation are presented when the solar electromagnetic and corpuscular forms of radiation were considered as sources of degradation. The analysis of the interaction of two components of solar radiation, the electromagnetic radiation and radiation of low- and high-energy electrons, protons, and helium ions emitted by the Sun with the solar-sail materials is discussed. The physical processes of the interactions of photons, electrons, protons and alpha-particles with sail material atoms and nuclei, leading to the degradation and ionization of solar s"
+  },
+  {
+   "id": "2002.09468",
+   "full": false,
+   "field": true,
+   "score": 0.556,
+   "titles": {
+    "ru": "Solar Contamination in Extreme Precision Radial Velocity Measurements:   Deleterious Effects and Prospects for Mitigation"
+   },
+   "abstract": "Solar contamination, due to moonlight and atmospheric scattering of sunlight, can cause systematic errors in stellar radial velocity (RV) measurements that significantly detract from the ~10cm/s sensitivity required for the detection and characterization of terrestrial exoplanets in or near Habitable Zones of Sun-like stars. The addition of low-level spectral contamination at variable effective velocity offsets introduces systematic noise when measuring velocities using classical mask-based or template-based cross-correlation techniques. Here we present simulations estimating the range of RV m"
+  },
+  {
+   "id": "1804.05249",
+   "full": false,
+   "field": true,
+   "score": 0.55,
+   "titles": {
+    "ru": "Urban Haze and Photovoltaics"
+   },
+   "abstract": "Urban haze is a multifaceted threat. Foremost a major health hazard, it also affects the passage of light through the lower atmosphere. In this paper, we present a study addressing the impact of haze on the performance pf photovoltaic installations in cities. Using long-term, high resolution field data from Delhi and Singapore we derive an empirical relation between reduction in insolation and fine particulate matter (PM2.5) concentration. This approach enables a straightforward way to estimate air pollution related losses to photovoltaic power generation anywhere on the planet. For Delhi, we "
+  },
+  {
+   "id": "2306.05340",
+   "full": false,
+   "field": true,
+   "score": 0.548,
+   "titles": {
+    "ru": "Research Impact of Solar Panel Cleaning Robot on Photovoltaic Panel's   Deflection"
+   },
+   "abstract": "In the last few decades, solar panel cleaning robots (SPCR) have been widely used for sanitizing photovoltaic (PV) panels as an effective solution for ensuring PV efficiency. However, the dynamic load generated by the SPCR during operation might have a negative impact on PV panels. To reduce these effects, this paper presents the utilization of ANSYS software to simulate multiple scenarios involving the impact of SPCR on PV panels. The simulation scenarios provided in the paper are derived from the typical movements of SPCR observed during practical operations. The simulation results show the "
+  },
+  {
+   "id": "2107.00291",
+   "full": false,
+   "field": true,
+   "score": 0.536,
+   "titles": {
+    "ru": "Influence of Light Soaking on Silicon Heterojunction Solar Cells With   Various Architectures"
+   },
+   "abstract": "In this article, we investigate the effect of prolonged light exposure on silicon heterojunction solar cells. We show that, although light exposure systematicallyimproves solar cell efficiency in the case of devices using intrinsic and p-type layers with optimal thickness, this treatment leads to performance degradation for devices with an insufficiently thick (p) layer on the light-incoming side. Our results indicate that this degradation is caused by a diminution of the (i/p)-layer stack hole-selectivity because of light exposure. Degradation is avoided when a sufficiently thick (p) layer is"
+  },
+  {
+   "id": "2307.05136",
+   "full": false,
+   "field": true,
+   "score": 0.536,
+   "titles": {
+    "ru": "Unveiling the Invisible: Enhanced Detection and Analysis of Deteriorated   Areas in Solar PV Modules Using Unsupervised Sensing Algorithms and 3D   Augmented Reality"
+   },
+   "abstract": "Solar Photovoltaic (PV) is increasingly being used to address the global concern of energy security. However, hot spot and snail trails in PV modules caused mostly by crakes reduce their efficiency and power capacity. This article presents a groundbreaking methodology for automatically identifying and analyzing anomalies like hot spots and snail trails in Solar Photovoltaic (PV) modules, leveraging unsupervised sensing algorithms and 3D Augmented Reality (AR) visualization. By transforming the traditional methods of diagnosis and repair, our approach not only enhances efficiency but also subst"
+  },
+  {
+   "id": "1912.02639",
+   "full": false,
+   "field": true,
+   "score": 0.535,
+   "titles": {
+    "ru": "The Near-Sun Dust Environment: Initial Observations from Parker Solar   Probe"
+   },
+   "abstract": "The Parker Solar Probe (PSP) spacecraft has flown into the most dense and previously unexplored region of our solar system's zodiacal cloud. While PSP does not have a dedicated dust detector, multiple instruments onboard are sensitive to the effects of meteoroid bombardment. Here, we discuss measurements taken during PSP's first two orbits and compare them to models of the zodiacal cloud's dust distribution. Comparing the radial impact rate trends and the timing and location of a dust impact to an energetic particle detector, we find the impactor population to be consistent with dust grains on"
+  }
+ ]
+}

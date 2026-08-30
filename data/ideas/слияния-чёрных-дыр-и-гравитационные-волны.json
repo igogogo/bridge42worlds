@@ -1,0 +1,218 @@
+{
+ "topic": "слияния чёрных дыр и гравитационные волны",
+ "slug": "слияния-чёрных-дыр-и-гравитационные-волны",
+ "built": "2026-08-30",
+ "note": "В области слияний чёрных дыр активно развиваются методы анализа данных и теоретические модели, связывающие первичные чёрные дыры и экзотические объекты с наблюдаемыми сигналами.",
+ "drill": {
+  "found": 12,
+  "nearest": 0.65,
+  "band": "mid",
+  "near": 1,
+  "full": 3,
+  "model": "bge-m3"
+ },
+ "ideas": [
+  {
+   "title": "Оценка параметров слияний первичных чёрных дыр по данным LIGO/Virgo с использованием связи частот",
+   "what": "Разработать и применить метод оценки параметров первичных чёрных дыр (ПЧД) на основе соотношения между частотами стохастического фона и частотами слияний, полученного в работе [2607.01818v1]. Написать код для анализа данных LIGO/Virgo и проверить, улучшает ли эта связь точность оценок масс и темпов слияний.",
+   "why": "Позволит лучше выделить вклад ПЧД в наблюдаемые гравитационно-волновые события и уточнить ограничения на их распространённость, что важно для космологии.",
+   "methods": [
+    "Использовать аналитическое соотношение f_merge = 1.79 * f_bg из работы [2607.01818v1] для наложения априорных ограничений на параметры ПЧД.",
+    "Применить байесовский анализ с помощью существующих пакетов (например, Bilby) к данным O1-O3 LIGO/Virgo для событий-кандидатов ПЧД, таких как GW190425, GW190521, GW190814 (из работы [2007.06481]).",
+    "Сравнить полученные ограничения на долю ПЧД в тёмной материи с результатами без использования частотной связи."
+   ],
+   "origin": "В работе [2607.01818v1] установлена универсальная связь между частотами стохастического фона и слияний ПЧД, но она не применялась для анализа конкретных событий. Работа [2007.06481] выделяет события-кандидаты ПЧД, но без использования этой связи. Таким образом, не хватает практического применения соотношения для улучшения оценок параметров ПЧД.",
+   "first_step": "Скачать открытые данные LIGO/Virgo и выбрать события с массами в диапазоне, характерном для ПЧД; воспроизвести базовый анализ параметров с помощью готовых скриптов.",
+   "needs": "Доступ к данным LIGO/Virgo (открыты), навыки программирования на Python, знакомство с байесовским анализом и пакетами типа Bilby, вычислительные ресурсы (достаточно персонального компьютера для событийного анализа).",
+   "risks": "Соотношение частот может быть слишком грубым для отдельных событий, и улучшение оценок окажется незначительным; также неопределённость в модели формирования ПЧД может доминировать.",
+   "scale": "семестр",
+   "based_on": [
+    "2607.01818v1",
+    "2007.06481"
+   ]
+  },
+  {
+   "title": "Разработка быстрого симулятора гравитационных волн от слияний чёрных дыр с использованием суррогатных моделей и машинного обучения",
+   "what": "Создать быстрый генератор форм сигналов для слияний чёрных дыр, обученный на данных численной относительности из работы [1010.2165] и современных каталогах, с использованием нейронных сетей или гауссовых процессов. Интегрировать его в стандартный конвейер анализа LIGO/Virgo.",
+   "why": "Ускорит оценку параметров событий в десятки раз, что критично при растущем числе детектируемых слияний и для будущих наблюдений третьего поколения детекторов.",
+   "methods": [
+    "Собрать набор данных из численных симуляций слияний чёрных дыр (например, из SXS каталога, на который опирается работа [1010.2165]).",
+    "Обучить суррогатную модель (нейронную сеть или регрессию на основе гауссовых процессов) для предсказания формы волны по параметрам (массы, спины).",
+    "Проверить точность модели, сравнивая с эталонными симуляциями, и оценить выигрыш в скорости при использовании в байесовском анализе."
+   ],
+   "origin": "Работа [1010.2165] описывает важность численной относительности для получения точных форм волн, но вычисления остаются дорогими. Существующие быстрые модели (например, приближённые) имеют ограниченную точность. Не хватает доступного инструмента, который бы сочетал скорость и точность для широкого диапазона параметров.",
+   "first_step": "Скачать открытый каталог численных симуляций SXS и написать скрипт для извлечения параметров и соответствующих форм волн.",
+   "needs": "Доступ к каталогам численной относительности (SXS, RIT), навыки машинного обучения (Python, TensorFlow/PyTorch), вычислительные ресурсы для обучения (GPU желателен, но можно начать с CPU).",
+   "risks": "Точность суррогатной модели может оказаться недостаточной для сложных конфигураций (высокие спины, прецессия), что ограничит её применение.",
+   "scale": "диплом",
+   "based_on": [
+    "1010.2165"
+   ]
+  },
+  {
+   "title": "Поиск электромагнитных аналогов слияний нейтронных звёзд с чёрными дырами с использованием данных гравитационных волн и обзоров неба",
+   "what": "Разработать алгоритм для оперативного оповещения оптических телескопов о событиях слияний нейтронных звёзд с чёрными дырами (NSBH) на основе анализа гравитационно-волновых данных, учитывая эффекты смешивания мод из работы [2410.12775]. Проверить на архивных данных LIGO/Virgo и симулированных событиях.",
+   "why": "Повысит шансы обнаружить электромагнитное излучение от NSBH слияний, что даст информацию о природе компактных объектов и физике экстремальных состояний.",
+   "methods": [
+    "Использовать методы оценки параметров в реальном времени (например, low-latency анализ) для быстрого определения локализации и масс компонентов.",
+    "Включить в анализ возможность электромагнитных эффектов на форму гравитационного сигнала, как предложено в работе [2410.12775], чтобы уточнить классификацию события.",
+    "Разработать прототип оповещения, отправляющий координаты и вероятности в систему телескопов (например, через протокол GCN)."
+   ],
+   "origin": "Работа [2410.12775] показывает, что электромагнитные поля могут влиять на гравитационные волны от NSBH, но не предложен практический метод использования этого для улучшения поиска аналогов. Существующие оповещения основаны только на гравитационных данных и не учитывают такие эффекты. Не хватает интеграции этих теоретических результатов в наблюдательную практику.",
+   "first_step": "Изучить существующий конвейер low-latency анализа LIGO/Virgo и смоделировать несколько событий NSBH с ожидаемыми параметрами, чтобы оценить точность локализации.",
+   "needs": "Доступ к симуляциям и данным LIGO/Virgo, навыки программирования, понимание алгоритмов оценки параметров, возможно сотрудничество с астрономами для организации наблюдений.",
+   "risks": "Электромагнитные аналоги NSBH могут быть крайне слабыми, и эффект смешивания мод может быть неразличим в реальных данных; также координация с телескопами требует инфраструктуры.",
+   "scale": "годы",
+   "based_on": [
+    "2410.12775"
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "id": "2607.01818v1",
+   "date": "2026-07-02",
+   "full": true,
+   "titles": {
+    "ru": "Вселенская симфония: как басы и свист первичных чёрных дыр звучат в унисон",
+    "en": "Cosmic Symphony: How the Bass and Whistle of Primordial Black Holes Sound in Unison",
+    "es": "Sinfonía cósmica: cómo los bajos y el silbido de los agujeros negros primordiales suenan al unísono",
+    "ar": "السيمفونية الكونية: تناغم الباص والصفير من الثقوب السوداء البدائية",
+    "fr": "La symphonie cosmique : quand les basses et les sifflets des trous noirs primordiaux jouent à l'unisson"
+   },
+   "score": 0.549,
+   "url": "/lang/{lang}/archive/2026-07-02/2607.01818v1/",
+   "abstract": "Когда бросаешь камень в воду, круги расходятся по всей поверхности — так и крошечные сгустки материи в ранней Вселенной оставляют следы в виде гравитационных волн. Учёные связали два типа таких «кругов»: слабый гул от рождения этих сгустков и резкий щелчок от их столкновений. Оказалось, что частота щелчка всегда ровно в 1,79 раза выше частоты гула — независимо от размеров объектов. Теперь по одному сигналу можно предсказать другой, что позволит находить следы древних флуктуаций в совершенно разных диапазонах наблюдений."
+  },
+  {
+   "id": "2606.06478v1",
+   "date": "2026-06-04",
+   "full": true,
+   "titles": {
+    "ru": "Гравитационные фантомы: доменные стенки вместо чёрных дыр",
+    "en": "Gravitational Phantoms: Domain Walls Instead of Black Holes",
+    "es": "Fantasmas gravitacionales: paredes de dominio en lugar de agujeros negros",
+    "ar": "أطياف الجاذبية: جدران المجالات بدلاً من الثقوب السوداء",
+    "fr": "Fantômes gravitationnels : des parois de domaine à la place des trous noirs"
+   },
+   "score": 0.545,
+   "url": "/lang/{lang}/archive/2026-06-04/2606.06478v1/",
+   "abstract": "Представьте, что два гиганта сталкиваются в космосе, оставляя после себя рябь на ткани пространства. Учёные проверили, не может ли эта рябь быть следствием невидимых космических «складок», а не чёрных дыр. Оказалось, что чёрные дыры всё же объясняют сигналы лучше, но данные не исключают и «складки». Главная неожиданность: ложные «складки» маскируются под чёрные дыры с быстрым вращением. Теперь у нас есть новый способ проверять такие сигналы, что поможет отличать настоящие события от призраков в будущих наблюдениях."
+  },
+  {
+   "id": "2607.01818",
+   "date": "2026-07-02",
+   "full": true,
+   "titles": {
+    "ru": "Аккорд из бездны: гравитационные волны первичных чёрных дыр",
+    "en": "Chord from the Abyss: Gravitational Waves of Primordial Black Holes",
+    "es": "Acorde desde el abismo: ondas gravitacionales de agujeros negros primordiales",
+    "ar": "نغم من الهاوية: موجات الجاذبية للثقوب السوداء الأولية",
+    "fr": "L'accord des abysses : les ondes gravitationnelles des trous noirs primordiaux"
+   },
+   "score": 0.537,
+   "url": "/lang/{lang}/archive/2026-07-02/2607.01818/",
+   "abstract": "Если бросить камень в пруд, волны разойдутся широко, но на самом дне останется лишь небольшая ямка. Учёные выяснили, что похожий процесс в ранней Вселенной создаёт не только чёрные дыры, но и две разные гравитационные волны — одни низкие и густые, другие высокие и редкие. Оказалось, что частота высокого сигнала всегда ровно в 1,79 раза выше, чем у тех волн, что рождаются у края чёрной дыры, независимо от её размера. Теперь по одному всплеску можно предсказать другой в далёком диапазоне, что помогает ловить следы первых мгновений космоса без сложных расчётов."
+  },
+  {
+   "id": "2606.28161",
+   "date": "2026-06-26",
+   "full": false,
+   "titles": {
+    "ru": "Гравитационные атомы аксионов поют в парах чёрных дыр",
+    "en": "Gravitational atoms of axions sing in black hole pairs",
+    "es": "Los átomos gravitacionales de axiones cantan en pares de agujeros negros",
+    "ar": "الذرات الثقالية للأكسيونات تعزف في أزواج الثقوب السوداء",
+    "fr": "Les atomes gravitationnels d'axions chantent en couple autour des trous noirs"
+   },
+   "score": 0.532,
+   "url": "/lang/{lang}/archive/2026-06-26/2606.28161/",
+   "abstract": "Вокруг вращающихся чёрных дыр могут собираться облака из частиц-аксионов, образуя подобие огромного атома. Когда такая система входит в двойную пару, приливные силы вызывают переходы между уровнями этого «атома», рождая гравитационные волны. Новое исследование показало, что важнее не вероятность перехода, а согласованность излучения на выходе — она сохраняется при умеренных скоростях сближения. Это даёт чёткий сигнал, который можно зарегистрировать и по которому можно изучить свойства тёмной материи."
+  },
+  {
+   "id": "2604.21010",
+   "date": "2026-04-22",
+   "full": false,
+   "titles": {
+    "ru": "Гравитационное эхо от далёких чёрных дыр",
+    "en": "Gravitational Echoes from Distant Black Holes",
+    "es": "El eco gravitacional de agujeros negros lejanos",
+    "ar": "صدى الجاذبية من الثقوب السوداء البعيدة",
+    "fr": "L'écho gravitationnel des trous noirs lointains"
+   },
+   "score": 0.531,
+   "url": "/lang/{lang}/archive/2026-04-22/2604.21010/",
+   "abstract": "Слияния сверхмассивных чёрных дыр порождают гравитационные волны — рябь пространства-времени. Проходя мимо пульсаров (быстро вращающихся нейтронных звёзд), волна оставляет след в их ритме. Учёные предлагают использовать эти следы как «эхо», чтобы заглянуть в прошлое пары чёрных дыр на сотни лет назад. Такой метод позволит точнее находить источник волн на небе и проверять, как чёрные дыры сближаются перед слиянием."
+  },
+  {
+   "id": "1602.04476",
+   "full": false,
+   "field": true,
+   "score": 0.65,
+   "titles": {
+    "ru": "Viewpoint: The First Sounds of Merging Black Holes"
+   },
+   "abstract": "Gravitational waves emitted by the merger of two black holes have been detected, setting the course for a new era of observational astrophysics."
+  },
+  {
+   "id": "1604.04932",
+   "full": false,
+   "field": true,
+   "score": 0.646,
+   "titles": {
+    "ru": "Gravitational waves from primordial black holes collisions in binary   systems"
+   },
+   "abstract": "It was shown by (Nakamura et al. 1997), (Ioka et al. 1998), and (Sasaki et al. 2016) that primordial black holes (PBHs) binaries can form effectively at the cosmological stage of radiation dominance, and the merge of the PBHs in pairs can explain the gravitational wave burst GW150914. In this paper, the model is re-examined by considering the effect of inflationary dark matter density perturbations which produce additional tidal forces. As a result, the merge rate of PBHs binaries and the corresponding rate of the gravitational bursts are suppressed by the factor $\\sim1.5-2$ in comparison with"
+  },
+  {
+   "id": "0708.4202",
+   "full": false,
+   "field": true,
+   "score": 0.639,
+   "titles": {
+    "ru": "Gravitational waves from black-hole mergers"
+   },
+   "abstract": "Coalescing black-hole binaries are expected to be the strongest sources of gravitational waves for ground-based interferometers as well as the space-based interferometer LISA. Recent progress in numerical relativity now makes it possible to calculate the waveforms from the strong-field dynamical merger and is revolutionizing our understanding of these systems. We review these dramatic developments, emphasizing applications to issues in gravitational wave observations. These new capabilities also make possible accurate calculations of the recoil or kick imparted to the final remnant black hole "
+  },
+  {
+   "id": "2007.06481",
+   "full": false,
+   "field": true,
+   "score": 0.637,
+   "titles": {
+    "ru": "GW190425, GW190521 and GW190814: Three candidate mergers of primordial   black holes from the QCD epoch"
+   },
+   "abstract": "The two recent gravitational-wave events GW190425 and GW190814 from the third observing run of LIGO/Virgo have both a companion which is unexpected if originated from a neutron star or a stellar black hole, with masses $[1.6-2.5]~M_\\odot$ and $[2.5-2.7]~M_\\odot$ and merging rates $ 460^{+1050}_{-360} $ and $ 7^{+16}_{-6}$ events/yr/Gpc$^3$ respectively, at 90\\% c.l.. Moreover, the recent event GW190521 has black hole components with masses 67 and $91~M_\\odot$, and therefore lies in the so-called pair-instability mass gap, where there should not be direct formation of stellar black holes. The p"
+  },
+  {
+   "id": "1010.2165",
+   "full": false,
+   "field": true,
+   "score": 0.636,
+   "titles": {
+    "ru": "The Final Merger of Black-Hole Binaries"
+   },
+   "abstract": "Recent breakthroughs in the field of numerical relativity have led to dramatic progress in understanding the predictions of General Relativity for the dynamical interactions of two black holes in the regime of very strong gravitational fields. Such black-hole binaries are important astrophysical systems and are a key target of current and developing gravitational-wave detectors. The waveform signature of strong gravitational radiation emitted as the black holes fall together and merge provides a clear observable record of the process. After decades of slow progress, these mergers and the gravi"
+  },
+  {
+   "id": "2410.12775",
+   "full": false,
+   "field": true,
+   "score": 0.635,
+   "titles": {
+    "ru": "More Nonlinearities? Electromagnetic and Gravitational Mode Mixing in   NSBH Mergers"
+   },
+   "abstract": "We investigate the possibility of electromagnetic fields leaving imprints on gravitational wave (GW) signals from Neutron Star-Black hole (NSBH) mergers, specifically in the context of extreme mass ratio inspirals (EMRIs). Using black hole perturbation theory (BHPT) in the context of a minimally coupled Einstein-Maxwell system, we demonstrate that electromagnetic quasi normal modes(QNMs) can excite gravitational QNMs with frequencies that are linear or quadratic in the electromagnetic QNMs, at first level of mixing. Moreover, We then study the electromagnetism-gravity coupling by approximating"
+  },
+  {
+   "id": "1606.06526",
+   "full": false,
+   "field": true,
+   "score": 0.635,
+   "titles": {
+    "ru": "Implications of the Gravitational Wave Event GW150914"
+   },
+   "abstract": "The era of gravitational-wave astronomy began on 14 September 2015, when the LIGO Scientific Collaboration detected the merger of two $\\sim 30 M_\\odot$ black holes at a distance of $\\sim 400$ Mpc. This event has facilitated qualitatively new tests of gravitational theories, and has also produced exciting information about the astrophysical origin of black hole binaries. In this review we discuss the implications of this event for gravitational physics and astrophysics, as well as the expectations for future detections. In brief: (1) because the spins of the black holes could not be measured ac"
+  }
+ ]
+}

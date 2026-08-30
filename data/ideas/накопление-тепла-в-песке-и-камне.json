@@ -1,0 +1,237 @@
+{
+ "topic": "накопление тепла в песке и камне",
+ "slug": "накопление-тепла-в-песке-и-камне",
+ "built": "2026-08-30",
+ "note": "В области накопления тепла в песке и камне активно развиваются численные модели и лабораторные исследования, но не хватает практических инженерных методик и открытых данных для быстрой оценки свойств материалов.",
+ "drill": {
+  "found": 12,
+  "nearest": 0.595,
+  "band": "sparse",
+  "near": 0,
+  "full": 0,
+  "model": "bge-m3"
+ },
+ "ideas": [
+  {
+   "title": "Стенд для проверки влияния слоистости и анизотропии проницаемости на теплообмен в песчаных накопителях",
+   "what": "Собрать лабораторный стенд с контейнером песка, системой подачи горячей воды и датчиками температуры. Провести серию экспериментов по закачке горячей воды в песок с разной укладкой слоёв (горизонтальные, наклонные, с прослойками глины) и измерить распределение температуры и эффективность хранения тепла.",
+   "why": "Такие данные помогут понять, как геологическая неоднородность (слоистость, анизотропия) влияет на работу геотермальных батарей. Инженеры, проектирующие подземные накопители тепла, смогут точнее оценивать потери и выбирать участки.",
+   "methods": [
+    "Методика закачки и мониторинга температуры из работы 2006.13308 (Geothermal Battery Energy Storage): использовать аналогичный подход с контролем расхода и температуры воды.",
+    "Изменять укладку песка: создавать горизонтальные слои разной проницаемости, добавлять тонкие глинистые прослойки, чтобы имитировать анизотропию.",
+    "Измерять температуру в сетке точек с помощью термопар или оптоволоконных датчиков, регистрировать динамику теплового фронта.",
+    "Сравнить экспериментальные профили температуры с простыми аналитическими моделями теплопереноса в пористой среде."
+   ],
+   "origin": "В работе 2006.13308 численно исследовали влияние анизотропии проницаемости и слоистой неоднородности на хранение тепла в геотермальной батарее, но экспериментальной проверки этих эффектов в контролируемых условиях не хватает. Работа 2506.05818 показывает, что поведение глин и аргиллитов при термомеханических нагрузках сложное, и их присутствие как прослоек может сильно менять теплоперенос. Никто не проверял в лаборатории, насколько слоистость реального песка с глинистыми включениями меняет эффективность накопления тепла по сравнению с однородной моделью.",
+   "first_step": "Собрать простой контейнер с песком (например, аквариум с теплоизоляцией), установить несколько термопар, закачать горячую воду и записать изменение температуры во времени для однородного песка.",
+   "needs": "Лабораторный контейнер (0.5–1 м³), песок разной фракции, глина для прослоек, насос с регулировкой расхода, водонагреватель, 10–20 термопар или оптоволоконный датчик температуры, система сбора данных (Arduino или аналог). Навыки: базовое понимание гидрогеологии и теплообмена, умение работать с датчиками.",
+   "risks": "Сложно воспроизвести реальную анизотропию и масштабные эффекты в небольшом контейнере; результаты могут оказаться тривиальными (например, глинистые прослойки просто блокируют поток). Также может быть трудно добиться повторяемости из-за неоднородности укладки песка.",
+   "scale": "семестр",
+   "based_on": [
+    "2006.13308",
+    "2506.05818"
+   ]
+  },
+  {
+   "title": "Проверка применимости модели тепловой консолидации глин для оценки устойчивости песчано-каменных накопителей тепла",
+   "what": "Провести серию экспериментов по нагреву образцов насыщенной глины и песчано-глинистых смесей в жёсткой ячейке с измерением порового давления и деформаций. Сопоставить результаты с моделью тепловой консолидации из работы 1208.1753 и оценить, можно ли её использовать для прогноза механического поведения накопителей тепла в грунтах.",
+   "why": "При циклическом нагреве и охлаждении подземных накопителей тепла в глинистых прослойках могут возникать избыточные поровые давления и деформации, влияющие на устойчивость и герметичность. Понимание этого процесса поможет избежать аварий при эксплуатации.",
+   "methods": [
+    "Использовать экспериментальную методику из работы 1208.1753: нагрев насыщенных образцов в условиях ограниченного дренажа с измерением порового давления и осевой деформации.",
+    "Приготовить образцы с разным содержанием глины и песка, имитирующие типичные грунты на площадках накопителей.",
+    "Провести циклы нагрева и охлаждения с разной скоростью, фиксируя гистерезис порового давления и остаточные деформации.",
+    "Сравнить экспериментальные кривые с аналитическим решением модели тепловой консолидации, оценить параметры, при которых модель работает."
+   ],
+   "origin": "Работа 1208.1753 даёт теоретическую основу тепловой консолидации глин, но экспериментальные данные в ней ограничены и не покрывают циклические режимы, характерные для накопителей тепла. Работа 2506.05818 обобщает исследования термо-гидро-механического поведения глин, но не даёт прямых рекомендаций для песчано-глинистых смесей в условиях накопителей. Не хватает проверки, насколько модель из 1208.1753 применима к таким смесям и циклическим нагрузкам.",
+   "first_step": "Собрать или арендовать ячейку для испытаний грунтов с возможностью нагрева и измерения порового давления (например, модифицированный одометр). Приготовить первый образец смеси песка и глины и провести пробный нагрев.",
+   "needs": "Оборудование для механических испытаний грунтов (одометр или триаксиальная ячейка с нагревом), датчики порового давления, система управления температурой, пресс для уплотнения образцов. Навыки: механика грунтов, умение работать с измерительной аппаратурой.",
+   "risks": "Эксперименты с глинами длительны (диссипация порового давления может занимать дни), а модель тепловой консолидации может плохо описывать смеси с высоким содержанием песка. Возможно, потребуется модификация модели, что усложнит задачу.",
+   "scale": "диплом",
+   "based_on": [
+    "1208.1753",
+    "2506.05818"
+   ]
+  },
+  {
+   "title": "Разработка методики экспресс-оценки теплоёмкости и теплопроводности каменных материалов для накопителей тепла по данным простых измерений",
+   "what": "Создать портативную установку для измерения теплофизических свойств (теплоёмкость, теплопроводность) образцов горных пород и строительных материалов, используемых в накопителях тепла. Провести измерения для набора материалов (гранит, базальт, песчаник, бетон) и сопоставить с литературными данными, откалибровать методику.",
+   "why": "Для проектирования накопителей тепла в камне нужны точные данные о теплофизических свойствах материалов, но часто используются табличные значения без учёта местных особенностей. Доступная методика позволит быстро оценивать свойства конкретных материалов на площадке.",
+   "methods": [
+    "Использовать метод импульсного нагрева с регистрацией температуры на поверхности образца (по аналогии с методиками, описанными в работе 2410.22737 для оценки тепловых свойств планетезималей, но адаптированными для земных материалов).",
+    "Собрать измерительную ячейку с нагревательным элементом, термопарами и теплоизоляцией, подключить к микроконтроллеру для автоматической записи.",
+    "Провести измерения на образцах с известными свойствами (например, алюминий, вода) для калибровки, затем на горных породах.",
+    "Сравнить результаты с литературными данными и оценить погрешность метода."
+   ],
+   "origin": "В работе 2410.22737 рассматривается влияние динамических температур на динамику гальки, но используемые там подходы к оценке тепловых свойств могут быть адаптированы для земных материалов. В литературе по накопителям тепла часто не хватает простых и дешёвых методов измерения теплофизических свойств каменных материалов, особенно для местных пород. Никто не предложил портативную методику, которую инженер мог бы использовать на месте.",
+   "first_step": "Собрать простую ячейку: кусок теплоизоляции, плоский нагреватель, две термопары, подключить к Arduino. Проверить на образце с известной теплопроводностью.",
+   "needs": "Нагревательный элемент (например, нихромовая плёнка), термопары или цифровые датчики температуры, микроконтроллер, теплоизоляция, образцы горных пород (можно взять в геологической коллекции). Навыки: основы теплофизики, программирование микроконтроллеров.",
+   "risks": "Точность самодельной установки может оказаться низкой из-за контактных сопротивлений и утечек тепла. Для получения надёжных данных может потребоваться сравнение с коммерческими приборами, что не всегда доступно.",
+   "scale": "семестр",
+   "based_on": [
+    "2410.22737"
+   ]
+  },
+  {
+   "title": "Оценка влияния водонасыщенности на тепловые свойства пористых пород для накопителей тепла: эксперименты и простая модель",
+   "what": "Провести серию измерений теплопроводности и теплоёмкости образцов пористых пород (песчаник, известняк) при разной степени водонасыщения. Разработать простую эмпирическую модель для прогноза тепловых свойств в зависимости от пористости и насыщения, используя данные экспериментов и литературные данные.",
+   "why": "В реальных накопителях тепла поры могут быть частично заполнены водой, что сильно меняет теплоперенос. Такая модель поможет инженерам быстрее оценивать тепловые характеристики пласта без дорогостоящих измерений.",
+   "methods": [
+    "Использовать методику измерения теплопроводности и теплоёмкости, описанную в работе 2510.17446 для карбонатных пород с разной водонасыщенностью.",
+    "Подготовить образцы с контролируемой пористостью (например, спечённые стеклянные шарики или естественные породы) и насыщать их водой до разных уровней.",
+    "Провести измерения теплопроводности методом линейного источника тепла (heated needle) и теплоёмкости калориметрически.",
+    "Построить регрессионную модель, связывающую теплопроводность с пористостью и насыщением, и проверить её на независимых данных."
+   ],
+   "origin": "Работа 2510.17446 даёт экспериментальные данные по водонасыщению и термодинамике пористых карбонатных пород, но не предлагает простой модели для инженерных оценок. В литературе по накопителям тепла часто используются постоянные значения теплопроводности, игнорирующие насыщение. Не хватает практической методики, которая позволила бы быстро оценивать тепловые свойства по известной пористости и влажности.",
+   "first_step": "Найти или изготовить образцы пористых пород с известной пористостью, измерить их теплопроводность в сухом состоянии с помощью игольчатого зонда.",
+   "needs": "Измеритель теплопроводности (heated needle probe), весы для контроля насыщения, сушильный шкаф, образцы пород. Навыки: основы теплофизики, статистическая обработка данных.",
+   "risks": "Теплопроводность сильно зависит от микроструктуры пор, которую трудно охарактеризовать простыми параметрами. Эмпирическая модель может давать большие ошибки для пород с необычной структурой.",
+   "scale": "диплом",
+   "based_on": [
+    "2510.17446"
+   ]
+  },
+  {
+   "title": "Создание открытой базы данных теплофизических свойств горных пород и грунтов для проектирования накопителей тепла",
+   "what": "Собрать из литературы и собственных измерений данные по теплопроводности, теплоёмкости и плотности различных пород и грунтов, используемых в накопителях тепла. Систематизировать их в открытой базе данных с веб-интерфейсом и инструментами для подбора параметров.",
+   "why": "Проектировщикам накопителей тепла часто приходится искать разрозненные данные по свойствам материалов, что замедляет работу. Открытая база с удобным доступом ускорит предварительные оценки и повысит качество проектов.",
+   "methods": [
+    "Использовать данные из работ архива (например, 2510.17446, 1208.1753, 2006.13308) как первоначальный источник, дополнить поиском в открытых публикациях.",
+    "Разработать структуру базы данных: тип материала, пористость, насыщение, температура, метод измерения, источник.",
+    "Создать веб-интерфейс (например, на Python/Django или Flask) для поиска и фильтрации данных.",
+    "Добавить инструменты для интерполяции и оценки свойств по аналогии с известными материалами."
+   ],
+   "origin": "В работах архива (например, 2510.17446 и 1208.1753) приводятся отдельные данные по тепловым свойствам, но нет единой базы, которая объединяла бы их для практического использования. Существующие коммерческие базы часто закрыты или не покрывают грунты и породы для накопителей тепла. Не хватает открытого ресурса, который бы аккумулировал проверенные данные и позволял быстро получать оценки.",
+   "first_step": "Составить список из 50–100 публикаций с данными по теплопроводности пород, извлечь данные и занести в таблицу.",
+   "needs": "Доступ к научной литературе, навыки программирования (Python, веб-разработка), время на сбор данных. Оборудование не требуется, но полезно иметь возможность провести собственные измерения для заполнения пробелов.",
+   "risks": "Сбор и проверка данных трудоёмки, возможны ошибки из-за разных методик измерений. База может оказаться невостребованной, если не будет удобного интерфейса и продвижения.",
+   "scale": "годы",
+   "based_on": [
+    "2510.17446",
+    "1208.1753",
+    "2006.13308"
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "id": "1208.1753",
+   "full": false,
+   "field": true,
+   "score": 0.595,
+   "titles": {
+    "ru": "On The Thermal Consolidation Of Boom Clay"
+   },
+   "abstract": "When a mass of saturated clay is heated, as in the case of host soils surrounding nuclear waste disposals at great depth, the thermal expansion of the constituents generates excess pore pressures. The mass of clay is submitted to gradients of pore pressure and temperature, to hydraulic and thermal flows, and to changes in its mechanical properties. In this work, some of these aspects were experimentally studied in the case of Boom clay, so as to help predicting the response of the soil, in relation with investigations made in the Belgian underground laboratory at Mol. Results of slow heating t"
+  },
+  {
+   "id": "2510.17446",
+   "full": false,
+   "field": true,
+   "score": 0.593,
+   "titles": {
+    "ru": "Water saturation in texturally porous carbonate rocks: Shock thermodynamics and dampening of the shock"
+   },
+   "abstract": "Sedimentary rocks often form the upper layers or the entire target rocks in impact events. Thermodynamic properties of sedimentary rocks related to porosity and water saturation affect the process of impact crater formation. The heterogeneous distribution of sedimentary facies can complicate the development and distribution of shock effects, especially in numerical modeling. This work focuses on the shock thermodynamic properties of carbonate rocks with differing porosity textures (e.g., isolated pores, interstitial porosity, elongated pores) and water saturation levels. Using mesoscale numeri"
+  },
+  {
+   "id": "2506.05818",
+   "full": false,
+   "field": true,
+   "score": 0.593,
+   "titles": {
+    "ru": "Integrated Experimental and Numerical Investigations on the Thermo-Hydro-Mechanical Behavior of Clays and Argillaceous Rocks: A Perspective"
+   },
+   "abstract": "This paper synthesizes nearly a decade of research on the coupled thermo-hydro-mechanical (THM) behavior of clays and argillaceous rocks. Drawing from experimental observations, numerical model development, and field-scale simulations, it presents a consolidated view of soil-structure interaction under thermal loading, desiccation cracking, and long-term excavation impacts. Key findings are drawn from constitutive modeling, in situ tests, and energy geostructure applications, offering a practical THM framework for nuclear waste repositories and climate-resilient infrastructure."
+  },
+  {
+   "id": "2410.22737",
+   "full": false,
+   "field": true,
+   "score": 0.592,
+   "titles": {
+    "ru": "The effect of dynamic temperatures on pebble dynamics and planet   formation"
+   },
+   "abstract": "Context. To date, more than 5000 exoplanets have been discovered. The large majority of these planets have a mass between 1 and 17 {M_\\oplus}, making them so-called super-Earths and mini-Neptunes. The exact formation process for this abundant planet population has not yet been fully constrained. Aims. Recent studies on the formation of these planets make various assumptions with regard to the disk. The primary mass budget, held in pebbles, is either assumed to have a constant size or is parametrized as a flux. Simplifications of the temperature structure, in the form of a static power law, do "
+  },
+  {
+   "id": "2207.09804",
+   "full": false,
+   "field": true,
+   "score": 0.591,
+   "titles": {
+    "ru": "Anatomy of rocky planets formed by rapid pebble accretion II.   Differentiation by accretion energy and thermal blanketing"
+   },
+   "abstract": "We explore the heating and differentiation of rocky planets that grow by rapid pebble accretion. Our terrestrial planets grow outside of the ice line and initially accrete 28\\% water ice by mass. The accretion of water stops after the protoplanet reaches a mass of $0.01\\,M_{\\rm E}$ where the gas envelope becomes hot enough to sublimate the ice and transport the vapour back to the protoplanetary disc by recycling flows. The energy released by the decay of $^{26}$Al melts the accreted ice to form clay (phyllosilicates), oxidized iron (FeO), and a water surface layer with ten times the mass of Ea"
+  },
+  {
+   "id": "2409.05951",
+   "full": false,
+   "field": true,
+   "score": 0.588,
+   "titles": {
+    "ru": "The Role of Thermal Feedback in the Growth of Planetary Cores by Pebble   Accretion in Dust Traps"
+   },
+   "abstract": "High-resolution millimetre-imaging of protoplanetary discs has revealed many containing rings and gaps. These rings can contain large quantities of dust, often in excess of 10M$_\\oplus$, providing prime sites for efficient and rapid planet formation. Rapid planet formation will produce high accretion luminosities, heating the surrounding disc. We investigate the importance of a planetary embryo's accretion luminosity by simulating the dynamics of the gas and dust in a dust ring, accounting for the energy liberated as a resident planetary embryo accretes. The resulting heating alters the flow s"
+  },
+  {
+   "id": "2006.13308",
+   "full": false,
+   "field": true,
+   "score": 0.581,
+   "titles": {
+    "ru": "Influence of Permeability Anisotropy and Layered Heterogeneity on   Geothermal Energy Battery Storage"
+   },
+   "abstract": "The Geothermal Battery Energy Storage concept has been proposed to provide large-scale heat storage when solar radiance is available, to be later recovered for economic benefit. The concept uses solar radiance to heat water on the surface which is then injected into a suitable subsurface formation. This hot water elevates the ambient formation temperature creating a high-temperature geothermal reservoir acceptable for geothermal electricity generation or direct heat applications. The process uses produced/injected, connate formation water and thus neither freshwater nor surface storage or disp"
+  },
+  {
+   "id": "physics/0510231",
+   "full": false,
+   "field": true,
+   "score": 0.581,
+   "titles": {
+    "ru": "Single-domain chemical, thermochemical and thermal remanences in a   basaltic rock"
+   },
+   "abstract": "Tiny basaltic samples containing finely grained titanomagnetite with Curie temperature less than 100 C were heated in air in weak field (25 to 100microT) at temperatures between 400 and 560 C for times as long as 32 hours. Oxyexsolution of titanomagnetite resulted in the crystallization of interacting single domain particles with Curie point close to 540 C and the concomitant development of one of two types chemical remanence, depending upon thermal treatment: isothermal chemical remanence (CRM) or thermochemical remanence (TCRM), the latter acquired under the combined effects of chemical chan"
+  },
+  {
+   "id": "1806.07673",
+   "full": false,
+   "field": true,
+   "score": 0.58,
+   "titles": {
+    "ru": "Temperature programed desorption of water ice from the surface of   amorphous carbon and silicate grains as related to planet-forming disks"
+   },
+   "abstract": "Understanding the history and evolution of small bodies, such as dust grains and comets, in planet-forming disks is very important to reveal the architectural laws responsible for the creation of planetary systems. These small bodies in cold regions of the disks are typically considered as mixtures of dust particles with molecular ices, where ices cover the surface of a dust core or are actually physically mixed with dust. Whilst the first case, ice-on-dust, has been intensively studied in the laboratory in recent decades, the second case, ice-mixed-with-dust, present uncharted territory. This"
+  },
+  {
+   "id": "1207.3101",
+   "full": false,
+   "field": true,
+   "score": 0.575,
+   "titles": {
+    "ru": "Post-Impact Thermal Evolution of Porous Planetesimals"
+   },
+   "abstract": "Impacts between planetesimals have largely been ruled out as a heat source in the early Solar System, by calculations that show them to be an inefficient heat source and unlikely to cause global heating. However, the long-term, localized thermal effects of impacts on planetesimals have never been fully quantified. Here, we simulate a range of impact scenarios between planetesimals to determine the post-impact thermal histories of the parent bodies, and hence the importance of impact heating in the thermal evolution of planetesimals. We find on a local scale that heating material to petrologic "
+  },
+  {
+   "id": "1504.03986",
+   "full": false,
+   "field": true,
+   "score": 0.573,
+   "titles": {
+    "ru": "Solar-induced thermal activity and stratification in pond water"
+   },
+   "abstract": "Ponds are universally used to store water for a large number of uses. With the increasing demand for more fresh water, ponds, lakes and reservoirs are likely to be constructed on a larger scale. We must understand the effects of environmental changes on fresh water if we are to most efficiently utilize this resource. This study undertakes to increase our understanding of the rate of thermal response of ponds and other bodies of water to every-day environmental changes. The central research agenda is to investigate how the temperature of pond water from top to bottom responds to the day/night c"
+  },
+  {
+   "id": "1908.04204",
+   "full": false,
+   "field": true,
+   "score": 0.573,
+   "titles": {
+    "ru": "Microphysical effects of water content and temperature on the   triboelectrification of volcanic ash on long timescales"
+   },
+   "abstract": "The effects of water and temperature on the triboelectrification of granular materials have been reported by numerous authors, but have not been studied robustly in the context of volcanic plumes. Here, we present the results of a set of experiments designed to elucidate how environmental conditions modulate the triboelectric characteristics of volcanic ash. We find that that small amounts of water can reduce the charge collected by micron-sized ash grains by up to an order of magnitude. Increasing temperature at a constant relative humidity also appears to decrease the amount of charge gained"
+  }
+ ]
+}
