@@ -38,7 +38,8 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stderr.reconfigure(encoding="utf-8")
 
 ROOT = Path(__file__).resolve().parent.parent
-LANGS = ("ru", "en", "es", "ar", "fr")
+from common import ALL_LANGS  # noqa: E402
+LANGS = ALL_LANGS   # список языков один на проект: config.json через common.ALL_LANGS
 BASE = "https://bridge42worlds.academy"
 CARD_SELECTOR = "article.article-card"
 # Меньше этого числа карточек на главной — беда, а не «мало статей»: лента показывает

@@ -40,7 +40,8 @@ for _s in (sys.stdout, sys.stderr):
     except (AttributeError, ValueError):
         pass
 
-LANGS = ("ru", "en", "es", "ar", "fr")
+from common import ALL_LANGS  # noqa: E402
+LANGS = ALL_LANGS   # список языков один на проект: config.json через common.ALL_LANGS
 BATCH = 10
 
 LANG_NAME = {"ru": "русском", "en": "английском", "es": "испанском",

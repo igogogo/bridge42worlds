@@ -43,7 +43,8 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
 
 # Справочники лежат в главном дереве, когда работаем из worktree.
 MAIN = Path("C:/Users/nadez/PycharmProjects/bridge42worlds")
-LANGS = ("ru", "en", "es", "ar", "fr")
+from common import ALL_LANGS  # noqa: E402
+LANGS = ALL_LANGS   # список языков один на проект: config.json через common.ALL_LANGS
 
 # Поля, где маркеры разрешены. text есть у всех уровней; остальные — только у полного
 # разбора. Список повторяет промпт data/prompts/article-generate-advanced.txt.

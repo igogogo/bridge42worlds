@@ -369,7 +369,7 @@
         var wrap = document.createElement('div');
         wrap.className = 'langs';
         wrap.id = 'course-langs';
-        ['ru', 'en', 'es', 'ar', 'fr'].forEach(function (l) {
+        (window.B42_LANGS || ['ru', 'en', 'es', 'ar', 'fr']).forEach(function (l) {
             var a = document.createElement('a');
             // сохраняем текущий адрес и параметры, меняем только язык
             var qs = new URLSearchParams(location.search);

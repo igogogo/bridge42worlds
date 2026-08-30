@@ -37,7 +37,7 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 import common  # noqa: E402  — .env, chat, clean_json
-from common import write_json_atomic  # noqa: E402
+from common import ALL_LANGS, write_json_atomic  # noqa: E402
 
 STATE = ROOT / "data" / "comments-state.json"
 FIXES = ROOT / "data" / "comment-fixes.jsonl"
@@ -52,7 +52,7 @@ JOURNAL = ROOT / "data" / "comments-journal.json"
 # отклик не падает в яму, а превращается в правку, вопрос совету или строку впечатления.
 # Переводы саммари храним рядом с журналом и не пересчитываем повторно.
 I18N = ROOT / "data" / "comments-journal-i18n.json"
-PAGE_LANGS = ("ru", "en", "es", "ar", "fr")
+PAGE_LANGS = ALL_LANGS   # один список на проект: config.json через common.ALL_LANGS
 DB_ID = os.environ.get("CLOUDFLARE_D1_ID", "")
 
 

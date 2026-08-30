@@ -24,7 +24,12 @@ import sys
 if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-LANGS = ("ru", "en", "es", "ar", "fr")
+# Импорт common работает из любой папки, а не только из корня репозитория.
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent.parent))
+from common import ALL_LANGS  # noqa: E402
+LANGS = ALL_LANGS   # список языков один на проект: config.json через common.ALL_LANGS
 
 
 def clean(keys):

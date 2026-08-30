@@ -1687,6 +1687,10 @@ function escapeHtml(s) {
 // найденного за неделю: французских статей 1453 — две трети архива, — а их читатель
 // молча получал русскую выдачу, русский ответ бота и русские подсказки тьютора.
 // Список общий на все три ручки именно поэтому: три копии одного списка и разошлись.
+/* ЕДИНСТВЕННОЕ место со списком языков в воркере. Их было три, и при
+   добавлении языка забыть одно означало бы, что часть ручек его не знает.
+   Воркер живёт на краю и config.json не читает, поэтому список здесь —
+   но ровно один, и он же используется ниже. */
 const LANGS = ["ru", "en", "es", "ar", "fr"];
 
 const SEARCH_MODEL = "@cf/baai/bge-m3";
@@ -2193,7 +2197,7 @@ async function handleTutor(request, env) {
  * а до базы при этом доходит ничтожная доля запросов. Ключ кэша — полный адрес со всеми
  * параметрами, поэтому разные языки и уровни не путаются.
  */
-const FEED_LANGS = ["ru", "en", "es", "ar", "fr"];
+const FEED_LANGS = LANGS;
 const FEED_VERSIONS = ["popular", "simple", "advanced"];
 const FEED_MAX = 40;
 
@@ -2661,7 +2665,7 @@ async function handleAuthorClaim(request, env) {
 
   const akey = String(b.akey || "").slice(0, 80).toLowerCase();
   const action = String(b.action || "");
-  const lang = ["ru", "en", "es", "ar", "fr"].includes(b.lang) ? b.lang : "en";
+  const lang = LANGS.includes(b.lang) ? b.lang : "en";
   const T = claimTxt(lang === "ru" ? "ru" : "en");
   if (!/^[a-zа-яё]+\|[a-zа-яё]+$/u.test(akey) || !CLAIM_ACTIONS.includes(action)) {
     return Response.json({ error: "bad_request" }, { status: 400 });

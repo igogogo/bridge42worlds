@@ -36,6 +36,7 @@ run.py — единый оркестратор Bridge For Two Worlds.
 """
 
 import argparse
+from common import ALL_LANGS  # noqa: E402
 import json
 import os
 import subprocess
@@ -122,7 +123,7 @@ def cmd_daily(args):
     # Смотрим только папки этого дня: картинки других дней давно сконвертированы,
     # и обходить их заново незачем (без этого шага свежие статьи выходят без
     # картинок — возврат QA 2026-07-30).
-    _ensure_webp(only=[f"lang/{l}/archive/{_day}" for l in ("ru", "en", "es", "ar", "fr")])
+    _ensure_webp(only=[f"lang/{l}/archive/{_day}" for l in ALL_LANGS])
     # -1 = периметр не дал НИ ОДНОГО кандидата. Возвращаем неудачу наружу: планировщик
     # пишет код в logs/daily-history.log, и «rc=1» там видно сразу, а «rc=0» трое суток
     # подряд означало «всё хорошо» при стоящей ленте.

@@ -31,7 +31,12 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data" / "formulas.json"
-LANGS = ("ru", "en", "es", "ar", "fr")
+# Импорт common работает из любой папки, а не только из корня репозитория.
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent.parent))
+from common import ALL_LANGS  # noqa: E402
+LANGS = ALL_LANGS   # список языков один на проект: config.json через common.ALL_LANGS
 
 L10N = {
     "ru": {"title": "Формулы", "lead": "Формулы из наших статей. Одна формула часто связывает работы, "

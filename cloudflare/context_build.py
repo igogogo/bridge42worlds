@@ -27,6 +27,9 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stderr.reconfigure(encoding="utf-8")
 
 ROOT = Path(__file__).resolve().parent.parent
+# Импорт common работает из любой папки, а не только из корня репозитория.
+import sys as _sys
+_sys.path.insert(0, str(ROOT))
 load_dotenv(ROOT / ".env")
 DATA_ROOT = Path(os.environ.get("B42_DATA_ROOT") or ROOT)
 MANIFEST = ROOT / "cloudflare" / ".context-manifest.json"
@@ -37,7 +40,8 @@ KV_NAMESPACE = os.environ.get("KV_TOKENS_ID", "bf89cc7963304948a6a7aeeb0a06e43d"
 # всё выглядело исправным. А на деле французу было НЕЧЕГО показать: материалов на его
 # языке бот не находил и честно отвечал, что ответа нет. Французские аннотации при этом
 # давно написаны — есть у 100 статей из 110 в выборке.
-LANGS = ("ru", "en", "es", "ar", "fr")
+from common import ALL_LANGS  # noqa: E402
+LANGS = ALL_LANGS   # список языков один на проект: config.json через common.ALL_LANGS
 BULK = 5000          # столько пар за один запрос (предел Cloudflare — 10 000)
 
 

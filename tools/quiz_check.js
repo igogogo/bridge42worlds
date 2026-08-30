@@ -39,7 +39,10 @@ const G = require(path.join(__dirname, '..', 'js', 'quiz-grade.js'));
 const argv = process.argv.slice(2);
 const LEGACY = argv.includes('--legacy');
 const ONE = argv.includes('--lang') ? argv[argv.indexOf('--lang') + 1] : null;
-const LANGS = ONE ? [ONE] : ['ru', 'en', 'es', 'ar', 'fr'];
+// Список языков берём из config.json, а не держим свою копию.
+const CFG = JSON.parse(require('fs').readFileSync(
+    require('path').join(__dirname, '..', 'config.json'), 'utf8'));
+const LANGS = ONE ? [ONE] : (CFG.languages || ['ru', 'en', 'es', 'ar', 'fr']);
 
 /** Старое правило — только для того, чтобы показать, что именно было сломано. */
 function legacyEstimate(raw, q) {

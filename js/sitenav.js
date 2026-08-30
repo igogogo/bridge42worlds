@@ -15,7 +15,7 @@
     // Страница уже с меню (search.js успел отработать или разметка своя) — второе не нужно.
     if (bar.querySelector('.nav-more') || bar.querySelector('.nav-links')) return;
 
-    var LANGS = ['ru', 'en', 'es', 'ar', 'fr'];
+    var LANGS = window.B42_LANGS || ['ru', 'en', 'es', 'ar', 'fr'];
 
     /* Язык меню = язык страницы, и решает его САМА страница.
        Раньше здесь первым читался ?lang= из адреса, и на этом мы расходились с хозяином

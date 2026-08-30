@@ -28,7 +28,15 @@ for _s in (sys.stdout, sys.stderr):
 
 load_dotenv()
 
-CONFIG = json.loads(Path("config.json").read_text(encoding="utf-8"))
+# Настройки ищем РЯДОМ С ФАЙЛОМ, а не в текущей папке. Раньше здесь стоял
+# относительный путь, и любой инструмент, импортирующий common, работал только
+# из корня репозитория: запуск из другой папки падал на «config.json не найден».
+# Пока common импортировали единицы, это сходило; когда список языков переехал
+# сюда и импортировать стали двадцать пять файлов, ограничение стало общим.
+_CFG = Path(__file__).resolve().parent / "config.json"
+if not _CFG.exists():
+    _CFG = Path("config.json")
+CONFIG = json.loads(_CFG.read_text(encoding="utf-8"))
 LANGUAGES = CONFIG.get("languages", ["ru"])
 # B42_LANGS=ru,en — собрать только эти языки, не трогая config.json (его читают и
 # другие процессы, а правка файла ради одного прогона переживёт этот прогон).
@@ -39,6 +47,14 @@ _langs_only = os.environ.get("B42_LANGS", "").strip()
 if _langs_only:
     _keep = [x.strip() for x in _langs_only.split(",") if x.strip()]
     LANGUAGES = [l for l in LANGUAGES if l in _keep] or LANGUAGES
+# ВСЕ языки проекта, без оглядки на B42_LANGS. Разница существенна: LANGUAGES —
+# это «что собираем сейчас» и его сужает переменная окружения, а ALL_LANGS — «какие
+# языки у сайта есть вообще». Заливка карточек, сверка выкладки и прочие обходы
+# должны смотреть на второе: сузив их фильтром сборки, мы тихо перестали бы трогать
+# половину сайта. До сих пор каждый такой инструмент держал свою копию списка —
+# двадцать пять файлов с пятёркой языков внутри; шестой язык пришлось бы вписывать
+# в каждый (владелец 30.08: «всё подготовь, чтобы не было хардкода»).
+ALL_LANGS = tuple(CONFIG.get("languages", ["ru"]))
 DEFAULT_LANG = CONFIG.get("default_lang", "ru")
 LANG_DIR = CONFIG.get("lang_dir", "lang")
 AGENTS = CONFIG.get("agents", {})

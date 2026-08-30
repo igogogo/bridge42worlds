@@ -43,7 +43,8 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace", line_buffering=True)
 
 DB = "b42-cards"
-LANGS = ("ru", "en", "es", "ar", "fr")
+from common import ALL_LANGS  # noqa: E402
+LANGS = ALL_LANGS   # список языков один на проект: config.json через common.ALL_LANGS
 # Имена файлов — те же, что читает js/search.js (VERSION_INDEX_FILES). Один источник правды:
 # если там появится четвёртый уровень, здесь он должен появиться тем же именем.
 VERSIONS = {"popular": "", "simple": "-simple", "advanced": "-advanced"}

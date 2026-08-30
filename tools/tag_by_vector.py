@@ -51,6 +51,9 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace", line_buffering=True)
 
 ROOT = Path(__file__).resolve().parent.parent
+# Импорт common работает из любой папки, а не только из корня репозитория.
+sys.path.insert(0, str(ROOT))
+from common import ALL_LANGS  # noqa: E402
 # .env лежит в главной папке проекта: в git его нет, в рабочем дереве ML — тоже.
 MAIN_REPO = Path(r"C:\Users\nadez\PycharmProjects\bridge42worlds")
 MARK = re.compile(r"\[(?:tag|scientist|law):[^\]]+\]|\[/(?:tag|scientist|law)\]")
@@ -455,7 +458,7 @@ def main():
                         sci.append(name)
             sci = sci[:6]
             for tier in ("simple", "popular", "advanced"):
-                for _lang in ("ru", "en", "es", "ar", "fr"):
+                for _lang in ALL_LANGS:
                     v = d.get(tier, {}).get(_lang)
                     if isinstance(v, dict):
                         v["tags_vec"] = tags

@@ -23,7 +23,12 @@ import sys
 from pathlib import Path
 
 ROOT = Path("data/theory/courses")
-LANGS = ("ru", "en", "es", "ar", "fr")
+# Импорт common работает из любой папки, а не только из корня репозитория.
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent.parent))
+from common import ALL_LANGS  # noqa: E402
+LANGS = ALL_LANGS   # список языков один на проект: config.json через common.ALL_LANGS
 
 # урок/вопрос → (вид допуска, величина). Величина взята из авторского tolerance:
 # нигде не меняем ЧИСЛО, меняем только то, как оно читается.

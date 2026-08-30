@@ -29,7 +29,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-LANGS = ["ru", "en", "es", "ar", "fr"]
+from common import ALL_LANGS  # noqa: E402
+LANGS = ALL_LANGS   # список языков один на проект: config.json через common.ALL_LANGS
 # Сколько тегов держим у учёного. Больше — боковая колонка превращается в простыню,
 # и по ней уже не видно, чем человек занимался.
 MAX_TAGS = 12

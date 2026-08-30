@@ -89,13 +89,20 @@ def main():
     ap = argparse.ArgumentParser(description="Служебный недельный прогон")
     ap.add_argument("--only", help="только эти шаги через запятую")
     ap.add_argument("--no-publish", action="store_true")
+    # Языки полной пересборки. По умолчанию ru,en — этого хватает, когда служебный
+    # прогон идёт за переразметкой: понятия языко-независимы. Но правки САМОГО
+    # ТЕКСТА (следы перевода: тире, литеральные переносы) живут в каждом языке
+    # своей копией, и там нужны все пять — иначе испанский и французский останутся
+    # со старыми страницами до следующего такого же прогона.
+    ap.add_argument("--langs", default="ru,en",
+                    help="языки полной пересборки, через запятую; all — все пять")
     a = ap.parse_args()
 
     # Своё состояние: недельный прогон не должен путаться с ежедневным.
     F.STATE = ROOT / "data" / "weekly-state.json"
     F.FULL = True                      # здесь недельные шаги не пропускаются
     only = {s.strip() for s in (a.only or "").split(",") if s.strip()}
-    env = {"B42_LANGS": "ru,en"}
+    env = {} if a.langs.strip().lower() == "all" else {"B42_LANGS": a.langs}
     if a.no_publish:
         env["B42_NO_PUBLISH"] = "1"
 
@@ -117,7 +124,8 @@ def main():
                             "--reg", "data/concepts-v4.json", "--name-supers"],
                   timeout=timeout, cwd=ROOT.parent / "b42-ml", soft=True)
             continue
-        F.run(step, cmd, timeout=timeout, env=env if step.startswith("html") else None,
+        F.run(step, cmd, timeout=timeout,
+              env=(env or None) if step.startswith("html") else None,
               soft=step in ("g-grow", "f-support", "tr-formulas", "mentions-ru",
                             "highlight", "audit", "gaudit", "links", "vecnb",
                             "gnames", "weave"))

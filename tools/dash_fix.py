@@ -52,6 +52,9 @@ from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+# Импорт common работает из любой папки, а не только из корня репозитория.
+import sys as _sys
+_sys.path.insert(0, str(ROOT))
 
 for _s in (sys.stdout, sys.stderr):
     try:
@@ -59,7 +62,8 @@ for _s in (sys.stdout, sys.stderr):
     except (AttributeError, ValueError):
         pass
 
-LANGS = ("ru", "en", "es", "ar", "fr")
+from common import ALL_LANGS  # noqa: E402
+LANGS = ALL_LANGS   # список языков один на проект: config.json через common.ALL_LANGS
 TIERS = ("simple", "popular", "advanced")
 FIELDS = ("text", "title", "oneliner", "description", "mini", "threads",
           "fun_fact", "scifi", "metaphor")

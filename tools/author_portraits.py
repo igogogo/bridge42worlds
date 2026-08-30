@@ -32,10 +32,10 @@ sys.path.insert(0, str(ROOT))
 if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-from common import write_json_atomic  # noqa: E402
+from common import ALL_LANGS, write_json_atomic  # noqa: E402
 
 OUT = ROOT / "data" / "author-portraits.json"
-LANGS = ("ru", "en", "es", "ar", "fr")
+LANGS = ALL_LANGS   # один список на проект: config.json через common.ALL_LANGS
 
 # Имя из одних инициалов не опознаёт человека: «Y. Li» в нашем архиве — это десятки разных
 # людей, слитых в один узел графа. Портрет такому узлу — заведомая ложь про несуществующего

@@ -37,7 +37,8 @@ sys.path.insert(0, str(ROOT / "tools"))
 # Так устроены hypotheses/frontier/discoveries — заводить своё устройство рядом
 # с общим нельзя, это уже дважды кончалось переделкой.
 OUT = ROOT / "data" / "theory" / "research.json"
-LANGS = ("ru", "en", "es", "ar", "fr")
+from common import ALL_LANGS  # noqa: E402
+LANGS = ALL_LANGS   # список языков один на проект: config.json через common.ALL_LANGS
 TR_LANGS = ("en", "es", "ar", "fr")
 # Насколько близко работа мирового поля должна лежать, чтобы считаться «про то же».
 # Порог тот же, что у плотности в рекомендациях: ниже — это уже соседняя тема.

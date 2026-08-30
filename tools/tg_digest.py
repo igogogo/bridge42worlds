@@ -16,6 +16,11 @@
 пролистывают не читая — это не про красоту, а про то, увидят ли работу вообще.
 """
 import argparse
+# Импорт common работает из любой папки, а не только из корня репозитория.
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent.parent))
+from common import ALL_LANGS  # noqa: E402
 import json
 import os
 import sys
@@ -177,7 +182,7 @@ def main():
     # Язык дайджеста: канал @bridge42worlds_en завёл владелец 18.08. Индексы и тексты
     # карточек уже существуют на пяти языках, поэтому второй канал — это параметр,
     # а не вторая система. Ссылка ведёт на страницу того же языка.
-    ap.add_argument("--lang", default="ru", choices=("ru", "en", "es", "ar", "fr"))
+    ap.add_argument("--lang", default="ru", choices=ALL_LANGS)
     args = ap.parse_args()
 
     e = env()

@@ -61,7 +61,8 @@ GAP_BELOW = 0.60
 TOP_LESSON = 4
 TOP_TOPIC = 5
 
-LANGS = ("ru", "en", "es", "ar", "fr")
+from common import ALL_LANGS  # noqa: E402
+LANGS = ALL_LANGS   # список языков один на проект: config.json через common.ALL_LANGS
 
 
 def our_articles():

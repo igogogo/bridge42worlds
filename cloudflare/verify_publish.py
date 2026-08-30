@@ -37,7 +37,12 @@ ROOT = Path(os.environ.get("B42_DATA_ROOT") or Path(__file__).resolve().parent.p
 load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 MANIFEST = Path(__file__).resolve().parent / ".r2-manifest.json"
 SITE = os.environ.get("B42_SITE_URL", "https://bridge42worlds.academy")
-LANGS = ("ru", "en", "es", "ar", "fr")
+# Импорт common работает из любой папки, а не только из корня репозитория.
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent.parent))
+from common import ALL_LANGS  # noqa: E402
+LANGS = ALL_LANGS   # список языков один на проект: config.json через common.ALL_LANGS
 # Что именно сверяем. Не «все файлы» — их сто тридцать тысяч, и большинство из них
 # страницы, чья поломка видна сторожем главной. Здесь — файлы, от которых зависит
 # ЛЕНТА и поиск: если рвётся любой из них, сайт выглядит пустым.

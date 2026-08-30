@@ -30,7 +30,11 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-LANGS = ("ru", "en", "es", "ar", "fr")
+# Импорт common работает из любой папки, а не только из корня репозитория.
+import sys as _sys
+_sys.path.insert(0, str(ROOT))
+from common import ALL_LANGS  # noqa: E402
+LANGS = ALL_LANGS   # список языков один на проект: config.json через common.ALL_LANGS
 TIP = 260          # столько знаков влезает в подсказку; остальное всё равно обрезается
 
 

@@ -81,10 +81,14 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+# Импорт common работает из любой папки, а не только из корня репозитория.
+import sys as _sys
+_sys.path.insert(0, str(ROOT))
 ARCHIVE = ROOT / "lang" / "ru" / "archive"
 REGISTRY = ROOT / "data" / "concepts.json"
 BACKUP = ROOT / "data" / "scientists-prune-backup.jsonl"
-LANGS = ("ru", "en", "es", "ar", "fr")
+from common import ALL_LANGS  # noqa: E402
+LANGS = ALL_LANGS   # список языков один на проект: config.json через common.ALL_LANGS
 TIERS = ("simple", "popular", "advanced")
 
 

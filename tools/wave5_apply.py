@@ -34,11 +34,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
-from common import write_json_atomic  # noqa: E402
+from common import ALL_LANGS, write_json_atomic  # noqa: E402
 ML = ROOT.parent / "b42-ml"
 RETAG = ROOT / "data" / "articles-retag-v2.json"
 LIVE = ROOT / "data" / "concepts-live.json"
-LANGS = ("ru", "en", "es", "ar", "fr")
+LANGS = ALL_LANGS   # один список на проект: config.json через common.ALL_LANGS
 TIERS = ("simple", "popular", "advanced")
 
 

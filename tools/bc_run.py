@@ -32,6 +32,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
+from common import ALL_LANGS  # noqa: E402
 PY = sys.executable
 LOG = ROOT / "data" / "bc.log"
 STATE = ROOT / "data" / "bc-state.json"
@@ -138,7 +139,7 @@ def main():
     if "c-export" not in state()["done"]:
         live = json.loads((ROOT / "data/concepts-live.json")
                           .read_text(encoding="utf-8"))["concepts"]
-        for lang in ("ru", "en", "es", "ar", "fr"):
+        for lang in ALL_LANGS:
             out = {c: {"name": (v.get("names") or {}).get(lang)
                        or (v.get("names") or {}).get("en") or c.replace("_", " ")}
                    for c, v in live.items()}
