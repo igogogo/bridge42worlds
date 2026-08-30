@@ -105,7 +105,7 @@ var UI_STRINGS = {
           favTitle: 'Избранное', like: 'Нравится', dislike: 'Не нравится', superlike: 'Супер!',
           refineTip: 'Отшлифовано редактором',
           noCard: 'Карточки пока нет — покажем статьи, где о нём говорится',
-          kmTip: 'Разобрано машиной знаний: в конце продвинутой версии есть раздел для автора работы — куда двигаться дальше и что лежит рядом в нашем архиве. Нажмите, чтобы открыть.' },
+          kmTitle: 'Разобрано машиной знаний', kmTip: 'Разобрано машиной знаний: в конце продвинутой версии есть раздел для автора работы — куда двигаться дальше и что лежит рядом в нашем архиве. Нажмите, чтобы открыть.' },
     en: { tagNotFound: 'Tag not found', selectTag: 'Select a tag:', scientistNotFound: 'Scientist not found',
           selectScientist: 'Select a scientist:', authorNotFound: 'Author not found', selectAuthor: 'Select an author:',
           articlesWord: 'articles', noResults: 'Nothing found', more: 'More →', profile: 'Profile →', moreWord: 'more', min: 'min',
@@ -114,7 +114,7 @@ var UI_STRINGS = {
           favTitle: 'Favorites', like: 'Like', dislike: 'Dislike', superlike: 'Super!',
           refineTip: 'Polished by an editor',
           noCard: 'No profile yet — we will show the articles that mention it',
-          kmTip: 'Read by the knowledge machine: the advanced version ends with a section for the paper\'s author — where the work could go next and what lies nearby in our archive. Click to open.' },
+          kmTitle: 'Read by the knowledge machine', kmTip: 'Read by the knowledge machine: the advanced version ends with a section for the paper\'s author — where the work could go next and what lies nearby in our archive. Click to open.' },
     es: { tagNotFound: 'Etiqueta no encontrada', selectTag: 'Elige una etiqueta:', scientistNotFound: 'Científico no encontrado',
           selectScientist: 'Elige un científico:', authorNotFound: 'Autor no encontrado', selectAuthor: 'Elige un autor:',
           articlesWord: 'artículos', noResults: 'Nada encontrado', more: 'Más →', profile: 'Perfil →', moreWord: 'más', min: 'min',
@@ -123,7 +123,7 @@ var UI_STRINGS = {
           favTitle: 'Favoritos', like: 'Me gusta', dislike: 'No me gusta', superlike: '¡Genial!',
           refineTip: 'Pulido por un editor',
           noCard: 'Aún sin ficha: mostraremos los artículos donde se menciona',
-          kmTip: 'Analizado por la máquina del conocimiento: la versión avanzada termina con una sección para el autor del trabajo — hacia dónde avanzar y qué hay cerca en nuestro archivo. Pulse para abrir.' },
+          kmTitle: 'Analizado por la máquina del conocimiento', kmTip: 'Analizado por la máquina del conocimiento: la versión avanzada termina con una sección para el autor del trabajo — hacia dónde avanzar y qué hay cerca en nuestro archivo. Pulse para abrir.' },
     zh: { tagNotFound: '未找到标签', selectTag: '选择标签：', scientistNotFound: '未找到科学家',
           selectScientist: '选择科学家：', authorNotFound: '未找到作者', selectAuthor: '选择作者：',
           articlesWord: '篇文章', noResults: '未找到结果', more: '详情 →', profile: '主页 →', moreWord: '更多', min: '分钟',
@@ -131,7 +131,7 @@ var UI_STRINGS = {
           favTitle: '收藏', like: '喜欢', dislike: '不喜欢', superlike: '太赞了！',
           refineTip: '编辑润色',
           noCard: '暂无词条——将显示提到它的文章',
-          kmTip: '已由知识机器解读：进阶版末尾有写给论文作者的一节——可以往哪里走，档案库里附近有什么。点击打开。' },
+          kmTitle: '已由知识机器解读', kmTip: '已由知识机器解读：进阶版末尾有写给论文作者的一节——可以往哪里走，档案库里附近有什么。点击打开。' },
     fr: { tagNotFound: 'Tag introuvable', selectTag: 'Choisir un tag :', scientistNotFound: 'Scientifique introuvable',
           selectScientist: 'Choisir un scientifique :', authorNotFound: 'Auteur introuvable', selectAuthor: 'Choisir un auteur :',
           articlesWord: 'articles', noResults: 'Aucun résultat', more: 'En savoir plus →', profile: 'Profil →', moreWord: 'autres', min: 'min',
@@ -140,7 +140,7 @@ var UI_STRINGS = {
           favTitle: 'Favoris', like: 'J\'aime', dislike: 'Je n\'aime pas', superlike: 'Génial !',
           refineTip: 'Peaufiné par un éditeur',
           noCard: 'Pas encore de fiche : nous montrerons les articles qui en parlent',
-          kmTip: 'Lu par la machine du savoir : la version avancée se termine par une section destinée à l\'auteur — vers où avancer et ce qui se trouve à côté dans notre archive. Cliquez pour ouvrir.' },
+          kmTitle: 'Lu par la machine du savoir', kmTip: 'Lu par la machine du savoir : la version avancée se termine par une section destinée à l\'auteur — vers où avancer et ce qui se trouve à côté dans notre archive. Cliquez pour ouvrir.' },
     ar: { tagNotFound: 'الوسم غير موجود', selectTag: 'اختر وسمًا:', scientistNotFound: 'العالم غير موجود',
           selectScientist: 'اختر عالمًا:', authorNotFound: 'المؤلف غير موجود', selectAuthor: 'اختر مؤلفًا:',
           articlesWord: 'مقالات', noResults: 'لا نتائج', more: 'المزيد ←', profile: 'الملف ←', moreWord: 'آخرون', min: 'دقيقة',
@@ -149,7 +149,7 @@ var UI_STRINGS = {
           favTitle: 'المفضلة', like: 'إعجاب', dislike: 'عدم إعجاب', superlike: 'رائع!',
           refineTip: 'تم صقله بواسطة محرر',
           noCard: 'لا توجد بطاقة بعد — سنعرض المقالات التي تذكره',
-          kmTip: 'قرأته آلة المعرفة: تنتهي النسخة المتقدمة بقسم موجَّه إلى مؤلف العمل — إلى أين يمكن المضي وما الذي يقع قريبًا في أرشيفنا. اضغط للفتح.' }
+          kmTitle: 'قرأته آلة المعرفة', kmTip: 'قرأته آلة المعرفة: تنتهي النسخة المتقدمة بقسم موجَّه إلى مؤلف العمل — إلى أين يمكن المضي وما الذي يقع قريبًا في أرشيفنا. اضغط للفتح.' }
 };
 var UI = UI_STRINGS[lang] || UI_STRINGS.en;
 
@@ -228,19 +228,57 @@ try { hideExpress = localStorage.getItem('b42_hide_express') === '1'; } catch (e
 var onlyAdvice = false;
 try { onlyAdvice = localStorage.getItem('b42_only_advice') === '1'; } catch (e) {}
 
+/* ЭКСПРЕСС-ФИЛЬТР ПЕРЕЕХАЛ В ШАПКУ. Он жил галочкой в общем ряду фильтров, где
+   его не видно и не вспомнить (владелец 30.08: «может, убрать из меню и перенести
+   в шапку, поставить кнопку как плашка express и сделать её включателем»).
+   Кнопка повторяет плашку экспресса — тот же значок и то же слово, — и её
+   состояние читается без подписи: горит — экспрессы в ленте, погашена и
+   перечёркнута — скрыты.
+
+   Строим на клиенте, а не в шаблоне: шаблон означал бы пересборку, а кнопка
+   нужна ровно там, где есть сам фильтр. Старая галочка прячется стилем — она
+   остаётся в разметке как якорь состояния и на случай отката. */
+function mountExpressButton(cb) {
+    var host = document.querySelector('.header-right');
+    if (!host || document.getElementById('express-head-toggle')) return null;
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.id = 'express-head-toggle';
+    b.className = 'express-head';
+    b.innerHTML = (typeof b42ic === 'function' ? b42ic('bolt', 12, '⚡') : '⚡')
+                + '<span>' + (UI.express || 'express') + '</span>';
+    host.insertBefore(b, host.firstChild);
+    function paint() {
+        b.classList.toggle('off', hideExpress);
+        b.setAttribute('aria-pressed', hideExpress ? 'true' : 'false');
+        b.setAttribute('aria-label', UI.hideExpress || 'express');
+        b.dataset.tipText = UI.hideExpress || '';
+    }
+    b.onclick = function () {
+        cb.checked = !cb.checked;
+        cb.onchange();
+        paint();
+    };
+    paint();
+    return paint;
+}
+
 function initExpressFilter() {
     var cb = document.getElementById('express-filter-toggle');
     if (!cb) return;
     var label = document.getElementById('express-filter-label');
     if (label) label.textContent = UI.hideExpress;
     cb.checked = hideExpress;
+    var repaint = null;
     cb.onchange = function() {
         hideExpress = cb.checked;
         try { localStorage.setItem('b42_hide_express', hideExpress ? '1' : '0'); } catch (e) {}
+        if (repaint) repaint();
         // Тумблер — глобальный фильтр поверх текущего вида; проще всего сбросить на «последние»,
         // чем пытаться помнить, какой именно фильтр (дата/категория/поиск) был активен.
         _defaultFeed();
     };
+    repaint = mountExpressButton(cb);
     var ab = document.getElementById('advice-filter-toggle');
     if (!ab) return;
     var alabel = document.getElementById('advice-filter-label');
@@ -1326,14 +1364,22 @@ function cardHTML(item) {
             // Уровни чтения НЕ здесь, а внизу, в строке действий (владелец 28.08:
             // «сверху маячат над названием»). Первым в карточке должен читаться
             // заголовок статьи, а не ряд кнопок.
+            // Заголовок и значок машины знаний — В ОДНОЙ ОБЁРТКЕ. Значок идёт отдельной
+            // ссылкой ПОСЛЕ заголовка, а не внутри него: ссылка внутри ссылки —
+            // недопустимая вложенность, браузер её разрывает. Но заголовок блочный, и
+            // значок сваливался под него отдельной строкой — «болтается не рядом с
+            // названием» (владелец 30.08). Обёртка делает заголовок строчным внутри
+            // себя, и значок встаёт за последним словом.
+            //
+            // Сам значок ведёт СРАЗУ в раздел рекомендаций и всегда в продвинутую
+            // версию — раздел живёт только там (владелец 11 августа: «плюсик виден во
+            // всех версиях и списках, при нажатии переход на рекомендации»).
+            '<div class="card-head">' +
             '<a class="card-title" href="' + url + '">' + item.title + '</a>' +
-            // Значок машины знаний у названия. Ведёт СРАЗУ в раздел рекомендаций и всегда
-            // в продвинутую версию — раздел живёт только там (владелец 11 августа: «плюсик
-            // виден во всех версиях и списках, при нажатии переход на рекомендации»).
-            // Отдельной ссылкой ПОСЛЕ заголовка, а не внутри него: ссылка внутри ссылки —
-            // недопустимая вложенность, браузер её разрывает и значок выпадает из строки.
             (item.km ? '<a class="km-badge" href="' + base + 'advanced.html#km-advice"' +
-                       ' title="' + (UI.kmTip || '') + '" aria-label="' + (UI.kmTip || '') + '">✛</a>' : '') +
+                       ' aria-label="' + (UI.kmTip || '') + '"' +
+                       ' data-tip-text="' + (UI.kmTip || '').replace(/"/g, '&quot;') + '">✛</a>' : '') +
+            '</div>' +
             (bodyText ? '<div class="card-desc">' + bodyText + '</div>' : '') +
             (authorsHtml ? '<div class="card-authors">' + authorsHtml + '</div>' : '') +
             (tagsHtml ? '<div class="card-tags">' + tagsHtml + '</div>' : '') +
@@ -2196,7 +2242,9 @@ function initAllTooltips() {
     // то есть на телефоне слово «экспресс» не объяснялось ничем (владелец 2026-07-31).
     // Бейдж это span вне ссылки, поэтому перехват клика ему безопасен, в отличие от
     // чипов-фильтров, на которых мы уже обжигались.
-    document.querySelectorAll('[data-tag], [data-scientist], [data-law], [data-author], [data-cat-desc], .express-badge, .card-express-badge, .refine-badge').forEach(function(el) {
+    dropNativeTips();
+    glueBadges();
+    document.querySelectorAll('[data-tag], [data-scientist], [data-law], [data-author], [data-cat-desc], .express-badge, .card-express-badge, .refine-badge, .km-badge').forEach(function(el) {
         if (el.dataset.tooltipInit) return;
         el.dataset.tooltipInit = '1';
 
@@ -2277,10 +2325,26 @@ function initAllTooltips() {
             var tip = getOrCreateTooltip();
 
             var content = '';
+            var km = el.classList && el.classList.contains('km-badge');
             var badge = el.classList && (el.classList.contains('express-badge')
                      || el.classList.contains('card-express-badge')
                      || el.classList.contains('refine-badge'));
-            if (badge) {
+            if (km) {
+                /* «Прочитано машиной знаний» — та же карточка, что у экспресса, но
+                   со ссылкой: значок ведёт в раздел с советами автору. Ссылка в
+                   конце содержимого — общий приём этого тултипа, он сам переносит
+                   её в шапку карточки. */
+                var kmT = UI.kmTitle || '✛';
+                var kmD = (el.dataset.tipText || UI.kmTip || '');
+                /* Описание начинается тем же названием («Разобрано машиной знаний:
+                   в конце продвинутой версии…»), и в карточке оно выходило дважды.
+                   Срезаем повтор вместе с двоеточием. */
+                if (kmD.indexOf(kmT) === 0) kmD = kmD.slice(kmT.length).replace(/^[\s:—-]+/, '');
+                content = '<strong>' + kmT + '</strong> <span class="tip-desc">'
+                        + kmD + '</span>'
+                        + (el.getAttribute('href') ? ' <a href="' + el.getAttribute('href') + '">'
+                             + UI.more + '</a>' : '');
+            } else if (badge) {
                 // Тексты давно переведены на шесть языков (UI_STRINGS) и до сих пор
                 // только переписывались в атрибут title — теперь показываем их сами.
                 content = '<strong>' + (el.textContent || '').trim() + '</strong> <span class="tip-desc">'
@@ -2363,13 +2427,46 @@ function localizeStaticUI() {
 
     var expressBadge = document.querySelector('.express-badge');
     if (expressBadge) {
-        expressBadge.title = UI.expressTip;
         expressBadge.innerHTML = b42ic('bolt', 13, '⚡');
         expressBadge.appendChild(document.createTextNode(' ' + UI.express));
     }
+    dropNativeTips();
+}
 
-    var refineBadge = document.querySelector('.refine-badge');
-    if (refineBadge) refineBadge.title = UI.refineTip;
+/* ДВЕ ПОДСКАЗКИ НА ОДНУ ПЛАШКУ. У «экспресса», «отшлифовано» и «прочитано машиной»
+   стоял атрибут title — родная подсказка браузера строкой. Когда для них сделали
+   карточку, title убрать забыли, и на наведение выходили обе разом: строка,
+   уезжающая за край, и карточка (владелец 30.08: «у карточки express два тултипа,
+   один старый, который в строку, и один новый»).
+
+   Снимаем здесь, а не только в генераторе: страницы уже собраны, и ждать пересборки
+   сорока тысяч ради одного атрибута незачем. В генераторе тоже поправлено — новые
+   страницы приедут уже без него. Смысл не теряется: текст переезжает в aria-label,
+   его читает озвучка. */
+function dropNativeTips() {
+    var sel = '.express-badge, .card-express-badge, .refine-badge, .km-badge';
+    document.querySelectorAll(sel).forEach(function (el) {
+        var t = el.getAttribute('title');
+        if (!t) return;
+        if (!el.getAttribute('aria-label')) el.setAttribute('aria-label', t);
+        el.setAttribute('data-tip-text', t);
+        el.removeAttribute('title');
+    });
+}
+window.dropNativeTips = dropNativeTips;
+
+/* ЗНАЧОК НЕ УХОДИТ НА СВОЮ СТРОКУ. В заголовке после текста стоит обычный пробел,
+   и на узком месте перенос рвал строку ровно перед значком — он оставался болтаться
+   один (владелец 30.08). Заменяем этот пробел неразрывным: значок всегда при
+   последнем слове. */
+function glueBadges() {
+    document.querySelectorAll('.article-title-top .km-badge, .article-title-top .refine-badge')
+        .forEach(function (el) {
+            var prev = el.previousSibling;
+            if (prev && prev.nodeType === 3 && /\s$/.test(prev.data)) {
+                prev.data = prev.data.replace(/\s+$/, '\u00A0');
+            }
+        });
 }
 document.addEventListener('DOMContentLoaded', localizeStaticUI);
 

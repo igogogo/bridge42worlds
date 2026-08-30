@@ -1760,7 +1760,7 @@ def km_badge_html(article, lang, date_str, version):
     tip = _KM_BADGE_TIP.get(lang, _KM_BADGE_TIP["en"])
     href = ("#km-advice" if version == "advanced"
             else f'/{LANG_DIR}/{lang}/archive/{date_str}/{article["id"]}/advanced.html#km-advice')
-    return (f'<a class="km-badge" href="{attr_safe(href)}" title="{attr_safe(tip)}" '
+    return (f'<a class="km-badge" href="{attr_safe(href)}" data-tip-text="{attr_safe(tip)}" '
             f'aria-label="{attr_safe(tip)}">✛</a>')
 
 
@@ -2372,8 +2372,8 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
         # так же, как ✛ машины знаний.
         lic_badge=(f'<span class="lic-badge" title="{attr_safe(_ANALYSIS_NOTE.get(lang, _ANALYSIS_NOTE["en"]))}">✎</span>'
                    if article.get("license_class") == "analysis" else ""),
-        refine_badge=(f'<span class="refine-badge" title="{safe({"ru": "Отшлифовано редактором", "en": "Polished by an editor", "es": "Pulido por un editor", "ar": "تم صقله بواسطة محرر", "fr": "Peaufiné par un éditeur", "zh": "编辑润色"}.get(lang, "Polished by an editor"))}">✦</span>' if article.get("refined") else ""),
-        express_badge=(f'<span class="express-badge" title="{safe({"ru": "Экспресс-версия: по аннотации автора, без разбора полного текста статьи", "en": "Express version: based on the author\'s abstract, not the full paper text", "es": "Versión exprés: basada en el resumen del autor, no en el texto completo", "ar": "نسخة سريعة: بناءً على ملخص المؤلف، دون تحليل النص الكامل", "fr": "Version express : basée sur le résumé de l\'auteur", "zh": "速览版：基于作者摘要"}.get(lang, "Express version: based on the abstract"))}">{safe({"ru": "экспресс", "en": "express", "es": "exprés", "ar": "سريع", "fr": "express", "zh": "速览"}.get(lang, "express"))}</span>' if article.get("express") else ""),
+        refine_badge=(f'<span class="refine-badge" data-tip-text="{safe({"ru": "Отшлифовано редактором", "en": "Polished by an editor", "es": "Pulido por un editor", "ar": "تم صقله بواسطة محرر", "fr": "Peaufiné par un éditeur", "zh": "编辑润色"}.get(lang, "Polished by an editor"))}">✦</span>' if article.get("refined") else ""),
+        express_badge=(f'<span class="express-badge" data-tip-text="{safe({"ru": "Экспресс-версия: по аннотации автора, без разбора полного текста статьи", "en": "Express version: based on the author\'s abstract, not the full paper text", "es": "Versión exprés: basada en el resumen del autor, no en el texto completo", "ar": "نسخة سريعة: بناءً على ملخص المؤلف، دون تحليل النص الكامل", "fr": "Version express : basée sur le résumé de l\'auteur", "zh": "速览版：基于作者摘要"}.get(lang, "Express version: based on the abstract"))}">{safe({"ru": "экспресс", "en": "express", "es": "exprés", "ar": "سريع", "fr": "express", "zh": "速览"}.get(lang, "express"))}</span>' if article.get("express") else ""),
         original_title=safe(article["title"]),
         oneliner=safe(scipop.get("oneliner", "")),
         oneliner_short=safe(scipop.get("oneliner", "")[:160]),
