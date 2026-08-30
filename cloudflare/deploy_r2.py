@@ -163,6 +163,50 @@ def md5(p):
     return h.hexdigest()
 
 
+"""ОПИСЬ ПОМНИТ НЕ ТОЛЬКО ОТПЕЧАТОК, НО И РАЗМЕР СО ВРЕМЕНЕМ ПРАВКИ.
+
+Дельта считалась так: обойти дерево и посчитать отпечаток КАЖДОГО файла заново.
+В облаке 286 920 файлов, из них 92 тысячи картинок; чтобы узнать, изменился ли
+файл, его надо прочитать целиком, — то есть каждая выкладка читала с диска
+десятки гигабайт. Именно это, а не отправка в сеть, и загружало машину до
+неработоспособности (владелец 30.08).
+
+Размер и время правки файловая система знает БЕЗ чтения содержимого. Совпали оба
+и отпечаток уже записан — значит файл тот же, читать нечего. Обложке, которую не
+трогали с июля, теперь достаётся один запрос к файловой системе вместо чтения
+двухсот килобайт.
+
+Чего эта проверка не поймает: правку, которая сохранила и размер, и время до
+наносекунды. Такое бывает только при намеренном возврате времени; наши сборщики
+пишут обычной записью. На случай сомнений есть --rehash: он считает всё заново,
+как раньше.
+
+Опись читается в обоих видах. Старая запись — просто строка с отпечатком; новая —
+тройка «отпечаток, размер, время». Первая выкладка после этой правки честно
+прочитает всё (сравнивать не с чем) и запишет тройки; выигрыш начнётся со второй.
+"""
+
+
+def stat_of(p):
+    st = p.stat()
+    return st.st_size, st.st_mtime_ns
+
+
+def hash_of(entry):
+    """Отпечаток из записи описи, каким бы ни был её вид."""
+    if isinstance(entry, str):
+        return entry
+    if isinstance(entry, (list, tuple)) and entry:
+        return entry[0]
+    return None
+
+
+def same_file(entry, size, mtime):
+    """Можно ли поверить описи без чтения файла."""
+    return (isinstance(entry, (list, tuple)) and len(entry) >= 3
+            and entry[1] == size and entry[2] == mtime)
+
+
 def _api_call(method, session, url, **kw):
     """Запрос к api.cloudflare.com с ретраем на 429/5xx (лимит ~1200 запр/5мин на токен)."""
     for attempt in range(6):
@@ -371,6 +415,9 @@ def main():
     # При точечной выкладке начинаем не с пустого манифеста, а со старого: иначе
     # всё, что не попало под фильтр, исчезнет из него и уедет заново следующим разом.
     new, to_upload, skipped = (dict(old) if only else {}), [], 0
+    pending = {}          # отпечатки файлов, которые ещё предстоит отправить
+    rehash = "--rehash" in sys.argv
+    quick = 0
     for p in iter_files():
         key = p.relative_to(ROOT).as_posix()
         if only and not key.startswith(only):
@@ -378,16 +425,27 @@ def main():
         if withdrawn and any(code in key for code in withdrawn):
             continue
         try:
+            size, mtime = stat_of(p)
+            prev = old.get(key)
+            if not rehash and same_file(prev, size, mtime):
+                # Размер и время те же — содержимое то же. Файл не читаем.
+                new[key] = prev
+                quick += 1
+                continue
             h = md5(p)
         except FileNotFoundError:
             # другой процесс/сессия может параллельно писать в то же дерево (см. ПРАВИЛА-РАБОТЫ.md) —
             # файл, который был в листинге, успел исчезнуть; не роняем весь прогон из-за одного.
             skipped += 1
             continue
-        new[key] = h
-        if old.get(key) != h:
+        if hash_of(old.get(key)) != h:
+            # В опись попадёт после удачной отправки, не раньше.
+            pending[key] = [h, size, mtime]
             to_upload.append((p, key))
+        else:
+            new[key] = [h, size, mtime]
     print(f"всего файлов: {len(new)} | изменённых к заливке: {len(to_upload)}" +
+          (f" | без чтения (размер и время те же): {quick}" if quick else "") +
           (f" | пропущено (исчезли на лету): {skipped}" if skipped else ""))
     _refuse_if_rules_unclear(list(new))
 
@@ -400,25 +458,66 @@ def main():
     # никогда, его перезаливали руками на всех языках. Поэтому перед отправкой сверяем
     # отпечаток заново и, если файл изменился, отправляем НОВЫЙ и запоминаем НОВЫЙ.
     changed_under_us = []
+    failed = []
+
+    """ОБРЫВ СЕТИ НЕ ДОЛЖЕН ОБЕСЦЕНИВАТЬ ВЫКЛАДКУ.
+
+    30 августа заливка 128 399 файлов упала на таймауте рукопожатия к R2 — обычная
+    сетевая икота на большом прогоне. Упала целиком: одно исключение из потока
+    выносило весь ex.map, опись не записывалась вовсе, и следующий запуск считал
+    заново ВСЁ, включая сотню тысяч уже уехавших файлов.
+
+    Две правки. Первая: файл попадает в опись ТОЛЬКО после удачной отправки —
+    раньше отпечатки всех файлов проставлялись до заливки, и оборвись прогон в
+    середине, опись соврала бы, что залито всё. Вторая: опись сохраняется по ходу,
+    каждые две тысячи файлов. Оборвалось — потеряли последние две тысячи, а не сто
+    двадцать восемь.
+
+    Неудачные файлы в опись не попадают, поэтому следующий прогон возьмётся ровно
+    за них.
+    """
+    RETRY = 3
 
     def put(item):
         p, key = item
         ct = mimetypes.guess_type(key)[0] or "application/octet-stream"
         try:
             fresh = md5(p)
+            size, mtime = stat_of(p)
         except FileNotFoundError:
             return key, None
-        if fresh != new.get(key):
+        if fresh != hash_of(pending.get(key)):
             changed_under_us.append(key)
-            new[key] = fresh
-        backend.put(p, key, ct)
-        return key, fresh
+        for attempt in range(RETRY):
+            try:
+                backend.put(p, key, ct)
+                return key, [fresh, size, mtime]
+            except Exception as e:
+                if attempt == RETRY - 1:
+                    failed.append((key, f"{type(e).__name__}: {str(e)[:60]}"))
+                    return key, None
+                time.sleep(1.5 * (attempt + 1))
+        return key, None
 
     if to_upload:
+        done_since_save = 0
         with ThreadPoolExecutor(max_workers=24) as ex:
-            for i, _ in enumerate(ex.map(put, to_upload), 1):
+            for i, (key, rec) in enumerate(ex.map(put, to_upload), 1):
+                if rec:
+                    new[key] = rec
+                    done_since_save += 1
                 if i % 500 == 0:
-                    print(f"  залито {i}/{len(to_upload)}")
+                    print(f"  залито {i}/{len(to_upload)}" +
+                          (f" · не удалось {len(failed)}" if failed else ""))
+                if done_since_save >= 2000:
+                    MANIFEST.write_text(json.dumps(new, ensure_ascii=False),
+                                        encoding="utf-8")
+                    done_since_save = 0
+    if failed:
+        print(f"⚠️  не удалось залить {len(failed)} файлов — они НЕ записаны в опись, "
+              f"следующий прогон возьмётся за них. Первые:")
+        for k, why in failed[:5]:
+            print(f"   {k}  ({why})")
     if changed_under_us:
         # Не тревога, а факт: дерево меняли во время выкладки. Печатаем, потому что это
         # первый признак двух прогонов на одном дереве — и потому что молчание здесь
