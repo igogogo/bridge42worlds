@@ -196,6 +196,8 @@ MIGRATIONS = [
     "ALTER TABLE concepts ADD COLUMN section TEXT",
     "ALTER TABLE concepts ADD COLUMN part TEXT",
     "ALTER TABLE concepts ADD COLUMN names TEXT",
+    "ALTER TABLE graph_groups ADD COLUMN labels TEXT",
+    "ALTER TABLE graph_groups ADD COLUMN notes TEXT",
     "CREATE INDEX IF NOT EXISTS concepts_section ON concepts(section, n_arts DESC)",
 ]
 
@@ -440,7 +442,8 @@ def main():
                 n_arts += graph["nodes"][m].get("n") or 0
             gmeta.append([gi, g.get("label_ru"), g.get("label_en"),
                           g.get("note_ru"), g.get("note_en"),
-                          len(g.get("members") or []), n_arts])
+                          len(g.get("members") or []), n_arts,
+                          g.get("labels") or None, g.get("notes") or None])
         # связи между областями: сколько рёбер идёт из одной в другую
         for e in graph["edges"]:
             ga, gb = node_group.get(e[0]), node_group.get(e[1])
@@ -450,7 +453,8 @@ def main():
             glinks[k] = glinks.get(k, 0) + 1
         push("concept_groups", ["gid", "cid"], gm, "членство в областях")
         push("graph_groups", ["gid", "label_ru", "label_en", "note_ru", "note_en",
-                              "n_con", "n_arts"], gmeta, "паспорта областей")
+                              "n_con", "n_arts", "labels", "notes"], gmeta,
+             "паспорта областей")
         push("graph_group_links", ["a", "b", "w"],
              [[a, b, w] for (a, b), w in glinks.items()], "связи областей")
 

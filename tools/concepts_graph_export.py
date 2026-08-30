@@ -25,6 +25,9 @@ from itertools import combinations
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+import sys as _sys
+_sys.path.insert(0, str(ROOT))
+from common import ALL_LANGS as LANGS  # языки проекта одним списком
 OUT = ROOT / "data" / "concepts-graph.json"
 LIVE = ROOT / "data" / "concepts-live.json"
 
@@ -326,7 +329,12 @@ def main():
 
     # note_* — строка «о чём эта область»: панель графа показывает её под
     # названием, чтобы круг на обзоре объяснял себя сам.
-    groups = [{"id": g, "label_en": label(g, "en"), "label_ru": label(g, "ru"),
+    # ВСЕ ЯЗЫКИ ПРОЕКТА, а не пара ru/en: название области — первое, что читатель
+    # видит на /concepts/ и в графе, и до 30.08 испанец читал его по-английски.
+    groups = [{"id": g,
+               "labels": {l: label(g, l) for l in LANGS},
+               "notes": {l: note(g, l) for l in LANGS if note(g, l)},
+               "label_en": label(g, "en"), "label_ru": label(g, "ru"),
                "note_en": note(g, "en"), "note_ru": note(g, "ru"),
                "members": [idx[m] for m in groups_raw[g] if m in idx]}
               for g in gids]

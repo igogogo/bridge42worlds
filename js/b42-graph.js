@@ -284,7 +284,11 @@ function showSet(idxs, focusId) {
     igniteSparks();
     renderInfo();
 }
-function groupLabel(g) { return (RU && g.label_ru) ? g.label_ru : g.label_en; }
+// Имя области воркер отдаёт готовым полем на языке страницы; кадры графа зовут
+// его то label_*, то name — оба написания в ходу, пока не истечёт кэш браузера.
+function groupLabel(g) {
+    return g.name || g.label || ((RU && g.label_ru) ? g.label_ru : g.label_en);
+}
 
 /* ── состояние ── */
 var frame = {mode: 'overview', nodes: [], edges: []};
@@ -1367,7 +1371,7 @@ function renderInfo() {
         else if (selI >= 0 && frame.nodes[selI]) gi = frame.nodes[selI].gi;
         var gg = gi >= 0 ? G.groups[gi] : null;
         if (gg) {
-            var note = (RU && gg.note_ru) ? gg.note_ru : (gg.note_en || '');
+            var note = gg.note || ((RU && gg.note_ru) ? gg.note_ru : (gg.note_en || ''));
             box.innerHTML =
                 '<div class="b42g-sel"><b>' + groupLabel(gg) + '</b></div>' +
                 '<div class="b42g-dim">' + gg.members.length +

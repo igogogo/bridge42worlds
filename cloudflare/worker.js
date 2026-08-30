@@ -2846,6 +2846,17 @@ const CONCEPT_COLS = "id, kind, name_ru, name_en, card, n_arts, n_links, groups,
    молча отдаёт английское имя. Теперь имена всех языков лежат в одном поле
    names ({"ru":..., "es":...}), а выбор живёт здесь. Старые столбцы остаются
    запасным дном: пока реестр не перелит, страница не пустеет. */
+/* Значение из поля-словаря {язык: текст}: пусто, битый JSON и отсутствие языка
+   отвечают пустой строкой, чтобы вызывающему хватило одного `||`. */
+function byLang(raw, lang) {
+  if (!raw) return "";
+  let d = raw;
+  if (typeof raw === "string") {
+    try { d = JSON.parse(raw); } catch (e) { return ""; }
+  }
+  return (d && (d[lang] || d.en)) || "";
+}
+
 function cname(r, lang) {
   let byLang = null;
   if (r.names) {
@@ -3037,14 +3048,20 @@ async function handleGraphFrame(request, env) {
        обновлять?»). Таблицы областей маленькие: полсотни строк паспортов и
        полторы сотни связей, — так что запрос дешевле, чем хранить его ответ. */
     const gs = await env.CARDS.prepare(
-      "SELECT gid, label_ru, label_en, note_ru, note_en, n_con, n_arts" +
-      "  FROM graph_groups ORDER BY n_arts DESC").all();
+      "SELECT gid, label_ru, label_en, note_ru, note_en, n_con, n_arts," +
+      " labels, notes FROM graph_groups ORDER BY n_arts DESC").all();
     const gl = await env.CARDS.prepare(
       "SELECT a, b, w FROM graph_group_links ORDER BY w DESC LIMIT 300").all();
     const pos = {};
     const nodes = (gs.results || []).map(function (g, i) {
       pos[g.gid] = i;
+      /* name и note — уже на языке страницы; пара ru/en остаётся дном для
+         кадров, которые ещё держит кэш браузера. */
       return { id: "g" + g.gid, gi: g.gid, kind: "_group",
+               name: byLang(g.labels, lang) || (lang === "ru" ? g.label_ru : g.label_en)
+                     || g.label_en,
+               note: byLang(g.notes, lang) || (lang === "ru" ? g.note_ru : g.note_en)
+                     || g.note_en || "",
                ru: g.label_ru, en: g.label_en,
                note_ru: g.note_ru, note_en: g.note_en,
                n: g.n_arts, members: g.n_con };
