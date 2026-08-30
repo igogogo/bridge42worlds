@@ -32,6 +32,7 @@ import argparse
 import datetime
 import json
 import os
+import re
 import subprocess
 import sys
 import time
@@ -52,6 +53,63 @@ STEPS_DIR = ROOT / "data" / "pipeline-steps"
 # Режим прогона. Обычный — точечный: только новое. Полный (--full) добирает
 # недельные шаги, которые обходят весь корпус.
 FULL = False
+# РОД ПРОГОНА. Их два и они разные по смыслу: ежедневный ведёт новые статьи от
+# arXiv до выкладки, недельный доразмечает весь архив на выросшем реестре.
+# В журнал оба писали одинаково, и на схеме конвейера их было не различить —
+# владелец 30.08: «я должен увидеть, что прошли ЭТИ ДВА пайплайна».
+KIND = "daily"
+
+# ЧИСЛА ШАГОВ. Лампочка «прошло» говорит, что шаг не упал, и молчит о том, что он
+# сделал. Владелец 30.08: «все их шаги со статистикой — сколько статей, понятий
+# новых, дедупликация, отбор кандидатов, доразметка».
+#
+# Числа берём ИЗ СОБСТВЕННОГО ОТЧЁТА ШАГА и по полному выводу, а не по трём
+# строкам итога: нужная строка редко оказывается последней. Шаг, который своего
+# числа не печатает, не показывает ничего — выдумывать нечем.
+NUMBERS = {
+    "harvest":  [("спрошено статей", r"спрошено (\d+)"),
+                 ("кандидатов", r"кандидатов (\d+)")],
+    "match":    [("кандидатов", r"кандидатов (\d+)"),
+                 ("совпало со старым", r"совпало со старым (\d+)"),
+                 ("новых", r"новых (\d+)")],
+    "distill":  [("слито дублей", r"слито дублей: (\d+)"),
+                 ("осталось кандидатов", r"осталось кандидатов (\d+)")],
+    "births":   [("спрошено", r"спрошено (\d+)"),
+                 ("кандидатов", r"кандидатов (\d+)"),
+                 ("ждут рождения", r"ждут (\d+)"),
+                 ("родилось понятий", r"родилось (\d+)")],
+    "twins":    [("слито двойников", r"слито (\d+)"),
+                 ("переименовано", r"переименовано (\d+)")],
+    "retag-day": [("статей размечено", r"записано: (\d+) статей")],
+    "hl-day":   [("статей подсвечено", r"статей затронуто: (\d+)"),
+                 ("маркеров понятий", r"маркеров поставлено: (\d+)")],
+    "highlight": [("статей подсвечено", r"статей затронуто: (\d+)"),
+                  ("маркеров понятий", r"маркеров поставлено: (\d+)")],
+    "field":    [("векторов достроено", r"добавлено за прогон: ([\d,]+)")],
+    "retag":    [("статей дополнено", r"статей получили новое (\d+)"),
+                 ("новых привязок", r"новых привязок (\d+)"),
+                 ("понятий на статью", r"разметка: ([\d.]+) понятий на статью")],
+    "apply":    [("разметка записана в статей", r"записана в (\d+) статей")],
+    "html":     [("страниц собрано", r"Regenerated (\d+) HTML")],
+    "html-force": [("страниц собрано", r"Regenerated (\d+) HTML")],
+    "strata":   [("спрос машины знаний", r"спрос машины знаний: (\d+)"),
+                 ("работ поднято", r"отобрано работ: (\d+)")],
+    "strata-gen": [("разборов из прошлого", r"Regenerated (\d+) HTML")],
+    "ideas":    [("тем с идеями", r"готово: (\d+) из")],
+    "ideas-page": [("идей на странице", r"идей (\d+)")],
+    "cloud-d1": [("понятий в облаке", r"облако знает: (\d+) понятий")],
+    "deploy":   [("файлов выложено", r"\+(\d+) обновлено")],
+}
+
+
+def numbers_of(step, out):
+    """Что шаг сам сказал о сделанном — парами «подпись: число»."""
+    got = []
+    for label, rx in NUMBERS.get(step, ()):
+        m = re.search(rx, out or "")
+        if m:
+            got.append([label, m.group(1)])
+    return got
 
 
 def summarize(out, keep=3):
@@ -107,6 +165,10 @@ def journal(st):
     if rec is None:
         rec = {"id": rid, "started": st.get("started"), "days": st.get("days") or []}
         runs.append(rec)
+    rec["kind"] = st.get("kind") or KIND
+    rec["finished"] = st.get("finished")
+    rec["secs_total"] = st.get("secs_total")
+    rec["totals"] = list(st.get("totals") or [])
     rec["done"] = list(st.get("done") or [])
     rec["failed"] = list(st.get("failed") or [])
     rec["current"] = st.get("current")
@@ -210,7 +272,7 @@ def run(step, cmd, timeout=8 * 3600, cwd=None, env=None, soft=False, weekly=Fals
     st.setdefault("secs", {})[step] = dt
     st.setdefault("steps", {})[step] = {
         "started": started, "finished": finished, "secs": dt, "ok": ok,
-        "out": summarize(out),
+        "out": summarize(out), "nums": numbers_of(step, out),
     }
     if ok:
         st["done"].append(step)
@@ -221,6 +283,64 @@ def run(step, cmd, timeout=8 * 3600, cwd=None, env=None, soft=False, weekly=Fals
             log(f"  ШАГ НЕ УДАЛСЯ: {step}. Прогон остановлен — разбираться здесь.")
     save(st)
     return ok or soft
+
+
+def day_ids(days):
+    """Идентификаторы статей за эти дни — списком для точечных шагов."""
+    arch = ROOT / "lang" / "ru" / "archive"
+    out = []
+    for d in days or ():
+        p_ = arch / d
+        if p_.is_dir():
+            out += sorted(x.name for x in p_.iterdir() if x.is_dir())
+    return out
+
+
+def articles_of(days):
+    """Сколько статей принесли дни прогона — счётом папок, а не разбором вывода.
+
+    Число статей — первое, что спрашивают о прогоне, и единственное, которое
+    нельзя брать из отчёта шага: день печатает свой ход десятком строк, а иногда
+    падает на хвосте, уже написав статьи. Файловая система знает точно.
+    """
+    arch = ROOT / "lang" / "ru" / "archive"
+    n = 0
+    for d in days or ():
+        p_ = arch / d
+        if p_.is_dir():
+            n += sum(1 for x in p_.iterdir() if x.is_dir())
+    return n
+
+
+def finish():
+    """Закрыть прогон: время окончания, длительность, свод чисел.
+
+    Свод — это то, ради чего схема конвейера вообще открывается: не «прошло 43
+    шага», а «принесли 20 статей, родилось 3 понятия, слито 2 двойника, доразметка
+    дописала 118 привязок». Собирается из чисел, которые шаги напечатали сами.
+    """
+    st = state()
+    st["finished"] = time.strftime("%Y-%m-%d %H:%M")
+    if st.get("t0"):
+        st["secs_total"] = int(time.time() - st["t0"])
+    total = []
+    arts = articles_of(st.get("days"))
+    if arts:
+        total.append(["статей за прогон", str(arts)])
+    # Порядок свода — порядок конвейера: сначала статьи, потом понятия, потом
+    # разметка и страницы. Повторы снимаем: одно и то же число из двух шагов
+    # (кандидаты у harvest и у match) читателю ничего не добавляет.
+    seen = set()
+    for step in ("harvest", "match", "distill", "births", "twins", "retag-day",
+                 "retag", "apply", "hl-day", "highlight", "strata", "strata-gen",
+                 "ideas", "html", "html-force", "cloud-d1", "deploy"):
+        for label, val in (st.get("steps", {}).get(step, {}).get("nums") or ()):
+            if label in seen:
+                continue
+            seen.add(label)
+            total.append([label, val])
+    st["totals"] = total
+    save(st)
 
 
 def prepare_super_input():
@@ -280,11 +400,14 @@ def main():
     if not st.get("run_id"):
         st["run_id"] = time.strftime("%Y-%m-%d %H:%M")
         st["started"] = st["run_id"]
+        st["t0"] = time.time()
+    st["kind"] = KIND
     st["days"] = days
     st["plan"] = ([f"day-{d}" for d in days] + [
         "harvest", "anatomy", "flink", "match", "distill", "births", "g-grow",
         "f-support", "twins", "consts", "units-fix", "live-1", "cards", "tr-cards",
-        "tr-formulas", "names-ru", "retag", "apply", "super", "live-2", "vecnb",
+        "tr-formulas", "names-ru", "field", "retag-day", "retag", "apply", "hl-day",
+        "super", "live-2", "vecnb",
         "live-3", "gnames", "weave", "live-4", "graph", "mentions-ru", "highlight",
         "pages-c", "pages-f", "html", "authors", "status", "cloud-d1", "cloud-vec",
         "cards-sync", "deploy", "api", "pages", "audit", "gaudit", "links"])
@@ -298,7 +421,12 @@ def main():
     # Экспресс читает аннотацию вместо текста и пишет два уровня из трёх — для теста
     # зрелости это была бы репетиция, а не прогон. Языки ru,en: перевод на остальные
     # три владелец отложил, и класть в прод полупереведённое нельзя.
-    LANGS = {"B42_LANGS": "ru,en"}
+    # ВСЕ ЯЗЫКИ ПРОЕКТА. Пара ru,en держалась с тех пор, когда перевод на три
+    # остальных был отложен: статья выходила наполовину, а второй заход делался
+    # руками — и после августовских дней не сделался, 37 статей так и остались
+    # заглушками для испанца и француза (владелец 30.08: «надо все делать
+    # переводы»). Список берём из конфига: шестой язык не потребует правки здесь.
+    LANGS = {}
     # ДНИ ИДУТ БЕЗ ВЫКЛАДКИ. Замер 28.08: четыре статьи 22 августа сгенерировались
     # за десять минут, а следующие шестьдесят пять ушли на хвост дня — webp по
     # 26 ГБ картинок, индексы, справочники, дашборд, публикация в R2, резервная
@@ -340,9 +468,41 @@ def main():
     run("tr-formulas", [PY, "tools/cards_translate_ru.py", "--formulas", "--force-peak"],
         timeout=4 * 3600, soft=True)
     run("names-ru", [PY, "tools/concept_names_translate.py"], timeout=3600, soft=True)
-    run("retag", [PY, "tools/retag_hub.py", "--thr", "0.50", "--margin", "0.12"],
-        timeout=4 * 3600)
-    run("apply", [PY, "tools/wave5_apply.py", "--apply"], timeout=3600)
+
+    # ── РАЗМЕТКА СТАТЕЙ ДНЯ. ТОЧЕЧНО, КАЖДЫЙ ДЕНЬ ────────────────────────────
+    # Здесь была дыра, и она видна только если сложить два факта. Первый: шаг
+    # retag — недельный (обходит весь архив вектором), в обычном прогоне он
+    # пропускается. Второй: run.py daily разметку не делает вовсе — он делает
+    # статью. Значит свежая статья ждала понятий до недельного прогона, а до
+    # тех пор выходила голой: ни понятий в карточке, ни ссылок в тексте, ни
+    # места в графе.
+    #
+    # Разметка по всему архиву для этого не нужна и не годится — нужны ровно
+    # статьи дня. Оба инструмента это умеют: разметка по списку id, подсветка
+    # по --ids. Три шага, все локальные и бесплатные.
+    ids = day_ids(days)
+    if ids:
+        # Выгрузка arXiv отстаёт на недели, и работ последних дней в ней нет;
+        # без вектора разметка честно отвечает «статьи нет в корпусе». Поле
+        # достраивается из наших же data.json.
+        month = days[0][:7] if days else ""
+        run("field", [PY, "field_build.py", "--ours"] +
+            (["--months", month] if month else []) + ["--max-cost", "0.5"],
+            timeout=3600, cwd=ROOT.parent / "b42-ml", soft=True)
+        run("retag-day", [PY, "tools/retag_hub.py", "--live", ",".join(ids),
+                          "--apply", "--thr", "0.50", "--margin", "0.12"],
+            timeout=3600)
+
+    run("retag", [PY, "tools/retag_hub.py", "--add-only",
+                  "--thr", "0.50", "--margin", "0.12"], timeout=4 * 3600)
+    # --articles-only в обычном прогоне: живой справочник тут же пересобирают
+    # шаги live-*, а дню нужна только разметка его статей.
+    run("apply", [PY, "tools/wave5_apply.py", "--apply"]
+        + ([] if FULL else ["--articles-only"]), timeout=3600)
+    if ids:
+        run("hl-day", [PY, "tools/highlight_concepts.py",
+                       "--tiers", "simple,popular,advanced", "--ids", ",".join(ids)],
+            timeout=3600, soft=True)
 
     # ── IV. СВЯЗНОСТЬ ────────────────────────────────────────────────────────
     # Супер считает группы и соседей по карточкам, поэтому идёт ПОСЛЕ карточек;
@@ -406,6 +566,7 @@ def main():
     run("audit", [PY, "tools/concepts_audit.py"], timeout=1800, soft=True)
     run("gaudit", [PY, "tools/group_integrity.py", "--audit"], timeout=1800, soft=True)
     run("links", [PY, "tools/link_check.py"], timeout=1800, soft=True)
+    finish()
     log("═══ ПОЛНЫЙ ПРОГОН ЗАВЕРШЁН ═══")
     return 0
 

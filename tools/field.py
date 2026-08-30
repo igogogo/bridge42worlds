@@ -72,25 +72,53 @@ one two three four five six seven eight nine ten""".split())
 def _vec_dir():
     """Где лежит полное поле. Свой data/ — потом рабочая папка ML.
 
-    Копировать 3.2 ГБ к себе незачем: файл один, читается memmap'ом, и держать две копии
-    значит однажды искать соседей по устаревшей. Путь можно задать B42_FIELD_DIR.
+    Копировать гигабайты к себе незачем: файл один, читается memmap'ом, и держать две
+    копии значит однажды искать соседей по устаревшей. Путь можно задать B42_FIELD_DIR.
+
+    ДВА НАПИСАНИЯ ПОЛЯ, И НОВОЕ ГЛАВНЕЕ. Поле собиралось дважды: в августе — парой
+    field-vectors.npy + field-ids.txt (1,56 млн работ), и позже — форматом vecstore,
+    field.f16 + field.ids, который умеет дописываться в хвост и потому растёт каждым
+    прогоном (2,96 млн на 30 августа). Старая пара никуда не делась и лежит рядом,
+    поэтому проверять её первой нельзя: поиск честно отработает и просто не увидит
+    полутора миллионов работ — самая тихая из возможных ошибок.
     """
-    for d in (Path(os.environ["B42_FIELD_DIR"]) if os.environ.get("B42_FIELD_DIR") else None,
-              ROOT / "data",
-              ROOT.parent / "b42-ml" / "data"):
+    cands = [Path(os.environ["B42_FIELD_DIR"]) if os.environ.get("B42_FIELD_DIR") else None,
+             ROOT / "data",
+             ROOT.parent / "b42-ml" / "data"]
+    for d in cands:                       # сначала новое написание
+        if d and (d / "field.f16").exists() and (d / "field.ids").exists():
+            return d
+    for d in cands:                       # потом старое
         if d and (d / "field-vectors.npy").exists() and (d / "field-ids.txt").exists():
             return d
     return ROOT / "data"
 
 
 _VD = _vec_dir()
-VEC = _VD / "field-vectors.npy"
-VEC_IDS = _VD / "field-ids.txt"
+NEW = (_VD / "field.f16").exists() and (_VD / "field.ids").exists()
+VEC = _VD / ("field.f16" if NEW else "field-vectors.npy")
+VEC_IDS = _VD / ("field.ids" if NEW else "field-ids.txt")
 VEC_META = _VD / "field-meta.json"
+DIM = 1024
 
 
 def have_vectors():
     return VEC.exists() and VEC_IDS.exists()
+
+
+def _matrix():
+    """Поле матрицей (работы × 1024), не поднимая его в память.
+
+    Новое написание — сырой float16 без заголовка: длина берётся из числа
+    идентификаторов. Старое — обычный .npy со своим заголовком.
+    """
+    import numpy as np
+    ids = VEC_IDS.read_text(encoding="utf-8").split()
+    if NEW:
+        m = np.memmap(VEC, dtype=np.float16, mode="r").reshape(len(ids), DIM)
+    else:
+        m = np.load(VEC, mmap_mode="r")
+    return ids, m
 
 
 def search_vectors(seed_vec, limit=CANDIDATES, exclude=()):
@@ -101,8 +129,7 @@ def search_vectors(seed_vec, limit=CANDIDATES, exclude=()):
     float16 это 6.4 ГБ на диске, но в память целиком поднимать их незачем.
     """
     import numpy as np
-    ids = VEC_IDS.read_text(encoding="utf-8").split()
-    m = np.load(VEC, mmap_mode="r")
+    ids, m = _matrix()
     q = np.asarray(seed_vec, dtype=np.float32)
     q /= (np.linalg.norm(q) or 1.0)
     # Порциями, чтобы не тянуть весь массив в память одним куском.

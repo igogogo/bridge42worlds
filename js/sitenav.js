@@ -65,6 +65,7 @@
         learn:      { ru: 'Учебник',           en: 'Learn',           es: 'Curso',                ar: 'تعلّم',          fr: 'Cours' },
         analytics:  { ru: 'Карта проекта',     en: 'Project map',     es: 'Mapa del proyecto',    ar: 'خريطة المشروع', fr: 'Carte du projet' },
         research:   { ru: 'Что исследовать',   en: 'What to explore', es: 'Qué investigar',       ar: 'اتجاهات البحث', fr: 'Quoi explorer' },
+        ideas:      { ru: 'Идеи проектов',     en: 'Project ideas',   es: 'Ideas de proyectos',   ar: 'أفكار مشاريع',  fr: 'Idées de projets' },
         community:  { ru: 'Авторские работы',  en: 'Author works',    es: 'Trabajos de autor',    ar: 'أعمال المؤلفين', fr: 'Travaux d’auteurs' }
     };
     var MENU_I18N = { ru: 'Меню', en: 'Menu', es: 'Menú', ar: 'القائمة', fr: 'Menu' };
@@ -126,6 +127,10 @@
         // для чат-бота-исследователя». Страница одна на все языки, поэтому язык
         // передаём параметром, как учебным материалам.
         ['research', '/research.html?lang=' + L],
+        // Идеи проектов — соседний по смыслу раздел и такой же одностраничный:
+        // «что исследовать» отвечает нам, «идеи проектов» отвечают пришедшему со
+        // стороны. Язык параметром, как у research.
+        ['ideas', '/ideas.html?lang=' + L],
         // Авторские работы — последними, как и в главном меню: раздел неприметный
         // по решению владельца, но найти его должно быть можно.
         ['community', '/lang/' + L + '/community/']

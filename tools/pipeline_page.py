@@ -35,13 +35,16 @@ PHASES = [
     ("Насыщение", "новые понятия из текстов, формулы, рождения, чистка",
      ["harvest", "anatomy", "flink", "match", "distill", "births", "g-grow",
       "f-support", "twins", "consts", "units-fix"]),
-    ("Записи", "карточки, переводы, имена, переразметка",
-     ["live-1", "cards", "tr-cards", "tr-formulas", "names-ru", "retag", "apply"]),
+    ("Записи", "карточки, переводы, имена; разметка статей дня и доразметка архива",
+     ["live-1", "cards", "tr-cards", "tr-formulas", "names-ru",
+      "field", "retag-day", "hl-day", "retag", "apply"]),
     ("Связность", "суперпонятия, соседи, области, связи знанием, граф",
      ["super", "live-2", "vecnb", "live-3", "gnames", "weave", "live-4", "graph",
       "mentions-ru", "highlight"]),
+    ("Пласты и идеи", "спрос машины знаний → работы из прошлого; идеи проектов",
+     ["strata", "strata-gen", "ideas", "ideas-tr", "ideas-page"]),
     ("Сборка", "страницы понятий и формул, весь сайт, авторы, дашборд",
-     ["pages-c", "pages-f", "html", "authors", "status"]),
+     ["pages-c", "pages-f", "html", "html-force", "authors", "status"]),
     ("Облако", "D1, векторы, карточки статей, выкладка воркера",
      ["cloud-d1", "cloud-vec", "cards-sync", "deploy"]),
     ("Проверка", "эндпоинты, страницы, аудиты, связность ссылок",
@@ -74,13 +77,18 @@ SHORT = {
     "live-4": "В реестр ④",
     "cards": "Полные карточки", "tr-cards": "Перевод карточек",
     "tr-formulas": "Перевод формул", "names-ru": "Имена по-русски",
-    "retag": "Переразметка статей", "apply": "Применение разметки",
+    "field": "Вектор свежим статьям", "retag-day": "Разметка статей дня",
+    "hl-day": "Подсветка статей дня",
+    "retag": "Доразметка статей", "apply": "Применение разметки",
     "super": "Суперпонятия", "vecnb": "Соседи вектором",
     "gnames": "Имена областей", "weave": "Связи знанием",
     "graph": "Экспорт графа", "mentions-ru": "Упоминания",
     "highlight": "Подсветка терминов",
     "pages-c": "Страницы понятий", "pages-f": "Страницы формул",
-    "html": "Сборка сайта", "authors": "Страницы авторов", "status": "Дашборд",
+    "html": "Сборка сайта", "html-force": "Полная пересборка",
+    "strata": "Пласты: поиск в прошлом", "strata-gen": "Разборы из прошлого",
+    "ideas": "Идеи проектов", "ideas-tr": "Перевод идей",
+    "ideas-page": "Страница идей", "authors": "Страницы авторов", "status": "Дашборд",
     "cloud-d1": "Заливка D1", "cloud-vec": "Векторы в облако",
     "cards-sync": "Карточки статей в D1", "deploy": "Выкладка воркера",
     "api": "Проверка API", "pages": "Проверка страниц",
@@ -101,7 +109,7 @@ body { max-width: 1100px; padding-bottom: 70px; }
 .pp-bar { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center;
     margin: 16px 0 6px; font-family: var(--mono); font-size: 12px; }
 .pp-bar select { font-family: var(--mono); font-size: 12px; padding: 4px 8px;
-    border: 1px solid var(--hairline); border-radius: 6px; background: var(--bg);
+    border: 1px solid var(--hair); border-radius: 6px; background: var(--bg);
     color: var(--fg); }
 .pp-now { color: var(--muted); }
 .pp-now b { color: var(--fg); font-weight: 600; }
@@ -113,15 +121,15 @@ body { max-width: 1100px; padding-bottom: 70px; }
 
 .pp-flow { margin: 14px 0 0; }
 .pp-phase { display: grid; grid-template-columns: 175px 1fr; gap: 12px;
-    padding: 10px 0; border-top: 1px solid var(--hairline); align-items: start; }
-.pp-phase:last-child { border-bottom: 1px solid var(--hairline); }
+    padding: 10px 0; border-top: 1px solid var(--hair); align-items: start; }
+.pp-phase:last-child { border-bottom: 1px solid var(--hair); }
 .pp-pname { font-family: var(--serif); font-size: 14.5px; line-height: 1.3; }
 .pp-pdesc { color: var(--soft); font-size: 11.5px; line-height: 1.4; margin-top: 2px; }
 .pp-steps { display: flex; flex-wrap: wrap; gap: 7px; }
 
 /* Квадратик шага: имя, знак статуса, под ними — время и итог. */
 .pp-step { position: relative; min-width: 132px; max-width: 208px; flex: 0 1 auto;
-    border: 1.5px solid var(--hairline); border-radius: 5px; padding: 6px 9px 6px 24px;
+    border: 1.5px solid var(--hair); border-radius: 5px; padding: 6px 9px 6px 24px;
     background: var(--bg); font-size: 11.5px; line-height: 1.35; }
 .pp-mark { position: absolute; left: 6px; top: 6px; width: 13px; height: 13px;
     display: grid; place-items: center; font-size: 10px; font-weight: 700;
@@ -131,6 +139,23 @@ body { max-width: 1100px; padding-bottom: 70px; }
     color: var(--muted); margin-top: 2px; }
 .pp-out { display: block; font-size: 10.5px; color: var(--soft); margin-top: 3px;
     line-height: 1.35; }
+/* Числа шага — то, ради чего он запускался. Моноширинные, чтобы столбик цифр
+   читался сверху вниз, а не терялся в тексте итога. */
+.pp-nums { display: block; margin-top: 3px; font-family: var(--mono);
+    font-size: 10px; line-height: 1.45; }
+.pp-nums b { font-weight: 700; }
+.pp-nums span { color: var(--muted); }
+
+/* Свод прогона: то же, но крупно и наверху — «что этот прогон сделал». */
+.pp-totals { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 0; }
+.pp-tot { border: 1.5px solid var(--hair); border-radius: 5px;
+    padding: 6px 10px; background: var(--bg); }
+.pp-tot b { display: block; font-family: var(--mono); font-size: 16px;
+    line-height: 1.2; }
+.pp-tot span { display: block; font-size: 10.5px; color: var(--soft);
+    margin-top: 1px; }
+.pp-kind { font-family: var(--mono); font-size: 10.5px; border-radius: 3px;
+    padding: 1px 6px; border: 1px solid var(--hair); margin-right: 6px; }
 
 .pp-step[data-s="done"] { border-style: solid; border-color: var(--ok); }
 .pp-step[data-s="done"] .pp-mark { border: 1.5px solid var(--ok); color: var(--ok); }
@@ -153,7 +178,7 @@ body { max-width: 1100px; padding-bottom: 70px; }
 .pp-fails li { margin: 4px 0; }
 .pp-fails code { font-size: 11px; color: var(--muted); }
 .pp-hint { margin: 16px 0 0; font-size: 12px; color: var(--soft); line-height: 1.5; }
-.pp-empty { margin: 22px 0; padding: 14px; border: 1px dashed var(--hairline);
+.pp-empty { margin: 22px 0; padding: 14px; border: 1px dashed var(--hair);
     border-radius: 8px; color: var(--soft); font-size: 13px; }
 @media (max-width: 720px) {
   .pp-phase { grid-template-columns: 1fr; gap: 4px; }
@@ -170,6 +195,14 @@ JS = """
   var MARK = {done: "✓", fail: "!", run: "▶", wait: "·"};
   var WORD = {done: "прошло", fail: "сбой", run: "идёт", wait: "впереди"};
   var runs = [];
+  /* Прогонов два и они разные: ежедневный ведёт новые статьи от arXiv до
+     выкладки, недельный доразмечает весь архив на выросшем реестре. Старые
+     записи журнала рода не знают — им отвечаем по признаку: есть дни, значит
+     ежедневный. */
+  function KIND_NAME(run) {
+    var k = run.kind || ((run.days && run.days.length) ? "daily" : "weekly");
+    return k === "weekly" ? "недельный" : "ежедневный";
+  }
 
   function label(step) {
     if (step.indexOf("day-") === 0) return step.slice(4);
@@ -211,10 +244,18 @@ JS = """
     if (!meta.length) meta.push(WORD[s]);
     /* Итог шага — то, чем он сам отчитался: числа, ради которых он и запускался. */
     var out = (info.out || []).slice(-2).join(" · ");
+    /* ЧИСЛА ШАГА отдельной строкой, а не внутри итога. Итог — это фраза, которой
+       шаг о себе отчитался; число — то, что сравнивают между прогонами. Шаг,
+       своего числа не печатающий, не показывает ничего: выдумывать нечем. */
+    var nums = (info.nums || []).map(function (kv) {
+      return '<b>' + String(kv[1]).replace(/[<>&]/g, "") + '</b> <span>' +
+        String(kv[0]).replace(/[<>&]/g, "") + '</span>';
+    }).join('<br>');
     el.innerHTML =
       '<i class="pp-mark">' + MARK[s] + '</i>' +
       '<b class="pp-name">' + label(step) + '</b>' +
       '<span class="pp-meta">' + meta.join(" · ") + '</span>' +
+      (nums ? '<span class="pp-nums">' + nums + '</span>' : "") +
       (out ? '<span class="pp-out">' + out.replace(/[<>&]/g, "") + '</span>' : "");
     return el;
   }
@@ -275,12 +316,32 @@ JS = """
       box.appendChild(ul);
     }
 
+    /* СВОД ПРОГОНА. Владелец 30.08: «я должен увидеть, что прошли эти два
+       пайплайна, все их шаги со статистикой — сколько статей, понятий новых,
+       дедупликация, отбор кандидатов, доразметка». Числа собирает сам прогон
+       (tools/full_run.py, finish) из того, что напечатали шаги. */
+    var tot = document.getElementById("pp-totals");
+    tot.innerHTML = "";
+    (run.totals || []).forEach(function (kv) {
+      var d = document.createElement("div");
+      d.className = "pp-tot";
+      d.innerHTML = "<b>" + String(kv[1]).replace(/[<>&]/g, "") + "</b><span>" +
+        String(kv[0]).replace(/[<>&]/g, "") + "</span>";
+      tot.appendChild(d);
+    });
+
     var left = all.filter(function (s) { return stateOf(run, s) === "wait"; }).length;
-    document.getElementById("pp-now").innerHTML = run.current
-      ? "идёт: <b>" + label(run.current) + "</b> · пройдено " + (run.done || []).length +
-        " из " + all.length + " · осталось " + left
-      : "завершён · пройдено " + (run.done || []).length + " из " + all.length +
-        (fails.length ? " · сбоев " + fails.length : "");
+    var when = (run.started || "") +
+      (run.finished ? " → " + run.finished : "") +
+      (run.secs_total ? " · " + secs(run.secs_total) : "");
+    document.getElementById("pp-now").innerHTML =
+      '<i class="pp-kind">' + KIND_NAME(run) + '</i>' +
+      (run.current
+        ? "идёт: <b>" + label(run.current) + "</b> · пройдено " + (run.done || []).length +
+          " из " + all.length + " · осталось " + left
+        : "завершён · пройдено " + (run.done || []).length + " из " + all.length +
+          (fails.length ? " · сбоев " + fails.length : "")) +
+      (when ? " · " + when : "");
   }
 
   fetch("/data/pipeline-runs.json", {cache: "no-store"}).then(function (r) {
@@ -295,7 +356,7 @@ JS = """
     runs.forEach(function (r, i) {
       var o = document.createElement("option");
       o.value = i;
-      o.textContent = (r.started || r.id || "прогон") +
+      o.textContent = KIND_NAME(r) + " · " + (r.started || r.id || "прогон") +
         (r.days && r.days.length ? " · дни " + r.days[0] + "…" + r.days[r.days.length - 1] : "") +
         ((r.failed || []).length ? " · сбоев " + r.failed.length : "");
       sel.appendChild(o);
@@ -354,6 +415,7 @@ def main():
   и ничего не выдумывает, пока файла нет.
 </div>
 
+<div class="pp-totals" id="pp-totals"></div>
 <div class="pp-flow" id="pp-flow"></div>
 <div class="pp-fails" id="pp-fails" style="display:none"></div>
 

@@ -38,6 +38,10 @@ SOURCES = 12          # сколько работ архива показыва�
 MIN_SCORE = 0.42      # ниже — случайный сосед; порог чуть мягче, чем у рекомендаций,
                       # потому что тема запроса шире, чем текст конкретной статьи
 LANGS = ("en", "es", "ar", "fr")
+# Добирать ли опоры из поля, когда своих мало. Выключается B42_IDEAS_FIELD=0 —
+# на случай, когда нужны идеи строго по разобранному нами.
+import os as _os                                                       # noqa: E402
+USE_FIELD = _os.environ.get("B42_IDEAS_FIELD", "1") != "0"
 
 
 def _slug(topic):
@@ -54,8 +58,118 @@ def sources(topic):
     for n in picked:
         s = recommend._neighbour(n)
         if s:
+            s["url"] = article_url(s)
+            s["abstract"] = our_abstract(s)
             out.append(s)
     return out
+
+
+def our_abstract(src):
+    """Короткое изложение НАШЕГО разбора — чтобы модель могла на него опереться.
+
+    Замер 30 августа, тема «слияния чёрных дыр»: в опорах было пять наших работ и
+    семь из поля, а модель построила все пять идей ТОЛЬКО на поле. Причина не в
+    качестве: у работ поля в промпте стояла аннотация, а у наших — один заголовок
+    по-русски. Опереться можно лишь на то, что прочёл.
+
+    Берём популярное изложение из данных статьи: оно наше, короткое и на русском —
+    том же языке, на котором модель пишет идеи.
+    """
+    url = src.get("url") or ""
+    if not url:
+        return ""
+    folder = ROOT / url.replace("{lang}", "ru").strip("/")
+    data = folder / "data.json"
+    if not data.exists():
+        return ""
+    try:
+        d = json.loads(data.read_text(encoding="utf-8"))
+    except Exception:
+        return ""
+    for tier in ("popular", "simple", "advanced"):
+        v = (d.get(tier) or {}).get("ru")
+        if isinstance(v, dict):
+            for key in ("description", "mini", "oneliner"):
+                t = v.get(key)
+                if isinstance(t, str) and len(t) > 80:
+                    return " ".join(t.split())[:600]
+            one = v.get("oneliner")
+            if isinstance(one, str) and one.strip():
+                return " ".join(one.split())[:600]
+    return ""
+
+
+def article_url(src):
+    """Адрес нашей страницы разбора — проверенный по диску, а не собранный на веру.
+
+    Опора приходит с датой и номером, но папка статьи зовётся то с версией
+    (2608.21711v1), то без неё (2607.17623): версия зависит от того, какой её
+    отдал arXiv в день разбора. Собрать адрес по шаблону значит поставить в идею
+    ссылку, которая у половины опор ведёт в 404 — поэтому смотрим, что есть.
+    """
+    date, aid = src.get("date"), src.get("id")
+    if not (date and aid):
+        return ""
+    base = ROOT / "lang" / "ru" / "archive" / str(date)
+    for name in (aid, f"{aid}v1", f"{aid}v2"):
+        if (base / name).is_dir():
+            return f"/lang/{{lang}}/archive/{date}/{name}/"
+    # Папки нет — честно возвращаем пусто: страница поставит поиск по номеру.
+    return ""
+
+
+def field_sources(topic, need):
+    """Опоры из ПОЛЯ — всего arXiv, а не только разобранного нами.
+
+    Зачем. Наш архив — шесть с лишним тысяч работ по физике и смежному; инженерный
+    факультет приходит с опреснением воды и пылью на солнечных панелях, и по этим
+    темам архив честно молчит: замер 30 августа дал ноль опор и ни одной идеи.
+    Поле — 2,96 млн работ arXiv с 1991 года — про них знает.
+
+    Почему это стало возможно только теперь. Прямой векторный проход по полю
+    считался дорогим (в Vectorize он и правда стоил бы $128 в месяц), поэтому
+    tools/field.py искал двухступенчато — словами, потом вектором по тремстам
+    кандидатам. Но поле давно лежит у нас на диске, и полный проход по нему занял
+    32 секунды на замере: за словесную ступень больше платить нечем.
+
+    Что важно помнить читателю. Работа из поля НАМИ НЕ РАЗОБРАНА — у неё нет нашей
+    страницы. Мы помечаем такие опоры (field=True), и это же становится заказом:
+    идея, опирающаяся на неразобранную работу, — прямое указание, что её пора
+    разбирать (см. tools/strata.py).
+    """
+    import field
+    if not field.have_vectors():
+        return []
+    try:
+        q = field.embed([topic])[0]
+    except Exception as ex:
+        print(f"  вектор темы не посчитан ({type(ex).__name__}) — поле пропускаю")
+        return []
+    hits = field.search_vectors(q, limit=need * 3)
+    hits = [(sc, field_bare(a)) for sc, a in hits if sc >= MIN_SCORE]
+    if not hits:
+        return []
+    meta = field._abstracts([(a, field._mon_of(a)) for _, a in hits[:need * 2]])
+    out = []
+    for sc, aid in hits:
+        # _abstracts отдаёт кортеж (заголовок, аннотация, разделы, дата) — не словарь.
+        m = meta.get(aid)
+        if not m:
+            continue
+        title = (m[0] or "").strip()
+        if not title:
+            continue
+        out.append({"id": aid, "full": False, "field": True, "score": round(sc, 3),
+                    "titles": {"ru": title}, "abstract": (m[1] or "")[:600]})
+        if len(out) >= need:
+            break
+    return out
+
+
+def field_bare(aid):
+    """Идентификатор поля без приставки: «arx:hep-th/9901001» → «hep-th/9901001»."""
+    a = str(aid)
+    return a[4:] if a.startswith("arx:") else a
 
 
 def build(topic, show=False):
@@ -63,14 +177,26 @@ def build(topic, show=False):
     from common import chat, clean_json, job
 
     src = sources(topic)
+    n_ours = len(src)
+    if len(src) < SOURCES and USE_FIELD:
+        # Добираем полем. Наши разборы идут первыми и остаются главной опорой:
+        # у них есть страница, читатель может пойти и прочитать.
+        got = field_sources(topic, SOURCES - len(src))
+        have = {x["id"] for x in src}
+        src += [x for x in got if x["id"] not in have]
+        if got:
+            print(f"  наших работ {n_ours}, из поля добрано {len(src) - n_ours}")
     if len(src) < 3:
-        print(f"«{topic}»: в архиве нашлось всего {len(src)} подходящих работ — "
+        print(f"«{topic}»: нашлось всего {len(src)} подходящих работ — "
               f"идей не будет (натянутые хуже, чем никаких)")
         return None
 
     lines = "\n".join(
-        f"- [{s['id']}] ({'полный разбор' if s.get('full') else 'экспресс'}) "
-        f"{(s.get('titles') or {}).get('ru', '')}"
+        f"- [{s['id']}] ("
+        + ("работа arXiv, нами ещё не разобрана" if s.get("field")
+           else ("наш разбор, полный" if s.get("full") else "наш разбор, экспресс"))
+        + f") {(s.get('titles') or {}).get('ru', '')}"
+        + (f"{chr(10)}    {s['abstract'][:400]}" if s.get("abstract") else "")
         for s in src)
     NL = "\n"
     parts = [
@@ -83,6 +209,10 @@ def build(topic, show=False):
         "1. Каждая идея ОБЯЗАНА опираться на работы из списка ниже — минимум на одну, лучше",
         "   на две. Их id пиши ТОЛЬКО в поле based_on, в тексте id не упоминай.",
         "   Нет опоры — идею не пишем. Красивых слов без основания не надо: их и без нас много.",
+        "1а. При прочих равных ПРЕДПОЧИТАЙ работы, помеченные «наш разбор»: читатель может",
+        "   открыть их на нашем сайте и прочитать по-русски, а работа поля — это ссылка на",
+        "   английскую страницу arXiv. Если наша работа подходит хуже — бери ту, что подходит:",
+        "   натянутая опора хуже честной ссылки наружу.",
         "2. Идея должна быть ДЕЛОМ, а не темой для реферата. Проверка простая: понятно ли, что",
         "   человек сделает руками в первую неделю. «Исследовать влияние X на Y» — не идея.",
         "   «Собрать стенд из трёх датчиков и померить, как запылённость меняет отдачу панели»",
@@ -251,7 +381,32 @@ def main():
     ap.add_argument("--save", action="store_true")
     ap.add_argument("--translate", action="store_true", help="+4 языка общим переводчиком")
     ap.add_argument("--topics", help="файл со списком тем, по одной на строку")
+    ap.add_argument("--fill-langs", action="store_true",
+                    help="перевести УЖЕ НАПИСАННЫЕ наборы, не сочиняя их заново: "
+                         "иначе идеи, написанные без --translate, остались бы "
+                         "русскими навсегда")
+    ap.add_argument("--only-new", action="store_true",
+                    help="пропустить темы, по которым идеи уже написаны — так шаг "
+                         "недельного прогона стоит денег только за новые темы")
     args = ap.parse_args()
+
+    if args.fill_langs:
+        # Переводим только то, чего ещё нет: набор с готовой веткой lang пропускаем,
+        # иначе шаг платил бы за один и тот же перевод каждую неделю.
+        done = 0
+        for f in sorted(OUT.glob("*.json")):
+            if f.name == "index.json":
+                continue
+            rec = json.loads(f.read_text(encoding="utf-8"))
+            have = set((rec.get("lang") or {}).keys())
+            if have >= set(LANGS):
+                continue
+            print(f"перевожу: {rec.get('topic')}")
+            rec = translate(rec)
+            f.write_text(json.dumps(rec, ensure_ascii=False, indent=1), encoding="utf-8")
+            done += 1
+        print(f"переведено наборов: {done}")
+        return 0
 
     topics = []
     if args.topics:
@@ -263,6 +418,11 @@ def main():
         print("нужна тема или --topics файл")
         return 2
 
+    if args.only_new:
+        was = len(topics)
+        topics = [t for t in topics if not (OUT / f"{_slug(t)}.json").exists()]
+        if was != len(topics):
+            print(f"уже написано: {was - len(topics)}, беру {len(topics)}")
     done = 0
     for t in topics:
         out = build(t, show=args.show or not (args.save or args.topics))

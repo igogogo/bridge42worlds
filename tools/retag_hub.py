@@ -193,14 +193,62 @@ def build(args):
     print(f"понятий шире 5% архива: {len(wide)}"
           + (f" — {', '.join(c for c, _ in sorted(wide, key=lambda t: -t[1])[:5])}" if wide else ""))
 
+    # ── ДОРАЗМЕТКА, А НЕ ПЕРЕРАЗМЕТКА ────────────────────────────────────
+    # Владелец 30.08: «раз в неделю это доразметка всех статей, так? не полная
+    # переразметка». Разница не в вычислении — оно одно и то же, — а в том, что
+    # делать с результатом.
+    #
+    # Полная переразметка ЗАМЕЩАЕТ разметку статьи целиком. Значит любое дрожание
+    # порога отбирает у статьи понятие, которое у неё было вчера: страница
+    # меняется, отпечаток меняется, и пересобрать приходится весь архив — сорок
+    # тысяч страниц ради того, что почти всегда не менялось. Ещё хуже смысл:
+    # читатель видел связь, вернулся — связи нет, хотя ничего не случилось.
+    #
+    # Доразметка ДОПИСЫВАЕТ. Родились понятия — они находят свои старые статьи;
+    # всё, что стояло раньше, остаётся стоять. Меняются ровно те статьи, которые
+    # что-то получили, и пересобрать нужно только их. Это и есть недельный смысл:
+    # реестр вырос — пусть архив об этом узнает.
+    #
+    # Цена честности: доразметка сама по себе не снимает ошибочную привязку.
+    # Снимают их отдельные механизмы, где решение видно и обратимо, — слияние
+    # двойников и правки реестра, — а не безымянный сдвиг порога.
+    added_arts = added_links = 0
+    if getattr(args, "add_only", False):
+        try:
+            prev = json.loads(OUT.read_text(encoding="utf-8")).get("articles") or {}
+        except Exception:
+            prev = {}
+        merged = {}
+        for a_, v in got.items():
+            fresh = [cids[x] for x in v]
+            old = list(prev.get(a_) or [])
+            plus = [c for c in fresh if c not in old]
+            if plus:
+                added_arts += 1
+                added_links += len(plus)
+            # Старое впереди: порядок статьи не должен переставляться от того,
+            # что реестр подрос. Потолок на статью общий, лишнее не влезает.
+            merged[a_] = (old + plus)[:MAX_PER_ARTICLE]
+        # Статьи, которых в этом проходе не оказалось вовсе (корпус шире поля),
+        # сохраняют свою прежнюю разметку — доразметка ничего не отнимает.
+        for a_, old in prev.items():
+            merged.setdefault(a_, old)
+        articles = merged
+        print(f"доразметка: статей получили новое {added_arts} · "
+              f"новых привязок {added_links} · всего статей в разметке {len(articles)}")
+    else:
+        articles = {a_: [cids[x] for x in v] for a_, v in got.items()}
+
     OUT.write_text(json.dumps({
         "built": "2026-08-26", "threshold": args.thr, "hub_margin": args.margin,
+        "mode": "add-only" if getattr(args, "add_only", False) else "rebuild",
+        "added_articles": added_arts, "added_links": added_links,
         "min_support": MIN_SUPPORT, "max_per_article": MAX_PER_ARTICLE,
         "density": round(sum(per) / n, 2),
         "note": "Переразметка v2: margin поверх хабности вместо сырой близости; "
                 "понятия с опорой меньше пяти статей вынесены в кандидаты. "
                 "Предложение, боевые файлы не тронуты.",
-        "articles": {a: [cids[x] for x in v] for a, v in got.items()},
+        "articles": articles,
     }, ensure_ascii=False), encoding="utf-8")
     print(f"→ {OUT.relative_to(ROOT)} ({OUT.stat().st_size // 1024} КБ)")
 
@@ -266,6 +314,9 @@ def main():
                     help="прогнать статьи как новые (id через запятую)")
     ap.add_argument("--apply", action="store_true",
                     help="с --live: дописать результат в общую разметку")
+    ap.add_argument("--add-only", action="store_true",
+                    help="ДОразметка: прежние привязки сохранить, дописать только "
+                         "новые (недельный прогон)")
     args = ap.parse_args()
     return live(args) if args.live else build(args)
 
