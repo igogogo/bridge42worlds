@@ -443,6 +443,18 @@ def main():
         st["started"] = st["run_id"]
         st["t0"] = time.time()
     st["kind"] = KIND
+    # ПРОГОН, КОТОРЫЙ ИДЁТ, НЕ ЗАКОНЧЕН. Состояние читается и пишется целиком, и
+    # отметки прошлого захода (время окончания, длительность, свод чисел) ехали
+    # дальше как ни в чём не бывало: на схеме у идущего прогона стояло время
+    # окончания и итоговые числа. Продолжение оборванного прогона — это тоже
+    # начало работы, поэтому чистим здесь, а не только при первом запуске.
+    for k in ("finished", "secs_total", "totals"):
+        st.pop(k, None)
+    # Отметки шагов, которые в прошлый заход не досчитались, тоже уводят: шаг
+    # стоит «впереди», а под ним время начала и «0 с» от оборванного прогона.
+    ok_steps = set(st.get("done") or []) | set(st.get("failed") or [])
+    st["steps"] = {k: v for k, v in (st.get("steps") or {}).items() if k in ok_steps}
+    st["secs"] = {k: v for k, v in (st.get("secs") or {}).items() if k in ok_steps}
     st["days"] = days
     st["plan"] = ([f"day-{d}" for d in days] + [
         "harvest", "anatomy", "flink", "match", "distill", "births", "g-grow",

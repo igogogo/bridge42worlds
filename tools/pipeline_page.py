@@ -330,9 +330,13 @@ JS = """
        пайплайна, все их шаги со статистикой — сколько статей, понятий новых,
        дедупликация, отбор кандидатов, доразметка». Числа собирает сам прогон
        (tools/full_run.py, finish) из того, что напечатали шаги. */
+    /* Пока прогон идёт, время окончания не показываем ни при каких данных:
+       журнал мог сохранить отметку прошлого захода, и читатель увидел бы
+       законченным то, что работает у него на глазах. */
+    var live = !!run.current;
     var tot = document.getElementById("pp-totals");
     tot.innerHTML = "";
-    (run.totals || []).forEach(function (kv) {
+    (live ? [] : (run.totals || [])).forEach(function (kv) {
       var d = document.createElement("div");
       d.className = "pp-tot";
       d.innerHTML = "<b>" + String(kv[1]).replace(/[<>&]/g, "") + "</b><span>" +
@@ -342,8 +346,8 @@ JS = """
 
     var left = all.filter(function (s) { return stateOf(run, s) === "wait"; }).length;
     var when = (run.started || "") +
-      (run.finished ? " → " + run.finished : "") +
-      (run.secs_total ? " · " + secs(run.secs_total) : "");
+      (!live && run.finished ? " → " + run.finished : "") +
+      (!live && run.secs_total ? " · " + secs(run.secs_total) : "");
     document.getElementById("pp-now").innerHTML =
       '<i class="pp-kind">' + KIND_NAME(run) + '</i>' +
       (run.current
