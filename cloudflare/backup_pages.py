@@ -78,11 +78,13 @@ def main():
         except FileNotFoundError:      # параллельная сборка могла переписать страницу
             vanished += 1
             continue
-        new[key] = h
         raw += size
         if old.get(key) != h:
-            todo.append((p, key))
-    print(f"страниц перевода: {len(new)} ({raw / 2 ** 30:.2f} ГБ до сжатия) | "
+            # В опись попадёт ПОСЛЕ удачной отправки, не раньше.
+            todo.append((p, key, h))
+        else:
+            new[key] = h
+    print(f"страниц перевода: {len(new) + len(todo)} ({raw / 2 ** 30:.2f} ГБ до сжатия) | "
           f"изменённых: {len(todo)}" + (f" | исчезли на лету: {vanished}" if vanished else ""))
     if a.plan:
         return 0
@@ -92,24 +94,57 @@ def main():
         return 1
     sent = [0]
 
+    """ОБРЫВ НЕ ДОЛЖЕН ОБЕСЦЕНИВАТЬ КОПИЮ.
+
+    Опись писалась одной строкой в самом конце. Значит любой обрыв — kill, сеть,
+    выключение — стирал память о тридцати тысячах уже отправленных страниц, и
+    следующий прогон гнал их заново. Поймано 30 августа на живом примере: прогон
+    остановили посреди копии, и следующий день начал с тех же 30 819 страниц.
+    Ровно этот изъян в тот же день чинили в cloudflare/deploy_r2.py — лечим и здесь,
+    тем же способом: страница попадает в опись только после удачной отправки, а
+    опись сохраняется по ходу.
+    """
+    SAVE_EVERY = 2000
+    failed = []
+
     def put(item):
-        p, key = item
-        blob = gzip.compress(p.read_bytes(), 6)
-        cl.put_object(Bucket=BUCKET, Key=f"{PREFIX}/{key}.gz", Body=blob,
-                      ContentType="text/html", ContentEncoding="gzip")
-        sent[0] += len(blob)
+        p, key, h = item
+        try:
+            blob = gzip.compress(p.read_bytes(), 6)
+            cl.put_object(Bucket=BUCKET, Key=f"{PREFIX}/{key}.gz", Body=blob,
+                          ContentType="text/html", ContentEncoding="gzip")
+            sent[0] += len(blob)
+            return key, h
+        except Exception as e:
+            failed.append((key, f"{type(e).__name__}: {str(e)[:60]}"))
+            return key, None
 
     if todo:
+        done_since_save = 0
         with ThreadPoolExecutor(max_workers=24) as ex:
-            for i, _ in enumerate(ex.map(put, todo), 1):
+            for i, (key, h) in enumerate(ex.map(put, todo), 1):
+                if h is not None:
+                    new[key] = h
+                    done_since_save += 1
                 if i % 2000 == 0:
-                    print(f"  отправлено {i}/{len(todo)} · {sent[0] / 2 ** 20:.0f} МБ")
+                    print(f"  отправлено {i}/{len(todo)} · {sent[0] / 2 ** 20:.0f} МБ"
+                          + (f" · не удалось {len(failed)}" if failed else ""))
+                if done_since_save >= SAVE_EVERY:
+                    MANIFEST.write_text(json.dumps(new, ensure_ascii=False),
+                                        encoding="utf-8")
+                    done_since_save = 0
+    if failed:
+        print(f"⚠️  не удалось отправить {len(failed)} страниц — в опись они НЕ "
+              f"записаны, следующий прогон возьмётся за них. Первые:")
+        for k, why in failed[:5]:
+            print(f"   {k}  ({why})")
 
     # Как и в backup_r2.py: из бакета ничего не удаляем. Копия должна переживать
     # случайное «снёс не ту папку» на рабочей машине.
     MANIFEST.write_text(json.dumps(new, ensure_ascii=False), encoding="utf-8")
-    print(f"✅ переводы скопированы: +{len(todo)} обновлено ({sent[0] / 2 ** 20:.0f} МБ сжатыми), "
-          f"всего {len(new)} страниц.")
+    print(f"✅ переводы скопированы: +{len(todo) - len(failed)} обновлено "
+          f"({sent[0] / 2 ** 20:.0f} МБ сжатыми), всего {len(new)} страниц."
+          + (f" Не удалось: {len(failed)}." if failed else ""))
     return 0
 
 
