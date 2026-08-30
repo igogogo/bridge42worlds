@@ -285,6 +285,36 @@ def cited(picks, pause=1.1):
     return picks
 
 
+def publishable(aid):
+    """Можно ли вообще разбирать эту работу — вопрос лицензии, а не желания.
+
+    Пласты поднимают СТАРЫЕ работы, а у работ до 2007 года свободной лицензии
+    часто нет вовсе: arXiv тогда брал бессрочное право на распространение, но не
+    давал его нам. Очередь без этой проверки выглядела бы полной, а разбор
+    молча пропускал бы работу за работой — и шаг «поднято из прошлого: 0» никто
+    бы не понял.
+
+    Проверяем тем же кодом, что и дневной отбор: своего мнения о лицензиях
+    заводить нельзя.
+    """
+    try:
+        sys.path.insert(0, str(ROOT))
+        from gen_arxiv import get_license, is_allowed_license
+    except Exception:
+        return True          # проверить нечем — пусть решает генератор
+    try:
+        lic = get_license(aid)
+    except Exception:
+        return True
+    ok = is_allowed_license(lic)
+    # Возвращает ПАРУ (можно ли, какая лицензия) — не голый флаг. bool() от пары
+    # всегда истина, и проверка молча пропускала бы всё: quant-ph/9601025 (1996)
+    # отвечает (False, None), и именно такие работы пласты поднимают чаще всего.
+    if isinstance(ok, tuple):
+        return bool(ok[0])
+    return bool(ok)
+
+
 def main():
     ap = argparse.ArgumentParser(description="Пласты: спрос машины знаний → поле arXiv")
     ap.add_argument("--scan", action="store_true", help="только спрос, без поиска")
@@ -333,13 +363,25 @@ def main():
     if a.queue:
         # Очередь — просто идентификаторы, по одному на строку: её ест
         # run.py ids --ids-file, и никакого своего формата заводить не нужно.
+        # Идём по списку сверху и берём первые queue_top ДОПУСТИМЫХ: у работы
+        # без свободной лицензии разбора не будет, и держать её в очереди значит
+        # обманывать себя же.
+        chosen, skipped = [], 0
+        for x in picks:
+            if len(chosen) >= a.queue_top:
+                break
+            if publishable(x["id"]):
+                chosen.append(x["id"])
+            else:
+                skipped += 1
+            time.sleep(0.4)          # arXiv не любит частых вопросов
         head = ["# Пласты: работы, поднятые по спросу машины знаний",
                 f"# собрано {time.strftime('%Y-%m-%d %H:%M')}, "
                 f"спрос {len(want)} понятий"]
         Path(a.queue).write_text(
-            "\n".join(head + [x["id"] for x in picks[:a.queue_top]]) + "\n",
-            encoding="utf-8")
-        print(f"очередь: {min(len(picks), a.queue_top)} работ → {a.queue}")
+            "\n".join(head + chosen) + "\n", encoding="utf-8")
+        print(f"очередь: {len(chosen)} работ → {a.queue}"
+              + (f" · отсеяно по лицензии {skipped}" if skipped else ""))
     if a.ids:
         print(",".join(p["id"] for p in picks))
         return 0
