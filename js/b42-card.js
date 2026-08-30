@@ -21,23 +21,42 @@
 'use strict';
 
 var LANG = document.documentElement.lang || 'en';
-var RU = LANG === 'ru';
 var API = (window.B42_API || '').replace(/\/$/, '');
 var cache = {}, rels = {}, box = null, cur = null, pinned = false;
 var lastX = 0, lastY = 0;
 
-var T = {
-    more:   RU ? 'Подробно' : 'Details',
-    close:  RU ? 'Закрыть' : 'Close',
-    arts:   RU ? 'статей' : 'articles',
-    links:  RU ? 'связей' : 'links',
-    wait:   RU ? 'смотрю…' : 'loading…',
-    none:   RU ? 'Карточки пока нет' : 'No card yet',
-    graph:  RU ? 'В графе' : 'In graph',
-    fact:   RU ? 'Кстати' : 'By the way',
-    wider:  RU ? 'Шире' : 'Broader',
-    deeper: RU ? 'Глубже' : 'Deeper'
+/* ПОДПИСИ КАРТОЧКИ — ТАБЛИЦЕЙ ПО ЯЗЫКАМ, а не тройкой `RU ? … : …`.
+
+   Карточку читают на пяти языках, а подписи знали два: испанцу, арабу и французу
+   доставалось «Details», «articles», «Broader». Это тот же изъян, что и в облаке,
+   где имя понятия жило в столбце name_ru: язык записан условием, а не значением,
+   и шестой язык требует шестой ветки в каждой строке. Здесь язык — ключ; добавить
+   китайский значит дописать один блок, и ни одной правки в коде ниже.
+
+   Английский — дно: язык, которого в таблице нет, получает его целиком, а язык
+   переведённый наполовину — только недостающие строки (Object.assign). Пустой
+   карточки не бывает ни при каком языке. */
+var STRINGS = {
+    ru: { more: 'Подробно', close: 'Закрыть', arts: 'статей', links: 'связей',
+          wait: 'смотрю…', none: 'Карточки пока нет', graph: 'В графе',
+          fact: 'Кстати', wider: 'Шире', deeper: 'Глубже' },
+    es: { more: 'Detalles', close: 'Cerrar', arts: 'artículos', links: 'enlaces',
+          wait: 'cargando…', none: 'Aún no hay ficha', graph: 'En el grafo',
+          fact: 'Por cierto', wider: 'Más amplio', deeper: 'Más profundo' },
+    ar: { more: 'تفاصيل', close: 'إغلاق', arts: 'مقالة', links: 'روابط',
+          wait: 'جارٍ التحميل…', none: 'لا توجد بطاقة بعد', graph: 'في الرسم البياني',
+          fact: 'بالمناسبة', wider: 'أوسع', deeper: 'أعمق' },
+    fr: { more: 'Détails', close: 'Fermer', arts: 'articles', links: 'liens',
+          wait: 'chargement…', none: 'Pas encore de fiche', graph: 'Dans le graphe',
+          fact: 'Au fait', wider: 'Plus large', deeper: 'Plus profond' },
+    zh: { more: '详情', close: '关闭', arts: '篇文章', links: '关联',
+          wait: '加载中…', none: '暂无卡片', graph: '在图谱中',
+          fact: '顺带一提', wider: '更广', deeper: '更深' }
 };
+var EN = { more: 'Details', close: 'Close', arts: 'articles', links: 'links',
+           wait: 'loading…', none: 'No card yet', graph: 'In graph',
+           fact: 'By the way', wider: 'Broader', deeper: 'Deeper' };
+var T = Object.assign({}, EN, STRINGS[LANG] || {});
 
 /* УРОВЕНЬ ЧТЕНИЯ НАСЛЕДУЕТСЯ. Владелец 29.08: «если я открываю карточку понятия
    с популярной или простой версии, она должна вести на популярное понятие».
@@ -66,13 +85,40 @@ function brief(t, cap) {
     return stop > cap * 0.5 ? cut.slice(0, stop + 1) : cut.replace(/\s+\S*$/, '') + '…';
 }
 
-var KIND_RU = {
-    concept: 'понятие', law: 'закон', principle: 'принцип', theorem: 'теорема',
-    equation: 'уравнение', phenomenon: 'явление', effect: 'эффект',
-    method: 'метод', process: 'процесс', object: 'объект', substance: 'вещество',
-    instrument: 'прибор', quantity: 'величина', unit: 'единица',
-    constant: 'константа', statistics: 'статистика', math: 'математика',
-    theory: 'теория', property: 'свойство', formula: 'формула'
+/* Класс понятия — тем же приёмом. Английские ключи (law, phenomenon, quantity)
+   и были подписью для всех, кроме русского: испанец читал «phenomenon» посреди
+   испанской фразы. */
+var KINDS = {
+    ru: { concept: 'понятие', law: 'закон', principle: 'принцип', theorem: 'теорема',
+          equation: 'уравнение', phenomenon: 'явление', effect: 'эффект',
+          method: 'метод', process: 'процесс', object: 'объект', substance: 'вещество',
+          instrument: 'прибор', quantity: 'величина', unit: 'единица',
+          constant: 'константа', statistics: 'статистика', math: 'математика',
+          theory: 'теория', property: 'свойство', formula: 'формула' },
+    es: { concept: 'concepto', law: 'ley', principle: 'principio', theorem: 'teorema',
+          equation: 'ecuación', phenomenon: 'fenómeno', effect: 'efecto',
+          method: 'método', process: 'proceso', object: 'objeto', substance: 'sustancia',
+          instrument: 'instrumento', quantity: 'magnitud', unit: 'unidad',
+          constant: 'constante', statistics: 'estadística', math: 'matemáticas',
+          theory: 'teoría', property: 'propiedad', formula: 'fórmula' },
+    ar: { concept: 'مفهوم', law: 'قانون', principle: 'مبدأ', theorem: 'مبرهنة',
+          equation: 'معادلة', phenomenon: 'ظاهرة', effect: 'أثر',
+          method: 'طريقة', process: 'عملية', object: 'جسم', substance: 'مادة',
+          instrument: 'أداة', quantity: 'كمية', unit: 'وحدة',
+          constant: 'ثابت', statistics: 'إحصاء', math: 'رياضيات',
+          theory: 'نظرية', property: 'خاصية', formula: 'صيغة' },
+    fr: { concept: 'concept', law: 'loi', principle: 'principe', theorem: 'théorème',
+          equation: 'équation', phenomenon: 'phénomène', effect: 'effet',
+          method: 'méthode', process: 'processus', object: 'objet', substance: 'substance',
+          instrument: 'instrument', quantity: 'grandeur', unit: 'unité',
+          constant: 'constante', statistics: 'statistique', math: 'mathématiques',
+          theory: 'théorie', property: 'propriété', formula: 'formule' },
+    zh: { concept: '概念', law: '定律', principle: '原理', theorem: '定理',
+          equation: '方程', phenomenon: '现象', effect: '效应',
+          method: '方法', process: '过程', object: '客体', substance: '物质',
+          instrument: '仪器', quantity: '物理量', unit: '单位',
+          constant: '常数', statistics: '统计', math: '数学',
+          theory: '理论', property: '性质', formula: '公式' }
 };
 
 function el() {
@@ -92,7 +138,8 @@ function el() {
 }
 
 function kindLabel(k) {
-    return RU ? (KIND_RU[k] || k || '') : (k || '');
+    var by = KINDS[LANG];
+    return (by && by[k]) || k || '';
 }
 
 function esc(s) {
@@ -144,7 +191,9 @@ function ways(d, rel) {
 
 
 function render(d, id, rel) {
-    var name = (RU && d.name) ? d.name : (d.name || id.replace(/_/g, ' '));
+    /* Имя воркер уже отдал на языке страницы (поле names, все языки разом);
+       разбирать его здесь по языкам больше нечего. */
+    var name = d.name || id.replace(/_/g, ' ');
     var href = '/lang/' + LANG + '/concepts/' + encodeURIComponent(id) + '.html';
     var stats = [];
     if (d.n) stats.push(d.n + ' ' + T.arts);

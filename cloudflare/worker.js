@@ -2835,12 +2835,30 @@ const LINK_KINDS = ["tag", "law", "sci", "cat", "concept"];
    числа карточка константы в ленте ничем не отличается от любой другой, а по
    разделу списки фильтруются. */
 const CONCEPT_COLS = "id, kind, name_ru, name_en, card, n_arts, n_links, groups, cat, "
-  + "value, unit, symbol, section, part";
+  + "value, unit, symbol, section, part, names";
+
+/* ИМЯ ПОНЯТИЯ НА ЯЗЫКЕ СТРАНИЦЫ - одним местом на весь воркер.
+
+   Раньше выбор был написан десятью строчками вида
+   `(lang === "ru" && r.name_ru) || r.name_en` - по одной у карточки, у соседей,
+   у поиска, у каждого кадра графа. Пока языков было два, это работало; шестой
+   язык означал бы десять правок в десяти местах и один забытый список, который
+   молча отдаёт английское имя. Теперь имена всех языков лежат в одном поле
+   names ({"ru":..., "es":...}), а выбор живёт здесь. Старые столбцы остаются
+   запасным дном: пока реестр не перелит, страница не пустеет. */
+function cname(r, lang) {
+  let byLang = null;
+  if (r.names) {
+    try { byLang = JSON.parse(r.names); } catch (e) { byLang = null; }
+  }
+  return (byLang && byLang[lang]) || (byLang && byLang.en)
+    || (lang === "ru" && r.name_ru) || r.name_en || String(r.id).replace(/_/g, " ");
+}
 
 function conceptRow(r, lang) {
   return {
     id: r.id, kind: r.kind,
-    name: (lang === "ru" && r.name_ru) || r.name_en || r.id.replace(/_/g, " "),
+    name: cname(r, lang),
     card: r.card, n: r.n_arts, links: r.n_links,
     groups: r.groups ? JSON.parse(r.groups) : [], cat: r.cat,
     value: r.value || null, unit: r.unit || null, symbol: r.symbol || null,
@@ -2864,31 +2882,49 @@ async function handleConcept(request, env) {
     "SELECT " + CONCEPT_COLS + ", full_en, full_ru, systems FROM concepts WHERE id = ?")
     .bind(id).first();
   if (!row) return Response.json({ error: "not_found" }, { status: 404 });
+  /* ПОЛНАЯ ЗАПИСЬ НА ЯЗЫКЕ СТРАНИЦЫ. Переводы полных карточек есть давно - по
+     три тысячи на испанском, арабском и французском, - но в облако уезжал
+     только русский: в таблице было ровно два столбца, full_en и full_ru. Испанец
+     открывал понятие и читал по-английски при готовом переводе. Теперь запись
+     ищется строкой (id, lang), и язык не упирается в имя столбца. */
+  const fullRows = await env.CARDS.prepare(
+    "SELECT lang, body FROM concept_full WHERE id = ? AND lang IN (?, 'en')")
+    .bind(id, lang).all();
+  let bodyLang = "", bodyText = "";
+  (fullRows.results || []).forEach(function (r) {
+    if (r.lang === lang && r.body) { bodyLang = lang; bodyText = r.body; }
+    else if (!bodyText && r.body) { bodyLang = "en"; bodyText = r.body; }
+  });
   const links = await env.CARDS.prepare(
     /* n_arts у СОСЕДА нужен карточке: по числу статей она делит соседей на
      «шире» и «глубже» — понятие, что встречается чаще, почти всегда шире.
      Столбец уже в этой же таблице, лишнего запроса не появляется. */
-    "SELECT l.b AS id, l.w, l.kind AS lk, c.name_ru, c.name_en, c.kind AS ckind,"
+    "SELECT l.b AS id, l.w, l.kind AS lk, c.name_ru, c.name_en, c.names, c.kind AS ckind,"
     + " c.n_arts" +
     "  FROM concept_links l LEFT JOIN concepts c ON c.id = l.b" +
     " WHERE l.a = ? ORDER BY l.w DESC LIMIT 24").bind(id).all();
-  const full = (lang === "ru" && row.full_ru) ? row.full_ru : row.full_en;
-  const fullObj = full ? JSON.parse(full) : null;
+  /* Запасное дно на время перелива: пока concept_full не заполнена, берём
+     старые столбцы - страница не должна пустеть между двумя выкладками. */
+  const full = bodyText
+    || ((lang === "ru" && row.full_ru) ? row.full_ru : row.full_en);
+  if (!bodyLang) bodyLang = (lang === "ru" && row.full_ru) ? "ru" : "en";
+  let fullObj = null;
+  try { fullObj = full ? JSON.parse(full) : null; } catch (e) { fullObj = null; }
   /* Короткая карточка на языке страницы. В таблице лежит английская — она опора
      вектора и общая для всех языков, — а русская живёт внутри полной записи.
      Всплывающая подсказка по наведению берёт именно card, и на русской странице
      читатель получал английское определение. */
-  const cardLang = (lang === "ru" && fullObj && fullObj.card) ? fullObj.card : null;
+  const cardLang = (bodyLang === lang && fullObj && fullObj.card) ? fullObj.card : null;
   const out = Response.json({
     concept: Object.assign(conceptRow(row, lang), cardLang ? { card: cardLang } : {}, {
       full: fullObj,
-      fullLang: (lang === "ru" && row.full_ru) ? "ru" : "en",
+      fullLang: bodyLang,
       systems: row.systems ? JSON.parse(row.systems) : null,
     }),
     related: (links.results || []).filter(function (r) { return r.lk === "c"; })
       .map(function (r) {
         return { id: r.id, w: r.w, kind: r.ckind, n: r.n_arts || 0,
-          name: (lang === "ru" && r.name_ru) || r.name_en || r.id.replace(/_/g, " ") };
+          name: cname(r, lang) };
       }),
     formulas: (links.results || []).filter(function (r) { return r.lk === "f"; })
       .map(function (r) { return { id: r.id }; }),
@@ -2917,8 +2953,11 @@ async function handleConcepts(request, env) {
     bind.push(section, section);
   }
   if (q) {
-    where.push("(name_ru LIKE ? OR name_en LIKE ? OR id LIKE ?)");
-    bind.push("%" + q + "%", "%" + q + "%", "%" + q + "%");
+    /* names - это JSON со всеми языками, и LIKE по нему находит понятие,
+       как его назвали по-испански или по-арабски. До этого поиск по понятиям
+       понимал два языка из пяти. */
+    where.push("(name_ru LIKE ? OR name_en LIKE ? OR names LIKE ? OR id LIKE ?)");
+    bind.push("%" + q + "%", "%" + q + "%", "%" + q + "%", "%" + q + "%");
   }
   const sql = "SELECT " + CONCEPT_COLS + " FROM concepts" +
     (where.length ? " WHERE " + where.join(" AND ") : "") +
@@ -2974,15 +3013,18 @@ async function handleGraphFrame(request, env) {
       "SELECT " + CONCEPT_COLS + " FROM concepts WHERE id = ?").bind(id).first();
     if (!center) return Response.json({ error: "not_found" }, { status: 404 });
     const links = await env.CARDS.prepare(
-      "SELECT l.b AS id, l.w, c.name_ru, c.name_en, c.kind, c.n_arts, c.card, c.cat" +
+      "SELECT l.b AS id, l.w, c.name_ru, c.name_en, c.names, c.kind, c.n_arts, c.card, c.cat" +
       "  FROM concept_links l LEFT JOIN concepts c ON c.id = l.b" +
       " WHERE l.a = ? ORDER BY l.w DESC LIMIT 40").bind(id).all();
-    const nodes = [{ id: center.id, ru: center.name_ru, en: center.name_en,
+    /* name - имя на языке страницы; ru/en остаются для старых кадров, которые
+       ещё держит кэш браузера. */
+    const nodes = [{ id: center.id, name: cname(center, lang),
+                     ru: center.name_ru, en: center.name_en,
                      kind: center.kind, n: center.n_arts, card: center.card,
                      cat: center.cat, center: true }];
     const edges = [];
     (links.results || []).forEach(function (r, i) {
-      nodes.push({ id: r.id, ru: r.name_ru, en: r.name_en,
+      nodes.push({ id: r.id, name: cname(r, lang), ru: r.name_ru, en: r.name_en,
                    kind: r.kind || "concept", n: r.n_arts || 0,
                    card: r.card, cat: r.cat });
       edges.push([0, i + 1, r.w]);
@@ -3021,7 +3063,7 @@ async function handleGraphFrame(request, env) {
     const gid = parseInt(key.slice(2), 10);
     if (isNaN(gid)) return Response.json({ error: "bad_request" }, { status: 400 });
     const mem = await env.CARDS.prepare(
-      "SELECT c.id, c.name_ru, c.name_en, c.kind, c.n_arts, c.card, c.cat" +
+      "SELECT c.id, c.name_ru, c.name_en, c.names, c.kind, c.n_arts, c.card, c.cat" +
       "  FROM concept_groups g JOIN concepts c ON c.id = g.cid" +
       " WHERE g.gid = ? ORDER BY c.n_arts DESC LIMIT 200").bind(gid).all();
     const rows = mem.results || [];
@@ -3029,7 +3071,8 @@ async function handleGraphFrame(request, env) {
     const pos = {};
     const nodes = rows.map(function (r, i) {
       pos[r.id] = i;
-      return { id: r.id, ru: r.name_ru, en: r.name_en, kind: r.kind || "concept",
+      return { id: r.id, name: cname(r, lang), ru: r.name_ru, en: r.name_en,
+               kind: r.kind || "concept",
                n: r.n_arts || 0, card: r.card, cat: r.cat };
     });
     const ids = rows.map(function (r) { return "'" + String(r.id).replace(/'/g, "''") + "'"; });

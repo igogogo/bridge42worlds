@@ -226,10 +226,17 @@ def main():
     nodes = []
     for cid in cids:
         v = live[cid]
+        # ИМЕНА ВСЕХ ЯЗЫКОВ, а не пара ru/en. Мини-граф стоит на КАЖДОЙ странице
+        # статьи и берёт имена отсюда: пока в узле лежали только ru и en, испанец
+        # с французом читали испанскую статью, а понятия под ней — по-английски,
+        # хотя имена на их языке есть у всех 3 609 понятий. Поле names весит
+        # около двухсот килобайт на весь граф и снимает вопрос о шестом языке.
+        _nm = v.get("names") or {}
         nodes.append({
             "id": cid,
-            "en": (v.get("names") or {}).get("en") or cid.replace("_", " "),
-            "ru": (v.get("names") or {}).get("ru") or "",
+            "en": _nm.get("en") or cid.replace("_", " "),
+            "ru": _nm.get("ru") or "",
+            "names": {l: t for l, t in _nm.items() if t},
             "kind": v.get("kind") or "concept",
             "g": group_of(cid),
             "n": len(v.get("articles") or []),

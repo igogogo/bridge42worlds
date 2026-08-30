@@ -239,6 +239,75 @@ def build_live():
     return meta, retag
 
 
+def grow_live(apply):
+    """Рождённых дописать в живой справочник, ничего в нём не пересобирая.
+
+    Полная пересборка live (build_live) собирает справочник заново из исходников
+    ML — это правильно раз в неделю и слишком дорого для дня: над живым файлом
+    уже поработали слияния двойников, правка направлений связей, переводы имён и
+    популярные тексты, и день, принёсший два десятка статей, не должен всё это
+    перекладывать. Поэтому дневной прогон звал apply с --articles-only.
+
+    Но у этого была цена, которую заметили только 30 августа: цикл роста понятий
+    рождает понятие в data/concepts-grown.json, а в живой справочник его вливает
+    ровно та пересборка, которую день пропускает. Рождение происходило — и никуда
+    не приезжало. Здесь дневной путь: взять живой файл как есть, дописать в него
+    тех, кого в нём нет, и обновить число статей у дописанных. Никто из старых
+    записей не трогается.
+    """
+    if not LIVE.exists():
+        print("живого справочника нет — сначала полная сборка (apply без ключей)")
+        return 1
+    grown_p = ROOT / "data" / "concepts-grown.json"
+    if not grown_p.exists():
+        print("рождённых нет")
+        return 0
+    live = load(LIVE)
+    cur = live["concepts"]
+    grown = load(grown_p)
+    retag = load(RETAG)["articles"]
+    support = defaultdict(list)
+    for aid, cs_ in retag.items():
+        for cid in cs_:
+            support[cid].append(aid)
+
+    added = []
+    for cid, g in grown.items():
+        if cid in cur:
+            continue
+        cur[cid] = {
+            "card_en": g.get("card_en") or "",
+            "kind": g.get("kind") or "concept",
+            "origin": g.get("origin") or "live-harvest",
+            "names": dict(g.get("names") or {}),
+            "supers": [], "related": [], "scientists": [], "formulas": [],
+            "articles": support.get(cid, []),
+            "aliases": g.get("aliases") or [],
+        }
+        for k in ("value", "unit", "symbol"):
+            if g.get(k):
+                cur[cid][k] = g[k]
+        added.append(cid)
+    # у новичка число статей меняется каждый день — оно и есть его вес в ленте
+    touched = 0
+    for cid in grown:
+        rec = cur.get(cid)
+        if rec is not None and support.get(cid) and rec.get("articles") != support[cid]:
+            rec["articles"] = support[cid]
+            touched += 1
+
+    print(f"справочник: было {len(cur) - len(added)}, дописано {len(added)}, "
+          f"обновлено статей у {touched} · стало {len(cur)}")
+    if added:
+        print("  первые:", ", ".join(added[:8]))
+    if apply:
+        write_json_atomic(LIVE, live, indent=None)
+        print(f"→ {LIVE.relative_to(ROOT)} ({LIVE.stat().st_size // 1024} КБ)")
+    else:
+        print("  --apply запишет")
+    return 0
+
+
 def apply_articles(retag, dry):
     """concepts_v2 → data.json. Во все уровни и языки, как пишет tag_by_vector."""
     n = 0
@@ -291,11 +360,15 @@ def main():
                          "для точечного добавления свежих статей")
     ap.add_argument("--live-only", action="store_true",
                     help="пересобрать только справочник live (группы/связи/хранилища), статьи не трогать")
+    ap.add_argument("--grow-live", action="store_true",
+                    help="дописать в живой справочник рождённых циклом — не пересобирая его")
     ap.add_argument("--restore", action="store_true")
     a = ap.parse_args()
     if a.restore:
         restore()
         return 0
+    if a.grow_live:
+        return grow_live(apply=a.apply)
 
     live, retag = build_live()
     c = live["concepts"]

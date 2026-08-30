@@ -33,6 +33,108 @@ var RU = LANG === 'ru';
    штрихографика, формы, дуги. Один код с мини-графами страниц. ── */
 var CORE = window.B42GraphCore;
 var KINDS = CORE.KINDS;
+
+/* ПОДПИСИ ГРАФА — ТАБЛИЦЕЙ ПО ЯЗЫКАМ.
+
+   Граф целиком — хлебные крошки, подсказки, кнопки, всплывающие пояснения — был
+   написан парами `RU ? 'по-русски' : 'in English'`: двадцать четыре штуки. Для
+   испанца, араба и француза это значило английский интерфейс поверх испанских
+   имён понятий, а для шестого языка — двадцать четыре правки в двадцати четырёх
+   местах. Язык здесь ключ, английский — дно для языка, которого в таблице нет
+   или который переведён наполовину. */
+var TXT = (function () {
+    var EN = {
+        fpage: 'formula page →', spage: 'scientist page →', cpage: 'concept page →',
+        overview: 'Overview', artset: 'article set · ', cloud: 'whole cloud',
+        areas: 'areas: ', grpArts: 'group · articles: ', clickOpen: 'click to open',
+        artShort: ' art.', linkShort: ' links', concepts: ' concepts',
+        dblEnter: 'double-click to enter',
+        hintArea: 'hover a circle to see the area · double-click to enter',
+        hintNav: 'click — select · dbl-click — drill · wheel — zoom',
+        artsMid: ' articles · ', links: ' links', strongest: 'strongest links:',
+        nodes: ' nodes · ', edgesPower: ' edges · power ',
+        empty: 'empty — search or click', all: 'all', clear: 'clear', expand: 'expand'
+    };
+    var BY = {
+        ru: {
+            fpage: 'страница формулы →', spage: 'страница учёного →',
+            cpage: 'страница понятия →', overview: 'Обзор', artset: 'набор статьи · ',
+            cloud: 'всё облако', areas: 'области: ', grpArts: 'группа · статей: ',
+            clickOpen: 'клик — открыть', artShort: ' ст.', linkShort: ' св.',
+            concepts: ' понятий', dblEnter: 'двойной клик — войти в область',
+            hintArea: 'наведи на круг — что это за область · двойной клик — внутрь',
+            hintNav: 'клик — выбрать · двойной — вглубь · колесо — зум',
+            artsMid: ' статей · ', links: ' связей', strongest: 'сильнейшие связи:',
+            nodes: ' узлов · ', edgesPower: ' рёбер · мощность ',
+            empty: 'пусто — начните с поиска или клика', all: 'все',
+            clear: 'очистить', expand: 'раскрыть'
+        },
+        es: {
+            fpage: 'página de la fórmula →', spage: 'página del científico →',
+            cpage: 'página del concepto →', overview: 'Vista general',
+            artset: 'conjunto del artículo · ', cloud: 'toda la nube',
+            areas: 'áreas: ', grpArts: 'grupo · artículos: ',
+            clickOpen: 'clic para abrir', artShort: ' art.', linkShort: ' enl.',
+            concepts: ' conceptos', dblEnter: 'doble clic para entrar',
+            hintArea: 'pasa por un círculo para ver el área · doble clic para entrar',
+            hintNav: 'clic — elegir · doble — profundizar · rueda — zoom',
+            artsMid: ' artículos · ', links: ' enlaces',
+            strongest: 'enlaces más fuertes:', nodes: ' nodos · ',
+            edgesPower: ' aristas · fuerza ', empty: 'vacío — busca o haz clic',
+            all: 'todo', clear: 'limpiar', expand: 'desplegar'
+        },
+        ar: {
+            fpage: 'صفحة الصيغة →', spage: 'صفحة العالِم →',
+            cpage: 'صفحة المفهوم →', overview: 'نظرة عامة',
+            artset: 'مجموعة المقالة · ', cloud: 'السحابة كاملة',
+            areas: 'المجالات: ', grpArts: 'مجموعة · مقالات: ',
+            clickOpen: 'انقر للفتح', artShort: ' مقالة', linkShort: ' رابط',
+            concepts: ' مفهوماً', dblEnter: 'انقر نقراً مزدوجاً للدخول',
+            hintArea: 'مرّر فوق دائرة لمعرفة المجال · نقر مزدوج للدخول',
+            hintNav: 'نقرة — اختيار · مزدوجة — تعمّق · العجلة — تكبير',
+            artsMid: ' مقالة · ', links: ' رابط', strongest: 'أقوى الروابط:',
+            nodes: ' عقدة · ', edgesPower: ' حافة · القوة ',
+            empty: 'فارغ — ابحث أو انقر', all: 'الكل', clear: 'مسح', expand: 'توسيع'
+        },
+        fr: {
+            fpage: 'page de la formule →', spage: 'page du scientifique →',
+            cpage: 'page du concept →', overview: 'Vue d’ensemble',
+            artset: 'ensemble de l’article · ', cloud: 'tout le nuage',
+            areas: 'domaines : ', grpArts: 'groupe · articles : ',
+            clickOpen: 'cliquer pour ouvrir', artShort: ' art.', linkShort: ' liens',
+            concepts: ' concepts', dblEnter: 'double-clic pour entrer',
+            hintArea: 'survolez un cercle pour voir le domaine · double-clic pour entrer',
+            hintNav: 'clic — choisir · double — approfondir · molette — zoom',
+            artsMid: ' articles · ', links: ' liens',
+            strongest: 'liens les plus forts :', nodes: ' nœuds · ',
+            edgesPower: ' arêtes · puissance ', empty: 'vide — cherchez ou cliquez',
+            all: 'tout', clear: 'effacer', expand: 'déplier'
+        },
+        zh: {
+            fpage: '公式页面 →', spage: '科学家页面 →', cpage: '概念页面 →',
+            overview: '总览', artset: '本文集合 · ', cloud: '整片云',
+            areas: '领域：', grpArts: '组 · 文章：', clickOpen: '点击打开',
+            artShort: ' 篇', linkShort: ' 关联', concepts: ' 个概念',
+            dblEnter: '双击进入',
+            hintArea: '悬停圆圈查看领域 · 双击进入',
+            hintNav: '单击 — 选择 · 双击 — 深入 · 滚轮 — 缩放',
+            artsMid: ' 篇文章 · ', links: ' 关联', strongest: '最强关联：',
+            nodes: ' 个节点 · ', edgesPower: ' 条边 · 强度 ',
+            empty: '空 — 搜索或点击', all: '全部', clear: '清除', expand: '展开'
+        }
+    };
+    var out = {}, k;
+    for (k in EN) { if (Object.prototype.hasOwnProperty.call(EN, k)) out[k] = EN[k]; }
+    var mine = BY[LANG];
+    if (mine) {
+        for (k in mine) {
+            if (Object.prototype.hasOwnProperty.call(mine, k)) out[k] = mine[k];
+        }
+    }
+    return out;
+})();
+
+var kindLabel = CORE.kindLabel;
 var bucketOf = CORE.bucketOf;
 function tokens() { return CORE.tokens(); }
 var TK = tokens();
@@ -106,7 +208,13 @@ fetch('/data/concepts-graph.json').then(function (r) { return r.json(); })
             if (b) b.textContent = LIVE_FRAMES ? 'облако' : 'файл';
         });
     });
-function nodeName(n) { return (RU && n.ru) ? n.ru : n.en; }
+// Имя узла воркер теперь отдаёт готовым полем name — на языке страницы, каким бы
+// он ни был. Пара ru/en остаётся запасным дном: её присылают кадры, которые ещё
+// держит кэш браузера, и она же спасала, пока языков было два.
+function nodeName(n) {
+    return n.name || (n.names && (n.names[LANG] || n.names.en))
+        || ((RU && n.ru) ? n.ru : n.en);
+}
 
 /* Куда ведёт узел. Классов в графе три вида, и у каждого свой дом: понятие,
    формула, учёный. Раньше панель всегда предлагала «страницу понятия» — для
@@ -121,9 +229,9 @@ function pageOf(n) {
     return '/lang/' + LANG + '/concepts/' + n.id + '.html';
 }
 function pageLabel(n) {
-    if (n.kind === 'formula') return RU ? 'страница формулы →' : 'formula page →';
-    if (n.kind === 'scientist') return RU ? 'страница учёного →' : 'scientist page →';
-    return RU ? 'страница понятия →' : 'concept page →';
+    if (n.kind === 'formula') return TXT.fpage;
+    if (n.kind === 'scientist') return TXT.spage;
+    return TXT.cpage;
 }
 
 /* Открыть кадр по параметрам адреса. Возвращает true, если открыли. */
@@ -168,9 +276,9 @@ function showSet(idxs, focusId) {
     var f = frameFromIds(idxs, true);
     var fi = -1;
     for (var i = 0; i < idxs.length; i++) if (G.nodes[idxs[i]].id === focusId) fi = i;
-    trail = [{mode: 'overview', arg: null, label: RU ? 'Обзор' : 'Overview'}];
+    trail = [{mode: 'overview', arg: null, label: TXT.overview}];
     trail.push({mode: 'set', arg: idxs,
-                label: (RU ? 'набор статьи · ' : 'article set · ') + idxs.length});
+                label: TXT.artset + idxs.length});
     setFrame('set', f.nodes, f.edges, 'set' + idxs.length);
     selI = fi >= 0 ? fi : 0;
     igniteSparks();
@@ -280,7 +388,7 @@ function showOverview() {
         var p = k.split(':');
         return [+p[0], +p[1], keep[k]];
     });
-    trail = [{mode: 'overview', label: RU ? 'Обзор' : 'Overview'}];
+    trail = [{mode: 'overview', label: TXT.overview}];
     selI = -1; sparks = [];
     setFrame('overview', nodes, edges);
 }
@@ -329,8 +437,8 @@ function showAll() {
     var ids = [];
     for (var i = 0; i < G.nodes.length; i++) ids.push(i);
     var f = frameFromIds(ids);
-    trail = [{mode: 'overview', label: RU ? 'Обзор' : 'Overview'},
-             {mode: 'all', label: RU ? 'всё облако' : 'whole cloud'}];
+    trail = [{mode: 'overview', label: TXT.overview},
+             {mode: 'all', label: TXT.cloud}];
     selI = -1; sparks = [];
     setFrame('all', f.nodes, f.edges);
     view.zoomT = 0.4;
@@ -355,9 +463,9 @@ function showPicked() {
     var f = frameFromIds(ids);
     var names = G.groups.filter(function (_, i) { return !pick || pick.has(i); })
         .map(groupLabel);
-    var label = (RU ? 'области: ' : 'areas: ') +
+    var label = TXT.areas +
         (names.length > 3 ? names.length : names.join(', '));
-    trail = [{mode: 'overview', label: RU ? 'Обзор' : 'Overview'},
+    trail = [{mode: 'overview', label: TXT.overview},
              {mode: 'picked', label: label}];
     selI = -1; sparks = [];
     setFrame('picked', f.nodes, f.edges);
@@ -371,7 +479,7 @@ function showGroup(gi, pushCrumb, focusKey) {
             if (!f || !f.nodes || !f.nodes.length) { showGroupLocal(gi, pushCrumb, focusKey); return; }
             var nodes = f.nodes.map(function (n, i) {
                 return {key: 'n' + n.id, ni: G.byId !== undefined ? G.byId[n.id] : undefined,
-                        id: n.id, label: (RU && n.ru) ? n.ru : n.en, n: n.n || 0,
+                        id: n.id, label: nodeName(n), n: n.n || 0,
                         kind: n.kind, cat: n.cat, card: n.card, out: !!n.out,
                         size: 3.4 + 8.5 * Math.sqrt((n.n || 1) /
                               Math.max(1, Math.max.apply(null, f.nodes.map(function (x) { return x.n || 1; }))))};
@@ -858,13 +966,13 @@ function draw() {
         var hd = n[hoverI];
         var lines = [hd.label], cardFrom = 2;
         if (hd.kind === '_group') {
-            lines.push((RU ? 'группа · статей: ' : 'group · articles: ') + hd.n);
-            lines.push(RU ? 'клик — открыть' : 'click to open');
+            lines.push(TXT.grpArts + hd.n);
+            lines.push(TXT.clickOpen);
             cardFrom = 99;
         } else {
             var gi2 = G.nodes[hd.ni];
-            lines.push(gi2.kind + ' · ' + gi2.n + (RU ? ' ст.' : ' art.') +
-                       ' · ' + deg[hd.ni] + (RU ? ' св.' : ' links'));
+            lines.push(gi2.kind + ' · ' + gi2.n + TXT.artShort +
+                       ' · ' + deg[hd.ni] + TXT.linkShort);
             /* карточка понятия прямо в тултипе — смотреть и учиться на месте */
             if (gi2.card) {
                 ctx.font = '10.5px ' + TK.mono;
@@ -1263,22 +1371,20 @@ function renderInfo() {
             box.innerHTML =
                 '<div class="b42g-sel"><b>' + groupLabel(gg) + '</b></div>' +
                 '<div class="b42g-dim">' + gg.members.length +
-                (RU ? ' понятий' : ' concepts') + '</div>' +
+                TXT.concepts + '</div>' +
                 (note ? '<div class="b42g-note">' + note + '</div>' : '') +
                 '<div class="b42g-dim">' +
-                (RU ? 'двойной клик — войти в область' : 'double-click to enter') +
+                TXT.dblEnter +
                 '</div>';
             return;
         }
         box.innerHTML = '<div class="b42g-dim">' +
-            (RU ? 'наведи на круг — что это за область · двойной клик — внутрь'
-                : 'hover a circle to see the area · double-click to enter') + '</div>';
+            TXT.hintArea + '</div>';
         return;
     }
     if (selI < 0 || !frame.nodes[selI]) {
         box.innerHTML = '<div class="b42g-dim">' +
-            (RU ? 'клик — выбрать · двойной — вглубь · колесо — зум'
-                : 'click — select · dbl-click — drill · wheel — zoom') + '</div>';
+            TXT.hintNav + '</div>';
         return;
     }
     var nd = frame.nodes[selI], gn = G.nodes[nd.ni];
@@ -1293,12 +1399,12 @@ function renderInfo() {
     box.innerHTML =
         '<div class="b42g-sel"><b>' + nd.label + '</b> <span class="b42g-dim">' +
         gn.kind + '</span></div>' +
-        '<div class="b42g-dim">' + gn.n + (RU ? ' статей · ' : ' articles · ') +
-        adj[nd.ni].length + (RU ? ' связей' : ' links') + '</div>' +
+        '<div class="b42g-dim">' + gn.n + TXT.artsMid +
+        adj[nd.ni].length + TXT.links + '</div>' +
         '<div style="margin:4px 0 7px"><a href="' + pageOf(gn) + '">' +
         pageLabel(gn) + '</a></div>' +
         '<div class="b42g-dim" style="margin-bottom:3px">' +
-        (RU ? 'сильнейшие связи:' : 'strongest links:') + '</div>' + rows;
+        TXT.strongest + '</div>' + rows;
     box.querySelectorAll('.b42g-jump').forEach(function (b) {
         b.onclick = function () { showEgo(+b.dataset.ni); };
     });
@@ -1324,14 +1430,14 @@ function renderStats() {
     var bars = KINDS.filter(function (K) { return byK[K.k]; })
         .map(function (K) {
             var v = byK[K.k];
-            return '<div class="b42g-bar" title="' + (RU ? K.ru : K.en) + ': ' +
+            return '<div class="b42g-bar" title="' + kindLabel(K, LANG) + ': ' +
                 v + '"><i style="width:' + Math.round(v / maxK * 100) +
                 '%;background:' + K.color + '"></i><span>' + v + '</span></div>';
         }).join('');
     box.innerHTML =
         '<div class="b42g-dim">' +
-        vis.length + (RU ? ' узлов · ' : ' nodes · ') +
-        nEdges + (RU ? ' рёбер · мощность ' : ' edges · power ') + wSum +
+        vis.length + TXT.nodes +
+        nEdges + TXT.edgesPower + wSum +
         '</div>' + bars;
 }
 
@@ -1340,7 +1446,7 @@ function renderPath() {
     if (!box) return;
     if (!path.length) {
         box.innerHTML = '<div class="b42g-dim">' +
-            (RU ? 'пусто — начните с поиска или клика' : 'empty — search or click') +
+            TXT.empty +
             '</div>';
         return;
     }
@@ -1359,7 +1465,7 @@ function buildPanel() {
         KINDS.forEach(function (K) {
             var lab = document.createElement('label');
             lab.className = 'b42g-check';
-            lab.title = RU ? K.ru : K.en;
+            lab.title = kindLabel(K, LANG);
             var cb = document.createElement('input');
             cb.type = 'checkbox'; cb.checked = true;
             cb.onchange = function () {
@@ -1376,7 +1482,7 @@ function buildPanel() {
             ctx = keep;
             lab.appendChild(sw);
             var sp = document.createElement('span');
-            sp.textContent = RU ? K.ru : K.en;
+            sp.textContent = kindLabel(K, LANG);
             lab.appendChild(sp);
             kb.appendChild(lab);
         });
@@ -1414,7 +1520,7 @@ function buildPanel() {
     if (gb) {
         var all = document.createElement('button');
         all.className = 'b42g-mini';
-        all.textContent = RU ? 'все' : 'all';
+        all.textContent = TXT.all;
         all.onclick = function () {
             groupOn = null;
             gb.querySelectorAll('input').forEach(function (c) { c.checked = true; });
@@ -1426,7 +1532,7 @@ function buildPanel() {
            к пустому набору можно было только двадцатью щелчками (владелец 30.08). */
         var none = document.createElement('button');
         none.className = 'b42g-mini';
-        none.textContent = RU ? 'очистить' : 'clear';
+        none.textContent = TXT.clear;
         none.onclick = function () {
             groupOn = new Set();
             gb.querySelectorAll('input').forEach(function (c) { c.checked = false; });
@@ -1438,7 +1544,7 @@ function buildPanel() {
            показываются своими понятиями. */
         var open = document.createElement('button');
         open.className = 'b42g-mini';
-        open.textContent = RU ? 'раскрыть' : 'expand';
+        open.textContent = TXT.expand;
         open.onclick = function () { stopDemo(); showPicked(); };
         gb.appendChild(open);
         G.groups.forEach(function (g, i) {

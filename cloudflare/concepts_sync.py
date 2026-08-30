@@ -41,6 +41,8 @@ sys.path.insert(0, str(ROOT))
 if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
+from common import ALL_LANGS
+
 DB = "b42-cards"
 BATCH = 40
 # Потолок длины одного SQL-запроса к D1. Замер 28.08: сорок строк с полными
@@ -115,7 +117,20 @@ SCHEMA = [
          unit     TEXT,               -- её единица: «coulomb»
          symbol   TEXT,               -- её символ: «e»
          section  TEXT,               -- раздел по смыслу: statistics | constant | …
-         part     TEXT                -- часть раздела: «Проверка гипотез»
+         part     TEXT,               -- часть раздела: «Проверка гипотез»
+         names    TEXT                -- {"ru":…, "en":…, "es":…} — ВСЕ языки одним полем
+       )""",
+    # ПОЛНАЯ ЗАПИСЬ — СТРОКОЙ НА ЯЗЫК, А НЕ СТОЛБЦОМ НА ЯЗЫК. Столбцы full_en и
+    # full_ru появились, когда языков было два, и с тех пор испанец, араб и француз
+    # открывали понятие по-английски: переводы существуют (3 040–3 058 карточек на
+    # каждом), но доехать им было некуда. Шестой язык добавил бы шестой столбец и
+    # шестую ветку в воркере; здесь язык — значение, а не имя поля, и добавление
+    # языка перестаёт быть правкой схемы.
+    """CREATE TABLE IF NOT EXISTS concept_full (
+         id   TEXT NOT NULL,
+         lang TEXT NOT NULL,
+         body TEXT,
+         PRIMARY KEY (id, lang)
        )""",
     "CREATE INDEX IF NOT EXISTS concepts_kind ON concepts(kind, n_arts DESC)",
     "CREATE INDEX IF NOT EXISTS concepts_arts ON concepts(n_arts DESC)",
@@ -180,6 +195,7 @@ MIGRATIONS = [
     "ALTER TABLE concepts ADD COLUMN symbol TEXT",
     "ALTER TABLE concepts ADD COLUMN section TEXT",
     "ALTER TABLE concepts ADD COLUMN part TEXT",
+    "ALTER TABLE concepts ADD COLUMN names TEXT",
     "CREATE INDEX IF NOT EXISTS concepts_section ON concepts(section, n_arts DESC)",
 ]
 
@@ -216,7 +232,7 @@ def load():
 # добавить только таблицы областей).
 ONLY = None
 ONLY_TABLES = {
-    "concepts": {"concepts"},
+    "concepts": {"concepts", "concept_full"},
     "links": {"concept_links"},
     "arts": {"concept_arts"},
     "formulas": {"formulas"},
@@ -369,11 +385,24 @@ def main():
                 # страница вместо ответа, за которым на неё пришли
                 v.get("value"), v.get("unit"), v.get("symbol"),
                 v.get("section"), v.get("section_part"),
+                v.get("names") or None,
             ])
         push("concepts", ["id", "kind", "name_ru", "name_en", "card", "n_arts",
                           "n_links", "groups", "cat", "full_en", "full_ru",
                           "systems", "value", "unit", "symbol", "section",
-                          "part"], rows, "понятия")
+                          "part", "names"], rows, "понятия")
+
+        # Полные записи по языкам. Английская — исходная (v["full"]), остальные
+        # лежат переводами в full_i18n. Язык, которого у понятия нет, строкой не
+        # становится: воркер откатится к английской.
+        full_rows = []
+        for cid, v in C.items():
+            if v.get("full"):
+                full_rows.append([cid, "en", v["full"]])
+            for lang, body in (v.get("full_i18n") or {}).items():
+                if body and lang != "en" and lang in ALL_LANGS:
+                    full_rows.append([cid, lang, body])
+        push("concept_full", ["id", "lang", "body"], full_rows, "полные записи")
 
         links = []
         for cid, v in C.items():

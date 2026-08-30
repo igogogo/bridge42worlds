@@ -24,13 +24,21 @@ var boxes = document.querySelectorAll('.b42mini[data-ids]');
 if (!boxes.length || !window.B42GraphCore) return;
 var CORE = window.B42GraphCore;
 var LANG = document.documentElement.lang || 'en';
-var RU = LANG === 'ru';
+/* «статей» на языке страницы. Мини-граф показывает эту подпись у каждого узла
+   под курсором, и она была последней парой ru/en в клиенте графа. */
+var ARTS = ({ru: ' статей', es: ' artículos', ar: ' مقالة', fr: ' articles',
+             zh: ' 篇文章'})[LANG] || ' articles';
 
 CORE.data().then(function (G) {
     boxes.forEach(function (box) { init(box, G); });
 });
 
-function nodeName(n) { return (RU && n.ru) ? n.ru : n.en; }
+// Имя узла воркер отдаёт готовым полем name — на языке страницы; пара ru/en
+// осталась дном для кадров, которые ещё держит кэш браузера.
+function nodeName(n) {
+    return n.name || (n.names && (n.names[LANG] || n.names.en))
+        || ((LANG === 'ru' && n.ru) ? n.ru : n.en);
+}
 
 function init(box, G) {
     var ids = (box.dataset.ids || '').split(',').filter(Boolean);
@@ -314,7 +322,7 @@ function init(box, G) {
         if (hover >= 0 && mouse.x !== undefined) {
             var hd = nodes[hover];
             var lines = [hd.label,
-                         hd.kind + ' · ' + hd.n + (RU ? ' статей' : ' articles')];
+                         hd.kind + ' · ' + hd.n + ARTS];
             ctx.font = '10.5px ' + TK.mono;
             var tww = 0;
             lines.forEach(function (s) { tww = Math.max(tww, ctx.measureText(s).width); });

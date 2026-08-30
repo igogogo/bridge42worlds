@@ -12,46 +12,54 @@
 'use strict';
 
 /* классы понятий: форма + цвет + штрих. Порядок = порядок в легенде. */
+/* ПОДПИСЬ СЕМЕЙСТВА НА ЯЗЫКЕ СТРАНИЦЫ. Пара ru/en держалась с тех пор, когда
+   языков было два: испанец, араб и француз читали легенду графа по-английски.
+   Язык теперь ключ в записи, а выбор — одна функция ниже; шестой язык это ещё
+   один ключ и ни одной правки в коде, который рисует. */
 var KINDS = [
     {k: 'law+', shapes: ['law', 'principle', 'theorem', 'equation'], sh: 'sq',
      color: '#4a7ab5', hatch: 'double',
-     ru: 'закон · принцип', en: 'law · principle'},
+     ru: 'закон · принцип', en: 'law · principle', es: 'ley · principio', ar: 'قانون · مبدأ', fr: 'loi · principe', zh: '定律 · 原理'},
     {k: 'method+', shapes: ['method', 'process'], sh: 'di',
      color: '#b8860b', hatch: 'diag',
-     ru: 'метод · процесс', en: 'method · process'},
+     ru: 'метод · процесс', en: 'method · process', es: 'método · proceso', ar: 'طريقة · عملية', fr: 'méthode · processus', zh: '方法 · 过程'},
     {k: 'phen+', shapes: ['phenomenon', 'effect'], sh: 'tr',
      color: '#0d7d8c', hatch: 'rays',
-     ru: 'явление · эффект', en: 'phenomenon · effect'},
+     ru: 'явление · эффект', en: 'phenomenon · effect', es: 'fenómeno · efecto', ar: 'ظاهرة · أثر', fr: 'phénomène · effet', zh: '现象 · 效应'},
     {k: 'obj+', shapes: ['object', 'substance', 'structure'], sh: 'ring',
      color: '#8a6db1', hatch: 'ring',
-     ru: 'объект · вещество', en: 'object · substance'},
+     ru: 'объект · вещество', en: 'object · substance', es: 'objeto · sustancia', ar: 'جسم · مادة', fr: 'objet · substance', zh: '客体 · 物质'},
     {k: 'instr+', shapes: ['instrument', 'experiment'], sh: 'hex',
      color: '#5f8d4e', hatch: 'dot',
-     ru: 'прибор', en: 'instrument'},
+     ru: 'прибор', en: 'instrument', es: 'instrumento', ar: 'أداة', fr: 'instrument', zh: '仪器'},
     {k: 'math', shapes: ['math'], sh: 'circle',
      color: '#a05c65', hatch: 'grid',
-     ru: 'математика', en: 'math'},
+     ru: 'математика', en: 'math', es: 'matemáticas', ar: 'رياضيات', fr: 'mathématiques', zh: '数学'},
     {k: 'units+', shapes: ['quantity', 'constant', 'unit', 'unit_system'],
      sh: 'pent', color: '#767c85', hatch: 'horiz',
-     ru: 'величины · единицы', en: 'quantities · units'},
+     ru: 'величины · единицы', en: 'quantities · units', es: 'magnitudes · unidades', ar: 'كميات · وحدات', fr: 'grandeurs · unités', zh: '物理量 · 单位'},
     {k: 'stats', shapes: ['statistics'], sh: 'circle', color: '#4e8076',
-     hatch: 'scatter', ru: 'статистика', en: 'statistics'},
+     hatch: 'scatter', ru: 'статистика', en: 'statistics', es: 'estadística', ar: 'إحصاء', fr: 'statistique', zh: '统计'},
     {k: 'formula', shapes: ['formula'], sh: 'fx', color: '#8c6d3f',
-     hatch: 'none', ru: 'формулы', en: 'formulas'},
+     hatch: 'none', ru: 'формулы', en: 'formulas', es: 'fórmulas', ar: 'صيغ', fr: 'formules', zh: '公式'},
     /* Учёные — отдельным классом и отдельной формой (владелец 28.08: «есть ли
        опция включить учёных, иконка для них»). Форма «человек»: круг головы над
        дугой плеч — единственная фигура в наборе, читаемая как имя, а не как
        предмет. Выключается тем же переключателем, что и остальные классы. */
     {k: 'sci', shapes: ['scientist'], sh: 'person', color: '#b5654a',
-     hatch: 'none', ru: 'учёные', en: 'scientists'},
+     hatch: 'none', ru: 'учёные', en: 'scientists', es: 'científicos', ar: 'علماء', fr: 'scientifiques', zh: '科学家'},
     {k: 'rest', shapes: [], sh: 'circle', color: '#6b7f8c', hatch: 'none',
-     ru: 'понятие', en: 'concept'},
+     ru: 'понятие', en: 'concept', es: 'concepto', ar: 'مفهوم', fr: 'concept', zh: '概念'},
 ];
 var bucket = {}, style = {};
 KINDS.forEach(function (K) {
     style[K.k] = K;
     K.shapes.forEach(function (s) { bucket[s] = K.k; });
 });
+
+function kindLabel(K, lang) {
+    return (K && (K[lang] || K.en)) || '';
+}
 
 function bucketOf(kind) { return bucket[kind] || 'rest'; }
 function styleOf(kind) { return style[bucketOf(kind)]; }
@@ -233,7 +241,7 @@ function data() {
 }
 
 window.B42GraphCore = {
-    KINDS: KINDS, bucketOf: bucketOf, styleOf: styleOf, tokens: tokens,
+    KINDS: KINDS, kindLabel: kindLabel, bucketOf: bucketOf, styleOf: styleOf, tokens: tokens,
     pathShape: pathShape, drawNodeIcon: drawNodeIcon, edgePath: edgePath,
     data: data,
 };
