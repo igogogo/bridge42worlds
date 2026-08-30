@@ -361,6 +361,28 @@ def finish():
     st["totals"] = total
     save(st)
 
+    # ЖУРНАЛ ВЫКЛАДЫВАЕМ ОТДЕЛЬНО, ПОСЛЕ ВСЕГО. Схема конвейера читает
+    # data/pipeline-runs.json прямо с сайта, а выкладка идёт шагом html — то есть
+    # ПОСРЕДИ прогона. Значит на проде вечно висел бы прогон, застывший на шаге
+    # сборки: последний час работы, итоговые числа и слово «завершён» не доезжали
+    # никогда. Здесь три файла и пара секунд, зато страница говорит правду.
+    if os.environ.get("B42_NO_PUBLISH") == "1":
+        return
+    try:
+        out = subprocess.run(
+            [PY, "cloudflare/deploy_r2.py", "--only",
+             "data/pipeline-runs.json", "pipeline.html"],
+            cwd=ROOT, env=dict(os.environ, PYTHONIOENCODING="utf-8",
+                               B42_DEPLOY_OK="1"),
+            capture_output=True, text=True, encoding="utf-8", errors="replace",
+            timeout=600)
+        tail = [l for l in (out.stdout or "").splitlines() if l.strip()][-1:]
+        log("итог прогона выложен: " + (tail[0] if tail else "без вывода"))
+    except Exception as e:
+        # Не доехало — прогон от этого не становится неудачным: журнал лежит
+        # на диске и уедет со следующей выкладкой.
+        log(f"итог прогона не выложен ({type(e).__name__}) — уедет со следующей")
+
 
 def prepare_super_input():
     """Собрать вход для кластеризации: супер живёт в соседнем дереве и ест свой
@@ -572,13 +594,16 @@ def main():
     # полтора часа, и в обычном прогоне она не нужна: новые статьи и затронутые
     # страницы отпечатки находят сами. Полный проход остаётся недельным (--full),
     # там он и уместен: после переразметки всего архива меняются все страницы.
+    # Страница конвейера — ПЕРЕД сборкой: сборка её и выложит. Разметка страницы
+    # меняется редко (данные она берёт запросом), но когда меняется — читатель
+    # должен получить новую, а не ту, что собралась после выкладки.
+    run("pipeline-page", [PY, "tools/pipeline_page.py"], timeout=600, soft=True)
     run("html", [PY, "run.py", "html"] + (["--force"] if FULL else []),
         timeout=8 * 3600, env=env)
     run("authors", [PY, "-c", "import sys; sys.path.insert(0,'.'); "
                     "import generate as G; G.update_all_authors()"], timeout=4 * 3600)
     run("status", [PY, "-c", "import sys; sys.path.insert(0,'.'); "
                    "import generate as G; G.generate_status_page()"], timeout=1800)
-    run("pipeline-page", [PY, "tools/pipeline_page.py"], timeout=600, soft=True)
 
     # ── VI. ОБЛАКО ───────────────────────────────────────────────────────────
     run("cloud-d1", [PY, "cloudflare/concepts_sync.py"], timeout=4 * 3600)
