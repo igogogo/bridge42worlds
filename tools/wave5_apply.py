@@ -188,14 +188,23 @@ def build_live():
             for l, nm in (g.get("names") or {}).items():
                 if cid in out:
                     out[cid]["names"].setdefault(l, nm)
-    # русские имена из переводчика — ЕЩЁ ОДНО хранилище, которое пересборка
-    # обязана вливать сама (27.08: live-only пересборка уронила ru-имена
-    # с 3231 до 529 — переводчик писал их только в текущий live)
-    nru = ROOT / "data" / "concept-names-ru.json"
-    if nru.exists():
-        for cid, ru in load(nru).items():
-            if cid in out and ru:
-                out[cid]["names"].setdefault("ru", ru)
+    # ИМЕНА ПО ЯЗЫКАМ — ХРАНИЛИЩЕ, КОТОРОЕ ПЕРЕСБОРКА ОБЯЗАНА ВЛИВАТЬ САМА.
+    #
+    # 27 августа так потерялись русские имена (3231 → 529): переводчик писал их
+    # только в текущий live, а live собирается заново из исходников. Тогда завели
+    # concept-names-ru.json — и записали урок для ОДНОГО языка.
+    #
+    # 30 августа то же случилось с остальными: испанские, арабские и французские
+    # имена упали с 3609 до 530 на первой же пересборке. Болезнь была общая, а
+    # лекарство — частное. Теперь вливаем все языки проекта; хранилища заполняет
+    # tools/concept_names_store.py, туда же пишет переводчик.
+    for _lang in LANGS:
+        _p = ROOT / "data" / f"concept-names-{_lang}.json"
+        if not _p.exists():
+            continue
+        for cid, nm in load(_p).items():
+            if cid in out and nm:
+                out[cid]["names"].setdefault(_lang, nm)
     # ЧИСЛО КОНСТАНТЫ. Значение и единица приходят из разбора формул и ядра СИ
     # (tools/constants_from_formulas.py) — реестр v3 их не знает, а страница
     # без числа бесполезна: константа и есть своё число.
