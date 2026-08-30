@@ -2349,6 +2349,13 @@ async function handleCorpus(request, env) {
   if (hit) return hit;
 
   const { lang, version } = feedParams(url);
+  /* Сводка считает ТО ЖЕ, что покажет лента. Фильтр «скрыть экспресс» отсекает
+     работы в ленте, но счётчики на чипах его не знали — и чип обещал четыре работы
+     там, где лента честно отдавала ноль: у «Networking» все четыре оказались
+     экспрессами (владелец 30.08). Число, которое ни к чему не ведёт, хуже
+     отсутствующего: читатель жмёт и упирается в пустоту. */
+  const ex = url.searchParams.get("express");
+  const exWhere = (ex === "0" || ex === "1") ? " AND express = " + Number(ex) : "";
   // Разделы считаем через json_each: колонка categories хранит массив строкой, а полоса
   // разделов над лентой показывает статью в КАЖДОМ её разделе, не только в главном.
   // Взять primary_category было бы дешевле и неверно: у работы на стыке двух наук
@@ -2356,12 +2363,12 @@ async function handleCorpus(request, env) {
   const [rows, catRows] = await Promise.all([
     env.CARDS.prepare(
       `SELECT date, COUNT(*) n, SUM(express) ex, SUM(km) km
-         FROM cards WHERE lang = ? AND version = ?
+         FROM cards WHERE lang = ? AND version = ?` + exWhere + `
         GROUP BY date ORDER BY date`).bind(lang, version).all(),
     env.CARDS.prepare(
       `SELECT je.value cat, COUNT(*) n
          FROM cards, json_each(cards.categories) je
-        WHERE lang = ? AND version = ?
+        WHERE lang = ? AND version = ?` + exWhere + `
         GROUP BY cat ORDER BY n DESC`).bind(lang, version).all().catch(() => ({ results: [] })),
   ]);
 

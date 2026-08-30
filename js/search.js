@@ -274,6 +274,10 @@ function initExpressFilter() {
         hideExpress = cb.checked;
         try { localStorage.setItem('b42_hide_express', hideExpress ? '1' : '0'); } catch (e) {}
         if (repaint) repaint();
+        // Числа на чипах должны пересчитаться под новый фильтр.
+        ensureCorpus().then(function () {
+            if (window.initCategoryBar) try { initCategoryBar(); } catch (e) {}
+        });
         // Тумблер — глобальный фильтр поверх текущего вида; проще всего сбросить на «последние»,
         // чем пытаться помнить, какой именно фильтр (дата/категория/поиск) был активен.
         _defaultFeed();
@@ -1318,6 +1322,11 @@ function cardHTML(item) {
         '<button class="react-btn sm' + (_myR === 'like' ? ' active' : '') + '" data-react="like" title="Нравится">' + b42ic('like', 17, '👍') + '<span class="rc"></span></button>' +
         '<button class="react-btn sm' + (_myR === 'dislike' ? ' active' : '') + '" data-react="dislike" title="Не нравится">' + b42ic('dislike', 17, '👎') + '<span class="rc"></span></button>' +
         '<button class="fav-btn sm' + (_favOn ? ' active' : '') + '" data-fav="' + item.id + '" title="В избранное"><span class="fav-ic">' + (_favOn ? '★' : '☆') + '</span></button>' +
+        // Ссылка на первоисточник — ЗДЕСЬ, между реакциями и уровнями чтения.
+        // Владелец 30.08: «все ссылки будут внизу». Наверху она мешала отдать
+        // верхнюю строку разделам, а по смыслу это такой же вход в статью, как
+        // и три уровня, только наружу.
+        '<a class="card-src" href="https://arxiv.org/abs/' + item.id + '" target="_blank" rel="noopener">arXiv:' + item.id + '</a>' +
         // Три входа в статью — здесь же, правее реакций; CSS прижимает их к краю.
         levelSwitchHTML(base) +
         '</div>';
@@ -1340,22 +1349,36 @@ function cardHTML(item) {
     // к «паспорту» статьи, живёт сверху; низ карточки остаётся под теги и действия.
     // Описание раздела уходит в data-, а не в title: нативная подсказка рисуется строкой,
     // уезжает за экран и на телефоне не показывается вовсе.
-    var eyebrow = (catName || item.date || item.express || item.reading) ?
-        '<div class="card-eyebrow">' +
-            (catName ? '<a class="card-cat" href="#" data-cat="' + cat + '" data-cat-desc="' + catDesc.replace(/"/g, '&quot;') + '" onclick="filterByCategory(\'' + cat + '\');return false;">' +
-                // знак группы перед названием: в ленте из двадцати работ разных наук глаз
-                // цепляется за рисунок раньше, чем прочитает слово (владелец 2026-08-05)
-                (window.B42Icons && B42Icons.sectionIcon ? B42Icons.sectionIcon(cat, 14) : '') +
-                '<span class="card-cat-t">' + catName + '</span></a>' : '') +
+    /* ВЕРХНЯЯ СТРОКА — РАЗДЕЛЫ, И ВСЕ. Показывался только первый, хотя работа обычно
+       числится в двух-трёх, и по каждому её ищут (владелец 30.08: «отдать верхнюю
+       строку под названия разделов, сейчас там первый»). Дата, минуты и ссылка на
+       первоисточник ушли: дата с минутами — строкой ниже, ссылка — вниз к действиям.
+       От этого выигрывает не только строка: картинка начинается ниже и встаёт вровень
+       с текстом, который её обтекает, — раньше между ними зиял почти целый интервал. */
+    var cats = (item.categories && item.categories.length ? item.categories : (cat ? [cat] : []));
+    var catsHtml = cats.map(function (c) {
+        var nm = (window.ARXIV_CAT_NAMES && ARXIV_CAT_NAMES[c]) || c;
+        var d = ((window.ARXIV_CAT_DESC && ARXIV_CAT_DESC[c]) || '').replace(/"/g, '&quot;');
+        return '<a class="card-cat" href="#" data-cat="' + c + '" data-cat-desc="' + d +
+               '" onclick="filterByCategory(\'' + c + '\');return false;">' +
+               // знак группы перед названием: в ленте из двадцати работ разных наук глаз
+               // цепляется за рисунок раньше, чем прочитает слово (владелец 2026-08-05)
+               (window.B42Icons && B42Icons.sectionIcon ? B42Icons.sectionIcon(c, 14) : '') +
+               '<span class="card-cat-t">' + nm + '</span></a>';
+    }).join('');
+    var eyebrow = (catsHtml || item.express) ?
+        '<div class="card-eyebrow">' + catsHtml +
+            (item.express ? '<span class="card-express-badge" data-tip-text="' + (UI.expressTip || '').replace(/"/g, '&quot;') + '">' + UI.express + '</span>' : '') +
+        '</div>' : '';
+    var metaRow = (item.date || item.reading || item.cites) ?
+        '<div class="card-meta">' +
             (item.date ? '<span class="card-date">' + item.date + '</span>' : '') +
             (item.reading ? '<span class="card-read">' + item.reading + ' ' + UI.min + '</span>' : '') +
-            '<a class="card-src" href="https://arxiv.org/abs/' + item.id + '" target="_blank" rel="noopener">arXiv:' + item.id + '</a>' +
             // Цитируемость Scholar (поле cites приходит из индекса; молчим, если нет)
-            (item.cites ? '<span class="card-cites" title="Citations — Semantic Scholar">' + item.cites.toLocaleString() + ' cit</span>' : '') +
-            (item.express ? '<span class="card-express-badge" title="' + UI.expressTip + '">' + UI.express + '</span>' : '') +
+            (item.cites ? '<span class="card-cites" data-tip-text="Citations — Semantic Scholar">' + item.cites.toLocaleString() + ' cit</span>' : '') +
         '</div>' : '';
     return '<article class="article-card">' +
-        eyebrow +
+        eyebrow + metaRow +
         (hasImg ? (
         '<a class="card-img-wrap" href="' + url + '">' +
             '<img src="' + img + '" data-fb="' + imgFb + '" loading="lazy" onerror="if(this.dataset.fb){this.src=this.dataset.fb;this.removeAttribute(\'data-fb\');}else{this.closest(\'.card-img-wrap\').style.display=\'none\';}" alt="">' +
@@ -1459,10 +1482,17 @@ function feedFromCloud(query, page) {
    Ради этих чисел раньше качался весь индекс — календарю нужны ДНИ, полосе разделов
    НАЗВАНИЯ, фильтру глубины ДВА ЧИСЛА, а приезжали все тексты архива. */
 var _corpusPromise = null;
+var _corpusKey = '';
 function ensureCorpus() {
-    if (_corpusPromise) return _corpusPromise;
+    /* Сводка зависит от фильтра экспресса: с ним и без него числа разные. Помним её
+       вместе с состоянием фильтра — иначе после переключения на чипах остались бы
+       старые числа, и они снова разошлись бы с лентой. */
+    var key = effVersion() + '|' + (hideExpress ? '1' : '0');
+    if (_corpusPromise && _corpusKey === key) return _corpusPromise;
+    _corpusKey = key;
     _corpusPromise = fetch(API + '/api/corpus?lang=' + encodeURIComponent(lang) +
-                           '&version=' + encodeURIComponent(effVersion()))
+                           '&version=' + encodeURIComponent(effVersion()) +
+                           (hideExpress ? '&express=0' : ''))
         .then(function (r) { if (!r.ok) throw 0; return r.json(); })
         .then(function (c) { window.__corpus = c; return c; })
         .catch(function () { return null; });

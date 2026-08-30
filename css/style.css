@@ -1989,6 +1989,20 @@ html[dir="rtl"] .cat-chip-add { margin-left: 0; margin-right: 5px; }
    размерах шрифта. */
 .card-eyebrow { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
 .card-eyebrow > * { display: inline-flex; align-items: center; gap: 4px; }
+/* Дата, минуты и цитируемость — отдельной строкой под разделами. Верхняя строка
+   отдана разделам целиком, а эта строка заодно опускает картинку: та начинается
+   ниже и встаёт вровень с обтекающим текстом (владелец 30.08). */
+.card-meta {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px;
+    margin-bottom: 5px; line-height: 1.3;
+    font-size: 11px; color: var(--muted); font-family: var(--mono);
+}
+.card-meta .card-date { margin-left: 0; }
+/* Ссылка на первоисточник переехала в строку действий. Прижимаем её к уровням
+   чтения справа, а не к реакциям слева: это вход в статью, только наружу. */
+.card-actions .card-src { margin-left: auto; font-size: 11px; color: var(--muted); }
+.card-actions .card-src + .lv-switch,
+.card-actions .card-src + .lv-bottom { margin-left: 8px; }
 .card-eyebrow svg { flex: 0 0 auto; }
 .card-eyebrow .card-date { margin: 0 !important; }
 .card-eyebrow .card-express-badge { margin: 0 !important; }
