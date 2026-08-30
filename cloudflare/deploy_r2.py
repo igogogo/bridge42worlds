@@ -366,14 +366,23 @@ def main():
     # С точечной выкладкой манифест НЕ переписывается целиком: обновляются только
     # тронутые ключи, остальные переносятся как были. Иначе следующая полная выкладка
     # решила бы, что всего прочего в облаке нет, и залила бы весь сайт заново.
-    only = ""
+    only = []
     if "--only" in sys.argv:
+        # НЕСКОЛЬКО ПУТЕЙ, а не один. Раньше бралось ровно sys.argv[i+1], и вызов
+        # с двумя путями молча выкладывал первый: команда отрабатывала, отчитывалась
+        # успехом, а половина того, ради чего её звали, оставалась дома. Берём всё
+        # до следующего ключа.
         i = sys.argv.index("--only")
-        only = sys.argv[i + 1].replace("\\", "/").strip("/") if i + 1 < len(sys.argv) else ""
+        rest = []
+        for x in sys.argv[i + 1:]:
+            if x.startswith("--"):
+                break
+            rest.append(x.replace("\\", "/").strip("/"))
+        only = [x for x in rest if x]
         if not only:
             print("--only без пути. Стоп.")
             return
-        print(f"точечная выкладка: только {only}")
+        print("точечная выкладка: только " + ", ".join(only))
     if not only:
         _refuse_if_build_running()
     prune = "--prune" in sys.argv
@@ -420,7 +429,7 @@ def main():
     quick = 0
     for p in iter_files():
         key = p.relative_to(ROOT).as_posix()
-        if only and not key.startswith(only):
+        if only and not any(key.startswith(o) for o in only):
             continue
         if withdrawn and any(code in key for code in withdrawn):
             continue
