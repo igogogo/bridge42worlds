@@ -5048,8 +5048,24 @@ def write_arxiv_categories_json():
     неизбежно расходилась с Python-словарём при каждом добавлении новой категории.
     Заодно — ARXIV_CATEGORY_DESCRIPTIONS в data/arxiv-category-descriptions.json (тултипы)."""
     Path("data").mkdir(exist_ok=True)
+    # ARXIV_CATEGORIES — наши КОРОТКИЕ подписи, их 64: «High Energy» вместо
+    # «High Energy Astrophysical Phenomena». Остальные девяносто разделов подписи не
+    # имели вовсе, и по-английски читатель видел код: «math.SG» там, где по-русски
+    # стоит «Симплектическая геометрия» (владелец 30.08). Русский, испанский,
+    # французский и арабский справочники полные — 155 записей, — а английский отставал,
+    # потому что собирался из этого словаря и ниоткуда больше.
+    #
+    # Полные английские имена лежат рядом, в data/arxiv-taxonomy-en.json. Кладём их
+    # основанием, а свои короткие — поверх: там, где мы придумали подпись лучше, она
+    # и останется.
+    full = {}
+    try:
+        full = json.loads(Path("data/arxiv-taxonomy-en.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        pass
     Path("data/arxiv-categories.json").write_text(
-        json.dumps(ARXIV_CATEGORIES, ensure_ascii=False, indent=2), encoding="utf-8")
+        json.dumps({**full, **ARXIV_CATEGORIES}, ensure_ascii=False, indent=2),
+        encoding="utf-8")
     Path("data/arxiv-category-descriptions.json").write_text(
         json.dumps(ARXIV_CATEGORY_DESCRIPTIONS, ensure_ascii=False, indent=2), encoding="utf-8")
 

@@ -498,7 +498,7 @@ body.graph-fs-open { overflow: hidden; }
 /* Мельче + перенос внутри колонки, чтобы длинная строка (с 7 счётчиками) не вылезала за 620px
    (юзер 2026-07-24). white-space:normal + overflow-wrap — переносится по « / », а не режется. */
 .site-stats { text-align: left; max-width: 620px; font-size: 10.5px; line-height: 1.5;
-    color: var(--soft); margin: 2px 0 14px; font-family: var(--mono);
+    color: var(--soft); margin: 14px 0 14px; font-family: var(--mono);
     /* Перенос ВЕЗДЕ. История: сначала «одна строка со свайпом» (2026-07-25), потом на
        телефоне хвост стоял за краем без доскролла (QA 2026-07-29), а 2026-08-02 владелец
        увидел то же на десктопе: «…5 языка / обновлен» выглядело обрезанным на половине,
@@ -571,6 +571,20 @@ body {
     content: ""; position: absolute; left: 0; right: 0;
     top: -24px; height: 24px; background: var(--bg);
     box-shadow: 0 0 0 24px var(--bg);
+    /* ПОД содержимое шапки, а не поверх. Разброс тени в 24px идёт во ВСЕ стороны,
+       в том числе вниз: полоса стоит на -24px, значит тень закрашивает и первые
+       24 пикселя самой шапки. Кнопки справа («понятия», ночной режим) начинаются
+       на +8 и высотой 32 — то есть под заливку попадала ровно их верхняя половина
+       (замер: перекрытие 16 пикселей). Владелец дважды показывал этот срез на
+       снимке; в первый раз я убрал отрицательный отступ у шапки и промахнулся —
+       дело было не в нём.
+
+       Псевдоэлемент позиционирован, а логотип и кнопки — нет, и по порядку
+       отрисовки позиционированное ложится поверх обычного потока. Отрицательный
+       слой возвращает полосу на своё место: над фоном страницы, но под текстом
+       и кнопками. Шапка липкая и со своим z-index, то есть образует свой слой —
+       наружу этот -1 не протекает. */
+    z-index: -1;
 }
 .logo {
     font-family: 'Source Serif 4', 'Georgia', serif;
@@ -765,10 +779,23 @@ html[dir="rtl"] .calendar-panel, html[dir="rtl"] .search-panel { right: auto; le
    после сужения шапки стал визуально шире и левее её. Единое левое выравнивание на всю
    колонку страницы. */
 .category-bar {
-    max-width: 620px; margin: 8px 0 0; display: flex; flex-wrap: wrap;
+    /* Панель подтянута к строке языков, а статистику от неё, наоборот, отпустили —
+       владелец 30.08: «это ещё чуть поднять вверх, а строку со статистикой наоборот
+       отлепить». Раньше и то и другое стояло вплотную, и три разнородные строки
+       читались одним комком. */
+    max-width: 620px; margin: 2px 0 0; display: flex; flex-wrap: wrap;
     justify-content: flex-start; font-size: 11.5px; line-height: 1.9;
 }
 .category-bar.collapsed { max-height: 3.9em; overflow: hidden; }
+/* РАЗВЁРНУТЫЙ СПИСОК НЕ РАЗЪЕЗЖАЕТСЯ НА ПОЛЭКРАНА. Разделов полторы сотни, и
+   раскрытая панель уводила ленту далеко вниз: чтобы свернуть, приходилось листать
+   обратно (владелец 30.08). Держим примерно двадцать строк и даём прокрутку внутри —
+   список остаётся на месте, а лента под ним никуда не уезжает. */
+.category-bar:not(.collapsed) {
+    /* lh — высота строки; браузеру постарше её не понять, поэтому сначала пиксели. */
+    max-height: 420px; max-height: 20lh;
+    overflow-y: auto; overscroll-behavior: contain;
+}
 .category-bar-more {
     display: none; max-width: var(--w-wide); margin: 2px 0 0; padding: 0;
     background: none; border: none; color: var(--soft); font-size: 11px; cursor: pointer;
@@ -4736,6 +4763,10 @@ body.graph-page { max-width: none; }
     color: var(--link); padding: 2px 9px;
     transition: border-color .16s, color .16s; }
 .b42card-next:hover { border-color: var(--cyan); color: var(--cyan); }
+
+/* Код раздела в подсказке: «Симплектическая геометрия · math.SG». Служебное
+   обозначение, поэтому моноширинным и приглушённо — оно для справки, не для чтения. */
+.tip-code { font-family: var(--mono); font-size: 10.5px; color: var(--muted); }
 
 .b42card-n { font-family: var(--mono); font-size: 10.5px; color: var(--muted);
     margin-top: 6px; }

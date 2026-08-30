@@ -479,6 +479,14 @@ window.B42Refs = Promise.all(
     // хардкоженная копия, которая расходилась с серверной при каждом добавлении категории.
     Object.assign(ARXIV_CAT_NAMES, rest[3] || {});
     Object.assign(ARXIV_CAT_DESC, rest[4] || {});
+    /* ПАНЕЛЬ РАЗДЕЛОВ ЖДЁТ СЛОВАРЬ. Она строится по сводке корпуса, а та приезжает
+       раньше названий: в подпись подставлялся код — «astro-ph.HE» вместо «High
+       Energy», «math.SG» вместо «Симплектическая геометрия» (владелец 30.08).
+       Выглядело как нехватка перевода, а на деле гонка загрузок: словарь приходил
+       вторым и панель уже была нарисована. Если она на странице — перерисуем. */
+    if (document.getElementById('category-bar') && window.initCategoryBar) {
+        try { initCategoryBar(); } catch (e) {}
+    }
 
     window.tagsLoc = tagsLoc;
     window.scientistsData = scientistsData;
@@ -1926,10 +1934,23 @@ function initCategoryBar() {
     moreBtn.onclick = function() {
         var collapsed = bar.classList.toggle('collapsed');
         moreBtn.textContent = (collapsed ? UI.moreWord + ' ▾' : UI.showLess + ' ▴');
+        // СВЕРНУЛИ — ВЕРНУЛИСЬ НАВЕРХ. Развёрнутый список разделов занимает пол-экрана,
+        // и кнопка «свернуть» оказывается глубоко внизу. Нажав её, читатель оставался
+        // где-то на третьей статье ленты, хотя он всего лишь закрыл список (владелец
+        // 30.08). Прокручиваем к самой панели, а не к началу страницы: она и есть то,
+        // с чем он сейчас работает.
+        if (collapsed) {
+            var y = bar.getBoundingClientRect().top + (window.scrollY || 0) - 72;
+            window.scrollTo({top: Math.max(0, y), behavior: 'smooth'});
+        }
     };
     requestAnimationFrame(function() {
         if (bar.scrollHeight > bar.clientHeight + 2) moreBtn.style.display = 'inline-block';
     });
+    /* Чипы созданы заново — значит слушателей подсказки на них нет. Панель теперь
+       перерисовывается после прихода словаря названий, и без этой строки раздел
+       молча перестал показывать подсказку с описанием и кодом. */
+    if (typeof initAllTooltips === 'function') initAllTooltips();
 }
 window.initCategoryBar = initCategoryBar;
 
@@ -2281,7 +2302,12 @@ function initAllTooltips() {
                     : '<strong>' + (el.textContent || el.dataset.law) + '</strong> <a href="/lang/' + lang + '/laws/' + encodeURIComponent(el.dataset.law) + '.html">' + UI.more + '</a>';
             } else if (el.dataset.cat) {
                 var cd = el.dataset.catDesc || '';
+                // Код раздела показываем рядом с именем: «Симплектическая геометрия
+                // · math.SG». Владелец 30.08: «можно у раздела сделать тултипчик с
+                // кодом, тогда удобно» — код и есть то, чем раздел зовут на arXiv,
+                // по нему ищут и ссылаются, а в подписи он не помещается.
                 content = '<strong>' + (ARXIV_CAT_NAMES[el.dataset.cat] || el.dataset.cat) + '</strong>'
+                        + ' <span class="tip-code">' + el.dataset.cat + '</span>'
                         + (cd ? ' &mdash; <span class="tip-desc">' + tipCut(cd) + '</span>' : '');
             } else if (el.dataset.author) {
                 var a = authorsGraph[el.dataset.author];

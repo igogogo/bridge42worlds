@@ -310,7 +310,28 @@ def main():
         _frozen("публикация на прод")
     except ImportError:
         pass
-    _refuse_if_build_running()
+    # --only <путь> — выложить ТОЛЬКО то, что начинается с этого пути.
+    #
+    # Зачем. Правка интерфейса — это один файл css или js, и страницы подключают их
+    # без версии в адресе, то есть доезжает она сама за пять минут жизни кэша, без
+    # всякой пересборки (так и задумано, см. заголовки в worker.js). А выкладка при
+    # этом всё равно считала дельту по всему дереву в 286 тысяч файлов и отказывалась
+    # работать, пока идёт сборка. Получалось, что почтовую марку нельзя отправить,
+    # пока не достроен дом.
+    #
+    # С точечной выкладкой манифест НЕ переписывается целиком: обновляются только
+    # тронутые ключи, остальные переносятся как были. Иначе следующая полная выкладка
+    # решила бы, что всего прочего в облаке нет, и залила бы весь сайт заново.
+    only = ""
+    if "--only" in sys.argv:
+        i = sys.argv.index("--only")
+        only = sys.argv[i + 1].replace("\\", "/").strip("/") if i + 1 < len(sys.argv) else ""
+        if not only:
+            print("--only без пути. Стоп.")
+            return
+        print(f"точечная выкладка: только {only}")
+    if not only:
+        _refuse_if_build_running()
     prune = "--prune" in sys.argv
     account = os.environ.get("CLOUDFLARE_ACCOUNT_ID") or os.environ.get("R2_ACCOUNT_ID")
     bucket = os.environ.get("R2_BUCKET", "bridge42worlds-site")
@@ -347,9 +368,13 @@ def main():
         raise SystemExit(1)
 
     old = json.loads(MANIFEST.read_text(encoding="utf-8")) if MANIFEST.exists() else {}
-    new, to_upload, skipped = {}, [], 0
+    # При точечной выкладке начинаем не с пустого манифеста, а со старого: иначе
+    # всё, что не попало под фильтр, исчезнет из него и уедет заново следующим разом.
+    new, to_upload, skipped = (dict(old) if only else {}), [], 0
     for p in iter_files():
         key = p.relative_to(ROOT).as_posix()
+        if only and not key.startswith(only):
+            continue
         if withdrawn and any(code in key for code in withdrawn):
             continue
         try:
