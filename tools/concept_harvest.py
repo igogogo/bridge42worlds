@@ -207,10 +207,24 @@ def ingest(aid, cands):
             rows[c["name"]] = {**c, "articles": [aid], "matched": None}
             added += 1
     save_harvest(rows)
-    ready = [r for r in rows.values()
-             if not r.get("matched") and len(r["articles"]) >= ARTICLES_MIN]
+    # «ДОРОСЛО» СЧИТАЕМ ТЕМ ЖЕ СИТОМ, ЧТО И РОЖДАЕТ. Здесь стояло «пять статей и не
+    # совпал со старым» — по этому счёту доросшими выглядели 3 062 кандидата, а цикл
+    # рождал троих. Разница не в сбое: рождение требует ещё вектора и ТВЁРДОЙ ОПОРЫ —
+    # дословных упоминаний в текстах. Но строка в логе об этом молчала, и число
+    # 3 062 успело уехать в отчёт владельцу как «ждут рождения» (30.08).
+    #
+    # Считаем по-настоящему: спрашиваем у самого цикла. Если он почему-то не
+    # импортируется, показываем черновой счёт и честно помечаем его словом «грубо».
+    try:
+        from tools import concept_cycle as _cyc
+        ready = _cyc.born_candidates(rows)
+        note = ""
+    except Exception:
+        ready = [r for r in rows.values()
+                 if not r.get("matched") and len(r["articles"]) >= ARTICLES_MIN]
+        note = " (грубо)"
     print(f"{aid}: новых кандидатов {added}, подросло {grown}; "
-          f"в копилке {len(rows)}, доросло до понятия {len(ready)}")
+          f"в копилке {len(rows)}, доросло до понятия {len(ready)}{note}")
 
 
 def embed(texts):

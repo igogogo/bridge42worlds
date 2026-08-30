@@ -209,6 +209,13 @@ WEEKLY_ONLY = {
 }
 
 
+# Коды возврата, которые НЕ являются сбоем. Пока такой был один и жил в голове,
+# он же и путал: день без публикаций arXiv (выходной, лаг объявления) отдавал
+# единицу, схема красила шаг красным, и «прогон без ошибок» становился
+# недостижим по календарю.
+EMPTY_CODE = 3
+
+
 def run(step, cmd, timeout=8 * 3600, cwd=None, env=None, soft=False, weekly=False):
     """soft — шаг, неудача которого не должна валить прогон (например, обложки:
     без картинки статья всё равно статья).
@@ -259,13 +266,21 @@ def run(step, cmd, timeout=8 * 3600, cwd=None, env=None, soft=False, weekly=Fals
                 f.flush()
             proc.wait(timeout=timeout)
         ok = proc.returncode == 0
+        empty = proc.returncode == EMPTY_CODE
         out = "\n".join(lines)
     except subprocess.TimeoutExpired:
         ok = False
+        empty = False
         log(f"  ⏱ {step}: превышено время ({timeout // 60} мин)")
     dt = int(time.time() - t0)
     finished = time.strftime("%H:%M:%S")
-    log(("✓ " if ok else "✗ ") + f"{step} ({dt // 60} мин {dt % 60} с)")
+    if empty:
+        # Пусто — это факт дня, а не наша неудача. Пишем словом, чтобы в журнале
+        # было видно, почему шаг ничего не принёс.
+        ok = True
+        log(f"○ {step}: пусто — arXiv не дал ни одной работы ({dt // 60} мин {dt % 60} с)")
+    else:
+        log(("✓ " if ok else "✗ ") + f"{step} ({dt // 60} мин {dt % 60} с)")
     st = state()
     st["current"] = None
     st["at"] = time.strftime("%Y-%m-%d %H:%M")
@@ -273,6 +288,7 @@ def run(step, cmd, timeout=8 * 3600, cwd=None, env=None, soft=False, weekly=Fals
     st.setdefault("steps", {})[step] = {
         "started": started, "finished": finished, "secs": dt, "ok": ok,
         "out": summarize(out), "nums": numbers_of(step, out),
+        "empty": empty,
     }
     if ok:
         st["done"].append(step)
@@ -280,7 +296,10 @@ def run(step, cmd, timeout=8 * 3600, cwd=None, env=None, soft=False, weekly=Fals
     else:
         st.setdefault("failed", []).append(step)
         if not soft:
-            log(f"  ШАГ НЕ УДАЛСЯ: {step}. Прогон остановлен — разбираться здесь.")
+            # Раньше здесь стояло «Прогон остановлен», и это было неправдой:
+            # значение никто не проверял, цепочка шла дальше. Говорим как есть.
+            log(f"  ШАГ НЕ УДАЛСЯ: {step}. Разбираться здесь; "
+                f"остальные шаги идут дальше.")
     save(st)
     return ok or soft
 

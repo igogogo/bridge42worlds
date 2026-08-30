@@ -157,6 +157,9 @@ body { max-width: 1100px; padding-bottom: 70px; }
 .pp-kind { font-family: var(--mono); font-size: 10.5px; border-radius: 3px;
     padding: 1px 6px; border: 1px solid var(--hair); margin-right: 6px; }
 
+.pp-step[data-s="empty"] { border-style: solid; border-color: var(--hair); }
+.pp-step[data-s="empty"] .pp-mark { border: 1.5px solid var(--muted);
+    color: var(--muted); }
 .pp-step[data-s="done"] { border-style: solid; border-color: var(--ok); }
 .pp-step[data-s="done"] .pp-mark { border: 1.5px solid var(--ok); color: var(--ok); }
 .pp-step[data-s="fail"] { border-style: solid; border-color: var(--fail);
@@ -192,8 +195,9 @@ JS = """
   var PHASES = %PHASES%, EXPLAIN = %EXPLAIN%, SHORT = %SHORT%, NODES = %NODES%;
   /* Знак статуса — не цвет, а символ: его видно в любом зрении и в чёрно-белой
      распечатке. */
-  var MARK = {done: "✓", fail: "!", run: "▶", wait: "·"};
-  var WORD = {done: "прошло", fail: "сбой", run: "идёт", wait: "впереди"};
+  var MARK = {done: "✓", fail: "!", run: "▶", wait: "·", empty: "○"};
+  var WORD = {done: "прошло", fail: "сбой", run: "идёт", wait: "впереди",
+              empty: "пусто"};
   var runs = [];
   /* Прогонов два и они разные: ежедневный ведёт новые статьи от arXiv до
      выкладки, недельный доразмечает весь архив на выросшем реестре. Старые
@@ -223,7 +227,13 @@ JS = """
     if (s === undefined || s === null) return "";
     return s < 60 ? s + " с" : Math.floor(s / 60) + " м " + (s % 60) + " с";
   }
+  /* ПУСТО — НЕ СБОЙ. День, за который arXiv ничего не объявил (выходной, лаг
+     объявления пятничных работ), проходит правильно и не приносит ничего. Красная
+     лампочка тут врёт дважды: пугает и делает «прогон без ошибок» недостижимым по
+     календарю. Отдельный знак — кружок. */
   function stateOf(run, step) {
+    var info = (run.steps || {})[step] || {};
+    if (info.empty) return "empty";
     if ((run.failed || []).indexOf(step) >= 0) return "fail";
     if (run.current === step) return "run";
     if ((run.done || []).indexOf(step) >= 0) return "done";
@@ -405,6 +415,7 @@ def main():
     <span><i style="border:1.5px solid var(--ok);color:var(--ok)">&#10003;</i>прошло</span>
     <span><i style="border:1.5px dashed var(--run);color:var(--run)">&#9654;</i>идёт</span>
     <span><i style="border:1.5px solid var(--fail);color:var(--fail)">!</i>сбой</span>
+    <span><i style="border:1.5px solid var(--muted);color:var(--muted)">&#9675;</i>пусто</span>
     <span><i style="border:1.5px dotted var(--wait);color:var(--wait)">&middot;</i>впереди</span>
   </span>
 </div>

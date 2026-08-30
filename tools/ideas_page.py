@@ -124,6 +124,19 @@ JS = """
     || document.documentElement.lang || "ru";
   var T = __T__, D = T[LANG] || T.ru;
   var box = document.getElementById("id-body"), bar = document.getElementById("id-bar");
+  /* ШАПКА НА ЯЗЫКЕ ЧИТАТЕЛЯ. Разметка собирается по-русски (страница одна на все
+     языки, как /research.html), поэтому подписи ставит скрипт. Арабский вдобавок
+     разворачивает страницу: читать слева направо он не станет. */
+  document.documentElement.lang = LANG;
+  document.documentElement.dir = (LANG === "ar") ? "rtl" : "ltr";
+  var set = function (id, txt) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = txt;
+  };
+  set("id-title", D.title);
+  set("id-sub", D.sub);
+  set("id-note", D.note);
+  document.title = D.title + " — bridge42worlds";
   function esc(s) {
     return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) {
       return {"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c];
@@ -257,9 +270,9 @@ def main():
 <body>
 
 <div class="id-head">
-  <h1>{d['title']}</h1>
-  <div class="id-sub">{d['sub']}</div>
-  <p class="id-note">{d['note']}</p>
+  <h1 id="id-title">{d['title']}</h1>
+  <div class="id-sub" id="id-sub">{d['sub']}</div>
+  <p class="id-note" id="id-note">{d['note']}</p>
 </div>
 
 <div class="id-bar" id="id-bar"></div>
