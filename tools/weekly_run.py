@@ -72,6 +72,11 @@ STEPS = [
     ("live-2", [PY, "tools/wave5_apply.py", "--live-only"], 1800),
     ("vecnb", [PY, "tools/vector_neighbors.py", "--apply"], 1800),
     ("gnames", [PY, "tools/group_names.py", "--run", "--force-peak"], 3600),
+    # Названия областей пишутся по-русски и по-английски; остальным языкам их
+    # переводит этот шаг. Без него испанец открывает /concepts/ и читает пятьдесят
+    # английских заголовков под испанским «Conceptos» — код тут ни при чём, он
+    # давно спрашивает name_{lang}, не хватало данных.
+    ("gnames-tr", [PY, "tools/group_names_translate.py"], 3600),
     ("weave", [PY, "tools/link_weaving.py", "--all", "--limit", "600", "--apply"], 4 * 3600),
     ("live-3", [PY, "tools/wave5_apply.py", "--live-only"], 1800),
     ("tr-formulas", [PY, "tools/cards_translate_ru.py", "--formulas", "--force-peak"], 4 * 3600),
@@ -185,7 +190,7 @@ def main():
               env=(env or None) if step.startswith("html") else None,
               soft=step in ("g-grow", "f-support", "tr-formulas", "mentions-ru",
                             "highlight", "audit", "gaudit", "links", "vecnb",
-                            "gnames", "weave",
+                            "gnames", "gnames-tr", "weave",
                             # Пласты и идеи — насыщение, а не производство: их
                             # неудача не должна ронять недельный круг, в котором
                             # ещё стоят пересборка и выкладка.
