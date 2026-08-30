@@ -6146,7 +6146,12 @@ def rebuild_indexes():
             # индекс догружается в фоне для поиска/фильтров/«показать ещё».
             latest = sorted(buckets[lang][version], key=lambda e: e.get("date", ""), reverse=True)[:LATEST_INDEX_N]
             write_json_atomic(base / VERSION_INDEX_LATEST[version], latest)
-    total = sum(len(b["popular"]) for b in buckets.values())
+    # Статьи считаем В ОДНОМ языке. Сумма по языкам давала ровно кратное число:
+    # при сборке ru+en строка под шапкой показывала «13.4k статей» вместо 6 714
+    # (владелец 30.08: «откуда там 13.4k, у нас 6 с чем-то тысяч»). Статья одна,
+    # переводов у неё пять — считать надо статьи.
+    _one = buckets.get(DEFAULT_LANG) or (next(iter(buckets.values()), None) or {"popular": []})
+    total = len(_one["popular"])
     # Дата последней сборки — витрина «обновлено …» на дашборде/в статистике (юзер 2026-07-24).
     import datetime
     Path("data").mkdir(exist_ok=True)
@@ -6159,7 +6164,7 @@ def rebuild_indexes():
         n_authors = len(json.loads(Path("data/authors-graph.json").read_text(encoding="utf-8")))
     except Exception:
         n_authors = 0
-    n_express = sum(1 for b in buckets.values() for e in b["popular"] if e.get("express"))
+    n_express = sum(1 for e in _one["popular"] if e.get("express"))
     # Понятия и формулы — в ту же строку статистики вместо «законов» и «тегов»:
     # снаружи такой терминологии больше нет, а числа врали (175 и 368 при живом
     # реестре 3231 — владелец увидел 27.08).

@@ -674,17 +674,16 @@ function renderSiteStats() {
     // Компактная ОДНА строка (юзер 2026-07-25 «сократи, сожми, уплотни»): 16795 → 16.8k.
     function kfmt(n){ return n >= 10000 ? (n / 1000).toFixed(1).replace('.0', '') + 'k' : String(n); }
     function part(n, w){ return '<b>' + kfmt(n) + '</b> ' + w; }
+    /* Языки и дата сборки убраны: строка не помещалась в одну и уезжала на вторую,
+       а обе позиции ничего не сообщают. Сколько языков — видно по переключателю
+       прямо над строкой; когда обновлено — видно по датам статей в ленте.
+       Владелец 30.08: «эта информация особенно не нужна, и так понятно». */
     var bits = [
         part(nA, L.articles),
         part(nC, L.concepts), part(nF, L.formulas), part(nSec, L.sections),
-        part(nS, L.scientists), part(nAu, L.authors), part(nLang, langWord)
+        part(nS, L.scientists), part(nAu, L.authors)
     ].filter(function (s) { return s.indexOf('<b>0</b>') !== 0; });
     el.innerHTML = bits.join(' · ');
-    var B2 = window.__buildInfo;
-    if (B2 && B2.built) {
-        var upd = {ru:'обновлено', en:'updated', es:'actualizado', ar:'حُدّث', fr:'mis à jour'}[lang] || 'updated';
-        el.innerHTML += ' <span class="stats-built">/ ' + upd + ' ' + B2.built + '</span>';
-    }
 }
 
 /* Числа корпуса и дата сборки — один запрос на двести байт, один раз за страницу.
@@ -2260,7 +2259,15 @@ function descByVersion(obj, kind, id) {
     return obj.description_popular || obj.description_simple || obj.description || '';
 }
 
+/* Есть ли на странице всплывающая карточка понятия. Скрипт грузится отложенно,
+   поэтому смотрим и на объект, и на сам тег: к моменту привязки подсказок он мог
+   ещё не выполниться. */
+function hasCardScript() {
+    return !!(window.B42Card || document.querySelector('script[src*="b42-card"]'));
+}
+
 function initAllTooltips() {
+    window.__hasB42Card = hasCardScript();
     // Тач-паттерн (решение владельца 2026-07-30): тап по плашке НЕ переходит сразу,
     // а открывает тултип, и уже В НЁМ два действия — «подробнее» (переход на карточку)
     // и «закрыть» (крестик; тап мимо тоже закрывает — оба уже были). Раньше поведение
@@ -2287,7 +2294,13 @@ function initAllTooltips() {
            Уступаем карточке — она новее и богаче, владелец 28.08 просил именно её:
            «тултип не строкой, а аккуратной карточкой». Плашки, от которых карточка
            отказывается (ent-nocard, ent-sci), остаются за нами. */
-        if (el.closest && el.closest('a.ent, a.text-tag, a.side-tag')
+        /* Уступаем карточке ТОЛЬКО если она на этой странице есть. b42-card.js
+           подключён у статьи и у понятия, а в ленте его нет — и уступка обернулась
+           тем, что у понятий на карточке пропала подсказка вовсе, тогда как у
+           учёных осталась (владелец 30.08). Проверяем наличие: нет карточки —
+           показываем свою. */
+        if (window.__hasB42Card
+            && el.closest && el.closest('a.ent, a.text-tag, a.side-tag')
             && !el.classList.contains('ent-nocard')
             && !el.classList.contains('ent-sci')) return;
 

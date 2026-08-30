@@ -279,8 +279,18 @@
 (function () {
     if (window.__b42Typo) return;
     window.__b42Typo = 1;
-    var s = document.createElement('script');
-    s.src = '/js/typography.js';
-    s.defer = true;
-    (document.head || document.documentElement).appendChild(s);
+    add('/js/typography.js');
+    /* Всплывающая карточка понятия — на ВСЕХ страницах, а не только у статьи и
+       понятия. В ленте её не было, и понятие на карточке статьи не объяснялось
+       ничем (владелец 30.08: «почему у них нет тултипа, а только у учёных»).
+       Если тег уже стоит в разметке страницы — второй раз не подключаем: скрипт
+       вешает слушатели на документ, и от двойного подключения карточка мигала бы. */
+    if (!document.querySelector('script[src*="b42-card"]')) add('/js/b42-card.js');
+
+    function add(src) {
+        var s = document.createElement('script');
+        s.src = src;
+        s.defer = true;
+        (document.head || document.documentElement).appendChild(s);
+    }
 })();
