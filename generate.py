@@ -2813,43 +2813,22 @@ def generate_index_page(lang):
     loc = {
         "en": {"search": "Search articles, #tags, @authors", "hint": "# tag · @ author · ! scientist",
                "loading": "Loading...", "footer": "science made simple",
-               "intro": "bridge42worlds turns fresh arXiv preprints into articles anyone can read — every day, "
-                        "no physics degree required. Pick your level: <b>Simple</b> for a first look, "
-                        "<b>Popular</b> if science already excites you, <b>Advanced</b> for formulas and the full "
-                        "story, <b>Mini</b> for the gist in 10 seconds. Plus a living map of science — the tags, "
-                        "laws, and scientists behind every discovery."},
+               "intro": "bridge42worlds takes fresh arXiv preprints every day and retells them so anyone can follow, no physics degree needed. Three levels to choose from: <b>Simple</b> for a first look, <b>Popular</b> if science already excites you, <b>Advanced</b> for formulas and the full story of a discovery. Beside every article lives a map of science: concepts, formulas and the people behind them. The retelling, the translation into five languages and the markup are done by advanced AI models, and every article links to the original."},
         "ru": {"search": "Поиск статей, #теги, @авторы", "hint": "# тег · @ автор · ! учёный", "loading": "Загрузка...",
                "footer": "наука простыми словами",
-               "intro": "bridge42worlds превращает свежие научные препринты с arXiv в понятные тексты — каждый "
-                        "день, без диплома физика. Выбирайте свой уровень: <b>Просто</b> — для первого знакомства, "
-                        "<b>Популярно</b> — если наука уже увлекает, <b>Подробно</b> — с формулами и историей "
-                        "открытия, <b>Мини</b> — если нужна только суть за 10 секунд. Плюс карта науки: связанные "
-                        "темы, законы и учёные, которые за ними стоят."},
+               "intro": "bridge42worlds каждый день берёт свежие препринты с arXiv и пересказывает их так, чтобы понял любой, без диплома физика. Три уровня на выбор: <b>Просто</b> для первого знакомства, <b>Популярно</b> если наука уже увлекает, <b>Подробно</b> с формулами и историей открытия. Рядом с текстом живёт карта науки: понятия, формулы и учёные, которые за ними стоят. Пересказ, перевод на пять языков и разметку делают передовые модели искусственного интеллекта, а ссылка на первоисточник стоит в каждой статье."},
         "es": {"search": "Buscar artículos, #etiquetas, @autores", "hint": "# etiqueta · @ autor · ! científico",
                "loading": "Cargando...", "footer": "la ciencia simplificada",
-               "intro": "bridge42worlds convierte los últimos preprints de arXiv en artículos que cualquiera puede "
-                        "leer — cada día, sin necesidad de un título en física. Elige tu nivel: <b>Simple</b> para "
-                        "una primera mirada, <b>Popular</b> si la ciencia ya te apasiona, <b>Avanzado</b> para "
-                        "fórmulas e historia completa, <b>Mini</b> para la idea esencial en 10 segundos. Además, "
-                        "un mapa vivo de la ciencia: las etiquetas, leyes y científicos detrás de cada descubrimiento."},
+               "intro": "bridge42worlds toma cada día los preprints más recientes de arXiv y los reescribe para que cualquiera pueda seguirlos, sin necesidad de un título en física. Tres niveles a elegir: <b>Simple</b> para un primer vistazo, <b>Popular</b> si la ciencia ya te entusiasma, <b>Avanzado</b> con fórmulas y la historia del descubrimiento. Junto a cada artículo vive un mapa de la ciencia: conceptos, fórmulas y las personas detrás de ellos. La reescritura, la traducción a cinco idiomas y el etiquetado los hacen modelos avanzados de inteligencia artificial, y cada artículo enlaza al original."},
         "zh": {"search": "搜索文章、#标签、@作者", "hint": "# 标签 · @ 作者 · ! 科学家", "loading": "加载中...",
                "footer": "让科学变简单",
-               "intro": "bridge42worlds 每天将 arXiv 上的最新科研预印本转化为通俗易懂的文章，无需物理学位。选择你的"
-                        "难度：<b>简明</b>适合初次了解，<b>科普</b>适合对科学感兴趣的读者，<b>深入</b>提供公式与发现"
-                        "历程，<b>迷你</b>10秒获取核心结论。还有一张不断生长的科学地图——标签、定律与背后的科学家。"},
+               "intro": "bridge42worlds 每天把 arXiv 上最新的预印本改写成人人都能读懂的文章，无需物理学位。三个层次任选：<b>简明</b>适合初次了解，<b>科普</b>适合已对科学有兴趣的读者，<b>进阶</b>包含公式与发现的来龙去脉。每篇文章旁边都有一张科学地图：概念、公式，以及它们背后的科学家。改写、五种语言的翻译与标注均由先进的人工智能模型完成，每篇文章都附有原文链接。"},
         "fr": {"search": "Rechercher des articles, #tags, @auteurs", "hint": "# tag · @ auteur · ! scientifique",
                "loading": "Chargement...", "footer": "la science simplifiée",
-               "intro": "bridge42worlds transforme les derniers prépublications arXiv en articles accessibles à "
-                        "tous — chaque jour, sans diplôme de physique. Choisissez votre niveau : <b>Simple</b> pour "
-                        "découvrir, <b>Populaire</b> si la science vous passionne déjà, <b>Avancé</b> pour les "
-                        "formules et l'histoire complète, <b>Mini</b> pour l'essentiel en 10 secondes. Plus une "
-                        "carte vivante de la science : tags, lois et scientifiques derrière chaque découverte."},
+               "intro": "bridge42worlds reprend chaque jour les prépublications récentes d'arXiv et les raconte de façon accessible à tous, sans diplôme de physique. Trois niveaux au choix : <b>Simple</b> pour un premier regard, <b>Populaire</b> si la science vous passionne déjà, <b>Avancé</b> avec les formules et l'histoire de la découverte. À côté de chaque article vit une carte de la science : concepts, formules et les personnes qui les ont établis. La réécriture, la traduction en cinq langues et le balisage sont réalisés par des modèles d'intelligence artificielle avancés, et chaque article renvoie à l'original."},
         "ar": {"search": "ابحث عن مقالات، #وسوم، @مؤلفين", "hint": "# وسم · @ مؤلف · ! عالم",
                "loading": "جارٍ التحميل...", "footer": "العلم ببساطة",
-               "intro": "يحوّل bridge42worlds أحدث الأبحاث العلمية من arXiv إلى مقالات يفهمها الجميع - كل يوم، دون "
-                        "الحاجة لشهادة في الفيزياء. اختر مستواك: <b>مبسّط</b> لأول نظرة، <b>شائع</b> إذا كان العلم "
-                        "يثير شغفك، <b>متقدّم</b> للمعادلات والقصة كاملة، <b>مختصر</b> للخلاصة في 10 ثوانٍ. بالإضافة "
-                        "إلى خريطة حية للعلم: الوسوم والقوانين والعلماء وراء كل اكتشاف."}
+               "intro": "يأخذ bridge42worlds كل يوم أحدث الأبحاث من arXiv ويعيد سردها ليفهمها الجميع، دون الحاجة إلى شهادة في الفيزياء. ثلاثة مستويات للاختيار: <b>بسيط</b> لنظرة أولى، <b>مبسّط</b> إن كان العلم يشوّقك بالفعل، <b>متقدّم</b> مع الصيغ وقصة الاكتشاف. وإلى جانب كل مقال تعيش خريطة للعلم: مفاهيم وصيغ والعلماء الذين يقفون خلفها. إعادة السرد والترجمة إلى خمس لغات والتوسيم تقوم بها نماذج ذكاء اصطناعي متقدّمة، ورابط الأصل موجود في كل مقال."}
     }.get(lang, {"search": "Search...", "hint": "", "loading": "Loading...", "footer": "", "intro": ""})
     calendar_title = {"ru": "Архив по датам", "en": "Browse by date", "zh": "按日期浏览",
                        "fr": "Parcourir par date", "ar": "تصفح حسب التاريخ"}.get(lang, "Browse by date")

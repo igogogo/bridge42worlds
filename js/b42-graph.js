@@ -203,7 +203,12 @@ function nodeVisible(nd) {
     /* фильтр групп/разделов — только на широких кадрах (обзор, всё облако):
        внутри группы и в эго кадр уже отобран смыслом; прятать там соседей —
        тот самый баг «все галочки стоят, а после двойного клика фильтруется» */
-    var wide = frame.mode === 'overview' || frame.mode === 'all';
+    var wide = frame.mode === 'overview' || frame.mode === 'all' || frame.mode === 'picked';
+    /* САМ ПУЗЫРЬ ОБЛАСТИ ТОЖЕ ПОДЧИНЯЕТСЯ ФИЛЬТРУ. Здесь стояло условие
+       «kind !== "_group"», и в обзоре, где ВСЕ узлы это области, снятие галочки
+       не меняло ровно ничего: «фильтр групп не действует даже на группы»
+       (владелец 30.08). Область прячется по своему же номеру. */
+    if (wide && groupOn && nd.kind === '_group' && !groupOn.has(nd.gi)) return false;
     if (wide && groupOn && nd.kind !== '_group' &&
         nd.g !== undefined && nd.g !== null && !groupOn.has(nd.g)) return false;
     if (wide && catOn && nd.kind !== '_group' && nd.cat && !catOn.has(nd.cat))
@@ -304,6 +309,20 @@ function frameFromIds(ids, centerFirst) {
     return {nodes: nodes, edges: edges};
 }
 
+/* Порог веса связи. Он один на всю страницу, и в этом была беда: «всё облако»
+   поднимает его до трёх, чтобы сорок тысяч связей не превратились в кашу, — а
+   дальше читатель заходит в область, где связей всего несколько сотен, и порог
+   остаётся поднятым. Замер по данным: связи с весом 1 и 2 — это 40% всех, то
+   есть внутри области пропадала почти половина. Отсюда и «облако несвязанных
+   понятий, непонятно что дальше» (владелец 30.08). Широкому кадру порог нужен,
+   узкому вреден, поэтому он теперь ставится под кадр. */
+function setMinW(v) {
+    view.minW = v;
+    var wr = el('b42g-w'), wv = el('b42g-wv');
+    if (wr) wr.value = v;
+    if (wv) wv.textContent = '≥' + v;
+}
+
 function showAll() {
     /* всё облако целиком (владелец: «хочу просто целиком смотреть») —
        фильтры классов/групп/разделов работают, физика на сетке */
@@ -316,12 +335,34 @@ function showAll() {
     setFrame('all', f.nodes, f.edges);
     view.zoomT = 0.4;
     /* на полном полотне слабые связи — каша: поднимаем порог, слайдер вслед */
-    if (view.minW < 3) {
-        view.minW = 3;
-        var wr = el('b42g-w'), wv = el('b42g-wv');
-        if (wr) wr.value = 3;
-        if (wv) wv.textContent = '≥3';
-    }
+    if (view.minW < 3) setMinW(3);
+}
+
+/* ПОНЯТИЯ ВЫБРАННЫХ ОБЛАСТЕЙ, без пузырей. Владелец 30.08: «можно перейти в режим
+   без групп, где группы как фильтры», «смотреть по выбранным разделам всю
+   детализацию». Обзор показывает области шариками, и заглянуть внутрь можно было
+   только в одну за раз. Здесь берём объединение отмеченных областей и раскрываем
+   их понятиями сразу, со всеми связями между ними. */
+function showPicked() {
+    if (!G || !G.groups) return;
+    var pick = groupOn;                      // null означает «все отмечены»
+    var ids = [];
+    G.groups.forEach(function (g, i) {
+        if (pick && !pick.has(i)) return;
+        g.members.forEach(function (m) { ids.push(m); });
+    });
+    if (!ids.length) return;
+    var f = frameFromIds(ids);
+    var names = G.groups.filter(function (_, i) { return !pick || pick.has(i); })
+        .map(groupLabel);
+    var label = (RU ? 'области: ' : 'areas: ') +
+        (names.length > 3 ? names.length : names.join(', '));
+    trail = [{mode: 'overview', label: RU ? 'Обзор' : 'Overview'},
+             {mode: 'picked', label: label}];
+    selI = -1; sparks = [];
+    setFrame('picked', f.nodes, f.edges);
+    view.zoomT = 0.6;
+    if (view.minW > 1) setMinW(1);
 }
 
 function showGroup(gi, pushCrumb, focusKey) {
@@ -341,6 +382,7 @@ function showGroup(gi, pushCrumb, focusKey) {
             }
             selI = -1; sparks = [];
             setFrame('group', nodes, f.edges || [], focusKey || ('g' + gi));
+            if (view.minW > 1) setMinW(1);   // узкий кадр — слабые связи здесь нужны
         });
         return;
     }
@@ -382,6 +424,7 @@ function showGroupLocal(gi, pushCrumb, focusKey) {
     }
     selI = -1; sparks = [];
     setFrame('group', f.nodes, f.edges, focusKey || ('g' + gi));
+    if (view.minW > 1) setMinW(1);       // узкий кадр — слабые связи здесь нужны
 }
 
 function showEgo(ni, pushCrumb) {
@@ -1189,6 +1232,7 @@ function renderCrumbs() {
             trail = trail.slice(0, i + 1);
             if (t.mode === 'overview') showOverview();
             else if (t.mode === 'all') showAll();
+            else if (t.mode === 'picked') showPicked();
             else if (t.mode === 'group') showGroup(t.arg, false);
             else showEgo(t.arg, false);
         };
@@ -1378,6 +1422,25 @@ function buildPanel() {
             renderStats();
         };
         gb.appendChild(all);
+        /* «очистить» снимает все галочки разом. С одной кнопкой «все» вернуться
+           к пустому набору можно было только двадцатью щелчками (владелец 30.08). */
+        var none = document.createElement('button');
+        none.className = 'b42g-mini';
+        none.textContent = RU ? 'очистить' : 'clear';
+        none.onclick = function () {
+            groupOn = new Set();
+            gb.querySelectorAll('input').forEach(function (c) { c.checked = false; });
+            sim.alive = Math.max(sim.alive, 100);
+            renderStats();
+        };
+        gb.appendChild(none);
+        /* «раскрыть» — тот самый режим без пузырей: отмеченные области
+           показываются своими понятиями. */
+        var open = document.createElement('button');
+        open.className = 'b42g-mini';
+        open.textContent = RU ? 'раскрыть' : 'expand';
+        open.onclick = function () { stopDemo(); showPicked(); };
+        gb.appendChild(open);
         G.groups.forEach(function (g, i) {
             var lab = document.createElement('label');
             lab.className = 'b42g-check';

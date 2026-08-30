@@ -106,7 +106,10 @@ html[lang="ar"] .discoveries-list { padding-left: 0; padding-right: 20px; }
        спокойного диапазона. Сужается КОЛОНКА ЦЕЛИКОМ, вместе с обложкой:
        сузить одну прозу значило бы снова развести правый край. На телефоне
        ограничение не срабатывает — там ширина экрана и так меньше. */
-    --w-article: 500px;
+    /* 600, а не 500: на пятистах строка языков переставала помещаться рядом с
+       кнопкой «следующая статья» и французская ссылка срывалась на вторую строку
+       (владелец 30.08: «слишком зажали, надо увеличить процентов на 20»). */
+    --w-article: 600px;
     /* Страницы понятия, закона, учёного, тега и автора. Внутри карточки свои
        двадцать пикселей поля, поэтому колонка на сорок шире статьи — и строка
        внутри получается ровно та же, 500. Владелец 29.08: «ширина других
@@ -1350,6 +1353,7 @@ p { margin-bottom: 16px; color: var(--text); text-align: left; }
    margin-left, который в RTL не переворачивается сам собой — дата и раздел визуально слипались
    (юзер-фидбек 2026-07-21). */
 html[dir="rtl"] .card-date { margin-left: 0; margin-right: 8px; }
+html[dir="rtl"] .card-media { float: right; margin: 2px 0 8px 16px; }
 /* Заголовок карточки — одна строка на любой ширине, обрезка многоточием, а не перенос
    (юзер-фидбек 2026-07-21). НЕ трогаем .card-desc тем же способом — overflow:hidden там
    уже один раз ломал обтекание плавающей картинки (.card-img-wrap { float:left }), см.
@@ -1992,10 +1996,36 @@ html[dir="rtl"] .cat-chip-add { margin-left: 0; margin-right: 5px; }
 /* Дата, минуты и цитируемость — отдельной строкой под разделами. Верхняя строка
    отдана разделам целиком, а эта строка заодно опускает картинку: та начинается
    ниже и встаёт вровень с обтекающим текстом (владелец 30.08). */
+/* Разделы: мельче и строго в одну строку. Их бывает пять, и строка уезжала вниз;
+   лишние прячутся под «+N» рядом (владелец 30.08). */
+.card-eyebrow { flex-wrap: nowrap; overflow: hidden; }
+.card-eyebrow .card-cat { font-size: 10px; letter-spacing: .4px; min-width: 0; }
+.card-eyebrow .card-cat-t { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.card-cat-more {
+    flex: none; font-family: var(--mono); font-size: 10px; cursor: pointer;
+    background: none; border: 1px solid var(--hair); border-radius: 999px;
+    color: var(--muted); padding: 0 6px; line-height: 1.6;
+}
+.card-cat-more:hover { border-color: var(--cyan); color: var(--cyan); }
+/* Ссылки-слова в шапке убраны. Меню «…» и так содержит всё, а до правки в шапке
+   оставалось одно слово «concepts» — остальные пункты уносил sitenav.js по ширине, —
+   и оно выбивалось из ряда значков (владелец 30.08: «лишнее выбивается, либо замени
+   на иконку, либо убери, потому что в меню всё равно есть»). Убрали: пять новых
+   значков рядом с ночным режимом теснили бы шапку сильнее, чем помогали. */
+.header-right .nav-links { display: none; }
+
+/* Плашка «экспресс» переехала к названию: не даём ей разрывать строку заголовка. */
+.card-head .card-express-badge { margin-left: 6px; vertical-align: middle; white-space: nowrap; }
+
+/* Колонка слева: сначала дата с минутами, под ней картинка. Плывёт как единое
+   целое, поэтому заголовок обтекает её справа и его верхняя кромка встаёт вровень
+   с датой (владелец 30.08). Плавает теперь обёртка, а не сама картинка. */
+.card-media { float: left; width: 130px; margin: 2px 16px 8px 0; }
+.card-media .card-img-wrap { float: none; width: 100%; margin: 0; }
 .card-meta {
-    display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px;
-    margin-bottom: 5px; line-height: 1.3;
-    font-size: 11px; color: var(--muted); font-family: var(--mono);
+    display: flex; flex-wrap: wrap; align-items: center; gap: 2px 6px;
+    margin: 0 0 4px; line-height: 1.25;
+    font-size: 10.5px; color: var(--muted); font-family: var(--mono);
 }
 .card-meta .card-date { margin-left: 0; }
 /* Ссылка на первоисточник переехала в строку действий. Прижимаем её к уровням

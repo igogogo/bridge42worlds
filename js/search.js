@@ -1316,6 +1316,13 @@ function cardHTML(item) {
     var _likeId = item.id + '_' + lang + '_' + currentVersion;
     var _myR = (typeof myReaction === 'function' ? (myReaction(_likeId) || '') : '');
     var _favOn = (typeof isFavorite === 'function' && isFavorite(item.id));
+    var metaRow = (item.date || item.reading || item.cites) ?
+        '<div class="card-meta">' +
+            (item.date ? '<span class="card-date">' + item.date + '</span>' : '') +
+            (item.reading ? '<span class="card-read">' + item.reading + ' ' + UI.min + '</span>' : '') +
+            // Цитируемость Scholar (поле cites приходит из индекса; молчим, если нет)
+            (item.cites ? '<span class="card-cites" data-tip-text="Citations — Semantic Scholar">' + item.cites.toLocaleString() + ' cit</span>' : '') +
+        '</div>' : '';
     var cardActions =
         '<div class="card-actions" data-article-id="' + _likeId + '">' +
         '<button class="react-btn sm' + (_myR === 'like' ? ' active' : '') + '" data-react="like" title="Нравится">' + b42ic('like', 17, '👍') + '<span class="rc"></span></button>' +
@@ -1355,7 +1362,7 @@ function cardHTML(item) {
        От этого выигрывает не только строка: картинка начинается ниже и встаёт вровень
        с текстом, который её обтекает, — раньше между ними зиял почти целый интервал. */
     var cats = (item.categories && item.categories.length ? item.categories : (cat ? [cat] : []));
-    var catsHtml = cats.map(function (c) {
+    var catsHtml = cats.slice(0, 2).map(function (c) {
         var nm = (window.ARXIV_CAT_NAMES && ARXIV_CAT_NAMES[c]) || c;
         var d = ((window.ARXIV_CAT_DESC && ARXIV_CAT_DESC[c]) || '').replace(/"/g, '&quot;');
         return '<a class="card-cat" href="#" data-cat="' + c + '" data-cat-desc="' + d +
@@ -1365,23 +1372,46 @@ function cardHTML(item) {
                (window.B42Icons && B42Icons.sectionIcon ? B42Icons.sectionIcon(c, 14) : '') +
                '<span class="card-cat-t">' + nm + '</span></a>';
     }).join('');
-    var eyebrow = (catsHtml || item.express) ?
-        '<div class="card-eyebrow">' + catsHtml +
-            (item.express ? '<span class="card-express-badge" data-tip-text="' + (UI.expressTip || '').replace(/"/g, '&quot;') + '">' + UI.express + '</span>' : '') +
-        '</div>' : '';
-    var metaRow = (item.date || item.reading || item.cites) ?
-        '<div class="card-meta">' +
-            (item.date ? '<span class="card-date">' + item.date + '</span>' : '') +
-            (item.reading ? '<span class="card-read">' + item.reading + ' ' + UI.min + '</span>' : '') +
-            // Цитируемость Scholar (поле cites приходит из индекса; молчим, если нет)
-            (item.cites ? '<span class="card-cites" data-tip-text="Citations — Semantic Scholar">' + item.cites.toLocaleString() + ' cit</span>' : '') +
-        '</div>' : '';
-    return '<article class="article-card">' +
-        eyebrow + metaRow +
-        (hasImg ? (
+    /* Разделов у работы бывает пять, и строка уезжала на вторую. Показываем первые
+       два, остальные прячем под «+N»: нажатие открывает их списком в том же окошке,
+       что и прочие подсказки (владелец 30.08: «не допускать переезда на вторую
+       строку, просто там многоточие, пусть открывается во всплывающем окошке»). */
+    var CATS_INLINE = 2;
+    var restNames = cats.slice(CATS_INLINE).map(function (c) {
+        return (window.ARXIV_CAT_NAMES && ARXIV_CAT_NAMES[c]) || c;
+    });
+    var moreHtml = restNames.length
+        ? '<button type="button" class="card-cat-more" data-cat-list="' +
+          restNames.join(' · ').replace(/"/g, '&quot;') + '">+' + restNames.length + '</button>'
+        : '';
+    var eyebrow = catsHtml ?
+        '<div class="card-eyebrow">' + catsHtml + moreHtml + '</div>' : '';
+
+    var imgHtml = hasImg ?
         '<a class="card-img-wrap" href="' + url + '">' +
             '<img src="' + img + '" data-fb="' + imgFb + '" loading="lazy" onerror="if(this.dataset.fb){this.src=this.dataset.fb;this.removeAttribute(\'data-fb\');}else{this.closest(\'.card-img-wrap\').style.display=\'none\';}" alt="">' +
-        '</a>') : '') +
+        '</a>' : '';
+    /* КАРТИНКА СТОИТ ПОСЛЕ ЗАГОЛОВКА, а не перед ним. Сначала я опустил её строкой
+       даты — и вместе с ней уехал вниз заголовок, чего владелец не просил: «название
+       тоже съехало вниз, а должна была сместиться только картинка» (30.08). Теперь
+       заголовок остаётся первым, а картинка начинается под ним и обтекается описанием
+       — то есть ровно тем текстом, ради выравнивания с которым всё и затевалось.
+       Дата и минуты ушли вниз, в строку действий, к ссылке на первоисточник. */
+    /* Картинка стоит ПЕРЕД телом и обтекается: название начинается справа от неё,
+       на одной с ней высоте. Я успел попробовать обратное — опустить её под
+       заголовок, — и владелец сразу поправил: «картинка должна быть вровень с
+       названием, а теперь название сместилось над картинкой» (30.08). */
+    /* ДАТА СТОИТ НАД КАРТИНКОЙ, В ЕЁ ЖЕ КОЛОНКЕ. Владелец 30.08: «верхняя кромка
+       названия и дата вровень, потом картинка под датой с минутами». Я успел
+       попробовать оба неверных пути: сначала положил дату отдельной строкой во всю
+       ширину и опустил ею и картинку, и заголовок; потом убрал её вниз к действиям,
+       и она пропала из виду. Правильно так: дата и картинка — одна плавающая
+       колонка слева, заголовок обтекает её справа и начинается на одной высоте
+       с датой. */
+    var mediaHtml = (metaRow || imgHtml)
+        ? '<div class="card-media">' + metaRow + imgHtml + '</div>' : '';
+    return '<article class="article-card">' +
+        eyebrow + mediaHtml +
         '<div class="card-body">' +
             // Уровни чтения НЕ здесь, а внизу, в строке действий (владелец 28.08:
             // «сверху маячат над названием»). Первым в карточке должен читаться
@@ -1401,6 +1431,10 @@ function cardHTML(item) {
             (item.km ? '<a class="km-badge" href="' + base + 'advanced.html#km-advice"' +
                        ' aria-label="' + (UI.kmTip || '') + '"' +
                        ' data-tip-text="' + (UI.kmTip || '').replace(/"/g, '&quot;') + '">✛</a>' : '') +
+            // Плашка «экспресс» стоит ЗА НАЗВАНИЕМ, рядом со значком машины знаний
+            // (владелец 30.08). В верхней строке она делила место с разделами, а это
+            // свойство самой статьи, и читается оно вместе с заголовком.
+            (item.express ? '<span class="card-express-badge" data-tip-text="' + (UI.expressTip || '').replace(/"/g, '&quot;') + '">' + UI.express + '</span>' : '') +
             '</div>' +
             (bodyText ? '<div class="card-desc">' + bodyText + '</div>' : '') +
             (authorsHtml ? '<div class="card-authors">' + authorsHtml + '</div>' : '') +
@@ -1821,7 +1855,15 @@ function _authorLive() {
 
 function _defaultFeed() {
     if (_authorLive()) return;
-    if (window.__favoritesPage) showFavorites(); else showLatest();
+    /* Избранное ищет статьи в ПОЛНОМ индексе и потому обязано его дождаться. Оно
+       рисовалось сразу, по тому, что успело приехать, — а приезжает первым короткий
+       индекс последних статей. Сохранённая статья старше этой полусотни не находилась,
+       и раздел отвечал «пока пусто», хотя звёздочка стояла (владелец 30.08: «в
+       избранном ничего не появилось»). */
+    if (window.__favoritesPage) {
+        showFavorites();
+        ensureSearchIndex().then(showFavorites);
+    } else showLatest();
 }
 
 function filterByCategory(cat) {
@@ -2281,7 +2323,7 @@ function initAllTooltips() {
     // чипов-фильтров, на которых мы уже обжигались.
     dropNativeTips();
     glueBadges();
-    document.querySelectorAll('[data-tag], [data-scientist], [data-law], [data-author], [data-cat-desc], .express-badge, .card-express-badge, .refine-badge, .km-badge').forEach(function(el) {
+    document.querySelectorAll('[data-tag], [data-scientist], [data-law], [data-author], [data-cat-desc], .express-badge, .card-express-badge, .refine-badge, .km-badge, .card-cat-more').forEach(function(el) {
         if (el.dataset.tooltipInit) return;
         el.dataset.tooltipInit = '1';
 
@@ -2369,10 +2411,15 @@ function initAllTooltips() {
 
             var content = '';
             var km = el.classList && el.classList.contains('km-badge');
+            var catList = el.dataset && el.dataset.catList;
             var badge = el.classList && (el.classList.contains('express-badge')
                      || el.classList.contains('card-express-badge')
                      || el.classList.contains('refine-badge'));
-            if (km) {
+            if (catList) {
+                // Остальные разделы работы: строкой, через точку.
+                content = '<strong>' + (UI.sectionsWord || 'sections') + '</strong> <span class="tip-desc">'
+                        + catList + '</span>';
+            } else if (km) {
                 /* «Прочитано машиной знаний» — та же карточка, что у экспресса, но
                    со ссылкой: значок ведёт в раздел с советами автору. Ссылка в
                    конце содержимого — общий приём этого тултипа, он сам переносит
