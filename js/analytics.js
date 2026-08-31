@@ -19,7 +19,9 @@
     fr: { spin: 'rotation : stop / marche', zin: 'zoomer', zout: 'reculer', reset: 'vue initiale',
           shapes: 'des formes en plus de la couleur — pour les daltoniens' },
     ar: { spin: 'الدوران: إيقاف / تشغيل', zin: 'تقريب', zout: 'إبعاد', reset: 'إعادة العرض',
-          shapes: 'أشكال إلى جانب اللون — لمن يميّز الألوان بشكل مختلف' }
+          shapes: 'أشكال إلى جانب اللون — لمن يميّز الألوان بشكل مختلف' },
+    zh: { spin: '旋转：开 / 关', zin: '放大', zout: '缩小', reset: '重置视图',
+          shapes: '除颜色外还用形状 —— 为色觉不同的读者' }
   })[LANG] || { shapes: 'shapes as well as colour', spin: 'auto-rotate', zin: 'zoom in', zout: 'zoom out', reset: 'reset view' };
 
 
@@ -63,6 +65,11 @@
           intro: 'You are <b>flying through our universe of articles</b>. Each star is a paper; the brighter, the closer. Steer with mouse or finger, change speed with the wheel or slider. Aim at the star in the centre to see it — click to open.' },
     es: { tab: 'Vuelo', fs: 'pantalla completa', speed: 'velocidad', hint: 'dirige para girar · rueda/control para velocidad · clic en la estrella central para abrir',
           intro: 'Vuelas <b>por nuestro universo de artículos</b>. Cada estrella es un trabajo; cuanto más brillante, más cerca. Dirige con el ratón o el dedo, cambia la velocidad con la rueda o el control. Apunta a la estrella del centro para verla y haz clic para abrirla.' },
+    zh: { title: '项目地图', articles: '文章', authors: '作者', loading: '正在构建地图…',
+          hint: '拖动旋转 · 滚轮缩放 · 点击查看', clusters: '主题聚类', n: '点',
+          theoryExp: '点的颜色：实验（赭石）→ 理论（青色）',
+          introA: '每个点是一<b>篇文章</b>。两点越近，共同主题越多。颜色 = 算法自行划分的<b>主题聚类</b>。',
+          introB: '每个点是一位<b>作者</b>。相近意味着主题相通。颜色 = 主题聚类，大小 = 作品数量。' },
     fr: { tab: 'Vol', fs: 'plein écran', speed: 'vitesse', hint: 'guidez pour tourner · molette/curseur pour la vitesse · clic sur l’étoile au centre pour ouvrir',
           intro: 'Vous <b>volez à travers notre univers d’articles</b>. Chaque étoile est un travail ; plus elle brille, plus elle est proche. Guidez à la souris ou au doigt, changez la vitesse à la molette. Visez l’étoile au centre pour la voir, cliquez pour l’ouvrir.' },
     ar: { tab: 'تحليق', fs: 'ملء الشاشة', speed: 'السرعة', hint: 'وجّه للدوران · العجلة/المنزلق للسرعة · انقر النجمة في المنتصف لفتحها',
@@ -75,6 +82,9 @@
           intro: 'A heat <b>landscape of the project</b>: one axis is topic groups, the other is months. The taller and brighter the bar, the more articles came out on that topic that month. Drag to rotate.' },
     es: { tab: 'Calor', hint: 'arrastra para girar · rueda para acercar',
           intro: 'Un <b>paisaje térmico del proyecto</b>: un eje son los grupos temáticos, el otro los meses. Cuanto más alta y brillante la barra, más artículos hubo. Arrastra para girar.' },
+    zh: { tab: '飞行', fs: '全屏', speed: '速度',
+          hint: '瞄准即可转向 · 滚轮或滑块调速 · 点击中心的星打开它',
+          intro: '你正<b>飞越我们的文章宇宙</b>。每颗星是一项研究，越亮离得越近。用鼠标或手指转向，用滚轮或滑块调速。瞄准中心的星即可看清，点击打开。' },
     fr: { tab: 'Chaleur', hint: 'glisser pour tourner · molette pour zoomer',
           intro: 'Un <b>paysage thermique du projet</b> : un axe pour les groupes thématiques, l’autre pour les mois. Plus la barre est haute et brillante, plus il y a eu d’articles sur ce thème ce mois-là. Glissez pour tourner.' },
     ar: { tab: 'الحرارة', hint: 'اسحب للتدوير · العجلة للتقريب',
@@ -104,6 +114,8 @@
       matrixIntro: 'Una malla <b>concepto × concepto</b>: cuanto más brillante la celda, más veces aparecen juntos. Los cuadros densos son campos; los puntos aislados, <b>puentes entre disciplinas</b>.',
       hint: 'arrastra para rotar · rueda para acercar'
     },
+    zh: { tab: '热力', hint: '拖动旋转 · 滚轮缩放',
+          intro: '<b>项目</b>的热力地形：一轴是主题聚类，另一轴是月份。柱子越高越亮，该月文章越多。拖动可旋转。' },
     fr: {
       sphere: 'Sphère', mobius: 'Möbius', matrix: 'Liens',
       sphereIntro: 'Tout le savoir du projet sur <b>une sphère</b> : concepts, lois et scientifiques disposés pour que le proche en sens soit proche en espace. Un <b>ensemble fermé</b> — le savoir n’a pas de bord. Faites tourner le globe et regardez quels continents se sont formés.',

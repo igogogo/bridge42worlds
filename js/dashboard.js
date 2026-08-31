@@ -90,7 +90,35 @@
               noTags:'articles sans tags', orphanTags:'tags sans articles', lawsNoTags:'lois sans liens',
               sciNoArticles:'scientifiques sans articles', machine:'Temps machine',
               calls:'appels au modèle', tokensM:'M de jetons', cachePct:'servi depuis le cache',
-              byAgent:'Par étape de travail', period:'période', ofMax:'du maximum' }
+              byAgent:'Par étape de travail', period:'période', ofMax:'du maximum' },
+        zh: { concepts:'概念', formulas:'公式', areas:'领域', topConcepts:'常见概念',
+              cWithArts:'有支撑的概念', cNoArts:'无文章的概念', cOnlyMent:'仅被提及',
+              title:'项目概览', articles:'篇文章', full:'完整', express:'速览',
+              laws:'定律', tags:'标签', sections:'分区', scientists:'科学家',
+              authors:'作者', langs:'种语言', nodes:'图谱节点', edges:'边',
+              activity:'按日活动', dynamics:'按月动态', bySection:'各分区覆盖',
+              kitchen:'幕后：封面与覆盖', covers:'封面', withCover:'有封面',
+              noCover:'无封面', km:'知识机器', kmOf:'占完整分析的',
+              kmNote:'含有给作者建议一节的完整分析', topTags:'常见标签',
+              topSci:'常见科学家', perDay:'每日文章', updated:'已更新',
+              loading:'正在汇总数据…', none:'—', topLaws:'重要定律', mainPage:'首页',
+              audience:'读者（自有统计）', uniqueVisitors:'独立访客', visits:'访问',
+              returning:'回访', topPages:'去过哪里', byLangViews:'读者语言',
+              sources:'来源', clicks:'点击了什么', readDepth:'阅读深度，%',
+              audienceNote:'近30天。我们自己的访问已标记，不计入这些数字。',
+              engagement:'参与度（站点数据）', views:'浏览', likes:'赞',
+              dislikes:'踩', comments:'评论', viewsByType:'按类型浏览',
+              viewsByDevice:'按设备浏览', reactions:'反应', lawTypes:'概念种类',
+              eArticle:'文章', eTag:'标签', eLaw:'定律', eScientist:'科学家',
+              eAuthor:'作者', pace:'节奏', d7:'近7天', d30:'近30天',
+              perDayAvg:'日均', lastArticle:'最新文章', growth:'语料增长',
+              totalBy:'累计至', ofThemFull:'其中完整', langCoverage:'语言覆盖',
+              connectivity:'连通性：什么还孤立着', noTags:'无标签的文章',
+              orphanTags:'无文章的标签', lawsNoTags:'无连接的定律',
+              sciNoArticles:'无文章的科学家', machine:'机器时间', calls:'模型调用',
+              tokensM:'百万词元', cachePct:'来自缓存', byAgent:'按工作阶段',
+              period:'时段', ofMax:'占峰值' }
+
     })[window.lang] || null;
     // Английская карта — база-фолбэк: любой ключ, которого нет в языковой карте (напр. v2-подписи
     // добавлены только в ru/en), берётся отсюда, чтобы не было "undefined".

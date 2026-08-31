@@ -54,21 +54,21 @@
        в арабском меню вопросительный оборот читается как обращение к читателю, а не как
        имя раздела. */
     var NAV_I18N = {
-        about:      { ru: 'Гид',               en: 'Guide',           es: 'Guía',                 ar: 'الدليل',        fr: 'Guide' },
-        main:       { ru: 'Главная',           en: 'Home',            es: 'Inicio',               ar: 'الرئيسية',      fr: 'Accueil' },
-        laws:       { ru: 'Понятия',           en: 'Concepts',        es: 'Conceptos',            ar: 'المفاهيم',      fr: 'Concepts' },
-        comments:   { ru: 'Комментарии',       en: 'Comments',        es: 'Comentarios',          ar: 'التعليقات',     fr: 'Commentaires' },
-        scientists: { ru: 'Учёные',            en: 'Scientists',      es: 'Científicos',          ar: 'العلماء',       fr: 'Scientifiques' },
-        sections:   { ru: 'Разделы',           en: 'Sections',        es: 'Secciones',            ar: 'الأقسام',       fr: 'Sections' },
-        authors:    { ru: 'Авторы',            en: 'Authors',         es: 'Autores',              ar: 'المؤلفون',      fr: 'Auteurs' },
-        graph:      { ru: 'Граф знаний',       en: 'Knowledge graph', es: 'Red de conocimiento',  ar: 'شبكة المعرفة',  fr: 'Graphe des savoirs' },
-        learn:      { ru: 'Учебник',           en: 'Learn',           es: 'Curso',                ar: 'تعلّم',          fr: 'Cours' },
-        analytics:  { ru: 'Карта проекта',     en: 'Project map',     es: 'Mapa del proyecto',    ar: 'خريطة المشروع', fr: 'Carte du projet' },
-        research:   { ru: 'Что исследовать',   en: 'What to explore', es: 'Qué investigar',       ar: 'اتجاهات البحث', fr: 'Quoi explorer' },
-        ideas:      { ru: 'Идеи проектов',     en: 'Project ideas',   es: 'Ideas de proyectos',   ar: 'أفكار مشاريع',  fr: 'Idées de projets' },
-        community:  { ru: 'Авторские работы',  en: 'Author works',    es: 'Trabajos de autor',    ar: 'أعمال المؤلفين', fr: 'Travaux d’auteurs' }
+        about:      { ru: 'Гид',               en: 'Guide',           es: 'Guía',                 ar: 'الدليل',        fr: 'Guide' , zh: '指南'},
+        main:       { ru: 'Главная',           en: 'Home',            es: 'Inicio',               ar: 'الرئيسية',      fr: 'Accueil' , zh: '首页'},
+        laws:       { ru: 'Понятия',           en: 'Concepts',        es: 'Conceptos',            ar: 'المفاهيم',      fr: 'Concepts' , zh: '概念'},
+        comments:   { ru: 'Комментарии',       en: 'Comments',        es: 'Comentarios',          ar: 'التعليقات',     fr: 'Commentaires' , zh: '评论'},
+        scientists: { ru: 'Учёные',            en: 'Scientists',      es: 'Científicos',          ar: 'العلماء',       fr: 'Scientifiques' , zh: '科学家'},
+        sections:   { ru: 'Разделы',           en: 'Sections',        es: 'Secciones',            ar: 'الأقسام',       fr: 'Sections' , zh: '分区'},
+        authors:    { ru: 'Авторы',            en: 'Authors',         es: 'Autores',              ar: 'المؤلفون',      fr: 'Auteurs' , zh: '作者'},
+        graph:      { ru: 'Граф знаний',       en: 'Knowledge graph', es: 'Red de conocimiento',  ar: 'شبكة المعرفة',  fr: 'Graphe des savoirs' , zh: '知识图谱'},
+        learn:      { ru: 'Учебник',           en: 'Learn',           es: 'Curso',                ar: 'تعلّم',          fr: 'Cours' , zh: '课程'},
+        analytics:  { ru: 'Карта проекта',     en: 'Project map',     es: 'Mapa del proyecto',    ar: 'خريطة المشروع', fr: 'Carte du projet' , zh: '项目地图'},
+        research:   { ru: 'Что исследовать',   en: 'What to explore', es: 'Qué investigar',       ar: 'اتجاهات البحث', fr: 'Quoi explorer' , zh: '研究方向'},
+        ideas:      { ru: 'Идеи проектов',     en: 'Project ideas',   es: 'Ideas de proyectos',   ar: 'أفكار مشاريع',  fr: 'Idées de projets' , zh: '项目构想'},
+        community:  { ru: 'Авторские работы',  en: 'Author works',    es: 'Trabajos de autor',    ar: 'أعمال المؤلفين', fr: 'Travaux d’auteurs' , zh: '作者作品'}
     };
-    var MENU_I18N = { ru: 'Меню', en: 'Menu', es: 'Menú', ar: 'القائمة', fr: 'Menu' };
+    var MENU_I18N = { ru: 'Меню', en: 'Menu', es: 'Menú', ar: 'القائمة', fr: 'Menu', zh: '菜单' };
 
     function label(key) {
         var t = NAV_I18N[key];

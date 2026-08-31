@@ -144,7 +144,8 @@ async function submitFeedback(id, wrap, entityType) {
         ru: { ok: '✓ спасибо!', err: '⚠ не отправлено' },
         en: { ok: '✓ thank you!', err: '⚠ not sent' },
         es: { ok: '✓ ¡gracias!', err: '⚠ no enviado' },
-        ar: { ok: '✓ شكرًا لك!', err: '⚠ لم يُرسل' }
+        ar: { ok: '✓ شكرًا لك!', err: '⚠ لم يُرسل' },
+        zh: { ok: '✓ 谢谢！', err: '⚠ 未发送' }
     };
     const _m = FB_MSG[window.lang] || FB_MSG.en;
     if (status) status.textContent = error ? _m.err : _m.ok;
