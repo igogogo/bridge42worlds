@@ -4934,6 +4934,19 @@ def generate_sitemaps():
                 f"{SITE_URL}/{LANG_DIR}/{lang}/tags/index.html",
                 f"{SITE_URL}/{LANG_DIR}/en/authors/index.html",
                 f"{SITE_URL}/{LANG_DIR}/{lang}/scientists/index.html"]
+        # ВЕРХНИЕ СТРАНИЦЫ — тоже по языкам. Раньше «Идеи», «Учиться», «Что исследовать»,
+        # курс жили по одному адресу на пять языков: поисковик видел одну русскую страницу,
+        # четырёх остальных языков у них не существовало. tools/lang_pages.py собирает копию
+        # на каждый язык; карта должна их предъявить, иначе копии останутся никем не найдены.
+        try:
+            from tools.lang_pages import PAGES as _TOP
+        except Exception:
+            _TOP = []
+        for _pg in _TOP:
+            _f = Path(f"{_pg}.html") if lang == DEFAULT_LANG else Path(LANG_DIR) / lang / f"{_pg}.html"
+            if _f.exists():
+                urls.append(f"{SITE_URL}/{_f.as_posix()}")
+
         authors_dir = Path(LANG_DIR) / "en" / "authors"
         if lang == "en" and authors_dir.exists():
             for p in sorted(authors_dir.glob("[a-z].html")):
@@ -4983,8 +4996,16 @@ def generate_sitemaps():
         fn = f"sitemap-{lang}.xml"
         _write_text_retry(Path(fn), urlset(urls))
         made.append(fn)
+    # ИНДЕКС КАРТ — ПО ВСЕМ ЯЗЫКАМ, А НЕ ПО ПЕРЕСОБРАННЫМ. Пересборка часто идёт
+    # с сужением языков (B42_LANGS), и индекс, собранный из «сделанных за прогон»,
+    # молча выбрасывал остальные: 31 августа в нём остались только ru и en — арабский,
+    # наша целевая аудитория, пропал из карты сайта целиком, хотя файл лежал на месте
+    # и отдавался. Карта языка живёт своей жизнью: пока файл существует, он в индексе.
+    from common import ALL_LANGS as _ALL          # полный список языков проекта
+    listed = [f"sitemap-{l}.xml" for l in _ALL
+              if f"sitemap-{l}.xml" in made or Path(f"sitemap-{l}.xml").exists()]
     index = ('<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
-             + "".join(f"<sitemap><loc>{SITE_URL}/{f}</loc></sitemap>" for f in made) + "</sitemapindex>")
+             + "".join(f"<sitemap><loc>{SITE_URL}/{f}</loc></sitemap>" for f in listed) + "</sitemapindex>")
     _write_text_retry(Path("sitemap.xml"), index)
     print(f"  🗺️ Sitemaps: {', '.join(made)} + sitemap.xml")
 

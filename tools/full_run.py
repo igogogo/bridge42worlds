@@ -102,6 +102,7 @@ NUMBERS = {
     "apply":    [("разметка записана в статей", r"записана в (\d+) статей")],
     # Выкладка в R2 живёт ВНУТРИ шага сборки (run.py html публикует сам), а шаг
     # deploy выкатывает воркер — там числа файлов нет и быть не может.
+    "lang-pages": [("копий верхних страниц", r"копий (\d+)")],
     "html":     [("страниц собрано", r"Regenerated (\d+) HTML"),
                  ("файлов выложено", r"\+(\d+) обновлено")],
     "html-force": [("страниц собрано", r"Regenerated (\d+) HTML"),
@@ -507,7 +508,7 @@ def main():
         "tr-formulas", "names-ru", "field", "retag-day", "retag", "apply", "hl-day",
         "super", "live-2", "vecnb",
         "live-3", "gnames", "weave", "live-4", "graph", "mentions-ru", "highlight",
-        "pages-c", "pages-f", "related", "cited", "carousel", "fx", "html", "authors", "status", "cloud-d1", "cloud-vec",
+        "pages-c", "pages-f", "related", "cited", "carousel", "fx", "html", "lang-pages", "authors", "status", "cloud-d1", "cloud-vec",
         "cards-sync", "deploy", "api", "pages", "audit", "gaudit", "links"])
     save(st)
 
@@ -675,6 +676,9 @@ def main():
     run("pipeline-page", [PY, "tools/pipeline_page.py"], timeout=600, soft=True)
     run("html", [PY, "run.py", "html"] + (["--force"] if FULL else []),
         timeout=8 * 3600, env=env)
+    # Копии верхних страниц по языкам — после сборки, до карт сайта: карта предъявляет
+    # именно эти адреса, и собирать её раньше копий значит звать поисковика в пустоту.
+    run("lang-pages", [PY, "tools/lang_pages.py"], timeout=600)
     run("authors", [PY, "-c", "import sys; sys.path.insert(0,'.'); "
                     "import generate as G; G.update_all_authors()"], timeout=4 * 3600)
     run("status", [PY, "-c", "import sys; sys.path.insert(0,'.'); "

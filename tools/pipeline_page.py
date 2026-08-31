@@ -59,7 +59,7 @@ EXPLAIN = {
     "cards": "cards", "tr-cards": "cards", "retag": "retag", "apply": "reapply",
     "live-3": "reapply", "mentions-ru": "anchors", "highlight": "hl-model",
     "weave": "hl-vec", "gnames": "hl-dict", "pages-c": "pages", "pages-f": "pages",
-    "html": "pages", "graph": "data", "status": "dash", "authors": "dash",
+    "html": "pages", "lang-pages": "pages", "graph": "data", "status": "dash", "authors": "dash",
     "cloud-d1": "d1", "cloud-vec": "vz", "deploy": "r2", "api": "watch",
     "pages": "watch", "links": "watch",
 }
@@ -86,6 +86,7 @@ SHORT = {
     "highlight": "Подсветка терминов",
     "pages-c": "Страницы понятий", "pages-f": "Страницы формул",
     "html": "Сборка сайта", "html-force": "Полная пересборка",
+    "lang-pages": "Верхние страницы по языкам",
     "strata": "Пласты: поиск в прошлом", "strata-gen": "Разборы из прошлого",
     "ideas": "Идеи проектов", "ideas-tr": "Перевод идей",
     "ideas-page": "Страница идей", "authors": "Страницы авторов", "status": "Дашборд",

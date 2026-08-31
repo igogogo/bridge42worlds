@@ -1,80 +1,14 @@
-#!/usr/bin/env python3
-"""Страница «Идеи проектов» — то, за что можно взяться, с опорой на работы.
-
-Владелец 30 августа спросил, жив ли генератор идей. Жив: `tools/ideas.py` пишет
-дельные идеи с методиками, первым шагом и честным риском. Но продукта не было —
-`data/ideas/` был пуст, и ни одна страница на него не ссылалась. Здесь продукт.
-
-КОМУ ЭТО. Не читателю ленты, а тому, у кого работы ещё нет: студенту инженерного
-факультета, аспиранту, инженеру. Он приходит с областью — «опреснение воды»,
-«пыль на солнечных панелях» — и получает дела, за которые можно взяться завтра.
-
-ОТКУДА ОПОРЫ И ПОЧЕМУ ЭТО ВАЖНО ВИДЕТЬ. У идеи всегда названы работы, на которых
-она стоит, и они бывают двух родов. Наши разборы — ссылка ведёт на страницу сайта.
-Работы поля arXiv, которых мы ещё не разбирали, — ссылка ведёт на arXiv, и это
-честно помечено. Второе не недостаток, а признание: по прикладным темам наш архив
-пока молчит, а поле в 2,96 млн работ — нет.
-
-ЯЗЫК. Русский лежит в корне записи, остальные четыре — в ветке lang (их пишет
-`ideas.py --translate` общим переводчиком статей). Страница выбирает язык сама и
-показывает только те, что готовы: полупереведённое хуже, чем честно непереведённое.
-
-    python tools/ideas_page.py        собрать /ideas.html и /data/ideas/index.json
-"""
-import hashlib
-import json
-import sys
-from pathlib import Path
-
-ROOT = Path(__file__).resolve().parent.parent
-SRC = ROOT / "data" / "ideas"
-OUT = ROOT / "ideas.html"
-INDEX = SRC / "index.json"
-
-if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
-    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
-
-LANGS = ("ru", "en", "es", "ar", "fr")
-
-T = {
-    "ru": { "like": "нравится", "dislike": "не то", "comment": "+ комментарий", "commentHint": "отклики читаем пачками — идею можем поправить", "send": "отправить", "expressMark": "экспресс", "open": "Открыть идею","title": "Идеи проектов", "sub": "За что можно взяться — с опорой на работы",
-           "none": "Идей пока нет", "scale": "масштаб", "what": "что делаем",
-           "why": "зачем", "methods": "как", "first": "первый шаг", "needs": "что нужно",
-           "risks": "где споткнётся", "origin": "почему мы это предлагаем",
-           "based": "опора", "ours": "наш разбор", "field": "работа arXiv, не разобрана",
-           "topics": "Области", "note": "Каждая идея обязана опираться на конкретные "
-           "работы, и они названы. Идея без опоры — красивые слова, их и без нас много."},
-    "en": { "like": "like", "dislike": "not for me", "comment": "+ comment", "commentHint": "we read replies in batches — the idea may change", "send": "send", "expressMark": "express", "open": "Open the idea","title": "Project ideas", "sub": "Things you can take on — grounded in papers",
-           "none": "No ideas yet", "scale": "scale", "what": "what to do",
-           "why": "why", "methods": "how", "first": "first step", "needs": "what you need",
-           "risks": "where it stumbles", "origin": "why we suggest it",
-           "based": "grounded in", "ours": "our analysis", "field": "arXiv paper, not analysed",
-           "topics": "Areas", "note": "Every idea must rest on named papers. "
-           "An idea without grounding is just words, and there are plenty of those."},
-    "es": { "like": "me gusta", "dislike": "no es lo mío", "comment": "+ comentario", "commentHint": "leemos las respuestas por lotes — la idea puede cambiar", "send": "enviar", "expressMark": "exprés", "open": "Abrir la idea","title": "Ideas de proyectos", "sub": "Qué se puede emprender, apoyado en trabajos",
-           "none": "Aún no hay ideas", "scale": "escala", "what": "qué hacer",
-           "why": "para qué", "methods": "cómo", "first": "primer paso", "needs": "qué hace falta",
-           "risks": "dónde tropezará", "origin": "por qué lo proponemos",
-           "based": "apoyo", "ours": "nuestro análisis", "field": "trabajo de arXiv, sin analizar",
-           "topics": "Áreas", "note": "Cada idea debe apoyarse en trabajos concretos, y están "
-           "nombrados. Una idea sin apoyo son solo palabras, y de esas sobran."},
-    "ar": { "like": "يعجبني", "dislike": "ليس لي", "comment": "+ تعليق", "commentHint": "نقرأ الردود على دفعات — قد تتغيّر الفكرة", "send": "إرسال", "expressMark": "سريعة", "open": "افتح الفكرة","title": "أفكار مشاريع", "sub": "ما يمكن الشروع فيه، مستنداً إلى أبحاث",
-           "none": "لا توجد أفكار بعد", "scale": "الحجم", "what": "ماذا نفعل",
-           "why": "لماذا", "methods": "كيف", "first": "الخطوة الأولى", "needs": "ما يلزم",
-           "risks": "أين قد يتعثّر", "origin": "لماذا نقترح ذلك",
-           "based": "الاستناد", "ours": "تحليلنا", "field": "بحث في arXiv، لم نحلّله",
-           "topics": "المجالات", "note": "كل فكرة يجب أن تستند إلى أبحاث محددة، وهي مذكورة. "
-           "الفكرة بلا استناد مجرد كلام، والكلام كثير."},
-    "fr": { "like": "j’aime", "dislike": "pas pour moi", "comment": "+ commentaire", "commentHint": "nous lisons les réponses par lots — l’idée peut changer", "send": "envoyer", "expressMark": "express", "open": "Ouvrir l’idée","title": "Idées de projets", "sub": "Ce qu’on peut entreprendre, appuyé sur des travaux",
-           "none": "Pas encore d’idées", "scale": "échelle", "what": "quoi faire",
-           "why": "pourquoi", "methods": "comment", "first": "première étape", "needs": "ce qu’il faut",
-           "risks": "où ça coince", "origin": "pourquoi nous le proposons",
-           "based": "appui", "ours": "notre analyse", "field": "article arXiv, non analysé",
-           "topics": "Domaines", "note": "Chaque idée doit s’appuyer sur des travaux nommés. "
-           "Une idée sans appui n’est que des mots, et il y en a assez."},
-}
-
-CSS = """
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Идеи проектов — bridge42worlds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<style>
 .id-head { margin: 0 0 6px; }
 .id-head h1 { font-family: var(--serif); font-size: 27px; margin: 0 0 4px; }
 .id-sub { color: var(--soft); font-size: 13px; }
@@ -152,13 +86,41 @@ CSS = """
 .id-src a[data-k="field"] { border-style: dashed; color: var(--muted); }
 .id-empty { color: var(--muted); font-size: 13px; margin: 18px 0; }
 @media (max-width: 700px) { .id-head h1 { font-size: 23px; } }
-"""
+</style>
+<!-- b42:hreflang -->
+<link rel="canonical" href="https://bridge42worlds.academy/ideas.html">
+<link rel="alternate" hreflang="ru" href="https://bridge42worlds.academy/ideas.html">
+<link rel="alternate" hreflang="en" href="https://bridge42worlds.academy/lang/en/ideas.html">
+<link rel="alternate" hreflang="es" href="https://bridge42worlds.academy/lang/es/ideas.html">
+<link rel="alternate" hreflang="ar" href="https://bridge42worlds.academy/lang/ar/ideas.html">
+<link rel="alternate" hreflang="fr" href="https://bridge42worlds.academy/lang/fr/ideas.html">
+<link rel="alternate" hreflang="x-default" href="https://bridge42worlds.academy/ideas.html">
+<!-- /b42:hreflang -->
+</head>
+<body>
 
-JS = """
+<div class="top-bar">
+  <a href="/learn.html" class="logo">bridge42worlds</a>
+  <button type="button" class="theme-toggle" onclick="var h=document.documentElement;h.setAttribute('data-theme', h.getAttribute('data-theme')==='dark'?'light':'dark');">&#9683;</button>
+</div>
+
+<div class="id-head">
+  <h1 id="id-title">Идеи проектов</h1>
+  <div class="id-sub" id="id-sub">За что можно взяться — с опорой на работы</div>
+  <p class="id-note" id="id-note">Каждая идея обязана опираться на конкретные работы, и они названы. Идея без опоры — красивые слова, их и без нас много.</p>
+</div>
+
+<div class="id-bar" id="id-bar"></div>
+<div id="id-body"></div>
+
+<script src="/js/icons.js"></script>
+<script src="/js/sitenav.js"></script>
+<script src="/js/likes.js"></script>
+<script>
 (function () {
   var LANG = (new URLSearchParams(location.search).get("lang") || "").slice(0, 2)
     || document.documentElement.lang || "ru";
-  var T = __T__, D = T[LANG] || T.ru;
+  var T = {"ru": {"like": "нравится", "dislike": "не то", "comment": "+ комментарий", "commentHint": "отклики читаем пачками — идею можем поправить", "send": "отправить", "expressMark": "экспресс", "open": "Открыть идею", "title": "Идеи проектов", "sub": "За что можно взяться — с опорой на работы", "none": "Идей пока нет", "scale": "масштаб", "what": "что делаем", "why": "зачем", "methods": "как", "first": "первый шаг", "needs": "что нужно", "risks": "где споткнётся", "origin": "почему мы это предлагаем", "based": "опора", "ours": "наш разбор", "field": "работа arXiv, не разобрана", "topics": "Области", "note": "Каждая идея обязана опираться на конкретные работы, и они названы. Идея без опоры — красивые слова, их и без нас много."}, "en": {"like": "like", "dislike": "not for me", "comment": "+ comment", "commentHint": "we read replies in batches — the idea may change", "send": "send", "expressMark": "express", "open": "Open the idea", "title": "Project ideas", "sub": "Things you can take on — grounded in papers", "none": "No ideas yet", "scale": "scale", "what": "what to do", "why": "why", "methods": "how", "first": "first step", "needs": "what you need", "risks": "where it stumbles", "origin": "why we suggest it", "based": "grounded in", "ours": "our analysis", "field": "arXiv paper, not analysed", "topics": "Areas", "note": "Every idea must rest on named papers. An idea without grounding is just words, and there are plenty of those."}, "es": {"like": "me gusta", "dislike": "no es lo mío", "comment": "+ comentario", "commentHint": "leemos las respuestas por lotes — la idea puede cambiar", "send": "enviar", "expressMark": "exprés", "open": "Abrir la idea", "title": "Ideas de proyectos", "sub": "Qué se puede emprender, apoyado en trabajos", "none": "Aún no hay ideas", "scale": "escala", "what": "qué hacer", "why": "para qué", "methods": "cómo", "first": "primer paso", "needs": "qué hace falta", "risks": "dónde tropezará", "origin": "por qué lo proponemos", "based": "apoyo", "ours": "nuestro análisis", "field": "trabajo de arXiv, sin analizar", "topics": "Áreas", "note": "Cada idea debe apoyarse en trabajos concretos, y están nombrados. Una idea sin apoyo son solo palabras, y de esas sobran."}, "ar": {"like": "يعجبني", "dislike": "ليس لي", "comment": "+ تعليق", "commentHint": "نقرأ الردود على دفعات — قد تتغيّر الفكرة", "send": "إرسال", "expressMark": "سريعة", "open": "افتح الفكرة", "title": "أفكار مشاريع", "sub": "ما يمكن الشروع فيه، مستنداً إلى أبحاث", "none": "لا توجد أفكار بعد", "scale": "الحجم", "what": "ماذا نفعل", "why": "لماذا", "methods": "كيف", "first": "الخطوة الأولى", "needs": "ما يلزم", "risks": "أين قد يتعثّر", "origin": "لماذا نقترح ذلك", "based": "الاستناد", "ours": "تحليلنا", "field": "بحث في arXiv، لم نحلّله", "topics": "المجالات", "note": "كل فكرة يجب أن تستند إلى أبحاث محددة، وهي مذكورة. الفكرة بلا استناد مجرد كلام، والكلام كثير."}, "fr": {"like": "j’aime", "dislike": "pas pour moi", "comment": "+ commentaire", "commentHint": "nous lisons les réponses par lots — l’idée peut changer", "send": "envoyer", "expressMark": "express", "open": "Ouvrir l’idée", "title": "Idées de projets", "sub": "Ce qu’on peut entreprendre, appuyé sur des travaux", "none": "Pas encore d’idées", "scale": "échelle", "what": "quoi faire", "why": "pourquoi", "methods": "comment", "first": "première étape", "needs": "ce qu’il faut", "risks": "où ça coince", "origin": "pourquoi nous le proposons", "based": "appui", "ours": "notre analyse", "field": "article arXiv, non analysé", "topics": "Domaines", "note": "Chaque idée doit s’appuyer sur des travaux nommés. Une idée sans appui n’est que des mots, et il y en a assez."}}, D = T[LANG] || T.ru;
   var box = document.getElementById("id-body"), bar = document.getElementById("id-bar");
   /* ШАПКА НА ЯЗЫКЕ ЧИТАТЕЛЯ. Разметка собирается по-русски (страница одна на все
      языки, как /research.html), поэтому подписи ставит скрипт. Арабский вдобавок
@@ -398,89 +360,6 @@ JS = """
     box.innerHTML = '<p class="id-empty">' + esc(D.none) + "</p>";
   });
 })();
-"""
-
-
-def build_index():
-    """Опись тем — маленький файл, чтобы страница не тянула все наборы разом."""
-    topics = []
-    for p in sorted(SRC.glob("*.json")):
-        if p.name == "index.json":
-            continue
-        try:
-            d = json.loads(p.read_text(encoding="utf-8"))
-        except Exception:
-            continue
-        if not d.get("ideas"):
-            continue
-        titles = {}
-        for lang in LANGS[1:]:
-            l = (d.get("lang") or {}).get(lang)
-            # Имя темы на другом языке берём из перевода первой идеи, только если
-            # перевод есть: выдумывать название темы нам нечем.
-            if l and l.get("topic"):
-                titles[lang] = l["topic"]
-        # КЛЮЧ ОТКЛИКА — короткий. Ручка /api/react режет опознаватель на 60 знаках,
-        # а кириллический ломоть темы уже упирался в эту границу («охлаждение-
-        # фотоэлектрических-модулей-в-жарком-климате» — ровно 60 с номером идеи).
-        # Ещё одна буква в названии — и номер идеи отрезало бы молча: лайки всех идей
-        # темы слились бы в один. Восемь знаков от хеша ломтя устойчивы к пересборке.
-        slug = d.get("slug") or p.stem
-        topics.append({"slug": slug, "topic": d.get("topic") or p.stem,
-                       "key": hashlib.sha1(slug.encode("utf-8")).hexdigest()[:8],
-                       "n": len(d["ideas"]), "titles": titles,
-                       "sources": len(d.get("sources") or [])})
-    INDEX.write_text(json.dumps({"topics": topics}, ensure_ascii=False, indent=1),
-                     encoding="utf-8")
-    return topics
-
-
-def main():
-    if not SRC.exists():
-        print("data/ideas/ ещё нет — сначала tools/ideas.py --topics data/idea-topics.txt")
-        return 1
-    topics = build_index()
-    d = T["ru"]
-    html = f"""<!DOCTYPE html>
-<html lang="ru" dir="ltr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{d['title']} — bridge42worlds</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css">
-<link rel="icon" href="/favicon.ico" sizes="any">
-<style>{CSS}</style>
-</head>
-<body>
-
-<div class="top-bar">
-  <a href="/learn.html" class="logo">bridge42worlds</a>
-  <button type="button" class="theme-toggle" onclick="var h=document.documentElement;h.setAttribute('data-theme', h.getAttribute('data-theme')==='dark'?'light':'dark');">&#9683;</button>
-</div>
-
-<div class="id-head">
-  <h1 id="id-title">{d['title']}</h1>
-  <div class="id-sub" id="id-sub">{d['sub']}</div>
-  <p class="id-note" id="id-note">{d['note']}</p>
-</div>
-
-<div class="id-bar" id="id-bar"></div>
-<div id="id-body"></div>
-
-<script src="/js/icons.js"></script>
-<script src="/js/sitenav.js"></script>
-<script src="/js/likes.js"></script>
-<script>{JS.replace('__T__', json.dumps(T, ensure_ascii=False))}</script>
+</script>
 </body>
 </html>
-"""
-    OUT.write_text(html, encoding="utf-8")
-    print(f"✅ {OUT.name}: тем {len(topics)}, идей "
-          f"{sum(t['n'] for t in topics)} · опись {INDEX.relative_to(ROOT)}")
-    return 0
-
-
-if __name__ == "__main__":
-    sys.exit(main())
