@@ -522,6 +522,13 @@ body.graph-fs-open { overflow: hidden; }
 .author-item.recent::before { content: "•"; color: var(--scientist-color); margin-right: 3px; font-weight: 700; }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
+/* [hidden] ПРЯЧЕТ ВСЕГДА. Встроенное браузерное [hidden]{display:none} имеет тот же вес,
+   что любое наше `display: flex`, и проигрывает ему по порядку — элемент, спрятанный из
+   скрипта, остаётся на экране. Ловили поштучно пять раз: лайтбокс, поле отклика, строка
+   отправки, фильтры мини-графа, член раздела. Шестыми попались кнопки письма на странице
+   автора — две пустые пилюли висели под вопросом «это ваша страница?» (владелец 31.08:
+   «там что-то наезжает, проверь глазами»). Одно правило на весь сайт вместо седьмой заплатки. */
+[hidden] { display: none !important; }
 
 body {
     font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
@@ -4749,6 +4756,10 @@ body:has(.entity-body) .entity-list,
 body:has(.entity-body) #search-results { max-width: var(--w-entity); }
 /* Полоса статистики отступала на 24 внутрь и не совпадала ни с чем. */
 body:has(.entity-body) .s2-stats { padding-left: 0; padding-right: 0; }
+/* Тело сущности подтягивается вверх на --s-5, чтобы стать продолжением шапки. На странице
+   автора между ними встаёт ещё строка — цитирования Semantic Scholar, — и подтяжка наезжала
+   на неё десятью пикселями. Соседство есть, подтягивать нечего. */
+.s2-stats + .entity-body { margin-top: 2px; }
 
 body.entity-page { max-width: 700px; }
 body.entity-page .ent-pane p,

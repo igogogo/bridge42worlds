@@ -220,6 +220,23 @@ function edgePath(ctx, a, b) {
     ctx.quadraticCurveTo(mx - dy / d * k, my + dx / d * k, b[0], b[1]);
 }
 
+/* ОПИСАНИЕ ПОНЯТИЯ ПОД КУРСОРОМ — НА ЯЗЫКЕ ЧИТАТЕЛЯ. В самом графе лежит английская
+   карточка: пять переводов раздули бы файл с двух с половиной мегабайт до семи, а он
+   грузится на каждой странице с мини-графом. Перевод приезжает вторым файлом и только
+   свой (600 килобайт), уже после того как граф нарисован: пока он в пути, подсказка
+   показывает английское описание, а не пустоту. */
+function cards(d) {
+    var lang = (document.documentElement.lang || 'en').slice(0, 2);
+    if (lang === 'en') return;
+    fetch('/data/graph-cards-' + lang + '.json')
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (m) {
+            if (!m) return;
+            d.nodes.forEach(function (n) { if (m[n.id]) n.card = m[n.id]; });
+        })
+        .catch(function () {});
+}
+
 /* общий загрузчик данных: один запрос на страницу, сколько бы графов ни было */
 var dataP = null;
 function data() {
@@ -234,6 +251,7 @@ function data() {
                     d.adj[e[0]].push([e[1], e[2]]);
                     d.adj[e[1]].push([e[0], e[2]]);
                 });
+                cards(d);
                 return d;
             });
     }

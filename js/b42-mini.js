@@ -29,10 +29,33 @@ var LANG = document.documentElement.lang || 'en';
 var ARTS = ({ru: ' статей', es: ' artículos', ar: ' مقالة', fr: ' articles',
              zh: ' 篇文章'})[LANG] || ' articles';
 
+/* «ВЕСЬ ГРАФ» ОТ КАЖДОГО МИНИ-ГРАФА. Ссылку писала только статья — руками, в
+   generate.py. Страница автора, понятия, формулы и учёного показывали кадр и обрывались
+   на нём: развернуть его во весь экран было нельзя (владелец 31.08 про страницу автора).
+   Ставит её сам мини-граф — он и так знает свой набор, — и уносит именно этот набор, а
+   не бросает читателя на обзор из пятидесяти кругов. Где ссылка уже написана в разметке,
+   второй не появляется. */
+var WHOLE = {ru: 'Весь граф', en: 'Whole graph', es: 'Todo el grafo',
+             ar: 'الرسم كاملاً', fr: 'Le graphe entier', zh: '完整图谱'};
+
+function wholeLink(box) {
+    var ids = (box.dataset.ids || '').split(',').filter(Boolean);
+    if (ids.length < 2) return;
+    var next = box.nextElementSibling;
+    if (next && next.classList.contains('b42mini-note')) return;
+    var d = document.createElement('div');
+    d.className = 'b42mini-note';
+    var a = document.createElement('a');
+    a.href = '/lang/' + LANG + '/concepts/graph.html?set=' + encodeURIComponent(ids.join(','));
+    a.textContent = (WHOLE[LANG] || WHOLE.en) + ' →';
+    d.appendChild(a);
+    box.parentNode.insertBefore(d, box.nextSibling);
+}
+
 var _G = null;
 CORE.data().then(function (G) {
     _G = G;
-    boxes.forEach(function (box) { init(box, G); });
+    boxes.forEach(function (box) { init(box, G); wholeLink(box); });
 });
 
 /* УПОМЯНУТЫЕ ПОНЯТИЯ — ПО КНОПКЕ, А НЕ САМИ.
@@ -370,13 +393,31 @@ function init(box, G) {
             var lines = [hd.label,
                          hd.kind + ' · ' + hd.n + ARTS];
             ctx.font = '10.5px ' + TK.mono;
+            /* ОПИСАНИЕ ПОНЯТИЯ ПРЯМО В ПОДСКАЗКЕ — «наведись и узнай». Большой граф это
+               умеет с самого начала, мини-граф носил описание в данных и не показывал:
+               человек видел «phenomenon · 18 статей» и должен был уходить на страницу,
+               чтобы понять, что это вообще такое (владелец 31.08). Ширина 220 — столько
+               помещается рядом с курсором на телефоне, не закрывая сам граф. */
+            var body = 0;
+            if (hd.card) {
+                var words = String(hd.card).split(' '), line = '';
+                for (var wi = 0; wi < words.length && body < 4; wi++) {
+                    var test = line ? line + ' ' + words[wi] : words[wi];
+                    if (ctx.measureText(test).width > 220 && line) {
+                        lines.push(line); body++; line = words[wi];
+                    } else line = test;
+                }
+                if (line && body < 4) { lines.push(line); body++; }
+                else if (body >= 4) lines[lines.length - 1] += '…';
+            }
             var tww = 0;
             lines.forEach(function (s) { tww = Math.max(tww, ctx.measureText(s).width); });
+            var th = lines.length * 13 + 8;
             var tx = Math.min(mouse.x + 12, w - tww - 16);
-            var ty = Math.min(mouse.y + 4, h - 34);
+            var ty = Math.min(mouse.y + 4, h - th - 4);
             ctx.globalAlpha = 0.95;
             ctx.fillStyle = TK.surface; ctx.strokeStyle = TK.hair;
-            ctx.beginPath(); ctx.roundRect(tx - 6, ty - 12, tww + 12, 32, 5);
+            ctx.beginPath(); ctx.roundRect(tx - 6, ty - 12, tww + 12, th, 5);
             ctx.fill(); ctx.stroke();
             ctx.globalAlpha = 1;
             ctx.textAlign = 'start';

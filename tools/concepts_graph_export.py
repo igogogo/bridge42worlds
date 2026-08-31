@@ -344,6 +344,25 @@ def main():
     kb = OUT.stat().st_size // 1024
     print(f"✅ граф: {len(nodes)} узлов, {len(edges)} рёбер, {len(groups)} групп"
           f" → {OUT.name} ({kb} КБ)")
+
+    # КАРТОЧКИ ПО ЯЗЫКАМ — ОТДЕЛЬНЫМИ ФАЙЛАМИ. Подсказка под курсором показывает
+    # короткое описание понятия, и до сих пор оно было английским на всех пяти языках:
+    # в узел кладётся card_en. Сложить пять переводов в сам граф нельзя — он вырастет
+    # с двух с половиной мегабайт до семи, а грузится он на каждой странице с мини-графом.
+    # Поэтому язык подтягивается вторым файлом и только своим: граф рисуется сразу,
+    # описания приезжают следом (js/b42-graph-core.js).
+    live_all = json.loads(LIVE.read_text(encoding="utf-8"))["concepts"]
+    for lang in ("ru", "es", "ar", "fr"):
+        cards = {}
+        for cid, v in live_all.items():
+            if v.get("merged_into"):
+                continue
+            c = ((v.get("full_i18n") or {}).get(lang) or {}).get("card")
+            if c:
+                cards[cid] = c[:220]
+        f = ROOT / "data" / f"graph-cards-{lang}.json"
+        f.write_text(json.dumps(cards, ensure_ascii=False), encoding="utf-8")
+        print(f"   карточки {lang}: {len(cards)} → {f.name} ({f.stat().st_size // 1024} КБ)")
     return 0
 
 

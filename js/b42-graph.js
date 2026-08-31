@@ -1597,7 +1597,21 @@ function buildPanel() {
         set3d(false); view.spin = false;
         if (sp) sp.classList.remove('active');
     };
-    if (b3) b3.onclick = function () { set3d(true); };
+    /* 3D БЕЗ ОБЪЁМНОЙ РАСКЛАДКИ — ЭТО ПЛОСКОЕ ОБЛАКО, КОТОРОЕ КРУТИТСЯ. Кнопка меняла
+       только флаг, а узлы оставались разложены силами в одной плоскости: включаешь 3D и
+       видишь ту же плоскость под углом (владелец 31.08). Раскладка «сфера» уже умеет
+       обратное — включает 3D сама; связываем и в эту сторону. Если человек уже выбрал
+       объёмную раскладку (сфера, галактика, слои), не трогаем его выбор. */
+    if (b3) b3.onclick = function () {
+        set3d(true);
+        if (view.layout === 'force' || view.layout === 'ring') {
+            view.layout = 'sphere';
+            document.querySelectorAll('[data-layout]').forEach(function (x) {
+                x.classList.toggle('active', x.dataset.layout === 'sphere');
+            });
+            applyFixedLayout();
+        }
+    };
     if (sp) sp.onclick = function () {
         view.spin = !view.spin; sp.classList.toggle('active', view.spin);
     };
