@@ -223,6 +223,12 @@ def emails_of(date, aid, cap=4000):
         out = []
         for m in MAIL_RE.findall(head):
             a = m.replace(" ", "").strip(".,;")
+            # ХВОСТ ОТ ВЁРСТКИ. В PDF за адресом часто идёт значок сноски или начало
+            # следующего слова, и они прилипают к домену: «…@eli-alps.huE». Домен
+            # верхнего уровня пишется строчными; если после строчных идут заглавные,
+            # это уже не адрес, а соседний текст.
+            import re as _re
+            a = _re.sub(r"(\.[a-z]{2,24})[A-Z].*$", r"\1", a)
             if any(s in a.lower() for s in SKIP_MAIL):
                 continue
             if a not in out:
