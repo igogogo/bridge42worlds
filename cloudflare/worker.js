@@ -2392,6 +2392,69 @@ async function handleCorpus(request, env) {
   return out;
 }
 
+/* СВОДКА ДАШБОРДА — ЦЕЛИКОМ ИЗ ОБЛАКА.
+ *
+ * Дашборд /archive считает не список, а агрегаты, и до сих пор считал их на клиенте:
+ * тянул индекс статей (14,2 МБ) и граф авторов (24,5 МБ) — тридцать девять мегабайт
+ * ради полусотни чисел. Владелец 31 августа: «всё должно быть в облаке, все индексы».
+ *
+ * И второе, важнее веса. Дашборд считал СТАРЫЙ словарь: 175 законов и 368 тегов из
+ * старых справочников laws.json и tags.json. Эти файлы не переписывались с 17 и 25
+ * августа — их никто не обновляет: словарь давно переехал в понятия. Читатель видел
+ * позапрошлый мир и не мог этого знать. Здесь считается сегодняшний: понятия, их виды,
+ * формулы, области.
+ */
+async function handleSummary(request, env) {
+  if (!env.CARDS) return noCards();
+  const url = new URL(request.url);
+  const cache = caches.default;
+  const hit = await cache.match(request);
+  if (hit) return hit;
+  const { lang, version } = feedParams(url);
+  const q = (sql, ...b) => env.CARDS.prepare(sql).bind(...b).all()
+    .catch(() => ({ results: [] }));
+
+  const [arts, cats, kinds, conc, forms, areas, auth, top, langs] = await Promise.all([
+    q(`SELECT COUNT(*) n, SUM(express) ex, SUM(km) km, MAX(date) last,
+              SUM(CASE WHEN image IS NOT NULL AND image != '' THEN 1 ELSE 0 END) img
+         FROM cards WHERE lang = ? AND version = ?`, lang, version),
+    q(`SELECT je.value cat, COUNT(*) n FROM cards, json_each(cards.categories) je
+        WHERE lang = ? AND version = ? GROUP BY cat`, lang, version),
+    // Виды понятий вместо «типов законов»: закон, уравнение, явление, величина…
+    q(`SELECT kind, COUNT(*) n FROM concepts GROUP BY kind ORDER BY n DESC`),
+    q(`SELECT COUNT(*) n, SUM(CASE WHEN n_arts > 0 THEN 1 ELSE 0 END) withArts,
+              SUM(CASE WHEN n_mentions > 0 THEN 1 ELSE 0 END) withMent FROM concepts`),
+    q(`SELECT COUNT(*) n FROM formulas`),
+    q(`SELECT COUNT(*) n FROM graph_groups`),
+    q(`SELECT COUNT(DISTINCT akey) n FROM card_authors`),
+    q(`SELECT id, name_ru, name_en, names, n_arts FROM concepts
+        WHERE n_arts > 0 ORDER BY n_arts DESC LIMIT 12`),
+    q(`SELECT lang l, COUNT(*) n FROM cards WHERE version = ? GROUP BY lang`, version),
+  ]);
+
+  const one = (r, f, d) => ((r.results || [])[0] || {})[f] ?? d;
+  const total = one(arts, "n", 0), express = one(arts, "ex", 0);
+  const catMap = {}; for (const r of cats.results || []) catMap[r.cat] = r.n;
+  const kindMap = {}; for (const r of kinds.results || []) if (r.kind) kindMap[r.kind] = r.n;
+  const langMap = {}; for (const r of langs.results || []) langMap[r.l] = r.n;
+
+  const out = feedJson({
+    articles: { total, express, full: total - express, km: one(arts, "km", 0),
+                last: one(arts, "last", ""), covers: one(arts, "img", 0) },
+    concepts: { total: one(conc, "n", 0), withArts: one(conc, "withArts", 0),
+                withMentions: one(conc, "withMent", 0), kinds: kindMap },
+    formulas: one(forms, "n", 0),
+    areas: one(areas, "n", 0),
+    authors: one(auth, "n", 0),
+    sections: Object.keys(catMap).length,
+    cats: catMap,
+    langs: langMap,
+    top: (top.results || []).map((r) => ({ id: r.id, n: r.n_arts, name: cname(r, lang) })),
+  }, 600);
+  request.method === "GET" && (await cache.put(request, out.clone()));
+  return out;
+}
+
 /* Страница автора: работы, разложенные по РЕАЛЬНЫМ людям, а не по совпадению подписи.
  *
  * Наш ключ автора — фамилия плюс инициалы (panov|ad). Этого мало: проход по Semantic
@@ -3263,6 +3326,7 @@ export default {
     if (url.pathname === "/api/search") return withCors(await handleSearch(request, env));
     if (url.pathname === "/api/feed") return withCors(await feedGuard(request, env, handleFeed));
     if (url.pathname === "/api/corpus") return withCors(await feedGuard(request, env, handleCorpus));
+    if (url.pathname === "/api/summary") return withCors(await feedGuard(request, env, handleSummary));
     if (url.pathname === "/api/author") return withCors(await feedGuard(request, env, handleAuthorFeed));
     if (url.pathname === "/api/author/claim") return withCors(await feedGuard(request, env, handleAuthorClaim));
     if (url.pathname === "/api/author/confirm") return feedGuard(request, env, handleAuthorConfirm);

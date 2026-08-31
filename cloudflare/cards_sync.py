@@ -399,16 +399,43 @@ def sync_authors(apply):
     кого считать одним человеком, — а это ровно тот баг с четырьмя Пановыми под одним
     ключом, который владелец поймал 24 августа."""
     from tools.author_record import key_from_display
+    # ИСТОЧНИК — ГРАФ АВТОРОВ, а не индекс лент.
+    #
+    # Индекс — файл для браузера, и в нём авторы обрезались (пятьдесят на работу).
+    # Страницы же строятся из графа, где авторы ВСЕ. Отсюда расхождение, которое
+    # владелец увидел 31 августа на /lang/en/authors/U_Kolb.html: страница есть,
+    # а списка работ и статистики нет. Замер: 46 991 автор в графе против 30 315 в
+    # облаке — шестнадцать с половиной тысяч человек с пустой страницей. У работы
+    # 2511.14407 таких двести семьдесят шесть из трёхсот двадцати шести.
+    #
+    # Потолок в индексе снят тем же решением, но полагаться на индекс здесь всё
+    # равно неправильно: он про то, что качает читатель, а не про то, кто автор.
+    graph_p = ROOT / "data" / "authors-graph.json"
     p = ROOT / "lang" / "ru" / "articles-index.json"
     if not p.exists():
         return 0, 0
     idx = json.loads(p.read_text(encoding="utf-8"))
+    when = {a["id"]: a.get("date", "") for a in idx}
     want = {}
-    for a in idx:
-        for name in (a.get("authors") or []):
+    if graph_p.exists():
+        graph = json.loads(graph_p.read_text(encoding="utf-8"))
+        for name, v in graph.items():
             k = key_from_display(name)
-            if k:
-                want[(k, a["id"])] = a.get("date", "")
+            if not k:
+                continue
+            for aid in (v.get("articles") or []):
+                # Дата нужна для сортировки списка работ; берём из индекса, а работу,
+                # которой в индексе нет, не берём вовсе — её карточки в облаке тоже нет.
+                if aid in when:
+                    want[(k, aid)] = when[aid]
+        print(f"      источник: граф авторов ({len(graph)} человек)")
+    else:
+        print("      ⚠️ графа авторов нет — беру индекс (авторы там обрезаны)")
+        for a in idx:
+            for name in (a.get("authors") or []):
+                k = key_from_display(name)
+                if k:
+                    want[(k, a["id"])] = a.get("date", "")
     try:
         have = {(r["akey"], r["id"]) for r in q("SELECT akey, id FROM card_authors")}
     except RuntimeError as e:
