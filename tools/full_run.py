@@ -502,14 +502,26 @@ def main():
     st["steps"] = {k: v for k, v in (st.get("steps") or {}).items() if k in ok_steps}
     st["secs"] = {k: v for k, v in (st.get("secs") or {}).items() if k in ok_steps}
     st["days"] = days
-    st["plan"] = ([f"day-{d}" for d in days] + [
+    # ПЛАН — ТОЛЬКО ТО, ЧТО ЭТОТ ПРОГОН ДЕЙСТВИТЕЛЬНО СДЕЛАЕТ. Одиннадцать шагов в
+    # списке принадлежат недельному кругу (дорост областей, доразметка всего корпуса,
+    # суперпонятия, связи знанием, упоминания, подсветка целиком) — ежедневный их не
+    # запускает никогда. Пока они стояли в общем плане, доска показывала «42 из 54» и
+    # ежедневный выглядел недоделанным при полностью пройденном круге. Владелец просил
+    # видеть оба конвейера ПРОЙДЕННЫМИ без ошибок — значит план обязан говорить правду
+    # о том, что этот прогон намерен сделать.
+    weekly_only = ["g-grow", "f-support", "tr-formulas", "retag", "super", "vecnb",
+                   "gnames", "weave", "mentions-ru", "highlight", "gaudit"]
+    _plan = [
         "harvest", "anatomy", "flink", "match", "distill", "births", "g-grow",
         "f-support", "twins", "consts", "units-fix", "live-1", "cards", "tr-cards",
         "tr-formulas", "names-ru", "field", "retag-day", "retag", "apply", "hl-day",
         "super", "live-2", "vecnb",
         "live-3", "gnames", "weave", "live-4", "graph", "mentions-ru", "highlight",
         "pages-c", "pages-f", "related", "cited", "carousel", "fx", "recommend", "html", "lang-pages", "authors", "status", "cloud-d1", "cloud-vec",
-        "cards-sync", "deploy", "api", "pages", "audit", "gaudit", "links"])
+        "cards-sync", "deploy", "api", "pages", "audit", "gaudit", "links"]
+    if not FULL:
+        _plan = [x for x in _plan if x not in weekly_only]
+    st["plan"] = [f"day-{d}" for d in days] + _plan
     save(st)
 
     # ── I. ЗАБОР И РАЗБОР ────────────────────────────────────────────────────

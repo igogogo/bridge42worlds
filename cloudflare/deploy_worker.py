@@ -73,7 +73,12 @@ def main():
     # Отличаем одно от другого по собственному отчёту wrangler: есть «Uploaded» и
     # версия — значит воркер выложен. Тогда это предупреждение, а не сбой; но
     # предупреждение громкое, чтобы права однажды выдали и строка ушла.
-    uploaded = ("Uploaded" in out and "Current Version ID" in out)
+    # Признак «код уехал» ищем по нескольким строкам, а не по одной паре: у разных
+    # версий wrangler отчёт разный. 31 августа шаг снова покраснел, хотя воркер
+    # выложился: в отчёте были «Uploaded bridge42worlds» и «Deployed … triggers»,
+    # а строки «Current Version ID» — не было вовсе, и проверка её не нашла.
+    uploaded = any(m in out for m in
+                   ("Current Version ID", "Total Upload", "Deployed bridge42worlds"))         and "Uploaded" in out
     routes_only = uploaded and ("workers/routes" in out or "Authentication error" in out)
     if routes_only:
         print("⚠️  Воркер ВЫЛОЖЕН, но маршруты зоны обновить не удалось: у токена нет "
