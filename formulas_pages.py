@@ -32,7 +32,7 @@ ROOT = Path(__file__).resolve().parent
 ML = ROOT.parent / "b42-ml"
 sys.path.insert(0, str(ROOT))
 from concepts_pages import (head, name_of, KIND_LBL, site_chrome,  # noqa: E402
-                            UNIT_RU, unit_label)
+                            UNIT_RU, unit_label, ALWAYS_LANGS)
 import generate as G   # noqa: E402 — действия и отклик теми же функциями
 
 # формулы — те же два языка, что и понятия; остальным редирект (см. concepts_pages)

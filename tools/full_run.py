@@ -667,7 +667,11 @@ def main():
     # citations.json, кадры из PDF, формулы правилами.
     run("related", [PY, "tools/vector_links_local.py"], timeout=3600, soft=True)
     run("cited", [PY, "tools/cited_ours.py"], timeout=900, soft=True)
-    run("carousel", [PY, "tools/carousel_frames.py"], timeout=3600, soft=True)
+    # --all обязателен: без него инструмент отвечает «укажи --pilot N или --all» и
+    # выходит с ошибкой. Шаг стоял в конвейере с сегодняшнего утра и ни разу не
+    # отработал — отсюда и статичные карточки у свежих статей, которые владелец
+    # увидел днём. Ошибка мягкая, поэтому прогон её пережил и никто не заметил.
+    run("carousel", [PY, "tools/carousel_frames.py", "--all"], timeout=3600, soft=True)
     run("fx", [PY, "tools/fix_inline_math.py"], timeout=1800, soft=True)
 
     # РЕКОМЕНДАЦИИ АВТОРУ — ДО СБОРКИ, А НЕ ПОСЛЕ. Тот самый значок ✛: раздел «куда
