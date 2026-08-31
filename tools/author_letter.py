@@ -360,7 +360,7 @@ def candidates(days, limit):
     return 0
 
 
-def by_paper(aid, lang, to, send):
+def by_paper(aid, lang, to, send, test=False):
     """Письмо про КОНКРЕТНУЮ свежую работу — она идёт первой строкой."""
     import generate as G
     art = None
@@ -388,14 +388,20 @@ def by_paper(aid, lang, to, send):
     if not to:
         print("нет адреса — укажите --to")
         return 2
-    was = written().get(who)
-    if was:
-        print(f"этому автору уже писали {was['at'][:10]} — второй раз не пишем")
-        return 1
+    # ПРОБНОЕ ПИСЬМО СЕБЕ в журнал не пишется: иначе автор, на чьём письме мы
+    # проверяли вид, навсегда попал бы в «уже написали» и настоящего письма не получил.
+    if not test:
+        was = written().get(who)
+        if was:
+            print(f"этому автору уже писали {was['at'][:10]} — второй раз не пишем")
+            return 1
     import council_mail
     if council_mail.send(to, subj, body, sender=FROM):
-        remember(who, to, lang)
-        print(f"✅ отправлено: {who} → {to}")
+        if test:
+            print(f"✅ пробное письмо ушло на {to} (в журнал не записано)")
+        else:
+            remember(who, to, lang)
+            print(f"✅ отправлено: {who} → {to}")
         return 0
     return 1
 
@@ -413,12 +419,14 @@ def main():
     ap.add_argument("--days", type=int, default=30, help="глубина свежести, дней")
     ap.add_argument("--limit", type=int, default=40, help="сколько показать")
     ap.add_argument("--id", help="писать по конкретной работе (её arXiv-номер)")
+    ap.add_argument("--test", action="store_true",
+                    help="пробное письмо себе: уходит, но в журнал не пишется")
     a = ap.parse_args()
 
     if a.candidates:
         return candidates(a.days, a.limit)
     if a.id:
-        return by_paper(a.id, a.lang, a.to, a.send)
+        return by_paper(a.id, a.lang, a.to, a.send or a.test, a.test)
 
     if a.log:
         w = written()
