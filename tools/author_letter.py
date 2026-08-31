@@ -285,6 +285,20 @@ def fresh_articles(days):
 RETAG = ROOT / "data" / "articles-retag-v2.json"
 
 
+def advice_on_page(date, aid, lang="en"):
+    """Стоит ли раздел рекомендаций НА СТРАНИЦЕ, а не только в данных.
+
+    Проверять данные оказалось мало. 31 августа у сорока четырёх свежих работ раздел
+    был записан, а страница собрана раньше — и письмо привело бы автора туда, где для
+    него ничего не написано. Проверка данных отвечает «мы это посчитали», проверка
+    страницы — «человек это увидит». Письмо обещает второе.
+    """
+    p = ROOT / "lang" / lang / "archive" / str(date) / aid / "advanced.html"
+    if not p.exists():
+        return False
+    return "km-advice" in p.read_text(encoding="utf-8", errors="ignore")
+
+
 def has_advice(date, aid):
     """Есть ли у работы раздел рекомендаций — тот самый значок ✛ на карточке.
 
@@ -334,8 +348,10 @@ def candidates(days, limit):
         if not n_con:
             no_mark += 1
             continue
-        # Плюсик обязателен: без раздела рекомендаций письму некуда вести.
-        if not has_advice(art.get("date"), art["id"]):
+        # Плюсик обязателен, и считается он ПО СТРАНИЦЕ: раздел в данных без раздела
+        # на странице — это обещание, которого читатель не увидит.
+        if not (has_advice(art.get("date"), art["id"])
+                and advice_on_page(art.get("date"), art["id"])):
             no_adv += 1
             continue
         mails = emails_of(art.get("date"), art["id"])

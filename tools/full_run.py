@@ -508,7 +508,7 @@ def main():
         "tr-formulas", "names-ru", "field", "retag-day", "retag", "apply", "hl-day",
         "super", "live-2", "vecnb",
         "live-3", "gnames", "weave", "live-4", "graph", "mentions-ru", "highlight",
-        "pages-c", "pages-f", "related", "cited", "carousel", "fx", "html", "lang-pages", "authors", "status", "cloud-d1", "cloud-vec",
+        "pages-c", "pages-f", "related", "cited", "carousel", "fx", "recommend", "html", "lang-pages", "authors", "status", "cloud-d1", "cloud-vec",
         "cards-sync", "deploy", "api", "pages", "audit", "gaudit", "links"])
     save(st)
 
@@ -669,6 +669,16 @@ def main():
     run("cited", [PY, "tools/cited_ours.py"], timeout=900, soft=True)
     run("carousel", [PY, "tools/carousel_frames.py"], timeout=3600, soft=True)
     run("fx", [PY, "tools/fix_inline_math.py"], timeout=1800, soft=True)
+
+    # РЕКОМЕНДАЦИИ АВТОРУ — ДО СБОРКИ, А НЕ ПОСЛЕ. Тот самый значок ✛: раздел «куда
+    # работа может пойти дальше». Шаг стоял только в недельном, и получалась неделя
+    # рассинхрона: статья вышла сегодня, рекомендации к ней написались в воскресенье,
+    # а страница с ними собралась ещё позже. Владелец 31.08 поймал это живьём — сорок
+    # четыре свежие работы с рекомендациями в данных и без раздела на странице.
+    # Порядок здесь и решает: разметка → рекомендации → страницы.
+    # Сорок за прогон с запасом покрывают дневную выработку полных разборов.
+    run("recommend", [PY, "tools/recommend.py", "--all-full", "--limit", "40"],
+        timeout=2 * 3600, soft=True)
 
     # Страница конвейера — ПЕРЕД сборкой: сборка её и выложит. Разметка страницы
     # меняется редко (данные она берёт запросом), но когда меняется — читатель
