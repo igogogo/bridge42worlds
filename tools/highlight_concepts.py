@@ -66,6 +66,38 @@ def norm(s):
     return s.lower().replace("\u0451", "\u0435")      # ё → е
 
 
+# ПИСЬМЕННОСТИ БЕЗ ГРАНИЦЫ СЛОВА. Разбор на слова (WORD) опирается на то, что слова
+# разделены не-буквой. В китайском, японском и корейском пробелов между словами нет
+# вовсе: замер 31.08 показал, что «黑洞是时空中引力极强的区域» становится ОДНИМ словом,
+# и сравнение по первым пяти буквам не найдёт 黑洞 никогда — подсветки не будет ни одной.
+#
+# Арабский пробелы имеет, но приклеивает артикли и предлоги к слову: на живой статье
+# арабский получил 2 маркера там, где английский получил 11. Это не про арабский язык,
+# это про правило поиска.
+#
+# Для таких языков правило другое и оно ПРОЩЕ: термин ЕСТЬ подстрока текста. Ищем
+# вхождением, а не совпадением слов. Для латиницы и кириллицы так нельзя — «ион»
+# нашёлся бы внутри «региона», — поэтому там правило прежнее.
+NO_WORD_BOUNDARY = {"zh", "ja", "ko", "ar", "he", "th"}
+
+
+def span_sub(text, name):
+    """Вхождение подстрокой ВНЕ существующих маркеров. Возвращает (начало, конец).
+
+    Регистр снимаем нормализацией, длину она не меняет: lower() и ё→е посимвольны,
+    а в письменностях без регистра не меняют ничего.
+    """
+    n = norm(name)
+    if not n:
+        return None
+    low = norm(text)
+    for zs, ze in free_zones(text):
+        i = low.find(n, zs, ze)
+        if i >= 0 and i + len(n) <= ze:
+            return i, i + len(n)
+    return None
+
+
 def same_word(w, h):
     """Одно и то же слово с точностью до окончания.
 
@@ -281,7 +313,7 @@ def dedupe(text):
     return MARKER_FULL.sub(one, text), seen, removed
 
 
-def mark_text(text, cands, names, used, strict=False):
+def mark_text(text, cands, names, used, strict=False, lang="ru"):
     """Одно вхождение на понятие: подсветка — это дорога вглубь, а не раскраска. Второе и
     третье упоминание того же понятия ведут туда же и только рябят в глазах.
 
@@ -290,24 +322,31 @@ def mark_text(text, cands, names, used, strict=False):
     Вставок на поле не больше двадцати (GLOSSARY_CAP), а понятий три с половиной
     тысячи, так что разборов стало на два порядка меньше."""
     cmp = same_word_strict if strict else same_word
+    by_sub = lang in NO_WORD_BOUNDARY
     added = []
     toks, pref = None, None
     for cid in cands:
         if cid in used or cid not in names:
             continue
         kind, name = names[cid]
-        want = [norm(w) for w in WORD.findall(name)]
-        if not want:
-            continue
-        if toks is None:
-            toks, pref = tokens_of(text)
-        # Указатель: у строгого сравнения первые пять букв обязаны совпасть, значит
-        # понятие, чьего зачина в тексте нет, можно отбросить одним поиском.
-        if strict and want[0][:5] not in pref:
-            continue
-        span = span_in(toks, want, cmp)
-        if not span:
-            continue
+        if by_sub:
+            # Письменность без границы слова: ищем вхождением целиком, как оно есть.
+            span = span_sub(text, name)
+            if not span:
+                continue
+        else:
+            want = [norm(w) for w in WORD.findall(name)]
+            if not want:
+                continue
+            if toks is None:
+                toks, pref = tokens_of(text)
+            # Указатель: у строгого сравнения первые пять букв обязаны совпасть, значит
+            # понятие, чьего зачина в тексте нет, можно отбросить одним поиском.
+            if strict and want[0][:5] not in pref:
+                continue
+            span = span_in(toks, want, cmp)
+            if not span:
+                continue
         a, b = span
         frag = text[a:b]
         text = text[:a] + "[" + kind + ":" + cid + "]" + frag + "[/" + kind + "]" + text[b:]
@@ -411,11 +450,12 @@ def process_article(path, reg, names_by_lang, tiers, dry, show=False):
                 s = data.get(f)
                 if not isinstance(s, str) or len(s) < 40:
                     continue
-                new, added = mark_text(s, cands, names, used)
+                new, added = mark_text(s, cands, names, used, lang=lang)
                 # Глоссарный проход — вторым: привязанные понятия уже заняли свои места,
                 # теперь любой термин реестра в тексте получает пояснение-подсказку.
                 if gcands and gleft > 0:
-                    new, gadded = mark_text(new, gcands, names, used, strict=True)
+                    new, gadded = mark_text(new, gcands, names, used, strict=True,
+                                            lang=lang)
                     if len(gadded) > gleft:
                         # перебор сверх потолка честно откатываем нельзя — потолок держим
                         # заранее: режем список кандидатов на следующее поле
