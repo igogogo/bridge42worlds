@@ -279,6 +279,24 @@ def fresh_articles(days):
 RETAG = ROOT / "data" / "articles-retag-v2.json"
 
 
+def has_advice(date, aid):
+    """Есть ли у работы раздел рекомендаций — тот самый значок ✛ на карточке.
+
+    Владелец 31.08: «те, что с плюсиками, по ним и рассылку». Это самый строгий и
+    самый честный отбор из возможных. Плюсик значит, что работа разобрана полностью
+    (а не пересказана по аннотации) и что машина знаний написала автору раздел «куда
+    это может пойти дальше», опираясь на конкретных векторных соседей. Письмо ведёт
+    человека ровно туда, где для него что-то написано.
+    """
+    for lang in ("ru", "en"):
+        p = ROOT / "lang" / lang / "archive" / str(date) / aid / "data.json"
+        if p.exists():
+            d = json.loads(p.read_text(encoding="utf-8"))
+            rec = d.get("recommend") or {}
+            return bool(rec.get("ru") or rec.get("en"))
+    return False
+
+
 def machine_marked():
     """Работы, которые ПРОШЛИ машину знаний: у них есть разметка понятий.
 
@@ -304,11 +322,15 @@ def candidates(days, limit):
     """Кому писать: свежие разборы, прошедшие машину знаний, с адресом из работы."""
     done = written()
     marked = machine_marked()
-    rows, no_mark, no_mail = [], 0, 0
+    rows, no_mark, no_mail, no_adv = [], 0, 0, 0
     for art in sorted(fresh_articles(days), key=lambda x: x.get("date", ""), reverse=True):
         n_con = marked.get(art["id"]) or marked.get(art["id"].split("v")[0]) or 0
         if not n_con:
             no_mark += 1
+            continue
+        # Плюсик обязателен: без раздела рекомендаций письму некуда вести.
+        if not has_advice(art.get("date"), art["id"]):
+            no_adv += 1
             continue
         mails = emails_of(art.get("date"), art["id"])
         if not mails:
@@ -328,7 +350,8 @@ def candidates(days, limit):
                     encoding="utf-8")
     print(f"свежих разборов за {days} дней: готовых к письму {len(rows)}"
           f"  → {CAND.relative_to(ROOT)}")
-    print(f"  отсеяно: без разметки машины знаний {no_mark} · без адреса в работе {no_mail}\n")
+    print(f"  отсеяно: без разметки понятий {no_mark} · без плюсика (нет рекомендаций) "
+          f"{no_adv} · без адреса в работе {no_mail}\n")
     for r in rows[:limit]:
         print(f"  {r['date']}  {r['id']:16} {r['concepts']:3} пон.  {r['to']:36} "
               f"{r['author'][:22]:24} {r['title'][:36]}")
