@@ -143,7 +143,9 @@ def sym_rows(an, lang, live, t):
 def formula_page(b, an, lang, live):
     t = T[lang]
     name = b.get("name") or b["base_id"]
-    out = [head(lang, name)]
+    out = [head(lang, name, canon=f"/lang/{lang}/formula/{b['base_id']}.html",
+                alts=list(ALWAYS_LANGS),
+                desc=(an or {}).get("plain") or (an or {}).get("meaning") or name)]
     out.append('<div class="tag-header">')
     out.append(f'<div class="tag-title-row"><h1>{H.escape(name)}</h1></div>')
     out.append(f'<div class="formula" style="font-size:20px;margin:12px 0">'
@@ -253,7 +255,8 @@ def formula_page(b, an, lang, live):
 
 def cloud(bases, lang, live):
     t = T[lang]
-    out = [head(lang, t["title"])]
+    out = [head(lang, t["title"], canon=f"/lang/{lang}/formula/index.html",
+                alts=list(ALWAYS_LANGS), desc=t["sub"].format(n=len(bases)))]
     out.append(f'<h1>{t["title"]}</h1>'
                f'<div class="subtitle">{t["sub"].format(n=len(bases))}</div>')
     # Разделы (владелец 27.08: «список по разделам как-то»): форма наследует раздел

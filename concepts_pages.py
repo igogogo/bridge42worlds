@@ -170,7 +170,68 @@ def av(path):
         return path
 
 
-def head(lang, title, body_class="entity-page", page_langs=None):
+SITE = "https://bridge42worlds.academy"
+
+
+def _desc(text, limit=175):
+    """Описание для выдачи: до конца предложения, а не по середине слова.
+
+    Google обрежет своё на ~160 знаках, но обрежет грубо. Лучше закончить мысль."""
+    t = " ".join(str(text or "").split())
+    if len(t) <= limit:
+        return t
+    cut = t[:limit]
+    for sep in (". ", "! ", "? "):
+        i = cut.rfind(sep)
+        if i > limit * 0.5:
+            return cut[:i + 1]
+    i = cut.rfind(" ")
+    return (cut[:i] if i > 0 else cut) + "…"
+
+
+def _seo(canon, alts, desc):
+    """canonical + hreflang + описание.
+
+    Страницы понятий строились без единого из этих тегов: charset, viewport, title —
+    и всё. Отчёт Google за 31 августа объяснил, чем это кончилось: в выборке из тысячи
+    проиндексированных адресов страниц понятий — НОЛЬ, при том что их 3 616 на язык и
+    это самый долгоживущий наш текст. Пять языковых версий по одному адресу-близнецу,
+    без canonical, без взаимных ссылок и без описания читаются поисковиком как пять
+    копий неизвестно чего. Статья такое имеет с самого начала — здесь просто забыли.
+    """
+    if not canon:
+        return ""
+    rows = []
+    if desc:
+        d = H.escape(_desc(desc), quote=True)
+        rows.append(f'<meta name="description" content="{d}">')
+        rows.append(f'<meta property="og:description" content="{d}">')
+    rows.append(f'<link rel="canonical" href="{SITE}{canon}">')
+    here = "/lang/" + lang_of(canon) + "/"
+
+    def other(l):
+        return SITE + canon.replace(here, "/lang/" + l + "/", 1)
+
+    for l in (alts or []):
+        rows.append(f'<link rel="alternate" hreflang="{l}" href="{other(l)}">')
+    if alts:
+        # x-default ведёт на русскую версию: русский у нас исходный, остальные —
+        # переводы с него, и читателю без подходящего языка честнее показать её.
+        # Если русской нет (понятие пока только по-английски), ведём на первую
+        # существующую: отправлять в переадресацию — тратить обход впустую.
+        rows.append('<link rel="alternate" hreflang="x-default" '
+                    f'href="{other("ru" if "ru" in alts else alts[0])}">')
+    return "".join(r + chr(10) for r in rows)
+
+
+def lang_of(path):
+    """Язык из адреса вида /lang/ar/concepts/x.html."""
+    parts = str(path).split("/")
+    return parts[2] if len(parts) > 2 and parts[1] == "lang" else "ru"
+
+
+def head(lang, title, body_class="entity-page", page_langs=None,
+         canon="", alts=None, desc=""):
     d = "rtl" if lang == "ar" else "ltr"
     return f"""<!DOCTYPE html>
 <html lang="{lang}" dir="{d}">
@@ -178,6 +239,9 @@ def head(lang, title, body_class="entity-page", page_langs=None):
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{H.escape(title)} — bridge42worlds</title>
+{_seo(canon, alts, desc)}<meta property="og:title" content="{H.escape(title, quote=True)}">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&family=Noto+Naskh+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
@@ -676,7 +740,13 @@ def concept_page(cid, c, lang, live, by_id, rich=None, page_langs=None):
     foreign = lang != "en" and not c["names"].get(lang)
     note = f' <span class="tag-ver" style="font-size:11px">{t["en_note"]}</span>' if foreign and t["en_note"] else ""
 
-    out = [head(lang, name, page_langs=page_langs or list(ALWAYS_LANGS))]
+    # Описание берём из популярного объяснения понятия — это первое, что читатель
+    # увидит в выдаче, и оно уже написано на его языке.
+    _r = (rich or {}).get(cid) or {}
+    out = [head(lang, name, page_langs=page_langs or list(ALWAYS_LANGS),
+                canon=f"/lang/{lang}/concepts/{cid}.html",
+                alts=list(page_langs or ALWAYS_LANGS),
+                desc=_r.get("description_popular") or c.get("si_definition") or "")]
     out.append('<div class="tag-header">')
     # Класс понятия — бейджем ПЕРЕД названием: владелец 26.08 «у понятий был класс,
     # метод, принцип и так далее — они остались?» Остались у всех 1222; бейдж делает
@@ -994,7 +1064,9 @@ def concept_page(cid, c, lang, live, by_id, rich=None, page_langs=None):
 def cloud_page(lang, live, by_id):
     t = T[lang]
     c = live["concepts"]
-    out = [head(lang, t["title"])]
+    out = [head(lang, t["title"], canon=f"/lang/{lang}/concepts/index.html",
+                alts=list(LANGS), desc=t.get("sub", "").format(n=len(c),
+                                                               g=len(live["groups"])))]
     out.append(f'<h1>{t["title"]}</h1>')
     gt = GRAPH_T.get(lang, GRAPH_T["en"])
     out.append(f'<div class="subtitle">{t["sub"].format(n=len(c), g=len(live["groups"]))}'
@@ -1174,7 +1246,8 @@ def section_page(section, lang, live):
     title = t.get(section, section)
     sub = (SEC_SUB.get(section, {}).get(lang)
            or SEC_SUB.get(section, {}).get("en") or t["sub"])
-    out = [head(lang, title)]
+    out = [head(lang, title, canon=f"/lang/{lang}/concepts/{section}.html",
+                alts=list(ALWAYS_LANGS), desc=sub.format(n=len(members)))]
     out.append(f'<h1>{H.escape(title)}</h1>')
     out.append(f'<div class="subtitle">{sub.format(n=len(members))} '
                f'&nbsp;<a href="/lang/{lang}/concepts/" '

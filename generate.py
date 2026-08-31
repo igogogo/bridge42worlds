@@ -5015,6 +5015,11 @@ def generate_sitemaps():
             for cp in sorted(cdir.glob("*.html")):
                 if cp.name == "index.html":
                     continue
+                # Понятие без перевода на этот язык — переадресация на английский
+                # (concepts_pages.py). Такие в карту не берём по той же причине, что
+                # и заглушки тегов: обход платит, индексировать нечего.
+                if cp.stat().st_size < 1200:
+                    continue
                 urls.append(f"{SITE_URL}/{LANG_DIR}/{lang}/concepts/{cp.name}")
             urls.append(f"{SITE_URL}/{LANG_DIR}/{lang}/concepts/index.html")
         fn = f"sitemap-{lang}.xml"
