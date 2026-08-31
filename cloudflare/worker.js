@@ -2635,18 +2635,46 @@ async function handleCardsByIds(request, env) {
 /* Поиск СЛОВАМИ. Отдельно от /api/search — тот ищет по смыслу через Vectorize и стоит
    денег, поэтому у него суточный предел на адрес. Этот бесплатен и работает по нашему же
    тексту карточек, полнотекстовым индексом SQLite. */
+const CJK = /[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f]/;
+
 async function handleWordSearch(request, env) {
   if (!env.CARDS) return noCards();
   const url = new URL(request.url);
   const { lang, version, limit, page, offset } = feedParams(url);
   const raw = (url.searchParams.get("q") || "").trim().slice(0, 120);
-  if (raw.length < 2) return Response.json({ items: [] });
+  /* Иероглифу хватает одного знака: 熵 это «энтропия», 光 это «свет». Порог в две
+     буквы поставлен для языков, где слово из одной буквы ничего не значит. */
+  if (raw.length < (CJK.test(raw) ? 1 : 2)) return Response.json({ items: [] });
   // Запрос читателя в синтаксис FTS не пускаем: кавычки, звёздочки и NEAR там значат
   // своё, и «C++» или «10^19» роняют разбор. Оставляем слова, каждое ищем как префикс.
-  const terms = raw.replace(/["'*(){}:^-]/g, " ").split(/\s+/)
-    .filter((w) => w.length > 1).slice(0, 8);
+  const clean = raw.replace(/["'*(){}:^-]/g, " ");
+  /* ПИСЬМЕННОСТИ БЕЗ ПРОБЕЛОВ. В индекс китайский текст пишется по знаку через
+     пробел (cards_sync.fts_body): иначе unicode61 делает из целого предложения один
+     токен, и поиск по слову не находит ничего. Значит и запрос надо превратить в
+     фразу из тех же знаков: 黑洞 → "黑 洞". Trigram-токенизатор эту задачу не решает
+     — он не видит запросов короче трёх знаков, а термины в науке сплошь двузначные.
+
+     Латиница внутри китайского запроса («LIGO 引力波») остаётся словом: в индексе она
+     тоже не разрывалась. */
+  const terms = [];
+  clean.split(/\s+/).forEach((w) => {
+    if (!w) return;
+    if (!CJK.test(w)) {
+      if (w.length > 1) terms.push(`"${w}"*`);
+      return;
+    }
+    // Разбираем на куски: подряд идущие иероглифы — фразой, остальное — словом.
+    (w.match(/[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f]+|[^\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f]+/g) || [])
+      .forEach((part) => {
+        if (CJK.test(part)) {
+          terms.push('"' + part.split("").join(" ") + '"');
+        } else if (part.trim().length > 1) {
+          terms.push(`"${part.trim()}"*`);
+        }
+      });
+  });
   if (!terms.length) return Response.json({ items: [] });
-  const q = terms.map((w) => `"${w}"*`).join(" AND ");
+  const q = terms.slice(0, 8).join(" AND ");
   let rows;
   try {
     rows = await env.CARDS.prepare(
