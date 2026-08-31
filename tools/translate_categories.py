@@ -62,6 +62,11 @@ def _system(lang):
     )
 
 
+def _clean(text):
+    from common import clean_json
+    return clean_json(text)
+
+
 def translate_chunk(chunk, lang, chat):
     # translate_flash, а не translate: названия разделов — короткие термины, дорогая
     # модель тут ничего не добавляет (та же логика, что у slim-перевода тиров).
@@ -70,7 +75,7 @@ def translate_chunk(chunk, lang, chat):
     # chat() возвращает ответ целиком (объект SDK), а не строку — текст лежит внутри.
     text = (resp.choices[0].message.content or "").strip()
     try:
-        out = json.loads(clean_json(text))
+        out = json.loads(_clean(text))
     except json.JSONDecodeError:
         print(f"    ⚠️ модель вернула не JSON — пропускаю пачку из {len(chunk)}")
         return {}
@@ -112,7 +117,11 @@ def main():
 
     chat = None
     if not dry:
-        from common import chat as _chat, clean_json
+        # clean_json нужен НЕ здесь, а в translate_chunk — модуль его и не видел:
+        # инструмент падал на первом же ответе модели с NameError. Он был написан
+        # ради того, чтобы разовую работу можно было повторить командой, но самой
+        # командой ни разу не воспользовались. Поймано 31.08 на китайском.
+        from common import chat as _chat
         chat = _chat
 
     total = 0
