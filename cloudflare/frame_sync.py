@@ -68,8 +68,15 @@ SCHEMA = [
          id       TEXT PRIMARY KEY,
          related  TEXT,             -- [id, ...] по смыслу, порядок значим
          cited    TEXT,             -- [id, ...] из цитируемого мы разбирали
-         frames   INTEGER DEFAULT 0 -- кадров карусели
+         frames   INTEGER DEFAULT 0,-- кадров карусели
+         mentions TEXT              -- [понятие, ...] дословно упомянутые в тексте
        )""",
+]
+
+# Столбцы, дописанные к существующей таблице: CREATE TABLE IF NOT EXISTS их не
+# добавит — таблица есть, и запрос молча ничего не делает.
+MIGRATIONS = [
+    "ALTER TABLE article_side ADD COLUMN mentions TEXT",
 ]
 
 KINDS = {"tag": "tags", "law": "laws", "sci": "scientists", "cat": "categories"}
@@ -139,6 +146,34 @@ def build_side(idx):
             cited = json.loads(p.read_text(encoding="utf-8"))
         except Exception:
             cited = {}
+    # УПОМИНАНИЯ — ВТОРАЯ СВЯЗЬ СТАТЬИ С ПОНЯТИЕМ, И ОНА НЕ РАВНА ПЕРВОЙ.
+    #
+    # Плашки (concepts_v2) отвечают на вопрос «о чём работа»: вектор с поправкой
+    # на хабность, общие понятия отброшены намеренно. Упоминания отвечают на другой
+    # вопрос — «какие слова в тексте стоит объяснить»: они находятся дословно и
+    # потому как раз общие. На статье 2608.26281 множества не пересеклись ВООБЩЕ:
+    # в тексте галактика, сверхновая, кислород; в плашках сверхновая Ia, Кассиопея А,
+    # Pantheon+. Обе разметки честные, просто разные.
+    #
+    # Читателю от этого было плохо: слово в тексте подсвечено, а в колонке и в
+    # мини-графе его нет. Везём вторую связь отдельным полем — рядом, но не вместо:
+    # смешать их значило бы отменить поправку на хабность и залить граф хабами.
+    mentions = {}
+    mp = ROOT / "data" / "concept-mentions.jsonl"
+    if mp.exists():
+        with mp.open(encoding="utf-8") as fh:
+            for line in fh:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    r = json.loads(line)
+                except Exception:
+                    continue
+                art, con = r.get("art"), r.get("concept")
+                if art and con:
+                    mentions.setdefault(art, []).append(con)
+
     frames = {}
     p = ROOT / "data" / "carousel.json"
     if p.exists():
@@ -170,10 +205,22 @@ def build_side(idx):
         r = _ids(rel.get(aid))
         c = _ids(cited.get(aid))
         n = frames.get(aid) or 0
-        if r or c or n:
+        # Журнал упоминаний зовёт работу без версии, папка — с версией.
+        base = str(aid).split("v")[0]
+        m = mentions.get(aid) or mentions.get(base) or []
+        # Порядок как в журнале (он идёт по тексту), повторы снимаем, потолок —
+        # чтобы колонка не превратилась в словарь: двадцати хватает с запасом.
+        seen, m2 = set(), []
+        for x in m:
+            if x not in seen:
+                seen.add(x)
+                m2.append(x)
+        m2 = m2[:20]
+        if r or c or n or m2:
             out[aid] = (json.dumps(r, ensure_ascii=False),
                         json.dumps(c, ensure_ascii=False),
-                        int(n))
+                        int(n),
+                        json.dumps(m2, ensure_ascii=False) if m2 else None)
     return out
 
 
@@ -225,6 +272,13 @@ def main():
 
     for sql in SCHEMA:
         cs.q(sql)
+    for sql in MIGRATIONS:
+        # ALTER на уже существующий столбец D1 отдаёт голый 400 — ожидаемый ответ
+        # при повторном прогоне, а не сбой.
+        try:
+            cs.q(sql)
+        except Exception:
+            pass
     # Полная перезапись связей: их немного, а вычислять разницу по четырём видам сущностей
     # дороже, чем залить заново. Порядок — сначала стереть, потом залить: обратный оставил бы
     # висеть связи с удалённых тегов, и страница показывала бы работы, которых там нет.
@@ -243,8 +297,9 @@ def main():
     print(f"  сводок залито: {n}")
 
     cs.q("DELETE FROM article_side")
-    rows = [(aid, r, c, f) for aid, (r, c, f) in side.items()]
-    n = push(rows, "INSERT OR REPLACE INTO article_side (id, related, cited, frames)", 4, batch=60)
+    rows = [(aid, r, c, f, m) for aid, (r, c, f, m) in side.items()]
+    n = push(rows, "INSERT OR REPLACE INTO article_side "
+                   "(id, related, cited, frames, mentions)", 5, batch=60)
     print(f"  обвязок залито: {n}")
     return 0
 

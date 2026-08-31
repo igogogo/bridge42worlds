@@ -4860,3 +4860,35 @@ body.graph-page { max-width: none; }
     .b42card { position: fixed; left: 8px !important; right: 8px;
         top: auto !important; bottom: 10px; width: auto; }
 }
+
+/* УПОМЯНУТЫЕ ПОНЯТИЯ — вторая связь статьи с понятием, и выглядеть она обязана
+   иначе. Плашки выше отвечают «о чём работа»: их считает вектор с поправкой на
+   хабность, и общие понятия он отбрасывает намеренно. Упоминания отвечают на
+   другой вопрос — «какие слова в тексте стоит объяснить», и это как раз общие
+   слова: галактика, сверхновая, кислород. Замер на статье 2608.26281: множества
+   не пересеклись ни одним понятием.
+
+   Отсюда и вид: без рамки, строчными, приглушённо. Читатель должен видеть, что
+   это подсказки к чтению, а не предмет работы. Одинаковый вид смешал бы два
+   разных утверждения в одно. */
+.article-side .side-mentions-label { margin-top: 10px; }
+.article-side .side-mention {
+    display: block; font-size: 10.5px; text-align: center;
+    text-decoration: none; color: var(--muted);
+    padding: 2px 6px; margin-bottom: 1px;
+    border-bottom: 1px dotted var(--hair);
+    transition: color .15s;
+}
+.article-side .side-mention:hover { color: var(--fg); }
+
+/* Кнопка «+ упомянуты» под мини-графом. Тихая: она предлагает добавить общие
+   слова к предмету работы, а не спорит с ним. */
+.b42mini-more {
+    margin-left: 10px; font: inherit; font-size: 11px;
+    background: transparent; border: 1px dotted var(--hair);
+    border-radius: 999px; padding: 1px 9px;
+    color: var(--muted); cursor: pointer; transition: all .15s;
+}
+.b42mini-more:hover { color: var(--fg); border-style: solid; }
+.b42mini-more[aria-pressed="true"] { color: var(--fg); border-style: solid;
+    background: var(--surface); }

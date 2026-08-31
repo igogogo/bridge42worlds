@@ -210,6 +210,9 @@ function sideArgs() {
           '&lang=' + args[1] + '&version=' + v)
         .then(function (r) { if (!r.ok) throw 0; return r.json(); })
         .then(function (d) {
+            // Упомянутые едут тем же ответом и рисуются независимо от похожих:
+            // у статьи может не быть соседей, а подсказки к чтению — есть.
+            drawMentions(d && d.mentions, args[1]);
             var box = document.getElementById('related');
             if (d && d.related && d.related.length && box) {
                 drawRelated(box, d.related.map(function (a) { return { a: a }; }),
@@ -225,6 +228,55 @@ function sideArgs() {
         })
         .catch(legacyRelated);
 })();
+
+/* УПОМЯНУТЫЕ В ТЕКСТЕ — тихим рядом под плашками.
+
+   Зачем вообще. Слово в тексте подсвечено и ведёт на понятие, а в колонке этого
+   понятия нет: плашки считает вектор с поправкой на хабность и общие понятия
+   отбрасывает намеренно (требование владельца 26.08 — «к общим не привязывать»).
+   Обе разметки правы, но читатель видел несогласие. Показываем вторую связь
+   рядом и НЕ вместо: слить их значило бы вернуть хабы в граф.
+
+   Разметку колонки не трогаем — находим её по уже стоящим плашкам и дописываем
+   ряд. Поэтому пересборка сайта для этого не нужна. */
+var MENTIONS_LBL = {
+    ru: 'Упомянуты', en: 'Mentioned', es: 'Mencionados',
+    ar: 'مذكورة', fr: 'Mentionnés'
+};
+
+function drawMentions(list, lang) {
+    if (!list || !list.length) return;
+    var side = document.querySelector('.article-side');
+    if (!side || side.querySelector('.side-mention')) return;
+    /* Уже стоящее плашкой не повторяем: одно понятие в двух рядах читается как
+       ошибка, а не как два разных утверждения. */
+    var have = {};
+    Array.prototype.forEach.call(
+        side.querySelectorAll('[data-tag], [data-law]'), function (a) {
+            have[a.dataset.tag || a.dataset.law] = 1;
+        });
+    var fresh = list.filter(function (m) { return m && m.id && !have[m.id]; });
+    if (!fresh.length) return;
+    var lbl = document.createElement('div');
+    lbl.className = 'side-tags-label side-mentions-label';
+    lbl.textContent = MENTIONS_LBL[lang] || MENTIONS_LBL.en;
+    side.appendChild(lbl);
+    fresh.slice(0, 14).forEach(function (m) {
+        var a = document.createElement('a');
+        a.className = 'side-mention';
+        a.href = '/lang/' + lang + '/concepts/' + encodeURIComponent(m.id) + '.html';
+        a.textContent = m.name || m.id.replace(/_/g, ' ');
+        a.dataset.tag = m.id;          // карточка понятия цепляется тем же признаком
+        side.appendChild(a);
+    });
+    /* Мини-графу отдаём те же понятия, но не рисуем их сами: у него свой потолок
+       узлов (на телефоне десяток), и решать, влезут ли, должен он. */
+    var g = document.getElementById('article-graph');
+    if (g && window.B42Mini && window.B42Mini.addMentions) {
+        window.B42Mini.addMentions(g, fresh.map(function (m) { return m.id; }),
+                                   MENTIONS_LBL[lang] || MENTIONS_LBL.en);
+    }
+}
 
 function legacyRelated() {
     if (window.__legacyRelStarted) return;

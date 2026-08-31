@@ -29,9 +29,55 @@ var LANG = document.documentElement.lang || 'en';
 var ARTS = ({ru: ' статей', es: ' artículos', ar: ' مقالة', fr: ' articles',
              zh: ' 篇文章'})[LANG] || ' articles';
 
+var _G = null;
 CORE.data().then(function (G) {
+    _G = G;
     boxes.forEach(function (box) { init(box, G); });
 });
+
+/* УПОМЯНУТЫЕ ПОНЯТИЯ — ПО КНОПКЕ, А НЕ САМИ.
+
+   Мини-граф показывает ПРЕДМЕТ работы: понятия, которые вектор выбрал с поправкой
+   на хабность. Упоминания — другое: это слова текста, и их вдвое больше (замер по
+   архиву: 12,9 плашек против 16,8 упоминаний на статью). Высыпать их в кадр значит
+   утопить предмет в общих словах — на телефоне потолок вообще десять узлов.
+
+   Поэтому решает читатель. Кнопка появляется, только если есть что добавить, и
+   только когда обвязка статьи уже пришла (её ставит js/scroll.js). Повторное
+   нажатие возвращает прежний кадр — узнать, что тут своё, а что общее, можно
+   переключением. */
+window.B42Mini = window.B42Mini || {};
+window.B42Mini.addMentions = function (box, ids, label) {
+    if (!box || !ids || !ids.length || box.dataset.mentions) return;
+    var have = (box.dataset.ids || '').split(',');
+    var fresh = ids.filter(function (x) { return have.indexOf(x) < 0; });
+    if (!fresh.length) return;
+    box.dataset.mentions = fresh.join(',');
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'b42mini-more';
+    btn.textContent = '+ ' + (label || 'mentioned').toLowerCase();
+    var on = false;
+    btn.onclick = function () {
+        on = !on;
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        var base = (box.dataset.base || box.dataset.ids);
+        if (!box.dataset.base) box.dataset.base = base;
+        box.dataset.ids = on ? (base + ',' + box.dataset.mentions) : base;
+        remount(box);
+    };
+    var note = box.nextElementSibling;
+    (note && note.classList.contains('b42mini-note') ? note : box).appendChild(btn);
+};
+
+/* Пересобрать кадр на месте: старый холст убираем, иначе их станет два. */
+function remount(box) {
+    if (!_G) return;
+    var old = box.querySelector('canvas');
+    if (old) old.remove();
+    box.style.display = '';
+    init(box, _G);
+}
 
 // Имя узла воркер отдаёт готовым полем name — на языке страницы; пара ru/en
 // осталась дном для кадров, которые ещё держит кэш браузера.

@@ -2835,7 +2835,7 @@ const LINK_KINDS = ["tag", "law", "sci", "cat", "concept"];
    числа карточка константы в ленте ничем не отличается от любой другой, а по
    разделу списки фильтруются. */
 const CONCEPT_COLS = "id, kind, name_ru, name_en, card, n_arts, n_links, groups, cat, "
-  + "value, unit, symbol, section, part, names";
+  + "value, unit, symbol, section, part, names, n_mentions";
 
 /* ИМЯ ПОНЯТИЯ НА ЯЗЫКЕ СТРАНИЦЫ - одним местом на весь воркер.
 
@@ -2871,6 +2871,8 @@ function conceptRow(r, lang) {
     id: r.id, kind: r.kind,
     name: cname(r, lang),
     card: r.card, n: r.n_arts, links: r.n_links,
+    // «упомянуто в M» — вторая мера веса понятия, рядом с опорой, но не вместо
+    mentions: r.n_mentions || 0,
     groups: r.groups ? JSON.parse(r.groups) : [], cat: r.cat,
     value: r.value || null, unit: r.unit || null, symbol: r.symbol || null,
     section: r.section || null, part: r.part || null,
@@ -3192,9 +3194,10 @@ async function handleArticleSide(request, env) {
     return Response.json({ error: "bad_id" }, { status: 400 });
   }
   const r = await env.CARDS.prepare(
-    "SELECT related, cited, frames FROM article_side WHERE id = ? OR id = ? || 'v1'")
+    "SELECT related, cited, frames, mentions FROM article_side" +
+    " WHERE id = ? OR id = ? || 'v1'")
     .bind(id, id).first();
-  if (!r) return feedJson({ related: [], cited: [], frames: 0 }, 600);
+  if (!r) return feedJson({ related: [], cited: [], frames: 0, mentions: [] }, 600);
   const j = (s) => { try { return JSON.parse(s || "[]"); } catch { return []; } };
   // Карточки похожих отдаём сразу, тем же ответом: иначе клиенту нужен второй заход
   // в /api/cards, а похожие — самый частый блок на странице статьи.
@@ -3209,7 +3212,33 @@ async function handleArticleSide(request, env) {
     by = new Map((rows.results || []).map((x) => [x.id, feedRow(x)]));
   }
   const pick = (arr) => arr.map((i) => by.get(i)).filter(Boolean);
-  const out = feedJson({ related: pick(rel), cited: pick(cit), frames: r.frames || 0 }, 600);
+
+  /* УПОМЯНУТЫЕ ПОНЯТИЯ — вторая связь статьи с понятием, не равная плашкам.
+     Плашки отвечают «о чём работа» (вектор, общие понятия отброшены намеренно),
+     упоминания — «какие слова в тексте стоит объяснить», и они как раз общие.
+     Читателю было плохо от того, что подсвеченного в тексте слова нет ни в
+     колонке, ни в мини-графе; везём его сюда, но отдельным полем: смешать
+     значило бы отменить поправку на хабность.
+
+     Имена берём из реестра тем же способом, что и везде (cname), чтобы испанец
+     видел испанское. Запрос один на статью и только если упоминания есть. */
+  let mentions = [];
+  const mids = j(r.mentions);
+  if (mids.length) {
+    const mk = mids.slice(0, 20);
+    const marks2 = mk.map(() => "?").join(",");
+    const mrows = await env.CARDS.prepare(
+      "SELECT id, name_ru, name_en, names, kind, n_arts FROM concepts" +
+      ` WHERE id IN (${marks2})`).bind(...mk).all();
+    const byId = new Map((mrows.results || []).map((x) => [x.id, x]));
+    mentions = mk.map((cid) => {
+      const c = byId.get(cid);
+      return c ? { id: cid, name: cname(c, lang), kind: c.kind || "concept",
+                   n: c.n_arts || 0 } : null;
+    }).filter(Boolean);
+  }
+  const out = feedJson({ related: pick(rel), cited: pick(cit),
+                         frames: r.frames || 0, mentions: mentions }, 600);
   request.method === "GET" && (await cache.put(request, out.clone()));
   return out;
 }

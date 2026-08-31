@@ -118,7 +118,8 @@ SCHEMA = [
          symbol   TEXT,               -- её символ: «e»
          section  TEXT,               -- раздел по смыслу: statistics | constant | …
          part     TEXT,               -- часть раздела: «Проверка гипотез»
-         names    TEXT                -- {"ru":…, "en":…, "es":…} — ВСЕ языки одним полем
+         names    TEXT,               -- {"ru":…, "en":…, "es":…} — ВСЕ языки одним полем
+         n_mentions INTEGER DEFAULT 0  -- в скольких статьях понятие УПОМЯНУТО дословно
        )""",
     # ПОЛНАЯ ЗАПИСЬ — СТРОКОЙ НА ЯЗЫК, А НЕ СТОЛБЦОМ НА ЯЗЫК. Столбцы full_en и
     # full_ru появились, когда языков было два, и с тех пор испанец, араб и француз
@@ -196,6 +197,7 @@ MIGRATIONS = [
     "ALTER TABLE concepts ADD COLUMN section TEXT",
     "ALTER TABLE concepts ADD COLUMN part TEXT",
     "ALTER TABLE concepts ADD COLUMN names TEXT",
+    "ALTER TABLE concepts ADD COLUMN n_mentions INTEGER DEFAULT 0",
     "ALTER TABLE graph_groups ADD COLUMN labels TEXT",
     "ALTER TABLE graph_groups ADD COLUMN notes TEXT",
     "CREATE INDEX IF NOT EXISTS concepts_section ON concepts(section, n_arts DESC)",
@@ -372,6 +374,29 @@ def main():
     C = {cid: v for cid, v in C.items() if not v.get("merged_into")}
 
     if not a.frames:
+        # ДВА ЧИСЛА У ПОНЯТИЯ, И ОНИ РАЗНЫЕ. n_arts — опора: статьи, О КОТОРЫХ
+        # понятие. n_mentions — в скольких статьях оно дословно упомянуто. Первое
+        # решает, состоялось ли понятие; второе показывает, насколько оно на слуху.
+        # Раньше видно было только первое, и 271 страница стояла пустой при том,
+        # что 157 из них упомянуты в пяти и более статьях.
+        n_men = {}
+        mp = ROOT / "data" / "concept-mentions.jsonl"
+        if mp.exists():
+            seen = set()
+            with mp.open(encoding="utf-8") as fh:
+                for line in fh:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    try:
+                        r = json.loads(line)
+                    except Exception:
+                        continue
+                    k = (r.get("concept"), r.get("art"))
+                    if k[0] and k[1] and k not in seen:
+                        seen.add(k)
+                        n_men[k[0]] = n_men.get(k[0], 0) + 1
+            print(f"упоминаний: понятий с упоминаниями {len(n_men)}")
         rows = []
         for cid, v in C.items():
             g = gnode.get(cid) or {}
@@ -388,11 +413,12 @@ def main():
                 v.get("value"), v.get("unit"), v.get("symbol"),
                 v.get("section"), v.get("section_part"),
                 v.get("names") or None,
+                n_men.get(cid, 0),
             ])
         push("concepts", ["id", "kind", "name_ru", "name_en", "card", "n_arts",
                           "n_links", "groups", "cat", "full_en", "full_ru",
                           "systems", "value", "unit", "symbol", "section",
-                          "part", "names"], rows, "понятия")
+                          "part", "names", "n_mentions"], rows, "понятия")
 
         # Полные записи по языкам. Английская — исходная (v["full"]), остальные
         # лежат переводами в full_i18n. Язык, которого у понятия нет, строкой не

@@ -39,21 +39,27 @@ var lastX = 0, lastY = 0;
 var STRINGS = {
     ru: { more: 'Подробно', close: 'Закрыть', arts: 'статей', links: 'связей',
           wait: 'смотрю…', none: 'Карточки пока нет', graph: 'В графе',
-          fact: 'Кстати', wider: 'Шире', deeper: 'Глубже' },
+          fact: 'Кстати', wider: 'Шире', mentioned: 'упоминаний',
+          deeper: 'Глубже' },
     es: { more: 'Detalles', close: 'Cerrar', arts: 'artículos', links: 'enlaces',
           wait: 'cargando…', none: 'Aún no hay ficha', graph: 'En el grafo',
-          fact: 'Por cierto', wider: 'Más amplio', deeper: 'Más profundo' },
+          fact: 'Por cierto', wider: 'Más amplio', mentioned: 'menciones',
+          deeper: 'Más profundo' },
     ar: { more: 'تفاصيل', close: 'إغلاق', arts: 'مقالة', links: 'روابط',
           wait: 'جارٍ التحميل…', none: 'لا توجد بطاقة بعد', graph: 'في الرسم البياني',
-          fact: 'بالمناسبة', wider: 'أوسع', deeper: 'أعمق' },
+          fact: 'بالمناسبة', wider: 'أوسع', mentioned: 'إشارة',
+          deeper: 'أعمق' },
     fr: { more: 'Détails', close: 'Fermer', arts: 'articles', links: 'liens',
           wait: 'chargement…', none: 'Pas encore de fiche', graph: 'Dans le graphe',
-          fact: 'Au fait', wider: 'Plus large', deeper: 'Plus profond' },
+          fact: 'Au fait', wider: 'Plus large', mentioned: 'mentions',
+          deeper: 'Plus profond' },
     zh: { more: '详情', close: '关闭', arts: '篇文章', links: '关联',
           wait: '加载中…', none: '暂无卡片', graph: '在图谱中',
-          fact: '顺带一提', wider: '更广', deeper: '更深' }
+          fact: '顺带一提', wider: '更广', mentioned: '次提及',
+          deeper: '更深' }
 };
 var EN = { more: 'Details', close: 'Close', arts: 'articles', links: 'links',
+           mentioned: 'mentions',
            wait: 'loading…', none: 'No card yet', graph: 'In graph',
            fact: 'By the way', wider: 'Broader', deeper: 'Deeper' };
 var T = Object.assign({}, EN, STRINGS[LANG] || {});
@@ -198,6 +204,13 @@ function render(d, id, rel) {
     var stats = [];
     if (d.n) stats.push(d.n + ' ' + T.arts);
     if (d.links) stats.push(d.links + ' ' + T.links);
+    /* ВТОРОЕ ЧИСЛО ПОНЯТИЯ. n — опора: статьи, О КОТОРЫХ понятие; mentions — в
+       скольких статьях оно дословно упомянуто. Показываем упоминания только когда
+       их БОЛЬШЕ опоры: иначе строка ничего не добавляет, а место занимает. Для
+       понятия без опоры это единственный признак жизни — таких страниц 157. */
+    if (d.mentions && d.mentions > (d.n || 0)) {
+        stats.push(d.mentions + ' ' + T.mentioned);
+    }
     /* Текст по уровню чтения. Популярного описания нет у 512 понятий из 3 589 —
        там честно остаётся формальное, а не пустое место. */
     var full = d.full || {};
