@@ -271,11 +271,23 @@ function drawMentions(list, lang) {
     });
     /* Мини-графу отдаём те же понятия, но не рисуем их сами: у него свой потолок
        узлов (на телефоне десяток), и решать, влезут ли, должен он. */
+    /* Мини-граф может ещё не загрузиться: обвязка приходит запросом, а b42-mini.js
+       выполняется своим чередом. Кто быстрее — зависит от сети, и на проде победил
+       запрос: кнопка «+ упомянуты» молча не ставилась. Ждём готовности с потолком,
+       а не надеемся на порядок загрузки. */
     var g = document.getElementById('article-graph');
-    if (g && window.B42Mini && window.B42Mini.addMentions) {
-        window.B42Mini.addMentions(g, fresh.map(function (m) { return m.id; }),
-                                   MENTIONS_LBL[lang] || MENTIONS_LBL.en);
-    }
+    if (!g) return;
+    var ids = fresh.map(function (m) { return m.id; });
+    var label = MENTIONS_LBL[lang] || MENTIONS_LBL.en;
+    var tries = 0;
+    (function ready() {
+        if (window.B42Mini && window.B42Mini.addMentions) {
+            window.B42Mini.addMentions(g, ids, label);
+            return;
+        }
+        if (++tries > 40) return;      // четыре секунды; дольше ждать нечего
+        setTimeout(ready, 100);
+    })();
 }
 
 function legacyRelated() {
