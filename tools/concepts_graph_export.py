@@ -307,7 +307,30 @@ def main():
                 share = raw / total
                 score = share * (raw ** 0.5) / (n_arts ** 0.25)
                 sci_link[nm].append((score, raw, idx[cid]))
+    # СПРАВОЧНИК УЧЁНЫХ — ИМЯ И ОПИСАНИЕ НА ЯЗЫКАХ. Узел учёного выходил с пустым
+    # русским именем и пустой карточкой: под курсором читатель видел латиницу и
+    # «scientist · 39 ст.», и ничего о человеке. А справочник лежит рядом — тот же,
+    # по которому собраны страницы /scientists/.
+    sci_loc = {}
+    for lg in ("ru", "en", "es", "ar", "fr"):
+        f = ROOT / "lang" / lg / "data" / "scientists.json"
+        if f.exists():
+            try:
+                sci_loc[lg] = json.loads(f.read_text(encoding="utf-8"))
+            except Exception:
+                pass
+
+    def sci_names(nm):
+        out = {}
+        for lg, d in sci_loc.items():
+            v = (d.get(nm) or {}).get("name")
+            if v and v != nm:
+                out[lg] = v
+        return out
+
     n_sci = 0
+    sci_of = {}                      # имя → индекс узла, для связей между учёными
+    sci_concepts = {}                # имя → множество понятий, с которыми он связан
     for nm, lst in sci_link.items():
         lst.sort(reverse=True)
         si = len(nodes)
@@ -315,17 +338,49 @@ def main():
         # раздел и область берём у самого характерного понятия: учёный садится
         # там, где работал, а не в общей куче
         first = nodes[top[0][2]] if top else {}
+        nms = sci_names(nm)
+        card = ((sci_loc.get("en", {}).get(nm) or {}).get("description")
+                or (sci_loc.get("ru", {}).get(nm) or {}).get("description") or "")
+        life = ((sci_loc.get("en", {}).get(nm) or {}).get("lifespan") or "")
         nodes.append({
-            "id": "s:" + nm, "en": nm, "ru": "",
+            "id": "s:" + nm, "en": nm, "ru": nms.get("ru", ""),
+            "names": nms,
             "kind": "scientist", "g": first.get("g"),
             "n": sum(raw for _s, raw, _i in lst),
-            "card": "", "cat": first.get("cat"),
+            "card": ((life + " · ") if life else "") + card[:200],
+            "cat": first.get("cat"),
         })
+        sci_of[nm] = si
+        sci_concepts[nm] = {ci for _s, _r, ci in lst}
         n_sci += 1
         for _score, raw, ci in top:
             edges.append([ci, si, max(1, int(raw))])
+
+    # УЧЁНЫЕ СВЯЗАНЫ МЕЖДУ СОБОЙ. Владелец 31.08: «учёные тоже должны быть связаны
+    # между собой через понятия или статьи». До сих пор рёбер учёный-учёный было
+    # ровно ноль: каждый висел на своих четырёх понятиях, и кадр из десяти имён
+    # рассыпался на десять звёздочек. Мера — сколько понятий у двоих общих: это и
+    # есть «работали об одном». Берём по четыре сильнейших связи на человека, иначе
+    # Эйнштейн соединится с половиной списка и рисунок утонет.
+    names = sorted(sci_of)
+    pairs = []
+    for i, a1 in enumerate(names):
+        for a2 in names[i + 1:]:
+            common = len(sci_concepts[a1] & sci_concepts[a2])
+            if common >= 2:
+                pairs.append((common, a1, a2))
+    pairs.sort(reverse=True)
+    kept = defaultdict(int)
+    n_ss = 0
+    for common, a1, a2 in pairs:
+        if kept[a1] >= 4 or kept[a2] >= 4:
+            continue
+        kept[a1] += 1
+        kept[a2] += 1
+        edges.append([sci_of[a1], sci_of[a2], common])
+        n_ss += 1
     if n_sci:
-        print(f"  учёных узлами: {n_sci}")
+        print(f"  учёных узлами: {n_sci} · связей между ними: {n_ss}")
 
     # note_* — строка «о чём эта область»: панель графа показывает её под
     # названием, чтобы круг на обзоре объяснял себя сам.
@@ -360,6 +415,16 @@ def main():
             c = ((v.get("full_i18n") or {}).get(lang) or {}).get("card")
             if c:
                 cards[cid] = c[:220]
+        # УЧЁНЫЕ — В ТОТ ЖЕ ФАЙЛ. Их описание переведено (справочник /scientists/ живёт
+        # на всех языках), а в самом графе лежит английское: под курсором русскому
+        # читателю показывали английскую строку про человека, о котором он читает
+        # по-русски. Имя остаётся латиницей — так на сайте везде.
+        sd = sci_loc.get(lang) or {}
+        for nm, v in sd.items():
+            d = (v or {}).get("description")
+            if d:
+                life = (v.get("lifespan") or "")
+                cards["s:" + nm] = (((life + " · ") if life else "") + d)[:220]
         f = ROOT / "data" / f"graph-cards-{lang}.json"
         f.write_text(json.dumps(cards, ensure_ascii=False), encoding="utf-8")
         print(f"   карточки {lang}: {len(cards)} → {f.name} ({f.stat().st_size // 1024} КБ)")
