@@ -2414,7 +2414,8 @@ async function handleSummary(request, env) {
   const q = (sql, ...b) => env.CARDS.prepare(sql).bind(...b).all()
     .catch(() => ({ results: [] }));
 
-  const [arts, cats, kinds, conc, forms, areas, auth, top, langs] = await Promise.all([
+  const [arts, cats, kinds, conc, forms, areas, auth, top, langs, sci, sciN, secs] =
+    await Promise.all([
     q(`SELECT COUNT(*) n, SUM(express) ex, SUM(km) km, MAX(date) last,
               SUM(CASE WHEN image IS NOT NULL AND image != '' THEN 1 ELSE 0 END) img
          FROM cards WHERE lang = ? AND version = ?`, lang, version),
@@ -2430,6 +2431,14 @@ async function handleSummary(request, env) {
     q(`SELECT id, name_ru, name_en, names, n_arts FROM concepts
         WHERE n_arts > 0 ORDER BY n_arts DESC LIMIT 12`),
     q(`SELECT lang l, COUNT(*) n FROM cards WHERE version = ? GROUP BY lang`, version),
+    // Учёные и разделы — из готовых сводок entity_stats: там уже посчитано «всего» и
+    // «сколько из них экспресс», а полосе разделов нужно именно это. Считать заново
+    // по карточкам значило бы повторить работу, которую делает заливка.
+    q(`SELECT key, total FROM entity_stats WHERE kind = 'sci'
+        ORDER BY total DESC LIMIT 12`),
+    q(`SELECT COUNT(*) n FROM entity_stats WHERE kind = 'sci'`),
+    q(`SELECT key, total, express FROM entity_stats WHERE kind = 'cat'
+        ORDER BY total DESC`),
   ]);
 
   const one = (r, f, d) => ((r.results || [])[0] || {})[f] ?? d;
@@ -2450,6 +2459,10 @@ async function handleSummary(request, env) {
     cats: catMap,
     langs: langMap,
     top: (top.results || []).map((r) => ({ id: r.id, n: r.n_arts, name: cname(r, lang) })),
+    scientists: one(sciN, "n", 0),
+    topSci: (sci.results || []).map((r) => ({ name: r.key, n: r.total })),
+    secStats: (secs.results || []).map((r) => ({ cat: r.key, n: r.total,
+                                                 full: r.total - (r.express || 0) })),
   }, 600);
   request.method === "GET" && (await cache.put(request, out.clone()));
   return out;

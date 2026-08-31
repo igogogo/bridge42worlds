@@ -8,7 +8,7 @@
     if (!root) return;
 
     var L = ({
-        ru: { title:'Сводка проекта', articles:'статей', full:'полных', express:'экспресс', laws:'законов',
+        ru: { concepts:'понятий', formulas:'формул', areas:'областей', topConcepts:'Частые понятия', cWithArts:'понятий с опорой', cNoArts:'понятий без статей', cOnlyMent:'только упоминаются',  title:'Сводка проекта', articles:'статей', full:'полных', express:'экспресс', laws:'законов',
               tags:'тегов', sections:'разделов', scientists:'учёных', authors:'авторов', langs:'языка',
               nodes:'узлов графа', edges:'рёбер', activity:'Активность по дням', dynamics:'Динамика по месяцам',
               bySection:'Охват по разделам', kitchen:'Кухня: обложки и покрытие', covers:'Обложки',
@@ -26,13 +26,13 @@
               sciNoArticles:'учёных без статей', machine:'Машинное время', calls:'запросов к модели',
               tokensM:'млн токенов', cachePct:'взято из кэша', byAgent:'По шагам работы',
               period:'период', ofMax:'от максимума' },
-        en: { title:'Project dashboard', articles:'articles', full:'full', express:'express', laws:'laws',
+        en: { concepts:'concepts', formulas:'formulas', areas:'areas', topConcepts:'Top concepts', cWithArts:'concepts with support', cNoArts:'concepts without papers', cOnlyMent:'mentioned only',  title:'Project dashboard', articles:'articles', full:'full', express:'express', laws:'laws',
               tags:'tags', sections:'sections', scientists:'scientists', authors:'authors', langs:'languages',
               nodes:'graph nodes', edges:'edges', activity:'Daily activity', dynamics:'Monthly dynamics',
               bySection:'Coverage by area', kitchen:'Behind the scenes: covers & coverage', covers:'Covers',
               withCover:'with cover', noCover:'no cover', km:'Knowledge machine', kmOf:'of full reviews', kmNote:'Full reviews that carry a section of recommendations for the author', topTags:'Top tags', topSci:'Top scientists',
               perDay:'articles that day', updated:'updated', loading:'Crunching the data…', none:'—' },
-        es: { title:'Panel del proyecto', articles:'artículos', full:'completos', express:'exprés', laws:'leyes',
+        es: { concepts:'conceptos', formulas:'fórmulas', areas:'áreas', topConcepts:'Conceptos frecuentes', cWithArts:'conceptos con apoyo', cNoArts:'conceptos sin trabajos', cOnlyMent:'solo mencionados',  title:'Panel del proyecto', articles:'artículos', full:'completos', express:'exprés', laws:'leyes',
               tags:'etiquetas', sections:'secciones', scientists:'científicos', authors:'autores', langs:'idiomas',
               nodes:'nodos', edges:'aristas', activity:'Actividad diaria', dynamics:'Dinámica mensual',
               bySection:'Cobertura por área', kitchen:'Tras bambalinas: portadas y cobertura', covers:'Portadas',
@@ -51,7 +51,7 @@
               machine:'Tiempo de máquina', calls:'llamadas al modelo', tokensM:'M de tokens',
               cachePct:'servido desde caché', byAgent:'Por etapa de trabajo', period:'periodo',
               ofMax:'del máximo' },
-        ar: { title:'لوحة المشروع', articles:'مقالات', full:'كاملة', express:'سريعة', laws:'قوانين',
+        ar: { concepts:'مفاهيم', formulas:'صيغ', areas:'مجالات', topConcepts:'مفاهيم متكررة', cWithArts:'مفاهيم لها سند', cNoArts:'مفاهيم بلا أبحاث', cOnlyMent:'مذكورة فقط',  title:'لوحة المشروع', articles:'مقالات', full:'كاملة', express:'سريعة', laws:'قوانين',
               tags:'وسوم', sections:'أقسام', scientists:'علماء', authors:'مؤلفين', langs:'لغات',
               nodes:'عقدة', edges:'حافة', activity:'النشاط اليومي', dynamics:'الديناميكية الشهرية',
               bySection:'التغطية حسب المجال', kitchen:'من الكواليس: الأغلفة والتغطية', covers:'الأغلفة',
@@ -71,7 +71,7 @@
         // Французский появился пятым языком позже дашборда, и до сих пор весь его текст
         // приезжал из английского фолбэка — читатель видел «Daily activity» на французской
         // странице. Ключи те же, что у остальных.
-        fr: { title:'Tableau de bord du projet', articles:'articles', full:'complets', express:'express',
+        fr: { concepts:'concepts', formulas:'formules', areas:'domaines', topConcepts:'Concepts fréquents', cWithArts:'concepts avec appui', cNoArts:'concepts sans travaux', cOnlyMent:'seulement mentionnés',  title:'Tableau de bord du projet', articles:'articles', full:'complets', express:'express',
               laws:'lois', tags:'tags', sections:'sections', scientists:'scientifiques', authors:'auteurs',
               langs:'langues', nodes:'nœuds', edges:'arêtes', activity:'Activité quotidienne',
               dynamics:'Dynamique mensuelle', bySection:'Couverture par domaine',
@@ -94,7 +94,9 @@
     })[window.lang] || null;
     // Английская карта — база-фолбэк: любой ключ, которого нет в языковой карте (напр. v2-подписи
     // добавлены только в ru/en), берётся отсюда, чтобы не было "undefined".
-    var DEFAULT = { title:'Dashboard', articles:'articles', full:'full', express:'express', laws:'laws',
+    var DEFAULT = { title:'Dashboard', concepts:'concepts', formulas:'formulas',
+        areas:'areas', topConcepts:'Top concepts', cWithArts:'concepts with support',
+        cNoArts:'concepts without papers', cOnlyMent:'mentioned only', articles:'articles', full:'full', express:'express', laws:'laws',
         tags:'tags', sections:'sections', scientists:'scientists', authors:'authors', langs:'languages',
         nodes:'nodes', edges:'edges', activity:'Daily activity', dynamics:'Monthly dynamics',
         bySection:'Coverage by area', kitchen:'Covers & coverage', covers:'Covers', withCover:'with cover',
@@ -125,47 +127,63 @@
     // и через 12 секунд он показывал 0 статей при живом корпусе. Теперь три источника
     // запрашиваются явно: индекс (вся сводка), справочники (теги/законы/учёные), граф авторов
     // (счётчик авторов — он по той же причине показывал 0).
+    /* ДАННЫЕ ИЗ ОБЛАКА, А НЕ ИЗ ИНДЕКСА.
+       Здесь качались индекс статей (14,2 МБ) и граф авторов (24,5 МБ) — тридцать
+       девять мегабайт ради полусотни чисел, которые целиком считаются запросом.
+       Владелец 31.08: «всё должно быть в облаке, все индексы».
+       /api/summary — словарь и итоги, /api/corpus — дни (для карты и динамики). */
+    var API = (window.B42_API || '').replace(/\/$/, '');
+    var qs = '?lang=' + encodeURIComponent(window.lang || 'ru') + '&version=popular';
     Promise.all([
-        window.ensureSearchIndex ? window.ensureSearchIndex() : Promise.resolve(window.searchIndex || []),
-        window.B42Refs || Promise.resolve({}),
-        window.ensureAuthorsGraph ? window.ensureAuthorsGraph() : Promise.resolve({})
-    ]).then(function (r) { build(r[0]); })
-      // Сводка без части данных лучше вечного «Собираем данные…»: рисуем тем, что доехало.
-      .catch(function (e) { console.error('Dashboard data error:', e); build(window.searchIndex || []); });
+        fetch(API + '/api/summary' + qs).then(function (r) { return r.ok ? r.json() : null; }),
+        fetch(API + '/api/corpus' + qs).then(function (r) { return r.ok ? r.json() : null; })
+    ]).then(function (r) { build(r[0], r[1]); })
+      .catch(function (e) {
+          console.error('Dashboard data error:', e);
+          var box = document.getElementById('dashboard');
+          if (box) box.innerHTML = '<p class="dash-empty">' + esc(T.loading) + '</p>';
+      });
 
-    function build(index) {
-        var idx = index || window.searchIndex || [];
-        // Уникальные статьи по id (в индексе 3 тира на статью).
-        var byId = {};
-        idx.forEach(function (a) { if (!byId[a.id]) byId[a.id] = a; });
-        var arts = Object.keys(byId).map(function (k) { return byId[k]; });
+    function build(S, C) {
+        S = S || {}; C = C || {};
+        var A = S.articles || {}, CN = S.concepts || {};
+        var nA = A.total || 0, express = A.express || 0, full = A.full || 0;
+        var withImg = A.covers || 0, kmN = A.km || 0;
 
-        var express = 0, withImg = 0;
-        var byDay = {}, byMonth = {}, bySection = {}, tagCount = {}, sciCount = {};
-        arts.forEach(function (a) {
-            if (a.express) express++;
-            if (a.image !== false) withImg++;
-            if (a.date) { byDay[a.date] = (byDay[a.date] || 0) + 1;
-                var m = a.date.slice(0, 7); if (!byMonth[m]) byMonth[m] = { full: 0, express: 0 };
-                byMonth[m][a.express ? 'express' : 'full']++; }
-            // По разделу считаем не только «сколько», но и «сколько из них полных»: раздел
-            // с 300 экспрессами и разделом с 300 разборами — разные вещи, а полоса была одна.
-            (a.categories || []).slice(0, 1).forEach(function (c) {
-                var p = c.split('.')[0];
-                if (!bySection[p]) bySection[p] = { total: 0, full: 0 };
-                bySection[p].total++;
-                if (!a.express) bySection[p].full++;
-            });
-            (a.tags || []).forEach(function (t) { if (t) tagCount[t] = (tagCount[t] || 0) + 1; });
-            (a.scientists || []).forEach(function (s) { if (s) sciCount[s] = (sciCount[s] || 0) + 1; });
+        /* Дни приходят тройками [всего, экспрессов, с разбором] — из них выводим и
+           карту по дням, и динамику по месяцам. Раньше и то и другое считалось
+           обходом всех статей на клиенте. */
+        var byDay = {}, byMonth = {};
+        var days = C.days || {};
+        Object.keys(days).forEach(function (d) {
+            var t = days[d], n = t[0] || 0, ex = t[1] || 0;
+            byDay[d] = n;
+            var m = d.slice(0, 7);
+            if (!byMonth[m]) byMonth[m] = { full: 0, express: 0 };
+            byMonth[m].express += ex;
+            byMonth[m].full += n - ex;
         });
-        var nA = arts.length, full = nA - express;
-        var nL = Object.keys(window.lawsData || {}).length;
-        var nT = Object.keys(window.tagsLoc || {}).length;
-        var nSec = Object.keys(window.ARXIV_CAT_NAMES || {}).length;
-        var nS = Object.keys(window.scientistsData || {}).length;
-        var nAu = Object.keys(window.authorsGraph || {}).length;
-        var nLang = (document.querySelectorAll('#langs-bar a').length || 4);
+        /* Разделы — из готовых сводок, там уже посчитано «сколько из них полных».
+           Группируем по верхнему уровню: astro-ph.HE и astro-ph.GA — одна полоса. */
+        var bySection = {};
+        (S.secStats || []).forEach(function (r) {
+            var p = String(r.cat || '').split('.')[0];
+            if (!p) return;
+            if (!bySection[p]) bySection[p] = { total: 0, full: 0 };
+            bySection[p].total += r.n || 0;
+            bySection[p].full += r.full || 0;
+        });
+
+        /* СЕГОДНЯШНИЙ СЛОВАРЬ. Здесь стояли «законов» и «тегов» из справочников
+           lang/<язык>/data — а их не переписывали с 17 и 25 августа: словарь давно
+           переехал в понятия, и дашборд показывал позапрошлый мир (владелец 31.08).
+           Теперь: понятия, формулы, области — то, что конвейер обновляет каждый день. */
+        var nC = CN.total || 0, nF = S.formulas || 0, nAr = S.areas || 0;
+        var nSec = Object.keys(bySection).length || S.sections || 0;
+        var nS = S.scientists || 0;
+        var nAu = S.authors || 0;
+        var nLang = Object.keys(S.langs || {}).length ||
+                    (document.querySelectorAll('#langs-bar a').length || 5);
 
         var html = '<h1 class="dash-h1">' + esc(T.title) + '</h1>';
 
@@ -176,8 +194,9 @@
         }
         html += '<div class="kpi-grid">' +
             kpi(nA, T.articles, '<b>' + full + '</b> ' + T.full + ' · <b>' + express + '</b> ' + T.express) + kpi(full, T.full) + kpi(express, T.express) +
-            kpi(nL, T.laws) + kpi(nT, T.tags) + kpi(nSec, T.sections) +
-            kpi(nS, T.scientists) + kpi(nAu, T.authors) + kpi(nLang, T.langs) +
+            kpi(nC, T.concepts) + kpi(nF, T.formulas) + kpi(nAr, T.areas) +
+            kpi(nSec, T.sections) + kpi(nS, T.scientists) + kpi(nAu, T.authors) +
+            kpi(nLang, T.langs) +
             '</div>';
 
         // ── Темп ──────────────────────────────────────────────
@@ -187,12 +206,11 @@
         function iso(d) { return new Date(d).toISOString().slice(0, 10); }
         var todayMs = Date.now();
         var since7 = iso(todayMs - 7 * 864e5), since30 = iso(todayMs - 30 * 864e5);
-        var n7 = 0, n30 = 0, lastDate = '';
-        arts.forEach(function (a) {
-            if (!a.date) return;
-            if (a.date > since7) n7++;
-            if (a.date > since30) n30++;
-            if (a.date > lastDate) lastDate = a.date;
+        var n7 = 0, n30 = 0, lastDate = A.last || '';
+        Object.keys(byDay).forEach(function (d) {
+            if (d > since7) n7 += byDay[d];
+            if (d > since30) n30 += byDay[d];
+            if (d > lastDate) lastDate = d;
         });
         function kpiText(text, label, sub) {
             return '<div class="kpi"><div class="kpi-n kpi-n-sm">' + esc(text) + '</div>' +
@@ -296,13 +314,11 @@
         // Считаем от ПОЛНЫХ разборов, а не от всего архива: экспрессам раздел не пишется
         // вовсе, и доля от 3.6 тысяч показывала бы вечные 0.4% вместо честной картины.
         function kmBar() {
-            var full = arts.filter(function (a) { return !a.express; });
-            var km = full.filter(function (a) { return a.km; }).length;
-            if (!full.length) return '';
-            var pct = Math.round(100 * km / full.length);
+            if (!full) return '';
+            var km = kmN, pct = Math.round(100 * km / full);
             return '<div class="cover-bar km-bar"><span class="cover-fill" style="width:' + pct + '%"></span></div>' +
                 '<div class="cover-legend" title="' + esc(T.kmNote || '') + '"><b>' + km + '</b> ' +
-                esc(T.km) + ' · ' + esc(T.kmOf) + ' <b>' + full.length + '</b> (' + pct + '%)</div>';
+                esc(T.km) + ' · ' + esc(T.kmOf) + ' <b>' + full + '</b> (' + pct + '%)</div>';
         }
         var pctCover = nA ? Math.round(100 * withImg / nA) : 0;
         html += '<div class="dash-block"><h2>' + esc(T.kitchen) + '</h2>' +
@@ -315,14 +331,15 @@
         // само по себе. Половина словаря тегов может не встречаться ни в одной статье, и по
         // общим счётчикам этого не видно вообще. Считается из тех же справочников, что уже
         // загружены страницей, — ни одного лишнего запроса.
-        var tagsAll = window.tagsLoc || {}, sciAll = window.scientistsData || {}, lawsAll = window.lawsData || {};
-        var noTagArts = arts.filter(function (a) { return !((a.tags || []).length); }).length;
-        var orphanTags = Object.keys(tagsAll).filter(function (t) { return !tagCount[t]; }).length;
-        var lawsLoose = Object.keys(lawsAll).filter(function (k) { return !(((lawsAll[k] || {}).tags || []).length); }).length;
-        var sciLoose = Object.keys(sciAll).filter(function (s) { return !sciCount[s]; }).length;
+        /* Что висит само по себе. Раньше считались теги без статей и законы без
+           связей — по справочникам, которые никто не обновляет. Считаем то же самое
+           про понятия: у скольких есть опора (статьи, О КОТОРЫХ понятие) и у скольких
+           только упоминания в текстах. Пустая страница понятия — наш долг, и он виден. */
+        var noArts = Math.max(0, nC - (CN.withArts || 0));
+        var onlyMent = Math.max(0, (CN.withMentions || 0) - (CN.withArts || 0));
         html += '<div class="dash-block"><h2>' + esc(T.connectivity) + '</h2><div class="kpi-grid">' +
-            kpi(noTagArts, T.noTags) + kpi(orphanTags, T.orphanTags) +
-            kpi(lawsLoose, T.lawsNoTags) + kpi(sciLoose, T.sciNoArticles) +
+            kpi(CN.withArts || 0, T.cWithArts) + kpi(noArts, T.cNoArts) +
+            kpi(onlyMent, T.cOnlyMent) + kpi(nF, T.formulas) +
             '</div></div>';
 
         // ── Топы ───────────────────────────────────────────────
@@ -338,8 +355,21 @@
             }).join('');
             return '<div class="dash-block"><h2>' + esc(title) + '</h2><div class="dash-chips">' + (chips || esc(T.none)) + '</div></div>';
         }
-        html += topBlock(tagCount, T.topTags, 'tag');
-        html += topBlock(sciCount, T.topSci, 'sci');
+        function chipsBlock(arr, title, href) {
+            var chips = (arr || []).map(function (r) {
+                return '<a class="dash-chip" href="' + href(r) + '">' +
+                    esc(r.name || r.id) + ' <b>' + (r.n || 0) + '</b></a>';
+            }).join('');
+            return '<div class="dash-block"><h2>' + esc(title) + '</h2><div class="dash-chips">' +
+                (chips || esc(T.none)) + '</div></div>';
+        }
+        html += chipsBlock(S.top, T.topConcepts, function (r) {
+            return '/lang/' + window.lang + '/concepts/' + encodeURIComponent(r.id) + '.html';
+        });
+        html += chipsBlock(S.topSci, T.topSci, function (r) {
+            return '/lang/' + window.lang + '/scientists/' +
+                (window.authorSlug ? authorSlug(r.name) : encodeURIComponent(r.name)) + '.html';
+        });
 
         // ── Топ-законы (по числу связанных тегов из справочника законов) ──
         var ld = window.lawsData || {};
