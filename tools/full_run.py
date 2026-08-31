@@ -630,7 +630,12 @@ def main():
     # ── VI. ОБЛАКО ───────────────────────────────────────────────────────────
     run("cloud-d1", [PY, "cloudflare/concepts_sync.py"], timeout=4 * 3600)
     run("cloud-vec", [PY, "tools/concepts_to_vectorize.py", "--apply"], timeout=2 * 3600)
-    run("cards-sync", [PY, "cloudflare/cards_sync.py"], timeout=2 * 3600, soft=True)
+    # --apply обязателен: без ключа cards_sync честно отвечает «укажи --check или
+    # --apply» и выходит с единицей. Шаг стоял в цепочке с самого начала и НИ РАЗУ
+    # не отработал — красная лампочка каждый прогон, а карточки статей в ленту
+    # уезжали только когда их лил кто-то руками.
+    run("cards-sync", [PY, "cloudflare/cards_sync.py", "--apply"],
+        timeout=2 * 3600, soft=True)
     run("deploy", [PY, "cloudflare/deploy_worker.py"], timeout=1800,
         env={"B42_DEPLOY_OK": "1"})
 

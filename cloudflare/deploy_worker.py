@@ -56,7 +56,31 @@ def main():
     cmd = "npx wrangler deploy" + (" --config wrangler.dev.toml" if dev else "")
     print(f"\n▶️  {cmd}\n")
     # shell=True — на Windows npx это .cmd, без оболочки он не находится.
-    return subprocess.run(cmd, cwd=HERE, shell=True).returncode
+    r = subprocess.run(cmd, cwd=HERE, shell=True, capture_output=True, text=True,
+                       encoding="utf-8", errors="replace")
+    out = (r.stdout or "") + (r.stderr or "")
+    print(out)
+    if r.returncode == 0:
+        return 0
+
+    # КОД УЕХАЛ, А КРАСНЫМ ГОРИТ ОТКАЗ ПО МАРШРУТАМ.
+    #
+    # У токена нет прав на зону www.bridge42worlds.academy, и wrangler после
+    # успешной загрузки воркера падает на попытке ПЕРЕЗАПИСАТЬ маршруты. Маршруты
+    # при этом на месте и менять их не требуется — 30 августа проверено на живом
+    # проде: воркер отвечал новым кодом, а шаг конвейера считался сбойным.
+    #
+    # Отличаем одно от другого по собственному отчёту wrangler: есть «Uploaded» и
+    # версия — значит воркер выложен. Тогда это предупреждение, а не сбой; но
+    # предупреждение громкое, чтобы права однажды выдали и строка ушла.
+    uploaded = ("Uploaded" in out and "Current Version ID" in out)
+    routes_only = uploaded and ("workers/routes" in out or "Authentication error" in out)
+    if routes_only:
+        print("⚠️  Воркер ВЫЛОЖЕН, но маршруты зоны обновить не удалось: у токена нет "
+              "прав на зону. Маршруты и так на месте — это не сбой выкладки.")
+        print("   Чтобы строка ушла: дать токену право Zone → Workers Routes → Edit.")
+        return 0
+    return r.returncode
 
 
 if __name__ == "__main__":
