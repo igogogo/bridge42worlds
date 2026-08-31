@@ -291,7 +291,7 @@
             write: 'Написать нам', writeN: 'Написать нам · {n}',
             works: ['работа', 'работы', 'работ'], groups: 'группа',
             copy: 'Скопировать письмо', copied: 'Письмо скопировано',
-            noMail: 'Почта не открылась? Скопируйте письмо и отправьте на ' + 'author@bridge42worlds.academy',
+            noCopy: 'Скопировать не вышло. Напишите на author@bridge42worlds.academy — тема и текст выше.',
             addLine: 'Чьи они, если знаете:'
         },
         en: {
@@ -309,7 +309,7 @@
             write: 'Write to us', writeN: 'Write to us · {n}',
             works: ['paper', 'papers', 'papers'], groups: 'group',
             copy: 'Copy the letter', copied: 'Letter copied',
-            noMail: 'Mail app did not open? Copy the letter and send it to author@bridge42worlds.academy',
+            noCopy: 'Could not copy. Write to author@bridge42worlds.academy — subject and text above.',
             addLine: 'Whose are they, if you know:'
         }
     };
@@ -487,7 +487,9 @@
                                  : Promise.reject()).then(function () {
                 said.hidden = false; said.textContent = t.copied;
             }).catch(function () {
-                said.hidden = false; said.textContent = t.noMail;
+                /* Не скопировалось — говорим об этом, а не про почту: свалить свою
+                   неудачу на чужое приложение значит отправить человека чинить не то. */
+                said.hidden = false; said.textContent = t.noCopy;
             });
         });
     }
