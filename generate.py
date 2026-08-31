@@ -4957,7 +4957,12 @@ def generate_sitemaps():
             # не даём: мы только что срезали её с 46 662 адресов до 13 566 именно потому,
             # что поисковик захлебнулся. Порог «две работы и больше» оставляет 1 479 — тех,
             # кого мы разбирали не по случайности. Остальных добавим, когда эти осядут.
-            for name in sorted(_authors_multi()):
+            # Порог три работы, а не две. Отчёт Google за 31 августа: 41 323 адреса
+            # «обнаружена, не проиндексирована» — обход рационирован, и тратить его
+            # на пять с половиной тысяч страниц авторов с двумя работами значит
+            # отодвигать понятия и статьи. Страницы остаются живыми и связанными,
+            # просто не зовём на них поисковика первыми.
+            for name in sorted(_authors_multi(3)):
                 urls.append(f"{SITE_URL}/{LANG_DIR}/en/authors/{author_slug(name)}.html")
         sections_dir = Path(LANG_DIR) / lang / "sections"
         if sections_dir.exists():
@@ -4991,8 +4996,27 @@ def generate_sitemaps():
                 # читать. После правки предъявляем около 11 тысяч.
                 if (art_dir / "index.html").exists():
                     urls.append((f"{SITE_URL}/{LANG_DIR}/{lang}/archive/{a['date']}/{a['id']}/index.html", lm))
+        # ТЕГИ, СТАВШИЕ ПЕРЕАДРЕСАЦИЕЙ, В КАРТЕ НЕ НУЖНЫ. С 28 августа страница тега,
+        # у которого есть одноимённое понятие, — это заглушка с redirect на /concepts/.
+        # Таких 365 из 366: карта предъявляла поисковику полторы тысячи адресов (пять
+        # языков), каждый из которых только отсылает дальше. Обход за них платит, а
+        # индексировать там нечего. Ведём сразу на понятие.
+        _mini = _live_mini()
         for tid in tags_graph:
+            if tid in _mini or TAG_ALIAS.get(tid) in _mini:
+                continue
             urls.append(f"{SITE_URL}/{LANG_DIR}/{lang}/tags/{tid}.html")
+        # СТРАНИЦЫ ПОНЯТИЙ — 3 617 на язык, и до сих пор их в карте не было вовсе.
+        # Это наш самый долгоживущий текст: определение, формулы, соседи, статьи —
+        # семь-семнадцать тысяч знаков на языке читателя. Статья стареет за неделю,
+        # понятие живёт годами; именно за такими страницами приходят из поиска.
+        cdir = Path(LANG_DIR) / lang / "concepts"
+        if cdir.exists():
+            for cp in sorted(cdir.glob("*.html")):
+                if cp.name == "index.html":
+                    continue
+                urls.append(f"{SITE_URL}/{LANG_DIR}/{lang}/concepts/{cp.name}")
+            urls.append(f"{SITE_URL}/{LANG_DIR}/{lang}/concepts/index.html")
         fn = f"sitemap-{lang}.xml"
         _write_text_retry(Path(fn), urlset(urls))
         made.append(fn)
