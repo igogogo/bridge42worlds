@@ -254,7 +254,10 @@ function cards(d) {
    Возвращает добавочные рёбра [i, j, вес, 1] в номерах кадра, а не графа. */
 function bridgeEdges(adj, gids, edges) {
     var N = gids.length;
-    if (N < 3 || N > 80) return [];
+    /* Потолок 300 — тот же, что у кадра: больше в кадр и не попадает. Пар при трёхстах
+       узлах сорок пять тысяч, но считаются они только у тех, кто В РАЗНЫХ островах, и
+       только пока острова есть; на связном кадре цикл выходит сразу. */
+    if (N < 3 || N > 300) return [];
     var par = [], i, j;
     for (i = 0; i < N; i++) par.push(i);
     function find(x) { while (par[x] !== x) { par[x] = par[par[x]]; x = par[x]; } return x; }
@@ -300,7 +303,9 @@ function bridgeEdges(adj, gids, edges) {
     pass(near);
     roots = {};
     for (i = 0; i < N; i++) roots[find(i)] = 1;
-    if (Object.keys(roots).length > 1) pass(gids.map(wider));
+    // Второй проход (через двоих) дорог: у каждого узла разворачиваются соседи соседей.
+    // На широком кадре он не нужен — там острова редки и мелки.
+    if (Object.keys(roots).length > 1 && N <= 120) pass(gids.map(wider));
     return extra;
 }
 

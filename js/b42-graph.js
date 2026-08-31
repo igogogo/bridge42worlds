@@ -54,14 +54,18 @@ var TXT = (function () {
         artsMid: ' articles · ', links: ' links', strongest: 'strongest links:',
         nodes: ' nodes · ', edgesPower: ' edges · power ',
         empty: 'empty — search or click', all: 'all', clear: 'clear', expand: 'expand',
+        cutNote: "showing the {n} most connected of {t}",
+        cutAll: "show all",
         filtOn: "showing a set: ",
         filtOf: " of ",
         filtOff: "show whole graph",
         filtAdd: "add",
-        filtAddHint: "search and pick — the concept joins the set",
+        filtAddHint: "type a concept name, or an arXiv number / link to a paper",
+        artAdding: "reading the paper\u2026",
+        artNone: "no such paper in our archive",
     };
     var BY = {
-        ru: { filtOn: "показан набор: ", filtOf: " из ", filtOff: "показать весь граф", filtAdd: "добавить", filtAddHint: "найдите и выберите — понятие войдёт в набор",
+        ru: { filtAddHint: "имя понятия — или номер arXiv либо ссылка на статью", artAdding: "читаю статью…", artNone: "такой работы у нас нет", cutNote: "показаны {n} самых связанных из {t}", cutAll: "показать все", filtOn: "показан набор: ", filtOf: " из ", filtOff: "показать весь граф", filtAdd: "добавить",
             fpage: 'страница формулы →', spage: 'страница учёного →',
             cpage: 'страница понятия →', overview: 'Обзор', artset: 'набор статьи · ',
             cloud: 'всё облако', areas: 'области: ', grpArts: 'группа · статей: ',
@@ -74,7 +78,7 @@ var TXT = (function () {
             empty: 'пусто — начните с поиска или клика', all: 'все',
             clear: 'очистить', expand: 'раскрыть'
         },
-        es: { filtOn: "conjunto mostrado: ", filtOf: " de ", filtOff: "ver todo el grafo", filtAdd: "añadir", filtAddHint: "busque y elija: el concepto entra en el conjunto",
+        es: { filtAddHint: "nombre del concepto, o número arXiv / enlace al artículo", artAdding: "leyendo el artículo…", artNone: "no tenemos ese trabajo", cutNote: "se muestran los {n} más conectados de {t}", cutAll: "mostrar todos", filtOn: "conjunto mostrado: ", filtOf: " de ", filtOff: "ver todo el grafo", filtAdd: "añadir",
             fpage: 'página de la fórmula →', spage: 'página del científico →',
             cpage: 'página del concepto →', overview: 'Vista general',
             artset: 'conjunto del artículo · ', cloud: 'toda la nube',
@@ -88,7 +92,7 @@ var TXT = (function () {
             edgesPower: ' aristas · fuerza ', empty: 'vacío — busca o haz clic',
             all: 'todo', clear: 'limpiar', expand: 'desplegar'
         },
-        ar: { filtOn: "مجموعة معروضة: ", filtOf: " من ", filtOff: "اعرض الشبكة كاملة", filtAdd: "أضف", filtAddHint: "ابحث واختر ليدخل المفهوم إلى المجموعة",
+        ar: { filtAddHint: "اسم مفهوم، أو رقم arXiv أو رابط بحث", artAdding: "أقرأ البحث…", artNone: "لا يوجد هذا البحث لدينا", cutNote: "معروض {n} الأكثر ارتباطًا من {t}", cutAll: "اعرض الكل", filtOn: "مجموعة معروضة: ", filtOf: " من ", filtOff: "اعرض الشبكة كاملة", filtAdd: "أضف",
             fpage: 'صفحة الصيغة →', spage: 'صفحة العالِم →',
             cpage: 'صفحة المفهوم →', overview: 'نظرة عامة',
             artset: 'مجموعة المقالة · ', cloud: 'السحابة كاملة',
@@ -101,7 +105,7 @@ var TXT = (function () {
             nodes: ' عقدة · ', edgesPower: ' حافة · القوة ',
             empty: 'فارغ — ابحث أو انقر', all: 'الكل', clear: 'مسح', expand: 'توسيع'
         },
-        fr: { filtOn: "ensemble affiché : ", filtOf: " sur ", filtOff: "voir le graphe entier", filtAdd: "ajouter", filtAddHint: "cherchez et choisissez : la notion rejoint l’ensemble",
+        fr: { filtAddHint: "nom d’une notion, ou numéro arXiv / lien vers un article", artAdding: "je lis l’article…", artNone: "nous n’avons pas ce travail", cutNote: "affichés : les {n} plus liés sur {t}", cutAll: "tout afficher", filtOn: "ensemble affiché : ", filtOf: " sur ", filtOff: "voir le graphe entier", filtAdd: "ajouter",
             fpage: 'page de la formule →', spage: 'page du scientifique →',
             cpage: 'page du concept →', overview: 'Vue d’ensemble',
             artset: 'ensemble de l’article · ', cloud: 'tout le nuage',
@@ -302,7 +306,8 @@ var frame = {mode: 'overview', nodes: [], edges: []};
    ближние (владелец 31.08: «хорошо бы усилить перспективу… или как-то этим управлять»).
    Одно число управляет обоими признаками сразу — и размером, и прозрачностью, — потому
    что оба считаются от глубины _depth, которую даёт эта же проекция. */
-var view = {is3d: false, layout: 'force', spin: false, minW: 2, persp: 5,
+var _cut = null;          // сколько узлов показано из скольких в последнем кадре
+var view = {is3d: false, layout: 'force', spin: false, minW: 2, persp: 5, noCap: false,
             zoom: 1, zoomT: 1, panX: 0, panY: 0, panTX: 0, panTY: 0,
             rotX: -0.35, rotY: 0.5};
 var kindOn = {};
@@ -407,7 +412,42 @@ function showOverview() {
     setFrame('overview', nodes, edges);
 }
 
+/* ПОТОЛОК НА РАЗМЕР КАДРА. Четыре с половиной тысячи понятий в одном кадре — это не
+   карта, а войлок: подписи не помещаются, связи сливаются в серое, физика считает
+   миллион пар. Владелец 31.08: «что делать, когда очень много понятий вываливается в
+   граф, допустим больше трёхсот — надо отсекать и предупреждать».
+
+   Отсекаем по СВЯЗНОСТИ внутри кадра, а не по числу статей: в карте важно, кто держит
+   рисунок, а не кто популярен. Центр (если он задан) остаётся всегда. Сколько скрыто,
+   говорит полоса фильтра, и там же кнопка «показать все» — потолок снимается для этого
+   кадра, а не навсегда. */
+var CAP = 300;
+
+function capIds(ids, centerFirst) {
+    if (view.noCap || ids.length <= CAP) return {ids: ids, total: ids.length};
+    var inSet = {};
+    ids.forEach(function (id) { inSet[id] = 1; });
+    var score = {};
+    ids.forEach(function (id) {
+        var w = 0, a = adj[id] || [];
+        for (var k = 0; k < a.length; k++) if (inSet[a[k][0]]) w += a[k][1];
+        score[id] = w;
+    });
+    var keep = ids.slice();
+    var first = centerFirst ? keep[0] : null;
+    keep.sort(function (x, y) { return score[y] - score[x]; });
+    keep = keep.slice(0, CAP);
+    if (first !== null && keep.indexOf(first) < 0) { keep.pop(); keep.unshift(first); }
+    else if (first !== null) {
+        keep = [first].concat(keep.filter(function (x) { return x !== first; }));
+    }
+    return {ids: keep, total: ids.length};
+}
+
 function frameFromIds(ids, centerFirst) {
+    var cut = capIds(ids, centerFirst);
+    ids = cut.ids;
+    _cut = {shown: ids.length, total: cut.total, all: cut.ids === ids && cut.total === ids.length};
     var pos = {};
     ids.forEach(function (id, i) { pos[id] = i; });
     var mx = 1;
@@ -979,7 +1019,13 @@ function draw() {
     });
     labels.sort(function (a, b) { return b.pri - a.pri; });
     var taken = [];
-    var maxLabels = frame.mode === 'overview' ? 50 : (view.zoom > 1.6 ? 70 : 26);
+    /* БЮДЖЕТ ПОДПИСЕЙ — ОТ РАЗМЕРА КАДРА, А НЕ ОДНИМ ЧИСЛОМ НА ВСЁ. Двадцать шесть имён
+       на кадр в сто узлов означало, что три четверти точек безымянны, хотя место рядом
+       свободно (владелец 31.08: «бывает, можно подпись показать, а её не показывает даже
+       бледно»). Настоящий ограничитель — столкновения: они и так не дадут налезть друг на
+       друга. Число нужно только чтобы не считать разметку тысячи имён на широком кадре. */
+    var maxLabels = frame.mode === 'overview' ? 60
+        : Math.min(220, Math.max(40, Math.round(frame.nodes.length * 0.9)));
     var shown = 0;
     labels.forEach(function (L) {
         if (shown >= maxLabels && !L.hot) return;
@@ -997,8 +1043,10 @@ function draw() {
         taken.push(box);
         shown++;
         ctx.fillStyle = L.hot ? TK.cyan : (L.big ? TK.text : TK.muted);
-        ctx.globalAlpha = (L.hot ? 1 : (L.big ? 0.9 : 0.62)) *
-                          (view.is3d ? 0.25 + L.dp * 0.75 : 1);
+        /* Третий ярус: всё, что за первой сотней, показываем бледно. Раньше такие имена
+           просто не рисовались — теперь они есть, но не спорят с главными за внимание. */
+        var tier = L.hot ? 1 : (L.big ? 0.9 : (shown > 100 ? 0.42 : 0.62));
+        ctx.globalAlpha = tier * (view.is3d ? 0.25 + L.dp * 0.75 : 1);
         ctx.textAlign = 'center';
         ctx.fillText(text, L.x, L.y);
     });
@@ -1383,23 +1431,29 @@ var addMode = false;
 function renderFilter() {
     var box = el('b42g-filter');
     if (!box) return;
+    var trimmed = _cut && _cut.total > _cut.shown;
     var sub = frame.mode === 'set' || frame.mode === 'picked' ||
               frame.mode === 'ego' || frame.mode === 'group';
-    box.hidden = !sub;
-    if (!sub) { addMode = false; return; }
+    box.hidden = !(sub || trimmed);
+    if (box.hidden) { addMode = false; return; }
     var shown = frame.nodes.filter(function (nd) { return nd.kind !== '_group'; }).length;
     var total = G && G.nodes ? G.nodes.length : shown;
     /* Подпись без повторов: у набора статьи ярлык уже кончается числом узлов, и
        «набор статьи · 5 · 5 из 4471» читается как заикание. У области и окружения
        ярлык — имя, его показываем. */
     var label = trail.length ? trail[trail.length - 1].label : '';
-    var head = (frame.mode === 'set' || frame.mode === 'picked')
-        ? TXT.filtOn : TXT.filtOn + label + ' · ';
     box.innerHTML = '';
-    var t = document.createElement('span');
-    t.className = 'b42g-filter-t';
-    t.textContent = head + shown + TXT.filtOf + total;
-    box.appendChild(t);
+    /* Когда кадр не подмножество, а просто срезан потолком, «показан набор: 300 из 4471»
+       и «показаны 300 самых связанных из 4471» стоят рядом и говорят одно и то же.
+       Оставляем одну строку: про набор — если он есть, про срез — если срез. */
+    if (sub) {
+        var head = (frame.mode === 'set' || frame.mode === 'picked')
+            ? TXT.filtOn : TXT.filtOn + label + ' · ';
+        var t = document.createElement('span');
+        t.className = 'b42g-filter-t';
+        t.textContent = head + shown + TXT.filtOf + total;
+        box.appendChild(t);
+    }
     var add = document.createElement('button');
     add.type = 'button';
     add.className = 'b42g-filter-add' + (addMode ? ' on' : '');
@@ -1411,12 +1465,78 @@ function renderFilter() {
         renderFilter();
     };
     box.appendChild(add);
-    var off = document.createElement('button');
-    off.type = 'button';
-    off.className = 'b42g-filter-off';
-    off.textContent = '✕ ' + TXT.filtOff;
-    off.onclick = function () { addMode = false; showAll(); };
-    box.appendChild(off);
+    if (trimmed) {
+        var cn = document.createElement('span');
+        cn.className = 'b42g-filter-cut';
+        cn.textContent = TXT.cutNote.replace('{n}', _cut.shown).replace('{t}', _cut.total);
+        box.appendChild(cn);
+        var all = document.createElement('button');
+        all.type = 'button';
+        all.className = 'b42g-filter-add';
+        all.textContent = TXT.cutAll;
+        all.onclick = function () {
+            view.noCap = true;
+            var t = trail[trail.length - 1] || {};
+            if (t.mode === 'group') showGroup(t.arg, false);
+            else if (t.mode === 'set') showSet(t.arg);
+            else if (t.mode === 'ego') showEgo(t.arg);
+            else showAll();
+            view.noCap = false;      // снимаем потолок на один кадр, а не насовсем
+        };
+        box.appendChild(all);
+    }
+    if (sub) {
+        var off = document.createElement('button');
+        off.type = 'button';
+        off.className = 'b42g-filter-off';
+        off.textContent = '✕ ' + TXT.filtOff;
+        off.onclick = function () { addMode = false; showAll(); };
+        box.appendChild(off);
+    }
+}
+
+/* ДОБАВИТЬ В НАБОР ЦЕЛУЮ СТАТЬЮ. Владелец 31.08: «не понятно, как добавлять в фильтр
+   статьи». Раньше в набор входило только понятие из списка имён, а набор статьи можно
+   было получить лишь придя по ссылке с самой статьи.
+
+   Берём ровно тот набор, который статья показывает в своём мини-графе: сначала спрашиваем
+   облако, где статья лежит (/api/cards отдаёт адрес с датой), потом читаем её страницу и
+   вынимаем data-ids. Второй запрос кажется лишним, но именно он даёт ПРЕДМЕТ работы —
+   понятия, выбранные вектором с поправкой на хабность, — а не список упомянутых слов,
+   который вдвое шире и общее по смыслу. */
+function articleId(q) {
+    var m = String(q).match(/(\d{4}\.\d{4,5}(?:v\d+)?)/);
+    return m ? m[1] : null;
+}
+
+function addArticle(q, say) {
+    var aid = articleId(q);
+    if (!aid) { say(TXT.artNone); return; }
+    say(TXT.artAdding);
+    fetch('/api/cards?ids=' + encodeURIComponent(aid) + '&lang=' + LANG)
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (d) {
+            var it = ((d && (d.items || d.cards)) || [])[0];
+            if (!it || !it.url) throw 0;
+            return fetch(it.url).then(function (r) { return r.text(); });
+        })
+        .then(function (html) {
+            var m = html.match(/class="b42mini"[^>]*data-ids="([^"]+)"/) ||
+                    html.match(/data-ids="([^"]+)"[^>]*class="b42mini"/);
+            if (!m) throw 0;
+            var have = frame.nodes.filter(function (nd) { return nd.ni !== undefined; })
+                                  .map(function (nd) { return nd.ni; });
+            m[1].split(',').forEach(function (id) {
+                var i = G.byId ? G.byId[id] : undefined;
+                if (i === undefined) i = idOf(id);
+                if (i >= 0 && have.indexOf(i) < 0) have.push(i);
+            });
+            if (have.length < 2) throw 0;
+            showSet(have);
+            addMode = true;
+            renderFilter();
+        })
+        .catch(function () { say(TXT.artNone); });
 }
 
 /* Добавить понятие в показанный набор, не выходя из него. */
@@ -1690,6 +1810,19 @@ function buildPanel() {
                     inp.value = ''; inp.blur(); return;
                 }
             }
+            /* Не имя понятия — может быть номер работы или ссылка на неё. */
+            if (articleId(q)) {
+                var box = el('b42g-filter');
+                addArticle(q, function (msg) {
+                    if (!box) return;
+                    box.hidden = false;
+                    var s2 = box.querySelector('.b42g-filter-say') ||
+                             box.appendChild(document.createElement('span'));
+                    s2.className = 'b42g-filter-say';
+                    s2.textContent = msg;
+                });
+                inp.value = ''; inp.blur();
+            }
         });
     }
     var b2 = el('b42g-2d'), b3 = el('b42g-3d'), sp = el('b42g-spin');
@@ -1754,10 +1887,21 @@ function buildPanel() {
 function resize() {
     /* панели графа стоят под шапкой сайта — её высота меняется от языка и
        ширины экрана, поэтому меряем, а не гадаем (наложение поймано 27.08) */
-    var tb = document.querySelector('.top-bar');
-    if (tb) {
+    /* Меряем НИЖНИЙ КРАЙ ВСЕГО, что стоит над сценой, а не одной шапки. 27 августа
+       учли шапку сайта, а полосу языков — нет: она липкая, высотой 44, и накрывала
+       панель графа вместе с полем поиска и крошками. Нажать по ним было нельзя
+       (владелец 31.08: «там что-то закрыто, меню выбора»). Список, а не одна ссылка:
+       завтра над сценой встанет что-то третье, и мерка не должна об этом забыть. */
+    var over = 0;
+    ['.top-bar', '.langs'].forEach(function (sel) {
+        var e = document.querySelector(sel);
+        if (e && e.offsetParent !== null) {
+            over = Math.max(over, e.getBoundingClientRect().bottom);
+        }
+    });
+    if (over > 0) {
         document.documentElement.style.setProperty(
-            '--b42g-top', Math.round(tb.getBoundingClientRect().bottom + 10) + 'px');
+            '--b42g-top', Math.round(over + 8) + 'px');
     }
     var r = canvas.parentElement.getBoundingClientRect();
     canvas.width = Math.max(300, r.width) * devicePixelRatio;

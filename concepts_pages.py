@@ -1401,11 +1401,16 @@ html, body {{ height:100%; overflow:hidden; }}
 .glass {{ background:color-mix(in srgb, var(--surface) 72%, transparent);
   backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
   border:1px solid var(--hairline); border-radius:var(--radius-sm); }}
-.b42g-top {{ position:fixed; top:var(--b42g-top,78px); left:14px; right:296px; z-index:4;
+/* ПАНЕЛЬ ГРАФА СТОИТ НИЖЕ ПЕРЕКЛЮЧАТЕЛЯ ЯЗЫКОВ. Она висела на 78 пикселях, а полоса
+   языков — липкая, с z-index 40 и высотой 44 — занимала 81..125 и накрывала её первые
+   668 пикселей: поле поиска и хлебные крошки нельзя было ни прочитать, ни нажать
+   (владелец 31.08: «там что-то закрыто, меню выбора»). Двигаем ниже полосы и поднимаем
+   слой, чтобы следующий липкий элемент не повторил историю. */
+.b42g-top {{ position:fixed; top:var(--b42g-top,132px); left:14px; right:296px; z-index:41;
   display:flex; flex-wrap:wrap; gap:10px; align-items:center;
   font-family:var(--mono); font-size:12px; padding:8px 14px; }}
-.b42g-side {{ position:fixed; top:var(--b42g-top,78px); right:14px; bottom:14px; width:264px;
-  z-index:4; font-family:var(--mono); font-size:12px;
+.b42g-side {{ position:fixed; top:var(--b42g-top,132px); right:14px; bottom:14px; width:264px;
+  z-index:41; font-family:var(--mono); font-size:12px;
   overflow-y:auto; padding:12px 14px; }}
 .b42g-sec {{ margin-bottom:10px; }}
 .b42g-h {{ font-size:10px; text-transform:uppercase; letter-spacing:.09em;
