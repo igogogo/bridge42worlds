@@ -51,9 +51,14 @@ var TXT = (function () {
         dblEnter: 'double-click to enter',
         hintArea: 'hover a circle to see the area · double-click to enter',
         hintNav: 'click — select · dbl-click — drill · wheel — zoom',
-        artsMid: ' articles · ', links: ' links', strongest: 'strongest links:',
+        artsMid: ' articles · ', links: ' links',
+        strongest: "strongest links (shared papers):",
+        findLbl: "Filter by name",
+        findPh: "part of a name",
         nodes: ' nodes · ', edgesPower: ' edges · power ',
         empty: 'empty — search or click', all: 'all', clear: 'clear', expand: 'expand',
+        secOpen: "open this section",
+        secCrumb: "section ",
         cutNote: "showing the {n} most connected of {t}",
         cutAll: "show all",
         filtOn: "showing a set: ",
@@ -65,7 +70,7 @@ var TXT = (function () {
         artNone: "no such paper in our archive",
     };
     var BY = {
-        ru: { filtAddHint: "имя понятия — или номер arXiv либо ссылка на статью", artAdding: "читаю статью…", artNone: "такой работы у нас нет", cutNote: "показаны {n} самых связанных из {t}", cutAll: "показать все", filtOn: "показан набор: ", filtOf: " из ", filtOff: "показать весь граф", filtAdd: "добавить",
+        ru: { findLbl: "Отбор по имени", findPh: "часть имени", strongest: "сильнейшие связи (общих статей):", secOpen: "открыть раздел", secCrumb: "раздел ", filtAddHint: "имя понятия — или номер arXiv либо ссылка на статью", artAdding: "читаю статью…", artNone: "такой работы у нас нет", cutNote: "показаны {n} самых связанных из {t}", cutAll: "показать все", filtOn: "показан набор: ", filtOf: " из ", filtOff: "показать весь граф", filtAdd: "добавить",
             fpage: 'страница формулы →', spage: 'страница учёного →',
             cpage: 'страница понятия →', overview: 'Обзор', artset: 'набор статьи · ',
             cloud: 'всё облако', areas: 'области: ', grpArts: 'группа · статей: ',
@@ -73,12 +78,12 @@ var TXT = (function () {
             concepts: ' понятий', dblEnter: 'двойной клик — войти в область',
             hintArea: 'наведи на круг — что это за область · двойной клик — внутрь',
             hintNav: 'клик — выбрать · двойной — вглубь · колесо — зум',
-            artsMid: ' статей · ', links: ' связей', strongest: 'сильнейшие связи:',
+            artsMid: ' статей · ', links: ' связей', 
             nodes: ' узлов · ', edgesPower: ' рёбер · мощность ',
             empty: 'пусто — начните с поиска или клика', all: 'все',
             clear: 'очистить', expand: 'раскрыть'
         },
-        es: { filtAddHint: "nombre del concepto, o número arXiv / enlace al artículo", artAdding: "leyendo el artículo…", artNone: "no tenemos ese trabajo", cutNote: "se muestran los {n} más conectados de {t}", cutAll: "mostrar todos", filtOn: "conjunto mostrado: ", filtOf: " de ", filtOff: "ver todo el grafo", filtAdd: "añadir",
+        es: { findLbl: "Filtrar por nombre", findPh: "parte del nombre", strongest: "vínculos más fuertes (artículos comunes):", secOpen: "abrir la sección", secCrumb: "sección ", filtAddHint: "nombre del concepto, o número arXiv / enlace al artículo", artAdding: "leyendo el artículo…", artNone: "no tenemos ese trabajo", cutNote: "se muestran los {n} más conectados de {t}", cutAll: "mostrar todos", filtOn: "conjunto mostrado: ", filtOf: " de ", filtOff: "ver todo el grafo", filtAdd: "añadir",
             fpage: 'página de la fórmula →', spage: 'página del científico →',
             cpage: 'página del concepto →', overview: 'Vista general',
             artset: 'conjunto del artículo · ', cloud: 'toda la nube',
@@ -88,11 +93,11 @@ var TXT = (function () {
             hintArea: 'pasa por un círculo para ver el área · doble clic para entrar',
             hintNav: 'clic — elegir · doble — profundizar · rueda — zoom',
             artsMid: ' artículos · ', links: ' enlaces',
-            strongest: 'enlaces más fuertes:', nodes: ' nodos · ',
+             nodes: ' nodos · ',
             edgesPower: ' aristas · fuerza ', empty: 'vacío — busca o haz clic',
             all: 'todo', clear: 'limpiar', expand: 'desplegar'
         },
-        ar: { filtAddHint: "اسم مفهوم، أو رقم arXiv أو رابط بحث", artAdding: "أقرأ البحث…", artNone: "لا يوجد هذا البحث لدينا", cutNote: "معروض {n} الأكثر ارتباطًا من {t}", cutAll: "اعرض الكل", filtOn: "مجموعة معروضة: ", filtOf: " من ", filtOff: "اعرض الشبكة كاملة", filtAdd: "أضف",
+        ar: { findLbl: "تصفية بالاسم", findPh: "جزء من الاسم", strongest: "أقوى الروابط (أبحاث مشتركة):", secOpen: "افتح القسم", secCrumb: "قسم ", filtAddHint: "اسم مفهوم، أو رقم arXiv أو رابط بحث", artAdding: "أقرأ البحث…", artNone: "لا يوجد هذا البحث لدينا", cutNote: "معروض {n} الأكثر ارتباطًا من {t}", cutAll: "اعرض الكل", filtOn: "مجموعة معروضة: ", filtOf: " من ", filtOff: "اعرض الشبكة كاملة", filtAdd: "أضف",
             fpage: 'صفحة الصيغة →', spage: 'صفحة العالِم →',
             cpage: 'صفحة المفهوم →', overview: 'نظرة عامة',
             artset: 'مجموعة المقالة · ', cloud: 'السحابة كاملة',
@@ -101,11 +106,11 @@ var TXT = (function () {
             concepts: ' مفهوماً', dblEnter: 'انقر نقراً مزدوجاً للدخول',
             hintArea: 'مرّر فوق دائرة لمعرفة المجال · نقر مزدوج للدخول',
             hintNav: 'نقرة — اختيار · مزدوجة — تعمّق · العجلة — تكبير',
-            artsMid: ' مقالة · ', links: ' رابط', strongest: 'أقوى الروابط:',
+            artsMid: ' مقالة · ', links: ' رابط', 
             nodes: ' عقدة · ', edgesPower: ' حافة · القوة ',
             empty: 'فارغ — ابحث أو انقر', all: 'الكل', clear: 'مسح', expand: 'توسيع'
         },
-        fr: { filtAddHint: "nom d’une notion, ou numéro arXiv / lien vers un article", artAdding: "je lis l’article…", artNone: "nous n’avons pas ce travail", cutNote: "affichés : les {n} plus liés sur {t}", cutAll: "tout afficher", filtOn: "ensemble affiché : ", filtOf: " sur ", filtOff: "voir le graphe entier", filtAdd: "ajouter",
+        fr: { findLbl: "Filtrer par nom", findPh: "partie du nom", strongest: "liens les plus forts (articles communs) :", secOpen: "ouvrir la section", secCrumb: "section ", filtAddHint: "nom d’une notion, ou numéro arXiv / lien vers un article", artAdding: "je lis l’article…", artNone: "nous n’avons pas ce travail", cutNote: "affichés : les {n} plus liés sur {t}", cutAll: "tout afficher", filtOn: "ensemble affiché : ", filtOf: " sur ", filtOff: "voir le graphe entier", filtAdd: "ajouter",
             fpage: 'page de la formule →', spage: 'page du scientifique →',
             cpage: 'page du concept →', overview: 'Vue d’ensemble',
             artset: 'ensemble de l’article · ', cloud: 'tout le nuage',
@@ -115,7 +120,7 @@ var TXT = (function () {
             hintArea: 'survolez un cercle pour voir le domaine · double-clic pour entrer',
             hintNav: 'clic — choisir · double — approfondir · molette — zoom',
             artsMid: ' articles · ', links: ' liens',
-            strongest: 'liens les plus forts :', nodes: ' nœuds · ',
+             nodes: ' nœuds · ',
             edgesPower: ' arêtes · puissance ', empty: 'vide — cherchez ou cliquez',
             all: 'tout', clear: 'effacer', expand: 'déplier'
         },
@@ -307,7 +312,10 @@ var frame = {mode: 'overview', nodes: [], edges: []};
    Одно число управляет обоими признаками сразу — и размером, и прозрачностью, — потому
    что оба считаются от глубины _depth, которую даёт эта же проекция. */
 var _cut = null;          // сколько узлов показано из скольких в последнем кадре
-var view = {is3d: false, layout: 'force', spin: false, minW: 2, persp: 5, noCap: false,
+/* q — отбор по имени внутри кадра. Не навигация: кадр остаётся тем же, просто всё,
+   что не подошло, гаснет. Владелец 31.08 просил среду анализа, а не только просмотра;
+   первое, чего в ней не хватало, — «покажи в этом кадре всё про поляризацию». */
+var view = {is3d: false, layout: 'force', spin: false, minW: 2, persp: 5, noCap: false, q: '',
             zoom: 1, zoomT: 1, panX: 0, panY: 0, panTX: 0, panTY: 0,
             rotX: -0.35, rotY: 0.5};
 var kindOn = {};
@@ -994,6 +1002,7 @@ function draw() {
         var dp = view.is3d ? Math.max(0, Math.min(1, (nd._depth - 0.55) * 2.2)) : 1;
         var alpha = (dim ? 0.20 : 1) * (view.is3d ? 0.12 + dp * 0.88 : 1);
         if (linked && !linked[i] && nd.kind !== '_group' && !hot) alpha *= 0.18;
+        if (view.q && !hot && String(nd.label).toLowerCase().indexOf(view.q) < 0) alpha *= 0.13;
         drawNodeIcon(p[0], p[1], r, styleOf(nd.kind, nd), alpha, hot,
                      nd.kind === '_group');
     });
@@ -1028,6 +1037,7 @@ function draw() {
         : Math.min(220, Math.max(40, Math.round(frame.nodes.length * 0.9)));
     var shown = 0;
     labels.forEach(function (L) {
+        if (view.q && String(n[L.i].label).toLowerCase().indexOf(view.q) < 0 && !L.hot) return;
         if (shown >= maxLabels && !L.hot) return;
         var nd = n[L.i];
         var fs = L.hot ? 12.5 : (L.big ? 11 : 9.5);
@@ -1433,7 +1443,7 @@ function renderFilter() {
     if (!box) return;
     var trimmed = _cut && _cut.total > _cut.shown;
     var sub = frame.mode === 'set' || frame.mode === 'picked' ||
-              frame.mode === 'ego' || frame.mode === 'group';
+              frame.mode === 'ego' || frame.mode === 'group' || frame.mode === 'cat';
     box.hidden = !(sub || trimmed);
     if (box.hidden) { addMode = false; return; }
     var shown = frame.nodes.filter(function (nd) { return nd.kind !== '_group'; }).length;
@@ -1447,11 +1457,18 @@ function renderFilter() {
        и «показаны 300 самых связанных из 4471» стоят рядом и говорят одно и то же.
        Оставляем одну строку: про набор — если он есть, про срез — если срез. */
     if (sub) {
-        var head = (frame.mode === 'set' || frame.mode === 'picked')
-            ? TXT.filtOn : TXT.filtOn + label + ' · ';
         var t = document.createElement('span');
         t.className = 'b42g-filter-t';
-        t.textContent = head + shown + TXT.filtOf + total;
+        /* Когда кадр ещё и срезан потолком, счёт «300 из 4471» рядом с «показаны 300 из
+           1225» не просто повторяется — он врёт: у раздела своё целое, а не весь граф.
+           Оставляем в такой паре только имя, числа скажет строка среза. */
+        if (trimmed) {
+            t.textContent = TXT.filtOn + label;
+        } else {
+            var head = (frame.mode === 'set' || frame.mode === 'picked')
+                ? TXT.filtOn : TXT.filtOn + label + ' · ';
+            t.textContent = head + shown + TXT.filtOf + total;
+        }
         box.appendChild(t);
     }
     var add = document.createElement('button');
@@ -1493,6 +1510,23 @@ function renderFilter() {
         off.onclick = function () { addMode = false; showAll(); };
         box.appendChild(off);
     }
+}
+
+/* РАЗДЕЛ ARXIV КАК УРОВЕНЬ, А НЕ ТОЛЬКО ГАЛОЧКА. Раздел был фильтром: спрятать
+   или показать. Но «астрофизика» — это и место, куда можно войти и увидеть только
+   её понятия, как входят в область (владелец 31.08: «как уйти на уровень разделов»).
+   Кадр собирается ровно как у области, включая потолок в триста узлов. */
+function showSection(cat) {
+    var ids = [];
+    for (var i = 0; i < G.nodes.length; i++) if (G.nodes[i].cat === cat) ids.push(i);
+    if (ids.length < 2) return;
+    var f = frameFromIds(ids);
+    trail = trail.filter(function (c) { return c.mode === 'overview'; });
+    trail.push({mode: 'cat', arg: cat, label: TXT.secCrumb + cat});
+    selI = -1; sparks = [];
+    setFrame('cat', f.nodes, f.edges);
+    if (view.minW > 1) setMinW(1);
+    igniteSparks();
 }
 
 /* ДОБАВИТЬ В НАБОР ЦЕЛУЮ СТАТЬЮ. Владелец 31.08: «не понятно, как добавлять в фильтр
@@ -1559,6 +1593,7 @@ function renderCrumbs() {
         a.onclick = function () {
             trail = trail.slice(0, i + 1);
             if (t.mode === 'overview') showOverview();
+            else if (t.mode === 'cat') showSection(t.arg);
             else if (t.mode === 'all') showAll();
             else if (t.mode === 'picked') showPicked();
             else if (t.mode === 'group') showGroup(t.arg, false);
@@ -1728,8 +1763,15 @@ function buildPanel() {
                     renderStats();
                 };
                 lab.appendChild(cb);
-                var sp2 = document.createElement('span');
+                /* Имя раздела — кнопка входа, галочка рядом осталась фильтром.
+                   Два действия на одной строке, и каждое читается: галочка про
+                   «показывать ли», имя про «пойти туда». */
+                var sp2 = document.createElement('button');
+                sp2.type = 'button';
+                sp2.className = 'b42g-catgo';
+                sp2.title = TXT.secOpen;
                 sp2.textContent = cname + ' · ' + cats[cname];
+                sp2.onclick = function (e) { e.preventDefault(); showSection(cname); };
                 lab.appendChild(sp2);
                 cb2.appendChild(lab);
             });
@@ -1857,6 +1899,19 @@ function buildPanel() {
             if (view.layout === 'force') seedLayout();
             else applyFixedLayout();
         };
+    });
+    var fq = el('b42g-find');
+    if (fq) fq.addEventListener('input', function () {
+        view.q = fq.value.trim().toLowerCase();
+        var c = el('b42g-findn');
+        if (c) {
+            var k = 0;
+            frame.nodes.forEach(function (nd) {
+                if (!view.q || String(nd.label).toLowerCase().indexOf(view.q) >= 0) k++;
+            });
+            c.textContent = view.q ? k + '/' + frame.nodes.length : '';
+        }
+        sim.alive = Math.max(sim.alive, 60);
     });
     var pr = el('b42g-persp');
     if (pr) pr.addEventListener('input', function () {

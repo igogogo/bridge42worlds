@@ -1326,11 +1326,13 @@ def graph_page(lang):
     L = {"ru": {"mode": "Режим", "layout": "Представление", "force": "силы",
                 "ring": "кольцо", "sphere": "сфера", "galaxy": "галактика",
                 "layers": "слои", "spin": "вращение", "depth": "Глубина",
+                "findLbl": "Отбор по имени", "findPh": "часть имени",
                 "kinds": "Классы", "groups": "Группы", "info": "Выбрано",
                 "stats": "Кадр", "path": "Путь"},
          "en": {"mode": "Mode", "layout": "Layout", "force": "force",
                 "ring": "ring", "sphere": "sphere", "galaxy": "galaxy",
                 "layers": "layers", "spin": "spin", "depth": "Depth",
+                "findLbl": "Filter by name", "findPh": "part of a name",
                 "kinds": "Kinds", "groups": "Groups", "info": "Selection",
                 "stats": "Frame", "path": "Trail"}}
     l = L.get(lang, L["en"])
@@ -1368,6 +1370,14 @@ def graph_page(lang):
   <div class="b42g-sec" id="b42g-persp-sec" style="display:none">
     <div class="b42g-h">{l.get("depth", "Depth")} <span id="b42g-perspv">5</span></div>
     <input id="b42g-persp" type="range" min="1" max="10" value="5" style="width:100%">
+  </div>
+  <!-- Отбор по имени внутри кадра: не переход, а гашение всего, что не подошло. -->
+  <div class="b42g-sec">
+    <div class="b42g-h">{l.get("findLbl", "Filter by name")} <span id="b42g-findn"></span></div>
+    <input id="b42g-find" type="search" placeholder="{l.get("findPh", "part of a name")}"
+           style="width:100%;padding:4px 8px;border:1px solid var(--hairline);
+                  border-radius:5px;background:var(--bg);color:var(--fg);
+                  font-family:var(--mono);font-size:11.5px">
   </div>
   <div class="b42g-sec"><div class="b42g-h">{t["w"]} <span id="b42g-wv">≥2</span></div>
     <input id="b42g-w" type="range" min="2" max="20" value="2" style="width:100%">

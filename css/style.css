@@ -4428,6 +4428,11 @@ html[lang="ar"] .card-img-wrap { float: none; margin: 0; }
 /* Ответ полосы на действие — «читаю статью…», «такой работы у нас нет». Живёт секунды,
    поэтому не кнопка и не рамка: просто строка тем же шрифтом. */
 .b42g-filter-say { font-family: var(--mono); font-size: 11px; color: var(--soft); }
+/* Имя раздела в панели — кнопка входа. Выглядит как текст, ведёт себя как ссылка:
+   строка и так тесная, ещё одна рамка сделала бы из списка панель управления. */
+.b42g-catgo { font: inherit; background: none; border: 0; padding: 0; cursor: pointer;
+    color: inherit; text-align: left; }
+.b42g-catgo:hover { color: var(--link); text-decoration: underline; }
 @media (max-width: 640px) {
     .b42g-filter { font-size: 11px; padding: 4px 7px; }
 }
