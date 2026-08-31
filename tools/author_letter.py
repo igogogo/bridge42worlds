@@ -151,8 +151,15 @@ def papers_of(name, lang, cap=6):
     import generate as G
     g = graph()
     ids = (g.get(name) or {}).get("articles") or []
+    # Названия берём из индекса ЯЗЫКА ПИСЬМА: арабское письмо со ссылкой на арабскую
+    # страницу и английским заголовком читается как машинная склейка. Реестр авторов
+    # общий, а заголовки у каждого языка свои.
     idx = {}
-    for a in G.load_index("en"):
+    try:
+        rows = G.load_index(lang)
+    except Exception:
+        rows = G.load_index("en")
+    for a in (rows or G.load_index("en")):
         if a.get("version") == "popular":
             idx[a["id"]] = a
             idx[a["id"].split("v")[0]] = a
