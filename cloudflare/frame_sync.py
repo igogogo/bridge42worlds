@@ -30,6 +30,10 @@ related-vec (160 КБ), tags-lite, laws-lite, scientists-lite, tag-laws, carouse
     python cloudflare/frame_sync.py --check
     python cloudflare/frame_sync.py --apply
 """
+import sys as _s
+from pathlib import Path as _P
+_s.path.insert(0, str(_P(__file__).resolve().parent.parent))
+from tools import runlock as _lock
 import argparse
 import json
 import sys
@@ -237,6 +241,7 @@ def push(rows, sql_head, cols_n, batch=90):
 
 
 def main():
+    _lock.acquire("d1", "обвязка статей в облако")
     # Общий замок (tools/freeze.py): пока стоит, прогоны не начинаются.
     try:
         import sys as _s

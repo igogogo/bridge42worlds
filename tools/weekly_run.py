@@ -44,6 +44,10 @@
     python tools/weekly_run.py --only retag,super
     python tools/weekly_run.py --no-publish
 """
+import sys as _s
+from pathlib import Path as _P
+_s.path.insert(0, str(_P(__file__).resolve().parent.parent))
+from tools import runlock as _lock
 import argparse
 import sys
 from pathlib import Path
@@ -167,6 +171,7 @@ def main():
         env["B42_NO_PUBLISH"] = "1"
 
     F.log("═══ СЛУЖЕБНЫЙ ПРОГОН: пересчёт по всему корпусу ═══")
+    _lock.acquire("tree", "недельный конвейер")
     st = F.state()
     st.setdefault("run_id", F.time.strftime("%Y-%m-%d %H:%M"))
     st.setdefault("started", st["run_id"])

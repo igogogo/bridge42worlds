@@ -28,6 +28,10 @@
     python tools/full_run.py --catch-up                      все пропущенные
     python tools/full_run.py --catch-up --limit 20           не больше N в день
 """
+import sys as _s
+from pathlib import Path as _P
+_s.path.insert(0, str(_P(__file__).resolve().parent.parent))
+from tools import runlock as _lock
 import argparse
 import datetime
 import json
@@ -441,6 +445,7 @@ def main():
     days = ([d.strip() for d in a.days.split(",") if d.strip()] if a.days
             else missing_days() if a.catch_up else [])
     log("═══ ПРОГОН КОНВЕЙЕРА: " + ("НЕДЕЛЬНЫЙ (всё)" if FULL else "обычный (точечный)") + " ═══")
+    _lock.acquire("tree", "ежедневный конвейер")
     log(f"дни: {', '.join(days) if days else 'нет — только насыщение и сборка'}")
 
     # План объявляем ДО работы: схема конвейера показывает не только пройденное и

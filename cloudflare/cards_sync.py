@@ -27,6 +27,10 @@
     python cloudflare/cards_sync.py --apply     залить разницу
     python cloudflare/cards_sync.py --apply --full   перезалить с нуля (после смены схемы)
 """
+import sys as _s
+from pathlib import Path as _P
+_s.path.insert(0, str(_P(__file__).resolve().parent.parent))
+from tools import runlock as _lock
 import argparse
 import hashlib
 import json
@@ -432,6 +436,7 @@ def sync_authors(apply):
 
 # ─────────────────────────────── главное ────────────────────────────────────
 def main():
+    _lock.acquire("d1", "карточки статей в облако")
     # Общий замок (tools/freeze.py): пока стоит, прогоны не начинаются.
     try:
         import sys as _s

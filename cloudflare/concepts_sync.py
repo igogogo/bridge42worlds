@@ -26,6 +26,10 @@
     python cloudflare/concepts_sync.py               залить всё
     python cloudflare/concepts_sync.py --frames      только кадры графа
 """
+import sys as _s
+from pathlib import Path as _P
+_s.path.insert(0, str(_P(__file__).resolve().parent.parent))
+from tools import runlock as _lock
 import argparse
 import json
 import os
@@ -349,6 +353,7 @@ def build_frames(live, graph):
 
 
 def main():
+    _lock.acquire("d1", "понятия в облако")
     ap = argparse.ArgumentParser(description="Реестр знаний → D1")
     ap.add_argument("--schema", action="store_true")
     ap.add_argument("--frames", action="store_true")

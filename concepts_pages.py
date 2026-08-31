@@ -23,6 +23,10 @@ tools/wave5_apply.py (data/concepts-live.json); здесь из него рас�
     python concepts_pages.py            все языки
     python concepts_pages.py --lang ru  один язык
 """
+import sys as _s
+from pathlib import Path as _P
+_s.path.insert(0, str(_P(__file__).resolve().parent))
+from tools import runlock as _lock
 import argparse
 import html as H
 import json
@@ -38,7 +42,8 @@ LIVE = ROOT / "data" / "concepts-live.json"
 # этом языке реально есть перевод (имя или текст старого справочника: таких
 # 529); остальным на этих языках отдаётся редирект на английскую версию,
 # чтобы ссылка была живой, а не 404.
-LANGS = ("ru", "en", "es", "ar", "fr")
+from common import ALL_LANGS  # noqa: E402
+LANGS = ALL_LANGS   # список языков один на проект: config.json через common.ALL_LANGS
 ALWAYS_LANGS = ("ru", "en")
 CARDS_CAP = 40
 
@@ -1468,6 +1473,7 @@ def build(langs):
 
 
 def main():
+    _lock.acquire("tree", "страницы понятий")
     ap = argparse.ArgumentParser()
     ap.add_argument("--lang", help="один язык")
     a = ap.parse_args()
