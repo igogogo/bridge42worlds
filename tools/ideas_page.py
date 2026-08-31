@@ -37,35 +37,35 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
 LANGS = ("ru", "en", "es", "ar", "fr")
 
 T = {
-    "ru": { "like": "нравится", "dislike": "не то", "comment": "+ комментарий", "commentHint": "отклики читаем пачками — идею можем поправить", "send": "отправить", "expressMark": "экспресс", "open": "Открыть идею","title": "Идеи проектов", "sub": "За что можно взяться — с опорой на работы",
+    "ru": { "origins": {"applied": "Прикладное", "core": "Наше ядро", "area": "Области машины знаний", "demand": "Спрос машины знаний"}, "like": "нравится", "dislike": "не то", "comment": "+ комментарий", "commentHint": "отклики читаем пачками — идею можем поправить", "send": "отправить", "expressMark": "экспресс", "open": "Открыть идею","title": "Идеи проектов", "sub": "За что можно взяться — с опорой на работы",
            "none": "Идей пока нет", "scale": "масштаб", "what": "что делаем",
            "why": "зачем", "methods": "как", "first": "первый шаг", "needs": "что нужно",
            "risks": "где споткнётся", "origin": "почему мы это предлагаем",
            "based": "опора", "ours": "наш разбор", "field": "работа arXiv, не разобрана",
            "topics": "Области", "note": "Каждая идея обязана опираться на конкретные "
            "работы, и они названы. Идея без опоры — красивые слова, их и без нас много."},
-    "en": { "like": "like", "dislike": "not for me", "comment": "+ comment", "commentHint": "we read replies in batches — the idea may change", "send": "send", "expressMark": "express", "open": "Open the idea","title": "Project ideas", "sub": "Things you can take on — grounded in papers",
+    "en": { "origins": {"applied": "Applied", "core": "Our core", "area": "Areas the machine found", "demand": "What the machine lacks"}, "like": "like", "dislike": "not for me", "comment": "+ comment", "commentHint": "we read replies in batches — the idea may change", "send": "send", "expressMark": "express", "open": "Open the idea","title": "Project ideas", "sub": "Things you can take on — grounded in papers",
            "none": "No ideas yet", "scale": "scale", "what": "what to do",
            "why": "why", "methods": "how", "first": "first step", "needs": "what you need",
            "risks": "where it stumbles", "origin": "why we suggest it",
            "based": "grounded in", "ours": "our analysis", "field": "arXiv paper, not analysed",
            "topics": "Areas", "note": "Every idea must rest on named papers. "
            "An idea without grounding is just words, and there are plenty of those."},
-    "es": { "like": "me gusta", "dislike": "no es lo mío", "comment": "+ comentario", "commentHint": "leemos las respuestas por lotes — la idea puede cambiar", "send": "enviar", "expressMark": "exprés", "open": "Abrir la idea","title": "Ideas de proyectos", "sub": "Qué se puede emprender, apoyado en trabajos",
+    "es": { "origins": {"applied": "Aplicado", "core": "Nuestro núcleo", "area": "Áreas halladas por la máquina", "demand": "Lo que le falta a la máquina"}, "like": "me gusta", "dislike": "no es lo mío", "comment": "+ comentario", "commentHint": "leemos las respuestas por lotes — la idea puede cambiar", "send": "enviar", "expressMark": "exprés", "open": "Abrir la idea","title": "Ideas de proyectos", "sub": "Qué se puede emprender, apoyado en trabajos",
            "none": "Aún no hay ideas", "scale": "escala", "what": "qué hacer",
            "why": "para qué", "methods": "cómo", "first": "primer paso", "needs": "qué hace falta",
            "risks": "dónde tropezará", "origin": "por qué lo proponemos",
            "based": "apoyo", "ours": "nuestro análisis", "field": "trabajo de arXiv, sin analizar",
            "topics": "Áreas", "note": "Cada idea debe apoyarse en trabajos concretos, y están "
            "nombrados. Una idea sin apoyo son solo palabras, y de esas sobran."},
-    "ar": { "like": "يعجبني", "dislike": "ليس لي", "comment": "+ تعليق", "commentHint": "نقرأ الردود على دفعات — قد تتغيّر الفكرة", "send": "إرسال", "expressMark": "سريعة", "open": "افتح الفكرة","title": "أفكار مشاريع", "sub": "ما يمكن الشروع فيه، مستنداً إلى أبحاث",
+    "ar": { "origins": {"applied": "تطبيقية", "core": "صميم عملنا", "area": "مجالات وجدتها آلة المعرفة", "demand": "ما ينقص آلة المعرفة"}, "like": "يعجبني", "dislike": "ليس لي", "comment": "+ تعليق", "commentHint": "نقرأ الردود على دفعات — قد تتغيّر الفكرة", "send": "إرسال", "expressMark": "سريعة", "open": "افتح الفكرة","title": "أفكار مشاريع", "sub": "ما يمكن الشروع فيه، مستنداً إلى أبحاث",
            "none": "لا توجد أفكار بعد", "scale": "الحجم", "what": "ماذا نفعل",
            "why": "لماذا", "methods": "كيف", "first": "الخطوة الأولى", "needs": "ما يلزم",
            "risks": "أين قد يتعثّر", "origin": "لماذا نقترح ذلك",
            "based": "الاستناد", "ours": "تحليلنا", "field": "بحث في arXiv، لم نحلّله",
            "topics": "المجالات", "note": "كل فكرة يجب أن تستند إلى أبحاث محددة، وهي مذكورة. "
            "الفكرة بلا استناد مجرد كلام، والكلام كثير."},
-    "fr": { "like": "j’aime", "dislike": "pas pour moi", "comment": "+ commentaire", "commentHint": "nous lisons les réponses par lots — l’idée peut changer", "send": "envoyer", "expressMark": "express", "open": "Ouvrir l’idée","title": "Idées de projets", "sub": "Ce qu’on peut entreprendre, appuyé sur des travaux",
+    "fr": { "origins": {"applied": "Appliqué", "core": "Notre cœur", "area": "Domaines trouvés par la machine", "demand": "Ce qui manque à la machine"}, "like": "j’aime", "dislike": "pas pour moi", "comment": "+ commentaire", "commentHint": "nous lisons les réponses par lots — l’idée peut changer", "send": "envoyer", "expressMark": "express", "open": "Ouvrir l’idée","title": "Idées de projets", "sub": "Ce qu’on peut entreprendre, appuyé sur des travaux",
            "none": "Pas encore d’idées", "scale": "échelle", "what": "quoi faire",
            "why": "pourquoi", "methods": "comment", "first": "première étape", "needs": "ce qu’il faut",
            "risks": "où ça coince", "origin": "pourquoi nous le proposons",
@@ -93,6 +93,11 @@ CSS = """
 .id-bar .id-chip:hover { border-color: var(--accent); }
 .id-bar .id-chip[aria-current="true"] { border-color: var(--accent);
     background: var(--surface); font-weight: 600; }
+/* Пласты тем. Ряд из девяноста кнопок подряд читается как свалка; разложенный
+   по происхождению — как оглавление, и заодно отвечает на вопрос «откуда это». */
+.id-glab { flex: 0 0 100%; margin: 6px 0 0; font-family: var(--mono); font-size: 10.5px;
+    text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.id-glab:first-child { margin-top: 0; }
 .id-topic { margin: 20px 0 0; }
 .id-topic h2 { font-family: var(--serif); font-size: 20px; margin: 0 0 3px; }
 .id-topic h2::first-letter { text-transform: uppercase; }
@@ -380,7 +385,23 @@ JS = """
       return;
     }
     TOPICS = idx.topics;
+    var ORDER = ["applied", "core", "area", "demand", ""];
+    var byOrigin = {};
     TOPICS.forEach(function (t) {
+      var k = ORDER.indexOf(t.origin || "") >= 0 ? (t.origin || "") : "";
+      (byOrigin[k] = byOrigin[k] || []).push(t);
+    });
+    ORDER.forEach(function (k) {
+      if (!byOrigin[k]) return;
+      if (D.origins && D.origins[k]) {
+        var lab = document.createElement("div");
+        lab.className = "id-glab";
+        lab.textContent = D.origins[k];
+        bar.appendChild(lab);
+      }
+      byOrigin[k].forEach(chip);
+    });
+    function chip(t) {
       IDX[t.slug] = t;
       var b = document.createElement("button");
       b.className = "id-chip";
@@ -392,7 +413,7 @@ JS = """
         if (location.hash === want) route(); else location.hash = want;
       };
       bar.appendChild(b);
-    });
+    }
     route();
   }).catch(function () {
     box.innerHTML = '<p class="id-empty">' + esc(D.none) + "</p>";
@@ -401,9 +422,26 @@ JS = """
 """
 
 
+def _origins():
+    """Слой → откуда тема. Список тем собирает tools/idea_topics.py из четырёх
+    пластов; странице это нужно, чтобы не валить в один ряд «опреснение морской
+    воды» и «квантовая информатика»: первое просил читатель, второе машина знаний
+    нашла сама."""
+    src = ROOT / "data" / "idea-topics.json"
+    if not src.exists():
+        return {}
+    import re as _re
+    out = {}
+    for r in json.loads(src.read_text(encoding="utf-8")).get("topics", []):
+        t = _re.sub(r"[^\w\s-]", "", str(r.get("topic", "")).lower(), flags=_re.U)
+        out[_re.sub(r"[\s_]+", "-", t).strip("-")[:60]] = r.get("origin") or ""
+    return out
+
+
 def build_index():
     """Опись тем — маленький файл, чтобы страница не тянула все наборы разом."""
     topics = []
+    origins = _origins()
     for p in sorted(SRC.glob("*.json")):
         if p.name == "index.json":
             continue
@@ -429,6 +467,7 @@ def build_index():
         topics.append({"slug": slug, "topic": d.get("topic") or p.stem,
                        "key": hashlib.sha1(slug.encode("utf-8")).hexdigest()[:8],
                        "n": len(d["ideas"]), "titles": titles,
+                       "origin": origins.get(slug, ""),
                        "sources": len(d.get("sources") or [])})
     INDEX.write_text(json.dumps({"topics": topics}, ensure_ascii=False, indent=1),
                      encoding="utf-8")

@@ -389,6 +389,10 @@ def main():
                     help="перевести УЖЕ НАПИСАННЫЕ наборы, не сочиняя их заново: "
                          "иначе идеи, написанные без --translate, остались бы "
                          "русскими навсегда")
+    ap.add_argument("--limit", type=int, default=0,
+                    help="сколько новых тем взять за прогон: список тем вырос со "
+                         "сорока до сотни, и писать их разом — это часы и деньги "
+                         "одним куском. Фабрика прирастает по десятку в неделю")
     ap.add_argument("--only-new", action="store_true",
                     help="пропустить темы, по которым идеи уже написаны — так шаг "
                          "недельного прогона стоит денег только за новые темы")
@@ -427,6 +431,9 @@ def main():
         topics = [t for t in topics if not (OUT / f"{_slug(t)}.json").exists()]
         if was != len(topics):
             print(f"уже написано: {was - len(topics)}, беру {len(topics)}")
+    if args.limit and len(topics) > args.limit:
+        print(f"предел прогона: {args.limit} из {len(topics)} — остальные в следующий раз")
+        topics = topics[:args.limit]
     done = 0
     for t in topics:
         out = build(t, show=args.show or not (args.save or args.topics))
