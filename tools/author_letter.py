@@ -276,19 +276,49 @@ def fresh_articles(days):
             if a.get("version") == "popular" and (a.get("date") or "") >= edge]
 
 
+RETAG = ROOT / "data" / "articles-retag-v2.json"
+
+
+def machine_marked():
+    """Работы, которые ПРОШЛИ машину знаний: у них есть разметка понятий.
+
+    Владелец 31.08: «отправляем только тем, чьи работы были обработаны машиной
+    знаний». Резон прямой: письмо ведёт человека на страницу, где его работа стоит
+    в графе понятий, со связями и соседями. Разбор без разметки такой страницы не
+    даёт — там пусто, и письмо обещает больше, чем показывает.
+
+    Разметку кладёт шаг retag (ежедневный — только работам дня, недельный —
+    доразметкой всему корпусу), а лежит она в data/articles-retag-v2.json.
+    """
+    if not RETAG.exists():
+        return {}
+    arts = json.loads(RETAG.read_text(encoding="utf-8")).get("articles") or {}
+    out = {}
+    for aid, concepts in arts.items():
+        out[aid] = len(concepts or [])
+        out[aid.split("v")[0]] = len(concepts or [])
+    return out
+
+
 def candidates(days, limit):
-    """Кому писать: свежие разборы, у которых адрес есть прямо в работе."""
+    """Кому писать: свежие разборы, прошедшие машину знаний, с адресом из работы."""
     done = written()
-    rows = []
+    marked = machine_marked()
+    rows, no_mark, no_mail = [], 0, 0
     for art in sorted(fresh_articles(days), key=lambda x: x.get("date", ""), reverse=True):
+        n_con = marked.get(art["id"]) or marked.get(art["id"].split("v")[0]) or 0
+        if not n_con:
+            no_mark += 1
+            continue
         mails = emails_of(art.get("date"), art["id"])
         if not mails:
+            no_mail += 1
             continue
         who = addressee(art, mails)
         if not who or who in done:
             continue
         rows.append({"id": art["id"], "date": art["date"], "author": who,
-                     "to": mails[0], "others": mails[1:3],
+                     "to": mails[0], "others": mails[1:3], "concepts": n_con,
                      "title": (art.get("title") or "")[:70],
                      "page": f"{SITE}/lang/en/authors/{slug_of(who)}.html"})
         if len(rows) >= limit:
@@ -296,10 +326,12 @@ def candidates(days, limit):
     CAND.parent.mkdir(parents=True, exist_ok=True)
     CAND.write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rows),
                     encoding="utf-8")
-    print(f"свежих разборов за {days} дней с найденным адресом: {len(rows)}"
-          f"  → {CAND.relative_to(ROOT)}\n")
+    print(f"свежих разборов за {days} дней: готовых к письму {len(rows)}"
+          f"  → {CAND.relative_to(ROOT)}")
+    print(f"  отсеяно: без разметки машины знаний {no_mark} · без адреса в работе {no_mail}\n")
     for r in rows[:limit]:
-        print(f"  {r['date']}  {r['id']:16} {r['to']:38} {r['author'][:24]:26} {r['title'][:40]}")
+        print(f"  {r['date']}  {r['id']:16} {r['concepts']:3} пон.  {r['to']:36} "
+              f"{r['author'][:22]:24} {r['title'][:36]}")
     if rows:
         print(f"\nписьмо по одной работе:  python tools/author_letter.py --id {rows[0]['id']} --dry")
     return 0

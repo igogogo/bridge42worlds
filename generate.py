@@ -5990,7 +5990,14 @@ def process_day(date_str, force=False, refresh_aggregates=True, express=False, l
     # category может быть НЕСКОЛЬКО категорий через запятую (мульти-периметр) — фетчим каждую,
     # объединяем+дедупим по id, и select_best ранжирует ЕДИНЫМ пулом → настоящий топ-N/день по всем
     # разделам, а не по одной категории (юзер-фидбер 2026-07-21: «20 лучших за день по всем разделам»).
-    cats = [c.strip() for c in (category or "astro-ph.*").split(",") if c.strip()]
+    # ПЕРИМЕТР ДОБЫЧИ — ИЗ КОНФИГА, А НЕ ИЗ ОБЁРТКИ ПЛАНИРОВЩИКА. Он жил строкой
+    # внутри tools/daily.cmd: четырнадцать разделов от астрофизики до cs.LG. А
+    # tools/full_run.py, который мы гоняем полуручником и на который собирались
+    # переезжать на VPS, категорию не передавал вовсе — и молча брал умолчание
+    # «astro-ph.*». Отсюда и перекос: за 22-27 августа 35 работ, из них 33
+    # астрофизические. Периметр — свойство проекта, а не одной обёртки.
+    _default = config.get("daily_categories") or "astro-ph.*"
+    cats = [c.strip() for c in (category or _default).split(",") if c.strip()]
     articles, _seen = [], set()
     gen_arxiv.FETCH_FAILURES.clear()
     for cat in cats:

@@ -48,7 +48,11 @@ REM его раздел. Замер на 167 кандидатах cs.LG: три 
 REM «про сам ИИ» на работы «ИИ для науки». Разрешено вернуть МЕНЬШЕ статей, чем просили,
 REM если достойных нет, — добор слабыми ради числа запрещён.
 REM Реальные доли смотреть в `run.py stats` после прогона.
-python run.py daily --express --limit 25 --category "astro-ph.*,gr-qc,hep-th,hep-ph,hep-ex,nucl-th,nucl-ex,quant-ph,cond-mat.*,physics.*,q-bio.*,math-ph,math.*,cs.LG" >> "%LOGDIR%\daily_%STAMP%.log" 2>&1
+REM Периметр разделов больше НЕ здесь: он в config.json (daily_categories).
+REM Пока он жил строкой в этой обёртке, полуручной конвейер tools/full_run.py
+REM про него не знал и брал умолчание astro-ph.* — за неделю 33 астрофизические
+REM работы из 35. Одно место на весь проект.
+python run.py daily --express --limit 25 >> "%LOGDIR%\daily_%STAMP%.log" 2>&1
 set RC=%ERRORLEVEL%
 
 REM Хвост лога — в общий журнал, чтобы одним файлом видеть историю прогонов
