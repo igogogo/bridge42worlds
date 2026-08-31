@@ -16,7 +16,7 @@
               perDay:'статей за день', updated:'обновлено', loading:'Собираем данные…', none:'—',
               topLaws:'Ключевые законы', mainPage:'главная', audience:'Аудитория (свой счётчик)', uniqueVisitors:'уникальных', visits:'визитов', returning:'вернулись', topPages:'Куда ходили', byLangViews:'Языки читателей', sources:'Откуда пришли', clicks:'Что нажимали', readDepth:'Глубина чтения, %', audienceNote:'За 30 дней. Наши собственные визиты помечены и в эти числа не входят.', engagement:'Вовлечённость (данные сайта)', views:'просмотров',
               likes:'лайков', dislikes:'дизлайков', comments:'откликов', viewsByType:'Просмотры по типу',
-              viewsByDevice:'Просмотры по устройству', reactions:'Реакции', lawTypes:'Типы законов',
+              viewsByDevice:'Просмотры по устройству', reactions:'Реакции', lawTypes:'Виды понятий',
               eArticle:'статьи', eTag:'теги', eLaw:'законы', eScientist:'учёные', eAuthor:'авторы',
               pace:'Темп', d7:'за 7 дней', d30:'за 30 дней', perDayAvg:'в среднем в день',
               lastArticle:'последняя статья', growth:'Рост корпуса', totalBy:'всего к',
@@ -40,7 +40,7 @@
               perDay:'artículos ese día', updated:'actualizado', loading:'Procesando datos…', none:'—',
               topLaws:'Leyes clave', mainPage:'inicio', audience:'Audiencia (contador propio)', uniqueVisitors:'únicos', visits:'visitas', returning:'volvieron', topPages:'Adónde fueron', byLangViews:'Idiomas de lectores', sources:'De dónde llegaron', clicks:'Qué pulsaron', readDepth:'Profundidad de lectura, %', audienceNote:'Últimos 30 días. Nuestras propias visitas están marcadas y excluidas.', engagement:'Interacción (datos del sitio)', views:'vistas',
               likes:'me gusta', dislikes:'no me gusta', comments:'respuestas', viewsByType:'Vistas por tipo',
-              viewsByDevice:'Vistas por dispositivo', reactions:'Reacciones', lawTypes:'Tipos de leyes',
+              viewsByDevice:'Vistas por dispositivo', reactions:'Reacciones', lawTypes:'Tipos de conceptos',
               eArticle:'artículos', eTag:'etiquetas', eLaw:'leyes', eScientist:'científicos', eAuthor:'autores',
               pace:'Ritmo', d7:'últimos 7 días', d30:'últimos 30 días', perDayAvg:'al día de media',
               lastArticle:'último artículo', growth:'Crecimiento del corpus', totalBy:'total hasta',
@@ -59,7 +59,7 @@
               perDay:'مقالات في ذلك اليوم', updated:'حُدّث', loading:'نُعالج البيانات…', none:'—',
               topLaws:'قوانين أساسية', mainPage:'الرئيسية', audience:'الجمهور (عدّادنا الخاص)', uniqueVisitors:'زوار فريدون', visits:'زيارات', returning:'عادوا', topPages:'أين ذهبوا', byLangViews:'لغات القراء', sources:'من أين جاؤوا', clicks:'ما الذي ضغطوه', readDepth:'عمق القراءة، %', audienceNote:'آخر 30 يومًا. زياراتنا الخاصة مُعلَّمة ومستبعدة.', engagement:'التفاعل (بيانات الموقع)', views:'مشاهدات',
               likes:'إعجابات', dislikes:'عدم إعجاب', comments:'ردود', viewsByType:'المشاهدات حسب النوع',
-              viewsByDevice:'المشاهدات حسب الجهاز', reactions:'التفاعلات', lawTypes:'أنواع القوانين',
+              viewsByDevice:'المشاهدات حسب الجهاز', reactions:'التفاعلات', lawTypes:'أنواع المفاهيم',
               eArticle:'مقالات', eTag:'وسوم', eLaw:'قوانين', eScientist:'علماء', eAuthor:'مؤلفون',
               pace:'الوتيرة', d7:'خلال 7 أيام', d30:'خلال 30 يومًا', perDayAvg:'يوميًا في المتوسط',
               lastArticle:'آخر مقالة', growth:'نمو المجموعة', totalBy:'المجموع بحلول', ofThemFull:'منها كاملة',
@@ -81,7 +81,7 @@
               loading:'Traitement des données…', none:'—', topLaws:'Lois clés',
               mainPage:'accueil', audience:'Audience (notre compteur)', uniqueVisitors:'uniques', visits:'visites', returning:'revenus', topPages:'Où ils sont allés', byLangViews:'Langues des lecteurs', sources:'D’où ils viennent', clicks:'Ce qu’ils ont cliqué', readDepth:'Profondeur de lecture, %', audienceNote:'30 derniers jours. Nos propres visites sont marquées et exclues.', engagement:'Engagement (données du site)', views:'vues', likes:'j’aime',
               dislikes:'je n’aime pas', comments:'retours', viewsByType:'Vues par type',
-              viewsByDevice:'Vues par appareil', reactions:'Réactions', lawTypes:'Types de lois',
+              viewsByDevice:'Vues par appareil', reactions:'Réactions', lawTypes:'Types de concepts',
               eArticle:'articles', eTag:'tags', eLaw:'lois', eScientist:'scientifiques', eAuthor:'auteurs',
               pace:'Rythme', d7:'sur 7 jours', d30:'sur 30 jours', perDayAvg:'par jour en moyenne',
               lastArticle:'dernier article', growth:'Croissance du corpus', totalBy:'total au',
@@ -104,7 +104,7 @@
         updated:'updated', loading:'…', none:'—',
         mainPage:'home', audience:'Audience (our own counter)', uniqueVisitors:'unique', visits:'visits', returning:'returned', topPages:'Where they went', byLangViews:'Reader languages', sources:'Where they came from', clicks:'What they clicked', readDepth:'Read depth, %', audienceNote:'Last 30 days. Our own visits are flagged and excluded.', engagement:'Engagement (site data)', views:'views', likes:'likes', dislikes:'dislikes',
         comments:'feedback', viewsByType:'Views by type', viewsByDevice:'Views by device',
-        reactions:'Reactions', lawTypes:'Law types', eArticle:'articles', eTag:'tags', eLaw:'laws',
+        reactions:'Reactions', lawTypes:'Concept kinds', eArticle:'articles', eTag:'tags', eLaw:'laws',
         eScientist:'scientists', eAuthor:'authors', topLaws:'Key laws',
         pace:'Pace', d7:'last 7 days', d30:'last 30 days', perDayAvg:'per day on average',
         lastArticle:'latest article', growth:'Corpus growth', totalBy:'total by', ofThemFull:'of them full',
@@ -179,7 +179,10 @@
            переехал в понятия, и дашборд показывал позапрошлый мир (владелец 31.08).
            Теперь: понятия, формулы, области — то, что конвейер обновляет каждый день. */
         var nC = CN.total || 0, nF = S.formulas || 0, nAr = S.areas || 0;
-        var nSec = Object.keys(bySection).length || S.sections || 0;
+        /* Разделов СТОЛЬКО, СКОЛЬКО ИХ У arXiv (astro-ph.HE, cond-mat.soft…), а не
+           сколько групп верхнего уровня: плитка обещает разделы, полоса ниже —
+           группы, и путать их нельзя (было 20 вместо 156). */
+        var nSec = S.sections || Object.keys(bySection).length || 0;
         var nS = S.scientists || 0;
         var nAu = S.authors || 0;
         var nLang = Object.keys(S.langs || {}).length ||
@@ -371,21 +374,30 @@
                 (window.authorSlug ? authorSlug(r.name) : encodeURIComponent(r.name)) + '.html';
         });
 
-        // ── Топ-законы (по числу связанных тегов из справочника законов) ──
-        var ld = window.lawsData || {};
-        var lawArr = Object.keys(ld).map(function (k) {
-            return [k, ((ld[k] && ld[k].tags) || []).length, (ld[k] && ld[k].name) || k, (ld[k] && ld[k].type) || ''];
-        }).filter(function (r) { return r[1] > 0; }).sort(function (a, b) { return b[1] - a[1]; }).slice(0, 12);
-        if (lawArr.length) {
-            html += '<div class="dash-block"><h2>' + esc(T.topLaws) + '</h2><div class="dash-chips">' +
-                lawArr.map(function (r) {
-                    return '<a class="dash-chip" href="/lang/' + window.lang + '/laws/' + encodeURIComponent(r[0]) + '.html">' +
-                        esc(r[2]) + ' <b>' + r[1] + '</b></a>';
-                }).join('') + '</div></div>';
-        }
-        // Типы законов — пай-чарт
+        /* Блок «Ключевые законы» убран. Он считал связи по справочнику законов, а тот
+           не переписывался с 25 августа и после переезда на облако вовсе не грузится:
+           блок молча не рисовался. Его место занял «Частые понятия» выше — та же мысль
+           на сегодняшнем словаре и со ссылками на живые страницы. */
+        // Виды понятий — круговая
+        /* ВИДЫ ПОНЯТИЙ вместо типов законов. Круг считался по lawsData — справочнику,
+           который не переписывали с 25 августа; после переезда на облако его вовсе не
+           стало, и круг молча исчез. Считаем по реестру понятий: закон, уравнение,
+           явление, величина, прибор — то, что конвейер обновляет каждый день. */
+        var KIND_RU = {
+            concept:'понятие', law:'закон', principle:'принцип', theorem:'теорема',
+            equation:'уравнение', phenomenon:'явление', effect:'эффект', method:'метод',
+            process:'процесс', object:'объект', substance:'вещество', instrument:'прибор',
+            quantity:'величина', unit:'единица', constant:'константа',
+            statistics:'статистика', math:'математика', theory:'теория',
+            property:'свойство', formula:'формула'
+        };
         var typeCount = {};
-        Object.keys(ld).forEach(function (k) { var t = (ld[k] && ld[k].type) || '?'; typeCount[t] = (typeCount[t] || 0) + 1; });
+        var kindsRaw = (S.concepts || {}).kinds || {};
+        Object.keys(kindsRaw).sort(function (a, b) { return kindsRaw[b] - kindsRaw[a]; })
+            .slice(0, 8).forEach(function (k) {
+                var name = (window.lang === 'ru' && KIND_RU[k]) ? KIND_RU[k] : k;
+                typeCount[name] = kindsRaw[k];
+            });
 
         // Слот под машинное время — перед покрытием архива: сначала «чем это сделано»,
         // потом «сколько такого ещё осталось в arXiv».

@@ -641,6 +641,11 @@ def main():
     # уезжали только когда их лил кто-то руками.
     run("cards-sync", [PY, "cloudflare/cards_sync.py", "--apply"],
         timeout=2 * 3600, soft=True)
+    # ОБВЯЗКА СТАТЬИ — похожие, цитируемые, кадры карусели и упоминания понятий.
+    # Её не звал НИ ОДИН конвейер: таблицу article_side наполняли руками, и «похожие»
+    # у новых статей появлялись, только когда кто-то вспоминал про этот шаг.
+    run("side-sync", [PY, "cloudflare/frame_sync.py", "--apply"],
+        timeout=2 * 3600, soft=True)
     run("deploy", [PY, "cloudflare/deploy_worker.py"], timeout=1800,
         env={"B42_DEPLOY_OK": "1"})
 
