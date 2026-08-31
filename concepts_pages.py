@@ -1316,12 +1316,12 @@ def graph_page(lang):
     t = GRAPH_T.get(lang, GRAPH_T["en"])
     L = {"ru": {"mode": "Режим", "layout": "Представление", "force": "силы",
                 "ring": "кольцо", "sphere": "сфера", "galaxy": "галактика",
-                "layers": "слои", "spin": "вращение",
+                "layers": "слои", "spin": "вращение", "depth": "Глубина",
                 "kinds": "Классы", "groups": "Группы", "info": "Выбрано",
                 "stats": "Кадр", "path": "Путь"},
          "en": {"mode": "Mode", "layout": "Layout", "force": "force",
                 "ring": "ring", "sphere": "sphere", "galaxy": "galaxy",
-                "layers": "layers", "spin": "spin",
+                "layers": "layers", "spin": "spin", "depth": "Depth",
                 "kinds": "Kinds", "groups": "Groups", "info": "Selection",
                 "stats": "Frame", "path": "Trail"}}
     l = L.get(lang, L["en"])
@@ -1335,6 +1335,11 @@ def graph_page(lang):
   <input id="b42g-q" list="b42g-names" placeholder="{t["search"]}">
   <datalist id="b42g-names"></datalist>
   <button id="b42g-demo" class="b42g-mini" title="{"экскурсия: сам ведёт, подсвечивает, крутит" if lang == "ru" else "tour: drives, highlights, spins by itself"}">▶ {"демо" if lang == "ru" else "demo"}</button>
+  <!-- Полоса наложенного фильтра — ВТОРОЙ СТРОКОЙ той же панели. Отдельным
+       плавающим блоком она наезжала на переключатель языков; здесь же она стоит
+       ровно под крошками, к которым и относится. Пуста и скрыта, пока показан
+       весь граф; подписи и кнопки ставит js/b42-graph.js на языке страницы. -->
+  <div class="b42g-filter" id="b42g-filter" hidden></div>
 </div>
 <aside class="b42g-side glass">
   <div class="b42g-sec"><div class="b42g-h">{l["mode"]}</div>
@@ -1348,6 +1353,12 @@ def graph_page(lang):
     <button data-layout="sphere" class="b42g-mini">{l["sphere"]}</button>
     <button data-layout="galaxy" class="b42g-mini">{l["galaxy"]}</button>
     <button data-layout="layers" class="b42g-mini">{l["layers"]}</button>
+  </div>
+  <!-- Глубина перспективы. Видна только в 3D: в плоском режиме управлять нечем.
+       Чем правее, тем короче фокусное расстояние — дальние узлы мельче и бледнее. -->
+  <div class="b42g-sec" id="b42g-persp-sec" style="display:none">
+    <div class="b42g-h">{l.get("depth", "Depth")} <span id="b42g-perspv">5</span></div>
+    <input id="b42g-persp" type="range" min="1" max="10" value="5" style="width:100%">
   </div>
   <div class="b42g-sec"><div class="b42g-h">{t["w"]} <span id="b42g-wv">≥2</span></div>
     <input id="b42g-w" type="range" min="2" max="20" value="2" style="width:100%">

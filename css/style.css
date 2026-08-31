@@ -4409,6 +4409,23 @@ html[lang="ar"] .card-img-wrap { float: none; margin: 0; }
 .tag-header .fact { margin-bottom: var(--s-2); max-width: var(--w-read); }
 .tag-stats { margin-bottom: 0; font-family: var(--mono); font-size: 12.5px; }
 
+/* ПОЛОСА НАЛОЖЕННОГО ФИЛЬТРА В ГРАФЕ. Стоит под верхней панелью и говорит прямо:
+   показан набор такой-то, столько-то узлов из скольких, вот кнопка снять. Раньше об
+   этом сообщали только хлебные крошки — бледной строчкой, не похожей на то, что можно
+   выключить. Цвет акцентный: полоса означает, что видно не всё. */
+.b42g-filter { flex: 0 0 100%; display: flex; flex-wrap: wrap; align-items: center;
+    gap: 8px; margin: 4px 0 0; padding: 5px 9px; border-radius: 7px;
+    background: var(--bg); border: 1px solid var(--accent); }
+.b42g-filter-t { font-family: var(--mono); font-size: 11.5px; color: var(--fg); }
+.b42g-filter button { font: inherit; font-family: var(--mono); font-size: 11px;
+    cursor: pointer; border-radius: 999px; padding: 3px 10px;
+    border: 1px solid var(--hair); background: var(--bg); color: var(--soft); }
+.b42g-filter button:hover { color: var(--fg); border-color: var(--fg); }
+.b42g-filter-add.on { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+@media (max-width: 640px) {
+    .b42g-filter { font-size: 11px; padding: 4px 7px; }
+}
+
 /* Тело сущности (ряды связанных) — продолжение шапки, а не отдельный остров:
    тот же фон, общая рамка, без двойного контура между ними. */
 .entity-body {

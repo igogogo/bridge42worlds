@@ -53,10 +53,15 @@ var TXT = (function () {
         hintNav: 'click — select · dbl-click — drill · wheel — zoom',
         artsMid: ' articles · ', links: ' links', strongest: 'strongest links:',
         nodes: ' nodes · ', edgesPower: ' edges · power ',
-        empty: 'empty — search or click', all: 'all', clear: 'clear', expand: 'expand'
+        empty: 'empty — search or click', all: 'all', clear: 'clear', expand: 'expand',
+        filtOn: "showing a set: ",
+        filtOf: " of ",
+        filtOff: "show whole graph",
+        filtAdd: "add",
+        filtAddHint: "search and pick — the concept joins the set",
     };
     var BY = {
-        ru: {
+        ru: { filtOn: "показан набор: ", filtOf: " из ", filtOff: "показать весь граф", filtAdd: "добавить", filtAddHint: "найдите и выберите — понятие войдёт в набор",
             fpage: 'страница формулы →', spage: 'страница учёного →',
             cpage: 'страница понятия →', overview: 'Обзор', artset: 'набор статьи · ',
             cloud: 'всё облако', areas: 'области: ', grpArts: 'группа · статей: ',
@@ -69,7 +74,7 @@ var TXT = (function () {
             empty: 'пусто — начните с поиска или клика', all: 'все',
             clear: 'очистить', expand: 'раскрыть'
         },
-        es: {
+        es: { filtOn: "conjunto mostrado: ", filtOf: " de ", filtOff: "ver todo el grafo", filtAdd: "añadir", filtAddHint: "busque y elija: el concepto entra en el conjunto",
             fpage: 'página de la fórmula →', spage: 'página del científico →',
             cpage: 'página del concepto →', overview: 'Vista general',
             artset: 'conjunto del artículo · ', cloud: 'toda la nube',
@@ -83,7 +88,7 @@ var TXT = (function () {
             edgesPower: ' aristas · fuerza ', empty: 'vacío — busca o haz clic',
             all: 'todo', clear: 'limpiar', expand: 'desplegar'
         },
-        ar: {
+        ar: { filtOn: "مجموعة معروضة: ", filtOf: " من ", filtOff: "اعرض الشبكة كاملة", filtAdd: "أضف", filtAddHint: "ابحث واختر ليدخل المفهوم إلى المجموعة",
             fpage: 'صفحة الصيغة →', spage: 'صفحة العالِم →',
             cpage: 'صفحة المفهوم →', overview: 'نظرة عامة',
             artset: 'مجموعة المقالة · ', cloud: 'السحابة كاملة',
@@ -96,7 +101,7 @@ var TXT = (function () {
             nodes: ' عقدة · ', edgesPower: ' حافة · القوة ',
             empty: 'فارغ — ابحث أو انقر', all: 'الكل', clear: 'مسح', expand: 'توسيع'
         },
-        fr: {
+        fr: { filtOn: "ensemble affiché : ", filtOf: " sur ", filtOff: "voir le graphe entier", filtAdd: "ajouter", filtAddHint: "cherchez et choisissez : la notion rejoint l’ensemble",
             fpage: 'page de la formule →', spage: 'page du scientifique →',
             cpage: 'page du concept →', overview: 'Vue d’ensemble',
             artset: 'ensemble de l’article · ', cloud: 'tout le nuage',
@@ -292,7 +297,12 @@ function groupLabel(g) {
 
 /* ── состояние ── */
 var frame = {mode: 'overview', nodes: [], edges: []};
-var view = {is3d: false, layout: 'force', spin: false, minW: 2,
+/* persp — сила перспективы в 3D, 1..10. Фокусное расстояние было прибито гвоздём
+   к 620, и объём читался слабо: дальние узлы почти той же величины и яркости, что
+   ближние (владелец 31.08: «хорошо бы усилить перспективу… или как-то этим управлять»).
+   Одно число управляет обоими признаками сразу — и размером, и прозрачностью, — потому
+   что оба считаются от глубины _depth, которую даёт эта же проекция. */
+var view = {is3d: false, layout: 'force', spin: false, minW: 2, persp: 5,
             zoom: 1, zoomT: 1, panX: 0, panY: 0, panTX: 0, panTY: 0,
             rotX: -0.35, rotY: 0.5};
 var kindOn = {};
@@ -350,7 +360,7 @@ function setFrame(mode, nodes, edges, focusKey) {
     /* камера плавно доезжает так, чтобы фокус оказался в центре */
     if (seed) { view.panTX = -seed[0]; view.panTY = -seed[1]; }
     else { view.panTX = 0; view.panTY = 0; }
-    renderCrumbs(); renderInfo(); renderStats(); renderPath();
+    renderCrumbs(); renderInfo(); renderStats(); renderPath(); renderFilter();
 }
 
 function showOverview() {
@@ -799,7 +809,8 @@ function project(nd) {
         var cx = Math.cos(view.rotX), sx = Math.sin(view.rotX);
         var x1 = x * cy + z * sy, z1 = -x * sy + z * cy;
         var y1 = y * cx + z1 * sx, z2 = -y * sx + z1 * cx;
-        var p = 620 / (620 + z2);          // ближе фокус — заметнее перспектива
+        var f = 1100 - view.persp * 90;    // 1 → 1010 (почти плоско), 10 → 200 (резко)
+        var p = f / (f + z2);              // ближе фокус — заметнее перспектива
         x = x1 * p; y = y1 * p; nd._depth = p;
     } else nd._depth = 1;
     var W = canvas.width / devicePixelRatio, H = canvas.height / devicePixelRatio;
@@ -895,6 +906,20 @@ function draw() {
     });
     ctx.globalAlpha = 1;
 
+    /* УЗЛЫ, ОСТАВШИЕСЯ БЕЗ СВЯЗЕЙ ПРИ ПОДНЯТОМ ПОРОГЕ, ГАСНУТ. Ползунок мощности
+       убирает слабые рёбра во всех представлениях одинаково, но в силовой раскладке это
+       сразу видно — облако перестраивается, — а в кольце, сфере, галактике и слоях узлы
+       стоят на своих местах, и картинка почти не меняется (владелец 31.08: «кажется,
+       работает только на силах»). Погасив тех, у кого не осталось ни одной связи, мы
+       показываем скелет кадра в любом представлении. */
+    var linked = null;
+    if (view.minW > +(el('b42g-w') || {}).min || view.minW > 2) {
+        linked = {};
+        frame.edges.forEach(function (e) {
+            if (e[2] >= view.minW) { linked[e[0]] = 1; linked[e[1]] = 1; }
+        });
+    }
+
     /* узлы */
     var order = visIdx();
     if (view.is3d) order.sort(function (a, b) { return n[a]._depth - n[b]._depth; });
@@ -915,6 +940,7 @@ function draw() {
         /* глубина в 3D: передние ярче и больше, задние тают */
         var dp = view.is3d ? Math.max(0, Math.min(1, (nd._depth - 0.55) * 2.2)) : 1;
         var alpha = (dim ? 0.20 : 1) * (view.is3d ? 0.12 + dp * 0.88 : 1);
+        if (linked && !linked[i] && nd.kind !== '_group' && !hot) alpha *= 0.18;
         drawNodeIcon(p[0], p[1], r, styleOf(nd.kind, nd), alpha, hot,
                      nd.kind === '_group');
     });
@@ -1328,7 +1354,64 @@ function set3d(on) {
     var b = el('b42g-3d'); if (b) b.classList.toggle('active', on);
     var b2 = el('b42g-2d'); if (b2) b2.classList.toggle('active', !on);
     var sp = el('b42g-spin'); if (sp) sp.style.display = on ? '' : 'none';
+    var ps = el('b42g-persp-sec'); if (ps) ps.style.display = on ? '' : 'none';
     sim.alive = Math.max(sim.alive, 140);
+}
+
+/* НАЛОЖЕННЫЙ ФИЛЬТР ВИДЕН И СНИМАЕТСЯ. Придя из карточки статьи или со страницы
+   автора, человек попадал в граф, где из четырёх с половиной тысяч понятий показаны
+   пять, и понять это было неоткуда: хлебные крошки говорили «набор статьи · 5» бледным
+   мелким шрифтом и не выглядели тем, что можно снять (владелец 31.08: «не понимаю, как
+   снять фильтр, наложенный статьёй»). Теперь над графом стоит явная полоса: сколько
+   показано из скольких, кнопка «показать весь граф» и кнопка «добавить» — она включает
+   режим, в котором найденное поиском не уводит в свой кадр, а входит в набор. */
+var addMode = false;
+
+function renderFilter() {
+    var box = el('b42g-filter');
+    if (!box) return;
+    var sub = frame.mode === 'set' || frame.mode === 'picked' ||
+              frame.mode === 'ego' || frame.mode === 'group';
+    box.hidden = !sub;
+    if (!sub) { addMode = false; return; }
+    var shown = frame.nodes.filter(function (nd) { return nd.kind !== '_group'; }).length;
+    var total = G && G.nodes ? G.nodes.length : shown;
+    /* Подпись без повторов: у набора статьи ярлык уже кончается числом узлов, и
+       «набор статьи · 5 · 5 из 4471» читается как заикание. У области и окружения
+       ярлык — имя, его показываем. */
+    var label = trail.length ? trail[trail.length - 1].label : '';
+    var head = (frame.mode === 'set' || frame.mode === 'picked')
+        ? TXT.filtOn : TXT.filtOn + label + ' · ';
+    box.innerHTML = '';
+    var t = document.createElement('span');
+    t.className = 'b42g-filter-t';
+    t.textContent = head + shown + TXT.filtOf + total;
+    box.appendChild(t);
+    var add = document.createElement('button');
+    add.type = 'button';
+    add.className = 'b42g-filter-add' + (addMode ? ' on' : '');
+    add.textContent = '+ ' + TXT.filtAdd;
+    add.onclick = function () {
+        addMode = !addMode;
+        var inp = el('b42g-q');
+        if (addMode && inp) { inp.placeholder = TXT.filtAddHint; inp.focus(); }
+        renderFilter();
+    };
+    box.appendChild(add);
+    var off = document.createElement('button');
+    off.type = 'button';
+    off.className = 'b42g-filter-off';
+    off.textContent = '✕ ' + TXT.filtOff;
+    off.onclick = function () { addMode = false; showAll(); };
+    box.appendChild(off);
+}
+
+/* Добавить понятие в показанный набор, не выходя из него. */
+function addToSet(ni) {
+    var ids = frame.nodes.filter(function (nd) { return nd.ni !== undefined; })
+                         .map(function (nd) { return nd.ni; });
+    if (ids.indexOf(ni) < 0) ids.push(ni);
+    showSet(ids, G.nodes[ni].id);
 }
 
 function renderCrumbs() {
@@ -1587,7 +1670,11 @@ function buildPanel() {
             for (var i = 0; i < G.nodes.length; i++) {
                 var n = G.nodes[i];
                 if (nodeName(n).toLowerCase() === q || n.en.toLowerCase() === q) {
-                    showEgo(i); inp.blur(); return;
+                    /* В режиме «добавить» найденное входит в показанный набор, а не
+                       уводит в свой кадр: человек собирает подборку, а не прыгает по ней. */
+                    if (addMode) { addToSet(i); addMode = true; renderFilter(); }
+                    else showEgo(i);
+                    inp.value = ''; inp.blur(); return;
                 }
             }
         });
@@ -1624,6 +1711,13 @@ function buildPanel() {
             if (view.layout === 'force') seedLayout();
             else applyFixedLayout();
         };
+    });
+    var pr = el('b42g-persp');
+    if (pr) pr.addEventListener('input', function () {
+        view.persp = +pr.value;
+        var l = el('b42g-perspv');
+        if (l) l.textContent = pr.value;
+        sim.alive = Math.max(sim.alive, 60);
     });
     var wr = el('b42g-w');
     if (wr) wr.addEventListener('input', function () {
