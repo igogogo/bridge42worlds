@@ -237,6 +237,73 @@ function cards(d) {
         .catch(function () {});
 }
 
+
+/* МОСТЫ ЧЕРЕЗ ТРЕТЬИ ПОНЯТИЯ — ОБЩИЕ ДЛЯ ОБОИХ ГРАФОВ.
+
+   Набор статьи почти никогда не связан внутри себя напрямую: между «чёрной дырой» и
+   «интерферометром» общего ребра нет, и кадр рассыпается на островки. Косвенно они
+   связаны почти всегда (владелец 31.08: «все понятия так или иначе связаны, может их
+   связать пунктиром пропорционально тому, сколько между ними промежуточных связей»).
+
+   Два прохода, и оба честные. Первый: сколько у пары ОБЩИХ соседей — это связь через
+   одного посредника, самая крепкая из косвенных. Второй, для того, что осталось
+   несшитым: пересечение соседей соседей, то есть связь через двоих. Вес моста — размер
+   пересечения, он и задаёт толщину пунктира. Чего не нашлось и на втором проходе, тем
+   мост не выдумываем: пусть лучше остров, чем ложная линия.
+
+   Возвращает добавочные рёбра [i, j, вес, 1] в номерах кадра, а не графа. */
+function bridgeEdges(adj, gids, edges) {
+    var N = gids.length;
+    if (N < 3 || N > 80) return [];
+    var par = [], i, j;
+    for (i = 0; i < N; i++) par.push(i);
+    function find(x) { while (par[x] !== x) { par[x] = par[par[x]]; x = par[x]; } return x; }
+    function join(a, b) { a = find(a); b = find(b); if (a !== b) { par[a] = b; return true; } return false; }
+    edges.forEach(function (e) { join(e[0], e[1]); });
+    var roots = {};
+    for (i = 0; i < N; i++) roots[find(i)] = 1;
+    if (Object.keys(roots).length < 2) return [];
+
+    function around(gi, cap) {
+        var set = {}, a = adj[gi] || [];
+        for (var k = 0; k < a.length && k < cap; k++) set[a[k][0]] = 1;
+        return set;
+    }
+    function wider(gi) {          // соседи соседей — связь через двоих
+        var set = around(gi, 60), out = {};
+        for (var k in set) {
+            out[k] = 1;
+            var a = adj[k] || [];
+            for (var m = 0; m < a.length && m < 40; m++) out[a[m][0]] = 1;
+        }
+        return out;
+    }
+    var extra = [];
+    function pass(sets) {
+        var pairs = [];
+        for (var x = 0; x < N; x++) {
+            for (var y = x + 1; y < N; y++) {
+                if (find(x) === find(y)) continue;
+                var c = 0;
+                for (var k in sets[x]) if (sets[y][k]) c++;
+                if (c > 0) pairs.push([x, y, c]);
+            }
+        }
+        pairs.sort(function (p, q) { return q[2] - p[2]; });   // сильнейшие мосты первыми
+        pairs.forEach(function (pr) {
+            if (find(pr[0]) === find(pr[1])) return;
+            join(pr[0], pr[1]);
+            extra.push([pr[0], pr[1], pr[2], 1]);
+        });
+    }
+    var near = gids.map(function (gi) { return around(gi, 300); });
+    pass(near);
+    roots = {};
+    for (i = 0; i < N; i++) roots[find(i)] = 1;
+    if (Object.keys(roots).length > 1) pass(gids.map(wider));
+    return extra;
+}
+
 /* общий загрузчик данных: один запрос на страницу, сколько бы графов ни было */
 var dataP = null;
 function data() {
@@ -261,6 +328,6 @@ function data() {
 window.B42GraphCore = {
     KINDS: KINDS, kindLabel: kindLabel, bucketOf: bucketOf, styleOf: styleOf, tokens: tokens,
     pathShape: pathShape, drawNodeIcon: drawNodeIcon, edgePath: edgePath,
-    data: data,
+    data: data, bridgeEdges: bridgeEdges,
 };
 })();

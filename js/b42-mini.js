@@ -182,8 +182,21 @@ function init(box, G) {
         });
     }
 
+    /* МОСТЫ МЕЖДУ ОСТРОВАМИ. Набор статьи почти никогда не связан внутри себя
+       напрямую: «чёрная дыра» и «интерферометр» стоят в разных углах, потому что
+       общего ребра между ними в графе нет, и кадр рассыпается на островки. Но
+       косвенно они связаны почти всегда — через третьи понятия (владелец 31.08:
+       «все понятия так или иначе связаны, может их связать пунктиром пропорционально
+       тому, сколько между ними промежуточных связей»).
+
+       Меру берём простую и честную: сколько у двух понятий ОБЩИХ соседей в большом
+       графе. Ноль общих — моста нет, и мы его не выдумываем. Мост рисуется пунктиром
+       и тянет вчетверо слабее настоящей связи: острова сходятся, но не слипаются, и
+       глазом видно, что это связь через третьих, а не прямая. */
+    CORE.bridgeEdges(G.adj, idxs, edges).forEach(function (e) { edges.push(e); });
+
     var wMax = 1;
-    edges.forEach(function (e) { if (e[2] > wMax) wMax = e[2]; });
+    edges.forEach(function (e) { if (e[2] > wMax && !e[3]) wMax = e[2]; });
 
     /* размеры значков: от холста и числа узлов — на телефоне мельче */
     var scale = Math.max(0.42, Math.min(1, (W / 700) * (7 / Math.sqrt(nodes.length))));
@@ -263,7 +276,9 @@ function init(box, G) {
             var dx = b.x - a.x, dy = b.y - a.y;
             var d = Math.sqrt(dx * dx + dy * dy) + 0.01;
             var target = len / (1 + Math.log(1 + e[2]) * 0.4);
+            if (e[3]) target *= 1.7;                 // мост держит на расстоянии
             var f = (d - target) * 0.0012 * Math.min(d, 200 * spread);
+            if (e[3]) f *= 0.25;                     // и тянет вчетверо слабее
             if (f > 6) f = 6; else if (f < -6) f = -6;
             dx /= d; dy /= d;
             a.vx += dx * f; a.vy += dy * f;
@@ -340,10 +355,20 @@ function init(box, G) {
             var dim = hover >= 0 && !hot;
             var wgt = Math.log(1 + e[2]) / Math.log(1 + wMax);
             ctx.strokeStyle = hot ? TK.cyan : TK.muted;
-            ctx.globalAlpha = dim ? 0.07 : (hot ? 0.75 : 0.12 + wgt * 0.38);
-            ctx.lineWidth = 0.4 + wgt * 2;
+            if (e[3]) {
+                /* мост через третьи понятия: пунктир, тоньше и бледнее прямой связи —
+                   толщина по числу общих соседей, чтобы видно было, насколько связь плотна */
+                ctx.setLineDash([3, 4]);
+                ctx.globalAlpha = dim ? 0.05 : (hot ? 0.5 : 0.10 + wgt * 0.18);
+                ctx.lineWidth = 0.4 + wgt * 1.1;
+            } else {
+                ctx.setLineDash([]);
+                ctx.globalAlpha = dim ? 0.07 : (hot ? 0.75 : 0.12 + wgt * 0.38);
+                ctx.lineWidth = 0.4 + wgt * 2;
+            }
             ctx.beginPath(); CORE.edgePath(ctx, pts[e[0]], pts[e[1]]); ctx.stroke();
         });
+        ctx.setLineDash([]);
         ctx.globalAlpha = 1;
         /* узлы и подписи с анти-коллизией */
         var taken = [];

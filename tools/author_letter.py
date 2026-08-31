@@ -142,7 +142,7 @@ def slug_of(name):
     return G.author_slug(name)
 
 
-def papers_of(name, lang, cap=6):
+def papers_of(name, lang, cap=6, first=None):
     """Строки со ссылками на разборы.
 
     Ссылка ведёт на язык письма: араб получает арабскую страницу, а не английскую
@@ -163,6 +163,10 @@ def papers_of(name, lang, cap=6):
         if a.get("version") == "popular":
             idx[a["id"]] = a
             idx[a["id"].split("v")[0]] = a
+    # Работа, ради которой пишем, идёт ПЕРВОЙ: человек должен узнать своё с первой
+    # строки, а не искать себя в списке.
+    if first:
+        ids = [first] + [x for x in ids if x != first and x.split("v")[0] != first.split("v")[0]]
     out, used = [], 0
     for aid in ids:
         a = idx.get(aid) or idx.get(aid.split("v")[0])
@@ -182,13 +186,61 @@ def papers_of(name, lang, cap=6):
     return "\n".join(out) + "\n"
 
 
-def compose(name, lang="en"):
+def compose(name, lang="en", first=None):
     t = LETTER.get(lang) or LETTER["en"]
     page = f"{SITE}/lang/en/authors/{slug_of(name)}.html"
-    body = t["body"].format(name=" " + name, papers=papers_of(name, lang),
+    body = t["body"].format(name=" " + name, papers=papers_of(name, lang, first=first),
                             page=page, sign=SIGN.get(lang, SIGN["en"]),
                             site=SITE.replace("https://", ""))
     return t["subject"], body
+
+
+# ── КОМУ ПИСАТЬ: АВТОРЫ СВЕЖИХ РАЗБОРОВ ──────────────────────────────────
+# Владелец 31.08: «начать надо с авторов со свежими разборами — всё свежее».
+# Резон простой: работа у человека ещё в голове, и письмо про неё не выглядит
+# археологией. Адрес берём из самой работы: в статьях он напечатан для переписки,
+# и лежит у нас же в fulltext.txt рядом со статьёй — качать ничего не надо.
+MAIL_RE = __import__("re").compile(r"[A-Za-z0-9._%+-]+\s*@\s*[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
+# Общие адреса редакций и коллабораций: писать туда бессмысленно и назойливо.
+SKIP_MAIL = ("arxiv.org", "example.com", "noreply", "no-reply", "support@",
+             "editor@", "journals@", "info@", "admin@")
+
+
+def emails_of(date, aid, cap=4000):
+    """Адреса из первых килобайт работы — там, где авторы их и печатают."""
+    for base in (ROOT / "lang" / "ru" / "archive" / str(date) / aid,
+                 ROOT / "lang" / "en" / "archive" / str(date) / aid):
+        f = base / "fulltext.txt"
+        if not f.exists():
+            continue
+        head = f.read_text(encoding="utf-8", errors="ignore")[:cap]
+        out = []
+        for m in MAIL_RE.findall(head):
+            a = m.replace(" ", "").strip(".,;")
+            if any(s in a.lower() for s in SKIP_MAIL):
+                continue
+            if a not in out:
+                out.append(a)
+        return out
+    return []
+
+
+def addressee(article, mails):
+    """Кому адресовать письмо: автору, чья фамилия совпала с адресом, иначе первому.
+
+    Совпадение ищем по фамилии в локальной части адреса: `rongan@nxu.edu.cn` для
+    «Rong An» — это он и есть. Не совпало — пишем первому автору: он в списке arXiv
+    первым не случайно."""
+    authors = article.get("authors") or []
+    if not authors:
+        return None
+    for m in mails:
+        local = m.split("@")[0].lower()
+        for a in authors:
+            surname = a.replace(".", " ").split()[-1].lower()
+            if len(surname) > 3 and surname in local:
+                return a
+    return authors[0]
 
 
 def written():
@@ -213,6 +265,86 @@ def remember(name, to, lang):
                             ensure_ascii=False) + "\n")
 
 
+CAND = ROOT / "data" / "outreach-candidates.jsonl"
+
+
+def fresh_articles(days):
+    import generate as G
+    from datetime import timedelta
+    edge = (datetime.now(timezone.utc) - timedelta(days=days)).date().isoformat()
+    return [a for a in G.load_index("en")
+            if a.get("version") == "popular" and (a.get("date") or "") >= edge]
+
+
+def candidates(days, limit):
+    """Кому писать: свежие разборы, у которых адрес есть прямо в работе."""
+    done = written()
+    rows = []
+    for art in sorted(fresh_articles(days), key=lambda x: x.get("date", ""), reverse=True):
+        mails = emails_of(art.get("date"), art["id"])
+        if not mails:
+            continue
+        who = addressee(art, mails)
+        if not who or who in done:
+            continue
+        rows.append({"id": art["id"], "date": art["date"], "author": who,
+                     "to": mails[0], "others": mails[1:3],
+                     "title": (art.get("title") or "")[:70],
+                     "page": f"{SITE}/lang/en/authors/{slug_of(who)}.html"})
+        if len(rows) >= limit:
+            break
+    CAND.parent.mkdir(parents=True, exist_ok=True)
+    CAND.write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rows),
+                    encoding="utf-8")
+    print(f"свежих разборов за {days} дней с найденным адресом: {len(rows)}"
+          f"  → {CAND.relative_to(ROOT)}\n")
+    for r in rows[:limit]:
+        print(f"  {r['date']}  {r['id']:16} {r['to']:38} {r['author'][:24]:26} {r['title'][:40]}")
+    if rows:
+        print(f"\nписьмо по одной работе:  python tools/author_letter.py --id {rows[0]['id']} --dry")
+    return 0
+
+
+def by_paper(aid, lang, to, send):
+    """Письмо про КОНКРЕТНУЮ свежую работу — она идёт первой строкой."""
+    import generate as G
+    art = None
+    for x in G.load_index("en"):
+        if x.get("version") == "popular" and (x["id"] == aid or x["id"].split("v")[0] == aid):
+            art = x
+            break
+    if not art:
+        print(f"нет такой работы в индексе: {aid}")
+        return 2
+    mails = emails_of(art.get("date"), art["id"])
+    who = addressee(art, mails)
+    if not who:
+        print("не нашлось, кому адресовать")
+        return 2
+    to = to or (mails[0] if mails else None)
+    subj, body = compose(who, lang, first=art["id"])
+    if not send:
+        print(f"РАБОТА: {art['id']} · {art.get('date')}")
+        print(f"КОМУ:  {who} <{to or 'адрес не найден'}>")
+        print(f"ТЕМА:  {subj}\n")
+        print(body)
+        print("\n(показ; чтобы отправить, добавьте --send)")
+        return 0
+    if not to:
+        print("нет адреса — укажите --to")
+        return 2
+    was = written().get(who)
+    if was:
+        print(f"этому автору уже писали {was['at'][:10]} — второй раз не пишем")
+        return 1
+    import council_mail
+    if council_mail.send(to, subj, body, sender=FROM):
+        remember(who, to, lang)
+        print(f"✅ отправлено: {who} → {to}")
+        return 0
+    return 1
+
+
 def main():
     ap = argparse.ArgumentParser(description="Письмо автору о его же работе")
     ap.add_argument("author", nargs="?", help="имя автора как в реестре")
@@ -221,7 +353,17 @@ def main():
     ap.add_argument("--send", action="store_true", help="отправить (иначе только показать)")
     ap.add_argument("--dry", action="store_true", help="показать письмо и выйти")
     ap.add_argument("--log", action="store_true", help="кому уже писали")
+    ap.add_argument("--candidates", action="store_true",
+                    help="авторы свежих разборов с найденными адресами")
+    ap.add_argument("--days", type=int, default=30, help="глубина свежести, дней")
+    ap.add_argument("--limit", type=int, default=40, help="сколько показать")
+    ap.add_argument("--id", help="писать по конкретной работе (её arXiv-номер)")
     a = ap.parse_args()
+
+    if a.candidates:
+        return candidates(a.days, a.limit)
+    if a.id:
+        return by_paper(a.id, a.lang, a.to, a.send)
 
     if a.log:
         w = written()

@@ -428,8 +428,13 @@ function frameFromIds(ids, centerFirst) {
             if (!seen[k]) { seen[k] = 1; edges.push([a, b, p[1]]); }
         });
     });
+    /* мосты через третьих — общий код в js/b42-graph-core.js, чтобы
+       мини-граф и большой не разъехались двумя копиями одной меры */
+    CORE.bridgeEdges(adj, ids, edges).forEach(function (e) { edges.push(e); });
     return {nodes: nodes, edges: edges};
 }
+
+
 
 /* Порог веса связи. Он один на всю страницу, и в этом была беда: «всё облако»
    поднимает его до трёх, чтобы сорок тысяч связей не превратились в кашу, — а
@@ -733,7 +738,8 @@ function tick() {
         });
     }
     frame.edges.forEach(function (e) {
-        if (e[2] < view.minW) return;
+        // мост (e[3]) порогом не режется: он показывает не силу связи, а её наличие
+        if (!e[3] && e[2] < view.minW) return;
         var a = e[0], b = e[1];
         if (!nodeVisible(n[a]) || !nodeVisible(n[b])) return;
         var dx = n[b].x - n[a].x, dy = n[b].y - n[a].y, dz = n[b].z - n[a].z;
@@ -741,6 +747,7 @@ function tick() {
         var wl = Math.log(1 + e[2]);
         var target = restLen(e);
         var stiff = 0.00016 * (1 + wl * 0.5);      // и жёстче: натяжение видно
+        if (e[3]) { target *= 1.7; stiff *= 0.25; }   // мост держит слабо и поодаль
         /* сила ограничена: на тяжёлых рёбрах обзора (веса — тысячи) f растёт
            как d² и за два тика взрывала симуляцию в NaN (поймано 27.08) */
         var f = (d - target) * stiff * Math.min(d, 240);
@@ -864,7 +871,7 @@ function draw() {
 
     /* рёбра: дуги, толщина и яркость — мощность */
     frame.edges.forEach(function (e) {
-        if (e[2] < view.minW) return;
+        if (!e[3] && e[2] < view.minW) return;
         if (!nodeVisible(n[e[0]]) || !nodeVisible(n[e[1]])) return;
         var a = pts[e[0]], b = pts[e[1]];
         var hot = focusI >= 0 && (e[0] === focusI || e[1] === focusI);
@@ -888,7 +895,13 @@ function draw() {
                           (1 - stretch * 0.35);
         /* струны: тонкие, почти нитяные — мощность в яркости больше, чем в теле */
         ctx.lineWidth = (0.28 + pow15 * 2.6) * (hot ? 1.3 : 1) * (1 - stretch * 0.5);
-        if (n[e[0]].out || n[e[1]].out) ctx.setLineDash([4, 5]);
+        if (e[3]) {
+            /* мост через третьи понятия: пунктир, тонко и бледно — толщина по числу
+               общих соседей, чтобы плотность косвенной связи была видна */
+            ctx.setLineDash([3, 5]);
+            ctx.globalAlpha *= 0.55;
+            ctx.lineWidth = 0.3 + Math.min(1.2, Math.log(1 + e[2]) * 0.5);
+        } else if (n[e[0]].out || n[e[1]].out) ctx.setLineDash([4, 5]);
         ctx.beginPath(); edgePath(a, b); ctx.stroke();
         ctx.setLineDash([]);
     });
