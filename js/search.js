@@ -1418,7 +1418,11 @@ function cardHTML(item) {
        с датой. */
     var mediaHtml = (metaRow || imgHtml)
         ? '<div class="card-media">' + metaRow + imgHtml + '</div>' : '';
-    return '<article class="article-card">' +
+    /* Опознаватель работы на самой карточке. Без него всякий, кому нужен id
+       (страница автора с её отметками, будущие подборки), выковыривал его из
+       адреса ссылки — то есть зависел от формы адреса. */
+    return '<article class="article-card" data-id="' + esc(item.id) +
+        '" data-date="' + esc(item.date || '') + '">' +
         eyebrow + mediaHtml +
         '<div class="card-body">' +
             // Уровни чтения НЕ здесь, а внизу, в строке действий (владелец 28.08:

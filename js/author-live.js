@@ -45,7 +45,6 @@
             arch: 'В arXiv {t} работ ({y}) · мы пересказали {o} ({p}%)',
             arcOurs: 'у нас {n}', lgRest: 'не пересказано',
             legend: 'серым — все работы автора в arXiv по годам, голубым — наши пересказы',
-            byMail: 'или просто напишите нам письмом — адрес и тема уже подставлены',
             mine: 'это тоже я', mineTip: 'Если это ваши работы и они разделены неверно — напишите нам'
         },
         en: {
@@ -60,7 +59,6 @@
             arch: '{t} papers on arXiv ({y}) · we retold {o} ({p}%)',
             arcOurs: 'we retold {n}', lgRest: 'not retold yet',
             legend: 'grey — all the author’s arXiv papers by year, blue — our retellings',
-            byMail: 'or simply write us a letter — address and subject are pre-filled',
             mine: 'this is me too', mineTip: 'If these are your papers and the split is wrong, write to us'
         },
         es: {
@@ -234,40 +232,85 @@
      * самих адресов там нет. Человеку об этом сказано прямо — иначе вопрос «зачем вы
      * спрашиваете то, что и так знаете» останется без ответа и будет выглядеть подвохом.
      */
+    /* ПЯТЬ ДЕЙСТВИЙ АВТОРА. Ни одного поля на странице.
+     *
+     * Форма с полем «ваш адрес» ушла целиком, и дело не в удобстве: письмо приходит
+     * С СОБСТВЕННОГО АДРЕСА автора, и это подтверждение сильнее любого поля, которое
+     * можно заполнить чужим адресом. Ни токена, ни базы адресов нам не нужно.
+     * Владелец 31.08: «кнопки должны вызывать стандартное действие — открытие
+     * почтового клиента; в письмо вставить идентификатор автора и идентификаторы
+     * статей, которые он выбрал».
+     *
+     * Печатать автор всё-таки будет — но В ПИСЬМЕ, где стоят подписанные пропуски.
+     * Отдельная строчка «или просто напишите нам» исчезла: это поведение каждой кнопки.
+     *
+     * pick — что становится выбираемым на странице:
+     *   ''     ничего, письмо открывается сразу
+     *   'work' квадратик у каждой работы
+     *   'group' кружок у каждой группы под этим именем
+     */
     var ACTIONS = {
         ru: [
-            ['confirm',  'Всё верно, это мои работы',        ''],
-            ['add',      'Не хватает моей статьи',           'Номер arXiv, например 2412.00159'],
-            ['merge',    'Вон тот автор — тоже я',           'Номер группы или ссылка на неё'],
-            ['remove',   'Эта статья не моя',                'Номер arXiv статьи, которую убрать'],
-            ['withdraw', 'Уберите мою страницу',             '']
+            ['confirm',  'Всё верно, это мои работы', '',
+             'Подтверждаю: работы в этом списке мои.'],
+            ['add',      'Не хватает моей статьи', '',
+             'Не хватает работ (номер arXiv или ссылка, по одной в строке):'],
+            ['merge',    'Вон тот автор — тоже я', 'group',
+             'Тоже я:'],
+            ['remove',   'Эта статья не моя', 'work',
+             'Не мои работы:'],
+            ['withdraw', 'Уберите мою страницу', '',
+             'Прошу убрать эту страницу.']
         ],
         en: [
-            ['confirm',  'Correct — these are my papers',    ''],
-            ['add',      'A paper of mine is missing',       'arXiv id, e.g. 2412.00159'],
-            ['merge',    'That author is me as well',        'Group id or a link to it'],
-            ['remove',   'This paper is not mine',           'arXiv id of the paper to remove'],
-            ['withdraw', 'Please take my page down',         '']
+            ['confirm',  'Correct — these are my papers', '',
+             'I confirm: the papers in this list are mine.'],
+            ['add',      'A paper of mine is missing', '',
+             'Missing papers (arXiv id or link, one per line):'],
+            ['merge',    'That author is me as well', 'group',
+             'That is me too:'],
+            ['remove',   'This paper is not mine', 'work',
+             'Not my papers:'],
+            ['withdraw', 'Please take my page down', '',
+             'Please take this page down.']
         ]
     };
     var UI2 = {
         ru: {
             head: 'Это ваша страница?',
-            lead: 'Вы автор и что-то здесь не так — поправим. Действие подтверждается письмом: ' +
-                  'напишите адрес, которым подписана ваша работа. Самих адресов мы не храним, ' +
-                  'только их отпечатки, поэтому и спрашиваем.',
-            mail: 'Ваш адрес', send: 'Отправить', sending: 'Отправляю…',
-            need: 'Укажите адрес', needTarget: 'Заполните поле выше',
-            fail: 'Не получилось отправить. Попробуйте позже или напишите нам.'
+            lead: 'Вы автор и что-то здесь не так — поправим. Нажмите нужное: откроется ' +
+                  'ваша почта с готовым письмом. Заполнять здесь ничего не надо — письмо ' +
+                  'приходит с вашего адреса, и это и есть подтверждение.',
+            hint: {
+                confirm: '',
+                add: 'Номер работы есть в её адресе на arXiv: arxiv.org/abs/2412.00159 — впишите его в письме.',
+                group: 'Отметьте группу, которая тоже вы. Если второе имя — другая страница, откройте её и вставьте адрес в письмо.',
+                work: 'Отметьте работы, которые не ваши. Если знаете, чьи они, — напишите в письме.',
+                withdraw: ''
+            },
+            write: 'Написать нам', writeN: 'Написать нам · {n}',
+            works: ['работа', 'работы', 'работ'], groups: 'группа',
+            copy: 'Скопировать письмо', copied: 'Письмо скопировано',
+            noMail: 'Почта не открылась? Скопируйте письмо и отправьте на ' + 'author@bridge42worlds.academy',
+            addLine: 'Чьи они, если знаете:'
         },
         en: {
             head: 'Is this your page?',
-            lead: 'You are the author and something here is wrong — we will fix it. The action is ' +
-                  'confirmed by letter: give the address your paper is signed with. We do not keep ' +
-                  'addresses, only their fingerprints — that is why we ask.',
-            mail: 'Your address', send: 'Send', sending: 'Sending…',
-            need: 'Please give an address', needTarget: 'Fill the field above',
-            fail: 'Could not send. Try later or write to us.'
+            lead: 'You are the author and something here is wrong — we will fix it. Press what ' +
+                  'you need: your mail app opens with the letter ready. Nothing to fill in here — ' +
+                  'the letter comes from your own address, and that is the confirmation.',
+            hint: {
+                confirm: '',
+                add: 'The id is in the arXiv address: arxiv.org/abs/2412.00159 — type it in the letter.',
+                group: 'Tick the group that is also you. If the second name is another page, open it and paste its address into the letter.',
+                work: 'Tick the papers that are not yours. If you know whose they are, say so in the letter.',
+                withdraw: ''
+            },
+            write: 'Write to us', writeN: 'Write to us · {n}',
+            works: ['paper', 'papers', 'papers'], groups: 'group',
+            copy: 'Copy the letter', copied: 'Letter copied',
+            noMail: 'Mail app did not open? Copy the letter and send it to author@bridge42worlds.academy',
+            addLine: 'Whose are they, if you know:'
         }
     };
 
@@ -278,77 +321,173 @@
             '<p class="aclaim-lead">' + esc(t.lead) + '</p><div class="aclaim-acts">';
         acts.forEach(function (a) {
             html += '<button type="button" class="aclaim-btn" data-act="' + a[0] +
-                    '" data-ph="' + esc(a[2]) + '">' + esc(a[1]) + '</button>';
+                    '" data-pick="' + a[2] + '">' + esc(a[1]) + '</button>';
         });
-        // Письмо с проставленным адресом и темой (владелец: «кнопка открывает почту,
-        // там всё уже проставлено, надо только что-то написать»). Автор пишет из СВОЕГО
-        // клиента — письмо приходит с его адреса, и это само по себе аккредитация,
-        // никакого токена не нужно. Работает и когда его адреса нет в нашей базе.
-        var mailSubj = 'Author page: ' + (NAME || AKEY) + ' — ' + location.pathname;
-        var mailBody = 'Page: https://bridge42worlds.academy' + location.pathname +
-            '%0AAuthor key: ' + encodeURIComponent(AKEY) +
-            '%0A%0AWhat is wrong / what to change:%0A';
-        html += '</div><p class="aclaim-mailto"><a href="mailto:author@bridge42worlds.academy' +
-            '?subject=' + encodeURIComponent(mailSubj) + '&body=' + mailBody + '">' +
-            esc(T.byMail) + '</a></p><form class="aclaim-form" hidden>' +
-            '<input type="text" class="aclaim-target" hidden>' +
-            '<input type="email" class="aclaim-mail" placeholder="' + esc(t.mail) + '" required>' +
-            '<button type="submit" class="aclaim-send">' + esc(t.send) + '</button>' +
-            '</form><p class="aclaim-msg" hidden></p></section>';
+        html += '</div><p class="aclaim-hint" hidden></p>' +
+            '<div class="aclaim-go" hidden>' +
+            '<button type="button" class="aclaim-write"></button>' +
+            '<button type="button" class="aclaim-copy"></button>' +
+            '<span class="aclaim-said" hidden></span></div></section>';
         return html;
     }
 
     function mountClaims(root, personId) {
         var l = (L === 'ru') ? 'ru' : 'en';
-        var t = UI2[l];
+        var t = UI2[l], acts = ACTIONS[l];
         var sec = root.querySelector('.aclaim');
         if (!sec) return;
-        var form = sec.querySelector('.aclaim-form');
-        var target = sec.querySelector('.aclaim-target');
-        var mail = sec.querySelector('.aclaim-mail');
-        var msg = sec.querySelector('.aclaim-msg');
-        var cur = null;
+        var hint = sec.querySelector('.aclaim-hint');
+        var go = sec.querySelector('.aclaim-go');
+        var write = sec.querySelector('.aclaim-write');
+        var copy = sec.querySelector('.aclaim-copy');
+        var said = sec.querySelector('.aclaim-said');
+        var cur = null, pick = '';
+
+        function byAct(a) {
+            var f = acts.filter(function (x) { return x[0] === a; })[0];
+            return f || ['', '', '', ''];
+        }
+        function plural(n, forms) {
+            if (l !== 'ru') return forms[n === 1 ? 0 : 1];
+            var m = n % 100;
+            if (m > 4 && m < 20) return forms[2];
+            m = n % 10;
+            return forms[m === 1 ? 0 : (m > 1 && m < 5 ? 1 : 2)];
+        }
+        /* Отмеченное на странице. Работы опознаём по data-id самой карточки,
+           группы — по data-s2 секции: оба признака уже стоят в разметке. */
+        function chosenWorks() {
+            return Array.prototype.slice.call(
+                root.querySelectorAll('.aclaim-tick:checked')).map(function (i) {
+                    var card = i.closest('.article-card');
+                    return { id: i.value,
+                             title: (card && card.querySelector('h2, h3, .card-title')
+                                     || {}).textContent || '' };
+                });
+        }
+        function chosenGroup() {
+            var r = root.querySelector('.aclaim-pick:checked');
+            if (!r) return null;
+            var g = r.closest('.agroup');
+            var h = g && g.querySelector('.agroup-head h3');
+            return { s2: r.value, title: (h ? h.textContent : '').trim() };
+        }
+
+        /* Отметки ставим и снимаем по требованию: в обычном состоянии страницы
+           их быть не должно — это список работ, а не анкета. */
+        function marks(kind) {
+            root.querySelectorAll('.aclaim-tick, .aclaim-pick').forEach(function (x) {
+                var wrap = x.closest('.aclaim-mark');
+                if (wrap) wrap.remove(); else x.remove();
+            });
+            if (kind === 'work') {
+                root.querySelectorAll('.article-card[data-id]').forEach(function (c) {
+                    var lab = document.createElement('label');
+                    lab.className = 'aclaim-mark';
+                    lab.innerHTML = '<input type="checkbox" class="aclaim-tick" value="' +
+                        esc(c.dataset.id) + '">';
+                    c.insertBefore(lab, c.firstChild);
+                });
+            } else if (kind === 'group') {
+                root.querySelectorAll('.agroup').forEach(function (g) {
+                    var h = g.querySelector('.agroup-head');
+                    if (!h || (g.dataset.s2 || 'none') === 'none') return;
+                    var lab = document.createElement('label');
+                    lab.className = 'aclaim-mark';
+                    lab.innerHTML = '<input type="radio" name="aclaim-group" ' +
+                        'class="aclaim-pick" value="' + esc(g.dataset.s2) + '">';
+                    h.insertBefore(lab, h.firstChild);
+                });
+            }
+            root.addEventListener('change', count);
+        }
+        function count() {
+            if (pick === 'work') {
+                var n = chosenWorks().length;
+                write.textContent = n
+                    ? t.writeN.replace('{n}', n + ' ' + plural(n, t.works))
+                    : t.write;
+            } else if (pick === 'group') {
+                var g = chosenGroup();
+                write.textContent = g ? t.writeN.replace('{n}', t.groups) : t.write;
+            } else {
+                write.textContent = t.write;
+            }
+        }
+
+        /* ПИСЬМО. Зелёного и охры тут нет — есть подставленное и пропуски. Пропуск
+           это строка подчёркиваний: в почтовом клиенте её видно, и понятно, что
+           вписать. Ссылка на страницу идёт первой: по ней мы найдём человека, даже
+           если ключ покажется нам странным. */
+        function letter() {
+            var a = byAct(cur), NL = '\r\n';
+            var blank = '______________________________';
+            var body = [
+                (l === 'ru' ? 'Страница: ' : 'Page: ') + location.origin + location.pathname,
+                (l === 'ru' ? 'Ключ: ' : 'Key: ') + AKEY +
+                    (personId ? ' · ' + personId : ''),
+                '', a[3]
+            ];
+            if (pick === 'work') {
+                chosenWorks().forEach(function (w) {
+                    body.push('  ' + w.id + (w.title ? ' — ' + w.title.trim().slice(0, 90) : ''));
+                });
+                body.push('', t.addLine, blank);
+            } else if (pick === 'group') {
+                var g = chosenGroup();
+                body.push('  ' + (g ? (g.s2 + (g.title ? ' · ' + g.title : '')) : blank));
+                body.push('', (l === 'ru' ? 'Или другая страница (вставьте ссылку):'
+                                          : 'Or another page (paste the link):'), blank);
+            } else if (cur === 'add') {
+                body.push(blank, blank);
+            } else {
+                body.push('', (l === 'ru' ? 'Что добавить (не обязательно):'
+                                          : 'Anything to add (optional):'), blank);
+            }
+            var subj = (l === 'ru' ? 'Автор: ' : 'Author: ') + (NAME || AKEY) +
+                ' — ' + a[1];
+            return { subject: subj, body: body.join(NL) };
+        }
 
         sec.querySelectorAll('.aclaim-btn').forEach(function (b) {
             b.addEventListener('click', function () {
+                var same = (cur === b.dataset.act);
                 sec.querySelectorAll('.aclaim-btn').forEach(function (x) {
-                    x.classList.toggle('on', x === b);
+                    x.classList.remove('on');
                 });
-                cur = b.dataset.act;
-                var ph = b.dataset.ph || '';
-                target.hidden = !ph;
-                target.placeholder = ph;
-                target.value = '';
-                form.hidden = false;
-                msg.hidden = true;
-                (ph ? target : mail).focus();
+                said.hidden = true;
+                if (same) {           // повторное нажатие выключает режим
+                    cur = null; pick = ''; marks(''); hint.hidden = true; go.hidden = true;
+                    return;
+                }
+                b.classList.add('on');
+                cur = b.dataset.act; pick = b.dataset.pick || '';
+                var h = t.hint[pick || cur] || '';
+                hint.textContent = h; hint.hidden = !h;
+                marks(pick);
+                count();
+                copy.textContent = t.copy;
+                // Выбирать нечего — письмо открывается сразу, без лишнего шага.
+                if (!pick) { go.hidden = true; send(); } else { go.hidden = false; }
             });
         });
 
-        form.addEventListener('submit', function (e) {
-            e.preventDefault();
-            if (!cur) return;
-            if (!target.hidden && !target.value.trim()) {
-                msg.hidden = false; msg.textContent = t.needTarget; return;
-            }
-            var btn = form.querySelector('.aclaim-send');
-            btn.disabled = true; btn.textContent = t.sending;
-            fetch(API + '/api/author/claim', {
-                method: 'POST', headers: { 'content-type': 'application/json' },
-                body: JSON.stringify({
-                    akey: AKEY, person: personId || '', action: cur,
-                    target: target.hidden ? '' : target.value.trim(),
-                    email: mail.value.trim(), lang: L
-                })
-            }).then(function (r) { return r.json(); }).then(function (d) {
-                msg.hidden = false;
-                msg.textContent = d && d.message ? d.message : t.fail;
-                if (d && d.ok) { form.hidden = true;
-                    sec.querySelectorAll('.aclaim-btn').forEach(function (x) { x.disabled = true; }); }
-                btn.disabled = false; btn.textContent = t.send;
+        function send() {
+            var m = letter();
+            location.href = 'mailto:author@bridge42worlds.academy?subject=' +
+                encodeURIComponent(m.subject) + '&body=' + encodeURIComponent(m.body);
+        }
+        write.addEventListener('click', send);
+        /* Запасной путь: на части машин mailto: не открывает ничего, и кнопка
+           тогда выглядит сломанной. Даём тот же текст в буфер. */
+        copy.addEventListener('click', function () {
+            var m = letter();
+            var txt = 'author@bridge42worlds.academy' + '\r\n' + m.subject + '\r\n\r\n' + m.body;
+            (navigator.clipboard ? navigator.clipboard.writeText(txt)
+                                 : Promise.reject()).then(function () {
+                said.hidden = false; said.textContent = t.copied;
             }).catch(function () {
-                msg.hidden = false; msg.textContent = t.fail;
-                btn.disabled = false; btn.textContent = t.send;
+                said.hidden = false; said.textContent = t.noMail;
             });
         });
     }

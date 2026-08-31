@@ -4115,14 +4115,31 @@ body.graph-fs-open .graph-fs-active svg { touch-action: manipulation; }
 /* «Уберите мою страницу» — последняя кнопка. Не прячем и не красим тревожно: право
    человека на себя не должно выглядеть опасным действием. */
 .aclaim-btn:last-child { color: var(--soft); }
-.aclaim-form { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-.aclaim-form input { font: inherit; font-size: 13px; padding: 7px 12px; border-radius: 8px;
-    border: 1px solid var(--border); background: var(--bg); color: var(--ink); min-width: 240px; }
-.aclaim-form input[hidden] { display: none; }
-.aclaim-send { font: inherit; font-size: 13px; padding: 7px 18px; border-radius: 8px;
+/* ФОРМЫ ЗДЕСЬ БОЛЬШЕ НЕТ. Поле «ваш адрес» и кнопка «отправить» ушли вместе с
+   отправкой на наш эндпоинт: письмо приходит с собственного адреса автора, и это
+   подтверждение сильнее любого поля. Остались подсказка, отметки на странице и
+   одна кнопка, открывающая почту. */
+.aclaim-hint { font-size: 13px; line-height: 1.6; color: var(--soft);
+    margin: 12px 0 0; max-width: 64ch; }
+.aclaim-go { display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+    margin-top: 12px; }
+.aclaim-write { font: inherit; font-size: 13px; padding: 7px 18px; border-radius: 8px;
     border: 1px solid var(--ink); background: var(--ink); color: var(--bg); cursor: pointer; }
-.aclaim-send:disabled { opacity: .6; cursor: default; }
-.aclaim-msg { font-size: 13px; line-height: 1.6; color: var(--soft); margin-top: 12px; max-width: 62ch; }
+.aclaim-copy { font: inherit; font-size: 13px; padding: 7px 14px; border-radius: 8px;
+    border: 1px solid var(--border); background: transparent; color: var(--soft);
+    cursor: pointer; }
+.aclaim-copy:hover { color: var(--ink); border-color: var(--ink); }
+.aclaim-said { font-size: 12.5px; color: var(--soft); }
+
+/* Отметка у работы и у группы. Появляется только в режиме выбора: в обычном
+   состоянии это список работ, а не анкета. */
+.aclaim-mark { float: left; margin: 2px 10px 0 0; }
+.aclaim-mark input { width: 17px; height: 17px; accent-color: var(--link);
+    cursor: pointer; }
+.article-card:has(.aclaim-tick:checked),
+.agroup-head:has(.aclaim-pick:checked) {
+    outline: 2px solid var(--link); outline-offset: 3px; border-radius: 6px;
+}
 
 /* Столбики публикаций по годам на страницах сущностей (js/entity-live.js). Обычные span,
    не библиотека: ради четырнадцати прямоугольников рисовалку не возят. */
@@ -4514,7 +4531,6 @@ html[lang="ar"] .card-img-wrap { float: none; margin: 0; }
 .lg { width: 9px; height: 9px; border-radius: 2px; display: inline-block; margin-right: 5px; }
 .lg-rest { background: var(--tag-bg); } .lg-ex { background: var(--cyan); opacity: .55; }
 .lg-full { background: var(--scientist-color); } .lg-km { background: var(--ochre); }
-.aclaim-mailto { font-size: 13px; margin: var(--s-3) 0 0; }
 
 /* ═══ Проход 2 — мобильные заплатки смотра 26.08 ═══
    Замер на 375 по всем типам: два перелива. Кнопка «следующая статья» с
