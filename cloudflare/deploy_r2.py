@@ -383,6 +383,11 @@ def main():
             print("--only без пути. Стоп.")
             return
         print("точечная выкладка: только " + ", ".join(only))
+    # ВЫКЛАДКА МИМО ОПИСИ. Опись читается в начале и пишется в конце; две выкладки
+    # разом затрут друг другу её. Для одного маленького файла — журнала прогона,
+    # который надо уронить на сайт посреди работы, — опись не нужна вовсе: файл
+    # меняется каждую минуту, и запоминать его отпечаток бессмысленно.
+    no_manifest = "--no-manifest" in sys.argv
     if not only:
         _refuse_if_build_running()
     prune = "--prune" in sys.argv
@@ -423,7 +428,9 @@ def main():
     old = json.loads(MANIFEST.read_text(encoding="utf-8")) if MANIFEST.exists() else {}
     # При точечной выкладке начинаем не с пустого манифеста, а со старого: иначе
     # всё, что не попало под фильтр, исчезнет из него и уедет заново следующим разом.
-    new, to_upload, skipped = (dict(old) if only else {}), [], 0
+    if no_manifest:
+        old = {}
+    new, to_upload, skipped = (dict(old) if (only and not no_manifest) else {}), [], 0
     pending = {}          # отпечатки файлов, которые ещё предстоит отправить
     rehash = "--rehash" in sys.argv
     quick = 0
@@ -518,7 +525,7 @@ def main():
                 if i % 500 == 0:
                     print(f"  залито {i}/{len(to_upload)}" +
                           (f" · не удалось {len(failed)}" if failed else ""))
-                if done_since_save >= 2000:
+                if done_since_save >= 2000 and not no_manifest:
                     MANIFEST.write_text(json.dumps(new, ensure_ascii=False),
                                         encoding="utf-8")
                     done_since_save = 0
@@ -550,8 +557,10 @@ def main():
         backend.delete_many(removed)
         print(f"удалено устаревших: {len(removed)}")
 
-    MANIFEST.write_text(json.dumps(new, ensure_ascii=False), encoding="utf-8")
-    print(f"✅ delta-деплой готов: +{len(to_upload)} обновлено, манифест сохранён.")
+    if not no_manifest:
+        MANIFEST.write_text(json.dumps(new, ensure_ascii=False), encoding="utf-8")
+    print(f"✅ delta-деплой готов: +{len(to_upload)} обновлено"
+          + (", опись не тронута." if no_manifest else ", манифест сохранён."))
     if to_upload:
         notify_telegram(len(to_upload), len(new))
 

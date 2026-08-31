@@ -230,6 +230,34 @@ WEEKLY_ONLY = {
 EMPTY_CODE = 3
 
 
+_BOARD_AT = [0.0]
+
+
+def board():
+    """Уронить журнал на сайт, чтобы доска показывала идущий прогон.
+
+    Схема конвейера читает data/pipeline-runs.json прямо с сайта, а туда он попадал
+    только шагом сборки — то есть посреди прогона один раз. Владелец 31.08 спросил,
+    можно ли смотреть прогресс на доске: на тот момент там висел вчерашний прогон.
+
+    Раз в минуту, не чаще: файл маленький, но и дёргать облако на каждом шаге незачем.
+    Мимо описи — иначе две выкладки затрут друг другу отпечатки.
+    """
+    if os.environ.get("B42_NO_PUBLISH") == "1":
+        return
+    if time.time() - _BOARD_AT[0] < 60:
+        return
+    _BOARD_AT[0] = time.time()
+    try:
+        subprocess.run([PY, "cloudflare/deploy_r2.py", "--only",
+                        "data/pipeline-runs.json", "--no-manifest"],
+                       cwd=ROOT, env=dict(os.environ, PYTHONIOENCODING="utf-8",
+                                          B42_DEPLOY_OK="1"),
+                       capture_output=True, timeout=120)
+    except Exception:
+        pass          # доска — удобство, а не работа: её сбой прогону не помеха
+
+
 def run(step, cmd, timeout=8 * 3600, cwd=None, env=None, soft=False, weekly=False):
     """soft — шаг, неудача которого не должна валить прогон (например, обложки:
     без картинки статья всё равно статья).
@@ -252,6 +280,7 @@ def run(step, cmd, timeout=8 * 3600, cwd=None, env=None, soft=False, weekly=Fals
     st["at"] = time.strftime("%Y-%m-%d %H:%M")
     st.setdefault("steps", {})[step] = {"started": started}
     save(st)
+    board()          # шаг начался — доска должна об этом сказать
     t0 = time.time()
     out = ""
     try:
@@ -315,6 +344,7 @@ def run(step, cmd, timeout=8 * 3600, cwd=None, env=None, soft=False, weekly=Fals
             log(f"  ШАГ НЕ УДАЛСЯ: {step}. Разбираться здесь; "
                 f"остальные шаги идут дальше.")
     save(st)
+    board()          # шаг кончился — с числами
     return ok or soft
 
 
