@@ -556,7 +556,17 @@ function showGroup(gi, pushCrumb, focusKey) {
                 trail.push({mode: 'group', arg: gi, label: groupLabel(G.groups[gi])});
             }
             selI = -1; sparks = [];
-            setFrame('group', nodes, f.edges || [], focusKey || ('g' + gi));
+            /* МОСТЫ НУЖНЫ И ЗДЕСЬ. Кадр области, пришедший из облака, собирается своим
+               кодом и минует frameFromIds — а значит, минует и мосты через третьи
+               понятия. Отсюда «нажимаю область, открывается облако, и там ничего не
+               связано между собой» (владелец 01.09): восемь островов в «Ядерной
+               астрофизике» так и оставались восемью. Достраиваем той же мерой. */
+            var ed = (f.edges || []).slice();
+            var gids = nodes.map(function (nd) { return nd.ni; });
+            if (gids.every(function (x) { return x !== undefined; })) {
+                CORE.bridgeEdges(adj, gids, ed).forEach(function (e) { ed.push(e); });
+            }
+            setFrame('group', nodes, ed, focusKey || ('g' + gi));
             if (view.minW > 1) setMinW(1);   // узкий кадр — слабые связи здесь нужны
         });
         return;

@@ -1406,6 +1406,18 @@ def graph_page(lang):
 /* весь экран: канвас — сцена, всё остальное плавает поверх */
 html, body {{ height:100%; overflow:hidden; }}
 .top-bar {{ position:relative; z-index:5; }}
+/* ЯЗЫКИ — В СТРОКУ С НАЗВАНИЕМ САЙТА. Отдельной полосой они съедали 44 пикселя
+   высоты, а на странице графа высота — это сцена: чем ниже начинается граф, тем
+   меньше его видно (владелец 01.09: «на графе важно место экрана, давай языки
+   переместим справа от названия сайта и сделаем их шрифт меньше»). Полоса
+   поднимается в строку шапки и садится сразу за логотипом; шрифт мельче на
+   полтора пункта — это переключатель, а не заголовок. */
+.langs {{ position:absolute; top:14px; left:196px; z-index:6;
+  padding:0; margin:0; border:0; background:none; gap:2px; }}
+.langs a {{ font-size:10px; padding:2px 6px; }}
+@media (max-width:700px) {{
+  .langs {{ position:static; }}
+}}
 .b42g-stage {{ position:fixed; inset:0; z-index:0; background:var(--bg); }}
 .b42g-stage canvas {{ display:block; width:100%; height:100%; }}
 .glass {{ background:color-mix(in srgb, var(--surface) 72%, transparent);

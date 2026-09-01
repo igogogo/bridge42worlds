@@ -37,35 +37,35 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
 LANGS = ("ru", "en", "es", "ar", "fr")
 
 T = {
-    "ru": { "origins": {"applied": "Прикладное", "core": "Наше ядро", "area": "Области машины знаний", "demand": "Спрос машины знаний"}, "like": "нравится", "dislike": "не то", "comment": "+ комментарий", "commentHint": "отклики читаем пачками — идею можем поправить", "send": "отправить", "expressMark": "экспресс", "open": "Открыть идею","title": "Идеи проектов", "sub": "За что можно взяться — с опорой на работы",
+    "ru": { "pickLbl": "Тема", "origins": {"applied": "Прикладное", "core": "Наше ядро", "area": "Области машины знаний", "demand": "Спрос машины знаний"}, "like": "нравится", "dislike": "не то", "comment": "+ комментарий", "commentHint": "отклики читаем пачками — идею можем поправить", "send": "отправить", "expressMark": "экспресс", "open": "Открыть идею","title": "Идеи проектов", "sub": "За что можно взяться — с опорой на работы",
            "none": "Идей пока нет", "scale": "масштаб", "what": "что делаем",
            "why": "зачем", "methods": "как", "first": "первый шаг", "needs": "что нужно",
            "risks": "где споткнётся", "origin": "почему мы это предлагаем",
            "based": "опора", "ours": "наш разбор", "field": "работа arXiv, не разобрана",
            "topics": "Области", "note": "Каждая идея обязана опираться на конкретные "
            "работы, и они названы. Идея без опоры — красивые слова, их и без нас много."},
-    "en": { "origins": {"applied": "Applied", "core": "Our core", "area": "Areas the machine found", "demand": "What the machine lacks"}, "like": "like", "dislike": "not for me", "comment": "+ comment", "commentHint": "we read replies in batches — the idea may change", "send": "send", "expressMark": "express", "open": "Open the idea","title": "Project ideas", "sub": "Things you can take on — grounded in papers",
+    "en": { "pickLbl": "Topic", "origins": {"applied": "Applied", "core": "Our core", "area": "Areas the machine found", "demand": "What the machine lacks"}, "like": "like", "dislike": "not for me", "comment": "+ comment", "commentHint": "we read replies in batches — the idea may change", "send": "send", "expressMark": "express", "open": "Open the idea","title": "Project ideas", "sub": "Things you can take on — grounded in papers",
            "none": "No ideas yet", "scale": "scale", "what": "what to do",
            "why": "why", "methods": "how", "first": "first step", "needs": "what you need",
            "risks": "where it stumbles", "origin": "why we suggest it",
            "based": "grounded in", "ours": "our analysis", "field": "arXiv paper, not analysed",
            "topics": "Areas", "note": "Every idea must rest on named papers. "
            "An idea without grounding is just words, and there are plenty of those."},
-    "es": { "origins": {"applied": "Aplicado", "core": "Nuestro núcleo", "area": "Áreas halladas por la máquina", "demand": "Lo que le falta a la máquina"}, "like": "me gusta", "dislike": "no es lo mío", "comment": "+ comentario", "commentHint": "leemos las respuestas por lotes — la idea puede cambiar", "send": "enviar", "expressMark": "exprés", "open": "Abrir la idea","title": "Ideas de proyectos", "sub": "Qué se puede emprender, apoyado en trabajos",
+    "es": { "pickLbl": "Tema", "origins": {"applied": "Aplicado", "core": "Nuestro núcleo", "area": "Áreas halladas por la máquina", "demand": "Lo que le falta a la máquina"}, "like": "me gusta", "dislike": "no es lo mío", "comment": "+ comentario", "commentHint": "leemos las respuestas por lotes — la idea puede cambiar", "send": "enviar", "expressMark": "exprés", "open": "Abrir la idea","title": "Ideas de proyectos", "sub": "Qué se puede emprender, apoyado en trabajos",
            "none": "Aún no hay ideas", "scale": "escala", "what": "qué hacer",
            "why": "para qué", "methods": "cómo", "first": "primer paso", "needs": "qué hace falta",
            "risks": "dónde tropezará", "origin": "por qué lo proponemos",
            "based": "apoyo", "ours": "nuestro análisis", "field": "trabajo de arXiv, sin analizar",
            "topics": "Áreas", "note": "Cada idea debe apoyarse en trabajos concretos, y están "
            "nombrados. Una idea sin apoyo son solo palabras, y de esas sobran."},
-    "ar": { "origins": {"applied": "تطبيقية", "core": "صميم عملنا", "area": "مجالات وجدتها آلة المعرفة", "demand": "ما ينقص آلة المعرفة"}, "like": "يعجبني", "dislike": "ليس لي", "comment": "+ تعليق", "commentHint": "نقرأ الردود على دفعات — قد تتغيّر الفكرة", "send": "إرسال", "expressMark": "سريعة", "open": "افتح الفكرة","title": "أفكار مشاريع", "sub": "ما يمكن الشروع فيه، مستنداً إلى أبحاث",
+    "ar": { "pickLbl": "الموضوع", "origins": {"applied": "تطبيقية", "core": "صميم عملنا", "area": "مجالات وجدتها آلة المعرفة", "demand": "ما ينقص آلة المعرفة"}, "like": "يعجبني", "dislike": "ليس لي", "comment": "+ تعليق", "commentHint": "نقرأ الردود على دفعات — قد تتغيّر الفكرة", "send": "إرسال", "expressMark": "سريعة", "open": "افتح الفكرة","title": "أفكار مشاريع", "sub": "ما يمكن الشروع فيه، مستنداً إلى أبحاث",
            "none": "لا توجد أفكار بعد", "scale": "الحجم", "what": "ماذا نفعل",
            "why": "لماذا", "methods": "كيف", "first": "الخطوة الأولى", "needs": "ما يلزم",
            "risks": "أين قد يتعثّر", "origin": "لماذا نقترح ذلك",
            "based": "الاستناد", "ours": "تحليلنا", "field": "بحث في arXiv، لم نحلّله",
            "topics": "المجالات", "note": "كل فكرة يجب أن تستند إلى أبحاث محددة، وهي مذكورة. "
            "الفكرة بلا استناد مجرد كلام، والكلام كثير."},
-    "fr": { "origins": {"applied": "Appliqué", "core": "Notre cœur", "area": "Domaines trouvés par la machine", "demand": "Ce qui manque à la machine"}, "like": "j’aime", "dislike": "pas pour moi", "comment": "+ commentaire", "commentHint": "nous lisons les réponses par lots — l’idée peut changer", "send": "envoyer", "expressMark": "express", "open": "Ouvrir l’idée","title": "Idées de projets", "sub": "Ce qu’on peut entreprendre, appuyé sur des travaux",
+    "fr": { "pickLbl": "Sujet", "origins": {"applied": "Appliqué", "core": "Notre cœur", "area": "Domaines trouvés par la machine", "demand": "Ce qui manque à la machine"}, "like": "j’aime", "dislike": "pas pour moi", "comment": "+ commentaire", "commentHint": "nous lisons les réponses par lots — l’idée peut changer", "send": "envoyer", "expressMark": "express", "open": "Ouvrir l’idée","title": "Idées de projets", "sub": "Ce qu’on peut entreprendre, appuyé sur des travaux",
            "none": "Pas encore d’idées", "scale": "échelle", "what": "quoi faire",
            "why": "pourquoi", "methods": "comment", "first": "première étape", "needs": "ce qu’il faut",
            "risks": "où ça coince", "origin": "pourquoi nous le proposons",
@@ -80,9 +80,21 @@ CSS = """
 .id-sub { color: var(--soft); font-size: 13px; }
 .id-note { color: var(--muted); font-size: 12px; margin: 8px 0 0; max-width: 62ch;
     line-height: 1.5; }
-.id-bar { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 0;
-    padding: 10px 0; border-top: 1px solid var(--hair);
+/* ВЫБОР ТЕМЫ — СПИСКОМ, А НЕ РЯДОМ КНОПОК. Двадцать четыре кнопки занимали четверть
+   экрана и отодвигали сами идеи ниже сгиба; а тем в очереди девяносто четыре, и ряд
+   вырос бы на весь экран (владелец 01.09: «верхний список разделов занимает всё место,
+   сделать выпадающим списком»). Список занимает одну строку при любом числе тем и
+   сохраняет пласты: они становятся группами внутри него. */
+.id-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+    margin: 14px 0 0; padding: 10px 0; border-top: 1px solid var(--hair);
     border-bottom: 1px solid var(--hair); }
+.id-picklbl { font-family: var(--mono); font-size: 10.5px; text-transform: uppercase;
+    letter-spacing: .08em; color: var(--muted); }
+.id-pick { font: inherit; font-size: 13.5px; max-width: min(100%, 460px);
+    padding: 6px 10px; border: 1.5px solid var(--hair); border-radius: 6px;
+    background: var(--bg); color: var(--fg); cursor: pointer; }
+.id-pick:hover, .id-pick:focus { border-color: var(--accent); outline: none; }
+.id-count { font-family: var(--mono); font-size: 11px; color: var(--muted); }
 /* Ширину рамки задаём вместе с классом-родителем: общий стиль сайта обнуляет
    границу у button, и без этого кнопка темы выглядела простым текстом. */
 .id-bar .id-chip { border: 1.5px solid var(--hair); border-radius: 5px;
@@ -208,11 +220,22 @@ JS = """
   }
   /* КАРТОЧКА ИДЕИ В СПИСКЕ. Название, масштаб и одна строка сути — ровно столько,
      сколько нужно, чтобы выбрать. Всё остальное открывается по нажатию. */
+  /* СУТЬ В СПИСКЕ. Резали по первой точке — и обрывались на «E. coli», «B. subtilis»,
+     «т. д.»: сокращение с точкой выглядит концом предложения, а мысль остаётся
+     недосказанной (владелец 01.09: «иногда обрезана суть идеи»). Берём до двухсот
+     знаков и режем по границе слова, а не по первой попавшейся точке. */
+  function brief_what(t) {
+    t = String(t || "").trim();
+    if (t.length <= 200) return t;
+    var cut = t.slice(0, 200), i = cut.lastIndexOf(" ");
+    return (i > 120 ? cut.slice(0, i) : cut) + "…";
+  }
+
   function brief(x, i) {
     return '<article class="id-brief" data-i="' + i + '">' +
       "<h3>" + esc(x.title) + "</h3>" +
       (x.scale ? '<span class="id-scale">' + esc(x.scale) + "</span>" : "") +
-      "<p>" + esc(String(x.what || "").split(". ")[0]) + ".</p>" +
+      "<p>" + esc(brief_what(x.what)) + "</p>" +
       '<p class="id-open">' + esc(D.open) + "</p></article>";
   }
 
@@ -290,8 +313,14 @@ JS = """
            жизнь — он строит ленту, ищет контейнеры и сам решает, что показать.
            Здесь нужны четыре поля: обложка, заголовок, одна строка сути, дата. */
         box.innerHTML = items.map(function (a) {
-          var img = a.image
-            ? '<img class="id-cimg" src="' + esc(a.image) + '" alt="" loading="lazy">' : "";
+          /* В карточке облака поле image — ПРИЗНАК «обложка есть», а не адрес: там
+             true/false. Мы подставляли его в src, браузер шёл за картинкой «true»
+             и получал 404 (владелец 01.09: «нет картинки у карточки»). Адрес
+             собираем сами из адреса статьи — миниатюра лежит рядом с ней. */
+          var thumb = a.image && a.url
+            ? a.url.replace(/[^/]*$/, "") + "t_ai.webp" : "";
+          var img = thumb
+            ? '<img class="id-cimg" src="' + esc(thumb) + '" alt="" loading="lazy">' : "";
           return '<a class="id-card-art" href="' + esc(a.url || "#") + '">' + img +
             '<span class="id-ctext"><b>' + esc(a.title || a.id) + "</b>" +
             (a.oneliner ? "<i>" + esc(a.oneliner) + "</i>" : "") +
@@ -331,10 +360,8 @@ JS = """
   }
 
   function mark(slug) {
-    Array.prototype.forEach.call(bar.children, function (c) {
-      if (c.dataset.slug === slug) c.setAttribute("aria-current", "true");
-      else c.removeAttribute("aria-current");
-    });
+    var sel = bar.querySelector(".id-pick");
+    if (sel && sel.value !== slug) sel.value = slug;
   }
 
   function load(slug) {
@@ -388,32 +415,43 @@ JS = """
     var ORDER = ["applied", "core", "area", "demand", ""];
     var byOrigin = {};
     TOPICS.forEach(function (t) {
+      IDX[t.slug] = t;
       var k = ORDER.indexOf(t.origin || "") >= 0 ? (t.origin || "") : "";
       (byOrigin[k] = byOrigin[k] || []).push(t);
     });
+    var lbl = document.createElement("span");
+    lbl.className = "id-picklbl";
+    lbl.textContent = D.pickLbl;
+    bar.appendChild(lbl);
+
+    var sel = document.createElement("select");
+    sel.className = "id-pick";
+    sel.setAttribute("aria-label", D.pickLbl);
     ORDER.forEach(function (k) {
       if (!byOrigin[k]) return;
-      if (D.origins && D.origins[k]) {
-        var lab = document.createElement("div");
-        lab.className = "id-glab";
-        lab.textContent = D.origins[k];
-        bar.appendChild(lab);
-      }
-      byOrigin[k].forEach(chip);
+      /* Пласты остаются: они становятся группами внутри списка, и человек по-прежнему
+         видит, откуда тема — рука, область машины знаний или её спрос. */
+      var box = document.createElement("optgroup");
+      box.label = (D.origins && D.origins[k]) || "";
+      byOrigin[k].forEach(function (t) {
+        var o = document.createElement("option");
+        o.value = t.slug;
+        o.textContent = ((t.titles && t.titles[LANG]) || t.topic) + " · " + t.n;
+        box.appendChild(o);
+      });
+      sel.appendChild(box);
     });
-    function chip(t) {
-      IDX[t.slug] = t;
-      var b = document.createElement("button");
-      b.className = "id-chip";
-      b.type = "button";
-      b.dataset.slug = t.slug;
-      b.textContent = (t.titles && t.titles[LANG]) || t.topic;
-      b.onclick = function () {
-        var want = "#" + encodeURIComponent(t.slug);
-        if (location.hash === want) route(); else location.hash = want;
-      };
-      bar.appendChild(b);
-    }
+    sel.onchange = function () {
+      var want = "#" + encodeURIComponent(sel.value);
+      if (location.hash === want) route(); else location.hash = want;
+    };
+    bar.appendChild(sel);
+
+    var cnt = document.createElement("span");
+    cnt.className = "id-count";
+    cnt.textContent = TOPICS.length + " · " +
+      TOPICS.reduce(function (a, t) { return a + (t.n || 0); }, 0);
+    bar.appendChild(cnt);
     route();
   }).catch(function () {
     box.innerHTML = '<p class="id-empty">' + esc(D.none) + "</p>";
@@ -480,6 +518,14 @@ def main():
         return 1
     topics = build_index()
     d = T["ru"]
+    # ШАПКА ОБЩАЯ, А НЕ СВОЯ. Была своя из логотипа и кнопки темы: ни поиска, ни
+    # избранного, ни разделов, ни языков — и один значок приезжал нулевого размера
+    # (владелец 01.09: «иконки поехавшие»). Общая шапка вырезается из живого шаблона
+    # тем же кодом, что у страниц понятий, и разъехаться с сайтом уже не может.
+    import sys as _sys
+    _sys.path.insert(0, str(ROOT))
+    from concepts_pages import site_chrome as _chrome_of
+    _chrome = _chrome_of("ru")[0]
     html = f"""<!DOCTYPE html>
 <html lang="ru" dir="ltr">
 <head>
@@ -494,10 +540,7 @@ def main():
 </head>
 <body>
 
-<div class="top-bar">
-  <a href="/learn.html" class="logo">bridge42worlds</a>
-  <button type="button" class="theme-toggle" onclick="var h=document.documentElement;h.setAttribute('data-theme', h.getAttribute('data-theme')==='dark'?'light':'dark');">&#9683;</button>
-</div>
+{_chrome}
 
 <div class="id-head">
   <h1 id="id-title">{d['title']}</h1>
@@ -511,6 +554,10 @@ def main():
 <script src="/js/icons.js"></script>
 <script src="/js/sitenav.js"></script>
 <script src="/js/likes.js"></script>
+<script src="/js/search-ui.js"></script>
+<script src="/js/site-search.js"></script>
+<script src="/js/search.js"></script>
+<script src="/js/b42-card.js"></script>
 <script>{JS.replace('__T__', json.dumps(T, ensure_ascii=False))}</script>
 </body>
 </html>
