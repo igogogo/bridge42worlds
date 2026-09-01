@@ -517,7 +517,7 @@ def main():
         "tr-formulas", "names-ru", "field", "retag-day", "retag", "apply", "hl-day",
         "super", "live-2", "vecnb",
         "live-3", "gnames", "weave", "live-4", "graph", "mentions-ru", "highlight",
-        "pages-c", "pages-f", "related", "cited", "carousel", "fx", "recommend", "html", "lang-pages", "authors", "status", "cloud-d1", "cloud-vec",
+        "pages-c", "pages-f", "related", "cited", "carousel", "fx", "uplift", "recommend", "html", "lang-pages", "authors", "status", "cloud-d1", "cloud-vec",
         "cards-sync", "deploy", "api", "pages", "audit", "gaudit", "links"]
     if not FULL:
         _plan = [x for x in _plan if x not in weekly_only]
@@ -685,6 +685,17 @@ def main():
     # увидел днём. Ошибка мягкая, поэтому прогон её пережил и никто не заметил.
     run("carousel", [PY, "tools/carousel_frames.py", "--all"], timeout=3600, soft=True)
     run("fx", [PY, "tools/fix_inline_math.py"], timeout=1800, soft=True)
+
+    # ДОТЯЖКА «ПОПУЛЯРНО» — КАЖДЫЙ ДЕНЬ, А НЕ РАЗОВОЙ АКЦИЕЙ. У экспресс-статьи все
+    # уровни — один и тот же текст: обещание трёх глубин для 6 024 работ из 6 749 не
+    # выполнено. Дотяжку делали дважды, и дважды долг возвращался: механизм жил только
+    # в tools/factory.py, а задача фабрики в планировщике отключена. Третий аудит
+    # (01.09) поймал это в третий раз: «сделано для ar/ru и снова остановлено, новые
+    # экспрессы опять рождаются клонами». Шаг переезжает в ежедневный конвейер, где
+    # ему и место — рядом с рождением этих самых экспрессов. Двадцать за прогон:
+    # дотяжка с переводом стоит 0,8 цента, то есть 16 центов в день.
+    run("uplift", [PY, "tools/express_uplift.py", "--pilot", "20", "--translate", "ar"],
+        timeout=2 * 3600, soft=True)
 
     # РЕКОМЕНДАЦИИ АВТОРУ — ДО СБОРКИ, А НЕ ПОСЛЕ. Тот самый значок ✛: раздел «куда
     # работа может пойти дальше». Шаг стоял только в недельном, и получалась неделя
