@@ -73,6 +73,34 @@ def diamonds():
         return {}
 
 
+def stars():
+    """ЗАЯВКИ ЧИТАТЕЛЕЙ. Баннер на экспресс-статье говорит прямо: «добавьте ★ в
+    избранное, если хотите её ускорить». До 1 сентября это было обещанием без
+    механизма — избранное жило в localStorage браузера и никуда не уходило
+    (владелец: «вот я её и добавил, у тебя есть механизм очереди?»). Теперь звезда
+    оставляет след в базе реакций, и он весит больше просмотра: просмотр говорит
+    «открыл», звезда — «мне это нужно целиком».
+
+    Идентификатор реакции у нас составной (`2608.26880v1_ru_popular`), потому что
+    лайки живут отдельно у каждого языка и уровня. Здесь язык и уровень не важны:
+    просят разобрать РАБОТУ.
+    """
+    out = {}
+    try:
+        sys.path.insert(0, str(ROOT / "tools"))
+        from comments_triage import sql
+        rows = sql("SELECT article_id, COUNT(*) c FROM reactions "
+                   "WHERE reaction='star' GROUP BY article_id")
+    except Exception as e:
+        print(f"⚠️ заявки недоступны ({type(e).__name__}) — очередь без них")
+        return out
+    for r in rows:
+        aid = str(r.get("article_id") or "").split("_")[0]
+        if aid:
+            out[aid] = out.get(aid, 0) + int(r.get("c") or 0)
+    return out
+
+
 def express_articles():
     """Экспресс-статьи: только их имеет смысл доращивать. У полных разбор уже есть."""
     out = {}
@@ -99,29 +127,35 @@ def main():
     exp = express_articles()
     vs = views(args.days)
     dm = diamonds()
+    st = stars()
 
     rows = []
     for aid, meta in exp.items():
         v = vs.get(aid, 0)
         d = dm.get(aid, 0)
-        if v < args.min_views and not d:
+        k = st.get(aid, 0)
+        if not k and v < args.min_views and not d:
             continue
-        # Читатели весомее нашего мнения: живой человек открыл статью — это факт,
-        # а «бриллиант» пока гипотеза. Но при нулевом трафике гипотеза лучше пустоты.
-        rows.append({"id": aid, "views": v, "diamond": round(d, 3),
-                     "score": v * 10 + d, **meta})
+        # Порядок веса: заявка > читатели > наше мнение. Звезда — это просьба живого
+        # человека именно про эту работу; просмотр говорит только «открыл»; «бриллиант»
+        # пока гипотеза. Одна заявка перевешивает пять открытий намеренно.
+        rows.append({"id": aid, "stars": k, "views": v, "diamond": round(d, 3),
+                     "score": k * 50 + v * 10 + d, **meta})
     rows.sort(key=lambda x: -x["score"])
 
     QUEUE.write_text(json.dumps(rows, ensure_ascii=False, indent=1), encoding="utf-8")
-    print(f"экспресс-статей {len(exp)} · с читателями {sum(1 for r in rows if r['views'])} · "
+    print(f"экспресс-статей {len(exp)} · по заявкам {sum(1 for r in rows if r['stars'])} · "
+          f"с читателями {sum(1 for r in rows if r['views'])} · "
           f"из «бриллиантов» {sum(1 for r in rows if r['diamond'])} · в очереди {len(rows)}")
     for r in rows[:12]:
-        why = f"читали {r['views']}" if r["views"] else f"бриллиант {r['diamond']}"
+        why = (f"заявок {r['stars']}" if r["stars"]
+               else f"читали {r['views']}" if r["views"]
+               else f"бриллиант {r['diamond']}")
         print(f"  {why:>16} · {r['date']} · {r['title'][:52]}")
     if not rows:
-        print("\nОчередь пуста. Это не поломка: статьи почти не открывают (за неделю "
-              "50 уникальных), а список «бриллиантов» от ML ещё не готов. Появится любой "
-              "из двух источников — очередь наполнится сама.")
+        print("\nОчередь пуста. Это не поломка: заявок звездой пока нет, статьи почти "
+              "не открывают, а список «бриллиантов» от ML ещё не готов. Появится любой "
+              "из трёх источников — очередь наполнится сама.")
         return 0
 
     if args.run:

@@ -113,6 +113,19 @@ function toggleFavorite(aid) {
     if (i === -1) f.push(aid); else f.splice(i, 1);
     try { localStorage.setItem('favorites', JSON.stringify(f)); } catch {}
     updateFavoriteUI(aid);
+    // ЗВЕЗДА НА ЭКСПРЕССЕ — ЭТО ЗАЯВКА. Баннер обещает «добавьте ★, если хотите
+    // ускорить», а избранное жило только в браузере: просьба никуда не уходила.
+    // Отправляем след в базу — молча и не мешая: не дошло, значит не дошло, список
+    // избранного от этого не пострадает. Снятие звезды заявку не отзывает: человек
+    // мог убрать из своего списка уже прочитанное, а работа всё равно нужна.
+    if (i === -1) {
+        try {
+            api('/api/react', {
+                method: 'POST',
+                body: JSON.stringify({ id: aid, reaction: 'star', entityType: 'article' }),
+            });
+        } catch (e) {}
+    }
 }
 function updateFavoriteUI(aid) {
     const on = isFavorite(aid);
