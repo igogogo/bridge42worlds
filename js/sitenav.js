@@ -12,8 +12,6 @@
 (function () {
     var bar = document.querySelector('.top-bar');
     if (!bar) return;
-    // Страница уже с меню (search.js успел отработать или разметка своя) — второе не нужно.
-    if (bar.querySelector('.nav-more') || bar.querySelector('.nav-links')) return;
 
     var LANGS = window.B42_LANGS || ['ru', 'en', 'es', 'ar', 'fr'];
 
@@ -76,6 +74,19 @@
         // достижимым, а пропуск сразу видно глазом.
         return (t && (t[L] || t.en)) || key;
     }
+
+    /* СЛОВАРЬ ОДИН НА ДВЕ ШТОРКИ. Меню собирают два разных места: на верхних страницах —
+       этот файл, на статьях и в ленте — js/search.js, и у второго подписи были прибиты
+       латиницей. Отсюда «about, concepts, scientists» в русском меню ленты против «Гид,
+       Понятия, Учёные» на учебных страницах: два меню с одним смыслом и разными словами
+       (владелец 01.09: «проверь гамбургер, чтобы был везде одинаковый»). Отдаём словарь
+       наружу — механика пусть остаётся разной, слова обязаны совпадать. */
+    window.B42NavLabel = label;
+
+    /* Своё меню строим только там, где его ещё нет. Проверка стоит ЗДЕСЬ, а не в начале
+       файла: словарь подписей нужен и на страницах с чужой шторкой — иначе она осталась бы
+       латинской, ради чего мы его и вынесли наружу. */
+    if (bar.querySelector('.nav-more') || bar.querySelector('.nav-links')) return;
 
     /* Знак учебника — та же книга, что стоит иконкой в шапке основного сайта
        (templates/index.html, ссылка /learn.html). Рисунок повторён здесь, а не взят из
@@ -222,12 +233,43 @@
        языков исторически стоит внутри .top-bar, а стандарт сайта — блок .langs в строке
        .langs-row под шапкой (см. templates/index.html и `.langs-row` в css/style.css).
        Из-за этого шапка учебных страниц выглядела иначе, чем везде. */
-    var langsRow = null;
+    var langsRow = null, langsBuilt = false;
+
+    /* ПЕРЕКЛЮЧАТЕЛЬ ЯЗЫКОВ ЕСТЬ ВЕЗДЕ. На верхних страницах — «Учиться», «Что
+       исследовать», «Открытия», «Спросить» — своего переключателя не было вовсе: сайт
+       на пяти языках, а с этих страниц уйти на свой язык было нельзя (владелец 01.09:
+       «сделай, чтобы такая же шапка с языками была везде»). Строим сами, если своего
+       нет: те же пять ссылок, тот же вид, что у остальных страниц. Язык страницы решает
+       сама страница — мы только показываем выбор. */
+    function buildLangs() {
+        var box = document.createElement('div');
+        box.className = 'langs';
+        var base = location.pathname + location.search.replace(/[?&]lang=[a-z]{2}/g, '');
+        base = base.split('#')[0].replace(/\?$/, '');
+        LANGS.forEach(function (l) {
+            var a = document.createElement('a');
+            a.href = base + (base.indexOf('?') >= 0 ? '&' : '?') + 'lang=' + l;
+            a.textContent = l.toUpperCase();
+            a.setAttribute('data-l', l);
+            if (l === L) a.className = 'active';
+            box.appendChild(a);
+        });
+        return box;
+    }
 
     function ensureLangsRow() {
         if (langsRow || document.querySelector('.langs-row')) return true;
-        var langs = bar.querySelector('.langs');
-        if (!langs) return false;
+        var langs = bar.querySelector('.langs') || document.querySelector('.langs');
+        if (!langs) {
+            /* Ставим общий — но ровно один раз. Наблюдатель за DOM срабатывает на нашу же
+               вставку и заходит сюда повторно, пока первый вызов ещё не дошёл до конца:
+               флаг ставим ДО вставки, иначе на странице оказывается два ряда языков
+               (поймано живьём на /learn.html). */
+            if (langsBuilt) return false;
+            langsBuilt = true;
+            langs = buildLangs();
+            bar.appendChild(langs);
+        }
         langsRow = document.createElement('div');
         langsRow.className = 'langs-row';
         langsRow.appendChild(langs);

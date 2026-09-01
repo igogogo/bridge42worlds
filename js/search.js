@@ -2587,7 +2587,12 @@ function collapseNavOverflow() {
     nav.dataset.navCollapsed = '1';
     // Что уезжает в шторку. /theory/ убран — раздела больше нет; /learn.html не сворачиваем,
     // он остаётся иконкой в строке и места почти не занимает.
-    var collapsiblePatterns = ['/tags/', '/laws/', '/scientists/', '/sections/', '/authors/', '/graph/'];
+    // '/concepts/' добавлен 01.09: раздел переименовали из /laws/ в /concepts/, а список
+    // сворачиваемых остался со старым адресом — и «concepts» оставался единственной
+    // текстовой ссылкой в шапке, дублируя такой же пункт в шторке (владелец: «мы убирали
+    // concepts из шапки, а оно всё ещё там»). В шапке остаются логотип, значки и шторка.
+    var collapsiblePatterns = ['/tags/', '/laws/', '/concepts/', '/scientists/',
+                               '/sections/', '/authors/', '/graph/'];
     var links = Array.prototype.slice.call(nav.querySelectorAll('a'));
     var toCollapse = links.filter(function(a) {
         var href = a.getAttribute('href') || '';
@@ -2627,7 +2632,13 @@ function collapseNavOverflow() {
     // раздел лежит в /formula/ (единственное число); граф по тегам и законам
     // заменён живым внутри понятий. Адрес, ведущий в прошлогоднюю витрину,
     // выглядит рабочим и потому опаснее битого.
-    [['/lang/' + lang + '/concepts/', 'concepts'],
+    // Подписи берём из общего словаря (js/sitenav.js экспортирует B42NavLabel): здесь они
+    // были прибиты латиницей, и русское меню ленты говорило «about, concepts, scientists»,
+    // пока меню верхних страниц говорило «Гид, Понятия, Учёные». Нет словаря — остаётся
+    // прежнее английское слово, раздел не пропадает.
+    var NL = window.B42NavLabel || function (k) { return k; };
+    [['/lang/' + lang + '/index.html', 'main'],
+     ['/lang/' + lang + '/concepts/', 'concepts'],
      ['/lang/' + lang + '/formula/', 'formulas'],
      ['/lang/en/authors/', 'authors'],
      ['/lang/' + lang + '/concepts/graph.html', 'graph'],
@@ -2640,10 +2651,14 @@ function collapseNavOverflow() {
      // существует и находится тем, кто ищет, но не спорит за внимание с основной лентой:
      // работа независимого автора и разбор статьи с arXiv — разные вещи, мешать их
      // в одном потоке рано.
+     ['/lang/' + lang + '/comments.html', 'comments'],
+     ['/research.html?lang=' + lang, 'research'],
      ['/lang/' + lang + '/community/', 'community']].forEach(function(e) {
         if (panel.querySelector('a[href="' + e[0] + '"]')) return;
         var a = document.createElement('a');
-        a.href = e[0]; a.textContent = e[1];
+        a.href = e[0];
+        // Ключ раздела и его подпись — разные вещи: 'laws' в словаре значит «Понятия».
+        a.textContent = NL(e[1] === 'concepts' ? 'laws' : e[1]);
         panel.appendChild(a);
     });
 

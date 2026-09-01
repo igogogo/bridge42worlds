@@ -334,7 +334,13 @@ JS = """
      того, кто её нашёл. Тема пишется в адрес как #тема, идея — как #тема/2:
      «назад» браузера начинает работать сам собой, ссылка на идею открывает именно
      её, а не первую тему списка. */
-  var CUR = null, CACHE = {}, IDX = {}, TOPICS = [];
+  /* АДРЕС ТОЛЬКО ЛАТИНИЦЕЙ. Тема писалась в адрес своим ломтем, и ссылка выглядела как
+     #активная-материя-и-живые-системы/1 — в браузере читаемо, но при копировании в
+     мессенджер превращается в проценты, а на чужой раскладке не набирается вовсе
+     (владелец 01.09: «никаких ссылок на русском, только англ»). Пишем короткий ключ,
+     он уже есть в описи: восемь знаков от хеша ломтя, устойчивы к пересборке.
+     Старые кириллические ссылки продолжают работать — их разбираем по ломтю. */
+  var CUR = null, CACHE = {}, IDX = {}, BYKEY = {}, TOPICS = [];
 
   function draw(rec) {
     CUR = rec;
@@ -359,6 +365,13 @@ JS = """
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
+  /* Ключ темы для адреса: он в описи, но у старых наборов его может не быть —
+     тогда честно падаем обратно на ломоть, лишь бы ссылка работала. */
+  function hashKey(rec) {
+    var t = IDX[(rec || {}).slug] || {};
+    return t.key || encodeURIComponent((rec || {}).slug || "");
+  }
+
   function mark(slug) {
     var sel = bar.querySelector(".id-pick");
     if (sel && sel.value !== slug) sel.value = slug;
@@ -381,7 +394,9 @@ JS = """
   function route() {
     var h = decodeURIComponent(String(location.hash || "").replace(/^#/, ""));
     var part = h.split("/");
-    var slug = IDX[part[0]] ? part[0] : (TOPICS[0] || {}).slug;
+    var slug = BYKEY[part[0]] ? BYKEY[part[0]].slug
+             : IDX[part[0]] ? part[0]                 // старая ссылка ломтем
+             : (TOPICS[0] || {}).slug;
     if (!slug) return;
     mark(slug);
     load(slug).then(function (rec) {
@@ -396,11 +411,11 @@ JS = """
   box.addEventListener("click", function (e) {
     var b = e.target.closest(".id-brief");
     if (b) {
-      location.hash = "#" + encodeURIComponent(CUR.slug) + "/" + b.dataset.i;
+      location.hash = "#" + hashKey(CUR) + "/" + b.dataset.i;
       return;
     }
     if (e.target.closest(".id-back")) {
-      location.hash = "#" + encodeURIComponent(CUR.slug);
+      location.hash = "#" + hashKey(CUR);
     }
   });
 
@@ -416,6 +431,7 @@ JS = """
     var byOrigin = {};
     TOPICS.forEach(function (t) {
       IDX[t.slug] = t;
+      if (t.key) BYKEY[t.key] = t;
       var k = ORDER.indexOf(t.origin || "") >= 0 ? (t.origin || "") : "";
       (byOrigin[k] = byOrigin[k] || []).push(t);
     });
@@ -442,7 +458,7 @@ JS = """
       sel.appendChild(box);
     });
     sel.onchange = function () {
-      var want = "#" + encodeURIComponent(sel.value);
+      var want = "#" + ((IDX[sel.value] || {}).key || sel.value);
       if (location.hash === want) route(); else location.hash = want;
     };
     bar.appendChild(sel);

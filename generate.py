@@ -5207,9 +5207,53 @@ def build_signature():
             h.update(f.read_bytes())
         gen = Path("generate.py")
         if gen.exists():
-            h.update(gen.read_bytes())
+            h.update(_code_only(gen.read_text(encoding="utf-8")).encode("utf-8"))
         _BUILD_SIG = h.hexdigest()[:16]
     return _BUILD_SIG
+
+
+def _code_only(src):
+    """Текст генератора БЕЗ комментариев и строк документации.
+
+    Подпись сборки считается по генератору целиком, и это правильно: правка кода может
+    изменить любую страницу. Но у нас комментарии — половина файла и главный способ
+    передавать причины решений; за 31 августа я дважды запустил полную пересборку сорока
+    тысяч страниц правкой одних комментариев (владелец 01.09: «это можно исправить?»).
+
+    Комментарий не попадает в HTML ни при каких условиях, значит и подписи менять не
+    должен. Разбираем файл токенизатором, а не регулярками: строка с решёткой внутри
+    кавычек — это данные, а не комментарий, и отличить их иначе нельзя.
+
+    Отступы сохраняем (NEWLINE/INDENT/DEDENT), иначе два разных файла свернутся в один
+    поток слов и подпись перестанет различать код.
+    """
+    import io
+    import tokenize
+    out = []
+    try:
+        toks = tokenize.generate_tokens(io.StringIO(src).readline)
+        prev_type = None
+        for tok in toks:
+            if tok.type == tokenize.COMMENT:
+                continue
+            # Docstring — строковый литерал, стоящий отдельным выражением: он идёт сразу
+            # после начала строки (NEWLINE/INDENT), а не внутри выражения.
+            if tok.type == tokenize.STRING and prev_type in (
+                    tokenize.NEWLINE, tokenize.NL, tokenize.INDENT, tokenize.DEDENT, None):
+                prev_type = tok.type
+                continue
+            if tok.type in (tokenize.NL, tokenize.ENDMARKER):
+                continue
+            # Пишем ИМЯ типа, а не сам текст: у переноса строки текст бывает то
+            # переносом, то пустой — смотря чем кончается файл. Из-за
+            # этого добавленный в конец комментарий менял подпись, хотя кода не касался.
+            out.append(tokenize.tok_name[tok.type] if tok.type in
+                       (tokenize.NEWLINE, tokenize.INDENT, tokenize.DEDENT)
+                       else tok.string)
+            prev_type = tok.type
+    except (tokenize.TokenError, IndentationError):
+        return src          # не разобрался — считаем по всему файлу, как раньше
+    return chr(31).join(out)     # разделитель, которого не бывает в исходнике
 
 
 def _load_fingerprints():
