@@ -26,6 +26,7 @@
 """
 import argparse
 import json
+import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -237,22 +238,72 @@ def emails_of(date, aid, cap=4000):
     return []
 
 
-def addressee(article, mails):
-    """Кому адресовать письмо: автору, чья фамилия совпала с адресом, иначе первому.
+def _name_forms(name):
+    """Как фамилия автора может выглядеть в адресе.
 
-    Совпадение ищем по фамилии в локальной части адреса: `rongan@nxu.edu.cn` для
-    «Rong An» — это он и есть. Не совпало — пишем первому автору: он в списке arXiv
-    первым не случайно."""
+    Адрес почти всегда собран из имени, но по-разному: `rongan` (имя+фамилия),
+    `kvogiatz` (инициал + обрезанная фамилия), `awliu` (два инициала + фамилия),
+    `martina.conte` (имя.фамилия). Собираем все формы, чтобы сверять с локальной частью.
+    """
+    parts = [x for x in name.replace(".", " ").replace("-", " ").split() if x]
+    if not parts:
+        return []
+    surname = parts[-1].lower()
+    firsts = [x.lower() for x in parts[:-1]]
+    ini = "".join(x[0] for x in firsts if x)
+    forms = {surname, ini + surname, (firsts[0] if firsts else "") + surname,
+             surname + ini}
+    if firsts:
+        forms.add(firsts[0] + "." + surname)
+        forms.add(firsts[0][0] + "." + surname)
+        # Только ПЕРВЫЙ инициал плюс фамилия: у «Konstantinos D. Vogiatzis» ящик
+        # kvogiatz@ — без среднего инициала, с обрезанной фамилией. Форма «kd…»
+        # такой адрес не ловит, и письмо уходило первому автору вместо настоящего.
+        forms.add(firsts[0][0] + surname)
+    return [f for f in forms if len(f) >= 4], surname
+
+
+def addressee(article, mails):
+    """Кому адресовать письмо — и НИКОМУ, если не уверены.
+
+    Прежнее правило искало фамилию в адресе, а не нашло — писало первому автору.
+    Третий аудит (01.09) поймал на этом первое же письмо очереди: работа Brody
+    Quebedeaux и четверых соавторов, адрес для переписки `kvogiatz@utk.edu` — то есть
+    Konstantinos Vogiatzis, последний автор. Письмо ушло бы человеку с чужим именем в
+    обращении. Для рассылки, вся ценность которой в «мы про ВАШУ работу», это худшая
+    из возможных ошибок.
+
+    Теперь: сверяем локальную часть со всеми формами имени каждого автора, включая
+    обрезанные (`kvogiatz` — начало `kvogiatzis`). Совпадений нет — возвращаем None, и
+    работа выпадает из очереди. Лучше не написать, чем написать не тому.
+    """
     authors = article.get("authors") or []
     if not authors:
         return None
+    best = None
+    best_mail = None
+    best_len = 0
     for m in mails:
-        local = m.split("@")[0].lower()
+        local = re.sub(r"[^a-z.]", "", m.split("@")[0].lower())
+        if len(local) < 4:
+            continue
         for a in authors:
-            surname = a.replace(".", " ").split()[-1].lower()
-            if len(surname) > 3 and surname in local:
-                return a
-    return authors[0]
+            forms, surname = _name_forms(a)
+            for f in forms:
+                # Точное совпадение, адрес длиннее формы, или адрес — обрезанное начало
+                # формы (не короче шести знаков, иначе «liu» совпадёт с половиной Китая).
+                # Точки в адресах ставят не все: «martina.conte» и «martinaconte» —
+                # один человек. Сверяем и с точками, и без них.
+                lf, ll = f.replace(".", ""), local.replace(".", "")
+                hit = (local == f or ll == lf
+                       or (ll.startswith(lf) and len(lf) >= 5)
+                       or (lf.startswith(ll) and len(ll) >= 6))
+                if hit and len(f) > best_len:
+                    best, best_mail, best_len = a, m, len(f)
+    # Возвращаем ПАРУ: кому и на какой адрес. В работе адресов бывает несколько
+    # (jphu@ и yang.xu@ у одной и той же), и раньше мы брали имя по совпадению с
+    # одним, а слали на первый попавшийся — то есть снова чужому человеку.
+    return best, best_mail
 
 
 def written():
@@ -364,11 +415,12 @@ def candidates(days, limit):
         if not mails:
             no_mail += 1
             continue
-        who = addressee(art, mails)
+        who, to = addressee(art, mails)
         if not who or who in done:
             continue
         rows.append({"id": art["id"], "date": art["date"], "author": who,
-                     "to": mails[0], "others": mails[1:3], "concepts": n_con,
+                     "to": to, "others": [x for x in mails if x != to][:2],
+                     "concepts": n_con,
                      "title": (art.get("title") or "")[:70],
                      "page": f"{SITE}/lang/en/authors/{slug_of(who)}.html"})
         if len(rows) >= limit:
@@ -400,11 +452,11 @@ def by_paper(aid, lang, to, send, test=False):
         print(f"нет такой работы в индексе: {aid}")
         return 2
     mails = emails_of(art.get("date"), art["id"])
-    who = addressee(art, mails)
+    who, matched = addressee(art, mails)
     if not who:
-        print("не нашлось, кому адресовать")
+        print("не нашлось, кому адресовать: ни один адрес в работе не сходится с именем")
         return 2
-    to = to or (mails[0] if mails else None)
+    to = to or matched
     subj, body = compose(who, lang, first=art["id"])
     if not send:
         print(f"РАБОТА: {art['id']} · {art.get('date')}")
