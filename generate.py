@@ -6137,9 +6137,29 @@ def process_day(date_str, force=False, refresh_aggregates=True, express=False, l
         best = kept
     inputs = load_generation_inputs()
 
+    # ДОЛЯ ПОЛНЫХ РАЗБОРОВ — КОНСТАНТА, А НЕ НАСТРОЕНИЕ ЗАПУСКА. Раньше глубина
+    # решалась одним флагом на весь день: расписание звало с --express и делало сто
+    # процентов экспрессов, полуручной конвейер звал без него и делал сто процентов
+    # полных. Отсюда и перекос архива: 6 024 экспресса против 725 полных, то есть
+    # обещание трёх глубин выполнено для одной работы из девяти (владелец 01.09:
+    # «надо новые страницы хотя бы 50 на 50, и это соотношение пусть будет константой»).
+    #
+    # Полными берём ВЕРХ дневного списка: он уже отранжирован моделью по интересу, и
+    # глубже разбирать стоит именно то, что она поставила первым. Флаг --express
+    # по-прежнему сильнее доли: он значит «сегодня дёшево», и это осознанный выбор.
+    full_share = 0 if express else float(config.get("full_share", 0.5))
+    n_full = int(round(len(best) * max(0.0, min(1.0, full_share))))
+    if n_full and not express:
+        print(f"  ⚖️ глубина: {n_full} полных из {len(best)} "
+              f"(доля {full_share:.0%}, config.full_share)")
+
+    def _one(pair):
+        i, a = pair
+        return build_article(a, date_str, inputs, force, express or (i >= n_full))
+
     print(f"  🚀 Обработка {len(best)} статей в {ARTICLE_WORKERS} потока...")
     with ThreadPoolExecutor(max_workers=ARTICLE_WORKERS) as ex:
-        prepared = [r for r in ex.map(lambda a: build_article(a, date_str, inputs, force, express), best) if r]
+        prepared = [r for r in ex.map(_one, list(enumerate(best))) if r]
 
     for item in prepared:
         try:

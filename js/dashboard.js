@@ -224,7 +224,12 @@
                 '<div class="kpi-l">' + esc(label) + '</div>' + (sub ? '<div class="kpi-s">' + sub + '</div>' : '') + '</div>';
         }
         html += '<div class="kpi-grid">' +
-            kpi(nA, T.articles, '<b>' + full + '</b> ' + T.full + ' · <b>' + express + '</b> ' + T.express) + kpi(full, T.full) + kpi(express, T.express) +
+            kpi(nA, T.articles, '<b>' + full + '</b> ' + T.full + ' · <b>' + express + '</b> ' + T.express) +
+            // У плитки «полных» подпись говорит, сколько из них прошли машину знаний.
+            // Число было на странице, но внизу, рядом с обложками: владелец 01.09 искал
+            // его и не нашёл. Место числа — там же, где то, к чему оно относится.
+            kpi(full, T.full, kmN ? '<b>' + kmN + '</b> ' + esc(T.km) : '') +
+            kpi(express, T.express) +
             kpi(nC, T.concepts) + kpi(nF, T.formulas) + kpi(nAr, T.areas) +
             kpi(nSec, T.sections) + kpi(nS, T.scientists) + kpi(nAu, T.authors) +
             kpi(nLang, T.langs) +
