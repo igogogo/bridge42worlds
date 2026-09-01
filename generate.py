@@ -1328,6 +1328,40 @@ _PORTRAIT_L10N = {
 }
 
 
+# Описание автора на странице — по-человечески и на его языке. Пять коротких кусков,
+# которые собираются в одну фразу: сколько работ, сколько полных, о чём, сколько соавторов.
+AUTHOR_ABOUT = {
+    "ru": {"works": "У нас {n} работ этого автора", "full": "из них {n} с полным разбором",
+           "topics": "чаще всего в них встречаются: {t}", "co": "соавторов в наших разборах — {n}"},
+    "en": {"works": "We have retold {n} papers by this author",
+           "full": "{n} of them with a full read", "topics": "most often about: {t}",
+           "co": "{n} co-authors across our retellings"},
+    "es": {"works": "Tenemos {n} trabajos de este autor",
+           "full": "{n} de ellos con análisis completo", "topics": "con más frecuencia sobre: {t}",
+           "co": "{n} coautores en nuestros análisis"},
+    "ar": {"works": "لدينا {n} من أبحاث هذا المؤلف", "full": "منها {n} بتحليل كامل",
+           "topics": "أكثرها عن: {t}", "co": "وعدد المشاركين في التأليف لدينا {n}"},
+    "fr": {"works": "Nous avons repris {n} travaux de cet auteur",
+           "full": "dont {n} en analyse complète", "topics": "le plus souvent sur : {t}",
+           "co": "{n} co-auteurs dans nos analyses"},
+}
+
+_EXPRESS_IDS = None
+
+
+def _express_ids():
+    """id → экспресс ли. Считается один раз: страниц авторов сорок семь тысяч, и открывать
+    data.json заново для каждой значило бы читать архив сорок семь тысяч раз."""
+    global _EXPRESS_IDS
+    if _EXPRESS_IDS is None:
+        _EXPRESS_IDS = {}
+        for a in load_index(DEFAULT_LANG):
+            if a.get("version") == "popular":
+                _EXPRESS_IDS[a["id"]] = bool(a.get("express"))
+                _EXPRESS_IDS[a["id"].split("v")[0]] = bool(a.get("express"))
+    return _EXPRESS_IDS
+
+
 def author_portrait_html(name, lang):
     """Портрет автора: абзац о занятиях, счётчики и столбики публикаций по годам.
 
@@ -4400,6 +4434,24 @@ def update_all_authors(only=None):
                 + (f" — {topics}" if topics else "")
                 + ". Free to read at bridge42worlds."
             )
+            # ВИДИМОЕ ОПИСАНИЕ, А НЕ ТОЛЬКО МЕТА-ТЕГ. Строка выше уходит поисковику,
+            # и её же владелец 01.09 искал на самой странице: «у автора столько-то статей,
+            # он специализируется на… — этого текста нет». Человек, пришедший по нашему
+            # письму, должен с первой строки понять, что он нашёл: сколько его работ мы
+            # разобрали, насколько глубоко и о чём они у нас получились.
+            n_full = sum(1 for aid in data.get("articles", [])
+                         if not _express_ids().get(aid, True))
+            n_co = len([c for c in data.get("coauthors", []) if is_real_author(c)])
+            _ab = AUTHOR_ABOUT.get(lang, AUTHOR_ABOUT["en"])
+            about_bits = [_ab["works"].format(n=n_art)]
+            if n_full:
+                about_bits.append(_ab["full"].format(n=n_full))
+            if topics:
+                about_bits.append(_ab["topics"].format(t=topics))
+            if n_co:
+                about_bits.append(_ab["co"].format(n=n_co))
+            author_about = ". ".join(about_bits) + "."
+
             portrait_html = author_portrait_html(author_name, lang)
             _write_text_retry(Path(LANG_DIR) / lang / "authors" / f"{slug}.html", tpl_page.substitute(
                 author_portrait_html=portrait_html,
@@ -4407,6 +4459,7 @@ def update_all_authors(only=None):
                 # мини-граф автора: понятия его работ и их внутренние связи
                 mini_ids=mini_ids_articles(set(data.get("articles", []))),
                 author_desc=attr_safe(author_desc),
+                author_about=safe(author_about),
                 author_url=f"{SITE_URL}/{LANG_DIR}/en/authors/{slug}.html",
                 lang=lang, dir=dir_for(lang), goatcounter=GOATCOUNTER, authors_lang="en", asset_ver=asset_ver(),
                 fav_title=safe(nav_fav_title(lang)),

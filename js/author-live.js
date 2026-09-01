@@ -284,13 +284,13 @@
             hint: {
                 confirm: '',
                 add: 'Номер работы есть в её адресе на arXiv: arxiv.org/abs/2412.00159 — впишите его в письме.',
-                group: 'Отметьте группу, которая тоже вы. Если второе имя — другая страница, откройте её и вставьте адрес в письмо.',
+                group: 'Под этим именем в архиве работы разных исследователей, и мы разделили их на списки. Отметьте кружком тот список, который тоже ваш — мы объединим его с вашим.',
                 work: 'Отметьте работы, которые не ваши. Если знаете, чьи они, — напишите в письме.',
                 withdraw: ''
             },
             write: 'Написать нам', writeN: 'Написать нам · {n}',
             works: ['работа', 'работы', 'работ'], groups: 'группа',
-            copy: 'Скопировать письмо', copied: 'Письмо скопировано',
+            copy: 'Почта не открылась? Скопировать текст', copied: 'Текст письма скопирован — вставьте в письмо на author@bridge42worlds.academy',
             noCopy: 'Скопировать не вышло. Напишите на author@bridge42worlds.academy — тема и текст выше.',
             addLine: 'Чьи они, если знаете:'
         },
@@ -308,7 +308,7 @@
             },
             write: 'Write to us', writeN: 'Write to us · {n}',
             works: ['paper', 'papers', 'papers'], groups: 'group',
-            copy: 'Copy the letter', copied: 'Letter copied',
+            copy: 'Mail app did not open? Copy the text', copied: 'Letter text copied — paste it into a mail to author@bridge42worlds.academy',
             noCopy: 'Could not copy. Write to author@bridge42worlds.academy — subject and text above.',
             addLine: 'Whose are they, if you know:'
         }
@@ -576,6 +576,16 @@
         var head = '';
         if (d.archive && d.archive.total) {
             head += archLine(d.archive, d.stats ? d.stats.total : 0) + archChart(d.archive);
+        }
+        /* ДАШБОРД — В СВОЁ МЕСТО, ЕСЛИ ОНО ЕСТЬ. Портфель arXiv и график по годам
+           рисовались первой строкой списка работ, то есть ниже облака понятий. Владелец
+           01.09 переставил: сначала соавторы и текст, потом статистика, потом облако.
+           Место готовит шаблон (#author-dash); нет его — ведём себя как раньше, чтобы
+           страницы, собранные до этой правки, не остались без дашборда вовсе. */
+        var dash = document.getElementById('author-dash');
+        if (dash && head) {
+            dash.innerHTML = head;
+            head = '';
         }
         html = head + claimsBlock() + html;
         if (window.B42Live) B42Live.swap(box, html);
