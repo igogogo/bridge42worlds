@@ -42,7 +42,7 @@ def env():
     return {**out, **os.environ}
 
 
-def send(to, subject, body, sender=None):
+def send(to, subject, body, sender=None, html=None):
     e = env()
     host = e.get("MAIL_HOST")
     user = sender or (e.get("MAIL_USERS", "").split(",")[0].strip() or e.get("MAIL_USER"))
@@ -55,6 +55,12 @@ def send(to, subject, body, sender=None):
     msg["To"] = to
     msg["Subject"] = subject
     msg.set_content(body)
+    # HTML — ВТОРОЙ ВЕРСИЕЙ, а не вместо. Письмо остаётся читаемым там, где картинок и
+    # стилей не показывают (терминал, режим «только текст», часть корпоративных клиентов),
+    # и выглядит нашей страницей там, где показывают. Порядок обязателен: add_alternative
+    # после set_content, иначе текстовая часть окажется второй и клиенты покажут её.
+    if html:
+        msg.add_alternative(html, subtype="html")
     try:
         with smtplib.SMTP(host, int(e.get("MAIL_SMTP_PORT", 587)), timeout=30) as s:
             s.starttls(context=ssl.create_default_context())

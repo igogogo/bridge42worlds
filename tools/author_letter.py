@@ -259,14 +259,27 @@ def retelling(aid, lang):
 
 
 def compose(name, lang="en", first=None):
+    """Возвращает тему, текстовую версию и HTML-версию письма.
+
+    Две версии одного письма, а не два разных письма: HTML собирается из того же
+    пересказа и тех же обещаний. Текстовая уходит первой частью — она нужна там, где
+    HTML не показывают.
+    """
     t = LETTER.get(lang) or LETTER["en"]
     aid = (first or "").split("v")[0] or first or ""
     retitle, retext = retelling(first, lang) if first else ("", "")
+    sign = SIGN.get(lang, SIGN["en"])
     body = t["body"].format(name=" " + name, who=name, aid=aid,
-                            retitle=retitle, retext=retext,
-                            sign=SIGN.get(lang, SIGN["en"]),
+                            retitle=retitle, retext=retext, sign=sign,
                             site=SITE.replace("https://", ""))
-    return t["subject"].format(aid=aid), body
+    html = None
+    if retext:
+        try:
+            import letter_html
+            html = letter_html.build(name, aid, lang, retitle, retext, sign)
+        except Exception as e:
+            print(f"⚠ оформление письма не собралось ({type(e).__name__}) — уйдёт текстом")
+    return t["subject"].format(aid=aid), body, html
 
 
 # ── КОМУ ПИСАТЬ: АВТОРЫ СВЕЖИХ РАЗБОРОВ ──────────────────────────────────
@@ -524,7 +537,7 @@ def by_paper(aid, lang, to, send, test=False):
         print("не нашлось, кому адресовать: ни один адрес в работе не сходится с именем")
         return 2
     to = to or matched
-    subj, body = compose(who, lang, first=art["id"])
+    subj, body, html = compose(who, lang, first=art["id"])
     if not send:
         print(f"РАБОТА: {art['id']} · {art.get('date')}")
         print(f"КОМУ:  {who} <{to or 'адрес не найден'}>")
@@ -543,7 +556,7 @@ def by_paper(aid, lang, to, send, test=False):
             print(f"этому автору уже писали {was['at'][:10]} — второй раз не пишем")
             return 1
     import council_mail
-    if council_mail.send(to, subj, body, sender=FROM):
+    if council_mail.send(to, subj, body, sender=FROM, html=html):
         if test:
             print(f"✅ пробное письмо ушло на {to} (в журнал не записано)")
         else:
@@ -589,7 +602,7 @@ def main():
         print(f"нет такого автора в реестре: {a.author}")
         return 2
 
-    subj, body = compose(a.author, a.lang)
+    subj, body, html = compose(a.author, a.lang)
     if a.dry or not a.send:
         print(f"КОМУ:  {a.to or '(адрес не задан)'}")
         print(f"ТЕМА:  {subj}\n")
