@@ -2650,6 +2650,23 @@ async function handleWordSearch(request, env) {
   /* Иероглифу хватает одного знака: 熵 это «энтропия», 光 это «свет». Порог в две
      буквы поставлен для языков, где слово из одной буквы ничего не значит. */
   if (raw.length < (CJK.test(raw) ? 1 : 2)) return Response.json({ items: [] });
+  /* НОМЕР РАБОТЫ ИЩЕТСЯ КАК НОМЕР. Автор, которому мы написали, приходит на сайт со
+     своим arXiv-номером в руках — и не находил ничего: в текстовый индекс номер не
+     попадает, а вектор по цифрам выдаёт случайное. Ловим форму номера до всякого FTS
+     и отвечаем прямой выборкой. Версия (v1) необязательна: человек чаще помнит номер
+     без неё. */
+  const arxivId = raw.match(/(\d{4}\.\d{4,5})(v\d+)?/);
+  if (arxivId) {
+    const base = arxivId[1];
+    const byId = await env.CARDS.prepare(
+      `SELECT ${FEED_COLS} FROM cards WHERE lang = ? AND version = ? AND ` +
+      "(id = ? OR id LIKE ?) LIMIT 5"
+    ).bind(lang, version, base, base + "v%").all();
+    const found = (byId.results || []).map(feedRow);
+    if (found.length) {
+      return feedJson({ items: found, page: 0, limit: found.length, more: false });
+    }
+  }
   // Запрос читателя в синтаксис FTS не пускаем: кавычки, звёздочки и NEAR там значат
   // своё, и «C++» или «10^19» роняют разбор. Оставляем слова, каждое ищем как префикс.
   const clean = raw.replace(/["'*(){}:^-]/g, " ");

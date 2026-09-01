@@ -47,50 +47,68 @@ GRAPH = ROOT / "data" / "authors-graph.json"
 # который человек задаст сам: кто вы, при чём тут я, что от меня хотят, как это убрать.
 LETTER = {
     "en": {
-        "subject": "Your paper is retold in plain language on bridge42worlds",
+        "subject": "We retold your paper {aid} in plain language",
         "body": """Hello{name},
 
-We run bridge42worlds, a small project that retells arXiv papers in plain
-language and publishes them in five languages, Arabic among them. The point is
-that a student or an engineer outside your field can follow what was done.
+We are bridge42worlds, a small non-commercial project. We read arXiv papers in
+full and retell them in plain language in five languages, Arabic among them, so
+that a student or an engineer outside the field can follow what was done.
 
-Your work is one of those we covered:
-{papers}
-We also keep a page that gathers your papers we have retold:
-  {page}
+We did that with your paper {aid}. The whole retelling is below, so you can judge
+it without going anywhere and without opening any link.
 
-Two things, and then we leave you alone.
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+{retitle}
 
-If we got something wrong, tell us and we will fix it. That page has buttons for
-it; they open your own mail program with the letter already written, so it costs
-you a few seconds.
+{retext}
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+On the site the same text has figures, a map of the concepts it touches, and a
+section written for you: where this work can go next. There is no link in this
+letter on purpose. The address is {site} and there are two ways to find yourself:
+
+  · type {aid} into the search box, or
+  · open the authors section and look for your name: {who}.
+
+Two more things and we leave you alone.
+
+If we got something wrong, tell us and we will fix it.
 
 If you would rather not be there at all, reply with one line and the page comes
 down the same day. No questions asked.
 
-Nothing is for sale here and there is nothing to sign up for. We wrote because
-it is your work and you should know where it is.
+Nothing is for sale here and there is nothing to sign up for. We wrote because it
+is your work and you should know where it is.
 
-{sign}
-{site}""",
+{sign}""",
     },
     "ar": {
-        "subject": "عملكم مُعاد سرده بلغة مبسّطة على bridge42worlds",
+        "subject": "أعدنا سرد بحثكم {aid} بلغة مبسّطة",
         "body": """السلام عليكم{name}،
 
-نحن مشروع صغير اسمه bridge42worlds، نعيد سرد أبحاث arXiv بلغة مبسّطة وننشرها
-بخمس لغات، من بينها العربية. الغاية أن يتمكّن طالب أو مهندس من خارج تخصّصكم من
-متابعة ما أُنجز.
+نحن bridge42worlds، مشروع صغير غير ربحي. نقرأ أبحاث arXiv كاملةً ونعيد سردها بلغة
+مبسّطة بخمس لغات، من بينها العربية، ليتمكّن طالب أو مهندس من خارج التخصّص من متابعة
+ما أُنجز.
 
-عملكم من بين ما تناولناه:
-{papers}
-ولدينا أيضًا صفحة تجمع أبحاثكم التي أعدنا سردها:
-  {page}
+فعلنا ذلك ببحثكم {aid}. السرد كاملاً أدناه، لتحكموا عليه دون الذهاب إلى أي مكان
+ودون فتح أي رابط.
 
-أمران فقط، ثم لا نشغلكم.
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+{retitle}
 
-إن كان في سردنا خطأ، أخبرونا ونصحّحه. في الصفحة أزرار لذلك: تفتح بريدكم ورسالته
-مكتوبة سلفًا، فلا يكلّفكم الأمر سوى ثوانٍ.
+{retext}
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+على الموقع للنص نفسه رسوم، وخريطة للمفاهيم التي يلامسها، وقسم كُتب لكم: إلى أين
+يمكن أن يمضي هذا العمل. لا رابط في هذه الرسالة عن قصد. العنوان {site}، وهناك
+طريقتان لتجدوا أنفسكم:
+
+  · اكتبوا {aid} في خانة البحث، أو
+  · افتحوا قسم المؤلفين وابحثوا عن اسمكم: {who}.
+
+أمران أخيران ثم لا نشغلكم.
+
+إن كان في سردنا خطأ، أخبرونا ونصحّحه.
 
 وإن كنتم تفضّلون ألّا تظهر الصفحة أصلًا، يكفي سطر واحد في الرد وتُزال في اليوم
 نفسه، دون أسئلة.
@@ -98,36 +116,43 @@ it is your work and you should know where it is.
 لا نبيع شيئًا ولا تسجيل هنا. كتبنا إليكم لأن العمل عملكم، ومن حقّكم أن تعرفوا
 أين هو.
 
-{sign}
-{site}""",
+{sign}""",
     },
     "ru": {
-        "subject": "Ваша работа пересказана простым языком на bridge42worlds",
+        "subject": "Мы пересказали вашу работу {aid} простым языком",
         "body": """Здравствуйте{name}!
 
-Мы небольшой проект bridge42worlds: пересказываем работы с arXiv простым языком
-и публикуем на пяти языках, включая арабский. Смысл в том, чтобы студент или
-инженер не из вашей области понял, что сделано.
+Мы bridge42worlds, небольшой некоммерческий проект. Читаем работы с arXiv целиком
+и пересказываем простым языком на пяти языках, включая арабский, — чтобы студент
+или инженер не из вашей области понял, что сделано.
 
-Ваша работа среди разобранных:
-{papers}
-И есть страница, которая собирает ваши работы, которые мы пересказали:
-  {page}
+Так мы поступили с вашей работой {aid}. Весь пересказ ниже: можно судить о нём,
+никуда не переходя и не открывая ни одной ссылки.
 
-Две вещи, и мы вас больше не тревожим.
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+{retitle}
 
-Если мы что-то переврали, скажите, и мы поправим. На странице для этого есть
-кнопки: они открывают вашу почтовую программу с уже написанным письмом, это
-несколько секунд.
+{retext}
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-Если вы предпочли бы вовсе там не быть, ответьте одной строкой, и страница
-уйдёт в тот же день. Без выяснений.
+На сайте у этого же текста есть рисунки, карта понятий, которых он касается, и
+раздел, написанный для вас: куда работа может пойти дальше. Ссылки в письме нет
+намеренно. Адрес — {site}, найти себя можно двумя способами:
 
-Мы ничего не продаём, и подписываться не на что. Написали потому, что работа
-ваша и вы должны знать, где она лежит.
+  · введите {aid} в строку поиска, или
+  · откройте раздел авторов и найдите своё имя: {who}.
 
-{sign}
-{site}""",
+Две вещи, и мы больше не тревожим.
+
+Если мы что-то переврали, скажите, и мы поправим.
+
+Если вы предпочли бы вовсе там не быть, ответьте одной строкой, и страница уйдёт
+в тот же день. Без выяснений.
+
+Мы ничего не продаём, и подписываться не на что. Написали потому, что работа ваша
+и вы должны знать, где она лежит.
+
+{sign}""",
     },
 }
 SIGN = {"en": "bridge42worlds", "ar": "فريق bridge42worlds", "ru": "bridge42worlds"}
@@ -193,13 +218,55 @@ def papers_of(name, lang, cap=6, first=None):
     return "\n".join(out) + "\n"
 
 
+def retelling(aid, lang):
+    """Сам пересказ — заголовок и текст популярного уровня, без разметки.
+
+    Владелец 01.09: «в письмо включить разобранную версию статьи, ссылку дать на сайт,
+    и не давать ссылку — пусть сам поищет, только адрес сайта». Резон прямой: писем со
+    ссылками столько, что нажимать их перестали, а нам нужно не нажатие, а доверие.
+    Письмо, которое несёт готовый текст и ничего не просит, читается как подарок, а не
+    как рассылка. Ссылка при этом остаётся возможной — но её человек наберёт сам,
+    когда захочет.
+
+    Разметку понятий ([tag:id]слово[/tag]) снимаем: в почте она мусор.
+    """
+    import re as _re
+    for base in (ROOT / "lang" / "ru" / "archive", ROOT / "lang" / "en" / "archive"):
+        hits = list(base.glob(f"*/{aid}/data.json"))
+        if not hits:
+            continue
+        d = json.loads(hits[0].read_text(encoding="utf-8"))
+        pop = (d.get("popular") or {}).get(lang) or (d.get("popular") or {}).get("en") or {}
+        if not pop:
+            pop = (d.get("simple") or {}).get(lang) or (d.get("simple") or {}).get("en") or {}
+        title = (pop.get("title") or "").strip()
+        text = (pop.get("text") or pop.get("description") or "").strip()
+        # Снимаем ВСЮ нашу разметку, а не только теги понятий: в тексте есть ещё
+        # [callout]…[/callout] — врезки, которые на странице становятся плашкой, а в
+        # почте остаются словом в скобках. Скобки читателя мы не трогаем: убираем
+        # только формы [слово] и [/слово] из нашего набора.
+        text = _re.sub(r"\[/?[a-z_]+(?::[^\]]*)?\]", "", text)
+        # Абзацы оставляем как есть: пересказ писался абзацами, и в почте они читаются.
+        # ПЕРЕНОСЫ РУКАМИ. Почтовые клиенты ломают длинные строки как придётся, и
+        # абзац в тысячу знаков приезжает лесенкой. Раскладываем сами по 78 колонок —
+        # ширина, на которой письмо читается и в терминале, и в телефоне.
+        import textwrap as _tw
+        nl = chr(10)
+        paras = [x.strip() for x in text.split(nl) if x.strip()]
+        wrapped = [_tw.fill(x, width=78) for x in paras]
+        return title, (nl + nl).join(wrapped)
+    return "", ""
+
+
 def compose(name, lang="en", first=None):
     t = LETTER.get(lang) or LETTER["en"]
-    page = f"{SITE}/lang/en/authors/{slug_of(name)}.html"
-    body = t["body"].format(name=" " + name, papers=papers_of(name, lang, first=first),
-                            page=page, sign=SIGN.get(lang, SIGN["en"]),
+    aid = (first or "").split("v")[0] or first or ""
+    retitle, retext = retelling(first, lang) if first else ("", "")
+    body = t["body"].format(name=" " + name, who=name, aid=aid,
+                            retitle=retitle, retext=retext,
+                            sign=SIGN.get(lang, SIGN["en"]),
                             site=SITE.replace("https://", ""))
-    return t["subject"], body
+    return t["subject"].format(aid=aid), body
 
 
 # ── КОМУ ПИСАТЬ: АВТОРЫ СВЕЖИХ РАЗБОРОВ ──────────────────────────────────
