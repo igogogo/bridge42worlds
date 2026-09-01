@@ -135,20 +135,40 @@ def focus_line(focus):
             f"плохо подходящее не притягивай.")
 
 
-# DeepSeek удваивает цену API в пиковые часы (9-12 и 14-18 по Пекину, UTC+8).
-DEEPSEEK_PEAK_WINDOWS_BEIJING = [(9, 12), (14, 18)]
+# ОКНА СЧИТАЮТСЯ В UTC И ПО БУДНЯМ — так их публикует сам DeepSeek
+# (api-docs.deepseek.com/quick_start/pricing): «Peak Hours: 01:00-04:00 and 06:00-10:00
+# UTC, Monday through Friday», вне их — половина цены.
+#
+# Прежняя таблица была задана в пекинском времени, с другими границами и без выходных, а
+# рядом стоял комментарий «пиковых цен у v4 нет, подтверждено оплатой» — на этом
+# основании страж был отключён. Владелец 01.09 прислал страницу тарифов: окна есть, и
+# разница двукратная. Считаем в UTC напрямую: часовой пояс машины к делу не относится, а
+# привязка «локально минус пять» ломается при первом переезде на сервер.
+DEEPSEEK_PEAK_WINDOWS_UTC = [(1, 4), (6, 10)]
 
 
 def deepseek_peak_status(now=None):
-    """Локальная машина на Beijing-5 (пик по местному — 4-7 и 9-13). Возвращает
-    (is_peak, hours_until_next_peak) — второе 0.0, если уже в пике сейчас."""
-    now = now or datetime.now()
-    bj_hour = (now + timedelta(hours=5)).hour + (now + timedelta(hours=5)).minute / 60
-    for start, end in DEEPSEEK_PEAK_WINDOWS_BEIJING:
-        if start <= bj_hour < end:
-            return True, 0.0
-    deltas = [(start - bj_hour) % 24 for start, _ in DEEPSEEK_PEAK_WINDOWS_BEIJING]
-    return False, min(deltas)
+    """(в пике ли сейчас, часов до следующего пика). Второе 0.0, если пик уже идёт.
+
+    Выходные целиком дешёвые: пик объявлен только на будни.
+    """
+    from datetime import timezone as _tz
+    now = (now.astimezone(_tz.utc) if (now is not None and now.tzinfo)
+           else datetime.now(_tz.utc))
+    hour = now.hour + now.minute / 60
+    if now.weekday() < 5:
+        for start, end in DEEPSEEK_PEAK_WINDOWS_UTC:
+            if start <= hour < end:
+                return True, 0.0
+    # Сколько ждать: шагаем по часам вперёд, а не считаем формулой. В пятницу вечером
+    # ближайший пик — утро понедельника, и никакой остаток от деления этого не скажет.
+    probe = now.replace(minute=0, second=0, microsecond=0)
+    for step in range(1, 24 * 4 + 1):
+        probe = probe + timedelta(hours=1)
+        if probe.weekday() < 5 and any(
+                start <= probe.hour < end for start, end in DEEPSEEK_PEAK_WINDOWS_UTC):
+            return False, round(step - now.minute / 60, 2)
+    return False, 0.0
 
 
 class PeakHourError(RuntimeError):
@@ -180,8 +200,9 @@ def guard_peak(context=""):
             return
         raise PeakHourError(
             f"Сейчас ПИКОВЫЕ часы DeepSeek (цена ×2){' — ' + context if context else ''}. "
-            f"Остановлено, чтобы не переплатить. Дождись дешёвого окна (пик Пекин 9-12 и 14-18, "
-            f"т.е. локально 04-07 и 09-13) ИЛИ запусти с ALLOW_PEAK=1, если реально надо сейчас.")
+            f"Остановлено, чтобы не переплатить. Дождись дешёвого окна "
+            f"(пик по будням 01:00-04:00 и 06:00-10:00 UTC) ИЛИ запусти с ALLOW_PEAK=1, "
+            f"если реально надо сейчас.")
     if not _PEAK_WARNED:
         print(f"💰 DeepSeek: дешёвое окно, до следующего пика ~{h:.1f} ч.")
         _PEAK_WARNED = True
