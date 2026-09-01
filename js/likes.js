@@ -135,6 +135,26 @@ function updateFavoriteUI(aid) {
     });
 }
 
+// ── Заявка на полный разбор прямо из баннера ────────────────────────────────
+// Баннер экспресс-статьи несёт кнопку «прошу разобрать полностью». Нажатие — та же
+// заявка, что и звезда: одна строка в базе, которую читает очередь доращивания
+// (tools/upgrade_queue.py) и разбирает недельный прогон. Кнопка после нажатия
+// становится подписью «заявка принята» и больше не нажимается: повторная просьба
+// того же человека ничего не добавляет, а кнопка, которую можно жать бесконечно,
+// выглядит сломанной.
+document.addEventListener('click', function (e) {
+    const b = e.target.closest('.express-ask');
+    if (!b || b.disabled) return;
+    const aid = b.dataset.ask;
+    if (!aid) return;
+    b.disabled = true;
+    b.textContent = b.dataset.done || '✓';
+    api('/api/react', {
+        method: 'POST',
+        body: JSON.stringify({ id: aid, reaction: 'star', entityType: 'article' }),
+    });
+});
+
 // ── Обратная связь: чипы + опциональный комментарий ─────────────────────────
 async function submitFeedback(id, wrap, entityType) {
     const box = wrap || document.querySelector(`.feedback[data-article-id="${id}"]`);

@@ -4433,6 +4433,16 @@ html[lang="ar"] .card-img-wrap { float: none; margin: 0; }
 .b42g-catgo { font: inherit; background: none; border: 0; padding: 0; cursor: pointer;
     color: inherit; text-align: left; }
 .b42g-catgo:hover { color: var(--link); text-decoration: underline; }
+
+/* Кнопка заявки в баннере экспресса. Стоит внутри абзаца, поэтому не блок и не
+   пилюля во всю строку: подчёркнутый текст с рамкой, читается как действие и не
+   спорит с самим сообщением. */
+.express-ask { font: inherit; font-size: 13px; cursor: pointer; white-space: nowrap;
+    border: 1px solid var(--hair); border-radius: 999px; padding: 2px 11px;
+    background: var(--bg); color: var(--link); margin-left: 4px;
+    transition: border-color .15s, color .15s; }
+.express-ask:hover { border-color: var(--link); }
+.express-ask:disabled { cursor: default; color: var(--soft); border-style: dashed; }
 @media (max-width: 640px) {
     .b42g-filter { font-size: 11px; padding: 4px 7px; }
 }

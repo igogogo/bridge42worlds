@@ -2207,7 +2207,15 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
             locked_name = (MINI_VERSION_LABEL.get(lang, MINI_VERSION_LABEL["en"]) if version == "mini"
                            else version_label(version, lang))
             banner_tpl = EXPRESS_LOCKED_BANNER.get(lang, EXPRESS_LOCKED_BANNER["en"])
-            banner_html = f'<p class="express-locked-banner">{banner_tpl.format(shown=shown_name, locked=locked_name)}</p>'
+            ask = EXPRESS_ASK_LABEL.get(lang, EXPRESS_ASK_LABEL["en"])
+            done = EXPRESS_ASK_DONE.get(lang, EXPRESS_ASK_DONE["en"])
+            banner_html = (
+                f'<p class="express-locked-banner">'
+                f'{banner_tpl.format(shown=shown_name, locked=locked_name)} '
+                f'<button type="button" class="express-ask" '
+                f'data-ask="{attr_safe(article["id"])}" '
+                f'data-done="{attr_safe(done)}">{safe(ask)}</button>'
+                f'</p>')
             text_html = banner_html + text_html
 
     # AI-обложка (ai.jpg) идёт ПЕРВЫМ кадром галереи, а не отдельным блоком сверху (юзер-фидбек
@@ -3362,6 +3370,27 @@ EXPRESS_LOCKED_BANNER = {
     "zh": '📄 当前显示"{shown}"版本 — "{locked}"尚未准备好。收藏可以帮助优先制作。',
     "fr": '📄 Version "{shown}" affichee, "{locked}" n est pas encore prete. Ajoutez-le aux favoris pour aider a la prioriser.',
     "ar": '📄 معروضة نسخة «{shown}» — «{locked}» غير جاهزة بعد. أضفه إلى المفضّلة للمساعدة في تسريعها.',
+}
+# КНОПКА, А НЕ ОПИСАНИЕ КНОПКИ. Баннер просил «добавьте ★ в избранное, если хотите
+# ускорить»: читателю надо было найти звезду где-то на странице и догадаться, что она
+# значит заявку (владелец 01.09: «надо тогда кнопочку в этом тексте»). Кнопка рядом с
+# текстом и есть заявка: нажал — просьба ушла в базу, недельный прогон разберёт верх
+# списка. Обработчик в js/likes.js по классу .express-ask.
+EXPRESS_ASK_LABEL = {
+    "ru": "Прошу разобрать полностью",
+    "en": "Ask for the full read",
+    "es": "Pedir el análisis completo",
+    "zh": "请求完整解读",
+    "fr": "Demander l’analyse complète",
+    "ar": "اطلب التحليل الكامل",
+}
+EXPRESS_ASK_DONE = {
+    "ru": "Заявка принята",
+    "en": "Request noted",
+    "es": "Petición registrada",
+    "zh": "已记录",
+    "fr": "Demande enregistrée",
+    "ar": "سُجّل الطلب",
 }
 EXPRESS_LOCKED_HINT_UNUSED_TOP = {
     "ru": 'DEAD_START',
