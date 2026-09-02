@@ -90,8 +90,28 @@ def crop_to_ratio(im, ratio=RATIO):
 NONE_MARK = "c_none"     # «проверено, годного кадра нет» — см. build()
 
 
+def licence_allows(folder):
+    """Можно ли брать авторские рисунки этой работы.
+
+    Кадры карусели — вырезки из авторских рисунков, то есть переработка. Лицензия
+    arXiv non-exclusive-distrib и NC-семейство её не разрешают: пересказ своими
+    словами законен, воспроизведение рисунков — нет. Проверка стоит здесь, потому
+    что карусель собирается отдельным проходом и о лицензии до сих пор не знала.
+    """
+    import json as _j
+    f = folder / "data.json"
+    if not f.exists():
+        return True
+    try:
+        return (_j.loads(f.read_text(encoding="utf-8")).get("license_class") != "analysis")
+    except Exception:
+        return True
+
+
 def build(folder, force=False):
     """Собирает c_0..c_2 в папке статьи. Возвращает число кадров карусели."""
+    if not licence_allows(folder):
+        return 0
     folder = Path(folder)
     done = sorted(folder.glob("c_[0-9].webp"))
     if done and not force:

@@ -247,9 +247,15 @@ def license_class(lic_url):
     u = lic_url or ""
     if not u:
         return "no"
-    if any(a in u for a in ("by/4.0", "by-sa/4.0", "zero/1.0", "nonexclusive-distrib/1.0")):
+    if any(a in u for a in ("by/4.0", "by-sa/4.0", "zero/1.0")):
         return "free"
-    if any(a in u for a in ANALYSIS_ONLY):
+    # arXiv non-exclusive-distrib — НЕ свободная лицензия. Она даёт право распространять
+    # работу одному только arXiv; третьим лицам она не даёт ничего сверх цитирования.
+    # Пересказ своими словами законен (идеи и факты не охраняются), а воспроизводить
+    # авторские рисунки нельзя. С 18.08 она стояла в списке «свободных», и под этой
+    # ошибкой на сайт ушли рисунки 2 137 работ (владелец 02.09: «мы берём то, что
+    # открытое; то, что нет — пересказываем, но тогда без картинок»).
+    if any(a in u for a in ANALYSIS_ONLY) or "nonexclusive-distrib" in u:
         return "analysis"
     return "no"
 

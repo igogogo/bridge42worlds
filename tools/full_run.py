@@ -525,7 +525,7 @@ def main():
         "live-3", "gnames", "weave", "live-4", "graph", "mentions-ru", "highlight",
         "pages-c", "pages-f", "related", "cited", "carousel", "fx", "recommend",
         "pipeline-page", "html", "lang-pages", "authors", "status", "cloud-d1", "cloud-vec",
-        "cards-sync", "side-sync", "deploy", "api", "pages", "audit", "gaudit", "links"]
+        "cards-sync", "side-sync", "deploy", "api", "pages", "audit", "gaudit", "links", "lic-audit"]
     # ПЛАН ОБЯЗАН СОВПАДАТЬ С ЦЕПОЧКОЙ. Из него убран мёртвый «uplift» (подъём «Просто»
     # до «Популярно» отменён 01.09) и добавлены два живых шага, которых в плане не было:
     # «pipeline-page» и «side-sync». Пока они расходились, счётчик «пройдено N из M» врал,
@@ -760,6 +760,10 @@ def main():
     run("audit", [PY, "tools/concepts_audit.py"], timeout=1800, soft=True)
     run("gaudit", [PY, "tools/group_integrity.py", "--audit"], timeout=1800, soft=True)
     run("links", [PY, "tools/link_check.py"], timeout=1800, soft=True)
+    # Лицензии — последними и НЕ мягко: работа класса «только собственный разбор» без
+    # ключа в KV значит, что воркер отдаст чужие рисунки и абстракт. Это единственная
+    # проверка, чей красный сигнал означает юридический риск, а не косметику.
+    run("lic-audit", [PY, "tools/license_audit.py", "--fix"], timeout=900)
     finish()
     log("═══ ПОЛНЫЙ ПРОГОН ЗАВЕРШЁН ═══")
     return 0

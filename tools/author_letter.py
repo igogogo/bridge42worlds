@@ -63,7 +63,7 @@ it without going anywhere and without opening any link.
 {retext}
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 {machine}
-On the site the same text has figures and a map of the concepts it touches. We put
+On the site the same text has {figures_note}a map of the concepts it touches. We put
 no link in this letter on purpose — for your own safety: letters with links are
 exactly how people get caught, and a stranger's link deserves no trust. The address
 is {site}, and you will find the paper there yourself: by your name or by its
@@ -98,7 +98,7 @@ is your work and you should know where it is.
 {retext}
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 {machine}
-على الموقع للنص نفسه رسوم وخريطة للمفاهيم التي يلامسها. لم نضع رابطًا في هذه الرسالة
+على الموقع للنص نفسه {figures_note}خريطة للمفاهيم التي يلامسها. لم نضع رابطًا في هذه الرسالة
 عن قصد، حفاظًا على سلامتكم: الرسائل التي تحمل روابط هي بالضبط ما يوقع الناس، ورابط
 من غريب لا يستحق الثقة. العنوان {site}، وستجدون البحث بأنفسكم: باسمكم أو برقمه
 {aid}.
@@ -132,7 +132,7 @@ is your work and you should know where it is.
 {retext}
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 {machine}
-На сайте у этого же текста есть рисунки и карта понятий, которых он касается.
+На сайте у этого же текста есть {figures_note}карта понятий, которых он касается.
 Ссылку мы намеренно не вкладываем — из соображений вашей же безопасности: письма
 со ссылками ровно так и ловят людей, и ссылке от незнакомых доверять не стоит.
 Адрес — {site}. Работу вы найдёте там сами: по своему
@@ -386,6 +386,19 @@ def best_paper(name):
     return best[1] if best else None
 
 
+def licence_restricted(aid):
+    """Класс «только собственный разбор» — рисунков на сайте у работы нет."""
+    if not aid:
+        return False
+    for base in (ROOT / "lang" / "ru" / "archive",):
+        for hit in base.glob(f"*/{aid}/data.json"):
+            try:
+                return json.loads(hit.read_text(encoding="utf-8")).get("license_class") == "analysis"
+            except Exception:
+                return False
+    return False
+
+
 def compose(name, lang="en", first=None):
     """Возвращает тему, текстовую версию и HTML-версию письма.
 
@@ -398,9 +411,14 @@ def compose(name, lang="en", first=None):
     retitle, retext = retelling(first, lang) if first else ("", "")
     mtext, mdata = machine(first, lang) if first else ("", None)
     sign = SIGN.get(lang, SIGN["en"])
+    # РИСУНКИ УПОМИНАЕМ ТОЛЬКО ТАМ, ГДЕ ОНИ ЕСТЬ. Для работ под arXiv non-exclusive и
+    # NC авторские рисунки на сайте не показываются (лицензия не разрешает), и фраза
+    # «у этого текста есть рисунки» была бы неправдой — а письмо и так одно на автора.
+    figs = {"en": "figures and ", "ru": "рисунки и ", "ar": "رسوم و"}
+    fn = figs.get(lang, figs["en"]) if not licence_restricted(first) else ""
     body = t["body"].format(name=" " + name, who=name, aid=aid,
                             retitle=retitle, retext=retext, machine=mtext, sign=sign,
-                            site=SITE.replace("https://", ""))
+                            site=SITE.replace("https://", ""), figures_note=fn)
     html = None
     if retext:
         try:

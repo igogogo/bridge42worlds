@@ -143,6 +143,15 @@ def make_thumbnails(folder, max_pdf=None, width=220):
     max_pdf по умолчанию из config.card_pdf_thumbs (в карточке 2 миниатюры/ряд, до 3 рядов = 6). Требует Pillow. Идемпотентно."""
     if max_pdf is None:
         max_pdf = config.get("card_pdf_thumbs", 6)
+    # Миниатюры t_0..t_N — это уменьшённые авторские рисунки, то есть их воспроизведение.
+    # Лицензия «только собственный разбор» их не разрешает: делаем одну обложку (она наша)
+    # и ни одного кадра из PDF. Читаем data.json сами — сюда его не передают.
+    try:
+        _lic = json.loads((Path(folder) / "data.json").read_text(encoding="utf-8"))
+        if _lic.get("license_class") == "analysis":
+            max_pdf = 0
+    except Exception:
+        pass
     try:
         from PIL import Image
     except Exception:
@@ -5350,6 +5359,19 @@ def _article_fingerprint(folder):
         return ""
 
 
+def content_images(folder, data):
+    """Рисунки из PDF для страницы — ТОЛЬКО если лицензия разрешает их переработку.
+
+    Класс лицензии проверяется здесь, при сборке страницы, а не только при загрузке:
+    файлы могли остаться от сборки до правки классификатора, и страница, которая
+    берёт всё, что лежит в папке, показала бы чужие рисунки снова. Обложка ai.jpg —
+    наша (FLUX), её это не касается."""
+    if (data or {}).get("license_class") == "analysis":
+        return []
+    return sorted([p for p in Path(folder).glob("*.jpg") if p.stem.isdigit()],
+                  key=lambda p: int(p.stem))
+
+
 def regenerate_all_html(only=None, force=False):
     """Пересобирает HTML статей из data.json (без API). Идёт по источнику правды,
     а не по индексам — устойчиво к их повреждению.
@@ -5389,8 +5411,7 @@ def regenerate_all_html(only=None, force=False):
         fresh[aid] = fp
         touched_authors |= {a for a in (data.get("authors") or []) if isinstance(a, str)}
         # только контентные картинки 0.jpg..N-1.jpg (ai.jpg — обложка, не в мозаике)
-        images = sorted([p for p in folder.glob("*.jpg") if p.stem.isdigit()],
-                        key=lambda p: int(p.stem))
+        images = content_images(folder, data)
         captions = data.get("captions") or {}
         article_obj = {
             "id": data["id"],
@@ -6818,7 +6839,7 @@ def backfill_images(force=False, gen_images=False, preset="image_cheap"):
         img = folder / "ai.jpg"
         if img.exists() and not force:
             return False, False
-        pdf_images = sorted((p for p in folder.glob("*.jpg") if p.stem.isdigit()), key=lambda p: int(p.stem))
+        pdf_images = content_images(folder, data)
         cover = pick_cover_image([str(p) for p in pdf_images])
         got_img = via_ai = False
         if cover:
@@ -6990,7 +7011,7 @@ def translate_article_lang(aid, target_lang, force=False):
     data_path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 
     # HTML только для нового языка — остальные языки этой статьи не трогаем.
-    images = sorted([p for p in folder.glob("*.jpg") if p.stem.isdigit()], key=lambda p: int(p.stem))
+    images = content_images(folder, data)
     lang_captions = captions_for_lang(captions, target_lang)
     article_obj = {
         "id": data["id"], "title": data.get("original_title", ""),

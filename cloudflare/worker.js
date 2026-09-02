@@ -3579,6 +3579,23 @@ async function handleRequest(request, env, ctx) {
       return Response.redirect(`https://${CANONICAL_HOST}/${heir}`, 301);
     }
 
+    /* ЛИЦЕНЗИЯ ПРОВЕРЯЕТСЯ ПРИ ОТДАЧЕ, А НЕ ПРИ СБОРКЕ. Класс работы лежит в KV
+       (lic:<номер>, пишет tools/license_fix.py) — тот же приём, что у снятых авторами
+       работ (wd:). Для работ «только собственный разбор» (arXiv non-exclusive, NC):
+       авторские рисунки, их миниатюры и кадры карусели не отдаются вовсе; обложка не
+       отдаётся, если она копия рисунка; из HTML вырезаются дословный абстракт и галерея.
+       Страницы на диске при этом не пересобираются — сайт динамический, и отдача
+       здесь дешевле 32 тысяч пересобранных файлов (владелец 02.09). */
+    const lic = await licenceOf(env, key);
+    if (lic && lic.restricted && lic.file && /^(\d+|t_\d+|c_\d+)\.(webp|jpg)$/.test(lic.file)) {
+      return new Response("Not available: the paper's licence does not permit reuse of its figures",
+        { status: 404, headers: { "content-type": "text/plain; charset=utf-8" } });
+    }
+    if (lic && lic.restricted && lic.cover && /^(t_)?ai\.(webp|jpg)$/.test(lic.file || "")) {
+      return new Response("Not available: cover reproduced an author figure",
+        { status: 404, headers: { "content-type": "text/plain; charset=utf-8" } });
+    }
+
     let obj = await env.SITE.get(key);
     if (!obj && !key.split("/").pop().includes(".")) {
       obj = await env.SITE.get(key + "/index.html"); // чистый URL без расширения
@@ -3659,10 +3676,75 @@ async function handleRequest(request, env, ctx) {
     // для If-None-Match.
     const inm = request.headers.get("if-none-match") || "";
     const weak = (t) => t.trim().replace(/^W\//, "");
-    if (inm && inm.split(",").some((t) => weak(t) === weak(obj.httpEtag))) {
+    // Ограниченной странице 304 не полагается: у читателя в кэше может лежать версия с
+    // рисунками и абстрактом, собранная до правки, и «не изменилось» оставило бы её ему.
+    const licHtml = lic && lic.restricted && /\.html$/.test(lic.file || "");
+    if (!licHtml && inm && inm.split(",").some((t) => weak(t) === weak(obj.httpEtag))) {
       return new Response(null, { status: 304, headers });
     }
+    if (lic && lic.restricted && /\.html$/.test(lic.file || "")) {
+      // Своя метка версии: переписанный ответ не должен совпасть с кэшем нетронутого.
+      headers.set("etag", obj.httpEtag.replace(/"$/, "-lic\""));
+      headers.set("cache-control", "public, max-age=300");
+      return licenceRewrite(lic.lang, new Response(obj.body, { headers }), lic.cover);
+    }
     return new Response(request.method === "HEAD" ? null : obj.body, { headers });
+}
+
+/* ── Лицензия работы: что ограничено и на каком языке сказать об этом ─────────── */
+const LIC_PATH = /^lang\/([a-z]{2})\/archive\/\d{4}-\d{2}-\d{2}\/([^/]+)\/([^/]+)$/;
+
+async function licenceOf(env, key) {
+  if (!env.TOKENS) return null;
+  const m = key.match(LIC_PATH);
+  if (!m) return null;
+  const v = await env.TOKENS.get(`lic:${m[2].split("v")[0]}`);
+  return { lang: m[1], file: m[3], restricted: !!v, cover: !!v && v.includes("cover") };
+}
+
+/* Подсказка у значка — на языке страницы. Карточка при наведении, как у остальных
+   подсказок сайта (data-tip-text подхватывает js/search.js), не системная строка. */
+const LIC_WORDS = {
+  ru: { fig: "Иллюстрации не показаны: лицензия работы не разрешает их воспроизведение. Рисунки — на arXiv.",
+        abs: "Оригинальный абстракт — на arXiv", link: "открыть на arXiv" },
+  en: { fig: "Figures are not shown: the paper's licence does not permit their reproduction. See them on arXiv.",
+        abs: "The original abstract is on arXiv", link: "open on arXiv" },
+  es: { fig: "Las figuras no se muestran: la licencia del trabajo no permite reproducirlas. Están en arXiv.",
+        abs: "El resumen original está en arXiv", link: "abrir en arXiv" },
+  fr: { fig: "Les figures ne sont pas affichées : la licence de l'article n'en permet pas la reproduction. Elles sont sur arXiv.",
+        abs: "Le résumé original est sur arXiv", link: "ouvrir sur arXiv" },
+  ar: { fig: "الأشكال غير معروضة: رخصة البحث لا تسمح بإعادة نشرها. تجدونها على arXiv.",
+        abs: "الملخّص الأصلي على arXiv", link: "فتح على arXiv" },
+  zh: { fig: "未显示插图：论文许可不允许转载。请在 arXiv 查看。", abs: "原始摘要见 arXiv", link: "在 arXiv 打开" },
+};
+
+function licenceRewrite(lang, resp, cover) {
+  const w = LIC_WORDS[lang] || LIC_WORDS.en;
+  const esc = (t) => t.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+  let arxiv = "";
+  return new HTMLRewriter()
+    // номер работы — из ссылки на источник, она есть на каждой странице
+    .on('a[href^="https://arxiv.org/abs/"]', { element(e) { if (!arxiv) arxiv = e.getAttribute("href") || ""; } })
+    // Мозаика — ОБЁРТКА, галерея лежит внутри неё. Значок ставится на место всей
+    // мозаики; отдельно трогать галерею нельзя — она исчезнет вместе с обёрткой, и
+    // значок исчезнет с ней (так и вышло в первой выкладке 02.09).
+    .on("div.mosaic", { element(e) {
+      e.replace(`<div class="mosaic lic-hidden" style="display:flex;align-items:center;gap:10px;` +
+                `padding:14px 0;color:#5A6273;font-size:13px"><span class="lic-mark" style="display:inline-flex;` +
+                `align-items:center;justify-content:center;width:34px;height:34px;border:1px solid #C77F3A;` +
+                `border-radius:50%;color:#C77F3A;cursor:help;flex:none" data-tip-text="${esc(w.fig)}" ` +
+                `aria-label="${esc(w.fig)}" title="${esc(w.fig)}">&#9635;</span><span>${esc(w.fig)}</span></div>`,
+                { html: true });
+    } })
+    // Чужая обложка: превью для соцсетей на неё ссылаться не должно — файл всё равно 404.
+    .on('meta[property="og:image"]', { element(e) { if (cover) e.remove(); } })
+    // дословный абстракт → одна строка со ссылкой
+    .on("section#orig-abstract", { element(e) {
+      e.replace(`<section id="orig-abstract" class="orig-abs lic-hidden"><p class="lic-note">` +
+                `${esc(w.abs)}${arxiv ? ` · <a href="${esc(arxiv)}" rel="noopener" target="_blank">${esc(w.link)}</a>` : ""}` +
+                `</p></section>`, { html: true });
+    } })
+    .transform(resp);
 }
 
 /* ОБЩАЯ ЗАЩИТА ОБРАБОТЧИКА. Владелец 02.09 прислал живую 1101 на обычной странице
