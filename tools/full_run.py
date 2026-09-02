@@ -181,6 +181,12 @@ def journal(st):
         rec = {"id": rid, "started": st.get("started"), "days": st.get("days") or []}
         runs.append(rec)
     rec["kind"] = st.get("kind") or KIND
+    # ОТКУДА ЗАПУЩЕН. Владелец 02.09: на схеме должно быть видно, «когда сед запуск
+    # или вручную». В записи такого поля не было вовсе — kind говорит лишь про род
+    # конвейера (ежедневный/недельный), а не про способ старта. Обёртка планировщика
+    # ставит B42_RUN_ORIGIN=scheduled; всё остальное — руками, и это честное умолчание:
+    # неизвестное происхождение вернее считать ручным, чем выдать за расписание.
+    rec["origin"] = st.get("origin") or os.environ.get("B42_RUN_ORIGIN") or "manual"
     rec["finished"] = st.get("finished")
     rec["secs_total"] = st.get("secs_total")
     rec["totals"] = list(st.get("totals") or [])
@@ -517,8 +523,14 @@ def main():
         "tr-formulas", "names-ru", "field", "retag-day", "retag", "apply", "hl-day",
         "super", "live-2", "vecnb",
         "live-3", "gnames", "weave", "live-4", "graph", "mentions-ru", "highlight",
-        "pages-c", "pages-f", "related", "cited", "carousel", "fx", "uplift", "recommend", "html", "lang-pages", "authors", "status", "cloud-d1", "cloud-vec",
-        "cards-sync", "deploy", "api", "pages", "audit", "gaudit", "links"]
+        "pages-c", "pages-f", "related", "cited", "carousel", "fx", "recommend",
+        "pipeline-page", "html", "lang-pages", "authors", "status", "cloud-d1", "cloud-vec",
+        "cards-sync", "side-sync", "deploy", "api", "pages", "audit", "gaudit", "links"]
+    # ПЛАН ОБЯЗАН СОВПАДАТЬ С ЦЕПОЧКОЙ. Из него убран мёртвый «uplift» (подъём «Просто»
+    # до «Популярно» отменён 01.09) и добавлены два живых шага, которых в плане не было:
+    # «pipeline-page» и «side-sync». Пока они расходились, счётчик «пройдено N из M» врал,
+    # а отсутствующие в плане шаги уезжали в строку «Прочее» — то есть схема показывала
+    # не тот конвейер, который работает.
     if not FULL:
         _plan = [x for x in _plan if x not in weekly_only]
     st["plan"] = [f"day-{d}" for d in days] + _plan

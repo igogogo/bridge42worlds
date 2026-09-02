@@ -3471,8 +3471,7 @@ async function handleArticleSide(request, env) {
 }
 
 
-export default {
-  async fetch(request, env) {
+async function handleRequest(request, env, ctx) {
     const url = new URL(request.url);
 
     // Один сайт — один адрес. Всё, что не он (www, второй домен bridge42worlds.org и его www),
@@ -3664,6 +3663,59 @@ export default {
       return new Response(null, { status: 304, headers });
     }
     return new Response(request.method === "HEAD" ? null : obj.body, { headers });
+}
+
+/* ОБЩАЯ ЗАЩИТА ОБРАБОТЧИКА. Владелец 02.09 прислал живую 1101 на обычной странице
+   статьи — «Worker threw exception». Экран Cloudflare вместо сайта читатель видит при
+   ЛЮБОМ необработанном исключении в любой ветке: их здесь три сотни, и однажды
+   какая-нибудь бросит. Раньше поймать такое было нечем — исключение не доживало до
+   наших глаз, а `wrangler tail` ловит его только если стоять с ним в момент сбоя.
+
+   Теперь ловим всё: страница получает нашу же 404-ю с кодом 500 (сайт, а не чужой
+   экран), API — честный JSON. И, главное, пишем в консоль адрес и стек: в следующем
+   tail причина будет видна сразу, без охоты за совпадением. */
+export default {
+  async fetch(request, env, ctx) {
+    try {
+      return await handleRequest(request, env, ctx);
+    } catch (e) {
+      const detail = (e && (e.stack || e.message)) || String(e);
+      console.error("НЕОБРАБОТАННОЕ ИСКЛЮЧЕНИЕ", request.method, request.url, detail);
+      /* Пишем в ту же таблицу событий, что и просмотры: `wrangler tail` показывает
+         исключение только тому, кто стоит рядом в момент сбоя, а редкую ошибку так не
+         поймать — сегодня восемь запросов подряд прошли, и причина осталась неизвестной.
+         Строка в базе ждёт сколько нужно. Тип 'werror', путь — адрес, extra — стек. */
+      try {
+        if (env.QUEUE) {
+          const day = new Date().toISOString().slice(0, 10);
+          const put = env.QUEUE.prepare(
+            "INSERT INTO events (day, type, path, extra, dev) VALUES (?, 'werror', ?, ?, 0)")
+            .bind(day, new URL(request.url).pathname.slice(0, 300), String(detail).slice(0, 900))
+            .run();
+          if (ctx && ctx.waitUntil) ctx.waitUntil(put); else await put;
+        }
+      } catch { /* запись об ошибке не имеет права стать второй ошибкой */ }
+      const wantsHtml = (request.headers.get("accept") || "").includes("text/html");
+      if (!wantsHtml) {
+        return Response.json({ error: "worker_exception" }, { status: 500 });
+      }
+      try {
+        const nf = await env.SITE.get("404.html");
+        if (nf) {
+          return new Response(nf.body, {
+            status: 500,
+            headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" },
+          });
+        }
+      } catch { /* хранилище тоже молчит — отдаём свой текст ниже */ }
+      return new Response(
+        "<!doctype html><meta charset=\"utf-8\"><title>bridge42worlds</title>" +
+        "<div style=\"font:16px/1.6 system-ui;max-width:34rem;margin:15vh auto;padding:0 1rem\">" +
+        "<h1 style=\"font-size:1.3rem\">Страница временно недоступна</h1>" +
+        "<p>Мы уже знаем об этом. Попробуйте обновить через минуту.</p></div>",
+        { status: 500, headers: { "content-type": "text/html; charset=utf-8",
+                                  "cache-control": "no-store" } });
+    }
   },
 
   // ── Сторож: раз в сутки проверяет, что сайт живой и свежий ──────────────────

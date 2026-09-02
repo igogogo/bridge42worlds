@@ -153,6 +153,53 @@ is your work and you should know where it is.
 }
 SIGN = {"en": "bridge42worlds", "ar": "فريق bridge42worlds", "ru": "bridge42worlds"}
 
+# ── ШАБЛОН ПИСЬМА ЖИВЁТ В ДАННЫХ, А НЕ ТОЛЬКО В КОДЕ ──────────────────────────
+# Владелец 2026-09-02: «в идеале виден шаблон письма, чтобы я мог его отредактировать».
+# Пока тексты были словарём в .py, править их мог только тот, кто правит код.
+#
+# Устройство простое и обратимое: если рядом лежит data/letter-template.json, его
+# поля НАКЛАДЫВАЮТСЯ на зашитые. Нет файла — работает как раньше. Испорчен файл —
+# тоже как раньше, и об этом говорится вслух, а не молча.
+#
+# Накладываем ПОЛЯМИ, а не целиком: правка русской темы не должна снести арабское
+# тело. И «испорчен» здесь значит не только битый JSON: тело письма обязано
+# сохранить все места подстановки, иначе письмо уйдёт с дырами вместо пересказа.
+TEMPLATE_FILE = ROOT / "data" / "letter-template.json"
+REQUIRED_SLOTS = ("{retitle}", "{retext}", "{machine}", "{sign}", "{site}", "{aid}")
+
+
+def template_problems(lang, body):
+    """Чего не хватает в теле письма. Пусто — можно сохранять."""
+    return [slot for slot in REQUIRED_SLOTS if slot not in (body or "")]
+
+
+def load_template():
+    """Наложить пользовательскую правку шаблона на зашитый."""
+    if not TEMPLATE_FILE.exists():
+        return
+    try:
+        over = json.loads(TEMPLATE_FILE.read_text(encoding="utf-8"))
+    except Exception as e:
+        print(f"⚠ {TEMPLATE_FILE.name} не читается ({type(e).__name__}) — беру зашитый шаблон")
+        return
+    for lang, item in (over or {}).items():
+        if lang not in LETTER or not isinstance(item, dict):
+            continue
+        if item.get("subject"):
+            LETTER[lang]["subject"] = item["subject"]
+        body = item.get("body")
+        if body:
+            missing = template_problems(lang, body)
+            if missing:
+                print(f"⚠ шаблон {lang}: нет мест подстановки {' '.join(missing)} — беру зашитый")
+            else:
+                LETTER[lang]["body"] = body
+        if item.get("sign"):
+            SIGN[lang] = item["sign"]
+
+
+load_template()
+
 
 def graph():
     g = json.loads(GRAPH.read_text(encoding="utf-8"))
@@ -726,8 +773,15 @@ def candidates(days, limit):
     return 0
 
 
-def by_paper(aid, lang, to, send, test=False):
-    """Письмо про КОНКРЕТНУЮ свежую работу — она идёт первой строкой."""
+def by_paper(aid, lang, to, send, test=False, lang_explicit=False):
+    """Письмо про КОНКРЕТНУЮ свежую работу — она идёт первой строкой.
+
+    ЯЗЫК ВЫЧИСЛЯЕТСЯ ПО АВТОРУ, а не берётся из флага. У --lang значение по
+    умолчанию «en», и команда `--id … --send` без явного языка отправляла бы
+    англоязычное письмо профессору в Эр-Рияде — при том, что арабский мир у нас
+    приоритетная аудитория, а кандидат уже помечен lang='ar' при отборе.
+    Явно указанный --lang сильнее: это осознанный выбор человека.
+    """
     import generate as G
     art = None
     for x in G.load_index("en"):
@@ -739,6 +793,8 @@ def by_paper(aid, lang, to, send, test=False):
         return 2
     mails = emails_of(art.get("date"), art["id"])
     who, matched = addressee(art, mails)
+    if not lang_explicit:
+        lang = letter_lang(art.get("date"), art["id"], matched, default=lang)
     if not who:
         print("не нашлось, кому адресовать: ни один адрес в работе не сходится с именем")
         return 2
@@ -760,6 +816,15 @@ def by_paper(aid, lang, to, send, test=False):
         was = written().get(who)
         if was:
             print(f"этому автору уже писали {was['at'][:10]} — второй раз не пишем")
+            return 1
+        # РАЗГОН СОБЛЮДАЕТСЯ, А НЕ ПЕЧАТАЕТСЯ. Ограничение 5→10→20→30 писем в день
+        # считалось функцией daily_cap() и попадало в статистику, но НИГДЕ не
+        # проверялось перед отправкой: целый блок обоснования существовал как цифра
+        # на экране (найдено разбором 02.09). Кнопка «отправить» в панели легко
+        # послала бы за раз всю очередь — ровно то, от чего разгон и защищает.
+        if daily_cap() <= 0:
+            print("на сегодня норма писем выбрана — разгон домена (5→10→20→30). "
+                  "Остальные уйдут завтра.")
             return 1
     import council_mail
     if council_mail.send(to, subj, body, sender=FROM, html=html):
@@ -792,7 +857,8 @@ def main():
     if a.candidates:
         return candidates(a.days, a.limit)
     if a.id:
-        return by_paper(a.id, a.lang, a.to, a.send or a.test, a.test)
+        return by_paper(a.id, a.lang, a.to, a.send or a.test, a.test,
+                        lang_explicit=("--lang" in sys.argv))
 
     if a.log:
         w = written()

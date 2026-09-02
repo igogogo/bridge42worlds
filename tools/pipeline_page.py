@@ -141,6 +141,29 @@ body { max-width: 1100px; padding-bottom: 70px; }
 .pp-name { display: block; font-weight: 500; }
 .pp-meta { display: block; font-family: var(--mono); font-size: 10px;
     color: var(--muted); margin-top: 2px; }
+
+/* СТРЕЛКИ МЕЖДУ ШАГАМИ. Раньше порядок читался только по тому, что плитки идут
+   слева направо — а это догадка, а не изображение. Владелец 02.09: «чтобы пайплайн
+   рисовался аккуратно со стрелочками». Стрелка — псевдоэлемент у каждой плитки,
+   кроме последней в строке фазы: не лишние узлы в разметке и не ломается при
+   переносе строки. Цветом не пользуемся (владелец дальтоник) — стрелка серая
+   всегда, она про порядок, а не про состояние. */
+.pp-flow .pp-steps { gap: 7px 16px; }        /* место под стрелку между плитками */
+.pp-step { position: relative; }
+.pp-step:not(:last-child)::after {
+    content: ""; position: absolute; right: -14px; top: 50%;
+    width: 10px; height: 1px; background: var(--muted); opacity: .55;
+}
+.pp-step:not(:last-child)::before {
+    content: ""; position: absolute; right: -14px; top: 50%;
+    margin-top: -3px; border: 3px solid transparent;
+    border-left-color: var(--muted); border-right: 0; opacity: .55;
+}
+html[dir="rtl"] .pp-step:not(:last-child)::after,
+html[dir="rtl"] .pp-step:not(:last-child)::before { right: auto; left: -7px; }
+/* Происхождение прогона: по расписанию или руками. */
+.pp-origin { border: 1px solid var(--hair); border-radius: 4px; padding: 1px 6px;
+    font-size: 10.5px; color: var(--soft); margin-left: 6px; white-space: nowrap; }
 .pp-out { display: block; font-size: 10.5px; color: var(--soft); margin-top: 3px;
     line-height: 1.35; }
 /* Числа шага — то, ради чего он запускался. Моноширинные, чтобы столбик цифр
@@ -185,6 +208,35 @@ body { max-width: 1100px; padding-bottom: 70px; }
 .pp-fails li { margin: 4px 0; }
 .pp-fails code { font-size: 11px; color: var(--muted); }
 
+
+/* ПАНЕЛЬ УПРАВЛЕНИЯ РАССЫЛКОЙ. Появляется ТОЛЬКО на рабочей машине: её данные
+   отдаёт локальный сервер (tools/dev_server.py), а на публичном адресе такой
+   ручки нет. Почты авторов на общедоступной странице показывать нельзя. */
+.pp-panel { margin: 20px 0 0; border: 1px solid var(--hair); border-radius: 8px;
+    padding: 16px 18px; background: var(--bg); }
+.pp-panel h3 { margin: 0 0 4px; font-size: 14px; }
+.pp-panel .pp-note { margin: 0 0 12px; }
+.pp-tbl { width: 100%; border-collapse: collapse; font-size: 12px; font-family: var(--mono); }
+.pp-tbl th { text-align: left; font-weight: 600; color: var(--soft);
+    border-bottom: 1px solid var(--hair); padding: 4px 8px 7px; }
+.pp-tbl td { padding: 6px 8px; border-bottom: 1px solid var(--hair); vertical-align: top; }
+.pp-tbl tr.done td { opacity: .45; }
+.pp-tbl .pp-mail { color: var(--muted); }
+.pp-tbl button { font: inherit; font-size: 11px; padding: 2px 8px; cursor: pointer;
+    border: 1px solid var(--hair); border-radius: 4px; background: var(--bg); color: var(--fg); }
+.pp-act { display: flex; gap: 10px; align-items: center; margin: 14px 0 0; flex-wrap: wrap; }
+.pp-send { font: inherit; font-size: 12px; font-family: var(--mono); padding: 7px 16px;
+    border: 1.5px solid var(--ok); border-radius: 6px; background: var(--bg);
+    color: var(--ok); cursor: pointer; }
+.pp-send[disabled] { opacity: .4; cursor: not-allowed; }
+.pp-tpl textarea { width: 100%; min-height: 260px; font-family: var(--mono); font-size: 11.5px;
+    line-height: 1.5; padding: 10px; border: 1px solid var(--hair); border-radius: 6px;
+    background: var(--bg); color: var(--fg); resize: vertical; }
+.pp-tpl input[type=text] { width: 100%; font-family: var(--mono); font-size: 12px;
+    padding: 6px 8px; border: 1px solid var(--hair); border-radius: 5px;
+    background: var(--bg); color: var(--fg); margin: 0 0 8px; }
+.pp-tabs { display: flex; gap: 6px; margin: 0 0 10px; }
+.pp-tabs button.on { border-color: var(--run); color: var(--run); }
 /* РАССЫЛКА АВТОРАМ. Числа — здесь и для всех; имена — во всплывающем окне и только
    на рабочей машине: страница публичная, она есть в карте сайта, и кому мы написали
    — не её дело. Подробности лежат в .jsonl, а .jsonl заливка в R2 не публикует. */
@@ -377,8 +429,12 @@ JS = """
     var when = (run.started || "") +
       (!live && run.finished ? " → " + run.finished : "") +
       (!live && run.secs_total ? " · " + secs(run.secs_total) : "");
+    /* Происхождение прогона рядом с родом: «ежедневный · по расписанию».
+       Старым записям поля неоткуда взяться — тогда молчим, а не выдумываем. */
+    var ORIGIN = {scheduled: "по расписанию", manual: "запущен вручную"};
+    var org = ORIGIN[run.origin] ? '<i class="pp-origin">' + ORIGIN[run.origin] + '</i>' : '';
     document.getElementById("pp-now").innerHTML =
-      '<i class="pp-kind">' + KIND_NAME(run) + '</i>' +
+      '<i class="pp-kind">' + KIND_NAME(run) + '</i>' + org +
       (run.current
         ? "идёт: <b>" + label(run.current) + "</b> · пройдено " + (run.done || []).length +
           " из " + all.length + " · осталось " + left
@@ -399,7 +455,9 @@ JS = """
     runs.forEach(function (r, i) {
       var o = document.createElement("option");
       o.value = i;
-      o.textContent = KIND_NAME(r) + " · " + (r.started || r.id || "прогон") +
+      o.textContent = KIND_NAME(r) +
+        (r.origin === "scheduled" ? " (расписание)" : r.origin === "manual" ? " (вручную)" : "") +
+        " · " + (r.started || r.id || "прогон") +
         (r.days && r.days.length ? " · дни " + r.days[0] + "…" + r.days[r.days.length - 1] : "") +
         ((r.failed || []).length ? " · сбоев " + r.failed.length : "");
       sel.appendChild(o);
@@ -487,6 +545,145 @@ JS = """
     });
   };
 })();
+/* ПАНЕЛЬ УПРАВЛЕНИЯ РАССЫЛКОЙ — ТОЛЬКО ЛОКАЛЬНО.
+   Ручка /api/outreach есть только у tools/dev_server.py на этой машине. На сайте
+   запрос не найдёт её, панель просто не появится — и почты авторов на публичной
+   странице не окажутся ни при каких обстоятельствах. */
+(function () {
+  var box = document.getElementById("pp-panel");
+  if (!box) return;
+  var CAND = [], TPL = null, LANG = "en", CAP = 0;
+
+  function esc(t) {
+    return String(t == null ? "" : t).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+
+  function drawTable() {
+    var rows = CAND.map(function (r, i) {
+      var lang = r.lang === "ar" ? "арабский" : "английский";
+      return '<tr class="' + (r.written ? "done" : "") + '">' +
+        '<td><input type="checkbox" data-i="' + i + '"' + (r.written ? " disabled" : "") + '></td>' +
+        "<td>" + esc(r.author) + "</td>" +
+        '<td class="pp-mail">' + esc(r.to) + "</td>" +
+        "<td>" + esc(r.id) + "</td>" +
+        "<td>" + esc(r.date) + "</td>" +
+        "<td>" + lang + "</td>" +
+        "<td>" + (r.written ? "уже писали" :
+          '<button type="button" data-prev="' + i + '">письмо</button>') + "</td></tr>";
+    }).join("");
+    document.getElementById("pp-cand").innerHTML =
+      "<tr><th></th><th>Автор</th><th>Почта</th><th>Работа</th><th>Разбор</th>" +
+      "<th>Язык</th><th></th></tr>" + rows;
+    document.getElementById("pp-panel-note").textContent =
+      "Кандидатов " + CAND.length + ". Все они уже прошли отбор: разбор машины знаний, " +
+      "неделя выдержки, адрес найден в самой работе и сходится с именем автора. " +
+      "Сегодня можно отправить ещё " + CAP + " — это разгон домена, он соблюдается при отправке.";
+    box.querySelectorAll("input[type=checkbox]").forEach(function (c) {
+      c.onchange = function () {
+        var n = box.querySelectorAll("input[type=checkbox]:checked").length;
+        document.getElementById("pp-send").disabled = n === 0;
+        document.getElementById("pp-send-note").textContent =
+          n ? "выбрано " + n + (n > CAP ? " — больше сегодняшней нормы, лишние не уйдут" : "") : "";
+      };
+    });
+    box.querySelectorAll("button[data-prev]").forEach(function (b) {
+      b.onclick = function () { preview(CAND[+b.dataset.prev]); };
+    });
+  }
+
+  function preview(r) {
+    var u = "/api/outreach/preview?id=" + encodeURIComponent(r.id) +
+            "&who=" + encodeURIComponent(r.author) + "&lang=" + encodeURIComponent(r.lang || "en");
+    fetch(u).then(function (x) { return x.json(); }).then(function (d) {
+      var m = document.createElement("div");
+      m.className = "pp-modal";
+      m.innerHTML = '<div class="pp-modal-in"><button class="pp-x" type="button">&times;</button>' +
+        "<h3>" + esc(d.subject || "") + "</h3>" +
+        '<div class="pp-note">Кому: ' + esc(r.to) + " · это ровно то письмо, которое уйдёт.</div>" +
+        (d.html ? '<div style="border:1px solid var(--hair);border-radius:8px;overflow:hidden;margin:10px 0">'
+                  + d.html + "</div>"
+                : '<pre style="white-space:pre-wrap;font-size:12px">' + esc(d.text) + '</pre>');
+      m.onclick = function (e) { if (e.target === m || e.target.className === "pp-x") m.remove(); };
+      document.body.appendChild(m);
+    });
+  }
+
+  function drawTemplate() {
+    var tabs = Object.keys(TPL.langs);
+    document.getElementById("pp-tpl-tabs").innerHTML = tabs.map(function (l) {
+      return '<button type="button" data-l="' + l + '" class="' + (l === LANG ? "on" : "") + '">' +
+             l.toUpperCase() + "</button>";
+    }).join("");
+    document.getElementById("pp-tpl-tabs").querySelectorAll("button").forEach(function (b) {
+      b.onclick = function () { saveDraft(); LANG = b.dataset.l; drawTemplate(); };
+    });
+    document.getElementById("pp-tpl-subject").value = TPL.langs[LANG].subject || "";
+    document.getElementById("pp-tpl-body").value = TPL.langs[LANG].body || "";
+    document.getElementById("pp-tpl-note").textContent =
+      "Правка ложится поверх зашитого шаблона в " + TPL.file +
+      ". Места подстановки обязаны остаться: " + TPL.slots.join(" ") +
+      " — без них письмо уйдёт с дырой вместо пересказа.";
+  }
+
+  function saveDraft() {
+    if (!TPL) return;
+    TPL.langs[LANG].subject = document.getElementById("pp-tpl-subject").value;
+    TPL.langs[LANG].body = document.getElementById("pp-tpl-body").value;
+  }
+
+  fetch("/api/outreach").then(function (r) {
+    if (!r.ok) throw 0;
+    return r.json();
+  }).then(function (d) {
+    CAND = d.items || []; CAP = d.can_today || 0;
+    box.style.display = "";
+    drawTable();
+    return fetch("/api/outreach/template").then(function (r) { return r.json(); });
+  }).then(function (t) {
+    TPL = t; drawTemplate();
+  }).catch(function () { /* публичный сайт: панели нет, и это правильно */ });
+
+  document.getElementById("pp-send").onclick = function () {
+    var ids = [];
+    box.querySelectorAll("input[type=checkbox]:checked").forEach(function (c) {
+      ids.push(CAND[+c.dataset.i].id);
+    });
+    if (!ids.length) return;
+    if (!confirm("Отправить " + ids.length + " писем? Отменить будет нельзя.")) return;
+    var btn = this; btn.disabled = true;
+    document.getElementById("pp-send-note").textContent = "отправляю…";
+    fetch("/api/outreach/send", {
+      method: "POST", headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ids: ids}),
+    }).then(function (r) { return r.json(); }).then(function (d) {
+      var ok = (d.sent || []).filter(function (x) { return x.ok; }).length;
+      document.getElementById("pp-send-note").textContent =
+        "отправлено " + ok + " из " + ids.length +
+        (ok < ids.length ? " · остальные не прошли: норма дня, уже писали или отказ почты" : "");
+      setTimeout(function () { location.reload(); }, 2500);
+    }).catch(function () {
+      document.getElementById("pp-send-note").textContent = "не удалось — смотри вывод сервера";
+      btn.disabled = false;
+    });
+  };
+
+  document.getElementById("pp-tpl-save").onclick = function () {
+    saveDraft();
+    fetch("/api/outreach/template", {
+      method: "POST", headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({langs: TPL.langs}),
+    }).then(function (r) { return r.json(); }).then(function (d) {
+      document.getElementById("pp-tpl-saved").textContent = d.saved
+        ? "сохранено в " + d.file
+        : "не сохранено: " + (d.problems || []).map(function (p) {
+            return p.lang + " — нет " + p.missing.join(" ");
+          }).join("; ");
+    });
+  };
+})();
+
 """
 
 def main():
@@ -550,6 +747,28 @@ def main():
   <div class="pp-note" id="pp-out-seen"></div>
 </div>
 
+<div class="pp-panel" id="pp-panel" style="display:none">
+  <h3>Управление рассылкой</h3>
+  <div class="pp-note" id="pp-panel-note"></div>
+  <table class="pp-tbl" id="pp-cand"></table>
+  <div class="pp-act">
+    <button class="pp-send" id="pp-send" type="button" disabled>Отправить выбранным</button>
+    <span class="pp-note" id="pp-send-note"></span>
+  </div>
+  <div class="pp-tpl" style="margin-top:22px">
+    <h3>Шаблон письма</h3>
+    <div class="pp-note" id="pp-tpl-note"></div>
+    <div class="pp-tabs" id="pp-tpl-tabs"></div>
+    <input type="text" id="pp-tpl-subject" placeholder="Тема письма">
+    <textarea id="pp-tpl-body" spellcheck="false"></textarea>
+    <div class="pp-act">
+      <button class="pp-send" id="pp-tpl-save" type="button">Сохранить шаблон</button>
+      <span class="pp-note" id="pp-tpl-saved"></span>
+    </div>
+  </div>
+</div>
+
+
 <div class="pp-hint">Статус читается знаком и рамкой, не цветом: галочка и
 сплошная — прошло, стрелка и пунктир — идёт, восклицание и штриховка — сбой,
 точка и точечная рамка — впереди. Под именем шага стоит время начала и окончания,
@@ -559,6 +778,8 @@ def main():
 <script>{js}</script>
 </body>
 </html>
+
+
 """
     OUT.write_text(html, encoding="utf-8")
     print(f"✅ {OUT.name}: {len(PHASES)} фаз, описаний узлов {len(nodes)}")

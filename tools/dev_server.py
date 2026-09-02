@@ -20,6 +20,7 @@
 """
 import argparse
 import json
+import sys
 import random
 import re
 import threading
@@ -254,10 +255,121 @@ def handle_authors(q):
     return {"items": rows[:lim]}
 
 
+# ── ПАНЕЛЬ РАССЫЛКИ: ТОЛЬКО ЗДЕСЬ, ТОЛЬКО НА ЭТОЙ МАШИНЕ ──────────────────────
+# Владелец 2026-09-02: «письма будем отправлять по моей кнопке; я ставлю чекбоксы,
+# ты отправляешь; виден шаблон, чтобы я мог его отредактировать; вижу их почту».
+#
+# ПОЧЕМУ ЭТО ЖИВЁТ В ЛОКАЛЬНОМ СЕРВЕРЕ, А НЕ В ВОРКЕРЕ. Две причины, и обе твёрдые.
+# Первая: воркер не умеет слать такие письма — рассылка идёт по SMTP с доступами из
+# .env, которых в облаке нет и быть не должно. Вторая важнее: почты авторов нельзя
+# показывать на публичной странице, а /pipeline.html лежит в карте сайта. Здесь же
+# сервер слушает localhost, и дальше этой машины ничего не уходит.
+def handle_outreach(q):
+    """Кандидаты на письмо — с адресами. Читается только локально."""
+    rows = []
+    f = ROOT / "data" / "outreach-candidates.jsonl"
+    if f.exists():
+        for line in f.read_text(encoding="utf-8").splitlines():
+            if line.strip():
+                try:
+                    rows.append(json.loads(line))
+                except Exception:
+                    pass
+    done = set()
+    lg = ROOT / "data" / "outreach-log.jsonl"
+    if lg.exists():
+        for line in lg.read_text(encoding="utf-8").splitlines():
+            if line.strip():
+                try:
+                    done.add(json.loads(line).get("author"))
+                except Exception:
+                    pass
+    for r in rows:
+        r["written"] = r.get("author") in done
+    cap = 0
+    try:
+        sys.path.insert(0, str(ROOT / "tools"))
+        from author_letter import daily_cap
+        cap = daily_cap()
+    except Exception:
+        pass
+    return {"items": rows, "can_today": cap}
+
+
+def handle_template(q):
+    """Шаблон письма как он есть сейчас: зашитый плюс наложенная правка."""
+    sys.path.insert(0, str(ROOT / "tools"))
+    import author_letter as AL
+    return {"langs": {k: {"subject": v["subject"], "body": v["body"], "sign": AL.SIGN.get(k, "")}
+                      for k, v in AL.LETTER.items()},
+            "slots": list(AL.REQUIRED_SLOTS),
+            "file": str(AL.TEMPLATE_FILE.relative_to(ROOT))}
+
+
+def handle_preview(q):
+    """Письмо для КОНКРЕТНОГО автора — ровно то, что уйдёт. Ничего не отправляет."""
+    sys.path.insert(0, str(ROOT / "tools"))
+    import importlib
+    import author_letter as AL
+    importlib.reload(AL)                       # подхватить только что сохранённый шаблон
+    aid = (q.get("id") or [""])[0]
+    who = (q.get("who") or [""])[0]
+    lang = (q.get("lang") or ["en"])[0]
+    if not (aid and who):
+        return {"error": "нужны id и who"}
+    subj, body, html = AL.compose(who, lang, first=aid)
+    return {"subject": subj, "text": body, "html": html or ""}
+
+
+def handle_send(payload):
+    """Отправка выбранных. Все зашитые ограничения остаются в силе: только с ✛,
+    неделя выдержки, один автор — одно письмо, разгон домена. Панель их не обходит,
+    она только выбирает, кому из ДОПУЩЕННЫХ написать сегодня."""
+    sys.path.insert(0, str(ROOT / "tools"))
+    import importlib
+    import author_letter as AL
+    importlib.reload(AL)
+    ids = [str(x) for x in (payload.get("ids") or [])][:50]
+    test_to = (payload.get("test_to") or "").strip()
+    out = []
+    for aid in ids:
+        try:
+            rc = AL.by_paper(aid, "en", test_to or None, True, bool(test_to))
+            out.append({"id": aid, "ok": rc == 0, "code": rc})
+        except Exception as e:
+            out.append({"id": aid, "ok": False, "error": f"{type(e).__name__}: {e}"})
+    return {"sent": out}
+
+
+def handle_save_template(payload):
+    """Сохранить правку шаблона. Пустые места подстановки не пропускаем: письмо без
+    {retext} уйдёт с дырой вместо пересказа, и заметит это уже автор."""
+    sys.path.insert(0, str(ROOT / "tools"))
+    import author_letter as AL
+    langs = payload.get("langs") or {}
+    bad = []
+    for lang, item in langs.items():
+        miss = AL.template_problems(lang, (item or {}).get("body") or "")
+        if miss:
+            bad.append({"lang": lang, "missing": miss})
+    if bad:
+        return {"saved": False, "problems": bad}
+    AL.TEMPLATE_FILE.write_text(json.dumps(langs, ensure_ascii=False, indent=1),
+                                encoding="utf-8")
+    return {"saved": True, "file": AL.TEMPLATE_FILE.name}
+
+
+POST_ROUTES = {"/api/outreach/send": handle_send,
+               "/api/outreach/template": handle_save_template}
+
+
 ROUTES = {"/api/feed": handle_feed, "/api/corpus": handle_corpus,
           "/api/find": handle_find, "/api/side": handle_side,
           "/api/cards": handle_cards,
-          "/api/authors": handle_authors}
+          "/api/authors": handle_authors,
+          "/api/outreach": handle_outreach,
+          "/api/outreach/template": handle_template,
+          "/api/outreach/preview": handle_preview}
 
 
 class Server(ThreadingHTTPServer):
@@ -287,6 +399,30 @@ class Handler(SimpleHTTPRequestHandler):
         # Тихо: в консоли важны только ошибки ручек, а не поток запросов за картинками.
         if "/api/" in (self.path or ""):
             super().log_message(fmt, *args)
+
+    def do_POST(self):
+        """Только для панели управления и только локально: сохранить шаблон и
+        отправить выбранные письма. POST сервер раньше не умел вовсе — любой
+        запрос получал 501, и кнопке было некуда стучать."""
+        u = urlparse(self.path)
+        fn = POST_ROUTES.get(u.path)
+        if not fn:
+            self.send_response(404); self.end_headers(); return
+        try:
+            n = int(self.headers.get("Content-Length") or 0)
+            payload = json.loads(self.rfile.read(n) or b"{}")
+            with _lock:
+                body = json.dumps(fn(payload), ensure_ascii=False).encode("utf-8")
+            code = 200
+        except Exception as e:
+            body = json.dumps({"error": f"{type(e).__name__}: {e}"}, ensure_ascii=False).encode("utf-8")
+            code = 500
+        self.send_response(code)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+        self.wfile.write(body)
 
     def do_GET(self):
         u = urlparse(self.path)
