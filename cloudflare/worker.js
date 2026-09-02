@@ -2294,10 +2294,16 @@ async function handleFeed(request, env) {
     // с показанным: у «дискретной математики» чип обещает две работы, а лента отдаёт
     // одну — у второй cs.DM стоит вторым разделом, основной math.CO (владелец 30.08,
     // arXiv:2607.02613). Либо счётчик, либо фильтр; верен счётчик.
-    where.push(
+    /* Разделов может быть НЕСКОЛЬКО через запятую. Ручка знала только один, и из-за
+       этого клиент при выборе двух чипов уходил обратно на браузерный индекс («ручка
+       не умеет, а индекс для этого уже есть»). Умеет — надо было дописать четыре
+       строки, а не держать ради них сорок мегабайт в браузере. */
+    const cats = cat.split(",").map((c) => c.trim()).filter(Boolean).slice(0, 12);
+    const ors = cats.map((c) =>
       "EXISTS (SELECT 1 FROM json_each(cards.categories) je WHERE je.value " +
-      (cat.includes(".") ? "= ?)" : "LIKE ?)"));
-    args.push(cat.includes(".") ? cat : cat + "%");
+      (c.includes(".") ? "= ?)" : "LIKE ?)"));
+    where.push("(" + ors.join(" OR ") + ")");
+    cats.forEach((c) => args.push(c.includes(".") ? c : c + "%"));
   }
   // Дата приходит ПРЕФИКСОМ: календарь трёхуровневый, и клик по году даёт «2026»,
   // по месяцу «2026-08», по дню «2026-08-20». Форму проверяем строго — не ради
@@ -2314,6 +2320,13 @@ async function handleFeed(request, env) {
   // а не приводим к числу (иначе "0" и "" сольются).
   const ex = url.searchParams.get("express");
   if (ex === "0" || ex === "1") { where.push("express = ?"); args.push(Number(ex)); }
+
+  /* «Только с советами автору» — тот самый значок ✛. Фильтра здесь не было, и клиент
+     из-за одного этого тумблера уходил обратно на браузерный индекс: «лента идёт по
+     индексу, см. cloudUsable». Столбец km в карточках есть и заполнен — не хватало
+     ровно этой строки. Никакой пересборки: спрашиваем то, что уже лежит. */
+  const km = url.searchParams.get("km");
+  if (km === "0" || km === "1") { where.push("km = ?"); args.push(Number(km)); }
 
   const w = where.join(" AND ");
   const order = sort === "new" ? "date DESC, id DESC"
@@ -2697,18 +2710,84 @@ async function handleWordSearch(request, env) {
   });
   if (!terms.length) return Response.json({ items: [] });
   const q = terms.slice(0, 8).join(" AND ");
+  /* ИЩЕМ ПО ВСЕМ УРОВНЯМ, ОТДАЁМ ВЫБРАННЫЙ. Раньше в условии стояло f.version = ?, и
+     поиск видел только тот уровень, который читатель открыл: слово, сказанное в
+     «Подробно», не находилось у того, кто читает «Популярно». Работа есть, а ответ —
+     «ничего не найдено» (владелец 2026-09-01: «искать статьи по всем их версиям, но
+     показывать выбранную»).
+     Полнотекст спрашиваем без версии, карточку берём в нужной; GROUP BY по id
+     схлопывает три уровня одной работы в одну строку, MIN(bm25) оставляет лучшую
+     из трёх оценок — если слово точнее сказано в «Подробно», работа и поднимется выше. */
   let rows;
   try {
+    /* Полнотекст спрашиваем ОТДЕЛЬНЫМ подзапросом и без версии, карточку берём в нужной.
+       Так же нельзя: bm25() SQLite отказывается считать под GROUP BY («unable to use
+       function bm25 in the requested context») — проверено на живой базе. Поэтому
+       ранжирование остаётся внутри чистого FTS-запроса (ORDER BY rank), а наружу выходят
+       только идентификаторы; DISTINCT снимает повтор, когда слово нашлось на двух
+       уровнях сразу. Втрое больший внутренний предел — запас на эти повторы. */
     rows = await env.CARDS.prepare(
-      `SELECT ${FEED_COLS.split(", ").map((c) => "c." + c).join(", ")}
-         FROM cards_fts f JOIN cards c ON c.id = f.id AND c.lang = f.lang AND c.version = f.version
-        WHERE cards_fts MATCH ? AND f.lang = ? AND f.version = ?
-        ORDER BY bm25(cards_fts) LIMIT ? OFFSET ?`)
-      .bind(q, lang, version, limit, offset).all();
+      `SELECT DISTINCT ${FEED_COLS.split(", ").map((c) => "c." + c).join(", ")}
+         FROM cards c
+         JOIN (SELECT id FROM cards_fts
+                WHERE cards_fts MATCH ? AND lang = ?
+                ORDER BY rank LIMIT ?) t ON t.id = c.id
+        WHERE c.lang = ? AND c.version = ?
+        LIMIT ? OFFSET ?`)
+      .bind(q, lang, limit * 3 + offset * 3, lang, version, limit, offset).all();
   } catch (e) {
     return Response.json({ items: [], error: "bad_query" });
   }
-  const items = (rows.results || []).map(feedRow);
+  let items = (rows.results || []).map(feedRow);
+
+  /* СВЯЗКИ — ЗАПРОСОМ, А НЕ ВТОРОЙ КОПИЕЙ ДАННЫХ. Полнотекст знает только свой текст:
+     заголовок, подводку и описание. Имени автора и названия понятия там нет, поэтому
+     «Panasyuk» и «космические лучи» не находили ничего.
+     Соблазн был дописать это в тело полнотекста — и переписать все 101 235 его строк
+     при том, что карточки не менялись. Владелец 2026-09-01: «мы ничего не трогаем в
+     карточках, думай, как обойти свои пересборки».
+     Обошли: связи УЖЕ лежат в этой же базе — concepts (имена понятий на пяти языках),
+     concept_arts (111 тысяч связей понятие→работа), card_authors (94 тысячи связей
+     автор→работа), и учёные строкой в самой карточке. Спрашиваем их, когда полнотекста
+     не хватило до просимого числа: обычному слову хватает и первого запроса, а имя или
+     понятие как раз и есть тот случай, когда FTS возвращает пусто.
+     Ни одной новой записи в базе. */
+  if (items.length < limit) {
+    const have = new Set(items.map((x) => x.id));
+    const like = "%" + raw.replace(/[%_]/g, "") + "%";
+    const need = limit - items.length;
+    const cols = FEED_COLS.split(", ").map((c) => "c." + c).join(", ");
+    const extra = await Promise.all([
+      // Понятия и законы: имя на языке читателя или служебное — через таблицу связей.
+      env.CARDS.prepare(
+        `SELECT DISTINCT ${cols} FROM cards c
+           JOIN concept_arts a ON a.id = c.id
+           JOIN concepts k ON k.id = a.cid
+          WHERE c.lang = ? AND c.version = ?
+            AND (k.name_ru LIKE ? OR k.name_en LIKE ? OR k.id LIKE ?)
+          LIMIT ?`).bind(lang, version, like, like, like, need).all().catch(() => null),
+      // Авторы: имя из графа работ, а не из текста статьи.
+      env.CARDS.prepare(
+        `SELECT DISTINCT ${cols} FROM cards c
+           JOIN card_authors ca ON ca.id = c.id
+          WHERE c.lang = ? AND c.version = ? AND ca.s2_name LIKE ?
+          LIMIT ?`).bind(lang, version, like, need).all().catch(() => null),
+      // Учёные и авторы, записанные в самой карточке.
+      env.CARDS.prepare(
+        `SELECT ${cols} FROM cards c
+          WHERE c.lang = ? AND c.version = ?
+            AND (c.scientists LIKE ? OR c.authors LIKE ?)
+          LIMIT ?`).bind(lang, version, like, like, need).all().catch(() => null),
+    ]);
+    for (const r of extra) {
+      for (const row of ((r && r.results) || [])) {
+        if (items.length >= limit) break;
+        if (have.has(row.id)) continue;
+        have.add(row.id);
+        items.push(feedRow(row));
+      }
+    }
+  }
   return feedJson({ items, page, limit, more: items.length === limit }, 120);
 }
 
@@ -3244,6 +3323,28 @@ async function handleGraphFrame(request, env) {
 }
 
 
+/* СПИСОК АВТОРОВ ПО ЧАСТИ ИМЕНИ. Единственное, ради чего в браузер ещё качался граф
+   авторов — 24.4 МБ, чтобы показать пятнадцать имён в подсказке и найти человека на
+   странице авторов. Имена лежат в card_authors (94 тысячи связей автор→работа), число
+   работ считается тут же. Ни одной новой таблицы и ни одной новой записи.
+   Владелец 2026-09-01: «никаких индексов в браузере, полная динамика через облако». */
+async function handleAuthorList(request, env) {
+  if (!env.CARDS) return noCards();
+  const url = new URL(request.url);
+  const q = (url.searchParams.get("q") || "").trim().slice(0, 60);
+  if (q.length < 2) return Response.json({ items: [] });
+  const limit = Math.min(Math.max(parseInt(url.searchParams.get("limit") || "30", 10) || 30, 1), 300);
+  const rows = await env.CARDS.prepare(
+    `SELECT s2_name name, COUNT(DISTINCT id) n
+       FROM card_authors
+      WHERE s2_name LIKE ?
+      GROUP BY s2_name
+      ORDER BY n DESC
+      LIMIT ?`).bind("%" + q.replace(/[%_]/g, "") + "%", limit).all().catch(() => null);
+  const items = ((rows && rows.results) || []).map((r) => ({ name: r.name, articles: r.n }));
+  return feedJson({ items }, 300);
+}
+
 async function handleEntityList(request, env) {
   if (!env.CARDS) return noCards();
   const url = new URL(request.url);
@@ -3396,6 +3497,7 @@ export default {
     if (url.pathname === "/api/cards") return withCors(await feedGuard(request, env, handleCardsByIds));
     if (url.pathname === "/api/find") return withCors(await feedGuard(request, env, handleWordSearch));
     if (url.pathname === "/api/list") return withCors(await feedGuard(request, env, handleEntityList));
+    if (url.pathname === "/api/authors") return withCors(await feedGuard(request, env, handleAuthorList));
     if (url.pathname === "/api/concept") return withCors(await feedGuard(request, env, handleConcept));
     if (url.pathname === "/api/concepts") return withCors(await feedGuard(request, env, handleConcepts));
     if (url.pathname === "/api/formula") return withCors(await feedGuard(request, env, handleFormula));
@@ -3463,6 +3565,20 @@ export default {
     // на остальном сайте это лишний поход в KV на каждый запрос.
     const withdrawn = await withdrawnCode(env, key);
     if (withdrawn) return goneResponse(withdrawn);
+
+    // МИНИ УБРАН ИЗ УРОВНЕЙ ЧТЕНИЯ. Владелец 2026-08-09: «мини убирай, это непонятно для
+    // чего, неудачный текст». Генерация остановлена тогда же, промпты дочищены 01.09, но
+    // 2 963 страницы остались лежать в хранилище — и продолжали отдаваться. Удалять их
+    // нельзя: на них могли остаться ссылки снаружи, а мы не знаем чьи.
+    //
+    // 301 на «Просто» — ближайший по смыслу уровень (мини и был выжимкой из него). Вес
+    // адреса уходит наследнику, а поисковик перестаёт обходить мёртвую четверть архива:
+    // при 27 адресах на одну работу это заметная доля обхода, которую мы тратили впустую.
+    // Стоит ДО чтения объекта — иначе старая страница отдалась бы как ни в чём не бывало.
+    if (key.endsWith("/mini.html")) {
+      const heir = key.replace(/\/mini\.html$/, "/simple.html");
+      return Response.redirect(`https://${CANONICAL_HOST}/${heir}`, 301);
+    }
 
     let obj = await env.SITE.get(key);
     if (!obj && !key.split("/").pop().includes(".")) {

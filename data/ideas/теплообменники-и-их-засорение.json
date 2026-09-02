@@ -204,5 +204,263 @@
    },
    "abstract": "In a recent article, Baranowski et al. [J. Appl. Phys. 113, 204904 (2013)] proposed a model that allegedly facilitates optimization of thermoelectric generators operation as these latter are in contact with hot and cold temperature baths through finite conductance heat exchangers. In this Comment, we argue that the results and analyses presented by these authors are misleading since their model is incomplete and rests on an inappropriate assumption derived from thermoelectric compatibility theory."
   }
- ]
+ ],
+ "lang": {
+  "en": {
+   "note": "In the field of heat exchangers and fouling, there is growing interest in online monitoring and prediction of deposits, but the archive has no direct works on this topic yet.",
+   "topic": "heat exchangers and their fouling",
+   "ideas": [
+    {
+     "based_on": [
+      "2606.25992"
+     ],
+     "title": "Test rig for measuring the effect of fouling on heat transfer in a plate heat exchanger",
+     "what": "Build a laboratory rig with a plate heat exchanger, hot and cold water loops, temperature and flow sensors. Gradually add a fouling agent (e.g., iron oxide or calcium carbonate suspension) to the water and measure the heat transfer coefficient and pressure drop at regular intervals.",
+     "why": "The data will allow assessing how quickly the heat exchanger efficiency drops for different types of fouling. This will help engineers plan cleaning schedules and calculate surface area margins.",
+     "origin": "The archive has no works on heat exchangers, but there are studies on catalyst and electrode poisoning mechanisms (e.g., 2606.25992 on the effect of ammonia on fuel cells). The methodology for quantifying performance degradation due to impurity accumulation can be adapted for thermal fouling. There is a lack of simple experimental data on fouling kinetics in heat exchangers that could serve as a basis for model calibration.",
+     "first_step": "Find an available plate heat exchanger (e.g., from an old boiler) and assemble a simple loop with a pump, flow meter, and thermometers. Run a test with clean water to ensure measurement stability.",
+     "needs": "Laboratory rig: heat exchanger, pumps, flow meters, thermocouples, pressure gauges, tank for fouled water, chemicals (suspensions). Skills in hydraulics, heat transfer, and working with measurement equipment. Budget: from 50 to 200 thousand rubles depending on equipment availability.",
+     "risks": "Fouling may occur unevenly and unpredictably, making reproducibility difficult. It may take a long time to see a noticeable drop in heat transfer if the fouling concentration is low.",
+     "scale": "semester",
+     "methods": [
+      "Design and assemble a hydraulic loop with pumps, rotameters, thermocouples, and a differential pressure gauge.",
+      "Use the heat balance method: measure flow rates and inlet/outlet temperatures of both loops, compute heat flow and heat transfer coefficient (U) using the formula Q = U·A·ΔT_lm.",
+      "Conduct regular measurements of U and ΔP at fixed flow rates after adding fouling doses, recording the fouling dynamics.",
+      "Compare experimental curves with fouling models (linear, asymptotic layer growth) from the literature."
+     ]
+    },
+    {
+     "based_on": [
+      "2603.04717",
+      "2601.06927"
+     ],
+     "title": "Cellular automaton model of deposit growth in a heat exchanger",
+     "what": "Develop a computational model of particle deposition on heat transfer surfaces, accounting for hydrodynamics, adhesion, and particle detachment. Implement the model in Python or MATLAB and verify it against literature experimental data.",
+     "why": "The model will allow predicting fouling rates under changes in flow velocity, particle size, and surface material. Engineers can use it to optimize heat exchanger operating conditions.",
+     "origin": "The archive contains works on quantum systems with disorder and impurities (2603.04717, 2601.06927) that examine the effect of defects on transport properties. Although the physics is different, the idea of modeling defect accumulation and its impact on transport can be transferred to the classical case of fouling. There is a lack of simple but physically sound models that can be quickly run for different conditions without complex CFD.",
+     "first_step": "Write code to compute particle trajectories in a simple channel with a given velocity profile. Add a rule for particle sticking to the wall and check how the deposit layer thickness changes over time.",
+     "needs": "Computer with Python/MATLAB, knowledge of numerical methods, access to literature on fouling models. Open-source CFD packages (OpenFOAM) may be used for more accurate hydrodynamics.",
+     "risks": "The simplified model may not match reality well due to the complexity of adhesion and detachment physics. Careful parameter calibration against experiments is required, and open-access experimental data may be insufficient.",
+     "scale": "thesis",
+     "methods": [
+      "Study existing fouling models (Kern-Seaton, Ebert-Panchal) and select a suitable basis.",
+      "Implement a two- or three-dimensional grid where particles move with the flow, stick to the wall with a probability depending on local conditions, and may detach under shear stress.",
+      "Link deposit layer growth to changes in local thermal resistance and hydraulic resistance.",
+      "Compare results with published experimental fouling data (e.g., from articles on cooling water heat exchangers)."
+     ]
+    },
+    {
+     "based_on": [
+      "2606.25992"
+     ],
+     "title": "Development of a fouling sensor based on thermal impedance measurement",
+     "what": "Create a prototype sensor that estimates deposit thickness on a heat exchanger wall by measuring local thermal impedance. The sensor consists of a thin-film heater and a thermocouple deposited on a substrate, installed flush with the wall.",
+     "why": "Such a sensor will allow real-time fouling monitoring without disassembling the heat exchanger, reducing maintenance costs and preventing emergency shutdowns.",
+     "origin": "Work 2606.25992 investigates ammonia poisoning of fuel cells, where impurity transport and its effect on performance play a key role. Similarly, in a heat exchanger, deposits change local thermal resistance. The idea of measuring this resistance as a fouling indicator is not new, but there is a lack of simple and cheap sensors for industrial applications.",
+     "first_step": "Assemble a simple measurement unit: glue a thin-film resistor to a metal plate, place a thermocouple nearby, apply a power pulse, and record the cooling curve. Compare the response of clean and fouled surfaces.",
+     "needs": "Equipment for sensor fabrication and calibration (furnace, sputtering system, or access to prototyping), electronics for heating control and data acquisition (Arduino, LabVIEW), laboratory rig with a heat exchanger. Skills in thermal physics, electronics, and programming.",
+     "risks": "The sensor sensitivity may be insufficient for thin deposit layers. There may also be issues with sensor adhesion to the wall and durability in aggressive environments.",
+     "scale": "years",
+     "methods": [
+      "Design the sensor: choose substrate material, heater geometry, and thermocouple placement.",
+      "Fabricate a prototype using available technologies (conductive ink printing, sputtering, or ready-made thin-film heaters).",
+      "Calibrate the sensor: apply layers of known thickness (e.g., varnish or epoxy) and measure the change in thermal response.",
+      "Conduct tests on a laboratory rig with controlled fouling and compare sensor readings with direct layer thickness measurements."
+     ]
+    }
+   ]
+  },
+  "es": {
+   "note": "En el ámbito de los intercambiadores de calor y la incrustación, se observa un creciente interés por el monitoreo en línea y la predicción de depósitos, pero en el archivo aún no hay trabajos directos sobre este tema.",
+   "topic": "intercambiadores de calor y su incrustación",
+   "ideas": [
+    {
+     "based_on": [
+      "2606.25992"
+     ],
+     "title": "Banco de pruebas para medir el efecto de la incrustación en la transferencia de calor en un intercambiador de placas",
+     "what": "Montar un banco de laboratorio con un intercambiador de placas, un circuito de agua caliente y fría, sensores de temperatura y caudalímetros. Añadir gradualmente un contaminante al agua (por ejemplo, una suspensión de óxido de hierro o carbonato de calcio) y medir a intervalos regulares el coeficiente de transferencia de calor y la caída de presión.",
+     "why": "Los datos obtenidos permitirán evaluar la rapidez con la que disminuye la eficiencia del intercambiador ante diferentes tipos de contaminantes. Esto será útil para que los ingenieros planifiquen la limpieza y calculen el margen de superficie.",
+     "origin": "En el archivo no hay trabajos sobre intercambiadores de calor, pero sí investigaciones sobre los mecanismos de envenenamiento de catalizadores y electrodos (por ejemplo, 2606.25992 sobre el efecto del amoníaco en pilas de combustible). La metodología de evaluación cuantitativa de la degradación de las prestaciones ante la acumulación de impurezas puede adaptarse a la incrustación térmica. Faltan datos experimentales sencillos sobre la cinética de incrustación en intercambiadores de calor que puedan servir de base para calibrar modelos.",
+     "first_step": "Encontrar un intercambiador de placas disponible (por ejemplo, de un calentador de agua viejo) y montar un circuito simple con bomba, caudalímetro y termómetros. Realizar una prueba con agua limpia y verificar la estabilidad de las mediciones.",
+     "needs": "Banco de laboratorio: intercambiador de calor, bombas, caudalímetros, termopares, manómetros, tanque para agua contaminada, productos químicos (suspensiones). Conocimientos de hidráulica, termotecnia y manejo de equipos de medición. Presupuesto: de 50 a 200 mil rublos, según la disponibilidad del equipo.",
+     "risks": "La incrustación puede ocurrir de manera desigual e impredecible, lo que dificultará la reproducibilidad. Puede ser necesario un tiempo prolongado para que la transferencia de calor disminuya notablemente si la concentración del contaminante es baja.",
+     "scale": "semestre",
+     "methods": [
+      "Diseñar y montar el circuito hidráulico con bombas, rotámetros, termopares y manómetro diferencial.",
+      "Utilizar el método del balance térmico: medir caudales y temperaturas de entrada/salida de ambos circuitos, calcular el flujo de calor y el coeficiente de transferencia de calor (U) mediante la fórmula Q = U·A·ΔT_lm.",
+      "Realizar mediciones periódicas de U y ΔP a caudales fijos después de añadir porciones del contaminante, registrando la dinámica de incrustación.",
+      "Comparar las curvas experimentales con modelos de incrustación (crecimiento lineal, asintótico de la capa) de la literatura."
+     ]
+    },
+    {
+     "based_on": [
+      "2603.04717",
+      "2601.06927"
+     ],
+     "title": "Modelo de crecimiento de depósitos en un intercambiador de calor basado en autómatas celulares",
+     "what": "Desarrollar un modelo computacional de deposición de partículas en la superficie de transferencia de calor, considerando la hidrodinámica, la adhesión y el desprendimiento de partículas. Implementar el modelo en Python o MATLAB y verificar con datos experimentales de la literatura.",
+     "why": "El modelo permitirá predecir la velocidad de incrustación ante cambios en la velocidad del flujo, el tamaño de las partículas y el material de la superficie. Los ingenieros podrán utilizarlo para optimizar los regímenes de operación de los intercambiadores de calor.",
+     "origin": "En el archivo hay trabajos sobre sistemas cuánticos con desorden e impurezas (2603.04717, 2601.06927), donde se examina el efecto de los defectos en las propiedades de transporte. Aunque la física es diferente, la idea de modelar la acumulación de defectos y su influencia en el transporte puede trasladarse al caso clásico de incrustación. Faltan modelos simples pero físicamente fundamentados que puedan ejecutarse rápidamente para diferentes condiciones sin recurrir a CFD complejo.",
+     "first_step": "Escribir código para calcular trayectorias de partículas en un canal simple con un perfil de velocidad dado. Añadir la regla de adherencia de partículas a la pared y comprobar cómo varía el espesor de la capa de depósitos con el tiempo.",
+     "needs": "Computadora con Python/MATLAB, conocimiento de métodos numéricos, acceso a literatura sobre modelos de incrustación. Posible uso de paquetes CFD de código abierto (OpenFOAM) para una hidrodinámica más precisa.",
+     "risks": "El modelo simplificado puede no corresponder bien con la realidad debido a la complejidad de la física de adhesión y desprendimiento. Será necesaria una calibración cuidadosa de los parámetros con experimentos, que pueden ser insuficientes en acceso abierto.",
+     "scale": "tesis",
+     "methods": [
+      "Estudiar los modelos de incrustación existentes (Kern-Seaton, Ebert-Panchal) y elegir una base adecuada.",
+      "Implementar una malla bidimensional o tridimensional en la que las partículas se muevan con el flujo, se adhieran a la pared con una probabilidad que dependa de las condiciones locales y puedan desprenderse bajo la acción del esfuerzo cortante.",
+      "Relacionar el crecimiento de la capa de depósitos con el cambio en la resistencia térmica local y la resistencia hidráulica.",
+      "Comparar los resultados con datos experimentales publicados sobre incrustación (por ejemplo, de artículos sobre intercambiadores de calor con agua de refrigeración)."
+     ]
+    },
+    {
+     "based_on": [
+      "2606.25992"
+     ],
+     "title": "Desarrollo de un sensor de incrustación basado en la medición de la impedancia térmica",
+     "what": "Crear un prototipo de sensor que estime el espesor de los depósitos en la pared de un intercambiador de calor mediante la medición de la impedancia térmica local. El sensor consiste en un calentador de película delgada y un termopar depositados sobre un sustrato que se instala a ras de la pared.",
+     "why": "Este sensor permitirá controlar la incrustación en tiempo real sin desmontar el intercambiador, lo que reducirá los costos de mantenimiento y evitará paradas de emergencia.",
+     "origin": "En el trabajo 2606.25992 se investiga el envenenamiento de pilas de combustible por amoníaco, donde el transporte de impurezas y su efecto en las prestaciones juegan un papel clave. De manera similar, en un intercambiador de calor los depósitos modifican la resistencia térmica local. La idea de medir esta resistencia como indicador de incrustación no es nueva, pero faltan sensores simples y económicos para aplicación industrial.",
+     "first_step": "Montar un módulo de medición simple: pegar un resistor de película delgada a una placa metálica, colocar un termopar cerca, aplicar un pulso de potencia y registrar la curva de enfriamiento. Comparar la respuesta con una superficie limpia y una contaminada.",
+     "needs": "Equipo para fabricar y calibrar sensores (horno, equipo de deposición al vacío o acceso a creación de prototipos), electrónica para controlar el calentamiento y adquirir datos (Arduino, LabVIEW), banco de laboratorio con intercambiador de calor. Conocimientos de termofísica, electrónica y programación.",
+     "risks": "La sensibilidad del sensor puede resultar insuficiente para capas delgadas de depósitos. También pueden surgir problemas de adherencia del sensor a la pared y de durabilidad en ambientes agresivos.",
+     "scale": "años",
+     "methods": [
+      "Diseñar el sensor: elegir el material del sustrato, la geometría del calentador y la ubicación del termopar.",
+      "Fabricar un prototipo con tecnologías accesibles (impresión con tintas conductoras, deposición al vacío, uso de calentadores de película delgada comerciales).",
+      "Calibrar el sensor: aplicar capas de espesor conocido (por ejemplo, laca o resina epoxi) y medir el cambio en la respuesta térmica.",
+      "Realizar pruebas en el banco de laboratorio con incrustación controlada y comparar las lecturas del sensor con mediciones directas del espesor de la capa."
+     ]
+    }
+   ]
+  },
+  "ar": {
+   "note": "في مجال المبادلات الحرارية والترسبات، هناك اهتمام متزايد بالمراقبة عبر الإنترنت والتنبؤ بالترسبات، لكن الأرشيف لا يحتوي حتى الآن على أعمال مباشرة حول هذا الموضوع.",
+   "topic": "المبادلات الحرارية وترسباتها",
+   "ideas": [
+    {
+     "based_on": [
+      "2606.25992"
+     ],
+     "title": "منصة اختبار لقياس تأثير الترسبات على انتقال الحرارة في مبادل حراري لوحي",
+     "what": "بناء منصة اختبار معملية تتضمن مبادلًا حراريًا لوحيًا، ودائرة للماء الساخن والبارد، وحساسات لدرجات الحرارة ومعدلات التدفق. تُضاف مادة ملوثة تدريجيًا إلى الماء (مثل معلق أكسيد الحديد أو كربونات الكالسيوم)، وتُقاس معامل انتقال الحرارة وفرق الضغط على فترات زمنية متساوية.",
+     "why": "ستسمح البيانات التي تم الحصول عليها بتقييم مدى سرعة انخفاض كفاءة المبادل الحراري مع أنواع مختلفة من الملوثات. وهذا سيفيد المهندسين في تخطيط التنظيف وحساب احتياطي السطح.",
+     "origin": "لا توجد أعمال في الأرشيف حول المبادلات الحرارية، لكن توجد دراسات حول آليات تسمم المحفزات والأقطاب الكهربائية (مثل 2606.25992 حول تأثير الأمونيا على خلايا الوقود). يمكن تكييف منهجية التقييم الكمي لتدهور الخصائص عند تراكم الشوائب لتطبق على الترسبات الحرارية. هناك نقص في البيانات التجريبية البسيطة حول حركية الترسبات في المبادلات الحرارية، والتي يمكن أن تكون أساسًا لمعايرة النماذج.",
+     "first_step": "إيجاد مبادل حراري لوحي متاح (مثلًا من سخان مياه قديم) وتجميع دائرة بسيطة بمضخة ومقياس تدفق وترمومترات. إجراء تشغيل تجريبي على ماء نظيف والتأكد من استقرار القياسات.",
+     "needs": "منصة اختبار معملية: مبادل حراري، مضخات، مقاييس تدفق، مزدوجات حرارية، مقاييس ضغط، خزان للمياه الملوثة، مواد كيميائية (معلقات). مهارات في الهيدروليكا، الهندسة الحرارية، والتعامل مع معدات القياس. الميزانية: من 50 إلى 200 ألف روبل اعتمادًا على توفر المعدات.",
+     "risks": "قد يحدث التلوث بشكل غير متساوٍ وغير متوقع، مما يصعب إعادة إنتاج النتائج. قد يتطلب الأمر وقتًا طويلاً لملاحظة انخفاض ملحوظ في انتقال الحرارة إذا كان تركيز الملوث منخفضًا.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "تصميم وتجميع دائرة هيدروليكية بمضخات ومقاييس تدفق دورانية ومزدوجات حرارية ومقياس ضغط تفاضلي.",
+      "استخدام طريقة التوازن الحراري: قياس معدلات التدفق ودرجات الحرارة عند المدخل/المخرج لكلتا الدائرتين، وحساب التدفق الحراري ومعامل انتقال الحرارة (U) باستخدام المعادلة Q = U·A·ΔT_lm.",
+      "إجراء قياسات منتظمة لـ U و ΔP عند معدلات تدفق ثابتة بعد إضافة أجزاء من الملوث، وتسجيل ديناميكية الترسب.",
+      "مقارنة المنحنيات التجريبية بنماذج الترسب (النمو الخطي، النمو المقارب للطبقة) من الأدبيات."
+     ]
+    },
+    {
+     "based_on": [
+      "2603.04717",
+      "2601.06927"
+     ],
+     "title": "نموذج لنمو الترسبات في المبادل الحراري باستخدام الخلايا الآلية (Cellular Automata)",
+     "what": "تطوير نموذج حاسوبي لترسب الجسيمات على سطح انتقال الحرارة مع مراعاة الديناميكا المائية والالتصاق وانفصال الجسيمات. تنفيذ النموذج بلغة Python أو MATLAB، والتحقق منه باستخدام بيانات تجريبية من الأدبيات.",
+     "why": "سيسمح النموذج بالتنبؤ بمعدل الترسب عند تغير سرعة التدفق وحجم الجسيمات ومادة السطح. سيتمكن المهندسون من استخدامه لتحسين ظروف تشغيل المبادلات الحرارية.",
+     "origin": "يوجد في الأرشيف أعمال حول الأنظمة الكمومية ذات الاضطراب والشوائب (2603.04717، 2601.06927) حيث يُدرس تأثير العيوب على خصائص النقل. على الرغم من اختلاف الفيزياء، يمكن نقل فكرة نمذجة تراكم العيوب وتأثيرها على النقل إلى الحالة الكلاسيكية للترسبات. هناك نقص في النماذج البسيطة ولكن المبررة فيزيائيًا والتي يمكن تشغيلها بسرعة لظروف مختلفة دون الحاجة إلى ديناميكا الموائع الحسابية المعقدة (CFD).",
+     "first_step": "كتابة كود لحساب مسارات الجسيمات في قناة بسيطة مع ملف تعريف سرعة معين. إضافة قاعدة لالتصاق الجسيمات بالجدار والتحقق من كيفية تغير سمك طبقة الترسبات بمرور الوقت.",
+     "needs": "كمبيوتر مع Python/MATLAB، معرفة بالطرق العددية، الوصول إلى الأدبيات حول نماذج الترسب. يمكن استخدام حزم CFD مفتوحة المصدر (OpenFOAM) لديناميكا مائية أكثر دقة.",
+     "risks": "قد لا يتوافق النموذج المبسط جيدًا مع الواقع بسبب تعقيد فيزياء الالتصاق والانفصال. ستكون هناك حاجة إلى معايرة دقيقة للمعلمات بناءً على التجارب، والتي قد لا تكون كافية في المصادر المفتوحة.",
+     "scale": "مشروع تخرج",
+     "methods": [
+      "دراسة نماذج الترسب الموجودة (Kern-Seaton، Ebert-Panchal) واختيار أساس مناسب.",
+      "تنفيذ شبكة ثنائية أو ثلاثية الأبعاد تتحرك فيها الجسيمات مع التدفق، وتلتصق بالجدار باحتمالية تعتمد على الظروف المحلية، ويمكن أن تنفصل تحت تأثير إجهاد القص.",
+      "ربط نمو طبقة الترسبات بالتغير في المقاومة الحرارية المحلية والمقاومة الهيدروليكية.",
+      "مقارنة النتائج مع البيانات التجريبية المنشورة حول الترسبات (مثلًا من مقالات عن المبادلات الحرارية بمياه التبريد)."
+     ]
+    },
+    {
+     "based_on": [
+      "2606.25992"
+     ],
+     "title": "تطوير حساس للترسبات يعتمد على قياس المعاوقة الحرارية",
+     "what": "إنشاء نموذج أولي لحساس يقدر سمك الترسبات على جدار المبادل الحراري عن طريق قياس المعاوقة الحرارية المحلية. يتكون الحساس من سخان رقيق وترمومتر حراري مطبقين على ركيزة تُثبت بشكل متساوٍ مع الجدار.",
+     "why": "سيسمح هذا الحساس بمراقبة الترسبات في الوقت الفعلي دون تفكيك المبادل الحراري، مما يقلل تكاليف الصيانة ويمنع التوقف الطارئ.",
+     "origin": "في العمل 2606.25992 يُدرس تسمم خلايا الوقود بالأمونيا، حيث يلعب نقل الشوائب وتأثيرها على الخصائص دورًا رئيسيًا. وبالمثل، في المبادل الحراري تغير الترسبات المقاومة الحرارية المحلية. فكرة قياس هذه المقاومة كمؤشر للترسب ليست جديدة، لكن هناك نقص في الحساسات البسيطة والرخيصة للتطبيق الصناعي.",
+     "first_step": "تجميع وحدة قياس بسيطة: لصق مقاوم رقيق على لوح معدني، وتركيب ترمومتر حراري بجانبه، وإرسال نبضة طاقة وتسجيل منحنى التبريد. مقارنة الاستجابة مع سطح نظيف وسطح ملوث.",
+     "needs": "معدات لتصنيع ومعايرة الحساسات (فرن، جهاز ترسيب بالرش أو الوصول إلى النمذجة السريعة)، إلكترونيات للتحكم في التسخين وجمع البيانات (Arduino، LabVIEW)، منصة اختبار معملية بمبادل حراري. مهارات في الفيزياء الحرارية والإلكترونيات والبرمجة.",
+     "risks": "قد تكون حساسية الحساس غير كافية للطبقات الرقيقة من الترسبات. كما قد تظهر مشاكل في التصاق الحساس بالجدار ومتانته في البيئات القاسية.",
+     "scale": "سنوات",
+     "methods": [
+      "تصميم الحساس: اختيار مادة الركيزة، وهندسة السخان، وموقع الترمومتر الحراري.",
+      "تصنيع نموذج أولي باستخدام تقنيات متاحة (الطباعة بأحبار موصلة، الرش، استخدام سخانات رقيقة جاهزة).",
+      "معايرة الحساس: وضع طبقات بسماكات معروفة (مثل الورنيش أو راتنج الإيبوكسي) وقياس التغير في الاستجابة الحرارية.",
+      "إجراء اختبارات على منصة معملية مع ترسبات محكومة، ومقارنة قراءات الحساس مع القياسات المباشرة لسمك الطبقة."
+     ]
+    }
+   ]
+  },
+  "fr": {
+   "note": "Dans le domaine des échangeurs de chaleur et de l'encrassement, on observe un intérêt croissant pour la surveillance en ligne et la prédiction des dépôts, mais les archives ne contiennent pas encore de travaux directs sur ce sujet.",
+   "topic": "échangeurs de chaleur et leur encrassement",
+   "ideas": [
+    {
+     "based_on": [
+      "2606.25992"
+     ],
+     "title": "Banc d'essai pour mesurer l'effet de l'encrassement sur le transfert de chaleur dans un échangeur à plaques",
+     "what": "Assembler un banc d'essai de laboratoire avec un échangeur à plaques, un circuit d'eau chaude et un circuit d'eau froide, des capteurs de température et de débit. Ajouter progressivement un polluant à l'eau (par exemple, une suspension d'oxyde de fer ou de carbonate de calcium) et mesurer à intervalles réguliers le coefficient de transfert de chaleur et la perte de charge.",
+     "why": "Les données obtenues permettront d'évaluer la rapidité avec laquelle l'efficacité de l'échangeur diminue pour différents types de polluants. Cela sera utile aux ingénieurs pour planifier le nettoyage et calculer la marge de surface.",
+     "origin": "Les archives ne contiennent pas de travaux sur les échangeurs de chaleur, mais il existe des études sur les mécanismes d'empoisonnement des catalyseurs et des électrodes (par exemple, 2606.25992 sur l'effet de l'ammoniac sur les piles à combustible). La méthodologie d'évaluation quantitative de la dégradation des performances lors de l'accumulation d'impuretés peut être adaptée à l'encrassement thermique. Il manque des données expérimentales simples sur la cinétique d'encrassement dans les échangeurs de chaleur, qui pourraient servir de base à l'étalonnage des modèles.",
+     "first_step": "Trouver un échangeur à plaques disponible (par exemple, provenant d'un vieux chauffe-eau) et assembler un circuit simple avec une pompe, un débitmètre et des thermomètres. Effectuer un essai avec de l'eau propre et vérifier la stabilité des mesures.",
+     "needs": "Banc d'essai de laboratoire : échangeur de chaleur, pompes, débitmètres, thermocouples, manomètres, réservoir pour eau polluée, produits chimiques (suspensions). Compétences en hydraulique, thermique, travail avec équipement de mesure. Budget : de 50 à 200 000 roubles selon la disponibilité de l'équipement.",
+     "risks": "L'encrassement peut se produire de manière inégale et imprévisible, ce qui rendra la reproductibilité difficile. Il peut falloir un temps long pour observer une baisse notable du transfert de chaleur si la concentration du polluant est faible.",
+     "scale": "semestre",
+     "methods": [
+      "Concevoir et assembler le circuit hydraulique avec pompes, rotamètres, thermocouples et manomètre différentiel.",
+      "Utiliser la méthode du bilan thermique : mesurer les débits et les températures à l'entrée et à la sortie des deux circuits, calculer le flux thermique et le coefficient de transfert de chaleur (U) avec la formule Q = U·A·ΔT_lm.",
+      "Effectuer des mesures régulières de U et ΔP à débits fixes après chaque ajout de polluant, en enregistrant la dynamique de l'encrassement.",
+      "Comparer les courbes expérimentales avec les modèles d'encrassement (croissance linéaire, asymptotique) issus de la littérature."
+     ]
+    },
+    {
+     "based_on": [
+      "2603.04717",
+      "2601.06927"
+     ],
+     "title": "Modèle de croissance des dépôts dans un échangeur de chaleur basé sur des automates cellulaires",
+     "what": "Développer un modèle computationnel du dépôt de particules sur la surface d'échange thermique, en tenant compte de l'hydrodynamique, de l'adhésion et du détachement des particules. Implémenter le modèle en Python ou MATLAB, et le vérifier sur des données expérimentales de la littérature.",
+     "why": "Le modèle permettra de prédire la vitesse d'encrassement en fonction de la vitesse d'écoulement, de la taille des particules et du matériau de la surface. Les ingénieurs pourront l'utiliser pour optimiser les conditions de fonctionnement des échangeurs de chaleur.",
+     "origin": "Les archives contiennent des travaux sur les systèmes quantiques avec désordre et impuretés (2603.04717, 2601.06927), qui examinent l'influence des défauts sur les propriétés de transport. Bien que la physique soit différente, l'idée de modéliser l'accumulation de défauts et leur influence sur le transport peut être transposée au cas classique de l'encrassement. Il manque des modèles simples mais physiquement fondés, que l'on peut exécuter rapidement pour différentes conditions sans recourir à une CFD complexe.",
+     "first_step": "Écrire un code pour calculer les trajectoires de particules dans un canal simple avec un profil de vitesse donné. Ajouter une règle d'adhésion des particules à la paroi et vérifier comment l'épaisseur du dépôt évolue au fil du temps.",
+     "needs": "Ordinateur avec Python/MATLAB, connaissances en méthodes numériques, accès à la littérature sur les modèles d'encrassement. Possibilité d'utiliser des logiciels CFD open source (OpenFOAM) pour une hydrodynamique plus précise.",
+     "risks": "Le modèle simplifié peut mal correspondre à la réalité en raison de la complexité de la physique de l'adhésion et du détachement. Un étalonnage minutieux des paramètres sur des expériences sera nécessaire, et celles-ci peuvent manquer dans le domaine public.",
+     "scale": "diplôme",
+     "methods": [
+      "Étudier les modèles d'encrassement existants (Kern-Seaton, Ebert-Panchal) et choisir une base appropriée.",
+      "Implémenter une grille bidimensionnelle ou tridimensionnelle sur laquelle les particules se déplacent avec le flux, adhèrent à la paroi avec une probabilité dépendant des conditions locales, et peuvent se détacher sous l'effet de la contrainte de cisaillement.",
+      "Relier la croissance du dépôt à la modification de la résistance thermique locale et de la résistance hydraulique.",
+      "Comparer les résultats avec les données expérimentales publiées sur l'encrassement (par exemple, à partir d'articles sur les échangeurs de chaleur à eau de refroidissement)."
+     ]
+    },
+    {
+     "based_on": [
+      "2606.25992"
+     ],
+     "title": "Développement d'un capteur d'encrassement basé sur la mesure de l'impédance thermique",
+     "what": "Créer un prototype de capteur qui estime l'épaisseur des dépôts sur la paroi d'un échangeur de chaleur en mesurant l'impédance thermique locale. Le capteur se compose d'un film chauffant mince et d'un thermocouple déposés sur un substrat, installé affleurant à la paroi.",
+     "why": "Un tel capteur permettra de surveiller l'encrassement en temps réel sans démonter l'échangeur, ce qui réduira les coûts de maintenance et évitera les arrêts d'urgence.",
+     "origin": "Dans le travail 2606.25992, on étudie l'empoisonnement des piles à combustible par l'ammoniac, où le transport des impuretés et leur influence sur les performances jouent un rôle clé. De manière analogue, dans un échangeur de chaleur, les dépôts modifient la résistance thermique locale. L'idée de mesurer cette résistance comme indicateur d'encrassement n'est pas nouvelle, mais il manque des capteurs simples et peu coûteux pour une application industrielle.",
+     "first_step": "Assembler un module de mesure simple : coller une résistance à film mince sur une plaque métallique, placer un thermocouple à proximité, appliquer une impulsion de puissance et enregistrer la courbe de refroidissement. Comparer la réponse avec une surface propre et une surface encrassée.",
+     "needs": "Équipement pour la fabrication et l'étalonnage des capteurs (four, installation de pulvérisation ou accès à un prototypage), électronique pour contrôler le chauffage et collecter les données (Arduino, LabVIEW), banc d'essai de laboratoire avec échangeur de chaleur. Compétences en thermophysique, électronique, programmation.",
+     "risks": "La sensibilité du capteur peut être insuffisante pour des couches minces de dépôt. Des problèmes d'adhésion du capteur à la paroi et de durabilité dans un environnement agressif peuvent également survenir.",
+     "scale": "années",
+     "methods": [
+      "Concevoir le capteur : choisir le matériau du substrat, la géométrie du chauffage, l'emplacement du thermocouple.",
+      "Fabriquer un prototype avec les technologies disponibles (impression d'encre conductrice, pulvérisation, utilisation de films chauffants prêts à l'emploi).",
+      "Étalonner le capteur : appliquer des couches d'épaisseur connue (par exemple, vernis ou résine époxy) et mesurer le changement de réponse thermique.",
+      "Effectuer des essais sur un banc de laboratoire avec encrassement contrôlé, comparer les lectures du capteur avec des mesures directes de l'épaisseur de la couche."
+     ]
+    }
+   ]
+  }
+ }
 }

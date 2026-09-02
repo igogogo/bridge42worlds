@@ -215,5 +215,259 @@
    },
    "abstract": "In this chapter, the physisorption of hydrogen molecules in porous materials as possible hydrogen storage systems has been reviewed. Owing to the weak interaction between H2 molecules and the adsorbent, high storage capacities are typically reached only at cryogenic temperature. Different classes of porous materials possessing different structure and composition have been designed for hydrogen storage applications using computational methods and especially with the aid of DFT methods. The adsorption energies for hydrogen in different porous materials have been increases by the doping of light "
   }
- ]
+ ],
+ "lang": {
+  "en": {
+   "note": "Researchers are actively seeking materials with moderate thermodynamics and fast kinetics, combining experiment and computation.",
+   "topic": "hydrogen storage in solid materials",
+   "ideas": [
+    {
+     "based_on": [
+      "2602.22807",
+      "2603.14139"
+     ],
+     "title": "Build a cell for measuring hydrogen pressure during desorption from powder",
+     "what": "Design and assemble a simple cell to measure the pressure of hydrogen released when a small amount of hydride is heated. Use readily available pressure and temperature sensors, and record desorption curves.",
+     "why": "This will allow quick screening of materials for hydrogen release kinetics without expensive equipment. It will be useful for any group starting work with hydrides.",
+     "origin": "In 2602.22807, a powder that self-stirs is described, but without details of the measurement setup. In 2603.14139, a database of materials is compiled, but simple measurement methods are not described. There is a lack of a cheap way to test kinetics in the lab.",
+     "first_step": "Assemble a sealed stainless steel container with a thermocouple and pressure sensor, connected to an Arduino.",
+     "needs": "Pressure sensor up to 10 bar, thermocouple, sealed container, heating element, Arduino, a small amount of MgH2.",
+     "risks": "Hydrogen leaks will distort measurements; careful sealing is required.",
+     "scale": "semester",
+     "methods": [
+      "Use the Sieverts scheme from 2602.22807: powder in a sealed volume, heating with temperature control, pressure measurement.",
+      "Calibrate the cell volume with an inert gas, as described in 2602.22807.",
+      "Compare the obtained curves with literature data for MgH2 to verify accuracy."
+     ]
+    },
+    {
+     "based_on": [
+      "2603.17479",
+      "2301.05009"
+     ],
+     "title": "Test the effect of aluminum doping on the reversibility of magnesium hydride",
+     "what": "Prepare MgH2 samples with aluminum additions (e.g., 5, 10, 15 at.%) by mechanochemical means. Measure PCT curves and sorption/desorption kinetics at different temperatures.",
+     "why": "Aluminum may reduce the thermodynamic stability of MgH2, bringing conditions closer to practical use. The results will help select compositions for further research.",
+     "origin": "In 2603.17479, the interaction of aluminum with hydrogen in alloys is studied, but not with MgH2. In 2301.05009, deformation is shown to improve magnesium kinetics, but the effect of aluminum additions is not studied. There is a lack of systematic data on Mg-Al-H compositions.",
+     "first_step": "Mix MgH2 and Al powders in a ball mill, measure PCT at 300°C.",
+     "needs": "Ball mill, Sieverts apparatus, diffractometer, starting powders.",
+     "risks": "Formation of intermetallics may worsen kinetics; milling time optimization may be needed.",
+     "scale": "thesis",
+     "methods": [
+      "Mechanochemical synthesis in a ball mill, as in 2603.17479.",
+      "Measurement of PCT curves on the Sieverts apparatus described in 2602.22807.",
+      "X-ray diffraction analysis to monitor phase composition."
+     ]
+    },
+    {
+     "based_on": [
+      "2301.02811",
+      "1102.0849"
+     ],
+     "title": "Calculate the hydrogen binding energy in high-entropy hydrides using DFT",
+     "what": "Perform first-principles calculations for a series of high-entropy alloys (e.g., TiZrHfNbTa) with hydrogen. Estimate hydride formation energies and predict compositions with optimal thermodynamics for room-temperature storage.",
+     "why": "This will allow selecting promising compositions for experimental verification, saving time and resources. The results can be used for designing new materials.",
+     "origin": "In 2301.02811, high-entropy hydrides are shown to work at room temperature, but only a limited number of compositions are studied. In 1102.0849, a review of DFT for porous materials is given, but not for metal hydrides. There is a lack of systematic screening of compositions.",
+     "first_step": "Select several compositions from 2301.02811, reproduce calculations to verify the methodology.",
+     "needs": "Access to a computing cluster, software packages VASP or Quantum ESPRESSO, experience with DFT calculations.",
+     "risks": "High computational cost for large cells; accuracy depends on accounting for configurational disorder.",
+     "scale": "years",
+     "methods": [
+      "Use the special quasirandom structures (SQS) method to model disordered alloys, as in 2301.02811.",
+      "DFT calculations with the PBE functional, including zero-point energy corrections.",
+      "Construct binding energy maps as a function of composition."
+     ]
+    }
+   ]
+  },
+  "es": {
+   "note": "Actualmente se buscan materiales con termodinámica moderada y cinética rápida, combinando experimento y cálculos.",
+   "topic": "almacenamiento de hidrógeno en materiales sólidos",
+   "ideas": [
+    {
+     "based_on": [
+      "2602.22807",
+      "2603.14139"
+     ],
+     "title": "Montar una celda para medir la presión de hidrógeno durante la desorción de un polvo",
+     "what": "Diseñar y montar una celda sencilla para medir la presión del hidrógeno liberado al calentar una pequeña cantidad de hidruro. Usar sensores de presión y temperatura disponibles, y registrar las curvas de desorción.",
+     "why": "Permitirá evaluar rápidamente la cinética de liberación de hidrógeno de los materiales sin necesidad de equipos costosos. Será útil para cualquier grupo que empiece a trabajar con hidruros.",
+     "origin": "En 2602.22807 se describe un polvo que se auto-agita, pero sin detalles del equipo de medición. En 2603.14139 se recopila una base de datos de materiales, pero no se describen métodos de medición sencillos. Falta una forma económica de comprobar la cinética en el laboratorio.",
+     "first_step": "Montar un contenedor hermético de acero inoxidable con termopar y sensor de presión, conectado a un Arduino.",
+     "needs": "Sensor de presión hasta 10 bar, termopar, contenedor hermético, elemento calefactor, Arduino, una pequeña cantidad de MgH2.",
+     "risks": "Las fugas de hidrógeno distorsionarán las mediciones; se necesita un sellado cuidadoso.",
+     "scale": "semestre",
+     "methods": [
+      "Usar el esquema de Sieverts del trabajo 2602.22807: polvo en un volumen hermético, calentamiento con control de temperatura y medición de presión.",
+      "Calibrar el volumen de la celda con gas inerte, como se describe en 2602.22807.",
+      "Comparar las curvas obtenidas con datos de la literatura para MgH2, para verificar la precisión."
+     ]
+    },
+    {
+     "based_on": [
+      "2603.17479",
+      "2301.05009"
+     ],
+     "title": "Comprobar el efecto del dopaje con aluminio en la reversibilidad del hidruro de magnesio",
+     "what": "Preparar muestras de MgH2 con adiciones de aluminio (por ejemplo, 5, 10, 15 at.%) mediante métodos mecanoquímicos. Medir las curvas PCT y la cinética de sorción/desorción a diferentes temperaturas.",
+     "why": "El aluminio podría reducir la estabilidad termodinámica del MgH2, acercando las condiciones a las prácticas. Los resultados ayudarán a elegir la composición para investigaciones posteriores.",
+     "origin": "En 2603.17479 se investigó la interacción del aluminio con el hidrógeno en aleaciones, pero no con MgH2. En 2301.05009 se mostró que la deformación mejora la cinética del magnesio, pero no se estudió el efecto de las adiciones de aluminio. Faltan datos sistemáticos sobre composiciones Mg-Al-H.",
+     "first_step": "Mezclar polvos de MgH2 y Al en un molino de bolas y medir PCT a 300°C.",
+     "needs": "Molino de bolas, equipo de Sieverts, difractómetro, polvos de partida.",
+     "risks": "La formación de intermetálicos puede empeorar la cinética; será necesario optimizar el tiempo de molienda.",
+     "scale": "tesis de grado",
+     "methods": [
+      "Síntesis mecanoquímica en molino de bolas, como en 2603.17479.",
+      "Medición de curvas PCT en el equipo de Sieverts descrito en 2602.22807.",
+      "Análisis de fases por difracción de rayos X para controlar la composición de fases."
+     ]
+    },
+    {
+     "based_on": [
+      "2301.02811",
+      "1102.0849"
+     ],
+     "title": "Calcular la energía de enlace del hidrógeno en hidruros de alta entropía mediante DFT",
+     "what": "Realizar cálculos de primeros principios para una serie de aleaciones de alta entropía (por ejemplo, TiZrHfNbTa) con hidrógeno. Evaluar las energías de formación de hidruros y predecir composiciones con termodinámica óptima para almacenamiento a temperatura ambiente.",
+     "why": "Permitirá seleccionar composiciones prometedoras para la verificación experimental, ahorrando tiempo y recursos. Los resultados podrían usarse para el diseño de nuevos materiales.",
+     "origin": "En 2301.02811 se mostró que los hidruros de alta entropía pueden funcionar a temperatura ambiente, pero se investigó un número limitado de composiciones. En 1102.0849 se ofrece una revisión de DFT para materiales porosos, pero no para hidruros metálicos. Falta un cribado sistemático de composiciones.",
+     "first_step": "Seleccionar varias composiciones de 2301.02811 y reproducir los cálculos para verificar la metodología.",
+     "needs": "Acceso a un clúster de computación, paquetes de software VASP o Quantum ESPRESSO, experiencia en cálculos DFT.",
+     "risks": "El alto costo computacional para celdas grandes; la precisión depende de la consideración del desorden configuracional.",
+     "scale": "años",
+     "methods": [
+      "Usar el método de estructuras especiales cuasi-aleatorias (SQS) para modelar aleaciones desordenadas, como en 2301.02811.",
+      "Cálculos DFT con el funcional PBE, incluyendo la energía de punto cero.",
+      "Construir mapas de energías de enlace en función de la composición."
+     ]
+    }
+   ]
+  },
+  "ar": {
+   "note": "يجري البحث حاليًا عن مواد تجمع بين ديناميكا حرارية معتدلة وحركية سريعة، من خلال الجمع بين التجارب والحسابات.",
+   "topic": "تخزين الهيدروجين في المواد الصلبة",
+   "ideas": [
+    {
+     "based_on": [
+      "2602.22807",
+      "2603.14139"
+     ],
+     "title": "بناء خلية لقياس ضغط الهيدروجين المنطلق من مسحوق",
+     "what": "تصميم وبناء خلية بسيطة لقياس ضغط الهيدروجين المنطلق عند تسخين كمية صغيرة من الهيدريد. استخدام مستشعرات ضغط ودرجة حرارة متاحة، وتسجيل منحنيات الامتصاص.",
+     "why": "سيسمح ذلك بفحص سريع لحركية انطلاق الهيدروجين من المواد دون الحاجة إلى معدات باهظة الثمن. سيكون مفيدًا لأي مجموعة تبدأ العمل مع الهيدريدات.",
+     "origin": "في 2602.22807 تم وصف مسحوق يخفق نفسه بنفسه، ولكن دون تفاصيل عن معدات القياس. في 2603.14139 تم تجميع قاعدة بيانات للمواد، ولكن لا يوجد وصف لطرق قياس بسيطة. هناك نقص في طريقة رخيصة لفحص الحركية في المختبر.",
+     "first_step": "بناء حاوية محكمة من الفولاذ المقاوم للصدأ مع مزدوجة حرارية ومستشعر ضغط، وتوصيلها بـ Arduino.",
+     "needs": "مستشعر ضغط حتى 10 بار، مزدوجة حرارية، حاوية محكمة، عنصر تسخين، Arduino، كمية صغيرة من MgH2.",
+     "risks": "تسرب الهيدروجين سيشوه القياسات؛ يتطلب إحكامًا دقيقًا.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "استخدام نظام Sieverts من العمل 2602.22807: مسحوق في حجم محكم، تسخين مع التحكم في درجة الحرارة، وقياس الضغط.",
+      "معايرة حجم الخلية بغاز خامل، كما هو موضح في 2602.22807.",
+      "مقارنة المنحنيات التي تم الحصول عليها مع البيانات الأدبية لـ MgH2 للتحقق من الدقة."
+     ]
+    },
+    {
+     "based_on": [
+      "2603.17479",
+      "2301.05009"
+     ],
+     "title": "اختبار تأثير إضافة الألومنيوم على انعكاسية هيدريد المغنيسيوم",
+     "what": "تحضير عينات من MgH2 مع إضافات من الألومنيوم (مثل 5، 10، 15 نسبة ذرية) بطريقة ميكانيكية كيميائية. قياس منحنيات PCT وحركية الامتصاص/الانطلاق عند درجات حرارة مختلفة.",
+     "why": "قد يقلل الألومنيوم من الاستقرار الديناميكي الحراري لـ MgH2، مما يقرب الظروف من التطبيق العملي. ستساعد النتائج في اختيار التركيبة المناسبة للأبحاث المستقبلية.",
+     "origin": "في 2603.17479 تمت دراسة تفاعل الألومنيوم مع الهيدروجين في السبائك، ولكن ليس مع MgH2. في 2301.05009 تبين أن التشوه يحسن حركية المغنيسيوم، ولكن تأثير إضافات الألومنيوم لم يُدرس. هناك نقص في البيانات المنهجية حول تركيبات Mg-Al-H.",
+     "first_step": "خلط مساحيق MgH2 وAl في مطحنة كروية، وقياس PCT عند 300 درجة مئوية.",
+     "needs": "مطحنة كروية، نظام Sieverts، حيود الأشعة السينية، مساحيق أولية.",
+     "risks": "تكوين مركبات بين فلزية قد يضعف الحركية؛ سيتطلب تحسين وقت الطحن.",
+     "scale": "أطروحة",
+     "methods": [
+      "تخليق ميكانيكي كيميائي في مطحنة كروية، كما في 2603.17479.",
+      "قياس منحنيات PCT على نظام Sieverts الموصوف في 2602.22807.",
+      "تحليل حيود الأشعة السينية للتحكم في التركيب البلوري."
+     ]
+    },
+    {
+     "based_on": [
+      "2301.02811",
+      "1102.0849"
+     ],
+     "title": "حساب طاقة ارتباط الهيدروجين في الهيدريدات عالية الإنتروبيا باستخدام DFT",
+     "what": "إجراء حسابات من المبادئ الأولى لسلسلة من السبائك عالية الإنتروبيا (مثل TiZrHfNbTa) مع الهيدروجين. تقدير طاقات تكوين الهيدريدات والتنبؤ بتركيبات ذات ديناميكا حرارية مثالية للتخزين في درجة حرارة الغرفة.",
+     "why": "سيسمح ذلك باختيار تركيبات واعدة للتحقق التجريبي، مما يوفر الوقت والموارد. يمكن استخدام النتائج لتصميم مواد جديدة.",
+     "origin": "في 2301.02811 تبين أن الهيدريدات عالية الإنتروبيا يمكن أن تعمل في درجة حرارة الغرفة، ولكن تمت دراسة عدد محدود من التركيبات. في 1102.0849 تم تقديم مراجعة لـ DFT للمواد المسامية، ولكن ليس للهيدريدات المعدنية. هناك نقص في الفحص المنهجي للتركيبات.",
+     "first_step": "اختيار عدة تركيبات من 2301.02811، وإعادة إنتاج الحسابات للتحقق من المنهجية.",
+     "needs": "الوصول إلى مجموعة حوسبة، حزم برامج VASP أو Quantum ESPRESSO، خبرة في حسابات DFT.",
+     "risks": "تكلفة حسابية عالية للخلايا الكبيرة؛ الدقة تعتمد على مراعاة الاضطراب التكويني.",
+     "scale": "سنوات",
+     "methods": [
+      "استخدام طريقة الهياكل شبه العشوائية الخاصة (SQS) لنمذجة السبائك غير المنتظمة، كما في 2301.02811.",
+      "حسابات في إطار DFT مع دالة PBE، مع مراعاة طاقة الاهتزازات الصفرية.",
+      "بناء خرائط لطاقات الارتباط كدالة للتركيب."
+     ]
+    }
+   ]
+  },
+  "fr": {
+   "note": "On recherche activement des matériaux à thermodynamique modérée et cinétique rapide, en combinant expérience et calculs.",
+   "topic": "stockage de l'hydrogène dans les matériaux solides",
+   "ideas": [
+    {
+     "based_on": [
+      "2602.22807",
+      "2603.14139"
+     ],
+     "title": "Construire une cellule pour mesurer la pression d'hydrogène lors de la désorption d'une poudre",
+     "what": "Concevoir et assembler une cellule simple pour mesurer la pression d'hydrogène libéré lors du chauffage d'une petite quantité d'hydrure. Utiliser des capteurs de pression et de température disponibles, enregistrer les courbes de désorption.",
+     "why": "Cela permettra de tester rapidement la cinétique de libération d'hydrogène des matériaux sans équipement coûteux. Utile pour tout groupe débutant dans les hydrures.",
+     "origin": "Dans 2602.22807, on décrit une poudre qui s'agite toute seule, mais sans détails sur le dispositif de mesure. Dans 2603.14139, une base de données sur les matériaux a été constituée, mais sans description de méthodes de mesure simples. Il manque un moyen peu coûteux de vérifier la cinétique en laboratoire.",
+     "first_step": "Assembler un conteneur étanche en acier inoxydable avec un thermocouple et un capteur de pression, connecté à un Arduino.",
+     "needs": "Capteur de pression jusqu'à 10 bar, thermocouple, conteneur étanche, élément chauffant, Arduino, une petite quantité de MgH2.",
+     "risks": "Les fuites d'hydrogène fausseront les mesures ; une étanchéité soignée est nécessaire.",
+     "scale": "semestre",
+     "methods": [
+      "Utiliser le montage de type Sieverts de 2602.22807 : poudre dans un volume étanche, chauffage avec contrôle de température, mesure de pression.",
+      "Étalonner le volume de la cellule avec un gaz inerte, comme décrit dans 2602.22807.",
+      "Comparer les courbes obtenues avec les données de la littérature pour MgH2 afin de vérifier la précision."
+     ]
+    },
+    {
+     "based_on": [
+      "2603.17479",
+      "2301.05009"
+     ],
+     "title": "Étudier l'effet du dopage à l'aluminium sur la réversibilité de l'hydrure de magnésium",
+     "what": "Préparer des échantillons de MgH2 avec des ajouts d'aluminium (par exemple, 5, 10, 15 at.%) par voie mécanochimique. Mesurer les courbes PCT et la cinétique de sorption/désorption à différentes températures.",
+     "why": "L'aluminium pourrait réduire la stabilité thermodynamique de MgH2, rapprochant les conditions de la pratique. Les résultats aideront à choisir une composition pour des recherches ultérieures.",
+     "origin": "Dans 2603.17479, l'interaction de l'aluminium avec l'hydrogène dans les alliages a été étudiée, mais pas avec MgH2. Dans 2301.05009, il a été montré que la déformation améliore la cinétique du magnésium, mais l'effet des ajouts d'aluminium n'a pas été étudié. Il manque des données systématiques sur les compositions Mg-Al-H.",
+     "first_step": "Mélanger les poudres de MgH2 et Al dans un broyeur à billes, mesurer les PCT à 300°C.",
+     "needs": "Broyeur à billes, montage Sieverts, diffractomètre, poudres de départ.",
+     "risks": "La formation d'intermétalliques peut dégrader la cinétique ; une optimisation du temps de broyage sera nécessaire.",
+     "scale": "mémoire",
+     "methods": [
+      "Synthèse mécanochimique dans un broyeur à billes, comme dans 2603.17479.",
+      "Mesure des courbes PCT sur le montage Sieverts décrit dans 2602.22807.",
+      "Analyse par diffraction des rayons X pour contrôler la composition des phases."
+     ]
+    },
+    {
+     "based_on": [
+      "2301.02811",
+      "1102.0849"
+     ],
+     "title": "Calculer l'énergie de liaison de l'hydrogène dans les hydrures à haute entropie par DFT",
+     "what": "Effectuer des calculs ab initio pour une série d'alliages à haute entropie (par exemple, TiZrHfNbTa) avec de l'hydrogène. Évaluer les énergies de formation des hydrures et prédire les compositions à thermodynamique optimale pour le stockage à température ambiante.",
+     "why": "Cela permettra de sélectionner des compositions prometteuses pour une vérification expérimentale, réduisant temps et ressources. Les résultats pourront être utilisés pour la conception de nouveaux matériaux.",
+     "origin": "Dans 2301.02811, il a été montré que les hydrures à haute entropie peuvent fonctionner à température ambiante, mais un nombre limité de compositions a été étudié. Dans 1102.0849, une revue de la DFT pour les matériaux poreux est donnée, mais pas pour les hydrures métalliques. Il manque un criblage systématique des compositions.",
+     "first_step": "Choisir quelques compositions de 2301.02811, reproduire les calculs pour vérifier la méthode.",
+     "needs": "Accès à un cluster de calcul, logiciels VASP ou Quantum ESPRESSO, expérience en calculs DFT.",
+     "risks": "Coût de calcul élevé pour les grandes cellules ; la précision dépend de la prise en compte du désordre configurationnel.",
+     "scale": "années",
+     "methods": [
+      "Utiliser la méthode des structures spéciales quasi-aléatoires (SQS) pour modéliser les alliages désordonnés, comme dans 2301.02811.",
+      "Calculs DFT avec la fonctionnelle PBE, prise en compte de l'énergie de point zéro.",
+      "Construire des cartes d'énergies de liaison en fonction de la composition."
+     ]
+    }
+   ]
+  }
+ }
 }

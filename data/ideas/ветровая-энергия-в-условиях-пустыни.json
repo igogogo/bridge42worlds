@@ -206,5 +206,319 @@
    },
    "abstract": "Unmanned Aerial Vehicle (UAV) swarms are often required in off-grid scenarios, such as disaster-struck, war-torn or rural areas, where the UAVs have no access to the power grid and instead rely on renewable energy. Considering a main battery fed from two renewable sources, wind and solar, we scale such a system based on the financial budget, environmental characteristics, and seasonal variations. Interestingly, the source of energy is correlated with the energy expenditure of the UAVs, since strong winds cause UAV hovering to become increasingly energy-hungry. The aim is to maximize the cost e"
   }
- ]
+ ],
+ "lang": {
+  "en": {
+   "note": "Interest is growing in hybrid systems and accounting for extreme factors in wind energy in desert conditions, but experimental data and practical dust mitigation solutions are lacking.",
+   "topic": "wind energy in desert conditions",
+   "ideas": [
+    {
+     "based_on": [
+      "2509.19558"
+     ],
+     "title": "Build a test bench to measure the effect of sand dust on the output of photovoltaic panels in desert conditions",
+     "what": "Assemble a small test bench with several solar panels, a dust spraying system, and irradiance and power sensors. Conduct a series of experiments by depositing sand from different desert regions onto the panels and measuring the drop in output power.",
+     "why": "In desert regions where solar energy is rapidly developing, dust can significantly reduce panel efficiency. The results will help solar power plant operators plan cleaning schedules and forecast energy production.",
+     "origin": "The work in [2509.19558] examines a hybrid photovoltaic-wind system for the Adrar region (Algeria) but does not account for the effect of panel soiling. Other works on desert energy mention the dust problem, but systematic experimental data on the impact of specific sand types are scarce. Simple, reproducible experiments are needed to quantify the losses.",
+     "first_step": "Purchase or assemble a small solar panel, a light source (e.g., a halogen lamp), a power meter, and a dust sprayer. Conduct a first test: measure the power of the clean panel, then apply a thin layer of sand and measure again.",
+     "needs": "Solar panels (2-3 units), a light source with adjustable intensity, a multimeter or power meter, sand samples from desert regions, a sprayer, a scale for precise dust dosing, and a room with controlled lighting.",
+     "risks": "It is difficult to reproduce real desert conditions (solar spectrum, wind-driven dust deposition). Results may only apply to specific panel types and dust types.",
+     "scale": "semester",
+     "methods": [
+      "Use a controlled dust deposition method followed by measuring the panel's current-voltage characteristics (adapt approaches from studies on hybrid systems that account for environmental effects).",
+      "Perform measurements at different dust densities (g/m²) and panel tilt angles, recording the power reduction relative to the clean panel.",
+      "Compare results with theoretical models of light attenuation by a dust layer based on the Bouguer-Lambert-Beer law."
+     ]
+    },
+    {
+     "based_on": [
+      "2509.19558"
+     ],
+     "title": "Develop and test a prototype hybrid wind-solar system with a dust cleaning mechanism for autonomous power supply",
+     "what": "Design a small-scale hybrid system (wind turbine + solar panels) with an automatic panel cleaning mechanism (e.g., using vibration or airflow from the wind turbine). Assemble a prototype and test it under simulated desert conditions.",
+     "why": "In desert regions, hybrid systems can provide more stable power supply, but dust reduces the efficiency of the solar component. Integrating cleaning can improve overall reliability and reduce maintenance costs.",
+     "origin": "The work [2509.19558] describes modeling and control of a hybrid system for Adrar but does not address the soiling problem. The literature on desert energy often mentions the need for cleaning, but practical implementations are rare. The idea is to combine these aspects.",
+     "first_step": "Study the scheme from [2509.19558] and select low-power components (a small wind turbine, a panel, a charge controller, a battery). Then design a simple vibration cleaner based on an electric motor with an eccentric mass.",
+     "needs": "Small wind turbine and solar panels, charge controller, battery, electric motor and mechanics for vibration, power sensors, sand to simulate dust, and access to a workshop.",
+     "risks": "Difficulty in synchronizing cleaning with energy generation; vibration may damage panels or reduce their lifespan. Optimization of cleaning energy consumption will be required.",
+     "scale": "thesis",
+     "methods": [
+      "Based on [2509.19558], select the hybrid system configuration and component parameters for a given load.",
+      "Develop a cleaning mechanism: for example, use surplus wind turbine energy to drive a vibrator or an air compressor.",
+      "Conduct cyclic tests: apply dust, run the cleaning, and measure power recovery."
+     ]
+    },
+    {
+     "based_on": [
+      "2002.10022"
+     ],
+     "title": "Assess wind energy potential in desert regions using ERA5 reanalysis data and CORDEX-MENA climate models",
+     "what": "Analyze wind resources in selected desert areas (e.g., Sahara, Arabian Desert) based on ERA5 data and CORDEX-MENA climate projections. Calculate mean wind speeds, energy density, seasonal variability, and trends over the coming decades.",
+     "why": "The results will help identify promising sites for wind farms in deserts and assess the impact of climate change on future generation.",
+     "origin": "In [2002.10022], a similar analysis was conducted for offshore zones of the Gulf of Oman. For desert inland regions, such studies are fewer, although there is potential due to strong thermal winds. The idea is to apply a proven methodology to new regions.",
+     "first_step": "Select 3-5 points in desert regions, download ERA5 data for the last 20 years, and construct wind roses and speed histograms.",
+     "needs": "Access to ERA5 data (free after registration), Python programming skills, and basic knowledge of statistics and wind energy.",
+     "risks": "Reanalysis data may underestimate near-surface wind speeds due to coarse resolution. Validation with ground-based measurements, if available, will be required.",
+     "scale": "thesis",
+     "methods": [
+      "Use the methodology from [2002.10022] to calculate wind energy potential: extrapolate wind speed to turbine hub height and account for the Weibull distribution.",
+      "Download ERA5 data for selected points and perform statistical analysis using Python (xarray, pandas libraries).",
+      "Compare with CORDEX-MENA projections to assess future changes."
+     ]
+    },
+    {
+     "based_on": [
+      "physics/0701114"
+     ],
+     "title": "Investigate the feasibility of using high-altitude wind systems for powering remote desert facilities",
+     "what": "Conduct a techno-economic analysis of high-altitude wind energy systems (airborne kites, aerostats) to supply energy to autonomous desert facilities (e.g., weather stations, communication towers). Compare with conventional ground-based wind turbines and solar panels.",
+     "why": "High-altitude winds are more stable and stronger, which could compensate for the lack of infrastructure in deserts. The results will help select the optimal solution for remote consumers.",
+     "origin": "The work [physics/0701114] proposes a revolutionary approach to utilizing high-altitude winds but does not consider specific desert applications. Ground-based wind turbines in deserts face issues with dust and high temperatures, while high-altitude systems may avoid these. An assessment of feasibility is needed.",
+     "first_step": "Study the principles of high-altitude wind systems from [physics/0701114] and select one or two concepts for analysis. Define a typical consumer and their energy consumption.",
+     "needs": "Access to scientific literature, modeling skills (MATLAB/Python), and knowledge of wind energy fundamentals and economics.",
+     "risks": "High-altitude systems are not yet commercialized, and data on reliability and cost are limited. Results will heavily depend on assumptions.",
+     "scale": "years",
+     "methods": [
+      "Use concepts from [physics/0701114] to estimate available energy at altitude and select the type of high-altitude system.",
+      "Model energy generation based on wind profile data (e.g., from ERA5) and system characteristics.",
+      "Calculate the levelized cost of energy (LCOE) and compare with alternatives."
+     ]
+    }
+   ]
+  },
+  "es": {
+   "note": "En el ámbito de la energía eólica en condiciones desérticas, se observa un creciente interés por los sistemas híbridos y la consideración de factores extremos, pero faltan datos experimentales y soluciones prácticas para combatir el polvo.",
+   "topic": "energía eólica en condiciones desérticas",
+   "ideas": [
+    {
+     "based_on": [
+      "2509.19558"
+     ],
+     "title": "Montar un banco de pruebas para medir el efecto del polvo de arena en el rendimiento de paneles fotovoltaicos en condiciones desérticas",
+     "what": "Montar un banco de pruebas pequeño con varios paneles solares, un sistema de pulverización de polvo y sensores de irradiancia y potencia. Realizar una serie de experimentos de ensuciamiento de los paneles con arena de diferentes regiones desérticas y medir la caída de la potencia de salida.",
+     "why": "En las regiones desérticas, donde la energía solar se está desarrollando activamente, el polvo puede reducir significativamente la eficiencia de los paneles. Los resultados ayudarán a los operadores de plantas solares a planificar la limpieza y predecir la generación.",
+     "origin": "En el trabajo [2509.19558] se considera un sistema híbrido fotovoltaico-eólico para la región de Adrar (Argelia), pero no se tiene en cuenta el efecto del ensuciamiento de los paneles. En otros trabajos sobre energía en desiertos se menciona el problema del polvo, pero hay pocos datos experimentales sistemáticos sobre el efecto de tipos específicos de arena. Se necesitan experimentos simples y reproducibles para cuantificar las pérdidas.",
+     "first_step": "Adquirir o montar un panel solar pequeño, una fuente de luz (por ejemplo, una lámpara halógena), un medidor de potencia y un pulverizador de polvo. Realizar la primera prueba: medir la potencia del panel limpio, luego aplicar una capa fina de arena y volver a medir.",
+     "needs": "Paneles solares (2-3 unidades), fuente de luz con intensidad regulable, multímetro o medidor de potencia, muestras de arena de regiones desérticas, pulverizador, balanza para dosificar el polvo con precisión, sala con iluminación controlada.",
+     "risks": "Es difícil reproducir las condiciones reales del desierto (espectro de luz solar, deposición de polvo por viento). Los resultados pueden ser aplicables solo a tipos específicos de paneles y polvo.",
+     "scale": "semestre",
+     "methods": [
+      "Utilizar un método de aplicación controlada de polvo seguido de la medición de las curvas corriente-tensión del panel (adaptar enfoques de trabajos sobre sistemas híbridos que consideran la influencia del entorno).",
+      "Realizar mediciones con diferentes densidades de polvo (g/m²) y ángulos de inclinación del panel, registrando la reducción de potencia en comparación con el panel limpio.",
+      "Comparar los resultados con modelos teóricos de atenuación de la luz por una capa de polvo basados en la ley de Bouguer-Lambert-Beer."
+     ]
+    },
+    {
+     "based_on": [
+      "2509.19558"
+     ],
+     "title": "Desarrollar y probar un prototipo de sistema híbrido eólico-solar con sistema de limpieza de paneles para suministro de energía autónomo",
+     "what": "Diseñar un sistema híbrido a pequeña escala (aerogenerador + paneles solares) con un sistema automático de limpieza de paneles (por ejemplo, mediante vibración o flujo de aire del aerogenerador). Montar un prototipo y realizar pruebas en condiciones que simulen el desierto.",
+     "why": "En las regiones desérticas, los sistemas híbridos pueden proporcionar un suministro de energía más estable, pero el polvo reduce la eficiencia de la parte solar. La integración de la limpieza puede aumentar la fiabilidad general y reducir los costos de mantenimiento.",
+     "origin": "El trabajo [2509.19558] describe el modelado y control de un sistema híbrido para Adrar, pero no aborda el problema del ensuciamiento. En la literatura sobre energía en desiertos se menciona a menudo la necesidad de limpieza, pero hay pocas implementaciones prácticas. La idea es combinar estos aspectos.",
+     "first_step": "Estudiar el esquema de [2509.19558] y seleccionar componentes de baja potencia (un pequeño aerogenerador, panel, controlador de carga, batería). Luego diseñar un limpiador vibratorio simple basado en un motor eléctrico con excéntrica.",
+     "needs": "Pequeño aerogenerador y paneles solares, controlador de carga, batería, motor eléctrico y mecánica para vibración, sensores de potencia, arena para simular polvo, acceso a taller.",
+     "risks": "Dificultad para sincronizar la limpieza con la generación de energía; la vibración puede dañar los paneles o reducir su vida útil. Se requerirá optimizar el consumo de energía de la limpieza.",
+     "scale": "tesis",
+     "methods": [
+      "Basándose en el trabajo [2509.19558], seleccionar la configuración del sistema híbrido y los parámetros de los componentes para una carga determinada.",
+      "Desarrollar el mecanismo de limpieza: por ejemplo, utilizar el exceso de energía del aerogenerador para accionar un vibrador o un compresor de aire.",
+      "Realizar pruebas cíclicas: aplicación de polvo, activación de la limpieza, medición de la recuperación de potencia."
+     ]
+    },
+    {
+     "based_on": [
+      "2002.10022"
+     ],
+     "title": "Evaluar el potencial de la energía eólica en regiones desérticas utilizando datos de reanálisis ERA5 y modelos climáticos CORDEX-MENA",
+     "what": "Realizar un análisis de los recursos eólicos en áreas desérticas seleccionadas (por ejemplo, el Sáhara, el desierto de Arabia) basado en datos ERA5 y proyecciones climáticas CORDEX-MENA. Calcular velocidades medias del viento, densidad de energía, variabilidad estacional y tendencias para las próximas décadas.",
+     "why": "Los resultados ayudarán a identificar lugares prometedores para parques eólicos en desiertos y a evaluar el impacto del cambio climático en la generación futura.",
+     "origin": "En el trabajo [2002.10022] se realizó un análisis similar para zonas marinas del Golfo de Omán. Para regiones desérticas interiores hay menos estudios de este tipo, aunque tienen potencial debido a los fuertes vientos térmicos. La idea es aplicar una metodología probada a nuevas regiones.",
+     "first_step": "Seleccionar 3-5 puntos en regiones desérticas, descargar datos ERA5 de los últimos 20 años y construir rosas de viento e histogramas de velocidades.",
+     "needs": "Acceso a datos ERA5 (gratuitos tras registro), habilidades de programación en Python, conocimientos básicos de estadística y energía eólica.",
+     "risks": "Los datos de reanálisis pueden subestimar la velocidad del viento cerca de la superficie debido a la resolución gruesa. Se requerirá validación con mediciones en tierra si están disponibles.",
+     "scale": "tesis",
+     "methods": [
+      "Utilizar la metodología de [2002.10022] para calcular el potencial eólico: extrapolación de la velocidad del viento a la altura de la turbina, consideración de la distribución de Weibull.",
+      "Descargar datos ERA5 para los puntos seleccionados y realizar un análisis estadístico con Python (bibliotecas xarray, pandas).",
+      "Comparar con las proyecciones CORDEX-MENA para evaluar cambios futuros."
+     ]
+    },
+    {
+     "based_on": [
+      "physics/0701114"
+     ],
+     "title": "Investigar la posibilidad de utilizar sistemas eólicos de gran altitud para el suministro de energía a instalaciones remotas en el desierto",
+     "what": "Realizar un análisis técnico-económico de la aplicación de sistemas eólicos de gran altitud (cometas, aerostatos) para proporcionar energía a instalaciones autónomas en el desierto (por ejemplo, estaciones meteorológicas, torres de comunicación). Comparar con aerogeneradores terrestres tradicionales y paneles solares.",
+     "why": "Los vientos de gran altitud son más estables y fuertes, lo que puede compensar la falta de infraestructura en el desierto. Los resultados ayudarán a elegir la solución óptima para consumidores remotos.",
+     "origin": "El trabajo [physics/0701114] propone un enfoque revolucionario para el uso de vientos de gran altitud, pero no considera aplicaciones específicas en condiciones desérticas. Los aerogeneradores terrestres en desiertos enfrentan problemas de polvo y altas temperaturas, mientras que los sistemas de gran altitud pueden evitarlos. Se necesita una evaluación de viabilidad.",
+     "first_step": "Estudiar los principios de los sistemas eólicos de gran altitud de [physics/0701114] y seleccionar uno o dos conceptos para analizar. Definir un consumidor típico y su consumo de energía.",
+     "needs": "Acceso a literatura científica, habilidades de modelado (MATLAB/Python), conocimiento de fundamentos de energía eólica y economía.",
+     "risks": "Los sistemas de gran altitud aún no están comercializados, los datos sobre fiabilidad y costos son limitados. Los resultados dependerán en gran medida de las suposiciones.",
+     "scale": "años",
+     "methods": [
+      "Utilizar los conceptos de [physics/0701114] para estimar la energía disponible a gran altitud y seleccionar el tipo de sistema de gran altitud.",
+      "Realizar un modelado de la generación de energía basado en datos del perfil de viento (por ejemplo, de ERA5) y las características del sistema.",
+      "Calcular el costo de la energía (LCOE) y comparar con alternativas."
+     ]
+    }
+   ]
+  },
+  "ar": {
+   "note": "في مجال طاقة الرياح في الظروف الصحراوية، هناك اهتمام متزايد بالأنظمة الهجينة ومراعاة العوامل القصوى، لكن تفتقر إلى البيانات التجريبية والحلول العملية لمكافحة الغبار.",
+   "topic": "طاقة الرياح في الظروف الصحراوية",
+   "ideas": [
+    {
+     "based_on": [
+      "2509.19558"
+     ],
+     "title": "بناء منصة اختبار لقياس تأثير الغبار الرملي على إنتاج الألواح الكهروضوئية في الظروف الصحراوية",
+     "what": "بناء منصة صغيرة تحتوي على عدة ألواح شمسية، ونظام رش الغبار، وأجهزة استشعار للإضاءة والطاقة. إجراء سلسلة من التجارب بتغطية الألواح بالرمال من مناطق صحراوية مختلفة وقياس الانخفاض في الطاقة الناتجة.",
+     "why": "في المناطق الصحراوية حيث تتطور الطاقة الشمسية بنشاط، يمكن للغبار أن يقلل بشكل كبير من كفاءة الألواح. ستساعد النتائج مشغلي محطات الطاقة الشمسية على تخطيط التنظيف والتنبؤ بالإنتاج.",
+     "origin": "في العمل [2509.19558] يتم دراسة نظام هجين كهروضوئي-ريحي لمنطقة أدرار (الجزائر)، لكن لا يؤخذ في الاعتبار تأثير الغبار على الألواح. في أعمال أخرى حول الطاقة الصحراوية، تُذكر مشكلة الغبار، لكن البيانات التجريبية المنهجية حول تأثير أنواع معينة من الرمال قليلة. نحتاج إلى تجارب بسيطة قابلة للتكرار لتقييم الخسائر كمياً.",
+     "first_step": "شراء أو تجميع لوح شمسي صغير، ومصدر ضوء (مثل مصباح هالوجين)، وجهاز قياس الطاقة، وجهاز رش الغبار. إجراء الاختبار الأول: قياس طاقة اللوح النظيف، ثم وضع طبقة رقيقة من الرمل وقياس الطاقة مرة أخرى.",
+     "needs": "ألواح شمسية (2-3 قطع)، مصدر ضوء بكثافة قابلة للضبط، مقياس متعدد أو جهاز قياس طاقة، عينات رمل من مناطق صحراوية، جهاز رش، ميزان لجرعات دقيقة من الغبار، غرفة بإضاءة محكومة.",
+     "risks": "من الصعب إعادة إنتاج الظروف الصحراوية الحقيقية (طيف ضوء الشمس، ترسب الغبار بفعل الرياح). قد تكون النتائج قابلة للتطبيق فقط على أنواع معينة من الألواح والغبار.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "استخدام منهجية الرش المتحكم فيه للغبار مع قياس خصائص الجهد والتيار للوح (تكييف الأساليب من الأعمال حول الأنظمة الهجينة التي تأخذ في الاعتبار تأثير البيئة).",
+      "إجراء القياسات عند كثافات مختلفة من الغبار (غ/م²) وزوايا ميل مختلفة للوح، مع تسجيل الانخفاض في الطاقة مقارنة باللوح النظيف.",
+      "مقارنة النتائج مع النماذج النظرية لتوهين الضوء بطبقة الغبار بناءً على قانون بوغير-لامبرت-بير."
+     ]
+    },
+    {
+     "based_on": [
+      "2509.19558"
+     ],
+     "title": "تطوير واختبار نموذج أولي لنظام هجين ريحي-شمسي مع نظام تنظيف الألواح من الغبار لتزويد الطاقة بشكل مستقل",
+     "what": "تصميم نظام هجين صغير الحجم (مولد رياح + ألواح شمسية) مع نظام تنظيف تلقائي للألواح من الغبار (على سبيل المثال، باستخدام الاهتزاز أو تدفق الهواء من مولد الرياح). تجميع النموذج الأولي وإجراء الاختبارات في ظروف تحاكي الصحراء.",
+     "why": "في المناطق الصحراوية، يمكن للأنظمة الهجينة توفير إمداد طاقة أكثر استقراراً، لكن الغبار يقلل من كفاءة الجزء الشمسي. دمج التنظيف يمكن أن يزيد الموثوقية العامة ويقلل تكاليف الصيانة.",
+     "origin": "يصف العمل [2509.19558] نمذجة والتحكم في نظام هجين لمنطقة أدرار، لكنه لا يتناول مشكلة الغبار. في الأدبيات حول الطاقة الصحراوية، كثيراً ما يُذكر ضرورة التنظيف، لكن التطبيقات العملية قليلة. الفكرة هي دمج هذه الجوانب.",
+     "first_step": "دراسة المخطط من [2509.19558] واختيار مكونات منخفضة الطاقة (مولد رياح صغير، لوح، متحكم شحن، بطارية). ثم تصميم أبسط منظف اهتزازي يعتمد على محرك كهربائي مع لامركزي.",
+     "needs": "مولد رياح صغير وألواح شمسية، متحكم شحن، بطارية، محرك كهربائي وآلية للاهتزاز، أجهزة استشعار للطاقة، رمل لمحاكاة الغبار، إمكانية الوصول إلى ورشة عمل.",
+     "risks": "صعوبة مزامنة عمل التنظيف مع إنتاج الطاقة؛ قد يؤدي الاهتزاز إلى تلف الألواح أو تقليل عمرها الافتراضي. سيكون من الضروري تحسين استهلاك الطاقة للتنظيف.",
+     "scale": "مشروع تخرج",
+     "methods": [
+      "بناءً على العمل [2509.19558]، اختيار تكوين النظام الهجين ومعلمات المكونات لحمل معين.",
+      "تطوير آلية التنظيف: على سبيل المثال، استخدام الطاقة الزائدة من مولد الرياح لتشغيل هزاز أو ضاغط هواء.",
+      "إجراء اختبارات دورية: وضع الغبار، تشغيل التنظيف، قياس استعادة الطاقة."
+     ]
+    },
+    {
+     "based_on": [
+      "2002.10022"
+     ],
+     "title": "تقييم إمكانات طاقة الرياح في المناطق الصحراوية باستخدام بيانات إعادة التحليل ERA5 والنماذج المناخية CORDEX-MENA",
+     "what": "إجراء تحليل لموارد الرياح في مناطق صحراوية مختارة (مثل الصحراء الكبرى، الصحراء العربية) بناءً على بيانات ERA5 والإسقاطات المناخية CORDEX-MENA. حساب متوسط سرعات الرياح، وكثافة الطاقة، والتغير الموسمي، والاتجاهات على مدى العقود القادمة.",
+     "why": "ستساعد النتائج في تحديد الأماكن الواعدة لإنشاء مزارع الرياح في الصحاري وتقييم تأثير تغير المناخ على الإنتاج المستقبلي.",
+     "origin": "في العمل [2002.10022] تم إجراء تحليل مماثل للمناطق البحرية في خليج عمان. بالنسبة للمناطق الداخلية الصحراوية، هناك دراسات أقل، على الرغم من وجود إمكانات بسبب الرياح الحرارية القوية. الفكرة هي تطبيق المنهجية المثبتة على مناطق جديدة.",
+     "first_step": "اختيار 3-5 نقاط في المناطق الصحراوية، تنزيل بيانات ERA5 لآخر 20 عاماً وإنشاء وردات الرياح ومخططات توزيع السرعات.",
+     "needs": "الوصول إلى بيانات ERA5 (مجانية بعد التسجيل)، مهارات البرمجة بلغة Python، معرفة أساسية بالإحصاء وطاقة الرياح.",
+     "risks": "قد تقلل بيانات إعادة التحليل من سرعة الرياح بالقرب من السطح بسبب الدقة الخشنة. سيكون من الضروري التحقق من القياسات الأرضية إذا كانت متاحة.",
+     "scale": "مشروع تخرج",
+     "methods": [
+      "استخدام المنهجية من [2002.10022] لحساب إمكانات طاقة الرياح: استقراء سرعة الرياح إلى ارتفاع التوربين، مع مراعاة توزيع ويبل.",
+      "تنزيل بيانات ERA5 للنقاط المختارة وإجراء تحليل إحصائي باستخدام Python (مكتبات xarray، pandas).",
+      "مقارنة مع إسقاطات CORDEX-MENA لتقييم التغيرات المستقبلية."
+     ]
+    },
+    {
+     "based_on": [
+      "physics/0701114"
+     ],
+     "title": "دراسة إمكانية استخدام أنظمة الرياح على ارتفاعات عالية لتزويد الطاقة للمنشآت الصحراوية النائية",
+     "what": "إجراء تحليل تقني اقتصادي لتطبيق أنظمة طاقة الرياح على ارتفاعات عالية (طائرات ورقية، بالونات) لتزويد الطاقة للمنشآت المستقلة في الصحراء (مثل محطات الأرصاد الجوية، أبراج الاتصالات). مقارنة مع توربينات الرياح الأرضية التقليدية والألواح الشمسية.",
+     "why": "الرياح على ارتفاعات عالية أكثر استقراراً وقوة، مما قد يعوض غياب البنية التحتية في الصحراء. ستساعد النتائج في اختيار الحل الأمثل للمستهلكين البعيدين.",
+     "origin": "يقدم العمل [physics/0701114] نهجاً ثورياً لاستخدام الرياح على ارتفاعات عالية، لكنه لا يتناول التطبيق المحدد في الظروف الصحراوية. تواجه توربينات الرياح الأرضية في الصحاري مشاكل الغبار ودرجات الحرارة المرتفعة، بينما يمكن للأنظمة المرتفعة تجنبها. نحتاج إلى تقييم الجدوى.",
+     "first_step": "دراسة مبادئ أنظمة الرياح المرتفعة من [physics/0701114] واختيار مفهوم أو مفهومين للتحليل. تحديد مستهلك نموذجي واستهلاكه للطاقة.",
+     "needs": "الوصول إلى الأدبيات العلمية، مهارات النمذجة (MATLAB/Python)، معرفة أساسيات طاقة الرياح والاقتصاد.",
+     "risks": "الأنظمة المرتفعة لم يتم تسويقها بعد، البيانات حول الموثوقية والتكلفة محدودة. ستعتمد النتائج بشكل كبير على الافتراضات.",
+     "scale": "سنوات",
+     "methods": [
+      "استخدام المفاهيم من [physics/0701114] لتقدير الطاقة المتاحة على الارتفاع واختيار نوع النظام المرتفع.",
+      "إجراء نمذجة لإنتاج الطاقة بناءً على بيانات ملف الرياح (مثل من ERA5) وخصائص النظام.",
+      "حساب تكلفة الطاقة (LCOE) ومقارنتها مع البدائل."
+     ]
+    }
+   ]
+  },
+  "fr": {
+   "note": "Dans le domaine de l'énergie éolienne en conditions désertiques, on observe un intérêt croissant pour les systèmes hybrides et la prise en compte des facteurs extrêmes, mais les données expérimentales et les solutions pratiques pour lutter contre la poussière font défaut.",
+   "topic": "énergie éolienne en conditions désertiques",
+   "ideas": [
+    {
+     "based_on": [
+      "2509.19558"
+     ],
+     "title": "Construire un banc d'essai pour mesurer l'impact de la poussière de sable sur le rendement de panneaux photovoltaïques en conditions désertiques",
+     "what": "Assembler un petit banc d'essai avec plusieurs panneaux solaires, un système de pulvérisation de poussière et des capteurs d'éclairement et de puissance. Mener une série d'expériences en saupoudrant les panneaux avec du sable provenant de différentes régions désertiques et mesurer la chute de puissance de sortie.",
+     "why": "Dans les régions désertiques où l'énergie solaire se développe activement, la poussière peut réduire considérablement l'efficacité des panneaux. Les résultats aideront les exploitants de centrales solaires à planifier le nettoyage et à prévoir la production.",
+     "origin": "Dans l'article [2509.19558], on étudie un système hybride photovoltaïque-éolien pour la région d'Adrar (Algérie), mais l'effet de l'encrassement des panneaux n'y est pas pris en compte. D'autres travaux sur l'énergie en milieu désertique mentionnent le problème de la poussière, mais les données expérimentales systématiques sur l'influence de types de sable spécifiques sont rares. Des expériences simples et reproductibles sont nécessaires pour quantifier les pertes.",
+     "first_step": "Acheter ou assembler un petit panneau solaire, une source de lumière (par exemple une lampe halogène), un mesureur de puissance et un pulvérisateur de poussière. Effectuer un premier test : mesurer la puissance du panneau propre, puis appliquer une fine couche de sable et mesurer à nouveau.",
+     "needs": "Panneaux solaires (2 à 3), source de lumière à intensité réglable, multimètre ou mesureur de puissance, échantillons de sable de régions désertiques, pulvérisateur, balance pour doser précisément la poussière, pièce à éclairage contrôlé.",
+     "risks": "Il est difficile de reproduire les conditions réelles du désert (spectre de la lumière solaire, dépôt de poussière par le vent). Les résultats peuvent n'être valables que pour des types spécifiques de panneaux et de poussière.",
+     "scale": "semestre",
+     "methods": [
+      "Utiliser une méthode de dépôt contrôlé de poussière suivie de la mesure des caractéristiques courant-tension du panneau (adapter les approches des travaux sur les systèmes hybrides qui tiennent compte de l'influence de l'environnement).",
+      "Effectuer des mesures à différentes densités de poussière (g/m²) et angles d'inclinaison du panneau, en enregistrant la baisse de puissance par rapport au panneau propre.",
+      "Comparer les résultats avec des modèles théoriques d'atténuation de la lumière par une couche de poussière basés sur la loi de Beer-Lambert-Bouguer."
+     ]
+    },
+    {
+     "based_on": [
+      "2509.19558"
+     ],
+     "title": "Développer et tester un prototype de système hybride éolien-solaire avec système de nettoyage des panneaux contre la poussière pour l'alimentation autonome en énergie",
+     "what": "Concevoir un système hybride à petite échelle (éolienne + panneaux solaires) avec un système automatique de nettoyage des panneaux contre la poussière (par exemple, utilisant des vibrations ou le flux d'air de l'éolienne). Assembler un prototype et le tester dans des conditions simulant le désert.",
+     "why": "Dans les régions désertiques, les systèmes hybrides peuvent fournir une alimentation plus stable, mais la poussière réduit l'efficacité de la partie solaire. L'intégration du nettoyage peut améliorer la fiabilité globale et réduire les coûts de maintenance.",
+     "origin": "L'article [2509.19558] décrit la modélisation et le contrôle d'un système hybride pour Adrar, mais ne traite pas du problème de l'encrassement. Dans la littérature sur l'énergie en milieu désertique, la nécessité du nettoyage est souvent mentionnée, mais les réalisations pratiques sont rares. L'idée est de combiner ces aspects.",
+     "first_step": "Étudier le schéma de [2509.19558] et choisir des composants de faible puissance (petite éolienne, panneau, contrôleur de charge, batterie). Ensuite, concevoir un nettoyeur vibrant simple basé sur un moteur électrique avec excentrique.",
+     "needs": "Petite éolienne et panneaux solaires, contrôleur de charge, batterie, moteur électrique et mécanique pour les vibrations, capteurs de puissance, sable pour simuler la poussière, accès à un atelier.",
+     "risks": "Difficulté à synchroniser le nettoyage avec la production d'énergie ; les vibrations peuvent endommager les panneaux ou réduire leur durée de vie. Il faudra optimiser la consommation d'énergie du nettoyage.",
+     "scale": "diplôme",
+     "methods": [
+      "Sur la base de [2509.19558], choisir la configuration du système hybride et les paramètres des composants pour une charge donnée.",
+      "Développer le mécanisme de nettoyage : par exemple, utiliser l'énergie excédentaire de l'éolienne pour entraîner un vibreur ou un compresseur d'air.",
+      "Effectuer des essais cycliques : application de poussière, déclenchement du nettoyage, mesure de la récupération de puissance."
+     ]
+    },
+    {
+     "based_on": [
+      "2002.10022"
+     ],
+     "title": "Évaluer le potentiel de l'énergie éolienne dans les régions désertiques à l'aide des données de réanalyse ERA5 et des modèles climatiques CORDEX-MENA",
+     "what": "Réaliser une analyse des ressources éoliennes dans des zones désertiques choisies (par exemple, le Sahara, le désert d'Arabie) sur la base des données ERA5 et des projections climatiques CORDEX-MENA. Calculer les vitesses moyennes du vent, la densité d'énergie, la variabilité saisonnière et les tendances pour les prochaines décennies.",
+     "why": "Les résultats aideront à identifier les sites prometteurs pour l'implantation de parcs éoliens dans les déserts et à évaluer l'impact du changement climatique sur la production future.",
+     "origin": "Dans l'article [2002.10022], une analyse similaire a été menée pour les zones offshore du golfe d'Oman. Pour les régions intérieures désertiques, ces études sont moins nombreuses, bien qu'elles présentent un potentiel en raison des vents thermiques forts. L'idée est d'appliquer une méthodologie éprouvée à de nouvelles régions.",
+     "first_step": "Choisir 3 à 5 points dans des régions désertiques, télécharger les données ERA5 des 20 dernières années et construire des roses des vents et des histogrammes de vitesses.",
+     "needs": "Accès aux données ERA5 (gratuit après inscription), compétences en programmation Python, connaissances de base en statistiques et en énergie éolienne.",
+     "risks": "Les données de réanalyse peuvent sous-estimer la vitesse du vent près de la surface en raison de la résolution grossière. Une validation avec des mesures au sol sera nécessaire si elles sont disponibles.",
+     "scale": "diplôme",
+     "methods": [
+      "Utiliser la méthodologie de [2002.10022] pour calculer le potentiel éolien : extrapolation de la vitesse du vent à la hauteur du moyeu, prise en compte de la distribution de Weibull.",
+      "Télécharger les données ERA5 pour les points choisis et effectuer une analyse statistique avec Python (bibliothèques xarray, pandas).",
+      "Comparer avec les projections CORDEX-MENA pour évaluer les changements futurs."
+     ]
+    },
+    {
+     "based_on": [
+      "physics/0701114"
+     ],
+     "title": "Étudier la possibilité d'utiliser des systèmes éoliens en altitude pour l'alimentation électrique de sites désertiques isolés",
+     "what": "Réaliser une analyse technico-économique de l'application de systèmes éoliens en altitude (cerfs-volants, aérostats) pour fournir de l'énergie à des installations autonomes dans le désert (par exemple, stations météo, tours de télécommunication). Comparer avec les éoliennes terrestres traditionnelles et les panneaux solaires.",
+     "why": "Les vents en altitude sont plus stables et plus forts, ce qui peut compenser l'absence d'infrastructures dans le désert. Les résultats aideront à choisir la solution optimale pour les consommateurs isolés.",
+     "origin": "L'article [physics/0701114] propose une approche révolutionnaire pour utiliser les vents d'altitude, mais n'examine pas d'application spécifique en milieu désertique. Les éoliennes terrestres dans les déserts sont confrontées à des problèmes de poussière et de températures élevées, que les systèmes en altitude pourraient éviter. Une évaluation de la faisabilité est nécessaire.",
+     "first_step": "Étudier les principes des systèmes éoliens en altitude à partir de [physics/0701114] et choisir une ou deux concepts pour l'analyse. Définir un consommateur type et sa consommation d'énergie.",
+     "needs": "Accès à la littérature scientifique, compétences en modélisation (MATLAB/Python), connaissances de base en énergie éolienne et en économie.",
+     "risks": "Les systèmes en altitude ne sont pas encore commercialisés, les données sur la fiabilité et les coûts sont limitées. Les résultats dépendront fortement des hypothèses.",
+     "scale": "années",
+     "methods": [
+      "Utiliser les concepts de [physics/0701114] pour estimer l'énergie disponible en altitude et choisir le type de système.",
+      "Effectuer une modélisation de la production d'énergie sur la base des données de profil de vent (par exemple, ERA5) et des caractéristiques du système.",
+      "Calculer le coût actualisé de l'énergie (LCOE) et le comparer aux alternatives."
+     ]
+    }
+   ]
+  }
+ }
 }

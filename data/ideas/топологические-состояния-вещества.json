@@ -209,5 +209,271 @@
    },
    "abstract": "We study different scenarios of topological phase transitions in the vicinity of the \\pi^0 condensation point in neutron matter. The transitions occur between the Fermi-liquid state and a topologically different one with two sheets of the Fermi surface. Two possibilities of a rearrangement of quasiparticle degrees of freedom are shown: the first-order topological phase transition and the second-order one. The order of the phase transition is found to be strongly dependent on the value of the critical wave vector of the soft \\pi^0 mode. The thermodynamics of the system is also studied. It is sh"
   }
- ]
+ ],
+ "lang": {
+  "en": {
+   "note": "",
+   "topic": "Topological states of matter",
+   "ideas": [
+    {
+     "based_on": [
+      "2605.00770",
+      "2603.20763"
+     ],
+     "title": "Building a setup to test edge memory in a Kitaev chain with cold atoms",
+     "what": "Implement a one-dimensional chain of fermionic atoms in an optical lattice reproducing the Kitaev model, and measure how information about the initial state is preserved at the edges under local perturbations.",
+     "why": "Work [2605.00770] predicts that in the topological phase, sensitivity to perturbations does not decay thanks to edge modes. An experimental test on atoms would provide direct control over parameters and allow checking the robustness of the effect against imperfections.",
+     "origin": "Work [2605.00770] theoretically shows that in the Kitaev chain, edge Majorana modes protect quantum information from decoherence, but no experimental realization on cold atoms exists yet. [2603.20763] demonstrates methods for working with atoms in trap chains and controlling their interaction with the environment, which can be adapted for this task.",
+     "first_step": "Calculate the optical lattice parameters to reach the topological phase (tunneling, pairing, and chemical potential ratios) and assemble a vacuum chamber with a trap for fermionic atoms.",
+     "needs": "Ultracold fermionic atoms, optical lattice, laser system for p-wave pairing (e.g., via Feshbach resonance), quantum gas microscope or single-atom detection system, skills in atomic physics and quantum optics.",
+     "risks": "Difficulty in stabilizing p-wave pairing in an optical lattice; instabilities may destroy the topological phase before measurements are taken.",
+     "scale": "years",
+     "methods": [
+      "Create an optical lattice with a period providing the required dispersion and load ultracold fermionic atoms (e.g., 6Li) into it.",
+      "Tune tunneling couplings and external fields so that the Hamiltonian corresponds to the Kitaev chain with p-wave pairing, as described in [2605.00770].",
+      "Initialize a local perturbation (e.g., change the phase at one site) and measure the dynamics of edge-site occupations using a quantum gas microscope.",
+      "Compare the relaxation times of sensitivity in the topological and trivial phases by varying parameters."
+     ]
+    },
+    {
+     "based_on": [
+      "2603.24031",
+      "2605.00770"
+     ],
+     "title": "Numerically verify the topological order parameter for mixed states in small systems",
+     "what": "Write code for exact diagonalization of small spin or fermionic systems with dissipation and compute the integer order parameter proposed in [2603.24031] at various decoherence levels.",
+     "why": "The order parameter from [2603.24031] generalizes the topological classification to mixed states, but its behavior in specific models with finite size and realistic noise is unexplored. This will help assess its applicability to quantum simulators.",
+     "origin": "In [2603.24031], an order parameter is proposed that should take integer values and change sharply at a topological transition in mixed states, but its computation for specific models has not been performed. [2605.00770] shows the importance of topological protection under realistic conditions, motivating a check on small systems accessible numerically.",
+     "first_step": "Choose the simplest model (e.g., a Kitaev chain with dissipation) and write a script for exact diagonalization of a 4-6 site Hamiltonian followed by calculation of the order parameter.",
+     "needs": "A computer with sufficient memory for exact diagonalization (up to 10-12 sites), knowledge of quantum mechanics and numerical methods, linear algebra libraries (Python/Julia).",
+     "risks": "The order parameter may be sensitive to finite size and require extrapolation, complicating interpretation.",
+     "scale": "semester",
+     "methods": [
+      "Implement exact diagonalization of the model Hamiltonian (e.g., a spin chain with interactions allowing a topological phase) with the addition of Lindblad dissipation operators.",
+      "Compute the order parameter using the formula from [2603.24031], using the steady state or dynamics.",
+      "Analyze how the parameter changes with increasing dissipation strength and system size, and find critical points.",
+      "Compare with known limiting cases of pure states."
+     ]
+    },
+    {
+     "based_on": [
+      "2401.04845",
+      "1302.1059"
+     ],
+     "title": "Search for hybrid topological states in thin films of elemental materials",
+     "what": "Perform angle-resolved photoemission spectroscopy (ARPES) on thin films or cleaved surfaces of elemental materials (e.g., bismuth) and compare observed surface states with predictions for hybrid topological phases.",
+     "why": "In [2401.04845], the discovery of a hybrid topological state in an elemental solid is reported, combining different topological invariants. Searching for similar states in other materials may reveal new candidates for applications.",
+     "origin": "Work [2401.04845] demonstrates a hybrid topological state in a single element, but the question of how general this phenomenon is remains open. Work [1302.1059] provides criteria for finding topological insulators among narrow-gap semiconductors, which can be applied to elemental materials.",
+     "first_step": "Choose a material and perform DFT calculations of its band structure to predict the presence of topological surface states, then prepare a sample for ARPES.",
+     "needs": "Access to an ARPES setup with resolution better than 10 meV, ultrahigh vacuum chamber for cleavage, skills in DFT calculations (VASP, Quantum ESPRESSO), high-purity samples.",
+     "risks": "Surface states may be indistinguishable from trivial ones due to defects or insufficient resolution, leading to false conclusions.",
+     "scale": "diploma",
+     "methods": [
+      "Select an elemental material with strong spin-orbit coupling (e.g., Bi, Sb) and prepare a clean surface by cleavage in ultrahigh vacuum.",
+      "Perform ARPES measurements with high energy and momentum resolution to map the dispersion of surface states.",
+      "Compare the obtained spectra with band structure calculations (DFT) and determine topological invariants (Chern numbers, Z2) from the presence and character of the states.",
+      "Check whether coexistence of multiple topological phases is observed, as in [2401.04845]."
+     ]
+    }
+   ]
+  },
+  "es": {
+   "note": "",
+   "topic": "estados topológicos de la materia",
+   "ideas": [
+    {
+     "based_on": [
+      "2605.00770",
+      "2603.20763"
+     ],
+     "title": "Montar un dispositivo para comprobar la memoria de borde en la cadena de Kitaev con átomos fríos",
+     "what": "Realizar una cadena unidimensional de átomos fermiónicos en una red óptica que reproduzca el modelo de Kitaev y medir cómo se conserva la información sobre el estado inicial en los bordes bajo perturbaciones locales.",
+     "why": "El trabajo [2605.00770] predice que en la fase topológica la sensibilidad a las perturbaciones no se desvanece gracias a los modos de borde. La verificación experimental con átomos proporcionará un control directo de los parámetros y permitirá comprobar la robustez del efecto frente a imperfecciones.",
+     "origin": "El trabajo [2605.00770] muestra teóricamente que en la cadena de Kitaev los modos de Majorana de borde protegen la información cuántica de la decoherencia, pero aún no existe una realización experimental con átomos fríos. En [2603.20763] se demuestran métodos para trabajar con átomos en cadenas de trampas y para controlar su interacción con el entorno, que pueden adaptarse a esta tarea.",
+     "first_step": "Calcular los parámetros de la red óptica para alcanzar la fase topológica (relación entre tunelamiento, emparejamiento y potencial químico) y montar una cámara de vacío con una trampa para átomos fermiónicos.",
+     "needs": "Átomos fermiónicos ultrafríos, red óptica, sistema láser para crear emparejamiento de onda p (por ejemplo, mediante una resonancia de Feshbach), microscopio de gas cuántico o sistema de detección de átomos individuales, y experiencia en física atómica y óptica cuántica.",
+     "risks": "La dificultad de estabilizar el emparejamiento de onda p en la red óptica; las inestabilidades pueden destruir la fase topológica antes de realizar las mediciones.",
+     "scale": "años",
+     "methods": [
+      "Crear una red óptica con un período que proporcione la dispersión deseada y cargar en ella átomos fermiónicos ultrafríos (por ejemplo, 6Li).",
+      "Ajustar los acoplamientos de tunelamiento y los campos externos para que el hamiltoniano corresponda a la cadena de Kitaev con emparejamiento de onda p, como se describe en [2605.00770].",
+      "Inicializar una perturbación local (por ejemplo, cambiar la fase en un sitio) y medir la dinámica de las ocupaciones de los sitios de borde con un microscopio de gas cuántico.",
+      "Comparar los tiempos de relajación de la sensibilidad en las fases topológica y trivial, variando los parámetros."
+     ]
+    },
+    {
+     "based_on": [
+      "2603.24031",
+      "2605.00770"
+     ],
+     "title": "Verificar numéricamente el parámetro de orden topológico para estados mixtos en sistemas pequeños",
+     "what": "Escribir un código para la diagonalización exacta de sistemas pequeños de espines o fermiones con disipación y calcular el parámetro de orden entero propuesto en [2603.24031] para diferentes niveles de decoherencia.",
+     "why": "El parámetro de orden de [2603.24031] generaliza la clasificación topológica a estados mixtos, pero su comportamiento en modelos concretos con tamaño finito y ruido real no se ha estudiado. Esto ayudará a evaluar su aplicabilidad para simuladores cuánticos.",
+     "origin": "En [2603.24031] se propone un parámetro de orden que debería tomar valores enteros y cambiar bruscamente en la transición topológica en estados mixtos, pero no se ha calculado para modelos concretos. En [2605.00770] se muestra la importancia de la protección topológica en condiciones realistas, lo que motiva la verificación en sistemas pequeños accesibles numéricamente.",
+     "first_step": "Elegir el modelo más simple (por ejemplo, la cadena de Kitaev con disipación) y escribir un script para la diagonalización exacta del hamiltoniano de 4-6 sitios, seguido del cálculo del parámetro de orden.",
+     "needs": "Una computadora con suficiente memoria para la diagonalización exacta (hasta 10-12 sitios), conocimiento de mecánica cuántica y métodos numéricos, y bibliotecas de álgebra lineal (Python/Julia).",
+     "risks": "El parámetro de orden puede ser sensible al tamaño finito y requerir extrapolación, lo que complicará la interpretación.",
+     "scale": "semestre",
+     "methods": [
+      "Implementar la diagonalización exacta del hamiltoniano del modelo (por ejemplo, una cadena de espines con interacción que admita una fase topológica) añadiendo operadores de disipación de Lindblad.",
+      "Calcular el parámetro de orden según la fórmula de [2603.24031], utilizando el estado estacionario o la dinámica.",
+      "Analizar cómo cambia el parámetro al aumentar la fuerza de disipación y el tamaño del sistema, y encontrar los puntos críticos.",
+      "Comparar con los casos límite conocidos de estados puros."
+     ]
+    },
+    {
+     "based_on": [
+      "2401.04845",
+      "1302.1059"
+     ],
+     "title": "Búsqueda de estados topológicos híbridos en películas delgadas de materiales elementales",
+     "what": "Realizar espectroscopia de fotoemisión resuelta en ángulo (ARPES) en películas delgadas o exfoliaciones de materiales elementales (por ejemplo, bismuto) y comparar los estados de superficie observados con las predicciones para fases topológicas híbridas.",
+     "why": "En [2401.04845] se informa del descubrimiento de un estado topológico híbrido en un sólido elemental, que combina diferentes invariantes topológicos. La búsqueda de estados similares en otros materiales podría revelar nuevos candidatos para aplicaciones.",
+     "origin": "El trabajo [2401.04845] demuestra un estado topológico híbrido en un solo elemento, pero queda abierta la cuestión de cuán general es este fenómeno. El trabajo [1302.1059] proporciona criterios para buscar aislantes topológicos entre semiconductores de banda pequeña, que pueden aplicarse a materiales elementales.",
+     "first_step": "Seleccionar un material y realizar un cálculo DFT de su estructura de bandas para predecir la presencia de estados de superficie topológicos, y luego preparar una muestra para ARPES.",
+     "needs": "Acceso a una instalación de ARPES con resolución mejor que 10 meV, cámara de ultra alto vacío para la exfoliación, habilidades en cálculos DFT (VASP, Quantum ESPRESSO) y muestras de alta pureza.",
+     "risks": "Los estados de superficie pueden ser indistinguibles de los triviales debido a defectos o resolución insuficiente, lo que llevaría a conclusiones erróneas.",
+     "scale": "tesis",
+     "methods": [
+      "Seleccionar un material elemental con fuerte acoplamiento espín-órbita (por ejemplo, Bi, Sb) y preparar una superficie limpia mediante exfoliación en ultra alto vacío.",
+      "Realizar mediciones ARPES con alta resolución en energía y momento para mapear la dispersión de los estados de superficie.",
+      "Comparar los espectros obtenidos con los cálculos de estructura de bandas (DFT) y determinar los invariantes topológicos (números de Chern, Z2) según la presencia y el carácter de los estados.",
+      "Verificar si se observa la coexistencia de varias fases topológicas, como en [2401.04845]."
+     ]
+    }
+   ]
+  },
+  "ar": {
+   "note": "",
+   "topic": "الحالات الطوبولوجية للمادة",
+   "ideas": [
+    {
+     "based_on": [
+      "2605.00770",
+      "2603.20763"
+     ],
+     "title": "بناء منظومة تجريبية لاختبار الذاكرة الطرفية في سلسلة كيتاييف باستخدام الذرات الباردة",
+     "what": "تحقيق سلسلة أحادية البعد من ذرات فرميونية في شبكة بصرية تحاكي نموذج كيتاييف، وقياس كيفية بقاء المعلومات حول الحالة الابتدائية على الأطراف عند تطبيق اضطرابات موضعية.",
+     "why": "يتنبأ العمل [2605.00770] أنه في الطور الطوبولوجي، لا تختفي الحساسية تجاه الاضطرابات بفضل الأنماط الطرفية. التجربة على الذرات ستمنح تحكمًا مباشرًا في المعاملات وتسمح باختبار متانة التأثير تجاه العيوب.",
+     "origin": "يُظهر العمل [2605.00770] نظريًا أن الأنماط الطرفية المايورانية في سلسلة كيتاييف تحمي المعلومات الكمومية من فقدان التماسك، لكن لا يوجد حتى الآن تحقيق تجريبي على الذرات الباردة. في [2603.20763] تم عرض طرق للتعامل مع الذرات في سلاسل من المصائد والتحكم في تفاعلها مع المحيط، ويمكن تكييفها لهذه المهمة.",
+     "first_step": "حساب معاملات الشبكة البصرية لتحقيق الطور الطوبولوجي (نسبة النفق، والاقتران، والجهد الكيميائي) وتجميع غرفة تفريغ مع مصيدة للذرات الفرميونية.",
+     "needs": "ذرات فرميونية فائقة البرودة، شبكة بصرية، نظام ليزر لإنشاء اقتران من نوع p-موجة (على سبيل المثال عبر رنين فيشباخ)، مجهر غاز كمومي أو نظام كشف للذرات المفردة، مهارات في الفيزياء الذرية والبصريات الكمومية.",
+     "risks": "صعوبة تثبيت اقتران p-موجة في الشبكة البصرية؛ قد تؤدي عدم الاستقرارية إلى تدمير الطور الطوبولوجي قبل إجراء القياسات.",
+     "scale": "سنوات",
+     "methods": [
+      "إنشاء شبكة بصرية بدورية تضمن التشتت المطلوب وتحميل ذرات فرميونية فائقة البرودة (مثل 6Li) فيها.",
+      "ضبط روابط النفق والمجالات الخارجية بحيث يتوافق الهاميلتوني مع سلسلة كيتاييف مع اقتران p-موجة، كما هو موصوف في [2605.00770].",
+      "تهيئة اضطراب موضعي (مثل تغيير الطور في عقدة واحدة) وقياس ديناميكية الإشغال في العقد الطرفية باستخدام مجهر الغاز الكمومي.",
+      "مقارنة أزمنة استرخاء الحساسية في الطورين الطوبولوجي والتافه مع تغيير المعاملات."
+     ]
+    },
+    {
+     "based_on": [
+      "2603.24031",
+      "2605.00770"
+     ],
+     "title": "التحقق عدديًا من معامل الترتيب الطوبولوجي للحالات المختلطة في أنظمة صغيرة",
+     "what": "كتابة كود للقطر الدقيق لأنظمة صغيرة من السبينات أو الفرميونات مع تبدد، وحساب معامل الترتيب الصحيح المقترح في [2603.24031] عند مستويات مختلفة من فقدان التماسك.",
+     "why": "معامل الترتيب من [2603.24031] يعمم التصنيف الطوبولوجي على الحالات المختلطة، لكن سلوكه في نماذج محددة بحجم محدود وضوضاء حقيقية لم يُدرس. سيساعد هذا في تقييم قابلية التطبيق على المحاكيات الكمومية.",
+     "origin": "في [2603.24031] تم اقتراح معامل ترتيب يجب أن يأخذ قيمًا صحيحة ويتغير بشكل حاد عند الانتقال الطوبولوجي في الحالات المختلطة، لكن حسابه لنماذج محددة لم يُنفذ. في [2605.00770] تظهر أهمية الحماية الطوبولوجية في الظروف الواقعية، مما يحفز التحقق على أنظمة صغيرة متاحة عدديًا.",
+     "first_step": "اختيار أبسط نموذج (مثل سلسلة كيتاييف مع تبدد) وكتابة سكربت للقطر الدقيق لهاميلتوني 4-6 عقد مع حساب معامل الترتيب لاحقًا.",
+     "needs": "حاسوب بذاكرة كافية للقطر الدقيق (حتى 10-12 عقدة)، معرفة بميكانيكا الكم والطرق العددية، مكتبات الجبر الخطي (Python/Julia).",
+     "risks": "قد يكون معامل الترتيب حساسًا للأحجام المحدودة ويتطلب استقراءً، مما يعقد التفسير.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "تنفيذ القطر الدقيق لهاميلتوني النموذج (مثل سلسلة سبينات مع تفاعل يسمح بطور طوبولوجي) مع إضافة مؤثرات لِندبلاد للتبدد.",
+      "حساب معامل الترتيب باستخدام الصيغة من [2603.24031]، باستخدام الحالة الثابتة أو الديناميكية.",
+      "تحليل كيفية تغير المعامل مع زيادة قوة التبدد وحجم النظام، وإيجاد النقاط الحرجة.",
+      "المقارنة مع الحالات الحدية المعروفة للحالات النقية."
+     ]
+    },
+    {
+     "based_on": [
+      "2401.04845",
+      "1302.1059"
+     ],
+     "title": "البحث عن حالات طوبولوجية هجينة في أغشية رقيقة من مواد أولية",
+     "what": "إجراء مطيافية ضوئية إلكترونية بزاوية (ARPES) على أغشية رقيقة أو أسطح مشقوقة من مواد أولية (مثل البزموت) ومقارنة الحالات السطحية المرصودة مع التنبؤات للأطوار الطوبولوجية الهجينة.",
+     "why": "في [2401.04845] تم الإبلاغ عن اكتشاف حالة طوبولوجية هجينة في مادة صلبة أولية تجمع بين ثوابت طوبولوجية مختلفة. البحث عن حالات مماثلة في مواد أخرى قد يكشف عن مرشحين جدد للتطبيقات.",
+     "origin": "يُظهر العمل [2401.04845] حالة طوبولوجية هجينة في عنصر واحد، لكن يبقى السؤال مفتوحًا حول مدى عمومية هذه الظاهرة. العمل [1302.1059] يعطي معايير للبحث عن عوازل طوبولوجية بين أشباه الموصلات ضيقة الفجوة، ويمكن تطبيقها على المواد الأولية.",
+     "first_step": "اختيار مادة وإجراء حساب DFT لبنيتها النطاقية للتنبؤ بوجود حالات سطحية طوبولوجية، ثم تحضير عينة لقياسات ARPES.",
+     "needs": "الوصول إلى منشأة ARPES بدقة أفضل من 10 ميلي إلكترون فولت، غرفة تفريغ فائق للشق، مهارات في حسابات DFT (VASP، Quantum ESPRESSO)، عينات عالية النقاء.",
+     "risks": "قد لا يمكن تمييز الحالات السطحية عن الحالات التافهة بسبب العيوب أو الدقة غير الكافية، مما يؤدي إلى استنتاجات خاطئة.",
+     "scale": "أطروحة",
+     "methods": [
+      "اختيار مادة أولية ذات تفاعل مغزلي-مداري قوي (مثل Bi، Sb) وتحضير سطح نظيف بالشق في تفريغ فائق.",
+      "إجراء قياسات ARPES بدقة عالية في الطاقة والزخم لرسم تشتت الحالات السطحية.",
+      "مقارنة الأطياف الناتجة مع حسابات البنية النطاقية (DFT) وتحديد الثوابت الطوبولوجية (أعداد تشيرن، Z2) بناءً على وجود وطبيعة الحالات.",
+      "التحقق مما إذا كان هناك تعايش بين أطوار طوبولوجية متعددة، كما في [2401.04845]."
+     ]
+    }
+   ]
+  },
+  "fr": {
+   "note": "",
+   "topic": "états topologiques de la matière",
+   "ideas": [
+    {
+     "based_on": [
+      "2605.00770",
+      "2603.20763"
+     ],
+     "title": "Assembler un dispositif pour tester la mémoire de bord dans la chaîne de Kitaev avec des atomes froids",
+     "what": "Réaliser une chaîne unidimensionnelle d'atomes fermioniques dans un réseau optique, reproduisant le modèle de Kitaev, et mesurer comment l'information sur l'état initial est préservée aux bords sous l'effet de perturbations locales.",
+     "why": "Le travail [2605.00770] prédit que dans la phase topologique, la sensibilité aux perturbations ne s'atténue pas grâce aux modes de bord. Une vérification expérimentale sur des atomes permettrait un contrôle direct des paramètres et de tester la robustesse de l'effet face aux imperfections.",
+     "origin": "Le travail [2605.00770] montre théoriquement que dans la chaîne de Kitaev, les modes de Majorana de bord protègent l'information quantique de la décohérence, mais aucune réalisation expérimentale sur atomes froids n'existe encore. Dans [2603.20763], des méthodes de manipulation d'atomes dans des chaînes de pièges et de contrôle de leur interaction avec l'environnement sont démontrées, ce qui peut être adapté à cette tâche.",
+     "first_step": "Calculer les paramètres du réseau optique pour atteindre la phase topologique (rapport entre tunnel, appariement et potentiel chimique) et assembler une chambre à vide avec un piège pour les atomes fermioniques.",
+     "needs": "Atomes fermioniques ultra-froids, réseau optique, système laser pour créer un appariement de type p (par exemple via une résonance de Feshbach), microscope à gaz quantique ou système de détection d'atomes individuels, compétences en physique atomique et optique quantique.",
+     "risks": "Difficulté à stabiliser l'appariement de type p dans le réseau optique ; des instabilités pourraient détruire la phase topologique avant les mesures.",
+     "scale": "années",
+     "methods": [
+      "Créer un réseau optique avec une période assurant la dispersion voulue et y charger des atomes fermioniques ultra-froids (par exemple du 6Li).",
+      "Ajuster les couplages tunnel et les champs externes pour que le hamiltonien corresponde à la chaîne de Kitaev avec appariement de type p, comme décrit dans [2605.00770].",
+      "Initialiser une perturbation locale (par exemple changer la phase sur un site) et mesurer la dynamique des occupations des sites de bord à l'aide d'un microscope à gaz quantique.",
+      "Comparer les temps de relaxation de la sensibilité dans les phases topologique et triviale en faisant varier les paramètres."
+     ]
+    },
+    {
+     "based_on": [
+      "2603.24031",
+      "2605.00770"
+     ],
+     "title": "Vérifier numériquement le paramètre d'ordre topologique pour des états mixtes dans de petits systèmes",
+     "what": "Écrire un code pour la diagonalisation exacte de petits systèmes de spins ou de fermions avec dissipation et calculer le paramètre d'ordre entier proposé dans [2603.24031] pour différents niveaux de décohérence.",
+     "why": "Le paramètre d'ordre de [2603.24031] généralise la classification topologique aux états mixtes, mais son comportement dans des modèles spécifiques avec taille finie et bruit réel n'est pas étudié. Cela aiderait à évaluer son applicabilité aux simulateurs quantiques.",
+     "origin": "Dans [2603.24031], un paramètre d'ordre est proposé, qui devrait prendre des valeurs entières et changer brusquement lors d'une transition topologique dans les états mixtes, mais son calcul pour des modèles spécifiques n'est pas effectué. Dans [2605.00770], l'importance de la protection topologique dans des conditions réalistes est démontrée, ce qui motive la vérification sur de petits systèmes accessibles numériquement.",
+     "first_step": "Choisir un modèle simple (par exemple une chaîne de Kitaev avec dissipation) et écrire un script pour la diagonalisation exacte du hamiltonien de 4 à 6 sites, puis calculer le paramètre d'ordre.",
+     "needs": "Un ordinateur avec suffisamment de mémoire pour la diagonalisation exacte (jusqu'à 10-12 sites), des connaissances en mécanique quantique et en méthodes numériques, des bibliothèques d'algèbre linéaire (Python/Julia).",
+     "risks": "Le paramètre d'ordre pourrait être sensible à la taille finie et nécessiter une extrapolation, ce qui compliquerait l'interprétation.",
+     "scale": "semestre",
+     "methods": [
+      "Implémenter la diagonalisation exacte du hamiltonien du modèle (par exemple une chaîne de spins avec interaction permettant une phase topologique) en ajoutant des opérateurs de dissipation de type Lindblad.",
+      "Calculer le paramètre d'ordre selon la formule de [2603.24031], en utilisant l'état stationnaire ou la dynamique.",
+      "Analyser comment le paramètre varie lorsque la force de dissipation et la taille du système augmentent, et trouver les points critiques.",
+      "Comparer avec les cas limites connus des états purs."
+     ]
+    },
+    {
+     "based_on": [
+      "2401.04845",
+      "1302.1059"
+     ],
+     "title": "Recherche d'états topologiques hybrides dans des films minces de matériaux élémentaires",
+     "what": "Effectuer une spectroscopie de photoémission résolue en angle (ARPES) sur des films minces ou des clivages de matériaux élémentaires (par exemple le bismuth) et comparer les états de surface observés avec les prédictions pour les phases topologiques hybrides.",
+     "why": "Dans [2401.04845], il est rapporté la découverte d'un état topologique hybride dans un solide élémentaire, combinant différents invariants topologiques. La recherche d'états similaires dans d'autres matériaux pourrait révéler de nouveaux candidats pour des applications.",
+     "origin": "Le travail [2401.04845] démontre un état topologique hybride dans un élément unique, mais la question de savoir si ce phénomène est général reste ouverte. Le travail [1302.1059] fournit des critères pour rechercher des isolants topologiques parmi les semi-conducteurs à petit gap, ce qui peut être appliqué aux matériaux élémentaires.",
+     "first_step": "Choisir un matériau et effectuer un calcul DFT de sa structure de bandes pour prédire la présence d'états de surface topologiques, puis préparer un échantillon pour l'ARPES.",
+     "needs": "Accès à une installation ARPES avec une résolution meilleure que 10 meV, chambre à ultravide pour le clivage, compétences en calculs DFT (VASP, Quantum ESPRESSO), échantillons de haute pureté.",
+     "risks": "Les états de surface pourraient être indiscernables des états triviaux en raison de défauts ou d'une résolution insuffisante, ce qui conduirait à des conclusions erronées.",
+     "scale": "diplôme",
+     "methods": [
+      "Choisir un matériau élémentaire avec un fort couplage spin-orbite (par exemple Bi, Sb) et préparer une surface propre par clivage sous ultravide.",
+      "Effectuer des mesures ARPES à haute résolution en énergie et en impulsion pour cartographier la dispersion des états de surface.",
+      "Comparer les spectres obtenus avec les calculs de structure de bandes (DFT) et déterminer les invariants topologiques (nombres de Chern, Z2) en fonction de la présence et de la nature des états.",
+      "Vérifier si l'on observe la coexistence de plusieurs phases topologiques, comme dans [2401.04845]."
+     ]
+    }
+   ]
+  }
+ }
 }

@@ -25,6 +25,7 @@ import json
 import os
 import re
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -415,6 +416,11 @@ def build(aid, show=False, hints=""):
         tr = translate_recommend(out, lang)
         if tr:
             rec[lang] = tr
+    # ДЕНЬ РАЗБОРА — ОТМЕТКОЙ, А НЕ ДОГАДКОЙ. От него считается выдержка перед письмом
+    # автору: неделя (владелец 2026-09-01, tools/author_letter.py · matured). Без отметки
+    # выдержку приходится считать от дня самой работы, а это другой день — иногда на
+    # месяцы раньше, если работу дотянули из экспресса.
+    d["recommend_at"] = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     p.write_text(json.dumps(d, ensure_ascii=False, indent=2), encoding="utf-8")
     langs_ok = [l for l in LANGS if l in rec]
     print(f"✅ {aid}: направлений {len(dirs)}, соседей {len(nb)}, языки ru+{'/'.join(langs_ok)}")

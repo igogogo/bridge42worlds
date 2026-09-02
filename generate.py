@@ -1946,7 +1946,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
                          f'<p>{safe(abstract_text)}</p></div>')
 
     loc = {
-        "en": {"search": "Search articles, #tags, @authors", "hint": "# tag · @ author · ! scientist",
+        "en": {"search": "Search: paper, author, number, concept", "hint": "",
                "share": "Share", "next": "Next article",
                "license": "Original", "scientists": "Scientists:", "key_numbers": "Key numbers",
                "context": "Context", "methods": "Methods", "results": "Results",
@@ -1957,7 +1957,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
                "author_verify_body": "Are you one of the authors of this paper? Email us from your institutional "
                                       "or work email address mentioning this article's arXiv ID and we'll verify "
                                       "you and give you edit access to this page."},
-        "es": {"search": "Buscar artículos, #etiquetas, @autores", "hint": "# etiqueta · @ autor · ! científico",
+        "es": {"search": "Buscar: trabajo, autor, número, concepto", "hint": "",
                "share": "Compartir", "next": "Siguiente artículo",
                "license": "Original", "scientists": "Científicos:", "key_numbers": "Cifras clave",
                "context": "Contexto", "methods": "Métodos", "results": "Resultados",
@@ -1968,7 +1968,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
                "author_verify_body": "¿Es usted uno de los autores de este trabajo? Escríbanos desde su correo "
                                       "institucional o profesional indicando el arXiv ID de este artículo: "
                                       "le verificaremos y le daremos acceso de edición a esta página."},
-        "ru": {"search": "Поиск статей, #теги, @авторы", "hint": "# тег · @ автор · ! учёный",
+        "ru": {"search": "Поиск: работа, автор, номер, понятие", "hint": "",
                "share": "Поделиться", "next": "Следующая статья",
                "license": "Оригинал", "scientists": "Учёные:", "key_numbers": "Ключевые числа",
                "context": "Контекст", "methods": "Методы", "results": "Результаты",
@@ -1979,7 +1979,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
                "author_verify_body": "Вы один из авторов этой статьи? Напишите нам с рабочей или университетской "
                                       "почты, указав arXiv ID этой статьи, и мы подтвердим вас и дадим доступ к "
                                       "редактированию этой страницы."},
-        "zh": {"search": "搜索文章、#标签、@作者", "hint": "# 标签 · @ 作者 · ! 科学家",
+        "zh": {"search": "搜索：论文、作者、编号、概念", "hint": "",
                "share": "分享", "next": "下一篇文章",
                "license": "原文", "scientists": "科学家：", "key_numbers": "关键数据",
                "context": "背景", "methods": "方法", "results": "结果",
@@ -1989,7 +1989,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
                "author_verify_label": "我是作者",
                "author_verify_body": "您是这篇论文的作者之一吗？请使用您的机构或工作邮箱给我们发邮件，注明这篇文章的 arXiv "
                                       "编号，我们将验证您的身份并授予您编辑此页面的权限。"},
-        "fr": {"search": "Rechercher des articles, #tags, @auteurs", "hint": "# tag · @ auteur · ! scientifique",
+        "fr": {"search": "Rechercher : travail, auteur, numéro, concept", "hint": "",
                "share": "Partager", "next": "Article suivant",
                "license": "Original", "scientists": "Scientifiques :", "key_numbers": "Chiffres clés",
                "context": "Contexte", "methods": "Méthodes", "results": "Résultats",
@@ -2001,7 +2001,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
                                       "votre adresse professionnelle ou institutionnelle en mentionnant l'ID arXiv "
                                       "de cet article, et nous vous vérifierons pour vous donner accès à la "
                                       "modification de cette page."},
-        "ar": {"search": "ابحث عن مقالات، #وسوم، @مؤلفين", "hint": "# وسم · @ مؤلف · ! عالم",
+        "ar": {"search": "ابحث: بحث، مؤلف، رقم، مفهوم", "hint": "",
                "share": "مشاركة", "next": "المقال التالي",
                "license": "الأصل", "scientists": "العلماء:", "key_numbers": "أرقام رئيسية",
                "context": "السياق", "methods": "المنهجية", "results": "النتائج",
@@ -2011,7 +2011,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
                "author_verify_label": "أنا المؤلف",
                "author_verify_body": "هل أنت أحد مؤلفي هذا البحث؟ راسلنا من بريدك المؤسسي أو المهني مع ذكر رقم "
                                       "arXiv لهذا المقال، وسنتحقق منك ونمنحك صلاحية تحرير هذه الصفحة."}
-    }.get(lang, {"search": "Search...", "hint": "# tag · @ author · ! scientist",
+    }.get(lang, {"search": "Search...", "hint": "",
                  "share": "Share", "next": "Next article", "license": "Original",
                  "scientists": "Scientists:", "key_numbers": "Key numbers",
                  "context": "Context", "methods": "Methods", "results": "Results",
@@ -2858,22 +2858,22 @@ def generate_index_page(lang):
     tpl = load_template("index")
     if not tpl.template: return
     loc = {
-        "en": {"search": "Search articles, #tags, @authors", "hint": "# tag · @ author · ! scientist",
+        "en": {"search": "Search: paper, author, number, concept", "hint": "",
                "loading": "Loading...", "footer": "science made simple",
                "intro": "bridge42worlds takes fresh arXiv preprints every day and retells them so anyone can follow, no physics degree needed. Three levels to choose from: <b>Simple</b> for a first look, <b>Popular</b> if science already excites you, <b>Advanced</b> for formulas and the full story of a discovery. Beside every article lives a map of science: concepts, formulas and the people behind them. The retelling, the translation into five languages and the markup are done by advanced AI models, and every article links to the original."},
-        "ru": {"search": "Поиск статей, #теги, @авторы", "hint": "# тег · @ автор · ! учёный", "loading": "Загрузка...",
+        "ru": {"search": "Поиск: работа, автор, номер, понятие", "hint": "", "loading": "Загрузка...",
                "footer": "наука простыми словами",
                "intro": "bridge42worlds каждый день берёт свежие препринты с arXiv и пересказывает их так, чтобы понял любой, без диплома физика. Три уровня на выбор: <b>Просто</b> для первого знакомства, <b>Популярно</b> если наука уже увлекает, <b>Подробно</b> с формулами и историей открытия. Рядом с текстом живёт карта науки: понятия, формулы и учёные, которые за ними стоят. Пересказ, перевод на пять языков и разметку делают передовые модели искусственного интеллекта, а ссылка на первоисточник стоит в каждой статье."},
-        "es": {"search": "Buscar artículos, #etiquetas, @autores", "hint": "# etiqueta · @ autor · ! científico",
+        "es": {"search": "Buscar: trabajo, autor, número, concepto", "hint": "",
                "loading": "Cargando...", "footer": "la ciencia simplificada",
                "intro": "bridge42worlds toma cada día los preprints más recientes de arXiv y los reescribe para que cualquiera pueda seguirlos, sin necesidad de un título en física. Tres niveles a elegir: <b>Simple</b> para un primer vistazo, <b>Popular</b> si la ciencia ya te entusiasma, <b>Avanzado</b> con fórmulas y la historia del descubrimiento. Junto a cada artículo vive un mapa de la ciencia: conceptos, fórmulas y las personas detrás de ellos. La reescritura, la traducción a cinco idiomas y el etiquetado los hacen modelos avanzados de inteligencia artificial, y cada artículo enlaza al original."},
-        "zh": {"search": "搜索文章、#标签、@作者", "hint": "# 标签 · @ 作者 · ! 科学家", "loading": "加载中...",
+        "zh": {"search": "搜索：论文、作者、编号、概念", "hint": "", "loading": "加载中...",
                "footer": "让科学变简单",
                "intro": "bridge42worlds 每天把 arXiv 上最新的预印本改写成人人都能读懂的文章，无需物理学位。三个层次任选：<b>简明</b>适合初次了解，<b>科普</b>适合已对科学有兴趣的读者，<b>进阶</b>包含公式与发现的来龙去脉。每篇文章旁边都有一张科学地图：概念、公式，以及它们背后的科学家。改写、五种语言的翻译与标注均由先进的人工智能模型完成，每篇文章都附有原文链接。"},
-        "fr": {"search": "Rechercher des articles, #tags, @auteurs", "hint": "# tag · @ auteur · ! scientifique",
+        "fr": {"search": "Rechercher : travail, auteur, numéro, concept", "hint": "",
                "loading": "Chargement...", "footer": "la science simplifiée",
                "intro": "bridge42worlds reprend chaque jour les prépublications récentes d'arXiv et les raconte de façon accessible à tous, sans diplôme de physique. Trois niveaux au choix : <b>Simple</b> pour un premier regard, <b>Populaire</b> si la science vous passionne déjà, <b>Avancé</b> avec les formules et l'histoire de la découverte. À côté de chaque article vit une carte de la science : concepts, formules et les personnes qui les ont établis. La réécriture, la traduction en cinq langues et le balisage sont réalisés par des modèles d'intelligence artificielle avancés, et chaque article renvoie à l'original."},
-        "ar": {"search": "ابحث عن مقالات، #وسوم، @مؤلفين", "hint": "# وسم · @ مؤلف · ! عالم",
+        "ar": {"search": "ابحث: بحث، مؤلف، رقم، مفهوم", "hint": "",
                "loading": "جارٍ التحميل...", "footer": "العلم ببساطة",
                "intro": "يأخذ bridge42worlds كل يوم أحدث الأبحاث من arXiv ويعيد سردها ليفهمها الجميع، دون الحاجة إلى شهادة في الفيزياء. ثلاثة مستويات للاختيار: <b>بسيط</b> لنظرة أولى، <b>مبسّط</b> إن كان العلم يشوّقك بالفعل، <b>متقدّم</b> مع الصيغ وقصة الاكتشاف. وإلى جانب كل مقال تعيش خريطة للعلم: مفاهيم وصيغ والعلماء الذين يقفون خلفها. إعادة السرد والترجمة إلى خمس لغات والتوسيم تقوم بها نماذج ذكاء اصطناعي متقدّمة، ورابط الأصل موجود في كل مقال."}
     }.get(lang, {"search": "Search...", "hint": "", "loading": "Loading...", "footer": "", "intro": ""})
@@ -3041,31 +3041,31 @@ def generate_tag_page(tag_id, lang):
     formulas_html = render_formulas(tag_data.get("formulas", []))
     loc = {
         "en": {"related": "Related tags", "history": "History", "how": "How it works", "problems": "Open problems & fun facts",
-               "search": "Search...", "hint": "# tag · @ author · ! scientist", "footer": "science made simple",
+               "search": "Search...", "hint": "", "footer": "science made simple",
                "scientists": "Scientists:", "no_articles": "No articles yet", "practical": "In practice", "articles": "Related articles"},
         "es": {"related": "Etiquetas relacionadas", "history": "Historia", "how": "Cómo funciona",
                "problems": "Problemas abiertos y curiosidades",
-               "search": "Buscar...", "hint": "# etiqueta · @ autor · ! científico",
+               "search": "Buscar...", "hint": "",
                "footer": "ciencia en palabras sencillas", "scientists": "Científicos:",
                "no_articles": "Aún no hay artículos", "practical": "En la práctica",
                "articles": "Artículos relacionados"},
         "ar": {"related": "وسوم ذات صلة", "history": "التاريخ", "how": "كيف يعمل",
                "problems": "مسائل مفتوحة وحقائق طريفة", "search": "بحث...",
-               "hint": "# وسم · @ مؤلف · ! عالم", "footer": "العلم ببساطة",
+               "hint": "", "footer": "العلم ببساطة",
                "scientists": "العلماء:", "no_articles": "لا مقالات بعد", "practical": "في الواقع", "articles": "مقالات ذات صلة"},
         "ru": {"related": "Связанные теги", "history": "История", "how": "Как работает",
                "problems": "Открытые проблемы и интересные факты", "search": "Поиск...",
-               "hint": "# тег · @ автор · ! учёный", "footer": "наука простыми словами",
+               "hint": "", "footer": "наука простыми словами",
                "scientists": "Учёные:", "no_articles": "Пока нет статей", "practical": "На практике", "articles": "Статьи по теме"},
         "zh": {"related": "相关标签", "history": "历史", "how": "工作原理", "problems": "未解决的问题与趣味知识",
-               "search": "搜索...", "hint": "# 标签 · @ 作者 · ! 科学家", "footer": "让科学变简单",
+               "search": "搜索...", "hint": "", "footer": "让科学变简单",
                "scientists": "科学家：", "no_articles": "暂无文章", "practical": "实际应用", "articles": "相关文章"},
         "fr": {"related": "Tags associés", "history": "Histoire", "how": "Fonctionnement",
                "problems": "Problèmes ouverts et anecdotes", "search": "Rechercher...",
-               "hint": "# tag · @ auteur · ! scientifique", "footer": "la science simplifiée",
+               "hint": "", "footer": "la science simplifiée",
                "scientists": "Scientifiques :", "no_articles": "Pas encore d'articles", "practical": "En pratique", "articles": "Articles liés"}
     }.get(lang, {"related": "Related", "history": "History", "how": "How it works", "problems": "Open problems & fun facts",
-                 "search": "Search...", "hint": "# tag · @ author · ! scientist", "footer": "",
+                 "search": "Search...", "hint": "", "footer": "",
                  "scientists": "Scientists:", "no_articles": "No articles yet", "practical": "In practice", "articles": "Related articles"})
 
     problems_and_fact_html = ""
@@ -3918,28 +3918,28 @@ def generate_scientist_page(sid, lang):
                 articles_html += entity_article_card(a, lang)
     loc = {
         "en": {"related": "Related tags", "related_laws": "Related laws", "related_scientists": "Related scientists", "discoveries": "Key discoveries", "bio": "Biography", "quote": "Quote",
-               "search": "Search...", "hint": "! scientist · # tag · @ author", "footer": "science made simple",
+               "search": "Search...", "hint": "", "footer": "science made simple",
                "no_articles": "No articles yet", "articles": "Related articles"},
         "es": {"related": "Etiquetas relacionadas", "related_laws": "Leyes relacionadas",
                "related_scientists": "Científicos relacionados", "discoveries": "Descubrimientos clave",
                "bio": "Biografía", "quote": "Cita",
-               "search": "Buscar...", "hint": "! científico · # etiqueta · @ autor",
+               "search": "Buscar...", "hint": "",
                "footer": "ciencia en palabras sencillas",
                "no_articles": "Aún no hay artículos", "articles": "Artículos relacionados"},
         "ar": {"related": "وسوم ذات صلة", "related_laws": "قوانين ذات صلة", "related_scientists": "علماء ذوو صلة", "discoveries": "اكتشافات رئيسية", "bio": "سيرة", "quote": "اقتباس",
-               "search": "بحث...", "hint": "! عالم · # وسم · @ مؤلف", "footer": "العلم ببساطة",
+               "search": "بحث...", "hint": "", "footer": "العلم ببساطة",
                "no_articles": "لا مقالات بعد", "articles": "مقالات ذات صلة"},
         "ru": {"related": "Связанные теги", "related_laws": "Связанные законы", "related_scientists": "Связанные учёные", "discoveries": "Ключевые открытия", "bio": "Биография", "quote": "Цитата",
-               "search": "Поиск...", "hint": "! учёный · # тег · @ автор", "footer": "наука простыми словами",
+               "search": "Поиск...", "hint": "", "footer": "наука простыми словами",
                "no_articles": "Пока нет статей", "articles": "Статьи с его участием"},
         "zh": {"related": "相关标签", "related_laws": "相关定律", "related_scientists": "相关科学家", "discoveries": "重要发现", "bio": "生平", "quote": "名言",
-               "search": "搜索...", "hint": "! 科学家 · # 标签 · @ 作者", "footer": "让科学变简单",
+               "search": "搜索...", "hint": "", "footer": "让科学变简单",
                "no_articles": "暂无文章", "articles": "相关文章"},
         "fr": {"related": "Tags associés", "related_laws": "Lois associées", "related_scientists": "Scientifiques associés", "discoveries": "Découvertes clés", "bio": "Biographie", "quote": "Citation",
-               "search": "Rechercher...", "hint": "! scientifique · # tag · @ auteur", "footer": "la science simplifiée",
+               "search": "Rechercher...", "hint": "", "footer": "la science simplifiée",
                "no_articles": "Pas encore d'articles", "articles": "Articles liés"}
     }.get(lang, {"related": "Related", "related_laws": "Related laws", "related_scientists": "Related scientists", "discoveries": "Discoveries", "bio": "Biography", "quote": "Quote",
-                 "search": "Search...", "hint": "! scientist · # tag · @ author", "footer": "",
+                 "search": "Search...", "hint": "", "footer": "",
                  "no_articles": "No articles yet", "articles": "Related articles"})
 
     my_tags = set(data.get("related_tags", []))
@@ -4057,19 +4057,19 @@ def section_slug(cat):
 
 
 SECTION_LOC = {
-    "en": {"search": "Search articles...", "hint": "# tag · @ author · ! scientist", "articles": "articles",
+    "en": {"search": "Search articles...", "hint": "", "articles": "articles",
            "no_articles": "No articles yet", "title": "Sections",
            "subtitle": "arXiv subject categories — browse articles by field.", "footer": "science made simple",
            "name_col": "Section", "code_col": "arXiv code", "count_col": "Articles"},
-    "ru": {"search": "Поиск статей...", "hint": "# тег · @ автор · ! учёный", "articles": "статей",
+    "ru": {"search": "Поиск статей...", "hint": "", "articles": "статей",
            "no_articles": "Пока нет статей", "title": "Разделы",
            "subtitle": "Разделы arXiv — статьи по областям науки.", "footer": "наука простыми словами",
            "name_col": "Раздел", "code_col": "Код arXiv", "count_col": "Статей"},
-    "es": {"search": "Buscar artículos...", "hint": "# etiqueta · @ autor · ! científico", "articles": "artículos",
+    "es": {"search": "Buscar artículos...", "hint": "", "articles": "artículos",
            "no_articles": "Aún no hay artículos", "title": "Secciones",
            "subtitle": "Categorías de arXiv — artículos por campo.", "footer": "la ciencia simplificada",
            "name_col": "Sección", "code_col": "Código arXiv", "count_col": "Artículos"},
-    "ar": {"search": "ابحث عن مقالات...", "hint": "# وسم · @ مؤلف · ! عالم", "articles": "مقالات",
+    "ar": {"search": "ابحث عن مقالات...", "hint": "", "articles": "مقالات",
            "no_articles": "لا مقالات بعد", "title": "الأقسام",
            "subtitle": "تصنيفات arXiv — تصفح المقالات حسب المجال.", "footer": "العلم ببساطة",
            "name_col": "القسم", "code_col": "رمز arXiv", "count_col": "المقالات"},
@@ -4198,32 +4198,32 @@ def update_all_authors(only=None):
         return
     LOC = {
         "en": {"title": "Authors", "subtitle": "Researchers publishing on arXiv.", "find": "Find authors...",
-               "search": "Search articles...", "hint": "@ author · # tag · ! scientist",
+               "search": "Search articles...", "hint": "",
                "coauthors": "Co-authors", "no_articles": "No articles yet", "footer": "science made simple",
                "articles": "articles", "coauthors_word": "co-authors", "tags": "Concepts", "laws": "Laws",
                "default_hint": 'Showing authors starting with "{letter}" — search above covers everyone.'},
         "ru": {"title": "Авторы", "subtitle": "Исследователи, публикующиеся в arXiv.", "find": "Найти авторов...",
-               "search": "Поиск статей...", "hint": "@ автор · # тег · ! учёный",
+               "search": "Поиск статей...", "hint": "",
                "coauthors": "Соавторы", "no_articles": "Пока нет статей", "footer": "наука простыми словами",
                "articles": "статей", "coauthors_word": "соавторов", "tags": "Понятия", "laws": "Законы",
                "default_hint": 'Показаны авторы на «{letter}» — поиск выше ищет среди всех.'},
         "es": {"title": "Autores", "subtitle": "Investigadores que publican en arXiv.", "find": "Buscar autores...",
-               "search": "Buscar artículos...", "hint": "@ autor · # etiqueta · ! científico",
+               "search": "Buscar artículos...", "hint": "",
                "coauthors": "Coautores", "no_articles": "Aún no hay artículos", "footer": "la ciencia simplificada",
                "articles": "artículos", "coauthors_word": "coautores", "tags": "Conceptos", "laws": "Leyes",
                "default_hint": 'Autores que empiezan por «{letter}» — la búsqueda de arriba cubre a todos.'},
         "ar": {"title": "المؤلفون", "subtitle": "باحثون ينشرون على arXiv.", "find": "ابحث عن مؤلفين...",
-               "search": "ابحث عن مقالات...", "hint": "@ مؤلف · # وسم · ! عالم",
+               "search": "ابحث عن مقالات...", "hint": "",
                "coauthors": "مؤلفون مشاركون", "no_articles": "لا مقالات بعد", "footer": "العلم ببساطة",
                "articles": "مقالات", "coauthors_word": "مؤلفين مشاركين", "tags": "المفاهيم", "laws": "القوانين",
                "default_hint": 'عرض المؤلفين الذين تبدأ أسماؤهم بـ «{letter}» — البحث أعلاه يغطي الجميع.'},
         "zh": {"title": "作者", "subtitle": "在 arXiv 上发表论文的研究人员。", "find": "查找作者...",
-               "search": "搜索文章...", "hint": "@ 作者 · # 标签 · ! 科学家",
+               "search": "搜索文章...", "hint": "",
                "coauthors": "合著者", "no_articles": "暂无文章", "footer": "让科学变简单",
                "articles": "篇文章", "coauthors_word": "位合著者", "tags": "概念", "laws": "定律",
                "default_hint": '显示以「{letter}」开头的作者 — 上方搜索涵盖所有作者。'},
         "fr": {"title": "Auteurs", "subtitle": "Chercheurs publiant sur arXiv.", "find": "Rechercher des auteurs...",
-               "search": "Rechercher des articles...", "hint": "@ auteur · # tag · ! scientifique",
+               "search": "Rechercher des articles...", "hint": "",
                "coauthors": "Co-auteurs", "no_articles": "Pas encore d'articles", "footer": "la science simplifiée",
                "articles": "articles", "coauthors_word": "co-auteurs", "tags": "Notions", "laws": "Lois",
                "default_hint": 'Auteurs commençant par « {letter} » — la recherche ci-dessus couvre tout le monde.'},
@@ -5555,7 +5555,7 @@ def build_article(a, date_str, inputs, force=False, express=False, **kw):
 
 
 def _build_article(a, date_str, inputs, force=False, express=False, known_license=None, no_fetch=False,
-                   only_langs=None, allow_restricted=False):
+                   only_langs=None, allow_restricted=False, force_pdf=False):
     """Фаза A: arXiv + PDF + все вызовы DeepSeek. Пишет только в папку статьи (гонок нет).
     Возвращает подготовленный dict либо None (пропущено/ошибка).
     express=True — дешёвый режим (см. TODO.md): один вызов generate_express() по авторской
@@ -5595,6 +5595,18 @@ def _build_article(a, date_str, inputs, force=False, express=False, known_licens
         except Exception:
             prev = {}
     prev_express_upgrade = bool(prev.get("express")) and not express
+    # «ПРОСТО» У ДОТЯНУТОГО ЭКСПРЕССА НЕ ПЕРЕДЕЛЫВАЕМ (владелец 2026-09-01: «если просто уже
+    # собран для экспресса, то оставь; в целом просто всегда можно собирать из абстракта,
+    # пусть так и останется»). Экспресс генерит НАСТОЯЩИЙ уровень «Просто» по авторской
+    # аннотации, и читатель его уже видел. Дотяжка достраивает сверху «Подробно» из текста
+    # PDF и «Популярно» из «Подробно», а нижний уровень остаётся как был — вместе со своими
+    # переводами на четыре языка (их подхватывает реюз prev ниже по функции).
+    #
+    # Это то же правило воронки, что раньше берегло короткий текст экспресса: оплаченное
+    # не выбрасываем. И это половина цены дотяжки шести тысяч работ — «Просто» с четырьмя
+    # переводами весит примерно столько же, сколько «Популярно» с четырьмя переводами.
+    prev_simple_ru = ((prev.get("simple") or {}).get(DEFAULT_LANG) or {}) if prev_express_upgrade else {}
+    keep_simple = bool(prev_simple_ru.get("text")) and not prev_simple_ru.get("express_locked")
     try:
         # known_license — лицензия уже известна (из локального Kaggle-дампа arXiv, поле license):
         # НЕ ходим в arXiv за OAI-лицензией. Вызывающий обязан передавать только разрешённые CC-BY/CC0
@@ -5653,12 +5665,25 @@ def _build_article(a, date_str, inputs, force=False, express=False, known_licens
             # (keep_pdf) — апгрейд экспресс→полная не должен перекачивать 2–20 МБ с arXiv,
             # которые уже есть на диске (владелец 2026-07-31: «если он его взял — пусть хранит»).
             # temp-кэш download_pdf этого не покрывал: temp чистится, папка статьи — нет.
+            # РАЗОБРАННЫЙ ТЕКСТ ВМЕСТО PDF, ЕСЛИ ОН УЖЕ ЛЕЖИТ РЯДОМ. fulltext.txt — это
+            # ровно то, что вернул бы parse_pdf: он им и записан. Значит перечитывать
+            # ради того же текста двадцатимегабайтный файл незачем, а хранить его —
+            # тем более: шесть тысяч PDF весят 29.4 ГБ и на сайт не выкладываются.
+            # Картинки при этом уже извлечены и лежат в папке статьи; новые из PDF
+            # берутся только при первой сборке, когда файл ещё на месте.
+            pdf = None
             local_pdf = article_folder / "original.pdf"
-            if local_pdf.exists() and local_pdf.stat().st_size > 10_000:
-                pdf = local_pdf
+            local_txt = article_folder / "fulltext.txt"
+            if local_txt.exists() and local_txt.stat().st_size > 2000 and not force_pdf:
+                text = local_txt.read_text(encoding="utf-8", errors="replace")
+                imgs = []
+                print(f"    ♻️ текст работы взят с диска ({len(text)} знаков), PDF не нужен")
             else:
-                pdf = download_pdf(a["id"])
-            text, imgs = parse_pdf(pdf)
+                if local_pdf.exists() and local_pdf.stat().st_size > 10_000:
+                    pdf = local_pdf
+                else:
+                    pdf = download_pdf(a["id"])
+                text, imgs = parse_pdf(pdf)
             # Подписи к рисункам ВЫКЛЮЧЕНЫ (владелец 2026-08-25: «лучше пока совсем эти
             # подписи убрать, пока мы не научимся хорошо подписывать»).
             #
@@ -5696,7 +5721,11 @@ def _build_article(a, date_str, inputs, force=False, express=False, known_licens
             (article_folder / "fulltext.txt").write_text(text, encoding="utf-8", errors="replace")
         (article_folder / "arxiv-atom.xml").write_text(atom_xml, encoding="utf-8", errors="replace")
         (article_folder / "arxiv-oai.xml").write_text(oai_xml or "", encoding="utf-8", errors="replace")
-        if not no_fetch and config.get("keep_pdf", True) and pdf != article_folder / "original.pdf":
+        # pdf может быть НЕ ОПРЕДЕЛЁН: когда текст взят из fulltext.txt, PDF не читался
+        # вовсе. Первый же ночной заход дотяжки (01.09, 16:30) на этом и упал — сто
+        # отказов подряд, UnboundLocalError. Проверка на None стоит первой.
+        if (pdf is not None and not no_fetch and config.get("keep_pdf", True)
+                and pdf != article_folder / "original.pdf"):
             # мёртвый вес на масштабе — можно не хранить; при реюзе PDF файл уже на месте
             (article_folder / "original.pdf").write_bytes(pdf.read_bytes())
         # NC-ND: авторские рисунки и их подписи не берём. Сам рисунок мы бы ещё могли показать
@@ -5708,7 +5737,7 @@ def _build_article(a, date_str, inputs, force=False, express=False, known_licens
         images = save_images(imgs, a["id"], article_folder) if imgs else []
         captions = captions[:len(images)]  # выравниваем по числу сохранённых картинок
         if not text: text = a["summary"]
-        express_tiers = set(CONFIG.get("express", {}).get("tiers", ["mini", "simple"])) if express else None
+        express_tiers = set(CONFIG.get("express", {}).get("tiers", ["simple"])) if express else None
         if express:
             # Один вызов по авторской аннотации — не полный текст, не advanced→simple→popular каскад.
             express_result = generate_express(a, a["summary"], inputs["express_tags_input"], inputs["scientists_keys"])
@@ -5761,24 +5790,31 @@ def _build_article(a, date_str, inputs, force=False, express=False, known_licens
                         _gf.write(json.dumps(rec, ensure_ascii=False) + "\n")
                 except Exception as _e:
                     print(f"    ⚠️ gap-suggestions write: {_e}")
-            # ЦЕПОЧКА (ТЗ контент-менеджера 2026-07-27, §4): advanced → popular → simple+mini.
+            # ЦЕПОЧКА (ТЗ контент-менеджера 2026-07-27, §4): advanced → popular → simple.
             # Раньше был веер (simple и popular независимо из advanced) — версии расходились по
-            # фактам и акцентам. Теперь popular наследует advanced, а simple+mini делаются ОДНИМ
-            # вызовом из popular; вся фактура переносится кодом (inherit_facts), не пересказом.
-            # Конвейер 2.0 (владелец 2026-07-30): конструктор — оба тира+mini одним вызовом
+            # фактам и акцентам. Теперь popular наследует advanced, а simple делается из popular;
+            # вся фактура переносится кодом (inherit_facts), не пересказом.
+            # Конвейер 2.0 (владелец 2026-07-30): конструктор — оба тира одним вызовом
             # из advanced, общие блоки копирует код. Флаг constructor в config.json;
             # выключен или вызов не удался — старый двухшаговый путь, как было.
+            #
+            # НАПРАВЛЕНИЕ ЦЕПОЧКИ НЕОБСУЖДАЕМО (владелец 2026-09-01): «Популярно» строится
+            # ТОЛЬКО из «Подробно». Обратный ход — поднять «Просто» до «Популярно» — запрещён:
+            # он даёт популярный уровень, под которым лежит одна авторская аннотация.
             scipop_pop = scipop_simple = None
-            if config.get("constructor"):
+            if not keep_simple and config.get("constructor"):
                 scipop_pop, scipop_simple = generate_combo(scipop_adv)
                 if scipop_pop is None:
                     print("    ⚠️ конструктор не собрал тиры — падаю на старый путь")
             if scipop_pop is None:
+                # Дотяжка идёт этим путём всегда: конструктор делает оба тира одним вызовом,
+                # а нам нужен только верхний — «Просто» уже есть и оплачено.
                 scipop_pop = generate_popular(scipop_adv)
-                scipop_simple, mini_ru = generate_simple_mini(scipop_pop)
-                if mini_ru:
-                    scipop_pop["mini"] = mini_ru
-                    scipop_simple["mini"] = mini_ru
+                if keep_simple:
+                    scipop_simple = dict(prev_simple_ru)
+                    print("    ♻️ «Просто» взято у экспресса — не переделываем и не переводим заново")
+                else:
+                    scipop_simple, _mini_unused = generate_simple_mini(scipop_pop)
             # Апгрейд экспресс→полная: короткий текст экспресса УЖЕ показан читателю как текст
             # статьи — он и остаётся mini полной версии (правило воронки: «экспресс не пропадает»),
             # а не свежая выжимка, которая говорит то же самое другими словами.
@@ -5887,6 +5923,11 @@ def _build_article(a, date_str, inputs, force=False, express=False, known_licens
         # читателя напрямую (статичный текст, LLM не нужен, экономия перевода тоже).
         translations = {v: {} for v in VERSIONS}
         real_tiers = [v for v in VERSIONS if not express or v in express_tiers]
+        if keep_simple:
+            # «Просто» при дотяжке не только не генерится заново, но и НЕ ПЕРЕВОДИТСЯ заново:
+            # его четыре перевода уже оплачены экспрессом и подхватываются реюзом prev ниже.
+            # Без этой строки экономия была бы бумажной — текст тот же, а платим за перевод.
+            real_tiers = [v for v in real_tiers if v != "simple"]
         use_constructor_translate = bool(config.get("constructor")) and not express
         if targets and use_constructor_translate:
             # Конвейер 2.0: на язык — advanced целиком (pro), затем popular/simple слимом
@@ -5897,6 +5938,8 @@ def _build_article(a, date_str, inputs, force=False, express=False, known_licens
                 adv_l = translate_scipop(versions_ru["advanced"], l)
                 out = {"advanced": adv_l}
                 for v in ("popular", "simple"):
+                    if v not in real_tiers:
+                        continue    # дотяжка: «Просто» уже переведено экспрессом
                     res = translate_scipop_slim(versions_ru[v], adv_l, l)
                     out[v] = res if res is not None else translate_scipop(versions_ru[v], l)
                 return out
@@ -6194,13 +6237,20 @@ def process_day(date_str, force=False, refresh_aggregates=True, express=False, l
     # решалась одним флагом на весь день: расписание звало с --express и делало сто
     # процентов экспрессов, полуручной конвейер звал без него и делал сто процентов
     # полных. Отсюда и перекос архива: 6 024 экспресса против 725 полных, то есть
-    # обещание трёх глубин выполнено для одной работы из девяти (владелец 01.09:
-    # «надо новые страницы хотя бы 50 на 50, и это соотношение пусть будет константой»).
+    # обещание трёх глубин выполнено для одной работы из девяти.
+    #
+    # С 01.09.2026 доля равна ЕДИНИЦЕ: экспрессов среди новых страниц больше нет
+    # (владелец: «с сегодняшнего дня никаких экспрессов, всё полное с разбором машиной
+    # знаний, лучше меньше да лучше»). Двадцать полных в день стоят меньше доллара —
+    # деньги здесь никогда и не были аргументом, аргументом была скорость набора
+    # архива, а она перестала быть целью. Экспресс остаётся ОПОРОЙ: явный --express
+    # для случая, когда свежей работе нужен контекст, которого ещё нет; такие опоры
+    # всё равно потом дотягиваются (tools/deep_uplift.py).
     #
     # Полными берём ВЕРХ дневного списка: он уже отранжирован моделью по интересу, и
     # глубже разбирать стоит именно то, что она поставила первым. Флаг --express
     # по-прежнему сильнее доли: он значит «сегодня дёшево», и это осознанный выбор.
-    full_share = 0 if express else float(config.get("full_share", 0.5))
+    full_share = 0 if express else float(config.get("full_share", 1.0))
     n_full = int(round(len(best) * max(0.0, min(1.0, full_share))))
     if n_full and not express:
         print(f"  ⚖️ глубина: {n_full} полных из {len(best)} "

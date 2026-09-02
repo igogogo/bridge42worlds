@@ -192,5 +192,263 @@
    },
    "abstract": "The Parker Solar Probe (PSP) spacecraft has flown into the most dense and previously unexplored region of our solar system's zodiacal cloud. While PSP does not have a dedicated dust detector, multiple instruments onboard are sensitive to the effects of meteoroid bombardment. Here, we discuss measurements taken during PSP's first two orbits and compare them to models of the zodiacal cloud's dust distribution. Comparing the radial impact rate trends and the timing and location of a dust impact to an energetic particle detector, we find the impactor population to be consistent with dust grains on"
   }
- ]
+ ],
+ "lang": {
+  "en": {
+   "note": "In the field of dust and soiling of solar panels, two directions are actively developing: automated cleaning and image-based soiling diagnostics, but quantitative data on power losses depending on soiling conditions is still lacking.",
+   "topic": "dust and soiling of solar panels",
+   "ideas": [
+    {
+     "based_on": [
+      "2511.18514"
+     ],
+     "title": "Comparing methods for detecting dust on solar panels using thermal and visual images",
+     "what": "Collect a small dataset of dusty and clean panel images using a thermal camera and a regular camera, train several simple dust detection models on them, and compare their accuracy.",
+     "why": "This will help choose the most reliable and cost-effective soiling monitoring method for small solar installations where there is no budget for complex systems.",
+     "origin": "Paper 2511.18514 claims a platform for dust and fault diagnostics using two image types, but it does not provide a detailed comparison of which data type is more informative for the specific task of dust detection. There is no data on how much a cheap camera lags behind a thermal camera. This comparison could yield practical recommendations for small installations.",
+     "first_step": "Find an accessible solar panel (e.g., on a campus roof) and take 20–30 photos of both clean and dusty surfaces with a regular camera and a thermal camera (which can be rented).",
+     "needs": "Access to a solar panel, a regular digital camera, a thermal camera (can be rented), a computer with a GPU or at least a CPU for training lightweight models, Python skills, and basic machine learning knowledge.",
+     "risks": "The main risk is the small amount of data for training deep models; you may have to stick to classical methods or use augmentation. Also, renting a thermal camera can be expensive.",
+     "scale": "semester",
+     "methods": [
+      "Use the approach from paper 2511.18514: it describes a unified deep learning platform for dust and fault diagnostics using thermal and visual images. Take the idea of combining the two image types from there.",
+      "Collect a dataset: take photos of the same panel under different levels of artificial soiling (dust, sand) using an IR camera and a regular digital camera.",
+      "Train simple classifiers (e.g., SVM on features or a lightweight CNN) separately for thermal images, separately for visual images, and for their combination.",
+      "Evaluate accuracy, recall, and F1-score on a held-out set, compare the models, and draw conclusions about practical applicability."
+     ]
+    },
+    {
+     "based_on": [
+      "2511.04837"
+     ],
+     "title": "Test bench for measuring the effect of dust on panel output power as a function of tilt angle",
+     "what": "Build a laboratory test bench with a solar panel, a light source, a dust dispenser, and an I-V curve tracer to quantitatively assess power losses at different panel tilt angles and different dust mass per unit area.",
+     "why": "Such data is useful for solar plant designers to choose the optimal tilt angle in dusty regions and to plan cleaning schedules.",
+     "origin": "Paper 2511.04837 discusses cleaning mechanisms and protective materials, but it does not provide systematic data on how power losses depend on tilt angle under the same soiling. It is commonly assumed that tilting helps self-cleaning, but quantitative data for different dust types is scarce. Our bench will provide such data for a specific dust type.",
+     "first_step": "Build a simple bench: one small solar panel, a halogen lamp, a multimeter, and an electronic load. Verify that the panel's I-V curve is stably reproducible.",
+     "needs": "A small solar panel (10–50 W), an adjustable mount, a light source with constant intensity (e.g., a halogen lamp with a power supply), dust (e.g., standard ISO 12103-1 test dust), a scale, an electronic load or a set of resistors, and a lux meter.",
+     "risks": "The difficulty of precise dust dosing and uniform application; light source instability can introduce errors. Results may depend on dust type, so generalization must be done cautiously.",
+     "scale": "thesis",
+     "methods": [
+      "Base the methodology on paper 2511.04837: it describes panel protection and cleaning mechanisms and mentions the effect of dust on efficiency. Use their approach to create controlled soiling.",
+      "Assemble the bench: a panel on an adjustable mount, a lamp with known spectrum and intensity, and a dust sprayer with a scale for precise dosing.",
+      "Measure the panel's I-V characteristic at different angles (0°, 30°, 45°, 60°) and different dust surface densities (e.g., 0, 5, 10, 20 g/m²).",
+      "Plot power versus angle and soiling, and calculate the loss coefficient."
+     ]
+    },
+    {
+     "based_on": [
+      "1412.0591",
+      "2511.04837"
+     ],
+     "title": "Development and testing of an autonomous cleaning robot for solar panels with vacuum grip",
+     "what": "Design and build a prototype of an autonomous robot that moves over the inclined surface of a solar panel and cleans it using vacuum suction and brushes, with a control system based on simple sensors.",
+     "why": "Automated cleaning without human intervention reduces operational costs on large solar farms, especially in desert regions.",
+     "origin": "Paper 1412.0591 proposes a control strategy for an autonomous vacuum cleaner, but lacks details on mechanical implementation and energy efficiency. Paper 2511.04837 compares different cleaning mechanisms, including brushes, but does not consider the vacuum method. Combining these approaches could yield a functional prototype with better characteristics.",
+     "first_step": "Build a simple wheeled cart that can drive on an inclined plane and check that it does not slip. Then add a vacuum pump and a brush.",
+     "needs": "Mechanical and electronics skills, access to a 3D printer or workshop, a microcontroller, motors, a low-power vacuum pump, a battery, and sensors. The component budget may be a few hundred dollars.",
+     "risks": "The main challenge is ensuring sufficient traction while keeping the design light so the robot does not damage the panel. The vacuum grip may consume a lot of energy, reducing autonomy.",
+     "scale": "years",
+     "methods": [
+      "Use the control strategy from paper 1412.0591: it describes an autonomous vacuum robot for solar panels with a surface traversal algorithm. Adapt this algorithm for your prototype.",
+      "Assemble the mechanical platform: a lightweight frame, wheels or tracks, a vacuum pump, brushes, and a dust container.",
+      "Implement the control system on a microcontroller (Arduino or STM32) with edge and tilt sensors.",
+      "Conduct tests on an inclined surface simulating a panel, measure cleaning quality (via glass transparency or panel output power) and the robot's energy consumption."
+     ]
+    }
+   ]
+  },
+  "es": {
+   "note": "En el ámbito del polvo y la suciedad en paneles solares se desarrollan activamente dos líneas: la limpieza automatizada y el diagnóstico de la suciedad mediante imágenes, pero aún faltan datos cuantitativos sobre las pérdidas de potencia según las condiciones de suciedad.",
+   "topic": "polvo y suciedad en paneles solares",
+   "ideas": [
+    {
+     "based_on": [
+      "2511.18514"
+     ],
+     "title": "Comparación de métodos de detección de polvo en paneles solares mediante imágenes térmicas y visuales",
+     "what": "Recopilar un pequeño conjunto de imágenes de paneles sucios y limpios utilizando una cámara térmica y una cámara normal, entrenar con ellas varios modelos simples de detección de polvo y comparar su precisión.",
+     "why": "Permitirá elegir el método de monitoreo de suciedad más fiable y económico para pequeñas instalaciones solares, donde no hay presupuesto para sistemas complejos.",
+     "origin": "En el trabajo 2511.18514 se presenta una plataforma para el diagnóstico de polvo y fallos utilizando dos tipos de imágenes, pero no se proporciona una comparación detallada de qué tipo de datos es más informativo para la tarea específica de detección de polvo. No hay datos sobre cuánto pierde una cámara barata frente a una térmica. Esta comparación podría ofrecer una recomendación práctica para pequeñas instalaciones.",
+     "first_step": "Encontrar un panel solar accesible (por ejemplo, en el techo de un edificio universitario) y tomar entre 20 y 30 fotografías de la superficie limpia y sucia con una cámara normal y una térmica (esta última puede alquilarse).",
+     "needs": "Acceso a un panel solar, cámara digital normal, cámara termográfica (se puede alquilar), computadora con GPU o al menos CPU para entrenar modelos ligeros, conocimientos de Python y fundamentos de aprendizaje automático.",
+     "risks": "El principal riesgo es la escasez de datos para entrenar modelos profundos; quizás sea necesario limitarse a métodos clásicos o usar aumentación de datos. Además, el alquiler de la cámara térmica puede resultar costoso.",
+     "scale": "semestre",
+     "methods": [
+      "Utilizar el enfoque del trabajo 2511.18514: allí se describe una plataforma unificada basada en aprendizaje profundo para el diagnóstico de polvo y fallos mediante imágenes térmicas y visuales. Tomar de ahí la idea de combinar los dos tipos de imágenes.",
+      "Crear un conjunto de datos: tomar fotografías del mismo panel con diferentes niveles de suciedad artificial (polvo, arena) utilizando una cámara infrarroja y una cámara digital normal.",
+      "Entrenar clasificadores simples (por ejemplo, SVM sobre características o una CNN ligera) por separado para imágenes térmicas, para imágenes visuales y para su combinación.",
+      "Evaluar la precisión, la exhaustividad y la medida F1 en un conjunto de validación, comparar los modelos y sacar conclusiones sobre su aplicabilidad práctica."
+     ]
+    },
+    {
+     "based_on": [
+      "2511.04837"
+     ],
+     "title": "Banco de pruebas para medir la influencia del polvo en la potencia de salida del panel según el ángulo de inclinación",
+     "what": "Montar un banco de pruebas de laboratorio con un panel solar, una fuente de luz, un dosificador de polvo y un medidor de curva I-V para cuantificar las pérdidas de potencia a diferentes ángulos de inclinación del panel y diferentes masas de polvo por unidad de área.",
+     "why": "Estos datos son útiles para los diseñadores de plantas solares a la hora de elegir el ángulo óptimo de instalación de los paneles en regiones polvorientas y planificar el calendario de limpieza.",
+     "origin": "En el trabajo 2511.04837 se analizan diseños de limpieza y materiales protectores, pero no se proporcionan datos sistemáticos sobre cómo las pérdidas de potencia dependen del ángulo de inclinación con la misma suciedad. Generalmente se asume que la inclinación favorece la autolimpieza, pero hay pocos datos cuantitativos para diferentes tipos de polvo. Nuestro banco de pruebas permitirá obtener estos datos para un tipo específico de polvo.",
+     "first_step": "Montar un banco de pruebas sencillo: un panel solar pequeño, una lámpara halógena, un multímetro y una carga electrónica. Verificar que la curva I-V del panel se reproduce de manera estable.",
+     "needs": "Panel solar pequeño (10–50 W), soporte ajustable, fuente de luz con intensidad constante (por ejemplo, lámpara halógena con fuente de alimentación), polvo (se puede usar polvo de prueba estándar ISO 12103-1), balanza, carga electrónica o conjunto de resistencias, luxómetro.",
+     "risks": "La dificultad de dosificar el polvo con precisión y aplicarlo uniformemente; la inestabilidad de la fuente de luz puede introducir errores. Los resultados pueden depender del tipo de polvo, por lo que se debe generalizar con precaución.",
+     "scale": "tesis",
+     "methods": [
+      "Tomar como base la metodología del trabajo 2511.04837: allí se describen mecanismos de protección y limpieza de paneles, y se menciona la influencia del polvo en la eficiencia. Usar su enfoque para crear una suciedad controlada.",
+      "Montar el banco de pruebas: panel sobre soporte ajustable, lámpara con espectro e intensidad conocidos, pulverizador de polvo con balanza para dosificación precisa.",
+      "Medir la curva corriente-voltaje del panel en diferentes ángulos (0°, 30°, 45°, 60°) y con diferentes densidades superficiales de polvo (por ejemplo, 0, 5, 10, 20 g/m²).",
+      "Trazar gráficos de la potencia en función del ángulo y la suciedad, y calcular el coeficiente de pérdidas."
+     ]
+    },
+    {
+     "based_on": [
+      "1412.0591",
+      "2511.04837"
+     ],
+     "title": "Desarrollo y prueba de un robot limpiador autónomo para paneles solares con sujeción por vacío",
+     "what": "Diseñar y ensamblar un prototipo de robot autónomo que se desplace sobre la superficie inclinada de un panel solar y lo limpie mediante succión por vacío y cepillos, con un sistema de control basado en sensores simples.",
+     "why": "La limpieza automática sin intervención humana reduce los costos operativos en grandes granjas solares, especialmente en regiones desérticas.",
+     "origin": "En el trabajo 1412.0591 se propone una estrategia de control para un limpiador de vacío autónomo, pero no se proporcionan detalles sobre la implementación mecánica y la eficiencia energética. En el trabajo 2511.04837 se comparan diferentes mecanismos de limpieza, incluidos los cepillos, pero no se considera el método de vacío. La combinación de estos enfoques podría dar lugar a un prototipo funcional con mejores características.",
+     "first_step": "Montar un carro simple con ruedas que pueda moverse sobre un plano inclinado y verificar que no se deslice. Luego agregar una bomba de vacío y un cepillo.",
+     "needs": "Habilidades de mecánica y electrónica, acceso a una impresora 3D o taller, microcontrolador, motores, bomba de vacío de baja potencia, batería, sensores. El presupuesto para los componentes puede ascender a varios cientos de dólares.",
+     "risks": "La principal dificultad es garantizar suficiente adherencia a la superficie y, al mismo tiempo, ligereza de la estructura para que el robot no dañe el panel. La sujeción por vacío puede consumir mucha energía, lo que reduciría la autonomía.",
+     "scale": "años",
+     "methods": [
+      "Utilizar la estrategia de control del trabajo 1412.0591: allí se describe un robot aspirador autónomo para paneles solares con un algoritmo de movimiento sobre la superficie. Adaptar este algoritmo para el propio prototipo.",
+      "Ensamblar la plataforma mecánica: marco ligero, ruedas u orugas, bomba de vacío, cepillos, contenedor para el polvo.",
+      "Implementar el sistema de control en un microcontrolador (Arduino o STM32) con sensores de borde del panel y de inclinación.",
+      "Realizar pruebas en una superficie inclinada que simule el panel, medir la calidad de limpieza (mediante la transparencia del vidrio o la potencia de salida del panel) y el consumo energético del robot."
+     ]
+    }
+   ]
+  },
+  "ar": {
+   "note": "في مجال الغبار وتلوث الألواح الشمسية، يتطور اتجاهان رئيسيان: التنظيف الآلي وتشخيص التلوث بالاعتماد على الصور، لكن لا تزال البيانات الكمية حول فقدان الطاقة حسب ظروف التلوث غير كافية.",
+   "topic": "الغبار وتلوث الألواح الشمسية",
+   "ideas": [
+    {
+     "based_on": [
+      "2511.18514"
+     ],
+     "title": "مقارنة طرق كشف الغبار على الألواح الشمسية باستخدام الصور الحرارية والمرئية",
+     "what": "جمع مجموعة صغيرة من الصور للألواح المتربة والنظيفة باستخدام كاميرا حرارية وكاميرا عادية، وتدريب عدة نماذج بسيطة لكشف الغبار عليها، ثم مقارنة دقتها.",
+     "why": "سيساعد ذلك في اختيار الطريقة الأكثر موثوقية والأقل تكلفة لمراقبة التلوث في المنشآت الشمسية الصغيرة التي لا تملك ميزانية للأنظمة المعقدة.",
+     "origin": "في العمل 2511.18514 تم الإعلان عن منصة لتشخيص الغبار والأعطال باستخدام نوعين من الصور، لكن لم يتم تقديم مقارنة تفصيلية حول أي نوع من البيانات أكثر إفادة لمهمة كشف الغبار تحديدًا. لا توجد بيانات حول مدى تفوق الكاميرا الرخيصة على الكاميرا الحرارية. هذه المقارنة قد تقدم توصية عملية للمنشآت الصغيرة.",
+     "first_step": "إيجاد لوح شمسي متاح (مثلًا على سطح مبنى أكاديمي) والتقاط 20-30 صورة لكل من السطح النظيف والمترب باستخدام كاميرا عادية وكاميرا حرارية (يمكن استئجارها).",
+     "needs": "الوصول إلى لوح شمسي، كاميرا رقمية عادية، كاميرا حرارية (يمكن استئجارها)، حاسوب مزود بوحدة معالجة رسومية (GPU) أو على الأقل وحدة معالجة مركزية (CPU) لتدريب النماذج الخفيفة، ومهارات في لغة بايثون وأساسيات التعلم الآلي.",
+     "risks": "الخطر الرئيسي هو قلة البيانات اللازمة لتدريب النماذج العميقة؛ قد يكون من الضروري الاكتفاء بالطرق التقليدية أو استخدام تقنيات زيادة البيانات. كما أن استئجار الكاميرا الحرارية قد يكون مكلفًا.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "استخدام النهج المتبع في العمل 2511.18514: حيث تم وصف منصة موحدة قائمة على التعلم العميق لتشخيص الغبار والأعطال باستخدام الصور الحرارية والمرئية. أخذ فكرة دمج نوعي الصور من هناك.",
+      "جمع مجموعة بيانات: التقاط صور لنفس اللوح بمستويات مختلفة من التلوث الاصطناعي (غبار، رمل) باستخدام كاميرا تعمل بالأشعة تحت الحمراء وكاميرا رقمية عادية.",
+      "تدريب مصنفات بسيطة (مثل آلة المتجهات الداعمة SVM على الميزات أو شبكة عصبية تلافيفية خفيفة CNN) بشكل منفصل للصور الحرارية والمرئية ولكليهما معًا.",
+      "تقييم الدقة والاستدعاء وقياس F1 على مجموعة اختبار محجوزة، ومقارنة النماذج واستخلاص استنتاج حول قابلية التطبيق العملي."
+     ]
+    },
+    {
+     "based_on": [
+      "2511.04837"
+     ],
+     "title": "منصة اختبار لقياس تأثير الغبار على الطاقة الناتجة للوح الشمسي حسب زاوية الميل",
+     "what": "تجميع منصة اختبار معملية تتضمن لوحًا شمسيًا ومصدر ضوء وموزع غبار وجهاز قياس منحنى التيار-الجهد (IV)، لتقييم فقدان الطاقة كميًا عند زوايا ميل مختلفة وكتل مختلفة من الغبار لكل وحدة مساحة.",
+     "why": "هذه البيانات مفيدة لمصممي محطات الطاقة الشمسية لاختيار زاوية التركيب المثلى للألواح في المناطق المتربة وتخطيط جداول التنظيف.",
+     "origin": "في العمل 2511.04837 تمت مناقشة آليات التنظيف والمواد الواقية، لكن لم يتم تقديم بيانات منهجية حول كيفية اعتماد فقدان الطاقة على زاوية الميل عند نفس مستوى التلوث. يُفترض عادة أن الميل يساعد في التنظيف الذاتي، لكن البيانات الكمية لأنواع مختلفة من الغبار قليلة. منصتنا ستسمح بالحصول على هذه البيانات لنوع معين من الغبار.",
+     "first_step": "تجميع منصة بسيطة: لوح شمسي صغير، مصباح هالوجين، مقياس متعدد، وحمل إلكتروني. التحقق من أن منحنى التيار-الجهد للوح مستقر وقابل للتكرار.",
+     "needs": "لوح شمسي صغير (10-50 واط)، حامل قابل للتعديل، مصدر ضوء بكثافة ثابتة (مثل مصباح هالوجين مع مزود طاقة)، غبار (يمكن استخدام الغبار القياسي ISO 12103-1)، ميزان، حمل إلكتروني أو مجموعة مقاومات، مقياس إضاءة (لوكسمتر).",
+     "risks": "صعوبة في الجرعات الدقيقة للغبار وتوزيعه بشكل متساوٍ؛ عدم استقرار مصدر الضوء قد يسبب أخطاء. قد تعتمد النتائج على نوع الغبار، لذا يجب التعميم بحذر.",
+     "scale": "مشروع تخرج",
+     "methods": [
+      "اعتماد المنهجية من العمل 2511.04837: حيث تم وصف آليات حماية وتنظيف الألواح، وتم ذكر تأثير الغبار على الكفاءة. استخدام نهجهم في إنشاء تلوث محكوم.",
+      "تجميع المنصة: لوح على حامل قابل للتعديل، مصباح بطيف وكثافة معروفين، رشاش غبار مع ميزان للجرعات الدقيقة.",
+      "قياس منحنى التيار-الجهد للوح عند زوايا مختلفة (0°، 30°، 45°، 60°) وكثافات سطحية مختلفة للغبار (مثل 0، 5، 10، 20 غ/م²).",
+      "رسم منحنيات توضح اعتماد الطاقة على الزاوية والتلوث، وحساب معامل الفقد."
+     ]
+    },
+    {
+     "based_on": [
+      "1412.0591",
+      "2511.04837"
+     ],
+     "title": "تطوير واختبار روبوت تنظيف ذاتي للألواح الشمسية مع نظام شفط فراغي",
+     "what": "تصميم وتجميع نموذج أولي لروبوت ذاتي الحركة يتحرك على سطح اللوح الشمسي المائل وينظفه باستخدام الشفط والفرش، مع نظام تحكم يعتمد على حساسات بسيطة.",
+     "why": "التنظيف الآلي دون تدخل بشري يقلل تكاليف التشغيل في مزارع الطاقة الشمسية الكبيرة، خاصة في المناطق الصحراوية.",
+     "origin": "في العمل 1412.0591 تم اقتراح استراتيجية تحكم لمكنسة كهربائية ذاتية الحركة، لكن دون تفاصيل حول التنفيذ الميكانيكي وكفاءة الطاقة. في العمل 2511.04837 تمت مقارنة آليات تنظيف مختلفة بما فيها الفرش، لكن لم يتم تناول طريقة الشفط. دمج هذه الأساليب قد ينتج نموذجًا أوليًا عمليًا بخصائص أفضل.",
+     "first_step": "تجميع عربة بسيطة بعجلات يمكنها التحرك على سطح مائل، والتحقق من أنها لا تنزلق. ثم إضافة مضخة شفط وفرشاة.",
+     "needs": "مهارات في الميكانيكا والإلكترونيات، والوصول إلى طابعة ثلاثية الأبعاد أو ورشة عمل، ومتحكم دقيق، ومحركات، ومضخة شفط منخفضة الطاقة، وبطارية، وحساسات. قد تصل تكلفة المكونات إلى عدة مئات من الدولارات.",
+     "risks": "التحدي الرئيسي هو ضمان التصاق كافٍ بالسطح وفي نفس الوقت خفة التصميم حتى لا يتلف الروبوت اللوح. قد يستهلك نظام الشفط طاقة كبيرة مما يقلل من استقلالية الروبوت.",
+     "scale": "سنوات",
+     "methods": [
+      "استخدام استراتيجية التحكم من العمل 1412.0591: حيث تم وصف روبوت مكنسة كهربائية ذاتي الحركة للألواح الشمسية مع خوارزمية للحركة على السطح. تكييف هذه الخوارزمية لنموذجنا الأولي.",
+      "تجميع المنصة الميكانيكية: هيكل خفيف، عجلات أو جنازير، مضخة شفط، فرش، حاوية للغبار.",
+      "تنفيذ نظام التحكم على متحكم دقيق (Arduino أو STM32) مع حساسات لحافة اللوح والميل.",
+      "إجراء اختبارات على سطح مائل يحاكي اللوح، وقياس جودة التنظيف (من خلال شفافية الزجاج أو الطاقة الناتجة للوح) واستهلاك الطاقة للروبوت."
+     ]
+    }
+   ]
+  },
+  "fr": {
+   "note": "Dans le domaine de la poussière et de l'encrassement des panneaux solaires, deux axes de recherche se développent activement : le nettoyage automatisé et le diagnostic de l'encrassement par imagerie, mais les données quantitatives sur les pertes de puissance en fonction des conditions d'encrassement restent insuffisantes.",
+   "topic": "poussière et encrassement des panneaux solaires",
+   "ideas": [
+    {
+     "based_on": [
+      "2511.18514"
+     ],
+     "title": "Comparaison des méthodes de détection de poussière sur panneaux solaires par imagerie thermique et visuelle",
+     "what": "Constituer un petit jeu d'images de panneaux encrassés et propres à l'aide d'une caméra thermique et d'une caméra classique, entraîner plusieurs modèles simples de détection de poussière sur ces images et comparer leur précision.",
+     "why": "Cela permettra de choisir la méthode de surveillance de l'encrassement la plus fiable et la moins coûteuse pour les petites installations solaires, qui n'ont pas le budget pour des systèmes complexes.",
+     "origin": "Dans le travail 2511.18514, une plateforme de diagnostic de la poussière et des défauts utilisant deux types d'images est présentée, mais aucune comparaison détaillée n'est fournie quant au type de données le plus informatif pour la détection spécifique de la poussière. On ne sait pas à quel point une caméra bon marché est inférieure à une caméra thermique. Cette comparaison pourrait fournir une recommandation pratique pour les petites installations.",
+     "first_step": "Trouver un panneau solaire accessible (par exemple sur le toit d'un bâtiment universitaire) et prendre 20 à 30 photos de la surface propre et encrassée avec une caméra classique et une caméra thermique (éventuellement en location).",
+     "needs": "Accès à un panneau solaire, caméra numérique classique, caméra thermique (éventuellement en location), ordinateur avec GPU ou au moins CPU pour entraîner des modèles légers, compétences en Python et en bases de l'apprentissage automatique.",
+     "risks": "Le principal risque est la faible quantité de données pour entraîner des modèles profonds ; il faudra peut-être se limiter à des méthodes classiques ou utiliser l'augmentation de données. De plus, la caméra thermique peut être chère à louer.",
+     "scale": "semestre",
+     "methods": [
+      "Utiliser l'approche du travail 2511.18514 : il y décrit une plateforme unifiée basée sur l'apprentissage profond pour le diagnostic de la poussière et des défauts à partir d'images thermiques et visuelles. En tirer l'idée de combiner les deux types d'images.",
+      "Constituer un jeu de données : prendre des photos du même panneau avec différents niveaux d'encrassement artificiel (poussière, sable) à l'aide d'une caméra infrarouge et d'une caméra numérique classique.",
+      "Entraîner des classifieurs simples (par exemple SVM sur caractéristiques ou CNN légère) séparément pour les images thermiques, séparément pour les images visuelles, et pour leur combinaison.",
+      "Évaluer la précision, le rappel et le score F1 sur un ensemble de validation, comparer les modèles et conclure sur leur applicabilité pratique."
+     ]
+    },
+    {
+     "based_on": [
+      "2511.04837"
+     ],
+     "title": "Banc d'essai pour mesurer l'influence de la poussière sur la puissance de sortie d'un panneau en fonction de l'angle d'inclinaison",
+     "what": "Assembler un banc d'essai en laboratoire avec un panneau solaire, une source de lumière, un doseur de poussière et un mesureur de caractéristique courant-tension, afin de quantifier les pertes de puissance pour différents angles d'inclinaison du panneau et différentes masses de poussière par unité de surface.",
+     "why": "Ces données sont utiles aux concepteurs de centrales solaires pour choisir l'angle d'installation optimal des panneaux dans les régions poussiéreuses et pour planifier le calendrier de nettoyage.",
+     "origin": "Dans le travail 2511.04837, les mécanismes de nettoyage et les matériaux de protection sont examinés, mais aucune donnée systématique n'est fournie sur la façon dont les pertes de puissance dépendent de l'angle d'inclinaison pour un même niveau d'encrassement. On suppose généralement que l'inclinaison favorise l'auto-nettoyage, mais les données quantitatives pour différents types de poussière sont rares. Notre banc d'essai permettra d'obtenir de telles données pour un type de poussière spécifique.",
+     "first_step": "Assembler un banc d'essai simple : un petit panneau solaire, une lampe halogène, un multimètre et une charge électronique. Vérifier que la caractéristique courant-tension du panneau est stable et reproductible.",
+     "needs": "Un petit panneau solaire (10 à 50 W), un support réglable, une source de lumière à intensité constante (par exemple une lampe halogène avec alimentation), de la poussière (on peut utiliser la poussière d'essai standard ISO 12103-1), une balance, une charge électronique ou un ensemble de résistances, un luxmètre.",
+     "risks": "La difficulté de doser précisément la poussière et de l'appliquer uniformément ; l'instabilité de la source de lumière peut introduire des erreurs. Les résultats peuvent dépendre du type de poussière, il faut donc généraliser avec prudence.",
+     "scale": "mémoire",
+     "methods": [
+      "S'inspirer de la méthodologie du travail 2511.04837 : il y décrit les mécanismes de protection et de nettoyage des panneaux, et mentionne l'influence de la poussière sur l'efficacité. Utiliser leur approche pour créer un encrassement contrôlé.",
+      "Assembler le banc d'essai : panneau sur support réglable, lampe avec spectre et intensité connus, pulvérisateur de poussière avec balance pour un dosage précis.",
+      "Mesurer la caractéristique courant-tension du panneau pour différents angles (0°, 30°, 45°, 60°) et différentes densités surfaciques de poussière (par exemple 0, 5, 10, 20 g/m²).",
+      "Tracer des graphiques de la puissance en fonction de l'angle et de l'encrassement, calculer le coefficient de perte."
+     ]
+    },
+    {
+     "based_on": [
+      "1412.0591",
+      "2511.04837"
+     ],
+     "title": "Développement et test d'un robot nettoyeur autonome pour panneaux solaires avec préhension par aspiration",
+     "what": "Concevoir et assembler un prototype de robot autonome qui se déplace sur la surface inclinée d'un panneau solaire et le nettoie à l'aide d'une aspiration et de brosses, avec un système de contrôle basé sur des capteurs simples.",
+     "why": "Le nettoyage automatique sans intervention humaine réduit les coûts d'exploitation des grandes centrales solaires, en particulier dans les régions désertiques.",
+     "origin": "Dans le travail 1412.0591, une stratégie de contrôle pour un nettoyeur à aspiration autonome est proposée, mais les détails sur la réalisation mécanique et l'efficacité énergétique manquent. Dans le travail 2511.04837, différents mécanismes de nettoyage sont comparés, y compris les brosses, mais la méthode par aspiration n'est pas abordée. La combinaison de ces approches pourrait donner un prototype fonctionnel avec de meilleures performances.",
+     "first_step": "Assembler un chariot simple avec des roues capable de se déplacer sur un plan incliné et vérifier qu'il ne glisse pas. Ajouter ensuite une pompe à vide et une brosse.",
+     "needs": "Compétences en mécanique et en électronique, accès à une imprimante 3D ou à un atelier, microcontrôleur, moteurs, pompe à vide de faible puissance, batterie, capteurs. Le budget pour les composants peut atteindre plusieurs centaines de dollars.",
+     "risks": "La principale difficulté est d'assurer une adhérence suffisante à la surface tout en gardant une structure légère pour ne pas endommager le panneau. La préhension par aspiration peut consommer beaucoup d'énergie, ce qui réduira l'autonomie.",
+     "scale": "années",
+     "methods": [
+      "Utiliser la stratégie de contrôle du travail 1412.0591 : il y décrit un robot aspirateur autonome pour panneaux solaires avec un algorithme de déplacement sur la surface. Adapter cet algorithme pour son propre prototype.",
+      "Assembler la plateforme mécanique : châssis léger, roues ou chenilles, pompe à vide, brosses, conteneur à poussière.",
+      "Implémenter le système de contrôle sur un microcontrôleur (Arduino ou STM32) avec des capteurs de bord de panneau et d'inclinaison.",
+      "Effectuer des tests sur une surface inclinée simulant un panneau, mesurer la qualité du nettoyage (par la transparence du verre ou la puissance de sortie du panneau) et la consommation énergétique du robot."
+     ]
+    }
+   ]
+  }
+ }
 }

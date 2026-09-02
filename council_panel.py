@@ -28,7 +28,8 @@ for _s in (sys.stdout, sys.stderr):
         pass
 
 ROOT = Path(__file__).resolve().parent
-LANGS = ("ru", "en", "es", "ar", "fr")
+from common import ALL_LANGS  # noqa: E402
+LANGS = ALL_LANGS   # список языков один на проект: config.json через common.ALL_LANGS
 
 # Строки панели. ru и en полные; es/ar/fr временно падают на en — владелец: «английский ок»,
 # но путь и переключатель нужны сразу, а не после перевода.

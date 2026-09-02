@@ -233,5 +233,427 @@
    },
    "abstract": "Membrane filtration is widely used in water treatment to remove foulants from contaminated water. Foulant build-up on the membrane occludes the area open for fluid flow, which impairs the efficiency of the filtration operation by decreasing the flux through the membrane. Backwashing is a strategy to restore the membrane, wherein clean water is processed backward through the membrane to dislodge attached foulants. We develop a Monte Carlo model to simulate constant-pressure forward filtration and backwashing through dead-end, flat-sheet membranes, with membrane fouling dominated by intermediate"
   }
- ]
+ ],
+ "lang": {
+  "en": {
+   "note": "In the field of seawater desalination, new membrane materials and methods to reduce energy consumption are being actively researched, but the gap between molecular modeling and practical testing remains significant.",
+   "topic": "seawater desalination",
+   "ideas": [
+    {
+     "based_on": [
+      "1309.0322",
+      "1512.07101",
+      "2310.05729"
+     ],
+     "title": "Build a test rig for comparing membranes under real desalination conditions",
+     "what": "Design and assemble a laboratory test rig for testing reverse osmosis membranes and novel nanoporous materials (graphyne, g-C2N, MoS2) on real seawater. Conduct a series of permeability and selectivity measurements for different membranes under identical conditions.",
+     "why": "Simulations predict outstanding performance for new 2D membranes, but experimental verifications are scarce. Such a rig would allow quick screening of unpromising materials and provide data for model calibration.",
+     "origin": "In papers 1309.0322, 1512.07101, and 2310.05729, molecular dynamics simulations show high permeability and complete salt rejection for new 2D materials, but experimental confirmation is lacking. There is no unified testing methodology that allows comparing different membranes under identical conditions on real seawater.",
+     "first_step": "Design a flow cell, select a pump, pressure sensors, and a conductivity meter; order or fabricate one type of membrane (e.g., based on graphene oxide as a more accessible analogue) and conduct a trial run with distilled water.",
+     "needs": "Equipment: high-pressure pump (up to 60 bar), flow cell, pressure and flow sensors, conductivity meter, source of synthetic seawater. Skills: hydraulic system design, working with measuring instruments, basic knowledge of membrane processes. Budget: approximately 200–300 thousand rubles for components.",
+     "risks": "Difficulty in fabricating defect-free 2D membranes with reproducible characteristics; real seawater contains organics and suspended solids that quickly foul the membrane, complicating interpretation.",
+     "scale": "semester",
+     "methods": [
+      "Fabricate membranes following methods from the papers: graphyne (1309.0322), g-C2N (1512.07101), MoS2 (2310.05729), or use commercial analogues.",
+      "Assemble a flow cell with control of pressure, temperature, and flow rate; measure water flux and salt concentration at inlet/outlet.",
+      "Perform measurements on synthetic seawater (per ASTM D1141) and on a real seawater sample.",
+      "Compare experimental data with molecular dynamics results from the papers."
+     ]
+    },
+    {
+     "based_on": [
+      "0704.2571"
+     ],
+     "title": "Develop a low-cost system for extracting fresh water from the atmosphere for coastal regions",
+     "what": "Design and build a pilot unit for condensing water from humid air, using natural temperature differences (e.g., seawater as a cold reservoir) or solar energy. Test it under real coastal conditions.",
+     "why": "In coastal areas with high humidity but limited access to fresh water, such a system could be an alternative to desalination. Potentially cheaper and easier to maintain.",
+     "origin": "Paper 0704.2571 proposes a cheap method for extracting water from the atmosphere, but does not consider the specifics of coastal zones, where humidity is high and cold seawater is available. Experimental verification and optimization for such conditions are lacking.",
+     "first_step": "Assemble a simple condenser: a metal sheet cooled by seawater, with grooves to collect condensate; measure overnight water yield.",
+     "needs": "Materials for the prototype (sheet metal, pipes, insulation), temperature and humidity sensors, access to seawater, a coastal location. Skills: basics of heat transfer, hands-on ability. Budget: 50–100 thousand rubles.",
+     "risks": "Water yield may be too low under real conditions (depends on dew point and wind speed), making the system economically unviable.",
+     "scale": "semester",
+     "methods": [
+      "Study the method for extracting water from the atmosphere proposed in paper 0704.2571 and adapt it to coastal climate conditions.",
+      "Calculate heat balance and mass transfer for the chosen scheme (condensation on a cooled surface, sorbent materials).",
+      "Assemble a prototype using available materials (metal sheets, plastic pipes, fans) and temperature/humidity sensors.",
+      "Conduct a series of tests under different weather conditions, measuring daily water yield and energy consumption."
+     ]
+    },
+    {
+     "based_on": [
+      "2501.16571",
+      "1807.04169"
+     ],
+     "title": "Create a prototype underwater drone for monitoring pollution near desalination plants",
+     "what": "Develop an autonomous underwater vehicle with a camera and computer vision system to detect and classify marine debris and potential pollutants in the intake areas of desalination plants. Train a detection model on synthetic and real data.",
+     "why": "Pollution of water intakes (debris, oil slicks) reduces desalination efficiency and damages membranes. Autonomous monitoring would allow timely cleanup of the water area and planning of plant maintenance.",
+     "origin": "Paper 2501.16571 demonstrates effective marine debris detection using a pruned YOLO, but without accounting for underwater distortions. Paper 1807.04169 proposes a method for enhancing underwater images, which could improve detection accuracy. An integrated solution for monitoring near desalination plants is lacking.",
+     "first_step": "Install and test the YOLO model on a public underwater debris dataset (e.g., TrashCan), evaluate accuracy and speed on the target hardware.",
+     "needs": "Underwater drone or components for its assembly, camera, onboard computer, access to a water area for testing. Skills: Python programming, experience with neural networks, basic construction skills. Budget: 100–300 thousand rubles depending on drone readiness.",
+     "risks": "Difficulty obtaining high-quality underwater images in turbid water; the model may generalize poorly to real conditions, requiring extensive data for fine-tuning.",
+     "scale": "thesis",
+     "methods": [
+      "Use the YOLO architecture with pruning, as in paper 2501.16571, adapted for underwater conditions.",
+      "Assemble an underwater vehicle based on open-source projects (e.g., BlueROV) with a camera and lighting.",
+      "Generate a synthetic dataset of underwater images with debris, apply dehazing methods from paper 1807.04169 to improve quality.",
+      "Train the model on the combined dataset and deploy it on an onboard computer (Jetson Nano or similar)."
+     ]
+    },
+    {
+     "based_on": [
+      "2501.09723",
+      "2501.10123"
+     ],
+     "title": "Develop a rapid analysis method for uranium and plutonium in seawater for monitoring desalinated water",
+     "what": "Adapt and simplify a radiochemical procedure for separating uranium and plutonium from seawater for routine safety monitoring of desalinated water. Create a portable protocol suitable for field use or at desalination plants.",
+     "why": "Desalinated water must meet radionuclide standards, but existing methods require complex equipment (AMS) and are time-consuming. A simplified method would allow quick checks for long-lived isotopes.",
+     "origin": "Papers 2501.10123 and 2501.09723 offer reliable but complex methods for actinide analysis in seawater using AMS. For desalination practice, a simpler and faster method is needed that can be implemented in a standard radiochemistry laboratory.",
+     "first_step": "Reproduce the method from 2501.09723 in laboratory conditions using standard solutions and evaluate yields at each step.",
+     "needs": "Radiochemistry laboratory with fume hood, ion exchange resins (TEVA, UTEVA), standard radionuclide solutions, access to an alpha spectrometer or ICP-MS. Skills: radiochemistry, work with ionizing radiation sources. Budget: 200–500 thousand rubles for reagents and analyses.",
+     "risks": "Alpha spectrometry sensitivity may be insufficient for low concentrations in desalinated water; long accumulation times or a more expensive method may be required.",
+     "scale": "thesis",
+     "methods": [
+      "Use the procedure from paper 2501.09723 (sequential extraction of U, Np, Pu from small volumes) as a basis and optimize it for even smaller volumes (1–2 L).",
+      "Replace AMS measurement with a more accessible method, e.g., alpha spectrometry or inductively coupled plasma mass spectrometry (ICP-MS), if sensitivity is sufficient.",
+      "Verify yields and separation purity using tracer additions (242Pu, 236U).",
+      "Conduct comparative measurements of real seawater and desalinated water samples."
+     ]
+    },
+    {
+     "based_on": [
+      "2508.18262"
+     ],
+     "title": "Create a digital twin of a membrane desalinator to optimize cleaning regimes",
+     "what": "Develop a software model of the filtration process accounting for membrane fouling and backwash cycles, based on laboratory experimental data and modeling. Use it to select optimal operating parameters for a real desalination plant.",
+     "why": "Membrane fouling is the main cause of increased energy consumption and replacement costs. A digital twin would allow predicting performance decline and planning cleanings, saving resources.",
+     "origin": "Paper 2508.18262 provides a stochastic model of membrane fouling, but does not consider optimization of cleaning regimes in the context of a complete desalination plant. Integration of the model with real data and application for control is lacking.",
+     "first_step": "Reproduce the model from 2508.18262 in Python, test its behavior on simple cases, and compare with published results.",
+     "needs": "A computer with sufficient performance, access to experimental data (can be generated on a simple test rig), skills in numerical modeling and programming (Python, C++). Budget: minimal if using a personal computer.",
+     "risks": "The model may be too simplistic for real conditions, requiring significant refinement; calibration on limited data may give unreliable predictions.",
+     "scale": "years",
+     "methods": [
+      "Use the membrane filtration model from paper 2508.18262 (Monte Carlo simulations of 2D flat-sheet) as a basis.",
+      "Extend the model to account for the real geometry of the membrane module and hydrodynamics (e.g., using CFD or simplified resistance models).",
+      "Collect experimental data on membrane fouling on a laboratory test rig (can use the rig from the first idea) for model calibration.",
+      "Implement an optimization algorithm (e.g., genetic algorithm) to select a cleaning schedule."
+     ]
+    }
+   ]
+  },
+  "es": {
+   "note": "En el ámbito de la desalinización de agua de mar se investigan activamente nuevos materiales de membrana y métodos para reducir el consumo energético, pero la brecha entre el modelado molecular y las pruebas prácticas sigue siendo considerable.",
+   "topic": "desalinización de agua de mar",
+   "ideas": [
+    {
+     "based_on": [
+      "1309.0322",
+      "1512.07101",
+      "2310.05729"
+     ],
+     "title": "Montar un banco de pruebas para comparar membranas en condiciones reales de desalinización",
+     "what": "Diseñar y montar un banco de pruebas de laboratorio para ensayar membranas de ósmosis inversa y nuevos materiales nanoporosos (grafino, g-C2N, MoS2) con agua de mar real. Realizar una serie de mediciones de permeabilidad y selectividad para diferentes membranas en las mismas condiciones.",
+     "why": "Las simulaciones predicen un rendimiento excepcional para las nuevas membranas 2D, pero hay pocas verificaciones experimentales. Este banco permitiría descartar rápidamente materiales poco prometedores y proporcionaría datos para calibrar los modelos.",
+     "origin": "En los trabajos 1309.0322, 1512.07101 y 2310.05729 se realizaron simulaciones de dinámica molecular que muestran alta permeabilidad y rechazo total de sales para los nuevos materiales 2D, pero no hay confirmación experimental. Falta una metodología de ensayo unificada que permita comparar diferentes membranas en las mismas condiciones con agua de mar real.",
+     "first_step": "Diseñar una celda de flujo, seleccionar la bomba, los sensores de presión y el conductímetro; encargar o fabricar un tipo de membrana (por ejemplo, basada en óxido de grafeno como análogo más accesible) y realizar una prueba inicial con agua destilada.",
+     "needs": "Equipamiento: bomba de alta presión (hasta 60 bar), celda de flujo, sensores de presión y caudal, conductímetro, fuente de agua de mar sintética. Habilidades: diseño de sistemas hidráulicos, manejo de instrumentación, conocimientos básicos de procesos de membrana. Presupuesto: aproximadamente 200–300 mil rublos para los componentes.",
+     "risks": "Dificultad para fabricar membranas 2D sin defectos y con características reproducibles; el agua de mar real contiene materia orgánica y sólidos en suspensión que ensucian rápidamente la membrana, lo que complicará la interpretación.",
+     "scale": "semestre",
+     "methods": [
+      "Fabricar membranas siguiendo los métodos de los trabajos: grafino (1309.0322), g-C2N (1512.07101), MoS2 (2310.05729) o usar análogos comerciales.",
+      "Montar una celda de flujo con control de presión, temperatura y caudal; medir el flujo de agua y la concentración de sales a la entrada y salida.",
+      "Realizar mediciones con agua de mar sintética (según la norma ASTM D1141) y con una muestra real de mar.",
+      "Comparar los datos experimentales con los resultados de los cálculos de dinámica molecular de los trabajos."
+     ]
+    },
+    {
+     "based_on": [
+      "0704.2571"
+     ],
+     "title": "Desarrollar un sistema económico de obtención de agua dulce a partir de la atmósfera para zonas costeras",
+     "what": "Diseñar y construir una planta piloto para condensar agua del aire húmedo, aprovechando los gradientes naturales de temperatura (por ejemplo, usando agua de mar como reservorio frío) o la energía solar. Probarla en condiciones reales en la costa.",
+     "why": "En zonas costeras con alta humedad pero acceso limitado a agua dulce, este sistema podría ser una alternativa a la desalinización. Potencialmente más barato y más fácil de mantener.",
+     "origin": "El trabajo 0704.2571 propone un método económico para extraer agua de la atmósfera, pero no considera las particularidades de las zonas costeras, donde la humedad es alta y hay agua de mar fría disponible. Faltan pruebas experimentales y optimización para tales condiciones.",
+     "first_step": "Montar un condensador simple: una lámina metálica enfriada con agua de mar, con ranuras para recoger el condensado; medir la producción de agua durante una noche.",
+     "needs": "Materiales para el prototipo (chapa metálica, tuberías, aislamiento), sensores de temperatura y humedad, acceso a agua de mar, un lugar en la costa. Habilidades: fundamentos de transferencia de calor, habilidades prácticas. Presupuesto: 50–100 mil rublos.",
+     "risks": "La producción de agua puede resultar demasiado baja en condiciones reales (depende del punto de rocío y la velocidad del viento), lo que haría que el sistema no fuera rentable.",
+     "scale": "semestre",
+     "methods": [
+      "Estudiar el método de extracción de agua de la atmósfera propuesto en el trabajo 0704.2571 y adaptarlo a las condiciones del clima costero.",
+      "Calcular el balance térmico y la transferencia de masa para el esquema elegido (condensación en superficie enfriada, materiales sorbentes).",
+      "Construir un prototipo con materiales disponibles (láminas metálicas, tuberías de plástico, ventiladores) y sensores de temperatura/humedad.",
+      "Realizar una serie de pruebas en diferentes condiciones climáticas, medir la producción diaria de agua y el consumo energético."
+     ]
+    },
+    {
+     "based_on": [
+      "2501.16571",
+      "1807.04169"
+     ],
+     "title": "Crear un prototipo de dron submarino para monitorear la contaminación cerca de plantas desalinizadoras",
+     "what": "Desarrollar un vehículo submarino autónomo con cámara y sistema de visión por computadora para detectar y clasificar basura marina y posibles contaminantes en la zona de captación de las plantas desalinizadoras. Entrenar un modelo de detección con datos sintéticos y reales.",
+     "why": "La contaminación de las tomas de agua (basura, películas de petróleo) reduce la eficiencia de la desalinización y daña las membranas. El monitoreo autónomo permitiría limpiar la zona a tiempo y planificar el mantenimiento de las plantas.",
+     "origin": "En 2501.16571 se muestra una detección eficaz de basura marina con una YOLO podada, pero sin tener en cuenta las distorsiones subacuáticas. El trabajo 1807.04169 propone un método para mejorar imágenes subacuáticas que podría aumentar la precisión de la detección. Falta una solución integrada para el monitoreo cerca de plantas desalinizadoras.",
+     "first_step": "Instalar y probar el modelo YOLO en un conjunto de datos público de basura subacuática (por ejemplo, TrashCan), evaluar la precisión y velocidad en el hardware objetivo.",
+     "needs": "Dron submarino o componentes para ensamblarlo, cámara, computadora a bordo, acceso a una zona acuática para pruebas. Habilidades: programación en Python, experiencia con redes neuronales, habilidades básicas de construcción. Presupuesto: 100–300 mil rublos dependiendo de si el dron está listo o no.",
+     "risks": "Dificultad para obtener imágenes subacuáticas de calidad en aguas turbias; el modelo podría no generalizar bien a condiciones reales y requerir muchos datos para reentrenamiento.",
+     "scale": "tesis",
+     "methods": [
+      "Usar la arquitectura YOLO con poda, como en el trabajo 2501.16571, adaptándola a condiciones subacuáticas.",
+      "Ensamblar un vehículo submarino basado en proyectos de código abierto (por ejemplo, BlueROV) con cámara e iluminación.",
+      "Generar un conjunto de datos sintético de imágenes subacuáticas con basura, aplicar métodos de eliminación de neblina del trabajo 1807.04169 para mejorar la calidad.",
+      "Entrenar el modelo con el conjunto de datos combinado y desplegarlo en una computadora a bordo (Jetson Nano o similar)."
+     ]
+    },
+    {
+     "based_on": [
+      "2501.09723",
+      "2501.10123"
+     ],
+     "title": "Desarrollar un método de análisis rápido de uranio y plutonio en agua de mar para el control del agua desalinizada",
+     "what": "Adaptar y simplificar el método radioquímico para extraer uranio y plutonio del agua de mar, para el control rutinario de la seguridad del agua desalinizada. Crear un protocolo portátil adecuado para uso en campo o en plantas desalinizadoras.",
+     "why": "El agua desalinizada debe cumplir las normas sobre radionúclidos, pero los métodos existentes requieren equipos complejos (AMS) y mucho tiempo. Un método simplificado permitiría verificar rápidamente el contenido de isótopos de vida larga.",
+     "origin": "Los trabajos 2501.10123 y 2501.09723 proponen métodos fiables pero complejos para analizar actínidos en agua de mar mediante AMS. Para la práctica de la desalinización se necesita un método más simple y rápido que pueda implementarse en un laboratorio radioquímico convencional.",
+     "first_step": "Reproducir el método de 2501.09723 en condiciones de laboratorio con soluciones estándar y evaluar los rendimientos en cada etapa.",
+     "needs": "Laboratorio radioquímico con campana extractora, resinas de intercambio iónico (TEVA, UTEVA), soluciones estándar de radionúclidos, acceso a un espectrómetro alfa o ICP-MS. Habilidades: radioquímica, manejo de fuentes de radiación ionizante. Presupuesto: 200–500 mil rublos para reactivos y análisis.",
+     "risks": "La sensibilidad de la espectrometría alfa puede ser insuficiente para las bajas concentraciones en agua desalinizada; se necesitaría un largo tiempo de acumulación o pasar a un método más costoso.",
+     "scale": "tesis",
+     "methods": [
+      "Tomar como base el procedimiento del trabajo 2501.09723 (extracción secuencial de U, Np, Pu de pequeños volúmenes) y optimizarlo para volúmenes aún menores (1–2 L).",
+      "Reemplazar la medición por AMS por un método más accesible, como espectrometría alfa o espectrometría de masas con plasma acoplado inductivamente (ICP-MS), si la sensibilidad es suficiente.",
+      "Verificar los rendimientos y la pureza de la separación mediante adiciones de trazadores (242Pu, 236U).",
+      "Realizar mediciones comparativas de muestras reales de agua de mar y agua desalinizada."
+     ]
+    },
+    {
+     "based_on": [
+      "2508.18262"
+     ],
+     "title": "Crear un gemelo digital de una desalinizadora de membrana para optimizar los ciclos de limpieza",
+     "what": "Desarrollar un modelo computacional del proceso de filtración que tenga en cuenta el ensuciamiento de la membrana y los ciclos de retrolavado, basado en datos de experimentos de laboratorio y simulación. Usarlo para seleccionar los parámetros óptimos de operación de una planta desalinizadora real.",
+     "why": "El ensuciamiento de las membranas es la principal causa del aumento del consumo energético y de los costos de reemplazo. Un gemelo digital permitiría predecir la caída del rendimiento y planificar los lavados, ahorrando recursos.",
+     "origin": "El trabajo 2508.18262 presenta un modelo estocástico de ensuciamiento de membranas, pero no considera la optimización de los ciclos de lavado en el contexto de una planta desalinizadora completa. Falta la integración del modelo con datos reales y su aplicación para el control.",
+     "first_step": "Reproducir el modelo de 2508.18262 en Python, verificar su comportamiento en casos simples y compararlo con los resultados publicados.",
+     "needs": "Computadora con suficiente rendimiento, acceso a datos experimentales (se pueden generar en un banco simple), habilidades en modelado numérico y programación (Python, C++). Presupuesto: mínimo si se usa una computadora personal.",
+     "risks": "El modelo puede ser demasiado simplificado para condiciones reales y requerir un desarrollo considerable; la calibración con datos limitados puede dar predicciones poco fiables.",
+     "scale": "años",
+     "methods": [
+      "Usar el modelo de filtración por membrana del trabajo 2508.18262 (simulaciones de Monte Carlo de lámina plana 2D) como base.",
+      "Complementar el modelo con la geometría real del módulo de membrana y la hidrodinámica (por ejemplo, con CFD o modelos de resistencia simplificados).",
+      "Recopilar datos experimentales de ensuciamiento de membrana en un banco de laboratorio (se puede usar el banco de la primera idea) para calibrar el modelo.",
+      "Implementar un algoritmo de optimización (por ejemplo, un algoritmo genético) para elegir el programa de lavados."
+     ]
+    }
+   ]
+  },
+  "ar": {
+   "note": "في مجال تحلية مياه البحر، تُجرى أبحاث مكثفة على مواد أغشية جديدة وطرق لتقليل استهلاك الطاقة، لكن الفجوة بين المحاكاة الجزيئية والاختبارات العملية لا تزال كبيرة.",
+   "topic": "تحلية مياه البحر",
+   "ideas": [
+    {
+     "based_on": [
+      "1309.0322",
+      "1512.07101",
+      "2310.05729"
+     ],
+     "title": "بناء منصة اختبار لمقارنة الأغشية في ظروف تحلية حقيقية",
+     "what": "تصميم وبناء منصة اختبار معملية لاختبار أغشية التناضح العكسي والمواد النانوية المسامية الجديدة (الغرافين، g-C2N، MoS2) على مياه البحر الحقيقية. إجراء سلسلة من قياسات النفاذية والانتقائية لأغشية مختلفة تحت ظروف موحدة.",
+     "why": "تتنبأ المحاكاة بخصائص استثنائية للأغشية ثنائية الأبعاد الجديدة، لكن التحقق التجريبي محدود. هذه المنصة ستسمح بالاستبعاد السريع للمواد غير الواعدة وستوفر بيانات لمعايرة النماذج.",
+     "origin": "في الأعمال 1309.0322 و1512.07101 و2310.05729، أُجريت محاكاة ديناميكا جزيئية تُظهر نفاذية عالية ورفضًا كاملاً للأملاح للمواد ثنائية الأبعاد الجديدة، لكن لا توجد تأكيدات تجريبية. كما تفتقر المنهجية الموحدة للاختبار التي تسمح بمقارنة الأغشية المختلفة تحت ظروف متطابقة على مياه البحر الحقيقية.",
+     "first_step": "تصميم خلية تدفق، واختيار مضخة، وأجهزة استشعار للضغط ومقياس موصلية؛ طلب أو تصنيع نوع واحد من الأغشية (على سبيل المثال، القائم على أكسيد الغرافين كبديل أكثر توفرًا) وإجراء تشغيل تجريبي على الماء المقطر.",
+     "needs": "المعدات: مضخة ضغط عالٍ (حتى 60 بار)، خلية تدفق، أجهزة استشعار للضغط والتدفق، مقياس موصلية، مصدر لمياه بحر اصطناعية. المهارات: تصميم الأنظمة الهيدروليكية، العمل مع أجهزة القياس، معرفة أساسية بعمليات الأغشية. الميزانية: حوالي 200-300 ألف روبل للمكونات.",
+     "risks": "صعوبة تصنيع أغشية ثنائية الأبعاد خالية من العيوب بخصائص قابلة للتكرار؛ مياه البحر الحقيقية تحتوي على مواد عضوية ومواد عالقة تلوث الغشاء بسرعة، مما يعقد تفسير النتائج.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "تصنيع الأغشية وفقًا لطرق من الأعمال: الغرافين (1309.0322)، g-C2N (1512.07101)، MoS2 (2310.05729) أو استخدام بدائل تجارية.",
+      "تجميع خلية تدفق مع التحكم في الضغط ودرجة الحرارة والتدفق؛ قياس تدفق الماء وتركيز الأملاح عند المدخل/المخرج.",
+      "إجراء قياسات على مياه بحر اصطناعية (وفقًا لمعيار ASTM D1141) وعلى عينة حقيقية من البحر.",
+      "مقارنة البيانات التجريبية مع نتائج حسابات الديناميكا الجزيئية من الأعمال."
+     ]
+    },
+    {
+     "based_on": [
+      "0704.2571"
+     ],
+     "title": "تطوير نظام منخفض التكلفة لاستخراج المياه العذبة من الغلاف الجوي للمناطق الساحلية",
+     "what": "تصميم وبناء وحدة تجريبية لتكثيف الماء من الهواء الرطب، تستخدم فروق درجات الحرارة الطبيعية (مثل مياه البحر كخزان بارد) أو الطاقة الشمسية. اختبارها في ظروف حقيقية على الساحل.",
+     "why": "في المناطق الساحلية ذات الرطوبة العالية ولكن محدودية الوصول إلى المياه العذبة، يمكن لهذا النظام أن يكون بديلاً للتحلية. من المحتمل أن يكون أرخص وأسهل في الصيانة.",
+     "origin": "يقترح العمل 0704.2571 طريقة منخفضة التكلفة لاستخراج الماء من الغلاف الجوي، لكنه لا يأخذ في الاعتبار خصوصية المناطق الساحلية حيث الرطوبة عالية والمياه الباردة متاحة. هناك نقص في التحقق التجريبي والتحسين لمثل هذه الظروف.",
+     "first_step": "تجميع مكثف بسيط: صفيحة معدنية تُبرد بمياه البحر، مع أخاديد لتجميع المكثف؛ قياس إنتاج الماء خلال الليل.",
+     "needs": "مواد للنموذج الأولي (صفائح معدنية، أنابيب، عزل)، أجهزة استشعار لدرجة الحرارة والرطوبة، الوصول إلى مياه البحر، موقع على الساحل. المهارات: أساسيات الهندسة الحرارية، مهارات يدوية. الميزانية: 50-100 ألف روبل.",
+     "risks": "قد يكون إنتاج الماء صغيرًا جدًا في الظروف الحقيقية (يعتمد على نقطة الندى وسرعة الرياح)، مما يجعل النظام غير مربح.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "دراسة الطريقة المقترحة في العمل 0704.2571 لاستخراج الماء من الغلاف الجوي وتكييفها مع ظروف المناخ الساحلي.",
+      "حساب التوازن الحراري وانتقال الكتلة للمخطط المختار (التكثيف على سطح مبرد، مواد ماصة).",
+      "تجميع نموذج أولي باستخدام مواد متاحة (صفائح معدنية، أنابيب بلاستيكية، مراوح) وأجهزة استشعار لدرجة الحرارة/الرطوبة.",
+      "إجراء سلسلة من الاختبارات في ظروف جوية مختلفة، وقياس الإنتاج اليومي للماء واستهلاك الطاقة."
+     ]
+    },
+    {
+     "based_on": [
+      "2501.16571",
+      "1807.04169"
+     ],
+     "title": "إنشاء نموذج أولي لطائرة تحت الماء لمراقبة التلوث بالقرب من محطات التحلية",
+     "what": "تطوير مركبة تحت الماء ذاتية القيادة مزودة بكاميرا ونظام رؤية حاسوبية لاكتشاف وتصنيف الحطام البحري والملوثات المحتملة في منطقة مداخل المياه لمحطات التحلية. تدريب نموذج الكشف على بيانات اصطناعية وحقيقية.",
+     "why": "تلوث مداخل المياه (الحطام، البقع النفطية) يقلل من كفاءة التحلية ويتلف الأغشية. المراقبة الذاتية ستسمح بتنظيف المنطقة في الوقت المناسب وتخطيط صيانة المحطات.",
+     "origin": "في 2501.16571، أظهر الكشف الفعال عن الحطام البحري باستخدام YOLO المقتطع، ولكن دون مراعاة التشوهات تحت الماء. يقدم العمل 1807.04169 طريقة لتحسين الصور تحت الماء يمكن أن تزيد من دقة الكشف. ينقص حل متكامل للمراقبة بالقرب من محطات التحلية.",
+     "first_step": "تثبيت واختبار نموذج YOLO على مجموعة بيانات عامة للحطام تحت الماء (مثل TrashCan)، وتقييم الدقة والسرعة على الأجهزة المستهدفة.",
+     "needs": "طائرة تحت الماء أو مكونات لتجميعها، كاميرا، كمبيوتر على متنها، الوصول إلى منطقة مائية للاختبارات. المهارات: البرمجة بلغة بايثون، خبرة مع الشبكات العصبية، مهارات بناء أساسية. الميزانية: 100-300 ألف روبل اعتمادًا على جاهزية الطائرة.",
+     "risks": "صعوبة الحصول على صور تحت الماء عالية الجودة في المياه العكرة؛ قد لا يعمم النموذج جيدًا على الظروف الحقيقية، وسيتطلب الكثير من البيانات لإعادة التدريب.",
+     "scale": "مشروع تخرج",
+     "methods": [
+      "استخدام بنية YOLO مع التقليم، كما في العمل 2501.16571، مع تكييفها للظروف تحت الماء.",
+      "تجميع حامل تحت الماء بناءً على مشاريع مفتوحة المصدر (مثل BlueROV) مع كاميرا وإضاءة.",
+      "توليد مجموعة بيانات اصطناعية للصور تحت الماء مع الحطام، وتطبيق طرق إزالة الضباب من العمل 1807.04169 لتحسين الجودة.",
+      "تدريب النموذج على مجموعة البيانات المدمجة ونشره على كمبيوتر على متنها (Jetson Nano أو ما يعادله)."
+     ]
+    },
+    {
+     "based_on": [
+      "2501.09723",
+      "2501.10123"
+     ],
+     "title": "تطوير طريقة تحليل سريع لليورانيوم والبلوتونيوم في مياه البحر لمراقبة المياه المحلاة",
+     "what": "تكييف وتبسيط منهجية كيميائية إشعاعية لفصل اليورانيوم والبلوتونيوم من مياه البحر للتحكم الروتيني في سلامة المياه المحلاة. إنشاء بروتوكول محمول مناسب للاستخدام الميداني أو في محطات التحلية.",
+     "why": "يجب أن تتوافق المياه المحلاة مع المعايير الخاصة بالنويدات المشعة، لكن الطرق الحالية تتطلب معدات معقدة (AMS) ووقتًا طويلاً. طريقة مبسطة ستسمح بفحص سريع للمياه لمحتوى النظائر طويلة العمر.",
+     "origin": "تقدم الأعمال 2501.10123 و2501.09723 منهجيات موثوقة ولكنها معقدة لتحليل الأكتينيدات في مياه البحر باستخدام AMS. لممارسة التحلية، هناك حاجة إلى طريقة أبسط وأسرع يمكن تنفيذها في مختبر كيميائي إشعاعي عادي.",
+     "first_step": "إعادة إنتاج المنهجية من 2501.09723 في ظروف معملية باستخدام محاليل قياسية وتقييم المخرجات في كل خطوة.",
+     "needs": "مختبر كيميائي إشعاعي مع خزانة دخان، راتنجات التبادل الأيوني (TEVA، UTEVA)، محاليل قياسية للنويدات المشعة، الوصول إلى مطياف ألفا أو ICP-MS. المهارات: الكيمياء الإشعاعية، العمل مع مصادر الإشعاع المؤين. الميزانية: 200-500 ألف روبل للكواشف والتحليلات.",
+     "risks": "قد تكون حساسية مطيافية ألفا غير كافية للتركيزات المنخفضة في المياه المحلاة؛ قد تكون هناك حاجة إلى تراكم طويل أو الانتقال إلى طريقة أكثر تكلفة.",
+     "scale": "مشروع تخرج",
+     "methods": [
+      "اتخاذ إجراء من العمل 2501.09723 كأساس (استخلاص متسلسل لـ U وNp وPu من أحجام صغيرة) وتحسينه لأحجام أصغر (1-2 لتر).",
+      "استبدال قياس AMS بطريقة أكثر توفرًا، مثل مطيافية ألفا أو قياس الطيف الكتلي بالبلازما المقترنة حثيًا (ICP-MS)، إذا كانت الحساسية كافية.",
+      "التحقق من المخرجات ونقاء الفصل باستخدام إضافات متتبعة (242Pu، 236U).",
+      "إجراء قياسات مقارنة لعينات حقيقية من مياه البحر والمياه المحلاة."
+     ]
+    },
+    {
+     "based_on": [
+      "2508.18262"
+     ],
+     "title": "إنشاء توأم رقمي لمحطة تحلية بالأغشية لتحسين دورات التنظيف",
+     "what": "تطوير نموذج برمجي لعملية الترشيح مع مراعاة تلوث الغشاء ودورات الغسيل العكسي بناءً على بيانات التجارب المعملية والمحاكاة. استخدامه لاختيار المعلمات المثلى لتشغيل محطة تحلية حقيقية.",
+     "why": "تلوث الأغشية هو السبب الرئيسي لزيادة استهلاك الطاقة وتكاليف الاستبدال. سيسمح التوأم الرقمي بالتنبؤ بانخفاض الأداء وتخطيط عمليات الغسيل، مما يوفر الموارد.",
+     "origin": "يقدم العمل 2508.18262 نموذجًا عشوائيًا لانسداد الغشاء، لكنه لا يأخذ في الاعتبار تحسين أوضاع الغسيل في سياق محطة تحلية كاملة. ينقص دمج النموذج مع البيانات الحقيقية وتطبيقه للإدارة.",
+     "first_step": "إعادة إنتاج النموذج من 2508.18262 بلغة بايثون، والتحقق من سلوكه في حالات بسيطة ومقارنته بالنتائج المنشورة.",
+     "needs": "كمبيوتر بأداء كافٍ، الوصول إلى بيانات تجريبية (يمكن توليدها ذاتيًا على منصة بسيطة)، مهارات في النمذجة العددية والبرمجة (بايثون، C++). الميزانية: ضئيلة إذا تم استخدام جهاز شخصي.",
+     "risks": "قد يكون النموذج مبسطًا جدًا للظروف الحقيقية، مما يتطلب تحسينًا كبيرًا؛ معايرة البيانات المحدودة قد تعطي تنبؤات غير موثوقة.",
+     "scale": "سنوات",
+     "methods": [
+      "استخدام نموذج ترشيح الغشاء من العمل 2508.18262 (محاكاة مونت كارلو لصفيحة مسطحة ثنائية الأبعاد) كأساس.",
+      "توسيع النموذج ليشمل الهندسة الحقيقية لوحدة الغشاء والديناميكا المائية (على سبيل المثال، باستخدام CFD أو نماذج مقاومة مبسطة).",
+      "جمع بيانات تجريبية عن انسداد الغشاء على منصة معملية (يمكن استخدام المنصة من الفكرة الأولى) لمعايرة النموذج.",
+      "تنفيذ خوارزمية تحسين (مثل الخوارزمية الجينية) لاختيار جدول الغسيل."
+     ]
+    }
+   ]
+  },
+  "fr": {
+   "note": "Dans le domaine du dessalement de l'eau de mer, de nouveaux matériaux membranaires et des méthodes de réduction de la consommation d'énergie sont activement étudiés, mais l'écart entre la modélisation moléculaire et les essais pratiques reste considérable.",
+   "topic": "dessalement de l'eau de mer",
+   "ideas": [
+    {
+     "based_on": [
+      "1309.0322",
+      "1512.07101",
+      "2310.05729"
+     ],
+     "title": "Monter un banc d'essai pour comparer les membranes dans des conditions réelles de dessalement",
+     "what": "Concevoir et assembler un banc d'essai de laboratoire pour tester les membranes d'osmose inverse et de nouveaux matériaux nanoporeux (graphyne, g-C2N, MoS2) sur de l'eau de mer réelle. Effectuer une série de mesures de perméabilité et de sélectivité pour différentes membranes dans des conditions identiques.",
+     "why": "Les simulations prédisent des performances exceptionnelles pour les nouvelles membranes 2D, mais les vérifications expérimentales sont rares. Un tel banc permettrait de filtrer rapidement les matériaux non prometteurs et fournirait des données pour calibrer les modèles.",
+     "origin": "Les travaux 1309.0322, 1512.07101 et 2310.05729 présentent des simulations de dynamique moléculaire montrant une perméabilité élevée et un rejet total des sels pour les nouveaux matériaux 2D, mais aucune confirmation expérimentale n'existe. Il manque une méthodologie d'essai unifiée permettant de comparer différentes membranes dans des conditions identiques sur de l'eau de mer réelle.",
+     "first_step": "Concevoir une cellule à flux, choisir une pompe, des capteurs de pression et un conductimètre ; commander ou fabriquer un type de membrane (par exemple, à base d'oxyde de graphène comme alternative plus accessible) et effectuer un essai préliminaire sur de l'eau distillée.",
+     "needs": "Équipement : pompe haute pression (jusqu'à 60 bars), cellule à flux, capteurs de pression et de débit, conductimètre, source d'eau de mer synthétique. Compétences : conception de systèmes hydrauliques, travail avec l'instrumentation de mesure, connaissances de base des procédés membranaires. Budget : environ 200 à 300 milliers de roubles pour les composants.",
+     "risks": "Difficulté de fabrication de membranes 2D sans défauts avec des caractéristiques reproductibles ; l'eau de mer réelle contient des matières organiques et des matières en suspension qui encrassent rapidement la membrane, ce qui compliquera l'interprétation.",
+     "scale": "semestre",
+     "methods": [
+      "Fabriquer des membranes selon les méthodes des travaux : graphyne (1309.0322), g-C2N (1512.07101), MoS2 (2310.05729) ou utiliser des analogues commerciaux.",
+      "Assembler une cellule à flux avec contrôle de la pression, de la température et du débit ; mesurer le flux d'eau et la concentration en sels à l'entrée et à la sortie.",
+      "Effectuer des mesures sur de l'eau de mer synthétique (selon la norme ASTM D1141) et sur un échantillon réel prélevé en mer.",
+      "Comparer les données expérimentales avec les résultats des calculs de dynamique moléculaire issus des travaux."
+     ]
+    },
+    {
+     "based_on": [
+      "0704.2571"
+     ],
+     "title": "Développer un système peu coûteux de production d'eau douce à partir de l'atmosphère pour les zones côtières",
+     "what": "Concevoir et construire une installation pilote pour condenser l'eau de l'air humide, utilisant les écarts naturels de température (par exemple, l'eau de mer comme réservoir froid) ou l'énergie solaire. La tester dans des conditions réelles sur le littoral.",
+     "why": "Dans les zones côtières à forte humidité mais avec un accès limité à l'eau douce, un tel système pourrait constituer une alternative au dessalement. Potentiellement moins cher et plus simple à entretenir.",
+     "origin": "Le travail 0704.2571 propose une méthode peu coûteuse pour extraire l'eau de l'atmosphère, mais ne considère pas les spécificités des zones côtières, où l'humidité est élevée et où l'eau de mer froide est disponible. Il manque une vérification expérimentale et une optimisation pour de telles conditions.",
+     "first_step": "Assembler un condenseur simple : une feuille de métal refroidie par l'eau de mer, avec des rainures pour recueillir le condensat ; mesurer la production d'eau pendant la nuit.",
+     "needs": "Matériaux pour le prototype (tôle, tubes, isolation), capteurs de température et d'humidité, accès à l'eau de mer, emplacement sur le littoral. Compétences : bases de la thermique, habileté manuelle. Budget : 50 à 100 milliers de roubles.",
+     "risks": "La production d'eau pourrait être trop faible dans des conditions réelles (elle dépend du point de rosée et de la vitesse du vent), ce qui rendrait le système non rentable.",
+     "scale": "semestre",
+     "methods": [
+      "Étudier la méthode d'extraction de l'eau de l'atmosphère proposée dans le travail 0704.2571 et l'adapter aux conditions du climat côtier.",
+      "Calculer le bilan thermique et le transfert de masse pour le schéma choisi (condensation sur surface refroidie, matériaux adsorbants).",
+      "Assembler un prototype avec des matériaux disponibles (tôles métalliques, tubes en plastique, ventilateurs) et des capteurs de température et d'humidité.",
+      "Effectuer une série d'essais dans différentes conditions météorologiques, mesurer la production quotidienne d'eau et la consommation d'énergie."
+     ]
+    },
+    {
+     "based_on": [
+      "2501.16571",
+      "1807.04169"
+     ],
+     "title": "Créer un prototype de drone sous-marin pour surveiller la pollution à proximité des stations de dessalement",
+     "what": "Développer un véhicule sous-marin autonome avec caméra et système de vision par ordinateur pour détecter et classer les débris marins et les polluants potentiels dans la zone des prises d'eau des installations de dessalement. Entraîner un modèle de détection sur des données synthétiques et réelles.",
+     "why": "La pollution des prises d'eau (débris, films d'hydrocarbures) réduit l'efficacité du dessalement et endommage les membranes. Une surveillance autonome permettrait de nettoyer la zone en temps utile et de planifier la maintenance des stations.",
+     "origin": "Le travail 2501.16571 montre une détection efficace des débris marins à l'aide d'un YOLO élagué, mais sans tenir compte des distorsions sous-marines. Le travail 1807.04169 propose une méthode d'amélioration des images sous-marines qui pourrait améliorer la précision de la détection. Il manque une solution intégrée pour la surveillance à proximité des stations de dessalement.",
+     "first_step": "Installer et tester le modèle YOLO sur un jeu de données public de débris sous-marins (par exemple, TrashCan), évaluer la précision et la vitesse sur le matériel cible.",
+     "needs": "Drone sous-marin ou composants pour son assemblage, caméra, ordinateur embarqué, accès à une zone aquatique pour les tests. Compétences : programmation en Python, expérience avec les réseaux de neurones, compétences de base en conception. Budget : 100 à 300 milliers de roubles selon l'état du drone.",
+     "risks": "Difficulté à obtenir des images sous-marines de qualité dans une eau trouble ; le modèle pourrait mal généraliser aux conditions réelles, nécessitant beaucoup de données pour un réentraînement.",
+     "scale": "mémoire",
+     "methods": [
+      "Utiliser l'architecture YOLO avec élagage, comme dans le travail 2501.16571, en l'adaptant aux conditions sous-marines.",
+      "Assembler un porteur sous-marin basé sur des projets ouverts (par exemple, BlueROV) avec caméra et éclairage.",
+      "Générer un jeu de données synthétique d'images sous-marines avec des débris, appliquer des méthodes de suppression du voile du travail 1807.04169 pour améliorer la qualité.",
+      "Entraîner le modèle sur un jeu de données combiné et le déployer sur un ordinateur embarqué (Jetson Nano ou équivalent)."
+     ]
+    },
+    {
+     "based_on": [
+      "2501.09723",
+      "2501.10123"
+     ],
+     "title": "Développer une méthode d'analyse rapide de l'uranium et du plutonium dans l'eau de mer pour le contrôle de l'eau dessalée",
+     "what": "Adapter et simplifier la méthode radiochimique de séparation de l'uranium et du plutonium de l'eau de mer pour le contrôle de routine de la sécurité de l'eau dessalée. Créer un protocole portable, utilisable sur le terrain ou dans les stations de dessalement.",
+     "why": "L'eau dessalée doit respecter les normes relatives aux radionucléides, mais les méthodes existantes nécessitent un équipement complexe (AMS) et beaucoup de temps. Une méthode simplifiée permettrait de vérifier rapidement la teneur en isotopes à vie longue.",
+     "origin": "Les travaux 2501.10123 et 2501.09723 proposent des méthodes fiables mais complexes pour l'analyse des actinides dans l'eau de mer par AMS. Pour la pratique du dessalement, il faut une méthode plus simple et plus rapide, réalisable dans un laboratoire de radiochimie ordinaire.",
+     "first_step": "Reproduire la méthode du travail 2501.09723 en laboratoire avec des solutions standard et évaluer les rendements à chaque étape.",
+     "needs": "Laboratoire de radiochimie avec hotte aspirante, résines échangeuses d'ions (TEVA, UTEVA), solutions standard de radionucléides, accès à un spectromètre alpha ou à un ICP-MS. Compétences : radiochimie, manipulation de sources de rayonnements ionisants. Budget : 200 à 500 milliers de roubles pour les réactifs et les analyses.",
+     "risks": "La sensibilité de la spectrométrie alpha pourrait être insuffisante pour les faibles concentrations dans l'eau dessalée ; un temps de comptage long ou le recours à une méthode plus coûteuse pourrait être nécessaire.",
+     "scale": "mémoire",
+     "methods": [
+      "Prendre comme base la procédure du travail 2501.09723 (extraction séquentielle de U, Np, Pu à partir de petits volumes) et l'optimiser pour des volumes encore plus petits (1 à 2 L).",
+      "Remplacer la mesure par AMS par une méthode plus accessible, par exemple la spectrométrie alpha ou la spectrométrie de masse à plasma à couplage inductif (ICP-MS), si la sensibilité est suffisante.",
+      "Vérifier les rendements et la pureté de la séparation à l'aide de traceurs (242Pu, 236U).",
+      "Effectuer des mesures comparatives sur des échantillons réels d'eau de mer et d'eau dessalée."
+     ]
+    },
+    {
+     "based_on": [
+      "2508.18262"
+     ],
+     "title": "Créer un jumeau numérique d'un dessaleur à membrane pour optimiser les cycles de nettoyage",
+     "what": "Développer un modèle logiciel du processus de filtration tenant compte de l'encrassement de la membrane et des cycles de rétrolavage, basé sur des données d'expériences de laboratoire et de modélisation. L'utiliser pour choisir les paramètres optimaux de fonctionnement d'une installation de dessalement réelle.",
+     "why": "L'encrassement des membranes est la principale cause de l'augmentation de la consommation d'énergie et des coûts de remplacement. Un jumeau numérique permettrait de prédire la baisse de performance et de planifier les lavages, économisant ainsi des ressources.",
+     "origin": "Le travail 2508.18262 fournit un modèle stochastique de colmatage des membranes, mais ne considère pas l'optimisation des cycles de lavage dans le contexte d'une installation de dessalement complète. Il manque l'intégration du modèle avec des données réelles et son application à la gestion.",
+     "first_step": "Reproduire le modèle du travail 2508.18262 en Python, vérifier son comportement sur des cas simples et le comparer aux résultats publiés.",
+     "needs": "Ordinateur avec une puissance suffisante, accès à des données expérimentales (peuvent être générées sur un banc simple), compétences en modélisation numérique et en programmation (Python, C++). Budget : minimal si on utilise un ordinateur personnel.",
+     "risks": "Le modèle pourrait être trop simplifié pour les conditions réelles, nécessitant des améliorations importantes ; l'étalonnage sur des données limitées pourrait donner des prévisions peu fiables.",
+     "scale": "années",
+     "methods": [
+      "Utiliser le modèle de filtration membranaire du travail 2508.18262 (simulations de Monte-Carlo en 2D flat-sheet) comme base.",
+      "Compléter le modèle en tenant compte de la géométrie réelle du module membranaire et de l'hydrodynamique (par exemple, par CFD ou des modèles de résistance simplifiés).",
+      "Collecter des données expérimentales sur l'encrassement de la membrane sur un banc de laboratoire (on peut utiliser le banc de la première idée) pour calibrer le modèle.",
+      "Implémenter un algorithme d'optimisation (par exemple, un algorithme génétique) pour choisir le calendrier des lavages."
+     ]
+    }
+   ]
+  }
+ }
 }

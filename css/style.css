@@ -1542,16 +1542,23 @@ html[dir="rtl"] .feedback .fb-title-row { justify-content: flex-start; }
    тот же значок, — чтобы читатель узнал её без подписи. Погашенная и перечёркнутая
    означает «экспрессы скрыты». Владелец 30.08: «сделать её как кнопку-включатель». */
 .express-head {
-    display: inline-flex; align-items: center; gap: 4px;
-    font-size: 11px; font-weight: 600; letter-spacing: .3px; text-transform: uppercase;
-    padding: 2px 7px; border: 1px solid #c07a1e; border-radius: 3px;
-    color: #c07a1e; background: none; cursor: pointer;
+    /* Один значок и тот же круг, что у поиска, календаря и темы — иначе в ряду
+       круглых кнопок прямоугольник с надписью читается как чужой элемент и на
+       узком экране ломает строку. Охра остаётся: по ней кнопка и узнаётся. */
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 30px; height: 30px; padding: 0; border-radius: 50%;
+    border: 1px solid #c07a1e; color: #c07a1e; background: none; cursor: pointer;
     transition: opacity .16s, color .16s, border-color .16s;
 }
 .express-head:hover { background: color-mix(in srgb, #c07a1e 12%, transparent); }
 .express-head.off {
-    color: var(--muted); border-color: var(--hair); text-decoration: line-through;
-    opacity: .75;
+    /* Погашено = скрыты. Перечёркивание текстом больше не работает — текста нет,
+       поэтому черту рисуем сами, поверх значка. */
+    color: var(--muted); border-color: var(--border); opacity: .75; position: relative;
+}
+.express-head.off::after {
+    content: ""; position: absolute; left: 5px; right: 5px; top: 50%;
+    border-top: 1.5px solid currentColor; transform: rotate(-45deg);
 }
 .express-head .b42-ic { flex: none; }
 /* Старая галочка в ряду фильтров: кнопка в шапке говорит то же самое, две ручки
@@ -2990,8 +2997,14 @@ html[data-theme="dark"] .an-stage {
    и 360 пикселей содержимого уже не помещаются. */
 @media (max-width: 400px) {
     .logo { font-size: 15px; }
-    .brand-row { gap: 8px; }
+    .brand-row { gap: 6px; }
     .hdr-icons { gap: 6px; }
+    /* Шапка не влезала в 375 ровно на восемь пикселей, и группа справа съезжала
+       второй строкой: три круга сверху, два снизу. Ужимаем промежутки, а не сами
+       кнопки — у них 44 пикселя не для красоты, это минимальная область нажатия
+       пальцем, и трогать её нельзя. Восьми сэкономленных пикселей хватает. */
+    .top-bar { gap: 6px; }
+    .header-right { gap: 6px 4px; }
 }
 
 /* Иконка, уехавшая в шторку (см. fitHeaderCluster в js/search.js), становится обычным
@@ -3055,7 +3068,14 @@ html[data-theme="dark"] .an-stage {
    тогда как поиск и тема нужны с любой страницы. Сам архив никуда не девается — он
    пунктом в шторке. Прятать календарь в шторку нельзя: он разворачивает сетку месяцев
    шириной под 620 и растягивает список, возвращая прокрутку вбок. */
-@media (max-width: 340px) {
+/* Порог поднят с 340 до 400. Арифметика простая и неумолимая: на 375 строке шапки
+   достаётся 343 пикселя, а логотип, «ещё», поиск, календарь, экспресс и тема просят
+   373. Тридцать лишних пикселей можно отнять только у чего-то одного — либо у области
+   нажатия (44 пикселя, минимум для пальца, трогать нельзя), либо у одной кнопки.
+   Уходит календарь: он единственный, чья работа полностью повторена страницей архива,
+   и до него оттуда два касания. Поиск, экспресс и тема остаются — им замены нет.
+   Без этого группа справа съезжала второй строкой: три круга сверху, два снизу. */
+@media (max-width: 400px) {
     .brand-row .cal-bar { display: none; }
 }
 

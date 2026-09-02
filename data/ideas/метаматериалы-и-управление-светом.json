@@ -244,5 +244,411 @@
    },
    "abstract": "Manipulation of wave-matter interactions in systems with loss and gain have opened new mechanisms to control wave propagation at will. Metamaterials and metasurfaces having spatially inhomogeneous loss and gain have been studied in the past few years by exploiting parity-time (PT) symmetry concepts inspired from quantum-physics. In this work we theoretically study the control of light-matter interactions in spatially unbounded metamaterials having a time-modulated permittivity whose imaginary part is temporally modulated to induce loss and gain, while the real part stays unchanged. We show bot"
   }
- ]
+ ],
+ "lang": {
+  "en": {
+   "note": "Tunable metamaterials that control light, heat, and superconductivity are an active area of research, but many effects have yet to be turned into practical devices.",
+   "topic": "metamaterials and light control",
+   "ideas": [
+    {
+     "based_on": [
+      "2604.03830"
+     ],
+     "title": "Build a tunable liquid-crystal metasurface modulator to control nonlinear frequency conversion",
+     "what": "Create a prototype of an ultrathin metasurface with liquid crystals, controlled by light, to tune nonlinear frequency conversion and the distribution of energy across directions. Reproduce the key result of work 2604.03830 in a simplified form, adding polarization control.",
+     "why": "Such a modulator could become the basis for programmable photonic circuits for signal processing, where tunable nonlinearity is needed without bulky optics.",
+     "origin": "Work 2604.03830 showed that liquid crystals on a metasurface allow light to control nonlinear properties, but it did not investigate the influence of the polarization of the control light, nor did it propose a simple scheme for practical use. We propose to reproduce the effect and add polarization control, which is absent in the original work.",
+     "first_step": "Calculate and simulate in FDTD a simple metasurface (for example, an array of gold nanorods) with a liquid-crystal layer to determine the geometry for the nonlinear response at the desired wavelength.",
+     "needs": "Access to electron-beam lithography facilities, femtosecond pulse sources, a high-resolution spectrometer, and skills with FDTD simulators (Lumerical, MEEP).",
+     "risks": "Difficulty in accurately reproducing the nonlinear response due to sensitivity to surface quality and liquid-crystal orientation; possible sample degradation at high intensities.",
+     "scale": "diploma",
+     "methods": [
+      "Fabricate a metasurface based on plasmonic nanoantennas coated with a liquid-crystal layer, using lithography and thin-film deposition methods.",
+      "Set up an optical pump-and-probe scheme: a pulsed laser to excite the nonlinear response, and a spectrometer to record the converted frequencies.",
+      "Control the orientation of the liquid crystal with external light (photoinduced reorientation) and measure changes in the nonlinear signal under different states.",
+      "Compare experimental data with finite-difference time-domain (FDTD) calculations to evaluate conversion efficiency."
+     ]
+    },
+    {
+     "based_on": [
+      "2601.09513"
+     ],
+     "title": "Test optical control of YBCO superconductivity for creating tunable metamaterials",
+     "what": "Use laser-induced oxygen depletion in YBCO films to locally modify superconducting properties and create a tunable metamaterial for controlling terahertz radiation.",
+     "why": "Local control of superconductivity would allow creating elements with variable conductivity for metamaterials operating in the terahertz range, which is relevant for spectroscopy and communications.",
+     "origin": "Work 2601.09513 demonstrates smooth tuning of YBCO superconductivity with a laser, but does not use this for creating metamaterials. Meanwhile, metamaterials for the terahertz range often require tuning, which this method could provide. We propose to combine these ideas.",
+     "first_step": "Obtain or fabricate a YBCO film and calibrate the laser exposure: measure the dependence of the transition temperature on power and irradiation time.",
+     "needs": "Pulsed laser deposition system, a laser with controlled power, a cryostat for measuring superconducting properties, and a terahertz spectrometer.",
+     "risks": "Difficulty in precisely controlling the spatial distribution of oxygen; possible instability of properties over time due to oxygen diffusion.",
+     "scale": "years",
+     "methods": [
+      "Deposit thin YBCO films on a substrate using pulsed laser deposition.",
+      "Use a focused laser to locally modify the oxygen content, controlling the transition temperature and carrier density, as in work 2601.09513.",
+      "Fabricate an array of such regions forming a metamaterial (for example, split-ring resonators) and measure its terahertz response using time-resolved terahertz spectroscopy.",
+      "Compare with simulations of a metamaterial with spatially inhomogeneous conductivity."
+     ]
+    },
+    {
+     "based_on": [
+      "2603.10900"
+     ],
+     "title": "Develop a method for optical writing of thermal channels based on hyperbolic phonon polaritons",
+     "what": "Reproduce and extend the method from work 2603.10900: use laser patterns on a molybdenum oxide film to create pathways for hyperbolic phonon polaritons and investigate their heat-conducting properties.",
+     "why": "Controlling heat at the nanoscale is important for electronics cooling and creating thermal diodes, and the proposed method is potentially cheaper and simpler than traditional ones.",
+     "origin": "Work 2603.10900 demonstrated a way to create thermal pathways with light, but did not investigate the resolution limits or the influence of pattern parameters on heat transfer efficiency. We propose to systematically study these aspects to understand the practical applicability of the method.",
+     "first_step": "Obtain a MoO3 film and reproduce the laser patterning, then perform basic structural characterization (atomic force microscopy, Raman spectroscopy).",
+     "needs": "Laser setup with precise positioning, a scanning thermal microscope or thermoreflectance system, and equipment for film deposition.",
+     "risks": "Difficulty in measuring heat fluxes at the nanoscale with sufficient accuracy; possible film damage during laser processing.",
+     "scale": "diploma",
+     "methods": [
+      "Fabricate thin films of molybdenum oxide (MoO3) by exfoliation or chemical vapor deposition.",
+      "Use a laser to write patterns, controlling their geometry (width, period) and laser parameters.",
+      "Measure heat propagation using scanning thermal microscopy or thermoreflectance to confirm directional transport along the patterns.",
+      "Compare with theoretical calculations of hyperbolic phonon polariton dispersion."
+     ]
+    },
+    {
+     "based_on": [
+      "2204.02750"
+     ],
+     "title": "Create an optical tweezer based on a metasurface for nanoparticle manipulation",
+     "what": "Design and fabricate a metasurface that focuses light into a subwavelength spot for optical trapping and manipulation of nanoparticles, using approaches from work 2204.02750.",
+     "why": "Metasurface tweezers could be more compact and cheaper than traditional ones, which is useful for biological research and nanotechnology.",
+     "origin": "Work 2204.02750 reviews the principles of metamaterial tweezers, but specific implementations often require complex alignment. We propose to create a simple metasurface and test its efficiency for particles of different sizes and materials.",
+     "first_step": "Numerically calculate a metasurface for focusing light of wavelength 1064 nm into a spot with diameter less than 500 nm.",
+     "needs": "Lithography equipment, a laser, a microscope with a camera, and simulation software (FDTD, COMSOL).",
+     "risks": "Low trapping efficiency due to losses in the metasurface; difficulty in precise positioning of particles.",
+     "scale": "semester",
+     "methods": [
+      "Design a metasurface (for example, based on dielectric nanopillars) to create an optical trap with a specified intensity profile.",
+      "Fabricate the sample using lithography and etching methods.",
+      "Assemble an optical setup for trapping polystyrene or silicon nanoparticles and observing their motion.",
+      "Measure trap stiffness by analyzing the Brownian motion of the trapped particle."
+     ]
+    },
+    {
+     "based_on": [
+      "2209.02656"
+     ],
+     "title": "Investigate ultrastrong coupling in quantum electrodynamic metamaterials for controlling optical response",
+     "what": "Theoretically and experimentally investigate a metamaterial consisting of resonators strongly coupled to quantum emitters, to determine how ultrastrong coupling modifies the collective optical response.",
+     "why": "Ultrastrong coupling could lead to new effects, such as modification of chemical reactions or transport properties, which is promising for quantum technologies.",
+     "origin": "Work 2209.02656 considers ultrastrong coupling in metamaterials but focuses on the theoretical description of single elements. We propose to study collective effects in an array, which could reveal new modes and nonlinearities.",
+     "first_step": "Choose a specific system (for example, quantum dots in plasmonic nanoresonators) and calculate its spectrum as a function of coupling strength.",
+     "needs": "Skills in quantum optics and numerical modeling (Python, QuTiP); for experiment, equipment for synthesizing quantum dots and nanostructures, and a spectrometer.",
+     "risks": "Difficulty in achieving ultrastrong coupling experimentally; theoretical models may not account for inhomogeneities.",
+     "scale": "years",
+     "methods": [
+      "Build a model of an array of meta-atoms, each containing a quantum emitter (e.g., a quantum dot) in a resonator, using approaches from work 2209.02656.",
+      "Calculate the collective modes of the system and their dispersion for different coupling strengths.",
+      "For experimental verification, fabricate a sample with quantum dots in a photonic resonator and measure reflection/transmission spectra.",
+      "Compare experimental spectra with theoretical predictions."
+     ]
+    }
+   ]
+  },
+  "es": {
+   "note": "Actualmente se están desarrollando metamateriales reconfigurables que controlan la luz, el calor y la superconductividad, pero muchos efectos aún no se han convertido en dispositivos prácticos.",
+   "topic": "metamateriales y control de la luz",
+   "ideas": [
+    {
+     "based_on": [
+      "2604.03830"
+     ],
+     "title": "Construir un modulador de metasuperficie reconfigurable basado en cristal líquido para controlar la conversión de frecuencia no lineal",
+     "what": "Crear un prototipo de metasuperficie ultradelgada con cristales líquidos, controlada por luz, para ajustar la conversión de frecuencia no lineal y la distribución de energía en diferentes direcciones. Reproducir el resultado clave del trabajo 2604.03830 de forma simplificada, añadiendo control de polarización.",
+     "why": "Este modulador podría convertirse en la base de circuitos fotónicos programables para el procesamiento de señales, donde se requiere no linealidad ajustable sin óptica voluminosa.",
+     "origin": "En el trabajo 2604.03830 se demostró que los cristales líquidos sobre una metasuperficie permiten controlar las propiedades no lineales con luz, pero no se investigó la influencia de la polarización de la luz de control ni se propuso un esquema simple para uso práctico. Proponemos reproducir el efecto y añadir control de polarización, que no está en el trabajo original.",
+     "first_step": "Calcular y simular en FDTD una metasuperficie simple (por ejemplo, una matriz de nanovarillas de oro) con una capa de cristal líquido, para determinar la geometría que produzca la respuesta no lineal en la longitud de onda deseada.",
+     "needs": "Acceso a instalaciones de litografía por haz de electrones, fuentes de pulsos de femtosegundos, espectrómetro de alta resolución, habilidades con simuladores FDTD (Lumerical, MEEP).",
+     "risks": "Dificultad para reproducir con precisión la respuesta no lineal debido a la sensibilidad a la calidad de la superficie y a la orientación de los cristales líquidos; posible degradación de la muestra a altas intensidades.",
+     "scale": "tesis de grado",
+     "methods": [
+      "Fabricar una metasuperficie basada en nanoantenas plasmónicas recubiertas con una capa de cristal líquido, utilizando litografía y métodos de deposición de películas delgadas.",
+      "Organizar el esquema óptico de bombeo y sondeo: un láser pulsado para excitar la respuesta no lineal y un espectrómetro para registrar las frecuencias convertidas.",
+      "Controlar la orientación del cristal líquido con luz externa (reorientación fotoinducida) y medir los cambios en la señal no lineal en diferentes estados.",
+      "Comparar los datos experimentales con el cálculo mediante el método de diferencias finitas en el dominio del tiempo (FDTD) para evaluar la eficiencia de conversión."
+     ]
+    },
+    {
+     "based_on": [
+      "2601.09513"
+     ],
+     "title": "Verificar el control óptico de la superconductividad de YBCO para crear metamateriales reconfigurables",
+     "what": "Utilizar el grabado láser de oxígeno en películas de YBCO para modificar localmente las propiedades superconductoras y crear, sobre esta base, un metamaterial reconfigurable para controlar la radiación de terahercios.",
+     "why": "El control local de la superconductividad permitirá crear elementos con conductividad variable para metamateriales que operan en el rango de terahercios, lo cual es relevante para espectroscopía y comunicaciones.",
+     "origin": "El trabajo 2601.09513 demuestra un ajuste suave de la superconductividad de YBCO con láser, pero no utiliza esto para crear metamateriales. Al mismo tiempo, los metamateriales para el rango de terahercios a menudo requieren reconfiguración, que se puede lograr de esta manera. Proponemos combinar estas ideas.",
+     "first_step": "Obtener o fabricar una película de YBCO y realizar la calibración del efecto láser: medir la dependencia de la temperatura de transición con la potencia y el tiempo de irradiación.",
+     "needs": "Instalación de deposición por láser pulsado, láser con potencia controlada, criostato para medir propiedades superconductoras, espectrómetro de terahercios.",
+     "risks": "Dificultad para controlar con precisión la distribución espacial del oxígeno; posible inestabilidad de las propiedades con el tiempo debido a la difusión de oxígeno.",
+     "scale": "años",
+     "methods": [
+      "Depositar películas delgadas de YBCO sobre un sustrato mediante deposición por láser pulsado.",
+      "Con un láser enfocado, modificar localmente el contenido de oxígeno, controlando la temperatura de transición y la densidad de portadores, como en el trabajo 2601.09513.",
+      "Fabricar una matriz de estas regiones que formen un metamaterial (por ejemplo, anillos partidos) y medir su respuesta de terahercios mediante espectroscopía de terahercios resuelta en el tiempo.",
+      "Comparar con la simulación de un metamaterial con conductividad espacialmente no homogénea."
+     ]
+    },
+    {
+     "based_on": [
+      "2603.10900"
+     ],
+     "title": "Desarrollar un método de escritura óptica de canales térmicos basados en fonones polaritones hiperbólicos",
+     "what": "Reproducir y ampliar el método del trabajo 2603.10900: mediante patrones láser sobre una película de óxido de molibdeno, crear caminos para fonones polaritones hiperbólicos e investigar sus propiedades de conducción de calor.",
+     "why": "El control del calor a nanoescala es importante para la refrigeración de dispositivos electrónicos y la creación de diodos térmicos, y el método propuesto es potencialmente más barato y simple que los tradicionales.",
+     "origin": "En el trabajo 2603.10900 se muestra una forma de crear caminos térmicos con luz, pero no se investigan los límites de resolución ni la influencia de los parámetros del patrón en la eficiencia de la transferencia de calor. Proponemos estudiar sistemáticamente estos aspectos para comprender la aplicabilidad práctica del método.",
+     "first_step": "Obtener una película de MoO3 y reproducir el patrón láser, luego realizar una caracterización básica de la estructura (microscopía de fuerza atómica, espectroscopía Raman).",
+     "needs": "Instalación láser con posicionamiento preciso, microscopio térmico de barrido o sistema de termorreflexión, equipo para deposición de películas.",
+     "risks": "Dificultad para medir flujos de calor a nanoescala con suficiente precisión; posible daño a la película durante el procesamiento láser.",
+     "scale": "tesis de grado",
+     "methods": [
+      "Fabricar películas delgadas de óxido de molibdeno (MoO3) mediante exfoliación o deposición química.",
+      "Con un láser, escribir patrones controlando su geometría (ancho, período) y los parámetros de la radiación láser.",
+      "Medir la propagación del calor mediante microscopía térmica de barrido o termorreflexión para confirmar el transporte direccional a lo largo de los patrones.",
+      "Comparar con cálculos teóricos de la dispersión de los fonones polaritones hiperbólicos."
+     ]
+    },
+    {
+     "based_on": [
+      "2204.02750"
+     ],
+     "title": "Crear una pinza óptica basada en metasuperficie para la manipulación de nanopartículas",
+     "what": "Diseñar y fabricar una metasuperficie que enfoque la luz en un punto sublongitud de onda para la captura y manipulación óptica de nanopartículas, utilizando enfoques del trabajo 2204.02750.",
+     "why": "Las pinzas ópticas de metasuperficie pueden ser más compactas y económicas que las tradicionales, lo cual es útil para investigaciones biológicas y nanotecnología.",
+     "origin": "El trabajo 2204.02750 resume los principios de las pinzas de metamaterial, pero las implementaciones específicas a menudo requieren ajustes complejos. Proponemos crear una metasuperficie simple y verificar su eficacia para partículas de diferentes tamaños y materiales.",
+     "first_step": "Calcular numéricamente una metasuperficie para enfocar luz de longitud de onda 1064 nm en un punto de diámetro menor a 500 nm.",
+     "needs": "Equipo de litografía, láser, microscopio con cámara, software de simulación (FDTD, COMSOL).",
+     "risks": "Baja eficiencia de captura debido a pérdidas en la metasuperficie; dificultad para posicionar con precisión las partículas.",
+     "scale": "semestre",
+     "methods": [
+      "Diseñar una metasuperficie (por ejemplo, basada en nanopilares dieléctricos) para crear una trampa óptica con un perfil de intensidad dado.",
+      "Fabricar la muestra mediante métodos de litografía y grabado.",
+      "Montar el esquema óptico para capturar nanopartículas de poliestireno o silicio y observar su movimiento.",
+      "Medir la rigidez de la trampa analizando el movimiento browniano de la partícula capturada."
+     ]
+    },
+    {
+     "based_on": [
+      "2209.02656"
+     ],
+     "title": "Investigar el acoplamiento ultrarfuerte en metamateriales electrodinámicos cuánticos para controlar la respuesta óptica",
+     "what": "Investigar teórica y experimentalmente un metamaterial compuesto por resonadores fuertemente acoplados a emisores cuánticos, para determinar cómo el acoplamiento ultrarfuerte modifica la respuesta óptica colectiva.",
+     "why": "El acoplamiento ultrarfuerte puede dar lugar a nuevos efectos, como la modificación de reacciones químicas o propiedades de transporte, lo cual es prometedor para tecnologías cuánticas.",
+     "origin": "El trabajo 2209.02656 aborda el acoplamiento ultrarfuerte en metamateriales, pero se centra en la descripción teórica de elementos individuales. Proponemos estudiar los efectos colectivos en una matriz, lo que podría revelar nuevos modos y no linealidades.",
+     "first_step": "Elegir un sistema específico (por ejemplo, puntos cuánticos en nanoresonadores plasmónicos) y calcular su espectro al variar la fuerza de acoplamiento.",
+     "needs": "Conocimientos de óptica cuántica y modelado numérico (Python, QuTiP); para el experimento, equipo para síntesis de puntos cuánticos y nanoestructuras, espectrómetro.",
+     "risks": "Dificultad para lograr el acoplamiento ultrarfuerte en el experimento; los modelos teóricos pueden no tener en cuenta las inhomogeneidades.",
+     "scale": "años",
+     "methods": [
+      "Construir un modelo de una matriz de metaátomos, cada uno con un emisor cuántico (por ejemplo, un punto cuántico) en un resonador, utilizando enfoques del trabajo 2209.02656.",
+      "Calcular los modos colectivos del sistema y su dispersión para diferentes fuerzas de acoplamiento.",
+      "Para la verificación experimental, fabricar una muestra con puntos cuánticos en un resonador fotónico y medir los espectros de reflexión/transmisión.",
+      "Comparar los espectros experimentales con las predicciones teóricas."
+     ]
+    }
+   ]
+  },
+  "ar": {
+   "note": "تتطور حاليًا المواد الفائقة القابلة للضبط (metamaterials) التي تتحكم في الضوء والحرارة والموصلية الفائقة، لكن العديد من التأثيرات لم تصل بعد إلى أجهزة عملية.",
+   "topic": "المواد الفائقة والتحكم في الضوء",
+   "ideas": [
+    {
+     "based_on": [
+      "2604.03830"
+     ],
+     "title": "بناء مُعدِّل سطحي فائق قابل للضبط باستخدام البلورات السائلة للتحكم في تحويل التردد غير الخطي",
+     "what": "إنشاء نموذج أولي لسطح فائق فائق الرقة مع بلورات سائلة يتم التحكم فيها بالضوء، لضبط تحويل التردد غير الخطي وتوزيع الطاقة عبر الاتجاهات. إعادة إنتاج النتيجة الرئيسية للعمل 2604.03830 بشكل مبسط، مع إضافة التحكم في الاستقطاب.",
+     "why": "يمكن أن يصبح هذا المُعدِّل أساسًا لدوائر فوتونية قابلة للبرمجة لمعالجة الإشارات، حيث تكون هناك حاجة إلى لاخطية قابلة للضبط دون بصريات ضخمة.",
+     "origin": "في العمل 2604.03830، تبين أن البلورات السائلة على السطح الفائق تسمح بالتحكم في الخصائص غير الخطية بالضوء، لكن لم يتم دراسة تأثير استقطاب الضوء المتحكم به، ولم يُقترح مخطط بسيط للاستخدام العملي. نقترح إعادة إنتاج التأثير وإضافة تحكم في الاستقطاب غير موجود في العمل الأصلي.",
+     "first_step": "حساب ومحاكاة سطح فائق بسيط (مثل مصفوفة من القضبان النانوية الذهبية) مع طبقة من البلورات السائلة باستخدام FDTD، لتحديد الهندسة المناسبة للاستجابة غير الخطية عند الطول الموجي المطلوب.",
+     "needs": "الوصول إلى معدات الطباعة الحجرية بشعاع الإلكترون، ومصادر نبضات فيمتوثانية، ومطياف عالي الدقة، ومهارات في استخدام محاكيات FDTD (Lumerical, MEEP).",
+     "risks": "صعوبة إعادة إنتاج الاستجابة غير الخطية بدقة بسبب الحساسية لجودة السطح واتجاه البلورات السائلة؛ احتمال تدهور العينة عند الشدات العالية.",
+     "scale": "مشروع تخرج",
+     "methods": [
+      "تصنيع سطح فائق يعتمد على هوائيات نانوية بلازمونية مغطاة بطبقة من البلورات السائلة، باستخدام الطباعة الحجرية وطرق ترسيب الأغشية الرقيقة.",
+      "تنظيم نظام بصري للضخ والاستشعار: ليزر نابض لإثارة الاستجابة غير الخطية، ومطياف لتسجيل الترددات المحولة.",
+      "التحكم في اتجاه البلورات السائلة بواسطة ضوء خارجي (إعادة توجيه ضوئية) وقياس التغيرات في الإشارة غير الخطية عند حالات مختلفة.",
+      "مقارنة البيانات التجريبية مع الحسابات باستخدام طريقة الفروق المحدودة في المجال الزمني (FDTD) لتقييم كفاءة التحويل."
+     ]
+    },
+    {
+     "based_on": [
+      "2601.09513"
+     ],
+     "title": "اختبار التحكم البصري في الموصلية الفائقة لـ YBCO لإنشاء مواد فائقة قابلة للضبط",
+     "what": "استخدام الحرق بالليزر للأكسجين في أغشية YBCO لتغيير الخصائص الفائقة التوصيل محليًا وإنشاء مادة فائقة قابلة للضبط على هذا الأساس للتحكم في إشعاع التيراهرتز.",
+     "why": "التحكم المحلي في الموصلية الفائقة سيسمح بإنشاء عناصر ذات موصلية متغيرة للمواد الفائقة التي تعمل في نطاق التيراهرتز، وهو أمر مهم للتحليل الطيفي والاتصالات.",
+     "origin": "يُظهر العمل 2601.09513 ضبطًا سلسًا للموصلية الفائقة لـ YBCO بالليزر، لكنه لا يستخدم ذلك لإنشاء مواد فائقة. في الوقت نفسه، غالبًا ما تتطلب المواد الفائقة لنطاق التيراهرتز ضبطًا يمكن توفيره بهذه الطريقة. نقترح دمج هذه الأفكار.",
+     "first_step": "الحصول على غشاء YBCO أو تصنيعه وإجراء معايرة للتأثير بالليزر: قياس اعتماد درجة حرارة الانتقال على القدرة وزمن التشعيع.",
+     "needs": "نظام ترسيب ليزري نابض، ليزر بقدرة قابلة للتحكم، مبرد لقياس الخصائص الفائقة التوصيل، مطياف تيراهرتز.",
+     "risks": "صعوبة التحكم الدقيق في التوزيع المكاني للأكسجين؛ احتمال عدم استقرار الخصائص بمرور الوقت بسبب انتشار الأكسجين.",
+     "scale": "سنوات",
+     "methods": [
+      "ترسيب أغشية رقيقة من YBCO بطريقة الترسيب الليزري النبضي على ركيزة.",
+      "باستخدام ليزر مركّز، تغيير محتوى الأكسجين محليًا، مع التحكم في درجة حرارة الانتقال وكثافة الناقلات، كما في العمل 2601.09513.",
+      "تصنيع مصفوفة من هذه المناطق لتشكيل مادة فائقة (مثل الحلقات المقطوعة)، وقياس استجابتها في نطاق التيراهرتز باستخدام مطيافية التيراهرتز بدقة زمنية.",
+      "المقارنة مع محاكاة المادة الفائقة ذات الموصلية غير المتجانسة مكانيًا."
+     ]
+    },
+    {
+     "based_on": [
+      "2603.10900"
+     ],
+     "title": "تطوير طريقة للتسجيل البصري للقنوات الحرارية بناءً على البولاريتونات الفونونية الزائدية",
+     "what": "إعادة إنتاج وتوسيع الطريقة من العمل 2603.10900: باستخدام أنماط ليزر على غشاء أكسيد الموليبدينوم لإنشاء مسارات للبولاريتونات الفونونية الزائدية ودراسة خصائصها الموصلة للحرارة.",
+     "why": "التحكم في الحرارة على المستوى النانوي مهم لتبريد الإلكترونيات وإنشاء صمامات حرارية، والطريقة المقترحة قد تكون أرخص وأبسط من الطرق التقليدية.",
+     "origin": "في العمل 2603.10900، تم عرض طريقة لإنشاء مسارات حرارية بالضوء، لكن لم يتم دراسة حدود الدقة وتأثير معلمات النمط على كفاءة نقل الحرارة. نقترح دراسة هذه الجوانب بشكل منهجي لفهم قابلية التطبيق العملي للطريقة.",
+     "first_step": "الحصول على غشاء MoO3 وإعادة إنتاج النمط بالليزر، ثم إجراء توصيف أساسي للبنية (مجهر القوة الذرية، مطيافية رامان).",
+     "needs": "نظام ليزر بتحديد موضع دقيق، مجهر حراري ماسح أو نظام انعكاس حراري، معدات لترسيب الأغشية.",
+     "risks": "صعوبة قياس التدفقات الحرارية على المستوى النانوي بدقة كافية؛ احتمال تلف الغشاء أثناء المعالجة بالليزر.",
+     "scale": "مشروع تخرج",
+     "methods": [
+      "تصنيع أغشية رقيقة من أكسيد الموليبدينوم (MoO3) بطريقة التقشير أو الترسيب الكيميائي.",
+      "باستخدام الليزر، إنشاء أنماط مع التحكم في هندستها (العرض، الدورة) ومعلمات إشعاع الليزر.",
+      "قياس انتشار الحرارة باستخدام مجهر حراري ماسح أو انعكاس حراري، لتأكيد النقل الموجه على طول الأنماط.",
+      "المقارنة مع الحسابات النظرية لتشتت البولاريتونات الفونونية الزائدية."
+     ]
+    },
+    {
+     "based_on": [
+      "2204.02750"
+     ],
+     "title": "إنشاء ملاقط بصرية تعتمد على سطح فائق للتلاعب بالجسيمات النانوية",
+     "what": "تطوير وتصنيع سطح فائق يركز الضوء في بقعة دون طول موجي للالتقاط البصري والتلاعب بالجسيمات النانوية، باستخدام أساليب من العمل 2204.02750.",
+     "why": "يمكن أن تكون الملاقط الفائقة السطحية أكثر إحكامًا وأرخص من التقليدية، وهو مفيد للأبحاث البيولوجية وتقنية النانو.",
+     "origin": "يلخص العمل 2204.02750 مبادئ الملاقط الفائقة، لكن التطبيقات المحددة غالبًا ما تتطلب ضبطًا معقدًا. نقترح إنشاء سطح فائق بسيط واختبار فعاليته لجسيمات مختلفة الأحجام والمواد.",
+     "first_step": "حساب عددي لسطح فائق لتركيز ضوء بطول موجة 1064 نانومتر في بقعة قطرها أقل من 500 نانومتر.",
+     "needs": "معدات الطباعة الحجرية، ليزر، مجهر بكاميرا، برامج محاكاة (FDTD, COMSOL).",
+     "risks": "انخفاض كفاءة الالتقاط بسبب الفقد في السطح الفائق؛ صعوبة تحديد موضع الجسيمات بدقة.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "تصميم سطح فائق (مثل أعمدة نانوية عازلة) لإنشاء مصيدة بصرية بملف شدة محدد.",
+      "تصنيع العينة بطرق الطباعة الحجرية والحفر.",
+      "تجميع نظام بصري لالتقاط جسيمات نانوية من البوليستيرين أو السيليكون ومراقبة حركتها.",
+      "قياس صلابة المصيدة بتحليل الحركة البراونية للجسيم الملتقط."
+     ]
+    },
+    {
+     "based_on": [
+      "2209.02656"
+     ],
+     "title": "دراسة الاقتران فائق القوة في المواد الفائقة الكهرومغناطيسية الكمومية للتحكم في الاستجابة البصرية",
+     "what": "دراسة نظرية وتجريبية لمادة فائقة تتكون من رنانات مرتبطة بقوة مع بواعث كمومية، لمعرفة كيف يغير الاقتران فائق القوة الاستجابة البصرية الجماعية.",
+     "why": "يمكن أن يؤدي الاقتران فائق القوة إلى تأثيرات جديدة مثل تغيير التفاعلات الكيميائية أو خصائص النقل، وهو واعد لتقنيات الكم.",
+     "origin": "ينظر العمل 2209.02656 في الاقتران فائق القوة في المواد الفائقة، لكنه يركز على الوصف النظري للعناصر المفردة. نقترح دراسة التأثيرات الجماعية في مصفوفة، مما قد يكشف عن أنماط ولا خطية جديدة.",
+     "first_step": "اختيار نظام محدد (مثل النقاط الكمومية في الرنانات النانوية البلازمونية) وحساب طيفه عند تغيير قوة الاقتران.",
+     "needs": "مهارات في البصريات الكمومية والمحاكاة العددية (Python, QuTiP)، للتجربة: معدات لتخليق النقاط الكمومية والهياكل النانوية، مطياف.",
+     "risks": "صعوبة تحقيق اقتران فائق القوة في التجربة؛ قد لا تأخذ النماذج النظرية في الاعتبار عدم التجانس.",
+     "scale": "سنوات",
+     "methods": [
+      "بناء نموذج لمصفوفة من الذرات الفائقة، تحتوي كل منها على باعث كمومي (مثل نقطة كمومية) في رنان، باستخدام أساليب من العمل 2209.02656.",
+      "حساب الأنماط الجماعية للنظام وتشتتها عند قوى اقتران مختلفة.",
+      "للتحقق التجريبي، تصنيع عينة بنقاط كمومية في رنان فوتوني وقياس أطياف الانعكاس/النفاذية.",
+      "مقارنة الأطياف التجريبية مع التوقعات النظرية."
+     ]
+    }
+   ]
+  },
+  "fr": {
+   "note": "Les métamatériaux accordables, capables de contrôler la lumière, la chaleur et la supraconductivité, sont en plein essor, mais de nombreux effets ne sont pas encore aboutis en dispositifs pratiques.",
+   "topic": "métamatériaux et contrôle de la lumière",
+   "ideas": [
+    {
+     "based_on": [
+      "2604.03830"
+     ],
+     "title": "Assembler un modulateur métasurface à cristaux liquides accordable pour contrôler la conversion de fréquence non linéaire",
+     "what": "Créer un prototype de métasurface ultramince avec des cristaux liquides, contrôlée par la lumière, pour ajuster la conversion de fréquence non linéaire et la distribution d'énergie selon les directions. Reproduire le résultat clé de l'article 2604.03830 sous une forme simplifiée, en ajoutant le contrôle de la polarisation.",
+     "why": "Un tel modulateur pourrait servir de base à des circuits photoniques programmables pour le traitement du signal, là où une non-linéarité accordable est requise sans optique encombrante.",
+     "origin": "L'article 2604.03830 montre que les cristaux liquides sur une métasurface permettent de contrôler les propriétés non linéaires par la lumière, mais il n'explore pas l'influence de la polarisation de la lumière de commande et ne propose pas de schéma simple pour une utilisation pratique. Nous proposons de reproduire l'effet et d'ajouter un contrôle de polarisation, absent de l'étude originale.",
+     "first_step": "Calculer et simuler dans FDTD une métasurface simple (par exemple, un réseau de nanobâtonnets d'or) avec une couche de cristaux liquides, afin de déterminer la géométrie pour une réponse non linéaire à la longueur d'onde souhaitée.",
+     "needs": "Accès à des installations de lithographie par faisceau d'électrons, à des sources d'impulsions femtosecondes, à un spectromètre à haute résolution, et compétences en simulation FDTD (Lumerical, MEEP).",
+     "risks": "Difficulté à reproduire précisément la réponse non linéaire en raison de la sensibilité à la qualité de surface et à l'orientation des cristaux liquides ; dégradation possible de l'échantillon à haute intensité.",
+     "scale": "diplôme",
+     "methods": [
+      "Fabriquer une métasurface à base de nanoantennes plasmoniques recouvertes d'une couche de cristaux liquides, en utilisant la lithographie et des méthodes de dépôt de couches minces.",
+      "Organiser un montage optique de pompe et de sonde : un laser pulsé pour exciter la réponse non linéaire, un spectromètre pour enregistrer les fréquences converties.",
+      "Contrôler l'orientation du cristal liquide par la lumière externe (réorientation photo-induite) et mesurer les variations du signal non linéaire pour différents états.",
+      "Comparer les données expérimentales avec les calculs par différences finies dans le domaine temporel (FDTD) pour évaluer l'efficacité de conversion."
+     ]
+    },
+    {
+     "based_on": [
+      "2601.09513"
+     ],
+     "title": "Tester le contrôle optique de la supraconductivité de YBCO pour créer des métamatériaux accordables",
+     "what": "Utiliser l'élimination d'oxygène par laser dans des films de YBCO pour modifier localement les propriétés supraconductrices et créer ainsi un métamatériau accordable pour le contrôle du rayonnement térahertz.",
+     "why": "Le contrôle local de la supraconductivité permettrait de créer des éléments à conductivité variable pour des métamatériaux fonctionnant dans le domaine térahertz, ce qui est pertinent pour la spectroscopie et les télécommunications.",
+     "origin": "L'article 2601.09513 démontre un réglage progressif de la supraconductivité de YBCO par laser, mais ne l'utilise pas pour créer des métamatériaux. Or, les métamatériaux pour le térahertz nécessitent souvent un réglage, que cette méthode pourrait fournir. Nous proposons de combiner ces idées.",
+     "first_step": "Obtenir ou fabriquer un film de YBCO et calibrer l'irradiation laser : mesurer la dépendance de la température de transition en fonction de la puissance et du temps d'irradiation.",
+     "needs": "Installation de dépôt par laser pulsé, laser à puissance contrôlée, cryostat pour mesurer les propriétés supraconductrices, spectromètre térahertz.",
+     "risks": "Difficulté à contrôler précisément la distribution spatiale de l'oxygène ; instabilité possible des propriétés dans le temps en raison de la diffusion de l'oxygène.",
+     "scale": "années",
+     "methods": [
+      "Déposer des films minces de YBCO par ablation laser pulsée sur un substrat.",
+      "À l'aide d'un laser focalisé, modifier localement la teneur en oxygène, en contrôlant la température de transition et la densité de porteurs, comme dans l'article 2601.09513.",
+      "Fabriquer un réseau de telles zones formant un métamatériau (par exemple, des anneaux fendus) et mesurer sa réponse térahertz par spectroscopie térahertz résolue en temps.",
+      "Comparer avec la simulation d'un métamatériau à conductivité spatialement inhomogène."
+     ]
+    },
+    {
+     "based_on": [
+      "2603.10900"
+     ],
+     "title": "Développer une méthode d'écriture optique de canaux thermiques basée sur les phonons polaritons hyperboliques",
+     "what": "Reproduire et étendre la méthode de l'article 2603.10900 : créer des pistes pour les phonons polaritons hyperboliques sur un film d'oxyde de molybdène à l'aide de motifs laser, et étudier leurs propriétés de conduction thermique.",
+     "why": "Le contrôle de la chaleur à l'échelle nanométrique est important pour le refroidissement de l'électronique et la création de diodes thermiques, et la méthode proposée est potentiellement moins chère et plus simple que les méthodes traditionnelles.",
+     "origin": "L'article 2603.10900 montre un moyen de créer des pistes thermiques par la lumière, mais n'explore pas les limites de résolution ni l'influence des paramètres du motif sur l'efficacité du transfert de chaleur. Nous proposons d'étudier systématiquement ces aspects pour comprendre l'applicabilité pratique de la méthode.",
+     "first_step": "Obtenir un film de MoO3 et reproduire l'écriture laser du motif, puis effectuer une caractérisation de base de la structure (microscopie à force atomique, spectroscopie Raman).",
+     "needs": "Installation laser avec positionnement précis, microscope thermique à balayage ou système de thermo-réflectance, équipement de dépôt de couches minces.",
+     "risks": "Difficulté à mesurer les flux thermiques à l'échelle nanométrique avec une précision suffisante ; dommages possibles du film lors du traitement laser.",
+     "scale": "diplôme",
+     "methods": [
+      "Fabriquer des films minces d'oxyde de molybdène (MoO3) par exfoliation ou dépôt chimique.",
+      "À l'aide d'un laser, écrire des motifs en contrôlant leur géométrie (largeur, période) et les paramètres du rayonnement laser.",
+      "Mesurer la propagation de la chaleur par microscopie thermique à balayage ou thermo-réflectance, afin de confirmer le transfert directionnel le long des motifs.",
+      "Comparer avec les calculs théoriques de la dispersion des phonons polaritons hyperboliques."
+     ]
+    },
+    {
+     "based_on": [
+      "2204.02750"
+     ],
+     "title": "Créer une pince optique à base de métasurface pour la manipulation de nanoparticules",
+     "what": "Développer et fabriquer une métasurface qui focalise la lumière en un point sub-longueur d'onde pour la capture et la manipulation optiques de nanoparticules, en utilisant les approches de l'article 2204.02750.",
+     "why": "Les pinces optiques à métasurface peuvent être plus compactes et moins chères que les pinces traditionnelles, ce qui est utile pour la recherche biologique et les nanotechnologies.",
+     "origin": "L'article 2204.02750 synthétise les principes des pinces à métamatériaux, mais les réalisations concrètes nécessitent souvent un réglage complexe. Nous proposons de créer une métasurface simple et de vérifier son efficacité pour des particules de tailles et de matériaux différents.",
+     "first_step": "Calculer numériquement une métasurface pour focaliser la lumière à 1064 nm en un point de diamètre inférieur à 500 nm.",
+     "needs": "Équipement de lithographie, laser, microscope avec caméra, logiciel de simulation (FDTD, COMSOL).",
+     "risks": "Faible efficacité de capture en raison des pertes dans la métasurface ; difficulté de positionnement précis des particules.",
+     "scale": "semestre",
+     "methods": [
+      "Concevoir une métasurface (par exemple, à base de nanopiliers diélectriques) pour créer un piège optique avec un profil d'intensité donné.",
+      "Fabriquer l'échantillon par des méthodes de lithographie et de gravure.",
+      "Monter le montage optique pour capturer des nanoparticules de polystyrène ou de silicium et observer leur mouvement.",
+      "Mesurer la rigidité du piège en analysant le mouvement brownien de la particule piégée."
+     ]
+    },
+    {
+     "based_on": [
+      "2209.02656"
+     ],
+     "title": "Étudier le couplage ultra-fort dans les métamatériaux électrodynamiques quantiques pour contrôler la réponse optique",
+     "what": "Étudier théoriquement et expérimentalement un métamatériau composé de résonateurs fortement couplés à des émetteurs quantiques, afin de déterminer comment le couplage ultra-fort modifie la réponse optique collective.",
+     "why": "Le couplage ultra-fort peut conduire à de nouveaux effets, tels que la modification des réactions chimiques ou des propriétés de transport, ce qui est prometteur pour les technologies quantiques.",
+     "origin": "L'article 2209.02656 traite du couplage ultra-fort dans les métamatériaux, mais se concentre sur la description théorique d'éléments uniques. Nous proposons d'étudier les effets collectifs dans un réseau, ce qui pourrait révéler de nouveaux modes et non-linéarités.",
+     "first_step": "Choisir un système concret (par exemple, des boîtes quantiques dans des nanorésonateurs plasmoniques) et calculer son spectre en fonction de la force de couplage.",
+     "needs": "Compétences en optique quantique et en simulation numérique (Python, QuTiP) ; pour l'expérience, équipement pour la synthèse de boîtes quantiques et de nanostructures, spectromètre.",
+     "risks": "Difficulté à atteindre le couplage ultra-fort en expérience ; les modèles théoriques peuvent ne pas tenir compte des inhomogénéités.",
+     "scale": "années",
+     "methods": [
+      "Construire un modèle de réseau de méta-atomes, chacun contenant un émetteur quantique (par exemple, une boîte quantique) dans un résonateur, en utilisant les approches de l'article 2209.02656.",
+      "Calculer les modes collectifs du système et leur dispersion pour différentes forces de couplage.",
+      "Pour la vérification expérimentale, fabriquer un échantillon avec des boîtes quantiques dans un résonateur photonique et mesurer les spectres de réflexion/transmission.",
+      "Comparer les spectres expérimentaux avec les prédictions théoriques."
+     ]
+    }
+   ]
+  }
+ }
 }

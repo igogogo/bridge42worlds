@@ -232,5 +232,263 @@
    },
    "abstract": "Thin crystalline silicon solar photovoltaics holds great potential for reducing the module price by material saving and increasing the efficiency by reduced bulk recombination loss. However, the module efficiency decreases rather sensitively as the module temperature rises under sunlight. Effective, inexpensive approach to cooling modules would accelerate large-scale market adoption of thin crystalline silicon photovoltaics. For effective cooling, we exploit high flexibility of single-crystalline thin silicon films to create wavy solar cells. These wavy cells possess larger surface area than c"
   }
- ]
+ ],
+ "lang": {
+  "en": {
+   "note": "The archive currently has few works on practical cooling of photovoltaic modules, but there is a solid theoretical foundation in the unprocessed papers.",
+   "topic": "cooling of photovoltaic modules in hot climates",
+   "ideas": [
+    {
+     "based_on": [
+      "1701.01678"
+     ],
+     "title": "Test rig for measuring the effect of dust on panel heating and output",
+     "what": "Build a test rig with two identical panels, one of which is regularly dusted, and measure temperature, voltage, and current over several weeks in a hot climate.",
+     "why": "Dust is a common factor in hot regions, but its contribution to overheating and power loss is rarely measured separately from soiling. The data will be useful for planning cleaning schedules and assessing real-world efficiency.",
+     "origin": "Paper 1701.01678 analyzes the heating mechanisms of photovoltaic modules and proposes methods for calculating the thermal balance, but it does not consider the influence of dust on these mechanisms. There are no works in the archive linking dust to overheating, even though in practice it is an important factor in hot climates.",
+     "first_step": "Buy two small solar panels, thermocouples, and a simple data logger; set them up side by side and start daily measurements of temperature and power output.",
+     "needs": "Two identical panels, thermocouples or an IR thermometer, a multimeter, a data logger, dust (local dust can be used, but the amount must be controlled), and a location with direct sunlight.",
+     "risks": "It is difficult to control the amount and composition of dust, and to separate its effect from other weather factors. A long observation period and careful statistics will be required.",
+     "scale": "semester",
+     "methods": [
+      "Take the methodology from paper 1701.01678 for measuring panel temperature and calculating thermal balance, but apply it to a dusted panel.",
+      "Once a day, record temperature readings (thermocouples or IR pyrometer) and electrical characteristics (multimeter, load).",
+      "Monitor the dust level: weigh the deposited dust on a reference plate next to the panel.",
+      "Compare the temperature and power of clean and dusted panels under the same solar radiation."
+     ]
+    },
+    {
+     "based_on": [
+      "1701.01678"
+     ],
+     "title": "Passive radiative cooling for photovoltaic panels: testing a film in practice",
+     "what": "Attach a film with high emissivity in the atmospheric transparency window (8–13 μm) to the back side of a solar panel and measure how much the temperature drops and power increases compared to a standard panel.",
+     "why": "Radiative cooling can lower panel temperature without energy input, but ready-made solutions for photovoltaics are scarce. If the film proves effective, it is cheap and scalable.",
+     "origin": "Paper 1701.01678 discusses radiative cooling of photovoltaic modules in detail and provides formulas for calculation, but there is no experimental verification on real panels with available materials. No works in the archive report such an experiment.",
+     "first_step": "Find or order a film with high infrared emissivity (for example, polyethylene with additives), attach it to the back of the panel, and start measuring temperature.",
+     "needs": "Two panels, a film with the required optical properties (can be ordered or made in-house), thermocouples, a pyranometer for measuring solar radiation, and a data logger.",
+     "risks": "The film may peel off or degrade under the sun, and its emissivity may be lower than calculated. The effect might be small compared to convection.",
+     "scale": "thesis",
+     "methods": [
+      "Use the approach from 1701.01678 as a basis: it describes how to calculate radiative cooling for a panel and which materials are suitable.",
+      "Select or fabricate a film with high emissivity in the 8–13 μm range (for example, based on polymers with additives).",
+      "Set up two panels: one with the film, one without, and measure temperature and electrical characteristics over several weeks.",
+      "Calculate the actual radiative power from the measured temperature and compare it with the theoretical value from the paper."
+     ]
+    },
+    {
+     "based_on": [
+      "1701.01678",
+      "2209.15138"
+     ],
+     "title": "Hybrid cooling system: radiative cooling plus forced convection for thin silicon panels",
+     "what": "Develop and test a combined cooling system for thin crystalline silicon panels: a passive radiative coating on the back side plus a controlled fan that activates when a threshold temperature is exceeded.",
+     "why": "Thin panels are more sensitive to heat, and simple passive cooling may not cope during peak hours. A hybrid approach could yield a larger gain at moderate energy cost.",
+     "origin": "Paper 1701.01678 shows that radiative cooling is effective, but it may be insufficient at high temperatures. Paper 2209.15138 proposes a flexible design for thin panels that improves heat dissipation, but it does not consider adding an active element. No one has tested how combining these approaches works in practice.",
+     "first_step": "Calculate using the formulas from 1701.01678 how much heat the radiative coating can dissipate and how much the fan will add; then build a mock-up with one thin panel and a fan.",
+     "needs": "A thin silicon panel (flexible if possible), a radiative coating, a fan with control, temperature sensors, a microcontroller (Arduino), and a power supply for the fan.",
+     "risks": "The fan's energy consumption may eat into the panel's power gain. Also, thin panels are fragile, and mounting the fan could damage them.",
+     "scale": "years",
+     "methods": [
+      "Use the thermal balance model from 1701.01678 to calculate the contributions of radiative cooling and convection.",
+      "Take the thin panel design from 2209.15138, which shows how flexibility helps dissipate heat, and adapt it for mounting the fan.",
+      "Build a prototype with temperature sensors and threshold-based fan control.",
+      "Conduct a series of measurements under varying solar radiation and wind speed, and compare with purely passive cooling."
+     ]
+    }
+   ]
+  },
+  "es": {
+   "note": "En el archivo todavía hay pocos trabajos sobre el enfriamiento práctico de módulos fotovoltaicos, pero existe una buena base teórica en artículos sin analizar.",
+   "topic": "enfriamiento de módulos fotovoltaicos en climas cálidos",
+   "ideas": [
+    {
+     "based_on": [
+      "1701.01678"
+     ],
+     "title": "Banco de pruebas para medir el efecto del polvo en el calentamiento y la producción de un panel",
+     "what": "Montar un banco de pruebas con dos paneles idénticos, uno de los cuales se ensucia regularmente con polvo, y medir la temperatura, el voltaje y la corriente durante varias semanas en un clima cálido.",
+     "why": "La acumulación de polvo es un factor común en las regiones cálidas, pero su contribución al sobrecalentamiento y a la pérdida de potencia rara vez se mide por separado de la suciedad. Los datos servirán para planificar la limpieza y evaluar la eficiencia real.",
+     "origin": "En 1701.01678 se analizan los mecanismos de calentamiento de los módulos fotovoltaicos y se proponen métodos para calcular el balance térmico, pero no se considera el efecto del polvo sobre estos mecanismos. En el archivo no hay trabajos que relacionen la acumulación de polvo con el sobrecalentamiento, aunque en la práctica es un factor importante en climas cálidos.",
+     "first_step": "Comprar dos paneles solares pequeños, termopares y un registrador de datos sencillo; instalarlos uno al lado del otro y comenzar a medir diariamente la temperatura y la potencia.",
+     "needs": "Dos paneles idénticos, termopares o termómetro infrarrojo, multímetro, registrador de datos, polvo (se puede usar el local, pero hay que controlar la cantidad), un lugar con sol directo.",
+     "risks": "Es difícil controlar la cantidad y la composición del polvo, así como separar su efecto de otros factores meteorológicos. Se necesitará un período de observación prolongado y un análisis estadístico cuidadoso.",
+     "scale": "semestre",
+     "methods": [
+      "Tomar la metodología del trabajo 1701.01678 para medir la temperatura del panel y calcular el balance térmico, pero aplicarla a un panel con polvo.",
+      "Una vez al día, registrar las lecturas de los sensores de temperatura (termopares o pirómetro infrarrojo) y las características eléctricas (multímetro, carga).",
+      "Controlar el nivel de polvo: pesar el polvo depositado en una placa de referencia junto al panel.",
+      "Comparar la temperatura y la potencia de los paneles limpio y con polvo bajo la misma radiación solar."
+     ]
+    },
+    {
+     "based_on": [
+      "1701.01678"
+     ],
+     "title": "Enfriamiento radiativo pasivo para paneles fotovoltaicos: prueba práctica de una película",
+     "what": "Pegar en la parte trasera de un panel solar una película con alta emisividad en la ventana de transparencia atmosférica (8–13 µm) y medir cuánto disminuye la temperatura y aumenta la potencia en comparación con un panel normal.",
+     "why": "El enfriamiento radiativo puede reducir la temperatura del panel sin gasto de energía, pero hay pocas soluciones listas para la fotovoltaica. Si la película resulta efectiva, es barata y escalable.",
+     "origin": "En 1701.01678 se analiza en detalle el enfriamiento radiativo de los módulos fotovoltaicos y se dan fórmulas para su cálculo, pero no hay verificación experimental en paneles reales con materiales disponibles. En el archivo no hay trabajos que hayan realizado tal experimento.",
+     "first_step": "Encontrar o encargar una película con alta emisión en el infrarrojo (por ejemplo, polietileno con aditivos), pegarla en la parte trasera del panel y comenzar a medir la temperatura.",
+     "needs": "Dos paneles, película con las propiedades ópticas adecuadas (se puede encargar o fabricar), termopares, piranómetro para medir la radiación solar, registrador de datos.",
+     "risks": "La película podría despegarse o degradarse con el sol, y su emisividad podría ser menor de lo calculado. El efecto podría ser pequeño en comparación con la convección.",
+     "scale": "tesis de grado",
+     "methods": [
+      "Tomar como base el enfoque de 1701.01678: allí se describe cómo calcular el enfriamiento radiativo para un panel y qué materiales son adecuados.",
+      "Seleccionar o fabricar una película con alta emisividad en el rango de 8–13 µm (por ejemplo, a base de polímeros con aditivos).",
+      "Montar dos paneles: uno con la película y otro sin ella, y durante varias semanas medir la temperatura y las características eléctricas.",
+      "Calcular la potencia de radiación real a partir de la temperatura medida y compararla con la teórica del trabajo."
+     ]
+    },
+    {
+     "based_on": [
+      "1701.01678",
+      "2209.15138"
+     ],
+     "title": "Sistema de enfriamiento híbrido: enfriamiento radiativo más convección forzada para paneles delgados de silicio",
+     "what": "Desarrollar y probar un sistema de enfriamiento combinado para paneles delgados de silicio cristalino: un recubrimiento radiativo pasivo en la parte trasera más un ventilador controlado que se activa cuando se supera una temperatura umbral.",
+     "why": "Los paneles delgados son más sensibles al calor, y el enfriamiento pasivo simple puede no ser suficiente en las horas pico. El enfoque híbrido puede ofrecer una mayor ganancia con un consumo de energía moderado.",
+     "origin": "En 1701.01678 se muestra que el enfriamiento radiativo es efectivo, pero puede no ser suficiente a altas temperaturas. En 2209.15138 se propone un diseño flexible de paneles delgados que mejora la disipación de calor, pero no se considera la adición de un elemento activo. Nadie ha probado cómo funciona la combinación de estos enfoques en la práctica.",
+     "first_step": "Calcular con las fórmulas de 1701.01678 cuánto flujo de calor puede disipar el recubrimiento radiativo y cuánto añadirá el ventilador; luego montar un prototipo con un panel delgado y un ventilador.",
+     "needs": "Panel delgado de silicio (puede ser flexible), recubrimiento radiativo, ventilador con control, sensores de temperatura, microcontrolador (Arduino), fuente de alimentación para el ventilador.",
+     "risks": "El consumo de energía del ventilador podría compensar la ganancia de potencia del panel. Además, los paneles delgados son frágiles y la instalación del ventilador podría dañarlos.",
+     "scale": "años",
+     "methods": [
+      "Usar el modelo de balance térmico de 1701.01678 para calcular la contribución del enfriamiento radiativo y la convección.",
+      "Tomar el diseño de panel delgado de 2209.15138, donde se muestra cómo la flexibilidad ayuda a disipar el calor, y adaptarlo para montar el ventilador.",
+      "Montar un prototipo con sensores de temperatura y control del ventilador por umbral.",
+      "Realizar una serie de mediciones con diferente radiación solar y velocidad del viento, y comparar con el enfriamiento puramente pasivo."
+     ]
+    }
+   ]
+  },
+  "ar": {
+   "note": "في الأرشيف حتى الآن دراسات قليلة حول التبريد العملي لوحدات الخلايا الكهروضوئية، لكن هناك أساس نظري جيد في المقالات غير المحللة.",
+   "topic": "تبريد الوحدات الكهروضوئية في المناخ الحار",
+   "ideas": [
+    {
+     "based_on": [
+      "1701.01678"
+     ],
+     "title": "منصة اختبار لقياس تأثير الغبار على تسخين وأداء اللوح",
+     "what": "بناء منصة اختبار من لوحين متطابقين، أحدهما يُترَك ليتسخ بالغبار بانتظام، وقياس درجة الحرارة والجهد والتيار على مدى عدة أسابيع في مناخ حار.",
+     "why": "الغبار عامل شائع في المناطق الحارة، لكن تأثيره على ارتفاع الحرارة وفقدان الطاقة نادرًا ما يُقاس بشكل منفصل عن التلوث. ستكون البيانات مفيدة لتخطيط التنظيف وتقييم الكفاءة الفعلية.",
+     "origin": "في ورقة 1701.01678 تم تحليل آليات تسخين الوحدات الكهروضوئية واقتراح طرق لحساب التوازن الحراري، لكن تأثير الغبار على هذه الآليات لم يُدرس. لا توجد في الأرشيف أعمال تربط الغبار بارتفاع الحرارة، رغم أنه عمليًا عامل مهم في المناخ الحار.",
+     "first_step": "شراء لوحين شمسيين صغيرين، وثرموكبلات، ومسجل بيانات بسيط؛ تثبيتهما جنبًا إلى جنب والبدء بقياسات يومية لدرجة الحرارة والطاقة.",
+     "needs": "لوحان متطابقان، ثرموكبلات أو مقياس حرارة بالأشعة تحت الحمراء، ملتيميتر، مسجل بيانات، غبار (يمكن استخدام الغبار المحلي، لكن يجب التحكم في الكمية)، مكان تحت الشمس المباشرة.",
+     "risks": "من الصعب التحكم في كمية الغبار وتركيبته، وكذلك فصل تأثيره عن العوامل الجوية الأخرى. ستكون هناك حاجة لفترة مراقبة طويلة وإحصاءات دقيقة.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "استخدام المنهجية من ورقة 1701.01678 لقياس درجة حرارة اللوح وحساب التوازن الحراري، وتطبيقها على اللوح المترب.",
+      "مرة يوميًا، تسجيل قراءات حساسات الحرارة (ثرموكبلات أو بيرومتر بالأشعة تحت الحمراء) والخصائص الكهربائية (ملتيميتر، حمل).",
+      "مراقبة مستوى التغبر: وزن الغبار المترسب على لوحة مرجعية بجانب اللوح.",
+      "مقارنة درجة الحرارة والطاقة للوحين النظيف والمترب تحت نفس الإشعاع الشمسي."
+     ]
+    },
+    {
+     "based_on": [
+      "1701.01678"
+     ],
+     "title": "التبريد الإشعاعي السلبي للألواح الكهروضوئية: اختبار عملي للغشاء",
+     "what": "لصق غشاء ذي انبعاثية عالية في نافذة الشفافية الجوية (8-13 ميكرومتر) على الجانب الخلفي للوح الشمسي، وقياس مدى انخفاض درجة الحرارة وزيادة الطاقة مقارنة بلوح عادي.",
+     "why": "التبريد الإشعاعي يمكن أن يخفض درجة حرارة اللوح دون استهلاك طاقة، لكن الحلول الجاهزة للخلايا الكهروضوئية قليلة. إذا كان الغشاء فعالاً، فسيكون حلاً رخيصًا وقابلاً للتوسع.",
+     "origin": "في ورقة 1701.01678 تم تحليل التبريد الإشعاعي للوحدات الكهروضوئية بالتفصيل وتقديم معادلات للحساب، لكن لا يوجد تحقق تجريبي على ألواح حقيقية بمواد متاحة. لا توجد في الأرشيف أعمال أجريت فيها مثل هذه التجربة.",
+     "first_step": "إيجاد أو طلب غشاء ذي انبعاثية عالية في الأشعة تحت الحمراء (مثل البولي إيثيلين مع إضافات)، ولصقه على الجانب الخلفي للوح والبدء بقياسات درجة الحرارة.",
+     "needs": "لوحان، غشاء بالخصائص البصرية المطلوبة (يمكن طلبه أو صنعه يدويًا)، ثرموكبلات، بيرومتر لقياس الإشعاع الشمسي، مسجل بيانات.",
+     "risks": "قد يتقشر الغشاء أو يتدهور تحت الشمس، وقد تكون انبعاثيته أقل من المحسوبة. ربما يكون التأثير صغيرًا مقارنة بالحمل الحراري.",
+     "scale": "مشروع تخرج",
+     "methods": [
+      "اعتماد النهج من ورقة 1701.01678: فهي تصف كيفية حساب التبريد الإشعاعي للوح والمواد المناسبة.",
+      "اختيار أو تصنيع غشاء ذي انبعاثية عالية في نطاق 8-13 ميكرومتر (على سبيل المثال، بوليمرات مع إضافات).",
+      "تجميع لوحين: أحدهما بالغشاء والآخر بدونه، وقياس درجة الحرارة والخصائص الكهربائية على مدى عدة أسابيع.",
+      "حساب قدرة الإشعاع الفعلية من درجة الحرارة المقاسة ومقارنتها بالنظرية من الورقة."
+     ]
+    },
+    {
+     "based_on": [
+      "1701.01678",
+      "2209.15138"
+     ],
+     "title": "نظام تبريد هجين: تبريد إشعاعي بالإضافة إلى حمل حراري قسري للألواح السيليكونية الرقيقة",
+     "what": "تطوير واختبار نظام تبريد مدمج للألواح السيليكونية البلورية الرقيقة: طلاء إشعاعي سلبي على الجانب الخلفي بالإضافة إلى مروحة محكومة تعمل عند تجاوز درجة حرارة عتبة.",
+     "why": "الألواح الرقيقة أكثر حساسية للحرارة، وقد لا يكفي التبريد السلبي البسيط في ساعات الذروة. النهج الهجين قد يعطي مكسبًا أكبر بتكلفة طاقة معتدلة.",
+     "origin": "في ورقة 1701.01678 تبين أن التبريد الإشعاعي فعال، لكنه قد لا يكون كافيًا عند درجات الحرارة المرتفعة. في ورقة 2209.15138 تم اقتراح تصميم مرن للألواح الرقيقة يحسن تبديد الحرارة، لكن لم يُنظر في إضافة عنصر نشط. لم يختبر أحد كيف يعمل الجمع بين هذه الأساليب عمليًا.",
+     "first_step": "حساب باستخدام معادلات 1701.01678 مقدار تدفق الحرارة الذي يمكن للطلاء الإشعاعي إزالته وكم سيضيف المروحة؛ ثم بناء نموذج أولي بلوح رقيق واحد ومروحة.",
+     "needs": "لوح سيليكون رقيق (يمكن أن يكون مرنًا)، طلاء إشعاعي، مروحة مع تحكم، حساسات حرارة، متحكم دقيق (Arduino)، مصدر طاقة للمروحة.",
+     "risks": "قد يستهلك تشغيل المروحة الطاقة التي يكسبها اللوح. بالإضافة إلى ذلك، الألواح الرقيقة هشة وقد يتلفها تركيب المروحة.",
+     "scale": "سنوات",
+     "methods": [
+      "استخدام نموذج التوازن الحراري من 1701.01678 لحساب مساهمة التبريد الإشعاعي والحمل الحراري.",
+      "أخذ تصميم اللوح الرقيق من 2209.15138، حيث تبين كيف تساعد المرونة في تبديد الحرارة، وتكييفه لتركيب المروحة.",
+      "بناء نموذج أولي مع حساسات حرارة والتحكم في المروحة حسب العتبة.",
+      "إجراء سلسلة من القياسات تحت إشعاع شمسي وسرعات رياح مختلفة، ومقارنتها بالتبريد السلبي البحت."
+     ]
+    }
+   ]
+  },
+  "fr": {
+   "note": "Les archives contiennent encore peu de travaux sur le refroidissement pratique des modules photovoltaïques, mais il existe une bonne base théorique dans des articles non encore analysés.",
+   "topic": "refroidissement des modules photovoltaïques en climat chaud",
+   "ideas": [
+    {
+     "based_on": [
+      "1701.01678"
+     ],
+     "title": "Banc d'essai pour mesurer l'effet de la poussière sur l'échauffement et le rendement d'un panneau",
+     "what": "Monter un banc d'essai avec deux panneaux identiques, dont l'un est régulièrement exposé à la poussière, et mesurer la température, la tension et le courant pendant plusieurs semaines en climat chaud.",
+     "why": "L'encrassement est un facteur fréquent dans les régions chaudes, mais sa contribution à la surchauffe et à la perte de puissance est rarement mesurée séparément de la saleté. Ces données seront utiles pour planifier le nettoyage et évaluer l'efficacité réelle.",
+     "origin": "Dans 1701.01678, les mécanismes d'échauffement des modules photovoltaïques sont analysés et des méthodes de calcul du bilan thermique sont proposées, mais l'influence de la poussière sur ces mécanismes n'y est pas abordée. Les archives ne contiennent aucun travail reliant l'encrassement à la surchauffe, alors qu'en pratique c'est un facteur important en climat chaud.",
+     "first_step": "Acheter deux petits panneaux solaires, des thermocouples et un simple enregistreur de données ; les installer côte à côte et commencer des mesures quotidiennes de température et de puissance.",
+     "needs": "Deux panneaux identiques, des thermocouples ou un thermomètre infrarouge, un multimètre, un enregistreur de données, de la poussière (on peut utiliser de la poussière locale, mais il faut contrôler la quantité), un emplacement en plein soleil.",
+     "risks": "Il est difficile de contrôler la quantité et la composition de la poussière, ainsi que de séparer son effet des autres facteurs météorologiques. Une longue période d'observation et des statistiques soignées seront nécessaires.",
+     "scale": "semestre",
+     "methods": [
+      "Reprendre la méthodologie de l'article 1701.01678 pour la mesure de la température du panneau et le calcul du bilan thermique, mais l'appliquer à un panneau encrassé.",
+      "Relever une fois par jour les données des capteurs de température (thermocouples ou pyromètre infrarouge) et les caractéristiques électriques (multimètre, charge).",
+      "Contrôler le niveau d'encrassement : peser la poussière déposée sur une plaque de référence placée à côté du panneau.",
+      "Comparer la température et la puissance des panneaux propre et encrassé sous le même rayonnement solaire."
+     ]
+    },
+    {
+     "based_on": [
+      "1701.01678"
+     ],
+     "title": "Refroidissement radiatif passif pour panneaux photovoltaïques : test pratique d'un film",
+     "what": "Coller sur la face arrière d'un panneau solaire un film à haute émissivité dans la fenêtre de transparence atmosphérique (8–13 µm) et mesurer la baisse de température et l'augmentation de puissance par rapport à un panneau ordinaire.",
+     "why": "Le refroidissement radiatif peut réduire la température du panneau sans consommation d'énergie, mais il existe peu de solutions prêtes à l'emploi pour le photovoltaïque. Si le film s'avère efficace, c'est une solution peu coûteuse et facilement déployable.",
+     "origin": "Dans 1701.01678, le refroidissement radiatif des modules photovoltaïques est analysé en détail et des formules de calcul sont fournies, mais aucune vérification expérimentale n'est faite sur de vrais panneaux avec des matériaux disponibles. Les archives ne contiennent aucun travail où une telle expérience aurait été menée.",
+     "first_step": "Trouver ou commander un film à haute émissivité dans l'infrarouge (par exemple du polyéthylène avec additifs), le coller sur la face arrière du panneau et commencer les mesures de température.",
+     "needs": "Deux panneaux, un film avec les propriétés optiques requises (peut être commandé ou fabriqué soi-même), des thermocouples, un pyranomètre pour mesurer le rayonnement solaire, un enregistreur de données.",
+     "risks": "Le film peut se décoller ou se dégrader sous le soleil, et son émissivité peut être inférieure à la valeur calculée. L'effet pourrait être faible par rapport à la convection.",
+     "scale": "mémoire",
+     "methods": [
+      "S'inspirer de l'approche de 1701.01678 : on y décrit comment calculer le refroidissement radiatif d'un panneau et quels matériaux conviennent.",
+      "Choisir ou fabriquer un film à haute émissivité dans la gamme 8–13 µm (par exemple à base de polymères avec additifs).",
+      "Assembler deux panneaux : l'un avec le film, l'autre sans, et pendant plusieurs semaines mesurer la température et les caractéristiques électriques.",
+      "Calculer la puissance radiative réelle à partir de la température mesurée et la comparer à la valeur théorique de l'article."
+     ]
+    },
+    {
+     "based_on": [
+      "1701.01678",
+      "2209.15138"
+     ],
+     "title": "Système de refroidissement hybride : refroidissement radiatif plus convection forcée pour panneaux en silicium mince",
+     "what": "Développer et tester un système de refroidissement combiné pour panneaux en silicium cristallin mince : un revêtement radiatif passif sur la face arrière plus un ventilateur contrôlé qui s'active lorsque la température dépasse un seuil.",
+     "why": "Les panneaux minces sont plus sensibles à la chaleur, et un simple refroidissement passif peut ne pas suffire aux heures de pointe. L'approche hybride peut offrir un gain plus important pour une consommation d'énergie modérée.",
+     "origin": "Dans 1701.01678, il est montré que le refroidissement radiatif est efficace, mais qu'il peut être insuffisant à haute température. Dans 2209.15138, une conception flexible de panneaux minces est proposée, améliorant l'évacuation de la chaleur, mais l'ajout d'un élément actif n'y est pas envisagé. Personne n'a vérifié comment la combinaison de ces approches fonctionne en pratique.",
+     "first_step": "Calculer à l'aide des formules de 1701.01678 le flux de chaleur que le revêtement radiatif peut évacuer et ce que le ventilateur peut ajouter ; puis assembler une maquette avec un panneau mince et un ventilateur.",
+     "needs": "Panneau en silicium mince (éventuellement flexible), revêtement radiatif, ventilateur avec commande, capteurs de température, microcontrôleur (Arduino), alimentation pour le ventilateur.",
+     "risks": "La consommation du ventilateur pourrait annuler le gain de puissance du panneau. De plus, les panneaux minces sont fragiles et l'installation du ventilateur pourrait les endommager.",
+     "scale": "années",
+     "methods": [
+      "Utiliser le modèle de bilan thermique de 1701.01678 pour calculer la contribution du refroidissement radiatif et de la convection.",
+      "Reprendre la conception du panneau mince de 2209.15138, où l'on montre comment la flexibilité aide à évacuer la chaleur, et l'adapter pour fixer le ventilateur.",
+      "Assembler un prototype avec des capteurs de température et une commande du ventilateur par seuil.",
+      "Effectuer une série de mesures sous différents rayonnements solaires et vitesses de vent, et comparer avec un refroidissement purement passif."
+     ]
+    }
+   ]
+  }
+ }
 }

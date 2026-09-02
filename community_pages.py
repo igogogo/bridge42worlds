@@ -26,7 +26,8 @@ from string import Template
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 
-LANGS = ["ru", "en", "es", "ar", "fr"]
+from common import ALL_LANGS  # noqa: E402
+LANGS = ALL_LANGS   # список языков один на проект: config.json через common.ALL_LANGS
 RTL = {"ar"}
 SUBS = ROOT / "data" / "submissions"
 SITE = "https://bridge42worlds.academy"

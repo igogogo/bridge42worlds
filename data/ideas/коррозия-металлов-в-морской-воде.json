@@ -193,5 +193,267 @@
    },
    "abstract": "The corrosion resistance of an electroplated (EP) Zn coating whose surface was chemically etched to produce surface defects (pores) is investigated in this work. Impedance and DC polarisation measururements were employed to study the behaviour of such coating in various corrosive media (NaCl, NaOH and rain water). Four different faradaic relaxation processes were clearly revealed in different NaCl concentrations (from 0.1M to 1M). In the most concentrated solutions at least three relaxation processes at low frequencies (LF) appeared and were related to zinc deposition and dissolution. At lower"
   }
- ]
+ ],
+ "lang": {
+  "en": {
+   "note": "In the field of corrosion in seawater, monitoring and modeling methods are actively developing, but many studies focus on individual aspects without considering the combined effects of the environment.",
+   "topic": "corrosion of metals in seawater",
+   "ideas": [
+    {
+     "based_on": [
+      "2504.08794",
+      "physics/0509117"
+     ],
+     "title": "Build a test rig to measure the corrosion rate of steel in flowing seawater with pH and oxygen control",
+     "what": "Assemble a laboratory setup with a flow cell, pH, dissolved oxygen, and temperature sensors, and conduct a series of corrosion rate measurements on carbon steel in artificial seawater at different flow velocities.",
+     "why": "Data on the influence of hydrodynamics on corrosion in seawater are needed to predict the service life of structures in coastal zones, where the flow is variable.",
+     "origin": "The work [2504.08794] highlights the importance of local conditions for corrosion, and [physics/0509117] shows the effect of dissolved oxygen on iron corrosion. However, these studies do not consider the influence of hydrodynamics on the corrosion rate in seawater, even though in practice the flow significantly alters the delivery of oxygen to the surface.",
+     "first_step": "Assemble a flow cell from acrylic, connect the pump and sensors, and check the stability of parameters using distilled water.",
+     "needs": "Potentiostat, electrodes, flow cell, pump, pH and oxygen sensors, chemicals for preparing seawater, access to a workshop for fabricating the cell.",
+     "risks": "Difficulty in maintaining a stable oxygen concentration when the flow changes; possible non-uniform corrosion, which complicates the interpretation of electrochemical data.",
+     "scale": "semester",
+     "methods": [
+      "Electrochemical measurements (polarization resistance, Tafel analysis) using a potentiostat.",
+      "Gravimetry: weighing samples before and after exposure with removal of corrosion products.",
+      "Monitoring of environmental parameters: pH meter, oxygen meter, flow meter.",
+      "Accelerated testing methodology: varying the flow velocity from 0 to 1 m/s."
+     ]
+    },
+    {
+     "based_on": [
+      "2504.08794",
+      "physics/0509117"
+     ],
+     "title": "Develop a model of localized corrosion of reinforcement in concrete of marine structures considering cathodic protection",
+     "what": "Develop a numerical model of corrosion of steel reinforcement in concrete exposed to seawater, taking into account the distribution of cathodic and anodic zones and the effect of cathodic protection.",
+     "why": "Such a model will allow predicting the effectiveness of cathodic protection and optimizing its parameters to extend the service life of reinforced concrete structures in marine environments.",
+     "origin": "The work [2504.08794] proposes a method for calculating corrosion currents in concrete, but does not account for the specifics of seawater (high chloride concentration, possible cathodic protection). At the same time, [physics/0509117] shows the importance of oxygen, but under different conditions. Combining these approaches may provide a more realistic picture.",
+     "first_step": "Reproduce the model from [2504.08794] for a simple case and compare with published results.",
+     "needs": "Numerical modeling skills, access to COMSOL or similar software, literature data for validation.",
+     "risks": "Lack of experimental data for model calibration; difficulty in accounting for all factors (humidity, carbonation, chlorides).",
+     "scale": "diploma",
+     "methods": [
+      "Use the approach from [2504.08794] to calculate local corrosion currents in concrete.",
+      "Extend the model to include the effect of chlorides from seawater on steel passivation.",
+      "Validate against literature data on reinforcement corrosion in marine concrete.",
+      "Implement the model in COMSOL Multiphysics or similar software."
+     ]
+    },
+    {
+     "based_on": [
+      "1907.11003"
+     ],
+     "title": "Investigate corrosion of aluminum alloys in seawater using ultraviolet plasmonics for monitoring",
+     "what": "Create an experimental setup to study corrosion of aluminum alloys in seawater using plasmonic nanostructures to enhance spectroscopic signals of corrosion products.",
+     "why": "Early detection of aluminum corrosion is important for naval aviation and shipbuilding, and plasmonic sensors can provide high sensitivity.",
+     "origin": "The work [1907.11003] shows that aluminum is susceptible to photocorrosion in the UV range, which limits its application in plasmonics. However, it has not been studied how aluminum nanostructures behave in seawater, where corrosion is accelerated by chlorides. This could be used to create corrosion sensors.",
+     "first_step": "Conduct a literature review on aluminum corrosion in chloride environments and select the alloy and nanostructure fabrication method.",
+     "needs": "Equipment for nanolithography, spectrometer with UV range, chemicals, potentiostat.",
+     "risks": "Difficulty in fabricating reproducible nanostructures; rapid degradation of aluminum in seawater may make measurements difficult.",
+     "scale": "years",
+     "methods": [
+      "Fabricate aluminum nanostructures using electron-beam lithography or nanosphere lithography.",
+      "Perform corrosion tests in artificial seawater, controlling pH and chloride ions.",
+      "Use UV-visible spectroscopy to monitor changes in the plasmon resonance.",
+      "Compare with results for samples without nanostructures."
+     ]
+    }
+   ]
+  },
+  "es": {
+   "note": "En el ámbito de la corrosión en agua de mar, los métodos de monitoreo y modelado están en pleno desarrollo, pero muchos trabajos se centran en aspectos aislados sin considerar el impacto integral del entorno.",
+   "topic": "corrosión de metales en agua de mar",
+   "ideas": [
+    {
+     "based_on": [
+      "2504.08794",
+      "physics/0509117"
+     ],
+     "title": "Montar un banco de pruebas para medir la velocidad de corrosión del acero en agua de mar en flujo, con control de pH y oxígeno",
+     "what": "Montar un sistema de laboratorio con celda de flujo, sensores de pH, oxígeno disuelto y temperatura, y realizar una serie de mediciones de la velocidad de corrosión del acero al carbono en agua de mar artificial a diferentes velocidades de flujo.",
+     "why": "Los datos sobre el efecto de la hidrodinámica en la corrosión en agua de mar son necesarios para predecir la vida útil de las estructuras en la zona costera, donde el flujo es variable.",
+     "origin": "En el trabajo [2504.08794] se destaca la importancia de las condiciones locales para la corrosión, y en [physics/0509117] se muestra la influencia del oxígeno disuelto en la corrosión del hierro. Sin embargo, en estos trabajos no se examina el efecto de la hidrodinámica en la velocidad de corrosión en agua de mar, aunque en la práctica el flujo altera significativamente el suministro de oxígeno a la superficie.",
+     "first_step": "Montar una celda de flujo de metacrilato, conectar la bomba y los sensores, y verificar la estabilidad de los parámetros en agua destilada.",
+     "needs": "Potenciostato, electrodos, celda de flujo, bomba, sensores de pH y oxígeno, productos químicos para preparar agua de mar, y acceso a un taller para fabricar la celda.",
+     "risks": "Dificultad para mantener una concentración estable de oxígeno al variar el flujo; posible corrosión no uniforme que complique la interpretación de los datos electroquímicos.",
+     "scale": "semestre",
+     "methods": [
+      "Mediciones electroquímicas (resistencia a la polarización, análisis de Tafel) con potenciostato.",
+      "Gravimetría: pesaje de las muestras antes y después de la exposición, con eliminación de los productos de corrosión.",
+      "Control de los parámetros del medio: pH-metro, oxímetro, caudalímetro.",
+      "Metodología de ensayos acelerados: variación de la velocidad de flujo de 0 a 1 m/s."
+     ]
+    },
+    {
+     "based_on": [
+      "2504.08794",
+      "physics/0509117"
+     ],
+     "title": "Desarrollar un modelo de corrosión local de la armadura en hormigón de estructuras marinas considerando la protección catódica",
+     "what": "Desarrollar un modelo numérico de la corrosión de la armadura de acero en hormigón expuesto a agua de mar, considerando la distribución de zonas catódicas y anódicas y el efecto de la protección catódica.",
+     "why": "Este modelo permitiría predecir la eficacia de la protección catódica y optimizar sus parámetros para prolongar la vida útil de las estructuras de hormigón armado en el medio marino.",
+     "origin": "El trabajo [2504.08794] propone un método para calcular las corrientes de corrosión en el hormigón, pero no tiene en cuenta las particularidades del agua de mar (alta concentración de cloruros, posible protección catódica). Por otro lado, [physics/0509117] muestra la importancia del oxígeno, pero en otras condiciones. La combinación de estos enfoques podría ofrecer una imagen más realista.",
+     "first_step": "Reproducir el modelo de [2504.08794] para un caso simple y compararlo con los resultados publicados.",
+     "needs": "Habilidades en modelado numérico, acceso a COMSOL o software similar, y datos de la literatura para validación.",
+     "risks": "Falta de datos experimentales para calibrar el modelo; dificultad para considerar todos los factores (humedad, carbonatación, cloruros).",
+     "scale": "tesis",
+     "methods": [
+      "Utilizar el enfoque del trabajo [2504.08794] para calcular las corrientes de corrosión locales en el hormigón.",
+      "Ampliar el modelo incluyendo el efecto de los cloruros del agua de mar en la pasivación del acero.",
+      "Validar con datos de la literatura sobre corrosión de armaduras en hormigón marino.",
+      "Implementar el modelo en COMSOL Multiphysics o similar."
+     ]
+    },
+    {
+     "based_on": [
+      "1907.11003"
+     ],
+     "title": "Investigar la corrosión de aleaciones de aluminio en agua de mar mediante plasmónica ultravioleta para monitoreo",
+     "what": "Crear una instalación experimental para estudiar la corrosión de aleaciones de aluminio en agua de mar utilizando nanoestructuras plasmónicas para amplificar las señales espectroscópicas de los productos de corrosión.",
+     "why": "La detección temprana de la corrosión del aluminio es importante para la aviación naval y la construcción naval, y los sensores plasmónicos podrían ofrecer alta sensibilidad.",
+     "origin": "El trabajo [1907.11003] muestra que el aluminio es susceptible a la fotocorrosión en el rango UV, lo que limita su aplicación en plasmónica. Sin embargo, no se ha estudiado cómo se comportan las nanoestructuras de aluminio en agua de mar, donde la corrosión se acelera por los cloruros. Esto podría aprovecharse para crear sensores de corrosión.",
+     "first_step": "Realizar una revisión bibliográfica sobre la corrosión del aluminio en medios con cloruros y seleccionar la aleación y el método de fabricación de las nanoestructuras.",
+     "needs": "Equipo de nanolitografía, espectrómetro con rango UV, productos químicos, potenciostato.",
+     "risks": "Dificultad para fabricar nanoestructuras reproducibles; la rápida degradación del aluminio en agua de mar podría dificultar las mediciones.",
+     "scale": "años",
+     "methods": [
+      "Fabricar nanoestructuras de aluminio mediante litografía por haz de electrones o litografía de nanoesferas.",
+      "Realizar ensayos de corrosión en agua de mar artificial, controlando el pH y los iones cloruro.",
+      "Utilizar espectroscopía UV-visible para monitorear los cambios en la resonancia de plasmón.",
+      "Comparar con los resultados de muestras sin nanoestructuras."
+     ]
+    }
+   ]
+  },
+  "ar": {
+   "note": "في مجال التآكل في مياه البحر، تتطور طرق المراقبة والنمذجة بنشاط، لكن العديد من الدراسات تركز على جوانب منفردة دون مراعاة التأثير البيئي المتكامل.",
+   "topic": "تآكل المعادن في مياه البحر",
+   "ideas": [
+    {
+     "based_on": [
+      "2504.08794",
+      "physics/0509117"
+     ],
+     "title": "بناء منصة لقياس معدل تآكل الفولاذ في مياه البحر الجارية مع التحكم في الأس الهيدروجيني والأكسجين",
+     "what": "بناء منظومة مخبرية تتضمن خلية تدفق، وأجهزة استشعار للأس الهيدروجيني والأكسجين المذاب ودرجة الحرارة، وإجراء سلسلة من قياسات معدل تآكل الفولاذ الكربوني في مياه بحر اصطناعية عند سرعات تدفق مختلفة.",
+     "why": "البيانات المتعلقة بتأثير الديناميكا المائية على التآكل في مياه البحر ضرورية للتنبؤ بالعمر الافتراضي للمنشآت في المناطق الساحلية حيث يكون التدفق متغيرًا.",
+     "origin": "في العمل [2504.08794] تم التأكيد على أهمية الظروف المحلية للتآكل، وفي [physics/0509117] تم إظهار تأثير الأكسجين المذاب على تآكل الحديد. ومع ذلك، لا تدرس هذه الأعمال تأثير الديناميكا المائية على معدل التآكل في مياه البحر، على الرغم من أن التدفق في الممارسة العملية يغير بشكل كبير توصيل الأكسجين إلى السطح.",
+     "first_step": "تجميع خلية تدفق من زجاج الأكريليك، وتوصيل المضخة وأجهزة الاستشعار، والتحقق من استقرار المعلمات على الماء المقطر.",
+     "needs": "بوستاتوستات (potentiostat)، أقطاب كهربائية، خلية تدفق، مضخة، أجهزة استشعار للأس الهيدروجيني والأكسجين، مواد كيميائية لتحضير مياه البحر، وإمكانية الوصول إلى ورشة لتصنيع الخلية.",
+     "risks": "صعوبة الحفاظ على تركيز ثابت للأكسجين عند تغير التدفق؛ احتمال حدوث تآكل غير منتظم مما يعقد تفسير البيانات الكهروكيميائية.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "قياسات كهروكيميائية (مقاومة الاستقطاب، تحليل تافل (Tafel)) باستخدام البوستاتوستات.",
+      "القياس الوزني: وزن العينات قبل وبعد التعرض مع إزالة منتجات التآكل.",
+      "مراقبة معاملات الوسط: مقياس الأس الهيدروجيني، مقياس الأكسجين، مقياس التدفق.",
+      "منهجية الاختبارات المعجلة: تغيير سرعة التدفق من 0 إلى 1 م/ث."
+     ]
+    },
+    {
+     "based_on": [
+      "2504.08794",
+      "physics/0509117"
+     ],
+     "title": "تطوير نموذج للتآكل الموضعي لحديد التسليح في الخرسانة البحرية مع مراعاة الحماية الكاثودية",
+     "what": "تطوير نموذج عددي لتآكل حديد التسليح في الخرسانة المعرضة لمياه البحر، مع مراعاة توزيع المناطق الكاثودية والأنودية وتأثير الحماية الكاثودية.",
+     "why": "مثل هذا النموذج سيسمح بالتنبؤ بفعالية الحماية الكاثودية وتحسين معاملاتها لإطالة العمر الافتراضي للمنشآت الخرسانية المسلحة في البيئة البحرية.",
+     "origin": "يقدم العمل [2504.08794] طريقة لحساب تيارات التآكل في الخرسانة، لكنه لا يأخذ في الاعتبار خصوصية مياه البحر (التركيز العالي للكلوريدات، وإمكانية الحماية الكاثودية). في الوقت نفسه، يظهر [physics/0509117] أهمية الأكسجين، لكن في ظروف أخرى. دمج هذه المناهج قد يعطي صورة أكثر واقعية.",
+     "first_step": "إعادة إنتاج النموذج من [2504.08794] لحالة بسيطة ومقارنته بالنتائج المنشورة.",
+     "needs": "مهارات في النمذجة العددية، والوصول إلى COMSOL أو برامج مماثلة، وبيانات أدبية للتحقق.",
+     "risks": "نقص البيانات التجريبية لمعايرة النموذج؛ صعوبة مراعاة جميع العوامل (الرطوبة، الكربنة، الكلوريدات).",
+     "scale": "مشروع تخرج",
+     "methods": [
+      "استخدام المنهج من العمل [2504.08794] لحساب تيارات التآكل الموضعي في الخرسانة.",
+      "توسيع النموذج ليشمل تأثير الكلوريدات من مياه البحر على تخميل الفولاذ.",
+      "إجراء التحقق على بيانات أدبية حول تآكل حديد التسليح في الخرسانة البحرية.",
+      "تنفيذ النموذج في بيئة COMSOL Multiphysics أو ما يعادلها."
+     ]
+    },
+    {
+     "based_on": [
+      "1907.11003"
+     ],
+     "title": "دراسة تآكل سبائك الألومنيوم في مياه البحر باستخدام البلازمونيات فوق البنفسجية للمراقبة",
+     "what": "إنشاء منظومة تجريبية لدراسة تآكل سبائك الألومنيوم في مياه البحر باستخدام هياكل نانوية بلازمونية لتقوية الإشارات الطيفية لمنتجات التآكل.",
+     "why": "الكشف المبكر عن تآكل الألومنيوم مهم للطيران البحري وبناء السفن، ويمكن لأجهزة الاستشعار البلازمونية أن توفر حساسية عالية.",
+     "origin": "يظهر العمل [1907.11003] أن الألومنيوم عرضة للتآكل الضوئي في نطاق الأشعة فوق البنفسجية، مما يحد من استخدامه في البلازمونيات. ومع ذلك، لم تتم دراسة سلوك الهياكل النانوية المصنوعة من الألومنيوم في مياه البحر، حيث يتسارع التآكل بفعل الكلوريدات. يمكن استخدام ذلك لإنشاء أجهزة استشعار للتآكل.",
+     "first_step": "إجراء مراجعة أدبية حول تآكل الألومنيوم في البيئات المحتوية على كلوريدات واختيار السبيكة وطريقة تصنيع الهياكل النانوية.",
+     "needs": "معدات للطباعة الحجرية النانوية، مطياف بنطاق فوق بنفسجي، مواد كيميائية، بوستاتوستات.",
+     "risks": "صعوبة تصنيع هياكل نانوية قابلة للتكرار؛ التدهور السريع للألومنيوم في مياه البحر قد يجعل القياسات صعبة.",
+     "scale": "سنوات",
+     "methods": [
+      "تصنيع هياكل نانوية من الألومنيوم باستخدام الطباعة الحجرية بشعاع الإلكترون أو الطباعة الحجرية بالكرات النانوية.",
+      "إجراء اختبارات التآكل في مياه بحر اصطناعية مع مراقبة الأس الهيدروجيني وأيونات الكلوريد.",
+      "استخدام مطيافية الأشعة فوق البنفسجية والمرئية لمراقبة تغيرات رنين البلازمون.",
+      "المقارنة مع نتائج العينات بدون هياكل نانوية."
+     ]
+    }
+   ]
+  },
+  "fr": {
+   "note": "Dans le domaine de la corrosion en eau de mer, les méthodes de surveillance et de modélisation se développent activement, mais de nombreux travaux se concentrent sur des aspects isolés sans tenir compte de l'impact global de l'environnement.",
+   "topic": "corrosion des métaux en eau de mer",
+   "ideas": [
+    {
+     "based_on": [
+      "2504.08794",
+      "physics/0509117"
+     ],
+     "title": "Assembler un banc d'essai pour mesurer la vitesse de corrosion de l'acier en eau de mer circulante avec contrôle du pH et de l'oxygène",
+     "what": "Assembler une installation de laboratoire avec une cellule à circulation, des capteurs de pH, d'oxygène dissous et de température, et réaliser une série de mesures de la vitesse de corrosion de l'acier au carbone dans de l'eau de mer artificielle à différentes vitesses d'écoulement.",
+     "why": "Les données sur l'influence de l'hydrodynamique sur la corrosion en eau de mer sont nécessaires pour prédire la durée de vie des structures en zone côtière, où le flux est variable.",
+     "origin": "Dans l'article [2504.08794], l'importance des conditions locales pour la corrosion est soulignée, et dans [physics/0509117], l'influence de l'oxygène dissous sur la corrosion du fer est démontrée. Cependant, ces travaux ne considèrent pas l'effet de l'hydrodynamique sur la vitesse de corrosion en eau de mer, alors qu'en pratique, le flux modifie considérablement l'apport d'oxygène à la surface.",
+     "first_step": "Assembler une cellule à circulation en plexiglas, connecter la pompe et les capteurs, vérifier la stabilité des paramètres sur de l'eau distillée.",
+     "needs": "Potentiostat, électrodes, cellule à circulation, pompe, capteurs de pH et d'oxygène, produits chimiques pour préparer l'eau de mer, accès à un atelier pour fabriquer la cellule.",
+     "risks": "Difficulté à maintenir une concentration stable en oxygène lors des variations de débit ; corrosion possiblement non uniforme, ce qui compliquerait l'interprétation des données électrochimiques.",
+     "scale": "semestre",
+     "methods": [
+      "Mesures électrochimiques (résistance de polarisation, analyse de Tafel) à l'aide d'un potentiostat.",
+      "Gravimétrie : pesée des échantillons avant et après exposition avec élimination des produits de corrosion.",
+      "Contrôle des paramètres du milieu : pH-mètre, oxymètre, débitmètre.",
+      "Méthode d'essais accélérés : variation de la vitesse d'écoulement de 0 à 1 m/s."
+     ]
+    },
+    {
+     "based_on": [
+      "2504.08794",
+      "physics/0509117"
+     ],
+     "title": "Développer un modèle de corrosion locale des armatures dans le béton des structures marines en tenant compte de la protection cathodique",
+     "what": "Développer un modèle numérique de la corrosion des armatures en acier dans le béton immergé en eau de mer, en tenant compte de la répartition des zones cathodiques et anodiques et de l'effet de la protection cathodique.",
+     "why": "Un tel modèle permettrait de prédire l'efficacité de la protection cathodique et d'optimiser ses paramètres pour prolonger la durée de vie des structures en béton armé en milieu marin.",
+     "origin": "L'article [2504.08794] propose une méthode de calcul des courants de corrosion dans le béton, mais ne prend pas en compte les spécificités de l'eau de mer (forte concentration en chlorures, protection cathodique éventuelle). Par ailleurs, [physics/0509117] montre l'importance de l'oxygène, mais dans d'autres conditions. La combinaison de ces approches pourrait donner une image plus réaliste.",
+     "first_step": "Reproduire le modèle de [2504.08794] pour un cas simple et le comparer aux résultats publiés.",
+     "needs": "Compétences en modélisation numérique, accès à COMSOL ou à un logiciel similaire, données bibliographiques pour la validation.",
+     "risks": "Manque de données expérimentales pour calibrer le modèle ; difficulté à prendre en compte tous les facteurs (humidité, carbonatation, chlorures).",
+     "scale": "diplôme",
+     "methods": [
+      "Utiliser l'approche de l'article [2504.08794] pour calculer les courants de corrosion locaux dans le béton.",
+      "Étendre le modèle en incluant l'effet des chlorures de l'eau de mer sur la passivation de l'acier.",
+      "Valider sur des données bibliographiques de corrosion des armatures dans le béton marin.",
+      "Implémenter le modèle dans COMSOL Multiphysics ou un logiciel similaire."
+     ]
+    },
+    {
+     "based_on": [
+      "1907.11003"
+     ],
+     "title": "Étudier la corrosion des alliages d'aluminium en eau de mer par plasmonique ultraviolette pour la surveillance",
+     "what": "Créer un dispositif expérimental pour étudier la corrosion des alliages d'aluminium en eau de mer à l'aide de nanostructures plasmoniques pour amplifier les signaux spectroscopiques des produits de corrosion.",
+     "why": "La détection précoce de la corrosion de l'aluminium est importante pour l'aviation maritime et la construction navale, et les capteurs plasmoniques pourraient offrir une sensibilité élevée.",
+     "origin": "L'article [1907.11003] montre que l'aluminium est sujet à la photocorrosion dans l'UV, ce qui limite son utilisation en plasmonique. Cependant, on n'a pas étudié comment les nanostructures d'aluminium se comportent en eau de mer, où la corrosion est accélérée par les chlorures. Cela pourrait être exploité pour créer des capteurs de corrosion.",
+     "first_step": "Effectuer une revue de la littérature sur la corrosion de l'aluminium en milieu chloruré et choisir un alliage et une méthode de fabrication des nanostructures.",
+     "needs": "Équipement de nanolithographie, spectromètre UV, produits chimiques, potentiostat.",
+     "risks": "Difficulté à fabriquer des nanostructures reproductibles ; la dégradation rapide de l'aluminium en eau de mer pourrait rendre les mesures difficiles.",
+     "scale": "années",
+     "methods": [
+      "Fabriquer des nanostructures d'aluminium par lithographie par faisceau d'électrons ou lithographie par nanosphères.",
+      "Effectuer des essais de corrosion dans de l'eau de mer artificielle, en contrôlant le pH et les ions chlorure.",
+      "Utiliser la spectroscopie UV-visible pour suivre les variations de la résonance plasmonique.",
+      "Comparer avec les résultats obtenus sur des échantillons sans nanostructures."
+     ]
+    }
+   ]
+  }
+ }
 }

@@ -233,5 +233,347 @@
    },
    "abstract": "Cold atom traps are at the heart of many quantum applications in science and technology. The preparation and control of atomic clouds involves complex optimization processes, that could be supported and accelerated by machine learning. In this work, we introduce reinforcement learning to cold atom experiments and demonstrate a flexible and adaptive approach to control a magneto-optical trap. Instead of following a set of predetermined rules to accomplish a specific task, the objectives are defined by a reward function. This approach not only optimizes the cooling of atoms just as an experiment"
   }
- ]
+ ],
+ "lang": {
+  "en": {
+   "note": "In the field of machine learning for particle physics, methods for accelerating computations and improving accuracy are actively being developed, but there is a lack of standardization and interpretability.",
+   "topic": "machine learning in particle physics",
+   "ideas": [
+    {
+     "based_on": [
+      "2607.22812v1"
+     ],
+     "title": "Fast estimation of gravitational lens parameters from four images using a neural network",
+     "what": "Assemble and train a neural network that estimates the parameters of a gravitational lens (mass, ellipticity, external shear) from the coordinates and brightnesses of four quasar images. Compare accuracy and speed with the traditional maximum likelihood method.",
+     "why": "It speeds up lens analysis for large surveys (e.g., LSST), where thousands of systems need to be processed. It could be useful for fast selection of lens candidates.",
+     "origin": "Work 2607.22812 already demonstrates that a neural network can quickly fit parameters from four points, but it did not investigate the impact of realistic errors or compare accuracy with traditional methods on the same data. There is a lack of assessment of applicability in real survey conditions.",
+     "first_step": "Generate a set of 10,000 synthetic lenses with known parameters and corresponding images, using a simple SIE + shear model.",
+     "needs": "A computer with a GPU for training, knowledge of Python and PyTorch/TensorFlow libraries, basic understanding of gravitational lensing.",
+     "risks": "The neural network may generalize poorly to configurations that differ significantly from the training set if sufficient diversity is not included; accuracy may be inferior to traditional methods when the number of images is small.",
+     "scale": "semester",
+     "methods": [
+      "Generate synthetic data: use a lens model (e.g., SIE + external shear) to create many image configurations with realistic errors.",
+      "Train a neural network (e.g., fully connected or convolutional) on pairs (input image parameters — output lens parameters).",
+      "Evaluate accuracy on test data and compare with maximum likelihood estimates, using, for example, the code from work 2607.22812.",
+      "Test robustness to noise and systematic errors by adding realistic uncertainties in coordinates and brightnesses."
+     ]
+    },
+    {
+     "based_on": [
+      "2112.05043",
+      "2602.03728"
+     ],
+     "title": "Accelerating reconstruction of partonic kinematics in hadron collisions with a neural network",
+     "what": "Develop a neural network method for reconstructing parton momenta in the process of hadron plus direct photon production at a collider. Train on data generated with NLO QCD corrections and compare with traditional methods.",
+     "why": "Direct reconstruction of partonic kinematics is important for studying hadron structure and improving the precision of calculations; neural networks can speed up analysis and improve resolution.",
+     "origin": "In work 2112.05043, reconstruction of partonic kinematics is done with traditional methods, which can be computationally expensive and may not fully exploit the information. A neural network approach has not been tried in this context, although 2602.03728 discusses the promise of ML in LHC phenomenology.",
+     "first_step": "Generate 100,000 events of pp -> h + photon using a generator that supports NLO, and save partonic and hadronic variables.",
+     "needs": "Access to event generators (MadGraph5_aMC@NLO, Pythia), computational resources for generation and training, knowledge of collider physics and ML.",
+     "risks": "Difficulty in generating a large event sample with NLO accuracy; the neural network may struggle with rare kinematic regions.",
+     "scale": "thesis",
+     "methods": [
+      "Use an event generator (e.g., Pythia or Sherpa) to simulate the process pp -> h + photon at NLO, as in work 2112.05043.",
+      "Build a neural network that predicts partonic variables (x1, x2, transferred momentum) from measured quantities (hadron momentum, photon momentum, missing energy).",
+      "Train on a large event sample and evaluate reconstruction accuracy, comparing with an analytical or iterative method.",
+      "Test robustness to detector effects by adding momentum smearing and detection efficiency."
+     ]
+    },
+    {
+     "based_on": [
+      "2004.08262",
+      "2605.18689"
+     ],
+     "title": "Interpretable machine learning for identifying heavy resonances at the LHC",
+     "what": "Apply interpretability methods (e.g., SHAP, LIME) to machine learning models used to identify heavy particles (W/Z/Higgs, top quarks) in LHC experiments. Find out which features are important for classification and compare with physical expectations.",
+     "why": "Increasing trust in ML models in high-energy physics and the possibility of discovering new physical patterns; important for practical application in CMS/ATLAS.",
+     "origin": "Work 2004.08262 shows high efficiency of ML identification but does not explain which features the decisions are based on. Review 2605.18689 emphasizes the importance of explainability of ML in physics, but there are few such studies for collider applications.",
+     "first_step": "Load open data or reproduce model training (e.g., a simple neural network) for signal-background discrimination, then compute SHAP values for the first 1000 events.",
+     "needs": "Access to open LHC data (e.g., CERN Open Data) or simulated datasets, knowledge of Python and ML and interpretability libraries (shap, lime), understanding of jet physics.",
+     "risks": "Interpretations may be unstable or misleading; careful validation with expert physicists is required.",
+     "scale": "thesis",
+     "methods": [
+      "Take a trained model from work 2004.08262 (or reproduce it on open data) for classifying hadronic decays of heavy particles.",
+      "Apply interpretation methods (SHAP, Integrated Gradients) to the trained model on a representative sample of events.",
+      "Analyze feature importance: do they correlate with known physical variables (mass, jet substructure)?",
+      "Check the stability of interpretations when changing model architecture and hyperparameters."
+     ]
+    },
+    {
+     "based_on": [
+      "2602.03728",
+      "1807.02876"
+     ],
+     "title": "Creating an open benchmark for ML in particle physics based on synthetic data",
+     "what": "Develop a set of standardized tasks and metrics for evaluating ML models in particle physics, including event classification, parameter regression, and generative modeling. Provide open code and data for reproducible comparisons.",
+     "why": "Accelerates development and comparison of new ML methods in particle physics, provides a common reference point for researchers.",
+     "origin": "Reviews 2602.03728 and 1807.02876 note the lack of standardized benchmarks, which hinders method comparison. Individual works use different datasets and metrics, so a common platform for assessing progress is missing.",
+     "first_step": "Choose one task (e.g., jet classification) and create a minimal dataset with known ground truth, then implement a baseline model and metrics.",
+     "needs": "Experience in ML and particle physics, computational resources for data generation, knowledge of Python and version control systems.",
+     "risks": "Maintaining the benchmark requires long-term effort and community coordination; data may quickly become outdated.",
+     "scale": "years",
+     "methods": [
+      "Select several key tasks from review 2602.03728 (e.g., reconstruction of parton distributions, jet classification).",
+      "Generate synthetic datasets with known distributions using fast simulations or generators.",
+      "Define metrics (accuracy, AUC, calibration, speed) and baseline models (logistic regression, random forest, simple neural network).",
+      "Publish the benchmark with documentation and usage examples, possibly as a Python package."
+     ]
+    }
+   ]
+  },
+  "es": {
+   "note": "En el campo del aprendizaje automático para la física de partículas, actualmente se están desarrollando activamente métodos para acelerar los cálculos y mejorar la precisión, pero falta estandarización e interpretabilidad.",
+   "topic": "aprendizaje automático en la física de partículas",
+   "ideas": [
+    {
+     "based_on": [
+      "2607.22812v1"
+     ],
+     "title": "Estimación rápida de los parámetros de una lente gravitacional a partir de cuatro imágenes mediante una red neuronal",
+     "what": "Recopilar y entrenar una red neuronal que, a partir de las coordenadas y brillos de cuatro imágenes de un cuásar, estime los parámetros de la lente gravitacional (masa, elipticidad, cizallamiento externo). Comparar la precisión y la velocidad con el método tradicional de máxima verosimilitud.",
+     "why": "Acelera el análisis de lentes para grandes sondeos (por ejemplo, LSST), donde es necesario procesar miles de sistemas. Puede ser útil para la selección rápida de candidatos a lentes.",
+     "origin": "El trabajo 2607.22812 ya demuestra que una red neuronal puede ajustar rápidamente los parámetros a partir de cuatro puntos, pero no investiga el efecto de errores realistas ni compara la precisión con métodos tradicionales en los mismos datos. Falta una evaluación de su aplicabilidad en condiciones reales de sondeos.",
+     "first_step": "Generar un conjunto de 10 000 lentes sintéticas con parámetros conocidos y sus correspondientes imágenes, utilizando un modelo simple de SIE + cizallamiento.",
+     "needs": "Computadora con GPU para el entrenamiento, conocimiento de Python y de las bibliotecas PyTorch/TensorFlow, comprensión básica del lenteo gravitacional.",
+     "risks": "La red neuronal puede generalizar mal a configuraciones muy diferentes de las de entrenamiento si no se incluye suficiente diversidad; la precisión puede ser inferior a la de los métodos tradicionales con un número reducido de imágenes.",
+     "scale": "semestre",
+     "methods": [
+      "Generar datos sintéticos: usar un modelo de lente (por ejemplo, SIE + cizallamiento externo) para crear múltiples configuraciones de imágenes con errores realistas.",
+      "Entrenar una red neuronal (por ejemplo, totalmente conectada o convolucional) con pares (parámetros de entrada de las imágenes, parámetros de salida de la lente).",
+      "Evaluar la precisión en datos de prueba y compararla con las estimaciones por máxima verosimilitud, utilizando, por ejemplo, el código del trabajo 2607.22812.",
+      "Comprobar la robustez frente al ruido y a errores sistemáticos añadiendo incertidumbres realistas en coordenadas y brillos."
+     ]
+    },
+    {
+     "based_on": [
+      "2112.05043",
+      "2602.03728"
+     ],
+     "title": "Aceleración de la reconstrucción de cinemáticas partónicas en colisiones de hadrones mediante una red neuronal",
+     "what": "Desarrollar un método basado en redes neuronales para reconstruir los momentos partónicos en el proceso de producción de un hadrón y un fotón directo en un colisionador. Entrenar con datos generados incluyendo correcciones NLO QCD y comparar con métodos tradicionales.",
+     "why": "La reconstrucción directa de la cinemática partónica es importante para estudiar la estructura de los hadrones y mejorar la precisión de los cálculos; las redes neuronales pueden acelerar el análisis y mejorar la resolución.",
+     "origin": "En el trabajo 2112.05043, la reconstrucción de la cinemática partónica se realiza con métodos tradicionales, que pueden ser computacionalmente costosos y no aprovechar completamente la información. El enfoque de redes neuronales no se ha probado en este contexto, aunque en 2602.03728 se discute el potencial del ML en la fenomenología del LHC.",
+     "first_step": "Generar 100 000 eventos pp -> h + photon con un generador que soporte NLO y guardar las variables partónicas y hadrónicas.",
+     "needs": "Acceso a generadores de eventos (MadGraph5_aMC@NLO, Pythia), recursos computacionales para la generación y el entrenamiento, conocimiento de la física de colisionadores y de ML.",
+     "risks": "La generación de un gran conjunto de eventos con precisión NLO es compleja; la red neuronal puede tener dificultades con regiones cinemáticas poco pobladas.",
+     "scale": "tesis de grado",
+     "methods": [
+      "Usar un generador de eventos (por ejemplo, Pythia o Sherpa) para simular el proceso pp -> h + photon a NLO, como en el trabajo 2112.05043.",
+      "Construir una red neuronal que, a partir de las magnitudes medidas (momento del hadrón, del fotón, energía faltante), prediga las variables partónicas (x1, x2, momento transferido).",
+      "Entrenar con un gran conjunto de eventos y evaluar la precisión de la reconstrucción, comparándola con un método analítico o iterativo.",
+      "Comprobar la robustez frente a efectos del detector añadiendo ensanchamiento de momentos y eficiencia de detección."
+     ]
+    },
+    {
+     "based_on": [
+      "2004.08262",
+      "2605.18689"
+     ],
+     "title": "Aprendizaje automático interpretable para la identificación de resonancias pesadas en el LHC",
+     "what": "Aplicar métodos de interpretabilidad (por ejemplo, SHAP, LIME) a modelos de aprendizaje automático utilizados para identificar partículas pesadas (W/Z/Higgs, quarks top) en experimentos del LHC. Determinar qué características son importantes para la clasificación y compararlas con las expectativas físicas.",
+     "why": "Aumenta la confianza en los modelos de ML en la física de altas energías y permite descubrir nuevas regularidades físicas; es importante para la aplicación práctica en CMS/ATLAS.",
+     "origin": "El trabajo 2004.08262 muestra una alta eficiencia de la identificación con ML, pero no explica en qué características se basan las decisiones. En la revisión 2605.18689 se subraya la importancia de la explicabilidad del ML en física, pero hay pocos estudios de este tipo para aplicaciones en colisionadores.",
+     "first_step": "Cargar datos abiertos o reproducir el entrenamiento de un modelo (por ejemplo, una red neuronal simple) para distinguir señal y fondo, y luego calcular los valores SHAP para los primeros 1000 eventos.",
+     "needs": "Acceso a datos abiertos del LHC (por ejemplo, CERN Open Data) o a conjuntos simulados, conocimiento de Python y de bibliotecas de ML e interpretabilidad (shap, lime), comprensión de la física de chorros.",
+     "risks": "Las interpretaciones pueden ser inestables o engañosas; se requiere una validación cuidadosa con físicos expertos.",
+     "scale": "tesis de grado",
+     "methods": [
+      "Tomar un modelo entrenado del trabajo 2004.08262 (o reproducirlo con datos abiertos) para clasificar desintegraciones hadrónicas de partículas pesadas.",
+      "Aplicar métodos de interpretación (SHAP, Integrated Gradients) al modelo entrenado sobre una muestra representativa de eventos.",
+      "Analizar la importancia de las características: ¿correlacionan con variables físicas conocidas (masa, subestructura del chorro)?",
+      "Comprobar la estabilidad de las interpretaciones al variar la arquitectura del modelo y los hiperparámetros."
+     ]
+    },
+    {
+     "based_on": [
+      "2602.03728",
+      "1807.02876"
+     ],
+     "title": "Creación de un punto de referencia abierto para ML en física de partículas basado en datos sintéticos",
+     "what": "Desarrollar un conjunto de tareas estandarizadas y métricas para evaluar modelos de ML en física de partículas, incluyendo clasificación de eventos, regresión de parámetros y modelado generativo. Proporcionar código y datos abiertos para comparaciones reproducibles.",
+     "why": "Acelera el desarrollo y la comparación de nuevos métodos de ML en física de partículas y proporciona un punto de referencia común para los investigadores.",
+     "origin": "En las revisiones 2602.03728 y 1807.02876 se señala la falta de puntos de referencia estandarizados, lo que dificulta la comparación de métodos. Los trabajos individuales utilizan diferentes conjuntos de datos y métricas, por lo que falta una plataforma común para evaluar el progreso.",
+     "first_step": "Elegir una tarea (por ejemplo, clasificación de chorros) y crear un conjunto de datos mínimo con verdad conocida, luego implementar un modelo base y métricas.",
+     "needs": "Experiencia en ML y física de partículas, recursos computacionales para generar datos, conocimiento de Python y sistemas de control de versiones.",
+     "risks": "El mantenimiento del punto de referencia requiere esfuerzos a largo plazo y coordinación con la comunidad; los datos pueden quedar obsoletos rápidamente.",
+     "scale": "años",
+     "methods": [
+      "Seleccionar varias tareas clave de la revisión 2602.03728 (por ejemplo, reconstrucción de distribuciones partónicas, clasificación de chorros).",
+      "Generar conjuntos de datos sintéticos con distribuciones conocidas utilizando simulaciones rápidas o generadores.",
+      "Definir métricas (precisión, AUC, calibración, velocidad) y modelos base (regresión logística, bosque aleatorio, red neuronal simple).",
+      "Publicar el punto de referencia con documentación y ejemplos de uso, posiblemente como un paquete de Python."
+     ]
+    }
+   ]
+  },
+  "ar": {
+   "note": "في مجال التعلم الآلي لفيزياء الجسيمات، تتطور حاليًا طرق تسريع الحسابات وزيادة الدقة، لكن ينقصها التوحيد القياسي وقابلية التفسير.",
+   "topic": "التعلم الآلي في فيزياء الجسيمات",
+   "ideas": [
+    {
+     "based_on": [
+      "2607.22812v1"
+     ],
+     "title": "تقدير سريع لمعاملات العدسة الجاذبية من أربع صور باستخدام شبكة عصبية",
+     "what": "جمع وتدريب شبكة عصبية تقوم، بناءً على إحداثيات وسطوع أربع صور لكوازار، بتقدير معاملات العدسة الجاذبية (الكتلة، الإهليلجية، الانحراف الخارجي). ومقارنة الدقة والسرعة مع الطريقة التقليدية للإمكان الأعظم.",
+     "why": "يسرع تحليل العدسات للمسوحات الكبيرة (مثل LSST) التي تتطلب معالجة آلاف الأنظمة. وقد يكون مفيدًا للاختيار السريع للمرشحين للعدسات.",
+     "origin": "يُظهر العمل 2607.22812 بالفعل أن الشبكة العصبية يمكنها ضبط المعاملات بسرعة من أربع نقاط، لكنه لم يدرس تأثير الأخطاء الواقعية ولم يقارن الدقة مع الطرق التقليدية على نفس البيانات. ينقص تقييم قابلية التطبيق في الظروف الحقيقية للمسوحات.",
+     "first_step": "توليد مجموعة من 10,000 عدسة اصطناعية بمعاملات معروفة وصورها المقابلة، باستخدام نموذج بسيط SIE + انزياح.",
+     "needs": "حاسوب بوحدة معالجة رسومية (GPU) للتدريب، ومعرفة بلغة Python ومكتبات PyTorch/TensorFlow، وفهم أساسي لعدسة الجاذبية.",
+     "risks": "قد لا تعمم الشبكة العصبية جيدًا على تركيبات تختلف كثيرًا عن بيانات التدريب إذا لم يُضمن تنوع كافٍ؛ وقد تكون الدقة أقل من الطرق التقليدية عند قلة عدد الصور.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "توليد بيانات اصطناعية: استخدام نموذج عدسة (مثل SIE + انزياح خارجي) لإنشاء العديد من تركيبات الصور مع أخطاء واقعية.",
+      "تدريب شبكة عصبية (مثل شبكة كاملة الاتصال أو التفافية) على أزواج (معاملات الصور المدخلة — معاملات العدسة المخرجة).",
+      "تقييم الدقة على بيانات الاختبار ومقارنتها بتقديرات الإمكان الأعظم، باستخدام مثلًا الكود من العمل 2607.22812.",
+      "فحص المتانة ضد الضوضاء والأخطاء المنهجية بإضافة عدم يقين واقعي للإحداثيات والسطوع."
+     ]
+    },
+    {
+     "based_on": [
+      "2112.05043",
+      "2602.03728"
+     ],
+     "title": "تسريع إعادة بناء الحركة البارطونية في تصادمات الهدرونات باستخدام شبكة عصبية",
+     "what": "تطوير طريقة شبكية عصبية لاستعادة عزم البارطونات في عملية إنتاج هدرون وفوتون مباشر على مصادم. التدريب على بيانات مولدة مع مراعاة تصحيحات QCD عند الرتبة NLO، والمقارنة مع الطرق التقليدية.",
+     "why": "الاستعادة المباشرة للحركة البارطونية مهمة لدراسة بنية الهدرونات وزيادة دقة الحسابات؛ ويمكن للشبكات العصبية تسريع التحليل وتحسين الدقة.",
+     "origin": "في العمل 2112.05043 تتم إعادة بناء الحركة البارطونية بالطرق التقليدية التي قد تكون مكلفة حسابيًا ولا تستخدم المعلومات بالكامل. لم تُجرَّب الطريقة الشبكية العصبية في هذا السياق، رغم أن 2602.03728 يناقش آفاق التعلم الآلي في فينومينولوجيا LHC.",
+     "first_step": "توليد 100,000 حدث pp -> h + photon باستخدام مولّد يدعم NLO، وحفظ المتغيرات البارطونية والهدرونية.",
+     "needs": "الوصول إلى مولّدات الأحداث (MadGraph5_aMC@NLO, Pythia)، وموارد حسابية للتوليد والتدريب، ومعرفة فيزياء المصادمات والتعلم الآلي.",
+     "risks": "صعوبة توليد مجموعة كبيرة من الأحداث بدقة NLO؛ وقد تتعامل الشبكة العصبية بشكل سيء مع المناطق الحركية النادرة.",
+     "scale": "مشروع تخرج",
+     "methods": [
+      "استخدام مولّد أحداث (مثل Pythia أو Sherpa) لنمذجة العملية pp -> h + photon عند NLO، كما في العمل 2112.05043.",
+      "بناء شبكة عصبية تتنبأ بالمتغيرات البارطونية (x1, x2, العزم المنقول) من الكميات المقاسة (عزم الهدرون، الفوتون، الطاقة المفقودة).",
+      "التدريب على مجموعة كبيرة من الأحداث وتقييم دقة الاستعادة، ومقارنتها بطريقة تحليلية أو تكرارية.",
+      "فحص المتانة ضد تأثيرات الكاشف بإضافة تلطيخ للعزوم وكفاءة التسجيل."
+     ]
+    },
+    {
+     "based_on": [
+      "2004.08262",
+      "2605.18689"
+     ],
+     "title": "تعلم آلي قابل للتفسير لتحديد الرنينات الثقيلة في LHC",
+     "what": "تطبيق طرق قابلية التفسير (مثل SHAP, LIME) على نماذج التعلم الآلي المستخدمة لتحديد الجسيمات الثقيلة (W/Z/Higgs، كواركات قمية) في تجارب LHC. معرفة أي الميزات مهمة للتصنيف ومقارنتها بالتوقعات الفيزيائية.",
+     "why": "زيادة الثقة في نماذج التعلم الآلي في فيزياء الطاقة العالية وإمكانية اكتشاف أنماط فيزيائية جديدة؛ مهم للتطبيق العملي في CMS/ATLAS.",
+     "origin": "يُظهر العمل 2004.08262 كفاءة عالية لتحديد الهوية بالتعلم الآلي، لكنه لا يشرح على أي ميزات تستند القرارات. وفي المراجعة 2605.18689 تُبرز أهمية قابلية تفسير التعلم الآلي في الفيزياء، لكن لمثل هذه التطبيقات في المصادمات قليل من الدراسات.",
+     "first_step": "تحميل بيانات مفتوحة أو إعادة إنتاج تدريب نموذج (مثل شبكة عصبية بسيطة) للتمييز بين الإشارة والخلفية، ثم حساب قيم SHAP لأول 1000 حدث.",
+     "needs": "الوصول إلى بيانات LHC المفتوحة (مثل CERN Open Data) أو مجموعات محاكاة، ومعرفة Python ومكتبات التعلم الآلي وقابلية التفسير (shap, lime)، وفهم فيزياء النفاثات.",
+     "risks": "قد تكون التفسيرات غير مستقرة أو مضللة؛ تتطلب تحققًا دقيقًا مع فيزيائيين خبراء.",
+     "scale": "مشروع تخرج",
+     "methods": [
+      "أخذ نموذج مدرب من العمل 2004.08262 (أو إعادة إنتاجه على بيانات مفتوحة) لتصنيف الاضمحلالات الهدرونية للجسيمات الثقيلة.",
+      "تطبيق طرق التفسير (SHAP, Integrated Gradients) على النموذج المدرب على عينة ممثلة من الأحداث.",
+      "تحليل أهمية الميزات: هل ترتبط بالمتغيرات الفيزيائية المعروفة (الكتلة، البنية التحتية للنفاثة)؟",
+      "فحص استقرار التفسيرات عند تغيير بنية النموذج والوسائط الفائقة."
+     ]
+    },
+    {
+     "based_on": [
+      "2602.03728",
+      "1807.02876"
+     ],
+     "title": "إنشاء معيار مفتوح للتعلم الآلي في فيزياء الجسيمات بناءً على بيانات اصطناعية",
+     "what": "تطوير مجموعة من المهام والمقاييس الموحدة لتقييم نماذج التعلم الآلي في فيزياء الجسيمات، بما في ذلك تصنيف الأحداث، وانحدار المعاملات، والنمذجة التوليدية. توفير كود وبيانات مفتوحة لمقارنات قابلة للتكرار.",
+     "why": "يسرع تطوير ومقارنة طرق التعلم الآلي الجديدة في فيزياء الجسيمات، ويوفر نقطة مرجعية موحدة للباحثين.",
+     "origin": "في المراجعتين 2602.03728 و1807.02876 يُلاحظ غياب معايير موحدة، مما يعيق مقارنة الطرق. تستخدم الأعمال الفردية مجموعات بيانات ومقاييس مختلفة، لذا ينقص منصة مشتركة لتقييم التقدم.",
+     "first_step": "اختيار مهمة واحدة (مثل تصنيف النفاثات) وإنشاء مجموعة بيانات دنيا مع حقيقة معروفة، ثم تنفيذ نموذج أساسي ومقاييس.",
+     "needs": "خبرة في التعلم الآلي وفيزياء الجسيمات، وموارد حسابية لتوليد البيانات، ومعرفة Python وأنظمة التحكم في الإصدارات.",
+     "risks": "يتطلب الحفاظ على المعيار جهودًا طويلة الأجل وموافقة المجتمع؛ وقد تصبح البيانات قديمة بسرعة.",
+     "scale": "سنوات",
+     "methods": [
+      "اختيار عدة مهام رئيسية من المراجعة 2602.03728 (مثل إعادة بناء التوزيعات البارطونية، تصنيف النفاثات).",
+      "توليد مجموعات بيانات اصطناعية بتوزيعات معروفة باستخدام محاكاة سريعة أو مولّدات.",
+      "تحديد المقاييس (الدقة، AUC، المعايرة، السرعة) والنماذج الأساسية (الانحدار اللوجستي، الغابة العشوائية، شبكة عصبية بسيطة).",
+      "نشر المعيار مع توثيق وأمثلة استخدام، ربما كحزمة Python."
+     ]
+    }
+   ]
+  },
+  "fr": {
+   "note": "Dans le domaine de l'apprentissage automatique pour la physique des particules, les méthodes d'accélération des calculs et d'amélioration de la précision se développent activement, mais il manque de standardisation et d'interprétabilité.",
+   "topic": "apprentissage automatique en physique des particules",
+   "ideas": [
+    {
+     "based_on": [
+      "2607.22812v1"
+     ],
+     "title": "Estimation rapide des paramètres d'une lentille gravitationnelle à partir de quatre images à l'aide d'un réseau de neurones",
+     "what": "Construire et entraîner un réseau de neurones qui, à partir des coordonnées et des luminosités de quatre images d'un quasar, estime les paramètres de la lentille gravitationnelle (masse, ellipticité, cisaillement externe). Comparer la précision et la vitesse avec la méthode traditionnelle du maximum de vraisemblance.",
+     "why": "Cela accélère l'analyse des lentilles pour les grands relevés (par exemple, LSST), où il faut traiter des milliers de systèmes. Cela peut être utile pour la sélection rapide de candidats de lentilles.",
+     "origin": "Le travail 2607.22812 démontre déjà qu'un réseau de neurones peut ajuster rapidement les paramètres à partir de quatre points, mais il n'y étudie pas l'influence des erreurs réalistes et ne compare pas la précision avec les méthodes traditionnelles sur les mêmes données. Il manque une évaluation de l'applicabilité dans les conditions réelles des relevés.",
+     "first_step": "Générer un ensemble de 10 000 lentilles synthétiques avec des paramètres connus et leurs images correspondantes, en utilisant un modèle simple SIE + cisaillement.",
+     "needs": "Un ordinateur avec GPU pour l'entraînement, la connaissance de Python et des bibliothèques PyTorch/TensorFlow, une compréhension de base du lentillage gravitationnel.",
+     "risks": "Le réseau de neurones peut mal généraliser sur des configurations très différentes de celles d'entraînement si une diversité suffisante n'est pas incluse ; la précision peut être inférieure aux méthodes traditionnelles avec un petit nombre d'images.",
+     "scale": "semestre",
+     "methods": [
+      "Générer des données synthétiques : utiliser un modèle de lentille (par exemple, SIE + cisaillement externe) pour créer de nombreuses configurations d'images avec des erreurs réalistes.",
+      "Entraîner un réseau de neurones (par exemple, fully connected ou convolutionnel) sur des paires (paramètres d'entrée des images — paramètres de sortie de la lentille).",
+      "Évaluer la précision sur des données de test et comparer avec les estimations par maximum de vraisemblance, en utilisant par exemple le code du travail 2607.22812.",
+      "Vérifier la robustesse au bruit et aux erreurs systématiques en ajoutant des incertitudes réalistes sur les coordonnées et les luminosités."
+     ]
+    },
+    {
+     "based_on": [
+      "2112.05043",
+      "2602.03728"
+     ],
+     "title": "Accélération de la reconstruction des cinématiques partoniques dans les collisions de hadrons à l'aide d'un réseau de neurones",
+     "what": "Développer une méthode par réseau de neurones pour reconstruire les impulsions partoniques dans le processus de production d'un hadron et d'un photon direct au collisionneur. Entraîner sur des données générées avec des corrections NLO QCD et comparer avec les méthodes traditionnelles.",
+     "why": "La reconstruction directe de la cinématique partonique est importante pour étudier la structure des hadrons et améliorer la précision des calculs ; les réseaux de neurones peuvent accélérer l'analyse et améliorer la résolution.",
+     "origin": "Dans le travail 2112.05043, la reconstruction de la cinématique partonique est effectuée par des méthodes traditionnelles qui peuvent être coûteuses en calcul et ne pas utiliser pleinement l'information. L'approche par réseau de neurones n'a pas été testée dans ce contexte, bien que 2602.03728 discute du potentiel du ML dans la phénoménologie du LHC.",
+     "first_step": "Générer 100 000 événements pp -> h + photon avec un générateur supportant le NLO et enregistrer les variables partoniques et hadroniques.",
+     "needs": "Accès aux générateurs d'événements (MadGraph5_aMC@NLO, Pythia), ressources de calcul pour la génération et l'entraînement, connaissance de la physique des collisionneurs et du ML.",
+     "risks": "Difficulté de générer un grand ensemble d'événements avec une précision NLO ; le réseau de neurones peut mal gérer les régions cinématiques rares.",
+     "scale": "mémoire",
+     "methods": [
+      "Utiliser un générateur d'événements (par exemple, Pythia ou Sherpa) pour modéliser le processus pp -> h + photon au NLO, comme dans le travail 2112.05043.",
+      "Construire un réseau de neurones qui, à partir des quantités mesurées (impulsion du hadron, du photon, énergie manquante), prédit les variables partoniques (x1, x2, impulsion transférée).",
+      "Entraîner sur un grand ensemble d'événements et évaluer la précision de reconstruction en comparant avec une méthode analytique ou itérative.",
+      "Vérifier la robustesse aux effets du détecteur en ajoutant un brouillage des impulsions et une efficacité de détection."
+     ]
+    },
+    {
+     "based_on": [
+      "2004.08262",
+      "2605.18689"
+     ],
+     "title": "Apprentissage automatique interprétable pour l'identification des résonances lourdes au LHC",
+     "what": "Appliquer des méthodes d'interprétabilité (par exemple, SHAP, LIME) aux modèles d'apprentissage automatique utilisés pour l'identification des particules lourdes (W/Z/Higgs, quarks top) dans les expériences au LHC. Déterminer quelles caractéristiques sont importantes pour la classification et comparer avec les attentes physiques.",
+     "why": "Améliorer la confiance dans les modèles ML en physique des hautes énergies et permettre la découverte de nouvelles régularités physiques ; important pour les applications pratiques dans CMS/ATLAS.",
+     "origin": "Le travail 2004.08262 montre une grande efficacité de l'identification par ML, mais n'explique pas sur quelles caractéristiques reposent les décisions. La revue 2605.18689 souligne l'importance de l'explicabilité du ML en physique, mais il y a peu d'études de ce type pour les applications aux collisionneurs.",
+     "first_step": "Télécharger des données ouvertes ou reproduire l'entraînement d'un modèle (par exemple, un simple réseau de neurones) pour distinguer signal et bruit de fond, puis calculer les valeurs SHAP pour les 1000 premiers événements.",
+     "needs": "Accès aux données ouvertes du LHC (par exemple, CERN Open Data) ou à des ensembles simulés, connaissance de Python et des bibliothèques de ML et d'interprétabilité (shap, lime), compréhension de la physique des jets.",
+     "risks": "Les interprétations peuvent être instables ou trompeuses ; une validation minutieuse avec des physiciens experts est nécessaire.",
+     "scale": "mémoire",
+     "methods": [
+      "Prendre le modèle entraîné du travail 2004.08262 (ou le reproduire sur des données ouvertes) pour la classification des désintégrations hadroniques de particules lourdes.",
+      "Appliquer des méthodes d'interprétation (SHAP, Integrated Gradients) au modèle entraîné sur un échantillon représentatif d'événements.",
+      "Analyser l'importance des caractéristiques : sont-elles corrélées avec des variables physiques connues (masse, sous-structure du jet) ?",
+      "Vérifier la stabilité des interprétations lors de changements d'architecture du modèle et d'hyperparamètres."
+     ]
+    },
+    {
+     "based_on": [
+      "2602.03728",
+      "1807.02876"
+     ],
+     "title": "Création d'un benchmark ouvert pour le ML en physique des particules basé sur des données synthétiques",
+     "what": "Développer un ensemble de tâches standardisées et de métriques pour évaluer les modèles ML en physique des particules, incluant la classification d'événements, la régression de paramètres et la modélisation générative. Fournir un code ouvert et des données pour des comparaisons reproductibles.",
+     "why": "Accélère le développement et la comparaison de nouvelles méthodes ML en physique des particules, fournit un point de référence commun pour les chercheurs.",
+     "origin": "Les revues 2602.03728 et 1807.02876 notent l'absence de benchmarks standardisés, ce qui rend difficile la comparaison des méthodes. Les travaux individuels utilisent différents ensembles de données et métriques, donc il manque une plateforme commune pour évaluer les progrès.",
+     "first_step": "Choisir une tâche (par exemple, la classification des jets) et créer un ensemble de données minimal avec une vérité terrain connue, puis implémenter un modèle de base et des métriques.",
+     "needs": "Expérience en ML et en physique des particules, ressources de calcul pour la génération de données, connaissance de Python et des systèmes de contrôle de version.",
+     "risks": "Maintenir le benchmark nécessite des efforts à long terme et une coordination avec la communauté ; les données peuvent devenir rapidement obsolètes.",
+     "scale": "années",
+     "methods": [
+      "Choisir plusieurs tâches clés de la revue 2602.03728 (par exemple, la reconstruction des distributions partoniques, la classification des jets).",
+      "Générer des ensembles de données synthétiques avec des distributions connues, en utilisant des simulations rapides ou des générateurs.",
+      "Définir des métriques (précision, AUC, calibration, vitesse) et des modèles de base (régression logistique, forêt aléatoire, réseau de neurones simple).",
+      "Publier le benchmark avec une documentation et des exemples d'utilisation, éventuellement sous forme de package Python."
+     ]
+    }
+   ]
+  }
+ }
 }

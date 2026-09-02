@@ -2,15 +2,31 @@
   "version": "0.0.1",
   "configurations": [
     {
+      "name": "dev-api",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "tools/dev_server.py"
+      ],
+      "port": 8420
+    },
+    {
       "name": "static-site",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "8420"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8420"
+      ],
       "port": 8420
     },
     {
       "name": "qa-static",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "8429"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8429"
+      ],
       "port": 8429
     }
   ]

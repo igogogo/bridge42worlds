@@ -258,5 +258,407 @@
    },
    "abstract": "Noise dominates every aspect of near-term quantum computers, rendering it exceedingly difficult to carry out even small computations. In this paper we are concerned with the modelling of noise in Noisy Intermediate-Scale Quantum (NISQ) computers. We focus on three error groups that represent the main sources of noise during a computation and present quantum channels that model each source. We engineer a noise model that combines all three noise channels and simulates the evolution of the quantum computer using its calibrated error rates. We run various experiments of our model, showcasing its "
   }
- ]
+ ],
+ "lang": {
+  "en": {
+   "note": "There is active research on ways to characterize and model noise in NISQ devices, but no unified approach yet exists for using these models in practice to improve algorithms.",
+   "topic": "noise in quantum computing",
+   "ideas": [
+    {
+     "based_on": [
+      "2209.12803",
+      "2101.02109"
+     ],
+     "title": "Probing the link between noise and VQE accuracy on a cloud quantum computer",
+     "what": "Run a variational quantum eigensolver (VQE) to compute the ground-state energy of a simple molecule on a publicly accessible quantum device, while simultaneously measuring noise parameters (decoherence times, gate errors) using standard characterization methods. Compare the actual energy error with the predictions of a noise model.",
+     "why": "This will help understand how well VQE accuracy predictions based on noise models match reality on cloud processors, and which noise sources dominate.",
+     "origin": "Work 2209.12803 assesses the impact of noise on VQE, but mostly through simulations and without detailed attachment to a specific cloud device. In 2101.02109, a noise model for NISQ computers is proposed, yet its application to predicting VQE accuracy on real hardware remains untested. There is no work linking measured noise parameters to the actual VQE error on public devices.",
+     "first_step": "Choose a molecule and a quantum device from a cloud service (IBM Quantum or similar), write a simple VQE circuit, and run calibration measurements to estimate gate and readout errors.",
+     "needs": "Access to a cloud quantum computer (IBM Quantum, Rigetti, etc.), knowledge of VQE basics and libraries (Qiskit, Cirq), and time to run many executions.",
+     "risks": "Cloud devices may have unstable noise parameters over time; the VQE error may depend on the specific optimizer implementation, complicating comparison with the model.",
+     "scale": "semester",
+     "methods": [
+      "Use the noise characterization method from 2101.02109: model three groups of errors (gate errors, decoherence, readout errors) and estimate their parameters for the chosen device.",
+      "Run VQE for the hydrogen molecule or lithium hydride, as in 2209.12803, and record the actual energy error relative to the exact value.",
+      "Compare the predicted error (obtained from the noise model, e.g., via simulation with added noise) with the experimental error and analyze discrepancies."
+     ]
+    },
+    {
+     "based_on": [
+      "2602.14694",
+      "2101.02109"
+     ],
+     "title": "Building and validating a noise model for a cloud quantum processor using shadow tomography",
+     "what": "Collect noise data from a specific cloud quantum device using the classical shadows method, estimate the parameters of noise channels, and build a model that predicts outcomes of arbitrary circuits. Validate the model on independent circuits.",
+     "why": "An accurate noise model would allow algorithm developers to optimize circuits for a specific device and predict their reliability without running them.",
+     "origin": "Work 2602.14694 demonstrates accelerated noise characterization using shadow measurements, but does not build a full noise model for predicting arbitrary circuits. In 2101.02109, noise modeling is proposed, but parameters are estimated with standard methods (RB, GST). No one has combined shadow tomography to efficiently obtain noise model parameters for a cloud device.",
+     "first_step": "Study 2602.14694, implement code to generate random circuits and shadow measurements on the chosen device, and run a pilot data collection on a few qubits.",
+     "needs": "Access to a cloud quantum computer, computational resources for data processing, knowledge of quantum tomography and libraries.",
+     "risks": "Shadow tomography may be sensitive to device instability; the model may fail to capture correlated noise between qubits.",
+     "scale": "thesis",
+     "methods": [
+      "Use the shadow tomography protocol from 2602.14694 to efficiently estimate the state after applying random circuits.",
+      "From the obtained data, estimate the parameters of noise channels (e.g., depolarizing, amplitude damping) for each gate and qubit.",
+      "Build a noisy simulator and compare its predictions with the results of running random test circuits on the device."
+     ]
+    },
+    {
+     "based_on": [
+      "2512.14842"
+     ],
+     "title": "Using noise as a resource to accelerate thermal equilibration in a quantum simulator",
+     "what": "Implement on a cloud quantum computer a model where artificially added noise accelerates convergence to a thermal state, and test whether this can be used to obtain thermodynamic properties faster.",
+     "why": "If noise can indeed be useful, it opens new possibilities for using imperfect quantum devices in quantum thermalization tasks.",
+     "origin": "Work 2512.14842 theoretically shows that noise can accelerate thermal equilibration, but no experimental verification on a real quantum computer has been performed. Existing thermalization experiments usually try to minimize noise, not use it. There is no data on whether noise can be controllably added to speed up convergence.",
+     "first_step": "Study the theoretical model from 2512.14842, choose a simple Hamiltonian system (e.g., a spin chain), and design a circuit that implements noisy dynamics.",
+     "needs": "Access to a cloud quantum computer, understanding of quantum thermalization, skills in quantum circuit design.",
+     "risks": "Real devices have intrinsic noise that may mask the effect of controlled noise; precise calibration and suppression of unwanted noise may be required.",
+     "scale": "thesis",
+     "methods": [
+      "Take the model from 2512.14842, where noise acts as a catalyst for mixing, and adapt it for a small number of qubits.",
+      "Compare the speed of reaching thermal equilibrium with and without added controlled noise on a real device.",
+      "Assess how close the obtained state is to thermal (e.g., by energy or observables)."
+     ]
+    },
+    {
+     "based_on": [
+      "2602.03938",
+      "2602.14694"
+     ],
+     "title": "Developing a method to separate readout and gate errors based on shadow measurement analysis",
+     "what": "Create a procedure that, from shadow measurement data, allows separating the contribution of readout errors from gate errors to the total noise of a quantum device, without the need for full tomography.",
+     "why": "Understanding the dominant error source helps algorithm developers and engineers improve hardware, and also allows more accurate error correction.",
+     "origin": "Work 2602.03938 proposes a way to decompose noise into components, but uses full tomography, which is costly. Shadow tomography from 2602.14694 provides an efficient way to collect noise data, but does not separate error sources. Combining these approaches could yield a fast diagnostic method that no one has implemented yet.",
+     "first_step": "Study 2602.03938, implement the noise decomposition algorithm, and apply it to simulated data with known readout and gate errors.",
+     "needs": "Access to a cloud quantum computer, Python programming skills, knowledge of quantum error theory.",
+     "risks": "The method may be unstable in the presence of correlated errors or device instability; separation may be ambiguous.",
+     "scale": "semester",
+     "methods": [
+      "Use the method from 2602.03938 to decompose noise into components, adapting it to shadow measurement data.",
+      "Run a series of experiments on a cloud device: first measure only readout errors (by preparing known states), then total noise, and compare with the decomposition results.",
+      "Evaluate the accuracy of separation on model data and on a real device."
+     ]
+    },
+    {
+     "based_on": [
+      "2512.22559",
+      "2101.02109"
+     ],
+     "title": "Investigating the impact of noise on the accuracy of convection modeling with quantum algorithms",
+     "what": "Implement a quantum algorithm for modeling scalar convection (e.g., the advection-diffusion equation) on a cloud quantum computer and systematically study how different types of noise distort the physical characteristics of the solution (dissipation, dispersion).",
+     "why": "Understanding how noise affects the physics of modeling will enable the development of correction methods or the selection of suitable algorithms for hydrodynamics on NISQ devices.",
+     "origin": "Work 2512.22559 considers convection modeling with noise, but does not provide a detailed analysis of how specific noise types affect the physical properties of the solution. In 2101.02109, noise models exist, but they have not been applied to hydrodynamic problems. There is no systematic study linking noise parameters to the distortion of physics in quantum fluid simulations.",
+     "first_step": "Study 2512.22559, implement the proposed quantum circuit for one-dimensional convection on a simulator, and reproduce the noiseless results.",
+     "needs": "Access to a cloud quantum computer, understanding of numerical methods for hydrodynamics, quantum programming skills.",
+     "risks": "The circuit may be too deep for current devices, and noise may completely destroy the solution; simplification of the model or error suppression methods may be required.",
+     "scale": "thesis",
+     "methods": [
+      "Use the quantum circuit for convection from 2512.22559 as a basis and reproduce it on a simulator.",
+      "Add noise models (e.g., depolarizing, amplitude damping) with varying strength and analyze how the numerical characteristics of the solution change.",
+      "Run the circuit on a real device and compare with simulations to identify dominant noise effects."
+     ]
+    }
+   ]
+  },
+  "es": {
+   "note": "Actualmente se investigan activamente formas de caracterizar y modelar el ruido en dispositivos NISQ, pero aún no existe un enfoque unificado para usar estos modelos en la práctica y mejorar los algoritmos.",
+   "topic": "ruido en computación cuántica",
+   "ideas": [
+    {
+     "based_on": [
+      "2209.12803",
+      "2101.02109"
+     ],
+     "title": "Comprobación de la relación entre el ruido y la precisión de VQE en una computadora cuántica en la nube",
+     "what": "Ejecutar un solucionador propio de valores cuántico variacional (VQE) para calcular la energía del estado fundamental de una molécula simple en un dispositivo cuántico de acceso público, midiendo simultáneamente los parámetros de ruido (tiempos de decoherencia, errores de compuertas) mediante métodos estándar de caracterización. Comparar el error real de la energía con las predicciones del modelo de ruido.",
+     "why": "Ayudará a entender en qué medida las predicciones de precisión de VQE basadas en modelos de ruido se corresponden con la realidad en procesadores en la nube y qué fuentes de ruido son dominantes.",
+     "origin": "El trabajo 2209.12803 evalúa el impacto del ruido en VQE, pero principalmente mediante simulaciones y sin un vínculo detallado con un dispositivo en la nube específico. En 2101.02109 se propone un modelo de ruido para computadoras NISQ, pero su aplicación para predecir la precisión de VQE en hardware real no ha sido verificada. Falta un trabajo que relacione los parámetros de ruido medidos con el error real de VQE en dispositivos públicos.",
+     "first_step": "Elegir una molécula y un dispositivo cuántico de un servicio en la nube (IBM Quantum o similar), escribir un circuito VQE simple y realizar mediciones de calibración para estimar errores de compuertas y de lectura.",
+     "needs": "Acceso a una computadora cuántica en la nube (IBM Quantum, Rigetti, etc.), conocimiento de los fundamentos de VQE y de bibliotecas (Qiskit, Cirq), tiempo para ejecutar múltiples corridas.",
+     "risks": "Los dispositivos en la nube pueden tener parámetros de ruido inestables en el tiempo; el error de VQE puede depender de la implementación específica del optimizador, lo que dificultará la comparación con el modelo.",
+     "scale": "semestre",
+     "methods": [
+      "Usar el método de caracterización de ruido del trabajo 2101.02109: modelar tres grupos de errores (errores de compuertas, decoherencia, errores de lectura) y estimar sus parámetros para el dispositivo elegido.",
+      "Realizar VQE para la molécula de hidrógeno o hidruro de litio, como en el trabajo 2209.12803, y registrar el error real de la energía respecto al valor exacto.",
+      "Comparar el error predicho (obtenido del modelo de ruido, por ejemplo, mediante simulación con ruido añadido) con el error experimental y analizar las discrepancias."
+     ]
+    },
+    {
+     "based_on": [
+      "2602.14694",
+      "2101.02109"
+     ],
+     "title": "Construcción y validación de un modelo de ruido para un procesador cuántico en la nube basado en tomografía de sombras",
+     "what": "Recopilar datos de ruido de un dispositivo cuántico en la nube específico mediante el método de mediciones de sombras clásicas (classical shadows), estimar los parámetros de los canales de ruido y construir un modelo que prediga los resultados de circuitos arbitrarios. Verificar el modelo en circuitos independientes.",
+     "why": "Un modelo de ruido preciso permitirá a los desarrolladores de algoritmos optimizar los circuitos para un dispositivo específico y predecir su fiabilidad sin necesidad de ejecutarlos.",
+     "origin": "El trabajo 2602.14694 demuestra una aceleración en la caracterización de ruido mediante mediciones de sombras, pero no construye un modelo de ruido completo para predecir circuitos arbitrarios. En 2101.02109 se propone un modelado de ruido, pero los parámetros se estiman con métodos estándar (RB, GST). Nadie ha combinado la tomografía de sombras para obtener eficientemente los parámetros de un modelo de ruido de un dispositivo en la nube.",
+     "first_step": "Estudiar el artículo 2602.14694, implementar código para generar circuitos aleatorios y mediciones de sombras en el dispositivo elegido, y realizar una recopilación piloto de datos de varios qubits.",
+     "needs": "Acceso a una computadora cuántica en la nube, recursos computacionales para procesar datos, conocimiento de tomografía cuántica y bibliotecas.",
+     "risks": "El método de tomografía de sombras puede ser sensible a la inestabilidad del dispositivo; el modelo podría no capturar el ruido correlacionado entre qubits.",
+     "scale": "tesis",
+     "methods": [
+      "Usar el protocolo de tomografía de sombras del trabajo 2602.14694 para estimar eficientemente el estado después de aplicar circuitos aleatorios.",
+      "A partir de los datos obtenidos, estimar los parámetros de los canales de ruido (por ejemplo, despolarización, amortiguamiento de amplitud) para cada compuerta y qubit.",
+      "Construir un simulador con ruido y comparar sus predicciones con los resultados de ejecutar circuitos de prueba aleatorios en el dispositivo."
+     ]
+    },
+    {
+     "based_on": [
+      "2512.14842"
+     ],
+     "title": "Uso del ruido como recurso para acelerar el equilibrio térmico en un simulador cuántico",
+     "what": "Implementar en una computadora cuántica en la nube un modelo en el que el ruido añadido artificialmente acelera la convergencia hacia un estado térmico, y verificar si esto puede usarse para obtener propiedades termodinámicas más rápidamente.",
+     "why": "Si el ruido realmente puede ser útil, abrirá nuevas posibilidades para usar dispositivos cuánticos imperfectos en problemas de termalización cuántica.",
+     "origin": "El trabajo 2512.14842 muestra teóricamente que el ruido puede acelerar el equilibrio térmico, pero no se ha realizado una verificación experimental en una computadora cuántica real. Los experimentos existentes de termalización suelen intentar minimizar el ruido, no utilizarlo. No hay datos sobre si se puede añadir ruido de manera controlada para acelerar la convergencia.",
+     "first_step": "Estudiar el modelo teórico de 2512.14842, elegir un sistema hamiltoniano simple (por ejemplo, una cadena de espines) y diseñar un circuito que implemente la dinámica con ruido.",
+     "needs": "Acceso a una computadora cuántica en la nube, comprensión de la termalización cuántica, habilidades para trabajar con circuitos cuánticos.",
+     "risks": "Los dispositivos reales tienen ruido propio que puede enmascarar el efecto del ruido controlado; posiblemente se requiera una calibración precisa y la supresión de ruidos no deseados.",
+     "scale": "tesis",
+     "methods": [
+      "Tomar el modelo del trabajo 2512.14842, donde el ruido actúa como catalizador de la mezcla, y adaptarlo para un número pequeño de qubits.",
+      "Comparar la velocidad de alcanzar el equilibrio térmico con y sin la adición de ruido controlado en un dispositivo real.",
+      "Evaluar cuán cerca está el estado obtenido del estado térmico (por ejemplo, mediante la energía o los observables)."
+     ]
+    },
+    {
+     "based_on": [
+      "2602.03938",
+      "2602.14694"
+     ],
+     "title": "Desarrollo de un método para separar errores de lectura y errores de compuertas basado en el análisis de mediciones de sombras",
+     "what": "Crear un procedimiento que, a partir de datos de mediciones de sombras, permita separar la contribución de los errores de lectura de los errores de compuertas en el ruido total de un dispositivo cuántico, sin necesidad de tomografía completa.",
+     "why": "Comprender la fuente de error dominante ayudará a los desarrolladores de algoritmos e ingenieros a mejorar el hardware, y también permitirá corregir errores con mayor precisión.",
+     "origin": "El trabajo 2602.03938 propone una forma de descomponer el ruido en componentes, pero utiliza tomografía completa, lo cual es costoso. La tomografía de sombras de 2602.14694 proporciona una forma eficiente de recopilar datos de ruido, pero no separa las fuentes de error. La combinación de estos enfoques podría dar un método rápido de diagnóstico que nadie ha implementado todavía.",
+     "first_step": "Estudiar el trabajo 2602.03938, implementar el algoritmo de descomposición del ruido y aplicarlo a datos simulados con errores de lectura y de compuertas conocidos.",
+     "needs": "Acceso a una computadora cuántica en la nube, habilidades de programación en Python, conocimiento de la teoría cuántica de errores.",
+     "risks": "El método puede ser inestable en presencia de errores correlacionados o inestabilidad del dispositivo; la separación puede ser ambigua.",
+     "scale": "semestre",
+     "methods": [
+      "Usar el método de 2602.03938 para descomponer el ruido en componentes, adaptándolo a los datos de mediciones de sombras.",
+      "Realizar una serie de experimentos en un dispositivo en la nube: primero medir solo los errores de lectura (preparando estados conocidos), luego el ruido total, y comparar con los resultados de la descomposición.",
+      "Evaluar la precisión de la separación en datos modelo y en el dispositivo real."
+     ]
+    },
+    {
+     "based_on": [
+      "2512.22559",
+      "2101.02109"
+     ],
+     "title": "Investigación del impacto del ruido en la precisión del modelado de convección mediante algoritmos cuánticos",
+     "what": "Implementar un algoritmo cuántico para modelar convección escalar (por ejemplo, la ecuación de advección-difusión) en una computadora cuántica en la nube y estudiar sistemáticamente cómo diferentes tipos de ruido distorsionan las características físicas de la solución (disipación, dispersión).",
+     "why": "Comprender cómo el ruido afecta la física del modelado permitirá desarrollar métodos de corrección o elegir algoritmos apropiados para hidrodinámica en dispositivos NISQ.",
+     "origin": "El trabajo 2512.22559 considera el modelado de convección con ruido, pero no ofrece un análisis detallado de cómo tipos específicos de ruido afectan las propiedades físicas de la solución. En 2101.02109 hay modelos de ruido, pero no se han aplicado a problemas hidrodinámicos. Falta una investigación sistemática de la relación entre los parámetros de ruido y la distorsión de la física en simulaciones cuánticas de fluidos.",
+     "first_step": "Estudiar el artículo 2512.22559, implementar el circuito cuántico propuesto para convección unidimensional en un simulador y reproducir los resultados sin ruido.",
+     "needs": "Acceso a una computadora cuántica en la nube, comprensión de métodos numéricos en hidrodinámica, habilidades de programación cuántica.",
+     "risks": "El circuito puede ser demasiado profundo para los dispositivos actuales y el ruido podría destruir completamente la solución; puede ser necesario simplificar el modelo o usar métodos de supresión de errores.",
+     "scale": "tesis",
+     "methods": [
+      "Tomar como base el circuito cuántico para convección del trabajo 2512.22559 y reproducirlo en un simulador.",
+      "Añadir modelos de ruido (por ejemplo, despolarización, amortiguamiento de amplitud) con diferentes intensidades y analizar cómo cambian las características numéricas de la solución.",
+      "Ejecutar el circuito en un dispositivo real y comparar con las simulaciones para identificar los efectos de ruido dominantes."
+     ]
+    }
+   ]
+  },
+  "ar": {
+   "note": "تُجرى حاليًا أبحاث مكثفة حول طرق توصيف ونمذجة الضوضاء في أجهزة NISQ، لكن لا يوجد حتى الآن نهج موحد للاستفادة العملية من هذه النماذج في تحسين الخوارزميات.",
+   "topic": "الضوضاء في الحوسبة الكمومية",
+   "ideas": [
+    {
+     "based_on": [
+      "2209.12803",
+      "2101.02109"
+     ],
+     "title": "اختبار العلاقة بين الضوضاء ودقة VQE على حاسوب كمومي سحابي",
+     "what": "تشغيل خوارزمية القيمة الذاتية الكمومية المتغيرة (VQE) لحساب طاقة الحالة الأرضية لجزيء بسيط على جهاز كمومي متاح للعموم، مع قياس معاملات الضوضاء (زمن الترابط، أخطاء البوابات) في الوقت نفسه باستخدام طرق التوصيف القياسية. ومقارنة خطأ الطاقة الفعلي بتنبؤات نموذج الضوضاء.",
+     "why": "سيساعد ذلك في فهم مدى تطابق تنبؤات دقة VQE المبنية على نماذج الضوضاء مع الواقع على المعالجات السحابية، وتحديد مصادر الضوضاء المهيمنة.",
+     "origin": "في العمل 2209.12803 يُقيَّم تأثير الضوضاء على VQE، لكن بشكل أساسي عبر المحاكاة وبدون ربط تفصيلي بجهاز سحابي محدد. وفي 2101.02109 يُقترح نموذج ضوضاء لأجهزة NISQ، لكن تطبيقه على التنبؤ بدقة VQE على عتاد حقيقي لم يُختبر. تفتقر الأبحاث إلى عمل يربط معاملات الضوضاء المقاسة بالخطأ الفعلي لـ VQE على الأجهزة العامة.",
+     "first_step": "اختيار جزيء وجهاز كمومي من خدمة سحابية (IBM Quantum أو ما يشابهها)، وكتابة دائرة VQE بسيطة، وإجراء قياسات معايرة لتقدير أخطاء البوابات والقراءة.",
+     "needs": "الوصول إلى حاسوب كمومي سحابي (IBM Quantum أو Rigetti أو غيرهما)، ومعرفة أساسيات VQE والمكتبات البرمجية (Qiskit أو Cirq)، والوقت لتنفيذ العديد من مرات التشغيل.",
+     "risks": "قد تكون معاملات الضوضاء للأجهزة السحابية غير مستقرة مع مرور الوقت؛ وقد يعتمد خطأ VQE على التنفيذ المحدد للمُحسِّن، مما يصعّب المقارنة مع النموذج.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "استخدام طريقة توصيف الضوضاء من العمل 2101.02109: نمذجة ثلاث مجموعات من الأخطاء (أخطاء البوابات، الترابط، أخطاء القراءة) وتقدير معاملاتها للجهاز المختار.",
+      "إجراء VQE لجزيء الهيدروجين أو هيدريد الليثيوم، كما في العمل 2209.12803، وتسجيل خطأ الطاقة الفعلي بالنسبة إلى القيمة الدقيقة.",
+      "مقارنة الخطأ المتوقع (المحصل عليه من نموذج الضوضاء، مثلاً عبر محاكاة مع ضوضاء مضافة) بالخطأ التجريبي وتحليل أوجه الاختلاف."
+     ]
+    },
+    {
+     "based_on": [
+      "2602.14694",
+      "2101.02109"
+     ],
+     "title": "بناء والتحقق من نموذج ضوضاء لمعالج كمومي سحابي باستخدام التصوير المقطعي الظلي",
+     "what": "جمع بيانات عن ضوضاء جهاز كمومي سحابي محدد باستخدام طريقة القياسات العشوائية الظلية (classical shadows)، وتقدير معاملات قنوات الضوضاء، وبناء نموذج يتنبأ بنتائج الدوائر العشوائية. والتحقق من النموذج على دوائر مستقلة.",
+     "why": "نموذج الضوضاء الدقيق سيمكن مطوري الخوارزميات من تحسين الدوائر لجهاز معين والتنبؤ بموثوقيتها دون الحاجة إلى تشغيلها.",
+     "origin": "يُظهر العمل 2602.14694 تسريع توصيف الضوضاء باستخدام القياسات الظلية، لكنه لا يبني نموذج ضوضاء كاملًا للتنبؤ بالدوائر العشوائية. وفي 2101.02109 يُقترح نمذجة الضوضاء، لكن المعاملات تُقدَّر بطرق قياسية (RB, GST). لم يقم أحد بدمج التصوير المقطعي الظلي للحصول بكفاءة على معاملات نموذج ضوضاء لجهاز سحابي.",
+     "first_step": "دراسة المقال 2602.14694، وتنفيذ كود لتوليد الدوائر العشوائية والقياسات الظلية على الجهاز المختار، وإجراء جمع بيانات تجريبي من عدة كيوبتات.",
+     "needs": "الوصول إلى حاسوب كمومي سحابي، وموارد حسابية لمعالجة البيانات، ومعرفة بالتصوير المقطعي الكمومي والمكتبات البرمجية.",
+     "risks": "قد تكون طريقة التصوير المقطعي الظلي حساسة لعدم استقرار الجهاز؛ وقد لا يلتقط النموذج الضوضاء المترابطة بين الكيوبتات.",
+     "scale": "أطروحة",
+     "methods": [
+      "استخدام بروتوكول التصوير المقطعي الظلي من العمل 2602.14694 لتقدير الحالة بعد تطبيق دوائر عشوائية بكفاءة.",
+      "بناءً على البيانات المحصلة، تقدير معاملات قنوات الضوضاء (مثل الاستقطاب، والاضمحلال السعوي) لكل بوابة ولكل كيوبت.",
+      "بناء محاكٍّ مع ضوضاء ومقارنة تنبؤاته بنتائج تشغيل دوائر اختبار عشوائية على الجهاز."
+     ]
+    },
+    {
+     "based_on": [
+      "2512.14842"
+     ],
+     "title": "استخدام الضوضاء كمورد لتسريع التوازن الحراري في محاكٍّ كمومي",
+     "what": "تنفيذ نموذج على حاسوب كمومي سحابي حيث تعمل ضوضاء مضافة اصطناعيًا على تسريع التقارب إلى الحالة الحرارية، والتحقق مما إذا كان يمكن استخدام ذلك للحصول على الخصائص الديناميكية الحرارية بشكل أسرع.",
+     "why": "إذا كانت الضوضاء مفيدة فعلًا، فسيفتح ذلك آفاقًا جديدة لاستخدام الأجهزة الكمومية غير المثالية في مسائل الترماليز الكمومي.",
+     "origin": "يُظهر العمل 2512.14842 نظريًا أن الضوضاء يمكن أن تسرع التوازن الحراري، لكن لم يتم إجراء تحقق تجريبي على حاسوب كمومي حقيقي. التجارب الحالية في الترماليز عادةً ما تحاول تقليل الضوضاء، وليس استخدامها. لا توجد بيانات حول إمكانية إضافة ضوضاء بشكل مضبوط لتسريع التقارب.",
+     "first_step": "دراسة النموذج النظري من 2512.14842، واختيار نظام هاميلتوني بسيط (مثل سلسلة سبينات)، وتطوير دائرة تنفذ الديناميكا مع الضوضاء.",
+     "needs": "الوصول إلى حاسوب كمومي سحابي، وفهم الترماليز الكمومي، ومهارات التعامل مع الدوائر الكمومية.",
+     "risks": "الأجهزة الحقيقية لها ضوضاء خاصة بها قد تحجب تأثير الضوضاء المضبوطة؛ وقد يتطلب الأمر معايرة دقيقة وقمعًا للضوضاء غير المرغوبة.",
+     "scale": "أطروحة",
+     "methods": [
+      "أخذ النموذج من العمل 2512.14842 حيث تعمل الضوضاء كمحفز للخلط، وتكييفه لعدد صغير من الكيوبتات.",
+      "مقارنة سرعة الوصول إلى التوازن الحراري مع إضافة ضوضاء مضبوطة وبدونها على جهاز حقيقي.",
+      "تقييم مدى قرب الحالة المحصلة من الحالة الحرارية (مثلًا عبر الطاقة أو القيم الملاحظة)."
+     ]
+    },
+    {
+     "based_on": [
+      "2602.03938",
+      "2602.14694"
+     ],
+     "title": "تطوير طريقة لفصل أخطاء القراءة عن أخطاء البوابات بناءً على تحليل القياسات الظلية",
+     "what": "إنشاء إجراء يسمح، من بيانات القياسات الظلية، بفصل مساهمة أخطاء القراءة عن أخطاء البوابات في الضوضاء الكلية للجهاز الكمومي، دون الحاجة إلى تصوير مقطعي كامل.",
+     "why": "فهم مصدر الأخطاء المهيمن سيساعد مطوري الخوارزميات والمهندسين على تحسين العتاد، وسيمكن أيضًا من تصحيح الأخطاء بشكل أكثر دقة.",
+     "origin": "يقدم العمل 2602.03938 طريقة لتحليل الضوضاء إلى مكونات، لكنه يستخدم تصويرًا مقطعيًا كاملًا، وهو مكلف. التصوير المقطعي الظلي من 2602.14694 يوفر طريقة فعالة لجمع بيانات الضوضاء، لكنه لا يفصل مصادر الأخطاء. دمج هذين النهجين قد يعطي طريقة تشخيص سريعة لم ينفذها أحد حتى الآن.",
+     "first_step": "دراسة العمل 2602.03938، وتنفيذ خوارزمية تحليل الضوضاء وتطبيقها على بيانات محاكاة بأخطاء قراءة وبوابات معروفة.",
+     "needs": "الوصول إلى حاسوب كمومي سحابي، ومهارات برمجة بلغة بايثون، ومعرفة بنظرية الأخطاء الكمومية.",
+     "risks": "قد تكون الطريقة غير مستقرة في وجود أخطاء مترابطة أو عدم استقرار الجهاز؛ وقد يكون الفصل غير محدد بشكل فريد.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "استخدام الطريقة من 2602.03938 لتحليل الضوضاء إلى مكونات، مع تكييفها لبيانات القياسات الظلية.",
+      "إجراء سلسلة تجارب على جهاز سحابي: أولاً قياس أخطاء القراءة فقط (بإدخال حالات معروفة)، ثم الضوضاء الكلية، ومقارنة النتائج بنتائج التحليل.",
+      "تقييم دقة الفصل على بيانات نموذجية وعلى جهاز حقيقي."
+     ]
+    },
+    {
+     "based_on": [
+      "2512.22559",
+      "2101.02109"
+     ],
+     "title": "دراسة تأثير الضوضاء على دقة نمذجة الحمل الحراري باستخدام الخوارزميات الكمومية",
+     "what": "تنفيذ خوارزمية كمومية لنمذجة الحمل الحراري القياسي (مثل معادلة الانتشار-الانتقال) على حاسوب كمومي سحابي، ودراسة منهجية لكيفية تشويه أنواع الضوضاء المختلفة للخصائص الفيزيائية للحل (التبديد، التشتت).",
+     "why": "فهم كيفية تأثير الضوضاء على فيزياء النمذجة سيمكن من تطوير طرق تصحيح أو اختيار خوارزميات مناسبة للديناميكا المائية على أجهزة NISQ.",
+     "origin": "يتناول العمل 2512.22559 نمذجة الحمل الحراري مع الضوضاء، لكنه لا يقدم تحليلًا تفصيليًا لكيفية تأثير أنواع معينة من الضوضاء على الخصائص الفيزيائية للحل. في 2101.02109 توجد نماذج ضوضاء، لكنها لم تُطبق على مسائل الديناميكا المائية. لا توجد دراسة منهجية تربط معاملات الضوضاء بتشويه الفيزياء في المحاكاة الكمومية للسوائل.",
+     "first_step": "دراسة المقال 2512.22559، وتنفيذ الدائرة الكمومية المقترحة للحمل الحراري أحادي البعد على محاكٍّ وإعادة إنتاج النتائج بدون ضوضاء.",
+     "needs": "الوصول إلى حاسوب كمومي سحابي، وفهم الطرق العددية للديناميكا المائية، ومهارات البرمجة الكمومية.",
+     "risks": "قد تكون الدائرة عميقة جدًا للأجهزة الحديثة، وقد تدمر الضوضاء الحل تمامًا؛ قد يتطلب الأمر تبسيط النموذج أو استخدام طرق قمع الأخطاء.",
+     "scale": "أطروحة",
+     "methods": [
+      "الاعتماد على الدائرة الكمومية للحمل الحراري من العمل 2512.22559 وإعادة إنتاجها على محاكٍّ.",
+      "إضافة نماذج ضوضاء (مثل الاستقطاب، والاضمحلال السعوي) بقوى مختلفة وتحليل كيفية تغير الخصائص العددية للحل.",
+      "تشغيل الدائرة على جهاز حقيقي ومقارنتها بالمحاكاة لتحديد تأثيرات الضوضاء المهيمنة."
+     ]
+    }
+   ]
+  },
+  "fr": {
+   "note": "On explore activement des méthodes pour caractériser et modéliser le bruit dans les dispositifs NISQ, mais il n'existe pas encore d'approche unifiée pour utiliser ces modèles en pratique afin d'améliorer les algorithmes.",
+   "topic": "bruit dans le calcul quantique",
+   "ideas": [
+    {
+     "based_on": [
+      "2209.12803",
+      "2101.02109"
+     ],
+     "title": "Vérification du lien entre bruit et précision de VQE sur un ordinateur quantique cloud",
+     "what": "Exécuter un solveur quantique variationnel (VQE) pour calculer l'énergie de l'état fondamental d'une molécule simple sur un dispositif quantique accessible publiquement, tout en mesurant les paramètres de bruit (temps de décohérence, erreurs de portes) à l'aide de méthodes de caractérisation standard. Comparer l'erreur d'énergie réelle avec les prédictions du modèle de bruit.",
+     "why": "Cela aidera à comprendre dans quelle mesure les prédictions de précision de VQE basées sur des modèles de bruit correspondent à la réalité sur les processeurs cloud, et quelles sources de bruit dominent.",
+     "origin": "Le travail 2209.12803 évalue l'impact du bruit sur VQE, mais principalement par des simulations et sans lien détaillé avec un dispositif cloud spécifique. Le travail 2101.02109 propose un modèle de bruit pour les ordinateurs NISQ, mais son application pour prédire la précision de VQE sur du matériel réel n'est pas vérifiée. Il manque un travail reliant les paramètres de bruit mesurés à l'erreur réelle de VQE sur des dispositifs publics.",
+     "first_step": "Choisir une molécule et un dispositif quantique parmi les services cloud (IBM Quantum ou équivalent), écrire un circuit VQE simple et effectuer des mesures de calibration pour estimer les erreurs de portes et de lecture.",
+     "needs": "Accès à un ordinateur quantique cloud (IBM Quantum, Rigetti, etc.), connaissance des bases de VQE et des bibliothèques (Qiskit, Cirq), temps pour effectuer de nombreuses exécutions.",
+     "risks": "Les dispositifs cloud peuvent avoir des paramètres de bruit instables dans le temps ; l'erreur de VQE peut dépendre de l'implémentation spécifique de l'optimiseur, ce qui rendra la comparaison avec le modèle difficile.",
+     "scale": "semestre",
+     "methods": [
+      "Utiliser la méthode de caractérisation du bruit du travail 2101.02109 : modéliser trois groupes d'erreurs (erreurs de portes, décohérence, erreurs de lecture) et estimer leurs paramètres pour le dispositif choisi.",
+      "Effectuer VQE pour la molécule d'hydrogène ou d'hydrure de lithium, comme dans le travail 2209.12803, et enregistrer l'erreur d'énergie réelle par rapport à la valeur exacte.",
+      "Comparer l'erreur prédite (obtenue à partir du modèle de bruit, par exemple par simulation avec bruit ajouté) avec l'erreur expérimentale et analyser les écarts."
+     ]
+    },
+    {
+     "based_on": [
+      "2602.14694",
+      "2101.02109"
+     ],
+     "title": "Construction et validation d'un modèle de bruit pour un processeur quantique cloud basé sur la tomographie fantôme",
+     "what": "Collecter des données sur le bruit d'un dispositif quantique cloud spécifique à l'aide de la méthode des mesures aléatoires fantômes (classical shadows), estimer les paramètres des canaux de bruit et construire un modèle prédisant les résultats de circuits arbitraires. Vérifier le modèle sur des circuits indépendants.",
+     "why": "Un modèle de bruit précis permettra aux développeurs d'algorithmes d'optimiser les circuits pour un dispositif spécifique et de prédire leur fiabilité sans exécution.",
+     "origin": "Le travail 2602.14694 démontre une accélération de la caractérisation du bruit à l'aide de mesures fantômes, mais ne construit pas un modèle de bruit complet pour prédire des circuits arbitraires. Le travail 2101.02109 propose une modélisation du bruit, mais les paramètres sont estimés par des méthodes standard (RB, GST). Personne n'a combiné la tomographie fantôme pour obtenir efficacement les paramètres du modèle de bruit d'un dispositif cloud.",
+     "first_step": "Étudier l'article 2602.14694, implémenter le code pour générer des circuits aléatoires et des mesures fantômes sur le dispositif choisi, effectuer une collecte pilote de données sur plusieurs qubits.",
+     "needs": "Accès à un ordinateur quantique cloud, ressources de calcul pour le traitement des données, connaissance de la tomographie quantique et des bibliothèques.",
+     "risks": "La méthode de tomographie fantôme peut être sensible à l'instabilité du dispositif ; le modèle pourrait ne pas capturer le bruit corrélé entre les qubits.",
+     "scale": "mémoire",
+     "methods": [
+      "Utiliser le protocole de tomographie fantôme du travail 2602.14694 pour estimer efficacement l'état après l'application de circuits aléatoires.",
+      "À partir des données obtenues, estimer les paramètres des canaux de bruit (par exemple, dépolarisation, amortissement d'amplitude) pour chaque porte et chaque qubit.",
+      "Construire un simulateur avec bruit et comparer ses prédictions avec les résultats de l'exécution de circuits de test aléatoires sur le dispositif."
+     ]
+    },
+    {
+     "based_on": [
+      "2512.14842"
+     ],
+     "title": "Utilisation du bruit comme ressource pour accélérer l'équilibre thermique dans un simulateur quantique",
+     "what": "Implémenter sur un ordinateur quantique cloud un modèle dans lequel un bruit artificiellement ajouté accélère la convergence vers l'état thermique, et vérifier si cela peut être utilisé pour obtenir plus rapidement des propriétés thermodynamiques.",
+     "why": "Si le bruit peut effectivement être utile, cela ouvrira de nouvelles possibilités pour utiliser des dispositifs quantiques imparfaits dans des problèmes de thermalisation quantique.",
+     "origin": "Le travail 2512.14842 montre théoriquement que le bruit peut accélérer l'équilibre thermique, mais aucune vérification expérimentale sur un ordinateur quantique réel n'a été effectuée. Les expériences de thermalisation existantes cherchent généralement à minimiser le bruit, pas à l'utiliser. On ne sait pas si l'on peut ajouter du bruit de manière contrôlée pour accélérer la convergence.",
+     "first_step": "Étudier le modèle théorique de 2512.14842, choisir un système hamiltonien simple (par exemple, une chaîne de spins) et développer un circuit implémentant la dynamique avec bruit.",
+     "needs": "Accès à un ordinateur quantique cloud, compréhension de la thermalisation quantique, compétences en programmation de circuits quantiques.",
+     "risks": "Les dispositifs réels ont leur propre bruit qui peut masquer l'effet du bruit contrôlé ; une calibration précise et la suppression des bruits indésirables peuvent être nécessaires.",
+     "scale": "mémoire",
+     "methods": [
+      "Prendre le modèle du travail 2512.14842, où le bruit agit comme catalyseur de mélange, et l'adapter pour un petit nombre de qubits.",
+      "Comparer la vitesse d'atteinte de l'équilibre thermique avec et sans ajout de bruit contrôlé sur un dispositif réel.",
+      "Évaluer à quel point l'état obtenu est proche de l'état thermique (par exemple, par l'énergie ou les observables)."
+     ]
+    },
+    {
+     "based_on": [
+      "2602.03938",
+      "2602.14694"
+     ],
+     "title": "Développement d'une méthode pour séparer les erreurs de lecture et les erreurs de portes à partir de l'analyse de mesures fantômes",
+     "what": "Créer une procédure qui, à partir de données de mesures fantômes, permet de séparer la contribution des erreurs de lecture de celle des erreurs de portes dans le bruit total d'un dispositif quantique, sans nécessiter une tomographie complète.",
+     "why": "Comprendre la source d'erreur dominante aidera les développeurs d'algorithmes et les ingénieurs à améliorer le matériel, et permettra également une correction des erreurs plus précise.",
+     "origin": "Le travail 2602.03938 propose une méthode pour décomposer le bruit en composantes, mais utilise une tomographie complète, ce qui est coûteux. La tomographie fantôme de 2602.14694 offre un moyen efficace de collecter des données sur le bruit, mais ne sépare pas les sources d'erreur. Combiner ces approches pourrait fournir une méthode de diagnostic rapide que personne n'a encore implémentée.",
+     "first_step": "Étudier le travail 2602.03938, implémenter l'algorithme de décomposition du bruit et l'appliquer à des données simulées avec des erreurs de lecture et de portes connues.",
+     "needs": "Accès à un ordinateur quantique cloud, compétences en programmation Python, connaissance de la théorie quantique des erreurs.",
+     "risks": "La méthode peut être instable en présence d'erreurs corrélées ou d'instabilité du dispositif ; la séparation peut être ambiguë.",
+     "scale": "semestre",
+     "methods": [
+      "Utiliser la méthode de 2602.03938 pour décomposer le bruit en composantes, en l'adaptant aux données de mesures fantômes.",
+      "Effectuer une série d'expériences sur un dispositif cloud : d'abord mesurer uniquement les erreurs de lecture (en préparant des états connus), puis le bruit total, et comparer avec les résultats de la décomposition.",
+      "Évaluer la précision de la séparation sur des données simulées et sur un dispositif réel."
+     ]
+    },
+    {
+     "based_on": [
+      "2512.22559",
+      "2101.02109"
+     ],
+     "title": "Étude de l'effet du bruit sur la précision de la simulation de convection à l'aide d'algorithmes quantiques",
+     "what": "Implémenter un algorithme quantique pour simuler la convection scalaire (par exemple, l'équation d'advection-diffusion) sur un ordinateur quantique cloud et étudier systématiquement comment différents types de bruit déforment les caractéristiques physiques de la solution (dissipation, dispersion).",
+     "why": "Comprendre comment le bruit affecte la physique de la simulation permettra de développer des méthodes de correction ou de choisir des algorithmes appropriés pour l'hydrodynamique sur les dispositifs NISQ.",
+     "origin": "Le travail 2512.22559 examine la simulation de convection avec bruit, mais ne fournit pas d'analyse détaillée de l'impact de types spécifiques de bruit sur les propriétés physiques de la solution. Le travail 2101.02109 propose des modèles de bruit, mais ils n'ont pas été appliqués à des problèmes hydrodynamiques. Il manque une étude systématique du lien entre les paramètres de bruit et la distorsion de la physique dans les simulations quantiques de fluides.",
+     "first_step": "Étudier l'article 2512.22559, implémenter le circuit quantique proposé pour la convection unidimensionnelle sur simulateur et reproduire les résultats sans bruit.",
+     "needs": "Accès à un ordinateur quantique cloud, compréhension des méthodes numériques en hydrodynamique, compétences en programmation quantique.",
+     "risks": "Le circuit peut être trop profond pour les dispositifs actuels, et le bruit pourrait détruire complètement la solution ; une simplification du modèle ou l'utilisation de méthodes de suppression d'erreurs peut être nécessaire.",
+     "scale": "mémoire",
+     "methods": [
+      "Prendre comme base le circuit quantique pour la convection du travail 2512.22559 et le reproduire sur simulateur.",
+      "Ajouter des modèles de bruit (par exemple, dépolarisation, amortissement d'amplitude) avec différentes intensités et analyser comment les caractéristiques numériques de la solution changent.",
+      "Exécuter le circuit sur un dispositif réel et comparer avec les simulations pour identifier les effets de bruit dominants."
+     ]
+    }
+   ]
+  }
+ }
 }

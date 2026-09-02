@@ -231,5 +231,259 @@
    },
    "abstract": "Air quality and the presence of tiny particular matter are crucial factors in human health, especially when considering urban scenarios. In this context, smart mobility coupled with low-cost sensors can create a distributed and sustainable platform for social sensing able to provide pervasive data to citizens and public administrations. Sustainable and eco-aware decisions can then be supported by empirical evidence, resulting in an improved life and city administration. In this paper, we present ArduECO, a simple Arduino-based wireless device able of collecting air quality data. Without loss o"
   }
- ]
+ ],
+ "lang": {
+  "en": {
+   "note": "Low-cost air quality sensor networks are growing explosively, but without systematic calibration and correction, their data remain only approximate.",
+   "topic": "measuring air quality with low-cost sensors",
+   "ideas": [
+    {
+     "based_on": [
+      "1712.04190",
+      "2007.08305"
+     ],
+     "title": "Field calibration of low-cost particulate matter sensors against a gravimetric reference",
+     "what": "Build a mobile setup with several low-cost optical particle sensors (e.g., PMS5003, SPS30) and a reference gravimetric sampler. Conduct a series of parallel measurements under different conditions (street, indoor, dusty industrial site) and construct calibration curves that account for temperature, humidity, and dust composition.",
+     "why": "Low-cost sensors are widely used in citizen science projects and monitoring networks, but their readings depend strongly on aerosol type and environmental conditions. Field-calibrated sensors would provide more reliable data for air quality assessments without the need for expensive reference stations.",
+     "origin": "In work 1712.04190, a network of low-cost ZigBee sensors was deployed for air monitoring, but the authors do not provide a methodology for individual sensor calibration against a reference. In work 2007.08305, a mobile bicycle-based network is used, but questions about the accuracy of low-cost sensors in different microenvironments remain open. There is a lack of systematic verification of how much trust can be placed in such sensors after field calibration performed without complex laboratory equipment.",
+     "first_step": "Assemble a box with one PMS5003 sensor, a temperature/humidity sensor, and a portable filter sampler. Conduct a series of 10–15 parallel measurements indoors and outdoors, and compare the readings.",
+     "needs": "Low-cost particle sensors (PMS5003, SPS30), temperature/humidity sensor, portable filter sampler (e.g., based on a membrane pump), analytical balance for weighing filters (can be borrowed from a lab), skills with microcontrollers (Arduino/ESP32), and basics of statistical data analysis.",
+     "risks": "The main risk is the variability of low-cost sensors from unit to unit and drift over time; a calibration obtained for one sensor may not transfer well to others. Also, the gravimetric method requires sufficiently long sampling at low concentrations, which complicates measurements in clean air.",
+     "scale": "semester",
+     "methods": [
+      "Parallel sampling: while recording sensor readings, collect air samples on filters for subsequent gravimetric determination of particle mass (methodology similar to that described in work 1712.04190 when deploying the sensor network, but with the addition of a reference method).",
+      "Build a linear or nonlinear regression between sensor readings (particle concentration) and gravimetric concentration, introducing corrections for temperature and relative humidity.",
+      "Check the stability of the calibration over time and when changing measurement location; assess inter-sensor variability for sensors of the same model."
+     ]
+    },
+    {
+     "based_on": [
+      "1712.04190",
+      "2603.00647"
+     ],
+     "title": "Testing the effect of high humidity and fog on the readings of low-cost particulate matter sensors",
+     "what": "Create a test chamber with controlled humidity (from 20% to 95%) and supply an aerosol of known composition. Conduct measurements with several models of low-cost optical sensors at different humidity levels to determine the threshold beyond which readings are significantly distorted due to condensation or particle swelling.",
+     "why": "In many regions, high humidity and fog are common, but low-cost sensors often overestimate particle concentrations under such conditions. The results will help monitoring network developers apply corrections or select sensors for specific climates.",
+     "origin": "In work 1712.04190, it is noted that sensors are deployed indoors where humidity can vary, but its effect on accuracy is not studied. In work 2603.00647 (express), radon deposition on plastic is considered, which indirectly indicates the importance of surface effects and humidity for aerosols, but this issue is not addressed for low-cost optical sensors. There is a lack of quantitative data on the error of low-cost sensors at high humidity that could be used for correction.",
+     "first_step": "Assemble a simple chamber from a plastic container, place a PMS5003 sensor and a humidity sensor inside, and take measurements at three humidity levels without aerosol to observe the baseline drift.",
+     "needs": "Low-cost particle sensors (several models for comparison), plastic container or aquarium, humidifier and dehumidifier, humidity/temperature sensor, nebulizer, salt solution, optionally a reference particle counter (can be rented or used in a lab). Skills in circuit design and microcontroller programming.",
+     "risks": "It is difficult to maintain stable humidity in a homemade chamber; condensation on walls and the sensor can occur, distorting results. Also, generating a stable aerosol with known concentration requires care.",
+     "scale": "thesis",
+     "methods": [
+      "Assemble a sealed chamber with a humidifier, dehumidifier, and humidity sensor; create stable relative humidity levels.",
+      "Generate a test aerosol using an ultrasonic nebulizer from a salt solution (e.g., NaCl) and supply it into the chamber, measuring concentration simultaneously with a low-cost sensor and a reference instrument (if available) or gravimetrically.",
+      "Compare the sensor response at the same mass concentration of particles but different humidity levels; plot graphs of error versus humidity."
+     ]
+    },
+    {
+     "based_on": [
+      "1712.04190",
+      "2007.08305"
+     ],
+     "title": "Development of a correction algorithm for low-cost air quality sensor readings based on humidity and temperature data",
+     "what": "Using open datasets from low-cost sensors and reference stations, build a machine learning model that corrects PM2.5 readings from low-cost sensors considering temperature and humidity. Validate the model on independent data from different cities and seasons.",
+     "why": "Low-cost sensor networks are growing, but their data are often unsuitable for decision-making due to systematic errors. A correction algorithm would allow already deployed networks to be used for more accurate monitoring without replacing equipment.",
+     "origin": "In work 1712.04190, data from low-cost sensors were collected indoors, but no correction methods were proposed. In work 2007.08305, a mobile network is used, where the influence of movement conditions and microclimate on sensors is not corrected. There is a lack of a practical algorithm that could be integrated into existing platforms to improve data quality.",
+     "first_step": "Download open data from PurpleAir and EPA reference stations for one city over a year, build a simple linear regression accounting for humidity, and observe the reduction in error.",
+     "needs": "Internet access and open data (PurpleAir, government monitoring networks), programming skills in Python (pandas, scikit-learn), knowledge of machine learning basics. Computational resources are minimal (a regular laptop).",
+     "risks": "The main risk is data bias: low-cost sensors are often located in different microclimatic conditions than reference stations, which limits the possibility of correction. Also, models may overfit to a specific set of sensors and generalize poorly to others.",
+     "scale": "thesis",
+     "methods": [
+      "Collect open data: readings from low-cost sensors (e.g., from the PurpleAir platform) and nearby reference stations (government networks), as well as meteorological data.",
+      "Train a regression model (linear with interactions, random forest, or gradient boosting) to predict reference concentration from low-cost sensor readings, temperature, and humidity.",
+      "Perform cross-validation over time and geographic locations, evaluate error, and compare with simple linear corrections."
+     ]
+    }
+   ]
+  },
+  "es": {
+   "note": "Actualmente hay un crecimiento explosivo de redes de sensores de calidad del aire de bajo costo, pero sin calibración y corrección sistemáticas, sus datos siguen siendo solo aproximados.",
+   "topic": "medición de la calidad del aire con sensores de bajo costo",
+   "ideas": [
+    {
+     "based_on": [
+      "1712.04190",
+      "2007.08305"
+     ],
+     "title": "Calibración en campo de sensores de polvo de bajo costo contra un estándar gravimétrico",
+     "what": "Montar un banco de pruebas móvil con varios sensores ópticos de partículas de bajo costo (por ejemplo, PMS5003, SPS30) y un muestreador gravimétrico de referencia. Realizar una serie de mediciones paralelas en diferentes condiciones (calle, interior, planta con polvo) y construir curvas de calibración que tengan en cuenta la temperatura, la humedad y la composición del polvo.",
+     "why": "Los sensores de bajo costo se utilizan masivamente en proyectos ciudadanos y redes de monitoreo, pero sus lecturas dependen en gran medida del tipo de aerosol y de las condiciones ambientales. Los sensores calibrados en campo proporcionarán datos más fiables para las evaluaciones de la calidad del aire sin necesidad de costosas estaciones de referencia.",
+     "origin": "En el trabajo 1712.04190 se despliega una red de sensores de bajo costo ZigBee para el monitoreo del aire, pero los autores no presentan una metodología de calibración individual de los sensores contra un estándar. En el trabajo 2007.08305 se utiliza una red móvil en bicicletas, pero las cuestiones sobre la precisión de los sensores de bajo costo en diferentes microambientes siguen abiertas. Falta una verificación sistemática de cuánto se puede confiar en tales sensores después de una calibración en campo realizada sin equipos de laboratorio complejos.",
+     "first_step": "Montar una caja con un sensor PMS5003, un sensor de temperatura/humedad y un muestreador portátil con filtro. Realizar una serie de 10 a 15 mediciones paralelas en una habitación y en el exterior, y comparar las lecturas.",
+     "needs": "Sensores de partículas de bajo costo (PMS5003, SPS30), sensor de temperatura/humedad, muestreador portátil con filtros (por ejemplo, basado en una bomba de membrana), balanza analítica para pesar los filtros (se puede usar la del laboratorio), habilidades con microcontroladores (Arduino/ESP32) y conocimientos básicos de procesamiento estadístico de datos.",
+     "risks": "El riesgo principal es la inestabilidad de los sensores de bajo costo de un ejemplar a otro y la deriva de las lecturas con el tiempo; la calibración obtenida para un sensor puede transferirse mal a otros. Además, el método gravimétrico requiere un muestreo suficientemente prolongado a bajas concentraciones, lo que complica las mediciones en aire limpio.",
+     "scale": "semestre",
+     "methods": [
+      "Muestreo paralelo: simultáneamente con el registro de las lecturas de los sensores, tomar muestras de aire en filtros para la determinación gravimétrica posterior de la masa de partículas (metodología análoga a la descrita en el trabajo 1712.04190 al desplegar la red de sensores, pero añadiendo el método de referencia).",
+      "Construir una regresión lineal o no lineal entre las lecturas del sensor (concentración de partículas) y la concentración gravimétrica, introduciendo correcciones por temperatura y humedad relativa.",
+      "Verificar la estabilidad de la calibración a lo largo del tiempo y al cambiar el lugar de medición; evaluar la variabilidad entre sensores de un mismo modelo."
+     ]
+    },
+    {
+     "based_on": [
+      "1712.04190",
+      "2603.00647"
+     ],
+     "title": "Verificación del efecto de la alta humedad y la niebla en las lecturas de sensores de partículas de bajo costo",
+     "what": "Crear una cámara de prueba con humedad controlada (del 20% al 95%) y suministro de aerosol de composición conocida. Realizar mediciones con varios modelos de sensores ópticos de bajo costo a diferentes niveles de humedad para determinar el umbral a partir del cual las lecturas se distorsionan fuertemente debido a la condensación o al hinchamiento de las partículas.",
+     "why": "En muchas regiones, la alta humedad y la niebla son comunes, pero los sensores de bajo costo a menudo sobreestiman la concentración de partículas en tales condiciones. Los resultados ayudarán a los desarrolladores de redes de monitoreo a introducir correcciones o a elegir sensores para climas específicos.",
+     "origin": "En el trabajo 1712.04190 se señala que los sensores están desplegados en interiores, donde la humedad puede variar, pero no se investiga su efecto en la precisión. En el trabajo 2603.00647 (expreso) se examina la deposición de radón en plástico, lo que indica indirectamente la importancia de los efectos superficiales y la humedad para los aerosoles, pero para los sensores ópticos de bajo costo esta cuestión no se aborda. Faltan datos cuantitativos sobre el error de los sensores de bajo costo en condiciones de alta humedad que puedan utilizarse para la corrección.",
+     "first_step": "Montar una cámara simple con un contenedor de plástico, instalar en su interior un sensor PMS5003 y un sensor de humedad, y realizar mediciones a tres niveles de humedad sin aerosol para observar la deriva base.",
+     "needs": "Sensores de partículas de bajo costo (varios modelos para comparar), contenedor de plástico o acuario, humidificador y deshumidificador, sensor de humedad/temperatura, nebulizador, solución salina, opcionalmente un contador de partículas de referencia (se puede alquilar o usar en el laboratorio). Habilidades en electrónica y programación de microcontroladores.",
+     "risks": "Es difícil mantener una humedad estable en una cámara casera; es posible que se produzca condensación en las paredes y en el sensor, lo que distorsiona los resultados. Además, generar un aerosol estable con una concentración conocida requiere cuidado.",
+     "scale": "tesis",
+     "methods": [
+      "Montar una cámara hermética con humidificador, deshumidificador y sensor de humedad; crear niveles estables de humedad relativa.",
+      "Generar un aerosol de prueba con un nebulizador ultrasónico a partir de una solución salina (por ejemplo, NaCl) y suministrarlo a la cámara, midiendo la concentración simultáneamente con un sensor de bajo costo y un instrumento de referencia (si está disponible) o gravimétricamente.",
+      "Comparar la respuesta del sensor a la misma concentración másica de partículas pero con diferente humedad; construir gráficos de la dependencia del error con la humedad."
+     ]
+    },
+    {
+     "based_on": [
+      "1712.04190",
+      "2007.08305"
+     ],
+     "title": "Desarrollo de un algoritmo de corrección de las lecturas de sensores de calidad del aire de bajo costo basado en datos de humedad y temperatura",
+     "what": "Utilizando conjuntos de datos abiertos de sensores de bajo costo y estaciones de referencia, construir un modelo de aprendizaje automático que corrija las lecturas de los sensores de bajo costo de PM2.5 teniendo en cuenta la temperatura y la humedad. Probar el modelo con datos independientes de diferentes ciudades y estaciones.",
+     "why": "Las redes de sensores de bajo costo están creciendo, pero sus datos a menudo no son adecuados para la toma de decisiones debido a errores sistemáticos. Un algoritmo de corrección permitirá utilizar las redes ya desplegadas para un monitoreo más preciso sin reemplazar el equipo.",
+     "origin": "En el trabajo 1712.04190 se recopilan datos de sensores de bajo costo en interiores, pero no se proponen métodos de corrección. En el trabajo 2007.08305 se utiliza una red móvil, donde el efecto de las condiciones de movimiento y el microclima en los sensores no se corrige. Falta un algoritmo práctico que pueda integrarse en las plataformas existentes para mejorar la calidad de los datos.",
+     "first_step": "Descargar datos abiertos de PurpleAir y de estaciones de referencia de la EPA para una ciudad durante un año, construir una regresión lineal simple que tenga en cuenta la humedad y observar la reducción del error.",
+     "needs": "Acceso a internet y a datos abiertos (PurpleAir, redes de monitoreo gubernamentales), habilidades de programación en Python (pandas, scikit-learn), conocimientos básicos de aprendizaje automático. Los recursos computacionales son mínimos (una computadora portátil normal).",
+     "risks": "El riesgo principal es el sesgo de los datos: los sensores de bajo costo a menudo se encuentran en condiciones microclimáticas diferentes a las de las estaciones de referencia, lo que limita la posibilidad de corrección. Además, los modelos pueden sobreajustarse a un conjunto específico de sensores y transferirse mal a otros.",
+     "scale": "tesis",
+     "methods": [
+      "Recopilar datos abiertos: lecturas de sensores de bajo costo (por ejemplo, de la plataforma PurpleAir) y de las estaciones de referencia más cercanas (redes gubernamentales), así como datos meteorológicos.",
+      "Entrenar un modelo de regresión (lineal con interacciones, bosque aleatorio o boosting de gradiente) para predecir la concentración de referencia a partir de las lecturas del sensor de bajo costo, la temperatura y la humedad.",
+      "Realizar una validación cruzada en el tiempo y en puntos geográficos, evaluar el error y comparar con correcciones lineales simples."
+     ]
+    }
+   ]
+  },
+  "ar": {
+   "note": "تشهد شبكات أجهزة استشعار جودة الهواء الرخيصة نموًا هائلًا حاليًا، لكن بدون معايرة منهجية وتصحيح، تظل بياناتها تقريبية فقط.",
+   "topic": "قياس جودة الهواء باستخدام أجهزة استشعار رخيصة",
+   "ideas": [
+    {
+     "based_on": [
+      "1712.04190",
+      "2007.08305"
+     ],
+     "title": "معايرة أجهزة استشعار الغبار الرخيصة وفقًا لمرجع قياس وزني في الظروف الميدانية",
+     "what": "بناء منصة متنقلة تحتوي على عدة أجهزة استشعار بصرية رخيصة للجسيمات (مثل PMS5003 وSPS30) وجهاز أخذ عينات مرجعي وزني. إجراء سلسلة من القياسات المتوازية في ظروف مختلفة (شارع، داخل المباني، منشأة صناعية متربة) ورسم منحنيات معايرة تأخذ في الاعتبار درجة الحرارة والرطوبة وتكوين الغبار.",
+     "why": "تُستخدم أجهزة الاستشعار الرخيصة على نطاق واسع في المشاريع المدنية وشبكات المراقبة، لكن قراءاتها تعتمد بشدة على نوع الهباء الجوي والظروف البيئية. الأجهزة التي تمت معايرتها ميدانيًا ستوفر بيانات أكثر موثوقية لتقييمات جودة الهواء دون الحاجة إلى محطات مرجعية باهظة الثمن.",
+     "origin": "في العمل 1712.04190 تم نشر شبكة من أجهزة الاستشعار الرخيصة ZigBee لمراقبة الهواء، لكن المؤلفين لم يقدموا منهجية معايرة فردية للأجهزة وفقًا لمرجع. في العمل 2007.08305 تم استخدام شبكة متنقلة على الدراجات، لكن أسئلة دقة أجهزة الاستشعار الرخيصة في البيئات الدقيقة المختلفة تظل مفتوحة. ينقصنا تحقق منهجي من مدى الثقة التي يمكن وضعها في هذه الأجهزة بعد معايرة ميدانية تتم دون معدات معملية معقدة.",
+     "first_step": "بناء صندوق يحتوي على جهاز استشعار PMS5003 واحد، وجهاز استشعار لدرجة الحرارة/الرطوبة، وجهاز أخذ عينات محمول بفلتر. إجراء سلسلة من 10 إلى 15 قياسًا متوازيًا في غرفة وفي الخارج، ومقارنة القراءات.",
+     "needs": "أجهزة استشعار جسيمات رخيصة (PMS5003، SPS30)، جهاز استشعار لدرجة الحرارة/الرطوبة، جهاز أخذ عينات محمول بفلاتر (على سبيل المثال، يعتمد على مضخة غشائية)، ميزان تحليلي لوزن الفلاتر (يمكن استعارته من المختبر)، مهارات العمل مع المتحكمات الدقيقة (Arduino/ESP32) وأساسيات المعالجة الإحصائية للبيانات.",
+     "risks": "الخطر الرئيسي هو عدم استقرار أجهزة الاستشعار الرخيصة من نسخة إلى أخرى وانحراف القراءات بمرور الوقت؛ المعايرة التي تم الحصول عليها لجهاز واحد قد لا تنطبق جيدًا على أجهزة أخرى. كما أن الطريقة الوزنية تتطلب فترة أخذ عينات طويلة نسبيًا عند التركيزات المنخفضة، مما يعقد القياسات في الهواء النظيف.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "أخذ عينات متوازي: بالتزامن مع تسجيل قراءات أجهزة الاستشعار، يتم جمع عينات الهواء على فلاتر لتحديد كتلة الجسيمات بالطريقة الوزنية (منهجية مشابهة لتلك الموصوفة في العمل 1712.04190 عند نشر شبكة الاستشعار، ولكن مع إضافة الطريقة المرجعية).",
+      "بناء انحدار خطي أو غير خطي بين قراءات الجهاز (تركيز الجسيمات) والتركيز الوزني، مع إدخال تصحيحات لدرجة الحرارة والرطوبة النسبية.",
+      "التحقق من استقرار المعايرة بمرور الوقت وعند تغيير مكان القياس؛ وتقييم التباين بين أجهزة الاستشعار لنفس الطراز."
+     ]
+    },
+    {
+     "based_on": [
+      "1712.04190",
+      "2603.00647"
+     ],
+     "title": "اختبار تأثير الرطوبة العالية والضباب على قراءات أجهزة استشعار الجسيمات الرخيصة",
+     "what": "إنشاء غرفة اختبار برطوبة محكومة (من 20% إلى 95%) مع إمداد بهباء جوي معروف التركيب. إجراء قياسات بعدة نماذج من أجهزة الاستشعار البصرية الرخيصة عند مستويات رطوبة مختلفة لتحديد العتبة التي تتجاوزها القراءات وتتشوه بشدة بسبب التكاثف أو تورم الجسيمات.",
+     "why": "في العديد من المناطق، تكون الرطوبة العالية والضباب شائعين، لكن أجهزة الاستشعار الرخيصة غالبًا ما تبالغ في تقدير تركيز الجسيمات في مثل هذه الظروف. ستساعد النتائج مطوري شبكات المراقبة على إدخال تصحيحات أو اختيار أجهزة استشعار مناسبة لمناخ معين.",
+     "origin": "في العمل 1712.04190 لوحظ أن أجهزة الاستشعار تم نشرها في الداخل حيث يمكن أن تتغير الرطوبة، لكن لم يتم دراسة تأثيرها على الدقة. في العمل 2603.00647 (سريع) يتم النظر في ترسب الرادون على البلاستيك، مما يشير بشكل غير مباشر إلى أهمية التأثيرات السطحية والرطوبة للهباء الجوي، لكن بالنسبة لأجهزة الاستشعار البصرية الرخيصة، لم يتم تناول هذه المسألة. ينقصنا بيانات كمية حول خطأ أجهزة الاستشعار الرخيصة عند الرطوبة العالية والتي يمكن استخدامها للتصحيح.",
+     "first_step": "بناء غرفة بسيطة من حاوية بلاستيكية، ووضع جهاز استشعار PMS5003 وجهاز رطوبة بالداخل، وإجراء قياسات عند ثلاثة مستويات رطوبة بدون هباء جوي لرؤية الانحراف الأساسي.",
+     "needs": "أجهزة استشعار جسيمات رخيصة (عدة نماذج للمقارنة)، حاوية بلاستيكية أو حوض أسماك، مرطب ومزيل رطوبة، جهاز رطوبة/حرارة، مبخرة (nebulizer)، محلول ملحي، اختياريًا عداد جسيمات مرجعي (يمكن استئجاره أو استخدامه في المختبر). مهارات في تصميم الدوائر وبرمجة المتحكمات الدقيقة.",
+     "risks": "من الصعب الحفاظ على رطوبة مستقرة في غرفة محلية الصنع، وقد يحدث تكاثف على الجدران وعلى الجهاز مما يشوه النتائج. كما أن توليد هباء جوي مستقر بتركيز معروف يتطلب عناية.",
+     "scale": "أطروحة تخرج",
+     "methods": [
+      "بناء غرفة محكمة الإغلاق مع مرطب ومزيل رطوبة وجهاز رطوبة؛ وإنشاء مستويات رطوبة نسبية مستقرة.",
+      "توليد هباء جوي اختباري باستخدام مبخرة فوق صوتية من محلول ملحي (مثل NaCl) وإدخاله إلى الغرفة، وقياس التركيز في نفس الوقت بجهاز رخيص وجهاز مرجعي (إذا كان متاحًا) أو بالطريقة الوزنية.",
+      "مقارنة استجابة الجهاز عند نفس التركيز الكتلي للجسيمات ولكن رطوبة مختلفة؛ ورسم رسوم بيانية لاعتماد الخطأ على الرطوبة."
+     ]
+    },
+    {
+     "based_on": [
+      "1712.04190",
+      "2007.08305"
+     ],
+     "title": "تطوير خوارزمية لتصحيح قراءات أجهزة استشعار جودة الهواء الرخيصة بناءً على بيانات الرطوبة ودرجة الحرارة",
+     "what": "باستخدام مجموعات بيانات مفتوحة من أجهزة استشعار رخيصة ومحطات مرجعية، بناء نموذج تعلم آلي يصحح قراءات أجهزة استشعار PM2.5 الرخيصة مع مراعاة درجة الحرارة والرطوبة. اختبار النموذج على بيانات مستقلة من مدن وفصول مختلفة.",
+     "why": "شبكات أجهزة الاستشعار الرخيصة في تزايد، لكن بياناتها غالبًا غير مناسبة لاتخاذ القرارات بسبب الأخطاء المنهجية. خوارزمية التصحيح ستسمح باستخدام الشبكات القائمة بالفعل لمراقبة أكثر دقة دون استبدال المعدات.",
+     "origin": "في العمل 1712.04190 تم جمع بيانات من أجهزة استشعار رخيصة في الداخل، لكن لم يتم اقتراح طرق تصحيح. في العمل 2007.08305 تم استخدام شبكة متنقلة حيث لم يتم تصحيح تأثير ظروف الحركة والمناخ المحلي على أجهزة الاستشعار. ينقصنا خوارزمية عملية يمكن دمجها في المنصات الحالية لتحسين جودة البيانات.",
+     "first_step": "تنزيل بيانات مفتوحة من PurpleAir ومحطات EPA المرجعية لمدينة واحدة لمدة عام، وبناء انحدار خطي بسيط مع مراعاة الرطوبة وملاحظة تقليل الخطأ.",
+     "needs": "الوصول إلى الإنترنت والبيانات المفتوحة (PurpleAir، شبكات المراقبة الحكومية)، مهارات البرمجة بلغة Python (pandas, scikit-learn)، معرفة أساسيات التعلم الآلي. الموارد الحاسوبية ضئيلة (كمبيوتر محمول عادي).",
+     "risks": "الخطر الرئيسي هو انحياز البيانات: غالبًا ما توجد أجهزة الاستشعار الرخيصة في ظروف مناخية دقيقة مختلفة عن المحطات المرجعية، مما يحد من إمكانية التصحيح. كما أن النماذج قد تفرط في التكيف مع مجموعة معينة من أجهزة الاستشعار وتفشل في التعميم على أجهزة أخرى.",
+     "scale": "أطروحة تخرج",
+     "methods": [
+      "جمع البيانات المفتوحة: قراءات أجهزة الاستشعار الرخيصة (على سبيل المثال، من منصة PurpleAir) والمحطات المرجعية القريبة (الشبكات الحكومية)، بالإضافة إلى بيانات الأرصاد الجوية.",
+      "تدريب نموذج انحدار (خطي مع تفاعلات، أو غابة عشوائية، أو تعزيز التدرج) للتنبؤ بالتركيز المرجعي بناءً على قراءات الجهاز الرخيص ودرجة الحرارة والرطوبة.",
+      "إجراء تحقق متقاطع عبر الزمن وعبر المواقع الجغرافية، وتقييم الخطأ ومقارنته بالتصحيحات الخطية البسيطة."
+     ]
+    }
+   ]
+  },
+  "fr": {
+   "note": "Les réseaux de capteurs d'air bon marché connaissent actuellement une croissance explosive, mais sans étalonnage et correction systématiques, leurs données restent approximatives.",
+   "topic": "mesure de la qualité de l'air avec des capteurs bon marché",
+   "ideas": [
+    {
+     "based_on": [
+      "1712.04190",
+      "2007.08305"
+     ],
+     "title": "Étalonnage sur le terrain de capteurs de poussière bon marché par référence gravimétrique",
+     "what": "Assembler un banc mobile équipé de plusieurs capteurs optiques de particules bon marché (par exemple PMS5003, SPS30) et d'un échantillonneur gravimétrique de référence. Effectuer une série de mesures parallèles dans différentes conditions (rue, intérieur, atelier poussiéreux) et construire des courbes d'étalonnage tenant compte de la température, de l'humidité et de la composition de la poussière.",
+     "why": "Les capteurs bon marché sont largement utilisés dans les projets citoyens et les réseaux de surveillance, mais leurs lectures dépendent fortement du type d'aérosol et des conditions environnementales. Des capteurs étalonnés sur le terrain fourniraient des données plus fiables pour évaluer la qualité de l'air sans recourir à des stations de référence coûteuses.",
+     "origin": "Dans le travail 1712.04190, un réseau de capteurs ZigBee bon marché est déployé pour la surveillance de l'air, mais les auteurs ne fournissent pas de méthode d'étalonnage individuel des capteurs par rapport à une référence. Dans le travail 2007.08305, un réseau mobile à vélo est utilisé, mais les questions de précision des capteurs bon marché dans différents micro-environnements restent ouvertes. Il manque une vérification systématique de la fiabilité de ces capteurs après un étalonnage sur le terrain effectué sans équipement de laboratoire sophistiqué.",
+     "first_step": "Assembler une boîte contenant un capteur PMS5003, un capteur de température/humidité et un échantillonneur portable avec filtre. Effectuer une série de 10 à 15 mesures parallèles à l'intérieur et à l'extérieur, puis comparer les lectures.",
+     "needs": "Capteurs de particules bon marché (PMS5003, SPS30), capteur de température/humidité, échantillonneur portable avec filtres (par exemple à base de pompe à membrane), balance analytique pour peser les filtres (disponible en laboratoire), compétences en microcontrôleurs (Arduino/ESP32) et bases du traitement statistique des données.",
+     "risks": "Le principal risque est l'instabilité des capteurs bon marché d'un exemplaire à l'autre et la dérive des lectures dans le temps ; l'étalonnage obtenu pour un capteur peut mal se transposer à d'autres. De plus, la méthode gravimétrique nécessite un échantillonnage assez long à faibles concentrations, ce qui complique les mesures en air pur.",
+     "scale": "semestre",
+     "methods": [
+      "Échantillonnage parallèle : simultanément à l'enregistrement des lectures des capteurs, prélever des échantillons d'air sur des filtres pour la détermination gravimétrique de la masse de particules (méthodologie analogue à celle décrite dans le travail 1712.04190 lors du déploiement du réseau de capteurs, mais avec ajout d'une méthode de référence).",
+      "Construction d'une régression linéaire ou non linéaire entre les lectures du capteur (concentration de particules) et la concentration gravimétrique, avec introduction de corrections pour la température et l'humidité relative.",
+      "Vérification de la stabilité de l'étalonnage dans le temps et lors d'un changement de lieu de mesure ; évaluation de la variabilité inter-capteurs pour des capteurs du même modèle."
+     ]
+    },
+    {
+     "based_on": [
+      "1712.04190",
+      "2603.00647"
+     ],
+     "title": "Étude de l'impact d'une humidité élevée et du brouillard sur les lectures des capteurs de particules bon marché",
+     "what": "Créer une chambre d'essai à humidité contrôlée (de 20 % à 95 %) et avec injection d'un aérosol de composition connue. Effectuer des mesures avec plusieurs modèles de capteurs optiques bon marché à différents niveaux d'humidité afin de déterminer le seuil au-delà duquel les lectures sont fortement faussées par la condensation ou le gonflement des particules.",
+     "why": "Dans de nombreuses régions, l'humidité élevée et le brouillard sont courants, mais les capteurs bon marché surestiment souvent la concentration de particules dans ces conditions. Les résultats aideront les développeurs de réseaux de surveillance à introduire des corrections ou à choisir des capteurs adaptés au climat local.",
+     "origin": "Dans le travail 1712.04190, il est noté que les capteurs sont déployés à l'intérieur où l'humidité peut varier, mais son influence sur la précision n'est pas étudiée. Le travail 2603.00647 (express) examine le dépôt de radon sur le plastique, ce qui indique indirectement l'importance des effets de surface et de l'humidité pour les aérosols, mais cette question n'est pas abordée pour les capteurs optiques bon marché. Il manque des données quantitatives sur l'erreur des capteurs bon marché en cas d'humidité élevée, qui pourraient être utilisées pour la correction.",
+     "first_step": "Assembler une chambre simple à partir d'un conteneur en plastique, y installer un capteur PMS5003 et un capteur d'humidité, effectuer des mesures à trois niveaux d'humidité sans aérosol pour observer la dérive de base.",
+     "needs": "Capteurs de particules bon marché (plusieurs modèles pour comparaison), conteneur en plastique ou aquarium, humidificateur et déshumidificateur, capteur d'humidité/température, nébuliseur, solution saline, éventuellement un compteur de particules de référence (peut être loué ou utilisé en laboratoire). Compétences en électronique et programmation de microcontrôleurs.",
+     "risks": "Il est difficile de maintenir une humidité stable dans une chambre artisanale ; de la condensation peut se produire sur les parois et sur le capteur, faussant les résultats. De plus, la génération d'un aérosol stable avec une concentration connue nécessite de la précision.",
+     "scale": "mémoire",
+     "methods": [
+      "Assembler une chambre étanche avec humidificateur, déshumidificateur et capteur d'humidité ; créer des niveaux stables d'humidité relative.",
+      "Générer un aérosol test à l'aide d'un nébuliseur à ultrasons à partir d'une solution saline (par exemple NaCl) et l'introduire dans la chambre, en mesurant la concentration simultanément avec un capteur bon marché et un instrument de référence (si disponible) ou par gravimétrie.",
+      "Comparer la réponse du capteur pour une même concentration massique de particules mais à différentes humidités ; tracer des graphiques de l'erreur en fonction de l'humidité."
+     ]
+    },
+    {
+     "based_on": [
+      "1712.04190",
+      "2007.08305"
+     ],
+     "title": "Développement d'un algorithme de correction des lectures des capteurs d'air bon marché basé sur les données d'humidité et de température",
+     "what": "En utilisant des ensembles de données ouvertes provenant de capteurs bon marché et de stations de référence, construire un modèle d'apprentissage automatique qui corrige les lectures des capteurs PM2.5 bon marché en tenant compte de la température et de l'humidité. Tester le modèle sur des données indépendantes provenant de différentes villes et saisons.",
+     "why": "Les réseaux de capteurs bon marché se développent, mais leurs données sont souvent inutilisables pour la prise de décision en raison d'erreurs systématiques. Un algorithme de correction permettrait d'utiliser les réseaux déjà déployés pour une surveillance plus précise sans remplacer l'équipement.",
+     "origin": "Dans le travail 1712.04190, des données de capteurs bon marché ont été collectées à l'intérieur, mais aucune méthode de correction n'est proposée. Dans le travail 2007.08305, un réseau mobile est utilisé, mais l'influence des conditions de mouvement et du microclimat sur les capteurs n'est pas corrigée. Il manque un algorithme pratique qui pourrait être intégré dans les plateformes existantes pour améliorer la qualité des données.",
+     "first_step": "Télécharger des données ouvertes de PurpleAir et des stations de référence de l'EPA pour une ville sur un an, construire une simple régression linéaire avec l'humidité et observer la réduction de l'erreur.",
+     "needs": "Accès à Internet et aux données ouvertes (PurpleAir, réseaux de surveillance gouvernementaux), compétences en programmation Python (pandas, scikit-learn), connaissances de base en apprentissage automatique. Les ressources de calcul sont minimes (un ordinateur portable ordinaire).",
+     "risks": "Le principal risque est le biais des données : les capteurs bon marché sont souvent situés dans des conditions microclimatiques différentes de celles des stations de référence, ce qui limite la possibilité de correction. De plus, les modèles peuvent surapprendre sur un ensemble spécifique de capteurs et se généraliser mal à d'autres.",
+     "scale": "mémoire",
+     "methods": [
+      "Collecter des données ouvertes : lectures de capteurs bon marché (par exemple de la plateforme PurpleAir) et des stations de référence les plus proches (réseaux gouvernementaux), ainsi que des données météorologiques.",
+      "Entraîner un modèle de régression (linéaire avec interactions, forêt aléatoire ou boosting de gradient) pour prédire la concentration de référence à partir des lectures du capteur bon marché, de la température et de l'humidité.",
+      "Effectuer une validation croisée dans le temps et par points géographiques, évaluer l'erreur et la comparer à des corrections linéaires simples."
+     ]
+    }
+   ]
+  }
+ }
 }

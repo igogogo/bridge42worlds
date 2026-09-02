@@ -248,5 +248,427 @@
    },
    "abstract": "Cosmic microwave background (CMB) experiments generally infer a temperature fluctuation from a measured intensity fluctuation through the first term in the Taylor expansion of the Planck function, the relation between the intensity in a given frequency and the temperature. However, with the forthcoming Planck satellite, and perhaps even with the Microwave Anisotropy Probe, the CMB-dipole amplitude will be large enough to warrant inclusion of the next higher order term. To quadratic order in the dipole amplitude, there is an intensity quadrupole induced by the dipole with a frequency dependence"
   }
- ]
+ ],
+ "lang": {
+  "en": {
+   "note": "Modern studies of the cosmic microwave background focus on precise measurements of polarization and searches for signs of inflation, but there are still opportunities for hands-on and analytical projects using archival data.",
+   "topic": "cosmic microwave background",
+   "ideas": [
+    {
+     "based_on": [
+      "2603.00584"
+     ],
+     "title": "Build a radiometer to observe the CMB at 18.6 GHz",
+     "what": "Design and build a small radiometer for 18.6 GHz, similar to the one used in [2603.00584], to observe the cosmic microwave background. Perform calibration and test observations of the sky.",
+     "why": "This will provide hands-on experience in building equipment for CMB observations, and can also be used for educational purposes and amateur observations.",
+     "origin": "The paper [2603.00584] describes a ground-based radio telescope that observed the CMB at 18.6 GHz, but the details of the instrument are not disclosed. There are amateur radiometer projects, but they rarely target the CMB.",
+     "first_step": "Find and study radiometer schematics for 18 GHz, estimate the required budget and component availability.",
+     "needs": "Amateur radio skills, access to microwave components (satellite LNB, low-noise amplifier), test equipment (multimeter, oscilloscope), budget on the order of 100-200 thousand rubles.",
+     "risks": "Difficulty achieving sufficient sensitivity to detect the CMB due to atmospheric interference and instrument instability.",
+     "scale": "semester",
+     "methods": [
+      "Study the radiometer description in [2603.00584] and similar publications.",
+      "Assemble a receiver based on available components (e.g., satellite LNB) with a bandwidth around 18.6 GHz.",
+      "Calibrate using known sources (Sun, Moon) and measure the system noise temperature.",
+      "Observe patches of the sky and compare with the expected signal level."
+     ]
+    },
+    {
+     "based_on": [
+      "2603.00584",
+      "1208.0298"
+     ],
+     "title": "Modeling the effect of galaxy clusters on the cosmic microwave background",
+     "what": "Develop a numerical model to calculate the Sunyaev-Zeldovich effect (thermal SZ) for galaxy clusters and compare with observations, including data from [2603.00584].",
+     "why": "This will improve our understanding of the physics of hot gas in clusters and systematic effects in ground-based observations.",
+     "origin": "The paper [2603.00584] reports the observation of a shadow from the cluster MACS J1752+4440, but does not provide a detailed comparison with models. Publicly available cluster data can be used for testing.",
+     "first_step": "Download data on the cluster MACS J1752+4440 from open sources and reproduce a simple SZ model.",
+     "needs": "Programming skills (Python, C++), access to literature on the SZ effect, a computer with sufficient performance.",
+     "risks": "Difficulty in accurately modeling the gas distribution; possible systematic discrepancies with observations.",
+     "scale": "thesis",
+     "methods": [
+      "Study the theory of the Sunyaev-Zeldovich effect and methods for modeling gas distribution in clusters.",
+      "Use open cluster data (e.g., from Planck or ROSAT catalogs) to build models.",
+      "Write code to compute the expected signal at 18.6 GHz and compare with observations from [2603.00584].",
+      "Assess the impact of uncertainties in cluster parameters."
+     ]
+    },
+    {
+     "based_on": [
+      "2607.18369v1",
+      "astro-ph/0603144"
+     ],
+     "title": "Searching for traces of heavy particles in CMB data",
+     "what": "Apply the analysis methods from [2607.18369v1] to open data from Planck or future missions to search for non-standard signals from hypothetical heavy particles in the early universe.",
+     "why": "This could provide new constraints on physics beyond the Standard Model using existing data.",
+     "origin": "The paper [2607.18369v1] proposes a new approach to searching for traces of heavy particles, but the authors used a limited set of models. Applying it to other data or extending the models could reveal new effects.",
+     "first_step": "Obtain access to Planck data and familiarize yourself with software tools for its analysis (e.g., HEALPix).",
+     "needs": "Data analysis skills, Python programming, access to computational resources, knowledge of cosmology.",
+     "risks": "High complexity of the analysis, possible systematic effects, competition with professional groups.",
+     "scale": "years",
+     "methods": [
+      "Study the methodology of [2607.18369v1] for analyzing the full anisotropy picture.",
+      "Download open Planck data (temperature and polarization maps).",
+      "Implement an algorithm to search for signals related to strong particle mixing.",
+      "Perform the analysis and compare with the results of [2607.18369v1]."
+     ]
+    },
+    {
+     "based_on": [
+      "2607.07477",
+      "astro-ph/0603144"
+     ],
+     "title": "Separating sources of nanohertz gravitational waves using pulsar data",
+     "what": "Implement and apply the method from [2607.07477] to analyze pulsar timing array (PTA) data to separate contributions from supermassive black hole binaries and cosmological sources.",
+     "why": "This will help answer a key question about the origin of the recently detected gravitational wave background.",
+     "origin": "The paper [2607.07477] proposes a method but does not apply it to real data. Open PTA datasets are available for testing.",
+     "first_step": "Download the NANOGrav 15-year dataset and familiarize yourself with its format.",
+     "needs": "Advanced statistical analysis and programming skills, access to a computer cluster, understanding of gravitational waves.",
+     "risks": "Difficulty in implementing the method, possible insufficient sensitivity of current data.",
+     "scale": "years",
+     "methods": [
+      "Study the method proposed in [2607.07477], based on deviations in pulsar signals.",
+      "Obtain open PTA data (e.g., NANOGrav, EPTA).",
+      "Implement the algorithm in Python or C++.",
+      "Apply to the data and assess the statistical significance of the separation."
+     ]
+    },
+    {
+     "based_on": [
+      "astro-ph/9608018",
+      "astro-ph/9703054"
+     ],
+     "title": "Creating a CMB map around the north celestial pole from archival data",
+     "what": "Reproduce and improve the CMB map from [astro-ph/9608018] using modern data processing techniques and possibly additional data.",
+     "why": "This will help master data processing methods for CMB experiments and gain experience with real data.",
+     "origin": "The paper [astro-ph/9608018] contains a map but with low signal-to-noise ratio. Modern methods could improve its quality and serve as a learning example.",
+     "first_step": "Find the archival data from the Saskatoon experiment and familiarize yourself with its format.",
+     "needs": "Programming skills (Python), knowledge of signal processing methods, access to data.",
+     "risks": "Data may be incomplete or difficult to interpret; improvement may be marginal.",
+     "scale": "semester",
+     "methods": [
+      "Download the Saskatoon experiment data from open archives.",
+      "Study the Wiener filtering technique used in [astro-ph/9608018].",
+      "Apply modern algorithms (e.g., based on machine learning) to improve the map.",
+      "Compare with the original map and modern Planck data."
+     ]
+    }
+   ]
+  },
+  "es": {
+   "note": "La investigación moderna de la radiación cósmica de fondo se centra en mediciones precisas de la polarización y en la búsqueda de huellas de la inflación, pero aún quedan oportunidades para proyectos prácticos y analíticos que utilicen datos de archivo.",
+   "topic": "fondo cósmico de microondas",
+   "ideas": [
+    {
+     "based_on": [
+      "2603.00584"
+     ],
+     "title": "Construir un radiómetro para observar la radiación cósmica de fondo a 18,6 GHz",
+     "what": "Diseñar y construir un radiómetro pequeño para la frecuencia de 18,6 GHz, similar al utilizado en el trabajo [2603.00584], para observar la radiación cósmica de fondo. Realizar la calibración y observaciones de prueba del cielo.",
+     "why": "Permitirá adquirir experiencia práctica en la construcción de equipos para observar la radiación cósmica de fondo, y también puede utilizarse con fines educativos y para observaciones de aficionados.",
+     "origin": "En el trabajo [2603.00584] se describe un radiotelescopio terrestre que observó la radiación cósmica de fondo a 18,6 GHz, pero no se revelan los detalles del equipo. Existen proyectos de radiómetros de aficionados, pero rara vez están orientados a la radiación cósmica de fondo.",
+     "first_step": "Buscar y estudiar esquemas de radiómetros de 18 GHz, evaluar el presupuesto necesario y la disponibilidad de componentes.",
+     "needs": "Habilidades de radioaficionado, acceso a componentes de microondas (convertidor de satélite, amplificador de bajo ruido), instrumentos de medición (multímetro, osciloscopio), presupuesto de unos 100-200 mil rublos.",
+     "risks": "Dificultad para alcanzar la sensibilidad suficiente para detectar la radiación cósmica de fondo debido a las interferencias atmosféricas y a la inestabilidad del equipo.",
+     "scale": "semestre",
+     "methods": [
+      "Estudiar la descripción del radiómetro en el trabajo [2603.00584] y en publicaciones similares.",
+      "Montar un receptor basado en componentes disponibles (por ejemplo, un convertidor de satélite) con un ancho de banda de unos 18,6 GHz.",
+      "Realizar la calibración con fuentes conocidas (Sol, Luna) y medir la temperatura de ruido del sistema.",
+      "Realizar observaciones de regiones del cielo y comparar con el nivel de señal esperado."
+     ]
+    },
+    {
+     "based_on": [
+      "2603.00584",
+      "1208.0298"
+     ],
+     "title": "Modelado del efecto de los cúmulos de galaxias en la radiación cósmica de fondo",
+     "what": "Desarrollar un modelo numérico para calcular el efecto Sunyaev-Zel'dovich (térmico) en cúmulos de galaxias y compararlo con observaciones, incluidos los datos del trabajo [2603.00584].",
+     "why": "Permitirá comprender mejor la física del gas caliente en los cúmulos y los efectos sistemáticos en las observaciones desde la Tierra.",
+     "origin": "El trabajo [2603.00584] informa de la observación de la sombra del cúmulo MACS J1752+4440, pero no proporciona una comparación detallada con modelos. Existen datos públicos sobre cúmulos que pueden utilizarse para la verificación.",
+     "first_step": "Descargar los datos del cúmulo MACS J1752+4440 de fuentes abiertas y reproducir un modelo simple del efecto SZ.",
+     "needs": "Habilidades de programación (Python, C++), acceso a la literatura sobre el efecto SZ, un ordenador con suficiente rendimiento.",
+     "risks": "Dificultad para modelar con precisión la distribución del gas; posibles discrepancias sistemáticas con las observaciones.",
+     "scale": "tesis",
+     "methods": [
+      "Estudiar la teoría del efecto Sunyaev-Zel'dovich y los métodos para modelar la distribución del gas en los cúmulos.",
+      "Utilizar datos abiertos sobre cúmulos (por ejemplo, de los catálogos de Planck o ROSAT) para construir modelos.",
+      "Escribir un código para calcular la señal esperada a 18,6 GHz y compararla con las observaciones de [2603.00584].",
+      "Evaluar el impacto de las incertidumbres en los parámetros del cúmulo."
+     ]
+    },
+    {
+     "based_on": [
+      "2607.18369v1",
+      "astro-ph/0603144"
+     ],
+     "title": "Búsqueda de huellas de partículas pesadas en los datos de la radiación cósmica de fondo",
+     "what": "Aplicar los métodos de análisis del trabajo [2607.18369v1] a los datos abiertos de los experimentos Planck o de futuras misiones para buscar señales no estándar de hipotéticas partículas pesadas en el universo temprano.",
+     "why": "Podría proporcionar nuevas restricciones a la física más allá del modelo estándar, utilizando datos existentes.",
+     "origin": "En el trabajo [2607.18369v1] se propone un nuevo enfoque para buscar huellas de partículas pesadas, pero los autores utilizaron un conjunto limitado de modelos. Aplicarlo a otros datos o ampliar los modelos podría revelar nuevos efectos.",
+     "first_step": "Obtener acceso a los datos de Planck y familiarizarse con las herramientas de software para su análisis (por ejemplo, HEALPix).",
+     "needs": "Habilidades de análisis de datos, programación en Python, acceso a recursos computacionales, conocimiento de cosmología.",
+     "risks": "Alta complejidad del análisis, posibles efectos sistemáticos, competencia con grupos profesionales.",
+     "scale": "años",
+     "methods": [
+      "Estudiar la metodología del trabajo [2607.18369v1] para el análisis del mapa completo de anisotropía.",
+      "Descargar los datos abiertos de Planck (mapas de temperatura y polarización).",
+      "Implementar el algoritmo de búsqueda de señales asociadas con el fuerte mezclado de partículas.",
+      "Realizar el análisis y comparar con los resultados de [2607.18369v1]."
+     ]
+    },
+    {
+     "based_on": [
+      "2607.07477",
+      "astro-ph/0603144"
+     ],
+     "title": "Separación de fuentes de ondas gravitacionales de muy baja frecuencia mediante datos de púlsares",
+     "what": "Implementar y aplicar el método del trabajo [2607.07477] para analizar datos de conjuntos de temporización de púlsares (PTA) con el fin de separar las contribuciones de binarias de agujeros negros supermasivos y fuentes cosmológicas.",
+     "why": "Ayudará a responder la pregunta clave sobre el origen del fondo de ondas gravitacionales recientemente detectado.",
+     "origin": "El trabajo [2607.07477] propone un método, pero no lo aplica a datos reales. Existen conjuntos de datos PTA abiertos que pueden utilizarse para la verificación.",
+     "first_step": "Descargar los datos del conjunto de 15 años de NANOGrav y familiarizarse con su formato.",
+     "needs": "Habilidades avanzadas de análisis estadístico y programación, acceso a un clúster de computadoras, comprensión de las ondas gravitacionales.",
+     "risks": "Dificultad para implementar el método, posible sensibilidad insuficiente de los datos actuales.",
+     "scale": "años",
+     "methods": [
+      "Estudiar el método propuesto en [2607.07477], basado en desviaciones en la señal de los púlsares.",
+      "Obtener datos abiertos de PTA (por ejemplo, NANOGrav, EPTA).",
+      "Implementar el algoritmo en Python o C++.",
+      "Aplicarlo a los datos y evaluar la significancia estadística de la separación."
+     ]
+    },
+    {
+     "based_on": [
+      "astro-ph/9608018",
+      "astro-ph/9703054"
+     ],
+     "title": "Creación de un mapa de la radiación cósmica de fondo alrededor del polo norte celeste a partir de datos de archivo",
+     "what": "Reproducir y mejorar el mapa de la radiación cósmica de fondo del trabajo [astro-ph/9608018] utilizando métodos modernos de procesamiento de datos y, posiblemente, datos adicionales.",
+     "why": "Permitirá dominar los métodos de procesamiento de datos de experimentos de radiación cósmica de fondo y adquirir experiencia con datos reales.",
+     "origin": "El trabajo [astro-ph/9608018] contiene un mapa, pero con una relación señal-ruido baja. Los métodos modernos pueden mejorar su calidad y servir como ejemplo didáctico.",
+     "first_step": "Encontrar los datos de archivo del experimento Saskatoon y familiarizarse con su formato.",
+     "needs": "Habilidades de programación (Python), conocimiento de métodos de procesamiento de señales, acceso a los datos.",
+     "risks": "Los datos pueden estar incompletos o ser difíciles de interpretar; la mejora puede ser insignificante.",
+     "scale": "semestre",
+     "methods": [
+      "Descargar los datos del experimento Saskatoon de archivos abiertos.",
+      "Estudiar la técnica de filtrado de Wiener utilizada en [astro-ph/9608018].",
+      "Aplicar algoritmos modernos (por ejemplo, basados en aprendizaje automático) para mejorar el mapa.",
+      "Comparar con el mapa original y con los datos modernos de Planck."
+     ]
+    }
+   ]
+  },
+  "ar": {
+   "note": "تركز الأبحاث الحديثة حول إشعاع الخلفية الكونية الميكروي على القياسات الدقيقة للاستقطاب والبحث عن آثار التضخم الكوني، لكن تظل هناك فرص لمشاريع عملية وتحليلية باستخدام البيانات الأرشيفية.",
+   "topic": "الخلفية الكونية الميكروية",
+   "ideas": [
+    {
+     "based_on": [
+      "2603.00584"
+     ],
+     "title": "بناء مقياس راديوي لرصد إشعاع الخلفية الكونية الميكروي عند تردد 18.6 جيجاهرتز",
+     "what": "تصميم وبناء مقياس راديوي صغير بتردد 18.6 جيجاهرتز، مماثل لذلك المستخدم في العمل [2603.00584]، لرصد إشعاع الخلفية الكونية الميكروي. إجراء المعايرة واختبارات الرصد للسماء.",
+     "why": "سيوفر خبرة عملية في بناء أجهزة رصد إشعاع الخلفية الكونية الميكروي، ويمكن استخدامه أيضًا للأغراض التعليمية والرصدات الهواة.",
+     "origin": "في العمل [2603.00584] تم وصف تلسكوب راديوي أرضي رصد إشعاع الخلفية الكونية الميكروي عند تردد 18.6 جيجاهرتز، لكن تفاصيل الجهاز غير مكشوفة. توجد مشاريع هواة لمقاييس راديوية، لكنها نادرًا ما تستهدف إشعاع الخلفية الكونية الميكروي.",
+     "first_step": "البحث ودراسة مخططات المقاييس الراديوية عند 18 جيجاهرتز، وتقدير الميزانية اللازمة وتوافر المكونات.",
+     "needs": "مهارات في الإلكترونيات الراديوية للهواة، الوصول إلى مكونات الموجات الدقيقة (محول الأقمار الصناعية، مضخم منخفض الضوضاء)، أجهزة قياس (مقياس متعدد، راسم إشارة)، ميزانية تتراوح بين 100-200 ألف روبل.",
+     "risks": "صعوبة تحقيق حساسية كافية لكشف إشعاع الخلفية الكونية الميكروي بسبب الاضطرابات الجوية وعدم استقرار الجهاز.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "دراسة وصف المقياس الراديوي في العمل [2603.00584] والمنشورات المماثلة.",
+      "تجميع مستقبل يعتمد على مكونات متاحة (مثل محول الأقمار الصناعية) بعرض نطاق حوالي 18.6 جيجاهرتز.",
+      "إجراء المعايرة باستخدام مصادر معروفة (الشمس، القمر) وقياس درجة حرارة الضوضاء للنظام.",
+      "إجراء رصدات لمناطق من السماء ومقارنتها بالمستوى المتوقع للإشارة."
+     ]
+    },
+    {
+     "based_on": [
+      "2603.00584",
+      "1208.0298"
+     ],
+     "title": "نمذجة تأثير تجمعات المجرات على إشعاع الخلفية الكونية الميكروي",
+     "what": "تطوير نموذج عددي لحساب تأثير سونيايف-زيلدوفيتش (thermal SZ) لتجمعات المجرات ومقارنته بالرصدات، بما في ذلك البيانات من العمل [2603.00584].",
+     "why": "سيسمح بفهم أفضل لفيزياء الغاز الساخن في التجمعات والتأثيرات المنهجية عند الرصد من الأرض.",
+     "origin": "يذكر العمل [2603.00584] رصد ظل من تجمع MACS J1752+4440، لكنه لا يقدم مقارنة تفصيلية مع النماذج. توجد بيانات متاحة للعموم عن التجمعات يمكن استخدامها للتحقق.",
+     "first_step": "تنزيل بيانات تجمع MACS J1752+4440 من المصادر المفتوحة وإعادة إنتاج نموذج بسيط لتأثير SZ.",
+     "needs": "مهارات برمجة (Python, C++)، الوصول إلى الأدبيات حول تأثير SZ، حاسوب بأداء كافٍ.",
+     "risks": "صعوبة النمذجة الدقيقة لتوزيع الغاز؛ قد توجد اختلافات منهجية مع الرصدات.",
+     "scale": "مشروع تخرج",
+     "methods": [
+      "دراسة نظرية تأثير سونيايف-زيلدوفيتش وطرق نمذجة توزيع الغاز في التجمعات.",
+      "استخدام البيانات المفتوحة عن التجمعات (مثل كتالوجات Planck أو ROSAT) لبناء النماذج.",
+      "كتابة كود لحساب الإشارة المتوقعة عند تردد 18.6 جيجاهرتز ومقارنتها بالرصدات من [2603.00584].",
+      "تقييم تأثير الشكوك في معاملات التجمع."
+     ]
+    },
+    {
+     "based_on": [
+      "2607.18369v1",
+      "astro-ph/0603144"
+     ],
+     "title": "البحث عن آثار الجسيمات الثقيلة في بيانات إشعاع الخلفية الكونية الميكروي",
+     "what": "تطبيق طرق التحليل من العمل [2607.18369v1] على البيانات المفتوحة لتجربة Planck أو البعثات المستقبلية للبحث عن إشارات غير قياسية من جسيمات ثقيلة افتراضية في الكون المبكر.",
+     "why": "قد يعطي قيودًا جديدة على الفيزياء خارج النموذج القياسي باستخدام البيانات الموجودة.",
+     "origin": "في العمل [2607.18369v1] تم اقتراح نهج جديد للبحث عن آثار الجسيمات الثقيلة، لكن المؤلفين استخدموا مجموعة محدودة من النماذج. تطبيقه على بيانات أخرى أو توسيع النماذج قد يكشف تأثيرات جديدة.",
+     "first_step": "الحصول على بيانات Planck والتعرف على الأدوات البرمجية لتحليلها (مثل HEALPix).",
+     "needs": "مهارات تحليل البيانات، برمجة بلغة Python، الوصول إلى موارد حاسوبية، معرفة بعلم الكون.",
+     "risks": "صعوبة عالية في التحليل، تأثيرات منهجية محتملة، منافسة مع المجموعات المهنية.",
+     "scale": "سنوات",
+     "methods": [
+      "دراسة المنهجية من العمل [2607.18369v1] لتحليل الصورة الكاملة لتباين الخواص.",
+      "تنزيل البيانات المفتوحة من Planck (خرائط درجة الحرارة والاستقطاب).",
+      "تنفيذ خوارزمية البحث عن الإشارات المرتبطة بالخلط القوي للجسيمات.",
+      "إجراء التحليل ومقارنته بنتائج [2607.18369v1]."
+     ]
+    },
+    {
+     "based_on": [
+      "2607.07477",
+      "astro-ph/0603144"
+     ],
+     "title": "فصل مصادر موجات الجاذبية فائقة الانخفاض التردد بناءً على بيانات النجوم النابضة",
+     "what": "تنفيذ وتطبيق الطريقة من العمل [2607.07477] لتحليل بيانات مصفوفات توقيت النجوم النابضة (PTA) بهدف فصل المساهمات من ثنائيات الثقوب السوداء فائقة الكتلة والمصادر الكونية.",
+     "why": "سيساعد في الإجابة على سؤال رئيسي حول أصل الخلفية المكتشفة مؤخرًا لموجات الجاذبية.",
+     "origin": "يقترح العمل [2607.07477] طريقة، لكنه لا يطبقها على البيانات الحقيقية. توجد مجموعات بيانات مفتوحة لـ PTA يمكن استخدامها للتحقق.",
+     "first_step": "تنزيل بيانات NANOGrav لمدة 15 عامًا والتعرف على التنسيق.",
+     "needs": "مهارات متقدمة في التحليل الإحصائي والبرمجة، الوصول إلى مجموعة حاسوبية، فهم موجات الجاذبية.",
+     "risks": "صعوبة تنفيذ الطريقة، حساسية غير كافية محتملة للبيانات الحالية.",
+     "scale": "سنوات",
+     "methods": [
+      "دراسة الطريقة المقترحة في [2607.07477]، والتي تعتمد على الانحرافات في إشارة النجوم النابضة.",
+      "الحصول على بيانات PTA المفتوحة (مثل NANOGrav, EPTA).",
+      "تنفيذ الخوارزمية بلغة Python أو C++.",
+      "تطبيقها على البيانات وتقييم الدلالة الإحصائية للفصل."
+     ]
+    },
+    {
+     "based_on": [
+      "astro-ph/9608018",
+      "astro-ph/9703054"
+     ],
+     "title": "إنشاء خريطة إشعاع الخلفية الكونية الميكروي حول القطب الشمالي السماوي من البيانات الأرشيفية",
+     "what": "إعادة إنتاج وتحسين خريطة إشعاع الخلفية الكونية الميكروي من العمل [astro-ph/9608018] باستخدام طرق معالجة البيانات الحديثة وربما بيانات إضافية.",
+     "why": "سيسمح بإتقان طرق معالجة بيانات تجارب إشعاع الخلفية الكونية الميكروي واكتساب خبرة في العمل مع البيانات الحقيقية.",
+     "origin": "يحتوي العمل [astro-ph/9608018] على خريطة، لكن بنسبة إشارة إلى ضوضاء منخفضة. الطرق الحديثة قد تحسن جودتها وتكون مثالًا تعليميًا.",
+     "first_step": "العثور على البيانات الأرشيفية لتجربة Saskatoon والتعرف على تنسيقها.",
+     "needs": "مهارات برمجة (Python)، معرفة بطرق معالجة الإشارات، الوصول إلى البيانات.",
+     "risks": "قد تكون البيانات غير مكتملة أو صعبة التفسير؛ قد يكون التحسن طفيفًا.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "تنزيل بيانات تجربة Saskatoon من الأرشيفات المفتوحة.",
+      "دراسة منهجية ترشيح وينر المستخدمة في [astro-ph/9608018].",
+      "تطبيق خوارزميات حديثة (مثل تلك القائمة على التعلم الآلي) لتحسين الخريطة.",
+      "مقارنتها بالخريطة الأصلية وبيانات Planck الحديثة."
+     ]
+    }
+   ]
+  },
+  "fr": {
+   "note": "Les recherches actuelles sur le fond diffus cosmologique se concentrent sur des mesures précises de la polarisation et sur la recherche de traces de l'inflation, mais il reste des possibilités pour des projets pratiques et analytiques utilisant des données d'archives.",
+   "topic": "fond diffus cosmologique",
+   "ideas": [
+    {
+     "based_on": [
+      "2603.00584"
+     ],
+     "title": "Construire un radiomètre pour observer le fond diffus cosmologique à 18,6 GHz",
+     "what": "Concevoir et assembler un petit radiomètre à 18,6 GHz, similaire à celui utilisé dans l'article [2603.00584], pour observer le fond diffus cosmologique. Effectuer la calibration et des observations test du ciel.",
+     "why": "Cela permettra d'acquérir une expérience pratique dans la construction d'instruments pour l'observation du fond diffus cosmologique, et pourra également être utilisé à des fins éducatives et pour des observations amateurs.",
+     "origin": "L'article [2603.00584] décrit un radiotélescope au sol qui a observé le fond diffus cosmologique à 18,6 GHz, mais les détails de l'instrument ne sont pas divulgués. Il existe des projets amateurs de radiomètres, mais ils visent rarement le fond diffus cosmologique.",
+     "first_step": "Trouver et étudier des schémas de radiomètres à 18 GHz, évaluer le budget nécessaire et la disponibilité des composants.",
+     "needs": "Compétences en radioamateurisme, accès à des composants hyperfréquences (convertisseur satellite, amplificateur faible bruit), instruments de mesure (multimètre, oscilloscope), budget d'environ 100 à 200 milliers de roubles.",
+     "risks": "Difficulté à atteindre une sensibilité suffisante pour détecter le fond diffus cosmologique en raison des perturbations atmosphériques et de l'instabilité de l'instrument.",
+     "scale": "semestre",
+     "methods": [
+      "Étudier la description du radiomètre dans l'article [2603.00584] et dans des publications similaires.",
+      "Assembler un récepteur à partir de composants disponibles (par exemple, un convertisseur satellite) avec une bande autour de 18,6 GHz.",
+      "Effectuer la calibration avec des sources connues (Soleil, Lune) et mesurer la température de bruit du système.",
+      "Effectuer des observations de régions du ciel et comparer avec le niveau de signal attendu."
+     ]
+    },
+    {
+     "based_on": [
+      "2603.00584",
+      "1208.0298"
+     ],
+     "title": "Modélisation de l'effet des amas de galaxies sur le fond diffus cosmologique",
+     "what": "Développer un modèle numérique pour calculer l'effet Sunyaev-Zel'dovich (SZ thermique) pour les amas de galaxies et le comparer avec les observations, y compris les données de l'article [2603.00584].",
+     "why": "Cela permettra de mieux comprendre la physique du gaz chaud dans les amas et les effets systématiques lors des observations depuis le sol.",
+     "origin": "L'article [2603.00584] rapporte l'observation de l'ombre de l'amas MACS J1752+4440, mais ne fournit pas de comparaison détaillée avec les modèles. Il existe des données publiques sur les amas qui peuvent être utilisées pour la vérification.",
+     "first_step": "Télécharger les données sur l'amas MACS J1752+4440 à partir de sources ouvertes et reproduire un modèle simple de l'effet SZ.",
+     "needs": "Compétences en programmation (Python, C++), accès à la littérature sur l'effet SZ, ordinateur avec des performances suffisantes.",
+     "risks": "Difficulté à modéliser précisément la distribution du gaz ; possibles écarts systématiques avec les observations.",
+     "scale": "mémoire",
+     "methods": [
+      "Étudier la théorie de l'effet Sunyaev-Zel'dovich et les méthodes de modélisation de la distribution du gaz dans les amas.",
+      "Utiliser des données ouvertes sur les amas (par exemple, des catalogues Planck ou ROSAT) pour construire des modèles.",
+      "Écrire un code pour calculer le signal attendu à 18,6 GHz et le comparer avec les observations de [2603.00584].",
+      "Évaluer l'impact des incertitudes sur les paramètres de l'amas."
+     ]
+    },
+    {
+     "based_on": [
+      "2607.18369v1",
+      "astro-ph/0603144"
+     ],
+     "title": "Recherche de traces de particules lourdes dans les données du fond diffus cosmologique",
+     "what": "Appliquer les méthodes d'analyse de l'article [2607.18369v1] aux données ouvertes des expériences Planck ou des futures missions pour rechercher des signaux non standard provenant de particules lourdes hypothétiques dans l'Univers primordial.",
+     "why": "Cela pourrait fournir de nouvelles contraintes sur la physique au-delà du modèle standard, en utilisant des données existantes.",
+     "origin": "L'article [2607.18369v1] propose une nouvelle approche pour rechercher des traces de particules lourdes, mais les auteurs ont utilisé un ensemble limité de modèles. L'application à d'autres données ou l'extension des modèles pourrait révéler de nouveaux effets.",
+     "first_step": "Obtenir l'accès aux données Planck et se familiariser avec les outils logiciels pour leur analyse (par exemple, HEALPix).",
+     "needs": "Compétences en analyse de données, programmation en Python, accès à des ressources de calcul, connaissance de la cosmologie.",
+     "risks": "Haute complexité de l'analyse, possibles effets systématiques, concurrence avec des groupes professionnels.",
+     "scale": "années",
+     "methods": [
+      "Étudier la méthodologie de l'article [2607.18369v1] pour l'analyse complète de l'anisotropie.",
+      "Télécharger les données ouvertes de Planck (cartes de température et de polarisation).",
+      "Implémenter l'algorithme de recherche de signaux liés au mélange fort de particules.",
+      "Effectuer l'analyse et comparer avec les résultats de [2607.18369v1]."
+     ]
+    },
+    {
+     "based_on": [
+      "2607.07477",
+      "astro-ph/0603144"
+     ],
+     "title": "Séparation des sources d'ondes gravitationnelles à très basse fréquence à partir des données de pulsars",
+     "what": "Implémenter et appliquer la méthode de l'article [2607.07477] pour analyser les données des réseaux de chronométrage de pulsars (PTA) afin de séparer les contributions des binaires de trous noirs supermassifs et des sources cosmologiques.",
+     "why": "Cela aidera à répondre à la question clé de l'origine du fond d'ondes gravitationnelles récemment détecté.",
+     "origin": "L'article [2607.07477] propose une méthode, mais ne l'applique pas à des données réelles. Il existe des ensembles de données PTA ouvertes qui peuvent être utilisés pour la vérification.",
+     "first_step": "Télécharger les données de l'ensemble de 15 ans de NANOGrav et se familiariser avec leur format.",
+     "needs": "Compétences avancées en analyse statistique et en programmation, accès à un cluster de calcul, compréhension des ondes gravitationnelles.",
+     "risks": "Difficulté à implémenter la méthode, possible sensibilité insuffisante des données actuelles.",
+     "scale": "années",
+     "methods": [
+      "Étudier la méthode proposée dans [2607.07477], basée sur les déviations dans le signal des pulsars.",
+      "Obtenir les données PTA ouvertes (par exemple, NANOGrav, EPTA).",
+      "Implémenter l'algorithme en Python ou C++.",
+      "Appliquer aux données et évaluer la significativité statistique de la séparation."
+     ]
+    },
+    {
+     "based_on": [
+      "astro-ph/9608018",
+      "astro-ph/9703054"
+     ],
+     "title": "Création d'une carte du fond diffus cosmologique autour du pôle nord céleste à partir de données d'archives",
+     "what": "Reproduire et améliorer la carte du fond diffus cosmologique de l'article [astro-ph/9608018] en utilisant des méthodes modernes de traitement des données et, éventuellement, des données supplémentaires.",
+     "why": "Cela permettra de maîtriser les méthodes de traitement des données des expériences sur le fond diffus cosmologique et d'acquérir de l'expérience avec des données réelles.",
+     "origin": "L'article [astro-ph/9608018] contient une carte, mais avec un faible rapport signal sur bruit. Les méthodes modernes pourraient améliorer sa qualité et servir d'exemple pédagogique.",
+     "first_step": "Trouver les données d'archives de l'expérience Saskatoon et se familiariser avec leur format.",
+     "needs": "Compétences en programmation (Python), connaissance des méthodes de traitement du signal, accès aux données.",
+     "risks": "Les données peuvent être incomplètes ou difficiles à interpréter ; l'amélioration peut être mineure.",
+     "scale": "semestre",
+     "methods": [
+      "Télécharger les données de l'expérience Saskatoon à partir des archives ouvertes.",
+      "Étudier la méthode de filtrage de Wiener utilisée dans [astro-ph/9608018].",
+      "Appliquer des algorithmes modernes (par exemple, basés sur l'apprentissage automatique) pour améliorer la carte.",
+      "Comparer avec la carte originale et les données modernes de Planck."
+     ]
+    }
+   ]
+  }
+ }
 }

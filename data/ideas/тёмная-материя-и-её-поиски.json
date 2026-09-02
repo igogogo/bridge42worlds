@@ -234,5 +234,391 @@
    },
    "abstract": "The presence of dark matter in the universe is nowadays supported by a substantial set of astronomical and cosmological observations. A large amount of dark matter is expected in the Galactic Center (GC) region. Thanks also to its proximity, it is one of the best targets to look for dark matter particle self-annihilation into very high energy gamma-rays. We perform a search for annihilating dark matter in the central 300 parsecs around the GC with the H.E.S.S. array of ground-based Cherenkov telescopes. Using the full H.E.S.S.- I dataset (2004-2014) of GC observations, new constraints are deri"
   }
- ]
+ ],
+ "lang": {
+  "en": {
+   "note": "The search for dark matter is shifting toward superheavy particles and unconventional channels, where standard WIMP models are already tightly constrained.",
+   "topic": "dark matter and its detection",
+   "ideas": [
+    {
+     "based_on": [
+      "2601.04576v1"
+     ],
+     "title": "Build a compact SQUID-based magnetometer for axion detection",
+     "what": "Assemble a laboratory prototype of an axion detector that uses a superconducting quantum interference device (SQUID) to register the ultraweak magnetic fields generated when axions interact with matter. Test its performance on known signals and prepare it for measurements under low-background conditions.",
+     "why": "This would provide a sensitive tool for axion searches in a laboratory setting without the need for a large accelerator, which could be useful for testing models with light axions.",
+     "origin": "The paper 2601.04576v1 describes an experiment with a tiny magnetic detector that set stringent limits on axion interactions, but the authors plan to cool the device to improve sensitivity. What is missing is a detailed description of how to implement such a cooled detector in the lab, reproducible by a small group.",
+     "first_step": "Study the detector design from 2601.04576v1 and procure the basic components: a SQUID sensor, a cryostat, and magnetic shielding.",
+     "needs": "SQUID magnetometer, liquid-helium cryostat, magnetic shielding, experience with cryogenic equipment and weak-signal measurement.",
+     "risks": "The high cost of cryogenic equipment and the difficulty of suppressing external magnetic interference could make the project unfeasible for a small laboratory.",
+     "scale": "diploma",
+     "methods": [
+      "Use the scheme from 2601.04576v1: a SQUID-based magnetic detector to register axion-induced signals.",
+      "Assemble a cryogenic system that cools to liquid-helium temperatures to reduce thermal noise.",
+      "Calibrate the detector using known magnetic fields and perform test measurements with shielding against external interference."
+     ]
+    },
+    {
+     "based_on": [
+      "2606.07106"
+     ],
+     "title": "Test the connection between the neutrino signal and the cosmic microwave background using IceCube and Planck data",
+     "what": "Compare data from the IceCube neutrino telescope on high-energy neutrino fluxes with Planck maps of the cosmic microwave background to look for correlations predicted by models of dark matter annihilation into neutrinos.",
+     "why": "If dark matter annihilates into neutrinos, it should leave an imprint in both the cosmic microwave background and neutrino telescopes. A joint analysis would increase the sensitivity of the search and help constrain the models.",
+     "origin": "The paper 2606.07106 proposes a method to search for dark matter through the effect of neutrino annihilation on the cosmic microwave background, but it does not compare with actual data from neutrino telescopes. On the other hand, IceCube data are available and can be used to test this method. What is missing is a concrete analysis that combines both datasets.",
+     "first_step": "Download the public IceCube and Planck data, and familiarize yourself with the formats and tools for working with astrophysical maps (e.g., HEALPix).",
+     "needs": "Access to IceCube and Planck data, knowledge of statistical methods for analyzing astrophysical data, programming skills in Python or C++.",
+     "risks": "The dark matter signal may be too weak compared to astrophysical backgrounds, and no correlations may be found.",
+     "scale": "semester",
+     "methods": [
+      "Take the public IceCube data on the diffuse neutrino flux and the Planck anisotropy maps of the cosmic microwave background.",
+      "Calculate the expected contribution from dark matter annihilation into neutrinos for different channels and masses, using the approach from 2606.07106.",
+      "Perform a statistical analysis of correlations between neutrino events and fluctuations in the cosmic microwave background across the sky."
+     ]
+    },
+    {
+     "based_on": [
+      "2602.23708"
+     ],
+     "title": "Simulate the detector response to superheavy dark matter with multiple scattering",
+     "what": "Develop a simulation of superheavy dark matter particles (masses above TeV) passing through detector material, accounting for multiple scattering, and estimate the sensitivity of existing and planned detectors to such particles.",
+     "why": "Superheavy dark matter remains a poorly explored area, and understanding the signatures of multiple scattering will help optimize searches in future experiments.",
+     "origin": "The review 2602.23708 describes theoretical models and search methods for superheavy dark matter, including multiple scattering, but it does not provide a ready-made simulation that could be used to assess the sensitivity of specific detectors. What is missing is a practical implementation of these ideas as a software tool.",
+     "first_step": "Study the section of the review 2602.23708 on multiple scattering and choose a simple interaction model to start the simulation.",
+     "needs": "Access to Geant4 or similar software, computational resources, knowledge of particle physics and C++ programming.",
+     "risks": "The complexity of accurately modeling rare events and the need to account for many backgrounds could delay the project.",
+     "scale": "years",
+     "methods": [
+      "Use the review 2602.23708 to define the theoretical models and expected interaction cross sections for superheavy dark matter.",
+      "Write code in Geant4 or a similar tool to simulate particle trajectories with multiple scattering in detectors such as liquid-xenon ones.",
+      "Calculate expected signals for various masses and cross sections and compare with current limits."
+     ]
+    },
+    {
+     "based_on": [
+      "2203.06029"
+     ],
+     "title": "Search for dark matter signals in ANTARES data using secluded dark matter models",
+     "what": "Analyze archival data from the ANTARES neutrino telescope for signals from annihilation of secluded dark matter toward the Galactic Center, using the methods described in 2203.06029.",
+     "why": "Secluded models can bypass constraints on dark matter mass and may produce an observable signal in neutrino telescopes, and ANTARES data are already collected and available for analysis.",
+     "origin": "The paper 2203.06029 has already performed a search for secluded dark matter in ANTARES data, but perhaps not all models and mass ranges were explored. What is missing is an extension of the analysis to other models or more recent data.",
+     "first_step": "Study the paper 2203.06029 and determine what data and software were used, then request access to ANTARES data.",
+     "needs": "Access to ANTARES data, knowledge of neutrino telescope analysis methods, programming skills.",
+     "risks": "ANTARES data may not be fully public, and collaboration with the collaboration may be required.",
+     "scale": "diploma",
+     "methods": [
+      "Take the public ANTARES data or reproduce the analysis from 2203.06029 using their methodology.",
+      "Apply secluded dark matter models to calculate the expected neutrino flux from the Galactic Center.",
+      "Perform a statistical analysis to search for an excess of events over the background."
+     ]
+    },
+    {
+     "based_on": [
+      "1507.03800"
+     ],
+     "title": "Compare the sensitivity of direct and indirect dark matter search methods for specific models",
+     "what": "Quantitatively compare the constraints on dark matter parameters obtained from direct detectors (e.g., XENON1T) and indirect observations (gamma rays from the Galactic Center) for a set of WIMP models.",
+     "why": "Such a comparison would help identify which models are better constrained by which method and guide future experiments toward the most promising areas.",
+     "origin": "The paper 1507.03800 provides a review of direct and indirect methods, but it does not systematically compare their sensitivity for specific models. What is missing is a quantitative analysis that would allow choosing the optimal search strategy.",
+     "first_step": "Select several dark matter models and find in the literature the corresponding constraints from direct and indirect experiments.",
+     "needs": "Access to scientific articles, data analysis and plotting skills (Python, ROOT).",
+     "risks": "The constraints may be presented under different assumptions, making direct comparison difficult.",
+     "scale": "semester",
+     "methods": [
+      "Collect published constraints from direct experiments (XENON1T, LUX) and indirect observations (Fermi-LAT, H.E.S.S.) from the literature.",
+      "For the selected models (e.g., singlet fermion, vector WIMP), recast the constraints into a common parameter space.",
+      "Plot sensitivity comparisons and identify regions where one method outperforms the other."
+     ]
+    }
+   ]
+  },
+  "es": {
+   "note": "La búsqueda de materia oscura se está desplazando hacia partículas superpesadas y canales no convencionales, donde los modelos WIMP habituales ya están muy restringidos.",
+   "topic": "materia oscura y su búsqueda",
+   "ideas": [
+    {
+     "based_on": [
+      "2601.04576v1"
+     ],
+     "title": "Construir un sensor compacto para buscar axiones basado en un magnetómetro SQUID",
+     "what": "Montar un prototipo de laboratorio de un detector de axiones que utilice un interferómetro cuántico superconductor (SQUID) para registrar los campos magnéticos ultradébiles que surgen cuando los axiones interactúan con la materia. Verificar su funcionamiento con señales conocidas y prepararlo para mediciones en condiciones de bajo fondo.",
+     "why": "Permitirá disponer de un instrumento sensible para buscar axiones en condiciones de laboratorio sin necesidad de construir un gran acelerador, lo que puede ser útil para probar modelos con axiones ligeros.",
+     "origin": "En el trabajo 2601.04576v1 se describe un experimento con un diminuto detector magnético que estableció fuertes restricciones a la interacción de los axiones, pero los autores planean enfriar el dispositivo para aumentar su sensibilidad. Falta una descripción detallada de cómo implementar un detector enfriado de este tipo en el laboratorio, que sea reproducible por un grupo pequeño.",
+     "first_step": "Estudiar el diseño del detector del trabajo 2601.04576v1 y adquirir los componentes básicos: sensor SQUID, criostato y blindaje magnético.",
+     "needs": "Magnetómetro SQUID, criostato de helio líquido, blindaje magnético, habilidades para trabajar con tecnología criogénica y señales débiles.",
+     "risks": "El alto costo del equipo criogénico y la dificultad de suprimir las interferencias magnéticas externas pueden hacer que el proyecto sea inviable para un laboratorio pequeño.",
+     "scale": "tesis de grado",
+     "methods": [
+      "Usar el esquema del trabajo 2601.04576v1: un detector magnético basado en SQUID para registrar señales inducidas por axiones.",
+      "Montar un sistema criogénico con enfriamiento a temperaturas de helio líquido para reducir el ruido térmico.",
+      "Calibrar el detector con campos magnéticos conocidos y realizar mediciones de prueba con blindaje contra interferencias externas."
+     ]
+    },
+    {
+     "based_on": [
+      "2606.07106"
+     ],
+     "title": "Verificar la relación entre la señal de neutrinos y la radiación de fondo cósmico de microondas con datos de IceCube y Planck",
+     "what": "Comparar los datos del telescopio de neutrinos IceCube sobre flujos de neutrinos de alta energía con los mapas de la radiación de fondo cósmico de microondas de Planck, para buscar correlaciones predichas por modelos de aniquilación de materia oscura en neutrinos.",
+     "why": "Si la materia oscura se aniquila en neutrinos, esto debería dejar una huella tanto en la radiación de fondo como en los telescopios de neutrinos. Un análisis conjunto aumentará la sensibilidad de la búsqueda y ayudará a restringir los modelos.",
+     "origin": "El trabajo 2606.07106 propone un método para buscar materia oscura a través del efecto de la aniquilación en neutrinos sobre la radiación de fondo, pero no realiza una comparación con datos reales de telescopios de neutrinos. Por otro lado, existen datos de IceCube que se pueden utilizar para probar este método. Falta un análisis concreto que combine ambos conjuntos de datos.",
+     "first_step": "Descargar los datos públicos de IceCube y Planck, familiarizarse con los formatos y las herramientas para trabajar con mapas astrofísicos (por ejemplo, HEALPix).",
+     "needs": "Acceso a los datos de IceCube y Planck, conocimiento de métodos estadísticos para el análisis de datos astrofísicos, habilidades de programación en Python o C++.",
+     "risks": "La señal de materia oscura puede ser demasiado débil en comparación con los fondos astrofísicos, y es posible que no se detecten correlaciones.",
+     "scale": "semestre",
+     "methods": [
+      "Tomar los datos públicos de IceCube sobre el flujo difuso de neutrinos y los mapas de anisotropía de la radiación de fondo de Planck.",
+      "Calcular la contribución esperada de la aniquilación de materia oscura en neutrinos para diferentes canales y masas, utilizando el enfoque del trabajo 2606.07106.",
+      "Realizar un análisis estadístico de las correlaciones entre eventos de neutrinos y las fluctuaciones de la radiación de fondo en el cielo."
+     ]
+    },
+    {
+     "based_on": [
+      "2602.23708"
+     ],
+     "title": "Simular la respuesta del detector a materia oscura superpesada con dispersión múltiple",
+     "what": "Desarrollar una simulación del paso de partículas de materia oscura superpesada (con masa mayor que TeV) a través del material del detector, teniendo en cuenta la dispersión múltiple, y evaluar la sensibilidad de los detectores existentes y planificados a tales partículas.",
+     "why": "La materia oscura superpesada sigue siendo un área poco explorada, y comprender las firmas de dispersión múltiple ayudará a optimizar las búsquedas en futuros experimentos.",
+     "origin": "En la revisión 2602.23708 se describen modelos teóricos y métodos de búsqueda de materia oscura superpesada, incluida la dispersión múltiple, pero no hay una simulación lista para usar que permita evaluar la sensibilidad de detectores específicos. Falta una implementación práctica de estas ideas como herramienta de software.",
+     "first_step": "Estudiar la sección de la revisión 2602.23708 sobre dispersión múltiple y elegir un modelo de interacción simple para comenzar la simulación.",
+     "needs": "Acceso a Geant4 o software similar, recursos computacionales, conocimiento de física de partículas elementales y programación en C++.",
+     "risks": "La complejidad de modelar con precisión eventos raros y la necesidad de tener en cuenta muchos fondos pueden retrasar el proyecto.",
+     "scale": "años",
+     "methods": [
+      "Usar la revisión 2602.23708 para definir los modelos teóricos y las secciones eficaces esperadas de interacción de la materia oscura superpesada.",
+      "Escribir código en Geant4 o una herramienta similar para simular trayectorias de partículas con dispersión múltiple en detectores como los de xenón líquido.",
+      "Calcular las señales esperadas para diferentes masas y secciones eficaces, y compararlas con las restricciones actuales."
+     ]
+    },
+    {
+     "based_on": [
+      "2203.06029"
+     ],
+     "title": "Búsqueda de señales de materia oscura en datos de ANTARES utilizando modelos de materia oscura secuestrada",
+     "what": "Analizar los datos de archivo del telescopio de neutrinos ANTARES en busca de señales de aniquilación de materia oscura secuestrada en la dirección del centro galáctico, utilizando los métodos descritos en el trabajo 2203.06029.",
+     "why": "Los modelos secuestrados permiten eludir las restricciones sobre la masa de la materia oscura y pueden dar una señal observable en los telescopios de neutrinos, y los datos de ANTARES ya están recopilados y disponibles para su análisis.",
+     "origin": "El trabajo 2203.06029 ya realizó una búsqueda de materia oscura secuestrada en datos de ANTARES, pero posiblemente no se hayan investigado todos los modelos y rangos de masa. Falta una extensión del análisis a otros modelos o a datos más recientes.",
+     "first_step": "Estudiar el artículo 2203.06029 y determinar qué datos y software se utilizaron, luego solicitar acceso a los datos de ANTARES.",
+     "needs": "Acceso a los datos de ANTARES, conocimiento de métodos de análisis de telescopios de neutrinos, habilidades de programación.",
+     "risks": "Los datos de ANTARES pueden no ser completamente públicos, y se requerirá colaboración con la colaboración.",
+     "scale": "tesis de grado",
+     "methods": [
+      "Tomar los datos públicos de ANTARES o reproducir el análisis del trabajo 2203.06029 utilizando su metodología.",
+      "Aplicar modelos de materia oscura secuestrada para calcular el flujo de neutrinos esperado desde el centro galáctico.",
+      "Realizar un análisis estadístico para buscar un exceso de eventos sobre el fondo."
+     ]
+    },
+    {
+     "based_on": [
+      "1507.03800"
+     ],
+     "title": "Comparar la sensibilidad de los métodos de búsqueda directa e indirecta de materia oscura para modelos específicos",
+     "what": "Realizar una comparación cuantitativa de las restricciones sobre los parámetros de la materia oscura obtenidas de detectores directos (por ejemplo, XENON1T) y observaciones indirectas (radiación gamma del centro galáctico), para un conjunto de modelos WIMP.",
+     "why": "Tal comparación ayudará a identificar qué modelos están mejor restringidos por uno u otro método, y orientará futuros experimentos hacia las áreas más prometedoras.",
+     "origin": "En el trabajo 1507.03800 se ofrece una revisión de los métodos directos e indirectos, pero no hay una comparación sistemática de su sensibilidad para modelos específicos. Falta un análisis cuantitativo que permita elegir la estrategia de búsqueda óptima.",
+     "first_step": "Seleccionar varios modelos de materia oscura y encontrar en la literatura las restricciones correspondientes de experimentos directos e indirectos.",
+     "needs": "Acceso a artículos científicos, habilidades de análisis de datos y elaboración de gráficos (Python, ROOT).",
+     "risks": "Las restricciones pueden presentarse bajo diferentes supuestos, lo que dificultará la comparación directa.",
+     "scale": "semestre",
+     "methods": [
+      "Recopilar las restricciones publicadas de experimentos directos (XENON1T, LUX) y observaciones indirectas (Fermi-LAT, H.E.S.S.) de la literatura.",
+      "Para los modelos seleccionados (por ejemplo, fermión singlete, WIMP vectorial), recalcular las restricciones en un espacio de parámetros común.",
+      "Construir gráficos de comparación de sensibilidad y determinar las regiones donde un método supera al otro."
+     ]
+    }
+   ]
+  },
+  "ar": {
+   "note": "تتجه عمليات البحث عن المادة المظلمة نحو الجسيمات فائقة الثقل والقنوات غير التقليدية، حيث أصبحت نماذج WIMP التقليدية مقيدة بشدة بالفعل.",
+   "topic": "المادة المظلمة والبحث عنها",
+   "ideas": [
+    {
+     "based_on": [
+      "2601.04576v1"
+     ],
+     "title": "بناء مستشعر مدمج للبحث عن الأكسيونات باستخدام مقياس مغناطيسية SQUID",
+     "what": "بناء نموذج أولي مختبري لكاشف الأكسيونات يعتمد على مقياس التداخل الكمي فائق التوصيل (SQUID) لرصد المجالات المغناطيسية فائقة الضعف الناتجة عن تفاعل الأكسيونات مع المادة. اختبار أدائه على إشارات معروفة وتجهيزه للقياسات في ظروف خلفية منخفضة.",
+     "why": "سيتيح ذلك الحصول على أداة حساسة للبحث عن الأكسيونات في الظروف المختبرية دون الحاجة إلى بناء معجل كبير، مما قد يكون مفيدًا لاختبار النماذج التي تتضمن أكسيونات خفيفة.",
+     "origin": "تصف الورقة البحثية 2601.04576v1 تجربة باستخدام كاشف مغناطيسي صغير وضع قيودًا صارمة على تفاعل الأكسيونات، لكن المؤلفين يخططون لتبريد الجهاز لزيادة الحساسية. ينقصنا وصف تفصيلي لتنفيذ مثل هذا الكاشف المبرد في الظروف المختبرية، بحيث يمكن لمجموعة صغيرة إعادة إنتاجه.",
+     "first_step": "دراسة تصميم الكاشف من الورقة 2601.04576v1 وشراء المكونات الأساسية: مستشعر SQUID، ومبرد (كريوستات)، وحماية مغناطيسية.",
+     "needs": "مقياس مغناطيسية SQUID، ومبرد يعمل بالهيليوم السائل، وحماية مغناطيسية، ومهارات في التعامل مع التقنيات المبردة والإشارات الضعيفة.",
+     "risks": "قد تؤدي التكلفة العالية للمعدات المبردة وصعوبة قمع التداخل المغناطيسي الخارجي إلى جعل المشروع غير قابل للتنفيذ في مختبر صغير.",
+     "scale": "مشروع تخرج",
+     "methods": [
+      "استخدام المخطط من الورقة 2601.04576v1: كاشف مغناطيسي يعتمد على SQUID لتسجيل الإشارات الناتجة عن الأكسيونات.",
+      "بناء نظام تبريد يصل إلى درجات حرارة الهيليوم السائل لتقليل الضوضاء الحرارية.",
+      "معايرة الكاشف باستخدام مجالات مغناطيسية معروفة وإجراء قياسات اختبارية مع حماية من التداخل الخارجي."
+     ]
+    },
+    {
+     "based_on": [
+      "2606.07106"
+     ],
+     "title": "اختبار العلاقة بين إشارة النيوترينو والإشعاع الأثري باستخدام بيانات IceCube وPlanck",
+     "what": "مقارنة بيانات تلسكوب النيوترينو IceCube حول تدفقات النيوترينوات عالية الطاقة مع خرائط الإشعاع الأثري من Planck، للبحث عن ارتباطات تتنبأ بها نماذج إفناء المادة المظلمة إلى نيوترينوات.",
+     "why": "إذا كانت المادة المظلمة تفنى إلى نيوترينوات، فيجب أن يترك ذلك أثرًا في كل من الإشعاع الأثري وتلسكوبات النيوترينو. التحليل المشترك سيزيد من حساسية البحث ويساعد في تقييد النماذج.",
+     "origin": "تقدم الورقة 2606.07106 طريقة للبحث عن المادة المظلمة من خلال تأثير الإفناء إلى نيوترينوات على الإشعاع الأثري، لكنها لا تجري مقارنة مع البيانات الفعلية من تلسكوبات النيوترينو. من ناحية أخرى، توجد بيانات IceCube التي يمكن استخدامها لاختبار هذه الطريقة. ينقصنا تحليل محدد يجمع بين مجموعتي البيانات.",
+     "first_step": "تنزيل البيانات العامة من IceCube وPlanck، والتعرف على التنسيقات والأدوات اللازمة للتعامل مع الخرائط الفيزيائية الفلكية (مثل HEALPix).",
+     "needs": "الوصول إلى بيانات IceCube وPlanck، ومعرفة الأساليب الإحصائية لتحليل البيانات الفيزيائية الفلكية، ومهارات البرمجة بلغة Python أو C++.",
+     "risks": "قد تكون إشارة المادة المظلمة ضعيفة جدًا مقارنة بالخلفيات الفيزيائية الفلكية، وقد لا يتم اكتشاف الارتباطات.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "أخذ البيانات العامة من IceCube حول تدفق النيوترينوات المنتشر وخرائط تباين الإشعاع الأثري من Planck.",
+      "حساب المساهمة المتوقعة من إفناء المادة المظلمة إلى نيوترينوات لقنوات وكتل مختلفة، باستخدام النهج من الورقة 2606.07106.",
+      "إجراء تحليل إحصائي للارتباطات بين أحداث النيوترينو وتقلبات الإشعاع الأثري في السماء."
+     ]
+    },
+    {
+     "based_on": [
+      "2602.23708"
+     ],
+     "title": "نمذجة استجابة الكاشف للمادة المظلمة فائقة الثقل مع التشتت المتعدد",
+     "what": "تطوير محاكاة لمرور جسيمات المادة المظلمة فائقة الثقل (بكتلة أكبر من تيراإلكترون فولت) عبر مادة الكاشف، مع مراعاة التشتت المتعدد، وتقييم حساسية الكواشف الحالية والمخطط لها تجاه هذه الجسيمات.",
+     "why": "تظل المادة المظلمة فائقة الثقل منطقة غير مستكشفة بشكل كافٍ، وفهم البصمات الناتجة عن التشتت المتعدد سيساعد في تحسين عمليات البحث في التجارب المستقبلية.",
+     "origin": "تصف المراجعة 2602.23708 النماذج النظرية وطرق البحث عن المادة المظلمة فائقة الثقل، بما في ذلك التشتت المتعدد، لكن لا توجد محاكاة جاهزة يمكن استخدامها لتقييم حساسية كواشف محددة. ينقصنا تنفيذ عملي لهذه الأفكار في شكل أداة برمجية.",
+     "first_step": "دراسة قسم المراجعة 2602.23708 حول التشتت المتعدد واختيار نموذج تفاعل بسيط لبدء المحاكاة.",
+     "needs": "الوصول إلى Geant4 أو برنامج مماثل، وموارد حسابية، ومعرفة فيزياء الجسيمات الأولية والبرمجة بلغة C++.",
+     "risks": "قد تؤدي صعوبة النمذجة الدقيقة للأحداث النادرة وضرورة مراعاة العديد من الخلفيات إلى تأخير المشروع.",
+     "scale": "سنوات",
+     "methods": [
+      "استخدام المراجعة 2602.23708 لتحديد النماذج النظرية والمقاطع العرضية المتوقعة لتفاعل المادة المظلمة فائقة الثقل.",
+      "كتابة كود باستخدام Geant4 أو أداة مشابهة لنمذجة مسارات الجسيمات مع التشتت المتعدد في كواشف مثل كواشف الزينون السائل.",
+      "حساب الإشارات المتوقعة لكتل ومقاطع عرضية مختلفة ومقارنتها بالقيود الحالية."
+     ]
+    },
+    {
+     "based_on": [
+      "2203.06029"
+     ],
+     "title": "البحث عن إشارات المادة المظلمة في بيانات ANTARES باستخدام نماذج المادة المظلمة المعزولة (Secluded Dark Matter)",
+     "what": "تحليل البيانات الأرشيفية لتلسكوب النيوترينو ANTARES بحثًا عن إشارات من إفناء المادة المظلمة المعزولة في اتجاه مركز المجرة، باستخدام الطرق الموصوفة في الورقة 2203.06029.",
+     "why": "تسمح النماذج المعزولة بتجاوز القيود على كتلة المادة المظلمة وقد تعطي إشارة قابلة للرصد في تلسكوبات النيوترينو، وبيانات ANTARES مجمعة بالفعل ومتاحة للتحليل.",
+     "origin": "قامت الورقة 2203.06029 بالفعل بالبحث عن المادة المظلمة المعزولة في بيانات ANTARES، ولكن ربما لم يتم فحص جميع النماذج ونطاقات الكتل. ينقصنا توسيع التحليل ليشمل نماذج أخرى أو بيانات أحدث.",
+     "first_step": "دراسة المقال 2203.06029 وتحديد البيانات والبرمجيات المستخدمة، ثم طلب الوصول إلى بيانات ANTARES.",
+     "needs": "الوصول إلى بيانات ANTARES، ومعرفة طرق تحليل تلسكوبات النيوترينو، ومهارات البرمجة.",
+     "risks": "قد لا تكون بيانات ANTARES عامة بالكامل، وقد يتطلب الأمر التعاون مع التعاونية.",
+     "scale": "مشروع تخرج",
+     "methods": [
+      "أخذ البيانات العامة من ANTARES أو إعادة إنتاج التحليل من الورقة 2203.06029 باستخدام منهجيتها.",
+      "تطبيق نماذج المادة المظلمة المعزولة لحساب تدفق النيوترينوات المتوقع من مركز المجرة.",
+      "إجراء تحليل إحصائي للبحث عن زيادة في الأحداث فوق الخلفية."
+     ]
+    },
+    {
+     "based_on": [
+      "1507.03800"
+     ],
+     "title": "مقارنة حساسية الطرق المباشرة وغير المباشرة للبحث عن المادة المظلمة لنماذج محددة",
+     "what": "إجراء مقارنة كمية للقيود على معاملات المادة المظلمة المستخلصة من الكواشف المباشرة (مثل XENON1T) والملاحظات غير المباشرة (أشعة غاما من مركز المجرة)، لمجموعة من نماذج WIMP.",
+     "why": "ستساعد هذه المقارنة في تحديد النماذج التي يتم تقييدها بشكل أفضل بطريقة أو بأخرى، وتوجيه التجارب المستقبلية نحو المجالات الأكثر واعدة.",
+     "origin": "تقدم الورقة 1507.03800 نظرة عامة على الطرق المباشرة وغير المباشرة، لكن لا توجد مقارنة منهجية لحساسيتها لنماذج محددة. ينقصنا تحليل كمي يسمح باختيار الاستراتيجية المثلى للبحث.",
+     "first_step": "اختيار عدة نماذج للمادة المظلمة والبحث في الأدبيات عن القيود المقابلة من التجارب المباشرة وغير المباشرة.",
+     "needs": "الوصول إلى المقالات العلمية، ومهارات تحليل البيانات ورسم الرسوم البيانية (Python, ROOT).",
+     "risks": "قد تكون القيود مقدمة في ظل افتراضات مختلفة، مما يصعب المقارنة المباشرة.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "جمع القيود المنشورة من التجارب المباشرة (XENON1T, LUX) والملاحظات غير المباشرة (Fermi-LAT, H.E.S.S.) من الأدبيات.",
+      "بالنسبة للنماذج المختارة (مثل فرميون منفرد، WIMP ناقل)، إعادة حساب القيود في فضاء معاملات مشترك.",
+      "رسم رسوم بيانية لمقارنة الحساسية وتحديد المناطق التي تتفوق فيها طريقة على أخرى."
+     ]
+    }
+   ]
+  },
+  "fr": {
+   "note": "La recherche de la matière noire se déplace vers des particules superlourdes et des canaux non conventionnels, où les modèles WIMP habituels sont déjà fortement contraints.",
+   "topic": "matière noire et sa recherche",
+   "ideas": [
+    {
+     "based_on": [
+      "2601.04576v1"
+     ],
+     "title": "Assembler un capteur compact pour la recherche d'axions basé sur un magnétomètre SQUID",
+     "what": "Assembler un prototype de laboratoire de détecteur d'axions utilisant un interféromètre quantique supraconducteur (SQUID) pour détecter les champs magnétiques ultra-faibles générés lors de l'interaction des axions avec la matière. Tester son fonctionnement sur des signaux connus et le préparer pour des mesures dans des conditions de bruit de fond faible.",
+     "why": "Cela permettra d'obtenir un instrument sensible pour la recherche d'axions en laboratoire sans avoir à construire un grand accélérateur, ce qui pourrait être utile pour tester les modèles avec des axions légers.",
+     "origin": "Dans l'article 2601.04576v1, une expérience avec un minuscule détecteur magnétique a établi des contraintes strictes sur l'interaction des axions, mais les auteurs prévoient de refroidir l'appareil pour augmenter sa sensibilité. Il manque une description détaillée de la mise en œuvre d'un tel détecteur refroidi en laboratoire, reproductible par une petite équipe.",
+     "first_step": "Étudier la conception du détecteur de l'article 2601.04576v1 et acheter les composants de base : capteur SQUID, cryostat, blindage magnétique.",
+     "needs": "Magnétomètre SQUID, cryostat à hélium liquide, blindage magnétique, compétences en cryogénie et en signaux faibles.",
+     "risks": "Le coût élevé de l'équipement cryogénique et la difficulté de supprimer les perturbations magnétiques externes pourraient rendre le projet irréalisable pour un petit laboratoire.",
+     "scale": "diplôme",
+     "methods": [
+      "Utiliser le schéma de l'article 2601.04576v1 : détecteur magnétique à base de SQUID pour enregistrer les signaux induits par les axions.",
+      "Assembler un système cryogénique avec refroidissement à des températures d'hélium liquide pour réduire le bruit thermique.",
+      "Étalonner le détecteur à l'aide de champs magnétiques connus et effectuer des mesures de test avec un blindage contre les perturbations externes."
+     ]
+    },
+    {
+     "based_on": [
+      "2606.07106"
+     ],
+     "title": "Vérifier le lien entre le signal neutrino et le rayonnement fossile à partir des données d'IceCube et de Planck",
+     "what": "Comparer les données du télescope à neutrinos IceCube sur les flux de neutrinos de haute énergie avec les cartes du rayonnement fossile de Planck, afin de rechercher des corrélations prédites par les modèles d'annihilation de la matière noire en neutrinos.",
+     "why": "Si la matière noire s'annihile en neutrinos, cela devrait laisser une trace à la fois dans le rayonnement fossile et dans les télescopes à neutrinos. Une analyse conjointe augmentera la sensibilité de la recherche et aidera à contraindre les modèles.",
+     "origin": "L'article 2606.07106 propose une méthode de recherche de la matière noire via l'influence de l'annihilation en neutrinos sur le rayonnement fossile, mais ne compare pas avec les données réelles des télescopes à neutrinos. D'autre part, il existe des données d'IceCube qui peuvent être utilisées pour tester cette méthode. Il manque une analyse concrète combinant les deux ensembles de données.",
+     "first_step": "Télécharger les données publiques d'IceCube et de Planck, se familiariser avec les formats et les outils pour travailler avec les cartes astrophysiques (par exemple, HEALPix).",
+     "needs": "Accès aux données d'IceCube et de Planck, connaissance des méthodes statistiques d'analyse des données astrophysiques, compétences en programmation en Python ou C++.",
+     "risks": "Le signal de la matière noire pourrait être trop faible par rapport aux bruits de fond astrophysiques, et les corrélations ne seraient pas détectées.",
+     "scale": "semestre",
+     "methods": [
+      "Prendre les données publiques d'IceCube sur le flux de neutrinos diffus et les cartes d'anisotropie du rayonnement fossile de Planck.",
+      "Calculer la contribution attendue de l'annihilation de la matière noire en neutrinos pour différents canaux et masses, en utilisant l'approche de l'article 2606.07106.",
+      "Effectuer une analyse statistique des corrélations entre les événements neutrinos et les fluctuations du rayonnement fossile dans le ciel."
+     ]
+    },
+    {
+     "based_on": [
+      "2602.23708"
+     ],
+     "title": "Simuler la réponse d'un détecteur à la matière noire superlourde avec diffusion multiple",
+     "what": "Développer une simulation du passage de particules de matière noire superlourde (masse supérieure au TeV) à travers la matière du détecteur, en tenant compte de la diffusion multiple, et évaluer la sensibilité des détecteurs existants et planifiés à ces particules.",
+     "why": "La matière noire superlourde reste un domaine peu étudié, et la compréhension des signatures de diffusion multiple aidera à optimiser les recherches lors des futures expériences.",
+     "origin": "Dans la revue 2602.23708, les modèles théoriques et les méthodes de recherche de la matière noire superlourde sont décrits, y compris la diffusion multiple, mais il n'y a pas de simulation prête à l'emploi pour évaluer la sensibilité de détecteurs spécifiques. Il manque une implémentation pratique de ces idées sous forme d'outil logiciel.",
+     "first_step": "Étudier la section de la revue 2602.23708 sur la diffusion multiple et choisir un modèle d'interaction simple pour commencer la simulation.",
+     "needs": "Accès à Geant4 ou à un logiciel similaire, ressources de calcul, connaissance de la physique des particules et programmation en C++.",
+     "risks": "La complexité de la modélisation précise des événements rares et la nécessité de prendre en compte de nombreux bruits de fond pourraient retarder le projet.",
+     "scale": "années",
+     "methods": [
+      "Utiliser la revue 2602.23708 pour définir les modèles théoriques et les sections efficaces d'interaction attendues pour la matière noire superlourde.",
+      "Écrire du code avec Geant4 ou un outil similaire pour modéliser les trajectoires des particules avec diffusion multiple dans des détecteurs de type xénon liquide.",
+      "Calculer les signaux attendus pour différentes masses et sections efficaces, et les comparer aux contraintes actuelles."
+     ]
+    },
+    {
+     "based_on": [
+      "2203.06029"
+     ],
+     "title": "Recherche de signaux de matière noire dans les données d'ANTARES en utilisant des modèles de matière noire séquestrée",
+     "what": "Analyser les données d'archives du télescope à neutrinos ANTARES à la recherche de signaux provenant de l'annihilation de matière noire séquestrée en direction du centre galactique, en utilisant les méthodes décrites dans l'article 2203.06029.",
+     "why": "Les modèles séquestrés permettent de contourner les contraintes sur la masse de la matière noire et peuvent donner un signal observable dans les télescopes à neutrinos, et les données d'ANTARES sont déjà collectées et disponibles pour analyse.",
+     "origin": "L'article 2203.06029 a déjà effectué une recherche de matière noire séquestrée dans les données d'ANTARES, mais peut-être que tous les modèles et gammes de masses n'ont pas été explorés. Il manque une extension de l'analyse à d'autres modèles ou à des données plus récentes.",
+     "first_step": "Étudier l'article 2203.06029 et déterminer quelles données et quels logiciels ont été utilisés, puis demander l'accès aux données d'ANTARES.",
+     "needs": "Accès aux données d'ANTARES, connaissance des méthodes d'analyse des télescopes à neutrinos, compétences en programmation.",
+     "risks": "Les données d'ANTARES pourraient ne pas être entièrement publiques, et une collaboration avec la collaboration sera nécessaire.",
+     "scale": "diplôme",
+     "methods": [
+      "Prendre les données publiques d'ANTARES ou reproduire l'analyse de l'article 2203.06029 en utilisant leur méthodologie.",
+      "Appliquer les modèles de matière noire séquestrée pour calculer le flux de neutrinos attendu depuis le centre galactique.",
+      "Effectuer une analyse statistique pour rechercher un excès d'événements par rapport au bruit de fond."
+     ]
+    },
+    {
+     "based_on": [
+      "1507.03800"
+     ],
+     "title": "Comparer la sensibilité des méthodes de recherche directe et indirecte de la matière noire pour des modèles spécifiques",
+     "what": "Effectuer une comparaison quantitative des contraintes sur les paramètres de la matière noire obtenues à partir de détecteurs directs (par exemple, XENON1T) et d'observations indirectes (rayonnement gamma du centre galactique), pour un ensemble de modèles WIMP.",
+     "why": "Une telle comparaison aidera à identifier quels modèles sont mieux contraints par telle ou telle méthode, et à orienter les futures expériences vers les domaines les plus prometteurs.",
+     "origin": "Dans l'article 1507.03800, un aperçu des méthodes directes et indirectes est donné, mais il n'y a pas de comparaison systématique de leur sensibilité pour des modèles spécifiques. Il manque une analyse quantitative qui permettrait de choisir la stratégie de recherche optimale.",
+     "first_step": "Choisir plusieurs modèles de matière noire et trouver dans la littérature les contraintes correspondantes des expériences directes et indirectes.",
+     "needs": "Accès aux articles scientifiques, compétences en analyse de données et en création de graphiques (Python, ROOT).",
+     "risks": "Les contraintes peuvent être présentées sous des hypothèses différentes, ce qui rendra la comparaison directe difficile.",
+     "scale": "semestre",
+     "methods": [
+      "Collecter les contraintes publiées des expériences directes (XENON1T, LUX) et des observations indirectes (Fermi-LAT, H.E.S.S.) à partir de la littérature.",
+      "Pour les modèles choisis (par exemple, fermion singulet, WIMP vectoriel), recalculer les contraintes dans un espace de paramètres commun.",
+      "Construire des graphiques de comparaison de sensibilité et déterminer les régions où une méthode est supérieure à l'autre."
+     ]
+    }
+   ]
+  }
+ }
 }

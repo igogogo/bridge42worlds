@@ -259,5 +259,431 @@
    },
    "abstract": "The study of systems with sustained energy uptake and dissipation at the scale of the constituent particles is an area of central interest in nonequilibrium statistical physics. Identifying such systems as a distinct category -- Active Matter -- unifies our understanding of autonomous collective move- ment in the living world and in some surprising inanimate imitations. In this article I present the Active Matter framework, briefly recall some early work, review our recent results on single-particle and collective behaviour, including experiments on active granular monolayers, and discuss new "
   }
- ]
+ ],
+ "lang": {
+  "en": {
+   "note": "In the field of active matter and living systems, both theoretical models of self-organization and experimental platforms are actively developing, but a gap remains between predictions and their verification on real systems.",
+   "topic": "active matter and living systems",
+   "ideas": [
+    {
+     "based_on": [
+      "2608.03317v1",
+      "1003.2032"
+     ],
+     "title": "Build a microscope setup to observe collective motion of bacteria and test predictions of a swarming model",
+     "what": "Assemble a simple optical setup with a microscope and camera to observe dense bacterial cultures (e.g., E. coli or B. subtilis) in a thin liquid layer. Process videos, extract bacterial trajectories, and compare observed collective structures (vortices, bands) with predictions from the hydrodynamic model in the paper on self-organization of active particles.",
+     "why": "This would allow experimental testing of how universal active matter models apply to real biological systems. Results could be useful for microbiologists and biophysicists in understanding collective bacterial behavior.",
+     "origin": "In paper 2608.03317v1, hydrodynamic equations for active particles with birth and death are derived, but their comparison with real bacterial systems is limited. Review 1003.2032 describes experimental approaches to observing collective bacterial motion but does not provide direct comparison with this specific model. The idea fills the gap: take experimental methods from the review and test the model's predictions on real data.",
+     "first_step": "Obtain a bacterial culture (e.g., a motile E. coli strain), prepare a thin layer in a chamber, and record video on a microscope with a camera at different cell densities.",
+     "needs": "Microscope with 20–40x magnification, digital camera, glass slides, culture medium, incubator for temperature control, video analysis software.",
+     "risks": "Bacteria may move too fast for the camera or clump together, making tracking individual cells difficult. Dense suspensions may be opaque, requiring optimization of observation conditions.",
+     "scale": "semester",
+     "methods": [
+      "Use the method for observing dense bacterial suspensions from paper 1003.2032 (Active Matter): thin layer between slide and coverslip, phase contrast or dark field.",
+      "Analyze videos using particle tracking with existing packages, e.g., TrackPy or ImageJ.",
+      "Compute velocity fields and order parameters (e.g., polar or nematic order) and compare with numerical solutions of equations from 2608.03317v1 (how reproducing particles self-organize into swarms).",
+      "Assess how well observed structures match model predictions (e.g., characteristic vortex size, density threshold for order emergence)."
+     ]
+    },
+    {
+     "based_on": [
+      "2605.16753",
+      "1004.1933"
+     ],
+     "title": "Measure cell shape fluctuations and map the boundary of life",
+     "what": "Use live-cell microscopy (e.g., fibroblasts or epithelial cells) to record long-term changes in cell morphology. Using machine learning or statistical analysis, extract parameters characterizing cell state, and apply the approach from the paper on the boundary of life to identify regions of viability and pre-death states.",
+     "why": "Could provide a quantitative tool for assessing cell state in culture, useful in biomedical research and toxicology. Would allow testing the universality of the boundary-of-life concept on real cellular data.",
+     "origin": "In 2605.16753, a mathematical method is proposed to determine the boundary between viable and non-viable states, but it is illustrated mainly with model systems. Paper 1004.1933 (The Mechanics and Statistics of Active Matter) discusses statistics of active particles but does not apply it to cell viability analysis. The idea combines: take the boundary-of-life method and apply it to experimental data on cell morphology.",
+     "first_step": "Choose a cell line, set up the microscope for long-term imaging (e.g., every 5 minutes for 24 hours), and record baseline morphology data under normal conditions.",
+     "needs": "Inverted microscope with incubation chamber (CO2, temperature), camera, cell culture, media, image processing software.",
+     "risks": "Cells may change morphology for reasons unrelated to viability (e.g., division, migration), complicating interpretation. Careful data annotation will be needed for training models.",
+     "scale": "thesis",
+     "methods": [
+      "Use the method from 2605.16753 (Where does the boundary of life lie?): decompose state space into regions of life and death based on parameter dynamics.",
+      "Obtain time series of morphological features (area, perimeter, elongation) using image segmentation software (e.g., CellProfiler).",
+      "Apply principal component analysis or nonlinear embedding to reduce dimensionality and visualize cell trajectories in state space.",
+      "Assess how clearly states before and after stressor exposure (e.g., cytotoxic agent) separate, and whether cell death can be predicted in advance."
+     ]
+    },
+    {
+     "based_on": [
+      "2411.19783",
+      "2608.03317v1"
+     ],
+     "title": "Create a robotic platform to study collective behavior of artificial active particles",
+     "what": "Develop a low-cost system of many small robots (e.g., based on vibration motors) that move on a surface and interact through simple rules. Use this platform to experimentally test active matter theories, such as emergence of order and phase transitions, and compare with predictions from the literature.",
+     "why": "Would allow controlled experiments with active matter, varying interaction parameters and density, which is difficult in biological systems. Could be used in education and as a testbed for new theoretical models.",
+     "origin": "In 2411.19783, existing synthetic active matter platforms are listed, but most are expensive or difficult to reproduce. Paper 2608.03317v1 proposes a theoretical model for self-organization of active particles, but its experimental verification on robots has not been done. The idea fills the gap: create an affordable robotic system to test the theory.",
+     "first_step": "Assemble a prototype of one robot: platform with two vibration motors, microcontroller, collision sensor, and test its movement on a flat surface.",
+     "needs": "Skills in electronics and microcontroller programming (Arduino, Raspberry Pi Pico), 3D printer for enclosures, camera, computer for video processing, basic knowledge of active matter physics.",
+     "risks": "Difficulty synchronizing many robots and ensuring reliable communication; vibration robots may be uncontrollable. Many iterations will be needed to achieve reproducible collective behavior.",
+     "scale": "years",
+     "methods": [
+      "Base the design on the review 2411.19783 (The 2024 Motile Active Matter Roadmap), which describes various types of synthetic active particles, including vibrobots.",
+      "Build an arena with an overhead camera, robots with differential drive and collision or proximity sensors.",
+      "Implement local interaction algorithms (e.g., velocity alignment as in the Vicsek model) on onboard microcontrollers.",
+      "Conduct experiments with different densities and interaction radii, measure order parameters, and compare with numerical simulations based on equations from 2608.03317v1."
+     ]
+    },
+    {
+     "based_on": [
+      "2604.22600",
+      "1705.06269"
+     ],
+     "title": "Numerically investigate the effect of quantum fluctuations on phase transitions in active matter",
+     "what": "Write a program to simulate active particles with added quantum corrections, following the approach from the paper on quantum ripples in active matter. Investigate how quantum effects change critical exponents and the nature of ordering in the system.",
+     "why": "Could clarify whether quantum effects are important in biological systems at the nanoscale (e.g., in molecular motors) and provide new predictions for experiments.",
+     "origin": "In 2604.22600, formulas for quantum corrections to the displacement of active particles are derived, but a systematic study of their influence on collective phenomena has not been conducted. Paper 1705.06269 (Active matter) provides a review of classical active matter models but does not address quantum aspects. The idea combines these directions, testing whether quantum fluctuations alter phase behavior.",
+     "first_step": "Write code to simulate a one-dimensional chain of active particles with quantum noise and reproduce results from 2604.22600 for a single particle.",
+     "needs": "Programming skills (Python, C++), knowledge of numerical methods for stochastic differential equations, computational resources (a regular PC to start).",
+     "risks": "Quantum corrections may turn out to be negligible in the regimes of interest, resulting in a negative result. Difficulty in correctly formulating quantum noise in a many-particle system.",
+     "scale": "thesis",
+     "methods": [
+      "Use equations from 2604.22600 (Quantum ripples in active matter) to describe particle displacement with quantum corrections.",
+      "Implement numerical solution of stochastic differential equations with quantum noise (e.g., Monte Carlo methods).",
+      "Compute correlation functions and order parameters for different values of quantum fluctuation intensity.",
+      "Compare with the classical case and determine under what conditions quantum effects become significant."
+     ]
+    },
+    {
+     "based_on": [
+      "1003.2032",
+      "1004.1933"
+     ],
+     "title": "Develop a software package for analyzing video data of collective animal motion",
+     "what": "Create an open-source Python tool for automatic extraction of trajectories and computation of collective motion parameters (polarization, correlations, vortices) from video recordings of bird flocks, fish schools, or insect groups. Apply it to publicly available datasets and compare with theoretical predictions.",
+     "why": "Would simplify the work of researchers studying collective behavior and allow standardization of analysis. Could be used in ecology and behavioral biology.",
+     "origin": "There are scattered tools for analyzing collective motion, but no unified package combining tracking and calculation of active matter statistical characteristics. Reviews 1003.2032 and 1004.1933 describe methods but do not provide ready code. The idea fills this gap, making analysis accessible to non-specialists.",
+     "first_step": "Collect several videos of collective motion (e.g., from open sources) and test a basic tracking algorithm on one video.",
+     "needs": "Python programming skills, knowledge of computer vision, access to video data (open datasets can be downloaded), time for development and testing.",
+     "risks": "Tracking in dense groups may be inaccurate, requiring manual correction. The package may be unnecessary if similar tools already exist, but unique metrics could be added.",
+     "scale": "semester",
+     "methods": [
+      "Use tracking algorithms from review 1003.2032 (Active Matter) and modern computer vision libraries (OpenCV, YOLO).",
+      "Implement computation of order parameters and correlation functions described in 1004.1933 (The Mechanics and Statistics of Active Matter).",
+      "Test on open datasets (e.g., starling flock or fish school videos) and compare with published results.",
+      "Package with documentation and examples."
+     ]
+    }
+   ]
+  },
+  "es": {
+   "note": "En el campo de la materia activa y los sistemas vivos, se desarrollan activamente tanto modelos teóricos de autoorganización como plataformas experimentales, pero persiste una brecha entre las predicciones y su verificación en sistemas reales.",
+   "topic": "materia activa y sistemas vivos",
+   "ideas": [
+    {
+     "based_on": [
+      "2608.03317v1",
+      "1003.2032"
+     ],
+     "title": "Montar un microscopio para observar el movimiento colectivo de bacterias y comprobar las predicciones del modelo de bandadas",
+     "what": "Montar un sencillo sistema óptico con microscopio y cámara para observar cultivos densos de bacterias (por ejemplo, E. coli o B. subtilis) en una capa fina de líquido. Procesar el video, extraer las trayectorias de las bacterias y comparar las estructuras colectivas observadas (vórtices, bandas) con las predicciones del modelo hidrodinámico del trabajo sobre autoorganización de partículas activas.",
+     "why": "Permitirá comprobar experimentalmente hasta qué punto los modelos universales de materia activa son aplicables a sistemas biológicos reales. Los resultados pueden ser útiles para microbiólogos y biofísicos en la comprensión del comportamiento colectivo de las bacterias.",
+     "origin": "En el trabajo 2608.03317v1 se derivan ecuaciones hidrodinámicas para partículas activas con reproducción y muerte, pero su comparación con sistemas bacterianos reales es limitada. La revisión 1003.2032 describe enfoques experimentales para observar el movimiento colectivo de bacterias, pero no ofrece una comparación directa con este modelo específico. La idea llena ese vacío: tomar las técnicas experimentales de la revisión y comprobar las predicciones del modelo con datos reales.",
+     "first_step": "Obtener un cultivo de bacterias (por ejemplo, una cepa de E. coli con buena motilidad), preparar una capa fina en una cámara y grabar video con un microscopio y cámara a diferentes densidades celulares.",
+     "needs": "Microscopio con aumento de 20–40x, cámara digital, portaobjetos, medio de cultivo, termostato para mantener la temperatura, software para análisis de video.",
+     "risks": "Las bacterias pueden moverse demasiado rápido para la cámara o agregarse, lo que dificultará el seguimiento de células individuales. Las suspensiones densas pueden ser opacas, y será necesario optimizar las condiciones de observación.",
+     "scale": "semestre",
+     "methods": [
+      "Usar la técnica de observación de suspensiones bacterianas densas del trabajo 1003.2032 (Active Matter): capa fina entre portaobjetos y cubreobjetos, contraste de fase o campo oscuro.",
+      "Análisis de video mediante seguimiento de partículas (particle tracking) con paquetes ya disponibles, como TrackPy o ImageJ.",
+      "Calcular los campos de velocidad y los parámetros de orden (por ejemplo, orden polar o nemático) y compararlos con las soluciones numéricas de las ecuaciones de 2608.03317v1 (cómo las partículas que se reproducen se autoorganizan en bandadas).",
+      "Evaluar en qué medida las estructuras observadas corresponden a las predicciones del modelo (por ejemplo, el tamaño característico de los vórtices, el umbral de densidad para la aparición de orden)."
+     ]
+    },
+    {
+     "based_on": [
+      "2605.16753",
+      "1004.1933"
+     ],
+     "title": "Medir las fluctuaciones de la forma celular y construir un mapa de la frontera de la vida",
+     "what": "Utilizar microscopía de células vivas (por ejemplo, fibroblastos o células epiteliales) para registrar durante largo tiempo los cambios en su morfología. Con métodos de aprendizaje automático o análisis estadístico, extraer parámetros que caractericen el estado celular y aplicar el enfoque del trabajo sobre la frontera de la vida para determinar regiones de viabilidad y estados previos a la muerte.",
+     "why": "Puede proporcionar una herramienta cuantitativa para evaluar el estado de las células en cultivo, útil en investigación biomédica y toxicología. Permitirá comprobar la universalidad del concepto de frontera de la vida con datos celulares reales.",
+     "origin": "En 2605.16753 se propone un método matemático para determinar la frontera entre estados viables y no viables, pero se ilustra principalmente con sistemas modelo. El trabajo 1004.1933 (The Mechanics and Statistics of Active Matter) discute la estadística de partículas activas, pero no la aplica al análisis de viabilidad celular. La idea combina ambos: tomar el método de la frontera de la vida y aplicarlo a datos experimentales de morfología celular.",
+     "first_step": "Elegir una línea celular, configurar el microscopio para grabación de larga duración (por ejemplo, cada 5 minutos durante 24 horas) y registrar datos básicos de morfología celular en condiciones normales.",
+     "needs": "Microscopio invertido con cámara de incubación (CO2, temperatura), cámara, cultivo celular, medios, software de procesamiento de imágenes.",
+     "risks": "Las células pueden cambiar su morfología por razones no relacionadas con la viabilidad (por ejemplo, división, migración), lo que dificultará la interpretación. Será necesario un etiquetado cuidadoso de los datos para entrenar los modelos.",
+     "scale": "tesis de grado",
+     "methods": [
+      "Usar la metodología de 2605.16753 (Dónde está la frontera de la vida): descomposición del espacio de estados en regiones de vida y muerte basada en la dinámica de los parámetros.",
+      "Obtener series temporales de rasgos morfológicos (área, perímetro, elongación) con programas de segmentación de imágenes (por ejemplo, CellProfiler).",
+      "Aplicar análisis de componentes principales o incrustación no lineal para reducir la dimensionalidad y visualizar las trayectorias celulares en el espacio de estados.",
+      "Evaluar con qué claridad se separan los estados antes y después de la exposición a un agente estresante (por ejemplo, un agente citotóxico) y si se puede predecir la muerte celular con antelación."
+     ]
+    },
+    {
+     "based_on": [
+      "2411.19783",
+      "2608.03317v1"
+     ],
+     "title": "Crear una plataforma robótica para estudiar el comportamiento colectivo de partículas activas artificiales",
+     "what": "Desarrollar un sistema económico compuesto por muchos robots pequeños (por ejemplo, basados en motores de vibración) que se mueven sobre una superficie e interactúan mediante reglas simples. Usar esta plataforma para la verificación experimental de teorías de materia activa, como la aparición de orden y las transiciones de fase, y comparar con las predicciones de la literatura.",
+     "why": "Permitirá realizar experimentos controlados con materia activa, variando los parámetros de interacción y la densidad, algo difícil en sistemas biológicos. Puede utilizarse en educación y como sistema de prueba para nuevos modelos teóricos.",
+     "origin": "En 2411.19783 se enumeran las plataformas existentes de materia activa sintética, pero la mayoría son caras o difíciles de reproducir. El trabajo 2608.03317v1 propone un modelo teórico para la autoorganización de partículas activas, pero su verificación experimental con robots no se ha realizado. La idea llena ese vacío: crear un sistema robótico accesible para probar la teoría.",
+     "first_step": "Montar un prototipo de un robot: plataforma con dos motores de vibración, microcontrolador, sensor de colisión, y comprobar su movimiento sobre una superficie plana.",
+     "needs": "Habilidades en electrónica y programación de microcontroladores (Arduino, Raspberry Pi Pico), impresora 3D para las carcasas, cámara, computadora para procesamiento de video, conocimientos básicos de física de materia activa.",
+     "risks": "Dificultad para sincronizar muchos robots y garantizar una comunicación fiable; los robots vibratorios pueden ser difíciles de controlar. Se necesitarán muchas iteraciones para lograr un comportamiento colectivo reproducible.",
+     "scale": "años",
+     "methods": [
+      "Tomar como base el diseño de la revisión 2411.19783 (The 2024 Motile Active Matter Roadmap), donde se describen varios tipos de partículas activas sintéticas, incluidos los vibrobots.",
+      "Montar un área de pruebas con cámara superior, robots con tracción diferencial y sensores de colisión o de proximidad.",
+      "Implementar algoritmos de interacción local (por ejemplo, alineación de velocidades como en el modelo de Vicsek) en los microcontroladores a bordo.",
+      "Realizar series de experimentos con diferentes densidades y radios de interacción, medir los parámetros de orden y comparar con simulaciones numéricas basadas en las ecuaciones de 2608.03317v1."
+     ]
+    },
+    {
+     "based_on": [
+      "2604.22600",
+      "1705.06269"
+     ],
+     "title": "Investigar numéricamente la influencia de las fluctuaciones cuánticas en las transiciones de fase en materia activa",
+     "what": "Escribir un programa para simular partículas activas con la adición de correcciones cuánticas, siguiendo el enfoque del trabajo sobre la ondulación cuántica en materia activa. Investigar cómo los efectos cuánticos modifican los exponentes críticos y el carácter del ordenamiento en el sistema.",
+     "why": "Puede aclarar si los efectos cuánticos son importantes en sistemas biológicos a nanoescala (por ejemplo, en motores moleculares) y proporcionar nuevas predicciones para experimentos.",
+     "origin": "En 2604.22600 se derivan fórmulas para las correcciones cuánticas al desplazamiento de partículas activas, pero no se ha realizado un estudio sistemático de su influencia en fenómenos colectivos. El trabajo 1705.06269 (Active matter) ofrece una revisión de los modelos clásicos de materia activa, pero no aborda los aspectos cuánticos. La idea combina estas direcciones, comprobando si las fluctuaciones cuánticas alteran el comportamiento de fase.",
+     "first_step": "Escribir código para simular una cadena unidimensional de partículas activas con ruido cuántico y reproducir los resultados de 2604.22600 para una sola partícula.",
+     "needs": "Habilidades de programación (Python, C++), conocimiento de métodos numéricos para ecuaciones diferenciales estocásticas, recursos computacionales (una PC normal para empezar).",
+     "risks": "Las correcciones cuánticas pueden resultar despreciables en los regímenes de interés, y el resultado sería negativo. Dificultad para formular correctamente el ruido cuántico en un sistema de muchas partículas.",
+     "scale": "tesis de grado",
+     "methods": [
+      "Usar las ecuaciones de 2604.22600 (Ondulación cuántica en materia activa) para describir el desplazamiento de partículas con correcciones cuánticas.",
+      "Implementar la solución numérica de ecuaciones diferenciales estocásticas con ruido cuántico (por ejemplo, mediante el método de Monte Carlo).",
+      "Calcular las funciones de correlación y los parámetros de orden para diferentes valores de la intensidad de las fluctuaciones cuánticas.",
+      "Comparar con el caso clásico y determinar en qué condiciones los efectos cuánticos se vuelven significativos."
+     ]
+    },
+    {
+     "based_on": [
+      "1003.2032",
+      "1004.1933"
+     ],
+     "title": "Desarrollar un paquete de software para analizar datos de video del movimiento colectivo de animales",
+     "what": "Crear una herramienta de código abierto en Python para la extracción automática de trayectorias y el cálculo de parámetros de movimiento colectivo (polarización, correlaciones, vórtices) a partir de grabaciones de bandadas de aves, cardúmenes de peces o grupos de insectos. Aplicarla a conjuntos de datos públicos y comparar con predicciones teóricas.",
+     "why": "Facilitará el trabajo de los investigadores que estudian el comportamiento colectivo y permitirá estandarizar el análisis. Puede utilizarse en ecología y biología del comportamiento.",
+     "origin": "Existen herramientas dispersas para el análisis del movimiento colectivo, pero no hay un paquete unificado que combine el seguimiento y el cálculo de características estadísticas de materia activa. Las revisiones 1003.2032 y 1004.1933 describen métodos, pero no proporcionan código listo. La idea llena este vacío, haciendo que el análisis sea accesible para no especialistas.",
+     "first_step": "Recopilar varias grabaciones de movimiento colectivo (por ejemplo, de fuentes abiertas) y probar el algoritmo básico de seguimiento en un video.",
+     "needs": "Habilidades de programación en Python, conocimiento de visión por computadora, acceso a datos de video (se pueden descargar conjuntos abiertos), tiempo para desarrollo y pruebas.",
+     "risks": "El seguimiento en grupos densos puede ser impreciso, y será necesaria corrección manual. El paquete puede no tener demanda si ya existen herramientas similares, pero se pueden añadir métricas únicas.",
+     "scale": "semestre",
+     "methods": [
+      "Usar algoritmos de seguimiento de la revisión 1003.2032 (Active Matter) y bibliotecas modernas de visión por computadora (OpenCV, YOLO).",
+      "Implementar el cálculo de parámetros de orden y funciones de correlación descritos en 1004.1933 (The Mechanics and Statistics of Active Matter).",
+      "Probar con conjuntos de datos abiertos (por ejemplo, videos de bandadas de estorninos o peces) y comparar con resultados publicados.",
+      "Organizar como un paquete con documentación y ejemplos."
+     ]
+    }
+   ]
+  },
+  "ar": {
+   "note": "في مجال المادة النشطة والأنظمة الحية، تتطور بنشاط كل من النماذج النظرية للتنظيم الذاتي والمنصات التجريبية، لكن لا تزال هناك فجوة بين التنبؤات والتحقق منها على الأنظمة الحقيقية.",
+   "topic": "المادة النشطة والأنظمة الحية",
+   "ideas": [
+    {
+     "based_on": [
+      "2608.03317v1",
+      "1003.2032"
+     ],
+     "title": "تجميع مجهر لمراقبة الحركة الجماعية للبكتيريا والتحقق من تنبؤات نموذج الأسراب",
+     "what": "تجميع إعداد بصري بسيط يتكون من مجهر وكاميرا لمراقبة مزارع بكتيرية كثيفة (مثل الإشريكية القولونية أو العصوية الرقيقة) في طبقة رقيقة من السائل. معالجة الفيديو، واستخراج مسارات البكتيريا، ومقارنة البنى الجماعية المرصودة (الدوامات، الأشرطة) مع تنبؤات النموذج الهيدروديناميكي من العمل حول التنظيم الذاتي للجسيمات النشطة.",
+     "why": "سيسمح بالتحقق تجريبيًا من مدى قابلية تطبيق النماذج العامة للمادة النشطة على الأنظمة البيولوجية الحقيقية. قد تكون النتائج مفيدة لعلماء الأحياء الدقيقة والفيزيائيين الحيويين لفهم السلوك الجماعي للبكتيريا.",
+     "origin": "في العمل 2608.03317v1 تم اشتقاق معادلات هيدروديناميكية للجسيمات النشطة مع التكاثر والموت، لكن مقارنتها مع الأنظمة البكتيرية الحقيقية محدودة. يصف الاستعراض 1003.2032 الأساليب التجريبية لمراقبة الحركة الجماعية للبكتيريا، لكنه لا يقدم مقارنة مباشرة مع هذا النموذج المحدد. الفكرة تسد هذه الفجوة: أخذ الأساليب التجريبية من الاستعراض والتحقق من تنبؤات النموذج على بيانات حقيقية.",
+     "first_step": "الحصول على مزرعة بكتيرية (مثل سلالة من الإشريكية القولونية ذات حركة جيدة)، وتحضير طبقة رقيقة في غرفة، وتصوير فيديو بالمجهر والكاميرا عند كثافات خلوية مختلفة.",
+     "needs": "مجهر بتكبير 20-40x، كاميرا رقمية، شرائح زجاجية، وسط غذائي، حاضنة للحفاظ على درجة الحرارة، برنامج لتحليل الفيديو.",
+     "risks": "قد تتحرك البكتيريا بسرعة كبيرة بالنسبة للكاميرا أو تلتصق ببعضها، مما يصعب تتبع الخلايا الفردية. قد تكون المعلقات الكثيفة غير شفافة، مما يتطلب تحسين ظروف المراقبة.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "استخدام منهجية مراقبة المعلقات البكتيرية الكثيفة من العمل 1003.2032 (المادة النشطة): طبقة رقيقة بين شريحة زجاجية وشريحة غطاء، تباين طوري أو حقل مظلم.",
+      "تحليل الفيديو بطريقة تتبع الجسيمات (particle tracking) باستخدام حزم جاهزة مثل TrackPy أو ImageJ.",
+      "حساب حقول السرعة ومعاملات الترتيب (مثل الترتيب القطبي أو النيماتيكي) ومقارنتها بالحلول العددية للمعادلات من 2608.03317v1 (كيف تتنظم الجسيمات المتكاثرة ذاتيًا في أسراب).",
+      "تقييم مدى تطابق البنى المرصودة مع تنبؤات النموذج (مثل الحجم المميز للدوامات، وعتبة الكثافة لظهور الترتيب)."
+     ]
+    },
+    {
+     "based_on": [
+      "2605.16753",
+      "1004.1933"
+     ],
+     "title": "قياس تقلبات شكل الخلايا ورسم خريطة حدود الحياة",
+     "what": "استخدام مجهر للخلايا الحية (مثل الخلايا الليفية أو الخلايا الظهارية) لتسجيل طويل الأمد للتغيرات في شكلها. باستخدام طرق التعلم الآلي أو التحليل الإحصائي، استخراج معاملات تميز حالة الخلية، وتطبيق نهج من عمل حول حدود الحياة لتحديد مناطق قابلية الحياة والحالات قبل الموت.",
+     "why": "قد يوفر أداة كمية لتقييم حالة الخلايا في المزرعة، مفيدة في الأبحاث الطبية الحيوية وعلم السموم. سيسمح بالتحقق من عالمية مفهوم حدود الحياة على بيانات خلوية حقيقية.",
+     "origin": "في 2605.16753 تم اقتراح طريقة رياضية لتحديد الحدود بين الحالات القابلة للحياة وغير القابلة للحياة، لكنها موضحة بشكل أساسي على أنظمة نموذجية. يناقش العمل 1004.1933 (ميكانيكا وإحصاء المادة النشطة) إحصاءات الجسيمات النشطة، لكنه لا يطبقها على تحليل قابلية حياة الخلايا. الفكرة تجمع بينهما: أخذ طريقة حدود الحياة وتطبيقها على بيانات تجريبية عن شكل الخلايا.",
+     "first_step": "اختيار خط خلوي، وضبط المجهر للتصوير طويل الأمد (مثل كل 5 دقائق لمدة 24 ساعة)، وتسجيل بيانات أساسية عن شكل الخلايا في الظروف الطبيعية.",
+     "needs": "مجهر مقلوب مع غرفة حضانة (CO2، درجة حرارة)، كاميرا، مزرعة خلوية، أوساط، برنامج لمعالجة الصور.",
+     "risks": "قد تغير الخلايا شكلها لأسباب لا تتعلق بقابلية الحياة (مثل الانقسام، الهجرة)، مما يصعب التفسير. ستكون هناك حاجة إلى وضع علامات دقيقة على البيانات لتدريب النماذج.",
+     "scale": "أطروحة",
+     "methods": [
+      "استخدام منهجية من 2605.16753 (أين تقع حدود الحياة): تحليل فضاء الحالات إلى مناطق حياة وموت بناءً على ديناميكيات المعاملات.",
+      "الحصول على سلاسل زمنية للسمات الشكلية (المساحة، المحيط، الاستطالة) باستخدام برامج تجزئة الصور (مثل CellProfiler).",
+      "تطبيق تحليل المكونات الرئيسية أو التضمين غير الخطي لتقليل الأبعاد وتصور مسارات الخلايا في فضاء الحالات.",
+      "تقييم مدى وضوح فصل الحالات قبل وبعد التعرض لعامل إجهاد (مثل عامل سام للخلايا) وما إذا كان يمكن التنبؤ بموت الخلية مسبقًا."
+     ]
+    },
+    {
+     "based_on": [
+      "2411.19783",
+      "2608.03317v1"
+     ],
+     "title": "إنشاء منصة روبوتية لدراسة السلوك الجماعي للجسيمات النشطة الاصطناعية",
+     "what": "تطوير نظام غير مكلف من العديد من الروبوتات الصغيرة (مثل تلك القائمة على محركات اهتزازية) التي تتحرك على سطح وتتفاعل عبر قواعد بسيطة. استخدام هذه المنصة للتحقق التجريبي من نظريات المادة النشطة، مثل ظهور الترتيب والتحولات الطورية، ومقارنتها بالتنبؤات من الأدبيات.",
+     "why": "سيسمح بإجراء تجارب مضبوطة على المادة النشطة، مع تغيير معاملات التفاعل والكثافة، وهو أمر صعب في الأنظمة البيولوجية. يمكن استخدامها في التعليم وكمنصة اختبار لنماذج نظرية جديدة.",
+     "origin": "في 2411.19783 تم سرد المنصات الحالية للمادة النشطة الاصطناعية، لكن معظمها مكلف أو يصعب إعادة إنتاجه. يقدم العمل 2608.03317v1 نموذجًا نظريًا للتنظيم الذاتي للجسيمات النشطة، لكن التحقق التجريبي على الروبوتات لم يتم. الفكرة تسد الفجوة: إنشاء نظام روبوتي ميسور التكلفة لاختبار النظرية.",
+     "first_step": "تجميع نموذج أولي لروبوت واحد: منصة بمحركين اهتزازيين، متحكم دقيق، مستشعر تصادم، واختبار حركته على سطح مستو.",
+     "needs": "مهارات في الإلكترونيات وبرمجة المتحكمات الدقيقة (Arduino، Raspberry Pi Pico)، طابعة ثلاثية الأبعاد للأغلفة، كاميرا، حاسوب لمعالجة الفيديو، معرفة أساسية بفيزياء المادة النشطة.",
+     "risks": "صعوبة مزامنة العديد من الروبوتات وضمان اتصال موثوق؛ قد تكون الروبوتات الاهتزازية غير قابلة للتحكم. ستكون هناك حاجة إلى العديد من التكرارات لتحقيق سلوك جماعي قابل للتكرار.",
+     "scale": "سنوات",
+     "methods": [
+      "الاستناد إلى التصميم من الاستعراض 2411.19783 (خارطة طريق المادة النشطة المتحركة 2024)، حيث تم وصف أنواع مختلفة من الجسيمات النشطة الاصطناعية، بما في ذلك الروبوتات الاهتزازية.",
+      "تجميع ساحة مع كاميرا علوية، وروبوتات بدفع تفاضلي ومستشعرات تصادم أو مستشعرات تقارب.",
+      "تنفيذ خوارزميات التفاعل المحلي (مثل محاذاة السرعات كما في نموذج فيشيك) على المتحكمات الدقيقة المدمجة.",
+      "إجراء سلسلة من التجارب بكثافات مختلفة ونصف قطر تفاعل مختلف، وقياس معاملات الترتيب ومقارنتها بالمحاكاة العددية بناءً على المعادلات من 2608.03317v1."
+     ]
+    },
+    {
+     "based_on": [
+      "2604.22600",
+      "1705.06269"
+     ],
+     "title": "دراسة عددية لتأثير التقلبات الكمومية على التحولات الطورية في المادة النشطة",
+     "what": "كتابة برنامج لمحاكاة الجسيمات النشطة مع إضافة تصحيحات كمومية، باتباع النهج من العمل حول التموجات الكمومية في المادة النشطة. دراسة كيف تغير التأثيرات الكمومية الأسس الحرجة وطبيعة الترتيب في النظام.",
+     "why": "قد يوضح ما إذا كانت التأثيرات الكمومية مهمة في الأنظمة البيولوجية على المستوى النانوي (مثل المحركات الجزيئية) ويقدم تنبؤات جديدة للتجارب.",
+     "origin": "في 2604.22600 تم اشتقاق صيغ للتصحيحات الكمومية لإزاحة الجسيمات النشطة، لكن لم يتم إجراء دراسة منهجية لتأثيرها على الظواهر الجماعية. يقدم العمل 1705.06269 (المادة النشطة) استعراضًا للنماذج الكلاسيكية للمادة النشطة، لكنه لا يتناول الجوانب الكمومية. الفكرة تجمع بين هذه الاتجاهات، للتحقق مما إذا كانت التقلبات الكمومية تغير السلوك الطوري.",
+     "first_step": "كتابة كود لمحاكاة سلسلة أحادية البعد من الجسيمات النشطة مع ضوضاء كمومية وإعادة إنتاج نتائج 2604.22600 لجسيم واحد.",
+     "needs": "مهارات برمجة (Python، C++)، معرفة بالطرق العددية للمعادلات التفاضلية العشوائية، موارد حسابية (حاسوب شخصي عادي للبداية).",
+     "risks": "قد تكون التصحيحات الكمومية صغيرة بشكل مهمل في الأنماط المثيرة للاهتمام، وستكون النتيجة سلبية. صعوبة صياغة الضوضاء الكمومية بشكل صحيح في نظام متعدد الجسيمات.",
+     "scale": "أطروحة",
+     "methods": [
+      "استخدام المعادلات من 2604.22600 (التموجات الكمومية في المادة النشطة) لوصف إزاحة الجسيمات مع التصحيحات الكمومية.",
+      "تنفيذ حل عددي للمعادلات التفاضلية العشوائية مع ضوضاء كمومية (مثل طريقة مونت كارلو).",
+      "حساب دوال الارتباط ومعاملات الترتيب لقيم مختلفة لشدة التقلبات الكمومية.",
+      "مقارنة مع الحالة الكلاسيكية وتحديد الشروط التي تصبح فيها التأثيرات الكمومية مهمة."
+     ]
+    },
+    {
+     "based_on": [
+      "1003.2032",
+      "1004.1933"
+     ],
+     "title": "تطوير حزمة برمجية لتحليل بيانات الفيديو للحركة الجماعية للحيوانات",
+     "what": "إنشاء أداة مفتوحة المصدر بلغة بايثون للاستخراج التلقائي للمسارات وحساب معاملات الحركة الجماعية (الاستقطاب، الارتباطات، الدوامات) من تسجيلات فيديو لأسراب الطيور، أو أسراب الأسماك، أو مجموعات الحشرات. تطبيقها على مجموعات بيانات متاحة للعموم ومقارنتها بالتنبؤات النظرية.",
+     "why": "سيبسط عمل الباحثين الذين يدرسون السلوك الجماعي، ويسمح بتوحيد التحليل. يمكن استخدامه في علم البيئة وعلم الأحياء السلوكي.",
+     "origin": "توجد أدوات متفرقة لتحليل الحركة الجماعية، لكن لا توجد حزمة موحدة تجمع بين التتبع وحساب الخصائص الإحصائية للمادة النشطة. يصف الاستعراضان 1003.2032 و1004.1933 الأساليب، لكنهما لا يقدمان كودًا جاهزًا. الفكرة تسد هذه الفجوة، مما يجعل التحليل في متناول غير المتخصصين.",
+     "first_step": "جمع عدة تسجيلات فيديو للحركة الجماعية (مثل من مصادر مفتوحة) واختبار خوارزمية التتبع الأساسية على فيديو واحد.",
+     "needs": "مهارات برمجة بلغة بايثون، معرفة بالرؤية الحاسوبية، الوصول إلى بيانات الفيديو (يمكن تنزيل مجموعات مفتوحة)، وقت للتطوير والاختبار.",
+     "risks": "قد يكون التتبع في المجموعات الكثيفة غير دقيق، مما يتطلب تصحيحًا يدويًا. قد لا تحظى الحزمة بطلب إذا كانت هناك أدوات مماثلة بالفعل، ولكن يمكن إضافة مقاييس فريدة.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "استخدام خوارزميات التتبع من الاستعراض 1003.2032 (المادة النشطة) والمكتبات الحديثة للرؤية الحاسوبية (OpenCV، YOLO).",
+      "تنفيذ حساب معاملات الترتيب ودوال الارتباط الموصوفة في 1004.1933 (ميكانيكا وإحصاء المادة النشطة).",
+      "اختبارها على مجموعات بيانات مفتوحة (مثل فيديوهات أسراب الزرزور أو الأسماك) ومقارنتها بالنتائج المنشورة.",
+      "إعدادها كحزمة مع توثيق وأمثلة."
+     ]
+    }
+   ]
+  },
+  "fr": {
+   "note": "Dans le domaine de la matière active et des systèmes vivants, les modèles théoriques d'auto-organisation et les plateformes expérimentales se développent activement, mais il subsiste un écart entre les prédictions et leur vérification sur des systèmes réels.",
+   "topic": "matière active et systèmes vivants",
+   "ideas": [
+    {
+     "based_on": [
+      "2608.03317v1",
+      "1003.2032"
+     ],
+     "title": "Assembler un microscope pour observer le mouvement collectif de bactéries et vérifier les prédictions des modèles de bancs",
+     "what": "Assembler un dispositif optique simple avec un microscope et une caméra pour observer des cultures bactériennes denses (par exemple, E. coli ou B. subtilis) dans une fine couche de liquide. Traiter les vidéos, extraire les trajectoires des bactéries et comparer les structures collectives observées (tourbillons, bandes) avec les prédictions du modèle hydrodynamique issu de l'article sur l'auto-organisation des particules actives.",
+     "why": "Cela permettra de vérifier expérimentalement dans quelle mesure les modèles universels de matière active s'appliquent à des systèmes biologiques réels. Les résultats pourraient être utiles aux microbiologistes et aux biophysiciens pour comprendre le comportement collectif des bactéries.",
+     "origin": "Dans l'article 2608.03317v1, des équations hydrodynamiques pour des particules actives avec reproduction et mort sont dérivées, mais leur comparaison avec des systèmes bactériens réels est limitée. La revue 1003.2032 décrit des approches expérimentales pour observer le mouvement collectif des bactéries, mais ne fournit pas de comparaison directe avec ce modèle spécifique. L'idée comble cette lacune : prendre les méthodes expérimentales de la revue et vérifier les prédictions du modèle sur des données réelles.",
+     "first_step": "Obtenir une culture bactérienne (par exemple, une souche d'E. coli à bonne mobilité), préparer une fine couche dans une chambre et filmer au microscope avec une caméra à différentes densités cellulaires.",
+     "needs": "Microscope avec grossissement 20–40x, caméra numérique, lames de verre, milieu de culture, thermostat pour maintenir la température, logiciel d'analyse vidéo.",
+     "risks": "Les bactéries peuvent se déplacer trop vite pour la caméra ou s'agglutiner, ce qui rendra difficile le suivi des cellules individuelles. Les suspensions denses peuvent être opaques, et une optimisation des conditions d'observation sera nécessaire.",
+     "scale": "semestre",
+     "methods": [
+      "Utiliser la méthode d'observation des suspensions bactériennes denses de l'article 1003.2032 (Active Matter) : fine couche entre lame et lamelle, contraste de phase ou fond noir.",
+      "Analyser les vidéos par suivi de particules (particle tracking) à l'aide de logiciels existants, par exemple TrackPy ou ImageJ.",
+      "Calculer les champs de vitesse et les paramètres d'ordre (par exemple, ordre polaire ou nématique) et les comparer aux solutions numériques des équations de 2608.03317v1 (comment les particules qui se reproduisent s'auto-organisent en bancs).",
+      "Évaluer dans quelle mesure les structures observées correspondent aux prédictions du modèle (par exemple, taille caractéristique des tourbillons, seuil de densité pour l'apparition de l'ordre)."
+     ]
+    },
+    {
+     "based_on": [
+      "2605.16753",
+      "1004.1933"
+     ],
+     "title": "Mesurer les fluctuations de forme des cellules et établir une carte de la frontière de la vie",
+     "what": "Utiliser la microscopie de cellules vivantes (par exemple, des fibroblastes ou des cellules épithéliales) pour enregistrer sur de longues périodes les changements de leur morphologie. À l'aide de méthodes d'apprentissage automatique ou d'analyse statistique, extraire des paramètres caractérisant l'état cellulaire, puis appliquer l'approche de l'article sur la frontière de la vie pour déterminer les zones de viabilité et les états prémortels.",
+     "why": "Cela pourrait fournir un outil quantitatif pour évaluer l'état des cellules en culture, utile en recherche biomédicale et en toxicologie. Cela permettrait de tester l'universalité du concept de frontière de la vie sur des données cellulaires réelles.",
+     "origin": "Dans 2605.16753, une méthode mathématique pour déterminer la frontière entre états viables et non viables est proposée, mais elle est principalement illustrée sur des systèmes modèles. L'article 1004.1933 (The Mechanics and Statistics of Active Matter) discute de la statistique des particules actives, mais ne l'applique pas à l'analyse de la viabilité cellulaire. L'idée combine les deux : prendre la méthode de la frontière de la vie et l'appliquer à des données expérimentales de morphologie cellulaire.",
+     "first_step": "Choisir une lignée cellulaire, configurer le microscope pour une prise de vue longue (par exemple, toutes les 5 minutes pendant 24 heures) et enregistrer des données de base sur la morphologie des cellules dans des conditions normales.",
+     "needs": "Microscope inversé avec chambre d'incubation (CO2, température), caméra, culture cellulaire, milieux, logiciel de traitement d'images.",
+     "risks": "Les cellules peuvent changer de morphologie pour des raisons non liées à la viabilité (par exemple, division, migration), ce qui compliquera l'interprétation. Un étiquetage minutieux des données sera nécessaire pour entraîner les modèles.",
+     "scale": "mémoire",
+     "methods": [
+      "Utiliser la méthode de 2605.16753 (Où passe la frontière de la vie) : décomposition de l'espace des états en régions de vie et de mort basée sur la dynamique des paramètres.",
+      "Obtenir des séries temporelles de traits morphologiques (aire, périmètre, élongation) à l'aide de logiciels de segmentation d'images (par exemple, CellProfiler).",
+      "Appliquer une analyse en composantes principales ou un plongement non linéaire pour réduire la dimensionnalité et visualiser les trajectoires des cellules dans l'espace des états.",
+      "Évaluer dans quelle mesure les états avant et après exposition à un agent stressant (par exemple, un agent cytotoxique) sont clairement séparés et si la mort cellulaire peut être prédite à l'avance."
+     ]
+    },
+    {
+     "based_on": [
+      "2411.19783",
+      "2608.03317v1"
+     ],
+     "title": "Créer une plateforme robotisée pour étudier le comportement collectif de particules actives artificielles",
+     "what": "Développer un système peu coûteux composé de nombreux petits robots (par exemple, à base de moteurs à vibration) qui se déplacent sur une surface et interagissent selon des règles simples. Utiliser cette plateforme pour tester expérimentalement des théories de la matière active, telles que l'émergence de l'ordre et les transitions de phase, et comparer avec les prédictions de la littérature.",
+     "why": "Cela permettra de mener des expériences contrôlées sur la matière active, en faisant varier les paramètres d'interaction et la densité, ce qui est difficile dans les systèmes biologiques. Cela pourrait être utilisé dans l'enseignement et comme système de test pour de nouveaux modèles théoriques.",
+     "origin": "Dans 2411.19783, les plateformes existantes de matière active synthétique sont énumérées, mais la plupart sont coûteuses ou difficiles à reproduire. L'article 2608.03317v1 propose un modèle théorique pour l'auto-organisation de particules actives, mais sa vérification expérimentale sur des robots n'a pas été réalisée. L'idée comble cette lacune : créer un système robotique accessible pour tester la théorie.",
+     "first_step": "Assembler un prototype d'un robot : plateforme avec deux moteurs à vibration, microcontrôleur, capteur de collision, et vérifier son déplacement sur une surface plane.",
+     "needs": "Compétences en électronique et en programmation de microcontrôleurs (Arduino, Raspberry Pi Pico), imprimante 3D pour les boîtiers, caméra, ordinateur pour le traitement vidéo, connaissances de base en physique de la matière active.",
+     "risks": "Difficulté à synchroniser de nombreux robots et à assurer une communication fiable ; les robots vibrants peuvent être difficiles à contrôler. De nombreuses itérations seront nécessaires pour obtenir un comportement collectif reproductible.",
+     "scale": "années",
+     "methods": [
+      "S'inspirer de la conception de la revue 2411.19783 (The 2024 Motile Active Matter Roadmap), qui décrit différents types de particules actives synthétiques, y compris les vibrobots.",
+      "Assembler une arène avec une caméra au-dessus, des robots à propulsion différentielle et des capteurs de collision ou de proximité.",
+      "Implémenter des algorithmes d'interaction locale (par exemple, alignement des vitesses comme dans le modèle de Vicsek) sur les microcontrôleurs embarqués.",
+      "Mener des séries d'expériences avec différentes densités et rayons d'interaction, mesurer les paramètres d'ordre et comparer avec des simulations numériques basées sur les équations de 2608.03317v1."
+     ]
+    },
+    {
+     "based_on": [
+      "2604.22600",
+      "1705.06269"
+     ],
+     "title": "Étudier numériquement l'influence des fluctuations quantiques sur les transitions de phase dans la matière active",
+     "what": "Écrire un programme pour simuler des particules actives avec l'ajout de corrections quantiques, en suivant l'approche de l'article sur les ondulations quantiques dans la matière active. Étudier comment les effets quantiques modifient les exposants critiques et la nature de l'ordre dans le système.",
+     "why": "Cela pourrait clarifier si les effets quantiques sont importants dans les systèmes biologiques à l'échelle nanométrique (par exemple, dans les moteurs moléculaires) et fournir de nouvelles prédictions pour les expériences.",
+     "origin": "Dans 2604.22600, des formules pour les corrections quantiques au déplacement des particules actives sont dérivées, mais aucune étude systématique de leur influence sur les phénomènes collectifs n'a été menée. L'article 1705.06269 (Active matter) donne un aperçu des modèles classiques de matière active, mais n'aborde pas les aspects quantiques. L'idée combine ces directions, en vérifiant si les fluctuations quantiques modifient le comportement de phase.",
+     "first_step": "Écrire un code pour simuler une chaîne unidimensionnelle de particules actives avec bruit quantique et reproduire les résultats de 2604.22600 pour une particule unique.",
+     "needs": "Compétences en programmation (Python, C++), connaissance des méthodes numériques pour les équations différentielles stochastiques, ressources de calcul (un PC ordinaire pour commencer).",
+     "risks": "Les corrections quantiques pourraient s'avérer négligeables dans les régimes intéressants, et le résultat serait négatif. Difficulté à formuler correctement le bruit quantique dans un système à plusieurs particules.",
+     "scale": "mémoire",
+     "methods": [
+      "Utiliser les équations de 2604.22600 (Ondulations quantiques dans la matière active) pour décrire le déplacement des particules avec corrections quantiques.",
+      "Implémenter une résolution numérique des équations différentielles stochastiques avec bruit quantique (par exemple, par méthode de Monte-Carlo).",
+      "Calculer les fonctions de corrélation et les paramètres d'ordre pour différentes valeurs de l'intensité des fluctuations quantiques.",
+      "Comparer avec le cas classique et déterminer dans quelles conditions les effets quantiques deviennent significatifs."
+     ]
+    },
+    {
+     "based_on": [
+      "1003.2032",
+      "1004.1933"
+     ],
+     "title": "Développer un logiciel d'analyse de données vidéo sur le mouvement collectif des animaux",
+     "what": "Créer un outil open source en Python pour extraire automatiquement les trajectoires et calculer les paramètres du mouvement collectif (polarisation, corrélations, tourbillons) à partir d'enregistrements vidéo de volées d'oiseaux, de bancs de poissons ou de groupes d'insectes. L'appliquer à des ensembles de données publics et comparer avec les prédictions théoriques.",
+     "why": "Cela facilitera le travail des chercheurs étudiant le comportement collectif et permettra de standardiser l'analyse. Cela pourrait être utilisé en écologie et en biologie du comportement.",
+     "origin": "Il existe des outils dispersés pour l'analyse du mouvement collectif, mais aucun package unifié ne combine le suivi et le calcul des caractéristiques statistiques de la matière active. Les revues 1003.2032 et 1004.1933 décrivent des méthodes, mais ne fournissent pas de code prêt à l'emploi. L'idée comble cette lacune, rendant l'analyse accessible aux non-spécialistes.",
+     "first_step": "Rassembler plusieurs vidéos de mouvement collectif (par exemple, à partir de sources ouvertes) et tester un algorithme de suivi de base sur une vidéo.",
+     "needs": "Compétences en programmation Python, connaissance de la vision par ordinateur, accès à des données vidéo (des ensembles ouverts peuvent être téléchargés), temps pour le développement et les tests.",
+     "risks": "Le suivi dans des groupes denses peut être imprécis, nécessitant une correction manuelle. Le package pourrait ne pas être utilisé si des outils similaires existent déjà, mais des métriques uniques peuvent être ajoutées.",
+     "scale": "semestre",
+     "methods": [
+      "Utiliser les algorithmes de suivi de la revue 1003.2032 (Active Matter) et des bibliothèques modernes de vision par ordinateur (OpenCV, YOLO).",
+      "Implémenter le calcul des paramètres d'ordre et des fonctions de corrélation décrits dans 1004.1933 (The Mechanics and Statistics of Active Matter).",
+      "Tester sur des ensembles de données ouverts (par exemple, des vidéos de volées d'étourneaux ou de poissons) et comparer avec les résultats publiés.",
+      "Packager le logiciel avec documentation et exemples."
+     ]
+    }
+   ]
+  }
+ }
 }

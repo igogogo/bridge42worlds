@@ -6,7 +6,7 @@
 <title>Конвейер — bridge42worlds</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css?v=83bd3ddb77">
+<link rel="stylesheet" href="/css/style.css?v=321f73c4a2">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <style>
 /* СТАТУС ЧИТАЕТСЯ БЕЗ ЦВЕТА. Владелец 28.08: «я дальтоник, для меня лучше
@@ -22,7 +22,7 @@ body { max-width: 1100px; padding-bottom: 70px; }
 .pp-bar { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center;
     margin: 16px 0 6px; font-family: var(--mono); font-size: 12px; }
 .pp-bar select { font-family: var(--mono); font-size: 12px; padding: 4px 8px;
-    border: 1px solid var(--hairline); border-radius: 6px; background: var(--bg);
+    border: 1px solid var(--hair); border-radius: 6px; background: var(--bg);
     color: var(--fg); }
 .pp-now { color: var(--muted); }
 .pp-now b { color: var(--fg); font-weight: 600; }
@@ -34,15 +34,15 @@ body { max-width: 1100px; padding-bottom: 70px; }
 
 .pp-flow { margin: 14px 0 0; }
 .pp-phase { display: grid; grid-template-columns: 175px 1fr; gap: 12px;
-    padding: 10px 0; border-top: 1px solid var(--hairline); align-items: start; }
-.pp-phase:last-child { border-bottom: 1px solid var(--hairline); }
+    padding: 10px 0; border-top: 1px solid var(--hair); align-items: start; }
+.pp-phase:last-child { border-bottom: 1px solid var(--hair); }
 .pp-pname { font-family: var(--serif); font-size: 14.5px; line-height: 1.3; }
 .pp-pdesc { color: var(--soft); font-size: 11.5px; line-height: 1.4; margin-top: 2px; }
 .pp-steps { display: flex; flex-wrap: wrap; gap: 7px; }
 
 /* Квадратик шага: имя, знак статуса, под ними — время и итог. */
 .pp-step { position: relative; min-width: 132px; max-width: 208px; flex: 0 1 auto;
-    border: 1.5px solid var(--hairline); border-radius: 5px; padding: 6px 9px 6px 24px;
+    border: 1.5px solid var(--hair); border-radius: 5px; padding: 6px 9px 6px 24px;
     background: var(--bg); font-size: 11.5px; line-height: 1.35; }
 .pp-mark { position: absolute; left: 6px; top: 6px; width: 13px; height: 13px;
     display: grid; place-items: center; font-size: 10px; font-weight: 700;
@@ -52,7 +52,27 @@ body { max-width: 1100px; padding-bottom: 70px; }
     color: var(--muted); margin-top: 2px; }
 .pp-out { display: block; font-size: 10.5px; color: var(--soft); margin-top: 3px;
     line-height: 1.35; }
+/* Числа шага — то, ради чего он запускался. Моноширинные, чтобы столбик цифр
+   читался сверху вниз, а не терялся в тексте итога. */
+.pp-nums { display: block; margin-top: 3px; font-family: var(--mono);
+    font-size: 10px; line-height: 1.45; }
+.pp-nums b { font-weight: 700; }
+.pp-nums span { color: var(--muted); }
 
+/* Свод прогона: то же, но крупно и наверху — «что этот прогон сделал». */
+.pp-totals { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 0; }
+.pp-tot { border: 1.5px solid var(--hair); border-radius: 5px;
+    padding: 6px 10px; background: var(--bg); }
+.pp-tot b { display: block; font-family: var(--mono); font-size: 16px;
+    line-height: 1.2; }
+.pp-tot span { display: block; font-size: 10.5px; color: var(--soft);
+    margin-top: 1px; }
+.pp-kind { font-family: var(--mono); font-size: 10.5px; border-radius: 3px;
+    padding: 1px 6px; border: 1px solid var(--hair); margin-right: 6px; }
+
+.pp-step[data-s="empty"] { border-style: solid; border-color: var(--hair); }
+.pp-step[data-s="empty"] .pp-mark { border: 1.5px solid var(--muted);
+    color: var(--muted); }
 .pp-step[data-s="done"] { border-style: solid; border-color: var(--ok); }
 .pp-step[data-s="done"] .pp-mark { border: 1.5px solid var(--ok); color: var(--ok); }
 .pp-step[data-s="fail"] { border-style: solid; border-color: var(--fail);
@@ -73,8 +93,33 @@ body { max-width: 1100px; padding-bottom: 70px; }
 .pp-fails h3 { margin: 0 0 6px; font-size: 13px; }
 .pp-fails li { margin: 4px 0; }
 .pp-fails code { font-size: 11px; color: var(--muted); }
+
+/* РАССЫЛКА АВТОРАМ. Числа — здесь и для всех; имена — во всплывающем окне и только
+   на рабочей машине: страница публичная, она есть в карте сайта, и кому мы написали
+   — не её дело. Подробности лежат в .jsonl, а .jsonl заливка в R2 не публикует. */
+.pp-out { margin: 28px 0 0; padding-top: 18px; border-top: 1px solid var(--hair); }
+.pp-out h2 { font-size: 16px; margin: 0 0 4px; }
+.pp-out .pp-sub2 { color: var(--soft); font-size: 12.5px; max-width: 74ch;
+    line-height: 1.55; margin: 0 0 12px; }
+.pp-out-btn { margin-top: 12px; font: inherit; font-size: 12px; padding: 6px 12px;
+    border: 1.5px solid var(--hair); border-radius: 6px; background: var(--bg);
+    color: var(--fg); cursor: pointer; font-family: var(--mono); }
+.pp-out-btn:hover { border-color: var(--run); }
+.pp-modal { position: fixed; inset: 0; background: rgba(15,22,38,.45); z-index: 60;
+    display: flex; align-items: center; justify-content: center; padding: 20px; }
+.pp-modal-in { background: var(--bg); border: 1px solid var(--hair); border-radius: 10px;
+    max-width: 780px; width: 100%; max-height: 82vh; overflow: auto; padding: 20px 22px; }
+.pp-modal h3 { margin: 0 0 12px; font-size: 15px; }
+.pp-modal table { width: 100%; border-collapse: collapse; font-size: 12px;
+    font-family: var(--mono); }
+.pp-modal th { text-align: left; font-weight: 600; color: var(--soft);
+    border-bottom: 1px solid var(--hair); padding: 4px 8px 7px; }
+.pp-modal td { padding: 6px 8px; border-bottom: 1px solid var(--hair); }
+.pp-modal .pp-x { float: right; cursor: pointer; color: var(--soft); border: 0;
+    background: none; font-size: 20px; line-height: 1; padding: 0 4px; }
+.pp-note { color: var(--soft); font-size: 12px; line-height: 1.55; margin: 10px 0 0; }
 .pp-hint { margin: 16px 0 0; font-size: 12px; color: var(--soft); line-height: 1.5; }
-.pp-empty { margin: 22px 0; padding: 14px; border: 1px dashed var(--hairline);
+.pp-empty { margin: 22px 0; padding: 14px; border: 1px dashed var(--hair);
     border-radius: 8px; color: var(--soft); font-size: 13px; }
 @media (max-width: 720px) {
   .pp-phase { grid-template-columns: 1fr; gap: 4px; }
@@ -99,6 +144,7 @@ body { max-width: 1100px; padding-bottom: 70px; }
     <span><i style="border:1.5px solid var(--ok);color:var(--ok)">&#10003;</i>прошло</span>
     <span><i style="border:1.5px dashed var(--run);color:var(--run)">&#9654;</i>идёт</span>
     <span><i style="border:1.5px solid var(--fail);color:var(--fail)">!</i>сбой</span>
+    <span><i style="border:1.5px solid var(--muted);color:var(--muted)">&#9675;</i>пусто</span>
     <span><i style="border:1.5px dotted var(--wait);color:var(--wait)">&middot;</i>впереди</span>
   </span>
 </div>
@@ -109,8 +155,21 @@ body { max-width: 1100px; padding-bottom: 70px; }
   и ничего не выдумывает, пока файла нет.
 </div>
 
+<div class="pp-totals" id="pp-totals"></div>
 <div class="pp-flow" id="pp-flow"></div>
 <div class="pp-fails" id="pp-fails" style="display:none"></div>
+
+
+<div class="pp-out" id="pp-out" style="display:none">
+  <h2>Рассылка авторам</h2>
+  <div class="pp-sub2">Письмо уходит только автору работы, которую разобрала машина
+  знаний, и не раньше чем через неделю после разбора. Очередь идёт от самых старых
+  работ. Здесь только числа: кому именно написано — в закрытом окне, оно открывается
+  на рабочей машине.</div>
+  <div class="pp-totals" id="pp-out-nums"></div>
+  <button class="pp-out-btn" id="pp-out-btn" type="button">Кому отправлено &rarr;</button>
+  <div class="pp-note" id="pp-out-seen"></div>
+</div>
 
 <div class="pp-hint">Статус читается знаком и рамкой, не цветом: галочка и
 сплошная — прошло, стрелка и пунктир — идёт, восклицание и штриховка — сбой,
@@ -120,12 +179,21 @@ body { max-width: 1100px; padding-bottom: 70px; }
 
 <script>
 (function () {
-  var PHASES = [["Забор и разбор", "день с arXiv: отбор, тексты, обложки, переводы", ["day"]], ["Насыщение", "новые понятия из текстов, формулы, рождения, чистка", ["harvest", "anatomy", "flink", "match", "distill", "births", "g-grow", "f-support", "twins", "consts", "units-fix"]], ["Записи", "карточки, переводы, имена, переразметка", ["live-1", "cards", "tr-cards", "tr-formulas", "names-ru", "retag", "apply"]], ["Связность", "суперпонятия, соседи, области, связи знанием, граф", ["super", "live-2", "vecnb", "live-3", "gnames", "weave", "live-4", "graph", "mentions-ru", "highlight"]], ["Сборка", "страницы понятий и формул, весь сайт, авторы, дашборд", ["pages-c", "pages-f", "html", "authors", "status"]], ["Облако", "D1, векторы, карточки статей, выкладка воркера", ["cloud-d1", "cloud-vec", "cards-sync", "deploy"]], ["Проверка", "эндпоинты, страницы, аудиты, связность ссылок", ["api", "pages", "audit", "gaudit", "links"]]], EXPLAIN = {"harvest": "harvest", "match": "sift", "distill": "sift", "births": "birth", "consts": "consts", "g-grow": "stats", "f-support": "stats", "anatomy": "anatomy", "flink": "anatomy", "super": "super2", "live-2": "super2", "cards": "cards", "tr-cards": "cards", "retag": "retag", "apply": "reapply", "live-3": "reapply", "mentions-ru": "anchors", "highlight": "hl-model", "weave": "hl-vec", "gnames": "hl-dict", "pages-c": "pages", "pages-f": "pages", "html": "pages", "graph": "data", "status": "dash", "authors": "dash", "cloud-d1": "d1", "cloud-vec": "vz", "deploy": "r2", "api": "watch", "pages": "watch", "links": "watch"}, SHORT = {"harvest": "Добыча понятий", "anatomy": "Анатомия формул", "flink": "Привязка формул", "match": "Сверка кандидатов", "distill": "Дистилляция", "births": "Рождение понятий", "g-grow": "Дорост областей", "f-support": "Опора формул", "twins": "Двойники", "consts": "Константы из формул", "units-fix": "Единицы", "live-1": "В реестр ①", "live-2": "В реестр ②", "live-3": "В реестр ③", "live-4": "В реестр ④", "cards": "Полные карточки", "tr-cards": "Перевод карточек", "tr-formulas": "Перевод формул", "names-ru": "Имена по-русски", "retag": "Переразметка статей", "apply": "Применение разметки", "super": "Суперпонятия", "vecnb": "Соседи вектором", "gnames": "Имена областей", "weave": "Связи знанием", "graph": "Экспорт графа", "mentions-ru": "Упоминания", "highlight": "Подсветка терминов", "pages-c": "Страницы понятий", "pages-f": "Страницы формул", "html": "Сборка сайта", "authors": "Страницы авторов", "status": "Дашборд", "cloud-d1": "Заливка D1", "cloud-vec": "Векторы в облако", "cards-sync": "Карточки статей в D1", "deploy": "Выкладка воркера", "api": "Проверка API", "pages": "Проверка страниц", "audit": "Аудит понятий", "gaudit": "Аудит областей", "links": "Проверка ссылок"}, NODES = {"arxiv-list": {"t": "arXiv: свежий список", "d": "новые работы по нашим разделам (физика, астро, квант, приборы, био)", "n": "arxiv_bulk · API arXiv"}, "select": {"t": "Отбор дня", "d": "~20–40 работ: баланс разделов, лицензии, вес (цитируемость — фактор отбора)", "n": "article_bulk_select · очередь bulk-select"}, "pdf": {"t": "PDF и кадры", "d": "текст статьи, картинки из PDF в мозаику", "n": "pdf → jpg/webp"}, "express": {"t": "Экспресс (~90% потока)", "d": "быстрый пересказ по авторской аннотации: заголовок, суть, «зачем читать». Дёшево, в тот же день", "n": "помечен бейджем «экспресс» на карточке"}, "tr-langs": {"t": "ru → en · es · ar · fr", "d": "все уровни и служебные поля; термины по физическому словоупотреблению языка", "n": "шесть слоёв утечки языка под проверкой"}, "tr-guard": {"t": "Страж языка", "d": "непереведённое не маскируется: честная заглушка с кнопкой «перевести сейчас»", "n": "payload_in_source_lang · заглушки"}, "cover-pdf": {"t": "Кадр из PDF", "d": "лучший рисунок статьи, если он есть — «золото», настоящая наука", "n": ""}, "cover-ai": {"t": "AI-обложка", "d": "когда кадра нет: schnell в поток, pro — витринным статьям", "n": "covers_full · поле image_model"}, "embed": {"t": "Эмбеддинг статьи", "d": "в облако (Vectorize — поиск и похожие) и в локальное поле 3 млн работ (валидации)", "n": ""}, "retag": {"t": "Разметка понятиями", "d": "сходство с карточками реестра, поправка на хабность, порог 0.50 + отрыв 0.12", "n": "retag_hub → concepts_v2"}, "sci-link": {"t": "Учёные и похожие", "d": "привязка к учёным, соседние разборы для «похожих» и машины знаний", "n": ""}, "s2": {"t": "Semantic Scholar", "d": "цитируемость, граф ссылок, метрики авторов — по новым статьям", "n": "1 запрос/сек · атрибуция обязательна"}, "harvest": {"t": "Добыча понятий", "d": "модель читает статью с определением понятия в промпте, отдаёт кандидатов + дословные якоря", "n": "concept_cycle · mentions в журнал"}, "sift": {"t": "Сверка и дистилляция", "d": "вектором против реестра (0.80) и между собой (0.86); проигравший — алиас", "n": ""}, "birth": {"t": "Рождение", "d": "тройное сито: опора ≥5 статей + вектор + Scholar-проверка; вектор — в матрицу и облако", "n": ""}, "consts": {"t": "Константы из формул", "d": "элементарный заряд стоит в 11 наших формулах и не назван дословно ни в одной статье — сито упоминаний его не пропустит. Опора здесь — разбор формулы: имя с числовым значением. «varies», «slope», «coefficient» — отказ, это ручки моделей", "n": "constants_from_formulas · ядро СИ поверх"}, "stats": {"t": "Раздел статистики", "d": "статистику в статьях не называют, её делают: «подогнали спектр» вместо метода наименьших квадратов. Из 275 кандидатов опору в 5 статей имеют семь — значит источник канон предмета, а не тексты", "n": "statistics_core · 81 понятие, 9 частей"}, "super2": {"t": "Место в графе", "d": "рождённым не из статей нужны группа и соседи, иначе они видны на своей странице и невидимы в графе. Считает супер по карточкам — значит после карточек и вектора", "n": "concepts_super · сирота по статьям можно, по связям нельзя"}, "anatomy": {"t": "Формулы", "d": "анатомия новых форм: переменные · константы · операторы · применимость; системы единиц (СИ/СГС/планковская)", "n": ""}, "cards": {"t": "Карточки", "d": "полные записи новорождённым + русские переводы карточек и анатомий", "n": ""}, "reapply": {"t": "Переразметка", "d": "статьи переразмечаются на выросшем реестре, справочник пересобирается из хранилищ", "n": "retag → wave5_apply → live"}, "anchors": {"t": "Якоря текстов", "d": "дословные вхождения понятий в русском и английском тексте — падежи, парафразы, аббревиатуры", "n": "mentions_ru · журнал якорей"}, "hl-model": {"t": "Слой 1 — модельные", "d": "дословные выражения из добычи: точное вхождение в текст", "n": ""}, "hl-vec": {"t": "Слой 2 — векторные", "d": "смысловое совпадение фразы с карточкой понятия", "n": ""}, "hl-dict": {"t": "Слой 3 — словарные", "d": "имена понятий и алиасы по словарю, до 20 ссылок на текст", "n": "highlight_concepts · 8–15 ссылок на сложную статью"}, "pages": {"t": "Перегенерация", "d": "новые статьи + затронутые понятия, формулы, авторы; единая карточка, мини-графы", "n": ""}, "data": {"t": "Данные", "d": "индексы (+цитируемость), словари клиенту, данные графа, датасет файн-тюнинга", "n": ""}, "dash": {"t": "Дашборд", "d": "покрытие машины знаний, реестр, целостность — цифры дня", "n": "status.html · отчёт 04:00"}, "r2": {"t": "R2 — статика", "d": "только изменённые файлы; страницы, обложки, данные", "n": ""}, "d1": {"t": "D1 + Worker — динамика", "d": "лента, автор, поиск, СПИСКИ ПОНЯТИЙ, кадры графа, анатомия формул — живое без пересборки", "n": "b42-cards · 27 эндпоинтов · 16 проверок из 16"}, "vz": {"t": "Vectorize", "d": "векторы статей и понятий — смысловой поиск находит и то и другое", "n": "27.08: 3231 карточка понятий залита"}, "watch": {"t": "Дозор", "d": "сторож пиков и почты, ежедневный отчёт; сбой шага — разбор и починка агентом", "n": "b42_report 04:00 · tg-тревоги"}};
+  var PHASES = [["Забор и разбор", "день с arXiv: отбор, тексты, обложки, переводы", ["day"]], ["Насыщение", "новые понятия из текстов, формулы, рождения, чистка", ["harvest", "anatomy", "flink", "match", "distill", "births", "g-grow", "f-support", "twins", "consts", "units-fix"]], ["Записи", "карточки, переводы, имена; разметка статей дня и доразметка архива", ["live-1", "cards", "tr-cards", "tr-formulas", "names-ru", "field", "retag-day", "hl-day", "retag", "apply"]], ["Связность", "суперпонятия, соседи, области, связи знанием, граф", ["super", "live-2", "vecnb", "live-3", "gnames", "gnames-tr", "weave", "live-4", "graph", "mentions-ru", "highlight"]], ["Пласты и идеи", "спрос машины знаний → работы из прошлого; идеи проектов", ["strata", "strata-gen", "ideas", "ideas-tr", "ideas-page"]], ["Сборка", "страницы понятий и формул, весь сайт, авторы, дашборд", ["pages-c", "pages-f", "related", "cited", "carousel", "fx", "html", "html-force", "authors", "status"]], ["Облако", "D1, векторы, карточки статей, выкладка воркера", ["cloud-d1", "cloud-vec", "cards-sync", "side-sync", "deploy"]], ["Проверка", "эндпоинты, страницы, аудиты, связность ссылок", ["api", "pages", "audit", "gaudit", "links"]]], EXPLAIN = {"harvest": "harvest", "match": "sift", "distill": "sift", "births": "birth", "consts": "consts", "g-grow": "stats", "f-support": "stats", "anatomy": "anatomy", "flink": "anatomy", "super": "super2", "live-2": "super2", "cards": "cards", "tr-cards": "cards", "retag": "retag", "apply": "reapply", "live-3": "reapply", "mentions-ru": "anchors", "highlight": "hl-model", "weave": "hl-vec", "gnames": "hl-dict", "pages-c": "pages", "pages-f": "pages", "html": "pages", "lang-pages": "pages", "graph": "data", "status": "dash", "authors": "dash", "cloud-d1": "d1", "cloud-vec": "vz", "deploy": "r2", "api": "watch", "pages": "watch", "links": "watch"}, SHORT = {"harvest": "Добыча понятий", "anatomy": "Анатомия формул", "flink": "Привязка формул", "match": "Сверка кандидатов", "distill": "Дистилляция", "births": "Рождение понятий", "g-grow": "Дорост областей", "f-support": "Опора формул", "twins": "Двойники", "consts": "Константы из формул", "units-fix": "Единицы", "live-1": "В реестр ①", "live-2": "В реестр ②", "live-3": "В реестр ③", "live-4": "В реестр ④", "cards": "Полные карточки", "tr-cards": "Перевод карточек", "tr-formulas": "Перевод формул", "names-ru": "Имена по-русски", "field": "Вектор свежим статьям", "retag-day": "Разметка статей дня", "hl-day": "Подсветка статей дня", "retag": "Доразметка статей", "apply": "Применение разметки", "super": "Суперпонятия", "vecnb": "Соседи вектором", "gnames": "Имена областей", "gnames-tr": "Перевод областей", "weave": "Связи знанием", "graph": "Экспорт графа", "mentions-ru": "Упоминания", "highlight": "Подсветка терминов", "pages-c": "Страницы понятий", "pages-f": "Страницы формул", "html": "Сборка сайта", "html-force": "Полная пересборка", "lang-pages": "Верхние страницы по языкам", "strata": "Пласты: поиск в прошлом", "strata-gen": "Разборы из прошлого", "uplift": "Дотяжка «Популярно»", "upgrade": "Доращивание по заявкам", "recommend": "Рекомендации автору", "rec-links": "Связи рекомендаций", "idea-topics": "Темы для идей", "ideas": "Идеи проектов", "ideas-tr": "Перевод идей", "ideas-page": "Страница идей", "authors": "Страницы авторов", "status": "Дашборд", "cloud-d1": "Заливка D1", "cloud-vec": "Векторы в облако", "cards-sync": "Карточки статей в D1", "side-sync": "Обвязка статей в D1", "related": "Похожие по смыслу", "cited": "Цитатные связи", "carousel": "Кадры карусели", "fx": "Формулы в тексте", "deploy": "Выкладка воркера", "api": "Проверка API", "pages": "Проверка страниц", "audit": "Аудит понятий", "gaudit": "Аудит областей", "links": "Проверка ссылок"}, NODES = {"arxiv-list": {"t": "arXiv: свежий список", "d": "новые работы по нашим разделам (физика, астро, квант, приборы, био)", "n": "arxiv_bulk · API arXiv"}, "select": {"t": "Отбор дня", "d": "~20–40 работ: баланс разделов, лицензии, вес (цитируемость — фактор отбора)", "n": "article_bulk_select · очередь bulk-select"}, "pdf": {"t": "PDF и кадры", "d": "текст статьи, картинки из PDF в мозаику", "n": "pdf → jpg/webp"}, "express": {"t": "Экспресс (~90% потока)", "d": "быстрый пересказ по авторской аннотации: заголовок, суть, «зачем читать». Дёшево, в тот же день", "n": "помечен бейджем «экспресс» на карточке"}, "tr-langs": {"t": "ru → en · es · ar · fr", "d": "все уровни и служебные поля; термины по физическому словоупотреблению языка", "n": "шесть слоёв утечки языка под проверкой"}, "tr-guard": {"t": "Страж языка", "d": "непереведённое не маскируется: честная заглушка с кнопкой «перевести сейчас»", "n": "payload_in_source_lang · заглушки"}, "cover-pdf": {"t": "Кадр из PDF", "d": "лучший рисунок статьи, если он есть — «золото», настоящая наука", "n": ""}, "cover-ai": {"t": "AI-обложка", "d": "когда кадра нет: schnell в поток, pro — витринным статьям", "n": "covers_full · поле image_model"}, "embed": {"t": "Эмбеддинг статьи", "d": "в облако (Vectorize — поиск и похожие) и в локальное поле 3 млн работ (валидации)", "n": ""}, "retag": {"t": "Разметка понятиями", "d": "сходство с карточками реестра, поправка на хабность, порог 0.50 + отрыв 0.12", "n": "retag_hub → concepts_v2"}, "sci-link": {"t": "Учёные и похожие", "d": "привязка к учёным, соседние разборы для «похожих» и машины знаний", "n": ""}, "s2": {"t": "Semantic Scholar", "d": "цитируемость, граф ссылок, метрики авторов — по новым статьям", "n": "1 запрос/сек · атрибуция обязательна"}, "harvest": {"t": "Добыча понятий", "d": "модель читает статью с определением понятия в промпте, отдаёт кандидатов + дословные якоря", "n": "concept_cycle · mentions в журнал"}, "sift": {"t": "Сверка и дистилляция", "d": "вектором против реестра (0.80) и между собой (0.86); проигравший — алиас", "n": ""}, "birth": {"t": "Рождение", "d": "тройное сито: опора ≥5 статей + вектор + Scholar-проверка; вектор — в матрицу и облако", "n": ""}, "consts": {"t": "Константы из формул", "d": "элементарный заряд стоит в 11 наших формулах и не назван дословно ни в одной статье — сито упоминаний его не пропустит. Опора здесь — разбор формулы: имя с числовым значением. «varies», «slope», «coefficient» — отказ, это ручки моделей", "n": "constants_from_formulas · ядро СИ поверх"}, "stats": {"t": "Раздел статистики", "d": "статистику в статьях не называют, её делают: «подогнали спектр» вместо метода наименьших квадратов. Из 275 кандидатов опору в 5 статей имеют семь — значит источник канон предмета, а не тексты", "n": "statistics_core · 81 понятие, 9 частей"}, "super2": {"t": "Место в графе", "d": "рождённым не из статей нужны группа и соседи, иначе они видны на своей странице и невидимы в графе. Считает супер по карточкам — значит после карточек и вектора", "n": "concepts_super · сирота по статьям можно, по связям нельзя"}, "anatomy": {"t": "Формулы", "d": "анатомия новых форм: переменные · константы · операторы · применимость; системы единиц (СИ/СГС/планковская)", "n": ""}, "cards": {"t": "Карточки", "d": "полные записи новорождённым + русские переводы карточек и анатомий", "n": ""}, "reapply": {"t": "Переразметка", "d": "статьи переразмечаются на выросшем реестре, справочник пересобирается из хранилищ", "n": "retag → wave5_apply → live"}, "anchors": {"t": "Якоря текстов", "d": "дословные вхождения понятий в русском и английском тексте — падежи, парафразы, аббревиатуры", "n": "mentions_ru · журнал якорей"}, "hl-model": {"t": "Слой 1 — модельные", "d": "дословные выражения из добычи: точное вхождение в текст", "n": ""}, "hl-vec": {"t": "Слой 2 — векторные", "d": "смысловое совпадение фразы с карточкой понятия", "n": ""}, "hl-dict": {"t": "Слой 3 — словарные", "d": "имена понятий и алиасы по словарю, до 20 ссылок на текст", "n": "highlight_concepts · 8–15 ссылок на сложную статью"}, "pages": {"t": "Перегенерация", "d": "новые статьи + затронутые понятия, формулы, авторы; единая карточка, мини-графы", "n": ""}, "data": {"t": "Данные", "d": "индексы (+цитируемость), словари клиенту, данные графа, датасет файн-тюнинга", "n": ""}, "dash": {"t": "Дашборд", "d": "покрытие машины знаний, реестр, целостность — цифры дня", "n": "status.html · отчёт 04:00"}, "r2": {"t": "R2 — статика", "d": "только изменённые файлы; страницы, обложки, данные", "n": ""}, "d1": {"t": "D1 + Worker — динамика", "d": "лента, автор, поиск, СПИСКИ ПОНЯТИЙ, кадры графа, анатомия формул — живое без пересборки", "n": "b42-cards · 27 эндпоинтов · 16 проверок из 16"}, "vz": {"t": "Vectorize", "d": "векторы статей и понятий — смысловой поиск находит и то и другое", "n": "27.08: 3231 карточка понятий залита"}, "watch": {"t": "Дозор", "d": "сторож пиков и почты, ежедневный отчёт; сбой шага — разбор и починка агентом", "n": "b42_report 04:00 · tg-тревоги"}};
   /* Знак статуса — не цвет, а символ: его видно в любом зрении и в чёрно-белой
      распечатке. */
-  var MARK = {done: "✓", fail: "!", run: "▶", wait: "·"};
-  var WORD = {done: "прошло", fail: "сбой", run: "идёт", wait: "впереди"};
+  var MARK = {done: "✓", fail: "!", run: "▶", wait: "·", empty: "○"};
+  var WORD = {done: "прошло", fail: "сбой", run: "идёт", wait: "впереди",
+              empty: "пусто"};
   var runs = [];
+  /* Прогонов два и они разные: ежедневный ведёт новые статьи от arXiv до
+     выкладки, недельный доразмечает весь архив на выросшем реестре. Старые
+     записи журнала рода не знают — им отвечаем по признаку: есть дни, значит
+     ежедневный. */
+  function KIND_NAME(run) {
+    var k = run.kind || ((run.days && run.days.length) ? "daily" : "weekly");
+    return k === "weekly" ? "недельный" : "ежедневный";
+  }
 
   function label(step) {
     if (step.indexOf("day-") === 0) return step.slice(4);
@@ -146,7 +214,13 @@ body { max-width: 1100px; padding-bottom: 70px; }
     if (s === undefined || s === null) return "";
     return s < 60 ? s + " с" : Math.floor(s / 60) + " м " + (s % 60) + " с";
   }
+  /* ПУСТО — НЕ СБОЙ. День, за который arXiv ничего не объявил (выходной, лаг
+     объявления пятничных работ), проходит правильно и не приносит ничего. Красная
+     лампочка тут врёт дважды: пугает и делает «прогон без ошибок» недостижимым по
+     календарю. Отдельный знак — кружок. */
   function stateOf(run, step) {
+    var info = (run.steps || {})[step] || {};
+    if (info.empty) return "empty";
     if ((run.failed || []).indexOf(step) >= 0) return "fail";
     if (run.current === step) return "run";
     if ((run.done || []).indexOf(step) >= 0) return "done";
@@ -167,10 +241,18 @@ body { max-width: 1100px; padding-bottom: 70px; }
     if (!meta.length) meta.push(WORD[s]);
     /* Итог шага — то, чем он сам отчитался: числа, ради которых он и запускался. */
     var out = (info.out || []).slice(-2).join(" · ");
+    /* ЧИСЛА ШАГА отдельной строкой, а не внутри итога. Итог — это фраза, которой
+       шаг о себе отчитался; число — то, что сравнивают между прогонами. Шаг,
+       своего числа не печатающий, не показывает ничего: выдумывать нечем. */
+    var nums = (info.nums || []).map(function (kv) {
+      return '<b>' + String(kv[1]).replace(/[<>&]/g, "") + '</b> <span>' +
+        String(kv[0]).replace(/[<>&]/g, "") + '</span>';
+    }).join('<br>');
     el.innerHTML =
       '<i class="pp-mark">' + MARK[s] + '</i>' +
       '<b class="pp-name">' + label(step) + '</b>' +
       '<span class="pp-meta">' + meta.join(" · ") + '</span>' +
+      (nums ? '<span class="pp-nums">' + nums + '</span>' : "") +
       (out ? '<span class="pp-out">' + out.replace(/[<>&]/g, "") + '</span>' : "");
     return el;
   }
@@ -231,12 +313,36 @@ body { max-width: 1100px; padding-bottom: 70px; }
       box.appendChild(ul);
     }
 
+    /* СВОД ПРОГОНА. Владелец 30.08: «я должен увидеть, что прошли эти два
+       пайплайна, все их шаги со статистикой — сколько статей, понятий новых,
+       дедупликация, отбор кандидатов, доразметка». Числа собирает сам прогон
+       (tools/full_run.py, finish) из того, что напечатали шаги. */
+    /* Пока прогон идёт, время окончания не показываем ни при каких данных:
+       журнал мог сохранить отметку прошлого захода, и читатель увидел бы
+       законченным то, что работает у него на глазах. */
+    var live = !!run.current;
+    var tot = document.getElementById("pp-totals");
+    tot.innerHTML = "";
+    (live ? [] : (run.totals || [])).forEach(function (kv) {
+      var d = document.createElement("div");
+      d.className = "pp-tot";
+      d.innerHTML = "<b>" + String(kv[1]).replace(/[<>&]/g, "") + "</b><span>" +
+        String(kv[0]).replace(/[<>&]/g, "") + "</span>";
+      tot.appendChild(d);
+    });
+
     var left = all.filter(function (s) { return stateOf(run, s) === "wait"; }).length;
-    document.getElementById("pp-now").innerHTML = run.current
-      ? "идёт: <b>" + label(run.current) + "</b> · пройдено " + (run.done || []).length +
-        " из " + all.length + " · осталось " + left
-      : "завершён · пройдено " + (run.done || []).length + " из " + all.length +
-        (fails.length ? " · сбоев " + fails.length : "");
+    var when = (run.started || "") +
+      (!live && run.finished ? " → " + run.finished : "") +
+      (!live && run.secs_total ? " · " + secs(run.secs_total) : "");
+    document.getElementById("pp-now").innerHTML =
+      '<i class="pp-kind">' + KIND_NAME(run) + '</i>' +
+      (run.current
+        ? "идёт: <b>" + label(run.current) + "</b> · пройдено " + (run.done || []).length +
+          " из " + all.length + " · осталось " + left
+        : "завершён · пройдено " + (run.done || []).length + " из " + all.length +
+          (fails.length ? " · сбоев " + fails.length : "")) +
+      (when ? " · " + when : "");
   }
 
   fetch("/data/pipeline-runs.json", {cache: "no-store"}).then(function (r) {
@@ -251,7 +357,7 @@ body { max-width: 1100px; padding-bottom: 70px; }
     runs.forEach(function (r, i) {
       var o = document.createElement("option");
       o.value = i;
-      o.textContent = (r.started || r.id || "прогон") +
+      o.textContent = KIND_NAME(r) + " · " + (r.started || r.id || "прогон") +
         (r.days && r.days.length ? " · дни " + r.days[0] + "…" + r.days[r.days.length - 1] : "") +
         ((r.failed || []).length ? " · сбоев " + r.failed.length : "");
       sel.appendChild(o);
@@ -263,6 +369,81 @@ body { max-width: 1100px; padding-bottom: 70px; }
   }).catch(function () {
     document.getElementById("pp-empty").style.display = "";
   });
+})();
+
+/* РАССЫЛКА: числа из открытой сводки, имена — из закрытого файла.
+   Открытая сводка (data/outreach-stats.json) едет вместе с сайтом. Подробности
+   (data/outreach-sent.jsonl) не едут: заливка пропускает все .jsonl. На публичном
+   сайте запрос за ними честно не найдёт файла — и окно скажет об этом словами,
+   а не покажет пустую таблицу. */
+(function () {
+  var box = document.getElementById("pp-out");
+  if (!box) return;
+  function tile(n, cap) {
+    return '<div class="pp-tot"><b>' + n + '</b><span>' + cap + '</span></div>';
+  }
+  fetch("/data/outreach-stats.json", {cache: "no-store"}).then(function (r) {
+    return r.ok ? r.json() : null;
+  }).then(function (d) {
+    if (!d) return;
+    box.style.display = "";
+    var s = d.sent || {}, plus = d.plus || {};
+    document.getElementById("pp-out-nums").innerHTML =
+      tile(s.total || 0, "писем всего") +
+      tile(s.week || 0, "за неделю") +
+      tile((s.today || 0) + " / " + ((s.today || 0) + (s.can_today || 0)), "сегодня") +
+      tile(d.came || 0, "зашли после письма") +
+      tile(d.queue || 0, "готовы к отправке") +
+      tile(plus["with"] || 0, "работ с плюсиком") +
+      tile(plus["without"] || 0, "ждут разбора");
+    var seen = d.seen || {};
+    if (seen.authors) {
+      document.getElementById("pp-out-seen").textContent =
+        "За " + seen.days + " дней страницы авторов открывали " + seen.authors.views +
+        " раз (" + seen.authors.pages + " разных страниц, " + seen.authors.devices +
+        " устройств), страницы статей — " + seen.papers.views + " раз (" +
+        seen.papers.pages + " страниц, " + seen.papers.devices + " устройств).";
+    }
+  }).catch(function () {});
+
+  document.getElementById("pp-out-btn").onclick = function () {
+    fetch("/data/outreach-sent.jsonl", {cache: "no-store"}).then(function (r) {
+      return r.ok ? r.text() : null;
+    }).then(function (t) {
+      var rows = [];
+      (t || "").split(String.fromCharCode(10)).forEach(function (ln) {
+        if (ln.trim()) { try { rows.push(JSON.parse(ln)); } catch (e) {} }
+      });
+      var body;
+      if (t === null) {
+        body = '<div class="pp-note">Подробности не публикуются вместе с сайтом: ' +
+          'кому мы написали — не дело публичной страницы. Файл ' +
+          '<code>data/outreach-sent.jsonl</code> лежит на рабочей машине, и это окно ' +
+          'показывает его там. Собрать заново: <code>python tools/outreach_stats.py</code>.</div>';
+      } else if (!rows.length) {
+        body = '<div class="pp-note">Писем ещё не отправляли.</div>';
+      } else {
+        body = '<table><tr><th>Когда</th><th>Кому</th><th>Работа</th><th>Язык</th>' +
+          '<th>Зашёл</th></tr>' + rows.map(function (r) {
+            var came = r.came
+              ? "да · " + ((r.author_visits || 0) + (r.paper_visits || 0)) + " заходов"
+              : "нет";
+            return "<tr><td>" + r.at + "</td><td>" + r.author + "</td><td>" +
+              (r.aid || "") + "</td><td>" + r.lang + "</td><td>" + came + "</td></tr>";
+          }).join("") + "</table>" +
+          '<div class="pp-note">Считается заход на страницу, а не человек: видно, что ' +
+          'адрес открывали после письма, и не видно, кто именно.</div>';
+      }
+      var m = document.createElement("div");
+      m.className = "pp-modal";
+      m.innerHTML = '<div class="pp-modal-in"><button class="pp-x" type="button">&times;</button>' +
+        "<h3>Кому отправлено</h3>" + body + "</div>";
+      m.onclick = function (e) {
+        if (e.target === m || e.target.className === "pp-x") m.remove();
+      };
+      document.body.appendChild(m);
+    });
+  };
 })();
 </script>
 </body>

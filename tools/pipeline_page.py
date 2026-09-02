@@ -184,6 +184,31 @@ body { max-width: 1100px; padding-bottom: 70px; }
 .pp-fails h3 { margin: 0 0 6px; font-size: 13px; }
 .pp-fails li { margin: 4px 0; }
 .pp-fails code { font-size: 11px; color: var(--muted); }
+
+/* РАССЫЛКА АВТОРАМ. Числа — здесь и для всех; имена — во всплывающем окне и только
+   на рабочей машине: страница публичная, она есть в карте сайта, и кому мы написали
+   — не её дело. Подробности лежат в .jsonl, а .jsonl заливка в R2 не публикует. */
+.pp-out { margin: 28px 0 0; padding-top: 18px; border-top: 1px solid var(--hair); }
+.pp-out h2 { font-size: 16px; margin: 0 0 4px; }
+.pp-out .pp-sub2 { color: var(--soft); font-size: 12.5px; max-width: 74ch;
+    line-height: 1.55; margin: 0 0 12px; }
+.pp-out-btn { margin-top: 12px; font: inherit; font-size: 12px; padding: 6px 12px;
+    border: 1.5px solid var(--hair); border-radius: 6px; background: var(--bg);
+    color: var(--fg); cursor: pointer; font-family: var(--mono); }
+.pp-out-btn:hover { border-color: var(--run); }
+.pp-modal { position: fixed; inset: 0; background: rgba(15,22,38,.45); z-index: 60;
+    display: flex; align-items: center; justify-content: center; padding: 20px; }
+.pp-modal-in { background: var(--bg); border: 1px solid var(--hair); border-radius: 10px;
+    max-width: 780px; width: 100%; max-height: 82vh; overflow: auto; padding: 20px 22px; }
+.pp-modal h3 { margin: 0 0 12px; font-size: 15px; }
+.pp-modal table { width: 100%; border-collapse: collapse; font-size: 12px;
+    font-family: var(--mono); }
+.pp-modal th { text-align: left; font-weight: 600; color: var(--soft);
+    border-bottom: 1px solid var(--hair); padding: 4px 8px 7px; }
+.pp-modal td { padding: 6px 8px; border-bottom: 1px solid var(--hair); }
+.pp-modal .pp-x { float: right; cursor: pointer; color: var(--soft); border: 0;
+    background: none; font-size: 20px; line-height: 1; padding: 0 4px; }
+.pp-note { color: var(--soft); font-size: 12px; line-height: 1.55; margin: 10px 0 0; }
 .pp-hint { margin: 16px 0 0; font-size: 12px; color: var(--soft); line-height: 1.5; }
 .pp-empty { margin: 22px 0; padding: 14px; border: 1px dashed var(--hair);
     border-radius: 8px; color: var(--soft); font-size: 13px; }
@@ -387,6 +412,81 @@ JS = """
     document.getElementById("pp-empty").style.display = "";
   });
 })();
+
+/* РАССЫЛКА: числа из открытой сводки, имена — из закрытого файла.
+   Открытая сводка (data/outreach-stats.json) едет вместе с сайтом. Подробности
+   (data/outreach-sent.jsonl) не едут: заливка пропускает все .jsonl. На публичном
+   сайте запрос за ними честно не найдёт файла — и окно скажет об этом словами,
+   а не покажет пустую таблицу. */
+(function () {
+  var box = document.getElementById("pp-out");
+  if (!box) return;
+  function tile(n, cap) {
+    return '<div class="pp-tot"><b>' + n + '</b><span>' + cap + '</span></div>';
+  }
+  fetch("/data/outreach-stats.json", {cache: "no-store"}).then(function (r) {
+    return r.ok ? r.json() : null;
+  }).then(function (d) {
+    if (!d) return;
+    box.style.display = "";
+    var s = d.sent || {}, plus = d.plus || {};
+    document.getElementById("pp-out-nums").innerHTML =
+      tile(s.total || 0, "писем всего") +
+      tile(s.week || 0, "за неделю") +
+      tile((s.today || 0) + " / " + ((s.today || 0) + (s.can_today || 0)), "сегодня") +
+      tile(d.came || 0, "зашли после письма") +
+      tile(d.queue || 0, "готовы к отправке") +
+      tile(plus["with"] || 0, "работ с плюсиком") +
+      tile(plus["without"] || 0, "ждут разбора");
+    var seen = d.seen || {};
+    if (seen.authors) {
+      document.getElementById("pp-out-seen").textContent =
+        "За " + seen.days + " дней страницы авторов открывали " + seen.authors.views +
+        " раз (" + seen.authors.pages + " разных страниц, " + seen.authors.devices +
+        " устройств), страницы статей — " + seen.papers.views + " раз (" +
+        seen.papers.pages + " страниц, " + seen.papers.devices + " устройств).";
+    }
+  }).catch(function () {});
+
+  document.getElementById("pp-out-btn").onclick = function () {
+    fetch("/data/outreach-sent.jsonl", {cache: "no-store"}).then(function (r) {
+      return r.ok ? r.text() : null;
+    }).then(function (t) {
+      var rows = [];
+      (t || "").split(String.fromCharCode(10)).forEach(function (ln) {
+        if (ln.trim()) { try { rows.push(JSON.parse(ln)); } catch (e) {} }
+      });
+      var body;
+      if (t === null) {
+        body = '<div class="pp-note">Подробности не публикуются вместе с сайтом: ' +
+          'кому мы написали — не дело публичной страницы. Файл ' +
+          '<code>data/outreach-sent.jsonl</code> лежит на рабочей машине, и это окно ' +
+          'показывает его там. Собрать заново: <code>python tools/outreach_stats.py</code>.</div>';
+      } else if (!rows.length) {
+        body = '<div class="pp-note">Писем ещё не отправляли.</div>';
+      } else {
+        body = '<table><tr><th>Когда</th><th>Кому</th><th>Работа</th><th>Язык</th>' +
+          '<th>Зашёл</th></tr>' + rows.map(function (r) {
+            var came = r.came
+              ? "да · " + ((r.author_visits || 0) + (r.paper_visits || 0)) + " заходов"
+              : "нет";
+            return "<tr><td>" + r.at + "</td><td>" + r.author + "</td><td>" +
+              (r.aid || "") + "</td><td>" + r.lang + "</td><td>" + came + "</td></tr>";
+          }).join("") + "</table>" +
+          '<div class="pp-note">Считается заход на страницу, а не человек: видно, что ' +
+          'адрес открывали после письма, и не видно, кто именно.</div>';
+      }
+      var m = document.createElement("div");
+      m.className = "pp-modal";
+      m.innerHTML = '<div class="pp-modal-in"><button class="pp-x" type="button">&times;</button>' +
+        "<h3>Кому отправлено</h3>" + body + "</div>";
+      m.onclick = function (e) {
+        if (e.target === m || e.target.className === "pp-x") m.remove();
+      };
+      document.body.appendChild(m);
+    });
+  };
+})();
 """
 
 def main():
@@ -437,6 +537,18 @@ def main():
 <div class="pp-totals" id="pp-totals"></div>
 <div class="pp-flow" id="pp-flow"></div>
 <div class="pp-fails" id="pp-fails" style="display:none"></div>
+
+
+<div class="pp-out" id="pp-out" style="display:none">
+  <h2>Рассылка авторам</h2>
+  <div class="pp-sub2">Письмо уходит только автору работы, которую разобрала машина
+  знаний, и не раньше чем через неделю после разбора. Очередь идёт от самых старых
+  работ. Здесь только числа: кому именно написано — в закрытом окне, оно открывается
+  на рабочей машине.</div>
+  <div class="pp-totals" id="pp-out-nums"></div>
+  <button class="pp-out-btn" id="pp-out-btn" type="button">Кому отправлено &rarr;</button>
+  <div class="pp-note" id="pp-out-seen"></div>
+</div>
 
 <div class="pp-hint">Статус читается знаком и рамкой, не цветом: галочка и
 сплошная — прошло, стрелка и пунктир — идёт, восклицание и штриховка — сбой,

@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- ЗАКРЫТО ОТ ПОИСКА СОЗНАТЕЛЬНО. Документ написан для аудитора и перечисляет
+     наши слабости прямым текстом. Он открыт по ссылке — кому дали, тот прочтёт, —
+     но звать на него поисковик незачем: это внутренний разговор, а не витрина.
+     В карту сайта страница тоже не попадает (generate.py собирает карту по
+     разделам, а этот файл лежит отдельным адресом). -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<title>Аудит bridge42worlds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --ground: #F4F2EC;
+  --surface: #FBFAF6;
+  --ink: #0F1626;
+  --body: #2A303C;
+  --muted: #5A6273;
+  --hair: rgba(15, 22, 38, .12);
+  --hair-soft: rgba(15, 22, 38, .06);
+  --cyan: #2E8AA0;
+  --ochre: #C77F3A;
+  --serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --sans: 'Inter', -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #12151C;
+    --surface: #191D26;
+    --ink: #ECEAE4;
+    --body: #C9CDD6;
+    --muted: #98A0AE;
+    --hair: rgba(236, 234, 228, .16);
+    --hair-soft: rgba(236, 234, 228, .08);
+    --cyan: #63B6C9;
+    --ochre: #DCA268;
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #12151C;
+  --surface: #191D26;
+  --ink: #ECEAE4;
+  --body: #C9CDD6;
+  --muted: #98A0AE;
+  --hair: rgba(236, 234, 228, .16);
+  --hair-soft: rgba(236, 234, 228, .08);
+  --cyan: #63B6C9;
+  --ochre: #DCA268;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--ground);
+  color: var(--body);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.62;
+  margin: 0;
+  padding: 0 20px 96px;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 880px; margin: 0 auto; }
+.col { max-width: 68ch; }
+
+/* ── шапка ─────────────────────────────────────────────────────────── */
+header { padding: 64px 0 0; }
+.eyebrow {
+  font-family: var(--mono); font-size: 11.5px; letter-spacing: .13em;
+  text-transform: uppercase; color: var(--muted); margin: 0 0 18px;
+}
+h1 {
+  font-family: var(--serif); font-weight: 600; color: var(--ink);
+  font-size: clamp(34px, 6vw, 52px); line-height: 1.08; letter-spacing: -.015em;
+  margin: 0 0 20px; text-wrap: balance;
+}
+.dek { font-size: 18px; color: var(--body); max-width: 60ch; margin: 0 0 34px; }
+.dek b { color: var(--ink); font-weight: 600; }
+
+/* ── тезис: две цифры, которые и есть спор ──────────────────────────── */
+.thesis {
+  display: grid; grid-template-columns: 1fr auto 1fr; gap: 22px; align-items: center;
+  background: var(--surface); border: 1px solid var(--hair); border-radius: 10px;
+  padding: 26px 28px; margin: 0 0 12px;
+}
+.thesis .n {
+  font-family: var(--mono); font-size: clamp(26px, 4.6vw, 38px); font-weight: 500;
+  color: var(--ink); line-height: 1; font-variant-numeric: tabular-nums;
+}
+.thesis .cap { font-size: 13.5px; color: var(--muted); margin-top: 8px; line-height: 1.45; }
+.thesis .vs {
+  font-family: var(--mono); font-size: 12px; color: var(--ochre);
+  text-transform: uppercase; letter-spacing: .1em;
+}
+.thesis-note { font-size: 13.5px; color: var(--muted); margin: 0 0 52px; }
+/* На телефоне три колонки превращают «188 807» в два слова столбиком, а подписи —
+   в узкие полосы. Ставим их друг под другом: спор от этого не слабеет, а числа
+   остаются целыми. */
+@media (max-width: 560px) {
+  .thesis { grid-template-columns: 1fr; gap: 16px; padding: 22px 20px; }
+  .thesis .vs { justify-self: start; }
+  .thesis .cap { max-width: 34ch; }
+}
+
+/* ── разделы ───────────────────────────────────────────────────────── */
+section { padding: 44px 0 0; border-top: 1px solid var(--hair-soft); margin-top: 44px; }
+section:first-of-type { border-top: 0; margin-top: 0; }
+h2 {
+  font-family: var(--serif); font-weight: 600; color: var(--ink);
+  font-size: clamp(23px, 3.4vw, 30px); line-height: 1.2; margin: 0 0 16px;
+  letter-spacing: -.01em; text-wrap: balance;
+}
+h3 {
+  font-family: var(--serif); font-weight: 600; color: var(--ink);
+  font-size: 18.5px; margin: 30px 0 8px;
+}
+p { margin: 0 0 16px; }
+a { color: var(--cyan); text-underline-offset: 2px; }
+a:hover { text-decoration-thickness: 2px; }
+
+/* ── числа ─────────────────────────────────────────────────────────── */
+.tablewrap { overflow-x: auto; margin: 24px 0 8px; }
+table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+th, td { text-align: left; padding: 10px 14px 10px 0; border-bottom: 1px solid var(--hair-soft); }
+thead th {
+  font-family: var(--mono); font-size: 11px; text-transform: uppercase;
+  letter-spacing: .09em; color: var(--muted); font-weight: 400;
+  border-bottom: 1px solid var(--hair); padding-bottom: 8px;
+}
+td.num, th.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+td.now { color: var(--ink); font-weight: 500; }
+tbody tr:last-child td { border-bottom: 0; }
+.tnote { font-size: 13px; color: var(--muted); margin: 6px 0 0; }
+
+/* ── два конвейера ─────────────────────────────────────────────────── */
+.pipes { display: grid; gap: 16px; margin: 24px 0 0; }
+@media (min-width: 720px) { .pipes { grid-template-columns: 1fr 1fr; } }
+.pipe {
+  background: var(--surface); border: 1px solid var(--hair);
+  border-radius: 10px; padding: 20px 22px;
+}
+.pipe h4 {
+  font-family: var(--serif); font-size: 17px; font-weight: 600; color: var(--ink);
+  margin: 0 0 4px;
+}
+.pipe .meta {
+  font-family: var(--mono); font-size: 11.5px; color: var(--muted);
+  margin: 0 0 12px; font-variant-numeric: tabular-nums;
+}
+.pipe p { font-size: 14.5px; margin: 0; }
+
+/* ── слабости: левая охряная линейка, как правка редактора ─────────── */
+.weak { border-left: 2px solid var(--ochre); padding-left: 22px; margin: 22px 0 0; }
+.weak > div { margin-bottom: 20px; }
+.weak > div:last-child { margin-bottom: 0; }
+.weak b { color: var(--ink); font-weight: 600; }
+.weak p { margin: 4px 0 0; font-size: 15px; }
+
+/* ── вопросы: нумерация здесь значит порядок важности ──────────────── */
+ol.q { list-style: none; counter-reset: q; padding: 0; margin: 26px 0 0; }
+ol.q li {
+  counter-increment: q; position: relative; padding-left: 46px;
+  margin-bottom: 24px; font-size: 15.5px;
+}
+ol.q li::before {
+  content: counter(q, decimal-leading-zero);
+  position: absolute; left: 0; top: 1px;
+  font-family: var(--mono); font-size: 13px; color: var(--ochre);
+  border: 1px solid var(--hair); border-radius: 5px; padding: 2px 7px;
+  background: var(--surface);
+}
+ol.q b { color: var(--ink); font-weight: 600; }
+
+/* ── документы ─────────────────────────────────────────────────────── */
+.docs { display: grid; gap: 12px; margin: 24px 0 0; }
+@media (min-width: 720px) { .docs { grid-template-columns: 1fr 1fr; } }
+.doc {
+  display: block; background: var(--surface); border: 1px solid var(--hair);
+  border-radius: 9px; padding: 15px 17px; text-decoration: none; color: inherit;
+  transition: border-color .16s ease, transform .16s ease;
+}
+a.doc:hover { border-color: var(--cyan); transform: translateY(-1px); }
+.doc .path {
+  font-family: var(--mono); font-size: 12px; color: var(--cyan);
+  display: block; margin-bottom: 5px; word-break: break-word;
+}
+.doc .what { font-size: 13.5px; color: var(--muted); line-height: 1.5; }
+.doc.plain .path { color: var(--ink); }
+
+.lede { font-size: 15px; color: var(--muted); margin: 0 0 4px; }
+footer {
+  margin-top: 56px; padding-top: 22px; border-top: 1px solid var(--hair);
+  font-family: var(--mono); font-size: 12px; color: var(--muted);
+}
+</style>
+
+</head>
+<body>
+
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Досье · 1 сентября 2026</p>
+  <h1>Аудит bridge42worlds</h1>
+  <p class="dek">Мы берём свежие работы с arXiv и превращаем их в тексты, понятные человеку без подготовки, — на пяти языках, бесплатно. За август выпуск вырос втрое и впервые пошёл без человека. <b>Спор, ради которого мы просим аудит, — вот в этих двух числах.</b></p>
+
+  <div class="thesis">
+    <div>
+      <div class="n">188 807</div>
+      <div class="cap">страниц выпущено — 6 749 работ, каждая на пяти языках</div>
+    </div>
+    <div class="vs">против</div>
+    <div>
+      <div class="n">6 120</div>
+      <div class="cap">страниц взял поиск за шесть недель на новом домене</div>
+    </div>
+  </div>
+  <p class="thesis-note">41 323 адреса Google обнаружил и <b>ни разу не открыл</b>: у всех дата сканирования — 1970 год. Обход не заблокирован, страницы не сироты. Это рацион молодого домена, и он назначен не нам одним. Вопрос в том, что с этим делать.</p>
+</header>
+
+<section class="col">
+  <h2>Что это</h2>
+  <p>Научная работа, понятная десяти специалистам, невидима для остальных семи миллиардов. Мы читаем препринт целиком, пересказываем его на человеческом языке в четырёх глубинах — от «просто» до «подробно» — и публикуем на русском, английском, испанском, арабском и французском.</p>
+  <p>Приоритетная аудитория — арабоязычные читатели и авторы Персидского залива. Арабский полный: все 6 749 работ, все справочники переведены без пропусков.</p>
+  <p>Проект некоммерческий: не продаём доступ, не показываем рекламу, не торгуем вниманием. Конечная цель — не медиа, а инструмент: читатель получает науку человеческим языком, автор получает разбор своей работы, карту соседних работ и направления развития идеи.</p>
+</section>
+
+<section>
+  <h2>Числа: что изменилось за август</h2>
+  <p class="col">Взяты с живого прода и <code style="font-family:var(--mono);font-size:13.5px">run.py stats</code>, а не из внутренних справочников: они в этом проекте не раз врали, и сверка с продом — правило.</p>
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr><th>Показатель</th><th class="num">5 августа</th><th class="num">1 сентября</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Работ разобрано</td><td class="num">2 160</td><td class="num now">6 749</td></tr>
+        <tr><td>Языки</td><td>пять, полные</td><td class="now">пять, полные — 6 749 × 5</td></tr>
+        <tr><td>Страниц выпущено</td><td class="num">~43 000</td><td class="num now">188 807</td></tr>
+        <tr><td>Полных разборов из PDF</td><td class="num">—</td><td class="num now">725</td></tr>
+        <tr><td>Работ с рекомендациями автору</td><td class="num">—</td><td class="num now">720</td></tr>
+        <tr><td>Понятий в машине знаний</td><td class="num">363 тега</td><td class="num now">3 613</td></tr>
+        <tr><td>Разделов arXiv в охвате</td><td>астрофизика +</td><td class="now">135</td></tr>
+        <tr><td>Авторов со страницей</td><td class="num">17 800</td><td class="num now">47 077</td></tr>
+        <tr><td>В индексе Google</td><td class="num">5 110</td><td class="num now">6 120</td></tr>
+        <tr><td>Показов в поиске</td><td>~50 в неделю</td><td class="now">~30 в сутки</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tnote">Себестоимость замерена на живых прогонах: экспресс с пятью языками $0,0098, полный разбор из PDF $0,039. Месяц ленты — около $25.</p>
+</section>
+
+<section>
+  <h2>Как это работает без человека</h2>
+  <p class="col">Главное изменение августа — два конвейера, которые проходят от забора статей до выкладки сами. Оба пишут в общий журнал, оба видны на <a href="https://bridge42worlds.academy/pipeline.html">доске конвейера</a>: шаги, время начала и конца, числа на каждом шаге.</p>
+  <div class="pipes">
+    <div class="pipe">
+      <h4>Ежедневный</h4>
+      <p class="meta">43 шага · 4,6 часа · свежие работы</p>
+      <p>Забор с arXiv по 14 разделам → векторный предфильтр вычёркивает «такое у нас есть» и «не наш профиль» (минус 81% токенов) → реранкер отвечает «интересно ли читателю» → модель берёт 20% дня, но не больше 20 → разбор → разметка понятий → рекомендации автору → сборка → выкладка.</p>
+    </div>
+    <div class="pipe">
+      <h4>Недельный</h4>
+      <p class="meta">32 шага · 16,4 часа · углубление</p>
+      <p>Доразметка всего корпуса вектором с поправкой на хабность, суперпонятия, связи знанием, пласты (спрос машины знаний → поиск по 2,96 млн работ arXiv → очередь на разбор), идеи проектов, полная подсветка терминов. Последний прогон: 28 шагов из 28 без единой ошибки.</p>
+    </div>
+  </div>
+  <h3>Три решения, на которых всё держится</h3>
+  <p><b style="color:var(--ink)">Тело статично, обвязка динамична.</b> Страницы лежат в объектном хранилище, списки и карточки приходят из базы. Иначе на десяти тысячах работ пересборка станет невозможной.</p>
+  <p><b style="color:var(--ink)">Разметка вектором, а не промптом.</b> Понятия, связи и соседей ищет эмбеддинг-модель, а не языковая: дешевле, воспроизводимо и не выдумывает.</p>
+  <p><b style="color:var(--ink)">Замок в коде, а не в дисциплине.</b> Два прогона на одном дереве дают смесь версий. Именованные замки не дают второму начаться и называют держателя. Впервые сработало 31 августа — два сторожа одновременно запустили один и тот же конвейер.</p>
+</section>
+
+<section>
+  <h2>Честные слабости</h2>
+  <p class="col">Написано нами о себе. Мы просим смотреть критически: цель аудита — свежий взгляд, а не подтверждение наших решений.</p>
+  <div class="weak col">
+    <div>
+      <b>Поиск нас почти не видит, и это главное.</b>
+      <p>6 120 страниц в индексе против 188 807 выпущенных. Индекс растёт примерно на 96 страниц в сутки — при таком темпе наш архив собирается годами.</p>
+    </div>
+    <div>
+      <b>Двадцать семь адресов на одну работу.</b>
+      <p>Четыре глубины × пять языков плюс страницы авторов. Со стороны поисковика это профиль машинной генерации, и рацион обхода назначается соответственно.</p>
+    </div>
+    <div>
+      <b>Аудитория — тридцать показов в сутки.</b>
+      <p>Объём вырос втрое, читателей нет. Продукт опережает дистрибуцию сильнее, чем месяц назад.</p>
+    </div>
+    <div>
+      <b>Обещание трёх глубин не выполнено для 6 024 работ из 6 749.</b>
+      <p>У экспресс-статей все уровни — один и тот же текст с баннером. Найдено внешним аудитом 5 августа, признано, не сделано.</p>
+    </div>
+    <div>
+      <b>Написанное не всегда подключено.</b>
+      <p>За одни сутки нашлось шесть случаев, когда код лежал на месте и не исполнялся: шаг звался без обязательного ключа, шаг не звался никем, шаг падал мягко и молча. Это слабость приёмки, а не набор случайностей.</p>
+    </div>
+    <div>
+      <b>Один человек и одна машина.</b>
+      <p>Прогоны, замки, почта и планировщик стоят на домашнем компьютере. Сон машины ломает шаг, говорящий с облаком.</p>
+    </div>
+    <div>
+      <b>Совет существует, участников-людей нет.</b>
+      <p>Механика заседаний и рассылок работает вхолостую: голосуют владелец и модель.</p>
+    </div>
+    <div>
+      <b>Зависимость от одного поставщика модели и одного облака.</b>
+      <p>Арабский требует выверки носителем, которого нет; качество перевода держится на валидаторах.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Вопросы, на которые мы просим посмотреть</h2>
+  <p class="col">В порядке важности для нас.</p>
+  <ol class="q col">
+    <li><b>Куда вкладывать: в производство или в дистрибуцию?</b> Мы выпускаем в тридцать раз больше, чем поиск успевает взять. Сервер ускорит выпуск, то есть увеличит то, чего и так избыток. Дообученная модель улучшит текст, но не скорость обхода. Что первым?</li>
+    <li><b>Не пора ли резать объём?</b> Стоит ли сократить выпускаемую поверхность — глубины, страницы авторов с одной работой — ради того, чтобы индексировалось лучшее?</li>
+    <li><b>Не распыляемся ли мы?</b> Лента, учебник, совет, народная наука, граф знаний, формулы, фабрика идей. Где резать?</li>
+    <li><b>Этика письма автору.</b> Мы берём адрес из самой работы, где он напечатан для переписки, пишем один раз про его же работу и предлагаем убрать страницу одной строкой. Достаточно ли этого — или мы себя уговариваем?</li>
+    <li><b>Как построить приёмку,</b> которая ловит «написано, но не исполняется» раньше владельца?</li>
+    <li><b>Риски единой точки:</b> владелец, машина, поставщики. Что страховать первым?</li>
+    <li><b>Модель совета:</b> жизнеспособна ли конструкция «модель на равных с ограничениями», и что в регламенте наивно?</li>
+  </ol>
+</section>
+
+<section>
+  <h2>Документы</h2>
+  <p class="col lede">Полные тексты лежат в репозитории проекта. Здесь — что где искать и в каком порядке читать.</p>
+  <div class="docs">
+    <div class="doc plain">
+      <span class="path">ДЛЯ-АУДИТОРА.md</span>
+      <span class="what">Полное досье: миссия, ценности, числа, техника, команда, совет, план, слабости, вопросы. Самодостаточно — не требует знакомства с проектом. Начинать отсюда.</span>
+    </div>
+    <div class="doc plain">
+      <span class="path">задачи/СТАТУС.md</span>
+      <span class="what">Где мы сейчас одним файлом: конвейеры с их шагами, что решено и не обсуждается заново, правила проверки, купленные ошибками недели.</span>
+    </div>
+    <div class="doc plain">
+      <span class="path">ПРАВИЛА-РАБОТЫ.md</span>
+      <span class="what">Как работает команда: ветки, кто собирает, кто публикует, чего нельзя делать никогда.</span>
+    </div>
+    <div class="doc plain">
+      <span class="path">СХЕМА.md</span>
+      <span class="what">Управление: три круга принятия решений, что выносится на голосование, недельный цикл, чего ещё нет.</span>
+    </div>
+    <div class="doc plain">
+      <span class="path">МАШИНА-ЗНАНИЙ.md</span>
+      <span class="what">Как устроен слой понятий: рождение, дедупликация, привязка к статьям, связи, суперпонятия.</span>
+    </div>
+    <div class="doc plain">
+      <span class="path">HANDOFF.md</span>
+      <span class="what">Архив, заморожен 5 августа. Описывает проект вдвое меньшего размера и содержит опасные указания. Оставлен как история решений, не как инструкция.</span>
+    </div>
+  </div>
+
+  <h3>Живое — можно открыть прямо сейчас</h3>
+  <div class="docs">
+    <a class="doc" href="https://bridge42worlds.academy/lang/ru/about.html">
+      <span class="path">Гид по проекту</span>
+      <span class="what">Как всё устроено глазами читателя, за пять минут. На пяти языках.</span>
+    </a>
+    <a class="doc" href="https://bridge42worlds.academy/pipeline.html">
+      <span class="path">Доска конвейеров</span>
+      <span class="what">Оба прогона, все шаги, время и числа. То, о чём раздел «как это работает без человека».</span>
+    </a>
+    <a class="doc" href="https://bridge42worlds.academy/lang/ru/concepts/graph.html">
+      <span class="path">Граф знаний</span>
+      <span class="what">4 471 узел, 43 158 связей, 50 областей. Понятия, формулы и учёные в одной среде разбора.</span>
+    </a>
+    <a class="doc" href="https://bridge42worlds.academy/lang/ru/index.html">
+      <span class="path">Лента</span>
+      <span class="what">Сам продукт: свежие работы, четыре глубины, пять языков.</span>
+    </a>
+    <a class="doc" href="https://bridge42worlds.academy/ideas.html">
+      <span class="path">Фабрика идей</span>
+      <span class="what">95 идей по 24 темам — за что можно взяться, с опорой на названные работы.</span>
+    </a>
+    <a class="doc" href="https://bridge42worlds.academy/learn.html">
+      <span class="path">Учебный раздел</span>
+      <span class="what">Курс с интерактивными стендами, разбором формул и ботом-репетитором.</span>
+    </a>
+    <a class="doc" href="https://bridge42worlds.academy/lang/en/authors/index.html">
+      <span class="path">Страницы авторов</span>
+      <span class="what">47 077 человек. Автор находит себя, видит наш разбор и может поправить или снять страницу.</span>
+    </a>
+    <a class="doc" href="https://bridge42worlds.academy/council.html">
+      <span class="path">Наблюдательный совет</span>
+      <span class="what">Повестки, голоса, решения. Механика работает; участников-людей пока нет.</span>
+    </a>
+  </div>
+</section>
+
+<footer>
+  bridge42worlds · досье собрано 1 сентября 2026 · числа с живого прода
+</footer>
+
+</div>
+
+</body>
+</html>

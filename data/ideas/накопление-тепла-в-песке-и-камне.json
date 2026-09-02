@@ -233,5 +233,427 @@
    },
    "abstract": "The effects of water and temperature on the triboelectrification of granular materials have been reported by numerous authors, but have not been studied robustly in the context of volcanic plumes. Here, we present the results of a set of experiments designed to elucidate how environmental conditions modulate the triboelectric characteristics of volcanic ash. We find that that small amounts of water can reduce the charge collected by micron-sized ash grains by up to an order of magnitude. Increasing temperature at a constant relative humidity also appears to decrease the amount of charge gained"
   }
- ]
+ ],
+ "lang": {
+  "en": {
+   "note": "In the field of heat storage in sand and rock, numerical models and laboratory studies are actively developing, but there is a lack of practical engineering methods and open data for quick assessment of material properties.",
+   "topic": "heat storage in sand and rock",
+   "ideas": [
+    {
+     "based_on": [
+      "2006.13308",
+      "2506.05818"
+     ],
+     "title": "Test rig for investigating the effect of layering and permeability anisotropy on heat transfer in sand storage systems",
+     "what": "Build a laboratory test rig with a sand container, a hot water supply system, and temperature sensors. Conduct a series of experiments injecting hot water into sand with different layer configurations (horizontal, inclined, with clay interbeds) and measure temperature distribution and heat storage efficiency.",
+     "why": "Such data will help understand how geological heterogeneity (layering, anisotropy) affects the performance of geothermal batteries. Engineers designing underground heat storage will be able to more accurately estimate losses and select suitable sites.",
+     "origin": "In work 2006.13308, the influence of permeability anisotropy and layered heterogeneity on heat storage in a geothermal battery was studied numerically, but experimental verification of these effects under controlled conditions is lacking. Work 2506.05818 shows that the behavior of clays and mudstones under thermomechanical loads is complex, and their presence as interbeds can significantly alter heat transfer. No one has tested in the laboratory how much the layering of real sand with clay inclusions changes heat storage efficiency compared to a homogeneous model.",
+     "first_step": "Assemble a simple container with sand (e.g., an insulated aquarium), install several thermocouples, inject hot water, and record temperature changes over time for homogeneous sand.",
+     "needs": "Laboratory container (0.5–1 m³), sand of different grain sizes, clay for interbeds, pump with flow control, water heater, 10–20 thermocouples or fiber-optic temperature sensor, data acquisition system (Arduino or similar). Skills: basic understanding of hydrogeology and heat transfer, ability to work with sensors.",
+     "risks": "It is difficult to reproduce real anisotropy and scale effects in a small container; results may be trivial (e.g., clay interbeds simply block flow). Achieving repeatability may also be challenging due to non-uniform sand packing.",
+     "scale": "semester",
+     "methods": [
+      "Injection and temperature monitoring methodology from work 2006.13308 (Geothermal Battery Energy Storage): use a similar approach with control of flow rate and water temperature.",
+      "Vary sand packing: create horizontal layers of different permeability, add thin clay interbeds to mimic anisotropy.",
+      "Measure temperature at a grid of points using thermocouples or fiber-optic sensors, record the dynamics of the thermal front.",
+      "Compare experimental temperature profiles with simple analytical models of heat transfer in porous media."
+     ]
+    },
+    {
+     "based_on": [
+      "1208.1753",
+      "2506.05818"
+     ],
+     "title": "Testing the applicability of the thermal consolidation model for clays to assess the stability of sand-rock heat storage systems",
+     "what": "Conduct a series of experiments heating saturated clay and sand-clay mixture samples in a rigid cell while measuring pore pressure and deformations. Compare results with the thermal consolidation model from work 1208.1753 and assess whether it can be used to predict the mechanical behavior of heat storage systems in soils.",
+     "why": "During cyclic heating and cooling of underground heat storage, excessive pore pressures and deformations may develop in clay interbeds, affecting stability and sealing. Understanding this process will help avoid failures during operation.",
+     "origin": "Work 1208.1753 provides a theoretical basis for thermal consolidation of clays, but the experimental data in it are limited and do not cover cyclic regimes typical for heat storage. Work 2506.05818 summarizes research on thermo-hydro-mechanical behavior of clays but does not give direct recommendations for sand-clay mixtures under storage conditions. There is a lack of verification of how applicable the model from 1208.1753 is to such mixtures and cyclic loads.",
+     "first_step": "Assemble or rent a soil testing cell with heating capability and pore pressure measurement (e.g., a modified oedometer). Prepare the first sand-clay mixture sample and conduct a trial heating.",
+     "needs": "Equipment for mechanical soil testing (oedometer or triaxial cell with heating), pore pressure sensors, temperature control system, press for sample compaction. Skills: soil mechanics, ability to work with measuring instruments.",
+     "risks": "Experiments with clays are time-consuming (pore pressure dissipation can take days), and the thermal consolidation model may poorly describe mixtures with high sand content. Model modification may be required, which complicates the task.",
+     "scale": "thesis",
+     "methods": [
+      "Use the experimental methodology from work 1208.1753: heating saturated samples under restricted drainage while measuring pore pressure and axial deformation.",
+      "Prepare samples with different clay and sand contents, mimicking typical soils at storage sites.",
+      "Conduct heating and cooling cycles at different rates, recording pore pressure hysteresis and residual deformations.",
+      "Compare experimental curves with the analytical solution of the thermal consolidation model, evaluate the parameters for which the model works."
+     ]
+    },
+    {
+     "based_on": [
+      "2410.22737"
+     ],
+     "title": "Development of a rapid assessment method for heat capacity and thermal conductivity of rock materials for heat storage based on simple measurements",
+     "what": "Create a portable setup for measuring thermophysical properties (heat capacity, thermal conductivity) of rock and building material samples used in heat storage. Perform measurements on a set of materials (granite, basalt, sandstone, concrete) and compare with literature data, calibrate the method.",
+     "why": "Designing heat storage in rock requires accurate data on thermophysical properties, but tabulated values are often used without accounting for local variations. An accessible method will allow quick assessment of specific materials on site.",
+     "origin": "Work 2410.22737 examines the influence of dynamic temperatures on pebble dynamics, but the approaches used there for assessing thermal properties may be adapted for terrestrial materials. In the heat storage literature, there is often a lack of simple and inexpensive methods for measuring thermophysical properties of rock materials, especially for local rocks. No one has proposed a portable method that an engineer could use on site.",
+     "first_step": "Assemble a simple cell: a piece of insulation, a flat heater, two thermocouples, connected to an Arduino. Test on a sample with known thermal conductivity.",
+     "needs": "Heating element (e.g., nichrome film), thermocouples or digital temperature sensors, microcontroller, insulation, rock samples (can be obtained from a geological collection). Skills: basics of thermophysics, microcontroller programming.",
+     "risks": "The accuracy of a homemade setup may be low due to contact resistances and heat leaks. Reliable data may require comparison with commercial instruments, which is not always available.",
+     "scale": "semester",
+     "methods": [
+      "Use the pulse heating method with surface temperature recording (analogous to techniques described in work 2410.22737 for assessing thermal properties of planetesimals, but adapted for terrestrial materials).",
+      "Assemble a measuring cell with a heating element, thermocouples, and insulation, connected to a microcontroller for automatic recording.",
+      "Perform measurements on samples with known properties (e.g., aluminum, water) for calibration, then on rocks.",
+      "Compare results with literature data and estimate the method's uncertainty."
+     ]
+    },
+    {
+     "based_on": [
+      "2510.17446"
+     ],
+     "title": "Assessing the influence of water saturation on thermal properties of porous rocks for heat storage: experiments and a simple model",
+     "what": "Conduct a series of measurements of thermal conductivity and heat capacity of porous rock samples (sandstone, limestone) at different water saturation levels. Develop a simple empirical model to predict thermal properties as a function of porosity and saturation, using experimental and literature data.",
+     "why": "In real heat storage, pores may be partially filled with water, which significantly alters heat transfer. Such a model will help engineers quickly estimate thermal characteristics of a formation without expensive measurements.",
+     "origin": "Work 2510.17446 provides experimental data on water saturation and thermodynamics of porous carbonate rocks but does not offer a simple model for engineering estimates. In the heat storage literature, constant thermal conductivity values are often used, ignoring saturation. There is a lack of a practical method that would allow quick estimation of thermal properties from known porosity and moisture content.",
+     "first_step": "Find or fabricate porous rock samples with known porosity, measure their thermal conductivity in a dry state using a needle probe.",
+     "needs": "Thermal conductivity meter (heated needle probe), scales for saturation control, drying oven, rock samples. Skills: basics of thermophysics, statistical data processing.",
+     "risks": "Thermal conductivity strongly depends on pore microstructure, which is difficult to characterize with simple parameters. The empirical model may give large errors for rocks with unusual structures.",
+     "scale": "thesis",
+     "methods": [
+      "Use the thermal conductivity and heat capacity measurement methodology described in work 2510.17446 for carbonate rocks with different water saturation.",
+      "Prepare samples with controlled porosity (e.g., sintered glass beads or natural rocks) and saturate them with water to different levels.",
+      "Measure thermal conductivity using the linear heat source method (heated needle) and heat capacity calorimetrically.",
+      "Build a regression model relating thermal conductivity to porosity and saturation, and validate it on independent data."
+     ]
+    },
+    {
+     "based_on": [
+      "2510.17446",
+      "1208.1753",
+      "2006.13308"
+     ],
+     "title": "Creating an open database of thermophysical properties of rocks and soils for designing heat storage systems",
+     "what": "Collect data from literature and own measurements on thermal conductivity, heat capacity, and density of various rocks and soils used in heat storage. Organize them into an open database with a web interface and tools for parameter selection.",
+     "why": "Designers of heat storage often have to search for scattered data on material properties, which slows down work. An open database with convenient access will speed up preliminary assessments and improve project quality.",
+     "origin": "In archive works (e.g., 2510.17446 and 1208.1753), individual data on thermal properties are provided, but there is no unified database that combines them for practical use. Existing commercial databases are often closed or do not cover soils and rocks for heat storage. There is a lack of an open resource that would accumulate verified data and allow quick estimates.",
+     "first_step": "Compile a list of 50–100 publications with data on rock thermal conductivity, extract data, and enter into a table.",
+     "needs": "Access to scientific literature, programming skills (Python, web development), time for data collection. No equipment is required, but it is useful to have the ability to conduct own measurements to fill gaps.",
+     "risks": "Data collection and verification are labor-intensive, and errors may occur due to different measurement methods. The database may go unused if the interface is not user-friendly and if it is not promoted.",
+     "scale": "years",
+     "methods": [
+      "Use data from archive works (e.g., 2510.17446, 1208.1753, 2006.13308) as an initial source, supplemented by searches in open publications.",
+      "Develop the database structure: material type, porosity, saturation, temperature, measurement method, source.",
+      "Create a web interface (e.g., using Python/Django or Flask) for searching and filtering data.",
+      "Add tools for interpolation and property estimation by analogy with known materials."
+     ]
+    }
+   ]
+  },
+  "es": {
+   "note": "En el ámbito de la acumulación de calor en arena y piedra, se desarrollan activamente modelos numéricos e investigaciones de laboratorio, pero faltan metodologías prácticas de ingeniería y datos abiertos para una evaluación rápida de las propiedades de los materiales.",
+   "topic": "acumulación de calor en arena y piedra",
+   "ideas": [
+    {
+     "based_on": [
+      "2006.13308",
+      "2506.05818"
+     ],
+     "title": "Banco de pruebas para evaluar el efecto de la estratificación y la anisotropía de permeabilidad en la transferencia de calor en acumuladores de arena",
+     "what": "Montar un banco de pruebas de laboratorio con un contenedor de arena, un sistema de suministro de agua caliente y sensores de temperatura. Realizar una serie de experimentos de inyección de agua caliente en arena con diferentes disposiciones de capas (horizontales, inclinadas, con intercalaciones de arcilla) y medir la distribución de temperatura y la eficiencia de almacenamiento de calor.",
+     "why": "Estos datos ayudarán a comprender cómo la heterogeneidad geológica (estratificación, anisotropía) afecta el funcionamiento de las baterías geotérmicas. Los ingenieros que diseñan acumuladores de calor subterráneos podrán estimar con mayor precisión las pérdidas y seleccionar los sitios adecuados.",
+     "origin": "En el trabajo 2006.13308 se investigó numéricamente el efecto de la anisotropía de permeabilidad y la heterogeneidad estratificada en el almacenamiento de calor en una batería geotérmica, pero falta verificación experimental de estos efectos en condiciones controladas. El trabajo 2506.05818 muestra que el comportamiento de arcillas y lutitas bajo cargas termomecánicas es complejo, y su presencia como intercalaciones puede alterar significativamente la transferencia de calor. Nadie ha comprobado en laboratorio hasta qué punto la estratificación de arena real con inclusiones arcillosas modifica la eficiencia de acumulación de calor en comparación con un modelo homogéneo.",
+     "first_step": "Montar un contenedor simple con arena (por ejemplo, un acuario con aislamiento térmico), instalar varias termopares, inyectar agua caliente y registrar el cambio de temperatura a lo largo del tiempo para arena homogénea.",
+     "needs": "Contenedor de laboratorio (0.5–1 m³), arena de diferentes granulometrías, arcilla para intercalaciones, bomba con control de caudal, calentador de agua, 10–20 termopares o sensor de temperatura por fibra óptica, sistema de adquisición de datos (Arduino o similar). Habilidades: comprensión básica de hidrogeología y transferencia de calor, manejo de sensores.",
+     "risks": "Es difícil reproducir la anisotropía real y los efectos de escala en un contenedor pequeño; los resultados pueden resultar triviales (por ejemplo, las intercalaciones arcillosas simplemente bloquean el flujo). También puede ser difícil lograr repetibilidad debido a la heterogeneidad en la disposición de la arena.",
+     "scale": "semestre",
+     "methods": [
+      "Metodología de inyección y monitoreo de temperatura del trabajo 2006.13308 (Geothermal Battery Energy Storage): utilizar un enfoque similar con control de caudal y temperatura del agua.",
+      "Variar la disposición de la arena: crear capas horizontales de diferente permeabilidad, añadir intercalaciones delgadas de arcilla para simular anisotropía.",
+      "Medir la temperatura en una malla de puntos con termopares o sensores de fibra óptica, registrar la dinámica del frente térmico.",
+      "Comparar los perfiles de temperatura experimentales con modelos analíticos simples de transferencia de calor en medios porosos."
+     ]
+    },
+    {
+     "based_on": [
+      "1208.1753",
+      "2506.05818"
+     ],
+     "title": "Verificación de la aplicabilidad del modelo de consolidación térmica de arcillas para evaluar la estabilidad de acumuladores de calor en arena y piedra",
+     "what": "Realizar una serie de experimentos de calentamiento de muestras de arcilla saturada y mezclas de arena y arcilla en una celda rígida con medición de presión de poros y deformaciones. Comparar los resultados con el modelo de consolidación térmica del trabajo 1208.1753 y evaluar si se puede utilizar para predecir el comportamiento mecánico de acumuladores de calor en suelos.",
+     "why": "Durante el calentamiento y enfriamiento cíclico de acumuladores de calor subterráneos, en las intercalaciones arcillosas pueden generarse presiones de poros excesivas y deformaciones que afectan la estabilidad y la estanqueidad. Comprender este proceso ayudará a evitar accidentes durante la operación.",
+     "origin": "El trabajo 1208.1753 proporciona una base teórica para la consolidación térmica de arcillas, pero los datos experimentales en él son limitados y no cubren los regímenes cíclicos característicos de los acumuladores de calor. El trabajo 2506.05818 resume investigaciones sobre el comportamiento termo-hidro-mecánico de arcillas, pero no ofrece recomendaciones directas para mezclas de arena y arcilla en condiciones de acumuladores. Falta verificar hasta qué punto el modelo de 1208.1753 es aplicable a tales mezclas y cargas cíclicas.",
+     "first_step": "Montar o alquilar una celda para ensayos de suelos con capacidad de calentamiento y medición de presión de poros (por ejemplo, un odómetro modificado). Preparar la primera muestra de mezcla de arena y arcilla y realizar un calentamiento de prueba.",
+     "needs": "Equipo para ensayos mecánicos de suelos (odómetro o celda triaxial con calentamiento), sensores de presión de poros, sistema de control de temperatura, prensa para compactar muestras. Habilidades: mecánica de suelos, manejo de instrumentación de medición.",
+     "risks": "Los experimentos con arcillas son largos (la disipación de la presión de poros puede tomar días), y el modelo de consolidación térmica puede describir mal las mezclas con alto contenido de arena. Posiblemente se requiera modificar el modelo, lo que complicaría la tarea.",
+     "scale": "tesis",
+     "methods": [
+      "Utilizar la metodología experimental del trabajo 1208.1753: calentamiento de muestras saturadas en condiciones de drenaje restringido con medición de presión de poros y deformación axial.",
+      "Preparar muestras con diferente contenido de arcilla y arena, simulando los suelos típicos en los sitios de acumuladores.",
+      "Realizar ciclos de calentamiento y enfriamiento a diferentes velocidades, registrando la histéresis de la presión de poros y las deformaciones residuales.",
+      "Comparar las curvas experimentales con la solución analítica del modelo de consolidación térmica, evaluando los parámetros para los cuales el modelo funciona."
+     ]
+    },
+    {
+     "based_on": [
+      "2410.22737"
+     ],
+     "title": "Desarrollo de una metodología de evaluación rápida de la capacidad calorífica y la conductividad térmica de materiales pétreos para acumuladores de calor a partir de mediciones simples",
+     "what": "Crear un dispositivo portátil para medir propiedades termofísicas (capacidad calorífica, conductividad térmica) de muestras de rocas y materiales de construcción utilizados en acumuladores de calor. Realizar mediciones en un conjunto de materiales (granito, basalto, arenisca, hormigón) y comparar con datos de la literatura, calibrando la metodología.",
+     "why": "Para el diseño de acumuladores de calor en piedra se necesitan datos precisos sobre las propiedades termofísicas de los materiales, pero a menudo se utilizan valores tabulados sin tener en cuenta las particularidades locales. Una metodología accesible permitirá evaluar rápidamente las propiedades de materiales específicos en el sitio.",
+     "origin": "En el trabajo 2410.22737 se examina el efecto de temperaturas dinámicas en la dinámica de guijarros, pero los enfoques utilizados allí para evaluar propiedades térmicas pueden adaptarse a materiales terrestres. En la literatura sobre acumuladores de calor a menudo faltan métodos simples y económicos para medir propiedades termofísicas de materiales pétreos, especialmente para rocas locales. Nadie ha propuesto una metodología portátil que un ingeniero pueda usar en el campo.",
+     "first_step": "Montar una celda simple: un trozo de aislamiento térmico, un calentador plano, dos termopares, conectados a un Arduino. Probar con una muestra de conductividad térmica conocida.",
+     "needs": "Elemento calefactor (por ejemplo, película de nicromo), termopares o sensores digitales de temperatura, microcontrolador, aislamiento térmico, muestras de rocas (se pueden obtener de una colección geológica). Habilidades: fundamentos de termofísica, programación de microcontroladores.",
+     "risks": "La precisión de un dispositivo casero puede ser baja debido a resistencias de contacto y fugas de calor. Para obtener datos confiables puede ser necesario comparar con instrumentos comerciales, lo que no siempre está disponible.",
+     "scale": "semestre",
+     "methods": [
+      "Utilizar el método de calentamiento por pulso con registro de temperatura en la superficie de la muestra (similar a las metodologías descritas en el trabajo 2410.22737 para evaluar propiedades térmicas de planetesimales, pero adaptadas a materiales terrestres).",
+      "Montar una celda de medición con elemento calefactor, termopares y aislamiento térmico, conectada a un microcontrolador para registro automático.",
+      "Realizar mediciones en muestras con propiedades conocidas (por ejemplo, aluminio, agua) para calibrar, luego en rocas.",
+      "Comparar los resultados con datos de la literatura y evaluar el error del método."
+     ]
+    },
+    {
+     "based_on": [
+      "2510.17446"
+     ],
+     "title": "Evaluación del efecto de la saturación de agua en las propiedades térmicas de rocas porosas para acumuladores de calor: experimentos y un modelo simple",
+     "what": "Realizar una serie de mediciones de conductividad térmica y capacidad calorífica en muestras de rocas porosas (arenisca, caliza) con diferentes grados de saturación de agua. Desarrollar un modelo empírico simple para predecir las propiedades térmicas en función de la porosidad y la saturación, utilizando datos experimentales y de la literatura.",
+     "why": "En acumuladores de calor reales, los poros pueden estar parcialmente llenos de agua, lo que altera significativamente la transferencia de calor. Un modelo así ayudará a los ingenieros a evaluar rápidamente las características térmicas del yacimiento sin mediciones costosas.",
+     "origin": "El trabajo 2510.17446 proporciona datos experimentales sobre saturación de agua y termodinámica de rocas carbonatadas porosas, pero no ofrece un modelo simple para estimaciones de ingeniería. En la literatura sobre acumuladores de calor a menudo se utilizan valores constantes de conductividad térmica, ignorando la saturación. Falta una metodología práctica que permita evaluar rápidamente las propiedades térmicas a partir de la porosidad y la humedad conocidas.",
+     "first_step": "Encontrar o fabricar muestras de rocas porosas con porosidad conocida, medir su conductividad térmica en estado seco con una sonda de aguja.",
+     "needs": "Medidor de conductividad térmica (sonda de aguja calentada), balanza para control de saturación, horno de secado, muestras de rocas. Habilidades: fundamentos de termofísica, procesamiento estadístico de datos.",
+     "risks": "La conductividad térmica depende fuertemente de la microestructura de los poros, que es difícil de caracterizar con parámetros simples. El modelo empírico puede dar errores grandes para rocas con estructura inusual.",
+     "scale": "tesis",
+     "methods": [
+      "Utilizar la metodología de medición de conductividad térmica y capacidad calorífica descrita en el trabajo 2510.17446 para rocas carbonatadas con diferente saturación de agua.",
+      "Preparar muestras con porosidad controlada (por ejemplo, esferas de vidrio sinterizadas o rocas naturales) y saturarlas con agua hasta diferentes niveles.",
+      "Realizar mediciones de conductividad térmica mediante el método de fuente lineal de calor (sonda de aguja) y de capacidad calorífica por calorimetría.",
+      "Construir un modelo de regresión que relacione la conductividad térmica con la porosidad y la saturación, y validarlo con datos independientes."
+     ]
+    },
+    {
+     "based_on": [
+      "2510.17446",
+      "1208.1753",
+      "2006.13308"
+     ],
+     "title": "Creación de una base de datos abierta de propiedades termofísicas de rocas y suelos para el diseño de acumuladores de calor",
+     "what": "Recopilar de la literatura y de mediciones propias datos sobre conductividad térmica, capacidad calorífica y densidad de diversas rocas y suelos utilizados en acumuladores de calor. Sistematizarlos en una base de datos abierta con interfaz web y herramientas para selección de parámetros.",
+     "why": "Los diseñadores de acumuladores de calor a menudo tienen que buscar datos dispersos sobre propiedades de materiales, lo que ralentiza el trabajo. Una base abierta con acceso conveniente acelerará las evaluaciones preliminares y mejorará la calidad de los proyectos.",
+     "origin": "En los trabajos del archivo (por ejemplo, 2510.17446 y 1208.1753) se presentan datos individuales sobre propiedades térmicas, pero no existe una base unificada que los integre para uso práctico. Las bases comerciales existentes suelen ser cerradas o no cubren suelos y rocas para acumuladores de calor. Falta un recurso abierto que acumule datos verificados y permita obtener estimaciones rápidamente.",
+     "first_step": "Elaborar una lista de 50–100 publicaciones con datos sobre conductividad térmica de rocas, extraer los datos y registrarlos en una tabla.",
+     "needs": "Acceso a literatura científica, habilidades de programación (Python, desarrollo web), tiempo para recopilación de datos. No se requiere equipo, pero es útil poder realizar mediciones propias para llenar vacíos.",
+     "risks": "La recopilación y verificación de datos es laboriosa y pueden ocurrir errores debido a diferentes metodologías de medición. La base puede no ser utilizada si no tiene una interfaz conveniente y promoción.",
+     "scale": "años",
+     "methods": [
+      "Utilizar los datos de los trabajos del archivo (por ejemplo, 2510.17446, 1208.1753, 2006.13308) como fuente inicial, complementar con búsqueda en publicaciones abiertas.",
+      "Desarrollar la estructura de la base de datos: tipo de material, porosidad, saturación, temperatura, método de medición, fuente.",
+      "Crear una interfaz web (por ejemplo, en Python/Django o Flask) para búsqueda y filtrado de datos.",
+      "Añadir herramientas para interpolación y estimación de propiedades por analogía con materiales conocidos."
+     ]
+    }
+   ]
+  },
+  "ar": {
+   "note": "في مجال تخزين الحرارة في الرمل والحجر، تتطور النماذج العددية والأبحاث المخبرية بشكل نشط، لكن ينقصها المنهجيات الهندسية العملية والبيانات المفتوحة للتقييم السريع لخصائص المواد.",
+   "topic": "تخزين الحرارة في الرمل والحجر",
+   "ideas": [
+    {
+     "based_on": [
+      "2006.13308",
+      "2506.05818"
+     ],
+     "title": "منصة اختبار للتحقق من تأثير التطبق (layering) وتباين النفاذية (anisotropy) على انتقال الحرارة في مخازن الرمل الحرارية",
+     "what": "بناء منصة مخبرية تحتوي على حاوية رمل، ونظام لتغذية الماء الساخن، وحساسات لدرجة الحرارة. إجراء سلسلة من التجارب على حقن الماء الساخن في الرمل بترتيبات مختلفة للطبقات (أفقية، مائلة، مع طبقات طينية رقيقة) وقياس توزيع درجة الحرارة وكفاءة تخزين الحرارة.",
+     "why": "تساعد هذه البيانات في فهم كيفية تأثير عدم التجانس الجيولوجي (التطبق، تباين النفاذية) على أداء البطاريات الحرارية الأرضية (geothermal batteries). سيتمكن المهندسون الذين يصممون مخازن الحرارة تحت الأرض من تقدير الفاقد بدقة أكبر واختيار المواقع المناسبة.",
+     "origin": "في العمل 2006.13308 تمت دراسة تأثير تباين النفاذية وعدم التجانس الطبقي على تخزين الحرارة في بطارية حرارية أرضية عدديًا، لكن ينقص التحقق التجريبي لهذه التأثيرات في ظروف مضبوطة. يُظهر العمل 2506.05818 أن سلوك الطين والصخور الطينية (argillites) تحت الأحمال الحرارية الميكانيكية معقد، وأن وجودها كطبقات رقيقة قد يغير انتقال الحرارة بشكل كبير. لم يتحقق أحد في المختبر من مدى تغيير تطبق الرمل الحقيقي مع الشوائب الطينية لكفاءة تخزين الحرارة مقارنة بالنموذج المتجانس.",
+     "first_step": "تجميع حاوية بسيطة بالرمل (مثل حوض سمك معزول حراريًا)، وتركيب عدة مزدوجات حرارية (thermocouples)، وضخ ماء ساخن، وتسجيل تغير درجة الحرارة مع الزمن للرمل المتجانس.",
+     "needs": "حاوية مخبرية (0.5–1 م³)، رمل بدرجات حبيبية مختلفة، طين للطبقات الرقيقة، مضخة مع تنظيم معدل التدفق، سخان مياه، 10–20 مزدوجة حرارية أو حساس ألياف بصرية لدرجة الحرارة، نظام لجمع البيانات (Arduino أو ما يعادله). المهارات: فهم أساسي للهيدروجيولوجيا وانتقال الحرارة، والقدرة على العمل مع الحساسات.",
+     "risks": "من الصعب إعادة إنتاج التباين الحقيقي والتأثيرات واسعة النطاق في حاوية صغيرة؛ قد تكون النتائج بديهية (مثل أن الطبقات الطينية الرقيقة تحجب التدفق ببساطة). قد يكون من الصعب أيضًا تحقيق قابلية التكرار بسبب عدم تجانس ترتيب الرمل.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "منهجية الحقن ومراقبة درجة الحرارة من العمل 2006.13308 (Geothermal Battery Energy Storage): استخدام نهج مماثل مع التحكم في معدل التدفق ودرجة حرارة الماء.",
+      "تغيير ترتيب الرمل: إنشاء طبقات أفقية بنفاذية مختلفة، وإضافة طبقات طينية رقيقة لمحاكاة التباين.",
+      "قياس درجة الحرارة في شبكة من النقاط باستخدام المزدوجات الحرارية أو حساسات الألياف البصرية، وتسجيل ديناميكية الجبهة الحرارية.",
+      "مقارنة ملفات درجة الحرارة التجريبية مع نماذج تحليلية بسيطة لانتقال الحرارة في وسط مسامي."
+     ]
+    },
+    {
+     "based_on": [
+      "1208.1753",
+      "2506.05818"
+     ],
+     "title": "التحقق من قابلية تطبيق نموذج الانضغاط الحراري (thermal consolidation) للطين لتقييم استقرار مخازن الحرارة الرملية الحجرية",
+     "what": "إجراء سلسلة من التجارب على تسخين عينات من الطين المشبع ومخاليط الرمل والطين في خلية صلبة مع قياس ضغط المسام (pore pressure) والتشوهات. مقارنة النتائج مع نموذج الانضغاط الحراري من العمل 1208.1753 وتقييم إمكانية استخدامه للتنبؤ بالسلوك الميكانيكي لمخازن الحرارة في التربة.",
+     "why": "أثناء التسخين والتبريد الدوري لمخازن الحرارة تحت الأرض، قد تنشأ ضغوط مسامية زائدة وتشوهات في الطبقات الطينية الرقيقة، مما يؤثر على الاستقرار وإحكام الغلق. فهم هذه العملية يساعد في تجنب الحوادث أثناء التشغيل.",
+     "origin": "يقدم العمل 1208.1753 أساسًا نظريًا للانضغاط الحراري للطين، لكن البيانات التجريبية فيه محدودة ولا تغطي الأنماط الدورية المميزة لمخازن الحرارة. يلخص العمل 2506.05818 أبحاث السلوك الحراري-المائي-الميكانيكي للطين، لكنه لا يقدم توصيات مباشرة لمخاليط الرمل والطين في ظروف المخازن. ينقص التحقق من مدى قابلية تطبيق النموذج من 1208.1753 على هذه المخاليط والأحمال الدورية.",
+     "first_step": "تجميع أو استئجار خلية لاختبار التربة مع إمكانية التسخين وقياس ضغط المسام (مثل مقياس الانضغاط المعدل (odometer)). تحضير أول عينة من خليط الرمل والطين وإجراء تسخين تجريبي.",
+     "needs": "معدات الاختبارات الميكانيكية للتربة (مقياس انضغاط أو خلية ثلاثية المحاور مع تسخين)، حساسات ضغط المسام، نظام للتحكم في درجة الحرارة، مكبس لضغط العينات. المهارات: ميكانيكا التربة، القدرة على العمل مع أجهزة القياس.",
+     "risks": "تجارب الطين طويلة (تبديد ضغط المسام قد يستغرق أيامًا)، وقد لا يصف نموذج الانضغاط الحراري المخاليط ذات المحتوى العالي من الرمل جيدًا. قد تكون هناك حاجة لتعديل النموذج، مما يعقد المهمة.",
+     "scale": "أطروحة تخرج",
+     "methods": [
+      "استخدام المنهجية التجريبية من العمل 1208.1753: تسخين العينات المشبعة في ظروف تصريف محدود مع قياس ضغط المسام والتشوه المحوري.",
+      "تحضير عينات بمحتوى مختلف من الطين والرمل، تحاكي التربة النموذجية في مواقع المخازن.",
+      "إجراء دورات تسخين وتبريد بمعدلات مختلفة، وتسجيل التباطؤ (hysteresis) في ضغط المسام والتشوهات المتبقية.",
+      "مقارنة المنحنيات التجريبية مع الحل التحليلي لنموذج الانضغاط الحراري، وتقييم المعاملات التي يعمل عندها النموذج."
+     ]
+    },
+    {
+     "based_on": [
+      "2410.22737"
+     ],
+     "title": "تطوير منهجية للتقييم السريع للسعة الحرارية والتوصيل الحراري للمواد الحجرية لمخازن الحرارة بناءً على قياسات بسيطة",
+     "what": "إنشاء جهاز محمول لقياس الخصائص الحرارية الفيزيائية (السعة الحرارية، التوصيل الحراري) لعينات الصخور ومواد البناء المستخدمة في مخازن الحرارة. إجراء قياسات لمجموعة من المواد (الجرانيت، البازلت، الحجر الرملي، الخرسانة) ومقارنتها بالبيانات الأدبية، ومعايرة المنهجية.",
+     "why": "لتصميم مخازن الحرارة في الصخور، هناك حاجة لبيانات دقيقة عن الخصائص الحرارية الفيزيائية للمواد، لكن غالبًا ما تُستخدم قيم جدولية دون مراعاة الخصائص المحلية. منهجية متاحة تسمح بالتقييم السريع لخصائص مواد معينة في الموقع.",
+     "origin": "في العمل 2410.22737 يُنظر في تأثير درجات الحرارة الديناميكية على ديناميكية الحصى، لكن الأساليب المستخدمة هناك لتقييم الخصائص الحرارية قد تكون قابلة للتكيف مع المواد الأرضية. في أدبيات مخازن الحرارة، غالبًا ما ينقص وجود طرق بسيطة ورخيصة لقياس الخصائص الحرارية الفيزيائية للمواد الحجرية، خاصة للصخور المحلية. لم يقترح أحد منهجية محمولة يمكن للمهندس استخدامها في الموقع.",
+     "first_step": "تجميع خلية بسيطة: قطعة عازل حراري، سخان مسطح، مزدوجتان حراريتان، وتوصيلها بـ Arduino. اختبارها على عينة ذات توصيل حراري معروف.",
+     "needs": "عنصر تسخين (مثل فيلم نيتشروم)، مزدوجات حرارية أو حساسات رقمية لدرجة الحرارة، متحكم دقيق، عازل حراري، عينات صخور (يمكن الحصول عليها من مجموعة جيولوجية). المهارات: أساسيات الفيزياء الحرارية، برمجة المتحكمات الدقيقة.",
+     "risks": "قد تكون دقة الجهاز محلي الصنع منخفضة بسبب مقاومات التلامس وفقدان الحرارة. للحصول على بيانات موثوقة، قد تكون هناك حاجة للمقارنة مع أجهزة تجارية، وهو ما قد لا يكون متاحًا دائمًا.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "استخدام طريقة التسخين النبضي مع تسجيل درجة الحرارة على سطح العينة (على غرار المنهجيات الموصوفة في العمل 2410.22737 لتقييم الخصائص الحرارية للكواكب الصغيرة، ولكن معدلة للمواد الأرضية).",
+      "تجميع خلية قياس تحتوي على عنصر تسخين، ومزدوجات حرارية، وعازل حراري، وتوصيلها بمتحكم دقيق للتسجيل التلقائي.",
+      "إجراء قياسات على عينات ذات خصائص معروفة (مثل الألومنيوم، الماء) للمعايرة، ثم على الصخور.",
+      "مقارنة النتائج مع البيانات الأدبية وتقييم خطأ المنهجية."
+     ]
+    },
+    {
+     "based_on": [
+      "2510.17446"
+     ],
+     "title": "تقييم تأثير التشبع بالماء على الخصائص الحرارية للصخور المسامية لمخازن الحرارة: تجارب ونموذج بسيط",
+     "what": "إجراء سلسلة من قياسات التوصيل الحراري والسعة الحرارية لعينات من الصخور المسامية (الحجر الرملي، الحجر الجيري) عند درجات مختلفة من التشبع بالماء. تطوير نموذج تجريبي بسيط للتنبؤ بالخصائص الحرارية اعتمادًا على المسامية والتشبع، باستخدام بيانات التجارب والبيانات الأدبية.",
+     "why": "في مخازن الحرارة الحقيقية، قد تكون المسام مملوءة جزئيًا بالماء، مما يغير انتقال الحرارة بشكل كبير. مثل هذا النموذج يساعد المهندسين على تقييم الخصائص الحرارية للطبقة بسرعة دون قياسات مكلفة.",
+     "origin": "يقدم العمل 2510.17446 بيانات تجريبية عن التشبع بالماء والديناميكا الحرارية للصخور الكربوناتية المسامية، لكنه لا يقدم نموذجًا بسيطًا للتقييمات الهندسية. في أدبيات مخازن الحرارة، غالبًا ما تُستخدم قيم ثابتة للتوصيل الحراري متجاهلة التشبع. ينقص منهجية عملية تسمح بالتقييم السريع للخصائص الحرارية بناءً على المسامية والرطوبة المعروفة.",
+     "first_step": "العثور على عينات من الصخور المسامية ذات مسامية معروفة أو تصنيعها، وقياس توصيلها الحراري في الحالة الجافة باستخدام مسبار إبرة (needle probe).",
+     "needs": "جهاز قياس التوصيل الحراري (مسبار إبرة ساخنة)، ميزان للتحكم في التشبع، فرن تجفيف، عينات صخور. المهارات: أساسيات الفيزياء الحرارية، المعالجة الإحصائية للبيانات.",
+     "risks": "يعتمد التوصيل الحراري بشكل كبير على البنية الدقيقة للمسام، والتي يصعب وصفها بمعاملات بسيطة. قد يعطي النموذج التجريبي أخطاء كبيرة للصخور ذات البنية غير العادية.",
+     "scale": "أطروحة تخرج",
+     "methods": [
+      "استخدام منهجية قياس التوصيل الحراري والسعة الحرارية الموصوفة في العمل 2510.17446 للصخور الكربوناتية بدرجات تشبع مختلفة.",
+      "تحضير عينات بمسامية مضبوطة (مثل كرات زجاجية ملبددة أو صخور طبيعية) وتشبعها بالماء بمستويات مختلفة.",
+      "إجراء قياسات التوصيل الحراري بطريقة مصدر الحرارة الخطي (المسبار الإبرة) والسعة الحرارية بطريقة المسعر (calorimetrically).",
+      "بناء نموذج انحدار يربط التوصيل الحراري بالمسامية والتشبع، والتحقق منه على بيانات مستقلة."
+     ]
+    },
+    {
+     "based_on": [
+      "2510.17446",
+      "1208.1753",
+      "2006.13308"
+     ],
+     "title": "إنشاء قاعدة بيانات مفتوحة للخصائص الحرارية الفيزيائية للصخور والتربة لتصميم مخازن الحرارة",
+     "what": "جمع بيانات من الأدبيات والقياسات الخاصة حول التوصيل الحراري والسعة الحرارية والكثافة لمختلف الصخور والتربة المستخدمة في مخازن الحرارة. تنظيمها في قاعدة بيانات مفتوحة مع واجهة ويب وأدوات لاختيار المعاملات.",
+     "why": "غالبًا ما يضطر مصممو مخازن الحرارة إلى البحث عن بيانات متناثرة حول خصائص المواد، مما يبطئ العمل. قاعدة بيانات مفتوحة ذات وصول سهل تسرع التقييمات الأولية وتحسن جودة المشاريع.",
+     "origin": "في أعمال الأرشيف (مثل 2510.17446 و1208.1753) تُعرض بيانات منفصلة عن الخصائص الحرارية، لكن لا توجد قاعدة موحدة تجمعها للاستخدام العملي. قواعد البيانات التجارية الحالية غالبًا ما تكون مغلقة أو لا تغطي التربة والصخور لمخازن الحرارة. ينقص مورد مفتوح يجمع البيانات الموثوقة ويسمح بالحصول على تقديرات سريعة.",
+     "first_step": "إعداد قائمة من 50–100 منشورًا تحتوي على بيانات عن التوصيل الحراري للصخور، واستخراج البيانات وإدخالها في جدول.",
+     "needs": "الوصول إلى الأدبيات العلمية، مهارات البرمجة (Python، تطوير الويب)، وقت لجمع البيانات. لا حاجة لمعدات، لكن من المفيد إجراء قياسات خاصة لملء الفجوات.",
+     "risks": "جمع البيانات والتحقق منها يتطلب جهدًا، وقد تحدث أخطاء بسبب اختلاف منهجيات القياس. قد لا تحظى القاعدة باهتمام إذا لم تكن الواجهة سهلة الاستخدام ولم يتم الترويج لها.",
+     "scale": "سنوات",
+     "methods": [
+      "استخدام بيانات من أعمال الأرشيف (مثل 2510.17446، 1208.1753، 2006.13308) كمصدر أولي، واستكمالها بالبحث في المنشورات المفتوحة.",
+      "تطوير هيكل قاعدة البيانات: نوع المادة، المسامية، التشبع، درجة الحرارة، طريقة القياس، المصدر.",
+      "إنشاء واجهة ويب (مثل Python/Django أو Flask) للبحث وتصفية البيانات.",
+      "إضافة أدوات للاستيفاء وتقييم الخصائص بالقياس على مواد معروفة."
+     ]
+    }
+   ]
+  },
+  "fr": {
+   "note": "Dans le domaine du stockage de chaleur dans le sable et la pierre, les modèles numériques et les recherches en laboratoire se développent activement, mais on manque de méthodes d'ingénierie pratiques et de données ouvertes pour évaluer rapidement les propriétés des matériaux.",
+   "topic": "stockage de chaleur dans le sable et la pierre",
+   "ideas": [
+    {
+     "based_on": [
+      "2006.13308",
+      "2506.05818"
+     ],
+     "title": "Banc d'essai pour étudier l'influence de la stratification et de l'anisotropie de perméabilité sur les échanges thermiques dans les accumulateurs de chaleur à sable",
+     "what": "Assembler un banc d'essai en laboratoire avec un conteneur de sable, un système d'injection d'eau chaude et des capteurs de température. Réaliser une série d'expériences d'injection d'eau chaude dans du sable avec différentes configurations de couches (horizontales, inclinées, avec des intercalaires d'argile) et mesurer la distribution de la température et l'efficacité du stockage de chaleur.",
+     "why": "Ces données aideront à comprendre comment l'hétérogénéité géologique (stratification, anisotropie) affecte le fonctionnement des batteries géothermiques. Les ingénieurs qui conçoivent des accumulateurs de chaleur souterrains pourront mieux évaluer les pertes et choisir les sites.",
+     "origin": "Dans le travail 2006.13308, l'influence de l'anisotropie de perméabilité et de l'hétérogénéité stratifiée sur le stockage de chaleur dans une batterie géothermique a été étudiée numériquement, mais on manque de vérification expérimentale de ces effets dans des conditions contrôlées. Le travail 2506.05818 montre que le comportement des argiles et des argilites sous des charges thermomécaniques est complexe, et leur présence en tant qu'intercalaires peut fortement modifier le transfert de chaleur. Personne n'a vérifié en laboratoire dans quelle mesure la stratification d'un sable réel avec des inclusions d'argile modifie l'efficacité du stockage de chaleur par rapport à un modèle homogène.",
+     "first_step": "Assembler un conteneur simple avec du sable (par exemple, un aquarium avec isolation thermique), installer plusieurs thermocouples, injecter de l'eau chaude et enregistrer l'évolution de la température dans le temps pour du sable homogène.",
+     "needs": "Conteneur de laboratoire (0,5 à 1 m³), sable de différentes granulométries, argile pour les intercalaires, pompe avec débit réglable, chauffe-eau, 10 à 20 thermocouples ou capteur de température à fibre optique, système d'acquisition de données (Arduino ou équivalent). Compétences : compréhension de base de l'hydrogéologie et des transferts thermiques, capacité à travailler avec des capteurs.",
+     "risks": "Il est difficile de reproduire l'anisotropie réelle et les effets d'échelle dans un petit conteneur ; les résultats pourraient être triviaux (par exemple, les intercalaires d'argile bloquent simplement l'écoulement). Il peut également être difficile d'obtenir une répétabilité en raison de l'hétérogénéité du tassement du sable.",
+     "scale": "semestre",
+     "methods": [
+      "Méthodologie d'injection et de suivi de température du travail 2006.13308 (Geothermal Battery Energy Storage) : utiliser une approche similaire avec contrôle du débit et de la température de l'eau.",
+      "Varier la disposition du sable : créer des couches horizontales de perméabilités différentes, ajouter de fines couches d'argile pour simuler l'anisotropie.",
+      "Mesurer la température en une grille de points à l'aide de thermocouples ou de capteurs à fibre optique, enregistrer la dynamique du front thermique.",
+      "Comparer les profils de température expérimentaux avec des modèles analytiques simples de transfert de chaleur en milieu poreux."
+     ]
+    },
+    {
+     "based_on": [
+      "1208.1753",
+      "2506.05818"
+     ],
+     "title": "Vérification de l'applicabilité du modèle de consolidation thermique des argiles pour évaluer la stabilité des accumulateurs de chaleur en sable et pierre",
+     "what": "Réaliser une série d'expériences de chauffage d'échantillons d'argile saturée et de mélanges sable-argile dans une cellule rigide avec mesure de la pression interstitielle et des déformations. Comparer les résultats avec le modèle de consolidation thermique du travail 1208.1753 et évaluer s'il peut être utilisé pour prédire le comportement mécanique des accumulateurs de chaleur dans les sols.",
+     "why": "Lors du chauffage et du refroidissement cycliques des accumulateurs de chaleur souterrains, des pressions interstitielles excessives et des déformations peuvent apparaître dans les couches d'argile, affectant la stabilité et l'étanchéité. Comprendre ce processus aidera à éviter les accidents lors de l'exploitation.",
+     "origin": "Le travail 1208.1753 fournit une base théorique pour la consolidation thermique des argiles, mais les données expérimentales y sont limitées et ne couvrent pas les régimes cycliques caractéristiques des accumulateurs de chaleur. Le travail 2506.05818 synthétise les recherches sur le comportement thermo-hydro-mécanique des argiles, mais ne donne pas de recommandations directes pour les mélanges sable-argile dans les conditions des accumulateurs. On manque de vérification de l'applicabilité du modèle de 1208.1753 à de tels mélanges et à des charges cycliques.",
+     "first_step": "Assembler ou louer une cellule d'essai de sols avec possibilité de chauffage et de mesure de la pression interstitielle (par exemple, un œdomètre modifié). Préparer le premier échantillon de mélange sable-argile et effectuer un chauffage d'essai.",
+     "needs": "Équipement d'essai mécanique des sols (œdomètre ou cellule triaxiale avec chauffage), capteurs de pression interstitielle, système de contrôle de la température, presse pour compacter les échantillons. Compétences : mécanique des sols, capacité à travailler avec l'instrumentation de mesure.",
+     "risks": "Les expériences avec les argiles sont longues (la dissipation de la pression interstitielle peut prendre des jours), et le modèle de consolidation thermique peut mal décrire les mélanges à forte teneur en sable. Une modification du modèle pourrait être nécessaire, ce qui compliquerait la tâche.",
+     "scale": "mémoire",
+     "methods": [
+      "Utiliser la méthodologie expérimentale du travail 1208.1753 : chauffage d'échantillons saturés dans des conditions de drainage limité avec mesure de la pression interstitielle et de la déformation axiale.",
+      "Préparer des échantillons avec différentes teneurs en argile et en sable, imitant les sols typiques des sites d'accumulateurs.",
+      "Effectuer des cycles de chauffage et de refroidissement à différentes vitesses, en enregistrant l'hystérésis de la pression interstitielle et les déformations résiduelles.",
+      "Comparer les courbes expérimentales avec la solution analytique du modèle de consolidation thermique, évaluer les paramètres pour lesquels le modèle fonctionne."
+     ]
+    },
+    {
+     "based_on": [
+      "2410.22737"
+     ],
+     "title": "Développement d'une méthode d'évaluation rapide de la capacité thermique et de la conductivité thermique des matériaux pierreux pour accumulateurs de chaleur à partir de mesures simples",
+     "what": "Créer un dispositif portable pour mesurer les propriétés thermophysiques (capacité thermique, conductivité thermique) d'échantillons de roches et de matériaux de construction utilisés dans les accumulateurs de chaleur. Effectuer des mesures sur un ensemble de matériaux (granite, basalte, grès, béton) et comparer avec les données de la littérature, calibrer la méthode.",
+     "why": "Pour concevoir des accumulateurs de chaleur dans la pierre, des données précises sur les propriétés thermophysiques des matériaux sont nécessaires, mais on utilise souvent des valeurs tabulées sans tenir compte des particularités locales. Une méthode accessible permettrait d'évaluer rapidement les propriétés de matériaux spécifiques sur site.",
+     "origin": "Dans le travail 2410.22737, l'influence des températures dynamiques sur la dynamique des galets est examinée, mais les approches utilisées pour évaluer les propriétés thermiques peuvent être adaptées aux matériaux terrestres. Dans la littérature sur les accumulateurs de chaleur, on manque souvent de méthodes simples et peu coûteuses pour mesurer les propriétés thermophysiques des matériaux pierreux, en particulier pour les roches locales. Personne n'a proposé une méthode portable qu'un ingénieur pourrait utiliser sur place.",
+     "first_step": "Assembler une cellule simple : un morceau d'isolant thermique, un élément chauffant plat, deux thermocouples, connectés à un Arduino. Tester sur un échantillon de conductivité thermique connue.",
+     "needs": "Élément chauffant (par exemple, film de nichrome), thermocouples ou capteurs de température numériques, microcontrôleur, isolation thermique, échantillons de roches (disponibles dans une collection géologique). Compétences : bases de la thermophysique, programmation de microcontrôleurs.",
+     "risks": "La précision d'un dispositif artisanal peut être faible en raison des résistances de contact et des fuites de chaleur. Pour obtenir des données fiables, une comparaison avec des instruments commerciaux peut être nécessaire, ce qui n'est pas toujours possible.",
+     "scale": "semestre",
+     "methods": [
+      "Utiliser la méthode de chauffage impulsionnel avec enregistrement de la température en surface de l'échantillon (par analogie avec les méthodes décrites dans le travail 2410.22737 pour l'évaluation des propriétés thermiques des planétésimaux, mais adaptées aux matériaux terrestres).",
+      "Assembler une cellule de mesure avec élément chauffant, thermocouples et isolation thermique, connectée à un microcontrôleur pour l'enregistrement automatique.",
+      "Effectuer des mesures sur des échantillons de propriétés connues (par exemple, aluminium, eau) pour l'étalonnage, puis sur des roches.",
+      "Comparer les résultats avec les données de la littérature et évaluer l'erreur de la méthode."
+     ]
+    },
+    {
+     "based_on": [
+      "2510.17446"
+     ],
+     "title": "Évaluation de l'influence de la saturation en eau sur les propriétés thermiques des roches poreuses pour accumulateurs de chaleur : expériences et modèle simple",
+     "what": "Réaliser une série de mesures de conductivité thermique et de capacité thermique sur des échantillons de roches poreuses (grès, calcaire) à différents degrés de saturation en eau. Développer un modèle empirique simple pour prédire les propriétés thermiques en fonction de la porosité et de la saturation, en utilisant les données expérimentales et les données de la littérature.",
+     "why": "Dans les accumulateurs de chaleur réels, les pores peuvent être partiellement remplis d'eau, ce qui modifie fortement le transfert de chaleur. Un tel modèle aiderait les ingénieurs à évaluer plus rapidement les caractéristiques thermiques du réservoir sans mesures coûteuses.",
+     "origin": "Le travail 2510.17446 fournit des données expérimentales sur la saturation en eau et la thermodynamique des roches carbonatées poreuses, mais ne propose pas de modèle simple pour les évaluations d'ingénierie. Dans la littérature sur les accumulateurs de chaleur, on utilise souvent des valeurs constantes de conductivité thermique, ignorant la saturation. On manque d'une méthode pratique permettant d'évaluer rapidement les propriétés thermiques à partir de la porosité et de l'humidité connues.",
+     "first_step": "Trouver ou fabriquer des échantillons de roches poreuses de porosité connue, mesurer leur conductivité thermique à l'état sec à l'aide d'une sonde à aiguille.",
+     "needs": "Mesureur de conductivité thermique (sonde à aiguille chauffante), balance pour contrôler la saturation, étuve, échantillons de roches. Compétences : bases de la thermophysique, traitement statistique des données.",
+     "risks": "La conductivité thermique dépend fortement de la microstructure des pores, difficile à caractériser par des paramètres simples. Le modèle empirique peut donner des erreurs importantes pour des roches à structure inhabituelle.",
+     "scale": "mémoire",
+     "methods": [
+      "Utiliser la méthode de mesure de conductivité thermique et de capacité thermique décrite dans le travail 2510.17446 pour les roches carbonatées à différentes saturations en eau.",
+      "Préparer des échantillons de porosité contrôlée (par exemple, billes de verre frittées ou roches naturelles) et les saturer en eau à différents niveaux.",
+      "Effectuer des mesures de conductivité thermique par la méthode de la source de chaleur linéique (sonde à aiguille chauffante) et de capacité thermique par calorimétrie.",
+      "Construire un modèle de régression reliant la conductivité thermique à la porosité et à la saturation, et le vérifier sur des données indépendantes."
+     ]
+    },
+    {
+     "based_on": [
+      "2510.17446",
+      "1208.1753",
+      "2006.13308"
+     ],
+     "title": "Création d'une base de données ouverte sur les propriétés thermophysiques des roches et des sols pour la conception d'accumulateurs de chaleur",
+     "what": "Collecter à partir de la littérature et de mesures propres des données sur la conductivité thermique, la capacité thermique et la densité de diverses roches et sols utilisés dans les accumulateurs de chaleur. Les organiser dans une base de données ouverte avec une interface web et des outils de sélection de paramètres.",
+     "why": "Les concepteurs d'accumulateurs de chaleur doivent souvent rechercher des données dispersées sur les propriétés des matériaux, ce qui ralentit le travail. Une base ouverte avec un accès facile accélérerait les évaluations préliminaires et améliorerait la qualité des projets.",
+     "origin": "Dans les travaux de la prépublication (par exemple, 2510.17446 et 1208.1753), des données individuelles sur les propriétés thermiques sont fournies, mais il n'existe pas de base unifiée qui les rassemble pour une utilisation pratique. Les bases commerciales existantes sont souvent fermées ou ne couvrent pas les sols et roches pour les accumulateurs de chaleur. On manque d'une ressource ouverte qui accumulerait des données vérifiées et permettrait d'obtenir rapidement des estimations.",
+     "first_step": "Établir une liste de 50 à 100 publications contenant des données sur la conductivité thermique des roches, extraire les données et les saisir dans un tableau.",
+     "needs": "Accès à la littérature scientifique, compétences en programmation (Python, développement web), temps pour la collecte de données. Aucun équipement n'est requis, mais il est utile de pouvoir effectuer ses propres mesures pour combler les lacunes.",
+     "risks": "La collecte et la vérification des données sont laborieuses, des erreurs sont possibles en raison de différentes méthodes de mesure. La base pourrait ne pas être utilisée si l'interface n'est pas conviviale et si elle n'est pas promue.",
+     "scale": "années",
+     "methods": [
+      "Utiliser les données des travaux de la prépublication (par exemple, 2510.17446, 1208.1753, 2006.13308) comme source initiale, compléter par une recherche dans les publications ouvertes.",
+      "Développer la structure de la base de données : type de matériau, porosité, saturation, température, méthode de mesure, source.",
+      "Créer une interface web (par exemple, en Python/Django ou Flask) pour la recherche et le filtrage des données.",
+      "Ajouter des outils d'interpolation et d'évaluation des propriétés par analogie avec des matériaux connus."
+     ]
+    }
+   ]
+  }
+ }
 }

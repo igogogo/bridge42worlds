@@ -1,15 +1,10 @@
-let searchIndex = [];
 let tagsLoc = {};
 let scientistsData = {};
 let lawsData = {};
 let authorsGraph = {};
 // Уровни сложности: popular (по умолчанию) → simple → advanced.
-var VERSION_INDEX_FILES = { popular: 'articles-index.json', simple: 'articles-index-simple.json',
-                            advanced: 'articles-index-advanced.json' };
 // Маленький индекс последних статей (~60 записей) — для мгновенной первой ленты, пока
 // полный тир (~3.6МБ) едет в фоне.
-var VERSION_INDEX_LATEST_FILES = { popular: 'articles-latest.json', simple: 'articles-latest-simple.json',
-                                   advanced: 'articles-latest-advanced.json' };
 let currentVersion = (function() {
     try { return localStorage.getItem('b42_version') || 'popular'; } catch(e) { return 'popular'; }
 })();
@@ -102,6 +97,8 @@ var UI_STRINGS = {
           articlesWord: 'статей', noResults: 'Ничего не найдено', more: 'Подробнее →', profile: 'Профиль →', moreWord: 'ещё', min: 'мин',
           express: 'экспресс', expressTip: 'Экспресс: быстрый пересказ по авторской аннотации. Полные статьи мы пишем по всему тексту работы — глубже и подробнее.',
           hideExpress: 'Скрыть экспресс-статьи', onlyAdvice: 'Только с советами автору', showLess: 'Свернуть',
+          searchPh: 'Поиск: работа, автор, номер, понятие',
+          searchOffline: 'Поиск не отвечает — попробуйте ещё раз',
           favTitle: 'Избранное', like: 'Нравится', dislike: 'Не нравится', superlike: 'Супер!',
           refineTip: 'Отшлифовано редактором',
           noCard: 'Карточки пока нет — покажем статьи, где о нём говорится',
@@ -111,6 +108,8 @@ var UI_STRINGS = {
           articlesWord: 'articles', noResults: 'Nothing found', more: 'More →', profile: 'Profile →', moreWord: 'more', min: 'min',
           express: 'express', expressTip: 'Express: a quick take from the author\'s abstract only. Full articles are written from the whole paper — deeper and more detailed.',
           hideExpress: 'Hide express articles', onlyAdvice: 'Only with advice to authors', showLess: 'Collapse',
+          searchPh: 'Search: paper, author, number, concept',
+          searchOffline: 'Search is not responding — please try again',
           favTitle: 'Favorites', like: 'Like', dislike: 'Dislike', superlike: 'Super!',
           refineTip: 'Polished by an editor',
           noCard: 'No profile yet — we will show the articles that mention it',
@@ -120,6 +119,8 @@ var UI_STRINGS = {
           articlesWord: 'artículos', noResults: 'Nada encontrado', more: 'Más →', profile: 'Perfil →', moreWord: 'más', min: 'min',
           express: 'exprés', expressTip: 'Exprés: un resumen rápido solo del abstract del autor. Los artículos completos se escriben a partir de todo el texto.',
           hideExpress: 'Ocultar artículos exprés', onlyAdvice: 'Solo con consejos al autor', showLess: 'Contraer',
+          searchPh: 'Buscar: trabajo, autor, número, concepto',
+          searchOffline: 'La búsqueda no responde, inténtelo de nuevo',
           favTitle: 'Favoritos', like: 'Me gusta', dislike: 'No me gusta', superlike: '¡Genial!',
           refineTip: 'Pulido por un editor',
           noCard: 'Aún sin ficha: mostraremos los artículos donde se menciona',
@@ -128,6 +129,8 @@ var UI_STRINGS = {
           selectScientist: '选择科学家：', authorNotFound: '未找到作者', selectAuthor: '选择作者：',
           articlesWord: '篇文章', noResults: '未找到结果', more: '详情 →', profile: '主页 →', moreWord: '更多', min: '分钟',
           express: '速览', expressTip: '速览版：基于作者摘要，未解析全文', hideExpress: '隐藏速览文章', onlyAdvice: '仅含给作者的建议', showLess: '收起',
+          searchPh: '搜索：论文、作者、编号、概念',
+          searchOffline: '搜索无响应，请重试',
           favTitle: '收藏', like: '喜欢', dislike: '不喜欢', superlike: '太赞了！',
           refineTip: '编辑润色',
           noCard: '暂无词条——将显示提到它的文章',
@@ -137,6 +140,8 @@ var UI_STRINGS = {
           articlesWord: 'articles', noResults: 'Aucun résultat', more: 'En savoir plus →', profile: 'Profil →', moreWord: 'autres', min: 'min',
           express: 'express', expressTip: 'Version express : basée sur le résumé de l\'auteur, pas le texte complet',
           hideExpress: 'Masquer les articles express', onlyAdvice: "Uniquement avec conseils à l'auteur", showLess: 'Réduire',
+          searchPh: 'Rechercher : travail, auteur, numéro, concept',
+          searchOffline: 'La recherche ne répond pas, réessayez',
           favTitle: 'Favoris', like: 'J\'aime', dislike: 'Je n\'aime pas', superlike: 'Génial !',
           refineTip: 'Peaufiné par un éditeur',
           noCard: 'Pas encore de fiche : nous montrerons les articles qui en parlent',
@@ -146,6 +151,8 @@ var UI_STRINGS = {
           articlesWord: 'مقالات', noResults: 'لا نتائج', more: 'المزيد ←', profile: 'الملف ←', moreWord: 'آخرون', min: 'دقيقة',
           express: 'سريع', expressTip: 'سريع: ملخّص سريع من خلاصة المؤلف فقط. أما المقالات الكاملة فتُكتب من النص الكامل — أعمق وأكثر تفصيلاً.',
           hideExpress: 'إخفاء المقالات السريعة', onlyAdvice: 'فقط ما فيه نصائح للمؤلف', showLess: 'طي',
+          searchPh: 'ابحث: بحث، مؤلف، رقم، مفهوم',
+          searchOffline: 'البحث لا يستجيب، حاولوا مرة أخرى',
           favTitle: 'المفضلة', like: 'إعجاب', dislike: 'عدم إعجاب', superlike: 'رائع!',
           refineTip: 'تم صقله بواسطة محرر',
           noCard: 'لا توجد بطاقة بعد — سنعرض المقالات التي تذكره',
@@ -245,8 +252,15 @@ function mountExpressButton(cb) {
     b.type = 'button';
     b.id = 'express-head-toggle';
     b.className = 'express-head';
-    b.innerHTML = (typeof b42ic === 'function' ? b42ic('bolt', 12, '⚡') : '⚡')
-                + '<span>' + (UI.express || 'express') + '</span>';
+    /* ТОЛЬКО ЗНАЧОК, БЕЗ ПОДПИСИ. Со словом «ЭКСПРЕСС» кнопка занимала 99 пикселей,
+       и на телефоне шапка разъезжалась на две строки: значок темы уезжал под ряд
+       круглых кнопок (владелец 01.09: «кнопка EXPRESS огромная и всё испортила,
+       сделай её маленькой или вообще одним понятным значком везде»).
+       Смысл не теряется: подпись живёт в подсказке и в aria-label, а состояние
+       читается видом — горит охрой значит «экспрессы в ленте», погашена и
+       перечёркнута значит «скрыты». */
+    b.innerHTML = (typeof b42ic === 'function' ? b42ic('bolt', 14, '⚡') : '⚡');
+
     host.insertBefore(b, host.firstChild);
     function paint() {
         b.classList.toggle('off', hideExpress);
@@ -333,17 +347,14 @@ fetch('/config.json')
 
 // Переключает язык ленты статей на месте (для страниц, существующих в одном языке — автор).
 function switchFeedLang(l) {
+    /* Смена языка ленты на месте. Раньше здесь качались ТРИ индекса разом (45.9 МБ
+       сырых) — ради того, чтобы список статей стал на другом языке. Теперь список
+       приходит из облака, и смена языка это просто новый запрос. */
     lang = l;
-    Promise.all([
-        fetch('/lang/' + l + '/' + VERSION_INDEX_FILES.popular).then(function(r) { return r.json(); }).catch(function() { return []; }),
-        fetch('/lang/' + l + '/' + VERSION_INDEX_FILES.simple).then(function(r) { return r.json(); }).catch(function() { return []; }),
-        fetch('/lang/' + l + '/' + VERSION_INDEX_FILES.advanced).then(function(r) { return r.json(); }).catch(function() { return []; })
-    ]).then(function(res) {
-        searchIndex = res[0].concat(res[1]).concat(res[2]);
-        window.searchIndex = searchIndex;
-        showLatest();
-        var bar = document.getElementById('langs-bar');
-        if (bar) bar.querySelectorAll('a').forEach(function(a) { a.classList.toggle('active', a.getAttribute('data-l') === l); });
+    showLatest();
+    var bar = document.getElementById('langs-bar');
+    if (bar) bar.querySelectorAll('a').forEach(function (a) {
+        a.classList.toggle('active', a.getAttribute('data-l') === l);
     });
 }
 window.switchFeedLang = switchFeedLang;
@@ -361,48 +372,29 @@ var tagsPath = '/lang/' + lang + '/data/tags-names.json';
 var conceptsNames = {};
 var _conceptsNamesP = fetch('/lang/' + lang + '/data/concepts-names.json')
     .then(function (r) { return r.ok ? r.json() : {}; })
-    .then(function (m) { conceptsNames = m || {}; return conceptsNames; })
+    .then(function (m) {
+        conceptsNames = m || {};
+        // Нужен поиску: по названию понятия он находит РАБОТЫ, а не карточку понятия,
+        // и сверяет набранное с локализованным именем (doFullSearch).
+        window.conceptsNames = conceptsNames;
+        return conceptsNames;
+    })
     .catch(function () { return {}; });
 var scientistsPath = '/lang/' + lang + '/data/scientists-names.json';
 
-function fetchIndex(version) {
-    return fetch('/lang/' + lang + '/' + VERSION_INDEX_FILES[version])
-        .then(function(r) { return r.json(); }).catch(function() { return []; });
-}
+/* ФАЙЛЫ ИНДЕКСА НЕ КАЧАЮТСЯ НИКОГДА. Здесь были fetchIndex() и fetchLatest() —
+   загрузка articles-index*.json. Три уровня русского индекса это 45.9 МБ сырых
+   (11.7 сжатых); даже «маленький» latest на 60 записей теперь лишний, потому что
+   первую пачку ленты отдаёт /api/feed за двадцать килобайт. */
 
-// Первая отрисовка ленты не должна ждать ~20МБ данных (3 тира индекса + граф авторов +
-// теги/законы/учёные) — раньше все они грузились одним Promise.all ПЕРЕД первым showLatest(),
-// из-за чего главная страница висела пустой, пока не скачается и не распарсится всё разом
-// (граф авторов сам по себе ~7МБ на 11000+ авторов). Теперь: сначала грузим ТОЛЬКО индекс
-// текущего тира (нужен для видимой ленты прямо сейчас) — отрисовываем немедленно; всё
-// остальное (два других тира для переключалки сложности, теги/учёные/законы для тултипов,
-// граф авторов) грузится ПАРАЛЛЕЛЬНО, но не блокирует первую отрисовку.
-// Двухступенчатая загрузка ленты. Шаг 1: крошечный latest-индекс (~60 свежих записей, ~150КБ)
-// рисует ленту почти мгновенно, не дожидаясь полного тира (~3.6МБ) — юзер 2026-07-23: «долго
-// грузится первый раз». Фильтры/календарь/статистика/поиск требуют полного набора, поэтому
-// висят до шага 2, но пользователь уже видит ленту. На избранном latest не нужен — там свой
-// источник (localStorage), сразу грузим полный.
-function fetchLatest(version) {
-    return fetch('/lang/' + lang + '/' + VERSION_INDEX_LATEST_FILES[version])
-        .then(function(r) { if (!r.ok) throw 0; return r.json(); });
-}
-
-/* Индекс статей нужен только там, где есть СПИСОК: лента главной и избранного, выдача
-   на странице тега/закона/учёного/раздела/автора. На странице СТАТЬИ и на /analytics
-   контейнера списка нет вовсе — а индекс качался и разбирался всё равно: на статье это
-   6,3 МБ разбора вдобавок к тому, что тот же файл вторым заходом берёт scroll.js для
-   «следующей статьи», на карте проекта — 19 МБ ради трёхмерной сцены, которая индексом
-   не пользуется (замер живого сайта 2026-07-30).
-   Тултипы и строка статистики от индекса не зависят — им нужны справочники, они грузятся
-   отдельной волной, поэтому ниже вызываются в обеих ветках. */
+/* Есть ли на странице список. По нему решаем, заводить ли ленту, календарь и полосу
+   разделов: на странице статьи и на карте проекта списка нет вовсе. */
 var HAS_LIST = !!document.getElementById('search-results');
-/* ИНДЕКС БОЛЬШЕ НЕ КАЧАЕТСЯ САМ. Здесь стояло «есть список — грузим индекс», и это
-   было верно, пока список брать было неоткуда. Теперь лента приходит из облака
-   постранично, страницы сущностей и автора рисуются своими модулями, а календарь,
-   полоса разделов и фильтр глубины считаются по сводке /api/corpus (13 КБ).
-   Индекс остаётся запасным путём и источником для дашборда /archive — его поднимает
-   ensureSearchIndex по требованию. */
-var _fullIndexPromise = null;
+/* ЗАПАСНОГО ПУТИ НЕТ. Здесь жил _fullIndexPromise — «индекс поднимем по требованию».
+   Требование и было тем крючком, на котором висели сорок мегабайт: пока путь есть, его
+   рано или поздно зовут. Лента идёт из /api/feed постранично, страницы сущностей и
+   автора рисуют свои модули, календарь и полоса разделов считаются по /api/corpus
+   (13 КБ), избранное — по /api/cards. */
 
 /* НАЧАЛЬНАЯ НАСТРОЙКА НИЧЕГО НЕ ЖДЁТ.
    Здесь стоял `_fullIndexPromise.then(...)`: лента, календарь, полоса разделов,
@@ -454,7 +446,6 @@ function catFetch(base, lang) {
         });
 }
 
-var OTHER_VERSIONS = ['popular', 'simple', 'advanced'].filter(function(v) { return v !== effVersion(); });
 
 /* Тяжёлое — ПОСЛЕ первой ленты, а не вместе с ней.
    Замер живого сайта (2026-07-30): первый визит тянул 5,36 МБ, из них первому экрану
@@ -576,26 +567,13 @@ window.B42Refs = Promise.all(
     return {};
 });
 
-/* Индексы соседних уровней — по требованию. Пока их нет, поиск ищет по текущему уровню:
-   это меньше, чем обещано, поэтому переключатель уровня и поиск сами дёргают загрузку,
-   а не ждут простоя. Один общий промис, сколько бы раз ни позвали. */
-var _otherVersionsPromise = null;
-function ensureOtherVersions() {
-    if (_otherVersionsPromise) return _otherVersionsPromise;
-    _otherVersionsPromise = Promise.all(OTHER_VERSIONS.map(fetchIndex)).then(function (otherIndexes) {
-        var byVersion = {};
-        byVersion[effVersion()] = window.__primaryIndex || searchIndex;
-        OTHER_VERSIONS.forEach(function (v, i) { byVersion[v] = otherIndexes[i]; });
-        searchIndex = (byVersion.popular || []).concat(byVersion.simple || []).concat(byVersion.advanced || []);
-        window.searchIndex = searchIndex;
-        return searchIndex;
-    }).catch(function (e) {
-        console.error('Other version indexes failed:', e);
-        return searchIndex;
-    });
-    return _otherVersionsPromise;
-}
-window.ensureOtherVersions = ensureOtherVersions;
+/* ИНДЕКСОВ СОСЕДНИХ УРОВНЕЙ БОЛЬШЕ НЕТ. Здесь стоял ensureOtherVersions(): поиск
+   подтягивал два других уровня, чтобы находить текст, сказанный не на том уровне,
+   который открыт. Это 30.7 МБ сырых, 7.8 сжатых — на первый же запрос читателя.
+   Теперь по всем уровням ищет база (см. handleWordSearch в cloudflare/worker.js:
+   полнотекст без фильтра по версии, карточка — в выбранной), и качать в браузер
+   нечего. Владелец 2026-09-01: «никаких индексов в браузере, полная динамика через
+   облако, никаких запасных путей». */
 
 /* Полный индекс ПО ТРЕБОВАНИЮ — для страниц, которые считают по корпусу, но списка не
    показывают. Такая ровно одна: дашборд /archive — вся его сводка (статьи, тепловая карта,
@@ -605,100 +583,11 @@ window.ensureOtherVersions = ensureOtherVersions;
    и экономию (статья и /analytics не зовут — значит не качают), и правду на дашборде.
    Один общий промис, сколько бы раз ни позвали; на странице со списком отдаёт тот же
    индекс, который уже грузится, вторым запросом не ходит. */
-var _searchIndexPromise = null;
-function ensureSearchIndex() {
-    if (_searchIndexPromise) return _searchIndexPromise;
-    _searchIndexPromise = (_fullIndexPromise || fetchIndex(effVersion())).then(function (primary) {
-        searchIndex = primary;
-        window.searchIndex = searchIndex;
-        window.__primaryIndex = primary;
-        return searchIndex;
-    }).catch(function (e) {
-        console.error('Index on demand failed:', e);
-        return [];
-    });
-    return _searchIndexPromise;
-}
-window.ensureSearchIndex = ensureSearchIndex;
+/* ЗАГРУЗЧИКОВ ИНДЕКСА БОЛЬШЕ НЕТ. Здесь были ensureSearchIndex() и versionSlice():
+   первый качал articles-index.json (15.2 МБ сырых, 3.9 сжатых) и держал его в памяти,
+   второй резал этот массив по уровню чтения. Ни того, ни другого браузеру не нужно.
+   Владелец 2026-09-01: «никаких индексов в браузере, полная динамика через облако». */
 
-// Ленивая загрузка графа авторов: один общий промис, сколько бы раз ни позвали.
-var _authorsGraphPromise = null;
-function ensureAuthorsGraph() {
-    if (_authorsGraphPromise) return _authorsGraphPromise;
-    _authorsGraphPromise = fetch('/data/authors-graph.json')
-        .then(function(r) { return r.json(); })
-        .catch(function() { return {}; })
-        .then(function(g) {
-            authorsGraph = g || {};
-            window.authorsGraph = authorsGraph;
-            renderSiteStats();   // счётчик авторов появляется, как только граф доехал
-            return authorsGraph;
-        });
-    return _authorsGraphPromise;
-}
-window.ensureAuthorsGraph = ensureAuthorsGraph;
-
-// Служебная строка-статистика: всё в ОДНУ строку через « / » (юзер 2026-07-24) — статьи (полные +
-// express), законы, теги, разделы, учёные, авторы, языки. Ключи-подписи локализованы.
-var STATS_LABELS2 = {
-    ru: {articles:'статей', full:'полных', express:'экспресс', concepts:'понятий', formulas:'формул', sections:'разделов', scientists:'учёных', authors:'авторов', langs:'языка'},
-    en: {articles:'articles', full:'full', express:'express', concepts:'concepts', formulas:'formulas', sections:'sections', scientists:'scientists', authors:'authors', langs:'languages'},
-    es: {articles:'artículos', full:'completos', express:'exprés', concepts:'conceptos', formulas:'fórmulas', sections:'secciones', scientists:'científicos', authors:'autores', langs:'idiomas'},
-    ar: {articles:'مقالات', full:'كاملة', express:'سريعة', concepts:'مفاهيم', formulas:'صيغ', sections:'أقسام', scientists:'علماء', authors:'مؤلفين', langs:'لغات'},
-    fr: {articles:'articles', full:'complets', express:'express', concepts:'concepts', formulas:'formules', sections:'sections', scientists:'scientifiques', authors:'auteurs', langs:'langues'}
-};
-function renderSiteStats() {
-    var el = document.getElementById('site-stats');
-    if (!el) return;
-    var L = STATS_LABELS2[lang] || STATS_LABELS2.en;
-    // Числа корпуса приходят из build-info.json (двести байт), а не считаются по данным.
-    // Раньше статьи считались перебором индекса, авторы — перебором графа авторов: строка
-    // под шапкой молчала, пока не доедут 39 МБ, и ради неё же они и качались.
-    var B = window.__buildInfo || {};
-    var uniq = {}, express = 0;
-    searchIndex.forEach(function(a){ if (!uniq[a.id]) { uniq[a.id] = 1; if (a.express) express++; } });
-    var nA = B.articles || Object.keys(uniq).length;
-    var full = nA - (B.express || express);
-    /* Раньше строка считала «законы» и «теги» по старым справочникам и врала:
-       175 и 368 при живом реестре в 3231 понятие (владелец увидел 27.08 —
-       снаружи такой терминологии больше нет). Теперь понятия и формулы из
-       build-info, который пишет сборка. */
-    var nC = B.concepts || Object.keys(window.conceptsNames || {}).length;
-    var nF = B.formulas || 0;
-    var nSec = Object.keys(window.ARXIV_CAT_NAMES || {}).length;
-    var nS = Object.keys(window.scientistsData || {}).length;
-    // Ноль здесь значил бы «авторов нет», а на самом деле значит «число ещё не
-    // приехало»: граф авторов мы больше не качаем (24.4 МБ ради одной цифры).
-    // Неизвестное не печатаем — позиция просто отсутствует, пока не станет известной.
-    var nAu = (window.__buildInfo && window.__buildInfo.authors)
-              || Object.keys(window.authorsGraph || {}).length || 0;
-    var nLang = (document.querySelectorAll('#langs-bar a').length || 4);
-    // «5 языка» — грамматическая ошибка на самом видном месте главной (владелец 2026-08-02).
-    // Русскому нужны три формы: 1 язык, 2-4 языка, 5+ языков.
-    var langWord = lang === 'ru'
-        ? (nLang % 10 === 1 && nLang % 100 !== 11 ? 'язык'
-           : (nLang % 10 >= 2 && nLang % 10 <= 4 && (nLang % 100 < 12 || nLang % 100 > 14) ? 'языка' : 'языков'))
-        : L.langs;
-    // Компактная ОДНА строка (юзер 2026-07-25 «сократи, сожми, уплотни»): 16795 → 16.8k.
-    function kfmt(n){ return n >= 10000 ? (n / 1000).toFixed(1).replace('.0', '') + 'k' : String(n); }
-    function part(n, w){ return '<b>' + kfmt(n) + '</b> ' + w; }
-    /* Языки и дата сборки убраны: строка не помещалась в одну и уезжала на вторую,
-       а обе позиции ничего не сообщают. Сколько языков — видно по переключателю
-       прямо над строкой; когда обновлено — видно по датам статей в ленте.
-       Владелец 30.08: «эта информация особенно не нужна, и так понятно». */
-    var bits = [
-        part(nA, L.articles),
-        part(nC, L.concepts), part(nF, L.formulas), part(nSec, L.sections),
-        part(nS, L.scientists), part(nAu, L.authors)
-    ].filter(function (s) { return s.indexOf('<b>0</b>') !== 0; });
-    el.innerHTML = bits.join(' · ');
-}
-
-/* Числа корпуса и дата сборки — один запрос на двести байт, один раз за страницу.
-   Раньше он жил внутри renderSiteStats под флажком на элементе; чтобы перерисовать
-   строку с приехавшими числами, флажок приходилось снимать — и перерисовка запускала
-   загрузку заново, по кругу. Здесь этого не может случиться по устройству: функция
-   вызывается один раз, а рисование ничего не грузит. */
 (function loadBuildInfo() {
     if (!document.getElementById('site-stats')) return;
     fetch('/data/build-info.json')
@@ -726,6 +615,79 @@ function parseSearchQuery(query) {
     return filters;
 }
 
+/* ГРАФ АВТОРОВ БОЛЬШЕ НЕ КАЧАЕТСЯ. Здесь стоял fetch('/data/authors-graph.json') —
+   24.4 МБ на 47 тысяч человек, и всё это ради подсказки по части имени и поиска на
+   странице авторов. Теперь имя ищет база: /api/authors отдаёт совпадения из таблицы
+   связей автор→работа вместе с числом работ. */
+function authorsFromCloud(query, limit) {
+    var api = (typeof API === 'string' ? API : '');
+    return fetch(api + '/api/authors?q=' + encodeURIComponent(query) +
+                 '&limit=' + (limit || 30))
+        .then(function (r) { return r.ok ? r.json() : { items: [] }; })
+        .then(function (j) { return (j && j.items) || []; })
+        .catch(function () { return []; });
+}
+
+
+
+var _authorsGraphPromise = null;
+
+var STATS_LABELS2 = {
+    ru: {articles:'статей', full:'полных', express:'экспресс', concepts:'понятий', formulas:'формул', sections:'разделов', scientists:'учёных', authors:'авторов', langs:'языка'},
+    en: {articles:'articles', full:'full', express:'express', concepts:'concepts', formulas:'formulas', sections:'sections', scientists:'scientists', authors:'authors', langs:'languages'},
+    es: {articles:'artículos', full:'completos', express:'exprés', concepts:'conceptos', formulas:'fórmulas', sections:'secciones', scientists:'científicos', authors:'autores', langs:'idiomas'},
+    ar: {articles:'مقالات', full:'كاملة', express:'سريعة', concepts:'مفاهيم', formulas:'صيغ', sections:'أقسام', scientists:'علماء', authors:'مؤلفين', langs:'لغات'},
+    fr: {articles:'articles', full:'complets', express:'express', concepts:'concepts', formulas:'formules', sections:'sections', scientists:'scientifiques', authors:'auteurs', langs:'langues'}
+};
+
+function renderSiteStats() {
+    var el = document.getElementById('site-stats');
+    if (!el) return;
+    var L = STATS_LABELS2[lang] || STATS_LABELS2.en;
+    // Числа корпуса приходят из build-info.json (двести байт), а не считаются по данным.
+    // Раньше статьи считались перебором индекса, авторы — перебором графа авторов: строка
+    // под шапкой молчала, пока не доедут 39 МБ, и ради неё же они и качались.
+    var B = window.__buildInfo || {};
+    /* Числа берём ТОЛЬКО из build-info.json (двести байт). Раньше рядом стоял запасной
+       подсчёт перебором индекса — он и держал индекс живым ради одной строки под шапкой.
+       Нет числа в сводке — позиция просто не печатается, это честнее выдуманной. */
+    var nA = B.articles || 0;
+    var full = nA - (B.express || 0);
+    /* Раньше строка считала «законы» и «теги» по старым справочникам и врала:
+       175 и 368 при живом реестре в 3231 понятие (владелец увидел 27.08 —
+       снаружи такой терминологии больше нет). Теперь понятия и формулы из
+       build-info, который пишет сборка. */
+    var nC = B.concepts || Object.keys(window.conceptsNames || {}).length;
+    var nF = B.formulas || 0;
+    var nSec = Object.keys(window.ARXIV_CAT_NAMES || {}).length;
+    var nS = Object.keys(window.scientistsData || {}).length;
+    // Ноль здесь значил бы «авторов нет», а на самом деле значит «число ещё не
+    // приехало»: граф авторов мы больше не качаем (24.4 МБ ради одной цифры).
+    // Неизвестное не печатаем — позиция просто отсутствует, пока не станет известной.
+    var nAu = (window.__buildInfo && window.__buildInfo.authors)
+              || 0;   /* граф авторов в браузер не качается — число только из сводки */
+    var nLang = (document.querySelectorAll('#langs-bar a').length || 4);
+    // «5 языка» — грамматическая ошибка на самом видном месте главной (владелец 2026-08-02).
+    // Русскому нужны три формы: 1 язык, 2-4 языка, 5+ языков.
+    var langWord = lang === 'ru'
+        ? (nLang % 10 === 1 && nLang % 100 !== 11 ? 'язык'
+           : (nLang % 10 >= 2 && nLang % 10 <= 4 && (nLang % 100 < 12 || nLang % 100 > 14) ? 'языка' : 'языков'))
+        : L.langs;
+    // Компактная ОДНА строка (юзер 2026-07-25 «сократи, сожми, уплотни»): 16795 → 16.8k.
+    function kfmt(n){ return n >= 10000 ? (n / 1000).toFixed(1).replace('.0', '') + 'k' : String(n); }
+    function part(n, w){ return '<b>' + kfmt(n) + '</b> ' + w; }
+    /* Языки и дата сборки убраны: строка не помещалась в одну и уезжала на вторую,
+       а обе позиции ничего не сообщают. Сколько языков — видно по переключателю
+       прямо над строкой; когда обновлено — видно по датам статей в ленте.
+       Владелец 30.08: «эта информация особенно не нужна, и так понятно». */
+    var bits = [
+        part(nA, L.articles),
+        part(nC, L.concepts), part(nF, L.formulas), part(nSec, L.sections),
+        part(nS, L.scientists), part(nAu, L.authors)
+    ].filter(function (s) { return s.indexOf('<b>0</b>') !== 0; });
+    el.innerHTML = bits.join(' · ');
+}
+
 function doSearch(query) {
     var container = document.getElementById('search-results');
     if (!container) return;
@@ -738,6 +700,16 @@ function doSearch(query) {
     var tokens = query.split(/\s+/);
     var last = tokens[tokens.length - 1];
 
+    /* ЖИВАЯ ВЫДАЧА — С ТРЕТЬЕГО ЗНАКА (владелец 01.09). По одной-двум буквам совпадений
+       тысячи, и список из них ничего не подсказывает: «в» найдётся почти в каждой работе.
+       Три знака — первое место, где выдача становится осмысленной.
+       Иероглифическим языкам порог не нужен: один знак там уже слово. */
+    var _t = query.trim();
+    if (_t.length < 3 && !/[㐀-鿿぀-ヿ]/.test(_t) && !/^[#!@]/.test(_t)) {
+        showLatest();
+        return;
+    }
+
     if (last === '#') { showTagSuggestions(''); return; }
     if (last === '!') { showScientistSuggestions(''); return; }
     if (last === '@') { showAuthorSuggestions(''); return; }
@@ -748,87 +720,59 @@ function doSearch(query) {
     doFullSearch(query);
 }
 
-// searchIndex после догрузки — конкатенация трёх тиров (~60k записей), а отбор нужного тира
-// шёл заново на КАЖДЫЙ символ ввода. Кэшируем срез по (ссылка на индекс, версия) — обе меняются
-// редко (догрузка тиров, переключалка сложности), так что инвалидация тривиальна.
-var _verSliceCache = { src: null, ver: null, out: null };
-function versionSlice() {
-    var v = effVersion();
-    if (_verSliceCache.src === searchIndex && _verSliceCache.ver === v) return _verSliceCache.out;
-    var out = searchIndex.filter(function(item) { return item.version === v; });
-    _verSliceCache = { src: searchIndex, ver: v, out: out };
-    return out;
+/* versionSlice() убрана вместе с индексом: резать было нечего. */
+
+/* ПОИСК ЖИВЁТ В ОБЛАКЕ. Никаких индексов в браузере и никаких запасных путей —
+   решение владельца, повторённое пятый раз (2026-09-01): «полная динамика через облако».
+
+   Спрашиваем /api/find: полнотекст SQLite в D1 ищет по заголовку, подводке и описанию,
+   а имена авторов, учёных и понятий добираются отдельными запросами по таблицам связей
+   (см. handleWordSearch в cloudflare/worker.js) — по всем трём уровням сразу, карточка
+   отдаётся того уровня, который читатель выбрал. Двадцать строк вместо двадцати тысяч.
+
+   Отказа не прячем: облако не ответило — так и говорим. Молчаливый откат на локальный
+   перебор означал бы, что индекс всё равно надо держать, то есть не изменилось бы ничего. */
+function searchFromCloud(query, limit) {
+    var u = API + '/api/find?q=' + encodeURIComponent(query) +
+            '&lang=' + encodeURIComponent(lang) +
+            '&version=' + encodeURIComponent(effVersion()) +
+            '&limit=' + (limit || 20);
+    return fetch(u).then(function (r) {
+        if (!r.ok) throw 0;
+        return r.json();
+    }).then(function (j) {
+        if (!j || !Array.isArray(j.items)) throw 0;
+        return j.items;
+    });
 }
 
+var _searchSeq = 0;
+
 function doFullSearch(query) {
-    // Индексы соседних уровней теперь грузятся в простое, а не в общей волне (см. ниже).
-    // Если читатель начал искать раньше, чем простой наступил, — дёргаем сами и
-    // перерисовываем выдачу, когда они доедут. До того ищем по текущему уровню:
-    // неполно, но мгновенно, и это лучше пустого экрана в ожидании 2,5 МБ.
-    if (typeof ensureOtherVersions === 'function' && !_otherVersionsPromise) {
-        ensureOtherVersions().then(function () {
-            var box = document.querySelector('.search-box');
-            if (box && box.value === query) doFullSearch(query);
-        });
-    }
     var container = document.getElementById('search-results');
+    if (!container) return;
     renderActiveFilters(query);
-    var filters = parseSearchQuery(query);
-    var results = versionSlice().slice();
-    results = applyPageContext(results);
 
-    if (filters.tags.length) {
-        results = results.filter(function(item) {
-            return filters.tags.some(function(t) {
-                return item.tags.some(function(itemTag) {
-                    if (itemTag === t) return true;
-                    var tagName = (window.tagsLoc[itemTag]?.name || '').toLowerCase();
-                    return tagName === t || tagName.includes(t);
-                });
-            });
-        });
-    }
-    if (filters.authors.length) {
-        results = results.filter(function(item) {
-            return filters.authors.some(function(a) {
-                return item.authors.some(function(ia) { return ia.toLowerCase().includes(a); });
-            });
-        });
-    }
-    if (filters.scientists.length) {
-        results = results.filter(function(item) {
-            return filters.scientists.some(function(s) {
-                return (item.scientists || []).some(function(ss) { return ss.toLowerCase().includes(s); });
-            });
-        });
-    }
-    // На странице избранного поиск ищет ВНУТРИ избранного: подмена его всем сайтом
-    // лишала раздел смысла (QA 2026-07-29). Пустое избранное отвечает пустотой честно.
-    if (window.__favoritesPage) {
-        var favSet = {};
-        try { JSON.parse(localStorage.getItem('favorites') || '[]').forEach(function (id) { favSet[id] = true; }); } catch (e) {}
-        results = results.filter(function (item) { return favSet[item.id]; });
-    }
-    if (filters.text) {
-        var q = filters.text;
-        results = results.filter(function(item) {
-            return (item.title || '').toLowerCase().includes(q) ||
-                   (item.oneliner || '').toLowerCase().includes(q) ||
-                   // Ищем по тому тексту, что видит читатель на карточке — теперь это
-                   // description (2026-07-31). Аннотацию оставляем в поиске как второй
-                   // источник: она есть у 1967 старых статей и расширяет находимость
-                   // (без неё en «quantum» терял 119 статей — QA 2026-07-29), а мусора
-                   // не даёт, потому что ищется, но не показывается.
-                   (item.description || '').toLowerCase().includes(q) ||
-                   // abstract из индекса убран (13 августа): он весил 1.14 МБ и давал
-                   // совпадения по тексту, которого на карточке нет. Поиск по полному
-                   // смыслу делает векторный поиск на стороне Worker'а.
+    /* Знаки #, @ и ! остаются рабочими, но в облако едут словами: полнотекст и так
+       знает и понятия, и авторов, и учёных — отдельные ветки фильтрации были нужны
+       только локальному перебору. */
+    var plain = String(query || '').replace(/(^|\s)[#@!]/g, '$1').trim();
+    if (!plain) { showLatest(); return; }
 
-                   (item.authors || []).some(function(a) { return a.toLowerCase().includes(q); });
-        });
-    }
-
-    renderResults(results.slice(0, 20));
+    /* На странице сущности поиск ищет ВНУТРИ неё. Ручка про сущность не знает, поэтому
+       просим втрое больше и отсеиваем здесь — на странице понятия работ немного, и
+       шестидесяти строк хватает с запасом. */
+    var narrowed = isEntityPage || pageContext.concept || pageContext.tags.length;
+    var seq = ++_searchSeq;
+    searchFromCloud(plain, narrowed ? 60 : 20).then(function (items) {
+        if (seq !== _searchSeq) return;          // пришёл ответ на устаревший запрос
+        var out = narrowed ? applyPageContext(items) : items;
+        renderResults(out.slice(0, 20));
+    }).catch(function () {
+        if (seq !== _searchSeq) return;
+        container.innerHTML = '<p style="color:var(--soft);text-align:center;padding:40px">'
+            + (UI.searchOffline || UI.noResults) + '</p>';
+    });
 }
 
 function showTagSuggestions(query) {
@@ -882,29 +826,42 @@ function showScientistSuggestions(query) {
 
 function showAuthorSuggestions(query) {
     var container = document.getElementById('search-results');
-    // Граф авторов теперь грузится лениво — если @ нажали раньше, чем он доехал,
-    // показываем «загрузка» и перерисовываем подсказки, как только данные придут.
-    if (!Object.keys(authorsGraph).length) {
-        container.innerHTML = '<p style="color:var(--soft);text-align:center;padding:40px">…</p>';
-        ensureAuthorsGraph().then(function() { showAuthorSuggestions(query); });
+    /* ПОДСКАЗКИ ПО АВТОРАМ — ИЗ ОБЛАКА. Здесь качался граф авторов: 24.4 МБ ради
+       пятнадцати имён в выпадающем списке. Имена берём из ответа поиска: он умеет
+       находить работы по автору (таблица card_authors в D1), а имена лежат в самих
+       карточках. Владелец 2026-09-01: «никаких индексов в браузере». */
+    if (!query || query.length < 2) {
+        container.innerHTML = '<p style="color:var(--soft);text-align:center;padding:40px">'
+            + UI.selectAuthor + '</p>';
         return;
     }
-    var names = Object.keys(authorsGraph)
-        .filter(function(name) { return !query || name.toLowerCase().includes(query); })
-        .slice(0, 15);
-
-    if (!names.length) {
-        container.innerHTML = '<p style="color:var(--soft);text-align:center;padding:40px">' + UI.authorNotFound + '</p>';
-        return;
-    }
-
-    container.innerHTML = '<div style="padding:10px 0;color:var(--soft);font-size:12px">' + UI.selectAuthor + '</div>' +
-        names.map(function(name) {
-            var d = authorsGraph[name] || {};
-            var count = d.article_count || (d.articles || []).length || 0;
-            return '<div class="suggestion-item" onclick="selectAuthor(\'' + name.replace(/'/g, "\\'") + '\')" style="cursor:pointer;padding:8px 12px;border-bottom:1px solid var(--border);font-size:14px">' +
-                '<strong>@' + name + '</strong> <span style="float:right;color:var(--soft);font-size:11px">' + count + ' ' + UI.articlesWord + '</span></div>';
-        }).join('');
+    container.innerHTML = '<p style="color:var(--soft);text-align:center;padding:40px">…</p>';
+    authorsFromCloud(query, 15).then(function (rows) {
+        var names = rows.map(function (r) { return r.name; });
+        if (!names.length) {
+            container.innerHTML = '<p style="color:var(--soft);text-align:center;padding:40px">'
+                + UI.authorNotFound + '</p>';
+            return;
+        }
+        var html = '<div style="padding:10px 0;color:var(--soft);font-size:12px">'
+            + UI.selectAuthor + '</div>';
+        names.forEach(function (name) {
+            var d = document.createElement('div');
+            d.className = 'suggestion-item';
+            d.style.cssText = 'cursor:pointer;padding:8px 12px;border-bottom:1px solid var(--border);font-size:14px';
+            d.innerHTML = '<strong>@' + name + '</strong>';
+            d.onclick = function () { selectAuthor(name); };
+            html += d.outerHTML.replace('</strong>', '</strong>');
+            d = null;
+        });
+        container.innerHTML = html;
+        Array.prototype.forEach.call(container.querySelectorAll('.suggestion-item'), function (el, n) {
+            el.onclick = function () { selectAuthor(names[n]); };
+        });
+    }).catch(function () {
+        container.innerHTML = '<p style="color:var(--soft);text-align:center;padding:40px">'
+            + (UI.searchOffline || UI.authorNotFound) + '</p>';
+    });
 }
 
 // Заменяет незавершённый последний токен (то что печаталось, чтобы вызвать
@@ -1021,19 +978,16 @@ function isAuthorsIndexPage() {
     return !!nav && !nav.querySelector('.alpha-link.active');
 }
 
-function authorTagsFor(name) {
-    var seen = {}, tags = [];
-    searchIndex.forEach(function(item) {
-        if ((item.authors || []).indexOf(name) === -1) return;
-        (item.tags || []).forEach(function(t) { if (!seen[t]) { seen[t] = 1; tags.push(t); } });
-    });
-    return tags.slice(0, 6);
-}
+/* authorTagsFor() убрана: облако тегов автора собирает js/author-live.js из /api/author,
+   а здесь она перебирала весь индекс ради шести тегов. */
 
 function authorRowHTML(name, data) {
     var slug = authorSlug(name);
     var count = data ? (data.article_count || (data.articles || []).length || 0) : 0;
-    var tagsHtml = authorTagsFor(name).map(function(t) {
+    /* Теги автора в этой строке больше не показываем: их собирала authorTagsFor(),
+       перебирая весь индекс ради шести штук. Настоящее облако тегов автора рисует
+       js/author-live.js по данным /api/author — там оно и к месту. */
+    var tagsHtml = [].map(function(t) {
         return '<span onclick="event.stopPropagation();window.location=\'/lang/' + lang + '/tags/' + t + '.html\'" class="text-tag" data-tag="' + t + '">' +
             ((tagsLoc[t] && tagsLoc[t].name) || t) + '</span>';
     }).join(' ');
@@ -1064,10 +1018,6 @@ function _filterAuthorsNow(query) {
     // листать без поиска.
     if (q && !isAuthorsIndexPage()) {
         if (_authorsDefaultHTML === null) _authorsDefaultHTML = container.innerHTML;
-        if (!Object.keys(authorsGraph).length) {
-            ensureAuthorsGraph().then(function () { _filterAuthorsNow(query); });
-            return;
-        }
         renderAuthorSearch(container, q);
         return;
     }
@@ -1079,10 +1029,6 @@ function _filterAuthorsNow(query) {
     if (isAuthorsIndexPage()) {
         if (_authorsDefaultHTML === null) _authorsDefaultHTML = container.innerHTML;
         if (!q) { container.innerHTML = _authorsDefaultHTML; return; }
-        if (!Object.keys(authorsGraph).length) {   // граф ленивый — дождаться и повторить
-            ensureAuthorsGraph().then(function() { filterAuthors(query); });
-            return;
-        }
         renderAuthorSearch(container, q);
         return;
     }
@@ -1100,19 +1046,23 @@ function _filterAuthorsNow(query) {
     });
 }
 function renderAuthorSearch(container, q) {
-    var names = Object.keys(authorsGraph)
-        .filter(function (name) { return name.toLowerCase().includes(q); })
-        .sort(function (a, b) { return a.localeCompare(b); });
-    // Отдаём первые три сотни: строить DOM на двадцать тысяч совпадений по букве «a» —
-    // это и была вторая половина подвисания. Уточнил запрос — список сузился.
-    var shown = names.slice(0, AUTHORS_RENDER_CAP);
-    var more = names.length - shown.length;
-    container.innerHTML = (shown.length
-        ? shown.map(function (n) { return authorRowHTML(n, authorsGraph[n]); }).join('')
-        : '<p style="color:var(--soft);text-align:center;padding:40px">' + UI.noResults + '</p>')
-        + (more > 0
-            ? '<p style="color:var(--soft);text-align:center;padding:14px">+' + more + '…</p>'
-            : '');
+    /* Ищет БАЗА, а не браузер. Раньше здесь перебирались 47 тысяч имён из графа, ради
+       которого граф и качался (24.4 МБ). Ручка /api/authors отдаёт совпадения вместе
+       с числом работ и сама ограничивает выдачу. */
+    container.innerHTML = '<p style="color:var(--soft);text-align:center;padding:40px">…</p>';
+    authorsFromCloud(q, AUTHORS_RENDER_CAP).then(function (rows) {
+        if (!rows.length) {
+            container.innerHTML = '<p style="color:var(--soft);text-align:center;padding:40px">'
+                + UI.noResults + '</p>';
+            return;
+        }
+        container.innerHTML = rows.map(function (r) {
+            return authorRowHTML(r.name, { article_count: r.articles });
+        }).join('');
+    }).catch(function () {
+        container.innerHTML = '<p style="color:var(--soft);text-align:center;padding:40px">'
+            + (UI.searchOffline || UI.noResults) + '</p>';
+    });
 }
 
 function filterScientists(query) { filterCloudItems('scientist-cloud', query); }
@@ -1213,12 +1163,10 @@ function pickTop(tags, n) {
        остаются в порядке генерации. Это ХУЖЕ прежнего (частый тег вёл в живой раздел,
        редкий в пустой), но не сломано. Чинится числами из сводки — отложено до
        окончания перестройки понятий, чтобы не считать частоты дважды. */
-    if (!_tagFreq) {
-        _tagFreq = {};
-        (window.searchIndex || []).forEach(function (a) {
-            (a.tags || []).forEach(function (t) { _tagFreq[t] = (_tagFreq[t] || 0) + 1; });
-        });
-    }
+    /* Частоты понятий считались перебором индекса. Индекса нет; пока сводка не отдаёт
+       эти числа, порядок остаётся тем, в котором понятия пришли — он и так осмысленный
+       (главный тег первым). */
+    if (!_tagFreq) _tagFreq = {};
     return tags.filter(Boolean).slice().sort(function (a, b) {
         return (_tagFreq[b] || 0) - (_tagFreq[a] || 0);
     }).slice(0, n);
@@ -1481,6 +1429,8 @@ var API = (typeof window.B42_API === 'string' ? window.B42_API : '');
 /* Облако выключается САМО и навсегда для этой страницы после первой неудачи.
    Пробовать снова на каждой прокрутке — значит на плохой сети показывать читателю
    череду пустых догрузок вместо ленты. Один отказ, один откат, дальше индекс. */
+/* Осталось только как признак «облако не отвечает» для догрузки на прокрутке.
+   Переключаться в true и уводить на индекс больше некуда — индекса нет. */
 var cloudOff = false;
 
 /* Наш порядок зовётся random, ручкин — mix. Ручка неизвестное значение молча
@@ -1496,14 +1446,22 @@ function cloudSort(mode) { return mode === 'random' ? 'mix' : mode; }
 function cloudQuery(extra) {
     var q = { sort: cloudSort(getSortMode()) };
     if (hideExpress) q.express = 0;
+    /* «Только с советами автору» тоже едет в облако. Раньше из-за одного этого тумблера
+       лента возвращалась на браузерный индекс — в ручке не было фильтра по km. Теперь есть. */
+    if (onlyAdvice) q.km = 1;
     if (extra) Object.keys(extra).forEach(function (k) { q[k] = extra[k]; });
     return q;
 }
 
 /* Можно ли открыть эту ленту из облака. Три «нет»: страница сущности (её рисует свой
    модуль), избранное (источник — localStorage), включённый фильтр по советам. */
+/* ОБЛАКО — ЕДИНСТВЕННЫЙ ПУТЬ. Здесь стояли три «нет»: страница сущности, избранное,
+   фильтр по советам. Первое живёт своим модулем (js/entity-live.js), второе теперь
+   спрашивает /api/cards по номерам из localStorage, третье уехало в запрос (km).
+   Запасного пути на индекс больше нет вовсе — владелец 2026-09-01, пятый повтор:
+   «никаких индексов в браузере, полная динамика через облако, никаких запасных путей». */
 function cloudUsable() {
-    return !isEntityPage && !window.__favoritesPage && !onlyAdvice && !cloudOff;
+    return !window.__favoritesPage;
 }
 
 function feedFromCloud(query, page) {
@@ -1721,44 +1679,25 @@ function showLatest() {
                 // двенадцать карточек приходят и во французском, где статей всего сорок.
                 mountYoungLangNote(typeof j.total === 'number' ? j.total : 99);
             })
-            .catch(function () { cloudOff = true; showLatestFromIndex(); });
+            .catch(function () { feedFailed(); });
         return;
     }
-    showLatestFromIndex();
+    showFavorites();
 }
 
-/* Прежняя лента — из индекса. Осталась запасным путём и единственным путём там, где
-   облако не при чём: избранное (источник localStorage) и страницы, куда лента попадает
-   с контекстом сущности. Индекс поднимается ПО ТРЕБОВАНИЮ: заранее его больше никто
-   не качает, иначе вся затея бессмысленна. */
-function showLatestFromIndex() {
-    var c0 = document.getElementById('search-results');
-    if (c0 && !searchIndex.length && typeof ensureSearchIndex === 'function') {
-        c0.innerHTML = '<p style="color:var(--soft);text-align:center;padding:40px">' +
-                       (UI.loading || '…') + '</p>';
-        ensureSearchIndex().then(function () { showLatestFromIndex(); });
-        return;
-    }
-    var arr = sortFeed(
-        applyPageContext(searchIndex.filter(function(item) { return item.version === effVersion(); })),
-        getSortMode()
-    );
-    mountYoungLangNote(arr.length);
-    feed.q = null;
-    feed.items = arr;
-    feed.shown = 0; feed.lastDay = null; feed.active = true;
+/* Отказ облака показываем словами. Раньше здесь стоял откат на браузерный индекс —
+   то есть индекс всё равно приходилось держать, и вся экономия была бумажной. */
+function feedFailed() {
     var c = document.getElementById('search-results');
-    if (c) c.innerHTML = feed.items.length ? '' : '<p style="color:var(--soft);text-align:center;padding:40px">' + UI.noResults + '</p>';
-    renderMoreFeed();
-    updateSearchRowVisibility();
-    // Приглашение в совет СНЯТО с ленты (владелец 2026-08-02: «убери окошко, которое
-    // стартует; вход — прямой /council.html, а в about только намёк — это небольшой квест»).
-    // Причина глубже удобства: в совет зовут за содержательное участие — внятный
-    // комментарий, подтверждённое авторство статьи, — а не за число открытых страниц.
-    // Всплывашка по счётчику просмотров звала не тех и обесценивала приглашение.
-    // mountCouncilInvite();  — функция оставлена ниже: она понадобится, если совет
-    // решит вернуть открытый вход (вопрос вынесен на заседание).
+    if (c) c.innerHTML = '<p style="color:var(--soft);text-align:center;padding:40px">' +
+        (UI.searchOffline || UI.noResults) + '</p>';
 }
+
+/* ЛЕНТЫ ИЗ ИНДЕКСА БОЛЬШЕ НЕТ. Здесь жила showLatestFromIndex(): она перебирала
+   массив статей, загруженный в память браузера, и была запасным путём для всего
+   остального. Запасной путь и был причиной, по которой индекс приходилось держать.
+   Всё, что она умела, умеет облако: лента — /api/feed, избранное — /api/cards,
+   страницы сущностей — js/entity-live.js. */
 window.showLatest = showLatest;
 
 /* ── Приглашение тем, кто дочитался ─────────────────────────────────────────
@@ -1832,14 +1771,25 @@ function mountCouncilInvite() {
 }
 
 // Вкладка «Избранное»: карточки из localStorage.favorites (клиент, без сервера).
+/* ИЗБРАННОЕ — ПО НОМЕРАМ, А НЕ ПЕРЕБОРОМ АРХИВА. Номера лежат в localStorage, карточки
+   спрашиваем у /api/cards. Раньше раздел искал сохранённые статьи в полном индексе и
+   потому обязан был его дождаться — из-за этого он же и врал «пока пусто», если статья
+   старше первой полусотни (владелец 30.08). Двадцать номеров — двадцать карточек. */
 function showFavorites() {
     hideSortControl();
     var favs = [];
     try { favs = JSON.parse(localStorage.getItem('favorites') || '[]'); } catch (e) {}
-    var favSet = {};
-    favs.forEach(function(id) { favSet[id] = true; });
-    feed.items = searchIndex.filter(function(item) { return item.version === effVersion() && favSet[item.id]; })
-        .sort(function(a, b) { return b.date.localeCompare(a.date); });
+    if (!favs.length) { renderFavorites([]); return; }
+    fetch(API + '/api/cards?lang=' + encodeURIComponent(lang) +
+          '&version=' + encodeURIComponent(effVersion()) +
+          '&ids=' + encodeURIComponent(favs.slice(0, 200).join(',')))
+        .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+        .then(function (j) { renderFavorites((j && j.items) || []); })
+        .catch(feedFailed);
+}
+
+function renderFavorites(items) {
+    feed.items = items.slice().sort(function (a, b) { return (b.date || '').localeCompare(a.date || ''); });
     feed.shown = 0; feed.lastDay = null; feed.active = true;
     var T = { ru: 'Избранное', en: 'Favorites', zh: '收藏', fr: 'Favoris', ar: 'المفضلة' }[lang] || 'Favorites';
     var E = { ru: 'Пока пусто — добавляйте статьи кнопкой ★.', en: 'No saved articles yet — add with ★.', zh: '暂无收藏 — 点 ★ 添加。', fr: 'Aucun favori — ajoutez avec ★.', ar: 'لا مقالات محفوظة — أضف بـ ★.' }[lang] || 'No saved articles yet.';
@@ -1874,24 +1824,17 @@ function _defaultFeed() {
        индекс последних статей. Сохранённая статья старше этой полусотни не находилась,
        и раздел отвечал «пока пусто», хотя звёздочка стояла (владелец 30.08: «в
        избранном ничего не появилось»). */
-    if (window.__favoritesPage) {
-        showFavorites();
-        ensureSearchIndex().then(showFavorites);
-    } else showLatest();
+    if (window.__favoritesPage) showFavorites();
+    else showLatest();
 }
 
 function filterByCategory(cat) {
     hideSortControl();
-    var items = applyPageContext(searchIndex.filter(function(item) {
-        return item.version === effVersion() && (item.categories || []).indexOf(cat) !== -1;
-    })).sort(function(a, b) { return b.date.localeCompare(a.date); });
-    var c = document.getElementById('search-results');
-    if (!c) return;
-    feed.active = false;
     var label = ARXIV_CAT_NAMES[cat] || cat;
-    c.innerHTML = '<div class="feed-day" style="cursor:pointer" onclick="showLatest()">' +
-        '← ' + label + ' (' + items.length + ')</div>' + items.map(cardHTML).join('');
-    initAllTooltips(); initReveal();
+    openCloudFeed(cloudQuery({ sort: 'new', cat: cat }), function (total) {
+        return '<div class="feed-day" style="cursor:pointer" onclick="showLatest()">← ' +
+               label + (total != null ? ' (' + total + ')' : '') + '</div>';
+    }).catch(feedFailed);
 }
 window.filterByCategory = filterByCategory;
 
@@ -1919,25 +1862,10 @@ function filterByDate(prefix, label) {
         openCloudFeed(cloudQuery({ sort: 'new', date: prefix }), function (total) {
             return '<div class="feed-day" style="cursor:pointer" onclick="showLatest()">← ' +
                    (label || prefix) + (total != null ? ' (' + total + ')' : '') + '</div>';
-        }).then(closePanel).catch(function () { cloudOff = true; filterByDate(prefix, label); });
+        }).then(closePanel).catch(feedFailed);
         return;
     }
-    if (!searchIndex.length && typeof ensureSearchIndex === 'function') {
-        ensureSearchIndex().then(function () { filterByDate(prefix, label); });
-        return;
-    }
-    feed.q = null;
-    feed.items = applyPageContext(searchIndex.filter(function(item) {
-        return item.version === effVersion() && (item.date || '').indexOf(prefix) === 0;
-    })).sort(function(a, b) { return b.date.localeCompare(a.date); });
-    feed.shown = 0; feed.lastDay = null; feed.active = true;
-    var c = document.getElementById('search-results');
-    if (!c) return;
-    c.innerHTML = '<div class="feed-day" style="cursor:pointer" onclick="showLatest()">← ' + (label || prefix) + ' (' + feed.items.length + ')</div>' +
-        (feed.items.length ? '' : '<p style="color:var(--soft);text-align:center;padding:40px">' + UI.noResults + '</p>');
-    renderMoreFeed();
-    var p = document.getElementById('calendar-panel'); if (p) p.classList.remove('open');
-    window.scrollTo({ top: 0 });
+    feedFailed();
 }
 window.filterByDate = filterByDate;
 
@@ -1963,10 +1891,9 @@ function initCalendar() {
         Object.keys(_c.days).forEach(function (date) {
             if (date) addDay(date, _c.days[date][0]);
         });
-    } else {
-        searchIndex.filter(function(i) { return i.version === effVersion() && i.date; })
-            .forEach(function(i) { addDay(i.date, 1); });
     }
+    /* Ветки «иначе» больше нет: дни считались перебором индекса, а это те же числа,
+       что отдаёт /api/corpus. Нет сводки — календарь пуст, и это честно. */
     if (!Object.keys(tree).length) { panel.innerHTML = ''; return; }
     var html = '<div class="cal-all" data-all="1">' + L.all + '</div>';
     Object.keys(tree).sort().reverse().forEach(function(y) {
@@ -2008,10 +1935,6 @@ function initCategoryBar() {
     var counts = {};
     if (window.__corpus && window.__corpus.cats) {
         counts = window.__corpus.cats;
-    } else {
-        searchIndex.filter(function(i) { return i.version === effVersion(); }).forEach(function(i) {
-            (i.categories || []).forEach(function(c) { counts[c] = (counts[c] || 0) + 1; });
-        });
     }
     var cats = Object.keys(counts).sort(function(a, b) { return counts[b] - counts[a]; });
     if (!cats.length) { bar.innerHTML = ''; return; }
@@ -2092,30 +2015,19 @@ function applyCategoryFilter() {
     // Один раздел спрашиваем у облака — это самый частый случай и он покрывается ручкой.
     // Несколько разделов сразу («+» на чипе) ручка не умеет, и городить ей список
     // не стоит: набор из пяти разделов выбирают редко, а индекс для этого уже есть.
-    if (sel.length === 1 && cloudUsable()) {
-        var one = sel[0];
-        openCloudFeed(cloudQuery({ sort: 'new', cat: one }),
+    /* Несколько разделов сразу тоже спрашиваем у облака: ручка научилась принимать их
+       через запятую. Раньше на двух чипах лента уходила на браузерный индекс — ради
+       редкого случая держались сорок мегабайт. */
+    if (sel.length && cloudUsable()) {
+        var label1 = sel.map(function (x) { return ARXIV_CAT_NAMES[x] || x; }).join(' · ');
+        openCloudFeed(cloudQuery({ sort: 'new', cat: sel.join(',') }),
             function (total) {
-                return '<div class="feed-day">' + (ARXIV_CAT_NAMES[one] || one) +
+                return '<div class="feed-day">' + label1 +
                        (total != null ? ' (' + total + ')' : '') + '</div>';
-            }).catch(function () { cloudOff = true; applyCategoryFilter(); });
+            }).catch(feedFailed);
         return;
     }
-    if (!searchIndex.length && typeof ensureSearchIndex === 'function') {
-        ensureSearchIndex().then(applyCategoryFilter);
-        return;
-    }
-    feed.q = null;
-    feed.items = applyPageContext(searchIndex.filter(function(item) {
-        return item.version === effVersion() && (item.categories || []).some(function(c) { return selectedCats[c]; });
-    })).sort(function(a, b) { return b.date.localeCompare(a.date); });
-    feed.shown = 0; feed.lastDay = null; feed.active = true;
-    var c = document.getElementById('search-results');
-    if (!c) return;
-    var label = sel.map(function(x) { return ARXIV_CAT_NAMES[x] || x; }).join(' · ');
-    c.innerHTML = '<div class="feed-day">' + label + ' (' + feed.items.length + ')</div>' +
-        (feed.items.length ? '' : '<p style="color:var(--soft);text-align:center;padding:40px">' + UI.noResults + '</p>');
-    renderMoreFeed();
+    feedFailed();
 }
 window.applyCategoryFilter = applyCategoryFilter;
 
@@ -2478,9 +2390,12 @@ function initAllTooltips() {
                         + ' <span class="tip-code">' + el.dataset.cat + '</span>'
                         + (cd ? ' &mdash; <span class="tip-desc">' + tipCut(cd) + '</span>' : '');
             } else if (el.dataset.author) {
-                var a = authorsGraph[el.dataset.author];
-                var count = a ? (a.article_count || (a.articles || []).length || 0) : 0;
-                content = '<strong>' + el.dataset.author + '</strong> &mdash; <span class="tip-desc">' + count + ' ' + UI.articlesWord + '</span> <a href="/lang/' + 'en' + '/authors/' + authorSlug(el.dataset.author) + '.html">' + UI.profile + '</a>';
+                /* Числа работ в подсказке больше нет: оно бралось из графа авторов,
+                   а граф в браузер не качается. Ноль вместо числа хуже отсутствия —
+                   он читается как «у автора нет работ». Ссылка на страницу остаётся,
+                   там число живое. */
+                content = '<strong>' + el.dataset.author + '</strong> <a href="/lang/en/authors/'
+                        + authorSlug(el.dataset.author) + '.html">' + UI.profile + '</a>';
             }
 
             if (content) {
@@ -2519,6 +2434,16 @@ function initAllTooltips() {
 // раньше это давало русский текст даже на ar/es-страницах. UI_STRINGS уже содержит переводы
 // (использовались только для карточек ленты) — просто дописываем их и в статичную разметку.
 function localizeStaticUI() {
+    /* ПОДСКАЗКА В ПОЛЕ ПОИСКА — БЕЗ СИНТАКСИСА. Было «Поиск статей, #теги, @авторы»:
+       читателю показывали служебные знаки, которых он не просил, а под полем висела
+       ещё и строка «# тег · @ автор · ! учёный» (её давно скрыли стилем).
+       Владелец 01.09: «убери эту подпись, там теги какие-то, надо в чистый вариант».
+       Поиск и так ищет по всему сразу — работам, авторам, номерам, понятиям, — а знаки
+       остаются рабочими для тех, кто их знает. Ставим отсюда, а не из шаблона: строка
+       в шаблоне означала бы пересборку сорока тысяч страниц ради одной подписи. */
+    document.querySelectorAll('.search-bar input, .search-panel input[type="text"], #search-input')
+        .forEach(function (el) { if (UI.searchPh) el.placeholder = UI.searchPh; });
+
     var fav = document.querySelector('a[href*="/favorites.html"]');
     if (fav) fav.title = UI.favTitle;
 
@@ -2695,7 +2620,7 @@ function collapseNavOverflow() {
         var cb = document.getElementById('express-filter-toggle');   // держим старый чекбокс в синхроне
         if (cb) cb.checked = hideExpress;
         var input = document.querySelector('.search-box');
-        if (window.searchIndex && document.getElementById('search-results')) {
+        if (document.getElementById('search-results')) {
             if (input && input.value.trim()) doSearch(input.value); else _defaultFeed();
         }
     };

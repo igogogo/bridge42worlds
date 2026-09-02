@@ -126,8 +126,6 @@ async function initScroll() {
         // search.js держит индекс выбранного в ленте уровня, а страница может быть другого:
         // на advanced.html при «популярно» в ленте мы бы показали чужие заголовки. Ссылки
         // тир правит сам (urlForVersion), а вот подписи взялись бы не те — поэтому сверяем.
-        var INDEX_FILES = { popular: 'articles-index.json', simple: 'articles-index-simple.json',
-                            advanced: 'articles-index-advanced.json', mini: 'articles-index.json' };
         var sameTier = typeof window.effVersion === 'function'
             && window.effVersion() === (version === 'mini' ? 'popular' : version);
         // ИНДЕКС ЗДЕСЬ БОЛЬШЕ НЕ КАЧАЕТСЯ САМ. Он нужен был двум блокам: «похожие»
@@ -135,27 +133,16 @@ async function initScroll() {
         // приходит в начале страницы. Качать 14.6 МБ ради того же — та же ошибка, что
         // и на ленте, только на самой посещаемой странице сайта.
         //
-        // Запасной путь цел: если облако промолчало, пул похожих пуст, и тогда — и
-        // только тогда — поднимаем индекс и ищем по тегам, как раньше.
+        // ЗАПАСНОГО ПУТИ БОЛЬШЕ НЕТ. Здесь стояло: облако промолчало — поднимаем индекс
+        // и ищем по тегам, как раньше. Ровно этот путь и держал сорок мегабайт живыми:
+        // пока он есть, его зовут. Владелец 2026-09-01: «никаких индексов в браузере,
+        // никаких запасных путей». Молчит облако — блока «похожие» просто нет; это
+        // честнее, чем качать архив ради трёх ссылок внизу страницы.
         if (window.__sidePool && window.__sidePool.length) {
             updateNextButton(version);
             return;
         }
-        try {
-            if (sameTier && typeof window.ensureSearchIndex === 'function') {
-                articlesIndex = await window.ensureSearchIndex() || [];
-            }
-            if (!articlesIndex.length) {
-                var resp = await fetch('/lang/' + lang + '/' + INDEX_FILES[version]);
-                if (!resp.ok) return;
-                articlesIndex = await resp.json();
-            }
-        } catch (e) {
-            console.log('Scroll: no index yet');
-            return;
-        }
-        updateNextButton(version);
-        renderRelated(currentId, lang, version);
+        return;
     });
 }
 
@@ -318,6 +305,24 @@ function legacyRelated() {
         renderRelated.apply(null, args);
     }).catch(function () { _relVec = {}; });
 }
+/* КАРТОЧКИ ПО НОМЕРАМ — ИЗ ОБЛАКА. И «похожие», и «цитируют у нас» знают номера работ
+   заранее (related-vec.json и cited-ours.json — по паре килобайт), а не хватало им только
+   заголовков и адресов. За ними ходили в articles-index.json: 15.2 МБ ради трёх ссылок
+   внизу страницы. Ручка /api/cards отдаёт ровно нужные карточки.
+   Владелец 2026-09-01: «никаких индексов в браузере, полная динамика через облако». */
+function cardsByIds(ids, lang, version) {
+    var list = (ids || []).filter(Boolean).slice(0, 40);
+    if (!list.length) return Promise.resolve([]);
+    var api = (window.B42_API || '').replace(/\/$/, '');
+    var v = version === 'mini' ? 'popular' : (version || 'popular');
+    return fetch(api + '/api/cards?lang=' + encodeURIComponent(lang || 'ru') +
+                 '&version=' + encodeURIComponent(v) +
+                 '&ids=' + encodeURIComponent(list.join(',')))
+        .then(function (r) { return r.ok ? r.json() : { items: [] }; })
+        .then(function (j) { return (j && j.items) || []; })
+        .catch(function () { return []; });
+}
+
 function relatedByMeaning(currentId) {
     if (!_relVec) return null;
     var near = _relVec[currentId];
@@ -336,23 +341,21 @@ function renderRelated(currentId, lang, version) {
        и что успел кэш. Раньше в этом случае «похожие» просто оставались пустыми — молча.
        Теперь не гадаем о порядке: нет индекса — грузим и перерисовываемся. */
     if (!articlesIndex.length) {
+        /* Номера соседей у нас есть (related-vec.json), не хватает их карточек —
+           спрашиваем именно их, а не весь архив. */
         if (!window.__relIdxLoading) {
             window.__relIdxLoading = 1;
-            var F = { popular: 'articles-index.json', simple: 'articles-index-simple.json',
-                      advanced: 'articles-index-advanced.json', mini: 'articles-index.json' };
-            fetch('/lang/' + lang + '/' + (F[version] || F.popular))
-                .then(function (r) { return r.ok ? r.json() : []; })
-                .then(function (idx) {
-                    if (idx && idx.length) {
-                        articlesIndex = idx;
+            var near = (_relVec && _relVec[currentId]) || [];
+            cardsByIds(near.map(function (n) { return n.id; }), lang, version)
+                .then(function (items) {
+                    if (items.length) {
+                        articlesIndex = items;
                         renderRelated(currentId, lang, version);
-                        // Врезка цитат живёт на том же индексе: без этого вызова она
-                        // молча пустует у всех, кто открыл страницу до его загрузки.
                         if (typeof renderCitedOurs === 'function') {
                             renderCitedOurs(currentId, lang, version);
                         }
                     }
-                }).catch(function () {});
+                });
         }
         return;
     }
@@ -421,16 +424,12 @@ function renderCitedOurs(currentId, lang, version) {
         // как условие своей отрисовки — та же ошибка, что уже описана выше по файлу.
         if (window.__citedIdxLoading) return;
         window.__citedIdxLoading = 1;
-        var F = { popular: 'articles-index.json', simple: 'articles-index-simple.json',
-                  advanced: 'articles-index-advanced.json', mini: 'articles-index.json' };
-        fetch('/lang/' + lang + '/' + (F[version] || F.popular))
-            .then(function (r) { return r.ok ? r.json() : []; })
-            .then(function (idx) {
-                if (idx && idx.length) {
-                    articlesIndex = idx;
-                    renderCitedOurs(currentId, lang, version);
-                }
-            }).catch(function () {});
+        cardsByIds(ids, lang, version).then(function (items) {
+            if (items.length) {
+                articlesIndex = items;
+                renderCitedOurs(currentId, lang, version);
+            }
+        });
         return;
     }
     var byId = {};

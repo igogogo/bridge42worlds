@@ -1069,7 +1069,7 @@ def build_parser():
     s.add_argument("--force", action="store_true", help="пересоздать уже существующие статьи")
     s.add_argument("--refine", action="store_true", help="рефлексивная шлифовка Simple и Popular")
     s.add_argument("--express", action="store_true", help="дешёвый режим: по аннотации, не по полному тексту PDF; только config.express.tiers полноценно (см. TODO.md)")
-    s.add_argument("--category", metavar="CAT", help="arXiv-категория(и) для поиска — ОДНА или НЕСКОЛЬКО через запятую (напр. 'astro-ph.*,gr-qc,hep-th,quant-ph'); по умолчанию astro-ph.*")
+    s.add_argument("--category", metavar="CAT", help="arXiv-категория(и) для поиска — ОДНА или НЕСКОЛЬКО через запятую (напр. 'astro-ph.*,gr-qc,hep-th,quant-ph'); по умолчанию — все разделы из config.daily_categories")
     s.add_argument("--limit", type=int, metavar="N", help="взять топ-N лучших за день (после ранжирования единым пулом по всем категориям)")
     s.set_defaults(func=cmd_daily, refine=False)
 
@@ -1080,7 +1080,7 @@ def build_parser():
     s.add_argument("--refine", action="store_true", help="рефлексивная шлифовка Simple и Popular")
     s.add_argument("--express", action="store_true", help="дешёвый режим по аннотации (см. daily --express)")
     s.add_argument("--limit", type=int, metavar="N", help="общий лимит статей на весь диапазон (не на день)")
-    s.add_argument("--category", metavar="CAT", help="arXiv-категория (напр. quant-ph) — по умолчанию astro-ph.*")
+    s.add_argument("--category", metavar="CAT", help="arXiv-категория (напр. quant-ph) — по умолчанию — все разделы из config.daily_categories")
     s.set_defaults(func=cmd_range, refine=False)
 
     s = sub.add_parser("bulk-select", help="year-wide каскадный отбор из локального arXiv-кэша (data/arxiv-bulk/) → data/bulk-select/<run>.json")

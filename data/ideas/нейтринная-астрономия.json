@@ -224,5 +224,331 @@
    },
    "abstract": "The Earth's Shadow to Cosmic Rays offer a windows to Tau Neutrino Astronomy at the Horizon edges. Inclined and Horizontal C.R. Showers (70^o-90^o zenith angle) produce secondary (gamma,e) mostly suppressed by high column atmosphere depth. The shower Cherenkov photons are diluted and filtered by air opacity, but secondary penetrating, muon pairs and their decay into electron pairs, revive additional Cerenkov flash lights. Most largest GeVs gamma telescopes may detect such UHECR horizontal showers. Arrival angle and column depth, shower shape, timing may inform on the altitude interaction and on"
   }
- ]
+ ],
+ "lang": {
+  "en": {
+   "note": "Neutrino astronomy is currently transitioning from the first detectors to a new generation of all-sky telescopes, and there are many untapped opportunities for data analysis and modeling.",
+   "topic": "neutrino astronomy",
+   "ideas": [
+    {
+     "based_on": [
+      "2011.09209",
+      "0904.4011"
+     ],
+     "title": "Comparing the sensitivity of neutrino telescopes to point sources",
+     "what": "Write a simulation of the response of the IceCube, Baikal-GVD, and KM3NeT detectors to neutrinos from point sources with different spectra, and compare their effective areas and angular resolution.",
+     "why": "It will allow us to assess which sources are best seen by each telescope and to plan joint observations.",
+     "origin": "Papers 2011.09209 and 0904.4011 describe the characteristics of Baikal-GVD and the Mediterranean telescopes, but there is no direct quantitative comparison of their sensitivity to point sources. Such a comparison is useful for choosing the optimal instrument for a specific task.",
+     "first_step": "Download the effective area tables for IceCube and Baikal-GVD from open papers and write a script to calculate the expected number of events from a source with a given flux.",
+     "needs": "A computer, knowledge of Python or C++, and access to open data (effective areas and angular resolution).",
+     "risks": "Effective areas may be given for different selection conditions, so their comparison will require careful normalization.",
+     "scale": "semester",
+     "methods": [
+      "Use the open effective areas and point spread functions from the collaborations' publications.",
+      "Generate events from hypothetical sources (e.g., with an E^-2 spectrum) using the Monte Carlo method.",
+      "Calculate the expected detection significance for a given observation time for different source declinations."
+     ]
+    },
+    {
+     "based_on": [
+      "2607.16136v2",
+      "1801.01551"
+     ],
+     "title": "Search for correlations between IceCube neutrinos and gamma-ray bursts, accounting for the eccentricity of the progenitor systems",
+     "what": "Analyze the archival IceCube high-energy neutrino data and the gamma-ray burst catalog, checking for an excess of coincidences in time and direction, especially for bursts that may occur in systems with elongated orbits.",
+     "why": "If neutrinos are produced in binary systems with eccentricity, this may manifest in the temporal correlation features, providing new information about the progenitors.",
+     "origin": "Paper 2607.16136v2 shows that the eccentricity of binary systems affects gravitational wave parameters, but it does not consider the connection with neutrino emission. If neutrinos are produced in similar systems, correlations may be enhanced.",
+     "first_step": "Download the public IceCube neutrino event list and the gamma-ray burst catalog, and write code to search for coincidences within a time window of ±1000 seconds and an angle of 5 degrees.",
+     "needs": "Access to IceCube data (public archive), statistical analysis skills, and knowledge of Python.",
+     "risks": "The statistics may be insufficient due to the rarity of high-energy neutrinos and the uncertainty in directions.",
+     "scale": "thesis",
+     "methods": [
+      "Take the public IceCube track events (via the IceCube Data Archive).",
+      "Use a gamma-ray burst catalog (e.g., Fermi GBM) and calculate the expected number of random coincidences.",
+      "Build the coincidence statistics as a function of time delay and angular distance, and compare with the background."
+     ]
+    },
+    {
+     "based_on": [
+      "2607.03840",
+      "2311.09986"
+     ],
+     "title": "Modeling the opacity of a neutron star to antineutrinos in the presence of dark matter",
+     "what": "Add to existing models of neutron stars with dark matter a calculation of the antineutrino interaction cross section with matter, and estimate how the presence of the dark component changes the flux of antineutrinos emerging from the star.",
+     "why": "It may provide observational signatures of dark matter in neutron stars through future neutrino detectors from supernovae.",
+     "origin": "Papers 2607.03840 and 2607.03840v1 give the structure of neutron stars with dark matter, but they do not consider neutrino opacity. Paper 2311.09986 calculates the opacity for ordinary stars, but without the dark component. Combining these approaches may reveal new effects.",
+     "first_step": "Choose one of the models from 2607.03840 (light or heavy dark matter) and calculate the density profile of ordinary matter, then compute the antineutrino cross section on nucleons at these densities.",
+     "needs": "Knowledge of nuclear physics and numerical methods, access to computational resources (can start with simple scripts).",
+     "risks": "The complexity of self-consistently accounting for dark matter and neutrino transport; simplifications may be required.",
+     "scale": "thesis",
+     "methods": [
+      "Take the equation of state from papers 2607.03840 or 2607.03840v1 for hybrid stars.",
+      "Calculate the neutral-current cross sections of antineutrinos on nucleons and leptons, accounting for density and composition.",
+      "Solve the neutrino transport equation in the diffusion approximation to obtain the flux at the surface."
+     ]
+    },
+    {
+     "based_on": [
+      "1101.1991"
+     ],
+     "title": "Estimation of the atmospheric muon background for a neutrino telescope at the North Pole in the 20 GeV range",
+     "what": "Calculate the expected flux of atmospheric muons passing through the Earth, and assess how the 'transparent Earth' method proposed in paper 1101.1991 can separate astrophysical neutrinos from the atmospheric background.",
+     "why": "If the method works, it would open a new window for neutrino astronomy at energies around 20 GeV, where it is currently difficult to separate signal from background.",
+     "origin": "Paper 1101.1991 proposes using vertical muons with an energy of 24 GeV as an almost background-free channel, but it does not provide a detailed background calculation. Testing this proposal with modern simulations is important for assessing its feasibility.",
+     "first_step": "Find the interaction cross sections of neutrinos and muons in matter and write a simple program to calculate the probability of a muon passing through the Earth.",
+     "needs": "Access to cross-section tables (PDG), programming skills, possibly using Geant4.",
+     "risks": "The residual background from atmospheric neutrinos may be higher than expected, making the method ineffective.",
+     "scale": "semester",
+     "methods": [
+      "Use simulations of muon propagation through matter (e.g., with Geant4 or range tables).",
+      "Calculate the flux of atmospheric muons reaching the detector at large zenith angles, accounting for absorption in the Earth.",
+      "Estimate the residual background from muons produced in neutrino interactions and compare with the expected signal from astrophysical sources."
+     ]
+    }
+   ]
+  },
+  "es": {
+   "note": "La astronomía de neutrinos está pasando de los primeros detectores a telescopios de nueva generación con sensibilidad a todo el cielo, y hay muchas oportunidades sin explotar para el análisis de datos y la modelización.",
+   "topic": "astronomía de neutrinos",
+   "ideas": [
+    {
+     "based_on": [
+      "2011.09209",
+      "0904.4011"
+     ],
+     "title": "Comparación de la sensibilidad de los telescopios de neutrinos a fuentes puntuales",
+     "what": "Escribir una simulación de la respuesta de los detectores IceCube, Baikal-GVD y KM3NeT a neutrinos de fuentes puntuales con diferentes espectros y comparar sus áreas efectivas y resolución angular.",
+     "why": "Permitirá evaluar qué fuentes son mejor visibles por cada telescopio y planificar observaciones conjuntas.",
+     "origin": "En los trabajos 2011.09209 y 0904.4011 se describen las características de Baikal-GVD y de los telescopios mediterráneos, pero no hay una comparación cuantitativa directa de su sensibilidad a fuentes puntuales. Esta comparación es útil para elegir el instrumento óptimo para una tarea concreta.",
+     "first_step": "Descargar las tablas de áreas efectivas de IceCube y Baikal-GVD de artículos abiertos y escribir un script para calcular el número esperado de eventos de una fuente con un flujo dado.",
+     "needs": "Computadora, conocimiento de Python o C++, acceso a datos abiertos (áreas efectivas y resolución angular).",
+     "risks": "Las áreas efectivas pueden estar dadas para diferentes condiciones de selección; su comparación requerirá una normalización cuidadosa.",
+     "scale": "semestre",
+     "methods": [
+      "Usar las áreas efectivas abiertas y las funciones de dispersión puntual de las publicaciones de las colaboraciones.",
+      "Generar eventos de fuentes hipotéticas (por ejemplo, con espectro E^-2) mediante el método de Monte Carlo.",
+      "Calcular la significancia esperada de detección para un tiempo de observación dado y para diferentes declinaciones de la fuente."
+     ]
+    },
+    {
+     "based_on": [
+      "2607.16136v2",
+      "1801.01551"
+     ],
+     "title": "Búsqueda de correlaciones entre neutrinos de IceCube y estallidos de rayos gamma teniendo en cuenta la excentricidad de los sistemas progenitores",
+     "what": "Analizar los datos de archivo de IceCube sobre neutrinos de alta energía y el catálogo de estallidos de rayos gamma, comprobando si hay un exceso de coincidencias en tiempo y dirección, especialmente para estallidos que podrían ocurrir en sistemas con órbitas alargadas.",
+     "why": "Si los neutrinos nacen en sistemas binarios con excentricidad, esto podría manifestarse en peculiaridades de las correlaciones temporales, lo que daría nueva información sobre los progenitores.",
+     "origin": "El trabajo 2607.16136v2 muestra que la excentricidad de los sistemas binarios afecta los parámetros de las ondas gravitacionales, pero no considera la conexión con la emisión de neutrinos. Si los neutrinos se producen en sistemas similares, las correlaciones podrían verse reforzadas.",
+     "first_step": "Descargar la lista de eventos de neutrinos de IceCube (pública) y el catálogo de estallidos de rayos gamma, escribir un código para buscar coincidencias dentro de una ventana temporal de ±1000 segundos y un ángulo de 5 grados.",
+     "needs": "Acceso a los datos de IceCube (archivo público), habilidades de análisis estadístico, conocimiento de Python.",
+     "risks": "La estadística puede ser insuficiente debido a la rareza de los neutrinos de alta energía y a la incertidumbre en las direcciones.",
+     "scale": "tesis de grado",
+     "methods": [
+      "Tomar los datos públicos de IceCube sobre eventos de tipo traza (a través del IceCube Data Archive).",
+      "Usar el catálogo de estallidos de rayos gamma (por ejemplo, Fermi GBM) y calcular el número esperado de coincidencias aleatorias.",
+      "Construir la estadística de coincidencias en función del retardo temporal y la distancia angular, y compararla con el fondo."
+     ]
+    },
+    {
+     "based_on": [
+      "2607.03840",
+      "2311.09986"
+     ],
+     "title": "Modelización de la opacidad de una estrella de neutrones para antineutrinos en condiciones de materia oscura",
+     "what": "Añadir a los modelos existentes de estrellas de neutrones con materia oscura el cálculo de la sección eficaz de interacción de antineutrinos con la materia y evaluar cómo la presencia de la componente oscura cambia el flujo de antineutrinos que salen de la estrella.",
+     "why": "Podría proporcionar indicios observacionales de materia oscura en estrellas de neutrones a través de futuros detectores de neutrinos de supernovas.",
+     "origin": "Los trabajos 2607.03840 y 2607.03840v1 dan la estructura de estrellas de neutrones con materia oscura, pero no consideran la opacidad a neutrinos. El artículo 2311.09986 calcula la opacidad para estrellas normales, pero sin componente oscura. La combinación de estos enfoques podría revelar nuevos efectos.",
+     "first_step": "Elegir uno de los modelos de 2607.03840 (materia oscura ligera o pesada) y calcular el perfil de densidad de la materia ordinaria, luego calcular la sección eficaz de antineutrinos sobre nucleones a esas densidades.",
+     "needs": "Conocimiento de física nuclear y métodos numéricos, acceso a recursos computacionales (se puede empezar con scripts sencillos).",
+     "risks": "La complejidad del tratamiento autoconsistente de la materia oscura y el transporte de neutrinos; puede ser necesario simplificar.",
+     "scale": "tesis de grado",
+     "methods": [
+      "Tomar la ecuación de estado de los trabajos 2607.03840 o 2607.03840v1 para estrellas híbridas.",
+      "Calcular las secciones eficaces de corrientes neutras de antineutrinos sobre nucleones y leptones teniendo en cuenta la densidad y la composición.",
+      "Resolver la ecuación de transporte de neutrinos en la aproximación de difusión para obtener el flujo en la superficie."
+     ]
+    },
+    {
+     "based_on": [
+      "1101.1991"
+     ],
+     "title": "Evaluación del fondo de muones atmosféricos para un telescopio de neutrinos en el Polo Norte en el rango de 20 GeV",
+     "what": "Calcular el flujo esperado de muones atmosféricos que atraviesan la Tierra y evaluar en qué medida el método de la 'Tierra transparente' propuesto en el trabajo 1101.1991 permite separar los neutrinos astrofísicos del fondo atmosférico.",
+     "why": "Si el método funciona, abriría una nueva ventana para la astronomía de neutrinos a energías de alrededor de 20 GeV, donde actualmente es difícil separar la señal del fondo.",
+     "origin": "El trabajo 1101.1991 propone usar muones verticales con energía de 24 GeV como un canal casi libre de fondo, pero no da un cálculo detallado del fondo. Verificar esta propuesta con simulaciones modernas es importante para evaluar su viabilidad.",
+     "first_step": "Encontrar las secciones eficaces de interacción de neutrinos y muones en la materia y escribir un programa sencillo para calcular la probabilidad de que un muón atraviese la Tierra.",
+     "needs": "Acceso a tablas de secciones eficaces (PDG), habilidades de programación, posiblemente uso de Geant4.",
+     "risks": "El fondo residual de neutrinos atmosféricos podría resultar mayor de lo esperado, lo que haría que el método no fuera efectivo.",
+     "scale": "semestre",
+     "methods": [
+      "Usar simulaciones de paso de muones a través de la materia (por ejemplo, con Geant4 o tablas de alcance).",
+      "Calcular el flujo de muones atmosféricos que alcanzan el detector bajo grandes ángulos cenitales, teniendo en cuenta la absorción en la Tierra.",
+      "Estimar el fondo residual de muones producidos en interacciones de neutrinos y compararlo con la señal esperada de fuentes astrofísicas."
+     ]
+    }
+   ]
+  },
+  "ar": {
+   "note": "تشهد فيزياء النيوترينو الفلكية حاليًا تحولًا من الكواشف الأولى إلى تلسكوبات الجيل الجديد ذات الحساسية للسماء بأكملها، وهناك العديد من الفرص غير المستغلة لتحليل البيانات والنمذجة.",
+   "topic": "فيزياء النيوترينو الفلكية",
+   "ideas": [
+    {
+     "based_on": [
+      "2011.09209",
+      "0904.4011"
+     ],
+     "title": "مقارنة حساسية تلسكوبات النيوترينو للمصادر النقطية",
+     "what": "كتابة محاكاة لاستجابة كواشف IceCube وBaikal-GVD وKM3NeT للنيوترينوات القادمة من مصادر نقطية بأطياف مختلفة، ومقارنة مساحاتها الفعالة ودقتها الزاوية.",
+     "why": "سيسمح ذلك بتقييم المصادر التي يراها كل تلسكوب بشكل أفضل، والتخطيط لملاحظات مشتركة.",
+     "origin": "تصف الأوراق 2011.09209 و0904.4011 خصائص Baikal-GVD وتلسكوبات البحر الأبيض المتوسط، لكنها لا تقدم مقارنة كمية مباشرة لحساسيتها للمصادر النقطية. هذه المقارنة مفيدة لاختيار الأداة المثلى لمهمة محددة.",
+     "first_step": "تنزيل جداول المساحات الفعالة لـ IceCube وBaikal-GVD من الأوراق المفتوحة، وكتابة سكربت لحساب العدد المتوقع للأحداث من مصدر بتدفق معين.",
+     "needs": "حاسوب، معرفة بلغة Python أو C++، والوصول إلى البيانات المفتوحة (المساحات الفعالة والدقة الزاوية).",
+     "risks": "قد تُعطى المساحات الفعالة لشروط انتقاء مختلفة، وستتطلب مقارنتها معايرة دقيقة.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "استخدام المساحات الفعالة المفتوحة ودوال تبعثر النقطة من منشورات التعاونيات.",
+      "توليد أحداث من مصادر افتراضية (على سبيل المثال، بطيف E^-2) بطريقة مونت كارلو.",
+      "حساب الدلالة المتوقعة للاكتشاف خلال زمن مراقبة معين لميول مختلفة للمصدر."
+     ]
+    },
+    {
+     "based_on": [
+      "2607.16136v2",
+      "1801.01551"
+     ],
+     "title": "البحث عن ارتباطات بين نيوترينوات IceCube وانفجارات أشعة غاما مع مراعاة اللامركزية المدارية للأنظمة الأم",
+     "what": "تحليل البيانات الأرشيفية لـ IceCube عن النيوترينوات عالية الطاقة وكتالوج انفجارات أشعة غاما، والتحقق مما إذا كان هناك فائض في التطابق الزمني والاتجاهي، خاصة بالنسبة للانفجارات التي قد تحدث في أنظمة ذات مدارات ممدودة.",
+     "why": "إذا وُلدت النيوترينوات في أنظمة ثنائية ذات لامركزية مدارية، فقد يظهر ذلك في سمات الارتباطات الزمنية، مما يعطي معلومات جديدة عن الأسلاف.",
+     "origin": "يُظهر العمل 2607.16136v2 أن اللامركزية المدارية للأنظمة الثنائية تؤثر على معاملات الموجات الثقالية، لكنه لا يدرس العلاقة مع إشعاع النيوترينو. إذا كانت النيوترينوات تُنتج في أنظمة مماثلة، فقد تكون الارتباطات معززة.",
+     "first_step": "تنزيل قائمة أحداث النيوترينو من IceCube (العامة) وكتالوج انفجارات أشعة غاما، وكتابة كود للبحث عن التطابقات ضمن نافذة زمنية ±1000 ثانية وزاوية 5 درجات.",
+     "needs": "الوصول إلى بيانات IceCube (الأرشيف العام)، ومهارات التحليل الإحصائي، ومعرفة Python.",
+     "risks": "قد تكون الإحصائيات غير كافية بسبب ندرة النيوترينوات عالية الطاقة وعدم اليقين في الاتجاهات.",
+     "scale": "أطروحة تخرج",
+     "methods": [
+      "أخذ البيانات العامة لـ IceCube للأحداث المسارية (عبر أرشيف بيانات IceCube).",
+      "استخدام كتالوج انفجارات أشعة غاما (مثل Fermi GBM) وحساب العدد المتوقع للتطابقات العشوائية.",
+      "بناء إحصائيات التطابقات كدالة للتأخير الزمني والمسافة الزاوية، ومقارنتها بالخلفية."
+     ]
+    },
+    {
+     "based_on": [
+      "2607.03840",
+      "2311.09986"
+     ],
+     "title": "نمذجة عتامة النجم النيوتروني للنيوترينوات المضادة في ظل المادة المظلمة",
+     "what": "إضافة حساب المقطع العرضي لتفاعل النيوترينو المضاد مع المادة إلى النماذج الحالية للنجوم النيوترونية التي تحتوي على مادة مظلمة، وتقييم كيف يغير وجود المكون المظلم تدفق النيوترينوات المضادة الخارجة من النجم.",
+     "why": "قد يعطي مؤشرات رصدية للمادة المظلمة في النجوم النيوترونية عبر كواشف النيوترينو المستقبلية من المستعرات العظمى.",
+     "origin": "تعطي الأوراق 2607.03840 و2607.03840v1 بنية النجوم النيوترونية مع المادة المظلمة، لكنها لا تدرس عتامة النيوترينو. تحسب الورقة 2311.09986 العتامة للنجوم العادية، لكن بدون المكون المظلم. قد يكشف دمج هذه المناهج عن تأثيرات جديدة.",
+     "first_step": "اختيار أحد النماذج من 2607.03840 (مادة مظلمة خفيفة أو ثقيلة) وحساب ملف كثافة المادة العادية، ثم حساب المقطع العرضي للنيوترينو المضاد على النيوكليونات عند هذه الكثافات.",
+     "needs": "معرفة بالفيزياء النووية والأساليب العددية، والوصول إلى الموارد الحاسوبية (يمكن البدء بسكربتات بسيطة).",
+     "risks": "تعقيد الحساب المتسق ذاتيًا للمادة المظلمة ونقل النيوترينو؛ قد يتطلب تبسيطًا.",
+     "scale": "أطروحة تخرج",
+     "methods": [
+      "أخذ معادلة الحالة من الأوراق 2607.03840 أو 2607.03840v1 للنجوم الهجينة.",
+      "حساب المقاطع العرضية للتيارات المحايدة للنيوترينو المضاد على النيوكليونات واللبتونات مع مراعاة الكثافة والتركيب.",
+      "حل معادلة نقل النيوترينو بتقريب الانتشار للحصول على التدفق على السطح."
+     ]
+    },
+    {
+     "based_on": [
+      "1101.1991"
+     ],
+     "title": "تقدير خلفية الميونات الجوية لتلسكوب نيوترينو في القطب الشمالي في نطاق 20 GeV",
+     "what": "حساب التدفق المتوقع للميونات الجوية التي تمر عبر الأرض، وتقييم مدى نجاح طريقة \"الأرض الشفافة\" المقترحة في الورقة 1101.1991 في تمييز النيوترينوات الفيزيائية الفلكية عن الخلفية الجوية.",
+     "why": "إذا نجحت الطريقة، فسيفتح ذلك نافذة جديدة لفيزياء النيوترينو الفلكية عند طاقات حوالي 20 GeV، حيث يصعب حاليًا فصل الإشارة عن الخلفية.",
+     "origin": "تقترح الورقة 1101.1991 استخدام الميونات الرأسية بطاقة 24 GeV كقناة شبه خالية من الخلفية، لكنها لا تقدم حسابًا تفصيليًا للخلفية. التحقق من هذا الاقتراح بمحاكاة حديثة مهم لتقييم قابلية التنفيذ.",
+     "first_step": "إيجاد المقاطع العرضية لتفاعل النيوترينو والميونات مع المادة، وكتابة برنامج بسيط لحساب احتمال مرور الميون عبر الأرض.",
+     "needs": "الوصول إلى جداول المقاطع العرضية (PDG)، ومهارات البرمجة، وربما استخدام Geant4.",
+     "risks": "قد تكون الخلفية المتبقية من النيوترينوات الجوية أعلى من المتوقع، مما يجعل الطريقة غير فعالة.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "استخدام محاكاة مرور الميونات عبر المادة (على سبيل المثال، باستخدام Geant4 أو جداول المدى).",
+      "حساب تدفق الميونات الجوية التي تصل إلى الكاشف بزوايا سمت كبيرة، مع مراعاة الامتصاص في الأرض.",
+      "تقدير الخلفية المتبقية من الميونات الناتجة عن تفاعلات النيوترينو، ومقارنتها بالإشارة المتوقعة من المصادر الفيزيائية الفلكية."
+     ]
+    }
+   ]
+  },
+  "fr": {
+   "note": "L'astronomie neutrino traverse actuellement une transition, passant des premiers détecteurs aux télescopes de nouvelle génération sensibles à tout le ciel, et il existe de nombreuses opportunités inexploitées pour l'analyse des données et la modélisation.",
+   "topic": "astronomie neutrino",
+   "ideas": [
+    {
+     "based_on": [
+      "2011.09209",
+      "0904.4011"
+     ],
+     "title": "Comparaison de la sensibilité des télescopes à neutrinos aux sources ponctuelles",
+     "what": "Écrire une simulation de la réponse des détecteurs IceCube, Baikal-GVD et KM3NeT aux neutrinos provenant de sources ponctuelles avec différents spectres, et comparer leurs surfaces efficaces et leur résolution angulaire.",
+     "why": "Cela permettra d'évaluer quelles sources sont mieux visibles par chaque télescope et de planifier des observations conjointes.",
+     "origin": "Les travaux 2011.09209 et 0904.4011 décrivent les caractéristiques de Baikal-GVD et des télescopes méditerranéens, mais ne fournissent pas de comparaison quantitative directe de leur sensibilité aux sources ponctuelles. Cette comparaison est utile pour choisir l'instrument optimal pour une tâche donnée.",
+     "first_step": "Télécharger les tables de surfaces efficaces d'IceCube et de Baikal-GVD à partir d'articles en accès libre et écrire un script pour calculer le nombre attendu d'événements provenant d'une source avec un flux donné.",
+     "needs": "Un ordinateur, la connaissance de Python ou C++, l'accès aux données ouvertes (surfaces efficaces et résolution angulaire).",
+     "risks": "Les surfaces efficaces peuvent être fournies pour différentes conditions de sélection, leur comparaison nécessitera une normalisation soigneuse.",
+     "scale": "semestre",
+     "methods": [
+      "Utiliser les surfaces efficaces ouvertes et les fonctions de diffusion ponctuelle issues des publications des collaborations.",
+      "Générer des événements provenant de sources hypothétiques (par exemple avec un spectre E^-2) par la méthode de Monte-Carlo.",
+      "Calculer la significativité attendue de la détection pour un temps d'observation donné et pour différentes déclinaisons de la source."
+     ]
+    },
+    {
+     "based_on": [
+      "2607.16136v2",
+      "1801.01551"
+     ],
+     "title": "Recherche de corrélations entre les neutrinos d'IceCube et les sursauts gamma en tenant compte de l'excentricité des systèmes parents",
+     "what": "Analyser les données archivées d'IceCube sur les neutrinos de haute énergie et le catalogue des sursauts gamma, en vérifiant s'il existe un excès de coïncidences en temps et en direction, en particulier pour les sursauts qui pourraient se produire dans des systèmes à orbites allongées.",
+     "why": "Si les neutrinos naissent dans des systèmes binaires avec excentricité, cela pourrait se manifester par des particularités dans les corrélations temporelles, fournissant ainsi de nouvelles informations sur les progéniteurs.",
+     "origin": "Le travail 2607.16136v2 montre que l'excentricité des systèmes binaires influence les paramètres des ondes gravitationnelles, mais n'examine pas le lien avec l'émission de neutrinos. Si les neutrinos sont produits dans de tels systèmes, les corrélations pourraient être renforcées.",
+     "first_step": "Télécharger la liste des événements neutrinos d'IceCube (publique) et le catalogue des sursauts gamma, écrire un code pour rechercher les coïncidences dans une fenêtre temporelle de ±1000 secondes et un angle de 5 degrés.",
+     "needs": "Accès aux données d'IceCube (archive publique), compétences en analyse statistique, connaissance de Python.",
+     "risks": "La statistique pourrait être insuffisante en raison de la rareté des neutrinos de haute énergie et de l'incertitude sur les directions.",
+     "scale": "mémoire",
+     "methods": [
+      "Prendre les données publiques d'IceCube sur les événements de type trace (via l'IceCube Data Archive).",
+      "Utiliser le catalogue des sursauts gamma (par exemple Fermi GBM) et calculer le nombre attendu de coïncidences fortuites.",
+      "Construire la statistique des coïncidences en fonction du délai temporel et de la distance angulaire, et la comparer au bruit de fond."
+     ]
+    },
+    {
+     "based_on": [
+      "2607.03840",
+      "2311.09986"
+     ],
+     "title": "Modélisation de l'opacité d'une étoile à neutrons aux antineutrinos en présence de matière noire",
+     "what": "Ajouter aux modèles existants d'étoiles à neutrons avec matière noire le calcul de la section efficace d'interaction des antineutrinos avec la matière, et évaluer comment la présence de la composante sombre modifie le flux d'antineutrinos sortant de l'étoile.",
+     "why": "Cela pourrait fournir des signatures observationnelles de la matière noire dans les étoiles à neutrons via les futurs détecteurs de neutrinos de supernovae.",
+     "origin": "Les travaux 2607.03840 et 2607.03840v1 donnent la structure des étoiles à neutrons avec matière noire, mais ne considèrent pas l'opacité neutrino. L'article 2311.09986 calcule l'opacité pour les étoiles ordinaires, mais sans la composante sombre. La combinaison de ces approches pourrait révéler de nouveaux effets.",
+     "first_step": "Choisir l'un des modèles de 2607.03840 (matière noire légère ou lourde) et calculer le profil de densité de la matière ordinaire, puis calculer la section efficace des antineutrinos sur les nucléons à ces densités.",
+     "needs": "Connaissance de la physique nucléaire et des méthodes numériques, accès à des ressources de calcul (on peut commencer avec des scripts simples).",
+     "risks": "Complexité de la prise en compte auto-cohérente de la matière noire et du transfert des neutrinos ; une simplification pourrait être nécessaire.",
+     "scale": "mémoire",
+     "methods": [
+      "Prendre l'équation d'état des travaux 2607.03840 ou 2607.03840v1 pour les étoiles hybrides.",
+      "Calculer les sections efficaces des courants neutres des antineutrinos sur les nucléons et les leptons en tenant compte de la densité et de la composition.",
+      "Résoudre l'équation de transfert des neutrinos dans l'approximation de diffusion pour obtenir le flux à la surface."
+     ]
+    },
+    {
+     "based_on": [
+      "1101.1991"
+     ],
+     "title": "Estimation du bruit de fond des muons atmosphériques pour un télescope à neutrinos au pôle Nord dans la gamme de 20 GeV",
+     "what": "Calculer le flux attendu de muons atmosphériques traversant la Terre et évaluer dans quelle mesure la méthode de la « Terre transparente » proposée dans le travail 1101.1991 permet de distinguer les neutrinos astrophysiques du bruit de fond atmosphérique.",
+     "why": "Si la méthode fonctionne, cela ouvrirait une nouvelle fenêtre pour l'astronomie neutrino à des énergies d'environ 20 GeV, où il est actuellement difficile de séparer le signal du bruit de fond.",
+     "origin": "Le travail 1101.1991 propose d'utiliser les muons verticaux d'énergie 24 GeV comme canal quasi sans bruit de fond, mais ne fournit pas de calcul détaillé du bruit de fond. Vérifier cette proposition avec des simulations modernes est important pour évaluer sa faisabilité.",
+     "first_step": "Trouver les sections efficaces d'interaction des neutrinos et des muons dans la matière et écrire un programme simple pour calculer la probabilité qu'un muon traverse la Terre.",
+     "needs": "Accès aux tables de sections efficaces (PDG), compétences en programmation, éventuellement utilisation de Geant4.",
+     "risks": "Le bruit de fond résiduel des neutrinos atmosphériques pourrait être plus élevé que prévu, rendant la méthode inefficace.",
+     "scale": "semestre",
+     "methods": [
+      "Utiliser des simulations de la traversée des muons dans la matière (par exemple avec Geant4 ou des tables de parcours).",
+      "Calculer le flux de muons atmosphériques atteignant le détecteur sous de grands angles zénithaux, en tenant compte de l'absorption dans la Terre.",
+      "Estimer le bruit de fond résiduel des muons produits dans les interactions de neutrinos et le comparer au signal attendu des sources astrophysiques."
+     ]
+    }
+   ]
+  }
+ }
 }

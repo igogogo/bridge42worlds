@@ -226,5 +226,339 @@
    },
    "abstract": "This paper explores the problem of quantum measurement complexity. In computability theory, the complexity of a problem is determined by how long it takes an effective algorithm to solve it. This complexity may be compared to the difficulty for a hypothetical oracle machine, the output of which may be verified by a computable function but cannot be simulated on a physical machine. We define a quantum oracle machine for measurements as one that can determine the state by examining a single copy. The complexity of measurement for a realizable machine will then be respect to the number of copies "
   }
- ]
+ ],
+ "lang": {
+  "en": {
+   "note": "In the field of quantum entanglement, both theoretical methods for estimation and measurement and experimental approaches are actively developing, but the practical implementation of precise measurements still faces limitations.",
+   "topic": "quantum entanglement and its measurement",
+   "ideas": [
+    {
+     "based_on": [
+      "0907.4117",
+      "1106.2526"
+     ],
+     "title": "A testbed for assessing the accuracy of entanglement measurement with imperfect detectors",
+     "what": "Build an experimental setup to generate two-qubit entangled states (for example, via spontaneous parametric down-conversion) and conduct a series of measurements to assess the accuracy of entanglement determination with finite statistics and imperfect detectors. Compare the experimental results with theoretical limits from quantum estimation theory.",
+     "why": "Practical characterization of entanglement is important for quantum technologies, and a systematic comparison with theoretical accuracy bounds will help improve verification protocols.",
+     "origin": "Work 0907.4117 presents an experimentally implementable method for estimating entanglement at the quantum limit of accuracy, but it does not consider the influence of specific detector imperfections. Work 1106.2526 provides a theoretical framework for accounting for errors and disturbances in measurement, yet there is no experimental verification of the combined application of these approaches.",
+     "first_step": "Assemble a simple scheme for generating polarization-entangled photons in a nonlinear crystal and calibrate the detectors by measuring their efficiency and dark count.",
+     "needs": "Optical table, laser, nonlinear crystal (e.g., BBO), single-photon detectors, coincidence electronics, skills in optics and statistical data processing.",
+     "risks": "The main difficulty is achieving sufficient brightness of the entangled-pair source and stability of the setup to obtain statistically significant results; systematic errors may arise from imperfections in the polarization optics.",
+     "scale": "diploma",
+     "methods": [
+      "Use quantum state tomography followed by computation of an entanglement measure (e.g., concurrence) and estimate its uncertainty via Fisher information, as in work 0907.4117.",
+      "Apply the error and disturbance estimation technique from work 1106.2526 to analyze the impact of measurement imperfections on the accuracy of entanglement determination.",
+      "Assemble an optical scheme generating photon pairs in a Bell state and measuring correlations in different bases, varying detector parameters (dark count, efficiency).",
+      "Perform statistical analysis: repeat measurements multiple times at different accumulation times and compare the spread of estimates with predictions of the quantum accuracy limit."
+     ]
+    },
+    {
+     "based_on": [
+      "2603.20765"
+     ],
+     "title": "Numerical verification of temporal entanglement in spin chains",
+     "what": "Implement a numerical calculation of the temporal entanglement measure for a one-dimensional spin system after a quench (sudden change of Hamiltonian parameters) and study its dynamics. Compare the behavior of temporal entanglement with known characteristics such as entanglement entropy growth and correlation propagation.",
+     "why": "Temporal entanglement is a new tool for analyzing quantum dynamics, but its properties for specific models are poorly studied; the results may be useful for understanding quantum chaos and thermalization.",
+     "origin": "Work 2603.20765 introduces the concept of temporal entanglement and shows its behavior in simple models, but a systematic study for a wide class of spin systems has not been conducted. There is no comparison with well-studied measures of spatial entanglement, which could reveal universal patterns.",
+     "first_step": "Write a program for exact diagonalization of a chain of 6 spins with the transverse-field Ising Hamiltonian and compute temporal entanglement after a sudden field change.",
+     "needs": "A computer with sufficient memory, knowledge of numerical methods (Python/Julia), linear algebra libraries, possibly access to a cluster for larger systems.",
+     "risks": "Numerical complexity grows exponentially with system size, so results for small systems may not reflect the thermodynamic limit; the definition of temporal entanglement may require careful choice of basis.",
+     "scale": "semester",
+     "methods": [
+      "Use exact diagonalization for small spin chains (up to 12-14 sites) and compute temporal entanglement according to the definition from work 2603.20765.",
+      "Apply tensor network techniques (e.g., TEBD) to simulate longer chains and check scaling.",
+      "Plot temporal entanglement as a function of time for various quench parameters and compare with the behavior of spatial entanglement.",
+      "Check whether damping and oscillations of temporal entanglement appear, similar to those described in work 2603.20765."
+     ]
+    },
+    {
+     "based_on": [
+      "0905.2467"
+     ],
+     "title": "Geometric measure of entanglement for multipartite states: computation and applications to phase transitions",
+     "what": "Develop efficient numerical algorithms for computing the geometric measure of entanglement (distance to the nearest separable state) for multipartite systems and apply them to analyze quantum phase transitions in spin models. Investigate how the geometric measure behaves near critical points.",
+     "why": "The geometric measure of entanglement provides an intuitively appealing quantitative characterization, but its computation for large systems is difficult; automation and application to realistic models will help in studying quantum phase transitions.",
+     "origin": "Work 0905.2467 introduces the geometric measure and provides analytical results for certain classes of states, but for general multipartite systems the computation remains computationally challenging. There is a lack of practical algorithms suitable for studying phase transitions in realistic models.",
+     "first_step": "Write code to compute the geometric measure for a pure two-qubit state analytically and compare with the known concurrence formula, then generalize to three qubits using numerical optimization.",
+     "needs": "Knowledge of quantum information and numerical optimization, a computer, possibly use of tensor network libraries (e.g., ITensor).",
+     "risks": "Optimization may get stuck in local minima, giving incorrect values of the measure; for large systems, computational costs may be prohibitive.",
+     "scale": "diploma",
+     "methods": [
+      "Use the definition of the geometric measure from work 0905.2467 as the distance to the set of separable states, computed by maximizing the overlap with a product of single-particle states.",
+      "Apply variational methods (e.g., imaginary time evolution with a separability constraint) to find the closest separable state.",
+      "Implement computation for matrix product states (MPS) via optimization over local tensors.",
+      "Apply to the transverse-field Ising model and the Heisenberg model, plot the measure as a function of the parameter and identify features at the critical point."
+     ]
+    },
+    {
+     "based_on": [
+      "1106.2526"
+     ],
+     "title": "Experimental test of uncertainty relations for error and disturbance in quantum measurements",
+     "what": "Build an optical setup to implement weak and strong measurements of photon polarization and test the universal relations between measurement error and state disturbance from work 1106.2526. Measure error and disturbance for various measurement strengths and compare with theoretical bounds.",
+     "why": "Error-disturbance relations are fundamental to quantum measurements, but their experimental verification in general form remains challenging; the results may clarify the limits of measurement accuracy.",
+     "origin": "Work 1106.2526 theoretically derives bounds for the product of error and disturbance, but experimental verification for arbitrary states and observables has not been performed. Existing experiments are often limited to special cases, so a more general test is needed.",
+     "first_step": "Assemble a scheme to prepare arbitrary polarization states of single photons using polarizers and wave plates, then implement a measurement device with tunable strength.",
+     "needs": "Single-photon source (attenuated laser), polarization optics, single-photon detectors, coincidence electronics, skills in quantum tomography.",
+     "risks": "Difficulty in precise control of measurement strength and compensation of systematic errors; statistical fluctuations may mask subtle effects.",
+     "scale": "years",
+     "methods": [
+      "Use the quantum estimation theory formalism from 1106.2526 to define error and disturbance via root-mean-square deviations of estimates.",
+      "Implement a polarization measurement scheme with variable interaction strength (e.g., using a partial polarizing beam splitter) and state tomography before and after.",
+      "Conduct a series of measurements for different observables and measurement strengths, plot the product of error and disturbance as a function of parameters.",
+      "Compare experimental data with predictions of the lower bound, including the achievable bound from the work."
+     ]
+    }
+   ]
+  },
+  "es": {
+   "note": "En el campo del entrelazamiento cuántico se desarrollan activamente tanto métodos teóricos de evaluación y medición como enfoques experimentales, pero la implementación práctica de mediciones precisas aún enfrenta limitaciones.",
+   "topic": "entrelazamiento cuántico y su medición",
+   "ideas": [
+    {
+     "based_on": [
+      "0907.4117",
+      "1106.2526"
+     ],
+     "title": "Banco de pruebas para evaluar la precisión de la medición del entrelazamiento considerando detectores no ideales",
+     "what": "Montar una configuración experimental para generar estados entrelazados de dos qubits (por ejemplo, mediante conversión paramétrica espontánea descendente) y realizar una serie de mediciones para evaluar la precisión en la determinación del entrelazamiento con estadística finita y detectores no ideales. Comparar los resultados experimentales con los límites teóricos de la teoría cuántica de la estimación.",
+     "why": "La caracterización práctica del entrelazamiento es importante para las tecnologías cuánticas, y la comparación sistemática con los límites teóricos de precisión ayudará a mejorar los protocolos de verificación.",
+     "origin": "En el trabajo 0907.4117 se presenta un método experimentalmente realizable para estimar el entrelazamiento en el límite cuántico de precisión, pero no se considera la influencia de imperfecciones específicas de los detectores. El trabajo 1106.2526 proporciona la base teórica para tener en cuenta errores y perturbaciones en la medición, sin embargo, falta una verificación experimental de la aplicación conjunta de estos enfoques.",
+     "first_step": "Montar el esquema más simple de generación de fotones entrelazados en polarización mediante un cristal no lineal y calibrar los detectores midiendo su eficiencia y la tasa de conteos oscuros.",
+     "needs": "Mesa óptica, láser, cristal no lineal (por ejemplo, BBO), detectores de fotón único, electrónica de coincidencias, habilidades en óptica y procesamiento estadístico de datos.",
+     "risks": "La principal dificultad es alcanzar suficiente brillo de la fuente de pares entrelazados y la estabilidad de la configuración para obtener resultados estadísticamente significativos; pueden surgir errores sistemáticos debido a imperfecciones en la óptica de polarización.",
+     "scale": "tesis de grado",
+     "methods": [
+      "Utilizar el método de tomografía de estado cuántico seguido del cálculo de una medida de entrelazamiento (por ejemplo, la concurrencia) y la estimación de su incertidumbre mediante la información de Fisher, como en el trabajo 0907.4117.",
+      "Aplicar la técnica de estimación de error y perturbación del trabajo 1106.2526 para analizar la influencia de las imperfecciones de la medición en la precisión de la determinación del entrelazamiento.",
+      "Montar el esquema óptico con generación de pares de fotones en un estado de Bell y medición de correlaciones en diferentes bases, variando los parámetros de los detectores (conteo oscuro, eficiencia).",
+      "Realizar un análisis estadístico: repetir las mediciones múltiples veces con diferentes tiempos de acumulación y comparar la dispersión de las estimaciones con las predicciones del límite cuántico de precisión."
+     ]
+    },
+    {
+     "based_on": [
+      "2603.20765"
+     ],
+     "title": "Verificación numérica del entrelazamiento temporal en cadenas de espines",
+     "what": "Implementar un cálculo numérico de la medida de entrelazamiento temporal para un sistema de espines unidimensional después de un quench (cambio abrupto de los parámetros del hamiltoniano) y estudiar su dinámica. Comparar el comportamiento del entrelazamiento temporal con características conocidas, como el crecimiento de la entropía de entrelazamiento y la propagación de correlaciones.",
+     "why": "El entrelazamiento temporal es una nueva herramienta para analizar la dinámica cuántica, pero sus propiedades para modelos específicos están poco estudiadas; los resultados pueden ser útiles para comprender el caos cuántico y la termalización.",
+     "origin": "El trabajo 2603.20765 propone el concepto de entrelazamiento temporal y muestra su comportamiento en modelos simples, pero no se ha realizado una investigación sistemática para una amplia clase de sistemas de espines. Falta una comparación con medidas bien estudiadas de entrelazamiento espacial, lo que podría revelar patrones universales.",
+     "first_step": "Escribir un programa para la diagonalización exacta de una cadena de 6 espines con el hamiltoniano de Ising en campo transversal y calcular el entrelazamiento temporal después de un cambio repentino del campo.",
+     "needs": "Computadora con suficiente memoria, conocimiento de métodos numéricos (Python/Julia), bibliotecas de álgebra lineal, posiblemente acceso a un clúster para sistemas más grandes.",
+     "risks": "La complejidad numérica crece exponencialmente con el tamaño del sistema, por lo que los resultados para sistemas pequeños pueden no reflejar el límite termodinámico; la definición de entrelazamiento temporal puede requerir una elección cuidadosa de la base.",
+     "scale": "semestre",
+     "methods": [
+      "Utilizar el método de diagonalización exacta para cadenas de espines pequeñas (hasta 12-14 sitios) y calcular el entrelazamiento temporal según la definición del trabajo 2603.20765.",
+      "Aplicar la técnica de redes de tensores (por ejemplo, TEBD) para simular cadenas más largas y verificar el escalamiento.",
+      "Construir gráficos de la dependencia temporal del entrelazamiento temporal para diferentes parámetros de quench y comparar con el comportamiento del entrelazamiento espacial.",
+      "Verificar si se manifiestan el decaimiento y las oscilaciones del entrelazamiento temporal, análogos a los descritos en el trabajo 2603.20765."
+     ]
+    },
+    {
+     "based_on": [
+      "0905.2467"
+     ],
+     "title": "Medida geométrica de entrelazamiento para estados de muchas partículas: cálculo y aplicaciones a transiciones de fase",
+     "what": "Desarrollar algoritmos numéricos eficientes para calcular la medida geométrica de entrelazamiento (distancia al estado separable más cercano) para sistemas de muchas partículas y aplicarlos al análisis de transiciones de fase cuánticas en modelos de espines. Investigar cómo se comporta la medida geométrica cerca de los puntos críticos.",
+     "why": "La medida geométrica de entrelazamiento proporciona una caracterización cuantitativa intuitiva, pero su cálculo para sistemas grandes es difícil; la automatización y la aplicación a modelos realistas ayudarán en el estudio de las transiciones de fase cuánticas.",
+     "origin": "El trabajo 0905.2467 introduce la medida geométrica y proporciona resultados analíticos para algunas clases de estados, pero para sistemas de muchas partículas en general el cálculo sigue siendo computacionalmente difícil. Faltan algoritmos prácticos adecuados para estudiar transiciones de fase en modelos realistas.",
+     "first_step": "Escribir código para calcular la medida geométrica para un estado puro de dos qubits analíticamente y comparar con la fórmula conocida de concurrencia, luego generalizar a tres qubits mediante optimización numérica.",
+     "needs": "Conocimiento de información cuántica y optimización numérica, computadora, posiblemente uso de bibliotecas para redes de tensores (por ejemplo, ITensor).",
+     "risks": "La optimización puede quedarse atrapada en mínimos locales, dando valores incorrectos de la medida; para sistemas grandes, los costos computacionales pueden ser prohibitivos.",
+     "scale": "tesis de grado",
+     "methods": [
+      "Utilizar la definición de medida geométrica del trabajo 0905.2467 como la distancia al conjunto de estados separables, calculada mediante la maximización de la superposición con un producto de estados de una partícula.",
+      "Aplicar métodos variacionales (por ejemplo, el método de tiempo imaginario con restricción de separabilidad) para encontrar el estado separable más cercano.",
+      "Implementar el cálculo para estados de producto de matrices (MPS) mediante la optimización de los tensores locales.",
+      "Aplicar al modelo de Ising con campo transversal y al modelo de Heisenberg, construir la dependencia de la medida con el parámetro y encontrar singularidades en el punto crítico."
+     ]
+    },
+    {
+     "based_on": [
+      "1106.2526"
+     ],
+     "title": "Verificación experimental de las relaciones de incertidumbre para error y perturbación en mediciones cuánticas",
+     "what": "Construir una configuración óptica para realizar mediciones débiles y fuertes de la polarización de fotones y verificar las relaciones universales entre el error de medición y la perturbación del estado del trabajo 1106.2526. Medir el error y la perturbación para diferentes intensidades de medición y comparar con los límites teóricos.",
+     "why": "Las relaciones error-perturbación son fundamentales para las mediciones cuánticas, pero su verificación experimental en forma general sigue siendo difícil; los resultados pueden aclarar los límites de precisión de las mediciones.",
+     "origin": "El trabajo 1106.2526 deriva teóricamente límites para el producto del error y la perturbación, pero no se ha realizado una verificación experimental para estados y observables arbitrarios. Los experimentos existentes a menudo se limitan a casos particulares, por lo que se necesita una verificación más general.",
+     "first_step": "Montar un esquema para preparar un estado de polarización arbitrario de fotones individuales utilizando polarizadores y placas de onda, luego implementar un dispositivo de medición con intensidad ajustable.",
+     "needs": "Fuente de fotones individuales (láser atenuado), óptica de polarización, detectores de fotón único, electrónica de coincidencias, habilidades en tomografía cuántica.",
+     "risks": "La dificultad de controlar con precisión la intensidad de la medición y compensar errores sistemáticos; las fluctuaciones estadísticas pueden enmascarar efectos sutiles.",
+     "scale": "años",
+     "methods": [
+      "Utilizar el formalismo de la teoría cuántica de la estimación de 1106.2526 para definir el error y la perturbación a través de las desviaciones cuadráticas medias de las estimaciones.",
+      "Implementar un esquema de medición de polarización con intensidad de interacción variable (por ejemplo, mediante un divisor de haz polarizador parcial) y tomografía del estado antes y después.",
+      "Realizar una serie de mediciones para diferentes observables e intensidades de medición, construir gráficos de la dependencia del producto del error y la perturbación con los parámetros.",
+      "Comparar los datos experimentales con las predicciones del límite inferior, incluido el límite alcanzable del trabajo."
+     ]
+    }
+   ]
+  },
+  "ar": {
+   "note": "في مجال التشابك الكمي، تتطور بنشاط كل من الأساليب النظرية لتقدير وقياس التشابك والمناهج التجريبية، لكن التنفيذ العملي للقياسات الدقيقة لا يزال يواجه قيودًا.",
+   "topic": "التشابك الكمي وقياسه",
+   "ideas": [
+    {
+     "based_on": [
+      "0907.4117",
+      "1106.2526"
+     ],
+     "title": "منصة لتقييم دقة قياس التشابك مع مراعاة عدم مثالية الكواشف",
+     "what": "بناء إعداد تجريبي لتوليد حالات متشابكة من كيوبتين (على سبيل المثال، عبر التشتت البارامتري التلقائي) وإجراء سلسلة من القياسات لتقييم دقة تحديد التشابك مع إحصائيات محدودة وكواشف غير مثالية. مقارنة النتائج التجريبية مع الحدود النظرية المستمدة من نظرية التقدير الكمي.",
+     "why": "التوصيف العملي للتشابك مهم للتقنيات الكمية، والمقارنة المنهجية مع الحدود النظرية للدقة ستساعد في تحسين بروتوكولات التحقق.",
+     "origin": "في العمل 0907.4117، قُدِّمت طريقة قابلة للتنفيذ تجريبيًا لتقدير التشابك عند حد الدقة الكمي، لكن لم يُنظر في تأثير عيوب كواشف محددة. العمل 1106.2526 يقدم أساسًا نظريًا لمراعاة الأخطاء والاضطرابات في القياس، لكن لا توجد تحقق تجريبي للتطبيق المشترك لهذين النهجين.",
+     "first_step": "تجميع أبسط مخطط لتوليد فوتونات متشابكة في الاستقطاب باستخدام بلورة غير خطية ومعايرة الكواشف بقياس كفاءتها والعدّ الداكن.",
+     "needs": "طاولة بصرية، ليزر، بلورة غير خطية (مثل BBO)، كواشف فوتون واحد، إلكترونيات توافق، مهارات في التعامل مع البصريات والمعالجة الإحصائية للبيانات.",
+     "risks": "الصعوبة الرئيسية هي تحقيق سطوع كافٍ لمصدر الأزواج المتشابكة واستقرار الإعداد للحصول على نتائج ذات دلالة إحصائية؛ قد تحدث أخطاء منهجية بسبب عدم كمال البصريات الاستقطابية.",
+     "scale": "أطروحة تخرج",
+     "methods": [
+      "استخدام طريقة التصوير المقطعي الكمي للحالة (quantum state tomography) ثم حساب مقياس التشابك (مثل concurrence) وتقدير خطأه عبر معلومات فيشر، كما في العمل 0907.4117.",
+      "تطبيق تقنية تقدير الخطأ والاضطراب من العمل 1106.2526 لتحليل تأثير عدم مثالية القياسات على دقة تحديد التشابك.",
+      "تجميع مخطط بصري لتوليد أزواج فوتونات في حالة بيل (Bell state) وقياس الارتباطات في أسس مختلفة، مع تغيير معلمات الكواشف (العدّ الداكن، الكفاءة).",
+      "إجراء تحليل إحصائي: تكرار القياسات عدة مرات عند أوقات تراكم مختلفة ومقارنة تشتت التقديرات مع توقعات الحد الكمي للدقة."
+     ]
+    },
+    {
+     "based_on": [
+      "2603.20765"
+     ],
+     "title": "تحقق عددي للتشابك الزمني في سلاسل السبين",
+     "what": "تنفيذ حساب عددي لمقياس التشابك الزمني لنظام سبين أحادي البعد بعد كوينش (تغيير مفاجئ في معاملات الهاميلتوني) ودراسة ديناميكياته. مقارنة سلوك التشابك الزمني مع الخصائص المعروفة مثل نمو إنتروبيا التشابك وانتشار الارتباطات.",
+     "why": "التشابك الزمني أداة جديدة لتحليل الديناميكا الكمية، لكن خصائصه لنماذج محددة لم تُدرس جيدًا؛ قد تكون النتائج مفيدة لفهم الفوضى الكمية والترمل.",
+     "origin": "العمل 2603.20765 يقدم مفهوم التشابك الزمني ويظهر سلوكه في نماذج بسيطة، لكن لم يُجرَ تحقيق منهجي لفئة واسعة من أنظمة السبين. لا توجد مقارنة مع مقاييس التشابك المكاني المدروسة جيدًا، مما قد يكشف عن أنماط عامة.",
+     "first_step": "كتابة برنامج للقطرية الدقيقة لسلسلة من 6 سبينات مع هاميلتوني إيزينغ في مجال عرضي وحساب التشابك الزمني بعد تغيير مفاجئ في المجال.",
+     "needs": "حاسوب بذاكرة كافية، معرفة بالطرق العددية (Python/Julia)، مكتبات جبر خطي، وربما الوصول إلى عنقود حاسوبي للأنظمة الأكبر.",
+     "risks": "التعقيد العددي ينمو أسيًا مع حجم النظام، لذا قد لا تعكس نتائج الأنظمة الصغيرة الحد الديناميكي الحراري؛ تعريف التشابك الزمني قد يتطلب اختيارًا دقيقًا للأساس.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "استخدام طريقة القطرية الدقيقة لسلاسل سبين صغيرة (حتى 12-14 عقدة) وحساب التشابك الزمني وفقًا لتعريف العمل 2603.20765.",
+      "تطبيق تقنية شبكات التنسور (مثل TEBD) لمحاكاة سلاسل أطول والتحقق من القياس.",
+      "رسم منحنيات اعتماد التشابك الزمني على الزمن لمعاملات كوينش مختلفة ومقارنتها بسلوك التشابك المكاني.",
+      "التحقق مما إذا كان التشابك الزمني يُظهر تثبيطًا وتذبذبات مشابهة لتلك الموصوفة في العمل 2603.20765."
+     ]
+    },
+    {
+     "based_on": [
+      "0905.2467"
+     ],
+     "title": "مقياس التشابك الهندسي لحالات متعددة الجسيمات: الحساب والتطبيقات على التحولات الطورية",
+     "what": "تطوير خوارزميات عددية فعالة لحساب مقياس التشابك الهندسي (المسافة إلى أقرب حالة قابلة للفصل) للأنظمة متعددة الجسيمات وتطبيقها لتحليل التحولات الطورية الكمية في نماذج السبين. دراسة سلوك المقياس الهندسي بالقرب من النقاط الحرجة.",
+     "why": "مقياس التشابك الهندسي يعطي خاصية كمية بديهية، لكن حسابه للأنظمة الكبيرة صعب؛ الأتمتة والتطبيق على نماذج واقعية سيساعدان في دراسة التحولات الطورية الكمية.",
+     "origin": "العمل 0905.2467 يقدم المقياس الهندسي ويعطي نتائج تحليلية لبعض فئات الحالات، لكن للأنظمة متعددة الجسيمات العامة يظل الحساب معقدًا حسابيًا. تفتقر الأدبيات إلى خوارزميات عملية مناسبة لدراسة التحولات الطورية في نماذج واقعية.",
+     "first_step": "كتابة كود لحساب المقياس الهندسي لحالة نقية من كيوبتين تحليليًا ومقارنته بالصيغة المعروفة لـ concurrence، ثم تعميمه على ثلاثة كيوبتات باستخدام التحسين العددي.",
+     "needs": "معرفة بالمعلومات الكمية والتحسين العددي، حاسوب، وربما استخدام مكتبات لشبكات التنسور (مثل ITensor).",
+     "risks": "قد يعلق التحسين في قيم صغرى محلية، مما يعطي قيمًا غير صحيحة للمقياس؛ للأنظمة الكبيرة، قد تكون التكاليف الحسابية باهظة.",
+     "scale": "أطروحة تخرج",
+     "methods": [
+      "استخدام تعريف المقياس الهندسي من العمل 0905.2467 كمسافة إلى مجموعة الحالات القابلة للفصل، محسوبة عبر تعظيم التداخل مع حاصل ضرب حالات أحادية الجسيم.",
+      "تطبيق طرق تباينية (مثل طريقة الزمن التخيلي مع قيد الانفصال) لإيجاد أقرب حالة قابلة للفصل.",
+      "تنفيذ الحساب لحالات حاصل ضرب المصفوفات (MPS) عبر التحسين على التنسورات المحلية.",
+      "تطبيق ذلك على نموذج إيزينغ مع مجال عرضي ونموذج هايزنبرغ، ورسم اعتماد المقياس على المعامل وتحديد الشذوذ عند النقطة الحرجة."
+     ]
+    },
+    {
+     "based_on": [
+      "1106.2526"
+     ],
+     "title": "تحقق تجريبي من علاقات اللايقين للخطأ والاضطراب في القياسات الكمية",
+     "what": "بناء إعداد بصري لتنفيذ قياسات ضعيفة وقوية لاستقطاب الفوتونات والتحقق من العلاقات العامة بين خطأ القياس واضطراب الحالة من العمل 1106.2526. قياس الخطأ والاضطراب لقوى قياس مختلفة ومقارنتها بالحدود النظرية.",
+     "why": "علاقات الخطأ-الاضطراب أساسية للقياسات الكمية، لكن التحقق التجريبي منها بشكل عام لا يزال صعبًا؛ قد توضح النتائج حدود دقة القياس.",
+     "origin": "العمل 1106.2526 يشتق نظريًا حدودًا لحاصل ضرب الخطأ والاضطراب، لكن لم يُجرَ تحقق تجريبي لحالات ومراصد عشوائية. التجارب الحالية غالبًا ما تقتصر على حالات خاصة، لذا هناك حاجة لتحقق أكثر عمومية.",
+     "first_step": "تجميع مخطط لتحضير حالة استقطاب عشوائية لفوتونات مفردة باستخدام مستقطبات وألواح موجية، ثم تنفيذ جهاز قياس بقوة قابلة للضبط.",
+     "needs": "مصدر فوتونات مفردة (ليزر مخفف)، بصريات استقطابية، كواشف فوتون واحد، إلكترونيات توافق، مهارات في التصوير المقطعي الكمي.",
+     "risks": "صعوبة التحكم الدقيق في قوة القياس وتعويض الأخطاء المنهجية؛ قد تخفي التقلبات الإحصائية تأثيرات دقيقة.",
+     "scale": "سنوات",
+     "methods": [
+      "استخدام صياغة نظرية التقدير الكمي من 1106.2526 لتحديد الخطأ والاضطراب عبر الانحرافات المعيارية للتقديرات.",
+      "تنفيذ مخطط قياس الاستقطاب بقوة تفاعل متغيرة (على سبيل المثال، باستخدام مقسم شعاع مستقطب جزئي) والتصوير المقطعي للحالة قبل وبعد.",
+      "إجراء سلسلة من القياسات لمراصد وقوى قياس مختلفة، ورسم منحنيات اعتماد حاصل ضرب الخطأ والاضطراب على المعاملات.",
+      "مقارنة البيانات التجريبية مع توقعات الحد الأدنى، بما في ذلك الحد القابل للتحقيق من العمل."
+     ]
+    }
+   ]
+  },
+  "fr": {
+   "note": "Dans le domaine de l'intrication quantique, les méthodes théoriques d'évaluation et de mesure, ainsi que les approches expérimentales, se développent activement, mais la mise en œuvre pratique de mesures précises reste confrontée à des limitations.",
+   "topic": "l'intrication quantique et sa mesure",
+   "ideas": [
+    {
+     "based_on": [
+      "0907.4117",
+      "1106.2526"
+     ],
+     "title": "Banc de test pour évaluer la précision de mesure de l'intrication en tenant compte de l'imperfection des détecteurs",
+     "what": "Assembler un dispositif expérimental pour générer des états intriqués à deux qubits (par exemple, par conversion paramétrique spontanée) et effectuer une série de mesures pour évaluer la précision de la détermination de l'intrication avec une statistique finie et des détecteurs imparfaits. Comparer les résultats expérimentaux avec les limites théoriques de la théorie de l'estimation quantique.",
+     "why": "La caractérisation pratique de l'intrication est importante pour les technologies quantiques, et une comparaison systématique avec les limites théoriques de précision aidera à améliorer les protocoles de vérification.",
+     "origin": "Le travail 0907.4117 présente une méthode d'estimation de l'intrication expérimentalement réalisable à la limite quantique de précision, mais ne considère pas l'influence des imperfections spécifiques des détecteurs. Le travail 1106.2526 fournit une base théorique pour prendre en compte les erreurs et les perturbations lors de la mesure, mais il n'existe pas de vérification expérimentale de l'application conjointe de ces approches.",
+     "first_step": "Assembler le schéma le plus simple de génération de photons intriqués en polarisation à l'aide d'un cristal non linéaire et calibrer les détecteurs en mesurant leur efficacité et leur taux de comptage sombre.",
+     "needs": "Table optique, laser, cristal non linéaire (par exemple BBO), détecteurs de photons uniques, électronique de coïncidence, compétences en optique et en traitement statistique des données.",
+     "risks": "La principale difficulté est d'atteindre une luminosité suffisante de la source de paires intriquées et une stabilité de l'installation pour obtenir des résultats statistiquement significatifs ; des erreurs systématiques peuvent survenir en raison de l'imperfection de l'optique de polarisation.",
+     "scale": "mémoire",
+     "methods": [
+      "Utiliser la méthode de tomographie quantique de l'état, puis calculer une mesure d'intrication (par exemple, la concurrence) et estimer son incertitude via l'information de Fisher, comme dans le travail 0907.4117.",
+      "Appliquer la technique d'estimation de l'erreur et de la perturbation du travail 1106.2526 pour analyser l'influence de l'imperfection des mesures sur la précision de la détermination de l'intrication.",
+      "Assembler le schéma optique avec génération de paires de photons dans un état de Bell et mesure des corrélations dans différentes bases, en faisant varier les paramètres des détecteurs (comptage sombre, efficacité).",
+      "Effectuer une analyse statistique : répéter les mesures à différents temps d'accumulation et comparer la dispersion des estimations avec les prédictions de la limite quantique de précision."
+     ]
+    },
+    {
+     "based_on": [
+      "2603.20765"
+     ],
+     "title": "Vérification numérique de l'intrication temporelle dans les chaînes de spins",
+     "what": "Implémenter un calcul numérique de la mesure d'intrication temporelle pour un système de spins unidimensionnel après un quench (changement brusque des paramètres du hamiltonien) et étudier sa dynamique. Comparer le comportement de l'intrication temporelle avec des caractéristiques connues telles que la croissance de l'entropie d'intrication et la propagation des corrélations.",
+     "why": "L'intrication temporelle est un nouvel outil pour analyser la dynamique quantique, mais ses propriétés pour des modèles spécifiques sont peu étudiées ; les résultats peuvent être utiles pour comprendre le chaos quantique et la thermalisation.",
+     "origin": "Le travail 2603.20765 propose le concept d'intrication temporelle et montre son comportement dans des modèles simples, mais aucune étude systématique pour une large classe de systèmes de spins n'a été menée. Il manque une comparaison avec les mesures d'intrication spatiale bien étudiées, ce qui pourrait révéler des lois universelles.",
+     "first_step": "Écrire un programme pour la diagonalisation exacte d'une chaîne de 6 spins avec un hamiltonien d'Ising en champ transverse et calculer l'intrication temporelle après un changement brusque du champ.",
+     "needs": "Ordinateur avec suffisamment de mémoire, connaissance des méthodes numériques (Python/Julia), bibliothèques d'algèbre linéaire, éventuellement accès à un cluster pour des systèmes plus grands.",
+     "risks": "La complexité numérique croît exponentiellement avec la taille du système, donc les résultats pour de petits systèmes peuvent ne pas refléter la limite thermodynamique ; la définition de l'intrication temporelle peut nécessiter un choix soigneux de la base.",
+     "scale": "semestre",
+     "methods": [
+      "Utiliser la méthode de diagonalisation exacte pour de petites chaînes de spins (jusqu'à 12-14 sites) et calculer l'intrication temporelle selon la définition du travail 2603.20765.",
+      "Appliquer la technique des réseaux de tenseurs (par exemple TEBD) pour simuler des chaînes plus longues et vérifier le comportement d'échelle.",
+      "Tracer les courbes de l'intrication temporelle en fonction du temps pour différents paramètres de quench et les comparer avec le comportement de l'intrication spatiale.",
+      "Vérifier si l'on observe une décroissance et des oscillations de l'intrication temporelle, analogues à celles décrites dans le travail 2603.20765."
+     ]
+    },
+    {
+     "based_on": [
+      "0905.2467"
+     ],
+     "title": "Mesure géométrique de l'intrication pour les états à plusieurs particules : calcul et applications aux transitions de phase",
+     "what": "Développer des algorithmes numériques efficaces pour calculer la mesure géométrique de l'intrication (distance à l'état séparable le plus proche) pour des systèmes à plusieurs particules et les appliquer à l'analyse des transitions de phase quantiques dans des modèles de spins. Étudier comment la mesure géométrique se comporte près des points critiques.",
+     "why": "La mesure géométrique de l'intrication fournit une caractérisation quantitative intuitive, mais son calcul pour de grands systèmes est difficile ; l'automatisation et l'application à des modèles réalistes aideront à étudier les transitions de phase quantiques.",
+     "origin": "Le travail 0905.2467 introduit la mesure géométrique et donne des résultats analytiques pour certaines classes d'états, mais pour des systèmes à plusieurs particules en général, le calcul reste coûteux en calcul. Il manque des algorithmes pratiques adaptés à l'étude des transitions de phase dans des modèles réalistes.",
+     "first_step": "Écrire un code pour calculer la mesure géométrique pour un état pur de deux qubits analytiquement et le comparer avec la formule connue de la concurrence, puis généraliser à trois qubits par optimisation numérique.",
+     "needs": "Connaissance de l'information quantique et de l'optimisation numérique, ordinateur, éventuellement utilisation de bibliothèques pour les réseaux de tenseurs (par exemple ITensor).",
+     "risks": "L'optimisation peut rester bloquée dans des minima locaux, donnant des valeurs incorrectes de la mesure ; pour les grands systèmes, les coûts de calcul peuvent être prohibitifs.",
+     "scale": "mémoire",
+     "methods": [
+      "Utiliser la définition de la mesure géométrique du travail 0905.2467 comme distance à l'ensemble des états séparables, calculée en maximisant le recouvrement avec un produit d'états à une particule.",
+      "Appliquer des méthodes variationnelles (par exemple, la méthode du temps imaginaire avec contrainte de séparabilité) pour trouver l'état séparable le plus proche.",
+      "Implémenter le calcul pour les états de produit de matrices (MPS) en optimisant sur les tenseurs locaux.",
+      "Appliquer au modèle d'Ising en champ transverse et au modèle de Heisenberg, tracer la dépendance de la mesure en fonction du paramètre et identifier les singularités au point critique."
+     ]
+    },
+    {
+     "based_on": [
+      "1106.2526"
+     ],
+     "title": "Vérification expérimentale des relations d'incertitude pour l'erreur et la perturbation dans les mesures quantiques",
+     "what": "Construire un montage optique pour réaliser des mesures faibles et fortes de la polarisation des photons et vérifier les relations universelles entre l'erreur de mesure et la perturbation de l'état du travail 1106.2526. Mesurer l'erreur et la perturbation pour différentes forces de mesure et les comparer aux limites théoriques.",
+     "why": "Les relations erreur-perturbation sont fondamentales pour les mesures quantiques, mais leur vérification expérimentale dans le cas général reste difficile ; les résultats peuvent clarifier les limites de précision des mesures.",
+     "origin": "Le travail 1106.2526 dérive théoriquement des bornes pour le produit de l'erreur et de la perturbation, mais une vérification expérimentale pour des états et des observables arbitraires n'a pas été réalisée. Les expériences existantes sont souvent limitées à des cas particuliers, donc une vérification plus générale est nécessaire.",
+     "first_step": "Assembler un schéma pour préparer un état de polarisation arbitraire de photons uniques à l'aide de polariseurs et de lames d'onde, puis réaliser un dispositif de mesure avec une force réglable.",
+     "needs": "Source de photons uniques (laser atténué), optique de polarisation, détecteurs de photons uniques, électronique de coïncidence, compétences en tomographie quantique.",
+     "risks": "Difficulté de contrôler précisément la force de mesure et de compenser les erreurs systématiques ; les fluctuations statistiques peuvent masquer des effets subtils.",
+     "scale": "années",
+     "methods": [
+      "Utiliser le formalisme de la théorie de l'estimation quantique de 1106.2526 pour définir l'erreur et la perturbation via les écarts quadratiques moyens des estimateurs.",
+      "Implémenter un schéma de mesure de polarisation avec une force d'interaction variable (par exemple, à l'aide d'un séparateur de faisceau polarisant partiel) et une tomographie de l'état avant et après.",
+      "Effectuer une série de mesures pour différentes observables et forces de mesure, tracer les courbes du produit de l'erreur et de la perturbation en fonction des paramètres.",
+      "Comparer les données expérimentales avec les prédictions de la borne inférieure, y compris la borne atteignable du travail."
+     ]
+    }
+   ]
+  }
+ }
 }

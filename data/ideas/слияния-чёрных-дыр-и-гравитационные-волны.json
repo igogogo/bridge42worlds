@@ -214,5 +214,251 @@
    },
    "abstract": "The era of gravitational-wave astronomy began on 14 September 2015, when the LIGO Scientific Collaboration detected the merger of two $\\sim 30 M_\\odot$ black holes at a distance of $\\sim 400$ Mpc. This event has facilitated qualitatively new tests of gravitational theories, and has also produced exciting information about the astrophysical origin of black hole binaries. In this review we discuss the implications of this event for gravitational physics and astrophysics, as well as the expectations for future detections. In brief: (1) because the spins of the black holes could not be measured ac"
   }
- ]
+ ],
+ "lang": {
+  "en": {
+   "note": "In the field of black hole mergers, data analysis methods and theoretical models are actively evolving, linking primordial black holes and exotic objects to observed signals.",
+   "topic": "black hole mergers and gravitational waves",
+   "ideas": [
+    {
+     "based_on": [
+      "2607.01818v1",
+      "2007.06481"
+     ],
+     "title": "Estimating parameters of primordial black hole mergers from LIGO/Virgo data using a frequency relation",
+     "what": "Develop and apply a method to estimate parameters of primordial black holes (PBHs) based on the relation between the frequencies of the stochastic background and merger frequencies, as derived in [2607.01818v1]. Write code to analyze LIGO/Virgo data and test whether this relation improves the accuracy of mass and merger rate estimates.",
+     "why": "This will help better isolate the PBH contribution to observed gravitational-wave events and refine constraints on their abundance, which is important for cosmology.",
+     "origin": "In [2607.01818v1], a universal relation between the frequencies of the stochastic background and PBH mergers was established, but it has not been applied to analyze specific events. The work [2007.06481] identifies PBH candidate events, but without using this relation. Thus, there is a lack of practical application of the relation to improve PBH parameter estimates.",
+     "first_step": "Download the public LIGO/Virgo data and select events with masses in the range typical for PBHs; reproduce the baseline parameter estimation using existing scripts.",
+     "needs": "Access to LIGO/Virgo data (public), Python programming skills, familiarity with Bayesian analysis and packages like Bilby, and computational resources (a personal computer is sufficient for event-wise analysis).",
+     "risks": "The frequency relation may be too coarse for individual events, and the improvement in estimates may be marginal; also, uncertainties in the PBH formation model could dominate.",
+     "scale": "semester",
+     "methods": [
+      "Use the analytical relation f_merge = 1.79 * f_bg from [2607.01818v1] to impose prior constraints on PBH parameters.",
+      "Apply Bayesian analysis using existing packages (e.g., Bilby) to O1-O3 LIGO/Virgo data for PBH candidate events such as GW190425, GW190521, GW190814 (from [2007.06481]).",
+      "Compare the resulting constraints on the PBH fraction of dark matter with those obtained without using the frequency relation."
+     ]
+    },
+    {
+     "based_on": [
+      "1010.2165"
+     ],
+     "title": "Developing a fast gravitational-wave simulator for black hole mergers using surrogate models and machine learning",
+     "what": "Create a fast waveform generator for black hole mergers, trained on numerical relativity data from [1010.2165] and modern catalogs, using neural networks or Gaussian processes. Integrate it into the standard LIGO/Virgo analysis pipeline.",
+     "why": "This will speed up parameter estimation for events by tens of times, which is critical given the growing number of detected mergers and for future third-generation detectors.",
+     "origin": "The work [1010.2165] highlights the importance of numerical relativity for obtaining accurate waveforms, but the computations remain expensive. Existing fast models (e.g., approximate ones) have limited accuracy. There is a lack of an accessible tool that combines speed and accuracy for a wide range of parameters.",
+     "first_step": "Download the public SXS catalog of numerical simulations and write a script to extract parameters and corresponding waveforms.",
+     "needs": "Access to numerical relativity catalogs (SXS, RIT), machine learning skills (Python, TensorFlow/PyTorch), and computational resources for training (GPU is desirable, but CPU can be used initially).",
+     "risks": "The accuracy of the surrogate model may be insufficient for complex configurations (high spins, precession), limiting its applicability.",
+     "scale": "thesis",
+     "methods": [
+      "Assemble a dataset from numerical simulations of black hole mergers (e.g., from the SXS catalog, which underpins [1010.2165]).",
+      "Train a surrogate model (neural network or Gaussian process regression) to predict the waveform from parameters (masses, spins).",
+      "Validate the model's accuracy against reference simulations and assess the speed gain when used in Bayesian analysis."
+     ]
+    },
+    {
+     "based_on": [
+      "2410.12775"
+     ],
+     "title": "Searching for electromagnetic counterparts of neutron star-black hole mergers using gravitational-wave data and sky surveys",
+     "what": "Develop an algorithm for rapid alerting of optical telescopes to neutron star-black hole (NSBH) merger events based on gravitational-wave data analysis, incorporating mode-mixing effects from [2410.12775]. Test on archival LIGO/Virgo data and simulated events.",
+     "why": "This will increase the chances of detecting electromagnetic emission from NSBH mergers, providing insights into the nature of compact objects and the physics of extreme states.",
+     "origin": "The work [2410.12775] shows that electromagnetic fields can affect gravitational waves from NSBH mergers, but no practical method has been proposed to use this for improving counterpart searches. Existing alerts rely solely on gravitational-wave data and do not account for such effects. There is a lack of integration of these theoretical results into observational practice.",
+     "first_step": "Study the existing low-latency LIGO/Virgo analysis pipeline and simulate several NSBH events with expected parameters to assess localization accuracy.",
+     "needs": "Access to simulations and LIGO/Virgo data, programming skills, understanding of parameter estimation algorithms, and possibly collaboration with astronomers to organize observations.",
+     "risks": "Electromagnetic counterparts of NSBH mergers may be extremely faint, and the mode-mixing effect may be indistinguishable in real data; also, coordinating with telescopes requires infrastructure.",
+     "scale": "years",
+     "methods": [
+      "Use real-time parameter estimation methods (e.g., low-latency analysis) for rapid localization and mass determination of components.",
+      "Incorporate the possibility of electromagnetic effects on the gravitational-wave signal shape, as proposed in [2410.12775], to refine event classification.",
+      "Develop a prototype alert system that sends coordinates and probabilities to a telescope network (e.g., via the GCN protocol)."
+     ]
+    }
+   ]
+  },
+  "es": {
+   "note": "En el campo de las fusiones de agujeros negros se están desarrollando activamente métodos de análisis de datos y modelos teóricos que vinculan los agujeros negros primordiales y los objetos exóticos con las señales observadas.",
+   "topic": "fusiones de agujeros negros y ondas gravitacionales",
+   "ideas": [
+    {
+     "based_on": [
+      "2607.01818v1",
+      "2007.06481"
+     ],
+     "title": "Estimación de parámetros de fusiones de agujeros negros primordiales a partir de datos de LIGO/Virgo utilizando la relación de frecuencias",
+     "what": "Desarrollar y aplicar un método para estimar los parámetros de los agujeros negros primordiales (ABP) basado en la relación entre las frecuencias del fondo estocástico y las frecuencias de fusión, obtenida en el trabajo [2607.01818v1]. Escribir código para analizar los datos de LIGO/Virgo y comprobar si esta relación mejora la precisión de las estimaciones de masas y tasas de fusión.",
+     "why": "Permitirá aislar mejor la contribución de los ABP a los eventos de ondas gravitacionales observados y refinar las restricciones sobre su abundancia, lo cual es importante para la cosmología.",
+     "origin": "En el trabajo [2607.01818v1] se estableció una relación universal entre las frecuencias del fondo estocástico y las fusiones de ABP, pero no se aplicó al análisis de eventos concretos. El trabajo [2007.06481] identifica eventos candidatos a ABP, pero sin usar esta relación. Por tanto, falta una aplicación práctica de la relación para mejorar las estimaciones de los parámetros de los ABP.",
+     "first_step": "Descargar los datos abiertos de LIGO/Virgo y seleccionar eventos con masas en el rango característico de los ABP; reproducir el análisis básico de parámetros con scripts ya preparados.",
+     "needs": "Acceso a los datos de LIGO/Virgo (abiertos), habilidades de programación en Python, familiaridad con el análisis bayesiano y paquetes como Bilby, recursos computacionales (un ordenador personal es suficiente para el análisis de eventos).",
+     "risks": "La relación de frecuencias puede ser demasiado aproximada para eventos individuales, y la mejora en las estimaciones podría ser insignificante; además, la incertidumbre en el modelo de formación de ABP podría dominar.",
+     "scale": "semestre",
+     "methods": [
+      "Usar la relación analítica f_merge = 1.79 * f_bg del trabajo [2607.01818v1] para imponer restricciones previas sobre los parámetros de los ABP.",
+      "Aplicar el análisis bayesiano con paquetes existentes (por ejemplo, Bilby) a los datos O1-O3 de LIGO/Virgo para eventos candidatos a ABP, como GW190425, GW190521, GW190814 (del trabajo [2007.06481]).",
+      "Comparar las restricciones obtenidas sobre la fracción de ABP en la materia oscura con los resultados sin usar la relación de frecuencias."
+     ]
+    },
+    {
+     "based_on": [
+      "1010.2165"
+     ],
+     "title": "Desarrollo de un simulador rápido de ondas gravitacionales de fusiones de agujeros negros mediante modelos sustitutos y aprendizaje automático",
+     "what": "Crear un generador rápido de formas de onda para fusiones de agujeros negros, entrenado con datos de relatividad numérica del trabajo [1010.2165] y catálogos modernos, utilizando redes neuronales o procesos gaussianos. Integrarlo en el pipeline estándar de análisis de LIGO/Virgo.",
+     "why": "Acelerará la estimación de parámetros de eventos en decenas de veces, lo cual es crítico con el creciente número de fusiones detectadas y para las futuras observaciones de detectores de tercera generación.",
+     "origin": "El trabajo [1010.2165] describe la importancia de la relatividad numérica para obtener formas de onda precisas, pero los cálculos siguen siendo costosos. Los modelos rápidos existentes (por ejemplo, aproximados) tienen precisión limitada. Falta una herramienta accesible que combine velocidad y precisión para un amplio rango de parámetros.",
+     "first_step": "Descargar el catálogo abierto de simulaciones numéricas SXS y escribir un script para extraer los parámetros y las formas de onda correspondientes.",
+     "needs": "Acceso a catálogos de relatividad numérica (SXS, RIT), habilidades de aprendizaje automático (Python, TensorFlow/PyTorch), recursos computacionales para el entrenamiento (GPU deseable, pero se puede empezar con CPU).",
+     "risks": "La precisión del modelo sustituto podría ser insuficiente para configuraciones complejas (espines altos, precesión), lo que limitaría su aplicación.",
+     "scale": "tesis",
+     "methods": [
+      "Recopilar un conjunto de datos de simulaciones numéricas de fusiones de agujeros negros (por ejemplo, del catálogo SXS, en el que se basa el trabajo [1010.2165]).",
+      "Entrenar un modelo sustituto (red neuronal o regresión basada en procesos gaussianos) para predecir la forma de onda a partir de los parámetros (masas, espines).",
+      "Verificar la precisión del modelo comparándolo con simulaciones de referencia y evaluar la ganancia en velocidad al usarlo en el análisis bayesiano."
+     ]
+    },
+    {
+     "based_on": [
+      "2410.12775"
+     ],
+     "title": "Búsqueda de contrapartidas electromagnéticas de fusiones de estrellas de neutrones con agujeros negros utilizando datos de ondas gravitacionales y cartografiados del cielo",
+     "what": "Desarrollar un algoritmo para alertar rápidamente a telescopios ópticos sobre eventos de fusión de estrellas de neutrones con agujeros negros (NSBH) basado en el análisis de datos de ondas gravitacionales, teniendo en cuenta los efectos de mezcla de modos del trabajo [2410.12775]. Probarlo con datos de archivo de LIGO/Virgo y eventos simulados.",
+     "why": "Aumentará las posibilidades de detectar emisión electromagnética de fusiones NSBH, lo que proporcionará información sobre la naturaleza de los objetos compactos y la física de estados extremos.",
+     "origin": "El trabajo [2410.12775] muestra que los campos electromagnéticos pueden afectar a las ondas gravitacionales de NSBH, pero no se propone un método práctico para usar esto en la mejora de la búsqueda de contrapartidas. Las alertas existentes se basan solo en datos gravitacionales y no tienen en cuenta tales efectos. Falta integrar estos resultados teóricos en la práctica observacional.",
+     "first_step": "Estudiar el pipeline de análisis de baja latencia de LIGO/Virgo y simular varios eventos NSBH con parámetros esperados para evaluar la precisión de la localización.",
+     "needs": "Acceso a simulaciones y datos de LIGO/Virgo, habilidades de programación, comprensión de algoritmos de estimación de parámetros, posible colaboración con astrónomos para organizar observaciones.",
+     "risks": "Las contrapartidas electromagnéticas de NSBH podrían ser extremadamente débiles, y el efecto de mezcla de modos podría ser indistinguible en datos reales; además, la coordinación con telescopios requiere infraestructura.",
+     "scale": "años",
+     "methods": [
+      "Usar métodos de estimación de parámetros en tiempo real (por ejemplo, análisis de baja latencia) para determinar rápidamente la localización y las masas de los componentes.",
+      "Incluir en el análisis la posibilidad de efectos electromagnéticos en la forma de la señal gravitacional, como se propone en el trabajo [2410.12775], para refinar la clasificación del evento.",
+      "Desarrollar un prototipo de alerta que envíe coordenadas y probabilidades al sistema de telescopios (por ejemplo, mediante el protocolo GCN)."
+     ]
+    }
+   ]
+  },
+  "ar": {
+   "note": "في مجال اندماج الثقوب السوداء، تتطور بنشاط أساليب تحليل البيانات والنماذج النظرية التي تربط الثقوب السوداء البدائية والأجسام الغريبة بالإشارات المرصودة.",
+   "topic": "اندماجات الثقوب السوداء وموجات الجاذبية",
+   "ideas": [
+    {
+     "based_on": [
+      "2607.01818v1",
+      "2007.06481"
+     ],
+     "title": "تقدير معاملات اندماجات الثقوب السوداء البدائية من بيانات LIGO/Virgo باستخدام علاقة الترددات",
+     "what": "تطوير وتطبيق طريقة لتقدير معاملات الثقوب السوداء البدائية (PBH) بناءً على العلاقة بين ترددات الخلفية العشوائية وترددات الاندماجات، المستمدة من العمل [2607.01818v1]. كتابة كود لتحليل بيانات LIGO/Virgo والتحقق مما إذا كانت هذه العلاقة تحسن دقة تقديرات الكتل ومعدلات الاندماج.",
+     "why": "سيسمح ذلك بتمييز مساهمة الثقوب السوداء البدائية في أحداث موجات الجاذبية المرصودة بشكل أفضل، وتحديد القيود على انتشارها بشكل أدق، وهو أمر مهم لعلم الكون.",
+     "origin": "في العمل [2607.01818v1] تم تحديد علاقة عامة بين ترددات الخلفية العشوائية واندماجات الثقوب السوداء البدائية، لكنها لم تُستخدم لتحليل أحداث محددة. العمل [2007.06481] يحدد أحداثًا مرشحة لثقوب سوداء بدائية، لكن دون استخدام هذه العلاقة. وبالتالي، هناك نقص في التطبيق العملي لهذه العلاقة لتحسين تقديرات معاملات الثقوب السوداء البدائية.",
+     "first_step": "تنزيل البيانات المفتوحة من LIGO/Virgo واختيار الأحداث ذات الكتل في النطاق المميز للثقوب السوداء البدائية؛ إعادة إنتاج التحليل الأساسي للمعاملات باستخدام نصوص جاهزة.",
+     "needs": "الوصول إلى بيانات LIGO/Virgo (متاحة للعموم)، مهارات البرمجة بلغة Python، الإلمام بالتحليل البايزي وحزم مثل Bilby، موارد حاسوبية (يكفي حاسوب شخصي للتحليل الفردي للأحداث).",
+     "risks": "قد تكون علاقة الترددات تقريبية جدًا للأحداث الفردية، وقد يكون التحسن في التقديرات ضئيلًا؛ كما أن عدم اليقين في نموذج تشكل الثقوب السوداء البدائية قد يكون هو المسيطر.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "استخدام العلاقة التحليلية f_merge = 1.79 * f_bg من العمل [2607.01818v1] لفرض قيود مسبقة على معاملات الثقوب السوداء البدائية.",
+      "تطبيق التحليل البايزي باستخدام الحزم الموجودة (مثل Bilby) على بيانات O1-O3 من LIGO/Virgo للأحداث المرشحة كثقوب سوداء بدائية، مثل GW190425 وGW190521 وGW190814 (من العمل [2007.06481]).",
+      "مقارنة القيود المستخلصة على نسبة الثقوب السوداء البدائية في المادة المظلمة مع النتائج دون استخدام علاقة الترددات."
+     ]
+    },
+    {
+     "based_on": [
+      "1010.2165"
+     ],
+     "title": "تطوير محاكي سريع لموجات الجاذبية من اندماجات الثقوب السوداء باستخدام النماذج البديلة والتعلم الآلي",
+     "what": "إنشاء مولد سريع لأشكال الإشارات لاندماجات الثقوب السوداء، مُدرَّب على بيانات النسبية العددية من العمل [1010.2165] والفهارس الحديثة، باستخدام الشبكات العصبية أو العمليات الغاوسية. دمجه في خط التحليل القياسي لـ LIGO/Virgo.",
+     "why": "سيؤدي إلى تسريع تقدير معاملات الأحداث بعشرات المرات، وهو أمر حاسم مع تزايد عدد الاندماجات المكتشفة وللرصد المستقبلي بجيل ثالث من الكواشف.",
+     "origin": "العمل [1010.2165] يصف أهمية النسبية العددية للحصول على أشكال موجية دقيقة، لكن الحسابات تظل مكلفة. النماذج السريعة الموجودة (مثل النماذج التقريبية) لها دقة محدودة. هناك نقص في أداة متاحة تجمع بين السرعة والدقة لمجموعة واسعة من المعاملات.",
+     "first_step": "تنزيل الفهرس المفتوح للمحاكاة العددية SXS وكتابة نص لاستخراج المعاملات وأشكال الموجات المقابلة.",
+     "needs": "الوصول إلى فهارس النسبية العددية (SXS, RIT)، مهارات في التعلم الآلي (Python, TensorFlow/PyTorch)، موارد حاسوبية للتدريب (يُفضل GPU، لكن يمكن البدء بـ CPU).",
+     "risks": "قد تكون دقة النموذج البديل غير كافية للتكوينات المعقدة (لفات عالية، مبادرة) مما يحد من استخدامه.",
+     "scale": "أطروحة تخرج",
+     "methods": [
+      "جمع مجموعة بيانات من المحاكاة العددية لاندماجات الثقوب السوداء (مثل من فهرس SXS الذي يعتمد عليه العمل [1010.2165]).",
+      "تدريب نموذج بديل (شبكة عصبية أو انحدار قائم على العمليات الغاوسية) للتنبؤ بشكل الموجة من المعاملات (الكتل، اللفات).",
+      "التحقق من دقة النموذج بمقارنته بالمحاكاة المرجعية، وتقييم الكسب في السرعة عند استخدامه في التحليل البايزي."
+     ]
+    },
+    {
+     "based_on": [
+      "2410.12775"
+     ],
+     "title": "البحث عن النظائر الكهرومغناطيسية لاندماجات النجوم النيوترونية مع الثقوب السوداء باستخدام بيانات موجات الجاذبية ومسوحات السماء",
+     "what": "تطوير خوارزمية للتنبيه السريع للتلسكوبات البصرية حول أحداث اندماج النجوم النيوترونية مع الثقوب السوداء (NSBH) بناءً على تحليل بيانات موجات الجاذبية، مع مراعاة تأثيرات خلط الأنماط من العمل [2410.12775]. التحقق على البيانات الأرشيفية من LIGO/Virgo والأحداث المحاكاة.",
+     "why": "سيزيد من فرص اكتشاف الإشعاع الكهرومغناطيسي من اندماجات NSBH، مما يوفر معلومات عن طبيعة الأجسام المدمجة وفيزياء الحالات القصوى.",
+     "origin": "العمل [2410.12775] يظهر أن المجالات الكهرومغناطيسية يمكن أن تؤثر على موجات الجاذبية من NSBH، لكنه لا يقترح طريقة عملية لاستخدام ذلك لتحسين البحث عن النظائر. التنبيهات الحالية تعتمد فقط على بيانات الجاذبية ولا تأخذ في الاعتبار مثل هذه التأثيرات. هناك نقص في دمج هذه النتائج النظرية في الممارسة الرصدية.",
+     "first_step": "دراسة خط التحليل منخفض الكمون الحالي في LIGO/Virgo ومحاكاة عدة أحداث NSBH بالمعاملات المتوقعة لتقييم دقة تحديد الموقع.",
+     "needs": "الوصول إلى المحاكاة وبيانات LIGO/Virgo، مهارات البرمجة، فهم خوارزميات تقدير المعاملات، ربما التعاون مع علماء الفلك لتنظيم الرصد.",
+     "risks": "قد تكون النظائر الكهرومغناطيسية لاندماجات NSBH ضعيفة للغاية، وقد يكون تأثير خلط الأنماط غير قابل للتمييز في البيانات الحقيقية؛ كما أن التنسيق مع التلسكوبات يتطلب بنية تحتية.",
+     "scale": "سنوات",
+     "methods": [
+      "استخدام طرق تقدير المعاملات في الزمن الحقيقي (مثل التحليل منخفض الكمون) لتحديد الموقع والكتل بسرعة.",
+      "إدراج إمكانية التأثيرات الكهرومغناطيسية على شكل إشارة الجاذبية في التحليل، كما اقترح في العمل [2410.12775]، لتحسين تصنيف الحدث.",
+      "تطوير نموذج أولي للتنبيه يرسل الإحداثيات والاحتمالات إلى نظام التلسكوبات (مثل عبر بروتوكول GCN)."
+     ]
+    }
+   ]
+  },
+  "fr": {
+   "note": "Dans le domaine des fusions de trous noirs, les méthodes d'analyse de données et les modèles théoriques reliant les trous noirs primordiaux et les objets exotiques aux signaux observés se développent activement.",
+   "topic": "fusions de trous noirs et ondes gravitationnelles",
+   "ideas": [
+    {
+     "based_on": [
+      "2607.01818v1",
+      "2007.06481"
+     ],
+     "title": "Estimation des paramètres des fusions de trous noirs primordiaux à partir des données LIGO/Virgo à l'aide de la relation de fréquences",
+     "what": "Développer et appliquer une méthode d'estimation des paramètres des trous noirs primordiaux (TNP) basée sur la relation entre les fréquences du fond stochastique et les fréquences des fusions, obtenue dans le travail [2607.01818v1]. Écrire un code pour analyser les données LIGO/Virgo et vérifier si cette relation améliore la précision des estimations des masses et des taux de fusion.",
+     "why": "Cela permettra de mieux isoler la contribution des TNP dans les événements d'ondes gravitationnelles observés et d'affiner les contraintes sur leur abondance, ce qui est important pour la cosmologie.",
+     "origin": "Dans le travail [2607.01818v1], une relation universelle entre les fréquences du fond stochastique et les fusions de TNP a été établie, mais elle n'a pas été appliquée à l'analyse d'événements spécifiques. Le travail [2007.06481] identifie des événements candidats TNP, mais sans utiliser cette relation. Ainsi, il manque une application pratique de la relation pour améliorer l'estimation des paramètres des TNP.",
+     "first_step": "Télécharger les données ouvertes LIGO/Virgo et sélectionner les événements avec des masses dans la plage caractéristique des TNP ; reproduire l'analyse de base des paramètres à l'aide de scripts prêts à l'emploi.",
+     "needs": "Accès aux données LIGO/Virgo (ouvertes), compétences en programmation Python, familiarité avec l'analyse bayésienne et des paquets comme Bilby, ressources de calcul (un ordinateur personnel suffit pour l'analyse par événement).",
+     "risks": "La relation de fréquences pourrait être trop grossière pour des événements individuels, et l'amélioration des estimations pourrait être négligeable ; de plus, l'incertitude dans le modèle de formation des TNP pourrait dominer.",
+     "scale": "semestre",
+     "methods": [
+      "Utiliser la relation analytique f_merge = 1.79 * f_bg du travail [2607.01818v1] pour imposer des contraintes a priori sur les paramètres des TNP.",
+      "Appliquer l'analyse bayésienne avec des paquets existants (par exemple, Bilby) aux données O1-O3 de LIGO/Virgo pour les événements candidats TNP, tels que GW190425, GW190521, GW190814 (du travail [2007.06481]).",
+      "Comparer les contraintes obtenues sur la fraction de TNP dans la matière noire avec les résultats sans l'utilisation de la relation de fréquences."
+     ]
+    },
+    {
+     "based_on": [
+      "1010.2165"
+     ],
+     "title": "Développement d'un simulateur rapide d'ondes gravitationnelles pour les fusions de trous noirs à l'aide de modèles de substitution et d'apprentissage automatique",
+     "what": "Créer un générateur rapide de formes d'ondes pour les fusions de trous noirs, entraîné sur les données de relativité numérique du travail [1010.2165] et des catalogues modernes, en utilisant des réseaux de neurones ou des processus gaussiens. L'intégrer dans le pipeline standard d'analyse LIGO/Virgo.",
+     "why": "Accélérera l'estimation des paramètres des événements de plusieurs dizaines de fois, ce qui est crucial avec le nombre croissant de fusions détectées et pour les futures observations de détecteurs de troisième génération.",
+     "origin": "Le travail [1010.2165] décrit l'importance de la relativité numérique pour obtenir des formes d'ondes précises, mais les calculs restent coûteux. Les modèles rapides existants (par exemple, approximatifs) ont une précision limitée. Il manque un outil accessible qui combine vitesse et précision pour une large gamme de paramètres.",
+     "first_step": "Télécharger le catalogue ouvert de simulations numériques SXS et écrire un script pour extraire les paramètres et les formes d'ondes correspondantes.",
+     "needs": "Accès aux catalogues de relativité numérique (SXS, RIT), compétences en apprentissage automatique (Python, TensorFlow/PyTorch), ressources de calcul pour l'entraînement (un GPU est souhaitable, mais on peut commencer avec un CPU).",
+     "risks": "La précision du modèle de substitution pourrait être insuffisante pour des configurations complexes (spins élevés, précession), ce qui limiterait son application.",
+     "scale": "diplôme",
+     "methods": [
+      "Collecter un ensemble de données à partir de simulations numériques de fusions de trous noirs (par exemple, du catalogue SXS, sur lequel s'appuie le travail [1010.2165]).",
+      "Entraîner un modèle de substitution (réseau de neurones ou régression par processus gaussiens) pour prédire la forme d'onde en fonction des paramètres (masses, spins).",
+      "Vérifier la précision du modèle en le comparant aux simulations de référence et évaluer le gain de vitesse lors de son utilisation dans l'analyse bayésienne."
+     ]
+    },
+    {
+     "based_on": [
+      "2410.12775"
+     ],
+     "title": "Recherche d'analogues électromagnétiques des fusions d'étoiles à neutrons et de trous noirs à l'aide des données d'ondes gravitationnelles et des relevés du ciel",
+     "what": "Développer un algorithme pour alerter rapidement les télescopes optiques des événements de fusion d'étoiles à neutrons et de trous noirs (NSBH) sur la base de l'analyse des données d'ondes gravitationnelles, en tenant compte des effets de mélange de modes du travail [2410.12775]. Tester sur les données archivées de LIGO/Virgo et des événements simulés.",
+     "why": "Augmentera les chances de détecter le rayonnement électromagnétique des fusions NSBH, ce qui fournira des informations sur la nature des objets compacts et la physique des états extrêmes.",
+     "origin": "Le travail [2410.12775] montre que les champs électromagnétiques peuvent influencer les ondes gravitationnelles des NSBH, mais aucune méthode pratique n'est proposée pour utiliser cela afin d'améliorer la recherche d'analogues. Les alertes existantes reposent uniquement sur les données gravitationnelles et ne tiennent pas compte de ces effets. Il manque l'intégration de ces résultats théoriques dans la pratique observationnelle.",
+     "first_step": "Étudier le pipeline d'analyse à faible latence existant de LIGO/Virgo et simuler plusieurs événements NSBH avec les paramètres attendus pour évaluer la précision de localisation.",
+     "needs": "Accès aux simulations et aux données LIGO/Virgo, compétences en programmation, compréhension des algorithmes d'estimation de paramètres, éventuellement collaboration avec des astronomes pour organiser les observations.",
+     "risks": "Les analogues électromagnétiques des NSBH pourraient être extrêmement faibles, et l'effet de mélange de modes pourrait être indiscernable dans les données réelles ; de plus, la coordination avec les télescopes nécessite une infrastructure.",
+     "scale": "années",
+     "methods": [
+      "Utiliser des méthodes d'estimation de paramètres en temps réel (par exemple, l'analyse à faible latence) pour déterminer rapidement la localisation et les masses des composants.",
+      "Inclure dans l'analyse la possibilité d'effets électromagnétiques sur la forme du signal gravitationnel, comme proposé dans le travail [2410.12775], afin d'affiner la classification de l'événement.",
+      "Développer un prototype d'alerte envoyant les coordonnées et les probabilités au système de télescopes (par exemple, via le protocole GCN)."
+     ]
+    }
+   ]
+  }
+ }
 }

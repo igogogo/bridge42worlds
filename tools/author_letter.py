@@ -62,13 +62,12 @@ it without going anywhere and without opening any link.
 
 {retext}
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-On the site the same text has figures, a map of the concepts it touches, and a
-section written for you: where this work can go next. There is no link in this
-letter on purpose. The address is {site} and there are two ways to find yourself:
-
-  · type {aid} into the search box, or
-  · open the authors section and look for your name: {who}.
+{machine}
+On the site the same text has figures and a map of the concepts it touches. We put
+no link in this letter on purpose — for your own safety: letters with links are
+exactly how people get caught, and a stranger's link deserves no trust. The address
+is {site}, and you will find the paper there yourself: by your name or by its
+number {aid}.
 
 Two more things and we leave you alone.
 
@@ -98,13 +97,11 @@ is your work and you should know where it is.
 
 {retext}
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-على الموقع للنص نفسه رسوم، وخريطة للمفاهيم التي يلامسها، وقسم كُتب لكم: إلى أين
-يمكن أن يمضي هذا العمل. لا رابط في هذه الرسالة عن قصد. العنوان {site}، وهناك
-طريقتان لتجدوا أنفسكم:
-
-  · اكتبوا {aid} في خانة البحث، أو
-  · افتحوا قسم المؤلفين وابحثوا عن اسمكم: {who}.
+{machine}
+على الموقع للنص نفسه رسوم وخريطة للمفاهيم التي يلامسها. لم نضع رابطًا في هذه الرسالة
+عن قصد، حفاظًا على سلامتكم: الرسائل التي تحمل روابط هي بالضبط ما يوقع الناس، ورابط
+من غريب لا يستحق الثقة. العنوان {site}، وستجدون البحث بأنفسكم: باسمكم أو برقمه
+{aid}.
 
 أمران أخيران ثم لا نشغلكم.
 
@@ -134,13 +131,12 @@ is your work and you should know where it is.
 
 {retext}
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-На сайте у этого же текста есть рисунки, карта понятий, которых он касается, и
-раздел, написанный для вас: куда работа может пойти дальше. Ссылки в письме нет
-намеренно. Адрес — {site}, найти себя можно двумя способами:
-
-  · введите {aid} в строку поиска, или
-  · откройте раздел авторов и найдите своё имя: {who}.
+{machine}
+На сайте у этого же текста есть рисунки и карта понятий, которых он касается.
+Ссылку мы намеренно не вкладываем — из соображений вашей же безопасности: письма
+со ссылками ровно так и ловят людей, и ссылке от незнакомых доверять не стоит.
+Адрес — {site}. Работу вы найдёте там сами: по своему
+имени или по номеру {aid}.
 
 Две вещи, и мы больше не тревожим.
 
@@ -258,6 +254,91 @@ def retelling(aid, lang):
     return "", ""
 
 
+# ── ✛ РАЗБОР МАШИНЫ ЗНАНИЙ: ЕДИНСТВЕННОЕ В ПИСЬМЕ, ЧТО НАПИСАНО ДЛЯ АВТОРА ─────
+# Терминология, в которой я путался и которую владелец 2026-09-01 развёл: «разобранная
+# версия» — это просто уровни чтения, пересказ для читателя. «Машина знаний» — другое:
+# это НАШИ рекомендации автору, значок ✛ на карточке. Письмо несло пересказ и лишь
+# ОБЕЩАЛО, что на сайте есть «раздел, написанный для вас». То есть самое ценное для
+# адресата оставалось за поиском — в письме без единой ссылки, по нашему же решению.
+#
+# Теперь раздел идёт целиком в письме. Пересказ показывает, что мы работу прочли;
+# ✛ показывает, что мы её поняли и нам есть что сказать по существу.
+MACHINE = {
+    "ru": {"head": "ЧТО УВИДЕЛА НАША МАШИНА ЗНАНИЙ",
+           "dirs": "Куда работа может пойти дальше:",
+           "near": "рядом в нашем архиве"},
+    "en": {"head": "WHAT OUR KNOWLEDGE MACHINE SAW",
+           "dirs": "Where this work can go next:",
+           "near": "neighbours in our archive"},
+    "ar": {"head": "ما رأته آلة المعرفة لدينا",
+           "dirs": "إلى أين يمكن أن يمضي هذا العمل:",
+           "near": "أعمال مجاورة في أرشيفنا"},
+}
+
+
+def machine(aid, lang):
+    """Раздел ✛ для письма: (готовый текст, данные для HTML).
+
+    Пусто — значит у работы разбора нет, и такую работу мы не рассылаем вовсе
+    (см. отбор кандидатов ниже: ✛ там обязательное условие, а не пожелание).
+
+    Номера соседних работ даём простым текстом. Ссылок в письме нет намеренно, но
+    номер arXiv — не ссылка, а доказательство: видно, что совет опирается на реальные
+    работы рядом, а не на общие слова.
+    """
+    import textwrap as _tw
+    nl = chr(10)
+    w = MACHINE.get(lang) or MACHINE["en"]
+    for base in (ROOT / "lang" / "ru" / "archive", ROOT / "lang" / "en" / "archive"):
+        hits = list(base.glob(f"*/{aid}/data.json"))
+        if not hits:
+            continue
+        rec = (json.loads(hits[0].read_text(encoding="utf-8")).get("recommend") or {})
+        d = rec.get(lang) or rec.get("en") or rec.get("ru") or {}
+        if not d:
+            return "", None
+        parts = [w["head"], ""]
+        for k in ("seen", "strength"):
+            if (d.get(k) or "").strip():
+                parts += [_tw.fill(d[k].strip(), width=78), ""]
+        dirs = [x for x in (d.get("directions") or []) if (x.get("text") or "").strip()]
+        if dirs:
+            parts.append(w["dirs"])
+            for i, x in enumerate(dirs, 1):
+                parts.append(_tw.fill(x["text"].strip(), width=74,
+                                      initial_indent=f"  {i}. ", subsequent_indent="     "))
+                near = [str(b) for b in (x.get("based_on") or []) if b]
+                if near:
+                    parts.append(f"     ({w['near']}: {', '.join(near)})")
+                parts.append("")
+        line = "- " * 39
+        return nl + line + nl + nl + nl.join(parts).rstrip() + nl + nl + line + nl, d
+    return "", None
+
+
+def best_paper(name):
+    """Свежая работа автора, у которой ЕСТЬ разбор машины знаний.
+
+    Это условие рассылки, а не удобство: владелец 2026-09-01 — «отправляем только тем,
+    чьи работы разобрала машина знаний, именно эти статьи я и хочу отправлять». Нет ✛ —
+    писать не о чем: письмо без раздела, написанного для автора, это обычная рассылка.
+    """
+    ids = (graph().get(name) or {}).get("articles") or []
+    best = None
+    for aid in ids:
+        for base in (ROOT / "lang" / "ru" / "archive", ROOT / "lang" / "en" / "archive"):
+            hits = list(base.glob(f"*/{aid}/data.json"))
+            if not hits:
+                continue
+            d = json.loads(hits[0].read_text(encoding="utf-8"))
+            if d.get("recommend"):
+                day = hits[0].parent.parent.name
+                if best is None or day > best[0]:
+                    best = (day, aid)
+            break
+    return best[1] if best else None
+
+
 def compose(name, lang="en", first=None):
     """Возвращает тему, текстовую версию и HTML-версию письма.
 
@@ -268,15 +349,16 @@ def compose(name, lang="en", first=None):
     t = LETTER.get(lang) or LETTER["en"]
     aid = (first or "").split("v")[0] or first or ""
     retitle, retext = retelling(first, lang) if first else ("", "")
+    mtext, mdata = machine(first, lang) if first else ("", None)
     sign = SIGN.get(lang, SIGN["en"])
     body = t["body"].format(name=" " + name, who=name, aid=aid,
-                            retitle=retitle, retext=retext, sign=sign,
+                            retitle=retitle, retext=retext, machine=mtext, sign=sign,
                             site=SITE.replace("https://", ""))
     html = None
     if retext:
         try:
             import letter_html
-            html = letter_html.build(name, aid, lang, retitle, retext, sign)
+            html = letter_html.build(name, aid, lang, retitle, retext, sign, mdata)
         except Exception as e:
             print(f"⚠ оформление письма не собралось ({type(e).__name__}) — уйдёт текстом")
     return t["subject"].format(aid=aid), body, html
@@ -400,10 +482,14 @@ def written():
     return out
 
 
-def remember(name, to, lang):
+def remember(name, to, lang, aid=""):
+    """Запись об отправке. Номер работы храним не для порядка: по нему видно потом,
+    открыл ли человек страницу своей РАБОТЫ, а не только страницу автора. Письмо не
+    несёт ссылок и предлагает два пути — поиск по номеру и раздел авторов, — так что
+    засчитывать надо оба (tools/outreach_visits.py)."""
     LOG.parent.mkdir(parents=True, exist_ok=True)
     with LOG.open("a", encoding="utf-8") as fh:
-        fh.write(json.dumps({"author": name, "to": to, "lang": lang,
+        fh.write(json.dumps({"author": name, "to": to, "lang": lang, "aid": aid,
                              "at": datetime.now(timezone.utc).isoformat(timespec="seconds")},
                             ensure_ascii=False) + "\n")
 
@@ -475,12 +561,124 @@ def machine_marked():
     return out
 
 
+# ── ВЫДЕРЖКА И ЯЗЫК: ДВА ПРАВИЛА, БЕЗ КОТОРЫХ РАССЫЛКУ НЕ НАЧИНАЕМ ────────────
+# Владелец 2026-09-01: «отправлять письма не раньше, чем прошла полная неделя с момента
+# нашего разбора, и только с плюсиком; начинай с самых старых по времени».
+#
+# ЗАЧЕМ НЕДЕЛЯ. Разбор в первый день ещё догоняют шаги конвейера: разметка понятий,
+# соседи, перевод на четыре языка, пересборка страницы. Письмо, ушедшее в тот же день,
+# зовёт человека на страницу, которая ещё меняется. Неделя — это срок, за который работа
+# успевает встать окончательно, а мы успеваем заметить и починить брак.
+RECO_WAIT_DAYS = 7
+
+# Арабский мир — приоритетная аудитория (решение владельца 31.07). Язык письма выбираем
+# ПО АВТОРУ, а не флагом: флаг со значением по умолчанию `en` слал англоязычное письмо
+# и профессору в Эр-Рияде тоже. Признак — страна в адресе для переписки, а если домен
+# общий, то название учреждения в шапке работы.
+ARAB_TLD = {"sa", "ae", "kw", "qa", "bh", "om", "eg", "jo", "lb", "sy", "iq", "ye",
+            "sd", "ly", "tn", "dz", "ma", "mr", "ps", "so", "dj", "km"}
+ARAB_WORDS = ("saudi", "kuwait", "qatar", "emirates", "abu dhabi", "dubai", "sharjah",
+              "bahrain", "oman", "muscat", "egypt", "cairo", "alexandria", "jordan",
+              "amman", "lebanon", "beirut", "iraq", "baghdad", "riyadh", "jeddah",
+              "dhahran", "kaust", "kfupm", "khalifa university", "zayed university",
+              "united arab emirates", "morocco", "rabat", "tunisia", "tunis", "algeria",
+              "algiers", "yemen", "sudan", "khartoum", "palestine", "birzeit", "doha")
+
+
+def analysed_at(date, aid):
+    """Когда МЫ разобрали работу — от этого дня и считается выдержка.
+
+    Точную отметку пишет tools/recommend.py (поле recommend_at). У работ, разобранных
+    до появления отметки, её нет — там берём день самой работы. Это занижает выдержку
+    в нашу же пользу: день работы всегда РАНЬШЕ дня разбора, значит семь дней от него
+    уже прошли наверняка.
+    """
+    for base in (ROOT / "lang" / "ru" / "archive", ROOT / "lang" / "en" / "archive"):
+        f = base / str(date) / aid / "data.json"
+        if f.exists():
+            try:
+                d = json.loads(f.read_text(encoding="utf-8"))
+            except Exception:
+                break
+            at = (d.get("recommend_at") or "")[:10]
+            if at:
+                return at
+            break
+    return str(date)[:10]
+
+
+def matured(date, aid, days=RECO_WAIT_DAYS):
+    """Прошла ли неделя с разбора."""
+    from datetime import timedelta
+    edge = (datetime.now(timezone.utc) - timedelta(days=days)).date().isoformat()
+    return analysed_at(date, aid) <= edge
+
+
+def letter_lang(date, aid, to, default="en"):
+    """Язык письма по автору: арабский арабскому миру, английский остальным."""
+    dom = (to or "").rsplit("@", 1)[-1].lower()
+    if dom.rsplit(".", 1)[-1] in ARAB_TLD:
+        return "ar"
+    for base in (ROOT / "lang" / "ru" / "archive", ROOT / "lang" / "en" / "archive"):
+        f = base / str(date) / aid / "fulltext.txt"
+        if f.exists():
+            head = f.read_text(encoding="utf-8", errors="ignore")[:4000].lower()
+            if any(w in head for w in ARAB_WORDS):
+                return "ar"
+            break
+    return default
+
+
+# ── СКОЛЬКО ПИСЕМ В ДЕНЬ ──────────────────────────────────────────────────────
+# Вопрос владельца 2026-09-01: «по сколько в день, по 20-30, чтобы в спам не попасть?»
+#
+# Дело не в числе, а в РАЗГОНЕ. Домен ни разу не рассылал писем, и для Gmail с Outlook
+# он чистый лист: тридцать холодных писем в первый же день с нового домена — самый
+# заметный признак рассылочной машины, какой вообще бывает. Тридцать писем в день после
+# двух недель ровной истории — обычное поведение живой переписки.
+#
+# Разгон вдвое каждые несколько дней: 5 → 10 → 20 → 30. Две недели до крейсерской
+# скорости, и это не потеря: в очереди сейчас десятки работ, а не тысячи.
+#
+# Что у нас уже в пользу доставки: SPF и DKIM на домене стоят, письмо уходит одному
+# человеку, текст у каждого свой, ссылок нет ни одной, есть заголовок отказа. Профиль
+# лучше, чем у большинства настоящих рассылок.
+RAMP = ((3, 5), (7, 10), (14, 20))
+RAMP_TOP = 30
+
+
+def daily_cap():
+    """Сколько писем ещё можно отправить сегодня. Ноль — на сегодня хватит."""
+    from datetime import date
+    rows = list(written().values())
+    today = date.today().isoformat()
+    if not rows:
+        return RAMP[0][1]
+    first = min((r.get("at") or "")[:10] for r in rows if r.get("at"))
+    try:
+        age = (date.today() - date.fromisoformat(first)).days
+    except ValueError:
+        age = 0
+    cap = RAMP_TOP
+    for edge, n in RAMP:
+        if age < edge:
+            cap = n
+            break
+    sent_today = sum(1 for r in rows if (r.get("at") or "")[:10] == today)
+    return max(0, cap - sent_today)
+
+
 def candidates(days, limit):
-    """Кому писать: свежие разборы, прошедшие машину знаний, с адресом из работы."""
+    """Кому писать: разборы с ✛, выдержанные неделю, с адресом из работы.
+
+    ПОРЯДОК — ОТ САМЫХ СТАРЫХ (владелец 2026-09-01: «по времени самые старые я имею в
+    виду»). Раньше список шёл от свежих, и хвост архива не был бы разослан никогда:
+    свежее прибывает каждый день и всегда становилось бы первым.
+    """
     done = written()
     marked = machine_marked()
-    rows, no_mark, no_mail, no_adv = [], 0, 0, 0
-    for art in sorted(fresh_articles(days), key=lambda x: x.get("date", ""), reverse=True):
+    rows, no_mark, no_mail, no_adv, no_wait = [], 0, 0, 0, 0
+    for art in sorted(fresh_articles(days), key=lambda x: x.get("date", "")):
         n_con = marked.get(art["id"]) or marked.get(art["id"].split("v")[0]) or 0
         if not n_con:
             no_mark += 1
@@ -491,6 +689,11 @@ def candidates(days, limit):
                 and advice_on_page(art.get("date"), art["id"])):
             no_adv += 1
             continue
+        # Выдержка: неделя с нашего разбора. Работа, разобранная вчера, ещё догоняется
+        # шагами конвейера — письмо позвало бы человека на страницу, которая меняется.
+        if not matured(art.get("date"), art["id"]):
+            no_wait += 1
+            continue
         mails = emails_of(art.get("date"), art["id"])
         if not mails:
             no_mail += 1
@@ -500,7 +703,8 @@ def candidates(days, limit):
             continue
         rows.append({"id": art["id"], "date": art["date"], "author": who,
                      "to": to, "others": [x for x in mails if x != to][:2],
-                     "concepts": n_con,
+                     "concepts": n_con, "lang": letter_lang(art.get("date"), art["id"], to),
+                     "analysed": analysed_at(art.get("date"), art["id"]),
                      "title": (art.get("title") or "")[:70],
                      "page": f"{SITE}/lang/en/authors/{slug_of(who)}.html"})
         if len(rows) >= limit:
@@ -508,13 +712,15 @@ def candidates(days, limit):
     CAND.parent.mkdir(parents=True, exist_ok=True)
     CAND.write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rows),
                     encoding="utf-8")
-    print(f"свежих разборов за {days} дней: готовых к письму {len(rows)}"
-          f"  → {CAND.relative_to(ROOT)}")
+    ar = sum(1 for r in rows if r.get("lang") == "ar")
+    print(f"разборов за {days} дней: готовых к письму {len(rows)} "
+          f"(по-арабски {ar}, по-английски {len(rows) - ar})  → {CAND.relative_to(ROOT)}")
     print(f"  отсеяно: без разметки понятий {no_mark} · без плюсика (нет рекомендаций) "
-          f"{no_adv} · без адреса в работе {no_mail}\n")
+          f"{no_adv} · моложе недели {no_wait} · без адреса в работе {no_mail}")
+    print(f"  сегодня можно отправить: {daily_cap()} (разгон домена)\n")
     for r in rows[:limit]:
-        print(f"  {r['date']}  {r['id']:16} {r['concepts']:3} пон.  {r['to']:36} "
-              f"{r['author'][:22]:24} {r['title'][:36]}")
+        print(f"  {r['date']}  {r['id']:16} {r.get('lang','en')}  {r['to']:34} "
+              f"{r['author'][:22]:24} {r['title'][:34]}")
     if rows:
         print(f"\nписьмо по одной работе:  python tools/author_letter.py --id {rows[0]['id']} --dry")
     return 0
@@ -602,10 +808,20 @@ def main():
         print(f"нет такого автора в реестре: {a.author}")
         return 2
 
-    subj, body, html = compose(a.author, a.lang)
-    if a.dry or not a.send:
-        print(f"КОМУ:  {a.to or '(адрес не задан)'}")
-        print(f"ТЕМА:  {subj}\n")
+    # РАБОТА ОБЯЗАТЕЛЬНА, А НЕ ЖЕЛАТЕЛЬНА. Этот путь звал compose() без номера работы —
+    # и письмо уходило БЕЗ пересказа, БЕЗ раздела машины знаний и без вёрстки (HTML
+    # собирается только когда есть пересказ). То есть по имени автора можно было отправить
+    # пустое «мы вас пересказали», не показав ни строчки. Свежую работу с ✛ берём сами:
+    # без разбора машины знаний мы не пишем вовсе (владелец 2026-09-01).
+    first = best_paper(a.author)
+    if not first:
+        print(f"у автора {a.author} нет работ с разбором машины знаний (✛) — таким не пишем")
+        return 2
+    subj, body, html = compose(a.author, a.lang, first=first)
+    if a.dry or not (a.send or a.test):
+        print(f"КОМУ:   {a.to or '(адрес не задан)'}")
+        print(f"РАБОТА: {first}")
+        print(f"ТЕМА:   {subj}\n")
         print(body)
         if not a.dry:
             print("\n(это показ; чтобы отправить, добавьте --to АДРЕС --send)")
@@ -614,14 +830,18 @@ def main():
     if not a.to:
         print("для отправки нужен --to АДРЕС")
         return 2
-    was = written().get(a.author)
-    if was:
-        print(f"этому автору уже писали {was['at'][:10]} на {was['to']} — второй раз не пишем")
-        return 1
+    if not a.test:
+        was = written().get(a.author)
+        if was:
+            print(f"этому автору уже писали {was['at'][:10]} на {was['to']} — второй раз не пишем")
+            return 1
     import council_mail
-    if council_mail.send(a.to, subj, body, sender=FROM):
-        remember(a.author, a.to, a.lang)
-        print(f"✅ отправлено: {a.author} → {a.to}")
+    if council_mail.send(a.to, subj, body, sender=FROM, html=html):
+        if a.test:
+            print(f"✅ пробное письмо ушло на {a.to} (в журнал не записано)")
+        else:
+            remember(a.author, a.to, a.lang, first)
+            print(f"✅ отправлено: {a.author} → {a.to}")
         return 0
     return 1
 

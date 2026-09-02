@@ -204,8 +204,60 @@ def handle_side(q):
     return {"related": out, "cited": [], "frames": 0}
 
 
+def handle_cards(q):
+    """Карточки по номерам. Ими живут избранное, «похожие» и «цитируют у нас» — всё,
+    что знает номера работ заранее и раньше ходило за их заголовками в 15-мегабайтный
+    индекс. В воркере это /api/cards; локально — тот же ответ по локальному индексу,
+    иначе проверка «сначала локально» перестаёт что-либо значить."""
+    lang, version, limit, page = feed_params(q)
+    ids = [x.strip() for x in ((q.get("ids") or [""])[0]).split(",") if x.strip()][:200]
+    if not ids:
+        return {"items": []}
+    want = set(ids)
+    base = {i.split("v")[0] for i in ids}
+    out = []
+    for a in index_of(lang, version):
+        aid = str(a.get("id") or "")
+        if aid in want or aid.split("v")[0] in base:
+            out.append(card(a))
+    order = {i: n for n, i in enumerate(ids)}
+    out.sort(key=lambda c: order.get(c.get("id"), order.get(str(c.get("id")).split("v")[0], 999)))
+    return {"items": out}
+
+
+def handle_authors(q):
+    """Имена авторов по части имени. В воркере это запрос к card_authors; локально —
+    перебор графа авторов на стороне СЕРВЕРА, а не браузера. Форма ответа та же."""
+    import json as _json
+    global _AUTHORS
+    try:
+        _AUTHORS
+    except NameError:
+        _AUTHORS = None
+    if _AUTHORS is None:
+        f = ROOT / "data" / "authors-graph.json"
+        try:
+            g = _json.loads(f.read_text(encoding="utf-8"))
+            _AUTHORS = g.get("graph", g)
+        except Exception:
+            _AUTHORS = {}
+    needle = ((q.get("q") or [""])[0]).strip().lower()
+    if len(needle) < 2:
+        return {"items": []}
+    lim = int((q.get("limit") or ["30"])[0] or 30)
+    rows = []
+    for name, d in _AUTHORS.items():
+        if needle in name.lower():
+            n = (d or {}).get("article_count") or len((d or {}).get("articles") or [])
+            rows.append({"name": name, "articles": n})
+    rows.sort(key=lambda r: -r["articles"])
+    return {"items": rows[:lim]}
+
+
 ROUTES = {"/api/feed": handle_feed, "/api/corpus": handle_corpus,
-          "/api/find": handle_find, "/api/side": handle_side}
+          "/api/find": handle_find, "/api/side": handle_side,
+          "/api/cards": handle_cards,
+          "/api/authors": handle_authors}
 
 
 class Server(ThreadingHTTPServer):

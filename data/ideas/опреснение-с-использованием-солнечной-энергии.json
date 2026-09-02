@@ -231,5 +231,419 @@
    },
    "abstract": "While solar power systems have offered a wide variety of electricity generation approaches including photovoltaics, solar thermal power systems, and solar thermoelectric generators, the ability of generating electricity at both the daytime and nighttime with no necessity of energy storage still remains challenging. Here, we propose and verify a strategy of harvesting solar energy by solar heating during the daytime and harnessing the coldness of the outer space through radiative cooling to produce electricity at night using a commercial thermoelectric module. It enables electricity generation "
   }
- ]
+ ],
+ "lang": {
+  "en": {
+   "note": "In the field of solar desalination, materials for photothermal evaporation are actively being developed, but systematic studies on long-term stability and integration with other functions are still scarce.",
+   "topic": "solar-powered desalination",
+   "ideas": [
+    {
+     "based_on": [
+      "1409.5962",
+      "1809.05184"
+     ],
+     "title": "Accelerated aging testbed for solar desalination materials under concentrated light",
+     "what": "Build a setup that irradiates samples of solar desalination materials (absorbers, hydrophilic coatings) with concentrated sunlight, with independent control of temperature and atmosphere. Conduct a series of degradation tests and compare with results obtained under ordinary solar irradiation.",
+     "why": "It will allow rapid evaluation of the durability of new materials for desalination systems without lengthy field tests. Useful for research groups and manufacturers of solar desalination units.",
+     "origin": "Paper 1409.5962 demonstrated an accelerated aging method for organic photovoltaic materials with separate control of temperature and intensity. For solar desalination materials (e.g., plasmonic absorbers from 1809.05184 or photothermal coatings), no such method exists, although their degradation under sunlight is critical for practice.",
+     "first_step": "Assemble a simple concentrator (Fresnel lens) and mount the sample on a thermoelectric Peltier module for temperature control. Check whether the desired temperature can be maintained when intensity changes.",
+     "needs": "Fresnel lens or parabolic mirror, thermoelectric module, power supply, IR thermometer or thermocouple, spectrophotometer (or access to one), material samples.",
+     "risks": "Difficulty of precise temperature control at high concentration; uneven irradiation may distort results.",
+     "scale": "semester",
+     "methods": [
+      "Use the approach from paper 1409.5962: concentrate sunlight with a lens or mirror, control sample temperature with a cooled substrate and IR thermometer.",
+      "Measure spectral reflectance/absorbance of samples before and after irradiation to quantify degradation.",
+      "Perform irradiation at different intensities (1x, 5x, 10x) and temperatures (e.g., 25°C and 60°C) to build an accelerated aging model."
+     ]
+    },
+    {
+     "based_on": [
+      "1905.10394",
+      "1806.02896"
+     ],
+     "title": "Field test of a photothermal umbrella for brine evaporation with salt fouling assessment",
+     "what": "Fabricate a device of the 'photothermal umbrella' type inspired by paper 1905.10394 and test it on real brine (e.g., seawater or wastewater) under field conditions. Measure evaporation rate, salt accumulation on the surface, and efficiency over time.",
+     "why": "To verify the concept's viability outside the lab and identify issues related to salt fouling, which are often underestimated. Results will be useful for developers of zero liquid discharge systems.",
+     "origin": "Paper 1905.10394 proposes a photothermal umbrella design to enhance evaporation in evaporation ponds, but does not provide data on long-term operation under real conditions with high-salinity water. In the solar desalination literature (e.g., 1806.02896), salt fouling is mentioned as a problem, but systematic field data are scarce.",
+     "first_step": "Build a prototype umbrella from readily available materials (e.g., cotton fabric coated with soot) and conduct initial diurnal evaporation measurements in a container with saltwater outdoors.",
+     "needs": "Materials for the umbrella (fabric, photothermal coating), containers, a balance accurate to the gram, a weather station (or data on solar radiation, temperature, wind), access to an outdoor location.",
+     "risks": "Salt fouling may quickly reduce efficiency; weather conditions may vary greatly, complicating comparisons.",
+     "scale": "thesis",
+     "methods": [
+      "Assemble the umbrella: a porous material impregnated with a photothermal substance (e.g., soot or a commercial absorber), placed above the water surface.",
+      "Take daily measurements of the mass of evaporated water and the mass of salt accumulated on the surface over several weeks.",
+      "Compare evaporation rate with a control tray without the umbrella to assess the gain."
+     ]
+    },
+    {
+     "based_on": [
+      "1508.00210",
+      "1804.10736"
+     ],
+     "title": "Hybrid system of concentrated photovoltaics and solar distillation with spectrum splitting",
+     "what": "Design and test a small-scale system that uses a dispersive element (prismatic Fresnel lens) to split the solar spectrum: the visible part goes to photovoltaic cells, while the infrared part heats water for desalination. Evaluate the overall solar energy utilization efficiency.",
+     "why": "It allows more complete use of the solar spectrum: photovoltaic cells operate in their optimal range, and heat is not wasted but used for desalination. Can increase the overall efficiency of solar energy installations.",
+     "origin": "Paper 1508.00210 demonstrated a cheap dispersive element for spectral splitting, but only for photovoltaic conversion. Works on solar desalination (e.g., 1804.10736) use the entire spectrum for heating, which is inefficient for electricity. Hybrid use of the spectrum could provide gains but has not been realized.",
+     "first_step": "Acquire or fabricate a prismatic Fresnel lens and test spectrum splitting on a simple screen, measuring intensity distribution across wavelengths with a spectrometer.",
+     "needs": "Prismatic Fresnel lens, photovoltaic cells (silicon or other), materials for heat receiver and distiller, spectrometer (or photodiodes with filters), multimeter, solar light source (natural or simulator).",
+     "risks": "Difficulty of precise optical alignment; reflection and scattering losses may reduce overall efficiency; cost of photovoltaic cells with non-standard bandgap.",
+     "scale": "thesis",
+     "methods": [
+      "Use a prismatic Fresnel lens, as in paper 1508.00210, to spatially separate spectral bands.",
+      "Select photovoltaic cells with a bandgap matching the separated visible part of the spectrum.",
+      "Direct the infrared part to a heat receiver connected to a simple solar distiller (e.g., an inclined plate with condensation).",
+      "Measure the electrical power of the photovoltaic cells and the amount of distillate, and calculate the overall energy balance."
+     ]
+    },
+    {
+     "based_on": [
+      "1809.05334",
+      "1809.05184"
+     ],
+     "title": "Numerical modeling of a plasmonic absorber for solar desalination with optimization for the real solar spectrum",
+     "what": "Create a computer model of a plasmonic nanostructured absorber (e.g., based on metallic nanoparticles) and optimize its geometry for maximum absorption in the solar spectrum and minimal thermal radiation at operating temperatures of the desalination unit.",
+     "why": "It will enable the development of more efficient absorbers for solar evaporators without costly experimental trial-and-error. Results can be used in the creation of new materials.",
+     "origin": "Paper 1809.05334 offers an efficient numerical method for modeling plasmonic solar cells with periodic structures, but does not apply it to solar water heating. Paper 1809.05184 experimentally obtained a plasmonic absorber, but without systematic optimization for the spectrum and operating temperatures of the desalination unit.",
+     "first_step": "Reproduce the simulation results from paper 1809.05334 for a simple periodic structure (e.g., an array of silver nanospheres) using open-source code (e.g., Python or MATLAB).",
+     "needs": "Access to computational resources (a personal computer is sufficient to start), knowledge of numerical methods or ready-made libraries (e.g., MEEP, COMSOL), basic programming skills.",
+     "risks": "Computational complexity may increase with structure size; model accuracy depends on correct accounting for material dispersion.",
+     "scale": "thesis",
+     "methods": [
+      "Use the volume integral equation method (as in paper 1809.05334) to calculate absorption in periodic structures with metallic nanoparticles.",
+      "Vary the size, shape, and period of nanoparticles, as well as materials (Au, Ag, Al) to achieve high absorption in the 300–2500 nm range.",
+      "Calculate thermal radiation at temperatures of 50–100°C and minimize it while maintaining high solar absorption.",
+      "Compare with experimental data from paper 1809.05184 to validate the model."
+     ]
+    },
+    {
+     "based_on": [
+      "1806.02896"
+     ],
+     "title": "Development of a sponge-like solar evaporator with mercury removal function for wastewater treatment",
+     "what": "Fabricate a composite sponge based on polyurethane coated with MoS2/C, as in paper 1806.02896, and test its ability to simultaneously evaporate water and remove mercury ions from solution. Evaluate evaporation rate and purification efficiency.",
+     "why": "Combined materials that both evaporate water and remove heavy metals are promising for industrial wastewater treatment. Practical implementation and composition optimization could make the technology accessible.",
+     "origin": "Paper 1806.02896 demonstrates the concept of a sponge with MoS2/C for simultaneous evaporation and mercury removal, but does not provide details on scaling and long-term stability. The solar evaporator literature often lacks data on the removal of specific contaminants in dynamics.",
+     "first_step": "Repeat the synthesis of MoS2/C according to the paper's description and apply it to a small sponge, then measure the evaporation rate in a laboratory setup with simulated sunlight.",
+     "needs": "Chemical reagents for MoS2/C synthesis, polyurethane sponges, laboratory glassware, a light source (solar simulator or halogen lamp), a balance, a spectrophotometer for mercury analysis (or access to an analytical laboratory).",
+     "risks": "Synthesis may require precise adherence to conditions; working with mercury requires safety measures; efficiency may be lower than claimed in the paper.",
+     "scale": "semester",
+     "methods": [
+      "Synthesize the MoS2/C composite according to the method from paper 1806.02896 (hydrothermal synthesis or impregnation followed by carbonization).",
+      "Apply the composite to a polyurethane sponge by dip coating.",
+      "Test the sponge in a solar evaporation setup: measure the evaporation rate of pure water and a solution with mercury ions, as well as mercury concentration before and after.",
+      "Perform several cycles to assess stability."
+     ]
+    }
+   ]
+  },
+  "es": {
+   "note": "En el campo de la desalinización solar se están desarrollando activamente materiales para la evaporación fototérmica, pero aún hay pocos estudios sistemáticos sobre su estabilidad a largo plazo y su integración con otras funciones.",
+   "topic": "desalinización con energía solar",
+   "ideas": [
+    {
+     "based_on": [
+      "1409.5962",
+      "1809.05184"
+     ],
+     "title": "Banco de pruebas para el envejecimiento acelerado de materiales de desalinizadores solares bajo luz concentrada",
+     "what": "Construir un equipo que irradie muestras de materiales para desalinizadores solares (absorbedores, recubrimientos hidrofílicos) con luz solar concentrada, con control independiente de temperatura y atmósfera. Realizar una serie de ensayos de degradación y comparar los resultados con los obtenidos bajo irradiación solar normal.",
+     "why": "Permitirá evaluar rápidamente la durabilidad de nuevos materiales para sistemas de desalinización sin necesidad de largas pruebas de campo. Será útil para grupos de investigación y fabricantes de desalinizadores solares.",
+     "origin": "El trabajo 1409.5962 presenta una metodología de envejecimiento acelerado para materiales fotovoltaicos orgánicos con control separado de temperatura e intensidad. Para los materiales de desalinizadores solares (por ejemplo, absorbedores plasmónicos de 1809.05184 o recubrimientos fototérmicos) no existe tal metodología, aunque su degradación bajo el sol es crítica para la práctica.",
+     "first_step": "Montar un concentrador simple (lente de Fresnel) y fijar la muestra sobre un módulo termoeléctrico de Peltier para controlar la temperatura. Verificar si se puede mantener la temperatura deseada al variar la intensidad.",
+     "needs": "Lente de Fresnel o espejo parabólico, módulo termoeléctrico, fuente de alimentación, termómetro infrarrojo o termopar, espectrofotómetro (o acceso a uno), muestras de materiales.",
+     "risks": "Dificultad para controlar con precisión la temperatura a alta concentración; la irradiación no uniforme puede distorsionar los resultados.",
+     "scale": "semestre",
+     "methods": [
+      "Usar el enfoque del trabajo 1409.5962: concentración de luz solar con lente o espejo, control de temperatura de la muestra mediante sustrato refrigerado y termómetro infrarrojo.",
+      "Medir la reflectancia/absorbancia espectral de las muestras antes y después de la irradiación para cuantificar la degradación.",
+      "Realizar irradiaciones a diferentes intensidades (1x, 5x, 10x) y temperaturas (por ejemplo, 25°C y 60°C) para construir un modelo de envejecimiento acelerado."
+     ]
+    },
+    {
+     "based_on": [
+      "1905.10394",
+      "1806.02896"
+     ],
+     "title": "Prueba de campo de un paraguas fototérmico para evaporación de salmuera con evaluación de la incrustación salina",
+     "what": "Fabricar un dispositivo tipo \"paraguas fototérmico\" inspirado en el trabajo 1905.10394 y probarlo con salmuera real (por ejemplo, agua de mar o aguas residuales) en condiciones de campo. Medir la tasa de evaporación, la acumulación de sales en la superficie y la eficiencia a lo largo del tiempo.",
+     "why": "Verificar el funcionamiento del concepto fuera del laboratorio e identificar problemas relacionados con la incrustación salina, que a menudo se subestiman. Los resultados serán útiles para los desarrolladores de sistemas de cero descarga líquida.",
+     "origin": "El trabajo 1905.10394 propone un diseño de paraguas fototérmico para mejorar la evaporación en estanques de evaporación, pero no proporciona datos sobre el funcionamiento a largo plazo en condiciones reales con agua de alta salinidad. En la literatura sobre desalinizadores solares (por ejemplo, 1806.02896) se menciona la incrustación salina como un problema, pero hay pocos datos de campo sistemáticos.",
+     "first_step": "Fabricar un prototipo de paraguas con materiales disponibles (por ejemplo, tela de algodón recubierta de hollín) y realizar las primeras mediciones diarias de evaporación en un recipiente con agua salada al aire libre.",
+     "needs": "Materiales para el paraguas (tela, recubrimiento fototérmico), recipientes, balanza con precisión de gramo, estación meteorológica (o datos de radiación solar, temperatura, viento), acceso a un lugar al aire libre.",
+     "risks": "La incrustación salina puede reducir rápidamente la eficiencia; las condiciones climáticas pueden variar mucho, lo que dificulta la comparación.",
+     "scale": "tesis de grado",
+     "methods": [
+      "Montar el paraguas: material poroso impregnado con una sustancia fototérmica (por ejemplo, hollín o absorbedor comercial), colocado sobre la superficie del agua.",
+      "Realizar mediciones diarias de la masa de agua evaporada y de la masa de sal acumulada en la superficie durante varias semanas.",
+      "Comparar la tasa de evaporación con una bandeja de control sin paraguas para evaluar la ganancia."
+     ]
+    },
+    {
+     "based_on": [
+      "1508.00210",
+      "1804.10736"
+     ],
+     "title": "Sistema híbrido de fotovoltaica concentrada y destilación solar con separación espectral",
+     "what": "Diseñar y probar un sistema a pequeña escala que utilice un elemento dispersivo (lente de Fresnel prismática) para separar el espectro solar: la parte visible se dirige a las células fotovoltaicas y la infrarroja al calentamiento de agua para desalinización. Evaluar la eficiencia global de uso de la energía solar.",
+     "why": "Permite aprovechar mejor el espectro solar: las células fotovoltaicas trabajan en su rango óptimo y el calor no se desperdicia, sino que se utiliza para desalinizar. Puede aumentar la eficiencia global de las instalaciones de energía solar.",
+     "origin": "El trabajo 1508.00210 demostró un elemento dispersivo de bajo costo para la separación espectral, pero solo para conversión fotovoltaica. Los trabajos sobre desalinización solar (por ejemplo, 1804.10736) utilizan todo el espectro para calentar, lo que es ineficiente para la electricidad. El uso híbrido del espectro podría ofrecer ventajas, pero no se ha implementado.",
+     "first_step": "Adquirir o fabricar una lente de Fresnel prismática y verificar la separación espectral en una pantalla simple, midiendo la distribución de intensidad por longitudes de onda con un espectrómetro.",
+     "needs": "Lente de Fresnel prismática, células fotovoltaicas (de silicio u otras), materiales para el receptor de calor y el destilador, espectrómetro (o fotodiodos con filtros), multímetro, fuente de luz solar (natural o simulador).",
+     "risks": "Dificultad para alinear con precisión el sistema óptico; las pérdidas por reflexión y dispersión pueden reducir la eficiencia global; el costo de células fotovoltaicas con ancho de banda prohibida no estándar.",
+     "scale": "tesis de grado",
+     "methods": [
+      "Usar una lente de Fresnel prismática, como en el trabajo 1508.00210, para la separación espacial de bandas espectrales.",
+      "Seleccionar células fotovoltaicas con un ancho de banda prohibida que corresponda a la parte visible separada del espectro.",
+      "Dirigir la parte infrarroja a un receptor de calor conectado a un destilador solar simple (por ejemplo, una placa inclinada con condensación).",
+      "Medir la potencia eléctrica de las células fotovoltaicas y la cantidad de destilado, y calcular el balance energético total."
+     ]
+    },
+    {
+     "based_on": [
+      "1809.05334",
+      "1809.05184"
+     ],
+     "title": "Modelado numérico de un absorbedor plasmónico para desalinizador solar con optimización para el espectro real",
+     "what": "Crear un modelo computacional de un absorbedor plasmónico nanoestructurado (por ejemplo, basado en nanopartículas metálicas) y optimizar su geometría para maximizar la absorción en el espectro solar y minimizar la emisión térmica a las temperaturas de operación del desalinizador.",
+     "why": "Permitirá desarrollar absorbedores más eficientes para evaporadores solares sin costosos tanteos experimentales. Los resultados pueden utilizarse para crear nuevos materiales.",
+     "origin": "El trabajo 1809.05334 presenta un método numérico eficiente para modelar células solares plasmónicas con estructuras periódicas, pero no lo aplica a problemas de calentamiento solar de agua. En el trabajo 1809.05184 se obtuvo experimentalmente un absorbedor plasmónico, pero sin una optimización sistemática para el espectro y las temperaturas de operación del desalinizador.",
+     "first_step": "Reproducir los resultados de modelado del artículo 1809.05334 para una estructura periódica simple (por ejemplo, una matriz de nanoesferas de plata), utilizando código abierto (por ejemplo, en Python o MATLAB).",
+     "needs": "Acceso a recursos computacionales (una computadora personal es suficiente para empezar), conocimiento de métodos numéricos o bibliotecas listas (por ejemplo, MEEP, COMSOL), habilidades básicas de programación.",
+     "risks": "La complejidad computacional puede aumentar al crecer el tamaño de la estructura; la precisión del modelo depende de una correcta consideración de la dispersión de los materiales.",
+     "scale": "tesis de grado",
+     "methods": [
+      "Usar el método de ecuaciones integrales de volumen (como en el trabajo 1809.05334) para calcular la absorción en estructuras periódicas con nanopartículas metálicas.",
+      "Variar el tamaño, la forma y el período de las nanopartículas, así como los materiales (Au, Ag, Al) para lograr una alta absorción en el rango de 300–2500 nm.",
+      "Calcular la emisión térmica a temperaturas de 50–100°C y minimizarla manteniendo una alta absorción solar.",
+      "Comparar con los datos experimentales del trabajo 1809.05184 para validar el modelo."
+     ]
+    },
+    {
+     "based_on": [
+      "1806.02896"
+     ],
+     "title": "Desarrollo de un evaporador solar tipo esponja con función de eliminación de mercurio para tratamiento de aguas residuales",
+     "what": "Fabricar una esponja compuesta a base de poliuretano recubierta con MoS2/C, como en el trabajo 1806.02896, y probar su capacidad para evaporar agua y eliminar iones de mercurio de una solución simultáneamente. Evaluar la tasa de evaporación y la eficiencia de purificación.",
+     "why": "Los materiales combinados que evaporan agua y eliminan metales pesados son prometedores para el tratamiento de efluentes industriales. La implementación práctica y la optimización de la composición pueden hacer que la tecnología sea accesible.",
+     "origin": "El trabajo 1806.02896 demuestra el concepto de una esponja con MoS2/C para evaporación y eliminación de mercurio simultáneas, pero no proporciona detalles sobre el escalado y la estabilidad a largo plazo. En la literatura sobre evaporadores solares a menudo faltan datos sobre la eliminación de contaminantes específicos en dinámica.",
+     "first_step": "Repetir la síntesis de MoS2/C según la descripción del artículo y aplicarla a una esponja pequeña; luego medir la tasa de evaporación en una configuración de laboratorio con luz solar simulada.",
+     "needs": "Reactivos químicos para la síntesis de MoS2/C, esponjas de poliuretano, material de laboratorio, fuente de luz (simulador solar o lámpara halógena), balanza, espectrofotómetro para análisis de mercurio (o acceso a un laboratorio analítico).",
+     "risks": "La síntesis puede requerir un control preciso de las condiciones; trabajar con mercurio requiere medidas de seguridad; la eficiencia puede ser menor que la reportada en el artículo.",
+     "scale": "semestre",
+     "methods": [
+      "Sintetizar el compuesto MoS2/C siguiendo el método del trabajo 1806.02896 (síntesis hidrotermal o impregnación seguida de carbonización).",
+      "Aplicar el compuesto a una esponja de poliuretano mediante inmersión.",
+      "Probar la esponja en un sistema de evaporación solar: medir la tasa de evaporación de agua pura y de una solución con iones de mercurio, así como la concentración de mercurio antes y después.",
+      "Realizar varios ciclos para evaluar la estabilidad."
+     ]
+    }
+   ]
+  },
+  "ar": {
+   "note": "في مجال تحلية المياه بالطاقة الشمسية، تتطور المواد المستخدمة في التبخير الضوئي الحراري بنشاط، لكن الدراسات المنهجية حول الاستقرار طويل الأمد وتكامل هذه المواد مع وظائف أخرى لا تزال نادرة.",
+   "topic": "تحلية المياه باستخدام الطاقة الشمسية",
+   "ideas": [
+    {
+     "based_on": [
+      "1409.5962",
+      "1809.05184"
+     ],
+     "title": "منصة لاختبار الشيخوخة المتسارعة لمواد أجهزة التحلية الشمسية تحت ضوء مركز",
+     "what": "بناء جهاز يقوم بتشعيع عينات من مواد أجهزة التحلية الشمسية (المواد الماصة، الطلاءات المحبة للماء) بضوء شمسي مركز مع تحكم مستقل في درجة الحرارة والغلاف الجوي. إجراء سلسلة من اختبارات التدهور ومقارنة النتائج بتلك التي تم الحصول عليها تحت الإشعاع الشمسي العادي.",
+     "why": "سيسمح ذلك بتقييم متانة المواد الجديدة لأنظمة التحلية بسرعة دون الحاجة إلى اختبارات ميدانية طويلة. سيكون مفيدًا للفرق البحثية ومصنعي أجهزة التحلية الشمسية.",
+     "origin": "في العمل 1409.5962 تم عرض منهجية للشيخوخة المتسارعة للمواد الكهروضوئية العضوية مع تحكم منفصل في درجة الحرارة والشدة. بالنسبة لمواد أجهزة التحلية الشمسية (مثل المواد الماصة البلازمونية من 1809.05184 أو الطلاءات الضوئية الحرارية) لا توجد مثل هذه المنهجية، على الرغم من أن تدهورها تحت الشمس أمر بالغ الأهمية للتطبيق العملي.",
+     "first_step": "بناء مركز بسيط (عدسة فريسنل) وتثبيت العينة على وحدة بلتيير الكهروحرارية للتحكم في درجة الحرارة. التحقق من إمكانية الحفاظ على درجة الحرارة المطلوبة عند تغير الشدة.",
+     "needs": "عدسة فريسنل أو مرآة مكافئة، وحدة كهروحرارية، مصدر طاقة، ميزان حرارة بالأشعة تحت الحمراء أو مزدوجة حرارية، مقياس طيف ضوئي (أو الوصول إليه)، عينات من المواد.",
+     "risks": "صعوبة التحكم الدقيق في درجة الحرارة عند التركيز العالي؛ عدم تجانس الإشعاع قد يشوه النتائج.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "استخدام النهج من العمل 1409.5962: تركيز ضوء الشمس بعدسة أو مرآة، والتحكم في درجة حرارة العينة باستخدام ركيزة مبردة وميزان حرارة بالأشعة تحت الحمراء.",
+      "قياس الانعكاسية/الامتصاصية الطيفية للعينات قبل وبعد التشعيع لتقييم التدهور كميًا.",
+      "إجراء التشعيع عند شدة مختلفة (1x، 5x، 10x) ودرجات حرارة مختلفة (مثل 25°C و60°C) لبناء نموذج للشيخوخة المتسارعة."
+     ]
+    },
+    {
+     "based_on": [
+      "1905.10394",
+      "1806.02896"
+     ],
+     "title": "اختبار ميداني للمظلة الضوئية الحرارية لتبخير المحلول الملحي مع تقييم ترسب الأملاح",
+     "what": "تصنيع جهاز من نوع \"المظلة الضوئية الحرارية\" استنادًا إلى العمل 1905.10394 واختباره على محلول ملحي حقيقي (مثل مياه البحر أو مياه الصرف) في ظروف ميدانية. قياس معدل التبخر، وتراكم الأملاح على السطح، والكفاءة بمرور الوقت.",
+     "why": "التحقق من قابلية تطبيق المفهوم خارج المختبر وتحديد المشاكل المتعلقة بترسب الأملاح التي غالبًا ما يتم التقليل من شأنها. ستكون النتائج مفيدة لمطوري أنظمة التصريف السائل الصفري.",
+     "origin": "يقدم العمل 1905.10394 تصميمًا لمظلة ضوئية حرارية لزيادة التبخر في أحواض التبخير، لكنه لا يقدم بيانات عن التشغيل طويل الأمد في ظروف حقيقية بمياه عالية الملوحة. في الأدبيات المتعلقة بأجهزة التحلية الشمسية (مثل 1806.02896) يُذكر ترسب الأملاح كمشكلة، لكن البيانات الميدانية المنهجية قليلة.",
+     "first_step": "تصنيع نموذج أولي للمظلة من مواد متاحة (مثل قماش قطني مغطى بالسخام) وإجراء أول قياسات يومية للتبخر في حاوية بها ماء مالح في الهواء الطلق.",
+     "needs": "مواد للمظلة (قماش، طلاء ضوئي حراري)، حاويات، ميزان بدقة جرام، محطة أرصاد جوية (أو بيانات عن الإشعاع الشمسي ودرجة الحرارة والرياح)، الوصول إلى مكان في الهواء الطلق.",
+     "risks": "قد يؤدي ترسب الأملاح إلى تقليل الكفاءة بسرعة؛ قد تختلف الظروف الجوية بشكل كبير مما يصعب المقارنة.",
+     "scale": "أطروحة تخرج",
+     "methods": [
+      "تجميع المظلة: مادة مسامية مشبعة بمادة ضوئية حرارية (مثل السخام أو ماص تجاري) موضوعة فوق سطح الماء.",
+      "إجراء قياسات يومية لكتلة الماء المتبخر وكتلة الملح المتراكم على السطح على مدى عدة أسابيع.",
+      "مقارنة معدل التبخر مع صينية تحكم بدون مظلة لتقييم الكسب."
+     ]
+    },
+    {
+     "based_on": [
+      "1508.00210",
+      "1804.10736"
+     ],
+     "title": "نظام هجين للطاقة الكهروضوئية المركزة والتقطير الشمسي مع فصل الطيف",
+     "what": "تصميم واختبار نظام صغير الحجم يستخدم عنصر تشتيت (عدسة فريسنل موشورية) لفصل الطيف الشمسي: الجزء المرئي يذهب إلى الخلايا الكهروضوئية، والجزء تحت الأحمر يذهب لتسخين الماء لتحليته. تقييم الكفاءة الإجمالية لاستخدام الطاقة الشمسية.",
+     "why": "يسمح باستخدام أكثر اكتمالاً للطيف الشمسي: تعمل الخلايا الكهروضوئية في النطاق الأمثل، ولا تُهدر الحرارة بل تُستخدم للتحلية. قد يزيد من الكفاءة الإجمالية لمنشآت الطاقة الشمسية.",
+     "origin": "في العمل 1508.00210 تم عرض عنصر تشتيت رخيص للفصل الطيفي، ولكن فقط للتحويل الكهروضوئي. الأعمال المتعلقة بالتحلية الشمسية (مثل 1804.10736) تستخدم الطيف بأكمله للتسخين، وهو غير فعال لإنتاج الكهرباء. الاستخدام الهجين للطيف قد يحقق مكسبًا، لكنه لم يُنفذ بعد.",
+     "first_step": "شراء أو تصنيع عدسة فريسنل موشورية والتحقق من فصل الطيف على شاشة بسيطة، وقياس توزيع الشدة عبر الأطوال الموجية باستخدام مطياف.",
+     "needs": "عدسة فريسنل موشورية، خلايا كهروضوئية (سيليكونية أو غيرها)، مواد لمستقبل الحرارة وجهاز التقطير، مطياف (أو ثنائيات ضوئية مع مرشحات)، مقياس متعدد، مصدر ضوء شمسي (طبيعي أو محاكي).",
+     "risks": "صعوبة الضبط الدقيق للنظام البصري؛ قد تقلل خسائر الانعكاس والتشتت من الكفاءة الإجمالية؛ تكلفة الخلايا الكهروضوئية ذات عرض نطاق غير قياسي.",
+     "scale": "أطروحة تخرج",
+     "methods": [
+      "استخدام عدسة فريسنل موشورية، كما في العمل 1508.00210، للفصل المكاني للنطاقات الطيفية.",
+      "اختيار خلايا كهروضوئية بعرض نطاق يتوافق مع الجزء المرئي المنفصل من الطيف.",
+      "توجيه الجزء تحت الأحمر إلى مستقبل حرارة متصل بجهاز تقطير شمسي بسيط (مثل لوح مائل مع تكثيف).",
+      "قياس القدرة الكهربائية للخلايا الكهروضوئية وكمية ناتج التقطير، وحساب توازن الطاقة الإجمالي."
+     ]
+    },
+    {
+     "based_on": [
+      "1809.05334",
+      "1809.05184"
+     ],
+     "title": "نمذجة عددية لماص بلازموني لجهاز تحلية شمسي مع تحسين للطيف الحقيقي",
+     "what": "إنشاء نموذج حاسوبي لماص نانوي بلازموني (على سبيل المثال، بناءً على جسيمات معدنية نانوية) وتحسين هندسته لتحقيق أقصى امتصاص في الطيف الشمسي وأقل إشعاع حراري عند درجات حرارة التشغيل لجهاز التحلية.",
+     "why": "سيسمح ذلك بتطوير مواد ماصة أكثر كفاءة للمبخرات الشمسية دون الحاجة إلى تجارب مكلفة. يمكن استخدام النتائج في إنشاء مواد جديدة.",
+     "origin": "يقدم العمل 1809.05334 طريقة عددية فعالة لنمذجة الخلايا الشمسية البلازمونية ذات الهياكل الدورية، لكنه لا يطبقها على مشاكل التسخين الشمسي للمياه. في العمل 1809.05184 تم الحصول تجريبيًا على ماص بلازموني، ولكن دون تحسين منهجي للطيف ودرجات حرارة التشغيل لجهاز التحلية.",
+     "first_step": "إعادة إنتاج نتائج النمذجة من مقال 1809.05334 لهيكل دوري بسيط (مثل مصفوفة من الكرات النانوية الفضية) باستخدام كود مفتوح المصدر (مثل Python أو MATLAB).",
+     "needs": "الوصول إلى موارد حاسوبية (الكمبيوتر الشخصي كافٍ للبدء)، معرفة بالطرق العددية أو المكتبات الجاهزة (مثل MEEP، COMSOL)، مهارات برمجة أساسية.",
+     "risks": "قد يزيد التعقيد الحسابي مع زيادة حجم الهيكل؛ تعتمد دقة النموذج على المعالجة الصحيحة لتشتت المواد.",
+     "scale": "أطروحة تخرج",
+     "methods": [
+      "استخدام طريقة المعادلات التكاملية الحجمية (كما في العمل 1809.05334) لحساب الامتصاص في الهياكل الدورية ذات الجسيمات النانوية المعدنية.",
+      "تغيير حجم وشكل وفترة الجسيمات النانوية، وكذلك المواد (Au، Ag، Al) لتحقيق امتصاص عالٍ في نطاق 300–2500 نانومتر.",
+      "حساب الإشعاع الحراري عند درجات حرارة 50–100 درجة مئوية وتقليله مع الحفاظ على امتصاص شمسي عالٍ.",
+      "مقارنة النتائج مع البيانات التجريبية من العمل 1809.05184 للتحقق من صحة النموذج."
+     ]
+    },
+    {
+     "based_on": [
+      "1806.02896"
+     ],
+     "title": "تطوير مبخر شمسي إسفنجي بوظيفة إزالة الزئبق لتنقية مياه الصرف",
+     "what": "تصنيع إسفنجة مركبة من البولي يوريثان مغطاة بـ MoS2/C، كما في العمل 1806.02896، واختبار قدرتها على تبخير الماء وإزالة أيونات الزئبق من المحلول في نفس الوقت. تقييم معدل التبخر وكفاءة التنقية.",
+     "why": "المواد المدمجة التي تبخر الماء وتزيل المعادن الثقيلة واعدة لتنقية المخلفات الصناعية. التنفيذ العملي وتحسين التركيب قد يجعلان التكنولوجيا متاحة.",
+     "origin": "يعرض العمل 1806.02896 مفهوم إسفنجة MoS2/C للتبخير المتزامن وإزالة الزئبق، لكنه لا يقدم تفاصيل حول التوسع والاستقرار طويل الأمد. في الأدبيات المتعلقة بالمبخرات الشمسية غالبًا ما تفتقر البيانات حول إزالة ملوثات محددة في الديناميكا.",
+     "first_step": "تكرار تخليق MoS2/C وفقًا للوصف في المقال وتطبيقه على إسفنجة صغيرة، ثم قياس معدل التبخر في جهاز مختبري مع محاكاة ضوء الشمس.",
+     "needs": "مواد كيميائية لتخليق MoS2/C، إسفنجات بولي يوريثان، أدوات مخبرية، مصدر ضوء (محاكي شمسي أو مصباح هالوجين)، ميزان، مطياف لتحليل الزئبق (أو الوصول إلى مختبر تحليلي).",
+     "risks": "قد يتطلب التخليق الالتزام الدقيق بالشروط؛ التعامل مع الزئبق يتطلب إجراءات سلامة؛ قد تكون الكفاءة أقل من المذكورة في المقال.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "تخليق مركب MoS2/C وفقًا للطريقة من العمل 1806.02896 (تخليق حراري مائي أو تشريب متبوع بالكربنة).",
+      "تطبيق المركب على إسفنجة البولي يوريثان بطريقة الغمر.",
+      "اختبار الإسفنجة في جهاز التبخير الشمسي: قياس معدل تبخر الماء النقي ومحلول أيونات الزئبق، وكذلك تركيز الزئبق قبل وبعد.",
+      "إجراء عدة دورات لتقييم الاستقرار."
+     ]
+    }
+   ]
+  },
+  "fr": {
+   "note": "Dans le domaine du dessalement solaire, les matériaux pour l'évaporation photothermique se développent activement, mais les travaux systématiques sur la stabilité à long terme et l'intégration avec d'autres fonctions restent rares.",
+   "topic": "dessalement à énergie solaire",
+   "ideas": [
+    {
+     "based_on": [
+      "1409.5962",
+      "1809.05184"
+     ],
+     "title": "Banc d'essai pour le vieillissement accéléré de matériaux de dessaleurs solaires sous lumière concentrée",
+     "what": "Construire une installation qui irradie des échantillons de matériaux pour dessaleurs solaires (absorbeurs, revêtements hydrophiles) avec de la lumière solaire concentrée, avec contrôle indépendant de la température et de l'atmosphère. Effectuer une série de tests de dégradation et comparer avec les résultats obtenus sous irradiation solaire normale.",
+     "why": "Cela permettra d'évaluer rapidement la durabilité de nouveaux matériaux pour systèmes de dessalement sans essais en conditions réelles de longue durée. Utile pour les groupes de recherche et les fabricants de dessaleurs solaires.",
+     "origin": "Dans le travail 1409.5962, une méthode de vieillissement accéléré de matériaux photovoltaïques organiques avec contrôle séparé de la température et de l'intensité est présentée. Pour les matériaux de dessaleurs solaires (par exemple, les absorbeurs plasmoniques de 1809.05184 ou les revêtements photothermiques), une telle méthode n'existe pas, bien que leur dégradation au soleil soit critique pour la pratique.",
+     "first_step": "Assembler un concentrateur simple (lentille de Fresnel) et fixer l'échantillon sur un module thermoélectrique Peltier pour contrôler la température. Vérifier si la température souhaitée peut être maintenue lorsque l'intensité varie.",
+     "needs": "Lentille de Fresnel ou miroir parabolique, module thermoélectrique, alimentation électrique, thermomètre infrarouge ou thermocouple, spectrophotomètre (ou accès à un), échantillons de matériaux.",
+     "risks": "Difficulté du contrôle précis de la température à forte concentration ; l'irradiation non uniforme peut fausser les résultats.",
+     "scale": "semestre",
+     "methods": [
+      "Utiliser l'approche du travail 1409.5962 : concentration de la lumière solaire par une lentille ou un miroir, contrôle de la température de l'échantillon à l'aide d'un substrat refroidi et d'un thermomètre infrarouge.",
+      "Mesurer la réflectance/absorbance spectrale des échantillons avant et après irradiation pour quantifier la dégradation.",
+      "Effectuer des irradiations à différentes intensités (1x, 5x, 10x) et températures (par exemple, 25°C et 60°C) pour construire un modèle de vieillissement accéléré."
+     ]
+    },
+    {
+     "based_on": [
+      "1905.10394",
+      "1806.02896"
+     ],
+     "title": "Test de terrain d'un parapluie photothermique pour l'évaporation de saumure avec évaluation de l'encrassement salin",
+     "what": "Fabriquer un dispositif de type « parapluie photothermique » inspiré du travail 1905.10394 et le tester sur une vraie saumure (par exemple, eau de mer ou eaux usées) en conditions réelles. Mesurer le taux d'évaporation, l'accumulation de sel sur la surface et l'efficacité au fil du temps.",
+     "why": "Vérifier le fonctionnement du concept hors laboratoire et identifier les problèmes liés à l'encrassement salin, souvent sous-estimés. Les résultats seront utiles aux développeurs de systèmes à rejet liquide nul.",
+     "origin": "Le travail 1905.10394 propose une conception de parapluie photothermique pour améliorer l'évaporation dans les bassins d'évaporation, mais ne fournit pas de données sur le fonctionnement à long terme en conditions réelles avec une eau très salée. Dans la littérature sur les dessaleurs solaires (par exemple, 1806.02896), l'encrassement salin est mentionné comme un problème, mais les données de terrain systématiques sont rares.",
+     "first_step": "Fabriquer un prototype de parapluie à partir de matériaux simples (par exemple, tissu de coton enduit de suie) et effectuer les premières mesures d'évaporation sur 24 heures dans un récipient d'eau salée en plein air.",
+     "needs": "Matériaux pour le parapluie (tissu, revêtement photothermique), récipients, balance précise au gramme, station météo (ou données sur le rayonnement solaire, la température, le vent), accès à un site en plein air.",
+     "risks": "L'encrassement salin peut rapidement réduire l'efficacité ; les conditions météorologiques peuvent varier fortement, ce qui complique la comparaison.",
+     "scale": "mémoire",
+     "methods": [
+      "Assembler le parapluie : un matériau poreux imprégné d'une substance photothermique (par exemple, suie ou absorbeur commercial), placé au-dessus de la surface de l'eau.",
+      "Effectuer des mesures quotidiennes de la masse d'eau évaporée et de la masse de sel accumulée sur la surface pendant plusieurs semaines.",
+      "Comparer le taux d'évaporation avec un bac témoin sans parapluie pour évaluer le gain."
+     ]
+    },
+    {
+     "based_on": [
+      "1508.00210",
+      "1804.10736"
+     ],
+     "title": "Système hybride de photovoltaïque concentré et de distillation solaire avec séparation spectrale",
+     "what": "Concevoir et tester un système à petite échelle qui utilise un élément dispersif (lentille de Fresnel prismatique) pour séparer le spectre solaire : la partie visible va vers les cellules photovoltaïques, et l'infrarouge chauffe l'eau pour le dessalement. Évaluer le rendement global d'utilisation de l'énergie solaire.",
+     "why": "Permet une utilisation plus complète du spectre solaire : les cellules photovoltaïques fonctionnent dans leur plage optimale, et la chaleur n'est pas gaspillée mais utilisée pour le dessalement. Peut améliorer le rendement global des installations solaires.",
+     "origin": "Le travail 1508.00210 démontre un élément dispersif peu coûteux pour la séparation spectrale, mais uniquement pour la conversion photovoltaïque. Les travaux sur le dessalement solaire (par exemple, 1804.10736) utilisent tout le spectre pour le chauffage, ce qui est inefficace pour l'électricité. Une utilisation hybride du spectre pourrait apporter un gain, mais n'a pas été réalisée.",
+     "first_step": "Acquérir ou fabriquer une lentille de Fresnel prismatique et vérifier la séparation spectrale sur un écran simple, en mesurant la distribution d'intensité en fonction de la longueur d'onde avec un spectromètre.",
+     "needs": "Lentille de Fresnel prismatique, cellules photovoltaïques (silicium ou autres), matériaux pour le récepteur de chaleur et le distillateur, spectromètre (ou photodiodes avec filtres), multimètre, source de lumière solaire (naturelle ou simulateur).",
+     "risks": "Difficulté de l'alignement précis du système optique ; les pertes par réflexion et diffusion peuvent réduire le rendement global ; coût des cellules photovoltaïques à bande interdite non standard.",
+     "scale": "mémoire",
+     "methods": [
+      "Utiliser une lentille de Fresnel prismatique, comme dans le travail 1508.00210, pour la séparation spatiale des bandes spectrales.",
+      "Choisir des cellules photovoltaïques avec une bande interdite correspondant à la partie visible extraite du spectre.",
+      "Diriger la partie infrarouge vers un récepteur de chaleur relié à un simple distillateur solaire (par exemple, une plaque inclinée avec condensation).",
+      "Mesurer la puissance électrique des cellules et la quantité de distillat, calculer le bilan énergétique global."
+     ]
+    },
+    {
+     "based_on": [
+      "1809.05334",
+      "1809.05184"
+     ],
+     "title": "Modélisation numérique d'un absorbeur plasmonique pour dessaleur solaire avec optimisation sous spectre réel",
+     "what": "Créer un modèle informatique d'un absorbeur nanostructuré plasmonique (par exemple, à base de nanoparticules métalliques) et optimiser sa géométrie pour maximiser l'absorption dans le spectre solaire et minimiser l'émission thermique aux températures de fonctionnement du dessaleur.",
+     "why": "Permettra de développer des absorbeurs plus efficaces pour les évaporateurs solaires sans essais expérimentaux coûteux. Les résultats pourront être utilisés pour créer de nouveaux matériaux.",
+     "origin": "Le travail 1809.05334 propose une méthode numérique efficace pour modéliser les cellules solaires plasmoniques à structures périodiques, mais ne l'applique pas au chauffage solaire de l'eau. Le travail 1809.05184 a obtenu expérimentalement un absorbeur plasmonique, mais sans optimisation systématique pour le spectre et les températures de fonctionnement du dessaleur.",
+     "first_step": "Reproduire les résultats de simulation de l'article 1809.05334 pour une structure périodique simple (par exemple, un réseau de nanosphères d'argent), en utilisant un code ouvert (par exemple, en Python ou MATLAB).",
+     "needs": "Accès à des ressources de calcul (un ordinateur personnel suffit pour commencer), connaissance des méthodes numériques ou des bibliothèques prêtes à l'emploi (par exemple, MEEP, COMSOL), compétences de base en programmation.",
+     "risks": "La complexité de calcul peut augmenter avec la taille de la structure ; la précision du modèle dépend de la prise en compte correcte de la dispersion des matériaux.",
+     "scale": "mémoire",
+     "methods": [
+      "Utiliser la méthode des équations intégrales de volume (comme dans le travail 1809.05334) pour calculer l'absorption dans des structures périodiques avec nanoparticules métalliques.",
+      "Faire varier la taille, la forme et la période des nanoparticules, ainsi que les matériaux (Au, Ag, Al) pour obtenir une absorption élevée dans la plage 300–2500 nm.",
+      "Calculer l'émission thermique à des températures de 50–100°C et la minimiser tout en conservant une absorption solaire élevée.",
+      "Comparer avec les données expérimentales du travail 1809.05184 pour valider le modèle."
+     ]
+    },
+    {
+     "based_on": [
+      "1806.02896"
+     ],
+     "title": "Développement d'un évaporateur solaire en éponge avec fonction d'élimination du mercure pour le traitement des eaux usées",
+     "what": "Fabriquer une éponge composite à base de polyuréthane recouverte de MoS2/C, comme dans le travail 1806.02896, et tester sa capacité à évaporer l'eau et à éliminer les ions mercure d'une solution. Évaluer le taux d'évaporation et l'efficacité de purification.",
+     "why": "Les matériaux combinés qui évaporent l'eau et éliminent les métaux lourds sont prometteurs pour le traitement des effluents industriels. La mise en œuvre pratique et l'optimisation de la composition pourraient rendre la technologie accessible.",
+     "origin": "Le travail 1806.02896 démontre le concept d'une éponge avec MoS2/C pour l'évaporation et l'élimination simultanées du mercure, mais ne donne pas de détails sur la mise à l'échelle et la stabilité à long terme. Dans la littérature sur les évaporateurs solaires, les données sur l'élimination de polluants spécifiques en dynamique font souvent défaut.",
+     "first_step": "Reproduire la synthèse de MoS2/C selon la description de l'article et l'appliquer sur une petite éponge, puis mesurer le taux d'évaporation dans un montage de laboratoire avec une lumière solaire simulée.",
+     "needs": "Réactifs chimiques pour la synthèse de MoS2/C, éponges de polyuréthane, verrerie de laboratoire, source de lumière (simulateur solaire ou lampe halogène), balance, spectrophotomètre pour l'analyse du mercure (ou accès à un laboratoire d'analyse).",
+     "risks": "La synthèse peut nécessiter des conditions précises ; le travail avec le mercure exige des mesures de sécurité ; l'efficacité peut être inférieure à celle annoncée dans l'article.",
+     "scale": "semestre",
+     "methods": [
+      "Synthétiser le composite MoS2/C selon la méthode du travail 1806.02896 (synthèse hydrothermale ou imprégnation suivie d'une carbonisation).",
+      "Appliquer le composite sur une éponge de polyuréthane par trempage.",
+      "Tester l'éponge dans un montage d'évaporation solaire : mesurer le taux d'évaporation de l'eau pure et d'une solution contenant des ions mercure, ainsi que la concentration de mercure avant et après.",
+      "Effectuer plusieurs cycles pour évaluer la stabilité."
+     ]
+    }
+   ]
+  }
+ }
 }

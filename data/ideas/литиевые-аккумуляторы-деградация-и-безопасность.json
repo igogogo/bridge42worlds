@@ -234,5 +234,351 @@
    },
    "abstract": "Lithium-ion batteries are recognised as a key technology to power electric vehicles and integrate grid-connected renewable energy resources. The economic viability of these applications is affected by the battery degradation during its lifetime. This study presents an extensive experimental degradation data for lithium-ion battery cells from three different manufactures (Sony, BYD and Samsung). The Sony and BYD cells are of LFP chemistry while the Samsung cell is of NMC. The capacity fade and resistance increase of the battery cells are quantified due to calendar and cycle aging. The charge le"
   }
- ]
+ ],
+ "lang": {
+  "en": {
+   "note": "Diagnostic methods for degradation and dynamic safety management are actively developing, but experimental verification of the links between aging modes and failures remains a bottleneck.",
+   "topic": "lithium batteries: degradation and safety",
+   "ideas": [
+    {
+     "based_on": [
+      "2408.16604",
+      "2405.10857"
+     ],
+     "title": "Test bench for measuring the evolution of thermal runaway during cell aging",
+     "what": "Build a setup for controlled thermal runaway on accelerated-aged cells and compare threshold temperatures and heat release with fresh cells.",
+     "why": "Standard safety tests are performed on fresh cells, but degradation changes internal resistance and electrolyte composition, which may lower the runaway threshold. The results will help manufacturers set dynamic safety limits.",
+     "origin": "Work 2408.16604 shows that failure behavior evolves with degradation but does not provide experimental data on thermal runaway. Work 2405.10857 proposes methods for assessing degradation modes without opening the cell. No one has linked these modes to changes in thermal runaway characteristics.",
+     "first_step": "Choose a cell type (e.g., cylindrical 18650) and design an accelerated aging protocol, then age the first batch to 10% capacity loss.",
+     "needs": "Adiabatic calorimeter (ARC) or a homemade equivalent with good insulation, climate chamber, battery cycler, access to cells from the same manufacturer. Skills in electrochemistry and working with high-current equipment.",
+     "risks": "Thermal runaway is unpredictable and dangerous; strict adherence to safety protocols is required. Aging may not produce a significant change in the runaway threshold due to the dominance of other mechanisms.",
+     "scale": "diploma",
+     "methods": [
+      "Accelerated cyclic aging of cells at elevated temperature and current to different degrees of capacity loss (e.g., 10%, 20%, 30%).",
+      "Measurement of internal resistance and differential capacity (dQ/dV) before and after aging to assess degradation modes, as in work 2405.10857.",
+      "Conducting thermal runaway tests in an adiabatic calorimeter (ARC) with recording of temperature and self-heating rate.",
+      "Comparison of threshold temperatures for the onset of exothermic reactions and maximum runaway temperature between fresh and aged cells."
+     ]
+    },
+    {
+     "based_on": [
+      "2503.14327",
+      "2604.26545"
+     ],
+     "title": "Fiber-optic deformation monitoring for early detection of swelling",
+     "what": "Develop and test a system based on fiber-optic sensors (FBG) for continuous measurement of the deformation of a lithium-ion cell casing during cycling and evaluate the correlation with capacity loss and internal pressure.",
+     "why": "Cell swelling is an early sign of gas generation and potential danger. Fiber optics allow in situ deformation measurement without opening the cell and can be integrated into BMS for predictive maintenance.",
+     "origin": "Work 2503.14327 demonstrates the use of external fiber-optic sensing for degradation monitoring but does not link deformation to specific gas generation mechanisms. Work 2604.26545 models the aging of Si-Gr anodes, where volume changes are particularly large. Combining these approaches could provide an early indicator of dangerous swelling.",
+     "first_step": "Assemble a simple optical setup with an FBG sensor and test its sensitivity on an empty can under varying internal pressure.",
+     "needs": "Fiber-optic sensors (FBG), interrogator, cycling equipment, cells with a known tendency for gas generation (e.g., with silicon anodes). Skills in optoelectronics and signal processing.",
+     "risks": "Attaching the sensor may alter the cell's thermal regime. The correlation between deformation and internal pressure is nonlinear and depends on the casing design.",
+     "scale": "semester",
+     "methods": [
+      "Attaching fiber Bragg gratings (FBG) to the cell surface and calibrating the response to known deformations.",
+      "Cycling the cell while recording FBG signals, voltage, current, and temperature.",
+      "Analysis of differential capacity (dQ/dV) to identify degradation modes, as in work 2503.14327.",
+      "Building correlation models between deformation, gas generation, and capacity loss."
+     ]
+    },
+    {
+     "based_on": [
+      "2405.10857",
+      "2408.16604"
+     ],
+     "title": "Dynamic current limits based on real-time degradation mode estimation",
+     "what": "Implement an algorithm that estimates the current dominant degradation mode (lithium loss, anode active material loss, etc.) from voltage, current, and temperature data, and adjusts allowable charge/discharge currents accordingly.",
+     "why": "Modern BMS use static limits that are either overly conservative or fail to prevent accelerated degradation. Dynamic limits could extend service life and improve safety without redesign.",
+     "origin": "Work 2405.10857 shows how to estimate degradation modes without opening the cell but does not propose how to use this information for control. Work 2408.16604 discusses dynamic safety management but does not provide specific algorithms. Combining these ideas could yield a practical adaptive control method.",
+     "first_step": "Choose a simple electrochemical model and implement a degradation simulation with parameter changes, then test the identifiability of these parameters on synthetic data.",
+     "needs": "Access to computational resources (Python/Matlab), cell cycling data (can be from open datasets, e.g., Sandia or Oxford). Skills in modeling and state estimation.",
+     "risks": "Degradation mode estimation may not be accurate enough in real time due to noise and non-identifiability. Dynamic limits may lead to undesirable performance reduction.",
+     "scale": "diploma",
+     "methods": [
+      "Use an electrochemical model (e.g., single particle model with extensions) to simulate cell response under various degradation modes, as in 2405.10857.",
+      "Implement model parameter estimation (volume fractions of active materials, lithium inventory) using Kalman filter or optimization methods.",
+      "Define heuristic rules: when anode active material loss is detected, reduce charge current by X%, etc.",
+      "Validate the algorithm on real cell cycling data and compare service life with a control group using static limits."
+     ]
+    },
+    {
+     "based_on": [
+      "2508.08654",
+      "2604.10630"
+     ],
+     "title": "Comparison of LATP degradation in Li-O2 batteries under different humidity conditions",
+     "what": "Conduct a systematic experimental study of the degradation of the solid electrolyte LATP in lithium-oxygen batteries under controlled humidity and analyze the decomposition products.",
+     "why": "Li-O2 batteries promise high energy density, but electrolyte degradation limits cycle life. Understanding the role of humidity will help select operating conditions and protective coatings.",
+     "origin": "Work 2508.08654 revealed leaching of ions from LATP in the highly alkaline environment of Li-O2 batteries but did not systematically study the effect of humidity. Work 2604.10630 considers the stability of lithium with a glassy salt, which could be an alternative. Data on how humidity accelerates or slows LATP degradation are lacking.",
+     "first_step": "Assemble a sealed cell with controlled atmosphere and perform cycling of LATP electrolyte in contact with lithium at two humidity levels.",
+     "needs": "Glove box, potentiostat, characterization equipment (XRD, XPS, SEM), chemicals for LATP synthesis. Skills in electrochemistry and materials science.",
+     "risks": "Li-O2 batteries are extremely sensitive to impurities; maintaining stable humidity is difficult. Degradation may be caused by factors other than humidity.",
+     "scale": "years",
+     "methods": [
+      "Fabricate cells with LATP electrolyte and lithium anode, as in work 2508.08654.",
+      "Cycle cells at different relative humidity levels (e.g., 0%, 10%, 30%).",
+      "After cycling, perform post-mortem analysis: XRD, XPS, SEM/EDX to determine phase composition and surface morphology.",
+      "Correlate the degree of degradation (capacity loss, impedance change) with the amount of leached ions (PO4, Al)."
+     ]
+    }
+   ]
+  },
+  "es": {
+   "note": "En este campo se desarrollan activamente métodos de diagnóstico de degradación y gestión dinámica de la seguridad, pero la verificación experimental de los vínculos entre los modos de envejecimiento y los fallos sigue siendo un cuello de botella.",
+   "topic": "baterías de litio: degradación y seguridad",
+   "ideas": [
+    {
+     "based_on": [
+      "2408.16604",
+      "2405.10857"
+     ],
+     "title": "Banco de pruebas para medir la evolución del descontrol térmico durante el envejecimiento de las celdas",
+     "what": "Montar un sistema para provocar un descontrol térmico controlado en celdas envejecidas aceleradamente y comparar las temperaturas umbral y la generación de calor con celdas nuevas.",
+     "why": "Las pruebas de seguridad estándar se realizan en celdas frescas, pero la degradación altera la resistencia interna y la composición del electrolito, lo que puede reducir el umbral de descontrol térmico. Los resultados ayudarán a los fabricantes a establecer límites de seguridad dinámicos.",
+     "origin": "El trabajo 2408.16604 muestra que el comportamiento de fallo evoluciona con la degradación, pero no proporciona datos experimentales sobre el descontrol térmico. El trabajo 2405.10857 propone métodos para evaluar los modos de degradación sin abrir la celda. Nadie ha relacionado estos modos con los cambios en las características del descontrol térmico.",
+     "first_step": "Elegir el tipo de celdas (por ejemplo, cilíndricas 18650) y diseñar un protocolo de envejecimiento acelerado, luego envejecer el primer lote hasta una pérdida de capacidad del 10%.",
+     "needs": "Calorímetro adiabático (ARC) o un equivalente casero con buen aislamiento térmico, cámara climática, ciclador de baterías, acceso a celdas del mismo fabricante. Conocimientos de electroquímica y manejo de equipos de alta corriente.",
+     "risks": "El descontrol térmico es impredecible y peligroso; se requiere un estricto cumplimiento de los protocolos de seguridad. El envejecimiento puede no producir un cambio significativo en el umbral de descontrol térmico debido al predominio de otros mecanismos.",
+     "scale": "tesis de grado",
+     "methods": [
+      "Envejecimiento cíclico acelerado de las celdas a temperatura y corriente elevadas hasta diferentes grados de pérdida de capacidad (por ejemplo, 10%, 20%, 30%).",
+      "Medición de la resistencia interna y de la capacidad diferencial (dQ/dV) antes y después del envejecimiento para evaluar los modos de degradación, como en el trabajo 2405.10857.",
+      "Realización de pruebas de descontrol térmico en un calorímetro adiabático (ARC) con registro de la temperatura y la velocidad de autocalentamiento.",
+      "Comparación de las temperaturas umbral de inicio de las reacciones exotérmicas y la temperatura máxima de descontrol térmico entre celdas frescas y envejecidas."
+     ]
+    },
+    {
+     "based_on": [
+      "2503.14327",
+      "2604.26545"
+     ],
+     "title": "Monitoreo de deformación por fibra óptica para la detección temprana de hinchamiento",
+     "what": "Desarrollar y probar un sistema basado en sensores de fibra óptica (FBG) para medir continuamente la deformación de la carcasa de una celda de iones de litio durante el ciclado y evaluar su correlación con la pérdida de capacidad y la presión interna.",
+     "why": "El hinchamiento de la celda es un signo temprano de generación de gas y de peligro potencial. La fibra óptica permite medir la deformación in situ sin abrir la celda y puede integrarse en el BMS para mantenimiento predictivo.",
+     "origin": "El trabajo 2503.14327 demuestra el uso de sensado por fibra óptica externa para monitorear la degradación, pero no relaciona la deformación con mecanismos específicos de generación de gas. El trabajo 2604.26545 modela el envejecimiento de ánodos de Si-Gr, donde los cambios volumétricos son especialmente grandes. La combinación de estos enfoques podría proporcionar un indicador temprano de hinchamiento peligroso.",
+     "first_step": "Montar un esquema óptico simple con un sensor FBG y verificar su sensibilidad en una celda vacía al variar la presión interna.",
+     "needs": "Sensores de fibra óptica (FBG), interrogador, equipo de ciclado, celdas con tendencia conocida a generar gas (por ejemplo, con ánodo de silicio). Conocimientos de optoelectrónica y procesamiento de señales.",
+     "risks": "La fijación del sensor puede alterar el régimen térmico de la celda. La correlación entre deformación y presión interna no es lineal y depende del diseño de la carcasa.",
+     "scale": "semestre",
+     "methods": [
+      "Fijación de redes de Bragg (FBG) en la superficie de la celda y calibración de la respuesta ante deformaciones conocidas.",
+      "Ciclado de la celda con registro simultáneo de las señales FBG, voltaje, corriente y temperatura.",
+      "Análisis de la capacidad diferencial (dQ/dV) para determinar los modos de degradación, como en el trabajo 2503.14327.",
+      "Construcción de modelos de correlación entre deformación, generación de gas y pérdida de capacidad."
+     ]
+    },
+    {
+     "based_on": [
+      "2405.10857",
+      "2408.16604"
+     ],
+     "title": "Límites de corriente dinámicos basados en la estimación de modos de degradación en tiempo real",
+     "what": "Implementar un algoritmo que, a partir de datos de voltaje, corriente y temperatura, estime el modo de degradación dominante (pérdida de litio, pérdida de material activo del ánodo, etc.) y ajuste los límites de corriente de carga/descarga en consecuencia.",
+     "why": "Los BMS actuales utilizan límites estáticos que son o demasiado conservadores o no previenen la degradación acelerada. Los límites dinámicos pueden prolongar la vida útil y mejorar la seguridad sin rediseñar el sistema.",
+     "origin": "El trabajo 2405.10857 muestra cómo estimar los modos de degradación sin abrir la celda, pero no propone cómo usar esta información para el control. El trabajo 2408.16604 discute la gestión dinámica de la seguridad, pero no proporciona algoritmos concretos. La combinación de estas ideas podría dar un método práctico de control adaptativo.",
+     "first_step": "Seleccionar un modelo electroquímico simple e implementar una simulación de degradación con variación de parámetros, luego verificar la identificabilidad de estos parámetros con datos sintéticos.",
+     "needs": "Acceso a recursos computacionales (Python/Matlab), datos de ciclado de celdas (pueden ser de conjuntos abiertos, como los de Sandia u Oxford). Conocimientos de modelado y estimación de estado.",
+     "risks": "La estimación de modos de degradación puede no ser suficientemente precisa en tiempo real debido al ruido y a la falta de identificabilidad. Los límites dinámicos pueden provocar una reducción no deseada del rendimiento.",
+     "scale": "tesis de grado",
+     "methods": [
+      "Usar un modelo electroquímico (por ejemplo, el modelo de partícula única con extensiones) para simular la respuesta de la celda bajo diferentes modos de degradación, como en 2405.10857.",
+      "Implementar la estimación de parámetros del modelo (fracciones volumétricas de materiales activos, cantidad de litio) mediante un filtro de Kalman o métodos de optimización.",
+      "Definir reglas heurísticas: al detectar pérdida de material activo del ánodo, reducir la corriente de carga en un X%, etc.",
+      "Probar el algoritmo con datos de ciclado de celdas reales y comparar la vida útil con un grupo de control que use límites estáticos."
+     ]
+    },
+    {
+     "based_on": [
+      "2508.08654",
+      "2604.10630"
+     ],
+     "title": "Comparación de la degradación de LATP en baterías Li-O2 bajo diferentes condiciones de humedad",
+     "what": "Realizar un estudio experimental sistemático de la degradación del electrolito sólido LATP en baterías de litio-oxígeno bajo humedad controlada y analizar los productos de descomposición.",
+     "why": "Las baterías Li-O2 prometen alta densidad de energía, pero la degradación del electrolito limita su vida útil. Comprender el papel de la humedad ayudará a elegir las condiciones de operación y las capas protectoras.",
+     "origin": "El trabajo 2508.08654 reveló la lixiviación de iones del LATP en el medio altamente alcalino de las baterías Li-O2, pero no estudió sistemáticamente el efecto de la humedad. El trabajo 2604.10630 examina la estabilidad del litio con una sal de vidrio, que podría ser una alternativa. Faltan datos sobre cómo la humedad acelera o frena la degradación del LATP.",
+     "first_step": "Montar una celda hermética con atmósfera controlada y realizar ciclado del electrolito LATP en contacto con litio a dos niveles de humedad.",
+     "needs": "Caja de guantes, potenciostato, equipos de caracterización (XRD, XPS, SEM), productos químicos para sintetizar LATP. Conocimientos de electroquímica y ciencia de materiales.",
+     "risks": "Las baterías Li-O2 son extremadamente sensibles a las impurezas; es difícil mantener una humedad estable. La degradación puede deberse no solo a la humedad, sino también a otros factores.",
+     "scale": "años",
+     "methods": [
+      "Fabricar celdas con electrolito LATP y ánodo de litio, como en el trabajo 2508.08654.",
+      "Ciclar las celdas a diferentes niveles de humedad relativa (por ejemplo, 0%, 10%, 30%).",
+      "Después del ciclado, realizar análisis post-mortem: XRD, XPS, SEM/EDX para determinar la composición de fases y la morfología de la superficie.",
+      "Correlacionar el grado de degradación (pérdida de capacidad, cambio de impedancia) con la cantidad de iones lixiviados (PO4, Al)."
+     ]
+    }
+   ]
+  },
+  "ar": {
+   "note": "تتطور بنشاط في هذا المجال طرق تشخيص التدهور والإدارة الديناميكية للسلامة، لكن التحقق التجريبي من العلاقات بين أنماط الشيخوخة والأعطال يظل نقطة حرجة.",
+   "topic": "بطاريات الليثيوم: التدهور والسلامة",
+   "ideas": [
+    {
+     "based_on": [
+      "2408.16604",
+      "2405.10857"
+     ],
+     "title": "منصة لقياس تطور الانفلات الحراري أثناء شيخوخة الخلايا",
+     "what": "بناء منظومة للانفلات الحراري المتحكم به (thermal runaway) على خلايا معتّقة بشكل متسارع ومقارنة درجات الحرارة العتبية وإطلاق الحرارة مع الخلايا الجديدة.",
+     "why": "تُجرى اختبارات السلامة القياسية على خلايا جديدة، لكن التدهور يغيّر المقاومة الداخلية وتركيب الإلكتروليت، مما قد يخفض عتبة الانفلات. ستساعد النتائج المصنّعين على تحديد حدود سلامة ديناميكية.",
+     "origin": "يُظهر العمل 2408.16604 أن سلوك العطل يتطور مع التدهور، لكنه لا يقدم بيانات تجريبية عن الانفلات الحراري. ويقترح العمل 2405.10857 طرقًا لتقييم أنماط التدهور دون فتح الخلية. لم يربط أحد هذه الأنماط بتغير خصائص الانفلات الحراري.",
+     "first_step": "اختيار نوع الخلايا (مثل الخلايا الأسطوانية 18650) ووضع بروتوكول للشيخوخة المتسارعة، ثم تعتيق الدفعة الأولى حتى فقدان 10% من السعة.",
+     "needs": "مسعر أدياباتي (ARC) أو بديل محلي الصنع بعزل حراري جيد، وحجرة مناخية، وجهاز تدوير للبطاريات، والوصول إلى خلايا من نفس الشركة المصنعة. مهارات في الكيمياء الكهربائية والعمل مع معدات التيار العالي.",
+     "risks": "الانفلات الحراري غير متوقع وخطير، ويتطلب التقيد الصارم ببروتوكولات السلامة. قد لا يؤدي التعتيق إلى تغيير كبير في عتبة الانفلات بسبب هيمنة آليات أخرى.",
+     "scale": "أطروحة تخرج",
+     "methods": [
+      "تعتيق دوري متسارع للخلايا عند درجة حرارة وتيار مرتفعين حتى درجات مختلفة من فقدان السعة (مثل 10%، 20%، 30%).",
+      "قياس المقاومة الداخلية والسعة التفاضلية (dQ/dV) قبل وبعد التعتيق لتقييم أنماط التدهور، كما في العمل 2405.10857.",
+      "إجراء اختبارات الانفلات الحراري في مسعر أدياباتي (ARC) مع تسجيل درجة الحرارة ومعدل التسخين الذاتي.",
+      "مقارنة درجات الحرارة العتبية لبدء التفاعلات الطاردة للحرارة والحد الأقصى لدرجة حرارة الانفلات بين الخلايا الجديدة والمعتّقة."
+     ]
+    },
+    {
+     "based_on": [
+      "2503.14327",
+      "2604.26545"
+     ],
+     "title": "مراقبة التشوه بالألياف البصرية للكشف المبكر عن الانتفاخ",
+     "what": "تطوير واختبار نظام يعتمد على مستشعرات الألياف البصرية (FBG) للقياس المستمر لتشوه غلاف خلية ليثيوم-أيون أثناء التدوير، وتقييم الارتباط مع فقدان السعة والضغط الداخلي.",
+     "why": "انتفاخ الخلية هو علامة مبكرة على انبعاث الغازات وخطر محتمل. تتيح الألياف البصرية قياس التشوه في الموقع (in situ) دون فتح الخلية، ويمكن دمجها في نظام إدارة البطارية (BMS) للصيانة التنبؤية.",
+     "origin": "يُظهر العمل 2503.14327 استخدام الاستشعار البصري الخارجي لمراقبة التدهور، لكنه لا يربط التشوه بآليات محددة لانبعاث الغازات. ويحاكي العمل 2604.26545 شيخوخة أنودات Si-Gr حيث تكون التغيرات الحجمية كبيرة بشكل خاص. قد يوفر الجمع بين هذين النهجين مؤشرًا مبكرًا للانتفاخ الخطير.",
+     "first_step": "تجميع دائرة بصرية بسيطة مع مستشعر FBG واختبار حساسيته على علبة فارغة عند تغير الضغط الداخلي.",
+     "needs": "مستشعرات ألياف بصرية (FBG)، ومحلل (interrogator)، ومعدات تدوير، وخلايا معروفة بقابليتها لانبعاث الغازات (مثل تلك ذات الأنود السيليكوني). مهارات في الإلكترونيات الضوئية ومعالجة الإشارات.",
+     "risks": "قد يؤدي لصق المستشعر إلى تغيير النظام الحراري للخلية. العلاقة بين التشوه والضغط الداخلي غير خطية وتعتمد على تصميم الغلاف.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "لصق شبكات براغ (FBG) على سطح الخلية ومعايرة الاستجابة لتشوهات معروفة.",
+      "تدوير الخلية مع تسجيل متزامن لإشارات FBG والجهد والتيار ودرجة الحرارة.",
+      "تحليل السعة التفاضلية (dQ/dV) لتحديد أنماط التدهور، كما في العمل 2503.14327.",
+      "بناء نماذج ارتباط بين التشوه وانبعاث الغازات وفقدان السعة."
+     ]
+    },
+    {
+     "based_on": [
+      "2405.10857",
+      "2408.16604"
+     ],
+     "title": "حدود تيار ديناميكية بناءً على تقييم أنماط التدهور في الوقت الفعلي",
+     "what": "تنفيذ خوارزمية تقوم، بناءً على بيانات الجهد والتيار ودرجة الحرارة، بتقييم نمط التدهور السائد حاليًا (فقدان الليثيوم، فقدان المادة النشطة للأنود، إلخ) وبناءً على ذلك تعديل تيارات الشحن/التفريغ المسموح بها.",
+     "why": "تستخدم أنظمة إدارة البطارية الحديثة حدودًا ثابتة، والتي تكون إما متحفظة بشكل مفرط أو لا تمنع التدهور المتسارع. يمكن للحدود الديناميكية إطالة عمر البطارية وتحسين السلامة دون إعادة تصميم.",
+     "origin": "يُظهر العمل 2405.10857 كيفية تقييم أنماط التدهور دون فتح الخلية، لكنه لا يقترح كيفية استخدام هذه المعلومات للإدارة. ويناقش العمل 2408.16604 الإدارة الديناميكية للسلامة، لكنه لا يقدم خوارزميات محددة. قد يوفر الجمع بين هذه الأفكار طريقة عملية للتحكم التكيفي.",
+     "first_step": "اختيار نموذج كهروكيميائي بسيط وتنفيذ محاكاة للتدهور مع تغيير المعاملات، ثم التحقق من قابلية تحديد هذه المعاملات من بيانات اصطناعية.",
+     "needs": "الوصول إلى موارد حاسوبية (Python/Matlab)، وبيانات تدوير الخلايا (يمكن من مجموعات مفتوحة، مثل تلك من سانديا أو أكسفورد). مهارات في النمذجة وتقدير الحالة.",
+     "risks": "قد لا يكون تقدير أنماط التدهور دقيقًا بما يكفي في الوقت الفعلي بسبب الضوضاء وعدم قابلية التحديد. قد تؤدي الحدود الديناميكية إلى انخفاض غير مرغوب فيه في الأداء.",
+     "scale": "أطروحة تخرج",
+     "methods": [
+      "استخدام نموذج كهروكيميائي (مثل نموذج الجسيم الواحد مع التوسعات) لمحاكاة استجابة الخلية في ظل أنماط تدهور مختلفة، كما في 2405.10857.",
+      "تنفيذ تقدير معاملات النموذج (الكسور الحجمية للمواد النشطة، كمية الليثيوم) باستخدام مرشح كالمان أو طرق التحسين.",
+      "تحديد قواعد إرشادية: عند اكتشاف فقدان المادة النشطة للأنود، خفض تيار الشحن بنسبة X%، وهكذا.",
+      "التحقق من الخوارزمية على بيانات تدوير لخلايا حقيقية ومقارنة العمر الافتراضي مع مجموعة ضابطة تستخدم حدودًا ثابتة."
+     ]
+    },
+    {
+     "based_on": [
+      "2508.08654",
+      "2604.10630"
+     ],
+     "title": "مقارنة تدهور LATP في بطاريات Li-O2 تحت ظروف رطوبة مختلفة",
+     "what": "إجراء دراسة تجريبية منهجية لتدهور الإلكتروليت الصلب LATP في بطاريات الليثيوم-أكسجين تحت رطوبة مضبوطة وتحليل نواتج التحلل.",
+     "why": "تعد بطاريات Li-O2 واعدة بكثافة طاقة عالية، لكن تدهور الإلكتروليت يحد من عمرها. فهم دور الرطوبة سيساعد في اختيار ظروف التشغيل والطلاءات الواقية.",
+     "origin": "كشف العمل 2508.08654 عن ترشيح الأيونات من LATP في البيئة عالية القلوية لبطاريات Li-O2، لكنه لم يدرس تأثير الرطوبة بشكل منهجي. وينظر العمل 2604.10630 في استقرار الليثيوم مع ملح زجاجي، وهو ما قد يكون بديلاً. هناك نقص في البيانات حول كيفية تسريع الرطوبة أو إبطاء تدهور LATP.",
+     "first_step": "تجميع خلية محكمة الإغلاق بغلاف جوي مضبوط وإجراء تدوير لإلكتروليت LATP في تلامس مع الليثيوم عند مستويين من الرطوبة.",
+     "needs": "صندوق قفازات، وجهاز بوستاتوستات، ومعدات توصيف (XRD، XPS، SEM)، ومواد كيميائية لتركيب LATP. مهارات في الكيمياء الكهربائية وعلوم المواد.",
+     "risks": "بطاريات Li-O2 حساسة للغاية للشوائب، ومن الصعب الحفاظ على رطوبة مستقرة. قد يكون التدهور ناتجًا عن عوامل أخرى غير الرطوبة.",
+     "scale": "سنوات",
+     "methods": [
+      "تصنيع خلايا بإلكتروليت LATP وأنود ليثيوم، كما في العمل 2508.08654.",
+      "تدوير الخلايا عند مستويات رطوبة نسبية مختلفة (مثل 0%، 10%، 30%).",
+      "بعد التدوير، إجراء تحليل بعد الوفاة: XRD وXPS وSEM/EDX لتحديد التركيب الطوري ومورفولوجيا السطح.",
+      "مقارنة درجة التدهور (فقدان السعة، تغير المعاوقة) مع كمية الأيونات المرتشحة (PO4، Al)."
+     ]
+    }
+   ]
+  },
+  "fr": {
+   "note": "Dans ce domaine, les méthodes de diagnostic de la dégradation et de gestion dynamique de la sécurité progressent rapidement, mais la validation expérimentale des liens entre les modes de vieillissement et les défaillances reste un point critique.",
+   "topic": "batteries lithium-ion : dégradation et sécurité",
+   "ideas": [
+    {
+     "based_on": [
+      "2408.16604",
+      "2405.10857"
+     ],
+     "title": "Banc de mesure de l'évolution de l'emballement thermique lors du vieillissement des cellules",
+     "what": "Construire un dispositif pour provoquer un emballement thermique contrôlé sur des cellules vieillies de manière accélérée et comparer les températures seuils et le dégagement de chaleur avec des cellules neuves.",
+     "why": "Les tests de sécurité standard sont effectués sur des cellules neuves, mais la dégradation modifie la résistance interne et la composition de l'électrolyte, ce qui peut abaisser le seuil d'emballement. Les résultats aideront les fabricants à définir des limites de sécurité dynamiques.",
+     "origin": "Le travail 2408.16604 montre que le comportement en défaillance évolue avec la dégradation, mais ne fournit pas de données expérimentales sur l'emballement thermique. Le travail 2405.10857 propose des méthodes pour évaluer les modes de dégradation sans ouvrir la cellule. Personne n'a relié ces modes à la modification des caractéristiques de l'emballement thermique.",
+     "first_step": "Choisir un type de cellules (par exemple, cylindriques 18650) et établir un protocole de vieillissement accéléré, puis vieillir un premier lot jusqu'à 10 % de perte de capacité.",
+     "needs": "Calorimètre adiabatique (ARC) ou équivalent fait maison avec une bonne isolation thermique, chambre climatique, cycler pour batteries, accès à des cellules d'un même fabricant. Compétences en électrochimie et en travail avec des équipements à courant élevé.",
+     "risks": "L'emballement thermique est imprévisible et dangereux, nécessitant le strict respect des protocoles de sécurité. Le vieillissement peut ne pas entraîner de changement significatif du seuil d'emballement en raison de la prédominance d'autres mécanismes.",
+     "scale": "diplôme",
+     "methods": [
+      "Vieillissement cyclique accéléré des cellules à température et courant élevés jusqu'à différents niveaux de perte de capacité (par exemple, 10 %, 20 %, 30 %).",
+      "Mesure de la résistance interne et de la capacité différentielle (dQ/dV) avant et après vieillissement pour évaluer les modes de dégradation, comme dans le travail 2405.10857.",
+      "Réalisation de tests d'emballement thermique dans un calorimètre adiabatique (ARC) avec enregistrement de la température et de la vitesse d'auto-échauffement.",
+      "Comparaison des températures seuils de début des réactions exothermiques et de la température maximale d'emballement entre cellules neuves et vieillies."
+     ]
+    },
+    {
+     "based_on": [
+      "2503.14327",
+      "2604.26545"
+     ],
+     "title": "Surveillance par fibre optique de la déformation pour la détection précoce du gonflement",
+     "what": "Développer et tester un système basé sur des capteurs à fibre optique (FBG) pour mesurer en continu la déformation du boîtier d'une cellule lithium-ion pendant le cyclage et évaluer la corrélation avec la perte de capacité et la pression interne.",
+     "why": "Le gonflement de la cellule est un signe précoce de dégagement gazeux et de danger potentiel. La fibre optique permet de mesurer la déformation in situ sans ouvrir la cellule et peut être intégrée au BMS pour une maintenance prédictive.",
+     "origin": "Le travail 2503.14327 démontre l'utilisation du sondage par fibre optique externe pour surveiller la dégradation, mais ne relie pas la déformation à des mécanismes spécifiques de dégagement gazeux. Le travail 2604.26545 modélise le vieillissement des anodes Si-Gr, où les changements de volume sont particulièrement importants. La combinaison de ces approches pourrait fournir un indicateur précoce de gonflement dangereux.",
+     "first_step": "Assembler un montage optique simple avec un capteur FBG et vérifier sa sensibilité sur une coque vide lors de variations de pression interne.",
+     "needs": "Capteurs à fibre optique (FBG), interrogateur, équipement de cyclage, cellules connues pour leur tendance au dégagement gazeux (par exemple, avec anode en silicium). Compétences en optoélectronique et en traitement du signal.",
+     "risks": "La fixation du capteur peut modifier le régime thermique de la cellule. La corrélation entre déformation et pression interne est non linéaire et dépend de la conception du boîtier.",
+     "scale": "semestre",
+     "methods": [
+      "Fixation de réseaux de Bragg (FBG) sur la surface de la cellule et étalonnage de la réponse à des déformations connues.",
+      "Cyclage de la cellule avec enregistrement simultané des signaux FBG, de la tension, du courant et de la température.",
+      "Analyse de la capacité différentielle (dQ/dV) pour déterminer les modes de dégradation, comme dans le travail 2503.14327.",
+      "Construction de modèles de corrélation entre déformation, dégagement gazeux et perte de capacité."
+     ]
+    },
+    {
+     "based_on": [
+      "2405.10857",
+      "2408.16604"
+     ],
+     "title": "Limites de courant dynamiques basées sur l'estimation en temps réel des modes de dégradation",
+     "what": "Implémenter un algorithme qui, à partir des données de tension, de courant et de température, estime le mode de dégradation dominant actuel (perte de lithium, perte de matière active de l'anode, etc.) et ajuste en conséquence les courants de charge/décharge admissibles.",
+     "why": "Les BMS modernes utilisent des limites statiques, soit trop conservatrices, soit n'empêchant pas une dégradation accélérée. Des limites dynamiques pourraient prolonger la durée de vie et améliorer la sécurité sans reconception.",
+     "origin": "Le travail 2405.10857 montre comment évaluer les modes de dégradation sans ouvrir la cellule, mais ne propose pas d'utilisation de cette information pour le contrôle. Le travail 2408.16604 discute de la gestion dynamique de la sécurité, mais ne fournit pas d'algorithmes concrets. La combinaison de ces idées pourrait donner une méthode pratique de contrôle adaptatif.",
+     "first_step": "Choisir un modèle électrochimique simple et implémenter une simulation de dégradation avec variation des paramètres, puis vérifier l'identifiabilité de ces paramètres sur des données synthétiques.",
+     "needs": "Accès à des ressources de calcul (Python/Matlab), données de cyclage de cellules (provenant de jeux de données ouverts, par exemple de Sandia ou d'Oxford). Compétences en modélisation et en estimation d'état.",
+     "risks": "L'estimation des modes de dégradation peut manquer de précision en temps réel en raison du bruit et de la non-identifiabilité. Des limites dynamiques peuvent entraîner une réduction indésirable des performances.",
+     "scale": "diplôme",
+     "methods": [
+      "Utiliser un modèle électrochimique (par exemple, le modèle à particule unique avec extensions) pour simuler la réponse de la cellule sous différents modes de dégradation, comme dans 2405.10857.",
+      "Implémenter l'estimation des paramètres du modèle (fractions volumiques des matériaux actifs, quantité de lithium) à l'aide d'un filtre de Kalman ou de méthodes d'optimisation.",
+      "Définir des règles heuristiques : en cas de détection de perte de matière active de l'anode, réduire le courant de charge de X %, etc.",
+      "Tester l'algorithme sur des données de cyclage de cellules réelles et comparer la durée de vie avec un groupe témoin utilisant des limites statiques."
+     ]
+    },
+    {
+     "based_on": [
+      "2508.08654",
+      "2604.10630"
+     ],
+     "title": "Comparaison de la dégradation de LATP dans les batteries Li-O2 sous différentes conditions d'humidité",
+     "what": "Mener une étude expérimentale systématique de la dégradation de l'électrolyte solide LATP dans les batteries lithium-oxygène sous humidité contrôlée et analyser les produits de décomposition.",
+     "why": "Les batteries Li-O2 promettent une densité d'énergie élevée, mais la dégradation de l'électrolyte limite la durée de vie. Comprendre le rôle de l'humidité aidera à choisir les conditions de fonctionnement et les revêtements de protection.",
+     "origin": "Le travail 2508.08654 a révélé le lessivage d'ions du LATP dans l'environnement fortement alcalin des batteries Li-O2, mais n'a pas étudié systématiquement l'effet de l'humidité. Le travail 2604.10630 examine la stabilité du lithium avec un sel de verre, ce qui pourrait être une alternative. Il manque des données sur la façon dont l'humidité accélère ou ralentit la dégradation du LATP.",
+     "first_step": "Assembler une cellule étanche avec atmosphère contrôlée et effectuer un cyclage de l'électrolyte LATP en contact avec du lithium à deux niveaux d'humidité.",
+     "needs": "Boîte à gants, potentiostat, équipement de caractérisation (XRD, XPS, MEB), produits chimiques pour la synthèse du LATP. Compétences en électrochimie et en science des matériaux.",
+     "risks": "Les batteries Li-O2 sont extrêmement sensibles aux impuretés, et il est difficile de maintenir une humidité stable. La dégradation peut être causée non seulement par l'humidité, mais aussi par d'autres facteurs.",
+     "scale": "années",
+     "methods": [
+      "Fabriquer des cellules avec électrolyte LATP et anode en lithium, comme dans le travail 2508.08654.",
+      "Cycler les cellules à différents niveaux d'humidité relative (par exemple, 0 %, 10 %, 30 %).",
+      "Après cyclage, effectuer une analyse post-mortem : XRD, XPS, MEB/EDX pour déterminer la composition des phases et la morphologie de surface.",
+      "Corréler le degré de dégradation (perte de capacité, changement d'impédance) avec la quantité d'ions lessivés (PO4, Al)."
+     ]
+    }
+   ]
+  }
+ }
 }

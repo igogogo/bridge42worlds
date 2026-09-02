@@ -200,5 +200,255 @@
    },
    "abstract": "The last few years has seen a dramatic increase in the number of exoplanets known and in the range of methods for characterising their atmospheric properties. At the same time, new discoveries of increasingly cooler brown dwarfs have pushed down their temperature range which now extends down to Y-dwarfs of <300 K. Modelling of these atmospheres has required the development of new techniques to deal with the molecular chemistry and clouds in these objects. The atmospheres of brown dwarfs are relatively well understood, but some problems remain, in particular the behavior of clouds at the L/T tr"
   }
- ]
+ ],
+ "lang": {
+  "en": {
+   "note": "Techniques for characterizing exoplanet atmospheres are advancing rapidly, from transit observations to simulations of escaping envelopes, but many questions about the influence of stellar activity and magnetic fields remain open.",
+   "topic": "exoplanets and their atmospheres",
+   "ideas": [
+    {
+     "based_on": [
+      "1507.03966",
+      "1701.00493"
+     ],
+     "title": "Searching for variations in exoplanet transits caused by stellar flares",
+     "what": "Collect transit light curves of hot Jupiters from the Kepler/K2 and TESS archives, identify cases where a stellar flare occurred during a transit, and assess how the flare alters the measured transit depth and the shape of the curve.",
+     "why": "If the effect is noticeable, it would provide a new way to probe the properties of upper planetary atmospheres and to correct for systematics in radius measurements.",
+     "origin": "Paper 1507.03966 discusses the difficulties of characterizing atmospheres due to noise and stellar activity, but a systematic study of the impact of flares occurring specifically during transits on measured parameters is lacking.",
+     "first_step": "Select 2–3 hot Jupiters with a large number of transits in the archive, find cases of flares during transit, and construct difference curves.",
+     "needs": "Python skills, access to the MAST archives, and time for data processing.",
+     "risks": "The effect may be too small against the noise, and flares during transits are rare.",
+     "scale": "semester",
+     "methods": [
+      "Download light curves from the MAST archive and select transits with simultaneous flares using flare activity catalogs.",
+      "Build transit models without a flare and with a flare event added, and compare the residuals.",
+      "Estimate the statistical significance of deviations for different planets and flare parameters."
+     ]
+    },
+    {
+     "based_on": [
+      "1201.4637",
+      "0902.3938"
+     ],
+     "title": "Modeling the escaping atmosphere of a hot Jupiter with the stellar magnetic field included",
+     "what": "Numerically simulate the escape of a hydrogen atmosphere from a hot Jupiter driven by stellar UV radiation, adding the star's magnetic field to the model and testing how it changes the shape and speed of the escaping flow.",
+     "why": "The magnetic field may explain observed asymmetries in absorption lines (for example, for HD 209458b) that purely hydrodynamic models do not reproduce.",
+     "origin": "Papers 1201.4637 and 0902.3938 describe observations of escaping atmospheres and basic hydrodynamic models, but magnetic effects are barely considered there, although they may be important for explaining the observed velocities.",
+     "first_step": "Install and run an existing model (for example, from the ATES paper) for HD 209458b, reproduce the known result, then start adding the magnetic field.",
+     "needs": "Experience in numerical modeling, access to computing resources (a cluster or a powerful PC), and knowledge of plasma physics.",
+     "risks": "Including the magnetic field greatly complicates the model and requires careful tuning of boundary conditions; the result may be unstable.",
+     "scale": "thesis",
+     "methods": [
+      "Take an open code for modeling planetary atmospheres (for example, PLUTO or ATES) and adapt it to the task.",
+      "Add an external dipole magnetic field and track the changes in the trajectories of ionized particles.",
+      "Compare synthetic Lyman-alpha line profiles with observations from papers 1201.4637 and 0902.3938."
+     ]
+    },
+    {
+     "based_on": [
+      "2605.02243"
+     ],
+     "title": "Long-term monitoring of the atmosphere of trans-Neptunian object 2002 XV93 using occultations",
+     "what": "Organize an observational campaign to record stellar occultations by object 2002 XV93 at several telescopes, in order to obtain new light curves and refine the parameters of its atmosphere.",
+     "why": "The atmosphere of this object was discovered recently, and additional observations will help understand its stability, seasonal changes, and connection with surface activity.",
+     "origin": "Paper 2605.02243 reports the discovery of an atmosphere around 2002 XV93, but it is based on a single occultation. To test reproducibility and study variability, repeated observations are needed, which are not yet available.",
+     "first_step": "Contact colleagues working on TNO occultations and gain access to the schedule of upcoming events; prepare a proposal for observing time.",
+     "needs": "Access to a telescope with a fast CCD camera (or participation in a collaboration), and skills in processing photometric data.",
+     "risks": "Occultations are rare and require precise predictions; weather can ruin observations.",
+     "scale": "years",
+     "methods": [
+      "Use occultation predictions from the Lucky Star project and coordinate observations on telescopes with fast cameras.",
+      "Process light curves using the method from paper 2605.02243: fit an atmospheric model that includes refraction.",
+      "Compare the obtained pressure and temperature profiles with previous measurements."
+     ]
+    }
+   ]
+  },
+  "es": {
+   "note": "Actualmente se están desarrollando métodos para caracterizar las atmósferas de exoplanetas, desde la observación de tránsitos hasta la modelización de atmósferas en escape, pero muchas preguntas sobre la influencia de la actividad estelar y los campos magnéticos siguen abiertas.",
+   "topic": "exoplanetas y sus atmósferas",
+   "ideas": [
+    {
+     "based_on": [
+      "1507.03966",
+      "1701.00493"
+     ],
+     "title": "Búsqueda de variaciones en los tránsitos de exoplanetas debidas a erupciones estelares",
+     "what": "Recopilar curvas de luz de tránsitos de Júpiter calientes de los archivos Kepler/K2 y TESS, identificar los casos en los que se produjo una erupción en la estrella durante el tránsito y evaluar cómo la erupción modifica la profundidad del tránsito medida y la forma de la curva.",
+     "why": "Si el efecto es apreciable, proporcionará una nueva forma de estimar las propiedades de las atmósferas superiores de los planetas y corregir la sistemática en las mediciones de radios.",
+     "origin": "En el trabajo 1507.03966 se discuten las dificultades de caracterizar atmósferas debido al ruido y la actividad estelar, pero falta un estudio sistemático del efecto de las erupciones precisamente durante el tránsito sobre los parámetros medidos.",
+     "first_step": "Seleccionar 2-3 Júpiter calientes con un gran número de tránsitos en el archivo, encontrar casos de erupciones durante el tránsito y construir curvas de diferencia.",
+     "needs": "Conocimientos de Python, acceso a los archivos MAST, tiempo para el procesamiento de datos.",
+     "risks": "El efecto puede ser demasiado pequeño frente al ruido, y las erupciones durante el tránsito son raras.",
+     "scale": "semestre",
+     "methods": [
+      "Descargar curvas de luz del archivo MAST, seleccionar tránsitos con erupciones simultáneas según los catálogos de actividad eruptiva.",
+      "Construir modelos de tránsito sin erupción y con la adición del evento eruptivo, comparar los residuos.",
+      "Evaluar la significancia estadística de las desviaciones para diferentes planetas y parámetros de erupción."
+     ]
+    },
+    {
+     "based_on": [
+      "1201.4637",
+      "0902.3938"
+     ],
+     "title": "Modelización de la atmósfera en escape de un Júpiter caliente teniendo en cuenta el campo magnético de la estrella",
+     "what": "Simular numéricamente la pérdida de la atmósfera de hidrógeno de un Júpiter caliente bajo la acción de la radiación ultravioleta de la estrella, añadiendo al modelo el campo magnético estelar y comprobando cómo modifica la forma y la velocidad del flujo en escape.",
+     "why": "El campo magnético puede explicar las asimetrías observadas en las líneas de absorción (por ejemplo, en HD 209458b), que no se reproducen con modelos puramente hidrodinámicos.",
+     "origin": "En los trabajos 1201.4637 y 0902.3938 se describen observaciones de atmósferas en escape y modelos hidrodinámicos básicos, pero los efectos magnéticos apenas se tienen en cuenta, aunque pueden ser importantes para explicar las velocidades observadas.",
+     "first_step": "Instalar y ejecutar un modelo existente (por ejemplo, el del artículo sobre ATES) para HD 209458b, reproducir el resultado conocido y luego comenzar a añadir el campo magnético.",
+     "needs": "Experiencia en modelización numérica, acceso a recursos computacionales (clúster o PC potente), conocimientos de física de plasmas.",
+     "risks": "Incluir el campo magnético complica mucho el modelo y requiere un ajuste cuidadoso de las condiciones de contorno; el resultado puede ser inestable.",
+     "scale": "tesis de grado",
+     "methods": [
+      "Tomar un código abierto para modelizar atmósferas planetarias (por ejemplo, PLUTO o ATES) y adaptarlo al problema.",
+      "Añadir un campo magnético externo de tipo dipolar y seguir el cambio en las trayectorias de las partículas ionizadas.",
+      "Comparar los perfiles sintéticos de la línea Lyman-alfa con las observaciones de los trabajos 1201.4637 y 0902.3938."
+     ]
+    },
+    {
+     "based_on": [
+      "2605.02243"
+     ],
+     "title": "Monitoreo a largo plazo de la atmósfera del objeto transneptuniano 2002 XV93 mediante ocultaciones",
+     "what": "Organizar una campaña observacional para registrar ocultaciones de estrellas por el objeto 2002 XV93 en varios telescopios, con el fin de obtener nuevas curvas de luz y refinar los parámetros de su atmósfera.",
+     "why": "La atmósfera de este objeto fue descubierta recientemente, y observaciones adicionales ayudarán a comprender su estabilidad, los cambios estacionales y su relación con la actividad de la superficie.",
+     "origin": "El trabajo 2605.02243 informa del descubrimiento de una atmósfera en 2002 XV93, pero se basa en una sola ocultación. Para comprobar la reproducibilidad y estudiar la variabilidad se necesitan observaciones repetidas, que aún no existen.",
+     "first_step": "Contactar con colegas que trabajen en ocultaciones de objetos transneptunianos y obtener acceso al calendario de eventos próximos; preparar una solicitud de tiempo de observación.",
+     "needs": "Acceso a un telescopio con cámara CCD rápida (o participación en una colaboración), habilidades en el procesamiento de datos fotométricos.",
+     "risks": "Las ocultaciones son raras y requieren una predicción precisa; el mal tiempo puede arruinar las observaciones.",
+     "scale": "años",
+     "methods": [
+      "Utilizar las predicciones de ocultaciones del proyecto Lucky Star y coordinar observaciones en telescopios con cámaras rápidas.",
+      "Procesar las curvas de luz con el método del trabajo 2605.02243: ajustar un modelo de atmósfera teniendo en cuenta la refracción.",
+      "Comparar los perfiles de presión y temperatura obtenidos con mediciones anteriores."
+     ]
+    }
+   ]
+  },
+  "ar": {
+   "note": "تتطور حاليًا طرق توصيف أغلفة الكواكب الخارجية، بدءًا من رصد العبور وصولًا إلى نمذجة الأغلفة الهاربة، لكن تبقى أسئلة كثيرة حول تأثير النشاط النجمي والمجالات المغناطيسية مفتوحة.",
+   "topic": "الكواكب الخارجية وأغلفتها الجوية",
+   "ideas": [
+    {
+     "based_on": [
+      "1507.03966",
+      "1701.00493"
+     ],
+     "title": "البحث عن تغيرات في عبور الكواكب الخارجية بسبب التوهجات النجمية",
+     "what": "جمع منحنيات ضوء العبور للمشتروات الحارة من أرشيفات Kepler/K2 وTESS، وتحديد الحالات التي حدث فيها توهج على النجم أثناء العبور، وتقييم كيفية تغيير التوهج لعمق العبور المقاس وشكل المنحنى.",
+     "why": "إذا كان التأثير ملحوظًا، فسيعطي طريقة جديدة لتقدير خصائص الأغلفة الجوية العليا للكواكب وتصحيح الأخطاء المنهجية في قياسات نصف القطر.",
+     "origin": "في العمل 1507.03966 تُناقش صعوبات توصيف الأغلفة الجوية بسبب الضوضاء والنشاط النجمي، لكن ينقص دراسة منهجية لتأثير التوهجات تحديدًا أثناء العبور على المعلمات المقاسة.",
+     "first_step": "اختيار 2–3 مشتروات حارة ذات عدد كبير من العبور في الأرشيف، وإيجاد حالات توهج أثناء العبور، وبناء منحنيات فرقية.",
+     "needs": "مهارات في بايثون، والوصول إلى أرشيفات MAST، ووقت لمعالجة البيانات.",
+     "risks": "قد يكون التأثير صغيرًا جدًا مقارنة بالضوضاء، والتوهجات أثناء العبور نادرة.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "تنزيل منحنيات الضوء من أرشيف MAST، واختيار العبورات المصاحبة لتوهجات وفقًا لكتالوجات النشاط التوهجي.",
+      "بناء نماذج عبور بدون توهج ومع إضافة حدث توهجي، ومقارنة البقايا.",
+      "تقدير الدلالة الإحصائية للانحرافات لمختلف الكواكب ومعلمات التوهج."
+     ]
+    },
+    {
+     "based_on": [
+      "1201.4637",
+      "0902.3938"
+     ],
+     "title": "نمذجة الغلاف الجوي الهارب لمشترٍ حار مع مراعاة المجال المغناطيسي للنجم",
+     "what": "محاكاة عددية لتدفق الغلاف الجوي الهيدروجيني لمشترٍ حار تحت تأثير الأشعة فوق البنفسجية للنجم، مع إضافة المجال المغناطيسي للنجم إلى النموذج وفحص كيفية تغييره لشكل وسرعة التدفق الهارب.",
+     "why": "قد يفسر المجال المغناطيسي التباينات المرصودة في خطوط الامتصاص (مثل HD 209458b)، والتي لا تعيد إنتاجها النماذج الهيدروديناميكية البحتة.",
+     "origin": "في العملين 1201.4637 و0902.3938 توصف ملاحظات الأغلفة الهاربة والنماذج الهيدروديناميكية الأساسية، لكن التأثيرات المغناطيسية لا تؤخذ في الاعتبار تقريبًا هناك، رغم أنها قد تكون مهمة لتفسير السرعات المرصودة.",
+     "first_step": "تثبيت وتشغيل نموذج موجود (مثل النموذج من مقال ATES) لـ HD 209458b، وإعادة إنتاج النتيجة المعروفة، ثم البدء في إضافة المجال المغناطيسي.",
+     "needs": "خبرة في النمذجة العددية، والوصول إلى موارد حاسوبية (عنقود أو حاسوب قوي)، ومعرفة فيزياء البلازما.",
+     "risks": "إضافة المجال المغناطيسي تعقد النموذج كثيرًا وتتطلب ضبطًا دقيقًا للشروط الحدودية؛ وقد تكون النتيجة غير مستقرة.",
+     "scale": "أطروحة تخرج",
+     "methods": [
+      "أخذ كود مفتوح المصدر لنمذجة الأغلفة الجوية الكوكبية (مثل PLUTO أو ATES) وتكييفه مع المهمة.",
+      "إضافة مجال مغناطيسي خارجي من النوع ثنائي القطب وتتبع تغير مسارات الجسيمات المتأينة.",
+      "مقارنة ملفات خط ليمان-ألفا الاصطناعية مع الملاحظات من العملين 1201.4637 و0902.3938."
+     ]
+    },
+    {
+     "based_on": [
+      "2605.02243"
+     ],
+     "title": "مراقبة طويلة الأمد للغلاف الجوي لجسم حزام كايبر 2002 XV93 باستخدام طريقة الاحتجابات",
+     "what": "تنظيم حملة رصدية لتسجيل احتجابات نجمية بواسطة الجسم 2002 XV93 على عدة تلسكوبات، للحصول على منحنيات ضوء جديدة وتحديد معلمات غلافه الجوي.",
+     "why": "اكتُشف الغلاف الجوي لهذا الجسم مؤخرًا، وستساعد الملاحظات الإضافية في فهم استقراره وتغيراته الموسمية وعلاقته بنشاط السطح.",
+     "origin": "يذكر العمل 2605.02243 اكتشاف غلاف جوي حول 2002 XV93، لكنه يعتمد على احتجاب واحد. للتحقق من قابلية التكرار ودراسة التغيرات، نحتاج إلى ملاحظات متكررة غير متوفرة حاليًا.",
+     "first_step": "التواصل مع الزملاء المهتمين باحتجابات الأجسام العابرة للنبتون (TNOs) والحصول على جدول الأحداث القادمة؛ وإعداد طلب للحصول على وقت مراقبة.",
+     "needs": "الوصول إلى تلسكوب مزود بكاميرا CCD سريعة (أو المشاركة في تعاون)، ومهارات في معالجة البيانات الضوئية.",
+     "risks": "الاحتجابات نادرة وتتطلب تنبؤًا دقيقًا؛ وقد يفسد الطقس الملاحظات.",
+     "scale": "سنوات",
+     "methods": [
+      "استخدام تنبؤات الاحتجاب من مشروع Lucky Star وتنسيق الملاحظات على تلسكوبات ذات كاميرات سريعة.",
+      "معالجة منحنيات الضوء بطريقة العمل 2605.02243: ملاءمة نموذج الغلاف الجوي مع مراعاة الانكسار.",
+      "مقارنة ملفات الضغط ودرجة الحرارة الناتجة مع القياسات السابقة."
+     ]
+    }
+   ]
+  },
+  "fr": {
+   "note": "Les méthodes de caractérisation des atmosphères d'exoplanètes se développent rapidement, des observations de transits à la modélisation des enveloppes en échappement, mais de nombreuses questions sur l'influence de l'activité stellaire et des champs magnétiques restent ouvertes.",
+   "topic": "exoplanètes et leurs atmosphères",
+   "ideas": [
+    {
+     "based_on": [
+      "1507.03966",
+      "1701.00493"
+     ],
+     "title": "Recherche de variations dans les transits d'exoplanètes dues aux éruptions stellaires",
+     "what": "Compiler les courbes de lumière des transits de Jupiter chauds à partir des archives Kepler/K2 et TESS, identifier les cas où une éruption stellaire s'est produite pendant le transit, et évaluer comment l'éruption modifie la profondeur de transit mesurée et la forme de la courbe.",
+     "why": "Si l'effet est perceptible, cela fournirait une nouvelle méthode pour estimer les propriétés des atmosphères supérieures des planètes et corriger les biais systématiques dans les mesures de rayons.",
+     "origin": "L'article 1507.03966 discute des difficultés de caractérisation des atmosphères dues aux bruits et à l'activité stellaire, mais une étude systématique de l'influence des éruptions pendant le transit sur les paramètres mesurés manque.",
+     "first_step": "Choisir 2 à 3 Jupiter chauds avec un grand nombre de transits dans l'archive, trouver des cas d'éruptions pendant le transit et construire des courbes différentielles.",
+     "needs": "Compétences en Python, accès aux archives MAST, temps pour le traitement des données.",
+     "risks": "L'effet pourrait être trop faible par rapport au bruit, et les éruptions pendant les transits sont rares.",
+     "scale": "semestre",
+     "methods": [
+      "Télécharger les courbes de lumière depuis l'archive MAST, sélectionner les transits avec éruptions simultanées à l'aide des catalogues d'activité éruptive.",
+      "Construire des modèles de transit sans éruption et avec ajout d'un événement éruptif, comparer les résidus.",
+      "Évaluer la significativité statistique des écarts pour différentes planètes et paramètres d'éruptions."
+     ]
+    },
+    {
+     "based_on": [
+      "1201.4637",
+      "0902.3938"
+     ],
+     "title": "Modélisation de l'atmosphère en échappement d'un Jupiter chaud en tenant compte du champ magnétique stellaire",
+     "what": "Simuler numériquement l'échappement de l'atmosphère d'hydrogène d'un Jupiter chaud sous l'effet du rayonnement UV de l'étoile, en ajoutant le champ magnétique stellaire au modèle et en vérifiant comment il modifie la forme et la vitesse du flux en échappement.",
+     "why": "Le champ magnétique pourrait expliquer les asymétries observées dans les raies d'absorption (par exemple pour HD 209458b), qui ne sont pas reproduites par les modèles purement hydrodynamiques.",
+     "origin": "Les articles 1201.4637 et 0902.3938 décrivent les observations d'atmosphères en échappement et les modèles hydrodynamiques de base, mais les effets magnétiques y sont à peine pris en compte, alors qu'ils pourraient être importants pour expliquer les vitesses observées.",
+     "first_step": "Installer et exécuter un modèle existant (par exemple celui de l'article sur ATES) pour HD 209458b, reproduire le résultat connu, puis commencer à ajouter le champ magnétique.",
+     "needs": "Expérience en modélisation numérique, accès à des ressources de calcul (cluster ou PC puissant), connaissances en physique des plasmas.",
+     "risks": "La prise en compte du champ magnétique complexifie fortement le modèle et nécessite un réglage soigneux des conditions aux limites; le résultat pourrait être instable.",
+     "scale": "mémoire de diplôme",
+     "methods": [
+      "Prendre un code ouvert pour la modélisation des atmosphères planétaires (par exemple PLUTO ou ATES) et l'adapter au problème.",
+      "Ajouter un champ magnétique externe de type dipolaire et suivre la modification des trajectoires des particules ionisées.",
+      "Comparer les profils synthétiques de la raie Lyman-alpha avec les observations des articles 1201.4637 et 0902.3938."
+     ]
+    },
+    {
+     "based_on": [
+      "2605.02243"
+     ],
+     "title": "Suivi à long terme de l'atmosphère de l'objet transneptunien 2002 XV93 par la méthode des occultations",
+     "what": "Organiser une campagne d'observation pour enregistrer des occultations stellaires par l'objet 2002 XV93 sur plusieurs télescopes, afin d'obtenir de nouvelles courbes de lumière et de préciser les paramètres de son atmosphère.",
+     "why": "L'atmosphère de cet objet a été découverte récemment, et des observations supplémentaires aideraient à comprendre sa stabilité, ses variations saisonnières et son lien avec l'activité de surface.",
+     "origin": "L'article 2605.02243 rapporte la découverte d'une atmosphère autour de 2002 XV93, mais repose sur une seule occultation. Pour vérifier la reproductibilité et étudier la variabilité, des observations répétées sont nécessaires, mais elles manquent actuellement.",
+     "first_step": "Contacter des collègues travaillant sur les occultations par les objets transneptuniens et obtenir l'accès au calendrier des prochains événements; préparer une demande de temps d'observation.",
+     "needs": "Accès à un télescope avec une caméra CCD rapide (ou participation à une collaboration), compétences en traitement de données photométriques.",
+     "risks": "Les occultations sont rares et nécessitent des prédictions précises; la météo peut compromettre les observations.",
+     "scale": "années",
+     "methods": [
+      "Utiliser les prédictions d'occultations du projet Lucky Star et coordonner les observations sur des télescopes équipés de caméras rapides.",
+      "Traiter les courbes de lumière avec la méthode de l'article 2605.02243: ajuster un modèle d'atmosphère avec réfraction.",
+      "Comparer les profils de pression et de température obtenus avec les mesures précédentes."
+     ]
+    }
+   ]
+  }
+ }
 }

@@ -332,6 +332,17 @@ def fts_body(text, lang):
     return _CJK.sub(lambda m: " " + m.group(0) + " ", text)
 
 
+# ТЕЛО ПОЛНОТЕКСТА НЕ ТРОГАЕМ, И ЭТО ОСОЗНАННО. Была попытка (01.09) дописать в него
+# авторов, учёных и понятия — чтобы поиск находил статьи по связкам. Работало бы, но
+# стоило бы переписи всех 101 235 строк полнотекста при том, что сами карточки не
+# менялись ни на байт. Владелец: «не понимаю, почему опять пересборка, мы ничего не
+# трогаем в карточках — думай, как обойти свои пересборки».
+#
+# Обошли: связки уже лежат в базе отдельными таблицами — concepts (имена понятий на
+# пяти языках), concept_arts (111 тысяч связей понятие→работа), card_authors (94 тысячи
+# связей автор→работа). Поиск спрашивает их запросом (worker.js, handleWordSearch), а
+# не хранит их копию в третьем месте. Ни одной новой записи.
+
 def _chunk_sql(part, lang, version):
     """Одна пачка — один вызов: вставка карточек, чистка их старых записей в полнотексте
     и вставка новых. Полнотекст держим в том же ритме: строка без своего текста в fts —
@@ -340,8 +351,7 @@ def _chunk_sql(part, lang, version):
     vals = ",".join("(" + ",".join(lit(r[c]) for c in COLS) + ")" for r in part)
     ids = ",".join(lit(r["id"]) for r in part)
     fts = ",".join(
-        "(" + lit(fts_body(" ".join((r["title"], r["oneliner"], r["description"])),
-                           lang)) + "," +
+        "(" + lit(fts_body(" ".join((r["title"], r["oneliner"], r["description"])), lang)) + "," +
         lit(r["id"]) + "," + lit(lang) + "," + lit(version) + ")" for r in part)
     return (f"INSERT OR REPLACE INTO cards ({cols}) VALUES {vals};"
             f"DELETE FROM cards_fts WHERE id IN ({ids}) AND lang = {lit(lang)}"
