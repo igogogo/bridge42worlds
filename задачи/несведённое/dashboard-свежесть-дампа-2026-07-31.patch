@@ -1,0 +1,446 @@
+diff --git a/corpus_stats.py b/corpus_stats.py
+index 1bc7ec4b032..f43ef4fa416 100644
+--- a/corpus_stats.py
++++ b/corpus_stats.py
+@@ -35,10 +35,30 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
+ 
+ DUMP = Path(r"C:/Users/nadez/Downloads/arxiv-metadata-oai-snapshot.json")
+ OUT = Path("data/corpus-stats.json")
++CHUNKS = Path("data/arxiv-bulk")
+ YEARS = ("25", "26")  # arXiv id YYMM.xxxxx → 2025-2026
+ ALLOWED = ("by/4.0", "by-sa/4.0", "zero/1.0", "nonexclusive-distrib/1.0")
+ 
+ 
++def freshness():
++    """Насколько свежи ИСХОДНИКИ, по которым посчитан блок покрытия (решение владельца
++    2026-07-31: на дашборде должно быть видно, устарел ли дамп).
++
++    Две разные вещи, и путать их нельзя. `dump_date` — когда скачан снапшот Kaggle: от него
++    числа «всего в arXiv» и «можем взять». `chunks_to` — до какого месяца у нас разложены
++    рабочие чанки в data/arxiv-bulk: из них берутся статьи в работу. Дамп может быть
++    свежим, а чанки отставать на месяц — тогда «можем взять» уже выросло, а брать пока
++    неоткуда, и по одному числу этого не понять."""
++    out = {}
++    if DUMP.exists():
++        from datetime import date
++        out["dump_date"] = date.fromtimestamp(DUMP.stat().st_mtime).isoformat()
++    months = sorted(p.stem for p in CHUNKS.glob("*.jsonl")) if CHUNKS.exists() else []
++    if months:
++        out["chunks_to"] = months[-1]
++    return out
++
++
+ def lic_key(lic):
+     if not lic:
+         return "нет/неизвестно"
+@@ -155,6 +175,7 @@ def build_full():
+         "licenses": sorted(licenses.items(), key=lambda x: -x[1]),
+         "allowed_total": sum(m["allowed"] for m in by_month.values()),
+     }
++    out.update(freshness())
+     OUT.write_text(json.dumps(out, ensure_ascii=False), encoding="utf-8")
+     print(f"✅ corpus-stats.json: дамп 2025-2026 = {n}, можем взять (откр. лиц.) = {out['allowed_total']}, "
+           f"обработали = {gtot['gen']} ({gtot['express']} express / {gtot['full']} full)")
+@@ -190,6 +211,9 @@ def refresh_ours():
+         if ym not in gm:
+             m["generated"] = m["express"] = m["full"] = 0
+     data["months"] = [by_ym[ym] for ym in sorted(by_ym)]
++    # Свежесть — из файлов, а не из чисел: обе даты читаются мгновенно, и тогда «дамп
++    # обновили, а покрытие не пересчитали» видно на дашборде сразу, а не через неделю.
++    data.update(freshness())
+ 
+     OUT.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+     print(f"✅ corpus-stats.json: наши числа обновлены — обработали {gtot['gen']} "
+diff --git a/js/analytics.js b/js/analytics.js
+index 3a6773a1fed..29f02918de9 100644
+--- a/js/analytics.js
++++ b/js/analytics.js
+@@ -3,18 +3,40 @@
+ // препросчёт analytics_build.py, БЕЗ DeepSeek). Юзер 2026-07-24: показать группировки, 3D, «вау».
+ (function () {
+   var root = document.getElementById('analytics');
++  if (!root) return;
++  var LANG = window.lang || 'en';
+   // Мини-панель вида: без неё сцена «замирала» — перетаскивание выключает автовращение,
+   // а включить обратно было нечем (замечание юзера 2026-07-28).
++  // LANG объявляется ВЫШЕ этой карты не для красоты: раньше строка стояла первой в файле и
++  // читала LANG до её объявления. var поднимается, значение — нет, поэтому [LANG] всегда
++  // было [undefined], и подписи кнопок на всех языках оставались английскими (2026-07-31).
+   var CTL = ({
+     ru: { spin: 'вращение', zin: 'приблизить', zout: 'отдалить', reset: 'вернуть вид' },
+     en: { spin: 'auto-rotate', zin: 'zoom in', zout: 'zoom out', reset: 'reset view' },
+     es: { spin: 'rotación', zin: 'acercar', zout: 'alejar', reset: 'restablecer vista' },
+-    ar: { spin: 'دوران تلقائي', zin: 'تقريب', zout: 'إبعاد', reset: 'إعادة العرض' }
++    ar: { spin: 'دوران تلقائي', zin: 'تقريب', zout: 'إبعاد', reset: 'إعادة العرض' },
++    fr: { spin: 'rotation auto', zin: 'zoom avant', zout: 'zoom arrière', reset: 'réinitialiser la vue' }
+   })[LANG] || { spin: 'auto-rotate', zin: 'zoom in', zout: 'zoom out', reset: 'reset view' };
+-
+-
+-  if (!root) return;
+-  var LANG = window.lang || 'en';
++  // Поиск по карте, подписи групп и приход со страницы статьи (волна 2, 2026-07-31).
++  var MAP = ({
++    ru: { find: 'найти на карте…', labels: 'подписи групп', found: 'найдено', nothing: 'ничего не нашлось',
++          here: 'эта статья — здесь', clear: 'показать всё',
++          notYet: 'этой статьи на карте пока нет — карта пересчитывается реже, чем выходят статьи' },
++    en: { find: 'find on the map…', labels: 'group labels', found: 'found', nothing: 'nothing found',
++          here: 'this article is here', clear: 'show all',
++          notYet: 'this article is not on the map yet — the map is rebuilt less often than articles appear' },
++    es: { find: 'buscar en el mapa…', labels: 'nombres de grupos', found: 'encontrados', nothing: 'sin resultados',
++          here: 'este artículo está aquí', clear: 'mostrar todo',
++          notYet: 'este artículo aún no está en el mapa: el mapa se recalcula con menos frecuencia' },
++    ar: { find: 'ابحث في الخريطة…', labels: 'أسماء المجموعات', found: 'وُجد', nothing: 'لا نتائج',
++          here: 'هذه المقالة هنا', clear: 'إظهار الكل',
++          notYet: 'هذه المقالة ليست على الخريطة بعد — تُعاد الخريطة أقل من وتيرة صدور المقالات' },
++    fr: { find: 'chercher sur la carte…', labels: 'noms des groupes', found: 'trouvés', nothing: 'aucun résultat',
++          here: 'cet article est ici', clear: 'tout afficher',
++          notYet: 'cet article n’est pas encore sur la carte — elle est recalculée moins souvent' }
++  })[LANG] || { find: 'find on the map…', labels: 'group labels', found: 'found', nothing: 'nothing found',
++                here: 'this article is here', clear: 'show all',
++                notYet: 'this article is not on the map yet' };
+   var L = ({
+     ru: { title: 'Карта проекта', articles: 'Статьи', authors: 'Авторы', loading: 'Считаем карту…',
+           hint: 'тяни — повернуть · колесо — зум · клик по точке', clusters: 'Тематические группы', n: 'точек',
+@@ -373,9 +395,14 @@
+     '<button class="an-btn" id="an-zin" title="' + CTL.zin + '"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/><path d="M8 10.5h5"/><path d="M10.5 8v5"/></svg></button>' +
+     '<button class="an-btn" id="an-zout" title="' + CTL.zout + '"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/><path d="M8 10.5h5"/></svg></button>' +
+     '<button class="an-btn" id="an-home" title="' + CTL.reset + '"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11 12 4l8 7"/><path d="M6.5 9.5V19h11V9.5"/></svg></button>' +
++    '<button class="an-btn" id="an-labels" title="' + MAP.labels + '" aria-pressed="true"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h11"/><path d="M4 12h7"/><path d="M4 17h9"/><circle cx="19" cy="7" r="1.6"/></svg></button>' +
+     '<button class="an-btn" id="an-fs" title="' + (FLY.fs || 'fullscreen') + '"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V5.5A1.5 1.5 0 0 1 5.5 4H9"/><path d="M15 4h3.5A1.5 1.5 0 0 1 20 5.5V9"/><path d="M20 15v3.5a1.5 1.5 0 0 1-1.5 1.5H15"/><path d="M9 20H5.5A1.5 1.5 0 0 1 4 18.5V15"/></svg></button></div>' +
+     '<div class="an-speed" id="an-speed"><span>' + (FLY.speed || 'speed') + '</span>' +
+     '<input type="range" id="an-speed-r" min="0" max="60" value="18"></div>' +
++    // Поиск по облаку: до сих пор карту можно было только крутить — найти на ней конкретную
++    // работу было нельзя, хотя это первое, чего от карты ждут.
++    '<div class="an-find" id="an-find"><input type="search" id="an-find-i" placeholder="' +
++    MAP.find + '" autocomplete="off" spellcheck="false"><span class="an-find-n" id="an-find-n"></span></div>' +
+     '<div class="an-tip" id="an-tip" hidden></div></div>' +
+     '<div class="an-legend" id="an-legend"></div>' +
+     '<div class="b42-loader" id="an-loading">' + T.loading + '</div>' +
+@@ -422,6 +449,16 @@
+     if (mode === 'fly') { state.travel = 0; state.fyaw = 0; state.fpitch = 0; state.speed = 0.0011; }
+     var speedBox = document.getElementById('an-speed');
+     if (speedBox) speedBox.style.display = mode === 'fly' ? 'flex' : 'none';
++    // Поиск живёт там, где есть точки с названиями. На со-встречаемости (сфера, связи,
++    // напряжение) искать нечего — поле там было бы обещанием, которое некому исполнить.
++    var findBox = document.getElementById('an-find');
++    var hasPoints = ['articles', 'authors', 'mobius', 'fly', 'heat', 'tree', 'spectrum'].indexOf(mode) >= 0;
++    if (findBox) findBox.style.display = hasPoints ? 'flex' : 'none';
++    // Запрос от прошлого вида к новому не относится: точки другие, счётчик соврал бы.
++    state.query = ''; state.focusId = null;
++    var fi = document.getElementById('an-find-i'), fn = document.getElementById('an-find-n');
++    if (fi) fi.value = '';
++    if (fn) fn.textContent = '';
+     var sr = document.getElementById('an-speed-r');
+     if (sr && mode === 'fly') sr.value = Math.round(state.speed / 0.006 * 60);
+     if (cache[dataMode]) { state.data = cache[dataMode]; prep(); return; }
+@@ -451,10 +488,14 @@
+       return;
+     }
+     // центрируем точки в [-0.5,0.5]
++    // lc — заранее приведённая к нижнему регистру подпись: поиск по ней идёт на каждом кадре,
++    // и делать toLowerCase() для 17 тысяч авторов по 60 раз в секунду незачем.
+     state.pts = state.data.points.map(function (p) {
++      var label = p.t || p.id;
+       return { x: p.x - 0.5, y: p.y - 0.5, z: (p.z != null ? p.z : 0.5) - 0.5,
+-               c: p.c, th: p.th, label: p.t || p.id, url: p.url, id: p.id };
++               c: p.c, th: p.th, label: label, lc: String(label).toLowerCase(), url: p.url, id: p.id };
+     });
++    state._cen = null;   // центры масс групп считаются заново: точки другие
+     // при большом множестве (все авторы, ~16k) — мельче точки и ниже альфа: важна форма облака, не точка.
+     var N = state.pts.length;
+     state.ptScale = N > 8000 ? 0.5 : N > 4000 ? 0.7 : 1;
+@@ -478,6 +519,8 @@
+     draw();
+     var rd = reading(state.mode);
+     if (rd) legendEl.innerHTML = legendEl.innerHTML + rd;
++    // Точки готовы — можно наводиться на ту, за которой пришли со страницы статьи.
++    if (typeof focusFromHash === 'function') focusFromHash();
+   }
+ 
+   function colorOf(p) {
+@@ -1027,18 +1070,113 @@
+     ctx.clearRect(0, 0, state.W, state.H);
+     if (state.mode === 'sphere') drawGlobeWire();
+     if (state.mode === 'mobius') drawMobiusWire();
++    var q = (state.query || '');
+     var proj = state.pts.map(function (p, i) { var pr = project(p); pr.i = i; pr.color = colorOf(p); return pr; });
+     proj.sort(function (a, b) { return a.depth - b.depth; }); // дальние сначала
+     for (var k = 0; k < proj.length; k++) {
+       var pr = proj[k];
++      var pt = state.pts[pr.i];
+       var fade = 0.35 + 0.65 * (1 - (pr.depth + 0.5));
+-      ctx.globalAlpha = Math.max(0.12, Math.min(1, fade * (state.ptAlpha || 1)));
++      var alpha = Math.max(0.12, Math.min(1, fade * (state.ptAlpha || 1)));
++      // Поиск: найденное горит, остальное гаснет — облако остаётся видно как фон, иначе
++      // непонятно, где именно в нём находка (юзер: карта должна отвечать «где это у нас»).
++      var isHit = q && pt.lc && pt.lc.indexOf(q) >= 0;
++      if (q) alpha = isHit ? 1 : alpha * 0.12;
++      ctx.globalAlpha = alpha;
+       ctx.fillStyle = pr.color;
++      var rr = pr.r * (state.ptScale || 1);
++      if (pr.i === state.hover) rr = pr.r * 2.4;
++      else if (isHit) rr = pr.r * 2.1;
+       ctx.beginPath();
+-      ctx.arc(pr.sx, pr.sy, pr.i === state.hover ? pr.r * 2.4 : pr.r * (state.ptScale || 1), 0, 6.283);
++      ctx.arc(pr.sx, pr.sy, rr, 0, 6.283);
+       ctx.fill();
++      // Точка, на которую пришли со страницы статьи (#id=…) — кольцо, чтобы её было видно
++      // в любом состоянии поиска и поворота.
++      if (state.focusId && pt.id === state.focusId) {
++        ctx.globalAlpha = 1;
++        ctx.strokeStyle = pr.color; ctx.lineWidth = 2;
++        ctx.beginPath(); ctx.arc(pr.sx, pr.sy, Math.max(9, rr * 3.2), 0, 6.283); ctx.stroke();
++      }
+     }
+     ctx.globalAlpha = 1;
++    if (state.labels !== false) drawClusterLabels();
++  }
++
++  /* Подписи групп прямо на сцене. Раньше названия кластеров жили только в легенде под
++     облаком: цвет на сцене есть, а что он значит — нужно было искать глазами внизу и
++     сопоставлять по оттенку. Подпись ставится в центр масс группы и рисуется поверх точек. */
++  function clusterCentroids() {
++    if (state._cen && state._cenFor === state.mode) return state._cen;
++    var acc = {};
++    for (var i = 0; i < state.pts.length; i++) {
++      var p = state.pts[i];
++      if (p.c == null) continue;
++      var a = acc[p.c] || (acc[p.c] = { x: 0, y: 0, z: 0, n: 0, c: p.c });
++      a.x += p.x; a.y += p.y; a.z += p.z; a.n++;
++    }
++    var out = Object.keys(acc).map(function (k) {
++      var a = acc[k];
++      return { c: a.c, n: a.n, x: a.x / a.n, y: a.y / a.n, z: a.z / a.n };
++    }).sort(function (a, b) { return b.n - a.n; }).slice(0, 9);   // девять крупнейших — дальше каша
++    state._cen = out; state._cenFor = state.mode;
++    return out;
++  }
++  function clusterTitle(c) {
++    var titles = state.data && state.data.titles;
++    var lt = titles && titles[c] ? (titles[c][LANG] || titles[c].en) : null;
++    if (lt && lt.title) return lt.title;
++    var cl = (state.data && state.data.clusters) || {};
++    return (cl[c] || []).map(niceLabel).slice(0, 2).join(' · ');
++  }
++  /* Цвет подложки читаем ОДИН раз. getComputedStyle форсирует пересчёт стилей, а сцена
++     перерисовывается по кадру автовращения — девять вызовов на кадр подвешивали вкладку
++     наглухо (поймал на себе, 2026-07-31). Тема меняется редко, поэтому кэш сбрасывает
++     обработчик смены темы ниже. */
++  var _bg = '';
++  function bgColor() {
++    if (!_bg) _bg = (getComputedStyle(document.body).getPropertyValue('--bg') || '').trim() || '#111';
++    return _bg;
++  }
++  window.addEventListener('b42-theme', function () { _bg = ''; });
++
++  function drawClusterLabels() {
++    if (state.mode !== 'articles' && state.mode !== 'authors' && state.mode !== 'mobius') return;
++    var cen = clusterCentroids();
++    var placed = [];
++    ctx.font = '600 12px ui-monospace, Menlo, monospace';
++    ctx.textAlign = 'center';
++    ctx.textBaseline = 'middle';
++    for (var i = 0; i < cen.length; i++) {
++      var pr = project(cen[i]);
++      // NaN/Infinity в координатах молча проходят любые сравнения (NaN < 40 === false),
++      // и дальше в canvas уходит мусор. Проверяем явно.
++      if (!isFinite(pr.sx) || !isFinite(pr.sy)) continue;
++      if (pr.sx < 40 || pr.sx > state.W - 40 || pr.sy < 14 || pr.sy > state.H - 14) continue;
++      var text = clusterTitle(cen[i].c);
++      if (!text) continue;
++      if (text.length > 26) text = text.slice(0, 25) + '…';
++      // Подписи не должны наезжать друг на друга: соседний центр масс в проекции может
++      // оказаться в двадцати пикселях, и два названия сливались в нечитаемую кашу.
++      var skip = false;
++      for (var j = 0; j < placed.length; j++) {
++        if (Math.abs(placed[j][0] - pr.sx) < 90 && Math.abs(placed[j][1] - pr.sy) < 18) { skip = true; break; }
++      }
++      if (skip) continue;
++      placed.push([pr.sx, pr.sy]);
++      var w = ctx.measureText(text).width;
++      ctx.globalAlpha = 0.72;
++      ctx.fillStyle = bgColor();
++      ctx.beginPath();
++      var rx = pr.sx - w / 2 - 6, ry = pr.sy - 9, rw = w + 12, rh = 18;
++      ctx.rect(rx, ry, rw, rh);
++      ctx.fill();
++      ctx.globalAlpha = 1;
++      ctx.fillStyle = PAL[cen[i].c % PAL.length];
++      ctx.fillText(text, pr.sx, pr.sy);
++    }
++    ctx.globalAlpha = 1;
++    ctx.textAlign = 'start';
++    ctx.textBaseline = 'alphabetic';
+   }
+ 
+   // Метки кластеров приходят как сырые id (теги snake_case у статей; коды разделов у авторов) —
+@@ -1109,6 +1247,67 @@
+   }
+   var spinBtn = document.getElementById('an-spin');
+   if (spinBtn) spinBtn.addEventListener('click', function () { setSpin(!state.spin); });
++
++  // ── Поиск по облаку ───────────────────────────────────────────────────────
++  var findInput = document.getElementById('an-find-i'), findN = document.getElementById('an-find-n');
++  function applyQuery(raw) {
++    var q = String(raw || '').trim().toLowerCase();
++    state.query = q;
++    if (!q) { if (findN) findN.textContent = ''; draw(); return; }
++    var n = 0;
++    for (var i = 0; i < (state.pts || []).length; i++) if (state.pts[i].lc.indexOf(q) >= 0) n++;
++    // Найденное лучше рассматривать на неподвижной сцене: вращение уводит подсвеченное из виду.
++    if (n) setSpin(false);
++    if (findN) findN.textContent = n ? (MAP.found + ' ' + n) : MAP.nothing;
++    draw();
++  }
++  if (findInput) {
++    findInput.addEventListener('input', function () { applyQuery(this.value); });
++    // Escape очищает поиск, не трогая остального вида — привычно и быстрее, чем стирать вручную.
++    findInput.addEventListener('keydown', function (e) {
++      if (e.key === 'Escape') { this.value = ''; applyQuery(''); }
++    });
++  }
++  var labelsBtn = document.getElementById('an-labels');
++  if (labelsBtn) {
++    labelsBtn.classList.add('active');
++    labelsBtn.addEventListener('click', function () {
++      state.labels = state.labels === false;
++      this.classList.toggle('active', state.labels !== false);
++      this.setAttribute('aria-pressed', state.labels !== false ? 'true' : 'false');
++      draw();
++    });
++  }
++
++  /* Приход со страницы статьи: /analytics#id=2607.12345v1. Наводим камеру так, чтобы точка
++     оказалась в центре, гасим автовращение и обводим её кольцом — иначе «твоя статья вон в
++     той стороне облака» остаётся обещанием. Поворот считается из тех же формул, что и
++     проекция: сначала yaw убирает x, потом pitch убирает y. */
++  function focusPoint(p) {
++    state.focusId = p.id;
++    state.yaw = Math.atan2(p.x, p.z);
++    var z1 = Math.sqrt(p.x * p.x + p.z * p.z);
++    state.pitch = Math.atan2(p.y, z1);
++    state.zoom = Math.max(state.zoom, 1.6);
++    setSpin(false);
++    draw();
++    if (findN) { findN.textContent = MAP.here + ': ' + p.label; }
++  }
++  function focusFromHash() {
++    var m = /(?:^|[#&])id=([^&]+)/.exec(location.hash || '');
++    if (!m || !state.pts) return;
++    var want = decodeURIComponent(m[1]);
++    for (var i = 0; i < state.pts.length; i++) {
++      // id в индексе бывает с версией (2607.12345v1) и без — принимаем оба написания.
++      var id = String(state.pts[i].id || '');
++      if (id === want || id.replace(/v\d+$/, '') === want.replace(/v\d+$/, '')) { focusPoint(state.pts[i]); return; }
++    }
++    // Промах — норма, а не поломка: карта считается офлайн и отстаёт от корпуса, поэтому
++    // свежая статья ведёт сюда раньше, чем попадает в данные. Молчать в этом случае нельзя —
++    // читатель решит, что ссылка сломана. (Насколько отстаёт — видно в блоке «Покрытие» дашборда.)
++    if (findN) findN.textContent = MAP.notYet;
++  }
++  window.addEventListener('hashchange', focusFromHash);
+   var zinBtn = document.getElementById('an-zin');
+   if (zinBtn) zinBtn.addEventListener('click', function () {
+     state.zoom = Math.min(4, state.zoom * 1.25); draw();
+diff --git a/js/dashboard.js b/js/dashboard.js
+index e33b96f1ca2..5a272b3b5b3 100644
+--- a/js/dashboard.js
++++ b/js/dashboard.js
+@@ -451,22 +451,34 @@
+             var CL = ({
+                 ru: { h: 'Покрытие архива · 2025–2026', dump: 'всего в arXiv', take: 'можем взять (откр. лиц.)',
+                       done: 'обработали', sub: '{e} express · {f} полных', lic: 'Лицензии в arXiv',
+-                      sec: 'Топ разделов: взято / всего', note: 'Из открытых лицензий освоена лишь малая часть — материала на годы вперёд.' },
++                      sec: 'Топ разделов: взято / всего', note: 'Из открытых лицензий освоена лишь малая часть — материала на годы вперёд.',
++                      range: 'Весь блок — только за 2025–2026', why: 'счётчики наверху считают корпус целиком',
++                      dumpFrom: 'дамп Kaggle от', chunksTo: 'чанки до' },
+                 en: { h: 'Archive coverage · 2025–2026', dump: 'total on arXiv', take: 'we can take (open lic.)',
+                       done: 'processed', sub: '{e} express · {f} full', lic: 'Licenses on arXiv',
+-                      sec: 'Top sections: taken / total', note: 'Only a fraction of the open-licensed pool is covered — years of material ahead.' },
++                      sec: 'Top sections: taken / total', note: 'Only a fraction of the open-licensed pool is covered — years of material ahead.',
++                      range: 'This block covers 2025–2026 only', why: 'the counters above cover the whole corpus',
++                      dumpFrom: 'Kaggle dump from', chunksTo: 'chunks up to' },
+                 es: { h: 'Cobertura del archivo · 2025–2026', dump: 'total en arXiv', take: 'podemos tomar (lic. abierta)',
+                       done: 'procesados', sub: '{e} express · {f} completos', lic: 'Licencias en arXiv',
+-                      sec: 'Secciones: tomadas / total', note: 'Solo cubrimos una fracción del material con licencia abierta.' },
++                      sec: 'Secciones: tomadas / total', note: 'Solo cubrimos una fracción del material con licencia abierta.',
++                      range: 'Este bloque cubre solo 2025–2026', why: 'los contadores de arriba cubren todo el corpus',
++                      dumpFrom: 'volcado de Kaggle del', chunksTo: 'fragmentos hasta' },
+                 ar: { h: 'تغطية الأرشيف · 2025–2026', dump: 'المجموع في arXiv', take: 'يمكننا أخذها (رخصة مفتوحة)',
+                       done: 'عالجنا', sub: '{e} سريع · {f} كامل', lic: 'الرخص في arXiv',
+-                      sec: 'أهم الأقسام: مأخوذ / الكل', note: 'لم نغطِّ سوى جزء يسير من المتاح برخصة مفتوحة.' },
++                      sec: 'أهم الأقسام: مأخوذ / الكل', note: 'لم نغطِّ سوى جزء يسير من المتاح برخصة مفتوحة.',
++                      range: 'هذه الكتلة تخص 2025–2026 فقط', why: 'العدادات في الأعلى تشمل المجموعة كاملة',
++                      dumpFrom: 'نسخة Kaggle بتاريخ', chunksTo: 'الأجزاء حتى' },
+                 fr: { h: 'Couverture de l’archive · 2025–2026', dump: 'total sur arXiv', take: 'accessible (licence ouverte)',
+                       done: 'traités', sub: '{e} express · {f} complets', lic: 'Licences sur arXiv',
+-                      sec: 'Principales sections : pris / total', note: 'Nous n’avons couvert qu’une fraction du matériel sous licence ouverte — il y en a pour des années.' }
++                      sec: 'Principales sections : pris / total', note: 'Nous n’avons couvert qu’une fraction du matériel sous licence ouverte — il y en a pour des années.',
++                      range: 'Ce bloc ne concerne que 2025–2026', why: 'les compteurs ci-dessus portent sur tout le corpus',
++                      dumpFrom: 'dump Kaggle du', chunksTo: 'fragments jusqu’à' }
+             })[window.lang] || null;
+             CL = CL || { h: 'Archive coverage · 2025–2026', dump: 'total on arXiv', take: 'we can take', done: 'processed',
+-                         sub: '{e} express · {f} full', lic: 'Licenses', sec: 'Top sections', note: '' };
++                         sub: '{e} express · {f} full', lic: 'Licenses', sec: 'Top sections', note: '',
++                         range: 'This block covers 2025–2026 only', why: 'the counters above cover the whole corpus',
++                         dumpFrom: 'Kaggle dump from', chunksTo: 'chunks up to' };
+             var g = cs.generated_total || { gen: 0, express: 0, full: 0 };
+             var licSegs = (cs.licenses || []).slice(0, 6).map(function (l, i) { return { label: l[0], value: l[1], color: PAL[i % PAL.length] }; });
+             // Полное ЛОКАЛИЗОВАННОЕ имя раздела из НАШЕГО справочника (юзер 2026-07-25: «используй наши
+@@ -485,8 +497,17 @@
+                     '<i class="cov-bar-take" style="width:' + pct + '%"></i></span>' +
+                     '<span class="cov-num">' + s[2].toLocaleString() + ' / ' + s[1].toLocaleString() + '</span></div>';
+             }).join('');
++            // Диапазон — крупно и до чисел, а не мелким хвостом в заголовке. Иначе «обработали
++            // 2095» под «2110 статей» читается как расхождение, хотя это просто разные периоды:
++            // сам об это споткнулся, пока разбирался (2026-07-31).
++            // Свежесть исходников — двумя датами: снапшот Kaggle и докуда разложены чанки.
++            var fresh = [];
++            if (cs.dump_date) fresh.push(esc(CL.dumpFrom) + ' ' + esc(cs.dump_date));
++            if (cs.chunks_to) fresh.push(esc(CL.chunksTo) + ' ' + esc(cs.chunks_to));
+             var cov = document.createElement('div');
+             cov.innerHTML = '<div class="dash-block"><h2>' + esc(CL.h) + '</h2>' +
++                '<p class="cov-range"><b>' + esc(CL.range) + '</b><span>· ' + esc(CL.why) + '</span></p>' +
++                (fresh.length ? '<p class="cov-fresh">' + fresh.join(' · ') + '</p>' : '') +
+                 '<div class="kpi-grid">' +
+                     '<div class="kpi"><div class="kpi-n">' + (cs.dump_total || 0).toLocaleString() + '</div><div class="kpi-l">' + esc(CL.dump) + '</div></div>' +
+                     '<div class="kpi"><div class="kpi-n">' + (cs.allowed_total || 0).toLocaleString() + '</div><div class="kpi-l">' + esc(CL.take) + '</div></div>' +
+diff --git a/js/mini-graph.js b/js/mini-graph.js
+index dd3becc67fa..4576aa0bfb5 100644
+--- a/js/mini-graph.js
++++ b/js/mini-graph.js
+@@ -274,3 +274,34 @@
+         c.addEventListener('change', function () { if (window.__miniRebuild) window.__miniRebuild(); });
+     });
+ })();
++
++/* «Где эта статья на карте» — ссылка со страницы статьи в /analytics с наводкой на её точку
++   (задача волны 2, 2026-07-31). Карта отвечала на вопрос «из чего состоит облако», но не на
++   «а моя статья где» — а именно его задаёт читатель, дочитавший до конца.
++
++   Живёт здесь, а не в шаблоне: mini-graph.js уже подключён на каждой странице статьи, и
++   правка видна без пересборки сайта. Ссылку ставим сразу под мини-графом связей — рядом
++   по смыслу: «вот твои связи, а вот твоё место в целом». */
++(function () {
++    var box = document.querySelector('.mini-graph--article');
++    if (!box) return;
++    var seg = location.pathname.split('/').filter(Boolean);
++    var ai = seg.indexOf('archive');
++    var id = (ai >= 0 && seg.length > ai + 2) ? seg[ai + 2] : '';
++    // id статьи arXiv: 2607.27193v1 или 2607.27193. Всё остальное — не статья, ссылку не ставим.
++    if (!/^\d{4}\.\d{4,6}(v\d+)?$/.test(id)) return;
++    var li = seg.indexOf('lang');
++    var lang = (li >= 0 && seg.length > li + 1) ? seg[li + 1] : (window.lang || 'en');
++    var TXT = ({
++        ru: 'Где эта статья на карте проекта',
++        en: 'Where this article sits on the project map',
++        es: 'Dónde está este artículo en el mapa del proyecto',
++        ar: 'أين تقع هذه المقالة على خريطة المشروع',
++        fr: 'Où se situe cet article sur la carte du projet'
++    })[lang] || 'Where this article sits on the project map';
++    var a = document.createElement('a');
++    a.className = 'mg-map-link';
++    a.href = '/lang/' + lang + '/analytics/#id=' + encodeURIComponent(id);
++    a.textContent = TXT + ' →';
++    (box.parentNode || document.body).insertBefore(a, box.nextSibling);
++})();

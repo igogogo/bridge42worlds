@@ -1,0 +1,74 @@
+diff --git a/tools/s2_authors.py b/tools/s2_authors.py
+index 77fb0829821..9da9a149bd3 100644
+--- a/tools/s2_authors.py
++++ b/tools/s2_authors.py
+@@ -131,12 +131,14 @@ def match_paper(rows_akeys, paper):
+     так второй Панов в той же работе выключает ярус целиком). Риск при этом нулевой:
+     один Панов у нас, один в S2 — это один человек, как бы коротко его ни записали."""
+     if not paper:
+-        return {}
+-    s2_pairs = [(key_from_display(a.get("name") or ""), a["authorId"])
++        return {}, {}
++    s2_pairs = [(key_from_display(a.get("name") or ""), a["authorId"], a.get("name") or "")
+                 for a in paper.get("authors") or [] if a.get("authorId")]
+     s2 = defaultdict(list)                       # ключ имени → [authorId]
+-    for k, aid in s2_pairs:
++    names = {}                                   # authorId → имя в этой работе
++    for k, aid, nm in s2_pairs:
+         s2[k].append(aid)
++        names[aid] = nm
+ 
+     res = {}
+     for akey in rows_akeys:
+@@ -150,7 +152,7 @@ def match_paper(rows_akeys, paper):
+     for k in rows_akeys:
+         our_sur[_sur(k)] += 1
+     s2_sur = defaultdict(list)
+-    for k, aid in s2_pairs:
++    for k, aid, _nm in s2_pairs:
+         s2_sur[_sur(k)].append((k, aid))
+     for akey in rows_akeys:
+         if akey in res:
+@@ -162,7 +164,7 @@ def match_paper(rows_akeys, paper):
+         i1, i2 = _ini(akey), _ini(k2)
+         if i1.startswith(i2) or i2.startswith(i1):
+             res[akey] = aid
+-    return res
++    return res, names
+ 
+ 
+ def main():
+@@ -185,9 +187,18 @@ def main():
+     print(f"S2 знает {known} из {len(ids)} работ")
+ 
+     updates = []                                  # (akey, id, s2id)
++    # Имя группы: САМОЕ ПОЛНОЕ из встреченных у этого человека по всем работам.
++    # S2 в разных работах пишет одного автора по-разному («A. Panov» и «Alexander
++    # D. Panov»); заголовком группы должен стать самый развёрнутый вариант — он
++    # и есть главный различитель для читателя.
++    best_name = {}                                # s2id → имя
+     for aid, akeys in by_id.items():
+-        for akey, s2id in match_paper(akeys, papers.get(aid)).items():
++        matched, names = match_paper(akeys, papers.get(aid))
++        for akey, s2id in matched.items():
+             updates.append((akey, aid, s2id))
++        for s2id, nm in names.items():
++            if len(nm) > len(best_name.get(s2id, "")):
++                best_name[s2id] = nm
+     print(f"однозначных сопоставлений: {len(updates)} из {len(rows)} связей")
+ 
+     if a.probe:
+@@ -206,8 +217,12 @@ def main():
+         chunk = updates[i:i + UPD_CHUNK]
+         whens = " ".join(
+             f"WHEN {lit(ak + '|' + aid)} THEN {lit(s2)}" for ak, aid, s2 in chunk)
++        wnames = " ".join(
++            f"WHEN {lit(ak + '|' + aid)} THEN {lit(best_name.get(s2, ''))}"
++            for ak, aid, s2 in chunk)
+         keys = ", ".join(lit(ak + "|" + aid) for ak, aid, _ in chunk)
+-        q(f"UPDATE card_authors SET s2_author_id = CASE akey||'|'||id {whens} END "
++        q(f"UPDATE card_authors SET s2_author_id = CASE akey||'|'||id {whens} END, "
++          f"s2_name = CASE akey||'|'||id {wnames} END "
+           f"WHERE akey||'|'||id IN ({keys})")
+         done += len(chunk)
+         if (i // UPD_CHUNK) % 10 == 0:
