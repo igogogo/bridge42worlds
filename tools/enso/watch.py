@@ -577,6 +577,15 @@ def run(fetch=True):
         IRI = IP.watch(observed_weekly=NW["latest"]["n34a"], observed_monthly=psl_last)
     except Exception as e:                                       # noqa: BLE001
         IRI = {"error": str(e)[:200]}
+    # Классы моделей по завершённым сезонам (ТЗ 5.4): считаются из сохранённых выпусков без сети.
+    if IRI and "error" not in IRI:
+        try:
+            import models as MD
+            cl = MD.classify(IRI, ONI, NW["latest"]["n34a"])
+            IRI["classes"] = cl["classes"]; IRI["class_tally"] = cl["tally"]
+            IRI["class_targets"] = cl["targets"]; IRI["class_issues"] = cl["issues"]
+        except Exception as e:                                   # noqa: BLE001
+            IRI["classes_error"] = str(e)[:200]
     RR, ridx = risks(W, N34, NW, ONI, IRI if IRI and "error" not in IRI else None)
     # Блок F: индекс FAO (живой ряд) и регионы (справочник × сила события). Любая беда здесь
     # не должна ронять остальное: блок пустой с причиной, страница живёт.

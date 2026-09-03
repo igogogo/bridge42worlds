@@ -2,7 +2,7 @@
 """IRI/CCSR ENSO plume — прогнозы двух десятков моделей, вытащенные из SVG.
 
 IRI не отдаёт таблицу моделей файлом: страница рисует её через
-https://ensoforecast2.iri.columbia.edu/figure4_plot/<год>/<месяц> как SVG из matplotlib.
+https://ensoforecast.iri.columbia.edu/figure4_plot/<год>/<месяц> как SVG из matplotlib.
 В таком SVG нет текста — подписи набраны глифами шрифта, но идентификатор глифа
 это код символа со сдвигом 29 (glyph 0x13 = '0'), а минус — отдельный глиф U+0C9C.
 Так читаются оси, легенда и заголовок; линии моделей — обычные <path>, их цвет и
@@ -22,7 +22,9 @@ from pathlib import Path
 import numpy as np
 
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
-URL = "https://ensoforecast2.iri.columbia.edu/figure4_plot/{y}/{m}"
+# Хост сменился 03.09.2026: ensoforecast2 перестал резолвиться, страница IRI ссылается на
+# ensoforecast.iri.columbia.edu. Тот же путь figure4_plot/<год>/<месяц выпуска − 1>.
+URL = "https://ensoforecast.iri.columbia.edu/figure4_plot/{y}/{m}"
 ROOT = Path(__file__).resolve().parents[2] / "data" / "enso"   # данные дашборда живут в data/enso/, код в tools/enso/
 DIR = ROOT / "iri"
 
@@ -274,7 +276,7 @@ def against_observed(cur, observed_weekly, observed_monthly=None):
             "reality_above_mean_sd": bool(observed_weekly > arr.mean() + arr.std(ddof=1)) if len(arr) > 1 else False}
 
 
-def latest_issues(today=None, keep=3):
+def latest_issues(today=None, keep=12):
     """Забрать текущий и два прошлых выпуска. Адрес выпуска = месяц публикации минус один
     (августовский плюм лежит под 2026/7). Сентябрьский появится ~19 сентября под 2026/8;
     пока его нет — сервер отдаёт не-SVG, и мы просто остаёмся на августовском."""
