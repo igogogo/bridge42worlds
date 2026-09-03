@@ -2567,7 +2567,10 @@ function collapseNavOverflow() {
      ['/lang/' + lang + '/formula/', 'formulas'],
      ['/lang/en/authors/', 'authors'],
      ['/lang/' + lang + '/concepts/graph.html', 'graph'],
-     ['/learn.html', 'learn'], ['/lang/' + lang + '/archive/', 'dashboard'], ['/lang/' + lang + '/analytics/', 'analytics'],
+     ['/learn.html', 'learn'],
+     // Дашборд Эль-Ниньо: пункт в шторке плюс живая кнопка в шапке (B42LivePill ниже).
+     ['/enso.html', 'enso'],
+     ['/lang/' + lang + '/archive/', 'dashboard'], ['/lang/' + lang + '/analytics/', 'analytics'],
      // Идеи проектов — раздел для того, у кого работы ещё нет: студента, инженера.
      // Страница одна на все языки, поэтому язык параметром, как у /research.html.
      ['/ideas.html?lang=' + lang, 'ideas'],
@@ -2645,6 +2648,22 @@ function collapseNavOverflow() {
         if (anchor) { host.insertBefore(wrap, anchor.nextSibling); placed = true; }
     }
     if (!placed) nav.insertBefore(wrap, nav.firstChild);
+    // Живая кнопка «El Niño 2026–2027» — вплотную к ☰, на всех страницах ленты и статей.
+    // Помощник живёт в js/sitenav.js (он же ставит кнопку на верхних страницах); нет
+    // помощника — нет кнопки, шапка от этого не ломается.
+    // Страницы ленты и статей sitenav.js НЕ подключают (проверено на lang/en/index.html:
+    // там только search.js, site-search.js, search-ui.js) — поэтому запасной сборщик
+    // с той же разметкой лежит здесь; одна кнопка на страницу в любом случае.
+    var live = window.B42LivePill ? window.B42LivePill() : (function () {
+        if (document.querySelector('.nav-live')) return null;
+        var a = document.createElement('a');
+        a.className = 'nav-live';
+        a.href = '/enso.html';
+        a.title = 'El Niño 2026–2027: live dashboard';
+        a.innerHTML = '<i aria-hidden="true"></i><span class="long">El Niño 2026–2027</span><span class="short">El Niño</span>';
+        return a;
+    })();
+    if (live) wrap.parentNode.insertBefore(live, wrap.nextSibling);
 
     btn.addEventListener('click', function(e) {
         e.stopPropagation();

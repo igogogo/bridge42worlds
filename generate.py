@@ -6126,7 +6126,14 @@ def write_article_pages(item, date_str):
     versions_ru, translations = item["versions"], item["translations"]
     captions = item.get("captions") or {}
     abstract = item.get("abstract") or {}
+    only_langs = item.get("only_langs")
     for lang in LANGUAGES:
+        # Язык вне only_langs и без единого настоящего перевода — папку не заводим вовсе.
+        # Заглушка «перевод готовится» тащила русские ключевые числа на арабскую страницу
+        # (поймано 03.09 на 2607.00386), а в облако ушла бы карточка языка, которого нет.
+        if (only_langs is not None and lang != DEFAULT_LANG and lang not in only_langs
+                and not any(pick_scipop(versions_ru, translations, v, lang)[1] for v in VERSIONS)):
+            continue
         lang_captions = captions_for_lang(captions, lang)
         lang_folder = Path(LANG_DIR) / lang / "archive" / date_str / a["id"]
         lang_folder.mkdir(parents=True, exist_ok=True)
@@ -6636,7 +6643,7 @@ def _refresh_all_aggregates():
     update_all_authors()
 
 
-def generate_ids(id_list, force=False, express=False, allow_restricted=False):
+def generate_ids(id_list, force=False, express=False, allow_restricted=False, only_langs=None):
     """Генерирует конкретные статьи по списку arXiv id. Дата берётся из метаданных
     статьи (published), поэтому статьи корректно ложатся в свои дни.
 
@@ -6654,9 +6661,14 @@ def generate_ids(id_list, force=False, express=False, allow_restricted=False):
             print(f"  ❌ {aid}: нет метаданных на arXiv")
             return None
         date_str = iso_day(a.get("published")) or TARGET_DATE
+        # only_langs — «полная на языке запроса»: переводим только названные языки, остальные
+        # ждут (владелец 03.09 по климатическим работам: «делай английские версии, пока
+        # забудем про перевод»). Русский — язык источника, он собирается всегда.
         item = build_article(a, date_str, inputs, force=force, express=express,
-                             allow_restricted=allow_restricted)
-        if item: item["date_str"] = date_str
+                             allow_restricted=allow_restricted, only_langs=only_langs)
+        if item:
+            item["date_str"] = date_str
+            item["only_langs"] = only_langs
         return item
 
     print(f"  🚀 Генерация {len(id_list)} статей по id в {ARTICLE_WORKERS} потока...")

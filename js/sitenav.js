@@ -62,6 +62,8 @@
         graph:      { ru: 'Граф знаний',       en: 'Knowledge graph', es: 'Red de conocimiento',  ar: 'شبكة المعرفة',  fr: 'Graphe des savoirs' , zh: '知识图谱'},
         learn:      { ru: 'Учебник',           en: 'Learn',           es: 'Curso',                ar: 'تعلّم',          fr: 'Cours' , zh: '课程'},
         analytics:  { ru: 'Карта проекта',     en: 'Project map',     es: 'Mapa del proyecto',    ar: 'خريطة المشروع', fr: 'Carte du projet' , zh: '项目地图'},
+        // Дашборд Эль-Ниньо — английский на всех языках (владелец 03.09): подпись пункта тоже.
+        enso:       { ru: 'El Niño 2026–2027', en: 'El Niño 2026–2027', es: 'El Niño 2026–2027', ar: 'El Niño 2026–2027', fr: 'El Niño 2026–2027', zh: 'El Niño 2026–2027' },
         research:   { ru: 'Что исследовать',   en: 'What to explore', es: 'Qué investigar',       ar: 'اتجاهات البحث', fr: 'Quoi explorer' , zh: '研究方向'},
         ideas:      { ru: 'Идеи проектов',     en: 'Project ideas',   es: 'Ideas de proyectos',   ar: 'أفكار مشاريع',  fr: 'Idées de projets' , zh: '项目构想'},
         community:  { ru: 'Авторские работы',  en: 'Author works',    es: 'Trabajos de autor',    ar: 'أعمال المؤلفين', fr: 'Travaux d’auteurs' , zh: '作者作品'}
@@ -81,6 +83,20 @@
        Понятия, Учёные» на учебных страницах: два меню с одним смыслом и разными словами
        (владелец 01.09: «проверь гамбургер, чтобы был везде одинаковый»). Отдаём словарь
        наружу — механика пусть остаётся разной, слова обязаны совпадать. */
+    /* Живая кнопка «El Niño 2026–2027» в шапке ВСЕХ страниц (владелец 03.09: «кнопка в верхней
+       части сайта, открывает полностраничный дашборд»). Вставляется скриптом, а не шаблоном:
+       шаблон потребовал бы пересборки 32 тысяч страниц ради одной ссылки. Стоит вплотную
+       к ☰; на узком экране остаётся только короткая подпись (см. .nav-live в css/style.css).
+       Одна на страницу: search.js и этот файл оба зовут помощника, второй вызов — пустой. */
+    window.B42LivePill = function () {
+        if (document.querySelector('.nav-live')) return null;
+        var a = document.createElement('a');
+        a.className = 'nav-live' + (location.pathname === '/enso.html' ? ' active' : '');
+        a.href = '/enso.html';
+        a.title = 'El Niño 2026–2027: live dashboard';
+        a.innerHTML = '<i aria-hidden="true"></i><span class="long">El Niño 2026–2027</span><span class="short">El Niño</span>';
+        return a;
+    };
     window.B42NavLabel = label;
 
     /* Своё меню строим только там, где его ещё нет. Проверка стоит ЗДЕСЬ, а не в начале
@@ -113,6 +129,7 @@
         // всякого «НОВОЕ!», не устаревает и повторяет знак учебника из шапки сайта, так что
         // читатель узнаёт его, а не разгадывает.
         ['learn', '/learn.html', 'mark'],
+        ['enso', '/enso.html'],
         ['main', '/lang/' + L + '/index.html'],
         // ПОНЯТИЯ — главный раздел знания, и в шторке его не было вовсе. Стоял
         // 'laws' — витрина, которая с 24 августа только переадресует в понятия:
@@ -221,12 +238,15 @@
     // поэтому мало вставить кнопку — надо ещё оттолкнуть вправо всё, что идёт следом, иначе
     // элементы распределятся поровну и ☰ повиснет посреди шапки.
     var logo = bar.querySelector('.logo');
+    var pill = window.B42LivePill ? window.B42LivePill() : null;
     if (logo && logo.parentNode === bar) {
         bar.insertBefore(wrap, logo.nextSibling);
-        var after = wrap.nextElementSibling;
+        if (pill) bar.insertBefore(pill, wrap.nextSibling);
+        var after = (pill || wrap).nextElementSibling;
         if (after) after.style.marginInlineStart = 'auto';
     } else {
         bar.appendChild(wrap);
+        if (pill) bar.appendChild(pill);
     }
 
     /* Языки — отдельной строкой под шапкой, как на всём сайте. На этих страницах переключатель

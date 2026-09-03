@@ -4987,3 +4987,20 @@ body.graph-page { max-width: none; }
 .b42mini-more:hover { color: var(--fg); border-style: solid; }
 .b42mini-more[aria-pressed="true"] { color: var(--fg); border-style: solid;
     background: var(--surface); }
+
+/* Живая кнопка «El Niño 2026–2027» в шапке: одна на сайт, ставится js/sitenav.js (B42LivePill).
+   Пилюля в моно, как остальные подписи шапки; точка «в эфире» пульсирует, но не у тех, кто
+   просил меньше движения. На узком экране остаётся короткая подпись: шапка на 375px и так
+   без запаса (см. правки 2026-07-23). */
+.nav-live { display: inline-flex; align-items: center; gap: 6px; margin-inline-start: 4px; flex-shrink: 0;
+    font-family: var(--mono); font-size: 11px; letter-spacing: .04em; white-space: nowrap; text-decoration: none;
+    color: var(--muted); border: 1px solid var(--line, var(--hair)); border-radius: 999px; padding: 4px 10px;
+    transition: color .18s, border-color .18s, background .18s; }
+.nav-live:hover, .nav-live.active { color: var(--ochre); border-color: color-mix(in srgb, var(--ochre) 55%, var(--hair));
+    background: color-mix(in srgb, var(--ochre) 8%, transparent); }
+.nav-live i { width: 7px; height: 7px; border-radius: 50%; background: #A8432B; box-shadow: 0 0 0 0 rgba(168, 67, 43, .45);
+    animation: nav-live-pulse 2.2s ease-out infinite; }
+.nav-live .short { display: none; }
+@keyframes nav-live-pulse { 0% { box-shadow: 0 0 0 0 rgba(168, 67, 43, .45); } 70% { box-shadow: 0 0 0 7px rgba(168, 67, 43, 0); } 100% { box-shadow: 0 0 0 0 rgba(168, 67, 43, 0); } }
+@media (prefers-reduced-motion: reduce) { .nav-live i { animation: none; } }
+@media (max-width: 520px) { .nav-live { padding: 4px 8px; margin-inline-start: 2px; } .nav-live .long { display: none; } .nav-live .short { display: inline; } }

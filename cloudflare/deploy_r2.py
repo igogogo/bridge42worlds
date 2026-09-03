@@ -87,7 +87,11 @@ SKIP_DIR_NAMES = {"api"}
 SKIP_PATH_PREFIXES = ("data/authors-contacts", "data/authors-outreach",
                       "data/arxiv-bulk/", "data/arxiv-bulk", "data/bulk-select",
                       "data/prompts/", "data/arxiv-index", "data/submissions/",
-                      "data/submissions")
+                      "data/submissions",
+                      # Эль-Ниньо: странице нужны latest.json, history.json и справочники;
+                      # сырьё источников, снимки и саммари модели — рабочий архив, не сайт.
+                      "data/enso/raw", "data/enso/last_good", "data/enso/snapshots",
+                      "data/enso/summaries", "data/enso/iri")
 
 mimetypes.add_type("application/json", ".json")
 mimetypes.add_type("text/html; charset=utf-8", ".html")

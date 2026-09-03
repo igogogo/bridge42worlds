@@ -896,8 +896,10 @@ def cmd_ids(args):
     if not ids:
         print("❌ не указано ни одного id (позиционно или через --ids-file)")
         sys.exit(1)
+    only_langs = [l.strip() for l in args.lang.split(",") if l.strip()] if getattr(args, "lang", None) else None
     n = generate.generate_ids(ids, force=args.force, express=getattr(args, 'express', False),
-                              allow_restricted=getattr(args, 'allow_restricted', False))
+                              allow_restricted=getattr(args, 'allow_restricted', False),
+                              only_langs=only_langs)
     if n and not getattr(args, "no_post", False):
         _post_generation(full=not getattr(args, "express", False))
 
@@ -1233,6 +1235,8 @@ def build_parser():
     # (tools/field.py) нужен как поле вокруг, а не как десяток полных разборов.
     s.add_argument("--express", action="store_true",
                    help="экспресс вместо полного разбора (в десять раз дешевле)")
+    s.add_argument("--lang", help="перевести только эти языки через запятую (напр. en); русский — "
+                                  "язык источника, собирается всегда; остальные ждут")
     # Точечное решение по конкретной работе. Массовый отбор (дневная очередь, bulk) этого
     # флага не знает и берёт только свободные лицензии — так и должно остаться.
     s.add_argument("--allow-restricted", action="store_true",

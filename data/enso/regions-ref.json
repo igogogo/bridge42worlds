@@ -1,0 +1,164 @@
+{
+  "_": "Reference tables for block F: typical impacts of a strong eastern-type El Niño by region and season, food-import vulnerability, and what to do. Every row carries a source; a row without one must not reach the page. Impacts are TYPICAL, not guaranteed: the page says 'usually', never 'will'. Strength: robust (appears in most strong events) / likely (majority) / weak (some). Vulnerability 1–5: share of imports in cereal consumption and exposure of food-insecure populations, from FAO/World Bank reports.",
+  "as_of": "2026-09-03",
+  "seasons": ["SON", "DJF", "MAM"],
+  "sources": {
+    "cpc": "NOAA CPC, El Niño and La Niña: typical global impacts (warm-episode maps, DJF and JJA), cpc.ncep.noaa.gov/products/analysis_monitoring/impacts",
+    "iri": "IRI, ENSO impacts by region and season, iri.columbia.edu/our-expertise/climate/enso",
+    "giews": "FAO GIEWS Special Alert 373, El Niño 2023–24: potential impacts on food security (Aug 2023)",
+    "wfp": "WFP, El Niño 2023–24 anticipatory action plans and regional outlooks",
+    "nfidc": "FAO / WTO list of Net Food-Importing Developing Countries; FAO cereal import dependency ratios (FAOSTAT food balances)",
+    "wb": "World Bank, Food Security Update (2024–2025), country import dependence",
+    "ep": "Eastern-Pacific (canonical) type: Rasmusson & Carpenter 1982; Ashok et al. 2007; coastal Peru impacts, SENAMHI/ENFEN bulletins"
+  },
+  "actions": {
+    "drought": "Pre-position drought-tolerant seed and fodder, plan water rationing, protect livestock, contract grain imports early.",
+    "flood": "Flood preparedness: drainage, protect stored grain, health measures for water-borne disease, early-warning for river basins.",
+    "heat": "Heat plans for cities and crops, irrigation scheduling, protection of vulnerable groups.",
+    "import": "Forward-contract cereal imports, build strategic reserves, budget for price rises, target social safety nets.",
+    "fisheries": "Prepare for a collapse of coastal upwelling fisheries: fishing bans, income support, alternative supply of fish protein.",
+    "none": "No strong signal: watch the neighbours' harvests and world prices rather than local weather."
+  },
+  "regions": [
+    {
+      "id": "east_africa", "name": "East Africa", "countries": "Kenya, Somalia, Ethiopia (south), Tanzania, Uganda",
+      "seasons": {
+        "SON": {"impact": "wet", "strength": "robust", "note": "Short rains (OND) usually well above normal; flooding and landslides, locust-friendly conditions."},
+        "DJF": {"impact": "wet", "strength": "likely", "note": "Wet tail of the short rains into January."},
+        "MAM": {"impact": "none", "strength": "weak", "note": "Long rains show no consistent signal."}
+      },
+      "vulnerability": {"level": 4, "note": "Large food-insecure population, cereal imports 20–40 % of consumption in Kenya and Somalia; floods hit pastoral and lowland cropping areas.", "importers": ["Somalia", "Kenya", "Djibouti"]},
+      "sources": ["cpc", "iri", "giews", "nfidc"]
+    },
+    {
+      "id": "southern_africa", "name": "Southern Africa", "countries": "Zimbabwe, Zambia, Malawi, Mozambique, South Africa, Botswana, Namibia",
+      "seasons": {
+        "SON": {"impact": "dry", "strength": "likely", "note": "Late and weak start of the rainy season."},
+        "DJF": {"impact": "dry", "strength": "robust", "note": "Main maize season drier and hotter than normal; 1982-83, 1991-92, 2015-16 and 2023-24 all brought regional maize failures."},
+        "MAM": {"impact": "dry", "strength": "likely", "note": "Early end of rains; reduced harvest."}
+      },
+      "vulnerability": {"level": 4, "note": "Maize-dependent diets, thin reserves; Zimbabwe, Malawi and Zambia declared drought emergencies in 2024.", "importers": ["Zimbabwe", "Malawi", "Mozambique", "Lesotho", "Eswatini"]},
+      "sources": ["cpc", "iri", "giews", "wfp"]
+    },
+    {
+      "id": "west_africa", "name": "West Africa (Gulf of Guinea)", "countries": "Nigeria, Ghana, Côte d'Ivoire, Cameroon",
+      "seasons": {
+        "SON": {"impact": "none", "strength": "weak", "note": "No consistent signal for the second rainy season."},
+        "DJF": {"impact": "none", "strength": "weak", "note": "Dry season; no signal."},
+        "MAM": {"impact": "none", "strength": "weak", "note": "Weak, mixed signal at the start of the first rainy season."}
+      },
+      "vulnerability": {"level": 3, "note": "Rice and wheat imports matter (Nigeria, Ghana); the exposure is through world prices rather than local weather.", "importers": ["Nigeria", "Ghana", "Côte d'Ivoire", "Liberia", "Sierra Leone"]},
+      "sources": ["cpc", "iri", "nfidc"]
+    },
+    {
+      "id": "sahel", "name": "Sahel", "countries": "Mali, Niger, Chad, Burkina Faso, Senegal, Sudan",
+      "seasons": {
+        "SON": {"impact": "dry", "strength": "weak", "note": "Rainy season (JAS) tends to be weaker in El Niño years; the 2026 season is mostly over, the effect is on the harvest already in the ground."},
+        "DJF": {"impact": "none", "strength": "weak", "note": "Dry season; no signal."},
+        "MAM": {"impact": "none", "strength": "weak", "note": "Dry season; no signal."}
+      },
+      "vulnerability": {"level": 5, "note": "Highest structural food insecurity, conflict, cereal imports 30–60 % of consumption in Mauritania, Senegal; any price shock is a crisis.", "importers": ["Mauritania", "Senegal", "Niger", "Chad", "Sudan"]},
+      "sources": ["cpc", "giews", "wfp", "nfidc"]
+    },
+    {
+      "id": "mena", "name": "Middle East and North Africa", "countries": "Egypt, Morocco, Algeria, Tunisia, Yemen, Iraq, Iran, Gulf states",
+      "seasons": {
+        "SON": {"impact": "none", "strength": "weak", "note": "No consistent signal."},
+        "DJF": {"impact": "wet", "strength": "likely", "note": "Eastern Mediterranean and Gulf winters tend to be wetter; north-west Africa mixed."},
+        "MAM": {"impact": "wet", "strength": "weak", "note": "Weak wet tendency in the Middle East."}
+      },
+      "vulnerability": {"level": 5, "note": "The world's largest wheat importers: Egypt, Algeria, Morocco, Yemen, Saudi Arabia import 50–100 % of cereals; exposure is almost entirely through world prices and exporters' harvests.", "importers": ["Egypt", "Yemen", "Algeria", "Morocco", "Tunisia", "Lebanon", "Jordan", "Iraq", "Saudi Arabia", "Kuwait", "UAE"]},
+      "sources": ["cpc", "iri", "nfidc", "wb"]
+    },
+    {
+      "id": "south_asia", "name": "South Asia", "countries": "India, Pakistan, Bangladesh, Sri Lanka, Nepal",
+      "seasons": {
+        "SON": {"impact": "dry", "strength": "likely", "note": "Monsoon withdrawal earlier; post-monsoon (NE monsoon) mixed, Sri Lanka and south India often wetter."},
+        "DJF": {"impact": "heat", "strength": "likely", "note": "Warmer, drier winter in north India and Pakistan; rabi wheat at risk from March heat."},
+        "MAM": {"impact": "heat", "strength": "likely", "note": "Pre-monsoon heat waves more likely."}
+      },
+      "vulnerability": {"level": 3, "note": "Largely self-sufficient in cereals but a huge population close to the margin; India restricts exports in bad years, which moves world rice prices.", "importers": ["Bangladesh", "Sri Lanka", "Nepal", "Afghanistan"]},
+      "sources": ["cpc", "iri", "giews"]
+    },
+    {
+      "id": "sea_indonesia", "name": "Southeast Asia and Indonesia", "countries": "Indonesia, Philippines, Malaysia, Thailand, Vietnam, Papua New Guinea",
+      "seasons": {
+        "SON": {"impact": "dry", "strength": "robust", "note": "Delayed monsoon onset, drought and peat fires in Indonesia and Malaysia; Philippines dry."},
+        "DJF": {"impact": "dry", "strength": "robust", "note": "Reduced rainfall persists; rice and palm-oil yields fall; Philippine drought."},
+        "MAM": {"impact": "dry", "strength": "likely", "note": "Dry tail; reservoirs low, hydropower reduced."}
+      },
+      "vulnerability": {"level": 3, "note": "Rice self-sufficiency thin in Indonesia and the Philippines (both import in El Niño years); Thailand and Vietnam are exporters whose smaller crops raise world prices.", "importers": ["Philippines", "Indonesia", "Malaysia", "Timor-Leste"]},
+      "sources": ["cpc", "iri", "giews", "wfp"]
+    },
+    {
+      "id": "east_asia", "name": "East Asia", "countries": "China, Japan, Korea",
+      "seasons": {
+        "SON": {"impact": "wet", "strength": "weak", "note": "Southern China somewhat wetter in autumn."},
+        "DJF": {"impact": "wet", "strength": "likely", "note": "Wetter winter in southern China; milder winter in Japan and Korea."},
+        "MAM": {"impact": "wet", "strength": "likely", "note": "Wetter spring in south China; the following summer often brings Yangtze flooding (1998, 2016)."}
+      },
+      "vulnerability": {"level": 2, "note": "China holds large reserves but is the largest soybean and a major maize importer; Japan and Korea import most cereals but are wealthy.", "importers": ["Japan", "South Korea", "China (soybean, maize)"]},
+      "sources": ["cpc", "iri"]
+    },
+    {
+      "id": "australia", "name": "Australia", "countries": "Australia (east and north), New Zealand",
+      "seasons": {
+        "SON": {"impact": "dry", "strength": "robust", "note": "Spring drier and hotter in the east and north; winter-crop finishing affected; bushfire season starts early."},
+        "DJF": {"impact": "heat", "strength": "robust", "note": "Hot, dry summer in the east; bushfires; northern wet season delayed."},
+        "MAM": {"impact": "dry", "strength": "weak", "note": "Signal fades in autumn."}
+      },
+      "vulnerability": {"level": 1, "note": "Major wheat exporter: a poor Australian crop tightens the world wheat balance and raises prices for importers elsewhere.", "importers": []},
+      "sources": ["cpc", "iri"]
+    },
+    {
+      "id": "pacific_islands", "name": "Pacific Islands", "countries": "Fiji, Papua New Guinea highlands, Vanuatu, Kiribati, Tuvalu, Micronesia",
+      "seasons": {
+        "SON": {"impact": "dry", "strength": "robust", "note": "Western Pacific (PNG, Fiji, Vanuatu) drier, central Pacific (Kiribati, Tuvalu) much wetter; sea level drops in the west, exposing reefs."},
+        "DJF": {"impact": "dry", "strength": "robust", "note": "Drought in the west persists; tropical cyclone activity shifts east towards French Polynesia and the Cooks."},
+        "MAM": {"impact": "dry", "strength": "likely", "note": "Recovery lags."}
+      },
+      "vulnerability": {"level": 4, "note": "Small islands import most staples and depend on shipping; the 1997-98 event brought famine conditions to the PNG highlands.", "importers": ["Kiribati", "Tuvalu", "Solomon Islands", "Vanuatu", "Fiji"]},
+      "sources": ["cpc", "iri", "wfp"]
+    },
+    {
+      "id": "north_america", "name": "North America", "countries": "United States, Canada, northern Mexico",
+      "seasons": {
+        "SON": {"impact": "none", "strength": "weak", "note": "Weak signals in autumn; hurricane season in the Atlantic usually suppressed."},
+        "DJF": {"impact": "wet", "strength": "likely", "note": "Wetter southern tier from California to Florida; warmer and drier in the northern US and Canada; Pacific North-west and Ohio valley drier."},
+        "MAM": {"impact": "wet", "strength": "likely", "note": "Wet spring in the southern Plains and Gulf; good for winter wheat."}
+      },
+      "vulnerability": {"level": 1, "note": "Largest maize and soybean exporter; El Niño winters are usually favourable for US crops, which eases world supply.", "importers": []},
+      "sources": ["cpc", "iri"]
+    },
+    {
+      "id": "central_america", "name": "Central America and the Caribbean", "countries": "Guatemala, Honduras, El Salvador, Nicaragua, Haiti, Cuba, Dominican Republic",
+      "seasons": {
+        "SON": {"impact": "dry", "strength": "robust", "note": "Dry corridor (Guatemala, Honduras, El Salvador, Nicaragua) drier; second bean and maize crop (postrera) at risk."},
+        "DJF": {"impact": "dry", "strength": "likely", "note": "Caribbean drier than normal."},
+        "MAM": {"impact": "dry", "strength": "likely", "note": "Late start of the first rainy season (primera)."}
+      },
+      "vulnerability": {"level": 4, "note": "Haiti and the dry-corridor countries combine high import dependence with chronic food insecurity and out-migration.", "importers": ["Haiti", "Honduras", "Guatemala", "El Salvador", "Nicaragua", "Cuba"]},
+      "sources": ["cpc", "iri", "giews", "wfp"]
+    },
+    {
+      "id": "andes_peru", "name": "Peru, Ecuador and the Andes", "countries": "Peru, Ecuador, Bolivia, Colombia",
+      "seasons": {
+        "SON": {"impact": "wet", "strength": "likely", "note": "Coastal Ecuador and northern Peru begin to see heavy rain; 'coastal El Niño' effect strongest in eastern-type events."},
+        "DJF": {"impact": "flood", "strength": "robust", "note": "Torrential rain and floods on the Peruvian and Ecuadorian coast (1982-83, 1997-98, 2017); anchoveta fishery collapses; Bolivian altiplano and southern Peruvian Andes drier."},
+        "MAM": {"impact": "flood", "strength": "robust", "note": "Coastal floods persist through the southern-hemisphere autumn; landslides; disease outbreaks."}
+      },
+      "vulnerability": {"level": 3, "note": "Peru imports wheat and maize; fishmeal exports and coastal agriculture (rice, mango, asparagus) are hit directly; Colombia and Bolivia rely on imports of wheat.", "importers": ["Peru", "Ecuador", "Bolivia", "Colombia"]},
+      "sources": ["cpc", "iri", "ep", "giews"]
+    },
+    {
+      "id": "southern_cone", "name": "Southern Cone", "countries": "southern Brazil, Uruguay, Paraguay, northern Argentina; north-east Brazil",
+      "seasons": {
+        "SON": {"impact": "wet", "strength": "robust", "note": "Southern Brazil, Uruguay and north-east Argentina wetter; floods in the Paraná basin; north-east Brazil drier."},
+        "DJF": {"impact": "wet", "strength": "robust", "note": "Wet summer favourable for Argentine soybean and maize once floods drain; north-east Brazil drought."},
+        "MAM": {"impact": "wet", "strength": "likely", "note": "Wet autumn; harvest delays."}
+      },
+      "vulnerability": {"level": 2, "note": "Net exporters of soybean, maize and wheat; the world-price effect is usually favourable (bigger crops), the local risk is floods and the north-east drought.", "importers": []},
+      "sources": ["cpc", "iri"]
+    }
+  ]
+}
