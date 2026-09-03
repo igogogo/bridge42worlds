@@ -29,9 +29,12 @@
   var SERIES_NAME = { sst_nino34: 'Niño 3.4', sst_world: 'world ocean', t2_world: 'land+ocean' };
 
   var S = {
-    D: null, G: {}, H: [], P: null,
+    D: null, G: {}, H: [], P: null, M: {}, L: {},
     view: 'now', sub: {}, risk: null, model: null, scenario: null,
-    delta: false,                 // режим «что изменилось с прошлого измерения»
+    // Режим сравнения: '' — показываем значения, 'update' — изменение с прошлого прогона,
+    // 'week' — с ближайшего снимка недельной давности (владелец 03.09: «было/стало от
+    // последней недели»). Кнопка в шапке перебирает три состояния.
+    delta: '',
     draw: null, plotEl: null, pinned: null
   };
 
@@ -47,6 +50,51 @@
   }
   function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
   function term(key, text) { return '<span data-term="' + esc(key) + '">' + esc(text) + '</span>'; }
+
+  /* Владелец 03.09: «ещё много понятий не подсвечено, например Niño 3, CPC MRKOV (9/9),
+     надо описание моделей». Термины и имена моделей помечаются прямо в готовом тексте:
+     длинные образцы идут первыми (Niño 3.4 раньше Niño 3), помечается первое вхождение —
+     подчёркнутая строка в каждом предложении читается хуже, чем непомеченная. */
+  var TERMS = [
+    ['Niño 3.4', 'nino34'], ['Niño 1+2', 'nino12'], ['Niño 3', 'nino3'], ['Niño 4', 'nino4'],
+    ['La Niña', 'lanina'], ['El Niño', 'elnino'], ['ONI', 'oni'], ['CUSUM', 'cusum'],
+    ['OISST', 'oisst'], ['ERA5', 'era5'], ['SOI', 'soi'], ['FAO', 'fao'],
+    ['teleconnections', 'teleconnection'], ['teleconnection', 'teleconnection'],
+    ['percentile', 'percentile'], ['plume', 'plume'], ['Modoki', 'type'],
+    ['analogues', 'analog'], ['analogue', 'analog'], ['p10', 'p10p50p90'],
+    ['net importers', 'importer'], ['risk index', 'riskindex']
+  ];
+  function mark(text) {
+    var out = esc(text == null ? '' : text), used = {};
+    TERMS.forEach(function (t) {
+      if (used[t[1]] || !S.G[t[1]]) return;
+      var i = out.indexOf(t[0]);
+      if (i < 0 || out.lastIndexOf('<', i) > out.lastIndexOf('>', i)) return;
+      used[t[1]] = 1;
+      out = out.slice(0, i) + '<span data-term="' + t[1] + '">' + t[0] + '</span>' + out.slice(i + t[0].length);
+    });
+    // Имена моделей: их описания живут в data/enso/models-ref.json, а измеренное поведение
+    // (класс, средняя ошибка, сколько выпусков ниже реальности) подставляется из наших данных.
+    Object.keys(S.M.models || {}).sort(function (a, b) { return b.length - a.length; }).forEach(function (nm) {
+      var i = out.indexOf(nm);
+      if (i < 0 || out.lastIndexOf('<', i) > out.lastIndexOf('>', i)) return;
+      out = out.slice(0, i) + modelSpan(nm, nm) + out.slice(i + nm.length);
+    });
+    return out;
+  }
+  function modelSpan(nm, text) {
+    var m = (S.M.models || {})[nm] || {}, iri = S.D.iri || {}, c = (iri.classes || {})[nm] || {};
+    var bd = (iri.breakdown || {}).chronic || [];
+    var row = bd.filter(function (x) { return x.model === nm; })[0] || {};
+    var kind = (S.M.kinds || {})[((iri.models || {})[nm] || {}).section] || '';
+    var perf = [];
+    if (c.cls) perf.push('Our class for it: ' + ({ ok: T.okC, lag: T.lagC, broke: T.brokeC }[c.cls] || T.naC) + (c.since ? ', since the ' + c.since + ' issue' : '') + '.');
+    if (fin(c.mean_err)) perf.push('Mean error against the official ONI on the seasons we can check: ' + fnum(c.mean_err) + ' °C.');
+    if (row.of) perf.push('Below reality in ' + row.issues_low + ' of ' + row.of + ' verified issues.');
+    var pay = { name: nm + (m.org ? ' · ' + m.org : ''), def: (m.note ? m.note + ' ' : '') + kind, why: perf.join(' '),
+      src: (S.M.src || 'IRI plume'), date: iri.issued };
+    return '<span data-src="' + esc(JSON.stringify(pay)) + '">' + esc(text) + '</span>';
+  }
   function src(payload, text) { return '<span data-src="' + esc(JSON.stringify(payload)) + '">' + esc(text) + '</span>'; }
   function addDays(iso, n) { var d = new Date(iso + 'T00:00:00Z'); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); }
   function lvlColor(l) { return 'var(--lv' + Math.max(1, Math.min(5, l)) + ')'; }
@@ -54,6 +102,28 @@
   function ord(n) { var s = ['th', 'st', 'nd', 'rd'], v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); }
   function sub(view, def) { return S.sub[view] || def; }
   function prevStamp() { return (S.P && S.P.stamp) || 'the previous update'; }
+
+  /* База сравнения по режиму. Прошлый прогон лежит в latest.prev целиком; «неделя назад» —
+     ближайший снимок не новее семи дней, из history.json (там с этого прогона есть уровни
+     рисков и ключевые числа). */
+  function baseline() {
+    if (S.delta === 'week') {
+      var rows = (S.H || []).filter(function (r) { return r.date; });
+      if (rows.length < 2) return null;
+      var last = rows[rows.length - 1].date;
+      var want = new Date(last + 'T00:00:00Z'); want.setUTCDate(want.getUTCDate() - 7);
+      var iso = want.toISOString().slice(0, 10);
+      var pick = null;
+      rows.forEach(function (r) { if (r.date <= iso) pick = r; });
+      if (!pick) pick = rows[0];
+      if (pick.stamp === (S.D || {}).stamp) return null;
+      return { stamp: pick.stamp || pick.date, risk_index: pick.risk_index, risks: pick.risks || {},
+        noaa: { n34a: pick.n34_weekly_prev }, daily: { sst_nino34: pick.n34_daily, sst_world: pick.sst_world, t2_world: pick.t2_world },
+        food_index: pick.food_index, class_tally: pick.class_tally, iri_peak: pick.combined_peak,
+        iri_below: pick.n_below, iri_n: pick.n_models, week: true };
+    }
+    return S.delta === 'update' ? S.P : null;
+  }
 
   /* «Сейчас» или «что изменилось»: одно число показывается двумя способами, переключатель
      в шапке. Возвращает {big, small} — крупное значение и подпись под ним. */
@@ -252,13 +322,77 @@
     }
     var comb = (IRI.summary || {}).combined;
     if (comb) s += segs(fc.map(function (i) { return [X(i), fin(comb[i]) ? Y(comb[i]) : NaN]; }), 'var(--text)', 3);
+    /* ЧЕРТА УЖЕ ДОСТИГНУТОГО УРОВНЯ через весь график. Без неё глаз сравнивал всю кривую
+       с одной точкой и спрашивал: почему линии выше 2.6, если модели «ломаются»? Линии идут
+       в будущее, событие ещё растёт — сравнивать можно только на первом прогнозном сезоне,
+       и вот он, отмечен вертикалью, а под чертой видно, кто уже отстал. */
+    s += '<line x1="' + Lp + '" y1="' + Y(obs).toFixed(1) + '" x2="' + (W - R - 8) + '" y2="' + Y(obs).toFixed(1) + '" style="stroke:var(--nino)" stroke-width="1" stroke-dasharray="4 3" opacity=".85"/>';
+    s += '<line x1="' + X(i0).toFixed(1) + '" y1="' + Tp + '" x2="' + X(i0).toFixed(1) + '" y2="' + (H - B) + '" style="stroke:var(--soft)" stroke-width=".8" stroke-dasharray="2 3" opacity=".8"/>';
+    // точки моделей на первом сезоне: красные — те, что уже ниже достигнутого
+    Object.keys(models).forEach(function (name) {
+      var m = models[name];
+      if ((m.section !== 'dyn' && m.section !== 'stat') || !m.values || !fin(m.values[i0])) return;
+      var lowv = m.values[i0] < obs;
+      s += '<circle cx="' + X(i0).toFixed(1) + '" cy="' + Y(m.values[i0]).toFixed(1) + '" r="2.6" style="fill:' + (lowv ? 'var(--lv5)' : 'var(--ok)') + '" opacity=".85"/>';
+    });
     s += '<circle cx="' + X(i0).toFixed(1) + '" cy="' + Y(obs).toFixed(1) + '" r="5.5" style="fill:var(--nino)"/>';
-    s += '<text x="' + (X(i0) + 9).toFixed(0) + '" y="' + (Y(obs) + 4).toFixed(0) + '" class="tt">reality ' + fnum(obs, 1) + '</text>';
+    s += '<text x="' + (X(i0) + 9).toFixed(0) + '" y="' + (Y(obs) - 7).toFixed(0) + '" class="tt">already reached ' + fnum(obs, 1) + '</text>';
+    s += '<text x="' + (X(i0) + 9).toFixed(0) + '" y="' + (Y(obs) + 12).toFixed(0) + '" style="fill:var(--soft)">' + (ao.below || []).length + ' of ' + ao.n + ' models below it at ' + esc(ao.season) + '</text>';
     var leg = [['combined forecast', 'var(--text)', 3], ['previous issue' + (hist.length > 1 ? ' (' + hist[1].issued + ')' : ''), 'var(--soft)', 1.6, '5 4'],
-      ['keeping up', 'var(--nina)', 1.4], ['lagging', 'var(--lv3)', 1.4], ['broken', 'var(--lv5)', 1.4], ['reality this week', 'var(--nino)', 'dot']];
+      ['keeping up', 'var(--nina)', 1.4], ['lagging', 'var(--lv3)', 1.4], ['broken', 'var(--lv5)', 1.4],
+      ['already reached ' + fnum(obs, 1), 'var(--nino)', 1, '4 3'], ['below it at ' + esc(ao.season), 'var(--lv5)', 'dot']];
     if (S.model) leg.unshift([S.model, 'var(--ochre)', 2.6]);
     s += legend(leg, W, H, R, Tp);
     return s + '</svg>';
+  }
+
+  /* ТРИ ВЫПУСКА ДРУГ ПОД ДРУГОМ. Один плюм отвечает на вопрос «что модели ждут», но не на
+     вопрос «видели ли они это раньше». Три выпуска в одной шкале, свежий сверху, с одной и
+     той же чертой уже достигнутого уровня, отвечают: месяц назад почти весь пучок лежал
+     ниже сегодняшней воды, то есть событие обгоняет прогноз, а не наоборот. */
+  function chartStack(stack, obs, W, H) {
+    if (!stack || stack.length < 2) return svgOpen(W, H) + '<text x="20" y="' + (H / 2) + '">Fewer than two stored issues.</text></svg>';
+    var rows = stack.slice(0, 3);
+    var all = [obs];
+    rows.forEach(function (r) {
+      Object.keys(r.models).forEach(function (k) { (r.models[k].values || []).forEach(function (v) { if (fin(v)) all.push(v); }); });
+    });
+    var vmin = Math.min.apply(null, all) - .2, vmax = Math.max.apply(null, all) + .2;
+    var gap = 8, hh = (H - gap * (rows.length - 1)) / rows.length;
+    var s2 = svgOpen(W, H);
+    rows.forEach(function (r, ri) {
+      var top = ri * (hh + gap);
+      var Lp = 44, R = 8, Tp = top + 14, B = 16, pw = W - Lp - R, ph = hh - 14 - B;
+      var fc = []; r.seasons.forEach(function (sn, i) { if (sn.indexOf('OBS') < 0) fc.push(i); });
+      if (!fc.length) return;
+      var X = function (i) { return Lp + (fc.indexOf(i) < 0 ? 0 : fc.indexOf(i)) / Math.max(1, fc.length - 1) * pw; };
+      var Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
+      s2 += '<rect x="' + Lp + '" y="' + Tp + '" width="' + pw + '" height="' + ph + '" rx="6" style="fill:var(--ink)" opacity="' + (ri === 0 ? '.035' : '.02') + '"/>';
+      [Math.ceil(vmin), Math.round((vmin + vmax) / 2), Math.floor(vmax)].forEach(function (g) {
+        if (g <= vmin || g >= vmax) return;
+        s2 += '<line x1="' + Lp + '" y1="' + Y(g).toFixed(1) + '" x2="' + (W - R) + '" y2="' + Y(g).toFixed(1) + '" style="stroke:var(--grid)" stroke-width=".5"/>';
+        s2 += '<text x="' + (Lp - 5) + '" y="' + (Y(g) + 3).toFixed(1) + '" text-anchor="end" font-size="9">' + fnum(g, 1) + '</text>';
+      });
+      // черта уже достигнутого уровня — общая для всех трёх
+      s2 += '<line x1="' + Lp + '" y1="' + Y(obs).toFixed(1) + '" x2="' + (W - R) + '" y2="' + Y(obs).toFixed(1) + '" style="stroke:var(--nino)" stroke-width="1" stroke-dasharray="4 3" opacity=".8"/>';
+      var below = 0, tot = 0;
+      Object.keys(r.models).forEach(function (nm) {
+        var m = r.models[nm];
+        if (m.section !== 'dyn' && m.section !== 'stat') return;
+        var pts = fc.map(function (i) { return [X(i), fin(m.values[i]) ? Y(m.values[i]) : NaN]; });
+        s2 += segs(pts, 'var(--soft)', 1, .45);
+        var first = fc.filter(function (i) { return fin(m.values[i]); })[0];
+        if (first != null) { tot++; if (m.values[first] < obs) below++; }
+      });
+      var comb = Object.keys(r.models).filter(function (k) { return k.indexOf('COMBINED') === 0; })[0];
+      if (comb) s2 += segs(fc.map(function (i) { return [X(i), fin(r.models[comb].values[i]) ? Y(r.models[comb].values[i]) : NaN]; }), 'var(--text)', 2.4);
+      var fi = fc[0];
+      s2 += '<circle cx="' + X(fi).toFixed(1) + '" cy="' + Y(obs).toFixed(1) + '" r="4" style="fill:var(--nino)"/>';
+      s2 += '<text class="tt" x="' + Lp + '" y="' + (top + 10) + '">' + esc(r.issued) + ' issue' + (ri === 0 ? ' — the newest' : '') + '</text>';
+      s2 += '<text x="' + (W - R) + '" y="' + (top + 10) + '" text-anchor="end" style="fill:var(--soft)">' + below + ' of ' + tot + ' below what the ocean has already reached (' + fnum(obs, 1) + ')</text>';
+      fc.forEach(function (i, k) { if (k % 2 === 0) s2 += '<text x="' + X(i).toFixed(0) + '" y="' + (Tp + ph + 12) + '" text-anchor="middle" font-size="9">' + esc(r.seasons[i]) + '</text>'; });
+    });
+    return s2 + '</svg>';
   }
 
   /* Как ломаются модели: доля ниже реальности по выпускам + средняя ошибка. */
@@ -382,11 +516,40 @@
     return s + '</svg>';
   }
 
+  /* Ряд аналога под тот же метрик: недельные индексы Niño берём из noaa.analog_series,
+     суточную аномалию Niño 3.4 — из nino34.analogs. Владелец 03.09: «на графиках рисков
+     нет сравнения с самым сильным событием, которое мы знаем, это 97-98». */
+  function analogFor(m) {
+    if (!m || !m.name) return null;
+    var D = S.D, out = [];
+    var wk = { 'Niño 3.4, NOAA weekly': 'n34a' };
+    var key = wk[m.name];
+    if (key && (D.noaa.analog_series || {})) {
+      Object.keys(D.noaa.analog_series || {}).forEach(function (y) {
+        var ser = D.noaa.analog_series[y] || [];
+        if (ser.length) out.push({ year: y, values: ser.slice(-m.values.length).map(function (r) { return r[key]; }) });
+      });
+      return out.length ? out : null;
+    }
+    if (m.name.indexOf('Niño 3.4, daily') === 0 && D.nino34 && D.nino34.analogs) {
+      var idx = D.nino34.day, n = m.values.length;
+      Object.keys(D.nino34.analogs).forEach(function (y) {
+        var a = D.nino34.analogs[y].series || [];
+        var seg = a.slice(Math.max(0, idx - n + 1), idx + 1);
+        if (seg.length) out.push({ year: y, values: seg });
+      });
+      return out.length ? out : null;
+    }
+    return null;
+  }
+
   function chartMetric(m, W, H, title) {
     var vals = m.values, dates = m.dates || [], n = vals.length;
     var Lp = 46, R = 54, Tp = topPad(W), B = 26, pw = W - Lp - R, ph = H - Tp - B;
     var vv = vals.filter(fin);
     if (vv.length < 2) return svgOpen(W, H) + '<text x="20" y="' + (H / 2) + '">no series for this item</text></svg>';
+    var ana = analogFor(m) || [];
+    ana.forEach(function (a) { vv = vv.concat(a.values.filter(fin)); });
     var vmin = Math.min.apply(null, vv), vmax = Math.max.apply(null, vv);
     if (vmax - vmin < 1e-6) vmax = vmin + 1;
     var pad = (vmax - vmin) * .12; vmin -= pad; vmax += pad;
@@ -396,6 +559,13 @@
     var step = (vmax - vmin) > 4 ? 1 : ((vmax - vmin) > 1.2 ? .5 : .25);
     s += gridY(vmin, vmax, step, Y, Lp, R, W);
     if (dates.length === n) dates.forEach(function (d, i) { if (i === 0 || i === n - 1 || (n > 6 && i === Math.floor(n / 2))) s += '<text x="' + X(i).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="' + (i === 0 ? 'start' : (i === n - 1 ? 'end' : 'middle')) + '">' + esc(String(d)) + '</text>'; });
+    // аналоги того же календарного окна — тонкими цветными линиями под нашим рядом
+    ana.forEach(function (a) {
+      var off = n - a.values.length;
+      s += segs(a.values.map(function (v, i) { return [X(off + i), fin(v) ? Y(v) : NaN]; }), 'var(--a' + a.year + ')', 1.3, .85);
+      var li2 = a.values.length - 1; while (li2 > 0 && !fin(a.values[li2])) li2--;
+      if (fin(a.values[li2])) s += '<text x="' + (X(off + li2) + 4).toFixed(0) + '" y="' + (Y(a.values[li2]) + 4).toFixed(0) + '" style="fill:var(--a' + a.year + ')" font-size="10">' + a.year + '</text>';
+    });
     s += segs(vals.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--text)', 2.2);
     if (m.flags && m.flags.length === n) vals.forEach(function (v, i) { if (m.flags[i] && fin(v)) s += '<circle cx="' + X(i).toFixed(1) + '" cy="' + Y(v).toFixed(1) + '" r="2.2" style="fill:var(--nino)"/>'; });
     var li = n - 1; while (li > 0 && !fin(vals[li])) li--;
@@ -426,6 +596,24 @@
     if (!fin(v) || !fin(ref)) return '';
     var d = v - ref, span = 1.5, x0 = w / 2, x = x0 + Math.max(-span, Math.min(span, d)) / span * (w / 2 - 2);
     return '<span class="mini"><svg viewBox="0 0 ' + w + ' ' + h + '"><line x1="' + x0 + '" y1="1" x2="' + x0 + '" y2="' + (h - 1) + '" style="stroke:var(--grid)"/><rect x="' + Math.min(x0, x).toFixed(1) + '" y="3" width="' + Math.abs(x - x0).toFixed(1) + '" height="' + (h - 6) + '" style="fill:' + (d < 0 ? 'var(--nina)' : 'var(--nino)') + '" opacity=".85"/></svg></span>';
+  }
+
+  /* Контекстные ссылки на разобранные работы (tools/enso/links.py): вектор нашёл, модель
+     проверила, здесь только показываем. Ссылка означает «вот что об этом говорит наука»,
+     а не «отсюда взято это число» — так и подписано. */
+  function linksFor(anchor) { return (S.L.anchors || {})[anchor] || []; }
+  function linksHtml(anchor, full) {
+    var ls = linksFor(anchor);
+    if (!ls.length) return '';
+    if (!full) {
+      var pay = { name: 'What the research says about this', def: ls.map(function (l) { return '· ' + l.title + (l.why ? ' — ' + l.why : ''); }).join(' '),
+        why: 'Open the risk or the region to follow the links.', src: 'our archive, matched by meaning and checked by the model', date: S.L.built };
+      return '<span class="lk" data-src="' + esc(JSON.stringify(pay)) + '">' + ls.length + ' work' + (ls.length > 1 ? 's' : '') + '</span>';
+    }
+    return '<div class="lk-h">What the research says about this</div>' + ls.map(function (l) {
+      return '<a class="lk-i" href="/lang/en/archive/' + esc(l.date) + '/' + esc(l.folder) + '/advanced.html" target="_blank" rel="noopener">' +
+        '<b>' + esc(l.title) + '</b><span>' + esc(l.why || '') + '</span><i>' + esc(l.kind || '') + ' · arXiv ' + esc(l.id) + '</i></a>';
+    }).join('') + '<div class="lk-n">Matched by meaning across the works we parsed, then checked by the model: a link means “this is what the research says about this”, not “this is the source of that number”.</div>';
   }
 
   function dynWords(m) {
@@ -462,7 +650,12 @@
       host.appendChild(b);
     });
     var t = $('deltaBtn');
-    if (t) { t.className = 'tab delta' + (S.delta ? ' on' : ''); t.textContent = S.delta ? 'change since last update' : 'now'; }
+    if (t) {
+      t.className = 'tab delta' + (S.delta ? ' on' : '');
+      t.textContent = S.delta === 'update' ? 'change since last update'
+        : (S.delta === 'week' ? 'change since a week ago' : 'now');
+      t.title = 'Switch between the values, the change since the previous update, and the change since a week ago';
+    }
   }
 
   /* Верхняя строка: когда собрано, докуда дотянулись ряды и что с каждым источником. */
@@ -490,11 +683,11 @@
   }
 
   // ---------------------------------------------------------------- rails
-  function alertCard(a) {
+  function alertCard(a, i) {
     var c = el('div', 'card alert-card ' + (a.level === 'SHOUT' ? 'lv-shout' : 'lv-watch') + ' kind-' + (a.kind || 'climate'));
     var isNew = S.P && S.P.alerts && S.P.alerts.indexOf(a.title) < 0;
     c.innerHTML = '<div class="ch"><b>' + esc(a.level) + '</b><span class="kk">' + esc(a.kind || 'climate') + '</span>' + (isNew ? '<span class="new">new</span>' : '') + '</div>' +
-      '<div class="ct">' + esc(a.title) + '</div><div class="cd">' + esc(a.detail) + '</div>';
+      '<div class="ct">' + mark(a.title) + '</div><div class="cd">' + mark(a.detail) + '</div>' + linksHtml('alert:' + i);
     return c;
   }
 
@@ -509,8 +702,10 @@
 
     // 1. KPI-карточка состояния
     var k1 = el('div', 'card kpi-card');
-    k1.innerHTML = '<div class="gauge-row"><div class="gauge" data-term="riskindex" style="--v:' + idx + ';--c:' + gc + '"><div class="gv">' + idx + '</div><div class="gl">risk index</div></div>' +
-      '<div class="g-side"><b>' + term('nino34', 'Niño 3.4') + ' ' + fnum(NW.latest.n34a, 1) + ' °C</b>' +
+    // Подпись шкалы стоит СНАРУЖИ круга: внутри она не помещалась и обрезалась
+    // (владелец 03.09: «в кружок текст не поместился, вынеси его»).
+    k1.innerHTML = '<div class="gauge-row"><div class="gauge" data-term="riskindex" style="--v:' + idx + ';--c:' + gc + '"><div class="gv">' + idx + '</div></div>' +
+      '<div class="g-side"><span class="glab" data-term="riskindex">risk index ' + idx + ' out of 100</span><b>' + term('nino34', 'Niño 3.4') + ' ' + fnum(NW.latest.n34a, 1) + ' °C</b>' +
       'rank ' + N.all_years_rank + ' of all years on the same 30 days. ' + term('oni', 'ONI') + ' ' + fnum(ONI.current[ls]) + ' (' + esc(ls) + ').' +
       '<span class="chgline">' + ri.small + '</span></div></div>';
     box.appendChild(k1);
@@ -518,12 +713,12 @@
     // 2. тревоги карточками, по видам
     var alerts = D.alerts || [];
     ['climate', 'food', 'models'].forEach(function (kind) {
-      alerts.filter(function (a) { return (a.kind || 'climate') === kind; }).forEach(function (a) { box.appendChild(alertCard(a)); });
+      alerts.forEach(function (a, i) { if ((a.kind || 'climate') === kind) box.appendChild(alertCard(a, i)); });
     });
     if (!alerts.length) box.appendChild(el('div', 'card quiet', '<div class="ct">The watchdog sees no turning point</div><div class="cd">No rule fired: no record broken, no reversal, no run of records ended.</div>'));
 
     // 3. карточка «как ломаются модели»
-    var bd = (D.iri || {}).breakdown;
+    var bd = (D.iri || {}).breakdown, rv = (D.iri || {}).revisions || {};
     if (bd && (bd.by_issue || []).length) {
       var rows = bd.by_issue, first = rows[0], last = rows[rows.length - 1];
       var chronic = (bd.chronic || []).filter(function (c) { return c.of >= 3 && c.issues_low >= Math.max(3, c.of * 0.6); });
@@ -532,8 +727,9 @@
         '<div class="ct">' + last.share + ' % of models are below reality, against ' + first.share + ' % a year ago</div>' +
         '<div class="cd">Verified on ' + rows.length + ' issues: for each we take its nearest season that already has an official ONI. The average model error went ' +
         fnum(first.mean_err) + ' → ' + fnum(last.mean_err) + ' °C.</div>' +
-        (chronic.length ? '<div class="cd chronic">Below reality in most issues: ' + chronic.slice(0, 5).map(function (c) { return '<b>' + esc(c.model) + '</b> ' + c.issues_low + '/' + c.of; }).join(', ') + '</div>' : '') +
-        '<div class="spark">' + sparkBars(rows) + '</div>';
+        (chronic.length ? '<div class="cd chronic">Below reality in most issues: ' + chronic.slice(0, 5).map(function (c) { return modelSpan(c.model, c.model) + ' ' + c.issues_low + '/' + c.of; }).join(', ') + '</div>' : '') +
+        (rv && rv.combined_peak_prev != null ? '<div class="cd">Since the ' + esc(rv.prev_issued || '') + ' issue the combined peak went ' + fnum(rv.combined_peak_prev) + ' → ' + fnum(rv.combined_peak_cur) + ' °C; ' + rv.n_up + ' of ' + rv.n + ' models raised it. The next issue is due around the 19th.</div>' : '') +
+        '<div class="spark">' + sparkBars(rows) + '</div>' + linksHtml('block:models');
       c3.onclick = function () { S.view = 'models'; S.sub.models = 'breakdown'; render(); };
       box.appendChild(c3);
     }
@@ -542,7 +738,7 @@
     var tp = sm.turning_point || {}, cav = Array.isArray(sm.caveats) ? sm.caveats : (sm.caveats ? [sm.caveats] : []);
     var v = el('div', 'card verdict');
     v.innerHTML = '<div class="ch"><b>VERDICT</b><span class="kk">' + (sm.error ? 'rules' : esc(sm.model || '')) + '</span></div>' +
-      '<p class="vv' + (D.shout ? ' on' : '') + '">' + esc(sm.verdict || '') + '</p>' +
+      '<p class="vv' + (D.shout ? ' on' : '') + '">' + mark(sm.verdict || '') + '</p>' +
       '<dl><dt>turning point</dt><dd>' + (tp.happened ? 'yes' : 'no') + ': ' + esc(tp.why || '') + '</dd>' +
       '<dt>2–3 weeks</dt><dd>' + esc(sm.outlook_2_3w || '') + '</dd>' +
       '<dt>what changed</dt><dd>' + esc(sm.changed || '') + '</dd>' +
@@ -574,7 +770,7 @@
       var was = P && P.risks ? P.risks[r.title] : null;
       var c = el('div', 'risk' + (S.risk === i ? ' on' : ''));
       c.innerHTML = '<div class="rl" style="background:' + lvlColor(r.level) + '">' + r.level + '</div>' +
-        '<div><div class="rt">' + esc(r.title) + (was == null && P ? ' <span class="new">new</span>' : '') + '</div>' +
+        '<div><div class="rt">' + mark(r.title) + (was == null && P ? ' <span class="new">new</span>' : '') + '</div>' +
         '<div class="rh">' + esc(r.horizon) + (fin(was) && was !== r.level ? ' · was ' + was : '') + (r.metric ? ' · ' + esc(r.metric.name) : '') + '</div>' +
         (r.metric ? '<div class="rs">' + spark(r.metric, 200, 24) + '</div>' : '') + '</div>';
       c.onclick = function () { S.risk = (S.risk === i ? null : i); S.view = S.risk == null ? 'now' : 'risk'; render(); };
@@ -670,14 +866,20 @@
     var k = sub('models', 'plume');
     var title = tally ? ('Of ' + names.length + ' models ' + tally.ok + ' keep up, ' + tally.lag + ' lag, ' + tally.broke + ' are broken')
       : (ao.below.length + ' of ' + ao.n + ' models are already below reality for ' + esc(ao.season));
-    var body = stageShell(title, [segBtn('models', 'plume', 'Plume', 'plume'), segBtn('models', 'board', 'Scoreboard', 'plume'),
-      segBtn('models', 'breakdown', 'How they break', 'plume'), segBtn('models', 'revision', 'Revisions', 'plume')]);
+    var body = stageShell(title, [segBtn('models', 'plume', 'Plume', 'plume'), segBtn('models', 'stack', 'Month by month', 'plume'),
+      segBtn('models', 'board', 'Scoreboard', 'plume'), segBtn('models', 'breakdown', 'How they break', 'plume'),
+      segBtn('models', 'revision', 'Revisions', 'plume')]);
     var i0 = IRI.seasons.indexOf(ao.season);
 
     if (k === 'plume') {
       plot(body, function (w, h) { return chartPlume(IRI, NW.latest.n34a, w, h); });
       var hist = (IRI.history || []).filter(function (h2) { return h2.combined; }).map(function (h2) { return h2.issued + ': ' + fnum(Math.max.apply(null, h2.combined.filter(fin))); });
       body.appendChild(el('div', 'cap', 'Each thin line is one model, coloured by its class: keeping up, lagging, broken. Thick is the combined mean, dashed the previous issue. The red dot is this week’s reality. Combined peak by issue: ' + hist.reverse().join(' → ') + '.'));
+    } else if (k === 'stack') {
+      plot(body, function (w, h) { return chartStack(IRI.stack || [], NW.latest.n34a, w, h); });
+      var st = IRI.stack || [];
+      body.appendChild(el('div', 'cap', 'The same plume in three issues, newest on top, all on one scale. The dashed red line is what the ocean has already reached (' + fnum(NW.latest.n34a, 1) + ' °C) and the red dot marks it on the first season each issue forecast. Month by month the whole bundle climbs towards the water: ' +
+        st.slice().reverse().map(function (r) { return esc(r.issued); }).join(' → ') + '. Forecasts are dated by the issue, not by the data behind them.'));
     } else if (k === 'breakdown') {
       plot(body, function (w, h) { return chartBreakdown(bd, w, h); });
       var rows = bd.by_issue || [];
@@ -685,21 +887,23 @@
       var tb = el('div', 'tbl-inline');
       tb.innerHTML = '<table class="e"><thead><tr><th>model</th><th>class</th><th>below reality</th><th>mean error</th><th>worst</th><th>since</th></tr></thead><tbody>' +
         chronic.map(function (c) {
-          return '<tr><td>' + esc(c.model) + '</td><td><span class="cls ' + (c.cls || 'na') + '">' + ({ ok: T.okC, lag: T.lagC, broke: T.brokeC }[c.cls] || T.naC) + '</span></td>' +
+          return '<tr><td>' + modelSpan(c.model, c.model) + '</td><td><span class="cls ' + (c.cls || 'na') + '">' + ({ ok: T.okC, lag: T.lagC, broke: T.brokeC }[c.cls] || T.naC) + '</span></td>' +
             '<td class="num">' + c.issues_low + ' / ' + c.of + '</td><td class="num">' + fnum(c.mean_err) + '</td><td class="num' + ((c.worst_err || 0) <= -1 ? ' top' : '') + '">' + fnum(c.worst_err) + '</td><td>' + esc(c.since || '—') + '</td></tr>';
         }).join('') + '</tbody></table>';
       body.appendChild(tb);
       body.appendChild(el('div', 'cap', 'For every stored issue we take its nearest season that now has an official ONI and count the models that came in below it. ' + (rows.length ? 'From ' + esc(rows[0].issue) + ' (' + rows[0].share + ' %) to ' + esc(rows[rows.length - 1].issue) + ' (' + rows[rows.length - 1].share + ' %). ' : '') + esc(bd.note || '')));
     } else if (k === 'revision') {
-      var rrows = (rv.rows || []).slice(0, 40);
+      var rrows = (rv.rows || []).slice(0, 26);
       plot(body, function (w, h) {
-        var W = w, Hh = h, Lp = 46, R = 20, Tp = topPad(w), B = 26, pw = W - Lp - R, ph = Hh - Tp - B;
+        var W = w, Hh = h, Lp = 46, R = 20, Tp = topPad(w), B = 76, pw = W - Lp - R, ph = Hh - Tp - B;
         var vals = []; rrows.forEach(function (r) { if (fin(r.peak_prev)) vals.push(r.peak_prev); if (fin(r.peak_cur)) vals.push(r.peak_cur); });
         if (!vals.length) return svgOpen(W, Hh) + '<text x="20" y="40">no previous issue to compare</text></svg>';
         var vmin = Math.min.apply(null, vals) - .2, vmax = Math.max.apply(null, vals) + .2;
         var X = function (i) { return Lp + (rrows.length < 2 ? pw / 2 : i / (rrows.length - 1) * pw); };
         var Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
-        var s = svgOpen(W, Hh) + '<text class="tt" x="' + Lp + '" y="13">Peak revision by model, ' + esc(rv.prev_issued || '') + ' → ' + esc(IRI.issued) + ' (°C)</text>';
+        // Ось X — модели, по одной вертикали на каждую: без подписей график читался как
+        // «непонятно что» (владелец 03.09). Подписи вертикальные, иначе не помещаются.
+        var s = svgOpen(W, Hh) + '<text class="tt" x="' + Lp + '" y="13">Where each model put the winter peak: ' + esc(rv.prev_issued || '') + ' issue → ' + esc(IRI.issued) + ' issue (°C)</text>';
         s += gridY(vmin, vmax, .5, Y, Lp, R, W, 1);
         rrows.forEach(function (r, i) {
           if (!fin(r.peak_prev) || !fin(r.peak_cur)) return;
@@ -707,10 +911,13 @@
           s += '<line x1="' + X(i).toFixed(1) + '" y1="' + Y(r.peak_prev).toFixed(1) + '" x2="' + X(i).toFixed(1) + '" y2="' + Y(r.peak_cur).toFixed(1) + '" style="stroke:' + (up ? 'var(--nino)' : 'var(--nina)') + '" stroke-width="2" opacity=".7"/>';
           s += '<circle cx="' + X(i).toFixed(1) + '" cy="' + Y(r.peak_cur).toFixed(1) + '" r="3" style="fill:' + (up ? 'var(--nino)' : 'var(--nina)') + '"/>';
           s += '<circle cx="' + X(i).toFixed(1) + '" cy="' + Y(r.peak_prev).toFixed(1) + '" r="2" style="fill:var(--soft)"/>';
+          s += '<text x="' + X(i).toFixed(1) + '" y="' + (Hh - B + 12) + '" transform="rotate(-90 ' + X(i).toFixed(1) + ' ' + (Hh - B + 12) + ')" text-anchor="end" font-size="9">' + esc(r.model) + '</text>';
         });
         return s + '</svg>';
       });
-      body.appendChild(el('div', 'cap', (rv.n ? rv.n_up + ' of ' + rv.n + ' models raised their peak, ' + rv.n_down + ' lowered it; the combined peak went ' + fnum(rv.combined_peak_prev) + ' → ' + fnum(rv.combined_peak_cur) + ' °C. ' : '') + 'When almost all models move the same way, they are catching up with the event rather than predicting it.'));
+      body.appendChild(el('div', 'cap', 'One vertical line per model, named along the bottom: the small grey dot is where it put the winter peak in the ' + esc(rv.prev_issued || 'previous') + ' issue, the coloured dot where it puts it now. ' +
+        (rv.n ? rv.n_up + ' of ' + rv.n + ' models raised their peak, ' + rv.n_down + ' lowered it; the combined peak went ' + fnum(rv.combined_peak_prev) + ' → ' + fnum(rv.combined_peak_cur) + ' °C. ' : '') +
+        'This is about the coming winter, not about what is broken today: for that see “How they break”, which checks the seasons that already have an official ONI.'));
     } else {
       var rvMap = {}; (rv.rows || []).forEach(function (r) { rvMap[r.model] = r; });
       var list = names.map(function (nm) {
@@ -724,7 +931,7 @@
         list.map(function (r) {
           var cc = r.cls && r.cls.cls ? '<span class="cls ' + r.cls.cls + '">' + ({ ok: T.okC, lag: T.lagC, broke: T.brokeC }[r.cls.cls] || T.naC) + '</span>' + (r.cls.since ? ' <span class="src">' + esc(r.cls.since) + '</span>' : '') : '<span class="cls na">' + T.naC + '</span>';
           var mid = S.delta ? '<td class="num">' + (fin(r.was) ? chg(r.v, r.was) : '—') + '</td>' : '<td class="num' + (r.gap != null && r.gap < 0 ? ' top' : '') + '">' + fnum(r.gap) + '</td>';
-          return '<tr data-model="' + esc(r.name) + '"' + (S.model === r.name ? ' class="on"' : '') + '><td>' + esc(r.name) + '</td><td>' + (r.sec === 'dyn' ? 'dyn.' : 'stat.') + '</td>' + (tally ? '<td>' + cc + '</td>' : '') +
+          return '<tr data-model="' + esc(r.name) + '"' + (S.model === r.name ? ' class="on"' : '') + '><td>' + modelSpan(r.name, r.name) + '</td><td>' + (r.sec === 'dyn' ? 'dyn.' : 'stat.') + '</td>' + (tally ? '<td>' + cc + '</td>' : '') +
             '<td class="num">' + fnum(r.v) + '</td>' + mid + '<td>' + miniBar(r.v, ao.observed_weekly) + '</td><td class="num">' + fnum(r.peak) + '</td><td class="num' + ((r.dpk || 0) > .3 ? ' top' : '') + '">' + fnum(r.dpk) + '</td></tr>';
         }).join('') + '</tbody></table>';
       wrap.addEventListener('click', function (e) {
@@ -833,7 +1040,7 @@
             return '<td class="num"><span class="lvl' + (c === scen ? ' cur' : '') + '" style="background:' + lvlColor(r.levels[c]) + '">' + r.levels[c] + '</span>' + d2 + '</td>';
           }).join('');
           return '<tr><td>' + src({ name: r.name, def: r.countries + '. Vulnerability ' + r.vulnerability.level + ' of 5: ' + r.vulnerability.note + (r.vulnerability.importers && r.vulnerability.importers.length ? ' Net importers: ' + r.vulnerability.importers.join(', ') + '.' : ''), src: r.sources.join(' · '), date: RG.as_of }, r.name) +
-            '<div class="sub">' + esc(r.countries) + '</div></td>' + cells + '<td>' + vb + '</td>' + lv + '<td class="act">' + r.actions.map(function (a) { return '<div>' + esc(a) + '</div>'; }).join('') + '</td></tr>';
+            '<div class="sub">' + esc(r.countries) + '</div></td>' + cells + '<td>' + vb + '</td>' + lv + '<td class="act">' + r.actions.map(function (a) { return '<div>' + esc(a) + '</div>'; }).join('') + linksHtml('region:' + r.id) + '</td></tr>';
         }).join('') + '</tbody></table>';
       wrap.addEventListener('click', function (e) {
         var th = e.target.closest && e.target.closest('th[data-scen]');
@@ -863,7 +1070,7 @@
     body.classList.add('scroll');
     if (k === 'glossary') {
       var g = el('div', 'gloss');
-      Object.keys(gl).forEach(function (key) { var x = gl[key]; g.innerHTML += '<div class="gl-i"><b>' + esc(x.name) + '</b>' + esc(x.def) + '<div class="why">' + esc(x.why) + '</div><div class="s">' + esc(x.src) + '</div></div>'; });
+      Object.keys(gl).forEach(function (key) { var x = gl[key]; g.innerHTML += '<div class="gl-i"><b>' + esc(x.name) + '</b>' + esc(x.def) + '<div class="why">' + esc(x.why) + '</div><div class="s">' + esc(x.src) + '</div>' + linksHtml('term:' + key) + '</div>'; });
       body.appendChild(g);
     } else if (k === 'sources') {
       var t = el('table', 'e');
@@ -890,14 +1097,18 @@
     var body = stageShell(esc(r.title), [{ label: '← back', on: false, click: function () { S.risk = null; S.view = 'now'; render(); } }]);
     if (r.metric) plot(body, function (w, h) { return chartMetric(r.metric, w, h, r.metric.name); });
     var was = S.P && S.P.risks ? S.P.risks[r.title] : null;
-    body.appendChild(el('div', 'lead', '<b>Level ' + r.level + ' · ' + esc(r.horizon) + '.</b> ' + esc(r.plain || '') + (fin(was) && was !== r.level ? ' <i>Level was ' + was + ' at ' + esc(prevStamp()) + '.</i>' : '')));
-    body.appendChild(el('div', 'note', '<strong>Evidence.</strong> ' + esc(r.evidence) + (r.metric ? '<br>' + dynWords(r.metric) : '')));
-    body.appendChild(el('div', 'note warn', '<strong>Watch.</strong> ' + esc(r.watch)));
+    body.appendChild(el('div', 'lead', '<b>Level ' + r.level + ' · ' + esc(r.horizon) + '.</b> ' + mark(r.plain || '') + (fin(was) && was !== r.level ? ' <i>Level was ' + was + ' at ' + esc(prevStamp()) + '.</i>' : '')));
+    body.appendChild(el('div', 'note', '<strong>Evidence.</strong> ' + mark(r.evidence) + (r.metric ? '<br>' + dynWords(r.metric) : '')));
+    body.appendChild(el('div', 'note warn', '<strong>Watch.</strong> ' + mark(r.watch)));
+    var lk = linksHtml('risk:' + S.risk, true);
+    if (lk) body.appendChild(el('div', 'links-box', lk));
   }
 
   // ---------------------------------------------------------------- render
   function render() {
     var narrow = window.matchMedia('(max-width:900px)').matches;
+    // База сравнения выбирается режимом, но код блоков читает S.P — подменяем на время отрисовки.
+    S.P = S.delta ? baseline() : (S.D || {}).prev || null;
     buildTabs();
     railState(); railRisks();
     var stage = $('stage'), L = $('railL'), R = $('railR');
@@ -959,11 +1170,18 @@
 
   // ---------------------------------------------------------------- go
   function get(u) { return fetch(u, { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw new Error(u + ': ' + r.status); return r.json(); }); }
-  Promise.all([get('/data/enso/latest.json'), get('/data/enso/glossary.json').catch(function () { return {}; }), get('/data/enso/history.json').catch(function () { return []; })])
+  Promise.all([get('/data/enso/latest.json'), get('/data/enso/glossary.json').catch(function () { return {}; }),
+    get('/data/enso/history.json').catch(function () { return []; }),
+    get('/data/enso/models-ref.json').catch(function () { return {}; }),
+    get('/data/enso/links.json').catch(function () { return {}; })])
     .then(function (r) {
       S.D = r[0]; S.G = (r[1] && r[1].en) || {}; S.H = r[2] || []; S.P = r[0].prev || null;
+      S.M = r[3] || {}; S.L = r[4] || {};
       var db = $('deltaBtn');
-      if (db) db.onclick = function () { S.delta = !S.delta; render(); };
+      if (db) db.onclick = function () {
+        S.delta = S.delta === '' ? 'update' : (S.delta === 'update' ? 'week' : '');
+        render();
+      };
       buildMeta(); initDock(); render();
       var ro = new ResizeObserver(function () { redrawPlot(); });
       ro.observe($('stage'));

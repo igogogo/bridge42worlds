@@ -95,6 +95,12 @@ def history(snaps):
             "t2_world": (W.get("t2_world") or {}).get("last_value"),
             "iri_issued": iri.get("issued"), "combined_peak": max(comb) if comb else None,
             "n_below": len(ao.get("below") or []), "n_models": ao.get("n"),
+            # Уровни рисков и ключевые числа — чтобы панель могла сказать «было неделю назад»,
+            # а не только «было в прошлый прогон» (владелец 03.09).
+            "risks": {r["title"]: r["level"] for r in (d.get("risks") or [])},
+            "n34_weekly_prev": ((d.get("noaa") or {}).get("latest") or {}).get("n34a"),
+            "food_index": (d.get("food") or {}).get("index") if isinstance(d.get("food"), dict) else None,
+            "class_tally": iri.get("class_tally"),
         })
     return rows
 

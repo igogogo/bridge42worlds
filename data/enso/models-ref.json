@@ -1,0 +1,41 @@
+{
+  "_": "Who each model in the IRI plume is. Type (dynamical / statistical) is not written by hand: it comes from the legend of the plume figure itself and is stored with every issue. The description says which centre runs it and what kind of machine it is; where we are not certain of the details we say only what the plume itself states. The performance next to a model on the panel (class, mean error, issues below reality) is measured by us against the official ONI, not taken from the centre.",
+  "as_of": "2026-09-03",
+  "src": "IRI/CCSR ENSO forecast plume, iri.columbia.edu; the model roster and the dynamical/statistical split come from the figure legend of each issue.",
+  "kinds": {
+    "dyn": "Dynamical: a coupled ocean–atmosphere model that integrates the physics forward in time. Expensive, and in principle able to produce a state it has never seen.",
+    "stat": "Statistical: a model fitted to past data — regression, linear inverse modelling, or a neural network. Cheap and often sharp, but a strong event outside its training range is exactly where it is weakest.",
+    "avg": "An average across the plume: combined, dynamical only, or statistical only. Not a model of its own."
+  },
+  "models": {
+    "AUS-ACCESS": {"org": "Bureau of Meteorology, Australia", "note": "The ACCESS-S coupled seasonal system, the model behind the Australian ENSO outlook."},
+    "BCC DIAP": {"org": "Beijing Climate Center, China", "note": "A coupled seasonal prediction system run by the Chinese national climate centre."},
+    "BCC_RZDM": {"org": "Beijing Climate Center, China", "note": "A statistical companion to the same centre's dynamical system."},
+    "CMC CANSIP": {"org": "Environment and Climate Change Canada", "note": "CanSIPS, the Canadian seasonal prediction system, a multi-model ensemble of Canadian coupled models."},
+    "CMCC SPS4": {"org": "CMCC, Italy", "note": "The Euro-Mediterranean Centre's seasonal prediction system, version 4."},
+    "COLA CCSM4": {"org": "Center for Ocean-Land-Atmosphere Studies, USA", "note": "A seasonal configuration of the CCSM4 climate model."},
+    "CPC MRKOV": {"org": "NOAA Climate Prediction Center, USA", "note": "A Markov model: a statistical scheme that propagates the present ocean state forward with transitions fitted to history. One of the oldest members of the plume."},
+    "CS-IRI-MM": {"org": "IRI, Columbia University, USA", "note": "A multi-model ensemble assembled at IRI itself."},
+    "CSU CLIPR": {"org": "Colorado State University, USA", "note": "A statistical scheme built on climate predictors."},
+    "IAP-NN": {"org": "Institute of Atmospheric Physics, Chinese Academy of Sciences", "note": "A neural network trained on past ENSO evolution."},
+    "IOCAS ICM": {"org": "Institute of Oceanology, Chinese Academy of Sciences", "note": "An intermediate coupled model: simpler physics than a full climate model, tuned for the tropical Pacific."},
+    "JAMSTEC CNN": {"org": "JAMSTEC, Japan", "note": "A convolutional neural network trained on maps of ocean state."},
+    "JMA": {"org": "Japan Meteorological Agency", "note": "The Japanese operational coupled seasonal system."},
+    "KMA": {"org": "Korea Meteorological Administration", "note": "The Korean operational coupled seasonal system."},
+    "LDEO": {"org": "Lamont-Doherty Earth Observatory, Columbia University, USA", "note": "The Zebiak–Cane lineage: the intermediate coupled model that made the first successful ENSO forecasts in the 1980s."},
+    "MetFRANCE": {"org": "Météo-France", "note": "The French operational coupled seasonal system."},
+    "NASA GMAOv3": {"org": "NASA Global Modeling and Assimilation Office, USA", "note": "The GEOS seasonal system, version 3."},
+    "NTU CODA": {"org": "National Taiwan University", "note": "A statistical scheme using ocean data assimilation output as its predictors."},
+    "SINTEX-F": {"org": "JAMSTEC, Japan, with European partners", "note": "A coupled model long used for ENSO and Indian Ocean prediction."},
+    "TONGJI-ML": {"org": "Tongji University, China", "note": "A machine-learning model, one of the newer members of the plume."},
+    "UCLA-TCD": {"org": "University of California, Los Angeles, USA", "note": "A statistical scheme in the plume."},
+    "UKMO": {"org": "Met Office, United Kingdom", "note": "The GloSea coupled seasonal system."},
+    "UW PSL-LIM": {"org": "University of Washington with NOAA PSL, USA", "note": "A linear inverse model: it learns how anomalies evolve on average and propagates them forward."},
+    "UW PSL-CSLIM": {"org": "University of Washington with NOAA PSL, USA", "note": "A cyclostationary linear inverse model, the seasonally varying version of the same idea."},
+    "Wyrtki-CSLIM": {"org": "Linear inverse modelling, named for Klaus Wyrtki", "note": "A cyclostationary linear inverse model built around the ocean heat recharge that Wyrtki described."},
+    "XRO": {"org": "Extended nonlinear recharge oscillator", "note": "A low-order model of the recharge oscillator kind, extended to other basins."},
+    "COMBINED AVG": {"org": "IRI", "note": "The average of all plume members, dynamical and statistical."},
+    "DYN Average": {"org": "IRI", "note": "The average of the dynamical members only."},
+    "STAT Average": {"org": "IRI", "note": "The average of the statistical members only."}
+  }
+}

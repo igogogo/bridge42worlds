@@ -119,6 +119,19 @@
   .models-card:hover{border-color:color-mix(in srgb, var(--ochre) 50%, var(--hair))}
   .models-card .spark{margin-top:6px}
   .chgline{font-family:var(--mono);font-size:10px;color:var(--soft);margin-top:4px;display:block}
+  /* Контекстные ссылки на разобранные работы: чип у якоря и полный список в сцене риска. */
+  .lk{display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.04em;margin-inline-start:6px;
+    padding:1px 6px;border-radius:999px;border:1px solid color-mix(in srgb, var(--cyan) 45%, var(--hair));
+    color:var(--cyan);white-space:nowrap;text-decoration:none;vertical-align:1px}
+  .links-box{border-top:1px solid var(--line, var(--hair));padding-top:8px;flex-shrink:0}
+  .lk-h{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);margin-bottom:5px}
+  .lk-i{display:block;text-decoration:none;color:var(--text);padding:5px 0;border-bottom:1px solid color-mix(in srgb, var(--ink) 6%, transparent)}
+  .lk-i:last-of-type{border-bottom:0}
+  .lk-i b{display:block;font-size:12.5px;font-weight:600;line-height:1.35}
+  .lk-i:hover b{color:var(--cyan)}
+  .lk-i span{display:block;font-size:11.5px;color:var(--muted);line-height:1.45}
+  .lk-i i{font-style:normal;font-family:var(--mono);font-size:9.5px;color:var(--soft)}
+  .lk-n{font-size:10.5px;color:var(--soft);line-height:1.45;margin-top:5px}
   .new{font-family:var(--mono);font-size:9px;color:var(--ochre)}
 
   .gauge-row{display:flex;gap:11px;align-items:center}
@@ -127,8 +140,9 @@
     display:grid;place-items:center;cursor:help}
   .gauge::before{content:"";position:absolute;inset:7px;border-radius:50%;background:var(--surface)}
   .gauge .gv{position:relative;font-family:var(--font-display);font-size:26px;font-weight:600;color:var(--c);line-height:1}
-  .gauge .gl{position:relative;font-family:var(--mono);font-size:7.5px;color:var(--soft);text-align:center;
-    line-height:1.1;margin-top:2px;letter-spacing:.05em;text-transform:uppercase}
+  /* Подпись шкалы больше не живёт внутри круга: там она не помещалась и обрезалась. */
+  .g-side .glab{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--soft);margin-bottom:3px}
   .g-side{font-size:12px;line-height:1.45;color:var(--muted);min-width:0}
   .g-side b{display:block;font-family:var(--font-display);font-size:14px;color:var(--text);line-height:1.25;margin-bottom:2px}
 
@@ -332,7 +346,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=10"></script>
+<script src="/js/enso.js?v=11"></script>
 <script src="/js/sitenav.js?v=4ec05c36e3"></script>
 </body>
 </html>

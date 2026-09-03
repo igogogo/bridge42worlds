@@ -368,6 +368,18 @@ def noaa_weekly_watch(rows):
             pk["date_n34"] = max(ev, key=lambda r: r["n34a"])["date"].isoformat()
             out["analog_peak"][y] = pk
 
+    # Ряды аналогов ПО ТОМУ ЖЕ КАЛЕНДАРЮ: 20 недель до той же даты у каждого сильного
+    # события. Нужны графикам рисков — владелец 03.09: «на графиках рисков нет сравнения
+    # с самым сильным событием, которое мы знаем, это 97-98».
+    out["analog_series"] = {}
+    for y in ANALOGS:
+        same = [r for r in rows if r["date"].year in (y, y + 1)
+                and -140 <= (r["date"].timetuple().tm_yday - doy if r["date"].year == y
+                             else r["date"].timetuple().tm_yday + 365 - doy) <= 0]
+        if same:
+            out["analog_series"][y] = [{"date": r["date"].isoformat(),
+                                        **{k: r[k] for k in keys4}} for r in same[-20:]]
+
     # исторические максимумы по каждому региону, без текущей недели — потолки для детектора
     out["hist_max_n34"] = max(rows[:-1], key=lambda r: r["n34a"])
     out["hist_max_n34"] = {"date": out["hist_max_n34"]["date"].isoformat(), "n34a": out["hist_max_n34"]["n34a"]}
@@ -401,6 +413,18 @@ def oni_watch(oni, psl):
     # ONI по годам — нужен оценке моделей: сезон плюма (ASO, DJF…) надо сверять с ONI ТОГО
     # ЖЕ календарного сезона, а не текущего года. Держим четыре последних года, это мелочь.
     out["by_year"] = {y: {s: by[y].get(s) for s in seasons} for y in sorted(by)[-4:]}
+    # Что было ПОСЛЕ пика каждого аналога: следующий год и год за ним. Владелец 03.09:
+    # «в рисках это нарушение не только текущего года, но и последующие проблемы на 27 год,
+    # здесь есть аналогия с прошлыми глобальными событиями». Без этих двух лет сказать
+    # нечего — в снимке лежал только год зарождения.
+    out["analogs_after"] = {}
+    for y in ANALOGS:
+        after = {}
+        for k in (1, 2):
+            if y + k in by:
+                after[y + k] = {s: by[y + k].get(s) for s in seasons}
+        if after:
+            out["analogs_after"][y] = after
     out["psl_current"] = psl.get(ycur)
     out["psl_analogs"] = {y: psl.get(y) for y in ANALOGS}
     return out
@@ -420,6 +444,83 @@ def _m_weekly(NW, key, name):
 
 def _m_series(vals, name, unit, step, dates=None):
     return {"name": name, "unit": unit, "step": step, "dates": dates, "values": vals}
+
+
+def _next_year_risks(W, ONI, cur_year=None):
+    """Что было у аналогов ПОСЛЕ пика — и потому стоит в рисках на следующий год.
+
+    Три вещи, каждая считается из наших рядов, а не из общих слов:
+      · год ПОСЛЕ зарождения был теплее года зарождения (годовые средние ERA5);
+      · ONI разворачивался в Ла-Нинью на второй год;
+      · индекс цен FAO догонял событие с запозданием (наложение считает food.py, здесь
+        только климатическая часть — цены живут своей карточкой).
+    Возвращает список кортежей под add(): title, level, horizon, evidence, plain, watch,
+    metric, kind."""
+    out = []
+    tw = W["t2_world"]
+    ann = {int(k): v for k, v in (tw.get("annual") or {}).items()}
+    # Год берём ТЕКУЩИЙ (series_watch кладёт его в out["year"]), а не последний в годовых
+    # средних: те считаются по завершённым годам, и без этого карточка говорила «2026 будет
+    # теплее 2025», хотя речь про год после пика.
+    year = cur_year or tw.get("year") or (max(ann) if ann else None)
+
+    # 1. следующий календарный год теплее
+    gains = []
+    for y in ANALOGS:
+        if y in ann and (y + 1) in ann:
+            gains.append((y, round(ann[y + 1] - ann[y], 3)))
+    if gains and year:
+        warmer = [g for g in gains if g[1] > 0]
+        med = sorted(g[1] for g in gains)[len(gains) // 2]
+        out.append((
+            f"The year after the peak: {year + 1} is likely to be warmer than {year}",
+            4, "next year",
+            "In " + ", ".join(f"{y}→{y + 1} {d:+.2f} °C" for y, d in gains) +
+            f" (annual land+ocean mean, ERA5); warmer in {len(warmer)} of {len(gains)} analogues, median {med:+.2f}.",
+            "El Niño releases the ocean's heat into the air with a lag of a few months, so the calendar year that "
+            "follows the peak is usually the warmer one. That is why 1998, 2016 and 2024 each became the warmest year "
+            "measured up to that point. On the same arithmetic, next year is the one to plan for, not this one.",
+            "annual land+ocean mean once the peak passes; the first months of next year already carry the signal",
+            _m_series([ann[y] for y in sorted(ann)][-30:], "Land+ocean, annual mean", "°C", "year",
+                      [str(y) for y in sorted(ann)][-30:]), "climate"))
+
+    # 2. разворот в Ла-Нинью на второй год
+    after = ONI.get("analogs_after") or {}
+    flips = []
+    for y, rows in after.items():
+        vals = []
+        for yy in sorted(rows):
+            vals += [v for v in (rows[yy] or {}).values() if v is not None]
+        if vals:
+            flips.append((int(y), round(min(vals), 2)))
+    if flips:
+        cold = [f for f in flips if f[1] <= -0.5]
+        out.append((
+            "A La Niña usually follows within a year or two",
+            3, "2027",
+            "After the analogues the ONI fell to " + ", ".join(f"{y}: {v:+.2f}" for y, v in flips) +
+            f"; it crossed the La Niña threshold of −0.5 in {len(cold)} of {len(flips)} cases.",
+            "The ocean does not simply return to normal: after a strong El Niño it usually swings the other way. "
+            "A La Niña flips the map of impacts, so the regions that are dry now tend to be wet then, and the "
+            "grain exporters that had a good year tend to have a bad one. Planning that only covers this winter "
+            "misses the swing.",
+            "the ONI trend after the peak; a fall of 0.3 or more per month is the usual signature of the swing",
+            None, "climate"))
+
+    # 3. воздух догоняет воду — уже есть отдельным риском, здесь про горизонт
+    lag = tw["level30"]["det"]
+    out.append((
+        "The impacts of this peak land mostly next year",
+        3, "6–18 months",
+        f"Land+ocean is {lag:+.2f} °C above trend now, while the ocean heat that drives it is still rising; "
+        "in the analogues the air-temperature records, the harvest failures and the price effects all came in "
+        "the year after the onset.",
+        "The dashboard measures the ocean today, but people meet an El Niño through harvests, water and prices, "
+        "and those arrive with a delay of six to eighteen months. The plans that matter are for next year: "
+        "import contracts, reserves, water rationing, insurance.",
+        "the first harvests after the peak season and the food price index six to twelve months from the onset",
+        _m_daily(tw, "Land+ocean, daily anomaly"), "climate"))
+    return out
 
 
 def risks(W, N34, NW, ONI, IRI=None):
@@ -575,6 +676,11 @@ def risks(W, N34, NW, ONI, IRI=None):
                 "itself is a signal: the next issue will probably be higher again.",
                 "the IRI issue around the 19th", metric=metric)
 
+    # ---- 11. следующий год: чем прошлые события кончались ПОСЛЕ пика
+    nxt = _next_year_risks(W, ONI, cur_year=W["t2_world"].get("year"))
+    for r in nxt:
+        add(*r[:6], metric=r[6], kind=r[7])
+
     R.sort(key=lambda r: -r["level"])
     load = sum(r["level"] ** 1.5 for r in R if r["kind"] == "climate")
     idx = int(round(100 * (1 - np.exp(-load / 25.0))))
@@ -609,6 +715,14 @@ def run(fetch=True):
             # Как ломаются модели во времени: доля ниже реальности по выпускам и постоянные
             # отстающие (владелец 03.09: «часть моделей постоянно отваливается»).
             IRI["breakdown"] = MD.breakdown(cl, IRI, ONI)
+            # Три последних выпуска ЦЕЛИКОМ (все модели, а не только сводное): панель кладёт
+            # их друг под другом, и видно, как прогноз догоняет событие от месяца к месяцу
+            # (владелец 03.09: «три сета графиком, вверху самый свежий, и точка где мы сейчас»).
+            IRI["stack"] = [{"issued": i["issued"], "seasons": i["seasons"],
+                             "models": {nm: {"section": m["section"], "values": m["values"]}
+                                        for nm, m in i["models"].items()
+                                        if m.get("values") and m["section"] in ("dyn", "stat", "avg")}}
+                            for i in MD._issues()[-3:]][::-1]
         except Exception as e:                                   # noqa: BLE001
             IRI["classes_error"] = str(e)[:200]
     RR, ridx = risks(W, N34, NW, ONI, IRI if IRI and "error" not in IRI else None)
