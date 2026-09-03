@@ -112,6 +112,22 @@ def main(fetch=True, llm=True):
     # детектор перелома — правила; потом саммари моделью по фактам, включая срабатывания
     import alerts as A
     cur["alerts"], cur["shout"] = A.detect(cur, prev)
+    # Тревоги по ценам и по поломке моделей встают в тот же список: панель показывает их
+    # слева карточками, а вид (kind) решает, в какую группу карточка попадёт.
+    try:
+        import food as FD2
+        cur["alerts"] += FD2.alerts(cur.get("food"))
+    except Exception as e:                                       # noqa: BLE001
+        cur["alerts"].append({"level": "WATCH", "kind": "food", "title": "Price alerts failed",
+                              "detail": str(e)[:160]})
+    try:
+        import models as MD2
+        iri = cur.get("iri") if isinstance(cur.get("iri"), dict) else {}
+        cur["alerts"] += MD2.alerts(iri, iri.get("breakdown") or {})
+    except Exception as e:                                       # noqa: BLE001
+        cur["alerts"].append({"level": "WATCH", "kind": "models", "title": "Model alerts failed",
+                              "detail": str(e)[:160]})
+    cur["shout"] = any(a["level"] == "SHOUT" for a in cur["alerts"])
     import summary as SM
     if llm:
         cur["summary"] = SM.summarize(cur)
@@ -123,6 +139,9 @@ def main(fetch=True, llm=True):
         # Без модели страница всё равно не пустая: сводка правилами с пометкой (ТЗ, п. 7).
         cur["summary"] = dict(SM.fallback_text(cur), error="run without the model", stamp=cur["stamp"])
 
+    # Память о прошлом прогоне: панель показывает «сейчас / было в прошлый раз» на каждом
+    # числе (владелец 03.09). Кладём компактный слепок, а не весь прошлый снимок.
+    cur["prev"] = compact(prev)
     cur = clean(cur)
     (ROOT / "latest.json").write_text(json.dumps(cur, ensure_ascii=False, default=str, allow_nan=False), encoding="utf-8")
     (SNAP / (datetime.now().strftime("%Y%m%d_%H%M%S") + ".json")).write_text(
@@ -146,5 +165,53 @@ def main(fetch=True, llm=True):
     return cur
 
 
+
+def compact(d):
+    """Слепок прошлого прогона для переключателя «сейчас / прошлое измерение».
+
+    Только те числа, которые панель сравнивает: полный прошлый снимок весит 200 КБ и
+    удваивал бы файл ради дельт."""
+    if not d:
+        return None
+    W = d.get("watch") or {}
+    iri = d.get("iri") if isinstance(d.get("iri"), dict) else {}
+    ao = (iri or {}).get("against_observed") or {}
+    food = d.get("food") if isinstance(d.get("food"), dict) else {}
+    reg = d.get("regions") if isinstance(d.get("regions"), dict) else {}
+    keys = ("sst_nino34", "sst_world", "t2_world")
+    return {
+        "stamp": d.get("stamp"), "generated": d.get("generated"),
+        "risk_index": d.get("risk_index"), "n_risks": len(d.get("risks") or []),
+        "risks": {r["title"]: r["level"] for r in (d.get("risks") or [])},
+        "shout": bool(d.get("shout")), "n_alerts": len(d.get("alerts") or []),
+        "alerts": [a.get("title") for a in (d.get("alerts") or [])],
+        "noaa_date": (d.get("noaa") or {}).get("date"),
+        "noaa": (d.get("noaa") or {}).get("latest"),
+        "daily": {k: (W.get(k) or {}).get("last_value") for k in keys},
+        "daily_date": {k: (W.get(k) or {}).get("last_date") for k in keys},
+        "level30": {k: ((W.get(k) or {}).get("level30") or {}).get("anom") for k in keys},
+        "slope14": {k: ((W.get(k) or {}).get("slope14") or {}).get("now") for k in keys},
+        "p50": {k: ((W.get(k) or {}).get("forecast14") or {}).get("p50") for k in keys},
+        "records": {k: ((W.get(k) or {}).get("records") or {}).get("streak") for k in keys},
+        "oni": (d.get("oni") or {}).get("current"),
+        "oni_season": (d.get("oni") or {}).get("last_season"),
+        "iri_issued": iri.get("issued"),
+        "iri_below": len(ao.get("below") or []), "iri_n": ao.get("n"),
+        "iri_mean": ao.get("mean"), "iri_max": ao.get("max"), "iri_season": ao.get("season"),
+        "iri_peak": max([v for v in ((iri.get("summary") or {}).get("combined") or []) if v is not None] or [None])
+        if (iri.get("summary") or {}).get("combined") else None,
+        "class_tally": iri.get("class_tally"),
+        "model_season": {nm: (m["values"][iri["seasons"].index(ao["season"])]
+                              if ao.get("season") in (iri.get("seasons") or []) and m.get("values") else None)
+                         for nm, m in (iri.get("models") or {}).items()
+                         if m.get("section") in ("dyn", "stat")},
+        "food_index": food.get("index"), "food_month": food.get("last_month"),
+        "food_groups": {g: v.get("last") for g, v in (food.get("groups") or {}).items()},
+        "regions": {r["id"]: r["levels"] for r in (reg.get("items") or [])},
+        "scenario": reg.get("current_scenario"),
+    }
+
+
 if __name__ == "__main__":
     main(fetch="--cached" not in sys.argv, llm="--no-llm" not in sys.argv)
+

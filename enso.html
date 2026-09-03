@@ -11,24 +11,26 @@
 <link rel="stylesheet" href="/css/style.css?v=321f73c4a2">
 <style>
   /* ПАНЕЛЬ, А НЕ СТРАНИЦА (владелец 03.09: «одностраничный, без прокруток, это панель, на
-     ней всё должно быть динамическое»). Отсюда всё устройство:
+     ней всё должно быть динамическое»), с правками второго разбора:
 
-       · высота ровно один экран (100dvh), прокрутки документа нет вовсе;
-       · содержимое не уходит вниз, а ПЕРЕКЛЮЧАЕТСЯ: вкладки сцены, выбор ряда, выбор
-         сценария, клик по риску — всё меняет то, что показано в главном окне;
-       · графики рисуются под размер своего окна и перерисовываются при изменении размера
-         (ResizeObserver в js/enso.js), поэтому SVG нигде не тянется «резинкой»;
-       · длинные списки (риски, таблица моделей, глоссарий) крутятся ВНУТРИ своей плитки —
-         это панель приборов, а не лента.
+       · строка «обновлено / докуда ряды / источники» — НАВЕРХУ, у каждого источника своё
+         пояснение по наведению;
+       · подвал объяснений НЕПОДВИЖЕН: фиксированная высота в три строки, чтобы он не дёргал
+         раскладку при наведении, а рядом с курсором висит карточка-абзац;
+       · левый борт — карточки: состояние, тревоги по климату, по ценам и по моделям,
+         разбор «как ломаются модели», вердикт;
+       · переключатель «сейчас / что изменилось с прошлого измерения» в шапке — числа
+         показываются либо значением, либо дельтой;
+       · графики рисуются под размер окна и перерисовываются при изменении размера и темы.
 
-     Цвета события — отдельно от акцента сайта: охра остаётся акцентом интерфейса, а тёплый
-     красный «Ниньо» / синий «Нинья» и пять уровней риска — семантика данных. */
+     Цвета события отдельно от акцента сайта: охра — интерфейс, красный «Ниньо» и синий
+     «Нинья» и пять уровней риска — семантика данных. */
   :root{
     --nino:#A8432B; --nina:#4A6FA5; --ok:#4A7C59;
     --lv5:#7A1F1F; --lv4:#A8432B; --lv3:#C9843A; --lv2:#8F8A81; --lv1:#B9B4AB;
     --band:#B9B4AB; --grid:color-mix(in srgb, var(--ink) 12%, transparent);
     --a1982:#7D5B8F; --a1997:#B06A8F; --a2015:#C07B53; --a2023:#D08A2B;
-    --rail:270px; --rail2:310px;
+    --rail:286px; --rail2:310px; --dockh:78px;
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){ --nino:#D4735C; --nina:#7C9BCB; --ok:#7BAA88; --band:#5c5a55;
@@ -38,33 +40,23 @@
       --lv2:#6f6c66; --lv1:#4f4d49; --a1982:#A98BBB; --a1997:#D39BB9; --a2015:#E0A07E; --a2023:#E8B45C; }
 
   html,body{height:100%;overflow:hidden;overscroll-behavior:none}
-  /* Общий стиль сайта держит body в читательской колонке (max-width 700px, авто-поля) —
-     для панели это смертельно: середина схлопывалась в 60 пикселей. Панели нужен весь экран. */
+  /* Общий стиль сайта держит body в читательской колонке (max-width 700px) — панели нужен
+     весь экран, иначе середина схлопывается в 60 пикселей. */
   body{background:var(--bg);color:var(--text);max-width:none;width:100%;margin:0;padding:0}
-  /* Переключатель языков и живая кнопка «El Niño» в шапке панели не нужны: язык один,
-     а кнопка ведёт на эту же страницу. sitenav.js их всё равно строит — прячем здесь. */
   .langs-row,.nav-live{display:none !important}
 
-  .panel{display:grid;grid-template-rows:auto minmax(0,1fr) auto;height:100dvh;gap:8px;
+  .panel{display:grid;grid-template-rows:auto auto minmax(0,1fr) var(--dockh);height:100dvh;gap:7px;
     padding:8px 10px calc(8px + env(safe-area-inset-bottom));box-sizing:border-box}
 
-  /* ── шапка панели ─────────────────────────────────────────────────────────── */
+  /* ── шапка ────────────────────────────────────────────────────────────────── */
   .top-bar{display:flex;align-items:center;gap:10px;padding:0;margin:0;max-width:none;min-width:0;
-    flex-wrap:nowrap;height:34px;flex-shrink:0}
+    flex-wrap:nowrap;height:32px;flex-shrink:0}
   .logo{font-family:var(--font-display);font-size:14px;color:var(--soft);text-decoration:none;white-space:nowrap}
   .logo:hover{color:var(--accent)}
-  .p-title{font-family:var(--font-display);font-size:clamp(15px,2vw,20px);font-weight:600;white-space:nowrap}
+  .p-title{font-family:var(--font-display);font-size:clamp(15px,1.9vw,19px);font-weight:600;white-space:nowrap}
   .p-title b{color:var(--nino);font-weight:600}
-  /* Свежесть и штампы стоят в подвале рядом с лампочками источников: в шапке они отнимали
-     высоту у сцены, а панель живёт высотой. */
-  .p-meta{font-family:var(--mono);font-size:10px;color:var(--soft);display:flex;gap:2px 10px;
-    flex-wrap:wrap;min-width:0;overflow:hidden;justify-content:flex-end;max-height:32px}
-  .p-meta .bad{color:var(--nino)}
   .theme-toggle{background:none;border:1px solid var(--line, var(--hair));color:var(--soft);
     border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:12px;flex-shrink:0}
-  .spacer{margin-inline-start:auto}
-
-  /* Вкладки сцены — главный орган управления панелью. */
   .tabs{display:flex;gap:4px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;min-width:0;flex:1}
   .tabs::-webkit-scrollbar{display:none}
   .tab{font-family:var(--mono);font-size:12px;letter-spacing:.03em;color:var(--muted);background:none;
@@ -73,8 +65,23 @@
   .tab:hover{color:var(--ochre)}
   .tab.on{color:var(--ochre);border-color:color-mix(in srgb, var(--ochre) 45%, var(--hair));
     background:color-mix(in srgb, var(--ochre) 10%, transparent)}
+  /* Переключатель «сейчас / что изменилось» — тот же орган, но отдельно от вкладок сцены. */
+  .tab.delta{flex-shrink:0;border-style:dashed}
+  .tab.delta.on{border-style:solid;color:var(--nino);border-color:color-mix(in srgb, var(--nino) 50%, var(--hair));
+    background:color-mix(in srgb, var(--nino) 10%, transparent)}
 
-  /* ── средняя часть: левый борт · сцена · правый борт ──────────────────────── */
+  /* ── строка обновления и источников (наверху, а не в подвале) ─────────────── */
+  .p-meta{display:flex;align-items:center;gap:4px 16px;flex-wrap:wrap;font-family:var(--mono);
+    font-size:10.5px;color:var(--soft);padding:0 2px;min-height:16px}
+  .p-meta > span{white-space:nowrap}
+  .p-meta b{font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;font-size:9.5px}
+  .p-meta i{font-style:normal;opacity:.75}
+  .p-meta .bad, .p-meta .bad b{color:var(--nino)}
+  .p-meta .dots{display:inline-flex;gap:4px;margin-inline-start:auto}
+  .p-meta .dots i{width:9px;height:9px;border-radius:50%;background:var(--ok);display:block;cursor:help}
+  .p-meta .dots i.bad{background:var(--nino)}
+
+  /* ── средняя часть ───────────────────────────────────────────────────────── */
   .mid{display:grid;grid-template-columns:var(--rail) minmax(0,1fr) var(--rail2);gap:8px;min-height:0}
   .col{display:flex;flex-direction:column;gap:8px;min-height:0;min-width:0}
   .tile{border:1px solid var(--line, var(--hair));border-radius:12px;background:var(--surface);
@@ -83,50 +90,66 @@
     padding:8px 12px 6px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;
     text-transform:uppercase;color:var(--soft);flex-shrink:0}
   .tile > .th .rt{letter-spacing:0;text-transform:none;font-size:11px}
-  .tile > .tb{flex:1;min-height:0;overflow:auto;padding:0 12px 10px;scrollbar-width:thin}
+  .tile > .tb{flex:1;min-height:0;overflow:auto;padding:0 10px 10px;scrollbar-width:thin}
   .tile > .tb.flush{padding:0}
   .tile.grow{flex:1}
 
-  /* ── левый борт: шкала, тревога, вердикт ─────────────────────────────────── */
-  .gauge-row{display:flex;gap:12px;align-items:center;padding:2px 0 8px}
-  .gauge{--v:0;--c:var(--ok);width:84px;height:84px;border-radius:50%;position:relative;flex-shrink:0;
+  /* ── карточки левого борта ───────────────────────────────────────────────── */
+  .cards{display:flex;flex-direction:column;gap:7px}
+  .card{border:1px solid var(--line, var(--hair));border-radius:10px;padding:9px 11px;
+    background:var(--tag-bg, transparent)}
+  .card .ch{display:flex;align-items:center;gap:6px;margin-bottom:4px;font-family:var(--mono);font-size:9px;
+    letter-spacing:.08em;text-transform:uppercase;color:var(--soft)}
+  .card .ch b{padding:1px 5px;border-radius:3px;color:#fff;font-weight:600;background:var(--lv2)}
+  .card .ch .kk{opacity:.8}
+  .card .ch .new{margin-inline-start:auto;color:var(--ochre);border:1px solid color-mix(in srgb, var(--ochre) 45%, var(--hair));
+    border-radius:999px;padding:0 5px}
+  .card .ct{font-size:13px;font-weight:600;line-height:1.35}
+  .card .cd{font-size:12px;line-height:1.5;color:var(--muted);margin-top:3px}
+  .card .cd.chronic b{color:var(--text);font-weight:600}
+  .alert-card.lv-shout{border-color:var(--lv5);background:color-mix(in srgb, var(--lv5) 9%, transparent)}
+  .alert-card.lv-shout .ch b{background:var(--lv5)}
+  .alert-card.lv-watch{border-color:color-mix(in srgb, var(--lv3) 55%, var(--hair));
+    background:color-mix(in srgb, var(--lv3) 7%, transparent)}
+  .alert-card.lv-watch .ch b{background:var(--lv3)}
+  .alert-card.kind-food .ch .kk{color:var(--lv3)}
+  .alert-card.kind-models .ch .kk{color:var(--nina)}
+  .card.quiet{border-color:color-mix(in srgb, var(--ok) 45%, var(--hair));background:color-mix(in srgb, var(--ok) 7%, transparent)}
+  .models-card{cursor:pointer}
+  .models-card:hover{border-color:color-mix(in srgb, var(--ochre) 50%, var(--hair))}
+  .models-card .spark{margin-top:6px}
+  .chgline{font-family:var(--mono);font-size:10px;color:var(--soft);margin-top:4px;display:block}
+  .new{font-family:var(--mono);font-size:9px;color:var(--ochre)}
+
+  .gauge-row{display:flex;gap:11px;align-items:center}
+  .gauge{--v:0;--c:var(--ok);width:74px;height:74px;border-radius:50%;position:relative;flex-shrink:0;
     background:conic-gradient(var(--c) calc(var(--v)*1%), color-mix(in srgb, var(--ink) 9%, transparent) 0);
     display:grid;place-items:center;cursor:help}
-  .gauge::before{content:"";position:absolute;inset:8px;border-radius:50%;background:var(--surface)}
-  .gauge .gv{position:relative;font-family:var(--font-display);font-size:29px;font-weight:600;color:var(--c);line-height:1}
-  .gauge .gl{position:relative;font-family:var(--mono);font-size:8px;color:var(--soft);text-align:center;
-    line-height:1.15;margin-top:2px;letter-spacing:.05em;text-transform:uppercase}
-  .g-side{font-size:12.5px;line-height:1.5;color:var(--muted);min-width:0}
-  .g-side b{display:block;font-family:var(--font-display);font-size:15px;color:var(--text);line-height:1.25;margin-bottom:3px}
+  .gauge::before{content:"";position:absolute;inset:7px;border-radius:50%;background:var(--surface)}
+  .gauge .gv{position:relative;font-family:var(--font-display);font-size:26px;font-weight:600;color:var(--c);line-height:1}
+  .gauge .gl{position:relative;font-family:var(--mono);font-size:7.5px;color:var(--soft);text-align:center;
+    line-height:1.1;margin-top:2px;letter-spacing:.05em;text-transform:uppercase}
+  .g-side{font-size:12px;line-height:1.45;color:var(--muted);min-width:0}
+  .g-side b{display:block;font-family:var(--font-display);font-size:14px;color:var(--text);line-height:1.25;margin-bottom:2px}
 
-  .alert{border-radius:10px;padding:9px 11px;margin-bottom:8px;border:1px solid var(--lv3);
-    background:color-mix(in srgb, var(--lv3) 10%, transparent)}
-  .alert.on{border-color:var(--lv5);background:color-mix(in srgb, var(--lv5) 11%, transparent)}
-  .alert.quiet{border-color:color-mix(in srgb, var(--ok) 45%, var(--hair));background:color-mix(in srgb, var(--ok) 8%, transparent)}
-  .alert .ah{font-family:var(--font-display);font-size:14px;font-weight:600;line-height:1.25;margin-bottom:4px}
-  .alert.on .ah{color:var(--lv5)}
-  .alert .arow{font-size:12.5px;line-height:1.45;padding:4px 0;border-top:1px solid var(--line, var(--hair))}
-  .alert .arow:first-of-type{border-top:0}
-  .alert .arow b{font-family:var(--mono);font-size:9px;letter-spacing:.08em;padding:1px 5px;border-radius:3px;
-    color:#fff;margin-inline-end:5px;vertical-align:1px}
-  .alert .lv-shout b{background:var(--lv5)} .alert .lv-watch b{background:var(--lv3)}
-  .alert .arow span.d{display:block;color:var(--soft);font-size:11.5px;margin-top:1px}
-
-  .verdict{font-size:13.5px;line-height:1.55}
-  .verdict .vv{font-family:var(--font-display);font-size:15px;line-height:1.35;margin-bottom:7px}
+  .verdict .vv{font-family:var(--font-display);font-size:13.5px;line-height:1.4;margin:0 0 6px}
   .verdict .vv.on{color:var(--lv5)}
   .verdict dl{margin:0}
-  .verdict dt{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
-    color:var(--soft);margin-top:8px}
-  .verdict dd{margin:1px 0 0;font-size:12.5px;line-height:1.5;color:var(--muted)}
-  .verdict ul{margin:2px 0 0 15px;padding:0;font-size:12.5px;color:var(--muted)}
+  .verdict dt{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--soft);margin-top:7px}
+  .verdict dd{margin:1px 0 0;font-size:12px;line-height:1.45;color:var(--muted)}
+  .verdict ul{margin:2px 0 0 15px;padding:0;font-size:12px;color:var(--muted)}
 
   /* ── сцена ───────────────────────────────────────────────────────────────── */
   .stage{display:flex;flex-direction:column;min-height:0;min-width:0}
   .stage-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 12px 4px;flex-shrink:0}
+  /* Заголовок сцены и переключатели: если заголовку остаётся меньше 320 пикселей, он
+     уезжает на свою строку целиком — иначе он вставал колонкой в три-четыре этажа и съедал
+     высоту графика (поймано на 1280×720). */
   .stage-h{font-family:var(--font-display);font-size:clamp(14px,1.7vw,18px);font-weight:600;line-height:1.25;
-    min-width:0;flex:1;text-wrap:balance}
+    min-width:0;flex:1 1 320px;text-wrap:balance}
   .seg{display:flex;gap:3px;flex-shrink:0;flex-wrap:wrap}
+  .seg.sub{padding:0 0 2px}
   .seg button{font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--soft);
     background:none;border:1px solid var(--line, var(--hair));border-radius:999px;padding:3px 9px;cursor:pointer;white-space:nowrap}
   .seg button:hover{color:var(--ochre)}
@@ -134,23 +157,24 @@
     background:color-mix(in srgb, var(--ochre) 10%, transparent)}
   .stage-body{flex:1;min-height:0;display:flex;flex-direction:column;padding:0 12px 8px;gap:8px}
   .stage-body.scroll{overflow:auto}
-  .plot{flex:1;min-height:160px;display:block}
+  /* График — главный житель сцены: не меньше половины её высоты, что бы ни делали подписи. */
+  .plot{flex:1 1 55%;min-height:170px;display:block}
   .plot svg{display:block;width:100%;height:100%}
   .plot svg text{font-family:var(--mono);font-size:11px;fill:var(--soft)}
   .plot svg text.tt{font-size:12px;font-weight:600;fill:var(--text)}
   .cap{font-size:11.5px;color:var(--soft);line-height:1.5;flex-shrink:0}
+  .tbl-inline{max-height:38%;overflow:auto;flex-shrink:0;border-top:1px solid var(--line, var(--hair));padding-top:4px}
 
-  /* Плашки чисел под сценой. */
-  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;flex-shrink:0}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:7px;flex-shrink:0}
   .kpi{border:1px solid var(--line, var(--hair));border-radius:10px;padding:7px 10px;background:var(--tag-bg, transparent)}
   .kpi .kn{font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--soft)}
-  .kpi .kv{font-family:var(--font-display);font-size:23px;line-height:1.05;margin:2px 0;font-variant-numeric:tabular-nums}
+  .kpi .kv{font-family:var(--font-display);font-size:22px;line-height:1.05;margin:2px 0;font-variant-numeric:tabular-nums}
   .kpi .kv small{font-size:11px;color:var(--soft);font-family:var(--mono);margin-inline-start:4px}
   .kpi .km{font-size:11.5px;color:var(--muted);line-height:1.4}
   .kpi .kd{font-family:var(--mono);font-size:10px;color:var(--soft);margin-top:3px;display:flex;gap:8px;flex-wrap:wrap}
   .up{color:var(--nino)} .dn{color:var(--nina)}
 
-  /* ── правый борт: риски ──────────────────────────────────────────────────── */
+  /* ── правый борт ─────────────────────────────────────────────────────────── */
   .risk{display:grid;grid-template-columns:26px minmax(0,1fr);gap:8px;padding:7px 2px;
     border-top:1px solid var(--line, var(--hair));cursor:pointer;align-items:start}
   .risk:first-child{border-top:0}
@@ -160,8 +184,9 @@
     font-weight:600;font-size:13px;display:grid;place-items:center}
   .risk .rt{font-size:12.5px;font-weight:600;line-height:1.3}
   .risk .rh{font-family:var(--mono);font-size:9.5px;color:var(--soft);margin-top:2px}
+  .risk .rs{margin-top:3px}
 
-  /* ── таблицы (модели, регионы, глоссарий) ────────────────────────────────── */
+  /* ── таблицы ─────────────────────────────────────────────────────────────── */
   table.e{border-collapse:collapse;width:100%;font-size:12px}
   table.e th{position:sticky;top:0;z-index:1;background:var(--surface);font-family:var(--mono);font-size:9.5px;
     letter-spacing:.07em;text-transform:uppercase;color:var(--soft);text-align:left;padding:6px 8px;
@@ -170,20 +195,20 @@
   table.e td{padding:5px 8px;border-bottom:1px solid color-mix(in srgb, var(--ink) 6%, transparent);vertical-align:middle}
   table.e tr:last-child td{border-bottom:0}
   table.e tbody tr:hover{background:color-mix(in srgb, var(--ochre) 6%, transparent)}
+  table.e tbody tr.on{background:color-mix(in srgb, var(--ochre) 12%, transparent)}
   table.e td.num{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
   table.e td.top{color:var(--nino);font-weight:600}
+  table.e td sup{color:var(--ochre);font-family:var(--mono);font-size:9px;margin-inline-start:2px}
   .cls{font-family:var(--mono);font-size:9.5px;letter-spacing:.04em;padding:2px 6px;border-radius:4px;color:#fff;white-space:nowrap}
   .cls.ok{background:var(--ok)} .cls.lag{background:var(--lv3)} .cls.broke{background:var(--lv5)} .cls.na{background:var(--lv2)}
+  .src{font-family:var(--mono);font-size:10px;color:var(--soft)}
   .mini svg{width:74px;height:14px;display:block}
   .tally{display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0}
   .tally span{font-family:var(--mono);font-size:10.5px;padding:3px 8px;border-radius:999px;border:1px solid var(--line, var(--hair));color:var(--muted)}
   .tally i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-inline-end:5px;vertical-align:-1px}
 
-  /* Имя региона и список стран держим в одну строку: иначе строка таблицы вырастала на
-     четыре этажа и в окно влезало пять регионов из четырнадцати. Полный список стран
-     показывает подвал по наведению. */
   table.regions td:first-child{white-space:nowrap}
-  table.regions td .sub{font-size:10.5px;color:var(--soft);margin-top:1px;max-width:20ch;
+  table.regions td .sub{font-size:10.5px;color:var(--soft);margin-top:1px;max-width:22ch;
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   table.regions td.act{font-size:11px;line-height:1.4;color:var(--muted);max-width:30ch}
   .imp{display:inline-block;font-family:var(--mono);font-size:10px;padding:1px 6px;border-radius:4px;white-space:nowrap;
@@ -195,6 +220,10 @@
   .lvl{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:6px;color:#fff;
     font-family:var(--font-display);font-weight:600;font-size:12px;opacity:.7}
   .lvl.cur{opacity:1;box-shadow:0 0 0 2px var(--surface),0 0 0 3px var(--ochre)}
+  .scen{font-family:var(--mono);font-size:11px;padding:2px 8px;border-radius:999px;cursor:pointer;
+    border:1px solid var(--line, var(--hair));margin-inline-end:3px}
+  .scen.on{color:var(--ochre);border-color:color-mix(in srgb, var(--ochre) 50%, var(--hair));
+    background:color-mix(in srgb, var(--ochre) 10%, transparent)}
 
   .gloss{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px}
   .gl-i{border:1px solid var(--line, var(--hair));border-radius:10px;padding:9px 11px;font-size:12px;line-height:1.5}
@@ -205,47 +234,56 @@
     font-size:12px;line-height:1.55;flex-shrink:0}
   .note.warn{border-inline-start-color:var(--nino)}
   .note strong{color:var(--text);font-weight:600}
-  .lead{font-size:12.5px;line-height:1.55;color:var(--muted);flex-shrink:0}
+  .lead{font-size:12.5px;line-height:1.6;color:var(--muted);flex-shrink:0}
   .lead b{color:var(--text);font-weight:600}
 
-  /* ── подвал: объяснение того, на что навели, + свежесть источников ───────── */
-  .dock{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,auto) auto;gap:12px;align-items:center;
+  /* ── подвал: НЕПОДВИЖНАЯ высота в три строки ─────────────────────────────── */
+  .dock{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;
     border:1px solid var(--line, var(--hair));border-radius:11px;background:var(--surface);
-    padding:7px 12px;min-height:44px}
-  .dock .dtxt{font-size:12px;line-height:1.45;min-width:0}
-  .dock .dtxt b{font-family:var(--font-display);font-size:13px;margin-inline-end:6px}
+    padding:8px 14px;height:var(--dockh);box-sizing:border-box;overflow:hidden}
+  .dock .dtxt{font-size:12.5px;line-height:1.5;min-width:0;max-height:100%;overflow:hidden;
+    display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
+  .dock .dtxt b{font-family:var(--font-display);font-size:13.5px;margin-inline-end:6px}
   .dock .dtxt .hint{color:var(--soft);font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase}
   .dock .dtxt .s{font-family:var(--mono);font-size:10px;color:var(--soft);display:block;margin-top:1px}
-  .dots{display:flex;gap:4px;flex-shrink:0}
-  .dots i{width:9px;height:9px;border-radius:50%;background:var(--ok);cursor:help;display:block}
-  .dots i.bad{background:var(--nino)}
+
+  /* Карточка-абзац у курсора: то же содержимое, но рядом с тем, на что смотрят. */
+  .tip{position:fixed;z-index:60;max-width:min(390px,80vw);max-height:min(300px,42vh);overflow:hidden;
+    pointer-events:none;opacity:0;
+    transform:translateY(3px);transition:opacity .12s ease, transform .12s ease;
+    background:var(--surface);border:1px solid var(--line, var(--hair));border-radius:11px;
+    padding:10px 13px;font-size:12.5px;line-height:1.55;color:var(--text);
+    box-shadow:0 10px 30px color-mix(in srgb, var(--ink) 22%, transparent)}
+  .tip.on{opacity:1;transform:none}
+  .tip b{font-family:var(--font-display);font-size:13.5px;display:block;margin-bottom:3px}
+  .tip .s{font-family:var(--mono);font-size:10px;color:var(--soft);display:block;margin-top:5px}
 
   [data-term],[data-src]{text-decoration:underline dotted color-mix(in srgb, var(--ochre) 55%, transparent);
     text-underline-offset:3px;cursor:help}
   [data-term]:hover,[data-src]:hover{color:var(--ochre)}
+  .p-meta [data-src]{text-decoration:none}
+  .p-meta [data-src]:hover{color:var(--ochre)}
   .e-empty{display:grid;place-items:center;height:100%;color:var(--muted);font-size:14px}
 
-  /* ── узкий экран: борта становятся вкладками, панель остаётся одним экраном ─ */
-  @media (max-width:1100px){ :root{--rail:230px;--rail2:250px} }
+  @media (max-width:1200px){ :root{--rail:250px;--rail2:270px} }
   @media (max-width:900px){
+    :root{--dockh:86px}
     .mid{grid-template-columns:1fr}
     .col.rail{display:none}
     .col.rail.show{display:flex}
     .stage.hide{display:none}
-    .p-meta{display:none}
+    .p-meta{font-size:9.5px;gap:2px 10px}
     .p-title{display:none}
-    /* На телефоне заголовок сцены и переключатели не помещаются в одну строку: заголовок
-       сжимался до колонки в одно слово и съедал график. Ставим их этажами. */
     .stage-head{flex-direction:column;align-items:flex-start;gap:6px}
     .stage-h{font-size:15px;flex:none;width:100%}
     .stage-body{overflow:auto}
     .plot{min-height:220px}
     .kpis{grid-template-columns:1fr 1fr}
+    .tip{display:none}                 /* на касании карточка у пальца мешает — работает подвал */
   }
   @media (max-width:560px){
     .panel{padding:6px 7px calc(6px + env(safe-area-inset-bottom))}
-    .p-title{font-size:14px}
-    .dock{min-height:40px;padding:6px 10px}
+    .dock{padding:7px 10px}
   }
   @media (prefers-reduced-motion: reduce){ *{transition:none !important;animation:none !important} }
 </style>
@@ -256,8 +294,11 @@
     <a class="logo" href="/">bridge42worlds</a>
     <div class="p-title" id="ptitle">El Niño <b>2026–2027</b></div>
     <nav class="tabs" id="tabs"></nav>
+    <button type="button" class="tab delta" id="deltaBtn">now</button>
     <button type="button" class="theme-toggle" id="theme-toggle" title="Theme">◐</button>
   </header>
+
+  <div class="p-meta" id="pmeta"></div>
 
   <div class="mid" id="mid">
     <div class="col rail" id="railL"></div>
@@ -266,11 +307,10 @@
   </div>
 
   <footer class="dock" id="dock">
-    <div class="dtxt" id="dtxt"><span class="hint">Point at anything underlined: definition, source, date</span></div>
-    <div class="p-meta" id="pmeta"></div>
-    <div class="dots" id="dots"></div>
+    <div class="dtxt" id="dtxt"><span class="hint">Point at anything underlined — definition, source and date appear here.</span></div>
   </footer>
 </div>
+<div class="tip" id="tip"></div>
 
 <script>
   (function(){
@@ -292,7 +332,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=8"></script>
+<script src="/js/enso.js?v=10"></script>
 <script src="/js/sitenav.js?v=4ec05c36e3"></script>
 </body>
 </html>

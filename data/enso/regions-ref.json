@@ -1,7 +1,12 @@
 {
-  "_": "Reference tables for block F: typical impacts of a strong eastern-type El Niño by region and season, food-import vulnerability, and what to do. Every row carries a source; a row without one must not reach the page. Impacts are TYPICAL, not guaranteed: the page says 'usually', never 'will'. Strength: robust (appears in most strong events) / likely (majority) / weak (some). Vulnerability 1–5: share of imports in cereal consumption and exposure of food-insecure populations, from FAO/World Bank reports.",
+  "_": "Reference tables for the regions block: typical impacts of a strong eastern-type El Niño by region and season, food-import vulnerability, and what to do. Every row carries a source; a row without one must not reach the panel. Impacts are TYPICAL, not guaranteed: the panel says 'usually', never 'will'. Strength: robust (appears in most strong events) / likely (majority) / weak (some, or contested in the literature). Vulnerability 1–5: share of imports in cereal consumption and exposure of food-insecure populations, from FAO/World Bank reports.",
   "as_of": "2026-09-03",
   "seasons": ["SON", "DJF", "MAM"],
+  "season_notes": {
+    "SON": "September-October-November. The season when El Niño is building towards its peak: the teleconnections are already switched on, and in the southern hemisphere it is the planting season.",
+    "DJF": "December-January-February. The peak season of almost every El Niño and the strongest teleconnections: the southern African and Australian summer, the northern winter.",
+    "MAM": "March-April-May. The decaying phase: the ocean is still warm, and the food consequences of the peak season arrive as harvests and prices."
+  },
   "sources": {
     "cpc": "NOAA CPC, El Niño and La Niña: typical global impacts (warm-episode maps, DJF and JJA), cpc.ncep.noaa.gov/products/analysis_monitoring/impacts",
     "iri": "IRI, ENSO impacts by region and season, iri.columbia.edu/our-expertise/climate/enso",
@@ -9,35 +14,40 @@
     "wfp": "WFP, El Niño 2023–24 anticipatory action plans and regional outlooks",
     "nfidc": "FAO / WTO list of Net Food-Importing Developing Countries; FAO cereal import dependency ratios (FAOSTAT food balances)",
     "wb": "World Bank, Food Security Update (2024–2025), country import dependence",
-    "ep": "Eastern-Pacific (canonical) type: Rasmusson & Carpenter 1982; Ashok et al. 2007; coastal Peru impacts, SENAMHI/ENFEN bulletins"
+    "ep": "Eastern-Pacific (canonical) type: Rasmusson & Carpenter 1982; Ashok et al. 2007; coastal Peru impacts, SENAMHI/ENFEN bulletins",
+    "euro": "Brönnimann 2007, Impact of El Niño–Southern Oscillation on European climate, Reviews of Geophysics 45; Ineson & Scaife 2009, the stratospheric pathway to late-winter Europe, Nature Geoscience 2",
+    "arabia": "Winter (Nov–Mar) rainfall of the Arabian Peninsula and the Gulf responds to ENSO through the subtropical jet: Kumar et al., ENSO influence on Arabian Peninsula winter rainfall; NOAA CPC seasonal outlooks for Southwest Asia",
+    "gcc": "Gulf food security: FAO/World Bank country briefs — the GCC imports 80–90 % of its food; national strategies (UAE National Food Security Strategy 2051, Saudi General Food Security Authority)",
+    "eurasia": "ENSO signal over Russia and Central Asia is weak and season-dependent: Brönnimann 2007; NOAA CPC composite maps; Central Asian winter-spring precipitation response documented in regional studies (Barlow et al.)"
   },
   "actions": {
     "drought": "Pre-position drought-tolerant seed and fodder, plan water rationing, protect livestock, contract grain imports early.",
-    "flood": "Flood preparedness: drainage, protect stored grain, health measures for water-borne disease, early-warning for river basins.",
+    "flood": "Flood preparedness: drainage, protect stored grain, health measures for water-borne disease, early warning for river basins.",
     "heat": "Heat plans for cities and crops, irrigation scheduling, protection of vulnerable groups.",
     "import": "Forward-contract cereal imports, build strategic reserves, budget for price rises, target social safety nets.",
     "fisheries": "Prepare for a collapse of coastal upwelling fisheries: fishing bans, income support, alternative supply of fish protein.",
+    "watch": "No strong local signal: watch the harvests of the exporters you buy from and the world price, not the local sky.",
     "none": "No strong signal: watch the neighbours' harvests and world prices rather than local weather."
   },
   "regions": [
     {
-      "id": "east_africa", "name": "East Africa", "countries": "Kenya, Somalia, Ethiopia (south), Tanzania, Uganda",
+      "id": "east_africa", "name": "East Africa", "countries": "Kenya, Somalia, southern Ethiopia, Tanzania, Uganda",
       "seasons": {
-        "SON": {"impact": "wet", "strength": "robust", "note": "Short rains (OND) usually well above normal; flooding and landslides, locust-friendly conditions."},
-        "DJF": {"impact": "wet", "strength": "likely", "note": "Wet tail of the short rains into January."},
-        "MAM": {"impact": "none", "strength": "weak", "note": "Long rains show no consistent signal."}
+        "SON": {"impact": "wet", "strength": "robust", "note": "Short rains (Oct–Dec) usually well above normal; flooding and landslides, and conditions that favour desert locust breeding."},
+        "DJF": {"impact": "wet", "strength": "likely", "note": "The wet tail of the short rains runs into January; standing water and disease follow."},
+        "MAM": {"impact": "none", "strength": "weak", "note": "The long rains show no consistent El Niño signal."}
       },
-      "vulnerability": {"level": 4, "note": "Large food-insecure population, cereal imports 20–40 % of consumption in Kenya and Somalia; floods hit pastoral and lowland cropping areas.", "importers": ["Somalia", "Kenya", "Djibouti"]},
+      "vulnerability": {"level": 4, "note": "Large food-insecure population; cereal imports are 20–40 % of consumption in Kenya and Somalia; floods hit pastoral and lowland cropping areas hardest.", "importers": ["Somalia", "Kenya", "Djibouti"]},
       "sources": ["cpc", "iri", "giews", "nfidc"]
     },
     {
       "id": "southern_africa", "name": "Southern Africa", "countries": "Zimbabwe, Zambia, Malawi, Mozambique, South Africa, Botswana, Namibia",
       "seasons": {
-        "SON": {"impact": "dry", "strength": "likely", "note": "Late and weak start of the rainy season."},
-        "DJF": {"impact": "dry", "strength": "robust", "note": "Main maize season drier and hotter than normal; 1982-83, 1991-92, 2015-16 and 2023-24 all brought regional maize failures."},
-        "MAM": {"impact": "dry", "strength": "likely", "note": "Early end of rains; reduced harvest."}
+        "SON": {"impact": "dry", "strength": "likely", "note": "A late and weak start of the rainy season delays planting."},
+        "DJF": {"impact": "dry", "strength": "robust", "note": "The main maize season runs drier and hotter than normal: 1982-83, 1991-92, 2015-16 and 2023-24 all brought regional maize failures."},
+        "MAM": {"impact": "dry", "strength": "likely", "note": "Rains end early and the harvest is cut short."}
       },
-      "vulnerability": {"level": 4, "note": "Maize-dependent diets, thin reserves; Zimbabwe, Malawi and Zambia declared drought emergencies in 2024.", "importers": ["Zimbabwe", "Malawi", "Mozambique", "Lesotho", "Eswatini"]},
+      "vulnerability": {"level": 4, "note": "Maize-dependent diets and thin reserves; Zimbabwe, Malawi and Zambia declared drought emergencies in 2024.", "importers": ["Zimbabwe", "Malawi", "Mozambique", "Lesotho", "Eswatini"]},
       "sources": ["cpc", "iri", "giews", "wfp"]
     },
     {
@@ -45,77 +55,107 @@
       "seasons": {
         "SON": {"impact": "none", "strength": "weak", "note": "No consistent signal for the second rainy season."},
         "DJF": {"impact": "none", "strength": "weak", "note": "Dry season; no signal."},
-        "MAM": {"impact": "none", "strength": "weak", "note": "Weak, mixed signal at the start of the first rainy season."}
+        "MAM": {"impact": "none", "strength": "weak", "note": "A weak and mixed signal at the start of the first rainy season."}
       },
-      "vulnerability": {"level": 3, "note": "Rice and wheat imports matter (Nigeria, Ghana); the exposure is through world prices rather than local weather.", "importers": ["Nigeria", "Ghana", "Côte d'Ivoire", "Liberia", "Sierra Leone"]},
+      "vulnerability": {"level": 3, "note": "Rice and wheat imports matter (Nigeria, Ghana); the exposure runs through world prices rather than local weather.", "importers": ["Nigeria", "Ghana", "Côte d'Ivoire", "Liberia", "Sierra Leone"]},
       "sources": ["cpc", "iri", "nfidc"]
     },
     {
       "id": "sahel", "name": "Sahel", "countries": "Mali, Niger, Chad, Burkina Faso, Senegal, Sudan",
       "seasons": {
-        "SON": {"impact": "dry", "strength": "weak", "note": "Rainy season (JAS) tends to be weaker in El Niño years; the 2026 season is mostly over, the effect is on the harvest already in the ground."},
+        "SON": {"impact": "dry", "strength": "weak", "note": "The rainy season (Jul–Sep) tends to be weaker in El Niño years; by September it is mostly over, so the effect is already in the standing crop."},
         "DJF": {"impact": "none", "strength": "weak", "note": "Dry season; no signal."},
         "MAM": {"impact": "none", "strength": "weak", "note": "Dry season; no signal."}
       },
-      "vulnerability": {"level": 5, "note": "Highest structural food insecurity, conflict, cereal imports 30–60 % of consumption in Mauritania, Senegal; any price shock is a crisis.", "importers": ["Mauritania", "Senegal", "Niger", "Chad", "Sudan"]},
+      "vulnerability": {"level": 5, "note": "The highest structural food insecurity, conflict, and cereal imports of 30–60 % of consumption in Mauritania and Senegal; any price shock becomes a crisis.", "importers": ["Mauritania", "Senegal", "Niger", "Chad", "Sudan"]},
       "sources": ["cpc", "giews", "wfp", "nfidc"]
     },
     {
-      "id": "mena", "name": "Middle East and North Africa", "countries": "Egypt, Morocco, Algeria, Tunisia, Yemen, Iraq, Iran, Gulf states",
+      "id": "gulf_arabia", "name": "Gulf and Arabian Peninsula", "countries": "UAE, Saudi Arabia, Kuwait, Qatar, Oman, Bahrain, Yemen",
       "seasons": {
-        "SON": {"impact": "none", "strength": "weak", "note": "No consistent signal."},
-        "DJF": {"impact": "wet", "strength": "likely", "note": "Eastern Mediterranean and Gulf winters tend to be wetter; north-west Africa mixed."},
-        "MAM": {"impact": "wet", "strength": "weak", "note": "Weak wet tendency in the Middle East."}
+        "SON": {"impact": "none", "strength": "weak", "note": "The winter rain season has not started; no consistent signal."},
+        "DJF": {"impact": "wet", "strength": "likely", "note": "El Niño strengthens the subtropical jet over Arabia, and winter rainfall runs above normal: the documented pathway behind heavy-rain and flash-flood episodes on the peninsula, including the April 2024 Gulf floods."},
+        "MAM": {"impact": "wet", "strength": "weak", "note": "The wet tendency fades through spring; heat arrives early."}
       },
-      "vulnerability": {"level": 5, "note": "The world's largest wheat importers: Egypt, Algeria, Morocco, Yemen, Saudi Arabia import 50–100 % of cereals; exposure is almost entirely through world prices and exporters' harvests.", "importers": ["Egypt", "Yemen", "Algeria", "Morocco", "Tunisia", "Lebanon", "Jordan", "Iraq", "Saudi Arabia", "Kuwait", "UAE"]},
+      "vulnerability": {"level": 5, "note": "The Gulf states import 80–90 % of their food and grow almost no cereals: the exposure is entirely to world prices, shipping and the harvests of exporters. Yemen combines that dependence with an ongoing food emergency.", "importers": ["UAE", "Saudi Arabia", "Kuwait", "Qatar", "Oman", "Bahrain", "Yemen"]},
+      "sources": ["arabia", "gcc", "cpc", "wb"]
+    },
+    {
+      "id": "north_africa_levant", "name": "North Africa and the Levant", "countries": "Egypt, Morocco, Algeria, Tunisia, Libya, Jordan, Lebanon, Syria, Iraq, Iran",
+      "seasons": {
+        "SON": {"impact": "none", "strength": "weak", "note": "No consistent signal at the start of the wet season."},
+        "DJF": {"impact": "wet", "strength": "weak", "note": "The eastern Mediterranean and Iraq–Iran tend to be wetter; north-west Africa shows a mixed and weaker response."},
+        "MAM": {"impact": "none", "strength": "weak", "note": "No consistent signal; local drought there is driven more by the Atlantic than by the Pacific."}
+      },
+      "vulnerability": {"level": 5, "note": "The world's largest wheat importers: Egypt, Algeria and Morocco import 50–75 % of their cereals, and Lebanon and Jordan more. Exposure runs through world prices and the harvests of the Black Sea exporters.", "importers": ["Egypt", "Algeria", "Morocco", "Tunisia", "Lebanon", "Jordan", "Iraq", "Libya", "Syria"]},
       "sources": ["cpc", "iri", "nfidc", "wb"]
+    },
+    {
+      "id": "europe", "name": "Europe", "countries": "Western, Southern and Northern Europe",
+      "seasons": {
+        "SON": {"impact": "none", "strength": "weak", "note": "Autumn shows no reliable El Niño signal over Europe."},
+        "DJF": {"impact": "none", "strength": "weak", "note": "Early winter is dominated by the North Atlantic, not the Pacific: the El Niño signal is weak and inconsistent between events."},
+        "MAM": {"impact": "wet", "strength": "weak", "note": "Late winter and early spring carry the clearest, still weak, signal: a stratospheric pathway that tends towards a negative North Atlantic Oscillation, which usually means colder and drier northern Europe and wetter southern Europe and the Mediterranean."}
+      },
+      "vulnerability": {"level": 1, "note": "A net exporter of cereals overall and wealthy enough to outbid others on the world market; the risk here is price, not availability. A poor southern-European harvest raises world prices for the importers elsewhere.", "importers": []},
+      "sources": ["euro", "cpc"]
+    },
+    {
+      "id": "russia_centralasia", "name": "Russia and Central Asia", "countries": "European Russia, Siberia, Kazakhstan, Uzbekistan, Turkmenistan, Tajikistan, Kyrgyzstan",
+      "seasons": {
+        "SON": {"impact": "none", "strength": "weak", "note": "No reliable signal for the autumn sowing of winter wheat."},
+        "DJF": {"impact": "none", "strength": "weak", "note": "Winters in European Russia tend to be milder in El Niño years, but the effect is small next to the Atlantic and Arctic drivers and does not repeat reliably."},
+        "MAM": {"impact": "wet", "strength": "weak", "note": "Central Asia (Kazakhstan to Tajikistan) tends towards a wetter winter and spring, which is favourable for the grain crop; for Russia itself the spring signal is not distinguishable from noise."}
+      },
+      "vulnerability": {"level": 1, "note": "Russia and Kazakhstan are among the largest wheat exporters: what matters for the world is their harvest, not their imports. A poor Black Sea crop is the single fastest route from weather to global bread prices.", "importers": ["Tajikistan", "Kyrgyzstan"]},
+      "sources": ["eurasia", "cpc"]
     },
     {
       "id": "south_asia", "name": "South Asia", "countries": "India, Pakistan, Bangladesh, Sri Lanka, Nepal",
       "seasons": {
-        "SON": {"impact": "dry", "strength": "likely", "note": "Monsoon withdrawal earlier; post-monsoon (NE monsoon) mixed, Sri Lanka and south India often wetter."},
-        "DJF": {"impact": "heat", "strength": "likely", "note": "Warmer, drier winter in north India and Pakistan; rabi wheat at risk from March heat."},
-        "MAM": {"impact": "heat", "strength": "likely", "note": "Pre-monsoon heat waves more likely."}
+        "SON": {"impact": "dry", "strength": "likely", "note": "The monsoon withdraws earlier; the north-east monsoon is mixed, and southern India and Sri Lanka are often wetter."},
+        "DJF": {"impact": "heat", "strength": "likely", "note": "A warmer and drier winter in northern India and Pakistan; the rabi wheat crop is exposed to March heat."},
+        "MAM": {"impact": "heat", "strength": "likely", "note": "Pre-monsoon heat waves become more likely."}
       },
-      "vulnerability": {"level": 3, "note": "Largely self-sufficient in cereals but a huge population close to the margin; India restricts exports in bad years, which moves world rice prices.", "importers": ["Bangladesh", "Sri Lanka", "Nepal", "Afghanistan"]},
+      "vulnerability": {"level": 3, "note": "Largely self-sufficient in cereals but with a huge population close to the margin; India restricts exports in bad years, and that alone moves world rice prices.", "importers": ["Bangladesh", "Sri Lanka", "Nepal", "Afghanistan"]},
       "sources": ["cpc", "iri", "giews"]
     },
     {
       "id": "sea_indonesia", "name": "Southeast Asia and Indonesia", "countries": "Indonesia, Philippines, Malaysia, Thailand, Vietnam, Papua New Guinea",
       "seasons": {
-        "SON": {"impact": "dry", "strength": "robust", "note": "Delayed monsoon onset, drought and peat fires in Indonesia and Malaysia; Philippines dry."},
-        "DJF": {"impact": "dry", "strength": "robust", "note": "Reduced rainfall persists; rice and palm-oil yields fall; Philippine drought."},
-        "MAM": {"impact": "dry", "strength": "likely", "note": "Dry tail; reservoirs low, hydropower reduced."}
+        "SON": {"impact": "dry", "strength": "robust", "note": "A delayed monsoon onset, drought and peat fires in Indonesia and Malaysia; the Philippines run dry."},
+        "DJF": {"impact": "dry", "strength": "robust", "note": "Reduced rainfall persists; rice and palm-oil yields fall and Philippine drought deepens."},
+        "MAM": {"impact": "dry", "strength": "likely", "note": "A dry tail: reservoirs low, hydropower reduced."}
       },
-      "vulnerability": {"level": 3, "note": "Rice self-sufficiency thin in Indonesia and the Philippines (both import in El Niño years); Thailand and Vietnam are exporters whose smaller crops raise world prices.", "importers": ["Philippines", "Indonesia", "Malaysia", "Timor-Leste"]},
+      "vulnerability": {"level": 3, "note": "Rice self-sufficiency is thin in Indonesia and the Philippines, and both import in El Niño years; Thailand and Vietnam are exporters whose smaller crops raise world prices.", "importers": ["Philippines", "Indonesia", "Malaysia", "Timor-Leste"]},
       "sources": ["cpc", "iri", "giews", "wfp"]
     },
     {
       "id": "east_asia", "name": "East Asia", "countries": "China, Japan, Korea",
       "seasons": {
-        "SON": {"impact": "wet", "strength": "weak", "note": "Southern China somewhat wetter in autumn."},
-        "DJF": {"impact": "wet", "strength": "likely", "note": "Wetter winter in southern China; milder winter in Japan and Korea."},
-        "MAM": {"impact": "wet", "strength": "likely", "note": "Wetter spring in south China; the following summer often brings Yangtze flooding (1998, 2016)."}
+        "SON": {"impact": "wet", "strength": "weak", "note": "Southern China is somewhat wetter in autumn."},
+        "DJF": {"impact": "wet", "strength": "likely", "note": "A wetter winter in southern China and a milder winter in Japan and Korea."},
+        "MAM": {"impact": "wet", "strength": "likely", "note": "A wetter spring in south China; the following summer often brings Yangtze flooding, as in 1998 and 2016."}
       },
-      "vulnerability": {"level": 2, "note": "China holds large reserves but is the largest soybean and a major maize importer; Japan and Korea import most cereals but are wealthy.", "importers": ["Japan", "South Korea", "China (soybean, maize)"]},
+      "vulnerability": {"level": 2, "note": "China holds large reserves but is the largest soybean and a major maize importer; Japan and Korea import most of their cereals but are wealthy enough to secure them.", "importers": ["Japan", "South Korea", "China (soybean, maize)"]},
       "sources": ["cpc", "iri"]
     },
     {
-      "id": "australia", "name": "Australia", "countries": "Australia (east and north), New Zealand",
+      "id": "australia", "name": "Australia and New Zealand", "countries": "eastern and northern Australia, New Zealand",
       "seasons": {
-        "SON": {"impact": "dry", "strength": "robust", "note": "Spring drier and hotter in the east and north; winter-crop finishing affected; bushfire season starts early."},
-        "DJF": {"impact": "heat", "strength": "robust", "note": "Hot, dry summer in the east; bushfires; northern wet season delayed."},
-        "MAM": {"impact": "dry", "strength": "weak", "note": "Signal fades in autumn."}
+        "SON": {"impact": "dry", "strength": "robust", "note": "Spring is drier and hotter in the east and north; the winter crop finishes badly and the bushfire season starts early."},
+        "DJF": {"impact": "heat", "strength": "robust", "note": "A hot, dry summer in the east, bushfires, and a delayed northern wet season."},
+        "MAM": {"impact": "dry", "strength": "weak", "note": "The signal fades through autumn."}
       },
-      "vulnerability": {"level": 1, "note": "Major wheat exporter: a poor Australian crop tightens the world wheat balance and raises prices for importers elsewhere.", "importers": []},
+      "vulnerability": {"level": 1, "note": "A major wheat exporter: a poor Australian crop tightens the world wheat balance and raises prices for importers elsewhere.", "importers": []},
       "sources": ["cpc", "iri"]
     },
     {
       "id": "pacific_islands", "name": "Pacific Islands", "countries": "Fiji, Papua New Guinea highlands, Vanuatu, Kiribati, Tuvalu, Micronesia",
       "seasons": {
-        "SON": {"impact": "dry", "strength": "robust", "note": "Western Pacific (PNG, Fiji, Vanuatu) drier, central Pacific (Kiribati, Tuvalu) much wetter; sea level drops in the west, exposing reefs."},
-        "DJF": {"impact": "dry", "strength": "robust", "note": "Drought in the west persists; tropical cyclone activity shifts east towards French Polynesia and the Cooks."},
-        "MAM": {"impact": "dry", "strength": "likely", "note": "Recovery lags."}
+        "SON": {"impact": "dry", "strength": "robust", "note": "The western Pacific (PNG, Fiji, Vanuatu) runs dry while the central Pacific (Kiribati, Tuvalu) is much wetter; sea level drops in the west and exposes reefs."},
+        "DJF": {"impact": "dry", "strength": "robust", "note": "Drought in the west persists, and tropical cyclone activity shifts east towards French Polynesia and the Cooks."},
+        "MAM": {"impact": "dry", "strength": "likely", "note": "Recovery lags behind the ocean."}
       },
       "vulnerability": {"level": 4, "note": "Small islands import most staples and depend on shipping; the 1997-98 event brought famine conditions to the PNG highlands.", "importers": ["Kiribati", "Tuvalu", "Solomon Islands", "Vanuatu", "Fiji"]},
       "sources": ["cpc", "iri", "wfp"]
@@ -123,19 +163,19 @@
     {
       "id": "north_america", "name": "North America", "countries": "United States, Canada, northern Mexico",
       "seasons": {
-        "SON": {"impact": "none", "strength": "weak", "note": "Weak signals in autumn; hurricane season in the Atlantic usually suppressed."},
-        "DJF": {"impact": "wet", "strength": "likely", "note": "Wetter southern tier from California to Florida; warmer and drier in the northern US and Canada; Pacific North-west and Ohio valley drier."},
-        "MAM": {"impact": "wet", "strength": "likely", "note": "Wet spring in the southern Plains and Gulf; good for winter wheat."}
+        "SON": {"impact": "none", "strength": "weak", "note": "Weak autumn signals; the Atlantic hurricane season is usually suppressed."},
+        "DJF": {"impact": "wet", "strength": "likely", "note": "The southern tier from California to Florida runs wetter, the northern US and Canada warmer and drier; the Pacific North-west and the Ohio valley run dry."},
+        "MAM": {"impact": "wet", "strength": "likely", "note": "A wet spring in the southern Plains and the Gulf, which is good for winter wheat."}
       },
-      "vulnerability": {"level": 1, "note": "Largest maize and soybean exporter; El Niño winters are usually favourable for US crops, which eases world supply.", "importers": []},
+      "vulnerability": {"level": 1, "note": "The largest maize and soybean exporter; El Niño winters are usually favourable for US crops, which eases world supply.", "importers": []},
       "sources": ["cpc", "iri"]
     },
     {
       "id": "central_america", "name": "Central America and the Caribbean", "countries": "Guatemala, Honduras, El Salvador, Nicaragua, Haiti, Cuba, Dominican Republic",
       "seasons": {
-        "SON": {"impact": "dry", "strength": "robust", "note": "Dry corridor (Guatemala, Honduras, El Salvador, Nicaragua) drier; second bean and maize crop (postrera) at risk."},
-        "DJF": {"impact": "dry", "strength": "likely", "note": "Caribbean drier than normal."},
-        "MAM": {"impact": "dry", "strength": "likely", "note": "Late start of the first rainy season (primera)."}
+        "SON": {"impact": "dry", "strength": "robust", "note": "The dry corridor (Guatemala, Honduras, El Salvador, Nicaragua) runs dry and the second bean and maize crop is at risk."},
+        "DJF": {"impact": "dry", "strength": "likely", "note": "The Caribbean is drier than normal."},
+        "MAM": {"impact": "dry", "strength": "likely", "note": "A late start of the first rainy season."}
       },
       "vulnerability": {"level": 4, "note": "Haiti and the dry-corridor countries combine high import dependence with chronic food insecurity and out-migration.", "importers": ["Haiti", "Honduras", "Guatemala", "El Salvador", "Nicaragua", "Cuba"]},
       "sources": ["cpc", "iri", "giews", "wfp"]
@@ -143,21 +183,21 @@
     {
       "id": "andes_peru", "name": "Peru, Ecuador and the Andes", "countries": "Peru, Ecuador, Bolivia, Colombia",
       "seasons": {
-        "SON": {"impact": "wet", "strength": "likely", "note": "Coastal Ecuador and northern Peru begin to see heavy rain; 'coastal El Niño' effect strongest in eastern-type events."},
-        "DJF": {"impact": "flood", "strength": "robust", "note": "Torrential rain and floods on the Peruvian and Ecuadorian coast (1982-83, 1997-98, 2017); anchoveta fishery collapses; Bolivian altiplano and southern Peruvian Andes drier."},
-        "MAM": {"impact": "flood", "strength": "robust", "note": "Coastal floods persist through the southern-hemisphere autumn; landslides; disease outbreaks."}
+        "SON": {"impact": "wet", "strength": "likely", "note": "Coastal Ecuador and northern Peru begin to see heavy rain; the coastal El Niño effect is strongest in eastern-type events."},
+        "DJF": {"impact": "flood", "strength": "robust", "note": "Torrential rain and floods on the Peruvian and Ecuadorian coast, as in 1982-83, 1997-98 and 2017; the anchoveta fishery collapses while the Bolivian altiplano and the southern Peruvian Andes run dry."},
+        "MAM": {"impact": "flood", "strength": "robust", "note": "Coastal floods persist through the southern autumn, with landslides and disease outbreaks."}
       },
-      "vulnerability": {"level": 3, "note": "Peru imports wheat and maize; fishmeal exports and coastal agriculture (rice, mango, asparagus) are hit directly; Colombia and Bolivia rely on imports of wheat.", "importers": ["Peru", "Ecuador", "Bolivia", "Colombia"]},
+      "vulnerability": {"level": 3, "note": "Peru imports wheat and maize; fishmeal exports and coastal agriculture (rice, mango, asparagus) are hit directly, and Colombia and Bolivia rely on imported wheat.", "importers": ["Peru", "Ecuador", "Bolivia", "Colombia"]},
       "sources": ["cpc", "iri", "ep", "giews"]
     },
     {
       "id": "southern_cone", "name": "Southern Cone", "countries": "southern Brazil, Uruguay, Paraguay, northern Argentina; north-east Brazil",
       "seasons": {
-        "SON": {"impact": "wet", "strength": "robust", "note": "Southern Brazil, Uruguay and north-east Argentina wetter; floods in the Paraná basin; north-east Brazil drier."},
-        "DJF": {"impact": "wet", "strength": "robust", "note": "Wet summer favourable for Argentine soybean and maize once floods drain; north-east Brazil drought."},
-        "MAM": {"impact": "wet", "strength": "likely", "note": "Wet autumn; harvest delays."}
+        "SON": {"impact": "wet", "strength": "robust", "note": "Southern Brazil, Uruguay and north-east Argentina run wetter, with floods in the Paraná basin, while north-east Brazil runs dry."},
+        "DJF": {"impact": "wet", "strength": "robust", "note": "A wet summer favourable for Argentine soybean and maize once the floods drain; north-east Brazil stays in drought."},
+        "MAM": {"impact": "wet", "strength": "likely", "note": "A wet autumn delays the harvest."}
       },
-      "vulnerability": {"level": 2, "note": "Net exporters of soybean, maize and wheat; the world-price effect is usually favourable (bigger crops), the local risk is floods and the north-east drought.", "importers": []},
+      "vulnerability": {"level": 2, "note": "Net exporters of soybean, maize and wheat: the world-price effect is usually favourable because the crops are bigger, and the local risk is floods and the north-eastern drought.", "importers": []},
       "sources": ["cpc", "iri"]
     }
   ]

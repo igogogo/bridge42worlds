@@ -38,7 +38,50 @@ def _round_half_up(x):
     return int(x + 0.5)
 
 
-def build(iri, noaa_latest_n34):
+def scenario_support(iri, observed_weekly, record):
+    """Насколько каждый сценарий поддержан моделями (владелец 03.09: «надо как-то оценить
+    вероятность base / strong / record»).
+
+    Честно это НЕ вероятность: у нас 26 прогнозов, а не ансамбль розыгрышей одной модели.
+    Считаем долю моделей, чей пик не ниже порога сценария, и говорим об этом словами.
+    Пороги: base — медиана пиков моделей, strong — 90-й процентиль, record — рекорд
+    недельного ряда NOAA. Оговорка обязательна: реальность уже выше части плюма, значит
+    доли занижены — это нижняя граница, а не оценка сверху."""
+    models = (iri or {}).get("models") or {}
+    peaks = []
+    for m in models.values():
+        if m.get("section") in ("dyn", "stat") and m.get("values"):
+            vv = [v for v in m["values"] if v is not None]
+            if vv:
+                peaks.append(max(vv))
+    if not peaks:
+        return None
+    peaks.sort()
+    n = len(peaks)
+    p50 = peaks[n // 2]
+    p90 = peaks[min(n - 1, int(round(0.9 * (n - 1))))]
+    th = {"base": p50, "strong": p90,
+          "record": record if record is not None else peaks[-1]}
+    words = {
+        "base": "the event peaks near the middle of the plume",
+        "strong": "the event peaks at the top of the model spread",
+        "record": "the peak goes above the record of the weekly NOAA series",
+    }
+    out = {}
+    for k, t in th.items():
+        at = sum(1 for p in peaks if p >= t - 1e-9)
+        out[k] = {"threshold": round(float(t), 2), "models_at_or_above": at, "of": n,
+                  "share": round(100 * at / n), "what": words[k]}
+    below_now = len([p for p in peaks if observed_weekly is not None and p < observed_weekly])
+    out["_note"] = (f"Share of the {n} IRI models whose peak reaches the threshold. Not a probability: "
+                    f"these are {n} different models, not draws from one. Reality is already above "
+                    f"{below_now} of them, so every share here is a lower bound.")
+    out["_median_peak"] = round(float(p50), 2)
+    out["_p90_peak"] = round(float(p90), 2)
+    return out
+
+
+def build(iri, noaa_latest_n34, record_weekly=None):
     ref = json.loads((ROOT / "regions-ref.json").read_text(encoding="utf-8"))
     summ = (iri or {}).get("summary") or {}
     comb = [v for v in (summ.get("combined") or []) if v is not None]
@@ -49,6 +92,7 @@ def build(iri, noaa_latest_n34):
     peak_max = max((t["mean"] + t["sd"] for t in seasons_tbl), default=None) if seasons_tbl else None
     peak_max = round(peak_max, 2) if peak_max is not None else None
     factors = _scenario_bonus(peak_p50, peak_max, noaa_latest_n34)
+    support = scenario_support(iri, noaa_latest_n34, record_weekly)
     # какой сценарий идёт сейчас: реальность выше всех моделей → record
     ao = (iri or {}).get("against_observed") or {}
     current = "record" if ao.get("reality_above_all") else ("strong" if ao.get("reality_above_mean_sd") else "base")
@@ -82,6 +126,7 @@ def build(iri, noaa_latest_n34):
     items.sort(key=lambda x: (-x["levels"][current], -x["vulnerability"]["level"]))
     return {
         "as_of": ref["as_of"], "seasons": ref["seasons"], "current_scenario": current,
+        "season_notes": ref.get("season_notes") or {}, "scenario_support": support,
         "factors": factors, "peak_p50": peak_p50, "peak_max": peak_max, "observed_weekly": noaa_latest_n34,
         "items": items,
         "method": "level = round(0.6 × impact + 0.4 × vulnerability + scenario), clipped to 1–5; impact: robust 4, likely 3, weak 1.5, none 0; scenario: base +0 (the event as in the combined forecast), strong +0.5 (top of the model spread), record +1 (reality above every model); one point lower everywhere if the combined peak is below 1.5 °C.",

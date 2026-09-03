@@ -12,8 +12,8 @@
 SHOUT, WATCH = "SHOUT", "WATCH"
 
 
-def _lvl(alerts, level, title, detail):
-    alerts.append({"level": level, "title": title, "detail": detail})
+def _lvl(alerts, level, title, detail, kind="climate"):
+    alerts.append({"level": level, "title": title, "detail": detail, "kind": kind})
 
 
 def detect(cur, prev=None):

@@ -349,6 +349,25 @@ def noaa_weekly_watch(rows):
     # ряд последних 60 недель
     out["series"] = [{"date": r["date"].isoformat(), **{k: r[k] for k in ("n12a", "n3a", "n34a", "n4a")}}
                      for r in rows[-60:]]
+    # Аналоги ПО НЕДЕЛЯМ, по каждому региону: та же календарная неделя 1982/1997/2015/2023
+    # и пик их события. Владелец 03.09: «на карте показать, где недельный индекс, сравнение
+    # с самым сильным явлением». Без этого карта отвечала только «сколько сейчас».
+    keys4 = ("n12a", "n3a", "n34a", "n4a")
+    out["analog_week"], out["analog_peak"] = {}, {}
+    for y in ANALOGS:
+        near = [r for r in rows if r["date"].year == y
+                and abs(r["date"].timetuple().tm_yday - doy) <= 4]
+        if near:
+            r = min(near, key=lambda r: abs(r["date"].timetuple().tm_yday - doy))
+            out["analog_week"][y] = dict({"date": r["date"].isoformat()},
+                                         **{k: r[k] for k in keys4})
+        ev = [r for r in rows if (r["date"].year == y and r["date"].month >= 7)
+              or (r["date"].year == y + 1 and r["date"].month <= 6)]
+        if ev:
+            pk = {k: max(r[k] for r in ev) for k in keys4}
+            pk["date_n34"] = max(ev, key=lambda r: r["n34a"])["date"].isoformat()
+            out["analog_peak"][y] = pk
+
     # исторические максимумы по каждому региону, без текущей недели — потолки для детектора
     out["hist_max_n34"] = max(rows[:-1], key=lambda r: r["n34a"])
     out["hist_max_n34"] = {"date": out["hist_max_n34"]["date"].isoformat(), "n34a": out["hist_max_n34"]["n34a"]}
@@ -379,6 +398,9 @@ def oni_watch(oni, psl):
         vals = [v for v in vals if v is not None]
         peaks[y] = max(vals) if vals else None
     out["analog_event_peak"] = peaks
+    # ONI по годам — нужен оценке моделей: сезон плюма (ASO, DJF…) надо сверять с ONI ТОГО
+    # ЖЕ календарного сезона, а не текущего года. Держим четыре последних года, это мелочь.
+    out["by_year"] = {y: {s: by[y].get(s) for s in seasons} for y in sorted(by)[-4:]}
     out["psl_current"] = psl.get(ycur)
     out["psl_analogs"] = {y: psl.get(y) for y in ANALOGS}
     return out
@@ -584,6 +606,9 @@ def run(fetch=True):
             cl = MD.classify(IRI, ONI, NW["latest"]["n34a"])
             IRI["classes"] = cl["classes"]; IRI["class_tally"] = cl["tally"]
             IRI["class_targets"] = cl["targets"]; IRI["class_issues"] = cl["issues"]
+            # Как ломаются модели во времени: доля ниже реальности по выпускам и постоянные
+            # отстающие (владелец 03.09: «часть моделей постоянно отваливается»).
+            IRI["breakdown"] = MD.breakdown(cl, IRI, ONI)
         except Exception as e:                                   # noqa: BLE001
             IRI["classes_error"] = str(e)[:200]
     RR, ridx = risks(W, N34, NW, ONI, IRI if IRI and "error" not in IRI else None)
@@ -597,7 +622,8 @@ def run(fetch=True):
     except Exception as e:                                       # noqa: BLE001
         FOOD = {"error": str(e)[:200]}
     try:
-        REG = RG.build(IRI if IRI and "error" not in IRI else None, NW["latest"]["n34a"])
+        REG = RG.build(IRI if IRI and "error" not in IRI else None, NW["latest"]["n34a"],
+                       record_weekly=(NW.get("hist_max") or {}).get("n34a"))
     except Exception as e:                                       # noqa: BLE001
         REG = {"error": str(e)[:200]}
     out = {"generated": date.today().isoformat(), "stamp": stamp,

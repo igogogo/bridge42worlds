@@ -67,3 +67,58 @@ def analyze(fao, oni_current, oni_analogs, cur_year):
         "overlay": overlay,
         "note": "FAO Food Price Index, 2014–16 = 100; published the first Friday of the month for the previous month.",
     }
+
+
+def alerts(F):
+    """Тревоги по продовольственным ценам — теми же правилами, что климатические.
+
+    Владелец 03.09: «слева не вижу алертов, касающихся динамики цен». Правила сравнивают
+    свежий индекс со своей же историей: с уровнем на начало события, с годом назад, с
+    максимумом пяти лет и с направлением последних месяцев. Ничего из головы."""
+    if not F or F.get("error"):
+        return []
+    A, ser = [], F["series"]
+    idx, months = ser["index"], ser["months"]
+    last, month = F["index"], F["last_month"]
+
+    def add(level, title, detail):
+        A.append({"level": level, "title": title, "detail": detail, "kind": "food"})
+
+    # 1. пятилетний максимум — редкое событие, кричим
+    tail60 = idx[-60:] if len(idx) >= 12 else idx
+    if last >= max(tail60):
+        add("SHOUT", "World food prices are the highest in five years",
+            f"FAO index {last:.1f} in {month}, above every month since {months[-len(tail60)]}")
+    elif last >= max(idx[-12:]):
+        add("WATCH", "World food prices are at a twelve-month high",
+            f"FAO index {last:.1f} in {month}; a year ago {idx[-13]:.1f}" if len(idx) > 12 else f"FAO index {last:.1f}")
+
+    # 2. рост три месяца подряд
+    if len(idx) >= 4 and idx[-1] > idx[-2] > idx[-3] > idx[-4]:
+        add("WATCH", "Food prices have risen three months in a row",
+            f"{idx[-4]:.1f} → {idx[-3]:.1f} → {idx[-2]:.1f} → {idx[-1]:.1f} (FAO index)")
+
+    # 3. группы: сильный годовой рост
+    for g, v in sorted((F.get("groups") or {}).items(), key=lambda kv: -(kv[1].get("yoy_pct") or 0)):
+        y = v.get("yoy_pct")
+        if y is not None and y >= 15:
+            add("WATCH", f"{g} prices are {y:+.1f} % against a year ago",
+                f"{g} index {v['last']:.1f} in {month}; the group most exposed to El Niño droughts "
+                "in South-east Asia and southern Africa is vegetable oils")
+        elif y is not None and y <= -15:
+            add("WATCH", f"{g} prices are {y:+.1f} % against a year ago",
+                f"{g} index {v['last']:.1f} in {month}: a fall this large moves the whole index")
+
+    # 4. от начала события
+    ov = F.get("overlay") or {}
+    cur = ov.get("current")
+    if cur and cur.get("values"):
+        vals = [v for v in cur["values"] if v is not None]
+        if vals:
+            delta = vals[-1] - 100
+            if abs(delta) >= 3:
+                add("WATCH", f"Food prices are {delta:+.1f} % against the onset of the event",
+                    f"onset month {ov.get('onset')} = 100; analogues at the same distance from onset: "
+                    + ", ".join(f"{y} {(a['values'][len(cur['values']) - 1] or 100) - 100:+.1f} %"
+                                for y, a in (ov.get("analogs") or {}).items()))
+    return A
