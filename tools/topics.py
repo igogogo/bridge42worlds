@@ -199,6 +199,39 @@ def wait_window(now):
         time.sleep(min(1800, max(60, int(hrs * 3600))))
 
 
+def needs_reco(aid):
+    """У работы ещё нет раздела машины знаний?"""
+    p = next(ROOT.glob(f"lang/ru/archive/*/{aid}*/data.json"), None)
+    if not p:
+        return False
+    try:
+        d = json.loads(p.read_text(encoding="utf-8"))
+    except Exception:                                        # noqa: BLE001
+        return False
+    return not (d.get("recommend") or {}).get("ru") and not d.get("express")
+
+
+def post(t, ids, say, env):
+    """Пост-шаги ровно по работам темы: разметка, понятия, формулы, машина знаний.
+
+    Общий `run.py ids` без --no-post зовёт recommend --all-full — очередь по всему архиву;
+    для темы это не то. Здесь те же шаги, но машина знаний идёт поимённо по её работам."""
+    for title, cmd in (("разметка вектором", [sys.executable, "tools/tag_by_vector.py", "--apply"]),
+                       ("понятия в тексте", [sys.executable, "tools/highlight_concepts.py"]),
+                       ("формулы", [sys.executable, "tools/fix_inline_math.py"])):
+        say(f"· {title}")
+        subprocess.run(cmd, cwd=str(ROOT), env=env)
+    todo = [i for i in ids if needs_reco(i.split("v")[0])]
+    say(f"· машина знаний: {len(todo)} работ")
+    for n, aid in enumerate(todo, 1):
+        rc = subprocess.run([sys.executable, "tools/recommend.py", aid],
+                            cwd=str(ROOT), env=env).returncode
+        if rc:
+            say(f"  ⚠️ {aid}: машина знаний вернула код {rc}")
+        if n % 10 == 0:
+            say(f"  машина знаний: {n}/{len(todo)}")
+
+
 def cmd_run(a):
     t = load(a.slug)
     ids = read_ids(works_file(t, a.tier))
@@ -229,16 +262,20 @@ def cmd_run(a):
             wait_window(a.now)
             # Языки: по умолчанию как везде на сайте — русский плюс все переводы (владелец
             # 03.09). Английский только у панели дашборда; сузить можно флагом --lang.
-            cmd = [sys.executable, "run.py", "ids", *ch, "--allow-restricted"]
+            # ВСЕГДА --no-post: общий пост-шаг зовёт recommend --all-full, а это очередь по
+            # ВСЕМУ архиву, не по теме. Свои шаги делаем сами после всех кусков — там же и
+            # машина знаний, по каждой работе темы поимённо (владелец 03.09: «всё делать
+            # полностью, с разбором машиной знаний»).
+            cmd = [sys.executable, "run.py", "ids", *ch, "--allow-restricted", "--no-post"]
             if langs != "all":
                 cmd += ["--lang", langs]
-            if n != len(chunks) or a.no_post:
-                cmd.append("--no-post")
             say(f"кусок {n}/{len(chunks)}: {' '.join(ch)}")
             t0 = time.time()
             rc = subprocess.run(cmd, cwd=str(ROOT), env=env).returncode
             done = sum(1 for i in ch if i.split("v")[0] in parsed_ids())
             say(f"  кусок {n}: код {rc}, готово {done}/{len(ch)}, {int(time.time() - t0)} с")
+        if not a.no_post:
+            post(t, todo, say, env)
     finally:
         runlock.release("tree")
     have = parsed_ids()
@@ -305,6 +342,31 @@ def cmd_new(a):
     return 0
 
 
+def cmd_daily(a):
+    """Ежедневный прогон идёт ПО ТЕМЕ, а не по ленте (владелец 03.09: «вместо дневного
+    прогона прогон пойдёт по ней»). Тема с флагом daily одна; сколько брать за день —
+    в её daily_limit."""
+    picked = None
+    for p in sorted(TOPICS.glob("*.json")):
+        t = json.loads(p.read_text(encoding="utf-8"))
+        if t.get("daily"):
+            picked = t
+            break
+    if not picked:
+        print("ни одна тема не помечена daily — дневной прогон нечем занять")
+        return 1
+    a.slug = picked["slug"]
+    a.tier = a.tier or 1
+    a.limit = a.limit or picked.get("daily_limit") or 25
+    ids = read_ids(works_file(picked, 1))
+    have = parsed_ids()
+    left1 = [i for i in ids if i.split("v")[0] not in have]
+    if not left1:                                            # первый ярус кончился — идём во второй
+        a.tier = 2
+    print(f"дневной прогон по теме {picked['slug']}, ярус {a.tier}, до {a.limit} работ")
+    return cmd_run(a)
+
+
 def main():
     ap = argparse.ArgumentParser()
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -333,6 +395,14 @@ def main():
     s.add_argument("slug")
     s.add_argument("--dry", action="store_true")
     s.set_defaults(func=cmd_select)
+
+    s = sub.add_parser("daily", help="дневной прогон по теме, помеченной daily")
+    s.add_argument("--limit", type=int)
+    s.add_argument("--tier", type=int, default=0)
+    s.add_argument("--lang", default="")
+    s.add_argument("--now", action="store_true")
+    s.add_argument("--no-post", action="store_true")
+    s.set_defaults(func=cmd_daily)
 
     s = sub.add_parser("run", help="разобрать отобранное")
     s.add_argument("slug")

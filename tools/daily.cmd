@@ -72,8 +72,19 @@ REM цепочку до выкладки, ради которой страниц
 REM
 REM B42_RUN_ORIGIN=scheduled: единственный способ отличить ночной запуск от ручного.
 REM Неизвестное происхождение считается ручным — так честнее, чем выдать за расписание.
+REM ТЕМА ВМЕСТО ЛЕНТЫ. Владелец 2026-09-03: «пока одна тема, Эль-Ниньо; вместо дневного
+REM прогона прогон пойдёт по ней; всё делать полностью, с разбором машиной знаний».
+REM tools/topics.py daily берёт тему с флагом daily, её дневной потолок и разбирает
+REM отобранные вектором работы; машина знаний идёт поимённо по работам темы, а не
+REM очередью по всему архиву. Если темы с флагом нет или прогон упал — падаем обратно
+REM на ленту, чтобы ночь не прошла впустую.
 set B42_RUN_ORIGIN=scheduled
-python tools\full_run.py --catch-up --limit 25 >> "%LOGDIR%\daily_%STAMP%.log" 2>&1
+python tools\topics.py daily >> "%LOGDIR%\daily_%STAMP%.log" 2>&1
+set RC=%ERRORLEVEL%
+if not "%RC%"=="0" (
+  echo [%DATE% %TIME%] topic daily rc=%RC%, back to the feed >> "%LOGDIR%\daily-history.log"
+  python tools\full_run.py --catch-up --limit 25 >> "%LOGDIR%\daily_%STAMP%.log" 2>&1
+)
 set RC=%ERRORLEVEL%
 
 REM Хвост лога — в общий журнал, чтобы одним файлом видеть историю прогонов
