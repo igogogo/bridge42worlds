@@ -241,6 +241,29 @@
     s += legend([['last 30 days', 'var(--nino)', 2.6], ['400 days', 'var(--text)', 1.8], ['10–90 % of all years', 'var(--band)', 6], ['forecast +14 d', 'var(--nino)', 1.6, '5 3']], W, H, R, Tp);
     return s + '</svg>';
   }
+  /* Сезон НА СЕГОДНЯ: среднее тех месяцев сезона, что уже измерены недельными данными.
+     Владелец 03.09: «ASO это среднее, а сейчас 3 сентября, сравнивать надо относительно
+     сегодня». Модель, чей трёхмесячный прогноз ниже прожитой части, уже не может быть права:
+     остаток сезона должен был бы стать холоднее прожитого. */
+  var SEASON_MONTHS = { DJF: [12, 1, 2], JFM: [1, 2, 3], FMA: [2, 3, 4], MAM: [3, 4, 5], AMJ: [4, 5, 6],
+    MJJ: [5, 6, 7], JJA: [6, 7, 8], JAS: [7, 8, 9], ASO: [8, 9, 10], SON: [9, 10, 11], OND: [10, 11, 12], NDJ: [11, 12, 1] };
+  function seasonTodate(label, year) {
+    var mon = (S.D.noaa || {}).monthly || {}, wk = (S.D.noaa || {}).monthly_weeks || {};
+    var months = SEASON_MONTHS[label];
+    if (!months) return null;
+    var vals = [], parts = [], y = year, prev = null;
+    months.forEach(function (m) {
+      if (prev != null && m < prev) y++;
+      prev = m;
+      var key = y + '-' + (m < 10 ? '0' : '') + m;
+      if (fin(mon[key]) && (wk[key] || 0) >= 2) { vals.push(mon[key]); parts.push(key); }
+    });
+    if (!vals.length) return null;
+    var sum = 0; vals.forEach(function (v) { sum += v; });
+    return { season: label, value: Math.round(sum / vals.length * 100) / 100, done: vals.length, of: 3, parts: parts };
+  }
+  function issueYear(issued) { var m = /(\d{4})/.exec(issued || ''); return m ? parseInt(m[1], 10) : (new Date()).getUTCFullYear(); }
+
   function seriesKey(w) {
     for (var k in SERIES_NAME) if (S.D.watch[k] === w) return k;
     return null;
@@ -275,7 +298,8 @@
     return s + '</svg>';
   }
 
-  function chartNoaa(NW, W, H) {
+  function chartNoaa(NW, W, H, mode) {
+    if (mode === 'analog') return chartNoaaAnalog(NW, W, H);
     var ser = NW.series, n = ser.length;
     var Lp = 46, R = legendW(W), Tp = topPad(W), B = 26, pw = W - Lp - R - 8, ph = H - Tp - B;
     var keys = [['n12a', 'Niño 1+2', 'var(--lv5)'], ['n3a', 'Niño 3', 'var(--nino)'], ['n34a', 'Niño 3.4', 'var(--text)'], ['n4a', 'Niño 4', 'var(--nina)']];
@@ -294,6 +318,42 @@
     return s + '</svg>';
   }
 
+  /* Тот же недельный индекс против сильнейших событий: 1982, 1997, 2015, 2023 по тому же
+     календарю (владелец 03.09: «weekly indices тоже сравнение должно быть с годами, когда
+     Эль-Ниньо было максимальным»). */
+  function chartNoaaAnalog(NW, W, H) {
+    var key = S.sub.wkey || 'n34a';
+    var NAMES = { n12a: 'Niño 1+2', n3a: 'Niño 3', n34a: 'Niño 3.4', n4a: 'Niño 4' };
+    var ser = NW.series, n = ser.length;
+    var Lp = 46, R = legendW(W), Tp = topPad(W), B = 26, pw = W - Lp - R - 8, ph = H - Tp - B;
+    var all = ser.map(function (r) { return r[key]; }).filter(fin);
+    var ana = [];
+    Object.keys(NW.analog_series || {}).forEach(function (y) {
+      var rows = (NW.analog_series[y] || []).slice(-n).map(function (r) { return r[key]; });
+      if (rows.length) { ana.push({ year: y, values: rows }); all = all.concat(rows.filter(fin)); }
+    });
+    var vmin = Math.min.apply(null, all) - .2, vmax = Math.max.apply(null, all) + .3;
+    var X = function (i) { return Lp + i / (n - 1) * pw; };
+    var Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
+    var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">' + NAMES[key] + ' weekly, last ' + n + ' weeks, against the strongest events on the same calendar</text>';
+    s += gridY(vmin, vmax, .5, Y, Lp, R + 8, W, 1);
+    ser.forEach(function (r, i) { if (parseInt(r.date.slice(8), 10) <= 7 && (W > 470 || i % 2 === 0)) s += '<text x="' + X(i).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle">' + MONTHS[parseInt(r.date.slice(5, 7), 10) - 1] + '</text>'; });
+    ana.forEach(function (a) {
+      var off = n - a.values.length;
+      s += segs(a.values.map(function (v, i) { return [X(off + i), fin(v) ? Y(v) : NaN]; }), 'var(--a' + a.year + ')', 1.4, .9);
+    });
+    s += segs(ser.map(function (r, i) { return [X(i), fin(r[key]) ? Y(r[key]) : NaN]; }), 'var(--text)', 2.6);
+    var li = n - 1;
+    s += '<circle cx="' + X(li).toFixed(1) + '" cy="' + Y(ser[li][key]).toFixed(1) + '" r="4" style="fill:var(--nino)"/>';
+    var leg = [['now ' + fnum(ser[li][key], 1), 'var(--text)', 2.6]];
+    ana.forEach(function (a) {
+      var v = a.values[a.values.length - 1];
+      leg.push([a.year + ' ' + fnum(v, 1) + (fin(v) ? ' (' + fnum(ser[li][key] - v, 1) + ' now)' : ''), 'var(--a' + a.year + ')', 1.4]);
+    });
+    s += legend(leg, W, H, R, Tp);
+    return s + '</svg>';
+  }
+
   function chartPlume(IRI, obs, W, H) {
     var seasons = IRI.seasons, models = IRI.models;
     var fc = []; seasons.forEach(function (sn, i) { if (sn.indexOf('OBS') < 0) fc.push(i); });
@@ -305,6 +365,8 @@
     var vmin = Math.min.apply(null, all) - .3, vmax = Math.max.apply(null, all) + .3;
     var X = function (i) { return Lp + (i - i0) / Math.max(1, seasons.length - 1 - i0) * pw; };
     var Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
+    var td = seasonTodate(ao.season, issueYear(IRI.issued));
+    var ref = td ? td.value : obs;                 // с чем честно сравнивать модели
     var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">IRI model plume, ' + esc(IRI.issued) + ' issue: Niño 3.4 by season, °C</text>';
     s += gridY(vmin, vmax, .5, Y, Lp, R + 8, W, 1);
     fc.forEach(function (i, k) { if (W > 470 || k % 2 === 0) s += '<text x="' + X(i).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle">' + esc(seasons[i]) + '</text>'; });
@@ -326,21 +388,24 @@
        с одной точкой и спрашивал: почему линии выше 2.6, если модели «ломаются»? Линии идут
        в будущее, событие ещё растёт — сравнивать можно только на первом прогнозном сезоне,
        и вот он, отмечен вертикалью, а под чертой видно, кто уже отстал. */
-    s += '<line x1="' + Lp + '" y1="' + Y(obs).toFixed(1) + '" x2="' + (W - R - 8) + '" y2="' + Y(obs).toFixed(1) + '" style="stroke:var(--nino)" stroke-width="1" stroke-dasharray="4 3" opacity=".85"/>';
+    s += '<line x1="' + Lp + '" y1="' + Y(ref).toFixed(1) + '" x2="' + (W - R - 8) + '" y2="' + Y(ref).toFixed(1) + '" style="stroke:var(--nino)" stroke-width="1" stroke-dasharray="4 3" opacity=".85"/>';
     s += '<line x1="' + X(i0).toFixed(1) + '" y1="' + Tp + '" x2="' + X(i0).toFixed(1) + '" y2="' + (H - B) + '" style="stroke:var(--soft)" stroke-width=".8" stroke-dasharray="2 3" opacity=".8"/>';
-    // точки моделей на первом сезоне: красные — те, что уже ниже достигнутого
+    // точки моделей на первом сезоне: красные — те, что уже ниже прожитой части сезона
+    var lowN = 0, totN = 0;
     Object.keys(models).forEach(function (name) {
       var m = models[name];
       if ((m.section !== 'dyn' && m.section !== 'stat') || !m.values || !fin(m.values[i0])) return;
-      var lowv = m.values[i0] < obs;
+      totN++;
+      var lowv = m.values[i0] < ref;
+      if (lowv) lowN++;
       s += '<circle cx="' + X(i0).toFixed(1) + '" cy="' + Y(m.values[i0]).toFixed(1) + '" r="2.6" style="fill:' + (lowv ? 'var(--lv5)' : 'var(--ok)') + '" opacity=".85"/>';
     });
-    s += '<circle cx="' + X(i0).toFixed(1) + '" cy="' + Y(obs).toFixed(1) + '" r="5.5" style="fill:var(--nino)"/>';
-    s += '<text x="' + (X(i0) + 9).toFixed(0) + '" y="' + (Y(obs) - 7).toFixed(0) + '" class="tt">already reached ' + fnum(obs, 1) + '</text>';
-    s += '<text x="' + (X(i0) + 9).toFixed(0) + '" y="' + (Y(obs) + 12).toFixed(0) + '" style="fill:var(--soft)">' + (ao.below || []).length + ' of ' + ao.n + ' models below it at ' + esc(ao.season) + '</text>';
+    s += '<circle cx="' + X(i0).toFixed(1) + '" cy="' + Y(ref).toFixed(1) + '" r="5.5" style="fill:var(--nino)"/>';
+    s += '<text x="' + (X(i0) + 9).toFixed(0) + '" y="' + (Y(ref) - 7).toFixed(0) + '" class="tt">' + esc(ao.season) + ' so far ' + fnum(ref) + (td ? ' (' + td.done + ' month' + (td.done > 1 ? 's' : '') + ' of 3)' : '') + '</text>';
+    s += '<text x="' + (X(i0) + 9).toFixed(0) + '" y="' + (Y(ref) + 12).toFixed(0) + '" style="fill:var(--soft)">' + lowN + ' of ' + totN + ' models below the part already measured</text>';
     var leg = [['combined forecast', 'var(--text)', 3], ['previous issue' + (hist.length > 1 ? ' (' + hist[1].issued + ')' : ''), 'var(--soft)', 1.6, '5 4'],
       ['keeping up', 'var(--nina)', 1.4], ['lagging', 'var(--lv3)', 1.4], ['broken', 'var(--lv5)', 1.4],
-      ['already reached ' + fnum(obs, 1), 'var(--nino)', 1, '4 3'], ['below it at ' + esc(ao.season), 'var(--lv5)', 'dot']];
+      [esc(ao.season) + ' so far ' + fnum(ref), 'var(--nino)', 1, '4 3'], ['below the lived part', 'var(--lv5)', 'dot']];
     if (S.model) leg.unshift([S.model, 'var(--ochre)', 2.6]);
     s += legend(leg, W, H, R, Tp);
     return s + '</svg>';
@@ -373,23 +438,27 @@
         s2 += '<line x1="' + Lp + '" y1="' + Y(g).toFixed(1) + '" x2="' + (W - R) + '" y2="' + Y(g).toFixed(1) + '" style="stroke:var(--grid)" stroke-width=".5"/>';
         s2 += '<text x="' + (Lp - 5) + '" y="' + (Y(g) + 3).toFixed(1) + '" text-anchor="end" font-size="9">' + fnum(g, 1) + '</text>';
       });
-      // черта уже достигнутого уровня — общая для всех трёх
-      s2 += '<line x1="' + Lp + '" y1="' + Y(obs).toFixed(1) + '" x2="' + (W - R) + '" y2="' + Y(obs).toFixed(1) + '" style="stroke:var(--nino)" stroke-width="1" stroke-dasharray="4 3" opacity=".8"/>';
+      // У КАЖДОГО ВЫПУСКА СВОЙ первый прогнозный сезон, и сравнивать его надо с прожитой
+      // частью именно этого сезона: у июньского выпуска это JJA, который сегодня прожит
+      // целиком, у августовского — ASO, прожитый на треть.
+      var fi0 = fc.filter(function (i) { var any = false; Object.keys(r.models).forEach(function (nm) { if (fin(r.models[nm].values[i])) any = true; }); return any; })[0];
+      var lab = fi0 != null ? r.seasons[fi0] : null;
+      var td2 = lab ? seasonTodate(lab, issueYear(r.issued)) : null;
+      var ref2 = td2 ? td2.value : obs;
+      s2 += '<line x1="' + Lp + '" y1="' + Y(ref2).toFixed(1) + '" x2="' + (W - R) + '" y2="' + Y(ref2).toFixed(1) + '" style="stroke:var(--nino)" stroke-width="1" stroke-dasharray="4 3" opacity=".8"/>';
       var below = 0, tot = 0;
       Object.keys(r.models).forEach(function (nm) {
         var m = r.models[nm];
         if (m.section !== 'dyn' && m.section !== 'stat') return;
         var pts = fc.map(function (i) { return [X(i), fin(m.values[i]) ? Y(m.values[i]) : NaN]; });
         s2 += segs(pts, 'var(--soft)', 1, .45);
-        var first = fc.filter(function (i) { return fin(m.values[i]); })[0];
-        if (first != null) { tot++; if (m.values[first] < obs) below++; }
+        if (fi0 != null && fin(m.values[fi0])) { tot++; if (m.values[fi0] < ref2) below++; }
       });
       var comb = Object.keys(r.models).filter(function (k) { return k.indexOf('COMBINED') === 0; })[0];
       if (comb) s2 += segs(fc.map(function (i) { return [X(i), fin(r.models[comb].values[i]) ? Y(r.models[comb].values[i]) : NaN]; }), 'var(--text)', 2.4);
-      var fi = fc[0];
-      s2 += '<circle cx="' + X(fi).toFixed(1) + '" cy="' + Y(obs).toFixed(1) + '" r="4" style="fill:var(--nino)"/>';
+      if (fi0 != null) s2 += '<circle cx="' + X(fi0).toFixed(1) + '" cy="' + Y(ref2).toFixed(1) + '" r="4" style="fill:var(--nino)"/>';
       s2 += '<text class="tt" x="' + Lp + '" y="' + (top + 10) + '">' + esc(r.issued) + ' issue' + (ri === 0 ? ' — the newest' : '') + '</text>';
-      s2 += '<text x="' + (W - R) + '" y="' + (top + 10) + '" text-anchor="end" style="fill:var(--soft)">' + below + ' of ' + tot + ' below what the ocean has already reached (' + fnum(obs, 1) + ')</text>';
+      s2 += '<text x="' + (W - R) + '" y="' + (top + 10) + '" text-anchor="end" style="fill:var(--soft)">' + below + ' of ' + tot + ' below ' + esc(lab || '') + ' as lived so far (' + fnum(ref2) + (td2 ? ', ' + td2.done + '/3 months' : '') + ')</text>';
       fc.forEach(function (i, k) { if (k % 2 === 0) s2 += '<text x="' + X(i).toFixed(0) + '" y="' + (Tp + ph + 12) + '" text-anchor="middle" font-size="9">' + esc(r.seasons[i]) + '</text>'; });
     });
     return s2 + '</svg>';
@@ -438,6 +507,21 @@
   }
 
   /* Карта Тихого океана: текущий индекс каждого участка и то же место у сильнейших событий. */
+  /* СУША. Владелец 03.09: «карту ты на pacific map не нарисовал». Очертания схематичны и
+     нарисованы прямо в координатах окна (120° в. д. … 70° з. д., 15° с. ш. … 15° ю. ш.):
+     это не карта для навигации, а опора для глаза — где Индонезия, где Южная Америка, между
+     ними участки Niño. Точки берега упрощены до десятка на контур. */
+  var LAND = [
+    { name: 'Philippines', pts: [[120, 15], [124, 14], [126, 11], [124.5, 7], [122, 6], [120.5, 9], [119.5, 12]] },
+    { name: 'Indonesia', pts: [[119, 1.5], [122.5, 0.5], [125.5, 1.5], [127, -1], [124, -4], [121, -5.5], [119, -3.5], [118.5, -1]] },
+    { name: '', pts: [[124, -8.5], [128, -8], [131, -8.5], [127, -10], [124.5, -9.5]] },
+    { name: 'New Guinea', pts: [[131, -1], [136, -2], [141, -2.5], [147, -6], [150.5, -8.5], [147, -9.5], [141, -8], [136, -6], [132, -4]] },
+    { name: 'N. Australia', pts: [[129, -11], [133, -11.5], [136.5, -12], [138, -15], [129, -15]] },
+    { name: '', pts: [[141, -10.8], [143.5, -12], [145.5, -15], [139, -15], [139.5, -12.5]] },
+    { name: 'Central America', pts: [[275, 15], [279, 13], [281, 10], [280, 8.5], [277.5, 9.5], [274, 11], [272, 15]] },
+    { name: 'South America', pts: [[280, 8.5], [282.5, 6], [281.5, 2], [279.3, 0], [280, -4], [281.5, -8], [283, -12], [284.5, -15], [292, -15], [292, 8.5]] }
+  ];
+
   function pacific(NW, W, H) {
     // В низкой плитке (телефон, короткое окно) подписи долгот и «экватор» съедали карту —
     // при высоте меньше 200 пикселей оставляем только сами участки.
@@ -454,6 +538,23 @@
     var s = svgOpen(W, H);
     s += '<text class="tt" x="' + Lp + '" y="13">Week of ' + esc(NW.date) + ' against ' + esc(cmpYear) + '–' + (parseInt(cmpYear, 10) + 1) + ' on the same week</text>';
     s += '<rect x="' + Lp + '" y="' + Tp + '" width="' + pw + '" height="' + ph + '" rx="8" style="fill:var(--nina)" opacity=".08"/>';
+    // суша поверх воды, до участков Niño
+    s += '<clipPath id="pacclip"><rect x="' + Lp + '" y="' + Tp + '" width="' + pw + '" height="' + ph + '" rx="8"/></clipPath><g clip-path="url(#pacclip)">';
+    LAND.forEach(function (L) {
+      var pts = L.pts.map(function (p) { return lon(p[0]).toFixed(1) + ',' + lat(Math.max(-15, Math.min(15, p[1]))).toFixed(1); }).join(' ');
+      s += '<polygon points="' + pts + '" style="fill:var(--ink);stroke:var(--soft)" fill-opacity=".16" stroke-width=".8" stroke-opacity=".5"/>';
+      if (L.name && !small) {
+        var cx = 0, cy = 0;
+        L.pts.forEach(function (p) { cx += lon(p[0]); cy += lat(Math.max(-15, Math.min(15, p[1]))); });
+        s += '<text x="' + (cx / L.pts.length).toFixed(0) + '" y="' + (cy / L.pts.length).toFixed(0) + '" text-anchor="middle" font-size="9" style="fill:var(--soft)">' + esc(L.name) + '</text>';
+      }
+    });
+    // Галапагосы — единственная суша посреди очага, полезный ориентир
+    if (!small) {
+      s += '<circle cx="' + lon(269.5).toFixed(1) + '" cy="' + lat(-0.5).toFixed(1) + '" r="2.2" style="fill:var(--ink)" opacity=".45"/>';
+      s += '<text x="' + (lon(269.5) + 5).toFixed(0) + '" y="' + (lat(-0.5) + 3).toFixed(0) + '" font-size="8.5" style="fill:var(--soft)">Galápagos</text>';
+    }
+    s += '</g>';
     s += '<line x1="' + Lp + '" y1="' + lat(0) + '" x2="' + (W - R) + '" y2="' + lat(0) + '" style="stroke:var(--soft)" stroke-width=".6" stroke-dasharray="4 4"/>';
     s += '<text x="' + (Lp + 4) + '" y="' + (lat(0) - 4) + '">equator</text>';
     if (!small) {
@@ -818,7 +919,8 @@
     var D = S.D, N = D.nino34, NW = D.noaa, ONI = D.oni, n34 = D.watch.sst_nino34, P = S.P;
     var k = sub('now', 'analogs');
     var above = Object.keys(N.analogs).every(function (y) { return N.analogs[y].same30 < N.current30; });
-    var segs2 = [segBtn('now', 'analogs', 'Against analogues', 'analogs'), segBtn('now', 'map', 'Pacific map', 'analogs'), segBtn('now', 'weekly', 'Weekly indices', 'analogs')];
+    var segs2 = [segBtn('now', 'analogs', 'Against analogues', 'analogs'), segBtn('now', 'map', 'Pacific map', 'analogs'),
+      segBtn('now', 'weekly', 'Weekly indices', 'analogs'), segBtn('now', 'weekly_a', 'Weekly vs strongest', 'analogs')];
     var body = stageShell(above ? 'Warmer today than any of the four strongest events were at this time of year'
       : 'The event follows the strongest ones: rank ' + N.rank_same30 + ' among the analogues', segs2);
     if (k === 'map') {
@@ -834,14 +936,27 @@
       body.appendChild(row);
       plot(body, function (w, h) { return pacific(NW, w, h); });
     } else if (k === 'weekly') plot(body, function (w, h) { return chartNoaa(NW, w, h); });
-    else plot(body, function (w, h) { return chartAnalogs(N, w, h); });
+    else if (k === 'weekly_a') {
+      var NAMES2 = { n34a: 'Niño 3.4', n3a: 'Niño 3', n12a: 'Niño 1+2', n4a: 'Niño 4' };
+      var row2 = el('div', 'seg sub');
+      Object.keys(NAMES2).forEach(function (kk) {
+        var b = el('button', (S.sub.wkey || 'n34a') === kk ? 'on' : '', NAMES2[kk]);
+        b.type = 'button'; b.onclick = function () { S.sub.wkey = kk; render(); };
+        row2.appendChild(b);
+      });
+      body.appendChild(row2);
+      plot(body, function (w, h) { return chartNoaa(NW, w, h, 'analog'); });
+    } else plot(body, function (w, h) { return chartAnalogs(N, w, h); });
 
     var pe = N.peak_estimate, ls = ONI.last_season, c4 = NW.chg4w || {}, c8 = NW.chg8w || {};
     var cap = el('div', 'cap');
     var aw = (NW.analog_week || {})[S.sub.cmp || '1997'] || {};
-    cap.innerHTML = k === 'map' ? 'Colour is the anomaly of the week; the small number under it is the same week of the comparison event. Point at a patch for the full comparison and the peak that event reached.'
+    var td = (D.iri || {}).todate, lf = (D.iri || {}).last_full_season;
+    cap.innerHTML = k === 'map' ? 'The land is schematic, the boxes are the four Niño regions. Colour is the anomaly of the week; the small number under it is the same week of the comparison event. Point at a patch for the full comparison and the peak that event reached.'
       : (k === 'weekly' ? 'Over 4 weeks: Niño 3.4 ' + fnum(c4.n34a, 1) + ', Niño 1+2 ' + fnum(c4.n12a, 1) + '; over 8 weeks ' + fnum(c8.n34a, 1) + ' and ' + fnum(c8.n12a, 1) + '. Record of the weekly Niño 3.4: ' + fnum(NW.hist_max_n34.n34a, 1) + ' (' + esc(NW.hist_max_n34.date) + ').'
-        : '<strong>Peak estimate.</strong> ' + esc(pe.note) + ' Typical peak window ' + esc(pe.typical_peak_window) + '.');
+        : (k === 'weekly_a' ? 'The same weekly index against 1982, 1997, 2015 and 2023 on the same weeks of the year. The number in brackets is how much this event is above that one right now.'
+          : '<strong>Peak estimate.</strong> ' + esc(pe.note) + ' Typical peak window ' + esc(pe.typical_peak_window) + '.' +
+            (lf ? ' The last season lived through in full is ' + esc(lf.season) + ' at ' + fnum(lf.value) + ' °C' + (td ? '; the current ' + esc(td.season) + ' is ' + td.months_done + ' month of 3 measured, at ' + fnum(td.observed_todate) + ' °C.' : '.') : '')));
     body.appendChild(cap);
 
     var wk = pair(NW.latest.n34a, P && P.noaa ? P.noaa.n34a : null, 1, '°C');

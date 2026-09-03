@@ -368,6 +368,15 @@ def noaa_weekly_watch(rows):
             pk["date_n34"] = max(ev, key=lambda r: r["n34a"])["date"].isoformat()
             out["analog_peak"][y] = pk
 
+    # Месячные средние по неделям: из них считается «сезон на сегодня» — единственное
+    # честное, с чем можно сравнивать трёхмесячный прогноз до конца сезона.
+    mm = {}
+    for r in rows:
+        mm.setdefault((r["date"].year, r["date"].month), []).append(r["n34a"])
+    out["monthly"] = {f"{y}-{m:02d}": round(sum(v) / len(v), 2)
+                      for (y, m), v in sorted(mm.items())[-24:]}
+    out["monthly_weeks"] = {f"{y}-{m:02d}": len(v) for (y, m), v in sorted(mm.items())[-24:]}
+
     # Ряды аналогов ПО ТОМУ ЖЕ КАЛЕНДАРЮ: 20 недель до той же даты у каждого сильного
     # события. Нужны графикам рисков — владелец 03.09: «на графиках рисков нет сравнения
     # с самым сильным событием, которое мы знаем, это 97-98».
@@ -521,6 +530,57 @@ def _next_year_risks(W, ONI, cur_year=None):
         "the first harvests after the peak season and the food price index six to twelve months from the onset",
         _m_daily(tw, "Land+ocean, daily anomaly"), "climate"))
     return out
+
+
+SEASON_MONTHS = {"DJF": (12, 1, 2), "JFM": (1, 2, 3), "FMA": (2, 3, 4), "MAM": (3, 4, 5),
+                 "AMJ": (4, 5, 6), "MJJ": (5, 6, 7), "JJA": (6, 7, 8), "JAS": (7, 8, 9),
+                 "ASO": (8, 9, 10), "SON": (9, 10, 11), "OND": (10, 11, 12), "NDJ": (11, 12, 1)}
+
+
+def season_todate(NW, label, year):
+    """Среднее ТЕХ месяцев сезона, что уже измерены: {value, months_done, months, parts}.
+
+    Месяц считается измеренным, если в нём есть хотя бы две недели: одна неделя — это ещё
+    не месяц, и среднее по ней сдвигает картину сильнее, чем помогает.
+    """
+    months = SEASON_MONTHS.get(label)
+    if not months:
+        return None
+    monthly, weeks = NW.get("monthly") or {}, NW.get("monthly_weeks") or {}
+    vals, parts, y = [], [], year
+    prev = None
+    for m in months:
+        if prev is not None and m < prev:          # сезон переваливает через новый год
+            y += 1
+        prev = m
+        key = f"{y}-{m:02d}"
+        if key in monthly and weeks.get(key, 0) >= 2:
+            vals.append(monthly[key])
+            parts.append({"month": key, "value": monthly[key], "weeks": weeks.get(key, 0)})
+    if not vals:
+        return None
+    return {"season": label, "value": round(sum(vals) / len(vals), 2), "months_done": len(vals),
+            "months": 3, "parts": parts}
+
+
+def models_vs_todate(IRI, td):
+    """Кто из моделей уже ниже прожитой части сезона — то есть уже не может быть прав."""
+    if not IRI or "error" in IRI or not td:
+        return None
+    seasons = IRI.get("seasons") or []
+    if td["season"] not in seasons:
+        return None
+    i = seasons.index(td["season"])
+    vals = [(nm, m["values"][i]) for nm, m in (IRI.get("models") or {}).items()
+            if m.get("section") in ("dyn", "stat") and m.get("values") and m["values"][i] is not None]
+    if not vals:
+        return None
+    below = sorted(nm for nm, v in vals if v < td["value"])
+    return {"season": td["season"], "observed_todate": td["value"], "months_done": td["months_done"],
+            "n": len(vals), "below": below, "share_below": round(100 * len(below) / len(vals)),
+            "note": ("the models forecast a three-month mean; this compares them with the part of that season "
+                     "already measured, so a model below this number would need the rest of the season to be "
+                     "colder than the part already lived")}
 
 
 def risks(W, N34, NW, ONI, IRI=None):
@@ -725,6 +785,19 @@ def run(fetch=True):
                             for i in MD._issues()[-3:]][::-1]
         except Exception as e:                                   # noqa: BLE001
             IRI["classes_error"] = str(e)[:200]
+    # Сезон на сегодня и последний прожитый целиком — честная опора для сравнения с плюмом.
+    if IRI and "error" not in IRI:
+        ao = IRI.get("against_observed") or {}
+        yr = int(NW["date"][:4])
+        td = season_todate(NW, ao.get("season") or "", yr)
+        IRI["todate"] = models_vs_todate(IRI, td) if td else None
+        for lab in ("JJA", "JAS", "ASO", "SON"):
+            full = season_todate(NW, lab, yr)
+            if full and full["months_done"] == 3:
+                IRI["last_full_season"] = full
+        if IRI.get("todate"):
+            IRI["todate"]["parts"] = td["parts"]
+
     RR, ridx = risks(W, N34, NW, ONI, IRI if IRI and "error" not in IRI else None)
     # Блок F: индекс FAO (живой ряд) и регионы (справочник × сила события). Любая беда здесь
     # не должна ронять остальное: блок пустой с причиной, страница живёт.
