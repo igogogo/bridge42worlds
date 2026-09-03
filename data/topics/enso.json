@@ -1,0 +1,48 @@
+{
+  "slug": "enso",
+  "title": "El Niño 2026–2027",
+  "question": "Идёт ли Эль-Ниньо, насколько оно сильное на фоне истории, куда движется, справляются ли модели прогноза и что это значит для еды.",
+  "kind": "live",
+  "created": "2026-09-03",
+  "lang": "en",
+  "lang_note": "первая тема разбиралась только на английском (решение владельца 03.09); последующие темы — русский и все переводы, как везде на сайте",
+  "page": "/enso.html",
+  "data": "data/enso",
+  "works": {
+    "tier1": "data/enso/works-tier1.txt",
+    "tier2": "data/enso/works-tier2.txt"
+  },
+  "links": "data/enso/links.json",
+  "select": {
+    "seed": "El Nino Southern Oscillation: sea surface temperature of the tropical Pacific, seasonal forecasting of ENSO, teleconnections to regional climate, and the consequences for harvests and food prices.",
+    "floor": 0.5,
+    "caps": {
+      "tier1": 400,
+      "tier2": 400
+    },
+    "queries": [
+      {
+        "tier": 1,
+        "fts": "\"El Nino\" OR \"El Niño\" OR ENSO OR \"Southern Oscillation\" OR \"La Nina\" OR \"La Niña\""
+      },
+      {
+        "tier": 2,
+        "fts": "(\"sea surface temperature\" OR SST) AND (forecast OR prediction OR predictability OR \"tropical Pacific\" OR \"equatorial Pacific\")"
+      },
+      {
+        "tier": 2,
+        "fts": "(teleconnection OR teleconnections) AND (Pacific OR tropical OR climate)"
+      },
+      {
+        "tier": 2,
+        "fts": "(monsoon OR drought OR precipitation OR rainfall) AND (Pacific OR \"tropical Pacific\" OR \"sea surface\" OR interannual)"
+      }
+    ]
+  },
+  "state": {
+    "selected": "2026-09-03 07:40",
+    "n_tier1": 325,
+    "n_tier2": 308
+  },
+  "note": "Первая тема. Отбор был сделан вручную теми же запросами, что записаны здесь; select пересоберёт списки тем же способом, но добавит векторный порядок."
+}
